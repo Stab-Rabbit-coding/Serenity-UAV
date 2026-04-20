@@ -1,7 +1,7 @@
 {
-  "inspectorOpen": true,
-  "treeOpen": false,
+  "inspectorOpen": false,
+  "treeOpen": true,
   "debugEnabled": true,
-  "selectionMode": "group",
-  "responsiveWidth": 425
+  "selectionMode": "element",
+  "responsiveWidth": null
 }
