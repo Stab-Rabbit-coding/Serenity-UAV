@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Serenity-Class Tiltrotor — Build Plan -->
+<!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP  CC BY 4.0 -->
+<!-- Hull: Peter Farell CC BY 4.0  Nozzle: BamJr CC BY 4.0 -->
+<!-- Visual inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy / Universal Pictures -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 680" width="920" height="680">
+<defs>
+  <style>text { font-family="'Courier New',monospace"; fill:rgba(255,255,255,0.35); font-size:10px; }
+    .label { fill:#00e5ff; font-size:11px; font-weight:bold; }
+    .dim   { fill:rgba(255,255,255,0.18); font-size:8px; }
+    .note  { fill:rgba(255,255,255,0.35); font-size:9px; }
+    .ant   { fill:#4ade80; font-size:8px; }
+  </style>
+  <marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+    <path d="M0,0 L6,3 L0,6 Z" fill="#00e5ff" opacity="0.5"/>
+  </marker>
+  <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+    <path d="M20 0L0 0 0 20" fill="none" stroke="rgba(0,229,255,0.06)" stroke-width="0.5"/>
+  </pattern>
+</defs>
+<rect width="920" height="680" fill="#07090e"/>
+<rect width="920" height="680" fill="url(#grid)"/>
+
+<rect x="18" y="36" width="290" height="145" rx="5" fill="#2dd4bf0c" stroke="#2dd4bf" stroke-width="1.5"/>
+<rect x="26" y="44" width="68" height="18" rx="3" fill="#2dd4bf25" stroke="#2dd4bf" stroke-width="1"/>
+<text x="60" y="57" text-anchor="middle" font-size="8" fill="#2dd4bf" font-weight="bold">PHASE 1</text>
+<text x="102" y="57" font-size="10" fill="#2dd4bf" font-weight="bold">PRINT PREP</text>
+<text x="28" y="74" font-size="7.5" fill="rgba(255,255,255,0.35)">• Dry all filament 6h @ 65°C</text>
+<text x="28" y="89" font-size="7.5" fill="rgba(255,255,255,0.35)">• Install hardened steel nozzle</text>
+<text x="28" y="104" font-size="7.5" fill="rgba(255,255,255,0.35)">• Calibrate E-steps + PA per filament</text>
+<text x="28" y="119" font-size="7.5" fill="rgba(255,255,255,0.35)">• Slice hull 5 sections · 8% gyroid · 0.20mm</text>
+<text x="28" y="134" font-size="7.5" fill="rgba(255,255,255,0.35)">• Print TPU skids first · then PETG hull · then CF-PETG nacelles</text>
+<text x="28" y="149" font-size="7.5" fill="rgba(255,255,255,0.35)">• Resin-print or source M0.5 gears (bevel pair, pinion-A, crown)</text>
+<rect x="316" y="36" width="290" height="145" rx="5" fill="#00e5ff0c" stroke="#00e5ff" stroke-width="1.5"/>
+<rect x="324" y="44" width="68" height="18" rx="3" fill="#00e5ff25" stroke="#00e5ff" stroke-width="1"/>
+<text x="358" y="57" text-anchor="middle" font-size="8" fill="#00e5ff" font-weight="bold">PHASE 2</text>
+<text x="400" y="57" font-size="10" fill="#00e5ff" font-weight="bold">CF SKELETON</text>
+<text x="326" y="74" font-size="7.5" fill="rgba(255,255,255,0.35)">• Cut keel 6×3mm × 385mm (15.2") · mark datums</text>
+<text x="326" y="89" font-size="7.5" fill="rgba(255,255,255,0.35)">• Cut 2× spar tubes 12mm OD × 300mm (11.8")</text>
+<text x="326" y="104" font-size="7.5" fill="rgba(255,255,255,0.35)">• Epoxy mid-hull to keel · cure 12h · do NOT bond cockpit/bell yet</text>
+<text x="326" y="119" font-size="7.5" fill="rgba(255,255,255,0.35)">• Epoxy CF-PETG spar bracket at 130mm · check 90° alignment</text>
+<text x="326" y="134" font-size="7.5" fill="rgba(255,255,255,0.35)">• Press-fit spars · Loctite 638 · cure 4h</text>
+<rect x="614" y="36" width="290" height="145" rx="5" fill="#ff6b350c" stroke="#ff6b35" stroke-width="1.5"/>
+<rect x="622" y="44" width="68" height="18" rx="3" fill="#ff6b3525" stroke="#ff6b35" stroke-width="1"/>
+<text x="656" y="57" text-anchor="middle" font-size="8" fill="#ff6b35" font-weight="bold">PHASE 3</text>
+<text x="698" y="57" font-size="10" fill="#ff6b35" font-weight="bold">NACELLE ASSEMBLY</text>
+<text x="624" y="74" font-size="7.5" fill="rgba(255,255,255,0.35)">• Press MR63ZZ bearings into nacelle pivot sockets</text>
+<text x="624" y="89" font-size="7.5" fill="rgba(255,255,255,0.35)">• Thread 8mm CF pivot rod · set screw + Loctite 243</text>
+<text x="624" y="104" font-size="7.5" fill="rgba(255,255,255,0.35)">• Install 70mm EDF · route motor leads through hollow spar</text>
+<text x="624" y="119" font-size="7.5" fill="rgba(255,255,255,0.35)">• Install MG90S tilt servo · connect horn at 18mm radius</text>
+<text x="624" y="134" font-size="7.5" fill="rgba(255,255,255,0.35)">• Assemble gear train: bevel block → long. shaft → crown pinion → ring</text>
+<text x="624" y="149" font-size="7.5" fill="rgba(255,255,255,0.35)">• Install sector gear on bracket · adjust mesh · 0.1-0.2mm backlash</text>
+<text x="624" y="164" font-size="7.5" fill="rgba(255,255,255,0.35)">• Sweep nacelle 0°→90° × 10 · measure exit 36mm/42mm</text>
+<rect x="18" y="189" width="290" height="145" rx="5" fill="#c084fc0c" stroke="#c084fc" stroke-width="1.5"/>
+<rect x="26" y="197" width="68" height="18" rx="3" fill="#c084fc25" stroke="#c084fc" stroke-width="1"/>
+<text x="60" y="210" text-anchor="middle" font-size="8" fill="#c084fc" font-weight="bold">PHASE 4</text>
+<text x="102" y="210" font-size="10" fill="#c084fc" font-weight="bold">ELECTRONICS</text>
+<text x="28" y="227" font-size="7.5" fill="rgba(255,255,255,0.35)">• Mount Pico 2 + TRIHAT-1 on cockpit CF bulkhead (55×38mm)</text>
+<text x="28" y="242" font-size="7.5" fill="rgba(255,255,255,0.35)">• Mount CM4 + CARRIER-1 + COMPHAT-1 at 95-160mm</text>
+<text x="28" y="257" font-size="7.5" fill="rgba(255,255,255,0.35)">• Install OS μSD in carrier slot · log μSD in COMPHAT slot</text>
+<text x="28" y="272" font-size="7.5" fill="rgba(255,255,255,0.35)">• Flash CPLD write-blocker · install JP2 · verify LED1 green</text>
+<text x="28" y="287" font-size="7.5" fill="rgba(255,255,255,0.35)">• Flash STM32 NX proxy · burn OTP WP fuses · verify NX_LATCH HIGH</text>
+<text x="28" y="302" font-size="7.5" fill="rgba(255,255,255,0.35)">• Install GPS U.FL coax · route to cockpit roof patch</text>
+<text x="28" y="317" font-size="7.5" fill="rgba(255,255,255,0.35)">• Install SiK + RCRS pigtails to belly/dorsal SMA</text>
+<rect x="316" y="189" width="290" height="145" rx="5" fill="#ffe6000c" stroke="#ffe600" stroke-width="1.5"/>
+<rect x="324" y="197" width="68" height="18" rx="3" fill="#ffe60025" stroke="#ffe600" stroke-width="1"/>
+<text x="358" y="210" text-anchor="middle" font-size="8" fill="#ffe600" font-weight="bold">PHASE 5</text>
+<text x="400" y="210" font-size="10" fill="#ffe600" font-weight="bold">VAR. NOZZLE</text>
+<text x="326" y="227" font-size="7.5" fill="rgba(255,255,255,0.35)">• Assemble 40mm fuselage nozzle (BamJr remix) · SG90 bracket</text>
+<text x="326" y="242" font-size="7.5" fill="rgba(255,255,255,0.35)">• Bayonet-lock into engine bell · route servo cable to GP15</text>
+<text x="326" y="257" font-size="7.5" fill="rgba(255,255,255,0.35)">• Calibrate: 1.0ms=42mm open · 2.0ms=36mm closed · lock clevis</text>
+<text x="326" y="272" font-size="7.5" fill="rgba(255,255,255,0.35)">• Nacelle nozzles: verify gear coupling calibration (Phase 3)</text>
+<text x="326" y="287" font-size="7.5" fill="rgba(255,255,255,0.35)">• Verify nozzle position matches nacelle angle: 0°=closed, 90°=open</text>
+<rect x="614" y="189" width="290" height="145" rx="5" fill="#4ade800c" stroke="#4ade80" stroke-width="1.5"/>
+<rect x="622" y="197" width="68" height="18" rx="3" fill="#4ade8025" stroke="#4ade80" stroke-width="1"/>
+<text x="656" y="210" text-anchor="middle" font-size="8" fill="#4ade80" font-weight="bold">PHASE 6</text>
+<text x="698" y="210" font-size="10" fill="#4ade80" font-weight="bold">WIRING AND POWER</text>
+<text x="624" y="227" font-size="7.5" fill="rgba(255,255,255,0.35)">• Solder power bus · XT60 PDB · 12AWG silicone to ESCs</text>
+<text x="624" y="242" font-size="7.5" fill="rgba(255,255,255,0.35)">• Install 5V BEC · verify 5.0V ±0.1V under load</text>
+<text x="624" y="257" font-size="7.5" fill="rgba(255,255,255,0.35)">• Route JST-GH Ethernet 150mm (port keel) · CAN FD 120mm (stbd keel)</text>
+<text x="624" y="272" font-size="7.5" fill="rgba(255,255,255,0.35)">• TRIHAT-1 120Ω CAN termination bridge = SOLDERED</text>
+<text x="624" y="287" font-size="7.5" fill="rgba(255,255,255,0.35)">• COMPHAT-1 CAN termination bridge = OPEN</text>
+<text x="624" y="302" font-size="7.5" fill="rgba(255,255,255,0.35)">• Install nav light chain GP26 · verify all 6 light states</text>
+<text x="624" y="317" font-size="7.5" fill="rgba(255,255,255,0.35)">• Continuity check: no shorts on +V, GND, motor phases</text>
+<rect x="18" y="342" width="290" height="145" rx="5" fill="#a3e6350c" stroke="#a3e635" stroke-width="1.5"/>
+<rect x="26" y="350" width="68" height="18" rx="3" fill="#a3e63525" stroke="#a3e635" stroke-width="1"/>
+<text x="60" y="363" text-anchor="middle" font-size="8" fill="#a3e635" font-weight="bold">PHASE 7</text>
+<text x="102" y="363" font-size="10" fill="#a3e635" font-weight="bold">SOFTWARE</text>
+<text x="28" y="380" font-size="7.5" fill="rgba(255,255,255,0.35)">• Flash Pico 2 firmware (USB BOOTSEL drag-drop) · verify 1Hz LED</text>
+<text x="28" y="395" font-size="7.5" fill="rgba(255,255,255,0.35)">• Boot CM4 · SSH in · apt install mavlink-router mavsdk pymavlink</text>
+<text x="28" y="410" font-size="7.5" fill="rgba(255,255,255,0.35)">• Configure SELinux log_storage_t · mount noexec,nodev,nosuid,ro</text>
+<text x="28" y="425" font-size="7.5" fill="rgba(255,255,255,0.35)">• Provision TPM: tpm2_createprimary + tpm2_create + tpm2_load</text>
+<text x="28" y="440" font-size="7.5" fill="rgba(255,255,255,0.35)">• Calibrate ESCs (no props) · calibrate nacelle servos ±0.5°</text>
+<text x="28" y="455" font-size="7.5" fill="rgba(255,255,255,0.35)">• Calibrate fuselage nozzle servo endpoints</text>
+<rect x="316" y="342" width="290" height="145" rx="5" fill="#2dd4bf0c" stroke="#2dd4bf" stroke-width="1.5"/>
+<rect x="324" y="350" width="68" height="18" rx="3" fill="#2dd4bf25" stroke="#2dd4bf" stroke-width="1"/>
+<text x="358" y="363" text-anchor="middle" font-size="8" fill="#2dd4bf" font-weight="bold">PHASE 8</text>
+<text x="400" y="363" font-size="10" fill="#2dd4bf" font-weight="bold">GROUND TEST</text>
+<text x="326" y="380" font-size="7.5" fill="rgba(255,255,255,0.35)">• Static CG: target 152mm (5.98") from nose · slide battery rail</text>
+<text x="326" y="395" font-size="7.5" fill="rgba(255,255,255,0.35)">• Radio check: MAVLink heartbeat · RC channels in QGC · TDDS channel select</text>
+<text x="326" y="410" font-size="7.5" fill="rgba(255,255,255,0.35)">• Bench thrust (tethered): verify ≥330g per 70mm fan at 30%</text>
+<text x="326" y="425" font-size="7.5" fill="rgba(255,255,255,0.35)">• Nozzle function: open 42mm / closed 36mm · gear sweep smooth</text>
+<text x="326" y="440" font-size="7.5" fill="rgba(255,255,255,0.35)">• Nav lights: all states correct · GPS HDOP ≤1.5 with EDFs running</text>
+<rect x="614" y="342" width="290" height="145" rx="5" fill="#4ade800c" stroke="#4ade80" stroke-width="1.5"/>
+<rect x="622" y="350" width="68" height="18" rx="3" fill="#4ade8025" stroke="#4ade80" stroke-width="1"/>
+<text x="656" y="363" text-anchor="middle" font-size="8" fill="#4ade80" font-weight="bold">PHASE 9</text>
+<text x="698" y="363" font-size="10" fill="#4ade80" font-weight="bold">FIRST FLIGHT</text>
+<text x="624" y="380" font-size="7.5" fill="rgba(255,255,255,0.35)">• Pre-flight ABCD: Airframe · Battery · Comms · Docs (FAA Pt107)</text>
+<text x="624" y="395" font-size="7.5" fill="rgba(255,255,255,0.35)">• Hover 1m AGL · 30s · land · inspect ESC temps less than 60°C</text>
+<text x="624" y="410" font-size="7.5" fill="rgba(255,255,255,0.35)">• Hover 3m: test ±10° roll/pitch/yaw · verify altitude hold</text>
+<text x="624" y="425" font-size="7.5" fill="rgba(255,255,255,0.35)">• Transition ≥26ft AGL: monitor altitude ±5ft during nacelle sweep</text>
+<text x="624" y="440" font-size="7.5" fill="rgba(255,255,255,0.35)">• Record telemetry: verify all sensor values nominal</text>
+<text x="624" y="455" font-size="7.5" fill="rgba(255,255,255,0.35)">• Cargo test: 250g payload · verify T/W · test winch deploy + retract</text>
+<text x="460" y="22" text-anchor="middle" font-size="9" fill="rgba(0,229,255,0.3)" letter-spacing="2">BUILD PLAN — ESTIMATED 45-60 HOURS</text>
+
+<text x="10" y="14" font-family="'Courier New',monospace" font-size="9" fill="rgba(0,229,255,0.3)"
+  letter-spacing="2">SERENITY-CLASS TILTROTOR — BUILD PLAN</text>
+<text x="10" y="26" font-family="'Courier New',monospace" font-size="7" fill="rgba(163,230,53,0.4)">
+  © 2025 Steve Griffing PE(CSE) CISSP-ISSEP CPP · CC BY 4.0
+  · Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0</text>
+</svg>
