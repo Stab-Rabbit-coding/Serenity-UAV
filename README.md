@@ -22,7 +22,7 @@ attached to the header is a comms and recorder hat with its own tpm, 915mhz mavl
 
 Here's the conversation:  https://claude.ai/share/a1e3900e-d2bf-4690-ba63-25178e7de666
 
-Here's the latest design revision: https://claude.ai/public/artifacts/08f78503-7532-407c-b8b6-79a310101efc
+Here's the latest design revision: https://claude.ai/public/artifacts/2bae8a5f-7160-4c76-ba28-a98d9b38638a
 
 # Published under Creative Commons With Attribution version 4.0 by Steve Griffing, April 2026. 
 
