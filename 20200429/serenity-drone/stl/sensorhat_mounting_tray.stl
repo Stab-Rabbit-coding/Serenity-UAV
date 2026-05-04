@@ -1,0 +1,86 @@
+solid sensorhat_mounting_tray
+  facet normal 0.000000 -1.000000 0.000000
+    outer loop
+      vertex 0.0000 0.0000 0.0000
+      vertex 52.0000 0.0000 0.0000
+      vertex 52.0000 0.0000 4.0000
+    endloop
+  endfacet
+  facet normal 0.000000 -1.000000 0.000000
+    outer loop
+      vertex 0.0000 0.0000 0.0000
+      vertex 52.0000 0.0000 4.0000
+      vertex 0.0000 0.0000 4.0000
+    endloop
+  endfacet
+  facet normal 1.000000 0.000000 0.000000
+    outer loop
+      vertex 52.0000 0.0000 0.0000
+      vertex 52.0000 42.0000 0.0000
+      vertex 52.0000 42.0000 4.0000
+    endloop
+  endfacet
+  facet normal 1.000000 0.000000 0.000000
+    outer loop
+      vertex 52.0000 0.0000 0.0000
+      vertex 52.0000 42.0000 4.0000
+      vertex 52.0000 0.0000 4.0000
+    endloop
+  endfacet
+  facet normal 0.000000 1.000000 0.000000
+    outer loop
+      vertex 52.0000 42.0000 0.0000
+      vertex 0.0000 42.0000 0.0000
+      vertex 0.0000 42.0000 4.0000
+    endloop
+  endfacet
+  facet normal 0.000000 1.000000 0.000000
+    outer loop
+      vertex 52.0000 42.0000 0.0000
+      vertex 0.0000 42.0000 4.0000
+      vertex 52.0000 42.0000 4.0000
+    endloop
+  endfacet
+  facet normal -1.000000 0.000000 0.000000
+    outer loop
+      vertex 0.0000 42.0000 0.0000
+      vertex 0.0000 0.0000 0.0000
+      vertex 0.0000 0.0000 4.0000
+    endloop
+  endfacet
+  facet normal -1.000000 0.000000 0.000000
+    outer loop
+      vertex 0.0000 42.0000 0.0000
+      vertex 0.0000 0.0000 4.0000
+      vertex 0.0000 42.0000 4.0000
+    endloop
+  endfacet
+  facet normal 0.000000 0.000000 1.000000
+    outer loop
+      vertex 0.0000 0.0000 4.0000
+      vertex 52.0000 0.0000 4.0000
+      vertex 52.0000 42.0000 4.0000
+    endloop
+  endfacet
+  facet normal 0.000000 0.000000 1.000000
+    outer loop
+      vertex 0.0000 0.0000 4.0000
+      vertex 52.0000 42.0000 4.0000
+      vertex 0.0000 42.0000 4.0000
+    endloop
+  endfacet
+  facet normal 0.000000 0.000000 -1.000000
+    outer loop
+      vertex 0.0000 0.0000 0.0000
+      vertex 0.0000 42.0000 0.0000
+      vertex 52.0000 42.0000 0.0000
+    endloop
+  endfacet
+  facet normal 0.000000 0.000000 -1.000000
+    outer loop
+      vertex 0.0000 0.0000 0.0000
+      vertex 52.0000 42.0000 0.0000
+      vertex 52.0000 0.0000 0.0000
+    endloop
+  endfacet
+endsolid sensorhat_mounting_tray

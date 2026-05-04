@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Serenity-Class Tiltrotor UAV — Build Guide — Step 12 — Security Hardware -->
+<!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP  CC BY 4.0 -->
+<!-- Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0 -->
+<!-- Visual: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+<rect width="1200" height="900" fill="#f5f0e8"/>
+<rect x="0" y="0" width="1200" height="64" fill="#006db7"/>
+<text x="24" y="24" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="14" fill="#ffffff" letter-spacing="2">SERENITY-CLASS TILTROTOR UAV</text>
+<text x="24" y="46" font-family="'Arial','Helvetica',sans-serif" font-size="11" fill="#c8dff0">Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · CC BY 4.0 · 2026</text>
+<rect x="1040" y="8" width="144" height="48" rx="6" fill="#ff7518"/>
+<text x="1112" y="29" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">STEP</text>
+<text x="1112" y="50" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">12 / 18</text>
+<rect x="0" y="64" width="1200" height="40" fill="#dde4ea" rx="0"/>
+<text x="24" y="90" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 6 — SECURITY HARDWARE SETUP</text>
+<text x="500" y="90" font-family="'Arial','Helvetica',sans-serif" font-size="12" fill="#607080">CPLD write-blocker · STM32 NX proxy · TPM</text>
+<rect x="0" y="872" width="1200" height="28" fill="#006db7"/>
+<text x="600" y="890" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#c8dff0">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
+<rect x="16" y="112" width="720" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
+<rect x="752" y="112" width="432" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
+<rect x="760" y="120" width="416" height="136" rx="8" fill="#fffdf6" stroke="#006db7" stroke-width="2"/>
+<rect x="760" y="120" width="416" height="28" rx="8" fill="#006db7"/>
+<rect x="760" y="136" width="416" height="12" fill="#006db7"/>
+<text x="968" y="139" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">PARTS NEEDED</text>
+<rect x="768" y="145" width="26" height="16" rx="4" fill="#f5c518" stroke="#222222" stroke-width="1"/>
+<text x="781" y="158" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
+<text x="800" y="158" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">JP2 jumper (2-pin 2.54mm)</text>
+<rect x="768" y="167" width="26" height="16" rx="4" fill="#607080" stroke="#222222" stroke-width="1"/>
+<text x="781" y="180" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
+<text x="800" y="180" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">USB-Blaster or FT2232H (JTAG)</text>
+<rect x="768" y="189" width="26" height="16" rx="4" fill="#607080" stroke="#222222" stroke-width="1"/>
+<text x="781" y="202" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
+<text x="800" y="202" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">ST-LINK V2 (SWD)</text>
+<rect x="768" y="211" width="26" height="16" rx="4" fill="#2e7d32" stroke="#222222" stroke-width="1"/>
+<text x="781" y="224" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
+<text x="800" y="224" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">STM32CubeProgrammer (software)</text>
+<rect x="760" y="264" width="416" height="192" rx="8" fill="#fffdf6" stroke="#607080" stroke-width="1.5"/>
+<rect x="760" y="264" width="416" height="28" rx="8" fill="#607080"/>
+<rect x="760" y="280" width="416" height="12" fill="#607080"/>
+<text x="968" y="283" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">INSTRUCTIONS</text>
+<circle cx="776" cy="299" r="9" fill="#006db7"/>
+<text x="776" y="303" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1</text>
+<text x="792" y="304" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Flash CPLD bitstream via JTAG: write_blocker.bit</text>
+<circle cx="776" cy="323" r="9" fill="#006db7"/>
+<text x="776" y="327" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
+<text x="792" y="328" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Insert JP2 on CM4-CARRIER-1 → verify LED1 (green) illuminates</text>
+<circle cx="776" cy="347" r="9" fill="#006db7"/>
+<text x="776" y="351" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
+<text x="792" y="352" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Flash STM32 via SWD with nx_proxy.bin firmware</text>
+<circle cx="776" cy="371" r="9" fill="#006db7"/>
+<text x="776" y="375" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4</text>
+<text x="792" y="376" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Burn STM32 read-protect OTP fuses in STM32CubeProgrammer</text>
+<circle cx="776" cy="395" r="9" fill="#006db7"/>
+<text x="776" y="399" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">5</text>
+<text x="792" y="400" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Verify NX_LATCH = HIGH at TP_NX test point</text>
+<circle cx="776" cy="419" r="9" fill="#006db7"/>
+<text x="776" y="423" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">6</text>
+<text x="792" y="424" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">On CM4: run tpm2_getcap to confirm both TPMs detected</text>
+<rect x="760" y="468" width="416" height="36" rx="6" fill="#fffac0" stroke="#ff7518" stroke-width="2"/><text x="778" y="483" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="14" fill="#ff7518">⚠</text><text x="796" y="490" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">OTP fuse burning is PERMANENT — verify firmware is correct before burning</text>
+<rect x="760" y="512" width="416" height="36" rx="6" fill="#fffac0" stroke="#ff7518" stroke-width="2"/><text x="778" y="527" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="14" fill="#ff7518">⚠</text><text x="796" y="534" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Once STM32 OTP fuses are blown, NX proxy firmware cannot be changed</text>
+<polygon points="176.0,411.0 232.3,378.5 187.3,352.5 131.0,385.0"   fill="#dde4ea"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<polygon points="176.0,408.0 232.3,375.5 232.3,378.5 176.0,411.0" fill="#90a4ae" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<polygon points="232.3,375.5 187.3,349.5 187.3,352.5 232.3,378.5" fill="#78909c" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<text x="208" y="422" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="9" fill="#222222">CM4-CARRIER-1</text>
+<polygon points="196.0,383.0 211.6,374.0 196.0,365.0 180.4,374.0"   fill="#a3e635"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<polygon points="196.0,378.0 211.6,369.0 211.6,374.0 196.0,383.0" fill="#2e7d32" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<polygon points="211.6,369.0 196.0,360.0 196.0,365.0 211.6,374.0" fill="#2e7d32" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<text x="205" y="388" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="7" fill="#ffffff">CPLD</text>
+<circle cx="236" cy="368" r="18" fill="#a3e635" stroke="#222222" stroke-width="1.5"/>
+<text x="236" y="372" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#222222">WB</text>
+<text x="276" y="358" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="9" fill="#2e7d32">Write-Blocker Active</text>
+<text x="276" y="370" font-family="'Arial','Helvetica',sans-serif" font-size="8" fill="#607080">LED1 GREEN = JP2 installed</text>
+<rect x="246" y="418" width="30" height="16" rx="3" fill="#f5c518" stroke="#ff7518" stroke-width="2"/>
+<text x="261" y="429" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="8" fill="#222222">JP2</text>
+<line x1="261.0" y1="434.0" x2="261.0" y2="442.0" stroke="#ff7518" stroke-width="2" stroke-dasharray="8 4"/><polygon points="261.0,442.0 256.3,430.9 265.7,430.9" fill="#ff7518"/>
+<text x="261" y="450" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="7" fill="#ff7518">Install for forensic mode</text>
+<polygon points="456.0,411.0 512.3,378.5 470.7,354.5 414.4,387.0"   fill="#dde4ea"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<polygon points="456.0,408.0 512.3,375.5 512.3,378.5 456.0,411.0" fill="#90a4ae" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<polygon points="512.3,375.5 470.7,351.5 470.7,354.5 512.3,378.5" fill="#78909c" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<text x="488" y="422" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="9" fill="#222222">COMPHAT-1</text>
+<polygon points="466.0,383.0 478.1,376.0 466.0,369.0 453.9,376.0"   fill="#ffe0c0"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<polygon points="466.0,378.0 478.1,371.0 478.1,376.0 466.0,383.0" fill="#ff7518" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<polygon points="478.1,371.0 466.0,364.0 466.0,369.0 478.1,376.0" fill="#ff7518" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<text x="473" y="388" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="6" fill="#ffffff">STM32</text>
+<circle cx="506" cy="368" r="18" fill="#ff7518" stroke="#222222" stroke-width="1.5"/>
+<text x="506" y="372" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">NX</text>
+<text x="534" y="358" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="9" fill="#ff7518">Hardware NX Enforced</text>
+<text x="534" y="370" font-family="'Arial','Helvetica',sans-serif" font-size="8" fill="#607080">OTP fuses burned · JP3 latch SET</text>
+<polygon points="482.0,382.0 490.7,377.0 478.5,370.0 469.9,375.0"   fill="#fffac0"   stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="482.0,378.0 490.7,373.0 490.7,377.0 482.0,382.0" fill="#f5c518" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="490.7,373.0 478.5,366.0 478.5,370.0 490.7,377.0" fill="#f5c518" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="487" y="388" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="6" fill="#222222">74HC74</text>
+<rect x="536" y="418" width="30" height="16" rx="3" fill="#fffac0" stroke="#ff7518" stroke-width="2"/>
+<text x="551" y="429" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="8" fill="#222222">JP3</text>
+<text x="551" y="444" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="7" fill="#607080">Recessed · tool required</text>
+<polygon points="296.0,492.0 311.6,483.0 299.5,476.0 283.9,485.0"   fill="#fffac0"   stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="296.0,488.0 311.6,479.0 311.6,483.0 296.0,492.0" fill="#f5c518" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="311.6,479.0 299.5,472.0 299.5,476.0 311.6,483.0" fill="#f5c518" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="305" y="498" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="7" fill="#222222">TPM 2.0</text>
+<text x="305" y="518" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="8" fill="#607080">SLB9670 on both boards</text>
+<rect x="96" y="528" width="620" height="90" rx="6" fill="#fffdf6" stroke="#a3e635" stroke-width="2"/>
+<text x="126" y="546" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#2e7d32">SECURITY VERIFICATION CHECKLIST</text>
+<rect x="106" y="550" width="14" height="14" rx="2" fill="#2e7d32" opacity="0.6"/>
+<text x="124" y="562" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#222222">JP2 installed on CM4-CARRIER-1 → LED1 (green) illuminated</text>
+<rect x="106" y="569" width="14" height="14" rx="2" fill="#ff7518" opacity="0.6"/>
+<text x="124" y="581" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#222222">NX_LATCH measures HIGH at TP_NX test point on COMPHAT</text>
+<rect x="106" y="588" width="14" height="14" rx="2" fill="#c62828" opacity="0.6"/>
+<text x="124" y="600" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#222222">STM32 OTP fuses burned → read-protect verified via STM32CubeProgrammer</text>
+<rect x="106" y="607" width="14" height="14" rx="2" fill="#f5c518" opacity="0.6"/>
+<text x="124" y="619" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#222222">TPM detected: run 'tpm2_getcap properties-fixed' on CM4 — should show TPM2</text>
+</svg>

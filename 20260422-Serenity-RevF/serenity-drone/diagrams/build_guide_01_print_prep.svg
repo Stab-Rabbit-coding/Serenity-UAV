@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Serenity-Class Tiltrotor UAV — Build Guide — Step 01 — Print Prep -->
+<!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP  CC BY 4.0 -->
+<!-- Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0 -->
+<!-- Visual: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+<rect width="1200" height="900" fill="#f5f0e8"/>
+<rect x="0" y="0" width="1200" height="64" fill="#006db7"/>
+<text x="24" y="24" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="14" fill="#ffffff" letter-spacing="2">SERENITY-CLASS TILTROTOR UAV</text>
+<text x="24" y="46" font-family="'Arial','Helvetica',sans-serif" font-size="11" fill="#c8dff0">Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · CC BY 4.0 · 2026</text>
+<rect x="1040" y="8" width="144" height="48" rx="6" fill="#ff7518"/>
+<text x="1112" y="29" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">STEP</text>
+<text x="1112" y="50" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">1 / 18</text>
+<rect x="0" y="64" width="1200" height="40" fill="#dde4ea" rx="0"/>
+<text x="24" y="90" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 1 — PRINT PREPARATION</text>
+<text x="500" y="90" font-family="'Arial','Helvetica',sans-serif" font-size="12" fill="#607080">Dry filament · install steel nozzle · calibrate</text>
+<rect x="0" y="872" width="1200" height="28" fill="#006db7"/>
+<text x="600" y="890" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#c8dff0">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
+<rect x="16" y="112" width="720" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
+<rect x="752" y="112" width="432" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
+<rect x="760" y="120" width="416" height="114" rx="8" fill="#fffdf6" stroke="#006db7" stroke-width="2"/>
+<rect x="760" y="120" width="416" height="28" rx="8" fill="#006db7"/>
+<rect x="760" y="136" width="416" height="12" fill="#006db7"/>
+<text x="968" y="139" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">PARTS NEEDED</text>
+<rect x="768" y="145" width="26" height="16" rx="4" fill="#607080" stroke="#222222" stroke-width="1"/>
+<text x="781" y="158" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3×</text>
+<text x="800" y="158" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Filament spools</text>
+<rect x="768" y="167" width="26" height="16" rx="4" fill="#f5c518" stroke="#222222" stroke-width="1"/>
+<text x="781" y="180" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
+<text x="800" y="180" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Filament dryer</text>
+<rect x="768" y="189" width="26" height="16" rx="4" fill="#006db7" stroke="#222222" stroke-width="1"/>
+<text x="781" y="202" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
+<text x="800" y="202" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">3D Printer</text>
+<rect x="760" y="242" width="416" height="168" rx="8" fill="#fffdf6" stroke="#607080" stroke-width="1.5"/>
+<rect x="760" y="242" width="416" height="28" rx="8" fill="#607080"/>
+<rect x="760" y="258" width="416" height="12" fill="#607080"/>
+<text x="968" y="261" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">INSTRUCTIONS</text>
+<circle cx="776" cy="277" r="9" fill="#006db7"/>
+<text x="776" y="281" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1</text>
+<text x="792" y="282" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Load PETG, CF-PETG, and TPU 95A filament</text>
+<circle cx="776" cy="301" r="9" fill="#006db7"/>
+<text x="776" y="305" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
+<text x="792" y="306" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Dry ALL filament in dryer: 65°C for 6 hours</text>
+<circle cx="776" cy="325" r="9" fill="#006db7"/>
+<text x="776" y="329" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
+<text x="792" y="330" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Install 0.4mm hardened steel nozzle</text>
+<circle cx="776" cy="349" r="9" fill="#006db7"/>
+<text x="776" y="353" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4</text>
+<text x="792" y="354" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Calibrate E-steps and Pressure Advance per filament</text>
+<circle cx="776" cy="373" r="9" fill="#006db7"/>
+<text x="776" y="377" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">5</text>
+<text x="792" y="378" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Bed: PEI spring steel · levelled after nozzle change</text>
+<rect x="760" y="422" width="416" height="36" rx="6" fill="#fffac0" stroke="#ff7518" stroke-width="2"/><text x="778" y="437" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="14" fill="#ff7518">⚠</text><text x="796" y="444" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">NEVER print CF-PETG through brass — it will destroy the nozzle within minutes</text>
+<rect x="760" y="466" width="416" height="32" rx="6" fill="#b2ebf2" stroke="#00838f" stroke-width="1.5"/><text x="770" y="480" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#00838f">ℹ</text><text x="786" y="486" font-family="'Arial','Helvetica',sans-serif" font-size="9.5" fill="#222222">Standard brass nozzle wears out in ~50g of CF-PETG</text>
+<polygon points="258.9,383.2 239.2,375.7 239.2,408.7 258.9,416.2" fill="#dde4ea" stroke="#222222" stroke-width="1.5"/>
+<polygon points="239.2,375.7 216.0,373.0 216.0,406.0 239.2,408.7" fill="#dde4ea" stroke="#222222" stroke-width="1.5"/>
+<polygon points="216.0,373.0 192.8,375.7 192.8,408.7 216.0,406.0" fill="#dde4ea" stroke="#222222" stroke-width="1.5"/>
+<polygon points="192.8,375.7 173.1,383.2 173.1,416.2 192.8,408.7" fill="#dde4ea" stroke="#222222" stroke-width="1.5"/>
+<polygon points="173.1,383.2 160.0,394.6 160.0,427.6 173.1,416.2" fill="#dde4ea" stroke="#222222" stroke-width="1.5"/>
+<polygon points="160.0,394.6 155.4,408.0 155.4,441.0 160.0,427.6" fill="#dde4ea" stroke="#222222" stroke-width="1.5"/>
+<polygon points="155.4,408.0 160.0,421.4 160.0,454.4 155.4,441.0" fill="#dde4ea" stroke="#222222" stroke-width="1.5"/>
+<polygon points="160.0,421.4 173.1,432.8 173.1,465.8 160.0,454.4" fill="#dde4ea" stroke="#222222" stroke-width="1.5"/>
+<polygon points="173.1,432.8 192.8,440.3 192.8,473.3 173.1,465.8" fill="#dde4ea" stroke="#222222" stroke-width="1.5"/>
+<polygon points="192.8,440.3 216.0,443.0 216.0,476.0 192.8,473.3" fill="#dde4ea" stroke="#222222" stroke-width="1.5"/>
+<polygon points="216.0,443.0 239.2,440.3 239.2,473.3 216.0,476.0" fill="#dde4ea" stroke="#222222" stroke-width="1.5"/>
+<polygon points="239.2,440.3 258.9,432.8 258.9,465.8 239.2,473.3" fill="#dde4ea" stroke="#222222" stroke-width="1.5"/>
+<polygon points="258.9,432.8 272.0,421.4 272.0,454.4 258.9,465.8" fill="#dde4ea" stroke="#222222" stroke-width="1.5"/>
+<polygon points="272.0,421.4 276.6,408.0 276.6,441.0 272.0,454.4" fill="#dde4ea" stroke="#222222" stroke-width="1.5"/>
+<polygon points="276.6,408.0 272.0,394.6 272.0,427.6 276.6,441.0" fill="#dde4ea" stroke="#222222" stroke-width="1.5"/>
+<polygon points="272.0,394.6 258.9,383.2 258.9,416.2 272.0,427.6" fill="#dde4ea" stroke="#222222" stroke-width="1.5"/>
+<polygon points="258.9,416.2 239.2,408.7 216.0,406.0 192.8,408.7 173.1,416.2 160.0,427.6 155.4,441.0 160.0,454.4 173.1,465.8 192.8,473.3 216.0,476.0 239.2,473.3 258.9,465.8 272.0,454.4 276.6,441.0 272.0,427.6" fill="#ffffff" stroke="#222222" stroke-width="1.5"/>
+<text x="216" y="458" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#607080">PETG</text>
+<polygon points="378.9,373.2 359.2,365.7 359.2,398.7 378.9,406.2" fill="#90a4ae" stroke="#222222" stroke-width="1.5"/>
+<polygon points="359.2,365.7 336.0,363.0 336.0,396.0 359.2,398.7" fill="#90a4ae" stroke="#222222" stroke-width="1.5"/>
+<polygon points="336.0,363.0 312.8,365.7 312.8,398.7 336.0,396.0" fill="#90a4ae" stroke="#222222" stroke-width="1.5"/>
+<polygon points="312.8,365.7 293.1,373.2 293.1,406.2 312.8,398.7" fill="#90a4ae" stroke="#222222" stroke-width="1.5"/>
+<polygon points="293.1,373.2 280.0,384.6 280.0,417.6 293.1,406.2" fill="#90a4ae" stroke="#222222" stroke-width="1.5"/>
+<polygon points="280.0,384.6 275.4,398.0 275.4,431.0 280.0,417.6" fill="#90a4ae" stroke="#222222" stroke-width="1.5"/>
+<polygon points="275.4,398.0 280.0,411.4 280.0,444.4 275.4,431.0" fill="#90a4ae" stroke="#222222" stroke-width="1.5"/>
+<polygon points="280.0,411.4 293.1,422.8 293.1,455.8 280.0,444.4" fill="#90a4ae" stroke="#222222" stroke-width="1.5"/>
+<polygon points="293.1,422.8 312.8,430.3 312.8,463.3 293.1,455.8" fill="#90a4ae" stroke="#222222" stroke-width="1.5"/>
+<polygon points="312.8,430.3 336.0,433.0 336.0,466.0 312.8,463.3" fill="#90a4ae" stroke="#222222" stroke-width="1.5"/>
+<polygon points="336.0,433.0 359.2,430.3 359.2,463.3 336.0,466.0" fill="#90a4ae" stroke="#222222" stroke-width="1.5"/>
+<polygon points="359.2,430.3 378.9,422.8 378.9,455.8 359.2,463.3" fill="#90a4ae" stroke="#222222" stroke-width="1.5"/>
+<polygon points="378.9,422.8 392.0,411.4 392.0,444.4 378.9,455.8" fill="#90a4ae" stroke="#222222" stroke-width="1.5"/>
+<polygon points="392.0,411.4 396.6,398.0 396.6,431.0 392.0,444.4" fill="#90a4ae" stroke="#222222" stroke-width="1.5"/>
+<polygon points="396.6,398.0 392.0,384.6 392.0,417.6 396.6,431.0" fill="#90a4ae" stroke="#222222" stroke-width="1.5"/>
+<polygon points="392.0,384.6 378.9,373.2 378.9,406.2 392.0,417.6" fill="#90a4ae" stroke="#222222" stroke-width="1.5"/>
+<polygon points="378.9,406.2 359.2,398.7 336.0,396.0 312.8,398.7 293.1,406.2 280.0,417.6 275.4,431.0 280.0,444.4 293.1,455.8 312.8,463.3 336.0,466.0 359.2,463.3 378.9,455.8 392.0,444.4 396.6,431.0 392.0,417.6" fill="#cfd8dc" stroke="#222222" stroke-width="1.5"/>
+<text x="336" y="448" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#37474f">CF-PETG</text>
+<polygon points="498.9,383.2 479.2,375.7 479.2,408.7 498.9,416.2" fill="#f8bbd0" stroke="#222222" stroke-width="1.5"/>
+<polygon points="479.2,375.7 456.0,373.0 456.0,406.0 479.2,408.7" fill="#f8bbd0" stroke="#222222" stroke-width="1.5"/>
+<polygon points="456.0,373.0 432.8,375.7 432.8,408.7 456.0,406.0" fill="#f8bbd0" stroke="#222222" stroke-width="1.5"/>
+<polygon points="432.8,375.7 413.1,383.2 413.1,416.2 432.8,408.7" fill="#f8bbd0" stroke="#222222" stroke-width="1.5"/>
+<polygon points="413.1,383.2 400.0,394.6 400.0,427.6 413.1,416.2" fill="#f8bbd0" stroke="#222222" stroke-width="1.5"/>
+<polygon points="400.0,394.6 395.4,408.0 395.4,441.0 400.0,427.6" fill="#f8bbd0" stroke="#222222" stroke-width="1.5"/>
+<polygon points="395.4,408.0 400.0,421.4 400.0,454.4 395.4,441.0" fill="#f8bbd0" stroke="#222222" stroke-width="1.5"/>
+<polygon points="400.0,421.4 413.1,432.8 413.1,465.8 400.0,454.4" fill="#f8bbd0" stroke="#222222" stroke-width="1.5"/>
+<polygon points="413.1,432.8 432.8,440.3 432.8,473.3 413.1,465.8" fill="#f8bbd0" stroke="#222222" stroke-width="1.5"/>
+<polygon points="432.8,440.3 456.0,443.0 456.0,476.0 432.8,473.3" fill="#f8bbd0" stroke="#222222" stroke-width="1.5"/>
+<polygon points="456.0,443.0 479.2,440.3 479.2,473.3 456.0,476.0" fill="#f8bbd0" stroke="#222222" stroke-width="1.5"/>
+<polygon points="479.2,440.3 498.9,432.8 498.9,465.8 479.2,473.3" fill="#f8bbd0" stroke="#222222" stroke-width="1.5"/>
+<polygon points="498.9,432.8 512.0,421.4 512.0,454.4 498.9,465.8" fill="#f8bbd0" stroke="#222222" stroke-width="1.5"/>
+<polygon points="512.0,421.4 516.6,408.0 516.6,441.0 512.0,454.4" fill="#f8bbd0" stroke="#222222" stroke-width="1.5"/>
+<polygon points="516.6,408.0 512.0,394.6 512.0,427.6 516.6,441.0" fill="#f8bbd0" stroke="#222222" stroke-width="1.5"/>
+<polygon points="512.0,394.6 498.9,383.2 498.9,416.2 512.0,427.6" fill="#f8bbd0" stroke="#222222" stroke-width="1.5"/>
+<polygon points="498.9,416.2 479.2,408.7 456.0,406.0 432.8,408.7 413.1,416.2 400.0,427.6 395.4,441.0 400.0,454.4 413.1,465.8 432.8,473.3 456.0,476.0 479.2,473.3 498.9,465.8 512.0,454.4 516.6,441.0 512.0,427.6" fill="#c2185b" stroke="#222222" stroke-width="1.5"/>
+<text x="456" y="458" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#c2185b">TPU 95A</text>
+<polygon points="296.0,548.0 399.9,488.0 330.6,448.0 226.7,508.0"   fill="#fff8e1"   stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="296.0,488.0 399.9,428.0 399.9,488.0 296.0,548.0" fill="#ffe082" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="399.9,428.0 330.6,388.0 330.6,448.0 399.9,488.0" fill="#ffd54f" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="356" y="500" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#222222">FILAMENT</text>
+<text x="356" y="518" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#607080">DRYER</text>
+<text x="356" y="540" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="12" fill="#ff7518">65°C / 6h</text>
+<line x1="216.0" y1="468.0" x2="276.0" y2="488.0" stroke="#ff7518" stroke-width="2" stroke-dasharray="8 4"/><polygon points="276.0,488.0 264.0,488.9 267.0,480.1" fill="#ff7518"/>
+<line x1="336.0" y1="458.0" x2="336.0" y2="488.0" stroke="#ff7518" stroke-width="2" stroke-dasharray="8 4"/><polygon points="336.0,488.0 331.3,476.9 340.7,476.9" fill="#ff7518"/>
+<line x1="456.0" y1="468.0" x2="396.0" y2="488.0" stroke="#ff7518" stroke-width="2" stroke-dasharray="8 4"/><polygon points="396.0,488.0 405.0,480.1 408.0,488.9" fill="#ff7518"/>
+<polygon points="496.0,568.0 617.2,498.0 530.6,448.0 409.4,518.0"   fill="#e3f2fd"   stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="496.0,448.0 617.2,378.0 617.2,498.0 496.0,568.0" fill="#90caf9" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="617.2,378.0 530.6,328.0 530.6,448.0 617.2,498.0" fill="#64b5f6" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="566" y="503" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#006db7">3D PRINTER</text>
+<text x="566" y="523" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#607080">Hardened steel nozzle</text>
+<text x="566" y="540" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#607080">required for CF-PETG</text>
+<circle cx="656" cy="458" r="18" fill="#ff7518" stroke="#222222" stroke-width="1.5"/>
+<text x="656" y="462" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="16" fill="#ffffff">⬡</text>
+<text x="656" y="434" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#ff7518">Steel nozzle</text>
+<text x="656" y="444" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#ff7518">required!</text>
+</svg>

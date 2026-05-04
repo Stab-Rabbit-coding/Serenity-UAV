@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Serenity-Class Tiltrotor — Top View -->
+<!-- © 2025 Steve Griffing PE(CSE) CISSP-ISSEP CPP  CC BY 4.0 -->
+<!-- Hull: Peter Farell CC BY 4.0  Nozzle: BamJr CC BY 4.0 -->
+<!-- Visual inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy / Universal Pictures -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="800" height="420">
+<defs>
+  <style>
+    @import url('https://fonts.cdnfonts.com/css/opendyslexic');
+    @media screen {
+      text, tspan, .label, .note, .dim {
+        font-family: 'OpenDyslexic','OpenDyslexicMono',sans-serif !important;
+      }
+    }
+    @media print {
+      svg { background: #ffffff !important; }
+      text, tspan { fill: #111111 !important; font-family: 'OpenDyslexic',sans-serif !important; }
+      rect[fill^="rgba"], rect[fill^="#0"] { fill: #f5f5f5 !important; }
+    }
+  </style>
+  <style>text { font-family="'OpenDyslexic Mono','OpenDyslexicMono',monospace"; fill:rgba(255,255,255,0.35); font-size:10px; }
+    .label { fill:#00e5ff; font-size:11px; font-weight:bold; }
+    .dim   { fill:rgba(255,255,255,0.18); font-size:8px; }
+    .note  { fill:rgba(255,255,255,0.35); font-size:9px; }
+    .ant   { fill:#4ade80; font-size:8px; }
+  </style>
+  <marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+    <path d="M0,0 L6,3 L0,6 Z" fill="#00e5ff" opacity="0.5"/>
+  </marker>
+  <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+    <path d="M20 0L0 0 0 20" fill="none" stroke="rgba(0,229,255,0.06)" stroke-width="0.5"/>
+  </pattern>
+</defs>
+<rect width="800" height="420" fill="#07090e"/>
+<rect width="800" height="420" fill="url(#grid)"/>
+
+<polygon points="215.2,153.3 232.8,142.5 269.2,-249.0 292.2,-249.0 308.4,142.5 327.3,153.3" fill="#0e2030" stroke="#00e5ff" stroke-width="1.3"/>
+<line x1="235.5" y1="153.3" x2="280.1" y2="-249.0" stroke="rgba(0,229,255,0.4)" stroke-width="2.5" stroke-dasharray="6 3"/>
+<ellipse cx="269.2" cy="-249.0" rx="48.6" ry="20.2" fill="#0e2030" stroke="#ff6b35" stroke-width="2"/>
+<ellipse cx="269.2" cy="-249.0" rx="29.7" ry="12.2" fill="rgba(255,107,53,0.12)" stroke="#ff6b35" stroke-width="1" stroke-dasharray="3 2"/>
+<circle cx="246.3" cy="-249.0" r="6" fill="#f87171" opacity="0.9"/>
+<text x="246.3" y="-265.0" text-anchor="middle" font-size="8" fill="#f87171" font-weight="bold">PORT</text>
+<line x1="228.8" y1="-249.0" x2="309.8" y2="-249.0" stroke="#ff6b35" stroke-width="0.8" stroke-dasharray="3 2" opacity="0.6"/>
+<text x="269.2" y="-275.0" text-anchor="middle" font-size="7" fill="#ff6b35">70mm EDF · gear nozzle</text>
+<polygon points="215.2,266.7 232.8,277.5 269.2,669.0 292.2,669.0 308.4,277.5 327.3,266.7" fill="#0e2030" stroke="#00e5ff" stroke-width="1.3"/>
+<line x1="235.5" y1="266.7" x2="280.1" y2="669.0" stroke="rgba(0,229,255,0.4)" stroke-width="2.5" stroke-dasharray="6 3"/>
+<ellipse cx="269.2" cy="669.0" rx="48.6" ry="20.2" fill="#0e2030" stroke="#ff6b35" stroke-width="2"/>
+<ellipse cx="269.2" cy="669.0" rx="29.7" ry="12.2" fill="rgba(255,107,53,0.12)" stroke="#ff6b35" stroke-width="1" stroke-dasharray="3 2"/>
+<circle cx="246.3" cy="669.0" r="6" fill="#4ade80" opacity="0.9"/>
+<text x="246.3" y="685.0" text-anchor="middle" font-size="8" fill="#4ade80" font-weight="bold">STBD</text>
+<line x1="228.8" y1="669.0" x2="309.8" y2="669.0" stroke="#ff6b35" stroke-width="0.8" stroke-dasharray="3 2" opacity="0.6"/>
+<text x="269.2" y="695.0" text-anchor="middle" font-size="7" fill="#ff6b35">70mm EDF · gear nozzle</text>
+<path d="M 60.0,210.0 L 70.8,196.5 L 89.7,185.7 L 114.0,169.5 L 138.3,161.4 L 178.8,160.1 L 222.0,153.3 L 249.0,153.3 L 282.8,156.0 L 316.5,161.4 L 357.0,170.8 L 400.2,185.7 L 411.0,188.4 L 435.3,177.6 L 471.8,170.8 L 505.5,172.2 L 552.8,180.3 L 552.8,239.7 L 505.5,247.8 L 471.8,249.2 L 435.3,242.4 L 411.0,231.6 L 400.2,234.3 L 357.0,249.2 L 316.5,258.6 L 282.8,264.0 L 249.0,266.7 L 222.0,266.7 L 178.8,259.9 L 138.3,258.6 L 114.0,250.5 L 89.7,234.3 L 70.8,223.5 L 60.0,210.0 Z" fill="#0e2030" stroke="#00e5ff" stroke-width="2"/>
+<ellipse cx="119.4" cy="210.0" rx="59.4" ry="32.4" fill="rgba(0,229,255,0.1)" stroke="#00e5ff" stroke-width="1"/>
+<circle cx="467.7" cy="210.0" r="27.0" fill="rgba(255,230,0,0.12)" stroke="#ffe600" stroke-width="1.8"/>
+<circle cx="467.7" cy="210.0" r="18.9" fill="rgba(255,230,0,0.15)" stroke="#ffe600" stroke-width="1"/>
+<text x="467.7" y="214.0" text-anchor="middle" font-size="7" fill="#ffe600">40mm EDF</text>
+<line x1="60.0" y1="210.0" x2="35.7" y2="210.0" stroke="#2dd4bf" stroke-width="3" stroke-linecap="round"/>
+<circle cx="35.7" cy="210.0" r="3" fill="#2dd4bf"/>
+<text x="35.7" y="202.0" text-anchor="middle" font-size="7" fill="#2dd4bf">PITOT</text>
+<rect x="122.1" y="191.1" width="29.7" height="12.2" rx="2" fill="rgba(74,222,128,0.25)" stroke="#4ade80" stroke-width="1.5"/>
+<text x="136.9" y="187.1" text-anchor="middle" font-size="8" fill="#4ade80" font-weight="bold">GPS</text>
+<circle cx="451.5" cy="191.1" r="5" fill="rgba(244,114,182,0.3)" stroke="#f472b6" stroke-width="1.5"/>
+<text x="451.5" y="180.3" text-anchor="middle" font-size="7" fill="#f472b6">49MHz↑</text>
+<circle cx="381.3" cy="210.0" r="4" fill="rgba(255,107,53,0.2)" stroke="#ff6b35" stroke-width="1" stroke-dasharray="2 2"/>
+<text x="381.3" y="224.0" text-anchor="middle" font-size="7" fill="#ff6b35">SiK↓ 915MHz</text>
+<rect x="235.5" y="196.5" width="94.5" height="27.0" rx="3" fill="rgba(244,114,182,0.08)" stroke="#f472b6" stroke-width="1" stroke-dasharray="3 2"/>
+<text x="282.8" y="213.0" text-anchor="middle" font-size="7" fill="#f472b6">PAYLOAD BAY</text>
+<circle cx="539.2" cy="210.0" r="5" fill="white" opacity="0.85"/>
+<text x="551.2" y="213.0" font-size="7" fill="white">TAIL●</text>
+<circle cx="222.0" cy="210.0" r="5" fill="#f87171" opacity="0.9"/>
+<text x="222.0" y="198.0" text-anchor="middle" font-size="7" fill="#f87171">ACOL◆</text>
+<line x1="265.2" y1="155.0" x2="265.2" y2="265.0" stroke="#4ade80" stroke-width="1" stroke-dasharray="5 3"/>
+<polygon points="265.2,155.0 258.2,172.0 272.2,172.0" fill="#4ade80" opacity="0.9"/>
+<text x="265.2" y="148.0" text-anchor="middle" font-size="8" fill="#4ade80" font-weight="bold">CG 152mm</text>
+<line x1="60.0" y1="398.0" x2="552.8" y2="398.0" stroke="#00e5ff" stroke-width="0.5" opacity="0.25"/>
+<text x="305.7" y="412.0" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.78)">365 mm (14.4") hull length</text>
+<line x1="28" y1="-249.0" x2="28" y2="669.0" stroke="#00e5ff" stroke-width="0.5" opacity="0.2"/>
+<text x="14" y="214.0" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.78)" transform="rotate(-90,14,210.0)">680 mm (26.8") span</text>
+<text x="49.2" y="214.0" text-anchor="end" font-size="8" fill="rgba(255,255,255,0.78)">NOSE</text>
+<text x="556.8" y="214.0" font-size="8" fill="rgba(255,255,255,0.78)">TAIL</text>
+
+<text x="10" y="14" font-family="'OpenDyslexic Mono','OpenDyslexicMono',monospace" font-size="9" fill="rgba(0,229,255,0.88)"
+  letter-spacing="2">SERENITY-CLASS TILTROTOR — TOP / PLAN VIEW</text>
+<text x="10" y="26" font-family="'OpenDyslexic Mono','OpenDyslexicMono',monospace" font-size="7" fill="rgba(163,230,53,0.95)">
+  © 2025 Steve Griffing PE(CSE) CISSP-ISSEP CPP · CC BY 4.0
+  · Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0</text>
+</svg>

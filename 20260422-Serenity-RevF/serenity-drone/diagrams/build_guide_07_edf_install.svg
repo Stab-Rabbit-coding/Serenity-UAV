@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Serenity-Class Tiltrotor UAV — Build Guide — Step 07 — EDF Install -->
+<!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP  CC BY 4.0 -->
+<!-- Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0 -->
+<!-- Visual: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+<rect width="1200" height="900" fill="#f5f0e8"/>
+<rect x="0" y="0" width="1200" height="64" fill="#006db7"/>
+<text x="24" y="24" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="14" fill="#ffffff" letter-spacing="2">SERENITY-CLASS TILTROTOR UAV</text>
+<text x="24" y="46" font-family="'Arial','Helvetica',sans-serif" font-size="11" fill="#c8dff0">Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · CC BY 4.0 · 2026</text>
+<rect x="1040" y="8" width="144" height="48" rx="6" fill="#ff7518"/>
+<text x="1112" y="29" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">STEP</text>
+<text x="1112" y="50" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">7 / 18</text>
+<rect x="0" y="64" width="1200" height="40" fill="#dde4ea" rx="0"/>
+<text x="24" y="90" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 3 — INSTALL 70mm EDF & LED</text>
+<text x="500" y="90" font-family="'Arial','Helvetica',sans-serif" font-size="12" fill="#607080">Insert EDF · route motor leads · install tip cap</text>
+<rect x="0" y="872" width="1200" height="28" fill="#006db7"/>
+<text x="600" y="890" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#c8dff0">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
+<rect x="16" y="112" width="720" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
+<rect x="752" y="112" width="432" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
+<rect x="760" y="120" width="416" height="136" rx="8" fill="#fffdf6" stroke="#006db7" stroke-width="2"/>
+<rect x="760" y="120" width="416" height="28" rx="8" fill="#006db7"/>
+<rect x="760" y="136" width="416" height="12" fill="#006db7"/>
+<text x="968" y="139" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">PARTS NEEDED</text>
+<rect x="768" y="145" width="26" height="16" rx="4" fill="#ff7518" stroke="#222222" stroke-width="1"/>
+<text x="781" y="158" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2×</text>
+<text x="800" y="158" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">70mm EDF + motor</text>
+<rect x="768" y="167" width="26" height="16" rx="4" fill="#607080" stroke="#222222" stroke-width="1"/>
+<text x="781" y="180" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">8×</text>
+<text x="800" y="180" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">M2.5 × 10mm screws</text>
+<rect x="768" y="189" width="26" height="16" rx="4" fill="#c62828" stroke="#222222" stroke-width="1"/>
+<text x="781" y="202" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2×</text>
+<text x="800" y="202" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">WS2812C-2020 LED</text>
+<rect x="768" y="211" width="26" height="16" rx="4" fill="#dde4ea" stroke="#222222" stroke-width="1"/>
+<text x="781" y="224" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2×</text>
+<text x="800" y="224" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Clear PETG tip cap</text>
+<rect x="760" y="264" width="416" height="216" rx="8" fill="#fffdf6" stroke="#607080" stroke-width="1.5"/>
+<rect x="760" y="264" width="416" height="28" rx="8" fill="#607080"/>
+<rect x="760" y="280" width="416" height="12" fill="#607080"/>
+<text x="968" y="283" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">INSTRUCTIONS</text>
+<circle cx="776" cy="299" r="9" fill="#006db7"/>
+<text x="776" y="303" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1</text>
+<text x="792" y="304" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Slide 70mm EDF into nacelle pod from INTAKE face</text>
+<circle cx="776" cy="323" r="9" fill="#006db7"/>
+<text x="776" y="327" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
+<text x="792" y="328" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Align motor mount ears with M2.5 captive nut inserts in pod</text>
+<circle cx="776" cy="347" r="9" fill="#006db7"/>
+<text x="776" y="351" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
+<text x="792" y="352" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Torque all 4× M2.5 screws to 0.3 N·m</text>
+<circle cx="776" cy="371" r="9" fill="#006db7"/>
+<text x="776" y="375" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4</text>
+<text x="792" y="376" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Route motor leads through 4mm wire channel in nacelle wall</text>
+<circle cx="776" cy="395" r="9" fill="#006db7"/>
+<text x="776" y="399" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">5</text>
+<text x="792" y="400" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Thread leads through hollow CF spar toward ESC location</text>
+<circle cx="776" cy="419" r="9" fill="#006db7"/>
+<text x="776" y="423" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">6</text>
+<text x="792" y="424" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Solder WS2812C-2020 LED into nacelle tip cap recess</text>
+<circle cx="776" cy="443" r="9" fill="#006db7"/>
+<text x="776" y="447" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">7</text>
+<text x="792" y="448" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Apply 5-minute epoxy bead over LED · seal for moisture</text>
+<rect x="760" y="492" width="416" height="32" rx="6" fill="#b2ebf2" stroke="#00838f" stroke-width="1.5"/><text x="770" y="506" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#00838f">ℹ</text><text x="786" y="512" font-family="'Arial','Helvetica',sans-serif" font-size="9.5" fill="#222222">Port nacelle LED = RED  ·  Starboard nacelle LED = GREEN (ICAO regulation)</text>
+<polygon points="310.6,368.0 298.2,362.8 298.2,482.8 310.6,488.0" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="298.2,362.8 283.7,360.1 283.7,480.1 298.2,482.8" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="283.7,360.1 268.3,360.1 268.3,480.1 283.7,480.1" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="268.3,360.1 253.8,362.8 253.8,482.8 268.3,480.1" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="253.8,362.8 241.4,368.0 241.4,488.0 253.8,482.8" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="241.4,368.0 232.3,375.2 232.3,495.2 241.4,488.0" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="232.3,375.2 227.6,383.6 227.6,503.6 232.3,495.2" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="227.6,383.6 227.6,392.4 227.6,512.4 227.6,503.6" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="227.6,392.4 232.3,400.8 232.3,520.8 227.6,512.4" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="232.3,400.8 241.4,408.0 241.4,528.0 232.3,520.8" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="241.4,408.0 253.8,413.2 253.8,533.2 241.4,528.0" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="253.8,413.2 268.3,415.9 268.3,535.9 253.8,533.2" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="268.3,415.9 283.7,415.9 283.7,535.9 268.3,535.9" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="283.7,415.9 298.2,413.2 298.2,533.2 283.7,535.9" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="298.2,413.2 310.6,408.0 310.6,528.0 298.2,533.2" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="310.6,408.0 319.7,400.8 319.7,520.8 310.6,528.0" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="319.7,400.8 324.4,392.4 324.4,512.4 319.7,520.8" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="324.4,392.4 324.4,383.6 324.4,503.6 324.4,512.4" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="324.4,383.6 319.7,375.2 319.7,495.2 324.4,503.6" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="319.7,375.2 310.6,368.0 310.6,488.0 319.7,495.2" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="310.6,488.0 298.2,482.8 283.7,480.1 268.3,480.1 253.8,482.8 241.4,488.0 232.3,495.2 227.6,503.6 227.6,512.4 232.3,520.8 241.4,528.0 253.8,533.2 268.3,535.9 283.7,535.9 298.2,533.2 310.6,528.0 319.7,520.8 324.4,512.4 324.4,503.6 319.7,495.2" fill="rgba(0,0,0,0)" stroke="#ff7518" stroke-width="2"/>
+<polygon points="306.3,370.5 295.5,365.9 295.5,465.9 306.3,470.5" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
+<polygon points="295.5,365.9 282.7,363.6 282.7,463.6 295.5,465.9" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
+<polygon points="282.7,363.6 269.3,363.6 269.3,463.6 282.7,463.6" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
+<polygon points="269.3,363.6 256.5,365.9 256.5,465.9 269.3,463.6" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
+<polygon points="256.5,365.9 245.7,370.5 245.7,470.5 256.5,465.9" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
+<polygon points="245.7,370.5 237.8,376.8 237.8,476.8 245.7,470.5" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
+<polygon points="237.8,376.8 233.7,384.1 233.7,484.1 237.8,476.8" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
+<polygon points="233.7,384.1 233.7,391.9 233.7,491.9 233.7,484.1" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
+<polygon points="233.7,391.9 237.8,399.2 237.8,499.2 233.7,491.9" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
+<polygon points="237.8,399.2 245.7,405.5 245.7,505.5 237.8,499.2" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
+<polygon points="245.7,405.5 256.5,410.1 256.5,510.1 245.7,505.5" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
+<polygon points="256.5,410.1 269.3,412.4 269.3,512.4 256.5,510.1" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
+<polygon points="269.3,412.4 282.7,412.4 282.7,512.4 269.3,512.4" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
+<polygon points="282.7,412.4 295.5,410.1 295.5,510.1 282.7,512.4" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
+<polygon points="295.5,410.1 306.3,405.5 306.3,505.5 295.5,510.1" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
+<polygon points="306.3,405.5 314.2,399.2 314.2,499.2 306.3,505.5" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
+<polygon points="314.2,399.2 318.3,391.9 318.3,491.9 314.2,499.2" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
+<polygon points="318.3,391.9 318.3,384.1 318.3,484.1 318.3,491.9" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
+<polygon points="318.3,384.1 314.2,376.8 314.2,476.8 318.3,484.1" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
+<polygon points="314.2,376.8 306.3,370.5 306.3,470.5 314.2,476.8" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
+<polygon points="306.3,470.5 295.5,465.9 282.7,463.6 269.3,463.6 256.5,465.9 245.7,470.5 237.8,476.8 233.7,484.1 233.7,491.9 237.8,499.2 245.7,505.5 256.5,510.1 269.3,512.4 282.7,512.4 295.5,510.1 306.3,505.5 314.2,499.2 318.3,491.9 318.3,484.1 314.2,476.8" fill="rgba(80,80,200,0.4)" stroke="#006db7" stroke-width="2"/>
+<text x="276" y="478" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#006db7">70mm EDF</text>
+<path d="M316,398 Q456,408 496,488" fill="none" stroke="#c62828" stroke-width="3" stroke-dasharray="6 3"/>
+<text x="456" y="438" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#c62828">Motor leads through hollow CF spar</text>
+<circle cx="196" cy="428" r="18" fill="#ff7518" stroke="#222222" stroke-width="1.5"/>
+<text x="196" y="432" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">✕4</text>
+<text x="156" y="448" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#ff7518">4× M2.5 screws</text>
+<text x="156" y="460" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#ff7518">0.3 N·m torque</text>
+<line x1="496.0" y1="388.0" x2="316.0" y2="388.0" stroke="#ff7518" stroke-width="3" stroke-dasharray="8 4"/><polygon points="316.0,388.0 327.1,383.3 327.1,392.7" fill="#ff7518"/>
+<text x="536" y="382" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ff7518">INSERT from intake end</text>
+<rect x="516" y="488" width="120" height="40" rx="6" fill="#fffac0" stroke="#ff7518" stroke-width="1.5"/>
+<text x="576" y="506" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#222222">0.3 N·m torque</text>
+<text x="576" y="522" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#607080">snug — do not over-tighten</text>
+<polygon points="310.6,518.0 298.2,512.8 298.2,520.8 310.6,526.0" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="298.2,512.8 283.7,510.1 283.7,518.1 298.2,520.8" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="283.7,510.1 268.3,510.1 268.3,518.1 283.7,518.1" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="268.3,510.1 253.8,512.8 253.8,520.8 268.3,518.1" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="253.8,512.8 241.4,518.0 241.4,526.0 253.8,520.8" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="241.4,518.0 232.3,525.2 232.3,533.2 241.4,526.0" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="232.3,525.2 227.6,533.6 227.6,541.6 232.3,533.2" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="227.6,533.6 227.6,542.4 227.6,550.4 227.6,541.6" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="227.6,542.4 232.3,550.8 232.3,558.8 227.6,550.4" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="232.3,550.8 241.4,558.0 241.4,566.0 232.3,558.8" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="241.4,558.0 253.8,563.2 253.8,571.2 241.4,566.0" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="253.8,563.2 268.3,565.9 268.3,573.9 253.8,571.2" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="268.3,565.9 283.7,565.9 283.7,573.9 268.3,573.9" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="283.7,565.9 298.2,563.2 298.2,571.2 283.7,573.9" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="298.2,563.2 310.6,558.0 310.6,566.0 298.2,571.2" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="310.6,558.0 319.7,550.8 319.7,558.8 310.6,566.0" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="319.7,550.8 324.4,542.4 324.4,550.4 319.7,558.8" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="324.4,542.4 324.4,533.6 324.4,541.6 324.4,550.4" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="324.4,533.6 319.7,525.2 319.7,533.2 324.4,541.6" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="319.7,525.2 310.6,518.0 310.6,526.0 319.7,533.2" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="310.6,526.0 298.2,520.8 283.7,518.1 268.3,518.1 253.8,520.8 241.4,526.0 232.3,533.2 227.6,541.6 227.6,550.4 232.3,558.8 241.4,566.0 253.8,571.2 268.3,573.9 283.7,573.9 298.2,571.2 310.6,566.0 319.7,558.8 324.4,550.4 324.4,541.6 319.7,533.2" fill="#ffffff" stroke="#ff7518" stroke-width="2"/>
+<circle cx="276" cy="588" r="18" fill="#ffcdd2" stroke="#222222" stroke-width="1.5"/>
+<text x="276" y="592" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#c62828">LED</text>
+<text x="276" y="608" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#c62828">WS2812C-2020 LED soldered into tip cap</text>
+<text x="276" y="620" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#607080">Port=RED · Stbd=GREEN · PETG lens</text>
+</svg>

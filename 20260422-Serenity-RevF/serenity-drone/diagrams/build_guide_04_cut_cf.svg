@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Serenity-Class Tiltrotor UAV — Build Guide — Step 04 — Cut CF -->
+<!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP  CC BY 4.0 -->
+<!-- Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0 -->
+<!-- Visual: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+<rect width="1200" height="900" fill="#f5f0e8"/>
+<rect x="0" y="0" width="1200" height="64" fill="#006db7"/>
+<text x="24" y="24" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="14" fill="#ffffff" letter-spacing="2">SERENITY-CLASS TILTROTOR UAV</text>
+<text x="24" y="46" font-family="'Arial','Helvetica',sans-serif" font-size="11" fill="#c8dff0">Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · CC BY 4.0 · 2026</text>
+<rect x="1040" y="8" width="144" height="48" rx="6" fill="#ff7518"/>
+<text x="1112" y="29" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">STEP</text>
+<text x="1112" y="50" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">4 / 18</text>
+<rect x="0" y="64" width="1200" height="40" fill="#dde4ea" rx="0"/>
+<text x="24" y="90" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 2 — CUT CARBON FIBRE SKELETON</text>
+<text x="500" y="90" font-family="'Arial','Helvetica',sans-serif" font-size="12" fill="#607080">Keel spine · outrigger spars · mark datums</text>
+<rect x="0" y="872" width="1200" height="28" fill="#006db7"/>
+<text x="600" y="890" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#c8dff0">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
+<rect x="16" y="112" width="720" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
+<rect x="752" y="112" width="432" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
+<rect x="760" y="120" width="416" height="136" rx="8" fill="#fffdf6" stroke="#006db7" stroke-width="2"/>
+<rect x="760" y="120" width="416" height="28" rx="8" fill="#006db7"/>
+<rect x="760" y="136" width="416" height="12" fill="#006db7"/>
+<text x="968" y="139" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">PARTS NEEDED</text>
+<rect x="768" y="145" width="26" height="16" rx="4" fill="#37474f" stroke="#222222" stroke-width="1"/>
+<text x="781" y="158" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
+<text x="800" y="158" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">CF flat bar 6×3mm × 500mm</text>
+<rect x="768" y="167" width="26" height="16" rx="4" fill="#37474f" stroke="#222222" stroke-width="1"/>
+<text x="781" y="180" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2×</text>
+<text x="800" y="180" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">CF tube 12mm OD × 400mm</text>
+<rect x="768" y="189" width="26" height="16" rx="4" fill="#607080" stroke="#222222" stroke-width="1"/>
+<text x="781" y="202" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
+<text x="800" y="202" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Dremel + cut-off disc</text>
+<rect x="768" y="211" width="26" height="16" rx="4" fill="#f5c518" stroke="#222222" stroke-width="1"/>
+<text x="781" y="224" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
+<text x="800" y="224" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Safety glasses + mask</text>
+<rect x="760" y="264" width="416" height="168" rx="8" fill="#fffdf6" stroke="#607080" stroke-width="1.5"/>
+<rect x="760" y="264" width="416" height="28" rx="8" fill="#607080"/>
+<rect x="760" y="280" width="416" height="12" fill="#607080"/>
+<text x="968" y="283" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">INSTRUCTIONS</text>
+<circle cx="776" cy="299" r="9" fill="#006db7"/>
+<text x="776" y="303" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1</text>
+<text x="792" y="304" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Cut CF keel 6×3mm to 385mm (15.2") with Dremel</text>
+<circle cx="776" cy="323" r="9" fill="#006db7"/>
+<text x="776" y="327" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
+<text x="792" y="328" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Mark datums: 90, 130, 160, 200, 290, 365mm from nose end</text>
+<circle cx="776" cy="347" r="9" fill="#006db7"/>
+<text x="776" y="351" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
+<text x="792" y="352" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Cut 2× CF spar tubes 12mm OD to 300mm (11.8") each</text>
+<circle cx="776" cy="371" r="9" fill="#006db7"/>
+<text x="776" y="375" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4</text>
+<text x="792" y="376" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Sand one end of each spar to 8mm dia × 25mm (tenon for bracket)</text>
+<circle cx="776" cy="395" r="9" fill="#006db7"/>
+<text x="776" y="399" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">5</text>
+<text x="792" y="400" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Deburr all CF cuts with 180-grit wrapped around mandrel</text>
+<rect x="760" y="444" width="416" height="36" rx="6" fill="#fffac0" stroke="#ff7518" stroke-width="2"/><text x="778" y="459" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="14" fill="#ff7518">⚠</text><text x="796" y="466" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">CF dust is hazardous — wear N95 mask and safety glasses. Cut outdoors or with dust extraction.</text>
+<polygon points="96.0,473.0 379.4,309.4 372.5,305.4 89.1,469.0"   fill="#37474f"   stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="96.0,468.0 379.4,304.4 379.4,309.4 96.0,473.0" fill="#37474f" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="379.4,304.4 372.5,300.4 372.5,305.4 379.4,309.4" fill="#37474f" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="256" y="508" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#37474f">CF KEEL SPINE  6×3mm × 385mm (15.2")</text>
+<line x1="172" y1="466" x2="172" y2="452" stroke="#ff7518" stroke-width="1.5"/>
+<text x="172" y="448" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="8" fill="#ff7518">90mm</text>
+<line x1="206" y1="466" x2="206" y2="452" stroke="#ff7518" stroke-width="1.5"/>
+<text x="206" y="448" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="8" fill="#ff7518">130mm</text>
+<line x1="232" y1="466" x2="232" y2="452" stroke="#ff7518" stroke-width="1.5"/>
+<text x="232" y="448" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="8" fill="#ff7518">160mm</text>
+<line x1="266" y1="466" x2="266" y2="452" stroke="#ff7518" stroke-width="1.5"/>
+<text x="266" y="448" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="8" fill="#ff7518">200mm</text>
+<line x1="342" y1="466" x2="342" y2="452" stroke="#ff7518" stroke-width="1.5"/>
+<text x="342" y="448" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="8" fill="#ff7518">290mm</text>
+<line x1="406" y1="466" x2="406" y2="452" stroke="#ff7518" stroke-width="1.5"/>
+<text x="406" y="448" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="8" fill="#ff7518">365mm</text>
+<polygon points="161.2,540.0 157.9,538.9 157.9,793.9 161.2,795.0" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="157.9,538.9 154.1,538.9 154.1,793.9 157.9,793.9" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="154.1,538.9 150.8,540.0 150.8,795.0 154.1,793.9" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="150.8,540.0 148.9,541.9 148.9,796.9 150.8,795.0" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="148.9,541.9 148.9,544.1 148.9,799.1 148.9,796.9" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="148.9,544.1 150.8,546.0 150.8,801.0 148.9,799.1" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="150.8,546.0 154.1,547.1 154.1,802.1 150.8,801.0" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="154.1,547.1 157.9,547.1 157.9,802.1 154.1,802.1" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="157.9,547.1 161.2,546.0 161.2,801.0 157.9,802.1" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="161.2,546.0 163.1,544.1 163.1,799.1 161.2,801.0" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="163.1,544.1 163.1,541.9 163.1,796.9 163.1,799.1" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="163.1,541.9 161.2,540.0 161.2,795.0 163.1,796.9" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="161.2,795.0 157.9,793.9 154.1,793.9 150.8,795.0 148.9,796.9 148.9,799.1 150.8,801.0 154.1,802.1 157.9,802.1 161.2,801.0 163.1,799.1 163.1,796.9" fill="#cfd8dc" stroke="#37474f" stroke-width="1.5"/>
+<text x="306" y="573" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#37474f">CF SPAR TUBE ×1  12mm OD × 300mm (11.8")</text>
+<polygon points="161.2,575.0 157.9,573.9 157.9,828.9 161.2,830.0" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="157.9,573.9 154.1,573.9 154.1,828.9 157.9,828.9" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="154.1,573.9 150.8,575.0 150.8,830.0 154.1,828.9" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="150.8,575.0 148.9,576.9 148.9,831.9 150.8,830.0" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="148.9,576.9 148.9,579.1 148.9,834.1 148.9,831.9" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="148.9,579.1 150.8,581.0 150.8,836.0 148.9,834.1" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="150.8,581.0 154.1,582.1 154.1,837.1 150.8,836.0" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="154.1,582.1 157.9,582.1 157.9,837.1 154.1,837.1" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="157.9,582.1 161.2,581.0 161.2,836.0 157.9,837.1" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="161.2,581.0 163.1,579.1 163.1,834.1 161.2,836.0" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="163.1,579.1 163.1,576.9 163.1,831.9 163.1,834.1" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="163.1,576.9 161.2,575.0 161.2,830.0 163.1,831.9" fill="#dde4ea" stroke="#37474f" stroke-width="1.5"/>
+<polygon points="161.2,830.0 157.9,828.9 154.1,828.9 150.8,830.0 148.9,831.9 148.9,834.1 150.8,836.0 154.1,837.1 157.9,837.1 161.2,836.0 163.1,834.1 163.1,831.9" fill="#cfd8dc" stroke="#37474f" stroke-width="1.5"/>
+<text x="306" y="608" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#37474f">CF SPAR TUBE ×2  12mm OD × 300mm (11.8")</text>
+<rect x="576" y="438" width="70" height="40" rx="6" fill="#dde4ea" stroke="#607080" stroke-width="2"/>
+<text x="611" y="463" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#607080">DREMEL</text>
+<text x="611" y="480" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#607080">cut-off disc</text>
+<line x1="576.0" y1="458.0" x2="476.0" y2="488.0" stroke="#607080" stroke-width="2" stroke-dasharray="8 4"/><polygon points="476.0,488.0 485.2,480.3 487.9,489.3" fill="#607080"/>
+<circle cx="636" cy="528" r="22" fill="#f5c518" stroke="#222222" stroke-width="1.5"/>
+<text x="636" y="532" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="18" fill="#222222">👓</text>
+<text x="671" y="536" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="9" fill="#ff7518">Eye protection</text>
+<text x="671" y="548" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#ff7518">CF dust hazard!</text>
+</svg>
