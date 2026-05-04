@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Serenity-Class Tiltrotor UAV — Build Guide — Step 10 — Power Wiring -->
+<!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP  CC BY 4.0 -->
+<!-- Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0 -->
+<!-- Visual: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+<rect width="1200" height="900" fill="#f5f0e8"/>
+<rect x="0" y="0" width="1200" height="64" fill="#006db7"/>
+<text x="24" y="24" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="14" fill="#ffffff" letter-spacing="2">SERENITY-CLASS TILTROTOR UAV</text>
+<text x="24" y="46" font-family="'Arial','Helvetica',sans-serif" font-size="11" fill="#c8dff0">Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · CC BY 4.0 · 2026</text>
+<rect x="1040" y="8" width="144" height="48" rx="6" fill="#ff7518"/>
+<text x="1112" y="29" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">STEP</text>
+<text x="1112" y="50" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">10 / 18</text>
+<rect x="0" y="64" width="1200" height="40" fill="#dde4ea" rx="0"/>
+<text x="24" y="90" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 6 — POWER WIRING & ESCS</text>
+<text x="500" y="90" font-family="'Arial','Helvetica',sans-serif" font-size="12" fill="#607080">PDB · BEC · ESC installation · wire gauges</text>
+<rect x="0" y="872" width="1200" height="28" fill="#006db7"/>
+<text x="600" y="890" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#c8dff0">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
+<rect x="16" y="112" width="720" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
+<rect x="752" y="112" width="432" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
+<rect x="760" y="120" width="416" height="136" rx="8" fill="#fffdf6" stroke="#006db7" stroke-width="2"/>
+<rect x="760" y="120" width="416" height="28" rx="8" fill="#006db7"/>
+<rect x="760" y="136" width="416" height="12" fill="#006db7"/>
+<text x="968" y="139" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">PARTS NEEDED</text>
+<rect x="768" y="145" width="26" height="16" rx="4" fill="#f5c518" stroke="#222222" stroke-width="1"/>
+<text x="781" y="158" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
+<text x="800" y="158" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">XT60 PDB (4× XT30 out)</text>
+<rect x="768" y="167" width="26" height="16" rx="4" fill="#006db7" stroke="#222222" stroke-width="1"/>
+<text x="781" y="180" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3×</text>
+<text x="800" y="180" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">BLHeli32 ESC (40A L/R · 25A fwd)</text>
+<rect x="768" y="189" width="26" height="16" rx="4" fill="#2e7d32" stroke="#222222" stroke-width="1"/>
+<text x="781" y="202" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
+<text x="800" y="202" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">5V 3A switching BEC</text>
+<rect x="768" y="211" width="26" height="16" rx="4" fill="#c62828" stroke="#222222" stroke-width="1"/>
+<text x="781" y="224" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
+<text x="800" y="224" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">12AWG silicone wire 1m</text>
+<rect x="760" y="264" width="416" height="192" rx="8" fill="#fffdf6" stroke="#607080" stroke-width="1.5"/>
+<rect x="760" y="264" width="416" height="28" rx="8" fill="#607080"/>
+<rect x="760" y="280" width="416" height="12" fill="#607080"/>
+<text x="968" y="283" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">INSTRUCTIONS</text>
+<circle cx="776" cy="299" r="9" fill="#006db7"/>
+<text x="776" y="303" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1</text>
+<text x="792" y="304" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Mount XT60 PDB at 130mm on keel underside · double-side foam + M2.5</text>
+<circle cx="776" cy="323" r="9" fill="#006db7"/>
+<text x="776" y="327" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
+<text x="792" y="328" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Solder 12AWG leads: PDB to ESC-L (145mm) · ESC-R (155mm) · ESC-Fwd (290mm)</text>
+<circle cx="776" cy="347" r="9" fill="#006db7"/>
+<text x="776" y="351" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
+<text x="792" y="352" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Mount ESCs with foam tape + M2.5 screw through mounting tab</text>
+<circle cx="776" cy="371" r="9" fill="#006db7"/>
+<text x="776" y="375" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4</text>
+<text x="792" y="376" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Wire 5V BEC from PDB power tap · verify 5.0V ±0.1V under load</text>
+<circle cx="776" cy="395" r="9" fill="#006db7"/>
+<text x="776" y="399" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">5</text>
+<text x="792" y="400" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Install battery on keel rail · XT60 to PDB · lock with M3 thumb screw</text>
+<circle cx="776" cy="419" r="9" fill="#006db7"/>
+<text x="776" y="423" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">6</text>
+<text x="792" y="424" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">CONTINUITY CHECK: no shorts on +V to GND before connecting battery</text>
+<rect x="760" y="468" width="416" height="36" rx="6" fill="#fffac0" stroke="#ff7518" stroke-width="2"/><text x="778" y="483" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="14" fill="#ff7518">⚠</text><text x="796" y="490" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">VERIFY zero shorts with multimeter before first battery connection</text>
+<rect x="760" y="512" width="416" height="32" rx="6" fill="#b2ebf2" stroke="#00838f" stroke-width="1.5"/><text x="770" y="526" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#00838f">ℹ</text><text x="786" y="532" font-family="'Arial','Helvetica',sans-serif" font-size="9.5" fill="#222222">Use silicone wire only — PVC insulation cracks under vibration</text>
+<polygon points="96.0,488.0 364.7,332.9 359.5,329.9 90.8,485.0"   fill="#37474f"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<polygon points="96.0,484.0 364.7,328.9 364.7,332.9 96.0,488.0" fill="#37474f" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<polygon points="364.7,328.9 359.5,325.9 359.5,329.9 364.7,332.9" fill="#37474f" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<polygon points="246.0,466.0 289.3,441.0 254.7,421.0 211.4,446.0"   fill="#fffac0"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<polygon points="246.0,458.0 289.3,433.0 289.3,441.0 246.0,466.0" fill="#f5c518" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<polygon points="289.3,433.0 254.7,413.0 254.7,421.0 289.3,441.0" fill="#f5c518" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<text x="271" y="470" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="8" fill="#222222">XT60 PDB</text>
+<polygon points="176.0,530.0 236.6,495.0 206.3,477.5 145.7,512.5"   fill="#ffe0c0"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<polygon points="176.0,508.0 236.6,473.0 236.6,495.0 176.0,530.0" fill="#ff7518" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<polygon points="236.6,473.0 206.3,455.5 206.3,477.5 236.6,495.0" fill="#ff7518" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
+<text x="211" y="528" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="9" fill="#ffffff">5S LiPo</text>
+<text x="211" y="542" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="8" fill="#fffac0">4500mAh 35C</text>
+<rect x="246" y="518" width="20" height="14" rx="3" fill="#f5c518" stroke="#222222" stroke-width="1.5"/>
+<text x="256" y="530" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="7" fill="#222222">XT60</text>
+<polygon points="316.0,430.0 355.0,407.5 329.0,392.5 290.0,415.0"   fill="#c8dff0"   stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="316.0,418.0 355.0,395.5 355.0,407.5 316.0,430.0" fill="#006db7" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="355.0,395.5 329.0,380.5 329.0,392.5 355.0,407.5" fill="#006db7" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="338" y="413" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">ESC-L</text>
+<line x1="271" y1="466" x2="338" y2="430" stroke="#c62828" stroke-width="4"/>
+<line x1="271" y1="472" x2="338" y2="436" stroke="#222222" stroke-width="4"/>
+<polygon points="396.0,430.0 435.0,407.5 409.0,392.5 370.0,415.0"   fill="#c8dff0"   stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="396.0,418.0 435.0,395.5 435.0,407.5 396.0,430.0" fill="#006db7" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="435.0,395.5 409.0,380.5 409.0,392.5 435.0,407.5" fill="#006db7" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="418" y="413" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">ESC-R</text>
+<line x1="271" y1="466" x2="418" y2="430" stroke="#c62828" stroke-width="4"/>
+<line x1="271" y1="472" x2="418" y2="436" stroke="#222222" stroke-width="4"/>
+<polygon points="476.0,430.0 515.0,407.5 489.0,392.5 450.0,415.0"   fill="#c8dff0"   stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="476.0,418.0 515.0,395.5 515.0,407.5 476.0,430.0" fill="#2e7d32" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="515.0,395.5 489.0,380.5 489.0,392.5 515.0,407.5" fill="#2e7d32" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="498" y="413" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">ESC-Fwd</text>
+<line x1="271" y1="466" x2="498" y2="430" stroke="#c62828" stroke-width="4"/>
+<line x1="271" y1="472" x2="498" y2="436" stroke="#222222" stroke-width="4"/>
+<text x="316" y="388" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="8" fill="#c62828">12AWG red/black to ESCs</text>
+<polygon points="546.0,453.0 580.6,433.0 559.0,420.5 524.3,440.5"   fill="#c8e6c9"   stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="546.0,438.0 580.6,418.0 580.6,433.0 546.0,453.0" fill="#2e7d32" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="580.6,418.0 559.0,405.5 559.0,420.5 580.6,433.0" fill="#2e7d32" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="566" y="453" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">5V BEC</text>
+<text x="566" y="468" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="7" fill="#c8e6c9">3A · switching</text>
+<rect x="576" y="518" width="170" height="70" rx="6" fill="#fffdf6" stroke="#607080" stroke-width="1.5"/>
+<text x="661" y="534" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#222222">WIRE GAUGES</text>
+<line x1="586" y1="544" x2="616" y2="544" stroke="#c62828" stroke-width=6"/>
+<text x="622" y="548" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#222222">12 AWG — ESC power</text>
+<line x1="586" y1="562" x2="616" y2="562" stroke="#006db7" stroke-width=3"/>
+<text x="622" y="566" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#222222">22 AWG — Signal/servo</text>
+<line x1="586" y1="580" x2="616" y2="580" stroke="#2e7d32" stroke-width=1.5"/>
+<text x="622" y="584" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#222222">28 AWG — LED/data</text>
+</svg>

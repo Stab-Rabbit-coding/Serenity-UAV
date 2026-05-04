@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Serenity-Class Tiltrotor UAV — Build Guide — Step 06 — Nacelle Pivot -->
+<!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP  CC BY 4.0 -->
+<!-- Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0 -->
+<!-- Visual: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+<defs>
+  <style>
+    @import url('https://fonts.cdnfonts.com/css/opendyslexic');
+    @media screen {
+      text, tspan, .label, .note, .dim {
+        font-family: 'OpenDyslexic','OpenDyslexicMono',sans-serif !important;
+      }
+    }
+    @media print {
+      svg { background: #ffffff !important; }
+      text, tspan { fill: #111111 !important; font-family: 'OpenDyslexic',sans-serif !important; }
+      rect[fill^="rgba"], rect[fill^="#0"] { fill: #f5f5f5 !important; }
+    }
+  </style>
+</defs>
+<rect width="1200" height="900" fill="#f5f0e8"/>
+<rect x="0" y="0" width="1200" height="64" fill="#006db7"/>
+<text x="24" y="24" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ffffff" letter-spacing="2">SERENITY-CLASS TILTROTOR UAV</text>
+<text x="24" y="46" font-family="'OpenDyslexic',sans-serif" font-size="11" fill="#c8dff0">Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · CC BY 4.0 · 2026</text>
+<rect x="1040" y="8" width="144" height="48" rx="6" fill="#ff7518"/>
+<text x="1112" y="29" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">STEP</text>
+<text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">6 / 18</text>
+<rect x="0" y="64" width="1200" height="40" fill="#dde4ea" rx="0"/>
+<text x="24" y="90" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 3 — NACELLE PIVOT & BEARING</text>
+<text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">Press bearings · thread pivot rod · set screw</text>
+<rect x="0" y="872" width="1200" height="28" fill="#006db7"/>
+<text x="600" y="890" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
+<rect x="16" y="112" width="720" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
+<rect x="752" y="112" width="432" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
+<rect x="760" y="120" width="416" height="136" rx="8" fill="#fffdf6" stroke="#006db7" stroke-width="2"/>
+<rect x="760" y="120" width="416" height="28" rx="8" fill="#006db7"/>
+<rect x="760" y="136" width="416" height="12" fill="#006db7"/>
+<text x="968" y="139" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">PARTS NEEDED</text>
+<rect x="768" y="145" width="26" height="16" rx="4" fill="#607080" stroke="#222222" stroke-width="1"/>
+<text x="781" y="158" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4×</text>
+<text x="800" y="158" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">MR63ZZ bearing 3×6×2.5mm</text>
+<rect x="768" y="167" width="26" height="16" rx="4" fill="#37474f" stroke="#222222" stroke-width="1"/>
+<text x="781" y="180" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2×</text>
+<text x="800" y="180" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">8mm CF rod × 52mm</text>
+<rect x="768" y="189" width="26" height="16" rx="4" fill="#607080" stroke="#222222" stroke-width="1"/>
+<text x="781" y="202" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2×</text>
+<text x="800" y="202" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">M3 set screw 6mm</text>
+<rect x="768" y="211" width="26" height="16" rx="4" fill="#c62828" stroke="#222222" stroke-width="1"/>
+<text x="781" y="224" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
+<text x="800" y="224" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Loctite 243 (medium)</text>
+<rect x="760" y="264" width="416" height="168" rx="8" fill="#fffdf6" stroke="#607080" stroke-width="1.5"/>
+<rect x="760" y="264" width="416" height="28" rx="8" fill="#607080"/>
+<rect x="760" y="280" width="416" height="12" fill="#607080"/>
+<text x="968" y="283" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">INSTRUCTIONS</text>
+<circle cx="776" cy="299" r="9" fill="#006db7"/>
+<text x="776" y="303" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1</text>
+<text x="792" y="304" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Print bearing press jig (simple cup from CF-PETG)</text>
+<circle cx="776" cy="323" r="9" fill="#006db7"/>
+<text x="776" y="327" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
+<text x="792" y="328" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Press one MR63ZZ into each nacelle pivot socket — must be flush ±0.2mm</text>
+<circle cx="776" cy="347" r="9" fill="#006db7"/>
+<text x="776" y="351" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
+<text x="792" y="352" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Press second bearing into each CF-PETG tilt bracket</text>
+<circle cx="776" cy="371" r="9" fill="#006db7"/>
+<text x="776" y="375" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4</text>
+<text x="792" y="376" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Thread 8mm CF pivot rod: wing spar → tilt bracket → nacelle bearing</text>
+<circle cx="776" cy="395" r="9" fill="#006db7"/>
+<text x="776" y="399" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">5</text>
+<text x="792" y="400" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Secure with M3 set screw + drop of Loctite 243</text>
+<rect x="760" y="444" width="416" height="32" rx="6" fill="#b2ebf2" stroke="#00838f" stroke-width="1.5"/><text x="770" y="458" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#00838f">ℹ</text><text x="786" y="464" font-family="'OpenDyslexic',sans-serif" font-size="9.5" fill="#222222">Bearing must be flush or ±0.2mm — use M5 bolt as press tool if no press available</text>
+<polygon points="246.5,390.4 235.6,385.8 235.6,495.8 246.5,500.4" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="235.6,385.8 222.7,383.4 222.7,493.4 235.6,495.8" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="222.7,383.4 209.3,383.4 209.3,493.4 222.7,493.4" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="209.3,383.4 196.4,385.8 196.4,495.8 209.3,493.4" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="196.4,385.8 185.5,390.4 185.5,500.4 196.4,495.8" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="185.5,390.4 177.6,396.7 177.6,506.7 185.5,500.4" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="177.6,396.7 173.4,404.1 173.4,514.1 177.6,506.7" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="173.4,404.1 173.4,411.9 173.4,521.9 173.4,514.1" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="173.4,411.9 177.6,419.3 177.6,529.3 173.4,521.9" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="177.6,419.3 185.5,425.6 185.5,535.6 177.6,529.3" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="185.5,425.6 196.4,430.2 196.4,540.2 185.5,535.6" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="196.4,430.2 209.3,432.6 209.3,542.6 196.4,540.2" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="209.3,432.6 222.7,432.6 222.7,542.6 209.3,542.6" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="222.7,432.6 235.6,430.2 235.6,540.2 222.7,542.6" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="235.6,430.2 246.5,425.6 246.5,535.6 235.6,540.2" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="246.5,425.6 254.4,419.3 254.4,529.3 246.5,535.6" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="254.4,419.3 258.6,411.9 258.6,521.9 254.4,529.3" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="258.6,411.9 258.6,404.1 258.6,514.1 258.6,521.9" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="258.6,404.1 254.4,396.7 254.4,506.7 258.6,514.1" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="254.4,396.7 246.5,390.4 246.5,500.4 254.4,506.7" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
+<polygon points="246.5,500.4 235.6,495.8 222.7,493.4 209.3,493.4 196.4,495.8 185.5,500.4 177.6,506.7 173.4,514.1 173.4,521.9 177.6,529.3 185.5,535.6 196.4,540.2 209.3,542.6 222.7,542.6 235.6,540.2 246.5,535.6 254.4,529.3 258.6,521.9 258.6,514.1 254.4,506.7" fill="#ffffff" stroke="#ff7518" stroke-width="2"/>
+<polygon points="221.7,404.7 218.1,403.5 218.1,412.3 221.7,413.5" fill="#b0bec5" stroke="#607080" stroke-width="1.5"/>
+<polygon points="218.1,403.5 213.9,403.5 213.9,412.3 218.1,412.3" fill="#b0bec5" stroke="#607080" stroke-width="1.5"/>
+<polygon points="213.9,403.5 210.3,404.7 210.3,413.5 213.9,412.3" fill="#b0bec5" stroke="#607080" stroke-width="1.5"/>
+<polygon points="210.3,404.7 208.2,406.8 208.2,415.6 210.3,413.5" fill="#b0bec5" stroke="#607080" stroke-width="1.5"/>
+<polygon points="208.2,406.8 208.2,409.2 208.2,418.0 208.2,415.6" fill="#b0bec5" stroke="#607080" stroke-width="1.5"/>
+<polygon points="208.2,409.2 210.3,411.3 210.3,420.1 208.2,418.0" fill="#b0bec5" stroke="#607080" stroke-width="1.5"/>
+<polygon points="210.3,411.3 213.9,412.5 213.9,421.3 210.3,420.1" fill="#b0bec5" stroke="#607080" stroke-width="1.5"/>
+<polygon points="213.9,412.5 218.1,412.5 218.1,421.3 213.9,421.3" fill="#b0bec5" stroke="#607080" stroke-width="1.5"/>
+<polygon points="218.1,412.5 221.7,411.3 221.7,420.1 218.1,421.3" fill="#b0bec5" stroke="#607080" stroke-width="1.5"/>
+<polygon points="221.7,411.3 223.8,409.2 223.8,418.0 221.7,420.1" fill="#b0bec5" stroke="#607080" stroke-width="1.5"/>
+<polygon points="223.8,409.2 223.8,406.8 223.8,415.6 223.8,418.0" fill="#b0bec5" stroke="#607080" stroke-width="1.5"/>
+<polygon points="223.8,406.8 221.7,404.7 221.7,413.5 223.8,415.6" fill="#b0bec5" stroke="#607080" stroke-width="1.5"/>
+<polygon points="221.7,413.5 218.1,412.3 213.9,412.3 210.3,413.5 208.2,415.6 208.2,418.0 210.3,420.1 213.9,421.3 218.1,421.3 221.7,420.1 223.8,418.0 223.8,415.6" fill="#eceff1" stroke="#607080" stroke-width="1.5"/>
+<circle cx="256" cy="348" r="18" fill="#006db7" stroke="#222222" stroke-width="1.5"/>
+<text x="256" y="352" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">1</text>
+<text x="296" y="340" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#006db7">Press MR63ZZ bearing</text>
+<text x="296" y="352" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#607080">3×6×2.5mm into pivot socket</text>
+<line x1="216" y1="468" x2="456" y2="468" stroke="#37474f" stroke-width="8" stroke-linecap="round"/>
+<text x="336" y="458" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#37474f">8mm CF pivot rod · 52mm (2.05")</text>
+<circle cx="476" cy="468" r="18" fill="#006db7" stroke="#222222" stroke-width="1.5"/>
+<text x="476" y="472" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">2</text>
+<text x="506" y="456" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#607080">Thread rod through</text>
+<text x="506" y="468" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#607080">spar → bracket → nacelle</text>
+<circle cx="576" cy="528" r="18" fill="#006db7" stroke="#222222" stroke-width="1.5"/>
+<text x="576" y="532" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">3</text>
+<text x="616" y="520" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ff7518">M3 set screw + Loctite 243</text>
+<text x="616" y="534" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#607080">Secure outer face</text>
+<line x1="296" y1="468" x2="294" y2="487" stroke="#ff7518" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6"/>
+<line x1="293" y1="489" x2="286" y2="507" stroke="#ff7518" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6"/>
+<line x1="285" y1="508" x2="274" y2="524" stroke="#ff7518" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6"/>
+<line x1="273" y1="525" x2="257" y2="537" stroke="#ff7518" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6"/>
+<line x1="256" y1="537" x2="238" y2="545" stroke="#ff7518" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6"/>
+<line x1="237" y1="545" x2="217" y2="548" stroke="#ff7518" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6"/>
+<line x1="216" y1="548" x2="197" y2="546" stroke="#ff7518" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6"/>
+<text x="306" y="578" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ff7518">90° tilt range</text>
+<rect x="476" y="558" width="130" height="50" rx="6" fill="#dde4ea" stroke="#607080" stroke-width="1.5"/>
+<text x="541" y="580" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#607080">BEARING PRESS JIG</text>
+<text x="541" y="596" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#607080">Print simple cup jig · use M5 bolt</text>
+</svg>

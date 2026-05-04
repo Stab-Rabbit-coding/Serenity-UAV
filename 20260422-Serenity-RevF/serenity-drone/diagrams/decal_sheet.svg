@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- © 2026 Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP  CC BY 4.0 -->
+<!-- Hull: Peter Farell CC BY 4.0  Nozzle: BamJr CC BY 4.0 -->
+<!-- Visual inspiration: Firefly/Serenity (C) Joss Whedon/Mutant Enemy/Universal Pictures -->
+<!-- Fan engineering work - not an officially licensed product -->
+<!-- Serenity Tiltrotor UAV — Decal Sheet -->
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 1200 1700" width="1200" height="1700">
+<defs>
+  <!-- Metallic gold gradient -->
+  <linearGradient id="gold_v" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%"   stop-color="#e8d08b"/>
+    <stop offset="35%"  stop-color="#c8a84b"/>
+    <stop offset="70%"  stop-color="#8b6b1a"/>
+    <stop offset="100%" stop-color="#c8a84b"/>
+  </linearGradient>
+  <linearGradient id="gold_h" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%"   stop-color="#8b6b1a"/>
+    <stop offset="50%"  stop-color="#e8d08b"/>
+    <stop offset="100%" stop-color="#8b6b1a"/>
+  </linearGradient>
+  <!-- Chrome gradient -->
+  <linearGradient id="chrome_v" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%"   stop-color="#c8d0d8"/>
+    <stop offset="50%"  stop-color="#ffffff"/>
+    <stop offset="100%" stop-color="#707880"/>
+  </linearGradient>
+  <!-- Worn metal texture filter -->
+  <filter id="worn" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" result="noise"/>
+    <feColorMatrix type="saturate" values="0" in="noise" result="grey_noise"/>
+    <feBlend in="SourceGraphic" in2="grey_noise" mode="overlay" result="blended"/>
+    <feComposite in="blended" in2="SourceGraphic" operator="in"/>
+  </filter>
+  <!-- Subtle drop shadow -->
+  <filter id="shadow">
+    <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.6)"/>
+  </filter>
+  <!-- Glow for nav lights -->
+  <filter id="glow">
+    <feGaussianBlur stdDeviation="4" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <!-- Cut-line dash: print along dashed lines, cut on solid -->
+  <pattern id="cut_pattern" width="12" height="12" patternUnits="userSpaceOnUse">
+    <line x1="0" y1="6" x2="12" y2="6" stroke="#ff0066" stroke-width="0.4" stroke-dasharray="6 6"/>
+  </pattern>
+</defs>
+<rect width="1200" height="1700" fill="#1a1a2e"/>
+<rect x="0" y="0" width="1200" height="60" rx="0" ry="0" fill="#444444" stroke="none" stroke-width="1"/>
+<rect x="0" y="0" width="1200" height="50" rx="0" ry="0" fill="#111111" stroke="none" stroke-width="1"/>
+<text x="600" y="18" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="14" fill="#c8a84b" font-weight="900" letter-spacing="3">SERENITY-CLASS TILTROTOR UAV  ·  DECAL SHEET</text>
+<text x="600" y="38" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#dde4ea" font-weight="normal">© 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP  ·  CC BY 4.0  ·  Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal Pictures — Fan engineering work</text>
+<text x="60" y="54" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">PRINT ON WATERSLIDE DECAL PAPER  ·  CUT ALONG PINK DASHED LINES  ·  SEAL WITH DECAL FIX</text>
+<rect x="0" y="58" width="1200" height="4" rx="0" ry="0" fill="#ff0066" stroke="none" stroke-width="1"/>
+<rect x="20" y="75" width="570" height="280" rx="8" ry="8" fill="rgba(255,255,255,0.04)" stroke="rgba(200,168,75,0.4)" stroke-width="1"/>
+<text x="305" y="90" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="11" fill="#c8a84b" font-weight="900" letter-spacing="2">A — HULL NAME LETTERING</text>
+<rect x="35" y="105" width="540" height="90" rx="6" ry="6" fill="rgba(20,10,5,0.85)" stroke="rgba(200,168,75,0.3)" stroke-width="1.5"/>
+<rect x="35" y="179" width="540" height="16" rx="0" fill="rgba(0,0,0,0.4)"/>
+<text x="305" y="171" text-anchor="middle" font-family="'Georgia','Times New Roman',serif" font-size="56" font-style="italic" font-weight="bold" fill="url(#gold_h)" filter="url(#shadow)" letter-spacing="8">SERENITY</text>
+<rect x="55" y="181" width="500" height="2" rx="1" ry="1" fill="#c8a84b" stroke="none" stroke-width="1"/>
+<text x="305" y="193" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="rgba(200,168,75,0.7)" font-weight="normal">FIREFLY-CLASS  ·  HULL 03SK  ·  PORT SIDE</text>
+<rect x="31" y="101" width="548" height="98" rx="12" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="35" y="99" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">A1 — PORT HULL (large)</text>
+<rect x="35" y="210" width="540" height="90" rx="6" ry="6" fill="rgba(20,10,5,0.85)" stroke="rgba(200,168,75,0.3)" stroke-width="1.5"/>
+<rect x="35" y="284" width="540" height="16" rx="0" fill="rgba(0,0,0,0.4)"/>
+<g transform="scale(-1,1) translate(-610,0)"><text x="305" y="276" text-anchor="middle" font-family="'Georgia','Times New Roman',serif" font-size="56" font-style="italic" font-weight="bold" fill="url(#gold_h)" filter="url(#shadow)" letter-spacing="8">SERENITY</text></g>
+<rect x="55" y="286" width="500" height="2" rx="1" ry="1" fill="#c8a84b" stroke="none" stroke-width="1"/>
+<text x="305" y="298" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="rgba(200,168,75,0.7)" font-weight="normal">FIREFLY-CLASS  ·  HULL 03SK  ·  STARBOARD (MIRRORED)</text>
+<rect x="31" y="206" width="548" height="98" rx="12" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="35" y="204" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">A2 — STBD HULL (mirrored)</text>
+<rect x="35" y="316" width="240" height="45" rx="5" ry="5" fill="rgba(20,10,5,0.85)" stroke="rgba(200,168,75,0.3)" stroke-width="1"/>
+<text x="155" y="348" text-anchor="middle" font-family="'Georgia','Times New Roman',serif" font-size="28" font-style="italic" font-weight="bold" fill="url(#gold_h)" letter-spacing="5">SERENITY</text>
+<rect x="31" y="312" width="248" height="53" rx="10" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="35" y="310" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">A3 — NOSE (small)</text>
+<rect x="295" y="316" width="45" height="145" rx="5" ry="5" fill="rgba(20,10,5,0.85)" stroke="rgba(200,168,75,0.3)" stroke-width="1"/>
+<text x="317" y="446" text-anchor="middle" font-family="'Georgia','Times New Roman',serif" font-size="22" font-style="italic" font-weight="bold" fill="url(#gold_h)" letter-spacing="4" transform="rotate(-90,317,388)">SERENITY</text>
+<rect x="291" y="312" width="53" height="153" rx="10" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="317" y="310" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">A4 — BELL (vert.)</text>
+<rect x="620" y="75" width="560" height="280" rx="8" ry="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,50,50,0.3)" stroke-width="1"/>
+<text x="900" y="90" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="11" fill="#c62828" font-weight="900" letter-spacing="1">B — FAA REGISTRATION (REQUIRED BY LAW)</text>
+<text x="900" y="105" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="8" fill="#dde4ea" font-weight="normal">14 CFR Part 48  ·  Replace N00000 with your issued FAA registration number</text>
+<rect x="630" y="115" width="510" height="75" rx="4" ry="4" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+<rect x="630" y="115" width="510" height="20" fill="#444444"/>
+<text x="885" y="129" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="8" fill="#ffffff" font-weight="bold" letter-spacing="1">FAA REGISTRATION  ·  UNITED STATES OF AMERICA</text>
+<text x="885" y="175" text-anchor="middle" font-family="'Impact','Arial Black',sans-serif" font-size="40" fill="#111111" letter-spacing="6">N00000</text>
+<text x="885" y="187" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7" fill="#444444" font-weight="normal">REPLACE N00000 WITH ISSUED FAA REGISTRATION  ·  MIN 3" CHARACTERS</text>
+<rect x="626" y="111" width="518" height="83" rx="10" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="630" y="109" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">B1 — PRIMARY REG BLOCK (exterior, fuselage belly)</text>
+<rect x="630" y="205" width="240" height="50" rx="3" ry="3" fill="#ffffff" stroke="#111111" stroke-width="1.5"/>
+<rect x="630" y="205" width="240" height="14" fill="#444444"/>
+<text x="750" y="215" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="7" fill="#ffffff" font-weight="bold" letter-spacing="1">FAA REG</text>
+<text x="750" y="243" text-anchor="middle" font-family="'Impact','Arial Black',sans-serif" font-size="22" fill="#111111" letter-spacing="3">N00000</text>
+<rect x="626" y="201" width="248" height="58" rx="9" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="630" y="199" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">B2 — NACELLE (×2)</text>
+<rect x="890" y="205" width="50" height="145" rx="3" ry="3" fill="#ffffff" stroke="#111111" stroke-width="1.5"/>
+<rect x="890" y="205" width="50" height="145" fill="#dde4ea"/>
+<text x="915" y="335" text-anchor="middle" font-family="'Impact','Arial Black',sans-serif" font-size="14" fill="#111111" letter-spacing="2" transform="rotate(-90,915,277)">N00000</text>
+<rect x="886" y="201" width="58" height="153" rx="8" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="915" y="199" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">B3 — BELL (vert.)</text>
+<rect x="960" y="205" width="165" height="55" rx="3" ry="3" fill="#fff8dc" stroke="#111111" stroke-width="1"/>
+<rect x="960" y="205" width="165" height="14" fill="#444444"/>
+<text x="1042" y="215" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="7" fill="#ffffff" font-weight="normal">INTERIOR / COCKPIT</text>
+<text x="1042" y="231" text-anchor="middle" font-family="'Impact','Arial Black',sans-serif" font-size="18" fill="#111111" font-weight="normal">N00000</text>
+<text x="1042" y="245" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7" fill="#444444" font-weight="normal">sUAS REGISTRATION</text>
+<rect x="956" y="201" width="173" height="63" rx="8" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="960" y="199" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">B4 — COCKPIT INT.</text>
+<rect x="20" y="375" width="1160" height="300" rx="8" ry="8" fill="rgba(255,255,255,0.04)" stroke="rgba(200,168,75,0.3)" stroke-width="1"/>
+<text x="600" y="391" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="11" fill="#c8a84b" font-weight="900" letter-spacing="2">C — FIREFLY-CLASS HULL MARKINGS & LOGOS</text>
+<rect x="30" y="403" width="340" height="80" rx="4" ry="4" fill="#8b3a1a" stroke="#8b6b1a" stroke-width="2"/>
+<rect x="34" y="407" width="332" height="72" rx="2" fill="none" stroke="#8b6b1a" stroke-width="1" stroke-dasharray="4 2"/>
+<text x="200" y="429" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="10" fill="#e8d08b" letter-spacing="2">UNION OF ALLIED PLANETS</text>
+<text x="200" y="447" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="14" fill="#e8d08b" letter-spacing="3">FIREFLY-CLASS</text>
+<text x="200" y="463" text-anchor="middle" font-family="'Impact','Arial Black',sans-serif" font-size="18" fill="#ffffff" letter-spacing="4">03SK  ·  ASREV-03</text>
+<text x="200" y="477" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7" fill="#e8d08b">COMMERCIAL TRANSPORT VESSEL  ·  DISPLACEMENT CLASS 3</text>
+<rect x="26" y="399" width="348" height="88" rx="10" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="30" y="397" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">C1 — ALLIANCE REGISTRATION PLATE (cockpit fwd)</text>
+<rect x="385" y="403" width="160" height="120" rx="8" ry="8" fill="rgba(10,5,2,0.9)" stroke="#8b6b1a" stroke-width="2"/>
+<path d="M465,458 L405,448 L425,473 Z" fill="#c8a84b" opacity="0.9"/>
+<path d="M465,458 L525,448 L505,473 Z" fill="#c8a84b" opacity="0.9"/>
+<ellipse cx="465" cy="458" rx="24" ry="12" fill="#c8a84b"/>
+<ellipse cx="419" cy="458" rx="10" ry="5" fill="#e8d08b" opacity="0.8"/>
+<ellipse cx="511" cy="458" rx="10" ry="5" fill="#e8d08b" opacity="0.8"/>
+<circle cx="465" cy="458" r="5" fill="#f5c518" opacity="0.9"/>
+<circle cx="419" cy="458" r="3" fill="#d06820" opacity="0.9"/>
+<circle cx="511" cy="458" r="3" fill="#d06820" opacity="0.9"/>
+<text x="465" y="491" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="9" fill="#c8a84b" font-weight="900" letter-spacing="2">FIREFLY-CLASS</text>
+<text x="465" y="505" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="8" fill="#e8d08b" font-weight="900" letter-spacing="2">TILTROTOR</text>
+<text x="465" y="518" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7" fill="#8b6b1a" font-weight="normal">UAV  ·  2026</text>
+<rect x="381" y="399" width="168" height="128" rx="14" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="385" y="397" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">C2 — FIREFLY-CLASS BADGE (dorsal fwd)</text>
+<rect x="560" y="403" width="140" height="80" rx="4" ry="4" fill="rgba(10,5,2,0.9)" stroke="#8b6b1a" stroke-width="2"/>
+<text x="630" y="415" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="8" fill="#e8d08b" letter-spacing="1">宁静号</text>
+<text x="630" y="463" text-anchor="middle" font-family="serif" font-size="42" fill="#c8a84b" letter-spacing="4">宁静</text>
+<text x="630" y="478" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7" fill="#e8d08b" font-weight="normal">SERENITY  (NÍng JÌng)</text>
+<rect x="556" y="399" width="148" height="88" rx="10" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="560" y="397" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">C3 — CHINESE NAME (port aft)</text>
+<rect x="715" y="403" width="60" height="60" rx="4" ry="4" fill="rgba(10,5,2,0.9)" stroke="#8b6b1a" stroke-width="1.5"/>
+<text x="745" y="447" text-anchor="middle" font-family="serif" font-size="36" fill="#c8a84b">号</text>
+<rect x="711" y="399" width="68" height="68" rx="9" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="745" y="397" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7" fill="#ff8888" font-weight="normal">C4 — VESSEL (sm.)</text>
+<rect x="790" y="403" width="100" height="60" rx="4" ry="4" fill="rgba(10,5,2,0.9)" stroke="#c8d0d8" stroke-width="2"/>
+<rect x="794" y="407" width="92" height="52" rx="2" fill="none" stroke="#c8d0d8" stroke-width="1" stroke-dasharray="3 2" opacity="0.5"/>
+<text x="840" y="449" text-anchor="middle" font-family="'Impact','Arial Black',sans-serif" font-size="38" fill="url(#chrome_v)" letter-spacing="4">03</text>
+<text x="840" y="460" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="8" fill="#c8d0d8" font-weight="900" letter-spacing="2">SK</text>
+<rect x="786" y="399" width="108" height="68" rx="9" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="790" y="397" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">C5 — HULL NO. (port nose)</text>
+<rect x="905" y="403" width="120" height="100" rx="6" ry="6" fill="rgba(10,5,2,0.9)" stroke="#8b6b1a" stroke-width="1.5"/>
+<polygon points="965,423 915,493 1015,493" fill="none" stroke="#c8a84b" stroke-width="2"/>
+<path d="M965,458 L945,451 L955,473 Z" fill="#c8a84b" opacity="0.8"/>
+<path d="M965,458 L985,451 L975,473 Z" fill="#c8a84b" opacity="0.8"/>
+<ellipse cx="965" cy="461" rx="8" ry="4" fill="#e8d08b"/>
+<text x="965" y="498" text-anchor="middle" font-family="'Georgia','Times New Roman',serif" font-size="9" fill="#c8a84b" font-weight="normal">SERENITY</text>
+<rect x="901" y="399" width="128" height="108" rx="12" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="905" y="397" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7" fill="#ff8888" font-weight="normal">C6 — TRIANGLE LOGO (cockpit int.)</text>
+<rect x="30" y="505" width="500" height="55" rx="5" ry="5" fill="rgba(10,5,2,0.9)" stroke="#8b6b1a" stroke-width="1.5"/>
+<text x="280" y="547" text-anchor="middle" font-family="'Georgia',serif" font-size="38" font-style="italic" fill="url(#gold_h)" letter-spacing="2">Firefly-class</text>
+<rect x="26" y="501" width="508" height="63" rx="10" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="30" y="499" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">C7 — 'FIREFLY-CLASS' SCRIPT (fuselage side)</text>
+<rect x="545" y="505" width="185" height="38" rx="3" ry="3" fill="rgba(10,5,2,0.9)" stroke="#cc3322" stroke-width="2"/>
+<rect x="545" y="505" width="24" height="38" fill="#cc3322"/>
+<text x="647" y="530" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="14" fill="#ffffff" letter-spacing="2">PORT</text>
+<rect x="541" y="501" width="193" height="46" rx="8" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="545" y="499" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7" fill="#ff8888" font-weight="normal">C8 — PORT marker</text>
+<rect x="745" y="505" width="185" height="38" rx="3" ry="3" fill="rgba(10,5,2,0.9)" stroke="#22cc33" stroke-width="2"/>
+<rect x="745" y="505" width="24" height="38" fill="#22cc33"/>
+<text x="847" y="530" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="14" fill="#ffffff" letter-spacing="2">STARBOARD</text>
+<rect x="741" y="501" width="193" height="46" rx="8" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="745" y="499" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7" fill="#ff8888" font-weight="normal">C9 — STARBOARD marker</text>
+<rect x="30" y="575" width="300" height="60" rx="5" ry="5" fill="#006db7" stroke="#8b6b1a" stroke-width="1.5"/>
+<rect x="30" y="575" width="300" height="20" fill="#8b6b1a"/>
+<text x="180" y="589" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="9" fill="#006db7" font-weight="900" letter-spacing="1">EAVESDOWN DOCKS  ·  PERSEPHONE</text>
+<text x="180" y="611" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#ffffff" font-weight="normal">COMMERCIAL BERTH  ·  PIER 7-DELTA</text>
+<text x="180" y="627" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="8" fill="#e8d08b" font-weight="normal">CARGO MANIFEST REQUIRED</text>
+<rect x="26" y="571" width="308" height="68" rx="10" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="30" y="569" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">C10 — EAVESDOWN DOCK STICKER (fun detail, belly)</text>
+<rect x="345" y="575" width="160" height="60" rx="6" ry="6" fill="rgba(10,5,2,0.9)" stroke="#c8a84b" stroke-width="2"/>
+<ellipse cx="425" cy="607" rx="22" ry="22" fill="none" stroke="#c8a84b" stroke-width="1.5"/>
+<text x="425" y="597" text-anchor="middle" font-family="'Georgia','Times New Roman',serif" font-size="9" fill="#e8d08b" letter-spacing="1">COMPANION</text>
+<text x="425" y="611" text-anchor="middle" font-family="serif" font-size="16" fill="#c8a84b">✦</text>
+<text x="425" y="625" text-anchor="middle" font-family="'Georgia','Times New Roman',serif" font-size="9" fill="#e8d08b" letter-spacing="1">GUILD REG.</text>
+<rect x="341" y="571" width="168" height="68" rx="12" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="425" y="569" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7" fill="#ff8888" font-weight="normal">C11 — COMPANION GUILD (fun)</text>
+<rect x="520" y="575" width="200" height="45" rx="3" ry="3" fill="#8b3a1a" stroke="#8b6b1a" stroke-width="2"/>
+<rect x="524" y="579" width="192" height="37" rx="1" fill="none" stroke="#c8a84b" stroke-width="0.8"/>
+<text x="620" y="591" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="9" fill="#e8d08b" font-weight="bold" letter-spacing="1">MALCOLM REYNOLDS</text>
+<text x="620" y="605" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#c8a84b" font-weight="normal">CAPTAIN  ·  SERENITY</text>
+<text x="620" y="616" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7" fill="#8b6b1a" font-weight="normal">FIREFLY-CLASS 03SK</text>
+<rect x="516" y="571" width="208" height="53" rx="9" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="520" y="569" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7" fill="#ff8888" font-weight="normal">C12 — CAPTAIN PLATE (cockpit hatch)</text>
+<rect x="20" y="695" width="1160" height="280" rx="8" ry="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,50,50,0.3)" stroke-width="1"/>
+<text x="600" y="711" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="11" fill="#c62828" font-weight="900" letter-spacing="1">D — REQUIRED REGULATORY & SAFETY MARKINGS (14 CFR Part 48 + Part 107)</text>
+<text x="600" y="725" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="9" fill="rgba(255,100,100,0.9)" font-weight="normal">These markings are LEGALLY REQUIRED — not optional</text>
+<rect x="30" y="740" width="280" height="90" rx="4" ry="4" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+<rect x="30" y="740" width="280" height="18" fill="#111111"/>
+<text x="170" y="753" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="9" fill="#ffffff" font-weight="bold" letter-spacing="1">sUAS REGISTRATION DATA</text>
+<rect x="30" y="768" width="280" height="14" fill="#dde4ea"/>
+<text x="36" y="778" text-anchor="start" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="8" fill="#444444" font-weight="bold">CLASS</text>
+<text x="304" y="778" text-anchor="end" font-family="'Arial','Helvetica',sans-serif" font-size="8" fill="#111111" font-weight="normal">Small UAS / sUAS</text>
+<rect x="30" y="782" width="280" height="14" fill="#ffffff"/>
+<text x="36" y="792" text-anchor="start" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="8" fill="#444444" font-weight="bold">CATEGORY</text>
+<text x="304" y="792" text-anchor="end" font-family="'Arial','Helvetica',sans-serif" font-size="8" fill="#111111" font-weight="normal">Part 107 Operations</text>
+<rect x="30" y="796" width="280" height="14" fill="#dde4ea"/>
+<text x="36" y="806" text-anchor="start" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="8" fill="#444444" font-weight="bold">AUW MAX</text>
+<text x="304" y="806" text-anchor="end" font-family="'Arial','Helvetica',sans-serif" font-size="8" fill="#111111" font-weight="normal">1,103 g  (2.43 lb)</text>
+<rect x="30" y="810" width="280" height="14" fill="#ffffff"/>
+<text x="36" y="820" text-anchor="start" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="8" fill="#444444" font-weight="bold">FAA REG</text>
+<text x="304" y="820" text-anchor="end" font-family="'Arial','Helvetica',sans-serif" font-size="8" fill="#111111" font-weight="normal">N00000</text>
+<rect x="30" y="824" width="280" height="14" fill="#dde4ea"/>
+<text x="36" y="834" text-anchor="start" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="8" fill="#444444" font-weight="bold">OWNER</text>
+<text x="304" y="834" text-anchor="end" font-family="'Arial','Helvetica',sans-serif" font-size="8" fill="#111111" font-weight="normal">[OWNER NAME / ADDRESS]</text>
+<rect x="26" y="736" width="288" height="98" rx="9" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="30" y="734" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">D1 — sUAS DATA PLATE (fuselage bottom, accessible)</text>
+<rect x="325" y="740" width="300" height="75" rx="4" ry="4" fill="#f5c518" stroke="#c62828" stroke-width="2"/>
+<rect x="325" y="740" width="300" height="20" fill="#c62828"/>
+<text x="475" y="754" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="10" fill="#ffffff" font-weight="900" letter-spacing="1">⚠  UNMANNED AIRCRAFT  ⚠</text>
+<text x="475" y="774" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#111111" font-weight="normal">If found, contact FAA:</text>
+<text x="475" y="788" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="12" fill="#c62828" font-weight="900">1-877-835-5322</text>
+<text x="475" y="802" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="8" fill="#111111" font-weight="normal">uas-inquiry@faa.gov  ·  FAA.gov/UAS</text>
+<text x="475" y="812" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="8" fill="#444444" font-weight="bold">FAA REG: N00000</text>
+<rect x="321" y="736" width="308" height="83" rx="9" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="325" y="734" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">D2 — LOST UAS CONTACT LABEL (interior cockpit bay)</text>
+<rect x="640" y="740" width="280" height="70" rx="4" ry="4" fill="#f5c518" stroke="#d06820" stroke-width="2"/>
+<rect x="640" y="740" width="280" height="18" fill="#d06820"/>
+<text x="780" y="753" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="10" fill="#ffffff" font-weight="900">⚡  LiPo BATTERY HAZARD  ⚡</text>
+<text x="780" y="770" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="9" fill="#111111" font-weight="bold">5S LiPo  18.5V nominal  21.0V max</text>
+<text x="780" y="784" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#111111" font-weight="normal">DO NOT puncture · incinerate · short-circuit</text>
+<text x="780" y="798" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7" fill="#444444" font-weight="normal">IF DAMAGED: place in fireproof bag · contact hazmat</text>
+<rect x="636" y="736" width="288" height="78" rx="9" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="640" y="734" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">D3 — LiPo WARNING (battery bay lid)</text>
+<rect x="935" y="740" width="225" height="110" rx="4" ry="4" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+<rect x="935" y="740" width="225" height="18" fill="#111111"/>
+<text x="1047" y="753" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="8" fill="#ffffff" font-weight="bold" letter-spacing="1">OPERATING LIMITATIONS</text>
+<rect x="935" y="763" width="225" height="13" fill="#dde4ea"/>
+<text x="939" y="773" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#444444" font-weight="normal">MAX ALT</text>
+<text x="1156" y="773" text-anchor="end" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#111111" font-weight="normal">400 ft AGL  (122 m)</text>
+<rect x="935" y="776" width="225" height="13" fill="#ffffff"/>
+<text x="939" y="786" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#444444" font-weight="normal">MAX SPEED</text>
+<text x="1156" y="786" text-anchor="end" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#111111" font-weight="normal">87 kts  (100 mph)</text>
+<rect x="935" y="789" width="225" height="13" fill="#dde4ea"/>
+<text x="939" y="799" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#444444" font-weight="normal">VISIBILITY</text>
+<text x="1156" y="799" text-anchor="end" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#111111" font-weight="normal">≥3 sm day  (VLOS)</text>
+<rect x="935" y="802" width="225" height="13" fill="#ffffff"/>
+<text x="939" y="812" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#444444" font-weight="normal">AIRSPACE</text>
+<text x="1156" y="812" text-anchor="end" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#111111" font-weight="normal">B/C/D/E: contact ATC</text>
+<rect x="935" y="815" width="225" height="13" fill="#dde4ea"/>
+<text x="939" y="825" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#444444" font-weight="normal">NIGHT OPS</text>
+<text x="1156" y="825" text-anchor="end" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#111111" font-weight="normal">Part 107 waiver req.</text>
+<rect x="935" y="828" width="225" height="13" fill="#ffffff"/>
+<text x="939" y="838" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#444444" font-weight="normal">PAYLOAD</text>
+<text x="1156" y="838" text-anchor="end" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#111111" font-weight="normal">250 g maximum</text>
+<rect x="935" y="841" width="225" height="13" fill="#dde4ea"/>
+<text x="939" y="851" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#444444" font-weight="normal">AUW MAX</text>
+<text x="1156" y="851" text-anchor="end" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#111111" font-weight="normal">1,103 g  (2.43 lb)</text>
+<rect x="931" y="736" width="233" height="118" rx="9" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="935" y="734" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">D4 — OPERATING LIMITS (fuselage top)</text>
+<rect x="30" y="850" width="600" height="40" rx="4" ry="4" fill="#c62828" stroke="#111111" stroke-width="1.5"/>
+<rect x="30" y="850" width="40" height="40" fill="#111111"/>
+<rect x="590" y="850" width="40" height="40" fill="#111111"/>
+<text x="330" y="877" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="18" fill="#ffffff" letter-spacing="6">REMOVE BEFORE FLIGHT</text>
+<rect x="26" y="846" width="608" height="48" rx="9" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="30" y="844" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">D5 — REMOVE BEFORE FLIGHT streamer (EDF covers)</text>
+<rect x="645" y="850" width="250" height="40" rx="4" ry="4" fill="#d06820" stroke="#111111" stroke-width="1.5"/>
+<text x="770" y="865" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="10" fill="#ffffff" font-weight="900">⛔  DO NOT HAND LAUNCH</text>
+<text x="770" y="880" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ffffff" font-weight="normal">VTOL ONLY  ·  CLEAR 5m RADIUS</text>
+<rect x="641" y="846" width="258" height="48" rx="9" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="645" y="844" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">D6 — NO HAND LAUNCH (belly)</text>
+<rect x="910" y="850" width="245" height="40" rx="4" ry="4" fill="#cc0000" stroke="#111111" stroke-width="1.5"/>
+<text x="1032" y="865" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="10" fill="#ffffff" font-weight="900">⚠  EDF ROTATING HAZARD</text>
+<text x="1032" y="880" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="8" fill="#f5c518" font-weight="normal">KEEP CLEAR WHEN ARMED</text>
+<rect x="906" y="846" width="253" height="48" rx="9" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="910" y="844" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">D7 — EDF DANGER (nacelle each)</text>
+<rect x="30" y="910" width="350" height="60" rx="4" ry="4" fill="#444444" stroke="#dde4ea" stroke-width="1.5"/>
+<rect x="30" y="910" width="350" height="16" fill="#111111"/>
+<text x="205" y="922" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="8" fill="#ffffff" font-weight="bold" letter-spacing="1">NAVIGATION LIGHT REFERENCE</text>
+<text x="38" y="934" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="10" fill="#cc2200">●</text>
+<text x="52" y="934" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#dde4ea" font-weight="normal">Port · Red · Steady</text>
+<text x="38" y="947" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="10" fill="#00cc00">●</text>
+<text x="52" y="947" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#dde4ea" font-weight="normal">Stbd · Green · Steady</text>
+<text x="38" y="960" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="10" fill="#ffffff">●</text>
+<text x="52" y="960" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#dde4ea" font-weight="normal">Tail · White · Steady</text>
+<text x="218" y="934" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="10" fill="#ff4444">◆</text>
+<text x="232" y="934" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#dde4ea" font-weight="normal">Anti-col · Red · 60FPM</text>
+<text x="218" y="947" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="10" fill="#dde4ea">◆</text>
+<text x="232" y="947" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#dde4ea" font-weight="normal">Belly · White · 60FPM</text>
+<text x="218" y="960" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="10" fill="#f5c518">▪</text>
+<text x="232" y="960" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#dde4ea" font-weight="normal">Landing · White · On ops</text>
+<text x="205" y="968" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="6.5" fill="#888888" font-weight="normal">ICAO Annex 2  ·  14 CFR 91.209  ·  FAA AC 107-2B</text>
+<rect x="26" y="906" width="358" height="68" rx="9" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="30" y="904" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">D8 — NAV LIGHT REFERENCE (cockpit interior)</text>
+<rect x="395" y="910" width="280" height="60" rx="4" ry="4" fill="#006db7" stroke="#dde4ea" stroke-width="1.5"/>
+<rect x="395" y="910" width="280" height="16" fill="#444444"/>
+<text x="535" y="922" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="8" fill="#ffffff" font-weight="bold" letter-spacing="1">RADIO FREQUENCIES</text>
+<rect x="395" y="932" width="280" height="14" fill="rgba(255,255,255,0.08)"/>
+<text x="399" y="942" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#f5c518" font-weight="normal">SiK 915 MHz</text>
+<text x="535" y="942" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="7.5" fill="#ffffff" font-weight="normal">MAVLink telemetry</text>
+<text x="671" y="942" text-anchor="end" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#e8d08b" font-weight="normal">≤1,094 yd</text>
+<rect x="395" y="946" width="280" height="14" fill="rgba(255,255,255,0)"/>
+<text x="399" y="956" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#f5c518" font-weight="normal">49 MHz RCRS</text>
+<text x="535" y="956" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="7.5" fill="#ffffff" font-weight="normal">Primary RC link</text>
+<text x="671" y="956" text-anchor="end" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#e8d08b" font-weight="normal">≤547 yd</text>
+<rect x="395" y="960" width="280" height="14" fill="rgba(255,255,255,0.08)"/>
+<text x="399" y="970" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#f5c518" font-weight="normal">WiFi 2.4/5G</text>
+<text x="535" y="970" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="7.5" fill="#ffffff" font-weight="normal">Ground debug</text>
+<text x="671" y="970" text-anchor="end" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#e8d08b" font-weight="normal">≤437 yd</text>
+<rect x="391" y="906" width="288" height="68" rx="9" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="395" y="904" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">D9 — RADIO FREQ CARD (interior avionics bay)</text>
+<rect x="690" y="910" width="460" height="60" rx="4" ry="4" fill="#fffdf6" stroke="#111111" stroke-width="1.5"/>
+<rect x="690" y="910" width="460" height="16" fill="#111111"/>
+<text x="920" y="922" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="8" fill="#ffffff" font-weight="bold" letter-spacing="1">OWNER / EMERGENCY CONTACT</text>
+<text x="698" y="940" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#444444" font-weight="normal">Name: ___________________________</text>
+<text x="930" y="940" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#444444" font-weight="normal">Phone: _____________________</text>
+<text x="698" y="956" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#444444" font-weight="normal">Email: ___________________________</text>
+<text x="930" y="956" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#444444" font-weight="normal">FAA Cert#: __________________</text>
+<text x="698" y="968" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7" fill="#888888" font-weight="normal">Serial: SERENITY-03SK-2026  ·  AUW: 1,103g max  ·  CC BY 4.0</text>
+<rect x="686" y="906" width="468" height="68" rx="9" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="690" y="904" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">D10 — OWNER CONTACT (fuselage interior / belly accessible)</text>
+<rect x="20" y="995" width="1160" height="240" rx="8" ry="8" fill="rgba(255,255,255,0.04)" stroke="rgba(200,168,75,0.3)" stroke-width="1"/>
+<text x="600" y="1011" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="11" fill="#c8a84b" font-weight="900" letter-spacing="2">E — WEATHERING DETAILS & SHOW-ACCURATE PANEL MARKINGS</text>
+<rect x="30" y="1025" width="250" height="55" rx="3" ry="3" fill="rgba(10,5,2,0.9)" stroke="#707880" stroke-width="1.5"/>
+<text x="155" y="1041" text-anchor="middle" font-family="'Impact','Arial Black',sans-serif" font-size="22" fill="#c8d0d8" font-weight="normal">CARGO</text>
+<text x="155" y="1057" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="9" fill="#dde4ea" font-weight="normal">MAX  250 kg  (551 lb)</text>
+<text x="155" y="1071" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7" fill="#888888" font-weight="normal">UNION COMMERCIAL REGISTRY 03SK</text>
+<rect x="26" y="1021" width="258" height="63" rx="9" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="30" y="1019" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">E1 — CARGO STENCIL (payload bay exterior)</text>
+<rect x="295" y="1025" width="200" height="55" rx="3" ry="3" fill="rgba(10,5,2,0.9)" stroke="#f5c518" stroke-width="1.5"/>
+<polygon points="335,1053 310,1043 310,1063" fill="#f5c518"/>
+<text x="410" y="1049" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="10" fill="#f5c518" font-weight="900">MAINTENANCE</text>
+<text x="410" y="1063" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="10" fill="#f5c518" font-weight="900">ACCESS</text>
+<text x="395" y="1075" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7" fill="#e8d08b" font-weight="normal">REMOVE BEFORE FLIGHT</text>
+<rect x="291" y="1021" width="208" height="63" rx="9" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="295" y="1019" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">E2 — MAINTENANCE ARROW (cockpit side)</text>
+<rect x="510" y="1025" width="400" height="45" rx="5" ry="5" fill="rgba(10,5,2,0.9)" stroke="rgba(200,168,75,0.4)" stroke-width="1.5"/>
+<text x="710" y="1057" text-anchor="middle" font-family="'Georgia',serif" font-size="20" font-style="italic" fill="#c8a84b" letter-spacing="3">...I aim to misbehave.</text>
+<text x="710" y="1066" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7" fill="#8b6b1a" font-weight="normal">— Capt. Malcolm Reynolds · Serenity (2005)</text>
+<rect x="506" y="1021" width="408" height="53" rx="10" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="510" y="1019" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">E3 — MAL QUOTE (optional fun detail, aft fuselage)</text>
+<rect x="30" y="1095" width="300" height="35" rx="3" ry="3" fill="#f5c518" stroke="#111111" stroke-width="1.5"/>
+<text x="180" y="1109" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="11" fill="#111111" font-weight="900" letter-spacing="2">⚠  INTAKE HAZARD</text>
+<text x="180" y="1122" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="8" fill="#444444" font-weight="normal">KEEP CLEAR WHEN ARMED  ·  EDF 70mm</text>
+<rect x="26" y="1091" width="308" height="43" rx="8" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="30" y="1089" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">E4 — INTAKE WARNING (per nacelle)</text>
+<rect x="345" y="1095" width="280" height="35" rx="3" ry="3" fill="rgba(10,5,2,0.9)" stroke="#707880" stroke-width="1"/>
+<rect x="349" y="1099" width="272" height="27" rx="1" fill="none" stroke="#c8d0d8" stroke-width="0.5" stroke-dasharray="3 2" opacity="0.4"/>
+<text x="485" y="1109" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="8" fill="#c8d0d8" font-weight="normal">ATMO PROCESSOR  ·  GRAV DRIVE</text>
+<text x="485" y="1121" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7" fill="#707880" font-weight="normal">FUEL CELL  ·  TYPE IV  ·  SERVICE INTERVAL: 500HR</text>
+<rect x="341" y="1091" width="288" height="43" rx="8" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="345" y="1089" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">E5 — TECH PLACARD (engine bell side)</text>
+<polygon points="700,1095 760,1125 760,1165 700,1180 640,1165 640,1125" fill="#8b3a1a" stroke="#8b6b1a" stroke-width="2"/>
+<text x="700" y="1120" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="11" fill="#e8d08b" font-weight="900">BROWN</text>
+<text x="700" y="1135" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="11" fill="#e8d08b" font-weight="900">COAT</text>
+<text x="700" y="1153" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7" fill="#c8a84b" font-weight="normal">INDEPENDENT</text>
+<text x="700" y="1165" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7" fill="#c8a84b" font-weight="normal">FACTION</text>
+<text x="700" y="1175" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="6" fill="#8b6b1a" font-weight="normal">2517 ABW</text>
+<rect x="636" y="1091" width="128" height="93" rx="9" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="700" y="1089" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7" fill="#ff8888" font-weight="normal">E6 — BROWNCOAT PATCH (fun)</text>
+<rect x="775" y="1095" width="390" height="85" rx="3" ry="3" fill="rgba(20,10,5,0.8)" stroke="rgba(100,80,40,0.4)" stroke-width="1"/>
+<rect x="775" y="1095" width="390" height="85" rx="3" fill="url(#cut_pattern)" opacity="0.3"/>
+<text x="970" y="1113" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="10" fill="#e8d08b" font-weight="bold" letter-spacing="2">WEATHERING GUIDE</text>
+<text x="781" y="1127" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="#8b3a1a" font-weight="normal">• Rust streaks: paint thin burnt-sienna wash along panel lines</text>
+<text x="781" y="1140" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="#888888" font-weight="normal">• Soot: dry-brush dark grey on aft bell, nacelle exits</text>
+<text x="781" y="1153" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="#c8d0d8" font-weight="normal">• Chipping: silver/chrome dabbed on leading edges, corners</text>
+<text x="781" y="1166" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="#444444" font-weight="normal">• Grime: diluted black wash pooled in recesses and seams</text>
+<text x="781" y="1179" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="#8b6b1a" font-weight="normal">• Oil stains: dark brown streaks beneath engine bell</text>
+<rect x="771" y="1091" width="398" height="93" rx="8" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
+<text x="775" y="1089" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">E7 — WEATHERING REFERENCE GUIDE</text>
+<rect x="20" y="1255" width="1160" height="200" rx="8" ry="8" fill="rgba(255,255,255,0.04)" stroke="rgba(100,200,100,0.3)" stroke-width="1"/>
+<text x="600" y="1271" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="11" fill="#2e7d32" font-weight="900" letter-spacing="2">F — PRINTING & APPLICATION INSTRUCTIONS</text>
+<rect x="30" y="1283" width="285" height="160" rx="5" ry="5" fill="rgba(255,255,255,0.06)" stroke="#2e7d32" stroke-width="1"/>
+<rect x="30" y="1283" width="285" height="22" rx="5" ry="5" fill="#2e7d32" stroke="none" stroke-width="1"/>
+<rect x="30" y="1295" width="285" height="10" rx="0" ry="0" fill="#2e7d32" stroke="none" stroke-width="1"/>
+<text x="172" y="1298" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="9" fill="#ffffff" font-weight="bold" letter-spacing="1">RECOMMENDED MEDIA</text>
+<text x="38" y="1313" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">Inkjet waterslide decal paper (clear or white)</text>
+<text x="38" y="1327" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">White paper backing for coloured decals A/C.</text>
+<text x="38" y="1341" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">Clear backing for registration decals B/D (allows</text>
+<text x="38" y="1355" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">hull colour to show through).</text>
+<rect x="325" y="1283" width="285" height="160" rx="5" ry="5" fill="rgba(255,255,255,0.06)" stroke="#2e7d32" stroke-width="1"/>
+<rect x="325" y="1283" width="285" height="22" rx="5" ry="5" fill="#2e7d32" stroke="none" stroke-width="1"/>
+<rect x="325" y="1295" width="285" height="10" rx="0" ry="0" fill="#2e7d32" stroke="none" stroke-width="1"/>
+<text x="467" y="1298" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="9" fill="#ffffff" font-weight="bold" letter-spacing="1">PRINT SETTINGS</text>
+<text x="333" y="1313" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">Full colour · highest quality · photo paper mode</text>
+<text x="333" y="1327" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">No scaling — print at 100% / 1:1</text>
+<text x="333" y="1341" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">Dry completely before cutting (≥30 min)</text>
+<text x="333" y="1355" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">Seal with 2 coats Micro-Sol decal film</text>
+<rect x="620" y="1283" width="285" height="160" rx="5" ry="5" fill="rgba(255,255,255,0.06)" stroke="#2e7d32" stroke-width="1"/>
+<rect x="620" y="1283" width="285" height="22" rx="5" ry="5" fill="#2e7d32" stroke="none" stroke-width="1"/>
+<rect x="620" y="1295" width="285" height="10" rx="0" ry="0" fill="#2e7d32" stroke="none" stroke-width="1"/>
+<text x="762" y="1298" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="9" fill="#ffffff" font-weight="bold" letter-spacing="1">APPLICATION METHOD</text>
+<text x="628" y="1313" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">1. Cut along pink dashed lines with scissors</text>
+<text x="628" y="1327" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">2. Soak in warm water 30s until decal slides</text>
+<text x="628" y="1341" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">3. Slide decal off paper onto wet hull surface</text>
+<text x="628" y="1355" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">4. Squeegee with soft cloth · remove bubbles</text>
+<text x="628" y="1369" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">5. Dry 24h · seal with clear lacquer</text>
+<rect x="915" y="1283" width="285" height="160" rx="5" ry="5" fill="rgba(255,255,255,0.06)" stroke="#2e7d32" stroke-width="1"/>
+<rect x="915" y="1283" width="285" height="22" rx="5" ry="5" fill="#2e7d32" stroke="none" stroke-width="1"/>
+<rect x="915" y="1295" width="285" height="10" rx="0" ry="0" fill="#2e7d32" stroke="none" stroke-width="1"/>
+<text x="1057" y="1298" text-anchor="middle" font-family="'Arial Black','Arial','Helvetica',sans-serif" font-weight="900" font-size="9" fill="#ffffff" font-weight="bold" letter-spacing="1">PLACEMENT NOTES</text>
+<text x="923" y="1313" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">• Port/Stbd names: 40mm from nose mid-hull</text>
+<text x="923" y="1327" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">• Reg block B1: belly between skids · MUST be visible</text>
+<text x="923" y="1341" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">• Reg block B2: each nacelle outboard face</text>
+<text x="923" y="1355" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">• Chinese 宁静 C3: aft hull port side</text>
+<text x="923" y="1369" text-anchor="start" font-family="'Arial','Helvetica',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">• FAA regs require number legible from 25ft</text>
+<rect x="0" y="1660" width="1200" height="40" rx="0" ry="0" fill="#111111" stroke="none" stroke-width="1"/>
+<text x="600" y="1678" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#e8d08b" font-weight="normal">© 2026 Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP  ·  CC BY 4.0  ·  creativecommons.org/licenses/by/4.0</text>
+<text x="600" y="1692" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#888888" font-weight="normal">Visual inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy Productions / Universal Pictures  ·  Fan engineering work — not an officially licensed product</text>
+</svg>

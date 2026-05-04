@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Serenity-Class Tiltrotor UAV — Build Guide — Cover -->
+<!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP  CC BY 4.0 -->
+<!-- Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0 -->
+<!-- Visual: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+<rect width="1200" height="900" fill="#006db7"/>
+<polygon points="0,0 400,0 0,300" fill="#ff7518" opacity="0.7"/>
+<polygon points="1200,900 800,900 1200,620" fill="#ff7518" opacity="0.5"/>
+<rect x="60" y="80" width="1080" height="240" rx="12" fill="rgba(0,0,0,0.35)"/>
+<text x="600" y="150" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="38" fill="#ffffff" letter-spacing="3">SERENITY-CLASS TILTROTOR UAV</text>
+<text x="600" y="196" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="22" fill="#f5c518">ILLUSTRATED BUILD GUIDE</text>
+<text x="600" y="236" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="14" fill="#c8dff0">Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP</text>
+<text x="600" y="258" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="12" fill="#c8dff0">© 2026  ·  CC BY 4.0  ·  creativecommons.org/licenses/by/4.0</text>
+<text x="600" y="295" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="rgba(200,223,240,0.7)">Hull: Peter Farell CC BY 4.0  ·  Nozzle: BamJr CC BY 4.0  ·  Visual: Firefly/Serenity © Joss Whedon / Universal — Fan engineering work</text>
+<polygon points="600,580 611,571 629,562 644,562 659,559 669,559 682,560 694,562 709,566 725,571 738,568 751,566 781,569 781,591 751,594 738,592 725,589 709,594 694,598 682,600 669,601 659,601 644,598 629,598 611,589 600,580" fill="rgba(100,180,255,0.25)" stroke="#c8dff0" stroke-width="2.5"/>
+<line x1="663" y1="555" x2="679" y2="412" stroke="#c8dff0" stroke-width="2.5"/>
+<ellipse cx="677" cy="412" rx="18" ry="7" fill="rgba(255,150,80,0.3)" stroke="#ff7518" stroke-width="2.5"/>
+<circle cx="668" cy="412" r="7" fill="#ff6060" opacity="0.9"/>
+<line x1="663" y1="605" x2="679" y2="748" stroke="#c8dff0" stroke-width="2.5"/>
+<ellipse cx="677" cy="748" rx="18" ry="7" fill="rgba(255,150,80,0.3)" stroke="#ff7518" stroke-width="2.5"/>
+<circle cx="668" cy="748" r="7" fill="#60ff60" opacity="0.9"/>
+<circle cx="749" cy="580" r="10" fill="rgba(255,230,80,0.25)" stroke="#f5c518" stroke-width="2"/>
+<rect x="80" y="340" width="170" height="70" rx="8" fill="rgba(255,255,255,0.1)"/>
+<text x="165" y="364" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">HULL</text>
+<text x="165" y="392" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">365mm (14.4")</text>
+<rect x="265" y="340" width="170" height="70" rx="8" fill="rgba(255,255,255,0.1)"/>
+<text x="350" y="364" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">WINGSPAN</text>
+<text x="350" y="392" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">680mm (26.8")</text>
+<rect x="450" y="340" width="170" height="70" rx="8" fill="rgba(255,255,255,0.1)"/>
+<text x="535" y="364" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">THRUST</text>
+<text x="535" y="392" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">2200g nacelle</text>
+<rect x="635" y="340" width="170" height="70" rx="8" fill="rgba(255,255,255,0.1)"/>
+<text x="720" y="364" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">T/W RATIO</text>
+<text x="720" y="392" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">2.20:1</text>
+<rect x="820" y="340" width="170" height="70" rx="8" fill="rgba(255,255,255,0.1)"/>
+<text x="905" y="364" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">CRUISE</text>
+<text x="905" y="392" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">35–49 kts</text>
+<rect x="1005" y="340" width="170" height="70" rx="8" fill="rgba(255,255,255,0.1)"/>
+<text x="1090" y="364" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">STEPS</text>
+<text x="1090" y="392" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">18</text>
+<rect x="1070" y="440" width="110" height="50" rx="8" fill="#ff7518"/>
+<text x="1125" y="460" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#ffffff">BUILD STEPS</text>
+<text x="1125" y="482" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">18</text>
+<text x="600" y="884" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="rgba(200,223,240,0.55)">LEGO-style build guide — all dimensions in mm (inches in parentheses)</text>
+</svg>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Serenity-Class Tiltrotor UAV — Build Guide — Step 17 — Ground Test -->
+<!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP  CC BY 4.0 -->
+<!-- Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0 -->
+<!-- Visual: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+<rect width="1200" height="900" fill="#f5f0e8"/>
+<rect x="0" y="0" width="1200" height="64" fill="#006db7"/>
+<text x="24" y="24" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="14" fill="#ffffff" letter-spacing="2">SERENITY-CLASS TILTROTOR UAV</text>
+<text x="24" y="46" font-family="'Arial','Helvetica',sans-serif" font-size="11" fill="#c8dff0">Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · CC BY 4.0 · 2026</text>
+<rect x="1040" y="8" width="144" height="48" rx="6" fill="#ff7518"/>
+<text x="1112" y="29" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">STEP</text>
+<text x="1112" y="50" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">17 / 18</text>
+<rect x="0" y="64" width="1200" height="40" fill="#dde4ea" rx="0"/>
+<text x="24" y="90" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 8 — GROUND TEST</text>
+<text x="500" y="90" font-family="'Arial','Helvetica',sans-serif" font-size="12" fill="#607080">Tethered bench test · all system verification</text>
+<rect x="0" y="872" width="1200" height="28" fill="#006db7"/>
+<text x="600" y="890" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#c8dff0">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
+<rect x="16" y="112" width="720" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
+<rect x="752" y="112" width="432" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
+<rect x="760" y="120" width="416" height="136" rx="8" fill="#fffdf6" stroke="#006db7" stroke-width="2"/>
+<rect x="760" y="120" width="416" height="28" rx="8" fill="#006db7"/>
+<rect x="760" y="136" width="416" height="12" fill="#006db7"/>
+<text x="968" y="139" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">PARTS NEEDED</text>
+<rect x="768" y="145" width="26" height="16" rx="4" fill="#006db7" stroke="#222222" stroke-width="1"/>
+<text x="781" y="158" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
+<text x="800" y="158" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">QGroundControl (GCS laptop)</text>
+<rect x="768" y="167" width="26" height="16" rx="4" fill="#c2185b" stroke="#222222" stroke-width="1"/>
+<text x="781" y="180" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
+<text x="800" y="180" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">49MHz RCRS ground transmitter</text>
+<rect x="768" y="189" width="26" height="16" rx="4" fill="#f5c518" stroke="#222222" stroke-width="1"/>
+<text x="781" y="202" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
+<text x="800" y="202" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Luggage scale (thrust measure)</text>
+<rect x="768" y="211" width="26" height="16" rx="4" fill="#2e7d32" stroke="#222222" stroke-width="1"/>
+<text x="781" y="224" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
+<text x="800" y="224" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">IR thermometer</text>
+<rect x="760" y="264" width="416" height="240" rx="8" fill="#fffdf6" stroke="#607080" stroke-width="1.5"/>
+<rect x="760" y="264" width="416" height="28" rx="8" fill="#607080"/>
+<rect x="760" y="280" width="416" height="12" fill="#607080"/>
+<text x="968" y="283" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">INSTRUCTIONS</text>
+<circle cx="776" cy="299" r="9" fill="#006db7"/>
+<text x="776" y="303" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1</text>
+<text x="792" y="304" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Tether aircraft firmly with 3-4 straps to bench before any spin-up</text>
+<circle cx="776" cy="323" r="9" fill="#006db7"/>
+<text x="776" y="327" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
+<text x="792" y="328" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Connect GCS laptop · verify MAVLink heartbeat + attitude display</text>
+<circle cx="776" cy="347" r="9" fill="#006db7"/>
+<text x="776" y="351" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
+<text x="792" y="352" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">RC RCRS transmitter: verify all channels in QGC RC calibration</text>
+<circle cx="776" cy="371" r="9" fill="#006db7"/>
+<text x="776" y="375" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4</text>
+<text x="792" y="376" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">GPS outdoors: wait for HDOP ≤1.5 and ≥6 satellites</text>
+<circle cx="776" cy="395" r="9" fill="#006db7"/>
+<text x="776" y="399" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">5</text>
+<text x="792" y="400" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">WITHOUT PROPS: arm · advance throttle per ESC · verify direction</text>
+<circle cx="776" cy="419" r="9" fill="#006db7"/>
+<text x="776" y="423" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">6</text>
+<text x="792" y="424" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">WITH FANS: 30% throttle tethered · verify ≥330g per 70mm fan</text>
+<circle cx="776" cy="443" r="9" fill="#006db7"/>
+<text x="776" y="447" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">7</text>
+<text x="792" y="448" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Sweep nacelles 0°→90°: verify nozzle gear coupling tracks smoothly</text>
+<circle cx="776" cy="467" r="9" fill="#006db7"/>
+<text x="776" y="471" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">8</text>
+<text x="792" y="472" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Check all nav lights in all firmware states before first flight</text>
+<rect x="760" y="516" width="416" height="36" rx="6" fill="#fffac0" stroke="#ff7518" stroke-width="2"/><text x="778" y="531" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="14" fill="#ff7518">⚠</text><text x="796" y="538" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">ALWAYS tether for ground tests — an unrestrained EDF is dangerous</text>
+<rect x="760" y="560" width="416" height="36" rx="6" fill="#fffac0" stroke="#ff7518" stroke-width="2"/><text x="778" y="575" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="14" fill="#ff7518">⚠</text><text x="796" y="582" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Remove all objects within 1m radius before spinning fans</text>
+<polygon points="96,488 112,477 140,470 162,469 201,466 238,470 261,474 285,481 304,479 325,477 370,481 370,493 325,495 304,494 285,493 261,498 238,500 201,502 162,501 140,500 112,495 96,488" fill="rgba(0,80,150,0.1)" stroke="#006db7" stroke-width="1.5"/>
+<line x1="76" y1="618" x2="76" y2="528" stroke="#f5c518" stroke-width="3" stroke-dasharray="5 3"/>
+<line x1="476" y1="618" x2="476" y2="528" stroke="#f5c518" stroke-width="3" stroke-dasharray="5 3"/>
+<line x1="216" y1="618" x2="216" y2="528" stroke="#f5c518" stroke-width="3" stroke-dasharray="5 3"/>
+<rect x="66" y="618" width="510" height="16" rx="3" fill="#f5c518" opacity="0.6"/>
+<text x="316" y="643" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="9" fill="#ff7518">TETHERED for ground test!</text>
+<rect x="476" y="388" width="220" height="200" rx="8" fill="#fffdf6" stroke="#2e7d32" stroke-width="2"/>
+<rect x="476" y="388" width="220" height="28" rx="8" fill="#2e7d32"/>
+<rect x="476" y="404" width="220" height="12" fill="#2e7d32"/>
+<text x="586" y="406" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">GROUND TEST</text>
+<rect x="488" y="417" width="14" height="14" rx="2" fill="#2e7d32" opacity="0.5" stroke="#2e7d32" stroke-width="1"/>
+<text x="506" y="428" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#222222">MAVLink heartbeat in QGC</text>
+<rect x="488" y="436" width="14" height="14" rx="2" fill="#2e7d32" opacity="0.5" stroke="#2e7d32" stroke-width="1"/>
+<text x="506" y="447" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#222222">RC channels respond (RCRS)</text>
+<rect x="488" y="455" width="14" height="14" rx="2" fill="#2e7d32" opacity="0.5" stroke="#2e7d32" stroke-width="1"/>
+<text x="506" y="466" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#222222">GPS fix HDOP ≤1.5</text>
+<rect x="488" y="474" width="14" height="14" rx="2" fill="#2e7d32" opacity="0.5" stroke="#2e7d32" stroke-width="1"/>
+<text x="506" y="485" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#222222">All nav lights correct</text>
+<rect x="488" y="493" width="14" height="14" rx="2" fill="#ff7518" opacity="0.5" stroke="#ff7518" stroke-width="1"/>
+<text x="506" y="504" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#222222">ESC tones on arm (no props)</text>
+<rect x="488" y="512" width="14" height="14" rx="2" fill="#2e7d32" opacity="0.5" stroke="#2e7d32" stroke-width="1"/>
+<text x="506" y="523" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#222222">Nacelle sweep 0°→90°</text>
+<rect x="488" y="531" width="14" height="14" rx="2" fill="#ff7518" opacity="0.5" stroke="#ff7518" stroke-width="1"/>
+<text x="506" y="542" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#222222">Nozzle opens/closes with nacelle</text>
+<rect x="488" y="550" width="14" height="14" rx="2" fill="#c2185b" opacity="0.5" stroke="#c2185b" stroke-width="1"/>
+<text x="506" y="561" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#222222">Winch deploy + retract</text>
+<rect x="56" y="408" width="180" height="80" rx="6" fill="#fffac0" stroke="#ff7518" stroke-width="2"/>
+<text x="146" y="426" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#222222">BENCH THRUST TEST</text>
+<text x="146" y="444" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#607080">30% throttle, TETHERED</text>
+<text x="146" y="462" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#2e7d32">Expect: ≥330g per 70mm fan</text>
+<text x="146" y="480" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-size="9" fill="#ff7518">ESC temp check: target &lt;60°C</text>
+</svg>
