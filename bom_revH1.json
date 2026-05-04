@@ -1,0 +1,101 @@
+{
+  "revision": "H.1",
+  "scale": "18 inches (457.2mm)",
+  "canonical_source": "QMx Official Serenity Blueprints (Mandel/Earls 2007)",
+  "hull_structure": [
+    {
+      "ref": "HULL-SHELL",
+      "desc": "PETG thin shell 1.2mm wall",
+      "qty": 1,
+      "mass_g": 143,
+      "volume_cm3": 115,
+      "density": "1.24 g/cm\u00b3",
+      "notes": "Numerical integration of canonical profile: 1711 cm\u00b3 gross, 115 cm\u00b3 shell"
+    },
+    {
+      "ref": "HULL-FOAM",
+      "desc": "X-30 expanding PU foam 2 lb/ft\u00b3",
+      "qty": 1,
+      "mass_g": 42,
+      "volume_cm3": 1309,
+      "density_lbcf": 2.0,
+      "density_gcm3": 0.03204,
+      "notes": "Net foam vol after 18% internals deduction. 2 lb/ft\u00b3 is lowest available density"
+    },
+    {
+      "ref": "HULL-CF",
+      "desc": "CF keel + ring frames",
+      "qty": 1,
+      "mass_g": 28
+    },
+    {
+      "ref": "HULL-TUBE",
+      "desc": "Straw-diameter cable route tubes \u00d76",
+      "qty": 6,
+      "mass_g": 5,
+      "notes": "Insert before foam pour"
+    }
+  ],
+  "nacelles": [
+    {
+      "ref": "NAC-POD-80",
+      "desc": "Nacelle pod 80mm EDF \u2014 OD 93mm, length 144mm",
+      "qty": 2,
+      "mass_g": 18,
+      "stl": "nacelle_pod_80mm.stl"
+    },
+    {
+      "ref": "EDF-80",
+      "desc": "80mm EDF unit (motor + fan)",
+      "qty": 2,
+      "mass_g": 150,
+      "thrust_g_6S": 1700,
+      "cost_est": "$35ea",
+      "notes": "6S rated. Canonical span places tip-to-tip at 288.9mm (11.375\\\"). Outward from datum."
+    },
+    {
+      "ref": "NAC-TIP-P",
+      "desc": "Nacelle tip cap PORT (RED nav light)",
+      "qty": 1,
+      "stl": "nacelle_tip_cap_port.stl"
+    },
+    {
+      "ref": "NAC-TIP-S",
+      "desc": "Nacelle tip cap STBD (GREEN nav light)",
+      "qty": 1,
+      "stl": "nacelle_tip_cap_stbd.stl"
+    },
+    {
+      "ref": "NAC-ARM",
+      "desc": "CF arm stub 12mm dia 1.5mm wall 10.3mm long",
+      "qty": 2,
+      "mass_g": 1,
+      "notes": "ARM_STUB=10.3mm. Hull edge to nacelle inner edge."
+    }
+  ],
+  "performance": {
+    "thrust_total_g": 3400,
+    "auw_empty_g": 1299,
+    "tw_empty": 2.62,
+    "auw_cargo_g": 1399,
+    "tw_cargo": 2.43,
+    "max_payload_g": 551,
+    "battery_empty": "6S 4000mAh 480g",
+    "battery_cargo": "6S 2200mAh 330g",
+    "fixed_base_g": 819
+  },
+  "canon_geometry": {
+    "hull_mm": 457.2,
+    "beam_mm": 288.9,
+    "height_mm": 134.3,
+    "edf_id": 80,
+    "edf_od": 93,
+    "nac_inner_from_cl_mm": 51.5,
+    "nac_ctr_from_cl_mm": 98.0,
+    "nac_outer_from_cl_mm": 144.5,
+    "nac_c2c_mm": 195.9,
+    "pylon_datum_from_cl_mm": 82.5,
+    "arm_stub_mm": 10.3
+  },
+  "hull_total_g": 213
+}
