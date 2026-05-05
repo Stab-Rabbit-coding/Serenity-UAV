@@ -560,12 +560,159 @@ function BomTab(){
   </div>);
 }
 
+// ── HULL & FOAM TAB ───────────────────────────────────────────
+function HullFoamTab(){
+  const voids=[
+    {id:"A",sta:"0–91",dim:"∅ 55 mm bayonet access",former:"EPS 50×30×86 mm",seal:"Waxed EPS + bayonet frame"},
+    {id:"B",sta:"91–165",dim:"65×60 mm dorsal void",former:"EPS 55×52×74 mm",seal:"Waxed EPS + M2.5×4 frame"},
+    {id:"C",sta:"160–251",dim:"80×55 mm belly void",former:"EPS 70×48×91 mm",seal:"Waxed EPS + hinge frame"},
+    {id:"D",sta:"251–320",dim:"65×55 mm dorsal void",former:"EPS 55×47×69 mm",seal:"Waxed EPS + magnet×4 frame"},
+    {id:"E",sta:"320–388",dim:"60×50 mm dorsal void",former:"EPS 50×42×68 mm",seal:"Waxed EPS + M2.5×4 frame"},
+    {id:"F",sta:"388–457",dim:"EDF bay — no foam",former:"None (open)",seal:"Open for EDF access"},
+  ];
+  const conduits=[
+    {id:"CAN FD",route:"Port keel rail","chain":"Node 1→2→3→4→COMPHAT-SWITCH"},
+    {id:"RS-485",route:"Starboard keel rail","chain":"Node 1→2→3→4→COMPHAT-SWITCH"},
+    {id:"MIL-STD-1553",route:"Dorsal centre","chain":"Node 1→2→3→4→COMPHAT-SWITCH"},
+    {id:"ETH-A",route:"Port side","chain":"Node 1→COMPHAT-SWITCH"},
+    {id:"ETH-B",route:"Starboard side","chain":"Node 2→COMPHAT-SWITCH"},
+    {id:"PWR",route:"Belly centre","chain":"Battery→BEC→all nodes"},
+  ];
+  const panels=[
+    {id:"A",label:"Nose Bayonet",contents:"Node 1 SENSORHAT-1 + CM4-CARRIER-2, GPS patch antenna, pitot tube fitting"},
+    {id:"B",label:"Dorsal Fwd Screw",contents:"Node 2 SENSORHAT-1 + CM4-CARRIER-2, power distribution, pitot line"},
+    {id:"C",label:"Cargo Belly Hinge",contents:"Winch motor + spool, payload release servo, downward FPV camera, mission data port"},
+    {id:"D",label:"Dorsal Aft Magnet",contents:"Node 3 SENSORHAT-1 + CM4-CARRIER-2, battery slide rail + XT60, main BEC"},
+    {id:"E",label:"Aft Service Screw",contents:"Node 4 SENSORHAT-1 + CM4-CARRIER-2, 3× ESCs, bus terminus (CAN/1553/RS485/ETH)"},
+    {id:"F",label:"Engine Bell Bayonet",contents:"40 mm EDF assembly, variable nozzle servo, forward FPV bridge camera"},
+  ];
+  const batOptions=[
+    {spec:"6S 4000 mAh 35C",mass:410,auw:1389,tw:"2.45",hover:"~8.5 min hover"},
+    {spec:"6S 2800 mAh 45C",mass:295,auw:1274,tw:"2.67",hover:"~5.8 min hover (cargo mission)"},
+    {spec:"6S 5000 mAh 30C",mass:530,auw:1509,tw:"2.25",hover:"~10.6 min hover (endurance, empty only)"},
+  ];
+  return(<div>
+
+    {/* ── Foam Fill Design ── */}
+    <SH t="Foam Fill Design" mt={0} c={C.teal}/>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20,marginBottom:4}}>
+      <div>
+        <KV k="Shell material"         v="1.2 mm PETG thin shell"/>
+        <KV k="Fill material"          v="X-30 PU foam, 2 lb/ft³ (0.032 g/cm³)" vc={C.teal}/>
+        <KV k="Gross internal volume"  v="1,711 cm³"/>
+        <KV k="Net foam volume (after voids)" v="1,309 cm³" vc={C.yellow}/>
+        <KV k="Foam mass"              v="41.9 g" vc={C.yellow}/>
+        <KV k="Shell mass"             v="143 g"/>
+        <KV k="Total hull assembly"    v="213 g" vc={C.lime}/>
+      </div>
+      <div>
+        <KV k="Solid-fill equivalent"  v="~680 g (no voids)"/>
+        <KV k="Mass saved by foam fill"v="467 g" vc={C.green}/>
+        <KV k="Mix ratio"              v="1:1 by volume"/>
+        <KV k="Pot life"               v="2 minutes"/>
+        <KV k="Expansion"              v="4× volume"/>
+        <KV k="Cure time"              v="24 hours"/>
+        <KV k="Max batch size"         v="60 mL (heat-warp limit for PETG)" vc={C.orange}/>
+        <KV k="Batches required"       v="3 total"/>
+      </div>
+    </div>
+    <Warn ch="Never exceed 60 mL per mix batch. X-30 exotherm above 60 mL can soften and warp 1.2 mm PETG walls. Mix, pour, wait 10 min before next batch."/>
+
+    {/* ── Void Former Table ── */}
+    <SH t="Void Former Table" c={C.purple}/>
+    <div style={{overflowX:"auto",marginBottom:4}}>
+      <table style={{width:"100%",borderCollapse:"collapse",fontFamily:M,fontSize:10}}>
+        <TH cols={["PANEL","STATION (mm from nose)","INTERIOR DIMS","FORMER","FASTENER / SEAL"]}/>
+        <tbody>{voids.map((v,i)=>(
+          <tr key={i} style={{background:v.id==="F"?"rgba(255,230,0,0.05)":i%2===0?"rgba(0,229,255,0.025)":"transparent"}}>
+            <td style={{padding:"5px 9px",color:v.id==="F"?C.yellow:C.accent,fontWeight:"bold"}}>{v.id}</td>
+            <td style={{padding:"5px 9px",color:C.yellow}}>{v.sta}</td>
+            <td style={{padding:"5px 9px",color:C.text}}>{v.dim}</td>
+            <td style={{padding:"5px 9px",color:v.id==="F"?C.dim:C.teal}}>{v.former}</td>
+            <td style={{padding:"5px 9px",color:C.dimmer,fontSize:9}}>{v.seal}</td>
+          </tr>
+        ))}</tbody>
+      </table>
+    </div>
+    <Note c={C.purple} ch="Void formers are cut from 25 mm EPS blue foam board (Owens Corning Foamular 150 or equiv). Apply 2 coats of Johnson's Paste Wax to all EPS surfaces before placing. Waxed EPS releases cleanly after foam cure — pull out through access panel."/>
+
+    {/* ── Conduit Routing Table ── */}
+    <SH t="Conduit Routing — 5 mm OD PTFE Tube" c={C.orange}/>
+    <div style={{overflowX:"auto",marginBottom:4}}>
+      <table style={{width:"100%",borderCollapse:"collapse",fontFamily:M,fontSize:10}}>
+        <TH cols={["BUS / SIGNAL","ROUTE","CHAIN"]}/>
+        <tbody>{conduits.map((c,i)=>(
+          <tr key={i} style={{background:i%2===0?"rgba(0,229,255,0.025)":"transparent"}}>
+            <td style={{padding:"5px 9px",color:C.orange,fontWeight:"bold",whiteSpace:"nowrap"}}>{c.id}</td>
+            <td style={{padding:"5px 9px",color:C.yellow,whiteSpace:"nowrap"}}>{c.route}</td>
+            <td style={{padding:"5px 9px",color:C.dim,fontSize:9}}>{c.chain}</td>
+          </tr>
+        ))}</tbody>
+      </table>
+    </div>
+    <Note c={C.orange} ch="All 6 conduits are 5 mm OD × 3 mm ID PTFE tube, installed before foam pour. Tie a pull-wire through each before pouring so cables can be threaded after cure. Total tube weight 12 g stays in airframe."/>
+
+    {/* ── Access Panel Maintenance Map ── */}
+    <SH t="Access Panel Maintenance Map" c={C.pink}/>
+    {panels.map((p,i)=>(
+      <div key={i} style={{display:"flex",gap:12,padding:"7px 10px",marginBottom:4,
+        border:`1px solid ${C.border}`,borderRadius:4,
+        background:i%2===0?"rgba(244,114,182,0.04)":"rgba(0,229,255,0.015)"}}>
+        <div style={{minWidth:130}}>
+          <span style={{color:C.pink,fontFamily:M,fontSize:11,fontWeight:"bold"}}>Panel {p.id}</span>
+          <div style={{color:C.dimmer,fontFamily:M,fontSize:9,marginTop:2}}>{p.label}</div>
+        </div>
+        <div style={{color:C.dim,fontFamily:M,fontSize:10,lineHeight:1.7}}>{p.contents}</div>
+      </div>
+    ))}
+
+    {/* ── 6S Power Notes ── */}
+    <SH t="6S Power System Notes" c={C.gold}/>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20,marginBottom:8}}>
+      <div>
+        <KV k="Nominal voltage (6S)"   v="22.2 V" vc={C.gold}/>
+        <KV k="Fully charged (6S)"     v="25.2 V" vc={C.gold}/>
+        <KV k="Nacelle ESCs"           v="2× 50 A BLHeli32, 6S rated"/>
+        <KV k="Fuselage ESC"           v="1× 25 A BLHeli32, 6S rated"/>
+        <KV k="BEC output (avionics)"  v="5 V @ 5 A"/>
+        <KV k="3.3 V rail"             v="CM4 carrier on-board regulators"/>
+      </div>
+      <div>
+        <div style={{color:C.gold,fontFamily:M,fontSize:10,marginBottom:6,letterSpacing:"0.05em"}}>BATTERY OPTIONS — T/W ≥ 2.0</div>
+        {batOptions.map((b,i)=>(
+          <div key={i} style={{padding:"7px 10px",marginBottom:5,border:`1px solid ${C.gold}33`,
+            borderRadius:4,background:"rgba(251,191,36,0.04)"}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:3}}>
+              <span style={{color:C.gold,fontFamily:M,fontSize:10,fontWeight:"bold"}}>{b.spec}</span>
+              <span style={{color:C.green,fontFamily:M,fontSize:10}}>T/W {b.tw}</span>
+            </div>
+            <div style={{display:"flex",justifyContent:"space-between"}}>
+              <span style={{color:C.dim,fontFamily:M,fontSize:9}}>{b.mass} g · AUW {b.auw} g</span>
+              <span style={{color:C.teal,fontFamily:M,fontSize:9}}>{b.hover}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+    <Good ch="All three 6S battery options maintain T/W ≥ 2.0. The 2800 mAh pack offers best T/W ratio (2.67) for cargo missions. 5000 mAh endurance pack restricted to empty payload only."/>
+    <Note c={C.gold} ch="This is the first Rev G tab to cover 6S power explicitly. Verify all ESC firmware supports 6S cell count detection. Set low-voltage cutoff to 3.5 V/cell (21.0 V total) in ESC configurator."/>
+
+  </div>);
+}
+
 // ── APP ───────────────────────────────────────────────────────
-const TABS = ["Overview","Dimensions","Weight & Thrust","Balance & CG","BOM Delta"];
+const TABS = [
+  {label:"Overview",      value:"overview"},
+  {label:"Dimensions",    value:"dimensions"},
+  {label:"Weight & Thrust",value:"weight"},
+  {label:"Balance & CG", value:"balance"},
+  {label:"BOM Delta",    value:"bom"},
+  {label:"Hull & Foam",  value:"foam"},
+];
 _ODFontLoader();
 
 export default function App(){
-  const [tab,setTab]=useState("Overview");
+  const [tab,setTab]=useState("overview");
   return(<div style={{minHeight:"100vh",background:C.bg,color:C.text,fontFamily:M}}>
     <Grid/>
     <div style={{background:"rgba(163,230,53,0.06)",borderBottom:"1px solid rgba(163,230,53,0.2)",
@@ -592,19 +739,20 @@ export default function App(){
         </div>
       </div>
       <div style={{display:"flex",gap:2,marginTop:12,flexWrap:"wrap"}}>
-        {TABS.map(t=>(<button key={t} onClick={()=>setTab(t)} style={{
-          background:tab===t?"rgba(0,229,255,0.09)":"transparent",
-          border:`1px solid ${tab===t?C.accent:"rgba(0,229,255,0.12)"}`,
-          color:tab===t?C.accent:C.dimmer,padding:"4px 11px",fontFamily:M,fontSize:9,
-          cursor:"pointer",letterSpacing:"0.06em",transition:"all 0.12s"}}>{t}</button>))}
+        {TABS.map(t=>(<button key={t.value} onClick={()=>setTab(t.value)} style={{
+          background:tab===t.value?"rgba(0,229,255,0.09)":"transparent",
+          border:`1px solid ${tab===t.value?C.accent:"rgba(0,229,255,0.12)"}`,
+          color:tab===t.value?C.accent:C.dimmer,padding:"4px 11px",fontFamily:M,fontSize:9,
+          cursor:"pointer",letterSpacing:"0.06em",transition:"all 0.12s"}}>{t.label}</button>))}
       </div>
     </div>
     <div style={{position:"relative",zIndex:1,padding:"20px 24px",maxWidth:1060,margin:"0 auto"}}>
-      {tab==="Overview"       && <OverviewTab/>}
-      {tab==="Dimensions"     && <DimensionsTab/>}
-      {tab==="Weight & Thrust"&& <WeightTab/>}
-      {tab==="Balance & CG"   && <BalanceTab/>}
-      {tab==="BOM Delta"      && <BomTab/>}
+      {tab==="overview"    && <OverviewTab/>}
+      {tab==="dimensions"  && <DimensionsTab/>}
+      {tab==="weight"      && <WeightTab/>}
+      {tab==="balance"     && <BalanceTab/>}
+      {tab==="bom"         && <BomTab/>}
+      {tab==="foam"        && <HullFoamTab/>}
     </div>
   </div>);
 }
