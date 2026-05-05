@@ -54,13 +54,19 @@ const DIM = {
   INNER:   50.99,                   // inner nacelle edge from CL (mm)
   OUTER:  144.47,                   // outer nacelle edge from CL (mm)
   ARM_STUB:10.4,                    // CF stub arm length (mm)
-  // Payload bay
-  PB_L:    91.0,  PB_W:  58.0, PB_H:  45.0,
+  // Payload bay (4"×3"×3" internal)
+  PB_L:   101.6,  PB_W:  76.2, PB_H:  76.2,   // 4"×3"×3" cargo box
+  GONDOLA_DROP: 18,                             // belly pod protrusion below hull line (mm)
   // Keel
   KEEL_L: 480.0,
   // CG
   CG_MM:  190.0,  CG_IN:  7.48,    // target CG from nose
   BAT_TR:  28.0,                    // battery slide travel ±mm
+  // Nacelle tilt range
+  TILT_VTOL:    0,    // degrees — pure VTOL (thrust vertical)
+  TILT_FWD:    90,    // degrees — forward flight (thrust horizontal)
+  TILT_REV:   115,    // degrees — FC soft limit for reverse/brake mode
+  TILT_STOP:  120,    // degrees — mechanical hard stop in tilt bracket
 };
 
 // ── Rev H weight budget (bom_revH1.json) ─────────────────────
@@ -98,10 +104,17 @@ const W_ITEMS = [
   ["XT90 battery pigtail",                     15],
   ["Bus cables (CAN/RS-485/1553/ETH)",         10],
   ["GPS / ESC telemetry / misc cables",        14],
-  // Payload system
+  // Payload + cargo system
   ["Payload servo + winch motor + driver",     20],
-  ["Payload bay door (PETG)",                   8],
+  ["Cargo gondola shell + clamshell door PETG",22],
+  ["SG90 cargo door servo + bell-crank",        9],
+  ["Cargo cradle + auto-latch assembly",        10],
+  ["Dyneema SK75 winch line 1.5m",              1],
   ["TPU landing skids ×4",                      4],
+  // Obstacle avoidance sensors
+  ["VL53L5CX ToF sensors ×6 + wiring harness", 15],
+  ["TCA9548A I²C mux + MCP23008 GPIO (PCB)",    4],
+  ["Sensor PETG mounts ×6 + PMMA windows",      7],
   // Radios + sensors
   ["SiK 915MHz radio + antenna",               17],
   ["RCRS 49MHz RC receiver + antenna",         15],
@@ -845,6 +858,176 @@ function AccessPanelsTab(){
   </div>);
 }
 
+// ── TAB: OBSTACLE AVOIDANCE ───────────────────────────────────
+function ObstacleAvoidanceTab(){
+  const SENSORS = [
+    {id:"S1",label:"Forward",   color:C.red,    sta:"25mm",  pos:"Nose bayonet ring",        look:"0° — forward",        note:"Circular port in nose cap; looks like a hull sensor/camera"},
+    {id:"S2",label:"Aft",      color:C.orange, sta:"440mm", pos:"Engine bell rim",           look:"180° — aft",          note:"Small annular ring behind engine bell; matches nozzle detail"},
+    {id:"S3",label:"Port",     color:C.accent, sta:"200mm", pos:"Port hull side at waterline",look:"90° port",            note:"Oval recess in hull side — looks like hull viewport"},
+    {id:"S4",label:"Starboard",color:C.green,  sta:"200mm", pos:"Stbd hull side at waterline",look:"90° stbd",           note:"Mirror of S3"},
+    {id:"S5",label:"Zenith",   color:C.purple, sta:"180mm", pos:"Dorsal keel apex",          look:"90° up",              note:"Smooth dome fairing at keel ridge — looks like antenna base"},
+    {id:"S6",label:"Nadir",    color:C.teal,   sta:"160mm", pos:"Forward belly blister",     look:"90° down",            note:"Small belly blister fwd of cargo gondola; used for landing flare"},
+  ];
+  const BUSES = [
+    ["TCA9548A I²C mux",  "0x70", "Selects one of ch 0–5 to address the target sensor"],
+    ["MCP23008 GPIO exp.", "0x20", "GP0–GP5 drive each sensor's XSHUT pin for address assignment at boot"],
+    ["Host: Node 3",       "I²C", "Panel D bay — SENSORHAT-1 XIAO RP2350 co-processor reads all 6 sensors"],
+  ];
+  const THR_ZONES = [
+    {zone:"< 0.4m", action:"STOP — emergency hover hold, alert pilot"},
+    {zone:"0.4–1.0m", action:"SLOW — reduce velocity to 0.3 m/s toward obstacle"},
+    {zone:"1.0–2.5m", action:"CAUTION — reduce velocity proportionally"},
+    {zone:"2.5–4.0m", action:"WARN — alert only, full speed permitted"},
+    {zone:"> 4.0m", action:"CLEAR — no action"},
+  ];
+  return(<div>
+    <SH t="VL53L5CX Omnidirectional ToF Sensor Array" mt={0} c={C.teal}/>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20,marginBottom:8}}>
+      <div>
+        <KV k="Sensor"         v="ST VL53L5CX 8×8 multizone ToF" vc={C.teal}/>
+        <KV k="FoV per sensor" v="65° diagonal (8×8 = 64 zones/frame)"/>
+        <KV k="Range"          v="0.4 – 4.0 m indoor"/>
+        <KV k="Update rate"    v="15 Hz full resolution"/>
+        <KV k="Interface"      v="I²C @ 1 MHz via TCA9548A mux"/>
+        <KV k="XSHUT control"  v="MCP23008 GP0–GP5"/>
+        <KV k="Sensor count"   v="6 — omnidirectional coverage" vc={C.lime}/>
+        <KV k="Total mass"     v="15g sensors + 4g mux PCB + 7g mounts = 26g"/>
+      </div>
+      <div>
+        <KV k="Aperture"       v="5mm PMMA disc, UV-adhesive, flush-mount PETG"/>
+        <KV k="Visual style"   v="Porthole-like hull detail — screen accurate" vc={C.lime}/>
+        <KV k="Host node"      v="Node 3 (Panel D access)"/>
+        <KV k="I²C addresses"  v="0x54–0x59 (assigned via XSHUT sequence at boot)"/>
+        <KV k="Indoor safe"    v="Class 1 VCSEL — eye-safe"/>
+        <KV k="Operating V"    v="2.8 V (LDO on-board)"/>
+      </div>
+    </div>
+
+    <SH t="Sensor Positions" c={C.accent}/>
+    <div style={{overflowX:"auto",marginBottom:8}}>
+      <table style={{width:"100%",borderCollapse:"collapse",fontFamily:M,fontSize:10}}>
+        <TH cols={["ID","LABEL","STATION","HULL POSITION","LOOK DIRECTION","AESTHETIC NOTE"]}/>
+        <tbody>{SENSORS.map((s,i)=>(
+          <tr key={i} style={{background:i%2===0?"rgba(0,229,255,0.025)":"transparent"}}>
+            <td style={{padding:"5px 9px"}}>
+              <span style={{background:s.color,color:"#000",padding:"2px 6px",borderRadius:3,
+                fontWeight:"bold",fontSize:9,fontFamily:M}}>{s.id}</span>
+            </td>
+            <td style={{padding:"5px 9px",color:s.color,fontWeight:"bold"}}>{s.label}</td>
+            <td style={{padding:"5px 9px",color:C.yellow}}>{s.sta}</td>
+            <td style={{padding:"5px 9px",color:C.dim}}>{s.pos}</td>
+            <td style={{padding:"5px 9px",color:C.dimmer,fontSize:9}}>{s.look}</td>
+            <td style={{padding:"5px 9px",color:C.dimmer,fontSize:9,fontStyle:"italic"}}>{s.note}</td>
+          </tr>
+        ))}</tbody>
+      </table>
+    </div>
+
+    <SH t="I²C Bus Topology" c={C.purple}/>
+    <div style={{overflowX:"auto",marginBottom:8}}>
+      <table style={{width:"100%",borderCollapse:"collapse",fontFamily:M,fontSize:10}}>
+        <TH cols={["DEVICE","I²C ADDRESS","ROLE"]}/>
+        <tbody>{BUSES.map(([dev,addr,role],i)=>(
+          <tr key={i} style={{background:i%2===0?"rgba(0,229,255,0.025)":"transparent"}}>
+            <td style={{padding:"5px 9px",color:C.purple,fontWeight:"bold"}}>{dev}</td>
+            <td style={{padding:"5px 9px",color:C.lime,fontFamily:M}}>{addr}</td>
+            <td style={{padding:"5px 9px",color:C.dim,fontSize:9}}>{role}</td>
+          </tr>
+        ))}</tbody>
+      </table>
+    </div>
+    <Note c={C.purple} ch="Boot sequence: MCP23008 holds all XSHUT low (all sensors off). Enable S1 XSHUT high → assign address 0x54 via I²C → disable. Repeat for S2–S6 (0x55–0x59). TCA9548A selects the matching channel when reading each sensor."/>
+
+    <SH t="Avoidance Thresholds" c={C.orange}/>
+    <div style={{overflowX:"auto",marginBottom:4}}>
+      <table style={{width:"100%",borderCollapse:"collapse",fontFamily:M,fontSize:10}}>
+        <TH cols={["DISTANCE ZONE","FC ACTION"]}/>
+        <tbody>{THR_ZONES.map(({zone,action},i)=>(
+          <tr key={i} style={{background:i%2===0?"rgba(0,229,255,0.025)":"transparent"}}>
+            <td style={{padding:"5px 9px",color:i===0?C.red:i===1?C.yellow:i===2?C.orange:C.green,
+              fontWeight:"bold",fontFamily:M}}>{zone}</td>
+            <td style={{padding:"5px 9px",color:C.dim}}>{action}</td>
+          </tr>
+        ))}</tbody>
+      </table>
+    </div>
+    <Note c={C.orange} ch="Indoor mode activates all 6 sensors at 15 Hz. Outdoor mode may disable S5/S6 to reduce CPU load. Sensor readings are fused with IMU velocity estimate — obstacle vectors with low confidence (VL53L5CX signal count < 80) are discarded."/>
+    <Warn ch="Do not apply paint or foam over PMMA aperture windows. Keep optically clear. Condensation inside aperture indicates seal failure — re-apply UV adhesive."/>
+  </div>);
+}
+
+// ── TAB: CARGO + NACELLE ──────────────────────────────────────
+function CargoNacelleTab(){
+  const STATES = [
+    {s:"TRANSIT",  icon:"✈", c:C.accent,   d:"Doors closed, cargo latched in cradle, winch spooled. Aerodynamically sealed."},
+    {s:"DEPLOY",   icon:"↓", c:C.yellow,   d:"Doors open (SG90 bell-crank), cradle descends on Dyneema at 120mm/s."},
+    {s:"RETRIEVE", icon:"↑", c:C.green,    d:"Cargo placed in cradle, winch raises at 80mm/s. Auto-latch clicks at top."},
+    {s:"SECURED",  icon:"✓", c:C.lime,     d:"Doors close around cargo, latched. Ready for transit."},
+  ];
+  const TILT = [
+    {mode:"VTOL",        deg:DIM.TILT_VTOL,    c:C.accent,  thrust:"3400g lift (nacelles only)",               note:"Hover, takeoff, landing"},
+    {mode:"TRANSITION",  deg:"0–90",            c:C.teal,    thrust:"Mixed lift + forward",                     note:"Gradual tilt during acceleration"},
+    {mode:"FORWARD",     deg:DIM.TILT_FWD,     c:C.green,   thrust:"Horizontal — altitude via fuselage EDF",   note:"Cruise flight"},
+    {mode:"REVERSE/BRAKING",deg:DIM.TILT_REV,  c:C.red,     thrust:"1438g reverse + 3080g lift retained",      note:"Indoor deceleration only"},
+    {mode:"HARD STOP",   deg:DIM.TILT_STOP,    c:C.yellow,  thrust:"—",                                        note:"Mechanical bracket stop — FC never commands this"},
+  ];
+  return(<div>
+    <SH t="Cargo Bay — 4\"×3\"×3\" Gondola Design" mt={0} c={C.pink}/>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20,marginBottom:8}}>
+      <div>
+        <KV k="Interior dims"        v={`${DIM.PB_L}×${DIM.PB_W}×${DIM.PB_H}mm (4"×3"×3")`} vc={C.pink}/>
+        <KV k="Gondola protrusion"   v={`${DIM.GONDOLA_DROP}mm below hull line`} vc={C.yellow}/>
+        <KV k="Gondola aesthetic"    v="Serenity cargo module belly pod — screen accurate" vc={C.lime}/>
+        <KV k="Door type"            v="Clamshell — 2 PETG halves on 3mm CF pin hinges"/>
+        <KV k="Door actuator"        v="SG90 + bell-crank push-pull (both halves simultaneous)"/>
+        <KV k="Door seal"            v="1.5mm closed-cell foam tape on door lip"/>
+      </div>
+      <div>
+        <KV k="Winch motor"          v="N20 DC 6V 300:1 gear ratio"/>
+        <KV k="Winch line"           v="Dyneema SK75 0.5mm — 1.5m"/>
+        <KV k="Winch rated load"     v="350g (1.4× margin over 250g max cargo)"/>
+        <KV k="Cradle"               v="Auto-latch PETG corner clips — no manual attachment"/>
+        <KV k="Lower speed"          v="120 mm/s"/>
+        <KV k="Raise speed"          v="80 mm/s"/>
+        <KV k="Max cargo"            v="250g (4"×3"×3" box)" vc={C.lime}/>
+      </div>
+    </div>
+
+    <SH t="Winch Operation Sequence" c={C.orange}/>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:8,marginBottom:8}}>
+      {STATES.map(({s,icon,c,d},i)=>(
+        <div key={i} style={{padding:"10px 12px",border:`1px solid ${c}44`,borderRadius:4,
+          background:`${c}08`}}>
+          <div style={{display:"flex",gap:8,alignItems:"center",marginBottom:6}}>
+            <div style={{fontSize:18,color:c}}>{icon}</div>
+            <span style={{color:c,fontFamily:M,fontSize:10,fontWeight:"bold"}}>{s}</span>
+          </div>
+          <div style={{color:C.dim,fontFamily:M,fontSize:9,lineHeight:1.6}}>{d}</div>
+        </div>
+      ))}
+    </div>
+
+    <SH t="Nacelle Tilt — Extended Range (0°→120°)" c={C.orange}/>
+    <Note c={C.orange} ch="The MG90S nacelle tilt servo is retained unchanged. The tilt_bracket_120deg.stl reprint extends the slot geometry to allow 120° of mechanical travel (vs. 90° original). The bracket hard-stop boss prevents over-rotation beyond 120°. No servo swap needed — the MG90S physical range comfortably covers 120°."/>
+    <div style={{overflowX:"auto",marginBottom:8}}>
+      <table style={{width:"100%",borderCollapse:"collapse",fontFamily:M,fontSize:10}}>
+        <TH cols={["MODE","TILT ANGLE","THRUST VECTOR","OPERATIONAL USE"]}/>
+        <tbody>{TILT.map(({mode,deg,c,thrust,note},i)=>(
+          <tr key={i} style={{background:i%2===0?"rgba(0,229,255,0.025)":"transparent"}}>
+            <td style={{padding:"5px 9px",color:c,fontWeight:"bold"}}>{mode}</td>
+            <td style={{padding:"5px 9px",color:C.lime,fontFamily:M}}>{deg}°</td>
+            <td style={{padding:"5px 9px",color:C.dim}}>{thrust}</td>
+            <td style={{padding:"5px 9px",color:C.dimmer,fontSize:9}}>{note}</td>
+          </tr>
+        ))}</tbody>
+      </table>
+    </div>
+    <Note c={C.yellow} ch="At 115° reverse mode: nacelle thrust × sin(25°) = 1700 × 0.423 = 719g reverse per nacelle = 1438g total reverse. Lift retained = 1700 × cos(25°) × 2 = 3080g — sufficient for hover with empty payload. Use reverse mode only for indoor deceleration braking; not sustained reverse cruise."/>
+    <Warn ch="Reverse/brake mode (90°–115°) is only available via explicit FC command in INDOOR mode. Normal outdoor flight limits nacelles to 0–90°. Maximum nacelle reverse rate = 20°/s to prevent abrupt pitch disturbance."/>
+    <Good ch="Tilt bracket modification requires only a reprint of tilt_bracket_120deg.stl (×2). Servo, arm, and pivot pin are unchanged. Zero additional mass."/>
+  </div>);
+}
+
 // ── APP ───────────────────────────────────────────────────────
 const TABS = [
   {label:"Overview",       value:"overview"},
@@ -854,6 +1037,8 @@ const TABS = [
   {label:"Avionics",       value:"avionics"},
   {label:"Hull & Foam",    value:"foam"},
   {label:"Access Panels",  value:"panels"},
+  {label:"Obstacle Avoid.",value:"sensors"},
+  {label:"Cargo & Nacelle",value:"cargo"},
 ];
 _ODFontLoader();
 
@@ -875,7 +1060,7 @@ export default function App(){
           <h1 style={{margin:0,fontSize:18,fontWeight:"normal",color:C.text,letterSpacing:"0.07em",fontFamily:MB}}>
             SERENITY-CLASS FIREFLY TILTROTOR UAV</h1>
           <div style={{color:"rgba(0,229,255,0.6)",fontSize:10,marginTop:3,fontFamily:M}}>
-            {DIM.L_MM}mm ({DIM.L_IN}") · nacelle C-to-C {DIM.C2C_MM}mm · 80mm 6S EDFs · foam-filled hull · 6 access panels
+            {DIM.L_MM}mm ({DIM.L_IN}") · 80mm 6S EDFs · 6× VL53L5CX ToF · 4"×3"×3" cargo gondola · nacelle 0–120° · 6 access panels
           </div>
         </div>
         <div style={{textAlign:"right",fontFamily:M}}>
@@ -904,6 +1089,8 @@ export default function App(){
       {tab==="avionics"    && <AvionicsTab/>}
       {tab==="foam"        && <HullFoamTab/>}
       {tab==="panels"      && <AccessPanelsTab/>}
+      {tab==="sensors"     && <ObstacleAvoidanceTab/>}
+      {tab==="cargo"       && <CargoNacelleTab/>}
     </div>
   </div>);
 }
