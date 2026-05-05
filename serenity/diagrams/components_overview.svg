@@ -84,7 +84,7 @@
 <text x="258" y="292" font-size="7" fill="rgba(255,255,255,0.78)">COMPHAT-1 · SMA-LR · register select</text>
 <rect x="250" y="320" width="180" height="55" rx="4" fill="#4ade800d" stroke="#4ade80" stroke-width="1.2"/>
 <text x="258" y="336" font-size="10" fill="#4ade80" font-weight="bold">u-blox M10Q GPS</text>
-<text x="258" y="349" font-size="8" fill="rgba(255,255,255,0.88)">Multi-GNSS · 25Hz · <2.5ft CEP</text>
+<text x="258" y="349" font-size="8" fill="rgba(255,255,255,0.88)">Multi-GNSS · 25Hz · &lt;2.5ft CEP</text>
 <text x="258" y="362" font-size="7" fill="rgba(255,255,255,0.78)">TRIHAT-1 · U.FL → cockpit roof patch</text>
 <rect x="250" y="390" width="180" height="55" rx="4" fill="#2dd4bf0d" stroke="#2dd4bf" stroke-width="1.2"/>
 <text x="258" y="406" font-size="10" fill="#2dd4bf" font-weight="bold">ICM-42688-P IMU</text>

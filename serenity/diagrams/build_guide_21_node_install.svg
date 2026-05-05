@@ -97,7 +97,7 @@
 <rect x="310" y="296" width="270" height="168" rx="6" fill="#6a1b9a0c" stroke="#6a1b9a" stroke-width="2"/>
 <rect x="316" y="302" width="72" height="20" rx="4" fill="#6a1b9a"/>
 <text x="352" y="317" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#ffffff">STEP 23</text>
-<text x="396" y="310" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="10" fill="#6a1b9a">VERIFY & CG TRIM</text>
+<text x="396" y="310" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="10" fill="#6a1b9a">VERIFY &amp; CG TRIM</text>
 <circle cx="324" cy="331" r="7" fill="#6a1b9a"/>
 <text x="324" y="335" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">1</text>
 <text x="338" y="336" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Power on without propellers installed</text>
