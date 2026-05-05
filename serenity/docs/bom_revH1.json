@@ -36,6 +36,62 @@
       "qty": 6,
       "mass_g": 5,
       "notes": "Insert before foam pour. Routes: CAN, RS-485, 1553, ETH\u00d72, power"
+    },
+    {
+      "ref": "HULL-VOID-EPS",
+      "desc": "EPS blue foam board 25mm \u00d7 300mm \u00d7 150mm \u2014 void former material",
+      "qty": 2,
+      "mass_g": 18,
+      "notes": "Owens Corning Foamular 150 or equivalent. Cut to 6 void-former shapes per build guide step 22."
+    },
+    {
+      "ref": "HULL-WAX",
+      "desc": "Johnson's Paste Wax 16oz tin \u2014 void-former release agent",
+      "qty": 1,
+      "mass_g": 400,
+      "notes": "Consumed, not airborne weight. Apply 2 coats to all EPS void-former surfaces before foam pour."
+    },
+    {
+      "ref": "HULL-PTFE-TUBE",
+      "desc": "PTFE tube 5mm OD \u00d7 3mm ID \u00d7 2.5m \u2014 cable conduit through foam",
+      "qty": 6,
+      "mass_g": 12,
+      "notes": "6 conduits: CAN, RS-485, 1553, ETH-A, ETH-B, PWR. Install before foam pour. Total 12g stays in airframe."
+    },
+    {
+      "ref": "ACCESS-FRAME-PETG",
+      "desc": "Access panel frame set \u2014 PETG 100% infill, 2mm wall \u2014 6 frames + 6 lids",
+      "qty": 1,
+      "mass_g": 38,
+      "notes": "Print from access_panel_frames.stl (TBD). Bond frames into hull with 5-min epoxy before foam pour. Lids are removable."
+    },
+    {
+      "ref": "ACCESS-SCREW-M25",
+      "desc": "M2.5\u00d76 SS button-head Phillips \u2014 access panel screws",
+      "qty": 16,
+      "mass_g": 4,
+      "notes": "4 per panel for panels B and E. Panels A and F use bayonet. Panel C uses hinge. Panel D uses magnets."
+    },
+    {
+      "ref": "ACCESS-MAGNET",
+      "desc": "N42 neodymium disc magnet 6\u00d72mm \u2014 panel D magnetic closure",
+      "qty": 8,
+      "mass_g": 2,
+      "notes": "4 in panel frame + 4 in panel lid. Press-fit into 6.1mm printed pockets."
+    },
+    {
+      "ref": "ACCESS-GASKET",
+      "desc": "3M 4016 closed-cell foam gasket tape 1.5mm \u00d7 9mm \u00d7 3m roll",
+      "qty": 1,
+      "mass_g": 8,
+      "notes": "Line all panel frame lips before foam pour. Provides dust/moisture seal and prevents foam intrusion into void."
+    },
+    {
+      "ref": "ACCESS-EPOXY",
+      "desc": "5-minute epoxy 25mL syringe \u2014 frame-to-hull bond",
+      "qty": 1,
+      "mass_g": 0,
+      "notes": "Consumed during build. Bond access-panel frames into hull sections before foam pour step."
     }
   ],
   "propulsion": [
