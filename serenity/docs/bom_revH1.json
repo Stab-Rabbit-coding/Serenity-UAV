@@ -478,5 +478,25 @@
       "neck_total_mm": 28.8,
       "neck_cargo_ratio": 0.32
     }
+  },
+  "total_airframe_mass_g": 1414,
+  "total_auw_g": {
+    "note": "EPS void formers and wax are consumed/removed after build and do not contribute to flying weight. ACCESS-EPOXY is consumed during build.",
+    "base_dry_no_battery_g": 1414,
+    "auw_empty_6S_4000mAh_410g": 1824,
+    "auw_cargo_6S_2800mAh_295g_plus_250g_payload": 1959
+  },
+  "build_notes": {
+    "foam_fill_step": 23,
+    "void_former_step": 22,
+    "access_panel_step": 24,
+    "foam_system": "X-30 2-part polyurethane, 2 lb/ft\u00b3, 4\u00d7 expansion",
+    "foam_pot_life_sec": 120,
+    "foam_cure_hr": 24,
+    "max_batch_mL": 60,
+    "total_foam_mL": 330,
+    "void_former_material": "25mm EPS blue foam board, waxed with Johnson's Paste Wax",
+    "conduit_material": "PTFE tube 5mm OD \u00d7 3mm ID",
+    "access_panels": ["A-nose-bayonet", "B-dorsal-fwd-screw", "C-cargo-belly-hinge", "D-dorsal-aft-magnet", "E-aft-service-screw", "F-engine-bell-bayonet"]
   }
 }
