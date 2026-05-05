@@ -1,0 +1,451 @@
+{
+  "project": "Serenity-Class Tiltrotor UAV",
+  "author": "Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP",
+  "year": 2026,
+  "license": "CC BY 4.0",
+  "revision": "F (current)",
+  "attribution": {
+    "hull": "Peter Farell CC BY 4.0 \u2014 printables.com/model/548545",
+    "nozzle": "BamJr CC BY 4.0 \u2014 thingiverse.com/thing:2991269",
+    "visual_inspiration": "Firefly/Serenity (c) Joss Whedon / Mutant Enemy Productions / Universal Pictures \u2014 Fan engineering work \u2014 not officially licensed"
+  },
+  "generated": "2026",
+  "file_count": 72,
+  "total_bytes": 2768959,
+  "integrity": "SHA-256",
+  "connectivity_revision": "Rev H (Ethernet + CAN FD + RS-485 + MIL-STD-1553B; I2C on-PCB sensor bus)",
+  "files": [
+    {
+      "path": "MANIFEST.json",
+      "sha256": "01c90cc3f13d81841f63869616b34fbae8d408fe4b4f3e3b3b89f01cd65b5d98",
+      "bytes": 13256,
+      "type": "JSON"
+    },
+    {
+      "path": "README.md",
+      "sha256": "39df281b327f0cab8029526102f231e709fb70fe82f1c17af0f105bc88a1e79b",
+      "bytes": 3873,
+      "type": "MD"
+    },
+    {
+      "path": "diagrams/build_guide_00_cover.svg",
+      "sha256": "15cbed66f99b3563caf218ad4a551a5344eef7c2d9acbec2dbfa3a67209d96af",
+      "bytes": 5495,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/build_guide_01_print_prep.svg",
+      "sha256": "65d9c5ab1f6a95d9ff0c09851977c2ed15457de62a115a90b0f69d4290a14af3",
+      "bytes": 16331,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/build_guide_02_print_hull.svg",
+      "sha256": "a62df20c7c14fb73e30d42dfa840bc51989a4f7db5456865da855d5f692cb1d4",
+      "bytes": 11568,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/build_guide_03_print_nacelle.svg",
+      "sha256": "de3da4af22c24f23fefba71d7977b94407247980377f737156895a32132e706a",
+      "bytes": 29080,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/build_guide_04_cut_cf.svg",
+      "sha256": "390c6b4209a746dcedbf155b37bd8e3387f348b9930dc78a3ac9d173a13f1dd7",
+      "bytes": 13225,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/build_guide_05_cf_skeleton.svg",
+      "sha256": "12a30e27da1a6ceb57f3bdeba65b4549211af0d942e622089992576c0a08b69f",
+      "bytes": 11592,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/build_guide_06_nacelle_pivot.svg",
+      "sha256": "664333d984fda8d9019c1e2d7976ef7fe6d055457ff930b6323422bb6dad3fda",
+      "bytes": 14151,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/build_guide_07_edf_install.svg",
+      "sha256": "4b7e41cffc01483b3b48e0927944a1e5084c1a46450eb7f1d65e74aafeb9657a",
+      "bytes": 17769,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/build_guide_08_nozzle_gear.svg",
+      "sha256": "5e59c64e7c3b8a2944df046a136aaf2d753fefe5b252cd04a26cbda363ca6025",
+      "bytes": 30354,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/build_guide_09_avionics.svg",
+      "sha256": "b0dbc16f38198d7e4bb5a37afe52b286b0079293282a4680791ddf0b8da2026e",
+      "bytes": 14063,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/build_guide_10_power_wiring.svg",
+      "sha256": "599c36664a9ea7e5885b316df7898dc4ee8d513ecd5182011acc3ec374babd91",
+      "bytes": 13405,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/build_guide_11_inter_board.svg",
+      "sha256": "35fa317bbd258f3d963a9ccebe40ad705ad561c06c20a64de910d94b8adf347d",
+      "bytes": 10717,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/build_guide_12_security_hw.svg",
+      "sha256": "256fb3640f80c91d2031edd913e99e069c1f01ba39c517455d475532a3a94397",
+      "bytes": 14278,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/build_guide_13_nav_lights.svg",
+      "sha256": "99104d00bb354c49121e76725dc278f88d222b54f5768e0f6745fde406d8589b",
+      "bytes": 10443,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/build_guide_14_antennas.svg",
+      "sha256": "b1a7a3b733eeda2558716e1d232d4ddc012d4674dd42ea1e1abd44cf18f8aabb",
+      "bytes": 11639,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/build_guide_15_software.svg",
+      "sha256": "bb947d44f0136d0a16c7452f2b65275244edf46d9edf8b21aa1a4b079a9a5bb8",
+      "bytes": 11900,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/build_guide_16_calibration.svg",
+      "sha256": "e046b8f13bf3fc085d96fa6cdc2bafd419b44c9fece133ec0308f8621b9afc6e",
+      "bytes": 9985,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/build_guide_17_ground_test.svg",
+      "sha256": "5b8f485973c461094a156de286392156cf3b43aa9901361d9dbb294dcb976b3f",
+      "bytes": 12060,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/build_guide_18_first_flight.svg",
+      "sha256": "58dfdb0b26ac1578aa31e633daa02670b058fc40d4a75f86799463a8e8a7d31b",
+      "bytes": 11664,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/build_guide_19_decal_placement.svg",
+      "sha256": "a4ae096dd20aacb3bb4108097611ea98634da5c59d10804946f569de536ad963",
+      "bytes": 22283,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/build_plan.svg",
+      "sha256": "bfbb9ad7ddccc87693aa16d7a4050b22014365ecfb6d8a2b29c0d8f4e1ab72ae",
+      "bytes": 12737,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/components_overview.svg",
+      "sha256": "f1e3adbbaf413ebf24a958d11095cc2e1056bb6880e721330c595a7876905fdb",
+      "bytes": 15402,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/decal_sheet.svg",
+      "sha256": "5cc21dae33e08b6847268a354085a95daf9ebd0a13d3aed7bdd78ee1f968a679",
+      "bytes": 57050,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/overview_bottom.svg",
+      "sha256": "10f5959f7a56945a986106cbac0a1fd5fa11966b3d6d2304ad8053a814b6507d",
+      "bytes": 6406,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/overview_front.svg",
+      "sha256": "64cce1e615fbfc2451647738f29cee31135447a7d67bdca287f76bc7d7c47894",
+      "bytes": 7845,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/overview_side.svg",
+      "sha256": "fea676e65d6c3e00c94342f5b96b0485b52233602122ea1266f54dd98fbccb66",
+      "bytes": 7080,
+      "type": "SVG"
+    },
+    {
+      "path": "diagrams/overview_top.svg",
+      "sha256": "8a9b331d701eeb417d59448be46d5ce4dabd267fa4e9e67b5d4e775741688469",
+      "bytes": 6776,
+      "type": "SVG"
+    },
+    {
+      "path": "docs/LICENSE_AND_ATTRIBUTION.md",
+      "sha256": "69c33d830174da080f11822d97acd30f1a4f73068d00fdbc53125ab751d81481",
+      "bytes": 10341,
+      "type": "MD"
+    },
+    {
+      "path": "pcb/CM4-CARRIER-1/CM4-CARRIER-1.kicad_pcb",
+      "sha256": "98d33dda69ff1b464e23b23c6f12af90d88c848cf51100a1c8df1ee543b95db2",
+      "bytes": 15499,
+      "type": "KICAD_PCB"
+    },
+    {
+      "path": "pcb/CM4-CARRIER-1/CM4-CARRIER-1.kicad_sch",
+      "sha256": "4f785809f9c98c9a096502db3c87595b44028b5bb4a45415d4e9b4965c12415e",
+      "bytes": 1011,
+      "type": "KICAD_SCH"
+    },
+    {
+      "path": "pcb/COMPHAT-1/COMPHAT-1.kicad_pcb",
+      "sha256": "7a1f1c2b0e6e35a037ed734c276e579de37a51fbf2f14f9103abd199c09b1c66",
+      "bytes": 20097,
+      "type": "KICAD_PCB"
+    },
+    {
+      "path": "pcb/COMPHAT-1/COMPHAT-1.kicad_sch",
+      "sha256": "e908aaaa1baf2701ad22465e7ddfc3b5418518da46d08778bde99b7de3ea4625",
+      "bytes": 1007,
+      "type": "KICAD_SCH"
+    },
+    {
+      "path": "pcb/TRIHAT-1/TRIHAT-1.kicad_pcb",
+      "sha256": "107f91a818a4fb6d8a0039eb975da6a8b1242689dcd23946f7bfaafc82ae98c9",
+      "bytes": 28897,
+      "type": "KICAD_PCB"
+    },
+    {
+      "path": "pcb/TRIHAT-1/TRIHAT-1.kicad_sch",
+      "sha256": "01b3a360722e991b272284972e736cb242e06e61896c952520ce5ac1baf597a8",
+      "bytes": 1006,
+      "type": "KICAD_SCH"
+    },
+    {
+      "path": "stl/bevel_gear_housing.stl",
+      "sha256": "8f4959d4cdabceaee3e150564b2d0f54e420ffc9ecd7cce54a67762ed39d958a",
+      "bytes": 11334,
+      "type": "STL"
+    },
+    {
+      "path": "stl/cockpit_dome_clear.stl",
+      "sha256": "64a62c50328b9dc5969c89628cb131d4b090f82be01fed61ecc8035ee934b067",
+      "bytes": 393274,
+      "type": "STL"
+    },
+    {
+      "path": "stl/dorsal_antenna_fin.stl",
+      "sha256": "7081b92fa5a09ec26bf90bbd37a49e9c03b9cc26af53e0cb63f701bd0a4fa64d",
+      "bytes": 10589,
+      "type": "STL"
+    },
+    {
+      "path": "stl/hull_aft_neck.stl",
+      "sha256": "3688095bd682e005fefc413e0ec701f255204fe86f216ff02f7aa9fa28050997",
+      "bytes": 50083,
+      "type": "STL"
+    },
+    {
+      "path": "stl/hull_cockpit_cap.stl",
+      "sha256": "e9095f85ae995d64c3bf7a0522888743a4f2040a29ac801c0204572ec05bccf9",
+      "bytes": 72413,
+      "type": "STL"
+    },
+    {
+      "path": "stl/hull_cockpit_section.stl",
+      "sha256": "f6256e9d5874b24034555d7cf6b4c5d0187d3d82b9a0ff7c865d319d22852445",
+      "bytes": 99269,
+      "type": "STL"
+    },
+    {
+      "path": "stl/hull_engine_bell.stl",
+      "sha256": "36841be1d94fb8549980b88c4fff14585c56e5118dbb275966ec0042f70f0cc8",
+      "bytes": 49169,
+      "type": "STL"
+    },
+    {
+      "path": "stl/hull_mid_body_left.stl",
+      "sha256": "a11c3c4f2b2bbdd0e95ce7cb2a286e1c2d6866dc2e8f2c13c5a73e1164eacc49",
+      "bytes": 126131,
+      "type": "STL"
+    },
+    {
+      "path": "stl/hull_mid_body_right.stl",
+      "sha256": "90817b9d26a7e043fe7388929d6dfca0157ba5ab4b63afa4e5b3d2547334a19c",
+      "bytes": 126133,
+      "type": "STL"
+    },
+    {
+      "path": "stl/landing_skid_foot.stl",
+      "sha256": "fea9fdaf6fd4381accd39436c0e2631154f3bc7572bf821253b06ee01a704f96",
+      "bytes": 4539,
+      "type": "STL"
+    },
+    {
+      "path": "stl/nacelle_pod_70mm.stl",
+      "sha256": "b858becd8fdf6d17c0392875bba125a7199e11459d36303b0c82ad0db3b41f2a",
+      "bytes": 49649,
+      "type": "STL"
+    },
+    {
+      "path": "stl/nacelle_tip_cap_port.stl",
+      "sha256": "692f2519babab58b66a3fa0ebb0eb5c95a447827cc11719a99a6d89907958190",
+      "bytes": 36701,
+      "type": "STL"
+    },
+    {
+      "path": "stl/nacelle_tip_cap_stbd.stl",
+      "sha256": "9816ed96ae2d98452abed78b5c4c3515f8d8a7ca24f5588ead5833c955ac8ae1",
+      "bytes": 36701,
+      "type": "STL"
+    },
+    {
+      "path": "stl/nozzle_flap_x8.stl",
+      "sha256": "2854e8e18b7f45def32e5624e5831ba9a915c6aa23662571877f433492f8bd5e",
+      "bytes": 2253,
+      "type": "STL"
+    },
+    {
+      "path": "stl/nozzle_inner_ring_40mm.stl",
+      "sha256": "355d0313708ca8c64f48b7b894280d11e94524d57db6313d2cdcbd8feb3b60d0",
+      "bytes": 49085,
+      "type": "STL"
+    },
+    {
+      "path": "stl/nozzle_inner_ring_70mm.stl",
+      "sha256": "e2d1c132d97c4cd7a0b689077039e15270f6e1efc0e663dc414d717b526c2f4d",
+      "bytes": 55467,
+      "type": "STL"
+    },
+    {
+      "path": "stl/nozzle_outer_housing_40mm.stl",
+      "sha256": "5bc3cdca41a998136e8343fa23eb72fcf8cb881a118c7aecf071cec52d349a93",
+      "bytes": 49091,
+      "type": "STL"
+    },
+    {
+      "path": "stl/nozzle_outer_housing_70mm.stl",
+      "sha256": "c5721b2e04a34eb550be862b9fce2a7ae72975c7f6005fde454072b4dd3d27bb",
+      "bytes": 49283,
+      "type": "STL"
+    },
+    {
+      "path": "stl/payload_bay_door.stl",
+      "sha256": "ac8d361ee81d6e8899e76e25fa68f302a022d64de368bda41ce6e62cd612c499",
+      "bytes": 8339,
+      "type": "STL"
+    },
+    {
+      "path": "stl/pinion_a_bracket.stl",
+      "sha256": "98b25035f431114ab6d4a5fab108c8b2d611ee6baff1d63ee4f36b206f94ed21",
+      "bytes": 11294,
+      "type": "STL"
+    },
+    {
+      "path": "stl/sector_gear_22mm.stl",
+      "sha256": "4d3530b9b2f05994012543b71d439ee4c39db014a2807de2f41516b67560acc2",
+      "bytes": 116110,
+      "type": "STL"
+    },
+    {
+      "path": "stl/tilt_bracket_cf_petg.stl",
+      "sha256": "41316249134fa7e7b3bd333af506e1fee4afc66adb6a747c64052e97a8e5ab53",
+      "bytes": 16533,
+      "type": "STL"
+    },
+    {
+      "path": "artifacts/antenna-layout.jsx",
+      "sha256": "7a50c1386a415e631840a5380d18dc58a790271bbcdc2c44e7778be9af5e639a",
+      "bytes": 52665,
+      "type": "JSX"
+    },
+    {
+      "path": "artifacts/cm4-carrier-update.jsx",
+      "sha256": "5aabfc263254e0fec1e2dedda8ea390cec8fff94466f143f7dc583e13ffde112",
+      "bytes": 50636,
+      "type": "JSX"
+    },
+    {
+      "path": "artifacts/nacelle-nozzle-gear.jsx",
+      "sha256": "41d9032fb036b13450b02640ec53b732488556000b4e00ae4c968dada5408304",
+      "bytes": 74403,
+      "type": "JSX"
+    },
+    {
+      "path": "artifacts/pico2-hat.jsx",
+      "sha256": "0efb401cd264fc79fc1efe22f67c9a2410995911d43d9fd3451e540d3dafb010",
+      "bytes": 47077,
+      "type": "JSX"
+    },
+    {
+      "path": "artifacts/serenity-connectivity-revF.jsx",
+      "sha256": "79989624f9427824b38cf8436954956c06630b86154634ec638bdfe0a43b7233",
+      "bytes": 60759,
+      "type": "JSX"
+    },
+    {
+      "path": "artifacts/serenity-connectivity-revG.jsx",
+      "sha256": "7b21e7167db47c6eb822d3645a5c206f771b91aa199f79fb74239106d8c5f53e",
+      "bytes": 71613,
+      "type": "JSX"
+    },
+    {
+      "path": "artifacts/serenity-connectivity-revH.jsx",
+      "sha256": "d825bfc80b33b1dba0fc3bd6ab8fcb6a62f51f2ea4a8ed29efd4fe0ddf5e5406",
+      "bytes": 59704,
+      "type": "JSX"
+    },
+    {
+      "path": "artifacts/serenity-drone.jsx",
+      "sha256": "5656cf26f9051b8b99b23e2dcacee162ae37c0faf22b10862c91c4357900c580",
+      "bytes": 52604,
+      "type": "JSX"
+    },
+    {
+      "path": "artifacts/serenity-rev-b.jsx",
+      "sha256": "33986c93d66298acb788d985c23932a90aa3978634d4b0f8a26e8a518e94793d",
+      "bytes": 51145,
+      "type": "JSX"
+    },
+    {
+      "path": "artifacts/serenity-rev-c.jsx",
+      "sha256": "2cb3298dd5b3095ba2c5b4f318a4f56f5f7fc8503ac510b5a76a7f86e1e6187c",
+      "bytes": 56745,
+      "type": "JSX"
+    },
+    {
+      "path": "artifacts/serenity-rev-d.jsx",
+      "sha256": "5cd847e800c9c6d5cf54c0bb3f807adf4093b902b5632bd0eff47dc0f4934285",
+      "bytes": 85664,
+      "type": "JSX"
+    },
+    {
+      "path": "artifacts/serenity-rev-e.jsx",
+      "sha256": "b7b31a470372ae8e0655638e275fc3f56aae62a104fca698817e3af2ea74b51a",
+      "bytes": 90544,
+      "type": "JSX"
+    },
+    {
+      "path": "artifacts/serenity-rev-f.jsx",
+      "sha256": "1529a6cb81b013ce06c1c7f4228fe1af9cf764ade7e90e78c3aca81cd5c89790",
+      "bytes": 56294,
+      "type": "JSX"
+    },
+    {
+      "path": "artifacts/tiltrotor-drone.jsx",
+      "sha256": "d6f4cf7d681c5aab1f5ec1690e9240eb84bb73bde1e144d5152fb72b6e86e6f4",
+      "bytes": 35381,
+      "type": "JSX"
+    }
+  ]
+}

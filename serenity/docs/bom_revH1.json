@@ -1,0 +1,426 @@
+{
+  "revision": "H.1",
+  "scale": "18 inches (457.2mm)",
+  "canonical_source": "QMx Official Serenity Blueprints (Mandel/Earls 2007) 269ft\u00d7170ft\u00d779ft",
+  "author": "Steve Griffing PE(CSE) CISSP-ISSEP CPP",
+  "license": "CC BY 4.0",
+  "hull_structure": [
+    {
+      "ref": "HULL-SHELL",
+      "desc": "PETG thin shell 1.2mm wall \u2014 print as open shell sections",
+      "qty": 1,
+      "mass_g": 143,
+      "vol_cm3": 115,
+      "density": "1.24 g/cm\u00b3",
+      "notes": "Print 6 sections. Insert cable-route straws before assembly."
+    },
+    {
+      "ref": "HULL-FOAM",
+      "desc": "X-30 expanding PU foam 2 lb/ft\u00b3 (0.032 g/cm\u00b3) \u2014 pour into shell voids",
+      "qty": 1,
+      "mass_g": 42,
+      "vol_cm3": 1309,
+      "density_lbcf": 2.0,
+      "notes": "2-part, 2-min pot life, 4\u00d7 expansion. Net foam vol 1309 cm\u00b3 after 18% internals deduction."
+    },
+    {
+      "ref": "HULL-CF",
+      "desc": "CF keel + ring frames",
+      "qty": 1,
+      "mass_g": 28,
+      "notes": "3mm CF plate keel + 2mm ring frames at 5 stations"
+    },
+    {
+      "ref": "HULL-TUBE",
+      "desc": "Cable-route tubes 5mm OD \u00d7 400mm (drink-straw diameter)",
+      "qty": 6,
+      "mass_g": 5,
+      "notes": "Insert before foam pour. Routes: CAN, RS-485, 1553, ETH\u00d72, power"
+    }
+  ],
+  "propulsion": [
+    {
+      "ref": "EDF-NAC-L",
+      "desc": "80mm EDF nacelle LEFT (PORT) \u2014 6S",
+      "qty": 1,
+      "mass_g": 150,
+      "thrust_g_6S": 1700,
+      "notes": "OD 93.5mm (canonical nacelle OD), 1.2mm wall pod"
+    },
+    {
+      "ref": "EDF-NAC-R",
+      "desc": "80mm EDF nacelle RIGHT (STBD) \u2014 6S",
+      "qty": 1,
+      "mass_g": 150,
+      "thrust_g_6S": 1700
+    },
+    {
+      "ref": "EDF-FUSE",
+      "desc": "40mm EDF fuselage (engine bell) \u2014 4S",
+      "qty": 1,
+      "mass_g": 38,
+      "thrust_g_4S": 380,
+      "notes": "Mounted in engine bell section 83-100% station. Variable-area nozzle (BamJr remix CC BY 4.0)"
+    },
+    {
+      "ref": "ESC-NAC",
+      "desc": "50A BLHeli32 ESC for 80mm nacelle EDF \u2014 6S rated",
+      "qty": 2,
+      "mass_g": 28,
+      "notes": "One per nacelle. 6S = 22.2V nominal."
+    },
+    {
+      "ref": "ESC-FUSE",
+      "desc": "25A BLHeli32 ESC for 40mm fuselage EDF \u2014 4S rated",
+      "qty": 1,
+      "mass_g": 16,
+      "notes": "Separate 4S feed from PDB (regulates down from 6S main)"
+    }
+  ],
+  "nacelle_hardware": [
+    {
+      "ref": "NAC-POD",
+      "desc": "Nacelle pod shell PETG \u2014 80mm ID, 93.5mm OD, 144mm long",
+      "qty": 2,
+      "mass_g": 18,
+      "stl": "nacelle_pod_80mm.stl"
+    },
+    {
+      "ref": "NAC-TIP-P",
+      "desc": "Nacelle tip cap PORT \u2014 RED WS2812C nav light recess",
+      "qty": 1,
+      "mass_g": 4,
+      "stl": "nacelle_tip_cap_port.stl"
+    },
+    {
+      "ref": "NAC-TIP-S",
+      "desc": "Nacelle tip cap STBD \u2014 GREEN WS2812C nav light recess",
+      "qty": 1,
+      "mass_g": 4,
+      "stl": "nacelle_tip_cap_stbd.stl"
+    },
+    {
+      "ref": "NAC-ARM",
+      "desc": "CF stub arm 12mm OD 1.5mm wall 10.4mm long",
+      "qty": 2,
+      "mass_g": 1,
+      "notes": "ARM_STUB = INNER \u2212 MAX_HW = 10.4mm"
+    },
+    {
+      "ref": "TILT-BRACKET",
+      "desc": "Nacelle tilt pivot bracket CF-PETG",
+      "qty": 2,
+      "mass_g": 6,
+      "stl": "tilt_bracket_cf_petg.stl"
+    },
+    {
+      "ref": "SERVO-NAC",
+      "desc": "MG90S nacelle tilt servo",
+      "qty": 2,
+      "mass_g": 9,
+      "notes": "50Hz PWM, \u00b190\u00b0 travel"
+    },
+    {
+      "ref": "GEAR-NOZZLE",
+      "desc": "Gear nozzle assembly \u2014 sector gear + ring + 8 flaps (BamJr CC BY 4.0)",
+      "qty": 3,
+      "mass_g": 4,
+      "notes": "2 nacelle + 1 fuselage. Sector gear drives ring via bevel chain."
+    },
+    {
+      "ref": "SERVO-NOZZLE",
+      "desc": "SG90 variable-nozzle servo",
+      "qty": 1,
+      "mass_g": 9
+    }
+  ],
+  "avionics_nodes": [
+    {
+      "ref": "CM4-LITE",
+      "desc": "Raspberry Pi CM4 Lite (no eMMC, no SDRAM on module)",
+      "qty": 4,
+      "mass_g": 7.5,
+      "cost_est": "$35ea",
+      "notes": "4 units \u2014 one per node. CARRIER-2 board provides microSD boot."
+    },
+    {
+      "ref": "CARRIER-2",
+      "desc": "CM4-CARRIER-2 PCB 57\u00d744mm 4L \u2014 minimal CM4 carrier",
+      "qty": 4,
+      "mass_g": 17.4,
+      "cost_est": "~$8 assembled JLCPCB",
+      "notes": "CPLD write-blocker, microSD OS slot, microSD log slot, USB-C, 40-pin GPIO"
+    },
+    {
+      "ref": "SENSORHAT-1",
+      "desc": "SENSORHAT-1 PCB 46\u00d736mm 4L \u2014 XIAO RP2350 direct-solder",
+      "qty": 4,
+      "mass_g": 12.4,
+      "cost_est": "~$22 assembled JLCPCB",
+      "notes": "XIAO RP2350, ICM-42688, BMP388, W5500 ETH, MCP2518FD CAN FD, HI-6130 1553, ISO* isolation"
+    },
+    {
+      "ref": "COMPHAT-SWITCH",
+      "desc": "COMPHAT-SWITCH PCB 65\u00d752mm 4L \u2014 Node 1 comms hat",
+      "qty": 1,
+      "mass_g": 28.5,
+      "cost_est": "~$35 assembled JLCPCB",
+      "notes": "KSZ8895 5-port ETH switch, SiK 915MHz, HI-6130 1553 RT, CAN FD, RS-485, TPM"
+    },
+    {
+      "ref": "MICROHAT",
+      "desc": "MICROHAT PCB 42\u00d736mm \u2014 Node 2-4 minimal comms hat",
+      "qty": 3,
+      "mass_g": 9.5,
+      "cost_est": "~$8 assembled JLCPCB",
+      "notes": "Ethernet passthrough, CAN FD, RS-485, 1553 connectors only \u2014 no radio"
+    },
+    {
+      "ref": "MICROS D-OS",
+      "desc": "microSD 8GB Class 10 \u2014 OS boot card",
+      "qty": 4,
+      "mass_g": 1,
+      "notes": "One per CARRIER-2"
+    },
+    {
+      "ref": "MICROSD-LOG",
+      "desc": "microSD 32GB \u2014 flight log storage",
+      "qty": 4,
+      "mass_g": 1,
+      "notes": "One per COMPHAT or MICROHAT"
+    }
+  ],
+  "wiring": [
+    {
+      "ref": "PDB",
+      "desc": "Power distribution board \u2014 XT90 main + 3\u00d7 ESC outputs + 5V BEC bus",
+      "qty": 1,
+      "mass_g": 12,
+      "notes": "Rated 100A continuous"
+    },
+    {
+      "ref": "BEC-5V",
+      "desc": "BEC 5V 5A (DC-DC) \u2014 avionics power",
+      "qty": 1,
+      "mass_g": 18
+    },
+    {
+      "ref": "WIRE-ESC-NAC",
+      "desc": "14AWG silicone ESC\u2192motor leads 200mm \u00d7 3-phase \u00d7 2 nacelles",
+      "qty": 1,
+      "mass_g": 24,
+      "notes": "High-current phase wires"
+    },
+    {
+      "ref": "WIRE-ESC-FUSE",
+      "desc": "16AWG silicone ESC\u2192motor leads 150mm \u00d7 3-phase fuselage",
+      "qty": 1,
+      "mass_g": 8
+    },
+    {
+      "ref": "WIRE-SERVO",
+      "desc": "20AWG servo extension leads 300mm \u00d7 6",
+      "qty": 1,
+      "mass_g": 12
+    },
+    {
+      "ref": "WIRE-XT90",
+      "desc": "XT90 battery pigtail 100mm",
+      "qty": 1,
+      "mass_g": 15
+    },
+    {
+      "ref": "CAB-CAN",
+      "desc": "CAN FD 4-pin JST-GH 150mm cables",
+      "qty": 3,
+      "mass_g": 2,
+      "notes": "Chain N1\u2192N2\u2192N3\u2192N4"
+    },
+    {
+      "ref": "CAB-RS485",
+      "desc": "RS-485 4-pin JST-GH 150mm cables",
+      "qty": 3,
+      "mass_g": 2
+    },
+    {
+      "ref": "CAB-1553",
+      "desc": "1553B 4-pin JST-GH shielded twisted pair 180mm",
+      "qty": 3,
+      "mass_g": 2.7,
+      "notes": "Belden 3084A equiv, 78\u03a9"
+    },
+    {
+      "ref": "CAB-ETH",
+      "desc": "Ethernet 6-pin JST-GH 200mm cables \u2014 Murex switch to nodes",
+      "qty": 4,
+      "mass_g": 2.5,
+      "notes": "W5500\u2192KSZ8895 star"
+    },
+    {
+      "ref": "CAB-ESC-TELEM",
+      "desc": "ESC telemetry 3-pin JST-GH 200mm",
+      "qty": 3,
+      "mass_g": 1.3
+    },
+    {
+      "ref": "CAB-GPS",
+      "desc": "GPS 6-pin JST-GH 150mm",
+      "qty": 1,
+      "mass_g": 3
+    },
+    {
+      "ref": "CAB-MISC",
+      "desc": "PWR + I2C + misc short cables, connectors, zip ties",
+      "qty": 1,
+      "mass_g": 8
+    }
+  ],
+  "payload_system": [
+    {
+      "ref": "SERVO-PAY",
+      "desc": "SG90 payload release servo",
+      "qty": 1,
+      "mass_g": 9
+    },
+    {
+      "ref": "WINCH-MOT",
+      "desc": "N20 6V DC winch motor",
+      "qty": 1,
+      "mass_g": 10
+    },
+    {
+      "ref": "DRV8833",
+      "desc": "DRV8833 dual H-bridge motor driver",
+      "qty": 1,
+      "mass_g": 1
+    },
+    {
+      "ref": "PAYLOAD-DOOR",
+      "desc": "Payload bay door PETG 112\u00d742mm",
+      "qty": 1,
+      "mass_g": 8,
+      "stl": "payload_bay_door.stl"
+    },
+    {
+      "ref": "SKID-FOOT",
+      "desc": "TPU 95A landing skid feet \u00d74",
+      "qty": 4,
+      "mass_g": 4,
+      "stl": "landing_skid_foot.stl"
+    }
+  ],
+  "radios_sensors": [
+    {
+      "ref": "SIK-915",
+      "desc": "SiK 915MHz telemetry radio module",
+      "qty": 1,
+      "mass_g": 14,
+      "notes": "On COMPHAT-SWITCH, SMA belly antenna"
+    },
+    {
+      "ref": "RCRS-49",
+      "desc": "49MHz RCRS RC receiver/transmitter board",
+      "qty": 1,
+      "mass_g": 12,
+      "notes": "Dorsal fin antenna, coil cavity"
+    },
+    {
+      "ref": "GPS-M10Q",
+      "desc": "u-blox M10Q GPS module + patch antenna",
+      "qty": 1,
+      "mass_g": 12,
+      "notes": "59mm from nose, cockpit top"
+    },
+    {
+      "ref": "ANT-SIK",
+      "desc": "915MHz SMA whip antenna + pigtail",
+      "qty": 1,
+      "mass_g": 3
+    },
+    {
+      "ref": "ANT-RCRS",
+      "desc": "49MHz helical coil + enclosure (dorsal fin)",
+      "qty": 1,
+      "mass_g": 3
+    },
+    {
+      "ref": "NAVLIGHT",
+      "desc": "WS2812C addressable LED + diffuser + mount",
+      "qty": 6,
+      "mass_g": 1.3,
+      "notes": "Port=RED, Stbd=GREEN, Tail=WHITE, Belly=WHITE strobe"
+    }
+  ],
+  "fasteners_misc": [
+    {
+      "ref": "STANDOFF",
+      "desc": "M2.5 nylon hex standoffs 6mm \u00d720",
+      "qty": 1,
+      "mass_g": 4
+    },
+    {
+      "ref": "SCREW-M25",
+      "desc": "M2.5 stainless screws \u00d740 (8mm + 12mm assorted)",
+      "qty": 1,
+      "mass_g": 6
+    },
+    {
+      "ref": "ZIPTIE",
+      "desc": "Nylon zip ties \u00d730 (100mm + 200mm)",
+      "qty": 1,
+      "mass_g": 4
+    },
+    {
+      "ref": "FOAM-TAPE",
+      "desc": "3M double-sided foam tape \u2014 vibration isolation mounts",
+      "qty": 1,
+      "mass_g": 4
+    },
+    {
+      "ref": "CABLE-CLIP",
+      "desc": "Cable management clips + mounts",
+      "qty": 1,
+      "mass_g": 4
+    }
+  ],
+  "performance": {
+    "nacelle_thrust_each_g": 1700,
+    "fuselage_thrust_g": 380,
+    "thrust_total_g": 3780,
+    "fixed_base_g": 1109,
+    "battery_empty": "6S 4000mAh 480g",
+    "auw_empty_g": 1589.2,
+    "auw_empty_lb": 3.5,
+    "tw_empty": 2.38,
+    "battery_cargo": "6S 2200mAh 330g",
+    "payload_g": 250,
+    "auw_cargo_g": 1689.2,
+    "auw_cargo_lb": 3.72,
+    "tw_cargo": 2.24,
+    "max_payload_g": 450,
+    "max_payload_oz": 15.9
+  },
+  "canon_geometry": {
+    "hull_mm": 457.2,
+    "hull_in": 18.0,
+    "beam_mm": 288.9,
+    "beam_in": 11.375,
+    "height_mm": 134.3,
+    "height_in": 5.286,
+    "nacelle_ctr_ratio": "57.5/269",
+    "nacelle_ctr_mm": 97.73,
+    "nacelle_od_mm": 93.48,
+    "inner_from_cl_mm": 50.99,
+    "datum_from_cl_mm": 82.15,
+    "outer_from_cl_mm": 144.47,
+    "c2c_mm": 195.46,
+    "arm_stub_mm": 10.4,
+    "formula": "outer = datum + (OD \u00d7 2/3)  =  82.15 + (93.48 \u00d7 2/3)  =  144.47mm (canonical \u2714)",
+    "side_profile_key_ratios": {
+      "dome_above_cl_mm": 99.7,
+      "dome_cargo_ratio": 2.42,
+      "neck_total_mm": 28.8,
+      "neck_cargo_ratio": 0.32
+    }
+  }
+}

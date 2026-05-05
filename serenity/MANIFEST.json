@@ -1,0 +1,495 @@
+{
+  "project": "Serenity-Class Tiltrotor UAV",
+  "revision": "H.1",
+  "scale": "18 inches (457.2mm)",
+  "author": "Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP",
+  "license": "CC BY 4.0",
+  "year": 2026,
+  "attribution": {
+    "hull": "Peter Farell CC BY 4.0 \u2014 printables.com/model/548545",
+    "nozzle": "BamJr CC BY 4.0 \u2014 thingiverse.com/thing:2991269",
+    "visual_inspiration": "Firefly/Serenity \u00a9 Joss Whedon/Mutant Enemy/Universal \u2014 Fan engineering work"
+  },
+  "total_files": 94,
+  "total_uncompressed_bytes": 6363922,
+  "categories": {
+    "chat": 4,
+    "artifacts": 16,
+    "diagrams": 29,
+    "kicad": 12,
+    "stl": 28,
+    "docs": 5
+  },
+  "files": [
+    {
+      "path": "serenity/chat/2026-04-22-11-20-04-serenity-tiltrotor-drone-design.txt",
+      "bytes": 926237,
+      "sha256": "217947cc75474a1d605e39d0f29855ef87bb3075d3c28c83e3a28f448345c4c7"
+    },
+    {
+      "path": "serenity/chat/2026-04-28-14-10-02-serenity-tiltrotor-drone-design.txt",
+      "bytes": 1097672,
+      "sha256": "f59bf5d4b332b18d17f84d9f8db87f012e1c3fc5911949986a243fceb6f01a54"
+    },
+    {
+      "path": "serenity/chat/2026-05-03-20-24-05-serenity-tiltrotor-drone-design.txt",
+      "bytes": 1108323,
+      "sha256": "f172b8dfaa96e6b3b9839b26f8724059221541e84ebe4efc96f0f903bb77b22f"
+    },
+    {
+      "path": "serenity/chat/journal.txt",
+      "bytes": 1720,
+      "sha256": "bd260aacf12e7db17b5af29ba04037344bfee5d848af693cf83b9dcc8f3a7386"
+    },
+    {
+      "path": "serenity/artifacts/antenna-layout.jsx",
+      "bytes": 53764,
+      "sha256": "d06c97f46e3ac77a6f91ffe25a7e264f4f6ce70803037579a22f6eba69ef2ea6"
+    },
+    {
+      "path": "serenity/artifacts/cm4-carrier-update.jsx",
+      "bytes": 51735,
+      "sha256": "d16457f25533fddc1a2ae8dc2bad748bcf47d40f50a505011d37c7a60e8a62f1"
+    },
+    {
+      "path": "serenity/artifacts/nacelle-nozzle-gear.jsx",
+      "bytes": 75502,
+      "sha256": "1fcc4949d4560c03a59eddfe5556d672a902854d1279e845de5677887918f921"
+    },
+    {
+      "path": "serenity/artifacts/pico2-hat.jsx",
+      "bytes": 48153,
+      "sha256": "7db4843fa56389a2c45d6653985fa50a379b1afec800b3590ed1db1d96dcc79e"
+    },
+    {
+      "path": "serenity/artifacts/serenity-connectivity-revF.jsx",
+      "bytes": 61858,
+      "sha256": "c3e8360350487ba859bffe3f2716e916609c86640a4ac4c1383632899d005202"
+    },
+    {
+      "path": "serenity/artifacts/serenity-connectivity-revG.jsx",
+      "bytes": 72712,
+      "sha256": "f60f926222e46da2643681f9e474c779958c3046b1a46f20ca7a7410a8e939b8"
+    },
+    {
+      "path": "serenity/artifacts/serenity-connectivity-revH.jsx",
+      "bytes": 60803,
+      "sha256": "560fc196cfdfc8da45f3afa72b40a13d12ed136a393a9c3caa684bd73f934278"
+    },
+    {
+      "path": "serenity/artifacts/serenity-drone.jsx",
+      "bytes": 53703,
+      "sha256": "57c225b3c1a006783b98674c5c0f63cce4374be36744a52ff6c914ec91f51a90"
+    },
+    {
+      "path": "serenity/artifacts/serenity-esc-telem-revH1.jsx",
+      "bytes": 60003,
+      "sha256": "1c6529940b363ba98467eefa2fe473f712a0e316855973c041eda4a339c5b22d"
+    },
+    {
+      "path": "serenity/artifacts/serenity-rev-b.jsx",
+      "bytes": 52244,
+      "sha256": "43a499d89dffe1f56148a22253e05afbc7bfc3244df9233a42bacf55e959c9f2"
+    },
+    {
+      "path": "serenity/artifacts/serenity-rev-c.jsx",
+      "bytes": 57844,
+      "sha256": "b0fdfb77a1bb1f6ad1e7cef0d8d8e6a8c68fa74e816e94472c681f33d6d740ce"
+    },
+    {
+      "path": "serenity/artifacts/serenity-rev-d.jsx",
+      "bytes": 86763,
+      "sha256": "43f581f260d026d177ff1ee4fc93752ca22d0e1d5b82577984b90320b63f0f7e"
+    },
+    {
+      "path": "serenity/artifacts/serenity-rev-e.jsx",
+      "bytes": 91643,
+      "sha256": "088e072aa71b7a973b2220e91043de10ef0036e391c73eda9019f63b0c46777e"
+    },
+    {
+      "path": "serenity/artifacts/serenity-rev-f.jsx",
+      "bytes": 21156,
+      "sha256": "e48dadf0133dc5675b95e34ede23e24f134db1195bffeb801d92e2325c3593bc"
+    },
+    {
+      "path": "serenity/artifacts/serenity-rev-g.jsx",
+      "bytes": 36498,
+      "sha256": "55bd18685796cfa1f58a606fba60d755d6b85880b35e44538cd0b1198a18f6a9"
+    },
+    {
+      "path": "serenity/artifacts/tiltrotor-drone.jsx",
+      "bytes": 36457,
+      "sha256": "1693e2532579d56684cb01a569686fe206dca9db995391e723e0cd6f50de0254"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_00_cover.svg",
+      "bytes": 5898,
+      "sha256": "982533e4c3755e29955f6b785899d6ea10d9bbdbdfd722c3a23083fa65019c52"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_01_print_prep.svg",
+      "bytes": 16622,
+      "sha256": "57896338d489b374cf19a61017a0daf3b346bfa53109fb5436e3245ac8343b66"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_02_print_hull.svg",
+      "bytes": 11854,
+      "sha256": "d059363a93696eb6eb568032275e364d8868081f814d7381a772678fcf143464"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_03_print_nacelle.svg",
+      "bytes": 29316,
+      "sha256": "f408089354b2891338e39735af8fa260caba7453ea4b7f38e29489f60e6f2492"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_04_cut_cf.svg",
+      "bytes": 13506,
+      "sha256": "c6c8c5cdff2962df5fecb5cd9c74f74ffd494abdac0e8f6432866b7a3cfcafce"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_05_cf_skeleton.svg",
+      "bytes": 11828,
+      "sha256": "79abda28a044277f4164e2645e7eca92c5988f8a07f0f57f4dbceb48c5984b39"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_06_nacelle_pivot.svg",
+      "bytes": 14437,
+      "sha256": "b43844ea44266ff65016c7d8b07fd81f653e289d73517091f9d04b53f82bf406"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_07_edf_install.svg",
+      "bytes": 18045,
+      "sha256": "96acf82ef57b9ab3e278a5f3e5b91f7709de9407318ecdc912d556d949502034"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_08_nozzle_gear.svg",
+      "bytes": 30600,
+      "sha256": "950b5e44fc17d7a709cbaa7c6b8d5c91359406a3d1e6ef470be331aa4fc8ed76"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_09_avionics.svg",
+      "bytes": 14309,
+      "sha256": "2a481e0664a85e0b97cfad0940f5d27d16fdb3e7af71ffe7d663b53130f2fdfe"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_10_power_wiring.svg",
+      "bytes": 13666,
+      "sha256": "e1553195e9dc44027253bba5f8558e371e8aafc3d1301029138defc7a7b3abe5"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_11_inter_board.svg",
+      "bytes": 10988,
+      "sha256": "71f2ecccceda1d347655f572dc0ff6ab8b5ccf9faa91c0aaa609f1068fe1bb68"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_12_security_hw.svg",
+      "bytes": 14499,
+      "sha256": "c1ac29ae69f68ec35b3538757a5ba5781a382b1bb7531bab86afc0eaa5749a9b"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_13_nav_lights.svg",
+      "bytes": 10719,
+      "sha256": "e4d56fa2274361be7100bb331d634f70b3128aa609c892b989adf82622f62049"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_14_antennas.svg",
+      "bytes": 11885,
+      "sha256": "34025e6ee4e45b14a95e287461b477ce987d05adfc50cfc821cffa9d2733c3ad"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_15_software.svg",
+      "bytes": 12276,
+      "sha256": "7f946bd8c39e9af54032b13d0780343594361228898805b409c3d88bb6afde17"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_16_calibration.svg",
+      "bytes": 10271,
+      "sha256": "dec457b9178e6908ffab23f167a4462d261bb719aa3d44bad00a8da1592b469f"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_17_ground_test.svg",
+      "bytes": 12301,
+      "sha256": "918c4949f9b8e08acf9c9d133d9ea4487ec52a988769105c7626df002c22ba0a"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_18_first_flight.svg",
+      "bytes": 11905,
+      "sha256": "bba75b479d3cbad05fb1913757252bb6ab8e2e7350b3f97f43b8c6bc95602efd"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_19_decal_placement.svg",
+      "bytes": 22597,
+      "sha256": "332728967f0ac55a1a6825487cf088739257860da1a4c35315dce9a4aee3c683"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_20_node_placement.svg",
+      "bytes": 23731,
+      "sha256": "959b533ce4e301dfd8e122eff421f93d327bca4d2f279a0c42900ccc51281311"
+    },
+    {
+      "path": "serenity/diagrams/build_guide_21_node_install.svg",
+      "bytes": 24025,
+      "sha256": "50ad55cb6e0f7cdb5e58db8a267a4e508471a8aaade213e1ee351764b6f87a82"
+    },
+    {
+      "path": "serenity/diagrams/build_plan.svg",
+      "bytes": 13296,
+      "sha256": "4a1aacd56c5679e47473ff7884c71c15744d1b6b4a1e10f68773a1140ece5418"
+    },
+    {
+      "path": "serenity/diagrams/components_overview.svg",
+      "bytes": 15961,
+      "sha256": "918951bf9839e58667f95ed4ce668b9712b5466a8bd1288c066e6a3348e04e3b"
+    },
+    {
+      "path": "serenity/diagrams/decal_sheet.svg",
+      "bytes": 57355,
+      "sha256": "76272166e2cdd72d37a0e8da1eb26568ea1741241eae8bccf4b3704a85a74d48"
+    },
+    {
+      "path": "serenity/diagrams/overview_bottom.svg",
+      "bytes": 8485,
+      "sha256": "9f3a3b18ff1d226601e001cb7afa97f03110b3c028077ddbaa9a7e26778672cc"
+    },
+    {
+      "path": "serenity/diagrams/overview_front.svg",
+      "bytes": 9710,
+      "sha256": "55097adf6febb74506272971d6ed4900ebd4c9a1dd2a92568d8e92b9563d5863"
+    },
+    {
+      "path": "serenity/diagrams/overview_side.svg",
+      "bytes": 8630,
+      "sha256": "9f2cebf60ac821ed7b74be9dd22f1259e0ec796e9378f7b9122066b755f20d0d"
+    },
+    {
+      "path": "serenity/diagrams/overview_top.svg",
+      "bytes": 10012,
+      "sha256": "340222c334e2b6d40aee28f694785bf700fef2a2ae9fc7ce30103c3b938ad071"
+    },
+    {
+      "path": "serenity/kicad/CM4-CARRIER-1.kicad_pcb",
+      "bytes": 15499,
+      "sha256": "98d33dda69ff1b464e23b23c6f12af90d88c848cf51100a1c8df1ee543b95db2"
+    },
+    {
+      "path": "serenity/kicad/CM4-CARRIER-1.kicad_sch",
+      "bytes": 1011,
+      "sha256": "4f785809f9c98c9a096502db3c87595b44028b5bb4a45415d4e9b4965c12415e"
+    },
+    {
+      "path": "serenity/kicad/CM4-CARRIER-2.kicad_pcb",
+      "bytes": 9397,
+      "sha256": "55e9b97bcbe2c028cf7dfb793113a855b1521ff7f5dd4335278a763e3b69c62e"
+    },
+    {
+      "path": "serenity/kicad/CM4-CARRIER-2.kicad_sch",
+      "bytes": 877,
+      "sha256": "deb469d6e8d76b4118facfb8647095672317a10eba3fc34e85bb45c0e1589570"
+    },
+    {
+      "path": "serenity/kicad/COMPHAT-1.kicad_pcb",
+      "bytes": 20097,
+      "sha256": "7a1f1c2b0e6e35a037ed734c276e579de37a51fbf2f14f9103abd199c09b1c66"
+    },
+    {
+      "path": "serenity/kicad/COMPHAT-1.kicad_sch",
+      "bytes": 1007,
+      "sha256": "e908aaaa1baf2701ad22465e7ddfc3b5418518da46d08778bde99b7de3ea4625"
+    },
+    {
+      "path": "serenity/kicad/COMPHAT-SWITCH.kicad_pcb",
+      "bytes": 26046,
+      "sha256": "22c213824f398ed2b8043c085b99aa7a7825499acda4f299d442af268c96238e"
+    },
+    {
+      "path": "serenity/kicad/COMPHAT-SWITCH.kicad_sch",
+      "bytes": 938,
+      "sha256": "5f20fddbbea8f063fafb57ba35276e028774e6257fdcb86191773f13066faecd"
+    },
+    {
+      "path": "serenity/kicad/SENSORHAT-1.kicad_pcb",
+      "bytes": 24237,
+      "sha256": "df07cf0eaade55e60c6c8440af2094c31e2afbb669849189fbe28bc05bd95933"
+    },
+    {
+      "path": "serenity/kicad/SENSORHAT-1.kicad_sch",
+      "bytes": 997,
+      "sha256": "1ff5f3178e80fd1d2b0c14787faeeab1e53706ef3c9231ce19947b213e369032"
+    },
+    {
+      "path": "serenity/kicad/TRIHAT-1.kicad_pcb",
+      "bytes": 28897,
+      "sha256": "107f91a818a4fb6d8a0039eb975da6a8b1242689dcd23946f7bfaafc82ae98c9"
+    },
+    {
+      "path": "serenity/kicad/TRIHAT-1.kicad_sch",
+      "bytes": 1006,
+      "sha256": "01b3a360722e991b272284972e736cb242e06e61896c952520ce5ac1baf597a8"
+    },
+    {
+      "path": "serenity/stl/bevel_gear_housing.stl",
+      "bytes": 11334,
+      "sha256": "8f4959d4cdabceaee3e150564b2d0f54e420ffc9ecd7cce54a67762ed39d958a"
+    },
+    {
+      "path": "serenity/stl/cm4_node_mounting_tray.stl",
+      "bytes": 2287,
+      "sha256": "6afffb73fdc4e7a7df420a99962a8301ce52133b542532be74233a88e31a527d"
+    },
+    {
+      "path": "serenity/stl/cockpit_dome_clear.stl",
+      "bytes": 393274,
+      "sha256": "64a62c50328b9dc5969c89628cb131d4b090f82be01fed61ecc8035ee934b067"
+    },
+    {
+      "path": "serenity/stl/dorsal_antenna_fin.stl",
+      "bytes": 10589,
+      "sha256": "7081b92fa5a09ec26bf90bbd37a49e9c03b9cc26af53e0cb63f701bd0a4fa64d"
+    },
+    {
+      "path": "serenity/stl/hull_aft_neck.stl",
+      "bytes": 50083,
+      "sha256": "3688095bd682e005fefc413e0ec701f255204fe86f216ff02f7aa9fa28050997"
+    },
+    {
+      "path": "serenity/stl/hull_cockpit_cap.stl",
+      "bytes": 72413,
+      "sha256": "e9095f85ae995d64c3bf7a0522888743a4f2040a29ac801c0204572ec05bccf9"
+    },
+    {
+      "path": "serenity/stl/hull_cockpit_section.stl",
+      "bytes": 99269,
+      "sha256": "f6256e9d5874b24034555d7cf6b4c5d0187d3d82b9a0ff7c865d319d22852445"
+    },
+    {
+      "path": "serenity/stl/hull_engine_bell.stl",
+      "bytes": 49169,
+      "sha256": "36841be1d94fb8549980b88c4fff14585c56e5118dbb275966ec0042f70f0cc8"
+    },
+    {
+      "path": "serenity/stl/hull_mid_body_left.stl",
+      "bytes": 126131,
+      "sha256": "a11c3c4f2b2bbdd0e95ce7cb2a286e1c2d6866dc2e8f2c13c5a73e1164eacc49"
+    },
+    {
+      "path": "serenity/stl/hull_mid_body_right.stl",
+      "bytes": 126133,
+      "sha256": "90817b9d26a7e043fe7388929d6dfca0157ba5ab4b63afa4e5b3d2547334a19c"
+    },
+    {
+      "path": "serenity/stl/landing_skid_foot.stl",
+      "bytes": 4539,
+      "sha256": "fea9fdaf6fd4381accd39436c0e2631154f3bc7572bf821253b06ee01a704f96"
+    },
+    {
+      "path": "serenity/stl/nacelle_pod_70mm.stl",
+      "bytes": 49649,
+      "sha256": "b858becd8fdf6d17c0392875bba125a7199e11459d36303b0c82ad0db3b41f2a"
+    },
+    {
+      "path": "serenity/stl/nacelle_pod_80mm.stl",
+      "bytes": 62206,
+      "sha256": "7adcdd6a10f0b9f7f2713361ba35a9e3303f87edd57401eb3908094b6608eb70"
+    },
+    {
+      "path": "serenity/stl/nacelle_tip_cap_80mm_port.stl",
+      "bytes": 46402,
+      "sha256": "4408647bb2d3d79cc8475b6306290e9e563ddbca6829166b00284d64e98e69b2"
+    },
+    {
+      "path": "serenity/stl/nacelle_tip_cap_port.stl",
+      "bytes": 36701,
+      "sha256": "692f2519babab58b66a3fa0ebb0eb5c95a447827cc11719a99a6d89907958190"
+    },
+    {
+      "path": "serenity/stl/nacelle_tip_cap_stbd.stl",
+      "bytes": 36701,
+      "sha256": "9816ed96ae2d98452abed78b5c4c3515f8d8a7ca24f5588ead5833c955ac8ae1"
+    },
+    {
+      "path": "serenity/stl/nozzle_flap_x8.stl",
+      "bytes": 2253,
+      "sha256": "2854e8e18b7f45def32e5624e5831ba9a915c6aa23662571877f433492f8bd5e"
+    },
+    {
+      "path": "serenity/stl/nozzle_inner_ring_40mm.stl",
+      "bytes": 49085,
+      "sha256": "355d0313708ca8c64f48b7b894280d11e94524d57db6313d2cdcbd8feb3b60d0"
+    },
+    {
+      "path": "serenity/stl/nozzle_inner_ring_70mm.stl",
+      "bytes": 55467,
+      "sha256": "e2d1c132d97c4cd7a0b689077039e15270f6e1efc0e663dc414d717b526c2f4d"
+    },
+    {
+      "path": "serenity/stl/nozzle_inner_ring_80mm.stl",
+      "bytes": 61646,
+      "sha256": "711cb670874ba05264d4f318610270fd29dfdce278597332a62deeca11317d74"
+    },
+    {
+      "path": "serenity/stl/nozzle_outer_housing_40mm.stl",
+      "bytes": 49091,
+      "sha256": "5bc3cdca41a998136e8343fa23eb72fcf8cb881a118c7aecf071cec52d349a93"
+    },
+    {
+      "path": "serenity/stl/nozzle_outer_housing_70mm.stl",
+      "bytes": 49283,
+      "sha256": "c5721b2e04a34eb550be862b9fce2a7ae72975c7f6005fde454072b4dd3d27bb"
+    },
+    {
+      "path": "serenity/stl/nozzle_outer_housing_80mm.stl",
+      "bytes": 61646,
+      "sha256": "212f4f9f7619dcaaecf729d97ace87ed832d99b02be4d6d80e317f2beea5d77e"
+    },
+    {
+      "path": "serenity/stl/payload_bay_door.stl",
+      "bytes": 8339,
+      "sha256": "ac8d361ee81d6e8899e76e25fa68f302a022d64de368bda41ce6e62cd612c499"
+    },
+    {
+      "path": "serenity/stl/pinion_a_bracket.stl",
+      "bytes": 11294,
+      "sha256": "98b25035f431114ab6d4a5fab108c8b2d611ee6baff1d63ee4f36b206f94ed21"
+    },
+    {
+      "path": "serenity/stl/sector_gear_22mm.stl",
+      "bytes": 116110,
+      "sha256": "4d3530b9b2f05994012543b71d439ee4c39db014a2807de2f41516b67560acc2"
+    },
+    {
+      "path": "serenity/stl/sensorhat_mounting_tray.stl",
+      "bytes": 2289,
+      "sha256": "374a603bf1fec940ab96066d204a2bc14bfe66c8b02ec9563dd553ac1c1abdfb"
+    },
+    {
+      "path": "serenity/stl/tilt_bracket_cf_petg.stl",
+      "bytes": 16533,
+      "sha256": "41316249134fa7e7b3bd333af506e1fee4afc66adb6a747c64052e97a8e5ab53"
+    },
+    {
+      "path": "serenity/docs/README.md",
+      "bytes": 2743,
+      "sha256": "04e4a8dc5f959c1c3597cbf9e7765e59852eb73b43e6be2de0089f371c407111"
+    },
+    {
+      "path": "serenity/docs/LICENSE_AND_ATTRIBUTION.md",
+      "bytes": 11601,
+      "sha256": "36a98afa7a16146062e46d9e3691bfa774ab7b4cb3da282de455fd96f7313969"
+    },
+    {
+      "path": "serenity/docs/PROJECT_INDEX.md",
+      "bytes": 10539,
+      "sha256": "6235dd240965ce85a672dd9a151ebb574d05a4cdcdc9b6c08b18f56154b226ca"
+    },
+    {
+      "path": "serenity/docs/MANIFEST.json",
+      "bytes": 14315,
+      "sha256": "1792cd8561c8f55713b5c6679282254fddd6db26233da0238c8dae4b2aefd7ee"
+    },
+    {
+      "path": "serenity/docs/bom_revH1.json",
+      "bytes": 11282,
+      "sha256": "1d50cb323711c65f61e9610c9e303b1269360a37d5f57053090de114a659e0a4"
+    }
+  ]
+}

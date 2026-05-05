@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP CC BY 4.0 -->
+<!-- Canon: QMx Official Serenity Blueprints (Mandel/Earls 2007) 269ft×170ft×79ft -->
+<!-- Scale: 18" (457.2mm)  Hull: Peter Farell CC BY 4.0  Nozzle: BamJr CC BY 4.0 -->
+<!-- Visual: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal Fan work -->
+<!-- SIDE PROFILE KEY RATIOS:
+     dome peak = 0.218×L = 99.7mm above CL  (iconic high bridge)
+     cargo top = 0.090×L = 41.1mm  dome:cargo = 2.42:1
+     neck total = 28.8mm  neck:cargo = 0.32:1  (dramatic pinch)
+     nacelle_ctr=97.7mm OD=93.5mm datum=82.1mm outer=144.5mm -->
+<!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP CC BY 4.0 -->
+<!-- Hull: Peter Farell CC BY 4.0  Nozzle: BamJr CC BY 4.0 -->
+<!-- Visual: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal Fan work -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 460" width="820" height="460">
+<defs>
+  <style>@import url('https://fonts.cdnfonts.com/css/opendyslexic');
+    text,tspan{font-family:'OpenDyslexic','OpenDyslexic Bold',sans-serif!important}
+    @media print{svg{background:#fff!important}text,tspan{fill:#111!important}}</style>
+  <marker id="ar" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+    <path d="M0,0 L7,3.5 L0,7 Z" fill="#00e5ff" opacity="0.8"/></marker>
+  <marker id="ar2" markerWidth="7" markerHeight="7" refX="1" refY="3.5" orient="auto">
+    <path d="M7,0 L0,3.5 L7,7 Z" fill="#00e5ff" opacity="0.8"/></marker>
+  <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+    <path d="M24 0L0 0 0 24" fill="none" stroke="rgba(0,229,255,0.04)" stroke-width="0.5"/>
+  </pattern>
+</defs>
+<rect width="820" height="460" fill="#07090e"/>
+<rect width="820" height="460" fill="url(#grid)"/>
+<text x="10" y="13" font-family="'OpenDyslexic Mono','OpenDyslexicMono',monospace" font-size="8" fill="rgba(0,229,255,0.85)" letter-spacing="1">SERENITY 18" (457mm) BOTTOM VIEW  dome=99.7mm  neck=28.8mm  dome:cargo=2.42  neck:cargo=0.32  nacelle_ctr=98mm→OD=93mm→datum=82mm→outer=144mm ✔</text>
+<polygon points="327.7,178.6 416.9,178.6 433.2,166.3 311.5,166.3" fill="#0e2030" stroke="#00e5ff" stroke-width="1.5"/>
+<ellipse cx="367.2" cy="107.8" rx="58.4" ry="20.0" fill="#0e2030" stroke="#ff6b35" stroke-width="2.5"/>
+<ellipse cx="367.2" cy="107.8" rx="50.0" ry="15.0" fill="rgba(255,107,53,0.10)" stroke="#ff6b35" stroke-width="1" stroke-dasharray="3 2"/>
+<line x1="294.0" y1="166.3" x2="450.7" y2="166.3" stroke="#00e5ff" stroke-width="0.8" stroke-dasharray="3 2" opacity="0.5"/>
+<line x1="286.0" y1="127.3" x2="458.7" y2="127.3" stroke="#d4a827" stroke-width="2" stroke-dasharray="6 3"/>
+<line x1="294.0" y1="49.4" x2="450.7" y2="49.4" stroke="#ff6b35" stroke-width="0.8" stroke-dasharray="3 2" opacity="0.5"/>
+<circle cx="313.8" cy="49.4" r="7" fill="#f87171" opacity="0.95" filter="url(#glow)"/>
+<text x="313.8" y="29.4" text-anchor="middle" font-family="'OpenDyslexic','OpenDyslexic Bold',sans-serif" font-size="8" fill="#f87171" font-weight="bold">●PORT</text>
+<text x="284.0" y="170.3" text-anchor="end" font-family="'OpenDyslexic','OpenDyslexic Bold',sans-serif" font-size="7" fill="#00e5ff">inner 51.0mm</text>
+<text x="284.0" y="131.3" text-anchor="end" font-family="'OpenDyslexic','OpenDyslexic Bold',sans-serif" font-size="8" fill="#d4a827" font-weight="bold">datum 82.1mm</text>
+<text x="284.0" y="53.4" text-anchor="end" font-family="'OpenDyslexic','OpenDyslexic Bold',sans-serif" font-size="7" fill="#ff6b35">outer 144.5mm</text>
+<polygon points="327.7,281.4 416.9,281.4 433.2,293.7 311.5,293.7" fill="#0e2030" stroke="#00e5ff" stroke-width="1.5"/>
+<ellipse cx="367.2" cy="352.2" rx="58.4" ry="20.0" fill="#0e2030" stroke="#ff6b35" stroke-width="2.5"/>
+<ellipse cx="367.2" cy="352.2" rx="50.0" ry="15.0" fill="rgba(255,107,53,0.10)" stroke="#ff6b35" stroke-width="1" stroke-dasharray="3 2"/>
+<line x1="294.0" y1="293.7" x2="450.7" y2="293.7" stroke="#00e5ff" stroke-width="0.8" stroke-dasharray="3 2" opacity="0.5"/>
+<line x1="286.0" y1="332.7" x2="458.7" y2="332.7" stroke="#d4a827" stroke-width="2" stroke-dasharray="6 3"/>
+<line x1="294.0" y1="410.6" x2="450.7" y2="410.6" stroke="#ff6b35" stroke-width="0.8" stroke-dasharray="3 2" opacity="0.5"/>
+<circle cx="313.8" cy="410.6" r="7" fill="#4ade80" opacity="0.95" filter="url(#glow)"/>
+<text x="313.8" y="430.6" text-anchor="middle" font-family="'OpenDyslexic','OpenDyslexic Bold',sans-serif" font-size="8" fill="#4ade80" font-weight="bold">●STBD</text>
+<path d="M 110.0,230.0 L 122.6,222.0 L 147.7,212.9 L 183.7,203.1 L 206.0,192.3 L 235.7,184.9 L 284.3,179.7 L 343.2,178.6 L 395.8,178.6 L 438.6,179.7 L 470.0,185.4 L 502.0,196.9 L 523.2,206.0 L 534.6,215.7 L 546.1,211.1 L 571.8,202.0 L 599.2,193.4 L 635.2,191.7 L 662.1,197.4 L 681.5,203.7 L 681.5,256.3 L 662.1,262.6 L 635.2,268.3 L 599.2,266.6 L 571.8,258.0 L 546.1,248.9 L 534.6,244.3 L 523.2,254.0 L 502.0,263.1 L 470.0,274.6 L 438.6,280.3 L 395.8,281.4 L 343.2,281.4 L 284.3,280.3 L 235.7,275.1 L 206.0,267.7 L 183.7,256.9 L 147.7,247.1 L 122.6,238.0 L 110.0,230.0 Z" fill="#0e2030" stroke="#00e5ff" stroke-width="2.5"/>
+<ellipse cx="178.6" cy="230.0" rx="34.3" ry="32.0" fill="rgba(0,229,255,0.04)" stroke="rgba(0,229,255,0.28)" stroke-width="1" stroke-dasharray="5 3"/>
+<rect x="319.2" y="204.3" width="84.0" height="51.4" rx="4" fill="rgba(244,114,182,0.18)" stroke="#f472b6" stroke-width="2"/>
+<text x="361.2" y="230.0" text-anchor="middle" font-family="'OpenDyslexic','OpenDyslexic Bold',sans-serif" font-size="9" fill="#f472b6" font-weight="bold">PAYLOAD BAY</text>
+<text x="361.2" y="243.0" text-anchor="middle" font-family="'OpenDyslexic','OpenDyslexic Bold',sans-serif" font-size="7" fill="rgba(244,114,182,0.75)">84×41mm</text>
+<circle cx="427.2" cy="230.0" r="10" fill="none" stroke="#ff6b35" stroke-width="0.7" opacity="0.35"/>
+<circle cx="427.2" cy="230.0" r="16" fill="none" stroke="#ff6b35" stroke-width="0.7" opacity="0.35"/>
+<circle cx="427.2" cy="230.0" r="22" fill="none" stroke="#ff6b35" stroke-width="0.7" opacity="0.35"/>
+<circle cx="427.2" cy="230.0" r="7" fill="rgba(255,107,53,0.32)" stroke="#ff6b35" stroke-width="2"/>
+<text x="427.2" y="202.0" text-anchor="middle" font-family="'OpenDyslexic','OpenDyslexic Bold',sans-serif" font-size="9" fill="#ff6b35" font-weight="bold">SiK↓ 254mm</text>
+<circle cx="361.5" cy="230.0" r="6" fill="rgba(255,255,200,0.85)" stroke="#ffffaa" stroke-width="1.5" filter="url(#glow)"/>
+<text x="361.5" y="216.0" text-anchor="middle" font-family="'OpenDyslexic','OpenDyslexic Bold',sans-serif" font-size="7" fill="#ffffaa">BELLY◆</text>
+<ellipse cx="607.2" cy="230.0" rx="33.1" ry="36.0" fill="rgba(255,230,0,0.08)" stroke="#ffe600" stroke-width="1.5"/>
+<line x1="110.0" y1="230.0" x2="77.5" y2="230.0" stroke="#2dd4bf" stroke-width="5" stroke-linecap="round"/>
+<line x1="187.7" y1="230.0" x2="270.0" y2="230.0" stroke="#00e5ff" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/>
+<line x1="356.9" y1="230.0" x2="439.2" y2="230.0" stroke="#00e5ff" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/>
+<line x1="299.7" y1="162.0" x2="299.7" y2="298.0" stroke="#4ade80" stroke-width="1.5" stroke-dasharray="6 3"/>
+<polygon points="299.7,162.0 290.7,180.0 308.7,180.0" fill="#4ade80"/>
+<text x="299.7" y="155.0" text-anchor="middle" font-family="'OpenDyslexic','OpenDyslexic Bold',sans-serif" font-size="9" fill="#4ade80" font-weight="bold">CG 152mm (5.98")</text>
+<line x1="110.0" y1="440.0" x2="681.5" y2="440.0" stroke="#00e5ff" stroke-width="0.5" opacity="0.25"/>
+<text x="395.8" y="453.0" text-anchor="middle" font-family="'OpenDyslexic','OpenDyslexic Bold',sans-serif" font-size="9" fill="rgba(255,255,255,0.82)">457.2 mm (18.00")  Canon 269ft</text>
+<text x="105.0" y="234.0" text-anchor="end" font-family="'OpenDyslexic','OpenDyslexic Bold',sans-serif" font-size="9" fill="rgba(255,255,255,0.82)">NOSE</text>
+<text x="686.5" y="234.0" font-family="'OpenDyslexic','OpenDyslexic Bold',sans-serif" font-size="9" fill="rgba(255,255,255,0.82)">TAIL</text>
+<text x="10" y="454" font-family="'OpenDyslexic Mono','OpenDyslexicMono',monospace" font-size="7" fill="rgba(163,230,53,0.85)">© 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP CC BY 4.0  Hull: Peter Farell CC BY 4.0  Nozzle: BamJr CC BY 4.0  Fan engineering work</text>
+</svg>

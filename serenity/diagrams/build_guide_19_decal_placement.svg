@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- © 2026 Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP  CC BY 4.0 -->
+<!-- Hull: Peter Farell CC BY 4.0  Nozzle: BamJr CC BY 4.0 -->
+<!-- Visual inspiration: Firefly/Serenity (C) Joss Whedon/Mutant Enemy/Universal Pictures -->
+<!-- Fan engineering work - not an officially licensed product -->
+<!-- Build Guide Step 19 — Decal Placement -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+<rect width="1200" height="900" fill="#f5f0e8"/>
+<rect x="0" y="0" width="1200" height="64" fill="#006db7"/>
+<text x="24" y="24" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="14" fill="#ffffff" letter-spacing="2">SERENITY-CLASS TILTROTOR UAV</text>
+<text x="24" y="46" font-family="'OpenDyslexic',sans-serif" font-size="11" fill="#c8dff0">Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · CC BY 4.0 · 2026</text>
+<rect x="1040" y="8" width="144" height="48" rx="6" fill="#d06820"/>
+<text x="1112" y="29" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="11" fill="#ffffff">STEP</text>
+<text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="22" fill="#ffffff">19 / 19</text>
+<rect x="0" y="64" width="1200" height="40" fill="#dde4ea"/>
+<text x="24" y="90" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="16" fill="#006db7">PHASE 10 — DECALS & HULL MARKINGS</text>
+<text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#888888">Apply decals · FAA registration · show markings</text>
+<rect x="16" y="112" width="720" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
+<polygon points="96,340 102,335 112,330 125,324 138,320 159,319 182,317 197,317 215,318 233,320 254,324 277,331 283,331 296,327 316,324 334,325 359,328 359,349 334,351 316,351 296,349 283,346 277,346 254,352 233,354 215,356 197,357 182,357 159,355 138,354 125,352 112,347 102,344 96,340" fill="rgba(100,120,180,0.15)" stroke="#006db7" stroke-width="2"/>
+<ellipse cx="128" cy="340" rx="24" ry="11" fill="rgba(0,229,255,0.08)" stroke="#006db7" stroke-width="1"/>
+<line x1="182" y1="319" x2="208" y2="167" stroke="#006db7" stroke-width="2.5"/>
+<ellipse cx="208" cy="167" rx="20" ry="7" fill="rgba(255,150,80,0.15)" stroke="#d06820" stroke-width="2"/>
+<line x1="182" y1="361" x2="208" y2="513" stroke="#006db7" stroke-width="2.5"/>
+<ellipse cx="208" cy="513" rx="20" ry="7" fill="rgba(255,150,80,0.15)" stroke="#d06820" stroke-width="2"/>
+<circle cx="313" cy="340" r="11" fill="rgba(255,230,100,0.1)" stroke="#f5c518" stroke-width="1.5"/>
+<defs>
+  <style>
+    @import url('https://fonts.cdnfonts.com/css/opendyslexic');
+    @media screen {
+      text, tspan, .label, .note, .dim {
+        font-family: 'OpenDyslexic','OpenDyslexicMono',sans-serif !important;
+      }
+    }
+    @media print {
+      svg { background: #ffffff !important; }
+      text, tspan { fill: #111111 !important; font-family: 'OpenDyslexic',sans-serif !important; }
+      rect[fill^="rgba"], rect[fill^="#0"] { fill: #f5f5f5 !important; }
+    }
+  </style><filter id="dshadow"><feDropShadow dx="1" dy="1" stdDeviation="2" flood-color="rgba(0,0,0,0.4)"/></filter></defs>
+<rect x="154.60000000000002" y="265" width="70" height="26" rx="4" fill="#006db7" opacity="0.92" filter="url(#dshadow)"/>
+<rect x="156.60000000000002" y="267" width="66" height="22" rx="3" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+<text x="189.60000000000002" y="276" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">A1</text>
+<text x="189.60000000000002" y="288" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.85)">SERENITY (port)</text>
+<line x1="190" y1="291" x2="190" y2="316" stroke="#006db7" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.7"/>
+<circle cx="190" cy="316" r="3" fill="#006db7" opacity="0.8"/>
+<rect x="154.60000000000002" y="383" width="70" height="26" rx="4" fill="#006db7" opacity="0.92" filter="url(#dshadow)"/>
+<rect x="156.60000000000002" y="385" width="66" height="22" rx="3" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+<text x="189.60000000000002" y="394" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">A2</text>
+<text x="189.60000000000002" y="406" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.85)">SERENITY (stbd)</text>
+<line x1="190" y1="383" x2="190" y2="356" stroke="#006db7" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.7"/>
+<circle cx="190" cy="356" r="3" fill="#006db7" opacity="0.8"/>
+<rect x="76.84" y="272" width="70" height="26" rx="4" fill="#006db7" opacity="0.92" filter="url(#dshadow)"/>
+<rect x="78.84" y="274" width="66" height="22" rx="3" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+<text x="111.84" y="283" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">A3</text>
+<text x="111.84" y="295" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.85)">Name (nose)</text>
+<line x1="112" y1="298" x2="112" y2="328" stroke="#006db7" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.7"/>
+<circle cx="112" cy="328" r="3" fill="#006db7" opacity="0.8"/>
+<rect x="169.0" y="399" width="70" height="26" rx="4" fill="#c62828" opacity="0.92" filter="url(#dshadow)"/>
+<rect x="171.0" y="401" width="66" height="22" rx="3" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+<text x="204.0" y="410" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">B1</text>
+<text x="204.0" y="422" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.85)">FAA N00000 REQUIRED</text>
+<line x1="204" y1="399" x2="204" y2="370" stroke="#c62828" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.7"/>
+<circle cx="204" cy="370" r="3" fill="#c62828" opacity="0.8"/>
+<rect x="120.60000000000002" y="154.2" width="70" height="26" rx="4" fill="#c62828" opacity="0.92" filter="url(#dshadow)"/>
+<rect x="122.60000000000002" y="156.2" width="66" height="22" rx="3" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+<text x="155.60000000000002" y="165.2" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">B2</text>
+<text x="155.60000000000002" y="177.2" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.85)">N00000</text>
+<line x1="191" y1="167" x2="188" y2="167" stroke="#c62828" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.7"/>
+<circle cx="188" cy="167" r="3" fill="#c62828" opacity="0.8"/>
+<rect x="224.60000000000002" y="499.79999999999995" width="70" height="26" rx="4" fill="#c62828" opacity="0.92" filter="url(#dshadow)"/>
+<rect x="226.60000000000002" y="501.79999999999995" width="66" height="22" rx="3" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+<text x="259.6" y="510.79999999999995" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">B2</text>
+<text x="259.6" y="522.8" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.85)">N00000</text>
+<line x1="225" y1="513" x2="228" y2="513" stroke="#c62828" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.7"/>
+<circle cx="228" cy="513" r="3" fill="#c62828" opacity="0.8"/>
+<rect x="100.6" y="265" width="70" height="26" rx="4" fill="#1a6870" opacity="0.92" filter="url(#dshadow)"/>
+<rect x="102.6" y="267" width="66" height="22" rx="3" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+<text x="135.6" y="276" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">C1</text>
+<text x="135.6" y="288" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.85)">Alliance plate</text>
+<line x1="136" y1="291" x2="136" y2="326" stroke="#1a6870" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.7"/>
+<circle cx="136" cy="326" r="3" fill="#1a6870" opacity="0.8"/>
+<rect x="118.6" y="259" width="70" height="26" rx="4" fill="#c8a84b" opacity="0.92" filter="url(#dshadow)"/>
+<rect x="120.6" y="261" width="66" height="22" rx="3" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+<text x="153.6" y="270" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">C2</text>
+<text x="153.6" y="282" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.85)">FF Badge</text>
+<line x1="154" y1="285" x2="154" y2="326" stroke="#c8a84b" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.7"/>
+<circle cx="154" cy="326" r="3" fill="#c8a84b" opacity="0.8"/>
+<rect x="226.60000000000002" y="299" width="70" height="26" rx="4" fill="#6a1b9a" opacity="0.92" filter="url(#dshadow)"/>
+<rect x="228.60000000000002" y="301" width="66" height="22" rx="3" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+<text x="261.6" y="310" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">C3</text>
+<text x="261.6" y="322" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.85)">宁静 (port aft)</text>
+<line x1="262" y1="325" x2="262" y2="332" stroke="#6a1b9a" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.7"/>
+<circle cx="262" cy="332" r="3" fill="#6a1b9a" opacity="0.8"/>
+<rect x="233.8" y="417" width="70" height="26" rx="4" fill="#1a6870" opacity="0.92" filter="url(#dshadow)"/>
+<rect x="235.8" y="419" width="66" height="22" rx="3" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+<text x="268.8" y="428" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">C10</text>
+<text x="268.8" y="440" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.85)">Eavesdown (belly)</text>
+<line x1="269" y1="417" x2="269" y2="370" stroke="#1a6870" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.7"/>
+<circle cx="269" cy="370" r="3" fill="#1a6870" opacity="0.8"/>
+<rect x="179.8" y="377" width="70" height="26" rx="4" fill="#c8a84b" opacity="0.92" filter="url(#dshadow)"/>
+<rect x="181.8" y="379" width="66" height="22" rx="3" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+<text x="214.8" y="388" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">C7</text>
+<text x="214.8" y="400" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.85)">Firefly-class script</text>
+<line x1="215" y1="377" x2="215" y2="358" stroke="#c8a84b" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.7"/>
+<circle cx="215" cy="358" r="3" fill="#c8a84b" opacity="0.8"/>
+<rect x="269.8" y="285" width="70" height="26" rx="4" fill="#8b3a1a" opacity="0.92" filter="url(#dshadow)"/>
+<rect x="271.8" y="287" width="66" height="22" rx="3" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+<text x="304.8" y="296" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">E3</text>
+<text x="304.8" y="308" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.85)">...misbehave (fun)</text>
+<line x1="305" y1="311" x2="305" y2="330" stroke="#8b3a1a" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.7"/>
+<circle cx="305" cy="330" r="3" fill="#8b3a1a" opacity="0.8"/>
+<rect x="129.4" y="182.2" width="70" height="26" rx="4" fill="#c62828" opacity="0.92" filter="url(#dshadow)"/>
+<rect x="131.4" y="184.2" width="66" height="22" rx="3" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+<text x="164.4" y="193.2" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">D5</text>
+<text x="164.4" y="205.2" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.85)">RBF</text>
+<rect x="201.4" y="471.79999999999995" width="70" height="26" rx="4" fill="#c62828" opacity="0.92" filter="url(#dshadow)"/>
+<rect x="203.4" y="473.79999999999995" width="66" height="22" rx="3" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+<text x="236.4" y="482.79999999999995" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">D5</text>
+<text x="236.4" y="494.79999999999995" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.85)">RBF</text>
+<rect x="179.8" y="128.2" width="70" height="26" rx="4" fill="#c62828" opacity="0.92" filter="url(#dshadow)"/>
+<rect x="181.8" y="130.2" width="66" height="22" rx="3" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+<text x="214.8" y="139.2" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">D7</text>
+<text x="214.8" y="151.2" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.85)">EDF DANGER</text>
+<rect x="179.8" y="525.8" width="70" height="26" rx="4" fill="#c62828" opacity="0.92" filter="url(#dshadow)"/>
+<rect x="181.8" y="527.8" width="66" height="22" rx="3" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+<text x="214.8" y="536.8" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">D7</text>
+<text x="214.8" y="548.8" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.85)">EDF DANGER</text>
+<rect x="118.6" y="399" width="70" height="26" rx="4" fill="#d06820" opacity="0.92" filter="url(#dshadow)"/>
+<rect x="120.6" y="401" width="66" height="22" rx="3" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+<text x="153.6" y="410" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">D6</text>
+<text x="153.6" y="422" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.85)">No Hand Launch</text>
+<text x="227" y="748" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#888888">TOP VIEW — DECAL PLACEMENT MAP</text>
+<text x="24" y="764" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="#888888">NOSE →</text>
+<text x="369" y="764" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="#888888">← TAIL</text>
+<rect x="752" y="112" width="432" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
+<rect x="760" y="120" width="416" height="158" rx="6" fill="#fffdf6" stroke="#006db7" stroke-width="2"/>
+<rect x="760" y="120" width="416" height="28" rx="6" fill="#006db7"/>
+<rect x="760" y="136" width="416" height="12" fill="#006db7"/>
+<text x="968" y="139" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="11" fill="#ffffff">PARTS NEEDED</text>
+<rect x="768" y="145" width="26" height="16" rx="4" fill="#f5c518" stroke="#222222" stroke-width="1"/>
+<text x="781" y="158" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">▪</text>
+<text x="800" y="158" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Decal sheet (printed)</text>
+<rect x="768" y="167" width="26" height="16" rx="4" fill="#c62828" stroke="#222222" stroke-width="1"/>
+<text x="781" y="180" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">▪</text>
+<text x="800" y="180" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Scissors / craft knife</text>
+<rect x="768" y="189" width="26" height="16" rx="4" fill="#1a6870" stroke="#222222" stroke-width="1"/>
+<text x="781" y="202" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">▪</text>
+<text x="800" y="202" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Warm water + soft cloth</text>
+<rect x="768" y="211" width="26" height="16" rx="4" fill="#006db7" stroke="#222222" stroke-width="1"/>
+<text x="781" y="224" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">▪</text>
+<text x="800" y="224" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Micro-Sol decal solution</text>
+<rect x="768" y="233" width="26" height="16" rx="4" fill="#2e7d32" stroke="#222222" stroke-width="1"/>
+<text x="781" y="246" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#ffffff">▪</text>
+<text x="800" y="246" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Clear lacquer (satin)</text>
+<rect x="760" y="286" width="416" height="264" rx="6" fill="#fffdf6" stroke="#888888" stroke-width="1.5"/>
+<rect x="760" y="286" width="416" height="28" rx="6" fill="#888888"/>
+<rect x="760" y="302" width="416" height="12" fill="#888888"/>
+<text x="968" y="305" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="11" fill="#ffffff">INSTRUCTIONS</text>
+<circle cx="776" cy="321" r="9" fill="#006db7"/>
+<text x="776" y="325" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="10" fill="#ffffff">1</text>
+<text x="792" y="326" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Print decal sheet on waterslide paper</text>
+<circle cx="776" cy="345" r="9" fill="#006db7"/>
+<text x="776" y="349" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="10" fill="#ffffff">2</text>
+<text x="792" y="350" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Seal with 2 coats clear lacquer — dry 30min</text>
+<circle cx="776" cy="369" r="9" fill="#006db7"/>
+<text x="776" y="373" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="10" fill="#ffffff">3</text>
+<text x="792" y="374" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Cut each decal along pink dashed lines</text>
+<circle cx="776" cy="393" r="9" fill="#006db7"/>
+<text x="776" y="397" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="10" fill="#ffffff">4</text>
+<text x="792" y="398" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Soak in warm water until decal slides (30s)</text>
+<circle cx="776" cy="417" r="9" fill="#006db7"/>
+<text x="776" y="421" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="10" fill="#ffffff">5</text>
+<text x="792" y="422" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Slide decal off backing onto wet surface</text>
+<circle cx="776" cy="441" r="9" fill="#006db7"/>
+<text x="776" y="445" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="10" fill="#ffffff">6</text>
+<text x="792" y="446" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Squeegee bubbles from centre outward</text>
+<circle cx="776" cy="465" r="9" fill="#006db7"/>
+<text x="776" y="469" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="10" fill="#ffffff">7</text>
+<text x="792" y="470" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Let dry 24h · seal all decals with clear coat</text>
+<circle cx="776" cy="489" r="9" fill="#006db7"/>
+<text x="776" y="493" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="10" fill="#ffffff">8</text>
+<text x="792" y="494" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">B1 reg block: MUST be on exterior, visible</text>
+<circle cx="776" cy="513" r="9" fill="#006db7"/>
+<text x="776" y="517" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="10" fill="#ffffff">9</text>
+<text x="792" y="518" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">B4 reg block: place inside cockpit bay</text>
+<rect x="760" y="562" width="416" height="80" rx="4" fill="#fff8dc" stroke="#c62828" stroke-width="2"/>
+<text x="770" y="578" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="10" fill="#c62828">⚠  FAA LEGAL REQUIREMENT</text>
+<text x="770" y="592" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">Registration number N00000 MUST be</text>
+<text x="770" y="606" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">displayed on the EXTERIOR of the aircraft.</text>
+<text x="770" y="620" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">Characters must be legible. Minimum</text>
+<text x="770" y="634" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c62828">REPLACE N00000 with your FAA number!</text>
+<rect x="0" y="872" width="1200" height="28" fill="#006db7"/>
+<text x="600" y="890" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
+</svg>
