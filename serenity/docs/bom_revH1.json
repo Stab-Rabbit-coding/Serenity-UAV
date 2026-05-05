@@ -171,10 +171,10 @@
     },
     {
       "ref": "SERVO-NAC",
-      "desc": "MG90S nacelle tilt servo",
+      "desc": "MG90S nacelle tilt servo \u2014 120\u00b0 bracket modification",
       "qty": 2,
       "mass_g": 9,
-      "notes": "50Hz PWM, \u00b190\u00b0 travel"
+      "notes": "50Hz PWM. Travel extended to 120\u00b0 via bracket geometry: 0\u00b0=VTOL, 90\u00b0=fwd flight, 120\u00b0=reverse thrust (30\u00b0 past horizontal). MG90S physical range supports this; bracket hard-stop at 120\u00b0. FC soft-limits: 0\u201390\u00b0 normal mode, 90\u2013115\u00b0 reverse/brake mode."
     },
     {
       "ref": "GEAR-NOZZLE",
@@ -334,15 +334,24 @@
   "payload_system": [
     {
       "ref": "SERVO-PAY",
-      "desc": "SG90 payload release servo",
+      "desc": "SG90 payload release / winch control servo",
       "qty": 1,
-      "mass_g": 9
+      "mass_g": 9,
+      "notes": "Controls winch motor direction and brake via DRV8833"
+    },
+    {
+      "ref": "SERVO-DOOR",
+      "desc": "SG90 clamshell cargo door actuator servo",
+      "qty": 1,
+      "mass_g": 9,
+      "notes": "Drives push-pull bell-crank that opens/closes both clamshell door halves simultaneously. Spring-assist opening, servo pull-close."
     },
     {
       "ref": "WINCH-MOT",
-      "desc": "N20 6V DC winch motor",
+      "desc": "N20 6V DC winch motor \u2014 300:1 gear ratio",
       "qty": 1,
-      "mass_g": 10
+      "mass_g": 10,
+      "notes": "300:1 gearing gives ~8N lift capacity for 250g cargo + cradle mass. Spool holds 1.5m of 0.5mm Dyneema SK75 line."
     },
     {
       "ref": "DRV8833",
@@ -351,11 +360,35 @@
       "mass_g": 1
     },
     {
-      "ref": "PAYLOAD-DOOR",
-      "desc": "Payload bay door PETG 112\u00d742mm",
+      "ref": "CARGO-GONDOLA",
+      "desc": "Cargo bay gondola shell PETG \u2014 112\u00d785\u00d722mm belly pod",
       "qty": 1,
-      "mass_g": 8,
-      "stl": "payload_bay_door.stl"
+      "mass_g": 22,
+      "stl": "cargo_gondola_shell.stl",
+      "notes": "Replaces flat belly panel. Interior 101.6\u00d776.2\u00d776.2mm (4\"\u00d73\"\u00d73\"). Belly pod protrudes 18mm below hull line \u2014 screen-accurate Serenity cargo module profile. Bonds to hull sections B and C with 5-min epoxy."
+    },
+    {
+      "ref": "CLAMSHELL-DOOR",
+      "desc": "Clamshell cargo door halves PETG \u2014 2\u00d7 mirrored halves",
+      "qty": 2,
+      "mass_g": 7,
+      "stl": "clamshell_door_half.stl",
+      "notes": "Each half hinges on 3mm CF pin at gondola centreline. Spring-loaded to open; SG90 linkage closes and latches. Seal lip with 1.5mm closed-cell foam tape."
+    },
+    {
+      "ref": "CARGO-CRADLE",
+      "desc": "Cargo cradle + auto-latch PETG \u2014 accepts 4\"\u00d73\"\u00d73\" box",
+      "qty": 1,
+      "mass_g": 10,
+      "stl": "cargo_cradle_autolatch.stl",
+      "notes": "Suspended on Dyneema line from winch. Spring-loaded corner clips auto-latch around box when cradle reaches top of bay. Unlatches when cradle descends 5mm (gravity + detent). Two-axis levelling rods keep load stable during winch traverse."
+    },
+    {
+      "ref": "WINCH-LINE",
+      "desc": "Dyneema SK75 0.5mm braid 2m length",
+      "qty": 1,
+      "mass_g": 1,
+      "notes": "Break strength 80N. Attach to cradle eyelet with double-bowline. Wind 1.5m onto spool, reserve 0.5m slack."
     },
     {
       "ref": "SKID-FOOT",
@@ -363,6 +396,44 @@
       "qty": 4,
       "mass_g": 4,
       "stl": "landing_skid_foot.stl"
+    }
+  ],
+  "obstacle_avoidance": [
+    {
+      "ref": "TOF-VL53L5CX",
+      "desc": "ST VL53L5CX 8×8 multizone ToF sensor — 65° FoV, 0.4–4m",
+      "qty": 6,
+      "mass_g": 2,
+      "notes": "6 sensors: S1-Forward (sta 25mm nose), S2-Aft (sta 440mm engine bell ring), S3-Port (sta 200mm hull side), S4-Stbd (sta 200mm hull side mirror), S5-Zenith (sta 180mm dorsal keel apex), S6-Nadir (sta 160mm forward belly). Each flush-mounted behind 5mm PMMA optical window. Package 6.4×3.0×1.5mm. I2C default 0x52; unique addresses assigned at boot via XSHUT multiplexing."
+    },
+    {
+      "ref": "TOF-MUX",
+      "desc": "TCA9548A 8-channel I2C mux — routes 6 VL53L5CX sensors",
+      "qty": 1,
+      "mass_g": 1,
+      "notes": "I2C address 0x70. Select channel 0–5 to address each sensor. On shared 25×20mm PETG-mounted PCB with MCP23008."
+    },
+    {
+      "ref": "TOF-GPIO",
+      "desc": "MCP23008 8-port I2C GPIO expander — XSHUT control",
+      "qty": 1,
+      "mass_g": 1,
+      "notes": "I2C address 0x20. GP0–GP5 drive XSHUT lines. At boot: all low (sensors shutdown) → enable one at a time, assign address, disable. Shared PCB with TCA9548A. Connected to Node 3 I2C bus (Panel D access)."
+    },
+    {
+      "ref": "TOF-MOUNT",
+      "desc": "Sensor PETG flush-mount ×6 — 5mm circular aperture",
+      "qty": 6,
+      "mass_g": 1,
+      "stl": "tof_flush_mount_5mm.stl",
+      "notes": "Press-fit into 6.5mm hull cutout. Sensor seats on 0.3mm shoulder. 0.5mm PMMA disc (cut from 1.5mm clear acrylic sheet) glued over aperture with UV cure adhesive. Mounts look like small hull portholes — screen-accurate Serenity detail."
+    },
+    {
+      "ref": "TOF-CABLE",
+      "desc": "VL53L5CX breakout cable 4-wire JST-SH1.0 — 300mm",
+      "qty": 6,
+      "mass_g": 1,
+      "notes": "GND/VCC/SDA/SCL. Route through foam conduit where possible; otherwise cable-clip to hull ribs. All 6 terminate at TCA9548A/MCP23008 PCB in Panel D bay."
     }
   ],
   "radios_sensors": [
@@ -479,17 +550,65 @@
       "neck_cargo_ratio": 0.32
     }
   },
-  "total_airframe_mass_g": 1414,
+  "cargo_bay": {
+    "interior_mm": "101.6 \u00d7 76.2 \u00d7 76.2",
+    "interior_in": "4.0 \u00d7 3.0 \u00d7 3.0",
+    "gondola_protrusion_mm": 18,
+    "gondola_note": "18mm belly pod protrusion below hull line \u2014 matches Serenity cargo module profile",
+    "door_type": "clamshell (2 halves fold down, SG90-actuated bell-crank)",
+    "winch_cable_m": 1.5,
+    "winch_line": "Dyneema SK75 0.5mm",
+    "max_cargo_mass_g": 250,
+    "cradle_type": "auto-latch PETG corner clips \u2014 no manual attachment needed"
+  },
+  "nacelle_tilt": {
+    "vtol_deg": 0,
+    "forward_flight_deg": 90,
+    "reverse_mode_deg": 115,
+    "hard_stop_deg": 120,
+    "servo": "MG90S (unchanged) \u2014 bracket geometry modified for 120\u00b0 travel",
+    "fc_soft_limit_normal": "0\u201390\u00b0",
+    "fc_soft_limit_reverse": "90\u2013115\u00b0 (reverse/brake mode only)",
+    "reverse_thrust_at_115deg": "nacelle thrust \u00d7 sin(25\u00b0) \u00d7 2 = 1700 \u00d7 0.423 \u00d7 2 = 1438g reverse component",
+    "lift_at_115deg": "nacelle thrust \u00d7 cos(25\u00b0) \u00d7 2 = 1700 \u00d7 0.906 \u00d7 2 = 3080g lift \u2014 sufficient for hover with reduced payload"
+  },
+  "obstacle_avoidance_notes": {
+    "sensor": "VL53L5CX 8\u00d78 multizone ToF, 65\u00b0 FoV, 0.4\u20134m range",
+    "count": 6,
+    "positions": {
+      "S1_forward":  "station 25mm  \u2014 nose bayonet ring, 0\u00b0 azimuth",
+      "S2_aft":      "station 440mm \u2014 engine bell rim, 180\u00b0 azimuth",
+      "S3_port":     "station 200mm \u2014 port hull side at waterline, 270\u00b0 azimuth",
+      "S4_stbd":     "station 200mm \u2014 stbd hull side at waterline, 90\u00b0 azimuth",
+      "S5_zenith":   "station 180mm \u2014 dorsal keel apex, 90\u00b0 elevation",
+      "S6_nadir":    "station 160mm \u2014 forward belly blister, -90\u00b0 elevation"
+    },
+    "i2c_mux": "TCA9548A ch 0\u20135",
+    "xshut_gpio": "MCP23008 GP0\u2013GP5",
+    "host_node": "Node 3 (Panel D) I2C bus",
+    "aperture": "5mm PMMA disc flush-mount \u2014 looks like hull porthole",
+    "indoor_range_m": 4,
+    "update_rate_hz": 15
+  },
+  "total_airframe_mass_g": 1473,
   "total_auw_g": {
-    "note": "EPS void formers and wax are consumed/removed after build and do not contribute to flying weight. ACCESS-EPOXY is consumed during build.",
-    "base_dry_no_battery_g": 1414,
-    "auw_empty_6S_4000mAh_410g": 1824,
-    "auw_cargo_6S_2800mAh_295g_plus_250g_payload": 1959
+    "note": "EPS void formers and wax consumed during build. +59g vs Rev H base for: cargo gondola (+14g), door servo (+9g), cargo cradle (+10g), ToF sensors (+15g), I2C mux PCB (+4g), sensor mounts (+7g).",
+    "base_dry_no_battery_g": 1473,
+    "auw_empty_6S_4000mAh_410g": 1883,
+    "tw_empty": 2.01,
+    "auw_cargo_6S_2800mAh_295g_plus_250g_payload": 2018,
+    "tw_cargo": 1.87,
+    "auw_cargo_light_6S_1800mAh_180g_plus_250g": 1903,
+    "tw_cargo_light": 1.99,
+    "note_cargo": "Use 6S 1800mAh (180g) for T/W\u22482.0 on cargo missions. 2800mAh gives T/W 1.87 \u2014 acceptable for slow indoor cargo ops where max throttle is rarely needed."
   },
   "build_notes": {
     "foam_fill_step": 23,
     "void_former_step": 22,
     "access_panel_step": 24,
+    "obstacle_sensor_step": 25,
+    "cargo_bay_step": 26,
+    "total_build_steps": 27,
     "foam_system": "X-30 2-part polyurethane, 2 lb/ft\u00b3, 4\u00d7 expansion",
     "foam_pot_life_sec": 120,
     "foam_cure_hr": 24,
