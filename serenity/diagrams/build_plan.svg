@@ -87,7 +87,7 @@
 <rect x="614" y="189" width="290" height="145" rx="5" fill="#4ade800c" stroke="#4ade80" stroke-width="1.5"/>
 <rect x="622" y="197" width="68" height="18" rx="3" fill="#4ade8025" stroke="#4ade80" stroke-width="1"/>
 <text x="656" y="210" text-anchor="middle" font-size="8" fill="#4ade80" font-weight="bold">PHASE 6</text>
-<text x="698" y="210" font-size="10" fill="#4ade80" font-weight="bold">WIRING & POWER</text>
+<text x="698" y="210" font-size="10" fill="#4ade80" font-weight="bold">WIRING &amp; POWER</text>
 <text x="624" y="227" font-size="7.5" fill="rgba(255,255,255,0.88)">• Solder power bus · XT60 PDB · 12AWG silicone to ESCs</text>
 <text x="624" y="242" font-size="7.5" fill="rgba(255,255,255,0.88)">• Install 5V BEC · verify 5.0V ±0.1V under load</text>
 <text x="624" y="257" font-size="7.5" fill="rgba(255,255,255,0.88)">• Route JST-GH Ethernet 150mm (port keel) · CAN FD 120mm (stbd keel)</text>
@@ -119,7 +119,7 @@
 <text x="656" y="363" text-anchor="middle" font-size="8" fill="#4ade80" font-weight="bold">PHASE 9</text>
 <text x="698" y="363" font-size="10" fill="#4ade80" font-weight="bold">FIRST FLIGHT</text>
 <text x="624" y="380" font-size="7.5" fill="rgba(255,255,255,0.88)">• Pre-flight ABCD: Airframe · Battery · Comms · Docs (FAA Pt107)</text>
-<text x="624" y="395" font-size="7.5" fill="rgba(255,255,255,0.88)">• Hover 1m AGL · 30s · land · inspect ESC temps <60°C</text>
+<text x="624" y="395" font-size="7.5" fill="rgba(255,255,255,0.88)">• Hover 1m AGL · 30s · land · inspect ESC temps &lt;60°C</text>
 <text x="624" y="410" font-size="7.5" fill="rgba(255,255,255,0.88)">• Hover 3m: test ±10° roll/pitch/yaw · verify altitude hold</text>
 <text x="624" y="425" font-size="7.5" fill="rgba(255,255,255,0.88)">• Transition ≥26ft AGL: monitor altitude ±5ft during nacelle sweep</text>
 <text x="624" y="440" font-size="7.5" fill="rgba(255,255,255,0.88)">• Record telemetry: verify all sensor values nominal</text>

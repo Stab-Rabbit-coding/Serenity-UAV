@@ -27,7 +27,7 @@
 <text x="1112" y="29" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">STEP</text>
 <text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">15 / 18</text>
 <rect x="0" y="64" width="1200" height="40" fill="#dde4ea" rx="0"/>
-<text x="24" y="90" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 7 — SOFTWARE FLASH & CONFIGURE</text>
+<text x="24" y="90" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 7 — SOFTWARE FLASH &amp; CONFIGURE</text>
 <text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">Pico 2 firmware · CM4 OS · packages · TPM</text>
 <rect x="0" y="872" width="1200" height="28" fill="#006db7"/>
 <text x="600" y="890" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
@@ -101,9 +101,9 @@
 <text x="541" y="402" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#ff7518">RPi OS Lite 64-bit bookworm</text>
 <rect x="56" y="568" width="700" height="120" rx="6" fill="#1e1e2e" stroke="#006db7" stroke-width="1.5"/>
 <text x="66" y="584" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#2e7d32">$ CM4 first-boot commands (SSH in after flash)</text>
-<text x="68" y="600" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#2e7d32" font-family="'OpenDyslexic Mono','OpenDyslexicMono',monospace">sudo apt install mavlink-router python3-pip tpm2-tools tpm2-tss</text>
-<text x="68" y="618" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#f5c518" font-family="'OpenDyslexic Mono','OpenDyslexicMono',monospace">pip3 install mavsdk pymavlink python-can dronecan</text>
-<text x="68" y="636" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#c8dff0" font-family="'OpenDyslexic Mono','OpenDyslexicMono',monospace">sudo raspi-config  # Enable SPI, I2C, SSH, CAN interfaces</text>
-<text x="68" y="654" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#e1bee7" font-family="'OpenDyslexic Mono','OpenDyslexicMono',monospace">tpm2_getcap properties-fixed  # Verify TPM detected</text>
-<text x="68" y="672" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#c8e6c9" font-family="'OpenDyslexic Mono','OpenDyslexicMono',monospace">systemctl enable mavlink-router  # Auto-start on boot</text>
+<text x="68" y="600" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#2e7d32" >sudo apt install mavlink-router python3-pip tpm2-tools tpm2-tss</text>
+<text x="68" y="618" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#f5c518" >pip3 install mavsdk pymavlink python-can dronecan</text>
+<text x="68" y="636" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#c8dff0" >sudo raspi-config  # Enable SPI, I2C, SSH, CAN interfaces</text>
+<text x="68" y="654" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#e1bee7" >tpm2_getcap properties-fixed  # Verify TPM detected</text>
+<text x="68" y="672" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#c8e6c9" >systemctl enable mavlink-router  # Auto-start on boot</text>
 </svg>

@@ -40,7 +40,7 @@
 <text x="792" y="282" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Pre-flight ABCD: Airframe · Battery · Comms · Documentation</text>
 <circle cx="776" cy="301" r="9" fill="#006db7"/>
 <text x="776" y="305" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
-<text x="792" y="306" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Hover 1m AGL · hold 30s · land · inspect ESC temps <60°C</text>
+<text x="792" y="306" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Hover 1m AGL · hold 30s · land · inspect ESC temps &lt;60°C</text>
 <circle cx="776" cy="325" r="9" fill="#006db7"/>
 <text x="776" y="329" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
 <text x="792" y="330" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Hover 3m: test ±10° roll/pitch/yaw · verify altitude hold</text>
