@@ -25,7 +25,7 @@
     (date "2025")
     (rev "E")
     (company "Steve Griffing PE(CSE) CISSP-ISSEP CPP")
-    (comment_1 "Serenity-Class Tiltrotor UAV")
+    (comment_1 "SUPERSEDED by SENSORHAT-1 in Rev H — retained for reference only")
     (comment_2 "CC BY 4.0 — creativecommons.org/licenses/by/4.0")
     (comment_3 "Pico 2 sensor hat: IMU+Baro+GPS+CAN+ETH+TPM+FPV  65x48mm 4-layer")
     (comment_4 "Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0")

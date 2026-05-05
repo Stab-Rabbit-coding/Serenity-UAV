@@ -11,11 +11,11 @@
     (title "TRIHAT-1")
     (date "2025") (rev "E")
     (company "Steve Griffing PE(CSE) CISSP-ISSEP CPP")
-    (comment_1 "Serenity-Class Tiltrotor UAV")
+    (comment_1 "SUPERSEDED by SENSORHAT-1 in Rev H — retained for reference only")
     (comment_2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
-    (comment_3 "See LICENSE_AND_ATTRIBUTION.md for full credits")
+    (comment_3 "Active Rev H board: serenity/kicad/SENSORHAT-1.kicad_sch")
     (comment_4 "Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0")
   )
-  ; ── Open in KiCad 7.x Schematic Editor to complete placement ──
-  ; ── Component values and net assignments are in the .kicad_pcb ─
+  ; ── SUPERSEDED: This Rev E design is replaced by SENSORHAT-1 in Rev H ──
+  ; ── Do not use for new builds. See SENSORHAT-1.kicad_pcb instead. ─────
 )
