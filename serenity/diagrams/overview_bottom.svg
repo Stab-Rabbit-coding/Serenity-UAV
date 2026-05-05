@@ -72,4 +72,26 @@
 <text x="105.0" y="234.0" text-anchor="end" font-family="'OpenDyslexic','OpenDyslexic Bold',sans-serif" font-size="9" fill="rgba(255,255,255,0.82)">NOSE</text>
 <text x="686.5" y="234.0" font-family="'OpenDyslexic','OpenDyslexic Bold',sans-serif" font-size="9" fill="rgba(255,255,255,0.82)">TAIL</text>
 <text x="10" y="454" font-family="'OpenDyslexic Mono','OpenDyslexicMono',monospace" font-size="7" fill="rgba(163,230,53,0.85)">© 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP CC BY 4.0  Hull: Peter Farell CC BY 4.0  Nozzle: BamJr CC BY 4.0  Fan engineering work</text>
+<g id="belly-panel-callouts">
+  <line x1="75" y1="290" x2="75" y2="324" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <rect x="27" y="324" width="108" height="34" rx="4" fill="#c0392b" opacity="0.92"/>
+  <text x="81" y="339" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#ffffff">A NOSE CAP</text>
+  <text x="81" y="353" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#ffffffcc">bayonet</text>
+  <line x1="265" y1="250" x2="265" y2="284" stroke="#27ae60" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <rect x="217" y="284" width="108" height="34" rx="4" fill="#27ae60" opacity="0.92"/>
+  <text x="271" y="299" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#ffffff">C CARGO BELLY</text>
+  <text x="271" y="313" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#ffffffcc">hinged (main)</text>
+  <line x1="450" y1="282" x2="450" y2="316" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <rect x="402" y="316" width="108" height="34" rx="4" fill="#e67e22" opacity="0.92"/>
+  <text x="456" y="331" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#ffffff">E AFT SERVICE</text>
+  <text x="456" y="345" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#ffffffcc">belly access</text>
+  <line x1="538" y1="295" x2="538" y2="329" stroke="#16a085" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <rect x="490" y="329" width="108" height="34" rx="4" fill="#16a085" opacity="0.92"/>
+  <text x="544" y="344" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#ffffff">F ENGINE BELL</text>
+  <text x="544" y="358" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#ffffffcc">bayonet</text>
+  <rect x="8" y="8" width="268" height="54" rx="5" fill="rgba(255,255,255,0.93)" stroke="#607080" stroke-width="1"/>
+  <text x="142" y="24" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#333">MAINTENANCE SEQUENCE (BELLY VIEW)</text>
+  <text x="142" y="40" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#555">F -> E -> D -> B -> A -> C (aft to forward)</text>
+  <text x="142" y="54" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="#888">Remove battery before opening any panel</text>
+</g>
 </svg>

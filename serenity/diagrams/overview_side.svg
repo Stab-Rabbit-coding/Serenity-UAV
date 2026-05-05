@@ -74,4 +74,45 @@
 <text x="65.5" y="244.0" text-anchor="end" font-family="'OpenDyslexic','OpenDyslexic Bold',sans-serif" font-size="8" fill="rgba(255,255,255,0.82)">NOSE</text>
 <text x="672.9" y="244.0" font-family="'OpenDyslexic','OpenDyslexic Bold',sans-serif" font-size="8" fill="rgba(255,255,255,0.82)">TAIL</text>
 <text x="10" y="414" font-family="'OpenDyslexic Mono','OpenDyslexicMono',monospace" font-size="7" fill="rgba(163,230,53,0.85)">© 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP CC BY 4.0  Hull: Peter Farell CC BY 4.0  Nozzle: BamJr CC BY 4.0  Fan engineering work</text>
+<g id="access-panel-callouts">
+  <line x1="55" y1="265" x2="55" y2="239" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <rect x="13" y="209" width="96" height="34" rx="4" fill="#c0392b" opacity="0.92"/>
+  <text x="61" y="224" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#ffffff">A NOSE CAP</text>
+  <text x="61" y="238" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#ffffffcc">bayonet</text>
+  <line x1="158" y1="218" x2="158" y2="192" stroke="#2980b9" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <rect x="116" y="162" width="96" height="34" rx="4" fill="#2980b9" opacity="0.92"/>
+  <text x="164" y="177" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#ffffff">B DORSAL FWD</text>
+  <text x="164" y="191" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#ffffffcc">4xM2.5</text>
+  <line x1="263" y1="340" x2="263" y2="400" stroke="#27ae60" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <rect x="221" y="370" width="96" height="34" rx="4" fill="#27ae60" opacity="0.92"/>
+  <text x="269" y="385" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#ffffff">C CARGO BELLY</text>
+  <text x="269" y="399" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#ffffffcc">hinged</text>
+  <line x1="363" y1="218" x2="363" y2="192" stroke="#8e44ad" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <rect x="321" y="162" width="96" height="34" rx="4" fill="#8e44ad" opacity="0.92"/>
+  <text x="369" y="177" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#ffffff">D DORSAL AFT</text>
+  <text x="369" y="191" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#ffffffcc">magnetic</text>
+  <line x1="452" y1="226" x2="452" y2="286" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <rect x="410" y="256" width="96" height="34" rx="4" fill="#e67e22" opacity="0.92"/>
+  <text x="458" y="271" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#ffffff">E AFT SERVICE</text>
+  <text x="458" y="285" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#ffffffcc">4xM2.5</text>
+  <line x1="540" y1="258" x2="540" y2="232" stroke="#16a085" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <rect x="498" y="202" width="96" height="34" rx="4" fill="#16a085" opacity="0.92"/>
+  <text x="546" y="217" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#ffffff">F ENGINE BELL</text>
+  <text x="546" y="231" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#ffffffcc">bayonet</text>
+  <rect x="8" y="8" width="202" height="82" rx="5" fill="rgba(255,255,255,0.93)" stroke="#607080" stroke-width="1"/>
+  <text x="109" y="24" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#333">ACCESS PANELS</text>
+  <text x="109" y="38" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#555">Remove battery before opening any panel</text>
+  <rect x="12" y="58" width="28" height="16" rx="3" fill="#c0392b"/>
+  <text x="26" y="70" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#fff">A</text>
+  <rect x="43" y="58" width="28" height="16" rx="3" fill="#2980b9"/>
+  <text x="57" y="70" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#fff">B</text>
+  <rect x="74" y="58" width="28" height="16" rx="3" fill="#27ae60"/>
+  <text x="88" y="70" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#fff">C</text>
+  <rect x="105" y="58" width="28" height="16" rx="3" fill="#8e44ad"/>
+  <text x="119" y="70" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#fff">D</text>
+  <rect x="136" y="58" width="28" height="16" rx="3" fill="#e67e22"/>
+  <text x="150" y="70" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#fff">E</text>
+  <rect x="167" y="58" width="28" height="16" rx="3" fill="#16a085"/>
+  <text x="181" y="70" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#fff">F</text>
+</g>
 </svg>
