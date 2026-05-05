@@ -1,0 +1,21 @@
+
+=== Journal Entry 2026-04-22T11:20:06.046848+00:00 ===
+2026-04-22-11-20-04-serenity-tiltrotor-drone-design.txt
+[Comprehensive UAV engineering design session: Serenity Firefly-class tiltrotor drone with dual 70mm EDF nacelles, 40mm fuselage EDF with variable nozzle, Raspberry Pi Pico 2 + CM4 companion computer, custom PCBs, security hardware, RF systems, payload system. Includes JSX artifacts, KiCad PCB files, STL files, SVG diagrams, LEGO-style build guide, license documentation.]
+
+
+
+
+=== Journal Entry 2026-04-28T14:10:03.343967+00:00 ===
+2026-04-28-14-10-02-serenity-tiltrotor-drone-design.txt
+[Comprehensive UAV engineering design session: Serenity Firefly-class tiltrotor drone with dual 70mm EDF nacelles, 40mm fuselage EDF with variable nozzle, XIAO RP2350 sensor hat, CM4 companion computer, custom PCBs, security hardware, RF systems, payload system, multi-bus avionics (ETH+CAN FD+RS-485+MIL-STD-1553B), ESC telemetry (BLHeli/AM32/BDSHOT/DroneCAN/KISS), full bus isolation, LEGO-style build guide, decal sheet, KiCad PCBs, STL files, license documentation.]
+
+
+
+
+=== Journal Entry 2026-05-03T20:24:06.014634+00:00 ===
+2026-05-03-20-24-05-serenity-tiltrotor-drone-design.txt
+[Comprehensive UAV engineering design session: Serenity Firefly-class tiltrotor drone with dual EDF nacelles, fuselage EDF, XIAO RP2350 sensor hat, CM4 companion computer, custom PCBs, security hardware, RF systems, payload system, multi-bus avionics (ETH+CAN FD+RS-485+MIL-STD-1553B), ESC telemetry (BLHeli/AM32/BDSHOT/DroneCAN/KISS), full bus isolation, 8-node distributed avionics, LEGO-style build guide, decal sheet, KiCad PCBs, STL files, license documentation. Latest: scaling to 18-inch hull with canonical proportions.]
+
+
+

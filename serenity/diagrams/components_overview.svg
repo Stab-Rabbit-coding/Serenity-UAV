@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Serenity-Class Tiltrotor — Component Overview -->
+<!-- © 2025 Steve Griffing PE(CSE) CISSP-ISSEP CPP  CC BY 4.0 -->
+<!-- Hull: Peter Farell CC BY 4.0  Nozzle: BamJr CC BY 4.0 -->
+<!-- Visual inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy / Universal Pictures -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" width="900" height="620">
+<defs>
+  <style>
+    @import url('https://fonts.cdnfonts.com/css/opendyslexic');
+    @media screen {
+      text, tspan, .label, .note, .dim {
+        font-family: 'OpenDyslexic','OpenDyslexicMono',sans-serif !important;
+      }
+    }
+    @media print {
+      svg { background: #ffffff !important; }
+      text, tspan { fill: #111111 !important; font-family: 'OpenDyslexic',sans-serif !important; }
+      rect[fill^="rgba"], rect[fill^="#0"] { fill: #f5f5f5 !important; }
+    }
+  </style>
+  <style>text { font-family="'OpenDyslexic Mono','OpenDyslexicMono',monospace"; fill:rgba(255,255,255,0.35); font-size:10px; }
+    .label { fill:#00e5ff; font-size:11px; font-weight:bold; }
+    .dim   { fill:rgba(255,255,255,0.18); font-size:8px; }
+    .note  { fill:rgba(255,255,255,0.35); font-size:9px; }
+    .ant   { fill:#4ade80; font-size:8px; }
+  </style>
+  <marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+    <path d="M0,0 L6,3 L0,6 Z" fill="#00e5ff" opacity="0.5"/>
+  </marker>
+  <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+    <path d="M20 0L0 0 0 20" fill="none" stroke="rgba(0,229,255,0.06)" stroke-width="0.5"/>
+  </pattern>
+</defs>
+<rect width="900" height="620" fill="#07090e"/>
+<rect width="900" height="620" fill="url(#grid)"/>
+
+<rect x="30" y="40" width="180" height="55" rx="4" fill="#00e5ff0d" stroke="#00e5ff" stroke-width="1.2"/>
+<text x="38" y="56" font-size="10" fill="#00e5ff" font-weight="bold">PICO 2 + TRIHAT-1</text>
+<text x="38" y="69" font-size="8" fill="rgba(255,255,255,0.88)">Flight Controller · TRIHAT-1 65×48mm (2.56"×1.89")</text>
+<text x="38" y="82" font-size="7" fill="rgba(255,255,255,0.78)">Cockpit bay · 60-90mm from nose</text>
+<rect x="30" y="110" width="180" height="55" rx="4" fill="#4ade800d" stroke="#4ade80" stroke-width="1.2"/>
+<text x="38" y="126" font-size="10" fill="#4ade80" font-weight="bold">CM4 + CARRIER-1 Rev E</text>
+<text x="38" y="139" font-size="8" fill="rgba(255,255,255,0.88)">Companion Computer · 65×52mm (2.56"×2.05")</text>
+<text x="38" y="152" font-size="7" fill="rgba(255,255,255,0.78)">Avionics bay · 95-160mm from nose</text>
+<rect x="30" y="180" width="180" height="55" rx="4" fill="#c084fc0d" stroke="#c084fc" stroke-width="1.2"/>
+<text x="38" y="196" font-size="10" fill="#c084fc" font-weight="bold">COMPHAT-1 Rev E</text>
+<text x="38" y="209" font-size="8" fill="rgba(255,255,255,0.88)">Hat: CAN·ETH·TPM·SD·SiK·RCRS · 65×48mm</text>
+<text x="38" y="222" font-size="7" fill="rgba(255,255,255,0.78)">Stacks on CM4 carrier · via 40-pin header</text>
+<rect x="30" y="250" width="180" height="55" rx="4" fill="#ff6b350d" stroke="#ff6b35" stroke-width="1.2"/>
+<text x="38" y="266" font-size="10" fill="#ff6b35" font-weight="bold">2× 70mm EDF NACELLE</text>
+<text x="38" y="279" font-size="8" fill="rgba(255,255,255,0.88)">2400-2600KV · 1100g thrust ea · 35A max</text>
+<text x="38" y="292" font-size="7" fill="rgba(255,255,255,0.78)">Wing tips · 70mm (2.76") duct · gear nozzle</text>
+<rect x="30" y="320" width="180" height="55" rx="4" fill="#ffe6000d" stroke="#ffe600" stroke-width="1.2"/>
+<text x="38" y="336" font-size="10" fill="#ffe600" font-weight="bold">40mm FUSELAGE EDF</text>
+<text x="38" y="349" font-size="8" fill="rgba(255,255,255,0.88)">4000-4500KV · 190g thrust · 14A max</text>
+<text x="38" y="362" font-size="7" fill="rgba(255,255,255,0.78)">Engine bell · 40mm (1.57") · servo nozzle</text>
+<rect x="30" y="390" width="180" height="55" rx="4" fill="#ff6b350d" stroke="#ff6b35" stroke-width="1.2"/>
+<text x="38" y="406" font-size="10" fill="#ff6b35" font-weight="bold">2× NACELLE NOZZLE</text>
+<text x="38" y="419" font-size="8" fill="rgba(255,255,255,0.88)">BamJr remix CC BY 4.0 · 36→42mm exit</text>
+<text x="38" y="432" font-size="7" fill="rgba(255,255,255,0.78)">Gear-coupled · sector/bevel/crown · no servo</text>
+<rect x="30" y="460" width="180" height="55" rx="4" fill="#2dd4bf0d" stroke="#2dd4bf" stroke-width="1.2"/>
+<text x="38" y="476" font-size="10" fill="#2dd4bf" font-weight="bold">2× MG90S TILT SERVO</text>
+<text x="38" y="489" font-size="8" fill="rgba(255,255,255,0.88)">1.8 kg·cm · ±90° nacelle tilt</text>
+<text x="38" y="502" font-size="7" fill="rgba(255,255,255,0.78)">Pivot bracket · Pico GP17/18</text>
+<rect x="30" y="530" width="180" height="55" rx="4" fill="#f472b60d" stroke="#f472b6" stroke-width="1.2"/>
+<text x="38" y="546" font-size="10" fill="#f472b6" font-weight="bold">PAYLOAD SYSTEM</text>
+<text x="38" y="559" font-size="8" fill="rgba(255,255,255,0.88)">SG90 release + N20 winch · 250g max</text>
+<text x="38" y="572" font-size="7" fill="rgba(255,255,255,0.78)">70×50×35mm (2.76"×1.97"×1.38") bay</text>
+<rect x="250" y="40" width="180" height="55" rx="4" fill="#a3e6350d" stroke="#a3e635" stroke-width="1.2"/>
+<text x="258" y="56" font-size="10" fill="#a3e635" font-weight="bold">SiK 915MHz RADIO</text>
+<text x="258" y="69" font-size="8" fill="rgba(255,255,255,0.88)">MAVLink 2.0 · 100mW · ≤1,094 yd range</text>
+<text x="258" y="82" font-size="7" fill="rgba(255,255,255,0.78)">COMPHAT-1 · belly SMA-RP · UART</text>
+<rect x="250" y="110" width="180" height="55" rx="4" fill="#f472b60d" stroke="#f472b6" stroke-width="1.2"/>
+<text x="258" y="126" font-size="10" fill="#f472b6" font-weight="bold">49MHz RCRS TDDS</text>
+<text x="258" y="139" font-size="8" fill="rgba(255,255,255,0.88)">6-ch · 10mW · ≤547 yd · TDDS</text>
+<text x="258" y="152" font-size="7" fill="rgba(255,255,255,0.78)">Dorsal fin · 250mm (9.8") whip + coil</text>
+<rect x="250" y="180" width="180" height="55" rx="4" fill="#c084fc0d" stroke="#c084fc" stroke-width="1.2"/>
+<text x="258" y="196" font-size="10" fill="#c084fc" font-weight="bold">CC2652P7 (opt.)</text>
+<text x="258" y="209" font-size="8" fill="rgba(255,255,255,0.88)">Zigbee/BLE/Thread/LoRa 2.4GHz · +20dBm</text>
+<text x="258" y="222" font-size="7" fill="rgba(255,255,255,0.78)">COMPHAT-1 · SMA-ZB · software select</text>
+<rect x="250" y="250" width="180" height="55" rx="4" fill="#f472b60d" stroke="#f472b6" stroke-width="1.2"/>
+<text x="258" y="266" font-size="10" fill="#f472b6" font-weight="bold">SX1276 (opt.)</text>
+<text x="258" y="279" font-size="8" fill="rgba(255,255,255,0.88)">LoRa/Zigbee 915MHz · 100mW · ≤4,374 yd</text>
+<text x="258" y="292" font-size="7" fill="rgba(255,255,255,0.78)">COMPHAT-1 · SMA-LR · register select</text>
+<rect x="250" y="320" width="180" height="55" rx="4" fill="#4ade800d" stroke="#4ade80" stroke-width="1.2"/>
+<text x="258" y="336" font-size="10" fill="#4ade80" font-weight="bold">u-blox M10Q GPS</text>
+<text x="258" y="349" font-size="8" fill="rgba(255,255,255,0.88)">Multi-GNSS · 25Hz · <2.5ft CEP</text>
+<text x="258" y="362" font-size="7" fill="rgba(255,255,255,0.78)">TRIHAT-1 · U.FL → cockpit roof patch</text>
+<rect x="250" y="390" width="180" height="55" rx="4" fill="#2dd4bf0d" stroke="#2dd4bf" stroke-width="1.2"/>
+<text x="258" y="406" font-size="10" fill="#2dd4bf" font-weight="bold">ICM-42688-P IMU</text>
+<text x="258" y="419" font-size="8" fill="rgba(255,255,255,0.88)">6-DOF · SPI0 · 24MHz · ±16g/±2000°/s</text>
+<text x="258" y="432" font-size="7" fill="rgba(255,255,255,0.78)">TRIHAT-1 · vibration-damped mount</text>
+<rect x="250" y="460" width="180" height="55" rx="4" fill="#2dd4bf0d" stroke="#2dd4bf" stroke-width="1.2"/>
+<text x="258" y="476" font-size="10" fill="#2dd4bf" font-weight="bold">BMP388 BARO</text>
+<text x="258" y="489" font-size="8" fill="rgba(255,255,255,0.88)">±0.5m altitude res. · I²C1 · 200Hz ODR</text>
+<text x="258" y="502" font-size="7" fill="rgba(255,255,255,0.78)">TRIHAT-1 · 0x76 I²C address</text>
+<rect x="250" y="530" width="180" height="55" rx="4" fill="#2dd4bf0d" stroke="#2dd4bf" stroke-width="1.2"/>
+<text x="258" y="546" font-size="10" fill="#2dd4bf" font-weight="bold">MS4525DO AIRSPEED</text>
+<text x="258" y="559" font-size="8" fill="rgba(255,255,255,0.88)">±1PSI · 0-155kts range · I²C1</text>
+<text x="258" y="572" font-size="7" fill="rgba(255,255,255,0.78)">TRIHAT-1 · 3mm CF pitot · silicone tubing</text>
+<rect x="470" y="40" width="180" height="55" rx="4" fill="#a3e6350d" stroke="#a3e635" stroke-width="1.2"/>
+<text x="478" y="56" font-size="10" fill="#a3e635" font-weight="bold">MachXO2 CPLD</text>
+<text x="478" y="69" font-size="8" fill="rgba(255,255,255,0.88)">Write-blocker · SDIO CMD filter</text>
+<text x="478" y="82" font-size="7" fill="rgba(255,255,255,0.78)">CM4-CARRIER-1 · JP2 jumper · NIST SP800-72</text>
+<rect x="470" y="110" width="180" height="55" rx="4" fill="#ff6b350d" stroke="#ff6b35" stroke-width="1.2"/>
+<text x="478" y="126" font-size="10" fill="#ff6b35" font-weight="bold">STM32F030 NX MCU</text>
+<text x="478" y="139" font-size="8" fill="rgba(255,255,255,0.88)">SPI proxy · SHA-256 audit · CMD write block</text>
+<text x="478" y="152" font-size="7" fill="rgba(255,255,255,0.78)">COMPHAT-1 · JP3 latch · OTP fuses blown</text>
+<rect x="470" y="180" width="180" height="55" rx="4" fill="#ffe6000d" stroke="#ffe600" stroke-width="1.2"/>
+<text x="478" y="196" font-size="10" fill="#ffe600" font-weight="bold">SLB9670 TPM 2.0</text>
+<text x="478" y="209" font-size="8" fill="rgba(255,255,255,0.88)">RSA-2048/ECC/AES/SHA · SPI</text>
+<text x="478" y="222" font-size="7" fill="rgba(255,255,255,0.78)">TRIHAT-1 + COMPHAT-1 · attestation</text>
+<rect x="470" y="250" width="180" height="55" rx="4" fill="#c084fc0d" stroke="#c084fc" stroke-width="1.2"/>
+<text x="478" y="266" font-size="10" fill="#c084fc" font-weight="bold">W5500 ETHERNET</text>
+<text x="478" y="279" font-size="8" fill="rgba(255,255,255,0.88)">100BASE-T · hw TCP/IP · 8 sockets · SPI</text>
+<text x="478" y="292" font-size="7" fill="rgba(255,255,255,0.78)">TRIHAT-1 + COMPHAT-1 · JST-GH 6-pin link</text>
+<rect x="470" y="320" width="180" height="55" rx="4" fill="#ff6b350d" stroke="#ff6b35" stroke-width="1.2"/>
+<text x="478" y="336" font-size="10" fill="#ff6b35" font-weight="bold">MCP2518FD CAN FD</text>
+<text x="478" y="349" font-size="8" fill="rgba(255,255,255,0.88)">ISO 11898-1:2015 · 4Mbps · SPI</text>
+<text x="478" y="362" font-size="7" fill="rgba(255,255,255,0.78)">TRIHAT-1 + COMPHAT-1 · JST-GH 4-pin link</text>
+<rect x="470" y="390" width="180" height="55" rx="4" fill="#4ade800d" stroke="#4ade80" stroke-width="1.2"/>
+<text x="478" y="406" font-size="10" fill="#4ade80" font-weight="bold">6× WS2812C LEDs</text>
+<text x="478" y="419" font-size="8" fill="rgba(255,255,255,0.88)">Port(R)·Stbd(G)·Tail(W)·ACOL·Belly·Land</text>
+<text x="478" y="432" font-size="7" fill="rgba(255,255,255,0.78)">ICAO Ann.2 · 14CFR91.209 · PIO GP26</text>
+<rect x="470" y="460" width="180" height="55" rx="4" fill="#ffe6000d" stroke="#ffe600" stroke-width="1.2"/>
+<text x="478" y="476" font-size="10" fill="#ffe600" font-weight="bold">5S LiPo BATTERY</text>
+<text x="478" y="489" font-size="8" fill="rgba(255,255,255,0.88)">2800-4500mAh · 35-75C · T/W ≥2.0</text>
+<text x="478" y="502" font-size="7" fill="rgba(255,255,255,0.78)">Keel rail · ±22mm (±0.87") CG trim</text>
+<rect x="470" y="530" width="180" height="55" rx="4" fill="#c084fc0d" stroke="#c084fc" stroke-width="1.2"/>
+<text x="478" y="546" font-size="10" fill="#c084fc" font-weight="bold">MABD-011028 DIPL.</text>
+<text x="478" y="559" font-size="8" fill="rgba(255,255,255,0.88)">WiFi diplexer · 2.4+5GHz split · 0.3dB IL</text>
+<text x="478" y="572" font-size="7" fill="rgba(255,255,255,0.78)">CM4-CARRIER-1 · SMA-1(2.4G)+SMA-2(5G)</text>
+<rect x="690" y="40" width="190" height="55" rx="4" fill="#2dd4bf0d" stroke="#2dd4bf" stroke-width="1.2"/>
+<text x="698" y="56" font-size="10" fill="#2dd4bf" font-weight="bold">CF KEEL SPINE</text>
+<text x="698" y="69" font-size="8" fill="rgba(255,255,255,0.88)">6×3mm (0.24"×0.12") · 385mm (15.2")</text>
+<text x="698" y="82" font-size="7" fill="rgba(255,255,255,0.78)">Structural backbone · M3 keel attachment</text>
+<rect x="690" y="110" width="190" height="55" rx="4" fill="#2dd4bf0d" stroke="#2dd4bf" stroke-width="1.2"/>
+<text x="698" y="126" font-size="10" fill="#2dd4bf" font-weight="bold">CF OUTRIGGER SPARS</text>
+<text x="698" y="139" font-size="8" fill="rgba(255,255,255,0.88)">12mm (0.47") OD × 300mm (11.8") · ×2</text>
+<text x="698" y="152" font-size="7" fill="rgba(255,255,255,0.78)">Spar junction bracket · Loctite 638</text>
+<rect x="690" y="180" width="190" height="55" rx="4" fill="#ff6b350d" stroke="#ff6b35" stroke-width="1.2"/>
+<text x="698" y="196" font-size="10" fill="#ff6b35" font-weight="bold">SECTOR GEARS ×2</text>
+<text x="698" y="209" font-size="8" fill="rgba(255,255,255,0.88)">R=22mm (0.87") · 90° arc · M0.5 PETG</text>
+<text x="698" y="222" font-size="7" fill="rgba(255,255,255,0.78)">Fixed to tilt bracket · pinion-A mesh</text>
+<rect x="690" y="250" width="190" height="55" rx="4" fill="#a3e6350d" stroke="#a3e635" stroke-width="1.2"/>
+<text x="698" y="266" font-size="10" fill="#a3e635" font-weight="bold">BEVEL PAIRS ×2</text>
+<text x="698" y="279" font-size="8" fill="rgba(255,255,255,0.88)">14T M0.5 · 20° bevel · 1:1 · resin/brass</text>
+<text x="698" y="292" font-size="7" fill="rgba(255,255,255,0.78)">90° axis redirect · inside nacelle</text>
+<rect x="690" y="320" width="190" height="55" rx="4" fill="#c084fc0d" stroke="#c084fc" stroke-width="1.2"/>
+<text x="698" y="336" font-size="10" fill="#c084fc" font-weight="bold">CROWN PINIONS ×2</text>
+<text x="698" y="349" font-size="8" fill="rgba(255,255,255,0.88)">10T M0.5 · 6mm (0.24") R · resin/brass</text>
+<text x="698" y="362" font-size="7" fill="rgba(255,255,255,0.78)">Drives nozzle ring rack · long. shaft</text>
+<rect x="690" y="390" width="190" height="55" rx="4" fill="#ff6b350d" stroke="#ff6b35" stroke-width="1.2"/>
+<text x="698" y="406" font-size="10" fill="#ff6b35" font-weight="bold">SERENITY HULL</text>
+<text x="698" y="419" font-size="8" fill="rgba(255,255,255,0.88)">CC BY 4.0 Peter Farell remix · PETG shell</text>
+<text x="698" y="432" font-size="7" fill="rgba(255,255,255,0.78)">365mm (14.4") · 11 sections · 1.5mm wall</text>
+<rect x="690" y="460" width="190" height="55" rx="4" fill="#ff6b350d" stroke="#ff6b35" stroke-width="1.2"/>
+<text x="698" y="476" font-size="10" fill="#ff6b35" font-weight="bold">NACELLE PODS ×2</text>
+<text x="698" y="489" font-size="8" fill="rgba(255,255,255,0.88)">CF-PETG · 80mm (3.1") OD · LED recess</text>
+<text x="698" y="502" font-size="7" fill="rgba(255,255,255,0.78)">Gear channels · bearing seats · pivot</text>
+<rect x="690" y="530" width="190" height="55" rx="4" fill="#ffe6000d" stroke="#ffe600" stroke-width="1.2"/>
+<text x="698" y="546" font-size="10" fill="#ffe600" font-weight="bold">ENGINE BELL</text>
+<text x="698" y="559" font-size="8" fill="rgba(255,255,255,0.88)">PETG · 76mm (3.0") ID · BamJr nozzle seat</text>
+<text x="698" y="572" font-size="7" fill="rgba(255,255,255,0.78)">Serenity silhouette · bayonet nozzle mount</text>
+<text x="450" y="14" text-anchor="middle" font-size="9" fill="rgba(0,229,255,0.88)" letter-spacing="2">COMPONENT OVERVIEW</text>
+
+<text x="10" y="14" font-family="'OpenDyslexic Mono','OpenDyslexicMono',monospace" font-size="9" fill="rgba(0,229,255,0.88)"
+  letter-spacing="2">SERENITY-CLASS TILTROTOR — COMPONENT OVERVIEW</text>
+<text x="10" y="26" font-family="'OpenDyslexic Mono','OpenDyslexicMono',monospace" font-size="7" fill="rgba(163,230,53,0.95)">
+  © 2025 Steve Griffing PE(CSE) CISSP-ISSEP CPP · CC BY 4.0
+  · Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0</text>
+</svg>

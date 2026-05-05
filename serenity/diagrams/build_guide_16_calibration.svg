@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Serenity-Class Tiltrotor UAV — Build Guide — Step 16 — Calibration -->
+<!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP  CC BY 4.0 -->
+<!-- Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0 -->
+<!-- Visual: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+<defs>
+  <style>
+    @import url('https://fonts.cdnfonts.com/css/opendyslexic');
+    @media screen {
+      text, tspan, .label, .note, .dim {
+        font-family: 'OpenDyslexic','OpenDyslexicMono',sans-serif !important;
+      }
+    }
+    @media print {
+      svg { background: #ffffff !important; }
+      text, tspan { fill: #111111 !important; font-family: 'OpenDyslexic',sans-serif !important; }
+      rect[fill^="rgba"], rect[fill^="#0"] { fill: #f5f5f5 !important; }
+    }
+  </style>
+</defs>
+<rect width="1200" height="900" fill="#f5f0e8"/>
+<rect x="0" y="0" width="1200" height="64" fill="#006db7"/>
+<text x="24" y="24" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ffffff" letter-spacing="2">SERENITY-CLASS TILTROTOR UAV</text>
+<text x="24" y="46" font-family="'OpenDyslexic',sans-serif" font-size="11" fill="#c8dff0">Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · CC BY 4.0 · 2026</text>
+<rect x="1040" y="8" width="144" height="48" rx="6" fill="#ff7518"/>
+<text x="1112" y="29" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">STEP</text>
+<text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">16 / 18</text>
+<rect x="0" y="64" width="1200" height="40" fill="#dde4ea" rx="0"/>
+<text x="24" y="90" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 8 — CALIBRATION</text>
+<text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">CG balance · servo endpoints · nozzle verification</text>
+<rect x="0" y="872" width="1200" height="28" fill="#006db7"/>
+<text x="600" y="890" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
+<rect x="16" y="112" width="720" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
+<rect x="752" y="112" width="432" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
+<rect x="760" y="120" width="416" height="114" rx="8" fill="#fffdf6" stroke="#006db7" stroke-width="2"/>
+<rect x="760" y="120" width="416" height="28" rx="8" fill="#006db7"/>
+<rect x="760" y="136" width="416" height="12" fill="#006db7"/>
+<text x="968" y="139" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">PARTS NEEDED</text>
+<rect x="768" y="145" width="26" height="16" rx="4" fill="#00838f" stroke="#222222" stroke-width="1"/>
+<text x="781" y="158" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
+<text x="800" y="158" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Digital angle gauge</text>
+<rect x="768" y="167" width="26" height="16" rx="4" fill="#607080" stroke="#222222" stroke-width="1"/>
+<text x="781" y="180" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
+<text x="800" y="180" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Digital calipers</text>
+<rect x="768" y="189" width="26" height="16" rx="4" fill="#f5c518" stroke="#222222" stroke-width="1"/>
+<text x="781" y="202" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
+<text x="800" y="202" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Luggage scale (optional)</text>
+<rect x="760" y="242" width="416" height="216" rx="8" fill="#fffdf6" stroke="#607080" stroke-width="1.5"/>
+<rect x="760" y="242" width="416" height="28" rx="8" fill="#607080"/>
+<rect x="760" y="258" width="416" height="12" fill="#607080"/>
+<text x="968" y="261" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">INSTRUCTIONS</text>
+<circle cx="776" cy="277" r="9" fill="#006db7"/>
+<text x="776" y="281" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1</text>
+<text x="792" y="282" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Place aircraft on knife-edge or fingertips at 152mm (5.98") from nose</text>
+<circle cx="776" cy="301" r="9" fill="#006db7"/>
+<text x="776" y="305" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
+<text x="792" y="306" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Slide battery rail until aircraft balances → CG at pivot point</text>
+<circle cx="776" cy="325" r="9" fill="#006db7"/>
+<text x="776" y="329" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
+<text x="792" y="330" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">With 250g payload installed: slide battery 10mm AFT to compensate</text>
+<circle cx="776" cy="349" r="9" fill="#006db7"/>
+<text x="776" y="353" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4</text>
+<text x="792" y="354" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Command nacelle 0°: verify with angle gauge, target ±0.5°</text>
+<circle cx="776" cy="373" r="9" fill="#006db7"/>
+<text x="776" y="377" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">5</text>
+<text x="792" y="378" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Command nacelle 90°: verify vertical ±0.5°</text>
+<circle cx="776" cy="397" r="9" fill="#006db7"/>
+<text x="776" y="401" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">6</text>
+<text x="792" y="402" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">With nacelle at 90°: measure nozzle exit with calipers: target 42mm (1.65")</text>
+<circle cx="776" cy="421" r="9" fill="#006db7"/>
+<text x="776" y="425" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">7</text>
+<text x="792" y="426" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">With nacelle at 0°: measure nozzle exit: target 36mm (1.42")</text>
+<rect x="760" y="470" width="416" height="36" rx="6" fill="#fffac0" stroke="#ff7518" stroke-width="2"/><text x="778" y="485" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ff7518">⚠</text><text x="796" y="492" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">NEVER exceed ±5° CG deviation from 152mm — flight stability will be compromised</text>
+<line x1="176" y1="548" x2="576" y2="548" stroke="#607080" stroke-width="4"/>
+<polygon points="376,548 356,578 396,578" fill="#607080"/>
+<polyline points="96,488 112,496 140,502 162,503 201,505 238,502 261,499 285,494 304,495 325,496 370,494" fill="none" stroke="#006db7" stroke-width="2"/>
+<polyline points="96,488 112,480 140,474 162,473 201,471 238,474 261,477 285,482 304,481 325,480 370,482" fill="none" stroke="#006db7" stroke-width="2"/>
+<line x1="210" y1="448" x2="210" y2="548" stroke="#2e7d32" stroke-width="2" stroke-dasharray="5 3"/>
+<text x="210" y="442" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#2e7d32">CG = 152mm (5.98")</text>
+<text x="210" y="452" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#2e7d32">from nose tip</text>
+<circle cx="210" cy="548" r="6" fill="#2e7d32" stroke="#222222" stroke-width="1.5"/>
+<line x1="198" y1="488" x2="278" y2="488" stroke="#f5c518" stroke-width="3"/>
+<line x1="198.5" y1="488.0" x2="188.5" y2="488.0" stroke="#f5c518" stroke-width="2" stroke-dasharray="8 4"/><polygon points="188.5,488.0 199.6,483.3 199.6,492.7" fill="#f5c518"/>
+<line x1="278.5" y1="488.0" x2="288.5" y2="488.0" stroke="#f5c518" stroke-width="2" stroke-dasharray="8 4"/><polygon points="288.5,488.0 277.4,492.7 277.4,483.3" fill="#f5c518"/>
+<text x="238" y="478" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#f5c518">Battery ±22mm slide</text>
+<rect x="516" y="408" width="180" height="80" rx="6" fill="#fffdf6" stroke="#00838f" stroke-width="2"/>
+<text x="606" y="426" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#222222">SERVO CALIBRATION</text>
+<text x="606" y="442" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#607080">0° = CRUISE (horizontal)</text>
+<text x="606" y="458" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#607080">90° = HOVER (vertical)</text>
+<text x="606" y="474" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#00838f">Tolerance: ±0.5°</text>
+<text x="606" y="490" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#607080">use digital angle gauge</text>
+<rect x="516" y="508" width="180" height="60" rx="6" fill="#fffdf6" stroke="#ff7518" stroke-width="1.5"/>
+<text x="606" y="524" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#222222">NOZZLE EXIT DIA.</text>
+<text x="606" y="540" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#2e7d32">OPEN (hover 90°): 42mm (1.65")</text>
+<text x="606" y="556" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#ff7518">CLOSED (cruise 0°): 36mm (1.42")</text>
+</svg>
