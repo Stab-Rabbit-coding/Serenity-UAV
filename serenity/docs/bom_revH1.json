@@ -1,27 +1,27 @@
 {
   "revision": "H.1",
   "scale": "18 inches (457.2mm)",
-  "canonical_source": "QMx Official Serenity Blueprints (Mandel/Earls 2007) 269ft\u00d7170ft\u00d779ft",
+  "canonical_source": "QMx Official Serenity Blueprints (Mandel/Earls 2007) 269ft×170ft×79ft",
   "author": "Steve Griffing PE(CSE) CISSP-ISSEP CPP",
   "license": "CC BY 4.0",
   "hull_structure": [
     {
       "ref": "HULL-SHELL",
-      "desc": "PETG thin shell 1.2mm wall \u2014 print as open shell sections",
+      "desc": "PETG thin shell 1.2mm wall — print as open shell sections",
       "qty": 1,
       "mass_g": 143,
       "vol_cm3": 115,
-      "density": "1.24 g/cm\u00b3",
+      "density": "1.24 g/cm³",
       "notes": "Print 6 sections. Insert cable-route straws before assembly."
     },
     {
       "ref": "HULL-FOAM",
-      "desc": "X-30 expanding PU foam 2 lb/ft\u00b3 (0.032 g/cm\u00b3) \u2014 pour into shell voids",
+      "desc": "X-30 expanding PU foam 2 lb/ft³ (0.032 g/cm³) — pour into shell voids",
       "qty": 1,
       "mass_g": 42,
       "vol_cm3": 1309,
       "density_lbcf": 2.0,
-      "notes": "2-part, 2-min pot life, 4\u00d7 expansion. Net foam vol 1309 cm\u00b3 after 18% internals deduction."
+      "notes": "2-part, 2-min pot life, 4× expansion. Net foam vol 1309 cm³ after 18% internals deduction."
     },
     {
       "ref": "HULL-CF",
@@ -32,63 +32,63 @@
     },
     {
       "ref": "HULL-TUBE",
-      "desc": "Cable-route tubes 5mm OD \u00d7 400mm (drink-straw diameter)",
+      "desc": "Cable-route tubes 5mm OD × 400mm (drink-straw diameter)",
       "qty": 6,
       "mass_g": 5,
-      "notes": "Insert before foam pour. Routes: CAN, RS-485, 1553, ETH\u00d72, power"
+      "notes": "Insert before foam pour. Routes: CAN, RS-485, 1553, ETH×2, power"
     },
     {
       "ref": "HULL-VOID-EPS",
-      "desc": "EPS blue foam board 25mm \u00d7 300mm \u00d7 150mm \u2014 void former material",
+      "desc": "EPS blue foam board 25mm × 300mm × 150mm — void former material",
       "qty": 2,
       "mass_g": 18,
       "notes": "Owens Corning Foamular 150 or equivalent. Cut to 6 void-former shapes per build guide step 22."
     },
     {
       "ref": "HULL-WAX",
-      "desc": "Johnson's Paste Wax 16oz tin \u2014 void-former release agent",
+      "desc": "Johnson's Paste Wax 16oz tin — void-former release agent",
       "qty": 1,
       "mass_g": 400,
       "notes": "Consumed, not airborne weight. Apply 2 coats to all EPS void-former surfaces before foam pour."
     },
     {
       "ref": "HULL-PTFE-TUBE",
-      "desc": "PTFE tube 5mm OD \u00d7 3mm ID \u00d7 2.5m \u2014 cable conduit through foam",
+      "desc": "PTFE tube 5mm OD × 3mm ID × 2.5m — cable conduit through foam",
       "qty": 6,
       "mass_g": 12,
       "notes": "6 conduits: CAN, RS-485, 1553, ETH-A, ETH-B, PWR. Install before foam pour. Total 12g stays in airframe."
     },
     {
       "ref": "ACCESS-FRAME-PETG",
-      "desc": "Access panel frame set \u2014 PETG 100% infill, 2mm wall \u2014 6 frames + 6 lids",
+      "desc": "Access panel frame set — PETG 100% infill, 2mm wall — 6 frames + 6 lids",
       "qty": 1,
       "mass_g": 38,
       "notes": "Print from access_panel_frames.stl (TBD). Bond frames into hull with 5-min epoxy before foam pour. Lids are removable."
     },
     {
       "ref": "ACCESS-SCREW-M25",
-      "desc": "M2.5\u00d76 SS button-head Phillips \u2014 access panel screws",
+      "desc": "M2.5×6 SS button-head Phillips — access panel screws",
       "qty": 16,
       "mass_g": 4,
       "notes": "4 per panel for panels B and E. Panels A and F use bayonet. Panel C uses hinge. Panel D uses magnets."
     },
     {
       "ref": "ACCESS-MAGNET",
-      "desc": "N42 neodymium disc magnet 6\u00d72mm \u2014 panel D magnetic closure",
+      "desc": "N42 neodymium disc magnet 6×2mm — panel D magnetic closure",
       "qty": 8,
       "mass_g": 2,
       "notes": "4 in panel frame + 4 in panel lid. Press-fit into 6.1mm printed pockets."
     },
     {
       "ref": "ACCESS-GASKET",
-      "desc": "3M 4016 closed-cell foam gasket tape 1.5mm \u00d7 9mm \u00d7 3m roll",
+      "desc": "3M 4016 closed-cell foam gasket tape 1.5mm × 9mm × 3m roll",
       "qty": 1,
       "mass_g": 8,
       "notes": "Line all panel frame lips before foam pour. Provides dust/moisture seal and prevents foam intrusion into void."
     },
     {
       "ref": "ACCESS-EPOXY",
-      "desc": "5-minute epoxy 25mL syringe \u2014 frame-to-hull bond",
+      "desc": "5-minute epoxy 25mL syringe — frame-to-hull bond",
       "qty": 1,
       "mass_g": 0,
       "notes": "Consumed during build. Bond access-panel frames into hull sections before foam pour step."
@@ -97,7 +97,7 @@
   "propulsion": [
     {
       "ref": "EDF-NAC-L",
-      "desc": "80mm EDF nacelle LEFT (PORT) \u2014 6S",
+      "desc": "80mm EDF nacelle LEFT (PORT) — 6S",
       "qty": 1,
       "mass_g": 150,
       "thrust_g_6S": 1700,
@@ -105,14 +105,14 @@
     },
     {
       "ref": "EDF-NAC-R",
-      "desc": "80mm EDF nacelle RIGHT (STBD) \u2014 6S",
+      "desc": "80mm EDF nacelle RIGHT (STBD) — 6S",
       "qty": 1,
       "mass_g": 150,
       "thrust_g_6S": 1700
     },
     {
       "ref": "EDF-FUSE",
-      "desc": "40mm EDF fuselage (engine bell) \u2014 4S",
+      "desc": "40mm EDF fuselage (engine bell) — 4S",
       "qty": 1,
       "mass_g": 38,
       "thrust_g_4S": 380,
@@ -120,14 +120,14 @@
     },
     {
       "ref": "ESC-NAC",
-      "desc": "50A BLHeli32 ESC for 80mm nacelle EDF \u2014 6S rated",
+      "desc": "50A BLHeli32 ESC for 80mm nacelle EDF — 6S rated",
       "qty": 2,
       "mass_g": 28,
       "notes": "One per nacelle. 6S = 22.2V nominal."
     },
     {
       "ref": "ESC-FUSE",
-      "desc": "25A BLHeli32 ESC for 40mm fuselage EDF \u2014 4S rated",
+      "desc": "25A BLHeli32 ESC for 40mm fuselage EDF — 4S rated",
       "qty": 1,
       "mass_g": 16,
       "notes": "Separate 4S feed from PDB (regulates down from 6S main)"
@@ -136,21 +136,21 @@
   "nacelle_hardware": [
     {
       "ref": "NAC-POD",
-      "desc": "Nacelle pod shell PETG \u2014 80mm ID, 93.5mm OD, 144mm long",
+      "desc": "Nacelle pod shell PETG — 80mm ID, 93.5mm OD, 144mm long",
       "qty": 2,
       "mass_g": 18,
       "stl": "nacelle_pod_80mm.stl"
     },
     {
       "ref": "NAC-TIP-P",
-      "desc": "Nacelle tip cap PORT \u2014 RED WS2812C nav light recess",
+      "desc": "Nacelle tip cap PORT — RED WS2812C nav light recess",
       "qty": 1,
       "mass_g": 4,
       "stl": "nacelle_tip_cap_port.stl"
     },
     {
       "ref": "NAC-TIP-S",
-      "desc": "Nacelle tip cap STBD \u2014 GREEN WS2812C nav light recess",
+      "desc": "Nacelle tip cap STBD — GREEN WS2812C nav light recess",
       "qty": 1,
       "mass_g": 4,
       "stl": "nacelle_tip_cap_stbd.stl"
@@ -160,7 +160,7 @@
       "desc": "CF stub arm 12mm OD 1.5mm wall 10.4mm long",
       "qty": 2,
       "mass_g": 1,
-      "notes": "ARM_STUB = INNER \u2212 MAX_HW = 10.4mm"
+      "notes": "ARM_STUB = INNER − MAX_HW = 10.4mm"
     },
     {
       "ref": "TILT-BRACKET",
@@ -171,14 +171,14 @@
     },
     {
       "ref": "SERVO-NAC",
-      "desc": "MG90S nacelle tilt servo \u2014 120\u00b0 bracket modification",
+      "desc": "MG90S nacelle tilt servo — 120° bracket modification",
       "qty": 2,
       "mass_g": 9,
-      "notes": "50Hz PWM. Travel extended to 120\u00b0 via bracket geometry: 0\u00b0=VTOL, 90\u00b0=fwd flight, 120\u00b0=reverse thrust (30\u00b0 past horizontal). MG90S physical range supports this; bracket hard-stop at 120\u00b0. FC soft-limits: 0\u201390\u00b0 normal mode, 90\u2013115\u00b0 reverse/brake mode."
+      "notes": "50Hz PWM. Travel extended to 120° via bracket geometry: 0°=VTOL, 90°=fwd flight, 120°=reverse thrust (30° past horizontal). MG90S physical range supports this; bracket hard-stop at 120°. FC soft-limits: 0–90° normal mode, 90–115° reverse/brake mode."
     },
     {
       "ref": "GEAR-NOZZLE",
-      "desc": "Gear nozzle assembly \u2014 sector gear + ring + 8 flaps (BamJr CC BY 4.0)",
+      "desc": "Gear nozzle assembly — sector gear + ring + 8 flaps (BamJr CC BY 4.0)",
       "qty": 3,
       "mass_g": 4,
       "notes": "2 nacelle + 1 fuselage. Sector gear drives ring via bevel chain."
@@ -193,89 +193,105 @@
   "avionics_nodes": [
     {
       "ref": "CM4-LITE",
-      "desc": "Raspberry Pi CM4 Lite (no eMMC, no SDRAM on module)",
-      "qty": 4,
+      "desc": "Raspberry Pi CM4 Lite (no eMMC) — Nodes 1 & 4",
+      "qty": 2,
       "mass_g": 7.5,
       "cost_est": "$35ea",
-      "notes": "4 units \u2014 one per node. CARRIER-2 board provides microSD boot."
+      "notes": "Nodes 1 (flight ctrl) and 4 (actuator ctrl). Full PCIe, GbE, USB3."
     },
     {
-      "ref": "CARRIER-2",
-      "desc": "CM4-CARRIER-2 PCB 57\u00d744mm 4L \u2014 minimal CM4 carrier",
-      "qty": 4,
-      "mass_g": 17.4,
+      "ref": "CM4-CARRIER-2",
+      "desc": "CM4-CARRIER-2 PCB 57×44mm 4L — minimal CM4 carrier",
+      "qty": 2,
+      "mass_g": 17.5,
       "cost_est": "~$8 assembled JLCPCB",
-      "notes": "CPLD write-blocker, microSD OS slot, microSD log slot, USB-C, 40-pin GPIO"
+      "notes": "CPLD write-blocker, 2× microSD, USB-C, 40-pin GPIO. Nodes 1 & 4."
     },
     {
       "ref": "SENSORHAT-1",
-      "desc": "SENSORHAT-1 PCB 46\u00d736mm 4L \u2014 XIAO RP2350 direct-solder",
-      "qty": 4,
-      "mass_g": 12.4,
+      "desc": "SENSORHAT-1 PCB 46×36mm 4L — XIAO RP2350 realtime co-processor",
+      "qty": 2,
+      "mass_g": 12.5,
       "cost_est": "~$22 assembled JLCPCB",
-      "notes": "XIAO RP2350, ICM-42688, BMP388, W5500 ETH, MCP2518FD CAN FD, HI-6130 1553, ISO* isolation"
+      "notes": "XIAO RP2350 + ICM-42688 + BMP388 + W5500 + MCP2518FD + HI-6130 + RS-485. Nodes 1 & 4."
+    },
+    {
+      "ref": "CM3PLUS",
+      "desc": "Raspberry Pi CM3+ Lite (no eMMC) — Nodes 2 & 3",
+      "qty": 2,
+      "mass_g": 8.0,
+      "cost_est": "$25ea",
+      "notes": "200-pin SODIMM. A53@1.2GHz, LPDDR2 1GB max. USB2-attached GbE via CM3-CARRIER-1 W5500. microSD boot via carrier J_SD slot."
+    },
+    {
+      "ref": "CM3-CARRIER-1",
+      "desc": "CM3-CARRIER-1 PCB 68×30mm 4L — integrated bus I/O carrier",
+      "qty": 2,
+      "mass_g": 9.0,
+      "cost_est": "~$12 assembled JLCPCB",
+      "notes": "200-pin SODIMM socket, 40-pin RPi HAT header, JST-GH: CAN FD 4-pin / RS-485 4-pin / 1553B 4-pin / ETH-SPI 6-pin. MCP2518FD+ATA6561, MAX3485E, HI-6130, W5500, CH340C USB-UART, AP2112K-3.3 LDO, CAT24C32 HAT EEPROM. Nodes 2 & 3 — replaces CARRIER-2+SENSORHAT-1+MICROHAT stack."
     },
     {
       "ref": "COMPHAT-SWITCH",
-      "desc": "COMPHAT-SWITCH PCB 65\u00d752mm 4L \u2014 Node 1 comms hat",
+      "desc": "COMPHAT-SWITCH PCB 65×52mm 4L — Node 1 comms hat",
       "qty": 1,
-      "mass_g": 28.5,
+      "mass_g": 29.0,
       "cost_est": "~$35 assembled JLCPCB",
-      "notes": "KSZ8895 5-port ETH switch, SiK 915MHz, HI-6130 1553 RT, CAN FD, RS-485, TPM"
+      "notes": "KSZ8895 5-port ETH switch, SiK 915MHz, HI-6130 1553 RT, CAN FD, RS-485, TPM. Node 1 only."
     },
     {
       "ref": "MICROHAT",
-      "desc": "MICROHAT PCB 42\u00d736mm \u2014 Node 2-4 minimal comms hat",
-      "qty": 3,
-      "mass_g": 9.5,
+      "desc": "MICROHAT PCB 42×36mm — Node 4 minimal comms hat",
+      "qty": 1,
+      "mass_g": 10.0,
       "cost_est": "~$8 assembled JLCPCB",
-      "notes": "Ethernet passthrough, CAN FD, RS-485, 1553 connectors only \u2014 no radio"
+      "notes": "Ethernet passthrough, CAN FD, RS-485, 1553 connectors only. Node 4 only (Nodes 2 & 3 use CM3-CARRIER-1 integrated bus ports)."
     },
     {
-      "ref": "MICROS D-OS",
-      "desc": "microSD 8GB Class 10 \u2014 OS boot card",
+      "ref": "MICROSD-OS",
+      "desc": "microSD 8GB Class 10 — OS boot card",
       "qty": 4,
-      "mass_g": 1,
-      "notes": "One per CARRIER-2"
+      "mass_g": 1.0,
+      "notes": "2× for CM4-CARRIER-2 (N1,N4), 2× for CM3-CARRIER-1 J_SD slot (N2,N3)"
     },
     {
       "ref": "MICROSD-LOG",
-      "desc": "microSD 32GB \u2014 flight log storage",
-      "qty": 4,
-      "mass_g": 1,
-      "notes": "One per COMPHAT or MICROHAT"
+      "desc": "microSD 32GB — flight log storage",
+      "qty": 2,
+      "mass_g": 1.0,
+      "notes": "One per CM4-CARRIER-2 log slot (Nodes 1 & 4). CM3 nodes log via ETH to Node 1."
     }
   ],
   "wiring": [
     {
       "ref": "PDB",
-      "desc": "Power distribution board \u2014 XT90 main + 3\u00d7 ESC outputs + 5V BEC bus",
+      "desc": "Power distribution board — XT90 main + 3× ESC outputs + 5V BEC bus",
       "qty": 1,
       "mass_g": 12,
       "notes": "Rated 100A continuous"
     },
     {
       "ref": "BEC-5V",
-      "desc": "BEC 5V 5A (DC-DC) \u2014 avionics power",
+      "desc": "BEC 5V 5A (DC-DC) — avionics power",
       "qty": 1,
       "mass_g": 18
     },
     {
       "ref": "WIRE-ESC-NAC",
-      "desc": "14AWG silicone ESC\u2192motor leads 200mm \u00d7 3-phase \u00d7 2 nacelles",
+      "desc": "14AWG silicone ESC→motor leads 200mm × 3-phase × 2 nacelles",
       "qty": 1,
       "mass_g": 24,
       "notes": "High-current phase wires"
     },
     {
       "ref": "WIRE-ESC-FUSE",
-      "desc": "16AWG silicone ESC\u2192motor leads 150mm \u00d7 3-phase fuselage",
+      "desc": "16AWG silicone ESC→motor leads 150mm × 3-phase fuselage",
       "qty": 1,
       "mass_g": 8
     },
     {
       "ref": "WIRE-SERVO",
-      "desc": "20AWG servo extension leads 300mm \u00d7 6",
+      "desc": "20AWG servo extension leads 300mm × 6",
       "qty": 1,
       "mass_g": 12
     },
@@ -290,7 +306,7 @@
       "desc": "CAN FD 4-pin JST-GH 150mm cables",
       "qty": 3,
       "mass_g": 2,
-      "notes": "Chain N1\u2192N2\u2192N3\u2192N4"
+      "notes": "Chain N1→N2→N3→N4"
     },
     {
       "ref": "CAB-RS485",
@@ -303,14 +319,14 @@
       "desc": "1553B 4-pin JST-GH shielded twisted pair 180mm",
       "qty": 3,
       "mass_g": 2.7,
-      "notes": "Belden 3084A equiv, 78\u03a9"
+      "notes": "Belden 3084A equiv, 78Ω"
     },
     {
       "ref": "CAB-ETH",
-      "desc": "Ethernet 6-pin JST-GH 200mm cables \u2014 Murex switch to nodes",
+      "desc": "Ethernet 6-pin JST-GH 200mm cables — Murex switch to nodes",
       "qty": 4,
       "mass_g": 2.5,
-      "notes": "W5500\u2192KSZ8895 star"
+      "notes": "W5500→KSZ8895 star"
     },
     {
       "ref": "CAB-ESC-TELEM",
@@ -348,7 +364,7 @@
     },
     {
       "ref": "WINCH-MOT",
-      "desc": "N20 6V DC winch motor \u2014 300:1 gear ratio",
+      "desc": "N20 6V DC winch motor — 300:1 gear ratio",
       "qty": 1,
       "mass_g": 10,
       "notes": "300:1 gearing gives ~8N lift capacity for 250g cargo + cradle mass. Spool holds 1.5m of 0.5mm Dyneema SK75 line."
@@ -361,15 +377,15 @@
     },
     {
       "ref": "CARGO-GONDOLA",
-      "desc": "Cargo bay gondola shell PETG \u2014 112\u00d785\u00d722mm belly pod",
+      "desc": "Cargo bay gondola shell PETG — 112×85×22mm belly pod",
       "qty": 1,
       "mass_g": 22,
       "stl": "cargo_gondola_shell.stl",
-      "notes": "Replaces flat belly panel. Interior 101.6\u00d776.2\u00d776.2mm (4\"\u00d73\"\u00d73\"). Belly pod protrudes 18mm below hull line \u2014 screen-accurate Serenity cargo module profile. Bonds to hull sections B and C with 5-min epoxy."
+      "notes": "Replaces flat belly panel. Interior 101.6×76.2×76.2mm (4\"×3\"×3\"). Belly pod protrudes 18mm below hull line — screen-accurate Serenity cargo module profile. Bonds to hull sections B and C with 5-min epoxy."
     },
     {
       "ref": "CLAMSHELL-DOOR",
-      "desc": "Clamshell cargo door halves PETG \u2014 2\u00d7 mirrored halves",
+      "desc": "Clamshell cargo door halves PETG — 2× mirrored halves",
       "qty": 2,
       "mass_g": 7,
       "stl": "clamshell_door_half.stl",
@@ -377,7 +393,7 @@
     },
     {
       "ref": "CARGO-CRADLE",
-      "desc": "Cargo cradle + auto-latch PETG \u2014 accepts 4\"\u00d73\"\u00d73\" box",
+      "desc": "Cargo cradle + auto-latch PETG — accepts 4\"×3\"×3\" box",
       "qty": 1,
       "mass_g": 10,
       "stl": "cargo_cradle_autolatch.stl",
@@ -392,7 +408,7 @@
     },
     {
       "ref": "SKID-FOOT",
-      "desc": "TPU 95A landing skid feet \u00d74",
+      "desc": "TPU 95A landing skid feet ×4",
       "qty": 4,
       "mass_g": 4,
       "stl": "landing_skid_foot.stl"
@@ -481,25 +497,25 @@
   "fasteners_misc": [
     {
       "ref": "STANDOFF",
-      "desc": "M2.5 nylon hex standoffs 6mm \u00d720",
+      "desc": "M2.5 nylon hex standoffs 6mm ×20",
       "qty": 1,
       "mass_g": 4
     },
     {
       "ref": "SCREW-M25",
-      "desc": "M2.5 stainless screws \u00d740 (8mm + 12mm assorted)",
+      "desc": "M2.5 stainless screws ×40 (8mm + 12mm assorted)",
       "qty": 1,
       "mass_g": 6
     },
     {
       "ref": "ZIPTIE",
-      "desc": "Nylon zip ties \u00d730 (100mm + 200mm)",
+      "desc": "Nylon zip ties ×30 (100mm + 200mm)",
       "qty": 1,
       "mass_g": 4
     },
     {
       "ref": "FOAM-TAPE",
-      "desc": "3M double-sided foam tape \u2014 vibration isolation mounts",
+      "desc": "3M double-sided foam tape — vibration isolation mounts",
       "qty": 1,
       "mass_g": 4
     },
@@ -542,7 +558,7 @@
     "outer_from_cl_mm": 144.47,
     "c2c_mm": 195.46,
     "arm_stub_mm": 10.4,
-    "formula": "outer = datum + (OD \u00d7 2/3)  =  82.15 + (93.48 \u00d7 2/3)  =  144.47mm (canonical \u2714)",
+    "formula": "outer = datum + (OD × 2/3)  =  82.15 + (93.48 × 2/3)  =  144.47mm (canonical ✔)",
     "side_profile_key_ratios": {
       "dome_above_cl_mm": 99.7,
       "dome_cargo_ratio": 2.42,
@@ -551,46 +567,46 @@
     }
   },
   "cargo_bay": {
-    "interior_mm": "101.6 \u00d7 76.2 \u00d7 76.2",
-    "interior_in": "4.0 \u00d7 3.0 \u00d7 3.0",
+    "interior_mm": "101.6 × 76.2 × 76.2",
+    "interior_in": "4.0 × 3.0 × 3.0",
     "gondola_protrusion_mm": 18,
-    "gondola_note": "18mm belly pod protrusion below hull line \u2014 matches Serenity cargo module profile",
+    "gondola_note": "18mm belly pod protrusion below hull line — matches Serenity cargo module profile",
     "door_type": "clamshell (2 halves fold down, SG90-actuated bell-crank)",
     "winch_cable_m": 1.5,
     "winch_line": "Dyneema SK75 0.5mm",
     "max_cargo_mass_g": 250,
-    "cradle_type": "auto-latch PETG corner clips \u2014 no manual attachment needed"
+    "cradle_type": "auto-latch PETG corner clips — no manual attachment needed"
   },
   "nacelle_tilt": {
     "vtol_deg": 0,
     "forward_flight_deg": 90,
     "reverse_mode_deg": 115,
     "hard_stop_deg": 120,
-    "servo": "MG90S (unchanged) \u2014 bracket geometry modified for 120\u00b0 travel",
-    "fc_soft_limit_normal": "0\u201390\u00b0",
-    "fc_soft_limit_reverse": "90\u2013115\u00b0 (reverse/brake mode only)",
-    "reverse_thrust_at_115deg": "nacelle thrust \u00d7 sin(25\u00b0) \u00d7 2 = 1700 \u00d7 0.423 \u00d7 2 = 1438g reverse component",
-    "lift_at_115deg": "nacelle thrust \u00d7 cos(25\u00b0) \u00d7 2 = 1700 \u00d7 0.906 \u00d7 2 = 3080g lift \u2014 sufficient for hover with reduced payload"
+    "servo": "MG90S (unchanged) — bracket geometry modified for 120° travel",
+    "fc_soft_limit_normal": "0–90°",
+    "fc_soft_limit_reverse": "90–115° (reverse/brake mode only)",
+    "reverse_thrust_at_115deg": "nacelle thrust × sin(25°) × 2 = 1700 × 0.423 × 2 = 1438g reverse component",
+    "lift_at_115deg": "nacelle thrust × cos(25°) × 2 = 1700 × 0.906 × 2 = 3080g lift — sufficient for hover with reduced payload"
   },
   "obstacle_avoidance_notes": {
-    "sensor": "VL53L5CX 8\u00d78 multizone ToF, 65\u00b0 FoV, 0.4\u20134m range",
+    "sensor": "VL53L5CX 8×8 multizone ToF, 65° FoV, 0.4–4m range",
     "count": 6,
     "positions": {
-      "S1_forward":  "station 25mm  \u2014 nose bayonet ring, 0\u00b0 azimuth",
-      "S2_aft":      "station 440mm \u2014 engine bell rim, 180\u00b0 azimuth",
-      "S3_port":     "station 200mm \u2014 port hull side at waterline, 270\u00b0 azimuth",
-      "S4_stbd":     "station 200mm \u2014 stbd hull side at waterline, 90\u00b0 azimuth",
-      "S5_zenith":   "station 180mm \u2014 dorsal keel apex, 90\u00b0 elevation",
-      "S6_nadir":    "station 160mm \u2014 forward belly blister, -90\u00b0 elevation"
+      "S1_forward": "station 25mm  — nose bayonet ring, 0° azimuth",
+      "S2_aft": "station 440mm — engine bell rim, 180° azimuth",
+      "S3_port": "station 200mm — port hull side at waterline, 270° azimuth",
+      "S4_stbd": "station 200mm — stbd hull side at waterline, 90° azimuth",
+      "S5_zenith": "station 180mm — dorsal keel apex, 90° elevation",
+      "S6_nadir": "station 160mm — forward belly blister, -90° elevation"
     },
-    "i2c_mux": "TCA9548A ch 0\u20135",
-    "xshut_gpio": "MCP23008 GP0\u2013GP5",
+    "i2c_mux": "TCA9548A ch 0–5",
+    "xshut_gpio": "MCP23008 GP0–GP5",
     "host_node": "Node 3 (Panel D) I2C bus",
-    "aperture": "5mm PMMA disc flush-mount \u2014 looks like hull porthole",
+    "aperture": "5mm PMMA disc flush-mount — looks like hull porthole",
     "indoor_range_m": 4,
     "update_rate_hz": 15
   },
-  "total_airframe_mass_g": 1473,
+  "total_airframe_mass_g": 1413,
   "total_auw_g": {
     "note": "EPS void formers and wax consumed during build. +59g vs Rev H base for: cargo gondola (+14g), door servo (+9g), cargo cradle (+10g), ToF sensors (+15g), I2C mux PCB (+4g), sensor mounts (+7g).",
     "base_dry_no_battery_g": 1473,
@@ -600,7 +616,13 @@
     "tw_cargo": 1.87,
     "auw_cargo_light_6S_1800mAh_180g_plus_250g": 1903,
     "tw_cargo_light": 1.99,
-    "note_cargo": "Use 6S 1800mAh (180g) for T/W\u22482.0 on cargo missions. 2800mAh gives T/W 1.87 \u2014 acceptable for slow indoor cargo ops where max throttle is rarely needed."
+    "note_cargo": "Use 6S 1800mAh (180g) for T/W≈2.0 on cargo missions. 2800mAh gives T/W 1.87 — acceptable for slow indoor cargo ops where max throttle is rarely needed.",
+    "dry_g": 1413,
+    "empty_with_6S4000_g": 1823,
+    "cargo_config_6S2800_g": 1958,
+    "max_auw_limited_tw2_g": 477,
+    "TW_empty": 2.07,
+    "TW_cargo_6S2800": 1.93
   },
   "build_notes": {
     "foam_fill_step": 23,
@@ -609,13 +631,48 @@
     "obstacle_sensor_step": 25,
     "cargo_bay_step": 26,
     "total_build_steps": 27,
-    "foam_system": "X-30 2-part polyurethane, 2 lb/ft\u00b3, 4\u00d7 expansion",
+    "foam_system": "X-30 2-part polyurethane, 2 lb/ft³, 4× expansion",
     "foam_pot_life_sec": 120,
     "foam_cure_hr": 24,
     "max_batch_mL": 60,
     "total_foam_mL": 330,
     "void_former_material": "25mm EPS blue foam board, waxed with Johnson's Paste Wax",
-    "conduit_material": "PTFE tube 5mm OD \u00d7 3mm ID",
-    "access_panels": ["A-nose-bayonet", "B-dorsal-fwd-screw", "C-cargo-belly-hinge", "D-dorsal-aft-magnet", "E-aft-service-screw", "F-engine-bell-bayonet"]
+    "conduit_material": "PTFE tube 5mm OD × 3mm ID",
+    "access_panels": [
+      "A-nose-bayonet",
+      "B-dorsal-fwd-screw",
+      "C-cargo-belly-hinge",
+      "D-dorsal-aft-magnet",
+      "E-aft-service-screw",
+      "F-engine-bell-bayonet"
+    ]
+  },
+  "cm3_carrier_1_notes": {
+    "board_dims_mm": "68 × 30",
+    "board_area_mm2": 2040,
+    "cm4_carrier2_area_mm2": 2508,
+    "area_reduction_pct": 19,
+    "layers": 4,
+    "cm_interface": "200-pin DDR2-SODIMM 0.6mm pitch — JEDEC MO-224 (TE 1473005-4 or equiv)",
+    "hat_header": "40-pin 2×20 2.54mm RPi HAT standard — accepts COMPHAT / COMM-HAT",
+    "jst_gh_ports": {
+      "J_CAN": "4-pin — GND / VCC / CANH / CANL — MCP2518FD + ATA6561",
+      "J_485": "4-pin — GND / VCC / RS485_A / RS485_B — MAX3485E",
+      "J_1553": "4-pin — GND / shield / BUS_A+ / BUS_A- — HI-6130 LQFP-80",
+      "J_ETH": "6-pin — GND / VCC / SCK / MISO / MOSI / CS — W5500 LQFP-48"
+    },
+    "power": "USB-C 5V in — AP2112K-3.3 LDO 600mA for 3.3V rail",
+    "debug": "CH340C USB-UART bridge on J_USBC — no crystal required",
+    "storage": "microSD push-push for CM3+ Lite OS boot",
+    "hat_eeprom": "CAT24C32WI 4Kbit I²C at 0x50 on ID_SD/ID_SC pins",
+    "capability_delta_vs_cm4": [
+      "Ethernet via W5500 SPI (hardware TCP/IP) — not native GbE — adequate for 100BASE-T node traffic",
+      "USB 2.0 max (CM3+ has no USB 3.0 or PCIe)",
+      "A53@1.2GHz vs A72@1.5GHz — ~50% single-thread regression; acceptable for nav/payload nodes",
+      "LPDDR2 max 1GB vs CM4 8GB max — sufficient for Node 2 (nav) and Node 3 (payload)",
+      "No CPLD write-blocker (CM3-CARRIER-1 omits MachXO2 — lower threat model for N2/N3)"
+    ],
+    "mass_saving_g": 60,
+    "notes": "CM3-CARRIER-1 replaces 3-board stack (CM4-CARRIER-2 + SENSORHAT-1 + MICROHAT = ~39g) with single 9g board + 8g CM3+ module = 17g. Total system saving 60g."
   }
 }

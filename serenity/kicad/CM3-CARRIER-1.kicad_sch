@@ -1,0 +1,16 @@
+; Serenity-Class Tiltrotor UAV — 8-Node Rev H.1
+; © 2026 Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP
+; License: CC BY 4.0  https://creativecommons.org/licenses/by/4.0/
+; Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0
+; Visual inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy / Universal Pictures
+; Fan engineering work — not officially licensed.
+
+(kicad_sch (version 20221012) (generator eeschema)
+  (paper "A3")
+  (title_block (title "CM3-CARRIER-1") (date "2026") (rev "H.1")
+    (company "Steve Griffing PE(CSE) CISSP-ISSEP CPP")
+    (comment_1 "Serenity-Class Tiltrotor — 8-Node Rev H.1")
+    (comment_2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
+    (comment_3 "CM3+ carrier 68x30mm 4L — integrated CAN FD/RS-485/1553/ETH — RPi HAT header")
+    (comment_4 "Nodes 2-3: replaces CM4-LITE + CM4-CARRIER-2 + SENSORHAT-1 + MICROHAT stack"))
+)
