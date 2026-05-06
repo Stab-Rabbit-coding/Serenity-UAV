@@ -90,12 +90,14 @@ const W_ITEMS = [
   ["Nacelle tilt servos MG90S ×2",             18],
   ["Gear nozzle assemblies ×3",                12],
   ["Variable-nozzle servo SG90",                9],
-  // Avionics
-  ["CM4-LITE ×4",                              30],
-  ["CM4-CARRIER-2 ×4",                         70],
-  ["SENSORHAT-1 ×4 (XIAO RP2350)",             50],
+  // Avionics — mixed CM4/CM3+ architecture
+  ["CM4-LITE ×2 (Nodes 1, 4)",                 15],
+  ["CM4-CARRIER-2 ×2 (Nodes 1, 4)",            35],
+  ["SENSORHAT-1 ×2 XIAO RP2350 (Nodes 1, 4)", 25],
+  ["CM3+ module ×2 (Nodes 2, 3)",              16],
+  ["CM3-CARRIER-1 ×2 (Nodes 2, 3)",            18],
   ["COMPHAT-SWITCH (Node 1 hat)",              29],
-  ["MICROHAT ×3 (Node 2-4 hats)",              29],
+  ["MICROHAT ×1 (Node 4 hat)",                 10],
   ["microSD cards ×8 (OS + log)",               8],
   // Power + wiring
   ["PDB + BEC 5V/5A",                          30],
@@ -621,16 +623,16 @@ function BalanceTab(){
 // ── TAB: AVIONICS ─────────────────────────────────────────────
 function AvionicsTab(){
   const NODES = [
-    {id:"NODE 1",pcb:"CM4-LITE + CARRIER-2 + SENSORHAT-1 + COMPHAT-SWITCH",
+    {id:"NODE 1",pcb:"CM4-LITE + CM4-CARRIER-2 + SENSORHAT-1 + COMPHAT-SWITCH",
      zone:"A (nose)",bus:"CAN FD BC · 1553 BC · RS-485 · ETH switch (KSZ8895) · SiK 915MHz",
      fn:"Flight controller · telemetry gateway · sensor fusion primary"},
-    {id:"NODE 2",pcb:"CM4-LITE + CARRIER-2 + SENSORHAT-1 + MICROHAT",
-     zone:"B (dorsal fwd)",bus:"CAN FD RT · 1553 RT · RS-485 · ETH port 2",
+    {id:"NODE 2",pcb:"CM3+ + CM3-CARRIER-1 (integrated bus I/O)",
+     zone:"B (dorsal fwd)",bus:"CAN FD RT · 1553 RT · RS-485 · ETH/SPI (W5500) — JST-GH ports",
      fn:"Navigation · GPS AHRS · power monitor · ESC telemetry"},
-    {id:"NODE 3",pcb:"CM4-LITE + CARRIER-2 + SENSORHAT-1 + MICROHAT",
-     zone:"D (dorsal aft)",bus:"CAN FD RT · 1553 RT · RS-485 · ETH port 3",
+    {id:"NODE 3",pcb:"CM3+ + CM3-CARRIER-1 (integrated bus I/O)",
+     zone:"D (dorsal aft)",bus:"CAN FD RT · 1553 RT · RS-485 · ETH/SPI (W5500) — JST-GH ports",
      fn:"Payload management · winch control · cargo camera · mission data"},
-    {id:"NODE 4",pcb:"CM4-LITE + CARRIER-2 + SENSORHAT-1 + MICROHAT",
+    {id:"NODE 4",pcb:"CM4-LITE + CM4-CARRIER-2 + SENSORHAT-1 + MICROHAT",
      zone:"E (aft service)",bus:"CAN FD RT · 1553 RT · RS-485 · ETH port 4",
      fn:"Actuator control · nacelle tilt servos · nozzle servos · nav lights"},
   ];
@@ -643,7 +645,7 @@ function AvionicsTab(){
   ];
   return(<div>
     <SH t="8-Node Distributed Compute Architecture" mt={0} c={C.teal}/>
-    <Note c={C.teal} ch="Each node is a CM4-LITE + CM4-CARRIER-2 + SENSORHAT-1 stack (XIAO RP2350 realtime co-processor on the hat). Node 1 adds COMPHAT-SWITCH for the Ethernet switch + 915MHz telemetry radio. Nodes 2-4 add MICROHAT for bus routing only. Total stack mass 188g."/>
+    <Note c={C.teal} ch="Mixed CM4/CM3+ architecture. Nodes 1 &amp; 4: CM4-LITE + CM4-CARRIER-2 + SENSORHAT-1 (XIAO RP2350 realtime co-processor). Nodes 2 &amp; 3: CM3+ + CM3-CARRIER-1 (68×30mm, integrated CAN FD/RS-485/1553B/W5500 with JST-GH panel connectors + 40-pin RPi HAT header). Saves ~60g vs all-CM4. Node 1 adds COMPHAT-SWITCH; Node 4 adds MICROHAT."/>
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:8}}>
       {NODES.map((n,i)=>(
         <div key={i} style={{padding:"10px 12px",border:`1px solid ${C.teal}44`,borderRadius:4,
@@ -672,23 +674,27 @@ function AvionicsTab(){
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20,marginTop:12}}>
       <div>
         <SH t="PCB Stack Masses" mt={0} c={C.purple}/>
-        <KV k="CM4-LITE ×4"            v="4 × 7.5g = 30g"/>
-        <KV k="CM4-CARRIER-2 ×4"       v="4 × 17.4g = 69.6g"/>
-        <KV k="SENSORHAT-1 ×4"         v="4 × 12.4g = 49.6g"/>
-        <KV k="COMPHAT-SWITCH ×1"      v="28.5g"/>
-        <KV k="MICROHAT ×3"            v="3 × 9.5g = 28.5g"/>
-        <KV k="microSD ×8 (OS+log)"    v="8 × 1g = 8g"/>
-        <KV k="TOTAL avionics stack"   v="214g" vc={C.lime}/>
+        <KV k="CM4-LITE ×2 (N1,N4)"        v="2 × 7.5g = 15g"/>
+        <KV k="CM4-CARRIER-2 ×2 (N1,N4)"   v="2 × 17.5g = 35g"/>
+        <KV k="SENSORHAT-1 ×2 (N1,N4)"     v="2 × 12.5g = 25g"/>
+        <KV k="CM3+ module ×2 (N2,N3)"     v="2 × 8g = 16g"/>
+        <KV k="CM3-CARRIER-1 ×2 (N2,N3)"   v="2 × 9g = 18g" vc={C.teal}/>
+        <KV k="COMPHAT-SWITCH ×1 (N1)"     v="29g"/>
+        <KV k="MICROHAT ×1 (N4)"           v="10g"/>
+        <KV k="microSD ×6 (OS+log)"        v="6 × 1g = 6g"/>
+        <KV k="TOTAL avionics stack"        v="154g" vc={C.lime}/>
+        <Good ch="−60g vs all-CM4 Rev H baseline (214g → 154g)"/>
       </div>
       <div>
-        <SH t="SENSORHAT-1 Sensors / Node" mt={0} c={C.pink}/>
-        <KV k="XIAO RP2350"       v="Cortex-M33 + RISC-V · dual-core 150MHz"/>
-        <KV k="ICM-42688-P IMU"   v="6-DOF · SPI0 · 24MHz · ±16g/±2000°/s"/>
-        <KV k="BMP388 barometer"  v="±0.5m res · I²C1 · 200Hz ODR"/>
-        <KV k="W5500 Ethernet"    v="100BASE-T · SPI1 · hardware TCP/IP"/>
-        <KV k="MCP2518FD CAN FD"  v="1Mbit/s · SPI0 · ISO 11898-1"/>
-        <KV k="HI-6130 1553"      v="RT mode · 78Ω · galv. isolated"/>
-        <KV k="RS-485 transceiver" v="3Mbit/s · half-duplex · ISO-protected"/>
+        <SH t="SENSORHAT-1 (Nodes 1 &amp; 4) / CM3-CARRIER-1 (Nodes 2 &amp; 3)" mt={0} c={C.pink}/>
+        <KV k="XIAO RP2350"        v="N1,N4 only · Cortex-M33+RISC-V · 150MHz"/>
+        <KV k="ICM-42688-P IMU"    v="N1,N4 only · 6-DOF · SPI0 · ±16g/±2000°/s"/>
+        <KV k="BMP388 barometer"   v="N1,N4 only · ±0.5m · I²C · 200Hz"/>
+        <KV k="MCP2518FD CAN FD"   v="All nodes · 1Mbit/s · SPI · ISO 11898-1"/>
+        <KV k="W5500 Ethernet"     v="All nodes · 100BASE-T · SPI · HW TCP/IP"/>
+        <KV k="HI-6130 1553B"      v="All nodes · RT mode · 78Ω · galv. isolated"/>
+        <KV k="MAX3485E RS-485"    v="All nodes · 3Mbit/s · half-duplex"/>
+        <KV k="CM3-CARRIER-1 size" v="68 × 30 mm · 4L · ~9g assembled" vc={C.teal}/>
       </div>
     </div>
   </div>);
