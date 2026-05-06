@@ -125,69 +125,97 @@
   <!-- ═══════════════════════════════════════════════════════════════════ -->
   <!-- RIGHT TOP: Nacelle tilt rotation diagram                            -->
   <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- DATUM: 0° = nacelle axis along longitudinal axis (forward flight)  -->
+  <!-- +θ = rotating aft toward VTOL and beyond; −5° = fwd hard stop      -->
   <rect x="590" y="102" width="590" height="310" rx="6" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
-  <text x="885" y="120" text-anchor="middle" font-size="11" font-weight="bold" fill="#333333">NACELLE TILT — 120&#xB0; RANGE (VTOL to REVERSE)</text>
+  <text x="885" y="120" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#333333">NACELLE TILT &#x2014; &#x2212;5&#xB0; TO 140&#xB0; · LONGITUDINAL AXIS DATUM</text>
 
-  <!-- Tilt pivot point at 830, 300 -->
-  <!-- Hub circle -->
-  <circle cx="830" cy="300" r="14" fill="#dddddd" stroke="#555555" stroke-width="2"/>
-  <text x="830" y="305" text-anchor="middle" font-size="7" fill="#333333">PIVOT</text>
+  <!-- Pivot at SVG (840, 310) -->
+  <circle cx="840" cy="310" r="12" fill="#dddddd" stroke="#555555" stroke-width="2"/>
+  <text x="840" y="314" text-anchor="middle" font-size="6.5" fill="#333333">PIVOT</text>
 
-  <!-- Arm (hull side) — horizontal left -->
-  <rect x="710" y="293" width="116" height="14" rx="3" fill="#b3d4ff" stroke="#006db7" stroke-width="1.5"/>
-  <text x="768" y="304" text-anchor="middle" font-size="7.5" fill="#003d7a">CF ARM</text>
+  <!-- CF Arm (hull side) pointing left -->
+  <rect x="700" y="303" width="129" height="14" rx="3" fill="#b3d4ff" stroke="#006db7" stroke-width="1.5"/>
+  <text x="764" y="313" text-anchor="middle" font-size="7.5" fill="#003d7a">CF ARM</text>
 
-  <!-- 0° position: EDF pointing straight up (nacelle horizontal, thrust vertical) -->
-  <!-- Nacelle as ellipse rotated 0° from vertical (EDF axis vertical = VTOL) -->
-  <g transform="translate(830,300)">
-    <!-- 0° — VTOL: nacelle pointing up -->
-    <ellipse cx="0" cy="-70" rx="20" ry="38" fill="#cce5ff" stroke="#006db7" stroke-width="1.5" opacity="0.7"/>
-    <text x="0" y="-95" text-anchor="middle" font-size="8" fill="#006db7">0&#xB0;</text>
-    <text x="0" y="-83" text-anchor="middle" font-size="7.5" fill="#006db7">VTOL</text>
-    <line x1="0" y1="-14" x2="0" y2="-108" stroke="#006db7" stroke-width="1" stroke-dasharray="3,2"/>
+  <!-- 0° datum reference line (horizontal forward) -->
+  <line x1="852" y1="310" x2="950" y2="310" stroke="#2e7d32" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="953" y="313" font-size="7" fill="#2e7d32">0° datum</text>
 
-    <!-- 90° — Forward: nacelle pointing forward (rotated 90° so EDF axis is horizontal) -->
-    <ellipse cx="80" cy="0" rx="38" ry="20" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1.5" opacity="0.7"/>
-    <text x="110" y="-8" font-size="8" fill="#2e7d32">90&#xB0;</text>
-    <text x="110" y="4" font-size="7.5" fill="#2e7d32">FWD</text>
-    <line x1="14" y1="0" x2="120" y2="0" stroke="#2e7d32" stroke-width="1" stroke-dasharray="3,2"/>
+  <!-- 90° datum reference line (VTOL vertical) -->
+  <line x1="840" y1="298" x2="840" y2="207" stroke="#006db7" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="844" y="204" font-size="7" fill="#006db7">90°</text>
 
-    <!-- 115° — Reverse thrust mode -->
-    <ellipse cx="60" cy="60" rx="38" ry="20" fill="#ffcdd2" stroke="#c62828" stroke-width="1.5" opacity="0.7"
-      transform="rotate(25,60,60)"/>
-    <text x="78" y="85" font-size="8" fill="#c62828">115&#xB0;</text>
-    <text x="78" y="95" font-size="7.5" fill="#c62828">REVERSE</text>
-    <line x1="14" y1="0" x2="108" y2="56" stroke="#c62828" stroke-width="1" stroke-dasharray="3,2"/>
+  <!-- ── Travel arcs (radius 95 centred on pivot 840,310) ── -->
+  <!-- Normal flight: −5° to 90° (green)
+       −5°: (840+94.6, 310+8.3)=(934.6,318.3)  90°: (840, 215) -->
+  <path d="M 935,318 A 95,95 0 0,1 840,215"
+        fill="none" stroke="#2e7d32" stroke-width="3" opacity="0.6"/>
+  <!-- Reverse/brake: 90° to 120° (orange)
+       120°: (840−47.5, 310−82.3)=(792.5,227.7) -->
+  <path d="M 840,215 A 95,95 0 0,1 793,228"
+        fill="none" stroke="#e65100" stroke-width="3" opacity="0.65"/>
+  <!-- Hard-stop zone: 120° to 140° (red dashed)
+       140°: (840−72.8, 310−61.1)=(767.2,248.9) -->
+  <path d="M 793,228 A 95,95 0 0,1 767,249"
+        fill="none" stroke="#c62828" stroke-width="2.5" stroke-dasharray="4,2" opacity="0.7"/>
 
-    <!-- Arc showing travel range -->
-    <path d="M 0,-86 A 86,86 0 0,1 86,0" fill="none" stroke="#2e7d32" stroke-width="2.5" opacity="0.6"/>
-    <path d="M 86,0 A 86,86 0 0,1 73,46" fill="none" stroke="#c62828" stroke-width="2.5" opacity="0.6"/>
+  <!-- ── Nacelle positions (arm length 85, centred on pivot) ── -->
+  <!-- θ=0° FORWARD: nacelle at (925,310), horizontal, no rotation -->
+  <ellipse cx="925" cy="310" rx="35" ry="16"
+    fill="#c8e6c9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="963" y="307" font-size="7.5" font-weight="bold" fill="#2e7d32">0° FWD</text>
+  <text x="963" y="317" font-size="7" fill="#2e7d32">3780g fwd thrust</text>
 
-    <!-- Angle arcs labels -->
-    <text x="-28" y="-65" font-size="7.5" fill="#555555">0–90&#xB0;</text>
-    <text x="-28" y="-54" font-size="7" fill="#555555">normal</text>
-  </g>
+  <!-- θ=90° VTOL: nacelle at (840,225), vertical (rotate −90°) -->
+  <ellipse cx="840" cy="225" rx="35" ry="16"
+    fill="#cce5ff" stroke="#006db7" stroke-width="2"
+    transform="rotate(-90,840,225)"/>
+  <text x="878" y="222" font-size="7.5" font-weight="bold" fill="#006db7">90° VTOL</text>
+  <text x="878" y="232" font-size="7" fill="#006db7">3400g lift</text>
 
-  <!-- Thrust vectors -->
-  <text x="612" y="200" font-size="8.5" font-weight="bold" fill="#006db7">VTOL (0&#xB0;)</text>
-  <text x="612" y="212" font-size="8" fill="#333333">Thrust: straight up</text>
-  <text x="612" y="223" font-size="8" fill="#333333">Lift: 2&#xD7;1700g = 3400g</text>
+  <!-- θ=120° REVERSE soft limit: nacelle at (798,236), rotate −120° -->
+  <ellipse cx="798" cy="236" rx="35" ry="16"
+    fill="#ffe0b2" stroke="#e65100" stroke-width="2"
+    transform="rotate(-120,798,236)"/>
 
-  <text x="612" y="248" font-size="8.5" font-weight="bold" fill="#2e7d32">FORWARD (90&#xB0;)</text>
-  <text x="612" y="260" font-size="8" fill="#333333">Thrust: forward only</text>
-  <text x="612" y="271" font-size="8" fill="#333333">Altitude: fuselage EDF only</text>
+  <!-- θ=140° AFT hard stop: nacelle at (775,255), rotate −140° -->
+  <ellipse cx="775" cy="255" rx="35" ry="16"
+    fill="#ffcdd2" stroke="#c62828" stroke-width="2"
+    transform="rotate(-140,775,255)"/>
 
-  <text x="612" y="296" font-size="8.5" font-weight="bold" fill="#c62828">REVERSE (115&#xB0;)</text>
-  <text x="612" y="308" font-size="8" fill="#333333">Reverse: 1700&#xD7;sin(25&#xB0;)&#xD7;2 = 1438g</text>
-  <text x="612" y="319" font-size="8" fill="#333333">Lift retained: 1700&#xD7;cos(25&#xB0;)&#xD7;2 = 3080g</text>
-  <text x="612" y="330" font-size="8" fill="#c62828">FC soft-limit: 90–115&#xB0; only in BRAKE mode</text>
-  <text x="612" y="341" font-size="8" fill="#555555">Mechanical hard-stop: 120&#xB0; in tilt bracket</text>
+  <!-- −5° FWD hard stop tick: small diamond at arc start -->
+  <polygon points="935,313 938,318 935,323 932,318"
+    fill="#5577aa" stroke="#5577aa" stroke-width="0.8" opacity="0.9"/>
+  <text x="936" y="330" text-anchor="middle" font-size="7" fill="#5577aa">&#x2212;5° stop</text>
+
+  <!-- Labels for 120° and 140° (placed left of nacelles) -->
+  <text x="612" y="236" font-size="7.5" font-weight="bold" fill="#e65100">120° REVERSE</text>
+  <text x="612" y="246" font-size="7" fill="#e65100">(FC soft limit)</text>
+  <line x1="700" y1="242" x2="775" y2="242" stroke="#e65100" stroke-width="0.7" stroke-dasharray="3,2"/>
+
+  <text x="612" y="262" font-size="7.5" font-weight="bold" fill="#c62828">140° HARD STOP</text>
+  <text x="612" y="272" font-size="7" fill="#c62828">(bracket boss)</text>
+  <line x1="700" y1="267" x2="762" y2="260" stroke="#c62828" stroke-width="0.7" stroke-dasharray="3,2"/>
+
+  <!-- ── Left text: mode descriptions ── -->
+  <text x="612" y="145" font-size="8.5" font-weight="bold" fill="#006db7">VTOL HOVER (90&#xB0;)</text>
+  <text x="612" y="156" font-size="8" fill="#333333">2&#xD7;1700g straight up = 3400g nacelle lift</text>
+
+  <text x="612" y="173" font-size="8.5" font-weight="bold" fill="#2e7d32">FORWARD FLIGHT (0&#xB0;)</text>
+  <text x="612" y="184" font-size="8" fill="#333333">2&#xD7;1700g fwd + 380g fuse = 3780g total fwd</text>
+  <text x="612" y="195" font-size="7.5" fill="#555555">Altitude maintained by fuselage EDF</text>
+
+  <text x="612" y="212" font-size="8.5" font-weight="bold" fill="#e65100">REVERSE / BRAKE (120&#xB0;)</text>
+  <text x="612" y="222" font-size="8" fill="#333333">1700&#xD7;sin(30&#xB0;)&#xD7;2 = 1700g aft reverse</text>
+  <text x="612" y="232" font-size="8" fill="#333333">1700&#xD7;cos(30&#xB0;)&#xD7;2 = 2944g lift retained</text>
 
   <!-- Bracket modification note -->
-  <rect x="596" y="356" width="374" height="44" rx="4" fill="#fff9c4" stroke="#f9a825" stroke-width="1.2"/>
-  <text x="783" y="370" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#5c3d00">TILT BRACKET MODIFICATION — NO SERVO CHANGE</text>
-  <text x="606" y="382" font-size="8" fill="#333333">Existing MG90S servo retained (9g, adequate torque for 120&#xB0; range).</text>
-  <text x="606" y="393" font-size="8" fill="#333333">Reprint tilt_bracket_120deg.stl — extended slot adds 30&#xB0; travel. Hard-stop boss at 120&#xB0; prevents over-rotation.</text>
+  <rect x="596" y="356" width="374" height="48" rx="4" fill="#fff9c4" stroke="#f9a825" stroke-width="1.2"/>
+  <text x="783" y="370" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#5c3d00">TILT BRACKET — NO SERVO CHANGE</text>
+  <text x="606" y="382" font-size="8" fill="#333333">Existing MG90S servo retained (9g, full torque adequate for 145&#xB0; total range).</text>
+  <text x="606" y="393" font-size="8" fill="#333333">Reprint tilt_bracket_140deg.stl — extended slot with dual hard-stop bosses at &#x2212;5&#xB0; and 140&#xB0;.</text>
+  <text x="606" y="403" font-size="7.5" fill="#555555">FC soft limits: outdoor 0&#xB0;&#x2013;90&#xB0;; BRAKE mode 0&#xB0;&#x2013;120&#xB0;. Max tilt rate: 20&#xB0;/s brake, 10&#xB0;/s transition.</text>
 
   <!-- ═══════════════════════════════════════════════════════════════════ -->
   <!-- BOTTOM LEFT: Cargo bay installation steps                           -->
@@ -242,23 +270,23 @@
 
   <circle cx="42" cy="690" r="9" fill="#ad1457"/>
   <text x="42" y="694" text-anchor="middle" font-size="9" font-weight="bold" fill="#ffffff">12</text>
-  <text x="56" y="694" font-size="9" fill="#222222">Print tilt_bracket_120deg.stl (&#xD7;2) replacing tilt_bracket_cf_petg.stl. Reinstall nacelle servos.</text>
-  <text x="56" y="704" font-size="9" fill="#222222">   Verify 0&#xB0; VTOL detent, 90&#xB0; forward stop, and 120&#xB0; hard-stop on bench before flight.</text>
+  <text x="56" y="694" font-size="9" fill="#222222">Print tilt_bracket_140deg.stl (&#xD7;2) replacing tilt_bracket_cf_petg.stl. Reinstall nacelle servos.</text>
+  <text x="56" y="704" font-size="9" fill="#222222">   Bench check: &#x2212;5&#xB0; fwd stop · 0&#xB0; forward datum · 90&#xB0; VTOL detent · 120&#xB0; soft mark · 140&#xB0; aft stop.</text>
 
   <circle cx="42" cy="720" r="9" fill="#ad1457"/>
   <text x="42" y="724" text-anchor="middle" font-size="9" font-weight="bold" fill="#ffffff">13</text>
-  <text x="56" y="724" font-size="9" fill="#222222">In FC configurator: enable REVERSE_BRAKE mode. Set nacelle_max = 115&#xB0;. Set nacelle_reverse_rate = 20&#xB0;/s.</text>
+  <text x="56" y="724" font-size="9" fill="#222222">In FC configurator: enable INDOOR_BRAKE mode. nacelle_brake_limit = 120&#xB0;, nacelle_aft_stop = 140&#xB0;, tilt_rate_brake = 20&#xB0;/s.</text>
 
   <circle cx="42" cy="740" r="9" fill="#ad1457"/>
   <text x="42" y="744" text-anchor="middle" font-size="9" font-weight="bold" fill="#ffffff">14</text>
-  <text x="56" y="744" font-size="9" fill="#222222">Flight test: hover at 2m, command REVERSE → verify rearward motion at &#x2264;1m/s. Check altitude</text>
-  <text x="56" y="754" font-size="9" fill="#222222">   hold (fuselage EDF maintains lift at 115&#xB0; nacelle). Cancel → nacelles return to 90&#xB0; in 2s.</text>
+  <text x="56" y="744" font-size="9" fill="#222222">Flight test: hover at 2m, command INDOOR_BRAKE → verify rearward motion &#x2264;1m/s. Check altitude</text>
+  <text x="56" y="754" font-size="9" fill="#222222">   hold (fuselage EDF maintains 2944g lift at 120&#xB0; nacelle). Cancel → nacelles return to 90&#xB0; in 2s.</text>
 
   <!-- Weight impact note -->
   <rect x="28" y="764" width="540" height="38" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.2"/>
   <text x="298" y="777" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#1a5c1a">MASS BUDGET IMPACT</text>
   <text x="38" y="789" font-size="8" fill="#333333">Cargo gondola +14g · door servo +9g · winch cradle +10g · Dyneema +1g · sensors +26g · mounts +11g = +71g total</text>
-  <text x="38" y="799" font-size="8" fill="#333333">Dry mass 1473g · AUW empty 1883g (T/W 2.01) · AUW cargo w/ 6S 1800mAh: 1903g (T/W 1.99)</text>
+  <text x="38" y="799" font-size="8" fill="#333333">Dry mass 1413g · AUW empty 1823g (T/W 2.07) · AUW cargo w/ 6S 1800mAh: 1843g (T/W 2.05) — Rev I</text>
 
   <!-- ═══════════════════════════════════════════════════════════════════ -->
   <!-- BOTTOM RIGHT: Winch operation sequence                              -->

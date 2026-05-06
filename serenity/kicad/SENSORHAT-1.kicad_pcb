@@ -1,4 +1,4 @@
-; Serenity-Class Tiltrotor UAV — 8-Node Rev H.1
+; Serenity-Class Tiltrotor UAV — 8-Node Rev I
 ; © 2026 Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP
 ; License: CC BY 4.0  https://creativecommons.org/licenses/by/4.0/
 ; Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0
@@ -9,9 +9,9 @@
   (general (thickness 1.6))
   (paper "A4")
   (title_block
-    (title "SENSORHAT-1")  (date "2026") (rev "H.1")
+    (title "SENSORHAT-1")  (date "2026") (rev "I")
     (company "Steve Griffing PE(CSE) CISSP-ISSEP CPP")
-    (comment_1 "Serenity-Class Tiltrotor UAV — 8-Node Rev H.1")
+    (comment_1 "Serenity-Class Tiltrotor UAV — 8-Node Rev I")
     (comment_2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
     (comment_3 "XIAO RP2350 sensor hat 46x36mm 4L — all buses isolated")
   )

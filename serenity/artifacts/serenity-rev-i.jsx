@@ -62,11 +62,12 @@ const DIM = {
   // CG
   CG_MM:  190.0,  CG_IN:  7.48,    // target CG from nose
   BAT_TR:  28.0,                    // battery slide travel ±mm
-  // Nacelle tilt range
-  TILT_VTOL:    0,    // degrees — pure VTOL (thrust vertical)
-  TILT_FWD:    90,    // degrees — forward flight (thrust horizontal)
-  TILT_REV:   115,    // degrees — FC soft limit for reverse/brake mode
-  TILT_STOP:  120,    // degrees — mechanical hard stop in tilt bracket
+  // Nacelle tilt range — 0° datum = longitudinal axis (forward flight)
+  TILT_FWD_STOP:  -5,   // mechanical hard stop — forward limit (anti-dive)
+  TILT_FWD:        0,   // 0° datum — nacelles horizontal, pure forward thrust
+  TILT_VTOL:      90,   // 90° — pure VTOL hover (nacelles pointing up)
+  TILT_REV:      120,   // FC soft limit — reverse / brake mode
+  TILT_AFT_STOP: 140,   // mechanical hard stop — aft limit in tilt bracket
 };
 
 // ── Rev H weight budget (bom_revH1.json) ─────────────────────
@@ -971,11 +972,12 @@ function CargoNacelleTab(){
     {s:"SECURED",  icon:"✓", c:C.lime,     d:"Doors close around cargo, latched. Ready for transit."},
   ];
   const TILT = [
-    {mode:"VTOL",        deg:DIM.TILT_VTOL,    c:C.accent,  thrust:"3400g lift (nacelles only)",               note:"Hover, takeoff, landing"},
-    {mode:"TRANSITION",  deg:"0–90",            c:C.teal,    thrust:"Mixed lift + forward",                     note:"Gradual tilt during acceleration"},
-    {mode:"FORWARD",     deg:DIM.TILT_FWD,     c:C.green,   thrust:"Horizontal — altitude via fuselage EDF",   note:"Cruise flight"},
-    {mode:"REVERSE/BRAKING",deg:DIM.TILT_REV,  c:C.red,     thrust:"1438g reverse + 3080g lift retained",      note:"Indoor deceleration only"},
-    {mode:"HARD STOP",   deg:DIM.TILT_STOP,    c:C.yellow,  thrust:"—",                                        note:"Mechanical bracket stop — FC never commands this"},
+    {mode:"FWD HARD STOP",      deg:DIM.TILT_FWD_STOP,  c:C.yellow, thrust:"—",                                            note:"Bracket boss fwd limit — FC never commands"},
+    {mode:"FORWARD",            deg:DIM.TILT_FWD,       c:C.green,  thrust:"3400g fwd (nacelles) + 380g fuse = 3780g",     note:"Cruise — altitude by fuselage EDF only"},
+    {mode:"TRANSITION",         deg:"0→90",              c:C.teal,   thrust:"Mixed fwd + lift",                             note:"Gradual tilt during accel / decel"},
+    {mode:"VTOL",               deg:DIM.TILT_VTOL,      c:C.accent, thrust:"3400g lift (nacelles) + 380g fuse lift",       note:"Hover, takeoff, landing"},
+    {mode:"REVERSE / BRAKE",    deg:DIM.TILT_REV,       c:C.red,    thrust:"1700g reverse + 2944g lift retained",          note:"BRAKE mode only — indoor deceleration"},
+    {mode:"AFT HARD STOP",      deg:DIM.TILT_AFT_STOP,  c:C.orange, thrust:"—",                                            note:"Bracket boss aft limit — FC never commands"},
   ];
   return(<div>
     <SH t="Cargo Bay — 4\"×3\"×3\" Gondola Design" mt={0} c={C.pink}/>
@@ -1013,8 +1015,8 @@ function CargoNacelleTab(){
       ))}
     </div>
 
-    <SH t="Nacelle Tilt — Extended Range (0°→120°)" c={C.orange}/>
-    <Note c={C.orange} ch="The MG90S nacelle tilt servo is retained unchanged. The tilt_bracket_120deg.stl reprint extends the slot geometry to allow 120° of mechanical travel (vs. 90° original). The bracket hard-stop boss prevents over-rotation beyond 120°. No servo swap needed — the MG90S physical range comfortably covers 120°."/>
+    <SH t="Nacelle Tilt — −5° to 140° (Longitudinal Axis Datum)" c={C.orange}/>
+    <Note c={C.orange} ch="Datum corrected: 0° = nacelles aligned with longitudinal axis (forward flight). 90° = VTOL hover. FC soft limits: outdoor 0°–90°; BRAKE mode 0°–120°. Hard stops: −5° forward boss (anti-dive), 140° aft boss. MG90S servo retained — reprint tilt_bracket_140deg.stl (×2) with dual stop bosses. No servo or arm change."/>
     <div style={{overflowX:"auto",marginBottom:8}}>
       <table style={{width:"100%",borderCollapse:"collapse",fontFamily:M,fontSize:10}}>
         <TH cols={["MODE","TILT ANGLE","THRUST VECTOR","OPERATIONAL USE"]}/>
@@ -1028,9 +1030,9 @@ function CargoNacelleTab(){
         ))}</tbody>
       </table>
     </div>
-    <Note c={C.yellow} ch="At 115° reverse mode: nacelle thrust × sin(25°) = 1700 × 0.423 = 719g reverse per nacelle = 1438g total reverse. Lift retained = 1700 × cos(25°) × 2 = 3080g — sufficient for hover with empty payload. Use reverse mode only for indoor deceleration braking; not sustained reverse cruise."/>
-    <Warn ch="Reverse/brake mode (90°–115°) is only available via explicit FC command in INDOOR mode. Normal outdoor flight limits nacelles to 0–90°. Maximum nacelle reverse rate = 20°/s to prevent abrupt pitch disturbance."/>
-    <Good ch="Tilt bracket modification requires only a reprint of tilt_bracket_120deg.stl (×2). Servo, arm, and pivot pin are unchanged. Zero additional mass."/>
+    <Note c={C.yellow} ch="At 120° (BRAKE soft limit): 30° past VTOL. Reverse = 1700×sin(30°)×2 = 1700g aft. Lift retained = 1700×cos(30°)×2 = 2944g — sufficient for hover with empty payload. At 140° hard stop: reverse = 1700×sin(50°)×2 = 2604g, lift = 1700×cos(50°)×2 = 2186g (structural limit only; FC never commands)."/>
+    <Warn ch="BRAKE mode (0°–120° range) available only via explicit FC INDOOR_BRAKE command. Outdoor FC soft-limits nacelles to 0°–90°. Maximum tilt rate: 20°/s in BRAKE mode; 10°/s during normal transition."/>
+    <Good ch="Tilt bracket modification: reprint tilt_bracket_140deg.stl (×2). Dual stop bosses at −5° and 140°. Existing MG90S servo, arm, and pivot pin unchanged. Zero additional mass."/>
   </div>);
 }
 
@@ -1062,11 +1064,11 @@ export default function App(){
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:12}}>
         <div>
           <div style={{color:C.lime,fontSize:9,letterSpacing:"0.2em",marginBottom:4}}>
-            SERENITY TILTROTOR · 18" CANONICAL · REV H</div>
+            SERENITY TILTROTOR · 18" CANONICAL · REV I</div>
           <h1 style={{margin:0,fontSize:18,fontWeight:"normal",color:C.text,letterSpacing:"0.07em",fontFamily:MB}}>
             SERENITY-CLASS FIREFLY TILTROTOR UAV</h1>
           <div style={{color:"rgba(0,229,255,0.6)",fontSize:10,marginTop:3,fontFamily:M}}>
-            {DIM.L_MM}mm ({DIM.L_IN}") · 80mm 6S EDFs · 6× VL53L5CX ToF · 4"×3"×3" cargo gondola · nacelle 0–120° · 6 access panels
+            {DIM.L_MM}mm ({DIM.L_IN}") · 80mm 6S EDFs · 6× VL53L5CX ToF · 4"×3"×3" cargo gondola · nacelle −5°–140° · CM3+ Nodes 2&amp;3 · 6 access panels
           </div>
         </div>
         <div style={{textAlign:"right",fontFamily:M}}>
