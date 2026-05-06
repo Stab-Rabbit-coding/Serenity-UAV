@@ -1,5 +1,5 @@
 {
-  "revision": "H.1",
+  "revision": "Rev I",
   "scale": "18 inches (457.2mm)",
   "canonical_source": "QMx Official Serenity Blueprints (Mandel/Earls 2007) 269ft×170ft×79ft",
   "author": "Steve Griffing PE(CSE) CISSP-ISSEP CPP",
@@ -578,15 +578,20 @@
     "cradle_type": "auto-latch PETG corner clips — no manual attachment needed"
   },
   "nacelle_tilt": {
-    "vtol_deg": 0,
+    "vtol_deg": 90,
     "forward_flight_deg": 90,
     "reverse_mode_deg": 115,
-    "hard_stop_deg": 120,
     "servo": "MG90S (unchanged) — bracket geometry modified for 120° travel",
     "fc_soft_limit_normal": "0–90°",
     "fc_soft_limit_reverse": "90–115° (reverse/brake mode only)",
     "reverse_thrust_at_115deg": "nacelle thrust × sin(25°) × 2 = 1700 × 0.423 × 2 = 1438g reverse component",
-    "lift_at_115deg": "nacelle thrust × cos(25°) × 2 = 1700 × 0.906 × 2 = 3080g lift — sufficient for hover with reduced payload"
+    "lift_at_115deg": "nacelle thrust × cos(25°) × 2 = 1700 × 0.906 × 2 = 3080g lift — sufficient for hover with reduced payload",
+    "datum": "0deg = longitudinal axis (forward flight); +theta = aft rotation toward VTOL",
+    "forward_deg": 0,
+    "fwd_hard_stop_deg": -5,
+    "reverse_soft_limit_deg": 120,
+    "aft_hard_stop_deg": 140,
+    "bracket_stl": "tilt_bracket_140deg.stl"
   },
   "obstacle_avoidance_notes": {
     "sensor": "VL53L5CX 8×8 multizone ToF, 65° FoV, 0.4–4m range",

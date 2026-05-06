@@ -18,7 +18,7 @@
 </defs>
 <rect width="1200" height="900" fill="#f5f0e8"/>
 <rect x="0" y="0" width="1200" height="64" fill="#006db7"/>
-<text x="24" y="24" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="14" fill="#ffffff" letter-spacing="2">SERENITY-CLASS TILTROTOR UAV  ·  8-NODE REV H.1</text>
+<text x="24" y="24" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="14" fill="#ffffff" letter-spacing="2">SERENITY-CLASS TILTROTOR UAV  ·  8-NODE REV I</text>
 <text x="24" y="46" font-family="'OpenDyslexic',sans-serif" font-size="11" fill="#c8dff0">Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · CC BY 4.0 · 2026</text>
 <rect x="1000" y="8" width="184" height="48" rx="6" fill="#ff7518"/>
 <text x="1092" y="29" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">STEPS 21-23 / 23</text>
@@ -122,7 +122,7 @@
 <rect x="620" y="116" width="560" height="748" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
 <rect x="620" y="116" width="560" height="28" rx="8" fill="#006db7"/>
 <rect x="620" y="132" width="560" height="12" fill="#006db7"/>
-<text x="900" y="135" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">WEIGHT BUDGET — 8-NODE REV H.1</text>
+<text x="900" y="135" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">WEIGHT BUDGET — 8-NODE REV I</text>
 <rect x="626" y="142" width="548" height="16" rx="2" fill="transparent"/>
 <text x="632" y="154" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222" font-weight="normal">Airframe hull + CF skeleton</text>
 <text x="815" y="154" text-anchor="end" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#222222">178</text>
