@@ -101,36 +101,64 @@
       "qty": 1,
       "mass_g": 150,
       "thrust_g_6S": 1700,
-      "notes": "OD 93.5mm (canonical nacelle OD), 1.2mm wall pod"
+      "notes": "OD 93.5mm (canonical nacelle OD), 1.2mm wall pod",
+      "sourcing": {
+        "supplier": "Nitroplanes",
+        "mpn": "Freewing 2836-2150KV 80mm EDF",
+        "cost_est_usd": 55
+      }
     },
     {
       "ref": "EDF-NAC-R",
       "desc": "80mm EDF nacelle RIGHT (STBD) — 6S",
       "qty": 1,
       "mass_g": 150,
-      "thrust_g_6S": 1700
+      "thrust_g_6S": 1700,
+      "sourcing": {
+        "supplier": "Nitroplanes",
+        "mpn": "Freewing 2836-2150KV 80mm EDF",
+        "cost_est_usd": 55
+      }
     },
     {
       "ref": "EDF-FUSE",
-      "desc": "40mm EDF fuselage (engine bell) — 4S",
+      "desc": "40mm EDF fuselage (engine bell) — 6S",
       "qty": 1,
       "mass_g": 38,
-      "thrust_g_4S": 380,
-      "notes": "Mounted in engine bell section 83-100% station. Variable-area nozzle (BamJr remix CC BY 4.0)"
+      "thrust_g_6S": 400,
+      "notes": "Mounted in engine bell section 83-100% station. Variable-area nozzle (BamJr remix CC BY 4.0). 6S direct-connect to main bus — no voltage conversion needed.",
+      "sourcing": {
+        "supplier": "Banggood",
+        "mpn": "40mm 6S 2205-2220KV EDF unit",
+        "cost_est_usd": 28,
+        "notes": "Generic 40mm 6S EDF unit; verify 22.2V rating before install"
+      }
     },
     {
       "ref": "ESC-NAC",
       "desc": "50A BLHeli32 ESC for 80mm nacelle EDF — 6S rated",
       "qty": 2,
       "mass_g": 28,
-      "notes": "One per nacelle. 6S = 22.2V nominal."
+      "notes": "One per nacelle. 6S = 22.2V nominal.",
+      "sourcing": {
+        "supplier": "Hobbywing",
+        "mpn": "Platinum 50A V4",
+        "cost_est_usd": 30,
+        "notes": "Per unit. 2 required."
+      }
     },
     {
       "ref": "ESC-FUSE",
-      "desc": "25A BLHeli32 ESC for 40mm fuselage EDF — 4S rated",
+      "desc": "30A BLHeli32 ESC for 40mm fuselage EDF — 6S rated",
       "qty": 1,
-      "mass_g": 16,
-      "notes": "Separate 4S feed from PDB (regulates down from 6S main)"
+      "mass_g": 20,
+      "notes": "Direct 6S feed from main PDB bus. Replaces 25A 4S ESC. Eliminates need for 4S BEC/step-down on PDB.",
+      "sourcing": {
+        "supplier": "Hobbywing",
+        "mpn": "Platinum 30A V4",
+        "cost_est_usd": 22,
+        "notes": "6S rated; verify 22.2V max input"
+      }
     }
   ],
   "nacelle_hardware": [
@@ -221,7 +249,13 @@
       "qty": 2,
       "mass_g": 8.0,
       "cost_est": "$25ea",
-      "notes": "200-pin SODIMM. A53@1.2GHz, LPDDR2 1GB max. USB2-attached GbE via CM3-CARRIER-1 W5500. microSD boot via carrier J_SD slot."
+      "notes": "200-pin SODIMM. A53@1.2GHz, LPDDR2 1GB max. USB2-attached GbE via CM3-CARRIER-1 W5500. microSD boot via carrier J_SD slot.",
+      "sourcing": {
+        "supplier": "Raspberry Pi approved resellers (Adafruit, PiShop, OKdo)",
+        "mpn": "SC0024",
+        "manufacturer": "Raspberry Pi Ltd",
+        "cost_est_usd_ea": 25
+      }
     },
     {
       "ref": "CM3-CARRIER-1",
@@ -416,40 +450,114 @@
   ],
   "obstacle_avoidance": [
     {
-      "ref": "TOF-VL53L5CX",
-      "desc": "ST VL53L5CX 8×8 multizone ToF sensor — 65° FoV, 0.4–4m",
+      "ref": "TOF-A-VL53L5CX",
+      "desc": "Array A — ST VL53L5CX 8×8 multizone ToF sensors — Node 3, Panel D",
       "qty": 6,
       "mass_g": 2,
-      "notes": "6 sensors: S1-Forward (sta 25mm nose), S2-Aft (sta 440mm engine bell ring), S3-Port (sta 200mm hull side), S4-Stbd (sta 200mm hull side mirror), S5-Zenith (sta 180mm dorsal keel apex), S6-Nadir (sta 160mm forward belly). Each flush-mounted behind 5mm PMMA optical window. Package 6.4×3.0×1.5mm. I2C default 0x52; unique addresses assigned at boot via XSHUT multiplexing."
+      "notes": "S1A Forward sta 25mm, S2A Aft sta 440mm, S3A Port sta 200mm, S4A Stbd sta 200mm, S5A Zenith sta 180mm, S6A Nadir sta 160mm. Each flush-mounted behind 5mm PMMA window. I2C bus: Node 3 I2C3.",
+      "sourcing": {
+        "supplier": "Mouser / DigiKey",
+        "mpn": "VL53L5CXV0GC/1",
+        "manufacturer": "STMicroelectronics",
+        "cost_est_usd_ea": 7.00,
+        "cost_est_usd_qty6": 42.00
+      }
     },
     {
-      "ref": "TOF-MUX",
-      "desc": "TCA9548A 8-channel I2C mux — routes 6 VL53L5CX sensors",
+      "ref": "TOF-A-MUX",
+      "desc": "Array A — TCA9548A 8-channel I2C mux",
       "qty": 1,
       "mass_g": 1,
-      "notes": "I2C address 0x70. Select channel 0–5 to address each sensor. On shared 25×20mm PETG-mounted PCB with MCP23008."
+      "notes": "I2C address 0x70. Channels 0–5 select S1A–S6A. Shared PCB with MCP23008-A. Node 3 I2C3 (Panel D).",
+      "sourcing": {
+        "supplier": "Mouser",
+        "mpn": "TCA9548APWR",
+        "manufacturer": "Texas Instruments",
+        "cost_est_usd": 1.50
+      }
     },
     {
-      "ref": "TOF-GPIO",
-      "desc": "MCP23008 8-port I2C GPIO expander — XSHUT control",
+      "ref": "TOF-A-GPIO",
+      "desc": "Array A — MCP23008 8-port I2C GPIO expander — XSHUT control",
       "qty": 1,
       "mass_g": 1,
-      "notes": "I2C address 0x20. GP0–GP5 drive XSHUT lines. At boot: all low (sensors shutdown) → enable one at a time, assign address, disable. Shared PCB with TCA9548A. Connected to Node 3 I2C bus (Panel D access)."
+      "notes": "I2C address 0x20. GP0–GP5 drive XSHUT for S1A–S6A. Boot: all low → enable one, assign 0x54–0x59, disable. Node 3 I2C3 (Panel D).",
+      "sourcing": {
+        "supplier": "Mouser",
+        "mpn": "MCP23008-E/SS",
+        "manufacturer": "Microchip Technology",
+        "cost_est_usd": 1.20
+      }
     },
     {
-      "ref": "TOF-MOUNT",
-      "desc": "Sensor PETG flush-mount ×6 — 5mm circular aperture",
+      "ref": "TOF-A-MOUNT",
+      "desc": "Array A — Sensor PETG flush-mount ×6",
       "qty": 6,
       "mass_g": 1,
       "stl": "tof_flush_mount_5mm.stl",
-      "notes": "Press-fit into 6.5mm hull cutout. Sensor seats on 0.3mm shoulder. 0.5mm PMMA disc (cut from 1.5mm clear acrylic sheet) glued over aperture with UV cure adhesive. Mounts look like small hull portholes — screen-accurate Serenity detail."
+      "notes": "Press-fit 6.5mm hull cutout. 0.5mm PMMA disc UV-adhesive over aperture."
     },
     {
-      "ref": "TOF-CABLE",
-      "desc": "VL53L5CX breakout cable 4-wire JST-SH1.0 — 300mm",
+      "ref": "TOF-A-CABLE",
+      "desc": "Array A — VL53L5CX cable 4-wire JST-SH1.0 300mm",
       "qty": 6,
       "mass_g": 1,
-      "notes": "GND/VCC/SDA/SCL. Route through foam conduit where possible; otherwise cable-clip to hull ribs. All 6 terminate at TCA9548A/MCP23008 PCB in Panel D bay."
+      "notes": "Route through foam conduit to Panel D bay. GND/VCC/SDA/SCL."
+    },
+    {
+      "ref": "TOF-B-VL53L5CX",
+      "desc": "Array B — ST VL53L5CX 8×8 multizone ToF sensors — Node 2, Panel B",
+      "qty": 6,
+      "mass_g": 2,
+      "notes": "S1B Forward sta 40mm, S2B Aft sta 425mm, S3B Port sta 150mm, S4B Stbd sta 150mm, S5B Zenith sta 260mm, S6B Nadir sta 220mm. Spatially offset from Array A for different blind-spot profiles. I2C bus: Node 2 I2C2.",
+      "sourcing": {
+        "supplier": "Mouser / DigiKey",
+        "mpn": "VL53L5CXV0GC/1",
+        "manufacturer": "STMicroelectronics",
+        "cost_est_usd_ea": 7.00,
+        "cost_est_usd_qty6": 42.00
+      }
+    },
+    {
+      "ref": "TOF-B-MUX",
+      "desc": "Array B — TCA9548A 8-channel I2C mux",
+      "qty": 1,
+      "mass_g": 1,
+      "notes": "I2C address 0x70 on Node 2 I2C2 — electrically isolated from Array A bus. Channels 0–5 select S1B–S6B. Panel B bay.",
+      "sourcing": {
+        "supplier": "Mouser",
+        "mpn": "TCA9548APWR",
+        "manufacturer": "Texas Instruments",
+        "cost_est_usd": 1.50
+      }
+    },
+    {
+      "ref": "TOF-B-GPIO",
+      "desc": "Array B — MCP23008 8-port I2C GPIO expander — XSHUT control",
+      "qty": 1,
+      "mass_g": 1,
+      "notes": "I2C address 0x20 on Node 2 I2C2. GP0–GP5 drive XSHUT for S1B–S6B. Boot sequence identical to Array A but on separate bus. Panel B bay.",
+      "sourcing": {
+        "supplier": "Mouser",
+        "mpn": "MCP23008-E/SS",
+        "manufacturer": "Microchip Technology",
+        "cost_est_usd": 1.20
+      }
+    },
+    {
+      "ref": "TOF-B-MOUNT",
+      "desc": "Array B — Sensor PETG flush-mount ×6",
+      "qty": 6,
+      "mass_g": 1,
+      "stl": "tof_flush_mount_5mm.stl",
+      "notes": "Same print as Array A mounts. Different hull cutout positions per Array B station offsets."
+    },
+    {
+      "ref": "TOF-B-CABLE",
+      "desc": "Array B — VL53L5CX cable 4-wire JST-SH1.0 300mm",
+      "qty": 6,
+      "mass_g": 1,
+      "notes": "Route through separate foam conduit to Panel B bay. Do NOT commingle with Array A harness."
     }
   ],
   "radios_sensors": [
@@ -595,39 +703,49 @@
   },
   "obstacle_avoidance_notes": {
     "sensor": "VL53L5CX 8×8 multizone ToF, 65° FoV, 0.4–4m range",
-    "count": 6,
-    "positions": {
-      "S1_forward": "station 25mm  — nose bayonet ring, 0° azimuth",
-      "S2_aft": "station 440mm — engine bell rim, 180° azimuth",
-      "S3_port": "station 200mm — port hull side at waterline, 270° azimuth",
-      "S4_stbd": "station 200mm — stbd hull side at waterline, 90° azimuth",
-      "S5_zenith": "station 180mm — dorsal keel apex, 90° elevation",
-      "S6_nadir": "station 160mm — forward belly blister, -90° elevation"
+    "total_sensors": 12,
+    "arrays": 2,
+    "redundancy": "Each array independently provides full omnidirectional coverage. Single node failure leaves other array active with no coverage gap.",
+    "array_A": {
+      "host": "Node 3 (Panel D) I2C3",
+      "positions": {
+        "S1A_forward": "station 25mm — nose bayonet ring",
+        "S2A_aft": "station 440mm — engine bell rim",
+        "S3A_port": "station 200mm — port hull side",
+        "S4A_stbd": "station 200mm — stbd hull side",
+        "S5A_zenith": "station 180mm — dorsal keel apex",
+        "S6A_nadir": "station 160mm — forward belly blister"
+      }
     },
-    "i2c_mux": "TCA9548A ch 0–5",
-    "xshut_gpio": "MCP23008 GP0–GP5",
-    "host_node": "Node 3 (Panel D) I2C bus",
+    "array_B": {
+      "host": "Node 2 (Panel B) I2C2",
+      "positions": {
+        "S1B_forward": "station 40mm — nose ring aft of S1A",
+        "S2B_aft": "station 425mm — engine bell fore of S2A",
+        "S3B_port": "station 150mm — port hull, fwd of S3A",
+        "S4B_stbd": "station 150mm — stbd hull, fwd of S4A",
+        "S5B_zenith": "station 260mm — dorsal keel, aft of S5A",
+        "S6B_nadir": "station 220mm — belly, aft of S6A"
+      }
+    },
+    "i2c_mux": "TCA9548A ch 0–5 (one per array, same address 0x70 on isolated buses)",
+    "xshut_gpio": "MCP23008 GP0–GP5 (one per array, same address 0x20 on isolated buses)",
     "aperture": "5mm PMMA disc flush-mount — looks like hull porthole",
     "indoor_range_m": 4,
     "update_rate_hz": 15
   },
-  "total_airframe_mass_g": 1413,
+  "total_airframe_mass_g": 1443,
   "total_auw_g": {
-    "note": "EPS void formers and wax consumed during build. +59g vs Rev H base for: cargo gondola (+14g), door servo (+9g), cargo cradle (+10g), ToF sensors (+15g), I2C mux PCB (+4g), sensor mounts (+7g).",
-    "base_dry_no_battery_g": 1473,
-    "auw_empty_6S_4000mAh_410g": 1883,
-    "tw_empty": 2.01,
-    "auw_cargo_6S_2800mAh_295g_plus_250g_payload": 2018,
-    "tw_cargo": 1.87,
-    "auw_cargo_light_6S_1800mAh_180g_plus_250g": 1903,
-    "tw_cargo_light": 1.99,
-    "note_cargo": "Use 6S 1800mAh (180g) for T/W≈2.0 on cargo missions. 2800mAh gives T/W 1.87 — acceptable for slow indoor cargo ops where max throttle is rarely needed.",
-    "dry_g": 1413,
-    "empty_with_6S4000_g": 1823,
-    "cargo_config_6S2800_g": 1958,
-    "max_auw_limited_tw2_g": 477,
-    "TW_empty": 2.07,
-    "TW_cargo_6S2800": 1.93
+    "note": "EPS void formers and wax consumed during build. Rev I adds dual obstacle avoidance arrays (+30g: Array-B sensors/PCB/mounts) and upgrades fuselage ESC 4S→6S (+4g). 40mm EDF now direct-connect 6S. Total dry +34g vs single-array build.",
+    "dry_g": 1443,
+    "thrust_g": 3800,
+    "auw_empty_6S_4000mAh_410g": 1853,
+    "tw_empty": 2.05,
+    "auw_cargo_6S_2800mAh_295g_plus_250g_payload": 1988,
+    "tw_cargo": 1.91,
+    "auw_cargo_light_6S_1800mAh_180g_plus_250g": 1873,
+    "tw_cargo_light": 2.03,
+    "note_cargo": "Use 6S 1800mAh (180g) for T/W>2.0 on cargo missions. 2800mAh gives T/W 1.91 — acceptable for slow indoor cargo ops."
   },
   "build_notes": {
     "foam_fill_step": 23,
