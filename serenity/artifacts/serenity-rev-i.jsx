@@ -82,9 +82,10 @@ const W_ITEMS = [
   ["Gasket tape 3M 4016",                       8],
   // Propulsion
   ["80mm EDF nacelle ×2 (motor+fan+housing)", 300],
-  ["40mm fuselage EDF 6S",                      38],
+  ["AEORC XDF40 40mm 8-blade EDF (4S via tap)",  41],
   ["50A ESC ×2 (nacelle, 6S)",                 56],
-  ["30A ESC ×1 (fuselage, 6S)",                20],
+  ["50A ESC ×1 (fuselage, 4S)",                22],
+  ["6S→4S balance tap pigtail (cells 1–4)",     2],
   ["Nacelle pods 93.5mm OD ×2",                36],
   ["Nacelle tip caps ×2 + nav lights",         16],
   ["CF stub arms + tilt brackets ×2",          14],
@@ -134,7 +135,7 @@ const DRY_G   = W_ITEMS.reduce((s,[,g])=>s+g, 0);
 
 // ── Power & thrust ────────────────────────────────────────────
 const THRUST_NAC  = 1700;  // each 80mm 6S EDF
-const THRUST_FUSE =  400;  // 40mm 6S EDF
+const THRUST_FUSE =  575;  // AEORC XDF40 nominal 4S (14.8V) — 698g peak at 4S full
 const THRUST      = THRUST_NAC*2 + THRUST_FUSE;  // 3780g
 
 const BAT_EMPTY   =  410;  // 6S 4000mAh
@@ -1044,9 +1045,9 @@ function CargoNacelleTab(){
   ];
   const TILT = [
     {mode:"FWD HARD STOP",      deg:DIM.TILT_FWD_STOP,  c:C.yellow, thrust:"—",                                            note:"Bracket boss fwd limit — FC never commands"},
-    {mode:"FORWARD",            deg:DIM.TILT_FWD,       c:C.green,  thrust:"3400g fwd (nacelles) + 400g fuse = 3800g",     note:"Cruise — altitude by fuselage EDF only"},
+    {mode:"FORWARD",            deg:DIM.TILT_FWD,       c:C.green,  thrust:"3400g fwd (nacelles) + 575g fuse = 3975g",     note:"Cruise — altitude by fuselage EDF only"},
     {mode:"TRANSITION",         deg:"0→90",              c:C.teal,   thrust:"Mixed fwd + lift",                             note:"Gradual tilt during accel / decel"},
-    {mode:"VTOL",               deg:DIM.TILT_VTOL,      c:C.accent, thrust:"3400g lift (nacelles) + 400g fuse lift",       note:"Hover, takeoff, landing"},
+    {mode:"VTOL",               deg:DIM.TILT_VTOL,      c:C.accent, thrust:"3400g lift (nacelles) + 575g fuse lift",       note:"Hover, takeoff, landing"},
     {mode:"REVERSE / BRAKE",    deg:DIM.TILT_REV,       c:C.red,    thrust:"1700g reverse + 2944g lift retained",          note:"BRAKE mode only — indoor deceleration"},
     {mode:"AFT HARD STOP",      deg:DIM.TILT_AFT_STOP,  c:C.orange, thrust:"—",                                            note:"Bracket boss aft limit — FC never commands"},
   ];
@@ -1139,7 +1140,7 @@ export default function App(){
           <h1 style={{margin:0,fontSize:18,fontWeight:"normal",color:C.text,letterSpacing:"0.07em",fontFamily:MB}}>
             SERENITY-CLASS FIREFLY TILTROTOR UAV</h1>
           <div style={{color:"rgba(0,229,255,0.6)",fontSize:10,marginTop:3,fontFamily:M}}>
-            {DIM.L_MM}mm ({DIM.L_IN}") · 80mm 6S EDFs · 12× VL53L5CX ToF dual-array · 4"×3"×3" cargo gondola · nacelle −5°–140° · CM3+ Nodes 2&amp;3 · 6 access panels
+            {DIM.L_MM}mm ({DIM.L_IN}") · 80mm 6S nacelle EDFs · AEORC XDF40 4S fuselage EDF · 12× VL53L5CX ToF dual-array · 4"×3"×3" cargo gondola · nacelle −5°–140° · CM3+ Nodes 2&amp;3 · 6 access panels
           </div>
         </div>
         <div style={{textAlign:"right",fontFamily:M}}>

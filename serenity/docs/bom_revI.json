@@ -122,17 +122,32 @@
     },
     {
       "ref": "EDF-FUSE",
-      "desc": "40mm EDF fuselage (engine bell) — 6S",
+      "desc": "AEORC XDF40 40mm 8-blade EDF — MC1908 6500KV motor — 3S/4S rated",
       "qty": 1,
-      "mass_g": 38,
-      "thrust_g_6S": 400,
-      "notes": "Mounted in engine bell section 83-100% station. Variable-area nozzle (BamJr remix CC BY 4.0). 6S direct-connect to main bus — no voltage conversion needed.",
+      "mass_g": 41,
+      "thrust_g_4S_nominal": 575,
+      "thrust_g_4S_peak": 698,
+      "current_4S_nominal_A": 41.2,
+      "current_4S_peak_A": 51.0,
+      "fan_duct_od_mm": 44.3,
+      "fan_duct_od_with_lip_mm": 51,
+      "motor": "MC1908 6500KV outrunner (~19mm body, ~3mm shaft)",
+      "notes": "Powered at 4S (14.8V nominal / 16.8V full) via balance tap from 6S main pack (cells 1–4). No motor swap needed — stock 6500KV motor at 4S gives 575g nominal / 698g peak thrust. 6S motor swap is not viable: no commercial motor exists in the MC1908 body class rated for 22V. Mounted in engine bell section 83–100% station. Variable-area nozzle (BamJr remix CC BY 4.0).",
       "sourcing": {
-        "supplier": "Banggood",
-        "mpn": "40mm 6S 2205-2220KV EDF unit",
-        "cost_est_usd": 28,
-        "notes": "Generic 40mm 6S EDF unit; verify 22.2V rating before install"
+        "supplier": "CaptainRC / Banggood",
+        "mpn": "AEORC XDF40 MC1908-6500KV",
+        "manufacturer": "AEORC",
+        "url": "https://captainrc.com/products/aeorc-40mm-edf-8-baldes-ccw-cw-ducted-fan-system-with-6500kv-brushless-motor-support-3s-4s-for-rc-airplane-model-jet-plane",
+        "cost_est_usd": 18,
+        "notes": "Available CW and CCW — order CCW for tractor (standard) orientation"
       }
+    },
+    {
+      "ref": "BAT-TAP-4S",
+      "desc": "6S→4S balance tap pigtail — JST-XH cells 1–4 to XT30 ESC input",
+      "qty": 1,
+      "mass_g": 2,
+      "notes": "Taps cells 1–4 of 6S balance connector to feed fuselage ESC at 4S (14.8–16.8V). Fuselage EDF is trim thrust only — average current ~15–25A — so differential discharge across cells 1–4 vs 5–6 is small (~2% capacity delta per 10-min flight). Balancer corrects on every charge cycle. Use 16 AWG wire, 150mm length."
     },
     {
       "ref": "ESC-NAC",
@@ -149,15 +164,15 @@
     },
     {
       "ref": "ESC-FUSE",
-      "desc": "30A BLHeli32 ESC for 40mm fuselage EDF — 6S rated",
+      "desc": "50A BLHeli32 ESC for AEORC XDF40 fuselage EDF — 4S rated",
       "qty": 1,
-      "mass_g": 20,
-      "notes": "Direct 6S feed from main PDB bus. Replaces 25A 4S ESC. Eliminates need for 4S BEC/step-down on PDB.",
+      "mass_g": 22,
+      "notes": "4S input from balance tap (14.8–16.8V). 50A rating matches 51A peak draw of XDF40 at 4S full charge. BLHeli32 for smooth throttle response during altitude trim.",
       "sourcing": {
         "supplier": "Hobbywing",
-        "mpn": "Platinum 30A V4",
-        "cost_est_usd": 22,
-        "notes": "6S rated; verify 22.2V max input"
+        "mpn": "Platinum 50A V4",
+        "cost_est_usd": 30,
+        "notes": "Same part as nacelle ESCs — reduces spare-parts count"
       }
     }
   ],
@@ -734,18 +749,21 @@
     "indoor_range_m": 4,
     "update_rate_hz": 15
   },
-  "total_airframe_mass_g": 1443,
+  "total_airframe_mass_g": 1450,
   "total_auw_g": {
-    "note": "EPS void formers and wax consumed during build. Rev I adds dual obstacle avoidance arrays (+30g: Array-B sensors/PCB/mounts) and upgrades fuselage ESC 4S→6S (+4g). 40mm EDF now direct-connect 6S. Total dry +34g vs single-array build.",
-    "dry_g": 1443,
-    "thrust_g": 3800,
-    "auw_empty_6S_4000mAh_410g": 1853,
-    "tw_empty": 2.05,
-    "auw_cargo_6S_2800mAh_295g_plus_250g_payload": 1988,
-    "tw_cargo": 1.91,
-    "auw_cargo_light_6S_1800mAh_180g_plus_250g": 1873,
-    "tw_cargo_light": 2.03,
-    "note_cargo": "Use 6S 1800mAh (180g) for T/W>2.0 on cargo missions. 2800mAh gives T/W 1.91 — acceptable for slow indoor cargo ops."
+    "note": "Fuselage EDF changed to AEORC XDF40 41g (+3g vs prev), ESC 50A 22g (+2g), plus 4S tap cable 2g. Thrust_fuse 400→575g (nominal 4S). Net: DRY_G +7g, thrust +175g vs previous rev.",
+    "dry_g": 1450,
+    "thrust_g": 3975,
+    "thrust_fuse_nominal_g": 575,
+    "thrust_fuse_peak_g": 698,
+    "thrust_nacelles_g": 3400,
+    "auw_empty_6S_4000mAh_410g": 1860,
+    "tw_empty": 2.14,
+    "auw_cargo_6S_2800mAh_295g_plus_250g_payload": 1995,
+    "tw_cargo": 1.99,
+    "auw_cargo_light_6S_1800mAh_180g_plus_250g": 1880,
+    "tw_cargo_light": 2.11,
+    "note_cargo": "T/W comfortably >2 even on cargo config with 2800mAh pack. 6S 1800mAh pack gives T/W 2.11 for sprint cargo ops."
   },
   "build_notes": {
     "foam_fill_step": 23,
