@@ -1,0 +1,47 @@
+Section,Ref,Description,Qty,Mass_g,Supplier,MPN,Manufacturer,Cost_USD_ea,STL_file,Notes
+Hull Structure,HULL-SHELL,PETG thin shell 1.2mm wall — print as open shell sections,1,143,,,,,,Print 6 sections. Insert cable-route straws before assembly.
+Hull Structure,HULL-FOAM,X-30 expanding PU foam 2 lb/ft³ (0.032 g/cm³) — pour into shell voids,1,42,,,,,,"2-part, 2-min pot life, 4× expansion. Net foam vol 1309 cm³ after 18% internals deduction."
+Hull Structure,HULL-CF,CF keel + ring frames,1,28,,,,,,3mm CF plate keel + 2mm ring frames at 5 stations
+Hull Structure,HULL-TUBE,Cable-route tubes 5mm OD × 400mm (drink-straw diameter),6,5,,,,,,"Insert before foam pour. Routes: CAN, RS-485, 1553, ETH×2, power"
+Hull Structure,HULL-VOID-EPS,EPS blue foam board 25mm × 300mm × 150mm — void former material,2,18,,,,,,Owens Corning Foamular 150 or equivalent. Cut to 6 void-former shapes per build guide step 22.
+Hull Structure,HULL-WAX,Johnson's Paste Wax 16oz tin — void-former release agent,1,400,,,,,,"Consumed, not airborne weight. Apply 2 coats to all EPS void-former surfaces before foam pour."
+Hull Structure,HULL-PTFE-TUBE,PTFE tube 5mm OD × 3mm ID × 2.5m — cable conduit through foam,6,12,,,,,,"6 conduits: CAN, RS-485, 1553, ETH-A, ETH-B, PWR. Install before foam pour. Total 12g stays in airframe."
+Hull Structure,ACCESS-FRAME-PETG,"Access panel frame set — PETG 100% infill, 2mm wall — 6 frames + 6 lids",1,38,,,,,,Print from access_panel_frames.stl (TBD). Bond frames into hull with 5-min epoxy before foam pour. Lids are removable.
+Hull Structure,ACCESS-SCREW-M25,M2.5×6 SS button-head Phillips — access panel screws,16,4,,,,,,4 per panel for panels B and E. Panels A and F use bayonet. Panel C uses hinge. Panel D uses magnets.
+Hull Structure,ACCESS-MAGNET,N42 neodymium disc magnet 6×2mm — panel D magnetic closure,8,2,,,,,,4 in panel frame + 4 in panel lid. Press-fit into 6.1mm printed pockets.
+Hull Structure,ACCESS-GASKET,3M 4016 closed-cell foam gasket tape 1.5mm × 9mm × 3m roll,1,8,,,,,,Line all panel frame lips before foam pour. Provides dust/moisture seal and prevents foam intrusion into void.
+Hull Structure,ACCESS-EPOXY,5-minute epoxy 25mL syringe — frame-to-hull bond,1,0,,,,,,Consumed during build. Bond access-panel frames into hull sections before foam pour step.
+Propulsion,EDF-NAC-L,80mm EDF nacelle LEFT (PORT) — 6S,1,150,Nitroplanes,Freewing 2836-2150KV 80mm EDF,,55,,"OD 93.5mm (canonical nacelle OD), 1.2mm wall pod"
+Propulsion,EDF-NAC-R,80mm EDF nacelle RIGHT (STBD) — 6S,1,150,Nitroplanes,Freewing 2836-2150KV 80mm EDF,,55,,
+Propulsion,EDF-FUSE,40mm EDF fuselage (engine bell) — 6S,1,38,Banggood,40mm 6S 2205-2220KV EDF unit,,28,,Mounted in engine bell section 83-100% station. Variable-area nozzle (BamJr remix CC BY 4.0). 6S direct-connect to main bus — no voltage conversion needed.
+Propulsion,ESC-NAC,50A BLHeli32 ESC for 80mm nacelle EDF — 6S rated,2,28,Hobbywing,Platinum 50A V4,,30,,One per nacelle. 6S = 22.2V nominal.
+Propulsion,ESC-FUSE,30A BLHeli32 ESC for 40mm fuselage EDF — 6S rated,1,20,Hobbywing,Platinum 30A V4,,22,,Direct 6S feed from main PDB bus. Replaces 25A 4S ESC. Eliminates need for 4S BEC/step-down on PDB.
+Nacelle Hardware,NAC-POD,"Nacelle pod shell PETG — 80mm ID, 93.5mm OD, 144mm long",2,18,,,,,nacelle_pod_80mm.stl,
+Nacelle Hardware,NAC-TIP-P,Nacelle tip cap PORT — RED WS2812C nav light recess,1,4,,,,,nacelle_tip_cap_port.stl,
+Nacelle Hardware,NAC-TIP-S,Nacelle tip cap STBD — GREEN WS2812C nav light recess,1,4,,,,,nacelle_tip_cap_stbd.stl,
+Nacelle Hardware,NAC-ARM,CF stub arm 12mm OD 1.5mm wall 10.4mm long,2,1,,,,,,ARM_STUB = INNER − MAX_HW = 10.4mm
+Nacelle Hardware,TILT-BRACKET,Nacelle tilt pivot bracket CF-PETG,2,6,,,,,tilt_bracket_cf_petg.stl,
+Nacelle Hardware,SERVO-NAC,MG90S nacelle tilt servo — 120° bracket modification,2,9,,,,,,"50Hz PWM. Travel extended to 120° via bracket geometry: 0°=VTOL, 90°=fwd flight, 120°=reverse thrust (30° past horizontal). MG90S physical range supports this; bracket hard-stop at 120°. FC soft-limits: 0–90° normal mode, 90–115° reverse/brake mode."
+Nacelle Hardware,GEAR-NOZZLE,Gear nozzle assembly — sector gear + ring + 8 flaps (BamJr CC BY 4.0),3,4,,,,,,2 nacelle + 1 fuselage. Sector gear drives ring via bevel chain.
+Nacelle Hardware,SERVO-NOZZLE,SG90 variable-nozzle servo,1,9,,,,,,
+Obstacle Avoidance,TOF-A-VL53L5CX,"Array A — ST VL53L5CX 8×8 multizone ToF sensors — Node 3, Panel D",6,2,Mouser / DigiKey,VL53L5CXV0GC/1,STMicroelectronics,7.0,,"S1A Forward sta 25mm, S2A Aft sta 440mm, S3A Port sta 200mm, S4A Stbd sta 200mm, S5A Zenith sta 180mm, S6A Nadir sta 160mm. Each flush-mounted behind 5mm PMMA window. I2C bus: Node 3 I2C3."
+Obstacle Avoidance,TOF-A-MUX,Array A — TCA9548A 8-channel I2C mux,1,1,Mouser,TCA9548APWR,Texas Instruments,1.5,,I2C address 0x70. Channels 0–5 select S1A–S6A. Shared PCB with MCP23008-A. Node 3 I2C3 (Panel D).
+Obstacle Avoidance,TOF-A-GPIO,Array A — MCP23008 8-port I2C GPIO expander — XSHUT control,1,1,Mouser,MCP23008-E/SS,Microchip Technology,1.2,,"I2C address 0x20. GP0–GP5 drive XSHUT for S1A–S6A. Boot: all low → enable one, assign 0x54–0x59, disable. Node 3 I2C3 (Panel D)."
+Obstacle Avoidance,TOF-A-MOUNT,Array A — Sensor PETG flush-mount ×6,6,1,,,,,tof_flush_mount_5mm.stl,Press-fit 6.5mm hull cutout. 0.5mm PMMA disc UV-adhesive over aperture.
+Obstacle Avoidance,TOF-A-CABLE,Array A — VL53L5CX cable 4-wire JST-SH1.0 300mm,6,1,,,,,,Route through foam conduit to Panel D bay. GND/VCC/SDA/SCL.
+Obstacle Avoidance,TOF-B-VL53L5CX,"Array B — ST VL53L5CX 8×8 multizone ToF sensors — Node 2, Panel B",6,2,Mouser / DigiKey,VL53L5CXV0GC/1,STMicroelectronics,7.0,,"S1B Forward sta 40mm, S2B Aft sta 425mm, S3B Port sta 150mm, S4B Stbd sta 150mm, S5B Zenith sta 260mm, S6B Nadir sta 220mm. Spatially offset from Array A for different blind-spot profiles. I2C bus: Node 2 I2C2."
+Obstacle Avoidance,TOF-B-MUX,Array B — TCA9548A 8-channel I2C mux,1,1,Mouser,TCA9548APWR,Texas Instruments,1.5,,I2C address 0x70 on Node 2 I2C2 — electrically isolated from Array A bus. Channels 0–5 select S1B–S6B. Panel B bay.
+Obstacle Avoidance,TOF-B-GPIO,Array B — MCP23008 8-port I2C GPIO expander — XSHUT control,1,1,Mouser,MCP23008-E/SS,Microchip Technology,1.2,,I2C address 0x20 on Node 2 I2C2. GP0–GP5 drive XSHUT for S1B–S6B. Boot sequence identical to Array A but on separate bus. Panel B bay.
+Obstacle Avoidance,TOF-B-MOUNT,Array B — Sensor PETG flush-mount ×6,6,1,,,,,tof_flush_mount_5mm.stl,Same print as Array A mounts. Different hull cutout positions per Array B station offsets.
+Obstacle Avoidance,TOF-B-CABLE,Array B — VL53L5CX cable 4-wire JST-SH1.0 300mm,6,1,,,,,,Route through separate foam conduit to Panel B bay. Do NOT commingle with Array A harness.
+Radios & Sensors,SIK-915,SiK 915MHz telemetry radio module,1,14,,,,,,"On COMPHAT-SWITCH, SMA belly antenna"
+Radios & Sensors,RCRS-49,49MHz RCRS RC receiver/transmitter board,1,12,,,,,,"Dorsal fin antenna, coil cavity"
+Radios & Sensors,GPS-M10Q,u-blox M10Q GPS module + patch antenna,1,12,,,,,,"59mm from nose, cockpit top"
+Radios & Sensors,ANT-SIK,915MHz SMA whip antenna + pigtail,1,3,,,,,,
+Radios & Sensors,ANT-RCRS,49MHz helical coil + enclosure (dorsal fin),1,3,,,,,,
+Radios & Sensors,NAVLIGHT,WS2812C addressable LED + diffuser + mount,6,1.3,,,,,,"Port=RED, Stbd=GREEN, Tail=WHITE, Belly=WHITE strobe"
+Fasteners & Misc,STANDOFF,M2.5 nylon hex standoffs 6mm ×20,1,4,,,,,,
+Fasteners & Misc,SCREW-M25,M2.5 stainless screws ×40 (8mm + 12mm assorted),1,6,,,,,,
+Fasteners & Misc,ZIPTIE,Nylon zip ties ×30 (100mm + 200mm),1,4,,,,,,
+Fasteners & Misc,FOAM-TAPE,3M double-sided foam tape — vibration isolation mounts,1,4,,,,,,
+Fasteners & Misc,CABLE-CLIP,Cable management clips + mounts,1,4,,,,,,
