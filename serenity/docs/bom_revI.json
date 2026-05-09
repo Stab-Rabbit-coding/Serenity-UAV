@@ -122,24 +122,22 @@
     },
     {
       "ref": "EDF-FUSE",
-      "desc": "AEORC XDF40 40mm 8-blade EDF — MC1908 6500KV motor — 3S/4S rated",
+      "desc": "XFLY Galaxy X4 PRO 40mm 12-blade EDF — 1413-KV5850 outrunner — 3S/4S rated",
       "qty": 1,
-      "mass_g": 41,
-      "thrust_g_4S_nominal": 575,
-      "thrust_g_4S_peak": 698,
-      "current_4S_nominal_A": 41.2,
-      "current_4S_peak_A": 51.0,
-      "fan_duct_od_mm": 44.3,
-      "fan_duct_od_with_lip_mm": 51,
-      "motor": "MC1908 6500KV outrunner (~19mm body, ~3mm shaft)",
-      "notes": "Powered at 4S (14.8V nominal / 16.8V full) via balance tap from 6S main pack (cells 1–4). No motor swap needed — stock 6500KV motor at 4S gives 575g nominal / 698g peak thrust. 6S motor swap is not viable: no commercial motor exists in the MC1908 body class rated for 22V. Mounted in engine bell section 83–100% station. Variable-area nozzle (BamJr remix CC BY 4.0).",
+      "mass_g": 40,
+      "thrust_g_4S": 650,
+      "current_4S_peak_A": 30,
+      "power_4S_W": 490,
+      "fan_duct_od_mm": 43,
+      "fan_duct_od_with_lip_mm": 47,
+      "motor": "1413 outrunner (14×13mm stator) 5850KV — factory balanced",
+      "notes": "Powered at 4S (14.8–16.5V) via balance tap from 6S main pack (cells 1–4). 12-blade design gives 650g thrust at only 30A — better efficiency than 8-blade alternatives. Factory-balanced, outrunner runs cooler than inrunner formats. RPM ceiling safe: 5850KV×16.8V=98,280 no-load; under load ~83,500 RPM vs 95,500 RPM tip-speed limit. Mounted in engine bell section 83–100% station. Variable-area nozzle (BamJr remix CC BY 4.0). Selected over AEORC XDF40 8600KV (819g peak but 68A, needs 70–80A ESC, reported ESC failures) and AEORC 6500KV (575g, 41A). XFLY PRO gives 650g at only 30A — best thrust-per-amp in class.",
       "sourcing": {
-        "supplier": "CaptainRC / Banggood",
-        "mpn": "AEORC XDF40 MC1908-6500KV",
-        "manufacturer": "AEORC",
-        "url": "https://captainrc.com/products/aeorc-40mm-edf-8-baldes-ccw-cw-ducted-fan-system-with-6500kv-brushless-motor-support-3s-4s-for-rc-airplane-model-jet-plane",
-        "cost_est_usd": 18,
-        "notes": "Available CW and CCW — order CCW for tractor (standard) orientation"
+        "supplier": "Turbines-RC (EU) / Grayson Hobby (US) / eBay",
+        "mpn": "XFLY Galaxy X4 PRO 5850KV",
+        "manufacturer": "XFLY Model",
+        "cost_est_usd": 48,
+        "notes": "Available CW and CCW. Order CCW for tractor orientation. Turbines-RC: https://www.turbines-rc.com/en/xfly-galaxy/4560-edf-ducted-fan-xfly-galaxy-x4-xfly-model-40mm-12-blades-3s4s-motor-5850kv-pro-version.html"
       }
     },
     {
@@ -164,15 +162,15 @@
     },
     {
       "ref": "ESC-FUSE",
-      "desc": "50A BLHeli32 ESC for AEORC XDF40 fuselage EDF — 4S rated",
+      "desc": "40A BLHeli32 ESC for XFLY X4 PRO fuselage EDF — 4S rated",
       "qty": 1,
-      "mass_g": 22,
-      "notes": "4S input from balance tap (14.8–16.8V). 50A rating matches 51A peak draw of XDF40 at 4S full charge. BLHeli32 for smooth throttle response during altitude trim.",
+      "mass_g": 15,
+      "notes": "4S input from balance tap (14.8–16.5V). XFLY PRO peaks at 30A — 40A ESC provides 33% headroom. BLHeli32 for smooth throttle response during altitude trim. Lighter than 50A part due to lower current spec.",
       "sourcing": {
         "supplier": "Hobbywing",
-        "mpn": "Platinum 50A V4",
-        "cost_est_usd": 30,
-        "notes": "Same part as nacelle ESCs — reduces spare-parts count"
+        "mpn": "XRotor Micro 40A BLHeli32",
+        "cost_est_usd": 18,
+        "notes": "Compact 4S BLHeli32; 15g. Alternatively Hobbywing Platinum 40A V4."
       }
     }
   ],
@@ -749,21 +747,20 @@
     "indoor_range_m": 4,
     "update_rate_hz": 15
   },
-  "total_airframe_mass_g": 1450,
+  "total_airframe_mass_g": 1442,
   "total_auw_g": {
-    "note": "Fuselage EDF changed to AEORC XDF40 41g (+3g vs prev), ESC 50A 22g (+2g), plus 4S tap cable 2g. Thrust_fuse 400→575g (nominal 4S). Net: DRY_G +7g, thrust +175g vs previous rev.",
-    "dry_g": 1450,
-    "thrust_g": 3975,
-    "thrust_fuse_nominal_g": 575,
-    "thrust_fuse_peak_g": 698,
+    "note": "XFLY Galaxy X4 PRO replaces AEORC XDF40: EDF 41→40g (−1g), ESC 50A→40A 22→15g (−7g). Net −8g DRY_G, +75g thrust (650 vs 575) vs AEORC 6500KV rev.",
+    "dry_g": 1442,
+    "thrust_g": 4050,
+    "thrust_fuse_g": 650,
     "thrust_nacelles_g": 3400,
-    "auw_empty_6S_4000mAh_410g": 1860,
-    "tw_empty": 2.14,
-    "auw_cargo_6S_2800mAh_295g_plus_250g_payload": 1995,
-    "tw_cargo": 1.99,
-    "auw_cargo_light_6S_1800mAh_180g_plus_250g": 1880,
-    "tw_cargo_light": 2.11,
-    "note_cargo": "T/W comfortably >2 even on cargo config with 2800mAh pack. 6S 1800mAh pack gives T/W 2.11 for sprint cargo ops."
+    "auw_empty_6S_4000mAh_410g": 1852,
+    "tw_empty": 2.19,
+    "auw_cargo_6S_2800mAh_295g_plus_250g_payload": 1987,
+    "tw_cargo": 2.04,
+    "auw_cargo_light_6S_1800mAh_180g_plus_250g": 1872,
+    "tw_cargo_light": 2.16,
+    "note_cargo": "T/W >2 in all configurations including full 2800mAh cargo config. Outstanding for a 1.4kg airframe."
   },
   "build_notes": {
     "foam_fill_step": 23,
