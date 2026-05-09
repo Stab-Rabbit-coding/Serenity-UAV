@@ -82,9 +82,9 @@ const W_ITEMS = [
   ["Gasket tape 3M 4016",                       8],
   // Propulsion
   ["80mm EDF nacelle ×2 (motor+fan+housing)", 300],
-  ["40mm fuselage EDF",                        38],
+  ["40mm fuselage EDF 6S",                      38],
   ["50A ESC ×2 (nacelle, 6S)",                 56],
-  ["25A ESC ×1 (fuselage, 4S)",                16],
+  ["30A ESC ×1 (fuselage, 6S)",                20],
   ["Nacelle pods 93.5mm OD ×2",                36],
   ["Nacelle tip caps ×2 + nav lights",         16],
   ["CF stub arms + tilt brackets ×2",          14],
@@ -114,10 +114,13 @@ const W_ITEMS = [
   ["Cargo cradle + auto-latch assembly",        10],
   ["Dyneema SK75 winch line 1.5m",              1],
   ["TPU landing skids ×4",                      4],
-  // Obstacle avoidance sensors
-  ["VL53L5CX ToF sensors ×6 + wiring harness", 15],
-  ["TCA9548A I²C mux + MCP23008 GPIO (PCB)",    4],
-  ["Sensor PETG mounts ×6 + PMMA windows",      7],
+  // Obstacle avoidance sensors — dual redundant arrays
+  ["VL53L5CX ToF sensors ×6 Array-A + harness",15],
+  ["TCA9548A mux-A + MCP23008 GPIO-A (PCB)",    4],
+  ["Sensor PETG mounts ×6 Array-A + PMMA",      7],
+  ["VL53L5CX ToF sensors ×6 Array-B + harness",15],
+  ["TCA9548A mux-B + MCP23008 GPIO-B (PCB)",    4],
+  ["Sensor PETG mounts ×6 Array-B + PMMA",      7],
   // Radios + sensors
   ["SiK 915MHz radio + antenna",               17],
   ["RCRS 49MHz RC receiver + antenna",         15],
@@ -131,7 +134,7 @@ const DRY_G   = W_ITEMS.reduce((s,[,g])=>s+g, 0);
 
 // ── Power & thrust ────────────────────────────────────────────
 const THRUST_NAC  = 1700;  // each 80mm 6S EDF
-const THRUST_FUSE =  380;  // 40mm 4S EDF
+const THRUST_FUSE =  400;  // 40mm 6S EDF
 const THRUST      = THRUST_NAC*2 + THRUST_FUSE;  // 3780g
 
 const BAT_EMPTY   =  410;  // 6S 4000mAh
@@ -861,89 +864,157 @@ function AccessPanelsTab(){
         </div>
       </div>
     ))}
-    <Note c={C.dim} ch="Panels A and F use PETG bayonet closures — no tools needed. Panels B and E use M2.5×6 Phillips screws — 4× each. Panel C hinges on a PETG pin; use a plastic pry tool on the spring latches. Panel D uses 4× N42 neodymium press-fit magnets. Do not use metallic tools near Panel D magnets."/>
+    <Note c={C.dim} ch="Panels A and F use PETG bayonet closures — no tools needed. Panels B and E use M2.5×6 Phillips screws — 4× each. Panel C hinges on a PETG pin; use a plastic pry tool on the spring latches. Panel D uses 4× N42 neodymium press-fit magnets. Do not use metallic tools near Panel D magnets. Panel B bay: Array-B TCA9548A+MCP23008 PCB and Node 2 I²C2 harness. Panel D bay: Array-A TCA9548A+MCP23008 PCB and Node 3 I²C3 harness."/>
   </div>);
 }
 
 // ── TAB: OBSTACLE AVOIDANCE ───────────────────────────────────
 function ObstacleAvoidanceTab(){
-  const SENSORS = [
-    {id:"S1",label:"Forward",   color:C.red,    sta:"25mm",  pos:"Nose bayonet ring",        look:"0° — forward",        note:"Circular port in nose cap; looks like a hull sensor/camera"},
-    {id:"S2",label:"Aft",      color:C.orange, sta:"440mm", pos:"Engine bell rim",           look:"180° — aft",          note:"Small annular ring behind engine bell; matches nozzle detail"},
-    {id:"S3",label:"Port",     color:C.accent, sta:"200mm", pos:"Port hull side at waterline",look:"90° port",            note:"Oval recess in hull side — looks like hull viewport"},
-    {id:"S4",label:"Starboard",color:C.green,  sta:"200mm", pos:"Stbd hull side at waterline",look:"90° stbd",           note:"Mirror of S3"},
-    {id:"S5",label:"Zenith",   color:C.purple, sta:"180mm", pos:"Dorsal keel apex",          look:"90° up",              note:"Smooth dome fairing at keel ridge — looks like antenna base"},
-    {id:"S6",label:"Nadir",    color:C.teal,   sta:"160mm", pos:"Forward belly blister",     look:"90° down",            note:"Small belly blister fwd of cargo gondola; used for landing flare"},
+  const SENSORS_A = [
+    {id:"S1A",label:"Forward",   color:C.red,    sta:"25mm",  pos:"Nose bayonet ring",          look:"0° — forward",  note:"Circular port in nose cap"},
+    {id:"S2A",label:"Aft",       color:C.orange, sta:"440mm", pos:"Engine bell rim",             look:"180° — aft",    note:"Annular ring behind engine bell"},
+    {id:"S3A",label:"Port",      color:C.accent, sta:"200mm", pos:"Port hull side at waterline", look:"90° port",      note:"Oval recess in hull side"},
+    {id:"S4A",label:"Starboard", color:C.green,  sta:"200mm", pos:"Stbd hull side at waterline", look:"90° stbd",      note:"Mirror of S3A"},
+    {id:"S5A",label:"Zenith",    color:C.purple, sta:"180mm", pos:"Dorsal keel apex",            look:"90° up",        note:"Smooth dome fairing"},
+    {id:"S6A",label:"Nadir",     color:C.teal,   sta:"160mm", pos:"Forward belly blister",       look:"90° down",      note:"Belly blister fwd of cargo gondola"},
   ];
-  const BUSES = [
-    ["TCA9548A I²C mux",  "0x70", "Selects one of ch 0–5 to address the target sensor"],
-    ["MCP23008 GPIO exp.", "0x20", "GP0–GP5 drive each sensor's XSHUT pin for address assignment at boot"],
-    ["Host: Node 3",       "I²C", "Panel D bay — SENSORHAT-1 XIAO RP2350 co-processor reads all 6 sensors"],
+  const SENSORS_B = [
+    {id:"S1B",label:"Forward",   color:C.red,    sta:"40mm",  pos:"Nose ring aft of S1A",        look:"0° — forward",  note:"Second fwd sensor ~15mm aft of S1A"},
+    {id:"S2B",label:"Aft",       color:C.orange, sta:"425mm", pos:"Engine bell fore of S2A",     look:"180° — aft",    note:"Second aft sensor ~15mm fwd of S2A"},
+    {id:"S3B",label:"Port",      color:C.accent, sta:"150mm", pos:"Port hull, fwd of S3A",       look:"90° port",      note:"50mm fwd of S3A — different axial blind spot"},
+    {id:"S4B",label:"Starboard", color:C.green,  sta:"150mm", pos:"Stbd hull, fwd of S4A",       look:"90° stbd",      note:"Mirror of S3B"},
+    {id:"S5B",label:"Zenith",    color:C.purple, sta:"260mm", pos:"Dorsal keel, aft of S5A",     look:"90° up",        note:"80mm aft of S5A — different zenith profile"},
+    {id:"S6B",label:"Nadir",     color:C.teal,   sta:"220mm", pos:"Belly, aft of S6A",           look:"90° down",      note:"60mm aft of S6A — different nadir profile"},
+  ];
+  const BUSES_A = [
+    ["TCA9548A-A",    "0x70", "Node 3 I²C3 — ch 0–5 for S1A–S6A"],
+    ["MCP23008-A",    "0x20", "Node 3 I²C3 — GP0–GP5 → XSHUT S1A–S6A"],
+    ["Host: Node 3",  "I²C3", "CM3-CARRIER-1 Panel D bay — Array A primary"],
+  ];
+  const BUSES_B = [
+    ["TCA9548A-B",    "0x70", "Node 2 I²C2 — ch 0–5 for S1B–S6B"],
+    ["MCP23008-B",    "0x20", "Node 2 I²C2 — GP0–GP5 → XSHUT S1B–S6B"],
+    ["Host: Node 2",  "I²C2", "CM3-CARRIER-1 Panel B bay — Array B primary"],
+  ];
+  const REDUNDANCY = [
+    {dir:"Forward",   a:"S1A sta 25mm",  b:"S1B sta 40mm"},
+    {dir:"Aft",       a:"S2A sta 440mm", b:"S2B sta 425mm"},
+    {dir:"Port",      a:"S3A sta 200mm", b:"S3B sta 150mm"},
+    {dir:"Starboard", a:"S4A sta 200mm", b:"S4B sta 150mm"},
+    {dir:"Zenith",    a:"S5A sta 180mm", b:"S5B sta 260mm"},
+    {dir:"Nadir",     a:"S6A sta 160mm", b:"S6B sta 220mm"},
   ];
   const THR_ZONES = [
-    {zone:"< 0.4m", action:"STOP — emergency hover hold, alert pilot"},
+    {zone:"< 0.4m",   action:"STOP — emergency hover hold, alert pilot"},
     {zone:"0.4–1.0m", action:"SLOW — reduce velocity to 0.3 m/s toward obstacle"},
     {zone:"1.0–2.5m", action:"CAUTION — reduce velocity proportionally"},
     {zone:"2.5–4.0m", action:"WARN — alert only, full speed permitted"},
-    {zone:"> 4.0m", action:"CLEAR — no action"},
+    {zone:"> 4.0m",   action:"CLEAR — no action"},
   ];
+  const SensorTable = ({sensors, title, node, color}) => (
+    <div style={{marginBottom:8}}>
+      <div style={{background:color,padding:"4px 10px",borderRadius:"3px 3px 0 0",
+        color:"#fff",fontFamily:M,fontSize:9,fontWeight:"bold",letterSpacing:"0.08em"}}>
+        {title} — {node}
+      </div>
+      <table style={{width:"100%",borderCollapse:"collapse",fontFamily:M,fontSize:9}}>
+        <TH cols={["ID","DIR","STATION","POSITION","LOOK","NOTE"]}/>
+        <tbody>{sensors.map((s,i)=>(
+          <tr key={i} style={{background:i%2===0?"rgba(0,229,255,0.025)":"transparent"}}>
+            <td style={{padding:"4px 8px"}}>
+              <span style={{background:s.color,color:"#000",padding:"1px 5px",borderRadius:3,
+                fontWeight:"bold",fontSize:8,fontFamily:M}}>{s.id}</span>
+            </td>
+            <td style={{padding:"4px 8px",color:s.color,fontWeight:"bold"}}>{s.label}</td>
+            <td style={{padding:"4px 8px",color:C.yellow}}>{s.sta}</td>
+            <td style={{padding:"4px 8px",color:C.dim}}>{s.pos}</td>
+            <td style={{padding:"4px 8px",color:C.dimmer,fontSize:8}}>{s.look}</td>
+            <td style={{padding:"4px 8px",color:C.dimmer,fontSize:8,fontStyle:"italic"}}>{s.note}</td>
+          </tr>
+        ))}</tbody>
+      </table>
+    </div>
+  );
   return(<div>
-    <SH t="VL53L5CX Omnidirectional ToF Sensor Array" mt={0} c={C.teal}/>
+    <SH t="Dual Redundant VL53L5CX Obstacle Avoidance — 12 Sensors" mt={0} c={C.teal}/>
+    <div style={{background:`${C.teal}18`,border:`1px solid ${C.teal}44`,borderRadius:4,padding:"8px 14px",marginBottom:12}}>
+      <div style={{color:C.lime,fontFamily:M,fontSize:10,fontWeight:"bold",marginBottom:4}}>REDUNDANCY DESIGN</div>
+      <div style={{color:C.dim,fontSize:9}}>Two fully independent 6-sensor arrays on separate nodes and separate I²C buses.
+        Each array alone provides complete omnidirectional coverage (all 6 axes).
+        Single-node failure leaves the other array active with no coverage gap.
+        Spatial offset between A/B sensors provides different axial blind-spot profiles.
+      </div>
+    </div>
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20,marginBottom:8}}>
       <div>
         <KV k="Sensor"         v="ST VL53L5CX 8×8 multizone ToF" vc={C.teal}/>
         <KV k="FoV per sensor" v="65° diagonal (8×8 = 64 zones/frame)"/>
         <KV k="Range"          v="0.4 – 4.0 m indoor"/>
         <KV k="Update rate"    v="15 Hz full resolution"/>
-        <KV k="Interface"      v="I²C @ 1 MHz via TCA9548A mux"/>
-        <KV k="XSHUT control"  v="MCP23008 GP0–GP5"/>
-        <KV k="Sensor count"   v="6 — omnidirectional coverage" vc={C.lime}/>
-        <KV k="Total mass"     v="15g sensors + 4g mux PCB + 7g mounts = 26g"/>
+        <KV k="Total sensors"  v="12 (6 Array-A + 6 Array-B)" vc={C.lime}/>
+        <KV k="Array-A mass"   v="15g sensors + 4g PCB + 7g mounts = 26g"/>
+        <KV k="Array-B mass"   v="15g sensors + 4g PCB + 7g mounts = 26g"/>
       </div>
       <div>
+        <KV k="Array-A host"   v="Node 3 I²C3 (Panel D)" vc={C.accent}/>
+        <KV k="Array-B host"   v="Node 2 I²C2 (Panel B)" vc={C.green}/>
+        <KV k="I²C addresses"  v="0x54–0x59 (per bus, independently assigned)"/>
         <KV k="Aperture"       v="5mm PMMA disc, UV-adhesive, flush-mount PETG"/>
         <KV k="Visual style"   v="Porthole-like hull detail — screen accurate" vc={C.lime}/>
-        <KV k="Host node"      v="Node 3 (Panel D access)"/>
-        <KV k="I²C addresses"  v="0x54–0x59 (assigned via XSHUT sequence at boot)"/>
         <KV k="Indoor safe"    v="Class 1 VCSEL — eye-safe"/>
-        <KV k="Operating V"    v="2.8 V (LDO on-board)"/>
       </div>
     </div>
 
-    <SH t="Sensor Positions" c={C.accent}/>
+    <SH t="Array A — Sensor Positions (Node 3, Panel D)" c={C.accent}/>
+    <SensorTable sensors={SENSORS_A} title="ARRAY A" node="Node 3 · I²C3 · Panel D bay" color={C.accent}/>
+
+    <SH t="Array B — Sensor Positions (Node 2, Panel B)" c={C.green}/>
+    <SensorTable sensors={SENSORS_B} title="ARRAY B" node="Node 2 · I²C2 · Panel B bay" color={C.green}/>
+
+    <SH t="Coverage Redundancy Matrix" c={C.yellow}/>
     <div style={{overflowX:"auto",marginBottom:8}}>
-      <table style={{width:"100%",borderCollapse:"collapse",fontFamily:M,fontSize:10}}>
-        <TH cols={["ID","LABEL","STATION","HULL POSITION","LOOK DIRECTION","AESTHETIC NOTE"]}/>
-        <tbody>{SENSORS.map((s,i)=>(
+      <table style={{width:"100%",borderCollapse:"collapse",fontFamily:M,fontSize:9}}>
+        <TH cols={["DIRECTION","ARRAY A (Node 3)","ARRAY B (Node 2)","FAIL-NODE-3","FAIL-NODE-2"]}/>
+        <tbody>{REDUNDANCY.map(({dir,a,b},i)=>(
           <tr key={i} style={{background:i%2===0?"rgba(0,229,255,0.025)":"transparent"}}>
-            <td style={{padding:"5px 9px"}}>
-              <span style={{background:s.color,color:"#000",padding:"2px 6px",borderRadius:3,
-                fontWeight:"bold",fontSize:9,fontFamily:M}}>{s.id}</span>
-            </td>
-            <td style={{padding:"5px 9px",color:s.color,fontWeight:"bold"}}>{s.label}</td>
-            <td style={{padding:"5px 9px",color:C.yellow}}>{s.sta}</td>
-            <td style={{padding:"5px 9px",color:C.dim}}>{s.pos}</td>
-            <td style={{padding:"5px 9px",color:C.dimmer,fontSize:9}}>{s.look}</td>
-            <td style={{padding:"5px 9px",color:C.dimmer,fontSize:9,fontStyle:"italic"}}>{s.note}</td>
+            <td style={{padding:"4px 9px",color:C.text,fontWeight:"bold"}}>{dir}</td>
+            <td style={{padding:"4px 9px",color:C.accent,fontFamily:M}}>{a}</td>
+            <td style={{padding:"4px 9px",color:C.green,fontFamily:M}}>{b}</td>
+            <td style={{padding:"4px 9px",color:C.lime,fontSize:8}}>Array B covers ✓</td>
+            <td style={{padding:"4px 9px",color:C.lime,fontSize:8}}>Array A covers ✓</td>
           </tr>
         ))}</tbody>
       </table>
     </div>
 
-    <SH t="I²C Bus Topology" c={C.purple}/>
-    <div style={{overflowX:"auto",marginBottom:8}}>
+    <SH t="I²C Bus Topology — Array A (Node 3)" c={C.accent}/>
+    <div style={{overflowX:"auto",marginBottom:4}}>
       <table style={{width:"100%",borderCollapse:"collapse",fontFamily:M,fontSize:10}}>
         <TH cols={["DEVICE","I²C ADDRESS","ROLE"]}/>
-        <tbody>{BUSES.map(([dev,addr,role],i)=>(
+        <tbody>{BUSES_A.map(([dev,addr,role],i)=>(
           <tr key={i} style={{background:i%2===0?"rgba(0,229,255,0.025)":"transparent"}}>
-            <td style={{padding:"5px 9px",color:C.purple,fontWeight:"bold"}}>{dev}</td>
+            <td style={{padding:"5px 9px",color:C.accent,fontWeight:"bold"}}>{dev}</td>
             <td style={{padding:"5px 9px",color:C.lime,fontFamily:M}}>{addr}</td>
             <td style={{padding:"5px 9px",color:C.dim,fontSize:9}}>{role}</td>
           </tr>
         ))}</tbody>
       </table>
     </div>
-    <Note c={C.purple} ch="Boot sequence: MCP23008 holds all XSHUT low (all sensors off). Enable S1 XSHUT high → assign address 0x54 via I²C → disable. Repeat for S2–S6 (0x55–0x59). TCA9548A selects the matching channel when reading each sensor."/>
+
+    <SH t="I²C Bus Topology — Array B (Node 2)" c={C.green}/>
+    <div style={{overflowX:"auto",marginBottom:8}}>
+      <table style={{width:"100%",borderCollapse:"collapse",fontFamily:M,fontSize:10}}>
+        <TH cols={["DEVICE","I²C ADDRESS","ROLE"]}/>
+        <tbody>{BUSES_B.map(([dev,addr,role],i)=>(
+          <tr key={i} style={{background:i%2===0?"rgba(0,229,255,0.025)":"transparent"}}>
+            <td style={{padding:"5px 9px",color:C.green,fontWeight:"bold"}}>{dev}</td>
+            <td style={{padding:"5px 9px",color:C.lime,fontFamily:M}}>{addr}</td>
+            <td style={{padding:"5px 9px",color:C.dim,fontSize:9}}>{role}</td>
+          </tr>
+        ))}</tbody>
+      </table>
+    </div>
+    <Note c={C.purple} ch="Boot sequence (per array): MCP23008 holds all XSHUT low. Enable XSHUT[0] → assign 0x54 → disable. Repeat for 0x55–0x59. Arrays A and B each run this sequence independently on their own bus — address collision is impossible since the buses are electrically isolated."/>
 
     <SH t="Avoidance Thresholds" c={C.orange}/>
     <div style={{overflowX:"auto",marginBottom:4}}>
@@ -958,8 +1029,8 @@ function ObstacleAvoidanceTab(){
         ))}</tbody>
       </table>
     </div>
-    <Note c={C.orange} ch="Indoor mode activates all 6 sensors at 15 Hz. Outdoor mode may disable S5/S6 to reduce CPU load. Sensor readings are fused with IMU velocity estimate — obstacle vectors with low confidence (VL53L5CX signal count < 80) are discarded."/>
-    <Warn ch="Do not apply paint or foam over PMMA aperture windows. Keep optically clear. Condensation inside aperture indicates seal failure — re-apply UV adhesive."/>
+    <Note c={C.orange} ch="FC fuses readings from both arrays. If a sensor on one array returns invalid data, the paired sensor on the other array (same direction, different station) maintains protection. Indoor mode: all 12 sensors at 15 Hz. Outdoor: S5/S6 on both arrays may be throttled to reduce CPU load."/>
+    <Warn ch="Do NOT merge Array A and Array B onto the same I²C bus — this defeats the redundancy. Route harnesses through separate conduits. Do not obstruct PMMA apertures with paint, foam, or tape."/>
   </div>);
 }
 
@@ -973,9 +1044,9 @@ function CargoNacelleTab(){
   ];
   const TILT = [
     {mode:"FWD HARD STOP",      deg:DIM.TILT_FWD_STOP,  c:C.yellow, thrust:"—",                                            note:"Bracket boss fwd limit — FC never commands"},
-    {mode:"FORWARD",            deg:DIM.TILT_FWD,       c:C.green,  thrust:"3400g fwd (nacelles) + 380g fuse = 3780g",     note:"Cruise — altitude by fuselage EDF only"},
+    {mode:"FORWARD",            deg:DIM.TILT_FWD,       c:C.green,  thrust:"3400g fwd (nacelles) + 400g fuse = 3800g",     note:"Cruise — altitude by fuselage EDF only"},
     {mode:"TRANSITION",         deg:"0→90",              c:C.teal,   thrust:"Mixed fwd + lift",                             note:"Gradual tilt during accel / decel"},
-    {mode:"VTOL",               deg:DIM.TILT_VTOL,      c:C.accent, thrust:"3400g lift (nacelles) + 380g fuse lift",       note:"Hover, takeoff, landing"},
+    {mode:"VTOL",               deg:DIM.TILT_VTOL,      c:C.accent, thrust:"3400g lift (nacelles) + 400g fuse lift",       note:"Hover, takeoff, landing"},
     {mode:"REVERSE / BRAKE",    deg:DIM.TILT_REV,       c:C.red,    thrust:"1700g reverse + 2944g lift retained",          note:"BRAKE mode only — indoor deceleration"},
     {mode:"AFT HARD STOP",      deg:DIM.TILT_AFT_STOP,  c:C.orange, thrust:"—",                                            note:"Bracket boss aft limit — FC never commands"},
   ];
@@ -1068,7 +1139,7 @@ export default function App(){
           <h1 style={{margin:0,fontSize:18,fontWeight:"normal",color:C.text,letterSpacing:"0.07em",fontFamily:MB}}>
             SERENITY-CLASS FIREFLY TILTROTOR UAV</h1>
           <div style={{color:"rgba(0,229,255,0.6)",fontSize:10,marginTop:3,fontFamily:M}}>
-            {DIM.L_MM}mm ({DIM.L_IN}") · 80mm 6S EDFs · 6× VL53L5CX ToF · 4"×3"×3" cargo gondola · nacelle −5°–140° · CM3+ Nodes 2&amp;3 · 6 access panels
+            {DIM.L_MM}mm ({DIM.L_IN}") · 80mm 6S EDFs · 12× VL53L5CX ToF dual-array · 4"×3"×3" cargo gondola · nacelle −5°–140° · CM3+ Nodes 2&amp;3 · 6 access panels
           </div>
         </div>
         <div style={{textAlign:"right",fontFamily:M}}>
