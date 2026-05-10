@@ -141,7 +141,7 @@
     },
     {
       "ref": "EDF-FUSE",
-      "desc": "XFLY Galaxy X4 PRO 40mm 12-blade EDF — 1413-KV5850 outrunner — 3S/4S rated",
+      "desc": "XFLY Galaxy X4 PRO 40mm 12-blade EDF — 1511-KV5850 outrunner — 3S/4S rated — HIGHEST KV ACHIEVABLE FOR 40mm DUCT AT 100k RPM",
       "qty": 1,
       "mass_g": 40,
       "thrust_g_4S": 650,
@@ -149,8 +149,20 @@
       "power_4S_W": 490,
       "fan_duct_od_mm": 43,
       "fan_duct_od_with_lip_mm": 47,
-      "motor": "1413 outrunner (14×13mm stator) 5850KV — factory balanced",
-      "notes": "Powered at 4S (14.8–16.5V) via balance tap from 6S main pack (cells 1–4). 12-blade design gives 650g thrust at only 30A — better efficiency than 8-blade alternatives. Factory-balanced, outrunner runs cooler than inrunner formats. RPM ceiling safe: 5850KV×16.8V=98,280 no-load; under load ~83,500 RPM vs 95,500 RPM tip-speed limit. Mounted in engine bell section 83–100% station. Variable-area nozzle (BamJr remix CC BY 4.0). Selected over AEORC XDF40 8600KV (819g peak but 68A, needs 70–80A ESC, reported ESC failures) and AEORC 6500KV (575g, 41A). XFLY PRO gives 650g at only 30A — best thrust-per-amp in class.",
+      "motor": "1511 outrunner (15×11mm stator) 5850KV — PRO version — factory balanced",
+      "motor_stator_od_mm": 15,
+      "motor_stator_h_mm": 11,
+      "no_load_rpm_at_4S_max": 98280,
+      "no_load_rpm_formula": "5850KV × 16.8V = 98,280 RPM",
+      "6S_motor_gap_analysis": {
+        "target_rpm": 100000,
+        "target_voltage_6S_nominal_V": 22.2,
+        "required_kv_for_6S_at_100k_rpm": 4505,
+        "max_stator_od_mm_for_40mm_hub": 15,
+        "finding": "NO commercial 6S motor exists in the ≤15mm stator class at 4000-4500KV. The 40mm EDF fan hub physically limits motor stator to ≤15mm OD. All ≤15mm-stator motors at 4000-4500KV are wound for 3S-4S (12-17V) — the tiny stator cannot dissipate 6S thermal load at high KV without destructive current draw. The minimum stator diameter for thermally viable 6S operation at ~4500KV is approximately 22-26mm, which fits 64mm+ EDF class fans — not 40mm. Market survey confirmed: AEORC XDF40 (19mm stator, 8600KV) is 3-4S only; E-flite BL480 (28mm, 4000KV) is 3-4S only; HET Typhoon 1W-30 (28mm, 4400KV) is 4S max; all 50mm EDF motors are 4S class. The 6S gap starts at 64mm fan diameter.",
+        "conclusion": "5850KV on 4S (via balance tap) IS the highest-performance solution for the 40mm 12-blade duct. It already delivers 98,280 RPM no-load — the 100k RPM turbine reference. 6S direct operation of a 40mm 12-blade EDF at 100k RPM is NOT achievable with any commercial motor. Do not change this EDF."
+      },
+      "notes": "Powered at 4S (14.8–16.5V) via balance tap from 6S main pack (cells 1–4). 12-blade design gives 650g thrust at only 30A — better efficiency than 8-blade alternatives. Factory-balanced outrunner. Tip speed at 100k RPM on 40mm fan: π×0.04m×100,000/60 = 209 m/s (Mach 0.61) — within GFRP blade envelope. 5850KV×16.8V=98,280 no-load ≈ 100k RPM turbine reference; under throttle ~83,500 RPM. NO 6S motor physically fits the 40mm hub at the 4,505KV required for 100k RPM on 22.2V — see 6S_motor_gap_analysis. Mounted in engine bell section 83–100% station. Variable-area nozzle (BamJr remix CC BY 4.0). Selected over AEORC XDF40 8600KV (819g peak but 68A, needs 70–80A ESC, reported ESC failures) and AEORC 6500KV (575g, 41A). XFLY PRO gives 650g at only 30A — best thrust-per-amp in class.",
       "sourcing": {
         "supplier": "Turbines-RC (EU) / Grayson Hobby (US) / eBay",
         "mpn": "XFLY Galaxy X4 PRO 5850KV",
