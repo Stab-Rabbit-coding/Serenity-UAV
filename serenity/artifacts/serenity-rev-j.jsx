@@ -41,7 +41,7 @@ const mmi    = mm => `${mm} mm (${mmToIn(mm)}")`;
 const gToLb  = g  => (g/453.592).toFixed(2);
 const gLb    = g  => `${g} g (${gToLb(g)} lb)`;
 
-// ── Canonical Rev H dimensions (QMx 269ft×170ft×79ft @ 18") ─
+// ── Canonical Rev I dimensions (QMx 269ft×170ft×79ft @ 18") — unchanged Rev J ─
 const DIM = {
   // Hull
   L_MM:   457.2,  L_IN:  18.0,
@@ -70,7 +70,7 @@ const DIM = {
   TILT_AFT_STOP: 140,   // mechanical hard stop — aft limit in tilt bracket
 };
 
-// ── Rev H weight budget (bom_revH1.json) ─────────────────────
+// ── Rev J weight budget (bom_revJ.json) ──────────────────────
 const W_ITEMS = [
   // Hull structure
   ["Hull shell 1.2mm PETG (6 sections)",     143],
@@ -304,14 +304,14 @@ function HullProfileDiagram(){
       {/* Info box */}
       <rect x={VW-195} y={8} width={187} height={62} rx={4}
         fill="rgba(0,0,0,0.55)" stroke="rgba(0,229,255,0.15)" strokeWidth={0.8}/>
-      <text x={VW-102} y={24} textAnchor="middle" fill={C.dimmer} fontSize={7.5} fontFamily={M} letterSpacing="0.5">CANONICAL PROPORTIONS — REV H</text>
+      <text x={VW-102} y={24} textAnchor="middle" fill={C.dimmer} fontSize={7.5} fontFamily={M} letterSpacing="0.5">CANONICAL PROPORTIONS — REV I</text>
       <text x={VW-102} y={38} textAnchor="middle" fill={C.lime} fontSize={9} fontFamily={M} fontWeight="bold">18.0" × QMx 269×170×79ft</text>
       <text x={VW-102} y={50} textAnchor="middle" fill={`${C.accent}80`} fontSize={7.5} fontFamily={M}>Span/length = C2C/L = {(DIM.C2C_MM/DIM.L_MM).toFixed(3)}</text>
       <text x={VW-102} y={62} textAnchor="middle" fill={C.orange} fontSize={7.5} fontFamily={M}>80mm EDF · 6S · nacelle OD {DIM.NAC_OD}mm</text>
 
       <text x={VW/2} y={14} textAnchor="middle"
         fill="rgba(0,229,255,0.85)" fontSize={8} fontFamily={M} letterSpacing="2">
-        TOP VIEW — CANONICAL PROPORTIONS — REV H</text>
+        TOP VIEW — CANONICAL PROPORTIONS — REV I (EDF UPGRADE REV J)</text>
     </svg>
   );
 }
@@ -403,7 +403,7 @@ function OverviewTab(){
     <div style={{background:"rgba(163,230,53,0.07)",border:"1px solid rgba(163,230,53,0.35)",
       borderRadius:6,padding:"16px 20px",marginBottom:20}}>
       <div style={{color:C.lime,fontFamily:M,fontSize:12,fontWeight:"bold",marginBottom:10,letterSpacing:"0.08em"}}>
-        REV H — 18" CANONICAL · QMx PROPORTIONS · FOAM-FILLED HULL
+        REV J — 18" CANONICAL · XRP 2700KV EDFS · QMx PROPORTIONS · FOAM-FILLED HULL
       </div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20}}>
         <div>
@@ -435,10 +435,11 @@ function OverviewTab(){
 
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24}}>
       <div>
-        <SH t="What changed Rev G → Rev H" mt={0} c={C.orange}/>
-        <Note c={C.orange} ch="Hull rescaled from 20.0″ (508mm) to 18.0″ (457.2mm) — the QMx canonical dimension for the 269ft Serenity at 1:1797 studio scale. Nacelle C-to-C computed from the same 170/269 blueprint ratio: 457.2 × (170/269) = 288.9mm outer span → 195.46mm C-to-C."/>
-        <Note c={C.teal} ch="80mm EDFs replace 100mm. The datum formula (TIP_HALF − 2/3 × OD) keeps nacelles proportionally at the correct outboard position regardless of EDF size. At 18″ scale, datum = 97.73 − 62.32 = 82.15mm from CL, outer edge 144.47mm from CL."/>
-        <Note c={C.purple} ch="Hull is now foam-filled (X-30 PU, 2 lb/ft³). 6 PTFE conduit tubes route all 4 data buses and power through the foam. 6 access panels (A–F) provide post-cure maintenance access to all avionics, ESCs, payload, and EDF."/>
+        <SH t="What changed Rev I → Rev J" mt={0} c={C.orange}/>
+        <Note c={C.orange} ch="Nacelle EDFs upgraded from Freewing 2836-2150KV to Changesun XRP 3660-2700KV — highest KV motor confirmed for 80mm 6S class. +466g per pair (300→766g), +2400g nacelle thrust (3400→5800g). Total thrust 4050→6450g. T/W empty 2.38→2.81 despite heavier mass."/>
+        <Note c={C.red} ch="MANDATORY ESC upgrade: XRP 2700KV draws 84A at full static thrust. Hobbywing Platinum PRO V4 120A replaces 50A ESC — 43% headroom. NEVER use 50A ESC with XRP motor — it will be destroyed at full throttle. +158g total ESC mass (56→214g)."/>
+        <Note c={C.teal} ch="Nacelle pod ID updated from 80mm → 83mm to match XRP housing OD. Pod OD (93.5mm canonical) unchanged. Wall reduces 6.75mm→5.25mm — structurally adequate for PETG. Canonical QMx geometry unchanged: nacelle C-to-C 195.46mm, outer edge 144.47mm from CL."/>
+        <Note c={C.purple} ch="40mm fuselage EDF unchanged (XFLY Galaxy X4 PRO 5850KV on 4S via balance tap). Gap analysis confirmed: no commercial 6S motor exists for 40mm hub at the required 4505KV. Current design already delivers 98,280 RPM no-load ≈ 100k RPM turbine reference."/>
       </div>
       <div>
         <SH t="T/W margin analysis" mt={0} c={C.green}/>
@@ -1045,10 +1046,10 @@ function CargoNacelleTab(){
   ];
   const TILT = [
     {mode:"FWD HARD STOP",      deg:DIM.TILT_FWD_STOP,  c:C.yellow, thrust:"—",                                            note:"Bracket boss fwd limit — FC never commands"},
-    {mode:"FORWARD",            deg:DIM.TILT_FWD,       c:C.green,  thrust:"3400g fwd (nacelles) + 650g fuse = 4050g",     note:"Cruise — altitude by fuselage EDF only"},
+    {mode:"FORWARD",            deg:DIM.TILT_FWD,       c:C.green,  thrust:"5800g fwd (nacelles) + 650g fuse = 6450g",     note:"Cruise — altitude by fuselage EDF only"},
     {mode:"TRANSITION",         deg:"0→90",              c:C.teal,   thrust:"Mixed fwd + lift",                             note:"Gradual tilt during accel / decel"},
-    {mode:"VTOL",               deg:DIM.TILT_VTOL,      c:C.accent, thrust:"3400g lift (nacelles) + 650g fuse lift",       note:"Hover, takeoff, landing"},
-    {mode:"REVERSE / BRAKE",    deg:DIM.TILT_REV,       c:C.red,    thrust:"1700g reverse + 2944g lift retained",          note:"BRAKE mode only — indoor deceleration"},
+    {mode:"VTOL",               deg:DIM.TILT_VTOL,      c:C.accent, thrust:"5800g lift (nacelles) + 650g fuse lift",       note:"Hover, takeoff, landing"},
+    {mode:"REVERSE / BRAKE",    deg:DIM.TILT_REV,       c:C.red,    thrust:"2900g reverse + 5024g lift retained",          note:"BRAKE mode only — indoor deceleration"},
     {mode:"AFT HARD STOP",      deg:DIM.TILT_AFT_STOP,  c:C.orange, thrust:"—",                                            note:"Bracket boss aft limit — FC never commands"},
   ];
   return(<div>
@@ -1102,7 +1103,7 @@ function CargoNacelleTab(){
         ))}</tbody>
       </table>
     </div>
-    <Note c={C.yellow} ch="At 120° (BRAKE soft limit): 30° past VTOL. Reverse = 1700×sin(30°)×2 = 1700g aft. Lift retained = 1700×cos(30°)×2 = 2944g — sufficient for hover with empty payload. At 140° hard stop: reverse = 1700×sin(50°)×2 = 2604g, lift = 1700×cos(50°)×2 = 2186g (structural limit only; FC never commands)."/>
+    <Note c={C.yellow} ch="At 120° (BRAKE soft limit): 30° past VTOL. Reverse = 2900×sin(30°)×2 = 2900g aft. Lift retained = 2900×cos(30°)×2 = 5024g — exceeds hover requirement with full payload. At 140° hard stop: reverse = 2900×sin(50°)×2 = 4443g, lift = 2900×cos(50°)×2 = 3731g (structural limit only; FC never commands)."/>
     <Warn ch="BRAKE mode (0°–120° range) available only via explicit FC INDOOR_BRAKE command. Outdoor FC soft-limits nacelles to 0°–90°. Maximum tilt rate: 20°/s in BRAKE mode; 10°/s during normal transition."/>
     <Good ch="Tilt bracket modification: reprint tilt_bracket_140deg.stl (×2). Dual stop bosses at −5° and 140°. Existing MG90S servo, arm, and pivot pin unchanged. Zero additional mass."/>
   </div>);
@@ -1136,7 +1137,7 @@ export default function App(){
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:12}}>
         <div>
           <div style={{color:C.lime,fontSize:9,letterSpacing:"0.2em",marginBottom:4}}>
-            SERENITY TILTROTOR · 18" CANONICAL · REV I</div>
+            SERENITY TILTROTOR · 18" CANONICAL · REV J</div>
           <h1 style={{margin:0,fontSize:18,fontWeight:"normal",color:C.text,letterSpacing:"0.07em",fontFamily:MB}}>
             SERENITY-CLASS FIREFLY TILTROTOR UAV</h1>
           <div style={{color:"rgba(0,229,255,0.6)",fontSize:10,marginTop:3,fontFamily:M}}>

@@ -62,11 +62,13 @@ body, p, li, td, th, code, pre {
 | `serenity-rev-c.jsx` | Battery + nav lights + antenna + wiring + BOM/SBOM | Rev C |
 | `serenity-rev-d.jsx` | 70mm EDFs + 40mm fwd + variable nozzle + build guide | Rev D |
 | `serenity-rev-e.jsx` | CC BY 4.0 + write-blocker + HW NX + dual WiFi SMA + Zigbee/LoRa + nacelle gear nozzle | Rev E |
-| `serenity-rev-f.jsx` | Author attribution + ft/kts/yd units + full license compliance | Rev F ← current master |
+| `serenity-rev-f.jsx` | Author attribution + ft/kts/yd units + full license compliance | Rev F |
 | `nacelle-nozzle-gear.jsx` | Variable-area nacelle nozzle gear coupling full design | Rev E |
 | `serenity-connectivity-revF.jsx` | 4-bus architecture analysis (Ethernet + CAN FD + RS-485 + I²C) | Rev F connectivity |
 | `serenity-connectivity-revG.jsx` | CAN daisy-chain (2nd connector) + RS-485 + I²C inter-board buses | Rev G connectivity |
-| `serenity-connectivity-revH.jsx` | **MIL-STD-1553B replaces I²C as 4th active bus** | Rev H connectivity ← current |
+| `serenity-connectivity-revH.jsx` | **MIL-STD-1553B replaces I²C as 4th active bus** | Rev H connectivity |
+| `serenity-rev-i.jsx` | CM3+ Nodes 2&3 + CM3-CARRIER-1 + dual VL53L5CX ToF arrays + cargo gondola | Rev I |
+| `serenity-rev-j.jsx` | **XRP 3660-2700KV nacelle EDFs + Hobbywing 120A ESCs + 83mm pod ID** | **Rev J ← current master** |
 
 ### SVG Engineering Diagrams
 
@@ -158,16 +160,19 @@ body, p, li, td, th, code, pre {
 | Canon basis | QMx Blueprints Mandel/Earls 2007 · 269ft × 170ft × 79ft |
 | Canonical beam | 288.9 mm (11.375") tip-to-tip · **100% canonical** |
 | Canonical height | 134.3 mm (5.286") landed |
-| Hull structure | PETG thin shell + X-30 expanding foam + CF skeleton · 302g |
-| Propulsion | 2× 80mm EDF nacelle (93mm OD · 1700g each @6S) · 1× 40mm fuselage |
+| Hull structure | PETG thin shell + X-30 expanding foam + CF skeleton |
+| Propulsion | 2× **Changesun XRP 3660-2700KV 80mm 6S EDF** (pod OD 93.5mm · 2900g each) · 1× XFLY X4 PRO 40mm 4S fuselage |
 | Nacelle span | 288.9 mm tip-to-tip (canonical beam) · C-C 195.9 mm (7.71") |
+| Nacelle ESC | **Hobbywing Platinum PRO V4 120A** (mandatory for 84A XRP draw) |
 | Pylon datum | 82.5 mm from CL (1/3 from nacelle inner edge — outward expansion) |
-| AUW (empty rec.) | 1,388g · 6S 4000mAh · T/W 2.45 · ~8min hover |
-| AUW (cargo 250g rec.) | 1,488g · 6S 2200mAh · T/W 2.28 · ~5min hover |
-| Max payload at T/W=2.0 | **462g (16.3oz)** |
+| Total hover thrust | **6,450 g** (5,800g nacelles + 650g fuselage) |
+| Airframe dry | **1,884 g** |
+| AUW empty | **2,294 g · 6S 4000mAh · T/W 2.81** |
+| AUW cargo 250g | **2,429 g · 6S 2800mAh · T/W 2.66** |
+| Max payload at T/W=2.0 | **1,046 g (2.31 lb)** |
 | Cruise speed | 38–54 kts (scaled from 35-49kts at 365mm) |
 | Transition altitude | ≥30 ft AGL |
-| CG target | 152 mm (5.98") from nose |
+| CG target | 190 mm (7.48") from nose |
 | Data buses | Ethernet 100BASE-T · CAN FD 4Mbps · RS-485 1Mbps · MIL-STD-1553B 1Mbps |
 | Security | CPLD write-blocker · STM32 NX proxy · TPM 2.0 · TrustZone · SELinux |
 | Navigation lights | 6× WS2812C — ICAO Annex 2 · 14 CFR 91.209 compliant |
