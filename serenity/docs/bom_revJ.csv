@@ -1,0 +1,80 @@
+Section,Ref,Description,Qty,Mass_g,US_Supplier,MPN_SKU,Manufacturer,Cost_USD_ea,Cost_USD_ext,STL_file,Notes
+Hull Structure,HULL-SHELL,"PETG thin shell 1.2mm wall",1,143,Self-print (PETG),PETG-1KG,Generic,4.00,4.00,,"143g PETG @ $25/kg approx material cost"
+Hull Structure,HULL-FOAM,"X-30 expanding PU foam 2 lb/ft³",1,42,"Amazon / US Composites",X-30 2lb PU foam,US Composites,28.00,28.00,,"2-part; 2-min pot life; 4× expansion"
+Hull Structure,HULL-CF,CF keel + ring frames,1,28,"DragonPlate / Amazon","CF-3mm-plate + CF-2mm-plate",Generic,18.00,18.00,,"3mm CF plate keel + 2mm ring frames"
+Hull Structure,HULL-TUBE,"Cable-route tubes 5mm OD × 400mm",6,5,Amazon,5mm-OD-straws,Generic,0.50,3.00,,Insert before foam pour
+Hull Structure,HULL-VOID-EPS,"EPS blue foam board 25mm × 300mm × 150mm",2,18,"Home Depot / Lowe's",Foamular 150,Owens Corning,4.00,8.00,,"Cut to 6 void-former shapes; step 22"
+Hull Structure,HULL-WAX,"Johnson's Paste Wax 16oz",1,400,"Hardware store / Amazon",Johnson's Paste Wax,SC Johnson,8.00,8.00,,"Release agent; consumed"
+Hull Structure,HULL-PTFE-TUBE,"PTFE tube 5mm OD × 3mm ID × 2.5m",6,12,Amazon,PTFE-5OD-3ID-1M,Generic,4.00,24.00,,"6 conduits; install before foam pour"
+Hull Structure,ACCESS-FRAME-PETG,Access panel frame set PETG,1,38,Self-print (PETG),—,—,2.50,2.50,access_panel_frames.stl,Print 6 frames + 6 lids
+Hull Structure,ACCESS-SCREW-M25,"M2.5×6 SS button-head Phillips ×16",16,4,Amazon,M2.5x6-BH-SS,Generic,0.20,3.20,,"4 per panel for B and E"
+Hull Structure,ACCESS-MAGNET,"N42 neodymium 6×2mm disc ×8",8,2,"Amazon / K&J Magnetics",D62-N42,"K&J / Amazon",0.75,6.00,,Press-fit 6.1mm pockets
+Hull Structure,ACCESS-GASKET,"3M 4016 closed-cell foam tape 1.5×9mm 3m",1,8,Amazon,3M-4016-9mm,3M,12.00,12.00,,Line all panel frame lips
+Hull Structure,ACCESS-EPOXY,"5-minute epoxy 25mL syringe",1,0,"Amazon / hardware store",5min-epoxy-25mL,Loctite/Generic,7.00,7.00,,Bond frames into hull
+Propulsion,EDF-NAC-L,"Changesun XRP 3660-2700KV 80mm 12-blade full-metal EDF — PORT CCW",1,383,"RC Castle (ships from China) / Turbines-RC EU",XRP-80mm-2700KV-CCW,"Changesun / XRP",190.00,190.00,,"~$170 unit + ~$20 intl shipping. Turbines-RC: turbines-rc.com/en/changesun-xrp-rc-blog/1896"
+Propulsion,EDF-NAC-R,"Changesun XRP 3660-2700KV 80mm 12-blade full-metal EDF — STBD CW",1,383,"RC Castle / Turbines-RC EU",XRP-80mm-2700KV-CW,"Changesun / XRP",190.00,190.00,,CW rotation for STBD nacelle
+Propulsion,EDF-FUSE,"XFLY Galaxy X4 PRO 40mm 12-blade EDF 1511-KV5850 — fuselage",1,40,Grayson Hobby (US),XFLY-X4-PRO-5850KV,XFLY Model,48.00,48.00,,"Powered at 4S via balance tap. 650g / 30A"
+Propulsion,BAT-TAP-4S,"6S→4S balance tap pigtail JST-XH cells 1–4 to XT30",1,2,Amazon (DIY from parts),"JST-XH6P + XT30F",Generic,5.00,5.00,,"DIY: JST-XH 6-pin header + XT30 female + 16AWG 150mm"
+Propulsion,ESC-NAC,"Hobbywing Platinum PRO V4 120A ESC 3S–6S — nacelle (×2)",2,107,HobbywingDirect.com (US),HWPROV4-120A,Hobbywing,124.99,249.98,,"SKU 30203600. 120A cont / 150A burst. MANDATORY for 84A XRP draw"
+Propulsion,ESC-FUSE,"Hobbywing XRotor Micro 40A BLHeli32 ESC 4S — fuselage",1,15,"Amazon / Hobbywing",XROTOR-MICRO-40A,Hobbywing,18.00,18.00,,"4S input via balance tap; XFLY peaks 30A"
+Nacelle Hardware,NAC-POD,"Nacelle pod shell PETG 83mm ID 93.5mm OD 144mm long (×2)",2,18,Self-print (PETG),—,—,3.00,6.00,nacelle_pod_83mm.stl,"Updated ID 83mm for XRP housing. Reprint from revised STL"
+Nacelle Hardware,NAC-TIP-P,Nacelle tip cap PORT — RED WS2812C recess,1,4,Self-print (Clear PETG),—,—,0.75,0.75,nacelle_tip_cap_port.stl,
+Nacelle Hardware,NAC-TIP-S,Nacelle tip cap STBD — GREEN WS2812C recess,1,4,Self-print (Clear PETG),—,—,0.75,0.75,nacelle_tip_cap_stbd.stl,
+Nacelle Hardware,NAC-ARM,"CF stub arm 12mm OD 1.5mm wall 10.4mm — (×2)",2,1,"Amazon / DragonPlate",CF-tube-12OD-10ID,Generic,3.00,6.00,,"ARM_STUB = 10.4mm"
+Nacelle Hardware,TILT-BRACKET,"Nacelle tilt pivot bracket CF-PETG (×2)",2,6,Self-print (CF-PETG),—,—,1.50,3.00,tilt_bracket_cf_petg.stl,
+Nacelle Hardware,SERVO-NAC,"MG90S nacelle tilt servo (×2)",2,9,Amazon,MG90S,Tower Pro,6.00,12.00,,"120° travel bracket modification"
+Nacelle Hardware,GEAR-NOZZLE,"Gear nozzle assembly sector gear + ring + 8 flaps (×3)",3,4,Self-print (PETG),—,BamJr CC BY 4.0,2.00,6.00,nozzle_inner_ring_80mm.stl,"2 nacelle + 1 fuselage"
+Nacelle Hardware,SERVO-NOZZLE,SG90 variable-nozzle servo,1,9,Amazon,SG90,Tower Pro,3.00,3.00,,
+Avionics,CM4-LITE,"Raspberry Pi CM4 Lite no eMMC (×2) Nodes 1 & 4",2,7.5,"Adafruit / PiShop.us",SC0685,Raspberry Pi Ltd,35.00,70.00,,"Nodes 1 (flight ctrl) and 4 (actuator ctrl)"
+Avionics,CM4-CARRIER-2,"CM4-CARRIER-2 PCB 57×44mm 4L minimal carrier (×2)",2,17.5,JLCPCB assembled,CM4-CARRIER-2,"Custom (KiCad in repo)",15.00,30.00,,"~$8 fab + ~$7 assembly/shipping amortized. Nodes 1 & 4"
+Avionics,SENSORHAT-1,"SENSORHAT-1 PCB 46×36mm XIAO RP2350 realtime hat (×2)",2,12.5,JLCPCB assembled,SENSORHAT-1,Custom,28.00,56.00,,"~$22 fab + ~$6 amortized. ICM-42688 + BMP388 + W5500 + MCP2518FD + HI-6130"
+Avionics,CM3PLUS,"Raspberry Pi CM3+ Lite no eMMC (×2) Nodes 2 & 3",2,8.0,"Adafruit / PiShop.us",SC0024,Raspberry Pi Ltd,25.00,50.00,,A53@1.2GHz 1GB LPDDR2
+Avionics,CM3-CARRIER-1,"CM3-CARRIER-1 PCB 68×30mm 4L integrated bus carrier (×2)",2,9.0,JLCPCB assembled,CM3-CARRIER-1,Custom,18.00,36.00,,"Nodes 2 & 3. MCP2518FD + MAX3485E + HI-6130 + W5500 integrated"
+Avionics,COMPHAT-SWITCH,"COMPHAT-SWITCH PCB 65×52mm Node 1 comms hat",1,29.0,JLCPCB assembled,COMPHAT-SWITCH,Custom,42.00,42.00,,"KSZ8895 5-port switch + SiK + 1553 + CAN FD + RS-485 + TPM"
+Avionics,MICROHAT,"MICROHAT PCB 42×36mm Node 4 comms hat",1,10.0,JLCPCB assembled,MICROHAT,Custom,12.00,12.00,,"ETH passthrough + CAN FD + RS-485 + 1553"
+Avionics,MICROSD-OS,"microSD 8GB Class 10 OS boot (×4)",4,1.0,Amazon,8GB-microSD-C10,"SanDisk / Samsung",8.00,32.00,,"2× CM4-CARRIER-2 + 2× CM3-CARRIER-1 J_SD"
+Avionics,MICROSD-LOG,"microSD 32GB flight log (×2)",2,1.0,Amazon,32GB-microSD,"SanDisk / Samsung",10.00,20.00,,"One per CM4-CARRIER-2 log slot (Nodes 1 & 4)"
+Power and Wiring,PDB,"Power distribution board XT90 main + 3× ESC + 5V BEC bus",1,12,"Amazon / GetFPV",PDB-XT90,Generic,14.00,14.00,,100A continuous rated
+Power and Wiring,BEC-5V,BEC 5V 5A DC-DC avionics power,1,18,"Amazon / GetFPV",BEC-5V-5A,Generic,12.00,12.00,,
+Power and Wiring,WIRE-ESC-NAC,"14AWG silicone ESC→motor leads 200mm ×3-phase ×2 nacelles",1,24,Amazon,14AWG-silicone-wire,Generic,12.00,12.00,,High-current phase wires
+Power and Wiring,WIRE-ESC-FUSE,"16AWG silicone ESC→motor leads 150mm ×3-phase fuselage",1,8,Amazon,16AWG-silicone-wire,Generic,6.00,6.00,,
+Power and Wiring,WIRE-SERVO,"20AWG servo extension leads 300mm ×6",1,12,Amazon,20AWG-servo-ext,Generic,6.00,6.00,,
+Power and Wiring,WIRE-XT90,XT90 battery pigtail 100mm,1,15,"Amazon / GetFPV",XT90-pigtail,Amass,6.00,6.00,,
+Power and Wiring,CAB-CAN,"CAN FD 4-pin JST-GH 150mm cables (×3)",3,2,"Mouser / Amazon",JST-GH-4P-150mm,Generic,2.00,6.00,,"Chain N1→N2→N3→N4"
+Power and Wiring,CAB-RS485,"RS-485 4-pin JST-GH 150mm cables (×3)",3,2,"Mouser / Amazon",JST-GH-4P-150mm,Generic,2.00,6.00,,
+Power and Wiring,CAB-1553,"1553B 4-pin JST-GH shielded twisted pair 180mm (×3)",3,2.7,"Mouser / Amazon",JST-GH-4P-STP-180mm,"Belden / Generic",3.00,9.00,,"Belden 3084A equiv 78Ω"
+Power and Wiring,CAB-ETH,"Ethernet 6-pin JST-GH 200mm cables (×4)",4,2.5,"Mouser / Amazon",JST-GH-6P-200mm,Generic,2.00,8.00,,W5500→KSZ8895 star
+Power and Wiring,CAB-ESC-TELEM,"ESC telemetry 3-pin JST-GH 200mm (×3)",3,1.3,"Mouser / Amazon",JST-GH-3P-200mm,Generic,1.50,4.50,,
+Power and Wiring,CAB-GPS,GPS 6-pin JST-GH 150mm,1,3,"Mouser / Amazon",JST-GH-6P-150mm,Generic,2.50,2.50,,
+Power and Wiring,CAB-MISC,"Power + I2C + misc cables connectors zip ties",1,8,Amazon,misc-cables,Generic,12.00,12.00,,
+Payload System,SERVO-PAY,SG90 payload release / winch servo,1,9,Amazon,SG90,Tower Pro,3.00,3.00,,Controls winch via DRV8833
+Payload System,SERVO-DOOR,SG90 clamshell cargo door servo,1,9,Amazon,SG90,Tower Pro,3.00,3.00,,Bell-crank push-pull
+Payload System,WINCH-MOT,"N20 6V DC gearmotor 300:1",1,10,Amazon,N20-6V-300RPM,Generic,8.00,8.00,,8N lift at 300:1
+Payload System,DRV8833,DRV8833 dual H-bridge driver breakout,1,1,"Amazon / Adafruit",DRV8833,"Adafruit / Generic",5.00,5.00,,
+Payload System,CARGO-GONDOLA,"Cargo gondola shell PETG 112×85×22mm",1,22,Self-print (PETG),—,—,3.00,3.00,cargo_gondola_shell.stl,18mm belly pod protrusion
+Payload System,CLAMSHELL-DOOR,Clamshell door halves PETG mirrored pair,2,7,Self-print (PETG),—,—,1.50,3.00,clamshell_door_half.stl,"Spring-loaded; SG90 linkage closes"
+Payload System,CARGO-CRADLE,Cargo cradle + auto-latch PETG,1,10,Self-print (PETG),—,—,2.50,2.50,cargo_cradle_autolatch.stl,"Accepts 4″×3″×3″ box"
+Payload System,WINCH-LINE,"Dyneema SK75 0.5mm braid 2m",1,1,Amazon,Dyneema-SK75-0.5mm,"DSM / Generic",8.00,8.00,,80N break strength
+Payload System,SKID-FOOT,"TPU 95A landing skid feet (×4)",4,4,Self-print (TPU 95A),—,—,0.75,3.00,landing_skid_foot.stl,
+Obstacle Avoidance Array A,TOF-A-VL53L5CX,"VL53L5CX 8×8 multizone ToF sensor Array-A (×6)",6,2,"Mouser / DigiKey",VL53L5CXV0GC/1,STMicroelectronics,7.00,42.00,,"Node 3 I2C3. Stations: Fwd/Aft/Port/Stbd/Zenith/Nadir"
+Obstacle Avoidance Array A,TOF-A-MUX,TCA9548A 8-ch I2C mux Array-A,1,1,Mouser,TCA9548APWR,Texas Instruments,1.50,1.50,,"I2C 0x70; channels 0–5 → S1A–S6A"
+Obstacle Avoidance Array A,TOF-A-GPIO,MCP23008 8-port GPIO expander XSHUT ctrl Array-A,1,1,Mouser,MCP23008-E/SS,Microchip,1.20,1.20,,"I2C 0x20; GP0–GP5 → XSHUT S1A–S6A"
+Obstacle Avoidance Array A,TOF-A-MOUNT,"VL53L5CX PETG flush-mount ×6 Array-A",6,1,Self-print (PETG),—,—,0.50,3.00,tof_flush_mount_5mm.stl,Press-fit 6.5mm hull cutout
+Obstacle Avoidance Array A,TOF-A-CABLE,"VL53L5CX 4-wire JST-SH1.0 300mm ×6 Array-A",6,1,"Amazon / Mouser",JST-SH1.0-4P-300mm,Generic,1.50,9.00,,"GND/VCC/SDA/SCL; route via foam conduit"
+Obstacle Avoidance Array B,TOF-B-VL53L5CX,"VL53L5CX 8×8 multizone ToF sensor Array-B (×6)",6,2,"Mouser / DigiKey",VL53L5CXV0GC/1,STMicroelectronics,7.00,42.00,,"Node 2 I2C2. Spatially offset from Array A"
+Obstacle Avoidance Array B,TOF-B-MUX,TCA9548A 8-ch I2C mux Array-B,1,1,Mouser,TCA9548APWR,Texas Instruments,1.50,1.50,,"I2C 0x70 on Node 2 I2C2 (isolated from Array A)"
+Obstacle Avoidance Array B,TOF-B-GPIO,MCP23008 8-port GPIO expander XSHUT ctrl Array-B,1,1,Mouser,MCP23008-E/SS,Microchip,1.20,1.20,,"I2C 0x20 on Node 2 I2C2"
+Obstacle Avoidance Array B,TOF-B-MOUNT,"VL53L5CX PETG flush-mount ×6 Array-B",6,1,Self-print (PETG),—,—,0.50,3.00,tof_flush_mount_5mm.stl,"Same print as Array A; different hull positions"
+Obstacle Avoidance Array B,TOF-B-CABLE,"VL53L5CX 4-wire JST-SH1.0 300mm ×6 Array-B",6,1,"Amazon / Mouser",JST-SH1.0-4P-300mm,Generic,1.50,9.00,,Separate foam conduit from Array A
+Radios and Sensors,SIK-915,SiK 915MHz telemetry radio module,1,14,"Holybro US / mRo",HolyBro SiK Radio V3,Holybro,45.00,45.00,,"On COMPHAT-SWITCH; SMA belly antenna"
+Radios and Sensors,RCRS-49,49MHz RCRS RC receiver board,1,12,Specialty RC suppliers,RCRS-49MHz,"RCRS / Generic",35.00,35.00,,Dorsal fin antenna coil
+Radios and Sensors,GPS-M10Q,u-blox M10Q GPS module + patch antenna,1,12,SparkFun,GPS-19770,"u-blox / SparkFun",35.00,35.00,,"59mm from nose; cockpit top mount"
+Radios and Sensors,ANT-SIK,915MHz SMA whip antenna + pigtail,1,3,Amazon,915MHz-SMA-whip,Generic,9.00,9.00,,SMA belly mount
+Radios and Sensors,ANT-RCRS,"49MHz helical coil + ABS enclosure (dorsal fin)",1,3,DIY (Amazon parts),49MHz-helical-DIY,DIY,12.00,12.00,,Wound coil in printed dorsal fin housing
+Radios and Sensors,NAVLIGHT,"WS2812C LED + diffuser + PETG mount (×6)",6,1.3,"Amazon / Adafruit",WS2812C-2020,WorldSemi,2.00,12.00,,"Port=RED Stbd=GREEN Tail=WHITE Belly=WHITE strobe"
+Fasteners and Misc,STANDOFF,"M2.5 nylon hex standoffs 6mm ×20",1,4,Amazon,M2.5-nylon-standoff-6mm,Generic,6.00,6.00,,
+Fasteners and Misc,SCREW-M25,"M2.5 stainless screws ×40 (8mm + 12mm assorted)",1,6,Amazon,M2.5-SS-screw-kit,Generic,6.00,6.00,,
+Fasteners and Misc,ZIPTIE,"Nylon zip ties ×30 (100mm + 200mm)",1,4,Amazon,nylon-zip-ties,Generic,4.00,4.00,,
+Fasteners and Misc,FOAM-TAPE,3M double-sided foam tape vibration isolation,1,4,Amazon,3M-foam-tape,3M,8.00,8.00,,
+Fasteners and Misc,CABLE-CLIP,Cable management clips + mounts,1,4,Amazon,cable-clips,Generic,6.00,6.00,,
+TOTAL,,,,,,,,,1644.08,,
