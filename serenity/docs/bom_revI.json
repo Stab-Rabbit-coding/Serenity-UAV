@@ -97,27 +97,46 @@
   "propulsion": [
     {
       "ref": "EDF-NAC-L",
-      "desc": "80mm EDF nacelle LEFT (PORT) — 6S",
+      "desc": "80mm EDF nacelle LEFT (PORT) — Changesun XRP 3660-2700KV 12-blade full-metal — 6S — highest KV for 80mm duct",
       "qty": 1,
-      "mass_g": 150,
-      "thrust_g_6S": 1700,
-      "notes": "OD 93.5mm (canonical nacelle OD), 1.2mm wall pod",
+      "mass_g": 383,
+      "thrust_g_6S": 2900,
+      "current_6S_A": 84,
+      "power_6S_W": 1864,
+      "motor": "3660 inrunner 2700KV multi-pole (36mm stator, 60mm long) — 5mm shaft — factory dynamically balanced",
+      "fan": "12-blade 80mm rotor — 7075 aluminium alloy — removable intake ring + tail cone",
+      "fan_housing_od_mm": 83,
+      "notes": "Highest KV motor confirmed available for 80mm 6S EDF duct. 2700KV × 22.2V = 59,940 no-load RPM; blade tip speed ~251 m/s at full chat — within 7075 Al blade design envelope. Requires 100A+ ESC (see ESC-NAC). OD 83mm housing slips into nacelle pod; update NAC-POD ID to 83mm. CCW rotation for tractor (pusher would need CW; order correct rotation).",
       "sourcing": {
-        "supplier": "Nitroplanes",
-        "mpn": "Freewing 2836-2150KV 80mm EDF",
-        "cost_est_usd": 55
+        "supplier": "Turbines-RC (EU, primary) / RC Castle (global)",
+        "mpn_ccw": "Changesun XRP 12 Blade 80mm EDF Ducted Fan 2700Kv Motor 6S (CCW)",
+        "mpn_cw": "Changesun XRP 12 Blade 80mm EDF Ducted Fan 2700Kv Motor 6S (CW)",
+        "manufacturer": "Changesun / XRP",
+        "cost_est_usd": 170,
+        "url_turbines_ccw": "https://www.turbines-rc.com/en/changesun-xrp-rc-blog/1896-changesun-xrp-12-blade-80mm-edf-ducted-fan-2700kv-motor-6s.html",
+        "url_turbines_cw": "https://www.turbines-rc.com/en/changesun-xrp-rc-blog/1900-changesun-xrp-12-blade-80mm-edf-ducted-fan-2700kv-motor-6s-cw.html",
+        "url_rccastle": "https://www.rc-castle.com/index.php?route=product/product&product_id=7410",
+        "notes": "Available CW and CCW. Order CCW (reverse) for tractor orientation matching current nacelle configuration."
       }
     },
     {
       "ref": "EDF-NAC-R",
-      "desc": "80mm EDF nacelle RIGHT (STBD) — 6S",
+      "desc": "80mm EDF nacelle RIGHT (STBD) — Changesun XRP 3660-2700KV 12-blade full-metal — 6S — highest KV for 80mm duct",
       "qty": 1,
-      "mass_g": 150,
-      "thrust_g_6S": 1700,
+      "mass_g": 383,
+      "thrust_g_6S": 2900,
+      "current_6S_A": 84,
+      "power_6S_W": 1864,
+      "motor": "3660 inrunner 2700KV multi-pole — 5mm shaft — factory dynamically balanced",
+      "fan": "12-blade 80mm rotor — 7075 aluminium alloy",
+      "fan_housing_od_mm": 83,
+      "notes": "CW rotation for STBD nacelle tractor. Order CW variant.",
       "sourcing": {
-        "supplier": "Nitroplanes",
-        "mpn": "Freewing 2836-2150KV 80mm EDF",
-        "cost_est_usd": 55
+        "supplier": "Turbines-RC (EU, primary) / RC Castle (global)",
+        "mpn": "Changesun XRP 12 Blade 80mm EDF Ducted Fan 2700Kv Motor 6S (CW)",
+        "manufacturer": "Changesun / XRP",
+        "cost_est_usd": 170,
+        "url_turbines_cw": "https://www.turbines-rc.com/en/changesun-xrp-rc-blog/1900-changesun-xrp-12-blade-80mm-edf-ducted-fan-2700kv-motor-6s-cw.html"
       }
     },
     {
@@ -149,15 +168,17 @@
     },
     {
       "ref": "ESC-NAC",
-      "desc": "50A BLHeli32 ESC for 80mm nacelle EDF — 6S rated",
+      "desc": "120A ESC for 80mm nacelle EDF — 6S rated — upgraded for XRP 2700KV (84A peak)",
       "qty": 2,
-      "mass_g": 28,
-      "notes": "One per nacelle. 6S = 22.2V nominal.",
+      "mass_g": 107,
+      "notes": "One per nacelle. XRP 2700KV draws 84A at full static thrust on 6S; 120A ESC provides 43% headroom. MUST NOT use 50A ESC — will destroy it at full throttle. 6S = 22.2V nominal.",
       "sourcing": {
         "supplier": "Hobbywing",
-        "mpn": "Platinum 50A V4",
-        "cost_est_usd": 30,
-        "notes": "Per unit. 2 required."
+        "mpn": "Platinum PRO V4 120A",
+        "sku": "30203600",
+        "cost_est_usd": 125,
+        "url": "https://www.hobbywingdirect.com/products/platinum-120a-v4-esc",
+        "notes": "3S–6S, 120A continuous / 150A burst. 107g. Per unit — 2 required."
       }
     },
     {
@@ -177,10 +198,11 @@
   "nacelle_hardware": [
     {
       "ref": "NAC-POD",
-      "desc": "Nacelle pod shell PETG — 80mm ID, 93.5mm OD, 144mm long",
+      "desc": "Nacelle pod shell PETG — 83mm ID, 93.5mm OD, 144mm long — updated for XRP 2700KV housing OD 83mm",
       "qty": 2,
       "mass_g": 18,
-      "stl": "nacelle_pod_80mm.stl"
+      "stl": "nacelle_pod_83mm.stl",
+      "notes": "ID updated from 80mm to 83mm to match Changesun XRP EDF housing OD. Reprint required from revised STL. Wall reduces from 6.75mm to 5.25mm — still adequate for PETG at 1.2mm shell specification."
     },
     {
       "ref": "NAC-TIP-P",
