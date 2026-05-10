@@ -81,9 +81,9 @@ const W_ITEMS = [
   ["Access screws M2.5 ×16 + magnets ×8",       6],
   ["Gasket tape 3M 4016",                       8],
   // Propulsion
-  ["80mm EDF nacelle ×2 (motor+fan+housing)", 300],
+  ["XRP 3660-2700KV 80mm EDF ×2 (motor+fan+housing)", 766],  // 383g each — XRP 2700KV highest KV for 80mm 6S
   ["XFLY Galaxy X4 PRO 40mm 12-blade EDF (4S)",  40],
-  ["50A ESC ×2 (nacelle, 6S)",                 56],
+  ["120A ESC ×2 (nacelle, 6S — HW Platinum V4 120A)", 214],  // 107g each — upgraded for 84A XRP draw
   ["40A ESC ×1 (fuselage, 4S)",                15],
   ["6S→4S balance tap pigtail (cells 1–4)",     2],
   ["Nacelle pods 93.5mm OD ×2",                36],
@@ -134,9 +134,9 @@ const W_ITEMS = [
 const DRY_G   = W_ITEMS.reduce((s,[,g])=>s+g, 0);
 
 // ── Power & thrust ────────────────────────────────────────────
-const THRUST_NAC  = 1700;  // each 80mm 6S EDF
+const THRUST_NAC  = 2900;  // each 80mm 6S EDF — XRP 3660-2700KV, 84A, 1864W
 const THRUST_FUSE =  650;  // XFLY Galaxy X4 PRO 5850KV nominal 4S — 30A peak, 12-blade
-const THRUST      = THRUST_NAC*2 + THRUST_FUSE;  // 3780g
+const THRUST      = THRUST_NAC*2 + THRUST_FUSE;  // 6450g
 
 const BAT_EMPTY   =  410;  // 6S 4000mAh
 const BAT_CARGO   =  295;  // 6S 2800mAh
