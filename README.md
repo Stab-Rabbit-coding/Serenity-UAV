@@ -20,6 +20,8 @@ these are networked to 4 raspberry cm4 with 4gb ram on a carrier board with a tp
 
 attached to the header is a comms and recorder hat with its own tpm, 915mhz mavlink mavlink and lora radio, 49mhz rcrs time division dual simplex transceiver with dynamic channel assignment,and a tf slot for a micro sd card with hardware enforced non-executable log storage. the hat has all four wired busses/networks and an embedded switch based on the murex mrswitch. 
 
+Revision K is a major avionics change, swapping out the R-Pi ecosystem for the Beagleboard.  There are 8 pocket Beagle 2 boards, 4 with sensor capes and 4 with comms capes, providing the same capabilities as the  R-Pi hats at a lower cost and complexity. 
+
 Here's the conversation:  https://claude.ai/share/a1e3900e-d2bf-4690-ba63-25178e7de666
 
 Here's the latest design revision: https://claude.ai/public/artifacts/2bae8a5f-7160-4c76-ba28-a98d9b38638a
