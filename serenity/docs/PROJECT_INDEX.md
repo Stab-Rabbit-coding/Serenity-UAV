@@ -173,7 +173,7 @@ body, p, li, td, th, code, pre {
 | Nacelle ESC | **Hobbywing Platinum PRO V4 120A** (mandatory for 84A XRP draw) |
 | Pylon datum | 82.5 mm from CL (1/3 from nacelle inner edge — outward expansion) |
 | Total hover thrust | **6,450 g** (5,800g nacelles + 650g fuselage) |
-| Avionics | **8× PocketBeagle 2 (AM6232)** · 4× Cape-A (sensor/flight) · 4× Cape-B (comms/payload) |
+| Avionics | **8× PocketBeagle 2 (AM6232)** · 4× Cape-A (FC nodes) · 4× Cape-B (CN nodes) · interleaved CN+FC per bay: Bay A: CN1+FC1, Bay B: CN2+FC2, Bay D: CN3+FC3, Bay E: CN4+FC4 |
 | Avionics dry | **404 g** (8× PB2 + 4× Cape-A + 4× Cape-B + 4× RCRS-49 + GPS×4 + radios) |
 | Airframe dry (Rev K) | **2,177 g** |
 | AUW empty | **2,587 g · 6S 4000mAh · T/W 2.49** |
@@ -194,8 +194,8 @@ body, p, li, td, th, code, pre {
 | Bus | Protocol | Speed | Topology | Notes |
 |-----|----------|-------|----------|-------|
 | 1 | Ethernet (CPSW3G + DP83825I) | 100 Mbps | **RSTP ring** (8-node, self-healing) | Added Rev E; ring topology Rev K |
-| 2 | CAN FD ISO 11898-1 | 1 Mbps / 8 Mbps data | Linear daisy-chain, 120Ω termination at FC1 and CN4 | Added Rev E |
-| 3 | RS-485 / EIA-485 | 1 Mbps | Multi-drop, 120Ω termination at FC1 and CN4 | Added Rev G |
+| 2 | CAN FD ISO 11898-1 | 1 Mbps / 8 Mbps data | Linear daisy-chain CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4; 120Ω at CN1 (start) and FC4 (end) | Added Rev E |
+| 3 | RS-485 / EIA-485 | 1 Mbps | Multi-drop CN1→…→FC4; 120Ω at CN1 and FC4 | Added Rev G |
 | 4 | **MIL-STD-1553B** (PRU Manchester II) | 1 Mbps | BC/RT — FC1=BC, FC2=standby BC; all others RT | Added Rev H; PRU encoder Rev K |
 | — | I²C (on-Cape) | 400 kHz | Local sensor bus via TCA9548A mux | Not inter-board |
 
