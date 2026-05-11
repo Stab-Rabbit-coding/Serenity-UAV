@@ -70,7 +70,7 @@ const DIM = {
   TILT_AFT_STOP: 140,   // mechanical hard stop — aft limit in tilt bracket
 };
 
-// ── Rev J weight budget (bom_revJ.json) ──────────────────────
+// ── Rev K weight budget (bom_revK.json) ──────────────────────
 const W_ITEMS = [
   // Hull structure
   ["Hull shell 1.2mm PETG (6 sections)",     143],
@@ -92,22 +92,19 @@ const W_ITEMS = [
   ["Nacelle tilt servos MG90S ×2",             18],
   ["Gear nozzle assemblies ×3",                12],
   ["Variable-nozzle servo SG90",                9],
-  // Avionics — mixed CM4/CM3+ architecture
-  ["CM4-LITE ×2 (Nodes 1, 4)",                 15],
-  ["CM4-CARRIER-2 ×2 (Nodes 1, 4)",            35],
-  ["SENSORHAT-1 ×2 XIAO RP2350 (Nodes 1, 4)", 25],
-  ["CM3+ module ×2 (Nodes 2, 3)",              16],
-  ["CM3-CARRIER-1 ×2 (Nodes 2, 3)",            18],
-  ["COMMS-HAT-SWITCH (Node 1 hat)",              29],
-  ["MICROHAT ×1 (Node 4 hat)",                 10],
-  ["microSD cards ×8 (OS + log)",               8],
+  // Avionics — 8× PocketBeagle 2 + Cape-A/B (Rev K)
+  ["PocketBeagle 2 ×8 (AM6232 + PRU-ICSS)",    80],  // 10g × 8
+  ["Cape-A Sensor/Flight PCB ×4 (85×55mm 4L)", 112], // 28g × 4
+  ["Cape-B Comms/Payload PCB ×4 (90×60mm 4L)", 152], // 38g × 4
+  ["RCRS-49 sub-modules ×4",                    48],  // 12g × 4
+  ["microSD ×12 (OS×8 + log×4)",                12],
   // Power + wiring
   ["PDB + BEC 5V/5A",                          30],
   ["ESC power wiring (12/16 AWG)",             32],
   ["Servo + signal wiring",                    12],
   ["XT90 battery pigtail",                     15],
-  ["Bus cables (CAN/RS-485/1553/ETH)",         10],
-  ["GPS / ESC telemetry / misc cables",        14],
+  ["Bus cables (CAN×7/RS-485×7/1553×7/ETH×8)", 25],  // ring topology — more cable runs
+  ["GPS pigtails ×4 + ESC telem + misc",       18],
   // Payload + cargo system
   ["Payload servo + winch motor + driver",     20],
   ["Cargo gondola shell + clamshell door PETG",22],
@@ -122,13 +119,15 @@ const W_ITEMS = [
   ["VL53L5CX ToF sensors ×6 Array-B + harness",15],
   ["TCA9548A mux-B + MCP23008 GPIO-B (PCB)",    4],
   ["Sensor PETG mounts ×6 Array-B + PMMA",      7],
-  // Radios + sensors
-  ["SiK 915MHz radio + antenna",               17],
-  ["RCRS 49MHz RC receiver + antenna",         15],
-  ["GPS u-blox M10Q + patch",                  12],
+  // Radios + sensors (×4 redundant on Cape-B / Cape-A)
+  ["SiK 915MHz modules ×4 + antennas",         36],  // 6g module + 3g ant × 4
+  ["LoRa 915MHz RFM95W ×4 + antennas",         20],  // 3g module + 2g ant × 4
+  ["TI WL1837MOD WiFi ×4 + antennas",          12],  // 2g module + 1g ant × 4
+  ["RCRS-49 sub-modules ×4 — counted in avionics", 0],
+  ["GPS u-blox M10Q ×4 + patch antennas",      48],  // 12g each on Cape-A FC1–FC4
   ["WS2812C nav lights ×6",                     8],
   // Fasteners + misc
-  ["Standoffs + screws + zip ties",            18],
+  ["Standoffs + screws + zip ties (8-node)",   24],
   ["Foam tape + cable clips",                   8],
 ];
 const DRY_G   = W_ITEMS.reduce((s,[,g])=>s+g, 0);
@@ -311,7 +310,7 @@ function HullProfileDiagram(){
 
       <text x={VW/2} y={14} textAnchor="middle"
         fill="rgba(0,229,255,0.85)" fontSize={8} fontFamily={M} letterSpacing="2">
-        TOP VIEW — CANONICAL PROPORTIONS — REV I (EDF UPGRADE REV J)</text>
+        TOP VIEW — CANONICAL PROPORTIONS — REV I (PB2 AVIONICS REV K)</text>
     </svg>
   );
 }
@@ -403,7 +402,7 @@ function OverviewTab(){
     <div style={{background:"rgba(163,230,53,0.07)",border:"1px solid rgba(163,230,53,0.35)",
       borderRadius:6,padding:"16px 20px",marginBottom:20}}>
       <div style={{color:C.lime,fontFamily:M,fontSize:12,fontWeight:"bold",marginBottom:10,letterSpacing:"0.08em"}}>
-        REV J — 18" CANONICAL · XRP 2700KV EDFS · QMx PROPORTIONS · FOAM-FILLED HULL
+        REV K — 18" CANONICAL · XRP 2700KV EDFS · 8× PocketBeagle 2 · FOAM-FILLED HULL
       </div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20}}>
         <div>
@@ -435,11 +434,11 @@ function OverviewTab(){
 
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24}}>
       <div>
-        <SH t="What changed Rev I → Rev J" mt={0} c={C.orange}/>
-        <Note c={C.orange} ch="Nacelle EDFs upgraded from Freewing 2836-2150KV to Changesun XRP 3660-2700KV — highest KV motor confirmed for 80mm 6S class. +466g per pair (300→766g), +2400g nacelle thrust (3400→5800g). Total thrust 4050→6450g. T/W empty 2.38→2.81 despite heavier mass."/>
-        <Note c={C.red} ch="MANDATORY ESC upgrade: XRP 2700KV draws 84A at full static thrust. Hobbywing Platinum PRO V4 120A replaces 50A ESC — 43% headroom. NEVER use 50A ESC with XRP motor — it will be destroyed at full throttle. +158g total ESC mass (56→214g)."/>
-        <Note c={C.teal} ch="Nacelle pod ID updated from 80mm → 83mm to match XRP housing OD. Pod OD (93.5mm canonical) unchanged. Wall reduces 6.75mm→5.25mm — structurally adequate for PETG. Canonical QMx geometry unchanged: nacelle C-to-C 195.46mm, outer edge 144.47mm from CL."/>
-        <Note c={C.purple} ch="40mm fuselage EDF unchanged (XFLY Galaxy X4 PRO 5850KV on 4S via balance tap). Gap analysis confirmed: no commercial 6S motor exists for 40mm hub at the required 4505KV. Current design already delivers 98,280 RPM no-load ≈ 100k RPM turbine reference."/>
+        <SH t="What changed Rev J → Rev K" mt={0} c={C.orange}/>
+        <Note c={C.orange} ch="Avionics redesigned: 4-node CM4/CM3+ mixed architecture replaced by 8× PocketBeagle 2 (AM6232) in two cooperative groups — 4× FC nodes (Cape-A) + 4× CN nodes (Cape-B). All 4 nodes are peer equals; role elected via CAN FD heartbeat priority voting at boot. +293g avionics mass (148g→441g)."/>
+        <Note c={C.teal} ch="Cape-A (Sensor/Flight): ICM-42688-P IMU, BMP388 baro, M10Q GPS, ATA6561 CAN FD, MAX3485E RS-485, PRU-native 1553 Manchester II (no HI-6130), DP83825I×2 Ethernet PHY, SLB9670 TPM2, 8×PWM servo rail. One per FC node."/>
+        <Note c={C.purple} ch="Cape-B (Comms/Payload): SiK 915MHz, RFM95W LoRa, TI WL1837MOD WiFi/BT, RCRS-49 sub-module header. All 4 radio links on every Cape-B — software-elected masters. ATF16V8BQL CPLD hardware write-block on log microSD (non-executable, append-only). SLB9670 TPM2 on each Cape-B. DRV8833 winch, HX711 load cell, cargo servo PWM."/>
+        <Note c={C.lime} ch="Ethernet topology: 8-node ring using CPSW3G + DP83825I PHY (100BASE-TX per link). CAN FD / RS-485: linear bus FC1→FC2→FC3→FC4→CN1→CN2→CN3→CN4 (7 cables, 120Ω at FC1 and CN4). 1553: same linear bus, PRU Manchester II, stub transformers per node."/>
       </div>
       <div>
         <SH t="T/W margin analysis" mt={0} c={C.green}/>
@@ -628,41 +627,67 @@ function BalanceTab(){
 
 // ── TAB: AVIONICS ─────────────────────────────────────────────
 function AvionicsTab(){
-  const NODES = [
-    {id:"NODE 1",pcb:"CM4-LITE + CM4-CARRIER-2 + SENSORHAT-1 + COMMS-HAT-SWITCH",
-     zone:"A (nose)",bus:"CAN FD BC · 1553 BC · RS-485 · ETH switch (KSZ8895) · SiK 915MHz",
-     fn:"Flight controller · telemetry gateway · sensor fusion primary"},
-    {id:"NODE 2",pcb:"CM3+ + CM3-CARRIER-1 (integrated bus I/O)",
-     zone:"B (dorsal fwd)",bus:"CAN FD RT · 1553 RT · RS-485 · ETH/SPI (W5500) — JST-GH ports",
-     fn:"Navigation · GPS AHRS · power monitor · ESC telemetry"},
-    {id:"NODE 3",pcb:"CM3+ + CM3-CARRIER-1 (integrated bus I/O)",
-     zone:"D (dorsal aft)",bus:"CAN FD RT · 1553 RT · RS-485 · ETH/SPI (W5500) — JST-GH ports",
-     fn:"Payload management · winch control · cargo camera · mission data"},
-    {id:"NODE 4",pcb:"CM4-LITE + CM4-CARRIER-2 + SENSORHAT-1 + MICROHAT",
-     zone:"E (aft service)",bus:"CAN FD RT · 1553 RT · RS-485 · ETH port 4",
-     fn:"Actuator control · nacelle tilt servos · nozzle servos · nav lights"},
+  const FC_NODES = [
+    {id:"FC1",cape:"Cape-A",zone:"Bay A (nose)",
+     role:"Primary FC · 1553 BC · CAN FD BC · GNSS primary",
+     sensors:"ICM-42688-P · BMP388 · M10Q GPS · MS4525DO airspeed"},
+    {id:"FC2",cape:"Cape-A",zone:"Bay A (nose)",
+     role:"Navigation · OA Array-B master · standby 1553 BC",
+     sensors:"ICM-42688-P · BMP388 · M10Q GPS · VL53L5CX Array-B"},
+    {id:"FC3",cape:"Cape-A",zone:"Bay B (dorsal fwd)",
+     role:"OA Array-A master · payload sensors · ESC telemetry",
+     sensors:"ICM-42688-P · BMP388 · M10Q GPS · VL53L5CX Array-A"},
+    {id:"FC4",cape:"Cape-A",zone:"Bay B (dorsal fwd)",
+     role:"Actuator control · tilt servos · nozzle · nav lights",
+     sensors:"ICM-42688-P · BMP388 · M10Q GPS"},
+  ];
+  const CN_NODES = [
+    {id:"CN1",cape:"Cape-B",zone:"Bay D (dorsal aft)",
+     role:"SiK 915MHz master · primary log writer",
+     radios:"SiK ★ · LoRa · WiFi · RCRS-49"},
+    {id:"CN2",cape:"Cape-B",zone:"Bay D (dorsal aft)",
+     role:"LoRa 915MHz master · secondary log · cargo backup",
+     radios:"SiK · LoRa ★ · WiFi · RCRS-49"},
+    {id:"CN3",cape:"Cape-B",zone:"Bay E (aft)",
+     role:"RCRS 49MHz master · cargo primary (winch/doors)",
+     radios:"SiK · LoRa · WiFi · RCRS-49 ★"},
+    {id:"CN4",cape:"Cape-B",zone:"Bay E (aft)",
+     role:"WiFi/BT master · cargo backup · log tertiary",
+     radios:"SiK · LoRa · WiFi ★ · RCRS-49"},
   ];
   const BUSES = [
-    {bus:"CAN FD",spec:"1 Mbit/s · MCP2518FD · ISO 11898-1:2015",purpose:"Real-time control loop, 500µs cycle"},
-    {bus:"Ethernet",spec:"100BASE-T · W5500 → KSZ8895 5-port switch",purpose:"HD video, bulk telemetry, OTA updates"},
-    {bus:"RS-485",spec:"Half-duplex · 3 Mbit/s · Modbus-style framing",purpose:"ESC telemetry, sensor aux bus"},
-    {bus:"MIL-STD-1553B",spec:"1 Mbit/s · HI-6130 · 78Ω stub",purpose:"Safety-critical commands, redundant C2"},
-    {bus:"PWR",spec:"6S 22.2V → 5V/5A BEC → all nodes",purpose:"Power distribution through foam conduits"},
+    {bus:"CAN FD",spec:"5 Mbit/s · AM6232 MCAN native · ATA6561 · ISO 11898-1:2015",purpose:"Role election heartbeats, sensor state, real-time control, 1ms cycle"},
+    {bus:"Ethernet",spec:"100BASE-T ring · CPSW3G + DP83825I × 2/node · RSTP",purpose:"Bulk telemetry, OTA, video, MAVLink passthrough"},
+    {bus:"RS-485",spec:"Half-duplex · 4 Mbit/s · MAX3485E · linear bus",purpose:"ESC config/telemetry, secondary sensor bus, bootloader"},
+    {bus:"MIL-STD-1553B",spec:"1 Mbit/s · PRU Manchester II · DS26LV31/32 + PE-68515 · 78Ω",purpose:"Safety-critical C2, redundant flight commands — no HI-6130"},
+    {bus:"PWR",spec:"6S → 5V/5A BEC × 2 (FC group + CN group) → all nodes",purpose:"Redundant power rails; FC and CN groups on separate BECs"},
   ];
   return(<div>
-    <SH t="8-Node Distributed Compute Architecture" mt={0} c={C.teal}/>
-    <Note c={C.teal} ch="Mixed CM4/CM3+ architecture. Nodes 1 &amp; 4: CM4-LITE + CM4-CARRIER-2 + SENSORHAT-1 (XIAO RP2350 realtime co-processor). Nodes 2 &amp; 3: CM3+ + CM3-CARRIER-1 (68×30mm, integrated CAN FD/RS-485/1553B/W5500 with JST-GH panel connectors + 40-pin RPi HAT header). Saves ~60g vs all-CM4. Node 1 adds COMMS-HAT-SWITCH; Node 4 adds MICROHAT."/>
-    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:8}}>
-      {NODES.map((n,i)=>(
-        <div key={i} style={{padding:"10px 12px",border:`1px solid ${C.teal}44`,borderRadius:4,
-          background:"rgba(45,212,191,0.03)"}}>
-          <div style={{color:C.teal,fontFamily:M,fontSize:11,fontWeight:"bold",marginBottom:4}}>{n.id}</div>
-          <div style={{color:C.lime,fontFamily:M,fontSize:9,marginBottom:3}}>{n.pcb}</div>
-          <div style={{color:C.yellow,fontFamily:M,fontSize:8.5,marginBottom:3}}>Zone {n.zone}</div>
-          <div style={{color:C.dimmer,fontFamily:M,fontSize:8.5,marginBottom:3}}>{n.bus}</div>
-          <div style={{color:C.dim,fontFamily:M,fontSize:8,opacity:0.85}}>{n.fn}</div>
-        </div>
-      ))}
+    <SH t="Rev K — 8× PocketBeagle 2 · Cape-A (FC) + Cape-B (CN)" mt={0} c={C.teal}/>
+    <Note c={C.teal} ch="All 8 nodes identical SoC: AM6232 dual A53 + M4F + PRU-ICSS, 512MB LPDDR4. Role is elected at boot via CAN FD priority arbitration — no hardwired primaries. All roles are hot-standby on any surviving node. PRU-ICSS replaces RP2350 for real-time tasks; native MCAN replaces MCP2518FD; PRU Manchester II replaces HI-6130."/>
+    <div style={{marginBottom:8}}>
+      <div style={{color:C.accent,fontFamily:M,fontSize:10,fontWeight:"bold",marginBottom:6}}>FC NODES — Cape-A (Sensor + Flight Control)</div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:6,marginBottom:10}}>
+        {FC_NODES.map((n,i)=>(
+          <div key={i} style={{padding:"8px 10px",border:`1px solid ${C.teal}44`,borderRadius:4,background:"rgba(45,212,191,0.03)"}}>
+            <div style={{color:C.teal,fontFamily:M,fontSize:11,fontWeight:"bold",marginBottom:3}}>{n.id} <span style={{color:C.yellow,fontSize:8}}>{n.cape}</span></div>
+            <div style={{color:C.dimmer,fontFamily:M,fontSize:7.5,marginBottom:3}}>{n.zone}</div>
+            <div style={{color:C.lime,fontFamily:M,fontSize:8,marginBottom:3}}>{n.role}</div>
+            <div style={{color:C.dim,fontFamily:M,fontSize:7.5}}>{n.sensors}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{color:C.purple,fontFamily:M,fontSize:10,fontWeight:"bold",marginBottom:6}}>CN NODES — Cape-B (Comms + Logging + Payload) · ★ = elected primary</div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:6}}>
+        {CN_NODES.map((n,i)=>(
+          <div key={i} style={{padding:"8px 10px",border:`1px solid ${C.purple}44`,borderRadius:4,background:"rgba(192,132,252,0.03)"}}>
+            <div style={{color:C.purple,fontFamily:M,fontSize:11,fontWeight:"bold",marginBottom:3}}>{n.id} <span style={{color:C.yellow,fontSize:8}}>{n.cape}</span></div>
+            <div style={{color:C.dimmer,fontFamily:M,fontSize:7.5,marginBottom:3}}>{n.zone}</div>
+            <div style={{color:C.lime,fontFamily:M,fontSize:8,marginBottom:3}}>{n.role}</div>
+            <div style={{color:C.dim,fontFamily:M,fontSize:7.5}}>{n.radios}</div>
+          </div>
+        ))}
+      </div>
     </div>
     <SH t="4-Bus Avionics Backbone" c={C.accent}/>
     <div style={{overflowX:"auto"}}>
@@ -679,28 +704,28 @@ function AvionicsTab(){
     </div>
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20,marginTop:12}}>
       <div>
-        <SH t="PCB Stack Masses" mt={0} c={C.purple}/>
-        <KV k="CM4-LITE ×2 (N1,N4)"        v="2 × 7.5g = 15g"/>
-        <KV k="CM4-CARRIER-2 ×2 (N1,N4)"   v="2 × 17.5g = 35g"/>
-        <KV k="SENSORHAT-1 ×2 (N1,N4)"     v="2 × 12.5g = 25g"/>
-        <KV k="CM3+ module ×2 (N2,N3)"     v="2 × 8g = 16g"/>
-        <KV k="CM3-CARRIER-1 ×2 (N2,N3)"   v="2 × 9g = 18g" vc={C.teal}/>
-        <KV k="COMMS-HAT-SWITCH ×1 (N1)"     v="29g"/>
-        <KV k="MICROHAT ×1 (N4)"           v="10g"/>
-        <KV k="microSD ×6 (OS+log)"        v="6 × 1g = 6g"/>
-        <KV k="TOTAL avionics stack"        v="154g" vc={C.lime}/>
-        <Good ch="−60g vs all-CM4 Rev H baseline (214g → 154g)"/>
+        <SH t="PCB Stack Masses — Rev K" mt={0} c={C.purple}/>
+        <KV k="PocketBeagle 2 ×8"          v="8 × 10g = 80g"/>
+        <KV k="Cape-A ×4 (85×55mm 4L)"    v="4 × 28g = 112g" vc={C.teal}/>
+        <KV k="Cape-B ×4 (90×60mm 4L)"    v="4 × 38g = 152g" vc={C.purple}/>
+        <KV k="RCRS-49 sub-modules ×4"    v="4 × 12g = 48g"/>
+        <KV k="microSD ×12 (OS×8 + log×4)"v="12 × 1g = 12g"/>
+        <KV k="TOTAL avionics stack"       v="404g" vc={C.lime}/>
+        <Note c={C.yellow} ch="+256g vs RevJ 148g. T/W remains ≥2.37 in all configs."/>
       </div>
       <div>
-        <SH t="SENSORHAT-1 (Nodes 1 &amp; 4) / CM3-CARRIER-1 (Nodes 2 &amp; 3)" mt={0} c={C.pink}/>
-        <KV k="XIAO RP2350"        v="N1,N4 only · Cortex-M33+RISC-V · 150MHz"/>
-        <KV k="ICM-42688-P IMU"    v="N1,N4 only · 6-DOF · SPI0 · ±16g/±2000°/s"/>
-        <KV k="BMP388 barometer"   v="N1,N4 only · ±0.5m · I²C · 200Hz"/>
-        <KV k="MCP2518FD CAN FD"   v="All nodes · 1Mbit/s · SPI · ISO 11898-1"/>
-        <KV k="W5500 Ethernet"     v="All nodes · 100BASE-T · SPI · HW TCP/IP"/>
-        <KV k="HI-6130 1553B"      v="All nodes · RT mode · 78Ω · galv. isolated"/>
-        <KV k="MAX3485E RS-485"    v="All nodes · 3Mbit/s · half-duplex"/>
-        <KV k="CM3-CARRIER-1 size" v="68 × 30 mm · 4L · ~9g assembled" vc={C.teal}/>
+        <SH t="Cape-A / Cape-B shared bus section" mt={0} c={C.pink}/>
+        <KV k="ATA6561 CAN FD"     v="All 8 nodes · 5Mbit/s · native MCAN"/>
+        <KV k="MAX3485E RS-485"    v="All 8 nodes · 4Mbit/s · half-duplex"/>
+        <KV k="PRU 1553 + DS26LV31/32" v="All 8 nodes · PRU Manchester II · no HI-6130"/>
+        <KV k="DP83825I × 2 ETH"  v="All 8 nodes · 100BASE-TX · CPSW3G ring"/>
+        <KV k="SLB9670 TPM 2.0"   v="All 8 nodes (both cape variants) · SPI"/>
+        <KV k="ATF16V8BQL CPLD"    v="Cape-B only · microSD write-block latch" vc={C.orange}/>
+        <KV k="ICM-42688-P IMU"    v="Cape-A only · 6-DOF · ±16g / ±2000°/s"/>
+        <KV k="BMP388 baro"        v="Cape-A only · ±0.5m · 200Hz"/>
+        <KV k="M10Q GPS"           v="Cape-A only · 4-constellation L1"/>
+        <KV k="Cape-A stack size"  v="85 × 55 × 35 mm" vc={C.teal}/>
+        <KV k="Cape-B stack size"  v="90 × 60 × 35 mm" vc={C.purple}/>
       </div>
     </div>
   </div>);
@@ -717,12 +742,12 @@ function HullFoamTab(){
     {id:"F",sta:"388–457",dim:"EDF bay — no foam",        former:"None (open)",      seal:"Open for EDF access"},
   ];
   const conduits=[
-    {id:"CAN FD",    route:"Port keel rail",       chain:"N1→N2→N3→N4→COMMS-HAT-SWITCH"},
-    {id:"RS-485",    route:"Starboard keel rail",  chain:"N1→N2→N3→N4→COMMS-HAT-SWITCH"},
-    {id:"MIL-1553B", route:"Dorsal centre",        chain:"N1→N2→N3→N4→COMMS-HAT-SWITCH"},
-    {id:"ETH-A",     route:"Port side",            chain:"N1→COMMS-HAT-SWITCH"},
-    {id:"ETH-B",     route:"Starboard side",       chain:"N2→COMMS-HAT-SWITCH"},
-    {id:"PWR",       route:"Belly centre",         chain:"Battery→BEC→all nodes"},
+    {id:"CAN FD",    route:"Port keel rail",       chain:"FC1→FC2→FC3→FC4→CN1→CN2→CN3→CN4 (linear, 120Ω ends)"},
+    {id:"RS-485",    route:"Starboard keel rail",  chain:"FC1→FC2→FC3→FC4→CN1→CN2→CN3→CN4 (linear, 120Ω ends)"},
+    {id:"MIL-1553B", route:"Dorsal centre",        chain:"FC1→FC2→FC3→FC4→CN1→CN2→CN3→CN4 (78Ω ends, stub xfmrs)"},
+    {id:"ETH-A/B",   route:"Port + stbd sides",    chain:"8-node ring: FC1↔FC2↔FC3↔FC4↔CN1↔CN2↔CN3↔CN4↔FC1"},
+    {id:"PWR-FC",    route:"Belly centre fwd",     chain:"Battery→BEC-1→FC1+FC2+FC3+FC4"},
+    {id:"PWR-CN",    route:"Belly centre aft",     chain:"Battery→BEC-2→CN1+CN2+CN3+CN4"},
   ];
   const BATCHES = [
     {n:1, zones:"A + B", mix_mL:55, foam_mL:"220", note:"Nose + dorsal-fwd voids"},
@@ -1053,7 +1078,7 @@ function CargoNacelleTab(){
     {mode:"AFT HARD STOP",      deg:DIM.TILT_AFT_STOP,  c:C.orange, thrust:"—",                                            note:"Bracket boss aft limit — FC never commands"},
   ];
   return(<div>
-    <SH t="Cargo Bay — 4\"×3\"×3\" Gondola Design" mt={0} c={C.pink}/>
+    <SH t="Cargo Bay — 4×3×3 in Gondola Design" mt={0} c={C.pink}/>
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20,marginBottom:8}}>
       <div>
         <KV k="Interior dims"        v={`${DIM.PB_L}×${DIM.PB_W}×${DIM.PB_H}mm (4"×3"×3")`} vc={C.pink}/>
@@ -1070,7 +1095,7 @@ function CargoNacelleTab(){
         <KV k="Cradle"               v="Auto-latch PETG corner clips — no manual attachment"/>
         <KV k="Lower speed"          v="120 mm/s"/>
         <KV k="Raise speed"          v="80 mm/s"/>
-        <KV k="Max cargo"            v="250g (4"×3"×3" box)" vc={C.lime}/>
+        <KV k="Max cargo"            v="250g (4×3×3 in box)" vc={C.lime}/>
       </div>
     </div>
 
@@ -1137,7 +1162,7 @@ export default function App(){
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:12}}>
         <div>
           <div style={{color:C.lime,fontSize:9,letterSpacing:"0.2em",marginBottom:4}}>
-            SERENITY TILTROTOR · 18" CANONICAL · REV J</div>
+            SERENITY TILTROTOR · 18" CANONICAL · REV K</div>
           <h1 style={{margin:0,fontSize:18,fontWeight:"normal",color:C.text,letterSpacing:"0.07em",fontFamily:MB}}>
             SERENITY-CLASS FIREFLY TILTROTOR UAV</h1>
           <div style={{color:"rgba(0,229,255,0.6)",fontSize:10,marginTop:3,fontFamily:M}}>

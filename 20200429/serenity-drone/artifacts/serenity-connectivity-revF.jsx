@@ -59,7 +59,7 @@ const PROTOCOLS = [
     ic:"MCP2518FD + MCP2562FD", newMass:"0g (connectors already budgeted → +0.8g second JST)",
     use:"Flight-critical: AHRS · RPM · arm/disarm · mode cmds",
     failMode:"Bus arbitration loss if >64 nodes or >4m stub",
-    notes:"Daisy-chain: Pico TRIHAT-1 ↔ COMPHAT-1 ↔ future nodes. 120Ω terminator JP at each chain END only — jumper-selectable on Rev F boards.",
+    notes:"Daisy-chain: Pico TRIHAT-1 ↔ COMMS-HAT-1 ↔ future nodes. 120Ω terminator JP at each chain END only — jumper-selectable on Rev F boards.",
   },{
     id:"Ethernet 100BASE-T", color:C.purple, status:"existing",
     phy:"IEEE 802.3 100BASE-T · transformer-coupled differential pair", topo:"Point-to-point (current) · switch-expandable",
@@ -184,10 +184,10 @@ function ProtocolAnalysisTab(){
 // ═══════════════════════════════════════════════════════════════
 function CANDaisyDiagram(){
   const VW=760, VH=360;
-  // Three nodes: TRIHAT-1 (Pico), COMPHAT-1 (CM4), future expansion
+  // Three nodes: TRIHAT-1 (Pico), COMMS-HAT-1 (CM4), future expansion
   const nodes=[
     {label:"TRIHAT-1",sub:"Pico 2 · MCP2518FD",x:80,y:160,c:"#00e5ff",term:true},
-    {label:"COMPHAT-1",sub:"CM4 · MCP2518FD",x:340,y:160,c:"#4ade80",term:false},
+    {label:"COMMS-HAT-1",sub:"CM4 · MCP2518FD",x:340,y:160,c:"#4ade80",term:false},
     {label:"NODE-3 (opt.)",sub:"Future expansion",x:600,y:160,c:"rgba(163,230,53,0.5)",term:true},
   ];
   return(
@@ -285,7 +285,7 @@ function CANDaisyTab(){
         <SH t="Second CAN JST Connector — Both Boards" mt={0} c={C.orange}/>
         <KV k="Connector added" v="1× additional JST-GH 1.25mm 4-pin per board"/>
         <KV k="TRIHAT-1 change" v="J2a (existing) = chain IN · J2b (new) = chain OUT"/>
-        <KV k="COMPHAT-1 change" v="J1a (existing) = chain IN · J1b (new) = chain OUT"/>
+        <KV k="COMMS-HAT-1 change" v="J1a (existing) = chain IN · J1b (new) = chain OUT"/>
         <KV k="Wiring" v="Both connectors wired in parallel to same CANH/CANL node"/>
         <KV k="Termination" v="Jumper JP_TERM per board · soldered at chain ENDS only" vc={C.yellow}/>
         <KV k="Termination rule" v="Exactly 2 terminators in any chain: first node + last node" vc={C.red}/>
@@ -293,11 +293,11 @@ function CANDaisyTab(){
         <KV k="Max stub length" v={`Each node stub ≤30mm (${(30*0.03937).toFixed(2)}") — within hull ✔`} vc={C.green}/>
         <KV k="PCB change" v="+1 JST-GH footprint per board · same CANH/CANL traces route to both" vc={C.green}/>
         <KV k="Mass delta" v="+0.4g per board · +0.8g total" vc={C.green}/>
-        <Warn ch="NEVER solder both JP_TERM jumpers AND have a middle node. If TRIHAT-1 and COMPHAT-1 are the only two nodes, both JP_TERM bridges are soldered. If a third node is added mid-chain, remove the COMPHAT-1 bridge and solder the new end node's bridge instead."/>
+        <Warn ch="NEVER solder both JP_TERM jumpers AND have a middle node. If TRIHAT-1 and COMMS-HAT-1 are the only two nodes, both JP_TERM bridges are soldered. If a third node is added mid-chain, remove the COMMS-HAT-1 bridge and solder the new end node's bridge instead."/>
       </div>
       <div>
         <SH t="Daisy Chain vs. Star Topology" mt={0} c={C.teal}/>
-        <Note c={C.teal} ch="The existing single-connector design is functionally a two-node stub connection — fine for just TRIHAT-1 and COMPHAT-1. Adding second connectors enables proper daisy-chaining where future peripherals (additional IMU, GPS, ESC telemetry aggregator, rangefinder) can be inserted into the chain without rewiring the primary Pico↔CM4 link."/>
+        <Note c={C.teal} ch="The existing single-connector design is functionally a two-node stub connection — fine for just TRIHAT-1 and COMMS-HAT-1. Adding second connectors enables proper daisy-chaining where future peripherals (additional IMU, GPS, ESC telemetry aggregator, rangefinder) can be inserted into the chain without rewiring the primary Pico↔CM4 link."/>
         <SH t="Future Expansion Examples" c={C.accent}/>
         {[
           ["Node 3 (opt.)","Auxiliary IMU board · ICM-42688-P on breakout · vibration-isolated"],
@@ -331,7 +331,7 @@ function RS485Diagram(){
       <text x="360" y="175" textAnchor="middle" fontFamily={M} fontSize={9} fill="rgba(163,230,53,0.5)">B (inv.)</text>
 
       {/* TRIHAT-1 node */}
-      {[{label:"TRIHAT-1",sub:"SP485EN · GP8/9 UART1",sub2:"GP7 DE/RE",x:130,y:60},{label:"COMPHAT-1",sub:"SP485EN · ttyAMA2",sub2:"GPIO24 DE/RE",x:380,y:60},{label:"NODE-3+",sub:"Future sensor node",sub2:"opt. population",x:590,y:60}].map((n,i)=>(
+      {[{label:"TRIHAT-1",sub:"SP485EN · GP8/9 UART1",sub2:"GP7 DE/RE",x:130,y:60},{label:"COMMS-HAT-1",sub:"SP485EN · ttyAMA2",sub2:"GPIO24 DE/RE",x:380,y:60},{label:"NODE-3+",sub:"Future sensor node",sub2:"opt. population",x:590,y:60}].map((n,i)=>(
         <g key={i}>
           <rect x={n.x-70} y={n.y} width={140} height={60} rx={5}
             fill={i<2?"rgba(163,230,53,0.1)":"rgba(163,230,53,0.04)"}
@@ -421,7 +421,7 @@ function RS485Tab(){
         <KV k="Differential threshold" v="±200mV — very robust to EMI from EDFs"/>
         <KV k="Baud rate" v="921600 baud (default) · up to 5 Mbps over 365mm" vc={C.lime}/>
         <KV k="Cable type" v="Twisted pair A/B + GND · JST-GH 4-pin"/>
-        <KV k="Cable route" v="TRIHAT-1 RS485-OUT → COMPHAT-1 RS485-IN · along keel"/>
+        <KV k="Cable route" v="TRIHAT-1 RS485-OUT → COMMS-HAT-1 RS485-IN · along keel"/>
         <KV k="Bias network" v="2× 560Ω on TRIHAT-1 (A to +3V3, B to GND) · pulls bus to known state when idle"/>
         <KV k="Direction control" v="Pico GP7 (DE/RE) · CM4 GPIO24 (DE/RE) · both active-high"/>
         <KV k="Protocol carried" v="MAVLink 2.0 binary framing · identical to SiK link"/>
@@ -596,7 +596,7 @@ function HatSpecsTab(){
           ["J1","JST-GH 6-pin","SiK/Telemetry UART"],
           ["J2a","JST-GH 4-pin","CAN FD chain IN ← (existing)"],
           ["J2b","JST-GH 4-pin","CAN FD chain OUT → (NEW Rev F)"],
-          ["J3","JST-GH 6-pin","Ethernet 100BASE-T ↔ COMPHAT-1"],
+          ["J3","JST-GH 6-pin","Ethernet 100BASE-T ↔ COMMS-HAT-1"],
           ["J4","JST-GH 6-pin","FPV camera UART/I²C"],
           ["J5","JST-GH 6-pin","External GPS (backup)"],
           ["J6","JST-GH 4-pin","I²C external sensors"],
@@ -619,13 +619,13 @@ function HatSpecsTab(){
         </div>
       </div>
 
-      {/* COMPHAT-1 */}
+      {/* COMMS-HAT-1 */}
       <div>
-        <SH t="COMPHAT-1 Rev E+ — CM4 Companion Hat" mt={0} c={C.green}/>
+        <SH t="COMMS-HAT-1 Rev E+ — CM4 Companion Hat" mt={0} c={C.green}/>
         <div style={{background:"rgba(74,222,128,0.04)",border:`1px solid ${C.lime}33`,borderRadius:4,padding:"12px",marginBottom:12}}>
           <KV k="Board size" v={mmi(65)+" × "+mmi(48)+" · 4-layer ENIG"}/>
           <KV k="RS-485 IC" v="SP485EN SOIC-8 · same transceiver as TRIHAT-1"/>
-          <KV k="USB" v="No USB connector on COMPHAT — USB is TRIHAT-1→carrier only"/>
+          <KV k="USB" v="No USB connector on COMMS-HAT — USB is TRIHAT-1→carrier only"/>
         </div>
         <div style={{fontFamily:M,fontSize:10,color:C.teal,marginBottom:6,fontWeight:"bold"}}>CONNECTORS — Rev E+</div>
         {[
@@ -650,7 +650,7 @@ function HatSpecsTab(){
           </div>);
         })}
         <div style={{marginTop:10,padding:"8px 10px",background:"rgba(163,230,53,0.05)",border:`1px solid ${C.lime}33`,borderRadius:4,fontFamily:M,fontSize:9,color:C.dim}}>
-          <span style={{color:C.lime}}>Rev E+ additions to COMPHAT-1:</span> J1b (CAN out) · J_RS485a/b (RS-485 chain) · SP485EN SOIC-8 · 120Ω termination jumper JP_TERM (replaces existing solder bridge with proper 2-pin jumper header). No size change.
+          <span style={{color:C.lime}}>Rev E+ additions to COMMS-HAT-1:</span> J1b (CAN out) · J_RS485a/b (RS-485 chain) · SP485EN SOIC-8 · 120Ω termination jumper JP_TERM (replaces existing solder bridge with proper 2-pin jumper header). No size change.
         </div>
       </div>
     </div>
@@ -677,9 +677,9 @@ function HatSpecsTab(){
 // ═══════════════════════════════════════════════════════════════
 function WiringMatrixTab(){
   const buses=[
-    {id:"CAN FD (primary)",c:C.orange,speed:"4 Mbps",phy:"Differential 120Ω term.",conn:"JST-GH 4-pin × 2 (chain)",route:"Stbd keel · TRIHAT-1 J2a→J2b → COMPHAT-1 J1a→J1b",carries:"AHRS · RPM · arm/mode · sensor health · nozzle state",pico:"SPI0 → MCP2518FD · GP14 CS · GP7 INT",cm4:"SPI0 → MCP2518FD · GPIO7 CS · GPIO8 INT · /dev/spidev0.0"},
-    {id:"Ethernet 100BASE-T",c:C.purple,speed:"100 Mbps",phy:"Transformer-coupled diff.",conn:"JST-GH 6-pin × 1",route:"Port keel · TRIHAT-1 J3 → COMPHAT-1 J2 · 150mm",carries:"MAVLink UDP 14550 · log stream 14551 · config TCP 8080",pico:"SPI1 → W5500 · GP8-13 · 192.168.10.1",cm4:"SPI1 → W5500 · GPIO17-21 · 192.168.10.2"},
-    {id:"RS-485 (NEW)",c:C.lime,speed:"5 Mbps (921600 baud)",phy:"EIA-485 half-duplex diff.",conn:"JST-GH 4-pin × 2 per board",route:"Port keel alongside ETH · 120mm · TRIHAT J_RS485b → COMPHAT J_RS485a",carries:"MAVLink backup · ESC telemetry · future sensor nodes",pico:"UART1 · GP8 TX · GP9 RX · GP7 DE/RE",cm4:"/dev/ttyAMA2 · GPIO14 TX · GPIO15 RX · GPIO24 DE/RE"},
+    {id:"CAN FD (primary)",c:C.orange,speed:"4 Mbps",phy:"Differential 120Ω term.",conn:"JST-GH 4-pin × 2 (chain)",route:"Stbd keel · TRIHAT-1 J2a→J2b → COMMS-HAT-1 J1a→J1b",carries:"AHRS · RPM · arm/mode · sensor health · nozzle state",pico:"SPI0 → MCP2518FD · GP14 CS · GP7 INT",cm4:"SPI0 → MCP2518FD · GPIO7 CS · GPIO8 INT · /dev/spidev0.0"},
+    {id:"Ethernet 100BASE-T",c:C.purple,speed:"100 Mbps",phy:"Transformer-coupled diff.",conn:"JST-GH 6-pin × 1",route:"Port keel · TRIHAT-1 J3 → COMMS-HAT-1 J2 · 150mm",carries:"MAVLink UDP 14550 · log stream 14551 · config TCP 8080",pico:"SPI1 → W5500 · GP8-13 · 192.168.10.1",cm4:"SPI1 → W5500 · GPIO17-21 · 192.168.10.2"},
+    {id:"RS-485 (NEW)",c:C.lime,speed:"5 Mbps (921600 baud)",phy:"EIA-485 half-duplex diff.",conn:"JST-GH 4-pin × 2 per board",route:"Port keel alongside ETH · 120mm · TRIHAT J_RS485b → COMMS-HAT J_RS485a",carries:"MAVLink backup · ESC telemetry · future sensor nodes",pico:"UART1 · GP8 TX · GP9 RX · GP7 DE/RE",cm4:"/dev/ttyAMA2 · GPIO14 TX · GPIO15 RX · GPIO24 DE/RE"},
     {id:"USB CDC-ACM (NEW)",c:C.indigo,speed:"12 Mbps FS",phy:"USB D+/D− diff. 90Ω",conn:"JST-GH 4-pin × 1 (TRIHAT-1)",route:"TRIHAT-1 J_USB → 100mm stub → GL850G hub port 3 on CM4-CARRIER-1",carries:"OTA firmware · debug serial · bulk config · last-resort fallback",pico:"RP2350 built-in USB HW · /dev/ttyACM0 on CM4 side",cm4:"GL850G hub → USB host → CDC-ACM auto-driver · /dev/ttyACM0"},
   ];
   return(<div>
@@ -699,7 +699,7 @@ function WiringMatrixTab(){
           </div>
           <div>
             <KV k="Pico 2 / TRIHAT-1" v={b.pico} vc={C.accent}/>
-            <KV k="CM4 / COMPHAT-1" v={b.cm4} vc={C.green}/>
+            <KV k="CM4 / COMMS-HAT-1" v={b.cm4} vc={C.green}/>
           </div>
         </div>
       </div>
@@ -724,20 +724,20 @@ function WiringMatrixTab(){
 function BOMDeltaTab(){
   const adds=[
     {qty:2, ref:"U_485_TH",  part:"SP485EN SOIC-8 RS-485 transceiver",      board:"TRIHAT-1",    mass:"0.15g",est:"$0.45ea",note:"One per board — Renesas/IXYS"},
-    {qty:2, ref:"U_485_CP",  part:"SP485EN SOIC-8 RS-485 transceiver",      board:"COMPHAT-1",   mass:"0.15g",est:"$0.45ea",note:""},
+    {qty:2, ref:"U_485_CP",  part:"SP485EN SOIC-8 RS-485 transceiver",      board:"COMMS-HAT-1",   mass:"0.15g",est:"$0.45ea",note:""},
     {qty:2, ref:"R_B1_B2",   part:"560Ω 0402 bias resistors ×2 set",        board:"TRIHAT-1",    mass:"0.02g",est:"$0.05",note:"A-to-+3V3 and B-to-GND bias"},
     {qty:4, ref:"J_RS485_TH",part:"JST-GH 1.25mm 4-pin RS-485 IN+OUT",     board:"TRIHAT-1",    mass:"0.2g ea",est:"$0.30ea",note:""},
-    {qty:4, ref:"J_RS485_CP",part:"JST-GH 1.25mm 4-pin RS-485 IN+OUT",     board:"COMPHAT-1",   mass:"0.2g ea",est:"$0.30ea",note:""},
+    {qty:4, ref:"J_RS485_CP",part:"JST-GH 1.25mm 4-pin RS-485 IN+OUT",     board:"COMMS-HAT-1",   mass:"0.2g ea",est:"$0.30ea",note:""},
     {qty:1, ref:"J_CAN2_TH", part:"JST-GH 1.25mm 4-pin CAN OUT (J2b)",    board:"TRIHAT-1",    mass:"0.2g",est:"$0.30",note:"Mirrors existing J2a"},
-    {qty:1, ref:"J_CAN2_CP", part:"JST-GH 1.25mm 4-pin CAN OUT (J1b)",    board:"COMPHAT-1",   mass:"0.2g",est:"$0.30",note:"Mirrors existing J1a"},
+    {qty:1, ref:"J_CAN2_CP", part:"JST-GH 1.25mm 4-pin CAN OUT (J1b)",    board:"COMMS-HAT-1",   mass:"0.2g",est:"$0.30",note:"Mirrors existing J1a"},
     {qty:2, ref:"JP_TERM",   part:"2-pin 2.54mm jumper header + shunt",    board:"Both boards", mass:"0.1g ea",est:"$0.10ea",note:"Replaces solder bridge — proper jumper"},
     {qty:1, ref:"J_USB_TH",  part:"JST-GH 1.25mm 4-pin USB (J_USB)",       board:"TRIHAT-1",    mass:"0.2g",est:"$0.30",note:"VBUS · D+ · D− · GND"},
-    {qty:1, ref:"CBL_RS485", part:"JST-GH 4-pin RS-485 cable 120mm",        board:"Cable",       mass:"1.2g",est:"$3.50",note:"Twisted A/B pair · TRIHAT-1↔COMPHAT-1"},
+    {qty:1, ref:"CBL_RS485", part:"JST-GH 4-pin RS-485 cable 120mm",        board:"Cable",       mass:"1.2g",est:"$3.50",note:"Twisted A/B pair · TRIHAT-1↔COMMS-HAT-1"},
     {qty:1, ref:"CBL_USB",   part:"JST-GH 4-pin USB stub 100mm",            board:"Cable",       mass:"0.7g",est:"$2.50",note:"D+/D− matched 90Ω · TRIHAT-1 J_USB → GL850G"},
   ];
   const removes=[
     {ref:"SOLDER_BR_TH", part:"120Ω CAN solder bridge on TRIHAT-1",  note:"Replaced by JP_TERM jumper header"},
-    {ref:"SOLDER_BR_CP", part:"120Ω CAN solder bridge on COMPHAT-1", note:"Replaced by JP_TERM jumper header"},
+    {ref:"SOLDER_BR_CP", part:"120Ω CAN solder bridge on COMMS-HAT-1", note:"Replaced by JP_TERM jumper header"},
   ];
   const totalMassAdded = 0.15*2+0.15*2+0.02+0.2*4+0.2*4+0.2+0.2+0.1*2+0.2+1.2+0.7;
   const totalCost = 0.45*2+0.45*2+0.05+0.30*4+0.30*4+0.30+0.30+0.10*2+0.30+3.50+2.50;

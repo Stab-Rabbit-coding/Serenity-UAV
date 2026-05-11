@@ -179,7 +179,7 @@ function OverviewTab(){
         <KV k="RCRS control range" v={`≤${yd(500)}`} vc={C.pink}/>
         <KV k="GPS CEP" v={`&lt;${ft(2.5)} (${mToYd(2.5).toFixed(0)} yd) open sky`}/>
         <KV k="Winch line" v={`5 m (5.5 yd) Dyneema SK75 · 40 kg break`}/>
-        <KV k="Controllers" v="Pico 2 + TRIHAT-1 · CM4 Lite 4GB + CARRIER-E + COMPHAT-E"/>
+        <KV k="Controllers" v="Pico 2 + TRIHAT-1 · CM4 Lite 4GB + CARRIER-E + COMMS-HAT-E"/>
         <KV k="Security" v="Write-blocked OS SD · Hardware-NX log SD · TPM 2.0 attestation"/>
         <KV k="Optional radios" v="CC2652P7 Zigbee/BLE/Thread 2.4 GHz · SX1276 LoRa 915 MHz"/>
         <KV k="BOM estimate" v="$640–740" vc={C.yellow}/>
@@ -240,7 +240,7 @@ function AirframeTab(){
     {part:"Cockpit dome height",        dim:32,  note:"Above fuselage centreline"},
     {part:"TRIHAT-1 PCB",               dim:null, note:"65 mm (2.56\") × 48 mm (1.89\")"},
     {part:"CM4-CARRIER-1 PCB (Rev E)",  dim:null, note:"65 mm (2.56\") × 52 mm (2.05\")"},
-    {part:"COMPHAT-1 PCB (Rev E)",      dim:null, note:"65 mm (2.56\") × 48 mm (1.89\")"},
+    {part:"COMMS-HAT-1 PCB (Rev E)",      dim:null, note:"65 mm (2.56\") × 48 mm (1.89\")"},
   ];
   return(<div>
     <Note c={C.accent} ch="All build dimensions are given in millimetres (mm) as primary units with inches in parentheses. Operational parameters use feet (altitude), knots (speed), and yards (range)."/>
@@ -395,11 +395,11 @@ function BatteryTab(){
 // ══════════════════════════════════════════════════════════════
 function RadiosTab(){
   const radios=[
-    {id:"SiK",   name:"SiK 915 MHz (MAVLink)",     freq:"915 MHz",power:"100 mW",proto:"MAVLink 2.0",range_m:1000, ant:"λ/4 monopole 82mm (3.23\") belly · SMA-RP",notes:"Primary telemetry link. UART1 on TRIHAT-1. Directs to GCS via COMPHAT-1 mavlink-router."},
+    {id:"SiK",   name:"SiK 915 MHz (MAVLink)",     freq:"915 MHz",power:"100 mW",proto:"MAVLink 2.0",range_m:1000, ant:"λ/4 monopole 82mm (3.23\") belly · SMA-RP",notes:"Primary telemetry link. UART1 on TRIHAT-1. Directs to GCS via COMMS-HAT-1 mavlink-router."},
     {id:"RCRS",  name:"49 MHz RCRS TDDS",           freq:"49.83–49.89 MHz",power:"10 mW EIRP",proto:"TDDS 6-ch",range_m:500, ant:"250mm (9.84\") whip + 38μH coil · dorsal fin · SMA-LR",notes:"Primary RC link. Clearest channel selected by scan on power-on. Control priority over telemetry in TDDS frame."},
     {id:"WiFi24",name:"WiFi 2.4 GHz (CM4)",         freq:"2412–2484 MHz",power:"BCM43455 module",proto:"802.11 b/g/n/ac",range_m:350, ant:"External omni via SMA-1 on carrier · diplexer",notes:"Ground debug SSH / QGC backup. External SMA-1 antenna extends range vs internal PCB trace."},
     {id:"WiFi5", name:"WiFi 5 GHz (CM4)",            freq:"5180–5825 MHz",power:"BCM43455 module",proto:"802.11 a/n/ac",range_m:200, ant:"External gain patch via SMA-2 · diplexer",notes:"High-bandwidth log streaming to ground station laptop."},
-    {id:"ZB24",  name:"Zigbee 2.4 GHz (CC2652P7, opt.)",freq:"2.4 GHz",power:"+20 dBm PA",proto:"Zigbee / BLE / Thread / Matter",range_m:100, ant:"2.4 GHz whip via SMA-ZB",notes:"Optional population on COMPHAT-1. One protocol image active at a time (SW select). Also supports BLE 5.0, Thread/Matter."},
+    {id:"ZB24",  name:"Zigbee 2.4 GHz (CC2652P7, opt.)",freq:"2.4 GHz",power:"+20 dBm PA",proto:"Zigbee / BLE / Thread / Matter",range_m:100, ant:"2.4 GHz whip via SMA-ZB",notes:"Optional population on COMMS-HAT-1. One protocol image active at a time (SW select). Also supports BLE 5.0, Thread/Matter."},
     {id:"LR915", name:"LoRa 915 MHz (SX1276, opt.)", freq:"902–928 MHz",power:"+20 dBm (100 mW)",proto:"LoRaWAN Class A",range_m:4000, ant:"λ/4 whip via SMA-LR",notes:"Optional. Long-range backup telemetry. Also supports FSK / Zigbee 915MHz via register config."},
   ];
   return(<div>
@@ -430,8 +430,8 @@ function RadiosTab(){
         <KV k="WiFi 2.4/5 GHz" v={`CM4-CARRIER-1 PCB · ${mmi(210)} from nose · external SMA`}/>
       </div>
       <div>
-        <KV k="Zigbee 2.4 GHz (opt.)" v={`COMPHAT-1 · SMA-ZB on board edge`}/>
-        <KV k="LoRa 915 MHz (opt.)" v={`COMPHAT-1 · SMA-LR on board edge`}/>
+        <KV k="Zigbee 2.4 GHz (opt.)" v={`COMMS-HAT-1 · SMA-ZB on board edge`}/>
+        <KV k="LoRa 915 MHz (opt.)" v={`COMMS-HAT-1 · SMA-LR on board edge`}/>
         <Note c={C.pink} ch={`SMA-ZB (Zigbee 2.4 GHz) and SMA-1 (WiFi 2.4 GHz) are both 2.4 GHz — minimum ${mmi(150)} (5.91") physical separation required. Route antennas to opposite hull surfaces if possible.`}/>
         <Note c={C.yellow} ch={`All antenna cables: U.FL to SMA/SMA-RP via RG-178 (GPS, ≤100mm/3.94") or RG-316 (49MHz, 120mm/4.72"). WiFi from CM4 U.FL: 0.81mm semi-rigid coax ≤25mm (0.98\") to diplexer.`}/>
       </div>
@@ -498,7 +498,7 @@ const BOM=[
   {cat:"Flt Ctrl",qty:1,ref:"PITOT",part:`CF pitot ${mmi(3)} + silicone tubing`,desc:`${mmi(80)} tube · 2×${mmi(80)} leads`,est:"$4"},
   {cat:"Companion",qty:1,ref:"CM4",part:"CM4 Lite 4GB WiFi",desc:"BCM2711 · 4×A72 · 4GB LPDDR4X · 802.11ac",est:"$55"},
   {cat:"Companion",qty:1,ref:"CAR1E",part:"CM4-CARRIER-1 Rev E (custom PCB)",desc:`${mmi(65)}×${mmi(52)} · CPLD write-blocker · diplexer · 2× SMA · μSD · USB hub`,est:"$28"},
-  {cat:"Companion",qty:1,ref:"CH1E",part:"COMPHAT-1 Rev E (custom PCB)",desc:`${mmi(65)}×${mmi(48)} · NX proxy MCU · Zigbee/LoRa footprints`,est:"$68"},
+  {cat:"Companion",qty:1,ref:"CH1E",part:"COMMS-HAT-1 Rev E (custom PCB)",desc:`${mmi(65)}×${mmi(48)} · NX proxy MCU · Zigbee/LoRa footprints`,est:"$68"},
   {cat:"Companion",qty:1,ref:"SIK",part:"SiK 915 MHz air unit",desc:`MAVLink 2.0 · 100 mW · range ≤${yd(1000)}`,est:"$18"},
   {cat:"Companion",qty:1,ref:"RCRS",part:"49 MHz RCRS transceiver",desc:`TDDS · 6-ch · 10 mW EIRP · range ≤${yd(500)}`,est:"$16"},
   {cat:"Companion",qty:1,ref:"CC2652",part:"CC2652P7 (opt — Zigbee/BLE/LoRa 2.4 GHz)",desc:`TI multiprotocol · +20 dBm · range ~${yd(100)}`,est:"$5"},
@@ -518,8 +518,8 @@ const BOM=[
   {cat:"Airframe",qty:2,ref:"SPAR",part:`CF tube ${mmi(12)} OD × ${mmi(300)}`,desc:"Outrigger wing spars",est:"$8ea"},
   {cat:"Airframe",qty:4,ref:"SKID",part:"TPU 95A skid feet",desc:"Crash-absorbing landing pads",est:"$2 filament"},
   {cat:"Wiring",qty:1,ref:"JSTKIT",part:"JST-GH 1.25mm connector kit",desc:"4+6pin · crimp tool · pre-made cables",est:"$14"},
-  {cat:"Wiring",qty:1,ref:"ETH-C",part:`6-pin JST-GH Ethernet cable ${mmi(150)}`,desc:"Twisted pairs · TRIHAT-1↔COMPHAT-1",est:"$4"},
-  {cat:"Wiring",qty:1,ref:"CAN-C",part:`4-pin JST-GH CAN FD cable ${mmi(120)}`,desc:"Twisted CANH/CANL · TRIHAT-1↔COMPHAT-1",est:"$3"},
+  {cat:"Wiring",qty:1,ref:"ETH-C",part:`6-pin JST-GH Ethernet cable ${mmi(150)}`,desc:"Twisted pairs · TRIHAT-1↔COMMS-HAT-1",est:"$4"},
+  {cat:"Wiring",qty:1,ref:"CAN-C",part:`4-pin JST-GH CAN FD cable ${mmi(120)}`,desc:"Twisted CANH/CANL · TRIHAT-1↔COMMS-HAT-1",est:"$3"},
   {cat:"Wiring",qty:1,ref:"WIRE",part:"Silicone wire assortment",desc:"12AWG power · 22AWG signal · 28AWG data",est:"$12"},
 ];
 const CAT_COL={Propulsion:C.orange,"Flt Ctrl":C.accent,Companion:C.green,"Nav Lights":C.yellow,Payload:C.pink,Power:C.yellow,Airframe:C.teal,Wiring:C.purple};

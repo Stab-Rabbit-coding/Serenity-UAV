@@ -205,7 +205,7 @@ const BOARD_COMPARE = [
   {board:"SENSORHAT-1 (Rev H.1)",      w:46, h:36, area:1656, mcu:"XIAO RP2350 SMD", weight:11, note:"XIAO direct-solder · 55% smaller"},
   {board:"CM4-CARRIER-1 Rev E",        w:65, h:52, area:3380, mcu:"CM4 module",       weight:18, note:"Current design"},
   {board:"CARRIER-2 (Rev H.1)",        w:57, h:44, area:2508, mcu:"CM4 module",       weight:13, note:"Min CM4 footprint · 26% smaller"},
-  {board:"COMPHAT-1 Rev E",            w:65, h:48, area:3120, mcu:"CM4 hat",           weight:16, note:"Unchanged — already well-optimised"},
+  {board:"COMMS-HAT-1 Rev E",            w:65, h:48, area:3120, mcu:"CM4 hat",           weight:16, note:"Unchanged — already well-optimised"},
 ];
 
 // ════════════════════════════════════════════════════════════════
@@ -603,7 +603,7 @@ function XIAOEvalTab(){
         <KV k="Current carrier (Rev E)" v="65×52mm = 3380mm²"/>
         <KV k="Target carrier (Rev H.1)" v="57×44mm = 2508mm² (−26%)"/>
         <KV k="Removable features" v="USB hub (GL850G) — not needed for flight operation"/>
-        <KV k="Move to COMPHAT-1" v="CPLD write-blocker — already close to log μSD"/>
+        <KV k="Move to COMMS-HAT-1" v="CPLD write-blocker — already close to log μSD"/>
         <KV k="Shrink approach" v="Remove USB hub · tighten component placement · use 0402 everywhere"/>
         <KV k="Weight savings" v="~18g → ~13g (−5g)"/>
         <Note c={C.teal} ch="The CM4 module itself is 55×40mm, making 57mm the practical minimum carrier width. Length can be reduced by removing the USB hub (only needed for initial setup via development PC) and using a compact DC-DC instead of LDO for 5V→3.3V conversion."/>

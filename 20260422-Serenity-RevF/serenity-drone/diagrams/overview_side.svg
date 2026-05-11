@@ -58,7 +58,7 @@
 <text x="381.3" y="267.8" text-anchor="middle" font-size="6" fill="rgba(255,107,53,0.6)">238mm (9.4") belly</text>
 <rect x="184.2" y="158.4" width="91.8" height="43.2" rx="4" fill="rgba(0,229,255,0.05)" stroke="rgba(0,229,255,0.3)" stroke-width="1" stroke-dasharray="4 2"/>
 <text x="230.1" y="169.2" text-anchor="middle" font-size="7" fill="rgba(0,229,255,0.5)">Pico 2 + TRIHAT-1</text>
-<text x="230.1" y="182.7" text-anchor="middle" font-size="7" fill="rgba(74,222,128,0.5)">CM4 + CARRIER + COMPHAT</text>
+<text x="230.1" y="182.7" text-anchor="middle" font-size="7" fill="rgba(74,222,128,0.5)">CM4 + CARRIER + COMMS-HAT</text>
 <line x1="265.2" y1="85.5" x2="265.2" y2="247.5" stroke="#4ade80" stroke-width="1" stroke-dasharray="5 3"/>
 <text x="265.2" y="77.4" text-anchor="middle" font-size="8" fill="#4ade80" font-weight="bold">CG 152mm (5.98")</text>
 <line x1="60.0" y1="180.0" x2="35.7" y2="180.0" stroke="#2dd4bf" stroke-width="3" stroke-linecap="round"/>

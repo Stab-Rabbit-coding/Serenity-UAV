@@ -69,8 +69,8 @@
 <text x="60" y="210" text-anchor="middle" font-size="8" fill="#c084fc" font-weight="bold">PHASE 4</text>
 <text x="102" y="210" font-size="10" fill="#c084fc" font-weight="bold">ELECTRONICS</text>
 <text x="28" y="227" font-size="7.5" fill="rgba(255,255,255,0.88)">• Mount Pico 2 + TRIHAT-1 on cockpit CF bulkhead (55×38mm)</text>
-<text x="28" y="242" font-size="7.5" fill="rgba(255,255,255,0.88)">• Mount CM4 + CARRIER-1 + COMPHAT-1 at 95-160mm</text>
-<text x="28" y="257" font-size="7.5" fill="rgba(255,255,255,0.88)">• Install OS μSD in carrier slot · log μSD in COMPHAT slot</text>
+<text x="28" y="242" font-size="7.5" fill="rgba(255,255,255,0.88)">• Mount CM4 + CARRIER-1 + COMMS-HAT-1 at 95-160mm</text>
+<text x="28" y="257" font-size="7.5" fill="rgba(255,255,255,0.88)">• Install OS μSD in carrier slot · log μSD in COMMS-HAT slot</text>
 <text x="28" y="272" font-size="7.5" fill="rgba(255,255,255,0.88)">• Flash CPLD write-blocker · install JP2 · verify LED1 green</text>
 <text x="28" y="287" font-size="7.5" fill="rgba(255,255,255,0.88)">• Flash STM32 NX proxy · burn OTP WP fuses · verify NX_LATCH HIGH</text>
 <text x="28" y="302" font-size="7.5" fill="rgba(255,255,255,0.88)">• Install GPS U.FL coax · route to cockpit roof patch</text>
@@ -92,7 +92,7 @@
 <text x="624" y="242" font-size="7.5" fill="rgba(255,255,255,0.88)">• Install 5V BEC · verify 5.0V ±0.1V under load</text>
 <text x="624" y="257" font-size="7.5" fill="rgba(255,255,255,0.88)">• Route JST-GH Ethernet 150mm (port keel) · CAN FD 120mm (stbd keel)</text>
 <text x="624" y="272" font-size="7.5" fill="rgba(255,255,255,0.88)">• TRIHAT-1 120Ω CAN termination bridge = SOLDERED</text>
-<text x="624" y="287" font-size="7.5" fill="rgba(255,255,255,0.88)">• COMPHAT-1 CAN termination bridge = OPEN</text>
+<text x="624" y="287" font-size="7.5" fill="rgba(255,255,255,0.88)">• COMMS-HAT-1 CAN termination bridge = OPEN</text>
 <text x="624" y="302" font-size="7.5" fill="rgba(255,255,255,0.88)">• Install nav light chain GP26 · verify all 6 light states</text>
 <text x="624" y="317" font-size="7.5" fill="rgba(255,255,255,0.88)">• Continuity check: no shorts on +V, GND, motor phases</text>
 <rect x="18" y="342" width="290" height="145" rx="5" fill="#a3e6350c" stroke="#a3e635" stroke-width="1.5"/>

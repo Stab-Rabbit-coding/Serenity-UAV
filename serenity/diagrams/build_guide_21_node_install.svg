@@ -39,7 +39,7 @@
 <text x="48" y="176" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Stack CARRIER-2 on M2.5 nylon standoffs 6mm</text>
 <circle cx="34" cy="191" r="7" fill="#006db7"/>
 <text x="34" y="195" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">3</text>
-<text x="48" y="196" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Stack COMPHAT-SWITCH on CARRIER-2 40-pin GPIO header</text>
+<text x="48" y="196" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Stack COMMS-HAT-SWITCH on CARRIER-2 40-pin GPIO header</text>
 <circle cx="34" cy="211" r="7" fill="#006db7"/>
 <text x="34" y="215" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">4</text>
 <text x="48" y="216" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Verify DF40C-100 CM4 connectors fully seated</text>
@@ -48,7 +48,7 @@
 <text x="48" y="236" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Install OS microSD in CARRIER-2 slot</text>
 <circle cx="34" cy="251" r="7" fill="#006db7"/>
 <text x="34" y="255" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">6</text>
-<text x="48" y="256" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Install log microSD in COMPHAT-SWITCH slot</text>
+<text x="48" y="256" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Install log microSD in COMMS-HAT-SWITCH slot</text>
 <circle cx="34" cy="271" r="7" fill="#006db7"/>
 <text x="34" y="275" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">7</text>
 <text x="48" y="276" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Verify JP2 forensic jumper installed · LED1 = GREEN</text>
@@ -74,7 +74,7 @@
 <text x="338" y="236" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Secure stacks with M2.5 screw + nylon zip tie to keel</text>
 <circle cx="324" cy="251" r="7" fill="#c62828"/>
 <text x="324" y="255" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">6</text>
-<text x="338" y="256" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Connect each node Ethernet to COMPHAT-SWITCH (ports 1-4)</text>
+<text x="338" y="256" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Connect each node Ethernet to COMMS-HAT-SWITCH (ports 1-4)</text>
 <rect x="20" y="296" width="270" height="168" rx="6" fill="#2e7d320c" stroke="#2e7d32" stroke-width="2"/>
 <rect x="26" y="302" width="72" height="20" rx="4" fill="#2e7d32"/>
 <text x="62" y="317" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#ffffff">STEP 22</text>
@@ -93,7 +93,7 @@
 <text x="42" y="436" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(60,80,100,0.97)">  SM-1553-11 xfmr handles impedance — no external 75ohm term</text>
 <circle cx="34" cy="451" r="7" fill="#2e7d32"/>
 <text x="34" y="455" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">7</text>
-<text x="48" y="456" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Ethernet: 6-pin JST-GH star from COMPHAT-SWITCH to each node</text>
+<text x="48" y="456" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Ethernet: 6-pin JST-GH star from COMMS-HAT-SWITCH to each node</text>
 <rect x="310" y="296" width="270" height="168" rx="6" fill="#6a1b9a0c" stroke="#6a1b9a" stroke-width="2"/>
 <rect x="316" y="302" width="72" height="20" rx="4" fill="#6a1b9a"/>
 <text x="352" y="317" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#ffffff">STEP 23</text>
@@ -161,7 +161,7 @@
 <text x="815" y="297" text-anchor="end" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#222222">21</text>
 <text x="825" y="297" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="rgba(60,80,100,0.97)">57x44mm + CM4 Lite</text>
 <rect x="626" y="302" width="548" height="16" rx="2" fill="transparent"/>
-<text x="632" y="314" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222" font-weight="normal">Node-1 COMPHAT-SWITCH</text>
+<text x="632" y="314" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222" font-weight="normal">Node-1 COMMS-HAT-SWITCH</text>
 <text x="815" y="314" text-anchor="end" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#222222">38</text>
 <text x="825" y="314" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="rgba(60,80,100,0.97)">65x52mm + KSZ8895</text>
 <rect x="626" y="319" width="548" height="16" rx="2" fill="transparent"/>

@@ -170,7 +170,7 @@ function OverviewTab(){
         <KV k="Nacelles (alt)" v="2× 64mm 12-blade EDF · 880g each · 1760g total"/>
         <KV k="Fuselage EDF" v="40mm 11-blade EDF + variable nozzle · 190g thrust" vc={C.teal}/>
         <KV k="Variable nozzle" v="BamJr remix · SG90 · 80–115% area ratio · Pico GP15"/>
-        <KV k="Controllers" v="Pico 2 + TRIHAT-1 · CM4 Lite 4GB + CARRIER + COMPHAT-1"/>
+        <KV k="Controllers" v="Pico 2 + TRIHAT-1 · CM4 Lite 4GB + CARRIER + COMMS-HAT-1"/>
         <KV k="Radios" v="SiK 915MHz + 49MHz RCRS TDDS · ETH+CAN FD inter-board"/>
         <KV k="Nav lights" v="6× WS2812C · ICAO+14CFR compliant"/>
         <KV k="Payload" v="250g · winch + release · 70×50×35mm bay"/>
@@ -556,14 +556,14 @@ function AntennaTab(){
         <SH t="SiK 915MHz · 238mm · belly" c={C.orange}/>
         <KV k="Type" v="λ/4 monopole 82mm · SMA-RP bulkhead"/>
         <KV k="Mount" v="6.5mm PETG belly hole at 238mm — clear zone 200–255mm"/>
-        <KV k="Cable" v="IPEX pigtail → COMPHAT-1 SiK U.FL"/>
+        <KV k="Cable" v="IPEX pigtail → COMMS-HAT-1 SiK U.FL"/>
       </div>
       <div>
         <SH t="49MHz RCRS · 290mm · dorsal" mt={0} c={C.pink}/>
         <KV k="Type" v="250mm whip + 38μH base coil · counterpoise 4× radials"/>
         <KV k="Mount" v="Serenity aft dorsal spine · integrated PETG antenna fin"/>
         <KV k="SWR target" v="≤2.5:1 across 49.83–49.89 MHz"/>
-        <KV k="Cable" v="RG-316 120mm → COMPHAT-1 U.FL"/>
+        <KV k="Cable" v="RG-316 120mm → COMMS-HAT-1 U.FL"/>
         <SH t="WiFi · 210mm · internal" c={C.purple}/>
         <KV k="Type" v="CM4 on-board PCB trace antenna · no install steps"/>
         <KV k="Mount" v="Internal to hull · PETG RF-transparent at 210mm"/>
@@ -579,7 +579,7 @@ function WiringTab(){
   return(<div>
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24}}>
       <div>
-        <SH t="Ethernet · TRIHAT-1 J3 ↔ COMPHAT-1 J2" mt={0} c={C.purple}/>
+        <SH t="Ethernet · TRIHAT-1 J3 ↔ COMMS-HAT-1 J2" mt={0} c={C.purple}/>
         <KV k="Connector" v="JST-GH 1.25mm 6-pin (both ends)"/>
         <KV k="Cable" v="Matched twisted-pair 100BASE-T · 150mm"/>
         <KV k="Pin 1" v="GND"/><KV k="Pin 2" v="TX+"/><KV k="Pin 3" v="TX−"/>
@@ -593,18 +593,18 @@ function WiringTab(){
         <Note c={C.purple} ch="HX1188NL magnetics on both boards — no external transformer. Auto-MDIX handles straight or crossover cable."/>
       </div>
       <div>
-        <SH t="CAN FD · TRIHAT-1 J2 ↔ COMPHAT-1 J1" mt={0} c={C.orange}/>
+        <SH t="CAN FD · TRIHAT-1 J2 ↔ COMMS-HAT-1 J1" mt={0} c={C.orange}/>
         <KV k="Connector" v="JST-GH 1.25mm 4-pin (both ends)"/>
         <KV k="Cable" v="Twisted CANH/CANL + power · 120mm"/>
         <KV k="Pin 1" v="GND"/><KV k="Pin 2" v="+5V bus power"/>
         <KV k="Pin 3" v="CANH"/><KV k="Pin 4" v="CANL"/>
         <KV k="Standard" v="ISO 11898-1:2015 CAN FD"/>
         <KV k="Rate" v="1Mbps nominal / 4Mbps FD data phase"/>
-        <KV k="Termination" v="120Ω at TRIHAT-1 only (bridge soldered) · COMPHAT-1 open"/>
+        <KV k="Termination" v="120Ω at TRIHAT-1 only (bridge soldered) · COMMS-HAT-1 open"/>
         <KV k="Pico→CM4" v="AHRS · RPM · sensor health · arm events · nozzle state"/>
         <KV k="CM4→Pico" v="Mission commands · mode · parameter updates"/>
         <KV k="Route" v="Starboard keel spine · ≥20mm from Ethernet cable"/>
-        <Warn ch="TRIHAT-1 120Ω bridge MUST be soldered. COMPHAT-1 bridge must NOT be soldered. Twist CANH/CANL ≥25 turns/metre."/>
+        <Warn ch="TRIHAT-1 120Ω bridge MUST be soldered. COMMS-HAT-1 bridge must NOT be soldered. Twist CANH/CANL ≥25 turns/metre."/>
       </div>
     </div>
     <SH t="New Rev D Signal Lines"/>
@@ -634,7 +634,7 @@ const BOM=[
   {cat:"Flt Ctrl",  qty:1, ref:"PITOT",  part:"CF pitot 3mm + 2mm silicone tubing",     desc:"80mm tube · 2×80mm leads",                est:"$4"},
   {cat:"Companion", qty:1, ref:"CM4",    part:"CM4 Lite 4GB WiFi",                      desc:"BCM2711 · 4×A72 · 4GB LPDDR4X · 802.11ac",est:"$55"},
   {cat:"Companion", qty:1, ref:"CAR1",   part:"CM4-CARRIER-1 (custom PCB)",             desc:"65×40mm · DF40 sockets · μSD OS · WiFi ant",est:"$22"},
-  {cat:"Companion", qty:1, ref:"CH1",    part:"COMPHAT-1 (custom PCB)",                 desc:"65×48mm · CAN+ETH+TPM+μSD+SiK+RCRS",      est:"$60"},
+  {cat:"Companion", qty:1, ref:"CH1",    part:"COMMS-HAT-1 (custom PCB)",                 desc:"65×48mm · CAN+ETH+TPM+μSD+SiK+RCRS",      est:"$60"},
   {cat:"Companion", qty:1, ref:"SIK",    part:"SiK 915MHz air unit",                    desc:"MAVLink 2.0 · 100mW · UART",               est:"$18"},
   {cat:"Companion", qty:1, ref:"RCRS",   part:"49MHz RCRS transceiver module",          desc:"TDDS · 6-ch · 10mW EIRP",                  est:"$16"},
   {cat:"Nav Lights",qty:6, ref:"WS2812", part:"WS2812C-2020 RGB LED",                   desc:"5V · 2×2mm · addressable · PIO driven",    est:"$0.50ea"},
@@ -656,8 +656,8 @@ const BOM=[
   {cat:"Airframe",  qty:4, ref:"SKID",   part:"TPU 95A skid feet",                     desc:"Crash-absorbing landing pads",             est:"$2 filament"},
   {cat:"Airframe",  qty:1, ref:"HW",     part:"M2/M2.5/M3 hardware assortment",        desc:"Standoffs · screws · heat-set inserts",    est:"$8"},
   {cat:"Wiring",    qty:1, ref:"JSTKIT", part:"JST-GH 1.25mm connector kit",           desc:"4+6pin · crimp tool · pre-made cables",    est:"$14"},
-  {cat:"Wiring",    qty:1, ref:"ETH-C",  part:"6-pin JST-GH Ethernet cable 150mm",     desc:"Twisted pairs · TRIHAT↔COMPHAT",           est:"$4"},
-  {cat:"Wiring",    qty:1, ref:"CAN-C",  part:"4-pin JST-GH CAN FD cable 120mm",       desc:"Twisted CANH/CANL · TRIHAT↔COMPHAT",       est:"$3"},
+  {cat:"Wiring",    qty:1, ref:"ETH-C",  part:"6-pin JST-GH Ethernet cable 150mm",     desc:"Twisted pairs · TRIHAT↔COMMS-HAT",           est:"$4"},
+  {cat:"Wiring",    qty:1, ref:"CAN-C",  part:"4-pin JST-GH CAN FD cable 120mm",       desc:"Twisted CANH/CANL · TRIHAT↔COMMS-HAT",       est:"$3"},
   {cat:"Wiring",    qty:1, ref:"WIRE",   part:"Silicone wire assortment",              desc:"12AWG power · 22AWG signal · 28AWG data",  est:"$12"},
   {cat:"Wiring",    qty:1, ref:"XT60P",  part:"XT60 connector pair",                   desc:"Battery to power board",                   est:"$2"},
 ];
@@ -715,7 +715,7 @@ const SBOM=[
   {sys:"CM4",   layer:"Middleware",comp:"dronecan (Python)",       ver:"≥1.0",  lic:"MIT",    role:"DroneCAN/UAVCANv1 protocol stack"},
   {sys:"CM4",   layer:"Middleware",comp:"pymavlink",               ver:"≥2.4",  lic:"LGPL",   role:"MAVLink serialisation + black-box logging"},
   {sys:"CM4",   layer:"Security",  comp:"tpm2-tools + tpm2-tss",  ver:"≥5.0/4.0",lic:"BSD-2",role:"TPM 2.0 key provisioning · firmware attestation"},
-  {sys:"CM4",   layer:"Logging",   comp:"Custom flight logger",    ver:"v1.0",  lic:"Propr.", role:"MAVLink+sensor+nozzle → binary log on COMPHAT μSD"},
+  {sys:"CM4",   layer:"Logging",   comp:"Custom flight logger",    ver:"v1.0",  lic:"Propr.", role:"MAVLink+sensor+nozzle → binary log on COMMS-HAT μSD"},
   {sys:"CM4",   layer:"Driver",    comp:"spi-bcm2835 kernel",      ver:"kernel",lic:"GPL-2",  role:"SPI for MCP2518FD · W5500 · TPM on CM4 GPIO"},
   {sys:"CM4",   layer:"Comms",     comp:"SiK firmware (air unit)", ver:"2.x",   lic:"GPL-3",  role:"915MHz MAVLink radio firmware"},
   {sys:"GCS",   layer:"App",       comp:"QGroundControl",          ver:"≥4.3",  lic:"GPL-3",  role:"Flight planning · telemetry · params"},
@@ -788,11 +788,11 @@ const BUILD_PHASES=[
     phase:"PHASE 4 · ELECTRONICS INSTALLATION",c:C.purple,
     steps:[
       {t:"Install Pico 2 + TRIHAT-1",d:"Mount Pico 2 on TRIHAT-1 using supplied 2×20 female header. Stack mounts at 60–90mm from nose on 4× M2.5 nylon standoffs (8mm height) on the cockpit CF bulkhead plate (cut from 2mm CF sheet: 55×38mm). Secure with M2.5 nylon nuts — use nylon throughout this bay to reduce RF interference."},
-      {t:"Install CM4 stack",d:"CM4 Lite plugs into CM4-CARRIER-1 DF40 underside connectors. COMPHAT-1 stacks on top via 2×20 header. This 3-board sandwich mounts at 95–160mm on the avionics bay floor using 4× M2.5 aluminium standoffs (11mm). OS microSD installs in CM4-CARRIER-1 slot (bottom of stack). Log microSD in COMPHAT-1 slot (top of stack)."},
+      {t:"Install CM4 stack",d:"CM4 Lite plugs into CM4-CARRIER-1 DF40 underside connectors. COMMS-HAT-1 stacks on top via 2×20 header. This 3-board sandwich mounts at 95–160mm on the avionics bay floor using 4× M2.5 aluminium standoffs (11mm). OS microSD installs in CM4-CARRIER-1 slot (bottom of stack). Log microSD in COMMS-HAT-1 slot (top of stack)."},
       {t:"Install GPS module",d:"TRIHAT-1 onboard M10Q is pre-soldered. The U.FL coax runs from TRIHAT-1 to the GPS patch antenna on the cockpit roof (via 3mm access hole in cockpit bulkhead). Secure coax with a small PLA cable guide. Do not kink the U.FL connector — minimum bend radius 10mm."},
       {t:"Install airspeed sensor",d:"MS4525DO mounts on TRIHAT-1 via the JST-ZH I²C connector included with the board. Route 2×2mm ID silicone tubing from the sensor pressure ports to the pitot tube port at the nose (stagnation line) and a static port on the hull side at 80mm. Colour-code: red=stagnation, white=static."},
       {t:"Install ESCs",d:"Mount 3 ESCs on the keel underside with double-sided foam tape and one M2.5 screw through their mounting tab. ESC-L and ESC-R for the nacelles at 145–155mm from nose. ESC-fwd for the 40mm EDF at 285–295mm. Route motor leads along the spar/keel channels with cable ties every 30mm."},
-      {t:"Install SiK and RCRS",d:"SiK 915MHz air unit sits inside the COMPHAT-1 radio compartment. Its IPEX pigtail exits through the fuselage to the SMA-RP bulkhead connector at the belly 238mm point. 49MHz RCRS module coax routes from COMPHAT-1 to the dorsal antenna fin at 290mm via the starboard keel spine. Secure both pigtails with a P-clip at the keel."},
+      {t:"Install SiK and RCRS",d:"SiK 915MHz air unit sits inside the COMMS-HAT-1 radio compartment. Its IPEX pigtail exits through the fuselage to the SMA-RP bulkhead connector at the belly 238mm point. 49MHz RCRS module coax routes from COMMS-HAT-1 to the dorsal antenna fin at 290mm via the starboard keel spine. Secure both pigtails with a P-clip at the keel."},
     ]
   },
   {
@@ -811,8 +811,8 @@ const BUILD_PHASES=[
     steps:[
       {t:"Power bus installation",d:"Mount XT60 power distribution board at 130mm on keel underside. Run 12AWG red/black silicone from battery bay connector to PDB. Run 12AWG silicone from PDB to each ESC. Solder all joints with 60/40 rosin-core solder. Use silicone sleeving over all bare joints — no heat shrink near printed parts."},
       {t:"BEC installation",d:"5V 3A switching BEC takes input from PDB +5V tap. BEC output (5V/GND) connects to: Pico 2 VSYS · CM4 carrier J_PWR · servo rail (shared GND, 5V). Use JST-PH 2-pin for BEC output connectors. Measure BEC output with multimeter: must be 5.0V ± 0.1V with all loads connected."},
-      {t:"Ethernet inter-board cable",d:"Route 6-pin JST-GH Ethernet cable (150mm) from TRIHAT-1 J3 along the port keel spine to COMPHAT-1 J2. Cable-tie every 40mm. Do not route alongside ESC power cables. Verify no tension on connectors — leave 20mm service loop at each end."},
-      {t:"CAN FD inter-board cable",d:"Route 4-pin JST-GH CAN FD cable (120mm) from TRIHAT-1 J2 along the starboard keel spine to COMPHAT-1 J1. Maintain ≥20mm separation from the Ethernet cable. Verify TRIHAT-1 120Ω termination solder bridge is populated. Verify COMPHAT-1 bridge is NOT populated."},
+      {t:"Ethernet inter-board cable",d:"Route 6-pin JST-GH Ethernet cable (150mm) from TRIHAT-1 J3 along the port keel spine to COMMS-HAT-1 J2. Cable-tie every 40mm. Do not route alongside ESC power cables. Verify no tension on connectors — leave 20mm service loop at each end."},
+      {t:"CAN FD inter-board cable",d:"Route 4-pin JST-GH CAN FD cable (120mm) from TRIHAT-1 J2 along the starboard keel spine to COMMS-HAT-1 J1. Maintain ≥20mm separation from the Ethernet cable. Verify TRIHAT-1 120Ω termination solder bridge is populated. Verify COMMS-HAT-1 bridge is NOT populated."},
       {t:"Signal wiring",d:"Connect nacelle servo L/R to TRIHAT-1 GP17/18 (PWM channels). Nozzle servo to TRIHAT-1 GP15. Release servo to TRIHAT-1 GP22. Winch DRV8833 IN1/IN2 to TRIHAT-1 GP22/23. LED chain data to TRIHAT-1 GP26. Label each connector with a Dymo label or colour-coded heat shrink at both ends."},
       {t:"Continuity check",d:"Before applying any power: use multimeter to verify no shorts between +V and GND on: main bus, BEC output, USB5V, 3.3V rails. Verify no continuity between motor phases and ESC power rails (insulation check). Then connect battery via XT60 to a current-limited bench supply at 2A max — verify no smoke, excessive heat, or unexpected current draw."},
     ]

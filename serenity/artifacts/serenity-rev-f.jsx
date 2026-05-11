@@ -108,7 +108,7 @@ function OverviewTab(){
 function ElectronicsTab(){
   const rows=[
     ["GPS patch (u-blox M10Q)",SP.pos.gps,"2.96\"","Cockpit roof",C.green],
-    ["Node-1: SENSORHAT + CARRIER-2 + COMPHAT-SWITCH",SP.pos.n1,"3.70\"","Primary FC + Murex ETH switch + 1553 BC",C.purple],
+    ["Node-1: SENSORHAT + CARRIER-2 + COMMS-HAT-SWITCH",SP.pos.n1,"3.70\"","Primary FC + Murex ETH switch + 1553 BC",C.purple],
     ["Node-2: SENSORHAT + CARRIER-2 + MICROHAT",SP.pos.n2,"6.41\"","Nav/IMU secondary",C.purple],
     ["Node-3: SENSORHAT + CARRIER-2 + MICROHAT",SP.pos.n3,"9.62\"","Payload/actuator control",C.purple],
     ["Node-4: SENSORHAT + CARRIER-2 + MICROHAT",SP.pos.n4,"13.07\"","Aft telemetry/logging",C.purple],

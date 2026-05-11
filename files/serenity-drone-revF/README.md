@@ -31,9 +31,9 @@ serenity-drone/
 │   ├── CM4-CARRIER-1/
 │   │   ├── CM4-CARRIER-1.kicad_pcb   ← CM4 carrier Rev E 65×52mm
 │   │   └── CM4-CARRIER-1.kicad_sch
-│   └── COMPHAT-1/
-│       ├── COMPHAT-1.kicad_pcb       ← CM4 companion hat Rev E 65×48mm
-│       └── COMPHAT-1.kicad_sch
+│   └── COMMS-HAT-1/
+│       ├── COMMS-HAT-1.kicad_pcb       ← CM4 companion hat Rev E 65×48mm
+│       └── COMMS-HAT-1.kicad_sch
 └── stl/                               ← 3D print files (ASCII STL)
     ├── hull_*.stl                     ← Serenity hull sections (PETG)
     ├── nacelle_*.stl                  ← 70mm EDF nacelle pods (CF-PETG)

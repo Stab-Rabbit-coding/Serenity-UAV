@@ -43,7 +43,7 @@
 <text x="38" y="139" font-size="8" fill="rgba(255,255,255,0.88)">Companion Computer · 65×52mm (2.56"×2.05")</text>
 <text x="38" y="152" font-size="7" fill="rgba(255,255,255,0.78)">Avionics bay · 95-160mm from nose</text>
 <rect x="30" y="180" width="180" height="55" rx="4" fill="#c084fc0d" stroke="#c084fc" stroke-width="1.2"/>
-<text x="38" y="196" font-size="10" fill="#c084fc" font-weight="bold">COMPHAT-1 Rev E</text>
+<text x="38" y="196" font-size="10" fill="#c084fc" font-weight="bold">COMMS-HAT-1 Rev E</text>
 <text x="38" y="209" font-size="8" fill="rgba(255,255,255,0.88)">Hat: CAN·ETH·TPM·SD·SiK·RCRS · 65×48mm</text>
 <text x="38" y="222" font-size="7" fill="rgba(255,255,255,0.78)">Stacks on CM4 carrier · via 40-pin header</text>
 <rect x="30" y="250" width="180" height="55" rx="4" fill="#ff6b350d" stroke="#ff6b35" stroke-width="1.2"/>
@@ -69,7 +69,7 @@
 <rect x="250" y="40" width="180" height="55" rx="4" fill="#a3e6350d" stroke="#a3e635" stroke-width="1.2"/>
 <text x="258" y="56" font-size="10" fill="#a3e635" font-weight="bold">SiK 915MHz RADIO</text>
 <text x="258" y="69" font-size="8" fill="rgba(255,255,255,0.88)">MAVLink 2.0 · 100mW · ≤1,094 yd range</text>
-<text x="258" y="82" font-size="7" fill="rgba(255,255,255,0.78)">COMPHAT-1 · belly SMA-RP · UART</text>
+<text x="258" y="82" font-size="7" fill="rgba(255,255,255,0.78)">COMMS-HAT-1 · belly SMA-RP · UART</text>
 <rect x="250" y="110" width="180" height="55" rx="4" fill="#f472b60d" stroke="#f472b6" stroke-width="1.2"/>
 <text x="258" y="126" font-size="10" fill="#f472b6" font-weight="bold">49MHz RCRS TDDS</text>
 <text x="258" y="139" font-size="8" fill="rgba(255,255,255,0.88)">6-ch · 10mW · ≤547 yd · TDDS</text>
@@ -77,11 +77,11 @@
 <rect x="250" y="180" width="180" height="55" rx="4" fill="#c084fc0d" stroke="#c084fc" stroke-width="1.2"/>
 <text x="258" y="196" font-size="10" fill="#c084fc" font-weight="bold">CC2652P7 (opt.)</text>
 <text x="258" y="209" font-size="8" fill="rgba(255,255,255,0.88)">Zigbee/BLE/Thread/LoRa 2.4GHz · +20dBm</text>
-<text x="258" y="222" font-size="7" fill="rgba(255,255,255,0.78)">COMPHAT-1 · SMA-ZB · software select</text>
+<text x="258" y="222" font-size="7" fill="rgba(255,255,255,0.78)">COMMS-HAT-1 · SMA-ZB · software select</text>
 <rect x="250" y="250" width="180" height="55" rx="4" fill="#f472b60d" stroke="#f472b6" stroke-width="1.2"/>
 <text x="258" y="266" font-size="10" fill="#f472b6" font-weight="bold">SX1276 (opt.)</text>
 <text x="258" y="279" font-size="8" fill="rgba(255,255,255,0.88)">LoRa/Zigbee 915MHz · 100mW · ≤4,374 yd</text>
-<text x="258" y="292" font-size="7" fill="rgba(255,255,255,0.78)">COMPHAT-1 · SMA-LR · register select</text>
+<text x="258" y="292" font-size="7" fill="rgba(255,255,255,0.78)">COMMS-HAT-1 · SMA-LR · register select</text>
 <rect x="250" y="320" width="180" height="55" rx="4" fill="#4ade800d" stroke="#4ade80" stroke-width="1.2"/>
 <text x="258" y="336" font-size="10" fill="#4ade80" font-weight="bold">u-blox M10Q GPS</text>
 <text x="258" y="349" font-size="8" fill="rgba(255,255,255,0.88)">Multi-GNSS · 25Hz · &lt;2.5ft CEP</text>
@@ -105,19 +105,19 @@
 <rect x="470" y="110" width="180" height="55" rx="4" fill="#ff6b350d" stroke="#ff6b35" stroke-width="1.2"/>
 <text x="478" y="126" font-size="10" fill="#ff6b35" font-weight="bold">STM32F030 NX MCU</text>
 <text x="478" y="139" font-size="8" fill="rgba(255,255,255,0.88)">SPI proxy · SHA-256 audit · CMD write block</text>
-<text x="478" y="152" font-size="7" fill="rgba(255,255,255,0.78)">COMPHAT-1 · JP3 latch · OTP fuses blown</text>
+<text x="478" y="152" font-size="7" fill="rgba(255,255,255,0.78)">COMMS-HAT-1 · JP3 latch · OTP fuses blown</text>
 <rect x="470" y="180" width="180" height="55" rx="4" fill="#ffe6000d" stroke="#ffe600" stroke-width="1.2"/>
 <text x="478" y="196" font-size="10" fill="#ffe600" font-weight="bold">SLB9670 TPM 2.0</text>
 <text x="478" y="209" font-size="8" fill="rgba(255,255,255,0.88)">RSA-2048/ECC/AES/SHA · SPI</text>
-<text x="478" y="222" font-size="7" fill="rgba(255,255,255,0.78)">TRIHAT-1 + COMPHAT-1 · attestation</text>
+<text x="478" y="222" font-size="7" fill="rgba(255,255,255,0.78)">TRIHAT-1 + COMMS-HAT-1 · attestation</text>
 <rect x="470" y="250" width="180" height="55" rx="4" fill="#c084fc0d" stroke="#c084fc" stroke-width="1.2"/>
 <text x="478" y="266" font-size="10" fill="#c084fc" font-weight="bold">W5500 ETHERNET</text>
 <text x="478" y="279" font-size="8" fill="rgba(255,255,255,0.88)">100BASE-T · hw TCP/IP · 8 sockets · SPI</text>
-<text x="478" y="292" font-size="7" fill="rgba(255,255,255,0.78)">TRIHAT-1 + COMPHAT-1 · JST-GH 6-pin link</text>
+<text x="478" y="292" font-size="7" fill="rgba(255,255,255,0.78)">TRIHAT-1 + COMMS-HAT-1 · JST-GH 6-pin link</text>
 <rect x="470" y="320" width="180" height="55" rx="4" fill="#ff6b350d" stroke="#ff6b35" stroke-width="1.2"/>
 <text x="478" y="336" font-size="10" fill="#ff6b35" font-weight="bold">MCP2518FD CAN FD</text>
 <text x="478" y="349" font-size="8" fill="rgba(255,255,255,0.88)">ISO 11898-1:2015 · 4Mbps · SPI</text>
-<text x="478" y="362" font-size="7" fill="rgba(255,255,255,0.78)">TRIHAT-1 + COMPHAT-1 · JST-GH 4-pin link</text>
+<text x="478" y="362" font-size="7" fill="rgba(255,255,255,0.78)">TRIHAT-1 + COMMS-HAT-1 · JST-GH 4-pin link</text>
 <rect x="470" y="390" width="180" height="55" rx="4" fill="#4ade800d" stroke="#4ade80" stroke-width="1.2"/>
 <text x="478" y="406" font-size="10" fill="#4ade80" font-weight="bold">6× WS2812C LEDs</text>
 <text x="478" y="419" font-size="8" fill="rgba(255,255,255,0.88)">Port(R)·Stbd(G)·Tail(W)·ACOL·Belly·Land</text>
