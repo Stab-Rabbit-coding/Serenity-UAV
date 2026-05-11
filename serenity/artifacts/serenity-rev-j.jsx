@@ -98,7 +98,7 @@ const W_ITEMS = [
   ["SENSORHAT-1 ×2 XIAO RP2350 (Nodes 1, 4)", 25],
   ["CM3+ module ×2 (Nodes 2, 3)",              16],
   ["CM3-CARRIER-1 ×2 (Nodes 2, 3)",            18],
-  ["COMPHAT-SWITCH (Node 1 hat)",              29],
+  ["COMMS-HAT-SWITCH (Node 1 hat)",              29],
   ["MICROHAT ×1 (Node 4 hat)",                 10],
   ["microSD cards ×8 (OS + log)",               8],
   // Power + wiring
@@ -629,7 +629,7 @@ function BalanceTab(){
 // ── TAB: AVIONICS ─────────────────────────────────────────────
 function AvionicsTab(){
   const NODES = [
-    {id:"NODE 1",pcb:"CM4-LITE + CM4-CARRIER-2 + SENSORHAT-1 + COMPHAT-SWITCH",
+    {id:"NODE 1",pcb:"CM4-LITE + CM4-CARRIER-2 + SENSORHAT-1 + COMMS-HAT-SWITCH",
      zone:"A (nose)",bus:"CAN FD BC · 1553 BC · RS-485 · ETH switch (KSZ8895) · SiK 915MHz",
      fn:"Flight controller · telemetry gateway · sensor fusion primary"},
     {id:"NODE 2",pcb:"CM3+ + CM3-CARRIER-1 (integrated bus I/O)",
@@ -651,7 +651,7 @@ function AvionicsTab(){
   ];
   return(<div>
     <SH t="8-Node Distributed Compute Architecture" mt={0} c={C.teal}/>
-    <Note c={C.teal} ch="Mixed CM4/CM3+ architecture. Nodes 1 &amp; 4: CM4-LITE + CM4-CARRIER-2 + SENSORHAT-1 (XIAO RP2350 realtime co-processor). Nodes 2 &amp; 3: CM3+ + CM3-CARRIER-1 (68×30mm, integrated CAN FD/RS-485/1553B/W5500 with JST-GH panel connectors + 40-pin RPi HAT header). Saves ~60g vs all-CM4. Node 1 adds COMPHAT-SWITCH; Node 4 adds MICROHAT."/>
+    <Note c={C.teal} ch="Mixed CM4/CM3+ architecture. Nodes 1 &amp; 4: CM4-LITE + CM4-CARRIER-2 + SENSORHAT-1 (XIAO RP2350 realtime co-processor). Nodes 2 &amp; 3: CM3+ + CM3-CARRIER-1 (68×30mm, integrated CAN FD/RS-485/1553B/W5500 with JST-GH panel connectors + 40-pin RPi HAT header). Saves ~60g vs all-CM4. Node 1 adds COMMS-HAT-SWITCH; Node 4 adds MICROHAT."/>
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:8}}>
       {NODES.map((n,i)=>(
         <div key={i} style={{padding:"10px 12px",border:`1px solid ${C.teal}44`,borderRadius:4,
@@ -685,7 +685,7 @@ function AvionicsTab(){
         <KV k="SENSORHAT-1 ×2 (N1,N4)"     v="2 × 12.5g = 25g"/>
         <KV k="CM3+ module ×2 (N2,N3)"     v="2 × 8g = 16g"/>
         <KV k="CM3-CARRIER-1 ×2 (N2,N3)"   v="2 × 9g = 18g" vc={C.teal}/>
-        <KV k="COMPHAT-SWITCH ×1 (N1)"     v="29g"/>
+        <KV k="COMMS-HAT-SWITCH ×1 (N1)"     v="29g"/>
         <KV k="MICROHAT ×1 (N4)"           v="10g"/>
         <KV k="microSD ×6 (OS+log)"        v="6 × 1g = 6g"/>
         <KV k="TOTAL avionics stack"        v="154g" vc={C.lime}/>
@@ -717,11 +717,11 @@ function HullFoamTab(){
     {id:"F",sta:"388–457",dim:"EDF bay — no foam",        former:"None (open)",      seal:"Open for EDF access"},
   ];
   const conduits=[
-    {id:"CAN FD",    route:"Port keel rail",       chain:"N1→N2→N3→N4→COMPHAT-SWITCH"},
-    {id:"RS-485",    route:"Starboard keel rail",  chain:"N1→N2→N3→N4→COMPHAT-SWITCH"},
-    {id:"MIL-1553B", route:"Dorsal centre",        chain:"N1→N2→N3→N4→COMPHAT-SWITCH"},
-    {id:"ETH-A",     route:"Port side",            chain:"N1→COMPHAT-SWITCH"},
-    {id:"ETH-B",     route:"Starboard side",       chain:"N2→COMPHAT-SWITCH"},
+    {id:"CAN FD",    route:"Port keel rail",       chain:"N1→N2→N3→N4→COMMS-HAT-SWITCH"},
+    {id:"RS-485",    route:"Starboard keel rail",  chain:"N1→N2→N3→N4→COMMS-HAT-SWITCH"},
+    {id:"MIL-1553B", route:"Dorsal centre",        chain:"N1→N2→N3→N4→COMMS-HAT-SWITCH"},
+    {id:"ETH-A",     route:"Port side",            chain:"N1→COMMS-HAT-SWITCH"},
+    {id:"ETH-B",     route:"Starboard side",       chain:"N2→COMMS-HAT-SWITCH"},
     {id:"PWR",       route:"Belly centre",         chain:"Battery→BEC→all nodes"},
   ];
   const BATCHES = [
@@ -815,7 +815,7 @@ function AccessPanelsTab(){
   const PANELS = [
     {id:"A",color:"#4ade80",label:"Nose Bayonet",sta:"0–91mm",
      open:"Rotate lid 60° CCW, pull axially",close:"Insert, rotate 60° CW, check detent",
-     contents:"Node 1 stack (COMPHAT-SWITCH), GPS antenna, pitot tube fitting, nose LED"},
+     contents:"Node 1 stack (COMMS-HAT-SWITCH), GPS antenna, pitot tube fitting, nose LED"},
     {id:"B",color:"#00e5ff",label:"Dorsal Fwd Screw",sta:"91–175mm",
      open:"Remove 4× M2.5×6 Phillips screws",close:"4× screws, 12 cN·m torque, no thread-lock",
      contents:"Node 2 stack (MICROHAT), PDB, BEC 5V/5A, power distribution wiring"},

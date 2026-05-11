@@ -45,7 +45,7 @@
 <text x="800" y="180" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">CM4 + CM4-CARRIER-1 Rev E</text>
 <rect x="768" y="189" width="26" height="16" rx="4" fill="#6a1b9a" stroke="#222222" stroke-width="1"/>
 <text x="781" y="202" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
-<text x="800" y="202" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">COMPHAT-1 Rev E</text>
+<text x="800" y="202" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">COMMS-HAT-1 Rev E</text>
 <rect x="768" y="211" width="26" height="16" rx="4" fill="#f5c518" stroke="#222222" stroke-width="1"/>
 <text x="781" y="224" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
 <text x="800" y="224" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">OS μSD card ≥32GB A2</text>
@@ -67,14 +67,14 @@
 <text x="792" y="374" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Snap CM4 Lite into CM4-CARRIER-1 DF40 connectors (underside)</text>
 <circle cx="776" cy="393" r="9" fill="#006db7"/>
 <text x="776" y="397" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4</text>
-<text x="792" y="398" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Stack COMPHAT-1 on carrier via 2×20 GPIO header</text>
+<text x="792" y="398" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Stack COMMS-HAT-1 on carrier via 2×20 GPIO header</text>
 <circle cx="776" cy="417" r="9" fill="#006db7"/>
 <text x="776" y="421" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">5</text>
-<text x="792" y="422" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Install OS μSD in carrier slot · Install log μSD in COMPHAT slot</text>
+<text x="792" y="422" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Install OS μSD in carrier slot · Install log μSD in COMMS-HAT slot</text>
 <circle cx="776" cy="441" r="9" fill="#006db7"/>
 <text x="776" y="445" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">6</text>
 <text x="792" y="446" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Route GPS U.FL coax to cockpit roof patch antenna via 3mm hole</text>
-<rect x="760" y="490" width="416" height="36" rx="6" fill="#fffac0" stroke="#ff7518" stroke-width="2"/><text x="778" y="505" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ff7518">⚠</text><text x="796" y="512" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">DO NOT mix up the two μSD cards — OS card goes in carrier, log card in COMPHAT</text>
+<rect x="760" y="490" width="416" height="36" rx="6" fill="#fffac0" stroke="#ff7518" stroke-width="2"/><text x="778" y="505" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ff7518">⚠</text><text x="796" y="512" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">DO NOT mix up the two μSD cards — OS card goes in carrier, log card in COMMS-HAT</text>
 <rect x="760" y="534" width="416" height="32" rx="6" fill="#b2ebf2" stroke="#00838f" stroke-width="1.5"/><text x="770" y="548" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#00838f">ℹ</text><text x="786" y="554" font-family="'OpenDyslexic',sans-serif" font-size="9.5" fill="#222222">Use NYLON standoffs throughout cockpit bay — metal reduces RF performance</text>
 <path d="M176,528 Q216,428 296,408 Q376,398 456,408 L456,528 Z" fill="rgba(200,230,255,0.15)" stroke="#006db7" stroke-width="2"/>
 <polygon points="316.0,462.0 385.3,422.0 380.1,419.0 310.8,459.0"   fill="#37474f"   stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
@@ -99,7 +99,7 @@
 <polygon points="456.0,367.0 512.3,334.5 470.7,310.5 414.4,343.0"   fill="#c8dff0"   stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
 <polygon points="456.0,364.0 512.3,331.5 512.3,334.5 456.0,367.0" fill="#006db7" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
 <polygon points="512.3,331.5 470.7,307.5 470.7,310.5 512.3,334.5" fill="#006db7" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
-<text x="489" y="381" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">COMPHAT-1</text>
+<text x="489" y="381" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">COMMS-HAT-1</text>
 <polygon points="456.0,343.0 503.6,315.5 469.0,295.5 421.4,323.0"   fill="#c8e6c9"   stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
 <polygon points="456.0,340.0 503.6,312.5 503.6,315.5 456.0,343.0" fill="#2e7d32" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
 <polygon points="503.6,312.5 469.0,292.5 469.0,295.5 503.6,315.5" fill="#2e7d32" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
@@ -117,7 +117,7 @@
 <circle cx="676" cy="368" r="16" fill="#2e7d32" stroke="#222222" stroke-width="1.5"/>
 <text x="676" y="372" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="12" fill="#ffffff">3</text>
 <text x="636" y="436" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7" fill="#607080">OS card in CARRIER</text>
-<text x="636" y="446" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7" fill="#607080">Log card in COMPHAT</text>
+<text x="636" y="446" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7" fill="#607080">Log card in COMMS-HAT</text>
 <path d="M351,384 Q316,338 296,318" fill="none" stroke="#2e7d32" stroke-width="2" stroke-dasharray="4 3"/>
 <rect x="266" y="303" width="40" height="16" rx="3" fill="rgba(74,222,128,0.3)" stroke="#2e7d32" stroke-width="1.5"/>
 <text x="286" y="314" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7" fill="#2e7d32">GPS PATCH</text>

@@ -28,7 +28,7 @@ function Grid(){return(<svg style={{position:"fixed",inset:0,width:"100%",height
 //  KEY DESIGN DECISION — I²C vs 1553 AS FOURTH BUS
 // ════════════════════════════════════════════════════════════
 // I²C hardware (PCA9517 buffer + TVS + BNX002 CMC + 2× JST-GH) REMAINS
-// on both TRIHAT-1 and COMPHAT-1 PCBs. It is available for on-board
+// on both TRIHAT-1 and COMMS-HAT-1 PCBs. It is available for on-board
 // sensor expansion (BMP388, ICM-42688, MS4525DO are already I²C1).
 // I²C is NOT used as an inter-board bus because MIL-STD-1553 fills
 // that role with superior noise immunity, deterministic timing, and
@@ -105,7 +105,7 @@ function FourBusDiagram(){
   const busRole={eth:"High-BW background",can:"Safety-critical RT",rs4:"Secondary telemetry",m53:"Hard-RT deterministic"};
   const busDash={eth:"none",can:"none",rs4:"6 3",m53:"none"};
   const busW={eth:3,can:3,rs4:2.5,m53:4};
-  const nodes=[{x:40,y:130,w:130,h:180,label:"PICO 2",sub:"TRIHAT-1 (Rev H)",c:C.accent,role:"BC"},{x:570,y:130,w:130,h:180,label:"CM4 LITE",sub:"COMPHAT-1 (Rev H)",c:C.green,role:"RT-01"}];
+  const nodes=[{x:40,y:130,w:130,h:180,label:"PICO 2",sub:"TRIHAT-1 (Rev H)",c:C.accent,role:"BC"},{x:570,y:130,w:130,h:180,label:"CM4 LITE",sub:"COMMS-HAT-1 (Rev H)",c:C.green,role:"RT-01"}];
 
   return(
     <svg viewBox={`0 0 ${VW} ${VH}`} width="100%" style={{maxWidth:"100%",display:"block"}}>
@@ -302,10 +302,10 @@ function Mil1553Diagram(){
       <text x={215} y={245} textAnchor="middle" fill={`${col}70`} fontSize={6} fontFamily={M}>shielded</text>
       <text x={215} y={262} textAnchor="middle" fill={`${col}50`} fontSize={6} fontFamily={M}>4-pin JST-GH</text>
 
-      {/* ── Right board: COMPHAT-1 (RT) ── */}
+      {/* ── Right board: COMMS-HAT-1 (RT) ── */}
       <rect x={250} y={40} width={170} height={290} rx={6}
         fill={`${col}06`} stroke={col} strokeWidth={1.8}/>
-      <text x={335} y={58} textAnchor="middle" fill={col} fontSize={10} fontFamily={M} fontWeight="bold">COMPHAT-1</text>
+      <text x={335} y={58} textAnchor="middle" fill={col} fontSize={10} fontFamily={M} fontWeight="bold">COMMS-HAT-1</text>
       <text x={335} y={72} textAnchor="middle" fill={`${col}70`} fontSize={8} fontFamily={M}>CM4 — 1553 RT-01</text>
 
       <rect x={260} y={82} width={70} height={40} rx={3}
@@ -363,7 +363,7 @@ function Mil1553Diagram(){
       <text x={595} y={266} textAnchor="middle" fill={`${col}35`} fontSize={7} fontFamily={M}>2× JST-GH 4P</text>
       <text x={595} y={283} textAnchor="middle" fill={`${col}30`} fontSize={7} fontFamily={M}>address pins set per node</text>
       <text x={595} y={296} textAnchor="middle" fill={C.yellow} fontSize={7} fontFamily={M}>← close term. on last node</text>
-      <text x={595} y={309} textAnchor="middle" fill={`${col}30`} fontSize={7} fontFamily={M}>COMPHAT term. re-opens</text>
+      <text x={595} y={309} textAnchor="middle" fill={`${col}30`} fontSize={7} fontFamily={M}>COMMS-HAT term. re-opens</text>
 
       {/* Labels */}
       <text x={350} y={14} textAnchor="middle" fill="rgba(255,191,36,0.3)"
@@ -460,7 +460,7 @@ function OverviewTab(){
       ))}
     </div>
     <div style={{marginTop:18,padding:"12px 14px",border:`1px solid rgba(74,222,128,0.2)`,background:"rgba(74,222,128,0.04)",borderRadius:4,fontFamily:M,fontSize:10,color:C.dim,lineHeight:1.8}}>
-      <span style={{color:C.i2c,fontWeight:"bold"}}>I²C status (Rev H):</span> Both TRIHAT-1 and COMPHAT-1 retain the PCA9517 buffer, PRTR5V0U2X TVS, BNX002 choke, and 2× JST-GH I²C connectors from Rev G. The I²C bus serves its original purpose — connecting on-board sensors (ICM-42688-P, BMP388, MS4525DO) and future expansion peripherals. It is explicitly <span style={{color:C.yellow}}>not</span> used as an inter-board data path; MIL-STD-1553B provides a superior physical and protocol basis for that role.
+      <span style={{color:C.i2c,fontWeight:"bold"}}>I²C status (Rev H):</span> Both TRIHAT-1 and COMMS-HAT-1 retain the PCA9517 buffer, PRTR5V0U2X TVS, BNX002 choke, and 2× JST-GH I²C connectors from Rev G. The I²C bus serves its original purpose — connecting on-board sensors (ICM-42688-P, BMP388, MS4525DO) and future expansion peripherals. It is explicitly <span style={{color:C.yellow}}>not</span> used as an inter-board data path; MIL-STD-1553B provides a superior physical and protocol basis for that role.
     </div>
   </div>);
 }
@@ -528,7 +528,7 @@ function Mil1553Tab(){
         <Note c={C.accent} ch="SPI0 is not shared with any other device on TRIHAT-1 in this configuration. The HI-6130 has its own dedicated CS on GP17, allowing future SPI0 bus sharing if needed."/>
       </div>
       <div>
-        <div style={{color:C.green,fontFamily:M,fontSize:10,fontWeight:"bold",marginBottom:8}}>COMPHAT-1 — CM4 SPI0</div>
+        <div style={{color:C.green,fontFamily:M,fontSize:10,fontWeight:"bold",marginBottom:8}}>COMMS-HAT-1 — CM4 SPI0</div>
         <KV k="SCLK"  v="GPIO11 (SPI0 clock)"/>
         <KV k="MOSI"  v="GPIO10 (SPI0 TX → HI-6130 SDI)"/>
         <KV k="MISO"  v="GPIO9  (SPI0 RX ← HI-6130 SDO)" vc={C.green}/>
@@ -612,7 +612,7 @@ function ExtensibilityTab(){
     <SH t="Why 1553 Scales Best"/>
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24}}>
       <div>
-        <Note c={C.m53} ch="MIL-STD-1553 is the only protocol in this design where N-node scaling requires ZERO hardware changes to existing nodes. Adding RT-02: plug into J_1553_OUT on COMPHAT-1, plug J_1553_OUT of new node to nothing (or next node). Update BC frame schedule table in firmware to poll RT-02. That's it. No termination to move (transformer coupling handles it), no address assignment (hardware pins RA[4:0] on HI-6130), no configuration propagation."/>
+        <Note c={C.m53} ch="MIL-STD-1553 is the only protocol in this design where N-node scaling requires ZERO hardware changes to existing nodes. Adding RT-02: plug into J_1553_OUT on COMMS-HAT-1, plug J_1553_OUT of new node to nothing (or next node). Update BC frame schedule table in firmware to poll RT-02. That's it. No termination to move (transformer coupling handles it), no address assignment (hardware pins RA[4:0] on HI-6130), no configuration propagation."/>
         <Note c={C.can} ch="CAN FD scales well but requires moving the 120Ω terminator when adding nodes. Small effort but it is a physical change. 1553 has no such requirement — transformer coupling provides inherent impedance matching at each tap."/>
       </div>
       <div>
@@ -649,7 +649,7 @@ function PCBTab(){
         <KV k="Transformer placement" v="SM-1553-11 primary side faces HI-6130 · secondary faces board edge connectors"/>
         <KV k="Shield connection" v="JST-GH pin 2 (SHIELD) connects to chassis GND via 10nF cap (AC-coupled) — NOT DC ground · standard 1553 practice"/>
         <KV k="RA address pins" v="HI-6130 RA[4:0] on TRIHAT-1: all pulled low = BC mode (addr 0 = BC by convention)"/>
-        <KV k="RA address pins" v="HI-6130 RA[4:0] on COMPHAT-1: RA0 pulled HIGH, rest low = RT address 1"/>
+        <KV k="RA address pins" v="HI-6130 RA[4:0] on COMMS-HAT-1: RA0 pulled HIGH, rest low = RT address 1"/>
         <Note c={C.m53} ch="TQFP-48 at 0.5mm pitch requires standard 4-layer PCB soldering practice. JLCPCB offers TQFP-48 assembly. The HI-6130 is in JLCPCB's extended parts library — specify part number HI-6130CBI during assembly order."/>
       </div>
     </div>
@@ -681,9 +681,9 @@ function PCBTab(){
 // ════════════════════════════════════════════════════════════
 const BOM_H=[
   {cat:"1553",qty:2,ref:"U_1553_T",part:"HI-6130 BC/RT/MT (TRIHAT-1)",     pkg:"TQFP-48",est:"$12ea",col:C.m53,note:"Holt IC · SPI BC/RT/MT · 7×7mm"},
-  {cat:"1553",qty:2,ref:"U_1553_C",part:"HI-6130 BC/RT/MT (COMPHAT-1)",    pkg:"TQFP-48",est:"$12ea",col:C.m53,note:"Same IC · RA[4:0] pins set to RT-01"},
+  {cat:"1553",qty:2,ref:"U_1553_C",part:"HI-6130 BC/RT/MT (COMMS-HAT-1)",    pkg:"TQFP-48",est:"$12ea",col:C.m53,note:"Same IC · RA[4:0] pins set to RT-01"},
   {cat:"1553",qty:2,ref:"T_1553_T",part:"SM-1553-11 isolation xfmr (TRIHAT)", pkg:"SMD 4.8×8mm",est:"$4ea",col:C.m53,note:"Bourns · 1500Vrms · dual-port"},
-  {cat:"1553",qty:2,ref:"T_1553_C",part:"SM-1553-11 isolation xfmr (COMPHAT)",pkg:"SMD 4.8×8mm",est:"$4ea",col:C.m53,note:"Same part both boards"},
+  {cat:"1553",qty:2,ref:"T_1553_C",part:"SM-1553-11 isolation xfmr (COMMS-HAT)",pkg:"SMD 4.8×8mm",est:"$4ea",col:C.m53,note:"Same part both boards"},
   {cat:"1553",qty:8,ref:"R_STUB",  part:"75Ω 0402 stub resistors (2 per board end × 2 boards)",pkg:"0402",est:"$0.05ea",col:C.m53,note:"Series stub in xfmr primary leads"},
   {cat:"1553",qty:8,ref:"C_1553",  part:"100nF/10µF 0402 decoupling caps (per HI-6130)",pkg:"0402",est:"$0.05ea",col:C.m53,note:"HI-6130 VDD, VDDIO, VDDBUS decoupling"},
   {cat:"1553",qty:4,ref:"J_1553",  part:"JST-GH 1.25mm 4-pin (J_1553_IN + J_1553_OUT × 2 boards)",pkg:"SMD",est:"$0.60ea",col:C.m53,note:"GND · SHIELD · BUS_A+ · BUS_A−"},

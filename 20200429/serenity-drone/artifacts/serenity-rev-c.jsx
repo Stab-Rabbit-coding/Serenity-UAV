@@ -142,7 +142,7 @@ function OverviewTab(){
           <KV k="Propulsion" v="2× 65mm EDF nacelles · 1× 35mm fwd EDF"/>
           <KV k="Thrust (nacelles)" v={`${THRUST_NAC}g`} vc={C.green}/>
           <KV k="Flight controller" v="Pico 2 + TRIHAT-1"/>
-          <KV k="Companion" v="CM4 Lite 4GB + CM4-CARRIER-1 + COMPHAT-1"/>
+          <KV k="Companion" v="CM4 Lite 4GB + CM4-CARRIER-1 + COMMS-HAT-1"/>
           <KV k="Radio" v="SiK 915MHz + 49MHz RCRS TDDS"/>
           <KV k="Inter-board" v="100BASE-T Ethernet + CAN FD 4Mbps · JST-GH"/>
           <KV k="Nav lights" v="6× WS2812C ICAO/14CFR compliant"/>
@@ -432,14 +432,14 @@ function AntennaTab(){
           <SH t="SiK 915MHz — 238mm belly" c={C.orange}/>
           <KV k="Type"    v="λ/4 monopole · 82mm · SMA-RP bulkhead"/>
           <KV k="Serenity mount" v="6.5mm hole in PETG belly at 238mm — clear expanse between payload bay edge (200mm) and aft skid strut (255mm)" vc={C.teal}/>
-          <KV k="Cable"   v="IPEX pigtail to COMPHAT-1 SiK U.FL"/>
+          <KV k="Cable"   v="IPEX pigtail to COMMS-HAT-1 SiK U.FL"/>
         </div>
         <div>
           <SH t="49MHz RCRS — 290mm dorsal" mt={0} c={C.pink}/>
           <KV k="Type"    v="250mm whip + 38μH base-loading coil"/>
           <KV k="Serenity mount" v="Integrated into Serenity's aft dorsal protrusion at 290mm — the raised spine naturally accommodates a vertical ABS/PETG antenna fin flush with the hull." vc={C.teal}/>
           <KV k="Fin"     v="35mm tall PETG fin · coil cavity inside · 4× radials under skin"/>
-          <KV k="Cable"   v="RG-316 120mm → COMPHAT-1 U.FL"/>
+          <KV k="Cable"   v="RG-316 120mm → COMMS-HAT-1 U.FL"/>
           <KV k="SWR"     v="≤2.5:1 across 49.83–49.89MHz (trim with 5–30pF series cap)"/>
           <SH t="WiFi 2.4/5GHz — 210mm internal" c={C.purple}/>
           <KV k="Type"    v="CM4 on-board PCB trace antenna"/>
@@ -476,7 +476,7 @@ function WiringDiagram(){
       <text x={CX2+CW/2} y={CY2+22} textAnchor="middle" fill={C.green} fontSize={11} fontFamily={M} fontWeight="bold">CM4 LITE 4GB</text>
       <text x={CX2+CW/2} y={CY2+37} textAnchor="middle" fill="rgba(74,222,128,0.45)" fontSize={8} fontFamily={M}>companion computer</text>
       <line x1={CX2+12} y1={CY2+46} x2={CX2+CW-12} y2={CY2+46} stroke="rgba(74,222,128,0.18)" strokeWidth={0.7}/>
-      <text x={CX2+CW/2} y={CY2+62} textAnchor="middle" fill={C.lime} fontSize={9} fontFamily={M} fontWeight="bold">COMPHAT-1</text>
+      <text x={CX2+CW/2} y={CY2+62} textAnchor="middle" fill={C.lime} fontSize={9} fontFamily={M} fontWeight="bold">COMMS-HAT-1</text>
       <text x={CX2+CW/2} y={CY2+76} textAnchor="middle" fill="rgba(163,230,53,0.6)" fontSize={8} fontFamily={M}>W5500 · GPIO17 · J2 ETH</text>
       <text x={CX2+CW/2} y={CY2+90} textAnchor="middle" fill="rgba(163,230,53,0.6)" fontSize={8} fontFamily={M}>MCP2518FD · GPIO7 · J1 CAN</text>
       <text x={CX2+CW/2} y={CY2+108} textAnchor="middle" fill="rgba(192,132,252,0.6)" fontSize={8} fontFamily={M}>TPM · μSD · 915MHz SiK</text>
@@ -528,7 +528,7 @@ function WiringTab(){
       </div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24}}>
         <div>
-          <SH t="Ethernet · TRIHAT-1 J3 ↔ COMPHAT-1 J2" mt={0} c={C.purple}/>
+          <SH t="Ethernet · TRIHAT-1 J3 ↔ COMMS-HAT-1 J2" mt={0} c={C.purple}/>
           <KV k="Connector" v="JST-GH 1.25mm 6-pin (both ends)"/>
           <KV k="Cable" v="Matched twisted-pair 100BASE-T · 150mm"/>
           <KV k="Pin 1" v="GND"/>
@@ -546,7 +546,7 @@ function WiringTab(){
           <Note c={C.purple} ch="Auto-MDIX handled in W5500 hardware — no crossover cable needed. Route along port keel spine, cable-tie every 40mm, no contact with CF spar."/>
         </div>
         <div>
-          <SH t="CAN FD · TRIHAT-1 J2 ↔ COMPHAT-1 J1" mt={0} c={C.orange}/>
+          <SH t="CAN FD · TRIHAT-1 J2 ↔ COMMS-HAT-1 J1" mt={0} c={C.orange}/>
           <KV k="Connector" v="JST-GH 1.25mm 4-pin (both ends)"/>
           <KV k="Cable" v="Twisted pair CANH/CANL · 2× power · 120mm"/>
           <KV k="Pin 1" v="GND"/>
@@ -556,12 +556,12 @@ function WiringTab(){
           <KV k="Standard" v="ISO 11898-1:2015 CAN FD"/>
           <KV k="Data rate" v="1Mbps nominal / 4Mbps FD data phase"/>
           <KV k="Transceivers" v="MCP2562FD on both boards · 5V bus / 3.3V logic"/>
-          <KV k="Termination" v="120Ω at TRIHAT-1 only (bridge populated) · none at COMPHAT"/>
+          <KV k="Termination" v="120Ω at TRIHAT-1 only (bridge populated) · none at COMMS-HAT"/>
           <KV k="Pico→CM4" v="AHRS quaternion · RPM · sensor health · arm events"/>
           <KV k="CM4→Pico" v="Mission commands · mode · param updates"/>
           <KV k="Protocol" v="DroneCAN / UAVCANv1 message framing"/>
           <KV k="Routing" v="Starboard keel · ≥20mm from Ethernet cable"/>
-          <Warn ch="Twist CANH/CANL at ≥25 twists/metre before inserting into JST-GH. TRIHAT-1 120Ω termination bridge MUST be soldered. COMPHAT-1 bridge must NOT be populated."/>
+          <Warn ch="Twist CANH/CANL at ≥25 twists/metre before inserting into JST-GH. TRIHAT-1 120Ω termination bridge MUST be soldered. COMMS-HAT-1 bridge must NOT be populated."/>
         </div>
       </div>
     </div>
@@ -583,7 +583,7 @@ const BOM=[
   {cat:"Flt Ctrl",    qty:1, ref:"PITOT",   part:"CF pitot 3mm + silicone tubing",   desc:"80mm tube · 2×80mm 2mm ID leads",         est:"$4"},
   {cat:"Companion",   qty:1, ref:"CM4",     part:"CM4 Lite 4GB WiFi",                desc:"BCM2711 · 4×A72 · 4GB LPDDR4X · 802.11ac",est:"$55"},
   {cat:"Companion",   qty:1, ref:"CAR1",    part:"CM4-CARRIER-1 (custom PCB)",       desc:"65×40mm · DF40 sockets · μSD · WiFi ant", est:"$22"},
-  {cat:"Companion",   qty:1, ref:"CH1",     part:"COMPHAT-1 (custom PCB)",           desc:"65×48mm · CAN+ETH+TPM+μSD+SiK+RCRS",     est:"$60"},
+  {cat:"Companion",   qty:1, ref:"CH1",     part:"COMMS-HAT-1 (custom PCB)",           desc:"65×48mm · CAN+ETH+TPM+μSD+SiK+RCRS",     est:"$60"},
   {cat:"Companion",   qty:1, ref:"SIK",     part:"SiK 915MHz telemetry air unit",    desc:"MAVLink 2.0 · 100mW · UART",              est:"$18"},
   {cat:"Companion",   qty:1, ref:"RCRS",    part:"49MHz RCRS transceiver module",    desc:"TDDS · 6-ch · 10mW EIRP",                 est:"$16"},
   {cat:"Nav Lights",  qty:6, ref:"WS2812",  part:"WS2812C-2020 RGB LED",             desc:"5V · 2×2mm · addressable · PIO driven",   est:"$0.50ea"},
@@ -603,8 +603,8 @@ const BOM=[
   {cat:"Airframe",    qty:4, ref:"SKID",    part:"TPU 95A skid feet",               desc:"Crash-absorbing pads",                    est:"$2 filament"},
   {cat:"Airframe",    qty:1, ref:"HW",      part:"M2/M2.5/M3 hardware assortment",  desc:"Standoffs · screws · heat-set inserts",   est:"$8"},
   {cat:"Wiring",      qty:1, ref:"JSTKIT",  part:"JST-GH 1.25mm kit",               desc:"4+6pin assorted · crimp tool · pre-made", est:"$14"},
-  {cat:"Wiring",      qty:1, ref:"ETH-C",   part:"6-pin JST-GH Ethernet cable 150mm",desc:"Twisted pairs · TRIHAT-1 ↔ COMPHAT-1",  est:"$4"},
-  {cat:"Wiring",      qty:1, ref:"CAN-C",   part:"4-pin JST-GH CAN FD cable 120mm", desc:"Twisted CANH/CANL · TRIHAT-1 ↔ COMPHAT-1",est:"$3"},
+  {cat:"Wiring",      qty:1, ref:"ETH-C",   part:"6-pin JST-GH Ethernet cable 150mm",desc:"Twisted pairs · TRIHAT-1 ↔ COMMS-HAT-1",  est:"$4"},
+  {cat:"Wiring",      qty:1, ref:"CAN-C",   part:"4-pin JST-GH CAN FD cable 120mm", desc:"Twisted CANH/CANL · TRIHAT-1 ↔ COMMS-HAT-1",est:"$3"},
   {cat:"Wiring",      qty:1, ref:"WIRE",    part:"Silicone wire assortment",         desc:"12AWG power · 22AWG signal · 28AWG data", est:"$12"},
   {cat:"Wiring",      qty:1, ref:"XT60P",   part:"XT60 connector pair",              desc:"Battery to power board",                  est:"$2"},
 ];
@@ -645,7 +645,7 @@ function BomTab(){
           </tr></tfoot>)}
         </table>
       </div>
-      <Note c={C.dim} ch="Custom PCBs (TRIHAT-1, CM4-CARRIER-1, COMPHAT-1) include 5-piece JLCPCB + LCSC components. Prices approx. AliExpress/GetFPV/Mouser 2024–2025. Filament at $25/kg PETG, $35/kg CF-PETG, $30/kg TPU."/>
+      <Note c={C.dim} ch="Custom PCBs (TRIHAT-1, CM4-CARRIER-1, COMMS-HAT-1) include 5-piece JLCPCB + LCSC components. Prices approx. AliExpress/GetFPV/Mouser 2024–2025. Filament at $25/kg PETG, $35/kg CF-PETG, $30/kg TPU."/>
     </div>
   );
 }
@@ -676,7 +676,7 @@ const SBOM=[
   {sys:"CM4",   layer:"Middleware",comp:"pymavlink",                 ver:"≥2.4",  lic:"LGPL",    role:"MAVLink serialisation + black-box logging"},
   {sys:"CM4",   layer:"Security",  comp:"tpm2-tools",               ver:"≥5.0",  lic:"BSD-2",   role:"TPM2.0 CLI key provisioning + attestation"},
   {sys:"CM4",   layer:"Security",  comp:"tpm2-tss",                 ver:"≥4.0",  lic:"BSD-2",   role:"TPM Software Stack: FAPI · ESAPI · TCTI"},
-  {sys:"CM4",   layer:"Logging",   comp:"Custom flight logger",      ver:"v1.0",  lic:"Propr.",  role:"MAVLink+sensor → binary log on COMPHAT μSD"},
+  {sys:"CM4",   layer:"Logging",   comp:"Custom flight logger",      ver:"v1.0",  lic:"Propr.",  role:"MAVLink+sensor → binary log on COMMS-HAT μSD"},
   {sys:"CM4",   layer:"Driver",    comp:"spi-bcm2835 kernel driver", ver:"kernel",lic:"GPL-2",   role:"SPI for MCP2518FD · W5500 · TPM"},
   {sys:"CM4",   layer:"Comms",     comp:"SiK firmware (air unit)",   ver:"2.x",   lic:"GPL-3",   role:"915MHz MAVLink radio firmware"},
   {sys:"GCS",   layer:"App",       comp:"QGroundControl",            ver:"≥4.3",  lic:"GPL-3",   role:"Flight planning · telemetry · params"},

@@ -313,8 +313,8 @@
       "notes": "200-pin SODIMM socket, 40-pin RPi HAT header, JST-GH: CAN FD 4-pin / RS-485 4-pin / 1553B 4-pin / ETH-SPI 6-pin. MCP2518FD+ATA6561, MAX3485E, HI-6130, W5500, CH340C USB-UART, AP2112K-3.3 LDO, CAT24C32 HAT EEPROM. Nodes 2 & 3 — replaces CARRIER-2+SENSORHAT-1+MICROHAT stack."
     },
     {
-      "ref": "COMPHAT-SWITCH",
-      "desc": "COMPHAT-SWITCH PCB 65×52mm 4L — Node 1 comms hat",
+      "ref": "COMMS-HAT-SWITCH",
+      "desc": "COMMS-HAT-SWITCH PCB 65×52mm 4L — Node 1 comms hat",
       "qty": 1,
       "mass_g": 29.0,
       "cost_est": "~$35 assembled JLCPCB",
@@ -613,7 +613,7 @@
       "desc": "SiK 915MHz telemetry radio module",
       "qty": 1,
       "mass_g": 14,
-      "notes": "On COMPHAT-SWITCH, SMA belly antenna"
+      "notes": "On COMMS-HAT-SWITCH, SMA belly antenna"
     },
     {
       "ref": "RCRS-49",
@@ -826,7 +826,7 @@
     "area_reduction_pct": 19,
     "layers": 4,
     "cm_interface": "200-pin DDR2-SODIMM 0.6mm pitch — JEDEC MO-224 (TE 1473005-4 or equiv)",
-    "hat_header": "40-pin 2×20 2.54mm RPi HAT standard — accepts COMPHAT / COMM-HAT",
+    "hat_header": "40-pin 2×20 2.54mm RPi HAT standard — accepts COMMS-HAT / COMM-HAT",
     "jst_gh_ports": {
       "J_CAN": "4-pin — GND / VCC / CANH / CANL — MCP2518FD + ATA6561",
       "J_485": "4-pin — GND / VCC / RS485_A / RS485_B — MAX3485E",

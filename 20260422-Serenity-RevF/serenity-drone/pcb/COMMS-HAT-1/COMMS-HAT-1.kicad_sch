@@ -8,7 +8,7 @@
 (kicad_sch (version 20221012) (generator eeschema)
   (paper "A3")
   (title_block
-    (title "COMPHAT-1")
+    (title "COMMS-HAT-1")
     (date "2025") (rev "E")
     (company "Steve Griffing PE(CSE) CISSP-ISSEP CPP")
     (comment_1 "Serenity-Class Tiltrotor UAV")

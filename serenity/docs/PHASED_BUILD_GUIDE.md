@@ -46,7 +46,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 | T/W with 250 g cargo | **2.66:1** (6S 2800mAh, 2,429 g AUW) |
 | Max payload | **1,046 g (2.31 lb)** at T/W = 2.0 |
 | Compute nodes | 4 nodes: N1 (FC/comms), N2 (nav/OA), N3 (payload/OA), N4 (actuator) |
-| Node 1 hardware | CM4 Lite + CM4-CARRIER-2 + SENSORHAT-1 (XIAO RP2350 RT co-proc) + COMPHAT-SWITCH |
+| Node 1 hardware | CM4 Lite + CM4-CARRIER-2 + SENSORHAT-1 (XIAO RP2350 RT co-proc) + COMMS-HAT-SWITCH |
 | Nodes 2 & 3 hardware | CM3+ Lite + CM3-CARRIER-1 (integrated bus I/O) |
 | Node 4 hardware | CM4 Lite + CM4-CARRIER-2 + SENSORHAT-1 + MICROHAT |
 | Radios | SiK 915MHz MAVLink (belly SMA) + 49MHz RCRS backup RC (dorsal fin) |
@@ -250,8 +250,8 @@ Bond each PETG flush-mount frame with 5-min epoxy — flush ±0.2mm. Apply 0.5mm
 | CAN-FD | Port keel rail, full length | CAN FD differential pair |
 | RS-485 | Starboard keel rail, full length | RS-485 A/B |
 | MIL-1553 | Dorsal centre spine, full length | 1553B twisted shielded pair (78Ω) |
-| ETH-A | Port side: N1 → COMPHAT-SWITCH | Ethernet SPI (W5500) |
-| ETH-B | Starboard side: N2 → COMPHAT-SWITCH | Ethernet SPI (W5500) |
+| ETH-A | Port side: N1 → COMMS-HAT-SWITCH | Ethernet SPI (W5500) |
+| ETH-B | Starboard side: N2 → COMMS-HAT-SWITCH | Ethernet SPI (W5500) |
 | PWR | Belly centre: battery → BEC → nodes | 14AWG power + servo bundle |
 
 Label each conduit A/B at BOTH ends with permanent marker. Immediately thread pull string through each tube and tie off at both ends.
@@ -394,7 +394,7 @@ Label each conduit A/B at BOTH ends with permanent marker. Immediately thread pu
 | CM4 Lite (no eMMC) | 1× | ~$35 |
 | CM4-CARRIER-2 PCB (JLCPCB assembled) | 1× | ~$8 |
 | SENSORHAT-1 PCB with XIAO RP2350 (JLCPCB assembled) | 1× | ~$22 |
-| COMPHAT-SWITCH PCB with SiK 915MHz (JLCPCB assembled) | 1× | ~$35 |
+| COMMS-HAT-SWITCH PCB with SiK 915MHz (JLCPCB assembled) | 1× | ~$35 |
 | u-blox M10Q GPS module + patch antenna | 1× | ~$12 |
 | SiK 915MHz ground station radio (pairs with airborne unit) | 1× | ~$15 |
 | 49MHz RCRS-49 board (or temporary RC receiver for initial test) | 1× | ~$20 |
@@ -441,7 +441,7 @@ Label each conduit A/B at BOTH ends with permanent marker. Immediately thread pu
 - HI-6130 MIL-STD-1553 interface
 - MAX3485E RS-485 transceiver
 
-**12.** Stack COMPHAT-SWITCH PCB on SENSORHAT-1 via 40-pin header. COMPHAT-SWITCH carries:
+**12.** Stack COMMS-HAT-SWITCH PCB on SENSORHAT-1 via 40-pin header. COMMS-HAT-SWITCH carries:
 - KSZ8895 5-port Ethernet switch (star topology for all nodes)
 - SiK 915MHz MAVLink radio
 - HI-6130 1553 RT
@@ -683,7 +683,7 @@ Connect to TCA9548A + MCP23008 in bay D. Array A bus is **electrically isolated*
 
 **11.** MIL-STD-1553: N1 as Bus Controller (BC), N2/N3/N4 as Remote Terminals (RT). Verify RT address assignments conflict-free.
 
-**12.** Ethernet star: COMPHAT-SWITCH KSZ8895 switch (on N1) provides ports to N2, N3, N4 via ETH-A/ETH-B conduits + direct connections.
+**12.** Ethernet star: COMMS-HAT-SWITCH KSZ8895 switch (on N1) provides ports to N2, N3, N4 via ETH-A/ETH-B conduits + direct connections.
 
 **13.** Configure autonomous navigation on Node 2:
 - GPS coordinates from Node 1 GPS (M10Q) broadcast on CAN FD
@@ -917,8 +917,8 @@ The phased approach reaches first flight at **~$670** and defers the $590 motor 
 | CAN-FD | Port keel rail | 4-pin JST-GH (CANH/CANL/GND/VCC) | 3 (N1), 4 (N4), 5 (N2, N3) |
 | RS-485 | Stbd keel rail | 4-pin JST-GH (A/B/GND/VCC) | 3 (N1), 4 (N4), 5 (N2, N3) |
 | MIL-1553 | Dorsal centre spine | 4-pin shielded JST-GH, 78Ω | 3 (N1), 4 (N4), 5 (N2, N3) |
-| ETH-A | Port side | 6-pin JST-GH W5500 SPI | 3 (N1→COMPHAT-SWITCH) |
-| ETH-B | Stbd side | 6-pin JST-GH W5500 SPI | 5 (N2→COMPHAT-SWITCH) |
+| ETH-A | Port side | 6-pin JST-GH W5500 SPI | 3 (N1→COMMS-HAT-SWITCH) |
+| ETH-B | Stbd side | 6-pin JST-GH W5500 SPI | 5 (N2→COMMS-HAT-SWITCH) |
 | PWR | Belly centre | 14AWG power + 20AWG servo bundle | 3 (ESCs, BEC, nav lights) |
 
 ---
@@ -940,7 +940,7 @@ The phased approach reaches first flight at **~$670** and defers the $590 motor 
 
 | Node | Bay | PCB Stack | Role | RT Co-proc | Security |
 |------|-----|-----------|------|-----------|----------|
-| N1 | A (nose) | CM4 Lite + CM4-CARRIER-2 + SENSORHAT-1 + COMPHAT-SWITCH | Primary FC, comms, logging | XIAO RP2350 | CPLD write-blocker + TPM |
+| N1 | A (nose) | CM4 Lite + CM4-CARRIER-2 + SENSORHAT-1 + COMMS-HAT-SWITCH | Primary FC, comms, logging | XIAO RP2350 | CPLD write-blocker + TPM |
 | N2 | B (dorsal fwd) | CM3+ Lite + CM3-CARRIER-1 | Navigation, waypoints, OA Array B | None (CM3+ A53) | TPM via CM3-CARRIER-1 |
 | N3 | D (dorsal aft) | CM3+ Lite + CM3-CARRIER-1 | Payload control, OA Array A | None (CM3+ A53) | TPM via CM3-CARRIER-1 |
 | N4 | E (aft svc) | CM4 Lite + CM4-CARRIER-2 + SENSORHAT-1 + MICROHAT | Actuator redundancy | XIAO RP2350 | CPLD write-blocker + TPM |

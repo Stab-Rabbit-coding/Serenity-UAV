@@ -92,7 +92,7 @@
 <polygon points="456.0,411.0 512.3,378.5 470.7,354.5 414.4,387.0"   fill="#dde4ea"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="456.0,408.0 512.3,375.5 512.3,378.5 456.0,411.0" fill="#90a4ae" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="512.3,375.5 470.7,351.5 470.7,354.5 512.3,378.5" fill="#78909c" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
-<text x="488" y="422" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#222222">COMPHAT-1</text>
+<text x="488" y="422" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#222222">COMMS-HAT-1</text>
 <polygon points="466.0,383.0 478.1,376.0 466.0,369.0 453.9,376.0"   fill="#ffe0c0"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="466.0,378.0 478.1,371.0 478.1,376.0 466.0,383.0" fill="#ff7518" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="478.1,371.0 466.0,364.0 466.0,369.0 478.1,376.0" fill="#ff7518" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
@@ -118,7 +118,7 @@
 <rect x="106" y="550" width="14" height="14" rx="2" fill="#2e7d32" opacity="0.6"/>
 <text x="124" y="562" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">JP2 installed on CM4-CARRIER-1 → LED1 (green) illuminated</text>
 <rect x="106" y="569" width="14" height="14" rx="2" fill="#ff7518" opacity="0.6"/>
-<text x="124" y="581" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">NX_LATCH measures HIGH at TP_NX test point on COMPHAT</text>
+<text x="124" y="581" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">NX_LATCH measures HIGH at TP_NX test point on COMMS-HAT</text>
 <rect x="106" y="588" width="14" height="14" rx="2" fill="#c62828" opacity="0.6"/>
 <text x="124" y="600" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">STM32 OTP fuses burned → read-protect verified via STM32CubeProgrammer</text>
 <rect x="106" y="607" width="14" height="14" rx="2" fill="#f5c518" opacity="0.6"/>

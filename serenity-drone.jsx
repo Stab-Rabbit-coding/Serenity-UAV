@@ -557,7 +557,7 @@ const ZONE_DETAIL = {
     ["Structural","Cockpit bulkhead (2mm CF plate, cockpit-frame formers) carries pitot loads"],
   ]},
   avionics:{title:"Avionics Bay",c:C.accent,rows:[
-    ["Contents","CM4 Lite + CM4-CARRIER-1 + COMPHAT-1 stack on M2.5 CF-nylon standoffs"],
+    ["Contents","CM4 Lite + CM4-CARRIER-1 + COMMS-HAT-1 stack on M2.5 CF-nylon standoffs"],
     ["Access","Top-access panel on dorsal mid-hull (snap-fit PETG panel, 4× M2 screws)"],
     ["Position","CM4 stack at 90–160mm from nose · mass centroid ~120mm"],
     ["Cooling","Natural convection through 4× Ø6mm NACA flush vents on hull sides"],
@@ -777,7 +777,7 @@ const WT_GROUPS=[
   ]},
   {label:"Companion — CM4 stack",c:C.green,items:[
     {n:"CM4 Lite 4GB WiFi",w:8},{n:"CM4-CARRIER-1 PCB",w:14},
-    {n:"COMPHAT-1 + ICs",w:20},{n:"SiK 915MHz air module",w:14},{n:"49MHz RCRS module",w:16},
+    {n:"COMMS-HAT-1 + ICs",w:20},{n:"SiK 915MHz air module",w:14},{n:"49MHz RCRS module",w:16},
   ]},
   {label:"Payload system",c:C.pink,items:[
     {n:"Payload release servo SG90",w:9},{n:"N20 winch + gearbox",w:14},

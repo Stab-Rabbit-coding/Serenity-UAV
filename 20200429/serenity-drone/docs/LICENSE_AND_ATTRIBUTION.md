@@ -78,7 +78,7 @@ Full license text: https://creativecommons.org/licenses/by/4.0/legalcode
 
 The following elements are original work by Steve Griffing, released under CC BY 4.0:
 
-- All flight system PCB schematics and layouts (TRIHAT-1, CM4-CARRIER-1 Rev E, COMPHAT-1 Rev E)
+- All flight system PCB schematics and layouts (TRIHAT-1, CM4-CARRIER-1 Rev E, COMMS-HAT-1 Rev E)
 - CPLD write-blocker Verilog RTL (`write_blocker.v`)
 - STM32 NX-enforcement proxy firmware (`nx_proxy.c`)
 - Variable-area nozzle gear-coupling design (sector gear · bevel pair · crown pinion · ring rack)
@@ -251,9 +251,9 @@ serenity-drone/
 │   ├── CM4-CARRIER-1/
 │   │   ├── CM4-CARRIER-1.kicad_sch
 │   │   └── CM4-CARRIER-1.kicad_pcb
-│   └── COMPHAT-1/
-│       ├── COMPHAT-1.kicad_sch
-│       └── COMPHAT-1.kicad_pcb
+│   └── COMMS-HAT-1/
+│       ├── COMMS-HAT-1.kicad_sch
+│       └── COMMS-HAT-1.kicad_pcb
 └── stl/
     ├── hull_cockpit_cap.stl
     ├── hull_cockpit_section.stl

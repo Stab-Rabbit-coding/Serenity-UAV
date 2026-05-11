@@ -43,7 +43,7 @@
 <text x="792" y="304" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Drill 6.5mm hole in PETG belly at 238mm from nose (SiK SMA-RP)</text>
 <circle cx="776" cy="323" r="9" fill="#006db7"/>
 <text x="776" y="327" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
-<text x="792" y="328" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Install SMA-RP bulkhead · connect SiK IPEX pigtail from COMPHAT-1</text>
+<text x="792" y="328" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Install SMA-RP bulkhead · connect SiK IPEX pigtail from COMMS-HAT-1</text>
 <circle cx="776" cy="347" r="9" fill="#006db7"/>
 <text x="776" y="351" text-anchor="middle" font-family="'Arial','Helvetica',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
 <text x="792" y="352" font-family="'Arial','Helvetica',sans-serif" font-size="10" fill="#222222">Mount GPS patch on 12mm PLA standoff at cockpit roof · route U.FL ≤100mm</text>

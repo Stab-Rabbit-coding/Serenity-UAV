@@ -8,14 +8,14 @@
 (kicad_sch (version 20221012) (generator eeschema)
   (paper "A3")
   (title_block
-    (title "COMPHAT-1")
+    (title "COMMS-HAT-1")
     (date "2025") (rev "E")
     (company "Steve Griffing PE(CSE) CISSP-ISSEP CPP")
-    (comment_1 "SUPERSEDED by COMPHAT-SWITCH in Rev H — retained for reference only")
+    (comment_1 "Serenity-Class Tiltrotor UAV")
     (comment_2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
-    (comment_3 "Active Rev H board: serenity/kicad/COMPHAT-SWITCH.kicad_sch")
+    (comment_3 "See LICENSE_AND_ATTRIBUTION.md for full credits")
     (comment_4 "Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0")
   )
-  ; ── SUPERSEDED: This Rev E design is replaced by COMPHAT-SWITCH in Rev H ──
-  ; ── Do not use for new builds. See COMPHAT-SWITCH.kicad_pcb instead. ─────
+  ; ── Open in KiCad 7.x Schematic Editor to complete placement ──
+  ; ── Component values and net assignments are in the .kicad_pcb ─
 )

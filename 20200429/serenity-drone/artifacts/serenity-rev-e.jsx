@@ -108,7 +108,7 @@ function LicenseTab(){
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24}}>
       <div>
         <div style={{color:C.green,fontFamily:M,fontSize:11,marginBottom:8,fontWeight:"bold"}}>✓ COVERED under CC BY 4.0</div>
-        {["3D printable hull, nacelle, bell, and nozzle design files (STL/STEP/F3D)","PCB schematics and Gerber files for TRIHAT-1, CM4-CARRIER-1, COMPHAT-1","Circuit diagrams, pinout tables, and wiring specifications","Mechanical drawings and assembly specifications","Firmware architecture specifications and algorithm descriptions","This design document in all its revisions (A–E and beyond)","Any derived works must carry CC BY 4.0 and attribute all upstream authors"].map((s,i)=>(<div key={i} style={{display:"flex",gap:8,padding:"4px 0",borderBottom:"1px solid rgba(74,222,128,0.08)"}}><span style={{color:C.green,fontSize:10,flexShrink:0}}>✓</span><span style={{color:C.dim,fontFamily:M,fontSize:10,lineHeight:1.6}}>{s}</span></div>))}
+        {["3D printable hull, nacelle, bell, and nozzle design files (STL/STEP/F3D)","PCB schematics and Gerber files for TRIHAT-1, CM4-CARRIER-1, COMMS-HAT-1","Circuit diagrams, pinout tables, and wiring specifications","Mechanical drawings and assembly specifications","Firmware architecture specifications and algorithm descriptions","This design document in all its revisions (A–E and beyond)","Any derived works must carry CC BY 4.0 and attribute all upstream authors"].map((s,i)=>(<div key={i} style={{display:"flex",gap:8,padding:"4px 0",borderBottom:"1px solid rgba(74,222,128,0.08)"}}><span style={{color:C.green,fontSize:10,flexShrink:0}}>✓</span><span style={{color:C.dim,fontFamily:M,fontSize:10,lineHeight:1.6}}>{s}</span></div>))}
       </div>
       <div>
         <div style={{color:C.orange,fontFamily:M,fontSize:11,marginBottom:8,fontWeight:"bold"}}>⚠ NOT COVERED / SEPARATE TERMS</div>
@@ -206,7 +206,7 @@ function NXDiagram(){
       <text x={75} y={148} textAnchor="middle" fill="rgba(74,222,128,0.45)" fontSize={7} fontFamily={M}>secure world</text>
       <text x={75} y={165} textAnchor="middle" fill="rgba(74,222,128,0.3)" fontSize={7} fontFamily={M}>noexec SELinux</text>
       <text x={75} y={179} textAnchor="middle" fill="rgba(74,222,128,0.3)" fontSize={7} fontFamily={M}>OTP NX fuse</text>
-      <text x={75} y={205} textAnchor="middle" fill="rgba(74,222,128,0.25)" fontSize={7} fontFamily={M}>on COMPHAT-1 hat</text>
+      <text x={75} y={205} textAnchor="middle" fill="rgba(74,222,128,0.25)" fontSize={7} fontFamily={M}>on COMMS-HAT-1 hat</text>
 
       {/* SPI bus */}
       <line x1={130} y1={150} x2={185} y2={150} stroke={C.green} strokeWidth={2.5} strokeLinecap="round"/>
@@ -242,7 +242,7 @@ function NXDiagram(){
       {/* Log SD */}
       <rect x={370} y={110} width={85} height={80} rx={4} fill="rgba(0,229,255,0.06)" stroke={C.accent} strokeWidth={1.2}/>
       <text x={412} y={143} textAnchor="middle" fill={C.accent} fontSize={9} fontFamily={M} fontWeight="bold">LOG μSD</text>
-      <text x={412} y={157} textAnchor="middle" fill="rgba(0,229,255,0.5)" fontSize={7} fontFamily={M}>COMPHAT-1</text>
+      <text x={412} y={157} textAnchor="middle" fill="rgba(0,229,255,0.5)" fontSize={7} fontFamily={M}>COMMS-HAT-1</text>
       <text x={412} y={170} textAnchor="middle" fill="rgba(0,229,255,0.4)" fontSize={6} fontFamily={M}>read+nav OK</text>
       <text x={412} y={183} textAnchor="middle" fill="rgba(248,113,113,0.5)" fontSize={6} fontFamily={M}>exec BLOCKED</text>
 
@@ -397,7 +397,7 @@ function CarrierTab(){
 }
 
 // ═══════════════════════════════════════════════════════════════
-//  TAB: COMPHAT-1 Rev E (NX enforcement + Zigbee/LoRa)
+//  TAB: COMMS-HAT-1 Rev E (NX enforcement + Zigbee/LoRa)
 // ═══════════════════════════════════════════════════════════════
 const PROTO_SHARING=[
   {band:"2.4 GHz", ic:"CC2652P7",    proto:["Zigbee (IEEE 802.15.4)","LoRa 2.4GHz (custom RF)","BLE 5.0","Thread / Matter","IEEE 802.15.4 DSSS"],sel:"Software protocol image on CC2652P7 · one protocol active at a time · bootloader-selectable"},
@@ -414,7 +414,7 @@ function ZigbeeDiagram(){
       <text x={55} y={126} textAnchor="middle" fill="rgba(74,222,128,0.4)" fontSize={7} fontFamily={M}>SPI master</text>
       <text x={55} y={140} textAnchor="middle" fill="rgba(74,222,128,0.4)" fontSize={7} fontFamily={M}>GPIO IRQ</text>
       <text x={55} y={155} textAnchor="middle" fill="rgba(74,222,128,0.4)" fontSize={7} fontFamily={M}>UART OPT</text>
-      <text x={55} y={178} textAnchor="middle" fill="rgba(74,222,128,0.25)" fontSize={7} fontFamily={M}>(on COMPHAT-1)</text>
+      <text x={55} y={178} textAnchor="middle" fill="rgba(74,222,128,0.25)" fontSize={7} fontFamily={M}>(on COMMS-HAT-1)</text>
 
       {/* SPI lines to CC2652P7 */}
       <line x1={100} y1={125} x2={155} y2={125} stroke={C.teal} strokeWidth={2}/>
@@ -468,7 +468,7 @@ function ZigbeeDiagram(){
         </g>
       ))}
 
-      <text x={VW/2} y={16} textAnchor="middle" fill="rgba(0,229,255,0.25)" fontSize={9} fontFamily={M} letterSpacing="0.1em">ZIGBEE + LoRa RADIO ARCHITECTURE — COMPHAT-1 Rev E</text>
+      <text x={VW/2} y={16} textAnchor="middle" fill="rgba(0,229,255,0.25)" fontSize={9} fontFamily={M} letterSpacing="0.1em">ZIGBEE + LoRa RADIO ARCHITECTURE — COMMS-HAT-1 Rev E</text>
     </svg>
   );
 }
@@ -510,14 +510,14 @@ function ComphatTab(){
       <div>
         <Secure ch="The NX enforcement is multi-layer: (1) STM32 SPI proxy physically prevents write commands reaching the SD. (2) 74HC74 hardware latch enables NX mode at POR — can only be cleared by physical tool action. (3) BCM2711 TrustZone secure monitor denies execute permission to any page flagged as originating from the SPI-SD device. (4) OTP fuse permanently marks the device class as non-executable."/>
         <Note c={C.teal} ch="Filesystem navigation is fully permitted. The CM4 can ls, cat, stat, and read any file on the log SD. Only execute() system calls targeting files on this mount point are blocked — enforced simultaneously by the kernel noexec flag, SELinux policy, and the TrustZone secure monitor. An attacker who corrupts the CM4 OS cannot execute payloads stored on the log SD."/>
-        <Warn ch="The STM32 audit log fills at approximately 10,000 read-block hashes. When full, it rolls to a FIFO (oldest entries overwritten). For forensic analysis, retrieve the STM32 audit log via its dedicated UART debug port (JP4 on COMPHAT-1) before it rolls."/>
+        <Warn ch="The STM32 audit log fills at approximately 10,000 read-block hashes. When full, it rolls to a FIFO (oldest entries overwritten). For forensic analysis, retrieve the STM32 audit log via its dedicated UART debug port (JP4 on COMMS-HAT-1) before it rolls."/>
       </div>
     </div>
 
     {/* Zigbee/LoRa section */}
     <SH t="Optional Zigbee + LoRa Radio Module" c={C.accent}/>
     <div style={{background:"rgba(0,229,255,0.04)",border:`1px solid ${C.border}`,borderRadius:4,padding:"8px 12px",marginBottom:14,fontFamily:M,fontSize:10,color:C.dim,lineHeight:1.8}}>
-      Both radio ICs are <span style={{color:C.yellow}}>optional population</span> — COMPHAT-1 PCB has footprints for both, populated on request. When not populated, their SPI buses are available as general-purpose GPIO. Software protocol selection switches firmware images on CC2652P7 (2.4GHz) and modulation settings on SX1276 (sub-GHz).
+      Both radio ICs are <span style={{color:C.yellow}}>optional population</span> — COMMS-HAT-1 PCB has footprints for both, populated on request. When not populated, their SPI buses are available as general-purpose GPIO. Software protocol selection switches firmware images on CC2652P7 (2.4GHz) and modulation settings on SX1276 (sub-GHz).
     </div>
     <div style={{border:`1px solid ${C.border}`,borderRadius:4,background:"rgba(0,229,255,0.01)",padding:8,marginBottom:16}}>
       <ZigbeeDiagram/>
@@ -601,7 +601,7 @@ function BatteryTab(){
       </div>
       <div>
         <Note c={C.green} ch="70mm nacelles (2200g total thrust) provide substantial T/W margin. The 5S 4500mAh 35C at 420g gives best empty endurance at T/W 2.20:1 — 9.4min hover, ~18min cruise."/>
-        <Warn ch="Rev E COMPHAT-1 adds ~6g (STM32 NX proxy + 74HC74 latch + CC2652P7 + SX1276 + PCB). AUW increases by 6g. All T/W values remain valid — the margin is within rounding error."/>
+        <Warn ch="Rev E COMMS-HAT-1 adds ~6g (STM32 NX proxy + 74HC74 latch + CC2652P7 + SX1276 + PCB). AUW increases by 6g. All T/W values remain valid — the margin is within rounding error."/>
       </div>
     </div>
   </div>);
@@ -664,13 +664,13 @@ function AntennaTab(){
         <KV k="Path" v="CM4 BCM43455 U.FL → diplexer → SMA-2"/>
         <KV k="Ant. type" v="External 5GHz patch/panel · 3–8dBi · SMA female"/>
         <KV k="Use" v="High-bandwidth log streaming to ground station laptop"/>
-        <SH t="Zigbee 2.4GHz · SMA-ZB on COMPHAT-1 (opt)" c={C.accent}/>
+        <SH t="Zigbee 2.4GHz · SMA-ZB on COMMS-HAT-1 (opt)" c={C.accent}/>
         <KV k="Path" v="CC2652P7 U.FL → SMA-ZB connector"/><KV k="Ant. type" v="2.4GHz whip/PCB · 2dBi"/>
-        <SH t="LoRa 915MHz · SMA-LR on COMPHAT-1 (opt)" c={C.pink}/>
+        <SH t="LoRa 915MHz · SMA-LR on COMMS-HAT-1 (opt)" c={C.pink}/>
         <KV k="Path" v="SX1276 U.FL → SMA-LR connector"/><KV k="Ant. type" v="915MHz λ/4 whip · 2dBi"/>
       </div>
     </div>
-    <Warn ch="Four SMA connectors now on the aircraft (SMA-1 WiFi 2.4G on carrier, SMA-2 WiFi 5G on carrier, SMA-ZB Zigbee 2.4G on COMPHAT, SMA-LR LoRa 915M on COMPHAT). Review separation and verify no inter-antenna interference before first flight. SMA-ZB and SMA-1 are both 2.4GHz — minimum 150mm physical separation required."/>
+    <Warn ch="Four SMA connectors now on the aircraft (SMA-1 WiFi 2.4G on carrier, SMA-2 WiFi 5G on carrier, SMA-ZB Zigbee 2.4G on COMMS-HAT, SMA-LR LoRa 915M on COMMS-HAT). Review separation and verify no inter-antenna interference before first flight. SMA-ZB and SMA-1 are both 2.4GHz — minimum 150mm physical separation required."/>
   </div>);
 }
 
@@ -678,21 +678,21 @@ function WiringTab(){
   return(<div>
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24}}>
       <div>
-        <SH t="Ethernet · TRIHAT-1 J3 ↔ COMPHAT-1 J2" mt={0} c={C.purple}/>
+        <SH t="Ethernet · TRIHAT-1 J3 ↔ COMMS-HAT-1 J2" mt={0} c={C.purple}/>
         <KV k="Connector" v="JST-GH 1.25mm 6-pin · 150mm"/><KV k="Pins" v="GND · TX+ · TX− · RX+ · RX− · N/C"/>
         <KV k="IP" v="Pico 192.168.10.1 · CM4 192.168.10.2"/><KV k="MAVLink" v="UDP 14550 · Log UDP 14551 · Config TCP 8080"/>
-        <SH t="CAN FD · TRIHAT-1 J2 ↔ COMPHAT-1 J1" c={C.orange}/>
+        <SH t="CAN FD · TRIHAT-1 J2 ↔ COMMS-HAT-1 J1" c={C.orange}/>
         <KV k="Connector" v="JST-GH 1.25mm 4-pin · 120mm"/><KV k="Pins" v="GND · +5V · CANH · CANL"/>
-        <KV k="Termination" v="120Ω at TRIHAT-1 only · COMPHAT-1 open"/><KV k="Rate" v="1Mbps / 4Mbps FD"/>
+        <KV k="Termination" v="120Ω at TRIHAT-1 only · COMMS-HAT-1 open"/><KV k="Rate" v="1Mbps / 4Mbps FD"/>
       </div>
       <div>
         <SH t="Rev E New Signal Lines" mt={0} c={C.lime}/>
         <KV k="CPLD write-blocker" v="JP2 jumper on carrier board edge · 2-pin 2.54mm"/>
         <KV k="CPLD LED indicators" v="LED1 (green WB) + LED2 (red blocked) · carrier top face"/>
-        <KV k="NX latch" v="74HC74 on COMPHAT-1 · SET at POR · JP3 override (recessed)"/>
-        <KV k="STM32 NX proxy UART" v="JP4 4-pin JST-GH on COMPHAT-1 · audit log readout"/>
-        <KV k="CC2652P7 SPI" v="COMPHAT-1 SPI2 · GPIO 22-26 · IRQ GPIO 22"/>
-        <KV k="SX1276 SPI" v="COMPHAT-1 SPI3 · GPIO 27-31 · DIO0 IRQ GPIO 27"/>
+        <KV k="NX latch" v="74HC74 on COMMS-HAT-1 · SET at POR · JP3 override (recessed)"/>
+        <KV k="STM32 NX proxy UART" v="JP4 4-pin JST-GH on COMMS-HAT-1 · audit log readout"/>
+        <KV k="CC2652P7 SPI" v="COMMS-HAT-1 SPI2 · GPIO 22-26 · IRQ GPIO 22"/>
+        <KV k="SX1276 SPI" v="COMMS-HAT-1 SPI3 · GPIO 27-31 · DIO0 IRQ GPIO 27"/>
         <KV k="Variable nozzle servo" v="Pico 2 GP15 → SG90 in engine bell · 28AWG 3-core"/>
         <KV k="WiFi SMA-1 cable" v="CM4 U.FL → MABD-011028 · 0.81mm coax ≤25mm"/>
         <KV k="WiFi SMA-2 cable" v="MABD-011028 output → SMA-2 · 50Ω microstrip ≤12mm"/>
@@ -724,7 +724,7 @@ const BOM=[
   {cat:"Companion",qty:1,ref:"MXO2",part:"Lattice MachXO2-256ZE CPLD",desc:"TQFP-32 · SDIO write-blocker",est:"$3.50"},
   {cat:"Companion",qty:1,ref:"MABD",part:"MABD-011028 WiFi diplexer",desc:"SOT-26 · 2.4/5GHz split · 0.3dB IL",est:"$2"},
   {cat:"Companion",qty:2,ref:"SMA-W",part:"SMA female edge-mount connector",desc:"SMA-1 (2.4GHz) + SMA-2 (5GHz) · rated to 6GHz",est:"$1.50ea"},
-  {cat:"Companion",qty:1,ref:"CH1E",part:"COMPHAT-1 Rev E (custom PCB)",desc:"NX latch + STM32 proxy + CC2652P7 + SX1276 footprints",est:"$68"},
+  {cat:"Companion",qty:1,ref:"CH1E",part:"COMMS-HAT-1 Rev E (custom PCB)",desc:"NX latch + STM32 proxy + CC2652P7 + SX1276 footprints",est:"$68"},
   {cat:"Companion",qty:1,ref:"STM32",part:"STM32F030F4P6 (NX proxy MCU)",desc:"SOIC-8 · SPI proxy · SHA-256 audit",est:"$1.20"},
   {cat:"Companion",qty:1,ref:"HC74",part:"74HC74D dual D flip-flop",desc:"NX latch IC · SOT-23-6",est:"$0.30"},
   {cat:"Companion",qty:1,ref:"CC2652",part:"CC2652P7 (opt — Zigbee/BLE/LoRa 2.4GHz)",desc:"TI multiprotocol 2.4GHz · +20dBm PA · SPI",est:"$5"},
@@ -754,7 +754,7 @@ const BOM=[
   {cat:"Airframe",qty:1,ref:"HW",part:"M2/M2.5/M3 hardware assortment",desc:"Standoffs · screws · heat-set inserts",est:"$8"},
   // Wiring
   {cat:"Wiring",qty:1,ref:"JSTKIT",part:"JST-GH 1.25mm kit",desc:"4+6pin · crimp tool",est:"$14"},
-  {cat:"Wiring",qty:1,ref:"ETH-C",part:"6-pin JST-GH Ethernet cable 150mm",desc:"TRIHAT↔COMPHAT",est:"$4"},
+  {cat:"Wiring",qty:1,ref:"ETH-C",part:"6-pin JST-GH Ethernet cable 150mm",desc:"TRIHAT↔COMMS-HAT",est:"$4"},
   {cat:"Wiring",qty:1,ref:"CAN-C",part:"4-pin JST-GH CAN FD cable 120mm",desc:"Twisted CANH/CANL",est:"$3"},
   {cat:"Wiring",qty:1,ref:"WIRE",part:"Silicone wire assortment",desc:"12AWG power · 22AWG signal · 28AWG data",est:"$12"},
   {cat:"Wiring",qty:1,ref:"XT60P",part:"XT60 connector pair",desc:"Battery to power board",est:"$2"},
@@ -783,7 +783,7 @@ function BomTab(){
         {cf==="All"&&(<tfoot><tr style={{borderTop:`1px solid ${C.border}`}}><td colSpan={5} style={{padding:"8px 8px",color:C.accent,textAlign:"right",fontSize:11}}>TOTAL ESTIMATED (select one battery; CC2652P7+SX1276 optional)</td><td style={{padding:"8px 8px",color:C.yellow,fontSize:16,fontWeight:"bold"}}>$640–740</td></tr></tfoot>)}
       </table>
     </div>
-    <Note c={C.dim} ch="Rev E delta vs Rev D: +$40–50 for CPLD write-blocker, diplexer, 2× additional SMA connectors, STM32 NX proxy, 74HC74 latch, and PCB redesign for CM4-CARRIER-1 and COMPHAT-1. CC2652P7 + SX1276 are optional and add $9 if populated. Hull: Peter Farell CC BY 4.0. Nozzle: BamJr CC BY 4.0."/>
+    <Note c={C.dim} ch="Rev E delta vs Rev D: +$40–50 for CPLD write-blocker, diplexer, 2× additional SMA connectors, STM32 NX proxy, 74HC74 latch, and PCB redesign for CM4-CARRIER-1 and COMMS-HAT-1. CC2652P7 + SX1276 are optional and add $9 if populated. Hull: Peter Farell CC BY 4.0. Nozzle: BamJr CC BY 4.0."/>
   </div>);
 }
 
@@ -840,8 +840,8 @@ function SbomTab(){
 const BUILD_ADDITIONS=[
   {t:"Install CPLD write-blocker (CM4-CARRIER-1)",c:C.lime,d:"The MachXO2-256ZE ships unprogrammed. Before board assembly: use a JTAG programmer (USB-Blaster or FT2232H breakout) to flash the write-blocker Verilog bitstream via ispDownload. Verify: insert a microSD, remove JP2 (WB disabled), verify OS installs normally. Replace JP2: verify OS mounts read-only and LED1 (green) lights."},
   {t:"Install diplexer and SMA connectors (CM4-CARRIER-1)",c:C.purple,d:"Solder MABD-011028 diplexer at U_DIP footprint. Solder two SMA edge-mount connectors at J_SMA1 (2.4GHz, orange-marked) and J_SMA2 (5GHz, purple-marked). Route 0.81mm semi-rigid coax from CM4 U.FL to diplexer input (≤25mm). Verify 50Ω impedance with a VNA before attaching antennas."},
-  {t:"Install STM32 NX proxy and 74HC74 latch (COMPHAT-1)",c:C.orange,d:"Flash STM32F030F4P6 via SWD (ST-LINK V2) with nx_proxy.bin from the project repo. Burn write-protect OTP fuses via STM32CubeProgrammer (OB → Flash protection → set WRP to all sectors). After fuse blow, verify flash is read-protected. Install 74HC74 at U_NX footprint. At POR, NX_Q pin should read HIGH — verify with multimeter before first boot."},
-  {t:"Populate CC2652P7 and SX1276 (optional — COMPHAT-1)",c:C.accent,d:"If Zigbee/LoRa is required: solder CC2652P7 at U_ZB footprint and SX1276 at U_LR footprint. Flash CC2652P7 with Z-Stack Zigbee image using Uniflash over JTAG. Test SX1276 with LoRaLib example sketch. Fit U.FL pigtails to SMA-ZB and SMA-LR board-edge connectors."},
+  {t:"Install STM32 NX proxy and 74HC74 latch (COMMS-HAT-1)",c:C.orange,d:"Flash STM32F030F4P6 via SWD (ST-LINK V2) with nx_proxy.bin from the project repo. Burn write-protect OTP fuses via STM32CubeProgrammer (OB → Flash protection → set WRP to all sectors). After fuse blow, verify flash is read-protected. Install 74HC74 at U_NX footprint. At POR, NX_Q pin should read HIGH — verify with multimeter before first boot."},
+  {t:"Populate CC2652P7 and SX1276 (optional — COMMS-HAT-1)",c:C.accent,d:"If Zigbee/LoRa is required: solder CC2652P7 at U_ZB footprint and SX1276 at U_LR footprint. Flash CC2652P7 with Z-Stack Zigbee image using Uniflash over JTAG. Test SX1276 with LoRaLib example sketch. Fit U.FL pigtails to SMA-ZB and SMA-LR board-edge connectors."},
   {t:"Verify multi-layer NX operation",c:C.lime,d:"Boot CM4. Check /proc/mounts: log-SD should show 'noexec,nodev,nosuid,ro'. Check SELinux context: ls -Z /mnt/log — should show 'system_u:object_r:log_storage_t:s0'. Attempt to execute a test binary copied to log-SD: should fail with EACCES. Read STM32 audit log via JP4 serial at 115200 baud: should show SHA-256 entries for boot reads. Verify TrustZone monitor active: cat /proc/device-tree/secure-chosen."},
 ];
 
@@ -851,9 +851,9 @@ function BuildGuideTab(){
     {p:"PHASE 1 · PRINT PREP",c:C.teal,steps:["Source PETG (300g), CF-PETG (80g), TPU 95A (40g). Dry all 6h at 65°C.","Install hardened steel 0.4mm nozzle for CF-PETG. Calibrate E-steps and PA.","Slice hull in 5 sections: nose cap (0–22mm), cockpit (22–90mm), mid-hull L+R halves (90–230mm), aft-hull (230–270mm), engine bell (270–365mm). 8% gyroid, 2 perimeters, 0.20mm.","Print TPU skid feet first. Then PETG hull sections overnight. Then CF-PETG nacelle pods and tilt brackets.","Dry-fit all sections. Test nacelle bearing press-fit. Sand mating surfaces 220-grit."]},
     {p:"PHASE 2 · CF SKELETON",c:C.accent,steps:["Cut CF keel 6×3mm × 385mm. Mark datums at 90, 130, 160, 200, 290, 365mm.","Cut 2× 12mm CF tube × 300mm outrigger spars. Sand tenon 8mm dia × 25mm at one end.","Epoxy mid-hull to keel. Cure 12h. Do not bond cockpit cap or engine bell — must be removable.","Epoxy CF-PETG spar junction bracket at 130mm. Check 90° alignment. Press-fit outrigger spars."]},
     {p:"PHASE 3 · NACELLE ASSEMBLY",c:C.orange,steps:["Press 8×5×2.5mm bearings into nacelle pivot sockets.","Thread 8mm CF pivot rod through spar bracket → bearing → nacelle. Secure with M3 set screw + Loctite 243.","Install 70mm EDF into nacelle pod. Route motor leads through hollow CF spar.","Mount MG90S tilt servo to CF-PETG bracket. Connect servo horn to nacelle push-rod at 18mm radius.","Install WS2812C-2020 LED into nacelle tip cap PETG lens recess (port=red, stbd=green). Epoxy, seal."]},
-    {p:"PHASE 4 · ELECTRONICS",c:C.purple,steps:["Mount Pico 2 + TRIHAT-1 stack at 60–90mm on cockpit CF bulkhead plate (55×38mm 2mm CF, cut to fit).","Mount CM4 stack (CM4 + CM4-CARRIER-1 Rev E + COMPHAT-1 Rev E) at 95–160mm avionics bay floor. Install OS μSD in carrier slot, log μSD in COMPHAT slot.","Connect GPS U.FL coax to TRIHAT-1, route to cockpit roof GPS patch antenna.","Install 3× ESCs on keel underside with double-sided foam + M2.5 screw. Route motor leads in channels.","Install SiK radio and 49MHz RCRS. Route coax pigtails to belly SMA and dorsal antenna fin.","Install MABD-011028 diplexer on CM4-CARRIER-1. Fit U.FL coax from CM4 module antenna port. Fit 2× SMA antennas to SMA-1 (2.4G) and SMA-2 (5G) on board edge."]},
+    {p:"PHASE 4 · ELECTRONICS",c:C.purple,steps:["Mount Pico 2 + TRIHAT-1 stack at 60–90mm on cockpit CF bulkhead plate (55×38mm 2mm CF, cut to fit).","Mount CM4 stack (CM4 + CM4-CARRIER-1 Rev E + COMMS-HAT-1 Rev E) at 95–160mm avionics bay floor. Install OS μSD in carrier slot, log μSD in COMMS-HAT slot.","Connect GPS U.FL coax to TRIHAT-1, route to cockpit roof GPS patch antenna.","Install 3× ESCs on keel underside with double-sided foam + M2.5 screw. Route motor leads in channels.","Install SiK radio and 49MHz RCRS. Route coax pigtails to belly SMA and dorsal antenna fin.","Install MABD-011028 diplexer on CM4-CARRIER-1. Fit U.FL coax from CM4 module antenna port. Fit 2× SMA antennas to SMA-1 (2.4G) and SMA-2 (5G) on board edge."]},
     {p:"PHASE 5 · VARIABLE NOZZLE",c:C.yellow,steps:["Print CF-PETG inner ring vertically. Print PETG flaps flat. Test-fit ring in housing.","Insert M1.5×8mm pivot pins through flaps. Lubricate pins with sewing machine oil.","Install taller inner ring variant for greater expansion range.","Mount SG90 to M2.5 boss on outer housing. Attach 1.5mm pushrod (18mm throw).","Bayonet-lock nozzle into engine bell. Route servo cable to Pico 2 GP15.","Calibrate: 1.0ms → target 42mm exit dia. 2.0ms → target 36mm exit dia. Adjust pushrod clevis."]},
-    {p:"PHASE 6 · WIRING & SECURITY SETUP",c:C.lime,steps:["Flash CPLD write-blocker bitstream via USB-Blaster. Install JP2. Verify LED1 (green) lights on OS-SD boot.","Flash STM32F030 with nx_proxy.bin via SWD. Burn OTP write-protect fuses. Verify NX_LATCH = HIGH at POR.","If CC2652P7 populated: flash Z-Stack image via Uniflash. If SX1276 populated: verify SPI comms with LoRaLib.","Solder power bus. Install BEC. Verify 5V ± 0.1V under load. Connect JST-GH Ethernet cable (150mm) and CAN FD cable (120mm) between TRIHAT-1 and COMPHAT-1.","Install all nav lights. Verify WS2812 chain (GP26 PIO). Test all 6 light states.","First power-on bench test: verify no shorts, all regulators in range, all boards booting, MAVLink heartbeat in QGC."]},
+    {p:"PHASE 6 · WIRING & SECURITY SETUP",c:C.lime,steps:["Flash CPLD write-blocker bitstream via USB-Blaster. Install JP2. Verify LED1 (green) lights on OS-SD boot.","Flash STM32F030 with nx_proxy.bin via SWD. Burn OTP write-protect fuses. Verify NX_LATCH = HIGH at POR.","If CC2652P7 populated: flash Z-Stack image via Uniflash. If SX1276 populated: verify SPI comms with LoRaLib.","Solder power bus. Install BEC. Verify 5V ± 0.1V under load. Connect JST-GH Ethernet cable (150mm) and CAN FD cable (120mm) between TRIHAT-1 and COMMS-HAT-1.","Install all nav lights. Verify WS2812 chain (GP26 PIO). Test all 6 light states.","First power-on bench test: verify no shorts, all regulators in range, all boards booting, MAVLink heartbeat in QGC."]},
     {p:"PHASE 7 · SOFTWARE & CALIBRATION",c:C.pink,steps:["Flash Pico 2 firmware (USB drag-drop). Verify 1Hz heartbeat LED.","Boot CM4. SSH in. apt install mavlink-router mavsdk pymavlink python-can dronecan tpm2-tools tpm2-tss. Configure mavlink-router.","Configure SELinux: label log-SD mount point as log_storage_t. Mount with noexec,nodev,nosuid,ro. Verify EACCES on test binary exec.","Provision TPM: tpm2_createprimary, tpm2_create, tpm2_load. Store handle for runtime attestation.","Calibrate ESCs (no props). Calibrate nacelle servos to ±0.5° accuracy at 0° and 90°.","Calibrate variable nozzle: verify 36mm (closed) and 42mm (open) exit diameters. Lock pushrod with Loctite 243."]},
     {p:"PHASE 8 · GROUND TEST",c:C.lime,steps:["Static CG balance: 152mm from nose. Slide battery rail to achieve. Load 250g payload: slide battery 10mm aft.","Radio link: verify MAVLink heartbeat, attitude response, RC channels in QGC. Verify TDDS channel selection ≤30s power-on.","Bench thrust tethered: 30% throttle per nacelle. Verify ≥330g per 70mm fan.","Nozzle function: command open (42mm) / closed (36mm). Verify smooth cam action, no servo bind.","Nav lights: verify all 6 lights correct colours and flash patterns per firmware states.","GPS / sensor: outdoors, verify HDOP ≤1.5, ≥6 sats. Spin EDFs: verify HDOP does not degrade >0.3."]},
     {p:"PHASE 9 · FIRST FLIGHT",c:C.green,steps:["Pre-flight ABCD: Airframe · Battery · Communications · Documentation (Part 107 cert, registration, NOTAM).","Hover 1m AGL, 30s. Land. Inspect all fasteners and ESC temps (target <60°C).","Hover 3m: test ±10° roll/pitch/yaw inputs. Verify altitude hold. Record hover amperage (expect within ±10% of calculated).","Transition test ≥8m AGL: nacelle sweep. Monitor altitude (expect ±1.5m). Verify nozzle closes during sweep.","Cargo test: 250g payload. Verify clean lift. Test winch deploy at 4m: payload descends at ~15cm/s. Retract and land."]},
@@ -910,14 +910,14 @@ function OverviewTab(){
         <KV k="Zigbee 2.4GHz (opt)" v="CC2652P7 · also BLE 5.0 · Thread · Matter · software select" vc={C.accent}/>
         <KV k="LoRa 915MHz (opt)" v="SX1276 · also FSK Zigbee 915MHz · software select" vc={C.pink}/>
         <KV k="CM4-CARRIER-1" v="65×52mm (Rev E) · +12mm width for CPLD + diplexer + SMA"/>
-        <KV k="COMPHAT-1" v="Rev E · NX proxy MCU · Zigbee/LoRa footprints (opt pop)"/>
+        <KV k="COMMS-HAT-1" v="Rev E · NX proxy MCU · Zigbee/LoRa footprints (opt pop)"/>
       </div>
       <div>
         <SH t="System Summary" mt={0}/>
         <KV k="Hull (CC BY 4.0)" v="Serenity by Peter Farell · 365mm · PETG/CF-PETG"/>
         <KV k="Nacelles" v="2× 70mm EDF · 2200g total thrust · T/W 2.20 (empty rec.)"/>
         <KV k="Fwd EDF" v="40mm + variable nozzle (BamJr remix CC BY 4.0) · 190g"/>
-        <KV k="Controllers" v="Pico 2 + TRIHAT-1 · CM4 Lite 4GB + CARRIER-E + COMPHAT-E"/>
+        <KV k="Controllers" v="Pico 2 + TRIHAT-1 · CM4 Lite 4GB + CARRIER-E + COMMS-HAT-E"/>
         <KV k="Radios" v="SiK 915MHz + 49MHz RCRS + optional Zigbee/LoRa"/>
         <KV k="Sec. storage" v="Write-blocked OS SD · Hardware-NX log SD"/>
         <KV k="BOM estimate" v="$640–740" vc={C.yellow}/>
@@ -930,7 +930,7 @@ function OverviewTab(){
 // ═══════════════════════════════════════════════════════════════
 //  APP
 // ═══════════════════════════════════════════════════════════════
-const TABS=["Overview","License","Battery","Propulsion","CM4 Carrier","COMPHAT-1","Nav Lights","Antenna","Wiring","BOM","SBOM","Build Guide"];
+const TABS=["Overview","License","Battery","Propulsion","CM4 Carrier","COMMS-HAT-1","Nav Lights","Antenna","Wiring","BOM","SBOM","Build Guide"];
 
 _ODFontLoader();
 export default function App(){
@@ -960,7 +960,7 @@ export default function App(){
       {tab==="Battery"     && <BatteryTab/>}
       {tab==="Propulsion"  && <PropulsionTab/>}
       {tab==="CM4 Carrier" && <CarrierTab/>}
-      {tab==="COMPHAT-1"   && <ComphatTab/>}
+      {tab==="COMMS-HAT-1"   && <ComphatTab/>}
       {tab==="Nav Lights"  && <NavLightsTab/>}
       {tab==="Antenna"     && <AntennaTab/>}
       {tab==="Wiring"      && <WiringTab/>}
