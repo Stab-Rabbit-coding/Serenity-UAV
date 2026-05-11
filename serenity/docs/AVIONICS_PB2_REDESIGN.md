@@ -25,9 +25,11 @@ All 8 nodes participate equally on all 4 wired data buses. Every node is a poten
 │  ─── RS-485 (half-duplex, 4 Mbps max) ──────────────  │
 │  ─── Ethernet (ring, CPSW3G, 100BASE-TX per link) ──  │
 └────┬──────┬──────┬──────┬──────┬──────┬──────┬─────┘
-    FC1   FC2   FC3   FC4   CN1   CN2   CN3   CN4
-   [A]   [A]   [A]   [A]  [B]   [B]   [B]   [B]
+    CN1   FC1   CN2   FC2   CN3   FC3   CN4   FC4
+   [B]   [A]   [B]   [A]  [B]   [A]   [B]   [A]
 ```
+
+Bus order: **CN1 → FC1 → CN2 → FC2 → CN3 → FC3 → CN4 → FC4** — one CN + one FC per bay (A/B/D/E). Any single segment cut or bay power failure leaves ≥2 FC + ≥2 CN accessible on both sides of the break.
 
 ---
 
@@ -210,11 +212,13 @@ Each Cape-B board carries all 4 radio types. Software assigns one CN node as pri
 Each PocketBeagle 2 CPSW3G provides two external MAC ports. Cape-A and Cape-B each add two DP83825I PHYs, giving each node two 100BASE-TX links. Nodes are wired in a ring:
 
 ```
-FC1 ─ETH─ FC2 ─ETH─ FC3 ─ETH─ FC4
- │                               │
+CN1 ─ETH─ FC1 ─ETH─ CN2 ─ETH─ FC2
+ │    Bay A    ETH-AB    Bay B   │
 ETH                             ETH
+(ETH-EA)                     (ETH-BD)
  │                               │
-CN4 ─ETH─ CN3 ─ETH─ CN2 ─ETH─ CN1
+FC4 ─ETH─ CN4 ─ETH─ FC3 ─ETH─ CN3
+     Bay E    ETH-DE    Bay D
 ```
 
 CPSW3G operates in hardware-bridge (switch) mode per node, forwarding frames between its two external ports transparently. RSTP (Rapid Spanning Tree) prevents loops and provides sub-second ring healing on single-link failure. Any node can reach any other node via two independent paths.
@@ -226,36 +230,40 @@ CPSW3G operates in hardware-bridge (switch) mode per node, forwarding frames bet
 All 8 nodes connect to one 1553 bus via their PRU-based Manchester II encoder/decoder:
 
 ```
-FC1 ─T─ FC2 ─T─ FC3 ─T─ FC4 ─T─ CN1 ─T─ CN2 ─T─ CN3 ─T─ CN4
-[BC/RT]  [RT]   [RT]   [RT]   [RT]  [RT]  [RT]  [RT]
-                                                         ╰─ 78Ω term
-    ╰─ 78Ω term at bus ends (FC1 and CN4)
+CN1 ─T─ FC1 ─T─ CN2 ─T─ FC2 ─T─ CN3 ─T─ FC3 ─T─ CN4 ─T─ FC4
+[RT]  [BC/RT] [RT]  [stbyBC] [RT]  [RT]  [RT]  [RT]
+╰─ 78Ω term                                          ╰─ 78Ω term
+   (CN1, Bay A)                                         (FC4, Bay E)
 ```
 
 - **T** = stub coupling transformer (PE-68515 or equivalent, 0.9 m max stub)  
 - **Primary BC:** FC1 (elected at boot via CAN FD priority arbitration)  
 - **Standby BC:** FC2 (assumes BC role if FC1 heartbeat absent for 3 frames)  
+- **Termination:** 78Ω at CN1 (bus start, Bay A) and FC4 (bus end, Bay E)  
 - **Shielded cable:** MIL-C-17/131 or equivalent, 78 Ω, twisted pair, drain wire grounded at one end per segment  
 - **PRU firmware requirement:** Manchester II encoder at 1 Mbps ± 0.5%; decoder with sync-word detection and RT address filtering; TX/RX half-duplex arbitration
 
 ### 5.3 CAN FD — linear bus, 8 nodes
 
 ```
-FC1 ─┬─ FC2 ─ FC3 ─ FC4 ─ CN1 ─ CN2 ─ CN3 ─┬─ CN4
+CN1 ─┬─ FC1 ─ CN2 ─ FC2 ─ CN3 ─ FC3 ─ CN4 ─┬─ FC4
    120Ω                                     120Ω
-   (end)                                   (end)
+  (start,                                  (end,
+  Bay A)                                  Bay E)
 ```
 
 - **Transceiver:** ATA6561 on every cape, 3.3 V, 5 Mbps data rate  
-- **Termination:** 120 Ω resistor soldered on FC1 cape and CN4 cape; all others: open  
+- **Termination:** 120 Ω resistor soldered on CN1 cape (bus start, Bay A) and FC4 cape (bus end, Bay E); all others: open  
 - **Controllers:** AM6232 MCAN0 (primary bus) + MCAN1 (reserved for second CAN bus or redundant arbitration)  
 - **Protocol:** DroneCAN v1 / UAVCANv1 for sensor data; custom priority-voting messages for role election
 
 ### 5.4 RS-485 — half-duplex bus, 8 nodes
 
 ```
-FC1 ─┬─ FC2 ─ FC3 ─ FC4 ─ CN1 ─ CN2 ─ CN3 ─┬─ CN4
+CN1 ─┬─ FC1 ─ CN2 ─ FC2 ─ CN3 ─ FC3 ─ CN4 ─┬─ FC4
    120Ω                                     120Ω
+  (CN1,                                    (FC4,
+  Bay A)                                  Bay E)
 ```
 
 - **Transceiver:** MAX3485E, direction control via GPIO (DE/RE)  
@@ -354,7 +362,7 @@ Cape-B PRU-1 is used for cargo servo PWM (2 channels only) + TDDS sync timing fo
 
 The CPLD write-blocker and STM32 OTP fuse architecture from RevJ applies unchanged. Each node's boot microSD (eMMC on PB2) is protected by the hardware write-blocker. Log storage (Cape-B microSD + NOR flash) uses hardware write-protect via the CPLD latch — the latch is set at power-on and cannot be cleared until the node is powered off, enforcing non-executable, append-only log semantics.
 
-TPM 2.0 (SLB9670 on Cape-A) provides per-node attestation. All 4 FC nodes attest; CN nodes do not require TPM (no flight-critical secrets stored on comms nodes).
+TPM 2.0 (SLB9670) is present on **both Cape-A and Cape-B** — all 8 nodes carry a TPM. FC nodes use it for flight-critical attestation and key storage. CN nodes use it for radio link key storage, boot measurement, and flight-log authenticity attestation (the CPLD write-blocker enforces append-only access; the TPM binds log signing keys).
 
 ---
 
@@ -369,7 +377,7 @@ TPM 2.0 (SLB9670 on Cape-A) provides per-node attestation. All 4 FC nodes attest
 | PB2 boot time in failover scenario | High | Benchmark: measure time from 5 V applied to CAN FD heartbeat present. Target <15 s. If >15 s, implement kexec warm-restart and/or pre-arm node-ready gating. |
 | Cape power connector to vehicle bus | Low | Specify: Molex Nano-Fit 4-pin (5 V, 5 V, GND, GND) per node, rated 6 A. 4 FC + 4 CN = 8 connectors to PDB. |
 | DRV8833 current sense for winch stall detection | Low | Add 0.1 Ω sense resistor on DRV8833 AOUT1 path; read via AM6232 ADC for stall current detection. |
-| VL53L5CX obstacle avoidance array interface | Medium | The 12× ToF sensor arrays (TCA9548A + MCP23008 per array) connect to FC2 and FC3 via the external I²C header on Cape-A. Verify I²C pull-up voltage compatibility (VL53L5CX uses 1.8 V I²C — level shifter required between Cape-A 3.3 V and sensor 1.8 V). |
+| VL53L5CX obstacle avoidance array interface | Medium | The 12× ToF sensor arrays (TCA9548A + MCP23008 per array) connect to FC1 (Bay A, Array B host) and FC3 (Bay D, Array A host) via the external I²C header on Cape-A. Verify I²C pull-up voltage compatibility (VL53L5CX uses 1.8 V I²C — level shifter required between Cape-A 3.3 V and sensor 1.8 V). |
 
 ---
 
