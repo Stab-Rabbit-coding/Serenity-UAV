@@ -571,11 +571,11 @@ function HullFoamTab(){
     {id:"F",sta:"388–457",dim:"EDF bay — no foam",former:"None (open)",seal:"Open for EDF access"},
   ];
   const conduits=[
-    {id:"CAN FD",route:"Port keel rail","chain":"Node 1→2→3→4→COMPHAT-SWITCH"},
-    {id:"RS-485",route:"Starboard keel rail","chain":"Node 1→2→3→4→COMPHAT-SWITCH"},
-    {id:"MIL-STD-1553",route:"Dorsal centre","chain":"Node 1→2→3→4→COMPHAT-SWITCH"},
-    {id:"ETH-A",route:"Port side","chain":"Node 1→COMPHAT-SWITCH"},
-    {id:"ETH-B",route:"Starboard side","chain":"Node 2→COMPHAT-SWITCH"},
+    {id:"CAN FD",route:"Port keel rail","chain":"Node 1→2→3→4→COMMS-HAT-SWITCH"},
+    {id:"RS-485",route:"Starboard keel rail","chain":"Node 1→2→3→4→COMMS-HAT-SWITCH"},
+    {id:"MIL-STD-1553",route:"Dorsal centre","chain":"Node 1→2→3→4→COMMS-HAT-SWITCH"},
+    {id:"ETH-A",route:"Port side","chain":"Node 1→COMMS-HAT-SWITCH"},
+    {id:"ETH-B",route:"Starboard side","chain":"Node 2→COMMS-HAT-SWITCH"},
     {id:"PWR",route:"Belly centre","chain":"Battery→BEC→all nodes"},
   ];
   const panels=[

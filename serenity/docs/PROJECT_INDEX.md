@@ -110,8 +110,8 @@ body, p, li, td, th, code, pre {
 | `TRIHAT-1.kicad_sch` | TRIHAT-1 | — | Schematic (open in KiCad 7.x) |
 | `CM4-CARRIER-1.kicad_pcb` | CM4-CARRIER-1 Rev E | 65×52mm | CM4 carrier: write-blocker CPLD, dual-band WiFi SMA, μSD, USB hub |
 | `CM4-CARRIER-1.kicad_sch` | CM4-CARRIER-1 Rev E | — | Schematic |
-| `COMPHAT-1.kicad_pcb` | COMPHAT-1 Rev E | 65×48mm | CM4 hat: CAN FD, Ethernet, TPM, NX proxy, log μSD, SiK, RCRS, Zigbee/LoRa |
-| `COMPHAT-1.kicad_sch` | COMPHAT-1 Rev E | — | Schematic |
+| `COMMS-HAT-1.kicad_pcb` | COMMS-HAT-1 Rev E | 65×48mm | CM4 hat: CAN FD, Ethernet, TPM, NX proxy, log μSD, SiK, RCRS, Zigbee/LoRa |
+| `COMMS-HAT-1.kicad_sch` | COMMS-HAT-1 Rev E | — | Schematic |
 
 ### STL 3D Print Files (22 parts)
 

@@ -486,7 +486,7 @@ const DETAIL = {
       ["Frequency","1575.42 MHz (GPS L1) · also receives GLONASS/Galileo/BeiDou"],
       ["Mount face","TOP of fuselage — forward section, 58mm from nose"],
       ["Height","12mm above fuselage skin on PLA standoff (ground-plane clearance)"],
-      ["Reason fwd","Away from CM4/COMPHAT-1 switching noise (>150mm), away from EDF motor interference"],
+      ["Reason fwd","Away from CM4/COMMS-HAT-1 switching noise (>150mm), away from EDF motor interference"],
       ["Ground plane","25×25mm copper pour on underside of TRIHAT-1 PCB · matched to patch"],
       ["Cable","U.FL → 50Ω coax (RG-178) → TRIHAT-1 U.FL connector · max 100mm"],
       ["Keepout","No carbon fibre within 40mm radius · no metal above the patch"],
@@ -499,14 +499,14 @@ const DETAIL = {
   sik: {
     title:"SiK 915 MHz MAVLink Whip", c:ANT.sik.color,
     rows:[
-      ["Type","Monopole whip, λ/4 @ 915 MHz = 82mm · SMA-RP female on COMPHAT-1"],
+      ["Type","Monopole whip, λ/4 @ 915 MHz = 82mm · SMA-RP female on COMMS-HAT-1"],
       ["Polarisation","Vertical (aligned with Earth's gravity in hover)"],
       ["Mount face","BELLY of fuselage, 238mm from nose · aft of payload bay"],
       ["Orientation","Vertical, pointing down · best pattern toward ground station"],
       ["Reason aft","Clears payload bay (125–195mm) by 43mm forward margin"],
       ["Reason belly","Ground-facing pattern · GCS is always below aircraft"],
       ["Cable","Integral to SiK module via IPEX/U.FL pigtail through fuselage hole"],
-      ["Ground plane","SiK module GND pours on COMPHAT-1 PCB act as partial counterpoise"],
+      ["Ground plane","SiK module GND pours on COMMS-HAT-1 PCB act as partial counterpoise"],
       ["Material zone","PLA shell belly — RF transparent ✔ · CF spar at 160mm (78mm away)"],
       ["Clearance to GPS","148mm ✔ (opposite faces top/belly add effective isolation)"],
       ["Clearance to 49MHz","52mm on fuselage — supplemented by face diversity (top vs belly)"],
@@ -529,7 +529,7 @@ const DETAIL = {
       ["Dorsal fin","3D-printed ABS/PETG fin, 35mm tall · keeps antenna clear of fuselage"],
       ["Reason top","Avoids winch line interference on belly · maximises sky view angle"],
       ["Reason aft","Maximises separation from GPS (232mm) · away from CM4 WiFi zone"],
-      ["Cable","50Ω RG-316 semi-rigid coax · 120mm · to COMPHAT-1 U.FL"],
+      ["Cable","50Ω RG-316 semi-rigid coax · 120mm · to COMMS-HAT-1 U.FL"],
       ["Matching","LC pi-network at antenna base resonates system at 49.86 MHz"],
       ["Polarisation","Vertical monopole — matches ground station vertical whip"],
       ["Clearance to GPS","232mm ✔ (required >150mm to protect GPS LNA)"],
@@ -730,7 +730,7 @@ function Mhz49Tab() {
           <KV k="Counterpoise" v="4× λ/4 radials, 150mm, at 90° around mount base"/>
           <KV k="Counterpoise material" v="22AWG tinned copper, laid against fuselage skin"/>
           <KV k="Mount" v="M3 nylon screw through 3mm PLA dorsal fin"/>
-          <KV k="Coax" v="50Ω RG-316 coax, 120mm, IPEX to COMPHAT-1"/>
+          <KV k="Coax" v="50Ω RG-316 coax, 120mm, IPEX to COMMS-HAT-1"/>
           <KV k="Matching" v="LC pi-network (resonance trim): 5–30pF variable cap in series"/>
           <KV k="SWR target" v="≤2.5:1 across 49.83–49.89 MHz"/>
         </div>
@@ -739,7 +739,7 @@ function Mhz49Tab() {
           <svg viewBox="0 0 280 420" width="100%" style={{maxWidth:300,display:"block"}}>
             {/* Coax connection at bottom */}
             <text x={140} y={410} textAnchor="middle" fill={C.dimmer}
-              fontSize={8} fontFamily={M}>COAX FEEDPOINT (COMPHAT-1)</text>
+              fontSize={8} fontFamily={M}>COAX FEEDPOINT (COMMS-HAT-1)</text>
             <line x1={140} y1={395} x2={140} y2={370} stroke={C.dimmer} strokeWidth={2}/>
             {/* Ground radials */}
             {[[-70,40],[70,40],[-60,-10],[60,-10]].map(([dx,dy],i)=>(
@@ -799,7 +799,7 @@ function Mhz49Tab() {
         ["3","Solder coil bottom pigtail to RG-316 centre conductor. Solder coil top pigtail to base of 250mm aluminium rod (or 3mm fibreglass rod with conductive paint trace)."],
         ["4","Solder 4× 150mm counterpoise wires to RG-316 shield braid. Route radials at 90° against the fuselage outer skin inside the fin base (they do NOT need to be elevated)."],
         ["5","Insert series trimmer (5–30pF) between coax centre and coil bottom. Connect nanoVNA. Adjust trimmer for minimum SWR at 49.860 MHz. Lock with drop of nail varnish."],
-        ["6","Route RG-316 coax internally through the fuselage to COMPHAT-1 U.FL port. Secure with cable ties every 50mm. Minimum bend radius: 15mm."],
+        ["6","Route RG-316 coax internally through the fuselage to COMMS-HAT-1 U.FL port. Secure with cable ties every 50mm. Minimum bend radius: 15mm."],
         ["7","Verify SWR ≤2.5:1 across 49.830–49.890 MHz with all hatch covers closed. Verify GPS lock and HDOP ≤1.5 with all radios transmitting simultaneously."],
       ].map(([n,s])=>(
         <div key={n} style={{display:"flex",gap:12,padding:"8px 0",
@@ -821,7 +821,7 @@ function InstallTab() {
     {c:ANT.rc49.color, title:"49 MHz — Dorsal Fin Location",
      body:"Mount at 290mm from nose on the dorsal (top) surface. This is aft of the CF spar by 130mm and aft of the CM4 WiFi antenna zone by 80mm. The dorsal position keeps the whip clear of the payload bay, winch mechanism, and skid landing gear. The fin must be oriented with the whip vertical in hover and approximately level in cruise — the pattern rotates with the aircraft which is acceptable for TDDS at short range."},
     {c:ANT.sik.color, title:"915 MHz — Belly SMA Penetration",
-     body:"Drill a 6.5mm hole in the PLA belly skin at 238mm from nose. Install an SMA-RP bulkhead connector. The SiK module connects internally via an IPEX-to-SMA pigtail through the COMPHAT-1 module. Thread the 82mm whip onto the external SMA-RP. Orient vertically downward. Secure with a small plastic clip to prevent vibration-induced rotation — vibration loosening of SMA connectors is a known failure mode on EDFs."},
+     body:"Drill a 6.5mm hole in the PLA belly skin at 238mm from nose. Install an SMA-RP bulkhead connector. The SiK module connects internally via an IPEX-to-SMA pigtail through the COMMS-HAT-1 module. Thread the 82mm whip onto the external SMA-RP. Orient vertically downward. Secure with a small plastic clip to prevent vibration-induced rotation — vibration loosening of SMA connectors is a known failure mode on EDFs."},
     {c:ANT.gps.color, title:"GPS Patch — Forward Top Mounting",
      body:"The 25×25mm patch antenna mounts on a 12mm PLA standoff at 58mm from nose. The standoff raises the patch above the fuselage metal hinge hardware for the access hatch. Route the U.FL coax in a gentle curve — never kink RG-178. The patch must have an unobstructed hemisphere of sky (90° half-angle). The pitot tube at the nose (58mm forward) is metallic but is 30mm below the patch plane — verify this does not create a null above 60° elevation empirically."},
     {c:ANT.wifi.color, title:"WiFi — No Modification Needed",

@@ -35,7 +35,7 @@ Obstacle Avoidance,TOF-B-MUX,Array B — TCA9548A 8-channel I2C mux,1,1,Mouser,T
 Obstacle Avoidance,TOF-B-GPIO,Array B — MCP23008 8-port I2C GPIO expander — XSHUT control,1,1,Mouser,MCP23008-E/SS,Microchip Technology,1.2,,I2C address 0x20 on Node 2 I2C2. GP0–GP5 drive XSHUT for S1B–S6B. Boot sequence identical to Array A but on separate bus. Panel B bay.
 Obstacle Avoidance,TOF-B-MOUNT,Array B — Sensor PETG flush-mount ×6,6,1,,,,,tof_flush_mount_5mm.stl,Same print as Array A mounts. Different hull cutout positions per Array B station offsets.
 Obstacle Avoidance,TOF-B-CABLE,Array B — VL53L5CX cable 4-wire JST-SH1.0 300mm,6,1,,,,,,Route through separate foam conduit to Panel B bay. Do NOT commingle with Array A harness.
-Radios & Sensors,SIK-915,SiK 915MHz telemetry radio module,1,14,,,,,,"On COMPHAT-SWITCH, SMA belly antenna"
+Radios & Sensors,SIK-915,SiK 915MHz telemetry radio module,1,14,,,,,,"On COMMS-HAT-SWITCH, SMA belly antenna"
 Radios & Sensors,RCRS-49,49MHz RCRS RC receiver/transmitter board,1,12,,,,,,"Dorsal fin antenna, coil cavity"
 Radios & Sensors,GPS-M10Q,u-blox M10Q GPS module + patch antenna,1,12,,,,,,"59mm from nose, cockpit top"
 Radios & Sensors,ANT-SIK,915MHz SMA whip antenna + pigtail,1,3,,,,,,

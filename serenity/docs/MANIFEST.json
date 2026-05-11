@@ -208,13 +208,13 @@
       "type": "KICAD_SCH"
     },
     {
-      "path": "pcb/COMPHAT-1/COMPHAT-1.kicad_pcb",
+      "path": "pcb/COMMS-HAT-1/COMMS-HAT-1.kicad_pcb",
       "sha256": "7a1f1c2b0e6e35a037ed734c276e579de37a51fbf2f14f9103abd199c09b1c66",
       "bytes": 20097,
       "type": "KICAD_PCB"
     },
     {
-      "path": "pcb/COMPHAT-1/COMPHAT-1.kicad_sch",
+      "path": "pcb/COMMS-HAT-1/COMMS-HAT-1.kicad_sch",
       "sha256": "e908aaaa1baf2701ad22465e7ddfc3b5418518da46d08778bde99b7de3ea4625",
       "bytes": 1007,
       "type": "KICAD_SCH"

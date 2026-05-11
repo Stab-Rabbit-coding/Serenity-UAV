@@ -78,7 +78,7 @@ const PROTOCOLS = [
     priority:"Real-time safety-critical", latency:"<500µs",
     addedRevG:true, weight:"~2g second cable+connector",terminators:"120Ω only at physical endpoints",
     extensibility:"TRUE daisy-chain bus. Adding node N: plug into any J_CAN_IN, out to J_CAN_OUT. Move 120Ω terminator to new last node. No configuration change on other nodes.",
-    notes:"Rev G adds J_CAN_IN and J_CAN_OUT (both 4-pin JST-GH) on TRIHAT-1 and COMPHAT-1. Internally connected in parallel — bus topology, not switched.",
+    notes:"Rev G adds J_CAN_IN and J_CAN_OUT (both 4-pin JST-GH) on TRIHAT-1 and COMMS-HAT-1. Internally connected in parallel — bus topology, not switched.",
     pinout:["GND","+5V","CANH","CANL"],
     jst:4,
   },
@@ -150,7 +150,7 @@ function FourBusDiagram(){
   // Node blocks
   const nodes=[
     {x:60,  y:160, w:120, h:100, label:"PICO 2",    sub:"TRIHAT-1",     c:C.accent, fc:C.teal},
-    {x:540, y:160, w:120, h:100, label:"CM4 LITE",  sub:"COMPHAT-1",    c:C.green,  fc:C.lime},
+    {x:540, y:160, w:120, h:100, label:"CM4 LITE",  sub:"COMMS-HAT-1",    c:C.green,  fc:C.lime},
   ];
   // Future node placeholder
   const future={x:280, y:340, w:160, h:50};
@@ -299,7 +299,7 @@ function CANDaisyDiagram(){
       <rect x={BX} y={BY} width={BW} height={BH} rx={6}
         fill="rgba(255,107,53,0.04)" stroke={col} strokeWidth={1.5}/>
       <text x={BX+BW/2} y={BY+20} textAnchor="middle"
-        fill={col} fontSize={9} fontFamily={M}>TRIHAT-1 or COMPHAT-1 (65×48mm)</text>
+        fill={col} fontSize={9} fontFamily={M}>TRIHAT-1 or COMMS-HAT-1 (65×48mm)</text>
 
       {/* MCP2518FD IC */}
       <rect x={BX+BW/2-30} y={BY+60} width={60} height={80} rx={4}
@@ -374,7 +374,7 @@ function CANDaisyDiagram(){
       <text x={BX+BW/2} y={BY+210} textAnchor="middle" fill={C.yellow} fontSize={8} fontFamily={M}>
         120Ω solder bridge: CLOSE only on first and last node · OPEN on all interior nodes</text>
       <text x={BX+BW/2} y={VH-8} textAnchor="middle" fill="rgba(0,229,255,0.22)" fontSize={7} fontFamily={M}>
-        CAN FD DAISY-CHAIN — DUAL JST-GH — APPLIES EQUALLY TO TRIHAT-1 AND COMPHAT-1</text>
+        CAN FD DAISY-CHAIN — DUAL JST-GH — APPLIES EQUALLY TO TRIHAT-1 AND COMMS-HAT-1</text>
     </svg>
   );
 }
@@ -388,7 +388,7 @@ function OverviewTab(){
       <div style={{color:C.lime,fontFamily:M,fontSize:11,fontWeight:"bold",marginBottom:6,letterSpacing:"0.08em"}}>REV G ADDITIONS</div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
         <div>
-          <KV k="CAN FD daisy-chain" v="2nd JST-GH 4-pin on TRIHAT-1 + COMPHAT-1" vc={C.can}/>
+          <KV k="CAN FD daisy-chain" v="2nd JST-GH 4-pin on TRIHAT-1 + COMMS-HAT-1" vc={C.can}/>
           <KV k="RS-485 (NEW)" v="MAX3485 SOT-23 + 2× JST-GH 4-pin · multi-drop" vc={C.rs4}/>
           <KV k="I²C expansion bus (NEW)" v="PCA9517 buffer + 2× JST-GH 4-pin · sensor bus" vc={C.i2c}/>
           <KV k="Ethernet" v="Unchanged — 1× JST-GH 6-pin point-to-point" vc={C.eth}/>
@@ -452,8 +452,8 @@ function CANTab(){
         <Warn ch="When adding a 3rd node: open (de-solder) the termination bridge on the previously-last node before connecting the new node. The new last node closes its own termination bridge. Verify with CAN analyser before first arming after topology change."/>
         <Note c={C.can} ch="Why two separate connector labels (IN/OUT) rather than identical connectors? Convention only — helps builders route cables in the correct direction and ensures consistent wiring. Electrically identical. Colour-coded cables recommended: orange for CAN, as established in Rev E."/>
         <SH t="Multi-Node CAN Wiring" c={C.can}/>
-        {[["2 nodes (current)","TRIHAT-1 J_CAN_OUT → COMPHAT-1 J_CAN_IN · 120Ω on both (endpoints)"],
-          ["3 nodes","TRIHAT-1 OUT → COMPHAT-1 IN; COMPHAT-1 OUT → Node3 IN · 120Ω on TRIHAT-1 and Node3 only; COMPHAT-1 bridge open"],
+        {[["2 nodes (current)","TRIHAT-1 J_CAN_OUT → COMMS-HAT-1 J_CAN_IN · 120Ω on both (endpoints)"],
+          ["3 nodes","TRIHAT-1 OUT → COMMS-HAT-1 IN; COMMS-HAT-1 OUT → Node3 IN · 120Ω on TRIHAT-1 and Node3 only; COMMS-HAT-1 bridge open"],
           ["4+ nodes","Continue chain · only first and last nodes have 120Ω · all interior nodes open"],
         ].map(([n,d],i)=>(<div key={i} style={{display:"flex",gap:10,padding:"6px 0",borderBottom:"1px solid rgba(255,107,53,0.1)"}}><span style={{color:C.can,fontFamily:M,fontSize:9,minWidth:110,flexShrink:0,fontWeight:"bold"}}>{n}</span><span style={{color:C.dim,fontFamily:M,fontSize:9,lineHeight:1.6}}>{d}</span></div>))}
       </div>
@@ -512,7 +512,7 @@ function RS485Diagram(){
       {/* Board 2 */}
       <rect x={220} y={80} width={130} height={140} rx={5}
         fill="rgba(45,212,191,0.06)" stroke={C.rs4} strokeWidth={1.5}/>
-      <text x={285} y={98} textAnchor="middle" fill={C.rs4} fontSize={9} fontFamily={M} fontWeight="bold">COMPHAT-1</text>
+      <text x={285} y={98} textAnchor="middle" fill={C.rs4} fontSize={9} fontFamily={M} fontWeight="bold">COMMS-HAT-1</text>
       <rect x={232} y={108} width={50} height={24} rx={3} fill="rgba(74,222,128,0.1)" stroke={C.green} strokeWidth={1}/>
       <text x={257} y={122} textAnchor="middle" fill={C.green} fontSize={7} fontFamily={M}>UART2 GPIO0/1</text>
       <rect x={286} y={104} width={40} height={32} rx={3} fill="rgba(45,212,191,0.15)" stroke={C.rs4} strokeWidth={1.5}/>
@@ -542,7 +542,7 @@ function RS485Diagram(){
       {/* move term to future node */}
       <rect x={420} y={145} width={12} height={16} rx={2} fill={C.yellow} opacity={0.4}/>
       <text x={426} y={156} textAnchor="middle" fill="rgba(255,230,0,0.4)" fontSize={5.5} fontFamily={M} fontWeight="bold">120Ω</text>
-      <text x={485} y={218} textAnchor="middle" fill={C.yellow} fontSize={6} fontFamily={M}>← moves term here; COMPHAT-1 term opens</text>
+      <text x={485} y={218} textAnchor="middle" fill={C.yellow} fontSize={6} fontFamily={M}>← moves term here; COMMS-HAT-1 term opens</text>
 
       <text x={VW/2} y={14} textAnchor="middle" fill="rgba(0,229,255,0.25)" fontSize={9} fontFamily={M} letterSpacing="0.1em">RS-485 DAISY-CHAIN — MAX3485 SOT-23 — DUAL JST-GH 4-PIN</text>
       <text x={VW/2} y={VH-8} textAnchor="middle" fill="rgba(0,229,255,0.2)" fontSize={7} fontFamily={M}>Direction control (DE/RE): active-high on UART TX GPIO · pull-up default receive</text>
@@ -632,9 +632,9 @@ function I2CDiagram(){
       <text x={190} y={165} textAnchor="middle" fill={`${col}70`} fontSize={6} fontFamily={M}>SDA</text>
       <text x={190} y={196} textAnchor="middle" fill={`${col}70`} fontSize={6} fontFamily={M}>SCL</text>
 
-      {/* Client board (COMPHAT) */}
+      {/* Client board (COMMS-HAT) */}
       <rect x={220} y={110} width={110} height={100} rx={5} fill={`${col}07`} stroke={col} strokeWidth={1.5}/>
-      <text x={275} y={128} textAnchor="middle" fill={col} fontSize={9} fontFamily={M} fontWeight="bold">COMPHAT-1</text>
+      <text x={275} y={128} textAnchor="middle" fill={col} fontSize={9} fontFamily={M} fontWeight="bold">COMMS-HAT-1</text>
       <text x={275} y={140} textAnchor="middle" fill={`${col}60`} fontSize={7} fontFamily={M}>I²C CLIENT</text>
       <rect x={234} y={148} width={40} height={24} rx={2} fill={`${col}12`} stroke={col} strokeWidth={1}/>
       <text x={254} y={161} textAnchor="middle" fill={col} fontSize={6} fontFamily={M}>J_I2C_IN</text>
@@ -728,7 +728,7 @@ function ComparisonTab(){
   const colC={eth:C.eth,can:C.can,rs4:C.rs4,i2c:C.i2c};
   const colH={eth:"ETHERNET",can:"CAN FD",rs4:"RS-485 ★NEW",i2c:"I²C ★NEW"};
   return(<div>
-    <Note c={C.accent} ch="★ NEW = added Rev G. All four buses are available on both TRIHAT-1 and COMPHAT-1. Each protocol is physically and electrically independent — simultaneous full operation on all four buses."/>
+    <Note c={C.accent} ch="★ NEW = added Rev G. All four buses are available on both TRIHAT-1 and COMMS-HAT-1. Each protocol is physically and electrically independent — simultaneous full operation on all four buses."/>
     <div style={{overflowX:"auto",marginTop:12}}>
       <table style={{width:"100%",borderCollapse:"collapse",fontFamily:M,fontSize:10}}>
         <thead><tr>
@@ -803,15 +803,15 @@ function ExtensibilityTab(){
         <TH cols={["BOARD","CHANGE","PCB AREA","WEIGHT DELTA","CONNECTOR DELTA"]}/>
         <tbody>{[
           ["TRIHAT-1 (65×48mm)","+ J_CAN_OUT 4-pin JST-GH · + MAX3485 SOT-23 + 2× RS-485 JST-GH · + PCA9517 SOT-23 + TVS + BNX + 2× I²C JST-GH","~400mm² (+17%)","~4g","6 → 12 JST-GH connectors"],
-          ["COMPHAT-1 (65×48mm)","Same additions as TRIHAT-1","~400mm² (+17%)","~4g","4 → 10 JST-GH connectors"],
-          ["CM4-CARRIER-1","No changes — RS-485 and I²C pass through GPIO header to COMPHAT","0","0","0"],
+          ["COMMS-HAT-1 (65×48mm)","Same additions as TRIHAT-1","~400mm² (+17%)","~4g","4 → 10 JST-GH connectors"],
+          ["CM4-CARRIER-1","No changes — RS-485 and I²C pass through GPIO header to COMMS-HAT","0","0","0"],
           ["Net PCB size","Both hats may need +8mm width (65→73mm) or tighter component layout","Optional","—","—"],
         ].map((r,i)=>(<tr key={i} style={{background:i%2===0?"rgba(0,229,255,0.02)":"transparent",verticalAlign:"top"}}>
           {r.map((v,j)=>(<td key={j} style={{padding:"5px 10px",color:j===0?C.text:j===3?C.green:C.dim,fontFamily:M,fontSize:10,lineHeight:1.5}}>{v}</td>))}
         </tr>))}</tbody>
       </table>
     </div>
-    <Note c={C.yellow} ch="PCB width increase to 65×56mm on TRIHAT-1 and COMPHAT-1 is the cleaner option vs tighter component placement. At 65×56mm both boards still fit within the Serenity avionics bay on existing standoffs — the bay is 68mm wide. Alternatively, the I²C components (PCA9517 + TVS + BNX002) can be placed on the B.Cu back copper layer to stay within 65×48mm with careful 4-layer routing."/>
+    <Note c={C.yellow} ch="PCB width increase to 65×56mm on TRIHAT-1 and COMMS-HAT-1 is the cleaner option vs tighter component placement. At 65×56mm both boards still fit within the Serenity avionics bay on existing standoffs — the bay is 68mm wide. Alternatively, the I²C components (PCA9517 + TVS + BNX002) can be placed on the B.Cu back copper layer to stay within 65×48mm with careful 4-layer routing."/>
   </div>);
 }
 
@@ -820,18 +820,18 @@ function ExtensibilityTab(){
 // ════════════════════════════════════════════════════════════
 const BOM_DELTA=[
   // CAN second connector
-  {cat:"CAN FD",qty:2,ref:"J_CAN_OUT",part:"JST-GH 1.25mm 4-pin connector (TRIHAT-1+COMPHAT-1)",pkg:"SMD",est:"$0.60ea",col:C.can,note:"Second CAN connector per board"},
+  {cat:"CAN FD",qty:2,ref:"J_CAN_OUT",part:"JST-GH 1.25mm 4-pin connector (TRIHAT-1+COMMS-HAT-1)",pkg:"SMD",est:"$0.60ea",col:C.can,note:"Second CAN connector per board"},
   {cat:"CAN FD",qty:1,ref:"CAN-C2",  part:"4-pin JST-GH CAN FD cable 120mm (spare)",pkg:"cable",est:"$3",col:C.can,note:"Second cable for daisy-chain"},
   // RS-485
   {cat:"RS-485",qty:2,ref:"U_RS485_T",part:"MAX3485 RS-485 transceiver (TRIHAT-1)",  pkg:"SOT-23-8",est:"$0.80ea",col:C.rs4,note:"3×3mm · 3.3V · 10Mbps"},
-  {cat:"RS-485",qty:2,ref:"U_RS485_C",part:"MAX3485 RS-485 transceiver (COMPHAT-1)", pkg:"SOT-23-8",est:"$0.80ea",col:C.rs4,note:"Same IC both boards"},
+  {cat:"RS-485",qty:2,ref:"U_RS485_C",part:"MAX3485 RS-485 transceiver (COMMS-HAT-1)", pkg:"SOT-23-8",est:"$0.80ea",col:C.rs4,note:"Same IC both boards"},
   {cat:"RS-485",qty:4,ref:"J_RS485",  part:"JST-GH 1.25mm 4-pin connector ×4 (2 per board)",pkg:"SMD",est:"$0.60ea",col:C.rs4,note:"IN+OUT per board"},
   {cat:"RS-485",qty:2,ref:"RS485-C",  part:"4-pin JST-GH RS-485 cable 150mm",        pkg:"cable",est:"$3ea",col:C.rs4,note:"Twisted pair A/B"},
   {cat:"RS-485",qty:4,ref:"R_BIAS",   part:"560Ω 0402 bias resistors (2 per bus end)",pkg:"0402",est:"$0.05ea",col:C.rs4,note:"Bus termination biasing"},
   {cat:"RS-485",qty:2,ref:"R_TERM",   part:"120Ω 0402 end termination (1 per bus end)",pkg:"0402",est:"$0.05ea",col:C.rs4,note:"Solder bridge JP_RS485_TERM"},
   // I2C
   {cat:"I²C",   qty:2,ref:"U_BUF_T",  part:"PCA9517 I²C buffer (TRIHAT-1)",          pkg:"SOT-23-6",est:"$0.60ea",col:C.i2c,note:"2×2mm · 400kHz/1MHz · bidirectional"},
-  {cat:"I²C",   qty:2,ref:"U_BUF_C",  part:"PCA9517 I²C buffer (COMPHAT-1)",         pkg:"SOT-23-6",est:"$0.60ea",col:C.i2c,note:"Same IC both boards"},
+  {cat:"I²C",   qty:2,ref:"U_BUF_C",  part:"PCA9517 I²C buffer (COMMS-HAT-1)",         pkg:"SOT-23-6",est:"$0.60ea",col:C.i2c,note:"Same IC both boards"},
   {cat:"I²C",   qty:2,ref:"U_TVS",    part:"PRTR5V0U2X TVS ESD diode (per board)",   pkg:"SOT-363",est:"$0.35ea",col:C.i2c,note:"±8kV HBM · dual rail · SOT-363"},
   {cat:"I²C",   qty:2,ref:"U_CMC",    part:"BNX002-01 common-mode choke (per board)", pkg:"SMD",est:"$0.80ea",col:C.i2c,note:"2200Ω @ 100MHz · EDF EMI rejection"},
   {cat:"I²C",   qty:4,ref:"J_I2C",    part:"JST-GH 1.25mm 4-pin connector ×4",       pkg:"SMD",est:"$0.60ea",col:C.i2c,note:"IN+OUT per board"},

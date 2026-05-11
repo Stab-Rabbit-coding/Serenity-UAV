@@ -309,7 +309,7 @@
   )
 
   (footprint "Connector_PinHeader_2.54mm:PinHeader_2x20_P2.54mm_Vertical" (layer "F.Cu")
-    (at 29.2 49) (descr "40-pin GPIO header Pi-standard to COMPHAT-1")
+    (at 29.2 49) (descr "40-pin GPIO header Pi-standard to COMMS-HAT-1")
     (fp_text reference "HDR40" (at 0 -5) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "GPIO-40" (at 0 5) (layer "F.Fab")
