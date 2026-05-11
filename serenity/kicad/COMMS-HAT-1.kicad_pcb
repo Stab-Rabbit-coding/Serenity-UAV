@@ -21,11 +21,11 @@
   (paper "A4")
 
   (title_block
-    (title "COMPHAT-1-RevE")
+    (title "COMMS-HAT-1-RevE")
     (date "2025")
     (rev "E")
     (company "Steve Griffing PE(CSE) CISSP-ISSEP CPP")
-    (comment_1 "Serenity-Class Tiltrotor UAV")
+    (comment_1 "SUPERSEDED by COMMS-HAT-SWITCH in Rev H — retained for reference only")
     (comment_2 "CC BY 4.0 — creativecommons.org/licenses/by/4.0")
     (comment_3 "CM4 companion hat: CAN FD, Ethernet, TPM2, uSD log, SiK 915MHz, 49MHz RCRS, Zigbee CC2652P7, LoRa SX1276, NX STM32 proxy, 74HC74 latch  65x48mm 4-layer")
     (comment_4 "Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0")

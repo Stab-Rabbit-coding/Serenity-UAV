@@ -21,7 +21,7 @@
   (paper "A4")
 
   (title_block
-    (title "COMPHAT-1-RevE")
+    (title "COMMS-HAT-1-RevE")
     (date "2025")
     (rev "E")
     (company "Steve Griffing PE(CSE) CISSP-ISSEP CPP")

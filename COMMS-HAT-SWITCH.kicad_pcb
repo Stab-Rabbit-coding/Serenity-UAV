@@ -9,7 +9,7 @@
   (general (thickness 1.6))
   (paper "A4")
   (title_block
-    (title "COMPHAT-SWITCH")  (date "2026") (rev "H.1")
+    (title "COMMS-HAT-SWITCH")  (date "2026") (rev "H.1")
     (company "Steve Griffing PE(CSE) CISSP-ISSEP CPP")
     (comment_1 "Serenity-Class Tiltrotor UAV — 8-Node Rev H.1")
     (comment_2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")

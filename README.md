@@ -51,7 +51,7 @@ Design	This project	—	CC BY 4.0	All original design work: PCBs, firmware spec,
 What This License Covers
 ✓ COVERED under CC BY 4.0
 ✓3D printable hull, nacelle, bell, and nozzle design files (STL/STEP/F3D)
-✓PCB schematics and Gerber files for TRIHAT-1, CM4-CARRIER-1, COMPHAT-1
+✓PCB schematics and Gerber files for TRIHAT-1, CM4-CARRIER-1, COMMS-HAT-1
 ✓Circuit diagrams, pinout tables, and wiring specifications
 ✓Mechanical drawings and assembly specifications
 ✓Firmware architecture specifications and algorithm descriptions

@@ -12,5 +12,5 @@
     (comment_1 "Serenity-Class Tiltrotor — 8-Node Rev I")
     (comment_2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
     (comment_3 "CM4 minimal carrier 57x44mm — no USB hub — CPLD write-blocker")
-    (comment_4 "Murex-style 5-port Ethernet switch handled in COMPHAT-SWITCH"))
+    (comment_4 "Murex-style 5-port Ethernet switch handled in COMMS-HAT-SWITCH"))
 )

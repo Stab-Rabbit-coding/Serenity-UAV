@@ -30,7 +30,7 @@ Avionics,CM4-CARRIER-2,"CM4-CARRIER-2 PCB 57×44mm 4L minimal carrier (×2)",2,1
 Avionics,SENSORHAT-1,"SENSORHAT-1 PCB 46×36mm XIAO RP2350 realtime hat (×2)",2,12.5,JLCPCB assembled,SENSORHAT-1,Custom,28.00,56.00,,"~$22 fab + ~$6 amortized. ICM-42688 + BMP388 + W5500 + MCP2518FD + HI-6130"
 Avionics,CM3PLUS,"Raspberry Pi CM3+ Lite no eMMC (×2) Nodes 2 & 3",2,8.0,"Adafruit / PiShop.us",SC0024,Raspberry Pi Ltd,25.00,50.00,,A53@1.2GHz 1GB LPDDR2
 Avionics,CM3-CARRIER-1,"CM3-CARRIER-1 PCB 68×30mm 4L integrated bus carrier (×2)",2,9.0,JLCPCB assembled,CM3-CARRIER-1,Custom,18.00,36.00,,"Nodes 2 & 3. MCP2518FD + MAX3485E + HI-6130 + W5500 integrated"
-Avionics,COMPHAT-SWITCH,"COMPHAT-SWITCH PCB 65×52mm Node 1 comms hat",1,29.0,JLCPCB assembled,COMPHAT-SWITCH,Custom,42.00,42.00,,"KSZ8895 5-port switch + SiK + 1553 + CAN FD + RS-485 + TPM"
+Avionics,COMMS-HAT-SWITCH,"COMMS-HAT-SWITCH PCB 65×52mm Node 1 comms hat",1,29.0,JLCPCB assembled,COMMS-HAT-SWITCH,Custom,42.00,42.00,,"KSZ8895 5-port switch + SiK + 1553 + CAN FD + RS-485 + TPM"
 Avionics,MICROHAT,"MICROHAT PCB 42×36mm Node 4 comms hat",1,10.0,JLCPCB assembled,MICROHAT,Custom,12.00,12.00,,"ETH passthrough + CAN FD + RS-485 + 1553"
 Avionics,MICROSD-OS,"microSD 8GB Class 10 OS boot (×4)",4,1.0,Amazon,8GB-microSD-C10,"SanDisk / Samsung",8.00,32.00,,"2× CM4-CARRIER-2 + 2× CM3-CARRIER-1 J_SD"
 Avionics,MICROSD-LOG,"microSD 32GB flight log (×2)",2,1.0,Amazon,32GB-microSD,"SanDisk / Samsung",10.00,20.00,,"One per CM4-CARRIER-2 log slot (Nodes 1 & 4)"
@@ -66,7 +66,7 @@ Obstacle Avoidance Array B,TOF-B-MUX,TCA9548A 8-ch I2C mux Array-B,1,1,Mouser,TC
 Obstacle Avoidance Array B,TOF-B-GPIO,MCP23008 8-port GPIO expander XSHUT ctrl Array-B,1,1,Mouser,MCP23008-E/SS,Microchip,1.20,1.20,,"I2C 0x20 on Node 2 I2C2"
 Obstacle Avoidance Array B,TOF-B-MOUNT,"VL53L5CX PETG flush-mount ×6 Array-B",6,1,Self-print (PETG),—,—,0.50,3.00,tof_flush_mount_5mm.stl,"Same print as Array A; different hull positions"
 Obstacle Avoidance Array B,TOF-B-CABLE,"VL53L5CX 4-wire JST-SH1.0 300mm ×6 Array-B",6,1,"Amazon / Mouser",JST-SH1.0-4P-300mm,Generic,1.50,9.00,,Separate foam conduit from Array A
-Radios and Sensors,SIK-915,SiK 915MHz telemetry radio module,1,14,"Holybro US / mRo",HolyBro SiK Radio V3,Holybro,45.00,45.00,,"On COMPHAT-SWITCH; SMA belly antenna"
+Radios and Sensors,SIK-915,SiK 915MHz telemetry radio module,1,14,"Holybro US / mRo",HolyBro SiK Radio V3,Holybro,45.00,45.00,,"On COMMS-HAT-SWITCH; SMA belly antenna"
 Radios and Sensors,RCRS-49,49MHz RCRS RC receiver board,1,12,Specialty RC suppliers,RCRS-49MHz,"RCRS / Generic",35.00,35.00,,Dorsal fin antenna coil
 Radios and Sensors,GPS-M10Q,u-blox M10Q GPS module + patch antenna,1,12,SparkFun,GPS-19770,"u-blox / SparkFun",35.00,35.00,,"59mm from nose; cockpit top mount"
 Radios and Sensors,ANT-SIK,915MHz SMA whip antenna + pigtail,1,3,Amazon,915MHz-SMA-whip,Generic,9.00,9.00,,SMA belly mount

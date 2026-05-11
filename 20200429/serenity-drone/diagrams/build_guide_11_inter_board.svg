@@ -49,13 +49,13 @@
 <text x="968" y="239" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">INSTRUCTIONS</text>
 <circle cx="776" cy="255" r="9" fill="#006db7"/>
 <text x="776" y="259" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1</text>
-<text x="792" y="260" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Plug Ethernet cable: TRIHAT-1 J3 → COMPHAT-1 J2 (purple cable)</text>
+<text x="792" y="260" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Plug Ethernet cable: TRIHAT-1 J3 → COMMS-HAT-1 J2 (purple cable)</text>
 <circle cx="776" cy="279" r="9" fill="#006db7"/>
 <text x="776" y="283" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
 <text x="792" y="284" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Route Ethernet along PORT keel spine · tie every 40mm</text>
 <circle cx="776" cy="303" r="9" fill="#006db7"/>
 <text x="776" y="307" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
-<text x="792" y="308" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Plug CAN FD cable: TRIHAT-1 J2 → COMPHAT-1 J1 (orange cable)</text>
+<text x="792" y="308" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Plug CAN FD cable: TRIHAT-1 J2 → COMMS-HAT-1 J1 (orange cable)</text>
 <circle cx="776" cy="327" r="9" fill="#006db7"/>
 <text x="776" y="331" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4</text>
 <text x="792" y="332" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Route CAN along STARBOARD keel spine · ≥20mm from Ethernet</text>
@@ -64,7 +64,7 @@
 <text x="792" y="356" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">TRIHAT-1: solder 120Ω termination bridge JP-T</text>
 <circle cx="776" cy="375" r="9" fill="#006db7"/>
 <text x="776" y="379" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">6</text>
-<text x="792" y="380" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">COMPHAT-1: leave bridge JP-C OPEN (do not solder)</text>
+<text x="792" y="380" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">COMMS-HAT-1: leave bridge JP-C OPEN (do not solder)</text>
 <rect x="760" y="424" width="416" height="36" rx="6" fill="#fffac0" stroke="#ff7518" stroke-width="2"/><text x="778" y="439" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ff7518">⚠</text><text x="796" y="446" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">CAN bus WILL NOT work correctly if both or neither terminator is soldered</text>
 <rect x="760" y="468" width="416" height="36" rx="6" fill="#fffac0" stroke="#ff7518" stroke-width="2"/><text x="778" y="483" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ff7518">⚠</text><text x="796" y="490" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Twist CANH/CANL ≥25 turns/metre — pre-twist before inserting into JST-GH</text>
 <polygon points="126.0,433.0 212.6,383.0 160.6,353.0 74.0,403.0"   fill="#c8dff0"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
@@ -75,7 +75,7 @@
 <polygon points="476.0,433.0 562.6,383.0 510.6,353.0 424.0,403.0"   fill="#e8f5e9"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="476.0,408.0 562.6,358.0 562.6,383.0 476.0,433.0" fill="#2e7d32" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="562.6,358.0 510.6,328.0 510.6,353.0 562.6,383.0" fill="#2e7d32" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
-<text x="526" y="423" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">COMPHAT-1</text>
+<text x="526" y="423" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">COMMS-HAT-1</text>
 <text x="526" y="438" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#c8e6c9">J2 ETH · J1 CAN</text>
 <path d="M226,423 Q326,368 476,423" fill="none" stroke="#6a1b9a" stroke-width="5" stroke-linecap="round"/>
 <rect x="336" y="358" width="100" height="28" rx="6" fill="#6a1b9a" opacity="0.85"/>
@@ -88,7 +88,7 @@
 <rect x="126" y="528" width="200" height="52" rx="6" fill="#fffac0" stroke="#ff7518" stroke-width="2"/>
 <text x="226" y="544" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#222222">120Ω TERMINATION</text>
 <text x="226" y="558" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">TRIHAT-1 J2: SOLDER bridge JP-T ✔</text>
-<text x="226" y="572" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c62828">COMPHAT-1 J1: bridge JP-C OPEN ✗</text>
+<text x="226" y="572" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c62828">COMMS-HAT-1 J1: bridge JP-C OPEN ✗</text>
 <rect x="476" y="528" width="200" height="40" rx="6" fill="#b2ebf2" stroke="#00838f" stroke-width="1.5"/>
 <text x="576" y="544" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#222222">Cable separation ≥20mm</text>
 <text x="576" y="560" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#607080">route on opposite keel sides</text>

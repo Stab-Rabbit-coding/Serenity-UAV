@@ -102,7 +102,7 @@ function CarrierPCB({selected, onSelect}) {
       x:bx+445, y:by+160, w:56, h:90, fill:"rgba(0,229,255,0.03)", stroke:"rgba(0,229,255,0.3)",
       dash:"3 2", tx:bx+473, ty:by+207, fc:"rgba(0,229,255,0.5)", fs:7},
     // 40-pin GPIO header (top edge, same position as Pi Zero)
-    {id:"HDR40", ref:"40-pin GPIO hdr", note:"2.54mm · to COMPHAT-1 · same footprint as Pi Zero",
+    {id:"HDR40", ref:"40-pin GPIO hdr", note:"2.54mm · to COMMS-HAT-1 · same footprint as Pi Zero",
       x:bx+44, y:by+284, w:376, h:22, fill:"rgba(255,107,53,0.08)", stroke:C.orange,
       dash:"", tx:bx+232, ty:by+297, fc:C.orange, fs:8},
     // AP2112K 3.3V LDO
@@ -240,7 +240,7 @@ const CARRIER_DETAIL = {
   ]},
   SD1:{ title:"μSD — CM4 OS (SDIO0)",c:C.lime,rows:[
     ["Purpose","CM4 operating system boot card"],["Interface","SDIO0 from CM4 via CN2"],
-    ["Recommended","≥32GB A2 UHS-I (U3) card"],["Separate from","COMPHAT-1 log μSD (SDIO1/SPI)"],
+    ["Recommended","≥32GB A2 UHS-I (U3) card"],["Separate from","COMMS-HAT-1 log μSD (SDIO1/SPI)"],
     ["Format","ext4 root + FAT32 boot"],["Note","CM4 Lite has no onboard eMMC — requires this SD"],
   ]},
   U1:{ title:"GL850G USB 2.0 Hub",c:C.accent,rows:[
@@ -260,17 +260,17 @@ const CARRIER_DETAIL = {
     ["BT","Shares antenna via CM4 internal switch"],
     ["Note","Place at far end of board from metallic payload bay"],
   ]},
-  HDR40:{ title:"40-pin GPIO Header — to COMPHAT-1",c:C.orange,rows:[
+  HDR40:{ title:"40-pin GPIO Header — to COMMS-HAT-1",c:C.orange,rows:[
     ["Type","2×20 2.54mm male header, tall (11mm) for clearance"],
     ["Pinout","Identical to Pi Zero / Pi 4 GPIO"],
     ["Carries","3.3V · 5V · GND · UART0 · SPI0 · SPI1 · I2C · GPIO"],
-    ["Stacks","COMPHAT-1 sits directly on top of this header"],
+    ["Stacks","COMMS-HAT-1 sits directly on top of this header"],
     ["CM4 note","All GPIO functions routed through DF40 connectors → header"],
   ]},
   U2:{ title:"AP2112K-3.3 LDO",c:C.yellow,rows:[
     ["Output","3.3V · 600mA"],["Input","5V VSYS"],["Powers","GL850G · μSD pull-ups · LED · buttons"],
     ["CM4 own 3.3V","CM4 module has internal regulators — does NOT use this LDO"],
-    ["COMPHAT 3.3V","Supplied by COMPHAT-1's own AP2112K LDO"],
+    ["COMMS-HAT 3.3V","Supplied by COMMS-HAT-1's own AP2112K LDO"],
   ]},
   SW1:{ title:"BOOT + nRST Buttons",c:C.dimmer,rows:[
     ["BOOT","Pulls CM4 nBOOT_EN low → USB mass-storage boot mode"],
@@ -316,7 +316,7 @@ function CarrierDetailPanel({id}) {
 // ═══════════════════════════════════════════════════════════════════
 function StackDiagram() {
   const layers = [
-    {label:"COMPHAT-1", sub:"CAN FD · ETH · TPM · μSD(log) · SiK · RCRS", h:54, c:C.orange, detail:"65×48mm · 4-layer · 20g"},
+    {label:"COMMS-HAT-1", sub:"CAN FD · ETH · TPM · μSD(log) · SiK · RCRS", h:54, c:C.orange, detail:"65×48mm · 4-layer · 20g"},
     {label:"40-pin GPIO header (11mm tall)", sub:"Pi-standard · all GPIO routed through", h:30, c:C.dim, detail:"standoffs+header 4g"},
     {label:"CM4-CARRIER-1", sub:"GL850G · μSD(OS) · WiFi ant · USB-C · power", h:54, c:C.green, detail:"65×40mm · 4-layer · 14g"},
     {label:"CM4 Lite 4GB WiFi", sub:"BCM2711 · 4×A72 · 4GB LPDDR4X · 802.11ac", h:40, c:C.green, detail:"55×40mm · 7.5g (underside of carrier)"},
@@ -368,7 +368,7 @@ const WEIGHT_DATA = [
   ]},
   {label:"Companion — CM4 stack",c:C.green, items:[
     {n:"CM4 Lite 4GB WiFi module",w:8},{n:"CM4-CARRIER-1 PCB",w:14},
-    {n:"COMPHAT-1 PCB + ICs",w:20},{n:"SiK 915MHz air module",w:14},{n:"49MHz RCRS module",w:16},
+    {n:"COMMS-HAT-1 PCB + ICs",w:20},{n:"SiK 915MHz air module",w:14},{n:"49MHz RCRS module",w:16},
   ]},
   {label:"Payload system",c:C.pink, items:[
     {n:"Payload release servo SG90",w:9},{n:"N20 winch motor + gearbox",w:14},
@@ -525,7 +525,7 @@ const HOVER_LOADS = [
   {n:"30mm fwd fan — hover trim idle",a:0.4,v:BAT_V,c:C.orange},
   {n:"CM4 Lite 4GB (active flight app)",a:0.85,v:5,c:C.green},
   {n:"GL850G USB hub",a:0.10,v:3.3,c:C.green},
-  {n:"COMPHAT-1 + sensors",a:0.22,v:3.3,c:C.purple},
+  {n:"COMMS-HAT-1 + sensors",a:0.22,v:3.3,c:C.purple},
   {n:"Pico 2 + TRIHAT-1",a:0.14,v:3.3,c:C.teal},
   {n:"SiK 915MHz (TX burst avg)",a:0.27,v:5,c:C.accent},
   {n:"49MHz RCRS transceiver (RX)",a:0.10,v:5,c:C.pink},
@@ -538,7 +538,7 @@ const CRUISE_LOADS = [
   {n:"2× 60mm EDF @ 15% trim thrust",a:3.0,v:BAT_V,c:C.orange},
   {n:"CM4 Lite 4GB (active)",a:0.85,v:5,c:C.green},
   {n:"GL850G USB hub",a:0.10,v:3.3,c:C.green},
-  {n:"COMPHAT-1 + sensors",a:0.22,v:3.3,c:C.purple},
+  {n:"COMMS-HAT-1 + sensors",a:0.22,v:3.3,c:C.purple},
   {n:"Pico 2 + TRIHAT-1",a:0.14,v:3.3,c:C.teal},
   {n:"SiK 915MHz (TX)",a:0.27,v:5,c:C.accent},
   {n:"49MHz RCRS (RX)",a:0.10,v:5,c:C.pink},
@@ -657,7 +657,7 @@ function PowerTab(){
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// COMPHAT-1 GPIO UPDATE (for CM4 pinout — identical to Pi Zero header)
+// COMMS-HAT-1 GPIO UPDATE (for CM4 pinout — identical to Pi Zero header)
 // ═══════════════════════════════════════════════════════════════════
 function ComphatTab(){
   const note_rows=[
@@ -667,12 +667,12 @@ function ComphatTab(){
     ["GPIO 22","MCP2518FD CAN INT"],["GPIO 23","SLB9670 TPM IRQ"],
     ["GPIO 24","W5500 INT"],["GPIO 25","49MHz RCRS IRQ"],
     ["GPIO 26","49MHz RCRS RST"],["GPIO 27","MCP2562FD CAN STBY"],
-    ["I²C (GPIO 2/3)","COMPHAT EEPROM (HAT ID) only"],
+    ["I²C (GPIO 2/3)","COMMS-HAT EEPROM (HAT ID) only"],
   ];
   return (
     <div>
-      <Note c={C.green} ch="COMPHAT-1 pin-out is unchanged. The CM4's 40-pin GPIO header is electrically and physically identical to the Pi Zero 2W header — the COMPHAT-1 PCB mounts directly on the CM4-CARRIER-1 header with no modification. The CM4 accesses all peripherals via the same GPIO numbers as the Zero 2W would have."/>
-      <SH t="COMPHAT-1 → CM4 GPIO Mapping" mt={16}/>
+      <Note c={C.green} ch="COMMS-HAT-1 pin-out is unchanged. The CM4's 40-pin GPIO header is electrically and physically identical to the Pi Zero 2W header — the COMMS-HAT-1 PCB mounts directly on the CM4-CARRIER-1 header with no modification. The CM4 accesses all peripherals via the same GPIO numbers as the Zero 2W would have."/>
+      <SH t="COMMS-HAT-1 → CM4 GPIO Mapping" mt={16}/>
       <div style={{overflowX:"auto"}}>
         <table style={{width:"100%",borderCollapse:"collapse",fontFamily:M,fontSize:11}}>
           <thead><tr>{["CM4 GPIO / BUS","PERIPHERAL"].map(h=>(
@@ -691,7 +691,7 @@ function ComphatTab(){
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginTop:4}}>
         {[
           {label:"SD1 — CM4 OS card",c:C.lime,loc:"CM4-CARRIER-1 board",iface:"SDIO0 (native CM4)",use:"Raspberry Pi OS Lite headless boot · application code · config files",note:"≥32GB A2 U3 card. Mounts as / (root) on CM4. Accessed by Linux kernel."},
-          {label:"SD2 — Log / data card",c:C.green,loc:"COMPHAT-1 hat",iface:"SPI1 CE2 (slower but adequate)",use:"MAVLink black-box logs · sensor recordings · payload event logs",note:"≥16GB. Mounted by application as /mnt/log. FAT32 for easy host retrieval."},
+          {label:"SD2 — Log / data card",c:C.green,loc:"COMMS-HAT-1 hat",iface:"SPI1 CE2 (slower but adequate)",use:"MAVLink black-box logs · sensor recordings · payload event logs",note:"≥16GB. Mounted by application as /mnt/log. FAT32 for easy host retrieval."},
         ].map((s,i)=>(
           <div key={i} style={{padding:"12px 14px",border:`1px solid ${s.c}44`,
             background:`${s.c}07`,borderRadius:4}}>
@@ -779,7 +779,7 @@ function BomDeltaTab(){
         ))}
       </div>
       <Warn ch={`Net AUW increase from Zero 2W → CM4: +14g. T/W ratio remains ${TW}:1 — adequate. Battery slide +18mm aft to re-trim CG. No ESC or motor changes required; 5S 2200mAh remains viable.`}/>
-      <Note c={C.green} ch="CM4-CARRIER-1 at 65×40mm is 10mm wider than a Pi Zero (65×30mm) — unavoidable given the 55×40mm CM4 module footprint. Length is identical at 65mm. The COMPHAT-1 (65×48mm) is already wider than the Zero, so the carrier fits within the same fuselage bay envelope. Footprint mount holes are Pi Zero-compatible (58mm × 23mm diagonal)."/>
+      <Note c={C.green} ch="CM4-CARRIER-1 at 65×40mm is 10mm wider than a Pi Zero (65×30mm) — unavoidable given the 55×40mm CM4 module footprint. Length is identical at 65mm. The COMMS-HAT-1 (65×48mm) is already wider than the Zero, so the carrier fits within the same fuselage bay envelope. Footprint mount holes are Pi Zero-compatible (58mm × 23mm diagonal)."/>
     </div>
   );
 }
@@ -830,7 +830,7 @@ function CarrierTab(){
               <KV k="OS microSD" v="SDIO0 · separate from log SD"/>
               <KV k="USB" v="GL850G hub · USB-C OTG/pwr"/>
               <KV k="WiFi" v="PCB trace ant · CM4 onboard radio"/>
-              <KV k="Stack height" v="~22mm total w/ COMPHAT-1"/>
+              <KV k="Stack height" v="~22mm total w/ COMMS-HAT-1"/>
               <KV k="Weight (PCB)" v="~14g"/>
             </div>
           )}
@@ -843,7 +843,7 @@ function CarrierTab(){
 // ═══════════════════════════════════════════════════════════════════
 // APP
 // ═══════════════════════════════════════════════════════════════════
-const TABS=["CM4 Carrier","COMPHAT-1","Weight & CG","Power Budget","BOM Delta"];
+const TABS=["CM4 Carrier","COMMS-HAT-1","Weight & CG","Power Budget","BOM Delta"];
 
 export default function App(){
   const [tab,setTab]=useState("CM4 Carrier");
@@ -861,7 +861,7 @@ export default function App(){
               CM4 LITE 4GB + CARRIER BOARD
             </h1>
             <div style={{color:"rgba(74,222,128,0.55)",fontSize:10,marginTop:5}}>
-              CM4-CARRIER-1 · COMPHAT-1 · Recalculated weight / CG / power
+              CM4-CARRIER-1 · COMMS-HAT-1 · Recalculated weight / CG / power
             </div>
           </div>
           <div style={{textAlign:"right",fontFamily:M}}>
@@ -884,7 +884,7 @@ export default function App(){
       {/* Content */}
       <div style={{position:"relative",zIndex:1,padding:"24px 28px",maxWidth:1020,margin:"0 auto"}}>
         {tab==="CM4 Carrier"    && <CarrierTab/>}
-        {tab==="COMPHAT-1"     && <ComphatTab/>}
+        {tab==="COMMS-HAT-1"     && <ComphatTab/>}
         {tab==="Weight & CG"   && <WeightTab/>}
         {tab==="Power Budget"  && <PowerTab/>}
         {tab==="BOM Delta"     && <BomDeltaTab/>}
@@ -893,7 +893,7 @@ export default function App(){
       <div style={{position:"relative",zIndex:1,borderTop:`1px solid ${C.border}`,
         padding:"11px 28px",display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:6}}>
         <span style={{color:"rgba(74,222,128,0.2)",fontSize:8,letterSpacing:"0.12em"}}>
-          CM4-CARRIER-1 + COMPHAT-1 · REV B · TRI-FAN TILTROTOR
+          CM4-CARRIER-1 + COMMS-HAT-1 · REV B · TRI-FAN TILTROTOR
         </span>
         <span style={{color:"rgba(74,222,128,0.2)",fontSize:8,letterSpacing:"0.1em"}}>
           REFERENCE DESIGN · VERIFY BEFORE FABRICATION
