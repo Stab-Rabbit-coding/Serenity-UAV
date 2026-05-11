@@ -135,7 +135,7 @@ Each Cape-B board carries all 4 radio types. Software assigns one CN node as pri
 | MAVLink telemetry | SiK v3 module (RFD900x footprint) | UART + GPIO | 902–928 MHz | Bidirectional telemetry / command uplink |
 | Long-range backup | RFM95W LoRa | SPI + DIO IRQ | 902–928 MHz (separate channel plan) | Backup command / low-rate telemetry |
 | RC control | RCRS-49 sub-module | UART + timing GPIO | 49 MHz TDDS | Pilot RC input, dynamic channel assignment |
-| Local mesh / GCS | ESP32-C3-MINI-1 | SPI + UART | 2.4 GHz WiFi b/g/n + BLE | Ground station AP, short-range streaming, Zigbee-compatible via firmware |
+| Local mesh / GCS | TI WL1837MOD | SDIO | 2.4 + 5 GHz WiFi (802.11 a/b/g/n) + BT 5.0 | Ground station AP, short-range streaming; BT for tablet GCS |
 
 > **SiK + LoRa coexistence:** Both operate in the 902–928 MHz US ISM band. Coordinate channel plans at firmware level — SiK on 915 MHz center, LoRa on 903 MHz or 927 MHz. Physical separation of SMA ports ≥50 mm, separate ground pours under each RF section.
 
@@ -152,15 +152,17 @@ Each Cape-B board carries all 4 radio types. Software assigns one CN node as pri
 | U4 | DP83825I × 2 | CPSW3G RMII | Ethernet PHY ring ports (same as Cape-A) |
 | U5 | RFD900x (or SiK v3 mod.) | UART, CTS/RTS | SiK 915 MHz MAVLink radio |
 | U6 | RFM95W | SPI, DIO0–DIO3 | LoRa 915 MHz long-range backup |
-| U7 | ESP32-C3-MINI-1 | SPI + UART | WiFi 2.4 GHz + BLE (GCS AP, Zigbee-compat via OpenThread fw) |
+| U7 | TI WL1837MOD | SDIO (4-bit) | WiFi 802.11 a/b/g/n (2.4 + 5 GHz) + BT 5.0 — uses TI wl18xx mainline kernel driver |
 | — | RCRS-49 sub-module | JST-GH 6-pin header | 49 MHz TDDS RC control |
 | U8 | W25Q128JV | SPI | 128 Mbit NOR flash — circular flight log buffer (non-executable) |
-| U9 | microSD socket | SPI | Removable log card — hardware WP pin asserted (write-protect via CPLD latch) |
-| U10 | DRV8833 | GPIO (H-bridge) | Cargo winch N20 300:1 motor driver, 1.5 A |
-| U11 | HX711 | GPIO bit-bang (DOUT/SCK) | 24-bit load cell ADC — payload weight |
-| U12 | TPS63031 (or equiv) | — | 3.3 V/1.5 A SMPS (radio TX peaks up to 800 mA combined) |
-| U13 | AP2112K-3.3 | — | Auxiliary 3.3 V LDO for logic (separated from RF supply) |
-| U14 | Ferrite + bulk cap array | — | Per-radio RF supply decoupling (100 µF + 100 nF per radio VCC) |
+| U9 | microSD socket | SPI | Removable log card — hardware write-block enforced by U10 |
+| U10 | ATF16V8BQL CPLD | GPIO latch → SD-WP pin | Write-block latch: SET at power-on by boot sequence, CLEAR only on hard power cycle; implements non-executable append-only log semantics identical to RevJ CPLD write-blocker |
+| U11 | SLB9670 | SPI | TPM 2.0 — per-node attestation, radio key storage, boot measurement |
+| U12 | DRV8833 | GPIO (H-bridge) | Cargo winch N20 300:1 motor driver, 1.5 A |
+| U13 | HX711 | GPIO bit-bang (DOUT/SCK) | 24-bit load cell ADC — payload weight |
+| U14 | TPS63031 (or equiv) | — | 3.3 V/1.5 A SMPS (radio TX peaks up to 800 mA combined) |
+| U15 | AP2112K-3.3 | — | Auxiliary 3.3 V LDO for logic (separated from RF supply) |
+| U16 | Ferrite + bulk cap array | — | Per-radio RF supply decoupling (100 µF + 100 nF per radio VCC) |
 
 ### 4.3 Cape-B payload / cargo I/O
 
@@ -189,15 +191,15 @@ Each Cape-B board carries all 4 radio types. Software assigns one CN node as pri
 | SMA-915-SIK | 902–928 MHz | SiK λ/4 monopole whip (82 mm) |
 | SMA-915-LORA | 902–928 MHz | LoRa λ/4 monopole or SMA whip |
 | SMA-49 | 49 MHz | RCRS-49 loaded whip (via sub-module) |
-| SMA-WIFI | 2.4 GHz | ESP32 PCB trace or U.FL → SMA pigtail |
+| SMA-WIFI | 2.4 / 5 GHz | WL1837MOD PCB antenna or U.FL → SMA pigtail |
 
 ### 4.6 Cape-B power budget
 
 | Rail | Consumers | Max current |
 |---|---|---|
 | 5 V in | PB2 VIN, DRV8833 motor, radio modules | 3.0 A |
-| 3.3 V RF (SMPS) | RFD900x (1.2 A TX peak), RFM95W (120 mA TX), ESP32-C3 (350 mA TX) | 1.5 A continuous, 2.0 A peak |
-| 3.3 V logic (LDO) | MAX3485E, ATA6561, DS26LV31/32, DP83825I × 2, HX711 | 300 mA |
+| 3.3 V RF (SMPS) | RFD900x (1.2 A TX peak), RFM95W (120 mA TX), WL1837MOD (550 mA TX peak) | 1.5 A continuous, 2.0 A peak |
+| 3.3 V logic (LDO) | MAX3485E, ATA6561, DS26LV31/32, DP83825I × 2, HX711, SLB9670, ATF16V8BQL | 350 mA |
 
 ---
 

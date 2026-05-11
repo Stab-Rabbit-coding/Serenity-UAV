@@ -68,7 +68,8 @@ body, p, li, td, th, code, pre {
 | `serenity-connectivity-revG.jsx` | CAN daisy-chain (2nd connector) + RS-485 + I²C inter-board buses | Rev G connectivity |
 | `serenity-connectivity-revH.jsx` | **MIL-STD-1553B replaces I²C as 4th active bus** | Rev H connectivity |
 | `serenity-rev-i.jsx` | CM3+ Nodes 2&3 + CM3-CARRIER-1 + dual VL53L5CX ToF arrays + cargo gondola | Rev I |
-| `serenity-rev-j.jsx` | **XRP 3660-2700KV nacelle EDFs + Hobbywing 120A ESCs + 83mm pod ID** | **Rev J ← current master** |
+| `serenity-rev-j.jsx` | XRP 3660-2700KV nacelle EDFs + Hobbywing 120A ESCs + 83mm pod ID | Rev J |
+| `serenity-rev-k.jsx` | **8× PocketBeagle 2 (AM6232) cooperative nodes + Cape-A/B + TPM ×8 + CPLD write-blocker + LoRa + WL1837MOD WiFi** | **Rev K ← current master** |
 
 ### SVG Engineering Diagrams
 
@@ -146,9 +147,15 @@ body, p, li, td, th, code, pre {
 |------|-------------|
 | `LICENSE_AND_ATTRIBUTION.md` | Full CC BY 4.0 license, author credentials, all upstream attributions |
 | `README.md` | Project overview, quick specs, build guide index, file inventory |
-| `MANIFEST.json` | SHA-256 checksums for all 72 files (integrity verification) |
+| `MANIFEST.json` | SHA-256 checksums for all project files (integrity verification) |
 | `PROJECT_INDEX.md` | This file |
-| `serenity-drone-revF.zip` | **Complete project archive** — all 72 files in one download (425 KB) |
+| `AVIONICS_PB2_REDESIGN.md` | **Rev K** — 8-node PocketBeagle 2 cooperative avionics architecture; Cape-A and Cape-B design specs |
+| `PHASED_BUILD_GUIDE.md` | **Rev K** — 8-phase phased build, procurement, and flight-test guide |
+| `bom_revK.json` | **Rev K** bill of materials (structured JSON with mass/cost) |
+| `bom_revK.csv` | **Rev K** bill of materials (CSV for spreadsheet use) |
+| `bom_revJ.json` | Rev J bill of materials (historical reference) |
+| `bom_revJ.csv` | Rev J bill of materials CSV |
+| `serenity-drone-revF.zip` | Complete Rev F project archive — legacy reference |
 
 ---
 
@@ -166,28 +173,31 @@ body, p, li, td, th, code, pre {
 | Nacelle ESC | **Hobbywing Platinum PRO V4 120A** (mandatory for 84A XRP draw) |
 | Pylon datum | 82.5 mm from CL (1/3 from nacelle inner edge — outward expansion) |
 | Total hover thrust | **6,450 g** (5,800g nacelles + 650g fuselage) |
-| Airframe dry | **1,884 g** |
-| AUW empty | **2,294 g · 6S 4000mAh · T/W 2.81** |
-| AUW cargo 250g | **2,429 g · 6S 2800mAh · T/W 2.66** |
-| Max payload at T/W=2.0 | **1,046 g (2.31 lb)** |
+| Avionics | **8× PocketBeagle 2 (AM6232)** · 4× Cape-A (sensor/flight) · 4× Cape-B (comms/payload) |
+| Avionics dry | **404 g** (8× PB2 + 4× Cape-A + 4× Cape-B + 4× RCRS-49 + GPS×4 + radios) |
+| Airframe dry (Rev K) | **2,177 g** |
+| AUW empty | **2,587 g · 6S 4000mAh · T/W 2.49** |
+| AUW cargo 250g | **2,722 g · 6S 2800mAh · T/W 2.37** |
+| Max payload at T/W=2.0 | **753 g (1.66 lb)** |
 | Cruise speed | 38–54 kts (scaled from 35-49kts at 365mm) |
 | Transition altitude | ≥30 ft AGL |
 | CG target | 190 mm (7.48") from nose |
-| Data buses | Ethernet 100BASE-T · CAN FD 4Mbps · RS-485 1Mbps · MIL-STD-1553B 1Mbps |
-| Security | CPLD write-blocker · STM32 NX proxy · TPM 2.0 · TrustZone · SELinux |
+| Data buses | Ethernet RSTP ring · CAN FD 1Mbps · RS-485 1Mbps · MIL-STD-1553B 1Mbps |
+| Radios | SiK 915MHz MAVLink · LoRa RFM95W 915MHz backup · TI WL1837MOD WiFi/BT GCS · RCRS-49MHz RC |
+| Security | ATF16V8BQL CPLD write-blocker (Cape-B log μSD) · **SLB9670 TPM 2.0 on all 8 nodes** · NOR flash circular log |
 | Navigation lights | 6× WS2812C — ICAO Annex 2 · 14 CFR 91.209 compliant |
 | FAA registration | **N00000 PLACEHOLDER — replace before first flight** |
 ---
 
-## Connectivity Summary (Rev H)
+## Connectivity Summary (Rev K)
 
-| Bus | Protocol | Speed | Topology | Added |
+| Bus | Protocol | Speed | Topology | Notes |
 |-----|----------|-------|----------|-------|
-| 1 | Ethernet 100BASE-T | 100 Mbps | P2P / switch | Rev E |
-| 2 | CAN FD ISO 11898-1 | 4 Mbps | Daisy-chain | Rev E (2nd connector Rev G) |
-| 3 | RS-485 / EIA-485 | 1 Mbps | Multi-drop bus | Rev G |
-| 4 | **MIL-STD-1553B** | 1 Mbps | BC/RT dual-redundant bus | **Rev H** |
-| — | I²C (on-PCB) | 400 kHz | Local sensor bus | Rev G (not inter-board) |
+| 1 | Ethernet (CPSW3G + DP83825I) | 100 Mbps | **RSTP ring** (8-node, self-healing) | Added Rev E; ring topology Rev K |
+| 2 | CAN FD ISO 11898-1 | 1 Mbps / 8 Mbps data | Linear daisy-chain, 120Ω termination at FC1 and CN4 | Added Rev E |
+| 3 | RS-485 / EIA-485 | 1 Mbps | Multi-drop, 120Ω termination at FC1 and CN4 | Added Rev G |
+| 4 | **MIL-STD-1553B** (PRU Manchester II) | 1 Mbps | BC/RT — FC1=BC, FC2=standby BC; all others RT | Added Rev H; PRU encoder Rev K |
+| — | I²C (on-Cape) | 400 kHz | Local sensor bus via TCA9548A mux | Not inter-board |
 
 ---
 
