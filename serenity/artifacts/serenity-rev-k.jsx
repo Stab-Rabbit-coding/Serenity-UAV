@@ -81,12 +81,12 @@ const W_ITEMS = [
   ["Access screws M2.5 ×16 + magnets ×8",       6],
   ["Gasket tape 3M 4016",                       8],
   // Propulsion
-  ["XRP 3660-2700KV 80mm EDF ×2 (motor+fan+housing)", 766],  // 383g each — XRP 2700KV highest KV for 80mm 6S
+  ["XRP 3660-2700KV 80mm EDF ×4 (2 per nacelle, tandem series)", 1532],  // 383g × 4 — 2 EDFs in series per nacelle
   ["XFLY Galaxy X4 PRO 40mm 12-blade EDF (4S)",  40],
-  ["120A ESC ×2 (nacelle, 6S — HW Platinum V4 120A)", 214],  // 107g each — upgraded for 84A XRP draw
+  ["120A ESC ×4 (nacelle, one per EDF, HW Platinum V4 120A)", 428],  // 107g × 4 — one per EDF, fault-tolerant pairs
   ["40A ESC ×1 (fuselage, 4S)",                15],
   ["6S→4S balance tap pigtail (cells 1–4)",     2],
-  ["Nacelle pods 93.5mm OD ×2",                36],
+  ["Nacelle pods 93.5mm OD ×2 (tandem 230mm pod)", 52],
   ["Nacelle tip caps ×2 + nav lights",         16],
   ["CF stub arms + tilt brackets ×2",          14],
   ["Nacelle tilt servos MG90S ×2",             18],
@@ -100,11 +100,11 @@ const W_ITEMS = [
   ["microSD ×12 (OS×8 + log×4)",                12],
   // Power + wiring
   ["PDB + BEC 5V/5A",                          30],
-  ["ESC power wiring (12/16 AWG)",             32],
+  ["ESC power wiring (12/16 AWG — 4 nacelle ESCs + fuselage)", 52],
   ["Servo + signal wiring",                    12],
   ["XT90 battery pigtail",                     15],
   ["Bus cables (CAN×7/RS-485×7/1553×7/ETH×8)", 25],  // ring topology — more cable runs
-  ["GPS pigtails ×4 + ESC telem + misc",       18],
+  ["GPS pigtails ×4 + ESC telem ×5 + misc",    22],  // 4 nacelle + 1 fuselage ESC telem
   // Payload + cargo system
   ["Payload servo + winch motor + driver",     20],
   ["Cargo gondola shell + clamshell door PETG",22],
@@ -133,9 +133,9 @@ const W_ITEMS = [
 const DRY_G   = W_ITEMS.reduce((s,[,g])=>s+g, 0);
 
 // ── Power & thrust ────────────────────────────────────────────
-const THRUST_NAC  = 2900;  // each 80mm 6S EDF — XRP 3660-2700KV, 84A, 1864W
+const THRUST_NAC  = 5300;  // each nacelle — 2× 80mm 6S EDF in tandem series (~91% of 2×2900g), 168A combined
 const THRUST_FUSE =  650;  // XFLY Galaxy X4 PRO 5850KV nominal 4S — 30A peak, 12-blade
-const THRUST      = THRUST_NAC*2 + THRUST_FUSE;  // 6450g
+const THRUST      = THRUST_NAC*2 + THRUST_FUSE;  // 11250g total
 
 const BAT_EMPTY   =  410;  // 6S 4000mAh
 const BAT_CARGO   =  295;  // 6S 2800mAh
@@ -402,7 +402,7 @@ function OverviewTab(){
     <div style={{background:"rgba(163,230,53,0.07)",border:"1px solid rgba(163,230,53,0.35)",
       borderRadius:6,padding:"16px 20px",marginBottom:20}}>
       <div style={{color:C.lime,fontFamily:M,fontSize:12,fontWeight:"bold",marginBottom:10,letterSpacing:"0.08em"}}>
-        REV K — 18" CANONICAL · XRP 2700KV EDFS · 8× PocketBeagle 2 · FOAM-FILLED HULL
+        REV K — 18" CANONICAL · DUAL 80mm 6S SERIES EDFs PER NACELLE · 8× PocketBeagle 2 · FOAM-FILLED HULL
       </div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20}}>
         <div>
@@ -415,7 +415,7 @@ function OverviewTab(){
           <KV k="Datum from CL"            v={`${DIM.DATUM} mm  →  outer ${DIM.OUTER} mm`} vc={C.purple}/>
         </div>
         <div>
-          <KV k="Nacelle EDFs (×2)"        v={`80mm 6S · ${THRUST_NAC}g each`} vc={C.orange}/>
+          <KV k="Nacelle EDFs (2+2)"        v={`2× 80mm 6S series per nacelle · ${THRUST_NAC}g/nacelle`} vc={C.orange}/>
           <KV k="Fuselage EDF"             v={`40mm 4S · ${THRUST_FUSE}g`}/>
           <KV k="Total hover thrust"       v={`${THRUST}g (${gToLb(THRUST)} lb)`} vc={C.green}/>
           <KV k="Airframe dry"             v={gLb(DRY_G)} vc={C.yellow}/>
@@ -580,7 +580,7 @@ function BalanceTab(){
     {item:"Dorsal-aft bay (station 266–320mm)",g:130,sta:293},
     {item:"Aft service bay (station 320–388mm)",g:180,sta:354},
     {item:"Engine bell + EDF (station 388–457mm)",g:105,sta:420},
-    {item:"Nacelles (both, effective sta)",   g:370, sta:167},
+    {item:"Nacelles (both, effective sta)",   g:1350, sta:167},  // 4 EDFs + 4 ESCs + pods + arms
     {item:"Wiring + misc",                    g:82,  sta:230},
     {item:"Battery (6S 4000mAh, centred)",    g:BAT_EMPTY, sta:DIM.CG_MM},
   ];
@@ -1134,17 +1134,138 @@ function CargoNacelleTab(){
   </div>);
 }
 
+// ── TAB: DUAL-EDF NACELLE ─────────────────────────────────────
+const DUAL_EDF_MODES = [
+  {mode:"NOMINAL",         c:"#4ade80", edfs:"FWD ✔  AFT ✔", thrust:`${THRUST_NAC}g`,     note:"Both EDFs running — full nacelle thrust. FWD+AFT throttle matched by FC governor."},
+  {mode:"FWD FAULT",       c:"#ffe600", edfs:"FWD ✖  AFT ✔", thrust:"~2900g (55%)",        note:"Forward EDF/ESC failed. Aft EDF continues. FC detects via zero RPM telemetry; trims opposite nacelle −10°, increases AFT throttle."},
+  {mode:"AFT FAULT",       c:"#ffe600", edfs:"FWD ✔  AFT ✖", thrust:"~2900g (55%)",        note:"Aft EDF/ESC failed. Forward EDF continues. Same trim response as FWD FAULT. T/W ≥2.0 retained."},
+  {mode:"BOTH FAULT",      c:"#f87171", edfs:"FWD ✖  AFT ✖", thrust:"0g (nacelle dead)",   note:"Full nacelle loss. Remaining nacelle: 5300g + fuselage 650g = 5950g vs AUW ~3627g — T/W 1.64 — controlled descent."},
+];
+const DUAL_EDF_TELEM = [
+  ["RPM delta (FWD vs AFT)", "BDSHOT both channels", ">500 RPM delta at matched throttle → bearing wear alert"],
+  ["Current imbalance",      "BLHeli32/AM32 UART ×4", ">15A delta at matched command → coil fault flag"],
+  ["Temperature (per ESC)",  "BLHeli32/AM32 UART ×4", ">95°C either ESC → throttle derate; >110°C → single-EDF mode"],
+  ["Voltage (per ESC)",      "BLHeli32/AM32 UART ×4", "Cell sag >0.3V delta → BEC or wiring fault"],
+  ["ESC Status flags",       "BLHeli32/AM32 UART ×4", "desync / overcurrent / overtemp flags → fault latch + NOTIFY"],
+];
+const NACELLE_SERIES_NOTES = [
+  {title:"Series fan staging", text:"Two 80mm EDFs in axial series within a single 230mm pod. The forward EDF (FWD) acts as the low-pressure stage; the aft EDF (AFT) as the high-pressure booster. Series staging increases total pressure ratio across the duct. Combined thrust ≈91% of arithmetic sum (5300g vs 5800g) due to inlet recirculation losses between stages. Both fans spin at the same commanded RPM; FC governor trims independently."},
+  {title:"Nacelle pod length", text:"Dual-EDF tandem pod is 230mm long (vs 144mm single). OD unchanged at 93.5mm — canonical nacelle silhouette preserved. EDF-to-EDF axial gap: 20mm with flow-straightener printed vane set (6 vanes, 8mm chord). Print nacelle_pod_dual_80mm.stl."},
+  {title:"ESC placement", text:"Each nacelle carries two ESCs: one mounted on the forward face of the inter-EDF bulkhead (ESC-FWD, 107g) and one on the aft face (ESC-AFT, 107g). Phase leads are 80mm long. Total nacelle ESC mass: 214g per nacelle, 428g total for both nacelles."},
+  {title:"Independent power buses", text:"FWD and AFT ESCs within each nacelle draw from the same 6S main battery but through independent XT30 pigtails soldered at the PDB. A short circuit on one ESC cannot take down the other. PDB fuses: 100A per nacelle ESC pair (two 100A poly fuses per nacelle)."},
+  {title:"Throttle governor", text:"FC governor maintains matched RPM between FWD and AFT EDFs within each nacelle under normal conditions (PID loop, setpoint = BDSHOT RPM FWD). On fault detection, governor isolates the failed ESC (DSHOT disarmed), ramps surviving EDF to compensate. Response time <50ms (3 consecutive telemetry failures at 10Hz)."},
+  {title:"Fault latch + recovery", text:"Faults are latched per-ESC. Recovery requires ground power cycle + GCS acknowledgment. No in-flight ESC reset — prevents oscillatory fault/recovery during maneuvers. GCS telemetry downlinks fault code, affected ESC ID, last good RPM, temperature, and flight phase at fault."},
+];
+function DualEDFNacelleTab(){
+  return(<div>
+    <div style={{background:"rgba(255,107,53,0.07)",border:"1px solid rgba(255,107,53,0.35)",
+      borderRadius:6,padding:"14px 18px",marginBottom:18}}>
+      <div style={{color:C.orange,fontFamily:M,fontSize:12,fontWeight:"bold",marginBottom:8,letterSpacing:"0.07em"}}>
+        DUAL 80mm EDF TANDEM SERIES — PER-NACELLE FAULT TOLERANCE
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:18}}>
+        <div>
+          <KV k="EDFs per nacelle"       v="2× XRP 3660-2700KV 80mm 6S (FWD + AFT)" vc={C.orange}/>
+          <KV k="Pod length"             v="230mm (vs 144mm single-EDF)" vc={C.yellow}/>
+          <KV k="Pod OD"                 v="93.5mm — unchanged" vc={C.lime}/>
+          <KV k="Inter-EDF gap"          v="20mm · flow-straightener vane set"/>
+          <KV k="Nacelle thrust (nom.)"  v={`${THRUST_NAC}g (both EDFs) · ~2900g (single)`} vc={C.green}/>
+          <KV k="ESCs per nacelle"       v="2× Hobbywing Platinum V4 120A" vc={C.teal}/>
+          <KV k="ESC telemetry"          v="BLHeli32/AM32 UART 115200 · 10Hz per ESC"/>
+          <KV k="ESC DSHOT"              v="BDSHOT on 4× independent PIO state machines"/>
+        </div>
+        <div>
+          <KV k="Total nacelle ESCs"     v="4 (2 per nacelle)" vc={C.accent}/>
+          <KV k="Total nacelle EDFs"     v="4 (2 per nacelle)" vc={C.accent}/>
+          <KV k="Nacelle ESC mass"       v="4 × 107g = 428g"/>
+          <KV k="Nacelle EDF mass"       v="4 × 383g = 1532g"/>
+          <KV k="Overall total thrust"   v={`${THRUST}g (${(THRUST/453.592).toFixed(2)} lb)`} vc={C.green}/>
+          <KV k="T/W empty"              v={`${TW_EMPTY}:1`} vc={parseFloat(TW_EMPTY)>=2.0?C.green:C.red}/>
+          <KV k="Fault T/W (1 EDF dead)" v={`${(THRUST/(DRY_G+BAT_EMPTY)).toFixed(2)}:1 → ${((THRUST_NAC+THRUST_FUSE+THRUST_NAC*0.55)/(DRY_G+BAT_EMPTY)).toFixed(2)}:1`} vc={C.yellow}/>
+          <KV k="Fault T/W (1 nac dead)" v={`${((THRUST_NAC+THRUST_FUSE)/(DRY_G+BAT_EMPTY)).toFixed(2)}:1`} vc={C.yellow}/>
+        </div>
+      </div>
+    </div>
+
+    <SH t="Fault Tolerance Matrix" mt={0} c={C.orange}/>
+    <div style={{overflowX:"auto",marginBottom:18}}>
+      <table style={{width:"100%",borderCollapse:"collapse",fontFamily:M,fontSize:10}}>
+        <TH cols={["CONDITION","EDF STATUS","NACELLE THRUST","FC RESPONSE"]}/>
+        <tbody>{DUAL_EDF_MODES.map((r,i)=>(
+          <tr key={i} style={{background:i%2===0?"rgba(0,229,255,0.025)":"transparent"}}>
+            <td style={{padding:"6px 9px",color:r.c,fontWeight:"bold",whiteSpace:"nowrap"}}>{r.mode}</td>
+            <td style={{padding:"6px 9px",color:C.text,fontFamily:"'Courier New',monospace",fontSize:10}}>{r.edfs}</td>
+            <td style={{padding:"6px 9px",color:r.c,fontWeight:"bold",whiteSpace:"nowrap"}}>{r.thrust}</td>
+            <td style={{padding:"6px 9px",color:C.dim,fontSize:9,lineHeight:1.5}}>{r.note}</td>
+          </tr>
+        ))}</tbody>
+      </table>
+    </div>
+
+    <SH t="ESC Telemetry — Fault Detection Channels" c={C.teal}/>
+    <div style={{overflowX:"auto",marginBottom:18}}>
+      <table style={{width:"100%",borderCollapse:"collapse",fontFamily:M,fontSize:10}}>
+        <TH cols={["PARAMETER","SOURCE","FAULT TRIGGER"]}/>
+        <tbody>{DUAL_EDF_TELEM.map((r,i)=>(
+          <tr key={i} style={{background:i%2===0?"rgba(0,229,255,0.025)":"transparent"}}>
+            <td style={{padding:"5px 9px",color:C.accent,fontWeight:"bold"}}>{r[0]}</td>
+            <td style={{padding:"5px 9px",color:C.teal}}>{r[1]}</td>
+            <td style={{padding:"5px 9px",color:C.yellow,fontSize:9}}>{r[2]}</td>
+          </tr>
+        ))}</tbody>
+      </table>
+    </div>
+
+    <SH t="Design Notes" c={C.lime}/>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
+      {NACELLE_SERIES_NOTES.map(({title,text},i)=>(
+        <div key={i} style={{padding:"10px 13px",border:`1px solid ${C.lime}22`,borderRadius:4,background:"rgba(163,230,53,0.02)"}}>
+          <div style={{color:C.lime,fontFamily:M,fontSize:10,fontWeight:"bold",marginBottom:5}}>{title}</div>
+          <div style={{color:C.dim,fontFamily:M,fontSize:9,lineHeight:1.7}}>{text}</div>
+        </div>
+      ))}
+    </div>
+
+    <SH t="ESC Telemetry Wiring — 4 Nacelle ESCs" c={C.purple}/>
+    <div style={{overflowX:"auto",marginBottom:8}}>
+      <table style={{width:"100%",borderCollapse:"collapse",fontFamily:M,fontSize:10}}>
+        <TH cols={["ESC ID","NACELLE","POSITION","DSHOT GPIO","TELEM UART MUX STATE","PHASE LEADS"]}/>
+        <tbody>{[
+          ["ESC-NAC-L-FWD","Port (L)","Forward",   "PRU DSHOT0","MUX 000","14AWG 80mm × 3-phase"],
+          ["ESC-NAC-L-AFT","Port (L)","Aft",        "PRU DSHOT1","MUX 001","14AWG 80mm × 3-phase"],
+          ["ESC-NAC-R-FWD","Stbd (R)","Forward",   "PRU DSHOT2","MUX 010","14AWG 80mm × 3-phase"],
+          ["ESC-NAC-R-AFT","Stbd (R)","Aft",        "PRU DSHOT3","MUX 011","14AWG 80mm × 3-phase"],
+          ["ESC-FUSE",     "Fuselage","Aft bay",    "PRU DSHOT4","MUX 100","16AWG 150mm × 3-phase"],
+        ].map((r,i)=>(
+          <tr key={i} style={{background:i%2===0?"rgba(0,229,255,0.025)":"transparent"}}>
+            {r.map((v,j)=>(
+              <td key={j} style={{padding:"5px 9px",
+                color:j===0?C.yellow:j===3?C.orange:j===4?C.teal:C.dim,
+                fontFamily:j===3||j===4?"'Courier New',monospace":M,
+                fontSize:j===3||j===4?9:10,whiteSpace:"nowrap"}}>{v}</td>
+            ))}
+          </tr>
+        ))}</tbody>
+      </table>
+    </div>
+    <Good ch="Four independent DSHOT lines (one per nacelle EDF) let the FC arm/disarm each EDF individually. A failed ESC is disarmed in firmware within 50ms of telemetry fault detection — the other EDF in the same nacelle continues without interruption."/>
+    <Warn ch="Series EDF pairing requires matched fan blade pitch within ±0.5°. Verify fan balance and pitch match before commissioning each nacelle. Mismatched pitch causes pressure recovery loss and unequal loading on the shaft bearings."/>
+    <Note c={C.yellow} ch="PDB current derating: each nacelle now draws up to 168A peak (2× 84A) vs 84A previously. Upgrade main bus bar to 4-AWG silicone and verify XT90-S connectors are rated for combined current. Use bus bar distribution point per nacelle rather than series XT30 pigtails."/>
+  </div>);
+}
+
 // ── APP ───────────────────────────────────────────────────────
 const TABS = [
-  {label:"Overview",       value:"overview"},
-  {label:"Dimensions",     value:"dimensions"},
-  {label:"Weight & Thrust",value:"weight"},
-  {label:"Balance & CG",  value:"balance"},
-  {label:"Avionics",       value:"avionics"},
-  {label:"Hull & Foam",    value:"foam"},
-  {label:"Access Panels",  value:"panels"},
-  {label:"Obstacle Avoid.",value:"sensors"},
-  {label:"Cargo & Nacelle",value:"cargo"},
+  {label:"Overview",        value:"overview"},
+  {label:"Dimensions",      value:"dimensions"},
+  {label:"Weight & Thrust", value:"weight"},
+  {label:"Balance & CG",   value:"balance"},
+  {label:"Avionics",        value:"avionics"},
+  {label:"Hull & Foam",     value:"foam"},
+  {label:"Access Panels",   value:"panels"},
+  {label:"Obstacle Avoid.", value:"sensors"},
+  {label:"Cargo & Nacelle", value:"cargo"},
+  {label:"Dual-EDF Nacelle",value:"dual_edf"},
 ];
 _ODFontLoader();
 
@@ -1166,7 +1287,7 @@ export default function App(){
           <h1 style={{margin:0,fontSize:18,fontWeight:"normal",color:C.text,letterSpacing:"0.07em",fontFamily:MB}}>
             SERENITY-CLASS FIREFLY TILTROTOR UAV</h1>
           <div style={{color:"rgba(0,229,255,0.6)",fontSize:10,marginTop:3,fontFamily:M}}>
-            {DIM.L_MM}mm ({DIM.L_IN}") · 80mm 6S nacelle EDFs · XFLY X4 PRO 4S fuselage EDF · 12× VL53L5CX ToF dual-array · 4"×3"×3" cargo gondola · nacelle −5°–140° · CM3+ Nodes 2&amp;3 · 6 access panels
+            {DIM.L_MM}mm ({DIM.L_IN}") · 2×80mm 6S series EDFs per nacelle · XFLY X4 PRO 4S fuselage EDF · 12× VL53L5CX ToF dual-array · 4"×3"×3" cargo gondola · nacelle −5°–140° · 4× nacelle ESCs w/telem · 6 access panels
           </div>
         </div>
         <div style={{textAlign:"right",fontFamily:M}}>
@@ -1197,6 +1318,7 @@ export default function App(){
       {tab==="panels"      && <AccessPanelsTab/>}
       {tab==="sensors"     && <ObstacleAvoidanceTab/>}
       {tab==="cargo"       && <CargoNacelleTab/>}
+      {tab==="dual_edf"    && <DualEDFNacelleTab/>}
     </div>
   </div>);
 }
