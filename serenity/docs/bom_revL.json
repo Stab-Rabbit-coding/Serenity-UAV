@@ -1,0 +1,278 @@
+{
+  "revision": "Rev L",
+  "supersedes": "Rev K",
+  "scale": "18 inches (457.2mm)",
+  "canonical_source": "QMx Official Serenity Blueprints (Mandel/Earls 2007) 269ft×170ft×79ft",
+  "author": "Steve Griffing PE(CSE) CISSP-ISSEP CPP",
+  "license": "CC BY 4.0",
+  "rev_l_delta_note": "Rev L adds no new hardware vs Rev K dual-EDF. The PID closed-loop governor runs on the existing AM6232 M4F coprocessor (firmware update only). Budget and high-performance EDF options are documented in edf_options section. Hardware BOM is identical to bom_revK.json.",
+  "hardware_reference": "bom_revK.json — all hull, propulsion, avionics, wiring, payload, sensor, and radio items are identical to Rev K dual-EDF. See bom_revK.json for full part-level detail.",
+
+  "rev_l_firmware": {
+    "ref": "GOV-FW-REVL",
+    "desc": "Rev L PID governor firmware binary — M4F coprocessor partition",
+    "file": "governor_firmware_revL.bin",
+    "target": "AM6232 M4F coprocessor on all 4 FC nodes (Cape-A: FC1–FC4)",
+    "flash_method": "CN1 GCS upload → Ethernet ring → TPM 2.0 verified flash on each FC node",
+    "loop_hz": 500,
+    "dshot_hz": 1000,
+    "telem_hz": 10,
+    "config_file": "governor_config.h",
+    "pid_rpm": {
+      "Kp": 3.0e-4,
+      "Ki": 1.0e-5,
+      "Kd": 8.0e-5,
+      "I_clamp": 0.15,
+      "deadband_rpm": 50,
+      "output_clamp_min": 0.0,
+      "output_clamp_max": 1.0
+    },
+    "pid_equalization": {
+      "Kp_eq": 1.0e-4,
+      "Ki_eq": 3.0e-6,
+      "aft_bias_frac": 0.02,
+      "max_correction_frac": 0.05,
+      "I_clamp_eq": 0.03
+    },
+    "thermal_derate": {
+      "start_degC": 85,
+      "zero_cap_degC": 110,
+      "method": "linear proportional throttle cap"
+    },
+    "current_limits": {
+      "soft_A": 80,
+      "hard_A": 105,
+      "soft_action": "proportional throttle reduction",
+      "hard_action": "throttle=0 + fault latch"
+    },
+    "rpm_limits": {
+      "stall_rpm": 5000,
+      "stall_cmd_threshold_pct": 20,
+      "runaway_rpm": 56000
+    },
+    "fault_states": ["NORMAL", "DERATE_FWD", "DERATE_AFT", "FAULT_FWD", "FAULT_AFT", "FAULT_BOTH"],
+    "fault_latch_policy": "Latched per-ESC for flight. Ground power cycle + GCS ack required to clear.",
+    "fault_both_action": "NACELLE_LOST flag to FC → ArduPilot RTH mandatory",
+    "bdshot_loss_timeout_ms": 100,
+    "telem_loss_timeout_ms": 500,
+    "calibration": {
+      "script": "governor_cal.py --mode bench",
+      "output": "EDF_THRUST_K (g/RPM²) — fitted from bench thrust vs RPM sweep",
+      "nominal_k": 1.073e-6,
+      "notes": "Re-run after any EDF replacement. k varies ±5% unit-to-unit."
+    },
+    "mavlink_reporting": [
+      {"msg": "ESC_STATUS #291", "trigger": "fault latch on any ESC"},
+      {"msg": "ESC_TELEMETRY_1_TO_4 #11030", "trigger": "10Hz serial telem cycle"},
+      {"msg": "STATUSTEXT", "trigger": "state transition to DERATE or FAULT"},
+      {"msg": "SYS_STATUS", "trigger": "per-EDF health bit in custom extension"}
+    ]
+  },
+
+  "edf_options": {
+    "note": "Budget EDFs (Phases 2–6) prove the airframe cheaply. XRP 3660-2700KV is the Phase 7 baseline. High-perf options available for Phase 7+ if T/W >3.5 desired. The PID governor auto-tunes to any option via bench calibration — only EDF_THRUST_K changes.",
+    "governor_compat": "Rev L governor compatible with any 80mm 6S EDF. Re-run governor_cal.py after EDF swap.",
+    "fuselage_note": "XFLY Galaxy X4 PRO 40mm 12-blade 4S 5850KV is the ONLY approved fuselage EDF. Do NOT substitute.",
+    "tiers": [
+      {
+        "tier": "BUDGET",
+        "build_phases": "Phases 2–6",
+        "purpose": "Prove airframe, avionics, and controls cheaply before expensive motor investment",
+        "options": [
+          {
+            "ref": "EDF-BUD-FLYFOX",
+            "name": "FlyFox 80mm 6S 2900KV 12-blade",
+            "cost_usd": 35,
+            "thrust_g_6S": 1400,
+            "peak_current_A": 45,
+            "max_rpm": 40000,
+            "esc_required": "50A BLHeli32",
+            "nacelle_pair_thrust_g": 2548,
+            "nacelle_pair_note": "2× FlyFox tandem × 0.91 efficiency = 2548g/nacelle. Aircraft total 5746g. T/W 1.59 (AUW 3607g). Below 2.0 — acceptable for airframe test, NOT for payload ops.",
+            "housing": "Plastic",
+            "phase_use": "Phases 2–6 airframe proof"
+          },
+          {
+            "ref": "EDF-BUD-GENERIC",
+            "name": "Generic 80mm 6S 3000KV 12-blade (various brands)",
+            "cost_usd": 38,
+            "thrust_g_6S": 1450,
+            "peak_current_A": 45,
+            "max_rpm": 40000,
+            "esc_required": "50A BLHeli32",
+            "nacelle_pair_thrust_g": 2640,
+            "nacelle_pair_note": "2× generic tandem × 0.91 = 2640g/nacelle.",
+            "housing": "Plastic",
+            "phase_use": "Phases 2–6"
+          },
+          {
+            "ref": "EDF-BUD-FREEWING",
+            "name": "Freewing 80mm 2836-2150KV 6S",
+            "cost_usd": 55,
+            "thrust_g_6S": 1700,
+            "peak_current_A": 50,
+            "max_rpm": 35000,
+            "esc_required": "60A BLHeli32",
+            "nacelle_pair_thrust_g": 3094,
+            "nacelle_pair_note": "2× Freewing tandem × 0.91 = 3094g/nacelle. Aircraft total 6838g. T/W 1.90 — close to 2.0, light cargo possible.",
+            "housing": "Plastic",
+            "phase_use": "Phases 2–6, acceptable for light payload test"
+          }
+        ]
+      },
+      {
+        "tier": "STANDARD",
+        "build_phases": "Phase 7 (baseline — CURRENT SPEC)",
+        "selected": true,
+        "options": [
+          {
+            "ref": "EDF-STD-XRP",
+            "name": "Changesun XRP 3660-2700KV 80mm 6S",
+            "selected": true,
+            "cost_usd": 170,
+            "thrust_g_6S": 2900,
+            "peak_current_A": 84,
+            "max_rpm": 52000,
+            "esc_required": "120A BLHeli32 (Hobbywing Platinum V4 120A — mandatory)",
+            "nacelle_pair_thrust_g": 5278,
+            "aircraft_total_thrust_g": 11206,
+            "tw_empty_auw3607g": 3.11,
+            "nacelle_pair_note": "2× XRP tandem × 0.91 = 5278g/nacelle. Aircraft 11206g ≈ 11250g spec (rounding). T/W 3.11:1 empty.",
+            "housing": "Aluminum (heat-shedding)",
+            "phase_use": "Phase 7 onwards — baseline spec",
+            "cost_per_pair_usd": 340,
+            "cost_4_nacelle_edfs_usd": 680,
+            "notes": "Best thrust/dollar in class for 80mm 6S. Highest available KV at this frame size. 84A draw requires 120A ESC — never use 50A or 80A ESC with XRP."
+          }
+        ]
+      },
+      {
+        "tier": "HIGH_PERFORMANCE",
+        "build_phases": "Phase 7+ premium",
+        "purpose": "T/W > 3.5 target, maximum payload, aircraft-grade hardware",
+        "options": [
+          {
+            "ref": "EDF-HP-FREEWING-3500",
+            "name": "Freewing 80mm 12-blade 3500KV 6S",
+            "cost_usd": 180,
+            "thrust_g_6S": 3100,
+            "peak_current_A": 88,
+            "max_rpm": 54000,
+            "esc_required": "120A BLHeli32",
+            "nacelle_pair_thrust_g": 5642,
+            "aircraft_total_thrust_g": 11934,
+            "tw_empty_auw3607g": 3.31,
+            "housing": "Aluminum",
+            "phase_use": "Phase 7+",
+            "notes": "Drop-in upgrade from XRP. Same 120A ESC already installed."
+          },
+          {
+            "ref": "EDF-HP-JETFAN",
+            "name": "Jetfan 80mm Pro 3300KV 6S",
+            "cost_usd": 240,
+            "thrust_g_6S": 3200,
+            "peak_current_A": 90,
+            "max_rpm": 54000,
+            "esc_required": "120A BLHeli32",
+            "nacelle_pair_thrust_g": 5824,
+            "aircraft_total_thrust_g": 12298,
+            "tw_empty_auw3607g": 3.41,
+            "housing": "CNC aluminum",
+            "phase_use": "Phase 7+",
+            "notes": "Precision-balanced CNC aluminum housing. Excellent efficiency."
+          },
+          {
+            "ref": "EDF-HP-SCHUEBELER",
+            "name": "Schübeler DS-51-AXI HST 80mm 6S",
+            "cost_usd": 320,
+            "thrust_g_6S": 3800,
+            "peak_current_A": 95,
+            "max_rpm": 58000,
+            "esc_required": "120A BLHeli32+ (or Schübeler-recommended 130A+)",
+            "nacelle_pair_thrust_g": 6916,
+            "aircraft_total_thrust_g": 14482,
+            "tw_empty_auw3607g": 4.01,
+            "housing": "Aircraft-grade aluminum, precision balanced",
+            "phase_use": "Phase 7+ maximum performance",
+            "notes": "German aircraft-grade EDF. Maximum thrust for 80mm 6S class. T/W >4.0 enables aggressive aerobatic envelopes. Cost: $640/pair for 2 nacelles."
+          }
+        ]
+      }
+    ],
+    "upgrade_procedure": [
+      "Power off. Disconnect all ESC motor leads.",
+      "Remove nacelle pod (4× M3 screws from tilt bracket). EDF slides out of pod.",
+      "Install new EDF. Reconnect motor leads (check rotation — reverse 2 of 3 if wrong).",
+      "Re-mount nacelle pod.",
+      "Run governor bench calibration: python3 governor_cal.py --mode bench",
+      "Update EDF_THRUST_K in governor_config.h from bench output.",
+      "Flash updated governor_config.h binary to FC1–FC4.",
+      "Verify BDSHOT RPM on all 4 ESCs at idle. Confirm equalization within ±100 RPM."
+    ]
+  },
+
+  "performance": {
+    "revision": "Rev L",
+    "nacelle_thrust_each_g": 5300,
+    "nacelle_edf_count_per_nacelle": 2,
+    "nacelle_series_efficiency": 0.91,
+    "nacelle_thrust_note": "Two 80mm 6S EDFs in tandem series per nacelle. Combined ≈91% of arithmetic 2×2900g = 5300g/nacelle. Flow-straightener vanes in 20mm inter-EDF gap recover ~40% of tangential velocity loss.",
+    "fuselage_thrust_g": 650,
+    "thrust_total_g": 11250,
+    "dry_g": 3197,
+    "battery_empty": {"desc": "6S 4000mAh LiPo", "mass_g": 410},
+    "auw_empty_g": 3607,
+    "auw_empty_lb": 7.95,
+    "tw_empty": 3.12,
+    "battery_cargo": {"desc": "6S 2800mAh LiPo", "mass_g": 295},
+    "payload_g": 250,
+    "auw_cargo_g": 3742,
+    "auw_cargo_lb": 8.25,
+    "tw_cargo": 3.01,
+    "tw_fault_one_edf_failed": 2.29,
+    "tw_fault_one_nacelle_failed": 1.65,
+    "max_payload_g": 1406,
+    "max_payload_lb": 3.10,
+    "governor_loop_hz": 500,
+    "dshot_rate_hz": 1000,
+    "bdshot_rpm_feedback_hz": 1000,
+    "serial_telem_hz": 10,
+    "rev_l_notes": "Rev L is a firmware-only update from Rev K dual-EDF. Hardware BOM unchanged. The PID governor (M4F 500Hz) provides: per-EDF RPM tracking PID, cooperative nacelle equalization (FWD/AFT RPM matched ±2% bias), thermal derate 85–110°C, current limiting 80A soft/105A hard, fault latch per ESC, MAVLink fault reporting, and RTH on nacelle loss. EDF options (budget, standard XRP, high-perf Schübeler) documented in edf_options section — governor auto-tunes via bench calibration."
+  },
+
+  "total_airframe_mass_g": 3197,
+  "total_auw_g": {
+    "note": "Rev L — 2× 80mm 6S series EDFs per nacelle + PID governor (firmware only) + 4× 120A ESCs + 8× PocketBeagle 2",
+    "dry_g": 3197,
+    "thrust_g": 11250,
+    "thrust_fuse_g": 650,
+    "thrust_nacelles_g": 10600,
+    "auw_empty_6S_4000mAh_410g": 3607,
+    "tw_empty": 3.12,
+    "auw_cargo_6S_2800mAh_295g_plus_250g_payload": 3742,
+    "tw_cargo": 3.01,
+    "tw_fault_single_edf": 2.29,
+    "tw_fault_single_nacelle": 1.65,
+    "note_power": "Each nacelle draws 168A peak (2× 84A ESCs). Main bus: 4-AWG silicone, XT90-S per nacelle rail. PDB handles 350A peak (2× 168A + 30A fuselage). 300A copper bus bar required.",
+    "note_governor": "Rev L PID governor adds zero mass. M4F execution is on existing AM6232 silicon. governor_firmware_revL.bin is distributed via Ethernet ring from CN1 GCS upload."
+  },
+
+  "build_notes": {
+    "rev_l_vs_rev_k": "Rev L requires no hardware changes from Rev K dual-EDF build. If building from scratch, follow bom_revK.json phase structure. Rev L only adds governor firmware commissioning (governor_cal.py bench run + PID step-response tuning) after Phase 7 hardware installation.",
+    "governor_commissioning_phase": "Phase 7 — after EDF installation, before first full-power flight",
+    "governor_commissioning_steps": [
+      "Enable BDSHOT on all 4 nacelle ESCs in BLHeli32/AM32 Configurator",
+      "Set serial telem baud 115200 on all 4 nacelle ESCs",
+      "Flash governor_firmware_revL.bin to FC1–FC4 via CN1 GCS upload",
+      "Run: python3 governor_cal.py --mode bench (per-nacelle thrust stand sweep)",
+      "Update EDF_THRUST_K from bench output in governor_config.h",
+      "Flash updated config binary to FC1–FC4",
+      "Step-response PID verification: <200ms settle, <5% overshoot",
+      "Equalization verification: |RPM_FWD - RPM_AFT| < 100 RPM steady-state",
+      "Fault injection test: FAULT_INJECT_OVERTEMP per ESC, verify latch behavior",
+      "Flight acceptance: two hover cycles, monitor temp/current/RPM via GCS"
+    ],
+    "edf_swap_commissioning": "After any EDF replacement: re-run governor_cal.py bench sweep. Update EDF_THRUST_K. No PID re-tuning required for same-class EDFs.",
+    "faa_registration": "Replace N00000 PLACEHOLDER on decal sheet before first untethered flight."
+  }
+}
