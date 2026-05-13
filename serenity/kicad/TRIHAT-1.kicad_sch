@@ -1,10 +1,3 @@
-; Serenity-Class Tiltrotor UAV — Custom PCB
-; Copyright 2025 Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP
-; License: CC BY 4.0  https://creativecommons.org/licenses/by/4.0/
-; Hull basis: Peter Farell CC BY 4.0  Nozzle basis: BamJr CC BY 4.0
-; Visual inspiration: Firefly/Serenity (C) Joss Whedon / Mutant Enemy / Universal Pictures
-; Fan engineering work — not officially licensed.
-
 (kicad_sch (version 20221012) (generator eeschema)
   (paper "A3")
   (title_block
@@ -14,8 +7,6 @@
     (comment_1 "SUPERSEDED by SENSORHAT-1 in Rev H — retained for reference only")
     (comment_2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
     (comment_3 "Active Rev H board: serenity/kicad/SENSORHAT-1.kicad_sch")
-    (comment_4 "Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0")
+    (comment_4 "Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0 | Firefly/Serenity fan-work, not officially licensed")
   )
-  ; ── SUPERSEDED: This Rev E design is replaced by SENSORHAT-1 in Rev H ──
-  ; ── Do not use for new builds. See SENSORHAT-1.kicad_pcb instead. ─────
 )
