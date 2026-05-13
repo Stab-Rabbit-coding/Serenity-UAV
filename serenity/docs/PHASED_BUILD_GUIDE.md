@@ -10,7 +10,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 @media print{body{background:#fff!important;color:#111!important}a{color:#003399!important}}
 </style>
 
-# Serenity-Class Tiltrotor UAV — Phased Build Guide (Rev K)
+# Serenity-Class Tiltrotor UAV — Phased Build Guide (Rev L)
 
 **Author:** Steve Griffing, PE(CSE) \[Control Systems Engineering\], CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
@@ -33,19 +33,26 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 ---
 
-## End State Specifications (Rev K)
+## End State Specifications (Rev L)
+
+> Rev L supersedes Rev K. Hardware identical to Rev K dual-EDF. Adds PID closed-loop governor per EDF.
 
 | Parameter | Value |
 |-----------|-------|
 | Hull length | 457.2 mm (18.00″) — canonical 269 ft |
 | Beam (nacelle tip-to-tip) | 288.9 mm (11.375″) — canonical 170 ft |
-| Propulsion | 2× Changesun XRP 3660-2700KV 80mm 6S EDF + 1× XFLY X4 PRO 40mm 4S fuselage |
-| Hover thrust | **6,450 g** (5,800 g nacelles + 650 g fuselage) |
-| ESCs | 2× Hobbywing Platinum PRO V4 120A (nacelles) + 1× BLHeli32 40A (fuselage) |
+| Propulsion | **2× (2× Changesun XRP 3660-2700KV 80mm 6S, tandem series) per nacelle** + 1× XFLY X4 PRO 40mm 4S fuselage |
+| Nacelle pod | 93.5 mm OD × **230 mm** length (tandem dual-EDF) · ID 83 mm |
+| Hover thrust | **11,250 g** (10,600 g nacelles + 650 g fuselage) |
+| ESCs | **4× Hobbywing Platinum PRO V4 120A** (nacelles, one per EDF) + 1× BLHeli32 40A (fuselage) |
+| Governor (Rev L new) | **PID closed-loop RPM per EDF · 500 Hz M4F · BDSHOT 1 kHz feedback** |
 | Avionics dry mass | **404 g** (8× PocketBeagle 2 + 4× Cape-A + 4× Cape-B + 4× RCRS-49 sub-modules + GPS ×4 + radios) |
-| T/W empty | **2.49:1** (6S 4000mAh, 2,587 g AUW) |
-| T/W with 250 g cargo | **2.37:1** (6S 2800mAh, 2,722 g AUW) |
-| Max payload | **753 g (1.66 lb)** at T/W = 2.0 |
+| Airframe dry mass | **3,197 g** |
+| T/W empty | **3.12:1** (6S 4000mAh, 3,607 g AUW) |
+| T/W with 250 g cargo | **3.01:1** (6S 2800mAh, 3,742 g AUW) |
+| T/W one EDF failed | **2.29:1** — partner EDF continues, fault latched |
+| T/W one nacelle lost | **1.65:1** — FC RTH |
+| Max payload | **1,406 g (3.10 lb)** at T/W = 2.0 |
 | Compute nodes | **8 nodes:** FC1–FC4 (Cape-A, sensor/flight) + CN1–CN4 (Cape-B, comms/payload) |
 | FC node hardware | PocketBeagle 2 (AM6232) + Cape-A 85×55mm — ICM-42688-P IMU, BMP388 baro, u-blox M10Q GPS, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0** |
 | CN node hardware | PocketBeagle 2 (AM6232) + Cape-B 90×60mm — SiK 915MHz, LoRa RFM95W 915MHz, TI WL1837MOD WiFi/BT, RCRS-49 sub-module, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0**; ATF16V8BQL CPLD write-blocker (log μSD) |
@@ -81,15 +88,15 @@ These rules eliminate costly structural rework. Read before you start Phase 1.
 
 | Phase | Name | Milestone | Incremental Cost | Cumulative Cost |
 |-------|------|-----------|-----------------|-----------------|
-| 0 | Print All Parts + Cut CF | All parts ready | ~$65 | ~$65 |
+| 0 | Print All Parts + Cut CF | All parts ready (incl. dual-EDF pods) | ~$65 | ~$65 |
 | 1 | Structure + All Future Provisions | Hull sealed, nothing left to install pre-foam | ~$80 | ~$145 |
-| 2 | Nacelle Mechanics + Budget EDFs | Propulsion mechanically complete | ~$145 | ~$290 |
-| 3 | Minimum Viable Flyer (CN1+FC1+CN2+FC2) | ★ **FIRST FLIGHT** | ~$740 | ~$1,030 |
-| 4 | Full 8-Node Architecture (CN3+FC3+CN4+FC4) | All 8 nodes, full ring redundancy | ~$540 | ~$1,570 |
-| 5 | Obstacle Avoidance: 12× VL53L5CX ToF | Autonomous flight + obstacle avoidance | ~$110 | ~$1,680 |
-| 6 | Cargo System | 250 g delivery operational | ~$30 | ~$1,710 |
-| 7 | Motor Upgrade: XRP + Hobbywing 120A | ★ **FULL PERFORMANCE** | ~$590 | ~$2,300 |
-| 8 | Finishing: Decals + FAA + Docs | Legal, complete, documented | ~$20 | ~$2,320 |
+| 2 | Nacelle Mechanics + **2× Budget EDFs/nacelle** | Dual-EDF propulsion mechanically complete | ~$215 | ~$360 |
+| 3 | Minimum Viable Flyer (CN1+FC1+CN2+FC2) | ★ **FIRST FLIGHT** | ~$740 | ~$1,100 |
+| 4 | Full 8-Node Architecture (CN3+FC3+CN4+FC4) | All 8 nodes, full ring redundancy | ~$540 | ~$1,640 |
+| 5 | Obstacle Avoidance: 12× VL53L5CX ToF | Autonomous flight + obstacle avoidance | ~$110 | ~$1,750 |
+| 6 | Cargo System | 250 g delivery operational | ~$30 | ~$1,780 |
+| 7 | **Motor Upgrade: 4× XRP + 4× Hobbywing 120A + PID Governor** | ★ **FULL PERFORMANCE — Rev L** | ~$800 | ~$2,580 |
+| 8 | Finishing: Decals + FAA + Docs | Legal, complete, documented | ~$20 | ~$2,600 |
 
 > Cost estimates are in USD and reflect component retail pricing as of 2026.
 > PCB fabrication costs assume JLCPCB assembled pricing.
@@ -131,8 +138,8 @@ These rules eliminate costly structural rework. Read before you start Phase 1.
 | `mid_hull_right.stl` | PETG | 0.20mm | 8% gyroid | 1 | |
 | `aft_neck.stl` | PETG | 0.20mm | 8% gyroid | 1 | |
 | `engine_bell.stl` | PETG | 0.20mm | 20% gyroid | 1 | 3 walls |
-| **`nacelle_pod_80mm.stl`** | CF-PETG | 0.15mm | 25% | 2 | **Phase 2 fit** — budget EDF housing OD |
-| **`nacelle_pod_83mm.stl`** | CF-PETG | 0.15mm | 25% | 2 | **Phase 7 fit** — XRP 2700KV housing OD = 83mm |
+| **`nacelle_pod_80mm.stl`** | CF-PETG | 0.15mm | 25% | 2 | **Phase 2 fit** — budget single-EDF housing (short, ~144mm) |
+| **`nacelle_pod_dual_80mm.stl`** | CF-PETG | 0.15mm | 25% | 2 | **Phase 7 fit** — 230mm tandem dual-EDF pod, 83mm ID, 6-vane flow-straightener rib at 110mm |
 | `nacelle_tip_cap_port.stl` | PETG | 0.20mm | 20% | 1 | RED nav light recess |
 | `nacelle_tip_cap_stbd.stl` | PETG | 0.20mm | 20% | 1 | GREEN nav light recess |
 | `tilt_bracket_140deg.stl` | CF-PETG | 0.15mm | 40% | 2 | 4 walls — hard stop at 140° |
@@ -322,18 +329,21 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 
 ---
 
-## Phase 2 — Nacelle Mechanics + Budget EDFs
+## Phase 2 — Nacelle Mechanics + Budget EDFs (2× per nacelle, tandem series)
 
-**Goal:** All propulsion mechanics and both nacelle/fuselage EDFs installed and mechanically verified. No ESCs connected yet. Budget EDFs enable affordable first-flight testing; XRP upgrade comes in Phase 7.
+**Goal:** All propulsion mechanics and both nacelle/fuselage EDFs installed and mechanically verified. No ESCs connected yet. **Rev L uses 2× budget EDFs in tandem series per nacelle from the start** — the tandem pod geometry is the final geometry. XRP EDF upgrade comes in Phase 7 with the same pod.
+
+> Budget EDFs in tandem series deliver ~2,500–3,100g per nacelle depending on model — adequate for Phases 2–6 airframe and avionics validation. The PID governor is not commissioned until Phase 7 (requires BDSHOT-capable ESCs). Budget ESCs in Phases 2–6 do not need BDSHOT; open-loop throttle is sufficient.
 
 ### Buy List for Phase 2
 
 | Item | Qty | Approx. Cost |
 |------|-----|--------------|
-| Budget 80mm EDF (verify housing OD matches nacelle_pod_80mm.stl ID) | 2× | ~$25–35ea |
+| Budget 80mm 6S EDF (×4 — 2 per nacelle, tandem series) | **4×** | ~$30–55ea |
 | XFLY Galaxy X4 PRO 40mm 12-blade 5850KV EDF | 1× | ~$48 |
-| MG90S metal gear servo (120° bracket; nacelle tilt) | 2× | ~$5ea |
-| SG90 micro servo (nacelle nozzle, 2×; fuselage nozzle, 1×) | 3× | ~$3ea |
+| Budget 50–60A BLHeli32 ESC (×4 nacelle + 1 fuselage) | **5×** | ~$18–30ea |
+| MG90S metal gear servo (nacelle tilt) | 2× | ~$5ea |
+| SG90 micro servo (nacelle nozzle 2×; fuselage nozzle 1×) | 3× | ~$3ea |
 | MR63ZZ radial bearing 3×6×2.5mm | 4× | ~$8 total |
 | 8mm CF rod (pivot rods) | ~150mm | ~$5 |
 | Loctite 243 medium threadlock | 1× | ~$8 |
@@ -343,7 +353,9 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 | Kynar wire 28AWG for nav lights | ~300mm | ~$2 |
 | 5-minute epoxy (LED sealing) | — | carry from Phase 1 |
 
-> **Budget EDF housing OD note:** Measure your chosen budget EDF with calipers before printing or purchasing nacelle pods. If housing OD differs from the STL ID, adjust the STL in your slicer or add a thin PETG adapter ring (0.5mm wall, same print run). This is the only Phase 2 variable.
+> **Budget EDF housing OD note:** All 4 budget EDFs must fit in the **`nacelle_pod_dual_80mm.stl`** 230mm tandem pod. Measure OD with calipers. Typical generic 80mm 6S EDF housing OD = 80–82mm. The dual pod has 83mm ID — add a thin (0.5–1mm) PETG liner ring if needed. This is the only Phase 2 variable.
+>
+> **ESC note for Phases 2–6:** 50–60A BLHeli32 ESCs are adequate for budget EDFs (≤50A peak). You will replace these with 4× Hobbywing 120A in Phase 7. Do not spend on premium ESCs until Phase 7 — budget ESCs are a deliberate temporary choice.
 
 ### Nacelle Assembly Sequence
 
@@ -357,11 +369,13 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 - Hard stop at 140° via bracket — nacelle physically cannot rotate past this point
 - ⚠ Do not force past 140° — bracket will crack
 
-**4. Install budget 80mm EDFs** in nacelle_pod_80mm.stl:
-- Slide EDF from intake face; align motor mount ears with M2.5 captive nut inserts
-- Torque 4× M2.5 screws to 0.3 N·m
-- Route 3-phase motor leads (14AWG) through 4mm channel in nacelle wall, then through hollow CF spar toward hull
-- Cap leads at hull exit with electrical tape — do NOT connect to ESCs yet
+**4. Install 2× budget 80mm EDFs** in `nacelle_pod_dual_80mm.stl` (one nacelle at a time):
+- **FWD EDF:** Slide from intake face into FWD position (55mm from inlet). Align motor mount ears with M2.5 captive inserts. Torque 4× M2.5 screws to 0.3 N·m.
+- **Flow-straightener rib** at 110mm from inlet: verify the rib is oriented correctly (vanes tangential-opposing). This is molded into the pod.
+- **AFT EDF:** Slide into AFT position (155mm from inlet). Same mounting. AFT motor leads route through separate slot (avoid FWD lead routing space).
+- Route all 3-phase motor leads (14AWG each EDF) through the 4mm channels and hollow CF spar toward hull.
+- Label leads FWD and AFT with heat-shrink before routing.
+- Cap all leads at hull exit with electrical tape — do NOT connect to ESCs yet
 
 **5. Install XFLY X4 PRO 40mm EDF** in engine bell (Zone F):
 - 4S operation (14.8–16.8V) via 6S balance tap from cells 1–4
@@ -388,11 +402,12 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 - [ ] Manual nacelle sweep 0°→115°→0° × 10 repetitions each side — smooth, no binding, no interference
 - [ ] Tilt servo command (bench 5V supply to servo): both nacelles track, symmetric response ±1°
 - [ ] Nozzle sweep × 10 per assembly: open = 42mm / closed = 36mm (verify with calipers)
-- [ ] Motor shafts: rotate budget EDFs by hand — free rotation, blade tips clear pod wall at all nacelle angles
+- [ ] Motor shafts: rotate **all 4** budget EDFs by hand — free rotation, blade tips clear pod wall at all nacelle angles
+- [ ] FWD and AFT leads correctly labeled, accessible at hull exit
 - [ ] LED polarity bench test (3.3V bench supply): PORT = RED, STBD = GREEN
 - [ ] Hard stop confirmed: nacelle cannot rotate past 140° aft
 
-**Phase 2 cost estimate:** 2× budget EDF ~$60 + 1× XFLY PRO ~$48 + servos ~$21 + bearings/hardware ~$16 = **~$145**
+**Phase 2 cost estimate:** 4× budget EDF ~$120–160 + 5× budget ESC ~$90–150 + 1× XFLY PRO ~$48 + servos ~$21 + bearings/hardware ~$16 = **~$215–295** (use lower-cost options from serenity-edf-options.jsx budget tier)
 
 ---
 
@@ -837,88 +852,147 @@ The cargo gondola hard points (M3 inserts) and panel C hinge (belly) were instal
 
 ---
 
-## Phase 7 — Motor Upgrade: XRP 3660-2700KV + Hobbywing 120A ESCs
+## Phase 7 — Motor Upgrade: 4× XRP 3660-2700KV + 4× Hobbywing 120A + PID Governor (Rev L)
 
-**Goal:** Full-performance propulsion installed. Aircraft achieves Rev K specified T/W ratios and max payload capacity. This phase swaps the budget nacelle pods and EDFs for the final XRP motors.
+**Goal:** Full-performance dual-EDF propulsion installed in both nacelles. 4× XRP 80mm EDFs replace budget EDFs. 4× Hobbywing 120A ESCs replace budget ESCs. Rev L PID governor commissioned. Aircraft achieves Rev L specified T/W 3.12:1 and max payload 1,406g.
 
-> ★ **Milestone: FULL PERFORMANCE achieved at end of this phase.**
+> ★ **Milestone: FULL PERFORMANCE + PID GOVERNOR — Rev L achieved at end of this phase.**
 
 ### Why Defer to Phase 7
 
-- Budget EDFs and ESCs proved airframe and avionics over Phases 2–6 at ~$590 lower cost
-- Any structural or design defects discovered in early phases are corrected before committing to premium motors
-- If airframe survives to Phase 7 intact, the expensive hardware investment is validated
+- Budget EDFs and ESCs (Phases 2–6) proved airframe, avionics, and tandem-series duct geometry at ~$800 lower cost
+- Any structural or design defects are corrected before committing to premium motors
+- The dual pod (`nacelle_pod_dual_80mm.stl`) is already installed — only the EDFs and ESCs swap out
 
 ### Buy List for Phase 7
 
 | Item | Qty | Approx. Cost |
 |------|-----|--------------|
-| Changesun XRP 3660-2700KV 80mm 6S EDF — CCW (port nacelle) | 1× | ~$170 |
-| Changesun XRP 3660-2700KV 80mm 6S EDF — CW (stbd nacelle) | 1× | ~$170 |
-| Hobbywing Platinum PRO V4 120A ESC | 2× | ~$125ea |
-| 14AWG silicone motor phase wire 200mm × 3-phase (if not already adequate) | — | ~$6 |
+| Changesun XRP 3660-2700KV 80mm 6S EDF — Port FWD (CCW) | 1× | ~$170 |
+| Changesun XRP 3660-2700KV 80mm 6S EDF — Port AFT (CCW) | 1× | ~$170 |
+| Changesun XRP 3660-2700KV 80mm 6S EDF — Stbd FWD (CW) | 1× | ~$170 |
+| Changesun XRP 3660-2700KV 80mm 6S EDF — Stbd AFT (CW) | 1× | ~$170 |
+| Hobbywing Platinum PRO V4 120A ESC (one per EDF) | **4×** | ~$125ea |
+| 12AWG silicone motor phase wire 100mm × 3-phase × 4 (if needed) | — | ~$10 |
+| XT30 pigtails (independent power rail per ESC) | 4× | ~$8 total |
+| 100A automotive mini poly fuse (one per ESC rail) | 4× | ~$6 total |
+| 1000µF 35V electrolytic capacitors (bulk cap per ESC at PDB) | 4× | ~$5 total |
+| 4-AWG silicone main bus wire (if not already upgraded) | ~500mm | ~$8 |
 
-> **Sourcing:** XRP 3660-2700KV available CCW and CW from Turbines-RC (EU primary) and RC-Castle (global). Order CCW for port (tractor), CW for stbd (tractor). Verify before ordering — incorrect rotation requires swapping any two phase leads, but correct rotation from the factory is cleaner.
+> **Sourcing:** XRP 3660-2700KV available CCW and CW from Turbines-RC (EU) and RC-Castle (global). Order CCW for port nacelle (both FWD+AFT), CW for starboard nacelle (both FWD+AFT) to maintain tractor/pusher balance.
 
-> ⚠ **ESC mandatory:** XRP 3660-2700KV draws **84A peak** on 6S. The Hobbywing 120A provides 43% headroom. Do NOT attempt to run XRP motors on the budget 80A ESCs — the ESCs will overheat and fail. Replace both nacelle ESCs.
+> ⚠ **ESC mandatory:** XRP 3660-2700KV draws **84A peak per EDF** on 6S. The Hobbywing 120A provides 43% headroom. Do NOT attempt to run XRP on budget 50–60A ESCs — they will overheat and fail. Replace all 4 nacelle ESCs.
 
-### Nacelle Pod Swap Sequence
+> ⚠ **Power wiring upgrade:** With 4× 84A ESCs, peak nacelle current is 168A/side (336A total). Upgrade main bus to **4-AWG silicone** if not already installed. Each ESC needs an independent XT30 power pigtail with 100A poly fuse at PDB.
 
-**1.** Power off and disconnect battery. Remove nacelle tip caps.
+### EDF Swap Sequence (per nacelle — repeat for both)
 
-**2.** Disconnect budget EDF motor leads at hull exit (unplug from ESC side or cut at nacelle if not connectorized).
+**1.** Power off and disconnect battery. Remove nacelle tip cap.
 
-**3.** Unscrew 4× M2.5 screws holding budget EDF to nacelle_pod_80mm.stl. Remove budget EDF; set aside (reuse or recycle).
+**2.** Disconnect all 4 budget EDF motor leads at hull exit (FWD and AFT).
 
-**4.** Unclip nacelle_pod_80mm.stl from pivot bracket (remove set screw, slide pod off CF pivot rod).
+**3.** Unscrew 4× M2.5 from AFT EDF. Slide AFT EDF out of pod aft face.
 
-**5.** Slide nacelle_pod_83mm.stl (printed Phase 0) onto CF pivot rod. Reattach with set screw + Loctite 243.
+**4.** Unscrew 4× M2.5 from FWD EDF. Slide FWD EDF out of pod intake.
 
-**6.** Mount XRP EDF in nacelle_pod_83mm.stl — XRP housing OD 83mm → slip fit into 83mm ID pod:
-- Torque 4× M2.5 screws to 0.3 N·m
-- Route 14AWG phase leads through channel and hollow spar (same path as budget EDF)
-- Verify blade tips clear pod wall at 0°, 45°, 90°, 115° nacelle angles
+**5.** The `nacelle_pod_dual_80mm.stl` pod remains on the pivot bracket — **do not remove the pod.**
 
-**7.** Replace budget 80A ESCs with Hobbywing Platinum PRO V4 120A ESCs:
-- Desolder old ESC motor leads from ESC output
-- Mount Hobbywing 120A ESCs in same bay C positions (verify clearance — 120A ESCs are larger)
-- Solder XRP motor phase leads to Hobbywing ESC outputs
-- Calibrate Hobbywing ESCs: full throttle arm → drop to zero per Hobbywing calibration procedure
-- Verify current limiting set to 120A in BLHeli Suite
+**6.** Slide XRP FWD EDF into intake (housing OD 83mm → 83mm ID pod = slip fit). Torque 4× M2.5 to 0.3 N·m. Route 14AWG phase leads through FWD channel, label "FWD".
 
-**8.** Reinstall nacelle tip caps.
+**7.** Slide XRP AFT EDF in from aft face. Mount as above. Route 14AWG leads through AFT channel, label "AFT".
 
-**9.** Update CG: XRP EDF pair is +766g vs budget EDF pair (~+440g delta vs typical budget 80mm pair). Recheck CG at 190mm from nose. Likely need to shift battery forward on rail.
+**8.** Verify blade tips clear pod wall at 0°, 45°, 90°, 115° nacelle angles — rotate by hand.
+
+**9.** Reinstall nacelle tip cap.
+
+### ESC Replacement Sequence
+
+**10.** Remove 4× budget ESCs from Bay C/D (one per nacelle EDF).
+
+**11.** Mount 4× Hobbywing Platinum V4 120A ESCs:
+- ESC-NAC-L-FWD in Bay C-L-FWD position
+- ESC-NAC-L-AFT in Bay C-L-AFT position
+- ESC-NAC-R-FWD in Bay C-R-FWD position
+- ESC-NAC-R-AFT in Bay C-R-AFT position
+
+**12.** For each Hobbywing ESC:
+- Connect independent XT30 power pigtail with 100A poly fuse to PDB rail
+- Solder 14AWG motor leads from XRP EDF
+- Connect DSHOT signal lead to FC1 Cape-A (for ESC-NAC-L-FWD/AFT) or FC4 Cape-A (for ESC-NAC-R-FWD/AFT)
+- Connect BLHeli32 serial telem JST-GH 3-pin to Cape-A telem port
+
+**13.** In BLHeli32 Suite (via FC USB passthrough):
+- Enable BDSHOT on all 4 nacelle ESCs
+- Set telem baud 115200 on all 4 nacelle ESCs
+- Verify BDSHOT RPM returns 0 at rest on all 4 channels
+- Verify current limiting: set to 120A in BLHeli Suite
+
+**14.** Update CG: XRP quad vs budget quad adds significant mass. Recheck CG at 190mm from nose with flight battery. Shift battery on rail as needed.
+
+### Rev L PID Governor Commissioning
+
+**15.** Flash Rev L governor firmware to FC1–FC4:
+```
+# From GCS via SiK or WiFi:
+mavftp upload governor_firmware_revL.bin /fc/m4f/governor.bin
+mavftp upload governor_config.h /fc/m4f/governor_config.h
+```
+Firmware distributes via Ethernet ring CN1→FC1→FC2→FC3→FC4 with TPM 2.0 signature verification.
+
+**16.** Bench calibration (nacelle on thrust stand with load cell, bench power supply):
+```
+python3 governor_cal.py --mode bench --nacelle port
+python3 governor_cal.py --mode bench --nacelle stbd
+```
+Each run sweeps 0%→100%→0% throttle, fits k coefficient (T = k × RPM²), outputs `EDF_THRUST_K`.
+
+**17.** Update `governor_config.h` with measured k values. Re-flash to FC1–FC4.
+
+**18.** PID step-response verification (bench, EDF in pod, tethered):
+- Apply 10% throttle step → verify RPM settle in <200ms, overshoot <5%
+- Verify equalization: |RPM_FWD − RPM_AFT| < 100 RPM at steady state
+- Verify AFT runs ~2% higher RPM than FWD at same thrust command
+
+**19.** Fault injection test (bench, tethered):
+- Inject FAULT_INJECT_OVERTEMP to ESC-NAC-L-FWD via GCS
+- Verify: FWD throttle → 0, AFT continues, MAVLink STATUSTEXT "EDF-L-FWD FAULT_OVERTEMP"
+- Verify fault stays latched (does not recover when temp injection removed)
+- Power cycle. Verify fault clears. Verify GCS acknowledgment required before arm.
 
 ### Full Performance Tests
 
-**10.** Bench thrust test (tie-down, tethered):
-- 100% throttle for 5s: verify ≥2,900g per nacelle (scale below aircraft nose)
-- Total nacelle thrust: ≥5,800g
+**20.** Bench thrust test (tie-down, tethered, all 4 nacelle EDFs running):
+- 100% throttle for 5s per nacelle: verify ≥5,300g per nacelle (thrust stand or suspended scale)
+- Total nacelle thrust: ≥10,600g
 - Fuselage EDF at 100% 4S: verify ≥650g
-- **Total: ≥6,450g** (spec target)
+- **Total: ≥11,250g** (Rev L spec target)
 
-**11.** ESC temperature: Hobbywing 120A ESC junction ≤80°C at sustained full throttle 10s. Monitor with IR thermometer on ESC case.
+**21.** ESC temperature: Hobbywing 120A ESC junction ≤80°C at sustained full throttle 10s on all 4 nacelle ESCs. Monitor with IR thermometer.
 
-**12.** T/W verification:
-- Empty (6S 4000mAh, 2,587g AUW): measured thrust 6,450g → T/W = **2.49:1** ✓
-- With 250g cargo (6S 2800mAh, 2,722g AUW): thrust 6,450g → T/W = **2.37:1** ✓
+**22.** T/W verification:
+- Empty (6S 4000mAh, 3,607g AUW): measured thrust 11,250g → T/W = **3.12:1** ✓
+- With 250g cargo (6S 2800mAh, 3,742g AUW): thrust 11,250g → T/W = **3.01:1** ✓
 
-**13.** Max payload test (incremental, over multiple flights):
-- 500g payload hover: stable, altitude hold within spec
-- 750g payload hover: verify T/W ≥2.05:1 (753g theoretical max at T/W = 2.0)
+**23.** Max payload test (incremental, tethered hover):
+- 500g payload hover: stable, altitude hold
+- 1,000g payload hover: T/W ≥2.22:1
+- 1,400g payload: T/W ≥2.01:1 (theoretical max 1,406g at T/W = 2.0)
 
-**14.** Full performance flight: forward flight at 35–49 kts, nacelle transitions, cargo delivery, return to home.
+**24.** Full performance flight: forward flight at cruise speed, nacelle transitions, 1-EDF fault injection at altitude (governor maintains flight), cargo delivery, RTH.
 
 ### Phase 7 Pass Criteria
 
-- [ ] Static bench thrust: ≥6,450g total at full throttle
-- [ ] ESC temps ≤80°C at full sustained thrust
-- [ ] T/W ≥2.49:1 empty (2,587g AUW), ≥2.37:1 with 250g cargo (2,722g AUW)
-- [ ] Successfully hover-lifted ≥750g payload (753g theoretical max at T/W = 2.0)
+- [ ] Static bench thrust: ≥11,250g total at full throttle (all 4 nacelle EDFs + fuselage)
+- [ ] ESC temps ≤80°C at full sustained thrust on all 4 nacelle ESCs
+- [ ] T/W ≥3.12:1 empty (3,607g AUW), ≥3.01:1 with 250g cargo (3,742g AUW)
+- [ ] Governor active: BDSHOT RPM feedback confirmed on all 4 ESCs
+- [ ] Governor equalization: |RPM_FWD − RPM_AFT| < 100 RPM steady-state
+- [ ] Fault latch test passed: single-EDF fault, partner continues, MAVLink alert issued
+- [ ] Successfully hover-lifted ≥1,000g payload
 - [ ] All Hobbywing ESC calibration LEDs show correct armed state
+- [ ] CG at 190mm from nose with flight battery verified
 
-**Phase 7 cost estimate:** 2× XRP EDF ~$340 + 2× Hobbywing 120A ~$250 = **~$590**
+**Phase 7 cost estimate:** 4× XRP EDF ~$680 + 4× Hobbywing 120A ~$500 + power hardware ~$37 = **~$800** (vs ~$590 for single-EDF Rev J Phase 7)
 
 ---
 
