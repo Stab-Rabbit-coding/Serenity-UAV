@@ -1,10 +1,3 @@
-; Serenity-Class Tiltrotor UAV — Custom PCB
-; Copyright 2025 Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP
-; License: CC BY 4.0  https://creativecommons.org/licenses/by/4.0/
-; Hull basis: Peter Farell CC BY 4.0  Nozzle basis: BamJr CC BY 4.0
-; Visual inspiration: Firefly/Serenity (C) Joss Whedon / Mutant Enemy / Universal Pictures
-; Fan engineering work — not officially licensed.
-
 (kicad_pcb
   (version 20221018)
   (generator pcbnew)
@@ -28,7 +21,7 @@
     (comment_1 "SUPERSEDED by SENSORHAT-1 in Rev H — retained for reference only")
     (comment_2 "CC BY 4.0 — creativecommons.org/licenses/by/4.0")
     (comment_3 "Pico 2 sensor hat: IMU+Baro+GPS+CAN+ETH+TPM+FPV  65x48mm 4-layer")
-    (comment_4 "Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0")
+    (comment_4 "Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0 | Firefly/Serenity fan-work, not officially licensed")
   )
 
   (layers
@@ -127,7 +120,6 @@
   (net 42 "ADC_VBAT")
   (net 43 "ADC_RSSI")
 
-  ; ── Board outline (Edge.Cuts) ──────────────────────────────────
   (gr_line
     (start 0 0) (end 65 0)
     (layer "Edge.Cuts") (width 0.05)
@@ -145,7 +137,6 @@
     (layer "Edge.Cuts") (width 0.05)
   )
 
-  ; ── Mounting holes M2.5 ───────────────────────────────────────
   (footprint "MountingHole:MountingHole_2.7mm_M2.5" (layer "F.Cu")
     (at 3.5 3.5) (descr "M2.5 mounting hole")
     (pad "" thru_hole circle (at 0 0) (size 2.7 2.7) (drill 2.7)
@@ -587,14 +578,12 @@
     (pad "2" smd rect (at  1 0) (size 1.5 0.8) (layers "F.Cu" "F.Paste" "F.Mask"))
   )
 
-  ; ── Key signal tracks (representative — complete in KiCad editor) ──
   (segment (start 10.5 10.5) (end 17.5 10.5) (width 0.15) (layer "F.Cu") (net 4))
   (segment (start 10.5 22) (end 10.5 10.5) (width 0.15) (layer "F.Cu") (net 4))
   (segment (start 38 22) (end 38 10.5) (width 0.15) (layer "In1.Cu") (net 1))
   (segment (start 0 0) (end 65 0) (width 0.5) (layer "In1.Cu") (net 1))
   (segment (start 0 0) (end 0 48) (width 0.5) (layer "In2.Cu") (net 2))
 
-  ; ── Copper pour GND plane (In2.Cu) ────────────────────────────
   (zone (net 2) (net_name "GND") (layer "In2.Cu") (tstamp 00000001)
     (hatch edge 0.508)
     (connect_pads (clearance 0.3))
@@ -602,7 +591,6 @@
     (fill yes (arc_segments 32) (thermal_gap 0.3) (thermal_bridge_width 0.3))
     (polygon (pts (xy 0 0) (xy 65 0) (xy 65 48) (xy 0 48)))
   )
-  ; ── Copper pour +3V3 plane (In1.Cu) ─────────────────────────
   (zone (net 1) (net_name "+3V3") (layer "In1.Cu") (tstamp 00000002)
     (hatch edge 0.508)
     (connect_pads (clearance 0.3))
