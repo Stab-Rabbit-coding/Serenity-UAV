@@ -3,7 +3,6 @@
   (title_block
     (title "TRIHAT-1")
     (date "2025") (rev "E")
-    (company "Steve Griffing PE(CSE) CISSP-ISSEP CPP")
     (comment_1 "Serenity-Class Tiltrotor UAV")
     (comment_2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
     (comment_3 "See LICENSE_AND_ATTRIBUTION.md for full credits")

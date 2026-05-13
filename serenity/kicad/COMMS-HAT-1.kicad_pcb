@@ -1,5 +1,5 @@
 (kicad_pcb
-  (version 20221018)
+  (version 20240101)
   (generator pcbnew)
 
   (general
@@ -17,7 +17,6 @@
     (title "COMMS-HAT-1-RevE")
     (date "2025")
     (rev "E")
-    (company "Steve Griffing PE(CSE) CISSP-ISSEP CPP")
     (comment_1 "SUPERSEDED by COMMS-HAT-SWITCH in Rev H — retained for reference only")
     (comment_2 "CC BY 4.0 — creativecommons.org/licenses/by/4.0")
     (comment_3 "CM4 companion hat: CAN FD, Ethernet, TPM2, uSD log, SiK 915MHz, 49MHz RCRS, Zigbee CC2652P7, LoRa SX1276, NX STM32 proxy, 74HC74 latch  65x48mm 4-layer")
@@ -145,22 +144,22 @@
   )
 
   (footprint "MountingHole:MountingHole_2.7mm_M2.5" (layer "F.Cu")
-    (at 3.5 3.5) (descr "M2.5 mounting hole")
+    (at 3.5 3.5) (property "Description" "M2.5 mounting hole")
     (pad "" thru_hole circle (at 0 0) (size 2.7 2.7) (drill 2.7)
       (layers "*.Cu" "*.Mask"))
   )
   (footprint "MountingHole:MountingHole_2.7mm_M2.5" (layer "F.Cu")
-    (at 61.5 3.5) (descr "M2.5 mounting hole")
+    (at 61.5 3.5) (property "Description" "M2.5 mounting hole")
     (pad "" thru_hole circle (at 0 0) (size 2.7 2.7) (drill 2.7)
       (layers "*.Cu" "*.Mask"))
   )
   (footprint "MountingHole:MountingHole_2.7mm_M2.5" (layer "F.Cu")
-    (at 3.5 44.5) (descr "M2.5 mounting hole")
+    (at 3.5 44.5) (property "Description" "M2.5 mounting hole")
     (pad "" thru_hole circle (at 0 0) (size 2.7 2.7) (drill 2.7)
       (layers "*.Cu" "*.Mask"))
   )
   (footprint "MountingHole:MountingHole_2.7mm_M2.5" (layer "F.Cu")
-    (at 61.5 44.5) (descr "M2.5 mounting hole")
+    (at 61.5 44.5) (property "Description" "M2.5 mounting hole")
     (pad "" thru_hole circle (at 0 0) (size 2.7 2.7) (drill 2.7)
       (layers "*.Cu" "*.Mask"))
   )
@@ -168,7 +167,7 @@
 
   (footprint "Package_DFN_QFN:QFN-45" (layer "F.Cu")
     (at 10 14)
-    (descr "CAN FD controller SPI0 CE1 GPIO7")
+    (property "Description" "CAN FD controller SPI0 CE1 GPIO7")
     (fp_text reference "U_CAN" (at 0 -3.5) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "MCP2518FD" (at 0 3.5) (layer "F.Fab")
@@ -183,7 +182,7 @@
 
   (footprint "Package_DFN_QFN:QFN-35" (layer "F.Cu")
     (at 18 14)
-    (descr "CAN FD transceiver 5V bus 3.3V logic SOIC-8")
+    (property "Description" "CAN FD transceiver 5V bus 3.3V logic SOIC-8")
     (fp_text reference "U_TR" (at 0 -3.0) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "MCP2562FD" (at 0 3.0) (layer "F.Fab")
@@ -198,7 +197,7 @@
 
   (footprint "Package_DFN_QFN:QFN-35" (layer "F.Cu")
     (at 10 24)
-    (descr "TPM 2.0 SPI0 CE0 GPIO8")
+    (property "Description" "TPM 2.0 SPI0 CE0 GPIO8")
     (fp_text reference "U_TPM" (at 0 -3.0) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "SLB9670" (at 0 3.0) (layer "F.Fab")
@@ -213,7 +212,7 @@
 
   (footprint "Package_DFN_QFN:QFN-50" (layer "F.Cu")
     (at 26 10)
-    (descr "Ethernet SPI1 CE1 hw TCP/IP LQFP-48")
+    (property "Description" "Ethernet SPI1 CE1 hw TCP/IP LQFP-48")
     (fp_text reference "U_ETH" (at 0 -3.7) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "W5500" (at 0 3.7) (layer "F.Fab")
@@ -228,7 +227,7 @@
 
   (footprint "Package_DFN_QFN:QFN-40" (layer "F.Cu")
     (at 34 10)
-    (descr "Ethernet magnetics 1500Vrms isolation")
+    (property "Description" "Ethernet magnetics 1500Vrms isolation")
     (fp_text reference "U_MAG" (at 0 -3.2) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "HX1188NL" (at 0 3.2) (layer "F.Fab")
@@ -243,7 +242,7 @@
 
   (footprint "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm" (layer "F.Cu")
     (at 30 18)
-    (descr "W5500 reference clock")
+    (property "Description" "W5500 reference clock")
     (fp_text reference "Y1" (at 0 -2) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "25MHz" (at 0 2) (layer "F.Fab")
@@ -253,7 +252,7 @@
   )
 
   (footprint "Connector_Card:microSD_HC_Molex_503182-1852" (layer "F.Cu")
-    (at 20 36) (descr "microSD log storage SPI1 CE2")
+    (at 20 36) (property "Description" "microSD log storage SPI1 CE2")
     (fp_text reference "SD2" (at 0 -6) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "uSD_LOG" (at 0 6) (layer "F.Fab")
@@ -267,7 +266,7 @@
   )
 
   (footprint "RF_Module:Generic_RF_Module_SMD" (layer "F.Cu")
-    (at 10 36) (descr "SiK 915MHz MAVLink radio module UART0")
+    (at 10 36) (property "Description" "SiK 915MHz MAVLink radio module UART0")
     (fp_text reference "U_SIK" (at 0 -6) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "SiK-915" (at 0 6) (layer "F.Fab")
@@ -284,7 +283,7 @@
 
   (footprint "Package_DFN_QFN:QFN-32" (layer "F.Cu")
     (at 44 36)
-    (descr "SPI proxy NX enforcement SHA-256 audit OTP WP SOIC-8")
+    (property "Description" "SPI proxy NX enforcement SHA-256 audit OTP WP SOIC-8")
     (fp_text reference "U_NX" (at 0 -2.8) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "STM32F030F4P6" (at 0 2.8) (layer "F.Fab")
@@ -299,7 +298,7 @@
 
   (footprint "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm" (layer "F.Cu")
     (at 50 36)
-    (descr "NX latch dual D flip-flop SET at POR JP3 override")
+    (property "Description" "NX latch dual D flip-flop SET at POR JP3 override")
     (fp_text reference "U_LATCH" (at 0 -2) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "74HC74D" (at 0 2) (layer "F.Fab")
@@ -309,7 +308,7 @@
   )
 
   (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" (layer "F.Cu")
-    (at 58 36) (descr "JP3 NX override — recessed tool-required 1mm pin")
+    (at 58 36) (property "Description" "JP3 NX override — recessed tool-required 1mm pin")
     (fp_text reference "JP3" (at 0 -3) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "NX-OVERRIDE" (at 0 3) (layer "F.Fab")
@@ -319,7 +318,7 @@
   )
 
   (footprint "Connector_JST:JST_GH_SM04B-GHS-TB_1x04_P1.25mm_Horizontal" (layer "F.Cu")
-    (at 58 42) (descr "JST-GH 1.25mm 4-pin connector")
+    (at 58 42) (property "Description" "JST-GH 1.25mm 4-pin connector")
     (fp_text reference "JP4" (at 0 -3) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "JST-GH-4P" (at 0 3) (layer "F.Fab")
@@ -332,7 +331,7 @@
 
   (footprint "Package_DFN_QFN:QFN-50" (layer "F.Cu")
     (at 44 18)
-    (descr "TI CC2652P7 Zigbee BLE Thread LoRa2.4GHz +20dBm SPI2 opt pop")
+    (property "Description" "TI CC2652P7 Zigbee BLE Thread LoRa2.4GHz +20dBm SPI2 opt pop")
     (fp_text reference "U_ZB" (at 0 -3.7) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "CC2652P7" (at 0 3.7) (layer "F.Fab")
@@ -347,7 +346,7 @@
 
   (footprint "Package_DFN_QFN:QFN-40" (layer "F.Cu")
     (at 44 28)
-    (descr "Semtech SX1276 LoRa FSK 915MHz 100mW SPI3 opt pop")
+    (property "Description" "Semtech SX1276 LoRa FSK 915MHz 100mW SPI3 opt pop")
     (fp_text reference "U_LR" (at 0 -3.2) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "SX1276" (at 0 3.2) (layer "F.Fab")
@@ -362,7 +361,7 @@
 
   (footprint "Package_TO_SOT_SMD:SOT-23-5" (layer "F.Cu")
     (at 56 18)
-    (descr "3.3V LDO 600mA hat peripherals")
+    (property "Description" "3.3V LDO 600mA hat peripherals")
     (fp_text reference "U_LDO" (at 0 -2) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "AP2112K-3.3" (at 0 2) (layer "F.Fab")
@@ -372,7 +371,7 @@
   )
 
   (footprint "Connector_JST:JST_GH_SM04B-GHS-TB_1x04_P1.25mm_Horizontal" (layer "F.Cu")
-    (at 12 44) (descr "JST-GH 1.25mm 4-pin connector")
+    (at 12 44) (property "Description" "JST-GH 1.25mm 4-pin connector")
     (fp_text reference "J1" (at 0 -3) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "JST-GH-4P" (at 0 3) (layer "F.Fab")
@@ -384,7 +383,7 @@
   )
 
   (footprint "Connector_JST:JST_GH_SM06B-GHS-TB_1x06_P1.25mm_Horizontal" (layer "F.Cu")
-    (at 22 44) (descr "JST-GH 1.25mm 6-pin connector")
+    (at 22 44) (property "Description" "JST-GH 1.25mm 6-pin connector")
     (fp_text reference "J2" (at 0 -3) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "JST-GH-6P" (at 0 3) (layer "F.Fab")
@@ -398,7 +397,7 @@
   )
 
   (footprint "Connector_JST:JST_GH_SM06B-GHS-TB_1x06_P1.25mm_Horizontal" (layer "F.Cu")
-    (at 32 44) (descr "JST-GH 1.25mm 6-pin connector")
+    (at 32 44) (property "Description" "JST-GH 1.25mm 6-pin connector")
     (fp_text reference "J3" (at 0 -3) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "JST-GH-6P" (at 0 3) (layer "F.Fab")
@@ -412,7 +411,7 @@
   )
 
   (footprint "Connector_JST:JST_GH_SM04B-GHS-TB_1x04_P1.25mm_Horizontal" (layer "F.Cu")
-    (at 42 44) (descr "JST-GH 1.25mm 4-pin connector")
+    (at 42 44) (property "Description" "JST-GH 1.25mm 4-pin connector")
     (fp_text reference "J4" (at 0 -3) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "JST-GH-4P" (at 0 3) (layer "F.Fab")
@@ -424,7 +423,7 @@
   )
 
   (footprint "Connector_Coaxial:SMA_Amphenol_132134_EdgeMount" (layer "F.Cu")
-    (at 62 14) (descr "SMA edge mount ZB-2.4G optional radio antenna")
+    (at 62 14) (property "Description" "SMA edge mount ZB-2.4G optional radio antenna")
     (fp_text reference "SMA_ZB" (at -3 0) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.12))))
     (fp_text value "SMA-ZB-2.4G" (at -3 2) (layer "F.Fab")
@@ -434,7 +433,7 @@
   )
 
   (footprint "Connector_Coaxial:SMA_Amphenol_132134_EdgeMount" (layer "F.Cu")
-    (at 62 28) (descr "SMA edge mount LR-915M optional radio antenna")
+    (at 62 28) (property "Description" "SMA edge mount LR-915M optional radio antenna")
     (fp_text reference "SMA_LR" (at -3 0) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.12))))
     (fp_text value "SMA-LR-915M" (at -3 2) (layer "F.Fab")

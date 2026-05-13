@@ -1,7 +1,6 @@
 (kicad_sch (version 20221012) (generator eeschema)
   (paper "A2")
   (title_block (title "COMMS-HAT-SWITCH") (date "2026") (rev "H.1")
-    (company "Steve Griffing PE(CSE) CISSP-ISSEP CPP")
     (comment_1 "Serenity-Class Tiltrotor — 8-Node Rev H.1")
     (comment_2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
     (comment_3 "CM4 comms hat — Murex-inspired KSZ8895 5-port switch + all buses isolated")

@@ -3,7 +3,6 @@
   (title_block
     (title "CM4-CARRIER-1")
     (date "2025") (rev "E")
-    (company "Steve Griffing PE(CSE) CISSP-ISSEP CPP")
     (comment_1 "SUPERSEDED by CM4-CARRIER-2 in Rev H — retained for reference only")
     (comment_2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
     (comment_3 "Active Rev H board: serenity/kicad/CM4-CARRIER-2.kicad_sch")
