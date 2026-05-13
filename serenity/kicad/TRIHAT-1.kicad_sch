@@ -3,7 +3,6 @@
   (title_block
     (title "TRIHAT-1")
     (date "2025") (rev "E")
-    (company "Steve Griffing PE(CSE) CISSP-ISSEP CPP")
     (comment_1 "SUPERSEDED by SENSORHAT-1 in Rev H — retained for reference only")
     (comment_2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
     (comment_3 "Active Rev H board: serenity/kicad/SENSORHAT-1.kicad_sch")
