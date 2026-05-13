@@ -69,7 +69,11 @@ body, p, li, td, th, code, pre {
 | `serenity-connectivity-revH.jsx` | **MIL-STD-1553B replaces I²C as 4th active bus** | Rev H connectivity |
 | `serenity-rev-i.jsx` | CM3+ Nodes 2&3 + CM3-CARRIER-1 + dual VL53L5CX ToF arrays + cargo gondola | Rev I |
 | `serenity-rev-j.jsx` | XRP 3660-2700KV nacelle EDFs + Hobbywing 120A ESCs + 83mm pod ID | Rev J |
-| `serenity-rev-k.jsx` | **8× PocketBeagle 2 (AM6232) cooperative nodes + Cape-A/B + TPM ×8 + CPLD write-blocker + LoRa + WL1837MOD WiFi** | **Rev K ← current master** |
+| `serenity-rev-k.jsx` | 8× PocketBeagle 2 (AM6232) cooperative nodes + Cape-A/B + TPM ×8 + CPLD write-blocker + LoRa + WL1837MOD WiFi + **Dual 80mm 6S series EDFs per nacelle** | Rev K (superseded by Rev L) |
+| `serenity-esc-telem-dual-edf.jsx` | Dual-EDF ESC telemetry spec — 4× nacelle ESCs, 74HC4051 8:1 mux, power wiring, fault tolerance | Rev K dual-EDF |
+| `serenity-nacelle-pid-governor.jsx` | **Per-EDF PID closed-loop RPM governor** — 5-tab spec: overview, PID loops, cooperative control, fault response, commissioning | **Rev L new** |
+| `serenity-edf-options.jsx` | **EDF selection guide** — budget / standard XRP / high-perf Schübeler comparison, tandem series performance, ESC pairing, phase build guide | **Rev L new** |
+| `serenity-rev-l.jsx` | **Rev L — Dual 80mm 6S series EDFs + PID governor + EDF options** — supersedes Rev K; firmware-only update; hardware unchanged | **Rev L ← current master** |
 
 ### SVG Engineering Diagrams
 
@@ -150,8 +154,9 @@ body, p, li, td, th, code, pre {
 | `MANIFEST.json` | SHA-256 checksums for all project files (integrity verification) |
 | `PROJECT_INDEX.md` | This file |
 | `AVIONICS_PB2_REDESIGN.md` | **Rev K** — 8-node PocketBeagle 2 cooperative avionics architecture; Cape-A and Cape-B design specs |
-| `PHASED_BUILD_GUIDE.md` | **Rev K** — 8-phase phased build, procurement, and flight-test guide |
-| `bom_revK.json` | **Rev K** bill of materials (structured JSON with mass/cost) |
+| `PHASED_BUILD_GUIDE.md` | **Rev L** — 8-phase phased build, procurement, and flight-test guide (updated for dual-EDF + PID governor) |
+| `bom_revL.json` | **Rev L** bill of materials — firmware delta, EDF options (budget/standard/high-perf), governor commissioning |
+| `bom_revK.json` | **Rev K** bill of materials — dual-EDF hardware (hardware identical to Rev L) |
 | `bom_revK.csv` | **Rev K** bill of materials (CSV for spreadsheet use) |
 | `bom_revJ.json` | Rev J bill of materials (historical reference) |
 | `bom_revJ.csv` | Rev J bill of materials CSV |
@@ -168,17 +173,18 @@ body, p, li, td, th, code, pre {
 | Canonical beam | 288.9 mm (11.375") tip-to-tip · **100% canonical** |
 | Canonical height | 134.3 mm (5.286") landed |
 | Hull structure | PETG thin shell + X-30 expanding foam + CF skeleton |
-| Propulsion | 2× **Changesun XRP 3660-2700KV 80mm 6S EDF** (pod OD 93.5mm · 2900g each) · 1× XFLY X4 PRO 40mm 4S fuselage |
-| Nacelle span | 288.9 mm tip-to-tip (canonical beam) · C-C 195.9 mm (7.71") |
-| Nacelle ESC | **Hobbywing Platinum PRO V4 120A** (mandatory for 84A XRP draw) |
-| Pylon datum | 82.5 mm from CL (1/3 from nacelle inner edge — outward expansion) |
-| Total hover thrust | **6,450 g** (5,800g nacelles + 650g fuselage) |
-| Avionics | **8× PocketBeagle 2 (AM6232)** · 4× Cape-A (FC nodes) · 4× Cape-B (CN nodes) · interleaved CN+FC per bay: Bay A: CN1+FC1, Bay B: CN2+FC2, Bay D: CN3+FC3, Bay E: CN4+FC4 |
+| Propulsion | **2× (2× Changesun XRP 3660-2700KV 80mm 6S, tandem series) per nacelle** · pod OD 93.5mm · pod length 230mm · 1× XFLY X4 PRO 40mm 4S fuselage |
+| Nacelle span | 288.9 mm tip-to-tip (canonical beam) · C-C 195.5 mm (7.70") |
+| Nacelle ESC | **4× Hobbywing Platinum PRO V4 120A** (one per EDF — 84A XRP draw, fault-tolerant pairs) |
+| Pylon datum | 82.2 mm from CL (1/3 from nacelle inner edge — outward expansion) |
+| Total hover thrust | **11,250 g** (10,600g nacelles + 650g fuselage) |
+| Governor (Rev L) | **PID closed-loop RPM per EDF** · 500 Hz M4F · BDSHOT 1kHz feedback · nacelle equalization |
+| Avionics | **8× PocketBeagle 2 (AM6232)** · 4× Cape-A (FC nodes) · 4× Cape-B (CN nodes) · interleaved CN+FC per bay |
 | Avionics dry | **404 g** (8× PB2 + 4× Cape-A + 4× Cape-B + 4× RCRS-49 + GPS×4 + radios) |
-| Airframe dry (Rev K) | **2,177 g** |
-| AUW empty | **2,587 g · 6S 4000mAh · T/W 2.49** |
-| AUW cargo 250g | **2,722 g · 6S 2800mAh · T/W 2.37** |
-| Max payload at T/W=2.0 | **753 g (1.66 lb)** |
+| Airframe dry (Rev L) | **3,197 g** |
+| AUW empty | **3,607 g · 6S 4000mAh · T/W 3.12** |
+| AUW cargo 250g | **3,742 g · 6S 2800mAh · T/W 3.01** |
+| Max payload at T/W=2.0 | **1,406 g (3.10 lb)** |
 | Cruise speed | 38–54 kts (scaled from 35-49kts at 365mm) |
 | Transition altitude | ≥30 ft AGL |
 | CG target | 190 mm (7.48") from nose |
@@ -189,7 +195,7 @@ body, p, li, td, th, code, pre {
 | FAA registration | **N00000 PLACEHOLDER — replace before first flight** |
 ---
 
-## Connectivity Summary (Rev K)
+## Connectivity Summary (Rev K/L — unchanged)
 
 | Bus | Protocol | Speed | Topology | Notes |
 |-----|----------|-------|----------|-------|

@@ -1,10 +1,3 @@
-; Serenity-Class Tiltrotor UAV — 8-Node Rev I
-; © 2026 Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP
-; License: CC BY 4.0  https://creativecommons.org/licenses/by/4.0/
-; Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0
-; Visual inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy / Universal Pictures
-; Fan engineering work — not officially licensed.
-
 (kicad_pcb (version 20221018) (generator pcbnew)
   (general (thickness 1.6))
   (paper "A4")
@@ -15,6 +8,7 @@
     (comment_2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
     (comment_3 "CM3+ carrier 68x30mm 4L — Nodes 2 & 3 — integrated bus I/O")
     (comment_4 "200-pin SODIMM edge + 40-pin GPIO HAT header + 4x JST-GH bus ports")
+    (comment_5 "Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0 | Firefly/Serenity fan-work, not officially licensed")
   )
   (layers
     (0 "F.Cu" signal) (1 "In1.Cu" power) (2 "In2.Cu" power) (31 "B.Cu" signal)
@@ -22,7 +16,6 @@
     (38 "B.Mask" user) (39 "F.Mask" user) (44 "Edge.Cuts" user)
   )
   (setup (pad_to_mask_clearance 0.1))
-  ; ── Nets ──────────────────────────────────────────────────────────
   (net 0  "")
   (net 1  "+5V")
   (net 2  "+3V3")
@@ -54,12 +47,10 @@
   (net 28 "I2C0_SCL")
   (net 29 "HAT_ID_SDA")
   (net 30 "HAT_ID_SCL")
-  ; ── Board outline 68 × 30 mm ──────────────────────────────────────
   (gr_line (start 0 0)  (end 68 0)  (layer "Edge.Cuts") (width 0.05))
   (gr_line (start 68 0) (end 68 30) (layer "Edge.Cuts") (width 0.05))
   (gr_line (start 68 30)(end 0 30)  (layer "Edge.Cuts") (width 0.05))
   (gr_line (start 0 30) (end 0 0)   (layer "Edge.Cuts") (width 0.05))
-  ; ── Mounting holes M2.5 (top corners — bottom blocked by SODIMM) ──
   (footprint "MountingHole:MountingHole_2.7mm_M2.5" (layer "F.Cu") (at 3 3)
     (pad "" thru_hole circle (at 0 0) (size 2.7 2.7) (drill 2.7) (layers "*.Cu" "*.Mask")))
   (footprint "MountingHole:MountingHole_2.7mm_M2.5" (layer "F.Cu") (at 65 3)
@@ -68,36 +59,26 @@
     (pad "" thru_hole circle (at 0 0) (size 2.7 2.7) (drill 2.7) (layers "*.Cu" "*.Mask")))
   (footprint "MountingHole:MountingHole_2.7mm_M2.5" (layer "F.Cu") (at 65 27)
     (pad "" thru_hole circle (at 0 0) (size 2.7 2.7) (drill 2.7) (layers "*.Cu" "*.Mask")))
-  ; ── J1: SODIMM 200-pin 0.6mm pitch — RPi CM3 / CM3+ ──────────────
-  ; Jedec DDR2 SODIMM: 67.6mm contact row; PCIe-style card-edge on B.Cu
-  ; Module inserts at angle, locks flat; notch at 52.85mm from left edge
   (footprint "SODIMM_200pin_0.6mm" (layer "B.Cu") (at 34 28.5)
     (descr "RPi CM3/CM3+ 200-pin SODIMM edge connector (TE 1473005-4 or equiv)")
     (fp_text reference "J1" (at 0 -4) (layer "B.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.12))))
     (fp_text value "SODIMM-200-CM3+" (at 0 4) (layer "B.Fab")
       (effects (font (size 0.8 0.8) (thickness 0.12))))
-    ; Courtyard: 67.6mm wide × 7.5mm deep
     (fp_poly (pts (xy -33.8 -3.75) (xy 33.8 -3.75) (xy 33.8 3.75) (xy -33.8 3.75))
      (layer "B.CrtYd") (width 0.05))
-    ; Pin 1 marker
     (pad "1" smd rect (at -33.15 -1.5) (size 0.35 1.2) (layers "B.Cu" "B.Paste" "B.Mask"))
-    ; SODIMM notch reference pad
     (pad "" np_thru_hole circle (at 18.85 0) (size 1.5 1.5) (drill 1.5) (layers "*.Cu")))
-  ; ── J_HAT: 40-pin GPIO header 2×20 2.54mm — RPi HAT interface ────
-  ; Positioned top-centre to match RPi HAT standard offset
   (footprint "PinHeader_2x20_P2.54" (layer "F.Cu") (at 28 5)
     (descr "40-pin GPIO for RPi HAT (COMMS-HAT / COMM-HAT / MICROHAT)")
     (fp_text reference "J_HAT" (at 0 -4.5) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "HAT-40PIN" (at 0 4.5) (layer "F.Fab")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
-    ; Courtyard: 50.8mm × 5.1mm
     (fp_poly (pts (xy -25.4 -2.54) (xy 25.4 -2.54) (xy 25.4 2.54) (xy -25.4 2.54))
      (layer "F.CrtYd") (width 0.05))
     (pad "1" thru_hole rect  (at -24.13 -1.27) (size 1.7 1.7) (drill 1.0) (layers "*.Cu" "*.Mask"))
     (pad "2" thru_hole circle(at -24.13  1.27) (size 1.7 1.7) (drill 1.0) (layers "*.Cu" "*.Mask")))
-  ; ── J_CAN: JST-GH 4-pin — CAN FD (GND / VCC / CANH / CANL) ──────
   (footprint "JST_GH_4P" (layer "F.Cu") (at 57 11)
     (descr "CAN FD bus — pin1=GND pin2=VCC pin3=CANH pin4=CANL")
     (fp_text reference "J_CAN" (at 0 -3.5) (layer "F.SilkS")
@@ -108,7 +89,6 @@
     (pad "2" smd rect (at -0.625 0) (size 0.8 1.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 2  "+3V3"))
     (pad "3" smd rect (at  0.625 0) (size 0.8 1.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 13 "CANH"))
     (pad "4" smd rect (at  1.875 0) (size 0.8 1.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 14 "CANL")))
-  ; ── J_485: JST-GH 4-pin — RS-485 (GND / VCC / A / B) ─────────────
   (footprint "JST_GH_4P" (layer "F.Cu") (at 57 16)
     (descr "RS-485 bus — pin1=GND pin2=VCC pin3=A pin4=B")
     (fp_text reference "J_485" (at 0 -3.5) (layer "F.SilkS")
@@ -119,7 +99,6 @@
     (pad "2" smd rect (at -0.625 0) (size 0.8 1.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 2  "+3V3"))
     (pad "3" smd rect (at  0.625 0) (size 0.8 1.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 16 "RS485_A"))
     (pad "4" smd rect (at  1.875 0) (size 0.8 1.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 17 "RS485_B")))
-  ; ── J_1553: JST-GH 4-pin — MIL-STD-1553B (GND / SHD / BUS+ / BUS-) ─
   (footprint "JST_GH_4P" (layer "F.Cu") (at 57 21)
     (descr "1553B stub — pin1=GND pin2=shield pin3=BUS_A+ pin4=BUS_A-")
     (fp_text reference "J_1553" (at 0 -3.5) (layer "F.SilkS")
@@ -130,7 +109,6 @@
     (pad "2" smd rect (at -0.625 0) (size 0.8 1.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 3  "GND"))
     (pad "3" smd rect (at  0.625 0) (size 0.8 1.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 18 "BUS_A_P"))
     (pad "4" smd rect (at  1.875 0) (size 0.8 1.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 19 "BUS_A_N")))
-  ; ── J_ETH: JST-GH 6-pin — Ethernet/SPI W5500 (GND/VCC/SCK/MISO/MOSI/CS) ─
   (footprint "JST_GH_6P" (layer "F.Cu") (at 63.5 11)
     (descr "W5500 SPI Ethernet — GND VCC SCK MISO MOSI CS — for inter-node ETH via RJ45 breakout")
     (fp_text reference "J_ETH" (at 0 -4) (layer "F.SilkS")
@@ -143,7 +121,6 @@
     (pad "4" smd rect (at  0.625 0) (size 0.8 1.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 6  "SPI0_MISO"))
     (pad "5" smd rect (at  1.875 0) (size 0.8 1.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 5  "SPI0_MOSI"))
     (pad "6" smd rect (at  3.125 0) (size 0.8 1.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 8  "SPI0_CS_ETH")))
-  ; ── J_USBC: USB-C 2.0 power + CM3+ USB OTG ───────────────────────
   (footprint "Package" (layer "F.Cu") (at 8 12)
     (descr "USB-C connector — 5V power in + CM3+ USB 2.0 OTG/programming (via CH340C bridge)")
     (fp_text reference "J_USBC" (at 0 -4.0) (layer "F.SilkS")
@@ -154,7 +131,6 @@
      (layer "F.CrtYd") (width 0.05))
     (pad "1" smd rect (at -4.50 0) (size 0.5 0.5) (layers "F.Cu" "F.Paste" "F.Mask") (net 1 "+5V"))
     (pad "EP" smd rect (at 0 0) (size 5.40 3.00) (layers "F.Cu" "F.Paste" "F.Mask")))
-  ; ── J_SD: microSD slot — CM3+ Lite OS boot card ───────────────────
   (footprint "Package" (layer "F.Cu") (at 22 12)
     (descr "microSD push-push — SDIO to CM3+ for OS boot (CM3+ Lite only)")
     (fp_text reference "J_SD" (at 0 -8.5) (layer "F.SilkS")
@@ -165,8 +141,6 @@
      (layer "F.CrtYd") (width 0.05))
     (pad "1" smd rect (at -8.00 0) (size 0.5 0.5) (layers "F.Cu" "F.Paste" "F.Mask") (net 24 "SD_CLK"))
     (pad "EP" smd rect (at 0 0) (size 9.60 8.40) (layers "F.Cu" "F.Paste" "F.Mask")))
-  ; ── U1: MCP2518FD — SPI CAN FD controller ────────────────────────
-  ; QFN-20 3×3mm, SPI0 CS0; provides CANH/CANL via ATA6561 driver (U1B)
   (footprint "Package" (layer "F.Cu") (at 36 17)
     (descr "MCP2518FD CAN FD controller QFN-20 — SPI0 CS0 — ISO 11898-1:2015 1Mbit/s")
     (fp_text reference "U1" (at 0 -2.5) (layer "F.SilkS")
@@ -177,8 +151,6 @@
      (layer "F.CrtYd") (width 0.05))
     (pad "1" smd rect (at -1.75 0) (size 0.5 0.5) (layers "F.Cu" "F.Paste" "F.Mask") (net 4 "SPI0_SCK"))
     (pad "EP" smd rect (at 0 0) (size 2.10 2.10) (layers "F.Cu" "F.Paste" "F.Mask") (net 3 "GND")))
-  ; ── U1B: ATA6561 — CAN FD bus transceiver ────────────────────────
-  ; SO-8 5×4mm; converts TXD/RXD from MCP2518FD to CANH/CANL differential
   (footprint "Package" (layer "F.Cu") (at 36 22)
     (descr "ATA6561 CAN FD transceiver SO-8 — 5Mbit/s — galv. capable")
     (fp_text reference "U1B" (at 0 -3.0) (layer "F.SilkS")
@@ -189,8 +161,6 @@
      (layer "F.CrtYd") (width 0.05))
     (pad "1" smd rect (at -3.00 0) (size 0.5 0.5) (layers "F.Cu" "F.Paste" "F.Mask") (net 13 "CANH"))
     (pad "EP" smd rect (at 0 0) (size 3.60 3.00) (layers "F.Cu" "F.Paste" "F.Mask") (net 3 "GND")))
-  ; ── U2: MAX3485E — RS-485 half-duplex transceiver ────────────────
-  ; SO-8 5×4mm; UART0 TX/RX with DE/RE from GPIO
   (footprint "Package" (layer "F.Cu") (at 44 17)
     (descr "MAX3485E RS-485 transceiver SO-8 — 3.3V — half-duplex — 3Mbit/s")
     (fp_text reference "U2" (at 0 -3.0) (layer "F.SilkS")
@@ -201,9 +171,6 @@
      (layer "F.CrtYd") (width 0.05))
     (pad "1" smd rect (at -3.00 0) (size 0.5 0.5) (layers "F.Cu" "F.Paste" "F.Mask") (net 10 "UART0_TX"))
     (pad "EP" smd rect (at 0 0) (size 3.60 3.00) (layers "F.Cu" "F.Paste" "F.Mask") (net 3  "GND")))
-  ; ── U3: HI-6130 — MIL-STD-1553B RT controller ────────────────────
-  ; LQFP-80 14×14mm; SPI1 CS0; 78Ω stub; galvanically isolated through pulse transformer
-  ; NOTE: placed at board centre-left due to package size
   (footprint "Package" (layer "F.Cu") (at 20 17)
     (descr "HI-6130 MIL-STD-1553B RT controller LQFP-80 — SPI1 — 78ohm stub — galv. isolated")
     (fp_text reference "U3" (at 0 -8.0) (layer "F.SilkS")
@@ -214,8 +181,6 @@
      (layer "F.CrtYd") (width 0.05))
     (pad "1" smd rect (at -7.50 0) (size 0.5 0.5) (layers "F.Cu" "F.Paste" "F.Mask") (net 4  "SPI0_SCK"))
     (pad "EP" smd rect (at 0 0) (size 8.40 8.40) (layers "F.Cu" "F.Paste" "F.Mask") (net 3  "GND")))
-  ; ── U4: W5500 — Hardwired TCP/IP Ethernet controller ─────────────
-  ; LQFP-48 7×7mm; SPI0 CS1; 100BASE-T via external magnetics + RJ45 breakout
   (footprint "Package" (layer "F.Cu") (at 44 24)
     (descr "W5500 Ethernet controller LQFP-48 — SPI0 CS1 — 100BASE-T — hardware TCP/IP stack")
     (fp_text reference "U4" (at 0 -4.5) (layer "F.SilkS")
@@ -226,8 +191,6 @@
      (layer "F.CrtYd") (width 0.05))
     (pad "1" smd rect (at -4.00 0) (size 0.5 0.5) (layers "F.Cu" "F.Paste" "F.Mask") (net 4  "SPI0_SCK"))
     (pad "EP" smd rect (at 0 0) (size 4.80 4.80) (layers "F.Cu" "F.Paste" "F.Mask") (net 3  "GND")))
-  ; ── U5: CH340C — USB-UART bridge ─────────────────────────────────
-  ; SOP-16; provides USB-serial programming access to CM3+ UART0; no crystal needed
   (footprint "Package" (layer "F.Cu") (at 8 20)
     (descr "CH340C USB-UART bridge SOP-16 — CM3+ UART0 programming/console — no crystal")
     (fp_text reference "U5" (at 0 -5.5) (layer "F.SilkS")
@@ -238,8 +201,6 @@
      (layer "F.CrtYd") (width 0.05))
     (pad "1" smd rect (at -5.00 0) (size 0.5 0.5) (layers "F.Cu" "F.Paste" "F.Mask") (net 22 "USB_DP"))
     (pad "EP" smd rect (at 0 0) (size 5.60 4.60) (layers "F.Cu" "F.Paste" "F.Mask") (net 3  "GND")))
-  ; ── U6: AP2112K-3.3 — 3.3V LDO 600mA ───────────────────────────
-  ; SOT-25; +5V in → +3V3 out; powers CM3+ I/O, all bus ICs, HAT
   (footprint "Package" (layer "F.Cu") (at 60 5)
     (descr "AP2112K-3.3 LDO 600mA SOT-25 — 5V to 3.3V — CM3+ IO + bus transceivers + HAT")
     (fp_text reference "U6" (at 0 -2.5) (layer "F.SilkS")
@@ -250,8 +211,6 @@
      (layer "F.CrtYd") (width 0.05))
     (pad "1" smd rect (at -1.50 0) (size 0.5 0.5) (layers "F.Cu" "F.Paste" "F.Mask") (net 1 "+5V"))
     (pad "EP" smd rect (at 0 0) (size 1.80 1.20) (layers "F.Cu" "F.Paste" "F.Mask") (net 2 "+3V3")))
-  ; ── U7: CAT24C32WI — RPi HAT ID EEPROM ──────────────────────────
-  ; SO-8 5×4mm; I²C addr=0x50; connected to HAT ID pins (GPIO0/GPIO1 = ID_SD/ID_SC)
   (footprint "Package" (layer "F.Cu") (at 60 16)
     (descr "CAT24C32WI 4Kbit I2C EEPROM SO-8 — RPi HAT ID at 0x50 on ID_SD/ID_SC")
     (fp_text reference "U7" (at 0 -3.0) (layer "F.SilkS")
@@ -262,7 +221,6 @@
      (layer "F.CrtYd") (width 0.05))
     (pad "1" smd rect (at -3.00 0) (size 0.5 0.5) (layers "F.Cu" "F.Paste" "F.Mask") (net 29 "HAT_ID_SDA"))
     (pad "EP" smd rect (at 0 0) (size 3.60 3.00) (layers "F.Cu" "F.Paste" "F.Mask") (net 3  "GND")))
-  ; ── LED_STATUS: CM3+ heartbeat ───────────────────────────────────
   (footprint "Package" (layer "F.Cu") (at 60 22)
     (fp_text reference "LED_STATUS" (at 0 -2.2) (layer "F.SilkS")
       (effects (font (size 0.7 0.7) (thickness 0.12))))
@@ -272,7 +230,6 @@
      (layer "F.CrtYd") (width 0.05))
     (pad "1" smd rect (at -1.00 0) (size 0.5 0.5) (layers "F.Cu" "F.Paste" "F.Mask"))
     (pad "EP" smd rect (at 0 0) (size 1.20 0.90) (layers "F.Cu" "F.Paste" "F.Mask")))
-  ; ── SW_BOOT: CM3+ boot mode select ───────────────────────────────
   (footprint "Package" (layer "F.Cu") (at 60 8)
     (fp_text reference "SW_BOOT" (at 0 -3.0) (layer "F.SilkS")
       (effects (font (size 0.7 0.7) (thickness 0.12))))
@@ -282,7 +239,6 @@
      (layer "F.CrtYd") (width 0.05))
     (pad "1" smd rect (at -2.00 0) (size 0.5 0.5) (layers "F.Cu" "F.Paste" "F.Mask"))
     (pad "EP" smd rect (at 0 0) (size 2.40 1.80) (layers "F.Cu" "F.Paste" "F.Mask")))
-  ; ── Routing stubs ────────────────────────────────────────────────
   (segment (start 36 17) (end 44 17) (width 0.15) (layer "F.Cu") (net 4))
   (segment (start 44 17) (end 44 24) (width 0.15) (layer "F.Cu") (net 4))
   (segment (start 36 17) (end 20 17) (width 0.15) (layer "F.Cu") (net 4))
@@ -290,7 +246,6 @@
   (segment (start 44 17) (end 57 16) (width 0.20) (layer "F.Cu") (net 16))
   (segment (start 20 17) (end 57 21) (width 0.20) (layer "F.Cu") (net 18))
   (segment (start 44 24) (end 63 11) (width 0.15) (layer "F.Cu") (net 8))
-  ; ── Power planes ─────────────────────────────────────────────────
   (zone (net 3) (net_name "GND") (layer "In2.Cu") (tstamp 00000001)
     (hatch edge 0.508) (connect_pads (clearance 0.3)) (min_thickness 0.25)
     (fill yes (arc_segments 32) (thermal_gap 0.3) (thermal_bridge_width 0.3))

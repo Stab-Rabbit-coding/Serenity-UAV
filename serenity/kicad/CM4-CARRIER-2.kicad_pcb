@@ -1,10 +1,3 @@
-; Serenity-Class Tiltrotor UAV — 8-Node Rev I
-; © 2026 Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP
-; License: CC BY 4.0  https://creativecommons.org/licenses/by/4.0/
-; Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0
-; Visual inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy / Universal Pictures
-; Fan engineering work — not officially licensed.
-
 (kicad_pcb (version 20221018) (generator pcbnew)
   (general (thickness 1.6))
   (paper "A4")
@@ -14,6 +7,7 @@
     (comment_1 "Serenity-Class Tiltrotor UAV — 8-Node Rev I")
     (comment_2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
     (comment_3 "CM4 minimal carrier 57x44mm 4L — Murex-ready Ethernet")
+    (comment_4 "Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0 | Firefly/Serenity fan-work, not officially licensed")
   )
   (layers
     (0 "F.Cu" signal) (1 "In1.Cu" power) (2 "In2.Cu" power) (31 "B.Cu" signal)

@@ -181,14 +181,18 @@ const ISO_BUSES = [
 ];
 
 // ════════════════════════════════════════════════════════════════
-//  GPIO MAP — XIAO RP2350 on SENSORHAT-1
+//  GPIO MAP — XIAO RP2350 on SENSORHAT-1  (dual-EDF Rev)
 // ════════════════════════════════════════════════════════════════
+// Dual-EDF upgrade: 4 nacelle ESCs (L-FWD, L-AFT, R-FWD, R-AFT) + 1 fuselage.
+// WS2812 moved to PCA9685 PWM IC on I²C (MCP23017 GPA trigger) — frees GP29 for 4th nacelle DSHOT.
+// ESC telem mux upgraded: 74HC4052 (dual 4:1, 2 sel bits) → 74HC4051 (8:1, 3 sel bits).
+// MUX select now uses MCP23017 GPA6, GPA7, GPB1 (was GPA6, GPA7 only).
 const XIAO_GPIO = [
   // Direct on XIAO
-  {pin:"D0 / GP26",  func:"DSHOT PIO: ESC-L (bidir)",      bus:"PIO0-SM0", note:"Bidirectional DSHOT + BDSHOT RPM"},
-  {pin:"D1 / GP27",  func:"DSHOT PIO: ESC-R (bidir)",      bus:"PIO0-SM1", note:"Bidirectional DSHOT + BDSHOT RPM"},
-  {pin:"D2 / GP28",  func:"DSHOT PIO: ESC-Fwd (bidir)",    bus:"PIO0-SM2", note:"Bidirectional DSHOT + BDSHOT RPM"},
-  {pin:"D3 / GP29",  func:"WS2812 LED chain",               bus:"PIO0-SM3", note:"Nav lights (6 LEDs)"},
+  {pin:"D0 / GP26",  func:"DSHOT PIO: ESC-NAC-L-FWD (bidir)", bus:"PIO0-SM0", note:"Port nacelle forward EDF — BDSHOT RPM"},
+  {pin:"D1 / GP27",  func:"DSHOT PIO: ESC-NAC-L-AFT (bidir)", bus:"PIO0-SM1", note:"Port nacelle aft EDF — BDSHOT RPM"},
+  {pin:"D2 / GP28",  func:"DSHOT PIO: ESC-NAC-R-FWD (bidir)", bus:"PIO0-SM2", note:"Stbd nacelle forward EDF — BDSHOT RPM"},
+  {pin:"D3 / GP29",  func:"DSHOT PIO: ESC-NAC-R-AFT (bidir)", bus:"PIO0-SM3", note:"Stbd nacelle aft EDF — BDSHOT RPM (WS2812→PCA9685)"},
   {pin:"D4 / GP6",   func:"I²C1 SDA — sensor bus",          bus:"I2C1 HW",  note:"IMU · Baro · Airspeed · MCP23017"},
   {pin:"D5 / GP7",   func:"I²C1 SCL — sensor bus",          bus:"I2C1 HW",  note:"ISO1540 isolator at connector"},
   {pin:"D6 / GP0",   func:"UART0 TX → GPS M10Q",             bus:"UART0 HW", note:"u-blox UBX binary"},
@@ -218,10 +222,11 @@ const XIAO_GPIO = [
   {pin:"MCP23017 GPA3", func:"Payload release servo",           bus:"I²C expdr",note:"Servo PWM"},
   {pin:"MCP23017 GPA4", func:"Winch DRV8833 IN1",              bus:"I²C expdr",note:"Winch motor H-bridge"},
   {pin:"MCP23017 GPA5", func:"Winch DRV8833 IN2",              bus:"I²C expdr",note:"Winch motor H-bridge"},
-  {pin:"MCP23017 GPA6", func:"ESC telem mux SEL-A (74HC4052)", bus:"I²C expdr",note:"Selects ESC-L/R/Fwd telem"},
-  {pin:"MCP23017 GPA7", func:"ESC telem mux SEL-B (74HC4052)", bus:"I²C expdr",note:"Selects ESC-L/R/Fwd telem"},
+  {pin:"MCP23017 GPA6", func:"ESC telem mux SEL-A (74HC4051)", bus:"I²C expdr",note:"3-bit mux select: bit 0"},
+  {pin:"MCP23017 GPA7", func:"ESC telem mux SEL-B (74HC4051)", bus:"I²C expdr",note:"3-bit mux select: bit 1"},
   {pin:"MCP23017 GPB0", func:"LED status / heartbeat",          bus:"I²C expdr",note:"Board health indicator"},
-  {pin:"MCP23017 GPB1", func:"Spare GPIO",                      bus:"I²C expdr",note:"Future expansion"},
+  {pin:"MCP23017 GPB1", func:"ESC telem mux SEL-C (74HC4051)", bus:"I²C expdr",note:"3-bit mux select: bit 2 — added for dual-EDF 5-channel mux"},
+  {pin:"MCP23017 GPB2", func:"PCA9685 OE̅ (nav-light PWM IC)",  bus:"I²C expdr",note:"Output enable for WS2812 replacement PWM driver"},
 ];
 
 // ════════════════════════════════════════════════════════════════
@@ -243,7 +248,7 @@ function ESCProtocolTab(){
   const p=ESC_PROTOCOLS.find(x=>x.id===sel)||ESC_PROTOCOLS[0];
   return(<div>
     <div style={{background:"rgba(0,229,255,0.04)",border:`1px solid ${C.border}`,borderRadius:4,padding:"10px 14px",marginBottom:16,fontFamily:M,fontSize:11,color:C.dim,lineHeight:1.8}}>
-      <span style={{color:C.accent,fontWeight:"bold"}}>Design principle:</span> One UART (shared with RS-485 via firmware time-division) + the existing DSHOT PIO outputs + the existing CAN FD bus covers ALL ESC/motor-driver telemetry protocols. No new dedicated interface ICs needed beyond a <span style={{color:C.yellow}}>74HC4052 analog mux</span> (~$0.40) to route ESC serial telem lines.
+      <span style={{color:C.accent,fontWeight:"bold"}}>Design principle (dual-EDF Rev):</span> One UART (shared with RS-485 via firmware time-division) + 4× independent DSHOT PIO outputs (one per nacelle EDF) + the existing CAN FD bus covers ALL ESC/motor-driver telemetry protocols. Dual-EDF upgrade adds a <span style={{color:C.yellow}}>74HC4051 8:1 analog mux</span> (~$0.50, 3 sel bits) to route 5 ESC serial telem lines (ESC-NAC-L-FWD/AFT, ESC-NAC-R-FWD/AFT, ESC-FUSE) plus RS-485. WS2812 nav lights move to PCA9685 PWM IC on I²C, freeing GP29 for the 4th nacelle DSHOT.
     </div>
 
     {/* Protocol selector */}
@@ -358,22 +363,26 @@ function GPIOAuditTab(){
     </div>
     <Note c={C.gold} ch="MCP23017 is an I²C 16-bit GPIO expander in QFN-28 (4×4mm). At 400kHz I²C, a full 16-bit write takes ~200µs — adequate for servo PWM updates (50Hz = 20ms period). For servo PWM precision, the MCP23017 drives the servo via a hardware PWM signal from a small dedicated PWM IC (PCA9685, also I²C) if sub-1ms accuracy is needed. Alternatively, the XIAO's 24 PWM channels can handle servos directly if GPIO budget allows reallocation."/>
 
-    <SH t="ESC Telemetry Mux — 74HC4052"/>
+    <SH t="ESC Telemetry Mux — 74HC4051 (dual-EDF upgrade)"/>
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24}}>
       <div>
-        <KV k="IC" v="74HC4052 — dual 4:1 analog mux" vc={C.yellow}/>
-        <KV k="Package" v="SOIC-16 · 9.9×3.9mm (or TSSOP-16 for smaller)"/>
-        <KV k="Function" v="Routes one of 3 ESC serial telem wires to UART1 RX"/>
-        <KV k="Select pins" v="S0 = MCP23017 GPA6 · S1 = MCP23017 GPA7"/>
-        <KV k="State 00" v="ESC-L telem → UART1 RX"/>
-        <KV k="State 01" v="ESC-R telem → UART1 RX"/>
-        <KV k="State 10" v="ESC-Fwd telem → UART1 RX"/>
-        <KV k="State 11" v="RS-485 / debug UART (default)"/>
+        <KV k="IC" v="74HC4051 — single 8:1 analog mux" vc={C.yellow}/>
+        <KV k="Package" v="SOIC-16 · 9.9×3.9mm (or TSSOP-16)"/>
+        <KV k="Function" v="Routes one of 5 ESC serial telem wires to UART1 RX"/>
+        <KV k="Select pins" v="S0=GPA6 · S1=GPA7 · S2=GPB1 (3-bit)"/>
+        <KV k="State 000" v="ESC-NAC-L-FWD telem → UART1 RX" vc={C.orange}/>
+        <KV k="State 001" v="ESC-NAC-L-AFT telem → UART1 RX" vc={C.orange}/>
+        <KV k="State 010" v="ESC-NAC-R-FWD telem → UART1 RX" vc={C.teal}/>
+        <KV k="State 011" v="ESC-NAC-R-AFT telem → UART1 RX" vc={C.teal}/>
+        <KV k="State 100" v="ESC-Fuse telem → UART1 RX"/>
+        <KV k="State 101–110" v="Spare (available for future ESCs)"/>
+        <KV k="State 111" v="RS-485 / debug UART (default)"/>
         <KV k="Switching time" v="&lt;10ns — transparent to UART"/>
         <KV k="Isolation" v="ISO7241C on UART external signals" vc={C.lime}/>
       </div>
       <div>
-        <Note c={C.teal} ch="The 74HC4052 allows the single UART1 to serve dual purpose: inter-board RS-485 data bus (state 11) and ESC telemetry polling (states 00/01/10). The Pico firmware never switches mid-byte — it completes any RS-485 transaction, idles the bus, switches mux state, waits for ESC telem frame, then returns to RS-485. Total ESC poll cycle per ESC: ~87µs at 115200 baud for a 10-byte frame."/>
+        <Note c={C.teal} ch="The 74HC4051 replaces the 74HC4052 at the same footprint (both SOIC-16) with one extra select pin (GPB1 on MCP23017). UART1 now cycles through 5 ESC telem channels in round-robin at 10Hz each. Total poll round-trip: 5 ESCs × 87µs = 435µs — negligible vs 100ms RS-485 idle window. Firmware detects per-ESC fault within 3 missed frames (300ms)."/>
+        <Note c={C.orange} ch="Dual-EDF GPIO change: WS2812 nav lights (previously GP29 / PIO0-SM3) move to PCA9685 I²C PWM driver. PCA9685 generates 50Hz PWM for each LED channel via I²C; MCP23017 GPB2 controls OE̅. This frees GP29 for ESC-NAC-R-AFT BDSHOT — all 4 nacelle EDFs now have independent bidirectional DSHOT with RPM feedback."/>
       </div>
     </div>
   </div>);
@@ -667,15 +676,17 @@ const BOM_H1=[
   // XIAO swap
   {cat:"MCU",    qty:2, ref:"U_XIAO",   part:"Seeed XIAO RP2350",                   pkg:"21×17.5mm castell.",est:"$6.30ea",col:C.lime,note:"Replaces 2× Pico 2 ($5ea) · −55% PCB area · 100% FW compat"},
   {cat:"MCU",    qty:2, ref:"U_MCP23017",part:"MCP23017 I²C GPIO expander",          pkg:"QFN-28 4×4mm",est:"$1.80ea",col:C.gold,note:"16-bit expander · servos+winch+ESC mux select over I²C"},
-  // ESC telemetry mux
-  {cat:"ESC-Telem",qty:2,ref:"U_MUX",  part:"74HC4052 dual 4:1 analog mux",         pkg:"SOIC-16",est:"$0.40ea",col:C.teal,note:"Routes 3× ESC telem UART lines to single UART1 RX"},
+  // ESC telemetry mux — upgraded to 8:1 for 4 nacelle + 1 fuselage ESC telem lines
+  {cat:"ESC-Telem",qty:2,ref:"U_MUX",  part:"74HC4051 single 8:1 analog mux",        pkg:"SOIC-16",est:"$0.50ea",col:C.teal,note:"Routes 5× ESC telem UART lines (4 nacelle + fuselage) to UART1 RX — 3 sel bits"},
   // Isolation ICs — replace existing
   {cat:"Isolation",qty:2,ref:"U_ISO_CAN",part:"ISO1042 isolated CAN FD transceiver", pkg:"SOIC-8",est:"$2.20ea",col:C.can, note:"Replaces MCP2562FD · 5kV · 5Mbps · pin-compatible"},
   {cat:"Isolation",qty:2,ref:"U_ISO_RS4",part:"ISO3086 isolated RS-485 transceiver", pkg:"SOIC-16",est:"$3.50ea",col:C.rs4, note:"Replaces MAX3485 · 3kV · integrated isolator"},
   {cat:"Isolation",qty:2,ref:"U_ISO_I2C",part:"ISO1540 isolated I²C bus buffer",     pkg:"SO-8",   est:"$2.80ea",col:C.i2c, note:"Replaces PCA9517 · 3kV · FM+ 1MHz"},
   {cat:"Isolation",qty:2,ref:"U_ISO_UART",part:"ISO7241C quad digital isolator",     pkg:"SOIC-16",est:"$2.50ea",col:C.uart,note:"4ch · 4kV · covers TX+RX+DE+RE on ESC/debug UART"},
-  // Connectors — ESC telem (3 per SENSORHAT)
-  {cat:"ESC-Telem",qty:6,ref:"J_ESC_TELEM",part:"JST-GH 1.25mm 3-pin ESC telem connector",pkg:"SMD",est:"$0.55ea",col:C.orange,note:"One per ESC · GND+TELEM_TX — 3 per SENSORHAT-1"},
+  // PCA9685 for nav lights (WS2812 freed GP29 for 4th nacelle DSHOT)
+  {cat:"ESC-Telem",qty:2,ref:"U_PCA9685",part:"PCA9685 16-ch I²C PWM driver",          pkg:"SOIC-28",est:"$1.10ea",col:C.purple,note:"Drives WS2812-compatible LED channels via I²C — frees GP29 for ESC-NAC-R-AFT DSHOT"},
+  // Connectors — ESC telem (5 per SENSORHAT: 4 nacelle + 1 fuselage)
+  {cat:"ESC-Telem",qty:10,ref:"J_ESC_TELEM",part:"JST-GH 1.25mm 3-pin ESC telem connector",pkg:"SMD",est:"$0.55ea",col:C.orange,note:"One per ESC · GND+TELEM_TX — 5 per SENSORHAT-1 (4 nacelle + 1 fuse)"},
   // Board cost savings (estimated)
   {cat:"PCB",    qty:1, ref:"PCB-SENSOR",part:"SENSORHAT-1 PCB 46×36mm 4-layer",    pkg:"JLCPCB",est:"~$4 for 5pcs",col:C.lime,note:"vs TRIHAT-1 65×56mm ~$6 for 5pcs · saves on area"},
   {cat:"PCB",    qty:1, ref:"PCB-CARRIER",part:"CARRIER-2 PCB 57×44mm 4-layer",     pkg:"JLCPCB",est:"~$5 for 5pcs",col:C.teal,note:"vs CM4-CARRIER-1 65×52mm ~$6 for 5pcs"},
@@ -740,10 +751,10 @@ export default function App(){
     <div style={{position:"relative",zIndex:1,borderBottom:`1px solid ${C.border}`,padding:"14px 24px 12px"}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:12}}>
         <div>
-          <div style={{color:"rgba(0,229,255,0.28)",fontSize:9,letterSpacing:"0.2em",marginBottom:4}}>SERENITY TILTROTOR · ESC TELEMETRY + ISOLATION + BOARD REFACTOR · REV H.1</div>
-          <h1 style={{margin:0,fontSize:18,fontWeight:"normal",color:"#fff",letterSpacing:"0.07em"}}>ESC TELEMETRY · FULL BUS ISOLATION · XIAO RP2350</h1>
+          <div style={{color:"rgba(0,229,255,0.28)",fontSize:9,letterSpacing:"0.2em",marginBottom:4}}>SERENITY TILTROTOR · ESC TELEMETRY + ISOLATION + BOARD REFACTOR · REV H.1 + DUAL-EDF</div>
+          <h1 style={{margin:0,fontSize:18,fontWeight:"normal",color:"#fff",letterSpacing:"0.07em"}}>ESC TELEMETRY · FULL BUS ISOLATION · XIAO RP2350 · DUAL-EDF NACELLE</h1>
           <div style={{color:"rgba(0,229,255,0.45)",fontSize:10,marginTop:3}}>
-            BLHeli/AM32/BDSHOT/DroneCAN/KISS · ISO1042/ISO3086/ISO1540/ISO7241C · XIAO RP2350 · −16g · −55% hat area
+            4× nacelle ESCs (2 per nacelle, FWD+AFT) · BLHeli/AM32/BDSHOT · 74HC4051 8:1 mux · ISO1042/ISO3086/ISO1540/ISO7241C · XIAO RP2350
           </div>
         </div>
         <div style={{textAlign:"right",fontFamily:M}}>
