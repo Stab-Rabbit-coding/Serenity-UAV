@@ -1053,7 +1053,7 @@ function CargoNacelleTab(){
     {mode:"AFT HARD STOP",      deg:DIM.TILT_AFT_STOP,  c:C.orange, thrust:"—",                                            note:"Bracket boss aft limit — FC never commands"},
   ];
   return(<div>
-    <SH t="Cargo Bay — 4\"×3\"×3\" Gondola Design" mt={0} c={C.pink}/>
+    <SH t="Cargo Bay — 4x3x3in Gondola Design" mt={0} c={C.pink}/>
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20,marginBottom:8}}>
       <div>
         <KV k="Interior dims"        v={`${DIM.PB_L}×${DIM.PB_W}×${DIM.PB_H}mm (4"×3"×3")`} vc={C.pink}/>
@@ -1070,7 +1070,7 @@ function CargoNacelleTab(){
         <KV k="Cradle"               v="Auto-latch PETG corner clips — no manual attachment"/>
         <KV k="Lower speed"          v="120 mm/s"/>
         <KV k="Raise speed"          v="80 mm/s"/>
-        <KV k="Max cargo"            v="250g (4"×3"×3" box)" vc={C.lime}/>
+        <KV k="Max cargo"            v="250g (4×3×3in box)" vc={C.lime}/>
       </div>
     </div>
 
