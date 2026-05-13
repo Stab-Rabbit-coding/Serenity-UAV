@@ -1,10 +1,3 @@
-; Serenity-Class Tiltrotor UAV — 8-Node Rev I
-; © 2026 Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP
-; License: CC BY 4.0  https://creativecommons.org/licenses/by/4.0/
-; Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0
-; Visual inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy / Universal Pictures
-; Fan engineering work — not officially licensed.
-
 (kicad_sch (version 20221012) (generator eeschema)
   (paper "A2")
   (title_block (title "SENSORHAT-1") (date "2026") (rev "I")
@@ -12,6 +5,7 @@
     (comment_1 "Serenity-Class Tiltrotor — 8-Node Rev I")
     (comment_2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
     (comment_3 "XIAO RP2350 direct-solder 46x36mm — all buses galvanically isolated")
-    (comment_4 "ISO1042 CAN | ISO3086 RS-485 | ISO1540 I2C | ISO7241C UART | SM-1553-11 1553 | HX1188NL ETH"))
-  ; Hierarchical sheets: Power, MCU, CAN_ISO, RS485_ISO, ETH, 1553, SENSORS, ESC_TELEM
+    (comment_4 "ISO1042 CAN | ISO3086 RS-485 | ISO1540 I2C | ISO7241C UART | SM-1553-11 1553 | HX1188NL ETH")
+    (comment_5 "Hierarchical sheets: Power, MCU, CAN_ISO, RS485_ISO, ETH, 1553, SENSORS, ESC_TELEM")
+    (comment_6 "Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0 | Firefly/Serenity fan-work, not officially licensed"))
 )
