@@ -10,7 +10,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 @media print{body{background:#fff!important;color:#111!important}a{color:#003399!important}}
 </style>
 
-# Serenity-Class Tiltrotor UAV — Phased Build Guide (Rev L)
+# Serenity-Class Tiltrotor UAV — Phased Build Guide (Rev M)
 
 **Author:** Steve Griffing, PE(CSE) \[Control Systems Engineering\], CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
@@ -33,9 +33,9 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 ---
 
-## End State Specifications (Rev L)
+## End State Specifications (Rev M)
 
-> Rev L supersedes Rev K. Hardware identical to Rev K dual-EDF. Adds PID closed-loop governor per EDF.
+> Rev M supersedes Rev L. Hardware upgrade: 8× PocketBeagle 2 (AM6232) → 8× PocketBeagle 2 Industrial (AM6254, 1GB DDR4, 64GB eMMC, −40°C to 85°C). Propulsion + governor unchanged from Rev L.
 
 | Parameter | Value |
 |-----------|-------|
@@ -46,16 +46,16 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 | Hover thrust | **11,250 g** (10,600 g nacelles + 650 g fuselage) |
 | ESCs | **4× Hobbywing Platinum PRO V4 120A** (nacelles, one per EDF) + 1× BLHeli32 40A (fuselage) |
 | Governor (Rev L new) | **PID closed-loop RPM per EDF · 500 Hz M4F · BDSHOT 1 kHz feedback** |
-| Avionics dry mass | **404 g** (8× PocketBeagle 2 + 4× Cape-A + 4× Cape-B + 4× RCRS-49 sub-modules + GPS ×4 + radios) |
-| Airframe dry mass | **3,197 g** |
-| T/W empty | **3.12:1** (6S 4000mAh, 3,607 g AUW) |
-| T/W with 250 g cargo | **3.01:1** (6S 2800mAh, 3,742 g AUW) |
-| T/W one EDF failed | **2.29:1** — partner EDF continues, fault latched |
-| T/W one nacelle lost | **1.65:1** — FC RTH |
-| Max payload | **1,406 g (3.10 lb)** at T/W = 2.0 |
+| Avionics dry mass | **420 g** (8× PocketBeagle 2 Industrial + 4× Cape-A + 4× Cape-B + 4× RCRS-49 sub-modules + GPS ×4 + radios) |
+| Airframe dry mass | **3,213 g** (Rev L 3,197 g + 16 g PB2-I net delta) |
+| T/W empty | **3.11:1** (6S 4000mAh, 3,623 g AUW) |
+| T/W with 250 g cargo | **2.99:1** (6S 2800mAh, 3,758 g AUW) |
+| T/W one EDF failed | **2.41:1** — partner EDF continues, fault latched |
+| T/W one nacelle lost | **1.64:1** — FC RTH |
+| Max payload | **1,392 g (3.07 lb)** at T/W = 2.0 |
 | Compute nodes | **8 nodes:** FC1–FC4 (Cape-A, sensor/flight) + CN1–CN4 (Cape-B, comms/payload) |
-| FC node hardware | PocketBeagle 2 (AM6232) + Cape-A 85×55mm — ICM-42688-P IMU, BMP388 baro, u-blox M10Q GPS, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0** |
-| CN node hardware | PocketBeagle 2 (AM6232) + Cape-B 90×60mm — SiK 915MHz, LoRa RFM95W 915MHz, TI WL1837MOD WiFi/BT, RCRS-49 sub-module, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0**; ATF16V8BQL CPLD write-blocker (log μSD) |
+| FC node hardware | **PocketBeagle 2 Industrial (AM6254)** + Cape-A 85×55mm — ICM-42688-P IMU, BMP388 baro, u-blox M10Q GPS, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0** · DK 2820-100003007-ND |
+| CN node hardware | **PocketBeagle 2 Industrial (AM6254)** + Cape-B 90×60mm — SiK 915MHz, LoRa RFM95W 915MHz, TI WL1837MOD WiFi/BT, RCRS-49 sub-module, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0**; ATF16V8BQL CPLD write-blocker (log μSD) · DK 2820-100003007-ND |
 | Bay assignments | Bay A: CN1+FC1 · Bay B: CN2+FC2 · Bay D: CN3+FC3 · Bay E: CN4+FC4 (CN lower, FC upper per bay) |
 | Bus order | CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4 — CN and FC interleaved on all data buses (CAN FD, RS-485, 1553) and power distribution; any single segment or bay power failure leaves ≥2 FC + ≥2 CN on both sides of the break |
 | Node role election | CAN FD heartbeat priority arbitration at boot — all 8 nodes identical hardware; master elected dynamically with automatic failover |
@@ -95,7 +95,7 @@ These rules eliminate costly structural rework. Read before you start Phase 1.
 | 4 | Full 8-Node Architecture (CN3+FC3+CN4+FC4) | All 8 nodes, full ring redundancy | ~$540 | ~$1,640 |
 | 5 | Obstacle Avoidance: 12× VL53L5CX ToF | Autonomous flight + obstacle avoidance | ~$110 | ~$1,750 |
 | 6 | Cargo System | 250 g delivery operational | ~$30 | ~$1,780 |
-| 7 | **Motor Upgrade: 4× XRP + 4× Hobbywing 120A + PID Governor** | ★ **FULL PERFORMANCE — Rev L** | ~$800 | ~$2,580 |
+| 7 | **Motor Upgrade: 4× XRP + 4× Hobbywing 120A + PID Governor** | ★ **FULL PERFORMANCE — Rev M** | ~$800 | ~$2,580 |
 | 8 | Finishing: Decals + FAA + Docs | Legal, complete, documented | ~$20 | ~$2,600 |
 
 > Cost estimates are in USD and reflect component retail pricing as of 2026.
@@ -413,7 +413,7 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 
 ## Phase 3 — Minimum Viable Flyer ★
 
-**Goal:** Four nodes (CN1, FC1, CN2, FC2) installed and operational — one CN+FC pair in Bay A, one in Bay B. Aircraft achieves safe, stable, RC-controlled hover and nacelle transition under cooperative PB2 flight control with automatic inter-node failover. Even at minimum build, any bus segment failure leaves one FC and one CN reachable on both sides of the break.
+**Goal:** Four nodes (CN1, FC1, CN2, FC2) installed and operational — one CN+FC pair in Bay A, one in Bay B. Aircraft achieves safe, stable, RC-controlled hover and nacelle transition under cooperative PB2-I flight control with automatic inter-node failover. Even at minimum build, any bus segment failure leaves one FC and one CN reachable on both sides of the break.
 
 > ★ **Milestone: FIRST FLIGHT achieved at end of this phase.**
 
@@ -429,13 +429,12 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 | 14AWG silicone wire 1m | 1× | ~$6 |
 | 16AWG silicone wire 0.5m | 1× | ~$4 |
 | JST-XH 6S balance tap → XT30 (cells 1–4, 4S tap) | 1× | ~$3 |
-| PocketBeagle 2 (AM6232) | 4× | ~$50ea |
+| PocketBeagle 2 Industrial (AM6254) | 4× | $51.03 ea (DK 2820-100003007-ND) |
 | Cape-A PCB 85×55mm 4L (JLCPCB assembled) — FC nodes | 2× | ~$42ea |
 | Cape-B PCB 90×60mm 4L (JLCPCB assembled) — CN nodes | 2× | ~$80ea |
 | RCRS-49 sub-module PCB (49MHz TDDS RC transceiver) | 2× | ~$20ea |
 | SiK 915MHz ground station radio | 1× | ~$15 |
-| microSD 8GB Class 10 A2 (OS boot — 1 per node) | 4× | ~$5ea |
-| microSD 32GB (log — 1 per CN node) | 2× | ~$8ea |
+| microSD 32GB (log — 1 per CN node, write-blocked) | 2× | ~$8ea |
 | WS2812C nav light chain, diffusers, mounts | 6× | ~$8 |
 | 6S 4000mAh LiPo battery | 1× | ~$60 |
 | JST-GH cables: 4-pin CAN, 4-pin RS-485, 8-pin ETH, shielded 1553 pair | assorted | ~$15 |
@@ -465,11 +464,11 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 
 > **Use NYLON standoffs throughout Bay A — metal standoffs degrade GPS and RF performance.**
 
-**9.** Mount CN1 Cape-B PCB on Bay A floor standoffs (4× M2.5 nylon 6mm, Cape-B hole pattern). Insert PocketBeagle 2 into CN1 Cape-B expansion connector. Secure with M2.5 nylon screws.
+**9.** Mount CN1 Cape-B PCB on Bay A floor standoffs (4× M2.5 nylon 6mm, Cape-B hole pattern). Insert PocketBeagle 2 Industrial into CN1 Cape-B expansion connector. Secure with M2.5 nylon screws.
 
 **10.** Thread FC1 inter-cape standoffs (4× M2.5 nylon 20mm, Cape-A hole pattern) into CN1 Cape-B upper mounting holes. Mount FC1 Cape-A on inter-cape standoffs. Insert second PocketBeagle 2.
 
-**11.** Install OS μSD (8GB) in each PB2 boot slot. **Install log μSD (32GB) in CN1 Cape-B log slot.** Label: CN1-OS, CN1-LOG, FC1-OS. ⚠ Do not interchange OS and log cards.
+**11.** PB2-I boots from 64GB eMMC — **no OS microSD required.** Flash OS to eMMC on CN1 and FC1 via USB-C before installation. **Install log μSD (64GB) in CN1 Cape-B log slot.** Label: CN1-LOG. ⚠ Log μSD is write-blocked hardware flight recorder — do not use as OS card.
 
 **12.** Seat RCRS-49 sub-module onto CN1 Cape-B sub-module header. Connect RCRS-49 coaxial lead through dorsal fin SMA bulkhead. Install 49MHz helical coil antenna in dorsal fin enclosure.
 
@@ -493,9 +492,9 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 
 ### CN2 + FC2 Installation (Bay B — Dorsal Forward)
 
-**20.** Open Bay B panel (4× M2.5 screws). Mount CN2 Cape-B on Bay B floor standoffs (4× M2.5 nylon 6mm). Insert PocketBeagle 2. Mount FC2 Cape-A on inter-cape standoffs (4× M2.5 nylon 20mm). Insert second PocketBeagle 2.
+**20.** Open Bay B panel (4× M2.5 screws). Mount CN2 Cape-B on Bay B floor standoffs (4× M2.5 nylon 6mm). Insert PocketBeagle 2 Industrial. Mount FC2 Cape-A on inter-cape standoffs (4× M2.5 nylon 20mm). Insert second PocketBeagle 2.
 
-**21.** Install OS μSD in each PB2 boot slot. **Install log μSD (32GB) in CN2 Cape-B log slot.** Label: CN2-OS, CN2-LOG, FC2-OS.
+**21.** PB2-I boots from eMMC — no OS μSD required. Flash OS to eMMC on CN2 and FC2 before installation. **Install log μSD (64GB) in CN2 Cape-B log slot.** Label: CN2-LOG.
 
 **22.** Seat RCRS-49 sub-module onto CN2 Cape-B header.
 
@@ -545,7 +544,7 @@ systemctl daemon-reload && mount -a
 
 ### Software
 
-**34.** OS image: BeagleBoard.org Debian 12 "Bookworm" for PocketBeagle 2 (AM6232 target). Flash to OS μSD using `dd` or Balena Etcher. Boot, SSH in, update:
+**34.** OS image: BeagleBoard.org Debian 12 "Bookworm" for PocketBeagle 2 Industrial (AM6254 target). Flash to 64GB eMMC via USB-C using BeagleBoard flasher image — no microSD needed. Boot from eMMC, SSH in, update:
 ```bash
 apt update && apt upgrade -y
 apt install can-utils iproute2 python3-pip
@@ -633,7 +632,7 @@ apt install mavlink-router
 - [ ] Flight log written to both CN node log μSDs; CPLD write-block verified (write attempt returns read-only error)
 - [ ] FC1 and FC2 GPS HDOP ≤1.5, positions agree within 2m
 
-**Phase 3 cost estimate:** ESCs ~$68 + PDB/BEC/wiring ~$38 + 4× PB2 ~$200 + 2× Cape-A ~$84 + 2× Cape-B ~$160 + 2× RCRS-49 ~$40 + SiK GS radio ~$15 + μSD ×6 ~$36 + battery ~$60 + nav lights ~$8 + tools ~$8 + misc ~$23 = **~$740**
+**Phase 3 cost estimate:** ESCs ~$68 + PDB/BEC/wiring ~$38 + 4× PB2-I ~$204 + 2× Cape-A ~$84 + 2× Cape-B ~$160 + 2× RCRS-49 ~$40 + SiK GS radio ~$15 + log μSD ×2 ~$24 + battery ~$60 + nav lights ~$8 + tools ~$8 + misc ~$23 = **~$732** (log μSD only — no OS microSD; eMMC handles OS)
 
 **Cumulative cost at first flight: ~$1,030**
 
@@ -647,21 +646,20 @@ apt install mavlink-router
 
 | Item | Qty | Approx. Cost |
 |------|-----|--------------|
-| PocketBeagle 2 (AM6232) | 4× | ~$50ea |
+| PocketBeagle 2 Industrial (AM6254) | 4× | $51.03 ea (DK 2820-100003007-ND) |
 | Cape-A PCB 85×55mm 4L (JLCPCB assembled) — FC3+FC4 | 2× | ~$42ea |
 | Cape-B PCB 90×60mm 4L (JLCPCB assembled) — CN3+CN4 | 2× | ~$80ea |
 | RCRS-49 sub-module PCB | 2× | ~$20ea |
-| microSD 8GB OS boot | 4× | ~$5ea |
-| microSD 32GB log (CN3+CN4 only) | 2× | ~$8ea |
+| microSD 32GB log (CN3+CN4 only, write-blocked) | 2× | ~$8ea |
 | JST-GH CAN/RS-485/1553/ETH cables 150mm | assorted | ~$20 |
 
 ### CN3 + FC3 Installation (Bay D — Dorsal Aft)
 
 > **Use NYLON standoffs throughout Bay D — metal standoffs degrade GPS performance.**
 
-**1.** Open Bay D panel (dorsal aft, 4× N42 magnets). Mount CN3 Cape-B on Bay D floor standoffs (4× M2.5 nylon 6mm, Cape-B hole pattern). Insert PocketBeagle 2. Mount FC3 Cape-A on inter-cape standoffs (4× M2.5 nylon 20mm) above CN3. Insert second PocketBeagle 2.
+**1.** Open Bay D panel (dorsal aft, 4× N42 magnets). Mount CN3 Cape-B on Bay D floor standoffs (4× M2.5 nylon 6mm, Cape-B hole pattern). Insert PocketBeagle 2 Industrial. Mount FC3 Cape-A on inter-cape standoffs (4× M2.5 nylon 20mm) above CN3. Insert second PocketBeagle 2.
 
-**2.** Install OS μSD in each PB2 boot slot. **Install log μSD (32GB) in CN3 Cape-B log slot.** Label: CN3-OS, CN3-LOG, FC3-OS.
+**2.** PB2-I boots from eMMC — no OS μSD required. Flash OS to eMMC on CN3 and FC3 before installation. **Install log μSD (64GB) in CN3 Cape-B log slot.** Label: CN3-LOG.
 
 **3.** Seat RCRS-49 sub-module onto CN3 Cape-B sub-module header.
 
@@ -679,9 +677,9 @@ apt install mavlink-router
 
 ### CN4 + FC4 Installation (Bay E — Aft Service)
 
-**10.** Open Bay E panel (aft service, 4× M2.5 screws). Mount CN4 Cape-B on Bay E floor standoffs (4× M2.5 nylon 6mm, Cape-B hole pattern). Insert PocketBeagle 2. Mount FC4 Cape-A on inter-cape standoffs (4× M2.5 nylon 20mm) above CN4. Insert second PocketBeagle 2.
+**10.** Open Bay E panel (aft service, 4× M2.5 screws). Mount CN4 Cape-B on Bay E floor standoffs (4× M2.5 nylon 6mm, Cape-B hole pattern). Insert PocketBeagle 2 Industrial. Mount FC4 Cape-A on inter-cape standoffs (4× M2.5 nylon 20mm) above CN4. Insert second PocketBeagle 2.
 
-**11.** Install OS μSD in each PB2 boot slot. **Install log μSD (32GB) in CN4 Cape-B log slot.** Label: CN4-OS, CN4-LOG, FC4-OS.
+**11.** PB2-I boots from eMMC — no OS μSD required. Flash OS to eMMC on CN4 and FC4 before installation. **Install log μSD (64GB) in CN4 Cape-B log slot.** Label: CN4-LOG.
 
 **12.** Seat RCRS-49 sub-module onto CN4 Cape-B sub-module header.
 
@@ -727,7 +725,7 @@ echo test > /mnt/flightlog/test.txt   # must return "Read-only file system"
 - [ ] Full hover with all 8 nodes: no interference or command jitter
 - [ ] Any single node power-kill: remaining nodes maintain flight control within 100ms
 
-**Phase 4 cost estimate:** 4× PB2 ~$200 + 2× Cape-A ~$84 + 2× Cape-B ~$160 + 2× RCRS-49 ~$40 + μSD ×6 ~$36 + cables ~$20 = **~$540**
+**Phase 4 cost estimate:** 4× PB2-I ~$204 + 2× Cape-A ~$84 + 2× Cape-B ~$160 + 2× RCRS-49 ~$40 + log μSD ×2 ~$24 + cables ~$20 = **~$532** (no OS microSD; eMMC handles OS)
 
 ---
 
@@ -852,11 +850,11 @@ The cargo gondola hard points (M3 inserts) and panel C hinge (belly) were instal
 
 ---
 
-## Phase 7 — Motor Upgrade: 4× XRP 3660-2700KV + 4× Hobbywing 120A + PID Governor (Rev L)
+## Phase 7 — Motor Upgrade: 4× XRP 3660-2700KV + 4× Hobbywing 120A + PID Governor (Rev M)
 
-**Goal:** Full-performance dual-EDF propulsion installed in both nacelles. 4× XRP 80mm EDFs replace budget EDFs. 4× Hobbywing 120A ESCs replace budget ESCs. Rev L PID governor commissioned. Aircraft achieves Rev L specified T/W 3.12:1 and max payload 1,406g.
+**Goal:** Full-performance dual-EDF propulsion installed in both nacelles. 4× XRP 80mm EDFs replace budget EDFs. 4× Hobbywing 120A ESCs replace budget ESCs. Rev L PID governor firmware commissioned (binary-compatible with AM6254 M4F — unchanged from Rev L). Aircraft achieves Rev M specified T/W 3.11:1 and max payload 1,392g.
 
-> ★ **Milestone: FULL PERFORMANCE + PID GOVERNOR — Rev L achieved at end of this phase.**
+> ★ **Milestone: FULL PERFORMANCE + PID GOVERNOR — Rev M achieved at end of this phase.**
 
 ### Why Defer to Phase 7
 
@@ -909,7 +907,7 @@ The cargo gondola hard points (M3 inserts) and panel C hinge (belly) were instal
 
 **10.** Remove 4× budget ESCs from Bay C/D (one per nacelle EDF).
 
-**11.** Mount 4× Hobbywing Platinum V4 120A ESCs:
+**11.** Mount 4× Hobbywing Platinum PRO V4 120A ESCs:
 - ESC-NAC-L-FWD in Bay C-L-FWD position
 - ESC-NAC-L-AFT in Bay C-L-AFT position
 - ESC-NAC-R-FWD in Bay C-R-FWD position
@@ -970,13 +968,13 @@ Each run sweeps 0%→100%→0% throttle, fits k coefficient (T = k × RPM²), ou
 **21.** ESC temperature: Hobbywing 120A ESC junction ≤80°C at sustained full throttle 10s on all 4 nacelle ESCs. Monitor with IR thermometer.
 
 **22.** T/W verification:
-- Empty (6S 4000mAh, 3,607g AUW): measured thrust 11,250g → T/W = **3.12:1** ✓
-- With 250g cargo (6S 2800mAh, 3,742g AUW): thrust 11,250g → T/W = **3.01:1** ✓
+- Empty (6S 4000mAh, 3,623g AUW): measured thrust 11,250g → T/W = **3.11:1** ✓
+- With 250g cargo (6S 2800mAh, 3,758g AUW): thrust 11,250g → T/W = **2.99:1** ✓
 
 **23.** Max payload test (incremental, tethered hover):
 - 500g payload hover: stable, altitude hold
 - 1,000g payload hover: T/W ≥2.22:1
-- 1,400g payload: T/W ≥2.01:1 (theoretical max 1,406g at T/W = 2.0)
+- 1,400g payload: T/W ≥2.01:1 (theoretical max 1,392g at T/W = 2.0)
 
 **24.** Full performance flight: forward flight at cruise speed, nacelle transitions, 1-EDF fault injection at altitude (governor maintains flight), cargo delivery, RTH.
 
@@ -984,7 +982,7 @@ Each run sweeps 0%→100%→0% throttle, fits k coefficient (T = k × RPM²), ou
 
 - [ ] Static bench thrust: ≥11,250g total at full throttle (all 4 nacelle EDFs + fuselage)
 - [ ] ESC temps ≤80°C at full sustained thrust on all 4 nacelle ESCs
-- [ ] T/W ≥3.12:1 empty (3,607g AUW), ≥3.01:1 with 250g cargo (3,742g AUW)
+- [ ] T/W ≥3.11:1 empty (3,623g AUW), ≥2.99:1 with 250g cargo (3,758g AUW)
 - [ ] Governor active: BDSHOT RPM feedback confirmed on all 4 ESCs
 - [ ] Governor equalization: |RPM_FWD − RPM_AFT| < 100 RPM steady-state
 - [ ] Fault latch test passed: single-EDF fault, partner continues, MAVLink alert issued
@@ -1097,14 +1095,14 @@ Bus order: **CN1 → FC1 → CN2 → FC2 → CN3 → FC3 → CN4 → FC4** (inte
 
 | Node | Bay | Position | Hardware | Role (elected) | Security |
 |------|-----|----------|----------|----------------|----------|
-| CN1 | A — Nose | Lower (floor) | PocketBeagle 2 + Cape-B 90×60mm | CN master or standby; radios master; CAN FD bus start (120Ω soldered) | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
-| FC1 | A — Nose | Upper (inter-cape) | PocketBeagle 2 + Cape-A 85×55mm | FC master or standby; OA Array B host; 1553 primary BC | SLB9670 TPM 2.0 |
-| CN2 | B — Dorsal Fwd | Lower (floor) | PocketBeagle 2 + Cape-B 90×60mm | CN master or standby | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
-| FC2 | B — Dorsal Fwd | Upper (inter-cape) | PocketBeagle 2 + Cape-A 85×55mm | FC master or standby; 1553 standby BC | SLB9670 TPM 2.0 |
-| CN3 | D — Dorsal Aft | Lower (floor) | PocketBeagle 2 + Cape-B 90×60mm | CN node | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
-| FC3 | D — Dorsal Aft | Upper (inter-cape) | PocketBeagle 2 + Cape-A 85×55mm | FC node; OA Array A host | SLB9670 TPM 2.0 |
-| CN4 | E — Aft Service | Lower (floor) | PocketBeagle 2 + Cape-B 90×60mm | CN node; cargo control | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
-| FC4 | E — Aft Service | Upper (inter-cape) | PocketBeagle 2 + Cape-A 85×55mm | FC node; CAN FD bus end (120Ω soldered) | SLB9670 TPM 2.0 |
+| CN1 | A — Nose | Lower (floor) | PocketBeagle 2 Industrial + Cape-B 90×60mm | CN master or standby; radios master; CAN FD bus start (120Ω soldered) | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
+| FC1 | A — Nose | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 85×55mm | FC master or standby; OA Array B host; 1553 primary BC | SLB9670 TPM 2.0 |
+| CN2 | B — Dorsal Fwd | Lower (floor) | PocketBeagle 2 Industrial + Cape-B 90×60mm | CN master or standby | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
+| FC2 | B — Dorsal Fwd | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 85×55mm | FC master or standby; 1553 standby BC | SLB9670 TPM 2.0 |
+| CN3 | D — Dorsal Aft | Lower (floor) | PocketBeagle 2 Industrial + Cape-B 90×60mm | CN node | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
+| FC3 | D — Dorsal Aft | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 85×55mm | FC node; OA Array A host | SLB9670 TPM 2.0 |
+| CN4 | E — Aft Service | Lower (floor) | PocketBeagle 2 Industrial + Cape-B 90×60mm | CN node; cargo control | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
+| FC4 | E — Aft Service | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 85×55mm | FC node; CAN FD bus end (120Ω soldered) | SLB9670 TPM 2.0 |
 
 **All FC nodes (Cape-A):** ICM-42688-P IMU · BMP388 baro · u-blox M10Q GPS · ATA6561 CAN FD · MAX3485E RS-485 · DS26LV31/32 + PE-68515 1553 · DP83825I ×2 Ethernet · SLB9670 TPM 2.0 · 8× servo PWM rail
 
