@@ -253,7 +253,7 @@ function MuxDiagram(){
       <rect x={uartX} y={muxY + muxH/2 - 28} width={100} height={56} rx={4}
         fill={`${C.accent}10`} stroke={C.accent} strokeWidth={1.8}/>
       <text x={uartX + 50} y={muxY + muxH/2 - 10} textAnchor="middle" fill={C.accent} fontSize={9} fontFamily={M} fontWeight="bold">UART1 RX</text>
-      <text x={uartX + 50} y={muxY + muxH/2 + 4} textAnchor="middle" fill={`${C.accent}80`} fontSize={7} fontFamily={M}>MCU (XIAO/PB2)</text>
+      <text x={uartX + 50} y={muxY + muxH/2 + 4} textAnchor="middle" fill={`${C.accent}80`} fontSize={7} fontFamily={M}>MCU (PB2-I AM6254)</text>
       <text x={uartX + 50} y={muxY + muxH/2 + 16} textAnchor="middle" fill={`${C.accent}60`} fontSize={6.5} fontFamily={M}>115200 8N1</text>
 
       {/* RS-485 bus */}

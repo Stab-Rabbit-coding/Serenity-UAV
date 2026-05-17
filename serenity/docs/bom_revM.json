@@ -1,0 +1,250 @@
+{
+  "revision": "Rev M",
+  "supersedes": "Rev L",
+  "scale": "18 inches (457.2mm)",
+  "canonical_source": "QMx Official Serenity Blueprints (Mandel/Earls 2007) 269ft×170ft×79ft",
+  "author": "Steve Griffing PE(CSE) CISSP-ISSEP CPP",
+  "license": "CC BY 4.0",
+  "rev_m_delta_note": "Rev M upgrades all 8 PocketBeagle 2 (AM6232) nodes to PocketBeagle 2 Industrial (AM6254). Hardware change only — propulsion, ESCs, cape PCBs, and governor firmware are all unchanged from Rev L. The 8 OS microSD cards are eliminated; each PB2-I boots from its 64GB onboard eMMC. The 4 Cape-B write-blocked log microSD cards are retained.",
+  "hardware_reference": "bom_revK.json — all hull, propulsion, nacelle, power, payload, sensor, wiring, and radio items are identical to Rev K/L. See bom_revK.json for full part-level detail.",
+
+  "rev_m_hardware_changes": {
+    "removed": [
+      {
+        "ref": "MICROSD-OS",
+        "desc": "microSD card 32GB (OS boot) — one per node",
+        "qty_removed": 8,
+        "reason": "PocketBeagle 2 Industrial includes 64GB eMMC — OS boots from eMMC, microSD not required",
+        "mass_removed_g": 8,
+        "cost_saved_usd": 64
+      }
+    ],
+    "replaced": [
+      {
+        "old_ref": "PB2-FC",
+        "old_desc": "PocketBeagle 2 (AM6232) — FC node",
+        "old_soc": "AM6232 dual Cortex-A53 + M4F + PRU-ICSS",
+        "old_ram": "512MB DDR4",
+        "old_emmc": "not populated",
+        "old_temp": "commercial 0°C to 70°C",
+        "old_mass_g": 10,
+        "old_cost_usd": 50,
+        "new_ref": "PB2-I-FC",
+        "new_desc": "PocketBeagle 2 Industrial (AM6254) — FC node, Cape-A mounted",
+        "new_soc": "AM6254 quad Cortex-A53 1.4GHz + M4F + PRU-ICSS",
+        "new_ram": "1GB DDR4",
+        "new_emmc": "64GB eMMC",
+        "new_temp": "industrial −40°C to 85°C",
+        "new_mass_g": 13,
+        "new_cost_usd": 51.03,
+        "mfr_pn": "100003007",
+        "dk_pn": "2820-100003007-ND",
+        "dk_url": "https://www.digikey.com/en/products/detail/beagleboard/100003007/28118583",
+        "qty": 4,
+        "notes": "FC1–FC4. Quad A53 provides 2× CPU headroom vs dual-A53 AM6232. M4F + PRU-ICSS governor firmware unchanged. Cape-A 72-pin header compatible."
+      },
+      {
+        "old_ref": "PB2-CN",
+        "old_desc": "PocketBeagle 2 (AM6232) — CN node",
+        "old_soc": "AM6232 dual Cortex-A53 + M4F + PRU-ICSS",
+        "old_ram": "512MB DDR4",
+        "old_emmc": "not populated",
+        "old_temp": "commercial 0°C to 70°C",
+        "old_mass_g": 10,
+        "old_cost_usd": 50,
+        "new_ref": "PB2-I-CN",
+        "new_desc": "PocketBeagle 2 Industrial (AM6254) — CN node, Cape-B mounted",
+        "new_soc": "AM6254 quad Cortex-A53 1.4GHz + M4F + PRU-ICSS",
+        "new_ram": "1GB DDR4",
+        "new_emmc": "64GB eMMC",
+        "new_temp": "industrial −40°C to 85°C",
+        "new_mass_g": 13,
+        "new_cost_usd": 51.03,
+        "mfr_pn": "100003007",
+        "dk_pn": "2820-100003007-ND",
+        "dk_url": "https://www.digikey.com/en/products/detail/beagleboard/100003007/28118583",
+        "qty": 4,
+        "notes": "CN1–CN4. Same SoC as FC nodes. Cape-B 72-pin header compatible. 64GB eMMC used for OS and GCS log staging."
+      }
+    ],
+    "unchanged": [
+      "CAPE-A — 85×55mm 4L PCB (FC nodes) — same 72-pin expansion — no redesign",
+      "CAPE-B — 90×60mm 4L PCB (CN nodes) — same 72-pin expansion — no redesign",
+      "MICROSD-LOG — 4× Cape-B write-blocked flight log microSD (Cape-B nodes only)",
+      "RCRS-49-MOD — 4× 49MHz TDDS RC sub-modules",
+      "All EDF, ESC, nacelle, hull, wiring, payload, sensor, radio items — see bom_revK.json"
+    ],
+    "cost_delta_usd": {
+      "8x_PB2_standard": 400,
+      "8x_PB2_industrial": 408.24,
+      "8x_OS_microSD_removed": -64,
+      "net_hardware_delta": "+$8.24",
+      "note": "Effectively cost-neutral upgrade. Industrial grade, double RAM, 64GB eMMC, industrial temp range for <$10 additional cost vs standard PB2."
+    },
+    "mass_delta_g": {
+      "8x_PB2_standard": 80,
+      "8x_PB2_industrial": 104,
+      "8x_OS_microSD_removed": -8,
+      "net_mass_delta_g": "+16g",
+      "rev_m_dry_g": 3213,
+      "note": "PB2-I at 13g × 8 = 104g (BOM rounds 12.7g to 13g) vs 10g × 8 = 80g standard. OS microSD removal -8g. Net +16g — negligible impact on T/W."
+    }
+  },
+
+  "avionics_nodes": [
+    {
+      "ref": "PB2-I-FC",
+      "desc": "PocketBeagle 2 Industrial (AM6254) — FC node, Cape-A mounted",
+      "qty": 4,
+      "mass_g": 13,
+      "cost_est": "$51.03 ea (DigiKey 2820-100003007-ND)",
+      "mfr_pn": "100003007",
+      "dk_pn": "2820-100003007-ND",
+      "soc": "AM6254 quad Cortex-A53 1.4GHz + Cortex-M4F + PRU-ICSS 250MHz",
+      "ram": "1GB DDR4",
+      "emmc": "64GB (OS boot + storage)",
+      "temp": "−40°C to 85°C industrial",
+      "form_factor": "55×35mm · 12.7g",
+      "notes": "FC1–FC4. Runs Cape-A sensor/flight-control cape. M4F runs Rev L PID governor firmware unchanged. PRU-ICSS provides 4× DSHOT output channels (DSHOT600/1200 at 1 kHz). Cape-A 72-pin expansion headers — Rev K PCB design fully compatible."
+    },
+    {
+      "ref": "PB2-I-CN",
+      "desc": "PocketBeagle 2 Industrial (AM6254) — CN node, Cape-B mounted",
+      "qty": 4,
+      "mass_g": 13,
+      "cost_est": "$51.03 ea (DigiKey 2820-100003007-ND)",
+      "mfr_pn": "100003007",
+      "dk_pn": "2820-100003007-ND",
+      "soc": "AM6254 quad Cortex-A53 1.4GHz + Cortex-M4F + PRU-ICSS 250MHz",
+      "ram": "1GB DDR4",
+      "emmc": "64GB (OS boot + storage + GCS log staging)",
+      "temp": "−40°C to 85°C industrial",
+      "form_factor": "55×35mm · 12.7g",
+      "notes": "CN1–CN4. Same SoC as FC nodes. Runs Cape-B comms/payload cape. Cape-B 72-pin expansion headers — Rev K PCB design fully compatible."
+    },
+    {
+      "ref": "CAPE-A",
+      "desc": "Cape-A PCB 85×55mm 4L — Sensor + Flight Control cape",
+      "qty": 4,
+      "mass_g": 28,
+      "cost_est": "~$42 assembled JLCPCB",
+      "notes": "Unchanged from Rev K. ICM-42688-P IMU, BMP388 baro, M10Q GPS, ATA6561 CAN FD, MAX3485E RS-485, DS26LV31/32+xfmr 1553 PRU, DP83825I×2 ETH PHY, SLB9670 TPM2, 8×PWM servo rail, ESC telem UART. Stacks on PB2-I P1/P2 headers — fully compatible."
+    },
+    {
+      "ref": "CAPE-B",
+      "desc": "Cape-B PCB 90×60mm 4L — Comms + Logging + Payload cape",
+      "qty": 4,
+      "mass_g": 38,
+      "cost_est": "~$80 assembled JLCPCB",
+      "notes": "Unchanged from Rev K. SiK 915MHz, RFM95W LoRa, TI WL1837MOD WiFi/BT, RCRS-49 header, ATA6561 CAN FD, MAX3485E RS-485, DS26LV31/32+xfmr 1553 PRU, DP83825I×2 ETH PHY, SLB9670 TPM2, ATF16V8BQL CPLD write-blocker, microSD log slot, W25Q128JV NOR flash, DRV8833 winch, HX711 load cell, 2×servo cargo. Stacks on PB2-I P1/P2 headers — fully compatible."
+    },
+    {
+      "ref": "RCRS-49-MOD",
+      "desc": "RCRS-49 sub-module PCB — 49MHz TDDS RC transceiver",
+      "qty": 4,
+      "mass_g": 12,
+      "cost_est": "~$25 ea custom PCB",
+      "notes": "Unchanged from Rev K."
+    },
+    {
+      "ref": "MICROSD-LOG",
+      "desc": "microSD card 64GB (flight log — hardware write-blocked)",
+      "qty": 4,
+      "mass_g": 1,
+      "cost_est": "~$12 ea",
+      "notes": "One per Cape-B (CN nodes only). Write-blocked by Cape-B ATF16V8BQL CPLD latch. Non-executable, append-only log. Retained in Rev M — these are the tamper-evident flight records, separate from OS microSD which is now eliminated."
+    },
+    {
+      "ref": "NOR-FLASH-LOG",
+      "desc": "W25Q128JV 128Mbit SPI NOR flash — circular log buffer",
+      "qty": 4,
+      "mass_g": 0,
+      "cost_est": "~$1.50 ea",
+      "notes": "On Cape-B. Fast circular write buffer for high-rate sensor telemetry. Unchanged from Rev K."
+    }
+  ],
+
+  "rev_l_firmware": {
+    "ref": "GOV-FW-REVL",
+    "desc": "Rev L PID governor firmware binary — M4F coprocessor partition (unchanged in Rev M)",
+    "file": "governor_firmware_revL.bin",
+    "target": "AM6254 M4F coprocessor on all 4 FC nodes (Cape-A: FC1–FC4)",
+    "compatibility_note": "Binary is fully compatible with AM6254 M4F — no recompile required. AM6254 M4F is same ARM Cortex-M4F architecture as AM6232. Governor logic unchanged.",
+    "flash_method": "CN1 GCS upload → Ethernet ring → TPM 2.0 verified flash on each FC node",
+    "loop_hz": 500,
+    "dshot_hz": 1000,
+    "telem_hz": 10,
+    "config_file": "governor_config.h",
+    "pid_rpm": {
+      "Kp": 3.0e-4,
+      "Ki": 1.0e-5,
+      "Kd": 8.0e-5,
+      "I_clamp": 0.15,
+      "deadband_rpm": 50
+    },
+    "pid_equalization": {
+      "Kp_eq": 1.0e-4,
+      "Ki_eq": 3.0e-6,
+      "aft_bias_frac": 0.02
+    },
+    "thermal_derate": {
+      "start_degC": 85,
+      "zero_cap_degC": 110
+    },
+    "current_limits": {
+      "soft_A": 80,
+      "hard_A": 105
+    },
+    "fault_states": ["NORMAL", "DERATE_FWD", "DERATE_AFT", "FAULT_FWD", "FAULT_AFT", "FAULT_BOTH"]
+  },
+
+  "performance": {
+    "revision": "Rev M",
+    "nacelle_thrust_each_g": 5300,
+    "fuselage_thrust_g": 650,
+    "thrust_total_g": 11250,
+    "dry_g": 3213,
+    "dry_note": "Rev L 3197g + 24g PB2-I upgrade (13g×8=104g vs 10g×8=80g) − 8g OS microSD removed = +16g net",
+    "battery_empty": {"desc": "6S 4000mAh LiPo", "mass_g": 410},
+    "auw_empty_g": 3623,
+    "tw_empty": 3.11,
+    "battery_cargo": {"desc": "6S 2800mAh LiPo", "mass_g": 295},
+    "payload_g": 250,
+    "auw_cargo_g": 3758,
+    "tw_cargo": 2.99,
+    "tw_fault_one_edf_failed": 2.41,
+    "tw_fault_one_nacelle_failed": 1.64,
+    "max_payload_g": 1392,
+    "governor_loop_hz": 500,
+    "dshot_rate_hz": 1000,
+    "bdshot_rpm_feedback_hz": 1000,
+    "serial_telem_hz": 10,
+    "rev_m_notes": "Rev M replaces 8× PocketBeagle 2 (AM6232) with 8× PocketBeagle 2 Industrial (AM6254). Propulsion, ESCs, capes, and governor firmware unchanged from Rev L. Weight increase +16g (negligible). T/W changes from 3.12 to 3.11 — within spec."
+  },
+
+  "installation_procedure": {
+    "board_swap_steps": [
+      "Power down. Disconnect all data cables.",
+      "Remove 8× PocketBeagle 2 (AM6232) from Cape-A/B 72-pin stacks.",
+      "Seat 8× PocketBeagle 2 Industrial (AM6254, P/N 100003007) onto same Cape-A/B headers.",
+      "Flash OS image to eMMC on each board via USB-C (no microSD needed — eMMC is the boot device).",
+      "Remove all 8 OS microSD cards from node slots. Retain 4× Cape-B write-blocked log microSD cards.",
+      "Reconnect all data cables.",
+      "Power on. Confirm all 8 nodes boot from eMMC (check /proc/mtd or journalctl for eMMC boot).",
+      "Upload governor_firmware_revL.bin via MAVLink to CN1 (unchanged — binary compatible with AM6254 M4F).",
+      "CN1 distributes to FC1–FC4 via Ethernet ring (RSTP secure channel).",
+      "Each FC node validates binary signature against TPM 2.0 endorsement key.",
+      "FC1–FC4 flash M4F partition and confirm via CAN FD heartbeat.",
+      "Reboot all FC nodes. Confirm GOV_STATE = NORMAL on all 4 ESCs via MAVLink."
+    ],
+    "note": "Cape-A and Cape-B PCBs are unchanged. The 72-pin expansion headers are identical between PB2 and PB2-I — no soldering required."
+  },
+
+  "build_notes": {
+    "rev_m_vs_rev_l": "Rev M requires board swap only. All other hardware is unchanged from Rev L/K. No ESC re-programming, no governor re-tuning, no Cape PCB modifications.",
+    "os_microsd_elimination": "The 8 OS microSD cards can be removed after eMMC OS flash is confirmed on all nodes. These are not needed for flight operations. Keep them as recovery media offline.",
+    "log_microsd_retention": "The 4 Cape-B write-blocked log microSD cards MUST be retained. They are the primary tamper-evident flight data recorders and are required for post-flight analysis and regulatory compliance.",
+    "industrial_temp_benefit": "PB2-I rated to −40°C to 85°C. Standard PB2 was 0–70°C. This eliminates thermal throttling risk at high ambient temperatures (hot summer flight ops) and enables cold-weather operations.",
+    "eMMC_benefit": "64GB eMMC provides ~8× more onboard storage vs typical 8GB OS microSD. This enables longer mission logs to be stored locally before offload."
+  }
+}

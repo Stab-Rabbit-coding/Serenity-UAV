@@ -1,6 +1,7 @@
 {
   "revision": "Rev L",
   "supersedes": "Rev K",
+  "superseded_by": "Rev M",
   "scale": "18 inches (457.2mm)",
   "canonical_source": "QMx Official Serenity Blueprints (Mandel/Earls 2007) 269ft×170ft×79ft",
   "author": "Steve Griffing PE(CSE) CISSP-ISSEP CPP",

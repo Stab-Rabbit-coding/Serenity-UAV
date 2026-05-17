@@ -1,14 +1,16 @@
-# Serenity Avionics Redesign — 8× PocketBeagle 2
+# Serenity Avionics Redesign — 8× PocketBeagle 2 Industrial
 
-**Status:** Design concept — supersedes RevJ CM4/CM3+ mixed architecture  
-**Date:** 2026-05-11  
+**Status:** Implemented — Rev M hardware baseline (supersedes AM6232 PB2 design from Rev K)  
+**Date:** 2026-05-17 (updated for Rev M PB2-I upgrade from 2026-05-11 original)  
 **Scope:** Avionics compute, cape specifications, bus topology, radio link architecture
+
+> **Rev M board change:** All 8 PocketBeagle 2 (AM6232) replaced with PocketBeagle 2 Industrial (AM6254). Cape-A and Cape-B PCB designs unchanged. DigiKey P/N: 2820-100003007-ND · $51.03 ea.
 
 ---
 
 ## 1. Architecture overview
 
-Eight PocketBeagle 2 boards split into two cooperative groups of four. Each board runs the same base Linux image. Real-time tasks are offloaded to the AM6232's PRU-ICSS cores, exactly as RP2350 PIO handled them in RevJ.
+Eight PocketBeagle 2 Industrial boards split into two cooperative groups of four. Each board runs the same base Linux image (from 64GB eMMC — no OS microSD required). Real-time tasks are offloaded to the AM6254's PRU-ICSS cores, exactly as RP2350 PIO handled them in RevJ.
 
 | Group | Count | Cape | Primary responsibility |
 |---|---|---|---|
@@ -33,34 +35,39 @@ Bus order: **CN1 → FC1 → CN2 → FC2 → CN3 → FC3 → CN4 → FC4** — o
 
 ---
 
-## 2. PocketBeagle 2 base platform
+## 2. PocketBeagle 2 Industrial base platform
 
 | Item | Spec |
 |---|---|
-| SoC | TI AM6232 (Sitara) |
-| App cores | 2× Cortex-A53 @ 1.4 GHz |
-| RT co-processor | 1× Cortex-M4F (bare-metal or FreeRTOS) |
-| PRU-ICSS | 2× PRU @ 250 MHz + 1× RTU (deterministic, direct GPIO) |
-| RAM | 512 MB LPDDR4 |
-| Storage | eMMC (OS) + microSD slot (logs or alternate OS) |
+| Board | PocketBeagle 2 Industrial · MFR P/N 100003007 · DigiKey 2820-100003007-ND · $51.03 ea |
+| SoC | TI AM6254 (Sitara) |
+| App cores | 4× Cortex-A53 @ up to 1.4 GHz |
+| RT co-processor | 1× Cortex-M4F (bare-metal or FreeRTOS) — runs PID governor at 500 Hz |
+| PRU-ICSS | 2× PRU @ 250 MHz + 1× RTU (deterministic, direct GPIO) — runs DSHOT1200 |
+| RAM | 1 GB DDR4 |
+| Storage | 64 GB eMMC (OS + storage, pre-populated) — no OS microSD required |
+| Log storage | Cape-B microSD slot (write-blocked by ATF16V8BQL CPLD — flight log only) |
+| Onboard MCU | MSPM0L1105 + 12-bit ADC (future expansion) |
+| LiPo charger | Onboard (future use) |
 | CAN | 2× MCAN (ISO 11898-1:2015, CAN FD capable) |
 | Ethernet | CPSW3G — 1 internal port + 2 external RGMII/RMII MAC ports |
-| USB | USB 2.0 HS (device/host) |
-| Expansion | P1 + P2 headers (2×18 pins, 0.1″ pitch) exposing SPI, I²C, UART, PWM, PRU I/O, MCAN, GPIO |
-| Power in | 5V via USB-C or P1 VIN pin |
-| Mass | ~10 g (estimated, similar to PocketBeagle 1) |
+| USB | USB-C power + 3.3V JST-SH UART debug |
+| Expansion | 72-pin expansion headers exposing SPI, I²C, UART, PWM, PRU I/O, MCAN, GPIO |
+| Power in | 5V via USB-C or expansion header VIN |
+| Temperature | −40°C to 85°C industrial |
+| Mass | 12.7 g |
 
 ### PRU as RP2350 replacement
 
-The RP2350 PIO state machines in RevJ handled servo PWM generation, Manchester II encoding for 1553, ESC telemetry capture, and bit-banged protocols. The AM6232 PRU provides equivalent determinism:
+The RP2350 PIO state machines in RevJ handled servo PWM generation, Manchester II encoding for 1553, ESC telemetry capture, and bit-banged protocols. The AM6254 PRU provides equivalent determinism:
 
-| Task | RevJ | PB2 redesign |
+| Task | RevJ | PB2-I redesign |
 |---|---|---|
-| Servo/ESC PWM | RP2350 PIO | AM6232 EHRPWM (6 ch) + PRU (additional channels) |
+| Servo/ESC PWM | RP2350 PIO | AM6254 EHRPWM (6 ch) + PRU (additional channels) |
 | 1553 Manchester II | HI-6130 SPI chip | PRU firmware (250 MHz → 250 cycles/µs bit cell) |
-| ESC telemetry capture | RP2350 PIO | AM6232 eCAP + UART |
-| CAN FD | MCP2518FD SPI | AM6232 MCAN (native, no external controller) |
-| Ethernet | W5500 SPI (100 Mbps nominal) | AM6232 CPSW3G (Gigabit, hardware switch) |
+| ESC telemetry capture | RP2350 PIO | AM6254 eCAP + UART |
+| CAN FD | MCP2518FD SPI | AM6254 MCAN (native, no external controller) |
+| Ethernet | W5500 SPI (100 Mbps nominal) | AM6254 CPSW3G (Gigabit, hardware switch) |
 
 ---
 
@@ -254,7 +261,7 @@ CN1 ─┬─ FC1 ─ CN2 ─ FC2 ─ CN3 ─ FC3 ─ CN4 ─┬─ FC4
 
 - **Transceiver:** ATA6561 on every cape, 3.3 V, 5 Mbps data rate  
 - **Termination:** 120 Ω resistor soldered on CN1 cape (bus start, Bay A) and FC4 cape (bus end, Bay E); all others: open  
-- **Controllers:** AM6232 MCAN0 (primary bus) + MCAN1 (reserved for second CAN bus or redundant arbitration)  
+- **Controllers:** AM6254 MCAN0 (primary bus) + MCAN1 (reserved for second CAN bus or redundant arbitration)  
 - **Protocol:** DroneCAN v1 / UAVCANv1 for sensor data; custom priority-voting messages for role election
 
 ### 5.4 RS-485 — half-duplex bus, 8 nodes
@@ -360,7 +367,7 @@ Cape-B PRU-1 is used for cargo servo PWM (2 channels only) + TDDS sync timing fo
 
 ## 10. Security model (unchanged from RevJ)
 
-The CPLD write-blocker and STM32 OTP fuse architecture from RevJ applies unchanged. Each node's boot microSD (eMMC on PB2) is protected by the hardware write-blocker. Log storage (Cape-B microSD + NOR flash) uses hardware write-protect via the CPLD latch — the latch is set at power-on and cannot be cleared until the node is powered off, enforcing non-executable, append-only log semantics.
+The CPLD write-blocker and STM32 OTP fuse architecture from RevJ applies unchanged. Each node boots from its 64GB eMMC (Rev M — no OS microSD). Log storage (Cape-B microSD + NOR flash) uses hardware write-protect via the CPLD latch — the latch is set at power-on and cannot be cleared until the node is powered off, enforcing non-executable, append-only log semantics.
 
 TPM 2.0 (SLB9670) is present on **both Cape-A and Cape-B** — all 8 nodes carry a TPM. FC nodes use it for flight-critical attestation and key storage. CN nodes use it for radio link key storage, boot measurement, and flight-log authenticity attestation (the CPLD write-blocker enforces append-only access; the TPM binds log signing keys).
 
@@ -376,7 +383,7 @@ TPM 2.0 (SLB9670) is present on **both Cape-A and Cape-B** — all 8 nodes carry
 | SiK + LoRa 915 MHz coexistence channel plan | Medium | Validate with spectrum analyzer — both in 902–928 MHz ISM band, minimum 2 MHz separation required between channels. |
 | PB2 boot time in failover scenario | High | Benchmark: measure time from 5 V applied to CAN FD heartbeat present. Target <15 s. If >15 s, implement kexec warm-restart and/or pre-arm node-ready gating. |
 | Cape power connector to vehicle bus | Low | Specify: Molex Nano-Fit 4-pin (5 V, 5 V, GND, GND) per node, rated 6 A. 4 FC + 4 CN = 8 connectors to PDB. |
-| DRV8833 current sense for winch stall detection | Low | Add 0.1 Ω sense resistor on DRV8833 AOUT1 path; read via AM6232 ADC for stall current detection. |
+| DRV8833 current sense for winch stall detection | Low | Add 0.1 Ω sense resistor on DRV8833 AOUT1 path; read via AM6254 ADC for stall current detection. |
 | VL53L5CX obstacle avoidance array interface | Medium | The 12× ToF sensor arrays (TCA9548A + MCP23008 per array) connect to FC1 (Bay A, Array B host) and FC3 (Bay D, Array A host) via the external I²C header on Cape-A. Verify I²C pull-up voltage compatibility (VL53L5CX uses 1.8 V I²C — level shifter required between Cape-A 3.3 V and sensor 1.8 V). |
 
 ---
