@@ -1,0 +1,16 @@
+(kicad_sch
+  (version 20250114)
+  (generator "eeschema")
+  (generator_version "9.0")
+  (paper "A2")
+  (title_block
+    (title "CAPE-A-1")
+    (date "2026")
+    (rev "M")
+    (comment 1 "Serenity-Class Tiltrotor UAV — FC Node Sensor and Flight Control Cape")
+    (comment 2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
+    (comment 3 "PocketBeagle 2 Industrial (AM6254) expansion — 55x35mm 4L JLCPCB assembled")
+    (comment 4 "ICM-42688-P IMU | BMP388 Baro | SAM-M10Q GPS | ATA6561 CAN FD | MAX3485E RS-485 | DS26LV31/32 1553 | DP83825I x2 ETH | SLB9670 TPM2")
+    (comment 5 "Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0 | Firefly/Serenity fan-work, not officially licensed")
+  )
+)

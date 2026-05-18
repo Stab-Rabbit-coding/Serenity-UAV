@@ -1,0 +1,16 @@
+(kicad_sch
+  (version 20250114)
+  (generator "eeschema")
+  (generator_version "9.0")
+  (paper "A2")
+  (title_block
+    (title "CAPE-B-1")
+    (date "2026")
+    (rev "M")
+    (comment 1 "Serenity-Class Tiltrotor UAV — CN Node Comms, Logging and Payload Cape")
+    (comment 2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
+    (comment 3 "PocketBeagle 2 Industrial (AM6254) expansion — 55x35mm 4L JLCPCB assembled")
+    (comment 4 "RFM95W LoRa | WL1837MOD WiFi/BT | ATA6561 CAN FD | MAX3485E RS-485 | DS26LV31/32 1553 | DP83825I x2 ETH | SLB9670 TPM2 | ATF16V8BQL CPLD | W25Q128JV NOR | DRV8833 Winch | HX711 Load Cell | PCA9685 PWM | microSD log slot")
+    (comment 5 "Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0 | Firefly/Serenity fan-work, not officially licensed")
+  )
+)

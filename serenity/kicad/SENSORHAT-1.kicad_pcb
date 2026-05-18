@@ -2,7 +2,7 @@
   (general (thickness 1.6))
   (paper "A4")
   (title_block
-    (title "SENSORHAT-1")  (date "2026") (rev "I")
+    (title "SENSORHAT-1") (date "2026") (rev "I")
     (comment_1 "Serenity-Class Tiltrotor UAV — 8-Node Rev I")
     (comment_2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
     (comment_3 "XIAO RP2350 sensor hat 46x36mm 4L — all buses isolated")
