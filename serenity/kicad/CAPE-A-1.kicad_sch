@@ -1,7 +1,4 @@
-(kicad_sch
-  (version 20250114)
-  (generator "eeschema")
-  (generator_version "9.0")
+(kicad_sch (version 20240101) (generator eeschema)
   (paper "A2")
   (title_block
     (title "CAPE-A-1")
