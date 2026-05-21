@@ -9,14 +9,14 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 @media print{body{background:#fff!important;color:#111!important}a{color:#003399!important}}
 </style>
 
-# Serenity-Class Tiltrotor UAV — Rev L (18" Canonical Build)
+# Serenity-Class Tiltrotor UAV — Rev M (18" Canonical Build)
 
 **Author:** Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
 **Year:** 2026  |  **Status:** Public release
 
-> Rev L supersedes Rev K. Adds per-EDF PID closed-loop RPM governor + cooperative nacelle equalization.
-> Hardware identical to Rev K dual-EDF. Firmware-only update to AM6232 M4F coprocessor.
+> Rev M supersedes Rev L. Hardware upgrade: all 8 PocketBeagle 2 (AM6232) replaced by PocketBeagle 2 Industrial (AM6254).
+> AM6254 quad Cortex-A53 1.4GHz · 1GB DDR4 · 64GB eMMC · −40°C to 85°C industrial. Propulsion + governor unchanged from Rev L.
 
 ---
 
@@ -32,7 +32,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 ---
 
-## Quick Specs (Rev L — 18" Scale)
+## Quick Specs (18" Scale — propulsion unchanged Rev L → Rev M; compute board upgraded)
 
 | Parameter | Value |
 |-----------|-------|
@@ -60,15 +60,31 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 | GPS patch | 59.4 mm from nose |
 | SiK 915MHz belly | 253.7 mm from nose |
 | 49MHz RCRS dorsal | 365.8 mm from nose |
-| Avionics | 8× PocketBeagle 2 (AM6232) · FC1–FC4 Cape-A · CN1–CN4 Cape-B |
+| Avionics | **8× PocketBeagle 2 Industrial (AM6254)** · FC1–FC4 Cape-A · CN1–CN4 Cape-B · DK 2820-100003007-ND · $51.03 ea |
 | Navigation lights | ICAO Annex 2 · 14 CFR 91.209 · PCA9685 I²C PWM driver |
 | FAA registration | **N00000 PLACEHOLDER — replace before flight** |
 
-### Rev L Governor (New)
+### Rev M Changes (Hardware Upgrade)
+
+| Change | Rev L | Rev M |
+|--------|-------|-------|
+| Compute board | PocketBeagle 2 (AM6232) | **PocketBeagle 2 Industrial (AM6254)** |
+| SoC | Dual Cortex-A53 1.0GHz | **Quad Cortex-A53 1.4GHz** |
+| RAM | 512MB DDR4 | **1GB DDR4** |
+| eMMC | Not populated | **64GB eMMC (OS boot + storage)** |
+| OS microSD | 8× required | **Eliminated — eMMC handles OS boot** |
+| Log microSD (Cape-B) | 4× write-blocked | **Unchanged — retained** |
+| Temperature | Commercial 0–70°C | **Industrial −40°C to 85°C** |
+| Onboard MCU | None beyond A53/M4F/PRU | **MSPM0L1105 + 12-bit ADC (future use)** |
+| Cape-A / Cape-B PCBs | Rev K design | **Unchanged — 72-pin header compatible** |
+| Propulsion / governor | Rev L dual-EDF PID | **Unchanged** |
+| Part number | — | **100003007 · DK 2820-100003007-ND · $51.03 ea** |
+
+### Rev L Governor (Unchanged in Rev M)
 
 | Parameter | Value |
 |-----------|-------|
-| Governor | Per-EDF PID closed-loop RPM · 500 Hz (M4F coprocessor) |
+| Governor | Per-EDF PID closed-loop RPM · 500 Hz (AM6254 M4F coprocessor) |
 | Feedback | BDSHOT RPM 1 kHz + BLHeli32 serial telem 10 Hz |
 | PID gains (RPM) | Kp=3×10⁻⁴ · Ki=1×10⁻⁵ · Kd=8×10⁻⁵ |
 | Nacelle equalization | FWD/AFT RPM matched · AFT +2% bias (inlet deficit) |
@@ -78,7 +94,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 | DSHOT channels | GP26–GP29 (PRU-ICSS 250 MHz) · freed GP29 via PCA9685 nav lights |
 | Telem mux | 74HC4051 8:1 · MCP23017 3-bit select (SEL A/B/C) |
 
-### Rev K → Rev L Changes
+### Rev K → Rev L Changes (historical)
 
 | Change | Rev K | Rev L |
 |--------|-------|-------|
