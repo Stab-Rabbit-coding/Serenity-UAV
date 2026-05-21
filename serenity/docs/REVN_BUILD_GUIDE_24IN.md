@@ -499,16 +499,35 @@ Install **CN1 + FC1** in Bay A (nose), **CN2 + FC2** in Bay B (dorsal fwd).
 6. Connect servo signal leads (2× tilt servos + 1× rear nozzle servo) to Cape-A servo rail.
 7. Connect GPS patch antenna coax to Cape-A GPS header. Mount GPS patch antenna on hull dorsal surface at nearest bay location.
 
+### ESC Assignment — Cross-Nacelle Redundancy
+
+ESCs are split across FC1 and FC2 so that each flight controller drives **one EDF per nacelle**.
+If either FC fails, the surviving FC retains 50% thrust in both nacelles — the aircraft can still
+hover rather than losing one nacelle entirely.
+
+| ESC | EDF | Nacelle | Position | Controlled by |
+| --- | --- | ------- | -------- | ------------- |
+| ESC1 | EDF1 (upstream / fore) | Port | Z=76..126mm | **FC1** |
+| ESC2 | EDF2 (downstream / aft) | Port | Z=5..50mm | **FC2** |
+| ESC3 | EDF1 (upstream / fore) | Starboard | Z=76..126mm | **FC1** |
+| ESC4 | EDF2 (downstream / aft) | Starboard | Z=5..50mm | **FC2** |
+| ESC5 | 120mm rear EDF | Fuselage | — | **FC2** |
+
+> **Failure mode:** FC1 loss → FC2 holds ESC2 (port aft) + ESC4 (stbd aft) + ESC5 (rear).
+> FC2 loss → FC1 holds ESC1 (port fore) + ESC3 (stbd fore). Symmetric half-thrust in both nacelles either way.
+
 ### Wiring Connections for 4-Node Minimum Build
 
 | Signal | From | To | Via |
 |--------|------|----|-----|
-| ESC1/2 DSHOT (port nacelle) | Cape-A FC1 PRU Ch.0/1 | ESC1, ESC2 | Conduit from Bay A to wing root |
-| ESC3/4 DSHOT (stbd nacelle) | Cape-A FC2 PRU Ch.0/1 | ESC3, ESC4 | Conduit from Bay B to wing root |
-| Nacelle tilt servo 1 | Cape-A FC1 servo rail | Servo-tilt-port | SERVO-PWR conduit |
-| Nacelle tilt servo 2 | Cape-A FC1 servo rail | Servo-tilt-stbd | SERVO-PWR conduit |
+| ESC1 DSHOT (port EDF1) | Cape-A FC1 PRU Ch.0 | ESC1 | Conduit Bay A → port wing root |
+| ESC3 DSHOT (stbd EDF1) | Cape-A FC1 PRU Ch.1 | ESC3 | Conduit Bay A → stbd wing root |
+| ESC2 DSHOT (port EDF2) | Cape-A FC2 PRU Ch.0 | ESC2 | Conduit Bay B → port wing root |
+| ESC4 DSHOT (stbd EDF2) | Cape-A FC2 PRU Ch.1 | ESC4 | Conduit Bay B → stbd wing root |
+| ESC5 DSHOT (rear EDF) | Cape-A FC2 PRU Ch.2 | ESC5 (80A) | Conduit Bay B → Bay F aft |
+| Nacelle tilt servo 1 (port) | Cape-A FC1 servo rail | Servo-tilt-port | SERVO-PWR conduit |
+| Nacelle tilt servo 2 (stbd) | Cape-A FC2 servo rail | Servo-tilt-stbd | SERVO-PWR conduit |
 | Rear nozzle servo | Cape-A FC2 servo rail | Servo-rear-nozzle | SERVO-PWR conduit aft |
-| ESC5 DSHOT (rear EDF) | Cape-A FC2 PRU Ch.2 | ESC5 (rear 80A) | Conduit to Bay F |
 | LED strips | Cape-B CN1 GPIO | WS2812B ×3 | LED wiring harness |
 | CAN FD bus | CN1→FC1→CN2→FC2 | Ring (open at FC2 end) | CAN conduit, 120Ω term at CN1 |
 
