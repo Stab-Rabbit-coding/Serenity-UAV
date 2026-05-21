@@ -405,7 +405,7 @@ function GovernorOverviewTab(){
           <KV k="DSHOT protocol"         v="DSHOT1200 · 625 ns/bit" vc={C.orange}/>
         </div>
         <div>
-          <KV k="MCU governor"           v="PocketBeagle 2 (AM6232)" vc={C.accent}/>
+          <KV k="MCU governor"           v="PocketBeagle 2 Industrial (AM6254)" vc={C.accent}/>
           <KV k="Governor core"          v="M4F coprocessor" vc={C.purple}/>
           <KV k="Governor rate"          v="500 Hz" vc={C.green}/>
           <KV k="DSHOT output"           v="PRU-ICSS 250 MHz · 1 kHz" vc={C.orange}/>
@@ -795,7 +795,7 @@ export default function App(){
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:12}}>
         <div>
           <div style={{color:C.orange,fontSize:9,letterSpacing:"0.2em",marginBottom:4}}>
-            SERENITY TILTROTOR · POCKETBEAGLE 2 (AM6232) · PRU-ICSS + M4F · DSHOT1200 · BDSHOT × 4
+            SERENITY TILTROTOR · POCKETBEAGLE 2 INDUSTRIAL (AM6254) · PRU-ICSS + M4F · DSHOT1200 · BDSHOT × 4
           </div>
           <h1 style={{margin:0,fontSize:18,fontWeight:"normal",color:C.text,letterSpacing:"0.07em",fontFamily:MB}}>
             NACELLE PID GOVERNOR — PER-EDF CLOSED-LOOP RPM CONTROL
@@ -834,7 +834,7 @@ export default function App(){
     {/* Footer */}
     <div style={{position:"relative",zIndex:1,borderTop:`1px solid ${C.border}`,padding:"8px 24px",fontFamily:M,fontSize:8,color:"rgba(0,229,255,0.3)",textAlign:"center",marginTop:20}}>
       © 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · CC BY 4.0 · Serenity fan engineering ·
-      PocketBeagle 2 AM6232 · PRU0 DSHOT0–3 · M4F PID governor · BDSHOT 1kHz · BLHeli32/AM32 10Hz telem
+      PocketBeagle 2 Industrial AM6254 · PRU0 DSHOT0–3 · M4F PID governor · BDSHOT 1kHz · BLHeli32/AM32 10Hz telem
     </div>
   </div>);
 }

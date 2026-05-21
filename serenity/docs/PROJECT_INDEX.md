@@ -69,11 +69,12 @@ body, p, li, td, th, code, pre {
 | `serenity-connectivity-revH.jsx` | **MIL-STD-1553B replaces I²C as 4th active bus** | Rev H connectivity |
 | `serenity-rev-i.jsx` | CM3+ Nodes 2&3 + CM3-CARRIER-1 + dual VL53L5CX ToF arrays + cargo gondola | Rev I |
 | `serenity-rev-j.jsx` | XRP 3660-2700KV nacelle EDFs + Hobbywing 120A ESCs + 83mm pod ID | Rev J |
-| `serenity-rev-k.jsx` | 8× PocketBeagle 2 (AM6232) cooperative nodes + Cape-A/B + TPM ×8 + CPLD write-blocker + LoRa + WL1837MOD WiFi + **Dual 80mm 6S series EDFs per nacelle** | Rev K (superseded by Rev L) |
+| `serenity-rev-k.jsx` | 8× PocketBeagle 2 (AM6232) cooperative nodes + Cape-A/B + TPM ×8 + CPLD write-blocker + LoRa + WL1837MOD WiFi + **Dual 80mm 6S series EDFs per nacelle** | Rev K (superseded by Rev L → Rev M) |
 | `serenity-esc-telem-dual-edf.jsx` | Dual-EDF ESC telemetry spec — 4× nacelle ESCs, 74HC4051 8:1 mux, power wiring, fault tolerance | Rev K dual-EDF |
 | `serenity-nacelle-pid-governor.jsx` | **Per-EDF PID closed-loop RPM governor** — 5-tab spec: overview, PID loops, cooperative control, fault response, commissioning | **Rev L new** |
 | `serenity-edf-options.jsx` | **EDF selection guide** — budget / standard XRP / high-perf Schübeler comparison, tandem series performance, ESC pairing, phase build guide | **Rev L new** |
-| `serenity-rev-l.jsx` | **Rev L — Dual 80mm 6S series EDFs + PID governor + EDF options** — supersedes Rev K; firmware-only update; hardware unchanged | **Rev L ← current master** |
+| `serenity-rev-l.jsx` | **Rev L — Dual 80mm 6S series EDFs + PID governor + EDF options** — supersedes Rev K; firmware-only update; hardware unchanged | Rev L (superseded by Rev M) |
+| `serenity-rev-m.jsx` | **Rev M — PocketBeagle 2 Industrial (AM6254) hardware upgrade** — 8× AM6254 quad A53 1.4GHz · 1GB DDR4 · 64GB eMMC · −40°C to 85°C · OS microSD eliminated · propulsion + governor unchanged | **Rev M ← current master** |
 
 ### SVG Engineering Diagrams
 
@@ -154,8 +155,9 @@ body, p, li, td, th, code, pre {
 | `MANIFEST.json` | SHA-256 checksums for all project files (integrity verification) |
 | `PROJECT_INDEX.md` | This file |
 | `AVIONICS_PB2_REDESIGN.md` | **Rev K** — 8-node PocketBeagle 2 cooperative avionics architecture; Cape-A and Cape-B design specs |
-| `PHASED_BUILD_GUIDE.md` | **Rev L** — 8-phase phased build, procurement, and flight-test guide (updated for dual-EDF + PID governor) |
-| `bom_revL.json` | **Rev L** bill of materials — firmware delta, EDF options (budget/standard/high-perf), governor commissioning |
+| `PHASED_BUILD_GUIDE.md` | **Rev M** — 8-phase phased build, procurement, and flight-test guide (PB2-I boards, eMMC boot, dual-EDF + PID governor) |
+| `bom_revM.json` | **Rev M** bill of materials — PB2-I hardware swap, DigiKey P/N, cost delta, eMMC notes |
+| `bom_revL.json` | **Rev L** bill of materials (superseded by Rev M) — firmware delta, EDF options, governor commissioning |
 | `bom_revK.json` | **Rev K** bill of materials — dual-EDF hardware (hardware identical to Rev L) |
 | `bom_revK.csv` | **Rev K** bill of materials (CSV for spreadsheet use) |
 | `bom_revJ.json` | Rev J bill of materials (historical reference) |
@@ -178,13 +180,13 @@ body, p, li, td, th, code, pre {
 | Nacelle ESC | **4× Hobbywing Platinum PRO V4 120A** (one per EDF — 84A XRP draw, fault-tolerant pairs) |
 | Pylon datum | 82.2 mm from CL (1/3 from nacelle inner edge — outward expansion) |
 | Total hover thrust | **11,250 g** (10,600g nacelles + 650g fuselage) |
-| Governor (Rev L) | **PID closed-loop RPM per EDF** · 500 Hz M4F · BDSHOT 1kHz feedback · nacelle equalization |
-| Avionics | **8× PocketBeagle 2 (AM6232)** · 4× Cape-A (FC nodes) · 4× Cape-B (CN nodes) · interleaved CN+FC per bay |
-| Avionics dry | **404 g** (8× PB2 + 4× Cape-A + 4× Cape-B + 4× RCRS-49 + GPS×4 + radios) |
-| Airframe dry (Rev L) | **3,197 g** |
-| AUW empty | **3,607 g · 6S 4000mAh · T/W 3.12** |
-| AUW cargo 250g | **3,742 g · 6S 2800mAh · T/W 3.01** |
-| Max payload at T/W=2.0 | **1,406 g (3.10 lb)** |
+| Governor (Rev L — unchanged) | **PID closed-loop RPM per EDF** · 500 Hz M4F · BDSHOT 1kHz feedback · nacelle equalization |
+| Avionics | **8× PocketBeagle 2 Industrial (AM6254)** · 4× Cape-A (FC nodes) · 4× Cape-B (CN nodes) · DK 2820-100003007-ND · $51.03 ea |
+| Avionics dry | **420 g** (8× PB2-I + 4× Cape-A + 4× Cape-B + 4× RCRS-49 + GPS×4 + radios) |
+| Airframe dry (Rev M) | **3,213 g** |
+| AUW empty | **3,623 g · 6S 4000mAh · T/W 3.11** |
+| AUW cargo 250g | **3,758 g · 6S 2800mAh · T/W 2.99** |
+| Max payload at T/W=2.0 | **1,392 g (3.07 lb)** |
 | Cruise speed | 38–54 kts (scaled from 35-49kts at 365mm) |
 | Transition altitude | ≥30 ft AGL |
 | CG target | 190 mm (7.48") from nose |
