@@ -1,21 +1,11 @@
-; Serenity-Class Tiltrotor UAV — Custom PCB
-; Copyright 2025 Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP
-; License: CC BY 4.0  https://creativecommons.org/licenses/by/4.0/
-; Hull basis: Peter Farell CC BY 4.0  Nozzle basis: BamJr CC BY 4.0
-; Visual inspiration: Firefly/Serenity (C) Joss Whedon / Mutant Enemy / Universal Pictures
-; Fan engineering work — not officially licensed.
-
 (kicad_sch (version 20221012) (generator eeschema)
   (paper "A3")
   (title_block
     (title "TRIHAT-1")
     (date "2025") (rev "E")
-    (company "Steve Griffing PE(CSE) CISSP-ISSEP CPP")
     (comment_1 "Serenity-Class Tiltrotor UAV")
     (comment_2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
     (comment_3 "See LICENSE_AND_ATTRIBUTION.md for full credits")
     (comment_4 "Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0")
   )
-  ; ── Open in KiCad 7.x Schematic Editor to complete placement ──
-  ; ── Component values and net assignments are in the .kicad_pcb ─
 )

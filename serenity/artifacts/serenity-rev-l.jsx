@@ -877,7 +877,7 @@ function QuickRefTab(){
         <KV k="Nacelle pod OD" v={`${DIM.NAC_OD} mm`}/>
         <KV k="Nacelle pod length" v="230 mm (tandem)"/>
         <KV k="CG target" v={`${DIM.CG_MM} mm (${DIM.CG_IN}") from nose`} vc={C.green}/>
-        <KV k="Canon basis" v="QMx 269ft×170ft×79ft · 18" scale"/>
+        <KV k="Canon basis" v="QMx 269ft×170ft×79ft · 18in scale"/>
 
         <SH t="Propulsion" c={C.orange} mt={16}/>
         <KV k="Nacelle EDF (each)" v="2× XRP 3660-2700KV 80mm 6S" vc={C.orange}/>
