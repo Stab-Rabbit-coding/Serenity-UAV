@@ -230,7 +230,7 @@
 
   (footprint "Sensor_Motion:InvenSense_ICM-42688-P_LGA-14_3x3mm_P0.5mm" (layer "F.Cu")
     (at 12.0 15.0) (descr "ICM-42688-P 6-axis IMU")
-    (property "Reference" "U1" (at 0 -2.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
+    (property "Reference" "IMU" (at 0 -2.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
     (property "Value" "ICM-42688-P" (at 0 2.5) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
     (pad "1"  smd rect   (at -1.00 -1.25) (size 0.5 0.25) (layers "F.Cu" "F.Paste" "F.Mask") (net 11 "PB2_P1_07_SPI0_CLK"))
     (pad "2"  smd rect   (at -0.50 -1.25) (size 0.5 0.25) (layers "F.Cu" "F.Paste" "F.Mask") (net 12 "PB2_P1_08_SPI0_D0"))
@@ -250,7 +250,7 @@
 
   (footprint "Sensor_Pressure:Bosch_LGA-8_2x2mm_P0.5mm" (layer "F.Cu")
     (at 18.0 15.0) (descr "BMP388 barometric pressure sensor")
-    (property "Reference" "U2" (at 0 -1.8) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
+    (property "Reference" "BARO" (at 0 -1.8) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
     (property "Value" "BMP388" (at 0 1.8) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
     (pad "1" smd rect (at -0.75 -0.75) (size 0.5 0.25) (layers "F.Cu" "F.Paste" "F.Mask") (net 9  "PB2_P1_05_I2C1_SCL"))
     (pad "2" smd rect (at -0.25 -0.75) (size 0.5 0.25) (layers "F.Cu" "F.Paste" "F.Mask") (net 10 "PB2_P1_06_I2C1_SDA"))
@@ -264,7 +264,7 @@
 
   (footprint "RF_GPS:u-blox_MAX-M10Q_LCC-16" (layer "F.Cu")
     (at 52.0 15.0) (descr "u-blox M10Q GNSS module")
-    (property "Reference" "U3" (at 0 -8.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
+    (property "Reference" "GPS" (at 0 -8.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
     (property "Value" "M10Q" (at 0 8.5) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
     (pad "1"  smd rect (at -4.8 -7.4) (size 1.2 1.5) (layers "F.Cu" "F.Paste" "F.Mask") (net 3  "GND"))
     (pad "2"  smd rect (at -4.8 -5.2) (size 1.2 1.5) (layers "F.Cu" "F.Paste" "F.Mask") (net 1  "+3V3"))
@@ -293,7 +293,7 @@
 
   (footprint "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" (layer "F.Cu")
     (at 12.0 30.0) (descr "ATA6561 CAN FD transceiver")
-    (property "Reference" "U5" (at 0 -3.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
+    (property "Reference" "CAN-TR" (at 0 -3.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
     (property "Value" "ATA6561" (at 0 3.5) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
     (pad "1" smd rect   (at -2.35 -1.905) (size 1.55 0.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 49 "CAN_RX"))
     (pad "2" smd rect   (at -2.35 -0.635) (size 1.55 0.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 3  "GND"))
@@ -316,7 +316,7 @@
 
   (footprint "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" (layer "F.Cu")
     (at 25.0 30.0) (descr "MAX3485E RS-485 transceiver")
-    (property "Reference" "U6" (at 0 -3.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
+    (property "Reference" "RS485" (at 0 -3.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
     (property "Value" "MAX3485E" (at 0 3.5) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
     (pad "1" smd rect (at -2.35 -1.905) (size 1.55 0.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 54 "RS485_RX"))
     (pad "2" smd rect (at -2.35 -0.635) (size 1.55 0.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 55 "RS485_DE"))
@@ -338,7 +338,7 @@
 
   (footprint "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm" (layer "F.Cu")
     (at 38.0 30.0) (descr "DS26LV31 MIL-STD-1553 line driver")
-    (property "Reference" "U7A" (at 0 -6.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
+    (property "Reference" "1553-DRV" (at 0 -6.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
     (property "Value" "DS26LV31" (at 0 6.5) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
     (pad "1"  smd rect (at -2.35 -4.445) (size 1.55 0.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 58 "M1553_TX_P"))
     (pad "2"  smd rect (at -2.35 -3.175) (size 1.55 0.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 59 "M1553_TX_N"))
@@ -360,7 +360,7 @@
 
   (footprint "Transformer:Pulse_PE-68515" (layer "F.Cu")
     (at 47.0 30.0) (descr "PE-68515 MIL-STD-1553B pulse transformer")
-    (property "Reference" "T1" (at 0 -4.0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
+    (property "Reference" "1553-XFM" (at 0 -4.0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
     (property "Value" "PE-68515" (at 0 4.0) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
     (pad "1" thru_hole rect  (at -2.5 -1.5) (size 1.6 1.6) (drill 0.8) (layers "*.Cu" "*.Mask") (net 58 "M1553_TX_P"))
     (pad "2" thru_hole oval  (at -2.5  1.5) (size 1.6 1.6) (drill 0.8) (layers "*.Cu" "*.Mask") (net 59 "M1553_TX_N"))
@@ -380,7 +380,7 @@
 
   (footprint "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.7x3.7mm" (layer "F.Cu")
     (at 65.0 20.0) (descr "DP83825I 10/100 Ethernet PHY — port side ETH-P")
-    (property "Reference" "U8A" (at 0 -3.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
+    (property "Reference" "ETH-PHY-P" (at 0 -3.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
     (property "Value" "DP83825I" (at 0 3.5) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
 
     (pad "33" smd rect (at 0 0) (size 3.7 3.7) (layers "F.Cu" "F.Paste" "F.Mask") (net 3 "GND"))
@@ -413,7 +413,7 @@
 
   (footprint "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.7x3.7mm" (layer "F.Cu")
     (at 75.0 20.0) (descr "DP83825I 10/100 Ethernet PHY — network side ETH-N")
-    (property "Reference" "U8B" (at 0 -3.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
+    (property "Reference" "ETH-PHY-N" (at 0 -3.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
     (property "Value" "DP83825I" (at 0 3.5) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
     (pad "33" smd rect (at 0 0) (size 3.7 3.7) (layers "F.Cu" "F.Paste" "F.Mask") (net 3 "GND"))
     (pad "1"  smd rect (at -2.75 -1.75) (size 0.25 0.5) (layers "F.Cu" "F.Paste" "F.Mask") (net 39 "PB2_P2_17_RGMII1_RD0"))
@@ -447,7 +447,7 @@
 
   (footprint "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" (layer "F.Cu")
     (at 12.0 43.0) (descr "SLB9670 TPM 2.0 SPI")
-    (property "Reference" "U9" (at 0 -3.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
+    (property "Reference" "TPM" (at 0 -3.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
     (property "Value" "SLB9670" (at 0 3.5) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
     (pad "1" smd rect (at -2.35 -1.905) (size 1.55 0.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 80 "TPM_MISO"))
     (pad "2" smd rect (at -2.35 -0.635) (size 1.55 0.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 3  "GND"))
@@ -461,7 +461,7 @@
 
   (footprint "Package_TO_SOT_SMD:SOT-25_HandSoldering" (layer "F.Cu")
     (at 65.0 43.0) (descr "AP2112K-3.3 LDO 3.3V regulator")
-    (property "Reference" "U10" (at 0 -2.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
+    (property "Reference" "LDO" (at 0 -2.5) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
     (property "Value" "AP2112K-3.3" (at 0 2.5) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
     (pad "1" smd rect (at -1.5  0.95) (size 0.9 1.3) (layers "F.Cu" "F.Paste" "F.Mask") (net 4  "VSYS"))
     (pad "2" smd rect (at  0.0  1.30) (size 0.9 1.3) (layers "F.Cu" "F.Paste" "F.Mask") (net 3  "GND"))
@@ -472,7 +472,7 @@
 
   (footprint "Package_SON:WSON-8-1EP_2x2mm_P0.5mm_EP0.9x1.6mm" (layer "F.Cu")
     (at 72.0 43.0) (descr "TPS62933 synchronous step-down 5V-3.3V 3A")
-    (property "Reference" "U11" (at 0 -2.0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
+    (property "Reference" "BUCK" (at 0 -2.0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
     (property "Value" "TPS62933" (at 0 2.0) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
     (pad "9" smd rect (at  0.0  0.0) (size 0.9 1.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 3 "GND"))
     (pad "1" smd rect (at -1.25 -0.75) (size 0.25 0.5) (layers "F.Cu" "F.Paste" "F.Mask") (net 2 "+5V"))
