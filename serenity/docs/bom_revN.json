@@ -6,7 +6,7 @@
   "license": "CC BY 4.0",
   "date": "2026-05-20",
 
-  "rev_n_summary": "Rev N is the first fully-documented 24-inch build of the Serenity-class tiltrotor UAV. It supersedes the 18-inch Rev M design. Key changes: scale 18→24 in, propulsion 4×80mm→2×(2×50mm in series) tandem nacelles, counter-rotating EDF pairs (port CW / starboard CCW) for zero net torque, 8-fin twisted stators integrated into each nacelle print (CF-PETG), gear-linked iris nozzles on both nacelles driven passively by the tilt pivot (no dedicated nozzle servo), single servo for rear fuselage 120mm nozzle, nacelle tilt range 0°(cruise)→120°(backing) with hard stops at −5°/140°. Avionics: 8× PocketBeagle 2 Industrial (AM6254) + Cape-A/B unchanged from Rev M.",
+  "rev_n_summary": "Rev N is the first fully-documented 24-inch build of the Serenity-class tiltrotor UAV. It supersedes the 18-inch Rev M design. Key changes: scale 18→24 in, propulsion 4×80mm→2×(2×50mm in series) tandem nacelles, counter-rotating EDF pairs (port CW / starboard CCW) for zero net torque, 8-fin twisted stators integrated into each nacelle print (CF-PETG), gear-linked iris nozzles on both nacelles driven passively by the tilt pivot (no dedicated nozzle servo), single servo for rear fuselage 120mm nozzle, nacelle tilt range 0°(cruise)→120°(backing) with hard stops at −5°/140°. Avionics: 8× PocketBeagle 2 Industrial (AM6254) + Cape-A/B unchanged from Rev M. Rev N intake change: belly scoop removed; 4 radial scoop inlets (90° spacing, dorsal/port/ventral/stbd) cut into hull at neck station ~310mm from nose; CF-PETG structural intake frame bonded into each opening; cross-shaped PETG plenum manifold routes air from all 4 scoops to the 120mm EDF fan face inside Panel F engine bell. SiK 915MHz belly antenna relocated forward to station ~260mm.",
 
   "hull_geometry": {
     "source_model":    "misubisu / Peter Farell — Serenity Firefly-class (printables.com/model/548545)",
@@ -31,13 +31,15 @@
       "mass_g":    95
     },
     {
-      "stl":       "s_middle_intake_shell24.stl",
-      "desc":      "Fuselage belly section with 120mm EDF intake (120mm dia opening at X=130, Y=−67)",
+      "stl":       "s_middle_canonical_shell24.stl",
+      "scad":      "serenity/stl/s_middle_canonical_shell24.scad",
+      "desc":      "Fuselage mid-section — canonical Serenity belly geometry, NO belly scoop. Replaces s_middle_intake_shell24.stl for Rev N 4-radial-intake build.",
       "material":  "PETG",
       "layer_mm":  0.20,
       "infill":    "8% gyroid",
       "qty":       1,
-      "mass_g":    140
+      "mass_g":    135,
+      "notes":     "Generate STL from SCAD with OpenSCAD CLI: openscad -o s_middle_canonical_shell24.stl serenity/stl/s_middle_canonical_shell24.scad"
     },
     {
       "stl":       "s_cargo_sect_shell24.stl",
@@ -49,13 +51,38 @@
       "mass_g":    180
     },
     {
-      "stl":       "s_rear_shell24.stl",
-      "desc":      "Rear fuselage / engine bell section",
+      "stl":       "s_rear_neck_intake_shell24.stl",
+      "scad":      "serenity/stl/s_rear_neck_intake_shell24.scad",
+      "desc":      "Rear fuselage / engine bell section with 4 radial scoop windows at neck station (~310mm from nose). 4 rectangular cutouts (65mm wide × 60mm axial) at 90° spacing (dorsal/port/ventral/stbd). Canonical shell geometry otherwise preserved.",
       "material":  "PETG",
       "layer_mm":  0.20,
       "infill":    "8% gyroid",
       "qty":       1,
-      "mass_g":    240
+      "mass_g":    225,
+      "notes":     "Generate STL from SCAD. Verify scoop-window station alignment in slicer before printing; adjust NECK_X parameter if needed."
+    },
+    {
+      "stl":       "s_neck_intake_frame.stl",
+      "scad":      "serenity/stl/s_neck_intake_frame.scad",
+      "desc":      "CF-PETG structural intake frame ring — bonds into 4 scoop windows at neck station. Provides aerodynamic intake lips, registration tongues (5mm), bonding shoulders (5mm), and internal duct arms routing air toward plenum. Replaces structural stiffness lost by cutting hull openings.",
+      "material":  "CF-PETG",
+      "layer_mm":  0.15,
+      "infill":    "40% gyroid",
+      "walls":     4,
+      "qty":       1,
+      "mass_g":    85,
+      "notes":     "Print with hardened-steel nozzle. Bond with structural epoxy (e.g. West System 105/206) into hull scoop cutouts. Cure 24h before foam-fill."
+    },
+    {
+      "stl":       "s_aft_edf_plenum.stl",
+      "scad":      "serenity/stl/s_aft_edf_plenum.scad",
+      "desc":      "PETG 4-to-1 cross-shaped plenum manifold — collects air from 4 intake frame duct arms (station ~310mm) and delivers to 120mm EDF fan face (station ~430mm). Rectangular arms (65×60mm) taper to 120mm circular EDF outlet over 80mm transition length.",
+      "material":  "PETG",
+      "layer_mm":  0.20,
+      "infill":    "20% gyroid",
+      "qty":       1,
+      "mass_g":    75,
+      "notes":     "Bond aft end to EDF mount ring; bond forward arm ends to intake frame duct arm exits. Seal all joints with epoxy fillet. Pressure-test with shop vac before closing hull."
     },
     {
       "stl":       "s_wings_both_shell24.stl",
@@ -229,12 +256,14 @@
     },
     "rear_edf": {
       "ref":         "EDF-120-6S",
-      "desc":        "120mm EDF unit @ 6S — rear fuselage, exhaust straight aft",
+      "desc":        "120mm EDF unit @ 6S — rear fuselage inside engine bell, exhaust straight aft",
       "qty":         1,
       "thrust_g":    3500,
       "voltage":     "6S",
       "mass_g":      420,
-      "notes":       "Mounted at X=130, Y=−67 in fuselage belly; intake via s_middle_intake_shell24.stl opening (120mm dia)."
+      "location":    "Panel F engine bell, fan face at station ~430mm from nose. Axis aligned with fuselage centreline, intake forward (+Z toward nose).",
+      "intake":      "4 radial scoops at station ~310mm via s_neck_intake_frame + s_aft_edf_plenum (replaces belly scoop).",
+      "notes":       "Fan annular area ≈10,683mm²; combined scoop capture area = 15,600mm² (ratio 1.46× — exceeds 1.3× minimum for duct velocity matching). Verify EDF ring / plenum outlet concentricity before bonding."
     },
     "rear_esc": {
       "ref":         "ESC-80A-6S",
@@ -350,7 +379,7 @@
       {"ref": "PB2-I-CN", "desc": "PocketBeagle 2 Industrial (AM6254) — CN node, Cape-B", "qty": 4, "mass_g": 13, "cost_usd": 51.03},
       {"ref": "CAPE-A",   "desc": "Cape-A PCB 85×55mm — Sensor + FC cape",               "qty": 4, "mass_g": 28, "cost_usd": 42},
       {"ref": "CAPE-B",   "desc": "Cape-B PCB 90×60mm — Comms + Logging + Payload cape", "qty": 4, "mass_g": 38, "cost_usd": 80},
-      {"ref": "RCRS-49",  "desc": "RCRS-49 sub-module PCB — 49MHz TDDS RC",               "qty": 4, "mass_g": 12, "cost_usd": 25},
+      {"ref": "RCRS-49",  "desc": "RCRS-49 sub-module PCB — 49MHz TDDS RC. Antenna: top wire running dorsal hull spine from nose post (~120mm) to EDF cone post (~600mm), ~470mm wire length, base-loaded (38uH coil + LC pi-net at nose post), CF keel bar counterpoise. No belly SMA required.", "qty": 4, "mass_g": 12, "cost_usd": 25},
       {"ref": "MICROSD-LOG", "desc": "64GB microSD — Cape-B write-blocked flight log",    "qty": 4, "mass_g": 1,  "cost_usd": 12}
     ],
     "bay_assignments": {
