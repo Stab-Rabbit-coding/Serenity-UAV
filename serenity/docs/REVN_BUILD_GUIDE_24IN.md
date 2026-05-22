@@ -176,7 +176,10 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 | M2.5 × 8mm SS button screws | 64× | Standoff attachment + panel B/E fasteners |
 | M3 heat-set inserts | 4× | Cargo gondola belly hard points |
 | N42 neodymium disc magnet 6×2mm | 8× | Panel D (4 in frame + 4 in lid) |
-| SMA panel-mount bulkhead | 4× | 915MHz SiK + LoRa + 49MHz RCRS + WiFi antennas |
+| SMA panel-mount bulkhead | 3× | 915MHz SiK (belly) + LoRa (belly) + WiFi (dorsal fwd). Note: 49MHz RCRS now uses a dorsal wire antenna — no belly SMA for that system |
+| PETG wire post (49MHz fwd + aft) | 2× | Print from s_rcrs49_wire_post.scad: forward post (~120mm from nose, dorsal) + aft post (top of rear nozzle cone). Both ~10mm tall insulated hooks |
+| 0.3mm stainless steel wire or 22AWG enamelled Cu | ~500mm | 49MHz RCRS top wire |
+| Ceramic bead insulator (3mm ID) | 1× | Aft end of 49MHz wire (insulated/open) |
 | Wing spar pocket inserts | 4× | CF spar sleeve inserts bonded into fuselage side walls at wing root |
 
 ### Installation Sequence
@@ -209,11 +212,14 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 **7. Install M3 heat-set inserts ×4** at belly cargo hard-point locations.
 
-**8. Install SMA bulkhead pass-throughs:**
-- Belly port, X≈**260mm**: SiK 915MHz antenna *(relocated forward from 310mm — station 310mm is now the neck intake ring; 260mm is in cargo bay belly, Panel C, clear of intake frame)*
-- Belly stbd, X≈260mm: LoRa RFM95W 915MHz antenna
-- Dorsal fin, X≈450mm: 49MHz RCRS-49 antenna
+**8. Install antenna posts and SMA bulkhead pass-throughs:**
+- Belly port, X≈**260mm**: SiK 915MHz SMA-RP bulkhead *(relocated forward from 310mm — station 310mm is now the neck intake ring; 260mm is in cargo bay belly, Panel C, clear of intake frame)*
+- Belly stbd, X≈260mm: LoRa RFM95W 915MHz SMA-RP bulkhead
+- Dorsal, X≈**120mm**: **49MHz RCRS-49 forward wire post** — PETG insulated mast (~10mm tall, 12×12mm foot), bonded to dorsal hull skin just aft of bridge/cockpit section; loading coil + LC pi-network at this post; RG-316 coax routed internally to Bay A RCRS-49 module *(replaces dorsal fin + vertical whip — wire now runs nose-to-tail along hull spine)*
+- Rear nozzle cone top: **49MHz RCRS-49 aft wire post** — PETG hook post (~10mm tall) bonded to top of `rear_nozzle_frame.stl`; electrically open (insulated end)
 - Dorsal fwd, X≈140mm: WiFi 2.4/5GHz antenna
+- **49MHz top wire**: 0.3mm stainless steel wire or 22AWG enamelled copper, ~470mm, strung from forward post hook to aft post hook with light tension (~20g); CF keel bar connected to RCRS-49 GND as counterpoise
+- **⚠ GPS clearance check**: forward wire post at ~120mm is ~43mm from GPS patch (both dorsal face). Bench-verify GPS HDOP ≤1.5 with RCRS-49 transmitting before flight. If GPS degrades, move GPS patch to ≥165mm from nose.
 
 **9. Install 12× ToF sensor flush-mount PETG frames** (6.5mm hull cutouts):
 

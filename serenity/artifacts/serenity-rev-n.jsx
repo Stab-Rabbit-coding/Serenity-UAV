@@ -74,6 +74,8 @@ const SCOOP_STA   = 310;  // neck scoop centre station (mm)
 const EDF_FACE    = 430;  // 120mm EDF fan face station (mm)
 const SIK_STA     = 260;  // SiK antenna station (mm, relocated from 310→260)
 const WING_STA    = 200;  // wing/nacelle pivot approximate station
+const WIRE_FWD    = 120;  // 49MHz top wire forward post (just aft of bridge) (mm)
+const WIRE_AFT    = 598;  // 49MHz top wire aft post (top of EDF cone) (mm)
 
 // Interpolate hull half-width at a given station
 function hullHW(sta) {
@@ -96,8 +98,9 @@ const LEGEND = [
   { col: C.teal,    label: "Plenum manifold (PETG, inside hull)" },
   { col: C.red,     label: "120mm EDF (station ~430mm, Panel F)" },
   { col: C.purple,  label: "Nacelle EDFs (2× port, 2× stbd)" },
-  { col: C.green,   label: "SiK antenna (relocated, ~260mm)" },
-  { col: C.pink,    label: "Rear iris nozzle" },
+  { col: C.green,   label: "SiK antenna (belly, ~260mm)" },
+  { col: C.pink,    label: "49MHz RCRS top wire (nose ~120mm → EDF cone)" },
+  { col: "#e879f9", label: "Rear iris nozzle" },
 ];
 
 // ── Print schedule ────────────────────────────────────────────
@@ -196,6 +199,28 @@ function SideProfile() {
       <polygon points={`${(HULL_L + 10) * DS},${CY - 20} ${(HULL_L + 10) * DS},${CY + 20} ${(HULL_L + 28) * DS},${CY}`}
         fill={C.pink} opacity={0.6} />
 
+      {/* 49MHz top wire along hull dorsal spine */}
+      {(() => {
+        const wFwdX = WIRE_FWD * DS + 10;
+        const wAftX = WIRE_AFT * DS + 10;
+        const wFwdHW = hullHW(WIRE_FWD) * DS;
+        const wAftHW = hullHW(WIRE_AFT) * DS;
+        return (
+          <g>
+            <line x1={wFwdX} y1={CY - wFwdHW - 2} x2={wAftX} y2={CY - wAftHW - 2}
+              stroke={C.pink} strokeWidth="1.6" />
+            {/* Forward post */}
+            <line x1={wFwdX} y1={CY - wFwdHW} x2={wFwdX} y2={CY - wFwdHW - 10}
+              stroke={C.pink} strokeWidth="1.5" />
+            <circle cx={wFwdX} cy={CY - wFwdHW - 11} r={3} fill="none" stroke={C.pink} strokeWidth="1.2" />
+            {/* Aft post */}
+            <line x1={wAftX} y1={CY - wAftHW} x2={wAftX} y2={CY - wAftHW - 8}
+              stroke={C.pink} strokeWidth="1.5" />
+            <circle cx={wAftX} cy={CY - wAftHW - 9} r={2.5} fill="none" stroke={C.pink} strokeWidth="1.1" />
+          </g>
+        );
+      })()}
+
       {/* SiK antenna */}
       <line x1={sikX} y1={CY + scoopHW - 2} x2={sikX} y2={CY + scoopHW + 18}
         stroke={C.green} strokeWidth="2" />
@@ -215,6 +240,7 @@ function SideProfile() {
         [SCOOP_STA, C.yellow,  "⬆ Scoops\n~310mm"],
         [EDF_FACE,  C.red,     "EDF\n~430mm"],
         [SIK_STA,  C.green,   "SiK\n~260mm"],
+        [WIRE_FWD, C.pink,    "49M\npost"],
       ].map(([sta, col, rawLabel]) => {
         const lines = rawLabel.split("\n");
         const sx = sta * DS + 10;
@@ -432,7 +458,8 @@ function SpecsTable() {
     ["Total capture area",   `${SCOOP_TOTAL_MM2} mm² (${CAPTURE_RATIO}× fan annular area)`, C.teal],
     ["Fan annular area",     `${FAN_ANNULAR_MM2} mm² (120mm EDF, 28mm hub)`, C.dim],
     ["EDF fan face station", "~430 mm from nose (Panel F engine bell)", C.red],
-    ["SiK antenna station",  "~260 mm (relocated forward — was 310mm, conflicts with intake)", C.green],
+    ["SiK antenna station",  "~260 mm belly (relocated forward — was 310mm, conflicts with intake)", C.green],
+    ["49MHz RCRS antenna",   "Top wire ~470mm: nose post ~120mm → EDF cone ~600mm. Base-loaded (38uH coil), CF keel counterpoise", C.pink],
     ["Nacelle propulsion",   "2× (2× 50mm EDF @ 6S, tandem) — counter-rotating pair", C.purple],
     ["Total thrust",         "~5,322 g (1,822 g nacelles + 3,500 g rear EDF)", C.dim],
     ["Hover T/W",            "~1.50 at 6S 4000mAh (~3,550 g AUW)", C.dim],

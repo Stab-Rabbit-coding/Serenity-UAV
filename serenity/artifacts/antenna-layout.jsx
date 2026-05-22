@@ -110,11 +110,13 @@ const FW  = 320 * SC;         // fuselage px length = 262
 const FC  = mmX(160);         // fuselage centre x (wing pivot) = 191
 const FA  = mmX(320);         // tail x = 322
 
-// antenna positions (mm from nose)
+// antenna positions (mm from nose — schematic/representative scale)
 const POS = {
   gps:   { x: mmX(58),  label:"GPS patch", sublabel:"58mm from nose", side:"TOP" },
   sik:   { x: mmX(238), label:"915 MHz whip", sublabel:"238mm from nose", side:"BELLY" },
-  rc49:  { x: mmX(290), label:"49 MHz loaded whip", sublabel:"290mm from nose", side:"TOP" },
+  // rc49 is now a top wire; xFwd = nose post, xAft = EDF cone post, x = midpoint for inspector
+  rc49:  { x: mmX(200), xFwd: mmX(90), xAft: mmX(308),
+           label:"49 MHz top wire (nose → EDF cone)", sublabel:"~90–308mm (schematic)", side:"TOP" },
   wifi:  { x: mmX(210), label:"WiFi trace (internal)", sublabel:"210mm from nose", side:"INTERNAL" },
 };
 
@@ -183,24 +185,32 @@ function TopView({hover,onHover}) {
           fill={`${ANT.wifi.color}70`} fontSize={6} fontFamily={M}>internal</text>
       </g>
 
-      {/* 49MHz dorsal whip */}
-      {halo("rc49", POS.rc49.x, CY-18, 7, ANT.rc49.color)}
+      {/* 49MHz dorsal top wire: nose post → EDF cone post */}
+      {halo("rc49", (POS.rc49.xFwd+POS.rc49.xAft)/2, CY-18, 7, ANT.rc49.color)}
       <g onClick={()=>onHover(hover==="rc49"?null:"rc49")} style={{cursor:"pointer"}}>
-        <circle cx={POS.rc49.x} cy={CY-18} r={5}
-          fill={`${ANT.rc49.color}20`} stroke={ANT.rc49.color} strokeWidth={hover==="rc49"?2:1.2}/>
-        {/* whip line going up */}
-        <line x1={POS.rc49.x} y1={CY-23} x2={POS.rc49.x} y2={CY-52}
-          stroke={ANT.rc49.color} strokeWidth={1.5} strokeLinecap="round"/>
-        {/* coil symbol */}
-        {[0,1,2].map(i=>(
-          <ellipse key={i} cx={POS.rc49.x} cy={CY-40+i*5} rx={4} ry={2}
-            fill="none" stroke={ANT.rc49.color} strokeWidth={0.8} opacity={0.8}/>
-        ))}
-        <text x={POS.rc49.x+12} y={CY-44} fill={ANT.rc49.color} fontSize={6} fontFamily={M}>coil</text>
-        <text x={POS.rc49.x} y={CY-60} textAnchor="middle"
-          fill={ANT.rc49.color} fontSize={7} fontFamily={M} fontWeight="bold">49M</text>
-        <text x={POS.rc49.x} y={CY-68} textAnchor="middle"
-          fill={ANT.rc49.color} fontSize={6} fontFamily={M}>290mm</text>
+        {/* Wire line along hull dorsal spine */}
+        <line x1={POS.rc49.xFwd} y1={CY-18} x2={POS.rc49.xAft} y2={CY-18}
+          stroke={ANT.rc49.color} strokeWidth={hover==="rc49"?2.5:1.8}/>
+        {/* Forward insulated mast (nose post) */}
+        <line x1={POS.rc49.xFwd} y1={CY-18} x2={POS.rc49.xFwd} y2={CY-30}
+          stroke={ANT.rc49.color} strokeWidth={1.5}/>
+        <circle cx={POS.rc49.xFwd} cy={CY-30} r={3.5}
+          fill="none" stroke={ANT.rc49.color} strokeWidth={1.2}/>
+        {/* Loading coil / feed dot at nose post */}
+        <circle cx={POS.rc49.xFwd} cy={CY-18} r={4}
+          fill={`${ANT.rc49.color}28`} stroke={ANT.rc49.color} strokeWidth={1}/>
+        {/* Aft insulated mast (EDF cone post) */}
+        <line x1={POS.rc49.xAft} y1={CY-18} x2={POS.rc49.xAft} y2={CY-28}
+          stroke={ANT.rc49.color} strokeWidth={1.5}/>
+        <circle cx={POS.rc49.xAft} cy={CY-28} r={3}
+          fill="none" stroke={ANT.rc49.color} strokeWidth={1.2}/>
+        {/* Centre label */}
+        <text x={(POS.rc49.xFwd+POS.rc49.xAft)/2} y={CY-48} textAnchor="middle"
+          fill={ANT.rc49.color} fontSize={7} fontFamily={M} fontWeight="bold">49MHz top wire</text>
+        <text x={POS.rc49.xFwd+4} y={CY-38} textAnchor="start"
+          fill={`${ANT.rc49.color}90`} fontSize={6} fontFamily={M}>fwd post ~90mm</text>
+        <text x={POS.rc49.xAft-4} y={CY-38} textAnchor="end"
+          fill={`${ANT.rc49.color}90`} fontSize={6} fontFamily={M}>aft post ~310mm</text>
       </g>
 
       {/* 915MHz — note on top view it's belly-mount, shown as dashed circle */}
@@ -215,14 +225,14 @@ function TopView({hover,onHover}) {
       </g>
 
       {/* Separation dimension lines */}
-      {/* GPS to 49MHz */}
-      <g opacity={0.35}>
-        <line x1={POS.gps.x} y1={CY+30} x2={POS.rc49.x} y2={CY+30}
-          stroke={C.yellow} strokeWidth={0.7}/>
-        <line x1={POS.gps.x} y1={CY+27} x2={POS.gps.x} y2={CY+33} stroke={C.yellow} strokeWidth={0.7}/>
-        <line x1={POS.rc49.x} y1={CY+27} x2={POS.rc49.x} y2={CY+33} stroke={C.yellow} strokeWidth={0.7}/>
-        <text x={(POS.gps.x+POS.rc49.x)/2} y={CY+42} textAnchor="middle"
-          fill={C.yellow} fontSize={7} fontFamily={M}>232mm</text>
+      {/* GPS to 49MHz wire forward post — now WARNING distance */}
+      <g opacity={0.6}>
+        <line x1={POS.gps.x} y1={CY+30} x2={POS.rc49.xFwd} y2={CY+30}
+          stroke="#f87171" strokeWidth={0.9}/>
+        <line x1={POS.gps.x} y1={CY+27} x2={POS.gps.x} y2={CY+33} stroke="#f87171" strokeWidth={0.9}/>
+        <line x1={POS.rc49.xFwd} y1={CY+27} x2={POS.rc49.xFwd} y2={CY+33} stroke="#f87171" strokeWidth={0.9}/>
+        <text x={(POS.gps.x+POS.rc49.xFwd)/2} y={CY+43} textAnchor="middle"
+          fill="#f87171" fontSize={7} fontFamily={M}>~32mm ⚠ verify GPS</text>
       </g>
 
       {/* Labels */}
@@ -298,40 +308,45 @@ function SideView({hover,onHover}) {
           fill={`${ANT.gps.color}80`} fontSize={6} fontFamily={M}>patch 22mm</text>
       </g>
 
-      {/* 49MHz dorsal loaded whip — aft top */}
-      {halo("rc49", POS.rc49.x, CY-FR-12, 7, ANT.rc49.color)}
+      {/* 49MHz dorsal top wire — runs nose post → EDF cone along hull spine */}
+      {halo("rc49", (POS.rc49.xFwd+POS.rc49.xAft)/2, CY-FR-6, 7, ANT.rc49.color)}
       <g onClick={()=>onHover(hover==="rc49"?null:"rc49")} style={{cursor:"pointer"}}>
-        {/* mount base */}
-        <rect x={POS.rc49.x-4} y={CY-FR-4} width={8} height={6} rx={1}
-          fill={`${ANT.rc49.color}30`} stroke={ANT.rc49.color} strokeWidth={1}/>
-        {/* Loading coil (squiggle) */}
-        {[0,1,2,3].map(i=>(
-          <ellipse key={i} cx={POS.rc49.x} cy={CY-FR-10-i*7} rx={4} ry={3}
-            fill="none" stroke={ANT.rc49.color} strokeWidth={1} opacity={0.75}/>
+        {/* Wire running along hull top surface */}
+        <line x1={POS.rc49.xFwd} y1={CY-FR} x2={POS.rc49.xAft} y2={CY-FR}
+          stroke={ANT.rc49.color} strokeWidth={hover==="rc49"?2.5:1.8} strokeLinecap="round"/>
+        {/* Forward insulated mast (nose post) — feed/coil end */}
+        <rect x={POS.rc49.xFwd-3} y={CY-FR-8} width={6} height={9} rx={1}
+          fill={`${ANT.rc49.color}28`} stroke={ANT.rc49.color} strokeWidth={1}/>
+        {/* Coil symbol at nose post */}
+        {[0,1,2].map(i=>(
+          <ellipse key={i} cx={POS.rc49.xFwd} cy={CY-FR-14-i*6} rx={3.5} ry={2.5}
+            fill="none" stroke={ANT.rc49.color} strokeWidth={0.9} opacity={0.8}/>
         ))}
-        {/* whip element above coil */}
-        <line x1={POS.rc49.x} y1={CY-FR-38} x2={POS.rc49.x} y2={CY-FR-88}
-          stroke={ANT.rc49.color} strokeWidth={1.5} strokeLinecap="round"/>
-        {/* tip */}
-        <circle cx={POS.rc49.x} cy={CY-FR-88} r={2} fill={ANT.rc49.color}/>
-        {/* length callout */}
-        <line x1={POS.rc49.x+12} y1={CY-FR-38} x2={POS.rc49.x+12} y2={CY-FR-88}
-          stroke={ANT.rc49.color} strokeWidth={0.6} opacity={0.5}/>
-        <line x1={POS.rc49.x+9} y1={CY-FR-38} x2={POS.rc49.x+15} y2={CY-FR-38}
-          stroke={ANT.rc49.color} strokeWidth={0.6} opacity={0.5}/>
-        <line x1={POS.rc49.x+9} y1={CY-FR-88} x2={POS.rc49.x+15} y2={CY-FR-88}
-          stroke={ANT.rc49.color} strokeWidth={0.6} opacity={0.5}/>
-        <text x={POS.rc49.x+22} y={CY-FR-60} fill={ANT.rc49.color}
-          fontSize={7} fontFamily={M}>250mm</text>
-        <text x={POS.rc49.x} y={CY-FR-96} textAnchor="middle"
-          fill={ANT.rc49.color} fontSize={7} fontFamily={M} fontWeight="bold">49MHz</text>
-        {/* Counterpoise radials */}
-        <line x1={POS.rc49.x} y1={CY-FR} x2={POS.rc49.x-22} y2={CY-FR+8}
+        <text x={POS.rc49.xFwd-14} y={CY-FR-26} fill={ANT.rc49.color} fontSize={6} fontFamily={M}>coil+feed</text>
+        {/* Counterpoise wire at feed post (goes along belly or to keel) */}
+        <line x1={POS.rc49.xFwd} y1={CY-FR} x2={POS.rc49.xFwd-20} y2={CY+FR-4}
           stroke={ANT.rc49.color} strokeWidth={0.8} strokeDasharray="2 2" opacity={0.5}/>
-        <line x1={POS.rc49.x} y1={CY-FR} x2={POS.rc49.x+22} y2={CY-FR+8}
+        <line x1={POS.rc49.xFwd} y1={CY-FR} x2={POS.rc49.xFwd+20} y2={CY+FR-4}
           stroke={ANT.rc49.color} strokeWidth={0.8} strokeDasharray="2 2" opacity={0.5}/>
-        <text x={POS.rc49.x-28} y={CY-FR+16} fill={`${ANT.rc49.color}60`}
-          fontSize={6} fontFamily={M}>radials</text>
+        <text x={POS.rc49.xFwd+26} y={CY+FR+2} fill={`${ANT.rc49.color}60`}
+          fontSize={6} fontFamily={M}>counterpoise</text>
+        {/* Aft insulated mast (EDF cone post) */}
+        <rect x={POS.rc49.xAft-3} y={CY-FR-7} width={6} height={8} rx={1}
+          fill={`${ANT.rc49.color}18`} stroke={ANT.rc49.color} strokeWidth={1}/>
+        {/* Insulator symbol at aft post (open circle) */}
+        <circle cx={POS.rc49.xAft} cy={CY-FR-10} r={3}
+          fill="none" stroke={ANT.rc49.color} strokeWidth={1.2}/>
+        <text x={POS.rc49.xAft+6} y={CY-FR-10} fill={`${ANT.rc49.color}80`}
+          fontSize={6} fontFamily={M}>insulator</text>
+        {/* Wire length callout */}
+        <line x1={POS.rc49.xFwd} y1={CY-FR-36} x2={POS.rc49.xAft} y2={CY-FR-36}
+          stroke={ANT.rc49.color} strokeWidth={0.5} opacity={0.35}/>
+        <line x1={POS.rc49.xFwd} y1={CY-FR-39} x2={POS.rc49.xFwd} y2={CY-FR-33}
+          stroke={ANT.rc49.color} strokeWidth={0.5} opacity={0.35}/>
+        <line x1={POS.rc49.xAft} y1={CY-FR-39} x2={POS.rc49.xAft} y2={CY-FR-33}
+          stroke={ANT.rc49.color} strokeWidth={0.5} opacity={0.35}/>
+        <text x={(POS.rc49.xFwd+POS.rc49.xAft)/2} y={CY-FR-42} textAnchor="middle"
+          fill={ANT.rc49.color} fontSize={7} fontFamily={M} fontWeight="bold">49MHz top wire ~470mm</text>
       </g>
 
       {/* WiFi — internal, dashed box */}
@@ -366,16 +381,16 @@ function SideView({hover,onHover}) {
           fill={`${ANT.sik.color}80`} fontSize={6} fontFamily={M}>915 MHz</text>
       </g>
 
-      {/* Separation callout — GPS to 49MHz top */}
-      <g opacity={0.3}>
-        <line x1={POS.gps.x} y1={CY-FR-30} x2={POS.rc49.x} y2={CY-FR-30}
-          stroke={C.yellow} strokeWidth={0.6}/>
-        <line x1={POS.gps.x} y1={CY-FR-33} x2={POS.gps.x} y2={CY-FR-27}
-          stroke={C.yellow} strokeWidth={0.6}/>
-        <line x1={POS.rc49.x} y1={CY-FR-33} x2={POS.rc49.x} y2={CY-FR-27}
-          stroke={C.yellow} strokeWidth={0.6}/>
-        <text x={(POS.gps.x+POS.rc49.x)/2} y={CY-FR-36} textAnchor="middle"
-          fill={C.yellow} fontSize={6} fontFamily={M}>232mm separation</text>
+      {/* Separation callout — GPS to 49MHz wire forward post ⚠ short */}
+      <g opacity={0.7}>
+        <line x1={POS.gps.x} y1={CY-FR-32} x2={POS.rc49.xFwd} y2={CY-FR-32}
+          stroke="#f87171" strokeWidth={0.8}/>
+        <line x1={POS.gps.x} y1={CY-FR-35} x2={POS.gps.x} y2={CY-FR-29}
+          stroke="#f87171" strokeWidth={0.8}/>
+        <line x1={POS.rc49.xFwd} y1={CY-FR-35} x2={POS.rc49.xFwd} y2={CY-FR-29}
+          stroke="#f87171" strokeWidth={0.8}/>
+        <text x={(POS.gps.x+POS.rc49.xFwd)/2} y={CY-FR-38} textAnchor="middle"
+          fill="#f87171" fontSize={6.5} fontFamily={M}>~32mm ⚠ bench verify GPS</text>
       </g>
 
       {/* View label */}
@@ -449,13 +464,12 @@ function BottomView({hover,onHover}) {
           fill={`${ANT.gps.color}50`} fontSize={6} fontFamily={M}>GPS↑</text>
       </g>
 
-      {/* 49MHz dorsal — not visible from below, shown dashed */}
+      {/* 49MHz dorsal top wire — not visible from below, shown as dashed centre line */}
       <g onClick={()=>onHover(hover==="rc49"?null:"rc49")} style={{cursor:"pointer"}}>
-        <circle cx={POS.rc49.x} cy={CY} r={6}
-          fill={`${ANT.rc49.color}06`} stroke={ANT.rc49.color}
-          strokeWidth={hover==="rc49"?1.5:0.7} strokeDasharray="4 2"/>
-        <text x={POS.rc49.x} y={CY-14} textAnchor="middle"
-          fill={`${ANT.rc49.color}50`} fontSize={6} fontFamily={M}>49↑</text>
+        <line x1={POS.rc49.xFwd} y1={CY} x2={POS.rc49.xAft} y2={CY}
+          stroke={ANT.rc49.color} strokeWidth={hover==="rc49"?1.5:0.8} strokeDasharray="5 3" opacity={0.5}/>
+        <text x={(POS.rc49.xFwd+POS.rc49.xAft)/2} y={CY-10} textAnchor="middle"
+          fill={`${ANT.rc49.color}55`} fontSize={6} fontFamily={M}>49MHz wire ↑ (hidden)</text>
       </g>
 
       {/* Fwd fan duct (bottom view) */}
@@ -515,26 +529,27 @@ const DETAIL = {
     ]
   },
   rc49: {
-    title:"49 MHz RCRS TDDS Loaded Whip", c:ANT.rc49.color,
+    title:"49 MHz RCRS TDDS Top Wire Antenna", c:ANT.rc49.color,
     rows:[
-      ["Type","Base-loaded shortened monopole on non-conductive dorsal fin"],
+      ["Type","End-fed shortened top wire — runs from nose post (~120mm) to EDF cone post (~600mm) along hull dorsal spine"],
       ["Frequency","49.830–49.890 MHz (6 RCRS channels, 10kHz spacing)"],
-      ["λ/4 free-space","1530mm — impractical; shortened + inductance-loaded"],
-      ["Physical length","250mm (whip element) + 30mm coil form = 280mm total above mount"],
-      ["Loading coil","~38 μH wound on 10mm OD ferrite rod · 1.5mm wire · ~45 turns"],
-      ["Counterpoise","4× 150mm tinned-copper wire radials at 90° · at mount base"],
-      ["Radiation resistance","~3–6 Ω (typical loaded short monopole at this ratio)"],
-      ["Efficiency","~ −14 dB vs ideal dipole · adequate for <500m TDDS range"],
-      ["Mount face","TOP of fuselage, 290mm from nose (aft section, tail-adjacent dorsal fin)"],
-      ["Dorsal fin","3D-printed ABS/PETG fin, 35mm tall · keeps antenna clear of fuselage"],
-      ["Reason top","Avoids winch line interference on belly · maximises sky view angle"],
-      ["Reason aft","Maximises separation from GPS (232mm) · away from CM4 WiFi zone"],
-      ["Cable","50Ω RG-316 semi-rigid coax · 120mm · to COMMS-HAT-1 U.FL"],
-      ["Matching","LC pi-network at antenna base resonates system at 49.86 MHz"],
-      ["Polarisation","Vertical monopole — matches ground station vertical whip"],
-      ["Clearance to GPS","232mm ✔ (required >150mm to protect GPS LNA)"],
-      ["Clearance to SiK","52mm linear, but opposite fuselage faces (+~15dB isolation)"],
-      ["Clearance to WiFi","80mm ✔ (frequencies very different, minimal coupling)"],
+      ["λ/4 free-space","1530mm — impractical; wire is ~470mm (λ/13), heavily shortened"],
+      ["Wire length","~470mm actual (nose post ~120mm to EDF cone ~600mm from nose, 24\" hull)"],
+      ["Wire material","0.3mm stainless steel wire or 22AWG enamelled copper"],
+      ["Forward post","PETG insulated mast ~10mm tall, bonded to dorsal hull at ~120mm from nose (just aft of bridge)"],
+      ["Aft post","PETG hook post ~10mm tall, bonded to top of rear_nozzle_frame.stl at EDF cone"],
+      ["Feed end","Forward (nose) post — loading coil + LC pi-network + RG-316 coax to RCRS-49 in Bay A"],
+      ["Aft end","Electrically open (insulated) — wire terminates on insulator at aft post"],
+      ["Loading coil","~38 μH base-loaded at nose feed post · 10mm ferrite rod (#43 mix) · 1.0mm Cu · ~48 turns"],
+      ["Matching","LC pi-network (5–30pF series trim cap) resonates wire at 49.86 MHz"],
+      ["Counterpoise","CF keel bar (6×3mm, grounded to RCRS-49 GND at Bay A) acts as partial ground plane; supplement with 2× belly wires ~150mm at feed post if SWR > 3:1"],
+      ["Polarisation","Horizontal wire — pattern has max broadside (port/stbd). Ground stations typically vertical; cross-polarisation loss ~6–12dB, acceptable at ≤300m TDDS range"],
+      ["Radiation resistance","~2–5 Ω (end-fed wire at this length/λ ratio)"],
+      ["Efficiency","~−10 to −16 dB vs ideal dipole — adequate for ≤300m short-range TDDS"],
+      ["⚠ GPS clearance","~120mm actual (24\" hull): wire forward post is ~43mm aft of GPS patch (~77mm from nose). 49MHz harmonics (98, 147, 196MHz...) do NOT fall on GPS L1 (1575MHz); near-field coupling/detuning is the risk. VERIFY GPS HDOP ≤1.5 with RCRS-49 transmitting."],
+      ["Clearance to SiK","Wire passes directly over SiK station (~260mm) on opposite face (top vs belly) — ~50mm vertical separation at that hull station. Freq. sep. is 866 MHz; face diversity adds ~12dB isolation. ✔"],
+      ["Clearance to WiFi","Internal WiFi at ~210mm — wire passes ~50mm above; frequencies very different. ✔"],
+      ["Aesthetic note","Top wire running nose-to-tail is visually authentic to the Serenity/Firefly ship — exterior antenna wires are a key detail of the Firefly design language."],
     ]
   },
   wifi: {
@@ -637,9 +652,9 @@ function MatrixTab() {
   ];
   const SEP = {
     "gps-sik":  {dist:"148mm",face:"top vs belly",ok:true, min:"100mm",note:"Face diversity adds ~12dB isolation"},
-    "gps-rc49": {dist:"232mm",face:"both top",ok:true, min:"150mm",note:"GPS LNA vulnerable to VHF harmonics — 232mm is comfortable"},
+    "gps-rc49": {dist:"~43mm (actual)",face:"both top",ok:false,min:"150mm (std)",note:"Wire forward post ~43mm from GPS patch (same face). 49MHz harmonics (98,147… MHz) don't reach GPS L1 (1575MHz) — risk is near-field detuning. BENCH TEST: verify GPS HDOP ≤1.5 with RCRS transmitting. If degraded, move GPS patch to ≥165mm."},
     "gps-wifi": {dist:"152mm",face:"internal",ok:true, min:"50mm", note:"2.4GHz–1.575GHz gap is large; no harmful coupling"},
-    "sik-rc49": {dist:"52mm linear",face:"belly vs top",ok:true, min:"face diversity",note:"Physical 52mm + opposite face → ~18dB isolation. Frequencies separated by 866 MHz."},
+    "sik-rc49": {dist:"~50mm vertical",face:"belly vs top",ok:true, min:"face diversity",note:"Wire passes over SiK station (opposite faces). ~50mm vertical separation through hull. 866 MHz freq. gap + face diversity (~12dB). ✔"},
     "sik-wifi": {dist:"28mm",face:"both internal",ok:true, min:"30mm",note:"915 MHz 5th harmonic at 4.575 GHz misses WiFi bands; monitor empirically"},
     "rc49-wifi":{dist:"80mm",face:"top vs internal",ok:true, min:"30mm",note:"49 MHz has no harmonics near WiFi; safe"},
   };
@@ -699,8 +714,8 @@ function MatrixTab() {
           </tbody>
         </table>
       </div>
-      <Note c={C.green} ch="All separation requirements met. The GPS patch and SiK whip are on opposite fuselage faces (top vs belly), adding approximately 12–18 dB of isolation beyond their 148mm physical separation. The 49 MHz and SiK 915 MHz antennas occupy opposite faces (top vs belly) which provides additional isolation despite their relatively close axial distance of 52mm."/>
-      <Warn ch="Verify GPS HDOP and fix quality with all radios transmitting simultaneously on the bench before flight. The 49 MHz loaded whip harmonics (147 MHz, 196 MHz, ...) are all well away from GPS L1 at 1575 MHz and 915 MHz, but empirical bench testing is mandatory."/>
+      <Warn ch="GPS–49MHz clearance reduced: the 49MHz top wire forward post is now ~43mm from the GPS patch (both on dorsal surface). The 49MHz harmonics (98, 147, 196 MHz…) do NOT fall on GPS L1 (1575 MHz), but near-field coupling may detune the GPS patch LNA. MANDATORY bench test: verify GPS HDOP ≤1.5 and fix quality with RCRS-49 transmitting at full power. If GPS degrades, relocate GPS patch aft to ≥165mm from nose."/>
+      <Note c={C.green} ch="All other pairs meet separation requirements. GPS↔SiK: opposite faces (top vs belly) add ~12dB isolation beyond 148mm. 49MHz wire↔SiK: wire passes over SiK station with ~50mm vertical separation through hull and face diversity. 49MHz wire↔WiFi: same — wire over internal WiFi, opposite faces."/>
     </div>
   );
 }
@@ -709,98 +724,118 @@ function MatrixTab() {
 function Mhz49Tab() {
   return (
     <div>
-      <SH t="49 MHz Loaded Whip — Design Detail" mt={0} c={ANT.rc49.color}/>
+      <SH t="49 MHz Top Wire Antenna — Design Detail" mt={0} c={ANT.rc49.color}/>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24}}>
         <div>
-          <KV k="Target frequency" v="49.830–49.890 MHz" c={ANT.rc49.color}/>
-          <KV k="Channel plan" v="6 ch × 10kHz spacing" c={ANT.rc49.color}/>
-          <KV k="λ/4 free space" v="1530 mm (impractical)"/>
-          <KV k="Electrical length" v="λ/4 = 1530mm (achieved via loading coil)"/>
-          <KV k="Physical whip length" v="250 mm"/>
-          <KV k="Whip diameter" v="3mm OD aluminium or fibreglass rod"/>
-          <KV k="Loading coil inductance" v="~38 μH"/>
-          <KV k="Coil form" v="10mm OD × 35mm ferrite rod (material: 43 mix)"/>
-          <KV k="Coil wire" v="1.0mm enamelled copper, 48 turns close-wound"/>
+          <KV k="Type" v="End-fed shortened top wire — nose post to EDF cone" c={ANT.rc49.color}/>
+          <KV k="Frequency" v="49.830–49.890 MHz · 6 RCRS channels · 10kHz spacing" c={ANT.rc49.color}/>
+          <KV k="Wire length" v="~470mm (nose post ~120mm to EDF cone ~600mm, 24 inch hull)"/>
+          <KV k="Wire material" v="0.3mm stainless steel or 22AWG enamelled copper"/>
+          <KV k="Tension" v="Light tautness — spring ~20g to prevent flutter"/>
+          <KV k="Forward post" v="PETG mast ~10mm tall · bonded at ~120mm from nose (just aft of bridge)"/>
+          <KV k="Aft post" v="PETG hook ~10mm tall · bonded to top of rear_nozzle_frame.stl"/>
+          <KV k="Feed end" v="Forward (nose) post — loading coil + LC pi-network + RG-316 to Bay A"/>
+          <KV k="Aft end" v="Open/insulated — wire clips to aft post via ceramic bead insulator"/>
+          <KV k="Loading coil" v="~38 uH base-loaded at nose post · 10mm ferrite rod #43 · 1.0mm Cu · ~48T"/>
           <KV k="Coil Q" v="~80–120 at 49 MHz"/>
-          <KV k="Coil position" v="Base-loaded (at mount base, feedpoint)"/>
-          <KV k="Radiation resistance" v="~3–6 Ω (typical for l/λ ≈ 0.055)"/>
-          <KV k="Loss resistance" v="~15–25 Ω (coil + counterpoise resistance)"/>
-          <KV k="Efficiency" v="~12–28% (−6 to −9 dB) · adequate at ≤500m"/>
-          <KV k="-3dB bandwidth" v="~80–120 kHz (covers all 6 RCRS channels)"/>
-          <KV k="Counterpoise" v="4× λ/4 radials, 150mm, at 90° around mount base"/>
-          <KV k="Counterpoise material" v="22AWG tinned copper, laid against fuselage skin"/>
-          <KV k="Mount" v="M3 nylon screw through 3mm PLA dorsal fin"/>
-          <KV k="Coax" v="50Ω RG-316 coax, 120mm, IPEX to COMMS-HAT-1"/>
-          <KV k="Matching" v="LC pi-network (resonance trim): 5–30pF variable cap in series"/>
-          <KV k="SWR target" v="≤2.5:1 across 49.83–49.89 MHz"/>
+          <KV k="Matching" v="LC pi-network (5–30pF series trim cap) resonates system at 49.86 MHz"/>
+          <KV k="Counterpoise" v="CF keel bar (6x3mm) grounded to RCRS-49 GND at Bay A. Add 2x 150mm belly wires if SWR > 3:1"/>
+          <KV k="Radiation resistance" v="~2–5 Ohm (end-fed wire at l/lambda ~ 0.077)"/>
+          <KV k="Loss resistance" v="~20–35 Ohm (coil + counterpoise contact resistance)"/>
+          <KV k="Efficiency" v="~8–18% (−7 to −11 dB) — adequate for ≤300m TDDS range"/>
+          <KV k="Polarisation" v="Horizontal wire — broadside (port/stbd) max. Cross-pol loss vs vertical GCS ~6–12dB"/>
+          <KV k="-3dB bandwidth" v="~60–100 kHz — covers all 6 RCRS channels (60kHz span)"/>
+          <KV k="SWR target" v="≤2.5:1 across 49.830–49.890 MHz"/>
+          <KV k="Coax" v="50Ohm RG-316, ≤150mm, IPEX to RCRS-49 module in Bay A"/>
+          <KV k="GPS proximity" v="~43mm to GPS patch (same dorsal face). Verify HDOP empirically."/>
+          <KV k="Aesthetic" v="Nose-to-tail top wire is authentic Serenity/Firefly ship detail"/>
         </div>
         <div>
-          {/* SVG schematic of the antenna */}
-          <svg viewBox="0 0 280 420" width="100%" style={{maxWidth:300,display:"block"}}>
-            {/* Coax connection at bottom */}
-            <text x={140} y={410} textAnchor="middle" fill={C.dimmer}
-              fontSize={8} fontFamily={M}>COAX FEEDPOINT (COMMS-HAT-1)</text>
-            <line x1={140} y1={395} x2={140} y2={370} stroke={C.dimmer} strokeWidth={2}/>
-            {/* Ground radials */}
-            {[[-70,40],[70,40],[-60,-10],[60,-10]].map(([dx,dy],i)=>(
-              <line key={i} x1={140} y1={360} x2={140+dx} y2={360+dy}
-                stroke={ANT.rc49.color} strokeWidth={1.2} strokeDasharray="3 2" opacity={0.7}/>
+          {/* SVG schematic of wire antenna — side view */}
+          <svg viewBox="0 0 320 310" width="100%" style={{maxWidth:340,display:"block"}}>
+            <text x={160} y={16} textAnchor="middle"
+              fill={ANT.rc49.color} fontSize={8} fontFamily={M}>49 MHz TOP WIRE (SIDE VIEW, SCHEMATIC)</text>
+            {/* Hull outline */}
+            <ellipse cx={160} cy={160} rx={130} ry={28}
+              fill="rgba(0,229,255,0.04)" stroke="rgba(0,229,255,0.35)" strokeWidth={1.5}/>
+            <text x={30} y={163} fill="rgba(0,229,255,0.35)" fontSize={7} fontFamily={M}>NOSE</text>
+            <text x={274} y={163} fill="rgba(0,229,255,0.35)" fontSize={7} fontFamily={M}>TAIL</text>
+            {/* Forward mast (nose post) */}
+            <line x1={52} y1={132} x2={52} y2={122} stroke={ANT.rc49.color} strokeWidth={2}/>
+            <rect x={46} y={130} width={12} height={8} rx={2}
+              fill={`${ANT.rc49.color}22`} stroke={ANT.rc49.color} strokeWidth={1}/>
+            {/* Loading coil at nose post */}
+            {[0,1,2,3].map(i=>(
+              <ellipse key={i} cx={52} cy={112-i*7} rx={7} ry={3}
+                fill="none" stroke={ANT.rc49.color} strokeWidth={1.1} opacity={0.8}/>
             ))}
-            <text x={210} y={380} fill={`${ANT.rc49.color}80`} fontSize={7} fontFamily={M}>radials</text>
-            <text x={210} y={390} fill={`${ANT.rc49.color}60`} fontSize={7} fontFamily={M}>×4 · 150mm</text>
-            {/* Mount/base */}
-            <rect x={122} y={340} width={36} height={20} rx={3}
-              fill="rgba(255,255,255,0.08)" stroke={C.dimmer} strokeWidth={1}/>
-            <text x={140} y={354} textAnchor="middle" fill={C.dimmer} fontSize={7} fontFamily={M}>mount</text>
-            {/* LC matching network */}
-            <rect x={110} y={300} width={60} height={36} rx={3}
+            <text x={66} y={108} fill={ANT.rc49.color} fontSize={6.5} fontFamily={M}>38uH loading coil</text>
+            {/* LC pi-network box */}
+            <rect x={32} y={80} width={42} height={24} rx={3}
               fill="rgba(244,114,182,0.1)" stroke={ANT.rc49.color} strokeWidth={1}/>
-            <text x={140} y={315} textAnchor="middle" fill={ANT.rc49.color} fontSize={7} fontFamily={M}>LC π-network</text>
-            <text x={140} y={328} textAnchor="middle" fill={`${ANT.rc49.color}70`} fontSize={7} fontFamily={M}>5–30pF trim cap</text>
-            <line x1={140} y1={340} x2={140} y2={336} stroke={ANT.rc49.color} strokeWidth={1}/>
-            {/* Loading coil */}
-            <rect x={120} y={220} width={40} height={76} rx={4}
-              fill="rgba(244,114,182,0.08)" stroke={ANT.rc49.color} strokeWidth={1.2}/>
-            {[0,1,2,3,4,5,6,7].map(i=>(
-              <ellipse key={i} cx={140} cy={234+i*9} rx={14} ry={4}
-                fill="none" stroke={ANT.rc49.color} strokeWidth={0.9} opacity={0.7}/>
-            ))}
-            <text x={170} y={255} fill={ANT.rc49.color} fontSize={7} fontFamily={M}>38 μH</text>
-            <text x={170} y={266} fill={`${ANT.rc49.color}70`} fontSize={7} fontFamily={M}>ferrite #43</text>
-            <text x={170} y={277} fill={`${ANT.rc49.color}60`} fontSize={7} fontFamily={M}>48T · 1.0mm</text>
-            <line x1={140} y1={220} x2={140} y2={210} stroke={ANT.rc49.color} strokeWidth={1.5}/>
-            <line x1={140} y1={296} x2={140} y2={304} stroke={ANT.rc49.color} strokeWidth={1.5}/>
-            {/* Whip element — 250mm shown compressed */}
-            <line x1={140} y1={210} x2={140} y2={30}
+            <text x={53} y={91} textAnchor="middle" fill={ANT.rc49.color} fontSize={6} fontFamily={M}>LC pi-net</text>
+            <text x={53} y={100} textAnchor="middle" fill={`${ANT.rc49.color}70`} fontSize={6} fontFamily={M}>5–30pF trim</text>
+            <line x1={52} y1={84} x2={52} y2={82} stroke={ANT.rc49.color} strokeWidth={1.2}/>
+            <line x1={52} y1={104} x2={52} y2={112} stroke={ANT.rc49.color} strokeWidth={1.2}/>
+            {/* Coax going down */}
+            <line x1={52} y1={80} x2={52} y2={56} stroke={C.dimmer} strokeWidth={2}/>
+            <text x={53} y={50} fill={C.dimmer} fontSize={7} fontFamily={M}>RG-316 to Bay A</text>
+            {/* Top wire */}
+            <line x1={52} y1={132} x2={268} y2={132}
               stroke={ANT.rc49.color} strokeWidth={2.5} strokeLinecap="round"/>
-            {/* tip */}
-            <circle cx={140} cy={30} r={4} fill={ANT.rc49.color}/>
-            {/* length callout */}
-            <line x1={160} y1={30} x2={160} y2={210} stroke={ANT.rc49.color} strokeWidth={0.6} opacity={0.4}/>
-            <line x1={156} y1={30} x2={164} y2={30} stroke={ANT.rc49.color} strokeWidth={0.6} opacity={0.4}/>
-            <line x1={156} y1={210} x2={164} y2={210} stroke={ANT.rc49.color} strokeWidth={0.6} opacity={0.4}/>
-            <text x={175} y={125} fill={ANT.rc49.color} fontSize={9} fontFamily={M} fontWeight="bold">250mm</text>
-            <text x={175} y={137} fill={`${ANT.rc49.color}70`} fontSize={7} fontFamily={M}>whip</text>
-            {/* PLA fin outline */}
-            <rect x={108} y={300} width={64} height={80} rx={4}
-              fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth={1} strokeDasharray="4 2"/>
-            <text x={140} y={398} textAnchor="middle"
-              fill="rgba(255,255,255,0.78)" fontSize={7} fontFamily={M}>PLA dorsal fin</text>
-            <text x={140} y={16} textAnchor="middle"
-              fill={ANT.rc49.color} fontSize={8} fontFamily={M}>49 MHz LOADED MONOPOLE</text>
+            {/* Wire length callout */}
+            <line x1={52} y1={144} x2={268} y2={144}
+              stroke={ANT.rc49.color} strokeWidth={0.5} opacity={0.35}/>
+            <line x1={52} y1={141} x2={52} y2={147} stroke={ANT.rc49.color} strokeWidth={0.5} opacity={0.35}/>
+            <line x1={268} y1={141} x2={268} y2={147} stroke={ANT.rc49.color} strokeWidth={0.5} opacity={0.35}/>
+            <text x={160} y={156} textAnchor="middle"
+              fill={ANT.rc49.color} fontSize={8} fontFamily={M} fontWeight="bold">~470mm wire</text>
+            {/* Aft mast (EDF cone post) */}
+            <line x1={268} y1={132} x2={268} y2={122} stroke={ANT.rc49.color} strokeWidth={2}/>
+            <rect x={262} y={130} width={12} height={8} rx={2}
+              fill={`${ANT.rc49.color}18`} stroke={ANT.rc49.color} strokeWidth={1}/>
+            <circle cx={268} cy={119} r={5} fill="none" stroke={ANT.rc49.color} strokeWidth={1.2}/>
+            <text x={278} y={114} fill={`${ANT.rc49.color}80`} fontSize={6} fontFamily={M}>insulator</text>
+            <text x={268} y={106} textAnchor="middle"
+              fill={`${ANT.rc49.color}70`} fontSize={6} fontFamily={M}>EDF cone</text>
+            {/* Counterpoise: keel bar */}
+            <line x1={30} y1={188} x2={290} y2={188}
+              stroke={ANT.rc49.color} strokeWidth={1.5} strokeDasharray="6,3" opacity={0.5}/>
+            <text x={160} y={200} textAnchor="middle"
+              fill={`${ANT.rc49.color}60`} fontSize={7} fontFamily={M}>CF keel bar (counterpoise ground)</text>
+            <line x1={52} y1={188} x2={52} y2={160}
+              stroke={ANT.rc49.color} strokeWidth={0.8} strokeDasharray="3,2" opacity={0.45}/>
+            <text x={52} y={176} textAnchor="middle" fill={`${ANT.rc49.color}55`} fontSize={6} fontFamily={M}>GND</text>
+            {/* GPS proximity warning */}
+            <rect x={20} y={216} width={280} height={36} rx={3}
+              fill="rgba(248,113,113,0.06)" stroke="#f87171" strokeWidth={0.8}/>
+            <text x={160} y={229} textAnchor="middle" fill="#f87171" fontSize={7} fontFamily={M} fontWeight="bold">
+              GPS patch ~43mm aft of nose post (same face)
+            </text>
+            <text x={160} y={241} textAnchor="middle" fill="#f87171" fontSize={6.5} fontFamily={M}>
+              Verify GPS HDOP ≤1.5 with RCRS-49 transmitting before flight
+            </text>
+            {/* Polarisation note */}
+            <text x={160} y={270} textAnchor="middle" fill={C.dimmer} fontSize={7} fontFamily={M}>
+              Horizontal wire: broadside (port/stbd) max pattern
+            </text>
+            <text x={160} y={282} textAnchor="middle" fill={`${C.dimmer}80`} fontSize={6.5} fontFamily={M}>
+              Cross-pol loss vs vertical GCS ~6–12dB — acceptable at ≤300m
+            </text>
           </svg>
-          <Note c={ANT.rc49.color} ch="Tune the 5–30pF series trimmer for minimum SWR at 49.860 MHz (channel 4, centre of the 6-channel band). An SWR of ≤2.5:1 reflects ≤11% of transmitted power — acceptable at ≤10mW EIRP. Measure with an antenna analyser or nanoVNA before first flight. Retune if the coil is repositioned."/>
+          <Note c={ANT.rc49.color} ch="Tune the 5–30pF series trimmer for minimum SWR at 49.860 MHz (channel 4). SWR ≤2.5:1 reflects ≤11% of power — acceptable at ≤10mW EIRP. Measure with nanoVNA before first flight. Re-tune if wire length changes."/>
         </div>
       </div>
       <SH t="Installation Procedure"/>
       {[
-        ["1","3D-print the dorsal fin in ABS or PETG (not PLA — heat soak). Height 38mm, base 20×20mm, M3 tapped hole for mounting to fuselage skin at 290mm from nose."],
-        ["2","Wind 48 turns of 1.0mm enamelled Cu on the ferrite rod (material 43). Leave 15mm pigtails each end. Coat with Q-dope or nail varnish for moisture protection."],
-        ["3","Solder coil bottom pigtail to RG-316 centre conductor. Solder coil top pigtail to base of 250mm aluminium rod (or 3mm fibreglass rod with conductive paint trace)."],
-        ["4","Solder 4× 150mm counterpoise wires to RG-316 shield braid. Route radials at 90° against the fuselage outer skin inside the fin base (they do NOT need to be elevated)."],
-        ["5","Insert series trimmer (5–30pF) between coax centre and coil bottom. Connect nanoVNA. Adjust trimmer for minimum SWR at 49.860 MHz. Lock with drop of nail varnish."],
-        ["6","Route RG-316 coax internally through the fuselage to COMMS-HAT-1 U.FL port. Secure with cable ties every 50mm. Minimum bend radius: 15mm."],
-        ["7","Verify SWR ≤2.5:1 across 49.830–49.890 MHz with all hatch covers closed. Verify GPS lock and HDOP ≤1.5 with all radios transmitting simultaneously."],
+        ["1","3D-print two insulated mast posts in PETG: forward post (10mm tall, M3 tapped base, small hook at top, 12x12mm foot) and aft post (same but hook only, no coil). The aft post bonds to the top of rear_nozzle_frame.stl; the forward post bonds to the dorsal hull at ~120mm from nose (just aft of the bridge/cockpit section)."],
+        ["2","Bond forward post to dorsal hull at ~120mm from nose with structural epoxy (West System). Bond aft post to top of rear_nozzle_frame.stl. Cure 2h. Both posts must be vertical and aligned on the hull centreline."],
+        ["3","Wind 48 turns of 1.0mm enamelled Cu on 10mm ferrite rod (material #43). Leave 15mm pigtails. Coat with Q-dope. Solder bottom pigtail to RG-316 centre conductor (feedpoint). Solder top pigtail to the start of the antenna wire."],
+        ["4","Connect RG-316 shield braid to CF keel bar via tinned-copper wire and clip or solder lug at Bay A. This establishes the keel bar as counterpoise ground. If SWR remains >3:1 after tuning, add 2x 150mm tinned-copper belly wires at the nose post laid flat along the belly skin."],
+        ["5","Insert series trimmer (5–30pF) between RG-316 centre and coil bottom. Attach nanoVNA. Feed the wire through the forward post hook. Adjust trimmer for minimum SWR at 49.860 MHz. Lock with nail varnish drop. SWR target ≤2.5:1 across 49.830–49.890 MHz."],
+        ["6","Pull the wire aft along the hull dorsal spine to the aft post hook. Tension lightly (~20g spring tension to prevent flutter). Clip the aft end to a ceramic bead insulator at the aft post. The aft end is electrically open."],
+        ["7","GPS bench test: with all covers closed and RCRS-49 transmitting at full power, verify GPS HDOP ≤1.5 and 3D fix quality. If GPS degrades, relocate GPS patch aft to ≥165mm from nose where the wire feed is further away."],
+        ["8","Route RG-316 coax internally from the nose post through Bay A to the RCRS-49 IPEX/U.FL connector. Secure with cable ties every 50mm. Minimum bend radius 15mm."],
       ].map(([n,s])=>(
         <div key={n} style={{display:"flex",gap:12,padding:"8px 0",
           borderBottom:"1px solid rgba(0,229,255,0.07)"}}>
@@ -818,8 +853,8 @@ function InstallTab() {
   const rules = [
     {c:C.green, title:"Carbon Fibre Keepout",
      body:"All four antenna elements must exit through PLA/PETG plastic shell zones. CF is electrically conductive (σ ≈ 10⁴ S/m) and strongly attenuates RF. The wing spars (12mm CF tubes) are at 160mm from the nose — all antenna feedpoints are positioned forward or aft of this frame member. No antenna wire runs parallel to a CF spar within 20mm."},
-    {c:ANT.rc49.color, title:"49 MHz — Dorsal Fin Location",
-     body:"Mount at 290mm from nose on the dorsal (top) surface. This is aft of the CF spar by 130mm and aft of the CM4 WiFi antenna zone by 80mm. The dorsal position keeps the whip clear of the payload bay, winch mechanism, and skid landing gear. The fin must be oriented with the whip vertical in hover and approximately level in cruise — the pattern rotates with the aircraft which is acceptable for TDDS at short range."},
+    {c:ANT.rc49.color, title:"49 MHz — Top Wire, Nose Post to EDF Cone",
+     body:"A 0.3mm stainless steel (or 22AWG enamelled copper) wire runs along the dorsal hull spine from a PETG insulated post at ~120mm from nose (just aft of the bridge/cockpit) to a PETG insulated hook post at the top of the rear nozzle cone frame (~600mm). Feed end (nose post): loading coil + LC pi-network + RG-316 coax to RCRS-49 in Bay A. Aft end: electrically open via ceramic bead insulator. Counterpoise: CF keel bar grounded to RCRS-49 GND. Pattern is broadside (port/stbd maximum) — cross-polarisation loss vs vertical ground station is ~6–12dB, acceptable at ≤300m TDDS range. GPS bench test mandatory: forward post is ~43mm from GPS patch, both on dorsal face; verify HDOP ≤1.5 with all radios transmitting."},
     {c:ANT.sik.color, title:"915 MHz — Belly SMA Penetration",
      body:"Drill a 6.5mm hole in the PLA belly skin at 238mm from nose. Install an SMA-RP bulkhead connector. The SiK module connects internally via an IPEX-to-SMA pigtail through the COMMS-HAT-1 module. Thread the 82mm whip onto the external SMA-RP. Orient vertically downward. Secure with a small plastic clip to prevent vibration-induced rotation — vibration loosening of SMA connectors is a known failure mode on EDFs."},
     {c:ANT.gps.color, title:"GPS Patch — Forward Top Mounting",
