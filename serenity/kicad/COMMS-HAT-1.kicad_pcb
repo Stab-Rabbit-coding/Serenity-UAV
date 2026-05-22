@@ -243,7 +243,7 @@
   (footprint "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm" (layer "F.Cu")
     (at 30 18)
     (property "Description" "W5500 reference clock")
-    (fp_text reference "Y1" (at 0 -2) (layer "F.SilkS")
+    (fp_text reference "ETH-CLK" (at 0 -2) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "25MHz" (at 0 2) (layer "F.Fab")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
@@ -319,7 +319,7 @@
 
   (footprint "Connector_JST:JST_GH_SM04B-GHS-TB_1x04_P1.25mm_Horizontal" (layer "F.Cu")
     (at 58 42) (property "Description" "JST-GH 1.25mm 4-pin connector")
-    (fp_text reference "JP4" (at 0 -3) (layer "F.SilkS")
+    (fp_text reference "PWR-IN" (at 0 -3) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "JST-GH-4P" (at 0 3) (layer "F.Fab")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
@@ -372,7 +372,7 @@
 
   (footprint "Connector_JST:JST_GH_SM04B-GHS-TB_1x04_P1.25mm_Horizontal" (layer "F.Cu")
     (at 12 44) (property "Description" "JST-GH 1.25mm 4-pin connector")
-    (fp_text reference "J1" (at 0 -3) (layer "F.SilkS")
+    (fp_text reference "SIK-UART" (at 0 -3) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "JST-GH-4P" (at 0 3) (layer "F.Fab")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
@@ -384,7 +384,7 @@
 
   (footprint "Connector_JST:JST_GH_SM06B-GHS-TB_1x06_P1.25mm_Horizontal" (layer "F.Cu")
     (at 22 44) (property "Description" "JST-GH 1.25mm 6-pin connector")
-    (fp_text reference "J2" (at 0 -3) (layer "F.SilkS")
+    (fp_text reference "ETH" (at 0 -3) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "JST-GH-6P" (at 0 3) (layer "F.Fab")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
@@ -398,7 +398,7 @@
 
   (footprint "Connector_JST:JST_GH_SM06B-GHS-TB_1x06_P1.25mm_Horizontal" (layer "F.Cu")
     (at 32 44) (property "Description" "JST-GH 1.25mm 6-pin connector")
-    (fp_text reference "J3" (at 0 -3) (layer "F.SilkS")
+    (fp_text reference "GPIO-EXT" (at 0 -3) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "JST-GH-6P" (at 0 3) (layer "F.Fab")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
@@ -412,7 +412,7 @@
 
   (footprint "Connector_JST:JST_GH_SM04B-GHS-TB_1x04_P1.25mm_Horizontal" (layer "F.Cu")
     (at 42 44) (property "Description" "JST-GH 1.25mm 4-pin connector")
-    (fp_text reference "J4" (at 0 -3) (layer "F.SilkS")
+    (fp_text reference "CAN-FD" (at 0 -3) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "JST-GH-4P" (at 0 3) (layer "F.Fab")
       (effects (font (size 0.8 0.8) (thickness 0.15))))

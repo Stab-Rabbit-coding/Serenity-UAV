@@ -276,7 +276,7 @@
     (pad "1" smd rect (at -1.50 0) (size 0.5 0.5) (layers "F.Cu" "F.Paste" "F.Mask"))
     (pad "EP" smd rect (at 0 0) (size 1.80 1.20) (layers "F.Cu" "F.Paste" "F.Mask")))
   (footprint "Package" (layer "F.Cu") (at 20 44) (property "Description" "KSZ8895 reference clock SMD")
-    (fp_text reference "Y1" (at 0 -3.1) (layer "F.SilkS")
+    (fp_text reference "SW-CLK" (at 0 -3.1) (layer "F.SilkS")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
     (fp_text value "25MHz-XTAL" (at 0 3.1) (layer "F.Fab")
       (effects (font (size 0.8 0.8) (thickness 0.15))))
