@@ -2,7 +2,7 @@
 blender_stator_gen.py  —  run with:
     blender --background --python blender_stator_gen.py
 
-8-fin inter-stage stator for the two 50 mm EDFs in series per nacelle.
+11-fin inter-stage stator for the two 50 mm EDFs in series per nacelle.
 
 Purpose: straighten the swirl imparted by EDF1 (upstream) before the air enters
 EDF2 (downstream), recovering the tangential kinetic energy lost to swirl and
@@ -176,7 +176,7 @@ make_ring(bm,
           z_top   = H,
           n_seg   = N_RING_SEG // 2)
 
-# 8 twisted fins
+# 11 twisted fins
 for i in range(N_FINS):
     phi = 2 * math.pi * i / N_FINS
     make_fin(bm,
@@ -198,7 +198,7 @@ bpy.context.collection.objects.link(obj)
 
 export_stl(obj, OUT)
 sz = os.path.getsize(OUT) // 1024
-print(f"\n=== Stator (50 mm EDF, 8 fins, {VANE_ANGLE_DEG}° vane angle) ===")
+print(f"\n=== Stator (50 mm EDF, 11 fins, {VANE_ANGLE_DEG}° vane angle) ===")
 print(f"  → stator_50mm.stl  ({sz} KB)")
 print(f"  OD={STATOR_OD}mm  hub_OD={HUB_OD}mm  bore_ID={STATOR_ID}mm  height={H}mm")
 print(f"  Fin twist: hub Δφ={math.degrees(H*math.tan(VANE_A)/R_HUB):.1f}°  "

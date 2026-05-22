@@ -83,7 +83,7 @@
 	(footprint "Connector_PinHeader_2.54mm"
 		(layer "F.Cu")
 		(uuid "02b8472a-f2c5-4bba-bbb6-3b236f7fa472")
-		(at 174 104.5)
+		(at 174 104.35)
 		(property "Reference" "NAV-LIGHT"
 			(at 0 -3 0)
 			(layer "F.SilkS")
@@ -210,7 +210,7 @@
 	(footprint "Package"
 		(layer "F.Cu")
 		(uuid "061b9701-c4c6-40b2-ba48-ebae55735f69")
-		(at 135 109.5)
+		(at 135 110.5)
 		(property "Reference" "RS485"
 			(at 0 -3.5 0)
 			(layer "F.SilkS")
@@ -285,7 +285,7 @@
 	(footprint "Package"
 		(layer "F.Cu")
 		(uuid "091d0f83-f1d8-463c-bcb5-9263f4c371ac")
-		(at 170 100)
+		(at 168.5 110.5 180)
 		(property "Reference" "TPM"
 			(at 0 -5.5 0)
 			(layer "F.SilkS")
@@ -534,7 +534,7 @@
 	(footprint "Package"
 		(layer "F.Cu")
 		(uuid "4560df91-ece3-4df8-90ac-00322e690573")
-		(at 149 115.5)
+		(at 141.5 112.5 90)
 		(property "Reference" "1553-XFM"
 			(at 0 -5 0)
 			(layer "F.SilkS")
@@ -668,7 +668,7 @@
 	(footprint "JST_GH_4P"
 		(layer "F.Cu")
 		(uuid "664fd5a8-7243-4afd-a06a-31fe5ca7a34f")
-		(at 156 101.5)
+		(at 161 95)
 		(property "Reference" "LOAD-CELL"
 			(at 0 -3 0)
 			(layer "F.SilkS")
@@ -743,7 +743,7 @@
 	(footprint "Package"
 		(layer "F.Cu")
 		(uuid "6c01405c-f3cc-4a83-b21c-9e5c8f4b9548")
-		(at 162 103)
+		(at 147 102.5)
 		(property "Reference" "ETH2-PHY"
 			(at 0 -5 0)
 			(layer "F.SilkS")
@@ -818,7 +818,7 @@
 	(footprint "Package"
 		(layer "F.Cu")
 		(uuid "73701563-85a0-4bba-9c61-ff7b9e2ae579")
-		(at 159 115.5)
+		(at 147 95)
 		(property "Reference" "LOAD-ADC"
 			(at 0 -5.5 0)
 			(layer "F.SilkS")
@@ -893,7 +893,7 @@
 	(footprint "JST_GH_4P"
 		(layer "F.Cu")
 		(uuid "7e5c0abc-1608-4bcb-bccc-2f16dbb666ff")
-		(at 156 95.5)
+		(at 155 95)
 		(property "Reference" "WINCH"
 			(at 0 -3 0)
 			(layer "F.SilkS")
@@ -968,7 +968,7 @@
 	(footprint "Package"
 		(layer "F.Cu")
 		(uuid "857e3417-fa83-489a-b723-e5ba94611206")
-		(at 135 104)
+		(at 135 115)
 		(property "Reference" "CAN-TR"
 			(at 0 -3.5 0)
 			(layer "F.SilkS")
@@ -1043,7 +1043,7 @@
 	(footprint "Package"
 		(layer "F.Cu")
 		(uuid "8c692d3b-8731-4c0f-b527-aef7fcf51aea")
-		(at 138 115.5)
+		(at 160 113)
 		(property "Reference" "1553-RCV"
 			(at 0 -5.5 0)
 			(layer "F.SilkS")
@@ -1252,7 +1252,7 @@
 	(footprint "Package"
 		(layer "F.Cu")
 		(uuid "9a1d4168-ce11-4897-a0ac-fa389c1dc8e7")
-		(at 146 100)
+		(at 137 103)
 		(property "Reference" "ETH1-PHY"
 			(at 0 -5 0)
 			(layer "F.SilkS")
@@ -1536,7 +1536,7 @@
 	(footprint "Package"
 		(layer "F.Cu")
 		(uuid "ccd0c38e-6c22-4e6a-a539-c995ca743303")
-		(at 144 109.5)
+		(at 155 104)
 		(property "Reference" "PWM-I2C"
 			(at 0 -6 0)
 			(layer "F.SilkS")
@@ -1694,7 +1694,7 @@
 	(footprint "JST_GH_3P"
 		(layer "F.Cu")
 		(uuid "e8b0742b-0e6e-4953-a621-2ffb3557c3f9")
-		(at 167 108.5)
+		(at 163.5 106)
 		(property "Reference" "SIK-TLM"
 			(at 0 -3 0)
 			(layer "F.SilkS")
@@ -1763,7 +1763,7 @@
 	(footprint "Package"
 		(layer "F.Cu")
 		(uuid "e93d9925-2fa1-4fcc-996f-ea6683b0f918")
-		(at 136 97)
+		(at 149.5 113 180)
 		(property "Reference" "1553-DRV"
 			(at -0.5 -3.5 0)
 			(layer "F.SilkS")
@@ -1897,7 +1897,7 @@
 	(footprint "JST_GH_3P"
 		(layer "F.Cu")
 		(uuid "ee2bf2b7-3a5e-4e9b-96ac-26b4c7f316c1")
-		(at 167 114.5)
+		(at 163.5 108.5)
 		(property "Reference" "RC-RCVR"
 			(at 0 -3 0)
 			(layer "F.SilkS")
@@ -1966,7 +1966,7 @@
 	(footprint "Package"
 		(layer "F.Cu")
 		(uuid "f330ffd1-b157-4aa8-9ff2-955f3e2af450")
-		(at 156 109.5)
+		(at 134 95)
 		(property "Reference" "WINCH-DRV"
 			(at 0 -3.5 0)
 			(layer "F.SilkS")

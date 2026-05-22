@@ -4,7 +4,7 @@ blender_nacelle_integrated_v1.py  —  run with:
 
 Rev N: integrated-stator nacelle shells for the Serenity-UAV 24" design.
 
-Generates two nacelle shells with 8-fin twisted inter-stage stators built
+Generates two nacelle shells with 11-fin twisted inter-stage stators built
 directly into the bore, replacing the separate press-fit stator_50mm.stl.
 The fins are solid geometry added at Z=STATOR_BOT..Z=STATOR_TOP inside each
 nacelle bore, joined into the same mesh that gets printed as the nacelle.
@@ -40,7 +40,7 @@ import os
 import math
 
 # ── tunables ─────────────────────────────────────────────────────────────────
-N_FINS         = 8
+N_FINS         = 11
 STATOR_BOT     = 53.0      # mm from Z=0 (nozzle face) — bottom of stator
 STATOR_HEIGHT  = 20.0      # mm axial extent of stator
 FIN_THICKNESS  = 2.0       # mm tangential thickness of each fin
@@ -179,7 +179,7 @@ def build_stator_mesh(cx, cy, swirl_dir):
                  z_top = STATOR_TOP,
                  n_seg = N_HUB_SEG)
 
-    # 8 twisted fins
+    # 11 twisted fins
     for i in range(N_FINS):
         phi = 2 * math.pi * i / N_FINS
         add_fin(bm, cx, cy,
