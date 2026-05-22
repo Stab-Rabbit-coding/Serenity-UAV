@@ -48,7 +48,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 | Iris nozzles | 2× nacelle (gear-linked to tilt pivot, no dedicated servo) + 1× rear (SG90 servo) |
 | Nozzle closed | 0° nacelle tilt → petals form hull-matched engine cone (Serenity skin) |
 | Nozzle open | 90° nacelle tilt → petals hinge out, LED-backlit translucent-blue inner faces |
-| Rear EDF | 120mm @ 6S, exhaust straight aft; intake via fuselage belly cutout (120mm dia) |
+| Rear EDF | 120mm @ 6S, exhaust straight aft; intake via 4 radial scoops at neck station ~310mm (dorsal/port/ventral/stbd; CF-PETG frame + PETG plenum manifold) |
 | Total thrust | ~5,322 g (1,822 g nacelles + 3,500 g rear) |
 | Hover T/W | ~1.50 at 6S 4000mAh (~3,550 g AUW) |
 | Avionics | 8× PocketBeagle 2 Industrial (AM6254): FC1–FC4 (Cape-A) + CN1–CN4 (Cape-B) |
@@ -109,9 +109,11 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 | STL | Material | Layer | Infill | Qty | Notes |
 |-----|----------|-------|--------|-----|-------|
 | `s_head_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Nose-down orientation |
-| `s_middle_intake_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Intake opening at belly Z=0 face |
+| `s_middle_canonical_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Canonical belly — NO belly scoop. Generate from `serenity/stl/s_middle_canonical_shell24.scad`. |
 | `s_cargo_sect_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | |
-| `s_rear_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | |
+| `s_rear_neck_intake_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | 4 radial scoop windows at neck station ~310mm. Generate from `serenity/stl/s_rear_neck_intake_shell24.scad`. Verify NECK_X alignment in slicer after generating. |
+| `s_neck_intake_frame.stl` | **CF-PETG** | 0.15 mm | 40% gyroid, 4 walls | 1 | Structural intake frame ring — bonds into 4 scoop windows. Hardened-steel nozzle required. Generate from `serenity/stl/s_neck_intake_frame.scad`. |
+| `s_aft_edf_plenum.stl` | PETG | 0.20 mm | 20% gyroid | 1 | Cross-shaped 4-to-1 plenum manifold. Generate from `serenity/stl/s_aft_edf_plenum.scad`. Pressure-test before hull close-up. |
 | `s_wings_both_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | |
 | `s_eng_left_stator_shell24.stl` | **CF-PETG** | 0.15 mm | 25% gyroid, 4 walls | 1 | Port nacelle — run `blender_nacelle_integrated_v1.py` first to generate |
 | `s_eng_right_stator_shell24.stl` | **CF-PETG** | 0.15 mm | 25% gyroid, 4 walls | 1 | Starboard nacelle |
@@ -208,8 +210,8 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 **7. Install M3 heat-set inserts ×4** at belly cargo hard-point locations.
 
 **8. Install SMA bulkhead pass-throughs:**
-- Belly port, X≈310mm: SiK 915MHz antenna
-- Belly stbd, X≈310mm: LoRa RFM95W 915MHz antenna
+- Belly port, X≈**260mm**: SiK 915MHz antenna *(relocated forward from 310mm — station 310mm is now the neck intake ring; 260mm is in cargo bay belly, Panel C, clear of intake frame)*
+- Belly stbd, X≈260mm: LoRa RFM95W 915MHz antenna
 - Dorsal fin, X≈450mm: 49MHz RCRS-49 antenna
 - Dorsal fwd, X≈140mm: WiFi 2.4/5GHz antenna
 
@@ -418,31 +420,80 @@ Crown pinion (R=6mm) → Nozzle inner ring rack (R=28mm)
 
 ---
 
-## Phase 4 — Rear EDF + Nozzle
+## Phase 4 — Rear EDF + Radial Intake + Nozzle
 
-**Goal:** 120mm EDF mounted in fuselage, rear nozzle frame installed, iris operational, servo wired.
+**Goal:** CF-PETG intake frame and PETG plenum manifold installed; 120mm EDF mounted inside engine bell (Panel F); rear nozzle frame installed, iris operational, servo wired.
 
-### Rear EDF Installation
+> **Design change from Rev M belly scoop:** The 120mm EDF no longer mounts in the fuselage belly. The belly of `s_middle_canonical_shell24.stl` is standard Serenity geometry. Air is delivered via 4 radial scoops at station ~310mm (the hull neck) through a CF-PETG frame ring and a cross-shaped PETG plenum manifold to the EDF fan face inside the engine bell at station ~430mm.
 
-The 120mm EDF mounts in the fuselage belly at the intake cutout (X=130, Y=−67 in `s_middle_intake_shell24.stl`).
+### 4A — Intake Frame Installation
 
-1. **Test 120mm EDF** on bench ESC before installation.
-2. **Route motor leads** through rear fuselage section to aft-service bay (Panel E / Bay E4).
-3. **Seat EDF** in intake opening — OD should seat flush in the 120mm bore. Bond with 4 dabs slow-cure structural epoxy around duct collar.
-4. **Install 80A ESC** in aft bay (Panel F). Bond ESC to bay floor with double-sided foam tape + cable tie.
-5. **Cure 2 h minimum.**
+The `s_neck_intake_frame.stl` (CF-PETG) is a one-piece ring that registers into all 4 scoop windows simultaneously.
 
-### Rear Nozzle Installation
+1. **Dry-fit intake frame** into the 4 scoop windows of `s_rear_neck_intake_shell24.stl` before bonding. Registration tongues (5mm) should insert snugly into each window with ~0.2mm clearance. Adjust with sandpaper if tight.
 
-1. **Press `rear_nozzle_frame.stl`** (base ring + 8 fixed ribs) onto rear EDF duct exit face. Ribs are at 22.5° offsets from petal positions and hold cone silhouette at all petal states.
+2. **Verify aerodynamic orientation:** intake lips (6mm forward projection) face forward (+X toward nose). Duct arms extend inward toward fuselage centreline.
+
+3. **Apply structural epoxy** (West System 105/206) to:
+   - Registration tongue outer surfaces (tongue → hull window edges)
+   - Bonding shoulders (flange pressing on hull exterior around each window)
+
+4. **Press frame into position.** All 4 tongues must seat fully before epoxy sets. Clamp with tape across shoulder flanges. Cure 24 h before moving.
+
+5. **Fill any gap between shoulder flange and hull exterior** with epoxy fillet. Smooth with gloved finger. Cure 2 h.
+
+### 4B — Plenum Manifold Installation
+
+The `s_aft_edf_plenum.stl` (PETG) connects the 4 intake frame duct arms to the 120mm EDF fan face. It is installed inside the engine bell section before closing Panel F.
+
+1. **Dry-fit plenum** against intake frame duct arm exits and verify:
+   - Each rectangular arm (65×60mm) aligns with the corresponding intake frame duct arm exit.
+   - Aft circular outlet (120mm) is centred on fuselage centreline.
+
+2. **Bond plenum forward arm ends to intake frame duct arm exits** with structural epoxy. Fillet all joints. Cure 2 h.
+
+3. **Pressure-test plenum before bonding EDF:**
+   - Seal EDF aft face with tape.
+   - Cover 3 of the 4 scoop inlets temporarily.
+   - Apply shop-vac suction at the 4th scoop — you should hear/feel a clear draft at the EDF outlet (leakage only around tape, not at joints).
+   - If joints leak, apply additional epoxy fillet and re-test.
+
+### 4C — 120mm EDF Installation
+
+The EDF mounts axially inside the engine bell (Panel F), fan face at station ~430mm from nose.
+
+1. **Test 120mm EDF** on bench ESC before installation (correct rotation, no vibration).
+
+2. **Install EDF mounting ring** (circular PETG ring matching EDF OD + 3mm, printed from `s_aft_edf_plenum.scad` retaining lip) at station ~430mm inside Panel F. Bond with structural epoxy. Cure 1 h.
+
+3. **Seat EDF in plenum outlet bell:**
+   - Slide EDF aft into the plenum's 120mm circular outlet (inner bell diameter = EDF OD + 2×3mm = 126mm).
+   - Press EDF forward until fan face aligns with the EDF retaining lip ring (station ~430mm).
+   - Bond with 4 dabs slow-cure structural epoxy around EDF casing circumference at the retaining lip.
+
+4. **Route 120mm EDF motor leads** through Panel F to 80A ESC in Panel F bay. Route signal lead forward through MAIN-PWR conduit to Bay B (FC2 PRU Ch.2).
+
+5. **Install 80A ESC** in Panel F bay. Bond ESC to bay floor with double-sided foam tape + cable tie.
+
+6. **Cure 2 h minimum before applying thrust.**
+
+### 4D — Rear Nozzle Installation
+
+1. **Press `rear_nozzle_frame.stl`** (base ring + 8 fixed ribs) onto the 120mm EDF duct exit face at Panel F aft end. Ribs are at 22.5° offsets from petal positions — they maintain the cone silhouette at all petal states.
 2. **Install 8 rear nozzle petals** on 3mm hinge pins. Piano wire link ring passes through all petal bottom lugs.
-3. **Install rear nozzle servo (SG90 class)** inside rear fuselage section. Piano wire pushrod connects servo arm to nozzle inner ring.
+3. **Install rear nozzle servo (SG90 class)** inside Panel F section. Piano wire pushrod connects servo arm to nozzle inner ring.
 4. **Calibrate:** servo 0° = petals closed (hull-matched bell profile); servo 90° = petals fully open (full burn).
 5. **Install WS2812B LED ring** at rear duct exit lip.
 
 ### Phase 4 Checks
 
-- [ ] Rear EDF bonded and seated flush in intake bore
+- [ ] Intake frame tongues fully seated in all 4 scoop windows — no gaps
+- [ ] Intake frame shoulder flanges bonded flush against hull exterior — no lifting
+- [ ] Plenum pressure-test passed — no joint leakage
+- [ ] EDF seated at station ~430mm, centreline ±2mm
+- [ ] EDF rotation verified before sealing (correct direction: intake = forward face)
+- [ ] Motor leads and ESC installed in Panel F; signal lead routed to FC2
+- [ ] 80A ESC bonded in bay
 - [ ] Nozzle frame ribs maintain cone profile with petals open AND closed
 - [ ] 8 petals open and close evenly without binding
 - [ ] Rear nozzle servo travel: closed at 0°, fully open at ~90°
@@ -611,14 +662,19 @@ Install clamshell cargo door hinges and latch. Bond cargo bay walls (per s_cargo
 
 ## Blender Script Reference
 
-| Script | Purpose | Output |
-|--------|---------|--------|
-| `blender_shells_v3.py` | Hollow and scale all hull STLs to 24" | `*_shell24.stl` (all hull sections) |
-| `blender_nacelle_integrated_v1.py` | Generate nacelle shells with integrated stators | `s_eng_left_stator_shell24.stl`, `s_eng_right_stator_shell24.stl` |
-| `blender_intake_cut.py` | Cut 120mm intake opening in s_middle underside | `s_middle_intake_shell24.stl` |
-| `blender_nozzle_gen.py` | Generate iris nozzle petals and rings | `nacelle_nozzle_petal.stl`, `nacelle_nozzle_ring.stl`, `rear_nozzle_petal.stl`, `rear_nozzle_frame.stl` |
+| Script / File | Tool | Purpose | Output |
+|---------------|------|---------|--------|
+| `blender_shells_v3.py` | Blender | Hollow and scale all hull STLs to 24" | `*_shell24.stl` (all hull sections) |
+| `blender_nacelle_integrated_v1.py` | Blender | Generate nacelle shells with integrated stators | `s_eng_left_stator_shell24.stl`, `s_eng_right_stator_shell24.stl` |
+| ~~`blender_intake_cut.py`~~ | ~~Blender~~ | ~~Cut 120mm belly intake in s_middle~~ | **Superseded** — belly scoop removed in Rev N; use canonical middle shell instead |
+| `blender_nozzle_gen.py` | Blender | Generate iris nozzle petals and rings | `nacelle_nozzle_petal.stl`, `nacelle_nozzle_ring.stl`, `rear_nozzle_petal.stl`, `rear_nozzle_frame.stl` |
+| `serenity/stl/s_middle_canonical_shell24.scad` | OpenSCAD | Canonical middle fuselage shell (belly restored) | `s_middle_canonical_shell24.stl` |
+| `serenity/stl/s_rear_neck_intake_shell24.scad` | OpenSCAD | Rear shell with 4 radial scoop windows | `s_rear_neck_intake_shell24.stl` |
+| `serenity/stl/s_neck_intake_frame.scad` | OpenSCAD | CF-PETG structural intake frame ring | `s_neck_intake_frame.stl` |
+| `serenity/stl/s_aft_edf_plenum.scad` | OpenSCAD | Cross-shaped 4-to-1 plenum manifold | `s_aft_edf_plenum.stl` |
 
-All scripts run headless: `blender --background --python <script>.py`
+Blender scripts run headless: `blender --background --python <script>.py`  
+OpenSCAD STLs: `openscad -o <output>.stl <file>.scad`
 
 ---
 
