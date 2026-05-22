@@ -38,8 +38,8 @@
         "other_text_upright": false,
         "pads": {
           "drill": 0.0,
-          "height": 3.6,
-          "width": 5.94
+          "height": 6.5,
+          "width": 2.4
         },
         "silk_line_width": 0.15,
         "silk_text_italic": false,
@@ -257,7 +257,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "CAPE-B-1.kicad_pro",
+    "filename": "CAPE-B-1a.kicad_pro",
     "version": 3
   },
   "net_settings": {
