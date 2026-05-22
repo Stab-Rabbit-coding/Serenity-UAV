@@ -379,7 +379,7 @@
       {"ref": "PB2-I-CN", "desc": "PocketBeagle 2 Industrial (AM6254) — CN node, Cape-B", "qty": 4, "mass_g": 13, "cost_usd": 51.03},
       {"ref": "CAPE-A",   "desc": "Cape-A PCB 85×55mm — Sensor + FC cape",               "qty": 4, "mass_g": 28, "cost_usd": 42},
       {"ref": "CAPE-B",   "desc": "Cape-B PCB 90×60mm — Comms + Logging + Payload cape", "qty": 4, "mass_g": 38, "cost_usd": 80},
-      {"ref": "RCRS-49",  "desc": "RCRS-49 sub-module PCB — 49MHz TDDS RC",               "qty": 4, "mass_g": 12, "cost_usd": 25},
+      {"ref": "RCRS-49",  "desc": "RCRS-49 sub-module PCB — 49MHz TDDS RC. Antenna: top wire running dorsal hull spine from nose post (~120mm) to EDF cone post (~600mm), ~470mm wire length, base-loaded (38uH coil + LC pi-net at nose post), CF keel bar counterpoise. No belly SMA required.", "qty": 4, "mass_g": 12, "cost_usd": 25},
       {"ref": "MICROSD-LOG", "desc": "64GB microSD — Cape-B write-blocked flight log",    "qty": 4, "mass_g": 1,  "cost_usd": 12}
     ],
     "bay_assignments": {
