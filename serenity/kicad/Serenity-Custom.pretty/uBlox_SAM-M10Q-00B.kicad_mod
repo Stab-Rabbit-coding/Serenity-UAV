@@ -1,0 +1,91 @@
+(footprint "uBlox_SAM-M10Q-00B"
+  (version 20240101)
+  (generator "pcbnew")
+  (generator_version "9.0")
+  (layer "F.Cu")
+  (descr "u-blox SAM-M10Q-00B GPS module, LCC-18, 9.6x9.6mm. Schematic pins 1-7 mapped to left-edge castellated pads.")
+  (tags "GPS GNSS u-blox SAM-M10Q LCC module")
+  (attr smd)
+
+  (fp_text reference "REF**"
+    (at 0 -5.8 0)
+    (layer "F.SilkS")
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
+  (fp_text value "SAM-M10Q-00B"
+    (at 0 5.8 0)
+    (layer "F.Fab")
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
+
+  (fp_rect
+    (start -4.8 -4.8)
+    (end 4.8 4.8)
+    (layer "F.CrtYd")
+    (stroke (width 0.05) (type solid))
+    (fill none)
+  )
+  (fp_rect
+    (start -4.8 -4.8)
+    (end 4.8 4.8)
+    (layer "F.Fab")
+    (stroke (width 0.1) (type solid))
+    (fill none)
+  )
+  (fp_rect
+    (start -4.55 -4.55)
+    (end 4.55 4.55)
+    (layer "F.SilkS")
+    (stroke (width 0.12) (type solid))
+    (fill none)
+  )
+
+  (fp_text user "${REFERENCE}"
+    (at 0 0 0)
+    (layer "F.Fab")
+    (effects (font (size 0.8 0.8) (thickness 0.12)))
+  )
+
+  (fp_line
+    (start -4.55 -4.55)
+    (end -3.55 -4.55)
+    (layer "F.SilkS")
+    (stroke (width 0.12) (type solid))
+  )
+
+  (pad "1" smd rect
+    (at -4.15 -3.9 0)
+    (size 1.5 1.0)
+    (layers "F.Cu" "F.Paste" "F.Mask")
+  )
+  (pad "2" smd rect
+    (at -4.15 -2.6 0)
+    (size 1.5 1.0)
+    (layers "F.Cu" "F.Paste" "F.Mask")
+  )
+  (pad "3" smd rect
+    (at -4.15 -1.3 0)
+    (size 1.5 1.0)
+    (layers "F.Cu" "F.Paste" "F.Mask")
+  )
+  (pad "4" smd rect
+    (at -4.15 0.0 0)
+    (size 1.5 1.0)
+    (layers "F.Cu" "F.Paste" "F.Mask")
+  )
+  (pad "5" smd rect
+    (at -4.15 1.3 0)
+    (size 1.5 1.0)
+    (layers "F.Cu" "F.Paste" "F.Mask")
+  )
+  (pad "6" smd rect
+    (at -4.15 2.6 0)
+    (size 1.5 1.0)
+    (layers "F.Cu" "F.Paste" "F.Mask")
+  )
+  (pad "7" smd rect
+    (at -4.15 3.9 0)
+    (size 1.5 1.0)
+    (layers "F.Cu" "F.Paste" "F.Mask")
+  )
+)

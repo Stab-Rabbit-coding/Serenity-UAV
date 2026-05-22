@@ -11,12 +11,21 @@ nacelle bore, joined into the same mesh that gets printed as the nacelle.
 
 Design layout (bore runs along Z; Z=0 is the aft / nozzle exit end):
   Nozzle / exit face    Z = 0
-  EDF2 (downstream)    Z = 5 .. 50 mm   (45 mm seat depth)
+  EDF2 (downstream)    Z = 5 .. 50 mm   (50mm EDF between stator and nozzle)
   Stator gap (clearance)Z = 50 .. 53 mm
   Stator fins           Z = 53 .. 73 mm  (STATOR_HEIGHT = 20 mm)
   Stator gap            Z = 73 .. 76 mm
   EDF1 (upstream)       Z = 76 .. 126 mm (50 mm including motor can)
   Intake bell           Z = 126 .. 148 mm
+
+Nozzle iris behavior:
+  - Ring is fixed to the nacelle shell at Z = NOZZLE_HINGE_Z.
+  - Internal rack teeth on the ring mate with a crown pinion on the
+    nacelle pivot linkage, so tilt motion drives the iris.
+  - When the nacelle is vertical, the ring is driven toward the OPEN
+    position; when horizontal, the ring is driven toward CLOSED.
+  - This keeps the dual 6S 50mm EDF exhaust path directed through the
+    nozzle bore without adding a separate hinged actuator.
 
 Counter-rotating EDF pairs — swirl direction is opposite per nacelle so
 torque reaction cancels across the airframe:
@@ -34,10 +43,21 @@ Outputs (files-hollowed-18in/):
   s_eng_right_stator_shell24.stl  — starboard nacelle, CCW stator fins
 """
 
-import bpy
-import bmesh
+try:
+    import bpy
+    import bmesh
+    running_in_blender = True
+except Exception:
+    bpy = None
+    bmesh = None
+    running_in_blender = False
 import os
 import math
+
+if not running_in_blender and __name__ == "__main__":
+    print("ERROR: 'bpy' is not available. Run this script inside Blender:")
+    print("  blender --background --python blender_nacelle_integrated_v1.py")
+    raise SystemExit(1)
 
 # ── tunables ─────────────────────────────────────────────────────────────────
 N_FINS         = 11
@@ -49,6 +69,17 @@ R_FIN_OUT      = 27.0      # mm — fin outer radius (just inside EDF casing)
 R_HUB_OUT      = 11.0      # mm — hub outer radius
 R_HUB_BORE     = 8.0       # mm — hub inner bore (wire routing)
 N_HUB_SEG      = 32        # polygon count for hub ring
+
+NOZZLE_HINGE_Z = 15.0      # mm from Z=0 (nozzle face) — fixed-ring attachment face
+NOZZLE_RING_OUTER_R = 31.0  # mm — ring outer radius at hinge
+NOZZLE_RING_INNER_R = 24.5  # mm — ring inner radius at hinge
+NOZZLE_RING_H = 6.0        # mm — ring axial height
+NOZZLE_RING_TEETH = 32      # internal rack teeth for passive crown pinion actuation
+NOZZLE_RING_RACK_DEPTH = 1.0
+NOZZLE_RING_RACK_WIDTH = 0.36
+NOZZLE_CUT_Z = 21.0         # mm — remove internal shell faces under the hinge region
+NOZZLE_CUT_R = 26.0         # mm — cut radius to clear the ring pocket while preserving outer hull (increased by 1mm diameter)
+NOZZLE_RING_BASE_FROM_NOZZLE = 4.5 * 25.4  # mm from nozzle face to the base of the new petals/ring
 
 # Nacelle bore centres (world-space X, Y; bore axis = Z)
 NACELLES = [
@@ -122,6 +153,100 @@ def add_hub_ring(bm, cx, cy, r_out, r_in, z_bot, z_top, n_seg):
         add_face(bm, [bi[i], ti[i], ti[j], bi[j]])   # inner wall (bore)
         add_face(bm, [bo[i], bi[i], bi[j], bo[j]])   # bottom annulus
         add_face(bm, [to[i], to[j], ti[j], ti[i]])   # top annulus
+
+
+def cut_nozzle_shell_region(obj, cx, cy, z_threshold, r_max, cut_above=False):
+    """Remove internal shell faces inside the nozzle ring pocket region.
+
+    If cut_above is False, delete faces with center Z <= z_threshold.
+    If cut_above is True, delete faces with center Z >= z_threshold.
+    """
+    bpy.context.view_layer.objects.active = obj
+    bpy.ops.object.mode_set(mode="EDIT")
+    bm = bmesh.from_edit_mesh(obj.data)
+    bm.faces.ensure_lookup_table()
+
+    r2 = r_max * r_max
+    to_delete = []
+    for face in bm.faces:
+        n = len(face.verts)
+        if n == 0:
+            continue
+        fc_z = sum(v.co.z for v in face.verts) / n
+        if (fc_z >= z_threshold if cut_above else fc_z <= z_threshold):
+            inside = False
+            for v in face.verts:
+                dx = v.co.x - cx
+                dy = v.co.y - cy
+                if dx * dx + dy * dy < r2:
+                    inside = True
+                    break
+            if inside:
+                to_delete.append(face)
+
+    bmesh.ops.delete(bm, geom=to_delete, context="FACES")
+    bmesh.update_edit_mesh(obj.data)
+    bpy.ops.object.mode_set(mode="OBJECT")
+    return len(to_delete)
+
+
+def make_nozzle_ring(name, cx, cy, outer_r, inner_r, axial_h,
+                     n_seg=128, rack_teeth=0, rack_depth=0.0,
+                     rack_width=0.4):
+    """Build a fixed nozzle ring with optional internal rack teeth."""
+    mesh = bpy.data.meshes.new(name + "_mesh")
+    bm   = bmesh.new()
+
+    if rack_teeth > 0:
+        n_seg = max(n_seg, rack_teeth * 8)
+
+    def inner_radius(angle):
+        if rack_teeth <= 0:
+            return inner_r
+        pitch = 2 * math.pi / rack_teeth
+        x = (angle % pitch) / pitch
+        if x < rack_width or x > 1.0 - rack_width:
+            return inner_r - rack_depth
+        return inner_r
+
+    angles = [2 * math.pi * i / n_seg for i in range(n_seg)]
+    bot_o = [bm.verts.new((cx + outer_r * math.cos(a),
+                          cy + outer_r * math.sin(a),
+                          NOZZLE_HINGE_Z))
+             for a in angles]
+    top_o = [bm.verts.new((cx + outer_r * math.cos(a),
+                          cy + outer_r * math.sin(a),
+                          NOZZLE_HINGE_Z + axial_h))
+             for a in angles]
+    bot_i = [bm.verts.new((cx + inner_radius(a) * math.cos(a),
+                          cy + inner_radius(a) * math.sin(a),
+                          NOZZLE_HINGE_Z))
+             for a in angles]
+    top_i = [bm.verts.new((cx + inner_radius(a) * math.cos(a),
+                          cy + inner_radius(a) * math.sin(a),
+                          NOZZLE_HINGE_Z + axial_h))
+             for a in angles]
+
+    def face(vlist):
+        try:
+            bm.faces.new(vlist)
+        except ValueError:
+            pass
+
+    for i in range(n_seg):
+        j = (i + 1) % n_seg
+        face([bot_o[i], bot_o[j], top_o[j], top_o[i]])     # outer wall
+        face([bot_i[i], top_i[i], top_i[j], bot_i[j]])     # inner wall
+        face([bot_o[i], bot_i[i], bot_i[j], bot_o[j]])     # bottom annulus
+        face([top_o[i], top_o[j], top_i[j], top_i[i]])     # top annulus
+
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.to_mesh(mesh)
+    bm.free()
+    mesh.update()
+    obj = bpy.data.objects.new(name, mesh)
+    bpy.context.collection.objects.link(obj)
+    return obj
 
 
 def add_fin(bm, cx, cy, phi_center, r_hub, r_out, z_bot, h,
@@ -222,16 +347,40 @@ for cfg in NACELLES:
     nacelle.name = "nacelle_shell"
     bb = nacelle.bound_box
     zs = [v[2] for v in bb]
-    print(f"  Shell Z range: {min(zs):.1f}..{max(zs):.1f} mm  "
-          f"(bore axis = Z, nozzle face = Z=0)")
+    shell_min_z = min(zs)
+    shell_max_z = max(zs)
+    print(f"  Shell Z range: {shell_min_z:.1f}..{shell_max_z:.1f} mm  "
+          f"(bore axis = Z, intake = Z=0, exhaust = Z={shell_max_z:.1f})")
 
-    # Build stator mesh at bore centre
+    ring_bottom_z = shell_max_z - 2 * NOZZLE_HINGE_Z
+    removed_faces = cut_nozzle_shell_region(nacelle,
+                                           cfg["bore_cx"], cfg["bore_cy"],
+                                           ring_bottom_z, NOZZLE_CUT_R,
+                                           cut_above=True)
+    print(f"  Removed {removed_faces} internal faces to clear nozzle ring pocket at Z>={ring_bottom_z:.1f}")
+
+    # Build stator mesh at bore centre and mirror it into the shell's actual intake-to-exhaust Z axis.
     stator_mesh = build_stator_mesh(cfg["bore_cx"], cfg["bore_cy"], cfg["swirl"])
     stator_obj  = bpy.data.objects.new("stator_fins", stator_mesh)
+    stator_obj.location.z = shell_max_z - (STATOR_BOT + STATOR_TOP)
     bpy.context.collection.objects.link(stator_obj)
 
-    # Join nacelle shell + stator into one printable object
-    combined = join_objects([nacelle, stator_obj])
+    nozzle_ring = make_nozzle_ring("nozzle_ring",
+                                   cfg["bore_cx"], cfg["bore_cy"],
+                                   NOZZLE_RING_OUTER_R, NOZZLE_RING_INNER_R,
+                                   NOZZLE_RING_H,
+                                   n_seg = N_HUB_SEG,
+                                   rack_teeth = NOZZLE_RING_TEETH,
+                                   rack_depth = NOZZLE_RING_RACK_DEPTH,
+                                   rack_width = NOZZLE_RING_RACK_WIDTH)
+    nozzle_ring.location.z = shell_max_z - 2 * NOZZLE_HINGE_Z
+    print(f"  Added nozzle ring with internal rack: {NOZZLE_RING_TEETH} teeth, "
+          f"{NOZZLE_RING_RACK_DEPTH:.1f}mm depth")
+    print("  Nozzle iris is sized for the dual 50mm EDF path and is intended "
+          "to open with vertical nacelle tilt and close with horizontal tilt.")
+
+    # Join nacelle shell + stator + nozzle ring into one printable object
+    combined = join_objects([nacelle, stator_obj, nozzle_ring])
     combined.name = cfg["out_stl"].replace(".stl", "")
 
     export_stl(combined, out_path)
