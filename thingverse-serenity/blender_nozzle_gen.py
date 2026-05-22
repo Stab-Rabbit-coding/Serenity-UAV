@@ -40,21 +40,38 @@ HULL CROSS-SECTION DATA (from blender_nozzle_gen.py analysis of shell24 files):
     Section centroid in YZ   = (−117, 36) mm  →  treat as (0,0) in nozzle local frame
 """
 
-import bpy
-import bmesh
+try:
+    import bpy
+    import bmesh
+    running_in_blender = True
+except Exception:
+    bpy = None
+    bmesh = None
+    running_in_blender = False
 import os
 import math
 
-# ── tunables ─────────────────────────────────────────────────────────────────
-N_PETALS     = 8          # iris petals per nozzle (8 replicates the show look)
-OVERLAP_DEG  = 3.0        # each petal spans 360/N + overlap (for sealing)
-N_PROFILE_Z  = 6          # radial profile subdivisions along petal length
-N_ANGLE      = 8          # angular subdivisions per petal
+if not running_in_blender and __name__ == "__main__":
+    print("ERROR: 'bpy' is not available. Run this script inside Blender:")
+    print("  blender --background --python blender_nozzle_gen.py")
+    raise SystemExit(1)
 
-HINGE_DIA_MM = 3.0        # hinge pin through-hole diameter
-HINGE_WALL   = 1.5        # wall around hinge pin
+# ── tunables ─────────────────────────────────────────────────────────────────
+N_PETALS         = 8          # iris petals per nozzle (8 replicates the show look)
+OVERLAP_DEG      = 3.0        # each petal spans 360/N + overlap (for sealing)
+N_PROFILE_Z      = 6          # radial profile subdivisions along petal length
+N_ANGLE          = 8          # angular subdivisions per petal
+
+HINGE_DIA_MM     = 3.0        # hinge pin through-hole diameter
+HINGE_WALL       = 1.5        # wall around hinge pin
+NAC_RING_TEETH   = 32         # inner ring rack teeth count for passive crown pinion actuation
+NAC_RING_RACK_DEPTH = 1.0     # tooth depth on inner ring wall (mm)
+NAC_RING_RACK_WIDTH = 0.36    # tooth width fraction of one pitch
 
 # ── nacelle nozzle parameters (50 mm EDF, Z-axis, Z=0 exit) ─────────────────
+# This nozzle is designed for a 50mm EDF installed between the stator and
+# the petal/hinge assembly; the downstream EDF span occupies the bore
+# upstream of the nozzle ring and the stator begins further upstream.
 NAC_EDF_R    = 25.0       # EDF fan radius (50 mm / 2)
 NAC_HINGE_Z  = 15.0       # z of hinge (where petal meets fixed ring)
 NAC_TIP_Z    = 0.0        # z of petal tip (hull exit face)
@@ -231,47 +248,63 @@ def make_petal(name, n_petals, outer_profile, inner_profile,
         face([outer_verts[iz][ia], inner_verts[iz][ia],
               inner_verts[iz][ia + 1], outer_verts[iz][ia + 1]])
 
-    # ── hinge lug: a small rectangular tab at hinge_z for the pin hole ──────
-    #   extends radially outward by HINGE_WALL*2 beyond outer_r at hinge
-    r_hinge = lerp_profile(outer_profile, hinge_z)
-    lug_r   = r_hinge + HINGE_WALL * 2
-    lug_h   = HINGE_WALL * 3   # tab axial height above hinge face
-    for ia in range(n_angle_sub - 1):
-        a_mid = (a_values[ia] + a_values[ia + 1]) / 2
-    # just add the lug at petal centre angle (θ=0)
-    a_mid = 0.0
-    lug_half_a = math.radians(span_deg / 4)  # half the petal span for lug width
+    # ── hinge lug: a functional tab at hinge_z for a 3 mm pivot pin ───────
+    # The lug includes a through-hole so the petal can pivot on a real pin.
+    r_hinge  = lerp_profile(outer_profile, hinge_z)
+    lug_r    = r_hinge + HINGE_WALL * 2
+    lug_h    = HINGE_WALL * 3   # tab axial height above hinge face
+    hole_r   = HINGE_DIA_MM / 2.0
+    hole_cx  = r_hinge + HINGE_WALL
+    hole_off = hole_r
+    lug_half_a = math.radians(span_deg / 4)
 
-    lug_verts = [
-        bm.verts.new((r_hinge * math.cos(a_mid - lug_half_a),
-                       r_hinge * math.sin(a_mid - lug_half_a), hinge_z)),
-        bm.verts.new((r_hinge * math.cos(a_mid + lug_half_a),
-                       r_hinge * math.sin(a_mid + lug_half_a), hinge_z)),
-        bm.verts.new((lug_r   * math.cos(a_mid + lug_half_a),
-                       lug_r   * math.sin(a_mid + lug_half_a), hinge_z)),
-        bm.verts.new((lug_r   * math.cos(a_mid - lug_half_a),
-                       lug_r   * math.sin(a_mid - lug_half_a), hinge_z)),
-        bm.verts.new((r_hinge * math.cos(a_mid - lug_half_a),
-                       r_hinge * math.sin(a_mid - lug_half_a), hinge_z + lug_h)),
-        bm.verts.new((r_hinge * math.cos(a_mid + lug_half_a),
-                       r_hinge * math.sin(a_mid + lug_half_a), hinge_z + lug_h)),
-        bm.verts.new((lug_r   * math.cos(a_mid + lug_half_a),
-                       lug_r   * math.sin(a_mid + lug_half_a), hinge_z + lug_h)),
-        bm.verts.new((lug_r   * math.cos(a_mid - lug_half_a),
-                       lug_r   * math.sin(a_mid - lug_half_a), hinge_z + lug_h)),
-    ]
-    # lug faces (box)
-    face([lug_verts[0], lug_verts[1], lug_verts[2], lug_verts[3]])  # bottom
-    face([lug_verts[4], lug_verts[7], lug_verts[6], lug_verts[5]])  # top
-    face([lug_verts[0], lug_verts[4], lug_verts[5], lug_verts[1]])  # inner
-    face([lug_verts[2], lug_verts[6], lug_verts[7], lug_verts[3]])  # outer
-    face([lug_verts[0], lug_verts[3], lug_verts[7], lug_verts[4]])  # side-
-    face([lug_verts[1], lug_verts[5], lug_verts[6], lug_verts[2]])  # side+
+    # outer lug corners at bottom and top
+    o0 = bm.verts.new((r_hinge * math.cos(-lug_half_a),
+                       r_hinge * math.sin(-lug_half_a), hinge_z))
+    o1 = bm.verts.new((r_hinge * math.cos(+lug_half_a),
+                       r_hinge * math.sin(+lug_half_a), hinge_z))
+    o2 = bm.verts.new((lug_r   * math.cos(+lug_half_a),
+                       lug_r   * math.sin(+lug_half_a), hinge_z))
+    o3 = bm.verts.new((lug_r   * math.cos(-lug_half_a),
+                       lug_r   * math.sin(-lug_half_a), hinge_z))
+    o4 = bm.verts.new((r_hinge * math.cos(-lug_half_a),
+                       r_hinge * math.sin(-lug_half_a), hinge_z + lug_h))
+    o5 = bm.verts.new((r_hinge * math.cos(+lug_half_a),
+                       r_hinge * math.sin(+lug_half_a), hinge_z + lug_h))
+    o6 = bm.verts.new((lug_r   * math.cos(+lug_half_a),
+                       lug_r   * math.sin(+lug_half_a), hinge_z + lug_h))
+    o7 = bm.verts.new((lug_r   * math.cos(-lug_half_a),
+                       lug_r   * math.sin(-lug_half_a), hinge_z + lug_h))
 
-    # drill hinge pin hole through lug (approximate with vertex deletion note)
-    # Full hole requires boolean; left as a pilot mark 1.5mm radius for printing:
-    # (Blender boolean on non-manifold is unreliable; user can drill post-print
-    #  or use a 3mm pin pushed through before the PLA sets, or add FDM bridge hole)
+    # square through-hole corners around the hinge pin center
+    ih0 = bm.verts.new((hole_cx - hole_off, -hole_off, hinge_z))
+    ih1 = bm.verts.new((hole_cx + hole_off, -hole_off, hinge_z))
+    ih2 = bm.verts.new((hole_cx + hole_off, +hole_off, hinge_z))
+    ih3 = bm.verts.new((hole_cx - hole_off, +hole_off, hinge_z))
+    ih4 = bm.verts.new((hole_cx - hole_off, -hole_off, hinge_z + lug_h))
+    ih5 = bm.verts.new((hole_cx + hole_off, -hole_off, hinge_z + lug_h))
+    ih6 = bm.verts.new((hole_cx + hole_off, +hole_off, hinge_z + lug_h))
+    ih7 = bm.verts.new((hole_cx - hole_off, +hole_off, hinge_z + lug_h))
+
+    # bottom & top frame faces with a functional pin hole opening
+    face([o0, o1, ih1, ih0])
+    face([o1, o2, ih2, ih1])
+    face([o2, o3, ih3, ih2])
+    face([o3, o0, ih0, ih3])
+    face([o4, o7, ih7, ih4])
+    face([o5, o4, ih4, ih5])
+    face([o6, o5, ih5, ih6])
+    face([o7, o6, ih6, ih7])
+
+    # outer and inner vertical faces
+    face([o0, o4, o5, o1])  # inner side
+    face([o1, o5, o6, o2])  # outer side
+    face([o2, o6, o7, o3])  # outer back
+    face([o3, o7, o4, o0])  # inner back
+    face([ih0, ih1, ih5, ih4])  # hole side 1
+    face([ih1, ih2, ih6, ih5])  # hole side 2
+    face([ih2, ih3, ih7, ih6])  # hole side 3
+    face([ih3, ih0, ih4, ih7])  # hole side 4
 
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     bm.to_mesh(mesh)
@@ -284,14 +317,30 @@ def make_petal(name, n_petals, outer_profile, inner_profile,
 
 
 def make_base_ring(name, outer_r, inner_r, axial_h, n_seg=64,
-                   hinge_lugs=8):
+                   hinge_lugs=8, rack_teeth=0, rack_depth=0.0,
+                   rack_width=0.4):
     """
     Fixed base ring that the petals hinge from.
     outer_r / inner_r: ring radii, axial_h: ring height.
-    Adds N evenly-spaced hinge lug notches on the outer rim.
+    The outer ring is sized to accept the petal hinge lug tabs, and the
+    optional inner rack profile mates with a crown pinion for tilt-actuated
+    iris motion.
     """
+    if rack_teeth > 0:
+        n_seg = max(n_seg, rack_teeth * 8)
+
     mesh = bpy.data.meshes.new(name + "_mesh")
     bm   = bmesh.new()
+
+    def inner_radius(angle):
+        if rack_teeth <= 0:
+            return inner_r
+        pitch = 2 * math.pi / rack_teeth
+        x = (angle % pitch) / pitch
+        # rectangular tooth approximated on the inner wall
+        if x < rack_width or x > 1.0 - rack_width:
+            return inner_r - rack_depth
+        return inner_r
 
     angles = [2 * math.pi * i / n_seg for i in range(n_seg)]
 
@@ -299,9 +348,11 @@ def make_base_ring(name, outer_r, inner_r, axial_h, n_seg=64,
              for a in angles]
     top_o = [bm.verts.new((outer_r * math.cos(a), outer_r * math.sin(a), axial_h))
              for a in angles]
-    bot_i = [bm.verts.new((inner_r * math.cos(a), inner_r * math.sin(a), 0.0))
+    bot_i = [bm.verts.new((inner_radius(a) * math.cos(a),
+                          inner_radius(a) * math.sin(a), 0.0))
              for a in angles]
-    top_i = [bm.verts.new((inner_r * math.cos(a), inner_r * math.sin(a), axial_h))
+    top_i = [bm.verts.new((inner_radius(a) * math.cos(a),
+                          inner_radius(a) * math.sin(a), axial_h))
              for a in angles]
 
     def face(vlist):
@@ -495,6 +546,10 @@ def assemble_closed(petal_obj, n_petals, out_path):
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # NACELLE NOZZLE  (50 mm ID, Z-axis, 8 petals × 4 nacelles = 32 total)
+# This assembly is sized for the dual 6S 50mm EDF stack and delivers its
+# exhaust through a pivot-actuated iris.  The petals hinge at the outer ring
+# while the ring carries an internal rack for crown pinion drive from the
+# nacelle tilt mechanism.
 # ═══════════════════════════════════════════════════════════════════════════════
 print("\n=== Nacelle nozzle (50 mm ID) ===")
 clear_scene()
@@ -512,10 +567,13 @@ nac_petal = make_petal(
 )
 
 nac_ring = make_base_ring(
-    name    = "nacelle_ring",
-    outer_r = lerp_profile(NAC_OUTER_PROFILE, NAC_HINGE_Z) + HINGE_WALL * 2,
-    inner_r = lerp_profile(NAC_INNER_PROFILE, NAC_HINGE_Z) - 0.5,
-    axial_h = HINGE_WALL * 4,
+    name      = "nacelle_ring",
+    outer_r   = lerp_profile(NAC_OUTER_PROFILE, NAC_HINGE_Z) + HINGE_WALL * 2,
+    inner_r   = lerp_profile(NAC_INNER_PROFILE, NAC_HINGE_Z) - 0.5,
+    axial_h   = HINGE_WALL * 4,
+    rack_teeth = NAC_RING_TEETH,
+    rack_depth = NAC_RING_RACK_DEPTH,
+    rack_width = NAC_RING_RACK_WIDTH,
 )
 
 petal_path = os.path.join(OUT, "nacelle_nozzle_petal.stl")
@@ -527,7 +585,7 @@ print(f"  → nacelle_nozzle_petal.stl  ({os.path.getsize(petal_path)//1024} KB)
       f"  print × {N_PETALS} per nacelle × 4 nacelles = {N_PETALS*4} total")
 export_stl(nac_ring, ring_path)
 print(f"  → nacelle_nozzle_ring.stl   ({os.path.getsize(ring_path)//1024} KB)"
-      f"  print × 4 (one per nacelle)")
+      f"  print × 4 (one per nacelle, inner rack teeth {NAC_RING_TEETH} × {NAC_RING_RACK_DEPTH:.1f}mm) ")
 
 assemble_closed(nac_petal, N_PETALS, asm_path)
 
