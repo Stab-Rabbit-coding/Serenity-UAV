@@ -1,25 +1,28 @@
 """
-blender_nacelle_integrated_v1.py  —  run with:
-    blender --background --python blender_nacelle_integrated_v1.py
+blender_nacelle_integrated_v2.py  —  run with:
+    blender --background --python blender_nacelle_integrated_v2.py
 
 Rev N: integrated-stator nacelle shells for the Serenity-UAV 24" design.
+Uses the 1.25× uniformly scaled 50mm EDF shells (s_eng_*_shell24_50mm.stl)
+that were scaled from the original 24" nacelles to accommodate the 50mm EDF bore.
 
 Generates two nacelle shells with 11-fin twisted inter-stage stators built
 directly into the bore, replacing the separate press-fit stator_50mm.stl.
 The fins are solid geometry added at Z=STATOR_BOT..Z=STATOR_TOP inside each
 nacelle bore, joined into the same mesh that gets printed as the nacelle.
 
-Design layout (bore runs along Z; Z=0 is the intake face, Z≈148 is the exhaust/nozzle exit):
-  Intake bell           Z =   0 ..  22 mm
-  EDF1 (upstream)       Z =  22 ..  72 mm  (50 mm EDF, motor at intake end)
-  Stator gap            Z =  72 ..  75 mm
-  Stator fins           Z =  75 ..  95 mm  (STATOR_HEIGHT = 20 mm)
-  Stator gap            Z =  95 ..  98 mm
-  EDF2 (downstream)     Z =  98 .. 143 mm  (50 mm EDF, motor at stator end)
-  Nozzle exit face      Z ≈ 143 .. 148 mm  (iris ring + petal region)
+Design layout (bore runs along Z; Z=0 is the intake face, Z≈185 is exhaust):
+All positions shown at 1× reference scale; runtime axial_scale ≈ 1.25 for 50mm shells.
+  Intake bell           Z =   0 ..  22 mm  (→  0 ..  27.5 mm at 1.25×)
+  EDF1 (upstream)       Z =  22 ..  72 mm  (→ 27.5 ..  90.0 mm at 1.25×)
+  Stator gap            Z =  72 ..  75 mm  (→ 90.0 ..  93.75 mm at 1.25×)
+  Stator fins           Z =  75 ..  95 mm  (→ 93.75 .. 118.75 mm at 1.25×)
+  Stator gap            Z =  95 ..  98 mm  (→ 118.75 .. 122.5 mm at 1.25×)
+  EDF2 (downstream)     Z =  98 .. 143 mm  (→ 122.5 .. 178.75 mm at 1.25×)
+  Nozzle exit face      Z ≈ 143 .. 148 mm  (→ 178.75 .. 185.35 mm at 1.25×)
 
 Nozzle iris behavior:
-  - Ring is fixed to the nacelle shell at Z = NOZZLE_HINGE_Z.
+  - Ring is fixed to the nacelle shell at Z = NOZZLE_HINGE_Z (scaled).
   - Internal rack teeth on the ring mate with a crown pinion on the
     nacelle pivot linkage, so tilt motion drives the iris.
   - When the nacelle is vertical, the ring is driven toward the OPEN
@@ -32,15 +35,19 @@ torque reaction cancels across the airframe:
   Port  (left)  nacelle: EDFs rotate CW viewed from intake → SWIRL_DIR = +1
   Starboard (right) nacelle: EDFs rotate CCW from intake   → SWIRL_DIR = −1
 
-Nacelle bore geometry (measured from s_eng_*_shell24.stl at 24" scale):
-  Left bore centre:  X = 34.2, Y = −152.5  (Z axis is bore axis)
-  Right bore centre: X = 124.0, Y = −152.5
-  Bore inscribed ID ≈ 55.5 mm (X), 62 mm (Y) — treats bore as 55 mm nominal
-  EDF casing OD = 55 mm → R_FIN_OUT = 27.0 mm (0.5 mm inside EDF casing)
+Fold mechanism (piv_outer, piv_pins, pistons) ELIMINATED — structural weak point.
+Nacelle pivot is a single-axis X-axis tilt clevis at the inboard (−Y) face.
+Hinge pin = spanwise CF spar, bearing = F688ZZ (8mm ID × 16mm OD × 5mm wide).
+
+Nacelle bore geometry (measured from s_eng_*_shell24_50mm.stl at 1.25× scale):
+  Left bore centre:  X = 42.75, Y = −190.625  (Z axis is bore axis)
+  Right bore centre: X = 155.0, Y = −190.625
+  Shell Z range: 0..185.35 mm  (REF_SHELL_LENGTH = 148.3 mm → axial_scale ≈ 1.25)
+  EDF casing OD = 55 mm → bore inner radius R_FIN_OUT = 25.0 mm (50mm ID bore)
 
 Outputs (files-hollowed-18in/):
-  s_eng_left_stator_shell24.stl   — port nacelle, CW stator fins
-  s_eng_right_stator_shell24.stl  — starboard nacelle, CCW stator fins
+  s_eng_left_stator_shell24_50mm.stl   — port nacelle, CW stator fins
+  s_eng_right_stator_shell24_50mm.stl  — starboard nacelle, CCW stator fins
 """
 
 try:
@@ -64,7 +71,7 @@ if not running_in_blender and __name__ == "__main__":
 
 # ── tunables ─────────────────────────────────────────────────────────────────
 N_FINS         = 11
-STATOR_BOT     = 53.0      # mm from Z=0 (nozzle face) — bottom of stator
+STATOR_BOT     = 75.0      # mm from Z=0 (intake face) — bottom of stator at 1× scale world Z
 STATOR_HEIGHT  = 20.0      # mm axial extent of stator
 FIN_THICKNESS  = 2.0       # mm tangential thickness of each fin
 VANE_ANGLE_DEG = 33.0      # degrees from axial — matches 50mm 6S EDF tip swirl
@@ -91,32 +98,39 @@ WIRE_GUIDE_WIDTH = 3.0
 WIRE_GUIDE_THICKNESS = 2.0
 WIRE_GUIDE_LENGTH = 20.0
 
-PIVOT_Z_FROM_INTAKE = 74.0   # mm — pivot boss axial center (nacelle aerodynamic CG)
-PIVOT_BOSS_Y_OFFSET = 27.5   # mm — boss center radial distance from bore axis (+Y toward wing)
-PIVOT_BOSS_OD = 16.0         # mm — bearing seat OD (fits 686ZZ or MR128 bearing)
-PIVOT_BOSS_ID = 6.0          # mm — spar/pin through-bore ID
-PIVOT_BOSS_HALF_LEN = 12.0   # mm — boss half-length along X (spanwise)
+PIVOT_Z_FROM_INTAKE  = 74.0   # mm — clevis axial centre at 1× reference scale (scaled × axial_scale)
+CLEVIS_ARM_SLOT      = 16.0   # mm — slot width between ears; arm width must be ≤15mm with 0.5mm clearance
+CLEVIS_EAR_THICK     = 10.0   # mm — X-direction thickness of each ear (F688ZZ is 5mm wide → 2.5mm each side)
+CLEVIS_EAR_OD        = 26.0   # mm — ear outer diameter (F688ZZ OD=16mm + 2×5mm CF-PETG housing wall)
+CLEVIS_PIN_D         = 8.0    # mm — F688ZZ bearing ID; hinge-pin = CF spar through-bore
+CLEVIS_Y_FROM_BORE   = -41.9  # mm — ear centre Y offset from bore_cy (negative → inboard −Y skin)
 
 INLET_BELL_Z_THROAT = 22.0   # mm — inlet bell joins thrust tube here (= EDF1 entry face)
 INLET_BELL_FLARE    = 3.0    # mm — extra radius at intake lip vs bore radius
 THRUST_TUBE_WALL    = 2.5    # mm — thrust tube wall thickness (OD = 50 + 5 = 55mm = EDF casing OD)
 
+# Reference axial length used when the axial placement constants were tuned.
+# If the imported shell is longer/shorter, we'll scale axial placements
+# by `axial_scale = shell_max_z / REF_SHELL_LENGTH` so features keep
+# their relative positions while the thrust tube ID remains 50mm.
+REF_SHELL_LENGTH = 148.3
+
 # Nacelle bore centres (world-space X, Y; bore axis = Z)
 NACELLES = [
     {
-        "in_stl":  "s_eng_left_shell24.stl",
-        "out_stl": "s_eng_left_stator_shell24.stl",
-        "bore_cx": 34.2,
-        "bore_cy": -152.5,
-        "swirl":   +1,      # CW viewed from intake (port nacelle)
+        "in_stl":  "s_eng_left_shell24_50mm.stl",
+        "out_stl": "s_eng_left_stator_shell24_50mm.stl",
+        "bore_cx": 42.75,       # X bore centre at 1.25× scale (fallback if compute_bore_center fails)
+        "bore_cy": -190.625,    # Y bore centre at 1.25× scale
+        "swirl":   +1,          # CW viewed from intake (port nacelle)
         "label":   "PORT (left), CW stator",
     },
     {
-        "in_stl":  "s_eng_right_shell24.stl",
-        "out_stl": "s_eng_right_stator_shell24.stl",
-        "bore_cx": 124.0,
-        "bore_cy": -152.5,
-        "swirl":   -1,      # CCW viewed from intake (starboard nacelle)
+        "in_stl":  "s_eng_right_shell24_50mm.stl",
+        "out_stl": "s_eng_right_stator_shell24_50mm.stl",
+        "bore_cx": 155.0,       # X bore centre at 1.25× scale
+        "bore_cy": -190.625,    # Y bore centre at 1.25× scale
+        "swirl":   -1,          # CCW viewed from intake (starboard nacelle)
         "label":   "STARBOARD (right), CCW stator",
     },
 ]
@@ -129,6 +143,17 @@ OUT_DIR = IN_DIR
 STATOR_TOP = STATOR_BOT + STATOR_HEIGHT
 VANE_A     = math.radians(VANE_ANGLE_DEG)
 T_HALF     = FIN_THICKNESS / 2
+
+# Keep originals so per-nacelle scaling doesn't mutate module globals.
+ORIG_STATOR_BOT = STATOR_BOT
+ORIG_STATOR_HEIGHT = STATOR_HEIGHT
+ORIG_NOZZLE_HINGE_Z = NOZZLE_HINGE_Z
+ORIG_NOZZLE_RING_FROM_EXHAUST = NOZZLE_RING_FROM_EXHAUST
+ORIG_AFT_MOTOR_MOUNT_FROM_INTAKE = AFT_MOTOR_MOUNT_FROM_INTAKE
+ORIG_FRONT_MOTOR_MOUNT_FROM_INTAKE = FRONT_MOTOR_MOUNT_FROM_INTAKE
+ORIG_PIVOT_Z_FROM_INTAKE = PIVOT_Z_FROM_INTAKE
+ORIG_INLET_BELL_Z_THROAT = INLET_BELL_Z_THROAT
+ORIG_OLD_PETAL_FROM_INTAKE = OLD_PETAL_FROM_INTAKE
 
 
 def clear_scene():
@@ -265,19 +290,19 @@ def make_nozzle_ring(name, cx, cy, outer_r, inner_r, axial_h,
     angles = [2 * math.pi * i / n_seg for i in range(n_seg)]
     bot_o = [bm.verts.new((cx + outer_r * math.cos(a),
                           cy + outer_r * math.sin(a),
-                          NOZZLE_HINGE_Z))
+                          0.0))
              for a in angles]
     top_o = [bm.verts.new((cx + outer_r * math.cos(a),
                           cy + outer_r * math.sin(a),
-                          NOZZLE_HINGE_Z + axial_h))
+                          axial_h))
              for a in angles]
     bot_i = [bm.verts.new((cx + inner_radius(a) * math.cos(a),
                           cy + inner_radius(a) * math.sin(a),
-                          NOZZLE_HINGE_Z))
+                          0.0))
              for a in angles]
     top_i = [bm.verts.new((cx + inner_radius(a) * math.cos(a),
                           cy + inner_radius(a) * math.sin(a),
-                          NOZZLE_HINGE_Z + axial_h))
+                          axial_h))
              for a in angles]
 
     def face(vlist):
@@ -458,40 +483,49 @@ def make_inlet_bell(name, cx, cy, z_entry, z_throat,
     return obj
 
 
-def make_pivot_boss(name, cx, cy, z_center,
-                    y_offset=PIVOT_BOSS_Y_OFFSET,
-                    boss_od=PIVOT_BOSS_OD, boss_id=PIVOT_BOSS_ID,
-                    half_len=PIVOT_BOSS_HALF_LEN, n_seg=32):
-    """Spanwise pivot bearing boss for nacelle tilt hinge.
+def make_clevis_extension(name, bore_cx, bore_cy, z_center,
+                          arm_slot=CLEVIS_ARM_SLOT, ear_thick=CLEVIS_EAR_THICK,
+                          ear_od=CLEVIS_EAR_OD, y_from_bore=CLEVIS_Y_FROM_BORE,
+                          pin_d=CLEVIS_PIN_D, n_seg=32):
+    """Two-eared X-axis tilt clevis at nacelle inboard (−Y) face.
 
-    Boss axis runs along X (spanwise).  Outer cylinder = bearing seat;
-    central bore = spar / hinge-pin through-bore.  Boss is centred at
-    (cx, cy+y_offset, z_center) so it protrudes from the nacelle exterior
-    toward the wing spar.
+    Pivot axis = X (spanwise).  Each ear is an annular tube (F688ZZ bearing bore)
+    with axis along X.  The arm_slot gap between the ears receives the rigid wing
+    arm.  y_from_bore is negative so the clevis protrudes toward the wing root,
+    not into the thrust stream.  Pin through-bore = F688ZZ ID (8mm).
+
+    Fold mechanism (piv_outer, piv_pins, pistons) ELIMINATED.  Single tilt axis only.
+
+    Layout in X around bore_cx:
+      Left ear:   X ∈ [bore_cx − arm_slot/2 − ear_thick, bore_cx − arm_slot/2]
+      Slot:       X ∈ [bore_cx − arm_slot/2, bore_cx + arm_slot/2]  (arm inserts here)
+      Right ear:  X ∈ [bore_cx + arm_slot/2, bore_cx + arm_slot/2 + ear_thick]
     """
     mesh = bpy.data.meshes.new(name + "_mesh")
     bm   = bmesh.new()
-    r_out = boss_od / 2
-    r_in  = boss_id / 2
-    bcy   = cy + y_offset
-    angles = [2 * math.pi * i / n_seg for i in range(n_seg)]
+    r_out     = ear_od / 2.0
+    r_in      = pin_d / 2.0
+    ey        = bore_cy + y_from_bore   # ear centre Y
+    ez        = z_center                # ear centre Z
+    half_slot = arm_slot / 2.0
 
-    def ring(x_offset, r):
-        return [bm.verts.new((cx + x_offset,
-                              bcy + r * math.cos(a),
-                              z_center + r * math.sin(a))) for a in angles]
+    # Build two ears — each is a short hollow cylinder (axis = X).
+    for x_near, x_far in [
+        (bore_cx - half_slot - ear_thick, bore_cx - half_slot),   # left ear
+        (bore_cx + half_slot,             bore_cx + half_slot + ear_thick),  # right ear
+    ]:
+        angles = [2.0 * math.pi * i / n_seg for i in range(n_seg)]
+        near_o = [bm.verts.new((x_near, ey + r_out * math.cos(a), ez + r_out * math.sin(a))) for a in angles]
+        far_o  = [bm.verts.new((x_far,  ey + r_out * math.cos(a), ez + r_out * math.sin(a))) for a in angles]
+        near_i = [bm.verts.new((x_near, ey + r_in  * math.cos(a), ez + r_in  * math.sin(a))) for a in angles]
+        far_i  = [bm.verts.new((x_far,  ey + r_in  * math.cos(a), ez + r_in  * math.sin(a))) for a in angles]
 
-    lo = ring(-half_len, r_out)
-    ro = ring(+half_len, r_out)
-    li = ring(-half_len, r_in)
-    ri = ring(+half_len, r_in)
-
-    for i in range(n_seg):
-        j = (i + 1) % n_seg
-        add_face(bm, [lo[i], lo[j], ro[j], ro[i]])   # outer wall
-        add_face(bm, [li[i], ri[i], ri[j], li[j]])   # inner bore wall
-        add_face(bm, [lo[i], li[i], li[j], lo[j]])   # left cap annulus
-        add_face(bm, [ro[i], ro[j], ri[j], ri[i]])   # right cap annulus
+        for i in range(n_seg):
+            j = (i + 1) % n_seg
+            add_face(bm, [near_o[i], near_o[j], far_o[j],  far_o[i]])   # outer wall
+            add_face(bm, [near_i[i], far_i[i],  far_i[j],  near_i[j]])  # inner bore wall
+            add_face(bm, [near_o[i], near_i[i], near_i[j], near_o[j]])  # near cap annulus
+            add_face(bm, [far_o[i],  far_o[j],  far_i[j],  far_i[i]])   # far cap annulus
 
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     bm.to_mesh(mesh)
@@ -544,28 +578,34 @@ def add_fin(bm, cx, cy, phi_center, r_hub, r_out, z_bot, h,
     add_face(bm, [tl_h_t, tl_o_t, ld_o_t, ld_h_t])  # top (EDF1 side)
 
 
-def build_stator_mesh(cx, cy, swirl_dir):
-    """Return a new Blender mesh containing the stator fins + hub ring."""
+def build_stator_mesh(cx, cy, swirl_dir, height=None):
+    """Return a new Blender mesh containing the stator fins + hub ring.
+
+    The mesh is generated with Z in the range 0..height so it can be
+    translated into place via the object's `location.z` property.
+    """
+    if height is None:
+        height = STATOR_HEIGHT
     mesh = bpy.data.meshes.new("stator_integrated")
     bm   = bmesh.new()
 
-    # Hub ring (cable routing passage)
+    # Hub ring (cable routing passage) — generated from z=0..height
     add_hub_ring(bm, cx, cy,
                  r_out = R_HUB_OUT,
                  r_in  = R_HUB_BORE,
-                 z_bot = STATOR_BOT,
-                 z_top = STATOR_TOP,
+                 z_bot = 0.0,
+                 z_top = height,
                  n_seg = N_HUB_SEG)
 
-    # 11 twisted fins
+    # twisted fins placed between z=0..height
     for i in range(N_FINS):
         phi = 2 * math.pi * i / N_FINS
         add_fin(bm, cx, cy,
                 phi_center = phi,
                 r_hub      = R_HUB_OUT,
                 r_out      = R_FIN_OUT,
-                z_bot      = STATOR_BOT,
-                h          = STATOR_HEIGHT,
+                z_bot      = 0.0,
+                h          = height,
                 t_half     = T_HALF,
                 vane_angle = VANE_A,
                 swirl_dir  = swirl_dir)
@@ -605,101 +645,189 @@ for cfg in NACELLES:
     print(f"  Shell Z range: {shell_min_z:.1f}..{shell_max_z:.1f} mm  "
           f"(bore axis = Z, intake = Z=0, exhaust = Z={shell_max_z:.1f})")
 
+    # If the shell geometry has been uniformly scaled (e.g. to fit 50mm EDFs),
+    # compute an axial scale factor and derive per-nacelle scaled placement
+    # variables (don't mutate module-level constants so the second nacelle
+    # processed doesn't get double-scaled).
+    axial_scale = shell_max_z / REF_SHELL_LENGTH if REF_SHELL_LENGTH > 0 else 1.0
+    if abs(axial_scale - 1.0) > 0.001:
+        print(f"  Axial scale factor: {axial_scale:.3f} (ref {REF_SHELL_LENGTH} mm)")
+    # scaled local placement values
+    sbot = ORIG_STATOR_BOT * axial_scale
+    sheight = ORIG_STATOR_HEIGHT * axial_scale
+    s_top = sbot + sheight
+    nozzle_hinge_z = ORIG_NOZZLE_HINGE_Z * axial_scale
+    nozzle_ring_from_exhaust = ORIG_NOZZLE_RING_FROM_EXHAUST * axial_scale
+    aft_mount_z = ORIG_AFT_MOTOR_MOUNT_FROM_INTAKE * axial_scale
+    front_mount_z = ORIG_FRONT_MOTOR_MOUNT_FROM_INTAKE * axial_scale
+    pivot_z = ORIG_PIVOT_Z_FROM_INTAKE * axial_scale
+    inlet_bell_z_throat = ORIG_INLET_BELL_Z_THROAT * axial_scale
+    old_petal_start_z = ORIG_OLD_PETAL_FROM_INTAKE * axial_scale
+
+    # Determine the actual bore centre by fitting a circle to the shell's
+    # internal ring vertices sampled in the mid-EDF region. This is the most
+    # precise source for the tube centre when the imported shell origin is
+    # shifted or the bore is not at the expected nominal coordinates.
+    def compute_bore_center(obj, z_lo, z_hi, expected_cx, expected_cy):
+        verts = [v.co for v in obj.data.vertices if z_lo <= v.co.z <= z_hi]
+        if not verts:
+            return expected_cx, expected_cy
+        cx0 = sum(v.x for v in verts) / len(verts)
+        cy0 = sum(v.y for v in verts) / len(verts)
+        r_low = max(0.0, R_FIN_OUT - 6.0)
+        r_high = R_FIN_OUT + 6.0
+        ring_pts = []
+        for v in verts:
+            r = math.hypot(v.x - cx0, v.y - cy0)
+            if r_low <= r <= r_high:
+                ring_pts.append((v.x, v.y))
+        if len(ring_pts) < 40:
+            return expected_cx, expected_cy
+
+        xs = [p[0] for p in ring_pts]
+        ys = [p[1] for p in ring_pts]
+        A00 = sum(x*x for x in xs)
+        A01 = sum(x*y for x,y in zip(xs,ys))
+        A02 = sum(xs)
+        A11 = sum(y*y for y in ys)
+        A12 = sum(ys)
+        A22 = len(ring_pts)
+        b0 = -sum((x*x+y*y)*x for x,y in zip(xs,ys))
+        b1 = -sum((x*x+y*y)*y for x,y in zip(xs,ys))
+        b2 = -sum((x*x+y*y) for x,y in zip(xs,ys))
+        A = [[float(A00), float(A01), float(A02)],
+             [float(A01), float(A11), float(A12)],
+             [float(A02), float(A12), float(A22)]]
+        b = [float(b0), float(b1), float(b2)]
+
+        for i in range(3):
+            pivot = i
+            for j in range(i+1, 3):
+                if abs(A[j][i]) > abs(A[pivot][i]):
+                    pivot = j
+            if pivot != i:
+                A[i], A[pivot] = A[pivot], A[i]
+                b[i], b[pivot] = b[pivot], b[i]
+            if abs(A[i][i]) < 1e-12:
+                return expected_cx, expected_cy
+            fac = A[i][i]
+            for j in range(i, 3):
+                A[i][j] /= fac
+            b[i] /= fac
+            for j in range(i+1, 3):
+                f = A[j][i]
+                for k in range(i, 3):
+                    A[j][k] -= f * A[i][k]
+                b[j] -= f * b[i]
+
+        x = [0.0, 0.0, 0.0]
+        for i in range(2, -1, -1):
+            s = b[i]
+            for j in range(i+1, 3):
+                s -= A[i][j] * x[j]
+            x[i] = s / A[i][i] if abs(A[i][i]) > 1e-12 else 0.0
+        D, E, F = x
+        cx = -D / 2.0
+        cy = -E / 2.0
+        return cx, cy
+
+    sample_z_lo = inlet_bell_z_throat + 20.0
+    sample_z_hi = min(shell_max_z - 20.0, inlet_bell_z_throat + 100.0)
+    bore_cx, bore_cy = compute_bore_center(nacelle,
+                                           sample_z_lo, sample_z_hi,
+                                           cfg["bore_cx"], cfg["bore_cy"])
+    print(f"  Computed bore centre: X={bore_cx:.2f} Y={bore_cy:.2f} "
+          f"(sample Z {sample_z_lo:.1f}..{sample_z_hi:.1f})")
+
     # Carve full-length bore from the intake face (Z=0) to nozzle ring pocket.
     # BORE_CARVE_R=27.5mm = thrust tube OD (25mm bore + 2.5mm wall) — clears room for the sleeve.
-    bore_removed = cut_bore_interior(nacelle, cfg["bore_cx"], cfg["bore_cy"],
+    bore_removed = cut_bore_interior(nacelle, bore_cx, bore_cy,
                                      BORE_CARVE_R, 0.0, shell_max_z)
     print(f"  Carved interior bore: removed {bore_removed} faces  (Z=0..{shell_max_z:.0f}mm)")
 
     # Widen carve at the exhaust end to strip the old fixed nozzle petal cone.
-    # Old petals are built into the shell STL starting at 4.58" from intake
-    # (Z=116.3mm) and converge toward the exhaust face; they can extend to
-    # ~36mm radius.  Carve from 5mm before the petal start to the shell end.
-    old_petal_start_z = OLD_PETAL_FROM_INTAKE  # 116.3mm from Z=0=intake
-    petal_removed = cut_bore_interior(nacelle, cfg["bore_cx"], cfg["bore_cy"],
+    petal_removed = cut_bore_interior(nacelle, bore_cx, bore_cy,
                                       36.0, old_petal_start_z - 5.0, shell_max_z)
     print(f"  Stripped old fixed petals: removed {petal_removed} faces at R≤36mm, "
           f"Z={old_petal_start_z-5:.0f}..{shell_max_z:.0f}mm")
 
-    # Build stator mesh at bore centre and mirror it into the shell's actual intake-to-exhaust Z axis.
-    stator_mesh = build_stator_mesh(cfg["bore_cx"], cfg["bore_cy"], cfg["swirl"])
+    # Build stator mesh at bore centre and position it at the scaled sbot.
+    stator_mesh = build_stator_mesh(bore_cx, bore_cy, cfg["swirl"], height=sheight)
     stator_obj  = bpy.data.objects.new("stator_fins", stator_mesh)
-    stator_obj.location.z = shell_max_z - (STATOR_BOT + STATOR_TOP)
+    stator_obj.location.z = sbot
     bpy.context.collection.objects.link(stator_obj)
 
-    # Nozzle ring hinge sits NOZZLE_RING_FROM_EXHAUST mm before the exhaust face.
-    ring_bottom_z = shell_max_z - NOZZLE_RING_FROM_EXHAUST  # world Z of hinge face
+    # Nozzle ring hinge sits nozzle_ring_from_exhaust mm before the exhaust face.
+    ring_bottom_z = shell_max_z - nozzle_ring_from_exhaust
     removed_faces = cut_nozzle_shell_region(nacelle,
-                                           cfg["bore_cx"], cfg["bore_cy"],
+                                           bore_cx, bore_cy,
                                            ring_bottom_z, NOZZLE_CUT_R,
                                            cut_above=True)
     print(f"  Cleared nozzle ring pocket: removed {removed_faces} faces at Z>={ring_bottom_z:.1f}mm "
-          f"({NOZZLE_RING_FROM_EXHAUST:.0f}mm from exhaust)")
+          f"({(nozzle_ring_from_exhaust if 'nozzle_ring_from_exhaust' in locals() else NOZZLE_RING_FROM_EXHAUST):.0f}mm from exhaust)")
 
     # Continuous 50mm ID thrust tube — single sleeve from inlet bell throat to nozzle pocket.
     # inner_r=25mm (50mm ID), wall=2.5mm → OD=55mm, matching Xfly Galaxy X5 casing OD.
     # This is the structural bore that houses both EDFs and the inter-stage stator.
     thrust_tube_z_top = ring_bottom_z  # flush with nozzle ring hinge face
     thrust_tube = make_thrust_tube("thrust_tube",
-                                   cfg["bore_cx"], cfg["bore_cy"],
-                                   INLET_BELL_Z_THROAT, thrust_tube_z_top,
+                                   bore_cx, bore_cy,
+                                   inlet_bell_z_throat, thrust_tube_z_top,
                                    inner_r=R_FIN_OUT, wall=THRUST_TUBE_WALL)
-    print(f"  Thrust tube: Z={INLET_BELL_Z_THROAT:.0f}..{thrust_tube_z_top:.0f}mm  "
+    print(f"  Thrust tube: Z={inlet_bell_z_throat:.0f}..{thrust_tube_z_top:.0f}mm  "
           f"ID={2*R_FIN_OUT:.0f}mm  OD={2*(R_FIN_OUT+THRUST_TUBE_WALL):.0f}mm")
 
-    # Bell-mouth inlet bell at Z=0..22mm — cylindrical entry cosine-tapered to 50mm bore.
+    # Bell-mouth inlet bell at Z=0..throat — cylindrical entry cosine-tapered to 50mm bore.
     inlet_bell = make_inlet_bell("inlet_bell",
-                                 cfg["bore_cx"], cfg["bore_cy"],
-                                 0.0, INLET_BELL_Z_THROAT)
-    print(f"  Inlet bell: Z=0..{INLET_BELL_Z_THROAT:.0f}mm  "
+                                 bore_cx, bore_cy,
+                                 0.0, inlet_bell_z_throat)
+    print(f"  Inlet bell: Z=0..{inlet_bell_z_throat:.0f}mm  "
           f"entry ID={2*(R_FIN_OUT+INLET_BELL_FLARE):.0f}mm → throat ID={2*R_FIN_OUT:.0f}mm")
 
-    # Pivot bearing boss for nacelle tilt hinge — protrudes +Y (toward wing spar).
-    # Boss axis = X (spanwise); boss OD fits a 686ZZ bearing (6mm ID / 13mm OD seated inside).
-    pivot_boss = make_pivot_boss("pivot_boss",
-                                 cfg["bore_cx"], cfg["bore_cy"],
-                                 PIVOT_Z_FROM_INTAKE)
-    print(f"  Pivot boss: spanwise axis at Z={PIVOT_Z_FROM_INTAKE:.0f}mm, "
-          f"Y+{PIVOT_BOSS_Y_OFFSET:.0f}mm from bore, OD={PIVOT_BOSS_OD:.0f}mm bore-ID={PIVOT_BOSS_ID:.0f}mm")
+    # X-axis tilt clevis at nacelle inboard (−Y) face — fold mechanism eliminated.
+    # F688ZZ bearing (8mm ID × 16mm OD × 5mm wide); hinge-pin = CF spar through-bore.
+    clevis_ext = make_clevis_extension("clevis_ext", bore_cx, bore_cy, pivot_z)
+    print(f"  Clevis: X-axis tilt hinge at Z={pivot_z:.1f}mm, "
+          f"Y_offset={CLEVIS_Y_FROM_BORE:.1f}mm (inboard), "
+          f"ear_OD={CLEVIS_EAR_OD:.0f}mm pin_ID={CLEVIS_PIN_D:.0f}mm "
+          f"slot={CLEVIS_ARM_SLOT:.0f}mm  [F688ZZ × 2]")
 
-    aft_mount_z   = AFT_MOTOR_MOUNT_FROM_INTAKE    # world Z from intake (EDF2 motor, ~108mm)
-    front_mount_z = FRONT_MOTOR_MOUNT_FROM_INTAKE  # world Z from intake (EDF1 motor, ~35mm)
     # Motor mount struts: 4 arms from hub surface (R_HUB_OUT=16mm) to bore inner wall (R_FIN_OUT=25mm).
     # Xfly 2627: 26mm stator → ~30mm can → hub OD 32mm (R_HUB_OUT=16mm).
     aft_motor_mount = make_motor_mount("aft_motor_mount",
-                                       cfg["bore_cx"], cfg["bore_cy"],
+                                       bore_cx, bore_cy,
                                        aft_mount_z,
                                        R_HUB_OUT, R_FIN_OUT,
                                        thickness=3.0, axial_length=8.0)
     front_motor_mount = make_motor_mount("front_motor_mount",
-                                         cfg["bore_cx"], cfg["bore_cy"],
+                                         bore_cx, bore_cy,
                                          front_mount_z,
                                          R_HUB_OUT, R_FIN_OUT,
                                          thickness=3.0, axial_length=8.0)
 
     wire_guide_front_1 = make_wire_guide("wire_guide_front_1",
-                                         cfg["bore_cx"], cfg["bore_cy"],
+                                         bore_cx, bore_cy,
                                          front_mount_z - 10.0,
                                          front_mount_z + 10.0,
                                          math.radians(45.0), R_FIN_OUT - 2.0,
                                          width=WIRE_GUIDE_WIDTH,
                                          thickness=WIRE_GUIDE_THICKNESS)
     wire_guide_front_2 = make_wire_guide("wire_guide_front_2",
-                                         cfg["bore_cx"], cfg["bore_cy"],
+                                         bore_cx, bore_cy,
                                          front_mount_z - 10.0,
                                          front_mount_z + 10.0,
                                          math.radians(135.0), R_FIN_OUT - 2.0,
                                          width=WIRE_GUIDE_WIDTH,
                                          thickness=WIRE_GUIDE_THICKNESS)
     wire_guide_aft_1 = make_wire_guide("wire_guide_aft_1",
-                                       cfg["bore_cx"], cfg["bore_cy"],
+                                       bore_cx, bore_cy,
                                        aft_mount_z - 10.0,
                                        aft_mount_z + 10.0,
                                        math.radians(225.0), R_FIN_OUT - 2.0,
                                        width=WIRE_GUIDE_WIDTH,
                                        thickness=WIRE_GUIDE_THICKNESS)
     wire_guide_aft_2 = make_wire_guide("wire_guide_aft_2",
-                                       cfg["bore_cx"], cfg["bore_cy"],
+                                       bore_cx, bore_cy,
                                        aft_mount_z - 10.0,
                                        aft_mount_z + 10.0,
                                        math.radians(315.0), R_FIN_OUT - 2.0,
@@ -707,16 +835,16 @@ for cfg in NACELLES:
                                        thickness=WIRE_GUIDE_THICKNESS)
 
     nozzle_ring = make_nozzle_ring("nozzle_ring",
-                                   cfg["bore_cx"], cfg["bore_cy"],
+                                   bore_cx, bore_cy,
                                    NOZZLE_RING_OUTER_R, NOZZLE_RING_INNER_R,
                                    NOZZLE_RING_H,
                                    n_seg = N_HUB_SEG,
                                    rack_teeth = NOZZLE_RING_TEETH,
                                    rack_depth = NOZZLE_RING_RACK_DEPTH,
                                    rack_width = NOZZLE_RING_RACK_WIDTH)
-    nozzle_ring.location.z = ring_bottom_z - NOZZLE_HINGE_Z
-    print(f"  Added nozzle ring at exhaust end (hinge Z={ring_bottom_z:.1f}mm, "
-          f"offset Z={ring_bottom_z - NOZZLE_HINGE_Z:.1f}mm): "
+    # make_nozzle_ring builds at local z=0..axial_h; location.z places bottom at ring_bottom_z.
+    nozzle_ring.location.z = ring_bottom_z
+    print(f"  Added nozzle ring at exhaust end (hinge Z={ring_bottom_z:.1f}mm): "
           f"{NOZZLE_RING_TEETH} teeth, {NOZZLE_RING_RACK_DEPTH:.1f}mm depth")
     print("  Nozzle iris is sized for the dual 50mm EDF path and is intended "
           "to open with vertical nacelle tilt and close with horizontal tilt.")
@@ -726,35 +854,42 @@ for cfg in NACELLES:
                              aft_motor_mount, front_motor_mount,
                              wire_guide_front_1, wire_guide_front_2,
                              wire_guide_aft_1, wire_guide_aft_2,
-                             pivot_boss, nozzle_ring])
+                             clevis_ext, nozzle_ring])
     combined.name = cfg["out_stl"].replace(".stl", "")
 
     export_stl(combined, out_path)
     sz = os.path.getsize(out_path) // 1024
-    twist_hub = math.degrees(STATOR_HEIGHT * math.tan(VANE_A) / R_HUB_OUT)
-    twist_out = math.degrees(STATOR_HEIGHT * math.tan(VANE_A) / R_FIN_OUT)
-    stator_world_bot = STATOR_BOT + (shell_max_z - (STATOR_BOT + STATOR_TOP))
-    stator_world_top = stator_world_bot + STATOR_HEIGHT
+    twist_hub = math.degrees(sheight * math.tan(VANE_A) / R_HUB_OUT)
+    twist_out = math.degrees(sheight * math.tan(VANE_A) / R_FIN_OUT)
+    stator_world_bot = sbot
+    stator_world_top = sbot + sheight
     print(f"  → {cfg['out_stl']}  ({sz} KB)")
-    print(f"  Thrust tube: Z={INLET_BELL_Z_THROAT:.0f}..{thrust_tube_z_top:.0f}mm  "
+    print(f"  Thrust tube: Z={inlet_bell_z_throat:.0f}..{thrust_tube_z_top:.0f}mm  "
           f"ID={2*R_FIN_OUT:.0f}mm (50mm bore)  OD={2*(R_FIN_OUT+THRUST_TUBE_WALL):.0f}mm")
     print(f"  Stator world: Z={stator_world_bot:.0f}..{stator_world_top:.0f}mm  "
           f"swirl_dir={cfg['swirl']:+d}  "
           f"fin_twist hub={twist_hub:.1f}° outer={twist_out:.1f}°")
-    print(f"  EDF1 seat: Z=22..72mm (intake end)  |  EDF2 seat: Z=98..143mm (exhaust end)")
+    edf1_top = 72.0 * axial_scale
+    edf2_bot = 98.0 * axial_scale
+    print(f"  EDF1 seat: Z={inlet_bell_z_throat:.0f}..{edf1_top:.0f}mm (intake end)  |  "
+          f"EDF2 seat: Z={edf2_bot:.0f}..{thrust_tube_z_top:.0f}mm (exhaust end)")
     print(f"  Nozzle ring hinge: Z={ring_bottom_z:.0f}mm  "
-          f"Pivot boss: Z={PIVOT_Z_FROM_INTAKE:.0f}mm  Hub bore ID={2*R_HUB_BORE:.0f}mm")
+          f"Clevis: Z={pivot_z:.1f}mm  Hub bore ID={2*R_HUB_BORE:.0f}mm")
 
-print("\nDone.  Print each nacelle shell in CF-PETG at 0.15mm / 25% infill.")
-print("EDF installation (Z=0 = intake face, Z≈148 = exhaust/nozzle face):")
-print("  1. Press EDF1 in from the INTAKE end (Z=0), seat at Z=22, motor forward.")
-print("  2. Apply 3 dabs structural epoxy to EDF1 casing at Z=72 shoulder.")
-print("  3. Route EDF1 leads back through hub bore toward intake.")
-print("  4. Press EDF2 in from the EXHAUST end (Z≈148), seat at Z=143, motor toward stator.")
-print("  5. Apply 3 dabs structural epoxy to EDF2 casing at Z=98 shoulder.")
-print("  6. Confirm stator fin vanes visible in gap Z=72..98 — stator is between EDFs.")
-print("  7. Seat nozzle iris ring on hinge bosses at Z≈133mm; install 3mm hinge pins.")
+print("\nDone.  Print each nacelle shell in CF-PETG at 0.15mm / 4 perimeters / 40% infill load-bearing.")
+print("Shells are 1.25× scale (50mm EDF); Z=0 = intake face, Z≈185.35mm = exhaust face.")
+print("\nEDF installation sequence:")
+print("  1. Press EDF1 in from INTAKE end (Z=0), seat at Z≈27.5mm, motor faces forward.")
+print("  2. Apply 3 dabs structural epoxy to EDF1 casing at Z≈90mm shoulder.")
+print("  3. Route EDF1 leads through hub bore toward intake.")
+print("  4. Press EDF2 in from EXHAUST end (Z≈185mm), seat at Z≈178.75mm, motor toward stator.")
+print("  5. Apply 3 dabs structural epoxy to EDF2 casing at Z≈122.5mm shoulder.")
+print("  6. Confirm stator fin vanes visible in gap Z≈90..123mm — stator is between EDFs.")
+print("  7. Seat nozzle iris ring at ring_bottom_z; no separate hinge pins (rack-coupled).")
+print("\nTILT HINGE (fold mechanism eliminated):")
+print("  Clevis ears at inboard (−Y) face, Z≈92.5mm.  Pin = CF spar through F688ZZ bearings.")
+print("  Arm slot = 16mm wide; fabricate arm ≤15mm wide for 0.5mm clearance each side.")
 print("\nSWIRL DIRECTION:")
 print("  Port  (left)  nacelle: SWIRL_DIR=+1 — EDF motors wired CW viewed from intake.")
 print("  Stbd (right) nacelle: SWIRL_DIR=−1 — EDF motors wired CCW viewed from intake.")
-print("  Verify rotation before sealing: spin-test each EDF before installing nacelle.")
+print("  Spin-test each EDF before sealing nacelle; confirm rotation matches SWIRL_DIR.")

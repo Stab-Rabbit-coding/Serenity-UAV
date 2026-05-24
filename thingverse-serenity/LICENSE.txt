@@ -1,1 +1,49 @@
-This thing was created by Thingiverse user misubisu, and is licensed under Creative Commons - Attribution - Share Alike
+SERENITY-CLASS TILTROTOR UAV — NACELLE INTEGRATION SCRIPTS
+License & Attribution
+
+=== ORIGINAL WORK ===
+
+Nacelle integration scripts, Blender geometry generation, and EDF housing
+bore carving logic: © 2025 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+Licensed under Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+=== ATTRIBUTED SOURCES ===
+
+1. Hull Geometry (Serenity, Firefly Class)
+   Author: Peter Farell
+   Source: printables.com/model/548545
+   License: CC BY 4.0
+   Use: Hull outer geometry adapted; scaled 365 mm, hollowed thin-wall,
+        CF skeleton added for UAV flight loads
+
+2. Variable-Area EDF Nozzle Mechanism
+   Author: BamJr
+   Source: thingiverse.com/thing:2991269
+   License: CC BY 4.0
+   Use (nacelle): 70mm ID, servo removed, M0.5 rack teeth added,
+                  gear-coupled to nacelle tilt pivot via sector/bevel/crown chain
+
+3. 50mm EDF Motor Housing (Interior Bore Reference)
+   Author: Unknown (archived design)
+   Source: thingiverse.com/thing:4560034
+   License: CC BY 4.0
+   Use (nacelle interior): Bore geometry and motor mount pocket layout reference.
+                          Dual-motor nacelle (EDF1 + EDF2 series) with stator
+                          vanes between motor seats
+
+=== LICENSE TEXT ===
+
+Creative Commons Attribution 4.0 International
+Full text: https://creativecommons.org/licenses/by/4.0/legalcode
+
+You are free to share, adapt, and remix this work for any purpose
+(including commercial) under the condition that you provide appropriate
+attribution to all original authors and indicate modifications made.
+
+Original work by: Thingiverse user misubisu (base hull shells)
+              + Steve Griffing (integration, carving, stator, actuation)
+              + Peter Farell (Serenity hull model)
+              + BamJr (EDF nozzle mechanism)
+              + Archived designer (EDF housing reference)
+
+All licensed under CC BY 4.0.

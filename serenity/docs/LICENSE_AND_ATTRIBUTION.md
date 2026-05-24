@@ -31,7 +31,7 @@ body, p, li, td, th, code, pre {
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **Project:** Serenity-Class Tri-Fan Tiltrotor Unmanned Aerial Vehicle  
-**Revision:** F (current)  
+**Revision:** N (current)  
 **License:** Creative Commons Attribution 4.0 International (CC BY 4.0)
 
 ---
@@ -177,6 +177,46 @@ Remixed by Steve Griffing:
   Fuselage — 40mm (1.57") ID, SG90 servo actuated, Serenity bell integrated.
 CC BY 4.0.
 ```
+
+---
+
+### 4. 50mm EDF Motor Housing (Interior Bore Reference)
+
+| Field | Detail |
+|-------|--------|
+| **Title** | 50mm EDF Housing |
+| **Author** | Designer unknown (archived design) |
+| **Source** | [thingiverse.com/thing:4560034](https://www.thingiverse.com/thing:4560034) |
+| **License** | CC BY 4.0 (presumed) |
+| **Use (nacelle interior)** | Interior bore geometry and motor mount pocket layout reference. Dual-motor nacelle (EDF1 + EDF2 in series) bore carved to 27 mm ID with stator vanes between motor seats. |
+
+**Attribution:**
+```
+EDF housing reference: thingiverse.com/thing:4560034 · CC BY 4.0
+Nacelle bore integrated by Steve Griffing: 50mm EDF1+EDF2 series config,
+dual motor mounts, 11-fin stator vanes between seats, variable-area iris.
+CC BY 4.0.
+```
+
+---
+
+## Design Revision Notes
+
+### Rev N changes (50mm EDF nacelles, fold elimination)
+
+- **Nacelles scaled 1.25×** uniformly from Rev F/L originals to accept 50mm EDF bore.
+  Canonical input shells: `s_eng_left_shell24_50mm.stl`, `s_eng_right_shell24_50mm.stl`.
+  Output shells: `s_eng_left_stator_shell24_50mm.stl`, `s_eng_right_stator_shell24_50mm.stl`.
+- **Fold mechanism retired** — `s_eng_piv_outer_scaled24.stl`, `s_eng_piv_pins_scaled24.stl`,
+  and `s_eng_pistons_scaled24.stl` are superseded and no longer part of the build.
+  Reason: the two-axis fold/tilt yoke was a structural weak point in a flight-critical joint.
+- **Single-axis tilt clevis** replaces fold mechanism.  Pivot axis = X (spanwise CF spar).
+  Bearing: F688ZZ (8mm ID × 16mm OD × 5mm wide). Zero airstream disruption.
+- **Stator fins**: 11 twisted fins (33° vane angle, NACA-style hub) built into bore at
+  Z=93.75..118.75mm (1.25× scale).  Inter-stage, between EDF1 and EDF2.
+- **Nacelle sweep**: 0–120° (Rev N requirement), hard stops at −5° and +140°.
+  Gear chain: sector R=22mm → pinion R=6mm → bevel 1:1 → crown R=6mm → rack R=28mm.
+  Ring rotation for 120° sweep = 94.3° (see `airframe/nacelles/nacelle-nozzle-gear.jsx`).
 
 ---
 
