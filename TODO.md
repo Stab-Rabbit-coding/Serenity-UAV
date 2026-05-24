@@ -38,6 +38,26 @@ Last updated: 2026-05-23
 - [ ] do a comprehensive update on the graphical build guides to the current design specs.
 - [ ] integrated the build plan into the todo
 
+- [x] **Wing+pivot merge into single pylon** — `s_wing_nacelle_pylon_revo.scad` created
+  2026-05-24.  Merges s_pivot_arm_a + s_eng_piv_outer into one CF-PETG part: hollow
+  harness-routing body, 4mm CF spar press-fit bore, nacelle boss socket, sector gear mount
+  (4× M2.5 inserts at R=18mm), wing root block (4× M3 inserts, positive-stop shoulder),
+  90° fold hinge (4mm CF pin + M2.5 set-screw detents). *(done 2026-05-24)*
+  **Pending:** Measure WING_SLOT_W and WING_SLOT_H from s_wings_both_shell24.stl before
+  first print (currently estimated 50×40mm at 2.197× Thingiverse scale).
+
+- [x] **Nav lights added to nacelles** — `nacelle_pod_50mm_tandem.scad` updated 2026-05-24:
+  external D-section conduit (NAV_CONDUIT_BORE=4mm) on inboard X-face routes 28AWG 3-core
+  WS2812C signal wire from tip cap to pylon harness interface; harness exit port (14×8mm)
+  cut through nacelle X-face at Z=86mm (inter-EDF gap).  Chirality param PYLON_SIDE=±1.
+  WS2812C-2020 LEDs in existing nacelle_tip_cap_port.stl / nacelle_tip_cap_stbd.stl.
+  FAA 14 CFR 91.209 compliant: port RED, starboard GREEN, ≥3SM visibility. *(done 2026-05-24)*
+
+- [x] **Wing lift analysis** — documented in serenity-rev-o.jsx Wing Lift tab 2026-05-24:
+  S_ref=0.0156m², q=260Pa at 40kts.  Flat-plate baseline CL=0.32 → L=1.30N (3.7%AUW).
+  Recommendation (zero exterior mold-line change): 3° incidence shim at pylon wing-root
+  block + 4% camber asymmetric infill → CL=0.90 → L=3.65N (10.5%AUW). *(done 2026-05-24)*
+
 ---
 
 ## PCB / KiCad
