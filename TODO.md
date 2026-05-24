@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-Last updated: 2026-05-23
+Last updated: 2026-05-24
 
 ---
 
@@ -24,10 +24,67 @@ Last updated: 2026-05-23
   Run: `blender --background --python <script>.py` per CLAUDE.md workflow.
   Verify Z-range and bore diameter in console before committing.
 
-- [ ] **Nacelle pod for Rev N (50 mm tandem EDFs)** — existing nacelle STLs are
-  70 mm and 80 mm bore.  Rev N spec: 2× 50 mm EDF in tandem series per nacelle.
-  Need `nacelle_pod_50mm_tandem.scad` with: dual-bore centerline, 11-fin stator,
-  gear-coupled nozzle linkage hard points, tilt pivot boss.  Export STL when done.
+- [ ] update the rev o jsx to be a complete description of the uav, with all relevant design and build elements.  
+- [ ] update the graphical build guide svgs to the rev o design specifications
+- [x] **Nacelle pod for Rev N (50 mm tandem EDFs)** — `nacelle_pod_50mm_tandem.scad` created
+  2026-05-24 with: dual-bore centerline (EDF1 Z=22..72mm, EDF2 Z=98..143mm), 11-fin
+  twisted stator, M=1.0 gear boss / conduit hard points, MF104ZZ clevis pivot boss at Z=83mm
+  (nacelle CG).  Rev O: pivot relocated to Z=83mm from Z=74mm (v1); blender_nacelle_revo.py
+  generates s_eng_left/right_stator_shell24_revo.stl.
+  **Note:** blender and openscad not installed in this build environment; run
+  `blender --background --python thingverse-serenity/blender_nacelle_revo.py` on host
+  machine to verify Z-range and bore-diameter before committing STLs. *(done 2026-05-24)*
+
+- [x] **Sensor / camera / antenna mounts in fuselage shells** — 2026-05-24.
+  Four shell SCAD files updated / created with dual-redundant VL53L5CX mount bosses
+  (16 mm OD, 11 mm PMMA aperture, 4x M1.6, 14x14 mm board recess), 28 mm FPV
+  camera mounts, GPS patch dome, 49 MHz RCRS post boss, and SMA bulkheads:
+  - `serenity/stl/s_head_shell24.scad` (NEW) -- S1A/S1B forward sensors (Array A/B),
+    bridge FPV, GPS patch dorsal, 49 MHz antenna post dorsal.
+  - `serenity/stl/s_cargo_sect_shell24.scad` (NEW) -- cargo nadir FPV camera (belly,
+    downward-facing, payload hoist view).
+  - `serenity/stl/s_middle_canonical_shell24.scad` (UPDATED) -- S3A/S4A port/stbd
+    sensors sta 267 mm, S3B/S4B port/stbd sta 200 mm, S5A/S5B zenith sta 240/347 mm,
+    S6A/S6B nadir sta 213/293 mm; SiK 915 MHz / ZigBee 2.4 GHz / WiFi 5 GHz SMA
+    bulkheads (port/stbd hull sides).
+  - `serenity/stl/s_rear_neck_intake_shell24.scad` (UPDATED) -- S2A/S2B aft sensors
+    (stern area, upper-port and lower-stbd quadrants to avoid engine bell).
+  All positions marked VERIFY; measure mesh cross-sections in slicer before printing.
+  Array A: FC3 SBC primary; Array B: FC2 SBC primary (hardware failover). *(done 2026-05-24)*
+
+- [ ] create Cargo handling equipment mounts.  export stls
+
+- [ ] do a comprehensive update on the graphical build guides to the current design specs.
+- [ ] integrated the build plan into the todo
+
+- [x] **Wing+pivot merge into single pylon** — `s_wing_nacelle_pylon_revo.scad` created
+  2026-05-24.  Merges s_pivot_arm_a + s_eng_piv_outer into one CF-PETG part: hollow
+  harness-routing body, 4mm CF spar press-fit bore, nacelle boss socket, sector gear mount
+  (4× M2.5 inserts at R=18mm), wing root block (4× M3 inserts, positive-stop shoulder),
+  90° fold hinge (4mm CF pin + M2.5 set-screw detents). *(done 2026-05-24)*
+  **Pending:** Measure WING_SLOT_W and WING_SLOT_H from s_wings_both_shell24.stl before
+  first print (currently estimated 50×40mm at 2.197× Thingiverse scale).
+
+- [x] **Nav lights added to nacelles** — `nacelle_pod_50mm_tandem.scad` updated 2026-05-24:
+  external D-section conduit (NAV_CONDUIT_BORE=4mm) on inboard X-face routes 28AWG 3-core
+  WS2812C signal wire from tip cap to pylon harness interface; harness exit port (14×8mm)
+  cut through nacelle X-face at Z=86mm (inter-EDF gap).  Chirality param PYLON_SIDE=±1.
+  WS2812C-2020 LEDs in existing nacelle_tip_cap_port.stl / nacelle_tip_cap_stbd.stl.
+  FAA 14 CFR 91.209 compliant: port RED, starboard GREEN, ≥3SM visibility. *(done 2026-05-24)*
+
+- [x] **Wing lift analysis** — documented in serenity-rev-o.jsx Wing Lift tab 2026-05-24:
+  S_ref=0.0156m², q=260Pa at 40kts.  Flat-plate baseline CL=0.32 → L=1.30N (3.7%AUW).
+  Initial recommendation (zero OML change): 3° incidence + 4% camber → CL=0.90 → 10.5%AUW.
+  *(done 2026-05-24)*
+
+- [x] **Selig S1223 wing — s_wings_s1223_revo.scad** — Created 2026-05-24.  Replaces
+  flat-plate s_wings_both_shell24.stl with S1223 cross-section (t/c=12.14% at 22.6% chord,
+  camber=8.65% at 39.4% chord); planform (span, taper, sweep) preserved to match canon.
+  CL=1.55 at 3° AoA (+ pylon shim) → L=6.30N (18.1%AUW) — 4.84N gain vs. baseline.
+  SCAD: serenity/stl/s_wings_s1223_revo.scad.  Reference: Selig & Guglielmo (1997),
+  J.Aircraft 34(1), 72–79.  **Pending:** Verify WING_CHORD_ROOT, WING_CHORD_TIP,
+  WING_SEMI_SPAN, WING_SWEEP_LE, WING_SLOT_W, WING_SLOT_H against original STL before
+  printing. *(done 2026-05-24)*
 
 ---
 
@@ -148,7 +205,8 @@ Design notes and BOM candidates are in `serenity/kicad/XCVR-49MHZ-1.md`.
 
 ## Documentation
 
-- [ ] **Update `PROJECT_INDEX.md`** — add XCVR-49MHZ-1 row to PCB table.
+- [x] **Update `PROJECT_INDEX.md`** — add XCVR-49MHZ-1 row to PCB table. *(done 2026-05-24)*
 
-- [ ] **Sync bom_revN.csv ↔ bom_revN.json** — resolve 2026-05-23 vs 2026-05-22
-  timestamp discrepancy.
+- [x] **Sync bom_revN.csv ↔ bom_revN.json** — resolve 2026-05-23 vs 2026-05-22
+  timestamp discrepancy. *(done 2026-05-24 — added WIRE-49MHZ, POST-FWD-49, POST-AFT-49 as
+  structured `avionics.antenna_system` entries in bom_revN.json; updated JSON date to 2026-05-23)*
