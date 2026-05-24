@@ -29,6 +29,11 @@ Last updated: 2026-05-23
   Need `nacelle_pod_50mm_tandem.scad` with: dual-bore centerline, 11-fin stator,
   gear-coupled nozzle linkage hard points, tilt pivot boss.  Export STL when done.
 
+- [ ] create Cargo handling equipment mounts.  create bridge fpv camera mount.  export stls
+
+- [ ] do a comprehensive update on the graphical build guides to the current design specs.
+- [ ] integrated the build plan into the todo
+
 ---
 
 ## PCB / KiCad
