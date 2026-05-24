@@ -74,7 +74,9 @@ body, p, li, td, th, code, pre {
 | `serenity-nacelle-pid-governor.jsx` | **Per-EDF PID closed-loop RPM governor** — 5-tab spec: overview, PID loops, cooperative control, fault response, commissioning | **Rev L new** |
 | `serenity-edf-options.jsx` | **EDF selection guide** — budget / standard XRP / high-perf Schübeler comparison, tandem series performance, ESC pairing, phase build guide | **Rev L new** |
 | `serenity-rev-l.jsx` | **Rev L — Dual 80mm 6S series EDFs + PID governor + EDF options** — supersedes Rev K; firmware-only update; hardware unchanged | Rev L (superseded by Rev M) |
-| `serenity-rev-m.jsx` | **Rev M — PocketBeagle 2 Industrial (AM6254) hardware upgrade** — 8× AM6254 quad A53 1.4GHz · 1GB DDR4 · 64GB eMMC · −40°C to 85°C · OS microSD eliminated · propulsion + governor unchanged | **Rev M ← current master** |
+| `serenity-rev-m.jsx` | **Rev M — PocketBeagle 2 Industrial (AM6254) hardware upgrade** — 8× AM6254 quad A53 1.4GHz · 1GB DDR4 · 64GB eMMC · −40°C to 85°C · OS microSD eliminated · propulsion + governor unchanged | Rev M (superseded by Rev N) |
+| `serenity-rev-n.jsx` | **Rev N — 24-inch hull + 50mm tandem EDFs** — scaled hull to 609.6 mm · 2× 50mm 6S EDF per nacelle in tandem series · 4-radial-scoop intake for rear 120mm EDF · nacelle_pod_50mm_tandem design stub · bom_revN (5 propulsion + full avionics) | Rev N (superseded by Rev O) |
+| `serenity-rev-o.jsx` | **Rev O — CG-pivot nacelle + full gear train** — tilt pivot relocated from Z=74mm to Z=83mm (nacelle CG, derived from 15-component mass breakdown) · M=1.0 gear train fully specified (sector R=22mm → drive pinion N=12T → bevel pair 45° N=14T → crown pinion N=12T → nozzle ring rack R_eff=28mm) · blender_nacelle_revo.py generates left/right stator shells · nacelle_pod_50mm_tandem.scad parametric SCAD · bom_revO (full 50mm-EDF build) | **Rev O ← current master** |
 
 ### SVG Engineering Diagrams
 
@@ -148,6 +150,25 @@ body, p, li, td, th, code, pre {
 | `landing_skid_foot.stl` | TPU 95A | Crash-absorbing skid pads (print ×4) |
 | `cockpit_dome_clear.stl` | Clear PETG | Ellipsoidal cockpit dome, GPS window |
 
+### OpenSCAD Parametric Source Files (Rev N / Rev O)
+
+Generate STL from SCAD: `openscad -o <output.stl> <file.scad>` (OpenSCAD 2021.01+)
+Nacelle shells use Blender script instead — see `thingverse-serenity/blender_nacelle_revo.py`.
+
+| File | Output STL | Description |
+|------|-----------|-------------|
+| `serenity/stl/s_edf_120_motor_mount.scad` | `s_edf_120_motor_mount.stl` | 120mm rear EDF motor mount ring — CF-PETG structural |
+| `serenity/stl/s_edf_120_thrust_tube.scad` | `s_edf_120_thrust_tube.stl` | 120mm rear EDF thrust tube / nozzle — PETG |
+| `serenity/stl/s_aft_edf_plenum.scad` | `s_aft_edf_plenum.stl` | 4-to-1 cross-shaped plenum manifold for 4 radial scoops → 120mm EDF |
+| `serenity/stl/s_neck_intake_frame.scad` | `s_neck_intake_frame.stl` | CF-PETG structural intake frame ring — bonds into 4 scoop windows at neck station |
+| `serenity/stl/s_rear_neck_intake_shell24.scad` | `s_rear_neck_intake_shell24.stl` | Rear fuselage shell with 4 radial scoop windows |
+| `serenity/stl/nacelle_pod_50mm_tandem.scad` | `s_eng_left/right_stator_shell24_revo.stl` | **Rev O** complete parametric nacelle pod — 50mm tandem EDFs, 11-fin stator, CG pivot boss (Z=83mm), M=1.0 gear bosses, iris nozzle pocket. Use `SWIRL_DIR=1` (port) / `-1` (stbd). |
+| `serenity/stl/nacelle_sector_gear.scad` | `nacelle_sector_gear.stl` | **Rev O** M=1.0 sector gear R=22mm, 38T, 155° arc — fixed to tilt bracket |
+| `serenity/stl/nacelle_pinion.scad` | `nacelle_pinion.stl` | **Rev O** M=1.0 spur pinions (drive pinion A + crown pinion), N=12T, D-bore shaft |
+| `serenity/stl/nacelle_bevel_pair.scad` | `nacelle_bevel_pair.stl` | **Rev O** M=1.0 bevel gear pair N=14T, 45° pitch cone, 1:1, 90° axis redirect |
+| `serenity/stl/nacelle_bevel_housing.scad` | `nacelle_bevel_housing.stl` | **Rev O** CF-PETG housing block 24×14×20mm for bevel gear pair |
+| `serenity/stl/nacelle_nozzle_iris.scad` | `nacelle_nozzle_iris.stl` | **Rev O** 50mm iris nozzle — inner ring (M=1.0 rack), outer housing, 8-petal geometry |
+
 ### Documentation
 
 | File | Description |
@@ -158,10 +179,14 @@ body, p, li, td, th, code, pre {
 | `PROJECT_INDEX.md` | This file |
 | `AVIONICS_PB2_REDESIGN.md` | **Rev K** — 8-node PocketBeagle 2 cooperative avionics architecture; Cape-A and Cape-B design specs |
 | `PHASED_BUILD_GUIDE.md` | **Rev M** — 8-phase phased build, procurement, and flight-test guide (PB2-I boards, eMMC boot, dual-EDF + PID governor) |
-| `bom_revM.json` | **Rev M** bill of materials — PB2-I hardware swap, DigiKey P/N, cost delta, eMMC notes |
-| `bom_revL.json` | **Rev L** bill of materials (superseded by Rev M) — firmware delta, EDF options, governor commissioning |
-| `bom_revK.json` | **Rev K** bill of materials — dual-EDF hardware (hardware identical to Rev L) |
-| `bom_revK.csv` | **Rev K** bill of materials (CSV for spreadsheet use) |
+| `bom_revO.json` | **Rev O** bill of materials — CG-pivot nacelle · M=1.0 gear train · 50mm tandem EDF · 24-inch hull · full avionics + antenna system |
+| `bom_revO.csv` | **Rev O** bill of materials (CSV for spreadsheet use) — 68 line items including 8 new Rev O gear-train rows; superseded M=0.5 rows retained at Qty=0 for traceability |
+| `bom_revN.json` | **Rev N** bill of materials — 50mm EDF upgrade + antenna system |
+| `bom_revN.csv` | **Rev N** bill of materials (CSV for spreadsheet use) |
+| `bom_revM.json` | Rev M bill of materials (superseded) — PB2-I hardware swap, DigiKey P/N, cost delta, eMMC notes |
+| `bom_revL.json` | Rev L bill of materials (superseded) — firmware delta, EDF options, governor commissioning |
+| `bom_revK.json` | Rev K bill of materials (superseded) — dual-EDF hardware |
+| `bom_revK.csv` | Rev K bill of materials CSV (superseded) |
 | `bom_revJ.json` | Rev J bill of materials (historical reference) |
 | `bom_revJ.csv` | Rev J bill of materials CSV |
 | `serenity-drone-revF.zip` | Complete Rev F project archive — legacy reference |
@@ -172,23 +197,19 @@ body, p, li, td, th, code, pre {
 
 | Parameter | Value |
 |-----------|-------|
-| Hull | 457.2 mm (18.00") Serenity-class · CC BY 4.0 Peter Farell |
+| Hull | **609.6 mm (24.00") Serenity-class** · CC BY 4.0 Peter Farell (printables.com/model/548545) · scale factor 2.9294× |
 | Canon basis | QMx Blueprints Mandel/Earls 2007 · 269ft × 170ft × 79ft |
-| Canonical beam | 288.9 mm (11.375") tip-to-tip · **100% canonical** |
-| Canonical height | 134.3 mm (5.286") landed |
-| Hull structure | PETG thin shell + X-30 expanding foam + CF skeleton |
-| Propulsion | **2× (2× Changesun XRP 3660-2700KV 80mm 6S, tandem series) per nacelle** · pod OD 93.5mm · pod length 230mm · 1× XFLY X4 PRO 40mm 4S fuselage |
-| Nacelle span | 288.9 mm tip-to-tip (canonical beam) · C-C 195.5 mm (7.70") |
-| Nacelle ESC | **4× Hobbywing Platinum PRO V4 120A** (one per EDF — 84A XRP draw, fault-tolerant pairs) |
-| Pylon datum | 82.2 mm from CL (1/3 from nacelle inner edge — outward expansion) |
-| Total hover thrust | **11,250 g** (10,600g nacelles + 650g fuselage) |
-| Governor (Rev L — unchanged) | **PID closed-loop RPM per EDF** · 500 Hz M4F · BDSHOT 1kHz feedback · nacelle equalization |
+| Canonical beam | 486 mm tip-to-tip · hull height 182 mm (landed) |
+| Hull structure | PETG thin shell + 2 lb/ft³ closed-cell PU foam + CF skeleton (6×3mm keel + 12mm OD spar tubes) |
+| Propulsion | **2× (2× 50mm EDF @ 6S, tandem series) per nacelle** · pod OD ~60.5 mm × 67 mm · pod length 148.3 mm · 1× 120mm EDF @ 6S rear · Rev O pivot at Z=83mm (nacelle CG) |
+| Nozzle linkage | Passive gear train: M=1.0 sector R=22mm → pinion N=12T → bevel pair N=14T 45° → crown N=12T → ring rack R=28mm · ratio 70.7° nozzle per 90° tilt · no dedicated servo |
+| Nacelle ESC | 4× 40A 6S BLHeli32 BDSHOT (one per 50mm EDF) · 1× 80A 6S BLHeli32 (120mm rear) |
+| Total hover thrust | **~5,322 g** (~1,822 g nacelles + ~3,500 g rear EDF) · T/W ≈1.50 at 6S 4000mAh AUW |
+| Governor | **PID closed-loop RPM per EDF** · BDSHOT600 feedback · nacelle equalization (Rev L governor — unchanged) |
 | Avionics | **8× PocketBeagle 2 Industrial (AM6254)** · 4× Cape-A (FC nodes) · 4× Cape-B (CN nodes) · DK 2820-100003007-ND · $51.03 ea |
-| Avionics dry | **420 g** (8× PB2-I + 4× Cape-A + 4× Cape-B + 4× RCRS-49 + GPS×4 + radios) |
-| Airframe dry (Rev M) | **3,213 g** |
-| AUW empty | **3,623 g · 6S 4000mAh · T/W 3.11** |
-| AUW cargo 250g | **3,758 g · 6S 2800mAh · T/W 2.99** |
-| Max payload at T/W=2.0 | **1,392 g (3.07 lb)** |
+| Avionics dry | ~420 g (8× PB2-I + 4× Cape-A + 4× Cape-B + 4× RCRS-49 + GPS×4 + radios) |
+| AUW (Rev O) | **~3,550 g · 6S 4000mAh · T/W ≈1.50** |
+| Max payload at T/W=1.0 | **~1,772 g (3.91 lb)** |
 | Cruise speed | 38–54 kts (scaled from 35-49kts at 365mm) |
 | Transition altitude | ≥30 ft AGL |
 | CG target | 190 mm (7.48") from nose |

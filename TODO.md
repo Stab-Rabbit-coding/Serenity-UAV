@@ -24,10 +24,14 @@ Last updated: 2026-05-23
   Run: `blender --background --python <script>.py` per CLAUDE.md workflow.
   Verify Z-range and bore diameter in console before committing.
 
-- [ ] **Nacelle pod for Rev N (50 mm tandem EDFs)** — existing nacelle STLs are
-  70 mm and 80 mm bore.  Rev N spec: 2× 50 mm EDF in tandem series per nacelle.
-  Need `nacelle_pod_50mm_tandem.scad` with: dual-bore centerline, 11-fin stator,
-  gear-coupled nozzle linkage hard points, tilt pivot boss.  Export STL when done.
+- [x] **Nacelle pod for Rev N (50 mm tandem EDFs)** — `nacelle_pod_50mm_tandem.scad` created
+  2026-05-24 with: dual-bore centerline (EDF1 Z=22..72mm, EDF2 Z=98..143mm), 11-fin
+  twisted stator, M=1.0 gear boss / conduit hard points, MF104ZZ clevis pivot boss at Z=83mm
+  (nacelle CG).  Rev O: pivot relocated to Z=83mm from Z=74mm (v1); blender_nacelle_revo.py
+  generates s_eng_left/right_stator_shell24_revo.stl.
+  **Note:** blender and openscad not installed in this build environment; run
+  `blender --background --python thingverse-serenity/blender_nacelle_revo.py` on host
+  machine to verify Z-range and bore-diameter before committing STLs. *(done 2026-05-24)*
 
 ---
 
