@@ -15,7 +15,7 @@
 // Thingiverse pivot components:
 //
 //   s_pivot_arm_a_scaled24   — inner pivot arm (fixed to nacelle, rotates on X)
-//   s_eng_piv_outer_scaled24 — outer pivot housing (wing-side, stow-fold hinge)
+//   s_eng_piv_outer_scaled24 — outer pivot housing (wing-side)
 //
 // The merged pylon integrates:
 //   • Hollow structural box body — entire interior is the harness routing channel
@@ -29,10 +29,8 @@
 //     The fixed sector gear is bolted here; the nacelle tilts around the spar
 //     while Pinion A (at Y = 28 mm on the nacelle) walks along the sector teeth.
 //   • Wing root attachment block — M3 bolts + positive-stop shoulder into the
-//     wing mount pocket on s_wings_both_shell24.stl.
-//   • Fold hinge — 4 mm CF hinge pin through two pylon ears; allows 90°
-//     fold-down of the nacelle+pylon assembly for stowage/transport.
-//     M2.5 set-screw in each ear retains the hinge pin (no spring, no magnets).
+//     wing mount pocket on s_wings_both_shell24.stl.  Pylon is rigidly fixed
+//     to the wing; no fold/stow mechanism.
 //
 // Scale / Compatibility Note
 // --------------------------
@@ -75,15 +73,6 @@
 //   (on the nacelle at Y = PINION_A_Y = 28 mm, Z = PIVOT_Z) orbits the pivot
 //   and rolls on the fixed sector, converting tilt angle to iris-drive shaft
 //   rotation.
-//
-// Fold Hinge
-// ----------
-//   A 4 mm CF hinge pin through the two inboard ears at the wing root end.
-//   Fold axis = Y direction (fore-aft, perpendicular to spar).
-//   0° position  = pylon horizontal (nacelle deployed for flight).
-//   90° position = pylon folded down (nacelle alongside fuselage, stowed).
-//   Each position is retained by an M2.5 × 4 set screw through a radial bore
-//   in each hinge ear that engages a detent flat on the hinge block.
 //
 // References
 // ----------
@@ -168,18 +157,6 @@ WING_BOLT_R     =  16.0;  // [mm] M3 bolt pitch circle radius (4× M3 × 16 SHCS
                            //      VERIFY position from wing STL insert positions
 WING_M3_INSERT_OD =  4.2; // [mm] M3 heat-set insert OD + 0.1 mm press
 WING_M3_INSERT_L  =  5.5; // [mm] M3 insert pocket depth
-
-// ── Fold hinge (inboard end of pylon, at wing root transition) ────────────────
-// 4 mm CF hinge pin through two pylon ears allows 90° fold for stowage.
-// Fold axis = Y (fore-aft); 0° = deployed, 90° = stowed (nacelle points down).
-FOLD_PIN_D      =   4.0;  // [mm] hinge CF pin diameter
-FOLD_BOSS_OD    =  14.0;  // [mm] hinge ear boss outer diameter
-FOLD_EAR_T      =   6.0;  // [mm] each hinge ear axial (X) thickness
-FOLD_EAR_GAP    =  22.0;  // [mm] gap between the two hinge ears (accommodates
-                           //      wing bracket mid-lug, nominally 20 mm + 1 mm/side)
-FOLD_PIN_BORE_D  =  4.0;  // [mm] hinge pin clearance bore (press: 3.98 → pin 4.0)
-FOLD_SS_BORE_D   =  2.7;  // [mm] M2.5 set-screw bore (radial, from ear OD to pin)
-FOLD_STOP_FLAT_W =  2.0;  // [mm] detent flat width milled on hinge block for set-screw
 
 // ── Harness / nav-light wiring ────────────────────────────────────────────────
 // Wire inventory through pylon interior (both EDFs, ESCs, nav-light WS2812C):
@@ -292,43 +269,6 @@ module wing_attach_block() {
 
 
 // =============================================================================
-// ── Module: fold_hinge_ears ───────────────────────────────────────────────────
-// =============================================================================
-// Two cylindrical hinge ear bosses extending inboard (in X) from the wing
-// attach block at Y = 0, Z = PIVOT_Z.  A 4 mm CF hinge pin passes through both
-// ears.  The wing bracket mid-lug sits in the gap between them.
-//
-// Fold axis: Y (fore-aft).  When the hinge pin rotates in the ear bores, the
-// entire pylon+nacelle swings from horizontal (deployed) to vertical-down (stowed).
-//
-// Each ear has a radial M2.5 set-screw bore that bears against a detent flat
-// on the hinge block at 0° and 90°.
-module fold_hinge_ears() {
-    // Ear centres: ±Z from pivot Z position, ±gap/2 in X direction from pylon end
-    ear_z_offset = 0;  // ears are centred on pivot Z
-    ear_x_base   = PYLON_X1 + WING_SLOT_DEPTH;  // inboard of the wing block
-
-    for (x_sign = [-1, +1]) {
-        translate([ear_x_base + (x_sign < 0 ? 0 : FOLD_EAR_GAP / 2 + FOLD_EAR_T / 2),
-                   0,
-                   PIVOT_Z])
-            rotate([90, 0, 0])   // cylinder axis = Y
-                // ── Ear cylinder ───────────────────────────────────────────
-                difference() {
-                    cylinder(r = FOLD_BOSS_OD / 2,
-                             h = FOLD_EAR_T,
-                             center = true);
-
-                    // ── Hinge pin bore (Y axis through ear) ───────────────
-                    cylinder(r = FOLD_PIN_BORE_D / 2,
-                             h = FOLD_EAR_T + 0.02,
-                             center = true);
-                }
-    }
-}
-
-
-// =============================================================================
 // ── Module: spar_bore ────────────────────────────────────────────────────────
 // =============================================================================
 // Press-fit bore for the 4 mm CF tilt spar, running along X through the entire
@@ -340,7 +280,7 @@ module fold_hinge_ears() {
 module spar_bore() {
     // The bore passes through the full pylon span plus the face-block thickness.
     bore_x_lo  = PYLON_X0 - (SECTOR_INSERT_L + 2.0);  // starts at nacelle face block
-    bore_x_hi  = PYLON_X1 + WING_SLOT_DEPTH + FOLD_EAR_T + 2.0;  // through fold ears + margin
+    bore_x_hi  = PYLON_X1 + WING_SLOT_DEPTH + 2.0;    // through wing block + 2 mm margin
 
     translate([bore_x_lo, 0, PIVOT_Z])
         rotate([0, 90, 0])   // cylinder along X
@@ -430,60 +370,6 @@ module wing_bolt_inserts() {
 
 
 // =============================================================================
-// ── Module: fold_hinge_pin_bore ───────────────────────────────────────────────
-// =============================================================================
-// Through-bore for the 4 mm CF fold hinge pin, perpendicular to the fold axis.
-// Runs along Y through both hinge ears.
-// Bore diameter = FOLD_PIN_BORE_D (press fit) — retains pin without set screw.
-// The M2.5 set-screw bore (FOLD_SS_BORE_D) is in the ear wall and engages
-// a detent flat on the hinge block bracket to lock 0° and 90° positions.
-module fold_hinge_pin_bore() {
-    ear_x_base = PYLON_X1 + WING_SLOT_DEPTH;
-    ear_half   = FOLD_EAR_GAP / 2 + FOLD_EAR_T;
-
-    for (x_sign = [-1, +1]) {
-        x_pos = ear_x_base + (x_sign < 0 ? FOLD_EAR_T / 2 : ear_half - FOLD_EAR_T / 2);
-
-        translate([x_pos, -FOLD_BOSS_OD / 2 - 0.5, PIVOT_Z])
-            rotate([-90, 0, 0])   // bore along Y
-                cylinder(r = FOLD_PIN_BORE_D / 2,
-                         h = FOLD_BOSS_OD + 1.0,
-                         center = false);
-    }
-}
-
-
-// =============================================================================
-// ── Module: fold_set_screw_bores ──────────────────────────────────────────────
-// =============================================================================
-// Radial M2.5 set-screw bores through each hinge ear, oriented to bear
-// against the detent flat on the wing bracket hinge block.
-// Two bores per ear: one for 0° (deployed) detent, one for 90° (stowed) detent.
-// The wing bracket must have matching flats machined or printed at these angles.
-module fold_set_screw_bores() {
-    ear_x_base = PYLON_X1 + WING_SLOT_DEPTH;
-
-    for (x_sign = [-1, +1]) {
-        x_pos = ear_x_base + (x_sign < 0 ? FOLD_EAR_T / 2 : FOLD_EAR_GAP / 2 + FOLD_EAR_T / 2);
-
-        // 0° detent: set screw approaches from +Z (top of ear)
-        translate([x_pos, 0, PIVOT_Z + FOLD_BOSS_OD / 2 + 0.5])
-            rotate([180, 0, 0])
-                cylinder(r = FOLD_SS_BORE_D / 2,
-                         h = FOLD_BOSS_OD / 2 + 1.0,
-                         center = false);
-
-        // 90° detent: set screw approaches from +Y (front face of ear, perpendicular)
-        translate([x_pos, -(FOLD_BOSS_OD / 2 + 0.5), PIVOT_Z])
-            rotate([90, 0, 0])
-                cylinder(r = FOLD_SS_BORE_D / 2,
-                         h = FOLD_BOSS_OD / 2 + 1.0,
-                         center = false);
-    }
-}
-
-
-// =============================================================================
 // ── Module: wing_incidence_shim ───────────────────────────────────────────────
 // =============================================================================
 // A 3° taper on the wing attach block face imposes 3° of positive incidence on
@@ -540,9 +426,6 @@ module pylon(inboard_sign = INBOARD_SIGN) {
                 // ── Wing root attachment block with shoulder flange ───────────
                 wing_attach_block();
 
-                // ── Fold hinge ears (extend inboard of wing block) ────────────
-                fold_hinge_ears();
-
             } // end union
 
             // ==================================================================
@@ -568,13 +451,6 @@ module pylon(inboard_sign = INBOARD_SIGN) {
             // ── M3 insert pockets for wing attachment bolts ───────────────────
             wing_bolt_inserts();
 
-            // ── Fold hinge pin bore ────────────────────────────────────────────
-            // 4 mm CF pin through both hinge ears.
-            fold_hinge_pin_bore();
-
-            // ── Fold set-screw bores (0° deployed + 90° stowed detents) ───────
-            fold_set_screw_bores();
-
         } // end difference
     } // end mirror
 }
@@ -597,9 +473,8 @@ pylon(inboard_sign = INBOARD_SIGN);
 // Infill      : 40% gyroid throughout (structural — no non-structural regions)
 // Nozzle      : Hardened-steel required (CF-PETG abrasive)
 // Orientation : Long axis (X, spar direction) horizontal on build plate;
-//               pylon body flat-face down; fold hinge ears pointing up.
-//               Requires support under fold ears and wing block shoulder flange.
-// Supports    : Breakaway / tree supports under hinge ears and flange overhangs.
+//               pylon body flat-face down; wing attach block flange pointing up.
+// Supports    : Breakaway / tree supports under wing block shoulder flange overhang.
 // Quantity    : 2 per aircraft (port + starboard — mirror in slicer).
 // Colour      : Matte black CF-PETG for UV/heat resistance.
 //
@@ -615,8 +490,6 @@ pylon(inboard_sign = INBOARD_SIGN);
 //   3. Sector gear recess: verify Ø 48 mm sector gear plate seats flush.
 //   4. M2.5 insert pockets: heat-set 4× M2.5 brass inserts; confirm flush seating.
 //   5. M3 insert pockets: heat-set 4× M3 brass inserts in wing block.
-//   6. Fold hinge bores: 4mm CF pin should slide through both ears with hand
-//      pressure; no rocking.  Apply thin film of PTFE grease.
 //
 // Render commands:
 //   Port pylon:

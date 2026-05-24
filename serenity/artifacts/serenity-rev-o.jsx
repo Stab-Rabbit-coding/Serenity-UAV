@@ -948,7 +948,6 @@ export default function RevOSpec() {
                                     ["SPAR_BORE_D",      "4.0 mm",           "CF spar press-fit bore (fixed in pylon)"],
                                     ["NAC_BOSS_SOCKET",  "Ø16.3 × 5.5 mm",  "Accepts nacelle pivot boss (16 mm OD)"],
                                     ["SECTOR_GEAR_BC_R", "18 mm",            "M2.5 insert bolt circle (4× inserts)"],
-                                    ["FOLD_PIN_D",       "4.0 mm",           "CF fold hinge pin diameter"],
                                     ["WING_SLOT_W",      "50 mm",            "Wing mount block width (VERIFY vs STL)"],
                                     ["WING_SLOT_H",      "40 mm",            "Wing mount block height (VERIFY vs STL)"],
                                 ].map((row, i) => (
@@ -1043,15 +1042,10 @@ export default function RevOSpec() {
                                     [
                                         "5",
                                         "Wing root attach block",
-                                        "4× M3 SHCS + positive-stop shoulder into wing pocket; no friction-fit primary joint",
+                                        "4× M3 SHCS + positive-stop shoulder into wing pocket; rigidly fixed — no fold mechanism",
                                     ],
                                     [
                                         "6",
-                                        "Fold hinge",
-                                        "4 mm CF hinge pin; 0°–90° fold range; M2.5 set-screw ball detent at 0° and 90°",
-                                    ],
-                                    [
-                                        "7",
                                         "Nav light wiring route",
                                         "Harness exits nacelle through X-face port: 14 × 8 mm slot at Z = 86 mm, adjacent to pivot boss",
                                     ],
@@ -1076,11 +1070,11 @@ export default function RevOSpec() {
                                 </tr>
                                 <tr style={{ background: "rgba(192,132,252,0.04)" }}>
                                     <td style={{ padding: "4px 14px 4px 0", color: C.dim,  fontFamily: M, fontSize: 12, whiteSpace: "nowrap" }}>Orientation</td>
-                                    <td style={{ padding: "4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>Long axis (X) horizontal on build plate; fold-hinge ears facing up</td>
+                                    <td style={{ padding: "4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>Long axis (X) horizontal on build plate; pylon body flat-face down; wing block flange up</td>
                                 </tr>
                                 <tr>
                                     <td style={{ padding: "4px 14px 4px 0", color: C.dim,  fontFamily: M, fontSize: 12, whiteSpace: "nowrap" }}>Supports</td>
-                                    <td style={{ padding: "4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>Required under fold-hinge ears and wing attachment block overhang</td>
+                                    <td style={{ padding: "4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>Required under wing attachment block shoulder flange overhang only</td>
                                 </tr>
                                 <tr style={{ background: "rgba(192,132,252,0.04)" }}>
                                     <td style={{ padding: "4px 14px 4px 0", color: C.dim,  fontFamily: M, fontSize: 12, whiteSpace: "nowrap" }}>Quantity</td>
