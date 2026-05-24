@@ -10,48 +10,6 @@
   (lib_symbols
   )
 
-  ; -----------------------------------------------------------------------
-  ; XCVR-49MHZ-1  —  DESIGN STUB
-  ;
-  ; Regulatory basis:  FCC Part 95 Subpart D (Remote Control Radio Service)
-  ;   Channels:  49.830 / 49.845 / 49.860 / 49.875 / 49.890 MHz
-  ;   Max TX power:  100 mW ERP  (47 CFR 95.631)
-  ;   Modulation:    AFSK (1200 baud, Bell 202, space=2200Hz / mark=1200Hz)
-  ;   Protocol:      AX.25 v2.2  (half-duplex, CSMA/CA)
-  ;
-  ; Interface to CAPE-B:
-  ;   J1  — 6-pin 2.54mm header
-  ;          pin 1  +5V  (from CAPE-B 5V rail, 200 mA max)
-  ;          pin 2  GND
-  ;          pin 3  UART_TX  (3.3V LVTTL, data from host to XCVR)
-  ;          pin 4  UART_RX  (3.3V LVTTL, data from XCVR to host)
-  ;          pin 5  PTT_N    (3.3V active-low push-to-talk from host)
-  ;          pin 6  RSSI_ANA (0–3.3V analog RSSI output to host ADC)
-  ;
-  ; Expected subsystems on schematic (all TBD):
-  ;   U1   DDS carrier synthesiser  (AD9833BRMZ or Si5351A-B-GT)
-  ;        — generates 49.860 MHz primary channel (configurable via SPI/I2C)
-  ;   U2   AFSK modem               (TCM3105 or discrete op-amp Goertzel DSP)
-  ;        — Bell 202 1200/2200 Hz tone encode/decode on 3.3V LVTTL UART
-  ;   U3   DSB/FM modulator + PA    (NE612 balanced mixer + discrete 2N7002 PA)
-  ;        — combines DDS carrier with AFSK audio; 100 mW output max
-  ;   U4   LNA + envelope detector  (MGA-82563 LNA + 1N5711 Schottky)
-  ;        — RX front-end; feeds AFSK demodulator
-  ;   FL1  5-element Chebyshev LPF  (fc = 75 MHz, −60 dBc at 2nd harmonic)
-  ;        — FCC 47 CFR 95.655 spurious emission suppression
-  ;   U5   TX/RX antenna switch     (PE4259-63 SPDT, driven by PTT_N)
-  ;   J2   SMA edge connector       — 50 Ω antenna port
-  ;   U6   3.3V LDO regulator       (AMS1117-3.3 or equivalent)
-  ;
-  ; Design constraints:
-  ;   — Full ground plane on In1.Cu; no copper pours on signal layers in RF section
-  ;   — 50 Ω microstrip on F.Cu: 2.75 mm wide on 1.6 mm FR4 (εr=4.5)
-  ;   — Keep digital UART traces ≥ 5 mm from RF section; use guard ring
-  ;   — All LPF inductors must be shielded (ferrite can) to prevent re-radiation
-  ;   — SMA connector flush to board edge; 3 mm keep-out on both sides of line
-  ;   — Board size: 55 × 35 mm (matches Cape-A/B footprint for stacking)
-  ; -----------------------------------------------------------------------
-
   (sheet_instances
     (path "/" (page "1"))
   )

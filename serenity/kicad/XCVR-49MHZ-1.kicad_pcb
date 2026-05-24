@@ -93,15 +93,12 @@
 	(net 14 "AFSK_OUT")
 	(net 15 "AFSK_IN")
 
-	; Board outline — 55 x 35 mm, origin at (100, 100)
-	; Matches Cape-A/B footprint for potential stacking
-	(gr_rect
+     (gr_rect
 		(start 100 100) (end 155 135)
 		(stroke (width 0.05) (type solid))
 		(layer "Edge.Cuts")
 	)
 
-	; Fab layer annotation — RF keep-out zone (right 25 mm = RF section)
 	(gr_rect
 		(start 130 100) (end 155 135)
 		(stroke (width 0.1) (type dash))
@@ -110,14 +107,13 @@
 	)
 	(gr_text "RF SECTION\n50Ω microstrip\nno pours on signal layers"
 		(at 142.5 117.5) (layer "F.Fab")
-		(effects (font (size 1.0 1.0) (thickness 0.15)) (justify center))
+		(effects (font (size 1.0 1.0) (thickness 0.15)) (justify left))
 	)
 	(gr_text "DIGITAL SECTION\nUART / power / modem"
 		(at 115 117.5) (layer "F.Fab")
-		(effects (font (size 1.0 1.0) (thickness 0.15)) (justify center))
+		(effects (font (size 1.0 1.0) (thickness 0.15)) (justify left))
 	)
 
-	; SMA keep-out marker on right edge (antenna port)
 	(gr_line
 		(start 155 112.5) (end 152 112.5)
 		(stroke (width 0.2) (type solid))
@@ -128,7 +124,6 @@
 		(effects (font (size 0.8 0.8) (thickness 0.12)) (justify right))
 	)
 
-	; J1 header marker on left edge (CAPE-B interface)
 	(gr_line
 		(start 100 110) (end 103 110)
 		(stroke (width 0.2) (type solid))
