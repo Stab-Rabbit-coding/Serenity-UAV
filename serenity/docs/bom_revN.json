@@ -4,7 +4,7 @@
   "scale": "24 inches (609.6 mm)",
   "author": "Steve Griffing PE(CSE) CISSP-ISSEP CPP",
   "license": "CC BY 4.0",
-  "date": "2026-05-20",
+  "date": "2026-05-23",
 
   "rev_n_summary": "Rev N is the first fully-documented 24-inch build of the Serenity-class tiltrotor UAV. It supersedes the 18-inch Rev M design. Key changes: scale 18→24 in, propulsion 4×80mm→2×(2×50mm in series) tandem nacelles, counter-rotating EDF pairs (port CW / starboard CCW) for zero net torque, 8-fin twisted stators integrated into each nacelle print (CF-PETG), gear-linked iris nozzles on both nacelles driven passively by the tilt pivot (no dedicated nozzle servo), single servo for rear fuselage 120mm nozzle, nacelle tilt range 0°(cruise)→120°(backing) with hard stops at −5°/140°. Avionics: 8× PocketBeagle 2 Industrial (AM6254) + Cape-A/B unchanged from Rev M. Rev N intake change: belly scoop removed; 4 radial scoop inlets (90° spacing, dorsal/port/ventral/stbd) cut into hull at neck station ~310mm from nose; CF-PETG structural intake frame bonded into each opening; cross-shaped PETG plenum manifold routes air from all 4 scoops to the 120mm EDF fan face inside Panel F engine bell. SiK 915MHz belly antenna relocated forward to station ~260mm.",
 
@@ -387,7 +387,39 @@
       "bay_B": "CN2 (Cape-B, lower) + FC2 (Cape-A, upper) — mid-forward, ~X=91..165mm",
       "bay_D": "CN3 (Cape-B, lower) + FC3 (Cape-A, upper) — mid-aft, ~X=251..320mm",
       "bay_E": "CN4 (Cape-B, lower) + FC4 (Cape-A, upper) — aft service, ~X=320..388mm"
-    }
+    },
+    "antenna_system": [
+      {
+        "ref":         "WIRE-49MHZ",
+        "desc":        "49 MHz top wire — 0.3 mm stainless steel, ~470 mm, dorsal spine",
+        "qty":         1,
+        "mass_g":      3,
+        "cost_usd":    5,
+        "supplier":    "Amazon / AliExpress",
+        "search":      "Stainless steel wire 0.3mm dia 1m spool",
+        "notes":       "End-fed shortened wire; horizontal polarisation; cross-pol loss ~6–12 dB at ≤300 m acceptable"
+      },
+      {
+        "ref":         "POST-FWD-49",
+        "desc":        "Forward wire post + base-loading coil — PETG post + 38 uH coil + LC pi-net at dorsal hull ~120 mm from nose",
+        "qty":         1,
+        "mass_g":      4,
+        "cost_usd":    8,
+        "supplier":    "In-house / AliExpress",
+        "search":      "38uH air-core inductor + variable cap + PETG printed post",
+        "notes":       "3 mm clearance from GPS patch face; bench-test HDOP ≤1.5 with RCRS TX active before first flight"
+      },
+      {
+        "ref":         "POST-AFT-49",
+        "desc":        "Aft wire post + ceramic bead insulator — top of rear nozzle cone ~600 mm from nose",
+        "qty":         1,
+        "mass_g":      2,
+        "cost_usd":    3,
+        "supplier":    "AliExpress",
+        "search":      "Ceramic standoff insulator 3mm + PETG post",
+        "notes":       "Strain-relief wire at aft post; open-circuit (insulated) termination"
+      }
+    ]
   },
 
   "power": {
