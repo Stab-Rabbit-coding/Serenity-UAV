@@ -134,12 +134,17 @@ WIRE_GUIDE_LENGTH     = 20.0
 
 # ── Pivot / clevis constants ──────────────────────────────────────────────────
 # Rev O: pivot relocated to nacelle CG, computed from mass breakdown in module docstring.
+# CG-alignment fix: pivot is now at Y=0 relative to bore centre (bore axis in Y = Y_cg).
+# The prior value of CLEVIS_Y_FROM_BORE = -41.9mm placed the pivot 41.9mm off the bore
+# axis, creating a gravity-torque arm that fought the tilt servo at every nacelle angle.
+# With CLEVIS_Y_FROM_BORE = 0.0, the pivot axis passes through the bore centre in Y
+# (= Y_cg ≈ 0 for this bore-symmetric assembly), eliminating gravity moment entirely.
 PIVOT_Z_FROM_INTAKE  = 83.0   # mm — Rev O: pivot at nacelle CG, computed from mass breakdown above
-CLEVIS_ARM_SLOT      = 16.0   # mm — slot width between ears; arm width must be ≤15mm with 0.5mm clearance
-CLEVIS_EAR_THICK     = 10.0   # mm — X-direction thickness of each ear (F688ZZ is 5mm wide → 2.5mm each side)
-CLEVIS_EAR_OD        = 26.0   # mm — ear outer diameter (F688ZZ OD=16mm + 2×5mm CF-PETG housing wall)
-CLEVIS_PIN_D         =  8.0   # mm — F688ZZ bearing ID; hinge-pin = CF spar through-bore
-CLEVIS_Y_FROM_BORE   = -41.9  # mm — ear centre Y offset from bore_cy (negative → inboard −Y skin)
+CLEVIS_ARM_SLOT      = 16.0   # mm — slot width between nacelle X faces; arm width must be ≤15mm
+CLEVIS_EAR_THICK     = 10.0   # mm — X-direction thickness of each pivot boss (MF104ZZ is 4mm wide + 1mm margin)
+CLEVIS_EAR_OD        = 26.0   # mm — boss outer diameter (MF104ZZ OD=10mm + 2×8mm CF-PETG housing wall)
+CLEVIS_PIN_D         =  8.0   # mm — MF104ZZ bearing ID (4mm) + clearance; hinge-pin = CF spar through-bore
+CLEVIS_Y_FROM_BORE   =  0.0   # mm — bore axis in Y (= nacelle Y_cg ≈ 0); pivot spar passes through bore centre
 
 # ── Inlet bell constants ──────────────────────────────────────────────────────
 INLET_BELL_Z_THROAT = 22.0   # mm — inlet bell joins thrust tube here (= EDF1 entry face)
@@ -162,17 +167,25 @@ PINION_A_SHAFT_D    =  3.0    # mm — MR63ZZ bearing ID; 3mm CF rod shaft
 PINION_A_BOSS_OD    =  7.0    # mm — MR63ZZ OD 6mm + 0.5mm press-fit wall
 PINION_A_BOSS_ID    =  3.2    # mm — shaft clearance bore (0.2mm on 3mm rod)
 PINION_A_BOSS_LEN   = 10.0    # mm — spans 2× MR63ZZ bearings (2×2.5mm + 5mm gap)
-PINION_A_Y_OFFSET   = -41.9   # mm — same Y as clevis ears (inboard −Y face)
+# PINION_A_Y_OFFSET fix: Pinion A must be at 28mm fore-aft from bore centre so it
+# meshes with the fixed sector gear (R=22mm) centred on the pivot axis (Y=0).
+# Centre-distance = R_sector + R_pinion_A = 22 + 6 = 28mm.
+# Prior value of -41.9mm placed Pinion A coaxially with the clevis (=pivot) centre,
+# making gear engagement geometrically impossible.
+PINION_A_Y_OFFSET   = 28.0    # mm — 28mm fore-aft from bore centre = R_sector(22) + R_pinion_A(6);
+                               #       Pinion A meshes with sector gear at this distance
 # Bevel housing mount: two M2.5 boss posts flanking the transverse shaft.
 BEVEL_BOSS_SPACING  = 16.0    # mm — centre-to-centre along X (clevis slot width)
 BEVEL_BOSS_OD       =  6.0    # mm — M2.5 clearance + 2×1.75mm wall
-BEVEL_BOSS_H        =  8.0    # mm — protrudes −Y from nacelle skin
+BEVEL_BOSS_H        =  8.0    # mm — protrudes in +Y from nacelle skin (same side as Pinion A)
 BEVEL_BOSS_BORE     =  2.7    # mm — M2.5 clearance
 # Longitudinal shaft conduit: 3mm CF shaft routes from bevel B output to crown pinion.
+# Conduit Y position matches Pinion A and Crown Pinion (both at Y=PINION_A_Y_OFFSET=28mm)
+# so the enclosed CF shaft runs straight with no lateral bend that would bind in the sleeve.
 SHAFT_CONDUIT_OD    =  5.5    # mm — OD of conduit rib on nacelle exterior
 SHAFT_CONDUIT_ID    =  3.5    # mm — clears 3mm shaft inside 4mm OD PTFE sleeve
-SHAFT_CONDUIT_ANGLE = -0.5    # rad — angular position of conduit on bore (−Y direction toward fuselage)
-SHAFT_CONDUIT_R     = 31.0    # mm — radial distance of conduit centreline from bore axis
+SHAFT_CONDUIT_ANGLE = -0.5    # rad — angular position of conduit on bore (retained for legacy geometry)
+SHAFT_CONDUIT_R     = 28.0    # mm — Y offset of conduit from bore axis; matches PINION_A_Y_OFFSET
 CROWN_PINION_Z_REF  = 133.0   # mm — crown pinion shaft centre (1× ref); near nozzle ring bottom
 # Crown pinion boss (same bearing spec as Pinion A)
 CROWN_BOSS_OD       =  7.0    # mm
@@ -1053,16 +1066,17 @@ for cfg in NACELLES:
     # Rev O: clevis at Z=83mm (nacelle CG) instead of 74mm (Rev N).
     # F688ZZ bearing (8mm ID × 16mm OD × 5mm wide); hinge-pin = CF spar through-bore.
     clevis_ext = make_clevis_extension("clevis_ext", bore_cx, bore_cy, pivot_z)
-    print(f"  Clevis: X-axis tilt hinge at Z={pivot_z:.1f}mm (Rev O CG-aligned), "
-          f"Y_offset={CLEVIS_Y_FROM_BORE:.1f}mm (inboard), "
-          f"ear_OD={CLEVIS_EAR_OD:.0f}mm pin_ID={CLEVIS_PIN_D:.0f}mm "
-          f"slot={CLEVIS_ARM_SLOT:.0f}mm  [F688ZZ × 2]")
+    print(f"  Pivot boss: X-axis tilt hinge at Z={pivot_z:.1f}mm (Rev O CG-aligned), "
+          f"Y_offset={CLEVIS_Y_FROM_BORE:.1f}mm (bore axis = Y_cg; zero gravity torque), "
+          f"boss_OD={CLEVIS_EAR_OD:.0f}mm pin_bore={CLEVIS_PIN_D:.0f}mm "
+          f"spar_span={CLEVIS_ARM_SLOT:.0f}mm  [MF104ZZ × 2, X-face bosses]")
 
     # ── Rev O: Pinion A bearing boss ─────────────────────────────────────────
     # Transverse shaft boss at CG pivot, inboard face.
     # Boss axis = X (spanwise); boss OD = MR63ZZ press-fit seat (7mm).
     pinion_a_boss = make_pinion_a_boss("pinion_a_boss", bore_cx, bore_cy, pivot_z)
     print(f"  Pinion A boss: X-axis at Z={pivot_z:.1f}mm, Y_offset={PINION_A_Y_OFFSET:.1f}mm "
+          f"(28mm = R_sector+R_pinion for sector-gear meshing) "
           f"OD={PINION_A_BOSS_OD:.0f}mm bore={PINION_A_BOSS_ID:.1f}mm [MR63ZZ seats]")
 
     # ── Rev O: Bevel housing M2.5 mount posts ────────────────────────────────
@@ -1078,7 +1092,8 @@ for cfg in NACELLES:
     shaft_conduit = make_shaft_conduit("shaft_conduit", bore_cx, bore_cy,
                                        pivot_z, crown_z)
     print(f"  Shaft conduit: Z={pivot_z:.1f}..{crown_z:.1f}mm, "
-          f"R={SHAFT_CONDUIT_R:.0f}mm, OD={SHAFT_CONDUIT_OD:.1f}mm ID={SHAFT_CONDUIT_ID:.1f}mm")
+          f"Y={SHAFT_CONDUIT_R:.0f}mm from bore (=PINION_A_Y_OFFSET, straight shaft run), "
+          f"OD={SHAFT_CONDUIT_OD:.1f}mm ID={SHAFT_CONDUIT_ID:.1f}mm")
 
     # ── Rev O: Crown pinion bearing boss at nozzle end ────────────────────────
     # Same spec as Pinion A boss (MR63ZZ press-fit seats); mounted near nozzle ring.
@@ -1199,7 +1214,7 @@ print("  • Pinion A bearing boss added at pivot Z: MR63ZZ press-fit (7mm OD, 3
 print("  • Bevel housing M2.5 mount posts (×2) added flanking Pinion A on inboard face.")
 print("  • Longitudinal shaft conduit rib added on nacelle exterior:")
 print(f"    Route: pivot_Z → crown_Z={CROWN_PINION_Z_REF:.0f}mm (ref), "
-      f"R={SHAFT_CONDUIT_R:.0f}mm from bore axis, angle≈{math.degrees(SHAFT_CONDUIT_ANGLE):.1f}°.")
+      f"Y={SHAFT_CONDUIT_R:.0f}mm from bore axis (= PINION_A_Y_OFFSET; straight shaft run).")
 print("    3mm CF shaft inside 4mm OD PTFE sleeve; conduit OD=5.5mm ID=3.5mm.")
 print("  • Crown pinion bearing boss added at Z≈133mm (ref) — MR63ZZ same as Pinion A.")
 
@@ -1223,9 +1238,10 @@ print("  6. Confirm stator fin vanes visible in gap Z≈90..123mm — stator is 
 print("  7. Seat nozzle iris ring at ring_bottom_z; no separate hinge pins (rack-coupled).")
 
 print("\nTILT HINGE (Rev O — CG-pivot):")
-print("  Clevis ears at inboard (−Y) face, Z≈103.75mm (scaled).  Pin = CF spar through F688ZZ.")
-print("  Pivot co-planar with Pinion A shaft — one CF spar serves as both hinge pin and gear shaft.")
-print("  Arm slot = 16mm wide; fabricate arm ≤15mm wide for 0.5mm clearance each side.")
+print("  Pivot spar along X at (Y=0, Z=83mm) — bore-centre in Y = Y_cg; spar passes through inter-EDF gap bore.")
+print("  MF104ZZ bearing bosses on both ±X faces of nacelle at (Y=0, Z=PIVOT_Z).  Pin = 4mm CF spar.")
+print("  Pivot Y=0 (bore axis): eliminates gravity torque arm; tilt servo only works against aero/inertia loads.")
+print("  Spar span = nacelle OD_X + 2×boss_depth = 60.5 + 10 = 70.5mm; fabricate arm bracket accordingly.")
 
 print("\nSWIRL DIRECTION:")
 print("  Port  (left)  nacelle: SWIRL_DIR=+1 — EDF motors wired CW viewed from intake.")

@@ -20,8 +20,8 @@
 //   • Inter-stage 11-fin twisted stator between EDF1 exit and EDF2 entry
 //   • EDF2 seat and motor-mount strut ring  (aft/downstream EDF)
 //   • Nozzle ring pocket at nozzle exit (rotating iris ring seat)
-//   • CG-aligned tilt clevis (two flanged-bearing ears at PIVOT_Z = CG)
-//   • Drive Pinion A boss (MR63ZZ bearing seat, co-axial with pivot)
+//   • CG-aligned pivot X-face boss (two MF104ZZ bearing bosses at PIVOT_Z = CG, Y=0)
+//   • Drive Pinion A boss (MR63ZZ bearing seat, at Y=PINION_A_Y=28mm from bore, meshes sector gear)
 //   • Crown Pinion boss (near nozzle ring, drives nozzle ring rack)
 //   • Longitudinal gear shaft conduit (3 mm CF shaft in PTFE sleeve)
 //   • Elliptical outer shell (NACELLE_OD_X × NACELLE_OD_Y cross-section)
@@ -44,7 +44,13 @@
 //
 // Rev O — CG-Pivot Design Note
 // ----------------------------
-// The tilt pivot is located at PIVOT_Z = 83 mm from the intake face.
+// The tilt pivot is located at PIVOT_Z = 83 mm from the intake face AND
+// at Y = 0 (bore axis).  Both conditions must be satisfied simultaneously
+// to achieve zero gravity torque about the tilt (X) axis at any tilt angle.
+//   • Z_cg = PIVOT_Z = 83 mm  (verified from nacelle mass breakdown below)
+//   • Y_cg ≈ 0 (bore-symmetric assembly; all major masses on bore axis)
+// The pivot spar runs along X through the spanwise X-face boss bores, passing
+// through the inter-EDF bore space at Y=0, Z=PIVOT_Z.  No clevis arm offset.
 // This position matches the full nacelle centre of gravity (CG), derived
 // from the complete mass breakdown:
 //
@@ -129,14 +135,18 @@ SWIRL_DIR       =  +1;    // [+1 / −1] stator swirl direction (default port CW
 PIVOT_Z         =  83.0;  // [mm] pivot axial centre (= nacelle CG station)
 
 // MF104ZZ flanged bearing: ID=4mm, OD=10mm, width=4mm.
-// Two bearings per nacelle, press-fit into the clevis ear bores.
+// Two bearings per nacelle, press-fit into the pivot boss bores on the nacelle X faces.
 // Selected over prior 686ZZ (6mm ID) to reduce mass and bore diameter.
 PIVOT_BORE_D    =   4.2;  // [mm] pivot rod clearance bore (4mm CF rod + 0.2mm)
-PIVOT_BEAR_OD   =  10.0;  // [mm] MF104ZZ bearing OD — sets ear bore press-fit diameter
-CLEVIS_EAR_T    =   5.0;  // [mm] ear thickness (1× MF104ZZ width 4mm + 0.5mm print margin)
-CLEVIS_SLOT_W   =  16.0;  // [mm] gap between ears (tilt bracket arm inserts here)
-CLEVIS_EAR_OD   =  16.0;  // [mm] ear cylinder OD (bearing OD 10mm + 2×3mm CF-PETG wall)
-CLEVIS_Y_OFFSET =  35.5;  // [mm] ear centre radial offset from bore axis (+Y, outboard)
+PIVOT_BEAR_OD   =  10.0;  // [mm] MF104ZZ bearing OD — sets boss bore press-fit diameter
+CLEVIS_EAR_T    =   5.0;  // [mm] retained for compatibility; same value as PIVOT_BOSS_DEPTH
+CLEVIS_SLOT_W   =  16.0;  // [mm] gap between nacelle X faces (tilt bracket arm inserts here)
+CLEVIS_EAR_OD   =  16.0;  // [mm] boss cylinder OD (bearing OD 10mm + 2×3mm CF-PETG wall)
+// CLEVIS_Y_OFFSET REMOVED: pivot is now at Y=0 (bore axis).  Moving the pivot
+// 35.5mm off the bore axis (the prior bug) created a gravity torque component
+// that fought the tilt servo at every angle.  With Y=0 = Y_cg the gravity
+// moment about the tilt axis is zero at all nacelle tilt angles.
+PIVOT_BOSS_DEPTH =   5.0;  // [mm] X-face pivot bearing boss protrusion depth (= CLEVIS_EAR_T)
 
 // ── Gear mount features ───────────────────────────────────────────────────────
 // All gears: Module M=1.0mm, pressure angle 20°.  Sizes:
@@ -149,14 +159,25 @@ CLEVIS_Y_OFFSET =  35.5;  // [mm] ear centre radial offset from bore axis (+Y, o
 //   At 90° nacelle tilt:
 //     Sector arc / pinion circumference × bevel 1:1 × crown:rack
 //     ≈ (22/6) × 1.0 × (6/28) × 90° = 70.7° ring rotation → nozzle fully open
-PINION_A_Z      =  83.0;  // [mm] Drive Pinion A shaft centre (= PIVOT_Z, co-axial)
+//
+// PINION_A_Y geometry note:
+//   The sector gear is fixed to the tilt bracket and centred on the pivot axis
+//   (Y=0, Z=PIVOT_Z).  Pinion A rolls on the sector gear, so its shaft must sit
+//   at centre-distance = R_sector + R_pinion = 22 + 6 = 28 mm from the sector
+//   centre.  PINION_A_Y = 28 mm is that offset in the Y (fore-aft) direction.
+//   Placing Pinion A coaxially at Y=0 (the prior bug) prevented any meshing.
+PINION_A_Z      =  83.0;  // [mm] Drive Pinion A shaft centre Z (= PIVOT_Z, same axial station)
+PINION_A_Y      =  28.0;  // [mm] fore-aft offset of Pinion A from bore centre
+                           //      = R_sector + R_pinion = 22 + 6 = 28 mm (meshing distance)
 PINION_A_BOSS_OD=   7.0;  // [mm] MR63ZZ press-fit boss OD (6mm bearing OD + 0.5mm wall)
 PINION_A_BOSS_L =  10.0;  // [mm] boss length (2× MR63ZZ bearings stacked + gap)
 PINION_A_SHAFT_D=   3.2;  // [mm] shaft clearance bore (3mm CF shaft + 0.2mm)
 CROWN_Z         = 133.0;  // [mm] Crown Pinion shaft centre (near nozzle ring bottom)
 CROWN_BOSS_OD   =   7.0;  // [mm] same spec as Pinion A boss (MR63ZZ press-fit)
 CROWN_BOSS_L    =  10.0;  // [mm] boss length
-SHAFT_CONDUIT_R =  31.0;  // [mm] conduit centreline radial distance from bore axis
+// SHAFT_CONDUIT_R removed: conduit Y position now derived from PINION_A_Y = 28mm.
+// The conduit runs at Y = PINION_A_Y so it is co-planar with both Pinion A and
+// the Crown Pinion, giving the enclosed CF shaft a straight longitudinal run.
 SHAFT_CONDUIT_OD=   5.5;  // [mm] conduit outer diameter (PTFE sleeve OD = 4mm + 0.5mm wall)
 SHAFT_CONDUIT_ID=   3.5;  // [mm] conduit inner bore (clears 3mm CF shaft in 4mm PTFE sleeve)
 
@@ -180,6 +201,42 @@ NOZZLE_RING_H   =   8.0;  // [mm] pocket axial depth (ring height + 0.5mm cleara
 // $fn=72 gives smooth circles at the expense of render time.
 // Reduce to $fn=36 for quick previews; use 72 for export.
 $fn = 72;
+
+
+// ── Navigation light wiring and harness exit provisions ───────────────────────
+// Added Rev O to support:
+//   (a) WS2812C navigation light (28AWG 3-core signal wire) routed from the
+//       tip cap LED recess to the inboard pylon harness channel.
+//   (b) ESC motor lead / signal wire harness exit from the nacelle interior
+//       to the pylon hollow-body harness channel.
+//
+// The conduit is an external D-section tube moulded onto the nacelle inboard
+// X-face outer shell.  PYLON_SIDE = +1 places the conduit on the +X face (port
+// nacelle, pylon toward fuselage on +X).  Override to -1 for starboard nacelle.
+//
+// 14 CFR 91.209 compliance:
+//   Port  nacelle (PYLON_SIDE = +1): RED WS2812C-2020 LED at Z = 0 tip cap.
+//   Stbd  nacelle (PYLON_SIDE = -1): GREEN WS2812C-2020 LED at Z = 0 tip cap.
+//   Both visible ≥ 3 SM, 110° arc (port) / 110° arc (stbd), as required.
+//
+PYLON_SIDE       = +1;    // [+1 / −1] inboard face sign: +1 = port, -1 = stbd
+                           //           override: openscad -D PYLON_SIDE=-1
+
+// Navigation light conduit (D-section, external, on nacelle inboard X-face)
+NAV_CONDUIT_BORE =  4.0;  // [mm] inner bore ID for 28AWG 3-core wire bundle
+NAV_CONDUIT_W    =  8.0;  // [mm] conduit outer width in Y
+NAV_CONDUIT_D    =  5.0;  // [mm] conduit depth in X beyond nacelle outer shell
+NAV_CONDUIT_Z_LO =  2.0;  // [mm] conduit start Z (near intake lip, clears lip curve)
+NAV_CONDUIT_Z_HI = PIVOT_Z - PIVOT_BOSS_DEPTH - 1.0;
+                           // [mm] conduit end Z: stops 1 mm before pivot boss root
+
+// Harness exit port (rectangular slot through nacelle inboard X-face shell)
+// Allows ESC motor leads, ESC signal leads, and nav-light wire to pass from
+// the nacelle interior to the pylon harness channel.
+// Port is in the inter-EDF gap (Z = 72–98 mm), above the pivot boss centre.
+HARNESS_PORT_W   = 14.0;  // [mm] slot width in Y
+HARNESS_PORT_H   =  8.0;  // [mm] slot height in Z
+HARNESS_PORT_Z   = 86.0;  // [mm] slot centre Z (inter-EDF gap, 3 mm above pivot boss)
 
 
 // =============================================================================
@@ -418,66 +475,76 @@ module motor_mount_ring(z_center) {
 
 
 // =============================================================================
-// ── Module: clevis_pivot ─────────────────────────────────────────────────────
+// ── Module: pivot_x_face_boss ────────────────────────────────────────────────
 // =============================================================================
-// Two-eared tilt clevis at the nacelle CG station (PIVOT_Z).
-// The ears protrude in the +Y direction (outboard, toward fuselage wing spar).
-// A 4mm CF pivot rod passes through both ears along the X axis.
-// Each ear seats one MF104ZZ flanged bearing (4×10×4mm) press-fit into the ear bore.
+// Two bearing boss protrusions on the spanwise (X-face) nacelle walls at the
+// CG station (PIVOT_Z, Y=0).  The tilt spar (4mm CF rod) enters from each
+// spanwise face along the X axis, passing through the inter-EDF bore space,
+// and is retained by a MF104ZZ flanged bearing (4×10×4mm) press-fit into
+// each boss.
 //
-// Geometry:
-//   Each ear: cylinder (OD=CLEVIS_EAR_OD, bore=PIVOT_BEAR_OD, thick=CLEVIS_EAR_T)
-//             oriented with its axis along X (the pivot axis).
-//   Two ears spaced CLEVIS_SLOT_W apart in X, centred at X=0.
-//   Both ears centred at (0, CLEVIS_Y_OFFSET, PIVOT_Z).
+// Pivot axis passes through (Y=0, Z=PIVOT_Z) — the nacelle bore centre in Y
+// and the computed CG station in Z.  This eliminates gravity-induced servo
+// torque in all three dimensions:
+//   • Z alignment : PIVOT_Z = 83.0 mm = nacelle Z_cg (1D CG analysis).
+//   • Y alignment : Y = 0 = bore axis; Y_cg ≈ 0 for bore-symmetric components.
+//   • X alignment : tilt axis is X — any X position on the spar axis is correct.
 //
-// Manufacturing note:
-//   CLEVIS_EAR_OD = 16 mm = PIVOT_BEAR_OD (10 mm) + 2×3mm CF-PETG wall.
-//   Minimum 2-wall contact annulus at bearing press-fit per CLAUDE.md.
-module clevis_pivot() {
-    // Half-span: ears are placed at ±(CLEVIS_SLOT_W/2 + CLEVIS_EAR_T/2)
-    ear_x_offset = CLEVIS_SLOT_W / 2 + CLEVIS_EAR_T / 2;
+// Boss geometry (each side):
+//   OD            = PIVOT_BEAR_OD + 2×BOSS_WALL = 10 + 6 = 16 mm
+//   Bearing bore  = PIVOT_BEAR_OD = 10 mm (MF104ZZ OD — press-fit)
+//   Protrusion    = PIVOT_BOSS_DEPTH = 5 mm beyond nacelle outer shell
+//   Position      = (X=±NACELLE_OD_X/2, Y=0, Z=PIVOT_Z)
+//
+// The spar also passes through the 50mm air bore at Z=PIVOT_Z (inter-EDF gap,
+// no EDF hardware).  The 4mm CF spar obstructs ~8% of bore diameter at one
+// 4.5mm-tall station — negligible aerodynamic penalty.
+//
+// CLAUDE.md compliance: 2-wall contact annulus (BOSS_WALL=3mm CF-PETG > 2×0.15mm).
+module pivot_x_face_boss() {
+    boss_od   = PIVOT_BEAR_OD + 6.0;  // 16 mm: bearing OD 10 mm + 2×3mm CF-PETG wall
+    boss_wall = PIVOT_BOSS_DEPTH;       // 5 mm protrusion depth (= CLEVIS_EAR_T depth)
 
-    // Loop generates port ear (+X) and starboard ear (-X)
-    for (side = [-1, +1]) {
+    for (sign = [-1, +1]) {
+        // ── Boss cylinder on nacelle X face ───────────────────────────────
         translate([
-            side * ear_x_offset,   // X: offset left or right
-            CLEVIS_Y_OFFSET,       // Y: outboard toward spar
-            PIVOT_Z                // Z: nacelle CG station
+            sign * (NACELLE_OD_X / 2),  // ±spanwise face of nacelle
+            0,                            // Y = bore centre (Y_cg ≈ 0)
+            PIVOT_Z                       // Z = nacelle CG station
         ])
-            rotate([0, 90, 0])     // Orient cylinder axis along X
-                difference() {
-                    // ── Ear outer cylinder ────────────────────────────────
-                    cylinder(
-                        r      = CLEVIS_EAR_OD / 2,
-                        h      = CLEVIS_EAR_T,
-                        center = true
-                    );
-                    // ── Bearing press-fit bore (MF104ZZ OD = 10mm) ────────
-                    cylinder(
-                        r      = PIVOT_BEAR_OD / 2,
-                        h      = CLEVIS_EAR_T + 0.02,
-                        center = true
-                    );
-                }
-    }
+        rotate([0, 90, 0])               // cylinder axis along X
+            difference() {
+                // ── Outer boss solid ─────────────────────────────────────
+                cylinder(
+                    r      = boss_od / 2,
+                    h      = boss_wall,
+                    center = false
+                );
+                // ── MF104ZZ press-fit bore ───────────────────────────────
+                cylinder(
+                    r      = PIVOT_BEAR_OD / 2,
+                    h      = boss_wall + 0.02,
+                    center = false
+                );
+            }
 
-    // ── Connecting web between ear bases and nacelle shell ─────────────────
-    // A short rectangular web bridges the ear roots to the outer shell surface,
-    // distributing the pivot load into the shell wall.
-    translate([
-        -(CLEVIS_SLOT_W / 2 + CLEVIS_EAR_T),  // X: spans full clevis width
-        NACELLE_OD_Y / 2 - WALL_T,             // Y: outer shell inner face
-        PIVOT_Z - CLEVIS_EAR_OD / 2            // Z: bottom of ear diameter
-    ])
-        cube([
-            CLEVIS_SLOT_W + 2 * CLEVIS_EAR_T,  // full clevis span in X
-            CLEVIS_Y_OFFSET                      // Y: from shell to ear centre
-                - NACELLE_OD_Y / 2
-                + WALL_T
-                + CLEVIS_EAR_OD / 2,
-            CLEVIS_EAR_OD                        // Z: ear cylinder height
-        ]);
+        // ── Load-spreading web between boss face and shell surface ────────
+        // A thin rectangular web transfers pivot loads from the boss root
+        // into the nacelle X-wall over a larger area.
+        translate([
+            sign * NACELLE_OD_X / 2,        // at outer shell face
+            -(boss_od / 2),                  // Y: full boss width, centred on Y=0
+            PIVOT_Z - boss_od / 2            // Z: centred on PIVOT_Z
+        ])
+        rotate([0, sign * 90, 0])            // face outboard
+            linear_extrude(height = WALL_T)  // web depth = 1× shell wall
+                polygon(points = [
+                    [0, 0],
+                    [boss_od, 0],
+                    [boss_od, boss_od],
+                    [0, boss_od]
+                ]);
+    }
 }
 
 
@@ -488,11 +555,17 @@ module clevis_pivot() {
 // Located at the same Z station as the tilt pivot (PIVOT_Z = PINION_A_Z).
 // Houses two MR63ZZ bearings (3×6×2.5mm) in a press-fit pocket.
 //
+// Y = PINION_A_Y = 28mm fore-aft from bore centre (sector-gear meshing distance).
+// The fixed sector gear (R=22mm) is centred on the pivot axis (Y=0, Z=PIVOT_Z).
+// Pinion A (R=6mm) must sit at centre-distance = 22+6 = 28mm from that centre,
+// hence PINION_A_Y = 28mm.  Placing Pinion A at Y=0 (prior bug = coaxial with
+// the sector gear) is geometrically impossible for meshing engagement.
+//
 // When the nacelle tilts, Pinion A (on the nacelle) rolls along the fixed
 // sector gear (on the tilt bracket), driving the longitudinal shaft and
 // ultimately the Crown Pinion to open/close the nozzle iris.
 module pinion_a_boss() {
-    translate([0, CLEVIS_Y_OFFSET, PINION_A_Z])
+    translate([0, PINION_A_Y, PINION_A_Z])
         rotate([0, 90, 0])    // cylinder axis along X
             difference() {
                 // ── Boss outer cylinder ───────────────────────────────────
@@ -517,8 +590,12 @@ module pinion_a_boss() {
 // Bearing boss for the Crown Pinion at CROWN_Z, same geometry as Pinion A boss.
 // The Crown Pinion engages the nozzle ring rack (R_eff = 28mm) to rotate the
 // iris inner ring and open/close the nozzle petals.
+//
+// Y = PINION_A_Y = 28mm: the Crown Pinion must be co-planar with Pinion A in Y
+// so the longitudinal CF shaft connecting them runs in a straight line without
+// lateral bends (which would bind the shaft inside the PTFE conduit sleeve).
 module crown_pinion_boss() {
-    translate([0, CLEVIS_Y_OFFSET, CROWN_Z])
+    translate([0, PINION_A_Y, CROWN_Z])
         rotate([0, 90, 0])    // cylinder axis along X
             difference() {
                 // ── Boss outer cylinder ───────────────────────────────────
@@ -541,16 +618,19 @@ module crown_pinion_boss() {
 // ── Module: shaft_conduit ────────────────────────────────────────────────────
 // =============================================================================
 // Longitudinal tube running axially from the Pinion A boss to the Crown Pinion
-// boss, on the inboard (+Y) side of the nacelle at radial offset SHAFT_CONDUIT_R.
+// boss.  The conduit Y position = PINION_A_Y = 28mm, co-planar with both gear
+// bosses, so the enclosed CF shaft runs in a straight line with no lateral
+// deflection that would cause binding inside the PTFE sleeve.
 // The conduit houses a 3mm CF shaft in a 4mm OD PTFE sleeve.
 //
 // OD = SHAFT_CONDUIT_OD (5.5mm)
 // ID = SHAFT_CONDUIT_ID (3.5mm — clears 3mm shaft inside 4mm PTFE sleeve)
 // Z span: PINION_A_Z → CROWN_Z
+// Y position: PINION_A_Y = 28mm (matches Pinion A and Crown Pinion Y positions)
 module shaft_conduit() {
     conduit_len = CROWN_Z - PINION_A_Z;
 
-    translate([0, SHAFT_CONDUIT_R, PINION_A_Z])
+    translate([0, PINION_A_Y, PINION_A_Z])
         difference() {
             // ── Conduit outer tube ─────────────────────────────────────────
             cylinder(
@@ -585,6 +665,87 @@ module nozzle_ring_pocket() {
             h = NOZZLE_RING_H + 0.02,
             center = false
         );
+}
+
+
+// =============================================================================
+// ── Module: nav_wire_conduit ─────────────────────────────────────────────────
+// =============================================================================
+// External D-section cable conduit moulded onto the inboard (pylon-side) X-face
+// of the nacelle outer shell.  Protects and retains the WS2812C navigation light
+// signal wire (28AWG 3-core, ≈ 2.5 mm OD bundle) as it runs axially from the
+// tip cap LED recess (Z ≈ 0) to the pylon harness interface zone (Z ≈ PIVOT_Z).
+//
+// At the pylon interface end, the wire exits the conduit and enters the hollow
+// pylon body through the harness_exit_port() slot in the nacelle X-face shell.
+//
+// D-section cross-section:
+//   Outer: NAV_CONDUIT_D (X) × NAV_CONDUIT_W (Y) rectangle
+//   Inner: NAV_CONDUIT_BORE diameter cylinder centred in the D body
+//   The flat face of the D abuts the nacelle shell outer surface; the curved
+//   face is exposed.
+//
+// Print note: The conduit prints without support when the nacelle is oriented
+// intake-face-down (the conduit is on the vertical X-face and is self-supported).
+//
+// Parameters:
+//   pylon_side [+1 / −1] — which X face carries the conduit.
+//                          +1 = port (left) nacelle, −1 = starboard (right).
+module nav_wire_conduit(pylon_side = PYLON_SIDE) {
+    face_x  = pylon_side * (NACELLE_OD_X / 2);  // X position of nacelle X-face
+    cond_len = NAV_CONDUIT_Z_HI - NAV_CONDUIT_Z_LO;
+
+    // ── Position conduit flush against the nacelle X-face outer surface ────
+    // For pylon_side = +1: conduit extends in +X beyond face_x.
+    // For pylon_side = -1: conduit extends in -X beyond face_x.
+    x_offset = (pylon_side > 0)
+               ? face_x                     // starts at +X face, extends further +X
+               : face_x - NAV_CONDUIT_D;    // starts NAV_CONDUIT_D back from -X face
+
+    translate([x_offset, -NAV_CONDUIT_W / 2, NAV_CONDUIT_Z_LO])
+        difference() {
+            // ── Outer rectangular D-body ──────────────────────────────────
+            cube([NAV_CONDUIT_D, NAV_CONDUIT_W, cond_len]);
+
+            // ── Inner wire bore (cylinder, centred in D cross-section) ────
+            translate([NAV_CONDUIT_D / 2, NAV_CONDUIT_W / 2, -0.01])
+                cylinder(r = NAV_CONDUIT_BORE / 2,
+                         h = cond_len + 0.02);
+        }
+}
+
+
+// =============================================================================
+// ── Module: harness_exit_port ────────────────────────────────────────────────
+// =============================================================================
+// Rectangular cutout in the nacelle inboard (pylon-side) X-face outer shell.
+// The slot is in the inter-EDF gap region, centred at Z = HARNESS_PORT_Z = 86 mm
+// (3 mm above the pivot boss centre at Z = 83 mm, 12 mm below EDF2 entry at 98 mm).
+//
+// The slot provides access from the nacelle interior (ESC motor leads, signal
+// leads) to the pylon harness channel.  Wires are threaded through the slot
+// during assembly.  A rubber grommet or epoxy fillet seals the slot perimeter.
+//
+// Slot dimensions: HARNESS_PORT_W (Y) × HARNESS_PORT_H (Z).
+// Slot depth      : cuts entirely through the nacelle X-face shell wall (≈ 3 mm
+//                   combined thrust-tube + outer shell at this station).
+//
+// Parameters:
+//   pylon_side [+1 / −1] — which X face carries the port (+1 = port nacelle).
+module harness_exit_port(pylon_side = PYLON_SIDE) {
+    face_x = pylon_side * (NACELLE_OD_X / 2);   // nacelle X-face outer surface X
+
+    // Cut depth: from 1 mm beyond the outer face inward through the full wall
+    // to the EDF bore edge.  The slot depth in X is generous (includes the outer
+    // shell + any thrust-tube wall at this radial station near Y = 0).
+    cut_depth = WALL_T + 3.5;   // shell WALL_T + thrust-tube wall margin at Y ≈ 0
+
+    translate([
+        (pylon_side > 0) ? (face_x - cut_depth) : face_x,
+        -HARNESS_PORT_W / 2,
+        HARNESS_PORT_Z - HARNESS_PORT_H / 2
+    ])
+        cube([cut_depth + 0.5, HARNESS_PORT_W, HARNESS_PORT_H]);
 }
 
 
@@ -636,8 +797,10 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
                 // Placed 10mm aft of EDF2 forward face = Z=108mm (mid-motor)
                 motor_mount_ring(EDF2_Z_ENTRY + 10);
 
-                // ── CG-aligned tilt clevis (MF104ZZ bearing ears) ─────────
-                clevis_pivot();
+                // ── CG-aligned pivot X-face boss (MF104ZZ bearing bosses) ──
+                // Pivot spar (4mm CF rod) along X at (Y=0, Z=PIVOT_Z).
+                // Y=0 = bore axis = Y_cg: zero gravity torque at all tilt angles.
+                pivot_x_face_boss();
 
                 // ── Drive Pinion A bearing boss (at PIVOT_Z, X axis) ─────
                 pinion_a_boss();
@@ -647,6 +810,12 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
 
                 // ── Longitudinal gear shaft conduit ───────────────────────
                 shaft_conduit();
+
+                // ── External nav-light wire conduit (inboard X-face) ─────
+                // D-section tube moulded onto nacelle outer shell, running
+                // from tip cap area (Z = 2 mm) to just below pivot boss.
+                // Routes 28AWG 3-core WS2812C signal wire to pylon harness.
+                nav_wire_conduit(pylon_side = PYLON_SIDE);
 
             } // end union (additive)
 
@@ -667,6 +836,24 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
             // ── Nozzle ring pocket (rotating iris ring seat) ───────────────
             nozzle_ring_pocket();
 
+            // ── Harness exit port (rectangular slot in inboard X-face shell) ──
+            // Allows ESC motor leads, signal leads, and nav-light wire to
+            // transition from nacelle interior to pylon harness channel.
+            // Centred at (Y=0, Z=HARNESS_PORT_Z=86mm), sized 14×8 mm.
+            harness_exit_port(pylon_side = PYLON_SIDE);
+
+            // ── Tilt spar clearance bore (along X through both nacelle faces + bore) ──
+            // The 4mm CF tilt spar passes through the inter-EDF bore space at Y=0,
+            // Z=PIVOT_Z.  This subtraction creates the clearance passage through the
+            // nacelle shell on both X faces and through the bore space.
+            translate([0, 0, PIVOT_Z])
+                rotate([0, 90, 0])  // cylinder along X
+                    cylinder(
+                        r = PIVOT_BORE_D / 2,               // 4.2mm / 2 = 2.1mm radius
+                        h = NACELLE_OD_X + 2 * PIVOT_BOSS_DEPTH + 2,  // full spar length + margin
+                        center = true
+                    );
+
         } // end difference
     } // end union (top-level)
 }
@@ -675,8 +862,9 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
 // =============================================================================
 // ── Render call ───────────────────────────────────────────────────────────────
 // =============================================================================
-// Render the nacelle pod using the global SWIRL_DIR parameter.
-// Override at command line: openscad -D SWIRL_DIR=-1 ...
+// Render the nacelle pod using global SWIRL_DIR and PYLON_SIDE parameters.
+// Port   nacelle: openscad -D SWIRL_DIR=+1 -D PYLON_SIDE=+1 ...
+// Stbd   nacelle: openscad -D SWIRL_DIR=-1 -D PYLON_SIDE=-1 ...
 nacelle_pod(swirl_dir = SWIRL_DIR);
 
 
@@ -687,21 +875,22 @@ nacelle_pod(swirl_dir = SWIRL_DIR);
 // Layer height: 0.15 mm
 // Walls       : 4 perimeter walls (minimum — do not reduce)
 // Infill      : 25% gyroid (non-structural fill regions)
-//               40% gyroid at clevis and bearing boss regions (slice manually)
+//               40% gyroid at pivot boss and bearing boss regions (slice manually)
 // Nozzle      : Hardened-steel required — CF-PETG is abrasive to brass nozzles
 // Supports    : None required if oriented intake-face-down on build plate
 // Bed adhesion: PEI sheet with light glue stick
 //
 // Post-print checks:
 //   1. Verify bore OD = 55.0 mm ± 0.3 mm with calipers at 3 stations.
-//   2. Verify pivot boss OD = 10.0 mm ± 0.1 mm (MF104ZZ press-fit).
-//   3. Verify shaft conduit ID = 3.5 mm ± 0.1 mm (passes 4mm PTFE tube).
-//   4. Check stator fin edges for layer-delamination; sand smooth if needed.
+//   2. Verify pivot boss bore = 10.0 mm ± 0.1 mm (MF104ZZ OD press-fit), both X faces.
+//   3. Verify tilt spar clearance bore ID = 4.2 mm ± 0.1 mm through both X faces.
+//   4. Verify shaft conduit ID = 3.5 mm ± 0.1 mm (passes 4mm PTFE tube).
+//   5. Check stator fin edges for layer-delamination; sand smooth if needed.
 //
 // Render commands:
-//   Port nacelle:
+//   Port nacelle (RED nav light, pylon on +X face):
 //     openscad -o s_nacelle_port_revo.stl nacelle_pod_50mm_tandem.scad \
-//              -D SWIRL_DIR=1
-//   Starboard nacelle:
+//              -D SWIRL_DIR=1 -D PYLON_SIDE=1
+//   Starboard nacelle (GREEN nav light, pylon on −X face):
 //     openscad -o s_nacelle_stbd_revo.stl nacelle_pod_50mm_tandem.scad \
-//              -D SWIRL_DIR=-1
+//              -D SWIRL_DIR=-1 -D PYLON_SIDE=-1

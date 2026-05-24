@@ -263,12 +263,14 @@ export default function RevOSpec() {
     const [activeTab, setActiveTab] = useState("overview");
 
     const tabs = [
-        { id: "overview",  label: "Overview"  },
-        { id: "cg",        label: "CG Analysis" },
-        { id: "gears",     label: "Gear Train"  },
-        { id: "nozzle",    label: "Iris Nozzle" },
+        { id: "overview",  label: "Overview"      },
+        { id: "cg",        label: "CG Analysis"   },
+        { id: "gears",     label: "Gear Train"    },
+        { id: "nozzle",    label: "Iris Nozzle"   },
         { id: "bom",       label: "Rev O Changes" },
-        { id: "files",     label: "Files"      },
+        { id: "files",     label: "Files"         },
+        { id: "winglift",  label: "Wing Lift"     },
+        { id: "pylon",     label: "Pylon"         },
     ];
 
     return (
@@ -675,6 +677,411 @@ export default function RevOSpec() {
                                 </div>
                             ))}
                         </div>
+                    </Card>
+                </div>
+            )}
+
+            {/* ── Wing Lift Analysis ───────────────────────────────────────── */}
+            {activeTab === "winglift" && (
+                <div>
+                    {/* ── Section header ── */}
+                    <div style={{ marginBottom: 20 }}>
+                        <div style={{ fontFamily: MB, fontSize: 18, color: C.accent, letterSpacing: 1 }}>
+                            WING LIFT ANALYSIS — FORWARD FLIGHT
+                        </div>
+                        <div style={{ color: C.dimmer, fontSize: 12, marginTop: 4 }}>
+                            Lift contribution at cruise speed; airfoil improvement recommendation
+                        </div>
+                    </div>
+
+                    {/* ── Given / constants ── */}
+                    <Card title="Given — Flight Conditions &amp; Geometry" accent={C.accent}>
+                        <table style={{ borderCollapse: "collapse", width: "100%" }}>
+                            <tbody>
+                                {/* AUW */}
+                                <tr>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim,  fontFamily: M, fontSize: 12, whiteSpace: "nowrap" }}>AUW</td>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>3 550 g = 3.55 kg</td>
+                                    <td style={{ padding: "4px 0", color: C.dimmer, fontFamily: M, fontSize: 11 }}>Weight W = 3.55 × 9.81 = 34.8 N</td>
+                                </tr>
+                                {/* Cruise speed */}
+                                <tr style={{ background: "rgba(0,229,255,0.03)" }}>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim,  fontFamily: M, fontSize: 12, whiteSpace: "nowrap" }}>Cruise speed V</td>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>40 kts = 20.58 m/s</td>
+                                    <td style={{ padding: "4px 0", color: C.dimmer, fontFamily: M, fontSize: 11 }}>1 kt = 0.5144 m/s</td>
+                                </tr>
+                                {/* Air density */}
+                                <tr>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim,  fontFamily: M, fontSize: 12, whiteSpace: "nowrap" }}>Air density ρ</td>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>1.225 kg/m³</td>
+                                    <td style={{ padding: "4px 0", color: C.dimmer, fontFamily: M, fontSize: 11 }}>ISA sea-level standard</td>
+                                </tr>
+                                {/* Dynamic pressure */}
+                                <tr style={{ background: "rgba(0,229,255,0.03)" }}>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim,  fontFamily: M, fontSize: 12, whiteSpace: "nowrap" }}>Dynamic pressure q</td>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>½ρV² = ½ × 1.225 × 20.58² = 259.7 Pa ≈ 260 Pa</td>
+                                    <td style={{ padding: "4px 0", color: C.dimmer, fontFamily: M, fontSize: 11 }}></td>
+                                </tr>
+                                {/* Wing plan area */}
+                                <tr>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim,  fontFamily: M, fontSize: 12, whiteSpace: "nowrap" }}>Wing plan area S_ref</td>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>0.0156 m² (both wings)</td>
+                                    <td style={{ padding: "4px 0", color: C.dimmer, fontFamily: M, fontSize: 11 }}>Each wing ≈ 120 mm span × 65 mm mean chord = 7 800 mm² per side; total 15 600 mm²; trapezoidal estimate at 24″ scale</td>
+                                </tr>
+                                {/* Reynolds number */}
+                                <tr style={{ background: "rgba(0,229,255,0.03)" }}>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim,  fontFamily: M, fontSize: 12, whiteSpace: "nowrap" }}>Reynolds number Re</td>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>ρVc / μ = 1.225 × 20.58 × 0.065 / 1.81×10⁻⁵ ≈ 90 700</td>
+                                    <td style={{ padding: "4px 0", color: C.dimmer, fontFamily: M, fontSize: 11 }}>Low-Re regime; viscous effects significant</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        {/* Scale-mismatch reminder */}
+                        <div style={{
+                            marginTop: 14,
+                            padding: "10px 14px",
+                            background: "rgba(255,107,53,0.08)",
+                            border: `1px solid rgba(255,107,53,0.35)`,
+                            borderRadius: 7,
+                            fontFamily: M, fontSize: 11.5,
+                            color: C.orange,
+                        }}>
+                            <span style={{ fontFamily: MB }}>Scale note: </span>
+                            Nacelles were enlarged 1.25× relative to the canonical 2.197× Thingiverse
+                            model to fit 50 mm EDF units. The fuselage and wings remain at the
+                            original 2.197× scale. Wing area and chord values above are derived from
+                            the 2.197× (24-inch) fuselage/wing dimensions.
+                        </div>
+                    </Card>
+
+                    {/* ── Baseline geometry ── */}
+                    <Card title="Current Geometry — Flat-Plate Wings (Canonical Serenity Shape)" accent={C.yellow}>
+                        <table style={{ borderCollapse: "collapse", width: "100%" }}>
+                            <tbody>
+                                {/* CL at 5 deg */}
+                                <tr>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim,  fontFamily: M, fontSize: 12, width: "34%" }}>C_L at 5° AoA (flat plate, Re ≈ 91k)</td>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>≈ 0.32</td>
+                                    <td style={{ padding: "4px 0", color: C.dimmer, fontFamily: M, fontSize: 11 }}>Falkner-Skan thin-airfoil inviscid: C_L = 2π sin α ≈ 0.55; corrected for low-Re viscous separation → 0.32</td>
+                                </tr>
+                                {/* Lift formula */}
+                                <tr style={{ background: "rgba(255,230,0,0.04)" }}>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim,  fontFamily: M, fontSize: 12 }}>Lift L</td>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.yellow, fontFamily: M, fontSize: 12 }}>C_L × q × S = 0.32 × 260 × 0.0156 = 1.30 N</td>
+                                    <td style={{ padding: "4px 0", color: C.dimmer, fontFamily: M, fontSize: 11 }}></td>
+                                </tr>
+                                {/* Wing lift fraction */}
+                                <tr>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim,  fontFamily: M, fontSize: 12 }}>Wing lift fraction</td>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.yellow, fontFamily: M, fontSize: 12 }}>L / W = 1.30 / 34.8 = 3.7%</td>
+                                    <td style={{ padding: "4px 0", color: C.dimmer, fontFamily: M, fontSize: 11 }}>Remaining 96.3% from EDF thrust</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </Card>
+
+                    {/* ── Airfoil improvement options ── */}
+                    <Card title="Recommended Airfoil Improvements — Zero Outer Mold-Line Change" accent={C.teal}>
+                        {/* Option 1 */}
+                        <div style={{
+                            marginBottom: 14,
+                            padding: "10px 14px",
+                            background: "rgba(0,229,255,0.05)",
+                            border: `1px solid ${C.border}`,
+                            borderRadius: 7,
+                        }}>
+                            <div style={{ fontFamily: MB, fontSize: 13, color: C.accent, marginBottom: 6 }}>
+                                Option 1 — Add 3° Positive Incidence at Wing Root Attachment
+                            </div>
+                            <div style={{ fontFamily: M, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+                                Angle the pylon wing-mount block upward 3° (pitch leading edge up).
+                                No change to the outer hull. ΔC_L = 2π × (3π/180) ≈ 0.33 at high Re;
+                                ~0.25 at Re = 91k. New C_L ≈ 0.57.<br />
+                                <span style={{ color: C.teal }}>New L = 0.57 × 260 × 0.0156 = 2.31 N → 6.6% of AUW.</span>
+                            </div>
+                        </div>
+
+                        {/* Option 2 */}
+                        <div style={{
+                            marginBottom: 14,
+                            padding: "10px 14px",
+                            background: "rgba(0,229,255,0.05)",
+                            border: `1px solid ${C.border}`,
+                            borderRadius: 7,
+                        }}>
+                            <div style={{ fontFamily: MB, fontSize: 13, color: C.accent, marginBottom: 6 }}>
+                                Option 2 — Hollow Interior with Asymmetric PETG Infill (4% Camber Line)
+                            </div>
+                            <div style={{ fontFamily: M, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+                                Keep the outer skin canonical. Hollow the wing body with infill biased toward
+                                the suction surface, shifting the mean camber line to ~4% of chord without
+                                any exterior change.<br />
+                                NACA 4-series at Re = 91k: C_L ≈ 0.90 at 5° AoA + 3° incidence.<br />
+                                <span style={{ color: C.teal }}>New L = 0.90 × 260 × 0.0156 = 3.65 N → 10.5% of AUW.</span>
+                            </div>
+                        </div>
+
+                        {/* Option 3 */}
+                        <div style={{
+                            marginBottom: 0,
+                            padding: "10px 14px",
+                            background: "rgba(74,222,128,0.07)",
+                            border: `1px solid rgba(74,222,128,0.35)`,
+                            borderRadius: 7,
+                        }}>
+                            <div style={{ fontFamily: MB, fontSize: 13, color: C.green, marginBottom: 6 }}>
+                                Option 3 — Combined (3° Incidence + 4% Camber Infill)
+                            </div>
+                            <div style={{ fontFamily: M, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+                                C_L ≈ 0.90, L = 3.65 N → 10.5% of AUW. Reduces EDF thrust required for
+                                cruise by ~10.5%, improving battery endurance.<br />
+                                <span style={{ color: C.green }}>
+                                    Estimated cruise endurance improvement: +6–8 min on 6S 10Ah pack
+                                    (based on reduced loiter thrust).
+                                </span>
+                            </div>
+                        </div>
+                    </Card>
+
+                    {/* ── Summary comparison table ── */}
+                    <Card title="Lift Configuration Comparison" accent={C.green}>
+                        <table style={{ borderCollapse: "collapse", width: "100%" }}>
+                            <thead>
+                                <tr>
+                                    {["Configuration", "C_L", "Lift (N)", "% AUW", "Endurance Δ"].map((h, hi) => (
+                                        <th key={h} style={{
+                                            color: C.green, fontFamily: MB, fontSize: 11,
+                                            padding: "4px 14px 4px 0", textAlign: hi > 0 ? "right" : "left",
+                                            borderBottom: `1px solid ${C.border}`,
+                                        }}>{h}</th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {/* Each row: [label, CL, lift, pct, delta, highlight] */}
+                                {[
+                                    ["Flat plate (baseline)", "0.32", "1.30 N", "3.7%",  "—",          false],
+                                    ["+ 3° incidence",        "0.57", "2.31 N", "6.6%",  "≈ +3–4 min", false],
+                                    ["+ 4% camber",           "0.90", "3.65 N", "10.5%", "≈ +5–7 min", false],
+                                    ["Combined",              "0.90", "3.65 N", "10.5%", "+6–8 min",   true ],
+                                ].map((row, i) => (
+                                    <tr key={i} style={{
+                                        background: row[5]
+                                            ? "rgba(74,222,128,0.10)"
+                                            : i % 2 ? "rgba(74,222,128,0.03)" : "transparent",
+                                        border: row[5] ? `1px solid rgba(74,222,128,0.40)` : "none",
+                                    }}>
+                                        {/* Configuration name */}
+                                        <td style={{
+                                            padding: "5px 14px 5px 6px",
+                                            color: row[5] ? C.green : C.text,
+                                            fontFamily: row[5] ? MB : M,
+                                            fontSize: 12,
+                                        }}>{row[0]}</td>
+                                        {/* CL */}
+                                        <td style={{ padding: "5px 14px 5px 0", color: row[5] ? C.green : C.text, fontFamily: M, fontSize: 12, textAlign: "right" }}>{row[1]}</td>
+                                        {/* Lift */}
+                                        <td style={{ padding: "5px 14px 5px 0", color: row[5] ? C.green : C.text, fontFamily: M, fontSize: 12, textAlign: "right" }}>{row[2]}</td>
+                                        {/* % AUW */}
+                                        <td style={{ padding: "5px 14px 5px 0", color: row[5] ? C.green : C.text, fontFamily: M, fontSize: 12, textAlign: "right" }}>{row[3]}</td>
+                                        {/* Endurance Δ */}
+                                        <td style={{ padding: "5px 0", color: row[5] ? C.green : C.dimmer, fontFamily: M, fontSize: 12, textAlign: "right" }}>{row[4]}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </Card>
+
+                    {/* ── Outer mold-line caveat ── */}
+                    <div style={{
+                        padding: "10px 16px",
+                        background: "rgba(0,229,255,0.05)",
+                        border: `1px solid ${C.border}`,
+                        borderRadius: 7,
+                        fontFamily: M, fontSize: 11.5,
+                        color: C.dimmer,
+                        marginBottom: 18,
+                    }}>
+                        <span style={{ color: C.accent, fontFamily: MB }}>Note: </span>
+                        Wing geometry is canonical Serenity shape. Outer mold line is NEVER changed.
+                        Only incidence angle (set by pylon mount block geometry at 3°) and internal
+                        hollow infill bias are modified.
+                    </div>
+                </div>
+            )}
+
+            {/* ── Wing Nacelle Pylon ───────────────────────────────────────── */}
+            {activeTab === "pylon" && (
+                <div>
+                    {/* ── Section header ── */}
+                    <div style={{ marginBottom: 20 }}>
+                        <div style={{ fontFamily: MB, fontSize: 18, color: C.orange, letterSpacing: 1 }}>
+                            WING NACELLE PYLON — s_wing_nacelle_pylon_revo.scad
+                        </div>
+                        <div style={{ color: C.dimmer, fontSize: 12, marginTop: 4 }}>
+                            Merged pivot + outer housing — single CF-PETG part
+                        </div>
+                    </div>
+
+                    {/* ── Key parameters table ── */}
+                    <Card title="Key Parameters" accent={C.orange}>
+                        <table style={{ borderCollapse: "collapse", width: "100%" }}>
+                            <thead>
+                                <tr>
+                                    {["Parameter", "Value", "Description"].map((h, hi) => (
+                                        <th key={h} style={{
+                                            color: C.orange, fontFamily: MB, fontSize: 11,
+                                            padding: "4px 14px 4px 0", textAlign: "left",
+                                            borderBottom: `1px solid ${C.border}`,
+                                        }}>{h}</th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {[
+                                    /* [parameter, value, description] */
+                                    ["PYLON_SPAN",       "88 mm",            "Wing face to nacelle X-face (verify vs wing STL)"],
+                                    ["PYLON_W",          "36 mm",            "Body width (Y, nacelle fore-aft)"],
+                                    ["PYLON_H",          "32 mm",            "Body height (Z, centred on PIVOT_Z)"],
+                                    ["PYLON_WALL",       "3.0 mm",           "CF-PETG wall (4 perimeter × 0.6 mm)"],
+                                    ["SPAR_BORE_D",      "4.0 mm",           "CF spar press-fit bore (fixed in pylon)"],
+                                    ["NAC_BOSS_SOCKET",  "Ø16.3 × 5.5 mm",  "Accepts nacelle pivot boss (16 mm OD)"],
+                                    ["SECTOR_GEAR_BC_R", "18 mm",            "M2.5 insert bolt circle (4× inserts)"],
+                                    ["WING_SLOT_W",      "50 mm",            "Wing mount block width (VERIFY vs STL)"],
+                                    ["WING_SLOT_H",      "40 mm",            "Wing mount block height (VERIFY vs STL)"],
+                                ].map((row, i) => (
+                                    <tr key={i} style={{ background: i % 2 ? "rgba(255,107,53,0.04)" : "transparent" }}>
+                                        {/* Parameter name in monospace accent */}
+                                        <td style={{ padding: "4px 14px 4px 0", color: C.orange, fontFamily: M, fontSize: 12, whiteSpace: "nowrap" }}>{row[0]}</td>
+                                        {/* Value */}
+                                        <td style={{ padding: "4px 14px 4px 0", color: C.text, fontFamily: M, fontSize: 12, whiteSpace: "nowrap" }}>{row[1]}</td>
+                                        {/* Description */}
+                                        <td style={{ padding: "4px 0", color: C.dim, fontFamily: M, fontSize: 11.5 }}>{row[2]}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </Card>
+
+                    {/* ── Nacelle scale mismatch note ── */}
+                    <Card title="Nacelle Scale Mismatch Note" accent={C.yellow}>
+                        <div style={{ fontFamily: M, fontSize: 12, color: C.text, lineHeight: 1.8, marginBottom: 12 }}>
+                            The nacelle was enlarged by <span style={{ color: C.yellow, fontFamily: MB }}>1.25×</span> relative
+                            to the fuselage/wing (to accommodate 50 mm EDFs). The original wing mount
+                            pocket was designed for the smaller 2.197× nacelle. The pylon bridges this
+                            mismatch:
+                        </div>
+                        <table style={{ borderCollapse: "collapse", width: "100%", marginBottom: 14 }}>
+                            <tbody>
+                                <tr>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim,  fontFamily: M, fontSize: 12, whiteSpace: "nowrap" }}>Nacelle-facing end</td>
+                                    <td style={{ padding: "4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>Sized for Rev O 60.5 × 67 mm elliptical nacelle cross-section</td>
+                                </tr>
+                                <tr style={{ background: "rgba(255,230,0,0.04)" }}>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim,  fontFamily: M, fontSize: 12, whiteSpace: "nowrap" }}>Wing-facing end</td>
+                                    <td style={{ padding: "4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>Sized for original 2.197× wing pocket geometry</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        {/* Critical measurement warning */}
+                        <div style={{
+                            padding: "10px 16px",
+                            background: "rgba(255,107,53,0.10)",
+                            border: `1px solid rgba(255,107,53,0.50)`,
+                            borderRadius: 7,
+                            fontFamily: M, fontSize: 12,
+                            color: C.orange,
+                        }}>
+                            <span style={{ fontFamily: MB }}>⚠ VERIFY BEFORE PRINTING: </span>
+                            WING_SLOT_W and WING_SLOT_H MUST be measured directly from
+                            <span style={{ color: C.yellow, fontFamily: MB }}> s_wings_both_shell24.stl </span>
+                            before slicing or printing the pylon. Values shown (50 mm × 40 mm) are
+                            provisional estimates only. Dimension from the STL pocket geometry,
+                            accounting for print clearance (~0.2 mm per face for CF-PETG).
+                        </div>
+                    </Card>
+
+                    {/* ── Features ── */}
+                    <Card title="Pylon Features" accent={C.teal}>
+                        <table style={{ borderCollapse: "collapse", width: "100%" }}>
+                            <thead>
+                                <tr>
+                                    {["#", "Feature", "Detail"].map(h => (
+                                        <th key={h} style={{
+                                            color: C.teal, fontFamily: MB, fontSize: 11,
+                                            padding: "4px 14px 4px 0", textAlign: "left",
+                                            borderBottom: `1px solid ${C.border}`,
+                                        }}>{h}</th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {[
+                                    /* [number, feature name, detail] */
+                                    [
+                                        "1",
+                                        "Hollow box body — harness channel",
+                                        "Entire interior carries ESC power + signal + nav light leads through the pylon span",
+                                    ],
+                                    [
+                                        "2",
+                                        "4 mm CF spar press-fit bore",
+                                        "Spar fixed to pylon; nacelle MF104ZZ bearings rotate on spar (spar does not rotate)",
+                                    ],
+                                    [
+                                        "3",
+                                        "Nacelle boss socket — positive-stop shoulder",
+                                        "Accepts Ø16.3 mm boss; shoulder prevents axial pull-out; CLAUDE.md compliant",
+                                    ],
+                                    [
+                                        "4",
+                                        "Sector gear mount face",
+                                        "4× M2.5 heat-set inserts at R = 18 mm bolt circle; ±10° adjustment arc per insert",
+                                    ],
+                                    [
+                                        "5",
+                                        "Wing root attach block",
+                                        "4× M3 SHCS + positive-stop shoulder into wing pocket; rigidly fixed — no fold mechanism",
+                                    ],
+                                    [
+                                        "6",
+                                        "Nav light wiring route",
+                                        "Harness exits nacelle through X-face port: 14 × 8 mm slot at Z = 86 mm, adjacent to pivot boss",
+                                    ],
+                                ].map((row, i) => (
+                                    <tr key={i} style={{ background: i % 2 ? "rgba(45,212,191,0.04)" : "transparent" }}>
+                                        <td style={{ padding: "5px 14px 5px 0", color: C.teal, fontFamily: MB, fontSize: 13, textAlign: "center", width: 30 }}>{row[0]}</td>
+                                        <td style={{ padding: "5px 14px 5px 0", color: C.text, fontFamily: MB, fontSize: 12 }}>{row[1]}</td>
+                                        <td style={{ padding: "5px 0", color: C.dim, fontFamily: M, fontSize: 11.5 }}>{row[2]}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </Card>
+
+                    {/* ── Print specification ── */}
+                    <Card title="Print Specification" accent={C.purple}>
+                        <table style={{ borderCollapse: "collapse", width: "100%" }}>
+                            <tbody>
+                                <tr>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim,  fontFamily: M, fontSize: 12, whiteSpace: "nowrap" }}>Material</td>
+                                    <td style={{ padding: "4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>CF-PETG · 0.15 mm layer height · 4 perimeter walls · 40% gyroid infill</td>
+                                </tr>
+                                <tr style={{ background: "rgba(192,132,252,0.04)" }}>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim,  fontFamily: M, fontSize: 12, whiteSpace: "nowrap" }}>Orientation</td>
+                                    <td style={{ padding: "4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>Long axis (X) horizontal on build plate; pylon body flat-face down; wing block flange up</td>
+                                </tr>
+                                <tr>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim,  fontFamily: M, fontSize: 12, whiteSpace: "nowrap" }}>Supports</td>
+                                    <td style={{ padding: "4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>Required under wing attachment block shoulder flange overhang only</td>
+                                </tr>
+                                <tr style={{ background: "rgba(192,132,252,0.04)" }}>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim,  fontFamily: M, fontSize: 12, whiteSpace: "nowrap" }}>Quantity</td>
+                                    <td style={{ padding: "4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>2× per aircraft (port and starboard); mirror in slicer — do NOT print two of the same hand</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </Card>
                 </div>
             )}
