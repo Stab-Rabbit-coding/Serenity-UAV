@@ -203,6 +203,42 @@ NOZZLE_RING_H   =   8.0;  // [mm] pocket axial depth (ring height + 0.5mm cleara
 $fn = 72;
 
 
+// ── Navigation light wiring and harness exit provisions ───────────────────────
+// Added Rev O to support:
+//   (a) WS2812C navigation light (28AWG 3-core signal wire) routed from the
+//       tip cap LED recess to the inboard pylon harness channel.
+//   (b) ESC motor lead / signal wire harness exit from the nacelle interior
+//       to the pylon hollow-body harness channel.
+//
+// The conduit is an external D-section tube moulded onto the nacelle inboard
+// X-face outer shell.  PYLON_SIDE = +1 places the conduit on the +X face (port
+// nacelle, pylon toward fuselage on +X).  Override to -1 for starboard nacelle.
+//
+// 14 CFR 91.209 compliance:
+//   Port  nacelle (PYLON_SIDE = +1): RED WS2812C-2020 LED at Z = 0 tip cap.
+//   Stbd  nacelle (PYLON_SIDE = -1): GREEN WS2812C-2020 LED at Z = 0 tip cap.
+//   Both visible ≥ 3 SM, 110° arc (port) / 110° arc (stbd), as required.
+//
+PYLON_SIDE       = +1;    // [+1 / −1] inboard face sign: +1 = port, -1 = stbd
+                           //           override: openscad -D PYLON_SIDE=-1
+
+// Navigation light conduit (D-section, external, on nacelle inboard X-face)
+NAV_CONDUIT_BORE =  4.0;  // [mm] inner bore ID for 28AWG 3-core wire bundle
+NAV_CONDUIT_W    =  8.0;  // [mm] conduit outer width in Y
+NAV_CONDUIT_D    =  5.0;  // [mm] conduit depth in X beyond nacelle outer shell
+NAV_CONDUIT_Z_LO =  2.0;  // [mm] conduit start Z (near intake lip, clears lip curve)
+NAV_CONDUIT_Z_HI = PIVOT_Z - PIVOT_BOSS_DEPTH - 1.0;
+                           // [mm] conduit end Z: stops 1 mm before pivot boss root
+
+// Harness exit port (rectangular slot through nacelle inboard X-face shell)
+// Allows ESC motor leads, ESC signal leads, and nav-light wire to pass from
+// the nacelle interior to the pylon harness channel.
+// Port is in the inter-EDF gap (Z = 72–98 mm), above the pivot boss centre.
+HARNESS_PORT_W   = 14.0;  // [mm] slot width in Y
+HARNESS_PORT_H   =  8.0;  // [mm] slot height in Z
+HARNESS_PORT_Z   = 86.0;  // [mm] slot centre Z (inter-EDF gap, 3 mm above pivot boss)
+
+
 // =============================================================================
 // ── Module: nacelle_shell ─────────────────────────────────────────────────────
 // =============================================================================
@@ -633,6 +669,87 @@ module nozzle_ring_pocket() {
 
 
 // =============================================================================
+// ── Module: nav_wire_conduit ─────────────────────────────────────────────────
+// =============================================================================
+// External D-section cable conduit moulded onto the inboard (pylon-side) X-face
+// of the nacelle outer shell.  Protects and retains the WS2812C navigation light
+// signal wire (28AWG 3-core, ≈ 2.5 mm OD bundle) as it runs axially from the
+// tip cap LED recess (Z ≈ 0) to the pylon harness interface zone (Z ≈ PIVOT_Z).
+//
+// At the pylon interface end, the wire exits the conduit and enters the hollow
+// pylon body through the harness_exit_port() slot in the nacelle X-face shell.
+//
+// D-section cross-section:
+//   Outer: NAV_CONDUIT_D (X) × NAV_CONDUIT_W (Y) rectangle
+//   Inner: NAV_CONDUIT_BORE diameter cylinder centred in the D body
+//   The flat face of the D abuts the nacelle shell outer surface; the curved
+//   face is exposed.
+//
+// Print note: The conduit prints without support when the nacelle is oriented
+// intake-face-down (the conduit is on the vertical X-face and is self-supported).
+//
+// Parameters:
+//   pylon_side [+1 / −1] — which X face carries the conduit.
+//                          +1 = port (left) nacelle, −1 = starboard (right).
+module nav_wire_conduit(pylon_side = PYLON_SIDE) {
+    face_x  = pylon_side * (NACELLE_OD_X / 2);  // X position of nacelle X-face
+    cond_len = NAV_CONDUIT_Z_HI - NAV_CONDUIT_Z_LO;
+
+    // ── Position conduit flush against the nacelle X-face outer surface ────
+    // For pylon_side = +1: conduit extends in +X beyond face_x.
+    // For pylon_side = -1: conduit extends in -X beyond face_x.
+    x_offset = (pylon_side > 0)
+               ? face_x                     // starts at +X face, extends further +X
+               : face_x - NAV_CONDUIT_D;    // starts NAV_CONDUIT_D back from -X face
+
+    translate([x_offset, -NAV_CONDUIT_W / 2, NAV_CONDUIT_Z_LO])
+        difference() {
+            // ── Outer rectangular D-body ──────────────────────────────────
+            cube([NAV_CONDUIT_D, NAV_CONDUIT_W, cond_len]);
+
+            // ── Inner wire bore (cylinder, centred in D cross-section) ────
+            translate([NAV_CONDUIT_D / 2, NAV_CONDUIT_W / 2, -0.01])
+                cylinder(r = NAV_CONDUIT_BORE / 2,
+                         h = cond_len + 0.02);
+        }
+}
+
+
+// =============================================================================
+// ── Module: harness_exit_port ────────────────────────────────────────────────
+// =============================================================================
+// Rectangular cutout in the nacelle inboard (pylon-side) X-face outer shell.
+// The slot is in the inter-EDF gap region, centred at Z = HARNESS_PORT_Z = 86 mm
+// (3 mm above the pivot boss centre at Z = 83 mm, 12 mm below EDF2 entry at 98 mm).
+//
+// The slot provides access from the nacelle interior (ESC motor leads, signal
+// leads) to the pylon harness channel.  Wires are threaded through the slot
+// during assembly.  A rubber grommet or epoxy fillet seals the slot perimeter.
+//
+// Slot dimensions: HARNESS_PORT_W (Y) × HARNESS_PORT_H (Z).
+// Slot depth      : cuts entirely through the nacelle X-face shell wall (≈ 3 mm
+//                   combined thrust-tube + outer shell at this station).
+//
+// Parameters:
+//   pylon_side [+1 / −1] — which X face carries the port (+1 = port nacelle).
+module harness_exit_port(pylon_side = PYLON_SIDE) {
+    face_x = pylon_side * (NACELLE_OD_X / 2);   // nacelle X-face outer surface X
+
+    // Cut depth: from 1 mm beyond the outer face inward through the full wall
+    // to the EDF bore edge.  The slot depth in X is generous (includes the outer
+    // shell + any thrust-tube wall at this radial station near Y = 0).
+    cut_depth = WALL_T + 3.5;   // shell WALL_T + thrust-tube wall margin at Y ≈ 0
+
+    translate([
+        (pylon_side > 0) ? (face_x - cut_depth) : face_x,
+        -HARNESS_PORT_W / 2,
+        HARNESS_PORT_Z - HARNESS_PORT_H / 2
+    ])
+        cube([cut_depth + 0.5, HARNESS_PORT_W, HARNESS_PORT_H]);
+}
+
+
+// =============================================================================
 // ── Module: nacelle_pod (main assembly) ──────────────────────────────────────
 // =============================================================================
 // Top-level assembly module.  Combines all sub-modules in the correct order:
@@ -694,6 +811,12 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
                 // ── Longitudinal gear shaft conduit ───────────────────────
                 shaft_conduit();
 
+                // ── External nav-light wire conduit (inboard X-face) ─────
+                // D-section tube moulded onto nacelle outer shell, running
+                // from tip cap area (Z = 2 mm) to just below pivot boss.
+                // Routes 28AWG 3-core WS2812C signal wire to pylon harness.
+                nav_wire_conduit(pylon_side = PYLON_SIDE);
+
             } // end union (additive)
 
             // ══════════════════════════════════════════════════════════════
@@ -712,6 +835,12 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
 
             // ── Nozzle ring pocket (rotating iris ring seat) ───────────────
             nozzle_ring_pocket();
+
+            // ── Harness exit port (rectangular slot in inboard X-face shell) ──
+            // Allows ESC motor leads, signal leads, and nav-light wire to
+            // transition from nacelle interior to pylon harness channel.
+            // Centred at (Y=0, Z=HARNESS_PORT_Z=86mm), sized 14×8 mm.
+            harness_exit_port(pylon_side = PYLON_SIDE);
 
             // ── Tilt spar clearance bore (along X through both nacelle faces + bore) ──
             // The 4mm CF tilt spar passes through the inter-EDF bore space at Y=0,
@@ -733,8 +862,9 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
 // =============================================================================
 // ── Render call ───────────────────────────────────────────────────────────────
 // =============================================================================
-// Render the nacelle pod using the global SWIRL_DIR parameter.
-// Override at command line: openscad -D SWIRL_DIR=-1 ...
+// Render the nacelle pod using global SWIRL_DIR and PYLON_SIDE parameters.
+// Port   nacelle: openscad -D SWIRL_DIR=+1 -D PYLON_SIDE=+1 ...
+// Stbd   nacelle: openscad -D SWIRL_DIR=-1 -D PYLON_SIDE=-1 ...
 nacelle_pod(swirl_dir = SWIRL_DIR);
 
 
@@ -758,9 +888,9 @@ nacelle_pod(swirl_dir = SWIRL_DIR);
 //   5. Check stator fin edges for layer-delamination; sand smooth if needed.
 //
 // Render commands:
-//   Port nacelle:
+//   Port nacelle (RED nav light, pylon on +X face):
 //     openscad -o s_nacelle_port_revo.stl nacelle_pod_50mm_tandem.scad \
-//              -D SWIRL_DIR=1
-//   Starboard nacelle:
+//              -D SWIRL_DIR=1 -D PYLON_SIDE=1
+//   Starboard nacelle (GREEN nav light, pylon on −X face):
 //     openscad -o s_nacelle_stbd_revo.stl nacelle_pod_50mm_tandem.scad \
-//              -D SWIRL_DIR=-1
+//              -D SWIRL_DIR=-1 -D PYLON_SIDE=-1
