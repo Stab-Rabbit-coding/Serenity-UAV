@@ -55,8 +55,17 @@ Last updated: 2026-05-23
 
 - [x] **Wing lift analysis** — documented in serenity-rev-o.jsx Wing Lift tab 2026-05-24:
   S_ref=0.0156m², q=260Pa at 40kts.  Flat-plate baseline CL=0.32 → L=1.30N (3.7%AUW).
-  Recommendation (zero exterior mold-line change): 3° incidence shim at pylon wing-root
-  block + 4% camber asymmetric infill → CL=0.90 → L=3.65N (10.5%AUW). *(done 2026-05-24)*
+  Initial recommendation (zero OML change): 3° incidence + 4% camber → CL=0.90 → 10.5%AUW.
+  *(done 2026-05-24)*
+
+- [x] **Selig S1223 wing — s_wings_s1223_revo.scad** — Created 2026-05-24.  Replaces
+  flat-plate s_wings_both_shell24.stl with S1223 cross-section (t/c=12.14% at 22.6% chord,
+  camber=8.65% at 39.4% chord); planform (span, taper, sweep) preserved to match canon.
+  CL=1.55 at 3° AoA (+ pylon shim) → L=6.30N (18.1%AUW) — 4.84N gain vs. baseline.
+  SCAD: serenity/stl/s_wings_s1223_revo.scad.  Reference: Selig & Guglielmo (1997),
+  J.Aircraft 34(1), 72–79.  **Pending:** Verify WING_CHORD_ROOT, WING_CHORD_TIP,
+  WING_SEMI_SPAN, WING_SWEEP_LE, WING_SLOT_W, WING_SLOT_H against original STL before
+  printing. *(done 2026-05-24)*
 
 ---
 
