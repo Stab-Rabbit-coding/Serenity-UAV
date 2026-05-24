@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-Last updated: 2026-05-23
+Last updated: 2026-05-24
 
 ---
 
@@ -33,7 +33,24 @@ Last updated: 2026-05-23
   `blender --background --python thingverse-serenity/blender_nacelle_revo.py` on host
   machine to verify Z-range and bore-diameter before committing STLs. *(done 2026-05-24)*
 
-- [ ] create Cargo handling equipment mounts.  create bridge fpv camera mount.  export stls
+- [x] **Sensor / camera / antenna mounts in fuselage shells** — 2026-05-24.
+  Four shell SCAD files updated / created with dual-redundant VL53L5CX mount bosses
+  (16 mm OD, 11 mm PMMA aperture, 4x M1.6, 14x14 mm board recess), 28 mm FPV
+  camera mounts, GPS patch dome, 49 MHz RCRS post boss, and SMA bulkheads:
+  - `serenity/stl/s_head_shell24.scad` (NEW) -- S1A/S1B forward sensors (Array A/B),
+    bridge FPV, GPS patch dorsal, 49 MHz antenna post dorsal.
+  - `serenity/stl/s_cargo_sect_shell24.scad` (NEW) -- cargo nadir FPV camera (belly,
+    downward-facing, payload hoist view).
+  - `serenity/stl/s_middle_canonical_shell24.scad` (UPDATED) -- S3A/S4A port/stbd
+    sensors sta 267 mm, S3B/S4B port/stbd sta 200 mm, S5A/S5B zenith sta 240/347 mm,
+    S6A/S6B nadir sta 213/293 mm; SiK 915 MHz / ZigBee 2.4 GHz / WiFi 5 GHz SMA
+    bulkheads (port/stbd hull sides).
+  - `serenity/stl/s_rear_neck_intake_shell24.scad` (UPDATED) -- S2A/S2B aft sensors
+    (stern area, upper-port and lower-stbd quadrants to avoid engine bell).
+  All positions marked VERIFY; measure mesh cross-sections in slicer before printing.
+  Array A: FC3 SBC primary; Array B: FC2 SBC primary (hardware failover). *(done 2026-05-24)*
+
+- [ ] create Cargo handling equipment mounts.  export stls
 
 - [ ] do a comprehensive update on the graphical build guides to the current design specs.
 - [ ] integrated the build plan into the todo
