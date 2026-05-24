@@ -24,6 +24,8 @@ Last updated: 2026-05-24
   Run: `blender --background --python <script>.py` per CLAUDE.md workflow.
   Verify Z-range and bore diameter in console before committing.
 
+- [ ] update the rev o jsx to be a complete description of the uav, with all relevant design and build elements.  
+- [ ] update the graphical build guide svgs to the rev o design specifications
 - [x] **Nacelle pod for Rev N (50 mm tandem EDFs)** — `nacelle_pod_50mm_tandem.scad` created
   2026-05-24 with: dual-bore centerline (EDF1 Z=22..72mm, EDF2 Z=98..143mm), 11-fin
   twisted stator, M=1.0 gear boss / conduit hard points, MF104ZZ clevis pivot boss at Z=83mm
