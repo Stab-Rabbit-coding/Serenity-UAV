@@ -1,5 +1,21 @@
 # Serenity UAV — Claude Code Project Instructions
 
+## Project Objective
+
+- **Design and build a fully functional EDF Tilt Rotor UAV version of the Firefly Class Spaceship "Serenity" from the Joss Whedon TV show and movie.**
+- **Provide redundancy and failover in all systems possible:
+-- Avionics:  4 pairs of pocketbeagle2 industrial SBCs: 4 with a Flight Control and Sensor Cape, and 4 with a Communications, Logging, and payload Cape.
+-- Onboard Communications:  Each of the 8 sbcs will be connected to the others via: Canbus FD, MILSTD 1553, RS485, & Ethernet
+-- External Communications: The UAV uses WIFI at 5ghz, Zigbee at 2.4ghz, MavLink /SiK at 915Mhz, and AX.25 on the 49Mhz RCRS channels.
+-- Powerplant: Each Nacelle has two EDFs in series, under PID control.  The forward EDF in each nacelle is controlled primarily by one of the flight control SBCs and the aft is primarily controlled by a different sbc.  The large fuselage EDF is controlled by a third one.  Each of the 4 fc sbcs can take over for all EDFs.
+
+- **Every message is secure, everything is logged**
+
+-- Every Cape has a TPM.
+-- Every message, internal and external, is digitally signed and authenticated.
+-- Everything is logged.  Sensors, messages, camera feed.
+-- The logs are saved to hardware-enforced non-executable microsd cards
+
 ## Design Philosophy
 
 All design decisions are for an **actual physical build**, not hypothetical or conceptual work.
@@ -31,6 +47,7 @@ Every component will be fabricated or procured; design accordingly.
 ## Licensing and Attribution
 
 - All work is **published under CC BY 4.0**.
+- The author of this project is Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 - Every design decision, algorithm, or geometry technique that draws on an external reference
   **must be cited** in the relevant source file docstring or commit message.
 - Derivative files must carry the full attribution chain back to upstream sources.
