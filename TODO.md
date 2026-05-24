@@ -148,7 +148,8 @@ Design notes and BOM candidates are in `serenity/kicad/XCVR-49MHZ-1.md`.
 
 ## Documentation
 
-- [ ] **Update `PROJECT_INDEX.md`** — add XCVR-49MHZ-1 row to PCB table.
+- [x] **Update `PROJECT_INDEX.md`** — add XCVR-49MHZ-1 row to PCB table. *(done 2026-05-24)*
 
-- [ ] **Sync bom_revN.csv ↔ bom_revN.json** — resolve 2026-05-23 vs 2026-05-22
-  timestamp discrepancy.
+- [x] **Sync bom_revN.csv ↔ bom_revN.json** — resolve 2026-05-23 vs 2026-05-22
+  timestamp discrepancy. *(done 2026-05-24 — added WIRE-49MHZ, POST-FWD-49, POST-AFT-49 as
+  structured `avionics.antenna_system` entries in bom_revN.json; updated JSON date to 2026-05-23)*

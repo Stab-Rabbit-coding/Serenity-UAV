@@ -118,6 +118,8 @@ body, p, li, td, th, code, pre {
 | `CM4-CARRIER-1.kicad_sch` | CM4-CARRIER-1 Rev E | — | Schematic |
 | `COMMS-HAT-1.kicad_pcb` | COMMS-HAT-1 Rev E | 65×48mm | CM4 hat: CAN FD, Ethernet, TPM, NX proxy, log μSD, SiK, RCRS, Zigbee/LoRa |
 | `COMMS-HAT-1.kicad_sch` | COMMS-HAT-1 Rev E | — | Schematic |
+| `XCVR-49MHZ-1.kicad_pcb` | XCVR-49MHZ-1 | 55×35mm | 49 MHz AX.25 RCRS transceiver: Si5351A DDS, TCM3105 AFSK modem, PA, 5-element Chebyshev LPF, MGA-82563 LNA, PE4259 TX/RX switch — connects to Cape-B J1 |
+| `XCVR-49MHZ-1.kicad_sch` | XCVR-49MHZ-1 | — | Schematic stub (open in KiCad 7.x) — layout in progress; see `XCVR-49MHZ-1.md` for design notes |
 
 ### STL 3D Print Files (22 parts)
 
