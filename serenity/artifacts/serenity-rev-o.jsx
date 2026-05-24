@@ -781,24 +781,24 @@ export default function RevOSpec() {
                         </table>
                     </Card>
 
-                    {/* ── Airfoil improvement options ── */}
-                    <Card title="Recommended Airfoil Improvements — Zero Outer Mold-Line Change" accent={C.teal}>
+                    {/* ── Airfoil improvement history ── */}
+                    <Card title="Improvement Options Evaluated (Superseded by S1223)" accent={C.teal}>
                         {/* Option 1 */}
                         <div style={{
                             marginBottom: 14,
                             padding: "10px 14px",
-                            background: "rgba(0,229,255,0.05)",
+                            background: "rgba(0,229,255,0.04)",
                             border: `1px solid ${C.border}`,
                             borderRadius: 7,
+                            opacity: 0.72,
                         }}>
                             <div style={{ fontFamily: MB, fontSize: 13, color: C.accent, marginBottom: 6 }}>
-                                Option 1 — Add 3° Positive Incidence at Wing Root Attachment
+                                Option 1 — 3° Positive Incidence at Wing Root (zero OML change)
                             </div>
                             <div style={{ fontFamily: M, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
-                                Angle the pylon wing-mount block upward 3° (pitch leading edge up).
-                                No change to the outer hull. ΔC_L = 2π × (3π/180) ≈ 0.33 at high Re;
-                                ~0.25 at Re = 91k. New C_L ≈ 0.57.<br />
-                                <span style={{ color: C.teal }}>New L = 0.57 × 260 × 0.0156 = 2.31 N → 6.6% of AUW.</span>
+                                Angle the pylon wing-mount block 3° nose-up via wedge shim.  ΔC_L ≈ 0.25 at
+                                Re = 91k.  New C_L ≈ 0.57.{" "}
+                                <span style={{ color: C.teal }}>L = 2.31 N → 6.6% AUW.</span>
                             </div>
                         </div>
 
@@ -806,42 +806,85 @@ export default function RevOSpec() {
                         <div style={{
                             marginBottom: 14,
                             padding: "10px 14px",
-                            background: "rgba(0,229,255,0.05)",
+                            background: "rgba(0,229,255,0.04)",
                             border: `1px solid ${C.border}`,
                             borderRadius: 7,
+                            opacity: 0.72,
                         }}>
                             <div style={{ fontFamily: MB, fontSize: 13, color: C.accent, marginBottom: 6 }}>
-                                Option 2 — Hollow Interior with Asymmetric PETG Infill (4% Camber Line)
+                                Option 2 — 4% Camber via Asymmetric Infill (zero OML change)
                             </div>
                             <div style={{ fontFamily: M, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
-                                Keep the outer skin canonical. Hollow the wing body with infill biased toward
-                                the suction surface, shifting the mean camber line to ~4% of chord without
-                                any exterior change.<br />
-                                NACA 4-series at Re = 91k: C_L ≈ 0.90 at 5° AoA + 3° incidence.<br />
-                                <span style={{ color: C.teal }}>New L = 0.90 × 260 × 0.0156 = 3.65 N → 10.5% of AUW.</span>
+                                Biased upper-surface infill in slicer modifier zone; no exterior geometry
+                                change.  Combined with 3°: C_L ≈ 0.90.{" "}
+                                <span style={{ color: C.teal }}>L = 3.65 N → 10.5% AUW.</span>
                             </div>
                         </div>
 
-                        {/* Option 3 */}
+                        {/* Selected */}
                         <div style={{
                             marginBottom: 0,
                             padding: "10px 14px",
                             background: "rgba(74,222,128,0.07)",
-                            border: `1px solid rgba(74,222,128,0.35)`,
+                            border: `1px solid rgba(74,222,128,0.45)`,
                             borderRadius: 7,
                         }}>
                             <div style={{ fontFamily: MB, fontSize: 13, color: C.green, marginBottom: 6 }}>
-                                Option 3 — Combined (3° Incidence + 4% Camber Infill)
+                                ✔ Selected — Selig S1223 Wing (cross-section replaced; planform preserved)
                             </div>
                             <div style={{ fontFamily: M, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
-                                C_L ≈ 0.90, L = 3.65 N → 10.5% of AUW. Reduces EDF thrust required for
-                                cruise by ~10.5%, improving battery endurance.<br />
-                                <span style={{ color: C.green }}>
-                                    Estimated cruise endurance improvement: +6–8 min on 6S 10Ah pack
-                                    (based on reduced loiter thrust).
-                                </span>
+                                Full S1223 profile replaces flat-plate cross-section.  Planform (span, taper,
+                                sweep) unchanged — only the cross-section shape changes.  SCAD:
+                                s_wings_s1223_revo.scad.  Combined with 3° incidence pylon shim:{" "}
+                                <span style={{ color: C.green }}>C_L ≈ 1.55 → L = 6.30 N → 18.1% AUW.</span>
+                                <br />
+                                Reference: Selig &amp; Guglielmo (1997), Journal of Aircraft 34(1), 72–79.
+                                Max t/c 12.14% at 22.6% chord; max camber 8.65% at 39.4% chord; C_L_max ≈ 2.0
+                                at Re = 100k (wind tunnel).
                             </div>
                         </div>
+                    </Card>
+
+                    {/* ── S1223 profile data ── */}
+                    <Card title="S1223 Aerodynamic Performance at Re = 91 000" accent={C.green}>
+                        <table style={{ borderCollapse: "collapse", width: "100%" }}>
+                            <tbody>
+                                <tr>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim, fontFamily: M, fontSize: 12, width: "38%" }}>Max thickness</td>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>12.14% chord at 22.6% chord</td>
+                                    <td style={{ padding: "4px 0", color: C.dimmer, fontFamily: M, fontSize: 11 }}>7.9 mm at root (65 mm chord)</td>
+                                </tr>
+                                <tr style={{ background: "rgba(74,222,128,0.04)" }}>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim, fontFamily: M, fontSize: 12 }}>Max camber</td>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>8.65% chord at 39.4% chord</td>
+                                    <td style={{ padding: "4px 0", color: C.dimmer, fontFamily: M, fontSize: 11 }}>5.6 mm at root (65 mm chord)</td>
+                                </tr>
+                                <tr>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim, fontFamily: M, fontSize: 12 }}>C_L at 0° AoA</td>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.green, fontFamily: M, fontSize: 12 }}>≈ 1.10</td>
+                                    <td style={{ padding: "4px 0", color: C.dimmer, fontFamily: M, fontSize: 11 }}>Camber alone lifts from 0° — L = 4.47 N (12.8% AUW)</td>
+                                </tr>
+                                <tr style={{ background: "rgba(74,222,128,0.04)" }}>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim, fontFamily: M, fontSize: 12 }}>C_L at 3° AoA (+ pylon shim)</td>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.green, fontFamily: MB, fontSize: 12 }}>≈ 1.55</td>
+                                    <td style={{ padding: "4px 0", color: C.green, fontFamily: M, fontSize: 11 }}>L = 6.30 N → 18.1% AUW</td>
+                                </tr>
+                                <tr>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim, fontFamily: M, fontSize: 12 }}>C_L_max (wind tunnel, Re=100k)</td>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>≈ 2.0</td>
+                                    <td style={{ padding: "4px 0", color: C.dimmer, fontFamily: M, fontSize: 11 }}>Selig &amp; Guglielmo 1997 measured</td>
+                                </tr>
+                                <tr style={{ background: "rgba(74,222,128,0.04)" }}>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim, fontFamily: M, fontSize: 12 }}>L/D at cruise C_L = 1.1</td>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.text, fontFamily: M, fontSize: 12 }}>≈ 32</td>
+                                    <td style={{ padding: "4px 0", color: C.dimmer, fontFamily: M, fontSize: 11 }}>vs. flat plate ≈ 10 — 3.2× better cruise efficiency</td>
+                                </tr>
+                                <tr>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.dim, fontFamily: M, fontSize: 12 }}>SCAD source</td>
+                                    <td style={{ padding: "4px 14px 4px 0", color: C.text, fontFamily: M, fontSize: 12 }} colSpan={2}>serenity/stl/s_wings_s1223_revo.scad</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </Card>
 
                     {/* ── Summary comparison table ── */}
@@ -861,52 +904,56 @@ export default function RevOSpec() {
                             <tbody>
                                 {/* Each row: [label, CL, lift, pct, delta, highlight] */}
                                 {[
-                                    ["Flat plate (baseline)", "0.32", "1.30 N", "3.7%",  "—",          false],
-                                    ["+ 3° incidence",        "0.57", "2.31 N", "6.6%",  "≈ +3–4 min", false],
-                                    ["+ 4% camber",           "0.90", "3.65 N", "10.5%", "≈ +5–7 min", false],
-                                    ["Combined",              "0.90", "3.65 N", "10.5%", "+6–8 min",   true ],
+                                    ["Flat plate (original)",          "0.32", "1.30 N",  "3.7%",  "—",           false],
+                                    ["+ 3° incidence only",            "0.57", "2.31 N",  "6.6%",  "≈ +3–4 min",  false],
+                                    ["+ 4% camber + 3° incidence",    "0.90", "3.65 N",  "10.5%", "≈ +6–8 min",  false],
+                                    ["S1223 @ 0° AoA",                "1.10", "4.47 N",  "12.8%", "≈ +10 min",   false],
+                                    ["S1223 + 3° incidence (BUILT)",  "1.55", "6.30 N",  "18.1%", "≈ +15 min",   true ],
                                 ].map((row, i) => (
                                     <tr key={i} style={{
                                         background: row[5]
-                                            ? "rgba(74,222,128,0.10)"
+                                            ? "rgba(74,222,128,0.12)"
                                             : i % 2 ? "rgba(74,222,128,0.03)" : "transparent",
-                                        border: row[5] ? `1px solid rgba(74,222,128,0.40)` : "none",
+                                        border: row[5] ? `1px solid rgba(74,222,128,0.45)` : "none",
                                     }}>
-                                        {/* Configuration name */}
                                         <td style={{
                                             padding: "5px 14px 5px 6px",
                                             color: row[5] ? C.green : C.text,
                                             fontFamily: row[5] ? MB : M,
                                             fontSize: 12,
                                         }}>{row[0]}</td>
-                                        {/* CL */}
                                         <td style={{ padding: "5px 14px 5px 0", color: row[5] ? C.green : C.text, fontFamily: M, fontSize: 12, textAlign: "right" }}>{row[1]}</td>
-                                        {/* Lift */}
                                         <td style={{ padding: "5px 14px 5px 0", color: row[5] ? C.green : C.text, fontFamily: M, fontSize: 12, textAlign: "right" }}>{row[2]}</td>
-                                        {/* % AUW */}
                                         <td style={{ padding: "5px 14px 5px 0", color: row[5] ? C.green : C.text, fontFamily: M, fontSize: 12, textAlign: "right" }}>{row[3]}</td>
-                                        {/* Endurance Δ */}
                                         <td style={{ padding: "5px 0", color: row[5] ? C.green : C.dimmer, fontFamily: M, fontSize: 12, textAlign: "right" }}>{row[4]}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
+                        <div style={{ marginTop: 10, fontFamily: M, fontSize: 11, color: C.dimmer }}>
+                            Endurance Δ estimated for 6S 4 000 mAh pack at 80 W hover thrust reduction.
+                            S1223 at 3° gives 4.84 N more lift than baseline → ≈ 14% less EDF thrust
+                            needed for cruise trim → ≈ 15 additional minutes at 40-kt cruise.
+                        </div>
                     </Card>
 
-                    {/* ── Outer mold-line caveat ── */}
+                    {/* ── Canon fidelity note ── */}
                     <div style={{
                         padding: "10px 16px",
-                        background: "rgba(0,229,255,0.05)",
-                        border: `1px solid ${C.border}`,
+                        background: "rgba(74,222,128,0.05)",
+                        border: `1px solid rgba(74,222,128,0.30)`,
                         borderRadius: 7,
                         fontFamily: M, fontSize: 11.5,
                         color: C.dimmer,
                         marginBottom: 18,
                     }}>
-                        <span style={{ color: C.accent, fontFamily: MB }}>Note: </span>
-                        Wing geometry is canonical Serenity shape. Outer mold line is NEVER changed.
-                        Only incidence angle (set by pylon mount block geometry at 3°) and internal
-                        hollow infill bias are modified.
+                        <span style={{ color: C.green, fontFamily: MB }}>Canon fidelity: </span>
+                        Wing planform (span, taper ratio, quarter-chord sweep) is unchanged from the
+                        2.197× Thingiverse Serenity model. The S1223 cross-section adds a visible leading-edge
+                        radius and slight upper-surface camber when viewed from the front — consistent with
+                        the Serenity wing silhouette as seen in the show. The reflexed lower surface near
+                        the trailing edge is a minor departure; it is not visible from normal viewing angles.
+                        All pylon attachment and fuselage root interface dimensions are unchanged.
                     </div>
                 </div>
             )}
