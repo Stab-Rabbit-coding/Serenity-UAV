@@ -1,0 +1,632 @@
+{
+  "revision": "Rev O",
+  "supersedes": "Rev N",
+  "scale": "24 inches (609.6 mm)",
+  "author": "Steve Griffing PE(CSE) CISSP-ISSEP CPP",
+  "license": "CC BY 4.0",
+  "date": "2026-05-24",
+
+  "rev_o_summary": "Rev O pivots nacelles at their center of gravity (CG=83mm from intake) to eliminate gravity-induced servo torque in all flight attitudes. Changes from Rev N: (1) Tilt pivot relocated from Z=74mm to Z=83mm (CG-derived from full nacelle mass breakdown); (2) Pivot bearing changed from v1 686ZZ (6mm ID) to MF104ZZ (4mm ID × 10mm OD × 4mm wide) for reduced mass and size; (3) Gear train fully specified — M=1.0 sector (R=22mm), drive pinion A (N=12T, R=6mm), M=1.0 bevel pair (N=14T, 45° pitch cone), crown pinion (N=12T, R=6mm), nozzle ring rack (R_eff=28mm); (4) nacelle_pod_50mm_tandem.scad added as parametric SCAD source for both port and starboard nacelle pods; (5) Longitudinal gear shaft conduit added to nacelle exterior (3mm CF shaft, PTFE sleeve, OD=5.5mm conduit); (6) All nozzle iris components redesigned in nacelle_nozzle_iris.scad with M=1.0 crown-pinion rack; (7) Blender nacelle generation script updated to blender_nacelle_revo.py producing s_eng_left/right_stator_shell24_revo.stl.",
+
+  "hull_geometry": {
+    "source_model":    "misubisu / Peter Farell — Serenity Firefly-class (printables.com/model/548545)",
+    "scale_factor":    2.9294,
+    "wall_thickness":  "2.5 mm",
+    "fill":            "2 lb/ft³ (32 kg/m³) two-part closed-cell polyurethane foam, 4× expansion",
+    "overall_length":  "609.6 mm (24.00 in)",
+    "beam":            "486 mm tip-to-tip",
+    "height":          "182 mm",
+    "nacelle_od":      "~60.5 mm (X) × 67 mm (Y) — bore inscribed ID ≈ 55.5 mm",
+    "nacelle_length":  "148.3 mm (Z axis, Z=0 = intake face, Z=148.3 = nozzle exit face)"
+  },
+
+  "print_schedule": [
+    {
+      "stl":       "s_head_shell24.stl",
+      "desc":      "Cockpit / nose section",
+      "material":  "PETG",
+      "layer_mm":  0.20,
+      "infill":    "8% gyroid",
+      "qty":       1,
+      "mass_g":    95
+    },
+    {
+      "stl":       "s_middle_canonical_shell24.stl",
+      "scad":      "serenity/stl/s_middle_canonical_shell24.scad",
+      "desc":      "Fuselage mid-section — canonical Serenity belly geometry, NO belly scoop. Replaces s_middle_intake_shell24.stl for Rev N/O 4-radial-intake build.",
+      "material":  "PETG",
+      "layer_mm":  0.20,
+      "infill":    "8% gyroid",
+      "qty":       1,
+      "mass_g":    135,
+      "notes":     "Generate STL from SCAD with OpenSCAD CLI: openscad -o s_middle_canonical_shell24.stl serenity/stl/s_middle_canonical_shell24.scad"
+    },
+    {
+      "stl":       "s_cargo_sect_shell24.stl",
+      "desc":      "Cargo section",
+      "material":  "PETG",
+      "layer_mm":  0.20,
+      "infill":    "8% gyroid",
+      "qty":       1,
+      "mass_g":    180
+    },
+    {
+      "stl":       "s_rear_neck_intake_shell24.stl",
+      "scad":      "serenity/stl/s_rear_neck_intake_shell24.scad",
+      "desc":      "Rear fuselage / engine bell section with 4 radial scoop windows at neck station (~310mm from nose). 4 rectangular cutouts (65mm wide × 60mm axial) at 90° spacing (dorsal/port/ventral/stbd). Canonical shell geometry otherwise preserved.",
+      "material":  "PETG",
+      "layer_mm":  0.20,
+      "infill":    "8% gyroid",
+      "qty":       1,
+      "mass_g":    225,
+      "notes":     "Generate STL from SCAD. Verify scoop-window station alignment in slicer before printing; adjust NECK_X parameter if needed."
+    },
+    {
+      "stl":       "s_neck_intake_frame.stl",
+      "scad":      "serenity/stl/s_neck_intake_frame.scad",
+      "desc":      "CF-PETG structural intake frame ring — bonds into 4 scoop windows at neck station. Provides aerodynamic intake lips, registration tongues (5mm), bonding shoulders (5mm), and internal duct arms routing air toward plenum. Replaces structural stiffness lost by cutting hull openings.",
+      "material":  "CF-PETG",
+      "layer_mm":  0.15,
+      "infill":    "40% gyroid",
+      "walls":     4,
+      "qty":       1,
+      "mass_g":    85,
+      "notes":     "Print with hardened-steel nozzle. Bond with structural epoxy (e.g. West System 105/206) into hull scoop cutouts. Cure 24h before foam-fill."
+    },
+    {
+      "stl":       "s_aft_edf_plenum.stl",
+      "scad":      "serenity/stl/s_aft_edf_plenum.scad",
+      "desc":      "PETG 4-to-1 cross-shaped plenum manifold — collects air from 4 intake frame duct arms (station ~310mm) and delivers to 120mm EDF fan face (station ~430mm). Rectangular arms (65×60mm) taper to 120mm circular EDF outlet over 80mm transition length.",
+      "material":  "PETG",
+      "layer_mm":  0.20,
+      "infill":    "20% gyroid",
+      "qty":       1,
+      "mass_g":    75,
+      "notes":     "Bond aft end to EDF mount ring; bond forward arm ends to intake frame duct arm exits. Seal all joints with epoxy fillet. Pressure-test with shop vac before closing hull."
+    },
+    {
+      "stl":       "s_wings_both_shell24.stl",
+      "desc":      "Wing pair (both sides, one print)",
+      "material":  "PETG",
+      "layer_mm":  0.20,
+      "infill":    "8% gyroid",
+      "qty":       1,
+      "mass_g":    110
+    },
+    {
+      "stl":       "s_eng_left_stator_shell24_revo.stl",
+      "desc":      "Port nacelle with integrated CW stator (SWIRL_DIR=+1) — Rev O, generated by blender_nacelle_revo.py OR openscad -D SWIRL_DIR=1 nacelle_pod_50mm_tandem.scad",
+      "scad":      "serenity/stl/nacelle_pod_50mm_tandem.scad",
+      "material":  "CF-PETG",
+      "layer_mm":  0.15,
+      "infill":    "25% gyroid",
+      "walls":     4,
+      "qty":       1,
+      "mass_g":    130,
+      "notes":     "Rev O: pivot at Z=83mm (CG). EDF bore ID≈55mm; 11-fin twisted stator Z=75..95mm; clevis MF104ZZ × 2; M=1.0 gear bosses at Z=83mm and Z=133mm. Print with hardened-steel nozzle."
+    },
+    {
+      "stl":       "s_eng_right_stator_shell24_revo.stl",
+      "desc":      "Starboard nacelle with integrated CCW stator (SWIRL_DIR=−1) — Rev O, mirror image of port nacelle",
+      "scad":      "serenity/stl/nacelle_pod_50mm_tandem.scad",
+      "material":  "CF-PETG",
+      "layer_mm":  0.15,
+      "infill":    "25% gyroid",
+      "walls":     4,
+      "qty":       1,
+      "mass_g":    130,
+      "notes":     "Rev O: openscad -D SWIRL_DIR=-1. CCW stator cancels port torque reaction. Same CG pivot at Z=83mm."
+    },
+    {
+      "stl":       "s_eng_piv_outer_scaled24.stl",
+      "desc":      "Nacelle pivot housing outer — updated for Rev O MF104ZZ bearing at Z=83mm",
+      "material":  "CF-PETG",
+      "layer_mm":  0.15,
+      "infill":    "40% gyroid",
+      "walls":     4,
+      "qty":       2,
+      "mass_g":    35
+    },
+    {
+      "stl":       "s_eng_piv_pins_scaled24.stl",
+      "desc":      "Pivot pin holders",
+      "material":  "CF-PETG",
+      "layer_mm":  0.15,
+      "infill":    "40% solid",
+      "walls":     4,
+      "qty":       2,
+      "mass_g":    12
+    },
+    {
+      "stl":       "s_eng_pistons_scaled24.stl",
+      "desc":      "Tilt piston linkage (decorative / fairing)",
+      "material":  "PETG",
+      "layer_mm":  0.20,
+      "infill":    "20% gyroid",
+      "qty":       2,
+      "mass_g":    25
+    },
+    {
+      "stl":       "s_pivot_arm_a_scaled24.stl",
+      "desc":      "Pivot arm — carries tilt servo pushrod",
+      "material":  "CF-PETG",
+      "layer_mm":  0.15,
+      "infill":    "40%",
+      "walls":     4,
+      "qty":       2,
+      "mass_g":    20
+    },
+    {
+      "stl":       "nacelle_nozzle_petal.stl",
+      "desc":      "Nacelle iris nozzle petal (50mm EDF, hull-matched outer surface) — redesigned for M=1.0 crown-pinion rack in Rev O",
+      "material":  "PETG",
+      "layer_mm":  0.20,
+      "infill":    "20% gyroid",
+      "qty":       16,
+      "mass_g":    2,
+      "notes":     "8 per nacelle × 2 nacelles; print flat; inner concave face print in translucent-blue PETG for LED backlight effect. SCAD: nacelle_nozzle_iris.scad"
+    },
+    {
+      "stl":       "nacelle_nozzle_ring.stl",
+      "desc":      "Nacelle iris base ring (fixed, seats at nozzle exit face) — M=1.0 internal rack for crown pinion in Rev O",
+      "material":  "CF-PETG",
+      "layer_mm":  0.15,
+      "infill":    "40%",
+      "qty":       2,
+      "mass_g":    18,
+      "notes":     "Rev O: M=1.0 internal rack tooth profile on inner ring (R_eff=28mm). SCAD: nacelle_nozzle_iris.scad"
+    },
+    {
+      "stl":       "rear_nozzle_petal.stl",
+      "desc":      "Rear fuselage iris nozzle petal (120mm EDF, 38° span)",
+      "material":  "PETG",
+      "layer_mm":  0.20,
+      "infill":    "20% gyroid",
+      "qty":       8,
+      "mass_g":    4,
+      "notes":     "Inner face: translucent-blue PETG for LED backlight"
+    },
+    {
+      "stl":       "rear_nozzle_frame.stl",
+      "desc":      "Rear nozzle base ring with 8 fixed ribs (one-piece cone frame, visible at all petal states)",
+      "material":  "CF-PETG",
+      "layer_mm":  0.15,
+      "infill":    "30%",
+      "qty":       1,
+      "mass_g":    55
+    },
+    {
+      "stl":       "s_feet_x_4_scaled24.stl",
+      "desc":      "Landing gear feet (×4 in one STL)",
+      "material":  "TPU 95A",
+      "layer_mm":  0.25,
+      "infill":    "40%",
+      "qty":       1,
+      "mass_g":    80
+    },
+    {
+      "stl":       "s_legs_scaled24.stl",
+      "desc":      "Landing gear legs",
+      "material":  "CF-PETG",
+      "layer_mm":  0.15,
+      "infill":    "30%",
+      "qty":       1,
+      "mass_g":    60
+    }
+  ],
+
+  "propulsion": {
+    "nacelle_edfs": [
+      {
+        "ref":       "EDF-50-6S",
+        "desc":      "50mm EDF unit @ 6S — 4 total (2 per nacelle, tandem series)",
+        "qty":       4,
+        "config":    "2 per nacelle in tandem/series — single shared bore, EDF1 upstream Z=22..72mm, EDF2 downstream Z=98..143mm",
+        "rotation":  "Port nacelle: CW from intake | Starboard nacelle: CCW from intake (counter-rotating pair for zero net torque)",
+        "thrust_each_g": 460,
+        "thrust_nacelle_g": 911,
+        "thrust_all_nacelles_g": 1822,
+        "voltage": "6S (22.2V nominal)",
+        "mass_g":    70,
+        "notes":     "Verify rotation direction before installing in nacelle. Spin-test on bench first."
+      }
+    ],
+    "nacelle_escs": [
+      {
+        "ref":       "ESC-40A-6S",
+        "desc":      "40A 6S BLHeli32 ESC with BDSHOT telemetry — one per 50mm EDF",
+        "qty":       4,
+        "current_cont_A": 40,
+        "current_burst_A": 55,
+        "voltage_max": "6S",
+        "dshot":     "BDSHOT600",
+        "mass_g":    25,
+        "notes":     "ESC1/ESC2 in port nacelle hub bore; ESC3/ESC4 in starboard. Route leads through integrated hub bore (ID=20mm)."
+      }
+    ],
+    "nacelle_stators": {
+      "desc":        "11-fin twisted inter-stage stator — integral to nacelle shell print (CF-PETG), not a separate part. Rev O: stator moved to Z=75..95mm, 11 fins (was 8 fins at Z=53..73mm in Rev N).",
+      "qty":         2,
+      "material":    "CF-PETG (integral to nacelle shell)",
+      "position_z":  "Z=75..95mm from intake face",
+      "vane_angle_deg": 33.0,
+      "swirl_dir_port": "+1 (CW correction)",
+      "swirl_dir_stbd": "−1 (CCW correction)",
+      "fin_count":   11,
+      "thrust_gain_pct": "~6%",
+      "notes":       "Generated by blender_nacelle_revo.py OR nacelle_pod_50mm_tandem.scad. 11-fin count chosen for mutual prime with 6-pole EDF motor (11 × 6 = 66 — avoids tonal resonance)."
+    },
+    "rear_edf": {
+      "ref":         "EDF-120-6S",
+      "desc":        "120mm EDF unit @ 6S — rear fuselage inside engine bell, exhaust straight aft",
+      "qty":         1,
+      "thrust_g":    3500,
+      "voltage":     "6S",
+      "mass_g":      420,
+      "location":    "Panel F engine bell, fan face at station ~430mm from nose. Axis aligned with fuselage centreline, intake forward (+Z toward nose).",
+      "intake":      "4 radial scoops at station ~310mm via s_neck_intake_frame + s_aft_edf_plenum (replaces belly scoop).",
+      "notes":       "Fan annular area ≈10,683mm²; combined scoop capture area = 15,600mm² (ratio 1.46× — exceeds 1.3× minimum for duct velocity matching). Verify EDF ring / plenum outlet concentricity before bonding."
+    },
+    "rear_esc": {
+      "ref":         "ESC-80A-6S",
+      "desc":        "80A 6S BLHeli32 ESC for 120mm rear EDF",
+      "qty":         1,
+      "current_cont_A": 80,
+      "current_burst_A": 110,
+      "mass_g":      65
+    },
+    "thrust_summary": {
+      "nacelles_g":  1822,
+      "rear_g":      3500,
+      "total_g":     5322,
+      "dry_mass_g":  "~2800 (estimated — hull prints + avionics + motors + servos, excl. battery)",
+      "auw_6s_4000mah_g": "~3550",
+      "tw_ratio":    "~1.50 at 6S 4000mAh",
+      "notes":       "Lower T/W than 18-inch design due to larger hull mass at 24-inch scale. Adequate for stable hover and cargo ops."
+    }
+  },
+
+  "tilt_mechanism": {
+    "nacelle_tilt_servos": [
+      {
+        "ref":         "SERVO-TILT",
+        "desc":        "Nacelle tilt servo — fuselage mounted, one per nacelle",
+        "qty":         2,
+        "torque_kgcm_min": 25,
+        "voltage":     "6V",
+        "type":        "Digital, metal gear (e.g. DS3218MG class or equivalent ≥25 kg·cm at 6V)",
+        "mass_g":      65,
+        "range_deg":   "0° (cruise/horizontal) to 120° (backing), hard stops at −5° / 140°",
+        "notes":       "Rev O: Servo torque demand greatly reduced by CG-pivot at Z=83mm. At any tilt angle, gravity exerts zero net moment on the nacelle. Servo now only overcomes aerodynamic and inertia moments."
+      }
+    ],
+    "nozzle_gear_linkage": {
+      "desc":          "Passive mechanical linkage — nacelle nozzle driven by tilt pivot, no dedicated servo. Rev O: Upgraded from M=0.5 to M=1.0 gears throughout for improved robustness and printability.",
+      "mechanism":     "Sector gear (R=22mm, M=1.0, fixed to tilt bracket) → Drive Pinion A (N=12T, R=6mm, on nacelle body at PIVOT_Z) → longitudinal 3mm CF shaft in conduit → M=1.0 Bevel pair (N=14T, 45° pitch cone, 90° axis redirect) → Crown Pinion (N=12T, R=6mm) → Nozzle inner ring rack (M=1.0, R_eff=28mm)",
+      "gear_ratio":    "Sector:pinion = 22/6 = 3.667:1 × bevel 1:1 × crown:rack = 6/28 = 0.214 → effective 0.786 nozzle-deg per nacelle-deg",
+      "nozzle_state":  "0° nacelle → nozzle fully closed (hull-matched petal surface); 90° nacelle → nozzle ~70.7° ring rotation = fully open",
+      "nozzle_120deg": "At 120° nacelle, nozzle ring would be over-driven — internal hard stop in ring gear limits ring to 70.7° max.",
+      "ref":           "serenity/stl/nacelle_pod_50mm_tandem.scad — PINION_A_Z, CROWN_Z, SHAFT_CONDUIT_R parameters"
+    },
+    "pivot_bearings": [
+      {
+        "ref":    "BRG-MF104ZZ",
+        "desc":   "MF104ZZ flanged bearing 4×10×4mm — nacelle pivot (2 per nacelle). Rev O: confirmed selection; replaces v1 686ZZ (6mm ID) from earlier revisions. Reduced mass, smaller bore.",
+        "qty":    4,
+        "id_mm":  4,
+        "od_mm":  10,
+        "w_mm":   4,
+        "mass_g": 2,
+        "cost_usd": 1.50,
+        "supplier": "Amazon / AliExpress",
+        "notes":  "Press-fit into CLEVIS_EAR_OD=16mm bore (10mm bearing OD + 2×3mm CF-PETG wall); pivot rod = 4mm CF (CF-ROD-4MM)"
+      }
+    ],
+    "pivot_rod": {
+      "ref":   "CF-ROD-4MM",
+      "desc":  "4mm OD solid carbon-fibre pivot rod, cut to length per pivot housing drawing",
+      "qty":   2,
+      "mass_g": 8
+    },
+    "sector_gear": {
+      "desc":  "M=1.0 sector gear R=22mm, 38T arc, 155° arc span — fixed to tilt bracket (fuselage side). Rev O: upgraded from M=0.5. See gear_train.SECTOR-M1-R22.",
+      "qty":   2,
+      "mass_g": 8,
+      "scad":  "serenity/stl/nacelle_sector_gear.scad"
+    },
+    "bevel_pair": {
+      "desc":  "M=1.0 bevel gear pair N=14T each, 45° pitch cone, 1:1 ratio, 90° axis redirect. Rev O: upgraded from M=0.5. See gear_train.BEVEL-M1-14T.",
+      "qty":   2,
+      "mass_g": 4,
+      "scad":  "serenity/stl/nacelle_bevel_pair.scad"
+    },
+    "pinion": {
+      "desc":  "M=1.0 drive and crown pinions, N=12T, R=6mm. Rev O: upgraded from M=0.5. See gear_train.PINION-A-M1-12T and CROWN-M1-12T.",
+      "qty":   4,
+      "mass_g": 3,
+      "scad":  "serenity/stl/nacelle_pinion.scad"
+    }
+  },
+
+  "nozzle_actuation": {
+    "nacelle_nozzles": {
+      "desc":        "2× iris nozzles (one per nacelle) — gear-driven passively from tilt pivot, NO dedicated servo. Rev O: iris components redesigned in nacelle_nozzle_iris.scad with M=1.0 crown-pinion rack.",
+      "petals":      "8 per nozzle × 2 nacelles = 16 petals total",
+      "hinge_pins":  "3mm diameter × 5mm stainless steel, one per petal",
+      "link_ring":   "Piano wire 0.8mm bent to link ring connecting petals to nozzle inner ring",
+      "petal_material": "PETG body + translucent-blue PETG inner face (print as two-colour or paint)",
+      "scad":        "serenity/stl/nacelle_nozzle_iris.scad"
+    },
+    "rear_nozzle": {
+      "desc":        "1× iris nozzle (rear 120mm EDF) — servo actuated",
+      "petals":      "8 moving petals + 8 fixed ribs (integral to rear_nozzle_frame.stl)",
+      "hinge_pins":  "3mm diameter × 5mm stainless steel, one per petal",
+      "link_ring":   "Piano wire 0.8mm",
+      "petal_material": "PETG + translucent-blue inner face",
+      "servo": {
+        "ref":     "SERVO-REAR-NOZZLE",
+        "desc":    "Rear nozzle servo — SG90 class or equivalent (small load)",
+        "qty":     1,
+        "torque_kgcm": 1.8,
+        "mass_g":  9,
+        "notes":   "Mount inside rear fuselage section adjacent to 120mm EDF duct. Piano wire pushrod to nozzle ring."
+      }
+    },
+    "hinge_pins_total": {
+      "desc":  "3mm OD × 5mm stainless steel roll pin or solid pin",
+      "qty":   24,
+      "notes": "16 for nacelle petals (8×2) + 8 for rear petals"
+    },
+    "led_rings": {
+      "desc":  "WS2812B LED ring (addressable RGB) — inside each nozzle duct for backlight effect",
+      "qty":   3,
+      "notes": "One per nozzle (2 nacelle + 1 rear). Inner petal face printed in translucent-blue PETG; LED ring mounts at duct exit lip."
+    }
+  },
+
+  "gear_train": {
+    "module_mm": 1.0,
+    "pressure_angle_deg": 20,
+    "ratio_calculation": "90° nacelle × (22/6) sector:pinion × 1.0 bevel × (6/28) crown:ring = 70.7° ring",
+    "nozzle_open_at_deg": 90,
+    "nozzle_ring_rotation_deg": 70.7,
+    "components": [
+        {
+            "ref": "SECTOR-M1-R22",
+            "desc": "M=1.0 sector gear R=22mm — fixed to tilt bracket, NOT rotating with nacelle",
+            "qty": 2,
+            "teeth_arc": 38,
+            "arc_deg": 155,
+            "pitch_r_mm": 22.0,
+            "body_h_mm": 3.0,
+            "material": "Resin SLA (FDM PETG backup)",
+            "mass_g": 8,
+            "cost_usd": 3,
+            "supplier": "In-house resin print",
+            "scad": "serenity/stl/nacelle_sector_gear.scad",
+            "notes": "Fixed to tilt bracket (fuselage side); nacelle Pinion A rolls along this arc during tilt"
+        },
+        {
+            "ref": "PINION-A-M1-12T",
+            "desc": "M=1.0 Drive Pinion A — N=12T, R=6mm, on nacelle exterior at pivot Z",
+            "qty": 2,
+            "module": 1.0,
+            "teeth": 12,
+            "pitch_r_mm": 6.0,
+            "shaft_mm": 3.0,
+            "bearing": "MR63ZZ (3×6×2.5mm) × 2 per pinion",
+            "material": "Resin SLA",
+            "mass_g": 3,
+            "cost_usd": 2,
+            "supplier": "In-house resin print",
+            "scad": "serenity/stl/nacelle_pinion.scad"
+        },
+        {
+            "ref": "BEVEL-M1-14T",
+            "desc": "M=1.0 bevel gear pair — N=14T each, 45° pitch cone, 1:1 ratio, 90° axis redirect",
+            "qty": 4,
+            "module": 1.0,
+            "teeth": 14,
+            "pitch_r_mm": 7.0,
+            "pitch_cone_deg": 45,
+            "shaft_mm": 3.0,
+            "material": "Resin SLA (SDP-SI or similar commercial preferred)",
+            "mass_g": 4,
+            "cost_usd": 8,
+            "supplier": "SDP-SI or in-house resin",
+            "scad": "serenity/stl/nacelle_bevel_pair.scad",
+            "notes": "2 gears (A=transverse + B=longitudinal) per nacelle, 2 nacelles = 4 total"
+        },
+        {
+            "ref": "CROWN-M1-12T",
+            "desc": "M=1.0 Crown Pinion — N=12T, R=6mm, drives nozzle ring rack",
+            "qty": 2,
+            "module": 1.0,
+            "teeth": 12,
+            "pitch_r_mm": 6.0,
+            "shaft_mm": 3.0,
+            "bearing": "MR63ZZ (3×6×2.5mm) × 2 per crown",
+            "material": "Resin SLA",
+            "mass_g": 3,
+            "cost_usd": 2,
+            "supplier": "In-house resin print",
+            "scad": "serenity/stl/nacelle_pinion.scad"
+        },
+        {
+            "ref": "BEVEL-HOUSING",
+            "desc": "Bevel gear housing block — CF-PETG, mounts to inboard nacelle boss posts",
+            "qty": 2,
+            "dims_mm": "24 × 14 × 20",
+            "material": "CF-PETG",
+            "mass_g": 12,
+            "cost_usd": 0,
+            "supplier": "In-house print",
+            "scad": "serenity/stl/nacelle_bevel_housing.scad"
+        },
+        {
+            "ref": "SHAFT-CF-3MM",
+            "desc": "3mm OD solid CF rod for gear shafts — cut to length (transverse + longitudinal per nacelle)",
+            "qty": 1,
+            "od_mm": 3.0,
+            "lengths_mm": "2× 22mm transverse (Pinion A + Bevel A), 1× 52mm longitudinal (Bevel B to Crown)",
+            "material": "Solid carbon fibre",
+            "mass_g": 4,
+            "cost_usd": 6,
+            "supplier": "Amazon / AliExpress"
+        },
+        {
+            "ref": "BRG-MR63ZZ",
+            "desc": "MR63ZZ miniature ball bearing 3×6×2.5mm — gear shaft bearings",
+            "qty": 8,
+            "id_mm": 3,
+            "od_mm": 6,
+            "w_mm": 2.5,
+            "mass_g": 0.5,
+            "cost_usd": 0.80,
+            "supplier": "Amazon / AliExpress",
+            "notes": "2 per pinion/crown × 4 pinions/crowns = 8 total; also 2 per Bevel A/B shaft = add 4 more if housing has bearings"
+        },
+        {
+            "ref": "PTFE-SLEEVE-4MM",
+            "desc": "PTFE tube 4mm OD × 3mm ID — longitudinal shaft sleeve inside conduit (52mm per nacelle)",
+            "qty": 1,
+            "od_mm": 4,
+            "id_mm": 3,
+            "length_mm": 120,
+            "mass_g": 2,
+            "cost_usd": 4,
+            "supplier": "Amazon / AliExpress"
+        }
+    ]
+  },
+
+  "avionics": {
+    "note": "Avionics hardware identical to Rev N / Rev M. All 8 PocketBeagle 2 Industrial (AM6254) nodes with Cape-A (FC nodes) and Cape-B (CN nodes). See bom_revM.json for full avionics part-level detail.",
+    "nodes": [
+      {"ref": "PB2-I-FC", "desc": "PocketBeagle 2 Industrial (AM6254) — FC node, Cape-A", "qty": 4, "mass_g": 13, "cost_usd": 51.03},
+      {"ref": "PB2-I-CN", "desc": "PocketBeagle 2 Industrial (AM6254) — CN node, Cape-B", "qty": 4, "mass_g": 13, "cost_usd": 51.03},
+      {"ref": "CAPE-A",   "desc": "Cape-A PCB 85×55mm — Sensor + FC cape",               "qty": 4, "mass_g": 28, "cost_usd": 42},
+      {"ref": "CAPE-B",   "desc": "Cape-B PCB 90×60mm — Comms + Logging + Payload cape", "qty": 4, "mass_g": 38, "cost_usd": 80},
+      {"ref": "RCRS-49",  "desc": "RCRS-49 sub-module PCB — 49MHz TDDS RC. Antenna: top wire running dorsal hull spine from nose post (~120mm) to EDF cone post (~600mm), ~470mm wire length, base-loaded (38uH coil + LC pi-net at nose post), CF keel bar counterpoise. No belly SMA required.", "qty": 4, "mass_g": 12, "cost_usd": 25},
+      {"ref": "MICROSD-LOG", "desc": "64GB microSD — Cape-B write-blocked flight log",    "qty": 4, "mass_g": 1,  "cost_usd": 12}
+    ],
+    "bay_assignments": {
+      "bay_A": "CN1 (Cape-B, lower) + FC1 (Cape-A, upper) — nose section, ~X=0..91mm",
+      "bay_B": "CN2 (Cape-B, lower) + FC2 (Cape-A, upper) — mid-forward, ~X=91..165mm",
+      "bay_D": "CN3 (Cape-B, lower) + FC3 (Cape-A, upper) — mid-aft, ~X=251..320mm",
+      "bay_E": "CN4 (Cape-B, lower) + FC4 (Cape-A, upper) — aft service, ~X=320..388mm"
+    },
+    "antenna_system": [
+      {
+        "ref":         "WIRE-49MHZ",
+        "desc":        "49 MHz top wire — 0.3 mm stainless steel, ~470 mm, dorsal spine",
+        "qty":         1,
+        "mass_g":      3,
+        "cost_usd":    5,
+        "supplier":    "Amazon / AliExpress",
+        "search":      "Stainless steel wire 0.3mm dia 1m spool",
+        "notes":       "End-fed shortened wire; horizontal polarisation; cross-pol loss ~6–12 dB at ≤300 m acceptable"
+      },
+      {
+        "ref":         "POST-FWD-49",
+        "desc":        "Forward wire post + base-loading coil — PETG post + 38 uH coil + LC pi-net at dorsal hull ~120 mm from nose",
+        "qty":         1,
+        "mass_g":      4,
+        "cost_usd":    8,
+        "supplier":    "In-house / AliExpress",
+        "search":      "38uH air-core inductor + variable cap + PETG printed post",
+        "notes":       "3 mm clearance from GPS patch face; bench-test HDOP ≤1.5 with RCRS TX active before first flight"
+      },
+      {
+        "ref":         "POST-AFT-49",
+        "desc":        "Aft wire post + ceramic bead insulator — top of rear nozzle cone ~600 mm from nose",
+        "qty":         1,
+        "mass_g":      2,
+        "cost_usd":    3,
+        "supplier":    "AliExpress",
+        "search":      "Ceramic standoff insulator 3mm + PETG post",
+        "notes":       "Strain-relief wire at aft post; open-circuit (insulated) termination"
+      }
+    ]
+  },
+
+  "power": {
+    "battery_hover": {
+      "desc":  "6S 4000mAh LiPo — hover / high-endurance",
+      "mass_g": 750,
+      "cont_A": 60,
+      "notes": "Primary flight battery. C-rating ≥15C continuous for peak draw (~60A)."
+    },
+    "battery_cargo": {
+      "desc":  "6S 2800mAh LiPo — cargo delivery (lower mass)",
+      "mass_g": 525,
+      "notes": "Use when payload ≤250g and flight time can be reduced."
+    },
+    "distribution": {
+      "main_bus":     "6S (22.2V) — EDF power",
+      "avionics_bus": "5V BEC from main bus — 8 PB2-I nodes + capes + servos",
+      "servo_bus":    "6V regulated from 6S BEC — nacelle tilt servos + rear nozzle servo",
+      "led_bus":      "5V from BEC — WS2812B LED rings (3× nozzle backlight)",
+      "bec_spec":     "≥5A dual BEC (5V + 6V output) on main power distribution board"
+    },
+    "wiring": {
+      "main_leads":   "10AWG silicone — battery to PDB and ESC inputs",
+      "esc_motor":    "16AWG silicone — each ESC to EDF motor",
+      "signal":       "28AWG shielded twisted pair for servo signal + DSHOT leads",
+      "data_bus":     "PTFE 3mm ID conduit, full hull length, for CAN FD / RS-485 / 1553 / ETH"
+    }
+  },
+
+  "structure": {
+    "keel": {
+      "desc":  "Carbon-fibre flat bar 6×3mm",
+      "length_mm": 620,
+      "notes": "Runs full hull length; datum marks at 91, 165, 251, 320, 388mm from nose"
+    },
+    "spars": {
+      "desc":  "Carbon-fibre tube 12mm OD × 1.5mm wall",
+      "length_mm": "2× 350mm (wing spar through wing root to fuselage)",
+      "notes": "Carries nacelle tilt loads. Bending stress at max nacelle torque (~0.13 Nm) ≈ 18 MPa — well below CF allowable (600 MPa)."
+    },
+    "ring_frames": {
+      "desc":  "2mm CF plate, 5 station profiles (91, 165, 251, 320, 388mm from nose)",
+      "qty":   5
+    },
+    "foam_fill": {
+      "spec":     "2 lb/ft³ (32 kg/m³) two-part closed-cell polyurethane, 4× expansion ratio",
+      "volume_l": "~0.7 L mixed (fills hull void after EPS void formers placed for bays + cargo)",
+      "notes":    "Provides structural rigidity, crash absorption, and near-neutral buoyancy. Do NOT foam the nacelle interior."
+    }
+  },
+
+  "cargo": {
+    "bay_dims":  "101.6 × 76.2 × 76.2 mm (4×3×3 in)",
+    "door":      "Clamshell — N20 winch motor + auto-latch cradle",
+    "payload_max_g": 400,
+    "winch":     "N20 300RPM 6V gear motor + HX711 load cell (Cape-B)"
+  },
+
+  "totals": {
+    "print_time_est_h": "~60–80 h across all parts",
+    "filament_petg_g":  "~1400 g",
+    "filament_cfpetg_g":"~620 g",
+    "filament_tpu_g":   "~100 g",
+    "total_edfs":       5,
+    "total_escs":       5,
+    "total_servos":     3,
+    "servo_breakdown":  "2× nacelle tilt (fuselage-mounted, ≥25 kg·cm) + 1× rear nozzle (SG90-class)",
+    "nozzle_iris_count": 3,
+    "cost_estimate_usd": {
+      "propulsion_edfs_escs": "~$280",
+      "servos_mechanism":     "~$65",
+      "avionics_nodes_capes": "~$720",
+      "pcbs_jlcpcb":          "~$490",
+      "hull_filament_cf":     "~$85",
+      "power_batteries":      "~$120",
+      "gear_train_new":       "~$62",
+      "hardware_misc":        "~$60",
+      "total_estimate":       "~$1,882",
+      "notes": "Excludes one-time tools. Component prices as of 2026. Rev O adds ~$62 for upgraded M=1.0 gear train."
+    }
+  }
+}
