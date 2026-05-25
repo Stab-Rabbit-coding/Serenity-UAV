@@ -195,11 +195,18 @@ Design notes and BOM candidates are in `serenity/kicad/XCVR-49MHZ-1.md`.
 
 ## Firmware (Phase 6 dependency)
 
-- [ ] **Create `serenity/firmware/` directory structure** — minimum viable for
+- [x] **Create `serenity/firmware/` directory structure** — minimum viable for
   Phase 6 first flight: CN node (CAPE-B AM6254) + FC node (CAPE-A AM6254).
+  *(done 2026-05-25 — serenity/firmware/ with common/include, cn/, fc/
+  sub-trees; CMakeLists.txt for cross-compilation to aarch64 Linux; README)*
 
-- [ ] **KISS/AX.25 UART driver for XCVR-49MHZ-1** — runs on CN node; framing,
+- [x] **KISS/AX.25 UART driver for XCVR-49MHZ-1** — runs on CN node; framing,
   channel select via I²C to Si5351A, PTT sequencing (≥ 5 ms key-up before TX).
+  *(done 2026-05-25 — serenity/firmware/cn/src/xcvr_kiss.c/.h: KISS encode/
+  decode state machine, PTT_N libgpiod 2.x sequencing, Si5351A I²C channel
+  select for all 5 RCRS channels (49.830–49.890 MHz, 47 CFR 95.623);
+  si5351.c/.h: PLLA+MS0 register computation per AN619; serenity-cn daemon
+  with argparse and SIGTERM shutdown)*
 
 ---
 
