@@ -58,7 +58,17 @@ Last updated: 2026-05-24
 
 - [ ] create Cargo handling equipment mounts.  export stls
 
-
+- [x] **Comprehensive graphical build guide update to Rev O specs** — Completed 2026-05-25.
+  All 34 SVG files in `serenity/diagrams/` updated:
+  - Component names: Pico2→PocketBeagle2, TRIHAT-1→CAPE-A-1, COMMS-HAT-1→CAPE-B-1
+  - Dimensions: 457.2mm→609.6mm, 70/80mm EDF→50mm tandem, M0.5→M=1.0 gears
+  - Bearings: MR63ZZ→MF104ZZ 4×10×4mm; pivot rod: 8mm→4mm CF
+  - CG: 152mm→203mm from nose; GPS: nose→sta 140mm dorsal
+  - Step counts normalized to X/26 throughout
+  - Hull geometry in overview_side/top/front/bottom SVGs replaced with
+    STL-derived silhouettes from actual 24″ shell geometry (probe_stl.py,
+    gen_hull_outlines.py, update_overview_paths.py).  Pre-update originals
+    are preserved in git history (this commit's parent).
 
 - [x] **Wing+pivot merge into single pylon** — `s_wing_nacelle_pylon_revo.scad` created
   2026-05-24.  Merges s_pivot_arm_a + s_eng_piv_outer into one CF-PETG part: hollow
@@ -245,7 +255,7 @@ Design notes and BOM candidates are in `serenity/kicad/XCVR-49MHZ-1.md`.
   structured `avionics.antenna_system` entries in bom_revN.json; updated JSON date to 2026-05-23)*
 
 - [ ] update the rev o jsx to be a complete description of the uav, with all relevant design and build elements.  
-- [ ] update the graphical build guide svgs
+- [x] update the graphical build guide svgs *(done 2026-05-25 — see Comprehensive graphical build guide update above)*
 
-- [ ] do a comprehensive update on the graphical build guides to the current design specs.
+- [x] do a comprehensive update on the graphical build guides to the current design specs. *(done 2026-05-25)*
 - [ ] integrated the build plan into the todo

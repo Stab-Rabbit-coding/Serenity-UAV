@@ -25,7 +25,7 @@
 <text x="24" y="46" font-family="'OpenDyslexic',sans-serif" font-size="11" fill="#c8dff0">Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · CC BY 4.0 · 2026</text>
 <rect x="1040" y="8" width="144" height="48" rx="6" fill="#ff7518"/>
 <text x="1112" y="29" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">STEP</text>
-<text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">3 / 18</text>
+<text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">3 / 26</text>
 <rect x="0" y="64" width="1200" height="40" fill="#dde4ea" rx="0"/>
 <text x="24" y="90" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 1 — PRINT NACELLES &amp; NOZZLE</text>
 <text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">CF-PETG nacelle pods · PETG nozzle parts · gear</text>
@@ -61,7 +61,7 @@
 <text x="968" y="327" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">INSTRUCTIONS</text>
 <circle cx="776" cy="343" r="9" fill="#006db7"/>
 <text x="776" y="347" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1</text>
-<text x="792" y="348" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Print nacelle pods: CF-PETG, 25% infill, 0.15mm</text>
+<text x="792" y="348" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Print nacelle pods: CF-PETG, 40% gyroid, 0.15mm, 4 walls</text>
 <circle cx="776" cy="367" r="9" fill="#006db7"/>
 <text x="776" y="371" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
 <text x="792" y="372" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Print nozzle inner rings vertically (layer lines ⊥ to axis)</text>
@@ -76,7 +76,7 @@
 <text x="792" y="444" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Print tilt brackets: CF-PETG, 4 walls, 40% infill</text>
 <circle cx="776" cy="463" r="9" fill="#006db7"/>
 <text x="776" y="467" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">6</text>
-<text x="792" y="468" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Resin-print or source M0.5 bevel/pinion gears</text>
+<text x="792" y="468" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Print M=1.0 sector/bevel/pinion/crown gears at 0.12mm</text>
 <rect x="760" y="512" width="416" height="36" rx="6" fill="#fffac0" stroke="#ff7518" stroke-width="2"/><text x="778" y="527" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ff7518">⚠</text><text x="796" y="534" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Sector gear tooth accuracy is critical — use 0.10mm layer if possible</text>
 <rect x="760" y="556" width="416" height="32" rx="6" fill="#b2ebf2" stroke="#00838f" stroke-width="1.5"/><text x="770" y="570" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#00838f">ℹ</text><text x="786" y="576" font-family="'OpenDyslexic',sans-serif" font-size="9.5" fill="#222222">BamJr nozzle remix CC BY 4.0 — see LICENSE_AND_ATTRIBUTION.md</text>
 <polygon points="183.7,412.0 173.8,407.8 173.8,487.8 183.7,492.0" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
@@ -101,7 +101,7 @@
 <polygon points="190.9,417.7 183.7,412.0 183.7,492.0 190.9,497.7" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
 <polygon points="183.7,492.0 173.8,487.8 162.1,485.7 149.9,485.7 138.2,487.8 128.3,492.0 121.1,497.7 117.3,504.5 117.3,511.5 121.1,518.3 128.3,524.0 138.2,528.2 149.9,530.3 162.1,530.3 173.8,528.2 183.7,524.0 190.9,518.3 194.7,511.5 194.7,504.5 190.9,497.7" fill="#ffffff" stroke="#ff7518" stroke-width="2"/>
 <text x="156" y="528" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ff7518">NACELLE POD</text>
-<text x="156" y="542" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#607080">CF-PETG · 80mm OD</text>
+<text x="156" y="542" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#607080">CF-PETG · 50mm bore · 148mm L</text>
 <text x="156" y="554" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#607080">25% infill · 0.15mm</text>
 <polygon points="315.4,441.0 304.9,436.6 304.9,452.6 315.4,457.0" fill="#dde4ea" stroke="#607080" stroke-width="2"/>
 <polygon points="304.9,436.6 292.5,434.3 292.5,450.3 304.9,452.6" fill="#dde4ea" stroke="#607080" stroke-width="2"/>
@@ -229,7 +229,7 @@
 <text x="636" y="510" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#ff7518">SECTOR GEAR</text>
 <text x="636" y="522" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#607080">PETG · 40% · 0.12mm</text>
 <circle cx="706" cy="428" r="22" fill="#ff7518" stroke="#222222" stroke-width="1.5"/>
-<text x="706" y="432" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">M0.5</text>
+<text x="706" y="432" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">M=1.0</text>
 <text x="706" y="400" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#ff7518">Gear module</text>
 <polygon points="356.0,583.0 408.0,553.0 390.6,543.0 338.7,573.0"   fill="#90a4ae"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="356.0,548.0 408.0,518.0 408.0,553.0 356.0,583.0" fill="#607d8b" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>

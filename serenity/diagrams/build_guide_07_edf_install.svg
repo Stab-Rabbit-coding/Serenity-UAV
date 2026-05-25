@@ -25,10 +25,10 @@
 <text x="24" y="46" font-family="'OpenDyslexic',sans-serif" font-size="11" fill="#c8dff0">Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · CC BY 4.0 · 2026</text>
 <rect x="1040" y="8" width="144" height="48" rx="6" fill="#ff7518"/>
 <text x="1112" y="29" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">STEP</text>
-<text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">7 / 18</text>
+<text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">7 / 26</text>
 <rect x="0" y="64" width="1200" height="40" fill="#dde4ea" rx="0"/>
-<text x="24" y="90" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 3 — INSTALL 70mm EDF &amp; LED</text>
-<text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">Insert EDF · route motor leads · install tip cap</text>
+<text x="24" y="90" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 3 — INSTALL 50mm EDF (tandem) &amp; LED</text>
+<text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">EDF2 (aft EDF) first · then EDF1 (fore EDF) · nav light conduit</text>
 <rect x="0" y="872" width="1200" height="28" fill="#006db7"/>
 <text x="600" y="890" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
 <rect x="16" y="112" width="720" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
@@ -39,7 +39,7 @@
 <text x="968" y="139" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">PARTS NEEDED</text>
 <rect x="768" y="145" width="26" height="16" rx="4" fill="#ff7518" stroke="#222222" stroke-width="1"/>
 <text x="781" y="158" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2×</text>
-<text x="800" y="158" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">70mm EDF + motor</text>
+<text x="800" y="158" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">50mm EDF ×2 per nacelle</text>
 <rect x="768" y="167" width="26" height="16" rx="4" fill="#607080" stroke="#222222" stroke-width="1"/>
 <text x="781" y="180" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">8×</text>
 <text x="800" y="180" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">M2.5 × 10mm screws</text>
@@ -55,26 +55,26 @@
 <text x="968" y="283" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">INSTRUCTIONS</text>
 <circle cx="776" cy="299" r="9" fill="#006db7"/>
 <text x="776" y="303" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1</text>
-<text x="792" y="304" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Slide 70mm EDF into nacelle pod from INTAKE face</text>
+<text x="792" y="304" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Install EDF2 (downstream): slide from nozzle end, seat at Z=5mm shoulder</text>
 <circle cx="776" cy="323" r="9" fill="#006db7"/>
 <text x="776" y="327" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
-<text x="792" y="328" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Align motor mount ears with M2.5 captive nut inserts in pod</text>
+<text x="792" y="328" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Apply 3 dabs structural epoxy at EDF2 casing at Z=50mm stator shoulder</text>
 <circle cx="776" cy="347" r="9" fill="#006db7"/>
 <text x="776" y="351" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
-<text x="792" y="352" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Torque all 4× M2.5 screws to 0.3 N·m</text>
+<text x="792" y="352" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Install EDF1 (upstream): slide from intake end, seat at Z=76mm shoulder</text>
 <circle cx="776" cy="371" r="9" fill="#006db7"/>
 <text x="776" y="375" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4</text>
-<text x="792" y="376" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Route motor leads through 4mm wire channel in nacelle wall</text>
+<text x="792" y="376" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Apply 3 dabs structural epoxy at EDF1 casing at Z=76mm shoulder</text>
 <circle cx="776" cy="395" r="9" fill="#006db7"/>
 <text x="776" y="399" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">5</text>
-<text x="792" y="400" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Thread leads through hollow CF spar toward ESC location</text>
+<text x="792" y="400" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Route motor leads through hub bore (16mm ID); bundle in wire sleeve</text>
 <circle cx="776" cy="419" r="9" fill="#006db7"/>
 <text x="776" y="423" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">6</text>
 <text x="792" y="424" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Solder WS2812C-2020 LED into nacelle tip cap recess</text>
 <circle cx="776" cy="443" r="9" fill="#006db7"/>
 <text x="776" y="447" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">7</text>
 <text x="792" y="448" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Apply 5-minute epoxy bead over LED · seal for moisture</text>
-<rect x="760" y="492" width="416" height="32" rx="6" fill="#b2ebf2" stroke="#00838f" stroke-width="1.5"/><text x="770" y="506" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#00838f">ℹ</text><text x="786" y="512" font-family="'OpenDyslexic',sans-serif" font-size="9.5" fill="#222222">Port nacelle LED = RED  ·  Starboard nacelle LED = GREEN (ICAO regulation)</text>
+<rect x="760" y="492" width="416" height="32" rx="6" fill="#b2ebf2" stroke="#00838f" stroke-width="1.5"/><text x="770" y="506" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#00838f">ℹ</text><text x="786" y="512" font-family="'OpenDyslexic',sans-serif" font-size="9.5" fill="#222222">Port = RED · Stbd = GREEN · 14 CFR 91.209 · LED in tip cap via D-section NAV_CONDUIT</text>
 <polygon points="310.6,368.0 298.2,362.8 298.2,482.8 310.6,488.0" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
 <polygon points="298.2,362.8 283.7,360.1 283.7,480.1 298.2,482.8" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
 <polygon points="283.7,360.1 268.3,360.1 268.3,480.1 283.7,480.1" fill="#ffe0c0" stroke="#ff7518" stroke-width="2"/>
@@ -117,7 +117,7 @@
 <polygon points="318.3,384.1 314.2,376.8 314.2,476.8 318.3,484.1" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
 <polygon points="314.2,376.8 306.3,370.5 306.3,470.5 314.2,476.8" fill="rgba(80,80,200,0.25)" stroke="#006db7" stroke-width="2"/>
 <polygon points="306.3,470.5 295.5,465.9 282.7,463.6 269.3,463.6 256.5,465.9 245.7,470.5 237.8,476.8 233.7,484.1 233.7,491.9 237.8,499.2 245.7,505.5 256.5,510.1 269.3,512.4 282.7,512.4 295.5,510.1 306.3,505.5 314.2,499.2 318.3,491.9 318.3,484.1 314.2,476.8" fill="rgba(80,80,200,0.4)" stroke="#006db7" stroke-width="2"/>
-<text x="276" y="478" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#006db7">70mm EDF</text>
+<text x="276" y="478" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#006db7">50mm EDF (tandem)</text>
 <path d="M316,398 Q456,408 496,488" fill="none" stroke="#c62828" stroke-width="3" stroke-dasharray="6 3"/>
 <text x="456" y="438" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c62828">Motor leads through hollow CF spar</text>
 <circle cx="196" cy="428" r="18" fill="#ff7518" stroke="#222222" stroke-width="1.5"/>

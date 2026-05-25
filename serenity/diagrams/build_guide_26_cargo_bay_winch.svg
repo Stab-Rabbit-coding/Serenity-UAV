@@ -22,7 +22,7 @@
 
   <!-- Step badge -->
   <rect x="28" y="62" width="78" height="30" rx="4" fill="#006db7"/>
-  <text x="67" y="82" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">26 / 27</text>
+  <text x="67" y="82" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">26 / 26</text>
 
   <!-- Phase badge -->
   <rect x="116" y="62" width="390" height="30" rx="4" fill="#ad1457"/>
