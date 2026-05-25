@@ -25,10 +25,10 @@
 <text x="24" y="46" font-family="'OpenDyslexic',sans-serif" font-size="11" fill="#c8dff0">Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · CC BY 4.0 · 2026</text>
 <rect x="1040" y="8" width="144" height="48" rx="6" fill="#ff7518"/>
 <text x="1112" y="29" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">STEP</text>
-<text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">12 / 18</text>
+<text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">12 / 26</text>
 <rect x="0" y="64" width="1200" height="40" fill="#dde4ea" rx="0"/>
-<text x="24" y="90" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 6 — SECURITY HARDWARE SETUP</text>
-<text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">CPLD write-blocker · STM32 NX proxy · TPM</text>
+<text x="24" y="90" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 7 — SECURITY HARDWARE SETUP (ALL 8 NODES)</text>
+<text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">SLB9670 TPM 2.0 · write-blocker μSD · signed messages</text>
 <rect x="0" y="872" width="1200" height="28" fill="#006db7"/>
 <text x="600" y="890" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
 <rect x="16" y="112" width="720" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
@@ -55,16 +55,16 @@
 <text x="968" y="283" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">INSTRUCTIONS</text>
 <circle cx="776" cy="299" r="9" fill="#006db7"/>
 <text x="776" y="303" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1</text>
-<text x="792" y="304" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Flash CPLD bitstream via JTAG: write_blocker.bit</text>
+<text x="792" y="304" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Provision SLB9670 TPM 2.0 on CAPE-A-1 and CAPE-B-1 of each node (8 total)</text>
 <circle cx="776" cy="323" r="9" fill="#006db7"/>
 <text x="776" y="327" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
-<text x="792" y="328" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Insert JP2 on CM4-CARRIER-1 → verify LED1 (green) illuminates</text>
+<text x="792" y="328" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Generate unique key material per node; seal to TPM non-reversible</text>
 <circle cx="776" cy="347" r="9" fill="#006db7"/>
 <text x="776" y="351" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
-<text x="792" y="352" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Flash STM32 via SWD with nx_proxy.bin firmware</text>
+<text x="792" y="352" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Enable μSD hardware write-blocker on log card slot of each CAPE-B-1</text>
 <circle cx="776" cy="371" r="9" fill="#006db7"/>
 <text x="776" y="375" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4</text>
-<text x="792" y="376" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Burn STM32 read-protect OTP fuses in STM32CubeProgrammer</text>
+<text x="792" y="376" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Enable signed-message enforcement: all CAN/ETH/1553 traffic authenticated</text>
 <circle cx="776" cy="395" r="9" fill="#006db7"/>
 <text x="776" y="399" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">5</text>
 <text x="792" y="400" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Verify NX_LATCH = HIGH at TP_NX test point</text>
@@ -76,7 +76,7 @@
 <polygon points="176.0,411.0 232.3,378.5 187.3,352.5 131.0,385.0"   fill="#dde4ea"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="176.0,408.0 232.3,375.5 232.3,378.5 176.0,411.0" fill="#90a4ae" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="232.3,375.5 187.3,349.5 187.3,352.5 232.3,378.5" fill="#78909c" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
-<text x="208" y="422" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#222222">CM4-CARRIER-1</text>
+<text x="208" y="422" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#222222">CAPE-A-1</text>
 <polygon points="196.0,383.0 211.6,374.0 196.0,365.0 180.4,374.0"   fill="#a3e635"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="196.0,378.0 211.6,369.0 211.6,374.0 196.0,383.0" fill="#2e7d32" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="211.6,369.0 196.0,360.0 196.0,365.0 211.6,374.0" fill="#2e7d32" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
@@ -92,7 +92,7 @@
 <polygon points="456.0,411.0 512.3,378.5 470.7,354.5 414.4,387.0"   fill="#dde4ea"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="456.0,408.0 512.3,375.5 512.3,378.5 456.0,411.0" fill="#90a4ae" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="512.3,375.5 470.7,351.5 470.7,354.5 512.3,378.5" fill="#78909c" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
-<text x="488" y="422" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#222222">COMMS-HAT-1</text>
+<text x="488" y="422" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#222222">CAPE-B-1</text>
 <polygon points="466.0,383.0 478.1,376.0 466.0,369.0 453.9,376.0"   fill="#ffe0c0"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="466.0,378.0 478.1,371.0 478.1,376.0 466.0,383.0" fill="#ff7518" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="478.1,371.0 466.0,364.0 466.0,369.0 478.1,376.0" fill="#ff7518" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
@@ -116,7 +116,7 @@
 <rect x="96" y="528" width="620" height="90" rx="6" fill="#fffdf6" stroke="#a3e635" stroke-width="2"/>
 <text x="126" y="546" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#2e7d32">SECURITY VERIFICATION CHECKLIST</text>
 <rect x="106" y="550" width="14" height="14" rx="2" fill="#2e7d32" opacity="0.6"/>
-<text x="124" y="562" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">JP2 installed on CM4-CARRIER-1 → LED1 (green) illuminated</text>
+<text x="124" y="562" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">JP2 installed on CAPE-A-1 → LED1 (green) illuminated</text>
 <rect x="106" y="569" width="14" height="14" rx="2" fill="#ff7518" opacity="0.6"/>
 <text x="124" y="581" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">NX_LATCH measures HIGH at TP_NX test point on COMMS-HAT</text>
 <rect x="106" y="588" width="14" height="14" rx="2" fill="#c62828" opacity="0.6"/>

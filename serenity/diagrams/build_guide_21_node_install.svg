@@ -18,10 +18,10 @@
 </defs>
 <rect width="1200" height="900" fill="#f5f0e8"/>
 <rect x="0" y="0" width="1200" height="64" fill="#006db7"/>
-<text x="24" y="24" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="14" fill="#ffffff" letter-spacing="2">SERENITY-CLASS TILTROTOR UAV  ·  8-NODE REV I</text>
+<text x="24" y="24" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="14" fill="#ffffff" letter-spacing="2">SERENITY-CLASS TILTROTOR UAV  ·  8-NODE REV O</text>
 <text x="24" y="46" font-family="'OpenDyslexic',sans-serif" font-size="11" fill="#c8dff0">Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · CC BY 4.0 · 2026</text>
 <rect x="1000" y="8" width="184" height="48" rx="6" fill="#ff7518"/>
-<text x="1092" y="29" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">STEPS 21-23 / 23</text>
+<text x="1092" y="29" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">STEPS 21-23 / 26</text>
 <text x="1092" y="50" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="18" fill="#ffffff">NODE INSTALL</text>
 <rect x="0" y="64" width="1200" height="40" fill="#dde4ea"/>
 <text x="24" y="90" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 11 — 8-NODE INSTALLATION &amp; BUS WIRING</text>
@@ -33,25 +33,25 @@
 <text x="106" y="143" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="10" fill="#006db7">(Primary FC + Murex)</text>
 <circle cx="34" cy="151" r="7" fill="#006db7"/>
 <text x="34" y="155" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">1</text>
-<text x="48" y="156" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Mount SENSORHAT-1 on CF bulkhead at 65mm from nose</text>
+<text x="48" y="156" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Mount CAPE-A-1 on CF bulkhead at 65mm from nose</text>
 <circle cx="34" cy="171" r="7" fill="#006db7"/>
 <text x="34" y="175" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">2</text>
-<text x="48" y="176" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Stack CARRIER-2 on M2.5 nylon standoffs 6mm</text>
+<text x="48" y="176" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Stack CAPE-A-1 on M2.5 nylon standoffs 6mm</text>
 <circle cx="34" cy="191" r="7" fill="#006db7"/>
 <text x="34" y="195" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">3</text>
-<text x="48" y="196" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Stack COMMS-HAT-SWITCH on CARRIER-2 40-pin GPIO header</text>
+<text x="48" y="196" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Stack CAPE-B-1 on CAPE-A-1 40-pin GPIO header</text>
 <circle cx="34" cy="211" r="7" fill="#006db7"/>
 <text x="34" y="215" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">4</text>
-<text x="48" y="216" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Verify DF40C-100 CM4 connectors fully seated</text>
+<text x="48" y="216" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Verify P8/P9 headers fully seated fully seated</text>
 <circle cx="34" cy="231" r="7" fill="#006db7"/>
 <text x="34" y="235" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">5</text>
-<text x="48" y="236" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Install OS microSD in CARRIER-2 slot</text>
+<text x="48" y="236" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Install OS microSD in CAPE-A-1 slot</text>
 <circle cx="34" cy="251" r="7" fill="#006db7"/>
 <text x="34" y="255" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">6</text>
-<text x="48" y="256" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Install log microSD in COMMS-HAT-SWITCH slot</text>
+<text x="48" y="256" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Install log μSD in CAPE-B-1 J5 write-protected slot</text>
 <circle cx="34" cy="271" r="7" fill="#006db7"/>
 <text x="34" y="275" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">7</text>
-<text x="48" y="276" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Verify JP2 forensic jumper installed · LED1 = GREEN</text>
+<text x="48" y="276" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Verify TPM 2.0 provisioned + write-blocker enabled on all 8 nodes</text>
 <rect x="310" y="116" width="270" height="168" rx="6" fill="#c628280c" stroke="#c62828" stroke-width="2"/>
 <rect x="316" y="122" width="72" height="20" rx="4" fill="#c62828"/>
 <text x="352" y="137" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#ffffff">STEP 21</text>
@@ -59,13 +59,13 @@
 <text x="396" y="143" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="10" fill="#c62828">(Sensor/Payload/Aft)</text>
 <circle cx="324" cy="151" r="7" fill="#c62828"/>
 <text x="324" y="155" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">1</text>
-<text x="338" y="156" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Node-2 @ 130-158mm: SENSORHAT + CARRIER-2 + MICROHAT</text>
+<text x="338" y="156" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">FC2+CN2 @ bay B: sta 91-165mm: SENSORHAT + CAPE-A-1 + MICROHAT</text>
 <circle cx="324" cy="171" r="7" fill="#c62828"/>
 <text x="324" y="175" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">2</text>
-<text x="338" y="176" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Node-3 @ 193-223mm: SENSORHAT + CARRIER-2 + MICROHAT</text>
+<text x="338" y="176" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Node-3 @ 193-223mm: SENSORHAT + CAPE-A-1 + MICROHAT</text>
 <circle cx="324" cy="191" r="7" fill="#c62828"/>
 <text x="324" y="195" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">3</text>
-<text x="338" y="196" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Node-4 @ 263-298mm: SENSORHAT + CARRIER-2 + MICROHAT</text>
+<text x="338" y="196" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Node-4 @ 263-298mm: SENSORHAT + CAPE-A-1 + MICROHAT</text>
 <circle cx="324" cy="211" r="7" fill="#c62828"/>
 <text x="324" y="215" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">4</text>
 <text x="338" y="216" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Mount each on M2.5 nylon standoffs 6mm</text>
@@ -74,7 +74,7 @@
 <text x="338" y="236" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Secure stacks with M2.5 screw + nylon zip tie to keel</text>
 <circle cx="324" cy="251" r="7" fill="#c62828"/>
 <text x="324" y="255" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">6</text>
-<text x="338" y="256" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Connect each node Ethernet to COMMS-HAT-SWITCH (ports 1-4)</text>
+<text x="338" y="256" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Connect each node Ethernet to CAPE-B-1 (ports 1-4)</text>
 <rect x="20" y="296" width="270" height="168" rx="6" fill="#2e7d320c" stroke="#2e7d32" stroke-width="2"/>
 <rect x="26" y="302" width="72" height="20" rx="4" fill="#2e7d32"/>
 <text x="62" y="317" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#ffffff">STEP 22</text>
@@ -93,7 +93,7 @@
 <text x="42" y="436" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(60,80,100,0.97)">  SM-1553-11 xfmr handles impedance — no external 75ohm term</text>
 <circle cx="34" cy="451" r="7" fill="#2e7d32"/>
 <text x="34" y="455" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">7</text>
-<text x="48" y="456" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Ethernet: 6-pin JST-GH star from COMMS-HAT-SWITCH to each node</text>
+<text x="48" y="456" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#222222">Ethernet: 6-pin JST-GH star from CAPE-B-1 to each node</text>
 <rect x="310" y="296" width="270" height="168" rx="6" fill="#6a1b9a0c" stroke="#6a1b9a" stroke-width="2"/>
 <rect x="316" y="302" width="72" height="20" rx="4" fill="#6a1b9a"/>
 <text x="352" y="317" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#ffffff">STEP 23</text>
@@ -122,13 +122,13 @@
 <rect x="620" y="116" width="560" height="748" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
 <rect x="620" y="116" width="560" height="28" rx="8" fill="#006db7"/>
 <rect x="620" y="132" width="560" height="12" fill="#006db7"/>
-<text x="900" y="135" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">WEIGHT BUDGET — 8-NODE REV I</text>
+<text x="900" y="135" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">WEIGHT BUDGET — 8-NODE REV O</text>
 <rect x="626" y="142" width="548" height="16" rx="2" fill="transparent"/>
 <text x="632" y="154" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222" font-weight="normal">Airframe hull + CF skeleton</text>
 <text x="815" y="154" text-anchor="end" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#222222">178</text>
 <text x="825" y="154" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="rgba(60,80,100,0.97)"></text>
 <rect x="626" y="159" width="548" height="16" rx="2" fill="transparent"/>
-<text x="632" y="171" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222" font-weight="normal">2x 80mm EDF + motor</text>
+<text x="632" y="171" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222" font-weight="normal">2x 50mm×2 EDF + motor</text>
 <text x="815" y="171" text-anchor="end" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#222222">300</text>
 <text x="825" y="171" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="rgba(60,80,100,0.97)">Upgraded from 70mm</text>
 <rect x="626" y="176" width="548" height="16" rx="2" fill="transparent"/>
@@ -138,7 +138,7 @@
 <rect x="626" y="193" width="548" height="16" rx="2" fill="transparent"/>
 <text x="632" y="205" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222" font-weight="normal">2x 50A ESC (80mm nacelle)</text>
 <text x="815" y="205" text-anchor="end" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#222222">60</text>
-<text x="825" y="205" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="rgba(60,80,100,0.97)">Upgraded for 80mm EDFs</text>
+<text x="825" y="205" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="rgba(60,80,100,0.97)">Upgraded for 50mm×2 EDFs</text>
 <rect x="626" y="210" width="548" height="16" rx="2" fill="transparent"/>
 <text x="632" y="222" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222" font-weight="normal">Servos + nozzle hardware</text>
 <text x="815" y="222" text-anchor="end" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#222222">55</text>
@@ -153,19 +153,19 @@
 <text x="825" y="256" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="rgba(60,80,100,0.97)">SiK+RCRS+6xLED+GPS</text>
 <line x1="628" y1="273" x2="1172" y2="273" stroke="#dde4ea" stroke-width="1"/>
 <rect x="626" y="268" width="548" height="16" rx="2" fill="transparent"/>
-<text x="632" y="280" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222" font-weight="normal">4x SENSORHAT-1 (XIAO)</text>
+<text x="632" y="280" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222" font-weight="normal">4x CAPE-A-1 (XIAO)</text>
 <text x="815" y="280" text-anchor="end" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#222222">48</text>
 <text x="825" y="280" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="rgba(60,80,100,0.97)">12g each</text>
 <rect x="626" y="285" width="548" height="16" rx="2" fill="transparent"/>
-<text x="632" y="297" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222" font-weight="normal">Node-1 CARRIER-2 + CM4</text>
+<text x="632" y="297" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222" font-weight="normal">Node-1 CAPE-A-1 + CM4</text>
 <text x="815" y="297" text-anchor="end" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#222222">21</text>
-<text x="825" y="297" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="rgba(60,80,100,0.97)">57x44mm + CM4 Lite</text>
+<text x="825" y="297" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="rgba(60,80,100,0.97)">57x44mm + PocketBeagle2</text>
 <rect x="626" y="302" width="548" height="16" rx="2" fill="transparent"/>
-<text x="632" y="314" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222" font-weight="normal">Node-1 COMMS-HAT-SWITCH</text>
+<text x="632" y="314" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222" font-weight="normal">Node-1 CAPE-B-1</text>
 <text x="815" y="314" text-anchor="end" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#222222">38</text>
 <text x="825" y="314" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="rgba(60,80,100,0.97)">65x52mm + KSZ8895</text>
 <rect x="626" y="319" width="548" height="16" rx="2" fill="transparent"/>
-<text x="632" y="331" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222" font-weight="normal">Nodes 2-4: 3x CARRIER-2+CM4</text>
+<text x="632" y="331" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222" font-weight="normal">Nodes 2-4: 3x CAPE-A-1+CM4</text>
 <text x="815" y="331" text-anchor="end" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#222222">63</text>
 <text x="825" y="331" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="rgba(60,80,100,0.97)">21g each</text>
 <rect x="626" y="336" width="548" height="16" rx="2" fill="transparent"/>

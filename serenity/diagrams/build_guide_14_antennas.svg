@@ -25,9 +25,9 @@
 <text x="24" y="46" font-family="'OpenDyslexic',sans-serif" font-size="11" fill="#c8dff0">Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · CC BY 4.0 · 2026</text>
 <rect x="1040" y="8" width="144" height="48" rx="6" fill="#ff7518"/>
 <text x="1112" y="29" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">STEP</text>
-<text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">14 / 18</text>
+<text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">14 / 26</text>
 <rect x="0" y="64" width="1200" height="40" fill="#dde4ea" rx="0"/>
-<text x="24" y="90" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 4 — ANTENNA INSTALLATION</text>
+<text x="24" y="90" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 1 — ANTENNA + SENSOR INSTALLATION</text>
 <text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">GPS · 49MHz dorsal · SiK belly · WiFi SMA</text>
 <rect x="0" y="872" width="1200" height="28" fill="#006db7"/>
 <text x="600" y="890" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
@@ -55,27 +55,27 @@
 <text x="968" y="283" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">INSTRUCTIONS</text>
 <circle cx="776" cy="299" r="9" fill="#006db7"/>
 <text x="776" y="303" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1</text>
-<text x="792" y="304" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Drill 6.5mm hole in PETG belly at 238mm from nose (SiK SMA-RP)</text>
+<text x="792" y="304" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Install SMA-RP bulkhead in flush cutout at belly port, sta 260mm</text>
 <circle cx="776" cy="323" r="9" fill="#006db7"/>
 <text x="776" y="327" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
-<text x="792" y="328" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Install SMA-RP bulkhead · connect SiK IPEX pigtail from COMMS-HAT-1</text>
+<text x="792" y="328" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Thread SiK 915MHz antenna to SMA-RP (belly port) · route coax to CAPE-B-1</text>
 <circle cx="776" cy="347" r="9" fill="#006db7"/>
 <text x="776" y="351" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
-<text x="792" y="352" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Mount GPS patch on 12mm PLA standoff at cockpit roof · route U.FL ≤100mm</text>
+<text x="792" y="352" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Install GPS 25×25mm patch in recess at mid-fuselage dorsal, sta 140mm</text>
 <circle cx="776" cy="371" r="9" fill="#006db7"/>
 <text x="776" y="375" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4</text>
-<text x="792" y="376" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Install 49MHz dorsal fin at 290mm · wind 48T 1.0mm coax on ferrite</text>
+<text x="792" y="376" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Install 49MHz fwd wire post (PETG mast, ~10mm tall) at dorsal sta 120mm + LC pi-network</text>
 <circle cx="776" cy="395" r="9" fill="#006db7"/>
 <text x="776" y="399" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">5</text>
-<text x="792" y="400" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Route 4× 150mm radials under dorsal fin base against hull skin</text>
+<text x="792" y="400" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">String 0.3mm stainless wire ~470mm from fwd post to aft post at rear nozzle cone top</text>
 <circle cx="776" cy="419" r="9" fill="#006db7"/>
 <text x="776" y="423" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">6</text>
-<text x="792" y="424" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Attach nanoVNA to 49MHz port · adjust 5-30pF series trimmer for SWR ≤2.5:1</text>
+<text x="792" y="424" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Install LoRa RFM95W SMA-RP at belly stbd, sta 260mm</text>
 <circle cx="776" cy="443" r="9" fill="#006db7"/>
 <text x="776" y="447" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">7</text>
-<text x="792" y="448" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Attach WiFi antennas to SMA-1 (2.4GHz) + SMA-2 (5GHz) on carrier edge</text>
+<text x="792" y="448" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Install WiFi/BT antenna at dorsal fwd, sta 140mm</text>
 <rect x="760" y="492" width="416" height="36" rx="6" fill="#fffac0" stroke="#ff7518" stroke-width="2"/><text x="778" y="507" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ff7518">⚠</text><text x="796" y="514" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Verify GPS HDOP ≤1.5 with all radios transmitting before first flight</text>
-<rect x="760" y="536" width="416" height="32" rx="6" fill="#b2ebf2" stroke="#00838f" stroke-width="1.5"/><text x="770" y="550" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#00838f">ℹ</text><text x="786" y="556" font-family="'OpenDyslexic',sans-serif" font-size="9.5" fill="#222222">GPS separation from 49MHz: 232mm ✔ Minimum required: 150mm</text>
+<rect x="760" y="536" width="416" height="32" rx="6" fill="#b2ebf2" stroke="#00838f" stroke-width="1.5"/><text x="770" y="550" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#00838f">ℹ</text><text x="786" y="556" font-family="'OpenDyslexic',sans-serif" font-size="9.5" fill="#222222">GPS at 140mm · 49MHz fwd post at 120mm · bench-verify GPS HDOP ≤1.5 with RCRS-49 TX before flight</text>
 <path d="M 96,488 L 114,471 L 142,459 L 166,458 L 208,454 L 248,459 L 272,465 L 300,478 L 318,475 L 340,472 L 388,477 L 388,495 L 340,498 L 318,497 L 300,494 L 272,503 L 248,507 L 208,510 L 166,508 L 142,507 L 114,499 L 96,488 Z" fill="rgba(0,80,150,0.1)" stroke="#006db7" stroke-width="1.5"/>
 <rect x="135" y="452" width="22" height="9" rx="2" fill="rgba(74,222,128,0.35)" stroke="#2e7d32" stroke-width="2"/>
 <text x="146" y="448" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#2e7d32">GPS PATCH</text>

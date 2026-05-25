@@ -19,7 +19,7 @@
 
   <!-- Step badge -->
   <rect x="28" y="62" width="78" height="30" rx="4" fill="#006db7"/>
-  <text x="67" y="82" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">25 / 27</text>
+  <text x="67" y="82" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">25 / 26</text>
 
   <!-- Phase badge -->
   <rect x="116" y="62" width="480" height="30" rx="4" fill="#2e7d32"/>
@@ -32,8 +32,8 @@
   <!-- LEFT PANEL: Hull top-view with dual-array sensor positions          -->
   <!-- ═══════════════════════════════════════════════════════════════════ -->
   <rect x="18" y="102" width="580" height="295" rx="6" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
-  <text x="308" y="120" text-anchor="middle" font-size="11" font-weight="bold" fill="#333333">SENSOR PLACEMENT — TOP VIEW (18&quot; hull, not to scale)</text>
-  <text x="308" y="132" text-anchor="middle" font-size="8" fill="#555555">● Array A (Node 3, solid) · ○ Array B (Node 2, hollow) — fully independent buses</text>
+  <text x="308" y="120" text-anchor="middle" font-size="11" font-weight="bold" fill="#333333">SENSOR PLACEMENT — TOP VIEW (24" hull, 609.6mm)</text>
+  <text x="308" y="132" text-anchor="middle" font-size="8" fill="#555555">● Array A (FC3 primary, solid) · ○ Array B (FC2 primary, hollow) — fully independent buses</text>
 
   <!-- Hull outline: nose left x=60, tail right ~x=468, CL y=247 -->
   <polygon points="60,247 72,234 92,225 118,216 150,212 200,210 250,213 310,215 350,218 390,222 430,230 455,240 468,247 455,254 430,264 390,272 350,277 310,280 250,282 200,285 150,283 118,278 92,269 72,260"

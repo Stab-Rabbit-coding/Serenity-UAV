@@ -38,24 +38,24 @@
 <circle cx="749" cy="580" r="10" fill="rgba(255,230,80,0.25)" stroke="#f5c518" stroke-width="2"/>
 <rect x="80" y="340" width="170" height="70" rx="8" fill="rgba(255,255,255,0.88)"/>
 <text x="165" y="364" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">HULL</text>
-<text x="165" y="392" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">365mm (14.4")</text>
+<text x="165" y="392" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">609.6mm (24.00")</text>
 <rect x="265" y="340" width="170" height="70" rx="8" fill="rgba(255,255,255,0.88)"/>
-<text x="350" y="364" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">WINGSPAN</text>
-<text x="350" y="392" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">680mm (26.8")</text>
+<text x="350" y="364" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">NACELLE TIP-TIP</text>
+<text x="350" y="392" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">~486mm (19.1")</text>
 <rect x="450" y="340" width="170" height="70" rx="8" fill="rgba(255,255,255,0.88)"/>
-<text x="535" y="364" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">THRUST</text>
-<text x="535" y="392" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">2200g nacelle</text>
+<text x="535" y="364" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">TOTAL THRUST</text>
+<text x="535" y="392" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">~5,322g</text>
 <rect x="635" y="340" width="170" height="70" rx="8" fill="rgba(255,255,255,0.88)"/>
-<text x="720" y="364" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">T/W RATIO</text>
-<text x="720" y="392" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">2.20:1</text>
+<text x="720" y="364" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">HOVER T/W</text>
+<text x="720" y="392" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">1.50:1</text>
 <rect x="820" y="340" width="170" height="70" rx="8" fill="rgba(255,255,255,0.88)"/>
 <text x="905" y="364" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">CRUISE</text>
 <text x="905" y="392" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">35–49 kts</text>
 <rect x="1005" y="340" width="170" height="70" rx="8" fill="rgba(255,255,255,0.88)"/>
 <text x="1090" y="364" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0" letter-spacing="1">STEPS</text>
-<text x="1090" y="392" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">18</text>
+<text x="1090" y="392" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ffffff">26</text>
 <rect x="1070" y="440" width="110" height="50" rx="8" fill="#ff7518"/>
 <text x="1125" y="460" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#ffffff">BUILD STEPS</text>
-<text x="1125" y="482" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">18</text>
+<text x="1125" y="482" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">26</text>
 <text x="600" y="884" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="rgba(200,223,240,0.90)">LEGO-style build guide — all dimensions in mm (inches in parentheses)</text>
 </svg>
