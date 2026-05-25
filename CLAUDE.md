@@ -43,7 +43,6 @@ Every component will be fabricated or procured; design accordingly.
 - All code shall use 4 space indenting, whether or not required by the language.
 - All code shall use verbose commenting, in strict conformity to each language.  In the case of a language that doesn't allow inline comments, such as kicad files, comments shall be included in an accompanying markdown file.
 
-
 ## Licensing and Attribution
 
 - All work is **published under CC BY 4.0**.
@@ -72,5 +71,3 @@ Every component will be fabricated or procured; design accordingly.
 - Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 - When a script regenerates STLs, verify Z-range and bore-diameter in the console output before
   committing.
-
-
