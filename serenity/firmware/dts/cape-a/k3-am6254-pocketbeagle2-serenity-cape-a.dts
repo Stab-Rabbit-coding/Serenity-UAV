@@ -1,0 +1,543 @@
+// SPDX-License-Identifier: CC-BY-4.0
+/*
+ * k3-am6254-pocketbeagle2-serenity-cape-a.dts
+ * Device tree overlay — Serenity UAV Cape-A (Sensor & Flight Control)
+ *
+ * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ *
+ * Target:
+ *   Board  : PocketBeagle 2 Industrial (DigiKey 2820-100003007-ND)
+ *   SoC    : TI AM6254 (quad Cortex-A53 @ 1.4 GHz, dual PRU-ICSS)
+ *   OS     : BeagleBone Debian Trixie (Linux ≥ 6.1, dtc 1.7.x)
+ *   Cape   : Cape-A — sensors + flight control, plugs onto P1/P2 headers
+ *
+ * Build:
+ *   dtc -@ -I dts -O dtb \
+ *       -o k3-am6254-pocketbeagle2-serenity-cape-a.dtbo \
+ *       k3-am6254-pocketbeagle2-serenity-cape-a.dts
+ *
+ * Install:
+ *   sudo cp *.dtbo /boot/firmware/overlays/
+ *   Add "fdtoverlays /overlays/k3-am6254-pocketbeagle2-serenity-cape-a.dtbo"
+ *   to /boot/firmware/extlinux/extlinux.conf
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * PAD OFFSET VERIFICATION NOTICE
+ * ═══════════════════════════════════════════════════════════════════════════
+ * AM62X_IOPAD offsets must be cross-checked against BOTH:
+ *   (1) TI AM6254 Technical Reference Manual, SPRUJ40, Table 7-1
+ *       "MAIN Domain Pad Control Registers"
+ *   (2) PocketBeagle 2 Industrial schematic — BeagleBoard.org hardware repo
+ *       (maps AM6254 balls to P1/P2 header pins)
+ * Offsets tagged [CONFIRMED] are from k3-am625-sk.dtsi, Linux 6.x kernel.
+ * Offsets tagged [ESTIMATE] follow the AM62x pad-table pattern and must be
+ * verified before committing to PCB fab or first-flight operations.
+ * GPIO line numbers (main_gpio0 / main_gpio1) are logical and must be
+ * verified against the PocketBeagle 2 expansion header pin map.
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * Cape-A peripheral map:
+ *   SPI0      — ICM-42688-P IMU, BMP388 barometer, SLB9670 TPM 2.0
+ *   I2C2      — TCA9548A 8-ch mux → 2× VL53L5CX ToF (array A), MS4525DO
+ *   UART0     — Debug console (JST-GH 4-pin)
+ *   UART1     — ESC UART telemetry input (BLHeli32/Hobbywing)
+ *   UART3     — u-blox M10Q GNSS (38400 baud default)
+ *   UART4     — RS-485 half-duplex via MAX3485E (DE/RE# GPIOs)
+ *   MCAN0     — CAN FD 1/8 Mbps via ATA6561 transceiver (STB# GPIO)
+ *   CPSW3G    — 100BASE-TX ring via 2× DP83825I RMII PHY
+ *   EHRPWM0-5 — Servo/ESC PWM (6 channels hardware, 50/400 Hz)
+ *   PRU-ICSS0/PRU0 — MIL-STD-1553B Manchester II codec (1 Mbps)
+ *   PRU-ICSS0/PRU1 — Extended servo PWM channels 6-7 (deterministic)
+ */
+
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+#include <dt-bindings/pinctrl/k3.h>
+#include <dt-bindings/net/ti-dp83867.h>
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * GPIO line assignments on main_gpio0 — VERIFY AGAINST PB2 SCHEMATIC
+ * Line numbers correspond to AM6254 GPIO bank 0 pins exposed on P1/P2.
+ * ─────────────────────────────────────────────────────────────────────────*/
+#define CAPE_A_GPIO_IMU_INT1        14  /* ICM-42688-P interrupt 1      [ESTIMATE] */
+#define CAPE_A_GPIO_IMU_INT2        15  /* ICM-42688-P interrupt 2      [ESTIMATE] */
+#define CAPE_A_GPIO_IMU_CS          16  /* SPI0 CS — ICM-42688-P        [ESTIMATE] */
+#define CAPE_A_GPIO_BARO_CS         17  /* SPI0 CS — BMP388             [ESTIMATE] */
+#define CAPE_A_GPIO_TPM_CS          18  /* SPI0 CS — SLB9670 TPM        [ESTIMATE] */
+#define CAPE_A_GPIO_TPM_IRQ         19  /* SLB9670 IRQ (active-low)     [ESTIMATE] */
+#define CAPE_A_GPIO_TPM_RST         20  /* SLB9670 reset (active-low)   [ESTIMATE] */
+#define CAPE_A_GPIO_GPS_RST         21  /* u-blox M10Q RESETN           [ESTIMATE] */
+#define CAPE_A_GPIO_GPS_TIMEPULSE   22  /* u-blox M10Q TIMEPULSE        [ESTIMATE] */
+#define CAPE_A_GPIO_RS485_DE        23  /* MAX3485E driver enable        [ESTIMATE] */
+#define CAPE_A_GPIO_RS485_RE_N      24  /* MAX3485E receiver enable#     [ESTIMATE] */
+#define CAPE_A_GPIO_CAN_STB_N       25  /* ATA6561 standby (active-low) [ESTIMATE] */
+#define CAPE_A_GPIO_PHY1_RST_N      26  /* DP83825I #1 reset            [ESTIMATE] */
+#define CAPE_A_GPIO_PHY1_INT_N      27  /* DP83825I #1 interrupt        [ESTIMATE] */
+#define CAPE_A_GPIO_PHY2_RST_N      28  /* DP83825I #2 reset            [ESTIMATE] */
+#define CAPE_A_GPIO_PHY2_INT_N      29  /* DP83825I #2 interrupt        [ESTIMATE] */
+#define CAPE_A_GPIO_1553_OE1_N      30  /* DS26LV31 output enable 1#    [ESTIMATE] */
+#define CAPE_A_GPIO_1553_OE2_N      31  /* DS26LV31 output enable 2#    [ESTIMATE] */
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * Section 1 — Pin control configurations
+ * ─────────────────────────────────────────────────────────────────────────*/
+&main_pmx0 {
+
+    /* SPI0: ICM-42688-P IMU + BMP388 barometer + SLB9670 TPM.
+     * Chip selects are GPIO-controlled (cs-gpios on the SPI node) so only
+     * the 4-wire bus pins appear here.                                    */
+    cape_a_spi0_pins: cape-a-spi0-pins {
+        pinctrl-single,pins = <
+            /* [CONFIRMED — k3-am625-sk.dtsi] */
+            AM62X_IOPAD(0x01bc, PIN_INPUT,  0) /* (A13) SPI0_CLK              */
+            AM62X_IOPAD(0x01c0, PIN_OUTPUT, 0) /* (B13) SPI0_D0   (MOSI)      */
+            AM62X_IOPAD(0x01c4, PIN_INPUT,  0) /* (B12) SPI0_D1   (MISO)      */
+        >;
+    };
+
+    /* I2C2: TCA9548A mux + downstream VL53L5CX ToF + MS4525DO airspeed.  */
+    cape_a_i2c2_pins: cape-a-i2c2-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE — GPMC0_CSn2/CSn3 pads in mux1] */
+            AM62X_IOPAD(0x00b0, PIN_INPUT_PULLUP, 1) /* (K22) I2C2_SCL          */
+            AM62X_IOPAD(0x00b4, PIN_INPUT_PULLUP, 1) /* (K24) I2C2_SDA          */
+        >;
+    };
+
+    /* UART0: debug console.                                               */
+    cape_a_uart0_pins: cape-a-uart0-pins {
+        pinctrl-single,pins = <
+            /* [CONFIRMED — k3-am625-sk.dtsi, SPI0_CS0/CS1 pads mux1]    */
+            AM62X_IOPAD(0x01c8, PIN_INPUT,  1) /* (D14) UART0_RXD             */
+            AM62X_IOPAD(0x01cc, PIN_OUTPUT, 1) /* (E14) UART0_TXD             */
+        >;
+    };
+
+    /* UART1: ESC UART telemetry (BLHeli32 / Hobbywing one-wire or 2-wire).*/
+    cape_a_uart1_pins: cape-a-uart1-pins {
+        pinctrl-single,pins = <
+            /* [CONFIRMED — MCASP0_AFSR/ACLKR pads mux2]                  */
+            AM62X_IOPAD(0x01ac, PIN_INPUT,  2) /* (E19) UART1_RXD             */
+            AM62X_IOPAD(0x01b0, PIN_OUTPUT, 2) /* (A20) UART1_TXD             */
+        >;
+    };
+
+    /* UART3: u-blox M10Q GNSS, 38400 baud default (upgradeable to 460800).*/
+    cape_a_uart3_pins: cape-a-uart3-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE — GPMC0_AD area, mux4] */
+            AM62X_IOPAD(0x0048, PIN_INPUT,  4) /* UART3_RXD                   */
+            AM62X_IOPAD(0x004c, PIN_OUTPUT, 4) /* UART3_TXD                   */
+        >;
+    };
+
+    /* UART4: RS-485 (MAX3485E). Direction controlled by DE/RE# GPIOs.    */
+    cape_a_uart4_pins: cape-a-uart4-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE — GPMC0_AD area, mux4] */
+            AM62X_IOPAD(0x0058, PIN_INPUT,  4) /* UART4_RXD                   */
+            AM62X_IOPAD(0x005c, PIN_OUTPUT, 4) /* UART4_TXD                   */
+        >;
+    };
+
+    /* MCAN0: CAN FD via ATA6561 transceiver.                             */
+    cape_a_mcan0_pins: cape-a-mcan0-pins {
+        pinctrl-single,pins = <
+            /* [CONFIRMED — k3-am625-sk.dtsi] */
+            AM62X_IOPAD(0x01d8, PIN_OUTPUT, 0) /* (C15) MCAN0_TX              */
+            AM62X_IOPAD(0x01dc, PIN_INPUT,  0) /* (E15) MCAN0_RX              */
+        >;
+    };
+
+    /* CPSW3G MDIO: shared MDC/MDIO bus for both DP83825I PHYs.          */
+    cape_a_mdio_pins: cape-a-mdio-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE — dedicated MDIO pad area] */
+            AM62X_IOPAD(0x0160, PIN_OUTPUT,       0) /* MDC                    */
+            AM62X_IOPAD(0x0164, PIN_INPUT_PULLUP, 0) /* MDIO                   */
+        >;
+    };
+
+    /* CPSW3G Port 1 — RMII (DP83825I #1, uplink/port-side ring segment). */
+    cape_a_rmii1_pins: cape-a-rmii1-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE — RGMII1 pad area in RMII mux] */
+            AM62X_IOPAD(0x0120, PIN_INPUT,  4) /* RMII1_RXD0                  */
+            AM62X_IOPAD(0x0124, PIN_INPUT,  4) /* RMII1_RXD1                  */
+            AM62X_IOPAD(0x0128, PIN_INPUT,  4) /* RMII1_RX_ER                 */
+            AM62X_IOPAD(0x012c, PIN_INPUT,  4) /* RMII1_CRS_DV                */
+            AM62X_IOPAD(0x0130, PIN_OUTPUT, 4) /* RMII1_TXD0                  */
+            AM62X_IOPAD(0x0134, PIN_OUTPUT, 4) /* RMII1_TXD1                  */
+            AM62X_IOPAD(0x0138, PIN_OUTPUT, 4) /* RMII1_TX_EN                 */
+            AM62X_IOPAD(0x013c, PIN_INPUT,  4) /* RMII1_REF_CLK (50 MHz in)   */
+        >;
+    };
+
+    /* CPSW3G Port 2 — RMII (DP83825I #2, starboard ring segment).       */
+    cape_a_rmii2_pins: cape-a-rmii2-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE — RGMII2 pad area in RMII mux] */
+            AM62X_IOPAD(0x0148, PIN_INPUT,  4) /* RMII2_RXD0                  */
+            AM62X_IOPAD(0x014c, PIN_INPUT,  4) /* RMII2_RXD1                  */
+            AM62X_IOPAD(0x0150, PIN_INPUT,  4) /* RMII2_RX_ER                 */
+            AM62X_IOPAD(0x0154, PIN_INPUT,  4) /* RMII2_CRS_DV                */
+            AM62X_IOPAD(0x0158, PIN_OUTPUT, 4) /* RMII2_TXD0                  */
+            AM62X_IOPAD(0x015c, PIN_OUTPUT, 4) /* RMII2_TXD1                  */
+            AM62X_IOPAD(0x0168, PIN_OUTPUT, 4) /* RMII2_TX_EN                 */
+            AM62X_IOPAD(0x016c, PIN_INPUT,  4) /* RMII2_REF_CLK               */
+        >;
+    };
+
+    /* EHRPWM0-A / EHRPWM1-A: servo/ESC channels 0 and 1.                */
+    cape_a_ehrpwm0_pins: cape-a-ehrpwm0-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE] */
+            AM62X_IOPAD(0x01a0, PIN_OUTPUT, 6) /* EHRPWM0_A (SERVO0)          */
+            AM62X_IOPAD(0x01a4, PIN_OUTPUT, 6) /* EHRPWM0_B (SERVO1)          */
+        >;
+    };
+
+    cape_a_ehrpwm1_pins: cape-a-ehrpwm1-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE] */
+            AM62X_IOPAD(0x01a8, PIN_OUTPUT, 6) /* EHRPWM1_A (SERVO2)          */
+            AM62X_IOPAD(0x01b8, PIN_OUTPUT, 6) /* EHRPWM1_B (SERVO3)          */
+        >;
+    };
+
+    cape_a_ehrpwm2_pins: cape-a-ehrpwm2-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE] */
+            AM62X_IOPAD(0x01b4, PIN_OUTPUT, 6) /* EHRPWM2_A (SERVO4)          */
+            AM62X_IOPAD(0x01b8, PIN_OUTPUT, 6) /* EHRPWM2_B (SERVO5)          */
+        >;
+    };
+
+    /* PRU-ICSS0 MIL-STD-1553 GPIO pins.
+     * PRU0 drives DS26LV31 TX inputs (differential pair) and reads
+     * DS26LV32 RX outputs (differential pair).
+     * PRG0_PRU0_GPIOxx line numbers must match the PRU firmware.         */
+    cape_a_pru0_1553_pins: cape-a-pru0-1553-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE — PRG0 GPIO pad area] */
+            AM62X_IOPAD(0x00d0, PIN_OUTPUT, 5) /* PRG0_PRU0_GPO0 → 1553_TX_P  */
+            AM62X_IOPAD(0x00d4, PIN_OUTPUT, 5) /* PRG0_PRU0_GPO1 → 1553_TX_N  */
+            AM62X_IOPAD(0x00d8, PIN_INPUT,  5) /* PRG0_PRU0_GPI2 ← 1553_RX_P  */
+            AM62X_IOPAD(0x00dc, PIN_INPUT,  5) /* PRG0_PRU0_GPI3 ← 1553_RX_N  */
+        >;
+    };
+
+    /* PRU-ICSS0 PRU1 extra servo PWM pins (channels 6-7).               */
+    cape_a_pru1_pwm_pins: cape-a-pru1-pwm-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE] */
+            AM62X_IOPAD(0x00e0, PIN_OUTPUT, 5) /* PRG0_PRU1_GPO0 → SERVO6     */
+            AM62X_IOPAD(0x00e4, PIN_OUTPUT, 5) /* PRG0_PRU1_GPO1 → SERVO7     */
+        >;
+    };
+};
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * Section 2 — SPI0: IMU, barometer, TPM 2.0
+ * CS lines are GPIO because the AM6254 SPI0 hardware CS count may be
+ * insufficient for 3 devices; this also allows individual power sequencing.
+ * ─────────────────────────────────────────────────────────────────────────*/
+&main_spi0 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_a_spi0_pins>;
+    /* Three GPIO chip-selects; SPI controller CS pin is not used.        */
+    cs-gpios = <&main_gpio0 CAPE_A_GPIO_IMU_CS  GPIO_ACTIVE_LOW>,
+               <&main_gpio0 CAPE_A_GPIO_BARO_CS GPIO_ACTIVE_LOW>,
+               <&main_gpio0 CAPE_A_GPIO_TPM_CS  GPIO_ACTIVE_LOW>;
+    #address-cells = <1>;
+    #size-cells = <0>;
+
+    /* ICM-42688-P 6-axis IMU — InvenSense, SPI mode 0 or 3, 24 MHz max. */
+    imu_icm42688: imu@0 {
+        compatible = "invensense,icm42688p";
+        reg = <0>;                           /* CS index 0 (IMU_CS GPIO)   */
+        spi-max-frequency = <24000000>;
+        spi-cpol;                            /* CPOL=1 CPHA=1 (SPI mode 3) */
+        spi-cpha;
+        interrupt-parent = <&main_gpio0>;
+        interrupts = <CAPE_A_GPIO_IMU_INT1 IRQ_TYPE_EDGE_RISING>;
+        /*
+         * Mount rotation: board coordinate frame → NED body frame.
+         * Fill in after physical inspection of IMU orientation on Cape-A.
+         * Reference: InvenSense ICM-42688-P datasheet, rev 1.7.
+         */
+        mount-matrix = "1", "0", "0",
+                        "0", "1", "0",
+                        "0", "0", "1";
+    };
+
+    /* BMP388 barometric pressure + temperature — Bosch, SPI mode 0.      */
+    baro_bmp388: barometer@1 {
+        compatible = "bosch,bmp388";
+        reg = <1>;                           /* CS index 1 (BARO_CS GPIO)  */
+        spi-max-frequency = <10000000>;
+        interrupt-parent = <&main_gpio0>;
+        interrupts = <CAPE_A_GPIO_IMU_INT2 IRQ_TYPE_EDGE_RISING>;
+        /* Data-ready interrupt wired to same GPIO bank as IMU INT2 —
+         * re-assign if conflict during layout.                           */
+    };
+
+    /* SLB9670 TPM 2.0 — Infineon, SPI mode 0, 33 MHz max.               */
+    tpm_slb9670: tpm@2 {
+        compatible = "infineon,slb9670";
+        reg = <2>;                           /* CS index 2 (TPM_CS GPIO)   */
+        spi-max-frequency = <33000000>;
+        interrupt-parent = <&main_gpio0>;
+        interrupts = <CAPE_A_GPIO_TPM_IRQ IRQ_TYPE_LEVEL_LOW>;
+        reset-gpios = <&main_gpio0 CAPE_A_GPIO_TPM_RST GPIO_ACTIVE_LOW>;
+    };
+};
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * Section 3 — I2C2: TCA9548A mux → VL53L5CX ToF sensors, MS4525DO airspeed
+ * ─────────────────────────────────────────────────────────────────────────*/
+&main_i2c2 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_a_i2c2_pins>;
+    clock-frequency = <400000>;              /* Fast mode 400 kHz          */
+    #address-cells = <1>;
+    #size-cells = <0>;
+
+    /* TCA9548A 8-channel I2C multiplexer — NXP/TI, address 0x70.
+     * All VL53L5CX sensors share address 0x29; the mux isolates them.   */
+    i2c_mux_tca9548a: i2c-mux@70 {
+        compatible = "nxp,pca9548";
+        reg = <0x70>;
+        #address-cells = <1>;
+        #size-cells = <0>;
+        /* reset-gpios not wired on Cape-A rev N; add if rev O adds RST. */
+
+        /* Channel 0: Array A sensor 1 (S1A — forward, FC3 primary).    */
+        i2c_tof_ch0: i2c@0 {
+            #address-cells = <1>;
+            #size-cells = <0>;
+            reg = <0>;
+
+            tof_s1a: tof@29 {
+                compatible = "st,vl53l5cx";
+                reg = <0x29>;
+                /*
+                 * VL53L5CX does not expose a kernel interrupt line in
+                 * the mainline driver; polling is used in firmware.
+                 * Future: wire INT pin through mux GPIO expander.
+                 */
+            };
+        };
+
+        /* Channel 1: Array B sensor 1 (S1B — aft, FC2 primary).        */
+        i2c_tof_ch1: i2c@1 {
+            #address-cells = <1>;
+            #size-cells = <0>;
+            reg = <1>;
+
+            tof_s1b: tof@29 {
+                compatible = "st,vl53l5cx";
+                reg = <0x29>;
+            };
+        };
+
+        /* Channel 2: MS4525DO differential airspeed (FC1 only; optional).*/
+        i2c_airspeed_ch2: i2c@2 {
+            #address-cells = <1>;
+            #size-cells = <0>;
+            reg = <2>;
+
+            airspeed_ms4525: airspeed@28 {
+                compatible = "ms4525do";         /* VERIFY driver name    */
+                reg = <0x28>;
+                /* Populated on FC1 only; leave absent on FC2-FC4 builds. */
+                status = "disabled";
+            };
+        };
+
+        /* Channels 3-7: reserved for future sensors.                    */
+    };
+};
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * Section 4 — UARTs
+ * ─────────────────────────────────────────────────────────────────────────*/
+
+/* UART0: debug console (115200 8N1).                                      */
+&main_uart0 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_a_uart0_pins>;
+};
+
+/* UART1: ESC UART telemetry, 115200 baud (BLHeli32 digital protocol).
+ * The AM6254 eCAP peripheral captures the BDSHOT600 telemetry frame;
+ * this UART is used as a fallback for analogue telemetry only.           */
+&main_uart1 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_a_uart1_pins>;
+};
+
+/* UART3: u-blox M10Q GNSS.  userspace (gpsd) owns this port.
+ * TIMEPULSE and RESETN are managed by the serenity-fc daemon via GPIO.  */
+&main_uart3 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_a_uart3_pins>;
+};
+
+/* UART4: RS-485 half-duplex via MAX3485E.
+ * Direction is toggled in software via DE and RE# GPIOs before each
+ * transmit/receive transition.  The serenity-fc daemon uses termios
+ * RS485 mode (TIOCSRS485) if the kernel driver supports it; otherwise
+ * explicit GPIO toggle with ≥1 µs guard time.                           */
+&main_uart4 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_a_uart4_pins>;
+    linux,rs485-enabled-at-boot-time;
+    rs485-rts-active-high;                   /* DE asserted high = TX     */
+    rs485-rx-during-tx;                      /* duplex: echo suppressed   */
+};
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * Section 5 — CAN FD (MCAN0 + ATA6561 transceiver)
+ * ─────────────────────────────────────────────────────────────────────────*/
+&main_mcan0 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_a_mcan0_pins>;
+    /* ATA6561 STB# driven low (active) at boot by the FC daemon.
+     * Normal mode = STB# = low.  Standby mode = STB# = high.
+     * Not modelled in DT; managed via /sys/class/gpio in serenity-fc.   */
+
+    can-transceiver {
+        max-bitrate = <8000000>;             /* 8 Mbps FD data rate max   */
+    };
+};
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * Section 6 — Ethernet: CPSW3G + 2× DP83825I RMII PHY
+ * Both PHYs share the MDIO bus; CPSW3G ports 1 and 2 are used.
+ * The 8-node RSTP ring is: CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4→(back to CN1).
+ * Each FC node connects its two PHYs to adjacent ring segments.
+ * ─────────────────────────────────────────────────────────────────────────*/
+&cpsw3g {
+    status = "okay";
+};
+
+&cpsw3g_port1 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_a_rmii1_pins>;
+    phy-handle = <&eth_phy1>;
+    phy-mode = "rmii";
+    ti,mac-only;
+    /* 50 MHz reference clock from DP83825I #1 REF_CLK output.           */
+};
+
+&cpsw3g_port2 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_a_rmii2_pins>;
+    phy-handle = <&eth_phy2>;
+    phy-mode = "rmii";
+    ti,mac-only;
+};
+
+&cpsw3g_mdio {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_a_mdio_pins>;
+    clock-frequency = <1000000>;             /* MDIO clock 1 MHz          */
+    #address-cells = <1>;
+    #size-cells = <0>;
+
+    /* DP83825I RMII PHY #1 — TI, MDIO address 0 (PHYAD0=1 → addr 1).
+     * VERIFY strap resistors on Cape-A schematic for PHYAD[1:0].        */
+    eth_phy1: ethernet-phy@1 {
+        compatible = "ti,dp83825i", "ethernet-phy-ieee802.3-c22";
+        reg = <1>;
+        reset-gpios = <&main_gpio0 CAPE_A_GPIO_PHY1_RST_N GPIO_ACTIVE_LOW>;
+        reset-assert-us   = <25>;            /* datasheet: t_reset_assert  */
+        reset-deassert-us = <2000>;          /* datasheet: t_reset_deassert*/
+        interrupt-parent = <&main_gpio0>;
+        interrupts = <CAPE_A_GPIO_PHY1_INT_N IRQ_TYPE_EDGE_FALLING>;
+        /* DP83825I strap: LEDs configured for link/activity on rev A.    */
+    };
+
+    /* DP83825I RMII PHY #2 — MDIO address 1 (PHYAD0=0 → addr 2).        */
+    eth_phy2: ethernet-phy@2 {
+        compatible = "ti,dp83825i", "ethernet-phy-ieee802.3-c22";
+        reg = <2>;
+        reset-gpios = <&main_gpio0 CAPE_A_GPIO_PHY2_RST_N GPIO_ACTIVE_LOW>;
+        reset-assert-us   = <25>;
+        reset-deassert-us = <2000>;
+        interrupt-parent = <&main_gpio0>;
+        interrupts = <CAPE_A_GPIO_PHY2_INT_N IRQ_TYPE_EDGE_FALLING>;
+    };
+};
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * Section 7 — EHRPWM: servo and ESC PWM channels 0-5
+ * EHRPWM0-2 each provide an A and B output → 6 channels total.
+ * Channels 6-7 are produced by PRU1 (see Section 8).
+ * All outputs: 1 µs resolution at 125 MHz SYSCLK / prescaler.
+ * ─────────────────────────────────────────────────────────────────────────*/
+&epwm0 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_a_ehrpwm0_pins>;
+};
+
+&epwm1 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_a_ehrpwm1_pins>;
+};
+
+&epwm2 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_a_ehrpwm2_pins>;
+};
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * Section 8 — PRU-ICSS0: MIL-STD-1553B (PRU0) and extended PWM (PRU1)
+ *
+ * PRU0 firmware: serenity-pru0-1553.out
+ *   Manchester II encoder/decoder at 1 Mbps ± 0.5%.
+ *   BC (bus controller) capability on FC1 (elected via CAN FD heartbeat);
+ *   all other FC nodes run as RT (remote terminal).
+ *   DS26LV31 TX: driven by PRG0_PRU0_GPO0 (TX_P) and GPO1 (TX_N).
+ *   DS26LV32 RX: read from PRG0_PRU0_GPI2 (RX_P) and GPI3 (RX_N).
+ *   DS26LV31 OE#: controlled via main_gpio0 lines CAPE_A_GPIO_1553_OE1_N
+ *                 and CAPE_A_GPIO_1553_OE2_N.
+ *   Coupling transformer: PE-68515, 1:1.41, 78 Ω stub resistors.
+ *
+ * PRU1 firmware: serenity-pru1-pwm.out
+ *   Generates SERVO6 and SERVO7 PWM with 1 µs resolution.
+ *   DSHOT1200 output capability for future DSHOT ESC support.
+ *
+ * Firmware binaries are installed to /lib/firmware/serenity/ on the target.
+ * ─────────────────────────────────────────────────────────────────────────*/
+&icssg0_pru0 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_a_pru0_1553_pins>;
+    firmware-name = "serenity/pru0-mil1553.out";
+};
+
+&icssg0_pru1 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_a_pru1_pwm_pins>;
+    firmware-name = "serenity/pru1-servo-pwm.out";
+};

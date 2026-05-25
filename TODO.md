@@ -195,11 +195,31 @@ Design notes and BOM candidates are in `serenity/kicad/XCVR-49MHZ-1.md`.
 
 ## Firmware (Phase 6 dependency)
 
-- [ ] **Create `serenity/firmware/` directory structure** — minimum viable for
+- [x] **Create `serenity/firmware/` directory structure** — minimum viable for
   Phase 6 first flight: CN node (CAPE-B AM6254) + FC node (CAPE-A AM6254).
+  *(done 2026-05-25 — serenity/firmware/ with common/include, cn/, fc/
+  sub-trees; CMakeLists.txt for cross-compilation to aarch64 Linux; README)*
 
-- [ ] **KISS/AX.25 UART driver for XCVR-49MHZ-1** — runs on CN node; framing,
+- [x] **KISS/AX.25 UART driver for XCVR-49MHZ-1** — runs on CN node; framing,
   channel select via I²C to Si5351A, PTT sequencing (≥ 5 ms key-up before TX).
+  *(done 2026-05-25 — serenity/firmware/cn/src/xcvr_kiss.c/.h: KISS encode/
+  decode state machine, PTT_N libgpiod 2.x sequencing, Si5351A I²C channel
+  select for all 5 RCRS channels (49.830–49.890 MHz, 47 CFR 95.623);
+  si5351.c/.h: PLLA+MS0 register computation per AN619; serenity-cn daemon
+  with argparse and SIGTERM shutdown)*
+
+- [x] **AM6254 device tree overlays for Cape-A and Cape-B** — kernel overlay
+  files configuring all peripherals on each cape for PocketBeagle 2 Industrial
+  running BeagleBone Debian Trixie (Linux ≥ 6.1, dtc 1.7.x).
+  *(done 2026-05-25 — serenity/firmware/dts/cape-a/
+  k3-am6254-pocketbeagle2-serenity-cape-a.dts: SPI0 IMU/baro/TPM, I2C2 ToF
+  mux, UART0-4, MCAN0, CPSW3G 2×DP83825I RMII, EHRPWM0-2, PRU-ICSS0 1553+PWM;
+  serenity/firmware/dts/cape-b/
+  k3-am6254-pocketbeagle2-serenity-cape-b.dts: SPI1 TPM/LoRa/NOR/microSD,
+  UART2 SiK CTS/RTS, UART4 RS-485, UART5 RCRS-49, MCAN0, CPSW3G, MMC1
+  WL1837MOD WiFi, EHRPWM0 cargo servo, PRU-ICSS0 1553+cargo; Makefile and
+  README in serenity/firmware/dts/; all [ESTIMATE] pad offsets flagged for
+  verification against SPRUJ40 Table 7-1 and PB2 Industrial schematic)*
 
 ---
 
