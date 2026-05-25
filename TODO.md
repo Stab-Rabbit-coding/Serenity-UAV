@@ -33,6 +33,12 @@ Last updated: 2026-05-24
   `blender --background --python thingverse-serenity/blender_nacelle_revo.py` on host
   machine to verify Z-range and bore-diameter before committing STLs. *(done 2026-05-24)*
 
+- [ ] combine all airframe stls, including the 1.25 scaled nacelles, all edf tubes, cargo bay clamshells, antenna bosses, sensor cutouts, access panels, legs, feet, etc. into a completed model for visual overview and verification of component interface and fit.  render svgs from this model from all 6 cardinal directions and all 8 isometric perspectives.
+
+- [ ] Make an exploded view svg with all printed parts.
+
+- [ ] Make an exploded view with all components including pcbs, SBCs, motors, wires, etc. included.
+
 - [x] **Sensor / camera / antenna mounts in fuselage shells** — 2026-05-24.
   Four shell SCAD files updated / created with dual-redundant VL53L5CX mount bosses
   (16 mm OD, 11 mm PMMA aperture, 4x M1.6, 14x14 mm board recess), 28 mm FPV
