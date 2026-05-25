@@ -23,7 +23,7 @@ Last updated: 2026-05-24
   - `serenity/stl/s_rear_neck_intake_shell24.scad`
   Run: `blender --background --python <script>.py` per CLAUDE.md workflow.
   Verify Z-range and bore diameter in console before committing.
-
+ to the rev o design specifications
 - [x] **Nacelle pod for Rev N (50 mm tandem EDFs)** — `nacelle_pod_50mm_tandem.scad` created
   2026-05-24 with: dual-bore centerline (EDF1 Z=22..72mm, EDF2 Z=98..143mm), 11-fin
   twisted stator, M=1.0 gear boss / conduit hard points, MF104ZZ clevis pivot boss at Z=83mm
@@ -32,6 +32,12 @@ Last updated: 2026-05-24
   **Note:** blender and openscad not installed in this build environment; run
   `blender --background --python thingverse-serenity/blender_nacelle_revo.py` on host
   machine to verify Z-range and bore-diameter before committing STLs. *(done 2026-05-24)*
+
+- [ ] combine all airframe stls, including the 1.25 scaled nacelles, all edf tubes, cargo bay clamshells, antenna bosses, sensor cutouts, access panels, legs, feet, etc. into a completed model for visual overview and verification of component interface and fit.  render svgs from this model from all 6 cardinal directions and all 8 isometric perspectives.
+
+- [ ] Make an exploded view svg with all printed parts.
+
+- [ ] Make an exploded view with all components including pcbs, SBCs, motors, wires, etc. included.
 
 - [x] **Sensor / camera / antenna mounts in fuselage shells** — 2026-05-24.
   Four shell SCAD files updated / created with dual-redundant VL53L5CX mount bosses
@@ -63,7 +69,6 @@ Last updated: 2026-05-24
     STL-derived silhouettes from actual 24″ shell geometry (probe_stl.py,
     gen_hull_outlines.py, update_overview_paths.py).  Pre-update originals
     are preserved in git history (this commit's parent).
-- [ ] integrated the build plan into the todo
 
 - [x] **Wing+pivot merge into single pylon** — `s_wing_nacelle_pylon_revo.scad` created
   2026-05-24.  Merges s_pivot_arm_a + s_eng_piv_outer into one CF-PETG part: hollow
@@ -98,9 +103,16 @@ Last updated: 2026-05-24
 
 ## PCB / KiCad
 
-- [ ] **Verify bom_revN.csv ↔ bom_revN.json sync** — CSV was updated 2026-05-23;
+- [x] **Verify bom_revN.csv ↔ bom_revN.json sync** — CSV was updated 2026-05-23;
   JSON was last written 2026-05-22.  Confirm both reflect the same component list
   and quantities.
+  *(done 2026-05-25 — compared all 60 CSV rows against JSON; JSON was missing "ref"
+  keys for 25 parts (PIANO-WIRE-0.8, BATT-6S-4000/2800, PDB-BEC, N20-WINCH,
+  HX711-LC, CF-BAR-6X3, CF-TUBE-12MM, CF-PLATE-2MM, FOAM-PU-2LB, WIRE-10/16/28AWG
+  + CONDUIT-PTFE, FIL-PETG/CF-PETG/TPU-95A, LED-WS2812B, gear refs SECTOR/BEVEL/
+  PINION-M05, all PRINT-* entries, and two print_schedule entries PRINT-EDF-MOTOR-MOUNT
+  + PRINT-THRUST-TUBE that were in CSV but absent from JSON print_schedule array);
+  all 60 refs now present as structured "ref" keys in bom_revN.json; JSON valid)*
 
 ---
 
@@ -197,17 +209,40 @@ Design notes and BOM candidates are in `serenity/kicad/XCVR-49MHZ-1.md`.
 - [ ] **Export BOM** — add XCVR-49MHZ-1 line items to `serenity/docs/bom_revN.csv`
   and `bom_revN.json`.
 
-- [ ] **Update `PROJECT_INDEX.md`** to list XCVR-49MHZ-1 under PCB section.
+- [x] **Update `PROJECT_INDEX.md`** to list XCVR-49MHZ-1 under PCB section.
+  *(done — XCVR-49MHZ-1.kicad_pcb and .kicad_sch are already in the KiCad PCB
+  Source Files table at serenity/docs/PROJECT_INDEX.md lines 123-124; confirmed
+  2026-05-25)*
 
 ---
 
 ## Firmware (Phase 6 dependency)
 
-- [ ] **Create `serenity/firmware/` directory structure** — minimum viable for
+- [x] **Create `serenity/firmware/` directory structure** — minimum viable for
   Phase 6 first flight: CN node (CAPE-B AM6254) + FC node (CAPE-A AM6254).
+  *(done 2026-05-25 — serenity/firmware/ with common/include, cn/, fc/
+  sub-trees; CMakeLists.txt for cross-compilation to aarch64 Linux; README)*
 
-- [ ] **KISS/AX.25 UART driver for XCVR-49MHZ-1** — runs on CN node; framing,
+- [x] **KISS/AX.25 UART driver for XCVR-49MHZ-1** — runs on CN node; framing,
   channel select via I²C to Si5351A, PTT sequencing (≥ 5 ms key-up before TX).
+  *(done 2026-05-25 — serenity/firmware/cn/src/xcvr_kiss.c/.h: KISS encode/
+  decode state machine, PTT_N libgpiod 2.x sequencing, Si5351A I²C channel
+  select for all 5 RCRS channels (49.830–49.890 MHz, 47 CFR 95.623);
+  si5351.c/.h: PLLA+MS0 register computation per AN619; serenity-cn daemon
+  with argparse and SIGTERM shutdown)*
+
+- [x] **AM6254 device tree overlays for Cape-A and Cape-B** — kernel overlay
+  files configuring all peripherals on each cape for PocketBeagle 2 Industrial
+  running BeagleBone Debian Trixie (Linux ≥ 6.1, dtc 1.7.x).
+  *(done 2026-05-25 — serenity/firmware/dts/cape-a/
+  k3-am6254-pocketbeagle2-serenity-cape-a.dts: SPI0 IMU/baro/TPM, I2C2 ToF
+  mux, UART0-4, MCAN0, CPSW3G 2×DP83825I RMII, EHRPWM0-2, PRU-ICSS0 1553+PWM;
+  serenity/firmware/dts/cape-b/
+  k3-am6254-pocketbeagle2-serenity-cape-b.dts: SPI1 TPM/LoRa/NOR/microSD,
+  UART2 SiK CTS/RTS, UART4 RS-485, UART5 RCRS-49, MCAN0, CPSW3G, MMC1
+  WL1837MOD WiFi, EHRPWM0 cargo servo, PRU-ICSS0 1553+cargo; Makefile and
+  README in serenity/firmware/dts/; all [ESTIMATE] pad offsets flagged for
+  verification against SPRUJ40 Table 7-1 and PB2 Industrial schematic)*
 
 ---
 
@@ -218,3 +253,9 @@ Design notes and BOM candidates are in `serenity/kicad/XCVR-49MHZ-1.md`.
 - [x] **Sync bom_revN.csv ↔ bom_revN.json** — resolve 2026-05-23 vs 2026-05-22
   timestamp discrepancy. *(done 2026-05-24 — added WIRE-49MHZ, POST-FWD-49, POST-AFT-49 as
   structured `avionics.antenna_system` entries in bom_revN.json; updated JSON date to 2026-05-23)*
+
+- [ ] update the rev o jsx to be a complete description of the uav, with all relevant design and build elements.  
+- [x] update the graphical build guide svgs *(done 2026-05-25 — see Comprehensive graphical build guide update above)*
+
+- [x] do a comprehensive update on the graphical build guides to the current design specs. *(done 2026-05-25)*
+- [ ] integrated the build plan into the todo

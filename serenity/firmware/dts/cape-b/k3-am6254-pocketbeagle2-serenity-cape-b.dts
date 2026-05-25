@@ -1,0 +1,625 @@
+// SPDX-License-Identifier: CC-BY-4.0
+/*
+ * k3-am6254-pocketbeagle2-serenity-cape-b.dts
+ * Device tree overlay — Serenity UAV Cape-B (Comms, Logging & Payload)
+ *
+ * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ *
+ * Target:
+ *   Board  : PocketBeagle 2 Industrial (DigiKey 2820-100003007-ND)
+ *   SoC    : TI AM6254 (quad Cortex-A53 @ 1.4 GHz, dual PRU-ICSS)
+ *   OS     : BeagleBone Debian Trixie (Linux ≥ 6.1, dtc 1.7.x)
+ *   Cape   : Cape-B — comms + logging + payload, plugs onto P1/P2 headers
+ *
+ * Build:
+ *   dtc -@ -I dts -O dtb \
+ *       -o k3-am6254-pocketbeagle2-serenity-cape-b.dtbo \
+ *       k3-am6254-pocketbeagle2-serenity-cape-b.dts
+ *
+ * Install:
+ *   sudo cp *.dtbo /boot/firmware/overlays/
+ *   Add "fdtoverlays /overlays/k3-am6254-pocketbeagle2-serenity-cape-b.dtbo"
+ *   to /boot/firmware/extlinux/extlinux.conf
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ * PAD OFFSET VERIFICATION NOTICE
+ * ═══════════════════════════════════════════════════════════════════════════
+ * AM62X_IOPAD offsets must be cross-checked against BOTH:
+ *   (1) TI AM6254 Technical Reference Manual, SPRUJ40, Table 7-1
+ *       "MAIN Domain Pad Control Registers"
+ *   (2) PocketBeagle 2 Industrial schematic — BeagleBoard.org hardware repo
+ *       (maps AM6254 balls to P1/P2 header pins)
+ * Offsets tagged [CONFIRMED] are from k3-am625-sk.dtsi, Linux 6.x kernel.
+ * Offsets tagged [ESTIMATE] follow the AM62x pad-table pattern and must be
+ * verified before committing to PCB fab or first-flight operations.
+ * GPIO line numbers (main_gpio0 / main_gpio1) are logical and must be
+ * verified against the PocketBeagle 2 expansion header pin map.
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * Cape-B peripheral map:
+ *   SPI1      — SLB9670 TPM 2.0, RFM95W LoRa 915 MHz, W25Q128JV NOR flash,
+ *               microSD (SPI mode, logging-only non-executable card)
+ *   UART2     — RFD900x SiK 915 MHz (hardware CTS/RTS flow control)
+ *   UART4     — MAX3485E RS-485 half-duplex (DE / RE# GPIOs)
+ *   UART5     — XCVR-49MHZ-1 RCRS 49 MHz AX.25 (PTT_N + TDDS_SYNC GPIOs)
+ *   MCAN0     — CAN FD 1/8 Mbps via ATA6561 transceiver (STB# GPIO)
+ *   CPSW3G    — 100BASE-TX ring via 2× DP83825I RMII PHY
+ *   SDIO      — WL1837MOD 5 GHz 802.11ac/b/g/n + BT5 (4-bit MMC)
+ *   EHRPWM0   — Cargo servo / gimbal axis (2 channels)
+ *   PRU-ICSS0/PRU0 — MIL-STD-1553B Manchester II codec (1 Mbps)
+ *   PRU-ICSS0/PRU1 — Cargo servo PWM ch 2-3 + XCVR TDDS timing
+ *
+ * External comms links on this node:
+ *   Link A: AX.25 49 MHz RCRS    (XCVR-49MHZ-1, UART5, PTT_N, TDDS_SYNC)
+ *   Link B: SiK MAVLink 915 MHz  (RFD900x, UART2, CTS/RTS)
+ *   Link C: LoRa 915 MHz (OOB)   (RFM95W, SPI1, DIO0-DIO3 IRQs)
+ *   Link D: 5 GHz 802.11ac       (WL1837MOD, SDIO)
+ *
+ * All transmitted frames carry a TPM-bound SHA-256 HMAC (SLB9670, SPI1).
+ * The ATF16V8BQL CPLD provides hardware-enforced write-protect to the
+ * logging microSD and latching logic for latch sensors.
+ *
+ * References:
+ *   [1] TI AM6254 TRM, SPRUJ40 — pad table, PRU-ICSS, CPSW3G, MCAN
+ *   [2] PocketBeagle 2 Industrial schematic, BeagleBoard.org hardware repo
+ *   [3] Chepponis & Karn, KISS TNC, ARRL 6th CNF 1987 (AX.25 link)
+ *   [4] 47 CFR Part 95 Subpart D (RCRS 49 MHz channel plan)
+ *   [5] 47 CFR Part 15 Subpart C (LoRa 915 MHz, unlicensed)
+ *   [6] Si5351A/B/C-B Datasheet, Skyworks, Rev 1.4
+ *   [7] Infineon SLB9670 TPM 2.0 Datasheet
+ *   [8] WL1837MOD (TI WL1837) Integration Guide
+ *   [9] MIL-STD-1553B, DoD Interface Standard, 21 Sep 1978
+ */
+
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+#include <dt-bindings/pinctrl/k3.h>
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * GPIO line assignments on main_gpio0 — VERIFY AGAINST PB2 SCHEMATIC
+ * All offsets relative to AM6254 GPIO bank 0 as exposed on P1/P2 headers.
+ * ─────────────────────────────────────────────────────────────────────────*/
+
+/* SPI1 chip-selects (GPIO-driven; SPI1 nCS lines not used in hardware). */
+#define CAPE_B_GPIO_TPM_CS          10  /* SPI1 CS — SLB9670 TPM 2.0        [ESTIMATE] */
+#define CAPE_B_GPIO_LORA_CS         11  /* SPI1 CS — RFM95W LoRa            [ESTIMATE] */
+#define CAPE_B_GPIO_FLASH_CS        12  /* SPI1 CS — W25Q128JV NOR flash     [ESTIMATE] */
+#define CAPE_B_GPIO_SD_CS           13  /* SPI1 CS — logging microSD         [ESTIMATE] */
+
+/* SLB9670 TPM 2.0 control lines. */
+#define CAPE_B_GPIO_TPM_IRQ         14  /* SLB9670 interrupt (active-low)    [ESTIMATE] */
+#define CAPE_B_GPIO_TPM_RST         15  /* SLB9670 reset (active-low)        [ESTIMATE] */
+
+/* RFM95W LoRa DIO interrupt lines (DIO0 = TX done / RX done). */
+#define CAPE_B_GPIO_LORA_DIO0       16  /* RFM95W DIO0 — TX/RX done         [ESTIMATE] */
+#define CAPE_B_GPIO_LORA_DIO1       17  /* RFM95W DIO1 — RX timeout / FHSS  [ESTIMATE] */
+#define CAPE_B_GPIO_LORA_DIO2       18  /* RFM95W DIO2 — FHSS change        [ESTIMATE] */
+#define CAPE_B_GPIO_LORA_DIO3       19  /* RFM95W DIO3 — CAD done           [ESTIMATE] */
+#define CAPE_B_GPIO_LORA_RESET      20  /* RFM95W RESET (active-low)         [ESTIMATE] */
+
+/* XCVR-49MHZ-1 RCRS 49 MHz control lines. */
+#define CAPE_B_GPIO_PTT_N           21  /* PTT_N — TX key (active-low)       [ESTIMATE] */
+#define CAPE_B_GPIO_TDDS_SYNC       22  /* Si5351A DDS freq sync strobe      [ESTIMATE] */
+
+/* MAX3485E RS-485 direction control. */
+#define CAPE_B_GPIO_RS485_DE        23  /* Driver enable (active-high)       [ESTIMATE] */
+#define CAPE_B_GPIO_RS485_RE_N      24  /* Receiver enable# (active-low)     [ESTIMATE] */
+
+/* ATA6561 CAN FD transceiver. */
+#define CAPE_B_GPIO_CAN_STB_N       25  /* Standby# (active-low, normal=low) [ESTIMATE] */
+
+/* DP83825I RMII PHY reset and interrupt lines. */
+#define CAPE_B_GPIO_PHY1_RST_N      26  /* DP83825I #1 reset (active-low)    [ESTIMATE] */
+#define CAPE_B_GPIO_PHY1_INT_N      27  /* DP83825I #1 interrupt             [ESTIMATE] */
+#define CAPE_B_GPIO_PHY2_RST_N      28  /* DP83825I #2 reset (active-low)    [ESTIMATE] */
+#define CAPE_B_GPIO_PHY2_INT_N      29  /* DP83825I #2 interrupt             [ESTIMATE] */
+
+/* MIL-STD-1553B DS26LV31/DS26LV32 output-enable lines. */
+#define CAPE_B_GPIO_1553_OE1_N      30  /* DS26LV31 output enable 1# (TX)    [ESTIMATE] */
+#define CAPE_B_GPIO_1553_OE2_N      31  /* DS26LV32 output enable 2# (RX)    [ESTIMATE] */
+
+/* WL1837MOD WiFi enable. */
+#define CAPE_B_GPIO_WL_EN           32  /* WL1837MOD WL_EN (active-high)     [ESTIMATE] */
+
+/* DRV8833 dual H-bridge (cargo mechanism / latch actuator). */
+#define CAPE_B_GPIO_DRV_AIN1        33  /* DRV8833 AIN1                      [ESTIMATE] */
+#define CAPE_B_GPIO_DRV_AIN2        34  /* DRV8833 AIN2                      [ESTIMATE] */
+#define CAPE_B_GPIO_DRV_BIN1        35  /* DRV8833 BIN1                      [ESTIMATE] */
+#define CAPE_B_GPIO_DRV_BIN2        36  /* DRV8833 BIN2                      [ESTIMATE] */
+#define CAPE_B_GPIO_DRV_STBY        37  /* DRV8833 STBY (active-high)        [ESTIMATE] */
+#define CAPE_B_GPIO_DRV_FAULT_N     38  /* DRV8833 /FAULT (active-low)       [ESTIMATE] */
+
+/* HX711 24-bit ADC (cargo load cell). */
+#define CAPE_B_GPIO_HX711_DOUT      39  /* HX711 DOUT (serial data out)      [ESTIMATE] */
+#define CAPE_B_GPIO_HX711_SCK       40  /* HX711 PD_SCK (clock / power-down) [ESTIMATE] */
+
+/* ATF16V8BQL CPLD (write-protect logic + latch control). */
+#define CAPE_B_GPIO_CPLD_I1         41  /* CPLD input 1                      [ESTIMATE] */
+#define CAPE_B_GPIO_CPLD_I2         42  /* CPLD input 2                      [ESTIMATE] */
+#define CAPE_B_GPIO_CPLD_I3         43  /* CPLD input 3                      [ESTIMATE] */
+#define CAPE_B_GPIO_CPLD_I4         44  /* CPLD input 4                      [ESTIMATE] */
+#define CAPE_B_GPIO_CPLD_I5         45  /* CPLD input 5                      [ESTIMATE] */
+#define CAPE_B_GPIO_CPLD_I6         46  /* CPLD input 6                      [ESTIMATE] */
+#define CAPE_B_GPIO_CPLD_O1         47  /* CPLD output 1 (read-only from SoC)[ESTIMATE] */
+#define CAPE_B_GPIO_CPLD_O2         48  /* CPLD output 2 (read-only from SoC)[ESTIMATE] */
+#define CAPE_B_GPIO_CPLD_O3         49  /* CPLD output 3                     [ESTIMATE] */
+#define CAPE_B_GPIO_CPLD_O4         50  /* CPLD output 4                     [ESTIMATE] */
+#define CAPE_B_GPIO_CPLD_OE_N       51  /* CPLD /OE (output enable)          [ESTIMATE] */
+
+/* Mechanical latch / payload bay position sensors. */
+#define CAPE_B_GPIO_LATCH_STATUS1   52  /* Latch 1 closed sensor             [ESTIMATE] */
+#define CAPE_B_GPIO_LATCH_STATUS2   53  /* Latch 2 closed sensor             [ESTIMATE] */
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * Section 1 — Pin control configurations
+ * ─────────────────────────────────────────────────────────────────────────*/
+&main_pmx0 {
+
+    /* SPI1: SLB9670 TPM, RFM95W LoRa, W25Q128JV NOR flash, logging microSD.
+     * All four chip-selects are GPIO-controlled for independent sequencing.
+     * Only the four-wire bus (CLK, D0/MOSI, D1/MISO) pins appear here.    */
+    cape_b_spi1_pins: cape-b-spi1-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE — SPI1 pad area, verify in SPRUJ40 Table 7-1] */
+            AM62X_IOPAD(0x01e0, PIN_INPUT,  0) /* SPI1_CLK                   */
+            AM62X_IOPAD(0x01e4, PIN_OUTPUT, 0) /* SPI1_D0  (MOSI)            */
+            AM62X_IOPAD(0x01e8, PIN_INPUT,  0) /* SPI1_D1  (MISO)            */
+        >;
+    };
+
+    /* UART2: RFD900x SiK 915 MHz MAVLink telemetry.
+     * Full hardware flow control (CTS/RTS) is required by RFD900x at
+     * 57600-921600 baud; both flow-control pins must be muxed.             */
+    cape_b_uart2_pins: cape-b-uart2-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE — UART2 pad area, mux mode 4 or 5] */
+            AM62X_IOPAD(0x0060, PIN_INPUT,  4) /* UART2_RXD                  */
+            AM62X_IOPAD(0x0064, PIN_OUTPUT, 4) /* UART2_TXD                  */
+            AM62X_IOPAD(0x0068, PIN_INPUT,  4) /* UART2_CTSn                 */
+            AM62X_IOPAD(0x006c, PIN_OUTPUT, 4) /* UART2_RTSn                 */
+        >;
+    };
+
+    /* UART4: RS-485 half-duplex via MAX3485E.
+     * Direction toggled by DE / RE# GPIOs or TIOCSRS485 kernel support.   */
+    cape_b_uart4_pins: cape-b-uart4-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE — GPMC0_AD area, mux4 — same offsets as Cape-A] */
+            AM62X_IOPAD(0x0058, PIN_INPUT,  4) /* UART4_RXD                  */
+            AM62X_IOPAD(0x005c, PIN_OUTPUT, 4) /* UART4_TXD                  */
+        >;
+    };
+
+    /* UART5: XCVR-49MHZ-1 RCRS 49 MHz AX.25 link.
+     * 57600 baud 8N1; PTT_N and TDDS_SYNC are GPIO (not UART signals).    */
+    cape_b_uart5_pins: cape-b-uart5-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE — GPMC0_AD area, mux4] */
+            AM62X_IOPAD(0x0070, PIN_INPUT,  4) /* UART5_RXD                  */
+            AM62X_IOPAD(0x0074, PIN_OUTPUT, 4) /* UART5_TXD                  */
+        >;
+    };
+
+    /* MCAN0: CAN FD via ATA6561 transceiver.                              */
+    cape_b_mcan0_pins: cape-b-mcan0-pins {
+        pinctrl-single,pins = <
+            /* [CONFIRMED — k3-am625-sk.dtsi] */
+            AM62X_IOPAD(0x01d8, PIN_OUTPUT, 0) /* (C15) MCAN0_TX             */
+            AM62X_IOPAD(0x01dc, PIN_INPUT,  0) /* (E15) MCAN0_RX             */
+        >;
+    };
+
+    /* CPSW3G MDIO: shared MDC/MDIO bus for both DP83825I PHYs.           */
+    cape_b_mdio_pins: cape-b-mdio-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE — dedicated MDIO pad area] */
+            AM62X_IOPAD(0x0160, PIN_OUTPUT,       0) /* MDC                   */
+            AM62X_IOPAD(0x0164, PIN_INPUT_PULLUP, 0) /* MDIO                  */
+        >;
+    };
+
+    /* CPSW3G Port 1 — RMII (DP83825I #1, uplink ring segment).           */
+    cape_b_rmii1_pins: cape-b-rmii1-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE — RGMII1 pad area, mux4 for RMII] */
+            AM62X_IOPAD(0x0120, PIN_INPUT,  4) /* RMII1_RXD0                 */
+            AM62X_IOPAD(0x0124, PIN_INPUT,  4) /* RMII1_RXD1                 */
+            AM62X_IOPAD(0x0128, PIN_INPUT,  4) /* RMII1_RX_ER                */
+            AM62X_IOPAD(0x012c, PIN_INPUT,  4) /* RMII1_CRS_DV               */
+            AM62X_IOPAD(0x0130, PIN_OUTPUT, 4) /* RMII1_TXD0                 */
+            AM62X_IOPAD(0x0134, PIN_OUTPUT, 4) /* RMII1_TXD1                 */
+            AM62X_IOPAD(0x0138, PIN_OUTPUT, 4) /* RMII1_TX_EN                */
+            AM62X_IOPAD(0x013c, PIN_INPUT,  4) /* RMII1_REF_CLK (50 MHz in)  */
+        >;
+    };
+
+    /* CPSW3G Port 2 — RMII (DP83825I #2, downlink ring segment).         */
+    cape_b_rmii2_pins: cape-b-rmii2-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE — RGMII2 pad area, mux4 for RMII] */
+            AM62X_IOPAD(0x0148, PIN_INPUT,  4) /* RMII2_RXD0                 */
+            AM62X_IOPAD(0x014c, PIN_INPUT,  4) /* RMII2_RXD1                 */
+            AM62X_IOPAD(0x0150, PIN_INPUT,  4) /* RMII2_RX_ER                */
+            AM62X_IOPAD(0x0154, PIN_INPUT,  4) /* RMII2_CRS_DV               */
+            AM62X_IOPAD(0x0158, PIN_OUTPUT, 4) /* RMII2_TXD0                 */
+            AM62X_IOPAD(0x015c, PIN_OUTPUT, 4) /* RMII2_TXD1                 */
+            AM62X_IOPAD(0x0168, PIN_OUTPUT, 4) /* RMII2_TX_EN                */
+            AM62X_IOPAD(0x016c, PIN_INPUT,  4) /* RMII2_REF_CLK              */
+        >;
+    };
+
+    /* SDIO: WL1837MOD 5 GHz 802.11ac + BT5 in 4-bit MMC mode.
+     * WL1837MOD requires 50 MHz SDIO clock and 4 data lines.              */
+    cape_b_sdio_pins: cape-b-sdio-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE — MMC1 pad area] */
+            AM62X_IOPAD(0x0220, PIN_INPUT_PULLUP, 0) /* MMC1_CLK              */
+            AM62X_IOPAD(0x0224, PIN_INPUT_PULLUP, 0) /* MMC1_CMD              */
+            AM62X_IOPAD(0x0228, PIN_INPUT_PULLUP, 0) /* MMC1_DAT0             */
+            AM62X_IOPAD(0x022c, PIN_INPUT_PULLUP, 0) /* MMC1_DAT1             */
+            AM62X_IOPAD(0x0230, PIN_INPUT_PULLUP, 0) /* MMC1_DAT2             */
+            AM62X_IOPAD(0x0234, PIN_INPUT_PULLUP, 0) /* MMC1_DAT3             */
+        >;
+    };
+
+    /* EHRPWM0: cargo servo / gimbal axis channels 0 and 1.               */
+    cape_b_ehrpwm0_pins: cape-b-ehrpwm0-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE] */
+            AM62X_IOPAD(0x01a0, PIN_OUTPUT, 6) /* EHRPWM0_A (CARGO_SERVO0)   */
+            AM62X_IOPAD(0x01a4, PIN_OUTPUT, 6) /* EHRPWM0_B (CARGO_SERVO1)   */
+        >;
+    };
+
+    /* PRU-ICSS0 PRU0: MIL-STD-1553B Manchester II codec pins.
+     * DS26LV31 TX driven by GPO0/GPO1; DS26LV32 RX read on GPI2/GPI3.   */
+    cape_b_pru0_1553_pins: cape-b-pru0-1553-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE — PRG0 GPIO pad area] */
+            AM62X_IOPAD(0x00d0, PIN_OUTPUT, 5) /* PRG0_PRU0_GPO0 → 1553_TX_P */
+            AM62X_IOPAD(0x00d4, PIN_OUTPUT, 5) /* PRG0_PRU0_GPO1 → 1553_TX_N */
+            AM62X_IOPAD(0x00d8, PIN_INPUT,  5) /* PRG0_PRU0_GPI2 ← 1553_RX_P */
+            AM62X_IOPAD(0x00dc, PIN_INPUT,  5) /* PRG0_PRU0_GPI3 ← 1553_RX_N */
+        >;
+    };
+
+    /* PRU-ICSS0 PRU1: cargo servo PWM ch 2-3 + XCVR TDDS_SYNC output.   */
+    cape_b_pru1_cargo_pins: cape-b-pru1-cargo-pins {
+        pinctrl-single,pins = <
+            /* [ESTIMATE] */
+            AM62X_IOPAD(0x00e0, PIN_OUTPUT, 5) /* PRG0_PRU1_GPO0 → SERVO2    */
+            AM62X_IOPAD(0x00e4, PIN_OUTPUT, 5) /* PRG0_PRU1_GPO1 → SERVO3    */
+            AM62X_IOPAD(0x00e8, PIN_OUTPUT, 5) /* PRG0_PRU1_GPO2 → TDDS_SYNC */
+        >;
+    };
+};
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * Section 2 — SPI1: TPM 2.0, LoRa 915 MHz, NOR flash, logging microSD
+ *
+ * All four devices share the SPI1 bus at 3.3 V LVTTL.  Individual chip-
+ * selects are GPIO-driven to allow per-device power sequencing and to avoid
+ * glitching inactive devices during bus transactions.
+ * ─────────────────────────────────────────────────────────────────────────*/
+&main_spi1 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_b_spi1_pins>;
+    cs-gpios = <&main_gpio0 CAPE_B_GPIO_TPM_CS   GPIO_ACTIVE_LOW>,
+               <&main_gpio0 CAPE_B_GPIO_LORA_CS  GPIO_ACTIVE_LOW>,
+               <&main_gpio0 CAPE_B_GPIO_FLASH_CS GPIO_ACTIVE_LOW>,
+               <&main_gpio0 CAPE_B_GPIO_SD_CS    GPIO_ACTIVE_LOW>;
+    #address-cells = <1>;
+    #size-cells = <0>;
+
+    /* SLB9670 TPM 2.0 — Infineon, SPI mode 0, 33 MHz max.
+     * Provides TPM-bound SHA-256 HMAC keys for all outbound radio frames.
+     * PCR measurements seeded from U-Boot measured-boot chain.
+     * Reference: Infineon SLB9670 datasheet, TPM 2.0 Part 3 commands.    */
+    tpm_slb9670: tpm@0 {
+        compatible = "infineon,slb9670";
+        reg = <0>;                           /* CS index 0 (TPM_CS GPIO)    */
+        spi-max-frequency = <33000000>;
+        interrupt-parent = <&main_gpio0>;
+        interrupts = <CAPE_B_GPIO_TPM_IRQ IRQ_TYPE_LEVEL_LOW>;
+        reset-gpios = <&main_gpio0 CAPE_B_GPIO_TPM_RST GPIO_ACTIVE_LOW>;
+    };
+
+    /* RFM95W LoRa 915 MHz — Semtech SX1276 core, SPI mode 0, 10 MHz max.
+     * Operates in 47 CFR Part 15 Subpart C unlicensed band (902-928 MHz).
+     * DIO0-DIO3 provide interrupt-driven TX-done, RX-done, CCA events.
+     * Used for out-of-band telemetry and command backup link.             */
+    lora_rfm95w: lora@1 {
+        compatible = "semtech,sx1276";
+        reg = <1>;                           /* CS index 1 (LORA_CS GPIO)   */
+        spi-max-frequency = <10000000>;
+        reset-gpios = <&main_gpio0 CAPE_B_GPIO_LORA_RESET GPIO_ACTIVE_LOW>;
+        /*
+         * DIO0 = TX done / RX done (primary IRQ).
+         * DIO1 = RX timeout / FHSS channel change.
+         * DIO2 = FHSS channel change.
+         * DIO3 = CAD (channel activity detection) done.
+         * All four interrupts wired; driver selects active ones per mode.
+         */
+        interrupts-extended =
+            <&main_gpio0 CAPE_B_GPIO_LORA_DIO0 IRQ_TYPE_EDGE_RISING>,
+            <&main_gpio0 CAPE_B_GPIO_LORA_DIO1 IRQ_TYPE_EDGE_RISING>,
+            <&main_gpio0 CAPE_B_GPIO_LORA_DIO2 IRQ_TYPE_EDGE_RISING>,
+            <&main_gpio0 CAPE_B_GPIO_LORA_DIO3 IRQ_TYPE_EDGE_RISING>;
+        interrupt-names = "dio0", "dio1", "dio2", "dio3";
+    };
+
+    /* W25Q128JV NOR Flash — Winbond, 128 Mbit (16 MiB), SPI mode 0.
+     * Used for persistent parameter storage and firmware staging.
+     * Mapped as MTD partition; write-protected by ATF16V8BQL CPLD WP line.
+     * Reference: W25Q128JV datasheet, Winbond, Rev L.                    */
+    nor_flash_w25q128: flash@2 {
+        compatible = "jedec,spi-nor";
+        reg = <2>;                           /* CS index 2 (FLASH_CS GPIO)  */
+        spi-max-frequency = <50000000>;
+        /* 104 MHz clock supported by W25Q128JV but limited to 50 MHz
+         * for noise margin on the Cape-B flex harness.                   */
+
+        partitions {
+            compatible = "fixed-partitions";
+            #address-cells = <1>;
+            #size-cells = <1>;
+
+            /* Bootloader parameters backup: 128 KiB at start of flash.   */
+            partition@0 {
+                label = "params";
+                reg = <0x000000 0x020000>;
+            };
+
+            /* Firmware staging area: 8 MiB.                              */
+            partition@20000 {
+                label = "firmware-staging";
+                reg = <0x020000 0x800000>;
+            };
+
+            /* Remaining space: key material backup (encrypted by TPM).   */
+            partition@820000 {
+                label = "key-backup";
+                reg = <0x820000 0x7e0000>;
+            };
+        };
+    };
+
+    /* Logging microSD in SPI mode.
+     * Hardware write-protect enforced by ATF16V8BQL CPLD — the CPLD
+     * asserts the microSD /WP line and prevents the SoC from de-asserting
+     * it without the correct CPLD input sequence (anti-tamper logging).
+     * Formatted ext4; mounted noexec,nosuid,nodev.                        */
+    log_sdcard: spi-mmc@3 {
+        compatible = "mmc-spi-slot";
+        reg = <3>;                           /* CS index 3 (SD_CS GPIO)     */
+        spi-max-frequency = <25000000>;
+        voltage-ranges = <3300 3300>;
+        /* gpios and other properties set by kernel mmc-spi-slot driver.  */
+    };
+};
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * Section 3 — UARTs
+ * ─────────────────────────────────────────────────────────────────────────*/
+
+/* UART2: RFD900x SiK 915 MHz MAVLink telemetry.
+ * Hardware flow control (CTS/RTS) is required to prevent packet loss at
+ * high data rates (115200-921600 baud).  The serenity-cn daemon opens this
+ * port with CRTSCTS set; RFD900x drives RTS low when ready to receive.    */
+&main_uart2 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_b_uart2_pins>;
+    /* uart-has-rtscts informs the driver that hardware flow control pins
+     * are connected.  Flow control is enabled by the daemon at open time. */
+    uart-has-rtscts;
+};
+
+/* UART4: RS-485 half-duplex via MAX3485E.
+ * Direction is toggled by DE and RE# GPIOs (or TIOCSRS485 if supported).
+ * Same configuration as Cape-A UART4 for inter-node RS-485 bus sharing.  */
+&main_uart4 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_b_uart4_pins>;
+    linux,rs485-enabled-at-boot-time;
+    rs485-rts-active-high;                   /* DE asserted high = TX       */
+    rs485-rx-during-tx;
+};
+
+/* UART5: XCVR-49MHZ-1 RCRS 49 MHz AX.25 link.
+ * 57600 baud 8N1.  PTT_N (CAPE_B_GPIO_PTT_N) and TDDS_SYNC
+ * (CAPE_B_GPIO_TDDS_SYNC) are managed by the serenity-cn daemon via
+ * libgpiod 2.x; they are not modelled as UART modem control lines.
+ *
+ * PTT sequencing: assert PTT_N ≥ 7 ms before first TX bit (5 ms required
+ * by 47 CFR 95.639; 2 ms margin added).  Release PTT_N after TX tail.
+ * Reference: serenity/firmware/cn/src/xcvr_kiss.c, xcvr_kiss_transmit().  */
+&main_uart5 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_b_uart5_pins>;
+};
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * Section 4 — CAN FD (MCAN0 + ATA6561 transceiver)
+ * Same physical CAN FD bus as Cape-A; each node bridges CAN FD ↔ 1553 ↔
+ * Ethernet to provide the redundant inter-node bus topology required by
+ * CLAUDE.md §"Onboard Communications".
+ * ─────────────────────────────────────────────────────────────────────────*/
+&main_mcan0 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_b_mcan0_pins>;
+    /* ATA6561 STB# is driven low (normal mode) by serenity-cn at startup.
+     * Standby mode (STB# high) is entered on watchdog timeout.           */
+
+    can-transceiver {
+        max-bitrate = <8000000>;             /* 8 Mbps FD data rate max     */
+    };
+};
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * Section 5 — Ethernet: CPSW3G + 2× DP83825I RMII PHY
+ * 8-node RSTP ring: CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4→(back to CN1).
+ * Each CN node connects two adjacent ring segments via its two PHYs.
+ * ─────────────────────────────────────────────────────────────────────────*/
+&cpsw3g {
+    status = "okay";
+};
+
+&cpsw3g_port1 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_b_rmii1_pins>;
+    phy-handle = <&eth_phy1>;
+    phy-mode = "rmii";
+    ti,mac-only;
+};
+
+&cpsw3g_port2 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_b_rmii2_pins>;
+    phy-handle = <&eth_phy2>;
+    phy-mode = "rmii";
+    ti,mac-only;
+};
+
+&cpsw3g_mdio {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_b_mdio_pins>;
+    clock-frequency = <1000000>;
+    #address-cells = <1>;
+    #size-cells = <0>;
+
+    /* DP83825I RMII PHY #1 — MDIO address 1 (PHYAD strap = 0b01).
+     * VERIFY strap resistors on Cape-B schematic for PHYAD[1:0].         */
+    eth_phy1: ethernet-phy@1 {
+        compatible = "ti,dp83825i", "ethernet-phy-ieee802.3-c22";
+        reg = <1>;
+        reset-gpios = <&main_gpio0 CAPE_B_GPIO_PHY1_RST_N GPIO_ACTIVE_LOW>;
+        reset-assert-us   = <25>;
+        reset-deassert-us = <2000>;
+        interrupt-parent = <&main_gpio0>;
+        interrupts = <CAPE_B_GPIO_PHY1_INT_N IRQ_TYPE_EDGE_FALLING>;
+    };
+
+    /* DP83825I RMII PHY #2 — MDIO address 2 (PHYAD strap = 0b10).       */
+    eth_phy2: ethernet-phy@2 {
+        compatible = "ti,dp83825i", "ethernet-phy-ieee802.3-c22";
+        reg = <2>;
+        reset-gpios = <&main_gpio0 CAPE_B_GPIO_PHY2_RST_N GPIO_ACTIVE_LOW>;
+        reset-assert-us   = <25>;
+        reset-deassert-us = <2000>;
+        interrupt-parent = <&main_gpio0>;
+        interrupts = <CAPE_B_GPIO_PHY2_INT_N IRQ_TYPE_EDGE_FALLING>;
+    };
+};
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * Section 6 — SDIO: WL1837MOD 802.11ac + Bluetooth 5.0
+ *
+ * The WL1837MOD (TI WiLink 8 family, SoC WL1837) provides:
+ *   - 802.11a/b/g/n/ac 2.4/5 GHz dual-band WiFi (SDIO 4-bit, 50 MHz)
+ *   - Bluetooth 5.0 + BLE (UART, separate node in DT)
+ *
+ * The module is connected to MMC1 (not the eMMC MMC0).
+ * WL_EN GPIO is toggled by the regulator fixed-regulator node below.
+ *
+ * Reference: WL1837MOD Integration Guide, SWRU516, Texas Instruments.
+ * ─────────────────────────────────────────────────────────────────────────*/
+
+/* Fixed regulator stub — enables WL1837MOD power via WL_EN GPIO.
+ * This node does not belong to a named kernel bus; it is placed here
+ * as a soc-level overlay fragment.                                        */
+/ {
+    fragment@100 {
+        target-path = "/";
+
+        __overlay__ {
+            wl1837_vdd: regulator-wl1837 {
+                compatible = "regulator-fixed";
+                regulator-name = "wl1837-vdd";
+                regulator-min-microvolt = <3300000>;
+                regulator-max-microvolt = <3300000>;
+                gpio = <&main_gpio0 CAPE_B_GPIO_WL_EN GPIO_ACTIVE_HIGH>;
+                enable-active-high;
+                startup-delay-us = <70000>;  /* WL1837 POR stabilise time  */
+            };
+        };
+    };
+};
+
+&sdhci1 {
+    /* MMC1 = SDIO port for WL1837MOD (NOT the logging microSD).
+     * The logging microSD is on SPI1 CS3 (spi-mmc-slot, Section 2).      */
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_b_sdio_pins>;
+    vmmc-supply = <&wl1837_vdd>;
+    bus-width = <4>;
+    cap-power-off-card;
+    keep-power-in-suspend;
+    /* non-removable: module is soldered, not a slot.                      */
+    non-removable;
+
+    wl1837: wifi@1 {
+        compatible = "ti,wl1837";
+        reg = <1>;
+    };
+};
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * Section 7 — EHRPWM0: cargo servo / gimbal axis (channels 0 and 1)
+ *
+ * 50 Hz standard RC servo timing (1000-2000 µs pulse, 20 ms period).
+ * Channels 2-3 are produced by PRU1 (see Section 8).
+ * ─────────────────────────────────────────────────────────────────────────*/
+&epwm0 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_b_ehrpwm0_pins>;
+};
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * Section 8 — PRU-ICSS0: MIL-STD-1553B (PRU0) and cargo/TDDS (PRU1)
+ *
+ * PRU0 firmware: serenity-pru0-1553.out
+ *   Same MIL-STD-1553B Manchester II codec as Cape-A PRU0.
+ *   On CN nodes this PRU runs exclusively as Remote Terminal (RT).
+ *   BC election happens on the CAN FD heartbeat bus; CN nodes do not
+ *   participate in BC election.
+ *   DS26LV31 TX: PRG0_PRU0_GPO0 (TX_P), GPO1 (TX_N).
+ *   DS26LV32 RX: PRG0_PRU0_GPI2 (RX_P), GPI3 (RX_N).
+ *   DS26LV31/32 OE#: main_gpio0 CAPE_B_GPIO_1553_OE1_N / OE2_N.
+ *   Coupling transformer: PE-68515, 1:1.41, 78 Ω stub resistors.
+ *
+ * PRU1 firmware: serenity-pru1-cargo.out
+ *   Two 50 Hz servo PWM channels (SERVO2, SERVO3) for cargo bay door
+ *   actuators with 1 µs resolution.
+ *   One TDDS_SYNC output line: generates a 10 ms strobe to the Si5351A
+ *   DDS after each PTT_N assert, enabling accurate channel frequency
+ *   lock before the first TX bit per 47 CFR 95.629(b)(1).
+ *
+ * Firmware binaries installed to /lib/firmware/serenity/ on the target.
+ * ─────────────────────────────────────────────────────────────────────────*/
+&icssg0_pru0 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_b_pru0_1553_pins>;
+    firmware-name = "serenity/pru0-mil1553.out";
+};
+
+&icssg0_pru1 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_b_pru1_cargo_pins>;
+    firmware-name = "serenity/pru1-cargo-servo.out";
+};
