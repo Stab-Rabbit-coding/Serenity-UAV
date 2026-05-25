@@ -90,6 +90,13 @@ Last updated: 2026-05-24
 - [x] **Verify bom_revN.csv ↔ bom_revN.json sync** — CSV was updated 2026-05-23;
   JSON was last written 2026-05-22.  Confirm both reflect the same component list
   and quantities.
+  *(done 2026-05-25 — compared all 60 CSV rows against JSON; JSON was missing "ref"
+  keys for 25 parts (PIANO-WIRE-0.8, BATT-6S-4000/2800, PDB-BEC, N20-WINCH,
+  HX711-LC, CF-BAR-6X3, CF-TUBE-12MM, CF-PLATE-2MM, FOAM-PU-2LB, WIRE-10/16/28AWG
+  + CONDUIT-PTFE, FIL-PETG/CF-PETG/TPU-95A, LED-WS2812B, gear refs SECTOR/BEVEL/
+  PINION-M05, all PRINT-* entries, and two print_schedule entries PRINT-EDF-MOTOR-MOUNT
+  + PRINT-THRUST-TUBE that were in CSV but absent from JSON print_schedule array);
+  all 60 refs now present as structured "ref" keys in bom_revN.json; JSON valid)*
 
 ---
 
@@ -186,7 +193,10 @@ Design notes and BOM candidates are in `serenity/kicad/XCVR-49MHZ-1.md`.
 - [ ] **Export BOM** — add XCVR-49MHZ-1 line items to `serenity/docs/bom_revN.csv`
   and `bom_revN.json`.
 
-- [ ] **Update `PROJECT_INDEX.md`** to list XCVR-49MHZ-1 under PCB section.
+- [x] **Update `PROJECT_INDEX.md`** to list XCVR-49MHZ-1 under PCB section.
+  *(done — XCVR-49MHZ-1.kicad_pcb and .kicad_sch are already in the KiCad PCB
+  Source Files table at serenity/docs/PROJECT_INDEX.md lines 123-124; confirmed
+  2026-05-25)*
 
 ---
 
