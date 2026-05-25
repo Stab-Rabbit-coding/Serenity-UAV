@@ -2,128 +2,136 @@
 // s_cargo_sect_shell24.scad
 // Cargo gondola shell for Serenity Rev N 24" hull (s_cargo_sect.stl).
 //
-// Mounts:
-//   CARGO_CAM – 28 mm standard FPV camera, nadir-facing (downward),
-//               belly of cargo gondola for payload hoist monitoring.
+// Mounts (flush with outer mold line -- zero external protrusion):
+//   CARGO_CAM -- 28 mm standard FPV camera, nadir-facing (downward),
+//                belly of cargo gondola for payload hoist monitoring.
+//
+// Flush-mount design:
+//   Camera face sits flush at the gondola belly skin.  A 29x29x1 mm bezel
+//   recess on the exterior face seats the camera body; the lens protrudes
+//   through a 16 mm bore.  4x M2 countersunk flathead screws (DIN 7991)
+//   retain the camera from outside.  A 20x20x5 mm pocket on the interior
+//   houses the camera body.
 //
 // Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-// License: CC BY 4.0 – creativecommons.org/licenses/by/4.0
+// License: CC BY 4.0 -- creativecommons.org/licenses/by/4.0
 //
 // Shell derivation:
 //   18" centroid from s_cargo_sect_shell18.scad: (-76.64, -246.47, 56.02)
-//   24" centroid = 18" centroid × (2.9294 / 2.1974) = × 1.33333:
-//     CX =  -76.64 × 1.33333 = -102.19 mm
-//     CY = -246.47 × 1.33333 = -328.63 mm
-//     CZ =   56.02 × 1.33333 =   74.70 mm
+//   24" centroid = 18" centroid x (2.9294 / 2.1974) = x 1.33333:
+//     CX =  -76.64 x 1.33333 = -102.19 mm
+//     CY = -246.47 x 1.33333 = -328.63 mm
+//     CZ =   56.02 x 1.33333 =   74.70 mm
 //   Inner scale factors from s_cargo_sect_shell18.scad (2.5 mm absolute wall):
 //     INNER_SX = 0.965771
 //     INNER_SY = 0.967263
 //     INNER_SZ = 0.959167
 //
 // Coordinate system (24"-scaled STL world space):
-//   X – longitudinal, positive toward nose
-//   Y – lateral, positive toward starboard (right)
-//   Z – vertical, positive toward dorsal (up)
+//   X -- longitudinal, positive toward nose
+//   Y -- vertical,    positive toward dorsal (up)   NOTE: Y is up, not Z
+//   Z -- lateral,     positive toward port  (left)
 //
 // Note on cargo gondola geometry:
-//   The cargo section STL is the below-fuselage cargo gondola.  Its centroid
-//   at CY = -328.63 mm places it well below / to the side of the main keel in
-//   the original Thingiverse model's coordinate frame.  All mount positions
-//   below are in that same 24"-scaled STL world space.
+//   CY = -328.63 mm places the gondola well below the main fuselage keel in
+//   the Thingiverse model's coordinate frame.  The nadir (downward, -Y) face
+//   of the gondola is at approximately CY - half_ext_Y.
+//   half_ext_Y = 2.5 / (1 - 0.967263) = 76.3 mm
+//   Gondola belly (nadir face): CY - 76 = approx -405 mm
+//   All positions VERIFY by measuring rendered mesh in slicer.
 //
-// IMPORTANT: All mount positions are estimated.  Verify by rendering in
-// OpenSCAD and measuring the gondola belly cross-section before printing.
+// IMPORTANT: Verify gondola belly Y-coordinate in slicer before printing.
 // ============================================================
 
 SCALE_24  = 2.9294;   // 24" hull scale factor
 
-// ── Cargo shell centroid in 24"-scaled STL world coordinates ─────────────────
+// Cargo gondola centroid in 24"-scaled STL world coordinates
 CX = -102.19;   // mm
-CY = -328.63;   // mm
-CZ =   74.70;   // mm
+CY = -328.63;   // mm -- dorsal/ventral axis (positive = up)
+CZ =   74.70;   // mm -- lateral axis (positive = port)
 
-// ── Inner-shell scale factors (preserve 2.5 mm absolute wall thickness) ──────
+// Inner-shell scale factors (2.5 mm absolute wall)
 INNER_SX = 0.965771;
 INNER_SY = 0.967263;
 INNER_SZ = 0.959167;
 
-// ── Nominal wall thickness (used for aperture depth calculations) ─────────────
-WALL_T = 4.0;   // mm (conservative; nominal 2.5 mm + tolerance)
+// Conservative wall thickness for cutter overlap
+WALL_T = 4.0;   // mm
 
-// ── Cargo nadir camera mount dimensions (28 mm standard FPV format) ───────────
-//    Camera faces downward (-Z) to monitor payload hoist beneath gondola.
-//    28 mm FPV mount: 4× M2 screws on 14×14 mm grid; 16 mm lens aperture.
-FPV_BOSS_W  = 28.0;   // mm – square boss footprint
-FPV_BOSS_H  =  2.0;   // mm – boss protrusion below gondola belly (into airstream)
-FPV_APER_D  = 16.0;   // mm – lens aperture bore
-FPV_M2_D    =  2.2;   // mm – M2 screw clearance
-FPV_M2_S    = 14.0;   // mm – M2 hole spacing (14×14 mm grid)
-FPV_BOARD_W = 20.0;   // mm – camera PCB pocket width (square, interior)
-FPV_BOARD_D =  5.0;   // mm – camera PCB pocket depth
+// FPV camera flush recess dimensions (28 mm standard FPV format)
+//   Exterior: 16 mm bore + 29x29x1 mm bezel recess + 4x M2 c/s holes.
+//   Interior: 20x20x5 mm camera body pocket.
+FPV_APER_D   = 16.0;   // mm -- lens aperture bore
+FPV_BEZ_W    = 29.0;   // mm -- bezel recess width (28 mm camera + 0.5 mm per side)
+FPV_BEZ_DEP  =  1.0;   // mm -- bezel recess depth (camera face sits flush with skin)
+FPV_M2_D     =  2.2;   // mm -- M2 through-hole clearance
+FPV_M2_S     = 14.0;   // mm -- M2 hole spacing (14x14 mm standard grid)
+FPV_CSK2_OD  =  4.5;   // mm -- M2 flathead c/s OD (DIN 7991, 90 deg)
+FPV_CSK2_D   =  1.2;   // mm -- M2 c/s depth
+FPV_BOARD_W  = 20.0;   // mm -- camera body pocket width (square)
+FPV_BOARD_D  =  5.0;   // mm -- camera body pocket depth (interior)
 
 $fn = 64;
 
-// ── Orientation rotation vectors ──────────────────────────────────────────────
-//    Default cylinder axis = +Z.  Rotate to redirect boss toward target axis.
-NADIR_ROT = [ 180, 0, 0 ];   // boss points in -Z (downward / ventral)
+// Orientation rotation vectors
+//   STL axes: X=forward, Y=dorsal (+up), Z=port (+left).
+//   Rx(+90 deg) maps +Z -> -Y (nadir / downward): rotate([ 90, 0, 0 ])
+NADIR_ROT = [ 90, 0, 0 ];   // aperture faces -Y (toward ground)
 
-// ── Cargo nadir camera position ───────────────────────────────────────────────
-//    Position is in 24"-scaled STL world space (same frame as CX/CY/CZ above).
-//    Gondola belly is approximately CZ − gondola_half_height.
-//    VERIFY: measure gondola belly Z-coordinate in slicer after rendering.
-CARGO_CAM_POS = [ -102, -329, 35 ];   // VERIFY; Z=35 mm estimated gondola belly
+// Cargo nadir camera position
+//   Gondola belly (nadir face) estimated at CY - 76 = approx -405 mm.
+//   Camera centred on gondola X/Z centreline.
+//   VERIFY gondola belly Y-coordinate in slicer before printing.
+CARGO_CAM_POS = [ CX, CY - 76, CZ ];   // VERIFY: gondola belly, nadir face
 
-// ── Module: fpv_boss ─────────────────────────────────────────────────────────
-//    Square raised boss for 28 mm FPV camera; union into outer shell.
-// ────────────────────────────────────────────────────────────────────────────
-module fpv_boss(pos, rot) {
-    translate(pos)
-    rotate(rot)
-    translate([-FPV_BOSS_W / 2, -FPV_BOSS_W / 2, 0])
-    cube([FPV_BOSS_W, FPV_BOSS_W, FPV_BOSS_H]);
-}
-
-// ── Module: fpv_cut ──────────────────────────────────────────────────────────
-//    Lens aperture bore + 4× M2 through-holes + PCB pocket; subtract from union.
-// ────────────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------------
+// Module: fpv_cut
+//   Flush recess cutter for 28 mm FPV camera.  Zero protrusion above skin.
+//   Lens bore + bezel seating recess + 4x M2 c/s holes + camera body pocket.
+// ----------------------------------------------------------------------------
 module fpv_cut(pos, rot) {
     translate(pos)
     rotate(rot)
     translate([0, 0, -(WALL_T + 1)]) {
         // Lens aperture bore
-        cylinder(h = WALL_T + FPV_BOSS_H + 2, d = FPV_APER_D);
-        // 4× M2 through-holes at 14×14 mm grid
+        cylinder(h = WALL_T + 2, d = FPV_APER_D);
+
+        // Bezel seating recess: 1 mm deep at exterior face, 29x29 mm
+        translate([-FPV_BEZ_W / 2, -FPV_BEZ_W / 2, WALL_T + 1 - FPV_BEZ_DEP])
+        cube([FPV_BEZ_W, FPV_BEZ_W, FPV_BEZ_DEP + 1]);
+
+        // 4x M2 countersunk mount holes (14x14 mm grid)
         for (dx = [-FPV_M2_S / 2, FPV_M2_S / 2])
         for (dy = [-FPV_M2_S / 2, FPV_M2_S / 2])
-            translate([dx, dy, 0])
-            cylinder(h = WALL_T + FPV_BOSS_H + 2, d = FPV_M2_D);
-        // Camera PCB pocket on interior face (gondola interior)
+            translate([dx, dy, 0]) {
+                cylinder(h = WALL_T + 2, d = FPV_M2_D);
+                // Countersink at exterior face
+                translate([0, 0, WALL_T + 1 - FPV_CSK2_D])
+                cylinder(h = FPV_CSK2_D + 1, d1 = FPV_M2_D, d2 = FPV_CSK2_OD);
+            }
+
+        // Camera body pocket on interior face
         translate([-FPV_BOARD_W / 2, -FPV_BOARD_W / 2, 0])
         cube([FPV_BOARD_W, FPV_BOARD_W, FPV_BOARD_D + 1]);
     }
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
+// ============================================================
 // Main geometry
-// ══════════════════════════════════════════════════════════════════════════════
+// ============================================================
 difference() {
-    union() {
-        // ── Canonical 24" cargo gondola shell ─────────────────────────────
-        difference() {
-            scale([SCALE_24, SCALE_24, SCALE_24])
-                import("../../thingverse-serenity/files/s_cargo_sect.stl");
+    // Canonical 24" cargo gondola shell -- no additive bosses; flush cut only
+    difference() {
+        scale([SCALE_24, SCALE_24, SCALE_24])
+            import("../../thingverse-serenity/files/s_cargo_sect.stl");
 
-            translate([CX, CY, CZ])
-            scale([INNER_SX, INNER_SY, INNER_SZ])
-            translate([-CX, -CY, -CZ])
-            scale([SCALE_24, SCALE_24, SCALE_24])
-                import("../../thingverse-serenity/files/s_cargo_sect.stl");
-        }
-
-        // ── Nadir camera boss (protrudes downward from gondola belly) ──────
-        fpv_boss(CARGO_CAM_POS, NADIR_ROT);
+        translate([CX, CY, CZ])
+        scale([INNER_SX, INNER_SY, INNER_SZ])
+        translate([-CX, -CY, -CZ])
+        scale([SCALE_24, SCALE_24, SCALE_24])
+            import("../../thingverse-serenity/files/s_cargo_sect.stl");
     }
 
-    // ── Camera aperture and through-holes ─────────────────────────────────
+    // Nadir camera flush aperture
     fpv_cut(CARGO_CAM_POS, NADIR_ROT);
 }
