@@ -25,7 +25,7 @@
 <text x="24" y="46" font-family="'OpenDyslexic',sans-serif" font-size="11" fill="#c8dff0">Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · CC BY 4.0 · 2026</text>
 <rect x="1040" y="8" width="144" height="48" rx="6" fill="#ff7518"/>
 <text x="1112" y="29" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">STEP</text>
-<text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">8 / 18</text>
+<text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">8 / 26</text>
 <rect x="0" y="64" width="1200" height="40" fill="#dde4ea" rx="0"/>
 <text x="24" y="90" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 3 — GEAR NOZZLE ASSEMBLY</text>
 <text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">BamJr remix CC BY 4.0 · sector/bevel/crown gear train</text>
@@ -42,7 +42,7 @@
 <text x="800" y="158" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Nozzle outer housing</text>
 <rect x="768" y="167" width="26" height="16" rx="4" fill="#006db7" stroke="#222222" stroke-width="1"/>
 <text x="781" y="180" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2×</text>
-<text x="800" y="180" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Nozzle inner ring 70mm</text>
+<text x="800" y="180" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Nozzle inner ring 50mm</text>
 <rect x="768" y="189" width="26" height="16" rx="4" fill="#00838f" stroke="#222222" stroke-width="1"/>
 <text x="781" y="202" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">16×</text>
 <text x="800" y="202" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Flaps × 8 per nacelle</text>
@@ -51,29 +51,29 @@
 <text x="800" y="224" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Sector gear 22mm</text>
 <rect x="768" y="233" width="26" height="16" rx="4" fill="#6a1b9a" stroke="#222222" stroke-width="1"/>
 <text x="781" y="246" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2×</text>
-<text x="800" y="246" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Crown pinion 10T M0.5</text>
+<text x="800" y="246" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Crown pinion 12T M=1.0</text>
 <rect x="768" y="255" width="26" height="16" rx="4" fill="#2e7d32" stroke="#222222" stroke-width="1"/>
 <text x="781" y="268" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4×</text>
-<text x="800" y="268" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Bevel pair 14T M0.5</text>
+<text x="800" y="268" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Bevel pair 14T M=1.0</text>
 <rect x="760" y="308" width="416" height="216" rx="8" fill="#fffdf6" stroke="#607080" stroke-width="1.5"/>
 <rect x="760" y="308" width="416" height="28" rx="8" fill="#607080"/>
 <rect x="760" y="324" width="416" height="12" fill="#607080"/>
 <text x="968" y="327" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">INSTRUCTIONS</text>
 <circle cx="776" cy="343" r="9" fill="#006db7"/>
 <text x="776" y="347" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1</text>
-<text x="792" y="348" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Insert M1.5×8mm pivot pins through all 8 flap hinge holes · oil each pin</text>
+<text x="792" y="348" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Install 8 nozzle petals on 3mm hinge pins · piano wire link ring through all petal lugs</text>
 <circle cx="776" cy="367" r="9" fill="#006db7"/>
 <text x="776" y="371" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
 <text x="792" y="372" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Thread inner ring into outer housing — rotate smoothly with light pressure</text>
 <circle cx="776" cy="391" r="9" fill="#006db7"/>
 <text x="776" y="395" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
-<text x="792" y="396" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Mount SG90 bracket on outer housing (FUSELAGE nozzle only — NOT nacelle)</text>
+<text x="792" y="396" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Nacelle nozzle is PASSIVE (gear-linked to tilt) — no servo; rear nozzle uses SG90</text>
 <circle cx="776" cy="415" r="9" fill="#006db7"/>
 <text x="776" y="419" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4</text>
-<text x="792" y="420" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Bayonet-lock assembled nozzle onto nacelle aft end (quarter turn)</text>
+<text x="792" y="420" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Press nozzle base ring onto nacelle aft exit face at Z=0</text>
 <circle cx="776" cy="439" r="9" fill="#006db7"/>
 <text x="776" y="443" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">5</text>
-<text x="792" y="444" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Press-fit crown pinion onto 3mm CF longitudinal shaft · Loctite 638</text>
+<text x="792" y="444" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Install crown pinion (12T) on 3mm CF shaft at Z=133mm; verify mesh with nozzle ring rack</text>
 <circle cx="776" cy="463" r="9" fill="#006db7"/>
 <text x="776" y="467" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">6</text>
 <text x="792" y="468" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Install sector gear on tilt bracket · adjust mesh for 0.1-0.2mm backlash</text>
@@ -82,7 +82,7 @@
 <text x="792" y="492" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Sweep nacelle 0°→90°: verify nozzle closes/opens smoothly</text>
 <rect x="760" y="536" width="416" height="36" rx="6" fill="#fffac0" stroke="#ff7518" stroke-width="2"/><text x="778" y="551" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ff7518">⚠</text><text x="796" y="558" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Gear ratio: 90° nacelle = 70.7° ring rotation. Verify exit: 36mm closed, 42mm open</text>
 <rect x="760" y="580" width="416" height="32" rx="6" fill="#b2ebf2" stroke="#00838f" stroke-width="1.5"/><text x="770" y="594" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#00838f">ℹ</text><text x="786" y="600" font-family="'OpenDyslexic',sans-serif" font-size="9.5" fill="#222222">Nacelle nozzle has NO servo — passive gear coupling only</text>
-<rect x="760" y="620" width="416" height="32" rx="6" fill="#b2ebf2" stroke="#00838f" stroke-width="1.5"/><text x="770" y="634" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#00838f">ℹ</text><text x="786" y="640" font-family="'OpenDyslexic',sans-serif" font-size="9.5" fill="#222222">Fuselage 40mm nozzle uses SG90 servo → Pico 2 GP15</text>
+<rect x="760" y="620" width="416" height="32" rx="6" fill="#b2ebf2" stroke="#00838f" stroke-width="1.5"/><text x="770" y="634" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#00838f">ℹ</text><text x="786" y="640" font-family="'OpenDyslexic',sans-serif" font-size="9.5" fill="#222222">Fuselage 40mm nozzle uses SG90 servo → PocketBeagle2 GP15</text>
 <polygon points="352.4,387.0 341.7,382.3 341.7,400.3 352.4,405.0" fill="#dde4ea" stroke="#607080" stroke-width="2"/>
 <polygon points="341.7,382.3 329.3,379.3 329.3,397.3 341.7,400.3" fill="#dde4ea" stroke="#607080" stroke-width="2"/>
 <polygon points="329.3,379.3 316.0,378.3 316.0,396.3 329.3,397.3" fill="#dde4ea" stroke="#607080" stroke-width="2"/>

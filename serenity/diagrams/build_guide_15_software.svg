@@ -25,10 +25,10 @@
 <text x="24" y="46" font-family="'OpenDyslexic',sans-serif" font-size="11" fill="#c8dff0">Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · CC BY 4.0 · 2026</text>
 <rect x="1040" y="8" width="144" height="48" rx="6" fill="#ff7518"/>
 <text x="1112" y="29" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">STEP</text>
-<text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">15 / 18</text>
+<text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">15 / 26</text>
 <rect x="0" y="64" width="1200" height="40" fill="#dde4ea" rx="0"/>
 <text x="24" y="90" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 7 — SOFTWARE FLASH &amp; CONFIGURE</text>
-<text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">Pico 2 firmware · CM4 OS · packages · TPM</text>
+<text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">PocketBeagle2/AM6254 Debian 12 · MAVLink-router · PRU 1553</text>
 <rect x="0" y="872" width="1200" height="28" fill="#006db7"/>
 <text x="600" y="890" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
 <rect x="16" y="112" width="720" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
@@ -52,19 +52,19 @@
 <text x="968" y="261" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">INSTRUCTIONS</text>
 <circle cx="776" cy="277" r="9" fill="#006db7"/>
 <text x="776" y="281" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1</text>
-<text x="792" y="282" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Flash Pico 2: hold BOOTSEL → USB → drag firmware.uf2 to drive</text>
+<text x="792" y="282" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Flash PocketBeagle2 (AM6254): write Debian 12 image to μSD via balena-etcher</text>
 <circle cx="776" cy="301" r="9" fill="#006db7"/>
 <text x="776" y="305" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
-<text x="792" y="306" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Verify Pico 2: GP25 LED blinks 1Hz = firmware running</text>
+<text x="792" y="306" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Set hostname, enable SSH; boot PB2; apt install mavlink-router</text>
 <circle cx="776" cy="325" r="9" fill="#006db7"/>
 <text x="776" y="329" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
 <text x="792" y="330" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Flash CM4 OS μSD: rpi-imager → RPi OS Lite 64-bit (bookworm)</text>
 <circle cx="776" cy="349" r="9" fill="#006db7"/>
 <text x="776" y="353" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4</text>
-<text x="792" y="354" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">rpi-imager Advanced: set hostname=serenity · enable SSH · set WiFi</text>
+<text x="792" y="354" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Configure MIL-STD-1553B PRU firmware on each AM6254 PRU0 core</text>
 <circle cx="776" cy="373" r="9" fill="#006db7"/>
 <text x="776" y="377" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">5</text>
-<text x="792" y="378" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Insert OS μSD in CM4-CARRIER-1 slot · boot CM4 · SSH in</text>
+<text x="792" y="378" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Test RSTP ring: all 8 nodes ping in ≤10ms · CAN FD loopback OK</text>
 <circle cx="776" cy="397" r="9" fill="#006db7"/>
 <text x="776" y="401" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">6</text>
 <text x="792" y="402" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Run apt install and pip3 install commands shown below</text>
@@ -94,7 +94,7 @@
 <polygon points="436.0,413.0 492.3,380.5 447.3,354.5 391.0,387.0"   fill="#e8f5e9"   stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="436.0,408.0 492.3,375.5 492.3,380.5 436.0,413.0" fill="#2e7d32" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
 <polygon points="492.3,375.5 447.3,349.5 447.3,354.5 492.3,380.5" fill="#2e7d32" stroke="#222222" stroke-width="2" stroke-linejoin="round"/>
-<text x="468" y="428" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#ffffff">CM4 Lite</text>
+<text x="468" y="428" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#ffffff">PocketBeagle2</text>
 <circle cx="516" cy="398" r="18" fill="#ff7518" stroke="#222222" stroke-width="1.5"/>
 <text x="516" y="402" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">2</text>
 <text x="541" y="390" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#ff7518">Flash OS μSD with rpi-imager</text>

@@ -31,12 +31,12 @@
 
 <!-- Title bar -->
 <rect x="0" y="0" width="960" height="32" fill="#111827"/>
-<text x="12" y="20" font-family="'OpenDyslexic Mono',monospace" font-size="10" fill="rgba(0,229,255,0.9)" letter-spacing="2" font-weight="bold">SERENITY-CLASS TILTROTOR — PHASED BUILD PLAN (REV J)</text>
+<text x="12" y="20" font-family="'OpenDyslexic Mono',monospace" font-size="10" fill="rgba(0,229,255,0.9)" letter-spacing="2" font-weight="bold">SERENITY-CLASS TILTROTOR — PHASED BUILD PLAN (REV O)</text>
 <text x="948" y="20" text-anchor="end" font-family="'OpenDyslexic Mono',monospace" font-size="8" fill="rgba(163,230,53,0.85)">© 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP · CC BY 4.0</text>
 
 <!-- Sub-title bar -->
 <rect x="0" y="32" width="960" height="18" fill="#0d1117"/>
-<text x="480" y="44" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="rgba(255,255,255,0.45)">9 phases · first flight at Phase 3 (~$670) · full performance at Phase 7 (~$1,553 total) · install ALL conduits/voids/mounts in Phase 1 before foam pour</text>
+<text x="480" y="44" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="rgba(255,255,255,0.45)">10 phases (0-9) · first flight at Phase 6 (~$640) · full 8-node at Phase 7 (~$1,120) · total ~$1,900 · install ALL conduits/voids/mounts in Phase 1 before foam pour</text>
 
 <!-- ══════════════════════ ROW 1: Phases 0, 1, 2 ══════════════════════ -->
 
@@ -49,12 +49,12 @@
 <text x="100" y="73" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#2dd4bf" font-weight="bold">PRINT ALL PARTS + CUT CF</text>
 <text x="18" y="99" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Dry filament 6h @ 65°C · install hardened steel nozzle</text>
 <text x="18" y="114" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Print ALL hull sections (PETG 8% gyroid 0.20mm)</text>
-<text x="18" y="129" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Print BOTH nacelle pods: 80mm ID (Phase 2) + 83mm ID (Phase 7)</text>
-<text x="18" y="144" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Print all nozzle parts, tilt brackets, cargo gondola, ToF mounts</text>
+<text x="18" y="129" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Print 2× nacelle_pod_50mm_tandem (CF-PETG, 40% gyroid, 4 walls)</text>
+<text x="18" y="144" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Print nozzle iris parts, s_wing_nacelle_pylon_revo.scad, cargo gondola, ToF mounts</text>
 <text x="18" y="159" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Print access-panel frames ×6 + lids ×6 (100% infill 2mm wall)</text>
 <text x="18" y="174" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Print TPU skids, cargo cradle, clamshell door halves</text>
-<text x="18" y="189" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Resin-print or source M0.5 bevel/pinion/crown gear set</text>
-<text x="18" y="204" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Cut CF keel 457.2mm · spars 2×300mm · ring frames · pivot rods</text>
+<text x="18" y="189" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Print M=1.0 sector/bevel/pinion/crown gear set at 0.12mm layer height</text>
+<text x="18" y="204" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Cut CF keel 620mm · spars 2×380mm · ring frames · 4mm CF pivot rods</text>
 <text x="18" y="219" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Dry-fit: keel threads all hull sections · pod ID calipered vs EDF OD</text>
 <rect x="12" y="242" width="298" height="34" rx="0" fill="#0d2222"/>
 <rect x="12" y="242" width="298" height="34" rx="0" fill="none" stroke="#2dd4bf" stroke-width="0.5" opacity="0.4"/>
@@ -73,10 +73,10 @@
 <text x="336" y="129" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Bond 12× ToF sensor PETG flush-mounts into hull cutouts</text>
 <text x="336" y="144" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Install M3 cargo hard-point threaded inserts (×4) belly</text>
 <text x="336" y="159" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Install SMA bulkheads: belly (SiK 915MHz) + dorsal (RCRS)</text>
-<text x="336" y="174" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Drill GPS coax hole at cockpit roof 59mm from nose</text>
-<text x="336" y="189" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Feed 6× PTFE conduits + pull strings nose-to-tail (label both ends)</text>
+<text x="336" y="174" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Install GPS patch recess at mid-fuselage dorsal sta 140mm</text>
+<text x="336" y="189" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Feed 8× PTFE conduits + pull strings nose-to-tail (label both ends)</text>
 <text x="336" y="204" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Insert waxed EPS void formers A–E · epoxy hull to keel · cure 12h</text>
-<text x="336" y="219" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• FOAM POUR X-30 (≤60mL batches, 24h cure) · remove formers · bond caps</text>
+<text x="336" y="219" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• FOAM POUR X-30 (≤60mL batches per panel, 24h cure) · remove formers · fit panels</text>
 <rect x="330" y="242" width="298" height="34" rx="0" fill="#080e14"/>
 <rect x="330" y="242" width="298" height="34" rx="0" fill="none" stroke="#ff4444" stroke-width="1.5" opacity="0.7"/>
 <text x="336" y="254" font-family="'OpenDyslexic',sans-serif" font-size="7" fill="#ff6666" font-weight="bold">⚠ POINT OF NO RETURN — verify ALL provisions before foam pour</text>
@@ -89,14 +89,14 @@
 <rect x="656" y="61" width="74" height="16" rx="3" fill="#ff6b35" opacity="0.9"/>
 <text x="693" y="73" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#07090e" font-weight="bold">PHASE 2</text>
 <text x="736" y="73" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#ff6b35" font-weight="bold">NACELLE MECH + BUDGET EDFs</text>
-<text x="654" y="99" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Press 4× MR63ZZ bearings flush ±0.2mm into nacelle pivot sockets</text>
-<text x="654" y="114" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Thread 8mm CF pivot rod · set screw + Loctite 243</text>
-<text x="654" y="129" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Install 2× MG90S tilt servos · 140° bracket (hard stop) · 18mm horn</text>
-<text x="654" y="144" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Install budget 80mm EDFs in nacelle_pod_80mm.stl · cap motor leads</text>
-<text x="654" y="159" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Install XFLY X4 PRO 40mm (final fuselage EDF) in engine bell</text>
+<text x="654" y="99" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Press 4× MF104ZZ flanged bearings into pivot housing bores (2 per nacelle)</text>
+<text x="654" y="114" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Thread 4mm CF pivot rod; nacelle CG pivot at Z=83mm from intake</text>
+<text x="654" y="129" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Install 2× DS3218MG tilt servos (≥25kg·cm @ 6V); hard stops -5°/140°</text>
+<text x="654" y="144" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Install 4× 50mm 6S EDFs (2 per nacelle tandem); verify CW/CCW rotation</text>
+<text x="654" y="159" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Install 1× 120mm 6S EDF in plenum outlet bell at sta ~430mm</text>
 <text x="654" y="174" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Solder WS2812C nav LEDs: PORT=RED · STBD=GREEN · epoxy seal</text>
-<text x="654" y="189" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Assemble gear nozzle trains ×3 (bevel→shaft→crown→ring) · SG90 servos</text>
-<text x="654" y="204" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Nozzle sweep open=42mm / closed=36mm (verify with calipers)</text>
+<text x="654" y="189" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Assemble gear nozzle trains ×2 nacelle (passive) + 1× rear (SG90 servo)</text>
+<text x="654" y="204" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Nozzle sweep: open=42mm exit · closed=36mm exit; verify with calipers</text>
 <text x="654" y="219" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Verify blade clearance at 0°, 90°, 115° nacelle angles</text>
 <rect x="648" y="242" width="300" height="34" rx="0" fill="#120a04"/>
 <text x="654" y="255" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="#ff6b35">TEST: sweep ×10 each · nozzle 42/36mm · LED polarity · 140° hard stop</text>
@@ -113,14 +113,14 @@
 <text x="100" y="311" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#4ade80" font-weight="bold">MINIMUM VIABLE FLYER</text>
 <!-- Star milestone marker -->
 <use href="#star" transform="translate(293,311)" />
-<text x="18" y="337" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• 2× budget 80A BLHeli32 ESC + 1× BLHeli32 40A · XT90 PDB · 5V BEC</text>
-<text x="18" y="352" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Node 1: CM4 Lite + CM4-CARRIER-2 + SENSORHAT-1 + COMMS-HAT-SWITCH</text>
-<text x="18" y="367" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• SENSORHAT-1 carries XIAO RP2350 real-time flight co-processor</text>
-<text x="18" y="382" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• SiK 915MHz radio (on COMMS-HAT-SWITCH) + 49MHz RCRS-49 radio</text>
-<text x="18" y="397" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• u-blox M10Q GPS · nav lights chain GP26 · 6S 4000mAh battery</text>
-<text x="18" y="412" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• CPLD write-blocker flash · STM32 OTP fuses burn · TPM provision</text>
-<text x="18" y="427" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Flash XIAO RP2350 firmware · boot CM4 · install mavlink-router</text>
-<text x="18" y="442" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• CG at 190mm · ESC calibration · servo calibration · radio check</text>
+<text x="18" y="337" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• 4× BLHeli32 40A ESC (50mm EDFs) + 1× BLHeli32 80A (120mm rear) · Dual BEC PDB</text>
+<text x="18" y="352" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Nodes FC1+CN1+FC2+CN2: 4× PocketBeagle2 + CAPE-A-1 + CAPE-B-1</text>
+<text x="18" y="367" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• MIL-STD-1553B PRU firmware on all 4 AM6254 PRU0 cores</text>
+<text x="18" y="382" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• SiK 915MHz belly port + LoRa RFM95W belly stbd + 49MHz RCRS-49 top wire</text>
+<text x="18" y="397" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• u-blox M10Q GPS at dorsal sta 140mm · WS2812C-2020 nav LEDs · 6S 4000mAh</text>
+<text x="18" y="412" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• SLB9670 TPM 2.0 provision on all 4 nodes · write-blocker μSD enable</text>
+<text x="18" y="427" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Boot PocketBeagle2 AM6254 Debian 12 · install mavlink-router · configure</text>
+<text x="18" y="442" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• CG at 203mm (knife-edge) · ESC calibration · servo ±5° · radio HDOP check</text>
 <text x="18" y="457" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• FAA reg N-number on airframe · ABCD pre-flight checklist</text>
 <rect x="12" y="490" width="298" height="34" rx="0" fill="#02110a"/>
 <rect x="12" y="490" width="298" height="34" rx="0" fill="none" stroke="#4ade80" stroke-width="1.5" opacity="0.6"/>
@@ -134,18 +134,18 @@
 <rect x="338" y="299" width="74" height="16" rx="3" fill="#c084fc" opacity="0.9"/>
 <text x="375" y="311" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#07090e" font-weight="bold">PHASE 4</text>
 <text x="418" y="311" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c084fc" font-weight="bold">NODE 4: ACTUATOR REDUNDANCY</text>
-<text x="336" y="337" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• CM4 Lite + CM4-CARRIER-2 + SENSORHAT-1 + MICROHAT in bay E</text>
-<text x="336" y="352" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• XIAO RP2350 on SENSORHAT-1 = dedicated real-time actuator ctrl</text>
-<text x="336" y="367" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• CPLD write-blocker flash + STM32 OTP (separate from Node 1)</text>
-<text x="336" y="382" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• N4 monitors N1 heartbeat via CAN FD; assumes control &lt;100ms on N1 timeout</text>
-<text x="336" y="397" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• N1→N4 CAN FD daisy-chain; add 120Ω termination at N4 end</text>
-<text x="336" y="412" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Pull CAN/RS-485/1553/ETH cables from conduits to bay E connectors</text>
-<text x="336" y="427" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• N4 cross-checks IMU against N1 (agree ±2°/s on all axes)</text>
-<text x="336" y="442" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Provision Node 4 TPM independently (unique key material)</text>
+<text x="336" y="337" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• PocketBeagle2 + CAPE-A-1 + CAPE-B-1 in bay E</text>
+<text x="336" y="352" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Each CAPE-A-1 PRU0 = dedicated real-time flight control</text>
+<text x="336" y="367" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Provision TPM + write-blocker on FC3+CN3+FC4+CN4 independently</text>
+<text x="336" y="382" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• FC4 monitors FC1 heartbeat via CAN FD; assumes control &lt;100ms on N1 timeout</text>
+<text x="336" y="397" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• FC4 is CAN FD ring endpoint; 120Ω terminator at FC4</text>
+<text x="336" y="412" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Pull all 8 bus conduits to each node bay</text>
+<text x="336" y="427" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• FC4 cross-checks IMU against FC1 (agree ±2°/s all axes) (agree ±2°/s on all axes)</text>
+<text x="336" y="442" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Provision all 4 new nodes independently (unique key material each)</text>
 <text x="336" y="457" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">  </text>
 <rect x="330" y="490" width="298" height="34" rx="0" fill="#0a0814"/>
-<text x="336" y="502" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="#c084fc">TEST: kill N1 → N4 holds hover within 100ms · IMU cross-check</text>
-<text x="336" y="517" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.55)">Cost: ~$86 (CM4 + CARRIER-2 + SENSORHAT + MICROHAT)  |  Cumul: ~$756</text>
+<text x="336" y="502" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="#c084fc">TEST: kill FC1 → FC2 holds hover within 100ms · IMU cross-check · IMU cross-check</text>
+<text x="336" y="517" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.55)">Cost: ~$180 (4× PB2-I + capes, nodes FC3+CN3+FC4+CN4)  |  Cumul: ~$756</text>
 
 <!-- Phase 5 — NODES 2 & 3 + OA  (yellow) -->
 <rect x="648" y="294" width="300" height="238" rx="6" fill="#1a1600" stroke="#ffe600" stroke-width="1.5"/>
@@ -154,11 +154,11 @@
 <rect x="656" y="299" width="74" height="16" rx="3" fill="#ffe600" opacity="0.9"/>
 <text x="693" y="311" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#07090e" font-weight="bold">PHASE 5</text>
 <text x="736" y="311" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#ffe600" font-weight="bold">NODES 2 &amp; 3 + FULL OA</text>
-<text x="654" y="337" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Node 2 (bay B): CM3+ Lite + CM3-CARRIER-1 → nav + waypoints</text>
-<text x="654" y="352" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Node 3 (bay D): CM3+ Lite + CM3-CARRIER-1 → payload + sensor</text>
-<text x="654" y="367" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Install OA Array B (×6 VL53L5CX, Node 2): S1B–S6B omnidirectional</text>
-<text x="654" y="382" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Install OA Array A (×6 VL53L5CX, Node 3): S1A–S6A spatially offset</text>
-<text x="654" y="397" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• 12 sensors total · dual I2C buses · TCA9548A mux + MCP23008 XSHUT</text>
+<text x="654" y="337" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Full 8-node ring active · all VL53L5CX arrays commissioned</text>
+<text x="654" y="352" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• OA Array A (FC3 primary): S1A-S6A omnidirectional</text>
+<text x="654" y="367" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• OA Array B (FC2 primary): S1B-S6B spatially offset from Array A</text>
+<text x="654" y="382" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• 12 sensors total · dual I2C buses · TCA9548A mux · XSHUT GPIO</text>
+<text x="654" y="397" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Full 4-bus redundancy: CAN FD + RS-485 + MIL-STD-1553B + ETH RSTP</text>
 <text x="654" y="412" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Full 4-node CAN FD ring · RS-485 multidrop · 1553 BC+RTs · ETH star</text>
 <text x="654" y="427" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Autonomous 3-waypoint mission · GPS-guided · RTL on link loss</text>
 <text x="654" y="442" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• OA halt at 1.0m · dual-array fusion 15Hz · single node OA coverage OK</text>
@@ -193,21 +193,21 @@
 <rect x="330" y="556" width="298" height="12" fill="#f8717122"/>
 <rect x="338" y="547" width="74" height="16" rx="3" fill="#f87171" opacity="0.9"/>
 <text x="375" y="559" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#07090e" font-weight="bold">PHASE 7</text>
-<text x="418" y="559" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#f87171" font-weight="bold">MOTOR UPGRADE: XRP + 120A ESC</text>
+<text x="418" y="559" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#f87171" font-weight="bold">FULL 8-NODE ARCHITECTURE</text>
 <!-- Star milestone marker -->
 <use href="#star" transform="translate(621,559)" />
-<text x="336" y="585" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Swap nacelle_pod_80mm → nacelle_pod_83mm (external pod — no hull work)</text>
-<text x="336" y="600" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Install 2× Changesun XRP 3660-2700KV 80mm 6S: CCW (port) + CW (stbd)</text>
-<text x="336" y="615" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• XRP draws 84A per nacelle — MANDATORY 120A ESC. Do not reuse 80A.</text>
-<text x="336" y="630" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Replace 2× budget ESC → 2× Hobbywing Platinum PRO V4 120A</text>
-<text x="336" y="645" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Recalibrate Hobbywing ESCs per Hobbywing arm procedure</text>
-<text x="336" y="660" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Recheck CG: XRP pair +766g delta vs budget pair → shift battery fwd</text>
-<text x="336" y="675" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Bench thrust: ≥2,900g/nacelle · ≥6,450g total · ESC ≤80°C</text>
-<text x="336" y="690" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Incremental payload test: 500g → 750g → 1,000g (max 1,046g at T/W 2.0)</text>
+<text x="336" y="585" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• All 8 nodes commissioned; full ring redundancy active</text>
+<text x="336" y="600" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Verify CAN FD RSTP ring · RS-485 multidrop · 1553 BC+RT · ETH star</text>
+<text x="336" y="615" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Full OA: dual-array fusion 15Hz · halt at 1.0m · RTL on link loss</text>
+<text x="336" y="630" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Autonomous 3-waypoint mission · GPS-guided · verify CG 203mm ±5mm</text>
+<text x="336" y="645" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Incremental payload test: 100g → 200g → 250g max</text>
+<text x="336" y="660" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• ABCD pre-flight checklist · FAA N-number on airframe</text>
+<text x="336" y="675" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Full flight envelope: hover · transition · cruise 40kts · RTL</text>
+<text x="336" y="690" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Wing lift verification: S1223 at 3° → L≥6.3N (18% AUW)</text>
 <rect x="330" y="722" width="298" height="34" rx="0" fill="#100306"/>
 <rect x="330" y="722" width="298" height="34" rx="0" fill="none" stroke="#f87171" stroke-width="1.5" opacity="0.6"/>
-<text x="336" y="734" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="#f87171" font-weight="bold">★ FULL PERF: T/W 2.81 empty · 2.66 with cargo · 1,046g max payload</text>
-<text x="336" y="749" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.55)">Cost: ~$590 (2× XRP $340 + 2× Hobbywing 120A $250)  |  Cumul: ~$1,553</text>
+<text x="336" y="734" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="#f87171" font-weight="bold">★ FULL 8-NODE: all systems redundant · first cargo mission</text>
+<text x="336" y="749" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.55)">Cost: ~$180 (nodes FC3+CN3+FC4+CN4)  |  Cumul: ~$1,553</text>
 
 <!-- Phase 8 — FINISHING  (slate) -->
 <rect x="648" y="542" width="300" height="222" rx="6" fill="#0e1118" stroke="#94a3b8" stroke-width="1.5"/>
@@ -231,7 +231,7 @@
 <!-- ══════════════════════ Footer ══════════════════════ -->
 <rect x="0" y="774" width="960" height="46" fill="#111827"/>
 <!-- Cost summary line -->
-<text x="480" y="791" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="rgba(255,255,255,0.55)">First flight at Phase 3: ~$670 total invested  |  Full build end-state: ~$1,573  |  All conduits/voids installed Phase 1 — no structural rework after foam pour</text>
+<text x="480" y="791" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="rgba(255,255,255,0.55)">First flight at Phase 6: ~$640 total · Full 8-node: ~$1,120 · Total ~$1,900  |  All conduits/voids installed Phase 1 — no structural rework after foam pour</text>
 <!-- Attribution -->
 <text x="480" y="810" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(163,230,53,0.8)">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
 </svg>
