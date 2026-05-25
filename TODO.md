@@ -23,9 +23,7 @@ Last updated: 2026-05-24
   - `serenity/stl/s_rear_neck_intake_shell24.scad`
   Run: `blender --background --python <script>.py` per CLAUDE.md workflow.
   Verify Z-range and bore diameter in console before committing.
-
-- [ ] update the rev o jsx to be a complete description of the uav, with all relevant design and build elements.  
-- [ ] update the graphical build guide svgs to the rev o design specifications
+ to the rev o design specifications
 - [x] **Nacelle pod for Rev N (50 mm tandem EDFs)** — `nacelle_pod_50mm_tandem.scad` created
   2026-05-24 with: dual-bore centerline (EDF1 Z=22..72mm, EDF2 Z=98..143mm), 11-fin
   twisted stator, M=1.0 gear boss / conduit hard points, MF104ZZ clevis pivot boss at Z=83mm
@@ -54,8 +52,7 @@ Last updated: 2026-05-24
 
 - [ ] create Cargo handling equipment mounts.  export stls
 
-- [ ] do a comprehensive update on the graphical build guides to the current design specs.
-- [ ] integrated the build plan into the todo
+
 
 - [x] **Wing+pivot merge into single pylon** — `s_wing_nacelle_pylon_revo.scad` created
   2026-05-24.  Merges s_pivot_arm_a + s_eng_piv_outer into one CF-PETG part: hollow
@@ -90,7 +87,7 @@ Last updated: 2026-05-24
 
 ## PCB / KiCad
 
-- [ ] **Verify bom_revN.csv ↔ bom_revN.json sync** — CSV was updated 2026-05-23;
+- [x] **Verify bom_revN.csv ↔ bom_revN.json sync** — CSV was updated 2026-05-23;
   JSON was last written 2026-05-22.  Confirm both reflect the same component list
   and quantities.
 
@@ -230,3 +227,9 @@ Design notes and BOM candidates are in `serenity/kicad/XCVR-49MHZ-1.md`.
 - [x] **Sync bom_revN.csv ↔ bom_revN.json** — resolve 2026-05-23 vs 2026-05-22
   timestamp discrepancy. *(done 2026-05-24 — added WIRE-49MHZ, POST-FWD-49, POST-AFT-49 as
   structured `avionics.antenna_system` entries in bom_revN.json; updated JSON date to 2026-05-23)*
+
+- [ ] update the rev o jsx to be a complete description of the uav, with all relevant design and build elements.  
+- [ ] update the graphical build guide svgs
+
+- [ ] do a comprehensive update on the graphical build guides to the current design specs.
+- [ ] integrated the build plan into the todo
