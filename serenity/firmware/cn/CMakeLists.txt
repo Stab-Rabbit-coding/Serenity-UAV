@@ -20,11 +20,14 @@ target_include_directories(serenity-cn
         ${CMAKE_SOURCE_DIR}/common/include
 )
 
-## libgpiod 2.x — GPIO character device library (PTT_N control)
-find_library(GPIOD_LIB gpiod REQUIRED)
-find_path(GPIOD_INCLUDE gpiod.h REQUIRED)
-target_include_directories(serenity-cn PRIVATE ${GPIOD_INCLUDE})
-target_link_libraries(serenity-cn PRIVATE ${GPIOD_LIB})
+##
+## libgpiod 2.x — GPIO character device library (PTT_N control).
+## Debian Trixie ships libgpiod 2.2.1; ensure the sysroot or pkg-config
+## resolves to a 2.x version.  libgpiod 1.x is NOT compatible.
+##
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GPIOD REQUIRED IMPORTED_TARGET libgpiod>=2.0)
+target_link_libraries(serenity-cn PRIVATE PkgConfig::GPIOD)
 
 ## POSIX threads (RX background thread)
 find_package(Threads REQUIRED)

@@ -20,7 +20,8 @@
  *
  * References:
  *   [1] POSIX.1-2017 termios specification.
- *   [2] libgpiod 1.x API — kernel.org/doc/html/latest/driver-api/gpio/intro.html
+ *   [2] libgpiod 2.2.1 API — libgpiod.readthedocs.io/en/latest
+ *       Target: Debian Trixie (libgpiod 2.2.1-2+deb13u1) on PocketBeagle 2 Industrial.
  *   [3] Chepponis & Karn, "KISS TNC," ARRL 6th Computer Networking Conf., 1987.
  */
 
@@ -50,16 +51,17 @@
  * ---------------------------------------------------------------------------*/
 
 struct xcvr_kiss_ctx {
-    int               uart_fd;         /**< UART file descriptor */
-    si5351_ctx_t     *si5351;          /**< DDS driver context */
-    struct gpiod_chip *gpio_chip;      /**< libgpiod chip handle */
-    struct gpiod_line *ptt_line;       /**< libgpiod PTT GPIO line (1.x API) */
-    pthread_t         rx_thread;       /**< Background receive thread */
-    pthread_mutex_t   tx_mutex;        /**< Serialises transmit calls */
-    volatile bool     rx_running;      /**< Set false to stop rx_thread */
-    unsigned int      current_channel; /**< Currently selected RCRS channel */
-    xcvr_rx_callback_t rx_callback;    /**< RX frame callback */
-    void             *rx_userdata;     /**< Caller context for rx_callback */
+    int                        uart_fd;         /**< UART file descriptor */
+    si5351_ctx_t              *si5351;          /**< DDS driver context */
+    struct gpiod_chip         *gpio_chip;       /**< libgpiod 2.x chip handle */
+    struct gpiod_line_request *ptt_req;         /**< libgpiod 2.x line request */
+    unsigned int               ptt_offset;      /**< GPIO line offset for PTT_N */
+    pthread_t                  rx_thread;       /**< Background receive thread */
+    pthread_mutex_t            tx_mutex;        /**< Serialises transmit calls */
+    volatile bool              rx_running;      /**< Set false to stop rx_thread */
+    unsigned int               current_channel; /**< Currently selected RCRS channel */
+    xcvr_rx_callback_t         rx_callback;     /**< RX frame callback */
+    void                      *rx_userdata;     /**< Caller context for rx_callback */
 };
 
 /* ---------------------------------------------------------------------------
@@ -116,27 +118,32 @@ static int uart_open(const char *dev)
 }
 
 /* ---------------------------------------------------------------------------
- * Internal: PTT GPIO (libgpiod 1.x API)
+ * Internal: PTT GPIO (libgpiod 2.x API)
  *
- * PTT_N is active-low: value=0 → line low → PTT asserted (TX keyed).
- *                      value=1 → line high → PTT released (TX unkeyed).
+ * PTT_N is active-low.  In libgpiod 2.x semantics for a non-inverted output:
+ *   GPIOD_LINE_VALUE_INACTIVE (0) → line electrically LOW  → PTT asserted
+ *   GPIOD_LINE_VALUE_ACTIVE   (1) → line electrically HIGH → PTT released
  * ---------------------------------------------------------------------------*/
 
 /**
- * @brief Assert PTT_N (drive the line low — active-low, TX keyed).
+ * @brief Assert PTT_N (drive line LOW — active-low, TX keyed).
  */
 static int ptt_assert(xcvr_kiss_ctx_t *ctx)
 {
-    int rc = gpiod_line_set_value(ctx->ptt_line, 0);
+    int rc = gpiod_line_request_set_value(ctx->ptt_req,
+                                          ctx->ptt_offset,
+                                          GPIOD_LINE_VALUE_INACTIVE);
     return (rc == 0) ? 0 : -EIO;
 }
 
 /**
- * @brief Release PTT_N (drive the line high — PTT inactive, TX unkeyed).
+ * @brief Release PTT_N (drive line HIGH — TX unkeyed).
  */
 static int ptt_release(xcvr_kiss_ctx_t *ctx)
 {
-    int rc = gpiod_line_set_value(ctx->ptt_line, 1);
+    int rc = gpiod_line_request_set_value(ctx->ptt_req,
+                                          ctx->ptt_offset,
+                                          GPIOD_LINE_VALUE_ACTIVE);
     return (rc == 0) ? 0 : -EIO;
 }
 
@@ -375,34 +382,65 @@ int xcvr_kiss_open(const xcvr_kiss_config_t *config,
     }
     ctx->current_channel = config->default_channel;
 
-    /* --- PTT_N GPIO (libgpiod 1.x) --- */
+    /* --- PTT_N GPIO (libgpiod 2.x) --- */
     ctx->gpio_chip = gpiod_chip_open(config->gpio_chip);
     if (ctx->gpio_chip == NULL) {
         rc = -errno;
         goto err_close_si5351;
     }
+    ctx->ptt_offset = config->ptt_gpio_line;
 
-    /* Get the GPIO line for PTT_N. */
-    ctx->ptt_line = gpiod_chip_get_line(ctx->gpio_chip,
-                                        config->ptt_gpio_line);
-    if (ctx->ptt_line == NULL) {
-        rc = -errno;
+    /*
+     * Build the libgpiod 2.x request in three steps:
+     *   1. line_settings  — direction and initial output value
+     *   2. line_config    — bind settings to the specific GPIO offset
+     *   3. request_config — set the consumer name for /dev/gpiochipN label
+     * Then call gpiod_chip_request_lines() to claim the line.
+     *
+     * Initial value: GPIOD_LINE_VALUE_ACTIVE (line HIGH = PTT released).
+     */
+    struct gpiod_line_settings *ls = gpiod_line_settings_new();
+    if (ls == NULL) {
+        rc = -ENOMEM;
+        goto err_close_gpio_chip;
+    }
+    (void)gpiod_line_settings_set_direction(ls, GPIOD_LINE_DIRECTION_OUTPUT);
+    (void)gpiod_line_settings_set_output_value(ls, GPIOD_LINE_VALUE_ACTIVE);
+
+    struct gpiod_line_config *lc = gpiod_line_config_new();
+    if (lc == NULL) {
+        rc = -ENOMEM;
+        gpiod_line_settings_free(ls);
+        goto err_close_gpio_chip;
+    }
+    rc = gpiod_line_config_add_line_settings(lc, &ctx->ptt_offset, 1U, ls);
+    gpiod_line_settings_free(ls);
+    if (rc != 0) {
+        rc = -EIO;
+        gpiod_line_config_free(lc);
         goto err_close_gpio_chip;
     }
 
-    /* Request the PTT_N line as output, initially high (PTT released). */
-    rc = gpiod_line_request_output(ctx->ptt_line,
-                                   "serenity-cn-xcvr-ptt",
-                                   1 /* initial value: line high = PTT off */);
-    if (rc != 0) {
-        rc = -EIO;
+    struct gpiod_request_config *rc_cfg = gpiod_request_config_new();
+    if (rc_cfg == NULL) {
+        rc = -ENOMEM;
+        gpiod_line_config_free(lc);
+        goto err_close_gpio_chip;
+    }
+    gpiod_request_config_set_consumer(rc_cfg, "serenity-cn-xcvr-ptt");
+
+    ctx->ptt_req = gpiod_chip_request_lines(ctx->gpio_chip, rc_cfg, lc);
+    gpiod_request_config_free(rc_cfg);
+    gpiod_line_config_free(lc);
+    if (ctx->ptt_req == NULL) {
+        rc = -errno;
         goto err_close_gpio_chip;
     }
 
     /* --- TX mutex --- */
     if (pthread_mutex_init(&ctx->tx_mutex, NULL) != 0) {
         rc = -errno;
-        gpiod_line_release(ctx->ptt_line);
+        gpiod_line_request_release(ctx->ptt_req);
         goto err_close_gpio_chip;
     }
 
@@ -445,7 +483,7 @@ void xcvr_kiss_close(xcvr_kiss_ctx_t *ctx)
     (void)ptt_release(ctx);
 
     (void)pthread_mutex_destroy(&ctx->tx_mutex);
-    gpiod_line_release(ctx->ptt_line);
+    gpiod_line_request_release(ctx->ptt_req);
     gpiod_chip_close(ctx->gpio_chip);
     si5351_close(ctx->si5351);
     (void)close(ctx->uart_fd);
