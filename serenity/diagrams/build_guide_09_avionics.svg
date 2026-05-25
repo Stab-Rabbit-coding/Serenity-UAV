@@ -25,10 +25,10 @@
 <text x="24" y="46" font-family="'OpenDyslexic',sans-serif" font-size="11" fill="#c8dff0">Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · CC BY 4.0 · 2026</text>
 <rect x="1040" y="8" width="144" height="48" rx="6" fill="#ff7518"/>
 <text x="1112" y="29" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">STEP</text>
-<text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">9 / 18</text>
+<text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">9 / 26</text>
 <rect x="0" y="64" width="1200" height="40" fill="#dde4ea" rx="0"/>
-<text x="24" y="90" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 4 — AVIONICS INSTALLATION</text>
-<text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">Pico 2 + TRIHAT-1 · CM4 stack · GPS coax</text>
+<text x="24" y="90" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 6 — AVIONICS INSTALLATION (MIN. VIABLE: FC1+CN1+FC2+CN2)</text>
+<text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">PocketBeagle2 + CAPE-A-1 · CM4 stack · GPS coax</text>
 <rect x="0" y="872" width="1200" height="28" fill="#006db7"/>
 <text x="600" y="890" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
 <rect x="16" y="112" width="720" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
@@ -39,13 +39,13 @@
 <text x="968" y="139" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">PARTS NEEDED</text>
 <rect x="768" y="145" width="26" height="16" rx="4" fill="#006db7" stroke="#222222" stroke-width="1"/>
 <text x="781" y="158" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
-<text x="800" y="158" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Pico 2 + TRIHAT-1</text>
+<text x="800" y="158" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">PocketBeagle2 + CAPE-A-1</text>
 <rect x="768" y="167" width="26" height="16" rx="4" fill="#2e7d32" stroke="#222222" stroke-width="1"/>
 <text x="781" y="180" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
-<text x="800" y="180" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">CM4 + CM4-CARRIER-1 Rev E</text>
+<text x="800" y="180" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">PocketBeagle2 + CAPE-A-1</text>
 <rect x="768" y="189" width="26" height="16" rx="4" fill="#6a1b9a" stroke="#222222" stroke-width="1"/>
 <text x="781" y="202" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
-<text x="800" y="202" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">COMMS-HAT-1 Rev E</text>
+<text x="800" y="202" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">CAPE-B-1</text>
 <rect x="768" y="211" width="26" height="16" rx="4" fill="#f5c518" stroke="#222222" stroke-width="1"/>
 <text x="781" y="224" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
 <text x="800" y="224" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">OS μSD card ≥32GB A2</text>
@@ -58,22 +58,22 @@
 <text x="968" y="305" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">INSTRUCTIONS</text>
 <circle cx="776" cy="321" r="9" fill="#006db7"/>
 <text x="776" y="325" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1</text>
-<text x="792" y="326" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Mount Pico 2 on TRIHAT-1 via 2×20 female header</text>
+<text x="792" y="326" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Seat PocketBeagle2-Industrial (AM6254) on CAPE-A-1 P8/P9 headers</text>
 <circle cx="776" cy="345" r="9" fill="#006db7"/>
 <text x="776" y="349" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
-<text x="792" y="350" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Mount stack on cockpit CF bulkhead: 4× M2.5 NYLON standoffs 8mm</text>
+<text x="792" y="350" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Mount CAPE-B-1 on bay floor standoffs (6mm) · stack CAPE-A-1 on 20mm standoffs above</text>
 <circle cx="776" cy="369" r="9" fill="#006db7"/>
 <text x="776" y="373" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
-<text x="792" y="374" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Snap CM4 Lite into CM4-CARRIER-1 DF40 connectors (underside)</text>
+<text x="792" y="374" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Snap PocketBeagle2 into CAPE-A-1 DF40 connectors (underside)</text>
 <circle cx="776" cy="393" r="9" fill="#006db7"/>
 <text x="776" y="397" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4</text>
-<text x="792" y="398" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Stack COMMS-HAT-1 on carrier via 2×20 GPIO header</text>
+<text x="792" y="398" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Connect CAPE-A-1 to CAPE-B-1 via 4-pin SPI header + CAN FD JST-GH</text>
 <circle cx="776" cy="417" r="9" fill="#006db7"/>
 <text x="776" y="421" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">5</text>
 <text x="792" y="422" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Install OS μSD in carrier slot · Install log μSD in COMMS-HAT slot</text>
 <circle cx="776" cy="441" r="9" fill="#006db7"/>
 <text x="776" y="445" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">6</text>
-<text x="792" y="446" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Route GPS U.FL coax to cockpit roof patch antenna via 3mm hole</text>
+<text x="792" y="446" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Route GPS U.FL coax to mid-fuselage dorsal patch at sta 140mm</text>
 <rect x="760" y="490" width="416" height="36" rx="6" fill="#fffac0" stroke="#ff7518" stroke-width="2"/><text x="778" y="505" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="14" fill="#ff7518">⚠</text><text x="796" y="512" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">DO NOT mix up the two μSD cards — OS card goes in carrier, log card in COMMS-HAT</text>
 <rect x="760" y="534" width="416" height="32" rx="6" fill="#b2ebf2" stroke="#00838f" stroke-width="1.5"/><text x="770" y="548" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#00838f">ℹ</text><text x="786" y="554" font-family="'OpenDyslexic',sans-serif" font-size="9.5" fill="#222222">Use NYLON standoffs throughout cockpit bay — metal reduces RF performance</text>
 <path d="M176,528 Q216,428 296,408 Q376,398 456,408 L456,528 Z" fill="rgba(200,230,255,0.15)" stroke="#006db7" stroke-width="2"/>
@@ -88,7 +88,7 @@
 <polygon points="326.0,387.0 382.3,354.5 340.7,330.5 284.4,363.0"   fill="#c8dff0"   stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
 <polygon points="326.0,384.0 382.3,351.5 382.3,354.5 326.0,387.0" fill="#006db7" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
 <polygon points="382.3,351.5 340.7,327.5 340.7,330.5 382.3,354.5" fill="#006db7" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
-<text x="359" y="402" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">TRIHAT-1</text>
+<text x="359" y="402" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">CAPE-A-1</text>
 <circle cx="391" cy="388" r="16" fill="#006db7" stroke="#222222" stroke-width="1.5"/>
 <text x="391" y="392" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="12" fill="#ffffff">1</text>
 <text x="351" y="496" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#607080">M2.5 nylon standoffs 8mm</text>
@@ -99,11 +99,11 @@
 <polygon points="456.0,367.0 512.3,334.5 470.7,310.5 414.4,343.0"   fill="#c8dff0"   stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
 <polygon points="456.0,364.0 512.3,331.5 512.3,334.5 456.0,367.0" fill="#006db7" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
 <polygon points="512.3,331.5 470.7,307.5 470.7,310.5 512.3,334.5" fill="#006db7" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
-<text x="489" y="381" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">COMMS-HAT-1</text>
+<text x="489" y="381" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">CAPE-B-1</text>
 <polygon points="456.0,343.0 503.6,315.5 469.0,295.5 421.4,323.0"   fill="#c8e6c9"   stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
 <polygon points="456.0,340.0 503.6,312.5 503.6,315.5 456.0,343.0" fill="#2e7d32" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
 <polygon points="503.6,312.5 469.0,292.5 469.0,295.5 503.6,315.5" fill="#2e7d32" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
-<text x="484" y="356" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">CM4 Lite</text>
+<text x="484" y="356" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="8" fill="#ffffff">PocketBeagle2</text>
 <circle cx="546" cy="338" r="16" fill="#ff7518" stroke="#222222" stroke-width="1.5"/>
 <text x="546" y="342" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="12" fill="#ffffff">2</text>
 <polygon points="636.0,411.0 653.3,401.0 641.2,394.0 623.9,404.0"   fill="#f5c518"   stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>

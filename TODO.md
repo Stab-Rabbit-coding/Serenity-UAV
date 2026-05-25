@@ -52,7 +52,17 @@ Last updated: 2026-05-24
 
 - [ ] create Cargo handling equipment mounts.  export stls
 
-- [ ] do a comprehensive update on the graphical build guides to the current design specs.
+- [x] **Comprehensive graphical build guide update to Rev O specs** — Completed 2026-05-25.
+  All 34 SVG files in `serenity/diagrams/` updated:
+  - Component names: Pico2→PocketBeagle2, TRIHAT-1→CAPE-A-1, COMMS-HAT-1→CAPE-B-1
+  - Dimensions: 457.2mm→609.6mm, 70/80mm EDF→50mm tandem, M0.5→M=1.0 gears
+  - Bearings: MR63ZZ→MF104ZZ 4×10×4mm; pivot rod: 8mm→4mm CF
+  - CG: 152mm→203mm from nose; GPS: nose→sta 140mm dorsal
+  - Step counts normalized to X/26 throughout
+  - Hull geometry in overview_side/top/front/bottom SVGs replaced with
+    STL-derived silhouettes from actual 24″ shell geometry (probe_stl.py,
+    gen_hull_outlines.py, update_overview_paths.py).  Pre-update originals
+    are preserved in git history (this commit's parent).
 - [ ] integrated the build plan into the todo
 
 - [x] **Wing+pivot merge into single pylon** — `s_wing_nacelle_pylon_revo.scad` created
