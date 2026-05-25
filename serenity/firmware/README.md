@@ -11,8 +11,8 @@
 This directory contains the userspace firmware daemons that run on the eight
 PocketBeagle 2 Industrial (AM6254) single-board computers in the Serenity UAV.
 
-The AM6254 runs a standard Linux image from onboard eMMC; these daemons are
-standard Linux processes that use POSIX APIs, i2c-dev, libgpiod, and pthreads.
+The AM6254 runs **BeagleBone Debian Trixie** from onboard 64 GB eMMC; these daemons
+are standard Linux processes that use POSIX APIs, i2c-dev, libgpiod 2.x, and pthreads.
 
 ## Node Groups
 
@@ -46,15 +46,46 @@ firmware/
 
 ## Build
 
-### Prerequisites
+### Target Platform
+
+| Item | Value |
+|------|-------|
+| Board | PocketBeagle 2 Industrial (DigiKey 2820-100003007-ND) |
+| SoC | TI AM6254 (quad Cortex-A53 @ 1.4 GHz, dual PRU-ICSS) |
+| OS | BeagleBone Debian Trixie (libgpiod 2.2.1, Linux ≥ 6.1) |
+| Storage | 64 GB eMMC (no OS microSD) |
+
+### Prerequisites (cross-compilation host, Ubuntu 24.04+)
 
 ```bash
-# On the development host (cross-compilation for AM6254 / aarch64)
+# Cross-compiler and CMake
 sudo apt install cmake gcc-aarch64-linux-gnu libc6-dev-arm64-cross
-sudo apt install libgpiod-dev:arm64  # PTT GPIO control
+
+# libgpiod 2.x headers and static lib for aarch64
+# Debian Trixie sysroot required — or use multiarch on a Trixie host:
+#   sudo dpkg --add-architecture arm64
+#   sudo apt install libgpiod-dev:arm64
 ```
 
-### Cross-compile for AM6254 (aarch64)
+> **Note:** libgpiod **2.x** is required (Debian Trixie ships 2.2.1).
+> The libgpiod 1.x API (Ubuntu 24.04) is **incompatible** with this code.
+> Build directly on a PocketBeagle 2 or in a Trixie arm64 container if
+> a full cross-compilation sysroot is not available.
+
+### Build on the PocketBeagle 2 itself (simplest for Phase 6)
+
+```bash
+# On the PocketBeagle 2 running Debian Trixie:
+sudo apt install cmake build-essential libgpiod-dev
+
+git clone <repo> && cd Serenity-UAV/serenity/firmware
+mkdir build && cd build
+cmake ..
+cmake --build .
+sudo cmake --install .
+```
+
+### Cross-compile for AM6254 (aarch64) — advanced
 
 ```bash
 mkdir build && cd build
@@ -62,24 +93,15 @@ cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake/aarch64-linux-gnu.cmake
 cmake --build .
 ```
 
-### Native build (for unit testing on x86 host)
-
-```bash
-mkdir build-native && cd build-native
-cmake .. -DNATIVE_BUILD=ON
-cmake --build .
-```
-
 ## Deployment
 
-Copy binaries to the target via scp and install as systemd services:
-
 ```bash
-scp build/cn/serenity-cn debian@cn-node-1:/usr/local/bin/
-scp build/fc/serenity-fc debian@fc-node-1:/usr/local/bin/
+# Install via cmake on the target, or copy manually:
+scp build/cn/serenity-cn debian@pocketbeagle2-cn1:/usr/local/bin/
+scp build/fc/serenity-fc debian@pocketbeagle2-fc1:/usr/local/bin/
 ```
 
-Systemd unit files are in `cn/serenity-cn.service` and `fc/serenity-fc.service`.
+Systemd unit files are in `cn/serenity-cn.service` and `fc/serenity-fc.service` (Phase 7).
 
 ## Security
 

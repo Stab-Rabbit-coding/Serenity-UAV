@@ -32,10 +32,11 @@
  * References:
  *   [1] Chepponis & Karn, "KISS TNC," ARRL 6th Computer Networking Conf., 1987.
  *   [2] AX.25 v2.2, TAPR / ARRL, 1998.
- *   [3] libgpiod 1.x API documentation — kernel.org.
+ *   [3] libgpiod 2.2.1 API documentation — libgpiod.readthedocs.io
  *
- * libgpiod version: 1.x API (gpiod_line_request_output / gpiod_line_set_value).
- * The target AM6254 system should have libgpiod ≥ 1.6.
+ * Target platform: PocketBeagle 2 Industrial (AM6254), Debian Trixie.
+ * Requires libgpiod ≥ 2.x (Debian Trixie: libgpiod 2.2.1-2+deb13u1).
+ * Not compatible with libgpiod 1.x — the 2.x API is a complete redesign.
  */
 
 #ifndef XCVR_KISS_H
