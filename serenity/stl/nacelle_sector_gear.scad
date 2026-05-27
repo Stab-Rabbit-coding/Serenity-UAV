@@ -91,51 +91,46 @@ BACK_INNER_R = ROOT_R - 3.0;   // [mm] = 17.75 mm
 // Backing plate outer radius matches addendum circle:
 BACK_OUTER_R = TIP_R;          // [mm] = 23.0 mm
 
+// ── Polygon Helpers ───────────────────────────────────────────────────────────
+//
+// arc_pts(r, a1, a2, n) — n+1 points along an arc at radius r from a1 to a2.
+//   Returns a list of [x, y] vectors usable in polygon().
+//   Using polygon() for tooth spaces avoids nested 2D CSG (circle−circle−square²)
+//   which forces CGAL into exponential work for each of the 38+ tooth subtractions.
+//
+function arc_pts(r, a1, a2, n) =
+    [for (i = [0 : n]) let(a = a1 + i * (a2 - a1) / n) [r * cos(a), r * sin(a)]];
+
+// annular_wedge(r_in, r_out, a1, a2, n) — closed annular-sector polygon.
+//   Inner arc runs a1→a2; outer arc runs a2→a1 (reversed for winding order).
+//   n = arc-segment count per edge; total vertices = 2*(n+1).
+//
+function annular_wedge(r_in, r_out, a1, a2, n) =
+    concat(arc_pts(r_in,  a1, a2, n),
+           arc_pts(r_out, a2, a1, n));
+
 // ── Module Definitions ────────────────────────────────────────────────────────
 
 // sector_plate() — solid pie-wedge annulus covering the full sector arc.
 //   The teeth will be formed by subtracting tooth-space wedges from this solid.
+//   Built as a single polygon (annular_wedge) — no nested 2D boolean operations.
+//   Arc resolution matches $fn=72 over the sector span: 72*(SECTOR_ARC_DEG/360)≈20;
+//   using 24 segments for the outer/inner arcs gives smooth edges at this scale.
 module sector_plate() {
-    // Pie-wedge extruded to BODY_H.  Built as difference of full disk minus
-    // the angular regions outside the sector, then minus the inner bore.
     linear_extrude(height = BODY_H) {
-        difference() {
-            // Full annulus ring from BACK_INNER_R to TIP_R
-            difference() {
-                circle(r = BACK_OUTER_R);
-                circle(r = BACK_INNER_R);
-            }
-            // Subtract everything outside the sector arc.
-            // Two masking wedges trim the ring to the correct angular span.
-            // Each masking wedge is a large square rotated to cover the
-            // non-sector region above (positive angle) and below (negative).
-            //
-            // Method: subtract a full disk then re-add only the pie slice,
-            // implemented here as two half-plane cuts.
-            //
-            // Upper mask — covers angles > SECTOR_START_DEG + SECTOR_ARC_DEG
-            rotate([0, 0, SECTOR_START_DEG + SECTOR_ARC_DEG])
-                translate([0, 0])
-                    sector_mask_wedge();
-            // Lower mask — covers angles < SECTOR_START_DEG
-            rotate([0, 0, SECTOR_START_DEG + 180])
-                sector_mask_wedge();
-        }
+        polygon(annular_wedge(
+            BACK_INNER_R, BACK_OUTER_R,
+            SECTOR_START_DEG, SECTOR_START_DEG + SECTOR_ARC_DEG,
+            24   // arc segments per edge (≈ $fn=72 proportional to 99° span)
+        ));
     }
-}
-
-// sector_mask_wedge() — half-plane mask (large rectangle covering 180°).
-//   Positioned by the caller's rotate() to clip the annulus to the sector arc.
-module sector_mask_wedge() {
-    // A 100 × 50 mm rectangle reaching from origin outward, covering 0 to 180°.
-    // Width 100 mm > 2 × TIP_R so it fully covers the gear disk.
-    translate([0, 0])
-        square([100, 100]);
 }
 
 // tooth_space(i) — subtract one tooth-space gap between teeth i and i+1.
 //   The gap is a thin angular wedge at the root-to-tip radial band, centred
 //   midway between adjacent tooth centrelines.
+//   Built as a polygon — avoids the 4-level CSG (circle−circle−square−square)
+//   that caused CGAL to time out with 38+ iterations.
 //
 //   Arguments:
 //     i  — tooth index (0-based); space is placed between tooth i and tooth i+1
@@ -152,19 +147,14 @@ module tooth_space(i) {
     // Tooth space width = same (equal division), so half-angle ≈ 2.045°
     half_ang = SPACE_HALF_ANG / 2;   // [deg]
 
+    // Each tooth space spans only ~4° — 2 arc segments per edge is sufficient;
+    // the arc deviates < 0.001 mm from a straight line over this narrow angle.
     linear_extrude(height = BODY_H + 0.1) {
-        // Wedge: a thin pie slice between ROOT_R and TIP_R + small overcut
-        rotate([0, 0, space_centre_deg - half_ang]) {
-            difference() {
-                circle(r = TIP_R + 0.2);       // outer radius with slight overcut
-                circle(r = ROOT_R - 0.1);      // stop at root circle
-                // Angular mask to limit the wedge to 2 × half_ang width
-                rotate([0, 0, 2 * half_ang])
-                    square([100, 100]);         // mask away the upper half-plane
-                rotate([0, 0, 180])
-                    square([100, 100]);         // mask away the lower half-plane
-            }
-        }
+        polygon(annular_wedge(
+            ROOT_R - 0.1, TIP_R + 0.2,
+            space_centre_deg - half_ang, space_centre_deg + half_ang,
+            2   // 2 segments per arc edge (tooth space is only ~4° wide)
+        ));
     }
 }
 

@@ -119,18 +119,18 @@ module fpv_cut(pos, rot) {
 // ============================================================
 // Main geometry
 // ============================================================
+//
+// Shell source note:
+//   The 24" cargo gondola shell was derived by Blender (blender_hollow_shells.py)
+//   from the Thingiverse source s_cargo_sect.stl.  The Thingiverse source and all
+//   derived pre-computed shells carry open-edge non-manifold geometry that CGAL
+//   cannot process in boolean operations.  The repaired manifold version
+//   (s_cargo_sect_shell24_repaired.stl) was created by repair_shells_for_scad.py
+//   using Blender voxel remesh at 1.5 mm pitch.
+//
 difference() {
-    // Canonical 24" cargo gondola shell -- no additive bosses; flush cut only
-    difference() {
-        scale([SCALE_24, SCALE_24, SCALE_24])
-            import("../../thingverse-serenity/files/s_cargo_sect.stl");
-
-        translate([CX, CY, CZ])
-        scale([INNER_SX, INNER_SY, INNER_SZ])
-        translate([-CX, -CY, -CZ])
-        scale([SCALE_24, SCALE_24, SCALE_24])
-            import("../../thingverse-serenity/files/s_cargo_sect.stl");
-    }
+    // Canonical 24" cargo gondola shell — manifold version for CGAL boolean ops
+    import("../../thingverse-serenity/files-hollowed-18in/s_cargo_sect_shell24_repaired.stl");
 
     // Nadir camera flush aperture
     fpv_cut(CARGO_CAM_POS, NADIR_ROT);

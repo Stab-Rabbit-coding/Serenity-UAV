@@ -63,6 +63,23 @@
 
 $fn = 72;   // standard circle resolution (all rotational bodies)
 
+// ── Polygon Helpers ───────────────────────────────────────────────────────────
+//
+// arc_pts(r, a1, a2, n) — n+1 points along an arc at radius r from a1 to a2.
+//   Returns a list of [x, y] vectors usable in polygon().
+//
+function arc_pts(r, a1, a2, n) =
+    [for (i = [0 : n]) let(a = a1 + i * (a2 - a1) / n) [r * cos(a), r * sin(a)]];
+
+// annular_wedge(r_in, r_out, a1, a2, n) — closed annular-sector polygon.
+//   Using polygon() for rack tooth spaces avoids nested 2D CSG (circle−circle−square²)
+//   which caused CGAL to time out when called 23 times inside a difference().
+//   n = arc-segment count per edge; inner/outer arcs wound for correct face normal.
+//
+function annular_wedge(r_in, r_out, a1, a2, n) =
+    concat(arc_pts(r_in,  a1, a2, n),
+           arc_pts(r_out, a2, a1, n));
+
 // ── Nozzle Bore and Ring Dimensions ───────────────────────────────────────────
 
 BORE_R        = 25.0;   // [mm] 50 mm EDF bore radius (airflow passage centre)
@@ -203,6 +220,8 @@ module nozzle_inner_ring() {
 // _rack_tooth_space(i) — one tooth-space void on inner face of ring.
 //   Tooth spaces are angular wedges at the RING_INNER_R + RACK_DEPTH band,
 //   leaving standing rack teeth between them.
+//   Built as a polygon (annular_wedge) — avoids nested 2D CSG (circle−circle−
+//   square−square) that caused CGAL to time out over 23 iterations.
 //
 //   Arguments:
 //     i — tooth-space index (0-based, 0 through RACK_TEETH)
@@ -217,19 +236,13 @@ module _rack_tooth_space(i) {
     r_outer = RING_INNER_R + RACK_DEPTH + 0.1;   // outer bound (tip + overcut)
     r_inner = RING_INNER_R - RACK_DEDENDUM;       // inner bound (root depth)
 
+    // Each tooth space spans only ~7° — 2 arc segments per edge is sufficient.
     linear_extrude(height = RING_H + 0.2) {
-        rotate([0, 0, space_centre - half_ang]) {
-            difference() {
-                // Radial band from root to tip
-                difference() {
-                    circle(r = r_outer);
-                    circle(r = r_inner);
-                }
-                // Angular mask to limit to 2 × half_ang width
-                rotate([0, 0, 2 * half_ang]) square([100, 100]);
-                rotate([0, 0, 180])          square([100, 100]);
-            }
-        }
+        polygon(annular_wedge(
+            r_inner, r_outer,
+            space_centre - half_ang, space_centre + half_ang,
+            2   // 2 segments per arc edge (narrow tooth space, arc ≈ straight line)
+        ));
     }
 }
 
