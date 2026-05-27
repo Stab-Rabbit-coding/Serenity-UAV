@@ -21,11 +21,17 @@ CENTRE_R =  20;    // radius of central merger zone (cross-bar where arms meet)
 $fn = 64;
 
 // ── Main module ───────────────────────────────────────────────────────────────
+// Note: _edf_lip() is included inside the union so it shares the same boolean
+// context as the outlet bell.  Placing it outside the difference() creates a
+// touching face at Z=0 (lip top == bell bottom) which yields a non-manifold mesh.
 module aft_edf_plenum() {
     difference() {
         union() {
             // EDF outlet bell: circular duct matching EDF OD
             _edf_outlet_bell();
+            // EDF retaining lip ring (stands proud ~3mm on aft face for bonding).
+            // Merged with the bell in this union to avoid touching faces at Z=0.
+            _edf_lip();
             // Four tapered arms transitioning to rectangular inlets
             for (a = [0, 90, 180, 270])
                 rotate([0, 0, a]) _inlet_arm();
@@ -34,9 +40,10 @@ module aft_edf_plenum() {
         }
         // Hollow out — keep WALL-thick walls everywhere
         union() {
-            // Inner EDF bore (annular; hub centre can be solid for mounting)
-            translate([0, 0, -1])
-            cylinder(h = 20 + 1, d = EDF_D - 2*WALL);
+            // Inner EDF bore: extend to cover lip region (Z=-3) so the lip is also
+            // hollowed.  Height = 20+3+1 covers Z=-4..Z=20, clearing the full lip.
+            translate([0, 0, -(3 + 1)])
+            cylinder(h = 20 + 3 + 1, d = EDF_D - 2*WALL);
             // Hollow each arm interior
             for (a = [0, 90, 180, 270])
                 rotate([0, 0, a]) _inlet_arm_hollow();
@@ -44,14 +51,14 @@ module aft_edf_plenum() {
             _merger_hub_hollow();
         }
     }
-    // EDF retaining lip ring (stands proud ~3mm on aft face for bonding)
-    _edf_lip();
 }
 
-// Outlet bell: circular PETG sleeve bonding over EDF casing
+// Outlet bell: circular PETG sleeve bonding over EDF casing.
+// Starts at Z=-0.01 (not Z=0) to avoid a coplanar face with the _edf_lip()
+// top face at Z=0 — coincident faces at Z=0 produce non-manifold CGAL topology.
 module _edf_outlet_bell() {
-    translate([0, 0, 0])
-    cylinder(h = 18, d = EDF_D + 2*WALL);
+    translate([0, 0, -0.01])
+    cylinder(h = 18 + 0.01, d = EDF_D + 2*WALL);
 }
 
 module _edf_lip() {
@@ -62,18 +69,22 @@ module _edf_lip() {
     }
 }
 
-// One tapered inlet arm pointing in +Y before rotation
+// One tapered inlet arm pointing in +Y before rotation.
+// ARM_LEN+1 / TAPER_L+1: each arm solid penetrates 1 mm past the hub outer wall
+// (CENTRE_R+WALL = 23 mm) so the union has no touching/coplanar face at that boundary.
+// The hollow (_inlet_arm_hollow) already uses the same +1 offset from EDF_D/2 (not
+// EDF_D/2+WALL), keeping 3 mm wall thickness throughout.
 module _inlet_arm() {
-    // Rectangular inlet section (constant cross-section)
+    // Rectangular inlet section — extends 1 mm into hub outer wall
     translate([0, EDF_D/2 + WALL, TOTAL_L - ARM_LEN + WALL])
     rotate([90, 0, 0])
-    linear_extrude(height = ARM_LEN)
+    linear_extrude(height = ARM_LEN + 1)
     square([ARM_W, ARM_H], center = true);
 
-    // Tapered transition: rectangular outlet → circular merger zone
+    // Tapered transition: rectangular inlet → square merger zone; 1 mm hub overlap
     translate([0, EDF_D/2 + WALL, WALL])
     rotate([90, 0, 0])
-    _taper_solid(ARM_W, ARM_H, CENTRE_R * 2, CENTRE_R * 2, TAPER_L);
+    _taper_solid(ARM_W, ARM_H, CENTRE_R * 2, CENTRE_R * 2, TAPER_L + 1);
 }
 
 module _inlet_arm_hollow() {

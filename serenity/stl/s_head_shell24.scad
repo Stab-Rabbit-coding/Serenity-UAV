@@ -187,18 +187,19 @@ module fpv_cut(pos, rot) {
 // ============================================================
 // Main geometry
 // ============================================================
+//
+// Shell source note:
+//   The 24" head shell was derived by Blender (blender_hollow_shells.py) from
+//   the Thingiverse source s_head.stl via outer minus slightly-shrunk-inner
+//   subtraction, then scaled to 24" (SCALE_24 = 2.9294).  The Thingiverse
+//   source and all derived pre-computed shells carry open-edge non-manifold
+//   geometry that CGAL cannot process in boolean operations.  The repaired
+//   manifold version (s_head_shell24_repaired.stl) was created by
+//   repair_shells_for_scad.py using Blender voxel remesh at 1.5 mm pitch.
+//
 difference() {
-    // Canonical 24" head shell -- no additive bosses; all mounts are flush cuts
-    difference() {
-        scale([SCALE_24, SCALE_24, SCALE_24])
-            import("../../thingverse-serenity/files/s_head.stl");
-
-        translate([CX, CY, CZ])
-        scale([INNER_SX, INNER_SY, INNER_SZ])
-        translate([-CX, -CY, -CZ])
-        scale([SCALE_24, SCALE_24, SCALE_24])
-            import("../../thingverse-serenity/files/s_head.stl");
-    }
+    // Canonical 24" head shell — manifold version for CGAL boolean operations
+    import("../../thingverse-serenity/files-hollowed-18in/s_head_shell24_repaired.stl");
 
     // Flush aperture cuts -- sensors and camera
     vlsensor_cut(S1A_POS, FWD_ROT);

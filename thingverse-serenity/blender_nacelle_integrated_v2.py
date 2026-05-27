@@ -671,18 +671,26 @@ for cfg in NACELLES:
     def compute_bore_center(obj, z_lo, z_hi, expected_cx, expected_cy):
         verts = [v.co for v in obj.data.vertices if z_lo <= v.co.z <= z_hi]
         if not verts:
+            print(f"    compute_bore_center: no verts in Z={z_lo:.1f}..{z_hi:.1f}, using fallback")
             return expected_cx, expected_cy
-        cx0 = sum(v.x for v in verts) / len(verts)
-        cy0 = sum(v.y for v in verts) / len(verts)
-        r_low = max(0.0, R_FIN_OUT - 6.0)
-        r_high = R_FIN_OUT + 6.0
+
+        # Use the expected centre as the filter origin, NOT the vertex centroid.
+        # The vertex centroid is the mean of ALL shell vertices in the slice, which
+        # is pulled off-axis by asymmetric outer-skin and pylon features.  Using
+        # expected_cx/cy ensures only genuine bore-wall vertices at R ≈ R_FIN_OUT
+        # enter the circle fit, giving a reliable refinement.
+        r_low  = max(0.0, R_FIN_OUT - 6.0)   # 19 mm
+        r_high = R_FIN_OUT + 6.0              # 31 mm
         ring_pts = []
         for v in verts:
-            r = math.hypot(v.x - cx0, v.y - cy0)
+            r = math.hypot(v.x - expected_cx, v.y - expected_cy)
             if r_low <= r <= r_high:
                 ring_pts.append((v.x, v.y))
         if len(ring_pts) < 40:
+            print(f"    compute_bore_center: {len(ring_pts)} ring pts < 40, using fallback "
+                  f"({expected_cx:.2f}, {expected_cy:.2f})")
             return expected_cx, expected_cy
+        print(f"    compute_bore_center: fitting circle to {len(ring_pts)} bore-wall pts")
 
         xs = [p[0] for p in ring_pts]
         ys = [p[1] for p in ring_pts]

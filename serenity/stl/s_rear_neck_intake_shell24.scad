@@ -148,18 +148,18 @@ module vlsensor_cut(pos, rot) {
 // ============================================================
 // Main geometry
 // ============================================================
+//
+// Shell source note:
+//   The 24" rear fuselage shell was derived by Blender (blender_hollow_shells.py)
+//   from the Thingiverse source s_rear.stl.  The Thingiverse source and all
+//   derived pre-computed shells carry open-edge non-manifold geometry that CGAL
+//   cannot process in boolean operations.  The repaired manifold version
+//   (s_rear_shell24_repaired.stl) was created by repair_shells_for_scad.py
+//   using Blender voxel remesh at 1.5 mm pitch.
+//
 difference() {
-    // Canonical 24" rear shell -- no additive bosses; all mounts are flush cuts
-    difference() {
-        scale([SCALE_24, SCALE_24, SCALE_24])
-            import("../../thingverse-serenity/files/s_rear.stl");
-
-        translate([CX, CY, CZ])
-        scale([INNER_SX, INNER_SY, INNER_SZ])
-        translate([-CX, -CY, -CZ])
-        scale([SCALE_24, SCALE_24, SCALE_24])
-            import("../../thingverse-serenity/files/s_rear.stl");
-    }
+    // Canonical 24" rear shell — manifold version for CGAL boolean operations
+    import("../../thingverse-serenity/files-hollowed-18in/s_rear_shell24_repaired.stl");
 
     // Four radial neck scoop windows
     //   Rotation axis = X; 0 deg = dorsal (+Y), 90 deg = port (+Z).
