@@ -13,14 +13,19 @@ import os
 STL_DIR = "/home/user/Serenity-UAV/thingverse-serenity/files-hollowed-18in"
 
 FILES = [
-    "s_head_shell24.stl",
-    "s_middle_shell24.stl",
-    "s_rear_shell24.stl",
-    "s_cargo_sect_shell24.stl",
-    "s_wings_both_shell24.stl",
+    "s_head_shell24_50mm.stl",
+    "s_middle_shell24_50mm.stl",
+    "s_rear_shell24_50mm.stl",
+    "s_cargo_sect_shell24_50mm.stl",
+    "s_wings_both_shell24_50mm.stl",
     "s_eng_left_shell24_50mm.stl",
     "s_eng_right_shell24_50mm.stl",
     "s_eng_left_stator_shell24_50mm.stl",
+    "s_eng_right_stator_shell24_50mm.stl",
+    "s_pivot_arm_a_scaled24_50mm.stl",
+    "s_eng_piv_outer_scaled24_50mm.stl",
+    "s_legs_scaled24_50mm.stl",
+    "s_feet_x_4_scaled24_50mm.stl",
     "nacelle_nozzle_ring.stl",
     "rear_nozzle_frame.stl",
 ]

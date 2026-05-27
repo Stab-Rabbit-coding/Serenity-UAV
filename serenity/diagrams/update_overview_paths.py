@@ -5,13 +5,13 @@ overview_*.svg files with accurate silhouettes derived from the STL geometry.
 
 Coordinate system (confirmed from STL bounding-box analysis):
   X  = fore–aft  (+X = nose / forward, –X = tail / aft)
-  Z  = height    (Z=0 = keel, Z_max ≈ 182 mm = top of aft section)
-  Y  = beam/lateral  (total span ~424 mm in the 24″ model)
+  Z  = height    (Z=0 = keel, Z_max ≈ 227 mm = top of aft EDF section)
+  Y  = beam/lateral  (total span ~530 mm in the 24″ _50mm model)
 
-Full assembly extents (all 24″ hull shells combined):
-  X: –311 … +299 mm   (609.6 mm fuselage + pylon arm tips)
-  Z:    0 … +182 mm
-  Y: –415 …   +9 mm
+Full assembly extents (all 24″ _50mm hull shells combined):
+  X: –390 … +340 mm   (fuselage + wings + pylon arm tips)
+  Z:    0 … +227 mm
+  Y: –520 …  +15 mm
 
 The four overview SVGs already carry all annotations; this script ONLY replaces
 the hull shape polygon/path elements, leaving every other SVG element intact.
@@ -32,18 +32,20 @@ STL_DIR = "/home/user/Serenity-UAV/thingverse-serenity/files-hollowed-18in"
 SVG_DIR = "/home/user/Serenity-UAV/serenity/diagrams"
 
 HULL_PARTS = [
-    "s_head_shell24.stl",
-    "s_middle_shell24.stl",
-    "s_rear_shell24.stl",
-    "s_cargo_sect_shell24.stl",
-    "s_wings_both_shell24.stl",
-    "s_pivot_arm_a_scaled24.stl",
-    "s_eng_piv_outer_scaled24.stl",
+    "s_head_shell24_50mm.stl",
+    "s_middle_shell24_50mm.stl",
+    "s_rear_shell24_50mm.stl",
+    "s_cargo_sect_shell24_50mm.stl",
+    "s_wings_both_shell24_50mm.stl",
+    "s_pivot_arm_a_scaled24_50mm.stl",
+    "s_eng_piv_outer_scaled24_50mm.stl",
 ]
 
 NACELLE_PARTS = [
     "s_eng_left_shell24_50mm.stl",
     "s_eng_right_shell24_50mm.stl",
+    "s_eng_left_stator_shell24_50mm.stl",
+    "s_eng_right_stator_shell24_50mm.stl",
 ]
 
 # ---------------------------------------------------------------------------
@@ -248,9 +250,9 @@ def update_side_view():
     fname = os.path.join(SVG_DIR, "overview_side.svg")
     svg = read_svg(fname)
 
-    # STL physical extents for the side view
-    STL_X_MIN, STL_X_MAX = -311.0, 299.0   # fore–aft
-    STL_Z_MIN, STL_Z_MAX =    0.0, 182.0   # height
+    # STL physical extents for the side view (_50mm Rev O shells)
+    STL_X_MIN, STL_X_MAX = -390.0, 340.0   # fore–aft (wings to middle nose)
+    STL_Z_MIN, STL_Z_MAX =    0.0, 230.0   # height (keel to top of aft EDF)
 
     # SVG pixel extents (from polygon analysis of existing file)
     SVG_X_NOSE  =  72.0    # nose at LEFT
@@ -329,13 +331,14 @@ def update_top_view():
     fname = os.path.join(SVG_DIR, "overview_top.svg")
     svg = read_svg(fname)
 
-    # STL extents used for the top-view mapping
-    STL_X_MIN, STL_X_MAX = -311.0, 299.0
+    # STL extents used for the top-view mapping (_50mm Rev O shells)
+    STL_X_MIN, STL_X_MAX = -390.0, 340.0
 
     # The fuselage top-view Y extent:
-    # Middle section spans Y: –156 … +9 (centroid ≈ –73.6)
-    # Use a slightly wider range to capture head and rear sections:
-    STL_Y_MIN  = -160.0   # port-most fuselage edge visible from above
+    # Middle section spans Y: -195..+11; head: -360..-66; rear: -242..-44
+    # Use a range that captures all main-fuselage sections visible from above
+    # but excludes the deep cargo bay (Y < -200) which projects below the fuselage
+    STL_Y_MIN  = -200.0   # port-most visible fuselage edge from above
     STL_Y_MAX  =   15.0   # starboard-most
 
     # SVG extents
@@ -372,11 +375,12 @@ def update_top_view():
         f'fill="#0e2030" stroke="#00e5ff" stroke-width="2.5"/>'
     )
 
-    # Match the main hull polygon in overview_top.svg
-    old_pattern = (
-        r'<path d="M 110\.0,230\.0.*?Z" fill="#0e2030" stroke="#00e5ff"[^/]*/>'
-    )
+    # Match previously-generated hull path (id-based) or the original polygon
+    old_pattern = r'<path[^>]+id="hull-top-stl"[^>]*/>'
     svg, replaced = replace_element(svg, old_pattern, new_hull)
+    if not replaced:
+        old_pattern2 = r'<path d="M 110\.0,230\.0.*?Z" fill="#0e2030" stroke="#00e5ff"[^/]*/>'
+        svg, replaced = replace_element(svg, old_pattern2, new_hull)
 
     if replaced:
         print("  Hull polygon replaced ✓")
@@ -416,8 +420,8 @@ def update_front_view():
 
     # STL extents for front view (looking from nose, along -X direction)
     # Show only the forward half for a cleaner profile
-    STL_Y_MIN, STL_Y_MAX = -415.0,  9.0   # full Y span
-    STL_Z_MIN, STL_Z_MAX =    0.0, 182.0
+    STL_Y_MIN, STL_Y_MAX = -520.0, 15.0   # full Y span (_50mm shells)
+    STL_Z_MIN, STL_Z_MAX =    0.0, 230.0
 
     # SVG layout: centred
     MARGIN = 60
@@ -427,7 +431,7 @@ def update_front_view():
     SVG_Z_BOT   = canvas_h - MARGIN - 30
 
     hull_verts = load_group(HULL_PARTS)
-    # Take only verts in the forward half (nose region)
+    # Take only verts in the forward half (nose region; X > -100 excludes rear shell and wings)
     fwd_verts = [(x, y, z) for x, y, z in hull_verts if x > -100]
 
     h_vals, z_top, z_bot = silhouette(fwd_verts, "y", "z", n_bins=400)
@@ -492,8 +496,8 @@ def update_bottom_view():
     else:
         canvas_w, canvas_h = 820, 460
 
-    STL_X_MIN, STL_X_MAX = -311.0, 299.0
-    STL_Y_MIN, STL_Y_MAX = -160.0,  15.0   # fuselage Y band
+    STL_X_MIN, STL_X_MAX = -390.0, 340.0
+    STL_Y_MIN, STL_Y_MAX = -200.0,  15.0   # fuselage Y band (_50mm shells)
 
     MARGIN = 60
     SVG_X_LEFT  = MARGIN

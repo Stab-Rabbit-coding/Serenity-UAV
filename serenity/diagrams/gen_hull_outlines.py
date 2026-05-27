@@ -7,13 +7,13 @@ thingverse-serenity/files-hollowed-18in/.
 
 Coordinate system (confirmed from STL bounding-box analysis):
   X  =  fore–aft  (+X = nose / forward,  -X = tail / aft)
-  Y  =  beam / lateral  (total 424mm span in 24″ scale)
-  Z  =  height   (Z=0 = keel / ground,  Z_max≈182mm = top)
+  Y  =  beam / lateral  (total ~530 mm span in 24″ scale including cargo bay)
+  Z  =  height   (Z=0 = keel / ground,  Z_max≈227mm = top of aft section)
 
-Full ship extent at 24″ scale (including pylon arms):
-  X: -311 … +299 mm  (609.6 mm ≈ 24.00 in)
-  Z:    0 … +182 mm  (7.17 in)
-  Y: -415 …   +9 mm  (total beam including cargo bay depth)
+Full ship extent at 24″ scale (_50mm Rev O shells):
+  X: -390 … +340 mm  (~730 mm tip-to-tip including wings and pylon arms)
+  Z:    0 … +227 mm  (8.94 in — rear EDF section is tallest)
+  Y: -520 …  +15 mm  (total beam including cargo bay depth)
 
 Outputs:
   serenity/diagrams/hull_side.svg    — XZ side profile (nose right)
@@ -43,17 +43,17 @@ STL_DIR = (
 )
 OUT_DIR = "/home/user/Serenity-UAV/serenity/diagrams"
 
-# Physical extents from STL analysis (mm, 24″ scale)
-HULL_X_MIN = -311.0   # stern wing-tip
-HULL_X_MAX =  299.0   # bow pylon-arm tip
+# Physical extents from STL analysis (mm, 24″ scale — _50mm Rev O shells)
+HULL_X_MIN = -390.0   # stern wing-tip (wings: -388.4)
+HULL_X_MAX =  340.0   # bow middle-section nose (middle: +336.9)
 HULL_Z_MIN =    0.0   # keel
-HULL_Z_MAX =  182.0   # top of aft engine section
-HULL_Y_MIN = -415.0   # bottom of cargo bay
-HULL_Y_MAX =    9.0   # fuselage centreline (roughly)
+HULL_Z_MAX =  230.0   # top of aft engine section (rear: +227.1)
+HULL_Y_MIN = -520.0   # bottom of cargo bay (cargo: -518.6)
+HULL_Y_MAX =   15.0   # fuselage top edge (middle: +11.0)
 
 # Annotation constants (Rev O specs)
-HULL_LENGTH_MM = 609.6
-HULL_HEIGHT_MM = 182.0
+HULL_LENGTH_MM = 609.6   # nominal 24.00 in spec; actual fuselage span ~594 mm
+HULL_HEIGHT_MM = 227.0   # measured from _50mm shells
 NACELLE_SPAN_MM = 486.0
 
 # SVG canvas dimensions
@@ -260,15 +260,17 @@ def dim_line(x1, y1, x2, y2, label, offset=18, color=C_DIM, font_size=11):
 # ---------------------------------------------------------------------------
 
 FUSELAGE_PARTS = [
-    "s_head_shell24.stl",
-    "s_middle_shell24.stl",
-    "s_rear_shell24.stl",
-    "s_cargo_sect_shell24.stl",
+    "s_head_shell24_50mm.stl",
+    "s_middle_shell24_50mm.stl",
+    "s_rear_shell24_50mm.stl",
+    "s_cargo_sect_shell24_50mm.stl",
 ]
-WING_PARTS = ["s_wings_both_shell24.stl"]
+WING_PARTS = ["s_wings_both_shell24_50mm.stl"]
 NACELLE_PARTS = [
     "s_eng_left_shell24_50mm.stl",
     "s_eng_right_shell24_50mm.stl",
+    "s_eng_left_stator_shell24_50mm.stl",
+    "s_eng_right_stator_shell24_50mm.stl",
 ]
 PIVOT_PARTS = [
     "s_pivot_arm_a_scaled24_50mm.stl",
@@ -386,23 +388,22 @@ def build_side_view():
         f'text-anchor="middle" dominant-baseline="middle" '
         f'font-family="{FONT}" font-size="10" fill="{C_DIM}" '
         f'transform="rotate(-90,{x_ht_px-4:.1f},{(z_top_py+z_bot_py)/2:.1f})">'
-        f'182 mm (7.17 in)</text>',
+        f'227 mm (8.94 in)</text>',
     ]
 
     # Station labels — access panels A–F
     STATIONS = [
-        (  0.0, -311, "STERN"),   # X = keel ref
-        ( 91.0, -311+91, "STA B"),
-        (165.0, -311+165, "STA C"),
-        (251.0, -311+251, "STA D"),
-        (320.0, -311+320, "STA E"),
-        (388.0, -311+388, "STA F"),
+        (  0.0, "STERN"),
+        ( 91.0, "STA B"),
+        (165.0, "STA C"),
+        (251.0, "STA D"),
+        (320.0, "STA E"),
+        (388.0, "STA F"),
     ]
     # Stations are measured from the stern; convert to STL X
-    # Stern is at X = HULL_X_MIN = -311mm
-    # Station 0 = stern, station 609.6 = nose
-    for sta_mm, _, lbl in STATIONS:
-        stl_x = HULL_X_MIN + sta_mm
+    # Stern (rear shell aft edge) ≈ X = -308 mm; nose (middle fwd edge) ≈ X = +337 mm
+    for sta_mm, lbl in STATIONS:
+        stl_x = -308.0 + sta_mm   # stern reference at X=-308
         spx, _ = px(stl_x, HULL_Z_MIN)
         _, spy = px(stl_x, HULL_Z_MIN)
         _, spy2 = px(stl_x, HULL_Z_MAX * 0.1)
@@ -420,8 +421,8 @@ def build_side_view():
             f'{text}</text>'
         )
 
-    # CG marker at 203mm from nose → X = HULL_X_MAX - 203 = +96mm
-    cg_x = HULL_X_MAX - 203.0
+    # CG marker at 203mm from nose → nose ≈ X=+337, so CG ≈ X=+134mm
+    cg_x = 337.0 - 203.0
     cg_px, cg_py = px(cg_x, HULL_Z_MIN + 15)
     lines += [
         f'<line x1="{cg_px:.1f}" y1="{cg_py-20:.1f}" x2="{cg_px:.1f}" '
@@ -431,7 +432,7 @@ def build_side_view():
     ]
 
     # GPS label at sta 140mm from nose (dorsal)
-    gps_x = HULL_X_MAX - 140.0
+    gps_x = 337.0 - 140.0
     gps_px, gps_py = px(gps_x, HULL_Z_MAX * 0.85)
     lines.append(
         f'<text x="{gps_px:.1f}" y="{gps_py:.1f}" text-anchor="middle" '
@@ -565,8 +566,8 @@ def build_top_view():
         f'font-family="{FONT}" font-size="11" fill="{C_DIM}">609.6 mm (24.00 in)</text>',
     ]
 
-    # CG line
-    cg_x = HULL_X_MAX - 203.0
+    # CG line — nose ≈ X=+337, CG at 203mm from nose
+    cg_x = 337.0 - 203.0
     cg_px2, _ = px(cg_x, 0)
     lines.append(
         f'<line x1="{cg_px2:.1f}" y1="{M}" x2="{cg_px2:.1f}" y2="{H-M}" '
