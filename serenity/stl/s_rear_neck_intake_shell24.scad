@@ -3,6 +3,17 @@
 // Rear fuselage shell for Serenity Rev N 24" hull (s_rear.stl).
 // Includes 4 radial neck scoop windows AND dual aft-facing ToF sensor mounts.
 //
+// Rev Q (2026-05-26): Updated to 2.0 mm foam-fill skin thickness.
+//   - Shell source: s_rear_shell24_2mm_repaired.stl
+//     (blender_shells_v3_2mm.py, voxel-remesh 1.2 mm pitch).
+//   - WALL_T reduced 4.0 → 3.5 mm (nominal 2.0 mm + 1.5 mm cutter overlap).
+//   - 6x M3 boss posts at fore joint face (X = -105 mm, rear-to-cargo junction).
+//   - No aft bosses: stern face is the engine bell / nozzle opening; the scoop
+//     window cutters and nozzle assembly occupy that perimeter.
+//   - Foam fill (2 lb/cf) carries distributed panel load; bosses handle point
+//     loads at section joint fasteners.
+//   Ref: structural_analysis.py log, Serenity UAV project, 2026-05-26.
+//
 // Mounts (flush with outer mold line -- zero external protrusion):
 //   S2A -- VL53L5CX aft ToF sensor, Array A (FC3 primary)
 //   S2B -- VL53L5CX aft ToF sensor, Array B (FC2 primary)
@@ -27,25 +38,33 @@
 //     CX = -175.79 mm
 //     CY = -109.19 mm
 //     CZ =   68.55 mm
-//   Inner scale factors (2.5 mm absolute wall):
-//     INNER_SX = 0.952708
-//     INNER_SY = 0.957812
-//     INNER_SZ = 0.963308
+//   Inner scale factors from blender_shells_v3_2mm.py (2.0 mm foam-fill wall):
+//     INNER_SX = 0.971620  (dim = 140.9 mm, wall = 2.0 mm)
+//     INNER_SY = 0.974683  (dim = 158.0 mm)
+//     INNER_SZ = 0.977981  (dim = 181.7 mm)
 //
 // Coordinate system (24"-scaled STL world space):
 //   X -- longitudinal, positive toward nose
 //   Y -- vertical,    positive toward dorsal (up)   NOTE: Y is up, not Z
 //   Z -- lateral,     positive toward port  (left)
 //
+// STL bounds (voxel-remesh repair): X=-246..-105, Y=-193..-35, Z=0..182.
+// Fore joint face at X = -105 mm (rear → cargo junction).
+// Aft/stern face at X = -246 mm (engine bell opening; no boss posts here).
+//
 // Aft sensor position notes:
-//   Rear section estimated span: neck (X = -129) to stern (X approx -265 mm).
-//   Stern estimated from ship-length/wingspan ratio approx 0.9 at 24" span (610 mm).
+//   Rear section estimated span: neck (X = -129) to stern (X approx -246 mm).
 //   Sensors offset from engine bell centreline (approx Y = CY, Z = CZ) to give
 //   unobstructed aft FoV and to serve as distinct Array A / Array B viewpoints.
 //   VERIFY all positions by measuring rendered mesh in slicer.
 //
-// IMPORTANT: Verify scoop and sensor positions by measuring mesh cross-sections
-// in a slicer after rendering before printing.
+// M3 boss reference:
+//   M3 heat-set insert (Ruthex RX-M3x5.7 or equiv): 4.0 mm bore, 5.7 mm OD.
+//   Boss OD 8.0 mm gives 2-wall annulus per CLAUDE.md fabrication requirements.
+//   Ref: Ruthex data sheet, ISO 14589, CLAUDE.md fabrication standards.
+//
+// IMPORTANT: Verify scoop, sensor, and boss positions by measuring mesh
+// cross-sections in a slicer after rendering before printing.
 // ============================================================
 
 SCALE_24  = 2.9294;   // 24" hull scale factor
@@ -55,13 +74,21 @@ CX = -175.79;   // mm
 CY = -109.19;   // mm -- dorsal/ventral axis (positive = up)
 CZ =   68.55;   // mm -- lateral axis (positive = port)
 
-// Inner-shell scale factors (2.5 mm absolute wall)
-INNER_SX = 0.952708;
-INNER_SY = 0.957812;
-INNER_SZ = 0.963308;
+// Inner-shell scale factors (2.0 mm foam-fill wall)
+// Source: blender_shells_v3_2mm.py console output 2026-05-26
+INNER_SX = 0.971620;
+INNER_SY = 0.974683;
+INNER_SZ = 0.977981;
 
-// Conservative wall thickness for cutter overlap
-WALL_T = 4.0;   // mm
+// Conservative wall thickness for cutter overlap (nominal 2.0 mm + 1.5 mm clearance)
+WALL_T = 3.5;   // mm
+
+// M3 heat-set insert boss dimensions
+//   Boss OD 8.0 mm gives minimum 2-wall annulus outside insert per CLAUDE.md.
+//   Ref: Ruthex RX-M3x5.7 data sheet; ISO 14589.
+BOSS_OD     = 8.0;   // mm -- boss outer diameter
+BOSS_H      = 6.0;   // mm -- boss height from interior face (>= insert length 5.7 mm)
+BOSS_BORE_D = 4.1;   // mm -- M3 heat-set insert bore (4.0 mm nominal + 0.1 mm clearance)
 
 // Neck scoop geometry
 NECK_X   = -129;    // mm -- neck station; VERIFY after rendering
@@ -101,6 +128,20 @@ S2A_POS = [ -222, CY + 25, CZ + 15 ];   // VERIFY
 
 // Array B aft sensor (FC2 primary) -- lower-stbd quadrant, distinct bearing from S2A
 S2B_POS = [ -215, CY - 20, CZ - 12 ];   // VERIFY
+
+// M3 boss positions at fore joint face (X = -105 mm, rear → cargo junction).
+//   Bosses extend from fore face into interior (-X direction = toward stern).
+//   BOSS_FORE_ROT: rotate([0,-90,0]) aligns cylinder axis along -X (into interior).
+//   Bounds at fore face: Y=-193..-35, Z=0..182; centroid CY=-109, CZ=69.
+//   All positions VERIFY in slicer -- boss must sit fully inside hull skin.
+BOSS_FORE_ROT = [ 0, -90, 0 ];
+
+BOSS_FORE_1 = [ -105, CY + 72,  CZ      ];  // VERIFY: dorsal face, Y near -37
+BOSS_FORE_2 = [ -105, CY + 36,  CZ + 68 ];  // VERIFY: dorsal-port, Z near 137
+BOSS_FORE_3 = [ -105, CY - 36,  CZ + 68 ];  // VERIFY: ventral-port
+BOSS_FORE_4 = [ -105, CY - 72,  CZ      ];  // VERIFY: ventral, Y near -181
+BOSS_FORE_5 = [ -105, CY - 36,  CZ - 55 ];  // VERIFY: ventral-stbd, Z near 14
+BOSS_FORE_6 = [ -105, CY + 36,  CZ - 55 ];  // VERIFY: dorsal-stbd
 
 // ----------------------------------------------------------------------------
 // Module: scoop_cutter
@@ -145,29 +186,59 @@ module vlsensor_cut(pos, rot) {
     }
 }
 
+// ----------------------------------------------------------------------------
+// Module: m3_boss
+//   Interior M3 heat-set insert boss post.  Solid ring with bore for insert.
+//   Added to union() as positive material inside hull skin.
+//   Ref: Ruthex RX-M3x5.7; ISO 14589; CLAUDE.md min 2-wall annulus.
+// ----------------------------------------------------------------------------
+module m3_boss(pos, rot) {
+    translate(pos)
+    rotate(rot)
+    difference() {
+        // Boss post: 8 mm OD x 6 mm tall
+        cylinder(h = BOSS_H, d = BOSS_OD);
+        // Heat-set insert bore: 4.1 mm dia, through height + 0.1 mm clearance
+        cylinder(h = BOSS_H + 0.1, d = BOSS_BORE_D);
+    }
+}
+
 // ============================================================
 // Main geometry
 // ============================================================
 //
-// Shell source note:
-//   The 24" rear fuselage shell was derived by Blender (blender_hollow_shells.py)
-//   from the Thingiverse source s_rear.stl.  The Thingiverse source and all
-//   derived pre-computed shells carry open-edge non-manifold geometry that CGAL
-//   cannot process in boolean operations.  The repaired manifold version
-//   (s_rear_shell24_repaired.stl) was created by repair_shells_for_scad.py
-//   using Blender voxel remesh at 1.5 mm pitch.
+// Shell source note (Rev Q):
+//   2.0 mm foam-fill skin shell generated by blender_shells_v3_2mm.py
+//   (WALL_MM=2.0, SCALE=2.9294x, centroid-inset hollowing) from Thingiverse
+//   source s_rear.stl.  Repaired to manifold (0 NM edges) by
+//   repair_shells_for_scad.py using voxel remesh at 1.2 mm pitch.
+//   STL bounds: X=-246..-105, Y=-193..-35, Z=0..182 mm.
+//   Inner scale used: sx=0.971620, sy=0.974683, sz=0.977981.
 //
-difference() {
-    // Canonical 24" rear shell — manifold version for CGAL boolean operations
-    import("../../thingverse-serenity/files-hollowed-18in/s_rear_shell24_repaired.stl");
+union() {
+    difference() {
+        // 2.0 mm foam-fill rear shell -- manifold for CGAL boolean operations
+        import("../../thingverse-serenity/files-hollowed-18in/s_rear_shell24_2mm_repaired.stl");
 
-    // Four radial neck scoop windows
-    //   Rotation axis = X; 0 deg = dorsal (+Y), 90 deg = port (+Z).
-    for (rot = [0, 90, 180, 270])
-        rotate([rot, 0, 0])
-        scoop_cutter();
+        // Four radial neck scoop windows
+        //   Rotation axis = X; 0 deg = dorsal (+Y), 90 deg = port (+Z).
+        for (rot = [0, 90, 180, 270])
+            rotate([rot, 0, 0])
+            scoop_cutter();
 
-    // Aft sensor flush apertures
-    vlsensor_cut(S2A_POS, AFT_ROT);
-    vlsensor_cut(S2B_POS, AFT_ROT);
+        // Aft sensor flush apertures
+        vlsensor_cut(S2A_POS, AFT_ROT);
+        vlsensor_cut(S2B_POS, AFT_ROT);
+    }
+
+    // 6x M3 boss posts at fore joint face (X = -105 mm, rear → cargo junction)
+    //   Bosses extend into interior (-X) from fore joint face.
+    //   No aft bosses: stern opening occupied by scoop windows and nozzle assembly.
+    //   VERIFY all boss positions inside hull skin before printing.
+    m3_boss(BOSS_FORE_1, BOSS_FORE_ROT);
+    m3_boss(BOSS_FORE_2, BOSS_FORE_ROT);
+    m3_boss(BOSS_FORE_3, BOSS_FORE_ROT);
+    m3_boss(BOSS_FORE_4, BOSS_FORE_ROT);
+    m3_boss(BOSS_FORE_5, BOSS_FORE_ROT);
+    m3_boss(BOSS_FORE_6, BOSS_FORE_ROT);
 }

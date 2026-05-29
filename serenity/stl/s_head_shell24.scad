@@ -2,6 +2,17 @@
 // s_head_shell24.scad
 // Nose / cockpit shell for Serenity Rev N 24" hull (s_head.stl).
 //
+// Rev Q (2026-05-26): Updated to 2.0 mm foam-fill skin thickness.
+//   - Shell source: s_head_shell24_2mm_repaired.stl (blender_shells_v3_2mm.py,
+//     voxel-remesh at 1.2 mm pitch, repair_shells_for_scad.py).
+//   - WALL_T reduced 4.0 → 3.5 mm (nominal 2.0 mm + 1.5 mm cutter overlap).
+//   - 6x M3 heat-set boss posts added at aft joint face (X ≈ 99 mm) for
+//     M3 bolts joining head to cargo section.
+//   - Foam fill (2 lb/cf closed-cell) provides structural core; bosses provide
+//     point-load capacity.  Structural analysis 2026-05-26 confirms 2.0 mm
+//     CF-PETG + foam adequate for skin panels at 28 m/s cruise.
+//   Ref: structural_analysis.py log, Serenity UAV project, 2026-05-26.
+//
 // Mounts (all flush with outer mold line -- zero external protrusion):
 //   S1A  -- VL53L5CX forward ToF sensor, Array A (FC3 primary), sta 33 mm
 //   S1B  -- VL53L5CX forward ToF sensor, Array B (FC2 primary), sta 53 mm
@@ -28,10 +39,10 @@
 //     CX =  121.00 x 1.33333 =  161.33 mm
 //     CY = -111.43 x 1.33333 = -148.57 mm
 //     CZ =   51.81 x 1.33333 =   69.08 mm
-//   Inner scale factors from s_head_shell18.scad (same 2.5 mm absolute wall):
-//     INNER_SX = 0.948480
-//     INNER_SY = 0.971650
-//     INNER_SZ = 0.952614
+//   Inner scale factors from blender_shells_v3_2mm.py (2.0 mm foam-fill wall):
+//     INNER_SX = 0.969083  (dim = 129.4 mm, wall = 2.0 mm)
+//     INNER_SY = 0.982987  (dim = 235.1 mm)
+//     INNER_SZ = 0.971563  (dim = 140.7 mm)
 //
 // Coordinate system (24"-scaled STL world space):
 //   X -- longitudinal, positive toward nose
@@ -39,10 +50,11 @@
 //   Z -- lateral,     positive toward port  (left)
 //   Station mapping: X_stl = 284 - station_mm
 //
-// Hull surface position estimates (wall = 2.5 mm):
-//   half_ext_Y = 2.5 / (1 - 0.971650) = 88 mm
+// Hull surface position estimates (wall = 2.0 mm):
+//   half_ext_Y = 2.0 / (1 - 0.982987) = 118 mm
 //   Hull Y-centreline (nose axis) approx CY = -149 mm
 //   Hull Z-centreline approx CZ = 69 mm
+//   STL bounds (from voxel-remesh repair): X=99..228, Y=-288..-53, Z=0..141
 //
 // Sensor references:
 //   VL53L5CX: ST UM2884 DocID032910 Rev 1, 2021.
@@ -50,7 +62,13 @@
 //     Carrier board approx 13x13 mm; PMMA window disc 11 mm dia.
 //   FPV: 28 mm industry-standard mount; 14x14 mm M2 bolt grid; 16 mm aperture.
 //
-// IMPORTANT: All mount positions are estimated.  Verify by rendering in
+// M3 boss reference:
+//   M3 heat-set insert (Ruthex RX-M3x5.7 or equiv): 4.0 mm bore, 5.7 mm OD,
+//   5.7 mm installed length.  Boss OD 8.0 mm gives 2-wall annulus per CLAUDE.md.
+//   Pullout capacity in CF-PETG: approx 400 N.
+//   Ref: Ruthex data sheet, ISO 14589, CLAUDE.md fabrication standards.
+//
+// IMPORTANT: All mount and boss positions are estimated.  Verify by rendering in
 // OpenSCAD and measuring mesh cross-sections in a slicer before printing.
 // ============================================================
 
@@ -61,13 +79,22 @@ CX =  161.33;   // mm
 CY = -148.57;   // mm -- dorsal/ventral axis (positive = up)
 CZ =   69.08;   // mm -- lateral axis (positive = port)
 
-// Inner-shell scale factors (2.5 mm absolute wall)
-INNER_SX = 0.948480;
-INNER_SY = 0.971650;
-INNER_SZ = 0.952614;
+// Inner-shell scale factors (2.0 mm foam-fill wall)
+// Source: blender_shells_v3_2mm.py console output 2026-05-26
+INNER_SX = 0.969083;
+INNER_SY = 0.982987;
+INNER_SZ = 0.971563;
 
-// Conservative wall thickness for cutter overlap
-WALL_T = 4.0;   // mm (nominal 2.5 mm + clearance)
+// Conservative wall thickness for cutter overlap (nominal 2.0 mm + 1.5 mm clearance)
+WALL_T = 3.5;   // mm
+
+// M3 heat-set insert boss dimensions
+//   Boss added to interior face at joint surfaces; bore accepts M3 heat-set insert.
+//   OD 8.0 mm gives minimum 2-wall annulus outside insert per CLAUDE.md requirement.
+//   Ref: Ruthex RX-M3x5.7 data sheet; ISO 14589.
+BOSS_OD     = 8.0;   // mm -- boss outer diameter
+BOSS_H      = 6.0;   // mm -- boss height from interior face (>= insert length 5.7 mm)
+BOSS_BORE_D = 4.1;   // mm -- M3 heat-set insert bore (4.0 mm nominal + 0.1 mm clearance)
 
 // VL53L5CX flush mount dimensions
 //   Exterior: 11 mm PMMA bore + 0.5 mm x 14 mm OD seat ring + 4x M1.6 c/s holes.
@@ -115,6 +142,20 @@ S1B_POS = [ 231, CY + 8, CZ + 12 ];  // VERIFY: ~15 deg bearing offset from S1A
 
 // Bridge FPV camera -- upper nose, Serenity bridge viewport, station 45 mm
 FPV_POS = [ 239, CY + 12, CZ ];      // VERIFY: Y offset toward windshield
+
+// M3 boss positions at aft joint face (X = 99 mm, head-to-cargo mating face).
+//   6 bosses distributed around the hull perimeter ellipse.
+//   Positions estimated from STL bounds (Y=-288..-53, Z=0..141) and hull centroid.
+//   BOSS_AFT_ROT: rotate([0,90,0]) aligns cylinder axis along +X (into interior).
+//   All positions VERIFY in slicer -- boss must be fully inside the hull skin.
+BOSS_AFT_ROT = [ 0, 90, 0 ];
+
+BOSS_AFT_1 = [  99, CY + 75, CZ       ];  // VERIFY: dorsal face, top of section
+BOSS_AFT_2 = [  99, CY + 38, CZ + 52  ];  // VERIFY: dorsal-port quadrant
+BOSS_AFT_3 = [  99, CY - 38, CZ + 52  ];  // VERIFY: ventral-port quadrant
+BOSS_AFT_4 = [  99, CY - 100, CZ      ];  // VERIFY: ventral face
+BOSS_AFT_5 = [  99, CY - 38, CZ - 52  ];  // VERIFY: ventral-stbd quadrant
+BOSS_AFT_6 = [  99, CY + 38, CZ - 52  ];  // VERIFY: dorsal-stbd quadrant
 
 // ----------------------------------------------------------------------------
 // Module: vlsensor_cut
@@ -184,25 +225,56 @@ module fpv_cut(pos, rot) {
     }
 }
 
+// ----------------------------------------------------------------------------
+// Module: m3_boss
+//   Interior M3 heat-set insert boss post.  Solid ring with bore for insert.
+//   Added to union() so it is positive material inside the hull skin.
+//   Boss cylinder axis along +X by default (BOSS_AFT_ROT = [0, 90, 0]).
+//   Ref: Ruthex RX-M3x5.7; ISO 14589; CLAUDE.md min 2-wall annulus requirement.
+// ----------------------------------------------------------------------------
+module m3_boss(pos, rot) {
+    translate(pos)
+    rotate(rot)
+    difference() {
+        // Boss post: solid cylinder, 8 mm OD x 6 mm tall
+        cylinder(h = BOSS_H, d = BOSS_OD);
+        // Heat-set insert bore: 4.1 mm dia, full height + 0.1 mm clearance
+        cylinder(h = BOSS_H + 0.1, d = BOSS_BORE_D);
+    }
+}
+
 // ============================================================
 // Main geometry
 // ============================================================
 //
-// Shell source note:
-//   The 24" head shell was derived by Blender (blender_hollow_shells.py) from
-//   the Thingiverse source s_head.stl via outer minus slightly-shrunk-inner
-//   subtraction, then scaled to 24" (SCALE_24 = 2.9294).  The Thingiverse
-//   source and all derived pre-computed shells carry open-edge non-manifold
-//   geometry that CGAL cannot process in boolean operations.  The repaired
-//   manifold version (s_head_shell24_repaired.stl) was created by
-//   repair_shells_for_scad.py using Blender voxel remesh at 1.5 mm pitch.
+// Shell source note (Rev Q):
+//   2.0 mm foam-fill skin shell generated by blender_shells_v3_2mm.py
+//   (WALL_MM=2.0, SCALE=2.9294x, centroid-inset hollowing) from Thingiverse
+//   source s_head.stl.  Repaired to manifold (0 NM edges) by
+//   repair_shells_for_scad.py using voxel remesh at 1.2 mm pitch.
+//   STL bounds: X=99..228, Y=-288..-53, Z=0..141 mm.
+//   Inner scale used: sx=0.969083, sy=0.982987, sz=0.971563.
+//   Structural analysis (2026-05-26) confirms 2.0 mm CF-PETG + 2 lb/cf foam fill
+//   adequate for skin panels: deflection 0.054 mm at 28 m/s cruise (vs 0.5 mm limit).
 //
-difference() {
-    // Canonical 24" head shell — manifold version for CGAL boolean operations
-    import("../../thingverse-serenity/files-hollowed-18in/s_head_shell24_repaired.stl");
+union() {
+    difference() {
+        // 2.0 mm foam-fill head shell -- manifold for CGAL boolean operations
+        import("../../thingverse-serenity/files-hollowed-18in/s_head_shell24_2mm_repaired.stl");
 
-    // Flush aperture cuts -- sensors and camera
-    vlsensor_cut(S1A_POS, FWD_ROT);
-    vlsensor_cut(S1B_POS, FWD_ROT);
-    fpv_cut(FPV_POS,      FWD_ROT);
+        // Flush aperture cuts -- sensors and camera
+        vlsensor_cut(S1A_POS, FWD_ROT);
+        vlsensor_cut(S1B_POS, FWD_ROT);
+        fpv_cut(FPV_POS,      FWD_ROT);
+    }
+
+    // 6x M3 boss posts at aft joint face (head → cargo section interface)
+    //   Bosses extend into interior (+X) from joint face at X = 99 mm.
+    //   VERIFY all boss positions are inside hull skin in slicer before printing.
+    m3_boss(BOSS_AFT_1, BOSS_AFT_ROT);
+    m3_boss(BOSS_AFT_2, BOSS_AFT_ROT);
+    m3_boss(BOSS_AFT_3, BOSS_AFT_ROT);
+    m3_boss(BOSS_AFT_4, BOSS_AFT_ROT);
+    m3_boss(BOSS_AFT_5, BOSS_AFT_ROT);
+    m3_boss(BOSS_AFT_6, BOSS_AFT_ROT);
 }
