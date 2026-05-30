@@ -1,9 +1,20 @@
 """
-blender_shells_v3_2mm.py  —  Rev Q  —  run with:
+blender_shells_v3_2mm.py  —  Rev R  —  run with:
     blender --background --python blender_shells_v3_2mm.py
 
 Generates 2.0 mm wall MANIFOLD HOLLOW shells for the Serenity UAV fuselage
 sections that will be foam-filled (2 lb/cf low-density closed-cell foam).
+
+Rev R changes from Rev Q (2026-05-29):
+  Root cause fix for T-junction non-manifold edges that blocked CGAL boolean
+  operations in OpenSCAD (reported when importing *_2mm_repaired.stl files):
+    Old: remove_doubles(dist=0.001 mm) welded vertices from distinct faces that
+         happen to be within 1 µm, creating edges shared by 3+ faces (T-junctions).
+    Fix: remove_doubles(dist=1e-6 mm) — only truly floating-point coincident
+         vertices are merged; geometric near-neighbours are left untouched.
+  The Manifold boolean solver (Blender 4.x EXACT) already produces watertight
+  output; aggressive vertex merging was unnecessary and harmful.
+  All five hull shells must be regenerated with this script after this fix.
 
 Rev Q changes from Rev P (2026-05-27):
   Previous workflow (BROKEN):
@@ -246,22 +257,22 @@ def process_hollow(fname, outer_remesh_mm):
     bpy.data.objects.remove(inner, do_unlink=True)
 
     # ── 4a. Post-boolean mesh cleanup (bmesh API — headless-safe) ────────────
-    # The EXACT boolean solver can produce near-coincident T-junction vertices
-    # at concave section-joint boundaries.  bpy.ops.mesh.* operators require a
-    # viewport context unavailable in --background mode, so bmesh ops are used
-    # directly instead.
+    # The EXACT (Manifold) boolean solver in Blender 4.x should produce a
+    # watertight mesh.  We apply two cleanup passes for robustness:
     #
-    # Pass 1 — remove_doubles at 0.001 mm: welds coincident vertices caused by
-    #   T-junctions without touching any intentional geometry (minimum voxel
-    #   pitch is 0.8 mm, so 0.001 mm is safely sub-voxel).
+    # Pass 1 — remove_doubles at 1e-6 mm (sub-nanometre): welds only vertices
+    #   that are truly floating-point coincident.  IMPORTANT: do NOT use a
+    #   larger distance (e.g., 0.001 mm) — welding vertices from distinct faces
+    #   that happen to be close creates T-junctions (edges shared by 3+ faces),
+    #   which blocks CGAL boolean operations in OpenSCAD.
     # Pass 2 — holes_fill on remaining open boundary edges: adds bridging faces
-    #   to close any open loops left after the weld pass.
+    #   to close any open loops left by the boolean solver.
     bpy.context.view_layer.objects.active = outer
     bm = bmesh.new()
     bm.from_mesh(outer.data)
 
     verts_before = len(bm.verts)
-    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=0.001)
+    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-6)
     verts_merged = verts_before - len(bm.verts)
     print(f"  merge_by_distance: {verts_merged} vertex pairs welded")
 
