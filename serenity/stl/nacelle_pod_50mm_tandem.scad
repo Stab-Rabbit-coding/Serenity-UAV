@@ -1,13 +1,13 @@
 // =============================================================================
 // nacelle_pod_50mm_tandem.scad
-// Serenity UAV — Rev P — Tandem-EDF Nacelle Pod (50 mm bore, canonical hull)
+// Serenity UAV — Rev R — Tandem-EDF Nacelle Pod (50 mm bore, canonical hull)
 // =============================================================================
 //
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // Project : Serenity-class Tilt-Rotor UAV (24-inch scale, Firefly TV ship)
 // License : CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 // Date    : 2026-05-26
-// Revision: Rev P
+// Revision: Rev T (2026-05-29)
 //
 // Description
 // -----------
@@ -18,7 +18,45 @@
 // accept 50 mm EDF units.  All bore and mechanical features are parametric
 // OpenSCAD geometry built into the interior of that shell.
 //
-// Change from Rev O:
+// Change from Rev S (Rev T — 2026-05-29):
+//   Sleeve architecture redesigned based on axial order:
+//   intake → rotor1 → spider1 → motor1 → stator → rotor2 → spider2 → motor2 → nozzle
+//
+//   • EDF1 spider (spider1) INTEGRATED INTO NACELLE (Zone C) just forward of stator
+//     zone at EDF1_SPIDER_Z = 87.75 mm (2 mm gap to stator leading edge).
+//     M3 clearance holes on intake face; motor's own threads mate the joint.
+//     Screws set from intake bore end (T-handle hex key, reach ≈ 88 mm).
+//   • Single edf_bore_sleeve.scad REPLACED by two shorter sleeves:
+//       edf_stator_sleeve.scad    — stator hub + 11 fins, Z = 90 … 122.5 mm
+//       edf_aft_spider_sleeve.scad — EDF2 spider2, Z = 122.5 … 166.25 mm
+//     Stator sleeve held in place by aft sleeve pushing forward face; no own screws.
+//     Aft sleeve retained by 3× M3 SHCS at nozzle ring pocket face (Rev S method).
+//   • Both sleeves have 3× longitudinal keys at 120° on OD; nacelle bore has
+//     matching slots (bore_key_slots() Zone B) for anti-rotation and alignment.
+//   • thrust_tube() restored: shortened to forward integral section Z = 27.5 … 90 mm.
+//   • ESC wire exit slot added (esc_wire_exit_slot() Zone B) at Z ≈ 90 mm —
+//     routes EDF1 ESC leads from bore to nacelle cavity at the sleeve joint.
+//   • edf_bore_sleeve.scad is now DEPRECATED (superseded by the two sleeve files).
+//   • Stator and spider parameters re-added for EDF1_SPIDER_Z computation and
+//     nacelle-integrated edf1_nacelle_spider() module.
+//
+// Change from Rev Q (Rev R — 2026-05-29):
+//   • motor_mount_ring() REPLACED by motor_mount_spider() (now superseded by Rev T).
+//
+// Change from Rev P (Rev Q):
+//   • nacelle_pod() restructured: stator_hub(), stator_fin() loop, and both
+//     motor_mount_ring() calls moved from the difference() inner union to the
+//     outer union() AFTER the difference() closes.  In Rev P these modules were
+//     placed inside the difference() additive union, where the full-length bore
+//     cylinder (r=25 mm, full nacelle length) subtracted all geometry with
+//     r < EDF_BORE_R — erasing stator hub (r=0-16 mm), stator fins (r=16-25 mm),
+//     and motor-mount arms and hub (r=0-25 mm) entirely.  Only the retaining lip
+//     ring (r=25-27.5 mm) survived.  Moving to the outer union() prevents the
+//     bore subtraction from applying to bore-interior geometry.
+//   • stator_fin() radial span extended ±1 mm at hub and bore-wall ends.
+//   • motor_mount_ring() arm span extended ±1 mm (now replaced by Rev R).
+//
+// Change from Rev O (Rev P):
 //   • nacelle_shell() synthetic ellipse REPLACED by import() of the repaired
 //     Serenity nacelle STL (s_eng_{left,right}_shell24_50mm_repaired.stl).
 //   • All Z-axis parameters updated to 1.25× reference scale to match the
@@ -31,7 +69,7 @@
 // Features (all parametric)
 // -------------------------
 //   • Cosine-tapered inlet bell  (Z=0 … EDF1_Z_ENTRY)
-//   • EDF1 seat and 4-arm motor-mount strut ring  (forward EDF, upstream)
+//   • EDF1 seat and 3-arm motor-mount spider      (forward EDF, upstream)
 //   • 11-fin twisted inter-stage stator  (EDF1 exit … EDF2 entry)
 //   • EDF2 seat and 4-arm motor-mount strut ring  (aft EDF, downstream)
 //   • Nozzle ring pocket at exhaust exit (iris ring seat)
@@ -156,24 +194,93 @@ EDF1_Z_EXIT     =  90.0;  // [mm] EDF1 aft face      (was 72.0 × 1.25)
 EDF2_Z_ENTRY    = 122.5;  // [mm] EDF2 forward face  (was 98.0 × 1.25)
 EDF2_Z_EXIT     = 178.8;  // [mm] EDF2 aft face      (was 143.0 × 1.25)
 
-// ── Motor-mount strut ring positions (1.25× scale) ────────────────────────────
-// Each ring is a 4-arm spider at the mid-motor axial station.
-// Blender reference: FRONT_MOTOR_MOUNT_FROM_INTAKE=35mm×1.25=43.75mm
-//                    AFT_MOTOR_MOUNT_FROM_INTAKE=108mm×1.25=135mm
-EDF1_MOTOR_Z    =  43.75;  // [mm] EDF1 motor strut ring centre Z
-EDF2_MOTOR_Z    = 135.0;   // [mm] EDF2 motor strut ring centre Z
+// ── EDF motor-mount spider geometry (Rev T — shared by nacelle EDF1 spider
+//    and aft sleeve EDF2 spider) ───────────────────────────────────────────────
+// Hub bore sized for motor shaft clearance; motor pass-through not required.
+// EDF1 spider (nacelle-integrated): M3 CLEARANCE bores on intake face.
+//   Motor's own M3 female threads (standard RC motor) mate the screws.
+//   Screws set from intake bore end with T-handle 2.5 mm hex key.
+// EDF2 spider (aft spider sleeve): M3 heat-set inserts on nozzle face.
+//   Screws from nozzle bore end after iris removed.
+SPIDER_ARM_H    =   8.0;   // [mm] arm axial thickness
+SPIDER_ARM_W    =   6.0;   // [mm] arm tangential width
+MOTOR_BOLT_R    =  10.0;   // [mm] M3 bolt circle radius — VERIFY vs actual motor
+M3_INSERT_D     =   3.5;   // [mm] M3 × 6 mm OLF brass heat-set insert OD
+M3_INSERT_L     =   6.0;   // [mm] heat-set insert depth
+M3_CLEAR_D      =   3.3;   // [mm] M3 clearance bore diameter
+R_HUB           =   8.0;   // [mm] spider hub outer radius (16 mm OD)
+R_HUB_BORE      =   2.0;   // [mm] spider hub bore radius   ( 4 mm ID, 3 mm shaft + 1 mm)
 
-// ── Inter-stage stator (1.25× scale) ─────────────────────────────────────────
-// 11-fin twisted stator between EDF1 exit (Z=90) and EDF2 entry (Z=122.5).
-STATOR_Z_BOT    =  93.75;  // [mm] stator bottom Z  (was 75.0 × 1.25)
-STATOR_Z_TOP    = 118.75;  // [mm] stator top Z     (was 95.0 × 1.25)
-N_FINS          =  11;     // [count] number of stator fins
-FIN_THICKNESS   =   2.0;   // [mm] fin tangential thickness at pitch radius
-VANE_ANGLE_DEG  =  33.0;   // [deg] fin angle from axial (matched to 50mm 6S tip swirl)
-R_HUB           =  16.0;   // [mm] hub outer radius
-R_HUB_BORE      =  10.0;   // [mm] hub bore inner radius (ESC signal wire routing)
-SWIRL_DIR       =  +1;     // [+1 / -1] stator swirl direction (default port CW)
-                            //           override: -D SWIRL_DIR=-1
+// ── Inter-stage stator geometry (echoed from sleeve files for EDF1_SPIDER_Z) ──
+STATOR_Z_BOT    =  93.75;  // [mm] stator bottom Z (was 75.0 × 1.25)
+STATOR_Z_TOP    = 118.75;  // [mm] stator top Z    (was 95.0 × 1.25)
+
+// ── EDF1 spider position (nacelle-integrated, just forward of stators) ─────────
+// 2 mm axial gap between EDF1 spider aft face and stator fin leading edge.
+// Wake from spider arms (120°) reattaches within ≈ 1.5 mm at cruise Re; the
+// 2 mm gap prevents unsteady loading on stator leading edges.
+EDF1_SPIDER_Z   = STATOR_Z_BOT - SPIDER_ARM_H / 2 - 2.0;  // = 87.75 mm
+
+// EDF2 spider (in aft spider sleeve — edf_aft_spider_sleeve.scad).
+// Nacelle-local Z; must satisfy: ≥ EDF2_Z_ENTRY + SPIDER_ARM_H/2 (126.5 mm)
+//   and ≤ NOZZLE_RING_Z - SPIDER_ARM_H/2 (162.25 mm).
+// Motor back plate (spider aft face + arm_h/2) + motor height (≈ 27 mm for 2627)
+// should land at or before EDF2_Z_EXIT (178.8 mm).
+// CONFIRM against actual motor dimensions before printing.
+EDF2_SPIDER_Z   = 148.0;   // [mm] EDF2 spider centre, nacelle-local Z
+
+// ── Nozzle ring pocket (defined here; used by AFT_SLV_Z_END below) ───────────
+// Must precede the two-sleeve parameter block because AFT_SLV_Z_END references
+// NOZZLE_RING_Z.  OpenSCAD 2021.01 does not resolve forward variable references
+// reliably in initializer expressions.
+NOZZLE_RING_Z   = 166.25;  // [mm] start Z of nozzle ring pocket (= CROWN_Z)
+NOZZLE_RING_OD  =  65.0;   // [mm] pocket bore OD (rotating ring outer OD;
+                            //      extended to 65 mm to cleanly cut fixed petals)
+NOZZLE_RING_H   =  40.0;   // [mm] pocket axial depth
+
+// ── Two-sleeve bore zone (Rev T) ─────────────────────────────────────────────
+// edf_stator_sleeve.scad  : Z = STATOR_SLV_Z_START … STATOR_SLV_Z_END
+// edf_aft_spider_sleeve.scad: Z = AFT_SLV_Z_START  … AFT_SLV_Z_END
+// Both sleeves OD = EDF_CASING_R = 27.5 mm; nacelle bore enlarged to
+// SLEEVE_BORE_R = 27.7 mm in this zone for 0.2 mm/side clearance fit.
+// Stator sleeve forward stop: bore narrows to EDF_BORE_R at STATOR_SLV_Z_START.
+// Aft sleeve aft retention: 3× M3 SHCS at nozzle ring pocket face.
+STATOR_SLV_Z_START = EDF1_Z_EXIT;    // = 90.0  mm
+STATOR_SLV_Z_END   = EDF2_Z_ENTRY;   // = 122.5 mm
+AFT_SLV_Z_START    = EDF2_Z_ENTRY;   // = 122.5 mm
+AFT_SLV_Z_END      = NOZZLE_RING_Z;  // = 166.25 mm
+SLEEVE_BORE_R   = EDF_CASING_R + 0.2;  // [mm] = 27.7 mm
+
+// ── Sleeve key geometry ───────────────────────────────────────────────────────
+// 3× longitudinal keys at 0°, 120°, 240° on each sleeve OD (keys protrude radially
+// outward).  Matching slots in nacelle bore wall prevent rotation under EDF torque
+// and ensure repeatable orientation for wire routing and assembly.
+// Both sleeves use the same key angles → single bore slot set in nacelle.
+SLEEVE_KEY_W      =   3.0;  // [mm] key width  (tangential / circumferential)
+SLEEVE_KEY_H      =   3.0;  // [mm] key height (radial protrusion above sleeve OD)
+SLEEVE_KEY_SLOT_W = SLEEVE_KEY_W + 0.3;   // [mm] nacelle bore slot width (clearance)
+SLEEVE_KEY_SLOT_H = SLEEVE_KEY_H + 0.3;   // [mm] nacelle bore slot depth (clearance)
+
+// ── ESC wire exit slot ────────────────────────────────────────────────────────
+// Rectangular slot through the forward thrust tube bore wall at the joint
+// between the integral nacelle bore section and the stator sleeve zone.
+// Routes EDF1 ESC motor leads and signal wire radially outward from the bore
+// to the nacelle cavity, then forward to the pylon harness exit port.
+// Slot on pylon side (PYLON_SIDE × X direction).
+ESC_SLOT_W  =  14.0;  // [mm] slot circumferential width
+ESC_SLOT_H  =   8.0;  // [mm] slot axial height
+ESC_SLOT_Z  = STATOR_SLV_Z_START - ESC_SLOT_H / 2;  // = 86.0 mm (slot bottom Z)
+
+// ── Sleeve retention boss geometry (Zone C, aft sleeve, nozzle pocket face) ──
+// 3× M3 × 6 mm OLF insert bosses at NOZZLE_RING_Z, r = SLEEVE_BOSS_R, 120°.
+// Aft spider sleeve aft face seats against pocket step; M3 × 20 mm SHCS from
+// nozzle bore end through sleeve clearance bores into these inserts.
+SLEEVE_BOSS_R   =  28.0;  // [mm] boss centre radius
+SLEEVE_BOSS_OD  =   7.0;  // [mm] boss OD (M3 insert 3.5 mm OD + 2 × 1.75 mm wall)
+SLEEVE_BOSS_L   =   6.0;  // [mm] boss protrusion into pocket (= insert depth)
+
+SWIRL_DIR       =  +1;    // [+1 / -1] default port nacelle CW from intake
+                           //           override: -D SWIRL_DIR=-1
 
 // ── CG-derived tilt pivot (1.25× scale) ──────────────────────────────────────
 // Pivot at nacelle CG eliminates gravity-induced servo torque.
@@ -205,11 +312,6 @@ SHAFT_CONDUIT_ID=   3.5;   // [mm] conduit inner bore
 // ── Inlet bell (1.25× scale) ──────────────────────────────────────────────────
 INLET_BELL_L    =  27.5;   // [mm] inlet bell axial length (was 22.0 × 1.25)
 INLET_BELL_FLARE=   3.0;   // [mm] extra flare radius at intake lip
-
-// ── Nozzle ring pocket ────────────────────────────────────────────────────────
-NOZZLE_RING_Z   = 166.25;  // [mm] start Z of nozzle ring pocket (= CROWN_Z)
-NOZZLE_RING_OD  =  62.0;   // [mm] pocket bore OD (rotating ring outer OD = 31mm R)
-NOZZLE_RING_H   =   8.0;   // [mm] pocket axial depth
 
 // ── Navigation light wiring and harness exit (1.25× scale Z values) ──────────
 PYLON_SIDE      = +1;      // [+1 / -1] inboard face: +1=port, -1=stbd
@@ -259,17 +361,20 @@ module nacelle_shell_imported() {
 // =============================================================================
 // ── Module: thrust_tube ──────────────────────────────────────────────────────
 // =============================================================================
-// Cylindrical bore tube from EDF1 seat to nozzle ring pocket.
-// ID = 50 mm, OD = 55 mm.  Structural wall between bore and outer shell cavity.
+// Forward bore tube from EDF1_Z_ENTRY to STATOR_SLV_Z_START (Z = 27.5 … 90 mm).
+// OD = EDF_CASING_R (27.5 mm), ID = EDF_BORE_R (25 mm); 2.5 mm wall.
+// Provides structural bore wall for the integral nacelle section housing EDF1
+// motor and spider.  Stator sleeve starts where this tube ends.
 module thrust_tube() {
+    tube_len = STATOR_SLV_Z_START - EDF1_Z_ENTRY;  // = 62.5 mm
     translate([0, 0, EDF1_Z_ENTRY])
         difference() {
             cylinder(r = EDF_CASING_R,
-                     h = NOZZLE_RING_Z - EDF1_Z_ENTRY,
+                     h = tube_len,
                      center = false);
             translate([0, 0, -0.01])
                 cylinder(r = EDF_BORE_R,
-                         h = (NOZZLE_RING_Z - EDF1_Z_ENTRY) + 0.02,
+                         h = tube_len + 0.02,
                          center = false);
         }
 }
@@ -315,72 +420,122 @@ module inlet_bell() {
 
 
 // =============================================================================
-// ── Module: stator_fin ───────────────────────────────────────────────────────
+// ── Module: sleeve_retention_bosses ─────────────────────────────────────────
 // =============================================================================
-// One twisted stator fin.  Spans R_HUB → EDF_BORE_R in the radial direction.
-module stator_fin(phi_center, swirl_dir) {
-    fin_h     = STATOR_Z_TOP - STATOR_Z_BOT;
-    twist_deg = swirl_dir * VANE_ANGLE_DEG * 2;
-
-    rotate([0, 0, phi_center])
-        translate([0, 0, STATOR_Z_BOT])
-            rotate([0, 0, 0])
-                linear_extrude(
-                    height  = fin_h,
-                    twist   = twist_deg,
-                    slices  = 16,
-                    center  = false
-                )
-                    translate([R_HUB, -FIN_THICKNESS / 2, 0])
-                        square([EDF_BORE_R - R_HUB, FIN_THICKNESS]);
+// 3× M3 × 6 mm OLF heat-set insert boss cylinders on the nozzle ring pocket
+// step face (Z = NOZZLE_RING_Z).  The EDF bore sleeve aft flange seats against
+// this face; 3× M3 SHCS (accessible from nozzle bore end after iris removed)
+// pass through the sleeve flange and thread into these inserts.
+//
+// Boss geometry:
+//   Centre radius   : SLEEVE_BOSS_R = 28 mm from bore axis
+//   Boss OD         : SLEEVE_BOSS_OD = 7 mm (insert 3.5 mm + 2× 1.75 mm wall)
+//   Boss outer edge : 28 + 3.5 = 31.5 mm < 32.5 mm (NOZZLE_RING_OD/2) → 1 mm clearance
+//   Boss protrusion : SLEEVE_BOSS_L = 6 mm aft into pocket (Z_RING … Z_RING+6)
+//
+// Placed in Zone C (outer union after difference) so the nozzle ring pocket
+// subtraction does not remove them.
+module sleeve_retention_bosses() {
+    for (angle = [0, 120, 240]) {
+        rotate([0, 0, angle])
+        translate([SLEEVE_BOSS_R, 0, NOZZLE_RING_Z])
+            difference() {
+                cylinder(r = SLEEVE_BOSS_OD / 2,
+                         h = SLEEVE_BOSS_L,
+                         center = false);
+                // M3 heat-set insert bore (blind, opening toward nozzle end).
+                translate([0, 0, -0.01])
+                    cylinder(r = M3_INSERT_D / 2,
+                             h = M3_INSERT_L + 0.01,
+                             center = false);
+            }
+    }
 }
 
 
 // =============================================================================
-// ── Module: stator_hub ───────────────────────────────────────────────────────
+// ── Module: edf1_nacelle_spider ──────────────────────────────────────────────
 // =============================================================================
-// Central hollow hub ring (OD=R_HUB×2, ID=R_HUB_BORE×2) at the stator station.
-module stator_hub() {
-    translate([0, 0, STATOR_Z_BOT])
+// EDF1 motor-mount spider integrated into the nacelle (Zone C).
+// Axial position: EDF1_SPIDER_Z = 87.75 mm (just forward of stator zone).
+//
+// Axial assembly order inside the bore:
+//   rotor1 (fan) — spider1 (this module) — motor1 — stator — rotor2 — spider2 — motor2
+//
+// Motor mounting (EDF1):
+//   • Motor slides in from nozzle end; back plate seats against spider AFT face.
+//   • Motor shaft extends FORWARD through hub bore (Ø4 mm) to rotor1.
+//   • 3× M3 SHCS from INTAKE bore end pass through M3 CLEARANCE bores in spider
+//     arms and thread into motor's own M3 female back-plate holes.
+//   • T-handle 2.5 mm hex key required; reach ≈ EDF1_SPIDER_Z ≈ 88 mm.
+//
+// Arms span (R_HUB − 1) → (EDF_BORE_R + 1) with ±1 mm CGAL overrun.
+// M3 clearance bores run THROUGH the arm (intake face → nozzle face).
+module edf1_nacelle_spider() {
+    arm_h = SPIDER_ARM_H;
+    arm_w = SPIDER_ARM_W;
+    z_ctr = EDF1_SPIDER_Z;
+
+    for (angle = [0, 120, 240]) {
+        rotate([0, 0, angle])
         difference() {
-            cylinder(r = R_HUB,
-                     h = STATOR_Z_TOP - STATOR_Z_BOT,
-                     center = false);
-            translate([0, 0, -0.01])
-                cylinder(r = R_HUB_BORE,
-                         h = (STATOR_Z_TOP - STATOR_Z_BOT) + 0.02,
+            // Arm solid — ±1 mm overrun for CGAL volumetric overlap.
+            translate([R_HUB - 1, -arm_w / 2, z_ctr - arm_h / 2])
+                cube([EDF_BORE_R - R_HUB + 2, arm_w, arm_h]);
+            // M3 clearance bore through full arm thickness (intake face to nozzle face).
+            // Screw head sits on intake face; shaft exits nozzle face into motor.
+            translate([MOTOR_BOLT_R, 0, z_ctr - arm_h / 2 - 0.01])
+                cylinder(r = M3_CLEAR_D / 2,
+                         h = arm_h + 0.02,
                          center = false);
         }
+    }
+
+    // Hub ring — OD = 2 × R_HUB (16 mm), bore = 2 × R_HUB_BORE (4 mm).
+    // Motor shaft passes through; ESC phase wires share bore alongside shaft.
+    translate([0, 0, z_ctr - arm_h / 2])
+        difference() {
+            cylinder(r = R_HUB,      h = arm_h, center = false);
+            translate([0, 0, -0.01])
+                cylinder(r = R_HUB_BORE, h = arm_h + 0.02, center = false);
+        }
 }
 
 
 // =============================================================================
-// ── Module: motor_mount_ring ─────────────────────────────────────────────────
+// ── Module: esc_wire_exit_slot ────────────────────────────────────────────────
 // =============================================================================
-// 4-arm spider strut ring at a given Z station.
-// Arms bridge hub (R_HUB) to bore wall (EDF_BORE_R); retaining lip at EDF_CASING_R.
-module motor_mount_ring(z_center) {
-    arm_h = 3.0;  // [mm] axial thickness
-    arm_w = 3.0;  // [mm] arm width
+// Rectangular slot through the forward thrust tube bore wall at Z ≈ ESC_SLOT_Z.
+// Routes EDF1 ESC motor leads and signal wire radially from bore interior to the
+// nacelle cavity (between bore tube and outer shell), then to the pylon harness.
+// Placed on the pylon-side X face for direct routing to the pylon channel.
+// Used as a Zone B subtraction.
+module esc_wire_exit_slot(pylon_side = PYLON_SIDE) {
+    cut_depth = (EDF_CASING_R - EDF_BORE_R) + 3.0;  // through tube wall + 3 mm into cavity
 
-    // EDF casing retaining lip ring
-    translate([0, 0, z_center - arm_h / 2])
-        difference() {
-            cylinder(r = EDF_CASING_R, h = arm_h, center = false);
-            translate([0, 0, -0.01])
-                cylinder(r = EDF_BORE_R, h = arm_h + 0.02, center = false);
-        }
+    translate([
+        pylon_side > 0 ? EDF_BORE_R - 0.01 : -(EDF_BORE_R + cut_depth),
+        -ESC_SLOT_W / 2,
+        ESC_SLOT_Z
+    ])
+        cube([cut_depth + 0.01, ESC_SLOT_W, ESC_SLOT_H]);
+}
 
-    // Four radial arms
-    for (angle = [0, 90, 180, 270]) {
+
+// =============================================================================
+// ── Module: bore_key_slots ────────────────────────────────────────────────────
+// =============================================================================
+// 3× longitudinal rectangular slots in the nacelle enlarged bore wall spanning
+// the full sleeve zone (STATOR_SLV_Z_START → AFT_SLV_Z_END).
+// Match the 3× keys on both stator sleeve and aft spider sleeve OD.
+// Used as a Zone B subtraction.
+module bore_key_slots() {
+    slot_len = AFT_SLV_Z_END - STATOR_SLV_Z_START;
+    for (angle = [0, 120, 240]) {
         rotate([0, 0, angle])
-            translate([R_HUB, -arm_w / 2, z_center - arm_h / 2])
-                cube([EDF_BORE_R - R_HUB, arm_w, arm_h]);
+        translate([SLEEVE_BORE_R - 0.01, -SLEEVE_KEY_SLOT_W / 2, STATOR_SLV_Z_START])
+            cube([SLEEVE_KEY_SLOT_H + 1.0, SLEEVE_KEY_SLOT_W, slot_len]);
     }
-
-    // Central hub plug
-    translate([0, 0, z_center - arm_h / 2])
-        cylinder(r = R_HUB, h = arm_h, center = false);
 }
 
 
@@ -573,58 +728,53 @@ module harness_exit_port(pylon_side = PYLON_SIDE) {
 // =============================================================================
 // ── Module: nacelle_pod (main assembly) ──────────────────────────────────────
 // =============================================================================
-// Top-level assembly.  Additive geometry is unioned; subtractive is differenced.
+// Top-level assembly.  Geometry is organised into three zones:
 //
-// Additive:
+// Zone A — inside difference() additive union (survive bore subtraction, r > 25):
 //   • nacelle_shell_imported() — canonical Serenity nacelle exterior hull
-//   • thrust_tube()            — 50 mm ID bore structural sleeve
+//   • thrust_tube()            — forward bore wall, Z = 27.5 … 90 mm (Rev T restored)
 //   • inlet_bell()             — cosine-tapered intake lip
-//   • stator_hub()             — cable-routing hub ring
-//   • N_FINS stator_fin()      — twisted inter-stage stator vanes
-//   • 2× motor_mount_ring()    — EDF1 and EDF2 spider strut rings
 //   • pivot_x_face_boss()      — CG-pivot MF104ZZ bearing bosses
 //   • pinion_a_boss()          — Drive Pinion A MR63ZZ boss
 //   • crown_pinion_boss()      — Crown Pinion MR63ZZ boss
 //   • shaft_conduit()          — longitudinal CF gear shaft conduit
 //   • nav_wire_conduit()       — external WS2812C signal wire channel
 //
-// Subtractive:
-//   • Full-length 50 mm ID bore cylinder (opens intake and exhaust faces)
+// Zone B — subtracted by difference():
+//   • Full-length 50 mm ID bore (opens intake and exhaust end caps)
+//   • Sleeve zone bore: r = SLEEVE_BORE_R (27.7 mm) from STATOR_SLV_Z_START (90 mm)
+//     to AFT_SLV_Z_END (166.25 mm) — accepts OD 55 mm sleeves
+//   • bore_key_slots()         — 3× longitudinal anti-rotation key slots, sleeve zone
+//   • esc_wire_exit_slot()     — EDF1 ESC wire exit at Z ≈ 86 mm
 //   • nozzle_ring_pocket()     — iris ring seat at exhaust end
 //   • harness_exit_port()      — ESC / nav-light wiring slot
 //   • Tilt spar clearance bore (4.2 mm dia along X through both X-faces)
+//
+// Zone C — outer union() AFTER difference():
+//   • edf1_nacelle_spider()     — EDF1 spider at Z = 87.75 mm (nacelle-integrated)
+//   • sleeve_retention_bosses() — 3× M3 insert bosses on nozzle pocket face
 module nacelle_pod(swirl_dir = SWIRL_DIR) {
 
     union() {
+
+        // ── Zone A + Zone B ──────────────────────────────────────────────────
         difference() {
 
             // ══════════════════════════════════════════════════════════════
-            // ── Additive geometry ─────────────────────────────────────────
+            // Zone A — additive geometry (r > EDF_BORE_R or exterior shell)
             // ══════════════════════════════════════════════════════════════
             union() {
 
                 // ── Canonical Serenity nacelle exterior hull ─────────────
                 nacelle_shell_imported();
 
-                // ── EDF bore thrust tube (EDF1 seat → nozzle ring) ───────
+                // ── Forward bore tube (Z = 27.5 … 90 mm, Rev T restored) ─
+                // Structural bore wall for integral EDF1 section.
+                // Stator / aft spider sleeves begin where this tube ends.
                 thrust_tube();
 
                 // ── Cosine-tapered intake bell (Z=0 → EDF1 seat) ─────────
                 inlet_bell();
-
-                // ── Inter-stage stator hub (cable-routing hollow ring) ────
-                stator_hub();
-
-                // ── 11 twisted stator fins ────────────────────────────────
-                for (i = [0 : N_FINS - 1]) {
-                    stator_fin(i * (360 / N_FINS), swirl_dir);
-                }
-
-                // ── EDF1 motor-mount spider ring (mid-EDF1 station) ───────
-                motor_mount_ring(EDF1_MOTOR_Z);
-
-                // ── EDF2 motor-mount spider ring (mid-EDF2 station) ───────
-                motor_mount_ring(EDF2_MOTOR_Z);
 
                 // ── CG-pivot X-face bosses (MF104ZZ, at PIVOT_Z, Y=0) ────
                 pivot_x_face_boss();
@@ -641,19 +791,34 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
                 // ── External nav-light wire conduit (inboard X-face) ─────
                 nav_wire_conduit(pylon_side = PYLON_SIDE);
 
-            } // end union (additive)
+            } // end union (Zone A additive)
 
             // ══════════════════════════════════════════════════════════════
-            // ── Subtractive geometry ──────────────────────════════════════
+            // Zone B — subtractive geometry
             // ══════════════════════════════════════════════════════════════
 
             // ── Full-length 50 mm ID bore path ────────────────────────────
-            // Extends 0.01 mm beyond each end to open the voxel-remesh end
-            // caps on the imported nacelle STL (intake and exhaust faces).
+            // Extends 0.01 mm past each end to open voxel-remesh end caps.
             translate([0, 0, -0.01])
                 cylinder(r = EDF_BORE_R,
                          h = NACELLE_L + 0.02,
                          center = false);
+
+            // ── Enlarged bore for sleeve zone (Rev T) ─────────────────────
+            // STATOR_SLV_Z_START (90 mm) to AFT_SLV_Z_END (166.25 mm).
+            // Bore step at STATOR_SLV_Z_START provides stator sleeve forward stop.
+            translate([0, 0, STATOR_SLV_Z_START])
+                cylinder(r = SLEEVE_BORE_R,
+                         h = AFT_SLV_Z_END - STATOR_SLV_Z_START,
+                         center = false);
+
+            // ── Sleeve key slots (anti-rotation, both sleeves) ─────────────
+            // 3× longitudinal slots at 0°/120°/240° spanning full sleeve zone.
+            bore_key_slots();
+
+            // ── EDF1 ESC wire exit slot ────────────────────────────────────
+            // Through forward thrust tube bore wall at Z ≈ 86 mm.
+            esc_wire_exit_slot(pylon_side = PYLON_SIDE);
 
             // ── Nozzle ring pocket (iris ring seat at exhaust end) ─────────
             nozzle_ring_pocket();
@@ -673,7 +838,25 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
                         center = true
                     );
 
-        } // end difference
+        } // end difference (Zone A + Zone B)
+
+        // ══════════════════════════════════════════════════════════════════
+        // Zone C — geometry added after difference() closes.
+        // Stator hub/fins and motor-mount spiders moved to edf_bore_sleeve.scad
+        // (Rev S).  Only sleeve retention bosses remain here.
+        // ══════════════════════════════════════════════════════════════════
+
+        // ── EDF1 nacelle-integrated motor-mount spider ────────────────────
+        // At EDF1_SPIDER_Z = 87.75 mm (just forward of stator zone).
+        // M3 clearance bores on intake face; screws from intake bore end.
+        edf1_nacelle_spider();
+
+        // ── Aft sleeve retention M3 insert bosses on nozzle pocket face ──
+        // 3× bosses at r = SLEEVE_BOSS_R = 28 mm, 120° spacing.
+        // Aft spider sleeve aft-face clearance holes mate with these bosses.
+        // 3× M3 × 20 mm SHCS from nozzle bore end after iris removed.
+        sleeve_retention_bosses();
+
     } // end union (top-level)
 }
 
@@ -690,25 +873,27 @@ nacelle_pod(swirl_dir = SWIRL_DIR);
 // Material    : CF-PETG (CarbonX PETG+CF or equivalent)
 // Layer height: 0.15 mm
 // Walls       : 4 perimeter walls (minimum)
-// Infill      : 25% gyroid (shell and bore-tube cavity regions)
-//               40% gyroid at pivot boss and bearing boss regions
+// Infill      : 25% gyroid (nacelle cavity regions)
+//               40% gyroid at pivot boss, bearing boss, and sleeve retention boss regions
 // Nozzle      : Hardened-steel required for CF-PETG
 // Supports    : None required if oriented intake-face-down
-// Interior    : Fill nacelle cavity (between bore tube and outer shell)
+// Interior    : Fill nacelle cavity (between sleeve OD and outer shell)
 //               with 2 lb/cf low-density closed-cell foam after printing,
 //               per CLAUDE.md fabrication standards.
+//               Insert foam before sliding EDF bore sleeve into nacelle.
 //
 // Post-print checks:
-//   1. Bore OD = 55.0 mm ± 0.3 mm at 3 stations (calipers).
+//   1. Sleeve bore ID = 55.4 mm ± 0.3 mm at 3 axial stations in EDF zone
+//      (Z = 27.5 … 178.8 mm).  Sleeve OD 55.0 mm must slide freely.
 //   2. Pivot boss bore = 10.0 mm ± 0.1 mm (MF104ZZ OD press-fit), both X faces.
 //   3. Tilt spar bore ID = 4.2 mm ± 0.1 mm through both X faces.
 //   4. Shaft conduit ID = 3.5 mm ± 0.1 mm (4 mm PTFE tube).
-//   5. Stator fin edges: sand smooth if layer delamination visible.
+//   5. Retention boss bores = 3.5 mm ± 0.05 mm (M3 × 6 mm OLF heat-set insert).
 //
 // Render commands:
 //   Port nacelle (RED nav light, pylon on +X, CW from intake):
-//     openscad -o s_nacelle_port_revp.stl nacelle_pod_50mm_tandem.scad \
+//     openscad -o s_nacelle_port_revs.stl nacelle_pod_50mm_tandem.scad \
 //              -D SWIRL_DIR=1 -D PYLON_SIDE=1 -D NACELLE_SIDE=1
 //   Starboard nacelle (GREEN nav light, pylon on -X, CCW from intake):
-//     openscad -o s_nacelle_stbd_revp.stl nacelle_pod_50mm_tandem.scad \
+//     openscad -o s_nacelle_stbd_revs.stl nacelle_pod_50mm_tandem.scad \
 //              -D SWIRL_DIR=-1 -D PYLON_SIDE=-1 -D NACELLE_SIDE=-1

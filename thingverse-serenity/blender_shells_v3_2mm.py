@@ -245,14 +245,44 @@ def process_hollow(fname, outer_remesh_mm):
     # Delete cutter object (inner solid no longer needed).
     bpy.data.objects.remove(inner, do_unlink=True)
 
+    # ── 4a. Post-boolean mesh cleanup (bmesh API — headless-safe) ────────────
+    # The EXACT boolean solver can produce near-coincident T-junction vertices
+    # at concave section-joint boundaries.  bpy.ops.mesh.* operators require a
+    # viewport context unavailable in --background mode, so bmesh ops are used
+    # directly instead.
+    #
+    # Pass 1 — remove_doubles at 0.001 mm: welds coincident vertices caused by
+    #   T-junctions without touching any intentional geometry (minimum voxel
+    #   pitch is 0.8 mm, so 0.001 mm is safely sub-voxel).
+    # Pass 2 — holes_fill on remaining open boundary edges: adds bridging faces
+    #   to close any open loops left after the weld pass.
+    bpy.context.view_layer.objects.active = outer
+    bm = bmesh.new()
+    bm.from_mesh(outer.data)
+
+    verts_before = len(bm.verts)
+    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=0.001)
+    verts_merged = verts_before - len(bm.verts)
+    print(f"  merge_by_distance: {verts_merged} vertex pairs welded")
+
+    open_edges = [e for e in bm.edges if not e.is_manifold]
+    if open_edges:
+        bmesh.ops.holes_fill(bm, edges=open_edges, sides=0)
+        print(f"  holes_fill: {len(open_edges)} open edge(s) filled")
+
+    bm.to_mesh(outer.data)
+    bm.free()
+    outer.data.update()
+
     # ── 5. Verify manifold ───────────────────────────────────────────────────
     bpy.context.view_layer.objects.active = outer
     nm_final = count_non_manifold(outer)
     n_faces  = len(outer.data.polygons)
-    print(f"  Final hollow shell: NM={nm_final}  faces={n_faces}")
+    print(f"  Final hollow shell:      NM={nm_final}  faces={n_faces}")
+
     if nm_final != 0:
-        print(f"  WARNING: {nm_final} NM edges remain — SCAD boolean ops may fail.")
-        print(f"  Consider reducing outer_remesh_mm or filing a bug report.")
+        print(f"  ERROR: {nm_final} NM edges remain after both repair passes.")
+        print(f"  Fix: reduce outer_remesh_mm for this part and re-run.")
 
     # ── 6. Export ────────────────────────────────────────────────────────────
     export_stl(outer, out)
