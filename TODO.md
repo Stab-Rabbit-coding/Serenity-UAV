@@ -195,8 +195,13 @@ Design notes and BOM candidates are in `serenity/kicad/XCVR-49MHZ-1.md`.
 - [ ] **SPICE/QUCS simulation of LPF** — verify harmonic suppression meets
   47 CFR 95.655 before board spin.
 
-- [ ] **50 Ω trace impedance check** — use KiCad impedance calculator or Saturn PCB
+- [x] **50 Ω trace impedance check** — use KiCad impedance calculator or Saturn PCB
   toolkit to confirm 2.75 mm / 1.6 mm FR4 / εr=4.5 gives 50 ± 5 Ω.
+  *(done 2026-05-30 — serenity/kicad/check_impedance.py implements IPC-2141A /
+  Hammerstad-Jensen / Wheeler (1977) formulas with thick-conductor width correction;
+  Z₀ = 52.26 Ω (W_eff=2.811 mm, ε_eff=3.375) → PASS [45–55 Ω]; script also
+  outputs corrective width via binary search when out of spec; run:
+  `python3 serenity/kicad/check_impedance.py`)*
 
 - [ ] **FCC Part 95 pre-compliance checklist** — document: center frequency
   accuracy, ERP calculation, harmonic levels, labeling requirements
