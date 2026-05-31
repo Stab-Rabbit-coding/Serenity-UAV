@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-06-01  
+**Last updated:** 2026-06-02  
 **Current design revision:** Rev P (master) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 ---
@@ -15,7 +15,7 @@
 | Nacelles | 2× 50mm tandem EDF, CG pivot Z=83mm, M=1.0 gear, iris nozzle | `nacelle_pod_50mm_tandem.scad` complete; Rev O stator shells (`_revo.stl`) NOT yet rendered |
 | Rear propulsion | 120mm 6S EDF, 4-scoop radial intake, iris nozzle | `s_edf_120_motor_mount.stl` ✓, `s_edf_120_thrust_tube.stl` ✓; intake frame + plenum SCAD complete, STLs missing |
 | Cargo bay | Clamshell doors + SG90 servos + DRV8833 + N20 winch + Dyneema + auto-latch + GPS ring + FPV bezel | ✓ All 13 cargo STLs generated (PR #21 + PR #22 2026-06-01); BOM updated bom_revP.json/csv; gondola shell open |
-| PCBs | Cape-A-1, Cape-B-1 assembled; XCVR-49MHZ-1 fabricated | Cape-A/B KiCad files complete, gerbers stale; XCVR-49MHZ-1 is schematic stub only |
+| PCBs | Cape-A-1, Cape-B-1 assembled; XCVR-49MHZ-1 fabricated | Cape-A/B KiCad files complete, gerbers stale; XCVR-49MHZ-1 Phase 1 complete (ICs selected 2026-05-31); Phase 2 schematic open |
 | Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 ✓; serenity-fc Phase 6 stub only; all Phase 7 items open |
 | Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
 | Regulatory | FAA Part 107, ICAO nav lights, FCC Part 95 | FAA registration placeholder; XCVR-49MHZ-1 pre-compliance pending |
@@ -136,14 +136,14 @@ All Phase 1–3 items must be sequentially complete. Phase 4 verification runs i
 
 **Phase 1 — IC Selection (gates all downstream work):**
 
-- [ ] **Resolve DDS choice** — Si5351A-B-GT (I²C, direct to 49 MHz, simpler) vs. AD9833BRMZ + external ×4 PLL. Evaluate Si5351A phase noise vs. Part 95 frequency stability spec (±0.005%).
-- [ ] **Evaluate PA options** — RA07H4047M (30–512 MHz, module) vs. discrete 2N3866 BJT PA. Check gain, efficiency, and thermal at 100 mW continuous. Minimum ≥40 dBc harmonic suppression after LPF.
-- [ ] **Confirm TCM3105 availability** — TI discontinued; verify stock at Mouser/Digi-Key or select drop-in (MC14412, Onsemi) or DSP implementation on Cape-B MCU.
+- [x] **Resolve DDS choice** — **Si5351A-B-GT selected** (Silicon Labs, MSOP-10) + EPSON TG2520SMN 25 MHz ±0.5 ppm TCXO. I²C direct to 49 MHz; firmware driver already written (`si5351.c`); < ±1 ppm system stability, meeting Part 95 ±0.005% with > 25× margin. AD9833 eliminated (max 12.5 MHz; required ×4 external PLL). *(decided 2026-05-31)*
+- [x] **Evaluate PA options** — **Two-stage discrete BJT selected**: MMBT2222A (SOT-23, driver) + 2N3866 (SOT-39, final). Class-A/AB; +5 V supply direct; ≈ 100 mW ERP; ≈ $1.60 BOM; ≥ 40 dBc harmonic suppression via FL1 LPF (SPICE verify Phase 4). RA07H4047M eliminated (requires 7.2–13.6 V; needs boost converter). *(decided 2026-05-31)*
+- [x] **Confirm TCM3105 availability** — TCM3105 confirmed discontinued (TI); no in-production drop-in. **Software Bell 202 AFSK selected**: AM6254 Cape-B MCU generates/decodes audio; TX via MCP4921 SPI 12-bit DAC; RX via LM393 comparator + passive RC bandpass filter. *(decided 2026-05-31)*
 
 **Phase 2 — Schematic:**
 
 - [ ] **U1 DDS sub-circuit** — power decoupling, SPI/I²C to J1, frequency configuration load sequence; channel select (49.830–49.890 MHz) software-configurable.
-- [ ] **U2 AFSK modem sub-circuit** — TCM3105 or equivalent; UART to J1 pins 3/4; CD (carrier detect) output to Cape-B GPIO.
+- [ ] **U2 AFSK modem sub-circuit** — software Bell 202 on Cape-B MCU; MCP4921 SPI 12-bit DAC (TX audio to U3 modulator); LM393 comparator + passive RC bandpass filter (RX demod); UART to J1 pins 3/4; LM393 output as CD (carrier detect) to Cape-B GPIO.
 - [ ] **U3 PA + modulator sub-circuit** — DDS carrier in, AFSK audio in, RF out to FL1; PTT_N gate; bias network and 50 Ω output matching.
 - [ ] **FL1 5-element Chebyshev LPF** — calculate values for fc=75 MHz, 50 Ω; verify −40 dBc at 98 MHz (2nd harmonic of 49 MHz). Simulate in QUCS-S before committing values.
 - [ ] **U4 LNA + envelope detector RX chain** — MGA-82563 input, gain/NF budget, RSSI voltage divider to J1 pin 6.
