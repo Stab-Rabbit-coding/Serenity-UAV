@@ -79,11 +79,19 @@ CX =  161.33;   // mm
 CY = -148.57;   // mm -- dorsal/ventral axis (positive = up)
 CZ =   69.08;   // mm -- lateral axis (positive = port)
 
-// Inner-shell scale factors (2.0 mm foam-fill wall)
-// Source: blender_shells_v3_2mm.py console output 2026-05-26
-INNER_SX = 0.969083;
-INNER_SY = 0.982987;
-INNER_SZ = 0.971563;
+// Hollow-shell parameters (Rev R: computed from solid STL bounding box)
+// Bounding box of s_head_shell24_repaired.stl after voxel-remesh (1.5 mm pitch):
+//   X =   99.2 .. 228.4  → DX = 129.2 mm
+//   Y = -287.6 .. -52.7  → DY = 234.9 mm
+//   Z =    0.2 .. 140.4  → DZ = 140.2 mm
+// Inner scale factors: S = (D - 2 × WALL_MM) / D (centroid-inset approximation).
+WALL_MM  = 2.0;
+DX = 129.2;
+DY = 234.9;
+DZ = 140.2;
+INNER_SX = (DX - 2 * WALL_MM) / DX;   // = 0.96904
+INNER_SY = (DY - 2 * WALL_MM) / DY;   // = 0.98297
+INNER_SZ = (DZ - 2 * WALL_MM) / DZ;   // = 0.97147
 
 // Conservative wall thickness for cutter overlap (nominal 2.0 mm + 1.5 mm clearance)
 WALL_T = 3.5;   // mm
@@ -257,10 +265,23 @@ module m3_boss(pos, rot) {
 //   Structural analysis (2026-05-26) confirms 2.0 mm CF-PETG + 2 lb/cf foam fill
 //   adequate for skin panels: deflection 0.054 mm at 28 m/s cruise (vs 0.5 mm limit).
 //
+// ============================================================
+// Module: hollow_shell (Rev R — same fix as s_rear_neck_intake_shell24.scad)
+// ============================================================
+module hollow_shell() {
+    difference() {
+        import("../../thingverse-serenity/files-hollowed-18in/s_head_shell24_repaired.stl");
+        translate([CX, CY, CZ])
+            scale([INNER_SX, INNER_SY, INNER_SZ])
+            translate([-CX, -CY, -CZ])
+                import("../../thingverse-serenity/files-hollowed-18in/s_head_shell24_repaired.stl");
+    }
+}
+
 union() {
     difference() {
-        // 2.0 mm foam-fill head shell -- manifold for CGAL boolean operations
-        import("../../thingverse-serenity/files-hollowed-18in/s_head_shell24_2mm_repaired.stl");
+        // 2.0 mm foam-fill head shell — hollowed in SCAD (see hollow_shell above)
+        hollow_shell();
 
         // Flush aperture cuts -- sensors and camera
         vlsensor_cut(S1A_POS, FWD_ROT);

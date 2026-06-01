@@ -91,11 +91,19 @@ CX = -102.19;   // mm
 CY = -328.63;   // mm -- dorsal/ventral axis (positive = up)
 CZ =   74.70;   // mm -- lateral axis (positive = port)
 
-// Inner-shell scale factors (2.0 mm foam-fill wall)
-// Source: blender_shells_v3_2mm.py console output 2026-05-26
-INNER_SX = 0.979459;
-INNER_SY = 0.980354;
-INNER_SZ = 0.975496;
+// Hollow-shell parameters (Rev R: computed from solid STL bounding box)
+// Bounding box of s_cargo_sect_shell24_repaired.stl after voxel-remesh (1.5 mm pitch):
+//   X = -201.5 ..  -7.4  → DX = 194.1 mm
+//   Y = -414.8 .. -211.3 → DY = 203.5 mm
+//   Z =    0.0 ..  163.2 → DZ = 163.2 mm
+// Inner scale factors: S = (D - 2 × WALL_MM) / D.
+WALL_MM  = 2.0;
+DX = 194.1;
+DY = 203.5;
+DZ = 163.2;
+INNER_SX = (DX - 2 * WALL_MM) / DX;   // = 0.97940
+INNER_SY = (DY - 2 * WALL_MM) / DY;   // = 0.98034
+INNER_SZ = (DZ - 2 * WALL_MM) / DZ;   // = 0.97549
 
 // Conservative wall thickness for cutter overlap (nominal 2.0 mm + 1.5 mm clearance)
 WALL_T = 3.5;   // mm
@@ -348,10 +356,23 @@ module gps_mount_cut(pos, rot) {
 //   STL bounds: X=-202..-7, Y=-415..-211, Z=0..163 mm.
 //   Inner scale used: sx=0.979459, sy=0.980354, sz=0.975496.
 //
+// ============================================================
+// Module: hollow_shell (Rev R — same fix as s_rear_neck_intake_shell24.scad)
+// ============================================================
+module hollow_shell() {
+    difference() {
+        import("../../thingverse-serenity/files-hollowed-18in/s_cargo_sect_shell24_repaired.stl");
+        translate([CX, CY, CZ])
+            scale([INNER_SX, INNER_SY, INNER_SZ])
+            translate([-CX, -CY, -CZ])
+                import("../../thingverse-serenity/files-hollowed-18in/s_cargo_sect_shell24_repaired.stl");
+    }
+}
+
 union() {
     difference() {
-        // 2.0 mm foam-fill cargo gondola shell -- manifold for CGAL boolean ops
-        import("../../thingverse-serenity/files-hollowed-18in/s_cargo_sect_shell24_2mm_repaired.stl");
+        // 2.0 mm foam-fill cargo gondola shell — hollowed in SCAD (see hollow_shell above)
+        hollow_shell();
 
         // Nadir camera flush aperture
         fpv_cut(CARGO_CAM_POS, NADIR_ROT);
