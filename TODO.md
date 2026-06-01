@@ -109,7 +109,8 @@ Last updated: 2026-05-24
     FPV_BEZ_W=29 mm, FPV_APER_D=16 mm, FPV_M2_S=14 mm.
 
   Open items flowing from this work:
-  - [ ] Add latch-catch lips to clamshell door frame in s_cargo_sect_shell24.scad.
+  - [x] Add latch-catch lips to clamshell door frame in s_cargo_sect_shell24.scad.
+        Done Rev S: 4× latch_catch_lip() at X=-152/-57, Z=42/122 mm.
   - [ ] Add motor-mount and DRV8833-tray boss locations to s_cargo_sect_shell24.scad
         interior drawing notes for foam-pour reference (Phase 1 pre-pour checklist).
   - [ ] Integrate cargo_* STLs into combined airframe model (see airframe overview TODO).
@@ -141,10 +142,10 @@ Last updated: 2026-05-24
   - Material: CF-PETG; 0.15 mm layers, 4 perimeters, ≥ 40 % infill.
 
   Open items:
-  - [ ] Add door-frame rebate / latch-catch feature to s_cargo_sect_shell24.scad belly
-        (tracked under cargo mounts open items above).
-  - [ ] Add SG90 bell-crank boss to inner face of each door for door-actuator pushrod
-        (currently actuated from servo bracket on gondola inner wall).
+  - [x] Add door-frame opening, hinge-pin blocks, servo pads, and latch catches to
+        s_cargo_sect_shell24.scad — done Rev S (2026-06-01).
+  - [ ] Add SG90 bell-crank boss to inner face of each door panel for pushrod attachment
+        (doors currently rely on external servo bracket; bell-crank needed for kinematics).
   - [ ] Verify door swing clearance against gondola interior in combined airframe model.
 
 - [x] **Comprehensive graphical build guide update to Rev O specs** — Completed 2026-05-25.
