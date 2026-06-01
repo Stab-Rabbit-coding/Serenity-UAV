@@ -6950,7 +6950,6 @@
 	)
 	(embedded_fonts no)
 
-	;; ── Tamper-evident security mesh ──────────────
 	(net 81 "TMESH_P")
 	(net 82 "TMESH_N")
 	(segment (start 126.0 93.0) (end 171.0 93.0) (width 0.1) (layer "F.Cu") (net 81))
