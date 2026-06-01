@@ -3,17 +3,18 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
 **Last updated:** 2026-06-01  
-**Current design revision:** Rev O (master) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
+**Current design revision:** Rev P (master) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 ---
 
 ## Quick-Reference: End State vs. Current State
 
-| Domain | End State (Rev O) | Current Status |
+| Domain | End State (Rev P) | Current Status |
 |--------|-------------------|----------------|
-| Hull | 609.6 mm PETG / PU foam / CF skeleton | SCAD sources complete; STLs for rev N hull shells exist in `files-hollowed-18in/`; 3 Rev-O-specific SCADs have no STL yet |
+| Hull | 609.6 mm PETG / PU foam / CF skeleton | SCAD sources complete; cargo section shell updated to Rev S (clamshell opening); 3 Rev-O-specific STLs not yet rendered |
 | Nacelles | 2× 50mm tandem EDF, CG pivot Z=83mm, M=1.0 gear, iris nozzle | `nacelle_pod_50mm_tandem.scad` complete; Rev O stator shells (`_revo.stl`) NOT yet rendered |
 | Rear propulsion | 120mm 6S EDF, 4-scoop radial intake, iris nozzle | `s_edf_120_motor_mount.stl` ✓, `s_edf_120_thrust_tube.stl` ✓; intake frame + plenum SCAD complete, STLs missing |
+| Cargo bay | Clamshell doors + SG90 servos + DRV8833 + N20 winch + Dyneema + auto-latch + GPS ring + FPV bezel | ✓ All 13 cargo STLs generated (PR #21 + PR #22 2026-06-01); BOM updated bom_revP.json/csv; gondola shell open |
 | PCBs | Cape-A-1, Cape-B-1 assembled; XCVR-49MHZ-1 fabricated | Cape-A/B KiCad files complete, gerbers stale; XCVR-49MHZ-1 is schematic stub only |
 | Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 ✓; serenity-fc Phase 6 stub only; all Phase 7 items open |
 | Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
@@ -178,8 +179,11 @@ All Phase 1–3 items must be sequentially complete. Phase 4 verification runs i
 
 ### 1.4 — Documentation
 
-- [ ] **Update `serenity-rev-o.jsx`** to be a complete description of the Rev O UAV: all design tabs current (propulsion, avionics, comms, power, structure, OA, cargo, security, regulatory, BOM). Each tab must reflect Rev O CG-pivot nacelle, M=1.0 gear train, 50mm tandem EDF, 24" hull, and PB2-I avionics.
-- [ ] **Update PHASED_BUILD_GUIDE.md** from Rev M to Rev N / Rev O specifications (hull 609.6 mm, 50mm EDFs, 4-scoop radial intake replacing belly scoop, M=1.0 gears, Rev O pivot Z=83mm, MF104ZZ bearings).
+- [x] **`serenity-rev-p.jsx`** — comprehensive 11-tab standalone Rev P specification created: Overview, Airframe, Propulsion, Avionics, Comms, Cargo, Security, Regulatory, BOM, Files, Build Status. Supersedes serenity-rev-o.jsx as current spec. *(done 2026-06-01)*
+- [x] **`bom_revP.json` + `bom_revP.csv`** — full Rev P BOM created: all Rev O items retained + 10 new cargo printed parts + SERVO-CARGO, DRV8833-CARGO, DYNEEMA-SK75, FOAM-GASKET-CARGO; cargo section expanded; totals updated (5 servos, ~$1,905 est.). *(done 2026-06-01)*
+- [x] **`README.md`** — updated to Revision P, June 2026; propulsion section updated to Rev O/P baseline; avionics section updated to PB2-I description; cargo section updated to Rev P complete spec. *(done 2026-06-01)*
+- [x] **`PROJECT_INDEX.md`** — updated to add serenity-rev-p.jsx and bom_revP entries; Rev P marked as current master. *(done 2026-06-01)*
+- [ ] **Update PHASED_BUILD_GUIDE.md** from Rev M 18-inch to Rev P 24-inch specifications (hull 609.6 mm, 50mm EDFs, 4-scoop radial intake, M=1.0 gears, Rev O pivot Z=83mm, MF104ZZ bearings, Rev P cargo system).
 - [ ] **Sync `bom_revO.json` ↔ `bom_revO.csv`** — verify all XCVR-49MHZ-1 BOM items (Phase 5 above) are reflected in both files once XCVR-49MHZ-1 Phase 5 is complete.
 
 ---
