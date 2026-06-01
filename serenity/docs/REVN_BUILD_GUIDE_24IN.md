@@ -10,11 +10,19 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 @media print{body{background:#fff!important;color:#111!important}a{color:#003399!important}}
 </style>
 
-# Serenity-Class Tiltrotor UAV — Build Guide Rev N (24-inch)
+# Serenity-Class Tiltrotor UAV — Build Guide Rev P baseline (24-inch)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Year:** 2026 | **Status:** Public release
+**Year:** 2026 | **Status:** Public release — Rev P baseline (2026-06-01)
+
+> **Rev P note:** This guide covers the Rev P baseline which adds a complete cargo bay system
+> to the Rev O CG-pivot tiltrotor. Rev P new items: Rev S cargo section shell (clamshell door
+> cutout + hinge-pin blocks + SG90 servo pads), port/stbd CF-PETG clamshell doors, 2× SG90
+> cargo servos via DRV8833 H-bridge, N20 winch + Dyneema SK75 spool, auto-latch cradle, GPS
+> retention ring, FPV bezel, 3M foam gasket door seal. All other subsystems identical to Rev O.
+> See `serenity-rev-p.jsx` for the complete Rev P specification and `bom_revP.json`/`bom_revP.csv`
+> for the full Rev P bill of materials.
 
 > Fan engineering work inspired by the Firefly-class transport ship *Serenity*  
 > from *Firefly* (Fox, 2002) and *Serenity* (Universal, 2005).  
