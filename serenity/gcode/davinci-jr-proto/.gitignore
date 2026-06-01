@@ -1,0 +1,13 @@
+# Generated slicer output — regenerate with slice_all_batches.sh
+# Do not commit these; they are large binary artifacts (up to 600 MB total).
+# To regenerate:
+#   cd /path/to/Serenity-UAV
+#   bash serenity/gcode/davinci-jr-proto/slice_all_batches.sh
+# To produce .3w files for XYZware WiFi upload:
+#   python3 serenity/gcode/davinci-jr-proto/xyz_wrap.py serenity/gcode/davinci-jr-proto/batch_X/
+*.gcode
+*.3w
+
+# slic3r temp files
+*.gcode.tmp
+*.tmp
