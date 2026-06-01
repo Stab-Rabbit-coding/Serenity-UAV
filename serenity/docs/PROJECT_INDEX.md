@@ -76,7 +76,8 @@ body, p, li, td, th, code, pre {
 | `serenity-rev-l.jsx` | **Rev L — Dual 80mm 6S series EDFs + PID governor + EDF options** — supersedes Rev K; firmware-only update; hardware unchanged | Rev L (superseded by Rev M) |
 | `serenity-rev-m.jsx` | **Rev M — PocketBeagle 2 Industrial (AM6254) hardware upgrade** — 8× AM6254 quad A53 1.4GHz · 1GB DDR4 · 64GB eMMC · −40°C to 85°C · OS microSD eliminated · propulsion + governor unchanged | Rev M (superseded by Rev N) |
 | `serenity-rev-n.jsx` | **Rev N — 24-inch hull + 50mm tandem EDFs** — scaled hull to 609.6 mm · 2× 50mm 6S EDF per nacelle in tandem series · 4-radial-scoop intake for rear 120mm EDF · nacelle_pod_50mm_tandem design stub · bom_revN (5 propulsion + full avionics) | Rev N (superseded by Rev O) |
-| `serenity-rev-o.jsx` | **Rev O — CG-pivot nacelle + full gear train** — tilt pivot relocated from Z=74mm to Z=83mm (nacelle CG, derived from 15-component mass breakdown) · M=1.0 gear train fully specified (sector R=22mm → drive pinion N=12T → bevel pair 45° N=14T → crown pinion N=12T → nozzle ring rack R_eff=28mm) · blender_nacelle_revo.py generates left/right stator shells · nacelle_pod_50mm_tandem.scad parametric SCAD · bom_revO (full 50mm-EDF build) | **Rev O ← current master** |
+| `serenity-rev-o.jsx` | **Rev O — CG-pivot nacelle + full gear train** — tilt pivot relocated from Z=74mm to Z=83mm (nacelle CG, derived from 15-component mass breakdown) · M=1.0 gear train fully specified (sector R=22mm → drive pinion N=12T → bevel pair 45° N=14T → crown pinion N=12T → nozzle ring rack R_eff=28mm) · blender_nacelle_revo.py generates left/right stator shells · nacelle_pod_50mm_tandem.scad parametric SCAD · bom_revO (full 50mm-EDF build) | Rev O (superseded by Rev P) |
+| `serenity-rev-p.jsx` | **Rev P — Cargo bay complete** — Rev S cargo section shell (100×90mm belly opening, hinge-pin blocks, SG90 servo pads, latch-catch lips) · port/stbd CF-PETG clamshell doors (piano hinge, 3mm CF rod, foam gasket seal) · 2× SG90 servo (door + release) via DRV8833 H-bridge · N20 winch + Dyneema SK75 0.5mm spool · auto-latch cargo cradle · GPS retention ring + FPV bezel · bom_revP.json/csv (14 new items, 5 total servos, ~$1,905 est.) · Comprehensive 11-tab standalone spec | **Rev P ← current master** |
 
 ### SVG Engineering Diagrams
 
@@ -179,8 +180,10 @@ Nacelle shells use Blender script instead — see `thingverse-serenity/blender_n
 | `PROJECT_INDEX.md` | This file |
 | `AVIONICS_PB2_REDESIGN.md` | **Rev K** — 8-node PocketBeagle 2 cooperative avionics architecture; Cape-A and Cape-B design specs |
 | `PHASED_BUILD_GUIDE.md` | **Rev M** — 8-phase phased build, procurement, and flight-test guide (PB2-I boards, eMMC boot, dual-EDF + PID governor) |
+| `bom_revP.json` | **Rev P** bill of materials — Rev O baseline + cargo bay complete: 10 new printed cargo parts + SERVO-CARGO, DRV8833-CARGO, DYNEEMA-SK75, FOAM-GASKET-CARGO; cargo section fully detailed; 5 total servos; ~$1,905 est. |
+| `bom_revP.csv` | **Rev P** bill of materials (CSV for spreadsheet use) — 91 line items including all Rev O rows + 14 new Rev P cargo rows |
 | `bom_revO.json` | **Rev O** bill of materials — CG-pivot nacelle · M=1.0 gear train · 50mm tandem EDF · 24-inch hull · full avionics + antenna system |
-| `bom_revO.csv` | **Rev O** bill of materials (CSV for spreadsheet use) — 68 line items including 8 new Rev O gear-train rows; superseded M=0.5 rows retained at Qty=0 for traceability |
+| `bom_revO.csv` | **Rev O** bill of materials (CSV for spreadsheet use) — 77 line items including 8 new Rev O gear-train rows; superseded M=0.5 rows retained at Qty=0 for traceability |
 | `bom_revN.json` | **Rev N** bill of materials — 50mm EDF upgrade + antenna system |
 | `bom_revN.csv` | **Rev N** bill of materials (CSV for spreadsheet use) |
 | `bom_revM.json` | Rev M bill of materials (superseded) — PB2-I hardware swap, DigiKey P/N, cost delta, eMMC notes |

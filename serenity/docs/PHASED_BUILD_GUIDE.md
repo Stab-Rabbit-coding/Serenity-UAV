@@ -10,7 +10,13 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 @media print{body{background:#fff!important;color:#111!important}a{color:#003399!important}}
 </style>
 
-# Serenity-Class Tiltrotor UAV — Phased Build Guide (Rev M)
+# Serenity-Class Tiltrotor UAV — Phased Build Guide (Rev M — SUPERSEDED)
+
+> **⚠ SUPERSEDED for 24-inch builds.** This guide was written for the Rev M 18-inch hull
+> with dual 80mm EDFs and PocketBeagle 2 Industrial nodes. For the current 24-inch Rev P
+> build, use **REVN_BUILD_GUIDE_24IN.md** (updated to Rev P baseline 2026-06-01) and the
+> phased build sequence in **TODO.md** (§3.0 Physical Build). This file is retained as a
+> historical reference for the Rev M 18-inch design iteration.
 
 **Author:** Steve Griffing, PE(CSE) \[Control Systems Engineering\], CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
