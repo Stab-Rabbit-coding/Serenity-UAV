@@ -2,6 +2,19 @@
 // s_cargo_sect_shell24.scad
 // Cargo gondola shell for Serenity Rev N 24" hull (s_cargo_sect.stl).
 //
+// Rev S (2026-06-01): Clamshell cargo-bay door opening, hinge-pin mount blocks,
+//   SG90 servo mounting pads, and latch-catch lips.
+//   - door_bay_cut(): 100×9×165 mm belly opening at X=-152..-52, Z=0..163,
+//     Y=-416..-407; 3 mm CF-PETG frame lip retained each X end.
+//   - hinge_pin_block(): two 10×10×12 mm CF-PETG blocks at X=-165..-155 (AFT)
+//     and X=-49..-39 (FWD), fused to interior belly face; 3.3 mm pin bore + M3
+//     grub-screw tap for 3 mm CF hinge rod (matches cargo_door_{port,stbd}.stl).
+//   - servo_mount_pad(): two 44×28×5 mm pads at X=-182, Z=40 and Z=122; 4x
+//     M2.5 self-tap pilot bores for cargo_door_servo_bracket.stl (SG90 servo).
+//   - latch_catch_lip(): four 5×2×5 mm ledges at opening edges (X=-152/-57),
+//     Z=42 and Z=122; bottom face is catch surface for cargo_cradle_autolatch.
+//   Ref: generate_cargo_doors.py; PHASED_BUILD_GUIDE.md §Phase 6.
+//
 // Rev R (2026-05-28): Dual GPS antenna flush-mount receptacles on dorsal face.
 //   - GPS_PORT (Z = CZ + 30 mm, port side): SMA coax exits to FC/Sensor Cape 1
 //     (primary GPS receiver for primary flight-control SBC pair).
@@ -157,6 +170,56 @@ GPS_M2_CSK_OD   =  4.5;  // mm -- M2 flathead countersink OD (DIN 7991, 90 deg)
 GPS_M2_CSK_D    =  1.2;  // mm -- M2 countersink depth
 
 $fn = 64;
+
+// ── Cargo-bay clamshell door parameters (Rev S) ───────────────────────────────
+// All values must match generate_cargo_doors.py exactly.
+// Ref: generate_cargo_doors.py X_BAY_AFT, X_BAY_FWD, Z_HINGE, HINGE_Y.
+//
+// Door bay longitudinal span (4.17 in, centred at X = -102 mm)
+DOOR_BAY_AFT  = -155.0;   // mm, AFT door-panel edge X
+DOOR_BAY_FWD  =  -49.0;   // mm, FWD door-panel edge X
+DOOR_BAY_LEN  =  106.0;   // mm, total door bay length
+// Frame lip retained at each X end (door panel seats on frame when closed)
+DOOR_FRAME_T  =    3.0;   // mm, lip width on each side
+// Opening edges (frame lips preserved between BAY edges and OPEN edges)
+DOOR_OPEN_AFT = DOOR_BAY_AFT + DOOR_FRAME_T;   // = -152 mm
+DOOR_OPEN_FWD = DOOR_BAY_FWD - DOOR_FRAME_T;   // =  -52 mm
+DOOR_OPEN_LEN = DOOR_OPEN_FWD - DOOR_OPEN_AFT; // =  100 mm
+
+// Belly exterior Y (matches blender_shells_v3_2mm.py; VERIFY in slicer)
+BELLY_EXT_Y = -415.0;   // mm, outer mold line at belly nadir
+
+// Hinge pin geometry (must match generate_cargo_doors.py HINGE_Y, HINGE_Z)
+//   Pin centre Y = belly exterior Y + 2 mm wall + knuckle radius 3 mm = -410.6 mm
+//   Pin centre Z = gondola half-width = 163.22 / 2 = 81.61 mm
+HINGE_Z        =  81.61;  // mm, CF-rod centreline Z
+HINGE_Y        = -410.6;  // mm, CF-rod centreline Y
+HINGE_BORE_D   =   3.3;   // mm, bore dia (3 mm CF rod + 2 × 0.15 mm radial clearance)
+// Y of the top of the hinge-knuckle barrel (HINGE_Y + knuckle radius 3 mm)
+//   Opening cut extends 0.4 mm above this to clear the barrel.
+DOOR_CUT_TOP_Y = -407.0;  // mm (= HINGE_Y + 3.0 + 0.4)
+
+// Hinge-pin mount block (one per X frame end, epoxied / fused to inner shell)
+//   Block extends PIN_BLOCK_L mm into the gondola interior (away from the bay).
+//   Material: CF-PETG (same as door panel).
+//   M3 grub-screw (DIN 913 M3×4) from +Z face clamps CF rod against rotation.
+//   Ref: Ruthex RX-M3x5.7 NOT used here (plain tap for grub screw only).
+PIN_BLOCK_L     = 10.0;   // mm, X depth into gondola interior
+PIN_BLOCK_H     = 10.0;   // mm, Y span (HINGE_Y ± 5 mm)
+PIN_BLOCK_W     = 12.0;   // mm, Z span (HINGE_Z ± 6 mm)
+M3_GRUB_TAP_D  =  2.5;   // mm, M3 tap-drill dia (coarse, pitch 0.5 mm)
+M3_GRUB_DEPTH  =  6.0;   // mm, bore depth from block +Z face
+
+// Latch-catch lips (4 total: 2 per X-frame edge, symmetric about HINGE_Z)
+//   Match cargo_cradle_autolatch flex-tab plan: 5×5 mm, 2 mm inward hook.
+//   Cradle body 80 mm wide in Z centred at HINGE_Z = 81.61 mm →
+//   cradle corners at Z = 41.6 mm and Z = 121.6 mm → lips at ±3 mm inside.
+//   Bottom face (Y = BELLY_INT_Y) is the catch surface hooked by tab.
+CATCH_PROTRUSION = 5.0;   // mm, X protrusion into bay from opening edge
+CATCH_T          = 2.0;   // mm, Y ledge thickness; underside is catch surface
+CATCH_W          = 5.0;   // mm, Z width (matches cradle tab 5×5 mm plan)
+CATCH_Z_STBD     = 42.0;  // mm, stbd-side catch lip Z centreline
+CATCH_Z_PORT     = 122.0; // mm, port-side catch lip Z centreline
 
 // Orientation rotation vectors
 //   STL axes: X=forward, Y=dorsal (+up), Z=port (+left).
@@ -344,6 +407,143 @@ module gps_mount_cut(pos, rot) {
     }
 }
 
+// ----------------------------------------------------------------------------
+// Module: door_bay_cut
+//   Removes the belly skin panel and the interior clearance zone needed for
+//   the hinge knuckles.  Applied as a boolean subtraction from the inner union
+//   that includes the shell, bosses, ribs, and hinge-pin blocks.
+//
+//   X: DOOR_OPEN_AFT..DOOR_OPEN_FWD (100 mm; 3 mm frame lip each end).
+//   Y: BELLY_EXT_Y - 1 (overshoot below exterior) to DOOR_CUT_TOP_Y (-407 mm).
+//   Z: full belly width with 1 mm overshoot on each side.
+//
+//   The cut also removes belly stiffener rib material within the opening X zone
+//   (both existing ribs at X=-70 and X=-140 are within the bay; their removal
+//   is intentional -- doors provide panel closure; foam fill + frame provide
+//   longitudinal rigidity outside the bay).
+//   Ref: generate_cargo_doors.py; structural_analysis.py 2026-05-26.
+// ----------------------------------------------------------------------------
+module door_bay_cut() {
+    translate([DOOR_OPEN_AFT,
+               BELLY_EXT_Y - 1,
+               BELLY_RIB_Z0 - 1])
+    cube([DOOR_OPEN_LEN,
+          DOOR_CUT_TOP_Y - (BELLY_EXT_Y - 1),
+          BELLY_RIB_Z1 - BELLY_RIB_Z0 + 2]);
+}
+
+// ----------------------------------------------------------------------------
+// Module: hinge_pin_block
+//   Solid CF-PETG bearing block fused to the interior belly face at one X end
+//   of the door bay.  Provides the end-support seat for the 3 mm CF hinge rod
+//   that runs in X through all 8 piano-hinge knuckles.
+//
+//   x_start: minimum-X face of the block.
+//     AFT block: x_start = DOOR_BAY_AFT - PIN_BLOCK_L = -165 (extends AFT)
+//     FWD block: x_start = DOOR_BAY_FWD              = -49  (extends FWD)
+//   Both blocks sit entirely outside the door_bay_cut X zone (-152..-52) so
+//   they are NOT removed by the cut.
+//
+//   Pin bore: 3.3 mm dia along X, centred at (HINGE_Y, HINGE_Z).
+//   M3 grub-screw tap: 2.5 mm dia × 6 mm deep from +Z face of block,
+//     perpendicular to pin axis.  Grub screw (DIN 913 M3×4) clamps CF rod.
+//   Ref: generate_cargo_doors.py HINGE_Y, HINGE_Z, PIN_CL.
+// ----------------------------------------------------------------------------
+module hinge_pin_block(x_start) {
+    difference() {
+        // Solid bearing block
+        translate([x_start,
+                   HINGE_Y - PIN_BLOCK_H / 2,
+                   HINGE_Z - PIN_BLOCK_W / 2])
+        cube([PIN_BLOCK_L, PIN_BLOCK_H, PIN_BLOCK_W]);
+
+        // CF-rod bore along X (rotate [0,90,0] maps cylinder +Z → +X)
+        //   0.5 mm overshoot at each end ensures clean boolean cut.
+        translate([x_start - 0.5, HINGE_Y, HINGE_Z])
+        rotate([0, 90, 0])
+        cylinder(h = PIN_BLOCK_L + 1.0, d = HINGE_BORE_D);
+
+        // M3 grub-screw tap hole from +Z face of block, centred on pin in X and Y.
+        //   Cylinder axis = default Z; translate to top face of block.
+        translate([x_start + PIN_BLOCK_L / 2,
+                   HINGE_Y,
+                   HINGE_Z + PIN_BLOCK_W / 2])
+        cylinder(h = M3_GRUB_DEPTH + 0.5, d = M3_GRUB_TAP_D);
+    }
+}
+
+// ----------------------------------------------------------------------------
+// Module: servo_mount_pad
+//   Thickened interior belly pad with 4x M2.5 self-tap pilot bores for the
+//   cargo_door_servo_bracket (44×28×5 mm, CF-PETG).
+//
+//   One pad per door half; both pads are AFT of the door bay so they survive
+//   the door_bay_cut.  The SG90 servo body pockets into the cargo_door_servo_
+//   bracket (generated separately); the bracket bolts to this pad.
+//
+//   Pad geometry:
+//     X span: SERVO_PAD_X = 44 mm (= bracket footprint)
+//     Z span: SERVO_PAD_Z = 28 mm
+//     Y: rises SERVO_PAD_T = 5 mm above BELLY_INT_Y into gondola interior.
+//   M2.5 pilot bores (2.1 mm dia, 6 mm deep from pad top) provide tap
+//   engagement of 5 mm in pad + 1 mm in belly wall.
+//   Ref: cargo_door_servo_bracket.stl; SG90 datasheet.
+// ----------------------------------------------------------------------------
+SERVO_PAD_X    = 44.0;   // mm, pad X span (= bracket length)
+SERVO_PAD_Z    = 28.0;   // mm, pad Z span (= bracket width)
+SERVO_PAD_T    =  5.0;   // mm, Y height above interior belly face
+SERVO_M25_D    =  2.1;   // mm, M2.5 self-tap pilot dia in CF-PETG
+SERVO_M25_DEP  =  6.0;   // mm, pilot bore depth from pad top
+SERVO_M25_S_X  = 15.0;   // mm, M2.5 hole ±X offset from pad centre
+SERVO_M25_S_Z  =  9.0;   // mm, M2.5 hole ±Z offset from pad centre
+
+// Servo pad X centre: AFT of door bay with 5 mm margin beyond the frame lip.
+//   DOOR_BAY_AFT = -155; pad half-length = 22 mm → x_cen = -155 - 22 - 5 = -182
+SERVO_X_CEN = DOOR_BAY_AFT - SERVO_PAD_X / 2 - 5;   // = -182 mm
+
+// Port-door servo pad: port side of hinge centreline (Z = 122 mm).
+SERVO_PORT_Z = 122.0;   // mm, pad Z centre
+// Stbd-door servo pad: stbd side of hinge centreline (Z = 40 mm).
+SERVO_STBD_Z =  40.0;   // mm, pad Z centre
+
+module servo_mount_pad(x_cen, z_cen) {
+    translate([x_cen, BELLY_INT_Y, z_cen])
+    difference() {
+        // Mounting pad: rises in +Y from interior belly face
+        translate([-SERVO_PAD_X / 2, 0, -SERVO_PAD_Z / 2])
+        cube([SERVO_PAD_X, SERVO_PAD_T, SERVO_PAD_Z]);
+
+        // 4x M2.5 pilot bores from pad top face, directed in -Y (downward).
+        //   rotate([90,0,0]) maps cylinder +Z axis to -Y direction.
+        for (dx = [-SERVO_M25_S_X, SERVO_M25_S_X])
+        for (dz = [-SERVO_M25_S_Z, SERVO_M25_S_Z])
+            translate([dx, SERVO_PAD_T, dz])
+            rotate([90, 0, 0])
+            cylinder(h = SERVO_M25_DEP + 0.1, d = SERVO_M25_D);
+    }
+}
+
+// ----------------------------------------------------------------------------
+// Module: latch_catch_lip
+//   Horizontal ledge on the interior face of a door-bay X opening edge.
+//   Added to the OUTER union() so it is NOT removed by door_bay_cut.
+//
+//   The ledge protrudes CATCH_PROTRUSION mm into the bay in the X direction
+//   and rises CATCH_T mm above BELLY_INT_Y.  The bottom face at BELLY_INT_Y
+//   is the catch surface engaged by the 2 mm inward hooks on the
+//   cargo_cradle_autolatch flex-latch tabs.
+//
+//   x_start: minimum X of the protruding ledge.
+//     AFT edge lips: x_start = DOOR_OPEN_AFT (= -152), protrude toward +X
+//     FWD edge lips: x_start = DOOR_OPEN_FWD - CATCH_PROTRUSION (= -57)
+//   z_pos  : Z centreline of the lip (CATCH_Z_STBD or CATCH_Z_PORT).
+//   Ref: cargo_cradle_autolatch flex-tab plan 5×5 mm; 2 mm inward hook.
+// ----------------------------------------------------------------------------
+module latch_catch_lip(x_start, z_pos) {
+    translate([x_start, BELLY_INT_Y, z_pos - CATCH_W / 2])
+    cube([CATCH_PROTRUSION, CATCH_T, CATCH_W]);
+}
+
 // ============================================================
 // Main geometry
 // ============================================================
@@ -356,60 +556,110 @@ module gps_mount_cut(pos, rot) {
 //   STL bounds: X=-202..-7, Y=-415..-211, Z=0..163 mm.
 //   Inner scale used: sx=0.979459, sy=0.980354, sz=0.975496.
 //
-// ============================================================
-// Module: hollow_shell (Rev R — same fix as s_rear_neck_intake_shell24.scad)
-// ============================================================
-module hollow_shell() {
-    difference() {
-        import("../../thingverse-serenity/files-hollowed-18in/s_cargo_sect_shell24_repaired.stl");
-        translate([CX, CY, CZ])
-            scale([INNER_SX, INNER_SY, INNER_SZ])
-            translate([-CX, -CY, -CZ])
-                import("../../thingverse-serenity/files-hollowed-18in/s_cargo_sect_shell24_repaired.stl");
-    }
-}
+// ── CSG tree overview (Rev S) ─────────────────────────────────────────────────
+//
+//   outer_union
+//   ├─ difference                    ← door_bay_cut applied to EVERYTHING below
+//   │  ├─ inner_union
+//   │  │  ├─ difference             ← existing per-skin cuts (camera, GPS)
+//   │  │  │  ├─ import(shell_stl)
+//   │  │  │  ├─ fpv_cut
+//   │  │  │  └─ gps_mount_cut ×2
+//   │  │  ├─ m3_boss ×12           ← joint-face bosses (outside bay zone)
+//   │  │  ├─ belly_rib ×2          ← ribs CUT by door_bay_cut within bay zone
+//   │  │  ├─ hinge_pin_block ×2    ← outside bay zone; survive door_bay_cut
+//   │  │  └─ servo_mount_pad ×2    ← outside bay zone (AFT of bay); survive
+//   │  └─ door_bay_cut             ← removes belly skin + hinge clearance
+//   └─ latch_catch_lip ×4          ← added AFTER cut; protrude into bay opening
 
 union() {
+
+    // ── A. Inner structure minus door opening ─────────────────────────────────
     difference() {
-        // 2.0 mm foam-fill cargo gondola shell — hollowed in SCAD (see hollow_shell above)
-        hollow_shell();
 
-        // Nadir camera flush aperture
-        fpv_cut(CARGO_CAM_POS, NADIR_ROT);
+        union() {
+            // A1. Shell with existing sensor/GPS aperture cuts.
+            difference() {
+                // 2.0 mm foam-fill cargo gondola shell (manifold for CGAL ops)
+                import("../../thingverse-serenity/files-hollowed-18in/s_cargo_sect_shell24_2mm_repaired.stl");
 
-        // Dual GPS antenna flush-mount receptacles on dorsal (top) face.
-        //   GPS_PORT (port, Z = CZ+30): SMA coax to FC/Sensor Cape 1 (primary GPS).
-        //   GPS_STBD (stbd, Z = CZ-30): SMA coax to FC/Sensor Cape 2 (redundant GPS).
-        //   Capes are distinct -- neither antenna shares a flight-control cape with
-        //   the other, satisfying CLAUDE.md independent-redundancy requirement.
-        //   VERIFY both positions sit on dorsal skin face in slicer before printing.
-        gps_mount_cut(GPS_PORT_POS, DORSAL_ROT);
-        gps_mount_cut(GPS_STBD_POS, DORSAL_ROT);
+                // Nadir FPV camera aperture
+                fpv_cut(CARGO_CAM_POS, NADIR_ROT);
+
+                // Dual GPS flush-mount receptacles on dorsal face.
+                //   GPS_PORT (Z=CZ+30): SMA coax to FC/Sensor Cape 1 (primary).
+                //   GPS_STBD (Z=CZ-30): SMA coax to FC/Sensor Cape 2 (redundant).
+                //   Independent capes satisfy CLAUDE.md failover requirement.
+                //   VERIFY both positions on dorsal skin in slicer before print.
+                gps_mount_cut(GPS_PORT_POS, DORSAL_ROT);
+                gps_mount_cut(GPS_STBD_POS, DORSAL_ROT);
+            }
+
+            // A2. M3 heat-set boss posts at fore joint face (X = -7 mm).
+            //     Bosses extend into interior (-X).  All outside door bay zone.
+            //     VERIFY each boss is inside the hull skin in slicer.
+            m3_boss(BOSS_FORE_1, BOSS_FORE_ROT);
+            m3_boss(BOSS_FORE_2, BOSS_FORE_ROT);
+            m3_boss(BOSS_FORE_3, BOSS_FORE_ROT);
+            m3_boss(BOSS_FORE_4, BOSS_FORE_ROT);
+            m3_boss(BOSS_FORE_5, BOSS_FORE_ROT);
+            m3_boss(BOSS_FORE_6, BOSS_FORE_ROT);
+
+            // A3. M3 boss posts at aft joint face (X = -202 mm).
+            //     Bosses extend into interior (+X).  All outside door bay zone.
+            m3_boss(BOSS_AFT_1, BOSS_AFT_ROT);
+            m3_boss(BOSS_AFT_2, BOSS_AFT_ROT);
+            m3_boss(BOSS_AFT_3, BOSS_AFT_ROT);
+            m3_boss(BOSS_AFT_4, BOSS_AFT_ROT);
+            m3_boss(BOSS_AFT_5, BOSS_AFT_ROT);
+            m3_boss(BOSS_AFT_6, BOSS_AFT_ROT);
+
+            // A4. Belly stiffener ribs on interior nadir face.
+            //     Ribs at X=-70 and X=-140 both fall within the door bay zone
+            //     (DOOR_OPEN_AFT=-152 to DOOR_OPEN_FWD=-52); door_bay_cut will
+            //     remove them within that X range.  Sections outside the bay
+            //     (X=-7..-49 fore zone; X=-155..-202 aft zone) are unaffected
+            //     and continue to brace the belly skin for foam pour.
+            //     VERIFY rib positions inside hull skin in slicer.
+            belly_rib(-70);
+            belly_rib(-140);
+
+            // A5. Hinge-pin mount blocks at each door-bay X end.
+            //     Both blocks sit OUTSIDE the door_bay_cut X zone and survive.
+            //     AFT block: x_start = DOOR_BAY_AFT - PIN_BLOCK_L = -165
+            //     FWD block: x_start = DOOR_BAY_FWD               = -49
+            //     VERIFY blocks are fused to interior belly face in slicer.
+            hinge_pin_block(DOOR_BAY_AFT - PIN_BLOCK_L);   // AFT: X = -165..-155
+            hinge_pin_block(DOOR_BAY_FWD);                  // FWD: X =  -49..-39
+
+            // A6. Servo mounting pads for door-actuator SG90 servos.
+            //     Both pads AFT of door bay (X_CEN = -182 mm); outside cut zone.
+            //     Port-door servo: pad centred at (SERVO_X_CEN, SERVO_PORT_Z).
+            //     Stbd-door servo: pad centred at (SERVO_X_CEN, SERVO_STBD_Z).
+            //     cargo_door_servo_bracket.stl bolts to each pad via 4x M2.5.
+            //     VERIFY pad footprint clears interior ribs and foam-fill zone.
+            servo_mount_pad(SERVO_X_CEN, SERVO_PORT_Z);   // port-door servo
+            servo_mount_pad(SERVO_X_CEN, SERVO_STBD_Z);   // stbd-door servo
+        }
+
+        // ── Cargo-bay door opening ────────────────────────────────────────────
+        //   Subtracts from ALL inner-union geometry including ribs.
+        //   Removes belly skin (X=-152..-52, full Z, Y=-416..-407).
+        //   3 mm shell frame lips remain at X=-155..-152 and X=-52..-49.
+        door_bay_cut();
     }
 
-    // 6x M3 boss posts at fore joint face (X = -7 mm, cargo → mid junction)
-    //   Bosses extend into interior (-X) from fore joint face.
-    //   VERIFY all boss positions inside hull skin before printing.
-    m3_boss(BOSS_FORE_1, BOSS_FORE_ROT);
-    m3_boss(BOSS_FORE_2, BOSS_FORE_ROT);
-    m3_boss(BOSS_FORE_3, BOSS_FORE_ROT);
-    m3_boss(BOSS_FORE_4, BOSS_FORE_ROT);
-    m3_boss(BOSS_FORE_5, BOSS_FORE_ROT);
-    m3_boss(BOSS_FORE_6, BOSS_FORE_ROT);
-
-    // 6x M3 boss posts at aft joint face (X = -202 mm, cargo → rear junction)
-    //   Bosses extend into interior (+X) from aft joint face.
-    m3_boss(BOSS_AFT_1, BOSS_AFT_ROT);
-    m3_boss(BOSS_AFT_2, BOSS_AFT_ROT);
-    m3_boss(BOSS_AFT_3, BOSS_AFT_ROT);
-    m3_boss(BOSS_AFT_4, BOSS_AFT_ROT);
-    m3_boss(BOSS_AFT_5, BOSS_AFT_ROT);
-    m3_boss(BOSS_AFT_6, BOSS_AFT_ROT);
-
-    // 2x belly stiffener ribs on interior nadir face, spanning Z.
-    //   Rib at X=-70: splits fore zone (X=-7..-133, ~126 mm) into 63 mm halves.
-    //   Rib at X=-140: splits aft zone (X=-68..-202, ~134 mm) into 67 mm halves.
-    //   VERIFY rib positions are inside hull skin in slicer before printing.
-    belly_rib(-70);
-    belly_rib(-140);
+    // ── B. Latch-catch lips (added after door_bay_cut; not affected by it) ────
+    //   4 lips total: 2 at AFT opening edge, 2 at FWD opening edge.
+    //   Each protrudes CATCH_PROTRUSION mm into the bay opening and rises
+    //   CATCH_T mm above BELLY_INT_Y.  Bottom face (Y=BELLY_INT_Y) is the
+    //   catch surface for cargo_cradle_autolatch 2 mm flex-tab hooks.
+    //   VERIFY lips are accessible through the open door in slicer.
+    //
+    //   AFT-edge lips (x_start = DOOR_OPEN_AFT = -152, protrude toward +X)
+    latch_catch_lip(DOOR_OPEN_AFT, CATCH_Z_STBD);
+    latch_catch_lip(DOOR_OPEN_AFT, CATCH_Z_PORT);
+    //   FWD-edge lips (x_start = DOOR_OPEN_FWD - CATCH_PROTRUSION = -57)
+    latch_catch_lip(DOOR_OPEN_FWD - CATCH_PROTRUSION, CATCH_Z_STBD);
+    latch_catch_lip(DOOR_OPEN_FWD - CATCH_PROTRUSION, CATCH_Z_PORT);
 }
