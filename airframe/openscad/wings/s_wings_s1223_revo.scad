@@ -51,19 +51,25 @@
 //   CL at 3° AoA      : ≈ 1.55 (Re=91k, interpolated)
 //   L/D at CL=1.0     : ≈ 30–35
 //
-// Coordinate System
-// -----------------
+// Coordinate System (internal / module geometry)
+// -----------------------------------------------
 //   X: chordwise    (X=0 = leading edge, X=CHORD = trailing edge)
-//   Y: thickness    (Y>0 = upper surface = toward sky in level flight)
-//   Z: spanwise     (Z=0 = wing root / fuselage face, Z=SEMI_SPAN = wing tip)
+//   Y: thickness    (Y>0 = upper surface)
+//   Z: spanwise     (Z=0 = wing root, Z=SEMI_SPAN = wing tip)
 //
-// In assembly, this SCAD is oriented:
-//   • Z horizontal (span = left/right)
-//   • X fore-aft (chord runs nose-to-tail)
-//   • Y vertical (thickness = up)
-//   3° incidence is applied by the s_wing_nacelle_pylon_revo.scad shim at
-//   the pylon attachment face — not baked into this wing geometry — so the
-//   chord plane is parallel to the fuselage waterline datum in this file.
+// Assembly output orientation (after wings() reorientation transform)
+// -------------------------------------------------------------------
+//   X: spanwise     (X=0 = root / fuselage face, X=SEMI_SPAN = tip)
+//   Y: chordwise    (Y=0 = leading edge, Y=CHORD = trailing edge)
+//   Z: thickness    (Z>0 = upper surface = toward sky in level flight)
+//
+//   This matches the canonical Serenity hull orientation measured from
+//   s_wings_both_shell24_50mm.stl: full-span X=171mm, chord Y=161mm,
+//   thickness Z=24mm.  The wings() module applies a coordinate permutation
+//   (X←Z, Y←X, Z←Y) to convert internal geometry to assembly orientation.
+//
+//   3° incidence is applied by s_wing_nacelle_pylon_revo.scad at the
+//   pylon attachment face — not baked into this geometry.
 //
 // Render Commands
 // ---------------
@@ -92,14 +98,15 @@
 // ── Parameter Block ───────────────────────────────────────────────────────────
 // =============================================================================
 
-// ── Wing planform — VERIFY all values against s_wings_both_shell24.stl ───────
-// All dimensions at 2.197× Thingiverse scale.  Measure the original STL in
-// Meshmixer / FreeCAD before committing to print; update parameters accordingly.
-WING_CHORD_ROOT =  65.0;  // [mm] VERIFY — root chord length (at fuselage face)
-WING_CHORD_TIP  =  42.0;  // [mm] VERIFY — tip chord length (at pylon face)
-WING_SEMI_SPAN  = 140.0;  // [mm] VERIFY — root face to tip face along Z
-WING_SWEEP_LE   =  12.0;  // [mm] VERIFY — leading-edge offset at tip vs. root (+X = aft sweep)
-WING_DIHEDRAL   =   0.0;  // [mm] VERIFY — tip rise vs. root (+Y = dihedral); Serenity ≈ 0
+// ── Wing planform — measured from canonical s_wings_both_shell24_50mm.stl ────
+// Full-span X=171.3mm → semi-span 85.7mm; chord Y=160.9mm; thickness Z=24.2mm.
+// WING_CHORD_TIP estimated at 64.5% of root (preserving original SCAD taper ratio).
+// WING_SWEEP_LE kept at 12mm — VERIFY against canonical LE sweep measurement.
+WING_CHORD_ROOT = 161.0;  // [mm] root chord length (at fuselage face) — measured
+WING_CHORD_TIP  = 104.0;  // [mm] tip chord length (at pylon face)     — estimated
+WING_SEMI_SPAN  =  85.7;  // [mm] root face to tip face (internal Z)   — measured
+WING_SWEEP_LE   =  12.0;  // [mm] VERIFY — LE offset at tip vs. root, aft (+Y in output)
+WING_DIHEDRAL   =   0.0;  // [mm] tip rise vs. root (+Z in output); Serenity ≈ 0
 
 // ── Wing section scaling ──────────────────────────────────────────────────────
 // The S1223 normalised profile is scaled by chord at each span station.
@@ -115,10 +122,9 @@ THICKNESS_SCALE =   1.0;  // [1.0 = full S1223 t/c; 0.85–1.0 recommended range
 // Bore is centred at 30% chord (near max thickness for minimum section loss).
 SPAR_BORE_OD    =  12.3;  // [mm] bore ID = tube OD + 0.3 mm slip fit
 SPAR_BORE_X     =   0.30; // [chord fraction] bore centre, chordwise
-                           // At root: 0.30 × 65 = 19.5 mm from LE
-                           // At tip : 0.30 × 42 = 12.6 mm from LE
-SPAR_BORE_Y_CTR =   0.0;  // [mm] bore centre Y offset (0 = chord line; may need
-                           //      small positive offset toward upper surface)
+                           // At root: 0.30 × 161 = 48.3 mm from LE (internal X)
+                           // At tip : 0.30 × 104 = 31.2 mm from LE (internal X)
+SPAR_BORE_Y_CTR =   0.0;  // [mm] bore centre, internal Y offset (0 = chord line)
 
 // ── Pylon mount pocket (must match s_wing_nacelle_pylon_revo.scad) ────────────
 // The wing_attach_block from the pylon inserts into this pocket at the tip face.
@@ -369,8 +375,9 @@ module fuselage_root_tab() {
 // ── Module: wing_one_side ─────────────────────────────────────────────────────
 // =============================================================================
 // One wing panel (port or starboard before mirror).
-// Builds the solid, then subtracts the spar bore, pylon pocket, and bolt holes.
-// The fuselage root tab is additive (+Z direction below root face).
+// Builds the solid, then subtracts the spar bore.
+// The fuselage root tab is additive (−Z from root face, inboard direction).
+// Note: pylon mount pocket omitted — folding capability not used on this build.
 module wing_one_side() {
     difference() {
         union() {
@@ -378,15 +385,11 @@ module wing_one_side() {
             wing_solid();
 
             // ── Fuselage root insertion tab ────────────────────────────────
-            // Protrudes inboard (−Z) from root face for fuselage slot fitment.
             fuselage_root_tab();
         }
 
         // ── CF spar bore (spanwise, 12 mm OD) ────────────────────────────
         spar_bore();
-
-        // ── Pylon mount pocket at tip ─────────────────────────────────────
-        pylon_mount_pocket();
     }
 }
 
@@ -395,18 +398,24 @@ module wing_one_side() {
 // ── Module: wings (top-level render) ─────────────────────────────────────────
 // =============================================================================
 // Renders port, starboard, or both wings based on RENDER_SIDE.
-// Starboard is port mirrored across the XY plane (Z=-Z).
-// In the assembled aircraft the two wings are symmetric about the XY midplane.
+//
+// Coordinate permutation applied here converts internal geometry
+//   (chord=X, thickness=Y, span=Z)  →  assembly output (span=X, chord=Y, thickness=Z)
+// using the cyclic permutation matrix [X←Z, Y←X, Z←Y].
+// This matches the canonical Serenity hull: span in X, chord in Y, thickness in Z.
+//
+// Port  wing: span extends in +X.
+// Stbd  wing: internal mirror([0,0,1]) flips span to −Z, then permutation → −X.
 module wings(render_side = RENDER_SIDE) {
+    reorient = [[0, 0, 1, 0],
+                [1, 0, 0, 0],
+                [0, 1, 0, 0],
+                [0, 0, 0, 1]];
     if (render_side >= 0) {
-        // Port (left) wing — Z extends in +Z direction
-        wing_one_side();
+        multmatrix(reorient) wing_one_side();
     }
     if (render_side <= 0) {
-        // Starboard (right) wing — mirror across Z = 0, then shift
-        // The root face of stbd is at Z = 0 (mirror of port root face).
-        mirror([0, 0, 1])
-            wing_one_side();
+        multmatrix(reorient) mirror([0, 0, 1]) wing_one_side();
     }
 }
 
