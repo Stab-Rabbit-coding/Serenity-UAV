@@ -5,7 +5,7 @@
 # Author : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 # License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
 # Date   : 2026-06-02
-# Slicer : slic3r 1.3.0 (apt)
+# Slicer : PrusaSlicer (apt) — CLI-compatible fork of Slic3r
 # Printer: XYZprinting da Vinci Jr. 1.0 w (150×150×150 mm, 0.4 mm nozzle)
 # Output : airframe/gcode/davinci-jr-proto/<batch>/  (one .gcode per part)
 #
@@ -22,16 +22,18 @@
 #   (wrapper adds the 8-byte XYZ header expected by XYZware WiFi upload).
 #   If the printer runs Repetier firmware, load .gcode directly via USB.
 #
-# Slic3r options reference used in this script:
-#   --load            : base printer/filament/print profile
+# PrusaSlicer CLI options used in this script:
+#   --export-gcode    : required for headless G-code export
+#   --load            : printer/filament/print profile (.ini — slic3r format compatible)
 #   --layer-height    : mm per layer
 #   --fill-density    : infill percentage (e.g. 20%)
 #   --perimeters      : shell count
 #   --support-material: enable support (flag present = on)
+#   --support-material-buildplate-only : support on build plate faces only
 #   --raft-layers     : 0=no raft, 1=1-layer raft, 2=full raft
 #   --scale           : uniform scale factor (0.86 = 86%)
 #   --duplicate       : number of copies to arrange on plate
-#   --print-center    : X,Y centre of bed in mm
+#   --center          : X,Y centre of bed in mm
 #   -o                : output .gcode path
 # =============================================================================
 
@@ -51,7 +53,7 @@ STL_WINGS="${REPO_ROOT}/airframe/stls/wings"
 
 GCODE_ROOT="${REPO_ROOT}/airframe/gcode/davinci-jr-proto"
 CFG="${GCODE_ROOT}/davinci_jr_pla.ini"
-SLICER="slic3r"
+SLICER="prusa-slicer"
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -82,6 +84,7 @@ slice() {
     log "  Slicing: ${base} (scale=${scale}, infill=${infill}, raft=${raft}, support=${support})"
 
     "$SLICER" \
+        --export-gcode \
         --load "$CFG" \
         --layer-height 0.2 \
         --scale "$scale" \
@@ -89,10 +92,10 @@ slice() {
         --raft-layers "$raft" \
         "${sup_flag[@]}" \
         "${extras[@]}" \
-        --print-center 75,75 \
+        --center 75,75 \
         -o "$out" \
         "$stl" \
-        2>&1 | grep -Ev "^(Slicing|Loading|Processing|Generating|Exporting|Done\.)$" || true
+        2>&1 | grep -Ev "^([0-9]+ => |=> |Slicing result exported|Done\.|[[:space:]]*$)" || true
 
     log "  → ${out##"${REPO_ROOT}/"}"
 }
@@ -215,21 +218,6 @@ run_batch() {
         ;;
 
     # -----------------------------------------------------------------------
-    # BATCH H — Tilt Mechanism Parts (★★)
-    # Pivot housings: 70.3×64.5×9.9 mm; pin holders: 37.8×91.2×2.6 mm (raft)
-    # Infill 25% (functional); using 50 mm-bore scaled versions throughout
-    # -----------------------------------------------------------------------
-    H)
-        batch_header H "Tilt Mechanism Parts"
-        slice "$OUT" 1 "25%" 0 "no" "${STL_NACELLES}/s_eng_piv_outer_scaled24_50mm.stl" \
-            --duplicate 2
-        slice "$OUT" 1 "25%" 1 "no" "${STL_NACELLES}/s_eng_piv_pins_scaled24_50mm.stl" \
-            --duplicate 2
-        slice "$OUT" 1 "25%" 0 "no" "${STL_WINGS}/s_pivot_arm_a_scaled24_50mm_repaired.stl" \
-            --duplicate 2
-        ;;
-
-    # -----------------------------------------------------------------------
     # BATCH I — 120 mm EDF Motor Mount Spider (★★)
     # 126×126×53 mm — fits 1:1; support for spider arm overhangs
     # Infill 25%
@@ -345,7 +333,7 @@ run_batch() {
     # Every external and internal-visible part sliced at exactly 63% so the
     # assembled reference model is geometrically consistent.
     #
-    # Part list (25 print jobs — complete aircraft):
+    # Part list (22 print jobs — complete aircraft):
     #
     #   HULL SECTIONS (4 prints)
     #     s_head_shell24          129.4×235.1×140.7 → 81.5×148.1×88.6 mm
@@ -357,11 +345,6 @@ run_batch() {
     #     s_nacelle_port_revt     75.6×83.3×185.2   → 47.6×52.5×116.7 mm
     #     s_nacelle_stbd_revt     same
     #     nacelle_nozzle_closed_asm_repaired (×2)    62.0×62.0×19.5 → 39.1×39.1×12.3 mm
-    #
-    #   TILT MECHANISM (3 prints, ×2 each for port+stbd nacelles)
-    #     s_eng_piv_outer_scaled24_50mm        70.3×64.5×9.9  → 44.3×40.6×6.2 mm
-    #     s_eng_piv_pins_scaled24_50mm         37.8×91.2×2.6  → 23.8×57.5×1.6 mm
-    #     s_pivot_arm_a_scaled24_50mm_repaired 44.8×50.1×14.3 → 28.2×31.6×9.0 mm
     #
     #   WINGS & LANDING GEAR (4 prints)
     #     s_wing_port_s1223_revo   85.7×161.0×~20 → 54.0×101.4×12.6 mm
@@ -392,7 +375,7 @@ run_batch() {
     VISUAL)
         local SCALE="0.63"
         local INFILL="15%"
-        batch_header VISUAL "Complete Aircraft Visual Reference (63% uniform scale — 25 print jobs)"
+        batch_header VISUAL "Complete Aircraft Visual Reference (63% uniform scale — 22 print jobs)"
 
         # ---- HULL SECTIONS ------------------------------------------------
         slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
@@ -425,19 +408,6 @@ run_batch() {
         # ---- NACELLE NOZZLE ASSEMBLIES (×2 — one per nacelle) --------------
         slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
             "${STL_NOZZLES}/nacelle_nozzle_closed_asm_repaired.stl" \
-            --duplicate 2
-
-        # ---- TILT MECHANISM (×2 each — one set per nacelle) ----------------
-        slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
-            "${STL_NACELLES}/s_eng_piv_outer_scaled24_50mm.stl" \
-            --duplicate 2
-
-        slice "$OUT" "$SCALE" "$INFILL" 1 "no" \
-            "${STL_NACELLES}/s_eng_piv_pins_scaled24_50mm.stl" \
-            --duplicate 2
-
-        slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
-            "${STL_WINGS}/s_pivot_arm_a_scaled24_50mm_repaired.stl" \
             --duplicate 2
 
         # ---- WINGS (port and starboard separately — S1223 airfoil) ---------
@@ -493,7 +463,7 @@ run_batch() {
         ;;
 
     *)
-        log "ERROR: Unknown batch '${batch}'. Valid: A B C D E F G1 G2 H I J K L M N O P Q VISUAL"
+        log "ERROR: Unknown batch '${batch}'. Valid: A B C D E F G1 G2 I J K L M N O P Q VISUAL"
         exit 1
         ;;
     esac
@@ -502,7 +472,7 @@ run_batch() {
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
-ALL_BATCHES=(A B C D E F G1 G2 H I J K L M N O P Q VISUAL)
+ALL_BATCHES=(A B C D E F G1 G2 I J K L M N O P Q VISUAL)
 
 if [[ $# -eq 0 ]]; then
     log "Running all batches: ${ALL_BATCHES[*]}"
