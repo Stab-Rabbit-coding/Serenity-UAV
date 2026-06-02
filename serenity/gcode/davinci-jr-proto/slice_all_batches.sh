@@ -329,8 +329,177 @@ run_batch() {
             --support-material-buildplate-only
         ;;
 
+    # -----------------------------------------------------------------------
+    # BATCH VISUAL — Complete Aircraft Visual Reference — uniform 63% scale
+    #
+    # 63% is the tightest constraint (s_head_shell24 Y=235.1 mm → 148.1 mm).
+    # Every external and internal-visible part is sliced at exactly 63% so the
+    # assembled reference model is geometrically consistent — no per-part rescaling.
+    #
+    # Part list (27 individual prints — complete aircraft):
+    #
+    #   HULL SECTIONS (4 prints)
+    #     head_shell24       129.4×235.1×140.7 → 81.5×148.1×88.6 mm
+    #     middle_shell24     177.1×164.8×73.2  → 111.6×103.9×46.1 mm  (with side intakes)
+    #     cargo_sect_shell24 194.7×203.6×163.2 → 122.7×128.3×102.8 mm
+    #     rear_shell24       140.9×158.0×181.7 → 88.8×99.5×114.4 mm
+    #
+    #   NACELLES — COMPLETE (8 prints, shared geometry for L and R)
+    #     eng_left_shell  (outer)  75.6×83.8×185.4 → 47.7×52.8×116.8 mm
+    #     eng_right_shell (outer)  same
+    #     eng_left_stator          75.6×96.2×172.6 → 47.7×60.6×108.7 mm
+    #     eng_right_stator         same
+    #     nacelle_nozzle_closed_asm_repaired (×2)  62.0×62.0×19.5 → 39×39×12.3 mm
+    #
+    #   TILT MECHANISM (4 prints, ×2 each for L+R nacelles)
+    #     eng_piv_outer_scaled24   70.3×64.5×9.9  → 44.3×40.6×6.2 mm
+    #     eng_piv_pins_scaled24    37.8×91.2×2.6  → 23.8×57.4×1.6 mm
+    #     pivot_arm_a_scaled24     44.8×50.1×14.3 → 28.2×31.6×9.0 mm
+    #     eng_pistons_scaled24     32.8×58.9×13.2 → 20.7×37.1×8.3 mm
+    #
+    #   WINGS & LANDING GEAR (3 prints)
+    #     wings_both_shell24  137.1×128.8×19.4 → 86.4×81.1×12.2 mm
+    #     legs_scaled24        96.1×150.1×7.5  → 60.5×94.6×4.7 mm  (raft)
+    #     feet_x_4_repaired    77.6×98.4×9.0   → 48.9×62.0×5.7 mm  (raft)
+    #
+    #   CARGO BAY (2 prints)
+    #     cargo_door_port  108.0×33.7×87.0 → 68.0×21.3×54.8 mm
+    #     cargo_door_stbd  108.0×38.2×84.6 → 68.0×24.1×53.3 mm
+    #
+    #   REAR EDF — COMPLETE (4 prints)
+    #     middle_intake_shell24  177.1×164.8×73.2 → 111.6×103.9×46.1 mm
+    #     s_edf_120_thrust_tube  134.0×134.0×167.0 → 84.4×84.4×105.2 mm
+    #     s_edf_120_motor_mount  126.0×126.0×53.0  → 79.4×79.4×33.4 mm
+    #     rear_nozzle_closed_asm 131.0×131.0×20.0  → 82.5×82.5×12.6 mm
+    #
+    #   VISUAL DETAILS (4 prints)
+    #     dorsal_antenna_fin    20.0×4.0×35.0  → 12.6×2.5×22.1 mm  (raft)
+    #     nacelle_tip_cap_port  80.0×80.0×8.0  → 50.4×50.4×5.0 mm  (raft)
+    #     nacelle_tip_cap_stbd  same
+    #     hull_engine_bell      76.0×76.0×50.0 → 47.9×47.9×31.5 mm
+    #
+    # Note: cockpit_dome_clear.stl is an open-surface mesh (no bottom face) that
+    # crashes slic3r 1.3.0. Print the cockpit dome as a separate clear-resin SLA
+    # part or add a base plane in CAD before slicing.
+    # -----------------------------------------------------------------------
+    VISUAL)
+        local SCALE="0.63"
+        local INFILL="15%"
+        batch_header VISUAL "Complete Aircraft Visual Reference (63% uniform scale — 27 prints)"
+
+        # ---- HULL SECTIONS ------------------------------------------------
+        slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
+            "${STL_CARGO}/s_head_shell24.stl" \
+            --support-material-buildplate-only
+
+        slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
+            "${STL_CARGO}/s_middle_shell24.stl" \
+            --support-material-buildplate-only
+
+        slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
+            "${STL_CARGO}/s_cargo_sect_shell24.stl" \
+            --support-material-buildplate-only
+
+        slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
+            "${STL_CARGO}/s_rear_shell24.stl" \
+            --support-material-buildplate-only
+
+        # ---- NACELLE OUTER SHELLS (tall — support on scarf face) -----------
+        slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
+            "${STL_CARGO}/s_eng_left_shell24_50mm.stl" \
+            --support-material-buildplate-only
+
+        slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
+            "${STL_CARGO}/s_eng_right_shell24_50mm.stl" \
+            --support-material-buildplate-only
+
+        # ---- NACELLE INNER STATOR SHELLS -----------------------------------
+        slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
+            "${STL_CARGO}/s_eng_left_stator_shell24_50mm.stl" \
+            --support-material-buildplate-only
+
+        slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
+            "${STL_CARGO}/s_eng_right_stator_shell24_50mm.stl" \
+            --support-material-buildplate-only
+
+        # ---- NACELLE NOZZLE ASSEMBLIES (one per nacelle, 2 total) ----------
+        # nacelle_nozzle_closed_asm_repaired: ring + 8 petals pre-assembled
+        # print 2 copies — one for each nacelle
+        slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
+            "${STL_CARGO}/nacelle_nozzle_closed_asm_repaired.stl" \
+            --duplicate 2
+
+        # ---- NACELLE TILT MECHANISM (×2 each — one set per nacelle) --------
+        slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
+            "${STL_CARGO}/s_eng_piv_outer_scaled24.stl" \
+            --duplicate 2
+
+        slice "$OUT" "$SCALE" "$INFILL" 1 "no" \
+            "${STL_CARGO}/s_eng_piv_pins_scaled24.stl" \
+            --duplicate 2
+
+        slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
+            "${STL_CARGO}/s_pivot_arm_a_scaled24.stl" \
+            --duplicate 2
+
+        slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
+            "${STL_CARGO}/s_eng_pistons_scaled24.stl" \
+            --duplicate 2
+
+        # ---- WINGS & LANDING GEAR -----------------------------------------
+        slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
+            "${STL_CARGO}/s_wings_both_shell24.stl"
+
+        slice "$OUT" "$SCALE" "$INFILL" 1 "no" \
+            "${STL_CARGO}/s_legs_scaled24.stl"
+
+        slice "$OUT" "$SCALE" "$INFILL" 1 "no" \
+            "${STL_CARGO}/s_feet_x_4_scaled24_repaired.stl"
+
+        # ---- CARGO BAY DOORS -----------------------------------------------
+        slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
+            "${STL_CARGO}/cargo_door_port.stl" \
+            --support-material-buildplate-only
+
+        slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
+            "${STL_CARGO}/cargo_door_stbd.stl" \
+            --support-material-buildplate-only
+
+        # ---- REAR EDF — COMPLETE -------------------------------------------
+        # Middle body with 4 radial intake scoops (the Rev P intake geometry)
+        slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
+            "${STL_CARGO}/s_middle_intake_shell24.stl" \
+            --support-material-buildplate-only
+
+        # 120 mm EDF thrust tube (duct from intake plenum to fan)
+        slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
+            "${STL_SERENITY}/s_edf_120_thrust_tube.stl"
+
+        # 120 mm EDF motor-mount spider (registers on thrust tube forward spigot)
+        slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
+            "${STL_SERENITY}/s_edf_120_motor_mount.stl" \
+            --support-material-buildplate-only
+
+        # Rear iris nozzle closed assembly (ring + 8 petals pre-assembled)
+        slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
+            "${STL_CARGO}/rear_nozzle_closed_asm.stl"
+
+        # ---- VISUAL DETAIL PARTS ------------------------------------------
+        slice "$OUT" "$SCALE" "$INFILL" 1 "no" \
+            "${STL_SERENITY}/dorsal_antenna_fin.stl"
+
+        slice "$OUT" "$SCALE" "$INFILL" 1 "no" \
+            "${STL_SERENITY}/nacelle_tip_cap_port.stl"
+
+        slice "$OUT" "$SCALE" "$INFILL" 1 "no" \
+            "${STL_SERENITY}/nacelle_tip_cap_stbd.stl"
+
+        slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
+            "${STL_SERENITY}/hull_engine_bell.stl"
+        ;;
+
     *)
-        log "ERROR: Unknown batch '${batch}'. Valid: A B C D E F G1 G2 H I J K L M N O P Q"
+        log "ERROR: Unknown batch '${batch}'. Valid: A B C D E F G1 G2 H I J K L M N O P Q VISUAL"
         exit 1
         ;;
     esac
@@ -339,7 +508,7 @@ run_batch() {
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
-ALL_BATCHES=(A B C D E F G1 G2 H I J K L M N O P Q)
+ALL_BATCHES=(A B C D E F G1 G2 H I J K L M N O P Q VISUAL)
 
 if [[ $# -eq 0 ]]; then
     log "Running all batches: ${ALL_BATCHES[*]}"
