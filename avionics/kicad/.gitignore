@@ -1,0 +1,6 @@
+# KiCad runtime / generated files — do not commit
+fp-info-cache
+report.txt
+*.lck
+~*.kicad_*
+*-backups/

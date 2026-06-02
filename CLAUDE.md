@@ -66,8 +66,8 @@ Every component will be fabricated or procured; design accordingly.
 -
 ## Workflow Notes
 
-* Run Blender scripts with `blender --background --python <script>.py` — the machine supports
+- Run Blender scripts with `blender --background --python <script>.py` — the machine supports
   headless execution.
-- Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
+- Output STLs go to `airframe/stls/` (subdirectories: `fuselage/`, `nacelles/`, `wings/`).
 - When a script regenerates STLs, verify Z-range and bore-diameter in the console output before
   committing.
