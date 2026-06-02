@@ -347,12 +347,12 @@ module nacelle_shell_imported() {
     if (NACELLE_SIDE > 0) {
         // ── Port (left) nacelle ───────────────────────────────────────────────
         translate([-BORE_CX_L, BORE_CY, 0])
-            import("../../thingverse-serenity/files-hollowed-18in/s_eng_left_shell24_50mm_repaired.stl",
+            import("../../stls/nacelles/s_eng_left_shell24_50mm_repaired.stl",
                    convexity = 4);
     } else {
         // ── Starboard (right) nacelle ─────────────────────────────────────────
         translate([-BORE_CX_R, BORE_CY, 0])
-            import("../../thingverse-serenity/files-hollowed-18in/s_eng_right_shell24_50mm_repaired.stl",
+            import("../../stls/nacelles/s_eng_right_shell24_50mm_repaired.stl",
                    convexity = 4);
     }
 }

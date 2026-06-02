@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 # =============================================================================
-# slice_all_batches.sh — Serenity-Class UAV Rev P Prototype Slice Runner
+# slice_all_batches.sh — Serenity-Class UAV Rev T Prototype Slice Runner
 # =============================================================================
 # Author : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 # License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
-# Date   : 2026-06-01
+# Date   : 2026-06-02
 # Slicer : slic3r 1.3.0 (apt)
 # Printer: XYZprinting da Vinci Jr. 1.0 w (150×150×150 mm, 0.4 mm nozzle)
-# Output : serenity/gcode/davinci-jr-proto/<batch>/  (one .gcode per part)
+# Output : airframe/gcode/davinci-jr-proto/<batch>/  (one .gcode per part)
 #
 # Usage:
 #   cd /home/user/Serenity-UAV
-#   bash serenity/gcode/davinci-jr-proto/slice_all_batches.sh [BATCH_LETTER]
+#   bash airframe/gcode/davinci-jr-proto/slice_all_batches.sh [BATCH_LETTER]
 #
-#   BATCH_LETTER is optional: A B C D E F G H I J K L M N O P Q
+#   BATCH_LETTER is optional: A B C D E F G1 G2 H I J K L M N O P Q VISUAL
 #   Omit to run all batches.
 #
 # Note on G-code format:
@@ -38,12 +38,18 @@
 set -euo pipefail
 
 # ---------------------------------------------------------------------------
-# Paths
+# Paths — all relative to repo root
 # ---------------------------------------------------------------------------
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
-STL_CARGO="${REPO_ROOT}/thingverse-serenity/files-hollowed-18in"
-STL_SERENITY="${REPO_ROOT}/serenity/stl"
-GCODE_ROOT="${REPO_ROOT}/serenity/gcode/davinci-jr-proto"
+
+STL_FUSELAGE="${REPO_ROOT}/airframe/stls/fuselage"
+STL_AFT_EDF="${REPO_ROOT}/airframe/stls/fuselage/aft-edf"
+STL_CARGO_BAY="${REPO_ROOT}/airframe/stls/fuselage/cargo"
+STL_NACELLES="${REPO_ROOT}/airframe/stls/nacelles"
+STL_NOZZLES="${REPO_ROOT}/airframe/stls/nacelles/nozzles"
+STL_WINGS="${REPO_ROOT}/airframe/stls/wings"
+
+GCODE_ROOT="${REPO_ROOT}/airframe/gcode/davinci-jr-proto"
 CFG="${GCODE_ROOT}/davinci_jr_pla.ini"
 SLICER="slic3r"
 
@@ -116,13 +122,13 @@ run_batch() {
     # -----------------------------------------------------------------------
     A)
         batch_header A "Small Cargo Hardware (7 parts)"
-        slice "$OUT" 1    "20%" 1 "no" "${STL_CARGO}/cargo_door_servo_bracket.stl"
-        slice "$OUT" 1    "20%" 1 "no" "${STL_CARGO}/cargo_release_servo_bracket.stl"
-        slice "$OUT" 1    "20%" 1 "no" "${STL_CARGO}/cargo_drv8833_tray.stl"
-        slice "$OUT" 1    "20%" 0 "no" "${STL_CARGO}/cargo_winch_motor_mount.stl"
-        slice "$OUT" 1    "20%" 0 "no" "${STL_CARGO}/cargo_winch_spool.stl"
-        slice "$OUT" 1    "20%" 1 "no" "${STL_CARGO}/cargo_gps_retention_ring.stl"
-        slice "$OUT" 1    "20%" 1 "no" "${STL_CARGO}/cargo_fpv_bezel.stl"
+        slice "$OUT" 1    "20%" 1 "no" "${STL_CARGO_BAY}/cargo_door_servo_bracket.stl"
+        slice "$OUT" 1    "20%" 1 "no" "${STL_CARGO_BAY}/cargo_release_servo_bracket.stl"
+        slice "$OUT" 1    "20%" 1 "no" "${STL_CARGO_BAY}/cargo_drv8833_tray.stl"
+        slice "$OUT" 1    "20%" 0 "no" "${STL_CARGO_BAY}/cargo_winch_motor_mount.stl"
+        slice "$OUT" 1    "20%" 0 "no" "${STL_CARGO_BAY}/cargo_winch_spool.stl"
+        slice "$OUT" 1    "20%" 1 "no" "${STL_CARGO_BAY}/cargo_gps_retention_ring.stl"
+        slice "$OUT" 1    "20%" 1 "no" "${STL_CARGO_BAY}/cargo_fpv_bezel.stl"
         ;;
 
     # -----------------------------------------------------------------------
@@ -131,7 +137,7 @@ run_batch() {
     # -----------------------------------------------------------------------
     B)
         batch_header B "Port Cargo Door"
-        slice "$OUT" 1 "20%" 0 "yes" "${STL_CARGO}/cargo_door_port.stl" \
+        slice "$OUT" 1 "20%" 0 "yes" "${STL_CARGO_BAY}/cargo_door_port.stl" \
             --support-material-buildplate-only
         ;;
 
@@ -141,7 +147,7 @@ run_batch() {
     # -----------------------------------------------------------------------
     C)
         batch_header C "Starboard Cargo Door"
-        slice "$OUT" 1 "20%" 0 "yes" "${STL_CARGO}/cargo_door_stbd.stl" \
+        slice "$OUT" 1 "20%" 0 "yes" "${STL_CARGO_BAY}/cargo_door_stbd.stl" \
             --support-material-buildplate-only
         ;;
 
@@ -152,7 +158,7 @@ run_batch() {
     # -----------------------------------------------------------------------
     D)
         batch_header D "Cargo Auto-latch Cradle"
-        slice "$OUT" 1 "25%" 0 "yes" "${STL_CARGO}/cargo_cradle_autolatch.stl" \
+        slice "$OUT" 1 "25%" 0 "yes" "${STL_CARGO_BAY}/cargo_cradle_autolatch.stl" \
             --support-material-buildplate-only
         ;;
 
@@ -163,7 +169,7 @@ run_batch() {
     # -----------------------------------------------------------------------
     E)
         batch_header E "Nacelle Nozzle Iris Petals (8 off)"
-        slice "$OUT" 1 "15%" 0 "no" "${STL_CARGO}/nacelle_nozzle_petal.stl" \
+        slice "$OUT" 1 "15%" 0 "no" "${STL_NOZZLES}/nacelle_nozzle_petal.stl" \
             --duplicate 8
         ;;
 
@@ -171,18 +177,20 @@ run_batch() {
     # BATCH F — Nacelle Nozzle Ring + Gear Parts (★★)
     # Ring: 62×62×6 mm; gear parts <30 mm — all fit together
     # Infill 20%, no support
+    # Note: pinion_a_bracket removed — engine fold mechanism not in this build
     # -----------------------------------------------------------------------
     F)
         batch_header F "Nacelle Nozzle Ring + Gear Parts"
-        slice "$OUT" 1 "20%" 0 "no" "${STL_CARGO}/nacelle_nozzle_ring.stl"
-        slice "$OUT" 1 "20%" 0 "no" "${STL_SERENITY}/pinion_a_bracket.stl" \
+        slice "$OUT" 1 "20%" 0 "no" "${STL_NOZZLES}/nacelle_nozzle_ring.stl"
+        slice "$OUT" 1 "20%" 0 "no" "${STL_NOZZLES}/nacelle_bevel_housing.stl" \
             --duplicate 2
-        slice "$OUT" 1 "20%" 0 "no" "${STL_SERENITY}/bevel_gear_housing.stl" \
+        slice "$OUT" 1 "20%" 0 "no" "${STL_NOZZLES}/nacelle_bevel_pair.stl" \
             --duplicate 2
-        # sector_gear_22mm_fixed.stl: repaired binary STL from slic3r --repair on
-        # the original ASCII STL (which had ~200 k mesh-loop errors on 0.2 mm slicing).
-        # The fixed.obj was converted back to binary STL via xyz_wrap.py pipeline.
-        slice "$OUT" 1 "20%" 0 "no" "${STL_SERENITY}/sector_gear_22mm_fixed.stl" \
+        slice "$OUT" 1 "20%" 0 "no" "${STL_NACELLES}/nacelle_pinion.stl" \
+            --duplicate 2
+        # sector_gear_22mm_fixed.stl: repaired binary STL (original ASCII had
+        # ~200 k mesh-loop errors at 0.2 mm layer height; fixed via slic3r --repair).
+        slice "$OUT" 1 "20%" 0 "no" "${STL_NACELLES}/sector_gear_22mm_fixed.stl" \
             --duplicate 2
         ;;
 
@@ -193,7 +201,7 @@ run_batch() {
     # -----------------------------------------------------------------------
     G1)
         batch_header G1 "Rear Nozzle Frame"
-        slice "$OUT" 1 "20%" 1 "no" "${STL_CARGO}/rear_nozzle_frame.stl"
+        slice "$OUT" 1 "20%" 1 "no" "${STL_AFT_EDF}/rear_nozzle_frame.stl"
         ;;
 
     # -----------------------------------------------------------------------
@@ -202,24 +210,22 @@ run_batch() {
     # -----------------------------------------------------------------------
     G2)
         batch_header G2 "Rear Nozzle Petals (4 per plate)"
-        slice "$OUT" 1 "20%" 0 "no" "${STL_CARGO}/rear_nozzle_petal.stl" \
+        slice "$OUT" 1 "20%" 0 "no" "${STL_AFT_EDF}/rear_nozzle_petal.stl" \
             --duplicate 4
         ;;
 
     # -----------------------------------------------------------------------
     # BATCH H — Tilt Mechanism Parts (★★)
     # Pivot housings: 70.3×64.5×9.9 mm; pin holders: 37.8×91.2×2.6 mm (raft)
-    # Infill 25% (functional)
+    # Infill 25% (functional); using 50 mm-bore scaled versions throughout
     # -----------------------------------------------------------------------
     H)
         batch_header H "Tilt Mechanism Parts"
-        slice "$OUT" 1 "25%" 0 "no" "${STL_CARGO}/s_eng_piv_outer_scaled24.stl" \
+        slice "$OUT" 1 "25%" 0 "no" "${STL_NACELLES}/s_eng_piv_outer_scaled24_50mm.stl" \
             --duplicate 2
-        slice "$OUT" 1 "25%" 1 "no" "${STL_CARGO}/s_eng_piv_pins_scaled24.stl" \
+        slice "$OUT" 1 "25%" 1 "no" "${STL_NACELLES}/s_eng_piv_pins_scaled24_50mm.stl" \
             --duplicate 2
-        slice "$OUT" 1 "25%" 0 "no" "${STL_CARGO}/s_pivot_arm_a_scaled24.stl" \
-            --duplicate 2
-        slice "$OUT" 1 "25%" 0 "no" "${STL_CARGO}/s_eng_pistons_scaled24.stl" \
+        slice "$OUT" 1 "25%" 0 "no" "${STL_WINGS}/s_pivot_arm_a_scaled24_50mm_repaired.stl" \
             --duplicate 2
         ;;
 
@@ -230,7 +236,7 @@ run_batch() {
     # -----------------------------------------------------------------------
     I)
         batch_header I "120 mm EDF Motor Mount Spider"
-        slice "$OUT" 1 "25%" 0 "yes" "${STL_SERENITY}/s_edf_120_motor_mount.stl" \
+        slice "$OUT" 1 "25%" 0 "yes" "${STL_AFT_EDF}/s_edf_120_motor_mount.stl" \
             --support-material-buildplate-only
         ;;
 
@@ -241,34 +247,37 @@ run_batch() {
     # -----------------------------------------------------------------------
     J)
         batch_header J "120 mm EDF Thrust Tube (89% scale)"
-        slice "$OUT" 0.89 "20%" 0 "no" "${STL_SERENITY}/s_edf_120_thrust_tube.stl"
+        slice "$OUT" 0.89 "20%" 0 "no" "${STL_AFT_EDF}/s_edf_120_thrust_tube.stl"
         ;;
 
     # -----------------------------------------------------------------------
-    # BATCH K — Nacelle Stator Shells — Left & Right (★★)
-    # Native: 75.6×96.2×172.6 mm → scale 86% → 65×82.7×148.4 mm
-    # Each on its own plate; support for aft scarf face
+    # BATCH K — Complete Nacelle Pods — Port & Starboard (★★)
+    # Rev T pods integrate EDF bore, stators, and spider mounts in one body.
+    # Native: 75.6×83.3×185.2 mm → scale 81% → 61.2×67.5×150.0 mm
+    # Each pod on its own plate; support for intake/nozzle face overhangs
     # -----------------------------------------------------------------------
     K)
-        batch_header K "Nacelle Stator Shells L+R (86% scale)"
-        slice "$OUT" 0.86 "20%" 0 "yes" \
-            "${STL_CARGO}/s_eng_left_stator_shell24_50mm.stl" \
+        batch_header K "Complete Nacelle Pods Port+Stbd (81% scale)"
+        slice "$OUT" 0.81 "20%" 0 "yes" \
+            "${STL_NACELLES}/s_nacelle_port_revt.stl" \
             --support-material-buildplate-only
-        slice "$OUT" 0.86 "20%" 0 "yes" \
-            "${STL_CARGO}/s_eng_right_stator_shell24_50mm.stl" \
+        slice "$OUT" 0.81 "20%" 0 "yes" \
+            "${STL_NACELLES}/s_nacelle_stbd_revt.stl" \
             --support-material-buildplate-only
         ;;
 
     # -----------------------------------------------------------------------
     # BATCH L — Landing Gear: Feet + Legs + Wings (★)
-    # Feet: 78.2×98.4×9 mm (1:1); Legs: 96.1×150.1×7.5 → 99% → 95×148.6mm
-    # Wings: 137.1×128.8×19.4 mm (1:1, both wings one file)
+    # Feet: 78.2×98.4×9 mm (1:1); Legs: 96.1×150.1×7.5 → 99% → 95×148.6 mm
+    # Wings (S1223): 161×85.7×~20 mm → scale 93% → 149.7×79.7×18.6 mm
+    #   Port and starboard printed separately (S1223 replaced combined flat-plate)
     # -----------------------------------------------------------------------
     L)
         batch_header L "Landing Gear: Feet + Legs + Wings"
-        slice "$OUT" 1    "15%" 0 "no" "${STL_CARGO}/s_feet_x_4_scaled24.stl"
-        slice "$OUT" 0.99 "15%" 0 "no" "${STL_CARGO}/s_legs_scaled24.stl"
-        slice "$OUT" 1    "15%" 0 "no" "${STL_CARGO}/s_wings_both_shell24.stl"
+        slice "$OUT" 1    "15%" 0 "no" "${STL_FUSELAGE}/s_feet_x_4_scaled24.stl"
+        slice "$OUT" 0.99 "15%" 0 "no" "${STL_FUSELAGE}/s_legs_scaled24.stl"
+        slice "$OUT" 0.93 "15%" 0 "no" "${STL_WINGS}/s_wing_port_s1223_revo.stl"
+        slice "$OUT" 0.93 "15%" 0 "no" "${STL_WINGS}/s_wing_stbd_s1223_revo.stl"
         ;;
 
     # -----------------------------------------------------------------------
@@ -278,7 +287,7 @@ run_batch() {
     # -----------------------------------------------------------------------
     M)
         batch_header M "Head Shell (63% scale)"
-        slice "$OUT" 0.63 "15%" 0 "yes" "${STL_CARGO}/s_head_shell24.stl" \
+        slice "$OUT" 0.63 "15%" 0 "yes" "${STL_FUSELAGE}/s_head_shell24.stl" \
             --support-material-buildplate-only
         ;;
 
@@ -289,7 +298,7 @@ run_batch() {
     # -----------------------------------------------------------------------
     N)
         batch_header N "Middle Shell (84% scale)"
-        slice "$OUT" 0.84 "15%" 0 "no" "${STL_CARGO}/s_middle_shell24.stl"
+        slice "$OUT" 0.84 "15%" 0 "no" "${STL_FUSELAGE}/s_middle_shell24.stl"
         ;;
 
     # -----------------------------------------------------------------------
@@ -299,7 +308,7 @@ run_batch() {
     # -----------------------------------------------------------------------
     O)
         batch_header O "Cargo Section Shell (73% scale)"
-        slice "$OUT" 0.73 "15%" 0 "yes" "${STL_CARGO}/s_cargo_sect_shell24.stl" \
+        slice "$OUT" 0.73 "15%" 0 "yes" "${STL_CARGO_BAY}/s_cargo_sect_shell24.stl" \
             --support-material-buildplate-only
         ;;
 
@@ -310,22 +319,22 @@ run_batch() {
     # -----------------------------------------------------------------------
     P)
         batch_header P "Rear Shell (82% scale)"
-        slice "$OUT" 0.82 "15%" 0 "yes" "${STL_CARGO}/s_rear_shell24.stl" \
+        slice "$OUT" 0.82 "15%" 0 "yes" "${STL_AFT_EDF}/s_rear_shell24.stl" \
             --support-material-buildplate-only
         ;;
 
     # -----------------------------------------------------------------------
-    # BATCH Q — Nacelle Outer Shells — Left & Right (★ visual reference)
-    # Native: same as stator 75.6×96.2×172.6 mm → scale 86%
-    # Note: bore shrinks to 47.3 mm at 86% (EDF won't fit — visual check only)
+    # BATCH Q — Nacelle Pods L+R (★ visual reference)
+    # Rev T complete pods at 81% scale (max that fits 150 mm bed along Z).
+    # Note: EDF bore shrinks to 40.5 mm at 81% — EDF won't fit; visual only.
     # -----------------------------------------------------------------------
     Q)
-        batch_header Q "Nacelle Outer Shells L+R (86% scale — visual only)"
-        slice "$OUT" 0.86 "15%" 0 "yes" \
-            "${STL_CARGO}/s_eng_left_shell24_50mm.stl" \
+        batch_header Q "Complete Nacelle Pods L+R (81% scale — visual only)"
+        slice "$OUT" 0.81 "15%" 0 "yes" \
+            "${STL_NACELLES}/s_nacelle_port_revt.stl" \
             --support-material-buildplate-only
-        slice "$OUT" 0.86 "15%" 0 "yes" \
-            "${STL_CARGO}/s_eng_right_shell24_50mm.stl" \
+        slice "$OUT" 0.81 "15%" 0 "yes" \
+            "${STL_NACELLES}/s_nacelle_stbd_revt.stl" \
             --support-material-buildplate-only
         ;;
 
@@ -333,169 +342,154 @@ run_batch() {
     # BATCH VISUAL — Complete Aircraft Visual Reference — uniform 63% scale
     #
     # 63% is the tightest constraint (s_head_shell24 Y=235.1 mm → 148.1 mm).
-    # Every external and internal-visible part is sliced at exactly 63% so the
-    # assembled reference model is geometrically consistent — no per-part rescaling.
+    # Every external and internal-visible part sliced at exactly 63% so the
+    # assembled reference model is geometrically consistent.
     #
-    # Part list (27 individual prints — complete aircraft):
+    # Part list (25 print jobs — complete aircraft):
     #
     #   HULL SECTIONS (4 prints)
-    #     head_shell24       129.4×235.1×140.7 → 81.5×148.1×88.6 mm
-    #     middle_shell24     177.1×164.8×73.2  → 111.6×103.9×46.1 mm  (with side intakes)
-    #     cargo_sect_shell24 194.7×203.6×163.2 → 122.7×128.3×102.8 mm
-    #     rear_shell24       140.9×158.0×181.7 → 88.8×99.5×114.4 mm
+    #     s_head_shell24          129.4×235.1×140.7 → 81.5×148.1×88.6 mm
+    #     s_middle_shell24        177.1×164.8×73.2  → 111.6×103.9×46.1 mm
+    #     s_cargo_sect_shell24    194.7×203.6×163.2 → 122.7×128.3×102.8 mm
+    #     s_rear_shell24          140.9×158.0×181.7 → 88.8×99.5×114.4 mm
     #
-    #   NACELLES — COMPLETE (8 prints, shared geometry for L and R)
-    #     eng_left_shell  (outer)  75.6×83.8×185.4 → 47.7×52.8×116.8 mm
-    #     eng_right_shell (outer)  same
-    #     eng_left_stator          75.6×96.2×172.6 → 47.7×60.6×108.7 mm
-    #     eng_right_stator         same
-    #     nacelle_nozzle_closed_asm_repaired (×2)  62.0×62.0×19.5 → 39×39×12.3 mm
+    #   NACELLE PODS — COMPLETE (2 prints, port + starboard)
+    #     s_nacelle_port_revt     75.6×83.3×185.2   → 47.6×52.5×116.7 mm
+    #     s_nacelle_stbd_revt     same
+    #     nacelle_nozzle_closed_asm_repaired (×2)    62.0×62.0×19.5 → 39.1×39.1×12.3 mm
     #
-    #   TILT MECHANISM (4 prints, ×2 each for L+R nacelles)
-    #     eng_piv_outer_scaled24   70.3×64.5×9.9  → 44.3×40.6×6.2 mm
-    #     eng_piv_pins_scaled24    37.8×91.2×2.6  → 23.8×57.4×1.6 mm
-    #     pivot_arm_a_scaled24     44.8×50.1×14.3 → 28.2×31.6×9.0 mm
-    #     eng_pistons_scaled24     32.8×58.9×13.2 → 20.7×37.1×8.3 mm
+    #   TILT MECHANISM (3 prints, ×2 each for port+stbd nacelles)
+    #     s_eng_piv_outer_scaled24_50mm        70.3×64.5×9.9  → 44.3×40.6×6.2 mm
+    #     s_eng_piv_pins_scaled24_50mm         37.8×91.2×2.6  → 23.8×57.5×1.6 mm
+    #     s_pivot_arm_a_scaled24_50mm_repaired 44.8×50.1×14.3 → 28.2×31.6×9.0 mm
     #
-    #   WINGS & LANDING GEAR (3 prints)
-    #     wings_both_shell24  137.1×128.8×19.4 → 86.4×81.1×12.2 mm
-    #     legs_scaled24        96.1×150.1×7.5  → 60.5×94.6×4.7 mm  (raft)
-    #     feet_x_4_repaired    77.6×98.4×9.0   → 48.9×62.0×5.7 mm  (raft)
+    #   WINGS & LANDING GEAR (4 prints)
+    #     s_wing_port_s1223_revo   85.7×161.0×~20 → 54.0×101.4×12.6 mm
+    #     s_wing_stbd_s1223_revo   same
+    #     s_legs_scaled24          96.1×150.1×7.5  → 60.6×94.6×4.7 mm  (raft)
+    #     s_feet_x_4_scaled24      77.6×98.4×9.0   → 48.9×62.0×5.7 mm  (raft)
     #
     #   CARGO BAY (2 prints)
-    #     cargo_door_port  108.0×33.7×87.0 → 68.0×21.3×54.8 mm
-    #     cargo_door_stbd  108.0×38.2×84.6 → 68.0×24.1×53.3 mm
+    #     cargo_door_port   108.0×33.7×87.0 → 68.0×21.2×54.8 mm
+    #     cargo_door_stbd   108.0×38.2×84.6 → 68.0×24.1×53.3 mm
     #
     #   REAR EDF — COMPLETE (4 prints)
-    #     middle_intake_shell24  177.1×164.8×73.2 → 111.6×103.9×46.1 mm
-    #     s_edf_120_thrust_tube  134.0×134.0×167.0 → 84.4×84.4×105.2 mm
-    #     s_edf_120_motor_mount  126.0×126.0×53.0  → 79.4×79.4×33.4 mm
-    #     rear_nozzle_closed_asm 131.0×131.0×20.0  → 82.5×82.5×12.6 mm
+    #     s_middle_intake_shell24  177.1×164.8×73.2  → 111.6×103.9×46.1 mm
+    #     s_edf_120_thrust_tube    134.0×134.0×167.0 → 84.4×84.4×105.2 mm
+    #     s_edf_120_motor_mount    126.0×126.0×53.0  → 79.4×79.4×33.4 mm
+    #     rear_nozzle_closed_asm   131.0×131.0×20.0  → 82.5×82.5×12.6 mm
     #
     #   VISUAL DETAILS (4 prints)
-    #     dorsal_antenna_fin    20.0×4.0×35.0  → 12.6×2.5×22.1 mm  (raft)
-    #     nacelle_tip_cap_port  80.0×80.0×8.0  → 50.4×50.4×5.0 mm  (raft)
-    #     nacelle_tip_cap_stbd  same
-    #     hull_engine_bell      76.0×76.0×50.0 → 47.9×47.9×31.5 mm
+    #     dorsal_antenna_fin     20.0×4.0×35.0  → 12.6×2.5×22.1 mm  (raft)
+    #     nacelle_tip_cap_port   80.0×80.0×8.0  → 50.4×50.4×5.0 mm  (raft)
+    #     nacelle_tip_cap_stbd   same
+    #     hull_engine_bell       76.0×76.0×50.0 → 47.9×47.9×31.5 mm
     #
     # Note: cockpit_dome_clear.stl is an open-surface mesh (no bottom face) that
-    # crashes slic3r 1.3.0. Print the cockpit dome as a separate clear-resin SLA
-    # part or add a base plane in CAD before slicing.
+    # crashes slic3r 1.3.0.  Print as a separate clear-resin SLA part or add a
+    # base plane in CAD before slicing.
     # -----------------------------------------------------------------------
     VISUAL)
         local SCALE="0.63"
         local INFILL="15%"
-        batch_header VISUAL "Complete Aircraft Visual Reference (63% uniform scale — 27 prints)"
+        batch_header VISUAL "Complete Aircraft Visual Reference (63% uniform scale — 25 print jobs)"
 
         # ---- HULL SECTIONS ------------------------------------------------
         slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
-            "${STL_CARGO}/s_head_shell24.stl" \
+            "${STL_FUSELAGE}/s_head_shell24.stl" \
             --support-material-buildplate-only
 
         slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
-            "${STL_CARGO}/s_middle_shell24.stl" \
+            "${STL_FUSELAGE}/s_middle_shell24.stl" \
             --support-material-buildplate-only
 
         slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
-            "${STL_CARGO}/s_cargo_sect_shell24.stl" \
+            "${STL_CARGO_BAY}/s_cargo_sect_shell24.stl" \
             --support-material-buildplate-only
 
         slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
-            "${STL_CARGO}/s_rear_shell24.stl" \
+            "${STL_AFT_EDF}/s_rear_shell24.stl" \
             --support-material-buildplate-only
 
-        # ---- NACELLE OUTER SHELLS (tall — support on scarf face) -----------
+        # ---- NACELLE PODS — COMPLETE (port + stbd) -------------------------
+        # Rev T pods integrate EDF bore, stator hub, and spider mounts.
+        # Replaces separate outer shell + stator shell prints.
         slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
-            "${STL_CARGO}/s_eng_left_shell24_50mm.stl" \
-            --support-material-buildplate-only
-
-        slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
-            "${STL_CARGO}/s_eng_right_shell24_50mm.stl" \
-            --support-material-buildplate-only
-
-        # ---- NACELLE INNER STATOR SHELLS -----------------------------------
-        slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
-            "${STL_CARGO}/s_eng_left_stator_shell24_50mm.stl" \
+            "${STL_NACELLES}/s_nacelle_port_revt.stl" \
             --support-material-buildplate-only
 
         slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
-            "${STL_CARGO}/s_eng_right_stator_shell24_50mm.stl" \
+            "${STL_NACELLES}/s_nacelle_stbd_revt.stl" \
             --support-material-buildplate-only
 
-        # ---- NACELLE NOZZLE ASSEMBLIES (one per nacelle, 2 total) ----------
-        # nacelle_nozzle_closed_asm_repaired: ring + 8 petals pre-assembled
-        # print 2 copies — one for each nacelle
+        # ---- NACELLE NOZZLE ASSEMBLIES (×2 — one per nacelle) --------------
         slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
-            "${STL_CARGO}/nacelle_nozzle_closed_asm_repaired.stl" \
+            "${STL_NOZZLES}/nacelle_nozzle_closed_asm_repaired.stl" \
             --duplicate 2
 
-        # ---- NACELLE TILT MECHANISM (×2 each — one set per nacelle) --------
+        # ---- TILT MECHANISM (×2 each — one set per nacelle) ----------------
         slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
-            "${STL_CARGO}/s_eng_piv_outer_scaled24.stl" \
+            "${STL_NACELLES}/s_eng_piv_outer_scaled24_50mm.stl" \
             --duplicate 2
 
         slice "$OUT" "$SCALE" "$INFILL" 1 "no" \
-            "${STL_CARGO}/s_eng_piv_pins_scaled24.stl" \
+            "${STL_NACELLES}/s_eng_piv_pins_scaled24_50mm.stl" \
             --duplicate 2
 
         slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
-            "${STL_CARGO}/s_pivot_arm_a_scaled24.stl" \
+            "${STL_WINGS}/s_pivot_arm_a_scaled24_50mm_repaired.stl" \
             --duplicate 2
 
+        # ---- WINGS (port and starboard separately — S1223 airfoil) ---------
         slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
-            "${STL_CARGO}/s_eng_pistons_scaled24.stl" \
-            --duplicate 2
+            "${STL_WINGS}/s_wing_port_s1223_revo.stl"
 
-        # ---- WINGS & LANDING GEAR -----------------------------------------
         slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
-            "${STL_CARGO}/s_wings_both_shell24.stl"
+            "${STL_WINGS}/s_wing_stbd_s1223_revo.stl"
+
+        # ---- LANDING GEAR --------------------------------------------------
+        slice "$OUT" "$SCALE" "$INFILL" 1 "no" \
+            "${STL_FUSELAGE}/s_legs_scaled24.stl"
 
         slice "$OUT" "$SCALE" "$INFILL" 1 "no" \
-            "${STL_CARGO}/s_legs_scaled24.stl"
-
-        slice "$OUT" "$SCALE" "$INFILL" 1 "no" \
-            "${STL_CARGO}/s_feet_x_4_scaled24_repaired.stl"
+            "${STL_FUSELAGE}/s_feet_x_4_scaled24_repaired.stl"
 
         # ---- CARGO BAY DOORS -----------------------------------------------
         slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
-            "${STL_CARGO}/cargo_door_port.stl" \
+            "${STL_CARGO_BAY}/cargo_door_port.stl" \
             --support-material-buildplate-only
 
         slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
-            "${STL_CARGO}/cargo_door_stbd.stl" \
+            "${STL_CARGO_BAY}/cargo_door_stbd.stl" \
             --support-material-buildplate-only
 
         # ---- REAR EDF — COMPLETE -------------------------------------------
-        # Middle body with 4 radial intake scoops (the Rev P intake geometry)
         slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
-            "${STL_CARGO}/s_middle_intake_shell24.stl" \
+            "${STL_FUSELAGE}/s_middle_intake_shell24.stl" \
             --support-material-buildplate-only
 
-        # 120 mm EDF thrust tube (duct from intake plenum to fan)
         slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
-            "${STL_SERENITY}/s_edf_120_thrust_tube.stl"
+            "${STL_AFT_EDF}/s_edf_120_thrust_tube.stl"
 
-        # 120 mm EDF motor-mount spider (registers on thrust tube forward spigot)
         slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
-            "${STL_SERENITY}/s_edf_120_motor_mount.stl" \
+            "${STL_AFT_EDF}/s_edf_120_motor_mount.stl" \
             --support-material-buildplate-only
 
-        # Rear iris nozzle closed assembly (ring + 8 petals pre-assembled)
         slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
-            "${STL_CARGO}/rear_nozzle_closed_asm.stl"
+            "${STL_AFT_EDF}/rear_nozzle_closed_asm.stl"
 
         # ---- VISUAL DETAIL PARTS ------------------------------------------
         slice "$OUT" "$SCALE" "$INFILL" 1 "no" \
-            "${STL_SERENITY}/dorsal_antenna_fin.stl"
+            "${STL_FUSELAGE}/dorsal_antenna_fin.stl"
 
         slice "$OUT" "$SCALE" "$INFILL" 1 "no" \
-            "${STL_SERENITY}/nacelle_tip_cap_port.stl"
+            "${STL_NACELLES}/nacelle_tip_cap_port.stl"
 
         slice "$OUT" "$SCALE" "$INFILL" 1 "no" \
-            "${STL_SERENITY}/nacelle_tip_cap_stbd.stl"
+            "${STL_NACELLES}/nacelle_tip_cap_stbd.stl"
 
         slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
-            "${STL_SERENITY}/hull_engine_bell.stl"
+            "${STL_AFT_EDF}/hull_engine_bell.stl"
         ;;
 
     *)
