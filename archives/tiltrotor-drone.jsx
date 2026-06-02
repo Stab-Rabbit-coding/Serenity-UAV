@@ -1,5 +1,32 @@
 import { useState } from "react";
 
+// ── OpenDyslexic font loader ───────────────────────────────────
+// Accessibility: high-contrast + dyslexia-friendly font (CC BY 4.0 OpenDyslexic)
+function _ODFontLoader(){
+  if(typeof document==="undefined") return null;
+  if(document.getElementById("od-font-link")) return null;
+  const l=document.createElement("link");
+  l.id="od-font-link"; l.rel="stylesheet";
+  l.href="https://fonts.cdnfonts.com/css/opendyslexic";
+  document.head.appendChild(l);
+  const s=document.createElement("style");
+  s.id="od-font-style";
+  s.textContent=`
+    *, *::before, *::after {
+      font-family: 'OpenDyslexic','OpenDyslexic Bold','OpenDyslexicMono',sans-serif !important;
+    }
+    @media print {
+      body { background: #ffffff !important; color: #111111 !important; }
+      * { color: #111111 !important; background: transparent !important;
+          border-color: #333333 !important; }
+      a { color: #003366 !important; }
+    }
+  `;
+  document.head.appendChild(s);
+  return null;
+}
+
+
 const SECTIONS = ["Overview", "Airframe", "Propulsion", "Avionics", "Control Logic", "BOM"];
 
 const accent = "#00e5ff";
@@ -306,6 +333,7 @@ function Section({ title, children }) {
   );
 }
 
+_ODFontLoader();
 export default function App() {
   const [activeTab, setActiveTab] = useState("Overview");
 
