@@ -51,6 +51,15 @@ traceability; not part of the active build.
   All current STL documentation is in `serenity/docs/bom_revP.json`,
   `serenity/docs/bom_revP.csv`, and `serenity/docs/PROJECT_INDEX.md`.
 
+### `cockpit_dome_clear.stl`
+
+- **Original location:** `serenity/stl/cockpit_dome_clear.stl`
+- **Why archived:** Pre-Rev-A era open-surface mesh — dome geometry only, no bottom
+  face, no manifold closure. Predates the 24-inch hull design by several major
+  revisions. Crashes slic3r 1.3.0 (segfault on layer intersection with open shell).
+  The Rev P canonical cockpit is modelled as part of `s_head_shell24.stl`; a separate
+  dome part is not required or used in the current build.
+
 ### `files-revF/`
 
 - **Original location:** `files/` (repository root — entire directory)
