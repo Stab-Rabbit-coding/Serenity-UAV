@@ -357,10 +357,12 @@ run_batch() {
     #     pivot_arm_a_scaled24     44.8×50.1×14.3 → 28.2×31.6×9.0 mm
     #     eng_pistons_scaled24     32.8×58.9×13.2 → 20.7×37.1×8.3 mm
     #
-    #   WINGS & LANDING GEAR (3 prints)
-    #     wings_both_shell24  137.1×128.8×19.4 → 86.4×81.1×12.2 mm
-    #     legs_scaled24        96.1×150.1×7.5  → 60.5×94.6×4.7 mm  (raft)
-    #     feet_x_4_repaired    77.6×98.4×9.0   → 48.9×62.0×5.7 mm  (raft)
+    #   WINGS — S1223 airfoil & LANDING GEAR (4 prints)
+    #     wing_port_s1223_revo  65.0×20.0×138.0 → 41.0×12.6×86.9 mm
+    #     wing_stbd_s1223_revo  65.0×20.0×138.0 → 41.0×12.6×86.9 mm
+    #       (both-wings file spans 252 mm → 158.8 mm at 63%: too tall; split by side)
+    #     legs_scaled24          96.1×150.1×7.5  → 60.5×94.6×4.7 mm  (raft)
+    #     feet_x_4_repaired      77.6×98.4×9.0   → 48.9×62.0×5.7 mm  (raft)
     #
     #   CARGO BAY (2 prints)
     #     cargo_door_port  108.0×33.7×87.0 → 68.0×21.3×54.8 mm
@@ -446,9 +448,17 @@ run_batch() {
             "${STL_CARGO}/s_eng_pistons_scaled24.stl" \
             --duplicate 2
 
-        # ---- WINGS & LANDING GEAR -----------------------------------------
+        # ---- WINGS — S1223 airfoil (drop-in replacement for flat-plate wings) --
+        # s_wings_both_shell24.stl (flat-plate) is superseded for this batch.
+        # The combined both-wings file spans 252 mm → 158.8 mm at 63% (over 150).
+        # Port and stbd are exported individually from s_wings_s1223_revo.scad
+        # via RENDER_SIDE=1/-1; each semi-span is 138 mm → 86.9 mm at 63% (OK).
+        # Lay flat with span along X, chord along Y, thickness (20 mm) as Z.
         slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
-            "${STL_CARGO}/s_wings_both_shell24.stl"
+            "${STL_CARGO}/s_wing_port_s1223_revo.stl"
+
+        slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
+            "${STL_CARGO}/s_wing_stbd_s1223_revo.stl"
 
         slice "$OUT" "$SCALE" "$INFILL" 1 "no" \
             "${STL_CARGO}/s_legs_scaled24.stl"
