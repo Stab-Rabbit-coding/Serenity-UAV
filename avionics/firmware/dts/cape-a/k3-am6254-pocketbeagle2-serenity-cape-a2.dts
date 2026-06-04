@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: CC-BY-4.0
 /*
- * k3-am6254-pocketbeagle2-serenity-cape-a.dts
- * Device tree overlay — Serenity UAV Cape-A (Sensor & Flight Control)
+ * k3-am6254-pocketbeagle2-serenity-cape-a2.dts
+ * Device tree overlay — Serenity UAV Cape-A-2 (EMI-hardened Sensor & Flight Control)
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
@@ -10,16 +10,17 @@
  *   Board  : PocketBeagle 2 Industrial (DigiKey 2820-100003007-ND)
  *   SoC    : TI AM6254 (quad Cortex-A53 @ 1.4 GHz, dual PRU-ICSS)
  *   OS     : BeagleBone Debian Trixie (Linux ≥ 6.1, dtc 1.7.x)
- *   Cape   : Cape-A — sensors + flight control, plugs onto P1/P2 headers
+ *   Cape   : Cape-A-2 — EMI-hardened sensor + flight control cape
+ *   Rev    : N-2
  *
  * Build:
  *   dtc -@ -I dts -O dtb \
- *       -o k3-am6254-pocketbeagle2-serenity-cape-a.dtbo \
- *       k3-am6254-pocketbeagle2-serenity-cape-a.dts
+ *       -o k3-am6254-pocketbeagle2-serenity-cape-a2.dtbo \
+ *       k3-am6254-pocketbeagle2-serenity-cape-a2.dts
  *
  * Install:
  *   sudo cp *.dtbo /boot/firmware/overlays/
- *   Add "fdtoverlays /overlays/k3-am6254-pocketbeagle2-serenity-cape-a.dtbo"
+ *   Add "fdtoverlays /overlays/k3-am6254-pocketbeagle2-serenity-cape-a2.dtbo"
  *   to /boot/firmware/extlinux/extlinux.conf
  *
  * ═══════════════════════════════════════════════════════════════════════════
@@ -37,20 +38,35 @@
  * verified against the PocketBeagle 2 expansion header pin map.
  * ═══════════════════════════════════════════════════════════════════════════
  *
- * Cape-A peripheral map:
+ * EMI-hardened -2 variant: 5 kV IEC 62368-1 isolation on CAN FD, RS-485, Ethernet
+ *
+ * Cape-A-2 peripheral map:
  *   SPI0      — ICM-42688-P IMU, BMP388 barometer, SLB9670 TPM 2.0
- *   I2C1      — QMC5883L magnetometer (0x0D), INA219AIDR battery monitor (0x40)
+ *               (Cape-A-2: ISOW1044BDFMR CAN FD; ADM2795EBRWZ RS-485; ADIN1300BCPZ PHY)
+ *   I2C1      — MMC5983MA magnetometer (0x30), INA226AIDGSR battery monitor (0x40)
  *   I2C2      — TCA9548A 8-ch mux → 2× VL53L5CX ToF (array A), MS4525DO
  *   UART0     — Debug console (JST-GH 4-pin)
  *   UART1     — ESC UART telemetry input (BLHeli32/Hobbywing)
  *   UART2     — SBUS RC input (100 kbaud 8E2 after 74LVC1G14 signal inverter)
  *   UART3     — u-blox M10Q GNSS (38400 baud default)
- *   UART4     — RS-485 half-duplex via MAX3485E (DE/RE# GPIOs)
- *   MCAN0     — CAN FD 1/8 Mbps via ATA6561 transceiver (STB# GPIO)
- *   CPSW3G    — 100BASE-TX ring via 2× DP83825I RMII PHY
+ *   UART4     — RS-485 half-duplex via ADM2795EBRWZ (DE/RE# GPIOs)
+ *   MCAN0     — CAN FD 1/8 Mbps via ISOW1044BDFMR (isolated, STB# GPIO)
+ *   CPSW3G    — 2× ADIN1300BCPZ 100BASE-TX RMII PHY (isolated via ISO7642FDWRR + Würth 749010012A)
  *   EHRPWM0-5 — Servo/ESC PWM (6 channels hardware, 50/400 Hz)
  *   PRU-ICSS0/PRU0 — MIL-STD-1553B Manchester II codec (1 Mbps)
  *   PRU-ICSS0/PRU1 — Extended servo PWM channels 6-7 (deterministic)
+ *
+ * References:
+ *   [1] TI AM6254 TRM, SPRUJ40 — pad table, PRU-ICSS, CPSW3G, MCAN
+ *   [2] PocketBeagle 2 Industrial schematic, BeagleBoard.org hardware repo
+ *   [3] ISOW1044BDFMR datasheet, TI SLLSEP5 — isolated CAN FD transceiver
+ *   [4] ADM2795EBRWZ datasheet, Analog Devices — isolated RS-485 transceiver
+ *   [5] ADIN1300BCPZ datasheet, Analog Devices Rev B — 100/1000BASE-T PHY
+ *   [6] ISO7642FDWRR datasheet, TI SLLSEP2 — 6-channel digital isolator
+ *   [7] Würth Elektronik 749010012A datasheet — Ethernet transformer 1500 V
+ *   [8] MMC5983MA datasheet, MEMSIC DS-MMC5983MA-A, Rev 0.3
+ *   [9] INA226 datasheet, TI SBOS547C
+ *   [10] PRTR5V0U2X datasheet, Nexperia — TVS for ESD/transient protection
  */
 
 /dts-v1/;
@@ -64,6 +80,9 @@
 /* ───────────────────────────────────────────────────────────────────────────
  * GPIO line assignments on main_gpio0 — VERIFY AGAINST PB2 SCHEMATIC
  * Line numbers correspond to AM6254 GPIO bank 0 pins exposed on P1/P2.
+ * Identical to Cape-A-1 GPIO assignments; the EMI-hardened transceivers
+ * (ISOW1044BDFMR, ADM2795EBRWZ, ADIN1300BCPZ) present the same electrical
+ * interface to the SoC as the v1 components.
  * ─────────────────────────────────────────────────────────────────────────*/
 #define CAPE_A_GPIO_IMU_INT1        14  /* ICM-42688-P interrupt 1      [ESTIMATE] */
 #define CAPE_A_GPIO_IMU_INT2        15  /* ICM-42688-P interrupt 2      [ESTIMATE] */
@@ -74,16 +93,22 @@
 #define CAPE_A_GPIO_TPM_RST         20  /* SLB9670 reset (active-low)   [ESTIMATE] */
 #define CAPE_A_GPIO_GPS_RST         21  /* u-blox M10Q RESETN           [ESTIMATE] */
 #define CAPE_A_GPIO_GPS_TIMEPULSE   22  /* u-blox M10Q TIMEPULSE        [ESTIMATE] */
-#define CAPE_A_GPIO_RS485_DE        23  /* MAX3485E driver enable        [ESTIMATE] */
-#define CAPE_A_GPIO_RS485_RE_N      24  /* MAX3485E receiver enable#     [ESTIMATE] */
-#define CAPE_A_GPIO_CAN_STB_N       25  /* ATA6561 standby (active-low) [ESTIMATE] */
-#define CAPE_A_GPIO_PHY1_RST_N      26  /* DP83825I #1 reset            [ESTIMATE] */
-#define CAPE_A_GPIO_PHY1_INT_N      27  /* DP83825I #1 interrupt        [ESTIMATE] */
-#define CAPE_A_GPIO_PHY2_RST_N      28  /* DP83825I #2 reset            [ESTIMATE] */
-#define CAPE_A_GPIO_PHY2_INT_N      29  /* DP83825I #2 interrupt        [ESTIMATE] */
+#define CAPE_A_GPIO_RS485_DE        23  /* ADM2795EBRWZ driver enable   [ESTIMATE] */
+#define CAPE_A_GPIO_RS485_RE_N      24  /* ADM2795EBRWZ receiver enable#[ESTIMATE] */
+#define CAPE_A_GPIO_CAN_STB_N       25  /* ISOW1044BDFMR standby#       [ESTIMATE] */
+#define CAPE_A_GPIO_PHY1_RST_N      26  /* ADIN1300BCPZ #1 reset        [ESTIMATE] */
+#define CAPE_A_GPIO_PHY1_INT_N      27  /* ADIN1300BCPZ #1 interrupt    [ESTIMATE] */
+#define CAPE_A_GPIO_PHY2_RST_N      28  /* ADIN1300BCPZ #2 reset        [ESTIMATE] */
+#define CAPE_A_GPIO_PHY2_INT_N      29  /* ADIN1300BCPZ #2 interrupt    [ESTIMATE] */
 #define CAPE_A_GPIO_1553_OE1_N      30  /* DS26LV31 output enable 1#    [ESTIMATE] */
 #define CAPE_A_GPIO_1553_OE2_N      31  /* DS26LV31 output enable 2#    [ESTIMATE] */
-#define CAPE_A_GPIO_MAG_DRDY        32  /* QMC5883L DRDY interrupt (active-high) [ESTIMATE] */
+#define CAPE_A_GPIO_MAG_DRDY        32  /* MMC5983MA DRDY interrupt (active-high) [ESTIMATE] */
+
+/* Cape-A-2: No additional GPIO defines vs v1.
+ * ISOW1044BDFMR CAN FD transceiver: same STB# GPIO as ATA6561.
+ * ADM2795EBRWZ RS-485 transceiver: same DE/RE# GPIOs as MAX3485E.
+ * ADIN1300BCPZ Ethernet PHY: same RST#/INT# GPIOs as DP83825I.
+ * PRTR5V0U2X TVS on SBUS_RAW: passive, no GPIO needed.                     */
 
 /* ───────────────────────────────────────────────────────────────────────────
  * Section 1 — Pin control configurations
@@ -138,7 +163,7 @@
         >;
     };
 
-    /* UART4: RS-485 (MAX3485E). Direction controlled by DE/RE# GPIOs.    */
+    /* UART4: RS-485 (ADM2795EBRWZ). Direction controlled by DE/RE# GPIOs. */
     cape_a_uart4_pins: cape-a-uart4-pins {
         pinctrl-single,pins = <
             /* [ESTIMATE — GPMC0_AD area, mux4] */
@@ -147,7 +172,7 @@
         >;
     };
 
-    /* MCAN0: CAN FD via ATA6561 transceiver.                             */
+    /* MCAN0: CAN FD via ISOW1044BDFMR isolated transceiver.              */
     cape_a_mcan0_pins: cape-a-mcan0-pins {
         pinctrl-single,pins = <
             /* [CONFIRMED — k3-am625-sk.dtsi] */
@@ -156,7 +181,7 @@
         >;
     };
 
-    /* CPSW3G MDIO: shared MDC/MDIO bus for both DP83825I PHYs.          */
+    /* CPSW3G MDIO: shared MDC/MDIO bus for both ADIN1300BCPZ PHYs.       */
     cape_a_mdio_pins: cape-a-mdio-pins {
         pinctrl-single,pins = <
             /* [ESTIMATE — dedicated MDIO pad area] */
@@ -165,7 +190,7 @@
         >;
     };
 
-    /* CPSW3G Port 1 — RMII (DP83825I #1, uplink/port-side ring segment). */
+    /* CPSW3G Port 1 — RMII (ADIN1300BCPZ #1, uplink/port-side ring segment). */
     cape_a_rmii1_pins: cape-a-rmii1-pins {
         pinctrl-single,pins = <
             /* [ESTIMATE — RGMII1 pad area in RMII mux] */
@@ -180,7 +205,7 @@
         >;
     };
 
-    /* CPSW3G Port 2 — RMII (DP83825I #2, starboard ring segment).       */
+    /* CPSW3G Port 2 — RMII (ADIN1300BCPZ #2, starboard ring segment).    */
     cape_a_rmii2_pins: cape-a-rmii2-pins {
         pinctrl-single,pins = <
             /* [ESTIMATE — RGMII2 pad area in RMII mux] */
@@ -243,8 +268,8 @@
         >;
     };
 
-    /* I2C1: QMC5883L magnetometer + INA219AIDR battery voltage monitor.
-     * 400 kHz fast mode.  2.2 kΩ pull-ups to +3V3 on Cape-A PCB.          */
+    /* I2C1: MMC5983MA magnetometer + INA226AIDGSR battery voltage monitor.
+     * 400 kHz fast mode.  2.2 kΩ pull-ups to +3V3 on Cape-A-2 PCB.       */
     cape_a_i2c1_pins: cape-a-i2c1-pins {
         pinctrl-single,pins = <
             /* [ESTIMATE — I2C1 pad area; verify in SPRUJ40 Table 7-1] */
@@ -254,7 +279,8 @@
     };
 
     /* UART2: SBUS RC input (receive-only).
-     * Signal path: RC receiver → J_SBUS (JST-GH 3P, Pin 3) → 100 Ω R_SBUS
+     * Signal path: RC receiver → J_SBUS (JST-GH 3P, Pin 3) → PRTR5V0U2X TVS
+     * (Cape-A-2 ESD protection on SBUS_RAW) → 100 Ω R_SBUS
      * → 74LVC1G14 Schmitt-trigger inverter (re-inverts SBUS idle-low to
      * idle-high) → UART2_RXD.
      * SBUS format: 100000 baud, 8 data bits, even parity, 2 stop bits.
@@ -296,7 +322,7 @@
         interrupts = <CAPE_A_GPIO_IMU_INT1 IRQ_TYPE_EDGE_RISING>;
         /*
          * Mount rotation: board coordinate frame → NED body frame.
-         * Fill in after physical inspection of IMU orientation on Cape-A.
+         * Fill in after physical inspection of IMU orientation on Cape-A-2.
          * Reference: InvenSense ICM-42688-P datasheet, rev 1.7.
          */
         mount-matrix = "1", "0", "0",
@@ -344,7 +370,7 @@
         reg = <0x70>;
         #address-cells = <1>;
         #size-cells = <0>;
-        /* reset-gpios not wired on Cape-A rev N; add if rev O adds RST. */
+        /* reset-gpios not wired on Cape-A-2 rev N-2; add if rev adds RST. */
 
         /* Channel 0: Array A sensor 1 (S1A — forward, FC3 primary).    */
         i2c_tof_ch0: i2c@0 {
@@ -394,64 +420,63 @@
 };
 
 /* ───────────────────────────────────────────────────────────────────────────
- * Section 3b — I2C1: QMC5883L magnetometer + INA219AIDR battery monitor
- *
- * Both devices are on I2C1 (separate bus from the ToF/airspeed mux on I2C2).
- * The bus is dedicated to these two low-rate sensors; no mux is needed.
+ * Section 3b — I2C1: MMC5983MA magnetometer + INA226AIDGSR battery monitor
+ * (Cape-A-2 EMI-hardened variants of QMC5883L and INA219 on Cape-A-1)
  * ─────────────────────────────────────────────────────────────────────────*/
 &main_i2c1 {
     status = "okay";
     pinctrl-names = "default";
     pinctrl-0 = <&cape_a_i2c1_pins>;
-    clock-frequency = <400000>;              /* Fast-mode 400 kHz           */
+    clock-frequency = <400000>;
     #address-cells = <1>;
     #size-cells = <0>;
 
-    /* QMC5883L 3-axis magnetometer — QST Corp, LGA-16, I2C addr 0x0D.
-     * Fixed address; A[1:0] pins not exposed.
-     * Provides heading reference for EKF yaw estimation.
-     * DRDY (data-ready) output wired to CAPE_A_GPIO_MAG_DRDY for
-     * interrupt-driven reads; eliminates polling of the STATUS register.
+    /* MMC5983MA 3-axis magnetometer — MEMSIC, LGA-16 (2×2 mm), AEC-Q100.
+     * Replaces QMC5883L (Cape-A-1) with AEC-Q100 automotive-grade part.
+     * 18-bit output, ±8 Gauss full-scale, I2C address 0x30 (SA0 pin = GND).
+     * On-chip SET/RESET coil eliminates need for external degaussing.
+     * Bandwidth: up to 1000 Hz (continuous measurement mode, BW=11).
+     * DRDY output is push-pull, active-high; wired to CAPE_A_GPIO_MAG_DRDY.
      *
-     * Default ODR after reset: 10 Hz continuous; serenity-fc reconfigures
-     * to 100 Hz (ODR=2, OSR=0, RNG=0, MODE=1) during init.
+     * Key differences from QMC5883L:
+     *   - Address 0x30 (vs 0x0D)
+     *   - 18-bit vs 16-bit output
+     *   - SA0 address select pin (vs fixed address)
+     *   - Higher EMI immunity (AEC-Q100 qualification)
      *
-     * Mounting rotation is identity by default; update mount-matrix after
-     * physical verification of IC orientation on Cape-A PCB.
-     *
-     * Reference: QMC5883L datasheet, QST Corp, Rev A, §5 Register Map.    */
-    mag_qmc5883l: magnetometer@d {
-        compatible = "qst,qmc5883l";
-        reg = <0x0d>;
+     * Reference: MMC5983MA datasheet, MEMSIC, DS-MMC5983MA-A, Rev 0.3.     */
+    mag_mmc5983ma: magnetometer@30 {
+        compatible = "memsic,mmc5983ma";
+        reg = <0x30>;
         interrupt-parent = <&main_gpio0>;
         interrupts = <CAPE_A_GPIO_MAG_DRDY IRQ_TYPE_EDGE_RISING>;
         /*
-         * mount-matrix: column-major 3×3 rotation from sensor frame to NED
-         * body frame.  Identity = sensor X=forward, Y=right, Z=down.
-         * Adjust after physical inspection of Cape-A IMU/MAG orientation.
+         * mount-matrix: identity by default.  Adjust after physical
+         * inspection of Cape-A-2 PCB to align sensor frame with NED body.
          */
         mount-matrix = "1", "0", "0",
                         "0", "1", "0",
                         "0", "0", "1";
     };
 
-    /* INA219AIDR battery voltage monitor — TI, SOIC-8, I2C addr 0x40.
-     * A0 and A1 address pins both pulled to GND on Cape-A.
-     * IN+ and IN− are tied together on Cape-A (voltage-only mode); no shunt
-     * resistor is in the main power path for current measurement.
-     * Reads the 6S LiPo main bus voltage via VBAT_MON_P / J_VBAT JST-GH 2P.
-     * INA219 bus voltage register: 4 mV LSB, 13-bit, range 0-32 V.
-     * 6S LiPo: 18.0 V (discharged) – 25.2 V (full), max 26 V (charge).
-     * Reference: INA219 datasheet, TI SBOS448H, §8.3 Register Definitions. */
-    bmon_ina219: battery-monitor@40 {
-        compatible = "ti,ina219";
+    /* INA226AIDGSR battery voltage monitor — TI, VSSOP-8, I2C addr 0x40.
+     * Replaces INA219AIDR (Cape-A-1) with higher voltage range device.
+     * A0 and A1 address pins both pulled to GND on Cape-A-2.
+     * IN+ and IN− are tied together (voltage-only mode; no shunt resistor).
+     * Reads VBAT_MON_P (6S LiPo main bus) via J_VBAT JST-GH 2P connector.
+     *
+     * Key differences from INA219:
+     *   - Max bus voltage: 36 V (vs 26 V on INA219) — more margin for 6S
+     *   - 16-bit vs 12-bit bus voltage ADC (1.25 mV vs 4 mV LSB)
+     *   - VSSOP-8 (smaller package) vs SOIC-8
+     *   - ALERT pin available (not used in v2, reserved for future OVP)
+     *   - VS supply pin (powers internal circuits from bus side)
+     *
+     * Reference: INA226 datasheet, TI SBOS547C, §8.5 Electrical Characteristics. */
+    bmon_ina226: battery-monitor@40 {
+        compatible = "ti,ina226";
         reg = <0x40>;
-        /*
-         * shunt-resistor = 0 signals voltage-only mode (no shunt installed).
-         * The serenity-fc daemon reads only the bus voltage register (0x02).
-         * Current and power registers will return zero or undefined values.
-         */
-        shunt-resistor = <0>;
+        shunt-resistor = <0>; /* Voltage-only mode; no shunt installed */
     };
 };
 
@@ -475,32 +500,11 @@
     pinctrl-0 = <&cape_a_uart1_pins>;
 };
 
-/* UART3: u-blox M10Q GNSS.  userspace (gpsd) owns this port.
- * TIMEPULSE and RESETN are managed by the serenity-fc daemon via GPIO.  */
-&main_uart3 {
-    status = "okay";
-    pinctrl-names = "default";
-    pinctrl-0 = <&cape_a_uart3_pins>;
-};
-
-/* UART4: RS-485 half-duplex via MAX3485E.
- * Direction is toggled in software via DE and RE# GPIOs before each
- * transmit/receive transition.  The serenity-fc daemon uses termios
- * RS485 mode (TIOCSRS485) if the kernel driver supports it; otherwise
- * explicit GPIO toggle with ≥1 µs guard time.                           */
-&main_uart4 {
-    status = "okay";
-    pinctrl-names = "default";
-    pinctrl-0 = <&cape_a_uart4_pins>;
-    linux,rs485-enabled-at-boot-time;
-    rs485-rts-active-high;                   /* DE asserted high = TX     */
-    rs485-rx-during-tx;                      /* duplex: echo suppressed   */
-};
-
 /* UART2: SBUS RC input (100 kbaud, 8 data bits, even parity, 2 stop bits).
  *
  * SBUS is a proprietary RC protocol (Futaba S.BUS) that uses an inverted
- * UART signal at 100 kbaud 8E2.  On Cape-A the 74LVC1G14 Schmitt-trigger
+ * UART signal at 100 kbaud 8E2.  On Cape-A-2 the PRTR5V0U2X TVS provides
+ * ESD/transient protection on SBUS_RAW before the 74LVC1G14 Schmitt-trigger
  * inverter (U_SBUS) re-inverts the signal to standard idle-high UART logic
  * before it reaches UART2_RXD.  The serenity-fc daemon configures the port
  * at runtime using struct termios2 / BOTHER ioctl to achieve exactly 100000
@@ -519,14 +523,39 @@
     pinctrl-0 = <&cape_a_uart2_sbus_pins>;
 };
 
+/* UART3: u-blox M10Q GNSS.  userspace (gpsd) owns this port.
+ * TIMEPULSE and RESETN are managed by the serenity-fc daemon via GPIO.  */
+&main_uart3 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_a_uart3_pins>;
+};
+
+/* UART4: RS-485 half-duplex via ADM2795EBRWZ (Cape-A-2 EMI-hardened; same
+ * electrical interface as MAX3485E on Cape-A-1).  Direction toggled via
+ * DE and RE# GPIOs.  IEC 62368-1 / VDE 0884-11 isolation: 5 kV (ADI).     */
+&main_uart4 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&cape_a_uart4_pins>;
+    linux,rs485-enabled-at-boot-time;
+    rs485-rts-active-high;                   /* DE asserted high = TX     */
+    rs485-rx-during-tx;                      /* duplex: echo suppressed   */
+};
+
 /* ───────────────────────────────────────────────────────────────────────────
- * Section 5 — CAN FD (MCAN0 + ATA6561 transceiver)
+ * Section 5 — CAN FD (MCAN0 + ISOW1044BDFMR isolated transceiver)
+ *
+ * UART4→MCAN0: ATA6561 replaced by ISOW1044BDFMR (Cape-A-2 EMI-hardened).
+ * ISOW1044BDFMR: fully-isolated CAN FD transceiver, SOIC-16W, 5 kV.
+ * Electrical interface to MCAN0 is identical to ATA6561.
+ * STB# GPIO (CAPE_A_GPIO_CAN_STB_N) function unchanged.
  * ─────────────────────────────────────────────────────────────────────────*/
 &main_mcan0 {
     status = "okay";
     pinctrl-names = "default";
     pinctrl-0 = <&cape_a_mcan0_pins>;
-    /* ATA6561 STB# driven low (active) at boot by the FC daemon.
+    /* ISOW1044BDFMR STB# driven low (active) at boot by the FC daemon.
      * Normal mode = STB# = low.  Standby mode = STB# = high.
      * Not modelled in DT; managed via /sys/class/gpio in serenity-fc.   */
 
@@ -536,10 +565,21 @@
 };
 
 /* ───────────────────────────────────────────────────────────────────────────
- * Section 6 — Ethernet: CPSW3G + 2× DP83825I RMII PHY
- * Both PHYs share the MDIO bus; CPSW3G ports 1 and 2 are used.
- * The 8-node RSTP ring is: CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4→(back to CN1).
- * Each FC node connects its two PHYs to adjacent ring segments.
+ * Section 6 — Ethernet: CPSW3G + 2× ADIN1300BCPZ RMII PHY (Cape-A-2)
+ *
+ * Cape-A-2 replaces DP83825I with ADIN1300BCPZ (Analog Devices, 1000BASE-T).
+ * The ADIN1300 is connected through:
+ *   - 2× ISO7642FDWRR 6-channel digital isolators (3+3 config, 5 kV,
+ *     Texas Instruments) on the RMII data/ctrl signals (6 lines each)
+ *   - Würth Elektronik 749010012A Ethernet transformer (1500 V isolation)
+ *   - JST-GH 4P connector (2-pair MDI — no RJ45 per design constraint)
+ *
+ * The isolators are transparent to the SoC RMII interface; no pinmux or
+ * CPSW3G changes are required vs Cape-A-1.  The ADIN1300 MDIO management
+ * bus passes through the same ISO7642FDWRR isolator (dedicated channels).
+ *
+ * The ADIN1300 supports 10/100/1000 Mbps; the ring uses 100BASE-TX.
+ * Configured in RMII mode to match CPSW3G RMII pin configuration.
  * ─────────────────────────────────────────────────────────────────────────*/
 &cpsw3g {
     status = "okay";
@@ -552,7 +592,7 @@
     phy-handle = <&eth_phy1>;
     phy-mode = "rmii";
     ti,mac-only;
-    /* 50 MHz reference clock from DP83825I #1 REF_CLK output.           */
+    /* 50 MHz reference clock from ADIN1300BCPZ #1 REF_CLK output.         */
 };
 
 &cpsw3g_port2 {
@@ -572,28 +612,38 @@
     #address-cells = <1>;
     #size-cells = <0>;
 
-    /* DP83825I RMII PHY #1 — TI, MDIO address 0 (PHYAD0=1 → addr 1).
-     * VERIFY strap resistors on Cape-A schematic for PHYAD[1:0].        */
+    /* ADIN1300BCPZ RMII PHY #1 — Analog Devices, 1000BASE-T, MDIO addr 1.
+     * Replaces DP83825I #1 (Cape-A-1).  MDIO strap: PHYAD0=1 → addr 1.
+     * Reset and interrupt GPIO lines same as Cape-A-1 PHY #1.
+     * Isolated side of ISO7642FDWRR; reset propagates through isolator.
+     * ADIN1300 reset duration: ≥ 10 ms assert, ≥ 5 ms deassert.
+     * Reference: ADIN1300 datasheet, ADI, Rev B, Table 4.                  */
     eth_phy1: ethernet-phy@1 {
-        compatible = "ti,dp83825i", "ethernet-phy-ieee802.3-c22";
+        compatible = "adi,adin1300";
         reg = <1>;
         reset-gpios = <&main_gpio0 CAPE_A_GPIO_PHY1_RST_N GPIO_ACTIVE_LOW>;
-        reset-assert-us   = <25>;            /* datasheet: t_reset_assert  */
-        reset-deassert-us = <2000>;          /* datasheet: t_reset_deassert*/
+        reset-assert-us   = <10000>;         /* ADIN1300: ≥ 10 ms assert    */
+        reset-deassert-us = <5000>;          /* ADIN1300: ≥ 5 ms deassert   */
         interrupt-parent = <&main_gpio0>;
         interrupts = <CAPE_A_GPIO_PHY1_INT_N IRQ_TYPE_EDGE_FALLING>;
-        /* DP83825I strap: LEDs configured for link/activity on rev A.    */
+        /*
+         * ADIN1300 RMII mode: strap RMII_SEL=1 on Cape-A-2 PCB.
+         * The ref clock is provided by the ADIN1300 (master mode, 50 MHz).
+         */
+        adi,phy-output-clock = "125mhz-free-running";
     };
 
-    /* DP83825I RMII PHY #2 — MDIO address 1 (PHYAD0=0 → addr 2).        */
+    /* ADIN1300BCPZ RMII PHY #2 — MDIO addr 2.
+     * Replaces DP83825I #2 (Cape-A-1).  PHYAD strap → addr 2.              */
     eth_phy2: ethernet-phy@2 {
-        compatible = "ti,dp83825i", "ethernet-phy-ieee802.3-c22";
+        compatible = "adi,adin1300";
         reg = <2>;
         reset-gpios = <&main_gpio0 CAPE_A_GPIO_PHY2_RST_N GPIO_ACTIVE_LOW>;
-        reset-assert-us   = <25>;
-        reset-deassert-us = <2000>;
+        reset-assert-us   = <10000>;
+        reset-deassert-us = <5000>;
         interrupt-parent = <&main_gpio0>;
         interrupts = <CAPE_A_GPIO_PHY2_INT_N IRQ_TYPE_EDGE_FALLING>;
+        adi,phy-output-clock = "125mhz-free-running";
     };
 };
 

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: CC-BY-4.0
 /*
- * k3-am6254-pocketbeagle2-serenity-cape-b.dts
- * Device tree overlay — Serenity UAV Cape-B (Comms, Logging & Payload)
+ * k3-am6254-pocketbeagle2-serenity-cape-b2.dts
+ * Device tree overlay — Serenity UAV Cape-B-2 (EMI-hardened Comms, Logging & Payload)
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
@@ -10,16 +10,17 @@
  *   Board  : PocketBeagle 2 Industrial (DigiKey 2820-100003007-ND)
  *   SoC    : TI AM6254 (quad Cortex-A53 @ 1.4 GHz, dual PRU-ICSS)
  *   OS     : BeagleBone Debian Trixie (Linux ≥ 6.1, dtc 1.7.x)
- *   Cape   : Cape-B — comms + logging + payload, plugs onto P1/P2 headers
+ *   Cape   : Cape-B-2 — EMI-hardened comms + logging + payload cape
+ *   Rev    : M-2
  *
  * Build:
  *   dtc -@ -I dts -O dtb \
- *       -o k3-am6254-pocketbeagle2-serenity-cape-b.dtbo \
- *       k3-am6254-pocketbeagle2-serenity-cape-b.dts
+ *       -o k3-am6254-pocketbeagle2-serenity-cape-b2.dtbo \
+ *       k3-am6254-pocketbeagle2-serenity-cape-b2.dts
  *
  * Install:
  *   sudo cp *.dtbo /boot/firmware/overlays/
- *   Add "fdtoverlays /overlays/k3-am6254-pocketbeagle2-serenity-cape-b.dtbo"
+ *   Add "fdtoverlays /overlays/k3-am6254-pocketbeagle2-serenity-cape-b2.dtbo"
  *   to /boot/firmware/extlinux/extlinux.conf
  *
  * ═══════════════════════════════════════════════════════════════════════════
@@ -37,15 +38,17 @@
  * verified against the PocketBeagle 2 expansion header pin map.
  * ═══════════════════════════════════════════════════════════════════════════
  *
- * Cape-B peripheral map:
+ * EMI-hardened -2 variant: ISOW1044BDFMR CAN FD; ADM2795EBRWZ RS-485; ADIN1300BCPZ PHY
+ *
+ * Cape-B-2 peripheral map:
  *   SPI1      — SLB9670 TPM 2.0, RFM95W LoRa 915 MHz, W25Q128JV NOR flash,
  *               microSD (SPI mode, logging-only non-executable card)
  *   UART2     — RFD900x SiK 915 MHz (hardware CTS/RTS flow control)
- *   UART4     — MAX3485E RS-485 half-duplex (DE / RE# GPIOs)
+ *   UART4     — ADM2795EBRWZ RS-485 half-duplex (DE / RE# GPIOs)
  *   UART5     — XCVR-49MHZ-1 RCRS 49 MHz AX.25 (SW1-1) OR SBUS RC input (SW1-2)
  *               J_XCVR JST-GH 6P shared connector; SW1 2-position DIP selects mode
- *   MCAN0     — CAN FD 1/8 Mbps via ATA6561 transceiver (STB# GPIO)
- *   CPSW3G    — 100BASE-TX ring via 2× DP83825I RMII PHY
+ *   MCAN0     — CAN FD 1/8 Mbps via ISOW1044BDFMR (isolated, STB# GPIO)
+ *   CPSW3G    — 2× ADIN1300BCPZ 100BASE-TX PHY (isolated via ISO7642FDWRR + Würth 749010012A)
  *   SDIO      — WL1837MOD 5 GHz 802.11ac/b/g/n + BT5 (4-bit MMC)
  *   EHRPWM0   — Cargo servo / gimbal axis (2 channels)
  *   PRU-ICSS0/PRU0 — MIL-STD-1553B Manchester II codec (1 Mbps)
@@ -62,15 +65,21 @@
  * logging microSD and latching logic for latch sensors.
  *
  * References:
- *   [1] TI AM6254 TRM, SPRUJ40 — pad table, PRU-ICSS, CPSW3G, MCAN
- *   [2] PocketBeagle 2 Industrial schematic, BeagleBoard.org hardware repo
- *   [3] Chepponis & Karn, KISS TNC, ARRL 6th CNF 1987 (AX.25 link)
- *   [4] 47 CFR Part 95 Subpart D (RCRS 49 MHz channel plan)
- *   [5] 47 CFR Part 15 Subpart C (LoRa 915 MHz, unlicensed)
- *   [6] Si5351A/B/C-B Datasheet, Skyworks, Rev 1.4
- *   [7] Infineon SLB9670 TPM 2.0 Datasheet
- *   [8] WL1837MOD (TI WL1837) Integration Guide
- *   [9] MIL-STD-1553B, DoD Interface Standard, 21 Sep 1978
+ *   [1]  TI AM6254 TRM, SPRUJ40 — pad table, PRU-ICSS, CPSW3G, MCAN
+ *   [2]  PocketBeagle 2 Industrial schematic, BeagleBoard.org hardware repo
+ *   [3]  Chepponis & Karn, KISS TNC, ARRL 6th CNF 1987 (AX.25 link)
+ *   [4]  47 CFR Part 95 Subpart D (RCRS 49 MHz channel plan)
+ *   [5]  47 CFR Part 15 Subpart C (LoRa 915 MHz, unlicensed)
+ *   [6]  Si5351A/B/C-B Datasheet, Skyworks, Rev 1.4
+ *   [7]  Infineon SLB9670 TPM 2.0 Datasheet
+ *   [8]  WL1837MOD (TI WL1837) Integration Guide
+ *   [9]  MIL-STD-1553B, DoD Interface Standard, 21 Sep 1978
+ *   [10] ISOW1044BDFMR datasheet, TI SLLSEP5 — isolated CAN FD transceiver
+ *   [11] ADM2795EBRWZ datasheet, Analog Devices — isolated RS-485 transceiver
+ *   [12] ADIN1300BCPZ datasheet, Analog Devices Rev B — 100/1000BASE-T PHY
+ *   [13] ISO7642FDWRR datasheet, TI SLLSEP2 — 6-channel digital isolator
+ *   [14] Würth Elektronik 749010012A datasheet — Ethernet transformer 1500 V
+ *   [15] PRTR5V0U2X datasheet, Nexperia — TVS for ESD/transient protection
  */
 
 /dts-v1/;
@@ -83,6 +92,9 @@
 /* ───────────────────────────────────────────────────────────────────────────
  * GPIO line assignments on main_gpio0 — VERIFY AGAINST PB2 SCHEMATIC
  * All offsets relative to AM6254 GPIO bank 0 as exposed on P1/P2 headers.
+ * Identical to Cape-B-1 GPIO assignments; the EMI-hardened transceivers
+ * (ISOW1044BDFMR, ADM2795EBRWZ, ADIN1300BCPZ) present the same electrical
+ * interface to the SoC as the v1 components.
  * ─────────────────────────────────────────────────────────────────────────*/
 
 /* SPI1 chip-selects (GPIO-driven; SPI1 nCS lines not used in hardware). */
@@ -106,18 +118,18 @@
 #define CAPE_B_GPIO_PTT_N           21  /* PTT_N — TX key (active-low)       [ESTIMATE] */
 #define CAPE_B_GPIO_TDDS_SYNC       22  /* Si5351A DDS freq sync strobe      [ESTIMATE] */
 
-/* MAX3485E RS-485 direction control. */
+/* ADM2795EBRWZ RS-485 direction control. */
 #define CAPE_B_GPIO_RS485_DE        23  /* Driver enable (active-high)       [ESTIMATE] */
 #define CAPE_B_GPIO_RS485_RE_N      24  /* Receiver enable# (active-low)     [ESTIMATE] */
 
-/* ATA6561 CAN FD transceiver. */
+/* ISOW1044BDFMR CAN FD transceiver. */
 #define CAPE_B_GPIO_CAN_STB_N       25  /* Standby# (active-low, normal=low) [ESTIMATE] */
 
-/* DP83825I RMII PHY reset and interrupt lines. */
-#define CAPE_B_GPIO_PHY1_RST_N      26  /* DP83825I #1 reset (active-low)    [ESTIMATE] */
-#define CAPE_B_GPIO_PHY1_INT_N      27  /* DP83825I #1 interrupt             [ESTIMATE] */
-#define CAPE_B_GPIO_PHY2_RST_N      28  /* DP83825I #2 reset (active-low)    [ESTIMATE] */
-#define CAPE_B_GPIO_PHY2_INT_N      29  /* DP83825I #2 interrupt             [ESTIMATE] */
+/* ADIN1300BCPZ RMII PHY reset and interrupt lines. */
+#define CAPE_B_GPIO_PHY1_RST_N      26  /* ADIN1300BCPZ #1 reset (active-low)[ESTIMATE] */
+#define CAPE_B_GPIO_PHY1_INT_N      27  /* ADIN1300BCPZ #1 interrupt         [ESTIMATE] */
+#define CAPE_B_GPIO_PHY2_RST_N      28  /* ADIN1300BCPZ #2 reset (active-low)[ESTIMATE] */
+#define CAPE_B_GPIO_PHY2_INT_N      29  /* ADIN1300BCPZ #2 interrupt         [ESTIMATE] */
 
 /* MIL-STD-1553B DS26LV31/DS26LV32 output-enable lines. */
 #define CAPE_B_GPIO_1553_OE1_N      30  /* DS26LV31 output enable 1# (TX)    [ESTIMATE] */
@@ -155,6 +167,12 @@
 #define CAPE_B_GPIO_LATCH_STATUS1   52  /* Latch 1 closed sensor             [ESTIMATE] */
 #define CAPE_B_GPIO_LATCH_STATUS2   53  /* Latch 2 closed sensor             [ESTIMATE] */
 
+/* Cape-B-2: No additional GPIO defines vs v1.
+ * ISOW1044BDFMR CAN FD: same STB# GPIO as ATA6561.
+ * ADM2795EBRWZ RS-485: same DE/RE# GPIOs as MAX3485E.
+ * ADIN1300BCPZ PHY: same RST#/INT# GPIOs as DP83825I.
+ * PRTR5V0U2X TVS on XCVR_RX_RAW: passive, no GPIO needed.                  */
+
 /* ───────────────────────────────────────────────────────────────────────────
  * Section 1 — Pin control configurations
  * ─────────────────────────────────────────────────────────────────────────*/
@@ -185,7 +203,7 @@
         >;
     };
 
-    /* UART4: RS-485 half-duplex via MAX3485E.
+    /* UART4: RS-485 half-duplex via ADM2795EBRWZ (Cape-B-2 EMI-hardened).
      * Direction toggled by DE / RE# GPIOs or TIOCSRS485 kernel support.   */
     cape_b_uart4_pins: cape-b-uart4-pins {
         pinctrl-single,pins = <
@@ -195,8 +213,10 @@
         >;
     };
 
-    /* UART5: XCVR-49MHZ-1 RCRS 49 MHz AX.25 link.
-     * 57600 baud 8N1; PTT_N and TDDS_SYNC are GPIO (not UART signals).    */
+    /* UART5: J_XCVR shared connector (XCVR-49MHZ-1 AX.25 or SBUS RC input).
+     * SW1 DIP selects signal path.  57600 8N1 (XCVR) or 100000 8E2 (SBUS).
+     * Cape-B-2 adds D_XCVR_TVS (PRTR5V0U2X) on XCVR_RX_RAW for ESD
+     * protection from the 49 MHz antenna feed (passive, no DT node needed). */
     cape_b_uart5_pins: cape-b-uart5-pins {
         pinctrl-single,pins = <
             /* [ESTIMATE — GPMC0_AD area, mux4] */
@@ -205,7 +225,7 @@
         >;
     };
 
-    /* MCAN0: CAN FD via ATA6561 transceiver.                              */
+    /* MCAN0: CAN FD via ISOW1044BDFMR isolated transceiver (Cape-B-2).    */
     cape_b_mcan0_pins: cape-b-mcan0-pins {
         pinctrl-single,pins = <
             /* [CONFIRMED — k3-am625-sk.dtsi] */
@@ -214,7 +234,7 @@
         >;
     };
 
-    /* CPSW3G MDIO: shared MDC/MDIO bus for both DP83825I PHYs.           */
+    /* CPSW3G MDIO: shared MDC/MDIO bus for both ADIN1300BCPZ PHYs.        */
     cape_b_mdio_pins: cape-b-mdio-pins {
         pinctrl-single,pins = <
             /* [ESTIMATE — dedicated MDIO pad area] */
@@ -223,7 +243,7 @@
         >;
     };
 
-    /* CPSW3G Port 1 — RMII (DP83825I #1, uplink ring segment).           */
+    /* CPSW3G Port 1 — RMII (ADIN1300BCPZ #1, uplink ring segment).        */
     cape_b_rmii1_pins: cape-b-rmii1-pins {
         pinctrl-single,pins = <
             /* [ESTIMATE — RGMII1 pad area, mux4 for RMII] */
@@ -238,7 +258,7 @@
         >;
     };
 
-    /* CPSW3G Port 2 — RMII (DP83825I #2, downlink ring segment).         */
+    /* CPSW3G Port 2 — RMII (ADIN1300BCPZ #2, downlink ring segment).      */
     cape_b_rmii2_pins: cape-b-rmii2-pins {
         pinctrl-single,pins = <
             /* [ESTIMATE — RGMII2 pad area, mux4 for RMII] */
@@ -363,7 +383,7 @@
         reg = <2>;                           /* CS index 2 (FLASH_CS GPIO)  */
         spi-max-frequency = <50000000>;
         /* 104 MHz clock supported by W25Q128JV but limited to 50 MHz
-         * for noise margin on the Cape-B flex harness.                   */
+         * for noise margin on the Cape-B-2 flex harness.                 */
 
         partitions {
             compatible = "fixed-partitions";
@@ -421,9 +441,9 @@
     uart-has-rtscts;
 };
 
-/* UART4: RS-485 half-duplex via MAX3485E.
- * Direction is toggled by DE and RE# GPIOs (or TIOCSRS485 if supported).
- * Same configuration as Cape-A UART4 for inter-node RS-485 bus sharing.  */
+/* UART4: RS-485 half-duplex via ADM2795EBRWZ (Cape-B-2 EMI-hardened; same
+ * electrical interface as MAX3485E on Cape-B-1).  IEC 62368-1 isolation.
+ * Direction is toggled by DE and RE# GPIOs (or TIOCSRS485 if supported).  */
 &main_uart4 {
     status = "okay";
     pinctrl-names = "default";
@@ -435,12 +455,15 @@
 
 /* UART5: XCVR-49MHZ-1 RCRS 49 MHz AX.25 link (SW1-1) OR SBUS RC input (SW1-2).
  *
- * SW1 is a 2-position DIP switch on Cape-B that shares the J_XCVR JST-GH 6P
+ * SW1 is a 2-position DIP switch on Cape-B-2 that shares the J_XCVR JST-GH 6P
  * connector between the external 49 MHz transceiver and an RC SBUS receiver.
  * The switch routes J_XCVR pin 4 (XCVR_RX_RAW) to UART5_RX via one of two paths:
  *
  *   SW1-1 (XCVR mode): XCVR_RX_RAW → 100 Ω R_XCVR_RX → UART5_RX (direct)
  *   SW1-2 (SBUS mode): XCVR_RX_RAW → 74LVC1G14 U_SBUS_B → 100 Ω R_SBUS_RX → UART5_RX
+ *
+ * Cape-B-2 adds D_XCVR_TVS (PRTR5V0U2X) on XCVR_RX_RAW for ESD/transient
+ * protection from the 49 MHz antenna feed (passive, no DT node required).
  *
  * In XCVR mode: 57600 baud 8N1; PTT_N (CAPE_B_GPIO_PTT_N) and TDDS_SYNC
  *   (CAPE_B_GPIO_TDDS_SYNC) are active.  AX.25 / KISS framing used.
@@ -463,7 +486,11 @@
 };
 
 /* ───────────────────────────────────────────────────────────────────────────
- * Section 4 — CAN FD (MCAN0 + ATA6561 transceiver)
+ * Section 4 — CAN FD (MCAN0 + ISOW1044BDFMR isolated transceiver)
+ *
+ * Cape-B-2 replaces ATA6561 with ISOW1044BDFMR (EMI-hardened, 5 kV isolated).
+ * Electrical interface to MCAN0 is identical to ATA6561.
+ * STB# GPIO (CAPE_B_GPIO_CAN_STB_N) function unchanged.
  * Same physical CAN FD bus as Cape-A; each node bridges CAN FD ↔ 1553 ↔
  * Ethernet to provide the redundant inter-node bus topology required by
  * CLAUDE.md §"Onboard Communications".
@@ -472,7 +499,7 @@
     status = "okay";
     pinctrl-names = "default";
     pinctrl-0 = <&cape_b_mcan0_pins>;
-    /* ATA6561 STB# is driven low (normal mode) by serenity-cn at startup.
+    /* ISOW1044BDFMR STB# is driven low (normal mode) by serenity-cn at startup.
      * Standby mode (STB# high) is entered on watchdog timeout.           */
 
     can-transceiver {
@@ -481,7 +508,17 @@
 };
 
 /* ───────────────────────────────────────────────────────────────────────────
- * Section 5 — Ethernet: CPSW3G + 2× DP83825I RMII PHY
+ * Section 5 — Ethernet: CPSW3G + 2× ADIN1300BCPZ RMII PHY (Cape-B-2)
+ *
+ * Cape-B-2 replaces DP83825I with ADIN1300BCPZ (Analog Devices, 1000BASE-T).
+ * The ADIN1300 is connected through:
+ *   - 2× ISO7642FDWRR 6-channel digital isolators (3+3 config, 5 kV,
+ *     Texas Instruments) on the RMII data/ctrl signals (6 lines each)
+ *   - Würth Elektronik 749010012A Ethernet transformer (1500 V isolation)
+ *   - JST-GH 4P connector (2-pair MDI — no RJ45 per design constraint)
+ *
+ * The isolators are transparent to the SoC RMII interface; no pinmux or
+ * CPSW3G changes are required vs Cape-B-1.
  * 8-node RSTP ring: CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4→(back to CN1).
  * Each CN node connects two adjacent ring segments via its two PHYs.
  * ─────────────────────────────────────────────────────────────────────────*/
@@ -515,27 +552,38 @@
     #address-cells = <1>;
     #size-cells = <0>;
 
-    /* DP83825I RMII PHY #1 — MDIO address 1 (PHYAD strap = 0b01).
-     * VERIFY strap resistors on Cape-B schematic for PHYAD[1:0].         */
+    /* ADIN1300BCPZ RMII PHY #1 — Analog Devices, 1000BASE-T, MDIO addr 1.
+     * Replaces DP83825I #1 (Cape-B-1).  MDIO strap: PHYAD0=1 → addr 1.
+     * Reset and interrupt GPIO lines same as Cape-B-1 PHY #1.
+     * Isolated side of ISO7642FDWRR; reset propagates through isolator.
+     * ADIN1300 reset duration: ≥ 10 ms assert, ≥ 5 ms deassert.
+     * Reference: ADIN1300 datasheet, ADI, Rev B, Table 4.                  */
     eth_phy1: ethernet-phy@1 {
-        compatible = "ti,dp83825i", "ethernet-phy-ieee802.3-c22";
+        compatible = "adi,adin1300";
         reg = <1>;
         reset-gpios = <&main_gpio0 CAPE_B_GPIO_PHY1_RST_N GPIO_ACTIVE_LOW>;
-        reset-assert-us   = <25>;
-        reset-deassert-us = <2000>;
+        reset-assert-us   = <10000>;         /* ADIN1300: ≥ 10 ms assert    */
+        reset-deassert-us = <5000>;          /* ADIN1300: ≥ 5 ms deassert   */
         interrupt-parent = <&main_gpio0>;
         interrupts = <CAPE_B_GPIO_PHY1_INT_N IRQ_TYPE_EDGE_FALLING>;
+        /*
+         * ADIN1300 RMII mode: strap RMII_SEL=1 on Cape-B-2 PCB.
+         * The ref clock is provided by the ADIN1300 (master mode, 50 MHz).
+         */
+        adi,phy-output-clock = "125mhz-free-running";
     };
 
-    /* DP83825I RMII PHY #2 — MDIO address 2 (PHYAD strap = 0b10).       */
+    /* ADIN1300BCPZ RMII PHY #2 — MDIO addr 2.
+     * Replaces DP83825I #2 (Cape-B-1).  PHYAD strap → addr 2.              */
     eth_phy2: ethernet-phy@2 {
-        compatible = "ti,dp83825i", "ethernet-phy-ieee802.3-c22";
+        compatible = "adi,adin1300";
         reg = <2>;
         reset-gpios = <&main_gpio0 CAPE_B_GPIO_PHY2_RST_N GPIO_ACTIVE_LOW>;
-        reset-assert-us   = <25>;
-        reset-deassert-us = <2000>;
+        reset-assert-us   = <10000>;
+        reset-deassert-us = <5000>;
         interrupt-parent = <&main_gpio0>;
         interrupts = <CAPE_B_GPIO_PHY2_INT_N IRQ_TYPE_EDGE_FALLING>;
+        adi,phy-output-clock = "125mhz-free-running";
     };
 };
 

@@ -33,6 +33,9 @@ target_link_libraries(serenity-cn PRIVATE PkgConfig::GPIOD)
 find_package(Threads REQUIRED)
 target_link_libraries(serenity-cn PRIVATE Threads::Threads)
 
+## serenity-common: SBUS decoder and shared utilities
+target_link_libraries(serenity-cn PRIVATE serenity-common)
+
 ## Installation target
 include(GNUInstallDirs)
 install(TARGETS serenity-cn
