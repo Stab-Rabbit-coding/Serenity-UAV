@@ -114,7 +114,7 @@
 <!-- Star milestone marker -->
 <use href="#star" transform="translate(293,311)" />
 <text x="18" y="337" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• 4× BLHeli32 40A ESC (50mm EDFs) + 1× BLHeli32 80A (120mm rear) · Dual BEC PDB</text>
-<text x="18" y="352" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Nodes FC1+CN1+FC2+CN2: 4× PocketBeagle2 + CAPE-A-1 + CAPE-B-1</text>
+<text x="18" y="352" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• FC1+CN1 (Bay A): PocketBeagle2 + CAPE-A-2 + CAPE-B-2 (v2 EMI) · FC2+CN2 (Bay B): CAPE-A-1 + CAPE-B-1 (v1)</text>
 <text x="18" y="367" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• MIL-STD-1553B PRU firmware on all 4 AM6254 PRU0 cores</text>
 <text x="18" y="382" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• SiK 915MHz belly port + LoRa RFM95W belly stbd + 49MHz RCRS-49 top wire</text>
 <text x="18" y="397" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• u-blox M10Q GPS at dorsal sta 140mm · WS2812C-2020 nav LEDs · 6S 4000mAh</text>
@@ -134,7 +134,7 @@
 <rect x="338" y="299" width="74" height="16" rx="3" fill="#c084fc" opacity="0.9"/>
 <text x="375" y="311" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#07090e" font-weight="bold">PHASE 4</text>
 <text x="418" y="311" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c084fc" font-weight="bold">NODE 4: ACTUATOR REDUNDANCY</text>
-<text x="336" y="337" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• PocketBeagle2 + CAPE-A-1 + CAPE-B-1 in bay E</text>
+<text x="336" y="337" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• FC3+CN3 (Bay D): CAPE-A-1 + CAPE-B-1 (v1) · FC4+CN4 (Bay E): CAPE-A-2 + CAPE-B-2 (v2 EMI)</text>
 <text x="336" y="352" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Each CAPE-A-1 PRU0 = dedicated real-time flight control</text>
 <text x="336" y="367" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Provision TPM + write-blocker on FC3+CN3+FC4+CN4 independently</text>
 <text x="336" y="382" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• FC4 monitors FC1 heartbeat via CAN FD; assumes control &lt;100ms on N1 timeout</text>

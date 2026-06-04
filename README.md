@@ -57,6 +57,15 @@ Ethernet transformer (JST GH 4P connector, no RJ45). XCVR-49MHZ-2 adds SRF2012-1
 PRTR5V0U2X TVS, and X2Y bridging capacitor on the antenna feed. All isolation barriers are IEC
 62368-1 / VDE 0884-11 certified at 5 kV. Gerbers pending DRC sign-off.
 
+**Node variant placement — v2 · v1 · v1 · v2 (nose → tail):** The -2 EMI-hardened capes are
+installed at both ends of the internal data bus (Bay A: CN1/FC1, Bay E: CN4/FC4); standard -1
+capes occupy the middle positions (Bay B: CN2/FC2, Bay D: CN3/FC3). This placement puts the 5 kV
+isolated transceivers at the CAN FD / RS-485 / 1553B bus termination endpoints — the nodes most
+exposed to conducted transients from long internal cable runs and nacelle motor EMI — while the
+-1 nodes in the inner bays retain their direct RMII dual-Ethernet connections to the CPSW3G for
+maximum ring throughput. Any single EM event entering from either bus end is absorbed by a v2
+isolation barrier before it can propagate to the -1 middle nodes.
+
 **Cargo handling (Rev P — complete):** clamshell cargo bay with CF-PETG port/starboard doors,
 8-barrel piano hinge on 3 mm CF rod, SG90 door servo + SG90 release servo via DRV8833 H-bridge,
 N20 winch motor + Dyneema SK75 0.5 mm line, auto-latch payload cradle, HX711 load cell, FPV camera

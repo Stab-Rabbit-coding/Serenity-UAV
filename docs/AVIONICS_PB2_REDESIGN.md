@@ -33,6 +33,17 @@ All 8 nodes participate equally on all 4 wired data buses. Every node is a poten
 
 Bus order: **CN1 → FC1 → CN2 → FC2 → CN3 → FC3 → CN4 → FC4** — one CN + one FC per bay (A/B/D/E). Any single segment cut or bay power failure leaves ≥2 FC + ≥2 CN accessible on both sides of the break.
 
+**Cape variant placement — v2 · v1 · v1 · v2 (nose → tail):**
+
+| Bay | Pair | Cape variant | Rationale |
+|-----|------|-------------|-----------|
+| A (nose) | CN1 / FC1 | Cape-B-2 / Cape-A-2 | Bus start termination node (CAN FD 120 Ω, RS-485 120 Ω, 1553B 78 Ω); 5 kV isolated transceivers absorb conducted transients entering from forward cable runs and external connectors |
+| B | CN2 / FC2 | Cape-B-1 / Cape-A-1 | Inner ring; direct RMII dual-Ethernet to CPSW3G for maximum ring throughput |
+| D | CN3 / FC3 | Cape-B-1 / Cape-A-1 | Inner ring; same rationale as Bay B |
+| E (tail) | CN4 / FC4 | Cape-B-2 / Cape-A-2 | Bus end termination node; 5 kV isolation at the aft bus endpoint, which is closest to nacelle motor leads and rear EDF wiring |
+
+The -1 capes in Bays B and D operate in the cleanest EM environment (surrounded by v2 isolation barriers at both ends) and retain direct RMII connections to CPSW3G. The -2 capes at each bus end provide an EM-hardened fallback: if a transient event saturates a termination node, the inner -1 nodes continue operating unaffected.
+
 ---
 
 ## 2. PocketBeagle 2 Industrial base platform
@@ -246,7 +257,7 @@ CN1 ─T─ FC1 ─T─ CN2 ─T─ FC2 ─T─ CN3 ─T─ FC3 ─T─ CN4 ─T
 - **T** = stub coupling transformer (PE-68515 or equivalent, 0.9 m max stub)  
 - **Primary BC:** FC1 (elected at boot via CAN FD priority arbitration)  
 - **Standby BC:** FC2 (assumes BC role if FC1 heartbeat absent for 3 frames)  
-- **Termination:** 78Ω at CN1 (bus start, Bay A) and FC4 (bus end, Bay E)  
+- **Termination:** 78Ω at CN1 (bus start, Bay A) and FC4 (bus end, Bay E). Both termination nodes use Cape-B-2 / Cape-A-2 (EMI-hardened).  
 - **Shielded cable:** MIL-C-17/131 or equivalent, 78 Ω, twisted pair, drain wire grounded at one end per segment  
 - **PRU firmware requirement:** Manchester II encoder at 1 Mbps ± 0.5%; decoder with sync-word detection and RT address filtering; TX/RX half-duplex arbitration
 
@@ -260,7 +271,7 @@ CN1 ─┬─ FC1 ─ CN2 ─ FC2 ─ CN3 ─ FC3 ─ CN4 ─┬─ FC4
 ```
 
 - **Transceiver:** ATA6561 on every cape, 3.3 V, 5 Mbps data rate  
-- **Termination:** 120 Ω resistor soldered on CN1 cape (bus start, Bay A) and FC4 cape (bus end, Bay E); all others: open  
+- **Termination:** 120 Ω resistor soldered on CN1 cape (bus start, Bay A) and FC4 cape (bus end, Bay E); all others: open. Both termination nodes use Cape-B-2 / Cape-A-2 (EMI-hardened, 5 kV isolated transceivers).  
 - **Controllers:** AM6254 MCAN0 (primary bus) + MCAN1 (reserved for second CAN bus or redundant arbitration)  
 - **Protocol:** DroneCAN v1 / UAVCANv1 for sensor data; custom priority-voting messages for role election
 
