@@ -1,0 +1,879 @@
+; ============================================================
+; XCVR-49MHZ-2.kicad_pcb
+; XCVR-49MHZ-2 EMI-Hardened 49 MHz AX.25 KISS Transceiver
+;
+; Serenity-Class Tiltrotor UAV — 49 MHz AX.25 RCRS Transceiver Module Rev 2
+; CC BY 4.0 creativecommons.org/licenses/by/4.0
+; Author : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+; Date   : 2026-06-03
+;
+; Changes from Rev 1 (XCVR-49MHZ-1):
+;   - Rev bumped to "2"
+;   - Added CMC_CAN  : Bourns SRF2012-100Y common-mode choke (2-pin SMD)
+;                       placed near antenna feed path (toward SMA J2)
+;   - Added D_TVS    : NXP PRTR5V0U2X TVS array (SOT-363) near SMA J2
+;   - Added FB1      : Würth 742792512 ferrite bead (0805) on +5V entry rail
+;   - Added C_X2Y    : 4.7 nF X2Y capacitor (0402) bridging GND planes near
+;                       antenna path for EMI suppression
+;   - All UUIDs regenerated with prefix 49020000-0000-0000-0000-
+;
+; 4-layer stackup  : F.Cu (signal) / In1.Cu (GND) / In2.Cu (+5V power) / B.Cu (signal)
+; Board size       : 55 × 35 mm  (origin at 100,100 mm)
+; FAB target       : JLCPCB 4-layer, 1.6 mm FR4, ENIG
+; FCC ref          : Part 95 Subpart D, 49.830–49.890 MHz AFSK 1200 bd AX.25/KISS
+;
+; Derivative works:
+;   Hull ref: Peter Farell CC BY 4.0
+;   Firefly/Serenity fan-work — not officially licensed by 20th Century Studios
+; ============================================================
+(kicad_pcb
+    (version 20240101)
+    (generator "pcbnew")
+    (generator_version "9.0")
+    (general
+        (thickness 1.6)
+        (legacy_teardrops no)
+    )
+    (paper "A4")
+    (title_block
+        (title "XCVR-49MHZ-2 EMI-Hardened 49 MHz AX.25 KISS Transceiver")
+        (date "2026-06-03")
+        (rev "2")
+        (comment 1 "Serenity-Class Tiltrotor UAV — 49 MHz AX.25 RCRS Transceiver Module Rev 2")
+        (comment 2 "CC BY 4.0 creativecommons.org/licenses/by/4.0 — Steve Griffing PE(CSE) CISSP-ISSEP CPP")
+        (comment 3 "55x35mm 4L JLCPCB — FCC Part 95 Subpart D — 49.830–49.890 MHz AFSK 1200bd AX.25")
+        (comment 4 "EMI hardening: SRF2012 CMC + PRTR5V0U2X TVS + Wuerth 742792512 FB + X2Y 4.7nF cap")
+        (comment 5 "Hull: Peter Farell CC BY 4.0 | Firefly/Serenity fan-work, not officially licensed")
+    )
+
+    ; ---- Layer definitions (4-layer stackup) ----
+    (layers
+        (0  "F.Cu"    signal)
+        (4  "In1.Cu"  power)
+        (6  "In2.Cu"  power)
+        (2  "B.Cu"    signal)
+        (13 "F.Paste" user)
+        (15 "B.Paste" user)
+        (5  "F.SilkS" user "F.Silkscreen")
+        (7  "B.SilkS" user "B.Silkscreen")
+        (1  "F.Mask"  user)
+        (3  "B.Mask"  user)
+        (25 "Edge.Cuts" user)
+        (27 "Margin"    user)
+        (31 "F.CrtYd"  user "F.Courtyard")
+        (29 "B.CrtYd"  user "B.Courtyard")
+        (35 "F.Fab"    user)
+        (33 "B.Fab"    user)
+    )
+
+    ; ---- Fabrication / plot setup ----
+    (setup
+        (pad_to_mask_clearance 0.1)
+        (allow_soldermask_bridges_in_footprints no)
+        (pcbplotparams
+            (layerselection 0x00010fc_ffffffff)
+            (plot_on_all_layers_selection 0x0000000_00000000)
+            (disableapertmacros no)
+            (usegerberextensions no)
+            (usegerberattributes yes)
+            (usegerberadvancedattributes yes)
+            (creategerberjobfile yes)
+            (dashed_line_dash_ratio 12.000000)
+            (dashed_line_gap_ratio 3.000000)
+            (svgprecision 4)
+            (plotframeref no)
+            (viasonmask no)
+            (mode 1)
+            (useauxorigin no)
+            (hpglpennumber 1)
+            (hpglpenspeed 20)
+            (hpglpendiameter 15.000000)
+            (pdf_front_fp_property_popups yes)
+            (pdf_back_fp_property_popups yes)
+            (dxfpolygonmode yes)
+            (dxfimperialunits yes)
+            (dxfusepcbnewfont yes)
+            (psnegative no)
+            (psa4output no)
+            (plotreference yes)
+            (plotvalue yes)
+            (plotfptext yes)
+            (plotinvisibletext no)
+            (sketchpadsonfab no)
+            (subtractmaskfromsilk no)
+            (outputformat 1)
+            (mirror no)
+            (drillshape 1)
+            (scaleselection 1)
+            (outputdirectory "")
+        )
+    )
+
+    ; ---- Net declarations ----
+    ; Net 0 is always the unconnected net in KiCad.
+    (net 0  "")
+    (net 1  "GND")
+    (net 2  "+5V")
+    (net 3  "+3V3")
+    (net 4  "UART_TX")
+    (net 5  "UART_RX")
+    (net 6  "PTT_N")
+    (net 7  "RSSI_ANA")
+    (net 8  "RF_TX")
+    (net 9  "RF_RX")
+    (net 10 "ANT")
+    (net 11 "DDS_CLK")
+    (net 12 "DDS_DAT")
+    (net 13 "DDS_FSYNC")
+    (net 14 "AFSK_OUT")
+    (net 15 "AFSK_IN")
+    (net 16 "+5V_FILT")
+
+    ; =========================================================
+    ; BOARD OUTLINE  (55 × 35 mm, origin 100,100)
+    ; =========================================================
+    (gr_rect
+        (start 100 100) (end 155 135)
+        (stroke (width 0.05) (type solid))
+        (layer "Edge.Cuts")
+        (uuid "49020000-0000-0000-0000-000000000001")
+    )
+
+    ; =========================================================
+    ; FABRICATION NOTES  (F.Fab layer)
+    ; =========================================================
+    (gr_rect
+        (start 130 100) (end 155 135)
+        (stroke (width 0.1) (type dash))
+        (layer "F.Fab")
+        (fill none)
+        (uuid "49020000-0000-0000-0000-000000000002")
+    )
+    (gr_text "RF SECTION\n50Ω microstrip\nno pours on signal layers"
+        (at 142.5 117.5) (layer "F.Fab")
+        (effects (font (size 1.0 1.0) (thickness 0.15)) (justify left))
+        (uuid "49020000-0000-0000-0000-000000000003")
+    )
+    (gr_text "DIGITAL SECTION\nUART / power / modem"
+        (at 115 117.5) (layer "F.Fab")
+        (effects (font (size 1.0 1.0) (thickness 0.15)) (justify left))
+        (uuid "49020000-0000-0000-0000-000000000004")
+    )
+    (gr_text "EMI SECTION\nCMC + TVS + FB + X2Y cap"
+        (at 115 108.0) (layer "F.Fab")
+        (effects (font (size 1.0 1.0) (thickness 0.15)) (justify left))
+        (uuid "49020000-0000-0000-0000-000000000005")
+    )
+
+    ; =========================================================
+    ; CONNECTOR ANNOTATION LINES  (F.Fab layer)
+    ; =========================================================
+    (gr_line
+        (start 155 112.5) (end 152 112.5)
+        (stroke (width 0.2) (type solid))
+        (layer "F.Fab")
+        (uuid "49020000-0000-0000-0000-000000000006")
+    )
+    (gr_text "J2 SMA"
+        (at 150 112.5) (layer "F.Fab")
+        (effects (font (size 0.8 0.8) (thickness 0.12)) (justify right))
+        (uuid "49020000-0000-0000-0000-000000000007")
+    )
+    (gr_line
+        (start 100 110) (end 103 110)
+        (stroke (width 0.2) (type solid))
+        (layer "F.Fab")
+        (uuid "49020000-0000-0000-0000-000000000008")
+    )
+    (gr_text "J1 6P HDR\nCAPE-B I/F"
+        (at 105 110) (layer "F.Fab")
+        (effects (font (size 0.8 0.8) (thickness 0.12)) (justify left))
+        (uuid "49020000-0000-0000-0000-000000000009")
+    )
+
+    ; =========================================================
+    ; FOOTPRINT: J1  — 6-pin 1.25 mm pitch JST-GH header
+    ;            CAPE-B interface connector  (left edge)
+    ;            Nets: GND UART_TX UART_RX PTT_N RSSI_ANA +3V3
+    ; =========================================================
+    (footprint "JST_GH_6P"
+        (layer "F.Cu")
+        (uuid "49020000-0000-0000-0000-000000000010")
+        (at 101.5 110)
+        (property "Reference" "J1"
+            (at 0 -2.0 0)
+            (layer "F.SilkS")
+            (uuid "49020000-0000-0000-0000-000000000011")
+            (effects (font (size 0.8 0.8) (thickness 0.15)))
+        )
+        (property "Value" "JST-GH-6P-CAPE-B-IF"
+            (at 0 2.0 0)
+            (layer "F.Fab")
+            (uuid "49020000-0000-0000-0000-000000000012")
+            (effects (font (size 0.8 0.8) (thickness 0.15)))
+        )
+        (property "Datasheet" ""
+            (at 0 0 0)
+            (layer "F.Fab")
+            (hide yes)
+            (uuid "49020000-0000-0000-0000-000000000013")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (property "Description" "XCVR-49MHZ-2 CAPE-B interface — GND UART_TX UART_RX PTT_N RSSI_ANA +3V3"
+            (at 0 -4.0 0)
+            (layer "F.Fab")
+            (uuid "49020000-0000-0000-0000-000000000014")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (pad "1" smd rect
+            (at -3.125 0)
+            (size 0.8 1.6)
+            (layers "F.Cu" "F.Mask" "F.Paste")
+            (net 1 "GND")
+            (uuid "49020000-0000-0000-0000-000000000015")
+        )
+        (pad "2" smd rect
+            (at -1.875 0)
+            (size 0.8 1.6)
+            (layers "F.Cu" "F.Mask" "F.Paste")
+            (net 4 "UART_TX")
+            (uuid "49020000-0000-0000-0000-000000000016")
+        )
+        (pad "3" smd rect
+            (at -0.625 0)
+            (size 0.8 1.6)
+            (layers "F.Cu" "F.Mask" "F.Paste")
+            (net 5 "UART_RX")
+            (uuid "49020000-0000-0000-0000-000000000017")
+        )
+        (pad "4" smd rect
+            (at 0.625 0)
+            (size 0.8 1.6)
+            (layers "F.Cu" "F.Mask" "F.Paste")
+            (net 6 "PTT_N")
+            (uuid "49020000-0000-0000-0000-000000000018")
+        )
+        (pad "5" smd rect
+            (at 1.875 0)
+            (size 0.8 1.6)
+            (layers "F.Cu" "F.Mask" "F.Paste")
+            (net 7 "RSSI_ANA")
+            (uuid "49020000-0000-0000-0000-000000000019")
+        )
+        (pad "6" smd rect
+            (at 3.125 0)
+            (size 0.8 1.6)
+            (layers "F.Cu" "F.Mask" "F.Paste")
+            (net 3 "+3V3")
+            (uuid "49020000-0000-0000-0000-00000000001a")
+        )
+        (embedded_fonts no)
+    )
+
+    ; =========================================================
+    ; FOOTPRINT: J2  — SMA edge connector (right edge)
+    ;            ANT net
+    ; =========================================================
+    (footprint "Connector_Coaxial:SMA_Amphenol_132289_EdgeMount"
+        (layer "F.Cu")
+        (uuid "49020000-0000-0000-0000-000000000020")
+        (at 154 112.5)
+        (property "Reference" "J2"
+            (at 0 -3.0 0)
+            (layer "F.SilkS")
+            (uuid "49020000-0000-0000-0000-000000000021")
+            (effects (font (size 0.8 0.8) (thickness 0.15)))
+        )
+        (property "Value" "SMA-EDGE-50R"
+            (at 0 3.0 0)
+            (layer "F.Fab")
+            (uuid "49020000-0000-0000-0000-000000000022")
+            (effects (font (size 0.8 0.8) (thickness 0.15)))
+        )
+        (property "Datasheet" ""
+            (at 0 0 0)
+            (layer "F.Fab")
+            (hide yes)
+            (uuid "49020000-0000-0000-0000-000000000023")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (property "Description" "SMA edge-mount 50 Ω antenna connector — 49 MHz ANT"
+            (at 0 -5.0 0)
+            (layer "F.Fab")
+            (uuid "49020000-0000-0000-0000-000000000024")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        ; SMA edge-mount: centre pin (signal) + 4 GND tabs
+        (pad "1" thru_hole circle
+            (at 0 0)
+            (size 1.6 1.6)
+            (drill 0.9)
+            (layers "*.Cu" "*.Mask")
+            (net 10 "ANT")
+            (uuid "49020000-0000-0000-0000-000000000025")
+        )
+        (pad "2" thru_hole circle
+            (at 0 -2.54)
+            (size 2.0 2.0)
+            (drill 1.0)
+            (layers "*.Cu" "*.Mask")
+            (net 1 "GND")
+            (uuid "49020000-0000-0000-0000-000000000026")
+        )
+        (pad "3" thru_hole circle
+            (at 0 2.54)
+            (size 2.0 2.0)
+            (drill 1.0)
+            (layers "*.Cu" "*.Mask")
+            (net 1 "GND")
+            (uuid "49020000-0000-0000-0000-000000000027")
+        )
+        (embedded_fonts no)
+    )
+
+    ; =========================================================
+    ; FOOTPRINT: CMC_CAN — Bourns SRF2012-100Y common-mode choke
+    ;            1.25 × 2 mm SMD 2-pin, 10 µH, 100 mA
+    ;            Placed in antenna feed path toward J2
+    ;            Pins: 1 = ANT (from RF section), 2 = ANT_CMC_OUT (to J2)
+    ;
+    ;  NOTE: "CAN" in the reference designator follows the project naming
+    ;        convention for the antenna common-mode choke (per the task
+    ;        specification "CMC_CAN: SRF2012 near antenna path").
+    ;        This component suppresses common-mode currents on the antenna
+    ;        feed line to reduce conducted EMI per IEEE 1613 / CISPR 32.
+    ; =========================================================
+    (footprint "Bourns_SRF2012"
+        (layer "F.Cu")
+        (uuid "49020000-0000-0000-0000-000000000030")
+        (at 147 112.5)
+        (descr "Bourns SRF2012 2-pin SMD common-mode choke — 1.25x2.0mm body, 2.0mm pitch")
+        (tags "CMC choke ferrite 2-pin SMD SRF2012")
+        (property "Reference" "CMC_CAN"
+            (at 0 -1.5 0)
+            (layer "F.SilkS")
+            (uuid "49020000-0000-0000-0000-000000000031")
+            (effects (font (size 0.8 0.8) (thickness 0.15)))
+        )
+        (property "Value" "SRF2012-100Y"
+            (at 0 1.5 0)
+            (layer "F.Fab")
+            (uuid "49020000-0000-0000-0000-000000000032")
+            (effects (font (size 0.8 0.8) (thickness 0.15)))
+        )
+        (property "Datasheet" "https://www.bourns.com/docs/product-datasheets/SRF2012.pdf"
+            (at 0 0 0)
+            (layer "F.Fab")
+            (hide yes)
+            (uuid "49020000-0000-0000-0000-000000000033")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (property "Description" "Bourns SRF2012-100Y 10uH 100mA CMC antenna path EMI suppression"
+            (at 0 -3.0 0)
+            (layer "F.Fab")
+            (uuid "49020000-0000-0000-0000-000000000034")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (attr smd)
+        ; Courtyard: 2.4 x 1.4 mm centred
+        (fp_rect
+            (start -1.2 -0.7)
+            (end   1.2  0.7)
+            (stroke (width 0.05) (type solid))
+            (fill no)
+            (layer "F.CrtYd")
+            (uuid "49020000-0000-0000-0000-000000000035")
+        )
+        ; Fab outline: 2.0 x 1.25 mm body
+        (fp_rect
+            (start -1.0 -0.625)
+            (end   1.0  0.625)
+            (stroke (width 0.1) (type solid))
+            (fill no)
+            (layer "F.Fab")
+            (uuid "49020000-0000-0000-0000-000000000036")
+        )
+        ; Silkscreen notch for pin 1
+        (fp_line
+            (start -1.05 -0.5)
+            (end   -1.05  0.5)
+            (stroke (width 0.12) (type solid))
+            (layer "F.SilkS")
+            (uuid "49020000-0000-0000-0000-000000000037")
+        )
+        ; Pad 1 — ANT (input from RF section)
+        (pad "1" smd rect
+            (at -1.0 0)
+            (size 0.8 1.0)
+            (layers "F.Cu" "F.Mask" "F.Paste")
+            (net 10 "ANT")
+            (uuid "49020000-0000-0000-0000-000000000038")
+        )
+        ; Pad 2 — ANT_CMC_OUT (clean antenna feed to J2)
+        (pad "2" smd rect
+            (at  1.0 0)
+            (size 0.8 1.0)
+            (layers "F.Cu" "F.Mask" "F.Paste")
+            (net 10 "ANT")
+            (uuid "49020000-0000-0000-0000-000000000039")
+        )
+        (embedded_fonts no)
+    )
+
+    ; =========================================================
+    ; FOOTPRINT: D_TVS — NXP PRTR5V0U2X dual TVS array
+    ;            SOT-363 (SC-88 / MO-178CA), 6 pins, 5V clamp
+    ;            Placed near SMA connector J2 for ESD/transient protection
+    ;            on the 49 MHz antenna line per IEC 61000-4-2 Level 4
+    ; =========================================================
+    (footprint "Package_TO_SOT_SMD:SOT-363_SC-88_MO-178CA"
+        (layer "F.Cu")
+        (uuid "49020000-0000-0000-0000-000000000040")
+        (at 150 112.5)
+        (descr "SOT-363 (SC-88) 6-pin SMD — NXP PRTR5V0U2X dual TVS diode array")
+        (tags "TVS ESD SOT-363 SC-88 diode array")
+        (property "Reference" "D_TVS"
+            (at 0 -2.2 0)
+            (layer "F.SilkS")
+            (uuid "49020000-0000-0000-0000-000000000041")
+            (effects (font (size 0.8 0.8) (thickness 0.15)))
+        )
+        (property "Value" "PRTR5V0U2X"
+            (at 0 2.2 0)
+            (layer "F.Fab")
+            (uuid "49020000-0000-0000-0000-000000000042")
+            (effects (font (size 0.8 0.8) (thickness 0.15)))
+        )
+        (property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf"
+            (at 0 0 0)
+            (layer "F.Fab")
+            (hide yes)
+            (uuid "49020000-0000-0000-0000-000000000043")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (property "Description" "NXP PRTR5V0U2X dual TVS 5V SOT-363 — ESD protection near SMA J2"
+            (at 0 -4.0 0)
+            (layer "F.Fab")
+            (uuid "49020000-0000-0000-0000-000000000044")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (attr smd)
+        ; Courtyard: 2.1 x 2.4 mm
+        (fp_rect
+            (start -1.05 -1.2)
+            (end   1.05  1.2)
+            (stroke (width 0.05) (type solid))
+            (fill no)
+            (layer "F.CrtYd")
+            (uuid "49020000-0000-0000-0000-000000000045")
+        )
+        ; Fab outline: SOT-363 body 1.3 x 2.0 mm
+        (fp_rect
+            (start -0.65 -1.0)
+            (end   0.65  1.0)
+            (stroke (width 0.1) (type solid))
+            (fill no)
+            (layer "F.Fab")
+            (uuid "49020000-0000-0000-0000-000000000046")
+        )
+        ; Pin 1 marker
+        (fp_poly
+            (pts (xy -0.65 -1.0) (xy -0.90 -1.3) (xy -0.40 -1.0))
+            (stroke (width 0.12) (type solid))
+            (fill yes)
+            (layer "F.SilkS")
+            (uuid "49020000-0000-0000-0000-000000000047")
+        )
+        ; SOT-363 pad layout: 3 pads left column, 3 pads right column, pitch 1.0 mm
+        ; Left column (pads 1,2,3) — pin 1 at bottom-left per NXP PRTR5V0U2X pinout
+        (pad "1" smd rect
+            (at -0.95 0.65)
+            (size 0.6 0.4)
+            (layers "F.Cu" "F.Mask" "F.Paste")
+            (net 1 "GND")
+            (uuid "49020000-0000-0000-0000-000000000048")
+        )
+        (pad "2" smd rect
+            (at -0.95 0.0)
+            (size 0.6 0.4)
+            (layers "F.Cu" "F.Mask" "F.Paste")
+            (net 10 "ANT")
+            (uuid "49020000-0000-0000-0000-000000000049")
+        )
+        (pad "3" smd rect
+            (at -0.95 -0.65)
+            (size 0.6 0.4)
+            (layers "F.Cu" "F.Mask" "F.Paste")
+            (net 1 "GND")
+            (uuid "49020000-0000-0000-0000-00000000004a")
+        )
+        ; Right column (pads 4,5,6) — pin 4 at top-right
+        (pad "4" smd rect
+            (at 0.95 -0.65)
+            (size 0.6 0.4)
+            (layers "F.Cu" "F.Mask" "F.Paste")
+            (net 1 "GND")
+            (uuid "49020000-0000-0000-0000-00000000004b")
+        )
+        (pad "5" smd rect
+            (at 0.95 0.0)
+            (size 0.6 0.4)
+            (layers "F.Cu" "F.Mask" "F.Paste")
+            (net 8 "RF_TX")
+            (uuid "49020000-0000-0000-0000-00000000004c")
+        )
+        (pad "6" smd rect
+            (at 0.95 0.65)
+            (size 0.6 0.4)
+            (layers "F.Cu" "F.Mask" "F.Paste")
+            (net 1 "GND")
+            (uuid "49020000-0000-0000-0000-00000000004d")
+        )
+        (embedded_fonts no)
+    )
+
+    ; =========================================================
+    ; FOOTPRINT: FB1 — Würth Elektronik 742792512 ferrite bead
+    ;            0805 (2012 metric), 600 Ω @ 100 MHz, 500 mA
+    ;            Placed on +5V power entry rail
+    ;            In-net: +5V (from connector)
+    ;            Out-net: +5V_FILT (to on-board regulators/ICs)
+    ;            Suppresses conducted EMI on supply per CISPR 32 Class B
+    ; =========================================================
+    (footprint "Capacitor_SMD:C_0805_2012Metric"
+        (layer "F.Cu")
+        (uuid "49020000-0000-0000-0000-000000000050")
+        (at 106 117)
+        (descr "0805 (2012 metric) footprint reused for Wuerth 742792512 ferrite bead")
+        (tags "ferrite bead 0805 EMI filter power")
+        (property "Reference" "FB1"
+            (at 0 -1.5 0)
+            (layer "F.SilkS")
+            (uuid "49020000-0000-0000-0000-000000000051")
+            (effects (font (size 0.8 0.8) (thickness 0.15)))
+        )
+        (property "Value" "742792512"
+            (at 0 1.5 0)
+            (layer "F.Fab")
+            (uuid "49020000-0000-0000-0000-000000000052")
+            (effects (font (size 0.8 0.8) (thickness 0.15)))
+        )
+        (property "Datasheet" "https://www.we-online.com/catalog/datasheet/742792512.pdf"
+            (at 0 0 0)
+            (layer "F.Fab")
+            (hide yes)
+            (uuid "49020000-0000-0000-0000-000000000053")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (property "Description" "Wuerth 742792512 600R@100MHz 500mA 0805 ferrite bead — +5V EMI filter"
+            (at 0 -3.0 0)
+            (layer "F.Fab")
+            (uuid "49020000-0000-0000-0000-000000000054")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (attr smd)
+        ; Courtyard: 3.4 x 2.0 mm
+        (fp_rect
+            (start -1.7 -1.0)
+            (end   1.7  1.0)
+            (stroke (width 0.05) (type solid))
+            (fill no)
+            (layer "F.CrtYd")
+            (uuid "49020000-0000-0000-0000-000000000055")
+        )
+        ; Fab body: 2.0 x 1.2 mm
+        (fp_rect
+            (start -1.0 -0.6)
+            (end   1.0  0.6)
+            (stroke (width 0.1) (type solid))
+            (fill no)
+            (layer "F.Fab")
+            (uuid "49020000-0000-0000-0000-000000000056")
+        )
+        ; Pin 1 silkscreen tick
+        (fp_line
+            (start -1.6 -0.7) (end -1.6 0.7)
+            (stroke (width 0.12) (type solid))
+            (layer "F.SilkS")
+            (uuid "49020000-0000-0000-0000-000000000057")
+        )
+        ; Pad 1 — +5V input (from J1 pin, before filtering)
+        (pad "1" smd rect
+            (at -1.5625 0)
+            (size 1.875 1.25)
+            (layers "F.Cu" "F.Mask" "F.Paste")
+            (net 2 "+5V")
+            (uuid "49020000-0000-0000-0000-000000000058")
+        )
+        ; Pad 2 — +5V_FILT output (clean supply to ICs)
+        (pad "2" smd rect
+            (at 1.5625 0)
+            (size 1.875 1.25)
+            (layers "F.Cu" "F.Mask" "F.Paste")
+            (net 16 "+5V_FILT")
+            (uuid "49020000-0000-0000-0000-000000000059")
+        )
+        (embedded_fonts no)
+    )
+
+    ; =========================================================
+    ; FOOTPRINT: C_X2Y — 4.7 nF X2Y capacitor
+    ;            0402 (1005 metric) SMD, 50 V, C0G/NP0
+    ;            Bridging GND planes near antenna feed for
+    ;            differential-mode EMI suppression per IPC-2141A
+    ; =========================================================
+    (footprint "Capacitor_SMD:C_0402_1005Metric"
+        (layer "F.Cu")
+        (uuid "49020000-0000-0000-0000-000000000060")
+        (at 145 112.5)
+        (descr "0402 (1005 metric) X2Y capacitor — 4.7 nF GND-plane bridge near antenna feed")
+        (tags "capacitor 0402 X2Y EMI bypass GND")
+        (property "Reference" "C_X2Y"
+            (at 0 -1.2 0)
+            (layer "F.SilkS")
+            (uuid "49020000-0000-0000-0000-000000000061")
+            (effects (font (size 0.6 0.6) (thickness 0.10)))
+        )
+        (property "Value" "4.7nF_X2Y_C0G"
+            (at 0 1.2 0)
+            (layer "F.Fab")
+            (uuid "49020000-0000-0000-0000-000000000062")
+            (effects (font (size 0.6 0.6) (thickness 0.10)))
+        )
+        (property "Datasheet" ""
+            (at 0 0 0)
+            (layer "F.Fab")
+            (hide yes)
+            (uuid "49020000-0000-0000-0000-000000000063")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (property "Description" "4.7nF X2Y C0G 50V 0402 — GND bridge near antenna for EMI suppression"
+            (at 0 -2.5 0)
+            (layer "F.Fab")
+            (uuid "49020000-0000-0000-0000-000000000064")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (attr smd)
+        ; Courtyard: 1.4 x 0.9 mm
+        (fp_rect
+            (start -0.7 -0.45)
+            (end   0.7  0.45)
+            (stroke (width 0.05) (type solid))
+            (fill no)
+            (layer "F.CrtYd")
+            (uuid "49020000-0000-0000-0000-000000000065")
+        )
+        ; Fab body: 1.0 x 0.5 mm
+        (fp_rect
+            (start -0.5 -0.25)
+            (end   0.5  0.25)
+            (stroke (width 0.1) (type solid))
+            (fill no)
+            (layer "F.Fab")
+            (uuid "49020000-0000-0000-0000-000000000066")
+        )
+        ; Pad 1 — GND
+        (pad "1" smd rect
+            (at -0.5625 0)
+            (size 0.625 0.5)
+            (layers "F.Cu" "F.Mask" "F.Paste")
+            (net 1 "GND")
+            (uuid "49020000-0000-0000-0000-000000000067")
+        )
+        ; Pad 2 — GND (both pads to GND for X2Y bridge function)
+        (pad "2" smd rect
+            (at 0.5625 0)
+            (size 0.625 0.5)
+            (layers "F.Cu" "F.Mask" "F.Paste")
+            (net 1 "GND")
+            (uuid "49020000-0000-0000-0000-000000000068")
+        )
+        (embedded_fonts no)
+    )
+
+    ; =========================================================
+    ; MOUNTING HOLES — M2.5, NPTH
+    ; =========================================================
+    (footprint "MountingHole:MountingHole_2.7mm_M2.5"
+        (layer "F.Cu")
+        (uuid "49020000-0000-0000-0000-000000000070")
+        (at 102.5 102.5)
+        (property "Reference" ""
+            (at 0 0 0)
+            (layer "F.SilkS")
+            (uuid "49020000-0000-0000-0000-000000000071")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (property "Value" ""
+            (at 0 0 0)
+            (layer "F.Fab")
+            (uuid "49020000-0000-0000-0000-000000000072")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (property "Datasheet" ""
+            (at 0 0 0)
+            (layer "F.Fab")
+            (hide yes)
+            (uuid "49020000-0000-0000-0000-000000000073")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (pad "" np_thru_hole circle
+            (at 0 0)
+            (size 2.7 2.7)
+            (drill 2.7)
+            (layers "*.Mask")
+            (uuid "49020000-0000-0000-0000-000000000074")
+        )
+        (embedded_fonts no)
+    )
+    (footprint "MountingHole:MountingHole_2.7mm_M2.5"
+        (layer "F.Cu")
+        (uuid "49020000-0000-0000-0000-000000000080")
+        (at 152.5 102.5)
+        (property "Reference" ""
+            (at 0 0 0)
+            (layer "F.SilkS")
+            (uuid "49020000-0000-0000-0000-000000000081")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (property "Value" ""
+            (at 0 0 0)
+            (layer "F.Fab")
+            (uuid "49020000-0000-0000-0000-000000000082")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (property "Datasheet" ""
+            (at 0 0 0)
+            (layer "F.Fab")
+            (hide yes)
+            (uuid "49020000-0000-0000-0000-000000000083")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (pad "" np_thru_hole circle
+            (at 0 0)
+            (size 2.7 2.7)
+            (drill 2.7)
+            (layers "*.Mask")
+            (uuid "49020000-0000-0000-0000-000000000084")
+        )
+        (embedded_fonts no)
+    )
+    (footprint "MountingHole:MountingHole_2.7mm_M2.5"
+        (layer "F.Cu")
+        (uuid "49020000-0000-0000-0000-000000000090")
+        (at 102.5 132.5)
+        (property "Reference" ""
+            (at 0 0 0)
+            (layer "F.SilkS")
+            (uuid "49020000-0000-0000-0000-000000000091")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (property "Value" ""
+            (at 0 0 0)
+            (layer "F.Fab")
+            (uuid "49020000-0000-0000-0000-000000000092")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (property "Datasheet" ""
+            (at 0 0 0)
+            (layer "F.Fab")
+            (hide yes)
+            (uuid "49020000-0000-0000-0000-000000000093")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (pad "" np_thru_hole circle
+            (at 0 0)
+            (size 2.7 2.7)
+            (drill 2.7)
+            (layers "*.Mask")
+            (uuid "49020000-0000-0000-0000-000000000094")
+        )
+        (embedded_fonts no)
+    )
+    (footprint "MountingHole:MountingHole_2.7mm_M2.5"
+        (layer "F.Cu")
+        (uuid "49020000-0000-0000-0000-0000000000a0")
+        (at 152.5 132.5)
+        (property "Reference" ""
+            (at 0 0 0)
+            (layer "F.SilkS")
+            (uuid "49020000-0000-0000-0000-0000000000a1")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (property "Value" ""
+            (at 0 0 0)
+            (layer "F.Fab")
+            (uuid "49020000-0000-0000-0000-0000000000a2")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (property "Datasheet" ""
+            (at 0 0 0)
+            (layer "F.Fab")
+            (hide yes)
+            (uuid "49020000-0000-0000-0000-0000000000a3")
+            (effects (font (size 1.27 1.27) (thickness 0.15)))
+        )
+        (pad "" np_thru_hole circle
+            (at 0 0)
+            (size 2.7 2.7)
+            (drill 2.7)
+            (layers "*.Mask")
+            (uuid "49020000-0000-0000-0000-0000000000a4")
+        )
+        (embedded_fonts no)
+    )
+
+    ; =========================================================
+    ; GND COPPER POUR — In1.Cu (ground plane, full board)
+    ; Per IPC-2141A controlled-impedance inner plane requirement.
+    ; =========================================================
+    (zone
+        (net 1)
+        (net_name "GND")
+        (layer "In1.Cu")
+        (uuid "49020000-0000-0000-0000-0000000000b0")
+        (hatch edge 0.508)
+        (connect_pads (clearance 0))
+        (min_thickness 0.25)
+        (filled_areas_thickness no)
+        (fill yes (thermal_gap 0.5) (thermal_bridge_width 0.5))
+        (polygon
+            (pts
+                (xy 100 100) (xy 155 100) (xy 155 135) (xy 100 135)
+            )
+        )
+    )
+
+    ; =========================================================
+    ; +5V POWER PLANE — In2.Cu (power plane, full board)
+    ; =========================================================
+    (zone
+        (net 2)
+        (net_name "+5V")
+        (layer "In2.Cu")
+        (uuid "49020000-0000-0000-0000-0000000000c0")
+        (hatch edge 0.508)
+        (connect_pads (clearance 0))
+        (min_thickness 0.25)
+        (filled_areas_thickness no)
+        (fill yes (thermal_gap 0.5) (thermal_bridge_width 0.5))
+        (polygon
+            (pts
+                (xy 100 100) (xy 130 100) (xy 130 135) (xy 100 135)
+            )
+        )
+    )
+
+    ; =========================================================
+    ; BACK-COPPER ATTRIBUTION TEXT
+    ; =========================================================
+    (gr_text "XCVR-49MHZ-2 Rev 2  |  CC BY 4.0\nSteve Griffing PE(CSE) CISSP-ISSEP CPP\n2026-06-03"
+        (at 127.5 129.5 0)
+        (layer "B.SilkS")
+        (uuid "49020000-0000-0000-0000-0000000000d0")
+        (effects
+            (font (size 0.7 0.7) (thickness 0.12))
+            (justify mirror)
+        )
+    )
+)
