@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-06-02  
+**Last updated:** 2026-06-04  
 **Current design revision:** Rev P (master) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 ---
@@ -15,7 +15,7 @@
 | Nacelles | 2× 50mm tandem EDF, CG pivot Z=83mm, M=1.0 gear, iris nozzle | `nacelle_pod_50mm_tandem.scad` complete; Rev O stator shells (`_revo.stl`) NOT yet rendered |
 | Rear propulsion | 120mm 6S EDF, 4-scoop radial intake, iris nozzle | `s_edf_120_motor_mount.stl` ✓, `s_edf_120_thrust_tube.stl` ✓; intake frame + plenum SCAD complete, STLs missing |
 | Cargo bay | Clamshell doors + SG90 servos + DRV8833 + N20 winch + Dyneema + auto-latch + GPS ring + FPV bezel | ✓ All 13 cargo STLs generated (PR #21 + PR #22 2026-06-01); BOM updated bom_revP.json/csv; gondola shell open |
-| PCBs | Cape-A-1, Cape-B-1 assembled; XCVR-49MHZ-1 fabricated | Cape-A/B KiCad files complete, gerbers stale; XCVR-49MHZ-1 Phase 1 complete (ICs selected 2026-05-31); Phase 2 schematic open |
+| PCBs | Cape-A-1, Cape-B-1 assembled; XCVR-49MHZ-1 fabricated; Cape-A-2, Cape-B-2, XCVR-49MHZ-2 EMI-hardened variants designed (branch `claude/cape-em-harsh-variants-9Yfr1`) | Cape-A/B -1 KiCad files complete, gerbers stale; XCVR-49MHZ-1 Phase 1 complete (ICs selected 2026-05-31); -2 variants: schematics + PCB files complete, gerbers not yet generated |
 | Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 ✓; serenity-fc Phase 6 stub only; all Phase 7 items open |
 | Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
 | Regulatory | FAA Part 107, ICAO nav lights, FCC Part 95 | FAA registration placeholder; XCVR-49MHZ-1 pre-compliance pending |
@@ -126,6 +126,53 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 
 - [ ] **Regenerate Cape-B-1 gerbers** — same timestamp issue. `serenity/kicad/gerbers/CAPE-B-1/` files are from 2026-05-22.
   - **BLOCKS Phase 6 fab order**
+
+---
+
+### 1.2a — PCB Design: Cape-A-2, Cape-B-2, and XCVR-49MHZ-2 (EMI-Hardened Variants)
+
+Design files on branch `claude/cape-em-harsh-variants-9Yfr1`. Schematics (`*.kicad_sch`) and PCB
+layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been generated or DRC-verified.
+
+**Key changes from -1 variants:**
+
+- **CAN FD**: ATA6561 (non-isolated) → ISOW1044BDFMR (TI, SOIC-16W, 5 kV reinforced isolation +
+  integrated DC/DC converter, IEC 62368-1 / VDE 0884-11)
+- **RS-485**: MAX3485E (non-isolated) → ADM2795EBRWZ (ADI, SOIC-20W, 5 kV reinforced isolation +
+  integrated DC/DC converter)
+- **Ethernet PHY**: DP83825I (non-isolated RMII PHY) → ADIN1300BCPZ (ADI, LFCSP-48, 1000BASE-T)
+  isolated via 2× ISO7642FDWRR (TI, SOIC-16W, 6-channel 150 Mbps digital isolator, 5 kV) +
+  Würth 749010012A SMD transformer + JST GH 4P connector (no RJ45)
+- **XCVR-49MHZ-2**: SRF2012-100Y CMC on antenna coax shield, PRTR5V0U2X TVS on PTT/RX lines,
+  X2Y bridging capacitor on RF ground plane, Würth 742792512 ferrite bead on +5V rail
+
+**Transform scripts** (generate -2 files from -1 originals):
+
+- `avionics/kicad/gen_cape_a2.py` → `CAPE-A-2.kicad_sch`
+- `avionics/kicad/gen_cape_b2.py` → `CAPE-B-2.kicad_sch`
+- `avionics/kicad/add_eth_phy.py` — ETH PHY isolation sub-circuit generator (called by above)
+- `avionics/kicad/gen_cape_a2_pcb.py` → `CAPE-A-2.kicad_pcb`
+- `avionics/kicad/gen_cape_b2_pcb.py` → `CAPE-B-2.kicad_pcb`
+
+**Open tasks:**
+
+- [ ] **Generate CAPE-A-2 gerbers** — `CAPE-A-2.kicad_pcb` complete; run DRC to zero errors in
+  KiCad; export to `avionics/kicad/gerbers/CAPE-A-2/`; re-export drill files.
+  - **BLOCKS CAPE-A-2 fab order**
+- [ ] **Generate CAPE-B-2 gerbers** — `CAPE-B-2.kicad_pcb` complete; same DRC + export procedure;
+  export to `avionics/kicad/gerbers/CAPE-B-2/`.
+  - **BLOCKS CAPE-B-2 fab order**
+- [ ] **Generate XCVR-49MHZ-2 gerbers** — `XCVR-49MHZ-2.kicad_pcb` complete; export to
+  `avionics/kicad/gerbers/XCVR-49MHZ-2/`.
+  - **BLOCKS XCVR-49MHZ-2 fab order**
+- [ ] **FCC Part 95 Subpart D pre-compliance checklist for XCVR-49MHZ-2** — document center
+  frequency accuracy (±0.005% per 47 CFR 95.655), ERP (≤100 mW), harmonic suppression ≥40 dBc at
+  2nd/3rd harmonics, 47 CFR 95.603 FCC ID silkscreen labeling block.
+- [ ] **EMI isolation validation checklist** — verify isolation barrier clearance: ISOW1044BDFMR
+  5 kV working voltage; ADM2795EBRWZ 5 kV working voltage; measure CMRR at 1 MHz on CAN and
+  RS-485 channels; verify differential impedance 100 Ω ±10% on ETH MDI traces.
+- [ ] **Merge `claude/cape-em-harsh-variants-9Yfr1` → master** after gerbers pass DRC and
+  pre-compliance checklist is signed off.
 
 ---
 
