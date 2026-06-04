@@ -75,7 +75,16 @@ Every component will be fabricated or procured; design accordingly.
 
 - Design for **Common Hand-tool field disassembly** of any component that may need in-field replacement.
 
--
+## Revisions and Version Control
+
+- A project revision with a letter is a comprehensive update and checkpoint for the project. All changes from the previous Revisions are integrated, all documents are updated and all capabilities are baseline.
+
+- All components are referenced as of the latest revision, even if there was no change on that component's specifications since a much earlier revision.  
+
+- Modifications to components after a Revision are shown as the Revision letter followed by a number, such as: J1, as the first odifications after Revision J, or M4, as the fourth modification of that component after Revision M.  These numbers reset with every revision. all active components carried forward to a new revision are part of that Revisions baseline.
+
+- All items that are archived prior to a Revision retain the Revision label which they held at the time of archival, and are not included in future revisions. 
+
 ## Workflow Notes
 
 - Run Blender scripts with `blender --background --python <script>.py` — the machine supports
