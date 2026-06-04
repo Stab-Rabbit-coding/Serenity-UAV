@@ -1,0 +1,554 @@
+(kicad_sch (version 20240101) (generator eeschema)
+
+  (paper "A4")
+
+  (title_block
+    (title "XCVR-49MHZ-2 EMI-Hardened 49 MHz AX.25 KISS Transceiver")
+    (date "2026-06-04")
+    (rev "2")
+    (company "Griffing Technology LLC")
+    (comment 1 "FC Node — 49 MHz AX.25 RCRS Comms Link for Serenity UAV")
+    (comment 2 "Copyright 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP | Griffing Technology LLC")
+    (comment 3 "License: CC BY 4.0  |  creativecommons.org/licenses/by/4.0")
+    (comment 4 "FCC Part 95 Subpart D — 49.830 MHz AFSK 1200 bd AX.25/KISS")
+  )
+
+  (lib_symbols
+
+    ;; ---------- Power symbols ----------
+    (symbol "GND"
+      (power)
+      (pin_names (offset 0) (hide yes))
+      (pin_numbers (hide yes))
+      (property "Reference" "#PWR" (at 0 -1.905 0)
+        (effects (font (size 1.27 1.27)) (hide yes)))
+      (property "Value" "GND" (at 0 -3.81 0)
+        (effects (font (size 1.27 1.27))))
+      (symbol "GND_0_1"
+        (polyline (pts (xy 0 0) (xy 0 -1.27)) (stroke (width 0) (type default)) (fill (type none)))
+        (polyline (pts (xy -1.27 -1.27) (xy 1.27 -1.27)) (stroke (width 0) (type default)) (fill (type none)))
+        (polyline (pts (xy -0.762 -1.905) (xy 0.762 -1.905)) (stroke (width 0) (type default)) (fill (type none)))
+        (polyline (pts (xy -0.254 -2.54) (xy 0.254 -2.54)) (stroke (width 0) (type default)) (fill (type none))))
+      (symbol "GND_1_1"
+        (pin power_in line (at 0 0 90) (length 0)
+          (name "~" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27)))))))
+
+    (symbol "+5V"
+      (power)
+      (pin_names (offset 0) (hide yes))
+      (pin_numbers (hide yes))
+      (property "Reference" "#PWR" (at 0 3.81 0)
+        (effects (font (size 1.27 1.27)) (hide yes)))
+      (property "Value" "+5V" (at 0 3.81 0)
+        (effects (font (size 1.27 1.27))))
+      (symbol "+5V_0_1"
+        (polyline (pts (xy 0 0) (xy 0 1.27)) (stroke (width 0) (type default)) (fill (type none)))
+        (polyline (pts (xy -0.762 1.27) (xy 0 2.54) (xy 0.762 1.27)) (stroke (width 0) (type default)) (fill (type none))))
+      (symbol "+5V_1_1"
+        (pin power_in line (at 0 0 270) (length 0)
+          (name "~" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27)))))))
+
+    ;; ---------- Passive components ----------
+    (symbol "Ferrite_Bead"
+      (pin_names (offset 0.254))
+      (pin_numbers (hide yes))
+      (property "Reference" "FB" (at 0 3.81 0)
+        (effects (font (size 1.27 1.27))))
+      (property "Value" "742792512" (at 0 -3.81 0)
+        (effects (font (size 1.27 1.27))))
+      (property "Footprint" "Inductor_SMD:L_0805_2012Metric" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) (hide yes)))
+      (property "Datasheet"
+        "https://www.we-online.com/catalog/datasheet/742792512.pdf" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) (hide yes)))
+      (symbol "Ferrite_Bead_0_1"
+        (rectangle (start -1.016 1.016) (end 1.016 -1.016)
+          (stroke (width 0) (type default)) (fill (type background))))
+      (symbol "Ferrite_Bead_1_1"
+        (pin passive line (at -3.81 0 0) (length 2.54)
+          (name "A" (effects (font (size 1.016 1.016))))
+          (number "1" (effects (font (size 1.016 1.016)))))
+        (pin passive line (at 3.81 0 180) (length 2.54)
+          (name "B" (effects (font (size 1.016 1.016))))
+          (number "2" (effects (font (size 1.016 1.016)))))))
+
+    (symbol "C"
+      (pin_names (offset 0.254))
+      (pin_numbers (hide yes))
+      (property "Reference" "C" (at 2.54 1.27 0)
+        (effects (font (size 1.27 1.27))))
+      (property "Value" "4.7nF" (at 2.54 -1.27 0)
+        (effects (font (size 1.27 1.27))))
+      (property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) (hide yes)))
+      (symbol "C_0_1"
+        (polyline (pts (xy -2.032 -0.762) (xy 2.032 -0.762)) (stroke (width 0.508) (type default)) (fill (type none)))
+        (polyline (pts (xy -2.032 0.762) (xy 2.032 0.762)) (stroke (width 0.508) (type default)) (fill (type none))))
+      (symbol "C_1_1"
+        (pin passive line (at 0 3.81 270) (length 2.54)
+          (name "~" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at 0 -3.81 90) (length 2.54)
+          (name "~" (effects (font (size 1.27 1.27))))
+          (number "2" (effects (font (size 1.27 1.27)))))))
+
+    ;; ---------- SRF2012-100Y common-mode choke ----------
+    (symbol "SRF2012"
+      (pin_names (offset 0.254))
+      (pin_numbers (hide yes))
+      (property "Reference" "CMC" (at 0 4.445 0)
+        (effects (font (size 1.27 1.27))))
+      (property "Value" "SRF2012-100Y" (at 0 -4.445 0)
+        (effects (font (size 1.27 1.27))))
+      (property "Footprint" "Bourns_SRF2012" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) (hide yes)))
+      (property "Datasheet"
+        "https://www.bourns.com/docs/Product-Datasheets/SRF201X.pdf" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) (hide yes)))
+      (symbol "SRF2012_0_1"
+        (rectangle (start -2.54 2.54) (end 2.54 -2.54)
+          (stroke (width 0) (type default)) (fill (type background))))
+      (symbol "SRF2012_1_1"
+        (pin passive line (at -5.08 1.27 0) (length 2.54)
+          (name "L1A" (effects (font (size 1.016 1.016))))
+          (number "1" (effects (font (size 1.016 1.016)))))
+        (pin passive line (at -5.08 -1.27 0) (length 2.54)
+          (name "L2A" (effects (font (size 1.016 1.016))))
+          (number "2" (effects (font (size 1.016 1.016)))))
+        (pin passive line (at 5.08 1.27 180) (length 2.54)
+          (name "L1B" (effects (font (size 1.016 1.016))))
+          (number "3" (effects (font (size 1.016 1.016)))))
+        (pin passive line (at 5.08 -1.27 180) (length 2.54)
+          (name "L2B" (effects (font (size 1.016 1.016))))
+          (number "4" (effects (font (size 1.016 1.016)))))))
+
+    ;; ---------- PRTR5V0U2X TVS diode array ----------
+    (symbol "PRTR5V0U2X"
+      (pin_names (offset 0.254))
+      (pin_numbers (hide yes))
+      (property "Reference" "D" (at 0 4.445 0)
+        (effects (font (size 1.27 1.27))))
+      (property "Value" "PRTR5V0U2X" (at 0 -4.445 0)
+        (effects (font (size 1.27 1.27))))
+      (property "Footprint" "Package_TO_SOT_SMD:SOT-363_SC-88_MO-178CA" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) (hide yes)))
+      (property "Datasheet"
+        "https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) (hide yes)))
+      (symbol "PRTR5V0U2X_0_1"
+        (rectangle (start -2.54 2.54) (end 2.54 -2.54)
+          (stroke (width 0) (type default)) (fill (type background))))
+      (symbol "PRTR5V0U2X_1_1"
+        (pin passive line (at -5.08 1.27 0) (length 2.54)
+          (name "A1" (effects (font (size 1.016 1.016))))
+          (number "1" (effects (font (size 1.016 1.016)))))
+        (pin passive line (at -5.08 -1.27 0) (length 2.54)
+          (name "A2" (effects (font (size 1.016 1.016))))
+          (number "3" (effects (font (size 1.016 1.016)))))
+        (pin passive line (at 5.08 0 180) (length 2.54)
+          (name "K" (effects (font (size 1.016 1.016))))
+          (number "2" (effects (font (size 1.016 1.016)))))
+        (pin power_in line (at 0 -5.08 90) (length 2.54)
+          (name "GND" (effects (font (size 1.016 1.016))))
+          (number "6" (effects (font (size 1.016 1.016)))))))
+
+    ;; ---------- JST GH 6-pin interface connector ----------
+    (symbol "Conn_JST_GH_06P"
+      (pin_names (offset 0.254))
+      (pin_numbers (hide yes))
+      (property "Reference" "J" (at 2.54 -10.16 0)
+        (effects (font (size 1.27 1.27))))
+      (property "Value" "JST_GH_06P" (at 2.54 10.16 0)
+        (effects (font (size 1.27 1.27))))
+      (property "Footprint"
+        "Connector_JST:JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) (hide yes)))
+      (symbol "Conn_JST_GH_06P_0_1"
+        (rectangle (start -1.016 8.89) (end 0 -8.89)
+          (stroke (width 0.254) (type default)) (fill (type background))))
+      (symbol "Conn_JST_GH_06P_1_1"
+        (pin passive line (at 2.54 6.35 180) (length 2.54)
+          (name "GND" (effects (font (size 1.016 1.016))))
+          (number "1" (effects (font (size 1.016 1.016)))))
+        (pin passive line (at 2.54 3.81 180) (length 2.54)
+          (name "+5V" (effects (font (size 1.016 1.016))))
+          (number "2" (effects (font (size 1.016 1.016)))))
+        (pin passive line (at 2.54 1.27 180) (length 2.54)
+          (name "SDA" (effects (font (size 1.016 1.016))))
+          (number "3" (effects (font (size 1.016 1.016)))))
+        (pin passive line (at 2.54 -1.27 180) (length 2.54)
+          (name "SCL" (effects (font (size 1.016 1.016))))
+          (number "4" (effects (font (size 1.016 1.016)))))
+        (pin passive line (at 2.54 -3.81 180) (length 2.54)
+          (name "PTT_N" (effects (font (size 1.016 1.016))))
+          (number "5" (effects (font (size 1.016 1.016)))))
+        (pin passive line (at 2.54 -6.35 180) (length 2.54)
+          (name "RX_OUT" (effects (font (size 1.016 1.016))))
+          (number "6" (effects (font (size 1.016 1.016)))))))
+
+    ;; ---------- SMA edge-mount antenna connector ----------
+    (symbol "Conn_SMA"
+      (pin_names (offset 0.254))
+      (pin_numbers (hide yes))
+      (property "Reference" "J" (at 0 5.08 0)
+        (effects (font (size 1.27 1.27))))
+      (property "Value" "SMA_Edge" (at 0 -5.08 0)
+        (effects (font (size 1.27 1.27))))
+      (property "Footprint"
+        "Connector_Coaxial:SMA_Amphenol_132289_EdgeMount" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) (hide yes)))
+      (symbol "Conn_SMA_0_1"
+        (rectangle (start -2.54 2.54) (end 2.54 -2.54)
+          (stroke (width 0) (type default)) (fill (type background))))
+      (symbol "Conn_SMA_1_1"
+        (pin passive line (at -5.08 0 0) (length 2.54)
+          (name "RF" (effects (font (size 1.016 1.016))))
+          (number "1" (effects (font (size 1.016 1.016)))))
+        (pin power_in line (at 5.08 0 180) (length 2.54)
+          (name "GND" (effects (font (size 1.016 1.016))))
+          (number "2" (effects (font (size 1.016 1.016)))))))
+
+  )
+
+  ;;
+  ;; ===== INSTANCES =====
+  ;;
+
+  ;; -- J1: JST GH 6-pin interface connector (GND/+5V/SDA/SCL/PTT_N/RX_OUT) --
+  (symbol (lib_id "Conn_JST_GH_06P") (at 50.00 100.00 0)
+    (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "49020000-0000-0000-0000-000000000101")
+    (property "Reference" "J1" (at 52.54 87.00 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "JST_GH_06P" (at 52.54 113.00 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Footprint"
+      "Connector_JST:JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal"
+      (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (pin "1" (uuid "49020000-0000-0000-0000-000000000102"))
+    (pin "2" (uuid "49020000-0000-0000-0000-000000000103"))
+    (pin "3" (uuid "49020000-0000-0000-0000-000000000104"))
+    (pin "4" (uuid "49020000-0000-0000-0000-000000000105"))
+    (pin "5" (uuid "49020000-0000-0000-0000-000000000106"))
+    (pin "6" (uuid "49020000-0000-0000-0000-000000000107")))
+
+  ;; -- FB1: Wurth 742792512 ferrite bead, 600Ω@100MHz 2A, on +5V entry --
+  (symbol (lib_id "Ferrite_Bead") (at 90.00 96.19 90)
+    (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "49020000-0000-0000-0000-000000000110")
+    (property "Reference" "FB1" (at 90.00 90.00 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "742792512" (at 90.00 102.00 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Inductor_SMD:L_0805_2012Metric"
+      (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (pin "1" (uuid "49020000-0000-0000-0000-000000000111"))
+    (pin "2" (uuid "49020000-0000-0000-0000-000000000112")))
+
+  ;; -- CMC_CAN: Bourns SRF2012-100Y CMC on antenna feed (100Ω@100MHz, 0.3A) --
+  (symbol (lib_id "SRF2012") (at 200.00 100.00 0)
+    (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "49020000-0000-0000-0000-000000000120")
+    (property "Reference" "CMC_CAN" (at 200.00 92.00 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "SRF2012-100Y" (at 200.00 108.00 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Bourns_SRF2012"
+      (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (pin "1" (uuid "49020000-0000-0000-0000-000000000121"))
+    (pin "2" (uuid "49020000-0000-0000-0000-000000000122"))
+    (pin "3" (uuid "49020000-0000-0000-0000-000000000123"))
+    (pin "4" (uuid "49020000-0000-0000-0000-000000000124")))
+
+  ;; -- D_TVS: PRTR5V0U2X TVS array at antenna connector (5.5V clamp) --
+  (symbol (lib_id "PRTR5V0U2X") (at 240.00 100.00 0)
+    (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "49020000-0000-0000-0000-000000000130")
+    (property "Reference" "D_TVS" (at 240.00 92.00 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "PRTR5V0U2X" (at 240.00 108.00 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-363_SC-88_MO-178CA"
+      (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (pin "1" (uuid "49020000-0000-0000-0000-000000000131"))
+    (pin "2" (uuid "49020000-0000-0000-0000-000000000132"))
+    (pin "3" (uuid "49020000-0000-0000-0000-000000000133"))
+    (pin "6" (uuid "49020000-0000-0000-0000-000000000134")))
+
+  ;; -- J2: SMA edge-mount antenna connector --
+  (symbol (lib_id "Conn_SMA") (at 280.00 100.00 0)
+    (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "49020000-0000-0000-0000-000000000140")
+    (property "Reference" "J2" (at 280.00 93.00 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "SMA_Edge" (at 280.00 107.00 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Connector_Coaxial:SMA_Amphenol_132289_EdgeMount"
+      (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (pin "1" (uuid "49020000-0000-0000-0000-000000000141"))
+    (pin "2" (uuid "49020000-0000-0000-0000-000000000142")))
+
+  ;; -- C_X2Y: 4.7nF X2Y cap bridging signal GND to chassis GND near antenna --
+  (symbol (lib_id "C") (at 270.00 120.00 0)
+    (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "49020000-0000-0000-0000-000000000150")
+    (property "Reference" "C_X2Y" (at 273.00 120.00 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "4.7nF X2Y" (at 273.00 122.54 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (pin "1" (uuid "49020000-0000-0000-0000-000000000151"))
+    (pin "2" (uuid "49020000-0000-0000-0000-000000000152")))
+
+  ;;
+  ;; ===== POWER SYMBOLS =====
+  ;;
+
+  ;; GND at J1 pin 1 (J1 body at 50,100; pin1 at x=52.54, y=106.35)
+  (symbol (lib_id "GND") (at 57.62 106.35 0)
+    (unit 1) (exclude_from_sim no) (in_bom no) (on_board yes) (dnp no)
+    (uuid "49020000-0000-0000-0000-000000000201")
+    (property "Reference" "#PWR01" (at 57.62 106.35 0)
+      (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 57.62 104.00 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "49020000-0000-0000-0000-000000000202")))
+
+  ;; +5V at J1 pin 2 (y=103.81) — before ferrite bead
+  (symbol (lib_id "+5V") (at 57.62 103.81 0)
+    (unit 1) (exclude_from_sim no) (in_bom no) (on_board yes) (dnp no)
+    (uuid "49020000-0000-0000-0000-000000000203")
+    (property "Reference" "#PWR02" (at 57.62 103.81 0)
+      (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "+5V" (at 57.62 106.35 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "49020000-0000-0000-0000-000000000204")))
+
+  ;; +5V at FB1 output (filtered rail — component at 90,96.19 rotated 90°
+  ;; pin "B" exits at y = 96.19 - 3.81 = 92.38)
+  (symbol (lib_id "+5V") (at 90.00 92.38 0)
+    (unit 1) (exclude_from_sim no) (in_bom no) (on_board yes) (dnp no)
+    (uuid "49020000-0000-0000-0000-000000000205")
+    (property "Reference" "#PWR03" (at 90.00 92.38 0)
+      (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "+5V" (at 90.00 89.84 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "49020000-0000-0000-0000-000000000206")))
+
+  ;; GND at D_TVS body bottom (pin 6 GND at y=100+5.08=105.08)
+  (symbol (lib_id "GND") (at 240.00 105.08 0)
+    (unit 1) (exclude_from_sim no) (in_bom no) (on_board yes) (dnp no)
+    (uuid "49020000-0000-0000-0000-000000000207")
+    (property "Reference" "#PWR04" (at 240.00 105.08 0)
+      (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 240.00 102.54 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "49020000-0000-0000-0000-000000000208")))
+
+  ;; GND at J2 pin 2 (GND/shield — pin exits at x=285.08, y=100)
+  (symbol (lib_id "GND") (at 285.08 100.00 0)
+    (unit 1) (exclude_from_sim no) (in_bom no) (on_board yes) (dnp no)
+    (uuid "49020000-0000-0000-0000-000000000209")
+    (property "Reference" "#PWR05" (at 285.08 100.00 0)
+      (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 285.08 97.46 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "49020000-0000-0000-0000-000000000210")))
+
+  ;; GND at C_X2Y pin 2 (bottom, y=120+3.81=123.81)
+  (symbol (lib_id "GND") (at 270.00 123.81 0)
+    (unit 1) (exclude_from_sim no) (in_bom no) (on_board yes) (dnp no)
+    (uuid "49020000-0000-0000-0000-000000000211")
+    (property "Reference" "#PWR06" (at 270.00 123.81 0)
+      (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 270.00 121.27 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "49020000-0000-0000-0000-000000000212")))
+
+  ;; GND at CMC_CAN L2B (pin 4, return path tied to GND, x=205.08, y=98.73)
+  (symbol (lib_id "GND") (at 209.16 98.73 0)
+    (unit 1) (exclude_from_sim no) (in_bom no) (on_board yes) (dnp no)
+    (uuid "49020000-0000-0000-0000-000000000213")
+    (property "Reference" "#PWR07" (at 209.16 98.73 0)
+      (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 209.16 96.19 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "49020000-0000-0000-0000-000000000214")))
+
+  ;; GND at CMC_CAN L2A (pin 2, input tied to GND, x=194.92, y=98.73)
+  (symbol (lib_id "GND") (at 190.84 98.73 0)
+    (unit 1) (exclude_from_sim no) (in_bom no) (on_board yes) (dnp no)
+    (uuid "49020000-0000-0000-0000-000000000215")
+    (property "Reference" "#PWR08" (at 190.84 98.73 0)
+      (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 190.84 96.19 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "49020000-0000-0000-0000-000000000216")))
+
+  ;;
+  ;; ===== GLOBAL LABELS (interface signals from J1 and antenna net) =====
+  ;;
+
+  ;; J1 pin 3 → SDA (I2C data to transceiver MCU)
+  (global_label "SDA" (shape bidirectional) (at 57.62 101.27 0)
+    (effects (font (size 1.016 1.016)))
+    (uuid "49020000-0000-0000-0000-000000000301")
+    (property "Intersheet References" "${INTERSHEET_REFS}" (at 57.62 101.27 0)
+      (effects (font (size 1.016 1.016)) (hide yes))))
+
+  ;; J1 pin 4 → SCL (I2C clock to transceiver MCU)
+  (global_label "SCL" (shape bidirectional) (at 57.62 98.73 0)
+    (effects (font (size 1.016 1.016)))
+    (uuid "49020000-0000-0000-0000-000000000302")
+    (property "Intersheet References" "${INTERSHEET_REFS}" (at 57.62 98.73 0)
+      (effects (font (size 1.016 1.016)) (hide yes))))
+
+  ;; J1 pin 5 → PTT_N (push-to-talk, active LOW)
+  (global_label "PTT_N" (shape bidirectional) (at 57.62 96.19 0)
+    (effects (font (size 1.016 1.016)))
+    (uuid "49020000-0000-0000-0000-000000000303")
+    (property "Intersheet References" "${INTERSHEET_REFS}" (at 57.62 96.19 0)
+      (effects (font (size 1.016 1.016)) (hide yes))))
+
+  ;; J1 pin 6 → RX_OUT (received audio / AFSK out)
+  (global_label "RX_OUT" (shape bidirectional) (at 57.62 93.65 0)
+    (effects (font (size 1.016 1.016)))
+    (uuid "49020000-0000-0000-0000-000000000304")
+    (property "Intersheet References" "${INTERSHEET_REFS}" (at 57.62 93.65 0)
+      (effects (font (size 1.016 1.016)) (hide yes))))
+
+  ;; RF_ANT — antenna signal, exits CMC L1A toward transceiver PA/LNA
+  (global_label "RF_ANT" (shape bidirectional) (at 190.84 101.27 180)
+    (effects (font (size 1.016 1.016)))
+    (uuid "49020000-0000-0000-0000-000000000305")
+    (property "Intersheet References" "${INTERSHEET_REFS}" (at 190.84 101.27 0)
+      (effects (font (size 1.016 1.016)) (hide yes))))
+
+  ;; RF_ANT_F — antenna signal, filtered, exits CMC L1B toward TVS/SMA
+  (global_label "RF_ANT_F" (shape bidirectional) (at 209.16 101.27 0)
+    (effects (font (size 1.016 1.016)))
+    (uuid "49020000-0000-0000-0000-000000000306")
+    (property "Intersheet References" "${INTERSHEET_REFS}" (at 209.16 101.27 0)
+      (effects (font (size 1.016 1.016)) (hide yes))))
+
+  ;; RF_ANT_F also drives D_TVS A1 and A2 (both anodes protect the line)
+  (global_label "RF_ANT_F" (shape bidirectional) (at 234.92 101.27 180)
+    (effects (font (size 1.016 1.016)))
+    (uuid "49020000-0000-0000-0000-000000000307")
+    (property "Intersheet References" "${INTERSHEET_REFS}" (at 234.92 101.27 0)
+      (effects (font (size 1.016 1.016)) (hide yes))))
+
+  ;; RF_ANT_F to D_TVS K (cathode) → J2 RF center pin
+  (global_label "RF_ANT_F" (shape bidirectional) (at 250.16 100.00 0)
+    (effects (font (size 1.016 1.016)))
+    (uuid "49020000-0000-0000-0000-000000000308")
+    (property "Intersheet References" "${INTERSHEET_REFS}" (at 250.16 100.00 0)
+      (effects (font (size 1.016 1.016)) (hide yes))))
+
+  ;; C_X2Y top (pin 1) connects to RF_ANT_F net (signal GND bridging node)
+  (global_label "RF_ANT_F" (shape bidirectional) (at 270.00 116.19 270)
+    (effects (font (size 1.016 1.016)))
+    (uuid "49020000-0000-0000-0000-000000000309")
+    (property "Intersheet References" "${INTERSHEET_REFS}" (at 270.00 116.19 0)
+      (effects (font (size 1.016 1.016)) (hide yes))))
+
+  ;; J2 RF center pin connects from D_TVS K
+  (global_label "RF_ANT_F" (shape bidirectional) (at 274.92 100.00 180)
+    (effects (font (size 1.016 1.016)))
+    (uuid "49020000-0000-0000-0000-000000000310")
+    (property "Intersheet References" "${INTERSHEET_REFS}" (at 274.92 100.00 0)
+      (effects (font (size 1.016 1.016)) (hide yes))))
+
+  ;;
+  ;; ===== WIRES =====
+  ;;
+
+  ;; J1 pin 1 (GND) wire to GND power symbol at x=57.62
+  (wire (pts (xy 52.54 106.35) (xy 57.62 106.35))
+    (uuid "49020000-0000-0000-0000-000000000401"))
+
+  ;; J1 pin 2 (+5V_IN) wire to +5V power symbol
+  (wire (pts (xy 52.54 103.81) (xy 57.62 103.81))
+    (uuid "49020000-0000-0000-0000-000000000402"))
+
+  ;; J1 pin 3 wire to SDA label
+  (wire (pts (xy 52.54 101.27) (xy 57.62 101.27))
+    (uuid "49020000-0000-0000-0000-000000000403"))
+
+  ;; J1 pin 4 wire to SCL label
+  (wire (pts (xy 52.54 98.73) (xy 57.62 98.73))
+    (uuid "49020000-0000-0000-0000-000000000404"))
+
+  ;; J1 pin 5 wire to PTT_N label
+  (wire (pts (xy 52.54 96.19) (xy 57.62 96.19))
+    (uuid "49020000-0000-0000-0000-000000000405"))
+
+  ;; J1 pin 6 wire to RX_OUT label
+  (wire (pts (xy 52.54 93.65) (xy 57.62 93.65))
+    (uuid "49020000-0000-0000-0000-000000000406"))
+
+  ;; +5V_IN to FB1 pin A (FB1 rotated 90°; pin A at y = 96.19 + 3.81 = 100.00)
+  ;; Connect J1 pin2 (+5V at x=57.62) and FB1 pin A (at x=90, y=100)
+  (wire (pts (xy 57.62 103.81) (xy 80.00 103.81))
+    (uuid "49020000-0000-0000-0000-000000000407"))
+  (wire (pts (xy 80.00 103.81) (xy 80.00 100.00))
+    (uuid "49020000-0000-0000-0000-000000000408"))
+  (wire (pts (xy 80.00 100.00) (xy 86.19 100.00))
+    (uuid "49020000-0000-0000-0000-000000000409"))
+
+  ;; FB1 pin B (y = 96.19 - 3.81 = 92.38) to filtered +5V symbol
+  (wire (pts (xy 90.00 92.38) (xy 90.00 92.38))
+    (uuid "49020000-0000-0000-0000-000000000410"))
+
+  ;; RF_ANT label to CMC_CAN L1A (pin1, at x=194.92, y=101.27)
+  ;; (label at x=190.84 connects via short wire)
+  (wire (pts (xy 190.84 101.27) (xy 194.92 101.27))
+    (uuid "49020000-0000-0000-0000-000000000411"))
+
+  ;; CMC_CAN L2A (pin2, at x=194.92, y=98.73) to GND
+  (wire (pts (xy 190.84 98.73) (xy 194.92 98.73))
+    (uuid "49020000-0000-0000-0000-000000000412"))
+
+  ;; CMC_CAN L1B (pin3, at x=205.08, y=101.27) to RF_ANT_F label
+  (wire (pts (xy 205.08 101.27) (xy 209.16 101.27))
+    (uuid "49020000-0000-0000-0000-000000000413"))
+
+  ;; CMC_CAN L2B (pin4, at x=205.08, y=98.73) to GND
+  (wire (pts (xy 205.08 98.73) (xy 209.16 98.73))
+    (uuid "49020000-0000-0000-0000-000000000414"))
+
+  ;; D_TVS A1 (pin1, at x=234.92, y=101.27) to RF_ANT_F label
+  (wire (pts (xy 234.92 101.27) (xy 234.92 101.27))
+    (uuid "49020000-0000-0000-0000-000000000415"))
+
+  ;; D_TVS A2 (pin3, at x=234.92, y=98.73) to RF_ANT_F via junction
+  (wire (pts (xy 234.92 98.73) (xy 234.92 101.27))
+    (uuid "49020000-0000-0000-0000-000000000416"))
+
+  ;; D_TVS K (pin2, at x=245.08, y=100.00) to RF_ANT_F label
+  (wire (pts (xy 245.08 100.00) (xy 250.16 100.00))
+    (uuid "49020000-0000-0000-0000-000000000417"))
+
+  ;; J2 RF pin (at x=274.92, y=100) connects from RF_ANT_F label
+  (wire (pts (xy 274.92 100.00) (xy 274.92 100.00))
+    (uuid "49020000-0000-0000-0000-000000000418"))
+
+  ;; J2 GND pin (at x=285.08, y=100) to GND power symbol
+  (wire (pts (xy 285.08 100.00) (xy 285.08 100.00))
+    (uuid "49020000-0000-0000-0000-000000000419"))
+
+  ;; C_X2Y pin1 (top, y=116.19) to RF_ANT_F label (signal GND side)
+  (wire (pts (xy 270.00 116.19) (xy 270.00 116.19))
+    (uuid "49020000-0000-0000-0000-000000000420"))
+
+  ;; C_X2Y pin2 (bottom, y=123.81) to GND
+  (wire (pts (xy 270.00 123.81) (xy 270.00 123.81))
+    (uuid "49020000-0000-0000-0000-000000000421"))
+
+  (sheet_instances
+    (path "/" (page "1")))
+
+)
