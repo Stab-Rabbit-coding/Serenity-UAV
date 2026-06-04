@@ -1,0 +1,8 @@
+# Host-side dependencies for governor_cal.py
+# Install with:  pip install -r requirements.txt
+#
+# Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+# License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+pyserial>=3.5
+numpy>=1.21
+scipy>=1.7
