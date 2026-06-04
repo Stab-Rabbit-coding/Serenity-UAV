@@ -49,6 +49,14 @@ barometer, airspeed, FPV camera, TPM 2.0, ADC, ESC telemetry, PWM, GPIO) and 4 w
 TDDS transceiver via RCRS-49 sub-module, CAN FD, MIL-STD-1553B, RS-485, Ethernet RSTP ring, TPM 2.0,
 ATF16V8BQL CPLD write-blocker, hardware-enforced non-executable log microSD).
 
+**EMI-hardened -2 variants** (Cape-A-2, Cape-B-2, XCVR-49MHZ-2) are complete on branch
+`claude/cape-em-harsh-variants-9Yfr1`. These replace the -1 discrete transceivers with reinforced
+5 kV isolated devices: ISOW1044BDFMR (CAN FD, TI), ADM2795EBRWZ (RS-485, ADI), ADIN1300BCPZ
+1000BASE-T PHY isolated via dual ISO7642FDWRR 6-channel digital isolators and Würth 749010012A
+Ethernet transformer (JST GH 4P connector, no RJ45). XCVR-49MHZ-2 adds SRF2012-100Y CMC,
+PRTR5V0U2X TVS, and X2Y bridging capacitor on the antenna feed. All isolation barriers are IEC
+62368-1 / VDE 0884-11 certified at 5 kV. Gerbers pending DRC sign-off.
+
 **Cargo handling (Rev P — complete):** clamshell cargo bay with CF-PETG port/starboard doors,
 8-barrel piano hinge on 3 mm CF rod, SG90 door servo + SG90 release servo via DRV8833 H-bridge,
 N20 winch motor + Dyneema SK75 0.5 mm line, auto-latch payload cradle, HX711 load cell, FPV camera
