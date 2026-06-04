@@ -30,6 +30,7 @@ Every component will be fabricated or procured; design accordingly.
   a fallback mode or redundant path (dual ESCs, independent battery rails, manual override, etc.).
 - **All EDF housings will be printed as part of the build.** Treat them as structural components,
   not wrappers. Wall thickness, infill, and material must be specified for each housing.
+
 - **Keep the skin geometry of Serenity true to the reference models** to the greatest extent possible. Interior modifications (bore carving, sleeve insertion, boss protrusions) must blend into the canonical exterior hull.  Do not alter the outer mold line unless structurally required.  Use this low detail model of Serenity https://www.thingiverse.com/thing:4677565 as a guide to the geometry of the hull, when orienting the head, cargo, middle, and rear sections of the fuselage. 
 
 - **All legal and regulatory requirements will be based on United States jurisdiction**  All Radio transmissions shall comply with appropriate FCC regulations.  Markings, lights, and operation shall comply with all appropriate FAA aircraft regulations.
@@ -54,12 +55,22 @@ Every component will be fabricated or procured; design accordingly.
 ## Fabrication Standards
 
 - Primary structural material: **CF-PETG** (0.15 mm layer height, 4 perimeters, ≥ 40% infill for load-bearing regions; 25% infill for non-structural fill).
+
 - Secondary / non-structural: **PETG** at same layer height.
+
 - The canonical exterior skin shall be hollowed to 2.0 mm while maintaining a watertight mesh surface without any voids or holes, except as explicitly specified in build. The mating surfaces between the four fuselage sections, (head, cargo, middle, rear), will be open to allow construction access.
-- The shell will be filled with 2lb/cf low-density foam to provide internal structure
-- All mating surfaces that carry load must have a minimum 2-wall contact annulus and a
-  positive-stop shoulder. Friction fits alone are not acceptable for flight-critical joints.
-- All stls, - All PCBs must be fully developed, with complete schematics files, pcb files, copper traces, proper ic footprints, and production ready gerber files.
+
+- The shell will be filled with 2lb/cf low-density foam to provide internal structure.
+
+- Bosses and ribs will be added to the interior of the shell as needed for mounting hardware, components, or other structural flight requirements.
+
+- To the greatest extent possible, mounting brackets for avionics, servos, sensors, antennas, and other hardware shall be integrated and printed as part of the shell.
+
+- All mating surfaces that carry load must have a minimum 2-wall contact annulus and a positive-stop shoulder. Friction fits alone are not acceptable for flight-critical joints.
+
+- All stls, openscad, and other 3d models shall be clean and have watertight surface meshes.  They should be ready to slice for printing. 
+
+- All PCBs must be fully developed, with complete schematics files, pcb files, copper traces, proper ic footprints, and production ready gerber files.
 
 - Design for **Common Hand-tool field disassembly** of any component that may need in-field replacement.
 
