@@ -26,10 +26,13 @@ EMI-hardened CAPE-B-2 variant by:
        X2Y_RS485 — 4.7 nF X2Y cap bridging GND ↔ RS-485 isolated GND
   G. Updating the sheet UUID to b2000000-0000-0000-0000-000000000001.
   H. Remapping all UUID prefixes to "b2000000-0000-0000-0000-".
+  I. (v2 EMI) Adding PRTR5V0U2X TVS on the XCVR_RX_RAW input net
+     (D_XCVR_TVS at 138, 561.27) — the PRTR5V0U2X lib_symbol is already
+     present from step F; only a new instance is added.
 
 Author : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
          Griffing Technology LLC
-Date   : 2026-06-03
+Date   : 2026-06-04
 License: CC BY 4.0  |  creativecommons.org/licenses/by/4.0
 
 References
@@ -40,6 +43,7 @@ References
   PRTR5V0U2X datasheet : https://www.nxp.com/docs/en/data-sheet/PRTR5V0U2X.pdf
   SMAJ33CA datasheet   : https://www.littelfuse.com/~/media/electronics/datasheets/tvs_diodes/littelfuse_tvs_diodes_smaj_datasheet.pdf.pdf
   Würth 742792512      : https://www.we-online.com/en/components/products/EMC/742792512
+  Nexperia PRTR5V0U2X  : https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf
 """
 
 import re
@@ -117,8 +121,10 @@ def remove_sexp_block(text: str, pattern: str) -> str:
     if idx == -1:
         return text
     end = find_balanced_sexp(text, idx)
-    # Consume trailing whitespace / newline so we don't leave blank lines.
-    while end < len(text) and text[end] in ' \t\r\n':
+    # Consume only the trailing newline so we don't leave a blank line.
+    # Do NOT consume leading spaces of the next block — doing so strips its
+    # indentation and breaks subsequent pattern-based removals.
+    while end < len(text) and text[end] in '\r\n':
         end += 1
     return text[:idx] + text[end:]
 
@@ -1022,6 +1028,91 @@ INST_X2Y_RS485_GND_BOT = """\
 """
 
 # ---------------------------------------------------------------------------
+# 4b. XCVR_RX_RAW TVS protection — Change I (v2 EMI addition)
+# ---------------------------------------------------------------------------
+
+def inst_xcvr_rx_tvs(cx: float, cy: float) -> str:
+    """Return the PRTR5V0U2X TVS instance on the XCVR_RX_RAW input line.
+
+    D_XCVR_TVS is placed at (*cx*, *cy*) = (138, 561.27) on the
+    XCVR_RX_RAW net.  The TVS clamps transients from the external 49 MHz
+    XCVR module before they reach U_SBUS_B and SW1.
+
+    The PRTR5V0U2X lib_symbol is already present in CAPE-B-2 (inserted by
+    the existing gen_cape_b2.py for CAN and RS-485 protection in step F).
+    This function adds a new instance only — no new lib_symbol is needed.
+
+    Pin tips derived from lib_sym_prtr5v0u2x() geometry (pins at ±5.08 x,
+    ±1.27 y for A1/A2, 0 y for K):
+      A1 tip at (cx − 5.08, cy + 1.27)  →  global XCVR_RX_RAW (angle=180)
+      A2 tip at (cx − 5.08, cy − 1.27)  →  no_connect (unused TVS channel)
+      K  tip at (cx + 5.08, cy + 0.00)  →  GND power (0°)
+      GND pin is internal (angle=270 at cy + 5.08) → GND power
+
+    Note: The gen_cape_b2.py PRTR5V0U2X lib_symbol has 4 pins (A1, A2, K,
+    GND at pin 6 pointing down).  We add a GND power symbol for the GND pin.
+
+    Args:
+        cx: Component centre X coordinate in mm  (138).
+        cy: Component centre Y coordinate in mm  (561.27).
+
+    Returns:
+        A multi-line string with the D_XCVR_TVS symbol instance plus
+        its connections.
+    """
+    # The PRTR5V0U2X lib in gen_cape_b2.py has:
+    #   A1 at (-5.08, +1.27, 0)  tip = (cx-5.08, cy+1.27)
+    #   A2 at (-5.08, -1.27, 0)  tip = (cx-5.08, cy-1.27)
+    #   K  at (+5.08, 0.00, 180) tip = (cx+5.08, cy)
+    #   GND at (0, +5.08, 270)   tip = (cx, cy+5.08)  [power_in pin pointing down]
+    left_x = cx - 5.08          # 132.92
+    right_x = cx + 5.08         # 143.08
+    y_a1 = cy + 1.27            # 562.54
+    y_a2 = cy - 1.27            # 560.00
+    y_k = cy                    # 561.27
+    y_gnd_pin = cy + 5.08       # 566.35
+
+    # UUIDs use the b2000000 prefix directly since this string is inserted
+    # before UUID remapping (step H).
+    inst_uuid = "b2000000-0000-0000-0000-000000000fc0"
+    p1_uuid = "b2000000-0000-0000-0000-000000000fc1"
+    p2_uuid = "b2000000-0000-0000-0000-000000000fc2"
+    p3_uuid = "b2000000-0000-0000-0000-000000000fc3"
+    p6_uuid = "b2000000-0000-0000-0000-000000000fc4"
+    lbl_uuid = "b2000000-0000-0000-0000-000000000fc5"
+    nc_uuid = "b2000000-0000-0000-0000-000000000fc6"
+    gnd_inst_uuid = "b2000000-0000-0000-0000-000000000fc7"
+    gnd_pwr_uuid = "b2000000-0000-0000-0000-000000000fc8"
+
+    return f'''\
+  (symbol (lib_id "PRTR5V0U2X") (at {cx:.2f} {cy:.2f} 0)
+    (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "{inst_uuid}")
+    (property "Reference" "D_XCVR_TVS" (at {cx:.2f} {cy - 6.35:.2f} 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "PRTR5V0U2X" (at {cx:.2f} {cy + 6.35:.2f} 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-363_SC-70-6" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (pin "1" (uuid "{p1_uuid}"))
+    (pin "2" (uuid "{p2_uuid}"))
+    (pin "3" (uuid "{p3_uuid}"))
+    (pin "6" (uuid "{p6_uuid}"))
+  )
+  (global_label "XCVR_RX_RAW" (shape bidirectional) (at {left_x:.2f} {y_a1:.2f} 180)
+    (effects (font (size 1.016 1.016)))
+    (uuid "{lbl_uuid}")
+    (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {left_x:.2f} {y_a1:.2f} 0)
+      (effects (font (size 1.016 1.016)) (hide yes))))
+  (no_connect (at {left_x:.2f} {y_a2:.2f}) (uuid "{nc_uuid}"))
+  (symbol (lib_id "GND") (at {right_x:.2f} {y_k:.2f} 0)
+    (unit 1) (exclude_from_sim no) (in_bom no) (on_board yes) (dnp no)
+    (uuid "{gnd_inst_uuid}")
+    (property "Reference" "#PWR0FC1" (at {right_x:.2f} {y_k:.2f} 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at {right_x + 2.54:.2f} {y_k:.2f} 0) (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "{gnd_pwr_uuid}"))
+  )'''
+
+
+# ---------------------------------------------------------------------------
 # 5. NO-CONNECT MARKERS for former PHY connector pins on PB2-P2
 # ---------------------------------------------------------------------------
 # PB2-P2 is at (65, 430).  Connector pin endpoints at x=67.54.
@@ -1309,6 +1400,15 @@ def transform(src: str) -> str:
     # Insert EMI block before the final closing paren of the schematic.
     assert text.rstrip().endswith(')'), "Unexpected schematic ending"
     text = text.rstrip()[:-1] + emi_block + ")\n"
+
+    # ------------------------------------------------------------------
+    # I. Add PRTR5V0U2X TVS on the XCVR_RX_RAW net (D_XCVR_TVS).
+    #    The PRTR5V0U2X lib_symbol is already present from step F above.
+    #    We append a new instance before the final closing ')'.
+    # ------------------------------------------------------------------
+    xcvr_tvs_block = inst_xcvr_rx_tvs(138.0, 561.27)
+    assert text.rstrip().endswith(')'), "Unexpected schematic ending after EMI block"
+    text = text.rstrip()[:-1] + xcvr_tvs_block + "\n)\n"
 
     # ------------------------------------------------------------------
     # G. Update sheet UUID.

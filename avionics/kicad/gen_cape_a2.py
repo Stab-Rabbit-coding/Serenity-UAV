@@ -21,11 +21,16 @@ the Serenity UAV project.  This script performs the following transformations:
   G. Updates the sheet UUID to the CAPE-A-2 canonical value.
   H. Remaps all UUIDs to use the "a2000000-0000-0000-0000-" prefix so that
      CAPE-A-2 is unambiguously distinct from CAPE-A-1.
+  I. (v2 sensor upgrades) Replaces QMC5883L magnetometer lib_symbol and instance
+     with MMC5983MA (MEMSIC, 18-bit, AEC-Q100) — same 5-pin I²C interface.
+  J. (v2 sensor upgrades) Replaces INA219AIDR lib_symbol and instance with
+     INA226AIDGSR (TI, VSSOP-8, 16-bit, 36 V) — compatible net connections.
+  K. (v2 EMI) Adds PRTR5V0U2X TVS on the SBUS_RAW input line (D_SBUS_TVS).
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
          Griffing Technology LLC
 License: CC BY 4.0  |  creativecommons.org/licenses/by/4.0
-Date:    2026-06-03
+Date:    2026-06-04
 Project: Serenity UAV — EDF Tilt-Rotor UAV
 
 References:
@@ -34,6 +39,8 @@ References:
   - Würth Elektronik 742792512 ferrite bead datasheet
   - Nexperia PRTR5V0U2X datasheet (Rev. 5, 2021)
   - Coilcraft SRF2012-100Y datasheet (2020)
+  - MEMSIC MMC5983MA datasheet (Rev. C, 2022)
+  - Texas Instruments INA226AIDGSR datasheet (SBOS547, 2011)
   - KiCad S-expression schematic format, version 20240101
 """
 
@@ -471,6 +478,377 @@ def lib_sym_x2y_cap() -> str:
         (name "G2" (effects (font (size 1.016 1.016))))
         (number "2" (effects (font (size 1.016 1.016)))))
     )
+  )'''
+
+
+# ===========================================================================
+# v2 EMI-hardened lib_symbol replacements (Changes I, J)
+# ===========================================================================
+
+def lib_sym_mmc5983ma() -> str:
+    """Return the KiCad lib_symbol S-expression for the MMC5983MA magnetometer.
+
+    MMC5983MA: MEMSIC 3-axis magnetometer, LGA-16, I²C/SPI, 18-bit, AEC-Q100.
+    Replaces the QMC5883L in CAPE-A-2.  The schematic interface is identical:
+    SCL, SDA, GND, VDD, DRDY — same 5 pins, same body geometry.
+
+    Pin layout (lib origin 0,0):
+      Left side (angle=0, tips at x = −10.16):
+        SCL  at lib (−10.16, −2.54)
+        SDA  at lib (−10.16,  0.00)
+        GND  at lib (−10.16, +2.54)
+      Right side (angle=180, tips at x = +10.16):
+        VDD  at lib (+10.16, −2.54)
+        DRDY at lib (+10.16, +2.54)
+    Body rectangle: (−7.62, −3.81) to (+7.62, +3.81).
+
+    Reference: MEMSIC MMC5983MA datasheet (Rev. C, 2022).
+    """
+    return '''\
+  (symbol "MMC5983MA" (in_bom yes) (on_board yes)
+    (property "Reference" "U" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "MMC5983MA" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Sensor_Magnetic:MMC5983MA" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "https://www.memsic.com/Public/Uploads/uploadfile/files/20220119/MMC5983MA-RevC.pdf" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (symbol "MMC5983MA_0_1"
+      (rectangle (start -7.62 -3.81) (end 7.62 3.81)
+        (stroke (width 0.254) (type default)) (fill (type background)))
+    )
+    (symbol "MMC5983MA_1_1"
+      (pin input line (at -10.16 -2.54 0) (length 2.54)
+        (name "SCL" (effects (font (size 1.016 1.016))))
+        (number "1" (effects (font (size 1.016 1.016)))))
+      (pin bidirectional line (at -10.16 0.00 0) (length 2.54)
+        (name "SDA" (effects (font (size 1.016 1.016))))
+        (number "2" (effects (font (size 1.016 1.016)))))
+      (pin power_in line (at -10.16 2.54 0) (length 2.54)
+        (name "GND" (effects (font (size 1.016 1.016))))
+        (number "3" (effects (font (size 1.016 1.016)))))
+      (pin power_in line (at 10.16 -2.54 180) (length 2.54)
+        (name "VDD" (effects (font (size 1.016 1.016))))
+        (number "4" (effects (font (size 1.016 1.016)))))
+      (pin output line (at 10.16 2.54 180) (length 2.54)
+        (name "DRDY" (effects (font (size 1.016 1.016))))
+        (number "5" (effects (font (size 1.016 1.016)))))
+    )
+  )'''
+
+
+def lib_sym_ina226() -> str:
+    """Return the KiCad lib_symbol S-expression for the INA226AIDGSR.
+
+    INA226AIDGSR: TI bidirectional current/voltage monitor, VSSOP-8, I²C,
+    16-bit, 36 V max bus voltage.  Replaces INA219AIDR in CAPE-A-2.
+
+    VSSOP-8 pin assignment (TI SBOS547):
+      Pin 1 = IN+, Pin 2 = IN−, Pin 3 = GND, Pin 4 = VS,
+      Pin 5 = SDA, Pin 6 = SCL, Pin 7 = A1,  Pin 8 = A0.
+
+    Symbol pin layout (lib origin 0,0, 2.54 mm pitch, ±3.81 mm from centre):
+      Left side (angle=0, tips at x = −10.16):
+        IN+ (pin 1) at lib (−10.16, −3.81)
+        IN− (pin 2) at lib (−10.16, −1.27)
+        GND (pin 3) at lib (−10.16, +1.27)
+        VS  (pin 4) at lib (−10.16, +3.81)
+      Right side (angle=180, tips at x = +10.16):
+        SDA (pin 5) at lib (+10.16, −3.81)
+        SCL (pin 6) at lib (+10.16, −1.27)
+        A1  (pin 7) at lib (+10.16, +1.27)
+        A0  (pin 8) at lib (+10.16, +3.81)
+    Body rectangle: (−7.62, −5.08) to (+7.62, +5.08).
+
+    Note: The VS supply pin of INA226 corresponds to V+ of INA219; both
+    connect to +3V3 in this design.
+
+    Reference: TI INA226 datasheet SBOS547 (Rev. A, 2011).
+    """
+    return '''\
+  (symbol "INA226AIDGSR" (in_bom yes) (on_board yes)
+    (property "Reference" "U" (at 0 -7.62 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "INA226AIDGSR" (at 0 7.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Package_SO:SSOP-8_4.4x3mm_P0.65mm" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "https://www.ti.com/lit/ds/symlink/ina226.pdf" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (symbol "INA226AIDGSR_0_1"
+      (rectangle (start -7.62 -5.08) (end 7.62 5.08)
+        (stroke (width 0.254) (type default)) (fill (type background)))
+    )
+    (symbol "INA226AIDGSR_1_1"
+      (pin input line (at -10.16 -3.81 0) (length 2.54)
+        (name "IN+" (effects (font (size 1.016 1.016))))
+        (number "1" (effects (font (size 1.016 1.016)))))
+      (pin input line (at -10.16 -1.27 0) (length 2.54)
+        (name "IN-" (effects (font (size 1.016 1.016))))
+        (number "2" (effects (font (size 1.016 1.016)))))
+      (pin power_in line (at -10.16 1.27 0) (length 2.54)
+        (name "GND" (effects (font (size 1.016 1.016))))
+        (number "3" (effects (font (size 1.016 1.016)))))
+      (pin power_in line (at -10.16 3.81 0) (length 2.54)
+        (name "VS" (effects (font (size 1.016 1.016))))
+        (number "4" (effects (font (size 1.016 1.016)))))
+      (pin bidirectional line (at 10.16 -3.81 180) (length 2.54)
+        (name "SDA" (effects (font (size 1.016 1.016))))
+        (number "5" (effects (font (size 1.016 1.016)))))
+      (pin input line (at 10.16 -1.27 180) (length 2.54)
+        (name "SCL" (effects (font (size 1.016 1.016))))
+        (number "6" (effects (font (size 1.016 1.016)))))
+      (pin input line (at 10.16 1.27 180) (length 2.54)
+        (name "A1" (effects (font (size 1.016 1.016))))
+        (number "7" (effects (font (size 1.016 1.016)))))
+      (pin input line (at 10.16 3.81 180) (length 2.54)
+        (name "A0" (effects (font (size 1.016 1.016))))
+        (number "8" (effects (font (size 1.016 1.016)))))
+    )
+  )'''
+
+
+# ===========================================================================
+# v2 component instance generators (Changes I, J, K)
+# ===========================================================================
+
+def inst_mag_v2(cx: float, cy: float) -> str:
+    """Return the symbol instance block for the MMC5983MA magnetometer (v2).
+
+    The MMC5983MA replaces the QMC5883L at the same schematic position
+    (*cx*, *cy*) = (155, 560).  Pin connections and net names are identical
+    to the QMC5883L instance since the lib_symbol exposes the same 5 signals.
+
+    Connected nets (same as QMC5883L):
+      SCL  → global I2C1_SCL  (angle=180)
+      SDA  → global I2C1_SDA  (angle=180)
+      GND  → GND power (270°)
+      VDD  → +3V3 power (90°)
+      DRDY → global GPIO_MAG_DRDY (angle=0)
+
+    Args:
+        cx: Component centre X coordinate in mm  (155).
+        cy: Component centre Y coordinate in mm  (560).
+    """
+    left_x = cx - 10.16     # 144.84
+    right_x = cx + 10.16    # 165.16
+    y_scl = cy - 2.54       # 557.46
+    y_sda = cy              # 560.00
+    y_gnd = cy + 2.54       # 562.54
+    y_vdd = cy - 2.54       # 557.46
+    y_drdy = cy + 2.54      # 562.54
+
+    uid_inst = next_uuid()
+    uid_p1 = next_uuid()
+    uid_p2 = next_uuid()
+    uid_p3 = next_uuid()
+    uid_p4 = next_uuid()
+    uid_p5 = next_uuid()
+
+    return f'''\
+  (symbol (lib_id "MMC5983MA") (at {cx:.2f} {cy:.2f} 0)
+    (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "{uid_inst}")
+    (property "Reference" "U_MAG" (at {cx:.2f} {cy - 5.08:.2f} 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "MMC5983MA" (at {cx:.2f} {cy + 5.08:.2f} 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Sensor_Magnetic:MMC5983MA" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "https://www.memsic.com/Public/Uploads/uploadfile/files/20220119/MMC5983MA-RevC.pdf" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (pin "1" (uuid "{uid_p1}"))
+    (pin "2" (uuid "{uid_p2}"))
+    (pin "3" (uuid "{uid_p3}"))
+    (pin "4" (uuid "{uid_p4}"))
+    (pin "5" (uuid "{uid_p5}"))
+  )
+  (global_label "I2C1_SCL" (shape bidirectional) (at {left_x:.2f} {y_scl:.2f} 180)
+    (effects (font (size 1.016 1.016)))
+    (uuid "{next_uuid()}")
+    (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {left_x:.2f} {y_scl:.2f} 0)
+      (effects (font (size 1.016 1.016)) (hide yes))))
+  (global_label "I2C1_SDA" (shape bidirectional) (at {left_x:.2f} {y_sda:.2f} 180)
+    (effects (font (size 1.016 1.016)))
+    (uuid "{next_uuid()}")
+    (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {left_x:.2f} {y_sda:.2f} 0)
+      (effects (font (size 1.016 1.016)) (hide yes))))
+  (symbol (lib_id "GND") (at {left_x:.2f} {y_gnd:.2f} 270)
+    (unit 1) (exclude_from_sim no) (in_bom no) (on_board yes) (dnp no)
+    (uuid "{next_uuid()}")
+    (property "Reference" "#PWR0A921" (at {left_x:.2f} {y_gnd:.2f} 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at {left_x:.2f} {y_gnd + 2.54:.2f} 0) (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "{next_uuid()}"))
+  )
+  (symbol (lib_id "+3V3") (at {right_x:.2f} {y_vdd:.2f} 90)
+    (unit 1) (exclude_from_sim no) (in_bom no) (on_board yes) (dnp no)
+    (uuid "{next_uuid()}")
+    (property "Reference" "#PWR0A922" (at {right_x:.2f} {y_vdd:.2f} 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "+3V3" (at {right_x:.2f} {y_vdd - 2.54:.2f} 0) (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "{next_uuid()}"))
+  )
+  (global_label "GPIO_MAG_DRDY" (shape bidirectional) (at {right_x:.2f} {y_drdy:.2f} 0)
+    (effects (font (size 1.016 1.016)))
+    (uuid "{next_uuid()}")
+    (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {right_x:.2f} {y_drdy:.2f} 0)
+      (effects (font (size 1.016 1.016)) (hide yes))))'''
+
+
+def inst_batt_mon_v2(cx: float, cy: float) -> str:
+    """Return the symbol instance block for the INA226AIDGSR battery monitor (v2).
+
+    The INA226AIDGSR replaces the INA219AIDR at the same position
+    (*cx*, *cy*) = (290, 560).  Net connections are identical — the pin
+    names differ (VS instead of V+; pin numbers rearranged) but all signals
+    connect to the same nets.
+
+    Connected nets (same as INA219AIDR instance):
+      IN+  → global VBAT_MON_P (angle=180)
+      IN−  → global VBAT_MON_P (angle=180)  [voltage-only mode]
+      GND  → GND power (270°)
+      VS   → +3V3 power (90°)
+      SDA  → global I2C1_SDA (angle=0)
+      SCL  → global I2C1_SCL (angle=0)
+      A0   → GND power (270°)
+      A1   → GND power (270°)
+
+    Args:
+        cx: Component centre X coordinate in mm  (290).
+        cy: Component centre Y coordinate in mm  (560).
+    """
+    left_x = cx - 10.16     # 279.84
+    right_x = cx + 10.16    # 300.16
+
+    y_in_plus = cy - 3.81   # 556.19
+    y_in_minus = cy - 1.27  # 558.73
+    y_gnd_pin = cy + 1.27   # 561.27
+    y_vs = cy + 3.81        # 563.81
+
+    y_sda = cy - 3.81       # 556.19  (INA226 pin 5 = SDA)
+    y_scl = cy - 1.27       # 558.73  (INA226 pin 6 = SCL)
+    y_a1 = cy + 1.27        # 561.27  (INA226 pin 7 = A1)
+    y_a0 = cy + 3.81        # 563.81  (INA226 pin 8 = A0)
+
+    uid_inst = next_uuid()
+    uid_p1 = next_uuid()
+    uid_p2 = next_uuid()
+    uid_p3 = next_uuid()
+    uid_p4 = next_uuid()
+    uid_p5 = next_uuid()
+    uid_p6 = next_uuid()
+    uid_p7 = next_uuid()
+    uid_p8 = next_uuid()
+
+    return f'''\
+  (symbol (lib_id "INA226AIDGSR") (at {cx:.2f} {cy:.2f} 0)
+    (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "{uid_inst}")
+    (property "Reference" "U_BMON" (at {cx:.2f} {cy - 7.62:.2f} 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "INA226AIDGSR" (at {cx:.2f} {cy + 7.62:.2f} 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Package_SO:SSOP-8_4.4x3mm_P0.65mm" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "https://www.ti.com/lit/ds/symlink/ina226.pdf" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (pin "1" (uuid "{uid_p1}"))
+    (pin "2" (uuid "{uid_p2}"))
+    (pin "3" (uuid "{uid_p3}"))
+    (pin "4" (uuid "{uid_p4}"))
+    (pin "5" (uuid "{uid_p5}"))
+    (pin "6" (uuid "{uid_p6}"))
+    (pin "7" (uuid "{uid_p7}"))
+    (pin "8" (uuid "{uid_p8}"))
+  )
+  (global_label "VBAT_MON_P" (shape bidirectional) (at {left_x:.2f} {y_in_plus:.2f} 180)
+    (effects (font (size 1.016 1.016)))
+    (uuid "{next_uuid()}")
+    (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {left_x:.2f} {y_in_plus:.2f} 0)
+      (effects (font (size 1.016 1.016)) (hide yes))))
+  (global_label "VBAT_MON_P" (shape bidirectional) (at {left_x:.2f} {y_in_minus:.2f} 180)
+    (effects (font (size 1.016 1.016)))
+    (uuid "{next_uuid()}")
+    (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {left_x:.2f} {y_in_minus:.2f} 0)
+      (effects (font (size 1.016 1.016)) (hide yes))))
+  (symbol (lib_id "GND") (at {left_x:.2f} {y_gnd_pin:.2f} 270)
+    (unit 1) (exclude_from_sim no) (in_bom no) (on_board yes) (dnp no)
+    (uuid "{next_uuid()}")
+    (property "Reference" "#PWR0A923" (at {left_x:.2f} {y_gnd_pin:.2f} 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at {left_x:.2f} {y_gnd_pin + 2.54:.2f} 0) (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "{next_uuid()}"))
+  )
+  (symbol (lib_id "+3V3") (at {left_x:.2f} {y_vs:.2f} 90)
+    (unit 1) (exclude_from_sim no) (in_bom no) (on_board yes) (dnp no)
+    (uuid "{next_uuid()}")
+    (property "Reference" "#PWR0A924" (at {left_x:.2f} {y_vs:.2f} 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "+3V3" (at {left_x:.2f} {y_vs - 2.54:.2f} 0) (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "{next_uuid()}"))
+  )
+  (global_label "I2C1_SDA" (shape bidirectional) (at {right_x:.2f} {y_sda:.2f} 0)
+    (effects (font (size 1.016 1.016)))
+    (uuid "{next_uuid()}")
+    (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {right_x:.2f} {y_sda:.2f} 0)
+      (effects (font (size 1.016 1.016)) (hide yes))))
+  (global_label "I2C1_SCL" (shape bidirectional) (at {right_x:.2f} {y_scl:.2f} 0)
+    (effects (font (size 1.016 1.016)))
+    (uuid "{next_uuid()}")
+    (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {right_x:.2f} {y_scl:.2f} 0)
+      (effects (font (size 1.016 1.016)) (hide yes))))
+  (symbol (lib_id "GND") (at {right_x:.2f} {y_a1:.2f} 270)
+    (unit 1) (exclude_from_sim no) (in_bom no) (on_board yes) (dnp no)
+    (uuid "{next_uuid()}")
+    (property "Reference" "#PWR0A925" (at {right_x:.2f} {y_a1:.2f} 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at {right_x:.2f} {y_a1 + 2.54:.2f} 0) (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "{next_uuid()}"))
+  )
+  (symbol (lib_id "GND") (at {right_x:.2f} {y_a0:.2f} 270)
+    (unit 1) (exclude_from_sim no) (in_bom no) (on_board yes) (dnp no)
+    (uuid "{next_uuid()}")
+    (property "Reference" "#PWR0A926" (at {right_x:.2f} {y_a0:.2f} 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at {right_x:.2f} {y_a0 + 2.54:.2f} 0) (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "{next_uuid()}"))
+  )'''
+
+
+def inst_sbus_tvs(cx: float, cy: float) -> str:
+    """Return the PRTR5V0U2X TVS instance on the SBUS_RAW input line.
+
+    D_SBUS_TVS is placed at (*cx*, *cy*) = (125, 627.54) on the SBUS_RAW
+    net, clamping transients on the RC receiver signal before it reaches
+    R_SBUS and U_SBUS.
+
+    The PRTR5V0U2X lib_symbol is already present in the CAPE-A-2 schematic
+    (inserted by the existing gen_cape_a2.py for CAN/RS-485 protection).
+
+    Pin layout from lib_sym_prtr5v0u2x() (body centre at cx,cy):
+      A1 tip at (cx − 7.62, cy − 2.54)  →  global SBUS_RAW (angle=180)
+      A2 tip at (cx − 7.62, cy + 2.54)  →  no_connect (unused channel)
+      K  tip at (cx + 7.62, cy + 0.00)  →  GND power (0°)
+
+    Args:
+        cx: Component centre X coordinate in mm  (125).
+        cy: Component centre Y coordinate in mm  (627.54).
+    """
+    left_x = cx - 7.62      # 117.38
+    right_x = cx + 7.62     # 132.62
+    y_a1 = cy - 2.54        # 625.00
+    y_a2 = cy + 2.54        # 630.08
+    y_k = cy                # 627.54
+
+    uid_inst = next_uuid()
+    uid_p1 = next_uuid()
+    uid_p2 = next_uuid()
+    uid_p3 = next_uuid()
+
+    return f'''\
+  (symbol (lib_id "PRTR5V0U2X") (at {cx:.2f} {cy:.2f} 0)
+    (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "{uid_inst}")
+    (property "Reference" "D_SBUS_TVS" (at {cx:.2f} {cy - 5.08:.2f} 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "PRTR5V0U2X" (at {cx:.2f} {cy + 5.08:.2f} 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-363_SC-70-6" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (pin "1" (uuid "{uid_p1}"))
+    (pin "2" (uuid "{uid_p2}"))
+    (pin "3" (uuid "{uid_p3}"))
+  )
+  (global_label "SBUS_RAW" (shape bidirectional) (at {left_x:.2f} {y_a1:.2f} 180)
+    (effects (font (size 1.016 1.016)))
+    (uuid "{next_uuid()}")
+    (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {left_x:.2f} {y_a1:.2f} 0)
+      (effects (font (size 1.016 1.016)) (hide yes))))
+  (no_connect (at {left_x:.2f} {y_a2:.2f}) (uuid "{next_uuid()}"))
+  (symbol (lib_id "GND") (at {right_x:.2f} {y_k:.2f} 0)
+    (unit 1) (exclude_from_sim no) (in_bom no) (on_board yes) (dnp no)
+    (uuid "{next_uuid()}")
+    (property "Reference" "#PWR0A927" (at {right_x:.2f} {y_k:.2f} 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at {right_x + 2.54:.2f} {y_k:.2f} 0) (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "{next_uuid()}"))
   )'''
 
 
@@ -1420,6 +1798,59 @@ def transform(src: str) -> str:
     last_close2 = text.rfind('\n)')
     if last_close2 != -1:
         text = text[:last_close2] + new_instances + text[last_close2:]
+
+    # ------------------------------------------------------------------
+    # I. Replace QMC5883L lib_symbol with MMC5983MA lib_symbol.
+    #    The MMC5983MA is a drop-in upgrade: same 5 pins (SCL, SDA, GND,
+    #    VDD, DRDY), same body geometry, higher performance and AEC-Q100.
+    # ------------------------------------------------------------------
+    try:
+        s, e = find_sexp_block(text, 'symbol "QMC5883L"')
+        text = text[:s] + lib_sym_mmc5983ma() + "\n" + text[e:]
+        print("  Replaced QMC5883L lib_symbol with MMC5983MA")
+    except ValueError as exc:
+        print(f"WARNING: QMC5883L lib_symbol not found: {exc}", file=sys.stderr)
+
+    # Replace the QMC5883L symbol instance with an MMC5983MA instance.
+    # The instance sits at the same position (155, 560) and has the same
+    # net connections; only the lib_id and Value/Footprint/Datasheet change.
+    try:
+        s, e = find_sexp_block(text, 'symbol (lib_id "QMC5883L")')
+        text = text[:s] + inst_mag_v2(155.0, 560.0) + "\n" + text[e:]
+        print("  Replaced QMC5883L instance with MMC5983MA instance")
+    except ValueError as exc:
+        print(f"WARNING: QMC5883L instance not found: {exc}", file=sys.stderr)
+
+    # ------------------------------------------------------------------
+    # J. Replace INA219AIDR lib_symbol with INA226AIDGSR lib_symbol.
+    #    The INA226 is pin-compatible at the net level: IN+, IN−, GND,
+    #    supply (VS vs V+), SDA, SCL, A0, A1 all connect identically.
+    # ------------------------------------------------------------------
+    try:
+        s, e = find_sexp_block(text, 'symbol "INA219AIDR"')
+        text = text[:s] + lib_sym_ina226() + "\n" + text[e:]
+        print("  Replaced INA219AIDR lib_symbol with INA226AIDGSR")
+    except ValueError as exc:
+        print(f"WARNING: INA219AIDR lib_symbol not found: {exc}", file=sys.stderr)
+
+    # Replace the INA219AIDR symbol instance with an INA226AIDGSR instance.
+    try:
+        s, e = find_sexp_block(text, 'symbol (lib_id "INA219AIDR")')
+        text = text[:s] + inst_batt_mon_v2(290.0, 560.0) + "\n" + text[e:]
+        print("  Replaced INA219AIDR instance with INA226AIDGSR instance")
+    except ValueError as exc:
+        print(f"WARNING: INA219AIDR instance not found: {exc}", file=sys.stderr)
+
+    # ------------------------------------------------------------------
+    # K. Add PRTR5V0U2X TVS on the SBUS_RAW input net (D_SBUS_TVS).
+    #    The PRTR5V0U2X lib_symbol is already present from Step E above.
+    #    We simply append a new instance.
+    # ------------------------------------------------------------------
+    sbus_tvs_block = "\n" + inst_sbus_tvs(125.0, 627.54) + "\n"
+    last_close_k = text.rfind('\n)')
+    if last_close_k != -1:
+        text = text[:last_close_k] + sbus_tvs_block + text[last_close_k:]
+        print("  Added D_SBUS_TVS (PRTR5V0U2X) on SBUS_RAW at (125, 627.54)")
 
     # ------------------------------------------------------------------
     # G. Update sheet UUID in sheet_instances section.
