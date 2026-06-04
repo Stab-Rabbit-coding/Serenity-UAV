@@ -49,5 +49,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/common/include)
 ## ---------------------------------------------------------------------------
 ## Sub-projects
 ## ---------------------------------------------------------------------------
+## common must be configured before fc and cn so that serenity-common
+## is available as a link target for both sub-project executables.
+add_subdirectory(common)
 add_subdirectory(cn)
 add_subdirectory(fc)
