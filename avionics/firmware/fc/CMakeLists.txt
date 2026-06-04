@@ -1,5 +1,5 @@
 ##
-## CMakeLists.txt — FC node daemon (serenity-fc) stub
+## CMakeLists.txt — FC node daemon (serenity-fc)
 ##
 ## Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 ## License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
@@ -7,6 +7,10 @@
 ## Target: PocketBeagle 2 Industrial (AM6254, aarch64 Linux)
 ## Phase 6: stub only — no external dependencies.
 ## Phase 7 will add libgpiod (servo/EDF), libspi (IMU), CAN FD libraries.
+##
+## governor_config.h (src/) provides compile-time EDF thrust-model coefficients
+## and PID governor constants.  Run tools/governor_cal.py on a thrust stand to
+## populate the EDF_THRUST_K_* values before a flight build.
 ##
 
 add_executable(serenity-fc
