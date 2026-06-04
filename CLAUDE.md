@@ -31,7 +31,7 @@ Every component will be fabricated or procured; design accordingly.
 - **All EDF housings will be printed as part of the build.** Treat them as structural components,
   not wrappers. Wall thickness, infill, and material must be specified for each housing.
 
-- **Keep the skin geometry of Serenity true to the reference models** to the greatest extent possible. Interior modifications (bore carving, sleeve insertion, boss protrusions) must blend into the canonical exterior hull.  Do not alter the outer mold line unless structurally required.  Use this low detail model of Serenity https://www.thingiverse.com/thing:4677565 as a guide to the geometry of the hull, when orienting the head, cargo, middle, and rear sections of the fuselage. 
+- **Keep the skin geometry of Serenity true to the reference models** to the greatest extent possible. Interior modifications (bore carving, sleeve insertion, boss protrusions) must blend into the canonical exterior hull.  Do not alter the outer mold line unless structurally required.  Be aware that Serenity has a very complex geometry, so bounding boxes and centroid calculations will  be inadequate for positioning and orienting parts. Use this low detail model of Serenity https://www.thingiverse.com/thing:4677565 as a guide to the geometry of the hull, when orienting the head, cargo, middle, and rear sections of the fuselage. 
 
 - **All legal and regulatory requirements will be based on United States jurisdiction**  All Radio transmissions shall comply with appropriate FCC regulations.  Markings, lights, and operation shall comply with all appropriate FAA aircraft regulations.
 - **All designs will be validated against appropriate industry best practice.**  Specific applicable standards bodies are AUVSI, IEEE, and ISA.
