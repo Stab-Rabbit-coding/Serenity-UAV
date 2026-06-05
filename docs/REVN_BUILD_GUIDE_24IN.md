@@ -13,44 +13,44 @@
 > retention ring, FPV bezel, 3M foam gasket door seal. All other subsystems identical to Rev O.
 > See `serenity-rev-p.jsx` for the complete Rev P specification and `bom_revP.json`/`bom_revP.csv`
 > for the full Rev P bill of materials.
-> Fan engineering work inspired by the Firefly-class transport ship *Serenity*
-> from *Firefly*(Fox, 2002) and*Serenity* (Universal, 2005).
+> Fan engineering work inspired by the Firefly-class transport ship _Serenity_
+> from _Firefly_(Fox, 2002) and*Serenity* (Universal, 2005).
 > © Joss Whedon / Mutant Enemy Productions — **Not an officially licensed product.**
 
 ---
 
 ## Attribution
 
-| Work | Author | License | Source |
-| ------ | -------- | --------- | -------- |
-| Hull geometry | misubisu / Peter Farell | CC BY 4.0 | printables.com/model/548545 |
-| Iris nozzle concept | BamJr | CC BY 4.0 | thingiverse.com/thing:2991269 |
+| Work                  | Author                           | License    | Source                         |
+| --------------------- | -------------------------------- | ---------- | ------------------------------ |
+| Hull geometry         | misubisu / Peter Farell          | CC BY 4.0  | printables.com/model/548545    |
+| Iris nozzle concept   | BamJr                            | CC BY 4.0  | thingiverse.com/thing:2991269  |
 | Blueprint proportions | Mandel + Earls / QMx / Universal | © 2007 QMx | 269 ft × 170 ft × 79 ft ratios |
-| All other design | Steve Griffing | CC BY 4.0 | This project |
+| All other design      | Steve Griffing                   | CC BY 4.0  | This project                   |
 
 ---
 
 ## End-State Specifications (Rev N)
 
-| Parameter | Value |
-| ----------- | ------- |
-| Hull length | 609.6 mm (24.00″) |
-| Beam (nacelle tip-to-tip) | ~486 mm |
-| Hull material | PETG (2.5 mm skin, 2 lb/ft³ closed-cell foam fill) |
-| Propulsion | 2× (2× 50mm EDF @ 6S, tandem series) nacelles + 1× 120mm EDF @ 6S fuselage |
-| Counter-rotation | Port nacelle EDFs: CW from intake; Starboard: CCW — zero net torque reaction |
-| Inter-stage stators | 8-fin twisted stator, integrated into each nacelle print (CF-PETG) |
-| Nacelle tilt | 0° (cruise) → 90° (hover) → 120° (backing); hard stops −5° / 140° |
-| Tilt actuation | 1× digital servo per nacelle (≥25 kg·cm @ 6V), fuselage-mounted |
-| Iris nozzles | 2× nacelle (gear-linked to tilt pivot, no dedicated servo) + 1× rear (SG90 servo) |
-| Nozzle closed | 0° nacelle tilt → petals form hull-matched engine cone (Serenity skin) |
-| Nozzle open | 90° nacelle tilt → petals hinge out, LED-backlit translucent-blue inner faces |
-| Rear EDF | 120mm @ 6S, exhaust straight aft; intake via 4 radial scoops at neck station ~310mm (dorsal/port/ventral/stbd; CF-PETG frame + PETG plenum manifold) |
-| Total thrust | ~5,322 g (1,822 g nacelles + 3,500 g rear) |
-| Hover T/W | ~1.50 at 6S 4000mAh (~3,550 g AUW) |
-| Avionics | 8× PocketBeagle 2 Industrial (AM6254): FC1–FC4 (Cape-A) + CN1–CN4 (Cape-B) |
-| Cargo | 101.6 × 76.2 × 76.2 mm bay, clamshell doors, N20 winch |
-| Build estimate | ~100–120 hours across all phases |
+| Parameter                 | Value                                                                                                                                                |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hull length               | 609.6 mm (24.00″)                                                                                                                                    |
+| Beam (nacelle tip-to-tip) | ~486 mm                                                                                                                                              |
+| Hull material             | PETG (2.5 mm skin, 2 lb/ft³ closed-cell foam fill)                                                                                                   |
+| Propulsion                | 2× (2× 50mm EDF @ 6S, tandem series) nacelles + 1× 120mm EDF @ 6S fuselage                                                                           |
+| Counter-rotation          | Port nacelle EDFs: CW from intake; Starboard: CCW — zero net torque reaction                                                                         |
+| Inter-stage stators       | 8-fin twisted stator, integrated into each nacelle print (CF-PETG)                                                                                   |
+| Nacelle tilt              | 0° (cruise) → 90° (hover) → 120° (backing); hard stops −5° / 140°                                                                                    |
+| Tilt actuation            | 1× digital servo per nacelle (≥25 kg·cm @ 6V), fuselage-mounted                                                                                      |
+| Iris nozzles              | 2× nacelle (gear-linked to tilt pivot, no dedicated servo) + 1× rear (SG90 servo)                                                                    |
+| Nozzle closed             | 0° nacelle tilt → petals form hull-matched engine cone (Serenity skin)                                                                               |
+| Nozzle open               | 90° nacelle tilt → petals hinge out, LED-backlit translucent-blue inner faces                                                                        |
+| Rear EDF                  | 120mm @ 6S, exhaust straight aft; intake via 4 radial scoops at neck station ~310mm (dorsal/port/ventral/stbd; CF-PETG frame + PETG plenum manifold) |
+| Total thrust              | ~5,322 g (1,822 g nacelles + 3,500 g rear)                                                                                                           |
+| Hover T/W                 | ~1.50 at 6S 4000mAh (~3,550 g AUW)                                                                                                                   |
+| Avionics                  | 8× PocketBeagle 2 Industrial (AM6254): FC1–FC4 (Cape-A) + CN1–CN4 (Cape-B)                                                                           |
+| Cargo                     | 101.6 × 76.2 × 76.2 mm bay, clamshell doors, N20 winch                                                                                               |
+| Build estimate            | ~100–120 hours across all phases                                                                                                                     |
 
 ---
 
@@ -76,18 +76,18 @@
 
 ## Phase Overview
 
-| Phase | Name | Milestone | Est. Cost |
-| ------- | ------ | ----------- | ----------- |
-| 0 | Print All Parts + CF Cuts | All parts ready | ~$85 |
-| 1 | Hull Structure + Provisions | Hull sealed, all conduits installed, foam-ready | ~$90 |
-| 2 | Nacelle Assembly | Both nacelles complete with EDFs, stators, nozzle linkage | ~$190 |
-| 3 | Tilt Mechanism | Nacelles mount, pivot, and tilt on fuselage | ~$80 |
-| 4 | Rear EDF + Nozzle | Rear 120mm EDF mounted, nozzle frame and iris operational | ~$250 |
-| 5 | Hull Foam Pour + Close-up | Structural foam cured, all access panels fitted | ~$30 |
-| 6 | Minimum Viable Flyer (4 nodes) | ★ **FIRST FLIGHT** (CN1+FC1+CN2+FC2) | ~$640 |
-| 7 | Full 8-Node Architecture | All 8 nodes, full ring redundancy | ~$480 |
-| 8 | Cargo System | 250 g delivery operational | ~$30 |
-| 9 | Finishing: Decals + FAA + Docs | Legal, complete, documented | ~$25 |
+| Phase | Name                           | Milestone                                                 | Est. Cost |
+| ----- | ------------------------------ | --------------------------------------------------------- | --------- |
+| 0     | Print All Parts + CF Cuts      | All parts ready                                           | ~$85      |
+| 1     | Hull Structure + Provisions    | Hull sealed, all conduits installed, foam-ready           | ~$90      |
+| 2     | Nacelle Assembly               | Both nacelles complete with EDFs, stators, nozzle linkage | ~$190     |
+| 3     | Tilt Mechanism                 | Nacelles mount, pivot, and tilt on fuselage               | ~$80      |
+| 4     | Rear EDF + Nozzle              | Rear 120mm EDF mounted, nozzle frame and iris operational | ~$250     |
+| 5     | Hull Foam Pour + Close-up      | Structural foam cured, all access panels fitted           | ~$30      |
+| 6     | Minimum Viable Flyer (4 nodes) | ★ **FIRST FLIGHT** (CN1+FC1+CN2+FC2)                      | ~$640     |
+| 7     | Full 8-Node Architecture       | All 8 nodes, full ring redundancy                         | ~$480     |
+| 8     | Cargo System                   | 250 g delivery operational                                | ~$30      |
+| 9     | Finishing: Decals + FAA + Docs | Legal, complete, documented                               | ~$25      |
 
 > Costs are USD estimates as of 2026. PCB assembly assumes JLCPCB pricing.
 
@@ -99,52 +99,52 @@
 
 ### Printer Setup
 
-| Setting | Value |
-| --------- | ------- |
-| Nozzle | Hardened steel (CF-PETG abrades brass — required for nacelles, brackets) |
-| Bed | PEI spring steel, leveled |
-| PETG profile | 230°C / 70°C bed |
-| CF-PETG profile | 240–245°C / 80°C bed |
-| TPU 95A profile | 220°C / 50°C bed, direct drive only |
-| Dry time | 6 h at 65°C for all filament before printing |
+| Setting         | Value                                                                    |
+| --------------- | ------------------------------------------------------------------------ |
+| Nozzle          | Hardened steel (CF-PETG abrades brass — required for nacelles, brackets) |
+| Bed             | PEI spring steel, leveled                                                |
+| PETG profile    | 230°C / 70°C bed                                                         |
+| CF-PETG profile | 240–245°C / 80°C bed                                                     |
+| TPU 95A profile | 220°C / 50°C bed, direct drive only                                      |
+| Dry time        | 6 h at 65°C for all filament before printing                             |
 
 ### Print Schedule
 
-| STL | Material | Layer | Infill | Qty | Notes |
-| ----- | ---------- | ------- | -------- | ----- | ------- |
-| `s_head_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Nose-down orientation |
-| `s_middle_canonical_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Canonical belly — NO belly scoop. Generate from `serenity/stl/s_middle_canonical_shell24.scad`. |
-| `s_cargo_sect_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | |
-| `s_rear_neck_intake_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | 4 radial scoop windows at neck station ~310mm. Generate from `serenity/stl/s_rear_neck_intake_shell24.scad`. Verify NECK_X alignment in slicer after generating. |
-| `s_neck_intake_frame.stl` | **CF-PETG** | 0.15 mm | 40% gyroid, 4 walls | 1 | Structural intake frame ring — bonds into 4 scoop windows. Hardened-steel nozzle required. Generate from `serenity/stl/s_neck_intake_frame.scad`. |
-| `s_aft_edf_plenum.stl` | PETG | 0.20 mm | 20% gyroid | 1 | Cross-shaped 4-to-1 plenum manifold. Generate from `serenity/stl/s_aft_edf_plenum.scad`. Pressure-test before hull close-up. |
-| `s_wings_both_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | |
-| `s_eng_left_stator_shell24.stl` | **CF-PETG** | 0.15 mm | 25% gyroid, 4 walls | 1 | Port nacelle — run `blender_nacelle_integrated_v1.py` first to generate |
-| `s_eng_right_stator_shell24.stl` | **CF-PETG** | 0.15 mm | 25% gyroid, 4 walls | 1 | Starboard nacelle |
-| `s_eng_piv_outer_scaled24.stl` | **CF-PETG** | 0.15 mm | 40%, 4 walls | 2 | Pivot housing; verify 4mm rod press-fit |
-| `s_eng_piv_pins_scaled24.stl` | **CF-PETG** | 0.15 mm | 40% solid, 4 walls | 2 | |
-| `s_eng_pistons_scaled24.stl` | PETG | 0.20 mm | 20% gyroid | 2 | Decorative fairings |
-| `s_pivot_arm_a_scaled24.stl` | **CF-PETG** | 0.15 mm | 40%, 4 walls | 2 | Carries tilt servo pushrod |
-| `nacelle_nozzle_petal.stl` | PETG (body) + translucent-blue PETG (inner face) | 0.20 mm | 20% gyroid | 16 | 8 per nacelle; print inner face swap if dual-material unavailable |
-| `nacelle_nozzle_ring.stl` | **CF-PETG** | 0.15 mm | 40% | 2 | Base ring; seals to nacelle nozzle exit face |
-| `rear_nozzle_petal.stl` | PETG + translucent-blue inner | 0.20 mm | 20% gyroid | 8 | 38° span; print flat |
-| `rear_nozzle_frame.stl` | **CF-PETG** | 0.15 mm | 30% | 1 | One-piece ring + 8 fixed ribs |
-| `s_feet_x_4_scaled24.stl` | **TPU 95A** | 0.25 mm | 40% | 1 | Direct-drive extruder required |
-| `s_legs_scaled24.stl` | **CF-PETG** | 0.15 mm | 30% | 1 | |
-| Tilt bracket w/ sector gear | **CF-PETG** | 0.12 mm | 40%, 4 walls | 2 | 0.12mm layer for M0.5 tooth accuracy |
-| Drive pinion (R=6mm, M0.5) | PETG or resin | 0.12 mm | 40% | 4 | 2 per nacelle (one either end of bevel shaft); resin gives best tooth finish |
-| Bevel gear pair (1:1, M0.5) | PETG or resin | 0.12 mm | 40% | 2 sets | 4 gears total; or source machined |
-| Nozzle inner ring (rack R=28mm) | PETG | 0.12 mm | 40%, 3 walls | 2 | Print vertically for tooth accuracy |
-| Access panel frames (A–F) + lids | PETG | 0.20 mm | 100% | 1 set | 6 frames + 6 lids; 2mm wall |
+| STL                              | Material                                         | Layer   | Infill              | Qty    | Notes                                                                                                                                                            |
+| -------------------------------- | ------------------------------------------------ | ------- | ------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `s_head_shell24.stl`             | PETG                                             | 0.20 mm | 8% gyroid           | 1      | Nose-down orientation                                                                                                                                            |
+| `s_middle_canonical_shell24.stl` | PETG                                             | 0.20 mm | 8% gyroid           | 1      | Canonical belly — NO belly scoop. Generate from `serenity/stl/s_middle_canonical_shell24.scad`.                                                                  |
+| `s_cargo_sect_shell24.stl`       | PETG                                             | 0.20 mm | 8% gyroid           | 1      |                                                                                                                                                                  |
+| `s_rear_neck_intake_shell24.stl` | PETG                                             | 0.20 mm | 8% gyroid           | 1      | 4 radial scoop windows at neck station ~310mm. Generate from `serenity/stl/s_rear_neck_intake_shell24.scad`. Verify NECK_X alignment in slicer after generating. |
+| `s_neck_intake_frame.stl`        | **CF-PETG**                                      | 0.15 mm | 40% gyroid, 4 walls | 1      | Structural intake frame ring — bonds into 4 scoop windows. Hardened-steel nozzle required. Generate from `serenity/stl/s_neck_intake_frame.scad`.                |
+| `s_aft_edf_plenum.stl`           | PETG                                             | 0.20 mm | 20% gyroid          | 1      | Cross-shaped 4-to-1 plenum manifold. Generate from `serenity/stl/s_aft_edf_plenum.scad`. Pressure-test before hull close-up.                                     |
+| `s_wings_both_shell24.stl`       | PETG                                             | 0.20 mm | 8% gyroid           | 1      |                                                                                                                                                                  |
+| `s_eng_left_stator_shell24.stl`  | **CF-PETG**                                      | 0.15 mm | 25% gyroid, 4 walls | 1      | Port nacelle — run `blender_nacelle_integrated_v1.py` first to generate                                                                                          |
+| `s_eng_right_stator_shell24.stl` | **CF-PETG**                                      | 0.15 mm | 25% gyroid, 4 walls | 1      | Starboard nacelle                                                                                                                                                |
+| `s_eng_piv_outer_scaled24.stl`   | **CF-PETG**                                      | 0.15 mm | 40%, 4 walls        | 2      | Pivot housing; verify 4mm rod press-fit                                                                                                                          |
+| `s_eng_piv_pins_scaled24.stl`    | **CF-PETG**                                      | 0.15 mm | 40% solid, 4 walls  | 2      |                                                                                                                                                                  |
+| `s_eng_pistons_scaled24.stl`     | PETG                                             | 0.20 mm | 20% gyroid          | 2      | Decorative fairings                                                                                                                                              |
+| `s_pivot_arm_a_scaled24.stl`     | **CF-PETG**                                      | 0.15 mm | 40%, 4 walls        | 2      | Carries tilt servo pushrod                                                                                                                                       |
+| `nacelle_nozzle_petal.stl`       | PETG (body) + translucent-blue PETG (inner face) | 0.20 mm | 20% gyroid          | 16     | 8 per nacelle; print inner face swap if dual-material unavailable                                                                                                |
+| `nacelle_nozzle_ring.stl`        | **CF-PETG**                                      | 0.15 mm | 40%                 | 2      | Base ring; seals to nacelle nozzle exit face                                                                                                                     |
+| `rear_nozzle_petal.stl`          | PETG + translucent-blue inner                    | 0.20 mm | 20% gyroid          | 8      | 38° span; print flat                                                                                                                                             |
+| `rear_nozzle_frame.stl`          | **CF-PETG**                                      | 0.15 mm | 30%                 | 1      | One-piece ring + 8 fixed ribs                                                                                                                                    |
+| `s_feet_x_4_scaled24.stl`        | **TPU 95A**                                      | 0.25 mm | 40%                 | 1      | Direct-drive extruder required                                                                                                                                   |
+| `s_legs_scaled24.stl`            | **CF-PETG**                                      | 0.15 mm | 30%                 | 1      |                                                                                                                                                                  |
+| Tilt bracket w/ sector gear      | **CF-PETG**                                      | 0.12 mm | 40%, 4 walls        | 2      | 0.12mm layer for M0.5 tooth accuracy                                                                                                                             |
+| Drive pinion (R=6mm, M0.5)       | PETG or resin                                    | 0.12 mm | 40%                 | 4      | 2 per nacelle (one either end of bevel shaft); resin gives best tooth finish                                                                                     |
+| Bevel gear pair (1:1, M0.5)      | PETG or resin                                    | 0.12 mm | 40%                 | 2 sets | 4 gears total; or source machined                                                                                                                                |
+| Nozzle inner ring (rack R=28mm)  | PETG                                             | 0.12 mm | 40%, 3 walls        | 2      | Print vertically for tooth accuracy                                                                                                                              |
+| Access panel frames (A–F) + lids | PETG                                             | 0.20 mm | 100%                | 1 set  | 6 frames + 6 lids; 2mm wall                                                                                                                                      |
 
 ### CF Cuts
 
-| Part | Material | Dimension | Notes |
-| ------ | ---------- | ----------- | ------- |
-| Keel | CF flat bar 6×3mm | 620 mm | Mark datums at 91, 165, 251, 320, 388mm from nose |
-| Wing spars | CF tube 12mm OD / 1.5mm wall | 2× 380 mm | Sand spar ends to fit wing-root spar pockets |
-| Pivot rods | CF solid rod 4mm OD | 2× cut to length per pivot housing drawing | Deburr ends; press-fit into MF104ZZ bearings |
-| Ring frames | CF plate 2mm | 5 profiles per station drawing | Fit to keel slot-notches |
+| Part        | Material                     | Dimension                                  | Notes                                             |
+| ----------- | ---------------------------- | ------------------------------------------ | ------------------------------------------------- |
+| Keel        | CF flat bar 6×3mm            | 620 mm                                     | Mark datums at 91, 165, 251, 320, 388mm from nose |
+| Wing spars  | CF tube 12mm OD / 1.5mm wall | 2× 380 mm                                  | Sand spar ends to fit wing-root spar pockets      |
+| Pivot rods  | CF solid rod 4mm OD          | 2× cut to length per pivot housing drawing | Deburr ends; press-fit into MF104ZZ bearings      |
+| Ring frames | CF plate 2mm                 | 5 profiles per station drawing             | Fit to keel slot-notches                          |
 
 > ⚠ **CF dust hazard.** Wear N95 mask + safety glasses. Cut outdoors or with dust extraction.
 
@@ -166,25 +166,25 @@
 
 ### Buy List
 
-| Item | Qty | Notes |
-| ------ | ----- | ------- |
-| West System 105/206 epoxy | 1 kit | Keel + spar bonding |
-| 5-minute epoxy syringe 25mL | 3× | Access frames, sensor mounts, standoffs |
-| X-30 polyurethane foam 2-part | ~600 mL kit | 2 lb/ft³, 4× expansion, 2-min pot life |
-| EPS blue foam board 25mm | 500×250mm | Void formers A–E (bay + cargo cutouts); Owens Corning Foamular 150 |
-| Johnson's Paste Wax | 1 tin | 2 coats on all EPS void surfaces (release agent) |
-| 3M 4016 closed-cell gasket tape | 1 roll | Seal all access panel frame lips |
-| PTFE tube 5mm OD × 3mm ID | 6 m | 8 conduits (CAN FD, RS-485, 1553, ETH×4, PWR) |
-| M2.5 nylon hex standoffs 6mm | 16× | Cape-B floor mounts (4 per bay × 4 bays) |
-| M2.5 nylon hex standoffs 20mm | 16× | Cape-A inter-cape spacing |
-| M2.5 × 8mm SS button screws | 64× | Standoff attachment + panel B/E fasteners |
-| M3 heat-set inserts | 4× | Cargo gondola belly hard points |
-| N42 neodymium disc magnet 6×2mm | 8× | Panel D (4 in frame + 4 in lid) |
-| SMA panel-mount bulkhead | 3× | 915MHz SiK (belly) + LoRa (belly) + WiFi (dorsal fwd). Note: 49MHz RCRS now uses a dorsal wire antenna — no belly SMA for that system |
-| PETG wire post (49MHz fwd + aft) | 2× | Print from s_rcrs49_wire_post.scad: forward post (~120mm from nose, dorsal) + aft post (top of rear nozzle cone). Both ~10mm tall insulated hooks |
-| 0.3mm stainless steel wire or 22AWG enamelled Cu | ~500mm | 49MHz RCRS top wire |
-| Ceramic bead insulator (3mm ID) | 1× | Aft end of 49MHz wire (insulated/open) |
-| Wing spar pocket inserts | 4× | CF spar sleeve inserts bonded into fuselage side walls at wing root |
+| Item                                             | Qty         | Notes                                                                                                                                             |
+| ------------------------------------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| West System 105/206 epoxy                        | 1 kit       | Keel + spar bonding                                                                                                                               |
+| 5-minute epoxy syringe 25mL                      | 3×          | Access frames, sensor mounts, standoffs                                                                                                           |
+| X-30 polyurethane foam 2-part                    | ~600 mL kit | 2 lb/ft³, 4× expansion, 2-min pot life                                                                                                            |
+| EPS blue foam board 25mm                         | 500×250mm   | Void formers A–E (bay + cargo cutouts); Owens Corning Foamular 150                                                                                |
+| Johnson's Paste Wax                              | 1 tin       | 2 coats on all EPS void surfaces (release agent)                                                                                                  |
+| 3M 4016 closed-cell gasket tape                  | 1 roll      | Seal all access panel frame lips                                                                                                                  |
+| PTFE tube 5mm OD × 3mm ID                        | 6 m         | 8 conduits (CAN FD, RS-485, 1553, ETH×4, PWR)                                                                                                     |
+| M2.5 nylon hex standoffs 6mm                     | 16×         | Cape-B floor mounts (4 per bay × 4 bays)                                                                                                          |
+| M2.5 nylon hex standoffs 20mm                    | 16×         | Cape-A inter-cape spacing                                                                                                                         |
+| M2.5 × 8mm SS button screws                      | 64×         | Standoff attachment + panel B/E fasteners                                                                                                         |
+| M3 heat-set inserts                              | 4×          | Cargo gondola belly hard points                                                                                                                   |
+| N42 neodymium disc magnet 6×2mm                  | 8×          | Panel D (4 in frame + 4 in lid)                                                                                                                   |
+| SMA panel-mount bulkhead                         | 3×          | 915MHz SiK (belly) + LoRa (belly) + WiFi (dorsal fwd). Note: 49MHz RCRS now uses a dorsal wire antenna — no belly SMA for that system             |
+| PETG wire post (49MHz fwd + aft)                 | 2×          | Print from s_rcrs49_wire_post.scad: forward post (~120mm from nose, dorsal) + aft post (top of rear nozzle cone). Both ~10mm tall insulated hooks |
+| 0.3mm stainless steel wire or 22AWG enamelled Cu | ~500mm      | 49MHz RCRS top wire                                                                                                                               |
+| Ceramic bead insulator (3mm ID)                  | 1×          | Aft end of 49MHz wire (insulated/open)                                                                                                            |
+| Wing spar pocket inserts                         | 4×          | CF spar sleeve inserts bonded into fuselage side walls at wing root                                                                               |
 
 ### Installation Sequence
 
@@ -196,14 +196,14 @@
 
 ## 3. Bond access panel frames A–F into hull sections
 
-| Panel | Station (mm) | Bay | Closure |
-| ------- | ------------- | ----- | --------- |
-| A — Nose | 0–91 | CN1+FC1 | Bayonet PETG frame |
-| B — Dorsal Fwd | 91–165 | CN2+FC2 | 4× M2.5 screws |
-| C — Cargo Belly | 160–251 | Cargo | Hinge + latch |
-| D — Dorsal Aft | 251–320 | CN3+FC3 | 4× N42 magnets |
-| E — Aft Service | 320–388 | CN4+FC4 | 4× M2.5 screws |
-| F — Rear | 388–609 | EDF access | Bayonet PETG frame |
+| Panel           | Station (mm) | Bay        | Closure            |
+| --------------- | ------------ | ---------- | ------------------ |
+| A — Nose        | 0–91         | CN1+FC1    | Bayonet PETG frame |
+| B — Dorsal Fwd  | 91–165       | CN2+FC2    | 4× M2.5 screws     |
+| C — Cargo Belly | 160–251      | Cargo      | Hinge + latch      |
+| D — Dorsal Aft  | 251–320      | CN3+FC3    | 4× N42 magnets     |
+| E — Aft Service | 320–388      | CN4+FC4    | 4× M2.5 screws     |
+| F — Rear        | 388–609      | EDF access | Bayonet PETG frame |
 
 ## 4. Install M2.5 nylon standoffs in bays A, B, D, E
 
@@ -219,7 +219,7 @@
 
 ## 8. Install antenna posts and SMA bulkhead pass-throughs
 
-- Belly port, X≈**260mm**: SiK 915MHz SMA-RP bulkhead *(relocated forward from 310mm — station 310mm is now the neck intake ring; 260mm is in cargo bay belly, Panel C, clear of intake frame)*
+- Belly port, X≈**260mm**: SiK 915MHz SMA-RP bulkhead _(relocated forward from 310mm — station 310mm is now the neck intake ring; 260mm is in cargo bay belly, Panel C, clear of intake frame)_
 - Belly stbd, X≈260mm: LoRa RFM95W 915MHz SMA-RP bulkhead
 - Dorsal, X≈**120mm**: **49MHz RCRS-49 forward wire post**— PETG insulated mast (~10mm tall, 12×12mm foot), bonded to dorsal hull skin just aft of bridge/cockpit section; loading coil + LC pi-network at this post; RG-316 coax routed internally to Bay A RCRS-49 module*(replaces dorsal fin + vertical whip — wire now runs nose-to-tail along hull spine)*
 - Rear nozzle cone top: **49MHz RCRS-49 aft wire post** — PETG hook post (~10mm tall) bonded to top of `rear_nozzle_frame.stl`; electrically open (insulated end)
@@ -229,27 +229,27 @@
 
 **9. Install 12× ToF sensor flush-mount PETG frames** (6.5mm hull cutouts):
 
-| Sensor | X (mm) | Position | Array |
-| -------- | --------- | ---------- | ------- |
-| S1A / S1B | 30, 50 | Nose ring | A / B |
-| S3B / S4B | 180 | Port / Stbd hull sides | B |
-| S3A / S4A | 240 | Port / Stbd hull sides | A |
-| S6A / S6B | 195, 265 | Belly blisters | A / B |
-| S5A / S5B | 215, 315 | Dorsal keel | A / B |
-| S2B / S2A | 510, 525 | Rear bell rim | B / A |
+| Sensor    | X (mm)   | Position               | Array |
+| --------- | -------- | ---------------------- | ----- |
+| S1A / S1B | 30, 50   | Nose ring              | A / B |
+| S3B / S4B | 180      | Port / Stbd hull sides | B     |
+| S3A / S4A | 240      | Port / Stbd hull sides | A     |
+| S6A / S6B | 195, 265 | Belly blisters         | A / B |
+| S5A / S5B | 215, 315 | Dorsal keel            | A / B |
+| S2B / S2A | 510, 525 | Rear bell rim          | B / A |
 
 **10. Feed 8× PTFE conduits nose-to-tail.** Thread pull strings immediately:
 
-| Conduit | Route | Signal |
-| --------- | ------- | -------- |
-| CAN-FD | Port keel rail | CAN FD ring — 120Ω term at CN1 and FC4 |
-| RS-485 | Stbd keel rail | RS-485 multidrop — 120Ω at CN1 and FC4 |
-| 1553-A | Port upper | MIL-STD-1553 bus A |
-| 1553-B | Stbd upper | MIL-STD-1553 bus B |
-| ETH-1 | Port lower | Ethernet ring segment |
-| ETH-2 | Stbd lower | Ethernet ring segment |
-| SERVO-PWR | Belly centerline | 6V servo bus + PWM signal harness |
-| MAIN-PWR | Belly centerline | 10AWG main power from battery to PDB |
+| Conduit   | Route            | Signal                                 |
+| --------- | ---------------- | -------------------------------------- |
+| CAN-FD    | Port keel rail   | CAN FD ring — 120Ω term at CN1 and FC4 |
+| RS-485    | Stbd keel rail   | RS-485 multidrop — 120Ω at CN1 and FC4 |
+| 1553-A    | Port upper       | MIL-STD-1553 bus A                     |
+| 1553-B    | Stbd upper       | MIL-STD-1553 bus B                     |
+| ETH-1     | Port lower       | Ethernet ring segment                  |
+| ETH-2     | Stbd lower       | Ethernet ring segment                  |
+| SERVO-PWR | Belly centerline | 6V servo bus + PWM signal harness      |
+| MAIN-PWR  | Belly centerline | 10AWG main power from battery to PDB   |
 
 **11. Install EPS void formers** (waxed 2×) in all bays. Verify pull strings clear voids.
 
@@ -280,47 +280,44 @@
 
 ### Materials Needed
 
-| Item | Qty | Notes |
-| ------ | ----- | ------- |
-| 50mm EDF @ 6S | 4 | 2 per nacelle |
-| 40A 6S ESC (BDSHOT) | 4 | 1 per EDF |
-| 3mm × 5mm SS hinge pins | 16 | 8 per nacelle nozzle |
-| 0.8mm piano wire | ~600mm | Link rings for nozzle petals |
-| M0.5 bevel gear pair (1:1) | 2 sets | One per nacelle |
-| M0.5 drive pinion R=6mm | 4 | 2 per nacelle (one each end of bevel shaft) |
+| Item                                     | Qty      | Notes                                         |
+| ---------------------------------------- | -------- | --------------------------------------------- |
+| 50mm EDF @ 6S                            | 4        | 2 per nacelle                                 |
+| 40A 6S ESC (BDSHOT)                      | 4        | 1 per EDF                                     |
+| 3mm × 5mm SS hinge pins                  | 16       | 8 per nacelle nozzle                          |
+| 0.8mm piano wire                         | ~600mm   | Link rings for nozzle petals                  |
+| M0.5 bevel gear pair (1:1)               | 2 sets   | One per nacelle                               |
+| M0.5 drive pinion R=6mm                  | 4        | 2 per nacelle (one each end of bevel shaft)   |
 | Longitudinal nozzle shaft (steel 2mm OD) | 2× ~60mm | Links bevel output to crown pinion in nacelle |
-| M0.5 crown pinion R=6mm | 2 | One per nacelle, drives nozzle inner ring |
-| WS2812B LED ring (nozzle size) | 2 | One per nacelle duct exit |
-| Structural epoxy (slow cure) | — | EDF casing bonding |
-| 3-wire servo extension 150mm | 4 | ESC signal leads |
-| Wire sleeve 8mm | ~500mm | Bundle ESC + motor leads in hub bore |
+| M0.5 crown pinion R=6mm                  | 2        | One per nacelle, drives nozzle inner ring     |
+| WS2812B LED ring (nozzle size)           | 2        | One per nacelle duct exit                     |
+| Structural epoxy (slow cure)             | —        | EDF casing bonding                            |
+| 3-wire servo extension 150mm             | 4        | ESC signal leads                              |
+| Wire sleeve 8mm                          | ~500mm   | Bundle ESC + motor leads in hub bore          |
 
 ### 2A — EDF Installation
 
 **For each nacelle** (port first, then starboard — VERIFY ROTATION DIRECTION DIFFERS):
 
-1. **Test EDF rotation direction before installation.** Connect to bench ESC + power supply (safe prop/duct test only).
-
-   - Port EDF must spin **CW viewed from intake** (fore end).
-   - Starboard EDF must spin **CCW viewed from intake**.
-   - To reverse: swap any two motor phase wires at the ESC.
+- **Test EDF rotation direction before installation.** Connect to bench ESC + power supply (safe prop/duct test only).
+  - Port EDF must spin **CW viewed from intake** (fore end).
+  - Starboard EDF must spin **CCW viewed from intake**.
+  - To reverse: swap any two motor phase wires at the ESC.
 
 - Step 2: **Install EDF2 (downstream — aft EDF):**
-
-   - Feed motor leads through hub bore (16mm ID) from aft end.
-   - Slide EDF2 into nacelle from aft (nozzle) end, Z=0.
-   - Seat EDF2 casing at Z=5mm shoulder. Casing OD should be snug in bore.
-   - Apply 3 small dabs of slow-cure structural epoxy around EDF2 casing at the Z=50mm stator shoulder. Do not foul fin channels.
-   - Route ESC1/ESC2 signal wire through hub bore alongside motor leads.
+  - Feed motor leads through hub bore (16mm ID) from aft end.
+  - Slide EDF2 into nacelle from aft (nozzle) end, Z=0.
+  - Seat EDF2 casing at Z=5mm shoulder. Casing OD should be snug in bore.
+  - Apply 3 small dabs of slow-cure structural epoxy around EDF2 casing at the Z=50mm stator shoulder. Do not foul fin channels.
+  - Route ESC1/ESC2 signal wire through hub bore alongside motor leads.
 
 - Step 3: **Route EDF2 leads through hub bore** and bring them out the fore (intake) end alongside stator fins. Bundle with wire sleeve.
 
 - Step 4: **Install EDF1 (upstream — fore EDF):**
-
-   - Feed EDF1 leads through from fore end.
-   - Slide EDF1 in from fore end, seat at Z=76mm.
-   - Verify stator fins are visible and clear in Z=53–73mm gap between EDFs.
-   - Apply 3 dabs epoxy at EDF1 casing at Z=76mm shoulder.
+  - Feed EDF1 leads through from fore end.
+  - Slide EDF1 in from fore end, seat at Z=76mm.
+  - Verify stator fins are visible and clear in Z=53–73mm gap between EDFs.
+  - Apply 3 dabs epoxy at EDF1 casing at Z=76mm shoulder.
 
 - Step 5: **Install ESC pair** against hub bore inner wall or in fuselage (route leads through spar conduit to fuselage bay). ESC heat must not be trapped inside nacelle bore — route ESCs to fuselage bay via spar conduit.
 
@@ -401,16 +398,16 @@ Crown pinion (R=6mm) → Nozzle inner ring rack (R=28mm)
 
 **Goal:** Both nacelles mounted on fuselage, pivot freely on bearings, tilt driven by fuselage-mounted servos with correct hard stops.
 
-### Materials Needed
+### Materials Required
 
-| Item | Qty | Notes |
-| ------ | ----- | ------- |
-| Nacelle tilt servo ≥25 kg·cm @ 6V, metal gear, digital | 2 | e.g. DS3218MG class or equivalent |
-| MF104ZZ flanged bearing 4×10×4mm | 4 | 2 per nacelle pivot (one each end of pivot rod) |
-| 4mm OD CF solid rod | 2 | Cut to length per pivot housing drawing |
-| Servo pushrod (steel 2mm, Z-bend ends) | 2 | Tilt servo arm → pivot arm |
-| Clevis links M2 | 4 | Pushrod-to-servo-arm + pushrod-to-pivot-arm |
-| Hard stop blocks (CF-PETG) | 4 | Two per nacelle: −5° stop + 140° stop |
+| Item                                                   | Qty | Notes                                           |
+| ------------------------------------------------------ | --- | ----------------------------------------------- |
+| Nacelle tilt servo ≥25 kg·cm @ 6V, metal gear, digital | 2   | e.g. DS3218MG class or equivalent               |
+| MF104ZZ flanged bearing 4×10×4mm                       | 4   | 2 per nacelle pivot (one each end of pivot rod) |
+| 4mm OD CF solid rod                                    | 2   | Cut to length per pivot housing drawing         |
+| Servo pushrod (steel 2mm, Z-bend ends)                 | 2   | Tilt servo arm → pivot arm                      |
+| Clevis links M2                                        | 4   | Pushrod-to-servo-arm + pushrod-to-pivot-arm     |
+| Hard stop blocks (CF-PETG)                             | 4   | Two per nacelle: −5° stop + 140° stop           |
 
 ### Installation
 
@@ -423,18 +420,16 @@ Crown pinion (R=6mm) → Nozzle inner ring rack (R=28mm)
 - Step 4: **Install tilt servo** in fuselage servo mount bracket at wing root bay. Servo arm must be accessible through access panel B or D.
 
 - Step 5: **Connect pushrod** from servo arm to pivot arm (`s_pivot_arm_a_scaled24.stl`). Adjust pushrod length so that:
-
-   - Servo 0° = nacelle 0° (horizontal / cruise)
-   - Servo ~125° = nacelle 90° (hover / vertical)
-   - Servo ~170° = nacelle 120° (backing)
+  - Servo 0° = nacelle 0° (horizontal / cruise)
+  - Servo ~125° = nacelle 90° (hover / vertical)
+  - Servo ~170° = nacelle 120° (backing)
 
 - Step 6: **Install hard stop blocks.** Bond −5° stop and 140° stop blocks to fuselage / pivot housing. Verify servo stalls against stop at travel limits rather than stripping — set servo travel limits in FC firmware.
 
 - Step 7: **Servo calibration (both nacelles):**
-
-   - Set FC output channel travel ±100% = nacelle 0°–90° for normal flight.
-   - Enable software travel limits at −5° and 140°.
-   - Verify both nacelles reach 90° simultaneously on throttle-up command.
+  - Set FC output channel travel ±100% = nacelle 0°–90° for normal flight.
+  - Enable software travel limits at −5° and 140°.
+  - Verify both nacelles reach 90° simultaneously on throttle-up command.
 
 ### Phase 3 Checks
 
@@ -462,9 +457,8 @@ The `s_neck_intake_frame.stl` (CF-PETG) is a one-piece ring that registers into 
 - Step 2: **Verify aerodynamic orientation:** intake lips (6mm forward projection) face forward (+X toward nose). Duct arms extend inward toward fuselage centreline.
 
 - Step 3: **Apply structural epoxy** (West System 105/206) to:
-
-   - Registration tongue outer surfaces (tongue → hull window edges)
-   - Bonding shoulders (flange pressing on hull exterior around each window)
+  - Registration tongue outer surfaces (tongue → hull window edges)
+  - Bonding shoulders (flange pressing on hull exterior around each window)
 
 - Step 4: **Press frame into position.** All 4 tongues must seat fully before epoxy sets. Clamp with tape across shoulder flanges. Cure 24 h before moving.
 
@@ -474,19 +468,17 @@ The `s_neck_intake_frame.stl` (CF-PETG) is a one-piece ring that registers into 
 
 The `s_aft_edf_plenum.stl` (PETG) connects the 4 intake frame duct arms to the 120mm EDF fan face. It is installed inside the engine bell section before closing Panel F.
 
-1. **Dry-fit plenum** against intake frame duct arm exits and verify:
-
-   - Each rectangular arm (65×60mm) aligns with the corresponding intake frame duct arm exit.
-   - Aft circular outlet (120mm) is centred on fuselage centreline.
+- **Dry-fit plenum** against intake frame duct arm exits and verify:
+  - Each rectangular arm (65×60mm) aligns with the corresponding intake frame duct arm exit.
+  - Aft circular outlet (120mm) is centred on fuselage centreline.
 
 - Step 2: **Bond plenum forward arm ends to intake frame duct arm exits** with structural epoxy. Fillet all joints. Cure 2 h.
 
 - Step 3: **Pressure-test plenum before bonding EDF:**
-
-   - Seal EDF aft face with tape.
-   - Cover 3 of the 4 scoop inlets temporarily.
-   - Apply shop-vac suction at the 4th scoop — you should hear/feel a clear draft at the EDF outlet (leakage only around tape, not at joints).
-   - If joints leak, apply additional epoxy fillet and re-test.
+  - Seal EDF aft face with tape.
+  - Cover 3 of the 4 scoop inlets temporarily.
+  - Apply shop-vac suction at the 4th scoop — you should hear/feel a clear draft at the EDF outlet (leakage only around tape, not at joints).
+  - If joints leak, apply additional epoxy fillet and re-test.
 
 ### 4C — 120mm EDF Installation
 
@@ -497,10 +489,9 @@ The EDF mounts axially inside the engine bell (Panel F), fan face at station ~43
 - Step 2: **Install EDF mounting ring** (circular PETG ring matching EDF OD + 3mm, printed from `s_aft_edf_plenum.scad` retaining lip) at station ~430mm inside Panel F. Bond with structural epoxy. Cure 1 h.
 
 - Step 3: **Seat EDF in plenum outlet bell:**
-
-   - Slide EDF aft into the plenum's 120mm circular outlet (inner bell diameter = EDF OD + 2×3mm = 126mm).
-   - Press EDF forward until fan face aligns with the EDF retaining lip ring (station ~430mm).
-   - Bond with 4 dabs slow-cure structural epoxy around EDF casing circumference at the retaining lip.
+  - Slide EDF aft into the plenum's 120mm circular outlet (inner bell diameter = EDF OD + 2×3mm = 126mm).
+  - Press EDF forward until fan face aligns with the EDF retaining lip ring (station ~430mm).
+  - Bond with 4 dabs slow-cure structural epoxy around EDF casing circumference at the retaining lip.
 
 - Step 4: **Route 120mm EDF motor leads** through Panel F to 80A ESC in Panel F bay. Route signal lead forward through MAIN-PWR conduit to Bay B (FC2 PRU Ch.2).
 
@@ -602,31 +593,31 @@ ESCs are split across FC1 and FC2 so that each flight controller drives **one ED
 If either FC fails, the surviving FC retains 50% thrust in both nacelles — the aircraft can still
 hover rather than losing one nacelle entirely.
 
-| ESC | EDF | Nacelle | Position | Controlled by |
-| --- | --- | ------- | -------- | ------------- |
-| ESC1 | EDF1 (upstream / fore) | Port | Z=76..126mm | **FC1** |
-| ESC2 | EDF2 (downstream / aft) | Port | Z=5..50mm | **FC2** |
-| ESC3 | EDF1 (upstream / fore) | Starboard | Z=76..126mm | **FC1** |
-| ESC4 | EDF2 (downstream / aft) | Starboard | Z=5..50mm | **FC2** |
-| ESC5 | 120mm rear EDF | Fuselage | — | **FC2** |
+| ESC  | EDF                     | Nacelle   | Position    | Controlled by |
+| ---- | ----------------------- | --------- | ----------- | ------------- |
+| ESC1 | EDF1 (upstream / fore)  | Port      | Z=76..126mm | **FC1**       |
+| ESC2 | EDF2 (downstream / aft) | Port      | Z=5..50mm   | **FC2**       |
+| ESC3 | EDF1 (upstream / fore)  | Starboard | Z=76..126mm | **FC1**       |
+| ESC4 | EDF2 (downstream / aft) | Starboard | Z=5..50mm   | **FC2**       |
+| ESC5 | 120mm rear EDF          | Fuselage  | —           | **FC2**       |
 
 > **Failure mode:** FC1 loss → FC2 holds ESC2 (port aft) + ESC4 (stbd aft) + ESC5 (rear).
 > FC2 loss → FC1 holds ESC1 (port fore) + ESC3 (stbd fore). Symmetric half-thrust in both nacelles either way.
 
 ### Wiring Connections for 4-Node Minimum Build
 
-| Signal | From | To | Via |
-| -------- | ------ | ---- | ----- |
-| ESC1 DSHOT (port EDF1) | Cape-A FC1 PRU Ch.0 | ESC1 | Conduit Bay A → port wing root |
-| ESC3 DSHOT (stbd EDF1) | Cape-A FC1 PRU Ch.1 | ESC3 | Conduit Bay A → stbd wing root |
-| ESC2 DSHOT (port EDF2) | Cape-A FC2 PRU Ch.0 | ESC2 | Conduit Bay B → port wing root |
-| ESC4 DSHOT (stbd EDF2) | Cape-A FC2 PRU Ch.1 | ESC4 | Conduit Bay B → stbd wing root |
-| ESC5 DSHOT (rear EDF) | Cape-A FC2 PRU Ch.2 | ESC5 (80A) | Conduit Bay B → Bay F aft |
-| Nacelle tilt servo 1 (port) | Cape-A FC1 servo rail | Servo-tilt-port | SERVO-PWR conduit |
-| Nacelle tilt servo 2 (stbd) | Cape-A FC2 servo rail | Servo-tilt-stbd | SERVO-PWR conduit |
-| Rear nozzle servo | Cape-A FC2 servo rail | Servo-rear-nozzle | SERVO-PWR conduit aft |
-| LED strips | Cape-B CN1 GPIO | WS2812B ×3 | LED wiring harness |
-| CAN FD bus | CN1→FC1→CN2→FC2 | Ring (open at FC2 end) | CAN conduit, 120Ω term at CN1 |
+| Signal                      | From                  | To                     | Via                            |
+| --------------------------- | --------------------- | ---------------------- | ------------------------------ |
+| ESC1 DSHOT (port EDF1)      | Cape-A FC1 PRU Ch.0   | ESC1                   | Conduit Bay A → port wing root |
+| ESC3 DSHOT (stbd EDF1)      | Cape-A FC1 PRU Ch.1   | ESC3                   | Conduit Bay A → stbd wing root |
+| ESC2 DSHOT (port EDF2)      | Cape-A FC2 PRU Ch.0   | ESC2                   | Conduit Bay B → port wing root |
+| ESC4 DSHOT (stbd EDF2)      | Cape-A FC2 PRU Ch.1   | ESC4                   | Conduit Bay B → stbd wing root |
+| ESC5 DSHOT (rear EDF)       | Cape-A FC2 PRU Ch.2   | ESC5 (80A)             | Conduit Bay B → Bay F aft      |
+| Nacelle tilt servo 1 (port) | Cape-A FC1 servo rail | Servo-tilt-port        | SERVO-PWR conduit              |
+| Nacelle tilt servo 2 (stbd) | Cape-A FC2 servo rail | Servo-tilt-stbd        | SERVO-PWR conduit              |
+| Rear nozzle servo           | Cape-A FC2 servo rail | Servo-rear-nozzle      | SERVO-PWR conduit aft          |
+| LED strips                  | Cape-B CN1 GPIO       | WS2812B ×3             | LED wiring harness             |
+| CAN FD bus                  | CN1→FC1→CN2→FC2       | Ring (open at FC2 end) | CAN conduit, 120Ω term at CN1  |
 
 ### Firmware Flash
 
@@ -707,35 +698,35 @@ Install clamshell cargo door hinges and latch. Bond cargo bay walls (per s_cargo
 
 ## Structural Specifications Summary
 
-| Component | Spec | Analysis |
-| ----------- | ------ | ---------- |
-| Wing spar | CF tube 12mm OD / 1.5mm wall | Bending stress at full nacelle torque (~0.13 Nm) ≈ 18 MPa — allowable CF ≥600 MPa |
-| Keel | CF flat bar 6×3mm | Carries fuselage bending; adequate for 24-inch hull at <5g manoeuvre |
-| Pivot rod | 4mm OD solid CF | Shear stress at 340g nacelle weight ≈ 27 MPa — allowable CF ≥300 MPa shear |
-| Pivot bearings | MF104ZZ 4×10×4mm × 2 per nacelle | Static capacity 490 N >> 3.3 N nacelle weight — fine |
-| Foam fill | 2 lb/ft³ closed-cell PU | Provides hull rigidity, crash absorption; adds ~180 g to total AUW |
-| Tilt servo | ≥25 kg·cm digital metal gear | Static torque req. ~13.6 kg·cm × 2 safety factor = 27 kg·cm min; 25 kg·cm rating marginal — prefer 30+ kg·cm |
-| Nacelle shell | CF-PETG 25% gyroid, 4 walls | Adequate for EDF thrust loads and nacelle-tilt reaction forces |
+| Component      | Spec                             | Analysis                                                                                                     |
+| -------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Wing spar      | CF tube 12mm OD / 1.5mm wall     | Bending stress at full nacelle torque (~0.13 Nm) ≈ 18 MPa — allowable CF ≥600 MPa                            |
+| Keel           | CF flat bar 6×3mm                | Carries fuselage bending; adequate for 24-inch hull at <5g manoeuvre                                         |
+| Pivot rod      | 4mm OD solid CF                  | Shear stress at 340g nacelle weight ≈ 27 MPa — allowable CF ≥300 MPa shear                                   |
+| Pivot bearings | MF104ZZ 4×10×4mm × 2 per nacelle | Static capacity 490 N >> 3.3 N nacelle weight — fine                                                         |
+| Foam fill      | 2 lb/ft³ closed-cell PU          | Provides hull rigidity, crash absorption; adds ~180 g to total AUW                                           |
+| Tilt servo     | ≥25 kg·cm digital metal gear     | Static torque req. ~13.6 kg·cm × 2 safety factor = 27 kg·cm min; 25 kg·cm rating marginal — prefer 30+ kg·cm |
+| Nacelle shell  | CF-PETG 25% gyroid, 4 walls      | Adequate for EDF thrust loads and nacelle-tilt reaction forces                                               |
 
 ---
 
 ## Blender Script Reference
 
-| Script / File | Tool | Purpose | Output |
-| --------------- | ------ | --------- | -------- |
-| `blender_shells_v3.py` | Blender | Hollow and scale all hull STLs to 24" | `*_shell24.stl` (all hull sections) |
-| `blender_nacelle_integrated_v1.py` | Blender | Generate nacelle shells with integrated stators | `s_eng_left_stator_shell24.stl`, `s_eng_right_stator_shell24.stl` |
-| ~~`blender_intake_cut.py`~~ | ~~Blender~~ | ~~Cut 120mm belly intake in s_middle~~ | **Superseded** — belly scoop removed in Rev N; use canonical middle shell instead |
-| `blender_nozzle_gen.py` | Blender | Generate iris nozzle petals and rings | `nacelle_nozzle_petal.stl`, `nacelle_nozzle_ring.stl`, `rear_nozzle_petal.stl`, `rear_nozzle_frame.stl` |
-| `serenity/stl/s_middle_canonical_shell24.scad` | OpenSCAD | Canonical middle fuselage shell (belly restored) | `s_middle_canonical_shell24.stl` |
-| `serenity/stl/s_rear_neck_intake_shell24.scad` | OpenSCAD | Rear shell with 4 radial scoop windows | `s_rear_neck_intake_shell24.stl` |
-| `serenity/stl/s_neck_intake_frame.scad` | OpenSCAD | CF-PETG structural intake frame ring | `s_neck_intake_frame.stl` |
-| `serenity/stl/s_aft_edf_plenum.scad` | OpenSCAD | Cross-shaped 4-to-1 plenum manifold | `s_aft_edf_plenum.stl` |
+| Script / File                                  | Tool        | Purpose                                          | Output                                                                                                  |
+| ---------------------------------------------- | ----------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| `blender_shells_v3.py`                         | Blender     | Hollow and scale all hull STLs to 24"            | `*_shell24.stl` (all hull sections)                                                                     |
+| `blender_nacelle_integrated_v1.py`             | Blender     | Generate nacelle shells with integrated stators  | `s_eng_left_stator_shell24.stl`, `s_eng_right_stator_shell24.stl`                                       |
+| ~~`blender_intake_cut.py`~~                    | ~~Blender~~ | ~~Cut 120mm belly intake in s_middle~~           | **Superseded** — belly scoop removed in Rev N; use canonical middle shell instead                       |
+| `blender_nozzle_gen.py`                        | Blender     | Generate iris nozzle petals and rings            | `nacelle_nozzle_petal.stl`, `nacelle_nozzle_ring.stl`, `rear_nozzle_petal.stl`, `rear_nozzle_frame.stl` |
+| `serenity/stl/s_middle_canonical_shell24.scad` | OpenSCAD    | Canonical middle fuselage shell (belly restored) | `s_middle_canonical_shell24.stl`                                                                        |
+| `serenity/stl/s_rear_neck_intake_shell24.scad` | OpenSCAD    | Rear shell with 4 radial scoop windows           | `s_rear_neck_intake_shell24.stl`                                                                        |
+| `serenity/stl/s_neck_intake_frame.scad`        | OpenSCAD    | CF-PETG structural intake frame ring             | `s_neck_intake_frame.stl`                                                                               |
+| `serenity/stl/s_aft_edf_plenum.scad`           | OpenSCAD    | Cross-shaped 4-to-1 plenum manifold              | `s_aft_edf_plenum.stl`                                                                                  |
 
 Blender scripts run headless: `blender --background --python <script>.py`
 OpenSCAD STLs: `openscad -o <output>.stl <file>.scad`
 
 ---
 
-*Rev N — first documented 24-inch Serenity-class build — May 2026*
-*Supersedes Rev M (18-inch, 80mm EDF, AM6254 upgrade)*
+_Rev N — first documented 24-inch Serenity-class build — May 2026_
+_Supersedes Rev M (18-inch, 80mm EDF, AM6254 upgrade)_

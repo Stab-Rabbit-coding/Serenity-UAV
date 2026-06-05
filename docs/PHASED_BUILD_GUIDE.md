@@ -10,22 +10,22 @@
 
 **Author:** Steve Griffing, PE(CSE) \[Control Systems Engineering\], CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**Year:**2026  |**Status:** Public release
+**Year:**2026 |**Status:** Public release
 
-> Fan engineering work inspired by the Firefly-class transport ship *Serenity*
-> from *Firefly*(Fox, 2002) and*Serenity* (Universal, 2005).
+> Fan engineering work inspired by the Firefly-class transport ship _Serenity_
+> from _Firefly_(Fox, 2002) and*Serenity* (Universal, 2005).
 > © Joss Whedon / Mutant Enemy Productions / Universal Pictures — **Not an officially licensed product.**
 
 ---
 
 ## Attribution
 
-| Work | Author | License | Source |
-| ------ | -------- | --------- | -------- |
-| Hull geometry | Peter Farell | CC BY 4.0 | printables.com/model/548545 |
-| EDF nozzles | BamJr | CC BY 4.0 | thingiverse.com/thing:2991269 |
+| Work                  | Author                           | License    | Source                         |
+| --------------------- | -------------------------------- | ---------- | ------------------------------ |
+| Hull geometry         | Peter Farell                     | CC BY 4.0  | printables.com/model/548545    |
+| EDF nozzles           | BamJr                            | CC BY 4.0  | thingiverse.com/thing:2991269  |
 | Blueprint proportions | Mandel + Earls / QMx / Universal | © 2007 QMx | 269 ft × 170 ft × 79 ft ratios |
-| All other design | Steve Griffing | CC BY 4.0 | This project |
+| All other design      | Steve Griffing                   | CC BY 4.0  | This project                   |
 
 ---
 
@@ -33,35 +33,35 @@
 
 > Rev M supersedes Rev L. Hardware upgrade: 8× PocketBeagle 2 (AM6232) → 8× PocketBeagle 2 Industrial (AM6254, 1GB DDR4, 64GB eMMC, −40°C to 85°C). Propulsion + governor unchanged from Rev L.
 
-| Parameter | Value |
-| ----------- | ------- |
-| Hull length | 457.2 mm (18.00″) — canonical 269 ft |
-| Beam (nacelle tip-to-tip) | 288.9 mm (11.375″) — canonical 170 ft |
-| Propulsion | **2× (2× Changesun XRP 3660-2700KV 80mm 6S, tandem series) per nacelle** + 1× XFLY X4 PRO 40mm 4S fuselage |
-| Nacelle pod | 93.5 mm OD × **230 mm** length (tandem dual-EDF) · ID 83 mm |
-| Hover thrust | **11,250 g** (10,600 g nacelles + 650 g fuselage) |
-| ESCs | **4× Hobbywing Platinum PRO V4 120A** (nacelles, one per EDF) + 1× BLHeli32 40A (fuselage) |
-| Governor (Rev L new) | **PID closed-loop RPM per EDF · 500 Hz M4F · BDSHOT 1 kHz feedback** |
-| Avionics dry mass | **420 g** (8× PocketBeagle 2 Industrial + 4× Cape-A + 4× Cape-B + 4× RCRS-49 sub-modules + GPS ×4 + radios) |
-| Airframe dry mass | **3,213 g** (Rev L 3,197 g + 16 g PB2-I net delta) |
-| T/W empty | **3.11:1** (6S 4000mAh, 3,623 g AUW) |
-| T/W with 250 g cargo | **2.99:1** (6S 2800mAh, 3,758 g AUW) |
-| T/W one EDF failed | **2.41:1** — partner EDF continues, fault latched |
-| T/W one nacelle lost | **1.64:1** — FC RTH |
-| Max payload | **1,392 g (3.07 lb)** at T/W = 2.0 |
-| Compute nodes | **8 nodes:** FC1–FC4 (Cape-A, sensor/flight) + CN1–CN4 (Cape-B, comms/payload) |
-| FC node hardware | **PocketBeagle 2 Industrial (AM6254)**+ Cape-A 85×55mm — ICM-42688-P IMU, BMP388 baro, u-blox M10Q GPS, MIL-STD-1553, CAN FD, RS-485, Ethernet;**SLB9670 TPM 2.0** · DK 2820-100003007-ND |
-| CN node hardware | **PocketBeagle 2 Industrial (AM6254)**+ Cape-B 90×60mm — SiK 915MHz, LoRa RFM95W 915MHz, TI WL1837MOD WiFi/BT, RCRS-49 sub-module, MIL-STD-1553, CAN FD, RS-485, Ethernet;**SLB9670 TPM 2.0**; ATF16V8BQL CPLD write-blocker (log μSD) · DK 2820-100003007-ND |
-| Bay assignments | Bay A: CN1+FC1 · Bay B: CN2+FC2 · Bay D: CN3+FC3 · Bay E: CN4+FC4 (CN lower, FC upper per bay) |
-| Bus order | CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4 — CN and FC interleaved on all data buses (CAN FD, RS-485, 1553) and power distribution; any single segment or bay power failure leaves ≥2 FC + ≥2 CN on both sides of the break |
-| Node role election | CAN FD heartbeat priority arbitration at boot — all 8 nodes identical hardware; master elected dynamically with automatic failover |
-| Radios | SiK 915MHz MAVLink + LoRa RFM95W 915MHz backup + TI WL1837MOD WiFi/BT GCS + 49MHz RCRS-49 RC; all 4 on every CN node; software-elected master per link |
-| Obstacle avoidance | 12× VL53L5CX 8×8 ToF sensors, dual redundant arrays (A on FC3 Bay D, B on FC1 Bay A) |
-| Cargo | 101.6 × 76.2 × 76.2 mm bay, clamshell doors, N20 winch + auto-latch cradle |
-| Security | ATF16V8BQL CPLD write-blocker (log μSD, all Cape-B nodes) + **SLB9670 TPM 2.0 on all 8 nodes** (Cape-A and Cape-B) + W25Q128JV NOR flash circular log buffer |
-| Navigation lights | ICAO Annex 2 / 14 CFR 91.209 (6-position) |
-| Access panels | 6 removable panels A–F (bayonet/screw/hinge/magnet) |
-| Build estimate | 100–130 hours across all phases |
+| Parameter                 | Value                                                                                                                                                                                                                                                         |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hull length               | 457.2 mm (18.00″) — canonical 269 ft                                                                                                                                                                                                                          |
+| Beam (nacelle tip-to-tip) | 288.9 mm (11.375″) — canonical 170 ft                                                                                                                                                                                                                         |
+| Propulsion                | **2× (2× Changesun XRP 3660-2700KV 80mm 6S, tandem series) per nacelle** + 1× XFLY X4 PRO 40mm 4S fuselage                                                                                                                                                    |
+| Nacelle pod               | 93.5 mm OD × **230 mm** length (tandem dual-EDF) · ID 83 mm                                                                                                                                                                                                   |
+| Hover thrust              | **11,250 g** (10,600 g nacelles + 650 g fuselage)                                                                                                                                                                                                             |
+| ESCs                      | **4× Hobbywing Platinum PRO V4 120A** (nacelles, one per EDF) + 1× BLHeli32 40A (fuselage)                                                                                                                                                                    |
+| Governor (Rev L new)      | **PID closed-loop RPM per EDF · 500 Hz M4F · BDSHOT 1 kHz feedback**                                                                                                                                                                                          |
+| Avionics dry mass         | **420 g** (8× PocketBeagle 2 Industrial + 4× Cape-A + 4× Cape-B + 4× RCRS-49 sub-modules + GPS ×4 + radios)                                                                                                                                                   |
+| Airframe dry mass         | **3,213 g** (Rev L 3,197 g + 16 g PB2-I net delta)                                                                                                                                                                                                            |
+| T/W empty                 | **3.11:1** (6S 4000mAh, 3,623 g AUW)                                                                                                                                                                                                                          |
+| T/W with 250 g cargo      | **2.99:1** (6S 2800mAh, 3,758 g AUW)                                                                                                                                                                                                                          |
+| T/W one EDF failed        | **2.41:1** — partner EDF continues, fault latched                                                                                                                                                                                                             |
+| T/W one nacelle lost      | **1.64:1** — FC RTH                                                                                                                                                                                                                                           |
+| Max payload               | **1,392 g (3.07 lb)** at T/W = 2.0                                                                                                                                                                                                                            |
+| Compute nodes             | **8 nodes:** FC1–FC4 (Cape-A, sensor/flight) + CN1–CN4 (Cape-B, comms/payload)                                                                                                                                                                                |
+| FC node hardware          | **PocketBeagle 2 Industrial (AM6254)**+ Cape-A 85×55mm — ICM-42688-P IMU, BMP388 baro, u-blox M10Q GPS, MIL-STD-1553, CAN FD, RS-485, Ethernet;**SLB9670 TPM 2.0** · DK 2820-100003007-ND                                                                     |
+| CN node hardware          | **PocketBeagle 2 Industrial (AM6254)**+ Cape-B 90×60mm — SiK 915MHz, LoRa RFM95W 915MHz, TI WL1837MOD WiFi/BT, RCRS-49 sub-module, MIL-STD-1553, CAN FD, RS-485, Ethernet;**SLB9670 TPM 2.0**; ATF16V8BQL CPLD write-blocker (log μSD) · DK 2820-100003007-ND |
+| Bay assignments           | Bay A: CN1+FC1 · Bay B: CN2+FC2 · Bay D: CN3+FC3 · Bay E: CN4+FC4 (CN lower, FC upper per bay)                                                                                                                                                                |
+| Bus order                 | CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4 — CN and FC interleaved on all data buses (CAN FD, RS-485, 1553) and power distribution; any single segment or bay power failure leaves ≥2 FC + ≥2 CN on both sides of the break                                              |
+| Node role election        | CAN FD heartbeat priority arbitration at boot — all 8 nodes identical hardware; master elected dynamically with automatic failover                                                                                                                            |
+| Radios                    | SiK 915MHz MAVLink + LoRa RFM95W 915MHz backup + TI WL1837MOD WiFi/BT GCS + 49MHz RCRS-49 RC; all 4 on every CN node; software-elected master per link                                                                                                        |
+| Obstacle avoidance        | 12× VL53L5CX 8×8 ToF sensors, dual redundant arrays (A on FC3 Bay D, B on FC1 Bay A)                                                                                                                                                                          |
+| Cargo                     | 101.6 × 76.2 × 76.2 mm bay, clamshell doors, N20 winch + auto-latch cradle                                                                                                                                                                                    |
+| Security                  | ATF16V8BQL CPLD write-blocker (log μSD, all Cape-B nodes) + **SLB9670 TPM 2.0 on all 8 nodes** (Cape-A and Cape-B) + W25Q128JV NOR flash circular log buffer                                                                                                  |
+| Navigation lights         | ICAO Annex 2 / 14 CFR 91.209 (6-position)                                                                                                                                                                                                                     |
+| Access panels             | 6 removable panels A–F (bayonet/screw/hinge/magnet)                                                                                                                                                                                                           |
+| Build estimate            | 100–130 hours across all phases                                                                                                                                                                                                                               |
 
 ---
 
@@ -89,17 +89,17 @@ These rules eliminate costly structural rework. Read before you start Phase 1.
 
 ## Phase Overview
 
-| Phase | Name | Milestone | Incremental Cost | Cumulative Cost |
-| ------- | ------ | ----------- | ----------------- | ----------------- |
-| 0 | Print All Parts + Cut CF | All parts ready (incl. dual-EDF pods) | ~$65 | ~$65 |
-| 1 | Structure + All Future Provisions | Hull sealed, nothing left to install pre-foam | ~$80 | ~$145 |
-| 2 | Nacelle Mechanics + **2× Budget EDFs/nacelle** | Dual-EDF propulsion mechanically complete | ~$215 | ~$360 |
-| 3 | Minimum Viable Flyer (CN1+FC1+CN2+FC2) | ★ **FIRST FLIGHT** | ~$740 | ~$1,100 |
-| 4 | Full 8-Node Architecture (CN3+FC3+CN4+FC4) | All 8 nodes, full ring redundancy | ~$540 | ~$1,640 |
-| 5 | Obstacle Avoidance: 12× VL53L5CX ToF | Autonomous flight + obstacle avoidance | ~$110 | ~$1,750 |
-| 6 | Cargo System | 250 g delivery operational | ~$30 | ~$1,780 |
-| 7 | **Motor Upgrade: 4× XRP + 4× Hobbywing 120A + PID Governor** | ★**FULL PERFORMANCE — Rev M** | ~$800 | ~$2,580 |
-| 8 | Finishing: Decals + FAA + Docs | Legal, complete, documented | ~$20 | ~$2,600 |
+| Phase | Name                                                         | Milestone                                     | Incremental Cost | Cumulative Cost |
+| ----- | ------------------------------------------------------------ | --------------------------------------------- | ---------------- | --------------- |
+| 0     | Print All Parts + Cut CF                                     | All parts ready (incl. dual-EDF pods)         | ~$65             | ~$65            |
+| 1     | Structure + All Future Provisions                            | Hull sealed, nothing left to install pre-foam | ~$80             | ~$145           |
+| 2     | Nacelle Mechanics + **2× Budget EDFs/nacelle**               | Dual-EDF propulsion mechanically complete     | ~$215            | ~$360           |
+| 3     | Minimum Viable Flyer (CN1+FC1+CN2+FC2)                       | ★ **FIRST FLIGHT**                            | ~$740            | ~$1,100         |
+| 4     | Full 8-Node Architecture (CN3+FC3+CN4+FC4)                   | All 8 nodes, full ring redundancy             | ~$540            | ~$1,640         |
+| 5     | Obstacle Avoidance: 12× VL53L5CX ToF                         | Autonomous flight + obstacle avoidance        | ~$110            | ~$1,750         |
+| 6     | Cargo System                                                 | 250 g delivery operational                    | ~$30             | ~$1,780         |
+| 7     | **Motor Upgrade: 4× XRP + 4× Hobbywing 120A + PID Governor** | ★**FULL PERFORMANCE — Rev M**                 | ~$800            | ~$2,580         |
+| 8     | Finishing: Decals + FAA + Docs                               | Legal, complete, documented                   | ~$20             | ~$2,600         |
 
 > Cost estimates are in USD and reflect component retail pricing as of 2026.
 > PCB fabrication costs assume JLCPCB assembled pricing.
@@ -113,15 +113,15 @@ These rules eliminate costly structural rework. Read before you start Phase 1.
 
 ### What to Buy First
 
-| Item | Qty | Notes |
-| ------ | ----- | ------- |
-| PETG filament | ~1,200 g | Hull sections, access panels, nozzle parts, cargo gondola, ToF mounts |
-| CF-PETG filament | ~500 g | Nacelle pods, tilt brackets, spar bracket — requires hardened steel nozzle |
-| TPU 95A filament | ~200 g | Landing skid feet |
-| Clear resin (or source) | — | M0.5 bevel gear pair + pinion + crown — resin-print or buy precision-machined |
-| CF flat bar 6×3mm | ~600 mm | Keel: 457.2 mm + 100 mm for ring frames |
-| CF tube 12mm OD 1.5mm wall | ~700 mm | Spars: 2× 300 mm + 50 mm scrap; pivot rods per drawing |
-| CF plate 2mm | 200×100 mm | Ring frames (5 stations) |
+| Item                       | Qty        | Notes                                                                         |
+| -------------------------- | ---------- | ----------------------------------------------------------------------------- |
+| PETG filament              | ~1,200 g   | Hull sections, access panels, nozzle parts, cargo gondola, ToF mounts         |
+| CF-PETG filament           | ~500 g     | Nacelle pods, tilt brackets, spar bracket — requires hardened steel nozzle    |
+| TPU 95A filament           | ~200 g     | Landing skid feet                                                             |
+| Clear resin (or source)    | —          | M0.5 bevel gear pair + pinion + crown — resin-print or buy precision-machined |
+| CF flat bar 6×3mm          | ~600 mm    | Keel: 457.2 mm + 100 mm for ring frames                                       |
+| CF tube 12mm OD 1.5mm wall | ~700 mm    | Spars: 2× 300 mm + 50 mm scrap; pivot rods per drawing                        |
+| CF plate 2mm               | 200×100 mm | Ring frames (5 stations)                                                      |
 
 ### Printer Setup
 
@@ -132,39 +132,39 @@ These rules eliminate costly structural rework. Read before you start Phase 1.
 
 ### Print Schedule (ordered to minimize reprints)
 
-| STL | Material | Layer | Infill | Qty | Notes |
-| ----- | ---------- | ------- | -------- | ----- | ------- |
-| `landing_skid_foot.stl` | TPU 95A | 0.25mm | 40% | 4 | Print first — tests bed adhesion |
-| `cockpit_cap.stl` | PETG | 0.20mm | 8% gyroid | 1 | Print nose-down |
-| `cockpit_section.stl` | PETG | 0.20mm | 8% gyroid | 1 | |
-| `mid_hull_left.stl` | PETG | 0.20mm | 8% gyroid | 1 | |
-| `mid_hull_right.stl` | PETG | 0.20mm | 8% gyroid | 1 | |
-| `aft_neck.stl` | PETG | 0.20mm | 8% gyroid | 1 | |
-| `engine_bell.stl` | PETG | 0.20mm | 20% gyroid | 1 | 3 walls |
-| **`nacelle_pod_80mm.stl`** | CF-PETG | 0.15mm | 25% | 2 | **Phase 2 fit** — budget single-EDF housing (short, ~144mm) |
-| **`nacelle_pod_dual_80mm.stl`** | CF-PETG | 0.15mm | 25% | 2 | **Phase 7 fit** — 230mm tandem dual-EDF pod, 83mm ID, 6-vane flow-straightener rib at 110mm |
-| `nacelle_tip_cap_port.stl` | PETG | 0.20mm | 20% | 1 | RED nav light recess |
-| `nacelle_tip_cap_stbd.stl` | PETG | 0.20mm | 20% | 1 | GREEN nav light recess |
-| `tilt_bracket_140deg.stl` | CF-PETG | 0.15mm | 40% | 2 | 4 walls — hard stop at 140° |
-| `spar_bracket.stl` | CF-PETG | 0.15mm | 40% | 1 | 4 walls |
-| `nozzle_outer_housing.stl` | PETG | 0.20mm | 20% gyroid | 3 | 2 nacelle + 1 fuselage |
-| `nozzle_inner_ring.stl` | CF-PETG | 0.15mm | vertical | 3 | Print vertical for tooth accuracy |
-| `nozzle_flap.stl` | PETG | 0.20mm | 20% | 48 | 8 per nozzle × 3 sets = 24; print flat |
-| `sector_gear_22mm.stl` | PETG | 0.12mm | 40% | 2 | 0.12mm layer for tooth accuracy |
-| `access_panel_frames.stl` | PETG | 0.20mm | 100% | 1 set | 6 frames + 6 lids; 2mm wall |
-| `cargo_gondola_shell.stl` | PETG | 0.20mm | 15% gyroid | 1 | 112×85×22mm belly pod |
-| `clamshell_door_half.stl` | PETG | 0.20mm | 20% | 2 | Mirrored halves |
-| `cargo_cradle_autolatch.stl` | PETG | 0.20mm | 30% | 1 | Auto-latch corner clips |
-| `tof_flush_mount_5mm.stl` | PETG | 0.20mm | 100% | 12 | Press-fit into 6.5mm hull cutouts |
+| STL                             | Material | Layer  | Infill     | Qty   | Notes                                                                                       |
+| ------------------------------- | -------- | ------ | ---------- | ----- | ------------------------------------------------------------------------------------------- |
+| `landing_skid_foot.stl`         | TPU 95A  | 0.25mm | 40%        | 4     | Print first — tests bed adhesion                                                            |
+| `cockpit_cap.stl`               | PETG     | 0.20mm | 8% gyroid  | 1     | Print nose-down                                                                             |
+| `cockpit_section.stl`           | PETG     | 0.20mm | 8% gyroid  | 1     |                                                                                             |
+| `mid_hull_left.stl`             | PETG     | 0.20mm | 8% gyroid  | 1     |                                                                                             |
+| `mid_hull_right.stl`            | PETG     | 0.20mm | 8% gyroid  | 1     |                                                                                             |
+| `aft_neck.stl`                  | PETG     | 0.20mm | 8% gyroid  | 1     |                                                                                             |
+| `engine_bell.stl`               | PETG     | 0.20mm | 20% gyroid | 1     | 3 walls                                                                                     |
+| **`nacelle_pod_80mm.stl`**      | CF-PETG  | 0.15mm | 25%        | 2     | **Phase 2 fit** — budget single-EDF housing (short, ~144mm)                                 |
+| **`nacelle_pod_dual_80mm.stl`** | CF-PETG  | 0.15mm | 25%        | 2     | **Phase 7 fit** — 230mm tandem dual-EDF pod, 83mm ID, 6-vane flow-straightener rib at 110mm |
+| `nacelle_tip_cap_port.stl`      | PETG     | 0.20mm | 20%        | 1     | RED nav light recess                                                                        |
+| `nacelle_tip_cap_stbd.stl`      | PETG     | 0.20mm | 20%        | 1     | GREEN nav light recess                                                                      |
+| `tilt_bracket_140deg.stl`       | CF-PETG  | 0.15mm | 40%        | 2     | 4 walls — hard stop at 140°                                                                 |
+| `spar_bracket.stl`              | CF-PETG  | 0.15mm | 40%        | 1     | 4 walls                                                                                     |
+| `nozzle_outer_housing.stl`      | PETG     | 0.20mm | 20% gyroid | 3     | 2 nacelle + 1 fuselage                                                                      |
+| `nozzle_inner_ring.stl`         | CF-PETG  | 0.15mm | vertical   | 3     | Print vertical for tooth accuracy                                                           |
+| `nozzle_flap.stl`               | PETG     | 0.20mm | 20%        | 48    | 8 per nozzle × 3 sets = 24; print flat                                                      |
+| `sector_gear_22mm.stl`          | PETG     | 0.12mm | 40%        | 2     | 0.12mm layer for tooth accuracy                                                             |
+| `access_panel_frames.stl`       | PETG     | 0.20mm | 100%       | 1 set | 6 frames + 6 lids; 2mm wall                                                                 |
+| `cargo_gondola_shell.stl`       | PETG     | 0.20mm | 15% gyroid | 1     | 112×85×22mm belly pod                                                                       |
+| `clamshell_door_half.stl`       | PETG     | 0.20mm | 20%        | 2     | Mirrored halves                                                                             |
+| `cargo_cradle_autolatch.stl`    | PETG     | 0.20mm | 30%        | 1     | Auto-latch corner clips                                                                     |
+| `tof_flush_mount_5mm.stl`       | PETG     | 0.20mm | 100%       | 12    | Press-fit into 6.5mm hull cutouts                                                           |
 
 ### CF Cuts
 
-| Cut | Tool | Dimension | Notes |
-| ----- | ------ | ----------- | ------- |
-| Keel | Dremel cut-off disc | 6×3mm flat bar → 457.2mm | Mark datums at 91, 165, 251, 320, 388mm from nose |
-| Spars | Pipe cutter / Dremel | 12mm OD tube → 2× 300mm | Sand inner (spar end) to 8mm dia × 25mm tenon |
-| Ring frames | Dremel / scroll saw | 2mm CF plate, 5 profiles per drawing | Fit to keel notches |
-| Pivot rods | Dremel | 8mm CF rod → 2× per drawing | Clean cuts, deburr |
+| Cut         | Tool                 | Dimension                            | Notes                                             |
+| ----------- | -------------------- | ------------------------------------ | ------------------------------------------------- |
+| Keel        | Dremel cut-off disc  | 6×3mm flat bar → 457.2mm             | Mark datums at 91, 165, 251, 320, 388mm from nose |
+| Spars       | Pipe cutter / Dremel | 12mm OD tube → 2× 300mm              | Sand inner (spar end) to 8mm dia × 25mm tenon     |
+| Ring frames | Dremel / scroll saw  | 2mm CF plate, 5 profiles per drawing | Fit to keel notches                               |
+| Pivot rods  | Dremel               | 8mm CF rod → 2× per drawing          | Clean cuts, deburr                                |
 
 > ⚠ **CF dust hazard.** Wear N95 mask and safety glasses. Cut outdoors or with dust extraction. Wipe down with damp cloth after cutting.
 
@@ -186,23 +186,23 @@ These rules eliminate costly structural rework. Read before you start Phase 1.
 
 ### Buy List for Phase 1
 
-| Item | Qty | Notes |
-| ------ | ----- | ------- |
-| West System 105/206 epoxy | 1 kit | Keel + spar bonding; structural joints |
-| 5-minute epoxy 25mL syringe | 2× | Access panel frame bonding, ToF mounts |
-| X-30 polyurethane foam (2-part) | ~400mL kit | 2 lb/ft³, 4× expansion, 2-min pot life |
-| PTFE tube 5mm OD × 3mm ID | 5m | 8 conduits (4× ETH ring + CAN + RS-485 + 1553 + PWR); label both ends |
-| EPS blue foam board 25mm | 400×200mm | Void formers A–E (larger bays for 2-node stacks); Owens Corning Foamular 150 |
-| Johnson's Paste Wax | 1 tin | 2 coats on all EPS void former surfaces |
-| 3M 4016 closed-cell gasket tape | 1 roll | Seal all access panel frame lips |
-| M2.5 nylon hex standoffs 6mm | 16× | 4 per bay (floor mount, lower Cape) × 4 bays |
-| M2.5 nylon hex standoffs 20mm | 16× | 4 per bay (inter-cape spacing, upper Cape) × 4 bays |
-| M2.5 × 8mm SS button screws | 64× | Panel B and E (4 each) + 8× per bay × 4 bays standoff attachment |
-| M3 heat-set threaded inserts | 4× | Cargo gondola belly hard points |
-| N42 neodymium disc magnet 6×2mm | 8× | Panel D (4 in frame + 4 in lid) |
-| SMA panel-mount bulkhead | 4× | Belly: SiK 915MHz + LoRa 915MHz · Dorsal: RCRS-49MHz · Dorsal fwd: WiFi; 50Ω, RG174 pigtail |
-| Pull strings | 8× ~600mm | Thread through each PTFE conduit immediately |
-| Toothpicks | 20× | Temporary void former pins into hull ribs |
+| Item                            | Qty        | Notes                                                                                       |
+| ------------------------------- | ---------- | ------------------------------------------------------------------------------------------- |
+| West System 105/206 epoxy       | 1 kit      | Keel + spar bonding; structural joints                                                      |
+| 5-minute epoxy 25mL syringe     | 2×         | Access panel frame bonding, ToF mounts                                                      |
+| X-30 polyurethane foam (2-part) | ~400mL kit | 2 lb/ft³, 4× expansion, 2-min pot life                                                      |
+| PTFE tube 5mm OD × 3mm ID       | 5m         | 8 conduits (4× ETH ring + CAN + RS-485 + 1553 + PWR); label both ends                       |
+| EPS blue foam board 25mm        | 400×200mm  | Void formers A–E (larger bays for 2-node stacks); Owens Corning Foamular 150                |
+| Johnson's Paste Wax             | 1 tin      | 2 coats on all EPS void former surfaces                                                     |
+| 3M 4016 closed-cell gasket tape | 1 roll     | Seal all access panel frame lips                                                            |
+| M2.5 nylon hex standoffs 6mm    | 16×        | 4 per bay (floor mount, lower Cape) × 4 bays                                                |
+| M2.5 nylon hex standoffs 20mm   | 16×        | 4 per bay (inter-cape spacing, upper Cape) × 4 bays                                         |
+| M2.5 × 8mm SS button screws     | 64×        | Panel B and E (4 each) + 8× per bay × 4 bays standoff attachment                            |
+| M3 heat-set threaded inserts    | 4×         | Cargo gondola belly hard points                                                             |
+| N42 neodymium disc magnet 6×2mm | 8×         | Panel D (4 in frame + 4 in lid)                                                             |
+| SMA panel-mount bulkhead        | 4×         | Belly: SiK 915MHz + LoRa 915MHz · Dorsal: RCRS-49MHz · Dorsal fwd: WiFi; 50Ω, RG174 pigtail |
+| Pull strings                    | 8× ~600mm  | Thread through each PTFE conduit immediately                                                |
+| Toothpicks                      | 20×        | Temporary void former pins into hull ribs                                                   |
 
 ### Installation Sequence — Follow Exactly
 
@@ -212,25 +212,25 @@ These rules eliminate costly structural rework. Read before you start Phase 1.
 
 **2. Bond access-panel frames (A–F) into hull sections** with 5-minute epoxy — 30min cure:
 
-| Panel | Station (mm) | Bay | Void size | Closure |
-| ------- | ------------- | ----- | ----------- | --------- |
-| A — Nose | 0–91 | CN1+FC1 (CN lower, FC upper) | 97×63×86mm EPS | Bayonet PETG frame |
-| B — Dorsal Fwd | 91–165 | CN2+FC2 (CN lower, FC upper) | 97×63×74mm EPS | 4× M2.5 screws |
-| C — Cargo Belly | 160–251 | cargo | 70×48×91mm EPS | Hinge PETG frame |
-| D — Dorsal Aft | 251–320 | CN3+FC3 (CN lower, FC upper) | 97×63×69mm EPS | 4× N42 magnets |
-| E — Aft Service | 320–388 | CN4+FC4 (CN lower, FC upper) | 97×63×68mm EPS | 4× M2.5 screws |
-| F — Engine Bell | 388–457 | EDF access | **NO FOAM** | Bayonet PETG frame |
+| Panel           | Station (mm) | Bay                          | Void size      | Closure            |
+| --------------- | ------------ | ---------------------------- | -------------- | ------------------ |
+| A — Nose        | 0–91         | CN1+FC1 (CN lower, FC upper) | 97×63×86mm EPS | Bayonet PETG frame |
+| B — Dorsal Fwd  | 91–165       | CN2+FC2 (CN lower, FC upper) | 97×63×74mm EPS | 4× M2.5 screws     |
+| C — Cargo Belly | 160–251      | cargo                        | 70×48×91mm EPS | Hinge PETG frame   |
+| D — Dorsal Aft  | 251–320      | CN3+FC3 (CN lower, FC upper) | 97×63×69mm EPS | 4× N42 magnets     |
+| E — Aft Service | 320–388      | CN4+FC4 (CN lower, FC upper) | 97×63×68mm EPS | 4× M2.5 screws     |
+| F — Engine Bell | 388–457      | EDF access                   | **NO FOAM**    | Bayonet PETG frame |
 
 All 4 node bays use a uniform 97×63mm footprint — sized for Cape-B (90×60mm) + 7mm clearance. This simplifies void former fabrication: bays A–E (except cargo C) share the same footprint jig template.
 
 **3. Install M2.5 nylon standoffs in all four node bays** before hulls are joined. Each bay holds one CN node (Cape-B, lower) and one FC node (Cape-A, upper). Install floor standoffs at the Cape-B (90×60mm) hole pattern; install inter-cape standoffs at the Cape-A (85×55mm) hole pattern above:
 
-| Bay | Station | Nodes (lower→upper) | Lower footprint | Floor standoffs | Inter-cape standoffs |
-| ----- | --------- | --------------------- | ----------------- | ----------------- | ---------------------- |
-| A (Nose, panel A) | 0–91mm | CN1 Cape-B → FC1 Cape-A | 90×60mm | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm |
-| B (Dorsal Fwd, panel B) | 91–165mm | CN2 Cape-B → FC2 Cape-A | 90×60mm | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm |
-| D (Dorsal Aft, panel D) | 251–320mm | CN3 Cape-B → FC3 Cape-A | 90×60mm | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm |
-| E (Aft Service, panel E) | 320–388mm | CN4 Cape-B → FC4 Cape-A | 90×60mm | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm |
+| Bay                      | Station   | Nodes (lower→upper)     | Lower footprint | Floor standoffs   | Inter-cape standoffs |
+| ------------------------ | --------- | ----------------------- | --------------- | ----------------- | -------------------- |
+| A (Nose, panel A)        | 0–91mm    | CN1 Cape-B → FC1 Cape-A | 90×60mm         | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm   |
+| B (Dorsal Fwd, panel B)  | 91–165mm  | CN2 Cape-B → FC2 Cape-A | 90×60mm         | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm   |
+| D (Dorsal Aft, panel D)  | 251–320mm | CN3 Cape-B → FC3 Cape-A | 90×60mm         | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm   |
+| E (Aft Service, panel E) | 320–388mm | CN4 Cape-B → FC4 Cape-A | 90×60mm         | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm   |
 
 Cape-B (CN) mounts on 6mm floor standoffs. Cape-A (FC) mounts on 20mm inter-cape standoffs threaded into the Cape-B upper holes — ~44mm total stack height. Because Cape-A (85×55mm) is smaller than Cape-B (90×60mm), the inter-cape standoffs use inboard hole positions; verify clearance on the PCB design before ordering standoffs.
 
@@ -238,20 +238,20 @@ Cape-B (CN) mounts on 6mm floor standoffs. Cape-A (FC) mounts on 20mm inter-cape
 
 **4. Install 12× ToF sensor flush-mount PETG frames** into hull cutouts (6.5mm holes):
 
-| Sensor | Station (mm) | Position | Array | Host node |
-| -------- | ------------- | ---------- | ------- | ----------- |
-| S1A | 25 | Nose, fwd bayonet ring | A | FC3 (Bay D upper) |
-| S1B | 40 | Nose ring, aft of S1A | B | FC1 (Bay A upper) |
-| S3B | 150 | Port hull side | B | FC1 (Bay A upper) |
-| S4B | 150 | Stbd hull side | B | FC1 (Bay A upper) |
-| S3A | 200 | Port hull side | A | FC3 (Bay D upper) |
-| S4A | 200 | Stbd hull side | A | FC3 (Bay D upper) |
-| S6A | 160 | Forward belly blister | A | FC3 (Bay D upper) |
-| S5A | 180 | Dorsal keel apex | A | FC3 (Bay D upper) |
-| S6B | 220 | Belly, aft of S6A | B | FC1 (Bay A upper) |
-| S5B | 260 | Dorsal keel, aft of S5A | B | FC1 (Bay A upper) |
-| S2B | 425 | Engine bell rim, fwd | B | FC1 (Bay A upper) |
-| S2A | 440 | Engine bell rim, aft | A | FC3 (Bay D upper) |
+| Sensor | Station (mm) | Position                | Array | Host node         |
+| ------ | ------------ | ----------------------- | ----- | ----------------- |
+| S1A    | 25           | Nose, fwd bayonet ring  | A     | FC3 (Bay D upper) |
+| S1B    | 40           | Nose ring, aft of S1A   | B     | FC1 (Bay A upper) |
+| S3B    | 150          | Port hull side          | B     | FC1 (Bay A upper) |
+| S4B    | 150          | Stbd hull side          | B     | FC1 (Bay A upper) |
+| S3A    | 200          | Port hull side          | A     | FC3 (Bay D upper) |
+| S4A    | 200          | Stbd hull side          | A     | FC3 (Bay D upper) |
+| S6A    | 160          | Forward belly blister   | A     | FC3 (Bay D upper) |
+| S5A    | 180          | Dorsal keel apex        | A     | FC3 (Bay D upper) |
+| S6B    | 220          | Belly, aft of S6A       | B     | FC1 (Bay A upper) |
+| S5B    | 260          | Dorsal keel, aft of S5A | B     | FC1 (Bay A upper) |
+| S2B    | 425          | Engine bell rim, fwd    | B     | FC1 (Bay A upper) |
+| S2A    | 440          | Engine bell rim, aft    | A     | FC3 (Bay D upper) |
 
 Bond each PETG flush-mount frame with 5-min epoxy — flush ±0.2mm. Apply 0.5mm PMMA disc over each aperture, UV-adhesive. Do not obstruct aperture.
 
@@ -266,27 +266,27 @@ Bond each PETG flush-mount frame with 5-min epoxy — flush ±0.2mm. Apply 0.5mm
 
 **7. Drill 3mm GPS coax routing holes** — one per FC node, at the nearest dorsal hull surface to each bay:
 
-| FC node | Bay | Hull position | Station |
-| --------- | ----- | --------------- | --------- |
-| FC1 | A (nose) | Cockpit roof | ~59mm |
-| FC2 | B (dorsal fwd) | Dorsal hull | ~130mm |
-| FC3 | D (dorsal aft) | Dorsal hull | ~275mm |
-| FC4 | E (aft service) | Dorsal hull | ~350mm |
+| FC node | Bay             | Hull position | Station |
+| ------- | --------------- | ------------- | ------- |
+| FC1     | A (nose)        | Cockpit roof  | ~59mm   |
+| FC2     | B (dorsal fwd)  | Dorsal hull   | ~130mm  |
+| FC3     | D (dorsal aft)  | Dorsal hull   | ~275mm  |
+| FC4     | E (aft service) | Dorsal hull   | ~350mm  |
 
 Insert PTFE sleeves in all 4 holes, seal each with silicone. Mount GPS patch antennas flush on the hull exterior, antenna face UP.
 
 ## 8. Feed 8× PTFE conduits nose-to-tail through hull
 
-| Conduit | Route | Signal |
-| --------- | ------- | -------- |
-| CAN-FD | Port keel rail, full length | CAN FD — CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4; 120Ω at CN1 and FC4 |
-| RS-485 | Starboard keel rail, full length | RS-485 — CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4 multidrop; 120Ω at CN1 and FC4 |
-| MIL-1553 | Dorsal centre spine, full length | 1553B twisted shielded pair (78Ω) — FC1=BC, FC2=standby BC |
-| ETH-AB | Port forward section: Bay A → Bay B | Ethernet — FC1↔CN2 ring link |
-| ETH-BD | Port mid-section: Bay B → Bay D (skip Bay C) | Ethernet — FC2↔CN3 ring link |
-| ETH-DE | Starboard aft: Bay D → Bay E | Ethernet — FC3↔CN4 ring link |
-| ETH-EA | Starboard full length: Bay E → Bay A | Ethernet — FC4↔CN1 ring-close link |
-| PWR | Belly centre: battery → BEC → bay taps | 14AWG power + 20AWG servo bundle; one power tap per bay — each tap feeds one CN + one FC |
+| Conduit  | Route                                        | Signal                                                                                   |
+| -------- | -------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| CAN-FD   | Port keel rail, full length                  | CAN FD — CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4; 120Ω at CN1 and FC4                            |
+| RS-485   | Starboard keel rail, full length             | RS-485 — CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4 multidrop; 120Ω at CN1 and FC4                  |
+| MIL-1553 | Dorsal centre spine, full length             | 1553B twisted shielded pair (78Ω) — FC1=BC, FC2=standby BC                               |
+| ETH-AB   | Port forward section: Bay A → Bay B          | Ethernet — FC1↔CN2 ring link                                                             |
+| ETH-BD   | Port mid-section: Bay B → Bay D (skip Bay C) | Ethernet — FC2↔CN3 ring link                                                             |
+| ETH-DE   | Starboard aft: Bay D → Bay E                 | Ethernet — FC3↔CN4 ring link                                                             |
+| ETH-EA   | Starboard full length: Bay E → Bay A         | Ethernet — FC4↔CN1 ring-close link                                                       |
+| PWR      | Belly centre: battery → BEC → bay taps       | 14AWG power + 20AWG servo bundle; one power tap per bay — each tap feeds one CN + one FC |
 
 Label each conduit at BOTH ends with permanent marker. Immediately thread pull string through each tube and tie off at both ends.
 
@@ -344,21 +344,21 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 
 ### Buy List for Phase 2
 
-| Item | Qty | Approx. Cost |
-| ------ | ----- | -------------- |
-| Budget 80mm 6S EDF (×4 — 2 per nacelle, tandem series) | **4×** | ~$30–55ea |
-| XFLY Galaxy X4 PRO 40mm 12-blade 5850KV EDF | 1× | ~$48 |
-| Budget 50–60A BLHeli32 ESC (×4 nacelle + 1 fuselage) | **5×** | ~$18–30ea |
-| MG90S metal gear servo (nacelle tilt) | 2× | ~$5ea |
-| SG90 micro servo (nacelle nozzle 2×; fuselage nozzle 1×) | 3× | ~$3ea |
-| MR63ZZ radial bearing 3×6×2.5mm | 4× | ~$8 total |
-| 8mm CF rod (pivot rods) | ~150mm | ~$5 |
-| Loctite 243 medium threadlock | 1× | ~$8 |
-| M3 set screws | 8× | ~$3 |
-| M2.5 × 6mm stainless screws | 20× | ~$4 |
-| WS2812C-2020 addressable RGB LED | 2× | ~$3 total |
-| Kynar wire 28AWG for nav lights | ~300mm | ~$2 |
-| 5-minute epoxy (LED sealing) | — | carry from Phase 1 |
+| Item                                                     | Qty    | Approx. Cost       |
+| -------------------------------------------------------- | ------ | ------------------ |
+| Budget 80mm 6S EDF (×4 — 2 per nacelle, tandem series)   | **4×** | ~$30–55ea          |
+| XFLY Galaxy X4 PRO 40mm 12-blade 5850KV EDF              | 1×     | ~$48               |
+| Budget 50–60A BLHeli32 ESC (×4 nacelle + 1 fuselage)     | **5×** | ~$18–30ea          |
+| MG90S metal gear servo (nacelle tilt)                    | 2×     | ~$5ea              |
+| SG90 micro servo (nacelle nozzle 2×; fuselage nozzle 1×) | 3×     | ~$3ea              |
+| MR63ZZ radial bearing 3×6×2.5mm                          | 4×     | ~$8 total          |
+| 8mm CF rod (pivot rods)                                  | ~150mm | ~$5                |
+| Loctite 243 medium threadlock                            | 1×     | ~$8                |
+| M3 set screws                                            | 8×     | ~$3                |
+| M2.5 × 6mm stainless screws                              | 20×    | ~$4                |
+| WS2812C-2020 addressable RGB LED                         | 2×     | ~$3 total          |
+| Kynar wire 28AWG for nav lights                          | ~300mm | ~$2                |
+| 5-minute epoxy (LED sealing)                             | —      | carry from Phase 1 |
 
 > **Budget EDF housing OD note:** All 4 budget EDFs must fit in the **`nacelle_pod_dual_80mm.stl`** 230mm tandem pod. Measure OD with calipers. Typical generic 80mm 6S EDF housing OD = 80–82mm. The dual pod has 83mm ID — add a thin (0.5–1mm) PETG liner ring if needed. This is the only Phase 2 variable.
 >
@@ -431,28 +431,28 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 
 ### Buy List for Phase 3
 
-| Item | Qty | Approx. Cost |
-| ------ | ----- | -------------- |
-| Budget BLHeli32 80A ESC (6S rated; for budget EDFs) | 2× | ~$25ea |
-| BLHeli32 40A ESC (4S; for XFLY fuselage) | 1× | ~$18 |
-| XT90 PDB — 4× XT30 outputs | 1× | ~$12 |
-| XT90 battery pigtail 100mm | 1× | ~$5 |
-| 5V 5A switching BEC (DC-DC) | 1× | ~$8 |
-| 14AWG silicone wire 1m | 1× | ~$6 |
-| 16AWG silicone wire 0.5m | 1× | ~$4 |
-| JST-XH 6S balance tap → XT30 (cells 1–4, 4S tap) | 1× | ~$3 |
-| PocketBeagle 2 Industrial (AM6254) | 4× | $51.03 ea (DK 2820-100003007-ND) |
-| Cape-A PCB 85×55mm 4L (JLCPCB assembled) — FC nodes | 2× | ~$42ea |
-| Cape-B PCB 90×60mm 4L (JLCPCB assembled) — CN nodes | 2× | ~$80ea |
-| RCRS-49 sub-module PCB (49MHz TDDS RC transceiver) | 2× | ~$20ea |
-| SiK 915MHz ground station radio | 1× | ~$15 |
-| microSD 32GB (log — 1 per CN node, write-blocked) | 2× | ~$8ea |
-| WS2812C nav light chain, diffusers, mounts | 6× | ~$8 |
-| 6S 4000mAh LiPo battery | 1× | ~$60 |
-| JST-GH cables: 4-pin CAN, 4-pin RS-485, 8-pin ETH, shielded 1553 pair | assorted | ~$15 |
-| USB-UART adapter (CP2102 or CH340) | 1× | ~$8 (tool) |
-| 3M double-sided foam tape | 1× | ~$5 |
-| Zip ties 100mm + 200mm | 1 bag | ~$4 |
+| Item                                                                  | Qty      | Approx. Cost                     |
+| --------------------------------------------------------------------- | -------- | -------------------------------- |
+| Budget BLHeli32 80A ESC (6S rated; for budget EDFs)                   | 2×       | ~$25ea                           |
+| BLHeli32 40A ESC (4S; for XFLY fuselage)                              | 1×       | ~$18                             |
+| XT90 PDB — 4× XT30 outputs                                            | 1×       | ~$12                             |
+| XT90 battery pigtail 100mm                                            | 1×       | ~$5                              |
+| 5V 5A switching BEC (DC-DC)                                           | 1×       | ~$8                              |
+| 14AWG silicone wire 1m                                                | 1×       | ~$6                              |
+| 16AWG silicone wire 0.5m                                              | 1×       | ~$4                              |
+| JST-XH 6S balance tap → XT30 (cells 1–4, 4S tap)                      | 1×       | ~$3                              |
+| PocketBeagle 2 Industrial (AM6254)                                    | 4×       | $51.03 ea (DK 2820-100003007-ND) |
+| Cape-A PCB 85×55mm 4L (JLCPCB assembled) — FC nodes                   | 2×       | ~$42ea                           |
+| Cape-B PCB 90×60mm 4L (JLCPCB assembled) — CN nodes                   | 2×       | ~$80ea                           |
+| RCRS-49 sub-module PCB (49MHz TDDS RC transceiver)                    | 2×       | ~$20ea                           |
+| SiK 915MHz ground station radio                                       | 1×       | ~$15                             |
+| microSD 32GB (log — 1 per CN node, write-blocked)                     | 2×       | ~$8ea                            |
+| WS2812C nav light chain, diffusers, mounts                            | 6×       | ~$8                              |
+| 6S 4000mAh LiPo battery                                               | 1×       | ~$60                             |
+| JST-GH cables: 4-pin CAN, 4-pin RS-485, 8-pin ETH, shielded 1553 pair | assorted | ~$15                             |
+| USB-UART adapter (CP2102 or CH340)                                    | 1×       | ~$8 (tool)                       |
+| 3M double-sided foam tape                                             | 1×       | ~$5                              |
+| Zip ties 100mm + 200mm                                                | 1 bag    | ~$4                              |
 
 ### Power System Installation
 
@@ -686,14 +686,14 @@ apt install mavlink-router
 
 ### Buy List for Phase 4
 
-| Item | Qty | Approx. Cost |
-| ------ | ----- | -------------- |
-| PocketBeagle 2 Industrial (AM6254) | 4× | $51.03 ea (DK 2820-100003007-ND) |
-| Cape-A PCB 85×55mm 4L (JLCPCB assembled) — FC3+FC4 | 2× | ~$42ea |
-| Cape-B PCB 90×60mm 4L (JLCPCB assembled) — CN3+CN4 | 2× | ~$80ea |
-| RCRS-49 sub-module PCB | 2× | ~$20ea |
-| microSD 32GB log (CN3+CN4 only, write-blocked) | 2× | ~$8ea |
-| JST-GH CAN/RS-485/1553/ETH cables 150mm | assorted | ~$20 |
+| Item                                               | Qty      | Approx. Cost                     |
+| -------------------------------------------------- | -------- | -------------------------------- |
+| PocketBeagle 2 Industrial (AM6254)                 | 4×       | $51.03 ea (DK 2820-100003007-ND) |
+| Cape-A PCB 85×55mm 4L (JLCPCB assembled) — FC3+FC4 | 2×       | ~$42ea                           |
+| Cape-B PCB 90×60mm 4L (JLCPCB assembled) — CN3+CN4 | 2×       | ~$80ea                           |
+| RCRS-49 sub-module PCB                             | 2×       | ~$20ea                           |
+| microSD 32GB log (CN3+CN4 only, write-blocked)     | 2×       | ~$8ea                            |
+| JST-GH CAN/RS-485/1553/ETH cables 150mm            | assorted | ~$20                             |
 
 ### CN3 + FC3 Installation (Bay D — Dorsal Aft)
 
@@ -782,27 +782,27 @@ echo test > /mnt/flightlog/test.txt   # must return "Read-only file system"
 
 ### Buy List for Phase 5
 
-| Item | Qty | Approx. Cost |
-| ------ | ----- | -------------- |
-| VL53L5CX 8×8 multizone ToF sensor | 12× | ~$7ea |
-| TCA9548A 8-channel I2C multiplexer | 2× | ~$1.50ea |
-| MCP23008 8-port I2C GPIO expander | 2× | ~$1.20ea |
-| JST-SH1.0 4-wire sensor cable 300mm | 12× | ~$1ea |
-| 5mm PMMA disc 0.5mm thick (ToF aperture covers) | 12× | ~$0.50ea |
-| UV adhesive (ToF aperture seal) | 1× | ~$6 |
+| Item                                            | Qty | Approx. Cost |
+| ----------------------------------------------- | --- | ------------ |
+| VL53L5CX 8×8 multizone ToF sensor               | 12× | ~$7ea        |
+| TCA9548A 8-channel I2C multiplexer              | 2×  | ~$1.50ea     |
+| MCP23008 8-port I2C GPIO expander               | 2×  | ~$1.20ea     |
+| JST-SH1.0 4-wire sensor cable 300mm             | 12× | ~$1ea        |
+| 5mm PMMA disc 0.5mm thick (ToF aperture covers) | 12× | ~$0.50ea     |
+| UV adhesive (ToF aperture seal)                 | 1×  | ~$6          |
 
 ### Array B Installation (FC1+FC2, Bay A — Nose)
 
 1. Install Array B sensors ×6 at flush-mount frames prepared in Phase 1. Cable routes to Bay A:
 
-| Sensor | Position | Station |
-| -------- | ---------- | --------- |
-| S1B | Nose bayonet ring (aft of S1A) | 40mm |
-| S2B | Engine bell rim (fwd of S2A) | 425mm |
-| S3B | Port hull flush mount | 150mm |
-| S4B | Stbd hull flush mount | 150mm |
-| S5B | Dorsal keel (panel D area, aft of S5A) | 260mm |
-| S6B | Belly blister (aft of S6A) | 220mm |
+| Sensor | Position                               | Station |
+| ------ | -------------------------------------- | ------- |
+| S1B    | Nose bayonet ring (aft of S1A)         | 40mm    |
+| S2B    | Engine bell rim (fwd of S2A)           | 425mm   |
+| S3B    | Port hull flush mount                  | 150mm   |
+| S4B    | Stbd hull flush mount                  | 150mm   |
+| S5B    | Dorsal keel (panel D area, aft of S5A) | 260mm   |
+| S6B    | Belly blister (aft of S6A)             | 220mm   |
 
 - Step 2: Connect each VL53L5CX via JST-SH1.0 4-wire (GND/VCC/SDA/SCL) to TCA9548A channels 0–5 in Bay A. Wire MCP23008 GP0–GP5 to XSHUT pins. I2C bus connects to FC1 Cape-A I2C header.
 
@@ -812,14 +812,14 @@ Boot sequence: assert all XSHUT LOW → enable one sensor → assign I2C address
 
 - Step 3: Install Array A sensors ×6. Cable routes to Bay D:
 
-| Sensor | Position | Station |
-| -------- | ---------- | --------- |
-| S1A | Nose bayonet ring (fwd of S1B) | 25mm |
-| S2A | Engine bell rim (aft of S2B) | 440mm |
-| S3A | Port hull flush mount (aft of S3B) | 200mm |
-| S4A | Stbd hull flush mount (aft of S4B) | 200mm |
-| S5A | Dorsal keel (panel B area, fwd of S5B) | 180mm |
-| S6A | Forward belly blister (fwd of S6B) | 160mm |
+| Sensor | Position                               | Station |
+| ------ | -------------------------------------- | ------- |
+| S1A    | Nose bayonet ring (fwd of S1B)         | 25mm    |
+| S2A    | Engine bell rim (aft of S2B)           | 440mm   |
+| S3A    | Port hull flush mount (aft of S3B)     | 200mm   |
+| S4A    | Stbd hull flush mount (aft of S4B)     | 200mm   |
+| S5A    | Dorsal keel (panel B area, fwd of S5B) | 180mm   |
+| S6A    | Forward belly blister (fwd of S6B)     | 160mm   |
 
 - Step 4: Connect to TCA9548A + MCP23008 in Bay D, wired to FC3 Cape-A I2C header. Array A I2C bus is**electrically isolated** from Array B — same addresses on separate buses is intentional.
 
@@ -851,15 +851,15 @@ The cargo gondola hard points (M3 inserts) and panel C hinge (belly) were instal
 
 ### Buy List for Phase 6
 
-| Item | Qty | Approx. Cost |
-| ------ | ----- | -------------- |
-| N20 DC motor 6V 300:1 gear ratio (winch) | 1× | ~$8 |
-| DRV8833 dual H-bridge motor driver board | 1× | ~$2 |
-| SG90 servo (clamshell door actuator) | 1× | ~$3 |
-| SG90 servo (payload release / winch direction) | 1× | ~$3 |
-| Dyneema SK75 0.5mm braid 2m | 1× | ~$4 |
-| 3mm CF rod for clamshell door hinge pin | ~60mm | ~$2 |
-| Closed-cell foam gasket tape (gondola-to-hull seal) | — | carry from Phase 1 |
+| Item                                                | Qty   | Approx. Cost       |
+| --------------------------------------------------- | ----- | ------------------ |
+| N20 DC motor 6V 300:1 gear ratio (winch)            | 1×    | ~$8                |
+| DRV8833 dual H-bridge motor driver board            | 1×    | ~$2                |
+| SG90 servo (clamshell door actuator)                | 1×    | ~$3                |
+| SG90 servo (payload release / winch direction)      | 1×    | ~$3                |
+| Dyneema SK75 0.5mm braid 2m                         | 1×    | ~$4                |
+| 3mm CF rod for clamshell door hinge pin             | ~60mm | ~$2                |
+| Closed-cell foam gasket tape (gondola-to-hull seal) | —     | carry from Phase 1 |
 
 > All gondola printed parts (shell, door halves, cradle) were printed in Phase 0.
 
@@ -909,18 +909,18 @@ The cargo gondola hard points (M3 inserts) and panel C hinge (belly) were instal
 
 ### Buy List for Phase 7
 
-| Item | Qty | Approx. Cost |
-| ------ | ----- | -------------- |
-| Changesun XRP 3660-2700KV 80mm 6S EDF — Port FWD (CCW) | 1× | ~$170 |
-| Changesun XRP 3660-2700KV 80mm 6S EDF — Port AFT (CCW) | 1× | ~$170 |
-| Changesun XRP 3660-2700KV 80mm 6S EDF — Stbd FWD (CW) | 1× | ~$170 |
-| Changesun XRP 3660-2700KV 80mm 6S EDF — Stbd AFT (CW) | 1× | ~$170 |
-| Hobbywing Platinum PRO V4 120A ESC (one per EDF) | **4×** | ~$125ea |
-| 12AWG silicone motor phase wire 100mm × 3-phase × 4 (if needed) | — | ~$10 |
-| XT30 pigtails (independent power rail per ESC) | 4× | ~$8 total |
-| 100A automotive mini poly fuse (one per ESC rail) | 4× | ~$6 total |
-| 1000µF 35V electrolytic capacitors (bulk cap per ESC at PDB) | 4× | ~$5 total |
-| 4-AWG silicone main bus wire (if not already upgraded) | ~500mm | ~$8 |
+| Item                                                            | Qty    | Approx. Cost |
+| --------------------------------------------------------------- | ------ | ------------ |
+| Changesun XRP 3660-2700KV 80mm 6S EDF — Port FWD (CCW)          | 1×     | ~$170        |
+| Changesun XRP 3660-2700KV 80mm 6S EDF — Port AFT (CCW)          | 1×     | ~$170        |
+| Changesun XRP 3660-2700KV 80mm 6S EDF — Stbd FWD (CW)           | 1×     | ~$170        |
+| Changesun XRP 3660-2700KV 80mm 6S EDF — Stbd AFT (CW)           | 1×     | ~$170        |
+| Hobbywing Platinum PRO V4 120A ESC (one per EDF)                | **4×** | ~$125ea      |
+| 12AWG silicone motor phase wire 100mm × 3-phase × 4 (if needed) | —      | ~$10         |
+| XT30 pigtails (independent power rail per ESC)                  | 4×     | ~$8 total    |
+| 100A automotive mini poly fuse (one per ESC rail)               | 4×     | ~$6 total    |
+| 1000µF 35V electrolytic capacitors (bulk cap per ESC at PDB)    | 4×     | ~$5 total    |
+| 4-AWG silicone main bus wire (if not already upgraded)          | ~500mm | ~$8          |
 
 > **Sourcing:** XRP 3660-2700KV available CCW and CW from Turbines-RC (EU) and RC-Castle (global). Order CCW for port nacelle (both FWD+AFT), CW for starboard nacelle (both FWD+AFT) to maintain tractor/pusher balance.
 > ⚠ **ESC mandatory:**XRP 3660-2700KV draws**84A peak per EDF** on 6S. The Hobbywing 120A provides 43% headroom. Do NOT attempt to run XRP on budget 50–60A ESCs — they will overheat and fail. Replace all 4 nacelle ESCs.
@@ -1087,17 +1087,17 @@ Each run sweeps 0%→100%→0% throttle, fits k coefficient (T = k × RPM²), ou
 
 ## Phase Cost Summary
 
-| Phase | Name | Incremental | Cumulative | Notes |
-| ------- | ------ | ------------ | ------------ | ------- |
-| 0 | Print All Parts + Cut CF | ~$65 | ~$65 | Filament + CF materials + resin gears |
-| 1 | Structure + All Future Provisions | ~$80 | ~$145 | Foam, epoxy, conduits, hardware |
-| 2 | Nacelle Mechanics + Budget EDFs | ~$145 | ~$290 | Includes XFLY PRO (final fuselage EDF) |
-| **3** | **Minimum Viable Flyer ★ FIRST FLIGHT** | **~$740** | **~$1,030** | CN1+FC1+CN2+FC2, power, ESCs, radios, battery |
-| 4 | Full 8-Node Architecture | ~$540 | ~$1,570 | CN3+FC3+CN4+FC4 — full ring redundancy |
-| 5 | Obstacle Avoidance: 12× ToF | ~$110 | ~$1,680 | Dual-redundant OA arrays |
-| 6 | Cargo System | ~$30 | ~$1,710 | Winch, gondola, auto-latch cradle |
-| **7** | **Motor Upgrade: XRP + Hobbywing ★ FULL PERFORMANCE** | **~$590** | **~$2,300** | Pod swap + ESC swap |
-| 8 | Finishing: Decals + FAA + Docs | ~$20 | **~$2,320** |
+| Phase | Name                                                  | Incremental | Cumulative  | Notes                                         |
+| ----- | ----------------------------------------------------- | ----------- | ----------- | --------------------------------------------- |
+| 0     | Print All Parts + Cut CF                              | ~$65        | ~$65        | Filament + CF materials + resin gears         |
+| 1     | Structure + All Future Provisions                     | ~$80        | ~$145       | Foam, epoxy, conduits, hardware               |
+| 2     | Nacelle Mechanics + Budget EDFs                       | ~$145       | ~$290       | Includes XFLY PRO (final fuselage EDF)        |
+| **3** | **Minimum Viable Flyer ★ FIRST FLIGHT**               | **~$740**   | **~$1,030** | CN1+FC1+CN2+FC2, power, ESCs, radios, battery |
+| 4     | Full 8-Node Architecture                              | ~$540       | ~$1,570     | CN3+FC3+CN4+FC4 — full ring redundancy        |
+| 5     | Obstacle Avoidance: 12× ToF                           | ~$110       | ~$1,680     | Dual-redundant OA arrays                      |
+| 6     | Cargo System                                          | ~$30        | ~$1,710     | Winch, gondola, auto-latch cradle             |
+| **7** | **Motor Upgrade: XRP + Hobbywing ★ FULL PERFORMANCE** | **~$590**   | **~$2,300** | Pod swap + ESC swap                           |
+| 8     | Finishing: Decals + FAA + Docs                        | ~$20        | **~$2,320** |                                               |
 
 > **Total build cost (end state): ~$2,320 USD**
 > **First flight achieved at end of Phase 3: ~$1,030 invested**
@@ -1116,29 +1116,29 @@ The phased approach reaches first flight at **~$1,030** and defers the $590 moto
 
 ## Reference: Conduit Cable Assignment
 
-| Conduit | Route | Cable | Phases Using It |
-| --------- | ------- | ------- | ----------------- |
-| CAN-FD | Port keel rail, full length | 4-pin JST-GH (CANH/CANL/GND/VCC) — 120Ω at CN1 (start, Bay A) and FC4 (end, Bay E) | 3 (CN1+FC1+CN2+FC2), 4 (full ring) |
-| RS-485 | Stbd keel rail, full length | 4-pin JST-GH (A/B/GND/VCC) — 120Ω at CN1 (start, Bay A) and FC4 (end, Bay E) | 3 (CN1+FC1+CN2+FC2), 4 (full ring) |
-| MIL-1553 | Dorsal centre spine, full length | 4-pin shielded JST-GH, 78Ω — FC1=BC, FC2=standby BC | 3 (CN1+FC1+CN2+FC2), 4 (full ring) |
-| ETH-AB | Port forward: Bay A → Bay B | 8-pin JST-GH Cat5e — FC1↔CN2 ring link | 3 (connected Phase 3 Step 27) |
-| ETH-BD | Port mid: Bay B → Bay D | 8-pin JST-GH Cat5e — FC2↔CN3 ring link | 3 (Bay B end connected, Bay D capped), 4 (connected) |
-| ETH-DE | Stbd aft: Bay D → Bay E | 8-pin JST-GH Cat5e — FC3↔CN4 ring link | 4 (CN3+FC3+CN4+FC4 install) |
-| ETH-EA | Stbd full: Bay E → Bay A | 8-pin JST-GH Cat5e — FC4↔CN1 ring-close link | 3 (Bay A end connected, Bay E capped), 4 (connected) |
-| PWR | Belly centre | 14AWG power + 20AWG servo bundle; one tap per bay, each tap feeds one CN + one FC | 3 (ESCs, BEC, nav lights) |
+| Conduit  | Route                            | Cable                                                                              | Phases Using It                                      |
+| -------- | -------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| CAN-FD   | Port keel rail, full length      | 4-pin JST-GH (CANH/CANL/GND/VCC) — 120Ω at CN1 (start, Bay A) and FC4 (end, Bay E) | 3 (CN1+FC1+CN2+FC2), 4 (full ring)                   |
+| RS-485   | Stbd keel rail, full length      | 4-pin JST-GH (A/B/GND/VCC) — 120Ω at CN1 (start, Bay A) and FC4 (end, Bay E)       | 3 (CN1+FC1+CN2+FC2), 4 (full ring)                   |
+| MIL-1553 | Dorsal centre spine, full length | 4-pin shielded JST-GH, 78Ω — FC1=BC, FC2=standby BC                                | 3 (CN1+FC1+CN2+FC2), 4 (full ring)                   |
+| ETH-AB   | Port forward: Bay A → Bay B      | 8-pin JST-GH Cat5e — FC1↔CN2 ring link                                             | 3 (connected Phase 3 Step 27)                        |
+| ETH-BD   | Port mid: Bay B → Bay D          | 8-pin JST-GH Cat5e — FC2↔CN3 ring link                                             | 3 (Bay B end connected, Bay D capped), 4 (connected) |
+| ETH-DE   | Stbd aft: Bay D → Bay E          | 8-pin JST-GH Cat5e — FC3↔CN4 ring link                                             | 4 (CN3+FC3+CN4+FC4 install)                          |
+| ETH-EA   | Stbd full: Bay E → Bay A         | 8-pin JST-GH Cat5e — FC4↔CN1 ring-close link                                       | 3 (Bay A end connected, Bay E capped), 4 (connected) |
+| PWR      | Belly centre                     | 14AWG power + 20AWG servo bundle; one tap per bay, each tap feeds one CN + one FC  | 3 (ESCs, BEC, nav lights)                            |
 
 ---
 
 ## Reference: Access Panel Quick-Reference
 
-| Panel | Location | Station | Closure | What's Inside |
-| ------- | ---------- | --------- | --------- | --------------- |
-| A | Nose, top | 0–91mm | Bayonet | CN1 Cape-B (lower) + FC1 Cape-A (upper); CN1 radios (SiK/LoRa/WiFi/RCRS-49); FC1 GPS coax (~59mm); ETH-AB/ETH-EA conduit ends; CAN FD 120Ω at CN1; Array B mux |
-| B | Dorsal fwd | 91–165mm | 4× M2.5 | CN2 Cape-B (lower) + FC2 Cape-A (upper); CN2 RCRS-49; FC2 GPS coax (~130mm); ETH-AB/ETH-BD conduit ends |
-| C | Cargo belly | 160–251mm | Hinge | Cargo gondola, clamshell doors, winch motor |
-| D | Dorsal aft | 251–320mm | 4× N42 magnets | CN3 Cape-B (lower) + FC3 Cape-A (upper); CN3 RCRS-49; FC3 GPS coax (~275mm); ETH-BD/ETH-DE conduit ends; CN3 log μSD; Array A mux |
-| E | Aft service | 320–388mm | 4× M2.5 | CN4 Cape-B (lower) + FC4 Cape-A (upper); CN4 RCRS-49; FC4 GPS coax (~350mm); ETH-DE/ETH-EA conduit ends; CAN FD 120Ω at FC4; CN4 log μSD; budget→Hobbywing ESCs |
-| F | Engine bell | 388–457mm | Bayonet | XFLY 40mm fuselage EDF, fuselage nozzle servo |
+| Panel | Location    | Station   | Closure        | What's Inside                                                                                                                                                   |
+| ----- | ----------- | --------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A     | Nose, top   | 0–91mm    | Bayonet        | CN1 Cape-B (lower) + FC1 Cape-A (upper); CN1 radios (SiK/LoRa/WiFi/RCRS-49); FC1 GPS coax (~59mm); ETH-AB/ETH-EA conduit ends; CAN FD 120Ω at CN1; Array B mux  |
+| B     | Dorsal fwd  | 91–165mm  | 4× M2.5        | CN2 Cape-B (lower) + FC2 Cape-A (upper); CN2 RCRS-49; FC2 GPS coax (~130mm); ETH-AB/ETH-BD conduit ends                                                         |
+| C     | Cargo belly | 160–251mm | Hinge          | Cargo gondola, clamshell doors, winch motor                                                                                                                     |
+| D     | Dorsal aft  | 251–320mm | 4× N42 magnets | CN3 Cape-B (lower) + FC3 Cape-A (upper); CN3 RCRS-49; FC3 GPS coax (~275mm); ETH-BD/ETH-DE conduit ends; CN3 log μSD; Array A mux                               |
+| E     | Aft service | 320–388mm | 4× M2.5        | CN4 Cape-B (lower) + FC4 Cape-A (upper); CN4 RCRS-49; FC4 GPS coax (~350mm); ETH-DE/ETH-EA conduit ends; CAN FD 120Ω at FC4; CN4 log μSD; budget→Hobbywing ESCs |
+| F     | Engine bell | 388–457mm | Bayonet        | XFLY 40mm fuselage EDF, fuselage nozzle servo                                                                                                                   |
 
 ---
 
@@ -1146,16 +1146,16 @@ The phased approach reaches first flight at **~$1,030** and defers the $590 moto
 
 Bus order: **CN1 → FC1 → CN2 → FC2 → CN3 → FC3 → CN4 → FC4** (interleaved CN+FC per bay — any single segment or bay power failure leaves ≥2 FC + ≥2 CN on both sides of the break)
 
-| Node | Bay | Position | Hardware | Role (elected) | Security |
-| ------ | ----- | ---------- | ---------- | ---------------- | ---------- |
-| CN1 | A — Nose | Lower (floor) | PocketBeagle 2 Industrial + Cape-B 90×60mm | CN master or standby; radios master; CAN FD bus start (120Ω soldered) | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
-| FC1 | A — Nose | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 85×55mm | FC master or standby; OA Array B host; 1553 primary BC | SLB9670 TPM 2.0 |
-| CN2 | B — Dorsal Fwd | Lower (floor) | PocketBeagle 2 Industrial + Cape-B 90×60mm | CN master or standby | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
-| FC2 | B — Dorsal Fwd | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 85×55mm | FC master or standby; 1553 standby BC | SLB9670 TPM 2.0 |
-| CN3 | D — Dorsal Aft | Lower (floor) | PocketBeagle 2 Industrial + Cape-B 90×60mm | CN node | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
-| FC3 | D — Dorsal Aft | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 85×55mm | FC node; OA Array A host | SLB9670 TPM 2.0 |
-| CN4 | E — Aft Service | Lower (floor) | PocketBeagle 2 Industrial + Cape-B 90×60mm | CN node; cargo control | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
-| FC4 | E — Aft Service | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 85×55mm | FC node; CAN FD bus end (120Ω soldered) | SLB9670 TPM 2.0 |
+| Node | Bay             | Position           | Hardware                                   | Role (elected)                                                        | Security                                        |
+| ---- | --------------- | ------------------ | ------------------------------------------ | --------------------------------------------------------------------- | ----------------------------------------------- |
+| CN1  | A — Nose        | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 90×60mm | CN master or standby; radios master; CAN FD bus start (120Ω soldered) | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
+| FC1  | A — Nose        | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 85×55mm | FC master or standby; OA Array B host; 1553 primary BC                | SLB9670 TPM 2.0                                 |
+| CN2  | B — Dorsal Fwd  | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 90×60mm | CN master or standby                                                  | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
+| FC2  | B — Dorsal Fwd  | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 85×55mm | FC master or standby; 1553 standby BC                                 | SLB9670 TPM 2.0                                 |
+| CN3  | D — Dorsal Aft  | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 90×60mm | CN node                                                               | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
+| FC3  | D — Dorsal Aft  | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 85×55mm | FC node; OA Array A host                                              | SLB9670 TPM 2.0                                 |
+| CN4  | E — Aft Service | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 90×60mm | CN node; cargo control                                                | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
+| FC4  | E — Aft Service | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 85×55mm | FC node; CAN FD bus end (120Ω soldered)                               | SLB9670 TPM 2.0                                 |
 
 **All FC nodes (Cape-A):** ICM-42688-P IMU · BMP388 baro · u-blox M10Q GPS · ATA6561 CAN FD · MAX3485E RS-485 · DS26LV31/32 + PE-68515 1553 · DP83825I ×2 Ethernet · SLB9670 TPM 2.0 · 8× servo PWM rail
 
@@ -1163,5 +1163,5 @@ Bus order: **CN1 → FC1 → CN2 → FC2 → CN3 → FC3 → CN4 → FC4** (inte
 
 ---
 
-*CC BY 4.0 · 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP*
-*Hull: Peter Farell CC BY 4.0 · Nozzles: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy / Universal*
+_CC BY 4.0 · 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP_
+_Hull: Peter Farell CC BY 4.0 · Nozzles: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy / Universal_

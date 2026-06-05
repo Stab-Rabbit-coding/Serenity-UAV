@@ -3,22 +3,22 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
 **Last updated:** 2026-06-04 (gerbers generated; XCVR-49MHZ-2 PCB complete)
-**Current design revision:**Rev P (master) |**Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
+**Current design revision:** Rev P (master) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 ---
 
 ## Quick-Reference: End State vs. Current State
 
-| Domain | End State (Rev P) | Current Status |
-| -------- | ------------------- | ---------------- |
-| Hull | 609.6 mm PETG / PU foam / CF skeleton | SCAD sources complete; cargo section shell updated to Rev S (clamshell opening); 3 Rev-O-specific STLs not yet rendered |
-| Nacelles | 2× 50mm tandem EDF, CG pivot Z=83mm, M=1.0 gear, iris nozzle | `nacelle_pod_50mm_tandem.scad` complete; Rev O stator shells (`_revo.stl`) NOT yet rendered |
-| Rear propulsion | 120mm 6S EDF, 4-scoop radial intake, iris nozzle | `s_edf_120_motor_mount.stl` ✓, `s_edf_120_thrust_tube.stl` ✓; intake frame + plenum SCAD complete, STLs missing |
-| Cargo bay | Clamshell doors + SG90 servos + DRV8833 + N20 winch + Dyneema + auto-latch + GPS ring + FPV bezel | ✓ All 13 cargo STLs generated (PR #21 + PR #22 2026-06-01); BOM updated bom_revP.json/csv; gondola shell open |
-| PCBs | Cape-A-1, Cape-B-1 assembled; XCVR-49MHZ-2 (supersedes -1) fabricated; Cape-A-2, Cape-B-2, XCVR-49MHZ-2 EMI-hardened variants designed | All gerbers current as of 2026-06-04 (`avionics/kicad/gerbers/`); XCVR-49MHZ-2 PCB complete (63 footprints, 27 nets, 50Ω RF chain, 6-element LPF, full EMI stage); XCVR-49MHZ-1 superseded by v2 |
-| Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 ✓; serenity-fc Phase 6 stub only; all Phase 7 items open |
-| Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
-| Regulatory | FAA Part 107, ICAO nav lights, FCC Part 95 | FAA registration placeholder; XCVR-49MHZ-1 pre-compliance pending |
+| Domain          | End State (Rev P)                                                                                                                      | Current Status                                                                                                                                                                                   |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Hull            | 609.6 mm PETG / PU foam / CF skeleton                                                                                                  | SCAD sources complete; cargo section shell updated to Rev S (clamshell opening); 3 Rev-O-specific STLs not yet rendered                                                                          |
+| Nacelles        | 2× 50mm tandem EDF, CG pivot Z=83mm, M=1.0 gear, iris nozzle                                                                           | `nacelle_pod_50mm_tandem.scad` complete; Rev O stator shells (`_revo.stl`) NOT yet rendered                                                                                                      |
+| Rear propulsion | 120mm 6S EDF, 4-scoop radial intake, iris nozzle                                                                                       | `s_edf_120_motor_mount.stl` ✓, `s_edf_120_thrust_tube.stl` ✓; intake frame + plenum SCAD complete, STLs missing                                                                                  |
+| Cargo bay       | Clamshell doors + SG90 servos + DRV8833 + N20 winch + Dyneema + auto-latch + GPS ring + FPV bezel                                      | ✓ All 13 cargo STLs generated (PR #21 + PR #22 2026-06-01); BOM updated bom_revP.json/csv; gondola shell open                                                                                    |
+| PCBs            | Cape-A-1, Cape-B-1 assembled; XCVR-49MHZ-2 (supersedes -1) fabricated; Cape-A-2, Cape-B-2, XCVR-49MHZ-2 EMI-hardened variants designed | All gerbers current as of 2026-06-04 (`avionics/kicad/gerbers/`); XCVR-49MHZ-2 PCB complete (63 footprints, 27 nets, 50Ω RF chain, 6-element LPF, full EMI stage); XCVR-49MHZ-1 superseded by v2 |
+| Firmware        | 8-node cooperative flight, PID governor, OA, cargo, logging                                                                            | serenity-cn Phase 6 ✓; serenity-fc Phase 6 stub only; all Phase 7 items open                                                                                                                     |
+| Physical build  | Airborne, autonomous, cargo-capable                                                                                                    | Not started — awaiting STL exports, PCB fabrication                                                                                                                                              |
+| Regulatory      | FAA Part 107, ICAO nav lights, FCC Part 95                                                                                             | FAA registration placeholder; XCVR-49MHZ-1 pre-compliance pending                                                                                                                                |
 
 ---
 
@@ -31,17 +31,16 @@ Complete all items in this section before ordering PCBs or starting any physical
 All SCADs run on a host machine with OpenSCAD 2021.01+ or Blender 3.x+ (headless).
 Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 
-## Nacelle shells (Blender, Rev O geometry — must run on host machine)
+### Nacelle shells (Blender, Rev O geometry — must run on host machine)
 
 - [ ] **Rev O nacelle stator shells** — run `blender --background --python thingverse-serenity/blender_nacelle_revo.py` with `SWIRL_DIR=1` (port) and `SWIRL_DIR=-1` (stbd).
   - Output: `s_eng_left_stator_shell24_revo.stl`, `s_eng_right_stator_shell24_revo.stl`
   - Verify: Z-range 0–148.3 mm, bore ID 55.0–56.0 mm, 11 stator fins visible in Z=53–95 mm gap
   - **BLOCKS Phase 0 nacelle printing**
 
-- [ ] **Verify adjustable nozzle integration to Nacelles**  functional checks with modeled components needed in CAD before printing
+- [ ] **Verify adjustable nozzle integration to Nacelles** functional checks with modeled components needed in CAD before printing
 
-
-## Rear intake system (OpenSCAD)
+### Rear intake system (OpenSCAD)
 
 - [ ] **s_aft_edf_plenum.stl** — `openscad -o s_aft_edf_plenum.stl serenity/stl/s_aft_edf_plenum.scad`
   - Verify: 4 rectangular arms 65×60 mm, aft outlet 120 mm circular; no self-intersection
@@ -57,11 +56,11 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
   - Verify: 4 radial scoop windows present; NECK_X station ~310 mm; window alignment
   - **BLOCKS Phase 0 (print schedule)**
 
-- [ ] **EDF integration into rear cone**  120mm EDF with 6S motor needs to be fitted into the rear cone.
+- [ ] **EDF integration into rear cone** 120mm EDF with 6S motor needs to be fitted into the rear cone.
 
 - [ ] **Rear cone needs to be split into iris petals** for EDF variable diameter exhaust nozzle
 
-## Rev O gear train (OpenSCAD — all 5 parts, M=1.0)
+### Rev O gear train (OpenSCAD — all 5 parts, M=1.0)
 
 - [ ] **nacelle_sector_gear.stl** — `openscad -o ... serenity/stl/nacelle_sector_gear.scad`
   - Spec: R=22mm, 38T, 155° arc; fixed to tilt bracket
@@ -74,28 +73,29 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 - [ ] **nacelle_nozzle_iris.stl** — `openscad -o ... serenity/stl/nacelle_nozzle_iris.scad`
   - Spec: 50 mm iris — inner ring (M=1.0 rack), outer housing, 8-petal geometry
 
-## Wing pylon (OpenSCAD — Rev O integrated design)
+### Wing pylon (OpenSCAD — Rev O integrated design)
 
 - [ ] **s_wing_nacelle_pylon_revo.stl** — `openscad -o ... serenity/stl/s_wing_nacelle_pylon_revo.scad`
   - Verify WING_SLOT_W and WING_SLOT_H against `s_wings_both_shell24.stl` (caliper-measure from the mesh) before printing — estimated 50×40 mm at 2.197× Thingiverse scale
 - [ ] **s_wings_s1223_revo.stl** — `openscad -o ... serenity/stl/s_wings_s1223_revo.scad`
   - Verify WING_CHORD_ROOT, WING_CHORD_TIP, WING_SEMI_SPAN, WING_SWEEP_LE against original STL before printing
 
-- [ ] **Create wing root sockets, bosses, spar channel, and cable ways with proper structures in the cargo section, wings, and nacelles.
+- [ ] **Define and create wing root mounting interfaces:** wing root sockets, bosses, spar channel, and cable ways in the fuselage **Cargo section**, wings, and nacelles.
+  - Verify attachment planes against `s_wing_nacelle_pylon_revo.stl` and `s_wings_s1223_revo.stl`.
+  - Confirm CF spar clearance, cable routing, and access-panel compatibility before exporting STLs.
 
-
-## Canonical middle shell (OpenSCAD — belly restored, no belly scoop)
+### Canonical middle shell (OpenSCAD — belly restored, no belly scoop)
 
 - [ ] **s_middle_canonical_shell24.stl** — `openscad -o ... serenity/stl/s_middle_canonical_shell24.scad`
   - Note: NOT the same as `s_middle_shell24.stl` (which has the obsolete belly intake cut). This is the Rev N canonical belly.
 
-## Rev O shell updates (sensor/antenna mounts from 2026-05-24)
+### Rev O shell updates (sensor/antenna mounts from 2026-05-24)
 
 - [ ] **s_head_shell24.stl** — regenerate from `serenity/stl/s_head_shell24.scad` (dual VL53L5CX bosses, FPV mount, GPS dome, 49MHz post, SMA bulkheads added 2026-05-24). Verify all mount boss positions in slicer cross-section before printing.
 - [ ] **s_cargo_sect_shell24.stl** — regenerate from `serenity/stl/s_cargo_sect_shell24.scad` (cargo nadir FPV mount added)
   - Both outputs go to `thingverse-serenity/files-hollowed-18in/`
 
-## Remaining parts needing SCAD source creation then STL export
+### Remaining parts needing SCAD source creation then STL export
 
 - [ ] **49MHz RCRS wire posts** — create `serenity/stl/s_rcrs49_wire_post.scad`: insulated PETG mast ~10 mm tall, 12×12 mm foot; generate both forward post (station ~120 mm, dorsal) and aft post (rear nozzle cone top)
   - **BLOCKS Phase 1 (antenna installation)**
@@ -103,31 +103,31 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 - [ ] **Access panel frames A–F + lids (24" Rev N)** — verify `files-hollowed-18in/` frames are sized for the 24" hull (97×63 mm bay footprint per REVN_BUILD_GUIDE_24IN.md Phase 1). If no 24" version exists, create `serenity/stl/access_panels_24in.scad` with 6 frame + 6 lid profiles.
   - **BLOCKS Phase 1**
 
-## Cargo handling equipment
+### Cargo handling equipment
 
-- [x] **Mounting hardware — 8 STLs** generated by `serenity/stl/generate_cargo_mounts.py` (Python/trimesh/manifold3d). Output: `thingverse-serenity/files-hollowed-18in/cargo_*.stl`*(done 2026-05-30, PR #21)*
+- [x] **Mounting hardware — 8 STLs** generated by `serenity/stl/generate_cargo_mounts.py` (Python/trimesh/manifold3d). Output: `thingverse-serenity/files-hollowed-18in/cargo_*.stl`_(done 2026-05-30, PR #21)_
   - [x] cargo_winch_motor_mount (CF-PETG), cargo_winch_spool (PETG), cargo_door_servo_bracket (CF-PETG), cargo_release_servo_bracket (CF-PETG), cargo_drv8833_tray (PETG), cargo_cradle_autolatch (PETG), cargo_gps_retention_ring (PETG), cargo_fpv_bezel (PETG)
 
 - [ ] **Cargo gondola shell** — create `serenity/stl/s_cargo_gondola_shell.scad`: 112×85×22 mm belly pod, 4× M3 hard point pattern, 18 mm protrusion below hull line
 - [x] **Clamshell door halves** — `cargo_door_port.stl` + `cargo_door_stbd.stl` generated by
 
-  `serenity/stl/generate_cargo_doors.py` (trimesh/scipy bilinear interpolation from Rev-O shell
-  belly faces). Both watertight; 8-barrel piano hinge, 3 mm CF rod, 3.15 mm bore. *(done 2026-06-01)*
+    `serenity/stl/generate_cargo_doors.py` (trimesh/scipy bilinear interpolation from Rev-O shell
+    belly faces). Both watertight; 8-barrel piano hinge, 3 mm CF rod, 3.15 mm bore. _(done 2026-06-01)_
 
 - [x] **`s_cargo_sect_shell24.scad` Rev S** — belly opening (100×9×165 mm), 2× hinge-pin blocks
 
-  (3.3 mm bore + M3 grub-screw tap), 2× SG90 servo mounting pads (4× M2.5 pilots each), 4×
-  latch-catch lips (Z=42/122 mm at each X frame edge). *(done 2026-06-01)*
+    (3.3 mm bore + M3 grub-screw tap), 2× SG90 servo mounting pads (4× M2.5 pilots each), 4×
+    latch-catch lips (Z=42/122 mm at each X frame edge). _(done 2026-06-01)_
 
 - [ ] Add motor-mount and DRV8833-tray boss locations to `s_cargo_sect_shell24.scad` interior
 
-  drawing notes (Phase 1 pre-pour checklist reference).
+    drawing notes (Phase 1 pre-pour checklist reference).
 
 - [ ] Add SG90 bell-crank boss to inner face of each door panel for pushrod attachment.
   - Export gondola shell to `thingverse-serenity/files-hollowed-18in/`
   - **BLOCKS Phase 8**
 
-## Combined airframe model (visual verification)
+### Combined airframe model (visual verification)
 
 - [ ] **Combine all airframe STLs** into a single assembly model including the 1.25× scaled nacelles, all EDF tubes, cargo bay clamshells, antenna bosses, sensor cutouts, access panels, landing legs, and feet. Render SVGs from all 6 cardinal directions (top, bottom, front, rear, port, stbd) and all 8 isometric views (8 corners). Save renders to `serenity/diagrams/`.
 - [ ] **Exploded view SVG — printed parts only** (all printed components labelled and exploded from assembly position)
@@ -137,9 +137,9 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 
 ### 1.2 — PCB Design: Cape-A-1 and Cape-B-1
 
-- [x] **Regenerate Cape-A-1 gerbers** — gerbers regenerated 2026-06-04 via `kicad-cli pcb export gerbers`; 14 files in `avionics/kicad/gerbers/CAPE-A-1/` (F.Cu, B.Cu, In1.Cu, In2.Cu, paste, silk, mask, Edge.Cuts, F/B Fab, drill). *(done 2026-06-04)*
+- [x] **Regenerate Cape-A-1 gerbers** — gerbers regenerated 2026-06-04 via `kicad-cli pcb export gerbers`; 14 files in `avionics/kicad/gerbers/CAPE-A-1/` (F.Cu, B.Cu, In1.Cu, In2.Cu, paste, silk, mask, Edge.Cuts, F/B Fab, drill). _(done 2026-06-04)_
 
-- [x] **Regenerate Cape-B-1 gerbers** — 14 files in `avionics/kicad/gerbers/CAPE-B-1/`. *(done 2026-06-04)*
+- [x] **Regenerate Cape-B-1 gerbers** — 14 files in `avionics/kicad/gerbers/CAPE-B-1/`. _(done 2026-06-04)_
 
 ---
 
@@ -152,20 +152,20 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 - **CAN FD**: ATA6561 (non-isolated) → ISOW1044BDFMR (TI, SOIC-16W, 5 kV reinforced isolation +
 
-  integrated DC/DC converter, IEC 62368-1 / VDE 0884-11)
+    integrated DC/DC converter, IEC 62368-1 / VDE 0884-11)
 
 - **RS-485**: MAX3485E (non-isolated) → ADM2795EBRWZ (ADI, SOIC-20W, 5 kV reinforced isolation +
 
-  integrated DC/DC converter)
+    integrated DC/DC converter)
 
 - **Ethernet PHY**: DP83825I (non-isolated RMII PHY) → ADIN1300BCPZ (ADI, LFCSP-48, 1000BASE-T)
 
-  isolated via 2× ISO7642FDWRR (TI, SOIC-16W, 6-channel 150 Mbps digital isolator, 5 kV) +
-  Würth 749010012A SMD transformer + JST GH 4P connector (no RJ45)
+    isolated via 2× ISO7642FDWRR (TI, SOIC-16W, 6-channel 150 Mbps digital isolator, 5 kV) +
+    Würth 749010012A SMD transformer + JST GH 4P connector (no RJ45)
 
 - **XCVR-49MHZ-2**: SRF2012-100Y CMC on antenna coax shield, PRTR5V0U2X TVS on PTT/RX lines,
 
-  X2Y bridging capacitor on RF ground plane, Würth 742792512 ferrite bead on +5V rail
+    X2Y bridging capacitor on RF ground plane, Würth 742792512 ferrite bead on +5V rail
 
 **Transform scripts** (generate -2 files from -1 originals):
 
@@ -177,26 +177,26 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 ## Open tasks
 
-- [x] **Generate CAPE-A-2 gerbers** — 14 files in `avionics/kicad/gerbers/CAPE-A-2/`. *(done 2026-06-04)*
-- [x] **Generate CAPE-B-2 gerbers** — 14 files in `avionics/kicad/gerbers/CAPE-B-2/`. *(done 2026-06-04)*
+- [x] **Generate CAPE-A-2 gerbers** — 14 files in `avionics/kicad/gerbers/CAPE-A-2/`. _(done 2026-06-04)_
+- [x] **Generate CAPE-B-2 gerbers** — 14 files in `avionics/kicad/gerbers/CAPE-B-2/`. _(done 2026-06-04)_
 - [ ] **Generate XCVR-49MHZ-2 gerbers** — PCB completed (63 footprints, 27 nets) via
 
-  `complete_xcvr_49mhz2.py`; 14 files in `avionics/kicad/gerbers/XCVR-49MHZ-2/`.  component placement still needs work.
-  Supersedes XCVR-49MHZ-1 for all production orders. *
+    `complete_xcvr_49mhz2.py`; 14 files in `avionics/kicad/gerbers/XCVR-49MHZ-2/`. component placement still needs work.
+    Supersedes XCVR-49MHZ-1 for all production orders. \*
 
 - [ ] **FCC Part 95 Subpart D pre-compliance checklist for XCVR-49MHZ-2** — document center
 
-  frequency accuracy (±0.005% per 47 CFR 95.655), ERP (≤100 mW), harmonic suppression ≥40 dBc at
-  2nd/3rd harmonics, 47 CFR 95.603 FCC ID silkscreen labeling block.
+    frequency accuracy (±0.005% per 47 CFR 95.655), ERP (≤100 mW), harmonic suppression ≥40 dBc at
+    2nd/3rd harmonics, 47 CFR 95.603 FCC ID silkscreen labeling block.
 
 - [ ] **EMI isolation validation checklist** — verify isolation barrier clearance: ISOW1044BDFMR
 
-  5 kV working voltage; ADM2795EBRWZ 5 kV working voltage; measure CMRR at 1 MHz on CAN and
-  RS-485 channels; verify differential impedance 100 Ω ±10% on ETH MDI traces.
+    5 kV working voltage; ADM2795EBRWZ 5 kV working voltage; measure CMRR at 1 MHz on CAN and
+    RS-485 channels; verify differential impedance 100 Ω ±10% on ETH MDI traces.
 
 - [ ] **Merge `claude/cape-em-harsh-variants-9Yfr1` → master** after gerbers pass DRC and
 
-  pre-compliance checklist is signed off.
+    pre-compliance checklist is signed off.
 
 ---
 
@@ -208,24 +208,24 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 ## Phase 1 — IC Selection (reference only; decisions incorporated into XCVR-49MHZ-2)
 
-- [x] **Resolve DDS choice**— Si5351A-B-GT selected.*(decided 2026-05-31)*
-- [x] **Evaluate PA options**— MMBT2222A + 2N3866 two-stage discrete BJT PA selected.*(decided 2026-05-31)*
-- [x] **Confirm TCM3105 availability**— Discontinued; software Bell 202 on MCU selected.*(decided 2026-05-31)*
+- [x] **Resolve DDS choice**— Si5351A-B-GT selected._(decided 2026-05-31)_
+- [x] **Evaluate PA options**— MMBT2222A + 2N3866 two-stage discrete BJT PA selected._(decided 2026-05-31)_
+- [x] **Confirm TCM3105 availability**— Discontinued; software Bell 202 on MCU selected._(decided 2026-05-31)_
 
 ## Phase 2–5 — CANCELLED, superseded by XCVR-49MHZ-2
 
-- [x] **50 Ω trace impedance check**— Z₀ = 52.26 Ω for W=2.75 mm, H=1.6 mm, εr=4.5, T=35 µm →**PASS**. *(done 2026-05-30)*
-- [x] **PROJECT_INDEX.md updated.** *(done 2026-05-25)*
+- [x] **50 Ω trace impedance check**— Z₀ = 52.26 Ω for W=2.75 mm, H=1.6 mm, εr=4.5, T=35 µm →**PASS**. _(done 2026-05-30)_
+- [x] **PROJECT_INDEX.md updated.** _(done 2026-05-25)_
 - [~] Phases 2–5 schematic, layout, LPF sim, gerbers, BOM — all superseded; see XCVR-49MHZ-2.
 
 ---
 
 ### 1.4 — Documentation
 
-- [x] **`serenity-rev-p.jsx`** — comprehensive 11-tab standalone Rev P specification created: Overview, Airframe, Propulsion, Avionics, Comms, Cargo, Security, Regulatory, BOM, Files, Build Status. Supersedes serenity-rev-o.jsx as current spec. *(done 2026-06-01)*
-- [x] **`bom_revP.json` + `bom_revP.csv`** — full Rev P BOM created: all Rev O items retained + 10 new cargo printed parts + SERVO-CARGO, DRV8833-CARGO, DYNEEMA-SK75, FOAM-GASKET-CARGO; cargo section expanded; totals updated (5 servos, ~$1,905 est.). *(done 2026-06-01)*
-- [x] **`README.md`** — updated to Revision P, June 2026; propulsion section updated to Rev O/P baseline; avionics section updated to PB2-I description; cargo section updated to Rev P complete spec. *(done 2026-06-01)*
-- [x] **`PROJECT_INDEX.md`** — updated to add serenity-rev-p.jsx and bom_revP entries; Rev P marked as current master. *(done 2026-06-01)*
+- [x] **`serenity-rev-p.jsx`** — comprehensive 11-tab standalone Rev P specification created: Overview, Airframe, Propulsion, Avionics, Comms, Cargo, Security, Regulatory, BOM, Files, Build Status. Supersedes serenity-rev-o.jsx as current spec. _(done 2026-06-01)_
+- [x] **`bom_revP.json` + `bom_revP.csv`** — full Rev P BOM created: all Rev O items retained + 10 new cargo printed parts + SERVO-CARGO, DRV8833-CARGO, DYNEEMA-SK75, FOAM-GASKET-CARGO; cargo section expanded; totals updated (5 servos, ~$1,905 est.). _(done 2026-06-01)_
+- [x] **`README.md`** — updated to Revision P, June 2026; propulsion section updated to Rev O/P baseline; avionics section updated to PB2-I description; cargo section updated to Rev P complete spec. _(done 2026-06-01)_
+- [x] **`PROJECT_INDEX.md`** — updated to add serenity-rev-p.jsx and bom_revP entries; Rev P marked as current master. _(done 2026-06-01)_
 - [ ] **Update PHASED_BUILD_GUIDE.md** from Rev M 18-inch to Rev P 24-inch specifications (hull 609.6 mm, 50mm EDFs, 4-scoop radial intake, M=1.0 gears, Rev O pivot Z=83mm, MF104ZZ bearings, Rev P cargo system).
 - [ ] **Sync `bom_revO.json` ↔ `bom_revO.csv`** — verify all XCVR-49MHZ-1 BOM items (Phase 5 above) are reflected in both files once XCVR-49MHZ-1 Phase 5 is complete.
 
@@ -237,104 +237,104 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 ### 2.1 — Filament and CF Stock (needed for Phase 0)
 
-| Item | Qty | Notes |
-| ------ | ----- | ------- |
-| PETG filament | ~1,200 g | Hull sections, access panels, nozzle parts, cargo gondola |
-| CF-PETG filament | ~500 g | Nacelle pods, tilt brackets, pylon, intake frame — hardened-steel nozzle required |
-| TPU 95A filament | ~200 g | Landing skid feet — direct-drive extruder required |
-| CF flat bar 6×3mm | ~700 mm | Keel 620 mm + 80 mm ring frame offcuts |
-| CF tube 12mm OD / 1.5mm wall | ~850 mm | Wing spars 2×380 mm + 90 mm scrap |
-| CF solid rod 4mm OD | ~300 mm | Pivot rods (2× nacelle) per pivot housing drawing |
-| CF plate 2mm | 250×150 mm | Ring frames (5 stations per drawing) |
+| Item                         | Qty        | Notes                                                                             |
+| ---------------------------- | ---------- | --------------------------------------------------------------------------------- |
+| PETG filament                | ~1,200 g   | Hull sections, access panels, nozzle parts, cargo gondola                         |
+| CF-PETG filament             | ~500 g     | Nacelle pods, tilt brackets, pylon, intake frame — hardened-steel nozzle required |
+| TPU 95A filament             | ~200 g     | Landing skid feet — direct-drive extruder required                                |
+| CF flat bar 6×3mm            | ~700 mm    | Keel 620 mm + 80 mm ring frame offcuts                                            |
+| CF tube 12mm OD / 1.5mm wall | ~850 mm    | Wing spars 2×380 mm + 90 mm scrap                                                 |
+| CF solid rod 4mm OD          | ~300 mm    | Pivot rods (2× nacelle) per pivot housing drawing                                 |
+| CF plate 2mm                 | 250×150 mm | Ring frames (5 stations per drawing)                                              |
 
 ### 2.2 — Structural Hardware (Phase 1)
 
-| Item | Qty | Notes |
-| ------ | ----- | ------- |
-| West System 105/206 epoxy | 1 kit | Keel + spar bonding; structural joints |
-| 5-minute epoxy syringe 25mL | 3× | Access frames, sensor mounts |
-| X-30 PU foam 2-part | ~600 mL | 2 lb/ft³, 4× expansion, 2-min pot life |
-| EPS blue foam board 25mm | 500×250 mm | Void formers A–E; Owens Corning Foamular 150 |
-| Johnson's Paste Wax | 1 tin | Void former release agent (2 coats) |
-| 3M 4016 closed-cell gasket tape | 1 roll | Access panel frame lips |
-| PTFE tube 5mm OD × 3mm ID | 6 m | 8 conduits (CAN FD, RS-485, 1553A, 1553B, ETH×2, SERVO-PWR, MAIN-PWR) |
-| M2.5 nylon hex standoff 6mm | 16× | Cape-B floor mounts (4 per bay × 4 bays) |
-| M2.5 nylon hex standoff 20mm | 16× | Cape-A inter-cape spacing |
-| M2.5 × 8mm SS button screws | 64× | Standoff attachment + panel B/E fasteners |
-| M3 heat-set threaded inserts | 4× | Cargo gondola belly hard points |
-| N42 neodymium disc magnet 6×2mm | 8× | Panel D (4 in frame + 4 in lid) |
-| SMA panel-mount bulkhead | 3× | SiK 915MHz (belly) + LoRa 915MHz (belly) + WiFi (dorsal fwd) |
-| 0.3mm stainless wire or 22AWG enamelled Cu | ~500 mm | 49MHz RCRS top wire |
-| Ceramic bead insulator 3mm ID | 1× | Aft end of 49MHz wire (insulated/open end) |
+| Item                                       | Qty        | Notes                                                                 |
+| ------------------------------------------ | ---------- | --------------------------------------------------------------------- |
+| West System 105/206 epoxy                  | 1 kit      | Keel + spar bonding; structural joints                                |
+| 5-minute epoxy syringe 25mL                | 3×         | Access frames, sensor mounts                                          |
+| X-30 PU foam 2-part                        | ~600 mL    | 2 lb/ft³, 4× expansion, 2-min pot life                                |
+| EPS blue foam board 25mm                   | 500×250 mm | Void formers A–E; Owens Corning Foamular 150                          |
+| Johnson's Paste Wax                        | 1 tin      | Void former release agent (2 coats)                                   |
+| 3M 4016 closed-cell gasket tape            | 1 roll     | Access panel frame lips                                               |
+| PTFE tube 5mm OD × 3mm ID                  | 6 m        | 8 conduits (CAN FD, RS-485, 1553A, 1553B, ETH×2, SERVO-PWR, MAIN-PWR) |
+| M2.5 nylon hex standoff 6mm                | 16×        | Cape-B floor mounts (4 per bay × 4 bays)                              |
+| M2.5 nylon hex standoff 20mm               | 16×        | Cape-A inter-cape spacing                                             |
+| M2.5 × 8mm SS button screws                | 64×        | Standoff attachment + panel B/E fasteners                             |
+| M3 heat-set threaded inserts               | 4×         | Cargo gondola belly hard points                                       |
+| N42 neodymium disc magnet 6×2mm            | 8×         | Panel D (4 in frame + 4 in lid)                                       |
+| SMA panel-mount bulkhead                   | 3×         | SiK 915MHz (belly) + LoRa 915MHz (belly) + WiFi (dorsal fwd)          |
+| 0.3mm stainless wire or 22AWG enamelled Cu | ~500 mm    | 49MHz RCRS top wire                                                   |
+| Ceramic bead insulator 3mm ID              | 1×         | Aft end of 49MHz wire (insulated/open end)                            |
 
 ### 2.3 — Propulsion System (Phases 2–4)
 
-| Item | Qty | Approx. Cost | Notes |
-| ------ | ----- | ------------- | ------- |
-| 50mm EDF @ 6S (budget tier) | 4× | ~$25–40ea | 2 per nacelle, tandem; verify OD fits 55–56mm ID bore |
-| 40A 6S BLHeli32 BDSHOT ESC | 4× | ~$18–25ea | 1 per nacelle EDF |
-| 120mm 6S EDF | 1× | ~$60–80 | Fuselage rear; single final motor |
-| 80A 6S BLHeli32 ESC | 1× | ~$25–35 | Fuselage EDF |
-| Digital tilt servo ≥25 kg·cm @ 6V, metal gear | 2× | ~$20–30ea | Nacelle tilt; prefer 30+ kg·cm |
-| SG90 micro servo | 3× | ~$3ea | Nacelle nozzle ×2 (redundant) + rear nozzle ×1 |
-| MF104ZZ flanged bearing 4×10×4mm | 4× | ~$8 total | 2 per nacelle pivot |
-| 4mm OD CF rod (pivot) | 2× cut lengths | — | From 2.3 CF stock above |
-| Steel pushrod 2mm OD × ~60mm | 2× | ~$3 total | Longitudinal nozzle shaft per nacelle |
-| Steel pushrod 2mm, Z-bend ends | 2× | ~$4 total | Tilt servo pushrod |
-| M2 clevis links | 4× | ~$3 total | Servo-to-pushrod |
-| 0.8mm piano wire | ~600 mm | ~$3 | Nozzle iris petal link rings |
-| 3mm SS hinge pins | 16× | ~$4 total | 8 per nacelle iris nozzle |
-| WS2812B LED ring (50mm) | 2× | ~$6 total | Nacelle duct exit |
-| WS2812C-2020 addressable LED | 6× | ~$6 total | Nav lights |
-| XT90 PDB, 4× XT30 outputs | 1× | ~$12 | Power distribution |
-| XT90 battery pigtail | 1× | ~$5 | Battery lead |
-| 5V 5A switching BEC | 1× | ~$8 | Avionics power rail |
-| 14AWG silicone wire | 1 m | ~$6 | Main bus |
-| 16AWG silicone wire | 0.5 m | ~$4 | ESC signal + fuselage taps |
-| 6S 4000mAh LiPo battery | 1× | ~$55–70 | Phase 6 first flight |
+| Item                                          | Qty            | Approx. Cost | Notes                                                 |
+| --------------------------------------------- | -------------- | ------------ | ----------------------------------------------------- |
+| 50mm EDF @ 6S (budget tier)                   | 4×             | ~$25–40ea    | 2 per nacelle, tandem; verify OD fits 55–56mm ID bore |
+| 40A 6S BLHeli32 BDSHOT ESC                    | 4×             | ~$18–25ea    | 1 per nacelle EDF                                     |
+| 120mm 6S EDF                                  | 1×             | ~$60–80      | Fuselage rear; single final motor                     |
+| 80A 6S BLHeli32 ESC                           | 1×             | ~$25–35      | Fuselage EDF                                          |
+| Digital tilt servo ≥25 kg·cm @ 6V, metal gear | 2×             | ~$20–30ea    | Nacelle tilt; prefer 30+ kg·cm                        |
+| SG90 micro servo                              | 3×             | ~$3ea        | Nacelle nozzle ×2 (redundant) + rear nozzle ×1        |
+| MF104ZZ flanged bearing 4×10×4mm              | 4×             | ~$8 total    | 2 per nacelle pivot                                   |
+| 4mm OD CF rod (pivot)                         | 2× cut lengths | —            | From 2.3 CF stock above                               |
+| Steel pushrod 2mm OD × ~60mm                  | 2×             | ~$3 total    | Longitudinal nozzle shaft per nacelle                 |
+| Steel pushrod 2mm, Z-bend ends                | 2×             | ~$4 total    | Tilt servo pushrod                                    |
+| M2 clevis links                               | 4×             | ~$3 total    | Servo-to-pushrod                                      |
+| 0.8mm piano wire                              | ~600 mm        | ~$3          | Nozzle iris petal link rings                          |
+| 3mm SS hinge pins                             | 16×            | ~$4 total    | 8 per nacelle iris nozzle                             |
+| WS2812B LED ring (50mm)                       | 2×             | ~$6 total    | Nacelle duct exit                                     |
+| WS2812C-2020 addressable LED                  | 6×             | ~$6 total    | Nav lights                                            |
+| XT90 PDB, 4× XT30 outputs                     | 1×             | ~$12         | Power distribution                                    |
+| XT90 battery pigtail                          | 1×             | ~$5          | Battery lead                                          |
+| 5V 5A switching BEC                           | 1×             | ~$8          | Avionics power rail                                   |
+| 14AWG silicone wire                           | 1 m            | ~$6          | Main bus                                              |
+| 16AWG silicone wire                           | 0.5 m          | ~$4          | ESC signal + fuselage taps                            |
+| 6S 4000mAh LiPo battery                       | 1×             | ~$55–70      | Phase 6 first flight                                  |
 
 ### 2.4 — Avionics (Phase 6 — 4-node minimum viable)
 
-| Item | Qty | Unit Cost | Total | Notes |
-| ------ | ----- | ---------- | ------- | ------- |
-| PocketBeagle 2 Industrial (AM6254) | 4× | $51.03 | ~$204 | DK 2820-100003007-ND |
-| Cape-A PCB (JLCPCB assembled) | 2× | ~$42 | ~$84 | FC nodes — use Cape-A-2 gerbers (EMI-hardened) |
-| Cape-B PCB (JLCPCB assembled) | 2× | ~$80 | ~$160 | CN nodes — use Cape-B-2 gerbers (EMI-hardened) |
-| XCVR-49MHZ-2 PCB (JLCPCB assembled) | 2× | ~$22 | ~$44 | RCRS sub-module — use XCVR-49MHZ-2 gerbers; supersedes v1 |
-| SiK 915MHz ground station radio | 1× | ~$15 | ~$15 | MAVLink GCS link |
-| microSD 64GB (log, write-blocked) | 2× | ~$10 | ~$20 | CN1-LOG, CN2-LOG |
-| JST-GH cables: CAN 4-pin, RS-485 4-pin, ETH 8-pin, 1553 shielded pair | assorted | — | ~$15 |
-| USB-UART adapter (CP2102) | 1× | ~$8 | ~$8 | Debug console (one-time tool) |
-| 3M double-sided foam tape | 1× | ~$5 | ~$5 | ESC and node mounting |
-| Zip ties 100mm + 200mm | 1 bag | ~$4 | ~$4 | Wire management |
+| Item                                                                  | Qty      | Unit Cost | Total | Notes                                                     |
+| --------------------------------------------------------------------- | -------- | --------- | ----- | --------------------------------------------------------- |
+| PocketBeagle 2 Industrial (AM6254)                                    | 4×       | $51.03    | ~$204 | DK 2820-100003007-ND                                      |
+| Cape-A PCB (JLCPCB assembled)                                         | 2×       | ~$42      | ~$84  | FC nodes — use Cape-A-2 gerbers (EMI-hardened)            |
+| Cape-B PCB (JLCPCB assembled)                                         | 2×       | ~$80      | ~$160 | CN nodes — use Cape-B-2 gerbers (EMI-hardened)            |
+| XCVR-49MHZ-2 PCB (JLCPCB assembled)                                   | 2×       | ~$22      | ~$44  | RCRS sub-module — use XCVR-49MHZ-2 gerbers; supersedes v1 |
+| SiK 915MHz ground station radio                                       | 1×       | ~$15      | ~$15  | MAVLink GCS link                                          |
+| microSD 64GB (log, write-blocked)                                     | 2×       | ~$10      | ~$20  | CN1-LOG, CN2-LOG                                          |
+| JST-GH cables: CAN 4-pin, RS-485 4-pin, ETH 8-pin, 1553 shielded pair | assorted | —         | ~$15  |                                                           |
+| USB-UART adapter (CP2102)                                             | 1×       | ~$8       | ~$8   | Debug console (one-time tool)                             |
+| 3M double-sided foam tape                                             | 1×       | ~$5       | ~$5   | ESC and node mounting                                     |
+| Zip ties 100mm + 200mm                                                | 1 bag    | ~$4       | ~$4   | Wire management                                           |
 
 ### 2.5 — Avionics (Phase 7 — remaining 4 nodes + ToF arrays)
 
-| Item | Qty | Approx. Cost | Notes |
-| ------ | ----- | ------------- | ------- |
-| PocketBeagle 2 Industrial (AM6254) | 4× | ~$204 | CN3, FC3, CN4, FC4 |
-| Cape-A PCB (JLCPCB assembled) | 2× | ~$84 | FC3, FC4 — use Cape-A-2 gerbers |
-| Cape-B PCB (JLCPCB assembled) | 2× | ~$160 | CN3, CN4 — use Cape-B-2 gerbers |
-| XCVR-49MHZ-2 PCB (assembled) | 2× | ~$44 | CN3, CN4 — use XCVR-49MHZ-2 gerbers |
-| microSD 64GB (log) | 2× | ~$20 | CN3-LOG, CN4-LOG |
-| VL53L5CX 8×8 ToF sensor | 12× | ~$84 | Dual OA arrays |
-| TCA9548A 8-ch I²C multiplexer | 2× | ~$3 | One per array host |
-| MCP23008 8-port I²C GPIO expander | 2× | ~$2.40 | XSHUT control |
-| JST-SH1.0 4-wire sensor cable 300mm | 12× | ~$12 | ToF sensor leads |
-| 5mm PMMA disc 0.5mm thick | 12× | ~$6 | ToF aperture covers |
-| UV adhesive | 1× | ~$6 | ToF aperture seal |
-| JST-GH cables (remaining bus segments) | assorted | ~$20 | Ring completion |
+| Item                                   | Qty      | Approx. Cost | Notes                               |
+| -------------------------------------- | -------- | ------------ | ----------------------------------- |
+| PocketBeagle 2 Industrial (AM6254)     | 4×       | ~$204        | CN3, FC3, CN4, FC4                  |
+| Cape-A PCB (JLCPCB assembled)          | 2×       | ~$84         | FC3, FC4 — use Cape-A-2 gerbers     |
+| Cape-B PCB (JLCPCB assembled)          | 2×       | ~$160        | CN3, CN4 — use Cape-B-2 gerbers     |
+| XCVR-49MHZ-2 PCB (assembled)           | 2×       | ~$44         | CN3, CN4 — use XCVR-49MHZ-2 gerbers |
+| microSD 64GB (log)                     | 2×       | ~$20         | CN3-LOG, CN4-LOG                    |
+| VL53L5CX 8×8 ToF sensor                | 12×      | ~$84         | Dual OA arrays                      |
+| TCA9548A 8-ch I²C multiplexer          | 2×       | ~$3          | One per array host                  |
+| MCP23008 8-port I²C GPIO expander      | 2×       | ~$2.40       | XSHUT control                       |
+| JST-SH1.0 4-wire sensor cable 300mm    | 12×      | ~$12         | ToF sensor leads                    |
+| 5mm PMMA disc 0.5mm thick              | 12×      | ~$6          | ToF aperture covers                 |
+| UV adhesive                            | 1×       | ~$6          | ToF aperture seal                   |
+| JST-GH cables (remaining bus segments) | assorted | ~$20         | Ring completion                     |
 
 ### 2.6 — Cargo System (Phase 8)
 
-| Item | Qty | Approx. Cost | Notes |
-| ------ | ----- | ------------- | ------- |
-| N20 DC motor 6V 300:1 | 1× | ~$8 | Winch drive |
-| DRV8833 dual H-bridge driver | 1× | ~$2 |
-| SG90 servo | 2× | ~$6 | Door actuator + payload release |
-| Dyneema SK75 0.5mm braid | 2 m | ~$4 | Winch line |
-| 3mm CF rod | ~60 mm | — | Clamshell door hinge pin |
-| Closed-cell foam gasket tape | — | — | Gondola-to-hull perimeter seal |
+| Item                         | Qty    | Approx. Cost | Notes                           |
+| ---------------------------- | ------ | ------------ | ------------------------------- |
+| N20 DC motor 6V 300:1        | 1×     | ~$8          | Winch drive                     |
+| DRV8833 dual H-bridge driver | 1×     | ~$2          |                                 |
+| SG90 servo                   | 2×     | ~$6          | Door actuator + payload release |
+| Dyneema SK75 0.5mm braid     | 2 m    | ~$4          | Winch line                      |
+| 3mm CF rod                   | ~60 mm | —            | Clamshell door hinge pin        |
+| Closed-cell foam gasket tape | —      | —            | Gondola-to-hull perimeter seal  |
 
 ---
 
@@ -347,57 +347,57 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 **Goal:** Every printed part complete and dry-fitted before first epoxy joint.
 
-## Printer setup
+### Printer setup
 
 - [ ] Install hardened-steel nozzle (CF-PETG abrades brass)
 - [ ] Calibrate E-steps and Pressure Advance for each filament
 - [ ] Dry all filament 6 h at 65°C before printing
 
-## Print schedule (ordered to minimize reprints)
+### Print schedule (ordered to minimize reprints)
 
-| Part | Material | Layer | Infill | Qty |
-| ------ | ---------- | ------- | -------- | ----- |
-| s_feet_x_4_scaled24.stl | TPU 95A | 0.25mm | 40% | 1 set |
-| s_legs_scaled24.stl | CF-PETG | 0.15mm | 30% | 1 |
-| s_head_shell24.stl | PETG | 0.20mm | 8% gyroid | 1 |
-| s_middle_canonical_shell24.stl | PETG | 0.20mm | 8% gyroid | 1 |
-| s_cargo_sect_shell24.stl | PETG | 0.20mm | 8% gyroid | 1 |
-| s_rear_neck_intake_shell24.stl | PETG | 0.20mm | 8% gyroid | 1 |
-| s_neck_intake_frame.stl | CF-PETG | 0.15mm | 40% gyroid, 4 walls | 1 |
-| s_aft_edf_plenum.stl | PETG | 0.20mm | 20% gyroid | 1 |
-| s_wings_s1223_revo.stl | PETG | 0.20mm | 8% gyroid | 1 |
-| s_eng_left_stator_shell24_revo.stl | CF-PETG | 0.15mm | 25% gyroid, 4 walls | 1 |
-| s_eng_right_stator_shell24_revo.stl | CF-PETG | 0.15mm | 25% gyroid, 4 walls | 1 |
-| s_eng_piv_outer_scaled24.stl | CF-PETG | 0.15mm | 40%, 4 walls | 2 |
-| s_eng_piv_pins_scaled24.stl | CF-PETG | 0.15mm | 40% solid, 4 walls | 2 |
-| s_pivot_arm_a_scaled24.stl | CF-PETG | 0.15mm | 40%, 4 walls | 2 |
-| s_eng_pistons_scaled24.stl | PETG | 0.20mm | 20% gyroid | 2 |
-| s_wing_nacelle_pylon_revo.stl | CF-PETG | 0.15mm | 40%, 4 walls | 2 |
-| nacelle_nozzle_petal.stl | PETG + translucent-blue inner | 0.20mm | 20% gyroid | 16 |
-| nacelle_nozzle_ring.stl | CF-PETG | 0.15mm | 40% | 2 |
-| nacelle_nozzle_iris.stl | PETG | 0.12mm | 40% | 2 |
-| rear_nozzle_petal.stl | PETG + translucent-blue | 0.20mm | 20% gyroid | 8 |
-| rear_nozzle_frame.stl | CF-PETG | 0.15mm | 30% | 1 |
-| nacelle_sector_gear.stl | CF-PETG | 0.12mm | 40%, 4 walls | 2 |
-| nacelle_pinion.stl | PETG or resin | 0.12mm | 40% | 4 |
-| nacelle_bevel_pair.stl | PETG or resin | 0.12mm | 40% | 2 sets |
-| nacelle_bevel_housing.stl | CF-PETG | 0.15mm | 40% | 2 |
-| s_rcrs49_wire_post.stl | PETG | 0.20mm | 100% | 2 |
-| Access panel frames A–F + lids | PETG | 0.20mm | 100% | 1 set |
-| s_cargo_gondola_shell.stl | PETG | 0.20mm | 15% gyroid | 1 |
-| cargo_door_port.stl | CF-PETG | 0.15mm | 40%, 4 walls | 1 | Generated (PR #22) — reprint if hinge changes |
-| cargo_door_stbd.stl | CF-PETG | 0.15mm | 40%, 4 walls | 1 | Generated (PR #22) — reprint if hinge changes |
-| cargo_cradle_autolatch.stl | PETG | 0.20mm | 30% | 1 | Already generated (PR #21) — reprint if dimensions change |
-| cargo_winch_spool.stl | PETG | 0.20mm | 40% | 1 | Already generated (PR #21) — reprint if dimensions change |
+| Part                                | Material                      | Layer  | Infill              | Qty    | Notes                                                     |
+| ----------------------------------- | ----------------------------- | ------ | ------------------- | ------ | --------------------------------------------------------- |
+| s_feet_x_4_scaled24.stl             | TPU 95A                       | 0.25mm | 40%                 | 1 set  |                                                           |
+| s_legs_scaled24.stl                 | CF-PETG                       | 0.15mm | 30%                 | 1      |                                                           |
+| s_head_shell24.stl                  | PETG                          | 0.20mm | 8% gyroid           | 1      |                                                           |
+| s_middle_canonical_shell24.stl      | PETG                          | 0.20mm | 8% gyroid           | 1      |                                                           |
+| s_cargo_sect_shell24.stl            | PETG                          | 0.20mm | 8% gyroid           | 1      |                                                           |
+| s_rear_neck_intake_shell24.stl      | PETG                          | 0.20mm | 8% gyroid           | 1      |                                                           |
+| s_neck_intake_frame.stl             | CF-PETG                       | 0.15mm | 40% gyroid, 4 walls | 1      |                                                           |
+| s_aft_edf_plenum.stl                | PETG                          | 0.20mm | 20% gyroid          | 1      |                                                           |
+| s_wings_s1223_revo.stl              | PETG                          | 0.20mm | 8% gyroid           | 1      |                                                           |
+| s_eng_left_stator_shell24_revo.stl  | CF-PETG                       | 0.15mm | 25% gyroid, 4 walls | 1      |                                                           |
+| s_eng_right_stator_shell24_revo.stl | CF-PETG                       | 0.15mm | 25% gyroid, 4 walls | 1      |                                                           |
+| s_eng_piv_outer_scaled24.stl        | CF-PETG                       | 0.15mm | 40%, 4 walls        | 2      |                                                           |
+| s_eng_piv_pins_scaled24.stl         | CF-PETG                       | 0.15mm | 40% solid, 4 walls  | 2      |                                                           |
+| s_pivot_arm_a_scaled24.stl          | CF-PETG                       | 0.15mm | 40%, 4 walls        | 2      |                                                           |
+| s_eng_pistons_scaled24.stl          | PETG                          | 0.20mm | 20% gyroid          | 2      |                                                           |
+| s_wing_nacelle_pylon_revo.stl       | CF-PETG                       | 0.15mm | 40%, 4 walls        | 2      |                                                           |
+| nacelle_nozzle_petal.stl            | PETG + translucent-blue inner | 0.20mm | 20% gyroid          | 16     |                                                           |
+| nacelle_nozzle_ring.stl             | CF-PETG                       | 0.15mm | 40%                 | 2      |                                                           |
+| nacelle_nozzle_iris.stl             | PETG                          | 0.12mm | 40%                 | 2      |                                                           |
+| rear_nozzle_petal.stl               | PETG + translucent-blue       | 0.20mm | 20% gyroid          | 8      |                                                           |
+| rear_nozzle_frame.stl               | CF-PETG                       | 0.15mm | 30%                 | 1      |                                                           |
+| nacelle_sector_gear.stl             | CF-PETG                       | 0.12mm | 40%, 4 walls        | 2      |                                                           |
+| nacelle_pinion.stl                  | PETG or resin                 | 0.12mm | 40%                 | 4      |                                                           |
+| nacelle_bevel_pair.stl              | PETG or resin                 | 0.12mm | 40%                 | 2 sets |                                                           |
+| nacelle_bevel_housing.stl           | CF-PETG                       | 0.15mm | 40%                 | 2      |                                                           |
+| s_rcrs49_wire_post.stl              | PETG                          | 0.20mm | 100%                | 2      |                                                           |
+| Access panel frames A–F + lids      | PETG                          | 0.20mm | 100%                | 1 set  |                                                           |
+| s_cargo_gondola_shell.stl           | PETG                          | 0.20mm | 15% gyroid          | 1      |                                                           |
+| cargo_door_port.stl                 | CF-PETG                       | 0.15mm | 40%, 4 walls        | 1      | Generated (PR #22) — reprint if hinge changes             |
+| cargo_door_stbd.stl                 | CF-PETG                       | 0.15mm | 40%, 4 walls        | 1      | Generated (PR #22) — reprint if hinge changes             |
+| cargo_cradle_autolatch.stl          | PETG                          | 0.20mm | 30%                 | 1      | Already generated (PR #21) — reprint if dimensions change |
+| cargo_winch_spool.stl               | PETG                          | 0.20mm | 40%                 | 1      | Already generated (PR #21) — reprint if dimensions change |
 
 ## CF cuts
 
-| Part | Material | Dimension | Notes |
-| ------ | ---------- | ----------- | ------- |
-| Keel | CF flat bar 6×3mm | 620 mm | Mark datums at 91, 165, 251, 320, 388mm from nose |
-| Wing spars | CF tube 12mm OD / 1.5mm wall | 2× 380 mm | Sand spar ends to fit wing-root pockets |
-| Pivot rods | CF solid rod 4mm OD | 2× cut per pivot housing drawing | Deburr; press-fit into MF104ZZ bearings |
-| Ring frames | CF plate 2mm | 5 profiles per station drawing | Fit to keel slot-notches |
+| Part        | Material                     | Dimension                        | Notes                                             |
+| ----------- | ---------------------------- | -------------------------------- | ------------------------------------------------- |
+| Keel        | CF flat bar 6×3mm            | 620 mm                           | Mark datums at 91, 165, 251, 320, 388mm from nose |
+| Wing spars  | CF tube 12mm OD / 1.5mm wall | 2× 380 mm                        | Sand spar ends to fit wing-root pockets           |
+| Pivot rods  | CF solid rod 4mm OD          | 2× cut per pivot housing drawing | Deburr; press-fit into MF104ZZ bearings           |
+| Ring frames | CF plate 2mm                 | 5 profiles per station drawing   | Fit to keel slot-notches                          |
 
 ## Phase 0 checks
 
@@ -597,13 +597,13 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 ## ESC assignment (cross-nacelle redundancy — any FC failure retains 50% thrust both nacelles)
 
-| ESC | EDF | Nacelle | Controlled by |
-| ----- | ----- | --------- | --------------- |
-| ESC1 | EDF1 (fore) | Port | FC1 Cape-A PRU Ch.0 |
-| ESC2 | EDF2 (aft) | Port | FC2 Cape-A PRU Ch.0 |
-| ESC3 | EDF1 (fore) | Stbd | FC1 Cape-A PRU Ch.1 |
-| ESC4 | EDF2 (aft) | Stbd | FC2 Cape-A PRU Ch.1 |
-| ESC5 | 120mm rear | Fuselage | FC2 Cape-A PRU Ch.2 |
+| ESC  | EDF         | Nacelle  | Controlled by       |
+| ---- | ----------- | -------- | ------------------- |
+| ESC1 | EDF1 (fore) | Port     | FC1 Cape-A PRU Ch.0 |
+| ESC2 | EDF2 (aft)  | Port     | FC2 Cape-A PRU Ch.0 |
+| ESC3 | EDF1 (fore) | Stbd     | FC1 Cape-A PRU Ch.1 |
+| ESC4 | EDF2 (aft)  | Stbd     | FC2 Cape-A PRU Ch.1 |
+| ESC5 | 120mm rear  | Fuselage | FC2 Cape-A PRU Ch.2 |
 
 ## CN1+FC1 installation (Bay A — nose)
 
@@ -725,27 +725,27 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 Array B (hosted by FC1, Bay A):
 
-| Sensor | Station | Position |
-| -------- | --------- | ---------- |
-| S1B | 50mm | Nose ring |
-| S2B | 510mm | Rear bell rim |
-| S3B | 180mm | Port hull |
-| S4B | 180mm | Stbd hull |
-| S5B | 315mm | Dorsal keel |
-| S6B | 265mm | Belly blister |
+| Sensor | Station | Position      |
+| ------ | ------- | ------------- |
+| S1B    | 50mm    | Nose ring     |
+| S2B    | 510mm   | Rear bell rim |
+| S3B    | 180mm   | Port hull     |
+| S4B    | 180mm   | Stbd hull     |
+| S5B    | 315mm   | Dorsal keel   |
+| S6B    | 265mm   | Belly blister |
 
 - [ ] Install 6× VL53L5CX in Array B flush-mount frames; wire to TCA9548A ch.0–5 in Bay A; MCP23008 GP0–GP5 → XSHUT; I²C to FC1 Cape-A.
 
 Array A (hosted by FC3, Bay D):
 
-| Sensor | Station | Position |
-| -------- | --------- | ---------- |
-| S1A | 30mm | Nose ring |
-| S2A | 525mm | Rear bell rim |
-| S3A | 240mm | Port hull |
-| S4A | 240mm | Stbd hull |
-| S5A | 215mm | Dorsal keel |
-| S6A | 195mm | Belly blister |
+| Sensor | Station | Position      |
+| ------ | ------- | ------------- |
+| S1A    | 30mm    | Nose ring     |
+| S2A    | 525mm   | Rear bell rim |
+| S3A    | 240mm   | Port hull     |
+| S4A    | 240mm   | Stbd hull     |
+| S5A    | 215mm   | Dorsal keel   |
+| S6A    | 195mm   | Belly blister |
 
 - [ ] Install 6× VL53L5CX in Array A flush-mount frames; wire to TCA9548A ch.0–5 in Bay D; separate I²C bus (electrically isolated from Array B).
 - [ ] Apply 0.5mm PMMA disc over each sensor aperture with UV adhesive.
@@ -808,12 +808,12 @@ Array A (hosted by FC3, Bay D):
 
 ### 4.1 — Completed
 
-- [x] Firmware directory structure (`serenity/firmware/`) *(done 2026-05-25)*
-- [x] KISS/AX.25 UART driver for XCVR-49MHZ-1 — `serenity/firmware/cn/src/xcvr_kiss.c/.h` *(done 2026-05-25)*
-- [x] Si5351A I²C driver — `serenity/firmware/cn/src/si5351.c/.h` *(done 2026-05-25)*
-- [x] AM6254 device tree overlays — Cape-A and Cape-B DTSs *(done 2026-05-25)*
-- [x] serenity-cn Phase 6 daemon (XCVR KISS driver + argparse + SIGTERM) *(done 2026-05-25)*
-- [x] serenity-fc Phase 6 stub (signal handling, idle loop placeholder) *(done 2026-05-25)*
+- [x] Firmware directory structure (`serenity/firmware/`) _(done 2026-05-25)_
+- [x] KISS/AX.25 UART driver for XCVR-49MHZ-1 — `serenity/firmware/cn/src/xcvr_kiss.c/.h` _(done 2026-05-25)_
+- [x] Si5351A I²C driver — `serenity/firmware/cn/src/si5351.c/.h` _(done 2026-05-25)_
+- [x] AM6254 device tree overlays — Cape-A and Cape-B DTSs _(done 2026-05-25)_
+- [x] serenity-cn Phase 6 daemon (XCVR KISS driver + argparse + SIGTERM) _(done 2026-05-25)_
+- [x] serenity-fc Phase 6 stub (signal handling, idle loop placeholder) _(done 2026-05-25)_
 
 ### 4.2 — FC Node (Cape-A) — Phase 7 Firmware
 
@@ -824,8 +824,8 @@ Array A (hosted by FC3, Bay D):
 - [ ] **u-blox M10Q GNSS integration** — UART NMEA/UBX parse; position fix broadcast on CAN FD; HDOP gating (≤1.5 for valid position); multi-node position cross-check (≤2m disagreement threshold).
 - [ ] **MIL-STD-1553B RT implementation** — PRU-ICSS Manchester II encoder/decoder; RT address assignment per node role; BC arbitration on FC1 and FC2.
 - [ ] **TPM-bound attestation** — SLB9670 TPM 2.0 HMAC on all outbound flight-critical CAN FD messages; pcrs extend on each boot; boot measurement chain.
-- [x] **governor_cal.py** — thrust stand calibration script: sweeps 0%→100%→0% throttle, fits k coefficient (T = k × RPM²), outputs `EDF_THRUST_K` for `governor_config.h`. *(done 2026-06-04)*
-- [x] **governor_config.h**— template with calibrated k values per EDF; compile-time constants.*(done 2026-06-04)*
+- [x] **governor_cal.py** — thrust stand calibration script: sweeps 0%→100%→0% throttle, fits k coefficient (T = k × RPM²), outputs `EDF_THRUST_K` for `governor_config.h`. _(done 2026-06-04)_
+- [x] **governor_config.h**— template with calibrated k values per EDF; compile-time constants._(done 2026-06-04)_
 
 ### 4.3 — CN Node (Cape-B) — Phase 7 Firmware
 
@@ -873,7 +873,7 @@ Array A (hosted by FC3, Bay D):
 - [ ] `Remove legacy piston sockets from STLs if still present` — not started
 - [x] `Fix cargo SCAD import path to regenerated STL` — completed
 
-*Last updated: 2026-06-05 — GitHub Copilot assistant (sync with in-repo task list)*
+**Last updated:** 2026-06-05 — GitHub Copilot assistant (sync with in-repo task list)
 
 - [ ] **Aircraft registration** — register under 14 CFR Part 48 (sUAS, AUW <55 lbs) at FAA DroneZone. Replace N00000 placeholder in `decal_sheet.svg`. Mark on airframe per 14 CFR 47 — visible without moving any part. **Complete before first untethered flight.**
 - [ ] **Remote Pilot Certificate** — verify FAA Part 107 Remote Pilot Certificate is current (24-month knowledge test recurrency).
@@ -890,5 +890,5 @@ Array A (hosted by FC3, Bay D):
 
 ---
 
-*© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY 4.0*
-*Hull: Peter Farell CC BY 4.0 · Nozzles: BamJr CC BY 4.0 · Inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy / Universal — Not an officially licensed product.*
+© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY 4.0
+Hull: Peter Farell CC BY 4.0 · Nozzles: BamJr CC BY 4.0 · Inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy / Universal — Not an officially licensed product.

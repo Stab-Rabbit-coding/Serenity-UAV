@@ -1,20 +1,20 @@
-u# Serenity UAV — Claude Code Project Instructions
+# Serenity UAV — Claude Code Project Instructions
 
 ## Project Objective
 
 - **Design and build a fully functional EDF Tilt Rotor UAV version of the Firefly Class Spaceship "Serenity" from the Joss Whedon TV show and movie.**
-- **Provide redundancy and failover in all systems possible:
+- \*\*Provide redundancy and failover in all systems possible:
 
--- Avionics:  4 pairs of pocketbeagle2 industrial SBCs: 4 with a Flight Control and Sensor Cape,  (with GPS,  imu, compass, barometer, anti-collision range sensors,  airspeed, pid motor speed control, and nacelle tilt servos), and 4 with a Communications, Logging, and payload Cape.
--- Onboard Communications:  Each of the 8 sbcs will be connected to the others via: Canbus FD, MILSTD 1553, RS485, & Ethernet
--- External Communications: The UAV uses WIFI at 5ghz, Zigbee at 2.4ghz, MavLink /SiK at 915Mhz, and AX.25 on the 49Mhz RCRS channels.  All four are usable for command and control of the aircraft.  The avionics capes also support sbus, but it's  not used.
--- Powerplant: Each Nacelle has two EDFs in series, under PID control.  The forward EDF in each nacelle is controlled primarily by one of the flight control SBCs and the aft is primarily controlled by a different sbc.  The large fuselage EDF is controlled by a third one.  Each of the 4 fc sbcs can take over for all EDFs.
+-- Avionics: 4 pairs of pocketbeagle2 industrial SBCs: 4 with a Flight Control and Sensor Cape, (with GPS, imu, compass, barometer, anti-collision range sensors, airspeed, pid motor speed control, and nacelle tilt servos), and 4 with a Communications, Logging, and payload Cape.
+-- Onboard Communications: Each of the 8 sbcs will be connected to the others via: Canbus FD, MILSTD 1553, RS485, & Ethernet
+-- External Communications: The UAV uses WIFI at 5ghz, Zigbee at 2.4ghz, MavLink /SiK at 915Mhz, and AX.25 on the 49Mhz RCRS channels. All four are usable for command and control of the aircraft. The avionics capes also support sbus, but it's not used.
+-- Powerplant: Each Nacelle has two EDFs in series, under PID control. The forward EDF in each nacelle is controlled primarily by one of the flight control SBCs and the aft is primarily controlled by a different sbc. The large fuselage EDF is controlled by a third one. Each of the 4 fc sbcs can take over for all EDFs.
 
 - **Every message is secure, everything is logged**
 
 -- Every Cape has a TPM.
 -- Every message, internal and external, is digitally signed and authenticated.
--- Everything is logged.  Sensors, messages, camera feed.
+-- Everything is logged. Sensors, messages, camera feed.
 -- The logs are saved to hardware-enforced non-executable microsd cards
 
 ## Design Philosophy
@@ -26,30 +26,30 @@ Every component will be fabricated or procured; design accordingly.
 
 - **Weight, balance, power, space, and component capabilities must always be accounted for.**
 
-  Size fasteners, walls, and structural members for real loads. Quote actual masses and CG shifts
-  when adding or removing geometry. Do not leave these as "TBD."
+    Size fasteners, walls, and structural members for real loads. Quote actual masses and CG shifts
+    when adding or removing geometry. Do not leave these as "TBD."
 
-- **Failover capability is a first-class requirement.**  Wherever possible, every system must have
+- **Failover capability is a first-class requirement.** Wherever possible, every system must have
 
-  a fallback mode or redundant path (dual ESCs, independent battery rails, manual override, etc.).
+    a fallback mode or redundant path (dual ESCs, independent battery rails, manual override, etc.).
 
 - **All EDF housings will be printed as part of the build.** Treat them as structural components,
 
-  not wrappers. Wall thickness, infill, and material must be specified for each housing.
+    not wrappers. Wall thickness, infill, and material must be specified for each housing.
 
-- **Keep the skin geometry of Serenity true to the reference models** to the greatest extent possible. Interior modifications (bore carving, sleeve insertion, boss protrusions) must blend into the canonical exterior hull.  Do not alter the outer mold line unless structurally required.
-- Serenity has a very complex geometry, so bounding boxes and centroid calculations will  be inadequate for positioning and orienting parts. Use this low detail model of Serenity https://www.thingiverse.com/thing:4677565 as a guide to the geometry of the hull, when orienting the head, cargo, middle, and rear sections of the fuselage.
+- **Keep the skin geometry of Serenity true to the reference models** to the greatest extent possible. Interior modifications (bore carving, sleeve insertion, boss protrusions) must blend into the canonical exterior hull. Do not alter the outer mold line unless structurally required.
+- Serenity has a very complex geometry, so bounding boxes and centroid calculations will be inadequate for positioning and orienting parts. Use this low detail model of Serenity <<<https://www.thingiverse.com/thing:4677565>>> as a guide to the geometry of the hull, when orienting the head, cargo, middle, and rear sections of the fuselage.
 
-- **All legal and regulatory requirements will be based on United States jurisdiction**  All Radio transmissions shall comply with appropriate FCC regulations.  Markings, lights, and operation shall comply with all appropriate FAA aircraft regulations.
-- **All designs will be validated against appropriate industry best practice.**  Specific applicable standards bodies are AUVSI, IEEE, and ISA.
+- **All legal and regulatory requirements will be based on United States jurisdiction** All Radio transmissions shall comply with appropriate FCC regulations. Markings, lights, and operation shall comply with all appropriate FAA aircraft regulations.
+- **All designs will be validated against appropriate industry best practice.** Specific applicable standards bodies are AUVSI, IEEE, and ISA.
 
 ## Coding Standards
 
-- All code shall be clean and syntactically correct.  **Secure coding practices shall be used throughout.**
+- All code shall be clean and syntactically correct. **Secure coding practices shall be used throughout.**
 - All code and documentation shall be written in accordance with strict linting rules and all linting standards shall be observed.
 - NIST SP800-82R3, 160, and 207 shall be complied with in information processing
 - All code shall use 4 space indenting, whether or not required by the language.
-- All code shall use verbose commenting, in strict conformity to each language.  In the case of a language that doesn't allow inline comments, such as kicad files, comments shall be included in an accompanying markdown file.
+- All code shall use verbose commenting, in strict conformity to each language. In the case of a language that doesn't allow inline comments, such as kicad files, comments shall be included in an accompanying markdown file.
 - Commenting in KiCad files using ; or # is strictly prohibited. All comments for kiCad files must be either in a markdown file or comment blocks such as: ( comment 1 "hello world" )
 
 ## Licensing and Attribution
@@ -77,7 +77,7 @@ Every component will be fabricated or procured; design accordingly.
 
 - All mating surfaces that carry load must have a minimum 2-wall contact annulus and a positive-stop shoulder. Friction fits alone are not acceptable for flight-critical joints.
 
-- **All stls, openscad, and other 3d models shall be clean and have watertight surface meshes.**  They should be ready to slice for printing.
+- **All stls, openscad, and other 3d models shall be clean and have watertight surface meshes.** They should be ready to slice for printing.
 
 - **All PCBs shall be fully developed**, with complete schematics files, pcb files, copper traces, proper ic footprints, and production ready gerber files.
 
@@ -89,7 +89,7 @@ Every component will be fabricated or procured; design accordingly.
 
 - All components are referenced as of the latest revision, even if there was no change on that component's specifications since a much earlier revision.
 
-- Modifications to components after a Revision are shown as the Revision letter followed by a number, such as: J1, as the first odifications after Revision J, or M4, as the fourth modification of that component after Revision M.  These numbers reset with every revision. all active components carried forward to a new revision are part of that Revisions baseline.
+- Modifications to components after a Revision are shown as the Revision letter followed by a number, such as: J1, as the first odifications after Revision J, or M4, as the fourth modification of that component after Revision M. These numbers reset with every revision. all active components carried forward to a new revision are part of that Revisions baseline.
 
 - All items that are archived prior to a Revision retain the Revision label which they held at the time of archival, and are not included in future revisions.
 
@@ -97,9 +97,9 @@ Every component will be fabricated or procured; design accordingly.
 
 - Run Blender scripts with `blender --background --python <script>.py` — the machine supports
 
-  headless execution.
+    headless execution.
 
 - Output STLs go to `airframe/stls/` (subdirectories: `fuselage/`, `nacelles/`, `wings/`).
 - When a script regenerates STLs, verify Z-range and bore-diameter in the console output before
 
-  committing.
+    committing.
