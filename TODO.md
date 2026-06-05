@@ -136,6 +136,13 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 Design files on branch `claude/cape-em-harsh-variants-9Yfr1`. Schematics (`*.kicad_sch`) and PCB
 layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been generated or DRC-verified.
 
+**Node placement — v2 · v1 · v1 · v2 (nose → tail):** Cape-A-2 / Cape-B-2 are installed at Bay A
+(CN1/FC1) and Bay E (CN4/FC4), the CAN FD / RS-485 / 1553B bus termination endpoints. Cape-A-1 /
+Cape-B-1 are used in Bay B (CN2/FC2) and Bay D (CN3/FC3). This puts 5 kV isolated transceivers
+at both bus ends — where conducted transients from motor wiring and external cable runs are highest
+— while the inner bays retain direct RMII dual-Ethernet connections to CPSW3G for maximum ring
+throughput. Procurement requires: 2× Cape-A-2, 2× Cape-B-2, 2× Cape-A-1, 2× Cape-B-1.
+
 **Key changes from -1 variants:**
 
 - **CAN FD**: ATA6561 (non-isolated) → ISOW1044BDFMR (TI, SOIC-16W, 5 kV reinforced isolation +
@@ -315,8 +322,10 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 | Item | Qty | Unit Cost | Total | Notes |
 |------|-----|----------|-------|-------|
 | PocketBeagle 2 Industrial (AM6254) | 4× | $51.03 | ~$204 | DK 2820-100003007-ND |
-| Cape-A PCB (JLCPCB assembled) | 2× | ~$42 | ~$84 | FC nodes (Cape-A-1 gerbers) |
-| Cape-B PCB (JLCPCB assembled) | 2× | ~$80 | ~$160 | CN nodes (Cape-B-1 gerbers) |
+| Cape-A-2 PCB (JLCPCB assembled) | 1× | ~$55 | ~$55 | FC1 / Bay A (v2 EM-hardened; bus start termination node) |
+| Cape-B-2 PCB (JLCPCB assembled) | 1× | ~$95 | ~$95 | CN1 / Bay A (v2 EM-hardened) |
+| Cape-A-1 PCB (JLCPCB assembled) | 1× | ~$42 | ~$42 | FC2 / Bay B (v1 standard) |
+| Cape-B-1 PCB (JLCPCB assembled) | 1× | ~$80 | ~$80 | CN2 / Bay B (v1 standard) |
 | XCVR-49MHZ-1 PCB (JLCPCB assembled) | 2× | ~$20 | ~$40 | RCRS sub-module; requires completed design |
 | SiK 915MHz ground station radio | 1× | ~$15 | ~$15 | MAVLink GCS link |
 | microSD 64GB (log, write-blocked) | 2× | ~$10 | ~$20 | CN1-LOG, CN2-LOG |
@@ -330,8 +339,10 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 | Item | Qty | Approx. Cost | Notes |
 |------|-----|-------------|-------|
 | PocketBeagle 2 Industrial (AM6254) | 4× | ~$204 | CN3, FC3, CN4, FC4 |
-| Cape-A PCB (JLCPCB assembled) | 2× | ~$84 | FC3, FC4 |
-| Cape-B PCB (JLCPCB assembled) | 2× | ~$160 | CN3, CN4 |
+| Cape-A-1 PCB (JLCPCB assembled) | 1× | ~$42 | FC3 / Bay D (v1 standard) |
+| Cape-B-1 PCB (JLCPCB assembled) | 1× | ~$80 | CN3 / Bay D (v1 standard) |
+| Cape-A-2 PCB (JLCPCB assembled) | 1× | ~$55 | FC4 / Bay E (v2 EM-hardened; bus end termination node) |
+| Cape-B-2 PCB (JLCPCB assembled) | 1× | ~$95 | CN4 / Bay E (v2 EM-hardened) |
 | XCVR-49MHZ-1 PCB (assembled) | 2× | ~$40 | CN3, CN4 |
 | microSD 64GB (log) | 2× | ~$20 | CN3-LOG, CN4-LOG |
 | VL53L5CX 8×8 ToF sensor | 12× | ~$84 | Dual OA arrays |
@@ -606,9 +617,12 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 | ESC4 | EDF2 (aft) | Stbd | FC2 Cape-A PRU Ch.1 |
 | ESC5 | 120mm rear | Fuselage | FC2 Cape-A PRU Ch.2 |
 
-**CN1+FC1 installation (Bay A — nose):**
-- [ ] Mount CN1 Cape-B on Bay A floor standoffs (M2.5 nylon 6mm). Insert PB2-I. Secure.
-- [ ] Mount FC1 Cape-A on inter-cape standoffs (M2.5 nylon 20mm) above CN1. Insert second PB2-I.
+**CN1+FC1 installation (Bay A — nose) — Cape-B-2 / Cape-A-2 (v2 EM-hardened):**
+> Bay A is the CAN FD / RS-485 / 1553B bus start termination node.  Use Cape-B-2 (ADM2795E
+> RS-485, ISOW1044 CAN FD, ADIN1300 Ethernet) and Cape-A-2 for 5 kV isolated transceivers at
+> this end of the bus.  v2 placement is mandatory here (see TODO §1.2a node placement note).
+- [ ] Mount CN1 Cape-B-2 on Bay A floor standoffs (M2.5 nylon 6mm). Insert PB2-I. Secure.
+- [ ] Mount FC1 Cape-A-2 on inter-cape standoffs (M2.5 nylon 20mm) above CN1. Insert second PB2-I.
 - [ ] Flash OS to eMMC on CN1 and FC1 via USB-C before installation.
 - [ ] Install log μSD (64GB) in CN1 Cape-B log slot. Label: **CN1-LOG**.
 - [ ] Seat RCRS-49 sub-module on CN1 Cape-B header; connect RCRS coax to forward 49MHz wire post.
@@ -619,15 +633,16 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 - [ ] Connect MIL-STD-1553: FC1 = Bus Controller (primary); CN1 = RT 0x01.
 - [ ] Cap Bay E end of ETH-EA conduit (will connect to FC4 in Phase 7); connect Bay A end to CN1 Cape-B ETH-2.
 
-**CN2+FC2 installation (Bay B — dorsal fwd):**
-- [ ] Mount CN2 Cape-B on Bay B floor standoffs; insert PB2-I; mount FC2 Cape-A above; insert second PB2-I.
+**CN2+FC2 installation (Bay B — dorsal fwd) — Cape-B-1 / Cape-A-1 (v1 standard):**
+> Bay B is an inner ring node.  Use Cape-B-1 / Cape-A-1 for direct RMII dual-Ethernet to CPSW3G.
+- [ ] Mount CN2 Cape-B-1 on Bay B floor standoffs; insert PB2-I; mount FC2 Cape-A-1 above; insert second PB2-I.
 - [ ] Flash OS to eMMC on CN2 and FC2 before installation.
 - [ ] Install log μSD (64GB) in CN2 Cape-B log slot. Label: **CN2-LOG**.
 - [ ] Seat RCRS-49 sub-module on CN2 header.
 - [ ] Route FC2 GPS coax through dorsal PTFE sleeve (sta ~130mm); mount GPS patch on dorsal hull, face UP.
 - [ ] Continue CAN FD daisy-chain Bay A→Bay B: CN2 → FC2 + temporary 120Ω at FC2 (remove Phase 7).
 - [ ] Continue RS-485 daisy-chain Bay A→Bay B.
-- [ ] Connect ETH-AB (Bay A→Bay B): FC1 Cape-A ETH-1 → CN2 Cape-B ETH-2 (FC1↔CN2 Ethernet ring link).
+- [ ] Connect ETH-AB (Bay A→Bay B): FC1 Cape-A-2 ETH-1 → CN2 Cape-B-1 ETH-2 (FC1↔CN2 Ethernet ring link).
 - [ ] Cap Bay D end of ETH-BD (will connect to CN3 in Phase 7).
 - [ ] Power taps: connect CN1, FC1, CN2, FC2 power leads from PWR conduit; verify 5V ±0.05V at each header.
 
@@ -681,9 +696,10 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 **Goal:** All 8 nodes installed, full ring redundancy, 12× VL53L5CX dual-redundant obstacle avoidance operational.
 
-**CN3+FC3 installation (Bay D — dorsal aft):**
-- [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Cape-A Bay B.
-- [ ] Mount CN3 Cape-B on Bay D floor standoffs; insert PB2-I; mount FC3 Cape-A above.
+**CN3+FC3 installation (Bay D — dorsal aft) — Cape-B-1 / Cape-A-1 (v1 standard):**
+> Bay D is an inner ring node.  Use Cape-B-1 / Cape-A-1 for direct RMII dual-Ethernet to CPSW3G.
+- [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Cape-A-1 Bay B.
+- [ ] Mount CN3 Cape-B-1 on Bay D floor standoffs; insert PB2-I; mount FC3 Cape-A-1 above.
 - [ ] Flash OS to eMMC; install log μSD. Label: **CN3-LOG**.
 - [ ] Seat RCRS-49 sub-module on CN3 header.
 - [ ] Route FC3 GPS coax through dorsal PTFE sleeve (sta ~275mm); mount GPS patch, face UP.
@@ -692,8 +708,11 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 - [ ] Connect ETH-BD (Bay B→Bay D): FC2 Cape-A ETH-1 → CN3 Cape-B ETH-2.
 - [ ] Power tap Bay D; verify 5V ±0.05V.
 
-**CN4+FC4 installation (Bay E — aft service):**
-- [ ] Mount CN4 Cape-B on Bay E standoffs; insert PB2-I; mount FC4 Cape-A above.
+**CN4+FC4 installation (Bay E — aft service) — Cape-B-2 / Cape-A-2 (v2 EM-hardened):**
+> Bay E is the CAN FD / RS-485 / 1553B bus end termination node and is physically closest to the
+> nacelle motor wiring and rear 120mm EDF.  Use Cape-B-2 / Cape-A-2 for 5 kV isolated
+> transceivers at this end of the bus.  v2 placement is mandatory here.
+- [ ] Mount CN4 Cape-B-2 on Bay E standoffs; insert PB2-I; mount FC4 Cape-A-2 above.
 - [ ] Flash OS to eMMC; install log μSD. Label: **CN4-LOG**.
 - [ ] Seat RCRS-49 sub-module on CN4 header.
 - [ ] Route FC4 GPS coax through dorsal PTFE sleeve (sta ~350mm); mount GPS patch, face UP.
