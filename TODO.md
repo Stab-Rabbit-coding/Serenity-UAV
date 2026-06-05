@@ -38,6 +38,9 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
   - Verify: Z-range 0–148.3 mm, bore ID 55.0–56.0 mm, 11 stator fins visible in Z=53–95 mm gap
   - **BLOCKS Phase 0 nacelle printing**
 
+- [ ] **Verify adjustable nozzle integration to Nacelles**  functional checks with modeled components needed in CAD before printing
+
+
 **Rear intake system (OpenSCAD):**
 
 - [ ] **s_aft_edf_plenum.stl** — `openscad -o s_aft_edf_plenum.stl serenity/stl/s_aft_edf_plenum.scad`
@@ -48,9 +51,15 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
   - Verify: 4 registration tongues 5 mm depth; intake lips project 6 mm forward
   - Material: CF-PETG; **BLOCKS Phase 1 (intake frame installation)**
 
+  - Intakes need to be routed between the outer horseshoe ring and the narrow neck on the middle fuselage section
+
 - [ ] **s_rear_neck_intake_shell24.stl** — `openscad -o ... serenity/stl/s_rear_neck_intake_shell24.scad`
   - Verify: 4 radial scoop windows present; NECK_X station ~310 mm; window alignment
   - **BLOCKS Phase 0 (print schedule)**
+
+- [ ] **EDF integration into rear cone**  120mm EDF with 6S motor needs to be fitted into the rear cone.
+
+- [ ] **Rear cone needs to be split into iris petals** for EDF variable diameter exhaust nozzle
 
 **Rev O gear train (OpenSCAD — all 5 parts, M=1.0):**
 
@@ -71,6 +80,9 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
   - Verify WING_SLOT_W and WING_SLOT_H against `s_wings_both_shell24.stl` (caliper-measure from the mesh) before printing — estimated 50×40 mm at 2.197× Thingiverse scale
 - [ ] **s_wings_s1223_revo.stl** — `openscad -o ... serenity/stl/s_wings_s1223_revo.scad`
   - Verify WING_CHORD_ROOT, WING_CHORD_TIP, WING_SEMI_SPAN, WING_SWEEP_LE against original STL before printing
+
+- [ ] **Create wing root sockets, bosses, spar channel, and cable ways with proper structures in the cargo section, wings, and nacelles.
+
 
 **Canonical middle shell (OpenSCAD — belly restored, no belly scoop):**
 
@@ -154,9 +166,9 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 - [x] **Generate CAPE-A-2 gerbers** — 14 files in `avionics/kicad/gerbers/CAPE-A-2/`. *(done 2026-06-04)*
 - [x] **Generate CAPE-B-2 gerbers** — 14 files in `avionics/kicad/gerbers/CAPE-B-2/`. *(done 2026-06-04)*
-- [x] **Generate XCVR-49MHZ-2 gerbers** — PCB completed (63 footprints, 27 nets) via
-  `complete_xcvr_49mhz2.py`; 14 files in `avionics/kicad/gerbers/XCVR-49MHZ-2/`.
-  Supersedes XCVR-49MHZ-1 for all production orders. *(done 2026-06-04)*
+- [ ] **Generate XCVR-49MHZ-2 gerbers** — PCB completed (63 footprints, 27 nets) via
+  `complete_xcvr_49mhz2.py`; 14 files in `avionics/kicad/gerbers/XCVR-49MHZ-2/`.  component placement still needs work.
+  Supersedes XCVR-49MHZ-1 for all production orders. *
 - [ ] **FCC Part 95 Subpart D pre-compliance checklist for XCVR-49MHZ-2** — document center
   frequency accuracy (±0.005% per 47 CFR 95.655), ERP (≤100 mW), harmonic suppression ≥40 dBc at
   2nd/3rd harmonics, 47 CFR 95.603 FCC ID silkscreen labeling block.
