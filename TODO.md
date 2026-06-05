@@ -172,7 +172,7 @@ throughput. Procurement requires: 2× Cape-A-2, 2× Cape-B-2, 2× Cape-A-1, 2× 
   export to `avionics/kicad/gerbers/CAPE-B-2/`.
   - **BLOCKS CAPE-B-2 fab order**
 
-- [ ] remove wifi, sik, and loRa antennas from CAPE-B-2. Use filtered chokes on rf lines to route all RF signals from antennas to wifi, lora, zigbee,and sik xcvr circuits on CAPE-B-2, and/or use uart or i2c with filtering to connect isolated xcvrs to the cape.
+- [x] remove wifi, sik, and loRa antennas from CAPE-B-2. Use filtered chokes on rf lines to route all RF signals from antennas to wifi, lora, zigbee,and sik xcvr circuits on CAPE-B-2, and/or use uart or i2c with filtering to connect isolated xcvrs to the cape. **Done (2026-06-05):** Added §13 antenna filter chains to CAPE-B-2.kicad_sch — each radio ANT pin now routes through a Johanson BPF (FL_LORA/FL_SIK: 0915LP15B0100E; FL_WIFI: 2450BP15B050E) and RCLAMP0502B ESD shunt to a dedicated SMA connector (J_SMA_LORA, J_SMA_WIFI, J_SMA_SIK). SiK uses Hirose U.FL J_SIK_ANT for module pigtail. All connector shells PGND. See CAPE-B-2.md §13.
 -[ ] re-evaluate space and connection capacity of CAPE-B-2 with rf antennas removed.  if possible, restore the second ethernet phy and connectors TO CAPE-B-2. 
 
   
