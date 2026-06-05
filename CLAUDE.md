@@ -16,10 +16,10 @@ u# Serenity UAV — Claude Code Project Instructions
 
 - **Every message is secure, everything is logged**
 
--- Every Cape has a TPM.
--- Every message, internal and external, is digitally signed and authenticated.
--- Everything is logged.  Sensors, messages, camera feed.
--- The logs are saved to hardware-enforced non-executable microsd cards
+- Every Cape has a TPM.
+- Every message, internal and external, is digitally signed and authenticated.
+- Everything is logged.  Sensors, messages, camera feed.
+- The logs are saved to hardware-enforced non-executable microsd cards
 
 ## Design Philosophy
 
