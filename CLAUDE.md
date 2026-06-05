@@ -12,7 +12,7 @@ u# Serenity UAV — Claude Code Project Instructions
 
 -- All Avionics shall be suitable for use in a variety of Unmanned Air, ground, or water vehicles and robots, not just this implementation.
 
---V2 Avionics are designed to operate in extremely hostile em/rf environments, such as  experienced when inspecting commercial radio or cellular antennas while they are radiating. 
+--Avionics are designed to operate in extremely hostile em/rf environments, such as  experienced when inspecting commercial radio or cellular antennas while they are radiating. - Design objective is operating in a 500 W/m^2 environment.
 
 - **Every message is secure, everything is logged**
 
