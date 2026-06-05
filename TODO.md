@@ -799,6 +799,20 @@ Array A (hosted by FC3, Bay D):
 
 ### 5.2 — FAA (airworthiness and operations)
 
+---
+**Repository WBS (assistant-managed)**
+
+- [x] `Measure & verify existing interface dimensions` — completed
+- [ ] `Add shared WING/PYLON parameter include and sync dimensions` — not started
+- [ ] `Reinforce cargo fuselage wing-root bay (doubler, spar sleeve, ribs)` — not started
+- [ ] `Update wing root pocket (load-spread flange, spar pocket, bolt holes)` — not started
+- [ ] `Ensure pylon pivot clearance, bearing seats, and sector-gear backing` — not started
+- [x] `Regenerate STLs and run hollowing + basic structural checks` — completed
+- [ ] `Remove legacy piston sockets from STLs if still present` — not started
+- [x] `Fix cargo SCAD import path to regenerated STL` — completed
+
+*Last updated: 2026-06-05 — GitHub Copilot assistant (sync with in-repo task list)*
+
 - [ ] **Aircraft registration** — register under 14 CFR Part 48 (sUAS, AUW <55 lbs) at FAA DroneZone. Replace N00000 placeholder in `decal_sheet.svg`. Mark on airframe per 14 CFR 47 — visible without moving any part. **Complete before first untethered flight.**
 - [ ] **Remote Pilot Certificate** — verify FAA Part 107 Remote Pilot Certificate is current (24-month knowledge test recurrency).
 - [ ] **Navigation lights compliance** — verify 6-position WS2812C nav light implementation: port RED (≥3 SM visibility), stbd GREEN, tail WHITE steady, belly WHITE strobe. Compliant with ICAO Annex 2 and 14 CFR 91.209.

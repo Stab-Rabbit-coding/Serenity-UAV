@@ -581,7 +581,7 @@ union() {
             // A1. Shell with existing sensor/GPS aperture cuts.
             difference() {
                 // 2.0 mm foam-fill cargo gondola shell (manifold for CGAL ops)
-                import("../../thingverse-serenity/files-hollowed-18in/s_cargo_sect_shell24_2mm_repaired.stl");
+                import("../../../stls/fuselage/cargo/s_cargo_sect_shell24_repaired.stl");
 
                 // Nadir FPV camera aperture
                 fpv_cut(CARGO_CAM_POS, NADIR_ROT);

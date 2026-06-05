@@ -51,6 +51,31 @@ SCALE_ONLY_PARTS = [
     "s_eng_piv_pins.stl",
 ]
 
+# Joint face features: section files, mating faces, and boss/socket assignment.
+# Each joint pair alternates so one side gets a boss and the mating side gets a socket.
+JOINT_FEATURES = {
+    "s_head.stl": [("aft", "max", 1.0, "socket")],
+    "s_cargo_sect.stl": [
+        ("forward", "min", -1.0, "boss"),
+        ("aft", "max", 1.0, "socket"),
+    ],
+    "s_middle.stl": [
+        ("forward", "min", -1.0, "boss"),
+        ("aft", "max", 1.0, "socket"),
+    ],
+    "s_rear.stl": [("forward", "min", -1.0, "boss")],
+}
+
+BOSS_OD_MM = 8.0
+BOSS_HEIGHT_MM = 6.0
+SOCKET_DEPTH_MM = 6.0
+BOSS_CLEARANCE_MM = 0.3
+M3_SCREW_DIAM_MM = 3.0
+M3_CLEARANCE_MM = 0.3
+M3_CLEARANCE_DIAM_MM = M3_SCREW_DIAM_MM + M3_CLEARANCE_MM
+M3_HOLE_DEPTH_MM = BOSS_HEIGHT_MM + 2.0
+BOSS_OFFSET_RATIO = 0.30  # offset from center for boss placement on the mating face
+
 
 def clear_scene():
     bpy.ops.object.select_all(action="SELECT")
@@ -69,7 +94,190 @@ def export_stl(obj, path):
     bpy.ops.wm.stl_export(filepath=path, export_selected_objects=True)
 
 
-def make_watertight_and_shell(obj, wall_mm, voxel_mm=1.0):
+def open_joint_faces(obj, fname, tolerance_mm=0.5):
+    """Remove the flat mating face polygons and leave the shell joint open."""
+    planes = JOINT_FEATURES.get(fname, [])
+    if not planes:
+        return
+
+    import bmesh
+    bpy.ops.object.mode_set(mode='OBJECT')
+    bpy.ops.object.select_all(action='DESELECT')
+    obj.select_set(True)
+    bpy.context.view_layer.objects.active = obj
+
+    bm = bmesh.new()
+    bm.from_mesh(obj.data)
+    bm.faces.ensure_lookup_table()
+
+    verts = [v.co.z for v in bm.verts]
+    z_min = min(verts)
+    z_max = max(verts)
+
+    for _, bound, normal_z, _ in planes:
+        plane_z = z_min if bound == 'min' else z_max
+        marked = []
+        for face in bm.faces:
+            if abs(face.normal.z - normal_z) > 0.05:
+                continue
+
+            centroid_z = sum((v.co.z for v in face.verts)) / len(face.verts)
+            if abs(centroid_z - plane_z) > tolerance_mm:
+                continue
+
+            marked.append(face)
+
+        if marked:
+            bmesh.ops.delete(bm, geom=marked, context='FACES')
+            print(f"  Opened joint face at {fname}: {bound} Z={plane_z:.2f}")
+
+    bm.to_mesh(obj.data)
+    bm.free()
+    obj.data.update()
+
+
+def add_joint_bosses(obj, fname):
+    """Add interior boss or socket features at the open joint face(s)."""
+    planes = JOINT_FEATURES.get(fname, [])
+    if not planes:
+        return
+
+    bpy.ops.object.mode_set(mode='OBJECT')
+    bpy.ops.object.select_all(action='DESELECT')
+    obj.select_set(True)
+    bpy.context.view_layer.objects.active = obj
+
+    bounds = [v.co for v in obj.data.vertices]
+    xs = [v.x for v in bounds]
+    ys = [v.y for v in bounds]
+    x_center = (min(xs) + max(xs)) / 2.0
+    y_center = (min(ys) + max(ys)) / 2.0
+    x_span = (max(xs) - min(xs)) * 0.5 * BOSS_OFFSET_RATIO
+    y_span = (max(ys) - min(ys)) * 0.5 * BOSS_OFFSET_RATIO
+
+    features = []
+    boss_hole_centers = []
+    for _, bound, normal_z, feature_type in planes:
+        z = min(v.co.z for v in bounds) if bound == 'min' else max(v.co.z for v in bounds)
+        direction = -normal_z
+        if feature_type == 'boss':
+            depth = BOSS_HEIGHT_MM
+            radius = BOSS_OD_MM / 2.0
+            name_prefix = 'boss'
+            offset = BOSS_HEIGHT_MM / 2.0 + 0.5
+        else:
+            depth = SOCKET_DEPTH_MM
+            radius = BOSS_OD_MM / 2.0 + BOSS_CLEARANCE_MM
+            name_prefix = 'socket'
+            offset = SOCKET_DEPTH_MM / 2.0 + 0.5
+
+        feature_z = z + direction * offset
+        for ix in (-1, 1):
+            for iy in (-1, 1):
+                fx = x_center + ix * x_span
+                fy = y_center + iy * y_span
+                feat_name = f"{name_prefix}_{fname}_{bound}_{ix}_{iy}"
+                bpy.ops.mesh.primitive_cylinder_add(
+                    radius=radius,
+                    depth=depth,
+                    enter_editmode=False,
+                    location=(fx, fy, feature_z),
+                )
+                feature_obj = bpy.context.active_object
+                feature_obj.name = feat_name
+                features.append((feature_obj, feature_type))
+                if feature_type == 'boss':
+                    boss_hole_centers.append((fx, fy, feature_z))
+
+    if not features:
+        return
+
+    # Separate boss solids and socket cutters.
+    boss_objs = [obj for obj, t in features if t == 'boss']
+    socket_objs = [obj for obj, t in features if t == 'socket']
+
+    if boss_objs:
+        bpy.ops.object.select_all(action='DESELECT')
+        for boss in boss_objs:
+            boss.select_set(True)
+        bpy.context.view_layer.objects.active = boss_objs[0]
+        bpy.ops.object.join()
+        boss_group = bpy.context.active_object
+        boss_group.name = 'joint_bosses'
+
+        bpy.ops.object.select_all(action='DESELECT')
+        obj.select_set(True)
+        boss_group.select_set(True)
+        bpy.context.view_layer.objects.active = obj
+        mod = obj.modifiers.new(name='boss_union', type='BOOLEAN')
+        mod.operation = 'UNION'
+        mod.object = boss_group
+        mod.solver = 'EXACT'
+        bpy.ops.object.modifier_apply(modifier='boss_union')
+        bpy.data.objects.remove(boss_group, do_unlink=True)
+
+        cut_m3_clearance_holes(obj, boss_hole_centers)
+
+    if socket_objs:
+        bpy.ops.object.select_all(action='DESELECT')
+        for socket in socket_objs:
+            socket.select_set(True)
+        bpy.context.view_layer.objects.active = socket_objs[0]
+        bpy.ops.object.join()
+        socket_group = bpy.context.active_object
+        socket_group.name = 'joint_sockets'
+
+        bpy.ops.object.select_all(action='DESELECT')
+        obj.select_set(True)
+        socket_group.select_set(True)
+        bpy.context.view_layer.objects.active = obj
+        mod = obj.modifiers.new(name='socket_cut', type='BOOLEAN')
+        mod.operation = 'DIFFERENCE'
+        mod.object = socket_group
+        mod.solver = 'EXACT'
+        bpy.ops.object.modifier_apply(modifier='socket_cut')
+        bpy.data.objects.remove(socket_group, do_unlink=True)
+
+    print(f"  Added {len(boss_objs)} boss(es) and {len(socket_objs)} socket(s) for {fname}")
+
+
+def cut_m3_clearance_holes(obj, hole_centers):
+    """Cut M3 clearance holes through boss features on the mating face."""
+    if not hole_centers:
+        return
+
+    bpy.ops.object.select_all(action='DESELECT')
+    hole_objs = []
+    for idx, (hx, hy, hz) in enumerate(hole_centers, start=1):
+        bpy.ops.mesh.primitive_cylinder_add(
+            radius=M3_CLEARANCE_DIAM_MM / 2.0,
+            depth=M3_HOLE_DEPTH_MM,
+            enter_editmode=False,
+            location=(hx, hy, hz),
+        )
+        hole = bpy.context.active_object
+        hole.name = f"m3_clearance_hole_{idx}"
+        hole.select_set(True)
+        hole_objs.append(hole)
+
+    bpy.context.view_layer.objects.active = hole_objs[0]
+    bpy.ops.object.join()
+    hole_group = bpy.context.active_object
+    hole_group.name = 'm3_clearance_holes'
+
+    bpy.ops.object.select_all(action='DESELECT')
+    obj.select_set(True)
+    hole_group.select_set(True)
+    bpy.context.view_layer.objects.active = obj
+    mod = obj.modifiers.new(name='m3_clearance_cut', type='BOOLEAN')
+    mod.operation = 'DIFFERENCE'
+    mod.object = hole_group
+    mod.solver = 'EXACT'
+    bpy.ops.object.modifier_apply(modifier='m3_clearance_cut')
+    bpy.data.objects.remove(hole_group, do_unlink=True)
+
+
+def make_watertight_and_shell(obj, wall_mm, voxel_mm=1.0, fname=None):
     """
     1. Voxel remesh → watertight manifold (preserves exterior to ±voxel_mm)
     2. Solidify inward → closed shell of wall_mm thickness
@@ -77,18 +285,40 @@ def make_watertight_and_shell(obj, wall_mm, voxel_mm=1.0):
     bpy.context.view_layer.objects.active = obj
 
     # Step 1: voxel remesh to guarantee a watertight manifold.
-    # Use the object-level voxel remesh (faster than the modifier path in 4.x).
-    obj.data.remesh_voxel_size = voxel_mm
-    obj.data.remesh_voxel_adaptivity = 0.0
-    bpy.ops.object.voxel_remesh()
+    # Call the operator with explicit parameters to ensure correct voxel size.
+    bpy.ops.object.mode_set(mode='OBJECT')
+    bpy.ops.object.select_all(action='DESELECT')
+    obj.select_set(True)
+    bpy.context.view_layer.objects.active = obj
+    bpy.ops.object.voxel_remesh(voxel_size=voxel_mm, adaptivity=0.0)
+
+    # Clean up: merge very-close vertices and make normals consistent (outside).
+    bpy.ops.object.mode_set(mode='EDIT')
+    bpy.ops.mesh.select_all(action='SELECT')
+    # Merge by distance to remove tiny duplicate verts created by remesh
+    bpy.ops.mesh.merge_by_distance()
+    # Ensure normals point outward so Solidify applies inward correctly
+    bpy.ops.mesh.normals_make_consistent(inside=False)
+    bpy.ops.object.mode_set(mode='OBJECT')
+
+    # Step 1b: open any section joint faces before shelling.
+    if fname is not None:
+        open_joint_faces(obj, fname)
 
     # Step 2: solidify inward — exterior surface stays exactly where it is.
+    # Use a positive thickness with offset=-1 to push the new surface inward
+    # relative to the outward-facing normals.  Do not cap boundaries here; the
+    # mating faces should remain open.
     mod = obj.modifiers.new(name="Shell", type="SOLIDIFY")
-    mod.thickness           = -wall_mm   # negative = inward offset
-    mod.offset              = -1.0       # anchor at outer surface
-    mod.use_even_offset     = True
+    mod.thickness = wall_mm
+    mod.offset = -1.0
+    mod.use_even_offset = True
     mod.use_quality_normals = True
+    mod.use_rim = False
     bpy.ops.object.modifier_apply(modifier="Shell")
+
+    if fname is not None:
+        add_joint_bosses(obj, fname)
 
 
 def process_hollow(fname):
@@ -104,7 +334,7 @@ def process_hollow(fname):
     bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
 
     # Voxel remesh (1 mm voxels at final scale) → Solidify inward 2.5 mm
-    make_watertight_and_shell(obj, wall_mm=WALL_MM, voxel_mm=1.0)
+    make_watertight_and_shell(obj, wall_mm=WALL_MM, voxel_mm=1.0, fname=fname)
 
     export_stl(obj, out)
     sz = os.path.getsize(out) / 1024
