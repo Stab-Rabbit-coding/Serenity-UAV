@@ -17,13 +17,14 @@ are standard Linux processes that use POSIX APIs, i2c-dev, libgpiod 2.x, and pth
 ## Node Groups
 
 | Group | Count | Cape | Responsibilities |
-|-------|-------|------|-----------------|
+| ------- | ------- | ------ | ----------------- |
 | FC nodes | 4 | Cape-A | Flight control, navigation, obstacle avoidance, ESC/actuator drive |
 | CN nodes | 4 | Cape-B | Radio links, system logging, payload/cargo management |
 
 ## Directory Layout
 
-```
+```text
+
 firmware/
 ├── common/
 │   └── include/         # Shared headers used by both FC and CN daemons
@@ -42,6 +43,7 @@ firmware/
 │   └── src/
 │       └── main.c       # FC node entry point stub
 └── CMakeLists.txt       # Top-level build
+
 ```
 
 ## Build
@@ -49,7 +51,7 @@ firmware/
 ### Target Platform
 
 | Item | Value |
-|------|-------|
+| ------ | ------- |
 | Board | PocketBeagle 2 Industrial (DigiKey 2820-100003007-ND) |
 | SoC | TI AM6254 (quad Cortex-A53 @ 1.4 GHz, dual PRU-ICSS) |
 | OS | BeagleBone Debian Trixie (libgpiod 2.2.1, Linux ≥ 6.1) |
@@ -58,16 +60,22 @@ firmware/
 ### Prerequisites (cross-compilation host, Ubuntu 24.04+)
 
 ```bash
+
 # Cross-compiler and CMake
+
 sudo apt install cmake gcc-aarch64-linux-gnu libc6-dev-arm64-cross
 
 # libgpiod 2.x headers and static lib for aarch64
+
 # Debian Trixie sysroot required — or use multiarch on a Trixie host:
+
 #   sudo dpkg --add-architecture arm64
+
 #   sudo apt install libgpiod-dev:arm64
+
 ```
 
-> **Note:** libgpiod **2.x** is required (Debian Trixie ships 2.2.1).
+> **Note:**libgpiod**2.x** is required (Debian Trixie ships 2.2.1).
 > The libgpiod 1.x API (Ubuntu 24.04) is **incompatible** with this code.
 > Build directly on a PocketBeagle 2 or in a Trixie arm64 container if
 > a full cross-compilation sysroot is not available.
@@ -75,7 +83,9 @@ sudo apt install cmake gcc-aarch64-linux-gnu libc6-dev-arm64-cross
 ### Build on the PocketBeagle 2 itself (simplest for Phase 6)
 
 ```bash
+
 # On the PocketBeagle 2 running Debian Trixie:
+
 sudo apt install cmake build-essential libgpiod-dev
 
 git clone <repo> && cd Serenity-UAV/serenity/firmware
@@ -83,22 +93,28 @@ mkdir build && cd build
 cmake ..
 cmake --build .
 sudo cmake --install .
+
 ```
 
 ### Cross-compile for AM6254 (aarch64) — advanced
 
 ```bash
+
 mkdir build && cd build
 cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake/aarch64-linux-gnu.cmake
 cmake --build .
+
 ```
 
 ## Deployment
 
 ```bash
+
 # Install via cmake on the target, or copy manually:
+
 scp build/cn/serenity-cn debian@pocketbeagle2-cn1:/usr/local/bin/
 scp build/fc/serenity-fc debian@pocketbeagle2-fc1:/usr/local/bin/
+
 ```
 
 Systemd unit files are in `cn/serenity-cn.service` and `fc/serenity-fc.service` (Phase 7).

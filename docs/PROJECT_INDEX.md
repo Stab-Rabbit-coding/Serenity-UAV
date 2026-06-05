@@ -1,37 +1,10 @@
 <!-- OpenDyslexic font for screen reading (CC BY 4.0) -->
-<link rel="stylesheet" href="https://fonts.cdnfonts.com/css/opendyslexic">
-<style>
-body, p, li, td, th, code, pre {
-  font-family: 'OpenDyslexic', 'OpenDyslexicMono', sans-serif !important;
-  line-height: 1.8;
-  letter-spacing: 0.03em;
-}
-/* Screen: dark background, high-contrast light text */
-@media screen {
-  body { background: #0d1117; color: #e6edf3; }
-  a    { color: #58a6ff; }
-  code { background: #161b22; color: #e6edf3; padding: 2px 6px; border-radius: 4px; }
-  pre  { background: #161b22; padding: 12px; border-radius: 6px; }
-  th   { background: #21262d; color: #79c0ff; }
-  tr:nth-child(even) td { background: #161b22; }
-  h1,h2,h3 { color: #58a6ff; border-bottom: 1px solid #30363d; padding-bottom: 6px; }
-  blockquote { border-left: 4px solid #388bfd; color: #8b949e; padding-left: 12px; }
-}
-/* Print: light background, dark text, conserve ink */
-@media print {
-  body { background: #ffffff !important; color: #111111 !important; }
-  a    { color: #003399 !important; }
-  h1,h2,h3 { color: #000000 !important; }
-  code,pre  { background: #f5f5f5 !important; color: #111111 !important; border: 1px solid #cccccc; }
-  tr:nth-child(even) td { background: #f9f9f9 !important; }
-}
-</style>
 
 # Serenity-Class Tiltrotor UAV — Public Project Index
 
-**Author:** Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP  
-**License:** CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/  
-**Year:** 2026  
+**Author:** Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP
+**License:** CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
+**Year:** 2026
 **Status:** Public release — all artifacts published
 
 ---
@@ -39,7 +12,7 @@ body, p, li, td, th, code, pre {
 ## Attribution
 
 | Work | Author | License | Source |
-|------|--------|---------|--------|
+| ------ | -------- | --------- | -------- |
 | Hull geometry | Peter Farell | CC BY 4.0 | printables.com/model/548545 |
 | Variable-area EDF nozzles | BamJr | CC BY 4.0 | thingiverse.com/thing:2991269 |
 | Visual inspiration | Joss Whedon / Mutant Enemy / Universal | © all rights reserved | Firefly (2002) / Serenity (2005) — Fan engineering work |
@@ -52,7 +25,7 @@ body, p, li, td, th, code, pre {
 ### JSX Interactive Specification Artifacts (open in Claude.ai or offline viewer)
 
 | File | Description | Revision |
-|------|-------------|----------|
+| ------ | ------------- | ---------- |
 | `tiltrotor-drone.jsx` | Original Rev A design concept | Rev A |
 | `pico2-hat.jsx` | TRIHAT-1 sensor hat specification | Rev A |
 | `cm4-carrier-update.jsx` | CM4 carrier board update | Rev B |
@@ -82,7 +55,7 @@ body, p, li, td, th, code, pre {
 ### SVG Engineering Diagrams
 
 | File | Description |
-|------|-------------|
+| ------ | ------------- |
 | `overview_top.svg` | Top / plan view with dimensions, antennas, CG, nav lights |
 | `overview_side.svg` | Right side view with all subsystems annotated |
 | `overview_front.svg` | Front (nose-on) view showing nacelle span |
@@ -114,7 +87,7 @@ body, p, li, td, th, code, pre {
 ### KiCad PCB Source Files (KiCad 7.x)
 
 | File | Board | Size | Description |
-|------|-------|------|-------------|
+| ------ | ------- | ------ | ------------- |
 | `TRIHAT-1.kicad_pcb` | TRIHAT-1 | 65×48mm | Pico 2 sensor hat: IMU, Baro, GPS, CAN FD, Ethernet, TPM 2.0 |
 | `TRIHAT-1.kicad_sch` | TRIHAT-1 | — | Schematic (open in KiCad 7.x) |
 | `CM4-CARRIER-1.kicad_pcb` | CM4-CARRIER-1 Rev E | 65×52mm | CM4 carrier: write-blocker CPLD, dual-band WiFi SMA, μSD, USB hub |
@@ -127,7 +100,7 @@ body, p, li, td, th, code, pre {
 ### STL 3D Print Files (22 parts)
 
 | File | Material | Notes |
-|------|----------|-------|
+| ------ | ---------- | ------- |
 | `hull_cockpit_cap.stl` | PETG | Nose section 0–22mm |
 | `hull_cockpit_section.stl` | PETG | Cockpit bay 22–90mm |
 | `hull_mid_body_left.stl` | PETG | Mid hull left half |
@@ -157,7 +130,7 @@ Generate STL from SCAD: `openscad -o <output.stl> <file.scad>` (OpenSCAD 2021.01
 Nacelle shells use Blender script instead — see `thingverse-serenity/blender_nacelle_revo.py`.
 
 | File | Output STL | Description |
-|------|-----------|-------------|
+| ------ | ----------- | ------------- |
 | `serenity/stl/s_edf_120_motor_mount.scad` | `s_edf_120_motor_mount.stl` | 120mm rear EDF motor mount ring — CF-PETG structural |
 | `serenity/stl/s_edf_120_thrust_tube.scad` | `s_edf_120_thrust_tube.stl` | 120mm rear EDF thrust tube / nozzle — PETG |
 | `serenity/stl/s_aft_edf_plenum.scad` | `s_aft_edf_plenum.stl` | 4-to-1 cross-shaped plenum manifold for 4 radial scoops → 120mm EDF |
@@ -173,7 +146,7 @@ Nacelle shells use Blender script instead — see `thingverse-serenity/blender_n
 ### Documentation
 
 | File | Description |
-|------|-------------|
+| ------ | ------------- |
 | `LICENSE_AND_ATTRIBUTION.md` | Full CC BY 4.0 license, author credentials, all upstream attributions |
 | `README.md` | Project overview, quick specs, build guide index, file inventory |
 | `MANIFEST.json` | SHA-256 checksums for all project files (integrity verification) |
@@ -199,7 +172,7 @@ Nacelle shells use Blender script instead — see `thingverse-serenity/blender_n
 ## Quick Specs
 
 | Parameter | Value |
-|-----------|-------|
+| ----------- | ------- |
 | Hull | **609.6 mm (24.00") Serenity-class** · CC BY 4.0 Peter Farell (printables.com/model/548545) · scale factor 2.9294× |
 | Canon basis | QMx Blueprints Mandel/Earls 2007 · 269ft × 170ft × 79ft |
 | Canonical beam | 486 mm tip-to-tip · hull height 182 mm (landed) |
@@ -226,7 +199,7 @@ Nacelle shells use Blender script instead — see `thingverse-serenity/blender_n
 ## Connectivity Summary (Rev K/L — unchanged)
 
 | Bus | Protocol | Speed | Topology | Notes |
-|-----|----------|-------|----------|-------|
+| ----- | ---------- | ------- | ---------- | ------- |
 | 1 | Ethernet (CPSW3G + DP83825I) | 100 Mbps | **RSTP ring** (8-node, self-healing) | Added Rev E; ring topology Rev K |
 | 2 | CAN FD ISO 11898-1 | 1 Mbps / 8 Mbps data | Linear daisy-chain CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4; 120Ω at CN1 (start) and FC4 (end) | Added Rev E |
 | 3 | RS-485 / EIA-485 | 1 Mbps | Multi-drop CN1→…→FC4; 120Ω at CN1 and FC4 | Added Rev G |
@@ -235,5 +208,5 @@ Nacelle shells use Blender script instead — see `thingverse-serenity/blender_n
 
 ---
 
-*© 2026 Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP*  
+*© 2026 Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP*
 *CC BY 4.0 · creativecommons.org/licenses/by/4.0*

@@ -1,19 +1,10 @@
 <!-- OpenDyslexic font for screen reading (CC BY 4.0) -->
-<link rel="stylesheet" href="https://fonts.cdnfonts.com/css/opendyslexic">
-<style>
-body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-serif!important;line-height:1.8}
-@media screen{body{background:#0d1117;color:#e6edf3}a{color:#58a6ff}
-  h1,h2,h3{color:#58a6ff;border-bottom:1px solid #30363d;padding-bottom:6px}
-  code{background:#161b22;color:#e6edf3;padding:2px 6px;border-radius:4px}
-  th{background:#21262d;color:#79c0ff}tr:nth-child(even)td{background:#161b22}}
-@media print{body{background:#fff!important;color:#111!important}a{color:#003399!important}}
-</style>
 
 # Serenity-Class Tiltrotor UAV — Rev M (18" Canonical Build)
 
 **Author:** Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**Year:** 2026  |  **Status:** Public release
+**Year:**2026  |**Status:** Public release
 
 > Rev M supersedes Rev L. Hardware upgrade: all 8 PocketBeagle 2 (AM6232) replaced by PocketBeagle 2 Industrial (AM6254).
 > AM6254 quad Cortex-A53 1.4GHz · 1GB DDR4 · 64GB eMMC · −40°C to 85°C industrial. Propulsion + governor unchanged from Rev L.
@@ -23,7 +14,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 ## Attribution
 
 | Work | Author | License | Source |
-|------|--------|---------|--------|
+| ------ | -------- | --------- | -------- |
 | Hull geometry | Peter Farell | CC BY 4.0 | printables.com/model/548545 |
 | EDF nozzles | BamJr | CC BY 4.0 | thingiverse.com/thing:2991269 |
 | Blueprint proportions | Mandel + Earls / QMx / Universal | © 2007 QMx | 269ft×170ft×79ft ratios |
@@ -35,14 +26,14 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 ## Quick Specs (18" Scale — propulsion unchanged Rev L → Rev M; compute board upgraded)
 
 | Parameter | Value |
-|-----------|-------|
+| ----------- | ------- |
 | Hull length | 457.2 mm (18.00") · Canon 269 ft |
 | Canonical beam (tip-to-tip) | 288.9 mm (11.375") · Canon 170 ft |
 | Canonical height (landed) | 134.3 mm (5.286") · Canon 79 ft |
 | Canon source | QMx Official Blueprints, Mandel/Earls 2007 |
 | Hull structure | PETG thin shell + X-30 foam + CF skeleton |
 | Propulsion | **2× (2× Changesun XRP 3660-2700KV 80mm 6S EDF, tandem series) per nacelle** · 1× XFLY X4 PRO 40mm 4S fuselage |
-| Nacelle pod OD | **93.5 mm** canonical · Pod length **230 mm** (tandem) · ID 83 mm (XRP housing) |
+| Nacelle pod OD | **93.5 mm**canonical · Pod length**230 mm** (tandem) · ID 83 mm (XRP housing) |
 | Nacelle tip-to-tip | 288.9 mm (11.375") — CANONICAL |
 | Nacelle C-to-C | 195.5 mm (7.70") |
 | Pylon datum from CL | 82.2 mm (1/3 from nacelle inner edge) |
@@ -67,7 +58,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 ### Rev M Changes (Hardware Upgrade)
 
 | Change | Rev L | Rev M |
-|--------|-------|-------|
+| -------- | ------- | ------- |
 | Compute board | PocketBeagle 2 (AM6232) | **PocketBeagle 2 Industrial (AM6254)** |
 | SoC | Dual Cortex-A53 1.0GHz | **Quad Cortex-A53 1.4GHz** |
 | RAM | 512MB DDR4 | **1GB DDR4** |
@@ -83,7 +74,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 ### Rev L Governor (Unchanged in Rev M)
 
 | Parameter | Value |
-|-----------|-------|
+| ----------- | ------- |
 | Governor | Per-EDF PID closed-loop RPM · 500 Hz (AM6254 M4F coprocessor) |
 | Feedback | BDSHOT RPM 1 kHz + BLHeli32 serial telem 10 Hz |
 | PID gains (RPM) | Kp=3×10⁻⁴ · Ki=1×10⁻⁵ · Kd=8×10⁻⁵ |
@@ -97,7 +88,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 ### Rev K → Rev L Changes (historical)
 
 | Change | Rev K | Rev L |
-|--------|-------|-------|
+| -------- | ------- | ------- |
 | Nacelle governor | Open-loop throttle pass-through | **PID closed-loop RPM per EDF + equalization** |
 | M4F coprocessor | Unused for propulsion | **500 Hz governor loops** |
 | Fault detection | Logged only | **Active latch + MAVLink + RTH** |
@@ -108,7 +99,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 ### Rev J → Rev K Changes (historical)
 
 | Change | Rev J | Rev K |
-|--------|-------|-------|
+| -------- | ------- | ------- |
 | Nacelle EDF | 1× XRP per nacelle | **2× XRP tandem series per nacelle** |
 | Nacelle ESC | 2× 120A total | **4× 120A (one per EDF)** |
 | Nacelle thrust (each) | 2,900 g | **5,300 g** (+83%) |

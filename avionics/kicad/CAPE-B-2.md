@@ -46,14 +46,14 @@ via RS485_DE (tied to both DE and RE_N) is preserved.
 ### 4. Common-mode chokes on CAN and RS-485 bus lines
 
 | Reference | Bus | Part | Spec |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | CM1 | CAN FD | Bourns SRF2012-100Y | 100 Ω @ 100 MHz, 800 mA |
 | CM2 | RS-485 | Bourns SRF2012-100Y | 100 Ω @ 100 MHz, 800 mA |
 
 ### 5. TVS diode arrays on all external field connectors
 
 | Reference | Connector | Part | Clamp |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | TVS-CAN | CAN-A JST-GH | PRTR5V0U2X | 5.5 V, bidirectional |
 | TVS-485 | RS485-A JST-GH | PRTR5V0U2X | 5.5 V, bidirectional |
 | TVS-1553 | 1553-A JST-GH | SMAJ33CA × 2 | 33 V, bidirectional, 400 W |
@@ -69,11 +69,15 @@ The SiK module (RFD900x form-factor UART-connected radio) has its power and cont
 lines treated as follows:
 
 - **Supply:** A 10 µF + 100 nF MLCC decoupling pair placed ≤ 1 mm from the module
+
   VCC pin, in addition to the existing 100 µF + 100 nF bulk cap array (U16 in CAPE-B-1).
+
 - **UART lines (UART_SIK_TX/RX):** A ferrite bead (Würth 742792510, 600 Ω @ 100 MHz,
+
   100 mA, 0402) in series with each line before the module header. These beads suppress
   RF currents at 915 MHz and above that could be conducted back from the SiK antenna
   onto the digital UART traces.
+
 - **CTS/RTS:** Same ferrite bead on each handshake line.
 
 ### 7. LoRa (RFM95W) SPI bus filtering
@@ -92,10 +96,13 @@ The TI WL1837MOD WiFi module uses SDIO at up to 50 MHz. The 2.4/5 GHz transmit p
 WiFi TX switching noise from coupling into the digital SPI and UART lines:
 
 - Ferrite beads (Würth 742792510) on SDIO_CLK, SDIO_CMD, and each SDIO_D0–D3 line
+
   at the module-to-SoC end. These attenuate 2.4 GHz common-mode ingress from the
   SDIO lines without significantly degrading SDIO eye quality at 50 MHz (ferrite bead
   impedance ≈ 600 Ω at 100 MHz vs. < 10 Ω at 50 MHz — negligible signal loss).
+
 - A separate TPS63031 output LC filter stage: added 1 µH inductance in series with the
+
   existing SMPS output, followed by 47 µF MLCC, to reduce RF ripple on the +3V3_RF
   WiFi supply from the TPS63031 switch-mode regulator.
 
@@ -106,9 +113,13 @@ protection:
 
 - TVS-RCRS (PRTR5V0U2X): protects UART_RCRS_TX, UART_RCRS_RX, and PTT_N lines
 - Ferrite beads (FB-RCRS, Würth 742792510) in series with the UART lines before J1:
+
   prevents 49 MHz RF energy from entering the SoC UART interface via the cable stub
+
 - RSSI_ANA line: 1 nF C0G cap to ground for HF noise filtering (not ferrite bead, to
+
   avoid distortion of the DC–3 kHz RSSI analog signal)
+
 - 5V power pin: 10 µF + 100 nF local decoupling at J1
 
 ### 10. Power entry filter
@@ -120,9 +131,12 @@ Identical to CAPE-A-2: π-filter (C11 = 47 µF, FB1 = Würth 742792512, C12 = 10
 
 Same single-point chassis ground topology as CAPE-A-2. PGND additional connections
 specific to CAPE-B-2:
+
 - SMA connector shields for all antenna ports (SMA-915-SIK, SMA-915-LORA, SMA-WIFI,
+
   SMA-49) — all connected to PGND, not GND, to keep RF return currents off the
   signal ground plane.
+
 - Mounting holes × 4: PGND via 0 Ω solder-selectable links.
 - PGND-to-GND star point: single 0 Ω / 10 Ω link at J-PWR under the bay mounting boss.
 
@@ -132,7 +146,7 @@ CAPE-B-1 had 100 µF + 100 nF per radio VCC (U16 ferrite + bulk cap array). CAPE
 upgrades to:
 
 | Radio | Input supply filter | VCC bypass |
-|---|---|---|
+| --- | --- | --- |
 | SiK RFD900x | 10 µH inductance + 47 µF (before module VCC) | 100 nF + 10 nF at module pin |
 | RFM95W | 100 Ω ferrite + 10 µF + 100 nF | 100 nF + 10 nF at module pin |
 | WL1837MOD | TPS63031 output + 1 µH + 47 µF (CAPE-B-2 added) | 10 µF + 100 nF at module pin |
@@ -145,16 +159,23 @@ upgrades to:
 The CAPE-A-2 layout constraints apply equally here. Additional CAPE-B-2 specifics:
 
 - **RF groundplane moat:** The RFD900x and RFM95W occupy the same RF section as in
+
   CAPE-B-1 (right 30 mm of board). The isolation moat between the RF groundplane and
   the digital groundplane must be maintained; the moat capacitors (10 nF X2Y) bridge
   the moat at RF frequencies, referenced to PGND on the RF side and GND on the digital
   side.
+
 - **SMA shield contacts:** All four SMA connectors must have their shells soldered to
+
   a PGND copper pour, NOT to the digital GND pour. Route a 3 mm PGND pour around each
   SMA mounting footprint.
+
 - **Ferrite bead orientation:** SDIO and SPI ferrite beads must be oriented with their
+
   axis perpendicular to the associated RF trace runs (per Würth EMC design guide).
+
 - **RCRS-49 header J1:** Place within 5 mm of the board edge so the cable run to the
+
   XCVR-49MHZ-2 module is minimised. Apply a PGND guard pour around J1.
 
 ---
@@ -162,8 +183,9 @@ The CAPE-A-2 layout constraints apply equally here. Additional CAPE-B-2 specific
 ## Eliminated vs. CAPE-B-1 Bill of Materials (delta)
 
 ### Removed
+
 | Reference | Part |
-|---|---|
+| --- | --- |
 | ETH1-PHY | DP83825I Ethernet PHY |
 | ETH2-PHY | DP83825I Ethernet PHY |
 | U11 (TPS62933) | 3.3→1.8 V SMPS for PHY AVDD |
@@ -173,8 +195,9 @@ The CAPE-A-2 layout constraints apply equally here. Additional CAPE-B-2 specific
 | RS485 (MAX3485E) | Non-isolated RS-485 transceiver |
 
 ### Added
+
 | Reference | Part | Function |
-|---|---|---|
+| --- | --- | --- |
 | CAN-ISO | ISOW1044BDFMR | Isolated CAN FD (5 kV) |
 | RS485-ISO | ADM2795EBRWZ | Isolated RS-485 (5 kV, ±42 V) |
 | CM1 | Bourns SRF2012-100Y | CAN CMC |
@@ -197,7 +220,7 @@ The CAPE-A-2 layout constraints apply equally here. Additional CAPE-B-2 specific
 ## Power Budget (updated)
 
 | Rail | Consumers | Max current |
-|---|---|---|
+| --- | --- | --- |
 | +5V (filtered) | PB2 VIN, DRV8833 motor, radio modules | 3.0 A |
 | +3V3_RF (SMPS) | RFD900x (1.2 A TX peak), RFM95W (120 mA TX), WL1837MOD (550 mA TX) | 1.5 A continuous, 2.0 A peak |
 | +3V3 logic (LDO) | MAX3485E→ADM2795, ATA6561→ISOW1044B, DS26LV31/32, HX711, SLB9670, ATF16V8BQL | 350 mA |
@@ -231,8 +254,13 @@ ground connection and the antenna cable shielding.
 ## References
 
 1. TI Application Note SLLA337A — "Isolation Boundary Layout Guidelines for ISOW Devices"
-2. Analog Devices ADM2795E Data Sheet Rev. B
-3. Würth Elektronik EMC Design Guide (2023) — ferrite bead placement
-4. TI WL1837MOD Hardware Design Guide (SWRU491) — supply filtering guidance
-5. IEC 61000-4-5:2017 — surge immunity
-6. MIL-STD-461G:2015
+
+- Step 2: Analog Devices ADM2795E Data Sheet Rev. B
+
+- Step 3: Würth Elektronik EMC Design Guide (2023) — ferrite bead placement
+
+- Step 4: TI WL1837MOD Hardware Design Guide (SWRU491) — supply filtering guidance
+
+- Step 5: IEC 61000-4-5:2017 — surge immunity
+
+- Step 6: MIL-STD-461G:2015

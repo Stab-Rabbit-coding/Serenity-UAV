@@ -1,18 +1,19 @@
 # Serenity-Class Tiltrotor UAV
 
-**Author:** Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP  
+**Author:** Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
 
-> Fan engineering work inspired by the Firefly-class transport ship *Serenity*  
-> from *Firefly* (2002) and *Serenity* (2005).  
-> © Joss Whedon / Mutant Enemy Productions / Universal Pictures  
+> Fan engineering work inspired by the Firefly-class transport ship *Serenity*
+> from *Firefly*(2002) and*Serenity* (2005).
+> © Joss Whedon / Mutant Enemy Productions / Universal Pictures
 > **Not an officially licensed product.**
 
 ---
 
 ## Repository Contents
 
-```
+```text
+
 serenity-drone/
 ├── README.md                          ← this file
 ├── docs/
@@ -44,6 +45,7 @@ serenity-drone/
     ├── payload_bay_door.stl           ← Belly door (PETG)
     ├── landing_skid_foot.stl          ← Skid pads (TPU 95A)
     └── cockpit_dome_clear.stl         ← Clear cockpit (clear PETG)
+
 ```
 
 ---
@@ -51,7 +53,7 @@ serenity-drone/
 ## Quick Specs
 
 | Parameter | Value |
-|-----------|-------|
+| ----------- | ------- |
 | Hull length | 365 mm (14.4") |
 | Wingspan | 680 mm (26.8") |
 | AUW — empty (rec.) | 1,002 g · 5S 4500mAh |
@@ -69,7 +71,7 @@ serenity-drone/
 
 - **Hull:** "Serenity, Firefly Class" by Peter Farell — [printables.com/model/548545](https://www.printables.com/model/548545) · CC BY 4.0
 - **Nozzle:** "Variable Area EDF Nozzles" by BamJr — [thingiverse.com/thing:2991269](https://www.thingiverse.com/thing:2991269) · CC BY 4.0
-- **Visual inspiration:** *Firefly* (Fox, 2002) / *Serenity* (Universal, 2005) · © Joss Whedon / Mutant Enemy Productions / Universal Pictures
+- **Visual inspiration:***Firefly* (Fox, 2002) /*Serenity* (Universal, 2005) · © Joss Whedon / Mutant Enemy Productions / Universal Pictures
 
 See [`docs/LICENSE_AND_ATTRIBUTION.md`](docs/LICENSE_AND_ATTRIBUTION.md) for full details.
 
@@ -77,15 +79,15 @@ See [`docs/LICENSE_AND_ATTRIBUTION.md`](docs/LICENSE_AND_ATTRIBUTION.md) for ful
 
 ## KiCad PCB Notes
 
-Open `.kicad_pcb` files in **KiCad 7.x or later**.  
-Component placement is provided; routing is a starting point — complete DRC-clean routing in KiCad before fabrication.  
-4-layer stackup: F.Cu (signals) · In1.Cu (+3V3 plane) · In2.Cu (GND plane) · B.Cu (signals).  
+Open `.kicad_pcb` files in **KiCad 7.x or later**.
+Component placement is provided; routing is a starting point — complete DRC-clean routing in KiCad before fabrication.
+4-layer stackup: F.Cu (signals) · In1.Cu (+3V3 plane) · In2.Cu (GND plane) · B.Cu (signals).
 Order from JLCPCB / OSHPark at 4-layer 1oz Cu ENIG finish.
 
 ## STL Print Notes
 
 | Filename | Material | Infill | Layer |
-|----------|----------|--------|-------|
+| ---------- | ---------- | -------- | ------- |
 | hull_*.stl | PETG | 8% gyroid | 0.20mm |
 | nacelle_*.stl | CF-PETG | 25% | 0.15mm |
 | nozzle_*.stl | PETG | 20% | 0.20mm |
@@ -94,8 +96,8 @@ Order from JLCPCB / OSHPark at 4-layer 1oz Cu ENIG finish.
 | cockpit_dome_clear.stl | Clear PETG | 15% | 0.20mm |
 | landing_skid_foot.stl | TPU 95A | 20% | 0.30mm |
 
-> **Note:** Gear STLs are mathematically-generated approximations.  
-> Refine tooth profiles in FreeCAD/Fusion 360 using a proper involute gear generator  
+> **Note:** Gear STLs are mathematically-generated approximations.
+> Refine tooth profiles in FreeCAD/Fusion 360 using a proper involute gear generator
 > (e.g., FreeCAD Gear workbench) before printing or sourcing commercial M0.5 gears.
 
 ---

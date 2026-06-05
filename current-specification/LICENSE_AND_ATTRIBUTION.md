@@ -1,44 +1,18 @@
 <!-- OpenDyslexic font for screen reading (CC BY 4.0) -->
-<link rel="stylesheet" href="https://fonts.cdnfonts.com/css/opendyslexic">
-<style>
-body, p, li, td, th, code, pre {
-  font-family: 'OpenDyslexic', 'OpenDyslexicMono', sans-serif !important;
-  line-height: 1.8;
-  letter-spacing: 0.03em;
-}
-/* Screen: dark background, high-contrast light text */
-@media screen {
-  body { background: #0d1117; color: #e6edf3; }
-  a    { color: #58a6ff; }
-  code { background: #161b22; color: #e6edf3; padding: 2px 6px; border-radius: 4px; }
-  pre  { background: #161b22; padding: 12px; border-radius: 6px; }
-  th   { background: #21262d; color: #79c0ff; }
-  tr:nth-child(even) td { background: #161b22; }
-  h1,h2,h3 { color: #58a6ff; border-bottom: 1px solid #30363d; padding-bottom: 6px; }
-  blockquote { border-left: 4px solid #388bfd; color: #8b949e; padding-left: 12px; }
-}
-/* Print: light background, dark text, conserve ink */
-@media print {
-  body { background: #ffffff !important; color: #111111 !important; }
-  a    { color: #003399 !important; }
-  h1,h2,h3 { color: #000000 !important; }
-  code,pre  { background: #f5f5f5 !important; color: #111111 !important; border: 1px solid #cccccc; }
-  tr:nth-child(even) td { background: #f9f9f9 !important; }
-}
-</style>
 
 # Serenity-Class Tiltrotor UAV — License & Attribution
 
-**Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**Project:** Serenity-Class Tri-Fan Tiltrotor Unmanned Aerial Vehicle  
-**Revision:** N (current)  
+**Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+**Project:** Serenity-Class Tri-Fan Tiltrotor Unmanned Aerial Vehicle
+**Revision:** N (current)
 **License:** Creative Commons Attribution 4.0 International (CC BY 4.0)
 
 ---
 
 ## License
 
-```
+```text
+
 Creative Commons Attribution 4.0 International
 
 Copyright © 2025 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
@@ -58,6 +32,7 @@ No additional restrictions — You may not apply legal terms or technological
 measures that legally restrict others from doing anything the license permits.
 
 Full license text: https://creativecommons.org/licenses/by/4.0/legalcode
+
 ```
 
 ---
@@ -65,7 +40,7 @@ Full license text: https://creativecommons.org/licenses/by/4.0/legalcode
 ## Author
 
 | Field | Value |
-|-------|-------|
+| ------- | ------- |
 | **Name** | Steve Griffing |
 | **PE License** | PE(CSE) — Professional Engineer |
 | **PE Discipline** | **Control Systems Engineering** |
@@ -95,16 +70,16 @@ The following elements are original work by Steve Griffing, released under CC BY
 
 ## Attribution to Integrated and Adapted Works
 
-### 1. *Firefly* / *Serenity* — Creative Universe
+### 1. *Firefly*/*Serenity* — Creative Universe
 
 > The hull form and visual design of this UAV are inspired by the **Firefly-class
-> transport ship *Serenity*** from the television series *Firefly* (2002) and
+> transport ship *Serenity***from the television series*Firefly* (2002) and
 > the feature film *Serenity* (2005).
 
-**Original Creators:**
+## Original Creators
 
 | Role | Name |
-|------|------|
+| ------ | ------ |
 | Creator / Executive Producer / Writer | **Joss Whedon** |
 | Co-Executive Producer / Writer | Tim Minear |
 | Producer / Director | David Solomon |
@@ -117,16 +92,17 @@ The following elements are original work by Steve Griffing, released under CC BY
 | Film Producer | Barry Mendel |
 | Principal Cast | Nathan Fillion · Gina Torres · Alan Tudyk · Morena Baccarin · Adam Baldwin · Jewel Staite · Sean Maher · Summer Glau · Ron Glass |
 
-**Note on Rights:**
+## Note on Rights
 
-The *Firefly* and *Serenity* names, the Firefly-class ship design, and all
+The *Firefly*and*Serenity* names, the Firefly-class ship design, and all
 associated intellectual property are trademarks and copyrights of their
 respective owners (Joss Whedon / Mutant Enemy Productions / Universal Pictures /
 20th Century Fox / The Walt Disney Company). This UAV project is a
-**non-commercial fan engineering work** that draws **visual inspiration** from
+**non-commercial fan engineering work**that draws**visual inspiration** from
 the Serenity's iconic silhouette.
 
-**This project does NOT:**
+## This project does NOT
+
 - Reproduce, distribute, or commercially exploit any copyrighted *Firefly*/*Serenity* artwork, script, soundtrack, or character
 - Claim any trademark rights to the name "Serenity"
 - Imply endorsement by or affiliation with the rights holders
@@ -139,19 +115,22 @@ rights holders before using the Serenity name or likeness in trade.
 ### 2. Serenity Firefly-Class 3D Model (Hull Geometry Basis)
 
 | Field | Detail |
-|-------|--------|
+| ------- | -------- |
 | **Title** | Serenity, Firefly Class |
 | **Author** | Peter Farell |
 | **Source** | [printables.com/model/548545](https://www.printables.com/model/548545) |
 | **License** | CC BY 4.0 |
 | **Use** | Hull outer geometry adapted; scaled to 365 mm (14.4"); hollowed to 1.5 mm thin-wall shell; structurally redesigned with CF skeleton for UAV flight loads. |
 
-**Remix attribution template:**
-```
+## Remix attribution template
+
+```text
+
 Hull: "Serenity, Firefly Class" by Peter Farell
 printables.com/model/548545 · CC BY 4.0
 Remixed by Steve Griffing: scaled 365mm (14.4"), hollowed thin-wall,
 CF skeleton added. CC BY 4.0.
+
 ```
 
 ---
@@ -159,7 +138,7 @@ CF skeleton added. CC BY 4.0.
 ### 3. Variable-Area EDF Nozzle (Nozzle Mechanism Basis)
 
 | Field | Detail |
-|-------|--------|
+| ------- | -------- |
 | **Title** | Variable Area EDF Nozzles |
 | **Author** | BamJr |
 | **Source** | [thingiverse.com/thing:2991269](https://www.thingiverse.com/thing:2991269) |
@@ -167,8 +146,10 @@ CF skeleton added. CC BY 4.0.
 | **Use (nacelle)** | Scaled to 70 mm (2.76") ID. Servo removed. M0.5 rack teeth added to inner ring OD. Outer housing integrated with Serenity bell geometry. Gear-coupled to nacelle tilt pivot via sector/bevel/crown chain — fully passive, no servo. |
 | **Use (fuselage)** | Scaled to 40 mm (1.57") ID. SG90 servo actuation retained. Integrated with Serenity engine bell. |
 
-**Remix attribution template:**
-```
+## Remix attribution template
+
+```text
+
 Nozzle: "Variable Area EDF Nozzles" by BamJr
 thingiverse.com/thing:2991269 · CC BY 4.0
 Remixed by Steve Griffing:
@@ -176,6 +157,7 @@ Remixed by Steve Griffing:
   gear-coupled to nacelle tilt pivot (sector/bevel/crown chain).
   Fuselage — 40mm (1.57") ID, SG90 servo actuated, Serenity bell integrated.
 CC BY 4.0.
+
 ```
 
 ---
@@ -183,19 +165,22 @@ CC BY 4.0.
 ### 4. 50mm EDF Motor Housing (Interior Bore Reference)
 
 | Field | Detail |
-|-------|--------|
+| ------- | -------- |
 | **Title** | 50mm EDF Housing |
 | **Author** | Designer unknown (archived design) |
 | **Source** | [thingiverse.com/thing:4560034](https://www.thingiverse.com/thing:4560034) |
 | **License** | CC BY 4.0 (presumed) |
 | **Use (nacelle interior)** | Interior bore geometry and motor mount pocket layout reference. Dual-motor nacelle (EDF1 + EDF2 in series) bore carved to 27 mm ID with stator vanes between motor seats. |
 
-**Attribution:**
-```
+## Attribution
+
+```text
+
 EDF housing reference: thingiverse.com/thing:4560034 · CC BY 4.0
 Nacelle bore integrated by Steve Griffing: 50mm EDF1+EDF2 series config,
 dual motor mounts, 11-fin stator vanes between seats, variable-area iris.
 CC BY 4.0.
+
 ```
 
 ---
@@ -205,16 +190,25 @@ CC BY 4.0.
 ### Rev N changes (50mm EDF nacelles, fold elimination)
 
 - **Nacelles scaled 1.25×** uniformly from Rev F/L originals to accept 50mm EDF bore.
+
   Canonical input shells: `s_eng_left_shell24_50mm.stl`, `s_eng_right_shell24_50mm.stl`.
   Output shells: `s_eng_left_stator_shell24_50mm.stl`, `s_eng_right_stator_shell24_50mm.stl`.
+
 - **Fold mechanism retired** — `s_eng_piv_outer_scaled24.stl`, `s_eng_piv_pins_scaled24.stl`,
+
   and `s_eng_pistons_scaled24.stl` are superseded and no longer part of the build.
   Reason: the two-axis fold/tilt yoke was a structural weak point in a flight-critical joint.
+
 - **Single-axis tilt clevis** replaces fold mechanism.  Pivot axis = X (spanwise CF spar).
+
   Bearing: F688ZZ (8mm ID × 16mm OD × 5mm wide). Zero airstream disruption.
+
 - **Stator fins**: 11 twisted fins (33° vane angle, NACA-style hub) built into bore at
+
   Z=93.75..118.75mm (1.25× scale).  Inter-stage, between EDF1 and EDF2.
+
 - **Nacelle sweep**: 0–120° (Rev N requirement), hard stops at −5° and +140°.
+
   Gear chain: sector R=22mm → pinion R=6mm → bevel 1:1 → crown R=6mm → rack R=28mm.
   Ring rotation for 120° sweep = 94.3° (see `airframe/nacelles/nacelle-nozzle-gear.jsx`).
 
@@ -223,7 +217,7 @@ CC BY 4.0.
 ## Third-Party Software and Firmware
 
 | Component | Version | License | Notes |
-|-----------|---------|---------|-------|
+| ----------- | --------- | --------- | ------- |
 | Raspberry Pi Pico SDK | ≥2.0 | BSD-3-Clause | RP2350 HAL |
 | Mahony AHRS (port) | custom | Apache-2.0 | Attitude filter |
 | MAVLink 2.0 C library | 2.0 | MIT/LGPL | Protocol encoder |
@@ -259,21 +253,22 @@ CC BY 4.0.
 This UAV **exceeds 250 g AUW** in all configurations.
 
 | Jurisdiction | Authority | Key Requirement |
-|-------------|-----------|-----------------|
+| ------------- | ----------- | ----------------- |
 | United States | FAA | Registration + Part 107 RPIC for commercial ops |
 | European Union | EASA | C1/C2 class registration |
 | United Kingdom | CAA | A2 CofC for sub-400 ft BVLOS |
 | Canada | Transport Canada | Advanced Operations cert may apply |
 | Australia | CASA | ReOC may be required for commercial ops |
 
-Navigation lights comply with **ICAO Annex 2** and **14 CFR 91.209**.
+Navigation lights comply with **ICAO Annex 2**and**14 CFR 91.209**.
 Verify local night-operations requirements before flight.
 
 ---
 
 ## File Inventory
 
-```
+```text
+
 serenity-drone/
 ├── docs/
 │   └── LICENSE_AND_ATTRIBUTION.md   ← this file
@@ -317,13 +312,15 @@ serenity-drone/
     ├── payload_bay_door.stl
     ├── landing_skid_foot.stl
     └── cockpit_dome_clear.stl
+
 ```
 
 ---
 
 ## Suggested Full Attribution Block
 
-```
+```text
+
 Serenity-Class Tiltrotor UAV
 © 2025 Steve Griffing, PE(CSE) [Control Systems Engineering],
 CISSP-ISSEP, CPP. CC BY 4.0.
@@ -337,9 +334,10 @@ Incorporates:
   Serenity (Universal Pictures, 2005)
   © Joss Whedon · Non-commercial fan engineering work.
   Not an officially licensed product.
+
 ```
 
 ---
 
-*This document is itself released under CC BY 4.0.*  
+*This document is itself released under CC BY 4.0.*
 *Last updated: 2025*
