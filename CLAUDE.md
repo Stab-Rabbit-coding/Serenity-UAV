@@ -9,6 +9,10 @@ u# Serenity UAV — Claude Code Project Instructions
 -- External Communications: The UAV uses WIFI at 5ghz, Zigbee at 2.4ghz, MavLink /SiK at 915Mhz, and AX.25 on the 49Mhz RCRS channels.  All four are usable for command and control of the aircraft.  The avionics capes also support sbus, but it's  not used. 
 -- Powerplant: Each Nacelle has two EDFs in series, under PID control.  The forward EDF in each nacelle is controlled primarily by one of the flight control SBCs and the aft is primarily controlled by a different sbc.  The large fuselage EDF is controlled by a third one.  Each of the 4 fc sbcs can take over for all EDFs.
 
+-- All Avionics shall be suitable for use in a variety of Unmanned Air, ground, or water vehicles and robots, not just this implementation.
+
+--V2 Avionics are designed to operate in extremely hostile em/rf environments, such as  experienced when inspecting commercial radio or cellular antennas while they are radiating. 
+
 - **Every message is secure, everything is logged**
 
 -- Every Cape has a TPM.
