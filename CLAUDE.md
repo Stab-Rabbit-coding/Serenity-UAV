@@ -1,4 +1,4 @@
-u# Serenity UAV — Claude Code Project Instructions
+# Serenity UAV — Claude Code Project Instructions
 
 ## Project Objective
 
