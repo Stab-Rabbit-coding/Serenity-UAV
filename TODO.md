@@ -131,6 +131,8 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 
 ### 1.2a — PCB Design: Cape-A-2, Cape-B-2, and XCVR-49MHZ-2 (EMI-Hardened Variants)
 
+#### ***EM hardening Objective is to ensure safe and controlled operations in hostile em/rf environments such as the vicinity of radiating commercial broadcast, amateur radio and cellular towers.***
+
 Design files on branch `claude/cape-em-harsh-variants-9Yfr1`. Schematics (`*.kicad_sch`) and PCB
 layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been generated or DRC-verified.
 
@@ -162,6 +164,11 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 - [ ] **Generate CAPE-B-2 gerbers** — `CAPE-B-2.kicad_pcb` complete; same DRC + export procedure;
   export to `avionics/kicad/gerbers/CAPE-B-2/`.
   - **BLOCKS CAPE-B-2 fab order**
+
+- [ ] remove wifi, sik, and loRa antennas from CAPE-B-2. Use filtered chokes on rf lines to route all RF signals from antennas to wifi, lora, zigbee,and sik xcvr circuits on CAPE-B-2, and/or use uart or i2c with filtering to connect isolated xcvrs to the cape.
+-[ ] re-evaluate space and connection capacity of CAPE-B-2 with rf antennas removed.  if possible, restore the second ethernet phy and connectors TO CAPE-B-2. 
+
+  
 - [ ] **Generate XCVR-49MHZ-2 gerbers** — `XCVR-49MHZ-2.kicad_pcb` complete; export to
   `avionics/kicad/gerbers/XCVR-49MHZ-2/`.
   - **BLOCKS XCVR-49MHZ-2 fab order**
@@ -171,8 +178,13 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 - [ ] **EMI isolation validation checklist** — verify isolation barrier clearance: ISOW1044BDFMR
   5 kV working voltage; ADM2795EBRWZ 5 kV working voltage; measure CMRR at 1 MHz on CAN and
   RS-485 channels; verify differential impedance 100 Ω ±10% on ETH MDI traces.
+
 - [ ] **Merge `claude/cape-em-harsh-variants-9Yfr1` → master** after gerbers pass DRC and
   pre-compliance checklist is signed off.
+
+- [ ] Design Faraday cages / boxes to protect all PCBs, minimizing weight and space but ensuring needed protection. 
+
+- [ ] Specify / implement tightly twisted pair bonded shielded wiring and cables throughout the aircraft.
 
 ---
 
@@ -221,6 +233,7 @@ All Phase 1–3 items must be sequentially complete. Phase 4 verification runs i
 - [ ] **Export gerbers** to `serenity/kicad/gerbers/XCVR-49MHZ-1/`
 - [ ] **Export BOM** — add XCVR-49MHZ-1 line items to `serenity/docs/bom_revN.csv` and `bom_revN.json`
 - [x] **Update `PROJECT_INDEX.md`** to list XCVR-49MHZ-1. *(done 2026-05-25)*
+
 
 ---
 
