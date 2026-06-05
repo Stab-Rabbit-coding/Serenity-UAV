@@ -45,8 +45,8 @@
 <text x="395.0" y="407" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="8" fill="#fbbf24">1553B  dorsal spine</text>
 <rect x="185.0" y="408" width="61.2" height="44" rx="5" fill="#006db722" stroke="#006db7" stroke-width="2.5"/>
 <text x="215.6" y="424" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#006db7">FC1+CN1 (Bay A, sta 0-91mm)</text>
-<text x="215.6" y="438" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7" fill="#006db7">PocketBeagle2+CAPE-A-1</text>
-<text x="215.6" y="449" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7" fill="#006db7">+CAPE-B-1</text>
+<text x="215.6" y="438" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7" fill="#006db7">PocketBeagle2+CAPE-A-2</text>
+<text x="215.6" y="449" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7" fill="#006db7">+CAPE-B-2 ★EMI</text>
 <rect x="197.6" y="388" width="36" height="16" rx="3" fill="#006db725" stroke="#006db7" stroke-width="1.2"/>
 <text x="215.6" y="399" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="#006db7">SENSOR</text>
 <circle cx="215.6" cy="458" r="5" fill="#ff7518"/>
@@ -82,8 +82,8 @@
 <circle cx="444.0" cy="474" r="4" fill="#c084fc"/>
 <rect x="540.2" y="442" width="61.2" height="44" rx="5" fill="#6a1b9a22" stroke="#6a1b9a" stroke-width="2.5"/>
 <text x="570.9" y="458" text-anchor="middle" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#6a1b9a">FC4+CN4 (Bay E)</text>
-<text x="570.9" y="472" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7" fill="#6a1b9a">PocketBeagle2+CAPE-A-1</text>
-<text x="570.9" y="483" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7" fill="#6a1b9a">+CAPE-B-1</text>
+<text x="570.9" y="472" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7" fill="#6a1b9a">PocketBeagle2+CAPE-A-2</text>
+<text x="570.9" y="483" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7" fill="#6a1b9a">+CAPE-B-2 ★EMI</text>
 <rect x="552.9" y="422" width="36" height="16" rx="3" fill="#6a1b9a25" stroke="#6a1b9a" stroke-width="1.2"/>
 <text x="570.9" y="433" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="#6a1b9a">SENSOR</text>
 <circle cx="570.9" cy="458" r="5" fill="#ff7518"/>
@@ -208,6 +208,11 @@
 <text x="948" y="704" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#ff7518">⚠  50mm×2 EDF REQUIRED</text>
 <text x="942" y="718" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#222222">50mm EDF (tandem)s: T/W=1.96 with 8 nodes.</text>
 <text x="942" y="728" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#222222">Use 80mm nacelle pod STLs in /stl/.</text>
+<!-- EMI variant layout annotation -->
+<rect x="28" y="532" width="880" height="52" rx="5" fill="#fff9e6" stroke="#f59e0b" stroke-width="1.5"/>
+<text x="40" y="548" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="9" fill="#b45309">★ CAPE VARIANT LAYOUT — v2 · v1 · v1 · v2 (nose → tail)</text>
+<text x="40" y="562" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#374151">Bay A (CN1/FC1): Cape-B-2 / Cape-A-2 — 5 kV isolated transceivers at CAN FD/RS-485/1553B bus start termination, closest to external connectors and forward cable runs.</text>
+<text x="40" y="576" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#374151">Bay B (CN2/FC2) &amp; Bay D (CN3/FC3): Cape-B-1 / Cape-A-1 — inner ring nodes; direct RMII dual-Ethernet to CPSW3G for maximum throughput.  Bay E (CN4/FC4): Cape-B-2 / Cape-A-2 — 5 kV isolated at bus end, adjacent to nacelle and rear EDF wiring.</text>
 <rect x="0" y="872" width="1400" height="28" fill="#006db7"/>
 <text x="700" y="890" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
 </svg>
