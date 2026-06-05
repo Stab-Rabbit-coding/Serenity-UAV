@@ -622,7 +622,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 > RS-485, ISOW1044 CAN FD, ADIN1300 Ethernet) and Cape-A-2 for 5 kV isolated transceivers at
 > this end of the bus.  v2 placement is mandatory here (see TODO §1.2a node placement note).
 - [ ] Mount CN1 Cape-B-2 on Bay A floor standoffs (M2.5 nylon 6mm). Insert PB2-I. Secure.
-- [ ] Mount FC1 Cape-A on inter-cape standoffs (M2.5 nylon 20mm) above CN1. Insert second PB2-I.
+- [ ] Mount FC1 Cape-A-2 on inter-cape standoffs (M2.5 nylon 20mm) above CN1. Insert second PB2-I.
 - [ ] Flash OS to eMMC on CN1 and FC1 via USB-C before installation.
 - [ ] Install log μSD (64GB) in CN1 Cape-B log slot. Label: **CN1-LOG**.
 - [ ] Seat RCRS-49 sub-module on CN1 Cape-B header; connect RCRS coax to forward 49MHz wire post.
@@ -642,7 +642,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 - [ ] Route FC2 GPS coax through dorsal PTFE sleeve (sta ~130mm); mount GPS patch on dorsal hull, face UP.
 - [ ] Continue CAN FD daisy-chain Bay A→Bay B: CN2 → FC2 + temporary 120Ω at FC2 (remove Phase 7).
 - [ ] Continue RS-485 daisy-chain Bay A→Bay B.
-- [ ] Connect ETH-AB (Bay A→Bay B): FC1 Cape-A ETH-1 → CN2 Cape-B ETH-2 (FC1↔CN2 Ethernet ring link).
+- [ ] Connect ETH-AB (Bay A→Bay B): FC1 Cape-A-2 ETH-1 → CN2 Cape-B-1 ETH-2 (FC1↔CN2 Ethernet ring link).
 - [ ] Cap Bay D end of ETH-BD (will connect to CN3 in Phase 7).
 - [ ] Power taps: connect CN1, FC1, CN2, FC2 power leads from PWR conduit; verify 5V ±0.05V at each header.
 
