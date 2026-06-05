@@ -127,3 +127,5 @@ Every component will be fabricated or procured; design accordingly.
 
 - Output STLs go to `airframe/stls/` (subdirectories: `fuselage/`, `nacelles/`, `wings/`).
 - When a script regenerates STLs, verify Z-range and bore-diameter in the console output before committing.
+
+- Any time that an assistant creates a todo list to accomplish a task for the build, the steps shall be added as sup-tasks in the appropriate paragraph of the root repo TODO.md wbs, conforming to proper style, so that unresolved issues can be picked up in future sessons.
