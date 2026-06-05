@@ -4817,9 +4817,20 @@
 		)
 		(embedded_fonts no)
 	)
+	(gr_arc
+		(start 121 90.5)
+		(mid 121.87868 88.37868)
+		(end 124 87.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "a2000000-0000-0000-0000-200000000760")
+	)
 	(gr_line
-		(start 121 87.5)
-		(end 176 87.5)
+		(start 124 87.5)
+		(end 173 87.5)
 		(stroke
 			(width 0.05)
 			(type solid)
@@ -4827,9 +4838,41 @@
 		(layer "Edge.Cuts")
 		(uuid "a2000000-0000-0000-0000-200000000752")
 	)
+	(gr_arc
+		(start 173 87.5)
+		(mid 175.12132 88.37868)
+		(end 176 90.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "a2000000-0000-0000-0000-200000000761")
+	)
 	(gr_line
-		(start 176 122.5)
-		(end 121 122.5)
+		(start 176 90.5)
+		(end 176 119.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "a2000000-0000-0000-0000-200000000755")
+	)
+	(gr_arc
+		(start 176 119.5)
+		(mid 175.12132 121.62132)
+		(end 173 122.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "a2000000-0000-0000-0000-200000000762")
+	)
+	(gr_line
+		(start 173 122.5)
+		(end 124 122.5)
 		(stroke
 			(width 0.05)
 			(type solid)
@@ -4837,25 +4880,26 @@
 		(layer "Edge.Cuts")
 		(uuid "a2000000-0000-0000-0000-200000000753")
 	)
+	(gr_arc
+		(start 124 122.5)
+		(mid 121.87868 121.62132)
+		(end 121 119.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "a2000000-0000-0000-0000-200000000763")
+	)
 	(gr_line
-		(start 121 122.5)
-		(end 121 87.5)
+		(start 121 119.5)
+		(end 121 90.5)
 		(stroke
 			(width 0.05)
 			(type solid)
 		)
 		(layer "Edge.Cuts")
 		(uuid "a2000000-0000-0000-0000-200000000754")
-	)
-	(gr_line
-		(start 176 87.5)
-		(end 176 122.5)
-		(stroke
-			(width 0.05)
-			(type solid)
-		)
-		(layer "Edge.Cuts")
-		(uuid "a2000000-0000-0000-0000-200000000755")
 	)
 	(gr_text "UAV Resillient Control Cape\n For the PocketBeagle2\nCC BY 4.0 — May 2026\nSteve Griffing\nPE(CSE), CISSP-ISSEP, CPP\nGriffing Technology LLC\nwww.github.com/Stab-Rabbit-Coding\n"
 		(at 148.5 104 0)

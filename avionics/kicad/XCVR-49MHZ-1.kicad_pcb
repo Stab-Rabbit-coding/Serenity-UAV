@@ -93,10 +93,89 @@
 	(net 14 "AFSK_OUT")
 	(net 15 "AFSK_IN")
 
-     (gr_rect
-		(start 100 100) (end 155 135)
-		(stroke (width 0.05) (type solid))
+	(gr_arc
+		(start 100 102.5)
+		(mid 100.73223 100.73223)
+		(end 102.5 100)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
 		(layer "Edge.Cuts")
+		(uuid "49010000-0000-0000-0000-000000000001")
+	)
+	(gr_line
+		(start 102.5 100)
+		(end 152.5 100)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "49010000-0000-0000-0000-000000000002")
+	)
+	(gr_arc
+		(start 152.5 100)
+		(mid 154.26777 100.73223)
+		(end 155 102.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "49010000-0000-0000-0000-000000000003")
+	)
+	(gr_line
+		(start 155 102.5)
+		(end 155 132.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "49010000-0000-0000-0000-000000000004")
+	)
+	(gr_arc
+		(start 155 132.5)
+		(mid 154.26777 134.26777)
+		(end 152.5 135)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "49010000-0000-0000-0000-000000000005")
+	)
+	(gr_line
+		(start 152.5 135)
+		(end 102.5 135)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "49010000-0000-0000-0000-000000000006")
+	)
+	(gr_arc
+		(start 102.5 135)
+		(mid 100.73223 134.26777)
+		(end 100 132.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "49010000-0000-0000-0000-000000000007")
+	)
+	(gr_line
+		(start 100 132.5)
+		(end 100 102.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "49010000-0000-0000-0000-000000000008")
 	)
 
 	(gr_rect

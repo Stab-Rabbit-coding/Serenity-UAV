@@ -191,6 +191,141 @@ The TVS is a SOD-123FL package, placed within 2 mm of J2, with the cathode to PG
 
   edge side, outside the shield can.
 
+### 8. PCB DRC Fixes — Corrected Net Assignments
+
+The following component pad-to-net assignments were incorrect and have been corrected.
+All changes address either shorted components (both pads on the same net) or
+functionally wrong connections.
+
+| Component | Ref | Pad | Old Net | New Net | Issue |
+| --- | --- | --- | --- | --- | --- |
+| UART CMC | CM5 | all | L_0402 2-pin | SRF2012_2012Metric 4-pin | Wrong footprint; SRF2012-100Y is 4-pin 2.0×1.25 mm CMC, not 2-pin 0402 inductor |
+| UART CMC | CM5 | 3 | UART_RX_F | UART_RX_MUX | Pad 3 is MUX output; net name updated to reflect SBUS circuit addition |
+| TX Bead | FB-TX | 1 | UART_TX | UART_TX_F | Bead pad 1 should carry the filtered signal, not the raw UART_TX net |
+| RX Bead | FB-RX | 1 | UART_RX | UART_RX_F | Bead pad 1 should carry the filtered signal |
+| PA Re | R_E | 1 | GND | PA_EMIT | Emitter-degeneration resistor shorted GND-GND; pad 1 is emitter node |
+| Th Lo | R_TH_LO | 1 | GND | COMP_IN | Threshold divider lower resistor shorted GND-GND; pad 1 is comparator input |
+| PA Cb1 | C_B1 | 2 | DDS_RF | PA_INT | Coupling capacitor both pads on DDS_RF; pad 2 is PA collector input |
+| AFSK Cp | C_AF | 2 | AFSK_OUT | AFSK_IN | Audio coupling capacitor both pads on AFSK_OUT; pad 2 is comparator input |
+
+**Silk reference label relocations:**
+
+| Component | Old position | New position | Reason |
+| --- | --- | --- | --- |
+| Th Lo | (0, +6.5) | (0, −1.17) | Label placed 6.5 mm below component body, outside any safe region |
+| RSSI Lo | (+2, +3.5) | (0, −1.17) | Label offset 2 mm right and 3.5 mm below component body |
+
+**New internal nets added to net table:**
+
+| Net # | Name | Description |
+| --- | --- | --- |
+| 27 | UART_TX_F | UART TX after CMC winding 1 (Tier-2 bead input) |
+| 28 | UART_RX_F | UART RX after CMC winding 2 (INV1 and MUX1 A0 inputs) |
+| 29 | PA_EMIT | PA emitter node (emitter-degeneration resistor junction) |
+| 30 | SBUS_OUT | Inverted UART_RX_F produced by INV1 (SBUS logic polarity) |
+| 31 | MODE_SEL | UART/SBUS mode select: LOW = UART, HIGH = SBUS |
+| 32 | UART_RX_MUX | MUX1 output routed to CMC pad 3; carries either UART_RX_F or SBUS_OUT |
+
+---
+
+### 9. SBUS Receiver Mode — Hardware-Select Inverter and MUX
+
+SBUS (used by RC receivers and autopilots) operates at 100000 baud with **inverted
+logic polarity** relative to standard UART. The 49 MHz RCRS channels are legal SBUS
+carrier frequencies under FCC Part 95 Subpart D; adding hardware inversion and a
+mode-select switch allows the transceiver to serve as an SBUS receiver input to the
+flight-control SBCs without requiring firmware changes to the UART peripheral.
+
+#### Circuit topology
+
+```text
+UART_RX_F ──┬──────────────────── A0  (MUX1 pin 1)
+             │
+             └── INV1 ──── SBUS_OUT ── A1  (MUX1 pin 6)
+                                       │
+S1 ─── MODE_SEL ──┬── R_MODE (10 kΩ, GND) ── S (MUX1 pin 5)
+                  │
+                  └── S1 pad 2 ── +3V3 (S1 pad 1)
+
+MUX1 Y (pin 3) ── UART_RX_MUX ── CMC pad 3 ── UART_RX (host)
+```
+
+- **S1 OPEN** (default): R_MODE pulls MODE_SEL LOW → MUX1 S=0 → Y = A0 = UART_RX_F
+  (standard UART mode, non-inverted)
+- **S1 CLOSED**: +3V3 overrides R_MODE → MUX1 S=1 → Y = A1 = SBUS_OUT
+  (SBUS mode, inverted 100 kbaud signal)
+
+The output UART_RX_MUX passes through CMC winding 2 before reaching the host
+connector J1, providing the same EMI filtering in both modes.
+
+#### Component details
+
+| Reference | Part | Package | Net connections | Placement (PCB coords) |
+| --- | --- | --- | --- | --- |
+| INV1 | SN74LVC1G04 (TI DBV) | SOT-23-5 | A=UART_RX_F, Y=SBUS_OUT, VCC=+3V3, GND | (109.5, 125) |
+| MUX1 | SN74LVC1G157 (TI DCT) | SC-70-6 (SOT-363) | A0=UART_RX_F, A1=SBUS_OUT, S=MODE_SEL, Y=UART_RX_MUX, VCC=+3V3 | (113.5, 125) |
+| S1 | SPST SMD slide switch | Custom 2-pad, 1.5 mm pitch | pad1=+3V3, pad2=MODE_SEL | (109.5, 128.5) |
+| C_INV | 100 nF C0G 0402 | C_0402_1005Metric | VCC bypass for INV1: +3V3→GND | (112.5, 128.5) |
+| C_MUX | 100 nF C0G 0402 | C_0402_1005Metric | VCC bypass for MUX1: +3V3→GND | (115.5, 128.5) |
+| R_MODE | 10 kΩ 0402 | R_0402_1005Metric | MODE_SEL pull-down to GND | (116.5, 125) |
+
+All six components are placed in the digital section lower-left area
+(x: 107–118, y: 124–130), clear of all existing component courtyards by ≥ 0.4 mm.
+
+#### Protocol note — SBUS timing
+
+SBUS: 100000 baud, 8E2 (8 data bits, even parity, 2 stop bits), **inverted logic**,
+25 ms frame period. The SN74LVC1G04 propagation delay is ≤ 5 ns (worst case at 3.3 V),
+negligible vs. the 10 µs SBUS bit period. No additional filtering is required on the
+inverted path because the UART_RX_F net is already filtered by the CMC and series bead.
+
+---
+
+### 10. Silk Label De-overlap Pass
+
+The F.SilkS reference labels were audited against component positions; 13 overlapping
+pairs were found and corrected by repositioning the `(at dx dy)` local offset in the
+`property "Reference"` entry for each affected footprint.
+
+| Ref | Old offset | New offset | Action |
+| --- | --- | --- | --- |
+| 49M DDS | (0, −2.45) | (0, +3.0) | Moved below chip body; cleared U1 ByA / U1 ByB cluster above |
+| 1.2k R | (0, −1.17) | (0, +1.17) | Moved below; cleared Th Hi cluster at y ≈ 123.3 |
+| 2.2k R | (0, −1.17) | (0, +1.17) | Moved below; cleared 1.2k C gap at same row |
+| +3V 10u | (0, −1.68) | (0, −2.8) | Moved further above; cleared +3V 100n at y ≈ 121.3 |
+| +3V 10n | (0, −1.16) | (+1.13, 0) | Moved right of component; cleared +3V 100n pair |
+| PA By | (0, −0.36) | (−1.0, 0) | Moved left; cleared PA Rb2 same-X stacked overlap |
+| PA Rb2 | (0, −1.17) | (0, +1.17) | Moved below; cleared PA By same-X label |
+| PA Drvr | (0, −2.40) | (+3.5, 0) | Moved right; cleared PA Cb1 above-row cluster |
+| PA Cb2 | (0, −1.16) | (+1.5, 0) | Moved right; cleared PA By / PA By2 cluster |
+| RSSI Lo | (0, −1.17) | (0, +1.17) | Moved below; cleared RSSI Hi same-Y pair |
+
+### 11. Via Repositioning — x = 130 Fence Column
+
+The GND via fence at x = 130 (14 vias at 2.5 mm pitch) was shifted −1.25 mm in Y so
+that no via falls on the board edge and all vias are at least 1.25 mm from both
+horizontal edges. New Y range: 101.25 → 133.75 mm.
+
+### 12. Via Conflict Fixes — PA Section and LNA
+
+Four vias in the RF section were found to overlap component courtyards or pads, causing
+DRC violations. All four were repositioned to clear positions with > 0.1 mm gap.
+
+| Via old pos | Net | Conflict | Via new pos | Min gap |
+| --- | --- | --- | --- | --- |
+| (132, 109.5) | +5V_FILT | PA Rc1 courtyard (−0.33 mm gap) | (131.5, 109.5) | +0.37 mm |
+| (136, 109.5) | PA_INT | PA Rb2 courtyard (−0.40 mm; dead-centre) | (136, 107) | +0.63 mm |
+| (140, 109.5) | GND | PA By2 courtyard (−0.35 mm gap) | (140.5, 109.5) | +0.54 mm |
+| (143, 124.5) | GND | LNA pad 3 RF_RX (cross-net short; −0.17 mm gap) | (143, 125.5) | +0.75 mm |
+
+The via at (136, 109.5) was dead-centred on the PA Rb2 courtyard because the via
+sits between PA Rb2 (PA_INT both pads) and PA Cb2 (PA_INT pad 1) — the same net, but
+the courtyard boundary still flags a DRC error. No trace segments connect to any of
+these four vias; they connect through copper pours or the inner GND/+5V planes.
+
+The via at (143, 124.5) was the only cross-net overlap (GND via touching LNA RF_RX
+pad 3), which constitutes a real short-circuit risk and must be corrected.
+
 ---
 
 ## Updated Bill of Materials (delta from XCVR-49MHZ-1)
@@ -220,6 +355,12 @@ The TVS is a SOD-123FL package, placed within 2 mm of J2, with the cathode to PG
 | C26 | 10 nF C0G 0402 | +3V3 VHF (49 MHz) bypass |
 | C27 | 10 nF C0G 0402 | GND–PGND moat bridge |
 | Shield | Laird MSA030020T (or equiv) | RF section EMI shield can |
+| INV1 | SN74LVC1G04DBVR (TI, SOT-23-5) | UART_RX_F → SBUS_OUT signal inverter |
+| MUX1 | SN74LVC1G157DCKR (TI, SC-70-6) | 2:1 MUX; selects UART or SBUS polarity |
+| S1 | SPST SMD slide switch, 1.5 mm pitch | UART / SBUS mode selector |
+| C_INV | 100 nF C0G 0402 | INV1 VCC bypass |
+| C_MUX | 100 nF C0G 0402 | MUX1 VCC bypass |
+| R_MODE | 10 kΩ 0402 | MODE_SEL pull-down (default UART) |
 | FL1_L1 | 100 nH (Coilcraft 0805HQ-101J) | 6-element LPF element 1 |
 | FL1_C1 | 120 pF C0G 0402 | 6-element LPF element 2 |
 | FL1_L2 | 180 nH (Coilcraft 0805HQ-181J) | 6-element LPF element 3 |
@@ -238,6 +379,13 @@ The EMI shield can footprint fits within the existing RF section keep-out area (
 vacated AMS1117 SOT-223 pad area plus a 5 × 8 mm strip adjacent to J1.
 
 **Layer stackup:** 4-layer, identical to XCVR-49MHZ-1.
+
+**Corner profile:** The four corners of the Edge.Cuts outline are rounded with
+R = 2.5 mm quarter-circle arcs, centered on the M2.5 corner mounting holes
+(which are placed 2.5 mm from each edge). This eliminates the sharp right-angle
+corners that are prone to chipping during depanelization and handling, and matches
+the corner profile applied to CAPE-A-1, CAPE-A-2, XCVR-49MHZ-1 (also updated),
+and the existing CAPE-B-1/B-2 boards (which already carried this profile).
 
 ---
 
