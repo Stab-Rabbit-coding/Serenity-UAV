@@ -36,6 +36,7 @@ Every component will be fabricated or procured; design accordingly.
 
 - **All legal and regulatory requirements will be based on United States jurisdiction**  All Radio transmissions shall comply with appropriate FCC regulations.  Markings, lights, and operation shall comply with all appropriate FAA aircraft regulations.
 - **All designs will be validated against appropriate industry best practice.**  Specific applicable standards bodies are AUVSI, IEEE, and ISA.
+- **EMI-hardened avionics variants (Cape-A-2, Cape-B-2, XCVR-49MHZ-2) are designed for operation in environments up to 500 W/m² incident RF power density** (≈ 434 V/m plane-wave equivalent, E = √(P × Z₀), Z₀ = 377 Ω).  This is the governing design objective for all conducted and radiated immunity measures in the -2 variants.  See `avionics/kicad/CAPE-A-2.md` for the full EMC compliance target table.
 
 ## Coding Standards
 

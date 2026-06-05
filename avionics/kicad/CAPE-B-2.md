@@ -18,6 +18,11 @@ digital CAPE-A-2, so hardening concentrates on conducted immunity for the wired
 buses and supply rails, and on keeping the RF subsystem's susceptibility low through
 better supply filtering and digital-interface isolation from the RF groundplane.
 
+**Design environment target: 500 W/m² incident RF power density** (≈ 434 V/m plane-wave
+equivalent; derived from E = √(P × Z₀), Z₀ = 377 Ω). This is shared with CAPE-A-2 and
+is the governing design objective for all immunity measures in this variant. See
+CAPE-A-2.md §Purpose for the full rationale.
+
 ---
 
 ## Changes from CAPE-B-1 (Rev M)
@@ -209,8 +214,12 @@ headroom absorbed by the new isolated transceivers (~80 mA combined increase).
 
 ## EMC Compliance Targets
 
-Same as CAPE-A-2: IEC 61000-4-2 Level 4, IEC 61000-4-4 Level 4, IEC 61000-4-5 Level 3,
-MIL-STD-461G RE102 Limit C, RS103 200 V/m.
+**Governing design environment: 500 W/m² incident RF power density (≈ 434 V/m plane-wave
+equivalent)** — shared with CAPE-A-2 and XCVR-49MHZ-2; see CAPE-A-2.md §EMC Compliance
+Targets for the full standard-level table and derivation.
+
+Formal standard targets: IEC 61000-4-2 Level 4, IEC 61000-4-4 Level 4,
+IEC 61000-4-5 Level 3, MIL-STD-461G RE102 Limit C, RS103 200 V/m.
 
 Additional RF susceptibility note: the RFD900x and RFM95W modules have their own
 internal LNA protectors. The PRTR5V0U2X TVS arrays on J1 protect the UART interface,

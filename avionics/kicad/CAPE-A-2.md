@@ -15,6 +15,12 @@ for operation in the nacelle bays and fuselage sections of the Serenity UAV wher
 switching noise, high-current ESC PWM harmonics, and external RF threats require a higher
 level of conducted and radiated immunity than the standard Rev M design provides.
 
+**Design environment target: 500 W/m² incident RF power density** (≈ 434 V/m plane-wave
+equivalent; derived from E = √(P × Z₀), Z₀ = 377 Ω). This exceeds the MIL-STD-461G RS103
+Level C test level of 200 V/m (~106 W/m²) by approximately 2× in field strength and 4× in
+power density, and is the governing design objective for all conducted and radiated immunity
+measures in this variant.
+
 This variant maintains full functional equivalence with CAPE-A-1: same PocketBeagle 2
 Industrial (AM6254) host, same sensor suite, same bus topology. The changes are purely
 protective hardening — no firmware or DTS changes are required.
@@ -220,10 +226,12 @@ budget is essentially unchanged due to new isolated transceiver overhead.
 ## EMC Compliance Targets
 
 This variant is designed to achieve immunity per the following standards, applicable
-to the Serenity UAV airframe operating environment:
+to the Serenity UAV airframe operating environment.  All measures are sized against
+the **500 W/m² (≈ 434 V/m) design environment target** stated in the Purpose section.
 
 | Standard | Level | Test | Notes |
 |---|---|---|---|
+| Design environment | **500 W/m² (≈ 434 V/m)** | Governing design objective | Exceeds RS103 Level C by ~4× in power density |
 | IEC 61000-4-2 | Level 4 (±8 kV contact, ±15 kV air) | ESD | TVS arrays at all field connectors |
 | IEC 61000-4-4 | Level 4 (4 kV peak) | EFT/Burst on signal lines | CMCs + isolated transceivers |
 | IEC 61000-4-5 | Level 3 (2 kV CM, 1 kV DM) | Surge | ±42 V bus fault on CAN/RS-485 |

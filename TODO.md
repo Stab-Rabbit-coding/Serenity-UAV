@@ -131,6 +131,11 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 
 ### 1.2a — PCB Design: Cape-A-2, Cape-B-2, and XCVR-49MHZ-2 (EMI-Hardened Variants)
 
+**Design environment target: 500 W/m² incident RF power density** (≈ 434 V/m plane-wave
+equivalent, E = √(P × Z₀), Z₀ = 377 Ω). This is the governing immunity design objective
+for all three -2 variant boards. See `avionics/kicad/CAPE-A-2.md` §Purpose and
+§EMC Compliance Targets for full rationale and standard-level table.
+
 Design files on branch `claude/cape-em-harsh-variants-9Yfr1`. Schematics (`*.kicad_sch`) and PCB
 layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been generated or DRC-verified.
 

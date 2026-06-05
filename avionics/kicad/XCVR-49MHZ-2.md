@@ -15,6 +15,12 @@ board is a 49 MHz AX.25 KISS modem for FCC Part 95 Subpart D operation; the -2 v
 adds conducted and radiated immunity measures to handle the EDF motor and ESC switching
 environment inside the Serenity UAV nacelles.
 
+**Design environment target: 500 W/m² incident RF power density** (≈ 434 V/m plane-wave
+equivalent; derived from E = √(P × Z₀), Z₀ = 377 Ω). This is the same governing design
+objective as CAPE-A-2 and CAPE-B-2. The 500 W/m² target is particularly relevant to this
+board because the antenna port and UART harness are the primary RF ingress paths on a
+transceiver sub-module.
+
 All Phase 1 IC selections (Si5351A-B-GT DDS, MMBT2222A + 2N3866 PA, MCP4921 DAC,
 LM393 comparator, MGA-82563 LNA, PE4259-63 T/R switch) are unchanged. The regulatory
 constraints from XCVR-49MHZ-1 apply unchanged.

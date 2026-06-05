@@ -50,7 +50,8 @@ TDDS transceiver via RCRS-49 sub-module, CAN FD, MIL-STD-1553B, RS-485, Ethernet
 ATF16V8BQL CPLD write-blocker, hardware-enforced non-executable log microSD).
 
 **EMI-hardened -2 variants** (Cape-A-2, Cape-B-2, XCVR-49MHZ-2) are complete on branch
-`claude/cape-em-harsh-variants-9Yfr1`. These replace the -1 discrete transceivers with reinforced
+`claude/cape-em-harsh-variants-9Yfr1`. Design objective: **500 W/m² incident RF power density**
+(≈ 434 V/m plane-wave equivalent). These replace the -1 discrete transceivers with reinforced
 5 kV isolated devices: ISOW1044BDFMR (CAN FD, TI), ADM2795EBRWZ (RS-485, ADI), ADIN1300BCPZ
 1000BASE-T PHY isolated via dual ISO7642FDWRR 6-channel digital isolators and Würth 749010012A
 Ethernet transformer (JST GH 4P connector, no RJ45). XCVR-49MHZ-2 adds SRF2012-100Y CMC,

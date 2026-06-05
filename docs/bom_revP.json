@@ -623,7 +623,7 @@
         "cost_usd":  68,
         "supplier":  "JLCPCB (fab from project gerbers)",
         "search":    "serenity/kicad/ CAPE-A-2 gerbers + BOM",
-        "notes":     "EMI-hardened -2 variant; gerbers not yet generated (see TODO §1.2a); use in high-EMI environments or as production replacement for CAPE-A"
+        "notes":     "EMI-hardened -2 variant; design environment target 500 W/m² incident RF power density (≈434 V/m plane-wave equivalent); gerbers not yet generated (see TODO §1.2a); use in high-EMI environments or as production replacement for CAPE-A"
       },
       {
         "ref":       "CAPE-B-2",
@@ -633,7 +633,7 @@
         "cost_usd":  105,
         "supplier":  "JLCPCB (fab from project gerbers)",
         "search":    "serenity/kicad/ CAPE-B-2 gerbers + BOM",
-        "notes":     "EMI-hardened -2 variant; gerbers not yet generated (see TODO §1.2a); retains all Cape-B payload ICs; use as production replacement for CAPE-B"
+        "notes":     "EMI-hardened -2 variant; design environment target 500 W/m² incident RF power density (≈434 V/m plane-wave equivalent); gerbers not yet generated (see TODO §1.2a); retains all Cape-B payload ICs; use as production replacement for CAPE-B"
       },
       {
         "ref":       "XCVR-49MHZ-2",
@@ -643,7 +643,7 @@
         "cost_usd":  32,
         "supplier":  "JLCPCB (fab from project gerbers)",
         "search":    "serenity/kicad/ XCVR-49MHZ-2 gerbers + BOM",
-        "notes":     "EMI-hardened variant of XCVR-49MHZ-1/RCRS-49; gerbers not yet generated (see TODO §1.2a); FCC Part 95 Subpart D pre-compliance pending"
+        "notes":     "EMI-hardened variant of XCVR-49MHZ-1/RCRS-49; design environment target 500 W/m² incident RF power density (≈434 V/m plane-wave equivalent); gerbers not yet generated (see TODO §1.2a); FCC Part 95 Subpart D pre-compliance pending"
       },
       {"ref": "MICROSD-LOG", "desc": "64 GB microSD — Cape-B write-blocked flight log",    "qty": 4, "mass_g": 1,  "cost_usd": 12}
     ],
