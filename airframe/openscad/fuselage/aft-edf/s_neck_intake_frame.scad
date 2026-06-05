@@ -1,24 +1,40 @@
 // s_neck_intake_frame.scad
-// CF-PETG structural intake frame ring for Serenity Rev N 24" hull
-// Bonds into the 4 scoop cutouts at the neck station (~310mm from nose)
+// CF-PETG structural intake frame ring for Serenity Rev N 24" hull.
+// Bonds into the 4 radial scoop cutouts in s_middle_canonical_edf_intake.stl
+// at the neck station (Z = 30 mm in the neck shell, Z-longitudinal coords).
 // Print in CF-PETG; bond with structural epoxy.
 //
-// Coordinate origin: centre of the ring on the fuselage centreline axis.
-// +X = forward (toward nose); fuselage axis = Z when printed upright.
+// Rev C (2026-06-02): Z-longitudinal axis correction.
+//   Coordinate system: Z = longitudinal (fore-aft), X = lateral, Y = vertical.
+//   Both middle and rear shells sit on their flat Z=0 face for printing.
+//   Hull dimensions re-measured via Z-slice at Z=30 mm.
+//   See blender_middle_intake_cut.py Rev C for matching hull cut parameters.
+//
+// Coordinate origin: hull XY centreline at intake station.
+// Frame axial direction = Z (same as hull longitudinal).
 
-// ── Hull cross-section at neck station (24" scale) ──────────────────────────
-HULL_W2  = 63;     // port/stbd half-width at station 310mm  [mm]
-HULL_H2  = 50;     // dorsal/ventral half-height (elliptical) [mm]
-HULL_WL  = 126;    // full width
-HULL_HL  = 100;    // full height
+// ── Hull cross-section at intake station Z = 30 mm (measured, 24" scale) ────
+// Source: Z-slice sweep of s_middle_canonical_shell24.stl,
+//   Serenity UAV project log 2026-06-02 (Z-longitudinal Rev C).
+// At Z=30: X span=177 mm (centre X=180.9), Y span=156.5 mm (centre Y=-77.8).
+// Half-dimensions from XY centreline:
+//   X half-width  = 88.5 mm → HULL_W2 = 89
+//   Y half-height = 78.3 mm → HULL_H2 = 78
+HULL_W2  = 89;     // X lateral half-width from centreline       [mm]
+HULL_H2  = 78;     // Y vertical half-height from centreline     [mm]
+HULL_WL  = 177;    // full width  (= 2 × HULL_W2 − 1)
+HULL_HL  = 157;    // full height (= 2 × HULL_H2 + rounding)
 
 // ── Scoop window dimensions ──────────────────────────────────────────────────
-SCOOP_W  = 65;     // circumferential width of each scoop cutout [mm]
-SCOOP_H  = 60;     // radial height of each scoop cutout         [mm]
+// Matched to blender_middle_intake_cut.py Rev C: SCOOP_W=75, SCOOP_H=38.
+// X-scoops: 48 mm wall remaining.  Y-scoops: 37 mm wall remaining.
+// Total capture area: 4 × 75 × 38 = 11 400 mm² (≈ 107 % of EDF fan annulus).
+SCOOP_W  = 75;     // circumferential window width               [mm]
+SCOOP_H  = 38;     // radial window height                       [mm]
 
 // ── Frame geometry ───────────────────────────────────────────────────────────
-FRAME_AX = 38;     // axial length of frame ring                 [mm]
-FRAME_RD = 14;     // radial depth of frame collar               [mm]
+FRAME_AX = 38;     // axial length of frame ring (matches SCOOP_AX) [mm]
+FRAME_RD = 10;     // radial depth of frame collar               [mm]
 WALL     =  3;     // CF-PETG wall thickness                     [mm]
 TONGUE_D =  5;     // tongue depth inserting into hull cutout    [mm]
 SHOULDER =  5;     // bonding shoulder pressing on hull exterior  [mm]

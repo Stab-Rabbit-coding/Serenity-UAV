@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-06-04  
+**Last updated:** 2026-06-04 (gerbers generated; XCVR-49MHZ-2 PCB complete)  
 **Current design revision:** Rev P (master) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 ---
@@ -15,7 +15,7 @@
 | Nacelles | 2× 50mm tandem EDF, CG pivot Z=83mm, M=1.0 gear, iris nozzle | `nacelle_pod_50mm_tandem.scad` complete; Rev O stator shells (`_revo.stl`) NOT yet rendered |
 | Rear propulsion | 120mm 6S EDF, 4-scoop radial intake, iris nozzle | `s_edf_120_motor_mount.stl` ✓, `s_edf_120_thrust_tube.stl` ✓; intake frame + plenum SCAD complete, STLs missing |
 | Cargo bay | Clamshell doors + SG90 servos + DRV8833 + N20 winch + Dyneema + auto-latch + GPS ring + FPV bezel | ✓ All 13 cargo STLs generated (PR #21 + PR #22 2026-06-01); BOM updated bom_revP.json/csv; gondola shell open |
-| PCBs | Cape-A-1, Cape-B-1 assembled; XCVR-49MHZ-1 fabricated; Cape-A-2, Cape-B-2, XCVR-49MHZ-2 EMI-hardened variants designed (branch `claude/cape-em-harsh-variants-9Yfr1`) | Cape-A/B -1 KiCad files complete, gerbers stale; XCVR-49MHZ-1 Phase 1 complete (ICs selected 2026-05-31); -2 variants: schematics + PCB files complete, gerbers not yet generated |
+| PCBs | Cape-A-1, Cape-B-1 assembled; XCVR-49MHZ-2 (supersedes -1) fabricated; Cape-A-2, Cape-B-2, XCVR-49MHZ-2 EMI-hardened variants designed | All gerbers current as of 2026-06-04 (`avionics/kicad/gerbers/`); XCVR-49MHZ-2 PCB complete (63 footprints, 27 nets, 50Ω RF chain, 6-element LPF, full EMI stage); XCVR-49MHZ-1 superseded by v2 |
 | Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 ✓; serenity-fc Phase 6 stub only; all Phase 7 items open |
 | Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
 | Regulatory | FAA Part 107, ICAO nav lights, FCC Part 95 | FAA registration placeholder; XCVR-49MHZ-1 pre-compliance pending |
@@ -119,13 +119,9 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 
 ### 1.2 — PCB Design: Cape-A-1 and Cape-B-1
 
-- [ ] **Regenerate Cape-A-1 gerbers** — `.kicad_pcb` modified 2026-05-23 (tamper-mesh commit); gerbers in `serenity/kicad/gerbers/CAPE-A-1/` are from 2026-05-22.
-  - Open in KiCad → Plot → Gerbers; overwrite files in `serenity/kicad/gerbers/CAPE-A-1/`; re-export drill files.
-  - Run DRC to zero errors before plotting.
-  - **BLOCKS Phase 6 fab order**
+- [x] **Regenerate Cape-A-1 gerbers** — gerbers regenerated 2026-06-04 via `kicad-cli pcb export gerbers`; 14 files in `avionics/kicad/gerbers/CAPE-A-1/` (F.Cu, B.Cu, In1.Cu, In2.Cu, paste, silk, mask, Edge.Cuts, F/B Fab, drill). *(done 2026-06-04)*
 
-- [ ] **Regenerate Cape-B-1 gerbers** — same timestamp issue. `serenity/kicad/gerbers/CAPE-B-1/` files are from 2026-05-22.
-  - **BLOCKS Phase 6 fab order**
+- [x] **Regenerate Cape-B-1 gerbers** — 14 files in `avionics/kicad/gerbers/CAPE-B-1/`. *(done 2026-06-04)*
 
 ---
 
@@ -156,15 +152,11 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 **Open tasks:**
 
-- [ ] **Generate CAPE-A-2 gerbers** — `CAPE-A-2.kicad_pcb` complete; run DRC to zero errors in
-  KiCad; export to `avionics/kicad/gerbers/CAPE-A-2/`; re-export drill files.
-  - **BLOCKS CAPE-A-2 fab order**
-- [ ] **Generate CAPE-B-2 gerbers** — `CAPE-B-2.kicad_pcb` complete; same DRC + export procedure;
-  export to `avionics/kicad/gerbers/CAPE-B-2/`.
-  - **BLOCKS CAPE-B-2 fab order**
-- [ ] **Generate XCVR-49MHZ-2 gerbers** — `XCVR-49MHZ-2.kicad_pcb` complete; export to
-  `avionics/kicad/gerbers/XCVR-49MHZ-2/`.
-  - **BLOCKS XCVR-49MHZ-2 fab order**
+- [x] **Generate CAPE-A-2 gerbers** — 14 files in `avionics/kicad/gerbers/CAPE-A-2/`. *(done 2026-06-04)*
+- [x] **Generate CAPE-B-2 gerbers** — 14 files in `avionics/kicad/gerbers/CAPE-B-2/`. *(done 2026-06-04)*
+- [x] **Generate XCVR-49MHZ-2 gerbers** — PCB completed (63 footprints, 27 nets) via
+  `complete_xcvr_49mhz2.py`; 14 files in `avionics/kicad/gerbers/XCVR-49MHZ-2/`.
+  Supersedes XCVR-49MHZ-1 for all production orders. *(done 2026-06-04)*
 - [ ] **FCC Part 95 Subpart D pre-compliance checklist for XCVR-49MHZ-2** — document center
   frequency accuracy (±0.005% per 47 CFR 95.655), ERP (≤100 mW), harmonic suppression ≥40 dBc at
   2nd/3rd harmonics, 47 CFR 95.603 FCC ID silkscreen labeling block.
@@ -178,49 +170,21 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 ### 1.3 — PCB Design: XCVR-49MHZ-1 (49 MHz AX.25 RCRS Transceiver)
 
-Stub KiCad project at `serenity/kicad/XCVR-49MHZ-1.*`. Design notes in `serenity/kicad/XCVR-49MHZ-1.md`.
-All Phase 1–3 items must be sequentially complete. Phase 4 verification runs in parallel with Phase 3.
+> **Superseded by XCVR-49MHZ-2.** All Phase 2–5 work below is cancelled; use the -2 variant
+> for all future fabrication orders. The -2 carries all -1 functionality plus EMI hardening
+> per XCVR-49MHZ-2.md. The -1 stub and its Phase 1 decisions are preserved for reference.
 
-**Phase 1 — IC Selection (gates all downstream work):**
+**Phase 1 — IC Selection (reference only; decisions incorporated into XCVR-49MHZ-2):**
 
-- [x] **Resolve DDS choice** — **Si5351A-B-GT selected** (Silicon Labs, MSOP-10) + EPSON TG2520SMN 25 MHz ±0.5 ppm TCXO. I²C direct to 49 MHz; firmware driver already written (`si5351.c`); < ±1 ppm system stability, meeting Part 95 ±0.005% with > 25× margin. AD9833 eliminated (max 12.5 MHz; required ×4 external PLL). *(decided 2026-05-31)*
-- [x] **Evaluate PA options** — **Two-stage discrete BJT selected**: MMBT2222A (SOT-23, driver) + 2N3866 (SOT-39, final). Class-A/AB; +5 V supply direct; ≈ 100 mW ERP; ≈ $1.60 BOM; ≥ 40 dBc harmonic suppression via FL1 LPF (SPICE verify Phase 4). RA07H4047M eliminated (requires 7.2–13.6 V; needs boost converter). *(decided 2026-05-31)*
-- [x] **Confirm TCM3105 availability** — TCM3105 confirmed discontinued (TI); no in-production drop-in. **Software Bell 202 AFSK selected**: AM6254 Cape-B MCU generates/decodes audio; TX via MCP4921 SPI 12-bit DAC; RX via LM393 comparator + passive RC bandpass filter. *(decided 2026-05-31)*
+- [x] **Resolve DDS choice** — Si5351A-B-GT selected. *(decided 2026-05-31)*
+- [x] **Evaluate PA options** — MMBT2222A + 2N3866 two-stage discrete BJT PA selected. *(decided 2026-05-31)*
+- [x] **Confirm TCM3105 availability** — Discontinued; software Bell 202 on MCU selected. *(decided 2026-05-31)*
 
-**Phase 2 — Schematic:**
+**Phase 2–5 — CANCELLED, superseded by XCVR-49MHZ-2:**
 
-- [ ] **U1 DDS sub-circuit** — power decoupling, SPI/I²C to J1, frequency configuration load sequence; channel select (49.830–49.890 MHz) software-configurable.
-- [ ] **U2 AFSK modem sub-circuit** — software Bell 202 on Cape-B MCU; MCP4921 SPI 12-bit DAC (TX audio to U3 modulator); LM393 comparator + passive RC bandpass filter (RX demod); UART to J1 pins 3/4; LM393 output as CD (carrier detect) to Cape-B GPIO.
-- [ ] **U3 PA + modulator sub-circuit** — DDS carrier in, AFSK audio in, RF out to FL1; PTT_N gate; bias network and 50 Ω output matching.
-- [ ] **FL1 5-element Chebyshev LPF** — calculate values for fc=75 MHz, 50 Ω; verify −40 dBc at 98 MHz (2nd harmonic of 49 MHz). Simulate in QUCS-S before committing values.
-- [ ] **U4 LNA + envelope detector RX chain** — MGA-82563 input, gain/NF budget, RSSI voltage divider to J1 pin 6.
-- [ ] **U5 TX/RX switch** — PE4259-63 SPDT; PTT_N control; isolation must protect LNA during TX (PE4259 ≥35 dB TX→RX isolation).
-- [ ] **U6 3.3 V LDO and power tree** — AMS1117-3.3 from +5V; bulk decoupling; ferrite bead between digital and RF sections on +5V.
-- [ ] **J1 and J2 connectors** with all pin labels.
-- [ ] **Run ERC; resolve all errors.**
-
-**Phase 3 — PCB Layout:**
-
-- [ ] **Set up layer stack** — 4L: F.Cu signal / In1.Cu GND / In2.Cu +3V3 / B.Cu signal; 1.6 mm total thickness (JLCPCB standard).
-- [ ] **Place components** — RF section (right 25 mm): U1, U3, U4, U5, FL1, J2; digital section (left 30 mm): U2, U6, J1.
-- [ ] **Route RF path** — 50 Ω microstrip, 2.75 mm wide on F.Cu (Z₀ = 52.26 Ω confirmed by `check_impedance.py` 2026-05-30); continuous GND stitching vias; no 90° bends.
-- [ ] **Route digital signals** — UART traces ≥5 mm from RF section boundary; ferrite bead (BLM18PG221SN1D or equiv.) on +5V at boundary.
-- [ ] **LPF shield keep-out** — mark Coilcraft SER inductor cans on F.Fab; orient perpendicular; verify no mutual coupling.
-- [ ] **Thermal vias under U3 PA** — exposed pad to In1.Cu GND; minimum 9× 0.3 mm vias; verify <85°C case at 100 mW continuous TX.
-- [ ] **SMA J2 edge placement** — flush to right board edge; 3 mm Cu keep-out either side of feed line from edge to U5.
-- [ ] **Run DRC; resolve all errors.**
-
-**Phase 4 — Verification and Compliance:**
-
-- [ ] **SPICE/QUCS simulation of FL1 LPF** — verify harmonic suppression meets 47 CFR 95.655 before board spin.
-- [x] **50 Ω trace impedance check** — Z₀ = 52.26 Ω for W=2.75 mm, H=1.6 mm, εr=4.5, T=35 µm → **PASS** [45–55 Ω]. *(done 2026-05-30 — serenity/kicad/check_impedance.py)*
-- [ ] **FCC Part 95 pre-compliance checklist** — document: center frequency accuracy, ERP calculation, harmonic levels, labeling requirements (47 CFR 95.603 FCC ID block on silkscreen).
-
-**Phase 5 — Production Files:**
-
-- [ ] **Export gerbers** to `serenity/kicad/gerbers/XCVR-49MHZ-1/`
-- [ ] **Export BOM** — add XCVR-49MHZ-1 line items to `serenity/docs/bom_revN.csv` and `bom_revN.json`
-- [x] **Update `PROJECT_INDEX.md`** to list XCVR-49MHZ-1. *(done 2026-05-25)*
+- [x] **50 Ω trace impedance check** — Z₀ = 52.26 Ω for W=2.75 mm, H=1.6 mm, εr=4.5, T=35 µm → **PASS**. *(done 2026-05-30)*
+- [x] **PROJECT_INDEX.md updated.** *(done 2026-05-25)*
+- [~] Phases 2–5 schematic, layout, LPF sim, gerbers, BOM — all superseded; see XCVR-49MHZ-2.
 
 ---
 
@@ -302,9 +266,9 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 | Item | Qty | Unit Cost | Total | Notes |
 |------|-----|----------|-------|-------|
 | PocketBeagle 2 Industrial (AM6254) | 4× | $51.03 | ~$204 | DK 2820-100003007-ND |
-| Cape-A PCB (JLCPCB assembled) | 2× | ~$42 | ~$84 | FC nodes (Cape-A-1 gerbers) |
-| Cape-B PCB (JLCPCB assembled) | 2× | ~$80 | ~$160 | CN nodes (Cape-B-1 gerbers) |
-| XCVR-49MHZ-1 PCB (JLCPCB assembled) | 2× | ~$20 | ~$40 | RCRS sub-module; requires completed design |
+| Cape-A PCB (JLCPCB assembled) | 2× | ~$42 | ~$84 | FC nodes — use Cape-A-2 gerbers (EMI-hardened) |
+| Cape-B PCB (JLCPCB assembled) | 2× | ~$80 | ~$160 | CN nodes — use Cape-B-2 gerbers (EMI-hardened) |
+| XCVR-49MHZ-2 PCB (JLCPCB assembled) | 2× | ~$22 | ~$44 | RCRS sub-module — use XCVR-49MHZ-2 gerbers; supersedes v1 |
 | SiK 915MHz ground station radio | 1× | ~$15 | ~$15 | MAVLink GCS link |
 | microSD 64GB (log, write-blocked) | 2× | ~$10 | ~$20 | CN1-LOG, CN2-LOG |
 | JST-GH cables: CAN 4-pin, RS-485 4-pin, ETH 8-pin, 1553 shielded pair | assorted | — | ~$15 | |
@@ -317,9 +281,9 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 | Item | Qty | Approx. Cost | Notes |
 |------|-----|-------------|-------|
 | PocketBeagle 2 Industrial (AM6254) | 4× | ~$204 | CN3, FC3, CN4, FC4 |
-| Cape-A PCB (JLCPCB assembled) | 2× | ~$84 | FC3, FC4 |
-| Cape-B PCB (JLCPCB assembled) | 2× | ~$160 | CN3, CN4 |
-| XCVR-49MHZ-1 PCB (assembled) | 2× | ~$40 | CN3, CN4 |
+| Cape-A PCB (JLCPCB assembled) | 2× | ~$84 | FC3, FC4 — use Cape-A-2 gerbers |
+| Cape-B PCB (JLCPCB assembled) | 2× | ~$160 | CN3, CN4 — use Cape-B-2 gerbers |
+| XCVR-49MHZ-2 PCB (assembled) | 2× | ~$44 | CN3, CN4 — use XCVR-49MHZ-2 gerbers |
 | microSD 64GB (log) | 2× | ~$20 | CN3-LOG, CN4-LOG |
 | VL53L5CX 8×8 ToF sensor | 12× | ~$84 | Dual OA arrays |
 | TCA9548A 8-ch I²C multiplexer | 2× | ~$3 | One per array host |

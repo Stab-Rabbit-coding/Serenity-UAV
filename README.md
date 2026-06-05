@@ -2,6 +2,12 @@
 
 ## Can't stop the signal and can't take the sky from me
 
+## Authoritative Project Instructions
+
+The canonical workspace instructions and design policy are maintained in `CLAUDE.md`. All contributors and automated tools (including assistants) must follow the requirements and standards documented there (coding style, fabrication specs, licensing, and attribution).
+
+See `CLAUDE.md` for full guidance.
+
 A functional, security-conscious Unmanned Aerial Vehicle based on the Firefly-class spacecraft
 Serenity from the 2002 show. Designed using Claude AI.
 

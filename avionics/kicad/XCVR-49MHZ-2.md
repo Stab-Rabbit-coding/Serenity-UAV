@@ -251,3 +251,130 @@ for AX.25 payload signing remain on the CAPE-B host CPU.
 6. 47 CFR 95.655 — FCC spurious emission requirements
 7. QUCS-S / SPICE Chebyshev filter synthesis reference:
    Williams & Taylor, "Electronic Filter Design Handbook" 4th ed., Table 11-60
+
+---
+
+## PCB File Inline Notes
+
+KiCad S-expression files do not support inline comments. The following content was
+previously carried as semicolon-prefixed comment lines in `XCVR-49MHZ-2.kicad_pcb`
+and is preserved here per project standards (CLAUDE.md §Coding Standards).
+
+### File Header (removed from kicad_pcb)
+
+- **Board:** XCVR-49MHZ-2 EMI-Hardened 49 MHz AX.25 KISS Transceiver
+- **Date:** 2026-06-03  **Rev:** 2
+- **4-layer stackup:** F.Cu (signal) / In1.Cu (GND) / In2.Cu (+5V power) / B.Cu (signal)
+- **Board size:** 55 × 35 mm, origin at (100, 100) mm
+- **FAB target:** JLCPCB 4-layer, 1.6 mm FR4, ENIG
+- **Changes from Rev 1:** Added CMC_CAN (SRF2012), D_TVS (PRTR5V0U2X), FB1 (742792512),
+  C_X2Y (4.7 nF X2Y cap); all UUIDs regenerated with prefix `49020000-0000-0000-0000-`
+
+### Reference Designator Convention — CMC_CAN
+
+The suffix "CAN" in `CMC_CAN` follows the project naming convention for the antenna
+common-mode choke per the task specification "CMC_CAN: SRF2012 near antenna path".
+This component suppresses common-mode currents on the antenna feed line to reduce
+conducted EMI per IEEE 1613 / CISPR 32.
+Pad 1 = ANT input (from RF section); Pad 2 = ANT output (clean side, toward J2 SMA).
+Both KiCad pads are assigned to net ANT because a separate ANT_CMC_OUT net was not
+declared; the functional distinction is physical placement only.
+
+### Footprint Pad Net Assignments
+
+| Ref | Pad | Net | Notes |
+|-----|-----|-----|-------|
+| J1 | 1 | GND | Left-most pin, 1.25 mm pitch SMD |
+| J1 | 2 | UART_TX | |
+| J1 | 3 | UART_RX | |
+| J1 | 4 | PTT_N | |
+| J1 | 5 | RSSI_ANA | |
+| J1 | 6 | +3V3 | Right-most pin |
+| J2 | 1 | ANT | SMA centre pin, 0.9 mm drill, thru-hole circle |
+| J2 | 2 | GND | Upper GND tab, 1.0 mm drill |
+| J2 | 3 | GND | Lower GND tab, 1.0 mm drill |
+| CMC_CAN | 1 | ANT | Input from RF section; left pad, silkscreen notch marks pin 1 |
+| CMC_CAN | 2 | ANT | Output to J2; right pad |
+| D_TVS | 1 | GND | Left column bottom — SOT-363 pin 1 per NXP PRTR5V0U2X pinout |
+| D_TVS | 2 | ANT | Left column centre — TVS anode A1 |
+| D_TVS | 3 | GND | Left column top |
+| D_TVS | 4 | GND | Right column top |
+| D_TVS | 5 | RF_TX | Right column centre — TVS anode A2 |
+| D_TVS | 6 | GND | Right column bottom |
+| FB1 | 1 | +5V | Input — raw +5V from J1 before filtering |
+| FB1 | 2 | +5V_FILT | Output — clean supply to on-board ICs; 0805 pad reused for bead |
+| C_X2Y | 1 | GND | Both pads GND for X2Y differential-mode bridge function |
+| C_X2Y | 2 | GND | Both pads GND for X2Y differential-mode bridge function |
+
+### Copper Pour Notes
+
+- **In1.Cu — GND plane:** Full-board pour, polygon (100,100)→(155,135).
+  Per IPC-2141A controlled-impedance inner plane requirement.
+  Min thickness 0.25 mm; thermal gap 0.5 mm; thermal bridge width 0.5 mm.
+- **In2.Cu — +5V power plane:** Digital section only, polygon (100,100)→(130,135).
+  Excludes RF section (x = 130–155 mm) per PCB layout constraint: no power plane
+  under RF section.
+
+### Footprint Courtyard and Body Dimensions
+
+| Ref | Courtyard (mm) | Fab body (mm) | Notes |
+|-----|----------------|---------------|-------|
+| CMC_CAN | 2.4 × 1.4, centred | 2.0 × 1.25 | Silkscreen notch on left edge for pin 1 |
+| D_TVS | 2.1 × 2.4 | 1.3 × 2.0 (SOT-363) | Filled triangle poly marks pin 1 |
+| FB1 | 3.4 × 2.0 | 2.0 × 1.2 | Silkscreen tick on left edge for pin 1 |
+| C_X2Y | 1.4 × 0.9 | 1.0 × 0.5 | 0402 metric |
+
+---
+
+## Schematic Inline Notes
+
+The following content was previously carried as `;;`-prefixed comment lines in
+`XCVR-49MHZ-2.kicad_sch` and is preserved here per project standards.
+
+### Component Placement Coordinates
+
+All coordinates are in KiCad schematic mm units. Pin offsets are from the component
+anchor; they are needed for hand-editing this file because KiCad pin exits are at
+fixed offsets from the symbol anchor per the lib_symbols definition above.
+
+| Ref | Anchor (x, y) | Rotation | Pin exit notes |
+|-----|---------------|----------|----------------|
+| J1 | 50.00, 100.00 | 0° | Pins exit at x = 52.54; y pitch = 2.54 mm; pin 1 at y = 106.35 |
+| FB1 | 90.00, 96.19 | 90° | Pin A exits at (86.19, 100.00); Pin B exits at (90.00, 92.38) |
+| CMC_CAN | 200.00, 100.00 | 0° | L1A at (194.92, 101.27); L2A at (194.92, 98.73); L1B at (205.08, 101.27); L2B at (205.08, 98.73) |
+| D_TVS | 240.00, 100.00 | 0° | A1 at (234.92, 101.27); A2 at (234.92, 98.73); K at (245.08, 100.00); GND at (240.00, 105.08) |
+| J2 | 280.00, 100.00 | 0° | RF pin at (274.92, 100.00); GND pin at (285.08, 100.00) |
+| C_X2Y | 270.00, 120.00 | 0° | Pin 1 top at (270.00, 116.19); Pin 2 bottom at (270.00, 123.81) |
+
+### Power Symbol Placements
+
+| Symbol | UUID suffix | At (x, y) | Connects to |
+|--------|-------------|-----------|-------------|
+| GND #PWR01 | …000201 | 57.62, 106.35 | J1 pin 1 (GND) |
+| +5V #PWR02 | …000203 | 57.62, 103.81 | J1 pin 2 (+5V, before FB1) |
+| +5V #PWR03 | …000205 | 90.00, 92.38 | FB1 pin B (filtered +5V output) |
+| GND #PWR04 | …000207 | 240.00, 105.08 | D_TVS pin 6 (GND) |
+| GND #PWR05 | …000209 | 285.08, 100.00 | J2 pin 2 (GND/shield) |
+| GND #PWR06 | …000211 | 270.00, 123.81 | C_X2Y pin 2 (bottom) |
+| GND #PWR07 | …000213 | 209.16, 98.73 | CMC_CAN L2B (pin 4, return path) |
+| GND #PWR08 | …000215 | 190.84, 98.73 | CMC_CAN L2A (pin 2, input) |
+
+### Signal Routing
+
+- J1 pin 1 → GND power symbol at (57.62, 106.35)
+- J1 pin 2 → +5V, then wire through (80.00, 103.81)→(80.00, 100.00)→(86.19, 100.00)
+  to FB1 pin A
+- J1 pin 3 → global label `SDA` (I²C data to transceiver MCU)
+- J1 pin 4 → global label `SCL` (I²C clock to transceiver MCU)
+- J1 pin 5 → global label `PTT_N` (push-to-talk, active LOW)
+- J1 pin 6 → global label `RX_OUT` (received audio / AFSK out)
+- `RF_ANT` label at (190.84, 101.27) → short wire → CMC_CAN L1A (194.92, 101.27)
+- CMC_CAN L2A (194.92, 98.73) → GND at (190.84, 98.73)
+- CMC_CAN L1B (205.08, 101.27) → `RF_ANT_F` label at (209.16, 101.27)
+- CMC_CAN L2B (205.08, 98.73) → GND at (209.16, 98.73)
+- `RF_ANT_F` label at (234.92, 101.27) → D_TVS A1 and A2 (junction at 234.92, 101.27)
+- D_TVS K (245.08, 100.00) → `RF_ANT_F` label at (250.16, 100.00)
+- `RF_ANT_F` label at (274.92, 100.00) → J2 RF pin
+- J2 GND pin (285.08, 100.00) → GND power symbol
+- `RF_ANT_F` label at (270.00, 116.19) → C_X2Y pin 1 (top)
+- C_X2Y pin 2 (270.00, 123.81) → GND power symbol

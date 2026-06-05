@@ -13,10 +13,13 @@
 //   Forward (Z=0):     forward spigot ID = EDF casing OD; locates tube on EDF exit.
 //   Aft (Z=TUBE_L):    bonding flange ring bonds to rear_nozzle_frame.stl base.
 //
-// Station reference (from nose):
-//   Station ~440mm: EDF exhaust face → Z=0 of this part
-//   Station ~600mm: rear nozzle frame base → Z=TUBE_L
-//   Total span: ~160mm → TUBE_L = 155mm (5mm overlap at each end)
+// Station reference (world X coordinates of s_rear_shell24_2mm_repaired.stl):
+//   EDF exhaust face at X ≈ -90 mm (in cargo section, per plenum design).
+//   Nozzle frame shoulder at X = -226 mm (= aft face -246 + seat depth 20).
+//   Required span: 226 - 90 = 136 mm → TUBE_L = 136 mm.
+//
+//   Rev B (2026-06-02): corrected TUBE_L from 155 mm to 136 mm.
+//   Previous value was 19 mm too long; tube end overshot the nozzle shoulder.
 //
 // Print: PETG, 0.20mm layers, 20% gyroid infill.
 // Note: orient with tube axis vertical on printer for best layer adhesion.
@@ -26,7 +29,7 @@
 
 BORE_ID      = 120;   // [mm] internal bore (matches EDF fan bore)
 WALL         =   3;   // [mm] tube wall thickness → OD = BORE_ID + 2×WALL
-TUBE_L       = 155;   // [mm] total tube length (see station notes above)
+TUBE_L       = 136;   // [mm] total tube length (EDF exhaust X≈-90 to nozzle shoulder X=-226)
 
 // Forward spigot: thin sleeve that slips over the EDF casing aft OD
 // The EDF casing outer diameter is nominally ~125mm (varies by brand);
