@@ -363,6 +363,91 @@ Formal testing per MIL-STD-461G RE102 / RS103 required before first flight.
 
 ---
 
+## §13 — Nacelle Tilt Encoder Interface (J_ENC)
+
+### 13.1 Overview
+
+Each Cape-A-2 exposes one 4-pin shielded JST-GH connector (J_ENC) that carries a
+dedicated I²C bus for a nacelle tilt angle encoder.  The encoder is an AMS AS5600
+12-bit magnetic absolute rotary sensor mounted on the ENC-NACELLE-1 board at the
+nacelle end of the wing spar.
+
+There are two nacelles (port and starboard).  Each nacelle's encoder is wired to the
+J_ENC connector of the Cape-A-2 that has primary responsibility for that nacelle's
+forward EDF.  The other Cape-A-2 nodes receive angle data via CAN FD.
+
+### 13.2 Connector J_ENC
+
+| Pin | Signal   | Direction         | Description                              |
+|-----|----------|-------------------|------------------------------------------|
+| 1   | GND      | Power return      | Signal and power ground                  |
+| 2   | +3V3     | Power output      | 3.3 V supply to ENC-NACELLE-1            |
+| 3   | ENC_SDA  | Bidirectional     | I²C SDA — AS5600 data                    |
+| 4   | ENC_SCL  | Output (PB2)      | I²C SCL — AS5600 clock                   |
+| MP  | SHIELD   | PGND              | Cable shield drain; bonded to PGND       |
+
+- **Connector:** JST SM04B-GHS-TB (4-pin GH, right-angle, shielded body variant)
+- **Mating:** JST GHHR-04V-S (or GHR-04V-S for wire-to-board)
+- **Footprint:** `Connector_JST:JST_GH_SM04B-GHS-TB_1x04-1MP_P1.25mm_Horizontal`
+
+### 13.3 I²C Pull-up Network
+
+Two 2.2 kΩ 0402 resistors (R_ENC_SDA, R_ENC_SCL) connect SDA and SCL to +3V3
+on Cape-A-2.  Pull-ups are located at the host (cape) end only; no pull-ups are
+populated on ENC-NACELLE-1.  This maximises cable length by concentrating the
+pull-up drive at the low-capacitance controller end.
+
+| Designator | Value | Package | Net connected |
+|------------|-------|---------|---------------|
+| R_ENC_SDA  | 2.2 kΩ | 0402   | ENC_SDA → +3V3 |
+| R_ENC_SCL  | 2.2 kΩ | 0402   | ENC_SCL → +3V3 |
+
+### 13.4 Decoupling Capacitor
+
+C_ENC (100 nF 0402 X5R ≥ 6.3 V) bypasses the +3V3 supply rail at J_ENC.  Placed
+within 2 mm of J_ENC pin 2 on the PCB.
+
+### 13.5 Cable Assembly
+
+| Parameter             | Specification                                     |
+|-----------------------|---------------------------------------------------|
+| Cable type            | Belden 9367 STP (shielded twisted pair), 28 AWG   |
+| Pairs used            | 1 × SDA/GND, 1 × SCL/+3V3 (two-pair STP)         |
+| Max length            | 600 mm (nacelle end of wing spar to avionics bay) |
+| Shield termination    | Drain wire to PGND at Cape-A-2 J_ENC MP pin only |
+| ENC-NACELLE-1 end     | Shield floating (single-point to prevent ground loop) |
+| Ferrite chokes        | Würth 74271222 snap-on at both cable ends         |
+| Connector at cape     | JST GHR-04V-S crimped to AWG 28                   |
+| Connector at encoder  | JST GHR-04V-S crimped to AWG 28                   |
+
+### 13.6 I²C Bus Parameters
+
+| Parameter            | Value                        |
+|----------------------|------------------------------|
+| Bus speed            | 100 kHz (Standard Mode)      |
+| AS5600 I²C address   | 0x36 (fixed, not adjustable) |
+| Cable capacitance    | ≈ 40 pF/m × 0.6 m ≈ 24 pF  |
+| Total bus capacitance| ≈ 60 pF (well under 400 pF limit) |
+| Pull-up resistor     | 2.2 kΩ → t_rise ≈ 132 ns (≤ 1000 ns limit) |
+
+Only one AS5600 may be on this I²C bus.  The device address is fixed (0x36).
+If the bus is also used for another device, that device must have a different address.
+
+### 13.7 GPIO Assignment (PocketBeagle 2)
+
+The ENC_SDA and ENC_SCL global labels connect to the PocketBeagle 2 via a spare
+I²C port on header PB2-P1.  Recommended assignment:
+
+| Signal  | PB2 pin | BALL | Peripheral mux |
+|---------|---------|------|----------------|
+| ENC_SCL | P1-26   | E18  | I2C3_SCL       |
+| ENC_SDA | P1-28   | D18  | I2C3_SDA       |
+
+I²C3 is unused by the main sensor suite (which uses I2C0 for IMU and I2C1 for
+compass/baro).  No DTS overlapping required.
+
+---
+
 ## Related Files
 
 - `CAPE-A-1.kicad_sch` — standard (non-EMI-hardened) variant, Rev M baseline
