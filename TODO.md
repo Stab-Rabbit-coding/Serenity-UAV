@@ -1,4 +1,4 @@
-# Serenity UAV — Work Breakdown Structure
+7# Serenity UAV — Work Breakdown Structure
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
@@ -241,10 +241,46 @@ All Phase 1–3 items must be sequentially complete. Phase 4 verification runs i
 - [ ] **Export BOM** — add XCVR-49MHZ-1 line items to `serenity/docs/bom_revN.csv` and `bom_revN.json`
 - [x] **Update `PROJECT_INDEX.md`** to list XCVR-49MHZ-1. *(done 2026-05-25)*
 
+---
+
+### 1.4 - EMI Hardening Beyond the PCBs to provide protection for 500 W/m^2 environment 
+
+#### 1.4.1 Faraday Enclosures
+
+- Must have proper bonding/grounding without loops.
+
+- Must have a fan and appropriate cooling
+
+- Must minimize weight, size, and cost
+
+- [ ] PB2-I + CAPE-A-2 Enclosure
+
+- Must account for all sensor inputs and flight control and comms outputs.
+
+- [ ] PB2-I + CAPE-B-2 Enclosure
+
+- Must account for RF routing from external antennas to internal transceivers
+
+- Must protect the log uSD
+
+#### 1.4.2. Antenna Placement and feedlines
+feelines
+- [ ] antenna mounts
+
+- [ ] feedline mux/demux
+
+- [ ] chokes
+
+#### 1.4.3 internode communication wiring
+
+#### 1.4.4 flight control signal wiring
+
+#### 1.4.5 power distribution
+
 
 ---
 
-### 1.4 — Documentation
+### 1.5 — Documentation
 
 - [x] **`serenity-rev-p.jsx`** — comprehensive 11-tab standalone Rev P specification created: Overview, Airframe, Propulsion, Avionics, Comms, Cargo, Security, Regulatory, BOM, Files, Build Status. Supersedes serenity-rev-o.jsx as current spec. *(done 2026-06-01)*
 - [x] **`bom_revP.json` + `bom_revP.csv`** — full Rev P BOM created: all Rev O items retained + 10 new cargo printed parts + SERVO-CARGO, DRV8833-CARGO, DYNEEMA-SK75, FOAM-GASKET-CARGO; cargo section expanded; totals updated (5 servos, ~$1,905 est.). *(done 2026-06-01)*
