@@ -311,11 +311,84 @@ antenna cable shielding provide the primary conducted shield path.
 
 ---
 
+## Shielded JST-GH Connectors
+
+All JST-GH connectors on Cape-B-2 now include a SHIELD pin (number "MP") bonded to the
+PGND chassis ground net through the PCB mounting tab footprint.
+
+| Reference | Type | Signals | SHIELD tap (absolute, mm) |
+|---|---|---|---|
+| J_XCVR | SM06B-GHS-TB-1MP | GND / +5V / UART_RCRS_TX / XCVR_RX_RAW / XCVR_PTT_N / +3V3 | (100.00, 570.16) |
+| J_FAN | SM03B-GHS-TB-1MP | GND / +5V / FAN_PWM_B | (100.00, 646.35) |
+
+**Cable assembly requirements for all JST-GH connectors (same as Cape-A-2):**
+
+- Cable: foil + braid shielded (Belden 9533 or equivalent)
+- Drain wire: terminate to connector PGND pad
+- Ferrite clamp: Würth 74271222 ≤ 25 mm from body, both ends
+
+**RF antenna cables (SMA ports J_SMA_SIK, J_SMA_LORA, J_UFL_WIFI):**
+
+- RG-178 or RG-316 50 Ω coaxial cable, maximum 500 mm length
+- SMA/UFL connector shells bonded to PGND at the board-side connector land
+- No ferrite clamp on antenna cables (coaxial inherently shielded)
+
+---
+
+## Bay Fan Connector (J_FAN)
+
+A 3-pin JST-GH connector J_FAN is provided for the bay Faraday enclosure ventilation fan.
+
+| Pin | Net | Description |
+|---|---|---|
+| 1 | GND | Fan return |
+| 2 | +5V | Fan power (80 mA max) |
+| 3 | FAN_PWM_B | PWM speed control — PocketBeagle 2 EHRPWM output |
+| MP | PGND | Cable shield drain |
+
+**Fan:** Sunon MF40100V2-1000U-A99 (40 × 40 × 10 mm, 5 V, 90 mA, 4450 RPM, brushless).
+
+**Note:** Cape-A-2 and Cape-B-2 each have an independent J_FAN connector within the
+same avionics bay.  Both fan signals (FAN_PWM_A, FAN_PWM_B) may drive the same fan
+or two fans (one per board), at the integrator's discretion.  For redundancy, wiring
+both boards to the same fan via a Schottky OR diode circuit (BAT54S) is preferred.
+
+---
+
+## Wiring Harness Requirements — All Bay Cables
+
+See CAPE-A-2.md §11 for the full wiring harness specification.  Cape-B-2 additionally
+requires:
+
+- **SiK/LoRa/WiFi RF cables:** RG-316 coaxial, max 500 mm, SMA bodies to PGND.
+- **XCVR-49MHZ-2 harness (J_XCVR):** 6-conductor overall-shielded twisted-bundle,
+  Belden 9533 or equivalent.  Ferrite clamp on both ends ≤ 25 mm from body.
+- **RCRS receive audio output:** shielded coaxial or individually shielded 2-wire
+  to the logging subsystem; drain to PGND.
+
+---
+
+## Avionics Bay Faraday Enclosure
+
+Each of the 4 avionics bays contains one Cape-A-2 and one Cape-B-2.  The complete
+Faraday enclosure specification (foil liner, fan, EMI gaskets, cable entry) is
+defined in Cape-A-2.md §12.  Cape-B-2 specific requirements:
+
+- The XCVR-49MHZ-2 sub-module (plugged into J_XCVR) must be located inside the
+  Faraday enclosure.  Its SMA antenna port exits through a bulkhead SMA
+  panel-mount connector bonded to PGND at the bay wall.
+- WiFi, SiK, and LoRa antenna coaxial pigtails must exit through a coaxial
+  bulkhead panel-mount at the bay wall, bonded to PGND.
+- No antenna cable shall pass through the copper foil liner without a proper
+  coaxial bulkhead connector.  Avoid pigtails longer than 100 mm inside the bay.
+
+---
+
 ## Related Files
 
 - `CAPE-B-1.kicad_sch` — standard (non-EMI-hardened) variant, Rev M baseline
 - `XCVR-49MHZ-2.kicad_sch` — EMI-hardened 49 MHz transceiver
-- `CAPE-A-2.md` — EMI-hardened flight control cape
+- `CAPE-A-2.md` — EMI-hardened flight control cape (Faraday enclosure spec §12)
 - `AVIONICS_PB2_REDESIGN.md` — system architecture
 
 ---

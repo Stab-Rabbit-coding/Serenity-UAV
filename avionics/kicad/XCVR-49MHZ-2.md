@@ -232,6 +232,54 @@ for AX.25 payload signing remain on the CAPE-B host CPU.
 
 ---
 
+## 8. Shielded Host Interface Connector (J1) and Wiring Requirements
+
+### J1 SHIELD Pin (MP) — PGND Bond
+
+The JST-GH SM06B-GHS-TB-1MP connector symbol for J1 now includes a SHIELD pin
+(number "MP") connected to the PGND chassis ground net via the PCB mounting tab.
+
+| Pin | Signal | Description |
+|---|---|---|
+| 1 | GND | Signal/power return |
+| 2 | +5V | Host power input (5 V, 250 mA max) |
+| 3 | UART_TX (SDA) | Host UART TX / I²C SDA |
+| 4 | UART_RX (SCL) | Host UART RX / I²C SCL |
+| 5 | PTT_N | Push-to-talk (active low) |
+| 6 | RX_OUT | Received audio / RSSI analog |
+| MP | PGND | Cable braid/foil drain — chassis ground |
+
+### J1 Cable Assembly Specification
+
+- **Cable type:** Belden 9533 6-conductor overall foil + braid shielded (or equivalent
+  multi-conductor shielded, ≥ 28 AWG per conductor, overall shield coverage ≥ 85 %).
+- **Drain wire:** 28 AWG stranded, terminate to the J1 PGND mounting-tab pad.  Bond the
+  other end to CAPE-B-2's corresponding J_XCVR PGND pad.
+- **Ferrite clamp:** Würth 74271222 snap-on ferrite (or Laird 28B0562-100) ≤ 25 mm from
+  the connector body at BOTH the XCVR-49MHZ-2 end and the CAPE-B-2 end.
+- **Maximum cable length:** 150 mm (limited by signal integrity at 1200-baud AFSK and
+  UART signal rise time ≤ 10 ns at 3.3 V LVCMOS).
+
+### Wiring to Host (CAPE-B-2 J_XCVR)
+
+The J1-to-J_XCVR harness is the primary EMI ingress path.  In addition to the
+cable shield, the following on-board measures are active (see §1):
+
+- **CM5** Bourns SRF2012-100Y common-mode choke on UART_TX/RX pair
+- **TVS6** PRTR5V0U2X on UART_TX/RX (pins 3–4) immediately at J1
+- **FB-TX** series 0402 ferrite beads (Würth 742792510) on each of UART_TX, UART_RX,
+  and PTT_N after CM5
+
+### SMA Antenna Cable (J2)
+
+- **Cable type:** RG-316 or RG-178 50 Ω coaxial, maximum 500 mm.
+- **Ferrite clamp:** One Würth 74271222 on the coaxial near the SMA connector body
+  at the antenna end (if cable length > 100 mm), to suppress common-mode current.
+- **TVS-SMA:** SMAJ5.0A bidirectional TVS on the SMA center conductor is already
+  fitted (§6); no additional external protection required.
+
+---
+
 ## Related Files
 
 - `XCVR-49MHZ-1.kicad_sch` — original (Phase 1 stub) schematic
