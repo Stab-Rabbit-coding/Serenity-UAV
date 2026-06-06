@@ -50,6 +50,30 @@
           (name "~" (effects (font (size 1.27 1.27))))
           (number "1" (effects (font (size 1.27 1.27)))))))
 
+    ;; ---------- Chassis ground (PGND) power symbol ----------
+    ;; PGND is the protective earth / chassis ground net.  It is connected to the
+    ;; PCB copper pour ring, all mounting holes, the SMA shield, and the SHIELD
+    ;; (MP) mounting tabs of every JST-GH connector.
+    (symbol "PGND"
+      (power)
+      (pin_names (offset 0) (hide yes))
+      (pin_numbers (hide yes))
+      (property "Reference" "#PWR" (at 0 -1.905 0)
+        (effects (font (size 1.27 1.27)) (hide yes)))
+      (property "Value" "PGND" (at 0 -3.81 0)
+        (effects (font (size 1.27 1.27))))
+      (symbol "PGND_0_1"
+        (polyline (pts (xy -1.016 -0.762) (xy 1.016 -0.762))
+          (stroke (width 0.254) (type default)) (fill (type none)))
+        (polyline (pts (xy -0.508 -1.524) (xy 0.508 -1.524))
+          (stroke (width 0.254) (type default)) (fill (type none)))
+        (polyline (pts (xy 0 0) (xy 0 -0.762))
+          (stroke (width 0.254) (type default)) (fill (type none))))
+      (symbol "PGND_1_1"
+        (pin power_in line (at 0 0 270) (length 0)
+          (name "~" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27)))))))
+
     ;; ---------- Passive components ----------
     (symbol "Ferrite_Bead"
       (pin_names (offset 0.254))
@@ -154,13 +178,16 @@
           (name "GND" (effects (font (size 1.016 1.016))))
           (number "6" (effects (font (size 1.016 1.016)))))))
 
-    ;; ---------- JST GH 6-pin interface connector ----------
+    ;; ---------- JST GH 6-pin interface connector (shielded) ----------
+    ;; SHIELD pin (MP) connects cable braid/drain to PGND at the PCB mounting tabs.
+    ;; Cable assembly must be foil/braid shielded with drain wire to this pin.
+    ;; A Wurth 74271222 snap-on ferrite clamp is required within 25 mm of the connector body.
     (symbol "Conn_JST_GH_06P"
       (pin_names (offset 0.254))
       (pin_numbers (hide yes))
       (property "Reference" "J" (at 2.54 -10.16 0)
         (effects (font (size 1.27 1.27))))
-      (property "Value" "JST_GH_06P" (at 2.54 10.16 0)
+      (property "Value" "JST_GH_06P_SHLD" (at 2.54 10.16 0)
         (effects (font (size 1.27 1.27))))
       (property "Footprint"
         "Connector_JST:JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal" (at 0 0 0)
@@ -186,7 +213,10 @@
           (number "5" (effects (font (size 1.016 1.016)))))
         (pin passive line (at 2.54 -6.35 180) (length 2.54)
           (name "RX_OUT" (effects (font (size 1.016 1.016))))
-          (number "6" (effects (font (size 1.016 1.016)))))))
+          (number "6" (effects (font (size 1.016 1.016)))))
+        (pin passive line (at 0.00 11.43 270) (length 2.54)
+          (name "SHIELD" (effects (font (size 1.016 1.016))))
+          (number "MP" (effects (font (size 1.016 1.016)))))))
 
     ;; ---------- SMA edge-mount antenna connector ----------
     (symbol "Conn_SMA"
@@ -222,7 +252,7 @@
     (uuid "49020000-0000-0000-0000-000000000101")
     (property "Reference" "J1" (at 52.54 87.00 0)
       (effects (font (size 1.27 1.27))))
-    (property "Value" "JST_GH_06P" (at 52.54 113.00 0)
+    (property "Value" "JST_GH_06P_SHLD" (at 52.54 113.00 0)
       (effects (font (size 1.27 1.27))))
     (property "Footprint"
       "Connector_JST:JST_GH_SM06B-GHS-TB_1x06-1MP_P1.25mm_Horizontal"
@@ -232,7 +262,16 @@
     (pin "3" (uuid "49020000-0000-0000-0000-000000000104"))
     (pin "4" (uuid "49020000-0000-0000-0000-000000000105"))
     (pin "5" (uuid "49020000-0000-0000-0000-000000000106"))
-    (pin "6" (uuid "49020000-0000-0000-0000-000000000107")))
+    (pin "6" (uuid "49020000-0000-0000-0000-000000000107"))
+    (pin "MP" (uuid "49020000-0000-0000-0000-000000000108")))
+
+  ;; PGND at J1 SHIELD (MP) mounting tab — chassis ground bond for cable braid drain
+  (symbol (lib_id "PGND") (at 50.00 111.43 0)
+    (unit 1) (exclude_from_sim no) (in_bom no) (on_board yes) (dnp no)
+    (uuid "49020000-0000-0000-0000-000000000220")
+    (property "Reference" "#PWR_J1_SHLD" (at 50.00 111.43 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "PGND" (at 50.00 112.70 0) (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "49020000-0000-0000-0000-000000000221")))
 
   ;; -- FB1: Wurth 742792512 ferrite bead, 600Ω@100MHz 2A, on +5V entry --
   (symbol (lib_id "Ferrite_Bead") (at 90.00 96.19 90)

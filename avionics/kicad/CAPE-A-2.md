@@ -235,6 +235,219 @@ flight. Formal MIL-STD-461G testing is deferred pending airframe integration.
 
 ---
 
+## 9. Shielded JST-GH Connectors
+
+All JST-GH connectors now include a SHIELD pin (number "MP") bonded to the PGND chassis
+ground net through the PCB mounting tab footprint.  This provides a low-impedance drain
+path for cable braid/foil shields.
+
+| Reference | Type | Signals | SHIELD tap (absolute, mm) |
+|---|---|---|---|
+| J_VBAT | SM02B-GHS-TB-1MP | +VBAT / GND | (370.00, 562.08) |
+| J_SBUS | SM03B-GHS-TB-1MP | GND / +5V / SBUS_RAW | (100.00, 631.35) |
+| J_FAN | SM03B-GHS-TB-1MP | GND / +5V / FAN_PWM_A | (100.00, 691.35) |
+
+**Cable assembly requirements for all JST-GH connectors:**
+
+- Cable type: individually foil-shielded conductors inside an overall braid/foil shield
+  (Belden 9533 or equivalent)
+- Drain wire: terminate to the connector mounting-tab PGND solder pad on the PCB
+- Ferrite clamp: Würth 74271222 snap-on ferrite (or Laird 28B0562-100 equivalent) placed
+  ≤ 25 mm from the connector body on each cable, both ends
+
+---
+
+## 10. Bay Fan Connector (J_FAN)
+
+A 3-pin JST-GH connector J_FAN is provided for the bay Faraday enclosure ventilation fan.
+
+| Pin | Net | Description |
+|---|---|---|
+| 1 | GND | Fan return |
+| 2 | +5V | Fan power supply (80 mA max) |
+| 3 | FAN_PWM_A | PWM speed control — PocketBeagle 2 EHRPWM output |
+| MP | PGND | Cable shield drain |
+
+**Fan:** Sunon MF40100V2-1000U-A99 (40 × 40 × 10 mm, 5 V, 90 mA, 4450 RPM,
+brushless, three-wire PWM) or equivalent.  Rated 40–70 °C ambient.
+
+**PCB layout note:** J_FAN must be placed ≤ 5 mm from the bay wall cable
+penetration.  The FAN_PWM_A signal must be routed with a 100 Ω series resistor
+(R_FAN) to limit slew rate.  The fan cable must include a Würth 74271222 ferrite
+clamp on the PCB side of the wall penetration.
+
+---
+
+## 11. Wiring Harness Requirements — All Bay Cables
+
+Every cable run entering or exiting an avionics bay must be:
+
+1. **Twisted** — every signal pair individually twisted (≥ 25 twists/metre).
+2. **Shielded** — overall foil + braid shield, coverage ≥ 85 %.
+3. **Terminated** — shield drain wire bonded to PGND at the board connector end only
+   (single-point connection per cable run to prevent ground loops).
+4. **Ferrite choke** — Würth 74271222 snap-on or equivalent on every cable,
+   ≤ 25 mm from the connector body, at BOTH ends of each run.
+
+Specified cable types by bus:
+
+| Bus / Signal | Min Cable Type | Char. Impedance | Notes |
+|---|---|---|---|
+| CAN FD | Belden 3105A twisted-pair, shielded | 120 Ω | Per ISO 11898-2 |
+| RS-485 | Belden 3106A twisted-pair, shielded | 120 Ω | — |
+| MIL-STD-1553 | MIL-C-17/176 twinax, shielded | 78 Ω | Per MIL-STD-1553B §3.4 |
+| PWM / servo | 3-wire individually shielded (Belden 9367 or equiv.) | — | Shield per wire |
+| +5V power | 18 AWG min, overall shielded, twisted pair | — | For loads > 250 mA |
+| +12V power | 18 AWG min, overall shielded, twisted pair | — | — |
+| Ethernet | Cat-6a FTP (foil-twisted-pair) | 100 Ω | Per TIA-568-C.2 |
+| SBUS | Belden 9364 shielded, 3-conductor | — | Inverted UART |
+| Fan power | 3-wire shielded, 24 AWG min | — | Per J_FAN above |
+
+---
+
+## 12. Avionics Bay Faraday Enclosure
+
+Each of the 4 avionics bays (one Cape-A-2 FC node + one Cape-B-2 CN node per bay)
+must be enclosed in a Faraday shielding envelope to achieve the MIL-STD-461G RS103
+immunity target (200 V/m, 10 kHz–18 GHz).
+
+### 12.1 Foil Liner Construction
+
+- **Copper foil:** 3M 1181 copper foil tape, 63.5 mm wide, 0.089 mm thick,
+  acrylic adhesive, DC resistance ≤ 0.005 Ω/sq.
+- **Coverage:** Apply to all interior bay surfaces — ceiling, floor, and all four
+  walls.  Line the removable access panel interior as well.
+- **Seam overlap:** Lap ≥ 13 mm at all tape seams; press seams flat with a roller
+  for continuous electrical contact.
+- **Ground bond:** One solder bond point only — solder the foil liner to the PGND
+  chassis star under the bay mounting plate (single-point connection prevents
+  internal ground loops).
+
+### 12.2 Fan Ventilation Aperture
+
+- **Fan model:** Sunon MF40100V2-1000U-A99, 40 × 40 × 10 mm, 5 V, brushless PWM.
+- **EMC vent panel:** Laird EMI Solutions HCZ0-2050-A (or equivalent honeycomb vent,
+  40 × 40 mm, cell size ≤ 3 mm) bonded to PGND.
+  Attenuation: ≥ 40 dB at 49 MHz, ≥ 60 dB at 915 MHz.
+- **Frame bond:** Fan frame bonded to PGND via 50 mm copper foil strap (3M 1181).
+- **Cable ferrite:** Würth 74271222 snap-on ferrite on fan cable at the bay wall
+  penetration.
+
+### 12.3 Access Panel EMI Gaskets
+
+- Conductive foam gasket (Laird EMI Shielding MFSH-6 or 3M 1182 copper foil tape
+  strip) around the full perimeter of all removable panel seams.
+- Minimum contact width: 6 mm continuous.
+- Gasket compressed ≥ 20 % when panel is closed.
+
+### 12.4 Cable Entry Penetrations
+
+All cables enter/exit the bay through a single cable penetration area on one bay wall:
+
+- Pass cables through Würth 74271222 ferrite clamps mounted flush with the penetration.
+- For structured wiring (multi-drop buses) use a Fischer Connectors EMI-filtered
+  D-Sub panel-mount bulkhead (or equivalent with integral ferrite array and shield
+  gasket).
+- Each penetration bundle secured with P-clamp bonded to PGND.
+
+### 12.5 Shielding Effectiveness
+
+| Frequency | Expected SE (copper foil theory) |
+|---|---|
+| 49 MHz | ≥ 30 dB (absorption + reflection) |
+| 915 MHz | ≥ 60 dB |
+| 2.4 GHz | ≥ 80 dB |
+| 5.8 GHz | ≥ 85 dB |
+
+Formal testing per MIL-STD-461G RE102 / RS103 required before first flight.
+
+---
+
+## §13 — Nacelle Tilt Encoder Interface (J_ENC)
+
+### 13.1 Overview
+
+Each Cape-A-2 exposes one 4-pin shielded JST-GH connector (J_ENC) that carries a
+dedicated I²C bus for a nacelle tilt angle encoder.  The encoder is an AMS AS5600
+12-bit magnetic absolute rotary sensor mounted on the ENC-NACELLE-1 board at the
+nacelle end of the wing spar.
+
+There are two nacelles (port and starboard).  Each nacelle's encoder is wired to the
+J_ENC connector of the Cape-A-2 that has primary responsibility for that nacelle's
+forward EDF.  The other Cape-A-2 nodes receive angle data via CAN FD.
+
+### 13.2 Connector J_ENC
+
+| Pin | Signal   | Direction         | Description                              |
+|-----|----------|-------------------|------------------------------------------|
+| 1   | GND      | Power return      | Signal and power ground                  |
+| 2   | +3V3     | Power output      | 3.3 V supply to ENC-NACELLE-1            |
+| 3   | ENC_SDA  | Bidirectional     | I²C SDA — AS5600 data                    |
+| 4   | ENC_SCL  | Output (PB2)      | I²C SCL — AS5600 clock                   |
+| MP  | SHIELD   | PGND              | Cable shield drain; bonded to PGND       |
+
+- **Connector:** JST SM04B-GHS-TB (4-pin GH, right-angle, shielded body variant)
+- **Mating:** JST GHHR-04V-S (or GHR-04V-S for wire-to-board)
+- **Footprint:** `Connector_JST:JST_GH_SM04B-GHS-TB_1x04-1MP_P1.25mm_Horizontal`
+
+### 13.3 I²C Pull-up Network
+
+Two 2.2 kΩ 0402 resistors (R_ENC_SDA, R_ENC_SCL) connect SDA and SCL to +3V3
+on Cape-A-2.  Pull-ups are located at the host (cape) end only; no pull-ups are
+populated on ENC-NACELLE-1.  This maximises cable length by concentrating the
+pull-up drive at the low-capacitance controller end.
+
+| Designator | Value | Package | Net connected |
+|------------|-------|---------|---------------|
+| R_ENC_SDA  | 2.2 kΩ | 0402   | ENC_SDA → +3V3 |
+| R_ENC_SCL  | 2.2 kΩ | 0402   | ENC_SCL → +3V3 |
+
+### 13.4 Decoupling Capacitor
+
+C_ENC (100 nF 0402 X5R ≥ 6.3 V) bypasses the +3V3 supply rail at J_ENC.  Placed
+within 2 mm of J_ENC pin 2 on the PCB.
+
+### 13.5 Cable Assembly
+
+| Parameter             | Specification                                     |
+|-----------------------|---------------------------------------------------|
+| Cable type            | Belden 9367 STP (shielded twisted pair), 28 AWG   |
+| Pairs used            | 1 × SDA/GND, 1 × SCL/+3V3 (two-pair STP)         |
+| Max length            | 600 mm (nacelle end of wing spar to avionics bay) |
+| Shield termination    | Drain wire to PGND at Cape-A-2 J_ENC MP pin only |
+| ENC-NACELLE-1 end     | Shield floating (single-point to prevent ground loop) |
+| Ferrite chokes        | Würth 74271222 snap-on at both cable ends         |
+| Connector at cape     | JST GHR-04V-S crimped to AWG 28                   |
+| Connector at encoder  | JST GHR-04V-S crimped to AWG 28                   |
+
+### 13.6 I²C Bus Parameters
+
+| Parameter            | Value                        |
+|----------------------|------------------------------|
+| Bus speed            | 100 kHz (Standard Mode)      |
+| AS5600 I²C address   | 0x36 (fixed, not adjustable) |
+| Cable capacitance    | ≈ 40 pF/m × 0.6 m ≈ 24 pF  |
+| Total bus capacitance| ≈ 60 pF (well under 400 pF limit) |
+| Pull-up resistor     | 2.2 kΩ → t_rise ≈ 132 ns (≤ 1000 ns limit) |
+
+Only one AS5600 may be on this I²C bus.  The device address is fixed (0x36).
+If the bus is also used for another device, that device must have a different address.
+
+### 13.7 GPIO Assignment (PocketBeagle 2)
+
+The ENC_SDA and ENC_SCL global labels connect to the PocketBeagle 2 via a spare
+I²C port on header PB2-P1.  Recommended assignment:
+
+| Signal  | PB2 pin | BALL | Peripheral mux |
+|---------|---------|------|----------------|
+| ENC_SCL | P1-26   | E18  | I2C3_SCL       |
+| ENC_SDA | P1-28   | D18  | I2C3_SDA       |
+
+I²C3 is unused by the main sensor suite (which uses I2C0 for IMU and I2C1 for
+compass/baro).  No DTS overlapping required.
+
+---
+
 ## Related Files
 
 - `CAPE-A-1.kicad_sch` — standard (non-EMI-hardened) variant, Rev M baseline
