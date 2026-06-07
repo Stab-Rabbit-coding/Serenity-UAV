@@ -18,6 +18,8 @@ add_executable(serenity-fc
     src/mag_qmc5883l.c
     src/mag_mmc5983ma.c
     src/bmon_ina2xx.c
+    src/cell_mon_bq769x0.c
+    src/pwr_fault.c
 )
 
 target_include_directories(serenity-fc
