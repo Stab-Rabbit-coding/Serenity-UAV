@@ -103,15 +103,16 @@ static int reg_write16(int fd, uint8_t reg, uint16_t val)
  * Public API
  * ---------------------------------------------------------------------------*/
 
-int bmon_ina2xx_open(const char *i2c_dev,
-                     bmon_ina_type_t type,
+int bmon_ina2xx_open(const char        *i2c_dev,
+                     uint8_t            i2c_addr,
+                     bmon_ina_type_t    type,
                      bmon_ina2xx_ctx_t **ctx_out)
 {
     bmon_ina2xx_ctx_t *ctx;
     uint16_t           die_id;
     int                rc;
 
-    if (i2c_dev == NULL || ctx_out == NULL) {
+    if (i2c_dev == NULL || ctx_out == NULL || i2c_addr == 0U) {
         return -EINVAL;
     }
 
@@ -127,7 +128,7 @@ int bmon_ina2xx_open(const char *i2c_dev,
         return rc;
     }
 
-    if (ioctl(ctx->fd, I2C_SLAVE, (long)INA2XX_I2C_ADDR) < 0) {
+    if (ioctl(ctx->fd, I2C_SLAVE, (long)i2c_addr) < 0) {
         rc = -errno;
         close(ctx->fd);
         free(ctx);

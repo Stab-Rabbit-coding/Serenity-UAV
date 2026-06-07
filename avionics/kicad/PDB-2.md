@@ -14,12 +14,22 @@ PDB-2 replaces the generic off-the-shelf dual-BEC PDB-BEC module with a custom
 four-layer PCB sized for the Serenity UAV power architecture. It provides:
 
 - Coordinated multi-level fusing (main bus + per-ESC branch fuses)
+- **Per-EDF independent power isolation**: each EDF output is electrically decoupled
+  so that a stall or blown fuse on one EDF cannot collapse the supply to any other
+  EDF, including the partner EDF in the same nacelle
+- **Separated FC signal paths**: the forward EDF and aft EDF in each nacelle are
+  commanded by different FC nodes — a single FC node failure cannot silence both
+  EDFs in any nacelle
 - Per-output current sensing via INA226 (reported over I2C to FC1 / Bay A)
 - Per-cell battery monitoring via BQ76930 (6S balance lead input)
 - Hardware-level battery protection FETs driven by BQ76930
 - Dual redundant 5 V / 10 A SMPS (diode-OR'd) for avionics bus
 - 6 V / 5 A SMPS for servo bus
 - EMI suppression on main bus and all BEC outputs
+- **Shield ground connection on every connector** (chassis ground pad or shielded
+  JST-GH MP pin at each output)
+- **All power cables twisted pair with per-output CM choke** and snap-on ferrites
+  at both cable ends
 
 Full electrical design rationale is documented in `docs/POWER_DISTRIBUTION.md`.
 
@@ -44,12 +54,19 @@ Full electrical design rationale is documented in `docs/POWER_DISTRIBUTION.md`.
 
 ## Connectors
 
+All connectors carry a shield ground connection.  Power connectors use an M3
+threaded brass insert adjacent to the connector body for cable braid/drain-wire
+termination.  Signal connectors use a PGND via-pad within 3 mm of the connector
+for shield drain wire attachment.  See Harness Specification for cable construction
+requirements.
+
 ### Input
 
 | Reference | Part | Function |
 |-----------|------|---------|
 | J_BATT | Amass XT60PW-F (PCB-mount XT60 female) | 6S LiPo main positive + negative |
 | J_BAL | JST XH-7P 2.54 mm male right-angle | 6S balance lead (7 wires: BAL_GND + B1–B6) |
+| J_PGND_BATT | M3 × 6 mm PCB-mount threaded brass insert (adjacent to J_BATT) | Battery cable braid/foil shield drain → chassis PGND |
 
 ### ESC Outputs
 
@@ -60,6 +77,8 @@ Full electrical design rationale is documented in `docs/POWER_DISTRIBUTION.md`.
 | J_ESC3 | Amass XT30PW-F | 30 A continuous / 60 A burst | Stbd Fwd  (EDF2) |
 | J_ESC4 | Amass XT30PW-F | 30 A continuous / 60 A burst | Stbd Aft  (EDF3) |
 | J_ESC5 | DNP (Amass XT60PW-F footprint, unpopulated Phase 5–10) | 80 A / 110 A | Fuse 120 mm (EDF4, Phase 11) |
+| J_SHLD_ESC1–4 | M3 × 6 mm PCB-mount threaded brass insert (×4, one adjacent to each J_ESCn) | ESC cable braid/foil shield drain → chassis PGND |
+| J_SHLD_ESC5 | M3 × 6 mm PCB-mount threaded brass insert (DNP, adjacent to J_ESC5 footprint) | Phase 11 ESC5 cable shield drain (unpopulated) |
 
 ### BEC Outputs
 
@@ -67,14 +86,23 @@ Full electrical design rationale is documented in `docs/POWER_DISTRIBUTION.md`.
 |-----------|------|------|-----------|
 | J_5V | Molex Nano-Fit 4-pin (pitch 2.50 mm) | 5 V / 10 A (dual SMPS) | Avionics bus to all 4 bays |
 | J_6V | Molex Nano-Fit 4-pin (pitch 2.50 mm) | 6 V / 5 A | Servo bus (tilt servos + nozzle servos) |
+| J_SHLD_5V | PGND via-pad 1.2 mm hole (adjacent to J_5V) | 5 V avionics cable shield drain → PGND plane |
+| J_SHLD_6V | PGND via-pad 1.2 mm hole (adjacent to J_6V) | 6 V servo cable shield drain → PGND plane |
 
 ### Monitoring / Comms
 
+All monitoring cables use shielded twisted-pair construction (see Harness Specification).
+The cable shield terminates at the adjacent PGND drain pad at the PDB-2 end; at the
+Cape-A-2 end the drain wire connects to the cape chassis GND point.
+
 | Reference | Part | Function |
 |-----------|------|---------|
-| J_I2C | JST-GH 4-pin (GND, +5 V, SCL, SDA) | PDB I2C bus to Cape-A-2 J_EXT_I2C (Bay A FC1) |
-| J_ALERT | JST-GH 2-pin (GND, ALERT_N) | BQ76930 open-drain alert to Cape-A-2 GPIO |
-| J_NTC | JST-GH 2-pin (NTC+, NTC-) | External battery NTC thermistor (10 kΩ, on battery strap) |
+| J_I2C | JST-GH SM04B-GHS-TB(LF)(SN), 4-pin 1.25 mm (GND, +5 V, SCL, SDA) | PDB I2C bus to Cape-A-2 J_EXT_I2C (Bay A FC1); shielded cable required |
+| J_ALERT | JST-GH SM02B-GHS-TB(LF)(SN), 2-pin 1.25 mm (GND, ALERT_N) | BQ76930 open-drain alert to Cape-A-2 GPIO; shielded cable required |
+| J_NTC | JST-GH SM02B-GHS-TB(LF)(SN), 2-pin 1.25 mm (NTC+, NTC−) | External battery NTC thermistor (10 kΩ, on battery strap); shielded cable required |
+| J_SHLD_I2C | PGND via-pad 1.2 mm hole (adjacent to J_I2C) | I2C cable shield drain → PGND plane |
+| J_SHLD_ALERT | PGND via-pad 1.2 mm hole (adjacent to J_ALERT) | ALERT cable shield drain → PGND plane |
+| J_SHLD_NTC | PGND via-pad 1.2 mm hole (adjacent to J_NTC) | NTC cable shield drain → PGND plane |
 
 ---
 
@@ -108,17 +136,34 @@ VBAT rail:
 
 ### ESC Branch (× 4, identical)
 
+Three isolation layers prevent a stalled or blown-fuse EDF from collapsing the supply
+to any other EDF, including the partner EDF sharing the same nacelle:
+
+- **Layer 1 — F_ESCn (branch fuse):** Disconnects a faulted output at > 40 A; clears
+  before the 150 A main bus fuse responds (selective coordination maintained).
+- **Layer 2 — C_DECn (local bulk capacitor):** 470 µF low-ESR electrolytic placed between
+  the fuse output and the CM choke input. Absorbs stall-induced voltage transients locally;
+  prevents VDIS rail sag from propagating to adjacent ESC branches.
+- **Layer 3 — CM_ESCn (per-output CM choke):** Common-mode choke on each ESC output blocks
+  ESC PWM switching noise and ringing from coupling back into the VDIS rail or into adjacent
+  ESC current monitors (INA226 measurement integrity preserved at full throttle).
+
 ```
-VDIS ──── F_ESCn (40 A mini blade fuse, automotive housing) ────
+VDIS ──── F_ESCn (40 A mini blade fuse, automotive housing) ──────────────────────
                 │
+         C_DECn (Panasonic EEUFC1V471, 470 µF / 35 V, low-ESR electrolytic)
+                │             ← stall transient absorbed here; VDIS rail sag isolated
+         CM_ESCn (Würth 7440640500, 10 A, 2 × 100 µH CMC)
+                │             ← ESC PWM switching noise blocked from VDIS / adjacent branches
          RS_n (Bourns CSS2H-2512K-1L00F, 1 mΩ, 3 W, 4-terminal Kelvin)
-                │            │
-         J_ESCn(+)    U_IS_n (INA226AIDGSR, addr 0x40–0x43)
-                                 Vin+ → RS_n Kelvin+
-                                 Vin- → RS_n Kelvin-
-                                 Vbus → J_ESCn(+) (bus voltage reference)
-                                 SDA/SCL → J_I2C PDB bus
-J_ESCn(−) → PGND (direct, no shunt — GND shared)
+                │                          │
+         J_ESCn(+) [Amass XT30PW-F]   U_IS_n (INA226AIDGSR, addr 0x40–0x43)
+         (twisted-pair shielded cable)     Vin+ → RS_n Kelvin+
+                                           Vin- → RS_n Kelvin-
+                                           Vbus → RS_n output side (bus voltage ref)
+                                           SDA/SCL → J_I2C PDB bus
+J_SHLD_ESCn (M3 chassis ground lug pad, adjacent to J_ESCn) ← cable shield drain wire
+J_ESCn(−) ──── PGND (power return — GND shared, no shunt)
 ```
 
 ### 5 V BEC (Dual Redundant)
@@ -178,6 +223,42 @@ BQ76930:
 
 ---
 
+## ESC Control and Telemetry Signal Routing
+
+Each nacelle contains two EDFs in tandem.  Power for both EDFs in a nacelle comes from
+the PDB-2, but the ESC control (DSHOT600) and telemetry (BDSHOT) signal paths are routed
+to **separate** FC nodes.  A single FC node failure therefore cannot silence both EDFs in
+any nacelle — thrust and directional control are degraded but not lost.
+
+### FC Assignment Table
+
+| EDF position | ESC ref | PDB-2 power conn | Controlling FC node | Cape-A-2 bay | Signal pin |
+|---|---|---|---|---|---|
+| Port Fwd (EDF0) | ESC1 | J_ESC1 | FC1 (Node 1) | Bay A | UART2-TX (DSHOT600) |
+| Port Aft (EDF1) | ESC2 | J_ESC2 | FC2 (Node 2) | Bay B | UART2-TX (DSHOT600) |
+| Stbd Fwd (EDF2) | ESC3 | J_ESC3 | FC2 (Node 2) | Bay B | UART3-TX (DSHOT600) |
+| Stbd Aft (EDF3) | ESC4 | J_ESC4 | FC3 (Node 3) | Bay C | UART2-TX (DSHOT600) |
+
+### Single-FC-Node Failure Matrix
+
+| Failed node | EDFs lost | EDFs retained | Flight implication |
+|---|---|---|---|
+| FC1 only | Port Fwd (EDF0) | Port Aft, both Stbd (3/4) | Degraded port nacelle thrust; controllable; continue or RTH |
+| FC2 only | Port Aft (EDF1) + Stbd Fwd (EDF2) | Port Fwd, Stbd Aft (2/4) | Symmetric diagonal pair retained; yaw authority maintained; RTH recommended |
+| FC3 only | Stbd Aft (EDF3) | Port Fwd, Port Aft, Stbd Fwd (3/4) | Degraded stbd nacelle thrust; controllable; continue or RTH |
+
+No single FC node failure eliminates both EDFs in any nacelle.
+
+### Signal Cable Independence
+
+DSHOT600 / BDSHOT signal cables are routed completely independently of the PDB-2 power
+cables.  Each ESC signal connector (JST-SH 3-pin: DSHOT+, GND, TELEM) connects directly
+to the controlling FC node's Cape-A-2 via a dedicated shielded twisted-pair cable that
+passes through a separate cable gland from the corresponding power cable.  This separation
+prevents conducted EMI on the high-current power cable from corrupting the DSHOT frame.
+
+---
+
 ## Bill of Materials (Delta vs Generic PDB-BEC)
 
 ### Removed from BOM
@@ -213,9 +294,9 @@ BQ76930:
 | J_ESC5 | DNP (XT60PW-F footprint) | Phase 11 aft EDF output | — |
 | J_5V | Molex Nano-Fit 4-pin (2.50 mm, RA) | 5 V avionics bus output | WM1720-ND |
 | J_6V | Molex Nano-Fit 4-pin (2.50 mm, RA) | 6 V servo bus output | WM1720-ND |
-| J_I2C | JST-GH 4-pin (1.25 mm) | PDB I2C to Cape-A-2 | Mouser 440-SM04B-GHS-TB |
-| J_ALERT | JST-GH 2-pin (1.25 mm) | BQ76930 ALERT output | Mouser 440-SM02B-GHS-TB |
-| J_NTC | JST-GH 2-pin (1.25 mm) | Battery NTC thermistor input | Mouser 440-SM02B-GHS-TB |
+| J_I2C | JST-GH SM04B-GHS-TB(LF)(SN) 4-pin, 1.25 mm | PDB I2C to Cape-A-2; shielded cable, drain to J_SHLD_I2C | Mouser 440-SM04B-GHS-TB |
+| J_ALERT | JST-GH SM02B-GHS-TB(LF)(SN) 2-pin, 1.25 mm | BQ76930 ALERT output; shielded cable, drain to J_SHLD_ALERT | Mouser 440-SM02B-GHS-TB |
+| J_NTC | JST-GH SM02B-GHS-TB(LF)(SN) 2-pin, 1.25 mm | Battery NTC thermistor input; shielded cable, drain to J_SHLD_NTC | Mouser 440-SM02B-GHS-TB |
 | R_ALERT | 2.2 kΩ 0402 | ALERT pull-up to 5 V | |
 | R_DSG_G | 10 kΩ 0402 | DSG gate resistor (AON6556) | |
 | R_FB1_1, R_FB1_2 | Resistors for 5.3 V set-point on TPS54620 #1 | See TPS54620 datasheet Table 2 | |
@@ -225,6 +306,13 @@ BQ76930:
 | L3 | 10 µH power inductor (Würth 744314100 or equiv, ≥ 6 A Isat) | TPS54540 switching inductor | |
 | FB_5V1, FB_5V2 | Würth 742792612 (600 Ω @ 100 MHz, 2 A) | 5 V BEC input ferrite beads | 732-742792612-ND |
 | FB_6V | Würth 742792612 | 6 V BEC input ferrite bead | 732-742792612-ND |
+| C_DEC1–C_DEC4 | Panasonic EEUFC1V471 (470 µF / 35 V, D10 × 20 mm, low-ESR radial, ×4) | Per-ESC output bulk decoupling (Layer 2 stall isolation) | P10349TB-ND |
+| CM_ESC1–CM_ESC4 | Würth 7440640500 (10 A, 2 × 100 µH CMC, through-hole, ×4) | Per-ESC output CM choke (Layer 3 noise isolation) | 732-7440640500-ND |
+| J_PGND_BATT | M3 × 6 mm PCB-mount threaded brass insert + M3 ring terminal lug (×1) | Battery cable shield/braid drain → chassis PGND | McMaster-Carr 94459A120 |
+| J_SHLD_ESC1–4 | M3 × 6 mm PCB-mount threaded brass insert + M3 ring terminal lug (×4) | Per-ESC cable shield/braid drain → chassis PGND | McMaster-Carr 94459A120 |
+| J_SHLD_ESC5 | M3 × 6 mm PCB-mount threaded brass insert (DNP; Phase 11) | Phase 11 ESC5 cable shield drain (unpopulated) | McMaster-Carr 94459A120 |
+| FERRITE-PWR | Würth 7427122 (25 mm ID, 31 Ω @ 25 MHz, ×14) | Snap-on ferrite chokes for power cables: 2 per cable end (J_BATT + J_ESC1–4 + J_5V + J_6V) | 732-7427122-ND |
+| FERRITE-SIG | Würth 7427120 (7 mm ID, 80 Ω @ 25 MHz, ×6) | Snap-on ferrite chokes for signal cables: 2 per cable end (J_I2C + J_ALERT + J_NTC) | 732-7427120-ND |
 
 ---
 
@@ -330,6 +418,71 @@ before first flight. Full MIL-STD-461G testing is deferred pending airframe inte
 
 ---
 
+## Harness Specification
+
+All cables leaving the PDB-2 must comply with the construction rules below.  The
+500 W/m² EMI design environment mandates shielded twisted-pair construction with
+continuous braid coverage and snap-on ferrite treatment at both cable ends.  All
+wire insulation must be silicone-rated (200 °C continuous) for propulsion cables
+and PVC/PTFE acceptable for signal cables.
+
+### Power Cables (J_BATT, J_ESC1–4)
+
+| Parameter | Specification |
+|---|---|
+| Conductor gauge | 4 AWG silicone (J_BATT main bus, 200 mm max); 10 AWG silicone (J_ESCn branches, 300 mm max) |
+| Construction | Twisted pair (+/−), ≥ 4 twists per 10 cm, 95 % optical-coverage spiral braid shield |
+| Shield termination | Both ends: braid drain wire (18 AWG) to M3 ring terminal at J_PGND_BATT or J_SHLD_ESCn chassis lug |
+| On-board CM choke | CM1 (Würth 7440640500) at main bus input; CM_ESCn (7440640500) per ESC output — these replace the cable-end choke for the board-side termination |
+| Snap-on ferrites | Würth 7427122 (25 mm ID, 31 Ω @ 25 MHz): one snap-on at each cable end (2 per cable) |
+| Connector (cable side) | Amass XT30PW-M male (J_ESCn); XT60 pig-tail (J_BATT) — solder cup termination only, no crimps on > 12 AWG |
+
+### 5 V Avionics Bus Cable (J_5V)
+
+| Parameter | Specification |
+|---|---|
+| Conductor gauge | 16 AWG silicone (2 conductors per polarity, paralleled for 10 A total) |
+| Construction | Twisted pair (+/−), 85 % coverage spiral braid shield |
+| Shield termination | Drain wire to J_SHLD_5V PGND via-pad at PDB-2 end; chassis GND lug at avionics bay entry point |
+| Snap-on ferrites | Würth 7427122 at both cable ends |
+| Connector (cable side) | Molex Nano-Fit 4-pin cable-side plug (mates with J_5V on PDB-2) |
+
+### 6 V Servo Bus Cable (J_6V)
+
+| Parameter | Specification |
+|---|---|
+| Conductor gauge | 18 AWG silicone |
+| Construction | Twisted pair (+/−), 85 % coverage spiral braid shield |
+| Shield termination | Drain wire to J_SHLD_6V PGND via-pad at PDB-2 end; chassis GND lug at servo harness entry |
+| Snap-on ferrites | Würth 7427122 at both cable ends |
+| Connector (cable side) | Molex Nano-Fit 4-pin cable-side plug (mates with J_6V on PDB-2) |
+
+### I2C and Signal Cables (J_I2C, J_ALERT, J_NTC)
+
+| Parameter | Specification |
+|---|---|
+| Conductor gauge | 28 AWG stranded silver-plated copper (2 twisted pairs for J_I2C: SCL/SDA + GND/5 V; single pair for J_ALERT, J_NTC) |
+| Construction | Individually shielded twisted pairs (Belden 9501 or equivalent); overall foil + braid shield |
+| Shield termination | Drain wire to J_SHLD_I2C / J_SHLD_ALERT / J_SHLD_NTC PGND via-pad at PDB-2 end; chassis GND at cape end; shield grounded at PDB-2 end only (single-end grounding prevents ground loop at 400 kHz) |
+| Snap-on ferrites | Würth 7427120 (7 mm ID, 80 Ω @ 25 MHz): one at each cable end |
+| Cable length | J_I2C: ≤ 150 mm (I2C bus capacitance budget ≤ 400 pF total at 400 kHz); J_ALERT / J_NTC: ≤ 300 mm |
+| Connector (cable side) | JST GHR-04V-S (4-pin, mates with J_I2C); JST GHR-02V-S (2-pin, mates with J_ALERT / J_NTC) |
+
+### ESC Signal Cables (ESC1–4 DSHOT/BDSHOT, not on PDB-2)
+
+ESC signal cables route directly between each ESC and its controlling FC node and do
+not connect to the PDB-2.  They are documented here for completeness.
+
+| Parameter | Specification |
+|---|---|
+| Conductor gauge | 28 AWG stranded |
+| Construction | Shielded twisted pair (DSHOT+ and GND as pair; TELEM as third conductor) |
+| Shield termination | Chassis GND at ESC end; chassis GND at Cape-A-2 end |
+| Snap-on ferrites | Würth 7427120 at both cable ends |
+| Cable routing | Separate cable gland / pass-through from the corresponding power cable for that ESC |
+
+---
+
 ## PCB Layout Constraints
 
 - **Power pours:** In2.Cu carries VBAT. Pour width ≥ 12 mm under all high-current
@@ -352,6 +505,14 @@ before first flight. Full MIL-STD-461G testing is deferred pending airframe inte
   bootstrap capacitor (C_BOOT) within 1 mm of BST pin.
 - **Thermal vias:** Place ≥ 6 × 0.3 mm vias under the TPS54620 PowerPAD exposed
   pad (thermal relief) to In2.Cu; add thermal copper pour on B.Cu under each SMPS.
+- **Chassis ground lugs (J_PGND_BATT, J_SHLD_ESC1–4):** Place M3 threaded insert
+  footprints within 8 mm of their associated power connector. Each lug pad must
+  have ≥ 4 × 0.4 mm vias to In1.Cu PGND plane. Include a 3 mm copper flood
+  connecting the via cluster to the nearest GND pour edge.
+- **Shield drain via-pads (J_SHLD_5V, J_SHLD_6V, J_SHLD_I2C, J_SHLD_ALERT,
+  J_SHLD_NTC):** Single 1.2 mm drilled / 2.0 mm annular via-pad within 5 mm of the
+  associated connector, stitched to In1.Cu PGND plane. Label each pad in the
+  F.Silkscreen layer.
 
 ---
 
@@ -375,7 +536,7 @@ and set INA226 address 0x45 in the ESC5 monitor context.
 | Component | Mass (g) |
 |-----------|---------|
 | PCB bare (90 × 65 mm, 4-layer FR-4) | ~32 |
-| Connectors (all) | ~18 |
+| Connectors (all, including M3 chassis lugs × 5) | ~24 |
 | Fuse holders + fuses | ~15 |
 | INA226 × 5 | ~1 |
 | BQ76930 | ~1 |
@@ -383,10 +544,14 @@ and set INA226 address 0x45 in the ESC5 monitor context.
 | Passives (caps, inductors, resistors) | ~8 |
 | Shunt resistors × 5 | ~5 |
 | Mosfet Q_BATT_DSG | ~1 |
-| **Total (Phases 5–10)** | **~84 g** |
+| C_DEC1–C_DEC4 (470 µF electrolytic × 4, D10 × 20 mm) | ~16 |
+| CM_ESC1–CM_ESC4 (Würth 7440640500 CMC × 4) | ~40 |
+| **Total (Phases 5–10)** | **~146 g** |
 
-Compare to generic PDB-BEC at 40 g — additional 44 g for full monitoring, protection,
-and redundant BEC capability. Well within mass budget.
+Compare to generic PDB-BEC at 40 g — additional 106 g for full monitoring, hardware
+protection, redundant BEC, per-EDF decoupling, and per-output CM filtering. The mass
+increase is dominated by the four per-ESC CM chokes (~10 g each); this is a deliberate
+trade for 500 W/m² EMI immunity. Well within mass budget.
 
 ---
 
