@@ -1,4 +1,4 @@
-# Serenity UAV — Work Breakdown Structure
+8# Serenity UAV — Work Breakdown Structure
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
@@ -315,14 +315,18 @@ feelines
 
 ### Avionics Workload Balancing
 
-- While all Wash capes are identical and all Zoë capes are also identical, they have different primary tasking.  **All Stacks are capable to communicate and control the UAV safety on their own.***
+- While all Wash capes are identical and all Zoë capes are also identical, they have different primary tasking.  **All Stacks are capable to communicate and control the UAV safety in a benign environment on their own.***
 
 -  UAV Tasks with PACE prioritization and failover per stack (primary, alternative, contingency, emergency) 
 
 -- Watchdog: P - Book; A - Inara; C - Simon, E - River
+
 -- Comms: P - Inara; A - Book; C - River; E -  Simon
+
 -- Flight Control: P - River; A - Simon; C - Book; E - Inara
--- Payload Control: P - Simon; A - River; C - Inara; E - Book;
+
+-- Payload Control: P - Simon; A - River; C - Inara; E - Book
+
 
 ---
 
