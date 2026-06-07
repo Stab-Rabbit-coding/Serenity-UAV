@@ -8,7 +8,9 @@
 - Node variant placement (v2 · v2 · v2 · v2, nose → tail, Rev Q):  All 8 nodes use EMI-hardened -2 capes (Cape-A-2, Cape-B-2, XCVR-49MHZ-2) at every position.  Rev Q standardises on the single hardened SKU across all bays, providing uniform 5 kV galvanic isolation on CAN FD, RS-485, and Ethernet at every node.  Cape-A-1, Cape-B-1, and XCVR-49MHZ-1 are archived as of Rev Q (2026-06-05).
 - Onboard Communications:  Each of the 8 sbcs will be connected to the others via: Canbus FD, MILSTD 1553, RS485, & Ethernet
 - External Communications: The UAV uses WIFI at 5ghz, Zigbee at 2.4ghz, MavLink /SiK at 915Mhz, and AX.25 on the 49Mhz RCRS channels.  All four are usable for command and control of the aircraft.  The avionics capes also support sbus, but it's  not used. 
-- Powerplant: Each Nacelle has two EDFs in series, under PID control.  The forward EDF in each nacelle is controlled primarily by one of the flight control SBCs and the aft is primarily controlled by a different sbc.  The large fuselage EDF is controlled by a third one.  Each of the 4 fc sbcs can take over for all EDFs.
+- Powerplant: Each Nacelle has two EDFs in series, under PID control.  The forward EDF in each nacelle is controlled primarily by one of the flight control SBCs and the aft is primarily controlled by a different sbc.
+
+- The large fuselage EDF is controlled by a third one.  Each of the 4 fc sbcs can take over for all EDFs. **This EDF is now an optional addition once everything else works. **
 
 - All Avionics shall be suitable for use in a variety of Unmanned Air, ground, or water vehicles and robots, not just this implementation.
 
