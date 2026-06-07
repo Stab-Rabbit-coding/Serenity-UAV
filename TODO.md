@@ -1,4 +1,4 @@
-7# Serenity UAV — Work Breakdown Structure
+# Serenity UAV — Work Breakdown Structure
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
@@ -75,7 +75,7 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 
 **Canonical middle shell (OpenSCAD — belly restored, no belly scoop):**
 
-- [ ] **s_middle_canonical_shell24.stl** — `openscad -o ... serenity/stl/s_middle_canonical_shell24.scad`
+- [x] **s_middle_canonical_shell24.stl** — `openscad -o ... serenity/stl/s_middle_canonical_shell24.scad`
   - Note: NOT the same as `s_middle_shell24.stl` (which has the obsolete belly intake cut). This is the Rev N canonical belly.
 
 **Rev O shell updates (sensor/antenna mounts from 2026-05-24):**
@@ -120,12 +120,12 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 
 ### 1.2 — PCB Design: Cape-A-1 and Cape-B-1
 
-- [ ] **Regenerate Cape-A-1 gerbers** — `.kicad_pcb` modified 2026-05-23 (tamper-mesh commit); gerbers in `serenity/kicad/gerbers/CAPE-A-1/` are from 2026-05-22.
+- [x] **Regenerate Cape-A-1 gerbers** — `.kicad_pcb` modified 2026-05-23 (tamper-mesh commit); gerbers in `serenity/kicad/gerbers/CAPE-A-1/` are from 2026-05-22.
   - Open in KiCad → Plot → Gerbers; overwrite files in `serenity/kicad/gerbers/CAPE-A-1/`; re-export drill files.
   - Run DRC to zero errors before plotting.
   - **BLOCKS Phase 6 fab order**
 
-- [ ] **Regenerate Cape-B-1 gerbers** — same timestamp issue. `serenity/kicad/gerbers/CAPE-B-1/` files are from 2026-05-22.
+- [x] **Regenerate Cape-B-1 gerbers** — same timestamp issue. `serenity/kicad/gerbers/CAPE-B-1/` files are from 2026-05-22.
   - **BLOCKS Phase 6 fab order**
 
 ---
@@ -137,12 +137,6 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 Design files on branch `claude/cape-em-harsh-variants-9Yfr1`. Schematics (`*.kicad_sch`) and PCB
 layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been generated or DRC-verified.
 
-**Node placement — v2 · v1 · v1 · v2 (nose → tail):** Cape-A-2 / Cape-B-2 are installed at Bay A
-(CN1/FC1) and Bay E (CN4/FC4), the CAN FD / RS-485 / 1553B bus termination endpoints. Cape-A-1 /
-Cape-B-1 are used in Bay B (CN2/FC2) and Bay D (CN3/FC3). This puts 5 kV isolated transceivers
-at both bus ends — where conducted transients from motor wiring and external cable runs are highest
-— while the inner bays retain direct RMII dual-Ethernet connections to CPSW3G for maximum ring
-throughput. Procurement requires: 2× Cape-A-2, 2× Cape-B-2, 2× Cape-A-1, 2× Cape-B-1.
 
 **Key changes from -1 variants:**
 
@@ -165,7 +159,8 @@ throughput. Procurement requires: 2× Cape-A-2, 2× Cape-B-2, 2× Cape-A-1, 2× 
 - `avionics/kicad/gen_cape_b2_pcb.py` → `CAPE-B-2.kicad_pcb`
 
 **Open tasks:**
-
+- [ ] finish Cape-A-2 PCB.  ensure all phy have shielded connectors, all nets are valid, all ferrite beads and isolation caps are in place.
+- [ ] Add sbus/uart dip to CAPE-A-2. 
 - [ ] **Generate CAPE-A-2 gerbers** — `CAPE-A-2.kicad_pcb` complete; run DRC to zero errors in
   KiCad; export to `avionics/kicad/gerbers/CAPE-A-2/`; re-export drill files.
   - **BLOCKS CAPE-A-2 fab order**
