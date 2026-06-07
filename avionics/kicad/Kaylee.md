@@ -1,4 +1,6 @@
-# PDB-2 — Power Distribution Board Rev A
+# Kaylee — Power Distribution Board Rev A
+
+*Named after Kaylee Frye, ship's mechanic, Firefly-class vessel Serenity.*
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
@@ -10,7 +12,7 @@
 
 ## Purpose
 
-PDB-2 replaces the generic off-the-shelf dual-BEC PDB-BEC module with a custom
+Kaylee replaces the generic off-the-shelf dual-BEC PDB-BEC module with a custom
 four-layer PCB sized for the Serenity UAV power architecture. It provides:
 
 - Coordinated multi-level fusing (main bus + per-ESC branch fuses)
@@ -92,7 +94,7 @@ requirements.
 ### Monitoring / Comms
 
 All monitoring cables use shielded twisted-pair construction (see Harness Specification).
-The cable shield terminates at the adjacent PGND drain pad at the PDB-2 end; at the
+The cable shield terminates at the adjacent PGND drain pad at the Kaylee end; at the
 Cape-A-2 end the drain wire connects to the cape chassis GND point.
 
 | Reference | Part | Function |
@@ -111,14 +113,23 @@ Cape-A-2 end the drain wire connects to the cape chassis GND point.
 ### Main Bus Path
 
 ```
-J_BATT(+) ──── CM1 (common-mode choke) ──── F1 (150 A MAXI fuse) ──── VBAT rail
-J_BATT(−) ──── CM1 ──────────────────────────────────────────────────── PGND rail
+                     ← enclosure wall ←
+J_BATT(+) ── (EMC cable gland) ── CM1 ── CM2 ── F1 (150 A MAXI fuse) ── VBAT rail
+J_BATT(−) ── (EMC cable gland) ── CM1 ── CM2 ──────────────────────────── PGND rail
+
+  CM1, CM2: Würth 7440640500 (10 A, 2 × 100 µH) in series — two-stage CM attenuation
+  for 500 W/m² (434 V/m) susceptibility environment (see §Kaylee Shielded Enclosure).
 
 VBAT rail:
   │
   ├── C1, C2: 220 µF / 35 V (bulk stiffening)
-  ├── C3: 100 nF X7R (HF bypass)
+  ├── C_DM1: 10 µF / 50 V X7R 1210 MLCC (Würth 885012207016) — low-ESR HF DM filter
+  ├── C3: 100 nF X7R 0805 MLCC (HF bypass)
   ├── D1: SMBJ33CA (bidirectional TVS, 33 V / 53.3 V clamp)
+  │
+  ├── C_Y1: 4.7 nF / 250 V Y2 class (Kemet SA305E472MAR): VBAT+ → J_CHASSIS
+  ├── C_Y2: 4.7 nF / 250 V Y2 class (Kemet SA305E472MAR): VBAT− → J_CHASSIS
+  │     (Y-capacitors drain CM RF energy to chassis; single-point bond to enclosure)
   │
   ├── Q_BATT_DSG (AON6556 N-MOSFET, 60 V, 30 A): drain=VBAT, source=VDIS
   │     gate driven by BQ76930 DSG pin (hardware disconnect on SCD/OCD)
@@ -132,6 +143,11 @@ VBAT rail:
         ├── F_ESC5 → J_ESC5 (DNP, Phase 11)
         ├── 5 V BEC section (see below)
         └── 6 V BEC section (see below)
+
+J_I2C signal lines:
+  SCL ── D_I2C (NXP PRTR5V0U2X, dual TVS, 5 V clamp) ── Cape-A-2 SCL
+  SDA ── D_I2C ─────────────────────────────────────── Cape-A-2 SDA
+  (protects against RF-induced transients on I2C at enclosure boundary)
 ```
 
 ### ESC Branch (× 4, identical)
@@ -226,13 +242,13 @@ BQ76930:
 ## ESC Control and Telemetry Signal Routing
 
 Each nacelle contains two EDFs in tandem.  Power for both EDFs in a nacelle comes from
-the PDB-2, but the ESC control (DSHOT600) and telemetry (BDSHOT) signal paths are routed
+the Kaylee, but the ESC control (DSHOT600) and telemetry (BDSHOT) signal paths are routed
 to **separate** FC nodes.  A single FC node failure therefore cannot silence both EDFs in
 any nacelle — thrust and directional control are degraded but not lost.
 
 ### FC Assignment Table
 
-| EDF position | ESC ref | PDB-2 power conn | Controlling FC node | Cape-A-2 bay | Signal pin |
+| EDF position | ESC ref | Kaylee power conn | Controlling FC node | Cape-A-2 bay | Signal pin |
 |---|---|---|---|---|---|
 | Port Fwd (EDF0) | ESC1 | J_ESC1 | FC1 (Node 1) | Bay A | UART2-TX (DSHOT600) |
 | Port Aft (EDF1) | ESC2 | J_ESC2 | FC2 (Node 2) | Bay B | UART2-TX (DSHOT600) |
@@ -251,7 +267,7 @@ No single FC node failure eliminates both EDFs in any nacelle.
 
 ### Signal Cable Independence
 
-DSHOT600 / BDSHOT signal cables are routed completely independently of the PDB-2 power
+DSHOT600 / BDSHOT signal cables are routed completely independently of the Kaylee power
 cables.  Each ESC signal connector (JST-SH 3-pin: DSHOT+, GND, TELEM) connects directly
 to the controlling FC node's Cape-A-2 via a dedicated shielded twisted-pair cable that
 passes through a separate cable gland from the corresponding power cable.  This separation
@@ -265,7 +281,7 @@ prevents conducted EMI on the high-current power cable from corrupting the DSHOT
 
 | Was | Notes |
 |-----|-------|
-| PDB-BEC (generic dual-BEC PDB from AliExpress) | Replaced by PDB-2 |
+| PDB-BEC (generic dual-BEC PDB from AliExpress) | Replaced by Kaylee |
 
 ### Added to BOM
 
@@ -313,6 +329,18 @@ prevents conducted EMI on the high-current power cable from corrupting the DSHOT
 | J_SHLD_ESC5 | M3 × 6 mm PCB-mount threaded brass insert (DNP; Phase 11) | Phase 11 ESC5 cable shield drain (unpopulated) | McMaster-Carr 94459A120 |
 | FERRITE-PWR | Würth 7427122 (25 mm ID, 31 Ω @ 25 MHz, ×14) | Snap-on ferrite chokes for power cables: 2 per cable end (J_BATT + J_ESC1–4 + J_5V + J_6V) | 732-7427122-ND |
 | FERRITE-SIG | Würth 7427120 (7 mm ID, 80 Ω @ 25 MHz, ×6) | Snap-on ferrite chokes for signal cables: 2 per cable end (J_I2C + J_ALERT + J_NTC) | 732-7427120-ND |
+| CM2 | Würth 7440640500 (10 A, 2 × 100 µH CMC) | Second-stage main bus CM choke (series with CM1; two-stage filter for 500 W/m² CS114) | 732-7440640500-ND |
+| C_Y1, C_Y2 | Kemet SA305E472MAR (4.7 nF / 250 V, Class Y2, ×2) | VBAT+/VBAT− to chassis CM bypass; drains RF induced CM to enclosure chassis | 399-SA305E472MARCT-ND |
+| C_DM1 | Würth 885012207016 (10 µF / 50 V X7R, 1210, ×1) | Additional DM HF filter in parallel with bulk caps; ESR < 5 mΩ at 1 MHz | 732-885012207016-ND |
+| D_I2C | NXP PRTR5V0U2X (dual TVS, SOT-363, 5 V clamp, ×1) | I2C line RF transient protection at enclosure wall (SCL + SDA) | 568-PRTR5V0U2XQLT-ND |
+| R_CHGND | 0 Ω / 0402 resistor (socketed 0402 position) | Chassis–PGND single-point bond; populated with 0 Ω at assembly; configurable | — |
+| J_CHASSIS | M3 × 8 mm brass PCB standoff (×4) + M3 locknut (×4) | PCB chassis ground to enclosure bond; also serves as board-mounting standoffs | McMaster-Carr 94459A120 |
+| ENC-BODY | 1.5 mm 6061-T6 aluminum enclosure, 115 × 95 × 55 mm, custom or Hammond 1590SFLBK equivalent | Kaylee shielded enclosure body | Custom fab or Hammond 1590SFLBK |
+| ENC-GASKET | Parker Chomerics CHO-SEAL 1217, silver-aluminum elastomer strip, 6 mm × 1.5 mm, ~450 mm total | Lid seam EMI gasket; ≤ 0.1 mΩ seam impedance; ≥ 60 dB SE contribution | Chomerics CHO-SEAL-1217 |
+| GLAND-M16 | Pflitsch 750M16 EMC cable gland, M16 thread, 9–13 mm cable OD (×1) | J_BATT main bus cable entry with 360° shield bond | Pflitsch 750M16 |
+| GLAND-M12 | Pflitsch 750M12 EMC cable gland, M12 thread, 6–10 mm cable OD (×6) | J_ESC1–4 + J_5V + J_6V cable entries with 360° shield bond | Pflitsch 750M12 |
+| GLAND-M10 | Pflitsch 750M10 EMC cable gland, M10 thread, 3–6 mm cable OD (×3) | J_I2C + J_ALERT + J_NTC signal cable entries | Pflitsch 750M10 |
+| HONEYCOMB-VENT | Ventilation honeycomb panel, aluminum, 2 mm cell inscribed dia, 18 × 18 mm (×1) | Waveguide-below-cutoff vent; safe to 7.5 GHz; bonded to enclosure floor aperture | Kemtron / custom |
 
 ---
 
@@ -326,7 +354,7 @@ prevents conducted EMI on the high-current power cable from corrupting the DSHOT
 | U_IS4 | ESC4 output | SCL | GND | 0x43 | 60 A |
 | U_IS_MAIN | Main bus | GND | VCC | 0x44 | 75 A |
 
-The PDB-2 I2C bus (J_I2C) connects to Cape-A-2 Bay A (FC1) on J_EXT_I2C.
+The Kaylee I2C bus (J_I2C) connects to Cape-A-2 Bay A (FC1) on J_EXT_I2C.
 These addresses reside on a separate physical I2C bus segment from the Cape-A-2
 internal INA226 (0x40 on the Cape's own I2C-0 bus). No address conflict.
 
@@ -406,21 +434,92 @@ Total VBAT draw (avionics + servos at peak, from VBAT side):
 
 ## EMC Compliance Targets
 
-| Standard | Level | Test | Mitigation |
-|----------|-------|------|-----------|
-| IEC 61000-4-5 | Level 3 (±2 kV CM, ±1 kV DM) | Surge on VBAT | D1 SMBJ33CA TVS + bulk caps |
-| IEC 61000-4-2 | Level 4 (±8 kV contact) | ESD on connectors | D1 TVS at J_BATT; XT30/XT60 are shrouded |
-| MIL-STD-461G CE102 | Limit B (conducted emission, power leads) | Conducted emission | CM1 input choke + π-filter on each BEC |
-| MIL-STD-461G CS101 | 50 V 30 Hz–150 kHz | Power bus susceptibility | 2× 220 µF bulk + BEC regulation |
+The Serenity UAV design environment is 500 W/m² (equivalent E-field:
+E = √(P × Z₀) = √(500 × 377) **≈ 434 V/m**). This exceeds all standard
+MIL-STD-461G limits and represents operation near commercial broadcast or
+cellular antenna structures. All Kaylee EMC design decisions are referenced
+to this threat level.
 
-Pre-compliance testing against CE102 and CS101 at system level is required
-before first flight. Full MIL-STD-461G testing is deferred pending airframe integration.
+| Standard / Threat | Level | Test | Mitigation |
+|---|---|---|---|
+| **500 W/m² (434 V/m) radiated susceptibility** | **Design requirement** | CW field immersion, 30 MHz – 6 GHz | Kaylee shielded aluminum enclosure (SE ≥ 60 dB); two-stage CM1+CM2; Y-caps C_Y1/C_Y2; I2C TVS D_I2C; 360° EMC cable glands |
+| MIL-STD-461G RS103 | 200 V/m (200 MHz – 1 GHz) | Radiated susceptibility | Enclosure SE ≥ 60 dB covers RS103 by margin |
+| MIL-STD-461G CS114 | Curve 05 (bulk cable injection) | Conducted susceptibility | Two-stage CM filter (CM1+CM2 in series = > 80 dB at 10 MHz); Y-caps to chassis |
+| MIL-STD-461G CS101 | 50 V, 30 Hz – 150 kHz | Power bus susceptibility | 2× 220 µF + 10 µF C_DM1 bulk; BEC regulation |
+| MIL-STD-461G CE102 | Limit B (conducted emission) | Conducted emission | CM1+CM2 input chokes; π-filter on each BEC |
+| IEC 61000-4-5 | Level 3 (±2 kV CM, ±1 kV DM) | Surge on VBAT | D1 SMBJ33CA TVS + bulk caps + Y-caps |
+| IEC 61000-4-2 | Level 4 (±8 kV contact) | ESD on connectors | D1 TVS; shielded enclosure prevents direct connector exposure |
+
+Pre-compliance testing against CE102, CS101, and CS114 at system level is required
+before first flight. Full MIL-STD-461G / 500 W/m² qualification testing is deferred
+pending airframe integration.
+
+---
+
+## Kaylee Shielded Enclosure
+
+To survive 500 W/m² (434 V/m) immersion, the Kaylee PCB is housed in a
+dedicated shielded aluminum enclosure that provides ≥ 60 dB shielding
+effectiveness (SE) from 1 MHz to 6 GHz. This reduces the external 434 V/m
+field to < 0.4 V/m at the PCB surface — below the susceptibility threshold
+of all ICs on the board.
+
+### Enclosure Specification
+
+| Parameter | Specification |
+|---|---|
+| Material | 1.5 mm 6061-T6 aluminum, all seams TIG-welded or riveted with overlapping flanges |
+| Surface finish | Alodine 1200 (MIL-DTL-5541 Class 1A) chromate conversion — maintains conductivity under environmental exposure |
+| External dimensions | 115 × 95 × 55 mm (lid on); accommodates 90 × 65 mm PCB + 15 mm cable entry depth |
+| Board standoffs | 4× M3 × 8 mm hex brass standoffs bonded to enclosure floor; standoff base contacts J_CHASSIS pad to bond PCB chassis ground to enclosure |
+| EMI gasket | Parker Chomerics CHO-SEAL 1217 silver-aluminum conductive elastomer strip (or Laird Techspray BER-13 beryllium-copper finger strip) on all four lid seam faces; minimum 50 % compression at closure |
+| Gasket goal | Seam impedance < 0.1 mΩ at 1 GHz; ensures SE contribution from seam > 80 dB |
+| Ventilation | Waveguide honeycomb panel, 18 × 18 mm active area, hexagonal cells ≤ 2 mm inscribed diameter (λ/20 at 7.5 GHz, safe to 6 GHz cellular band); adhesive-bonded to ventilation aperture in enclosure floor |
+| Lid fasteners | 8× M3 × 6 mm stainless SHCS on 25 mm centres; torque 0.3 N·m (maintains gasket compression) |
+| Mass estimate | ~90 g (enclosure + lid + gasket + hardware) |
+
+### Cable Entry — EMC Glands
+
+All cables entering the enclosure use EMC-rated cable glands with 360° spring-contact
+shield termination at the enclosure wall. Pigtail drain wires are not permitted at
+the enclosure boundary — they exhibit high impedance at frequencies above 30 MHz
+and destroy SE above that frequency.
+
+| Port | Cable | Gland specification | Qty |
+|---|---|---|---|
+| J_BATT (main bus) | 4 AWG / 12 mm OD shielded | Pflitsch 750M16 (M16 thread, 9–13 mm cable OD) or CMP COMEX EMC M20 | 1 |
+| J_ESC1–4 (ESC branch) | 10 AWG / 8 mm OD shielded | Pflitsch 750M12 (M12 thread, 6–10 mm cable OD) | 4 |
+| J_5V (avionics bus) | 16 AWG / 7 mm OD shielded | Pflitsch 750M12 | 1 |
+| J_6V (servo bus) | 18 AWG / 6 mm OD shielded | Pflitsch 750M12 | 1 |
+| J_I2C / J_ALERT / J_NTC | 28 AWG / 4 mm OD shielded | Pflitsch 750M10 (M10 thread, 3–6 mm cable OD) | 3 |
+
+The spring-contact ring in each gland makes 360° electrical contact with the cable's
+outer braid at the enclosure wall, providing a low-impedance RF path from cable shield
+to enclosure chassis at all frequencies.
+
+### PCB Chassis Ground (J_CHASSIS)
+
+A dedicated M3 brass standoff pad (J_CHASSIS) on the PCB connects to the enclosure
+floor via the four board-mounting standoffs. This is the only bond point between the
+PCB's signal/power grounds and the enclosure chassis. It carries:
+
+- Y-capacitors C_Y1 and C_Y2 (CM RF discharge from VBAT rails to chassis)
+- Cable gland shield return paths (via enclosure wall → standoff → J_CHASSIS)
+- PCB chassis guard rings
+
+J_CHASSIS is **not** connected to PGND directly. A single 0 Ω link (R_CHGND, 0402,
+socketed for configuration) connects J_CHASSIS to PGND at assembly. This allows the
+engineer to choose: (a) 0 Ω populated for single-point chassis bond; (b) small
+inductor or ferrite bead for frequency-selective chassis bond; (c) open for chassis
+floating (not recommended for this EMI environment).
+
+Default assembly: R_CHGND = 0 Ω (direct chassis bond, single point).
 
 ---
 
 ## Harness Specification
 
-All cables leaving the PDB-2 must comply with the construction rules below.  The
+All cables leaving the Kaylee must comply with the construction rules below.  The
 500 W/m² EMI design environment mandates shielded twisted-pair construction with
 continuous braid coverage and snap-on ferrite treatment at both cable ends.  All
 wire insulation must be silicone-rated (200 °C continuous) for propulsion cables
@@ -443,9 +542,9 @@ and PVC/PTFE acceptable for signal cables.
 |---|---|
 | Conductor gauge | 16 AWG silicone (2 conductors per polarity, paralleled for 10 A total) |
 | Construction | Twisted pair (+/−), 85 % coverage spiral braid shield |
-| Shield termination | Drain wire to J_SHLD_5V PGND via-pad at PDB-2 end; chassis GND lug at avionics bay entry point |
+| Shield termination | Drain wire to J_SHLD_5V PGND via-pad at Kaylee end; chassis GND lug at avionics bay entry point |
 | Snap-on ferrites | Würth 7427122 at both cable ends |
-| Connector (cable side) | Molex Nano-Fit 4-pin cable-side plug (mates with J_5V on PDB-2) |
+| Connector (cable side) | Molex Nano-Fit 4-pin cable-side plug (mates with J_5V on Kaylee) |
 
 ### 6 V Servo Bus Cable (J_6V)
 
@@ -453,9 +552,9 @@ and PVC/PTFE acceptable for signal cables.
 |---|---|
 | Conductor gauge | 18 AWG silicone |
 | Construction | Twisted pair (+/−), 85 % coverage spiral braid shield |
-| Shield termination | Drain wire to J_SHLD_6V PGND via-pad at PDB-2 end; chassis GND lug at servo harness entry |
+| Shield termination | Drain wire to J_SHLD_6V PGND via-pad at Kaylee end; chassis GND lug at servo harness entry |
 | Snap-on ferrites | Würth 7427122 at both cable ends |
-| Connector (cable side) | Molex Nano-Fit 4-pin cable-side plug (mates with J_6V on PDB-2) |
+| Connector (cable side) | Molex Nano-Fit 4-pin cable-side plug (mates with J_6V on Kaylee) |
 
 ### I2C and Signal Cables (J_I2C, J_ALERT, J_NTC)
 
@@ -463,15 +562,15 @@ and PVC/PTFE acceptable for signal cables.
 |---|---|
 | Conductor gauge | 28 AWG stranded silver-plated copper (2 twisted pairs for J_I2C: SCL/SDA + GND/5 V; single pair for J_ALERT, J_NTC) |
 | Construction | Individually shielded twisted pairs (Belden 9501 or equivalent); overall foil + braid shield |
-| Shield termination | Drain wire to J_SHLD_I2C / J_SHLD_ALERT / J_SHLD_NTC PGND via-pad at PDB-2 end; chassis GND at cape end; shield grounded at PDB-2 end only (single-end grounding prevents ground loop at 400 kHz) |
+| Shield termination | Drain wire to J_SHLD_I2C / J_SHLD_ALERT / J_SHLD_NTC PGND via-pad at Kaylee end; chassis GND at cape end; shield grounded at Kaylee end only (single-end grounding prevents ground loop at 400 kHz) |
 | Snap-on ferrites | Würth 7427120 (7 mm ID, 80 Ω @ 25 MHz): one at each cable end |
 | Cable length | J_I2C: ≤ 150 mm (I2C bus capacitance budget ≤ 400 pF total at 400 kHz); J_ALERT / J_NTC: ≤ 300 mm |
 | Connector (cable side) | JST GHR-04V-S (4-pin, mates with J_I2C); JST GHR-02V-S (2-pin, mates with J_ALERT / J_NTC) |
 
-### ESC Signal Cables (ESC1–4 DSHOT/BDSHOT, not on PDB-2)
+### ESC Signal Cables (ESC1–4 DSHOT/BDSHOT, not on Kaylee)
 
 ESC signal cables route directly between each ESC and its controlling FC node and do
-not connect to the PDB-2.  They are documented here for completeness.
+not connect to the Kaylee.  They are documented here for completeness.
 
 | Parameter | Specification |
 |---|---|
@@ -518,7 +617,7 @@ not connect to the PDB-2.  They are documented here for completeness.
 
 ## Phase 11 ESC5 Population
 
-When Phase 11 is ready, populate the following DNP components on the PDB-2:
+When Phase 11 is ready, populate the following DNP components on the Kaylee:
 
 1. J_ESC5 (XT60PW-F PCB-mount female)
 2. F_ESC5 (100 A MIDI blade fuse, Littelfuse 0299100.ZXNV, MIDI holder)
@@ -541,17 +640,21 @@ and set INA226 address 0x45 in the ESC5 monitor context.
 | INA226 × 5 | ~1 |
 | BQ76930 | ~1 |
 | TPS54620 × 2 + TPS54540 | ~3 |
-| Passives (caps, inductors, resistors) | ~8 |
+| Passives (caps, inductors, resistors, C_Y1/C_Y2/C_DM1/D_I2C) | ~10 |
 | Shunt resistors × 5 | ~5 |
 | Mosfet Q_BATT_DSG | ~1 |
 | C_DEC1–C_DEC4 (470 µF electrolytic × 4, D10 × 20 mm) | ~16 |
-| CM_ESC1–CM_ESC4 (Würth 7440640500 CMC × 4) | ~40 |
-| **Total (Phases 5–10)** | **~146 g** |
+| CM_ESC1–CM_ESC4 + CM2 (Würth 7440640500 × 5) | ~50 |
+| **PCB assembly total** | **~158 g** |
+| Shielded aluminum enclosure + lid | ~75 |
+| EMI gasket + hardware | ~8 |
+| EMC cable glands × 10 | ~30 |
+| Board standoffs (J_CHASSIS) × 4 | ~7 |
+| **Total installed (enclosure + PCB, Phases 5–10)** | **~278 g** |
 
-Compare to generic PDB-BEC at 40 g — additional 106 g for full monitoring, hardware
-protection, redundant BEC, per-EDF decoupling, and per-output CM filtering. The mass
-increase is dominated by the four per-ESC CM chokes (~10 g each); this is a deliberate
-trade for 500 W/m² EMI immunity. Well within mass budget.
+The EMI-hardened enclosure adds ~120 g over the bare PCB assembly. This is the
+mandatory cost of 500 W/m² immunity — a deliberate design trade documented in
+`docs/POWER_DISTRIBUTION.md §6`. AUW impact: +120 g → T/W reduces from 1.24 to ~1.20.
 
 ---
 

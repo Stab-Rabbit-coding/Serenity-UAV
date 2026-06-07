@@ -11,7 +11,7 @@
 
 ```
                          ┌───────────────────────────────────────────┐
-  6S 4000 mAh LiPo       │                 PDB-2                     │
+  6S 4000 mAh LiPo       │                 Kaylee                     │
   (22.2 V nominal)        │                                           │
   XT60 ──────────────────►│ J_BATT (XT60)                            │
                           │   │                                       │
@@ -215,21 +215,60 @@ derating should prevent sustained draws above 28 A in the nacelle environment.
 
 ## 6. EMI on Power Rails
 
+### 6.0 500 W/m² Threat Environment
+
+The Serenity UAV design envelope includes operation near commercial broadcast and
+cellular antenna installations where ambient RF power density reaches **500 W/m²**.
+
+```
+E = √(P_density × Z₀) = √(500 W/m² × 377 Ω) ≈ 434 V/m
+```
+
+For comparison: MIL-STD-461G RS103 (the most demanding standard radiated
+susceptibility test) requires operation at 200 V/m at 200 MHz–1 GHz. The Serenity
+environment exceeds RS103 by a factor of 2.2× in field strength, or 7 dB.
+
+**Required protection strategy:**
+
+1. **Enclosure shielding (first line):** The Kaylee PCB is housed in a 1.5 mm 6061-T6
+   aluminum enclosure with conductive EMI gasket providing ≥ 60 dB SE from 1 MHz
+   to 6 GHz. At 434 V/m external, 60 dB reduces the internal field to ≤ 0.4 V/m —
+   below the tested susceptibility of all ICs. See `Kaylee.md §Kaylee Shielded Enclosure`.
+
+2. **Cable-conducted path (second line):** Cables act as antennas, injecting RF energy
+   into the enclosure even when the enclosure shell itself is intact. Three layers of
+   defense:
+   - EMC cable glands (360° shield bond at enclosure wall)
+   - Two-stage CM filter (CM1 + CM2 in series) on main bus input
+   - Y-capacitors C_Y1/C_Y2 shunting residual CM energy to chassis
+
+3. **PCB immunity (third line):** On-board TVS on I2C lines (D_I2C), low-ESR HF
+   decoupling (C_DM1), and per-ESC CM chokes (CM_ESC1–4).
+
 ### 6.1 Main Bus EMI
 
 The primary EMI coupling path is ESC switching noise (DSHOT600 / BLHeli32 synchronous
 switching at 40–100 kHz) onto the VBAT bus, propagating to avionics via the BEC input.
+The 500 W/m² external RF environment adds a second conducted coupling path via the
+battery cable acting as a receiving antenna.
 
-**Mitigation stack (PDB-2):**
+**Full mitigation stack (Kaylee):**
 
 | Stage | Component | Purpose |
-|-------|-----------|---------|
-| 1. Input CM choke | Würth 7440640500 (10 A, 2×100 µH, 0.8 Ω DM) | Attenuates CM noise from ESC returns back toward battery |
-| 2. Bulk capacitance | 2× 220 µF / 35 V Panasonic EEF-CX1V221R electrolytic | Bus stiffening; low-ESR caps (< 30 mΩ at 100 kHz) |
-| 3. HF bypass | 100 nF X7R 0805 MLCC in parallel | Attenuates above 1 MHz |
-| 4. TVS clamp | SMBJ33CA bidirectional (33 V / 53.3 V clamp) | Regen voltage spike clamping |
-| 5. Per-ESC output | 10 nF X7R 0402 on each ESC output side of shunt | Local HF decoupling at ESC input pin |
-| 6. BEC input | π-filter on each BEC input (10 µH + 100 µF + 100 nF) | Rejects ESC noise before SMPS conversion |
+|---|---|---|
+| 0. Enclosure | 1.5 mm Al box + CHO-SEAL 1217 gasket | ≥ 60 dB SE; reduces 434 V/m to ≤ 0.4 V/m at PCB |
+| 0b. Cable gland | Pflitsch 750M EMC glands at all cable entries | 360° shield bond at enclosure wall; no pigtail break |
+| 1. 1st stage CM choke | CM1: Würth 7440640500 (10 A, 2 × 100 µH) | CM attenuation: ~40 dB at 1 MHz; blocks cable antenna CM current |
+| 2. 2nd stage CM choke | CM2: Würth 7440640500 (in series with CM1) | Additional ~40 dB at 1 MHz; two-stage cascade = ~80 dB CM at 1 MHz |
+| 3. Y-capacitors | C_Y1, C_Y2: 4.7 nF / 250 V Y2 (VBAT+/− to chassis) | Residual CM RF energy shunted to chassis; bypasses PGND–chassis impedance |
+| 4. Bulk capacitance | C1, C2: 2× 220 µF / 35 V electrolytic | Bus stiffening; DM low-frequency decoupling |
+| 5. HF DM cap | C_DM1: 10 µF / 50 V X7R 1210 MLCC | Low-ESR DM decoupling above 100 kHz |
+| 6. HF bypass | C3: 100 nF X7R 0805 MLCC | DM decoupling above 1 MHz |
+| 7. TVS clamp | D1: SMBJ33CA bidirectional | Regen voltage spike + RF-induced transient clamping |
+| 8. Per-ESC CM choke | CM_ESC1–4: Würth 7440640500 per ESC output | Prevents ESC PWM noise from coupling back into VDIS rail |
+| 9. Per-ESC decoupling | C_DEC1–4: 470 µF / 35 V low-ESR electrolytic | Absorbs ESC stall transients before they reach VDIS |
+| 10. BEC input | π-filter on each BEC input (10 µH + 100 µF + 100 nF) | Rejects ESC noise before SMPS conversion |
+| 11. I2C TVS | D_I2C: NXP PRTR5V0U2X, dual TVS, 5 V clamp | Protects SCL/SDA from RF-induced transients at enclosure boundary |
 
 ### 6.2 5 V Avionics Bus EMI
 
@@ -238,20 +277,20 @@ Avionics EMI coupling from motor noise is a serious concern.
 
 **Mitigation:**
 
-- PDB-2 SMPS switching frequency is ≥ 300 kHz (TPS54620) — keeps switching noise
+- Kaylee SMPS switching frequency is ≥ 300 kHz (TPS54620) — keeps switching noise
   above the EDF modulation frequencies but below the BLHeli32 DSHOT harmonics.
 - Each avionics bay has a local 47 µF + 100 nF + 10 nF bypass cap stack at the
   5 V entry (J-PWR on Cape-A-2 and Cape-B-2).
 - Cape-A-2 power entry π-filter (FB1 Würth 742792512 + C11/C12) provides additional
   conducted immunity per CAPE-A-2.md §6.
-- 5 V bus wire is twisted pair (18 AWG), shielded, drain wire grounded at PDB-2.
+- 5 V bus wire is twisted pair (18 AWG), shielded, drain wire grounded at Kaylee.
 
 ### 6.3 Grounding Architecture
 
-**Star ground:** All power grounds return to a single point at the PDB-2 PGND bar.
+**Star ground:** All power grounds return to a single point at the Kaylee PGND bar.
 
 ```
-PDB-2 PGND bar (star point)
+Kaylee PGND bar (star point)
 ├── Battery negative (XT60 GND)
 ├── ESC GND returns (each ESC GND to PGND via 10 AWG return wire)
 ├── 5 V BEC GND output (to avionics 5 V GND bus)
@@ -276,9 +315,9 @@ in voltage-only mode (no shunt). Provides coarse pack voltage at 1.25 mV/LSB.
 - Driver: `bmon_ina2xx` (bmon_ina2xx.h / bmon_ina2xx.c)
 - Poll rate: 10 Hz (via FC node pwr_fault task)
 
-### 7.2 Main Bus + Per-ESC Current (INA226 on PDB-2)
+### 7.2 Main Bus + Per-ESC Current (INA226 on Kaylee)
 
-Five INA226 devices on the PDB-2, connected to FC1 (Bay A, Cape-A-2) via a dedicated
+Five INA226 devices on the Kaylee, connected to FC1 (Bay A, Cape-A-2) via a dedicated
 I2C bus (I2C-PDB, JST-GH 4-pin to J_EXT_I2C on Cape-A-2).
 
 | Device | Location | Shunt R | I2C Addr | Full-scale I |
@@ -311,10 +350,10 @@ at 10 Hz. Driver: `bmon_ina2xx` extended current-sensing mode.
   At 40 A: P = 40² × 0.001 = 1.6 W — within 3 W rating. ✓
   At 55 A burst: P = 55² × 0.001 = 3.0 W — at rating limit; acceptable for ≤10 s.
 
-### 7.3 Cell-Level Monitoring (BQ76930 on PDB-2)
+### 7.3 Cell-Level Monitoring (BQ76930 on Kaylee)
 
 The Texas Instruments BQ76930 is a 6–10 series cell front-end monitor IC mounted on
-PDB-2 and connected to the JST-XH-7P balance lead.
+Kaylee and connected to the JST-XH-7P balance lead.
 
 | Parameter | Value |
 |-----------|-------|
@@ -331,7 +370,7 @@ PDB-2 and connected to the JST-XH-7P balance lead.
 | Alert output | Open-drain ALERT → Cape-A-2 GPIO (J_EXT_I2C SCL-side, 2.2 kΩ pull-up) |
 | Driver | `cell_mon_bq769x0` (cell_mon_bq769x0.h / cell_mon_bq769x0.c) |
 
-The BQ76930 also drives CHG and DSG FET-enable outputs. On the PDB-2 battery input,
+The BQ76930 also drives CHG and DSG FET-enable outputs. On the Kaylee battery input,
 the CHG/DSG outputs drive the gate of an integrated power path switch
 (AON6556 N-MOSFET pair), enabling the BQ76930 to disconnect the battery in a
 hardware-level fault event independent of firmware.
@@ -468,10 +507,10 @@ ramps from idle RPM at `EDF_GOV_RPM_RAMP_RATE` = 50 RPM/ms to prevent inrush cur
 
 ## 11. Redundant Power Rail Strategy
 
-All 8 avionics nodes share one 5 V bus from PDB-2. This is a single rail, not
+All 8 avionics nodes share one 5 V bus from Kaylee. This is a single rail, not
 redundant in the hardware-failure sense. Redundancy provisions:
 
-- **SMPS redundancy (PDB-2):** Two independent 5 V SMPS (TPS54620 × 2) with outputs
+- **SMPS redundancy (Kaylee):** Two independent 5 V SMPS (TPS54620 × 2) with outputs
   Schottky diode-OR'd (MBRD1045CT × 2, each sharing 50 % load). If one SMPS fails,
   the other carries the full 5 V load up to 6 A (limiting; some nodes may brown out
   if peak load exceeds 6 A — load shedding handles this).
