@@ -1,14 +1,22 @@
 /**
  * @file    bmon_ina2xx.h
- * @brief   INA219 / INA226 battery voltage monitor driver — public API.
+ * @brief   INA219 / INA226 battery voltage / current monitor driver — public API.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * Drives the Texas Instruments INA219AIDR (Cape-A-1) and INA226AIDGSR
- * (Cape-A-2) via Linux userspace i2c-dev.  Both devices are configured
- * in voltage-only measurement mode (no shunt resistor on Cape-A hardware;
- * IN+ and IN− are tied together at the battery terminal).
+ * (Cape-A-2 and PDB-2) via Linux userspace i2c-dev.
+ *
+ * Two operating modes are supported:
+ *
+ *   VOLTAGE-ONLY   Cape-A-2 INA226 on-cape pack-voltage tap.
+ *                  IN+ and IN− tied; no shunt; calibration register = 0.
+ *
+ *   CURRENT-SENSE  PDB-2 INA226 devices (U_IS1–U_IS4, U_IS_MAIN).
+ *                  IN+ / IN− across a Kelvin shunt resistor.
+ *                  Call bmon_ina226_configure_shunt() after open() to program
+ *                  the calibration register and unlock current / power reads.
  *
  * ── INA219AIDR (Cape-A-1) ─────────────────────────────────────────────────
  *
@@ -19,14 +27,26 @@
  *     PGA = ±320 mV, BADC = 12-bit, SADC = 12-bit, MODE = Continuous both
  *   Cape-A-1 usage: voltage-only; shunt disabled by tying IN+/IN−.
  *
- * ── INA226AIDGSR (Cape-A-2) ───────────────────────────────────────────────
+ * ── INA226AIDGSR (Cape-A-2 on-cape) ──────────────────────────────────────
  *
  *   I2C address : 0x40 (A0, A1 tied to GND)
  *   Bus voltage : 0–36 V, register 0x02, full 16-bit unsigned.
  *   Resolution  : 1.25 mV per LSB.
  *   die_id register 0xFF: always reads 0x2260.
  *   Manufacturer ID register 0xFE: reads 0x5449 ("TI").
- *   Cape-A-2 usage: voltage-only.
+ *   Cape-A-2 usage: voltage-only (IN+ / IN− tied).
+ *
+ * ── INA226AIDGSR (PDB-2 current monitors) ────────────────────────────────
+ *
+ *   I2C addresses: 0x40–0x44 (see PDB-2.md §INA226 Address Assignment).
+ *   Shunt resistors: 1 mΩ (ESC channels, 60 A full scale),
+ *                    1 mΩ (main bus, 75 A full scale).
+ *   After bmon_ina226_configure_shunt() the following registers are valid:
+ *     0x04 CURRENT_REG : signed 16-bit, LSB = CURRENT_LSB as programmed.
+ *     0x05 CALIBRATION  : set by configure_shunt; do not overwrite.
+ *     0x03 POWER_REG    : unsigned 16-bit, LSB = 25 × CURRENT_LSB.
+ *     0x07 ALERT_LIMIT  : threshold register (bmon_ina226_configure_alert).
+ *     0x06 MASK_ENABLE  : alert configuration (bmon_ina226_configure_alert).
  *
  * ── Auto-detection ────────────────────────────────────────────────────────
  *
@@ -46,7 +66,7 @@
  *
  * ── Thread Safety ─────────────────────────────────────────────────────────
  *
- * bmon_ina2xx_read_mv() is not thread-safe; ensure exclusive context access.
+ * None of the public functions are thread-safe; ensure exclusive context access.
  *
  * References:
  *   [1] INA219 Datasheet SBOS448G, Texas Instruments.
@@ -54,6 +74,7 @@
  *   [2] INA226 Datasheet SBOS547E, Texas Instruments.
  *       https://www.ti.com/lit/ds/symlink/ina226.pdf
  *   [3] Linux i2c-dev interface — Documentation/i2c/dev-interface.rst.
+ *   [4] PDB-2.md — Serenity UAV Power Distribution Board specification.
  *
  * Target platform: PocketBeagle 2 Industrial (AM6254), Debian Trixie.
  */
@@ -88,8 +109,29 @@ extern "C" {
  * Device constants — INA226
  * ---------------------------------------------------------------------------*/
 
+/** INA226 configuration register address. */
+#define INA226_REG_CONFIG       (0x00U)
+
+/** INA226 shunt voltage register address (signed 16-bit, 2.5 µV/LSB). */
+#define INA226_REG_SHUNT_VOLT   (0x01U)
+
 /** INA226 bus voltage register address. */
 #define INA226_REG_BUS_VOLT     (0x02U)
+
+/** INA226 power register address (unsigned, LSB = 25 × CURRENT_LSB). */
+#define INA226_REG_POWER        (0x03U)
+
+/** INA226 current register address (signed 16-bit, LSB = CURRENT_LSB). */
+#define INA226_REG_CURRENT      (0x04U)
+
+/** INA226 calibration register address. */
+#define INA226_REG_CALIBRATION  (0x05U)
+
+/** INA226 mask/enable register address (alert configuration). */
+#define INA226_REG_MASK_ENABLE  (0x06U)
+
+/** INA226 alert limit register address. */
+#define INA226_REG_ALERT_LIMIT  (0x07U)
 
 /** INA226 die-ID register address. */
 #define INA226_REG_DIE_ID       (0xFFU)
@@ -105,6 +147,37 @@ extern "C" {
  * Register 0x02 is a 16-bit unsigned count; voltage_mv = count × 1250 / 1000.
  */
 #define INA226_LSB_UV           (1250U)  /* µV per LSB */
+
+/**
+ * INA226 shunt voltage LSB in nanovolts (2500 nV = 2.5 µV).
+ * Register 0x01 is signed 16-bit; shunt_uv = (int16_t)reg × 2500 / 1000.
+ */
+#define INA226_SHUNT_LSB_NV     (2500U)  /* nV per LSB */
+
+/**
+ * INA226 mask/enable bit: over-current alert on shunt-over-limit (SOL).
+ * Set this bit in MASK_ENABLE to trigger ALERT when shunt voltage exceeds
+ * ALERT_LIMIT register value.
+ */
+#define INA226_MASK_SOL         (0x8000U)
+
+/**
+ * INA226 mask/enable bit: bus-over-voltage alert (BOV).
+ * Triggers ALERT when bus voltage exceeds ALERT_LIMIT register value.
+ */
+#define INA226_MASK_BOV         (0x4000U)
+
+/**
+ * INA226 mask/enable bit: bus-under-voltage alert (BUV).
+ * Triggers ALERT when bus voltage falls below ALERT_LIMIT register value.
+ */
+#define INA226_MASK_BUV         (0x2000U)
+
+/** INA226 mask/enable bit: alert polarity (active-high if set). */
+#define INA226_MASK_APOL        (0x0002U)
+
+/** INA226 mask/enable bit: alert latch enable. */
+#define INA226_MASK_LEN         (0x0001U)
 
 /* ---------------------------------------------------------------------------
  * Data types
@@ -192,6 +265,99 @@ int bmon_ina2xx_read_mv(bmon_ina2xx_ctx_t *ctx, uint32_t *voltage_mv);
  *         If ctx is NULL, returns BMON_INA_AUTO (0) as a safe default.
  */
 bmon_ina_type_t bmon_ina2xx_get_type(const bmon_ina2xx_ctx_t *ctx);
+
+/* ---------------------------------------------------------------------------
+ * INA226-only current-sense API
+ *
+ * These functions are only valid on INA226 devices.  They return -ENOTSUP if
+ * called on an INA219 context.
+ * ---------------------------------------------------------------------------*/
+
+/**
+ * @brief Configure the INA226 for current sensing by programming the
+ *        calibration register.
+ *
+ * Computes CAL = floor(0.00512 / (current_lsb_ma × shunt_mohm × 1e-6)) and
+ * writes it to register 0x05.  After this call, bmon_ina226_read_current_ma()
+ * and bmon_ina226_read_power_mw() return valid data.
+ *
+ * In voltage-only mode (Cape-A-2 on-cape INA226), do NOT call this function;
+ * the calibration register remains 0 and the current / power registers read 0.
+ *
+ * @param[in] ctx           Driver context (must be INA226).
+ * @param[in] shunt_mohm    Shunt resistance in milli-ohms (e.g. 1 for 1 mΩ).
+ * @param[in] imax_ma       Maximum expected current in milliamps (e.g. 60000 for 60 A).
+ *                          Sets the current LSB to imax_ma / 32768 mA.
+ * @param[out] current_lsb_ua_out  If non-NULL, receives the programmed
+ *                          current LSB in microamps.
+ * @return 0 on success, -ENOTSUP if ctx is INA219, -EINVAL if arguments are
+ *         invalid (shunt_mohm == 0 or imax_ma == 0), -EIO on I2C error.
+ */
+int bmon_ina226_configure_shunt(bmon_ina2xx_ctx_t *ctx,
+                                uint32_t           shunt_mohm,
+                                uint32_t           imax_ma,
+                                uint32_t          *current_lsb_ua_out);
+
+/**
+ * @brief Read the current register from an INA226 in current-sense mode.
+ *
+ * Reads register 0x04 (signed 16-bit) and scales by the current LSB programmed
+ * by bmon_ina226_configure_shunt().
+ *
+ * bmon_ina226_configure_shunt() must have been called first; otherwise the
+ * calibration register is 0 and this function returns 0 mA regardless of load.
+ *
+ * @param[in]  ctx         Driver context (INA226 only).
+ * @param[out] current_ma  Signed current in milliamps.  Positive = current
+ *                         flowing from IN+ to IN− (load current through shunt).
+ *                         Negative = reverse current (regen / charging).
+ * @return 0 on success, -ENOTSUP if ctx is INA219, -EINVAL on NULL args,
+ *         -EIO on I2C error.
+ */
+int bmon_ina226_read_current_ma(bmon_ina2xx_ctx_t *ctx, int32_t *current_ma);
+
+/**
+ * @brief Read the power register from an INA226 in current-sense mode.
+ *
+ * Reads register 0x03 (unsigned 16-bit) and scales by 25 × current_lsb.
+ * The power register represents bus_voltage × current (apparent power at
+ * the INA226 measurement point, not delivered power).
+ *
+ * bmon_ina226_configure_shunt() must have been called first.
+ *
+ * @param[in]  ctx      Driver context (INA226 only).
+ * @param[out] power_mw Power in milliwatts.
+ * @return 0 on success, -ENOTSUP if ctx is INA219, -EINVAL on NULL args,
+ *         -EIO on I2C error.
+ */
+int bmon_ina226_read_power_mw(bmon_ina2xx_ctx_t *ctx, uint32_t *power_mw);
+
+/**
+ * @brief Configure the INA226 ALERT function.
+ *
+ * Writes the MASK_ENABLE register (0x06) and ALERT_LIMIT register (0x07)
+ * to enable alert assertion on the specified condition.
+ *
+ * Common alert_mask values (may be OR'd):
+ *   INA226_MASK_SOL  — alert on shunt-over-limit (overcurrent)
+ *   INA226_MASK_BOV  — alert on bus-over-voltage
+ *   INA226_MASK_BUV  — alert on bus-under-voltage
+ *
+ * The ALERT_LIMIT register value is the raw comparison threshold:
+ *   SOL: alert_limit = I_limit_ma / current_lsb_ma (use current_lsb returned
+ *        by configure_shunt, convert to mA; alert_limit = I_limit_ma × 32768
+ *        / imax_ma)
+ *   BOV/BUV: alert_limit = V_limit_mv / 1.25 (INA226 bus voltage LSB = 1.25 mV)
+ *
+ * @param[in] ctx          Driver context (INA226 only).
+ * @param[in] alert_mask   Bitmask for MASK_ENABLE register (INA226_MASK_*).
+ * @param[in] alert_limit  Raw 16-bit value for the ALERT_LIMIT register.
+ * @return 0 on success, -ENOTSUP if ctx is INA219, -EINVAL on NULL ctx,
+ *         -EIO on I2C error.
+ */
+int bmon_ina226_configure_alert(bmon_ina2xx_ctx_t *ctx,
+                                uint16_t           alert_mask,
+                                uint16_t           alert_limit);
 
 #ifdef __cplusplus
 }
