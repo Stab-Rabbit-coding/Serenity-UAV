@@ -285,6 +285,26 @@ feelines
 - [ ] **Update PHASED_BUILD_GUIDE.md** from Rev M 18-inch to Rev P 24-inch specifications (hull 609.6 mm, 50mm EDFs, 4-scoop radial intake, M=1.0 gears, Rev O pivot Z=83mm, MF104ZZ bearings, Rev P cargo system).
 - [ ] **Sync `bom_revO.json` ↔ `bom_revO.csv`** — verify all XCVR-49MHZ-1 BOM items (Phase 5 above) are reflected in both files once XCVR-49MHZ-1 Phase 5 is complete.
 
+### 1.5.1. Names
+
+- [ ] The ground control station is named "Malcolm" aka "CAPT Reynolds" or "CAPT Tight Pants" - "I aim to misbehave" 
+
+- [ ] The Flight Control Avionics Cape is named "Wash" - "I'm a leaf on the wind"
+
+- [ ] The Comms/Logging/Payload Cape is named "Zoë" - "Big Damn Heros, sir."
+
+- [ ] The Power Distribution Board is named "Kaylee" - "Everything is shiny."
+
+- [ ] The Cargo handling system is named "Jayne" - "I was aiming for his head."
+
+- [ ] The forward avionics bay is named "Book" - "I have heathens enough right here."
+
+- [ ] The second avionics bay is named "Inara" - "Mal, I will never understand you."
+
+- [ ] The third avionics bay is named "River"  - "Also, I can kill you with my mind."
+
+- [ ] The aft avionics bay is named "Simon"  - "What did they do to you?"
+
 ---
 
 ## 2.0 — Procurement (Before Physical Build)
