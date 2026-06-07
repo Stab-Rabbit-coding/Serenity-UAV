@@ -27,33 +27,34 @@
 //   RETAINED — EDF1 nacelle-integrated spider and all other nacelle features
 //
 // Changes from Rev T1 (Rev T2 — 2026-06-07):
-//   ADDED — nozzle_access_pocket() Bore Z = 166.25 … 185.2+ mm at r = 32.5 mm;
-//            exposes 3× sleeve retention screws (SLEEVE_BOSS_R = 28 mm) when the
-//            screw-on nozzle housing is removed for EDF/rotor bench maintenance.
-//   ADDED — nozzle_thread_boss()   Threaded exit boss ring (OD = 63 mm,
+//   ADDED — nozzle_access_pocket() Bore Z = 166.25 … 186.25 mm at r = 32.5 mm;
+//            exposes 3× sleeve retention screws (SLEEVE_BOSS_R = 28 mm) when
+//            housing is removed for EDF/rotor bench maintenance.
+//   ADDED — nozzle_push_boss()     Smooth push-on exit boss (OD = 60 mm,
 //            ID = 50 mm, H = 12 mm) protruding aft from nacelle exit face;
-//            plus base collar anchoring boss to nacelle exit annular face.
-//            Housing female thread (Tr63×4, 3-start) engages this boss.
+//            base collar anchors boss to nacelle exit annular face.
+//            3× M3 set-screw flats at 0°/120°/240° engage housing set screws.
 //   ADDED — NOZZLE_ACCESS_*, NOZZLE_BOSS_*, NOZZLE_FLAT_* parameter blocks.
 //
 // Sleeve removability
 // -------------------
 // Maintenance sequence:
-//   1. Unscrew nozzle housing (a few turns; loosen M3 set screw first).
-//   2. With housing removed, 3× M3×20 SHCS sleeve retention screws are
-//      accessible at SLEEVE_BOSS_R = 28 mm radius through the access pocket.
-//   3. Remove aft spider sleeve (edf_aft_spider_sleeve.scad).
-//   4. Slide out stator sleeve (edf_stator_sleeve.scad).
-//   5. Service EDF1/EDF2 motors and fan rotors.
-//   6. Reinstall in reverse; reinstall and re-engage screw-on nozzle housing.
+//   1. Loosen 3× M3 set screws in housing skirt (2.5 mm hex key).
+//   2. Pull housing off push-on boss.
+//   3. 3× M3×20 SHCS sleeve retention screws now accessible at SLEEVE_BOSS_R
+//      = 28 mm radius through the access pocket bore.
+//   4. Remove aft spider sleeve (edf_aft_spider_sleeve.scad).
+//   5. Slide out stator sleeve (edf_stator_sleeve.scad).
+//   6. Service EDF1/EDF2 motors and fan rotors.
+//   7. Reinstall in reverse; push housing onto boss, drive set screws.
 //
 // Nozzle pairing
 // --------------
 // This nacelle mates with nacelle_nozzle_straight.scad (Rev T2):
-//   • Screw-on housing (female Tr63×4 3-start thread, engages nacelle boss)
+//   • Push-on housing (skirt bore Ø 60.25 mm slides over Ø 60 mm boss)
 //   • 50 mm airflow bore maintained through housing
 //   • 8 decorative imitation petals — same shape as REVT iris, non-functional
-//   • M3 set screw through housing skirt locks housing against nacelle boss flat
+//   • 3× M3 set screws in housing skirt engage boss OD flats at 0°/120°/240°
 //
 // Sleeves (unchanged from Rev T)
 // --------------------------------
@@ -194,12 +195,22 @@ EDF1_SPIDER_Z   = STATOR_Z_BOT - SPIDER_ARM_H / 2 - 2.0;  // = 87.75 mm
 // ── EDF2 spider position (in aft spider sleeve) ───────────────────────────────
 EDF2_SPIDER_Z   = 148.0;   // [mm] EDF2 spider centre, nacelle-local Z
 
-// ── Nozzle ring pocket Z reference ──────────────────────────────────────────
-// nozzle_ring_pocket() is removed in this simplified variant (no iris nozzle;
-// straight nozzle housing bonds to exterior nacelle exit face instead).
-// NOZZLE_RING_Z is retained because AFT_SLV_Z_END and sleeve_retention_bosses()
-// both reference this value.  NOZZLE_RING_OD and NOZZLE_RING_H are omitted.
-NOZZLE_RING_Z   = 166.25;  // [mm] aft boundary of sleeve zone; sleeve boss Z ref
+// ── Nozzle interface (push-on boss) ──────────────────────────────────────────
+// NOZZLE_RING_Z is retained: AFT_SLV_Z_END and sleeve_retention_bosses() ref.
+// nozzle_access_pocket() (Zone B) enlarges bore from NOZZLE_RING_Z aft to
+// expose 3× sleeve retention screws at SLEEVE_BOSS_R = 28 mm when housing is
+// removed.  nozzle_push_boss() (Zone C) adds the smooth push-on exit boss that
+// the housing skirt registers over; 3× M3 set screws in housing skirt lock into
+// shallow flats on boss OD.
+NOZZLE_RING_Z      = 166.25;  // [mm] aft boundary of sleeve zone; sleeve boss Z ref
+NOZZLE_ACCESS_OD   =  65.0;   // [mm] access pocket bore OD (clears boss OD + margin)
+NOZZLE_ACCESS_H    =  20.0;   // [mm] pocket axial depth aft of NOZZLE_RING_Z
+NOZZLE_BOSS_OD     =  60.0;   // [mm] push-on exit boss nominal OD (smooth, no thread)
+NOZZLE_BOSS_H      =  12.0;   // [mm] boss protrusion aft of nacelle exit face
+NOZZLE_COLLAR_OD   =  64.0;   // [mm] base collar OD (boss OD + 4 mm nacelle overlap)
+NOZZLE_COLLAR_H    =   3.0;   // [mm] base collar axial height at nacelle exit face
+NOZZLE_FLAT_DEPTH  =   0.75;  // [mm] M3 set-screw flat radial depth on boss OD
+NOZZLE_FLAT_W      =   5.0;   // [mm] set-screw flat width (circumferential + axial)
 
 // ── Two-sleeve bore zone ──────────────────────────────────────────────────────
 // edf_stator_sleeve.scad    : Z = STATOR_SLV_Z_START … STATOR_SLV_Z_END
@@ -562,6 +573,81 @@ module harness_exit_port(pylon_side = PYLON_SIDE) {
 
 
 // =============================================================================
+// ── Module: nozzle_access_pocket ─────────────────────────────────────────────
+// =============================================================================
+// Zone B subtraction: bore from NOZZLE_RING_Z aftward at r = NOZZLE_ACCESS_OD/2.
+// Exposes the 3× sleeve retention screws (at SLEEVE_BOSS_R = 28 mm) after the
+// nozzle housing is removed.  Boss collar (Zone C) registers in this pocket lip.
+module nozzle_access_pocket() {
+    translate([0, 0, NOZZLE_RING_Z])
+        cylinder(r = NOZZLE_ACCESS_OD / 2,
+                 h = NOZZLE_ACCESS_H,
+                 center = false);
+}
+
+
+// =============================================================================
+// ── Module: nozzle_push_boss ──────────────────────────────────────────────────
+// =============================================================================
+// Zone C addition: smooth push-on exit boss ring protrudes aft from nacelle
+// exit face.  Housing skirt bore (60.25 mm) slides over boss to shoulder stop
+// at boss aft face; 3× M3 set screws in housing skirt lock into the three
+// flats machined into boss OD.
+//
+// Geometry:
+//   Base collar: OD = NOZZLE_COLLAR_OD (64 mm), anchors boss to nacelle face.
+//                Height = NOZZLE_COLLAR_H (3 mm); sits inside nacelle exit annulus.
+//   Boss ring  : OD = NOZZLE_BOSS_OD (60 mm), ID = EDF bore (50 mm),
+//                protrudes NOZZLE_BOSS_H (12 mm) aft of nacelle exit face.
+//   Set-screw flats: 3× shallow flats on boss OD at 0°/120°/240°.
+//                    Depth = NOZZLE_FLAT_DEPTH (0.75 mm), W × H = 5 × 5 mm.
+//                    Centred at boss mid-height (NACELLE_L + NOZZLE_BOSS_H/2).
+//
+// Thread: NONE — push-on smooth bore.  Housing is retained by 3× M3 set screws
+// through housing skirt into these flats.
+module nozzle_push_boss() {
+    union() {
+
+        // ── Base collar (spans exit annulus, anchors boss to nacelle face) ──
+        translate([0, 0, NACELLE_L - NOZZLE_COLLAR_H])
+            difference() {
+                cylinder(r = NOZZLE_COLLAR_OD / 2,
+                         h = NOZZLE_COLLAR_H,
+                         center = false);
+                translate([0, 0, -0.01])
+                    cylinder(r = EDF_BORE_R,
+                             h = NOZZLE_COLLAR_H + 0.02,
+                             center = false);
+            }
+
+        // ── Boss ring (protrudes aft; housing skirt registers over this) ────
+        translate([0, 0, NACELLE_L])
+            difference() {
+                cylinder(r = NOZZLE_BOSS_OD / 2,
+                         h = NOZZLE_BOSS_H,
+                         center = false);
+                // EDF airflow bore
+                translate([0, 0, -0.01])
+                    cylinder(r = EDF_BORE_R,
+                             h = NOZZLE_BOSS_H + 0.02,
+                             center = false);
+                // 3× M3 set-screw engagement flats at 0°/120°/240°
+                for (angle = [0, 120, 240]) {
+                    rotate([0, 0, angle])
+                        translate([NOZZLE_BOSS_OD / 2 - NOZZLE_FLAT_DEPTH,
+                                   -NOZZLE_FLAT_W / 2,
+                                   NOZZLE_BOSS_H / 2 - NOZZLE_FLAT_W / 2])
+                            cube([NOZZLE_FLAT_DEPTH + 0.1,
+                                  NOZZLE_FLAT_W,
+                                  NOZZLE_FLAT_W + 0.1]);
+                }
+            }
+
+    }
+}
+
+
+// =============================================================================
 // ── Module: nacelle_pod (main assembly) ──────────────────────────────────────
 // =============================================================================
 // Top-level assembly.  Geometry is organised into three zones:
@@ -582,12 +668,13 @@ module harness_exit_port(pylon_side = PYLON_SIDE) {
 //   • esc_wire_exit_slot()     — EDF1 ESC wire exit at Z ≈ 86 mm
 //   • harness_exit_port()      — ESC / nav-light wiring slot
 //   • Tilt spar clearance bore (4.2 mm dia along X through both X-faces)
-//   NOTE: nozzle_ring_pocket() removed — straight nozzle housing bonds to
-//         exterior nacelle exit face (no iris inner ring seat required).
+//   • nozzle_access_pocket()   — r = 32.5 mm pocket from NOZZLE_RING_Z aft;
+//                                exposes sleeve retention screws when housing off
 //
 // Zone C — outer union() AFTER difference():
 //   • edf1_nacelle_spider()     — EDF1 spider at Z = 87.75 mm
 //   • sleeve_retention_bosses() — 3× M3 insert bosses on nozzle pocket face
+//   • nozzle_push_boss()        — smooth push-on exit boss, OD = 60 mm, H = 12 mm
 module nacelle_pod(swirl_dir = SWIRL_DIR) {
 
     union() {
@@ -663,9 +750,10 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
                         center = true
                     );
 
-            // NOTE: nozzle_ring_pocket() removed — no iris inner ring seat.
-            // The straight nozzle housing (nacelle_nozzle_straight.scad) bonds
-            // to the exterior nacelle exit face; no enlarged pocket required.
+            // ── Nozzle access pocket (exposes sleeve retention screws) ────────
+            // r = NOZZLE_ACCESS_OD/2 = 32.5 mm from NOZZLE_RING_Z aft.
+            // Sleeve retention screws (BOSS_R = 28 mm) accessible when housing removed.
+            nozzle_access_pocket();
 
         } // end difference (Zone A + Zone B)
 
@@ -680,6 +768,10 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
         // ── Aft sleeve retention M3 insert bosses on nozzle pocket face ──
         // 3× bosses at r = SLEEVE_BOSS_R = 28 mm, 120° spacing.
         sleeve_retention_bosses();
+
+        // ── Push-on nozzle exit boss (housing skirt registers over this) ──
+        // Smooth OD = 60 mm; 3× M3 set-screw flats at 0°/120°/240°.
+        nozzle_push_boss();
 
     } // end union (top-level)
 }
@@ -713,18 +805,29 @@ nacelle_pod(swirl_dir = SWIRL_DIR);
 //   4. Tilt spar bore ID = 4.2 mm ± 0.1 mm through both X faces.
 //   5. Retention boss bores = 3.5 mm ± 0.05 mm (M3 × 6 mm OLF heat-set insert).
 //
-// Nozzle installation (simplified variant):
-//   After all EDF/sleeve assembly, bond nacelle_nozzle_straight.scad housing
-//   to nacelle exterior exit face with structural epoxy (JB Weld or equiv.,
-//   min shear 3 MPa cured).  Install petals on 3 mm × 18 mm SS hinge pins,
-//   set desired fixed orientation, then threadlock pins in place.
+// Post-print checks (additional, Rev T2):
+//   6. Nozzle boss OD = 60.0 mm ± 0.2 mm — housing skirt bore 60.25 mm must
+//      slide on without binding.
+//   7. Boss flats at 0°/120°/240°: depth = 0.75 mm ± 0.1 mm.  M3 set screw
+//      tip must seat fully in flat without protrusion past boss OD.
+//   8. Access pocket OD = 65.0 mm ± 0.3 mm in Z = 166.25 … 186.25 mm band.
+//      Sleeve boss heads (r = 28 mm) must be fully visible with housing removed.
+//
+// Nozzle installation (Rev T2 — push-on with M3 set screws):
+//   1. Slide nacelle_nozzle_straight.scad housing over nozzle boss until
+//      housing shoulder seats on boss aft face (positive stop).
+//   2. Align housing set-screw holes with boss OD flats (3× at 120°).
+//   3. Drive 3× M3×6 flat-point SHCS (2.5 mm hex key) through housing skirt
+//      into boss flats.  Torque to 0.5 N·m; Loctite 243 on threads optional.
+//   4. Install petals on 3 mm × 18 mm SS hinge pins; set desired fixed
+//      orientation; threadlock pin ends in place.
 //
 // Render commands:
 //   Port nacelle (RED nav light, pylon on +X, CW from intake):
-//     openscad -o s_nacelle_port_simple_revt1.stl \
+//     openscad -o s_nacelle_port_simple_revt2.stl \
 //              nacelle_pod_50mm_tandem_simple.scad \
 //              -D SWIRL_DIR=1 -D PYLON_SIDE=1 -D NACELLE_SIDE=1
 //   Starboard nacelle (GREEN nav light, pylon on -X, CCW from intake):
-//     openscad -o s_nacelle_stbd_simple_revt1.stl \
+//     openscad -o s_nacelle_stbd_simple_revt2.stl \
 //              nacelle_pod_50mm_tandem_simple.scad \
 //              -D SWIRL_DIR=-1 -D PYLON_SIDE=-1 -D NACELLE_SIDE=-1
