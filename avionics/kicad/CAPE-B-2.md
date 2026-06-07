@@ -1,18 +1,19 @@
-# CAPE-B-2 — EMI-Hardened Communications, Logging & Payload Cape
+# Zoë (CAPE-B-2) — EMI-Hardened Communications, Logging & Payload Cape
 
+**Callsign:** Zoë
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**Revision:** A (EMI-hardened variant of CAPE-B-1 Rev M)
-**Date:** 2026-06-02
+**Revision:** Q (Rev Q baseline — EMI-hardened variant of CAPE-B-1 Rev M, Ethernet PHY restored)
+**Date:** 2026-06-07
 **Status:** Schematic complete — PCB layout pending
 
 ---
 
 ## Purpose
 
-CAPE-B-2 is the electromagnetic-environment-hardened variant of CAPE-B-1 (Rev M),
-designed for the same harsh nacelle and fuselage EM environment as CAPE-A-2. The
-communications payload of this cape (SiK 915 MHz, LoRa 915 MHz, WiFi 2.4/5 GHz,
+Zoë (CAPE-B-2) is the electromagnetic-environment-hardened variant of CAPE-B-1
+(Rev M), designed for the same harsh nacelle and fuselage EM environment as CAPE-A-2.
+The communications payload of this cape (SiK 915 MHz, LoRa 915 MHz, WiFi 2.4/5 GHz,
 49 MHz RCRS) is inherently more susceptible to radiated interference than the purely
 digital CAPE-A-2, so hardening concentrates on conducted immunity for the wired
 buses and supply rails, and on keeping the RF subsystem's susceptibility low through
@@ -311,76 +312,29 @@ antenna cable shielding provide the primary conducted shield path.
 
 ---
 
-## Shielded JST-GH Connectors
+## §14 — Field Connectors Summary
 
-All JST-GH connectors on Cape-B-2 now include a SHIELD pin (number "MP") bonded to the
-PGND chassis ground net through the PCB mounting tab footprint.
+All field connectors are shielded JST-GH (or SMA/U.FL for RF). SHIELD pins connect to PGND.
 
-| Reference | Type | Signals | SHIELD tap (absolute, mm) |
+| Designator | Type | Pins | Signal Assignment |
 |---|---|---|---|
-| J_XCVR | SM06B-GHS-TB-1MP | GND / +5V / UART_RCRS_TX / XCVR_RX_RAW / XCVR_PTT_N / +3V3 | (100.00, 570.16) |
-| J_FAN | SM03B-GHS-TB-1MP | GND / +5V / FAN_PWM_B | (100.00, 646.35) |
+| J_PWR | SM04B-GHS-TB-1MP | 1=+5V_IN, 2=GND, 3=GND, 4=+5V_IN, MP=PGND | Power input |
+| J_CAN | SM03B-GHS-TB-1MP | 1=CAN_B_H, 2=CAN_B_L, 3=GND, MP=PGND | CAN FD bus |
+| J_485 | SM03B-GHS-TB-1MP | 1=RS485_B_P, 2=RS485_B_N, 3=GND, MP=PGND | RS-485 |
+| J_1553 | SM04B-GHS-TB-1MP | 1=BUS_1553_B_P, 2=BUS_1553_B_N, 3=GND, 4=PGND, MP=PGND | MIL-STD-1553B |
+| J_ETH_B | SM06B-GHS-TB-1MP | 1=GND, 2=ETHB_TX+, 3=ETHB_TX-, 4=ETHB_RX+, 5=ETHB_RX-, 6=GND, MP=PGND | Ethernet PHY |
+| J_XCVR | SM06B-GHS-TB-1MP | 1=GND, 2=+5V, 3=UART_RCRS_TX, 4=XCVR_RX_RAW, 5=XCVR_PTT_N, 6=+3V3, MP=PGND | XCVR-49MHZ-2 header |
+| J_FAN | SM03B-GHS-TB-1MP | 1=GND, 2=+5V, 3=FAN_PWM_B, MP=PGND | Bay ventilation fan |
+| J_SD | MicroSD (Molex 503182-1852) | SDIO: CLK/CMD/D0-D3/CD/WP | Logging microSD |
+| J_SMA_LORA | SMA (50 Ω) | RF center conductor = LORA_ANT; shell = PGND | LoRa 915 MHz antenna |
+| J_SMA_WIFI | SMA (50 Ω) | RF center = WIFI_ANT; shell = PGND | WiFi 2.4/5 GHz antenna |
+| J_SIK_ANT | Hirose U.FL | RF center = SIK_ANT; shell = PGND | SiK 915 MHz module pigtail |
+| J_SMA_SIK | SMA (50 Ω) | RF center via FL_SIK; shell = PGND | SiK 915 MHz antenna output |
 
-**Cable assembly requirements for all JST-GH connectors (same as Cape-A-2):**
-
-- Cable: foil + braid shielded (Belden 9533 or equivalent)
-- Drain wire: terminate to connector PGND pad
-- Ferrite clamp: Würth 74271222 ≤ 25 mm from body, both ends
-
-**RF antenna cables (SMA ports J_SMA_SIK, J_SMA_LORA, J_UFL_WIFI):**
-
-- RG-178 or RG-316 50 Ω coaxial cable, maximum 500 mm length
-- SMA/UFL connector shells bonded to PGND at the board-side connector land
-- No ferrite clamp on antenna cables (coaxial inherently shielded)
-
----
-
-## Bay Fan Connector (J_FAN)
-
-A 3-pin JST-GH connector J_FAN is provided for the bay Faraday enclosure ventilation fan.
-
-| Pin | Net | Description |
-|---|---|---|
-| 1 | GND | Fan return |
-| 2 | +5V | Fan power (80 mA max) |
-| 3 | FAN_PWM_B | PWM speed control — PocketBeagle 2 EHRPWM output |
-| MP | PGND | Cable shield drain |
-
-**Fan:** Sunon MF40100V2-1000U-A99 (40 × 40 × 10 mm, 5 V, 90 mA, 4450 RPM, brushless).
-
-**Note:** Cape-A-2 and Cape-B-2 each have an independent J_FAN connector within the
-same avionics bay.  Both fan signals (FAN_PWM_A, FAN_PWM_B) may drive the same fan
-or two fans (one per board), at the integrator's discretion.  For redundancy, wiring
-both boards to the same fan via a Schottky OR diode circuit (BAT54S) is preferred.
-
----
-
-## Wiring Harness Requirements — All Bay Cables
-
-See CAPE-A-2.md §11 for the full wiring harness specification.  Cape-B-2 additionally
-requires:
-
-- **SiK/LoRa/WiFi RF cables:** RG-316 coaxial, max 500 mm, SMA bodies to PGND.
-- **XCVR-49MHZ-2 harness (J_XCVR):** 6-conductor overall-shielded twisted-bundle,
-  Belden 9533 or equivalent.  Ferrite clamp on both ends ≤ 25 mm from body.
-- **RCRS receive audio output:** shielded coaxial or individually shielded 2-wire
-  to the logging subsystem; drain to PGND.
-
----
-
-## Avionics Bay Faraday Enclosure
-
-Each of the 4 avionics bays contains one Cape-A-2 and one Cape-B-2.  The complete
-Faraday enclosure specification (foil liner, fan, EMI gaskets, cable entry) is
-defined in Cape-A-2.md §12.  Cape-B-2 specific requirements:
-
-- The XCVR-49MHZ-2 sub-module (plugged into J_XCVR) must be located inside the
-  Faraday enclosure.  Its SMA antenna port exits through a bulkhead SMA
-  panel-mount connector bonded to PGND at the bay wall.
-- WiFi, SiK, and LoRa antenna coaxial pigtails must exit through a coaxial
-  bulkhead panel-mount at the bay wall, bonded to PGND.
-- No antenna cable shall pass through the copper foil liner without a proper
-  coaxial bulkhead connector.  Avoid pigtails longer than 100 mm inside the bay.
+Note: Cape-B-2 uses `_B_` net name suffixes on CAN, RS-485, and 1553 bus signals
+(CAN_B_H/CAN_B_L, RS485_B_P/RS485_B_N, BUS_1553_B_P/BUS_1553_B_N) to distinguish
+them from Cape-A-2's `_A_` nets, allowing both boards to coexist on a shared
+schematic bus ring without net name conflicts.
 
 ---
 
@@ -388,7 +342,7 @@ defined in Cape-A-2.md §12.  Cape-B-2 specific requirements:
 
 - `CAPE-B-1.kicad_sch` — standard (non-EMI-hardened) variant, Rev M baseline
 - `XCVR-49MHZ-2.kicad_sch` — EMI-hardened 49 MHz transceiver
-- `CAPE-A-2.md` — EMI-hardened flight control cape (Faraday enclosure spec §12)
+- `CAPE-A-2.md` — EMI-hardened flight control cape
 - `AVIONICS_PB2_REDESIGN.md` — system architecture
 
 ---
