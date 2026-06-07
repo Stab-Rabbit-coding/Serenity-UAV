@@ -261,18 +261,26 @@ All Phase 1–3 items must be sequentially complete. Phase 4 verification runs i
 
 #### 1.4.2. Antenna Placement and feedlines
 feelines
+
+- [ ] 2 antennas for each of the 4 comm links, plus 2 gps/gnss antennas. This alsomeansthere are only 2 49MHz xcvrs. Each avionics stack has two. No Avionics stack has both LoRa and SiK, since those use the same 900mhz ism band.
+
 - [ ] antenna mounts
 
-- [ ] feedline mux/demux
+- [ ] feedlines
 
 - [ ] chokes
 
+
+
 #### 1.4.3 internode communication wiring
+
 
 #### 1.4.4 flight control signal wiring
 
+
 #### 1.4.5 power distribution
 
+-[ ] "Kaylee, what happened to my ship?"  - "Everything's shiny, Captain."
 
 ---
 
@@ -297,13 +305,36 @@ feelines
 
 - [ ] The Cargo handling system is named "Jayne" - "I was aiming for his head."
 
-- [ ] The forward avionics bay is named "Book" - "I have heathens enough right here."
+- [ ] The forward avionics bay is named "Shepherd Book" - "I have heathens enough right here."
 
 - [ ] The second avionics bay is named "Inara" - "Mal, I will never understand you."
 
 - [ ] The third avionics bay is named "River"  - "Also, I can kill you with my mind."
 
 - [ ] The aft avionics bay is named "Simon"  - "What did they do to you?"
+
+### Avionics Workload Balancing
+
+- While all Wash capes are identical and all Zoë capes are also identical, they have different primary tasking.  **All Stacks are capable to communicate and control the UAV safety on their own.***
+
+-  UAV Tasks with PACE prioritization and failover per stack (primary, alternative, contingency, emergency) 
+
+-- Watchdog: P - Book; A - Inara; C - Simon, E - River
+-- Comms: P - Inara; A - Book; C - River; E -  Simon
+-- Flight Control: P - River; A - Simon; C - Book; E - Inara
+-- Payload Control: P - Simon; A - River; C - Inara; E - Book;
+
+---
+
+- Mal is the ground control station - He's the boss. 
+
+- Book is the crew's conscience and therefore takes care of primarily watchdog, fault detection, failover, and authentication. His stack has SiK primary and WiFi secondary.
+
+- Inara has primarily camera, external sensors, and high bandwidth ground communication.  Her stack is connected to  WiFi primarily and LoRa antennas. 
+
+- River provides primary control of the forward EDFs, and provides EDF and nacelle control command and syncing, and the most resilient comms.  She may be crazy, but she comes through when no one else can.  She has 49Mhz RCRS primary and LoRa secondary.
+
+- Simon is the alternate watchdog for the ship, but most of his attention is on River.  He's got aft EDF control and alternate nacelle control. He follows River's lead but makes sure she doesn't crash the ship. Simon also controls Jayne, and ensures that the cargo isn't jettisoned or the crew abandoned. He's got 49MHz as his primary antenna and SiK as his backup. 
 
 ---
 
