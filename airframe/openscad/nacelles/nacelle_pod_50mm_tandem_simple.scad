@@ -1,21 +1,20 @@
 // =============================================================================
 // nacelle_pod_50mm_tandem_simple.scad
-// Serenity UAV — Rev T1 — Tandem-EDF Nacelle Pod, Simplified (no gear train)
+// Serenity UAV — Rev T2 — Tandem-EDF Nacelle Pod, Simplified (screw-on nozzle)
 // =============================================================================
 //
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // Project : Serenity-class Tilt-Rotor UAV (24-inch scale, Firefly TV ship)
 // License : CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 // Date    : 2026-06-07
-// Revision: Rev T1 (2026-06-07)
+// Revision: Rev T2 (2026-06-07)
 //
 // Derivation
 // ----------
 // Derived from nacelle_pod_50mm_tandem.scad Rev T (2026-05-29).
 // This variant removes the passive gear-driven variable-diameter iris nozzle
-// and all supporting gear-train nacelle features (Pinion A boss, Crown Pinion
-// boss, longitudinal shaft conduit, nozzle ring pocket).  The sleeve
-// architecture and all EDF mounting features are unchanged.
+// and all supporting gear-train nacelle features.  The sleeve architecture and
+// all EDF mounting features are unchanged.
 //
 // Changes from Rev T (Rev T1 — 2026-06-07):
 //   REMOVED — pinion_a_boss()      MR63ZZ boss for Drive Pinion A at PIVOT_Z
@@ -23,19 +22,38 @@
 //   REMOVED — shaft_conduit()      Longitudinal CF gear-shaft PTFE-sleeve conduit
 //   REMOVED — nozzle_ring_pocket() Cylindrical bore pocket for iris inner ring seat
 //   REMOVED — Gear mount parameter block (PINION_A_*, CROWN_*, SHAFT_CONDUIT_*)
-//   REMOVED — NOZZLE_RING_OD, NOZZLE_RING_H (no pocket to size)
 //   RETAINED — NOZZLE_RING_Z (AFT_SLV_Z_END and sleeve_retention_bosses() ref)
 //   RETAINED — All sleeve architecture (bore zones, key slots, retention bosses)
-//   RETAINED — EDF1 nacelle-integrated spider (edf1_nacelle_spider())
-//   RETAINED — All other nacelle features (pivot boss, nav conduit, harness port)
+//   RETAINED — EDF1 nacelle-integrated spider and all other nacelle features
+//
+// Changes from Rev T1 (Rev T2 — 2026-06-07):
+//   ADDED — nozzle_access_pocket() Bore Z = 166.25 … 185.2+ mm at r = 32.5 mm;
+//            exposes 3× sleeve retention screws (SLEEVE_BOSS_R = 28 mm) when the
+//            screw-on nozzle housing is removed for EDF/rotor bench maintenance.
+//   ADDED — nozzle_thread_boss()   Threaded exit boss ring (OD = 63 mm,
+//            ID = 50 mm, H = 12 mm) protruding aft from nacelle exit face;
+//            plus base collar anchoring boss to nacelle exit annular face.
+//            Housing female thread (Tr63×4, 3-start) engages this boss.
+//   ADDED — NOZZLE_ACCESS_*, NOZZLE_BOSS_*, NOZZLE_FLAT_* parameter blocks.
+//
+// Sleeve removability
+// -------------------
+// Maintenance sequence:
+//   1. Unscrew nozzle housing (a few turns; loosen M3 set screw first).
+//   2. With housing removed, 3× M3×20 SHCS sleeve retention screws are
+//      accessible at SLEEVE_BOSS_R = 28 mm radius through the access pocket.
+//   3. Remove aft spider sleeve (edf_aft_spider_sleeve.scad).
+//   4. Slide out stator sleeve (edf_stator_sleeve.scad).
+//   5. Service EDF1/EDF2 motors and fan rotors.
+//   6. Reinstall in reverse; reinstall and re-engage screw-on nozzle housing.
 //
 // Nozzle pairing
 // --------------
-// This simplified nacelle mates with nacelle_nozzle_straight.scad (Rev T1):
-//   • Fixed straight-bore housing (50 mm exit diameter, constant)
+// This nacelle mates with nacelle_nozzle_straight.scad (Rev T2):
+//   • Screw-on housing (female Tr63×4 3-start thread, engages nacelle boss)
+//   • 50 mm airflow bore maintained through housing
 //   • 8 decorative imitation petals — same shape as REVT iris, non-functional
-//   • Housing forward lip bonds to exterior nacelle exit face
-//   • No ring pocket bore needed; housing sits on nacelle exterior face
+//   • M3 set screw through housing skirt locks housing against nacelle boss flat
 //
 // Sleeves (unchanged from Rev T)
 // --------------------------------
