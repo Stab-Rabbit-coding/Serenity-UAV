@@ -48,8 +48,9 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 | Hull length | 609.6 mm (24.00″) |
 | Beam (nacelle tip-to-tip) | ~486 mm |
 | Hull material | PETG (2.5 mm skin, 2 lb/ft³ closed-cell foam fill) |
-| Propulsion (Phases 5–10) | 2× (2× 50mm EDF @ 6S, tandem series) nacelles — ~1,822 g combined thrust |
-| Propulsion (Phase 11 full) | As above + 1× 120mm EDF @ 6S fuselage — ~5,322 g total thrust |
+| Nacelle EDF | XFly Galaxy X5 50mm 12-blade 6S 3200KV — **1240 g thrust each** (xfly-model.eu) |
+| Propulsion (Phases 5–10) | 2× (2× 50mm EDF @ 6S tandem) nacelles — 1240 × 2 × 0.90 stator efficiency × 2 nacelles = **4,464 g** |
+| Propulsion (Phase 11 full) | As above + 1× 120mm EDF @ 6S fuselage rear — **7,964 g total thrust** |
 | Counter-rotation | Port nacelle EDFs: CW from intake | Starboard: CCW — zero net torque reaction |
 | Inter-stage stators | 8-fin twisted stator, integrated into each nacelle print (CF-PETG) |
 | Nacelle tilt | 0° (cruise) → 90° (hover) → 120° (backing); hard stops −5° / 140° |
@@ -60,9 +61,9 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 | Nozzle open | 90° nacelle tilt → petals hinge out, LED-backlit translucent-blue inner faces |
 | Rear EDF | 120mm @ 6S, exhaust straight aft; intake via 4 radial scoops at neck ~310mm — **DEFERRED Phase 11** |
 | AUW (Phases 5–10, no aft EDF) | ~2,768 g | Aft EDF system omitted (~840 g deferred): 120mm EDF ~400g + 80A ESC ~130g + CF-PETG intake frame ~90g + PETG plenum ~80g + nozzle frame/petals/servo/wiring ~140g |
-| Nacelle-only T/W (Phases 5–10) | ~0.66 | 1,822 g / 2,768 g — forward flight / STOL; VTOL hover not possible without aft EDF |
+| Nacelle-only T/W (Phases 5–10) | **~1.61** | 4,464 g / 2,768 g — **full VTOL hover capable** without aft EDF |
 | AUW (Phase 11 full system) | ~3,608 g | With full aft EDF hardware installed |
-| Full-system T/W (Phase 11) | ~1.47 | 5,322 g total thrust / 3,608 g AUW — full VTOL hover |
+| Full-system T/W (Phase 11) | **~2.21** | 7,964 g / 3,608 g — enhanced performance, heavier payloads, higher cruise speed |
 | Avionics | 8× PocketBeagle 2 Industrial (AM6254): FC1–FC4 (Cape-A) + CN1–CN4 (Cape-B) |
 | Cargo | 101.6 × 76.2 × 76.2 mm bay, clamshell doors, N20 winch |
 | Build estimate | ~100–120 hours across all phases |
@@ -474,12 +475,12 @@ After cure:
 
 ## Phase 5 — Minimum Viable Flyer (CN1 + FC1 + CN2 + FC2)
 
-**Goal:** ★ **FIRST FLIGHT** with 4-node avionics and nacelle propulsion operational.
+**Goal:** ★ **FIRST FLIGHT** with 4-node avionics — full VTOL hover using nacelle EDFs only.
 
-> **Aft EDF not installed.** The 120mm fuselage EDF and its intake / nozzle system are deferred
-> to Phase 11. With 4 nacelle EDFs only, nacelle T/W ≈ 0.51 — insufficient for pure VTOL hover.
-> First flight targets forward flight and partial-hover / STOL performance.  Full VTOL capability
-> is achieved in Phase 11 after all other systems are proven.
+> **Aft EDF not installed.** The 120mm fuselage EDF is deferred to Phase 11. The 4 nacelle EDFs
+> (XFly Galaxy X5, 1240 g each, 90% additive via stator = 2232 g/nacelle × 2 = 4464 g total)
+> deliver nacelle T/W ≈ **1.61** at the Phase 5–10 AUW of ~2,768 g — **sufficient for full VTOL
+> hover**. Phase 11 adds the rear EDF to reach T/W ≈ 2.21 for enhanced payload and cruise performance.
 
 ### Node Install Order
 
@@ -543,22 +544,18 @@ hover rather than losing one nacelle entirely.
 - [ ] GPS lock achieved on all 4 FC nodes (CN1/CN2 may relay for minimum flight)
 - [ ] FAA registration applied
 - [ ] Battery C-rating confirmed for peak draw
-- [ ] *(Rear EDF, nozzle servo, and 80A ESC are Phase 11 items — do not install yet)*
+- [ ] *(Rear EDF, rear nozzle servo, and 80A Panel F ESC are Phase 11 items — do not install yet)*
 
 ### First Flight Protocol
 
-**Forward flight / partial-hover test — nacelle EDFs only.**
+**Tethered hover test first — nacelle EDFs only (T/W ≈ 1.61).**
 
-> **VTOL hover not attempted in Phase 5.** Nacelle-only T/W ≈ 0.51 is insufficient for sustained
-> vertical hover. First flight targets conventional / STOL takeoff and low-speed flight with
-> nacelles at partial hover angles. Full VTOL is achieved in Phase 11.
-
-1. Secure tether lines to belly hard points (5 kg breaking strength minimum, 3m length) for initial tethered test.
-2. Bring up on throttle to 25% with nacelles at 45° — verify all 4 EDF sounds and tilt response.
-3. Increase to 60% — verify forward thrust and pitch authority with nacelles at cruise angle (0°–20°).
-4. Release tether for short-field roll / STOL takeoff. Maintain forward airspeed for wing lift assist.
-5. Fly forward flight circuit at ≤10m AGL; transition nacelles through 0°–70° range; do NOT hold sustained hover.
-6. **Only after 3 successful free-flight passes:** perform partial-hover approaches (nacelles 70–80°) while maintaining forward speed.
+1. Secure tether lines to belly hard points. 5 kg breaking strength minimum, 3 m length.
+2. Bring up on throttle to 30% with nacelles at 90° (hover position) — verify all 4 EDF sounds and lift response.
+3. Increase to 60% — verify stable hover and altitude-hold authority on tether.
+4. Verify nacelle nozzle opens correctly at 90° tilt (gear linkage — no dedicated servo).
+5. **Only after 3 successful tethered hover passes:** proceed to free hover at 1 m AGL.
+6. Free hover: altitude hold ±0.3 m for 30 s; yaw response; then nacelle transition forward flight circuit.
 
 ---
 

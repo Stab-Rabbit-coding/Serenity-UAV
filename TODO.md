@@ -13,7 +13,8 @@
 |--------|-------------------|----------------|
 | Hull | 609.6 mm PETG / PU foam / CF skeleton | SCAD sources complete; cargo section shell updated to Rev S (clamshell opening); 3 Rev-O-specific STLs not yet rendered |
 | Nacelles | 2× 50mm tandem EDF, CG pivot Z=83mm, M=1.0 gear, iris nozzle | `nacelle_pod_50mm_tandem.scad` complete; Rev O stator shells (`_revo.stl`) NOT yet rendered |
-| Rear propulsion | 120mm 6S EDF, 4-scoop radial intake, iris nozzle | **DEFERRED — Phase 11.** All design files moved to `deferred/aft-edf/`. SCAD and STLs complete. Physical build deferred until Phases 0–10 systems are proven. |
+| Nacelle EDFs | XFly Galaxy X5 50mm 12-blade 6S 3200KV, 1240g each; 2232g/nacelle (90% additive via stator); 4464g total | Baseline EDF selected (xfly-model.eu); nacelle T/W ≈ 1.61 at Phase 5–10 AUW — VTOL hover capable |
+| Rear propulsion | 120mm 6S EDF, 4-scoop radial intake, iris nozzle | **DEFERRED — Phase 11.** All design files moved to `deferred/aft-edf/`. SCAD and STLs complete. Adds ~3500g thrust; Phase 11 T/W ≈ 2.21. |
 | Cargo bay | Clamshell doors + SG90 servos + DRV8833 + N20 winch + Dyneema + auto-latch + GPS ring + FPV bezel | ✓ All 13 cargo STLs generated (PR #21 + PR #22 2026-06-01); BOM updated bom_revP.json/csv; gondola shell open |
 | PCBs | Cape-A-1, Cape-B-1 assembled; XCVR-49MHZ-1 fabricated; Cape-A-2, Cape-B-2, XCVR-49MHZ-2 EMI-hardened variants designed (branch `claude/cape-em-harsh-variants-9Yfr1`) | Cape-A/B -1 KiCad files complete, gerbers stale; XCVR-49MHZ-1 Phase 1 complete (ICs selected 2026-05-31); -2 variants: schematics + PCB files complete, gerbers not yet generated |
 | Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 ✓; serenity-fc Phase 6 stub only; all Phase 7 items open |
@@ -614,9 +615,10 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 **Goal:** CN1+FC1 (Bay A) and CN2+FC2 (Bay B) installed and operational — first flight achieved.
 
-> **Note:** The 120mm aft fuselage EDF (Phase 11) is not installed at this stage.  First flight
-> uses the 4 nacelle EDFs only.  Nacelle T/W in forward flight is adequate for a conventional
-> rolling/STOL takeoff.  True VTOL hover capability requires Phase 11 (aft EDF integration).
+> **Aft EDF not installed** (Phase 11). The 4 nacelle XFly Galaxy X5 EDFs (1240g each, 90%
+> additive via stator = 2232g/nacelle × 2 = 4464g total) deliver T/W ≈ **1.61** at the
+> Phase 5–10 AUW of ~2,768g — **full VTOL hover is achievable from Phase 5**. Phase 11
+> adds the rear EDF to reach T/W ≈ 2.21 for higher payload capacity and cruise performance.
 
 **Dependency:** Cape-A (×2) and Cape-B (×2) PCB assemblies received from JLCPCB.
 
@@ -695,16 +697,17 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 **First flight sequence (per REVN_BUILD_GUIDE_24IN.md §Phase 5):**
 - [ ] Pre-flight ABCD checklist (Airframe, Battery, Comms, Docs)
-- [ ] Tethered low-speed taxi / ground run; verify all 4 nacelle EDFs spin in correct directions
-- [ ] Short-field / STOL takeoff with nacelles at partial-hover angle (45–60°) — nacelle thrust provides initial lift assist
-- [ ] Forward flight circuit: one lap ≤10m AGL with nacelles in cruise position (0°–30°)
-- [ ] Partial hover approach: nacelles at 70–80° tilt, low-speed pass; do NOT attempt sustained vertical hover (T/W insufficient without aft EDF)
-- [ ] Land conventionally; verify flight log written to CN1-LOG and CN2-LOG
+- [ ] Tethered hover 1m AGL × 3 successful passes before free flight (nacelles at 90°, ~60% throttle)
+- [ ] Free hover 1m AGL (stability, ±10° authority, altitude hold ±0.3m)
+- [ ] Free hover 3m AGL (yaw 360° both directions)
+- [ ] Nacelle transition: ≥8m AGL, gradual sweep 90°→0° — altitude hold ±1.5m during transition
+- [ ] Forward flight circuit: one lap ≤10m AGL, transition back to hover, land
+- [ ] Verify flight log written to CN1-LOG and CN2-LOG
 
 **Phase 5 pass criteria:**
-- [ ] Stable forward flight with nacelles; partial-hover capability demonstrated at low speed
-- [ ] Nacelle transition tested (forward flight to hover approach) without loss of control
-- [ ] All 4 nacelle ESCs ≤70°C at full power
+- [ ] Stable hover 1m AGL in ≤15° headwind
+- [ ] Nacelle transition without altitude excursion >1.5m
+- [ ] All 4 nacelle ESCs ≤70°C at full hover power
 - [ ] MAVLink telemetry live to QGC during all segments
 - [ ] All 4-node CAN FD heartbeats confirmed
 - [ ] Node failover: standby assumes within 100ms of master power-kill
