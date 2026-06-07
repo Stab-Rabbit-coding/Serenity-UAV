@@ -1,66 +1,72 @@
 // =============================================================================
 // nacelle_nozzle_straight.scad
-// Serenity UAV — Rev T1 — Fixed Straight Nozzle with Decorative Petals
+// Serenity UAV — Rev T2 — Push-On Straight Nozzle with Decorative Petals
 // =============================================================================
 //
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // Project : Serenity-class Tilt-Rotor UAV (24-inch scale, Firefly TV ship)
 // License : CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 // Date    : 2026-06-07
-// Revision: Rev T1 (simplified variant — no gear train)
+// Revision: Rev T2 (push-on boss retention — no threads)
 //
 // Description
 // -----------
-// Simplified replacement for nacelle_nozzle_iris.scad (Rev O).  The variable-
-// diameter iris and its passive gear-driven actuation are removed entirely.
-// This file produces a fixed straight-bore nozzle housing (50 mm exit diameter,
-// constant) plus eight decorative imitation petals that replicate the visual
-// appearance of the iris nozzle without any mechanical function.
+// Rev T2 replacement for nacelle_nozzle_iris.scad (Rev O) and Rev T1.
+// The variable-diameter iris, its gear-driven actuation, and the T1 epoxy-bonded
+// housing are all removed.  This file produces a push-on straight-bore nozzle
+// housing (50 mm exit diameter, constant) retained by 3× M3 set screws, plus
+// eight decorative imitation petals that replicate the visual appearance of the
+// iris nozzle without mechanical function.
 //
 // Two separately-printable parts:
-//     1. nozzle_fixed_housing()  — fixed outer housing; bonds to nacelle exit
-//     2. nozzle_petal_fixed()    — one decorative petal (print × 8)
+//     1. nozzle_push_housing()  — push-on housing; retained by 3× M3 set screws
+//     2. nozzle_petal_fixed()   — one decorative petal (print × 8)
 //
-// Differences from nacelle_nozzle_iris.scad (Rev O):
-//     REMOVED — nozzle_inner_ring()       rotating ring with M=1.0 rack
-//     REMOVED — Crown Pinion access slot  radial wall slot for pinion mesh
-//     REMOVED — piano-wire link ring      drive wire between ring and petals
-//     REMOVED — link-ring slot on petals  1.2 mm wire slot through petal
-//     REMOVED — drive posts on ring       link-ring attachment stubs
-//     RETAINED — outer housing geometry   bonding lip, hinge bores, OD profile
-//     RETAINED — petal geometry           curved trapezoidal slab, hinge knuckle
+// Changes from Rev T1 (epoxy-bonded housing):
+//     REMOVED — bonding lip geometry       forward lip that epoxy-bonded to nacelle
+//     REMOVED — HOUSING_LIP_H, LIP_R       bonding lip parameters
+//     ADDED   — skirt section              bore over nacelle push-on boss (Ø 60 mm)
+//     ADDED   — 3× M3 set-screw bores      radially through skirt at 0°/120°/240°
+//     ADDED   — SET_SCREW_ANG, BOSS_R,     set-screw geometry parameters
+//               M3_TAP_D, BOSS_CLEARANCE
+//     RETAINED — housing body geometry     70 mm OD, 50 mm bore, hinge bores
+//     RETAINED — petal geometry            no change from Rev T1
+//
+// Retention mechanism
+// -------------------
+//     Housing skirt bore (Ø 60.25 mm) slides over nacelle push-on boss
+//     (Ø 60 mm, protruding 12 mm aft of nacelle exit face).  Shoulder stop
+//     at bore step (60.25 mm → 50 mm) seats on nacelle boss aft face.
+//     Three M3×6 flat-point SHCS through housing skirt engage shallow flats
+//     (0.75 mm deep) on the nacelle boss OD at 0°/120°/240°.
+//     Removal: loosen 3× set screws (2.5 mm hex key), pull housing off boss.
 //
 // Nozzle exit
 // -----------
 //     Exit diameter is fixed at 50 mm (EDF bore) regardless of nacelle tilt.
-//     The exit area is constant; no thrust vectoring optimisation between
-//     hover and cruise modes.
 //
 // Decorative petal function
 // -------------------------
-//     Petals are installed on 3 mm × 18 mm stainless steel hinge pins pressed
-//     into the housing hinge bores.  Once positioned, pins are secured with a
-//     drop of medium-strength threadlocker (Loctite 243 or equivalent) on the
-//     pin ends.  Petals DO NOT ROTATE after final assembly.  They serve only
-//     as aerodynamic fairings and cosmetic features matching the REVT iris look.
+//     Petals installed on 3 mm × 18 mm stainless steel hinge pins pressed into
+//     housing hinge bores.  Once positioned, pins are secured with medium-
+//     strength threadlocker (Loctite 243 or equivalent).  Petals DO NOT ROTATE
+//     after final assembly.  Cosmetic features matching REVT iris look.
 //
-//     Recommended fixed position: closed / cruise (petals rotated so their tips
-//     are roughly flush with the bore exit).  Adjust to taste before threadlocking.
+//     Recommended fixed position: closed / cruise (petal tips roughly flush
+//     with bore exit).  Adjust to taste before threadlocking.
 //
 // Mating interface
 // ----------------
-//     Bonds to nacelle exit face (nacelle_pod_50mm_tandem_simple.scad Rev T1).
-//     Housing forward lip (OD = 70 mm, H = 3 mm) registers against the nacelle
-//     exit face around the 50 mm bore opening.  Bond with structural epoxy
-//     (JB Weld or equivalent, min shear 3 MPa cured).
-//
-//     The simplified nacelle pod does NOT have a nozzle ring pocket bore; the
-//     housing lip sits on the exterior nacelle face.
+//     Mates to nacelle_pod_50mm_tandem_simple.scad Rev T2 push-on boss.
+//     Boss OD = 60 mm; housing skirt bore = 60.25 mm (0.25 mm diametral).
+//     Shoulder stop: housing bore step seats on nacelle boss aft face.
+//     Set-screw flats on nacelle boss at 0°/120°/240° — align housing
+//     set-screw holes before driving screws.
 //
 // Print specification — Housing:
-//     Material    : CF-PETG (structural bond surface; hinge bore load)
+//     Material    : CF-PETG (structural bore; hinge bore load; set-screw wall)
 //     Layers      : 0.15 mm; 4 perimeters; 40% gyroid infill
-//     Orientation : Bonding lip face down (lip face on build plate)
+//     Orientation : Exhaust face down (exhaust face on build plate)
 //     Quantity    : 1 per nacelle
 //
 // Print specification — Petal:
@@ -73,11 +79,10 @@
 //
 // References
 // ----------
-//     [1] nacelle_pod_50mm_tandem_simple.scad Rev T1 — mating nacelle bore
-//         and exit face geometry.
-//     [2] nacelle_nozzle_iris.scad Rev O — iris petal and housing geometry
-//         used as the geometric basis for this file.  Actuation elements removed.
-//     [3] Serenity-UAV project CLAUDE.md — fabrication standards (2026).
+//     [1] nacelle_pod_50mm_tandem_simple.scad Rev T2 — push-on boss geometry.
+//     [2] nacelle_nozzle_iris.scad Rev O — iris petal geometry (geometric basis).
+//     [3] nacelle_nozzle_straight.scad Rev T1 — epoxy-bonded predecessor.
+//     [4] Serenity-UAV project CLAUDE.md — fabrication standards (2026).
 //
 // =============================================================================
 
@@ -93,13 +98,25 @@ $fn = 72;   // standard circle resolution
 // ── Parameter Block ───────────────────────────────────────────────────────────
 // =============================================================================
 
-// ── Bore and housing dimensions ───────────────────────────────────────────────
+// ── Bore and housing body dimensions ─────────────────────────────────────────
 
 EDF_BORE_R       = 25.0;   // [mm] EDF bore inner radius → 50 mm ID (fixed exit)
 HOUSING_OUTER_R  = 35.0;   // [mm] housing outer radius → OD = 70 mm
-HOUSING_H        = 10.0;   // [mm] housing body axial depth
-HOUSING_LIP_H    =  3.0;   // [mm] forward bonding lip axial depth
-HOUSING_LIP_R    = 26.0;   // [mm] bonding lip inner radius (1 mm clearance over bore)
+HOUSING_BODY_H   = 10.0;   // [mm] body section axial depth (exhaust side, 50 mm bore)
+
+// ── Push-on boss interface (must match nacelle_pod_50mm_tandem_simple.scad T2) ─
+
+NOZZLE_BOSS_OD   = 60.0;   // [mm] nacelle push-on boss OD (housing slides over this)
+NOZZLE_BOSS_H    = 12.0;   // [mm] nacelle boss protrusion height = skirt section height
+BOSS_CLEARANCE   =  0.25;  // [mm] diametral clearance on skirt bore (smooth push-on fit)
+
+// ── Set-screw geometry ────────────────────────────────────────────────────────
+// 3× M3 flat-point set screws radially through housing skirt at 0°/120°/240°.
+// Set-screw holes are tapped M3 (2.5 mm tap drill).
+// Bore direction: radial (inward from housing OD); engages nacelle boss flats.
+
+SET_SCREW_ANGLES = [0, 120, 240];  // [deg] angular positions (match nacelle boss flats)
+M3_TAP_D         =  2.5;           // [mm] M3 tap drill diameter
 
 // ── Petal hinge geometry ──────────────────────────────────────────────────────
 
@@ -117,56 +134,77 @@ PETAL_CURVE_R    = HOUSING_OUTER_R;  // [mm] outer face convex radius = housing 
 
 
 // =============================================================================
-// ── Module: nozzle_fixed_housing ─────────────────────────────────────────────
+// ── Module: nozzle_push_housing ──────────────────────────────────────────────
 // =============================================================================
-// Fixed outer housing bonded to the nacelle exit face.
+// Push-on housing with set-screw retention.
 //
-// Geometry:
-//   Main body  : Annular disk, OD = 70 mm, ID = 50 mm, H = 10 mm.
-//   Bonding lip: Annular step at the forward (nacelle-side) face, H = 3 mm,
-//                OD = 70 mm, ID = 52 mm; registers against nacelle exit face
-//                and provides an epoxy bonding surface.
-//   Hinge bores: 8× Z-axis through-holes at PETAL_HINGE_R = 33 mm, Ø 3.2 mm.
-//                Holes span full housing + lip height for through-pin installation.
+// Geometry — two coaxial sections:
 //
-// NO pinion access slot (compared with iris nozzle_outer_housing).
-// NO inner bore enlargement for a rotating ring.
-// Bore is the full EDF_BORE_R = 25 mm throughout housing + lip thickness.
+//   Body section (Z = 0 … HOUSING_BODY_H, exhaust side):
+//     OD = 70 mm (HOUSING_OUTER_R = 35 mm).
+//     Bore = 50 mm (EDF_BORE_R = 25 mm).
+//     Contains 8× Z-axis hinge pin bores at PETAL_HINGE_R = 33 mm.
 //
-// Origin: Z = 0 at bonding lip inboard face (nacelle exit face contact plane).
-//         Z = HOUSING_H at housing outboard face.
-//         +Z = away from nacelle (downstream / exhaust direction).
-module nozzle_fixed_housing() {
+//   Skirt section (Z = HOUSING_BODY_H … HOUSING_BODY_H + NOZZLE_BOSS_H, nacelle side):
+//     OD = 70 mm (same as body).
+//     Bore = NOZZLE_BOSS_OD + BOSS_CLEARANCE = 60.25 mm.
+//     Slides over nacelle push-on boss (Ø 60 mm).
+//     Shoulder at bore step (Z = HOUSING_BODY_H) seats on nacelle boss aft face.
+//     3× M3 tap-drill bores radially through skirt at SET_SCREW_ANGLES.
+//
+// Origin: Z = 0 at exhaust face (downstream); +Z toward nacelle.
+//         Housing seated: nacelle boss aft face at Z = HOUSING_BODY_H.
+//         Nacelle exit face at Z = HOUSING_BODY_H + NOZZLE_BOSS_H.
+module nozzle_push_housing() {
     difference() {
 
-        // ── Main housing body + bonding lip (additive) ────────────────────
+        // ── Additive: body + skirt cylinder ──────────────────────────────────
         union() {
-            // Main annular disk body
-            cylinder(h = HOUSING_H, r = HOUSING_OUTER_R);
+            // Body section — exhaust-side annular disk
+            cylinder(h = HOUSING_BODY_H, r = HOUSING_OUTER_R);
 
-            // Forward bonding lip (sits against nacelle exterior exit face)
-            translate([0, 0, -HOUSING_LIP_H])
-                difference() {
-                    cylinder(h = HOUSING_LIP_H, r = HOUSING_OUTER_R);
-                    // Inner clearance: 1 mm larger than EDF bore to clear edge
-                    translate([0, 0, -0.1])
-                        cylinder(h = HOUSING_LIP_H + 0.2, r = HOUSING_LIP_R);
-                }
+            // Skirt section — nacelle-side skirt that surrounds boss
+            translate([0, 0, HOUSING_BODY_H])
+                cylinder(h = NOZZLE_BOSS_H, r = HOUSING_OUTER_R);
         }
 
-        // ── EDF airflow bore (straight through — no rotating ring) ────────
-        // 50 mm ID bore spans housing body and bonding lip with 0.1 mm overrun.
-        translate([0, 0, -HOUSING_LIP_H - 0.1])
-            cylinder(h = HOUSING_H + HOUSING_LIP_H + 0.2, r = EDF_BORE_R);
+        // ── Airflow bore (50 mm ID, full housing height) ──────────────────────
+        // Constant 50 mm EDF bore from exhaust face through body section.
+        // Shoulder stop at Z = HOUSING_BODY_H is the bore step to skirt bore.
+        translate([0, 0, -0.1])
+            cylinder(h = HOUSING_BODY_H + 0.2, r = EDF_BORE_R);
 
-        // ── 8× hinge pin bores (Z-axis through-holes at PETAL_HINGE_R) ───
-        // Hinge pins are 3 mm × 18 mm SS dowels pressed into these bores.
-        // Petals pivot on the exposed pin (between housing faces).
-        // Pins are bonded with threadlocker once petals are positioned.
+        // ── Skirt bore (60.25 mm ID, skirt section only) ──────────────────────
+        // Smooth push-on fit over nacelle boss OD = 60 mm.
+        // Shoulder at bore step Z = HOUSING_BODY_H stops on nacelle boss aft face.
+        translate([0, 0, HOUSING_BODY_H - 0.1])
+            cylinder(h = NOZZLE_BOSS_H + 0.2,
+                     r = (NOZZLE_BOSS_OD + BOSS_CLEARANCE) / 2);
+
+        // ── 3× M3 set-screw tap-drill bores (radial through skirt wall) ───────
+        // Each bore runs from the skirt bore inner surface (r = boss_r) outward
+        // to housing OD + 0.1 mm overrun to open the outer face.
+        // Aligned at skirt mid-height = HOUSING_BODY_H + NOZZLE_BOSS_H / 2.
+        for (angle = SET_SCREW_ANGLES) {
+            rotate([0, 0, angle])
+                translate([0, 0, HOUSING_BODY_H + NOZZLE_BOSS_H / 2])
+                    rotate([0, 90, 0])
+                        // Start at skirt bore inner radius; go outward to OD + margin
+                        translate([0, 0, (NOZZLE_BOSS_OD + BOSS_CLEARANCE) / 2])
+                            cylinder(r = M3_TAP_D / 2,
+                                     h = HOUSING_OUTER_R
+                                         - (NOZZLE_BOSS_OD + BOSS_CLEARANCE) / 2
+                                         + 0.1,
+                                     center = false);
+        }
+
+        // ── 8× hinge pin bores (Z-axis through body section only) ─────────────
+        // Bores at PETAL_HINGE_R = 33 mm; span body section with 0.1 mm overrun.
+        // Housing skirt section has no hinge bores.
         for (p = [0 : N_PETALS - 1]) {
             rotate([0, 0, p * 360 / N_PETALS])
-                translate([PETAL_HINGE_R, 0, -HOUSING_LIP_H - 0.1])
-                    cylinder(h = HOUSING_H + HOUSING_LIP_H + 0.2, d = HINGE_BORE_D);
+                translate([PETAL_HINGE_R, 0, -0.1])
+                    cylinder(h = HOUSING_BODY_H + 0.2, d = HINGE_BORE_D);
         }
 
     }
@@ -176,14 +214,12 @@ module nozzle_fixed_housing() {
 // =============================================================================
 // ── Module: nozzle_petal_fixed ────────────────────────────────────────────────
 // =============================================================================
-// One decorative fixed petal.  Geometry is identical to the iris petal
-// (nacelle_nozzle_iris.scad nozzle_petal()) with the link-ring slot removed.
-// No link-ring slot means no piano-wire connection; petals cannot be driven
-// mechanically.
+// One decorative fixed petal — geometry unchanged from Rev T1.
+// Link-ring slot is intentionally absent (no piano-wire connection).
 //
 // Shape:
 //   Trapezoidal curved planform, wider at hinge root, narrower at tip.
-//   2D footprint: pie sector spanning PETAL_SPAN_DEG about hinge pin axis [0,0].
+//   2D footprint: pie sector spanning PETAL_SPAN_DEG about hinge pin axis.
 //   Inner cutout clears hinge knuckle (r = 4.0 mm).
 //   Tip arc radius from hinge = PETAL_LENGTH + 3 mm = 21 mm.
 //   Extruded PETAL_THICKNESS = 2.5 mm in Z.
@@ -192,22 +228,13 @@ module nozzle_fixed_housing() {
 //   3.2 mm Z-axis through-hole at [0, 0] — mates with hinge pin in housing.
 //   Hinge knuckle lug (OD = 7.2 mm) provides bearing contact width.
 //
-// NO link-ring slot (1.2 mm wire hole removed; compare iris version).
-//
 // Origin: hinge pin centreline at [0, 0, 0]; petal extends in +X / ±Y plane.
 //         Rotate [0,0,angle] and translate [PETAL_HINGE_R, 0, 0] to place in
 //         housing.
-//
-// Assembly note:
-//   Set petal at desired fixed angle before threading hinge pin.  Apply
-//   medium-strength threadlocker to both pin ends once position is confirmed.
-//   Recommended position: tips approximately flush with bore exit (closed).
 module nozzle_petal_fixed() {
     difference() {
 
-        // ── Petal slab body ───────────────────────────────────────────────
-        // 2D footprint: annular sector from r=4 mm (clear knuckle) to
-        // PETAL_LENGTH+3 mm, spanning 0° to PETAL_SPAN_DEG.
+        // ── Petal slab body ───────────────────────────────────────────────────
         linear_extrude(height = PETAL_THICKNESS) {
             difference() {
                 // Tip arc — outer edge of petal from hinge
@@ -223,19 +250,17 @@ module nozzle_petal_fixed() {
             }
         }
 
-        // ── Hinge bore (Z-axis through-hole at origin) ────────────────────
-        // 3.2 mm clearance bore mates with 3 mm SS hinge pin in housing.
+        // ── Hinge bore (Z-axis through-hole at origin) ────────────────────────
         translate([0, 0, -0.1])
             cylinder(h = PETAL_THICKNESS + 0.2, d = HINGE_BORE_D);
 
-        // NOTE: link-ring slot is intentionally omitted in this fixed variant.
+        // NOTE: link-ring slot intentionally omitted — fixed petal variant.
 
     }
 
-    // ── Hinge knuckle lug ────────────────────────────────────────────────────
-    // Cylindrical reinforcement around the hinge bore; provides bearing
-    // contact width between petal and housing hinge bore face.
-    // OD = HINGE_BORE_D + 4.0 mm = 7.2 mm; bore = HINGE_BORE_D = 3.2 mm.
+    // ── Hinge knuckle lug ─────────────────────────────────────────────────────
+    // Cylindrical reinforcement around hinge bore; bearing contact between
+    // petal and housing hinge bore face.  OD = 7.2 mm; bore = HINGE_BORE_D.
     difference() {
         cylinder(h = PETAL_THICKNESS, d = HINGE_BORE_D + 4.0);
         translate([0, 0, -0.1])
@@ -250,12 +275,17 @@ module nozzle_petal_fixed() {
 //
 //   Interface                   Mating part                    Clearance / fit
 //   ──────────────────────────  ─────────────────────────────  ─────────────────
-//   Housing lip OD 70 mm        Nacelle exit face exterior     epoxy bond,
-//   (bonding lip, H = 3 mm)     nacelle_pod_50mm_tandem_simple shoulder stop
-//   Housing bore Ø 50 mm        EDF bore Ø 50 mm (nacelle)    flush, coaxial
-//   HINGE_BORE_D 3.2 mm         3 mm × 18 mm SS hinge pin     0.2 mm diametral
-//   (8 bores, r = 33 mm)                                       clearance; bond
-//   Petal hinge bore 3.2 mm     3 mm × 18 mm SS hinge pin     0.2 mm clearance
+//   Skirt bore Ø 60.25 mm       Nacelle boss OD Ø 60 mm        0.25 mm diametral
+//   (skirt section, H = 12 mm)  nozzle_push_boss() Rev T2      push-on clearance
+//   Shoulder stop at bore step  Nacelle boss aft face           positive axial stop
+//   (Z = HOUSING_BODY_H)        (Z = NACELLE_L in nacelle)
+//   3× M3 tap bores in skirt    3× M3×6 flat-point SHCS        tapped M3
+//   (r = 35 mm OD, 120° apart)  (field tool: 2.5 mm hex key)
+//   Set-screw tip engagement    Nacelle boss OD flat            0.75 mm flat depth
+//   HINGE_BORE_D 3.2 mm         3 mm × 18 mm SS hinge pin      0.2 mm clearance
+//   (8 bores, r = 33 mm,        body section only              bond with threadlocker
+//    Z = 0 … HOUSING_BODY_H)
+//   Petal hinge bore 3.2 mm     3 mm × 18 mm SS hinge pin      0.2 mm clearance
 //   Knuckle lug OD 7.2 mm       Housing bore face flat         abutment contact
 
 
@@ -264,13 +294,13 @@ module nozzle_petal_fixed() {
 // =============================================================================
 //
 // Export housing (STL for print):
-nozzle_fixed_housing();
+nozzle_push_housing();
 //
 // Export one petal (STL for print × 8):
 // nozzle_petal_fixed();
 //
 // Assembly preview — housing + all 8 petals at closed / cruise position:
-// nozzle_fixed_housing();
+// nozzle_push_housing();
 // for (i = [0 : N_PETALS - 1]) {
 //     rotate([0, 0, i * 360 / N_PETALS])
 //         translate([PETAL_HINGE_R, 0, 0])
@@ -279,6 +309,6 @@ nozzle_fixed_housing();
 // }
 //
 // Render commands:
-//   openscad -o nacelle_nozzle_straight_housing.stl nacelle_nozzle_straight.scad
+//   openscad -o nacelle_nozzle_straight_housing_revt2.stl nacelle_nozzle_straight.scad
 //   Uncomment nozzle_petal_fixed() and comment housing before exporting petal:
-//   openscad -o nacelle_nozzle_straight_petal.stl nacelle_nozzle_straight.scad
+//   openscad -o nacelle_nozzle_straight_petal_revt2.stl nacelle_nozzle_straight.scad
