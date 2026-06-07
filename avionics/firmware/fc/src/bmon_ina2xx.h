@@ -212,26 +212,34 @@ typedef struct bmon_ina2xx_ctx bmon_ina2xx_ctx_t;
  * ---------------------------------------------------------------------------*/
 
 /**
- * @brief Open the INA219/INA226 driver.
+ * @brief Open the INA219/INA226 driver at a specific I2C address.
  *
- * Opens the I2C bus device, sets slave address to INA2XX_I2C_ADDR (0x40).
+ * Opens the I2C bus device and sets the slave address to @p i2c_addr via
+ * ioctl I2C_SLAVE.  Pass INA2XX_I2C_ADDR (0x40) for the default Cape-A-2
+ * on-cape device.  For PDB-2 multi-device buses, pass the per-channel address
+ * directly (0x40–0x44); a separate open() per device is required because each
+ * context holds its own file descriptor and slave address.
+ *
  * If @p type is BMON_INA_AUTO, reads the die-ID register (0xFF); if the
  * result is 0x2260 the device is treated as INA226, otherwise INA219.
  *
  * Both devices operate in their power-on default configuration (continuous
  * bus voltage conversion, 12-bit averaging).  No configuration register
- * writes are performed.
+ * writes are performed at open.
  *
- * @param[in]  i2c_dev  Path to I2C bus device, e.g. "/dev/i2c-1".
- * @param[in]  type     Device variant, or BMON_INA_AUTO to auto-detect.
- * @param[out] ctx_out  Set to driver context on success.
+ * @param[in]  i2c_dev   Path to I2C bus device, e.g. "/dev/i2c-2".
+ * @param[in]  i2c_addr  7-bit I2C slave address of the target device
+ *                       (e.g. 0x40, 0x41, 0x42, 0x43, or 0x44 for PDB-2).
+ * @param[in]  type      Device variant, or BMON_INA_AUTO to auto-detect.
+ * @param[out] ctx_out   Set to driver context on success.
  * @return 0 on success, negative errno on error:
- *         -EINVAL : i2c_dev or ctx_out is NULL.
+ *         -EINVAL : i2c_dev or ctx_out is NULL, or i2c_addr is 0.
  *         -ENOMEM : memory allocation failed.
  *         -errno  : open/ioctl failure.
  */
-int bmon_ina2xx_open(const char *i2c_dev,
-                     bmon_ina_type_t type,
+int bmon_ina2xx_open(const char        *i2c_dev,
+                     uint8_t            i2c_addr,
+                     bmon_ina_type_t    type,
                      bmon_ina2xx_ctx_t **ctx_out);
 
 /**

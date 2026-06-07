@@ -198,7 +198,6 @@ int pwr_fault_open(const char *i2c_dev_pdb, pwr_fault_ctx_t **ctx_out)
     pwr_fault_ctx_t *ctx;
     uint32_t         i;
     int              rc;
-    char             i2c_bus[64];
 
     if (i2c_dev_pdb == NULL || ctx_out == NULL) {
         return -EINVAL;
@@ -212,47 +211,15 @@ int pwr_fault_open(const char *i2c_dev_pdb, pwr_fault_ctx_t **ctx_out)
     /* Open INA226 contexts for each ESC channel. */
     for (i = 0U; i < PWR_FAULT_ESC_COUNT; i++) {
         /*
-         * Each INA226 on the PDB-2 shares the same I2C bus segment but has
-         * a different I2C address.  bmon_ina2xx_open() uses ioctl I2C_SLAVE
-         * to set the address; a separate open() per device is required so
-         * each context holds its own fd with its own slave address.
-         * We achieve this by using the same bus path for all opens; the
-         * ioctl sets the address per fd.
+         * Each INA226 on the PDB-2 shares the same I2C bus but has a distinct
+         * address (0x40–0x43 for ESC1–ESC4).  Each bmon_ina2xx_open() call
+         * opens a separate file descriptor and programs the address via
+         * ioctl I2C_SLAVE, so all contexts are fully independent.
          */
-        (void)strncpy(i2c_bus, i2c_dev_pdb, sizeof(i2c_bus) - 1U);
-        i2c_bus[sizeof(i2c_bus) - 1U] = '\0';
-
-        rc = bmon_ina2xx_open(i2c_bus, BMON_INA_INA226, &ctx->ina[i]);
+        rc = bmon_ina2xx_open(i2c_dev_pdb, ESC_I2C_ADDR[i], BMON_INA_INA226,
+                              &ctx->ina[i]);
         if (rc != 0) {
             goto fail;
-        }
-
-        /*
-         * Override the I2C slave address to match the ESC channel address.
-         * bmon_ina2xx_open() set 0x40 (INA2XX_I2C_ADDR) for all channels.
-         * PDB-2 ESC INA226 addresses are 0x40–0x43 (ESC1–ESC4).
-         * Only channels 1–3 need override; channel 0 is already 0x40.
-         */
-        if (ESC_I2C_ADDR[i] != INA2XX_I2C_ADDR) {
-            /*
-             * There is no public API to change the I2C slave address after
-             * open, so we rely on the fact that the ESC[0] INA226 is at
-             * the default 0x40 address.  For ESC[1..3] we need a custom
-             * open sequence.  Since bmon_ina2xx_open() always sets 0x40,
-             * we must close and reopen with a modified address.
-             *
-             * Workaround: encode the address into a subpath and let the
-             * driver use I2C_SLAVE_FORCE if the standard I2C_SLAVE fails.
-             * This is handled by ioctl inside the driver — the address mismatch
-             * for channels 1–3 means the INA226 at 0x41–0x43 will NOT respond
-             * until the ioctl is set correctly.
-             *
-             * FIXME: extend bmon_ina2xx_open() to accept an I2C address
-             * parameter so multi-address bus scenarios are handled cleanly.
-             * For now, document that ESC channel 0 uses the default address
-             * and channels 1–3 require manual ioctl override by the caller
-             * after open.  See issue tracker for the address-parameter API.
-             */
         }
 
         rc = bmon_ina226_configure_shunt(ctx->ina[i],
@@ -282,7 +249,8 @@ int pwr_fault_open(const char *i2c_dev_pdb, pwr_fault_ctx_t **ctx_out)
     }
 
     /* Open main bus INA226 (address 0x44). */
-    rc = bmon_ina2xx_open(i2c_dev_pdb, BMON_INA_INA226, &ctx->ina[PWR_FAULT_ESC_COUNT]);
+    rc = bmon_ina2xx_open(i2c_dev_pdb, MAIN_BUS_I2C_ADDR, BMON_INA_INA226,
+                          &ctx->ina[PWR_FAULT_ESC_COUNT]);
     if (rc != 0) {
         goto fail;
     }
