@@ -1,6 +1,6 @@
 /**
  * @file    bmon_ina2xx.c
- * @brief   INA219 / INA226 battery voltage monitor driver — implementation.
+ * @brief   INA219 / INA226 battery voltage / current monitor driver — implementation.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
@@ -13,10 +13,15 @@
  *   read(fd, buf, 2)         — read 16-bit big-endian value
  *   val = (buf[0] << 8) | buf[1]
  *
+ * Register write sequence:
+ *   buf[0] = reg; buf[1] = val_hi; buf[2] = val_lo
+ *   write(fd, buf, 3)
+ *
  * References:
  *   [1] INA219 Datasheet SBOS448G, Texas Instruments.
  *   [2] INA226 Datasheet SBOS547E, Texas Instruments.
  *   [3] Linux i2c-dev interface — Documentation/i2c/dev-interface.rst.
+ *   [4] PDB-2.md — Serenity UAV Power Distribution Board specification.
  *
  * Target platform: PocketBeagle 2 Industrial (AM6254), Debian Trixie.
  */
@@ -36,8 +41,9 @@
  * ---------------------------------------------------------------------------*/
 
 struct bmon_ina2xx_ctx {
-    int             fd;    /**< Open /dev/i2c-N file descriptor. */
-    bmon_ina_type_t type;  /**< INA219 or INA226. */
+    int             fd;                /**< Open /dev/i2c-N file descriptor. */
+    bmon_ina_type_t type;              /**< INA219 or INA226. */
+    uint32_t        current_lsb_ua;    /**< INA226 current LSB in µA (0 = voltage-only mode). */
 };
 
 /* ---------------------------------------------------------------------------
@@ -70,19 +76,43 @@ static int reg_read16(int fd, uint8_t reg, uint16_t *val)
     return 0;
 }
 
+/**
+ * @brief Write a 16-bit big-endian value to a device register.
+ *
+ * @param fd   Open i2c-dev file descriptor.
+ * @param reg  Register address to write.
+ * @param val  16-bit value to write (will be sent big-endian).
+ * @return 0 on success, -EIO on error.
+ */
+static int reg_write16(int fd, uint8_t reg, uint16_t val)
+{
+    uint8_t buf[3];
+
+    buf[0] = reg;
+    buf[1] = (uint8_t)(val >> 8U);
+    buf[2] = (uint8_t)(val & 0xFFU);
+
+    if (write(fd, buf, 3U) != 3) {
+        return -EIO;
+    }
+
+    return 0;
+}
+
 /* ---------------------------------------------------------------------------
  * Public API
  * ---------------------------------------------------------------------------*/
 
-int bmon_ina2xx_open(const char *i2c_dev,
-                     bmon_ina_type_t type,
+int bmon_ina2xx_open(const char        *i2c_dev,
+                     uint8_t            i2c_addr,
+                     bmon_ina_type_t    type,
                      bmon_ina2xx_ctx_t **ctx_out)
 {
     bmon_ina2xx_ctx_t *ctx;
     uint16_t           die_id;
     int                rc;
 
-    if (i2c_dev == NULL || ctx_out == NULL) {
+    if (i2c_dev == NULL || ctx_out == NULL || i2c_addr == 0U) {
         return -EINVAL;
     }
 
@@ -98,7 +128,7 @@ int bmon_ina2xx_open(const char *i2c_dev,
         return rc;
     }
 
-    if (ioctl(ctx->fd, I2C_SLAVE, (long)INA2XX_I2C_ADDR) < 0) {
+    if (ioctl(ctx->fd, I2C_SLAVE, (long)i2c_addr) < 0) {
         rc = -errno;
         close(ctx->fd);
         free(ctx);
@@ -187,4 +217,162 @@ int bmon_ina2xx_read_mv(bmon_ina2xx_ctx_t *ctx, uint32_t *voltage_mv)
     }
 
     return 0;
+}
+
+/* ---------------------------------------------------------------------------
+ * INA226-only current-sense API
+ * ---------------------------------------------------------------------------*/
+
+int bmon_ina226_configure_shunt(bmon_ina2xx_ctx_t *ctx,
+                                uint32_t           shunt_mohm,
+                                uint32_t           imax_ma,
+                                uint32_t          *current_lsb_ua_out)
+{
+    uint32_t current_lsb_ua;
+    uint32_t cal;
+    int      rc;
+
+    if (ctx == NULL) {
+        return -EINVAL;
+    }
+    if (ctx->type != BMON_INA_INA226) {
+        return -ENOTSUP;
+    }
+    if (shunt_mohm == 0U || imax_ma == 0U) {
+        return -EINVAL;
+    }
+
+    /*
+     * Current LSB in microamps: CURRENT_LSB = imax_ma × 1000 / 32768 µA.
+     * Use ceiling to ensure full-scale fits in 16 bits without overflow.
+     * Maximum intermediate: 150000 mA × 1000 = 150 000 000 µA — fits in uint32_t.
+     */
+    current_lsb_ua = ((imax_ma * 1000U) + 32767U) / 32768U;
+
+    /*
+     * Calibration register per INA226 datasheet §8.5:
+     *   CAL = floor(0.00512 / (CURRENT_LSB_A × R_SHUNT_Ω))
+     *       = floor(5120000 / (current_lsb_ua × shunt_mohm / 1000))
+     *       = floor(5120000000 / (current_lsb_ua × shunt_mohm))
+     *
+     * Intermediate: 5120000000 fits in uint64_t.
+     */
+    {
+        uint64_t numerator   = 5120000000ULL;
+        uint64_t denominator = (uint64_t)current_lsb_ua * (uint64_t)shunt_mohm;
+        if (denominator == 0U) {
+            return -EINVAL;
+        }
+        cal = (uint32_t)(numerator / denominator);
+        if (cal > 0xFFFFU) {
+            cal = 0xFFFFU;  /* Clamp to 16-bit register width. */
+        }
+    }
+
+    rc = reg_write16(ctx->fd, INA226_REG_CALIBRATION, (uint16_t)cal);
+    if (rc != 0) {
+        return rc;
+    }
+
+    ctx->current_lsb_ua = current_lsb_ua;
+
+    if (current_lsb_ua_out != NULL) {
+        *current_lsb_ua_out = current_lsb_ua;
+    }
+
+    return 0;
+}
+
+int bmon_ina226_read_current_ma(bmon_ina2xx_ctx_t *ctx, int32_t *current_ma)
+{
+    uint16_t reg_val;
+    int      rc;
+
+    if (ctx == NULL || current_ma == NULL) {
+        return -EINVAL;
+    }
+    if (ctx->type != BMON_INA_INA226) {
+        return -ENOTSUP;
+    }
+
+    rc = reg_read16(ctx->fd, INA226_REG_CURRENT, &reg_val);
+    if (rc != 0) {
+        return rc;
+    }
+
+    /*
+     * INA226 current register (0x04) is a signed 16-bit two's-complement
+     * value where each LSB = ctx->current_lsb_ua µA.
+     *
+     * current_ma = (int16_t)reg_val × current_lsb_ua / 1000
+     *
+     * Maximum intermediate: 32767 × 2289 = 74 983 263 µA — within int32_t range.
+     * current_lsb_ua is 0 in voltage-only mode; result is 0 mA (no division by zero).
+     */
+    if (ctx->current_lsb_ua == 0U) {
+        *current_ma = 0;
+    } else {
+        int32_t raw = (int32_t)(int16_t)reg_val;
+        *current_ma = (raw * (int32_t)ctx->current_lsb_ua) / 1000;
+    }
+
+    return 0;
+}
+
+int bmon_ina226_read_power_mw(bmon_ina2xx_ctx_t *ctx, uint32_t *power_mw)
+{
+    uint16_t reg_val;
+    int      rc;
+
+    if (ctx == NULL || power_mw == NULL) {
+        return -EINVAL;
+    }
+    if (ctx->type != BMON_INA_INA226) {
+        return -ENOTSUP;
+    }
+
+    rc = reg_read16(ctx->fd, INA226_REG_POWER, &reg_val);
+    if (rc != 0) {
+        return rc;
+    }
+
+    /*
+     * INA226 power register (0x03) is unsigned 16-bit.
+     * Each LSB = 25 × current_lsb_ua µA × bus_V (reported in mW here).
+     * power_lsb_uw = 25 × current_lsb_ua µW (since bus LSB is 1.25 mV per LSB
+     * and V × I gives µW when I is in µA).
+     *
+     * power_mw = (uint32_t)reg_val × 25 × current_lsb_ua / 1 000 000
+     *
+     * Maximum intermediate (uint64_t): 65535 × 25 × 4578 = 7 495 403 250 — fits.
+     */
+    if (ctx->current_lsb_ua == 0U) {
+        *power_mw = 0U;
+    } else {
+        uint64_t uw = (uint64_t)reg_val * 25ULL * (uint64_t)ctx->current_lsb_ua;
+        *power_mw = (uint32_t)(uw / 1000000ULL);
+    }
+
+    return 0;
+}
+
+int bmon_ina226_configure_alert(bmon_ina2xx_ctx_t *ctx,
+                                uint16_t           alert_mask,
+                                uint16_t           alert_limit)
+{
+    int rc;
+
+    if (ctx == NULL) {
+        return -EINVAL;
+    }
+    if (ctx->type != BMON_INA_INA226) {
+        return -ENOTSUP;
+    }
+
+    rc = reg_write16(ctx->fd, INA226_REG_ALERT_LIMIT, alert_limit);
+    if (rc != 0) {
+        return rc;
+    }
+
+    return reg_write16(ctx->fd, INA226_REG_MASK_ENABLE, alert_mask);
 }
