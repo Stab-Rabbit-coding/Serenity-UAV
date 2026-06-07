@@ -19,14 +19,19 @@ Per the project design philosophy (see CLAUDE.md):
 The nacelle EDFs (2× 50 mm tandem per nacelle) provide the primary propulsion.  The aft EDF adds
 ~3 500 g of additional thrust and is required for the full T/W of ~1.47 stated in the Rev Q specs.
 
+**Baseline nacelle EDF:** XFly Galaxy X5 50mm 12-blade 6S 3200KV — **1240 g thrust per EDF**
+(source: xfly-model.eu/en/edf-units/4833-…).  Per nacelle (2× tandem, 90% additive via stator):
+1240 × 2 × 0.90 = **2232 g**.  Total nacelles (2×): **4464 g**.
+
 **Aft EDF system deferred mass: ~840 g** (120mm EDF ~400g + 80A ESC ~130g + CF-PETG intake frame
 ~90g + PETG plenum ~80g + nozzle frame ~50g + 8 petals ~40g + servo/wiring/hardware ~50g).
 
 **Revised Phases 5–10 AUW without aft EDF hardware:** ~2,768 g (down from ~3,608 g full build).
 
-**Nacelle-only T/W (Phases 5–10):** 1,822 g / 2,768 g ≈ **0.66** — adequate for forward flight
-and STOL takeoff; sustained VTOL hover is not possible.  Full VTOL hover (T/W ≈ 1.47) requires
-Phase 11.
+**Nacelle-only T/W (Phases 5–10):** 4,464 g / 2,768 g ≈ **1.61** — **full VTOL hover capable**.
+The aft EDF is not required for hover; it raises the full-system T/W to ≈ **2.21** (7,964 g /
+3,608 g), enabling heavier payload delivery, faster cruise speed, and better high-density-altitude
+performance.
 
 ---
 
