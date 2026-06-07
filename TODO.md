@@ -1,9 +1,9 @@
-8# Serenity UAV — Work Breakdown Structure
+# Serenity UAV — Work Breakdown Structure
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
 **Last updated:** 2026-06-07  
-**Current design revision:** Rev P (master) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
+**Current design revision:** Rev Q (master) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 ---
 
@@ -16,7 +16,7 @@
 | Nacelle EDFs | XFly Galaxy X5 50mm 12-blade 6S 3200KV, 1240g each; 2232g/nacelle (90% additive via stator); 4464g total | Baseline EDF selected (xfly-model.eu); nacelle T/W ≈ 1.61 at Phase 5–10 AUW — VTOL hover capable |
 | Rear propulsion | 120mm 6S EDF, 4-scoop radial intake, iris nozzle | **DEFERRED — Phase 11.** All design files moved to `deferred/aft-edf/`. SCAD and STLs complete. Adds ~3500g thrust; Phase 11 T/W ≈ 2.21. |
 | Cargo bay | Clamshell doors + SG90 servos + DRV8833 + N20 winch + Dyneema + auto-latch + GPS ring + FPV bezel | ✓ All 13 cargo STLs generated (PR #21 + PR #22 2026-06-01); BOM updated bom_revP.json/csv; gondola shell open |
-| PCBs | Cape-A-1, Cape-B-1 assembled; XCVR-49MHZ-1 fabricated; Cape-A-2, Cape-B-2, XCVR-49MHZ-2 EMI-hardened variants designed (branch `claude/cape-em-harsh-variants-9Yfr1`) | Cape-A/B -1 KiCad files complete, gerbers stale; XCVR-49MHZ-1 Phase 1 complete (ICs selected 2026-05-31); -2 variants: schematics + PCB files complete, gerbers not yet generated |
+| PCBs | **Rev Q: all 8 nodes use Cape-A-2 (Wash), Cape-B-2 (Zoë), XCVR-49MHZ-2** at every position. Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived 2026-06-05. | Rev Q schematics complete (Wash: 2× EMI-hardened Ethernet PHY; Zoë: 1× Ethernet PHY; all field connectors added). Gerbers pending. |
 | Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 ✓; serenity-fc Phase 6 stub only; all Phase 7 items open |
 | Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
 | Regulatory | FAA Part 107, ICAO nav lights, FCC Part 95 | FAA registration placeholder; XCVR-49MHZ-1 pre-compliance pending |
@@ -144,9 +144,10 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
   integrated DC/DC converter, IEC 62368-1 / VDE 0884-11)
 - **RS-485**: MAX3485E (non-isolated) → ADM2795EBRWZ (ADI, SOIC-20W, 5 kV reinforced isolation +
   integrated DC/DC converter)
-- **Ethernet PHY**: DP83825I (non-isolated RMII PHY) → ADIN1300BCPZ (ADI, LFCSP-48, 1000BASE-T)
-  isolated via 2× ISO7642FDWRR (TI, SOIC-16W, 6-channel 150 Mbps digital isolator, 5 kV) +
-  Würth 749010012A SMD transformer + JST GH 4P connector (no RJ45)
+- **Ethernet PHY (Rev Q)**: DP83825I (TI, LQFP-32, 10/100BASE-TX RMII) with EMI hardening:
+  HX1188NL LAN magnetics (1500 V isolation), SRF2012-100Y CMC, PRTR5V0U2X TVS, TPS62933 1.8V
+  supply. JST SM06B-GHS-TB-1MP connector (no RJ45). Wash: 2× PHY (RMII0+RMII1);
+  Zoë: 1× PHY (RMII0).
 - **XCVR-49MHZ-2**: SRF2012-100Y CMC on antenna coax shield, PRTR5V0U2X TVS on PTT/RX lines,
   X2Y bridging capacitor on RF ground plane, Würth 742792512 ferrite bead on +5V rail
 
@@ -169,9 +170,10 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
   - **BLOCKS CAPE-B-2 fab order**
 
 - [x] remove wifi, sik, and loRa antennas from CAPE-B-2. Use filtered chokes on rf lines to route all RF signals from antennas to wifi, lora, zigbee,and sik xcvr circuits on CAPE-B-2, and/or use uart or i2c with filtering to connect isolated xcvrs to the cape. **Done (2026-06-05):** Added §13 antenna filter chains to CAPE-B-2.kicad_sch — each radio ANT pin now routes through a Johanson BPF (FL_LORA/FL_SIK: 0915LP15B0100E; FL_WIFI: 2450BP15B050E) and RCLAMP0502B ESD shunt to a dedicated SMA connector (J_SMA_LORA, J_SMA_WIFI, J_SMA_SIK). SiK uses Hirose U.FL J_SIK_ANT for module pigtail. All connector shells PGND. See CAPE-B-2.md §13.
--[ ] re-evaluate space and connection capacity of CAPE-B-2 with rf antennas removed.  if possible, restore the second ethernet phy and connectors TO CAPE-B-2. 
+- [x] **Re-evaluate space / restore Ethernet to CAPE-B-2** — One DP83825I EMI-hardened PHY
+  added to Zoë (CAPE-B-2) at Rev Q; J_ETH_B connector populated. Board has adequate
+  space; RF SMA connectors remain. *(done 2026-06-07)*
 
-  
 - [ ] **Generate XCVR-49MHZ-2 gerbers** — `XCVR-49MHZ-2.kicad_pcb` complete; export to
   `avionics/kicad/gerbers/XCVR-49MHZ-2/`.
   - **BLOCKS XCVR-49MHZ-2 fab order**
@@ -286,12 +288,46 @@ feelines
 
 ### 1.5 — Documentation
 
-- [x] **`serenity-rev-p.jsx`** — comprehensive 11-tab standalone Rev P specification created: Overview, Airframe, Propulsion, Avionics, Comms, Cargo, Security, Regulatory, BOM, Files, Build Status. Supersedes serenity-rev-o.jsx as current spec. *(done 2026-06-01)*
-- [x] **`bom_revP.json` + `bom_revP.csv`** — full Rev P BOM created: all Rev O items retained + 10 new cargo printed parts + SERVO-CARGO, DRV8833-CARGO, DYNEEMA-SK75, FOAM-GASKET-CARGO; cargo section expanded; totals updated (5 servos, ~$1,905 est.). *(done 2026-06-01)*
-- [x] **`README.md`** — updated to Revision P, June 2026; propulsion section updated to Rev O/P baseline; avionics section updated to PB2-I description; cargo section updated to Rev P complete spec. *(done 2026-06-01)*
-- [x] **`PROJECT_INDEX.md`** — updated to add serenity-rev-p.jsx and bom_revP entries; Rev P marked as current master. *(done 2026-06-01)*
-- [ ] **Update PHASED_BUILD_GUIDE.md** from Rev M 18-inch to Rev P 24-inch specifications (hull 609.6 mm, 50mm EDFs, 4-scoop radial intake, M=1.0 gears, Rev O pivot Z=83mm, MF104ZZ bearings, Rev P cargo system).
-- [ ] **Sync `bom_revO.json` ↔ `bom_revO.csv`** — verify all XCVR-49MHZ-1 BOM items (Phase 5 above) are reflected in both files once XCVR-49MHZ-1 Phase 5 is complete.
+- [x] **1.4.1 `serenity-rev-p.jsx`** — comprehensive 11-tab standalone Rev P specification created: Overview, Airframe, Propulsion, Avionics, Comms, Cargo, Security, Regulatory, BOM, Files, Build Status. Supersedes serenity-rev-o.jsx as current spec. *(done 2026-06-01)*
+- [x] **1.4.2 Wash (CAPE-A-2): rename + dual Ethernet PHY** — Board renamed to "Wash (CAPE-A-2)"
+  throughout schematic and markdown. Added 2× EMI-hardened DP83825I PHYs (J_ETH1, J_ETH2):
+  HX1188NL magnetics, SRF2012-100Y CMC, PRTR5V0U2X TVS, TPS62933 1.8V supply per PHY.
+  RMII0→PHY1 (PHY addr 0x01), RMII1→PHY2 (PHY addr 0x02). MDC/MDIO shared.
+  CAPE-A-2.md §1 updated from "PHY removal" to "EMI-hardened dual Ethernet PHY". *(done 2026-06-07)*
+- [x] **1.4.3 Zoë (CAPE-B-2): rename + Ethernet PHY** — Board renamed to
+  "Zoë (CAPE-B-2)". Added 1× EMI-hardened DP83825I PHY (J_ETH_B): HX1188NL magnetics,
+  SRF2012-100Y CMC, PRTR5V0U2X TVS ×2, TPS62933 1.8V supply. RMII0 interface, PHY addr 0x01.
+  CAPE-B-2.md §1 updated from "PHY removal" to "EMI-hardened Ethernet PHY". *(done 2026-06-07)*
+- [x] **1.4.4 Wash (CAPE-A-2): add missing field connectors** — Connector audit found J_PWR,
+  J_CAN, J_485, J_1553, J_GPS, J_SERVO, J_ESC absent from schematic despite protection circuits
+  being present. All 7 connectors added (JST SM03B/SM04B/SM05B/SM06B-GHS-TB-1MP series). §14
+  field connector table added to CAPE-A-2.md. *(done 2026-06-07)*
+- [x] **1.4.5 Zoë (CAPE-B-2): add missing field connectors** — J_PWR, J_CAN, J_485,
+  J_1553 added to schematic (JST SM03B/SM04B-GHS-TB-1MP). §14 field connector table added to
+  CAPE-B-2.md. *(done 2026-06-07)*
+- [ ] **Update PHASED_BUILD_GUIDE.md** from Rev M 18-inch to Rev Q 24-inch specifications
+  (hull 609.6 mm, 50mm EDFs, v2·v2·v2·v2 node placement, Rev Q power system, cargo system).
+- [ ] **Sync `bom_revO.json` ↔ `bom_revO.csv`** — verify all XCVR-49MHZ-1 BOM items (Phase 5
+  above) are reflected in both files once XCVR-49MHZ-1 Phase 5 is complete.
+- [ ] **Create `bom_revQ.json` + `bom_revQ.csv`** — Rev Q BOM: replace all v1 cape procurement
+  quantities with v2 equivalents (4× Wash, 4× Zoë, 4× XCVR-49MHZ-2). Remove Cape-A-1,
+  Cape-B-1, XCVR-49MHZ-1 line items.
+
+---
+
+### 1.5 — Rev Q: Repo-Wide Architecture Propagation (2026-06-07)
+
+- [x] **1.5.1 Rev Q documentation propagation** — Updated all project documentation from Rev P
+  (v2·v1·v1·v2 mixed placement) to Rev Q (v2·v2·v2·v2 uniform EMI-hardened placement across
+  all 8 avionics nodes). Changes include:
+  - **TODO.md**: Rev P → Rev Q; node placement updated; §1.2a procurement updated to 4× Wash,
+    4× Zoë, 4× XCVR-49MHZ-2; Phase 6 / Phase 7 installation steps updated to v2 capes;
+    procurement tables updated; Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 retired from active BOM.
+  - **CLAUDE.md**: Rev Q already reflected (v2·v2·v2·v2, archive notes).
+  - **README.md**: Rev Q already reflected (updated prior to this commit).
+  - **POWER_SYSTEM_Q.md** (`docs/`): written at Rev Q baseline.
+  - **AVIONICS_PB2_REDESIGN.md**: Rev Q node placement already reflected.
+  *(done 2026-06-07)*
 
 ### 1.5.1. Names
 
@@ -406,31 +442,31 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 ### 2.4 — Avionics (Phase 6 — 4-node minimum viable)
 
+*Rev Q: all nodes use v2 EMI-hardened capes. Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 are retired.*
+
 | Item | Qty | Unit Cost | Total | Notes |
 |------|-----|----------|-------|-------|
 | PocketBeagle 2 Industrial (AM6254) | 4× | $51.03 | ~$204 | DK 2820-100003007-ND |
-| Cape-A-2 PCB (JLCPCB assembled) | 1× | ~$55 | ~$55 | FC1 / Bay A (v2 EM-hardened; bus start termination node) |
-| Cape-B-2 PCB (JLCPCB assembled) | 1× | ~$95 | ~$95 | CN1 / Bay A (v2 EM-hardened) |
-| Cape-A-1 PCB (JLCPCB assembled) | 1× | ~$42 | ~$42 | FC2 / Bay B (v1 standard) |
-| Cape-B-1 PCB (JLCPCB assembled) | 1× | ~$80 | ~$80 | CN2 / Bay B (v1 standard) |
-| XCVR-49MHZ-1 PCB (JLCPCB assembled) | 2× | ~$20 | ~$40 | RCRS sub-module; requires completed design |
+| Wash (Cape-A-2) PCB (JLCPCB assembled) | 2× | ~$55 | ~$110 | FC1/Bay A + FC2/Bay B (v2, EMI-hardened) |
+| Zoë (Cape-B-2) PCB (JLCPCB assembled) | 2× | ~$95 | ~$190 | CN1/Bay A + CN2/Bay B (v2, EMI-hardened) |
+| XCVR-49MHZ-2 PCB (JLCPCB assembled) | 2× | ~$25 | ~$50 | RCRS sub-module for CN1, CN2 (v2 EMI-hardened) |
 | SiK 915MHz ground station radio | 1× | ~$15 | ~$15 | MAVLink GCS link |
 | microSD 64GB (log, write-blocked) | 2× | ~$10 | ~$20 | CN1-LOG, CN2-LOG |
-| JST-GH cables: CAN 4-pin, RS-485 4-pin, ETH 8-pin, 1553 shielded pair | assorted | — | ~$15 | |
+| JST-GH cables: CAN 3-pin, RS-485 3-pin, ETH 6-pin, 1553 4-pin, GPS 5-pin | assorted | — | ~$20 | Per §14 connector table |
 | USB-UART adapter (CP2102) | 1× | ~$8 | ~$8 | Debug console (one-time tool) |
 | 3M double-sided foam tape | 1× | ~$5 | ~$5 | ESC and node mounting |
 | Zip ties 100mm + 200mm | 1 bag | ~$4 | ~$4 | Wire management |
 
 ### 2.5 — Avionics (Phase 7 — remaining 4 nodes + ToF arrays)
 
+*Rev Q: all Phase 7 nodes also use v2 EMI-hardened capes.*
+
 | Item | Qty | Approx. Cost | Notes |
 |------|-----|-------------|-------|
 | PocketBeagle 2 Industrial (AM6254) | 4× | ~$204 | CN3, FC3, CN4, FC4 |
-| Cape-A-1 PCB (JLCPCB assembled) | 1× | ~$42 | FC3 / Bay D (v1 standard) |
-| Cape-B-1 PCB (JLCPCB assembled) | 1× | ~$80 | CN3 / Bay D (v1 standard) |
-| Cape-A-2 PCB (JLCPCB assembled) | 1× | ~$55 | FC4 / Bay E (v2 EM-hardened; bus end termination node) |
-| Cape-B-2 PCB (JLCPCB assembled) | 1× | ~$95 | CN4 / Bay E (v2 EM-hardened) |
-| XCVR-49MHZ-1 PCB (assembled) | 2× | ~$40 | CN3, CN4 |
+| Wash (Cape-A-2) PCB (JLCPCB assembled) | 2× | ~$110 | FC3/Bay D + FC4/Bay E (v2) |
+| Zoë (Cape-B-2) PCB (JLCPCB assembled) | 2× | ~$190 | CN3/Bay D + CN4/Bay E (v2) |
+| XCVR-49MHZ-2 PCB (assembled) | 2× | ~$50 | CN3, CN4 (v2 EMI-hardened) |
 | microSD 64GB (log) | 2× | ~$20 | CN3-LOG, CN4-LOG |
 | VL53L5CX 8×8 ToF sensor | 12× | ~$84 | Dual OA arrays |
 | TCA9548A 8-ch I²C multiplexer | 2× | ~$3 | One per array host |
@@ -706,16 +742,16 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 - [ ] Connect MIL-STD-1553: FC1 = Bus Controller (primary); CN1 = RT 0x01.
 - [ ] Cap Bay E end of ETH-EA conduit (will connect to FC4 in Phase 7); connect Bay A end to CN1 Cape-B ETH-2.
 
-**CN2+FC2 installation (Bay B — dorsal fwd) — Cape-B-1 / Cape-A-1 (v1 standard):**
-> Bay B is an inner ring node.  Use Cape-B-1 / Cape-A-1 for direct RMII dual-Ethernet to CPSW3G.
-- [ ] Mount CN2 Cape-B-1 on Bay B floor standoffs; insert PB2-I; mount FC2 Cape-A-1 above; insert second PB2-I.
+**CN2+FC2 installation (Bay B — dorsal fwd) — Cape-B-2 (Zoë) / Cape-A-2 (Wash) (Rev Q):**
+> Rev Q: Bay B also uses v2 EMI-hardened capes (same as Bay A). All four bays use Wash + Zoë.
+- [ ] Mount CN2 Cape-B-2 (Zoë) on Bay B floor standoffs; insert PB2-I; mount FC2 Cape-A-2 (Wash) above.
 - [ ] Flash OS to eMMC on CN2 and FC2 before installation.
 - [ ] Install log μSD (64GB) in CN2 Cape-B log slot. Label: **CN2-LOG**.
-- [ ] Seat RCRS-49 sub-module on CN2 header.
+- [ ] Seat RCRS-49 sub-module on CN2 Cape-B-2 J_XCVR header.
 - [ ] Route FC2 GPS coax through dorsal PTFE sleeve (sta ~130mm); mount GPS patch on dorsal hull, face UP.
 - [ ] Continue CAN FD daisy-chain Bay A→Bay B: CN2 → FC2 + temporary 120Ω at FC2 (remove Phase 7).
 - [ ] Continue RS-485 daisy-chain Bay A→Bay B.
-- [ ] Connect ETH-AB (Bay A→Bay B): FC1 Cape-A-2 ETH-1 → CN2 Cape-B-1 ETH-2 (FC1↔CN2 Ethernet ring link).
+- [ ] Connect ETH-AB (Bay A→Bay B): FC1 Wash ETH-1 → CN2 Zoë ETH-B (FC1↔CN2 Ethernet ring link).
 - [ ] Cap Bay D end of ETH-BD (will connect to CN3 in Phase 7).
 - [ ] Power taps: connect CN1, FC1, CN2, FC2 power leads from PWR conduit; verify 5V ±0.05V at each header.
 
@@ -769,16 +805,16 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 **Goal:** All 8 nodes installed, full ring redundancy, 12× VL53L5CX dual-redundant obstacle avoidance operational.
 
-**CN3+FC3 installation (Bay D — dorsal aft) — Cape-B-1 / Cape-A-1 (v1 standard):**
-> Bay D is an inner ring node.  Use Cape-B-1 / Cape-A-1 for direct RMII dual-Ethernet to CPSW3G.
-- [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Cape-A-1 Bay B.
-- [ ] Mount CN3 Cape-B-1 on Bay D floor standoffs; insert PB2-I; mount FC3 Cape-A-1 above.
+**CN3+FC3 installation (Bay D — dorsal aft) — Cape-B-2 (Zoë) / Cape-A-2 (Wash) (Rev Q):**
+> Rev Q: Bay D also uses v2 EMI-hardened capes. All four bays uniform.
+- [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Wash Bay B.
+- [ ] Mount CN3 Cape-B-2 (Zoë) on Bay D floor standoffs; insert PB2-I; mount FC3 Cape-A-2 (Wash) above.
 - [ ] Flash OS to eMMC; install log μSD. Label: **CN3-LOG**.
-- [ ] Seat RCRS-49 sub-module on CN3 header.
+- [ ] Seat RCRS-49 sub-module on CN3 Zoë J_XCVR header.
 - [ ] Route FC3 GPS coax through dorsal PTFE sleeve (sta ~275mm); mount GPS patch, face UP.
 - [ ] Continue CAN FD chain: Bay B FC2 → Bay D CN3 → FC3 → exit toward Bay E.
 - [ ] Continue RS-485 chain Bay B→Bay D→Bay E.
-- [ ] Connect ETH-BD (Bay B→Bay D): FC2 Cape-A ETH-1 → CN3 Cape-B ETH-2.
+- [ ] Connect ETH-BD (Bay B→Bay D): FC2 Wash ETH-1 → CN3 Zoë ETH-B.
 - [ ] Power tap Bay D; verify 5V ±0.05V.
 
 **CN4+FC4 installation (Bay E — aft service) — Cape-B-2 / Cape-A-2 (v2 EM-hardened):**
