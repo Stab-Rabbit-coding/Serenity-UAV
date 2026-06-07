@@ -52,7 +52,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 | Propulsion (Phases 5–10) | 2× (2× 50mm EDF @ 6S tandem) nacelles — 1240 × 2 × 0.90 stator efficiency × 2 nacelles = **4,464 g** |
 | Propulsion (Phase 11 full) | As above + 1× 120mm EDF @ 6S fuselage rear — **7,964 g total thrust** |
 | Counter-rotation | Port nacelle EDFs: CW from intake | Starboard: CCW — zero net torque reaction |
-| Inter-stage stators | 8-fin twisted stator, integrated into each nacelle print (CF-PETG) |
+| Inter-stage stators | 11-fin twisted stator, integrated into each nacelle print (CF-PETG) |
 | Nacelle tilt | 0° (cruise) → 90° (hover) → 120° (backing); hard stops −5° / 140° |
 | Tilt actuation | 1× digital servo per nacelle (≥25 kg·cm @ 6V), fuselage-mounted |
 | Iris nozzles (nacelles) | 2× nacelle, gear-linked to tilt pivot — no dedicated servo |
