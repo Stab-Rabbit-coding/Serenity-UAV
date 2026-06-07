@@ -105,9 +105,9 @@ Every component will be fabricated or procured; design accordingly.
 
 - All mating surfaces that carry load must have a minimum 2-wall contact annulus and a positive-stop shoulder. Friction fits alone are not acceptable for flight-critical joints.
 
-- **All stls, openscad, and other 3d models shall be clean and have watertight surface meshes.**  They should be ready to slice for printing.
+- **All stls, openscad, and other 3d models shall be clean and have watertight surface meshes.**  They should be ready to slice for printing.  A mesh verification **shall** be run after every 3d model modification.  All findings shall be reported, added to the repo TODO.md, and resolved.
 
-- **All PCBs shall be fully developed**, with complete schematics files, pcb files, copper traces, proper ic footprints, and production ready gerber files.
+- **All PCBs shall be fully developed**, with complete schematics files, pcb files, copper traces, proper ic footprints, and production ready gerber files.  After every modification, each schematic and pcb **shall** be run through kicad's Design Rules Checker (DRC) and all violations and errors shall be documented and corrected.
 
 - Design for **Common Hand-tool field disassembly** of any component that may need in-field replacement.
 
