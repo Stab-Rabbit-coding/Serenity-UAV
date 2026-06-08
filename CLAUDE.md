@@ -170,3 +170,5 @@ Simon is the alternate watchdog for the ship, but most of his attention is on Ri
 - When a script regenerates STLs, verify Z-range and bore-diameter in the console output before committing.
 
 - Any time that an assistant creates a todo list to accomplish a task for the build, the steps shall be added as sup-tasks in the appropriate paragraph of the root repo TODO.md wbs, conforming to proper style, so that unresolved issues can be picked up in future sessons.
+
+- The AI assistant shall update PROJECT_INDEX.md, which lists the directory structure and all folders and files in the active project, whenever new active files are added to the repo.  When filess are archived, their names shall be moved from PROJECT_INDEX.md to ARCHIVE_INDEX.md, which describes the file tree of the archive.
