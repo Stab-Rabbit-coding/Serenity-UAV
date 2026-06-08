@@ -2,7 +2,7 @@
   (paper "A1")
   (uuid "b2000000-0000-0000-0000-000000000001")
   (title_block
-    (title "Zoë (CAPE-B-2) EMI-Hardened Comms, Logging & Payload Cape") (date "2026-06-07") (rev "3") (company "Griffing Technology LLC")
+    (title "Zoë — EMI-Hardened Comms, Logging & Payload Cape") (date "2026-06-07") (rev "3") (company "Griffing Technology LLC")
     (comment 1 "CN Node — Comms + Logging + Payload Cape for Serenity UAV")
     (comment 2 "Copyright 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP | Griffing Technology LLC")
     (comment 3 "License: CC BY 4.0  |  creativecommons.org/licenses/by/4.0")

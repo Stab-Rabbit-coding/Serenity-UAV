@@ -238,8 +238,8 @@ terminates at J_PGND.
 
 - `avionics/kicad/PWR-DIST-1.kicad_sch` — Schematic source
 - `docs/POWER_SYSTEM_Q.md` — Complete power system analysis including VTOL thrust analysis
-- `avionics/kicad/CAPE-A-2.md` — Flight control cape; receives +5V_AVI and ADC signals
-- `avionics/kicad/CAPE-B-2.md` — Comms/logging cape; receives +5V_AVI
+- `avionics/kicad/Wash.md` — Flight control cape; receives +5V_AVI and ADC signals
+- `avionics/kicad/Zoë.md` — Comms/logging cape; receives +5V_AVI
 
 ---
 

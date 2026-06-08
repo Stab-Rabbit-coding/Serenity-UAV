@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-gen_cape_b2_pcb.py — Transform CAPE-B-1.kicad_pcb into CAPE-B-2.kicad_pcb.
+gen_cape_b2_pcb.py — Transform CAPE-B-1.kicad_pcb into Zoë.kicad_pcb.
 
-CAPE-B-2 is the EMI-hardened Comms, Logging & Payload Cape for the Serenity UAV.
+Zoë is the EMI-hardened Comms, Logging & Payload Cape for the Serenity UAV.
 This script performs the following PCB-level transformations:
 
-    A. Updates the title block (title, rev, comment line) to reflect CAPE-B-2.
+    A. Updates the title block (title, rev, comment line) to reflect Zoë.
     B. Replaces the ATA6561 CAN transceiver footprint (SOIC-8) with the
        ISOW1044BDFMR (SOIC-16W, 5 kV reinforced isolation + integrated DC/DC).
     C. Replaces the MAX3485E RS-485 transceiver footprint (SOIC-8) with the
@@ -52,7 +52,7 @@ import os
 # ---------------------------------------------------------------------------
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 SRC_PATH = os.path.join(SCRIPT_DIR, "CAPE-B-1.kicad_pcb")
-DST_PATH = os.path.join(SCRIPT_DIR, "CAPE-B-2.kicad_pcb")
+DST_PATH = os.path.join(SCRIPT_DIR, "Zoë.kicad_pcb")
 
 # ---------------------------------------------------------------------------
 # UUID management
@@ -65,7 +65,7 @@ _uuid_counter = 200_000_000_001
 
 
 def next_uuid() -> str:
-    """Return the next sequential UUID with the CAPE-B-2 prefix."""
+    """Return the next sequential UUID with the Zoë prefix."""
     global _uuid_counter
     uid = f"{NEW_UUID_PREFIX}{_uuid_counter:012d}"
     _uuid_counter += 1
@@ -681,7 +681,7 @@ def insert_new_nets(text: str, new_nets: dict) -> str:
 # ---------------------------------------------------------------------------
 
 def remap_uuids(text: str) -> str:
-    """Remap all original UUIDs to the CAPE-B-2 UUID namespace."""
+    """Remap all original UUIDs to the Zoë UUID namespace."""
     seen: dict[str, str] = {}
 
     def _replace(m: re.Match) -> str:
@@ -694,7 +694,7 @@ def remap_uuids(text: str) -> str:
 
 
 # ---------------------------------------------------------------------------
-# Net assignments for CAPE-B-2
+# Net assignments for Zoë
 # ---------------------------------------------------------------------------
 # CAPE-B-1 existing net numbers (key signals):
 #   47=CAN_STB  40=MCAN1_TX  43=MCAN1_RX  68=CAN_L
@@ -704,7 +704,7 @@ def remap_uuids(text: str) -> str:
 #   5=RMII0_RXD0  18=RMII0_RXD1  17=RMII0_CRS_DV  44=RMII0_RX_ER
 #   7=MDC  52=MDIO  35=PHY1_RSTN  2=PHY1_INTRN
 #
-# New CAPE-B-2 nets starting at 86 (after TMESH_N at 85):
+# New Zoë nets starting at 86 (after TMESH_N at 85):
 NEW_NETS_B2 = {
     86:  "GND2_CAN",
     87:  "VCC2_CAN",
@@ -725,7 +725,7 @@ NEW_NETS_B2 = {
 }
 
 # ---------------------------------------------------------------------------
-# Component pin→net mappings for CAPE-B-2
+# Component pin→net mappings for Zoë
 # ---------------------------------------------------------------------------
 # ISOW1044BDFMR (CAN-TR, SOIC-16W) — CAPE-B-1 uses MCAN1 (not MCAN0)
 ISOW_NETS = {
@@ -903,14 +903,14 @@ X2Y_RS485_NETS = {
 # ---------------------------------------------------------------------------
 
 def transform() -> None:
-    """Execute all CAPE-B-1 → CAPE-B-2 PCB transformations."""
+    """Execute all CAPE-B-1 → Zoë PCB transformations."""
     print(f"Reading {SRC_PATH}")
     with open(SRC_PATH, "r", encoding="utf-8") as fh:
         text = fh.read()
 
     # A. Title block update
     print("Updating title block …")
-    text = text.replace('(title "CAPE-B-1")', '(title "CAPE-B-2")')
+    text = text.replace('(title "CAPE-B-1")', '(title "Zoë")')
     text = text.replace('(rev "M")', '(rev "A-STUB")')
     text = text.replace(
         "(comment 4 \"F: ATA6561 CAN FD | MAX3485E RS-485 | DS26LV31/32 1553 | "
@@ -981,7 +981,7 @@ def transform() -> None:
         last_paren = text.rfind(")")
     text = text[:last_paren] + "\n" + new_fps + text[last_paren:]
 
-    # I. Remap all UUIDs to CAPE-B-2 namespace
+    # I. Remap all UUIDs to Zoë namespace
     print("Remapping UUIDs to b2000000 namespace …")
     text = remap_uuids(text)
 
@@ -989,7 +989,7 @@ def transform() -> None:
     print(f"Writing {DST_PATH}")
     with open(DST_PATH, "w", encoding="utf-8") as fh:
         fh.write(text)
-    print("Done — CAPE-B-2.kicad_pcb generated successfully.")
+    print("Done — Zoë.kicad_pcb generated successfully.")
 
 
 if __name__ == "__main__":

@@ -34,14 +34,14 @@ without any overall board size increase from the CAPE-B-1 90 × 60 mm footprint.
 
 ### 2. CAN FD transceiver: ATA6561 → ISOW1044BDFMR
 
-Identical substitution to Wash. See CAPE-A-2.md §2 for full rationale.
+Identical substitution to Wash. See Wash.md §2 for full rationale.
 The isolated transceiver (ISOW1044BDFMR, SOIC-16, DigiKey 296-ISOW1044BDFMRCT-ND)
 provides 5 kV reinforced isolation, ±42 V bus fault tolerance, and an integrated DC/DC
 converter that generates the isolated bus-side supply from the 3.3 V logic rail.
 
 ### 3. RS-485 transceiver: MAX3485E → ADM2795EBRWZ
 
-Identical substitution to Wash. See CAPE-A-2.md §3. Half-duplex direction-control
+Identical substitution to Wash. See Wash.md §3. Half-duplex direction-control
 via RS485_DE (tied to both DE and RE_N) is preserved.
 
 ### 4. Common-mode chokes on CAN and RS-485 bus lines
@@ -126,7 +126,7 @@ protection:
 ### 10. Power entry filter
 
 Identical to Wash: π-filter (C11 = 47 µF, FB1 = Würth 742792512, C12 = 10 µF +
-100 nF) on the +5V supply at J-PWR. See CAPE-A-2.md §6.
+100 nF) on the +5V supply at J-PWR. See Wash.md §6.
 
 ### 11. Chassis ground (PGND) implementation
 
@@ -365,7 +365,7 @@ schematic bus ring without net name conflicts.
 
 - `CAPE-B-1.kicad_sch` — standard (non-EMI-hardened) variant, Rev M baseline
 - `XCVR-49MHZ-2.kicad_sch` — EMI-hardened 49 MHz transceiver
-- `CAPE-A-2.md` — EMI-hardened flight control cape
+- `Wash.md` — EMI-hardened flight control cape
 - `AVIONICS_PB2_REDESIGN.md` — system architecture
 
 ---

@@ -282,7 +282,7 @@ Avionics EMI coupling from motor noise is a serious concern.
 - Each avionics bay has a local 47 µF + 100 nF + 10 nF bypass cap stack at the
   5 V entry (J-PWR on Wash and Zoë).
 - Wash power entry π-filter (FB1 Würth 742792512 + C11/C12) provides additional
-  conducted immunity per CAPE-A-2.md §6.
+  conducted immunity per Wash.md §6.
 - 5 V bus wire is twisted pair (18 AWG), shielded, drain wire grounded at Kaylee.
 
 ### 6.3 Grounding Architecture

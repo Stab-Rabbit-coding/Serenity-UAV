@@ -9,7 +9,7 @@
   },
   "GeneralSpecs": {
     "ProjectId": {
-      "Name": "CAPE-A-2",
+      "Name": "Wash",
       "GUID": "43415045-2d41-42d3-922e-6b696361645f",
       "Revision": "A-STUB"
     },
@@ -38,57 +38,57 @@
   ],
   "FilesAttributes": [
     {
-      "Path": "CAPE-A-2-F_Cu.gbr",
+      "Path": "Wash-F_Cu.gbr",
       "FileFunction": "Copper,L1,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "CAPE-A-2-In1_Cu.gbr",
+      "Path": "Wash-In1_Cu.gbr",
       "FileFunction": "Copper,L5,Inr",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "CAPE-A-2-In2_Cu.gbr",
+      "Path": "Wash-In2_Cu.gbr",
       "FileFunction": "Copper,L7,Inr",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "CAPE-A-2-B_Cu.gbr",
+      "Path": "Wash-B_Cu.gbr",
       "FileFunction": "Copper,L4,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "CAPE-A-2-F_Paste.gbr",
+      "Path": "Wash-F_Paste.gbr",
       "FileFunction": "SolderPaste,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "CAPE-A-2-B_Paste.gbr",
+      "Path": "Wash-B_Paste.gbr",
       "FileFunction": "SolderPaste,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "CAPE-A-2-F_Silkscreen.gbr",
+      "Path": "Wash-F_Silkscreen.gbr",
       "FileFunction": "Legend,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "CAPE-A-2-B_Silkscreen.gbr",
+      "Path": "Wash-B_Silkscreen.gbr",
       "FileFunction": "Legend,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "CAPE-A-2-F_Mask.gbr",
+      "Path": "Wash-F_Mask.gbr",
       "FileFunction": "SolderMask,Top",
       "FilePolarity": "Negative"
     },
     {
-      "Path": "CAPE-A-2-B_Mask.gbr",
+      "Path": "Wash-B_Mask.gbr",
       "FileFunction": "SolderMask,Bot",
       "FilePolarity": "Negative"
     },
     {
-      "Path": "CAPE-A-2-Edge_Cuts.gbr",
+      "Path": "Wash-Edge_Cuts.gbr",
       "FileFunction": "Profile",
       "FilePolarity": "Positive"
     }

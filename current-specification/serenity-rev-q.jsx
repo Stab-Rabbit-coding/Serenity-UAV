@@ -863,8 +863,8 @@ function TabFiles() {
                     cols={["File", "Board", "Status"]}
                     accent={C.green}
                     rows={[
-                        ["CAPE-A-2.kicad_pcb / .kicad_sch", "Wash (85×55mm EMI-hardened)", "✓ ACTIVE — primary FC cape at all positions"],
-                        ["CAPE-B-2.kicad_pcb / .kicad_sch", "Zoë (90×60mm EMI-hardened)", "✓ ACTIVE — primary CN cape at all positions"],
+                        ["Wash.kicad_pcb / .kicad_sch", "Wash (85×55mm EMI-hardened)", "✓ ACTIVE — primary FC cape at all positions"],
+                        ["Zoë.kicad_pcb / .kicad_sch", "Zoë (90×60mm EMI-hardened)", "✓ ACTIVE — primary CN cape at all positions"],
                         ["XCVR-49MHZ-2.kicad_pcb / .kicad_sch", "XCVR-49MHZ-2 (55×35mm EMI-hardened)", "✓ ACTIVE — primary 49 MHz sub-module"],
                         ["CAPE-A-1 / CAPE-B-1 / XCVR-49MHZ-1", "v1 standard capes", "ARCHIVED — avionics/kicad/archive/ (Rev Q 2026-06-05)"],
                     ]}
@@ -876,8 +876,8 @@ function TabFiles() {
                     cols={["Directory", "Board", "Status"]}
                     accent={C.yellow}
                     rows={[
-                        ["avionics/gerbers/CAPE-A-2/",      "Wash",     "○ PENDING — DRC sign-off required before fab submission"],
-                        ["avionics/gerbers/CAPE-B-2/",      "Zoë",     "○ PENDING — DRC sign-off required before fab submission"],
+                        ["avionics/gerbers/Wash/",      "Wash",     "○ PENDING — DRC sign-off required before fab submission"],
+                        ["avionics/gerbers/Zoë/",      "Zoë",     "○ PENDING — DRC sign-off required before fab submission"],
                         ["avionics/gerbers/XCVR-49MHZ-2/",  "XCVR-49MHZ-2","○ PENDING — DRC sign-off required before fab submission"],
                         ["avionics/gerbers/archive/CAPE-A-1/","Cape-A-1",   "ARCHIVED Rev Q 2026-06-05"],
                         ["avionics/gerbers/archive/CAPE-B-1/","Cape-B-1",   "ARCHIVED Rev Q 2026-06-05"],

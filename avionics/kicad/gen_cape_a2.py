@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-gen_cape_a2.py — Transform CAPE-A-1.kicad_sch into CAPE-A-2.kicad_sch.
+gen_cape_a2.py — Transform CAPE-A-1.kicad_sch into Wash.kicad_sch.
 
-CAPE-A-2 is the EMI-hardened variant of the Flight Control & Sensor Cape for
+Wash is the EMI-hardened variant of the Flight Control & Sensor Cape for
 the Serenity UAV project.  This script performs the following transformations:
 
   A. Updates the title block (title, rev, date).
@@ -18,9 +18,9 @@ the Serenity UAV project.  This script performs the following transformations:
   E. Adds new EMI protection components: SRF2012-100Y common-mode chokes,
      PRTR5V0U2X TVS diodes, SMAJ33CA 1553 TVS, and a Würth 742792512 ferrite bead.
   F. Adds X2Y capacitors bridging isolation ground planes.
-  G. Updates the sheet UUID to the CAPE-A-2 canonical value.
+  G. Updates the sheet UUID to the Wash canonical value.
   H. Remaps all UUIDs to use the "a2000000-0000-0000-0000-" prefix so that
-     CAPE-A-2 is unambiguously distinct from CAPE-A-1.
+     Wash is unambiguously distinct from CAPE-A-1.
   I. (v2 sensor upgrades) Replaces QMC5883L magnetometer lib_symbol and instance
      with MMC5983MA (MEMSIC, 18-bit, AEC-Q100) — same 5-pin I²C interface.
   J. (v2 sensor upgrades) Replaces INA219AIDR lib_symbol and instance with
@@ -53,13 +53,13 @@ import os
 # ---------------------------------------------------------------------------
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 SRC_PATH = os.path.join(SCRIPT_DIR, "CAPE-A-1.kicad_sch")
-DST_PATH = os.path.join(SCRIPT_DIR, "CAPE-A-2.kicad_sch")
+DST_PATH = os.path.join(SCRIPT_DIR, "Wash.kicad_sch")
 
 # ---------------------------------------------------------------------------
 # UUID remapping constants
 # ---------------------------------------------------------------------------
 # All original CAPE-A-1 UUIDs use "00000000-0000-0000-0000-" as prefix.
-# CAPE-A-2 uses "a2000000-0000-0000-0000-" so the two schematics are
+# Wash uses "a2000000-0000-0000-0000-" so the two schematics are
 # unambiguously distinct in any KiCad project database.
 OLD_UUID_PREFIX = "00000000-0000-0000-0000-"
 NEW_UUID_PREFIX = "a2000000-0000-0000-0000-"
@@ -70,7 +70,7 @@ _uuid_counter = 900000000001
 
 
 def next_uuid() -> str:
-    """Return the next sequential UUID with the CAPE-A-2 prefix.
+    """Return the next sequential UUID with the Wash prefix.
 
     Sequential UUIDs keep the schematic deterministic and reproducible.
     The counter starts at 900000000001 so new UUIDs sort after all
@@ -489,7 +489,7 @@ def lib_sym_mmc5983ma() -> str:
     """Return the KiCad lib_symbol S-expression for the MMC5983MA magnetometer.
 
     MMC5983MA: MEMSIC 3-axis magnetometer, LGA-16, I²C/SPI, 18-bit, AEC-Q100.
-    Replaces the QMC5883L in CAPE-A-2.  The schematic interface is identical:
+    Replaces the QMC5883L in Wash.  The schematic interface is identical:
     SCL, SDA, GND, VDD, DRDY — same 5 pins, same body geometry.
 
     Pin layout (lib origin 0,0):
@@ -538,7 +538,7 @@ def lib_sym_ina226() -> str:
     """Return the KiCad lib_symbol S-expression for the INA226AIDGSR.
 
     INA226AIDGSR: TI bidirectional current/voltage monitor, VSSOP-8, I²C,
-    16-bit, 36 V max bus voltage.  Replaces INA219AIDR in CAPE-A-2.
+    16-bit, 36 V max bus voltage.  Replaces INA219AIDR in Wash.
 
     VSSOP-8 pin assignment (TI SBOS547):
       Pin 1 = IN+, Pin 2 = IN−, Pin 3 = GND, Pin 4 = VS,
@@ -802,7 +802,7 @@ def inst_sbus_tvs(cx: float, cy: float) -> str:
     net, clamping transients on the RC receiver signal before it reaches
     R_SBUS and U_SBUS.
 
-    The PRTR5V0U2X lib_symbol is already present in the CAPE-A-2 schematic
+    The PRTR5V0U2X lib_symbol is already present in the Wash schematic
     (inserted by the existing gen_cape_a2.py for CAN/RS-485 protection).
 
     Pin layout from lib_sym_prtr5v0u2x() (body centre at cx,cy):
@@ -1523,7 +1523,7 @@ def transform(src: str) -> str:
         src: Full text of CAPE-A-1.kicad_sch.
 
     Returns:
-        Transformed text for CAPE-A-2.kicad_sch.
+        Transformed text for Wash.kicad_sch.
     """
     text = src
 
@@ -1534,7 +1534,7 @@ def transform(src: str) -> str:
     # We replace only the three fields that change; all others are kept.
     text = text.replace(
         '(title "CAPE-A-1")',
-        '(title "CAPE-A-2 EMI-Hardened Flight Control & Sensor Cape")'
+        '(title "Wash EMI-Hardened Flight Control & Sensor Cape")'
     )
     text = text.replace('(rev "M")', '(rev "2")')
     text = text.replace('(date "2026-05-21")', '(date "2026-06-03")')
@@ -1889,7 +1889,7 @@ def transform(src: str) -> str:
 # ===========================================================================
 
 def main() -> None:
-    """Read CAPE-A-1.kicad_sch, transform it, and write CAPE-A-2.kicad_sch."""
+    """Read CAPE-A-1.kicad_sch, transform it, and write Wash.kicad_sch."""
     # --- Read source ---
     if not os.path.isfile(SRC_PATH):
         print(f"ERROR: Source file not found: {SRC_PATH}", file=sys.stderr)

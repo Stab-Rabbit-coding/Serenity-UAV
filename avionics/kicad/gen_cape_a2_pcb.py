@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-gen_cape_a2_pcb.py — Transform CAPE-A-1.kicad_pcb into CAPE-A-2.kicad_pcb.
+gen_cape_a2_pcb.py — Transform CAPE-A-1.kicad_pcb into Wash.kicad_pcb.
 
-CAPE-A-2 is the EMI-hardened Flight Control & Sensor Cape for the Serenity UAV.
+Wash is the EMI-hardened Flight Control & Sensor Cape for the Serenity UAV.
 This script performs the following PCB-level transformations:
 
-    A. Updates the title block (title, rev, comment line) to reflect CAPE-A-2.
+    A. Updates the title block (title, rev, comment line) to reflect Wash.
     B. Replaces the ATA6561 CAN transceiver footprint (SOIC-8) with the
        ISOW1044BDFMR (SOIC-16W, 5 kV reinforced isolation + integrated DC/DC).
     C. Replaces the MAX3485E RS-485 transceiver footprint (SOIC-8) with the
@@ -51,13 +51,13 @@ import os
 # ---------------------------------------------------------------------------
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 SRC_PATH = os.path.join(SCRIPT_DIR, "CAPE-A-1.kicad_pcb")
-DST_PATH = os.path.join(SCRIPT_DIR, "CAPE-A-2.kicad_pcb")
+DST_PATH = os.path.join(SCRIPT_DIR, "Wash.kicad_pcb")
 
 # ---------------------------------------------------------------------------
 # UUID management
 # ---------------------------------------------------------------------------
 # All original CAPE-A-1 UUIDs are remapped to use "a2000000-0000-0000-0000-"
-# prefix so CAPE-A-2 is unambiguously distinct in any KiCad project database.
+# prefix so Wash is unambiguously distinct in any KiCad project database.
 OLD_UUID_RE = re.compile(
     r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
 )
@@ -67,7 +67,7 @@ _uuid_counter = 200_000_000_001
 
 
 def next_uuid() -> str:
-    """Return the next sequential UUID with the CAPE-A-2 prefix.
+    """Return the next sequential UUID with the Wash prefix.
 
     Sequential UUIDs keep the PCB deterministic and reproducible.
     Counter starts at 200000000001 to sort well after remapped originals.
@@ -902,10 +902,10 @@ def insert_new_nets(text: str, new_nets: dict) -> str:
 # ---------------------------------------------------------------------------
 
 def remap_uuids(text: str) -> str:
-    """Remap all original UUIDs to the CAPE-A-2 UUID namespace.
+    """Remap all original UUIDs to the Wash UUID namespace.
 
     Replaces every UUID in *text* that does NOT already start with the
-    CAPE-A-2 prefix with a fresh sequential UUID.
+    Wash prefix with a fresh sequential UUID.
 
     Args:
         text: Full PCB text.
@@ -937,7 +937,7 @@ def remap_uuids(text: str) -> str:
 #   36=RMII0_TX_EN  56=RMII0_RXD0  20=RMII0_RXD1  10=RMII0_CRS_DV
 #   55=RMII0_RX_ER  22=PHY1_RSTN  53=PHY1_INTRN
 #
-# New CAPE-A-2 nets starting at 83:
+# New Wash nets starting at 83:
 NEW_NETS_A2 = {
     83: "GND2_CAN",
     84: "VCC2_CAN",
@@ -1197,7 +1197,7 @@ X2Y_RS485_NETS = {
 # ---------------------------------------------------------------------------
 
 def transform() -> None:
-    """Execute all CAPE-A-1 → CAPE-A-2 PCB transformations."""
+    """Execute all CAPE-A-1 → Wash PCB transformations."""
     print(f"Reading {SRC_PATH}")
     with open(SRC_PATH, "r", encoding="utf-8") as fh:
         text = fh.read()
@@ -1208,7 +1208,7 @@ def transform() -> None:
     print("Updating title block …")
     text = text.replace(
         '(title "CAPE-A-1")',
-        '(title "CAPE-A-2")'
+        '(title "Wash")'
     )
     text = text.replace(
         '(rev "M")',
@@ -1296,7 +1296,7 @@ def transform() -> None:
     text = text[:last_paren] + "\n" + new_fps + text[last_paren:]
 
     # -----------------------------------------------------------------------
-    # I. Remap all UUIDs to CAPE-A-2 namespace
+    # I. Remap all UUIDs to Wash namespace
     # -----------------------------------------------------------------------
     print("Remapping UUIDs to a2000000 namespace …")
     text = remap_uuids(text)
@@ -1307,7 +1307,7 @@ def transform() -> None:
     print(f"Writing {DST_PATH}")
     with open(DST_PATH, "w", encoding="utf-8") as fh:
         fh.write(text)
-    print("Done — CAPE-A-2.kicad_pcb generated successfully.")
+    print("Done — Wash.kicad_pcb generated successfully.")
 
 
 if __name__ == "__main__":

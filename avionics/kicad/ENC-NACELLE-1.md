@@ -206,10 +206,10 @@ strength from external RF sources.
 
 ## Related Files
 
-- `CAPE-A-2.kicad_sch` — host flight control cape; provides J_ENC connector
-- `CAPE-A-2.md` — §13 documents the encoder interface, pull-ups, and GPIO assignment
+- `Wash.kicad_sch` — host flight control cape; provides J_ENC connector
+- `Wash.md` — §13 documents the encoder interface, pull-ups, and GPIO assignment
 - `XCVR-49MHZ-2.md` — companion 49 MHz transceiver board
-- `CAPE-B-2.md` — companion comms/logging cape
+- `Zoë.md` — companion comms/logging cape
 
 ---
 

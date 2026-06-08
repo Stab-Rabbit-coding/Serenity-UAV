@@ -8,7 +8,7 @@
 	)
 	(paper "A4")
 	(title_block
-		(title "CAPE-A-2")
+		(title "Wash")
 		(date "2026-06-04")
 		(rev "A-STUB")
 		(comment 1 "Serenity-Class Tiltrotor UAV — FC Node Sensor and Flight Control Cape")

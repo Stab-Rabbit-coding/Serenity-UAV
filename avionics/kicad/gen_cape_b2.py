@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-gen_cape_b2.py  —  Generate CAPE-B-2.kicad_sch from CAPE-B-1.kicad_sch
+gen_cape_b2.py  —  Generate Zoë.kicad_sch from CAPE-B-1.kicad_sch
 =======================================================================
 Transforms the CAPE-B-1 Comms/Logging/Payload Cape schematic into the
-EMI-hardened CAPE-B-2 variant by:
+EMI-hardened Zoë variant by:
 
   A. Updating the title block (title, rev, date).
   B. Replacing ATA6561 (non-isolated CAN) with ISOW1044BDFMR
@@ -1038,7 +1038,7 @@ def inst_xcvr_rx_tvs(cx: float, cy: float) -> str:
     XCVR_RX_RAW net.  The TVS clamps transients from the external 49 MHz
     XCVR module before they reach U_SBUS_B and SW1.
 
-    The PRTR5V0U2X lib_symbol is already present in CAPE-B-2 (inserted by
+    The PRTR5V0U2X lib_symbol is already present in Zoë (inserted by
     the existing gen_cape_b2.py for CAN and RS-485 protection in step F).
     This function adds a new instance only — no new lib_symbol is needed.
 
@@ -1152,7 +1152,7 @@ def remap_uuids(text: str) -> str:
     """Replace all UUID prefix '00000000-0000-0000-0000-' with
     'b2000000-0000-0000-0000-' throughout the schematic.
 
-    This canonically distinguishes CAPE-B-2 objects from CAPE-B-1 objects
+    This canonically distinguishes Zoë objects from CAPE-B-1 objects
     and satisfies change H in the specification.
 
     Parameters
@@ -1174,7 +1174,7 @@ def remap_uuids(text: str) -> str:
 # ---------------------------------------------------------------------------
 
 def transform(src: str) -> str:
-    """Apply all CAPE-B-2 transformations to the CAPE-B-1 source text.
+    """Apply all Zoë transformations to the CAPE-B-1 source text.
 
     Parameters
     ----------
@@ -1182,7 +1182,7 @@ def transform(src: str) -> str:
 
     Returns
     -------
-    str  — The transformed CAPE-B-2 schematic text.
+    str  — The transformed Zoë schematic text.
     """
     text = src
 
@@ -1191,7 +1191,7 @@ def transform(src: str) -> str:
     # ------------------------------------------------------------------
     text = text.replace(
         '(title "CAPE-B-1")',
-        '(title "CAPE-B-2 EMI-Hardened Comms, Logging & Payload Cape")'
+        '(title "Zoë EMI-Hardened Comms, Logging & Payload Cape")'
     )
     text = text.replace(
         '(date "2026-05-21")',
@@ -1419,7 +1419,7 @@ def transform(src: str) -> str:
     # a sheet description block if absent, or simply let the UUID remap
     # in step H cover any existing sheet uuid tag.
 
-    # Ensure the schematic carries the canonical CAPE-B-2 sheet uuid by
+    # Ensure the schematic carries the canonical Zoë sheet uuid by
     # inserting it just after the (paper "A1") line.
     SHEET_UUID_LINE = '  (uuid "b2000000-0000-0000-0000-000000000001")\n'
     if '(uuid "b2000000-0000-0000-0000-000000000001")' not in text:
@@ -1442,7 +1442,7 @@ def transform(src: str) -> str:
 # ---------------------------------------------------------------------------
 
 def main() -> int:
-    """Read CAPE-B-1.kicad_sch, apply all transforms, write CAPE-B-2.kicad_sch.
+    """Read CAPE-B-1.kicad_sch, apply all transforms, write Zoë.kicad_sch.
 
     Returns
     -------
@@ -1452,7 +1452,7 @@ def main() -> int:
 
     script_dir = pathlib.Path(__file__).parent.resolve()
     src_path = script_dir / "CAPE-B-1.kicad_sch"
-    dst_path = script_dir / "CAPE-B-2.kicad_sch"
+    dst_path = script_dir / "Zoë.kicad_sch"
 
     print(f"Reading  : {src_path}")
     try:
@@ -1510,8 +1510,8 @@ def main() -> int:
         print("FAIL: rev not updated", file=sys.stderr)
         ok = False
 
-    if "CAPE-B-2" in dst_text:
-        print("OK   : title contains CAPE-B-2")
+    if "Zoë" in dst_text:
+        print("OK   : title contains Zoë")
     else:
         print("FAIL: title not updated", file=sys.stderr)
         ok = False

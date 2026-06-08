@@ -8,7 +8,7 @@
 	)
 	(paper "A4")
 	(title_block
-		(title "CAPE-B-2")
+		(title "Zoë")
 		(date "2026-06-04")
 		(rev "A-STUB")
 		(comment 1 "Serenity-Class Tiltrotor UAV — CN Node Comms, Logging, Payload and GPIO Expansion Cape")

@@ -368,8 +368,8 @@ This is sufficient to trim for normal payload variation.
 
 - `avionics/kicad/PWR-DIST-1.kicad_sch` — Power distribution board schematic
 - `avionics/kicad/PWR-DIST-1.md` — PDB component list, PCB spec, connector assignments
-- `avionics/kicad/CAPE-A-2.md` — Avionics cape (receives +5V from PWR-DIST-1)
-- `avionics/kicad/CAPE-B-2.md` — Comms cape (receives +5V from PWR-DIST-1)
+- `avionics/kicad/Wash.md` — Avionics cape (receives +5V from PWR-DIST-1)
+- `avionics/kicad/Zoë.md` — Comms cape (receives +5V from PWR-DIST-1)
 - `docs/PHASED_BUILD_GUIDE.md` — Build sequence, ESC commissioning, servo calibration
 
 ---

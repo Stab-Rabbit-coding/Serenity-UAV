@@ -1,7 +1,7 @@
 (kicad_sch (version 20240101) (generator eeschema)
   (paper "A1")
   (title_block
-    (title "Wash (CAPE-A-2) EMI-Hardened Flight Control & Sensor Cape") (date "2026-06-07") (rev "Q") (company "Griffing Technology LLC")
+    (title "Wash — EMI-Hardened Flight Control & Sensor Cape") (date "2026-06-07") (rev "Q") (company "Griffing Technology LLC")
     (comment 1 "FC Node — Sensor + Flight Control Cape for Serenity UAV")
     (comment 2 "Copyright 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP | Griffing Technology LLC")
     (comment 3 "License: CC BY 4.0  |  creativecommons.org/licenses/by/4.0")
