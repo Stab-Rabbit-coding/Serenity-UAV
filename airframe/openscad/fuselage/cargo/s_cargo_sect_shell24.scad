@@ -2,6 +2,20 @@
 // s_cargo_sect_shell24.scad
 // Cargo gondola shell for Serenity Rev N 24" hull (s_cargo_sect.stl).
 //
+// Rev S2 (2026-06-08): Inara and River avionics bay dorsal mounts.
+//   Inara bay (port, Z centre = 118 mm): 4× M3 boss standoffs on interior
+//   dorsal face; 85×55 mm dorsal access panel cut.  Cape-B (Zoë Cape-A-2,
+//   90×60 mm) mounts on 6 mm standoffs; Cape-A (Wash Cape-B-2, 85×55 mm)
+//   on 20 mm inter-cape standoffs above (total stack height 29.2 mm).
+//   GPS_PORT (Z=104.7 mm) co-located for minimal SMA routing.
+//   River bay (stbd, Z centre = 45 mm): same boss + panel pattern.
+//   GPS_STBD (Z=44.7 mm) co-located above River bay.
+//   All boss positions verified analytically to clear GPS Ø36 mm recess.
+//   Access panel overlaps GPS recess zone; panel cover designed with GPS
+//   clearance bore (Ø38 mm min).  VERIFY all positions in slicer.
+//   Ref: cape_b_v2.kicad_pcb corner hole grid; CLAUDE.md Rev Q EMI capes;
+//   GPS co-location analysis 2026-06-08; Ruthex RX-M3x5.7 insert spec.
+//
 // Rev S1 (2026-06-08): Wing root mortises, spar bearing blocks, and nacelle
 //   tilt servo mount blocks at port and stbd interior Z walls.
 //   - wing_root_mortise(±1): 30.8×20.8×15 mm slot through each lateral wall
@@ -681,6 +695,48 @@ NSVMT_M3_DEP       =    6.0;        // mm, M3 insert pocket depth (>= insert len
 NSVMT_CONDUIT_W    =   10.0;        // mm, servo lead conduit slot width (X)
 NSVMT_CONDUIT_H    =    6.0;        // mm, servo lead conduit slot height (Y)
 
+// ── Avionics bay dorsal mounts — Inara (port) and River (stbd) (Rev S2) ─────
+//
+// CAPE STACK GEOMETRY (Rev Q -2 EMI-hardened capes per CLAUDE.md Rev Q):
+//   Cape-B (Zoë / Cape-A-2): 90×60 mm PCB; corner M3 holes at 80×50 mm grid.
+//   Cape-A (Wash / Cape-B-2): 85×55 mm PCB; corner M3 holes at 75×45 mm grid.
+//   Cape-B ↔ dorsal face standoff: 6 mm.
+//   Cape-A ↔ Cape-B inter-cape standoff: 20 mm.
+//   Stack height: 6 + 1.6 + 20 + 1.6 = 29.2 mm below interior dorsal face.
+//   Cape long axis oriented in X (longitudinal) to align with gondola X span.
+//
+// BAY POSITIONS (both in dorsal band Y_int ≈ -213 mm = interior dorsal face):
+//   Inara bay — port half, Z_CEN = 118 mm, Cape-B footprint Z = 88..148 mm.
+//     GPS_PORT (Z=104.7 mm) is co-located above for minimal SMA lead routing.
+//   River bay — stbd half, Z_CEN = 45 mm,  Cape-B footprint Z = 15..75 mm.
+//     GPS_STBD (Z=44.7 mm) is co-located above for minimal SMA lead routing.
+//
+// STANDOFF BOSS PATTERN (4 bosses per bay):
+//   ±AVINICS_BOSS_DX (±40 mm) in X and ±AVINICS_BOSS_DZ (±25 mm) in Z.
+//   Boss BOSS_H = 6 mm = Cape-B standoff height.  Bore: Ruthex RX-M3x5.7.
+//   Bosses protrude in −Y (downward into interior) from interior dorsal face.
+//   GPS_PORT/STBD recess Ø36 mm (radius 18 mm): nearest boss clearance ≥ 41 mm.
+//
+// DORSAL ACCESS PANEL CUTS (per bay):
+//   85×55 mm opening; 2.5 mm shoulder lip vs Cape-B 90×60 mm footprint.
+//   GPS recess overlaps panel zone; access cover gets Ø38 mm GPS clearance bore.
+//   Cut applied at outer difference level, same as wing_root_mortise.
+//
+// DORSAL INTERIOR FACE Y:
+//   Gondola dorsal exterior Y_MAX ≈ -211 mm; interior face ≈ -211 - 2 = -213 mm.
+//   AVINICS_DORSAL_Y = CY + 116 ≈ -212.6 mm.  VERIFY in slicer.
+//   Ref: cape_b_v2.kicad_pcb hole pattern; GPS_PORT/STBD co-location analysis;
+//   Ruthex RX-M3x5.7 pullout spec; CLAUDE.md standoff and 2-wall requirements.
+AVINICS_DORSAL_Y   = CY + 116.0;   // mm, interior dorsal face Y (VERIFY in slicer)
+AVINICS_BOSS_ROT   = [90, 0, 0];   // rotate cylinder: +Z → −Y (protrudes down into interior)
+INARA_Z_CEN        = 118.0;        // mm, Inara bay Z centre — port half
+RIVER_Z_CEN        =  45.0;        // mm, River bay Z centre — stbd half
+AVINICS_X_CEN      = CX;           // mm, both bays share gondola X centreline
+AVINICS_BOSS_DX    =  40.0;        // mm, ±X offset of Cape-B corner bosses from bay centre
+AVINICS_BOSS_DZ    =  25.0;        // mm, ±Z offset of Cape-B corner bosses from bay centre
+AVINICS_PANEL_X    =  85.0;        // mm, dorsal access panel opening X span
+AVINICS_PANEL_Z    =  55.0;        // mm, dorsal access panel opening Z span
+
 // ----------------------------------------------------------------------------
 // Module: wing_root_mortise
 //   Rectangular slot cut through one Z-face wall to receive the wing root tenon.
@@ -806,6 +862,49 @@ module nacelle_servo_mount_block(z_sign) {
     }
 }
 
+// ----------------------------------------------------------------------------
+// Module: avinics_dorsal_boss
+//   Single M3 heat-set insert boss post on the interior dorsal face, protruding
+//   in −Y (downward into gondola interior).  Provides one corner standoff anchor
+//   for Cape-B avionics PCB (one call per corner of each bay, 4 per bay).
+//   Reuses m3_boss() with AVINICS_BOSS_ROT = [90,0,0] (maps +Z → −Y).
+//   Boss geometry: BOSS_OD = 8 mm, BOSS_H = 6 mm, bore BOSS_BORE_D = 4.1 mm.
+//   Boss base fused to interior dorsal face at AVINICS_DORSAL_Y; extends to
+//   AVINICS_DORSAL_Y − BOSS_H (= −218.6 mm approx) into gondola interior.
+//   VERIFY each boss clears GPS recess (Ø36 mm, R=18 mm) and GPS M2 holes in slicer.
+//   Ref: Ruthex RX-M3x5.7; Cape-B-2 90×60 mm PCB corner hole pattern; CLAUDE.md.
+// ----------------------------------------------------------------------------
+module avinics_dorsal_boss(x_pos, z_pos) {
+    m3_boss([x_pos, AVINICS_DORSAL_Y, z_pos], AVINICS_BOSS_ROT);
+}
+
+// ----------------------------------------------------------------------------
+// Module: avinics_dorsal_panel_cut
+//   Rectangular through-cut (85×55 mm) in the dorsal skin for avionics bay
+//   access.  Leaves a 2.5 mm positive-stop shoulder lip around the perimeter
+//   (Cape-B footprint 90×60 mm minus opening 85×55 mm = 2.5 mm per side).
+//   The lip provides a seating shoulder for a clip-on or M2-screw access cover.
+//
+//   Cut Y span: AVINICS_DORSAL_Y − 1.0 to AVINICS_DORSAL_Y + WALL_MM + 1.0
+//     = through interior skin (−1 mm overshoot) to past exterior face (+1 mm).
+//
+//   x_cen, z_cen: panel centre in X and Z (AVINICS_X_CEN and bay Z centre).
+//
+//   GPS recess (Ø36 mm) overlaps both panels; where both cuts apply the skin
+//   is fully open — GPS antenna is installed first, access cover is designed
+//   with a Ø38 mm min clearance bore for the antenna body.
+//   Applied at outer difference level alongside wing_root_mortise and spar bore.
+//   VERIFY lip width and panel extent vs GPS recess in slicer before printing.
+//   Ref: Cape-B-2 footprint; GPS co-location analysis 2026-06-08; CLAUDE.md
+//   positive-stop shoulder requirement for flight-critical joints.
+// ----------------------------------------------------------------------------
+module avinics_dorsal_panel_cut(x_cen, z_cen) {
+    translate([x_cen - AVINICS_PANEL_X / 2,
+               AVINICS_DORSAL_Y - 1.0,
+               z_cen - AVINICS_PANEL_Z / 2])
+    cube([AVINICS_PANEL_X, WALL_MM + 2.0, AVINICS_PANEL_Z]);
+}
+
 // ============================================================
 // Main geometry
 // ============================================================
@@ -818,12 +917,12 @@ module nacelle_servo_mount_block(z_sign) {
 //   STL bounds: X=-202..-7, Y=-415..-211, Z=0..163 mm.
 //   Inner scale used: sx=0.979459, sy=0.980354, sz=0.975496.
 //
-// ── CSG tree overview (Rev S1) ────────────────────────────────────────────────
+// ── CSG tree overview (Rev S2) ────────────────────────────────────────────────
 //
 //   outer_union
-//   ├─ difference                    ← door_bay_cut + wing mortises + spar bore
+//   ├─ difference              ← bay cut + wing mortises + spar bore + avionics panels
 //   │  ├─ inner_union
-//   │  │  ├─ difference             ← per-skin cuts (camera, GPS)
+//   │  │  ├─ difference        ← per-skin cuts (camera, GPS)
 //   │  │  │  ├─ import(shell_stl)
 //   │  │  │  ├─ fpv_cut
 //   │  │  │  └─ gps_mount_cut ×2
@@ -831,11 +930,15 @@ module nacelle_servo_mount_block(z_sign) {
 //   │  │  ├─ belly_rib ×2          ← ribs CUT by door_bay_cut within bay zone
 //   │  │  ├─ hinge_pin_block ×2    ← outside bay zone; survive door_bay_cut
 //   │  │  ├─ servo_mount_pad ×2    ← cargo door servos, AFT of bay
-//   │  │  ├─ spar_bearing_block ×2 ← port + stbd Z-wall bosses  (Rev S1 NEW)
-//   │  │  └─ nacelle_servo_mount_block ×2 ← port + stbd tilt-servo pads (NEW)
-//   │  ├─ door_bay_cut             ← removes belly skin + hinge clearance
-//   │  ├─ wing_root_mortise ×2     ← port + stbd tenon slots      (Rev S1 NEW)
-//   │  └─ wing_spar_bore           ← 12.3 mm full-Z spar bore     (Rev S1 NEW)
+//   │  │  ├─ spar_bearing_block ×2 ← port + stbd Z-wall bosses (Rev S1)
+//   │  │  ├─ nacelle_servo_mount_block ×2 ← port + stbd tilt-servo pads (S1)
+//   │  │  ├─ avinics_dorsal_boss ×8 ← Inara (port) + River (stbd) standoffs (S2)
+//   │  │  └─   (4 bosses per bay, ±40 mm X × ±25 mm Z from bay Z centre)
+//   │  ├─ door_bay_cut              ← removes belly skin + hinge clearance
+//   │  ├─ wing_root_mortise ×2      ← port + stbd tenon slots (S1)
+//   │  ├─ wing_spar_bore            ← 12.3 mm full-Z spar bore (S1)
+//   │  ├─ avinics_dorsal_panel_cut  ← Inara bay 85×55 mm dorsal opening (S2)
+//   │  └─ avinics_dorsal_panel_cut  ← River bay 85×55 mm dorsal opening (S2)
 //   └─ latch_catch_lip ×4          ← added AFTER cut; protrude into bay opening
 
 union() {
@@ -932,6 +1035,29 @@ union() {
             //     Ref: DS3218MG datasheet; PHASED_BUILD_GUIDE.md Phase 3.
             nacelle_servo_mount_block(+1);  // port: Z = 153..161 mm
             nacelle_servo_mount_block(-1);  // stbd: Z =   2..10  mm
+
+            // A9. Inara's avionics bay — port half, Z centre = 118 mm (Rev S2).
+            //     4× M3 Cape-B standoff bosses on interior dorsal face (Y≈−213 mm).
+            //     Boss pattern: ±40 mm (X) × ±25 mm (Z) from bay centre.
+            //     Boss positions (X, Z): (−142.2,93), (−62.2,93), (−142.2,143), (−62.2,143).
+            //     GPS_PORT (Z=104.7 mm) co-located for minimal SMA routing to Cape-B-2.
+            //     Clearance to GPS Ø36 mm recess: nearest boss ≥ 41 mm (verified analytically).
+            //     VERIFY boss positions and clearance in slicer before printing.
+            //     Ref: Rev S2 load calc; GPS_PORT recess radius 18 mm; cape_b_v2.kicad_pcb.
+            for (dx = [-AVINICS_BOSS_DX, AVINICS_BOSS_DX])
+            for (dz = [-AVINICS_BOSS_DZ, AVINICS_BOSS_DZ])
+                avinics_dorsal_boss(AVINICS_X_CEN + dx, INARA_Z_CEN + dz);
+
+            // A10. River's avionics bay — stbd half, Z centre = 45 mm (Rev S2).
+            //      4× M3 Cape-B standoff bosses on interior dorsal face (Y≈−213 mm).
+            //      Boss positions (X, Z): (−142.2,20), (−62.2,20), (−142.2,70), (−62.2,70).
+            //      GPS_STBD (Z=44.7 mm) co-located for minimal SMA routing to Cape-B-2.
+            //      Clearance to GPS Ø36 mm recess: nearest boss ≥ 47 mm (verified analytically).
+            //      VERIFY boss positions and clearance in slicer before printing.
+            //      Ref: Rev S2 load calc; GPS_STBD recess radius 18 mm; cape_b_v2.kicad_pcb.
+            for (dx = [-AVINICS_BOSS_DX, AVINICS_BOSS_DX])
+            for (dz = [-AVINICS_BOSS_DZ, AVINICS_BOSS_DZ])
+                avinics_dorsal_boss(AVINICS_X_CEN + dx, RIVER_Z_CEN + dz);
         }
 
         // ── Cargo-bay door opening ────────────────────────────────────────────
@@ -958,6 +1084,21 @@ union() {
         //   VERIFY bore X and Y in slicer cross-section before printing.
         //   Ref: CF-TUBE-12MM (bom_revO.csv); s_wings_s1223_revo.scad spar_bore().
         wing_spar_bore();
+
+        // ── Inara avionics dorsal access panel (port, Z≈90.5..145.5 mm) ─────
+        //   85×55 mm cut through dorsal skin at Inara bay Z centre = 118 mm.
+        //   Leaves 2.5 mm positive-stop shoulder lip (90−85)/2 per Cape-B edge.
+        //   GPS_PORT recess (Ø36 mm at Z=104.7 mm) overlaps panel: GPS antenna
+        //   is installed from outside before panel cover.  Cover needs Ø38 mm bore.
+        //   VERIFY opening bounds, lip width, and GPS overlap in slicer.
+        avinics_dorsal_panel_cut(AVINICS_X_CEN, INARA_Z_CEN);
+
+        // ── River avionics dorsal access panel (stbd, Z≈17.5..72.5 mm) ──────
+        //   85×55 mm cut through dorsal skin at River bay Z centre = 45 mm.
+        //   Same lip geometry and GPS co-location note as Inara panel above.
+        //   GPS_STBD recess (Ø36 mm at Z=44.7 mm) is centred inside panel zone.
+        //   VERIFY opening bounds, lip width, and GPS overlap in slicer.
+        avinics_dorsal_panel_cut(AVINICS_X_CEN, RIVER_Z_CEN);
     }
 
     // ── B. Latch-catch lips (added after door_bay_cut; not affected by it) ────
