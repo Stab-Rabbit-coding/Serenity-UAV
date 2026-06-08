@@ -2,3 +2,10 @@
 
 # Claude Code agent worktrees and session data
 .claude/
+
+# FreeCAD large binary outputs (exceed GitHub 100 MB limit — use LFS if needed)
+*.FCBak
+*.FCStd
+
+# VS Code Local History plugin (handled as submodule — do not commit raw files)
+avionics/kicad/.history/
