@@ -250,18 +250,17 @@ any nacelle — thrust and directional control are degraded but not lost.
 
 | EDF position | ESC ref | Kaylee power conn | Controlling FC node | Wash bay | Signal pin |
 |---|---|---|---|---|---|
-| Port Fwd (EDF0) | ESC1 | J_ESC1 | FC1 (Node 1) | Shepherd's room (Bay A) | UART2-TX (DSHOT600) |
-| Port Aft (EDF1) | ESC2 | J_ESC2 | FC2 (Node 2) | Inara's shuttle (Bay B) | UART2-TX (DSHOT600) |
-| Stbd Fwd (EDF2) | ESC3 | J_ESC3 | FC2 (Node 2) | Inara's shuttle (Bay B) | UART3-TX (DSHOT600) |
-| Stbd Aft (EDF3) | ESC4 | J_ESC4 | FC3 (Node 3) | River's room (Bay D) | UART2-TX (DSHOT600) |
+| Port Fwd (EDF0) | ESC1 | J_ESC1 | FC3 (Node 3) | River's room (Bay D) | UART2-TX (DSHOT600) |
+| Port Aft (EDF1) | ESC2 | J_ESC2 | FC4 (Node 4) | Simon's medbay (Bay E) | UART2-TX (DSHOT600) |
+| Stbd Fwd (EDF2) | ESC3 | J_ESC3 | FC3 (Node 3) | River's room (Bay D) | UART3-TX (DSHOT600) |
+| Stbd Aft (EDF3) | ESC4 | J_ESC4 | FC4 (Node 4) | Simon's medbay(Bay E) | UART2-TX (DSHOT600) |
 
 ### Single-FC-Node Failure Matrix
 
 | Failed node | EDFs lost | EDFs retained | Flight implication |
 |---|---|---|---|
-| FC1 only | Port Fwd (EDF0) | Port Aft, both Stbd (3/4) | Degraded port nacelle thrust; controllable; continue or RTH |
-| FC2 only | Port Aft (EDF1) + Stbd Fwd (EDF2) | Port Fwd, Stbd Aft (2/4) | Symmetric diagonal pair retained; yaw authority maintained; RTH recommended |
-| FC3 only | Stbd Aft (EDF3) | Port Fwd, Port Aft, Stbd Fwd (3/4) | Degraded stbd nacelle thrust; controllable; continue or RTH |
+| FC3 only | Port Fwd (EDF0) + Stbd Fwd (EDF3) | Port Aft, Stbd Aft (2/4) | Symmetric aft pair retained; yaw authority maintained; RTH recommended |
+| FC4 only | Port Aft (EDF1) + Stbd Aft (EDF3) | Port Fwd, Stbd Aft (2/4) | Symmetric forward pair retained; yaw authority maintained; RTH recommended |
 
 No single FC node failure eliminates both EDFs in any nacelle.
 
