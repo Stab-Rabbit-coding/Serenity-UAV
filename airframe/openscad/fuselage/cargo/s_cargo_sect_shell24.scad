@@ -12,7 +12,9 @@
 //     centred at X=-70.0 mm (30% chord from LE), Y=CY+40 mm.
 //   - nacelle_servo_mount_block(±1): 52×30×8 mm CF-PETG pad on each interior
 //     Z wall; 4× M3 heat-set inserts for nacelle_servo_bracket.stl; 10×6 mm
-//     lead conduit slot.
+//     lead conduit slot.  Block X centred at -147.6 mm (AFT of mortise) to
+//     eliminate four spatial conflicts found between CX-centred position and
+//     the wing root mortise / spar bearing boss — see NSVMT_X_CEN comment.
 //   All loads documented; FOS ≥ 11 (bolts) to 685 (bearing) vs. 4.0 target.
 //   Ref: s_wings_s1223_revo.scad; DS3218MG datasheet; load analysis in source.
 //
@@ -657,7 +659,17 @@ SPAR_GRUB_TAP_D    =    2.5;        // mm, M3 tap-drill dia for spar retention g
 //   A separately-printed nacelle_servo_bracket.stl clamps the servo body to
 //   this block via 4× M3×10 SHCS (one per heat-set insert).
 //   Ref: DS3218MG datasheet; PHASED_BUILD_GUIDE.md Phase 3; load analysis above.
-NSVMT_X_CEN        = CX;            // mm, block X centre — aligned with wing root X
+// NSVMT_X_CEN placement constraint (IMPORTANT — do not move forward of this formula):
+//   The servo block must clear the wing root mortise (left edge at
+//   WING_ROOT_X_CEN − MORT_W/2 = −117.6 mm) and the spar bearing boss
+//   (left edge at WING_SPAR_X_CEN − WING_SPAR_BOSS_OD/2 = −81.0 mm).
+//   The mortise is the binding constraint; 4 mm margin is added.
+//   Result: block spans X = −173.6 .. −121.6 mm (right edge at −121.6 mm,
+//   4.0 mm AFT of mortise left edge −117.6 mm; 40.6 mm AFT of boss left −81.0 mm).
+//   Ref: spatial conflict analysis 2026-06-08; all four ADD-ADD and SUB-ADD
+//   conflicts between mortise/boss and original CX-centred block are resolved.
+NSVMT_X_CEN        = WING_ROOT_X_CEN - MORT_W / 2 - NSVMT_PAD_W / 2 - 4.0;
+                                     // = -102.19 - 15.40 - 26.0 - 4.0 = -147.59 mm
 NSVMT_Y_CEN        = CY + 40.0;     // mm, block Y centre — same station as wing root Y
 NSVMT_PAD_W        =   52.0;        // mm, block X span (40 mm body + 6 mm margin each side)
 NSVMT_PAD_H        =   30.0;        // mm, block Y span (20 mm body + 5 mm lug + 2.5 mm/side)
