@@ -1,10 +1,14 @@
 # Serenity Avionics Redesign — 8× PocketBeagle 2 Industrial
 
-**Status:** Implemented — Rev M hardware baseline (supersedes AM6232 PB2 design from Rev K)
-**Date:** 2026-05-17 (updated for Rev M PB2-I upgrade from 2026-05-11 original)
+**Status:** Rev Q baseline — All 8 nodes use EMI-hardened v2 capes (Cape-A-2 / Cape-B-2 / XCVR-49MHZ-2)
+**Date:** 2026-06-05 (Rev Q: v2·v2·v2·v2 uniform placement; Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 archived)
 **Scope:** Avionics compute, cape specifications, bus topology, radio link architecture
 
-> **Rev M board change:** All 8 PocketBeagle 2 (AM6232) replaced with PocketBeagle 2 Industrial (AM6254). Cape-A and Cape-B PCB designs unchanged. DigiKey P/N: 2820-100003007-ND · $51.03 ea.
+> **Rev Q cape change:** All 8 nodes (Bays A, B, D, E) now use EMI-hardened -2 capes. Previously
+> Bays B and D used Cape-A-1 / Cape-B-1 (-1 standard). Rev Q standardises on a single hardened SKU,
+> providing 5 kV galvanic isolation on CAN FD, RS-485, and Ethernet at every position.
+> Cape-A-1, Cape-B-1, XCVR-49MHZ-1 KiCad files, gerbers, and DTS overlays are archived.
+> DigiKey P/N for PB2-I: 2820-100003007-ND · $51.03 ea.
 
 ---
 
@@ -34,6 +38,19 @@ All 8 nodes participate equally on all 4 wired data buses. Every node is a poten
 ```
 
 Bus order: **CN1 → FC1 → CN2 → FC2 → CN3 → FC3 → CN4 → FC4** — one CN + one FC per bay (A/B/D/E). Any single segment cut or bay power failure leaves ≥2 FC + ≥2 CN accessible on both sides of the break.
+
+**Cape variant placement — v2 · v2 · v2 · v2 (nose → tail, Rev Q):**
+
+| Bay | Pair | Cape variant | Rationale |
+|-----|------|-------------|-----------|
+| A (nose) | CN1 / FC1 | Cape-B-2 / Cape-A-2 | Bus start termination node (CAN FD 120 Ω, RS-485 120 Ω, 1553B 78 Ω); 5 kV isolated transceivers |
+| B | CN2 / FC2 | Cape-B-2 / Cape-A-2 | Rev Q: upgraded from -1. Uniform EMI hardening; ADIN1300BCPZ provides 1000BASE-T with isolation |
+| D | CN3 / FC3 | Cape-B-2 / Cape-A-2 | Rev Q: upgraded from -1. Same rationale as Bay B |
+| E (tail) | CN4 / FC4 | Cape-B-2 / Cape-A-2 | Bus end termination node; 5 kV isolation at aft bus endpoint |
+
+Rev Q places 5 kV galvanic isolation at every node. Single-SKU procurement eliminates dual-sourcing.
+The ADIN1300BCPZ 1000BASE-T PHY on Cape-A-2 / Cape-B-2 provides equivalent ring throughput to the
+DP83825I 100BASE-TX used on Cape-A-1 / Cape-B-1. Cape-A-1, Cape-B-1, XCVR-49MHZ-1 are archived.
 
 ---
 
@@ -251,7 +268,7 @@ CN1 ─T─ FC1 ─T─ CN2 ─T─ FC2 ─T─ CN3 ─T─ FC3 ─T─ CN4 ─T
 - **T** = stub coupling transformer (PE-68515 or equivalent, 0.9 m max stub)
 - **Primary BC:** FC1 (elected at boot via CAN FD priority arbitration)
 - **Standby BC:** FC2 (assumes BC role if FC1 heartbeat absent for 3 frames)
-- **Termination:** 78Ω at CN1 (bus start, Bay A) and FC4 (bus end, Bay E)
+- **Termination:** 78Ω at CN1 (bus start, Bay A) and FC4 (bus end, Bay E). Both termination nodes use Cape-B-2 / Cape-A-2 (EMI-hardened).
 - **Shielded cable:** MIL-C-17/131 or equivalent, 78 Ω, twisted pair, drain wire grounded at one end per segment
 - **PRU firmware requirement:** Manchester II encoder at 1 Mbps ± 0.5%; decoder with sync-word detection and RT address filtering; TX/RX half-duplex arbitration
 
@@ -267,7 +284,7 @@ CN1 ─┬─ FC1 ─ CN2 ─ FC2 ─ CN3 ─ FC3 ─ CN4 ─┬─ FC4
 ```
 
 - **Transceiver:** ATA6561 on every cape, 3.3 V, 5 Mbps data rate
-- **Termination:** 120 Ω resistor soldered on CN1 cape (bus start, Bay A) and FC4 cape (bus end, Bay E); all others: open
+- **Termination:** 120 Ω resistor soldered on CN1 cape (bus start, Bay A) and FC4 cape (bus end, Bay E); all others: open. Both termination nodes use Cape-B-2 / Cape-A-2 (EMI-hardened, 5 kV isolated transceivers).
 - **Controllers:** AM6254 MCAN0 (primary bus) + MCAN1 (reserved for second CAN bus or redundant arbitration)
 - **Protocol:** DroneCAN v1 / UAVCANv1 for sensor data; custom priority-voting messages for role election
 

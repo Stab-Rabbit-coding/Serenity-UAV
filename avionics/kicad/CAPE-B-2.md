@@ -180,6 +180,86 @@ The CAPE-A-2 layout constraints apply equally here. Additional CAPE-B-2 specific
 
 ---
 
+## 13. Antenna Port Filter Chains (Rev A addition)
+
+Each on-board RF transceiver has a dedicated antenna filter chain between its ANT pin
+and the SMA panel-mount connector. The goal is to prevent out-of-band conducted RF
+energy (from other transmitters sharing the bay) from reaching the receiver LNA or
+the digital bus lines, while keeping in-band insertion loss below 1 dB.
+
+### Topology (identical for all three chains)
+
+```
+ Module ANT pin
+      |
+  [LORA_ANT / WIFI_ANT / J_SIK_ANT]  ← global net label or U.FL
+      |
+  FL_xxx  (bandpass filter, series)
+      |
+      +----[D_ANT_xxx  RCLAMP0502B]---- PGND   ← shunt ESD clamp
+      |
+  J_SMA_xxx  (SMA bulkhead connector)
+      |
+  PGND  (connector shell)
+```
+
+### Component selection rationale
+
+**Bandpass filters:**
+
+| Reference | Part | Pass-band | IL | Rejection |
+|---|---|---|---|---|
+| FL_LORA | Johanson 0915LP15B0100E | 902–928 MHz | ≤ 0.6 dB | > 25 dB @ 2× f |
+| FL_SIK  | Johanson 0915LP15B0100E | 902–928 MHz | ≤ 0.6 dB | > 25 dB @ 2× f |
+| FL_WIFI | Johanson 2450BP15B050E  | 2400–2500 MHz | ≤ 0.5 dB | > 20 dB flanks |
+
+Both 915 MHz radios (LoRa and SiK) share the same BPF part number — they operate in
+the same band and there is no benefit to using separate filters.
+
+**RF ESD protection:**
+
+| Reference | Part | Capacitance | Clamp voltage | Package |
+|---|---|---|---|---|
+| D_ANT_LORA | Semtech RCLAMP0502BTCL | 0.15 pF max | 5.5 V | SOD-882 |
+| D_ANT_WIFI | Semtech RCLAMP0502BTCL | 0.15 pF max | 5.5 V | SOD-882 |
+| D_ANT_SIK  | Semtech RCLAMP0502BTCL | 0.15 pF max | 5.5 V | SOD-882 |
+
+The RCLAMP0502B is specified for RF antenna protection applications; its 0.15 pF
+maximum capacitance causes negligible antenna detuning at 915 MHz (< 1° phase shift
+at 50 Ω) and at 2.4 GHz (< 2° phase shift). The existing digital-line PRTR5V0U2X
+TVS (capacitance ≈ 5 pF per channel) is not suitable for RF antenna ports.
+
+**SiK U.FL input (J_SIK_ANT):**
+
+The RFD900x module carries an integrated U.FL antenna connector. A Hirose
+U.FL-R-SMT-1 pad on the Cape (J_SIK_ANT) receives the module's pigtail. The filter
+chain then routes from J_SIK_ANT through FL_SIK and D_ANT_SIK to J_SMA_SIK.
+The U.FL GND pin connects to PGND (chassis ground), keeping RF return current off
+the digital ground plane.
+
+**SMA connectors (J_SMA_LORA, J_SMA_WIFI, J_SMA_SIK):**
+
+Standard 50 Ω vertical SMA PCB bulkhead jacks. Shell (pin 2) connects to the PGND
+copper pour, consistent with §11.
+
+### PCB layout constraints (additions)
+
+- **50 Ω trace geometry:** Route all traces from module ANT pin to BPF input and from
+  BPF output to SMA as 50 Ω microstrip. For a standard 4-layer 1.6 mm FR-4 with
+  0.2 mm dielectric to inner ground plane, 50 Ω microstrip width ≈ 0.35 mm.
+- **BPF placement:** Place FL_LORA and FL_SIK as close as possible to the RFM95W and
+  RFD900x module U.FL/antenna pads respectively (≤ 5 mm trace from ANT pin to filter
+  pad). Place FL_WIFI ≤ 5 mm from WL1837MOD ANT pin.
+- **RCLAMP placement:** Place D_ANT_xxx immediately after the BPF (between BPF output
+  and SMA pin 1). The shunt path to PGND must be as short as possible (via directly
+  to PGND plane, no daisy-chain routing).
+- **Keep the RF trace in the BPF-to-SMA segment entirely within the RF groundplane
+  moat region** (right 30 mm of board). Do not route it over the digital GND pour.
+- **SMA pad PGND pour:** Each SMA footprint shell must have a ≥ 3 mm PGND copper pour
+  ring as specified in §11.
+
+---
+
 ## Eliminated vs. CAPE-B-1 Bill of Materials (delta)
 
 ### Removed
@@ -214,6 +294,16 @@ The CAPE-A-2 layout constraints apply equally here. Additional CAPE-B-2 specific
 | L1 | 1 µH / 1 A | WiFi supply added inductor |
 | C11–C15 | Various MLCC | Power filter capacitors |
 | C13, C14 | 4.7 nF X2Y | Isolation boundary CM caps |
+| FL_LORA | Johanson 0915LP15B0100E | LoRa ANT bandpass filter |
+| FL_SIK | Johanson 0915LP15B0100E | SiK ANT bandpass filter |
+| FL_WIFI | Johanson 2450BP15B050E | WiFi/BT ANT bandpass filter |
+| D_ANT_LORA | Semtech RCLAMP0502BTCL | LoRa ANT ESD shunt (0.15 pF) |
+| D_ANT_SIK | Semtech RCLAMP0502BTCL | SiK ANT ESD shunt (0.15 pF) |
+| D_ANT_WIFI | Semtech RCLAMP0502BTCL | WiFi/BT ANT ESD shunt (0.15 pF) |
+| J_SIK_ANT | Hirose U.FL-R-SMT-1(10) | SiK module pigtail U.FL receptacle |
+| J_SMA_LORA | SMA bulkhead jack (50 Ω) | LoRa 915 MHz antenna SMA output |
+| J_SMA_WIFI | SMA bulkhead jack (50 Ω) | WiFi/BT 2.4 GHz antenna SMA output |
+| J_SMA_SIK | SMA bulkhead jack (50 Ω) | SiK 915 MHz antenna SMA output |
 
 ---
 
@@ -237,8 +327,83 @@ MIL-STD-461G RE102 Limit C, RS103 200 V/m.
 
 Additional RF susceptibility note: the RFD900x and RFM95W modules have their own
 internal LNA protectors. The PRTR5V0U2X TVS arrays on J1 protect the UART interface,
-not the antenna port. Antenna port protection is handled by the SMA connector chassis-
-ground connection and the antenna cable shielding.
+not the antenna port. Antenna port protection is now provided by the RCLAMP0502B ESD
+shunts (D_ANT_LORA, D_ANT_WIFI, D_ANT_SIK) and by the BPF series filters (FL_LORA,
+FL_WIFI, FL_SIK) as documented in §13. The SMA connector shell PGND connection and
+antenna cable shielding provide the primary conducted shield path.
+
+---
+
+## Shielded JST-GH Connectors
+
+All JST-GH connectors on Cape-B-2 now include a SHIELD pin (number "MP") bonded to the
+PGND chassis ground net through the PCB mounting tab footprint.
+
+| Reference | Type | Signals | SHIELD tap (absolute, mm) |
+|---|---|---|---|
+| J_XCVR | SM06B-GHS-TB-1MP | GND / +5V / UART_RCRS_TX / XCVR_RX_RAW / XCVR_PTT_N / +3V3 | (100.00, 570.16) |
+| J_FAN | SM03B-GHS-TB-1MP | GND / +5V / FAN_PWM_B | (100.00, 646.35) |
+
+**Cable assembly requirements for all JST-GH connectors (same as Cape-A-2):**
+
+- Cable: foil + braid shielded (Belden 9533 or equivalent)
+- Drain wire: terminate to connector PGND pad
+- Ferrite clamp: Würth 74271222 ≤ 25 mm from body, both ends
+
+**RF antenna cables (SMA ports J_SMA_SIK, J_SMA_LORA, J_UFL_WIFI):**
+
+- RG-178 or RG-316 50 Ω coaxial cable, maximum 500 mm length
+- SMA/UFL connector shells bonded to PGND at the board-side connector land
+- No ferrite clamp on antenna cables (coaxial inherently shielded)
+
+---
+
+## Bay Fan Connector (J_FAN)
+
+A 3-pin JST-GH connector J_FAN is provided for the bay Faraday enclosure ventilation fan.
+
+| Pin | Net | Description |
+|---|---|---|
+| 1 | GND | Fan return |
+| 2 | +5V | Fan power (80 mA max) |
+| 3 | FAN_PWM_B | PWM speed control — PocketBeagle 2 EHRPWM output |
+| MP | PGND | Cable shield drain |
+
+**Fan:** Sunon MF40100V2-1000U-A99 (40 × 40 × 10 mm, 5 V, 90 mA, 4450 RPM, brushless).
+
+**Note:** Cape-A-2 and Cape-B-2 each have an independent J_FAN connector within the
+same avionics bay.  Both fan signals (FAN_PWM_A, FAN_PWM_B) may drive the same fan
+or two fans (one per board), at the integrator's discretion.  For redundancy, wiring
+both boards to the same fan via a Schottky OR diode circuit (BAT54S) is preferred.
+
+---
+
+## Wiring Harness Requirements — All Bay Cables
+
+See CAPE-A-2.md §11 for the full wiring harness specification.  Cape-B-2 additionally
+requires:
+
+- **SiK/LoRa/WiFi RF cables:** RG-316 coaxial, max 500 mm, SMA bodies to PGND.
+- **XCVR-49MHZ-2 harness (J_XCVR):** 6-conductor overall-shielded twisted-bundle,
+  Belden 9533 or equivalent.  Ferrite clamp on both ends ≤ 25 mm from body.
+- **RCRS receive audio output:** shielded coaxial or individually shielded 2-wire
+  to the logging subsystem; drain to PGND.
+
+---
+
+## Avionics Bay Faraday Enclosure
+
+Each of the 4 avionics bays contains one Cape-A-2 and one Cape-B-2.  The complete
+Faraday enclosure specification (foil liner, fan, EMI gaskets, cable entry) is
+defined in Cape-A-2.md §12.  Cape-B-2 specific requirements:
+
+- The XCVR-49MHZ-2 sub-module (plugged into J_XCVR) must be located inside the
+  Faraday enclosure.  Its SMA antenna port exits through a bulkhead SMA
+  panel-mount connector bonded to PGND at the bay wall.
+- WiFi, SiK, and LoRa antenna coaxial pigtails must exit through a coaxial
+  bulkhead panel-mount at the bay wall, bonded to PGND.
+- No antenna cable shall pass through the copper foil liner without a proper
+  coaxial bulkhead connector.  Avoid pigtails longer than 100 mm inside the bay.
 
 ---
 
@@ -246,7 +411,7 @@ ground connection and the antenna cable shielding.
 
 - `CAPE-B-1.kicad_sch` — standard (non-EMI-hardened) variant, Rev M baseline
 - `XCVR-49MHZ-2.kicad_sch` — EMI-hardened 49 MHz transceiver
-- `CAPE-A-2.md` — EMI-hardened flight control cape
+- `CAPE-A-2.md` — EMI-hardened flight control cape (Faraday enclosure spec §12)
 - `AVIONICS_PB2_REDESIGN.md` — system architecture
 
 ---
@@ -254,13 +419,11 @@ ground connection and the antenna cable shielding.
 ## References
 
 1. TI Application Note SLLA337A — "Isolation Boundary Layout Guidelines for ISOW Devices"
-
-- Step 2: Analog Devices ADM2795E Data Sheet Rev. B
-
-- Step 3: Würth Elektronik EMC Design Guide (2023) — ferrite bead placement
-
-- Step 4: TI WL1837MOD Hardware Design Guide (SWRU491) — supply filtering guidance
-
-- Step 5: IEC 61000-4-5:2017 — surge immunity
-
-- Step 6: MIL-STD-461G:2015
+2. Analog Devices ADM2795E Data Sheet Rev. B
+3. Würth Elektronik EMC Design Guide (2023) — ferrite bead placement
+4. TI WL1837MOD Hardware Design Guide (SWRU491) — supply filtering guidance
+5. IEC 61000-4-5:2017 — surge immunity
+6. MIL-STD-461G:2015
+7. Johanson Technology 0915LP15B0100E Data Sheet — 902–928 MHz bandpass filter
+8. Johanson Technology 2450BP15B050E Data Sheet — 2.4 GHz bandpass filter
+9. Semtech RCLAMP0502B Data Sheet — RF ESD protection, 0.15 pF, SOD-882

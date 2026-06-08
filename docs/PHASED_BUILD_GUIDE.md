@@ -33,35 +33,36 @@
 
 > Rev M supersedes Rev L. Hardware upgrade: 8× PocketBeagle 2 (AM6232) → 8× PocketBeagle 2 Industrial (AM6254, 1GB DDR4, 64GB eMMC, −40°C to 85°C). Propulsion + governor unchanged from Rev L.
 
-| Parameter                 | Value                                                                                                                                                                                                                                                         |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Hull length               | 457.2 mm (18.00″) — canonical 269 ft                                                                                                                                                                                                                          |
-| Beam (nacelle tip-to-tip) | 288.9 mm (11.375″) — canonical 170 ft                                                                                                                                                                                                                         |
-| Propulsion                | **2× (2× Changesun XRP 3660-2700KV 80mm 6S, tandem series) per nacelle** + 1× XFLY X4 PRO 40mm 4S fuselage                                                                                                                                                    |
-| Nacelle pod               | 93.5 mm OD × **230 mm** length (tandem dual-EDF) · ID 83 mm                                                                                                                                                                                                   |
-| Hover thrust              | **11,250 g** (10,600 g nacelles + 650 g fuselage)                                                                                                                                                                                                             |
-| ESCs                      | **4× Hobbywing Platinum PRO V4 120A** (nacelles, one per EDF) + 1× BLHeli32 40A (fuselage)                                                                                                                                                                    |
-| Governor (Rev L new)      | **PID closed-loop RPM per EDF · 500 Hz M4F · BDSHOT 1 kHz feedback**                                                                                                                                                                                          |
-| Avionics dry mass         | **420 g** (8× PocketBeagle 2 Industrial + 4× Cape-A + 4× Cape-B + 4× RCRS-49 sub-modules + GPS ×4 + radios)                                                                                                                                                   |
-| Airframe dry mass         | **3,213 g** (Rev L 3,197 g + 16 g PB2-I net delta)                                                                                                                                                                                                            |
-| T/W empty                 | **3.11:1** (6S 4000mAh, 3,623 g AUW)                                                                                                                                                                                                                          |
-| T/W with 250 g cargo      | **2.99:1** (6S 2800mAh, 3,758 g AUW)                                                                                                                                                                                                                          |
-| T/W one EDF failed        | **2.41:1** — partner EDF continues, fault latched                                                                                                                                                                                                             |
-| T/W one nacelle lost      | **1.64:1** — FC RTH                                                                                                                                                                                                                                           |
-| Max payload               | **1,392 g (3.07 lb)** at T/W = 2.0                                                                                                                                                                                                                            |
-| Compute nodes             | **8 nodes:** FC1–FC4 (Cape-A, sensor/flight) + CN1–CN4 (Cape-B, comms/payload)                                                                                                                                                                                |
-| FC node hardware          | **PocketBeagle 2 Industrial (AM6254)**+ Cape-A 85×55mm — ICM-42688-P IMU, BMP388 baro, u-blox M10Q GPS, MIL-STD-1553, CAN FD, RS-485, Ethernet;**SLB9670 TPM 2.0** · DK 2820-100003007-ND                                                                     |
-| CN node hardware          | **PocketBeagle 2 Industrial (AM6254)**+ Cape-B 90×60mm — SiK 915MHz, LoRa RFM95W 915MHz, TI WL1837MOD WiFi/BT, RCRS-49 sub-module, MIL-STD-1553, CAN FD, RS-485, Ethernet;**SLB9670 TPM 2.0**; ATF16V8BQL CPLD write-blocker (log μSD) · DK 2820-100003007-ND |
-| Bay assignments           | Bay A: CN1+FC1 · Bay B: CN2+FC2 · Bay D: CN3+FC3 · Bay E: CN4+FC4 (CN lower, FC upper per bay)                                                                                                                                                                |
-| Bus order                 | CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4 — CN and FC interleaved on all data buses (CAN FD, RS-485, 1553) and power distribution; any single segment or bay power failure leaves ≥2 FC + ≥2 CN on both sides of the break                                              |
-| Node role election        | CAN FD heartbeat priority arbitration at boot — all 8 nodes identical hardware; master elected dynamically with automatic failover                                                                                                                            |
-| Radios                    | SiK 915MHz MAVLink + LoRa RFM95W 915MHz backup + TI WL1837MOD WiFi/BT GCS + 49MHz RCRS-49 RC; all 4 on every CN node; software-elected master per link                                                                                                        |
-| Obstacle avoidance        | 12× VL53L5CX 8×8 ToF sensors, dual redundant arrays (A on FC3 Bay D, B on FC1 Bay A)                                                                                                                                                                          |
-| Cargo                     | 101.6 × 76.2 × 76.2 mm bay, clamshell doors, N20 winch + auto-latch cradle                                                                                                                                                                                    |
-| Security                  | ATF16V8BQL CPLD write-blocker (log μSD, all Cape-B nodes) + **SLB9670 TPM 2.0 on all 8 nodes** (Cape-A and Cape-B) + W25Q128JV NOR flash circular log buffer                                                                                                  |
-| Navigation lights         | ICAO Annex 2 / 14 CFR 91.209 (6-position)                                                                                                                                                                                                                     |
-| Access panels             | 6 removable panels A–F (bayonet/screw/hinge/magnet)                                                                                                                                                                                                           |
-| Build estimate            | 100–130 hours across all phases                                                                                                                                                                                                                               |
+| Parameter | Value |
+| --- | --- |
+| Hull length | 457.2 mm (18.00″) — canonical 269 ft |
+| Beam (nacelle tip-to-tip) | 288.9 mm (11.375″) — canonical 170 ft |
+| Propulsion | **2× (2× Changesun XRP 3660-2700KV 80mm 6S, tandem series) per nacelle** + 1× XFLY X4 PRO 40mm 4S fuselage |
+| Nacelle pod | 93.5 mm OD × **230 mm** length (tandem dual-EDF) · ID 83 mm |
+| Hover thrust | **11,250 g** (10,600 g nacelles + 650 g fuselage) |
+| ESCs | **4× Hobbywing Platinum PRO V4 120A** (nacelles, one per EDF) + 1× BLHeli32 40A (fuselage) |
+| Governor (Rev L new) | **PID closed-loop RPM per EDF · 500 Hz M4F · BDSHOT 1 kHz feedback** |
+| Avionics dry mass | **420 g** (8× PocketBeagle 2 Industrial + 4× Cape-A + 4× Cape-B + 4× RCRS-49 sub-modules + GPS ×4 + radios) |
+| Airframe dry mass | **3,213 g** (Rev L 3,197 g + 16 g PB2-I net delta) |
+| T/W empty | **3.11:1** (6S 4000mAh, 3,623 g AUW) |
+| T/W with 250 g cargo | **2.99:1** (6S 2800mAh, 3,758 g AUW) |
+| T/W one EDF failed | **2.41:1** — partner EDF continues, fault latched |
+| T/W one nacelle lost | **1.64:1** — FC RTH |
+| Max payload | **1,392 g (3.07 lb)** at T/W = 2.0 |
+| Compute nodes | **8 nodes:** FC1–FC4 (Cape-A, sensor/flight) + CN1–CN4 (Cape-B, comms/payload) |
+| FC node hardware | **PocketBeagle 2 Industrial (AM6254)** + Cape-A-2 85×55mm — ICM-42688-P IMU, BMP388 baro, u-blox M10Q GPS, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0** · DK 2820-100003007-ND |
+| CN node hardware | **PocketBeagle 2 Industrial (AM6254)** + Cape-B-2 90×60mm — SiK 915MHz, LoRa RFM95W 915MHz, TI WL1837MOD WiFi/BT, RCRS-49 sub-module, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0**; ATF16V8BQL CPLD write-blocker (log μSD) · DK 2820-100003007-ND |
+| Bay assignments | Bay A: CN1+FC1 · Bay B: CN2+FC2 · Bay D: CN3+FC3 · Bay E: CN4+FC4 (CN lower, FC upper per bay) |
+| Cape variant layout | **v2 · v2 · v2 · v2 (nose → tail, Rev Q):** All 8 positions use Cape-A-2 / Cape-B-2 (EMI-hardened, 5 kV isolated CAN FD / RS-485 / Ethernet transceivers). Single-SKU procurement; Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 archived as of Rev Q. |
+| Bus order | CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4 — CN and FC interleaved on all data buses (CAN FD, RS-485, 1553) and power distribution; any single segment or bay power failure leaves ≥2 FC + ≥2 CN on both sides of the break |
+| Node role election | CAN FD heartbeat priority arbitration at boot — all 8 nodes identical hardware; master elected dynamically with automatic failover |
+| Radios | SiK 915MHz MAVLink + LoRa RFM95W 915MHz backup + TI WL1837MOD WiFi/BT GCS + 49MHz RCRS-49 RC; all 4 on every CN node; software-elected master per link |
+| Obstacle avoidance | 12× VL53L5CX 8×8 ToF sensors, dual redundant arrays (A on FC3 Bay D, B on FC1 Bay A) |
+| Cargo | 101.6 × 76.2 × 76.2 mm bay, clamshell doors, N20 winch + auto-latch cradle |
+| Security | ATF16V8BQL CPLD write-blocker (log μSD, all Cape-B nodes) + **SLB9670 TPM 2.0 on all 8 nodes** (Cape-A and Cape-B) + W25Q128JV NOR flash circular log buffer |
+| Navigation lights | ICAO Annex 2 / 14 CFR 91.209 (6-position) |
+| Access panels | 6 removable panels A–F (bayonet/screw/hinge/magnet) |
+| Build estimate | 100–130 hours across all phases |
 
 ---
 

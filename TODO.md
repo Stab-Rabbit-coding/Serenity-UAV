@@ -1,4 +1,4 @@
-# Serenity UAV — Work Breakdown Structure
+7# Serenity UAV — Work Breakdown Structure
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
@@ -10,9 +10,9 @@
 ## Quick-Reference: End State vs. Current State
 
 | Domain          | End State (Rev P)                                                                                                                      | Current Status                                                                                                                                                                                   |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Hull            | 609.6 mm PETG / PU foam / CF skeleton                                                                                                  | SCAD sources complete; cargo section shell updated to Rev S (clamshell opening); 3 Rev-O-specific STLs not yet rendered                                                                          |
-| Nacelles        | 2× 50mm tandem EDF, CG pivot Z=83mm, M=1.0 gear, iris nozzle                                                                           | `nacelle_pod_50mm_tandem.scad` complete; Rev O stator shells (`_revo.stl`) NOT yet rendered                                                                                                      |
+
+| Hull            | 609.6 mm PETG-CF / PU foam / CF skeleton                                                                                                  | SCAD sources complete; cargo section shell updated to Rev S (clamshell opening); 3 Rev-O-specific STLs not yet rendered                                                                          |
+| Nacelles        | 2× 50mm tandem EDF with internal stator, CG pivot Z=83mm, M=1.0 gear, iris nozzle, **2232g** thrust per nacelle                                                                        | `nacelle_pod_50mm_tandem.scad` complete; Rev O stator shells (`_revo.stl`) NOT yet rendered                                                                                                      |
 | Rear propulsion | 120mm 6S EDF, 4-scoop radial intake, iris nozzle                                                                                       | `s_edf_120_motor_mount.stl` ✓, `s_edf_120_thrust_tube.stl` ✓; intake frame + plenum SCAD complete, STLs missing                                                                                  |
 | Cargo bay       | Clamshell doors + SG90 servos + DRV8833 + N20 winch + Dyneema + auto-latch + GPS ring + FPV bezel                                      | ✓ All 13 cargo STLs generated (PR #21 + PR #22 2026-06-01); BOM updated bom_revP.json/csv; gondola shell open                                                                                    |
 | PCBs            | Cape-A-1, Cape-B-1 assembled; XCVR-49MHZ-2 (supersedes -1) fabricated; Cape-A-2, Cape-B-2, XCVR-49MHZ-2 EMI-hardened variants designed | All gerbers current as of 2026-06-04 (`avionics/kicad/gerbers/`); XCVR-49MHZ-2 PCB complete (63 footprints, 27 nets, 50Ω RF chain, 6-element LPF, full EMI stage); XCVR-49MHZ-1 superseded by v2 |
@@ -145,10 +145,14 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 
 ### 1.2a — PCB Design: Cape-A-2, Cape-B-2, and XCVR-49MHZ-2 (EMI-Hardened Variants)
 
+#### ***EM hardening Objective is to ensure safe and controlled operations in hostile em/rf environments such as the vicinity of radiating commercial broadcast, amateur radio and cellular towers.***
+
 Design files on branch `claude/cape-em-harsh-variants-9Yfr1`. Schematics (`*.kicad_sch`) and PCB
 layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been generated or DRC-verified.
 
-## Key changes from -1 variants
+**Node placement — v2 · v2 · v2 · v2 (nose → tail, Rev Q):** All 8 nodes use Cape-A-2 / Cape-B-2 (EMI-hardened, 5 kV isolated CAN FD / RS-485 / Ethernet transceivers). Rev Q standardises on a single hardened SKU across all bays. Cape-A-1, Cape-B-1, and XCVR-49MHZ-1 are archived as of Rev Q (2026-06-05). Procurement requires: 4× Cape-A-2, 4× Cape-B-2, 4× XCVR-49MHZ-2.
+
+**Key changes from -1 variants:**
 
 - **CAN FD**: ATA6561 (non-isolated) → ISOW1044BDFMR (TI, SOIC-16W, 5 kV reinforced isolation +
 
@@ -184,6 +188,8 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     `complete_xcvr_49mhz2.py`; 14 files in `avionics/kicad/gerbers/XCVR-49MHZ-2/`. component placement still needs work.
     Supersedes XCVR-49MHZ-1 for all production orders. \*
 
+- [x] **Remove WiFi, SiK, and LoRa antennas from CAPE-B-2** — added §13 antenna filter chains to CAPE-B-2.kicad_sch: each radio ANT pin routes through a Johanson BPF (FL_LORA/FL_SIK: 0915LP15B0100E; FL_WIFI: 2450BP15B050E) and RCLAMP0502B ESD shunt to a dedicated SMA connector (J_SMA_LORA, J_SMA_WIFI, J_SMA_SIK). SiK uses Hirose U.FL J_SIK_ANT. All connector shells PGND. See CAPE-B-2.md §13. _(done 2026-06-05)_
+- [ ] **Re-evaluate CAPE-B-2 board space** — with RF antenna modules removed, assess available area; if feasible, restore the second Ethernet PHY and connectors to CAPE-B-2.
 - [ ] **FCC Part 95 Subpart D pre-compliance checklist for XCVR-49MHZ-2** — document center
 
     frequency accuracy (±0.005% per 47 CFR 95.655), ERP (≤100 mW), harmonic suppression ≥40 dBc at
@@ -197,6 +203,10 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 - [ ] **Merge `claude/cape-em-harsh-variants-9Yfr1` → master** after gerbers pass DRC and
 
     pre-compliance checklist is signed off.
+
+- [ ] Design Faraday cages / boxes to protect all PCBs, minimizing weight and space but ensuring needed protection. 
+
+- [ ] Specify / implement tightly twisted pair bonded shielded wiring and cables throughout the aircraft.
 
 ---
 
@@ -220,7 +230,44 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 ---
 
-### 1.4 — Documentation
+### 1.4 - EMI Hardening Beyond the PCBs to provide protection for 500 W/m^2 environment 
+
+#### 1.4.1 Faraday Enclosures
+
+- Must have proper bonding/grounding without loops.
+
+- Must have a fan and appropriate cooling
+
+- Must minimize weight, size, and cost
+
+- [ ] PB2-I + CAPE-A-2 Enclosure
+
+- Must account for all sensor inputs and flight control and comms outputs.
+
+- [ ] PB2-I + CAPE-B-2 Enclosure
+
+- Must account for RF routing from external antennas to internal transceivers
+
+- Must protect the log uSD
+
+#### 1.4.2. Antenna Placement and feedlines
+feelines
+- [ ] antenna mounts
+
+- [ ] feedline mux/demux
+
+- [ ] chokes
+
+#### 1.4.3 internode communication wiring
+
+#### 1.4.4 flight control signal wiring
+
+#### 1.4.5 power distribution
+
+
+---
+
+### 1.5 — Documentation
 
 - [x] **`serenity-rev-p.jsx`** — comprehensive 11-tab standalone Rev P specification created: Overview, Airframe, Propulsion, Avionics, Comms, Cargo, Security, Regulatory, BOM, Files, Build Status. Supersedes serenity-rev-o.jsx as current spec. _(done 2026-06-01)_
 - [x] **`bom_revP.json` + `bom_revP.csv`** — full Rev P BOM created: all Rev O items retained + 10 new cargo printed parts + SERVO-CARGO, DRV8833-CARGO, DYNEEMA-SK75, FOAM-GASKET-CARGO; cargo section expanded; totals updated (5 servos, ~$1,905 est.). _(done 2026-06-01)_
@@ -298,8 +345,8 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 | Item                                                                  | Qty      | Unit Cost | Total | Notes                                                     |
 | --------------------------------------------------------------------- | -------- | --------- | ----- | --------------------------------------------------------- |
 | PocketBeagle 2 Industrial (AM6254)                                    | 4×       | $51.03    | ~$204 | DK 2820-100003007-ND                                      |
-| Cape-A PCB (JLCPCB assembled)                                         | 2×       | ~$42      | ~$84  | FC nodes — use Cape-A-2 gerbers (EMI-hardened)            |
-| Cape-B PCB (JLCPCB assembled)                                         | 2×       | ~$80      | ~$160 | CN nodes — use Cape-B-2 gerbers (EMI-hardened)            |
+| Cape-A-2 PCB (JLCPCB assembled)                                       | 2×       | ~$55      | ~$110 | FC nodes — use Cape-A-2 gerbers (EMI-hardened, Rev Q)     |
+| Cape-B-2 PCB (JLCPCB assembled)                                       | 2×       | ~$95      | ~$190 | CN nodes — use Cape-B-2 gerbers (EMI-hardened, Rev Q)     |
 | XCVR-49MHZ-2 PCB (JLCPCB assembled)                                   | 2×       | ~$22      | ~$44  | RCRS sub-module — use XCVR-49MHZ-2 gerbers; supersedes v1 |
 | SiK 915MHz ground station radio                                       | 1×       | ~$15      | ~$15  | MAVLink GCS link                                          |
 | microSD 64GB (log, write-blocked)                                     | 2×       | ~$10      | ~$20  | CN1-LOG, CN2-LOG                                          |
@@ -310,20 +357,20 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 ### 2.5 — Avionics (Phase 7 — remaining 4 nodes + ToF arrays)
 
-| Item                                   | Qty      | Approx. Cost | Notes                               |
-| -------------------------------------- | -------- | ------------ | ----------------------------------- |
-| PocketBeagle 2 Industrial (AM6254)     | 4×       | ~$204        | CN3, FC3, CN4, FC4                  |
-| Cape-A PCB (JLCPCB assembled)          | 2×       | ~$84         | FC3, FC4 — use Cape-A-2 gerbers     |
-| Cape-B PCB (JLCPCB assembled)          | 2×       | ~$160        | CN3, CN4 — use Cape-B-2 gerbers     |
-| XCVR-49MHZ-2 PCB (assembled)           | 2×       | ~$44         | CN3, CN4 — use XCVR-49MHZ-2 gerbers |
-| microSD 64GB (log)                     | 2×       | ~$20         | CN3-LOG, CN4-LOG                    |
-| VL53L5CX 8×8 ToF sensor                | 12×      | ~$84         | Dual OA arrays                      |
-| TCA9548A 8-ch I²C multiplexer          | 2×       | ~$3          | One per array host                  |
-| MCP23008 8-port I²C GPIO expander      | 2×       | ~$2.40       | XSHUT control                       |
-| JST-SH1.0 4-wire sensor cable 300mm    | 12×      | ~$12         | ToF sensor leads                    |
-| 5mm PMMA disc 0.5mm thick              | 12×      | ~$6          | ToF aperture covers                 |
-| UV adhesive                            | 1×       | ~$6          | ToF aperture seal                   |
-| JST-GH cables (remaining bus segments) | assorted | ~$20         | Ring completion                     |
+| Item                                   | Qty      | Approx. Cost | Notes                                |
+| -------------------------------------- | -------- | ------------ | ------------------------------------ |
+| PocketBeagle 2 Industrial (AM6254)     | 4×       | ~$204        | CN3, FC3, CN4, FC4                   |
+| Cape-A-2 PCB (JLCPCB assembled)        | 2×       | ~$110        | FC3, FC4 — use Cape-A-2 gerbers      |
+| Cape-B-2 PCB (JLCPCB assembled)        | 2×       | ~$190        | CN3, CN4 — use Cape-B-2 gerbers      |
+| XCVR-49MHZ-2 PCB (assembled)           | 2×       | ~$44         | CN3, CN4 — use XCVR-49MHZ-2 gerbers  |
+| microSD 64GB (log)                     | 2×       | ~$20         | CN3-LOG, CN4-LOG                     |
+| VL53L5CX 8×8 ToF sensor                | 12×      | ~$84         | Dual OA arrays                       |
+| TCA9548A 8-ch I²C multiplexer          | 2×       | ~$3          | One per array host                   |
+| MCP23008 8-port I²C GPIO expander      | 2×       | ~$2.40       | XSHUT control                        |
+| JST-SH1.0 4-wire sensor cable 300mm    | 12×      | ~$12         | ToF sensor leads                     |
+| 5mm PMMA disc 0.5mm thick              | 12×      | ~$6          | ToF aperture covers                  |
+| UV adhesive                            | 1×       | ~$6          | ToF aperture seal                    |
+| JST-GH cables (remaining bus segments) | assorted | ~$20         | Ring completion                      |
 
 ### 2.6 — Cargo System (Phase 8)
 
@@ -607,8 +654,12 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 ## CN1+FC1 installation (Bay A — nose)
 
-- [ ] Mount CN1 Cape-B on Bay A floor standoffs (M2.5 nylon 6mm). Insert PB2-I. Secure.
-- [ ] Mount FC1 Cape-A on inter-cape standoffs (M2.5 nylon 20mm) above CN1. Insert second PB2-I.
+**CN1+FC1 installation (Bay A — nose) — Cape-B-2 / Cape-A-2 (v2 EM-hardened, Rev Q):**
+> Bay A is the CAN FD / RS-485 / 1553B bus start termination node. Use Cape-B-2 (ADM2795E
+> RS-485, ISOW1044 CAN FD, ADIN1300 Ethernet) and Cape-A-2 for 5 kV isolated transceivers at
+> this end of the bus. All 8 bays use v2 capes as of Rev Q.
+- [ ] Mount CN1 Cape-B-2 on Bay A floor standoffs (M2.5 nylon 6mm). Insert PB2-I. Secure.
+- [ ] Mount FC1 Cape-A-2 on inter-cape standoffs (M2.5 nylon 20mm) above CN1. Insert second PB2-I.
 - [ ] Flash OS to eMMC on CN1 and FC1 via USB-C before installation.
 - [ ] Install log μSD (64GB) in CN1 Cape-B log slot. Label: **CN1-LOG**.
 - [ ] Seat RCRS-49 sub-module on CN1 Cape-B header; connect RCRS coax to forward 49MHz wire post.
@@ -619,16 +670,17 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 - [ ] Connect MIL-STD-1553: FC1 = Bus Controller (primary); CN1 = RT 0x01.
 - [ ] Cap Bay E end of ETH-EA conduit (will connect to FC4 in Phase 7); connect Bay A end to CN1 Cape-B ETH-2.
 
-## CN2+FC2 installation (Bay B — dorsal fwd)
-
-- [ ] Mount CN2 Cape-B on Bay B floor standoffs; insert PB2-I; mount FC2 Cape-A above; insert second PB2-I.
+**CN2+FC2 installation (Bay B — dorsal fwd) — Cape-B-2 / Cape-A-2 (v2 EM-hardened, Rev Q):**
+> Bay B is an inner ring node. Rev Q upgraded from Cape-B-1/Cape-A-1 to v2 EMI-hardened capes
+> (ADIN1300BCPZ 1000BASE-T PHY with 5 kV isolation). All 8 bays use v2 as of Rev Q.
+- [ ] Mount CN2 Cape-B-2 on Bay B floor standoffs; insert PB2-I; mount FC2 Cape-A-2 above; insert second PB2-I.
 - [ ] Flash OS to eMMC on CN2 and FC2 before installation.
 - [ ] Install log μSD (64GB) in CN2 Cape-B log slot. Label: **CN2-LOG**.
 - [ ] Seat RCRS-49 sub-module on CN2 header.
 - [ ] Route FC2 GPS coax through dorsal PTFE sleeve (sta ~130mm); mount GPS patch on dorsal hull, face UP.
 - [ ] Continue CAN FD daisy-chain Bay A→Bay B: CN2 → FC2 + temporary 120Ω at FC2 (remove Phase 7).
 - [ ] Continue RS-485 daisy-chain Bay A→Bay B.
-- [ ] Connect ETH-AB (Bay A→Bay B): FC1 Cape-A ETH-1 → CN2 Cape-B ETH-2 (FC1↔CN2 Ethernet ring link).
+- [ ] Connect ETH-AB (Bay A→Bay B): FC1 Cape-A-2 ETH-1 → CN2 Cape-B-1 ETH-2 (FC1↔CN2 Ethernet ring link).
 - [ ] Cap Bay D end of ETH-BD (will connect to CN3 in Phase 7).
 - [ ] Power taps: connect CN1, FC1, CN2, FC2 power leads from PWR conduit; verify 5V ±0.05V at each header.
 
@@ -687,10 +739,11 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 **Goal:** All 8 nodes installed, full ring redundancy, 12× VL53L5CX dual-redundant obstacle avoidance operational.
 
-## CN3+FC3 installation (Bay D — dorsal aft)
-
-- [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Cape-A Bay B.
-- [ ] Mount CN3 Cape-B on Bay D floor standoffs; insert PB2-I; mount FC3 Cape-A above.
+**CN3+FC3 installation (Bay D — dorsal aft) — Cape-B-2 / Cape-A-2 (v2 EM-hardened, Rev Q):**
+> Bay D is an inner ring node. Rev Q upgraded from Cape-B-1/Cape-A-1 to v2 EMI-hardened capes.
+> All 8 bays use v2 as of Rev Q.
+- [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Cape-A-2 Bay B.
+- [ ] Mount CN3 Cape-B-2 on Bay D floor standoffs; insert PB2-I; mount FC3 Cape-A-2 above.
 - [ ] Flash OS to eMMC; install log μSD. Label: **CN3-LOG**.
 - [ ] Seat RCRS-49 sub-module on CN3 header.
 - [ ] Route FC3 GPS coax through dorsal PTFE sleeve (sta ~275mm); mount GPS patch, face UP.
@@ -699,9 +752,11 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 - [ ] Connect ETH-BD (Bay B→Bay D): FC2 Cape-A ETH-1 → CN3 Cape-B ETH-2.
 - [ ] Power tap Bay D; verify 5V ±0.05V.
 
-## CN4+FC4 installation (Bay E — aft service)
-
-- [ ] Mount CN4 Cape-B on Bay E standoffs; insert PB2-I; mount FC4 Cape-A above.
+**CN4+FC4 installation (Bay E — aft service) — Cape-B-2 / Cape-A-2 (v2 EM-hardened, Rev Q):**
+> Bay E is the CAN FD / RS-485 / 1553B bus end termination node and is physically closest to the
+> nacelle motor wiring and rear 120mm EDF. Use Cape-B-2 / Cape-A-2 for 5 kV isolated
+> transceivers at this end of the bus. All 8 bays use v2 as of Rev Q.
+- [ ] Mount CN4 Cape-B-2 on Bay E standoffs; insert PB2-I; mount FC4 Cape-A-2 above.
 - [ ] Flash OS to eMMC; install log μSD. Label: **CN4-LOG**.
 - [ ] Seat RCRS-49 sub-module on CN4 header.
 - [ ] Route FC4 GPS coax through dorsal PTFE sleeve (sta ~350mm); mount GPS patch, face UP.
