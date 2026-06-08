@@ -2,8 +2,8 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-06-07  
-**Current design revision:** Rev Q (master) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
+**Last updated:** 2026-06-08  
+**Current design revision:** Rev Q (master) / branch Rev S2 (cargo shell) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 ---
 
@@ -104,6 +104,54 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 - [x] **`s_cargo_sect_shell24.scad` Rev S** — belly opening (100×9×165 mm), 2× hinge-pin blocks
   (3.3 mm bore + M3 grub-screw tap), 2× SG90 servo mounting pads (4× M2.5 pilots each), 4×
   latch-catch lips (Z=42/122 mm at each X frame edge). *(done 2026-06-01)*
+- [x] **`s_cargo_sect_shell24.scad` Rev S1** — wing root mortises (30.8×20.8×15 mm), spar bearing
+  blocks (22 mm OD × 10 mm boss, M3 grub-screw), full-Z spar bore (Ø12.3 mm), and nacelle tilt
+  servo mount blocks (52×30×8 mm, 4× RX-M3×5.7 inserts) at port + stbd interior Z walls.
+  All 4 spatial conflicts resolved (NSVMT_X_CEN moved AFT to −147.6 mm). Load FOS ≥ 11 vs 4.0
+  AUVSI target. *(done 2026-06-08, PR #42)*
+- [x] **`s_cargo_sect_shell24.scad` Rev S2** — Inara and River avionics bay dorsal standoffs
+  (8× M3 boss posts, ±40×±25 mm pattern) + dorsal access panel cuts (85×55 mm each) for Cape-B
+  (90×60 mm) at port half (Z_CEN=118 mm, Inara) and stbd half (Z_CEN=45 mm, River). GPS_PORT/STBD
+  co-located for minimal SMA routing. *(done 2026-06-08, PR #42)*
+- [x] **`nacelle_servo_bracket.scad`** — U-channel saddle clamp for DS3218MG nacelle tilt servo;
+  4× M3×10 SHCS flanges at ±17.5×±8 mm; 10×6 mm lead notch; FOS_shear=85.7. *(done 2026-06-08)*
+- [x] **`REVN_BUILD_GUIDE_24IN.md` Phase 3 anti-rework** — spar grub-screw torque sequence
+  (0.5 N·m each, before foam pour) with consequence documentation. *(done 2026-06-08)*
+
+- [ ] **`s_cargo_sect_shell24.scad` — shuttle exterior fairing profiles on Z walls.**
+  Canonical Serenity shuttles (Shuttle 1 = Inara's, Shuttle 2) sit just above the wing roots on
+  the exterior Z faces of the cargo section. Their outline profiles need to be added as raised
+  exterior features at Y≈−273..−213 mm on both Z walls, matching the canonical hull geometry.
+  Interior avionics zone (Inara + River dorsal band) coexists — shuttles are exterior, avionics
+  interior. Reference the Thingiverse low-detail hull for shuttle fairing geometry.
+  **BLOCKS canonical hull fidelity (CLAUDE.md requirement: keep skin geometry true to reference).**
+
+- [ ] **Avionics dorsal access covers for Inara and River bays (two parts).**
+  Create `inara_access_cover.scad` and `river_access_cover.scad` (or a single parametric SCAD):
+  PETG clip-on or M2-screw panel, 90×60 mm footprint (Cape-B), Ø38 mm GPS clearance bore centred
+  at GPS antenna position (Inara: Z_GPS=104.7 mm; River: Z_GPS=44.7 mm), 2.5 mm seating shoulder
+  lip. Must be removable with common hand tools per CLAUDE.md field disassembly requirement.
+  Add to Phase 0 print schedule.
+
+- [ ] **Simon bay — define avionics bay in rear section SCAD file.**
+  Simon's stack (Cape-B-2 + Cape-A-2, 90×60 mm, 29.2 mm stack height) needs boss standoffs and
+  dorsal access panel in the rear engine cone SCAD (pre-Phase 11) or the middle ring SCAD (Phase 11
+  and beyond, once rear EDF occupies the cone). Verify rear section bounds and available dorsal band
+  before adding geometry. Reference CLAUDE.md PACE: Simon = alternate watchdog, aft EDF control.
+  **BLOCKS Phase 6 full 8-node installation.**
+
+- [ ] **Update REVN_BUILD_GUIDE_24IN.md bay layout table** to reflect revised avionics stack
+  positions (Inara + River in cargo section dorsal band; Shepherd Book in head section forward;
+  Simon in rear cone pre-Phase 11, middle ring post-Phase 11). Current guide Bays A–E are from an
+  older layout that does not match the cargo-section dorsal placement in Rev S2.
+
+- [ ] **Regenerate `s_cargo_sect_shell24.stl`** from Rev S2 SCAD source. Run:
+  `openscad -o airframe/stls/fuselage/s_cargo_sect_shell24.stl
+    airframe/openscad/fuselage/cargo/s_cargo_sect_shell24.scad`
+  Verify in slicer: wing mortises at both Z walls; spar bore at X=−70 mm; 8 dorsal boss posts;
+  two 85×55 mm dorsal panel openings. Z-range must be 0..163 mm; all features inside hull skin.
+  **BLOCKS Phase 0 cargo section printing.**
+
 - [ ] Add motor-mount and DRV8833-tray boss locations to `s_cargo_sect_shell24.scad` interior
   drawing notes (Phase 1 pre-pour checklist reference).
 - [ ] Add SG90 bell-crank boss to inner face of each door panel for pushrod attachment.
@@ -560,6 +608,9 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 | cargo_door_stbd.stl | CF-PETG | 0.15mm | 40%, 4 walls | 1 | Generated (PR #22) — reprint if hinge changes |
 | cargo_cradle_autolatch.stl | PETG | 0.20mm | 30% | 1 | Already generated (PR #21) — reprint if dimensions change |
 | cargo_winch_spool.stl | PETG | 0.20mm | 40% | 1 | Already generated (PR #21) — reprint if dimensions change |
+| nacelle_servo_bracket.stl | CF-PETG | 0.15mm | 40%, 4 walls | 2 | One per nacelle; from `airframe/openscad/nacelles/nacelle_servo_bracket.scad` (Rev S1). Print with channel mouth up; no supports needed. VERIFY M3 hole ±17.5×±8 mm pattern matches NSVMT inserts in slicer before printing. |
+| inara_access_cover.stl | PETG | 0.20mm | 40% | 1 | Dorsal access cover for Inara bay; 90×60 mm, Ø38 mm GPS bore. SCAD not yet created — **BLOCKS printing.** |
+| river_access_cover.stl | PETG | 0.20mm | 40% | 1 | Dorsal access cover for River bay; same spec. SCAD not yet created — **BLOCKS printing.** |
 
 **CF cuts:**
 
