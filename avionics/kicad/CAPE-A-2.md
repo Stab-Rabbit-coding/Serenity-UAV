@@ -1,6 +1,7 @@
-# CAPE-A-2 — EMI-Hardened Flight Control & Sensor Cape
+# Wash (CAPE-A-2) — EMI-Hardened Flight Control & Sensor Cape
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+**Callsign:** Wash
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
 **Revision:** A (EMI-hardened variant of CAPE-A-1 Rev M)
 **Date:** 2026-06-02
@@ -10,7 +11,7 @@
 
 ## Purpose
 
-CAPE-A-2 is an electromagnetic-environment-hardened variant of CAPE-A-1 (Rev M) intended
+Wash (CAPE-A-2) is an electromagnetic-environment-hardened variant of CAPE-A-1 (Rev M) intended
 for operation in the nacelle bays and fuselage sections of the Serenity UAV where EDF motor
 switching noise, high-current ESC PWM harmonics, and external RF threats require a higher
 level of conducted and radiated immunity than the standard Rev M design provides.
@@ -23,24 +24,38 @@ protective hardening — no firmware or DTS changes are required.
 
 ## Changes from CAPE-A-1 (Rev M)
 
-### 1. Ethernet PHY removal (space recovery)
+### 1. EMI-Hardened Dual Ethernet PHY (new in Rev A)
 
-The two DP83825I 100BASE-TX PHYs and their associated magnetics and RJ45-style connectors
-are removed. The 18 PocketBeagle 2 P2 expansion-header pins formerly used for RMII0/1,
-MDC, and MDIO are left as DNP (do-not-populate) / no-connect. The board-to-board
-Ethernet ring remains available in the standard CAPE-A-1 variant; in CAPE-A-2 nodes,
-inter-node communication relies on CAN FD (primary) and RS-485 (secondary) and
-MIL-STD-1553. All three remaining buses carry adequate bandwidth for flight-critical
-messaging in degraded connectivity scenarios.
+Two Texas Instruments DP83825I 10/100BASE-TX PHYs are included with full EMI
+hardening. Each PHY connects via RMII to one of the PocketBeagle 2 AM6254's
+two RGMII/RMII Ethernet ports (RMII0 and RMII1).
 
-**Rationale:** 100BASE-TX 100 MHz edge rates are a primary source of both conducted and
-radiated EMI on the cape. Removing the PHYs eliminates this emission source and frees
-approximately 12 × 10 mm of board area for EMI filter components.
+EMI hardening measures per PHY:
+- **LAN magnetics:** Pulse Electronics HX1188NL dual 10/100BASE-TX transformer
+  with integrated common-mode choke (1500 V isolation, SOIC-16).
+- **Additional CMC:** Bourns SRF2012-100Y on PHY-side MDI lines (belt-and-suspenders).
+- **TVS protection:** 2× PRTR5V0U2X (dual-channel SOT-363) on connector-side MDI lines.
+- **Bypass capacitors:** 100nF + 10nF + 1nF triplet on all VDD pins (100BASE-TX edge
+  rates suppressed; 100 MHz emissions are primarily the VDD ripple, not MDI lines).
+- **1.8V supply:** TPS62933 SMPS (3.3V→1.8V, 300mA) for PHY AVDD and DVDD.
+  Switching frequency 2.2 MHz — far from 100BASE-TX 125 MHz spectral content.
+- **RBIAS:** 49.9Ω 1% 0402 resistor on RBIAS pin.
+- **Connector:** JST SM06B-GHS-TB-1MP (6-pin shielded GH) — GND/TX+/TX-/RX+/RX-/GND,
+  SHIELD pin to PGND. One connector per PHY, both populated on the PCB.
+
+PHY1 connects to PocketBeagle 2 RMII0; PHY2 connects to RMII1.
+MDC and MDIO are shared between both PHYs (different PHY addresses: PHY1=0x01, PHY2=0x02).
+
+Ethernet connector assignments:
+| Connector | PHY | Port | Signals |
+|---|---|---|---|
+| J_ETH1 | DP83825I PHY1 | RMII0 / ETH0 | ETH1_TX+/TX-/RX+/RX-, GND, SHIELD |
+| J_ETH2 | DP83825I PHY2 | RMII1 / ETH1 | ETH2_TX+/TX-/RX+/RX-, GND, SHIELD |
 
 ### 2. CAN FD transceiver: ATA6561 → ISOW1044BDFMR
 
-| Parameter | CAPE-A-1 | CAPE-A-2 |
-| --- | --- | --- |
+| Parameter | CAPE-A-1 | Wash (CAPE-A-2) |
+|---|---|---|
 | Part | ATA6561 (SOIC-8) | ISOW1044BDFMR (SOIC-16) |
 | Isolation | None (non-isolated) | 5000 V RMS reinforced (IEC 62368-1) |
 | Surge | ±25 V bus fault protection | ±42 V bus fault protection |
@@ -63,8 +78,8 @@ without compromising DC isolation.
 
 ### 3. RS-485 transceiver: MAX3485E → ADM2795EBRWZ
 
-| Parameter | CAPE-A-1 | CAPE-A-2 |
-| --- | --- | --- |
+| Parameter | CAPE-A-1 | Wash (CAPE-A-2) |
+|---|---|---|
 | Part | MAX3485E (SOIC-8) | ADM2795EBRWZ (SOIC-20W) |
 | Isolation | None (non-isolated) | 5000 V RMS reinforced (IEC 62368-1) |
 | Surge / bus fault | ±12 V (standard RS-485) | ±42 V (exceeds IEC 61000-4-5 ±2 kV on bus) |
@@ -191,19 +206,28 @@ value cannot address.
 ### Removed
 
 | Reference | Part | Notes |
-| --- | --- | --- |
-| ETH1-PHY | DP83825I | Ethernet PHY — removed |
-| ETH2-PHY | DP83825I | Ethernet PHY — removed |
-| U10 (TPS62933) | 3.3→1.8 V SMPS for PHY AVDD | No longer required |
-| ETH-P connector | JST-GH 6-pin | Ethernet port A — removed |
-| ETH-N connector | JST-GH 6-pin | Ethernet port B — removed |
+|---|---|---|
 | CAN-TR (ATA6561) | Non-isolated CAN FD transceiver | Replaced by ISOW1044BDFMR |
 | RS485 (MAX3485E) | Non-isolated RS-485 | Replaced by ADM2795EBRWZ |
 
 ### Added
 
 | Reference | Part | Function |
-| --- | --- | --- |
+|---|---|---|
+| ETH1-PHY | DP83825I | RMII PHY for ETH0, EMI-hardened |
+| ETH2-PHY | DP83825I | RMII PHY for ETH1, EMI-hardened |
+| U_ETH1_1V8 | TPS62933 | 1.8V supply for ETH1 PHY (AVDD, DVDD) |
+| U_ETH2_1V8 | TPS62933 | 1.8V supply for ETH2 PHY (AVDD, DVDD) |
+| HX1188_1 | HX1188NL | ETH1 LAN transformer + integrated CMC |
+| HX1188_2 | HX1188NL | ETH2 LAN transformer + integrated CMC |
+| TVS_ETH1_TX | PRTR5V0U2X | ETH1 TX+/TX- TVS protection |
+| TVS_ETH1_RX | PRTR5V0U2X | ETH1 RX+/RX- TVS protection |
+| TVS_ETH2_TX | PRTR5V0U2X | ETH2 TX+/TX- TVS protection |
+| TVS_ETH2_RX | PRTR5V0U2X | ETH2 RX+/RX- TVS protection |
+| CM_ETH1 | SRF2012-100Y | ETH1 PHY-side MDI common-mode choke |
+| CM_ETH2 | SRF2012-100Y | ETH2 PHY-side MDI common-mode choke |
+| J_ETH1 | JST SM06B-GHS-TB-1MP | ETH1 shielded 6-pin GH connector |
+| J_ETH2 | JST SM06B-GHS-TB-1MP | ETH2 shielded 6-pin GH connector |
 | CAN-ISO | ISOW1044BDFMR | Isolated CAN FD transceiver (5 kV reinforced) |
 | RS485-ISO | ADM2795EBRWZ | Isolated RS-485 transceiver (5 kV reinforced, ±42 V) |
 | CM1 | Bourns SRF2012-100Y | CAN bus common-mode choke |
@@ -225,11 +249,15 @@ value cannot address.
 | Rail | Consumers | Max current |
 | --- | --- | --- |
 | +5V (filtered) | PB2 VIN | 2.0 A |
-| +3V3 (LDO) | ICM-42688-P, BMP388, M10Q, SLB9670, ISOW1044BDFMR VCC1, ADM2795EBRWZ VDD1 | 600 mA |
+| +3V3 (LDO) | ICM-42688-P, BMP388, M10Q, SLB9670, ISOW1044BDFMR VCC1, ADM2795EBRWZ VDD1, 2× DP83825I IOVDD (55 mA each = 110 mA), 2× TPS62933 VIN quiescent | 720 mA |
 | +3V3 isolated bus-side (VCC2/VDD2 — internal) | CAN bus stub loads, RS-485 line drivers | ≤ 150 mA combined (limited by ISOW1044B) |
+| +1V8_ETH1 (TPS62933 output) | DP83825I PHY1 AVDD + DVDD | 80 mA |
+| +1V8_ETH2 (TPS62933 output) | DP83825I PHY2 AVDD + DVDD | 80 mA |
 
-DP83825I removal saves approximately 100 mA from the 3.3V rail (50 mA per PHY). Net 3.3V
-budget is essentially unchanged due to new isolated transceiver overhead.
+Both DP83825I PHYs are populated and active. The two TPS62933 converters (3.3V→1.8V,
+300 mA rated) supply AVDD and DVDD for each PHY respectively. The +3V3 rail increases
+by approximately 110 mA IOVDD (2× 55 mA) plus two TPS62933 conversion losses (~10 mA
+each). Total +3V3 budget remains within the LDO regulator's rated capacity.
 
 ---
 
@@ -243,7 +271,7 @@ to the Serenity UAV airframe operating environment:
 | IEC 61000-4-2 | Level 4 (±8 kV contact, ±15 kV air) | ESD | TVS arrays at all field connectors |
 | IEC 61000-4-4 | Level 4 (4 kV peak) | EFT/Burst on signal lines | CMCs + isolated transceivers |
 | IEC 61000-4-5 | Level 3 (2 kV CM, 1 kV DM) | Surge | ±42 V bus fault on CAN/RS-485 |
-| MIL-STD-461G RE102 | Limit C | Radiated emissions | No 100BASE-TX emission source |
+| MIL-STD-461G RE102 | Limit C | Radiated emissions | 100BASE-TX EMI suppressed via HX1188NL magnetics, CMCs, and TVS arrays |
 | MIL-STD-461G RS103 | 200 V/m, 10 kHz–18 GHz | Radiated susceptibility | Isolated buses + chassis ground |
 
 Pre-compliance testing against IEC 61000-4-2 through 4-5 is required before first
@@ -251,216 +279,36 @@ flight. Formal MIL-STD-461G testing is deferred pending airframe integration.
 
 ---
 
-## 9. Shielded JST-GH Connectors
+## §14 — Field Connectors Summary
 
-All JST-GH connectors now include a SHIELD pin (number "MP") bonded to the PGND chassis
-ground net through the PCB mounting tab footprint.  This provides a low-impedance drain
-path for cable braid/foil shields.
+All field connectors use JST GH series (1.25 mm pitch) with shrouded shielded housings.
+SHIELD/MP pins on all connectors connect to chassis ground (PGND). Power pins are
+routed through the π-filter (FB1/C11/C12) before distribution to the cape rail.
 
-| Reference | Type | Signals | SHIELD tap (absolute, mm) |
+| Designator | Type | Pin Assignments | Function |
 |---|---|---|---|
-| J_VBAT | SM02B-GHS-TB-1MP | +VBAT / GND | (370.00, 562.08) |
-| J_SBUS | SM03B-GHS-TB-1MP | GND / +5V / SBUS_RAW | (100.00, 631.35) |
-| J_FAN | SM03B-GHS-TB-1MP | GND / +5V / FAN_PWM_A | (100.00, 691.35) |
+| J_PWR | SM04B-GHS-TB-1MP | 1=+5V_IN, 2=GND, 3=GND, 4=+5V_IN, MP=PGND | Power input (4-pin dual-rail entry) |
+| J_CAN | SM03B-GHS-TB-1MP | 1=CAN_A_H, 2=CAN_A_L, 3=GND, MP=PGND | CAN FD bus (ISOW1044BDFMR isolated) |
+| J_485 | SM03B-GHS-TB-1MP | 1=RS485_A_P, 2=RS485_A_N, 3=GND, MP=PGND | RS-485 half-duplex (ADM2795EBRWZ isolated) |
+| J_1553 | SM04B-GHS-TB-1MP | 1=BUS_1553_A_P, 2=BUS_1553_A_N, 3=GND, 4=PGND, MP=PGND | MIL-STD-1553B differential bus |
+| J_GPS | SM05B-GHS-TB-1MP | 1=GND, 2=+3V3, 3=GPS_TX(UART2_RX), 4=GPS_RX(UART2_TX), 5=GPS_PPS, MP=PGND | u-blox M10Q GPS module |
+| J_SERVO | SM06B-GHS-TB-1MP | 1=GND, 2=+5V, 3=SERVO_CH0, 4=SERVO_CH1, 5=SERVO_CH2, 6=SERVO_CH3, MP=PGND | Nacelle tilt servos (PWM) |
+| J_ESC | SM04B-GHS-TB-1MP | 1=ESC_PWM_0, 2=ESC_PWM_1, 3=ESC_PWM_2, 4=GND, MP=PGND | EDF ESC PWM / BDSHOT outputs |
+| J_ENC | SM04B-GHS-TB | 1=GND, 2=+3V3, 3=ENC_SDA, 4=ENC_SCL, MP=PGND | AS5600 nacelle tilt angle encoder (I2C) |
+| J_ETH1 | SM06B-GHS-TB-1MP | 1=GND, 2=ETH1_TX+, 3=ETH1_TX-, 4=ETH1_RX+, 5=ETH1_RX-, 6=GND, MP=PGND | Ethernet PHY1 (DP83825I, RMII0) |
+| J_ETH2 | SM06B-GHS-TB-1MP | 1=GND, 2=ETH2_TX+, 3=ETH2_TX-, 4=ETH2_RX+, 5=ETH2_RX-, 6=GND, MP=PGND | Ethernet PHY2 (DP83825I, RMII1) |
+| J_SBUS | SM03B-GHS-TB-1MP | 1=GND, 2=+5V, 3=SBUS_RAW, MP=PGND | RC receiver SBUS input (inverted via 74LVC1G14) |
+| J_VBAT | SM02B-GHS-TB-1MP | 1=VBAT_MON_P, 2=GND, MP=PGND | Battery voltage monitor (INA226 sense input) |
+| J_FAN | SM03B-GHS-TB-1MP | 1=GND, 2=+5V, 3=FAN_PWM_A, MP=PGND | Bay ventilation fan PWM control |
 
-**Cable assembly requirements for all JST-GH connectors:**
-
-- Cable type: individually foil-shielded conductors inside an overall braid/foil shield
-  (Belden 9533 or equivalent)
-- Drain wire: terminate to the connector mounting-tab PGND solder pad on the PCB
-- Ferrite clamp: Würth 74271222 snap-on ferrite (or Laird 28B0562-100 equivalent) placed
-  ≤ 25 mm from the connector body on each cable, both ends
-
----
-
-## 10. Bay Fan Connector (J_FAN)
-
-A 3-pin JST-GH connector J_FAN is provided for the bay Faraday enclosure ventilation fan.
-
-| Pin | Net | Description |
-|---|---|---|
-| 1 | GND | Fan return |
-| 2 | +5V | Fan power supply (80 mA max) |
-| 3 | FAN_PWM_A | PWM speed control — PocketBeagle 2 EHRPWM output |
-| MP | PGND | Cable shield drain |
-
-**Fan:** Sunon MF40100V2-1000U-A99 (40 × 40 × 10 mm, 5 V, 90 mA, 4450 RPM,
-brushless, three-wire PWM) or equivalent.  Rated 40–70 °C ambient.
-
-**PCB layout note:** J_FAN must be placed ≤ 5 mm from the bay wall cable
-penetration.  The FAN_PWM_A signal must be routed with a 100 Ω series resistor
-(R_FAN) to limit slew rate.  The fan cable must include a Würth 74271222 ferrite
-clamp on the PCB side of the wall penetration.
-
----
-
-## 11. Wiring Harness Requirements — All Bay Cables
-
-Every cable run entering or exiting an avionics bay must be:
-
-1. **Twisted** — every signal pair individually twisted (≥ 25 twists/metre).
-2. **Shielded** — overall foil + braid shield, coverage ≥ 85 %.
-3. **Terminated** — shield drain wire bonded to PGND at the board connector end only
-   (single-point connection per cable run to prevent ground loops).
-4. **Ferrite choke** — Würth 74271222 snap-on or equivalent on every cable,
-   ≤ 25 mm from the connector body, at BOTH ends of each run.
-
-Specified cable types by bus:
-
-| Bus / Signal | Min Cable Type | Char. Impedance | Notes |
-|---|---|---|---|
-| CAN FD | Belden 3105A twisted-pair, shielded | 120 Ω | Per ISO 11898-2 |
-| RS-485 | Belden 3106A twisted-pair, shielded | 120 Ω | — |
-| MIL-STD-1553 | MIL-C-17/176 twinax, shielded | 78 Ω | Per MIL-STD-1553B §3.4 |
-| PWM / servo | 3-wire individually shielded (Belden 9367 or equiv.) | — | Shield per wire |
-| +5V power | 18 AWG min, overall shielded, twisted pair | — | For loads > 250 mA |
-| +12V power | 18 AWG min, overall shielded, twisted pair | — | — |
-| Ethernet | Cat-6a FTP (foil-twisted-pair) | 100 Ω | Per TIA-568-C.2 |
-| SBUS | Belden 9364 shielded, 3-conductor | — | Inverted UART |
-| Fan power | 3-wire shielded, 24 AWG min | — | Per J_FAN above |
-
----
-
-## 12. Avionics Bay Faraday Enclosure
-
-Each of the 4 avionics bays (one Cape-A-2 FC node + one Cape-B-2 CN node per bay)
-must be enclosed in a Faraday shielding envelope to achieve the MIL-STD-461G RS103
-immunity target (200 V/m, 10 kHz–18 GHz).
-
-### 12.1 Foil Liner Construction
-
-- **Copper foil:** 3M 1181 copper foil tape, 63.5 mm wide, 0.089 mm thick,
-  acrylic adhesive, DC resistance ≤ 0.005 Ω/sq.
-- **Coverage:** Apply to all interior bay surfaces — ceiling, floor, and all four
-  walls.  Line the removable access panel interior as well.
-- **Seam overlap:** Lap ≥ 13 mm at all tape seams; press seams flat with a roller
-  for continuous electrical contact.
-- **Ground bond:** One solder bond point only — solder the foil liner to the PGND
-  chassis star under the bay mounting plate (single-point connection prevents
-  internal ground loops).
-
-### 12.2 Fan Ventilation Aperture
-
-- **Fan model:** Sunon MF40100V2-1000U-A99, 40 × 40 × 10 mm, 5 V, brushless PWM.
-- **EMC vent panel:** Laird EMI Solutions HCZ0-2050-A (or equivalent honeycomb vent,
-  40 × 40 mm, cell size ≤ 3 mm) bonded to PGND.
-  Attenuation: ≥ 40 dB at 49 MHz, ≥ 60 dB at 915 MHz.
-- **Frame bond:** Fan frame bonded to PGND via 50 mm copper foil strap (3M 1181).
-- **Cable ferrite:** Würth 74271222 snap-on ferrite on fan cable at the bay wall
-  penetration.
-
-### 12.3 Access Panel EMI Gaskets
-
-- Conductive foam gasket (Laird EMI Shielding MFSH-6 or 3M 1182 copper foil tape
-  strip) around the full perimeter of all removable panel seams.
-- Minimum contact width: 6 mm continuous.
-- Gasket compressed ≥ 20 % when panel is closed.
-
-### 12.4 Cable Entry Penetrations
-
-All cables enter/exit the bay through a single cable penetration area on one bay wall:
-
-- Pass cables through Würth 74271222 ferrite clamps mounted flush with the penetration.
-- For structured wiring (multi-drop buses) use a Fischer Connectors EMI-filtered
-  D-Sub panel-mount bulkhead (or equivalent with integral ferrite array and shield
-  gasket).
-- Each penetration bundle secured with P-clamp bonded to PGND.
-
-### 12.5 Shielding Effectiveness
-
-| Frequency | Expected SE (copper foil theory) |
-|---|---|
-| 49 MHz | ≥ 30 dB (absorption + reflection) |
-| 915 MHz | ≥ 60 dB |
-| 2.4 GHz | ≥ 80 dB |
-| 5.8 GHz | ≥ 85 dB |
-
-Formal testing per MIL-STD-461G RE102 / RS103 required before first flight.
-
----
-
-## §13 — Nacelle Tilt Encoder Interface (J_ENC)
-
-### 13.1 Overview
-
-Each Cape-A-2 exposes one 4-pin shielded JST-GH connector (J_ENC) that carries a
-dedicated I²C bus for a nacelle tilt angle encoder.  The encoder is an AMS AS5600
-12-bit magnetic absolute rotary sensor mounted on the ENC-NACELLE-1 board at the
-nacelle end of the wing spar.
-
-There are two nacelles (port and starboard).  Each nacelle's encoder is wired to the
-J_ENC connector of the Cape-A-2 that has primary responsibility for that nacelle's
-forward EDF.  The other Cape-A-2 nodes receive angle data via CAN FD.
-
-### 13.2 Connector J_ENC
-
-| Pin | Signal   | Direction         | Description                              |
-|-----|----------|-------------------|------------------------------------------|
-| 1   | GND      | Power return      | Signal and power ground                  |
-| 2   | +3V3     | Power output      | 3.3 V supply to ENC-NACELLE-1            |
-| 3   | ENC_SDA  | Bidirectional     | I²C SDA — AS5600 data                    |
-| 4   | ENC_SCL  | Output (PB2)      | I²C SCL — AS5600 clock                   |
-| MP  | SHIELD   | PGND              | Cable shield drain; bonded to PGND       |
-
-- **Connector:** JST SM04B-GHS-TB (4-pin GH, right-angle, shielded body variant)
-- **Mating:** JST GHHR-04V-S (or GHR-04V-S for wire-to-board)
-- **Footprint:** `Connector_JST:JST_GH_SM04B-GHS-TB_1x04-1MP_P1.25mm_Horizontal`
-
-### 13.3 I²C Pull-up Network
-
-Two 2.2 kΩ 0402 resistors (R_ENC_SDA, R_ENC_SCL) connect SDA and SCL to +3V3
-on Cape-A-2.  Pull-ups are located at the host (cape) end only; no pull-ups are
-populated on ENC-NACELLE-1.  This maximises cable length by concentrating the
-pull-up drive at the low-capacitance controller end.
-
-| Designator | Value | Package | Net connected |
-|------------|-------|---------|---------------|
-| R_ENC_SDA  | 2.2 kΩ | 0402   | ENC_SDA → +3V3 |
-| R_ENC_SCL  | 2.2 kΩ | 0402   | ENC_SCL → +3V3 |
-
-### 13.4 Decoupling Capacitor
-
-C_ENC (100 nF 0402 X5R ≥ 6.3 V) bypasses the +3V3 supply rail at J_ENC.  Placed
-within 2 mm of J_ENC pin 2 on the PCB.
-
-### 13.5 Cable Assembly
-
-| Parameter             | Specification                                     |
-|-----------------------|---------------------------------------------------|
-| Cable type            | Belden 9367 STP (shielded twisted pair), 28 AWG   |
-| Pairs used            | 1 × SDA/GND, 1 × SCL/+3V3 (two-pair STP)         |
-| Max length            | 600 mm (nacelle end of wing spar to avionics bay) |
-| Shield termination    | Drain wire to PGND at Cape-A-2 J_ENC MP pin only |
-| ENC-NACELLE-1 end     | Shield floating (single-point to prevent ground loop) |
-| Ferrite chokes        | Würth 74271222 snap-on at both cable ends         |
-| Connector at cape     | JST GHR-04V-S crimped to AWG 28                   |
-| Connector at encoder  | JST GHR-04V-S crimped to AWG 28                   |
-
-### 13.6 I²C Bus Parameters
-
-| Parameter            | Value                        |
-|----------------------|------------------------------|
-| Bus speed            | 100 kHz (Standard Mode)      |
-| AS5600 I²C address   | 0x36 (fixed, not adjustable) |
-| Cable capacitance    | ≈ 40 pF/m × 0.6 m ≈ 24 pF  |
-| Total bus capacitance| ≈ 60 pF (well under 400 pF limit) |
-| Pull-up resistor     | 2.2 kΩ → t_rise ≈ 132 ns (≤ 1000 ns limit) |
-
-Only one AS5600 may be on this I²C bus.  The device address is fixed (0x36).
-If the bus is also used for another device, that device must have a different address.
-
-### 13.7 GPIO Assignment (PocketBeagle 2)
-
-The ENC_SDA and ENC_SCL global labels connect to the PocketBeagle 2 via a spare
-I²C port on header PB2-P1.  Recommended assignment:
-
-| Signal  | PB2 pin | BALL | Peripheral mux |
-|---------|---------|------|----------------|
-| ENC_SCL | P1-26   | E18  | I2C3_SCL       |
-| ENC_SDA | P1-28   | D18  | I2C3_SDA       |
-
-I²C3 is unused by the main sensor suite (which uses I2C0 for IMU and I2C1 for
-compass/baro).  No DTS overlapping required.
+**Notes:**
+- GPS pin 3 (GPS_TX) connects to PocketBeagle 2 UART2_RX: the GPS module transmits, the SBC receives.
+- GPS pin 4 (GPS_RX) connects to PocketBeagle 2 UART2_TX: the SBC transmits, the GPS module receives.
+- SERVO_CH3 on J_SERVO pin 6 is a spare servo channel; populate as needed.
+- J_1553 pin 4 is chassis shield drain; both pins 4 and MP connect to PGND to provide a
+  dual-point shield termination compliant with MIL-STD-1553B stub cabling practice.
+- All PGND connections float relative to signal GND except at the single-point star under J_PWR
+  (0 Ω / 10 Ω solder-selectable link per §7 above).
 
 ---
 
@@ -470,19 +318,18 @@ compass/baro).  No DTS overlapping required.
 - `AVIONICS_PB2_REDESIGN.md` — system architecture and power budgets
 - `XCVR-49MHZ-2.md` — EMI-hardened 49 MHz transceiver (companion board)
 - `CAPE-B-2.md` — EMI-hardened comms/logging cape (companion board)
+- `Wash (CAPE-A-2).kicad_sch` — schematic for this board (canonical filename: CAPE-A-2.kicad_sch)
 
 ---
 
 ## References
 
 1. TI Application Note SLLA337A — "Isolation Boundary Layout Guidelines for ISOW Devices"
-
-- Step 2: Analog Devices ADM2795E Data Sheet Rev. B — isolation boundary capacitor guidance
-
-- Step 3: Bourns SRF2012 Series Data Sheet — common-mode choke attenuation curves
-
-- Step 4: IEC 62368-1:2018 Annex G — creepage/clearance for reinforced insulation
-
-- Step 5: IEC 61000-4-5:2017 — surge immunity test levels
-
-- Step 6: MIL-STD-461G:2015 — EM emissions and susceptibility requirements for aircraft
+2. Analog Devices ADM2795E Data Sheet Rev. B — isolation boundary capacitor guidance
+3. Bourns SRF2012 Series Data Sheet — common-mode choke attenuation curves
+4. IEC 62368-1:2018 Annex G — creepage/clearance for reinforced insulation
+5. IEC 61000-4-5:2017 — surge immunity test levels
+6. MIL-STD-461G:2015 — EM emissions and susceptibility requirements for aircraft
+7. Texas Instruments DP83825I Data Sheet (SNLS505C) — 10/100BASE-TX RMII PHY, RBIAS and bypass cap recommendations
+8. Pulse Electronics HX1188NL Data Sheet — dual 10/100BASE-TX LAN transformer application circuit, center-tap termination
+9. Texas Instruments TPS62933 Data Sheet (SLVSGM7) — 3.3V→1.8V SMPS, FB divider, output filter design
