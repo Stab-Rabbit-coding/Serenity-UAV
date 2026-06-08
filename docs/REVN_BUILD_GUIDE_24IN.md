@@ -418,6 +418,26 @@ Crown pinion (R=6mm) → Nozzle inner ring rack (R=28mm)
 
 4. **Install tilt servo** in fuselage servo mount bracket at wing root bay. Servo arm must be accessible through access panel B or D.
 
+   > **⚠ ANTI-REWORK — FOAM POUR SEQUENCE:**
+   > The wing spar (CF-TUBE-12MM, 12 mm OD) must be inserted through both
+   > `spar_bearing_block` annular bosses before the foam pour (Phase 4).
+   > Once foam cures, the spar bore is permanently encapsulated and cannot be
+   > accessed for spar insertion or retorquing.
+   >
+   > **Do this before Phase 4 foam pour:**
+   > 1. Insert CF spar through the stbd spar bearing boss (Z=2 mm face), across
+   >    the gondola interior, and through the port spar bearing boss (Z=161 mm face).
+   > 2. Verify spar slides freely with ≤ 0.15 mm radial clearance (12.3 mm bore).
+   > 3. Seat spar flush with exterior Z wall at both ends (zero protrusion).
+   > 4. Tighten the M3 grub screw (DIN 913 M3×4) in each bearing boss from
+   >    the +Y face to clamp the spar against Z-axis walking.  Torque: 0.5 N·m.
+   > 5. Confirm both grub screws are tightened and spar cannot slide axially.
+   >
+   > Failure to complete these steps before foam pour requires drilling out the
+   > foam from both bearing bores — a multi-hour rework that risks cracking
+   > the 4.85 mm bearing-block annulus.
+   > Ref: s_cargo_sect_shell24.scad spar_bearing_block(); PHASED_BUILD_GUIDE Phase 4.
+
 5. **Connect pushrod** from servo arm to pivot arm (`s_pivot_arm_a_scaled24.stl`). Adjust pushrod length so that:
    - Servo 0° = nacelle 0° (horizontal / cruise)
    - Servo ~125° = nacelle 90° (hover / vertical)
