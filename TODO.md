@@ -75,6 +75,11 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
   (8× M3 boss posts, ±40×±25 mm pattern) + dorsal access panel cuts (85×55 mm each) for Cape-B
   (90×60 mm) at port half (Z_CEN=118 mm, Inara) and stbd half (Z_CEN=45 mm, River). GPS_PORT/STBD
   co-located for minimal SMA routing. *(done 2026-06-08, PR #42)*
+- [x] **`s_cargo_sect_shell24.scad` Rev S3** — Faraday enclosure space allocation.
+  Panel cuts enlarged 85×55 → 95×65 mm; boss offsets updated ±40×±25 → ±42×±27 mm to match
+  Faraday tray corner mounts; bay Z centres adjusted ±1 mm (Inara 118→119, River 45→44) for 10 mm
+  inter-bay gap; FARADAY_* envelope parameters (95×65×65 mm, 1.5 mm Al wall, 25 mm fan) added.
+  *(done 2026-06-08, PR #42)*
 - [x] **`nacelle_servo_bracket.scad`** — U-channel saddle clamp for DS3218MG nacelle tilt servo;
   4× M3×10 SHCS flanges at ±17.5×±8 mm; 10×6 mm lead notch; FOS_shear=85.7. *(done 2026-06-08)*
 - [x] **`REVN_BUILD_GUIDE_24IN.md` Phase 3 anti-rework** — spar grub-screw torque sequence
@@ -88,11 +93,14 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
   interior. Reference the Thingiverse low-detail hull for shuttle fairing geometry.
   **BLOCKS canonical hull fidelity (CLAUDE.md requirement: keep skin geometry true to reference).**
 
-- [ ] **Avionics dorsal access covers for Inara and River bays (two parts).**
+- [ ] **Avionics dorsal access covers / Faraday tray lids for Inara and River bays (two parts).**
   Create `inara_access_cover.scad` and `river_access_cover.scad` (or a single parametric SCAD):
-  PETG clip-on or M2-screw panel, 90×60 mm footprint (Cape-B), Ø38 mm GPS clearance bore centred
-  at GPS antenna position (Inara: Z_GPS=104.7 mm; River: Z_GPS=44.7 mm), 2.5 mm seating shoulder
-  lip. Must be removable with common hand tools per CLAUDE.md field disassembly requirement.
+  Cover footprint 105×75 mm with 5 mm shoulder lip seating on hull skin around 95×65 mm opening.
+  Copper-foil-lined PETG or 0.5 mm Al sheet; Ø38 mm GPS clearance bore at GPS offset from cover
+  centre (Inara: offset −13.3 mm in Z from bay centre; River: offset +0.7 mm in Z from bay centre).
+  4× M2 flathead captive screws at ±40 mm (X) × ±25 mm (Z) from cover centre for EMI-seal clamping.
+  Must be removable with common hand tools per CLAUDE.md field disassembly requirement.
+  Ref: FARADAY_* parameters in s_cargo_sect_shell24.scad Rev S3; CLAUDE.md §1.4.1.
   Add to Phase 0 print schedule.
 
 - [ ] **Simon bay — define avionics bay in rear section SCAD file.**
@@ -195,6 +203,11 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 **Combined airframe model (visual verification):**
 
 - [ ] **Combine all airframe STLs** into a single assembly model including the 1.25× scaled nacelles, all EDF tubes, cargo bay clamshells, antenna bosses, sensor cutouts, access panels, landing legs, and feet. Render SVGs from all 6 cardinal directions (top, bottom, front, rear, port, stbd) and all 8 isometric views (8 corners). Save renders to `serenity/diagrams/`.
+  **FreeCAD/Assembly4 script created:** `airframe/freecad/assembly/serenity_fuselage_asm4.py`.
+  Run: `freecadcmd airframe/freecad/assembly/serenity_fuselage_asm4.py`
+  Output: `airframe/freecad/assembly/serenity_fuselage_asm4.FCStd`
+  - [ ] Render 6 cardinal + 8 isometric SVGs from the FCStd output to `airframe/diagrams/`.
+    **BLOCKS** exploded view SVGs below.
 - [ ] **Exploded view SVG — printed parts only** (all printed components labelled and exploded from assembly position)
 - [ ] **Exploded view SVG — full build** (all components: PCBs, SBCs, motors, ESCs, wires, sensors, antennas, hardware)
 
@@ -383,27 +396,57 @@ feelines
 
 - [ ] Specify wiring for UART, I2C, BSHOT, PWM, 
 
-- [ ] "Kaylee, what happened to my ship?"  - "Everything's shiny, Captain."
+#### 1.4.5 power distribution — Kaylee (PDB) and battery
 
-- [ ] Design EM Hardened Power Distribution Board - Kaylee.md, Kaylee.kicad_pro, Kaylee.kicad_sch, Kaylee.kicad_pcb
+**Battery placement decision (2026-06-08):**
+The 6S 4000 mAh LiPo (~450–520 g, ~155×52×36 mm) must be located near the aircraft CG.
+Phase 5 ground-test requirement: static CG at 190 mm from nose (REVN_BUILD_GUIDE_24IN.md §Phase 5).
+The keel datum at 190 mm from nose falls within the **middle ring section** (between keel stations
+165 mm and 251 mm), which is the main fuselage body above the cargo gondola.
+Battery is placed on the keel floor of the middle section, oriented longitudinally, secured by:
+- Two M3 boss standoffs at X≈−190 mm (CG station) on the keel face
+- Velcro retention strap through keel slot (safety tether, not sole retention)
+- Slide-in rail guides on keel face prevent lateral shift at 3g manoeuvre
 
-- [ ] Verify Kaylee.kicad_pcb meets Power requirements
+**Kaylee (PDB) placement decision (2026-06-08):**
+Kaylee (XT90 PDB, 4× XT30 outputs, ~80×60 mm) mounts adjacent to the battery in the middle
+section keel area (X≈−165..−245 mm station range) to minimise high-current 14 AWG wire length
+to the four nacelle ESC feeds (fed through PTFE conduits in the wing spar channel and to the
+cargo gondola lateral walls).
+Battery swap access via a **ventral hatch** in the middle section belly skin (hatch centred at
+X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
 
--- [ ] Proper Amperage
+**Open items — BLOCKS Phase 1 foam pour:**
+- [ ] **Add Kaylee/battery boss pattern to `s_middle_canonical_shell24.scad`.**
+  Boss posts: 4× M3 at (±55 mm X) × (±25 mm Z) from X=−190 mm keel centre for battery tray.
+  Kaylee PDB: 4× M3 boss posts at X≈−205 mm, Z=CZ±25 mm. Both on keel interior face (+Y rail).
+  Verify boss positions clear keel CF flat bar (6×3 mm) and ring frame station notches in slicer.
 
--- [ ] Proper fusing and wire size
+- [ ] **Add ventral battery-swap hatch cut to `s_middle_canonical_shell24.scad`.**
+  120×60 mm belly cut centred at X=−190 mm; 2 mm shoulder lip; same pattern as avionics panels.
+  **BLOCKS Phase 1 foam pour** (void former must clear hatch zone before foam pour).
 
--- [ ] Protection against cascades
+- [ ] **Create `kaylee_battery_tray.scad`.**
+  CF-PETG slide-in rail guide tray for 6S LiPo 155×52×36 mm; M3 attachment to boss posts;
+  two captive Velcro strap slots; XT90 connector exit cutout on AFT face.
+  **Add to Phase 0 print schedule.**
 
--- [ ] Proper filtering and EM hardening
+- [ ] **Create `kaylee_pdb_tray.scad`.**
+  CF-PETG mounting tray for Kaylee PDB (80×60 mm footprint); M3 boss attachment;
+  XT90 input pigtail route-through; 4× XT30 output ports facing AFT (toward ESC conduits).
+  **Add to Phase 0 print schedule.**
 
--- [ ] Battery and circuit monitoring
+- [ ] **Kaylee PCB design checklist:**
+  - [ ] Proper amperage and fusing/wire sizing per 14 AWG capacity
+  - [ ] Protection against cascade failures (back-EMF, short circuits)
+  - [ ] Proper filtering and EMI hardening (per CLAUDE.md 500 W/m² target)
+  - [ ] Battery and circuit monitoring (voltage, current, cell balance telemetry)
+  - [ ] Size and weight within middle section ventral cavity
+  - [ ] DRC pass; gerbers generated for production
 
--- [ ] Size and weight
-
-- [ ] DRC check
-
-- [ ] Gerber printed
+- [ ] **Update REVN_BUILD_GUIDE_24IN.md Phase 1** to include Kaylee + battery tray installation
+  in the pre-foam-pour checklist. Battery tray and hatch must be installed and hatch zone
+  masked before the foam pour step.
 
 ---
 
@@ -711,8 +754,10 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 | cargo_cradle_autolatch.stl | PETG | 0.20mm | 30% | 1 | Already generated (PR #21) — reprint if dimensions change |
 | cargo_winch_spool.stl | PETG | 0.20mm | 40% | 1 | Already generated (PR #21) — reprint if dimensions change |
 | nacelle_servo_bracket.stl | CF-PETG | 0.15mm | 40%, 4 walls | 2 | One per nacelle; from `airframe/openscad/nacelles/nacelle_servo_bracket.scad` (Rev S1). Print with channel mouth up; no supports needed. VERIFY M3 hole ±17.5×±8 mm pattern matches NSVMT inserts in slicer before printing. |
-| inara_access_cover.stl | PETG | 0.20mm | 40% | 1 | Dorsal access cover for Inara bay; 90×60 mm, Ø38 mm GPS bore. SCAD not yet created — **BLOCKS printing.** |
-| river_access_cover.stl | PETG | 0.20mm | 40% | 1 | Dorsal access cover for River bay; same spec. SCAD not yet created — **BLOCKS printing.** |
+| inara_access_cover.stl | PETG (Cu-foil lined) | 0.20mm | 40% | 1 | Faraday tray lid for Inara bay; 105×75 mm footprint, 5 mm shoulder, Ø38 mm GPS bore offset −13.3 mm Z from cover centre. SCAD not yet created — **BLOCKS printing.** |
+| river_access_cover.stl | PETG (Cu-foil lined) | 0.20mm | 40% | 1 | Faraday tray lid for River bay; 105×75 mm footprint, 5 mm shoulder, Ø38 mm GPS bore at +0.7 mm Z from cover centre. SCAD not yet created — **BLOCKS printing.** |
+| kaylee_battery_tray.stl | CF-PETG | 0.15mm | 40%, 4 walls | 1 | Battery slide-in rail tray for 6S 4000 mAh LiPo; keel mount at 190 mm station. SCAD not yet created — **BLOCKS Phase 1.** |
+| kaylee_pdb_tray.stl | CF-PETG | 0.15mm | 40%, 4 walls | 1 | Kaylee PDB mount tray; keel area, middle section. SCAD not yet created — **BLOCKS Phase 1.** |
 
 **CF cuts:**
 
