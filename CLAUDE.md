@@ -5,7 +5,7 @@
 - **Design and build a fully functional EDF Tilt Rotor UAV version of the Firefly Class Spaceship "Serenity" from the Joss Whedon TV show and movie.**
 - **Provide redundancy and failover in all systems possible**:
 - Avionics:  4 pairs of pocketbeagle2 industrial SBCs: 4 with a Flight Control and Sensor Cape, (called "Wash") (with GPS,  imu, compass, barometer, anti-collision range sensors,  airspeed, pid motor speed control, and nacelle tilt servos), and 4 with a Communications, Logging, and payload Cape, ( called "Zoë") .
-- Node variant placement (v2 · v2 · v2 · v2, nose → tail, Rev Q):  All 8 nodes use EMI-hardened -2 capes (Cape-A-2, Cape-B-2, XCVR-49MHZ-2) at every position.  Rev Q standardises on the single hardened SKU across all bays, providing uniform 5 kV galvanic isolation on CAN FD, RS-485, and Ethernet at every node.  Cape-A-1, Cape-B-1, and XCVR-49MHZ-1 are archived as of Rev Q (2026-06-05).
+- Node variant placement (v2 · v2 · v2 · v2, nose → tail, Rev Q):  All 8 nodes use EMI-hardened -2 capes (Wash, Zoë, XCVR-49MHZ-2) at every position.  Rev Q standardises on the single hardened SKU across all bays, providing uniform 5 kV galvanic isolation on CAN FD, RS-485, and Ethernet at every node.  Cape-A-1, Cape-B-1, and XCVR-49MHZ-1 are archived as of Rev Q (2026-06-05).
 - Onboard Communications:  Each of the 8 sbcs will be connected to the others via: Canbus FD, MILSTD 1553, RS485, & Ethernet
 - External Communications: The UAV uses WIFI at 5ghz, Zigbee at 2.4ghz, MavLink /SiK at 915Mhz, and AX.25 on the 49Mhz RCRS channels.  All four are usable for command and control of the aircraft.  The avionics capes also support sbus, but it's  not used.
 - Powerplant: Each Nacelle has two EDFs in series, under PID control.  The forward EDF in each nacelle is controlled primarily by one of the flight control SBCs and the aft is primarily controlled by a different sbc.
@@ -132,30 +132,30 @@ Every component will be fabricated or procured; design accordingly.
 
  The Cargo handling system is named "Jayne" - "I was aiming for his head."
 
- The forward avionics bay is named "Shepherd Book" - "I have heathens enough right here."
+ The forward avionics bay is named "Shepherd's room" - "I have heathens enough right here."
 
- The second avionics bay is named "Inara" - "Mal, I will never understand you."
+ The second avionics bay is named "Inara's shuttle" - "Mal, I will never understand you."
 
- The third avionics bay is named "River" - "Also, I can kill you with my mind."
+ The third avionics bay is named "River's room" - "Also, I can kill you with my mind."
 
- The aft avionics bay is named "Simon" - "What did they do to you?"
+ The aft avionics bay is named "Simon's medbay" - "What did they do to you?"
 
 Avionics Workload Balancing
 While all Wash capes are identical and all Zoë capes are also identical, they have different primary tasking. All Stacks are capable to communicate and control the UAV safety in a benign environment on their own.*
 
 UAV Tasks with PACE prioritization and failover per stack (primary, alternative, contingency, emergency)
 
--- Watchdog: P - Book; A - Inara; C - Simon, E - River
+-- Watchdog: P - Shepherd; A - Inara; C - Simon, E - River
 
--- Comms: P - Inara; A - Book; C - River; E - Simon
+-- Comms: P - Inara; A - Shepherd; C - River; E - Simon
 
--- Flight Control: P - River; A - Simon; C - Book; E - Inara
+-- Flight Control: P - River; A - Simon; C - Shepherd; E - Inara
 
--- Payload Control: P - Simon; A - River; C - Inara; E - Book
+-- Payload Control: P - Simon; A - River; C - Inara; E - Shepherd
 
 Mal is the ground control station - He's the boss.
 
-Book is the crew's conscience and therefore takes care of primarily watchdog, fault detection, failover, and authentication. His stack has SiK primary and WiFi secondary.
+Shepherd is the crew's conscience and therefore takes care of primarily watchdog, fault detection, failover, and authentication. His stack has SiK primary and WiFi secondary.
 
 Inara has primarily camera, external sensors, and high bandwidth ground communication. Her stack is connected to WiFi primarily and LoRa secondary.
 

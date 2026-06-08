@@ -38,7 +38,7 @@
  *
  * ── ALERT output ──────────────────────────────────────────────────────────
  *
- * The BQ76930 open-drain ALERT pin is connected to Cape-A-2 GPIO.  On any
+ * The BQ76930 open-drain ALERT pin is connected to Wash GPIO.  On any
  * hardware fault (OVP, UVP, OCD, SCD) the ALERT pin asserts LOW.  Firmware
  * should configure a falling-edge GPIO interrupt and call
  * cell_mon_read_status() from the interrupt service thread.

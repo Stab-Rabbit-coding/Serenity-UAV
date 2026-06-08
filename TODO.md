@@ -16,7 +16,7 @@
 | Nacelle EDFs | XFly Galaxy X5 50mm 12-blade 6S 3200KV, 1240g each; 2232g/nacelle (90% additive via stator); 4464g total | Baseline EDF selected (xfly-model.eu); nacelle T/W ≈ 1.61 at Phase 5–10 AUW — VTOL hover capable |
 | Rear propulsion | 120mm 6S EDF, 4-scoop radial intake, iris nozzle | **DEFERRED — Phase 11.** All design files moved to `deferred/aft-edf/`. SCAD and STLs complete. Adds ~3500g thrust; Phase 11 T/W ≈ 2.21. |
 | Cargo bay | Clamshell doors + SG90 servos + DRV8833 + N20 winch + Dyneema + auto-latch + GPS ring + FPV bezel | ✓ All 13 cargo STLs generated (PR #21 + PR #22 2026-06-01); BOM updated bom_revP.json/csv; gondola shell open |
-| PCBs | **Rev Q: all 8 nodes use Cape-A-2 (Wash), Cape-B-2 (Zoë), XCVR-49MHZ-2** at every position. Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived 2026-06-05. | Rev Q schematics complete (Wash: 2× EMI-hardened Ethernet PHY; Zoë: 1× Ethernet PHY; all field connectors added). Gerbers pending. |
+| PCBs | **Rev Q: all 8 nodes use Wash, Zoë, XCVR-49MHZ-2** at every position. Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived 2026-06-05. | Rev Q schematics complete (Wash: 2× EMI-hardened Ethernet PHY; Zoë: 1× Ethernet PHY; all field connectors added). Gerbers pending. |
 | Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 ✓; serenity-fc Phase 6 stub only; all Phase 7 items open |
 | Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
 | Regulatory | FAA Part 107, ICAO nav lights, FCC Part 95 | FAA registration placeholder; XCVR-49MHZ-1 pre-compliance pending |
@@ -130,7 +130,7 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 
 ---
 
-### 1.2a — PCB Design: Cape-A-2, Cape-B-2, and XCVR-49MHZ-2 (EMI-Hardened Variants)
+### 1.2a — PCB Design: Wash, Zoë, and XCVR-49MHZ-2 (EMI-Hardened Variants)
 
 #### ***EM hardening Objective is to ensure safe and controlled operations in hostile em/rf environments such as the vicinity of radiating commercial broadcast, amateur radio and cellular towers.***
 
@@ -160,7 +160,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 - `avionics/kicad/gen_cape_b2_pcb.py` → `CAPE-B-2.kicad_pcb`
 
 **Open tasks:**
-- [ ] finish Cape-A-2 PCB.  ensure all phy have shielded connectors, all nets are valid, all ferrite beads and isolation caps are in place.
+- [ ] finish Wash PCB.  ensure all phy have shielded connectors, all nets are valid, all ferrite beads and isolation caps are in place.
 - [ ] Add sbus/uart dip to CAPE-A-2. 
 - [ ] **Generate CAPE-A-2 gerbers** — `CAPE-A-2.kicad_pcb` complete; run DRC to zero errors in
   KiCad; export to `avionics/kicad/gerbers/CAPE-A-2/`; re-export drill files.
@@ -331,23 +331,23 @@ feelines
 
 ### 1.5.1. Names
 
-- [ ] The ground control station is named "Malcolm" aka "CAPT Reynolds" or "CAPT Tight Pants" - "I aim to misbehave" 
+- [x] The ground control station is named "Malcolm" aka "CAPT Reynolds" or "CAPT Tight Pants" - "I aim to misbehave" *(implemented throughout all docs)*
 
-- [ ] The Flight Control Avionics Cape is named "Wash" - "I'm a leaf on the wind"
+- [x] The Flight Control Avionics Cape is named "Wash" - "I'm a leaf on the wind" *(implemented: CAPE-A-2.kicad_sch, CAPE-A-2.md, all docs)*
 
-- [ ] The Comms/Logging/Payload Cape is named "Zoë" - "Big Damn Heros, sir."
+- [x] The Comms/Logging/Payload Cape is named "Zoë" - "Big Damn Heros, sir." *(implemented: CAPE-B-2.kicad_sch, CAPE-B-2.md, all docs)*
 
-- [ ] The Power Distribution Board is named "Kaylee" - "Everything is shiny."
+- [x] The Power Distribution Board is named "Kaylee" - "Everything is shiny." *(implemented: Kaylee.md, PWR-DIST-1.kicad_sch)*
 
-- [ ] The Cargo handling system is named "Jayne" - "I was aiming for his head."
+- [ ] The Cargo handling system is named "Jayne's bunk" - "I was aiming for his head."
 
-- [ ] The forward avionics bay is named "Shepherd Book" - "I have heathens enough right here."
+- [x] The forward avionics bay is named "Shepherd's room" (Bay A) - "I have heathens enough right here." *(implemented 2026-06-07)*
 
-- [ ] The second avionics bay is named "Inara" - "Mal, I will never understand you."
+- [x] The second avionics bay is named "Inara's shuttle" (Bay B) - "Mal, I will never understand you." *(implemented 2026-06-07)*
 
-- [ ] The third avionics bay is named "River"  - "Also, I can kill you with my mind."
+- [x] The third avionics bay is named "River's room" (Bay D) - "Also, I can kill you with my mind." *(implemented 2026-06-07)*
 
-- [ ] The aft avionics bay is named "Simon"  - "What did they do to you?"
+- [x] The aft avionics bay is named "Simon's medbay" (Bay E) - "What did they do to you?" *(implemented 2026-06-07)*
 
 ### Avionics Workload Balancing
 
@@ -355,20 +355,20 @@ feelines
 
 -  UAV Tasks with PACE prioritization and failover per stack (primary, alternative, contingency, emergency) 
 
--- Watchdog: P - Book; A - Inara; C - Simon, E - River
+-- Watchdog: P - Shepherd; A - Inara; C - Simon, E - River
 
--- Comms: P - Inara; A - Book; C - River; E -  Simon
+-- Comms: P - Inara; A - Shepherd; C - River; E - Simon
 
--- Flight Control: P - River; A - Simon; C - Book; E - Inara
+-- Flight Control: P - River; A - Simon; C - Shepherd; E - Inara
 
--- Payload Control: P - Simon; A - River; C - Inara; E - Book
+-- Payload Control: P - Simon; A - River; C - Inara; E - Shepherd
 
 
 ---
 
 - Mal is the ground control station - He's the boss. 
 
-- Book is the crew's conscience and therefore takes care of primarily watchdog, fault detection, failover, and authentication. His stack has SiK primary and WiFi secondary.
+- Shepherd is the crew's conscience and therefore takes care of primarily watchdog, fault detection, failover, and authentication. His stack has SiK primary and WiFi secondary.
 
 - Inara has primarily camera, external sensors, and high bandwidth ground communication.  Her stack is connected to  WiFi primarily and LoRa secondary. 
 
@@ -447,8 +447,8 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 | Item | Qty | Unit Cost | Total | Notes |
 |------|-----|----------|-------|-------|
 | PocketBeagle 2 Industrial (AM6254) | 4× | $51.03 | ~$204 | DK 2820-100003007-ND |
-| Wash (Cape-A-2) PCB (JLCPCB assembled) | 2× | ~$55 | ~$110 | FC1/Bay A + FC2/Bay B (v2, EMI-hardened) |
-| Zoë (Cape-B-2) PCB (JLCPCB assembled) | 2× | ~$95 | ~$190 | CN1/Bay A + CN2/Bay B (v2, EMI-hardened) |
+| Wash (Wash) PCB (JLCPCB assembled) | 2× | ~$55 | ~$110 | FC1/Shepherd's room (Bay A) + FC2/Inara's shuttle (Bay B) (v2, EMI-hardened) |
+| Zoë (Zoë) PCB (JLCPCB assembled) | 2× | ~$95 | ~$190 | CN1/Shepherd's room (Bay A) + CN2/Inara's shuttle (Bay B) (v2, EMI-hardened) |
 | XCVR-49MHZ-2 PCB (JLCPCB assembled) | 2× | ~$25 | ~$50 | RCRS sub-module for CN1, CN2 (v2 EMI-hardened) |
 | SiK 915MHz ground station radio | 1× | ~$15 | ~$15 | MAVLink GCS link |
 | microSD 64GB (log, write-blocked) | 2× | ~$10 | ~$20 | CN1-LOG, CN2-LOG |
@@ -464,8 +464,8 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 | Item | Qty | Approx. Cost | Notes |
 |------|-----|-------------|-------|
 | PocketBeagle 2 Industrial (AM6254) | 4× | ~$204 | CN3, FC3, CN4, FC4 |
-| Wash (Cape-A-2) PCB (JLCPCB assembled) | 2× | ~$110 | FC3/Bay D + FC4/Bay E (v2) |
-| Zoë (Cape-B-2) PCB (JLCPCB assembled) | 2× | ~$190 | CN3/Bay D + CN4/Bay E (v2) |
+| Wash (Wash) PCB (JLCPCB assembled) | 2× | ~$110 | FC3/River's room (Bay D) + FC4/Simon's medbay (Bay E) (v2) |
+| Zoë (Zoë) PCB (JLCPCB assembled) | 2× | ~$190 | CN3/River's room (Bay D) + CN4/Simon's medbay (Bay E) (v2) |
 | XCVR-49MHZ-2 PCB (assembled) | 2× | ~$50 | CN3, CN4 (v2 EMI-hardened) |
 | microSD 64GB (log) | 2× | ~$20 | CN3-LOG, CN4-LOG |
 | VL53L5CX 8×8 ToF sensor | 12× | ~$84 | Dual OA arrays |
@@ -699,7 +699,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 ### Phase 5 — Minimum Viable Flyer ★ FIRST FLIGHT
 
-**Goal:** CN1+FC1 (Bay A) and CN2+FC2 (Bay B) installed and operational — first flight achieved.
+**Goal:** CN1+FC1 (Shepherd's room / Bay A) and CN2+FC2 (Inara's shuttle / Bay B) installed and operational — first flight achieved.
 
 > **Aft EDF not installed** (Phase 11). The 4 nacelle XFly Galaxy X5 EDFs (1240g each, 90%
 > additive via stator = 2232g/nacelle × 2 = 4464g total) deliver T/W ≈ **1.61** at the
@@ -714,7 +714,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 - [ ] **Phase 11 only:** Install 80A ESC in Panel F for 120mm rear EDF (FC2 PRU Ch.2) — skip for Phase 5.
 - [ ] Install 5V/5A BEC; verify 5.00V ±0.05V under 1A bench load.
 - [ ] Pull motor phase leads through conduit to ESCs; solder (verify rotation marking first).
-- [ ] CAN FD termination: 120Ω SOLDERED to CN1 Cape-B at Bay A (bus start); temporary 120Ω at FC2 Cape-A Bay B (Phase 3 far-end; remove in Phase 7).
+- [ ] CAN FD termination: 120Ω SOLDERED to CN1 Cape-B at Shepherd's room (Bay A, bus start); temporary 120Ω at FC2 Cape-A in Inara's shuttle (Bay B, Phase 3 far-end; remove in Phase 7).
 
 **ESC assignment (cross-nacelle redundancy — any FC failure retains 50% thrust both nacelles):**
 
@@ -726,33 +726,33 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 | ESC4 | EDF2 (aft) | Stbd | FC2 Cape-A PRU Ch.1 |
 | ESC5 | 120mm rear | Fuselage | **DEFERRED — Phase 11** |
 
-**CN1+FC1 installation (Bay A — nose) — Cape-B-2 / Cape-A-2 (v2 EM-hardened):**
-> Bay A is the CAN FD / RS-485 / 1553B bus start termination node.  Use Cape-B-2 (ADM2795E
-> RS-485, ISOW1044 CAN FD, ADIN1300 Ethernet) and Cape-A-2 for 5 kV isolated transceivers at
+**CN1+FC1 installation — Shepherd's room (Bay A, nose) — Zoë / Wash (v2 EM-hardened):**
+> Shepherd's room (Bay A) is the CAN FD / RS-485 / 1553B bus start termination node.  Use Zoë (ADM2795E
+> RS-485, ISOW1044 CAN FD, ADIN1300 Ethernet) and Wash for 5 kV isolated transceivers at
 > this end of the bus.  v2 placement is mandatory here (see TODO §1.2a node placement note).
-- [ ] Mount CN1 Cape-B-2 on Bay A floor standoffs (M2.5 nylon 6mm). Insert PB2-I. Secure.
-- [ ] Mount FC1 Cape-A-2 on inter-cape standoffs (M2.5 nylon 20mm) above CN1. Insert second PB2-I.
+- [ ] Mount CN1 Zoë on Shepherd's room (Bay A) floor standoffs (M2.5 nylon 6mm). Insert PB2-I. Secure.
+- [ ] Mount FC1 Wash on inter-cape standoffs (M2.5 nylon 20mm) above CN1. Insert second PB2-I.
 - [ ] Flash OS to eMMC on CN1 and FC1 via USB-C before installation.
 - [ ] Install log μSD (64GB) in CN1 Cape-B log slot. Label: **CN1-LOG**.
 - [ ] Seat RCRS-49 sub-module on CN1 Cape-B header; connect RCRS coax to forward 49MHz wire post.
 - [ ] Connect CN1 radio pigtails: SiK 915MHz → belly port SMA; LoRa → belly stbd SMA; WiFi → dorsal fwd SMA.
 - [ ] Route FC1 GPS U.FL coax through cockpit-roof PTFE sleeve (sta ~59mm); mount GPS patch on hull dorsal, face UP.
-- [ ] Daisy-chain CAN FD: 120Ω (soldered) → CN1 → FC1 → exit Bay A toward Bay B.
-- [ ] Daisy-chain RS-485: CN1 → FC1 → exit toward Bay B.
+- [ ] Daisy-chain CAN FD: 120Ω (soldered) → CN1 → FC1 → exit Shepherd's room (Bay A) toward Inara's shuttle (Bay B).
+- [ ] Daisy-chain RS-485: CN1 → FC1 → exit toward Inara's shuttle (Bay B).
 - [ ] Connect MIL-STD-1553: FC1 = Bus Controller (primary); CN1 = RT 0x01.
-- [ ] Cap Bay E end of ETH-EA conduit (will connect to FC4 in Phase 7); connect Bay A end to CN1 Cape-B ETH-2.
+- [ ] Cap Simon's medbay (Bay E) end of ETH-EA conduit (will connect to FC4 in Phase 7); connect Shepherd's room (Bay A) end to CN1 Cape-B ETH-2.
 
-**CN2+FC2 installation (Bay B — dorsal fwd) — Cape-B-2 (Zoë) / Cape-A-2 (Wash) (Rev Q):**
-> Rev Q: Bay B also uses v2 EMI-hardened capes (same as Bay A). All four bays use Wash + Zoë.
-- [ ] Mount CN2 Cape-B-2 (Zoë) on Bay B floor standoffs; insert PB2-I; mount FC2 Cape-A-2 (Wash) above.
+**CN2+FC2 installation — Inara's shuttle (Bay B, dorsal fwd) — Zoë / Wash (Rev Q):**
+> Rev Q: Inara's shuttle (Bay B) also uses v2 EMI-hardened capes (same as Shepherd's room). All four bays use Wash + Zoë.
+- [ ] Mount CN2 Zoë on Inara's shuttle (Bay B) floor standoffs; insert PB2-I; mount FC2 Wash above.
 - [ ] Flash OS to eMMC on CN2 and FC2 before installation.
 - [ ] Install log μSD (64GB) in CN2 Cape-B log slot. Label: **CN2-LOG**.
-- [ ] Seat RCRS-49 sub-module on CN2 Cape-B-2 J_XCVR header.
+- [ ] Seat RCRS-49 sub-module on CN2 Zoë J_XCVR header.
 - [ ] Route FC2 GPS coax through dorsal PTFE sleeve (sta ~130mm); mount GPS patch on dorsal hull, face UP.
-- [ ] Continue CAN FD daisy-chain Bay A→Bay B: CN2 → FC2 + temporary 120Ω at FC2 (remove Phase 7).
-- [ ] Continue RS-485 daisy-chain Bay A→Bay B.
-- [ ] Connect ETH-AB (Bay A→Bay B): FC1 Wash ETH-1 → CN2 Zoë ETH-B (FC1↔CN2 Ethernet ring link).
-- [ ] Cap Bay D end of ETH-BD (will connect to CN3 in Phase 7).
+- [ ] Continue CAN FD daisy-chain Shepherd's room→Inara's shuttle: CN2 → FC2 + temporary 120Ω at FC2 (remove Phase 7).
+- [ ] Continue RS-485 daisy-chain Shepherd's room (Bay A) → Inara's shuttle (Bay B).
+- [ ] Connect ETH-AB (Shepherd's room → Inara's shuttle): FC1 Wash ETH-1 → CN2 Zoë ETH-B (FC1↔CN2 Ethernet ring link).
+- [ ] Cap River's room (Bay D) end of ETH-BD (will connect to CN3 in Phase 7).
 - [ ] Power taps: connect CN1, FC1, CN2, FC2 power leads from PWR conduit; verify 5V ±0.05V at each header.
 
 **Security provisioning (before first flight):**
@@ -805,30 +805,30 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 **Goal:** All 8 nodes installed, full ring redundancy, 12× VL53L5CX dual-redundant obstacle avoidance operational.
 
-**CN3+FC3 installation (Bay D — dorsal aft) — Cape-B-2 (Zoë) / Cape-A-2 (Wash) (Rev Q):**
-> Rev Q: Bay D also uses v2 EMI-hardened capes. All four bays uniform.
-- [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Wash Bay B.
-- [ ] Mount CN3 Cape-B-2 (Zoë) on Bay D floor standoffs; insert PB2-I; mount FC3 Cape-A-2 (Wash) above.
+**CN3+FC3 installation — River's room (Bay D, dorsal aft) — Zoë / Wash (Rev Q):**
+> Rev Q: River's room (Bay D) also uses v2 EMI-hardened capes. All four bays uniform.
+- [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Wash in Inara's shuttle (Bay B).
+- [ ] Mount CN3 Zoë on River's room (Bay D) floor standoffs; insert PB2-I; mount FC3 Wash above.
 - [ ] Flash OS to eMMC; install log μSD. Label: **CN3-LOG**.
 - [ ] Seat RCRS-49 sub-module on CN3 Zoë J_XCVR header.
 - [ ] Route FC3 GPS coax through dorsal PTFE sleeve (sta ~275mm); mount GPS patch, face UP.
-- [ ] Continue CAN FD chain: Bay B FC2 → Bay D CN3 → FC3 → exit toward Bay E.
-- [ ] Continue RS-485 chain Bay B→Bay D→Bay E.
-- [ ] Connect ETH-BD (Bay B→Bay D): FC2 Wash ETH-1 → CN3 Zoë ETH-B.
-- [ ] Power tap Bay D; verify 5V ±0.05V.
+- [ ] Continue CAN FD chain: Inara's shuttle (Bay B) FC2 → River's room (Bay D) CN3 → FC3 → exit toward Simon's medbay (Bay E).
+- [ ] Continue RS-485 chain Inara's shuttle (Bay B) → River's room (Bay D) → Simon's medbay (Bay E).
+- [ ] Connect ETH-BD (Inara's shuttle → River's room): FC2 Wash ETH-1 → CN3 Zoë ETH-B.
+- [ ] Power tap River's room (Bay D); verify 5V ±0.05V.
 
-**CN4+FC4 installation (Bay E — aft service) — Cape-B-2 / Cape-A-2 (v2 EM-hardened):**
-> Bay E is the CAN FD / RS-485 / 1553B bus end termination node and is physically closest to the
-> nacelle motor wiring and rear 120mm EDF.  Use Cape-B-2 / Cape-A-2 for 5 kV isolated
+**CN4+FC4 installation — Simon's medbay (Bay E, aft service) — Zoë / Wash (v2 EM-hardened):**
+> Simon's medbay (Bay E) is the CAN FD / RS-485 / 1553B bus end termination node and is physically closest to the
+> nacelle motor wiring and rear 120mm EDF.  Use Zoë / Wash for 5 kV isolated
 > transceivers at this end of the bus.  v2 placement is mandatory here.
-- [ ] Mount CN4 Cape-B-2 on Bay E standoffs; insert PB2-I; mount FC4 Cape-A-2 above.
+- [ ] Mount CN4 Zoë on Simon's medbay (Bay E) standoffs; insert PB2-I; mount FC4 Wash above.
 - [ ] Flash OS to eMMC; install log μSD. Label: **CN4-LOG**.
 - [ ] Seat RCRS-49 sub-module on CN4 header.
 - [ ] Route FC4 GPS coax through dorsal PTFE sleeve (sta ~350mm); mount GPS patch, face UP.
 - [ ] Terminate CAN FD bus end: CN4 → FC4 + **120Ω PERMANENT** soldered to FC4 Cape-A.
-- [ ] Connect ETH-DE (Bay D→Bay E): FC3 Cape-A ETH-1 → CN4 Cape-B ETH-2.
-- [ ] Connect ETH-EA ring-close (Bay E→Bay A): FC4 Cape-A ETH-1 → [Bay A CN1 Cape-B ETH-2 already connected]. Closes the 8-node RSTP ring.
-- [ ] Power tap Bay E; verify 5V ±0.05V.
+- [ ] Connect ETH-DE (River's room → Simon's medbay): FC3 Cape-A ETH-1 → CN4 Cape-B ETH-2.
+- [ ] Connect ETH-EA ring-close (Simon's medbay → Shepherd's room): FC4 Cape-A ETH-1 → [Shepherd's room CN1 Cape-B ETH-2 already connected]. Closes the 8-node RSTP ring.
+- [ ] Power tap Simon's medbay (Bay E); verify 5V ±0.05V.
 
 **Security provisioning — remaining 4 nodes:**
 - [ ] TPM 2.0 on CN3, FC3, CN4, FC4 — unique key material per node.
@@ -841,7 +841,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 **ToF sensor installation:**
 
-Array B (hosted by FC1, Bay A):
+Array B (hosted by FC1, Shepherd's room / Bay A):
 
 | Sensor | Station | Position |
 |--------|---------|----------|
@@ -852,9 +852,9 @@ Array B (hosted by FC1, Bay A):
 | S5B | 315mm | Dorsal keel |
 | S6B | 265mm | Belly blister |
 
-- [ ] Install 6× VL53L5CX in Array B flush-mount frames; wire to TCA9548A ch.0–5 in Bay A; MCP23008 GP0–GP5 → XSHUT; I²C to FC1 Cape-A.
+- [ ] Install 6× VL53L5CX in Array B flush-mount frames; wire to TCA9548A ch.0–5 in Shepherd's room (Bay A); MCP23008 GP0–GP5 → XSHUT; I²C to FC1 Cape-A.
 
-Array A (hosted by FC3, Bay D):
+Array A (hosted by FC3, River's room / Bay D):
 
 | Sensor | Station | Position |
 |--------|---------|----------|
@@ -865,7 +865,7 @@ Array A (hosted by FC3, Bay D):
 | S5A | 215mm | Dorsal keel |
 | S6A | 195mm | Belly blister |
 
-- [ ] Install 6× VL53L5CX in Array A flush-mount frames; wire to TCA9548A ch.0–5 in Bay D; separate I²C bus (electrically isolated from Array B).
+- [ ] Install 6× VL53L5CX in Array A flush-mount frames; wire to TCA9548A ch.0–5 in River's room (Bay D); separate I²C bus (electrically isolated from Array B).
 - [ ] Apply 0.5mm PMMA disc over each sensor aperture with UV adhesive.
 - [ ] Configure OA fusion in firmware: halt at 1.0m obstacle clearance; either array independent on single-FC failure.
 - [ ] GPS clearance check for 49MHz wire post proximity: bench-verify HDOP ≤1.5 with RCRS-49 transmitting; if GPS degrades, move GPS patch to ≥165mm from forward post.
@@ -1014,7 +1014,7 @@ the full T/W ≈ 1.47 VTOL hover capability specified in Rev Q.
 - [ ] Bench-test 120mm EDF (correct rotation, no vibration).
 - [ ] Install EDF retaining ring at station ~430mm inside Panel F; bond; cure 1h.
 - [ ] Seat EDF in plenum 120mm outlet; press forward to retaining lip; bond with 4 dabs slow-cure epoxy.
-- [ ] Route motor leads through Panel F to 80A ESC; route signal lead forward via MAIN-PWR conduit to Bay B (FC2 PRU Ch.2).
+- [ ] Route motor leads through Panel F to 80A ESC; route signal lead forward via MAIN-PWR conduit to Inara's shuttle (Bay B, FC2 PRU Ch.2).
 - [ ] Install 80A ESC in Panel F bay; foam tape + cable tie. Cure 2h before applying thrust.
 
 **11G — Rear nozzle installation:**

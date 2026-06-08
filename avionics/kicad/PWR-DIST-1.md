@@ -14,7 +14,7 @@ PWR-DIST-1 is the central power distribution board for the Serenity UAV.  It rou
 to five ESC outputs (4 nacelle + 1 rear fuselage EDF), and generates a dual-redundant
 5 V regulated rail for all avionics, servos, and sensor nodes.
 
-It also provides battery voltage and current telemetry to the Cape-A-2 flight control
+It also provides battery voltage and current telemetry to the Wash flight control
 nodes via analog signal connectors, and terminates the PGND chassis bonding strap
 from all Faraday enclosures at a single star point.
 
@@ -51,8 +51,8 @@ from all Faraday enclosures at a single star point.
 | J_SRV | JST PH 2-pin or equivalent | 5 V output to tilt + nozzle servos | TH |
 | R_VBAT_H | 100 kΩ 1 % 0402 | VBAT voltage divider high-side | 0402 |
 | R_VBAT_L | 15 kΩ 1 % 0402 | VBAT voltage divider low-side; output to ADC | 0402 |
-| J_SIG_I | 2-pin header | ACS758 VIOUT analog signal to Cape-A-2 ADC | TH |
-| J_SIG_V | 2-pin header | VBAT_MEAS voltage divider output to Cape-A-2 ADC | TH |
+| J_SIG_I | 2-pin header | ACS758 VIOUT analog signal to Wash ADC | TH |
+| J_SIG_V | 2-pin header | VBAT_MEAS voltage divider output to Wash ADC | TH |
 | J_PGND | M3 lug terminal | PGND chassis bonding strap attachment point | TH |
 
 ---
@@ -91,8 +91,8 @@ Battery (−) ──► J_BAT Pin 2 ──► PGND (chassis star point)
 | +5V_AVI | UBEC1/2 VOUT+ | J_AVI_A, J_AVI_B, J_SRV, ACS758 VCC | 5.0 V regulated |
 | GND | UBEC1/2 VOUT−; ACS758 GND; signal returns | All avionics signal returns | 0 V |
 | PGND | J_BAT Pin 2; TVS_ESCn cathodes; C_BULKn (−); J_PGND | Chassis star = battery (−) | 0 V chassis |
-| VIOUT_MAIN | ACS758_MAIN pin 8 | J_SIG_I Pin 1 → Cape-A-2 ADC | 0.5–4.5 V |
-| VBAT_MEAS | R_VBAT_H/R_VBAT_L junction | J_SIG_V Pin 1 → Cape-A-2 ADC | 0–3.3 V (scaled) |
+| VIOUT_MAIN | ACS758_MAIN pin 8 | J_SIG_I Pin 1 → Wash ADC | 0.5–4.5 V |
+| VBAT_MEAS | R_VBAT_H/R_VBAT_L junction | J_SIG_V Pin 1 → Wash ADC | 0–3.3 V (scaled) |
 | FILTER_ACS | ACS758_MAIN pin 7 | C_ACS_FILT Pin 1 | RC filter node |
 
 ### ACS758_MAIN — Current Sensor
@@ -115,13 +115,13 @@ R_VBAT_H (100 kΩ) and R_VBAT_L (15 kΩ) form a resistor divider from VBAT_BUS t
 - **Scale factor:** 15 / (100 + 15) = 0.130 → V_ADC = V_BAT × 0.130
 - **At full 6S (25.2 V):** V_ADC = 3.28 V (within 3.3 V ADC input range)
 - **At nominal 6S (22.2 V):** V_ADC = 2.89 V
-- **ADC input:** Cape-A-2 AIN0 (PocketBeagle 2 P1-2, 1.8 V ADC)
+- **ADC input:** Wash AIN0 (PocketBeagle 2 P1-2, 1.8 V ADC)
 
-**Note:** Cape-A-2 ADC input is 1.8 V max.  If using PocketBeagle 2 onboard ADC
+**Note:** Wash ADC input is 1.8 V max.  If using PocketBeagle 2 onboard ADC
 (1.8 V full scale), revise divider to R_VBAT_H = 100 kΩ, R_VBAT_L = 8.2 kΩ:
 scale = 8.2/108.2 = 0.0758 → V_ADC = 25.2 × 0.0758 = 1.91 V.
 **PCB revision Q1:** Replace R_VBAT_L with 8.2 kΩ before board spin if PB2 native
-ADC is used.  If an external 3.3 V ADC (e.g., ADS1015 on Cape-A-2) is used, the
+ADC is used.  If an external 3.3 V ADC (e.g., ADS1015 on Wash) is used, the
 15 kΩ value is correct.
 
 ### ESC Output Protection (TVS_ESCn + C_BULKn)
@@ -227,7 +227,7 @@ terminates at J_PGND.
    aluminium mounting plate.  Apply a 0.5 mm thermal pad between UBEC case and plate.
 3. **ANL fuse access:** F_MAIN is accessible from below the belly access plate
    (60 × 80 mm cutout) without removing the PDB.  Replace fuse with rated ANL blade only.
-4. **ADC divider revision:** Verify Cape-A-2 ADC full-scale voltage before ordering PCBs.
+4. **ADC divider revision:** Verify Wash ADC full-scale voltage before ordering PCBs.
    Replace R_VBAT_L with 8.2 kΩ (0402) if using PocketBeagle 2 native 1.8 V ADC.
 5. **PGND strap torque:** M3 lug at J_PGND torqued to 0.5 N·m.  Verify bond resistance
    ≤ 2.5 mΩ with Kelvin 4-wire measurement after installation.

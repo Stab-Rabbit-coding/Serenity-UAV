@@ -354,9 +354,9 @@ All field connectors are shielded JST-GH (or SMA/U.FL for RF). SHIELD pins conne
 | J_SIK_ANT | Hirose U.FL | RF center = SIK_ANT; shell = PGND | SiK 915 MHz module pigtail |
 | J_SMA_SIK | SMA (50 Ω) | RF center via FL_SIK; shell = PGND | SiK 915 MHz antenna output |
 
-Note: Cape-B-2 uses `_B_` net name suffixes on CAN, RS-485, and 1553 bus signals
+Note: Zoë uses `_B_` net name suffixes on CAN, RS-485, and 1553 bus signals
 (CAN_B_H/CAN_B_L, RS485_B_P/RS485_B_N, BUS_1553_B_P/BUS_1553_B_N) to distinguish
-them from Cape-A-2's `_A_` nets, allowing both boards to coexist on a shared
+them from Wash's `_A_` nets, allowing both boards to coexist on a shared
 schematic bus ring without net name conflicts.
 
 ---

@@ -48,7 +48,7 @@
  *   → U_SBUS (74LVC1G14 Schmitt inverter) → UART2_RXD
  *
  * Cape-B SBUS path (UART5, SW1-2 position):
- *   J_XCVR JST-GH 6P → PRTR5V0U2X TVS (Cape-B-2) → 74LVC1G14 U_SBUS_B
+ *   J_XCVR JST-GH 6P → PRTR5V0U2X TVS (Zoë) → 74LVC1G14 U_SBUS_B
  *   → 100 Ω R_SBUS_RX → UART5_RX
  *
  * ── Baud Rate Configuration ───────────────────────────────────────────────

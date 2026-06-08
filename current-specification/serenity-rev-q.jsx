@@ -8,7 +8,7 @@
  *      Node placement changes from v2·v1·v1·v2 (nose → tail) to v2·v2·v2·v2.
  *      Rationale: single-SKU procurement, uniform EM protection, simplified DTS/firmware
  *      configuration, no cape-variant detection logic required.
- *      Affected nodes: CN2/FC2 (Bay B) and CN3/FC3 (Bay D) now use Cape-A-2 / Cape-B-2.
+ *      Affected nodes: CN2/FC2 (Inara's shuttle / Bay B) and CN3/FC3 (River's room / Bay D) now use Wash / Zoë.
  *   2. Cape-A-1, Cape-B-1, XCVR-49MHZ-1 KiCad files, DTS overlays, and gerbers
  *      archived to avionics/kicad/archive/, avionics/gerbers/archive/,
  *      and avionics/firmware/dts/cape-*/archive/ respectively. (Rev Q archive, 2026-06-05)
@@ -157,7 +157,7 @@ function TabOverview() {
                     cols={["Subsystem", "Change", "Status", "Date"]}
                     accent={C.green}
                     rows={[
-                        ["Avionics / Cape", "All 8 nodes now use EMI-hardened v2 capes (Cape-A-2 + Cape-B-2 + XCVR-49MHZ-2) at every position. Placement: v2·v2·v2·v2 (was v2·v1·v1·v2). Single-SKU procurement, uniform EM protection.", "✓ DONE", "2026-06-05"],
+                        ["Avionics / Cape", "All 8 nodes now use EMI-hardened v2 capes (Wash + Zoë + XCVR-49MHZ-2) at every position. Placement: v2·v2·v2·v2 (was v2·v1·v1·v2). Single-SKU procurement, uniform EM protection.", "✓ DONE", "2026-06-05"],
                         ["Avionics / Archive", "Cape-A-1, Cape-B-1, XCVR-49MHZ-1 KiCad, gerbers, and DTS archived to avionics/kicad/archive/, avionics/gerbers/archive/, avionics/firmware/dts/*/archive/", "✓ DONE", "2026-06-05"],
                         ["Airframe / Nacelle", "Old nacelle scripts archived: blender_nacelle_integrated_v1/v2.py, generate_shells_v2.py, generate_hollow_shells.py, *_2mm.py, *_50mm.py. Canonical: blender_nacelle_revo.py + nacelle_pod_50mm_tandem.scad", "✓ DONE", "2026-06-05"],
                         ["Airframe / Nacelle STLs", "Archived: s_nacelle_*_revt.stl, s_eng_*_50mm_repaired.stl, stator_50mm.stl, sector_gear_22mm_fixed.*, nacelle_nozzle_*_repaired.stl, rear_nozzle_petal_repaired.stl", "✓ DONE", "2026-06-05"],
@@ -180,7 +180,7 @@ function TabOverview() {
                         ["Nozzle actuation",   "Passive gear train per nacelle; SG90 for rear nozzle", "M=1.0 sector → pinion → bevel → crown → iris ring"],
                         ["Total hover thrust",  "~5,322 g",                 "1,822 g nacelles + 3,500 g rear EDF"],
                         ["AUW (6S 4000 mAh)",  "~3,550 g",                 "Estimated; T/W ≈ 1.50"],
-                        ["Avionics",           "8× PocketBeagle 2 Industrial (AM6254)", "4× FC (Cape-A-2) + 4× CN (Cape-B-2) — ALL v2"],
+                        ["Avionics",           "8× PocketBeagle 2 Industrial (AM6254)", "4× FC (Wash) + 4× CN (Zoë) — ALL v2"],
                         ["Cape variant",       "EMI-hardened v2 at ALL 8 positions",   "v2·v2·v2·v2 (Rev Q baseline)"],
                         ["Data buses",         "Ethernet RSTP · CAN FD · RS-485 · MIL-STD-1553B", "All 4 on every node"],
                         ["Radio links",        "SiK 915 MHz + LoRa 915 MHz + WiFi + RCRS 49 MHz", "All 4 on every CN node"],
@@ -248,16 +248,16 @@ function TabAirframe() {
                     cols={["Panel", "Bay", "Station (from nose)", "Access Type", "Contents"]}
                     accent={C.teal}
                     rows={[
-                        ["A (nose)",      "Bay A", "~0–91 mm",   "Screw/bayonet", "CN1 + FC1 (Cape-B-2 / Cape-A-2); GPS coax; SiK/LoRa radios"],
-                        ["B (fwd dorsal)","Bay B", "~91–165 mm", "Screw/bayonet", "CN2 + FC2 (Cape-B-2 / Cape-A-2); GPS coax"],
-                        ["C (wing root)", "Bay C", "~165–251 mm","Hinge+latch",   "ESC pairs, servo leads, wing spar access"],
-                        ["D (aft dorsal)","Bay D", "~251–320 mm","Screw/bayonet", "CN3 + FC3 (Cape-B-2 / Cape-A-2)"],
-                        ["E (aft svc)",   "Bay E", "~320–388 mm","Screw/bayonet", "CN4 + FC4 (Cape-B-2 / Cape-A-2)"],
+                        ["A — Shepherd's room (nose)",   "Bay A", "~0–91 mm",   "Screw/bayonet", "CN1 (Zoë) + FC1 (Wash); GPS coax; SiK/LoRa radios"],
+                        ["B — Inara's shuttle (fwd dors)","Bay B", "~91–165 mm", "Screw/bayonet", "CN2 (Zoë) + FC2 (Wash); GPS coax"],
+                        ["C (wing root)",                 "Bay C", "~165–251 mm","Hinge+latch",   "ESC pairs, servo leads, wing spar access"],
+                        ["D — River's room (aft dorsal)", "Bay D", "~251–320 mm","Screw/bayonet", "CN3 (Zoë) + FC3 (Wash)"],
+                        ["E — Simon's medbay (aft svc)",  "Bay E", "~320–388 mm","Screw/bayonet", "CN4 (Zoë) + FC4 (Wash)"],
                         ["F (engine bell)","Bay F","~388–600 mm","Magnet+snap",   "120 mm EDF, 80A ESC, plenum, rear nozzle servo"],
                     ]}
                 />
                 <div style={{ marginTop: 8, fontFamily: M, fontSize: 11, color: C.dimmer }}>
-                    All bays: Cape-B-2 (CN lower) + Cape-A-2 (FC upper). Uniform v2 EMI hardening at all positions.
+                    All bays: Zoë (CN lower) + Wash (FC upper). Uniform v2 EMI hardening at all positions.
                     Panel lids: PETG 0.20 mm / 100% infill. Gasket: 3M 4016 closed-cell foam tape on frame lip.
                 </div>
             </Card>
@@ -394,7 +394,7 @@ function TabPropulsion() {
                         ["Total thrust",     "~5,322 g", ""],
                         ["Hull prints + foam","~1,150 g","All shell sections + access panels + foam"],
                         ["Nacelle assemblies","~440 g",  "2× nacelle shells + EDFs + ESCs + gear + nozzle"],
-                        ["Avionics",         "~460 g",   "8× PB2-I + 4× Cape-A-2 + 4× Cape-B-2 + 4× XCVR-49MHZ-2 + GPS×4 + radios"],
+                        ["Avionics",         "~460 g",   "8× PB2-I + 4× Wash + 4× Zoë + 4× XCVR-49MHZ-2 + GPS×4 + radios"],
                         ["Servos + linkage", "~160 g",   "2× tilt servo + 1× rear nozzle servo + pushrods"],
                         ["Power (6S 4000mAh)","~750 g",  "Primary flight battery"],
                         ["Misc hardware",    "~230 g",   "CF stock, fasteners, wiring, ESCs, bearings"],
@@ -404,7 +404,7 @@ function TabPropulsion() {
                     ]}
                 />
                 <div style={{ marginTop: 8, fontFamily: M, fontSize: 11, color: C.dimmer }}>
-                    AUW slightly higher than Rev P (+~40 g) due to 4× Cape-A-2 + 4× Cape-B-2 replacing 4× Cape-A-1 + 4× Cape-B-1.
+                    AUW slightly higher than Rev P (+~40 g) due to 4× Wash + 4× Zoë replacing 4× Cape-A-1 + 4× Cape-B-1.
                     T/W remains well above 1.0 hover threshold.
                 </div>
             </Card>
@@ -425,14 +425,14 @@ function TabAvionics() {
                     Any node can fail over for any role.
                     <br /><br />
                     <span style={{ color: C.green }}>Rev Q change:</span> All 8 positions now use EMI-hardened v2 capes
-                    (Cape-A-2 / Cape-B-2 + XCVR-49MHZ-2). Placement is uniform v2·v2·v2·v2 nose to tail.
+                    (Wash / Zoë + XCVR-49MHZ-2). Placement is uniform v2·v2·v2·v2 nose to tail.
                     Cape-A-1, Cape-B-1, XCVR-49MHZ-1 designs are archived.
                 </div>
                 <Table
                     cols={["Group", "Count", "Cape", "Primary Responsibility"]}
                     rows={[
-                        ["FC1–FC4", "4", "Cape-A-2 (EMI-hardened Sensor/Flight)", "Flight control, IMU/GPS/baro fusion, ESC PID governor, ToF OA, actuator PWM"],
-                        ["CN1–CN4", "4", "Cape-B-2 (EMI-hardened Comms/Payload)", "Radio links (all 4), system logging, cargo/payload control, MAVLink routing"],
+                        ["FC1–FC4", "4", "Wash (EMI-hardened Sensor/Flight)", "Flight control, IMU/GPS/baro fusion, ESC PID governor, ToF OA, actuator PWM"],
+                        ["CN1–CN4", "4", "Zoë (EMI-hardened Comms/Payload)", "Radio links (all 4), system logging, cargo/payload control, MAVLink routing"],
                     ]}
                 />
             </Card>
@@ -457,15 +457,15 @@ function TabAvionics() {
                 />
             </Card>
 
-            <Card title="Cape-A-2 — FC Node (EMI-Hardened Flight Control / Sensor)" accent={C.green}>
+            <Card title="Wash — FC Node (EMI-Hardened Flight Control / Sensor)" accent={C.green}>
                 <div style={{ fontFamily: M, fontSize: 11, color: C.green, marginBottom: 8 }}>
-                    Rev Q: Active design. Cape-A-1 archived. All 4 FC positions use Cape-A-2.
+                    Rev Q: Active design. Cape-A-1 archived. All 4 FC positions use Wash.
                 </div>
                 <Table
                     cols={["Feature", "Detail"]}
                     accent={C.green}
                     rows={[
-                        ["Size",          "85×55 mm, 4-layer KiCad (Cape-A-2 gerbers — active)"],
+                        ["Size",          "85×55 mm, 4-layer KiCad (Wash gerbers — active)"],
                         ["CAN FD",        "ISOW1044BDFMR 5 kV isolated CAN FD transceiver (TI) — IEC 62368-1 / VDE 0884-11 certified"],
                         ["RS-485",        "ADM2795EBRWZ 5 kV isolated RS-485 (ADI) — half-duplex, 1 Mbps"],
                         ["Ethernet",      "ADIN1300BCPZ 1000BASE-T PHY + 2× ISO7642FDWRR 6-ch digital isolators + Würth 749010012A transformer; JST GH 4P (no RJ45)"],
@@ -484,28 +484,28 @@ function TabAvionics() {
                 />
             </Card>
 
-            <Card title="Cape-B-2 — CN Node (EMI-Hardened Comms / Logging / Payload)" accent={C.pink}>
+            <Card title="Zoë — CN Node (EMI-Hardened Comms / Logging / Payload)" accent={C.pink}>
                 <div style={{ fontFamily: M, fontSize: 11, color: C.green, marginBottom: 8 }}>
-                    Rev Q: Active design. Cape-B-1 archived. All 4 CN positions use Cape-B-2.
+                    Rev Q: Active design. Cape-B-1 archived. All 4 CN positions use Zoë.
                 </div>
                 <Table
                     cols={["Feature", "Detail"]}
                     accent={C.pink}
                     rows={[
-                        ["Size",           "90×60 mm, 4-layer KiCad (Cape-B-2 gerbers — active)"],
-                        ["CAN FD",         "ISOW1044BDFMR 5 kV isolated (same as Cape-A-2)"],
-                        ["RS-485",         "ADM2795EBRWZ 5 kV isolated (same as Cape-A-2)"],
-                        ["Ethernet",       "ADIN1300BCPZ + ISO7642FDWRR × 2 + Würth transformer (same as Cape-A-2)"],
+                        ["Size",           "90×60 mm, 4-layer KiCad (Zoë gerbers — active)"],
+                        ["CAN FD",         "ISOW1044BDFMR 5 kV isolated (same as Wash)"],
+                        ["RS-485",         "ADM2795EBRWZ 5 kV isolated (same as Wash)"],
+                        ["Ethernet",       "ADIN1300BCPZ + ISO7642FDWRR × 2 + Würth transformer (same as Wash)"],
                         ["SiK radio",      "SiK 915 MHz MAVLink — belly port SMA bulkhead"],
                         ["LoRa radio",     "RFM95W 915 MHz backup — belly stbd SMA bulkhead"],
                         ["WiFi/BT",        "TI WL1837MOD 2.4/5 GHz — dorsal fwd SMA bulkhead"],
                         ["RCRS-49",        "XCVR-49MHZ-2 sub-module — 49 MHz AX.25 RC (EMI-hardened)"],
-                        ["Log μSD",        "Cape-B-2 microSD slot — hardware write-blocked via CPLD"],
+                        ["Log μSD",        "Zoë microSD slot — hardware write-blocked via CPLD"],
                         ["CPLD",           "ATF16V8BQL — hardware-enforced non-executable log storage"],
                         ["NOR flash",      "W25Q128JV 128 Mb — circular log overflow buffer"],
                         ["TPM",            "SLB9670 TPM 2.0 — key material for log signing + HMAC on AX.25 payloads"],
-                        ["Tamper mesh",    "Same as Cape-A-2"],
-                        ["Cargo GPIO",     "DRV8833 winch H-bridge + HX711 load cell ADC via Cape-B-2 GPIO"],
+                        ["Tamper mesh",    "Same as Wash"],
+                        ["Cargo GPIO",     "DRV8833 winch H-bridge + HX711 load cell ADC via Zoë GPIO"],
                         ["MIL-STD-1553",  "PRU Manchester II; CN1=RT 0x01, CN2–CN4 RT addresses"],
                         ["DTS overlay",   "k3-am6254-pocketbeagle2-serenity-cape-b2.dts (avionics/firmware/dts/cape-b/)"],
                     ]}
@@ -525,7 +525,7 @@ function TabAvionics() {
                         ["TVS",          "PRTR5V0U2X TVS on signal lines — transient suppression"],
                         ["X2Y cap",      "X2Y bridging capacitor on antenna feed — EMI filtering"],
                         ["Ferrite bead", "Würth 742792512 ferrite bead on +5V supply rail"],
-                        ["Connector",    "JST GH 6P to Cape-B-2 J1 (replaces direct-coupled connection)"],
+                        ["Connector",    "JST GH 6P to Zoë J1 (replaces direct-coupled connection)"],
                         ["RF trace",     "Z₀ = 52.26 Ω — W=2.75 mm, H=1.6 mm, εr=4.5, T=35 µm — PASS [45–55 Ω]"],
                         ["Modem",        "TCM3105 AFSK modem — same as XCVR-49MHZ-1"],
                         ["PA / LNA",     "MGA-82563 LNA, PE4259 TX/RX switch — same as XCVR-49MHZ-1"],
@@ -536,13 +536,13 @@ function TabAvionics() {
 
             <Card title="Bay Assignments — Rev Q (All v2)" accent={C.yellow}>
                 <Table
-                    cols={["Bay", "Station", "Lower (Cape-B-2 CN)", "Upper (Cape-A-2 FC)", "Notes"]}
+                    cols={["Bay / Room", "Station", "Lower CN (Zoë)", "Upper FC (Wash)", "Notes"]}
                     accent={C.yellow}
                     rows={[
-                        ["A (nose)",    "0–91 mm",   "CN1", "FC1", "5 kV CAN FD/RS-485/ETH isolation; GPS1; SiK + LoRa + WiFi + XCVR-49MHZ-2; CAN FD bus start 120Ω"],
-                        ["B (fwd)",     "91–165 mm", "CN2", "FC2", "5 kV isolation at inner bay (Rev Q: all-v2); GPS2; XCVR-49MHZ-2"],
-                        ["D (aft)",     "251–320 mm","CN3", "FC3", "5 kV isolation at inner bay (Rev Q: all-v2); GPS3; XCVR-49MHZ-2"],
-                        ["E (svc)",     "320–388 mm","CN4", "FC4", "5 kV CAN FD/RS-485/ETH isolation; GPS4; CAN FD bus end 120Ω permanent"],
+                        ["A — Shepherd's room (nose)",   "0–91 mm",   "CN1", "FC1", "5 kV CAN FD/RS-485/ETH isolation; GPS1; SiK + LoRa + WiFi + XCVR-49MHZ-2; CAN FD bus start 120Ω"],
+                        ["B — Inara's shuttle (fwd dors)","91–165 mm", "CN2", "FC2", "5 kV isolation; GPS2; XCVR-49MHZ-2"],
+                        ["D — River's room (aft dorsal)", "251–320 mm","CN3", "FC3", "5 kV isolation; GPS3; XCVR-49MHZ-2"],
+                        ["E — Simon's medbay (aft svc)",  "320–388 mm","CN4", "FC4", "5 kV CAN FD/RS-485/ETH isolation; GPS4; CAN FD bus end 120Ω permanent"],
                     ]}
                 />
                 <div style={{ marginTop: 8, fontFamily: M, fontSize: 11, color: C.dimmer }}>
@@ -593,7 +593,7 @@ function TabComms() {
                         ["Top wire",       "0.3 mm SS wire, ~470 mm dorsal spine", "Forward post ~120 mm → aft post ~600 mm from nose"],
                         ["Forward post",   "PETG mast, base-loading coil 38 µH + LC pi-net", "Bonded at dorsal ~120 mm; 3 mm clearance from GPS patch"],
                         ["Aft post",       "PETG mast, ceramic bead insulator", "Top of rear nozzle cone; insulated (open-circuit) end"],
-                        ["Counterpoise",   "CF keel bar 6×3 mm, 620 mm", "Connected to XCVR-49MHZ-2 GND on Cape-B-2"],
+                        ["Counterpoise",   "CF keel bar 6×3 mm, 620 mm", "Connected to XCVR-49MHZ-2 GND on Zoë"],
                         ["XCVR Z₀",        "52.26 Ω for W=2.75 mm, H=1.6 mm, εr=4.5, T=35 µm", "PASS [45–55 Ω] — verified by check_impedance.py 2026-05-30"],
                     ]}
                 />
@@ -658,13 +658,13 @@ function TabSecurity() {
                     cols={["Layer", "Implementation", "Coverage"]}
                     accent={C.red}
                     rows={[
-                        ["TPM 2.0",              "SLB9670 on every Cape-A-2 and Cape-B-2 (8 chips total)", "Unique key material per node; HMAC-SHA256 on all flight-critical CAN FD messages; PCR extend on each boot"],
-                        ["CPLD write-blocker",   "ATF16V8BQL on every Cape-B-2 (4 chips total)", "Hardware-enforced read-only append to log μSD; NX enforcement; cannot be bypassed in firmware"],
+                        ["TPM 2.0",              "SLB9670 on every Wash and Zoë (8 chips total)", "Unique key material per node; HMAC-SHA256 on all flight-critical CAN FD messages; PCR extend on each boot"],
+                        ["CPLD write-blocker",   "ATF16V8BQL on every Zoë (4 chips total)", "Hardware-enforced read-only append to log μSD; NX enforcement; cannot be bypassed in firmware"],
                         ["Message signing",      "TPM-bound HMAC on all outbound inter-node CAN FD frames", "Unauthenticated messages discarded by all nodes"],
                         ["AX.25 HMAC",           "TPM-bound HMAC-SHA256 on every RCRS-49 AX.25 packet", "Receiver nodes verify before acting on RC commands"],
                         ["5 kV isolation",       "ISOW1044BDFMR + ADM2795EBRWZ + ADIN1300BCPZ at all 8 nodes", "Galvanic isolation prevents conducted EMI/transient propagation across bus boundaries"],
-                        ["NOR flash log",        "W25Q128JV 128 Mb circular log on Cape-B-2", "Overflow buffer for log μSD; also write-blocked; NX enforced"],
-                        ["Tamper mesh",          "F.Cu/B.Cu TMESH_P/N copper nets on Cape-A-2 + Cape-B-2", "Physical intrusion detection routed to SLB9670 TPM GPIO"],
+                        ["NOR flash log",        "W25Q128JV 128 Mb circular log on Zoë", "Overflow buffer for log μSD; also write-blocked; NX enforced"],
+                        ["Tamper mesh",          "F.Cu/B.Cu TMESH_P/N copper nets on Wash + Zoë", "Physical intrusion detection routed to SLB9670 TPM GPIO"],
                         ["Boot measurement",     "TPM PCR extend on each boot stage", "Detected replay or firmware modification flagged to ground station"],
                         ["Log integrity",        "SHA-256 hash chain on all log records", "Forensically sound; record tampering detectable"],
                     ]}
@@ -686,14 +686,14 @@ function TabSecurity() {
                     cols={["Node", "Bay", "Cape", "TPM Action"]}
                     accent={C.purple}
                     rows={[
-                        ["CN1", "A", "Cape-B-2", "TPM clear → generate endorsement key → extend PCR0 on first boot"],
-                        ["FC1", "A", "Cape-A-2", "Same; also bind HMAC signing key to FC1 endorsement key"],
-                        ["CN2", "B", "Cape-B-2", "Same as CN1"],
-                        ["FC2", "B", "Cape-A-2", "Same as FC1"],
-                        ["CN3", "D", "Cape-B-2", "Phase 7 — provision after board installation"],
-                        ["FC3", "D", "Cape-A-2", "Phase 7"],
-                        ["CN4", "E", "Cape-B-2", "Phase 7"],
-                        ["FC4", "E", "Cape-A-2", "Phase 7"],
+                        ["CN1", "A — Shepherd's room", "Zoë", "TPM clear → generate endorsement key → extend PCR0 on first boot"],
+                        ["FC1", "A — Shepherd's room", "Wash", "Same; also bind HMAC signing key to FC1 endorsement key"],
+                        ["CN2", "B — Inara's shuttle", "Zoë", "Same as CN1"],
+                        ["FC2", "B — Inara's shuttle", "Wash", "Same as FC1"],
+                        ["CN3", "D — River's room", "Zoë", "Phase 7 — provision after board installation"],
+                        ["FC3", "D — River's room", "Wash", "Phase 7"],
+                        ["CN4", "E — Simon's medbay", "Zoë", "Phase 7"],
+                        ["FC4", "E — Simon's medbay", "Wash", "Phase 7"],
                     ]}
                 />
                 <div style={{ marginTop: 8, fontFamily: M, fontSize: 11, color: C.red }}>
@@ -748,7 +748,7 @@ function TabRegulatory() {
                         ["AUVSI", "UAS best practices — structural redundancy, failsafe modes, pre-flight checklists", "Design compliant; validate at build"],
                         ["IEEE",  "IEEE 802.3 (Ethernet), ISO 11898 (CAN FD), NIST SP 800-72 (write-blocker)", "All wired bus protocols conformant"],
                         ["ISA",   "ISA-99/IEC 62443 — message authentication, secure boot, isolation barriers", "TPM + HMAC + 5 kV isolation architecture addresses core requirements"],
-                        ["IEC",   "IEC 62368-1 / VDE 0884-11 — 5 kV isolation barrier certification", "All isolation barriers on Cape-A-2 / Cape-B-2 / XCVR-49MHZ-2 certified"],
+                        ["IEC",   "IEC 62368-1 / VDE 0884-11 — 5 kV isolation barrier certification", "All isolation barriers on Wash / Zoë / XCVR-49MHZ-2 certified"],
                         ["FAA",   "AC 107-2 (remote pilot operations), FAA Part 107 waivers if above 400 ft AGL", "Operator responsibility"],
                         ["ICAO",  "Annex 2 — nav light colours/positions; Annex 13 — accident reporting", "Nav light design conformant"],
                     ]}
@@ -765,8 +765,8 @@ function TabBOM() {
         { cat: "Tilt servos + linkage",        items: 3,  mass_g: 139,  cost: 32,   notes: "2× tilt servo + 1× rear nozzle SG90" },
         { cat: "Cargo servos",                 items: 2,  mass_g: 18,   cost: 6,    notes: "2× SG90 — door actuator + payload release" },
         { cat: "Gear train (M=1.0)",           items: 8,  mass_g: 62,   cost: 62,   notes: "Sector, pinion ×2, bevel ×2, crown, housing ×2, shafts, bearings" },
-        { cat: "Avionics (PB2-I + v2 capes)",  items: 6,  mass_g: 460,  cost: 1348, notes: "8× PB2-I + 4× Cape-A-2 + 4× Cape-B-2 + 4× XCVR-49MHZ-2 + 4× log μSD" },
-        { cat: "PCB fabrication (JLCPCB)",     items: 3,  mass_g: 0,    cost: 680,  notes: "Cape-A-2 ×4 + Cape-B-2 ×4 + XCVR-49MHZ-2 ×4 (assembled, active)" },
+        { cat: "Avionics (PB2-I + v2 capes)",  items: 6,  mass_g: 460,  cost: 1348, notes: "8× PB2-I + 4× Wash + 4× Zoë + 4× XCVR-49MHZ-2 + 4× log μSD" },
+        { cat: "PCB fabrication (JLCPCB)",     items: 3,  mass_g: 0,    cost: 680,  notes: "Wash ×4 + Zoë ×4 + XCVR-49MHZ-2 ×4 (assembled, active)" },
         { cat: "Power (batteries + PDB)",      items: 3,  mass_g: 1540, cost: 120,  notes: "6S 4000 mAh + 6S 2800 mAh + dual BEC PDB" },
         { cat: "Printed parts (filament)",     items: 3,  mass_g: 2000, cost: 106,  notes: "PETG ~1,400 g + CF-PETG ~650 g + TPU ~100 g" },
         { cat: "Structural (CF stock + foam)", items: 5,  mass_g: 980,  cost: 77,   notes: "Keel + spars + ring frames + PU foam + epoxy" },
@@ -812,15 +812,15 @@ function TabBOM() {
                         ["Cape-A-1 (4×, now archived)",       "$168", "—",    "−$168"],
                         ["Cape-B-1 (4×, now archived)",       "$320", "—",    "−$320"],
                         ["RCRS-49/XCVR-49MHZ-1 (4×, archived)","$100","—",   "−$100"],
-                        ["Cape-A-2 (4×, now primary at all FC)","+$272","$272","+$272"],
-                        ["Cape-B-2 (4×, now primary at all CN)","+$420","$420","+$420"],
+                        ["Wash (4×, now primary at all FC)","+$272","$272","+$272"],
+                        ["Zoë (4×, now primary at all CN)","+$420","$420","+$420"],
                         ["XCVR-49MHZ-2 (4×, now primary at all CN)","+$128","$128","+$128"],
                         ["Total avionics cape cost delta",    "—",    "—",    "+$232"],
                         ["Total estimate",                    "~$1,905","~$2,137","~+$232"],
                     ]}
                 />
                 <div style={{ marginTop: 8, fontFamily: M, fontSize: 11, color: C.dimmer }}>
-                    Cost increase reflects upgrading all 4 inner-bay nodes (Bay B / Bay D) from v1 to v2 capes.
+                    Cost increase reflects upgrading all 4 inner-bay nodes (Inara's shuttle / Bay B and River's room / Bay D) from v1 to v2 capes.
                     Single-SKU procurement; no dual-sourcing complexity. T/W remains ≥1.48.
                 </div>
             </Card>
@@ -863,8 +863,8 @@ function TabFiles() {
                     cols={["File", "Board", "Status"]}
                     accent={C.green}
                     rows={[
-                        ["CAPE-A-2.kicad_pcb / .kicad_sch", "Cape-A-2 (85×55mm EMI-hardened)", "✓ ACTIVE — primary FC cape at all positions"],
-                        ["CAPE-B-2.kicad_pcb / .kicad_sch", "Cape-B-2 (90×60mm EMI-hardened)", "✓ ACTIVE — primary CN cape at all positions"],
+                        ["CAPE-A-2.kicad_pcb / .kicad_sch", "Wash (85×55mm EMI-hardened)", "✓ ACTIVE — primary FC cape at all positions"],
+                        ["CAPE-B-2.kicad_pcb / .kicad_sch", "Zoë (90×60mm EMI-hardened)", "✓ ACTIVE — primary CN cape at all positions"],
                         ["XCVR-49MHZ-2.kicad_pcb / .kicad_sch", "XCVR-49MHZ-2 (55×35mm EMI-hardened)", "✓ ACTIVE — primary 49 MHz sub-module"],
                         ["CAPE-A-1 / CAPE-B-1 / XCVR-49MHZ-1", "v1 standard capes", "ARCHIVED — avionics/kicad/archive/ (Rev Q 2026-06-05)"],
                     ]}
@@ -876,8 +876,8 @@ function TabFiles() {
                     cols={["Directory", "Board", "Status"]}
                     accent={C.yellow}
                     rows={[
-                        ["avionics/gerbers/CAPE-A-2/",      "Cape-A-2",     "○ PENDING — DRC sign-off required before fab submission"],
-                        ["avionics/gerbers/CAPE-B-2/",      "Cape-B-2",     "○ PENDING — DRC sign-off required before fab submission"],
+                        ["avionics/gerbers/CAPE-A-2/",      "Wash",     "○ PENDING — DRC sign-off required before fab submission"],
+                        ["avionics/gerbers/CAPE-B-2/",      "Zoë",     "○ PENDING — DRC sign-off required before fab submission"],
                         ["avionics/gerbers/XCVR-49MHZ-2/",  "XCVR-49MHZ-2","○ PENDING — DRC sign-off required before fab submission"],
                         ["avionics/gerbers/archive/CAPE-A-1/","Cape-A-1",   "ARCHIVED Rev Q 2026-06-05"],
                         ["avionics/gerbers/archive/CAPE-B-1/","Cape-B-1",   "ARCHIVED Rev Q 2026-06-05"],
@@ -886,7 +886,7 @@ function TabFiles() {
                 />
                 <div style={{ marginTop: 8, fontFamily: M, fontSize: 11, color: C.orange }}>
                     ⚠ Rev Q gerbers for v2 capes pending DRC run. Generate with avionics/kicad/generate_gerbers.py
-                    after completing PCB layout for Cape-A-2, Cape-B-2, XCVR-49MHZ-2.
+                    after completing PCB layout for Wash, Zoë, XCVR-49MHZ-2.
                     Do not submit for fabrication until DRC passes with 0 errors / 0 unconnected.
                 </div>
             </Card>
@@ -896,8 +896,8 @@ function TabFiles() {
                     cols={["File", "Cape", "Status"]}
                     accent={C.teal}
                     rows={[
-                        ["avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts", "Cape-A-2", "✓ ACTIVE"],
-                        ["avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts", "Cape-B-2", "✓ ACTIVE"],
+                        ["avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts", "Wash", "✓ ACTIVE"],
+                        ["avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts", "Zoë", "✓ ACTIVE"],
                         ["avionics/firmware/dts/cape-a/archive/k3-am6254-pocketbeagle2-serenity-cape-a.dts", "Cape-A-1", "ARCHIVED Rev Q"],
                         ["avionics/firmware/dts/cape-b/archive/k3-am6254-pocketbeagle2-serenity-cape-b.dts", "Cape-B-1", "ARCHIVED Rev Q"],
                     ]}
@@ -969,11 +969,11 @@ function TabBuildStatus() {
             phase: "Pre-Build: PCBs (Rev Q — v2 only)", status: "IN PROGRESS",
             color: C.yellow,
             items: [
-                ["Cape-A-2 PCB layout complete (EMI-hardened)", "○ OPEN — BLOCKS Phase 6 fab"],
-                ["Cape-B-2 PCB layout complete (EMI-hardened)", "○ OPEN — BLOCKS Phase 6 fab"],
+                ["Wash PCB layout complete (EMI-hardened)", "○ OPEN — BLOCKS Phase 6 fab"],
+                ["Zoë PCB layout complete (EMI-hardened)", "○ OPEN — BLOCKS Phase 6 fab"],
                 ["XCVR-49MHZ-2 PCB layout complete (EMI-hardened)", "○ OPEN — BLOCKS Phase 6 fab"],
-                ["Cape-A-2 DRC pass + gerbers generated", "○ OPEN — BLOCKS Phase 6 fab"],
-                ["Cape-B-2 DRC pass + gerbers generated", "○ OPEN — BLOCKS Phase 6 fab"],
+                ["Wash DRC pass + gerbers generated", "○ OPEN — BLOCKS Phase 6 fab"],
+                ["Zoë DRC pass + gerbers generated", "○ OPEN — BLOCKS Phase 6 fab"],
                 ["XCVR-49MHZ-2 DRC pass + gerbers generated", "○ OPEN"],
                 ["XCVR-49MHZ-2 RF trace Z₀ = 52.26 Ω", "✓ DONE  PASS"],
                 ["Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 archived", "✓ DONE  Rev Q 2026-06-05"],
@@ -1023,11 +1023,11 @@ function TabBuildStatus() {
             phase: "Phase 6 — Minimum Viable Flyer ★ (Rev Q: all v2 capes)", status: "NOT STARTED",
             color: C.red,
             items: [
-                ["CN1+FC1 (Bay A) + CN2+FC2 (Bay B) Cape-A-2/B-2 installed", "○ BLOCKED by Phase 5 + PCB fab"],
-                ["Cape-A-2/B-2 PCBs received from JLCPCB", "○ BLOCKED by DRC + gerber regen"],
+                ["CN1+FC1 (Shepherd's room/Bay A) + CN2+FC2 (Inara's shuttle/Bay B) Wash/Zoë installed", "○ BLOCKED by Phase 5 + PCB fab"],
+                ["Wash/Zoë PCBs received from JLCPCB", "○ BLOCKED by DRC + gerber regen"],
                 ["XCVR-49MHZ-2 sub-modules received", "○ BLOCKED by gerber regen"],
-                ["TPM provisioning (all 4 Bay A/B nodes)", "○ OPEN"],
-                ["CPLD write-blocker verification (Cape-B-2)", "○ OPEN"],
+                ["TPM provisioning (all 4 Shepherd's room + Inara's shuttle nodes)", "○ OPEN"],
+                ["CPLD write-blocker verification (Zoë)", "○ OPEN"],
                 ["Load k3-am6254-...-cape-a2.dts / cape-b2.dts overlays", "○ OPEN"],
                 ["CAN FD heartbeat ring (0x001–0x004)", "○ OPEN"],
                 ["serenity-cn Phase 6 + serenity-fc Phase 6 flashed", "✓ FIRMWARE DONE"],
@@ -1037,10 +1037,10 @@ function TabBuildStatus() {
             ],
         },
         {
-            phase: "Phase 7 — Full 8-Node + OA (Rev Q: Bay D/E use Cape-A-2/B-2)", status: "NOT STARTED",
+            phase: "Phase 7 — Full 8-Node + OA (Rev Q: River's room/Bay D + Simon's medbay/Bay E use Wash/Zoë)", status: "NOT STARTED",
             color: C.red,
             items: [
-                ["CN3+FC3 (Bay D) + CN4+FC4 (Bay E) Cape-A-2/B-2 installed", "○ BLOCKED by Phase 6"],
+                ["CN3+FC3 (River's room/Bay D) + CN4+FC4 (Simon's medbay/Bay E) Wash/Zoë installed", "○ BLOCKED by Phase 6"],
                 ["12× VL53L5CX ToF sensors installed + configured", "○ OPEN"],
                 ["Ethernet RSTP ring closed + verified (8 ADIN1300BCPZ nodes)", "○ OPEN"],
                 ["3-waypoint autonomous mission", "○ OPEN"],

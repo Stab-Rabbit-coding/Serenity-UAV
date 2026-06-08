@@ -23,18 +23,16 @@ are standard Linux processes that use POSIX APIs, i2c-dev, libgpiod 2.x, and pth
 
 ## Cape Variant Placement
 
-The eight nodes use a **v2 · v1 · v1 · v2** (nose → tail) cape variant layout:
+The eight nodes use a **v2 · v2 · v2 · v2** (nose → tail) cape variant layout — Rev Q all-EMI-hardened:
 
-| Bay | Pair | FC cape | CN cape | Rationale |
-|-----|------|---------|---------|-----------|
-| A (nose) | FC1 / CN1 | Cape-A-2 | Cape-B-2 | Bus start termination; 5 kV isolated CAN FD / RS-485 / Ethernet at forward bus endpoint |
-| B | FC2 / CN2 | Cape-A-1 | Cape-B-1 | Inner ring; direct RMII to CPSW3G for maximum dual-Ethernet throughput |
-| D | FC3 / CN3 | Cape-A-1 | Cape-B-1 | Inner ring; same as Bay B |
-| E (tail) | FC4 / CN4 | Cape-A-2 | Cape-B-2 | Bus end termination; 5 kV isolation closest to nacelle motor wiring / rear EDF |
+| Bay | Room name | Pair | FC cape | CN cape | Rationale |
+|-----|-----------|------|---------|---------|-----------|
+| A (nose) | Shepherd's room | FC1 / CN1 | Wash | Zoë | Bus start termination; 5 kV isolated CAN FD / RS-485 / Ethernet at forward bus endpoint |
+| B | Inara's shuttle | FC2 / CN2 | Wash | Zoë | Rev Q: uniform EMI hardening across all bays |
+| D | River's room | FC3 / CN3 | Wash | Zoë | Rev Q: uniform EMI hardening across all bays |
+| E (tail) | Simon's medbay | FC4 / CN4 | Wash | Zoë | Bus end termination; 5 kV isolation closest to nacelle motor wiring / rear EDF |
 
-The -2 capes at both bus ends place isolation barriers where conducted transients from motor
-leads and external cable runs are highest. The -1 capes in the middle bays operate in the
-cleanest EM environment and retain direct RMII connections for full CPSW3G ring performance.
+Rev Q places 5 kV galvanic isolation at every node. Cape-A-1 / Cape-B-1 are archived.
 
 ## Directory Layout
 

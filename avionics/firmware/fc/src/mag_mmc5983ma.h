@@ -6,7 +6,7 @@
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * Drives the MEMSIC MMC5983MA 3-axis magnetometer via Linux userspace
- * i2c-dev.  Used by serenity-fc on Cape-A-2 (EMI-hardened variant).
+ * i2c-dev.  Used by serenity-fc on Wash (EMI-hardened variant).
  *
  * ── Device Overview ───────────────────────────────────────────────────────
  *
@@ -14,7 +14,7 @@
  * It provides 18-bit resolution per axis via a split 8+8+2 register scheme,
  * and includes internal SET/RESET coils for bridge sensitivity refresh.
  *
- *   I2C address      : 0x30 (SA0 tied to GND on Cape-A-2; SA0 = 1 → 0x31)
+ *   I2C address      : 0x30 (SA0 tied to GND on Wash; SA0 = 1 → 0x31)
  *   Supply voltage   : 1.71–3.6 V (I/O), 1.71–1.89 V (VDD) typical
  *   Full-scale range : ±8 G (fixed)
  *   Resolution       : 18-bit (4 mG / LSB at full-scale center)
@@ -93,7 +93,7 @@ extern "C" {
  * Device constants
  * ---------------------------------------------------------------------------*/
 
-/** I2C bus address with SA0 = 0 (Cape-A-2 hardware strapping). */
+/** I2C bus address with SA0 = 0 (Wash hardware strapping). */
 #define MMC5983MA_I2C_ADDR      (0x30U)
 
 /** Product ID register value that confirms MMC5983MA identity. */

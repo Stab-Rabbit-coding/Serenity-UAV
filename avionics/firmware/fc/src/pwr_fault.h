@@ -218,7 +218,7 @@ typedef struct pwr_fault_ctx pwr_fault_ctx_t;
  * Main bus INA226 is at 0x44.  BQ76930 is at 0x08.
  *
  * @param[in]  i2c_dev_pdb  Path to the I2C bus connected to Kaylee monitors
- *                          (e.g. "/dev/i2c-2"; Cape-A-2 Bay A J_EXT_I2C).
+ *                          (e.g. "/dev/i2c-2"; Wash Shepherd's room / Bay A J_EXT_I2C).
  * @param[out] ctx_out      Set to the manager context on success.
  * @return 0 on success, negative errno on error.
  */

@@ -50,14 +50,14 @@
 | T/W one nacelle lost | **1.64:1** — FC RTH |
 | Max payload | **1,392 g (3.07 lb)** at T/W = 2.0 |
 | Compute nodes | **8 nodes:** FC1–FC4 (Cape-A, sensor/flight) + CN1–CN4 (Cape-B, comms/payload) |
-| FC node hardware | **PocketBeagle 2 Industrial (AM6254)** + Cape-A-2 85×55mm — ICM-42688-P IMU, BMP388 baro, u-blox M10Q GPS, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0** · DK 2820-100003007-ND |
-| CN node hardware | **PocketBeagle 2 Industrial (AM6254)** + Cape-B-2 90×60mm — SiK 915MHz, LoRa RFM95W 915MHz, TI WL1837MOD WiFi/BT, RCRS-49 sub-module, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0**; ATF16V8BQL CPLD write-blocker (log μSD) · DK 2820-100003007-ND |
-| Bay assignments | Bay A: CN1+FC1 · Bay B: CN2+FC2 · Bay D: CN3+FC3 · Bay E: CN4+FC4 (CN lower, FC upper per bay) |
-| Cape variant layout | **v2 · v2 · v2 · v2 (nose → tail, Rev Q):** All 8 positions use Cape-A-2 / Cape-B-2 (EMI-hardened, 5 kV isolated CAN FD / RS-485 / Ethernet transceivers). Single-SKU procurement; Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 archived as of Rev Q. |
+| FC node hardware | **PocketBeagle 2 Industrial (AM6254)** + Wash 85×55mm — ICM-42688-P IMU, BMP388 baro, u-blox M10Q GPS, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0** · DK 2820-100003007-ND |
+| CN node hardware | **PocketBeagle 2 Industrial (AM6254)** + Zoë 90×60mm — SiK 915MHz, LoRa RFM95W 915MHz, TI WL1837MOD WiFi/BT, RCRS-49 sub-module, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0**; ATF16V8BQL CPLD write-blocker (log μSD) · DK 2820-100003007-ND |
+| Bay assignments | Shepherd's room (Bay A): CN1+FC1 · Inara's shuttle (Bay B): CN2+FC2 · River's room (Bay D): CN3+FC3 · Simon's medbay (Bay E): CN4+FC4 (CN lower, FC upper per bay) |
+| Cape variant layout | **v2 · v2 · v2 · v2 (nose → tail, Rev Q):** All 8 positions use Wash / Zoë (EMI-hardened, 5 kV isolated CAN FD / RS-485 / Ethernet transceivers). Single-SKU procurement; Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 archived as of Rev Q. |
 | Bus order | CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4 — CN and FC interleaved on all data buses (CAN FD, RS-485, 1553) and power distribution; any single segment or bay power failure leaves ≥2 FC + ≥2 CN on both sides of the break |
 | Node role election | CAN FD heartbeat priority arbitration at boot — all 8 nodes identical hardware; master elected dynamically with automatic failover |
 | Radios | SiK 915MHz MAVLink + LoRa RFM95W 915MHz backup + TI WL1837MOD WiFi/BT GCS + 49MHz RCRS-49 RC; all 4 on every CN node; software-elected master per link |
-| Obstacle avoidance | 12× VL53L5CX 8×8 ToF sensors, dual redundant arrays (A on FC3 Bay D, B on FC1 Bay A) |
+| Obstacle avoidance | 12× VL53L5CX 8×8 ToF sensors, dual redundant arrays (A on FC3 River's room / Bay D, B on FC1 Shepherd's room / Bay A) |
 | Cargo | 101.6 × 76.2 × 76.2 mm bay, clamshell doors, N20 winch + auto-latch cradle |
 | Security | ATF16V8BQL CPLD write-blocker (log μSD, all Cape-B nodes) + **SLB9670 TPM 2.0 on all 8 nodes** (Cape-A and Cape-B) + W25Q128JV NOR flash circular log buffer |
 | Navigation lights | ICAO Annex 2 / 14 CFR 91.209 (6-position) |
@@ -239,20 +239,20 @@ Cape-B (CN) mounts on 6mm floor standoffs. Cape-A (FC) mounts on 20mm inter-cape
 
 **4. Install 12× ToF sensor flush-mount PETG frames** into hull cutouts (6.5mm holes):
 
-| Sensor | Station (mm) | Position                | Array | Host node         |
-| ------ | ------------ | ----------------------- | ----- | ----------------- |
-| S1A    | 25           | Nose, fwd bayonet ring  | A     | FC3 (Bay D upper) |
-| S1B    | 40           | Nose ring, aft of S1A   | B     | FC1 (Bay A upper) |
-| S3B    | 150          | Port hull side          | B     | FC1 (Bay A upper) |
-| S4B    | 150          | Stbd hull side          | B     | FC1 (Bay A upper) |
-| S3A    | 200          | Port hull side          | A     | FC3 (Bay D upper) |
-| S4A    | 200          | Stbd hull side          | A     | FC3 (Bay D upper) |
-| S6A    | 160          | Forward belly blister   | A     | FC3 (Bay D upper) |
-| S5A    | 180          | Dorsal keel apex        | A     | FC3 (Bay D upper) |
-| S6B    | 220          | Belly, aft of S6A       | B     | FC1 (Bay A upper) |
-| S5B    | 260          | Dorsal keel, aft of S5A | B     | FC1 (Bay A upper) |
-| S2B    | 425          | Engine bell rim, fwd    | B     | FC1 (Bay A upper) |
-| S2A    | 440          | Engine bell rim, aft    | A     | FC3 (Bay D upper) |
+| Sensor | Station (mm) | Position                | Array | Host node                           |
+| ------ | ------------ | ----------------------- | ----- | ----------------------------------- |
+| S1A    | 25           | Nose, fwd bayonet ring  | A     | FC3 (River's room / Bay D upper) |
+| S1B    | 40           | Nose ring, aft of S1A   | B     | FC1 (Shepherd's room / Bay A upper) |
+| S3B    | 150          | Port hull side          | B     | FC1 (Shepherd's room / Bay A upper) |
+| S4B    | 150          | Stbd hull side          | B     | FC1 (Shepherd's room / Bay A upper) |
+| S3A    | 200          | Port hull side          | A     | FC3 (River's room / Bay D upper) |
+| S4A    | 200          | Stbd hull side          | A     | FC3 (River's room / Bay D upper) |
+| S6A    | 160          | Forward belly blister   | A     | FC3 (River's room / Bay D upper) |
+| S5A    | 180          | Dorsal keel apex        | A     | FC3 (River's room / Bay D upper) |
+| S6B    | 220          | Belly, aft of S6A       | B     | FC1 (Shepherd's room / Bay A upper) |
+| S5B    | 260          | Dorsal keel, aft of S5A | B     | FC1 (Shepherd's room / Bay A upper) |
+| S2B    | 425          | Engine bell rim, fwd    | B     | FC1 (Shepherd's room / Bay A upper) |
+| S2A    | 440          | Engine bell rim, aft    | A     | FC3 (River's room / Bay D upper) |
 
 Bond each PETG flush-mount frame with 5-min epoxy — flush ±0.2mm. Apply 0.5mm PMMA disc over each aperture, UV-adhesive. Do not obstruct aperture.
 

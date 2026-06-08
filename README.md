@@ -64,16 +64,16 @@ Fuselage EDF intake *(Phase 11 only)*: 4 radial scoops at neck station ~310 mm v
 
 ## Avionics (PocketBeagle 2 Industrial — 8-node cooperative architecture)
 
-8 × PocketBeagle 2 Industrial (AM6254) boards — 4 with Cape-A-2 (EMI-hardened sensor/flight
+8 × PocketBeagle 2 Industrial (AM6254) boards — 4 with Wash (EMI-hardened sensor/flight
 capes: GPS, IMU, barometer, airspeed, FPV camera, TPM 2.0, ADC, ESC telemetry, PWM, GPIO) and
-4 with Cape-B-2 (EMI-hardened comms/logging capes: MAVLink/SiK 915 MHz, LoRa RFM95W 915 MHz,
+4 with Zoë (EMI-hardened comms/logging capes: MAVLink/SiK 915 MHz, LoRa RFM95W 915 MHz,
 TI WL1837MOD WiFi/BT, 49 MHz TDDS transceiver via XCVR-49MHZ-2 sub-module, CAN FD,
 MIL-STD-1553B, RS-485, Ethernet RSTP ring, TPM 2.0, ATF16V8BQL CPLD write-blocker,
 hardware-enforced non-executable log microSD).
 
 - EMI Hardening design objective is for operation in a 500 W/m^2 environment. 
 
-**Rev Q — EMI-hardened v2 capes at ALL positions:** Cape-A-2, Cape-B-2, and XCVR-49MHZ-2 are the sole active avionics designs. All 8 nodes use 5 kV isolated transceivers: ISOW1044BDFMR (CAN FD, TI), ADM2795EBRWZ (RS-485, ADI), ADIN1300BCPZ 1000BASE-T PHY isolated via dual ISO7642FDWRR 6-channel digital isolators and Würth 749010012A Ethernet transformer (JST GH 4P, no RJ45). XCVR-49MHZ-2 adds SRF2012-100Y CMC, PRTR5V0U2X TVS, and X2Y bridging capacitor on the antenna feed. All isolation barriers IEC 62368-1 / VDE 0884-11 certified at 5 kV.
+**Rev Q — EMI-hardened v2 capes at ALL positions:** Wash, Zoë, and XCVR-49MHZ-2 are the sole active avionics designs. All 8 nodes use 5 kV isolated transceivers: ISOW1044BDFMR (CAN FD, TI), ADM2795EBRWZ (RS-485, ADI), ADIN1300BCPZ 1000BASE-T PHY isolated via dual ISO7642FDWRR 6-channel digital isolators and Würth 749010012A Ethernet transformer (JST GH 4P, no RJ45). XCVR-49MHZ-2 adds SRF2012-100Y CMC, PRTR5V0U2X TVS, and X2Y bridging capacitor on the antenna feed. All isolation barriers IEC 62368-1 / VDE 0884-11 certified at 5 kV.
 Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived (Rev Q, 2026-06-05). Gerbers for v2 capes pending DRC sign-off.
 
 **Node variant placement — v2 · v2 · v2 · v2 (nose → tail):** All 8 positions (Bays A, B, D, E)

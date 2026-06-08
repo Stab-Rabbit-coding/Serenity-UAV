@@ -22,7 +22,7 @@ four-layer PCB sized for the Serenity UAV power architecture. It provides:
 - **Separated FC signal paths**: the forward EDF and aft EDF in each nacelle are
   commanded by different FC nodes — a single FC node failure cannot silence both
   EDFs in any nacelle
-- Per-output current sensing via INA226 (reported over I2C to FC1 / Bay A)
+- Per-output current sensing via INA226 (reported over I2C to FC1 / Shepherd's room / Bay A)
 - Per-cell battery monitoring via BQ76930 (6S balance lead input)
 - Hardware-level battery protection FETs driven by BQ76930
 - Dual redundant 5 V / 10 A SMPS (diode-OR'd) for avionics bus
@@ -95,12 +95,12 @@ requirements.
 
 All monitoring cables use shielded twisted-pair construction (see Harness Specification).
 The cable shield terminates at the adjacent PGND drain pad at the Kaylee end; at the
-Cape-A-2 end the drain wire connects to the cape chassis GND point.
+Wash end the drain wire connects to the cape chassis GND point.
 
 | Reference | Part | Function |
 |-----------|------|---------|
-| J_I2C | JST-GH SM04B-GHS-TB(LF)(SN), 4-pin 1.25 mm (GND, +5 V, SCL, SDA) | PDB I2C bus to Cape-A-2 J_EXT_I2C (Bay A FC1); shielded cable required |
-| J_ALERT | JST-GH SM02B-GHS-TB(LF)(SN), 2-pin 1.25 mm (GND, ALERT_N) | BQ76930 open-drain alert to Cape-A-2 GPIO; shielded cable required |
+| J_I2C | JST-GH SM04B-GHS-TB(LF)(SN), 4-pin 1.25 mm (GND, +5 V, SCL, SDA) | PDB I2C bus to Wash J_EXT_I2C (Shepherd's room / Bay A, FC1); shielded cable required |
+| J_ALERT | JST-GH SM02B-GHS-TB(LF)(SN), 2-pin 1.25 mm (GND, ALERT_N) | BQ76930 open-drain alert to Wash GPIO; shielded cable required |
 | J_NTC | JST-GH SM02B-GHS-TB(LF)(SN), 2-pin 1.25 mm (NTC+, NTC−) | External battery NTC thermistor (10 kΩ, on battery strap); shielded cable required |
 | J_SHLD_I2C | PGND via-pad 1.2 mm hole (adjacent to J_I2C) | I2C cable shield drain → PGND plane |
 | J_SHLD_ALERT | PGND via-pad 1.2 mm hole (adjacent to J_ALERT) | ALERT cable shield drain → PGND plane |
@@ -145,8 +145,8 @@ VBAT rail:
         └── 6 V BEC section (see below)
 
 J_I2C signal lines:
-  SCL ── D_I2C (NXP PRTR5V0U2X, dual TVS, 5 V clamp) ── Cape-A-2 SCL
-  SDA ── D_I2C ─────────────────────────────────────── Cape-A-2 SDA
+  SCL ── D_I2C (NXP PRTR5V0U2X, dual TVS, 5 V clamp) ── Wash SCL
+  SDA ── D_I2C ─────────────────────────────────────── Wash SDA
   (protects against RF-induced transients on I2C at enclosure boundary)
 ```
 
@@ -248,12 +248,12 @@ any nacelle — thrust and directional control are degraded but not lost.
 
 ### FC Assignment Table
 
-| EDF position | ESC ref | Kaylee power conn | Controlling FC node | Cape-A-2 bay | Signal pin |
+| EDF position | ESC ref | Kaylee power conn | Controlling FC node | Wash bay | Signal pin |
 |---|---|---|---|---|---|
-| Port Fwd (EDF0) | ESC1 | J_ESC1 | FC1 (Node 1) | Bay A | UART2-TX (DSHOT600) |
-| Port Aft (EDF1) | ESC2 | J_ESC2 | FC2 (Node 2) | Bay B | UART2-TX (DSHOT600) |
-| Stbd Fwd (EDF2) | ESC3 | J_ESC3 | FC2 (Node 2) | Bay B | UART3-TX (DSHOT600) |
-| Stbd Aft (EDF3) | ESC4 | J_ESC4 | FC3 (Node 3) | Bay C | UART2-TX (DSHOT600) |
+| Port Fwd (EDF0) | ESC1 | J_ESC1 | FC1 (Node 1) | Shepherd's room (Bay A) | UART2-TX (DSHOT600) |
+| Port Aft (EDF1) | ESC2 | J_ESC2 | FC2 (Node 2) | Inara's shuttle (Bay B) | UART2-TX (DSHOT600) |
+| Stbd Fwd (EDF2) | ESC3 | J_ESC3 | FC2 (Node 2) | Inara's shuttle (Bay B) | UART3-TX (DSHOT600) |
+| Stbd Aft (EDF3) | ESC4 | J_ESC4 | FC3 (Node 3) | River's room (Bay D) | UART2-TX (DSHOT600) |
 
 ### Single-FC-Node Failure Matrix
 
@@ -269,7 +269,7 @@ No single FC node failure eliminates both EDFs in any nacelle.
 
 DSHOT600 / BDSHOT signal cables are routed completely independently of the Kaylee power
 cables.  Each ESC signal connector (JST-SH 3-pin: DSHOT+, GND, TELEM) connects directly
-to the controlling FC node's Cape-A-2 via a dedicated shielded twisted-pair cable that
+to the controlling FC node's Wash via a dedicated shielded twisted-pair cable that
 passes through a separate cable gland from the corresponding power cable.  This separation
 prevents conducted EMI on the high-current power cable from corrupting the DSHOT frame.
 
@@ -310,7 +310,7 @@ prevents conducted EMI on the high-current power cable from corrupting the DSHOT
 | J_ESC5 | DNP (XT60PW-F footprint) | Phase 11 aft EDF output | — |
 | J_5V | Molex Nano-Fit 4-pin (2.50 mm, RA) | 5 V avionics bus output | WM1720-ND |
 | J_6V | Molex Nano-Fit 4-pin (2.50 mm, RA) | 6 V servo bus output | WM1720-ND |
-| J_I2C | JST-GH SM04B-GHS-TB(LF)(SN) 4-pin, 1.25 mm | PDB I2C to Cape-A-2; shielded cable, drain to J_SHLD_I2C | Mouser 440-SM04B-GHS-TB |
+| J_I2C | JST-GH SM04B-GHS-TB(LF)(SN) 4-pin, 1.25 mm | PDB I2C to Wash; shielded cable, drain to J_SHLD_I2C | Mouser 440-SM04B-GHS-TB |
 | J_ALERT | JST-GH SM02B-GHS-TB(LF)(SN) 2-pin, 1.25 mm | BQ76930 ALERT output; shielded cable, drain to J_SHLD_ALERT | Mouser 440-SM02B-GHS-TB |
 | J_NTC | JST-GH SM02B-GHS-TB(LF)(SN) 2-pin, 1.25 mm | Battery NTC thermistor input; shielded cable, drain to J_SHLD_NTC | Mouser 440-SM02B-GHS-TB |
 | R_ALERT | 2.2 kΩ 0402 | ALERT pull-up to 5 V | |
@@ -354,8 +354,8 @@ prevents conducted EMI on the high-current power cable from corrupting the DSHOT
 | U_IS4 | ESC4 output | SCL | GND | 0x43 | 60 A |
 | U_IS_MAIN | Main bus | GND | VCC | 0x44 | 75 A |
 
-The Kaylee I2C bus (J_I2C) connects to Cape-A-2 Bay A (FC1) on J_EXT_I2C.
-These addresses reside on a separate physical I2C bus segment from the Cape-A-2
+The Kaylee I2C bus (J_I2C) connects to Wash in Shepherd's room (Bay A, FC1) on J_EXT_I2C.
+These addresses reside on a separate physical I2C bus segment from the Wash
 internal INA226 (0x40 on the Cape's own I2C-0 bus). No address conflict.
 
 The BQ76930 at 0x08 shares this same J_I2C bus segment. Total devices: 6.
@@ -420,7 +420,7 @@ and recomputes OV_TRIP and UV_TRIP using the actual trimmed calibration values.
 | Rail | Consumers | Max output current |
 |------|-----------|-------------------|
 | VBAT main bus | 4× ESC outputs | Up to 4 × 40 A = 160 A burst |
-| 5 V avionics (dual BEC) | 8× PocketBeagle 2 + 4× Cape-A-2 + 4× Cape-B-2 + accessories | 10 A cont. (dual SMPS) |
+| 5 V avionics (dual BEC) | 8× PocketBeagle 2 + 4× Wash + 4× Zoë + accessories | 10 A cont. (dual SMPS) |
 | 6 V servo | 2× DS3218MG tilt + 3× SG90 (nozzle/cargo) | 5 A cont. |
 | BQ76930 self | Internal LDO from REGSRC | < 100 µA quiescent |
 
@@ -576,7 +576,7 @@ not connect to the Kaylee.  They are documented here for completeness.
 |---|---|
 | Conductor gauge | 28 AWG stranded |
 | Construction | Shielded twisted pair (DSHOT+ and GND as pair; TELEM as third conductor) |
-| Shield termination | Chassis GND at ESC end; chassis GND at Cape-A-2 end |
+| Shield termination | Chassis GND at ESC end; chassis GND at Wash end |
 | Snap-on ferrites | Würth 7427120 at both cable ends |
 | Cable routing | Separate cable gland / pass-through from the corresponding power cable for that ESC |
 

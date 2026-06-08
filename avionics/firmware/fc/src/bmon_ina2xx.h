@@ -6,11 +6,11 @@
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * Drives the Texas Instruments INA219AIDR (Cape-A-1) and INA226AIDGSR
- * (Cape-A-2 and Kaylee) via Linux userspace i2c-dev.
+ * (Wash and Kaylee) via Linux userspace i2c-dev.
  *
  * Two operating modes are supported:
  *
- *   VOLTAGE-ONLY   Cape-A-2 INA226 on-cape pack-voltage tap.
+ *   VOLTAGE-ONLY   Wash INA226 on-cape pack-voltage tap.
  *                  IN+ and IN− tied; no shunt; calibration register = 0.
  *
  *   CURRENT-SENSE  Kaylee INA226 devices (U_IS1–U_IS4, U_IS_MAIN).
@@ -27,14 +27,14 @@
  *     PGA = ±320 mV, BADC = 12-bit, SADC = 12-bit, MODE = Continuous both
  *   Cape-A-1 usage: voltage-only; shunt disabled by tying IN+/IN−.
  *
- * ── INA226AIDGSR (Cape-A-2 on-cape) ──────────────────────────────────────
+ * ── INA226AIDGSR (Wash on-cape) ──────────────────────────────────────
  *
  *   I2C address : 0x40 (A0, A1 tied to GND)
  *   Bus voltage : 0–36 V, register 0x02, full 16-bit unsigned.
  *   Resolution  : 1.25 mV per LSB.
  *   die_id register 0xFF: always reads 0x2260.
  *   Manufacturer ID register 0xFE: reads 0x5449 ("TI").
- *   Cape-A-2 usage: voltage-only (IN+ / IN− tied).
+ *   Wash usage: voltage-only (IN+ / IN− tied).
  *
  * ── INA226AIDGSR (Kaylee current monitors) ────────────────────────────────
  *
@@ -195,7 +195,7 @@ typedef enum {
     /** Texas Instruments INA219 (Cape-A-1). */
     BMON_INA_INA219  = 1,
 
-    /** Texas Instruments INA226 (Cape-A-2). */
+    /** Texas Instruments INA226 (Wash). */
     BMON_INA_INA226  = 2,
 } bmon_ina_type_t;
 
@@ -215,7 +215,7 @@ typedef struct bmon_ina2xx_ctx bmon_ina2xx_ctx_t;
  * @brief Open the INA219/INA226 driver at a specific I2C address.
  *
  * Opens the I2C bus device and sets the slave address to @p i2c_addr via
- * ioctl I2C_SLAVE.  Pass INA2XX_I2C_ADDR (0x40) for the default Cape-A-2
+ * ioctl I2C_SLAVE.  Pass INA2XX_I2C_ADDR (0x40) for the default Wash
  * on-cape device.  For Kaylee multi-device buses, pass the per-channel address
  * directly (0x40–0x44); a separate open() per device is required because each
  * context holds its own file descriptor and slave address.
@@ -289,7 +289,7 @@ bmon_ina_type_t bmon_ina2xx_get_type(const bmon_ina2xx_ctx_t *ctx);
  * writes it to register 0x05.  After this call, bmon_ina226_read_current_ma()
  * and bmon_ina226_read_power_mw() return valid data.
  *
- * In voltage-only mode (Cape-A-2 on-cape INA226), do NOT call this function;
+ * In voltage-only mode (Wash on-cape INA226), do NOT call this function;
  * the calibration register remains 0 and the current / power registers read 0.
  *
  * @param[in] ctx           Driver context (must be INA226).

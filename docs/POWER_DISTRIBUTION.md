@@ -29,7 +29,7 @@
                           │  ├──── 5 V / 10 A BEC ── avionics bus    │
                           │  └──── 6 V /  5 A BEC ── servo bus       │
                           │                                           │
-                          │  INA226 monitors (I2C → Cape-A / Bay A)  │
+                          │  INA226 monitors (I2C → Cape-A / Shepherd's room / Bay A)  │
                           │   MAIN (0x44), ESC1 (0x40)–ESC4 (0x43)  │
                           └───────────────────────────────────────────┘
 ```
@@ -90,8 +90,8 @@ over-current threshold in governor_config.h: `EDF_ESC_OVERCURRENT_A = 80 A`).
 | Load | Qty | Nom. (mA ea.) | Peak (mA ea.) | Total nom. (mA) | Total peak (mA) |
 |------|-----|--------------|---------------|-----------------|-----------------|
 | PocketBeagle 2 Industrial (SoC active) | 8 | 500 | 1 200 | 4 000 | 9 600 |
-| Cape-A-2 (sensor suite + CAN/RS-485) | 4 | 700 | 1 400 | 2 800 | 5 600 |
-| Cape-B-2 (radios TX simultaneous) | 4 | 1 500 | 2 500 | 6 000 | 10 000 |
+| Wash (sensor suite + CAN/RS-485) | 4 | 700 | 1 400 | 2 800 | 5 600 |
+| Zoë (radios TX simultaneous) | 4 | 1 500 | 2 500 | 6 000 | 10 000 |
 | XCVR-49MHZ-2 sub-modules | 4 | 100 | 250 | 400 | 1 000 |
 | WS2812B LED rings (3×) | 3 | 80 | 200 | 240 | 600 |
 | HX711 + load cell | 1 | 10 | 10 | 10 | 10 |
@@ -280,8 +280,8 @@ Avionics EMI coupling from motor noise is a serious concern.
 - Kaylee SMPS switching frequency is ≥ 300 kHz (TPS54620) — keeps switching noise
   above the EDF modulation frequencies but below the BLHeli32 DSHOT harmonics.
 - Each avionics bay has a local 47 µF + 100 nF + 10 nF bypass cap stack at the
-  5 V entry (J-PWR on Cape-A-2 and Cape-B-2).
-- Cape-A-2 power entry π-filter (FB1 Würth 742792512 + C11/C12) provides additional
+  5 V entry (J-PWR on Wash and Zoë).
+- Wash power entry π-filter (FB1 Würth 742792512 + C11/C12) provides additional
   conducted immunity per CAPE-A-2.md §6.
 - 5 V bus wire is twisted pair (18 AWG), shielded, drain wire grounded at Kaylee.
 
@@ -306,9 +306,9 @@ noise into the avionics ground. Single-point; no ground loops.
 
 ## 7. Battery Monitoring Architecture
 
-### 7.1 Pack-Level Voltage (INA226 on Cape-A-2)
+### 7.1 Pack-Level Voltage (INA226 on Wash)
 
-Each Cape-A-2 has one INA226AIDGSR wired to J_VBAT (direct VBAT tap), configured
+Each Wash has one INA226AIDGSR wired to J_VBAT (direct VBAT tap), configured
 in voltage-only mode (no shunt). Provides coarse pack voltage at 1.25 mV/LSB.
 
 - I2C address: 0x40 (on Cape-A internal I2C bus)
@@ -317,8 +317,8 @@ in voltage-only mode (no shunt). Provides coarse pack voltage at 1.25 mV/LSB.
 
 ### 7.2 Main Bus + Per-ESC Current (INA226 on Kaylee)
 
-Five INA226 devices on the Kaylee, connected to FC1 (Bay A, Cape-A-2) via a dedicated
-I2C bus (I2C-PDB, JST-GH 4-pin to J_EXT_I2C on Cape-A-2).
+Five INA226 devices on the Kaylee, connected to FC1 (Shepherd's room / Bay A, Wash) via a dedicated
+I2C bus (I2C-PDB, JST-GH 4-pin to J_EXT_I2C on Wash).
 
 | Device | Location | Shunt R | I2C Addr | Full-scale I |
 |--------|----------|---------|----------|-------------|
@@ -367,7 +367,7 @@ Kaylee and connected to the JST-XH-7P balance lead.
 | Temperature input | 10 kΩ NTC on BAT exterior, TS1 input |
 | Over-temp limit | 60 °C (PROTECT3 OT threshold) |
 | I2C address | 0x08 (CHEM pin tied high; CRC mode enabled) |
-| Alert output | Open-drain ALERT → Cape-A-2 GPIO (J_EXT_I2C SCL-side, 2.2 kΩ pull-up) |
+| Alert output | Open-drain ALERT → Wash GPIO (J_EXT_I2C SCL-side, 2.2 kΩ pull-up) |
 | Driver | `cell_mon_bq769x0` (cell_mon_bq769x0.h / cell_mon_bq769x0.c) |
 
 The BQ76930 also drives CHG and DSG FET-enable outputs. On the Kaylee battery input,
@@ -515,7 +515,7 @@ redundant in the hardware-failure sense. Redundancy provisions:
   the other carries the full 5 V load up to 6 A (limiting; some nodes may brown out
   if peak load exceeds 6 A — load shedding handles this).
 
-- **Node-level isolation:** Each Cape-A-2 bay power connector (J-PWR, Molex Nano-Fit)
+- **Node-level isolation:** Each Wash bay power connector (J-PWR, Molex Nano-Fit)
   can be individually disconnected. Any node pair (FC + CN) in one bay can be removed
   from service without affecting other bays.
 

@@ -51,7 +51,7 @@
 | `serenity-rev-n.jsx` | **Rev N — 24-inch hull + 50mm tandem EDFs** — scaled hull to 609.6 mm · 2× 50mm 6S EDF per nacelle in tandem series · 4-radial-scoop intake for rear 120mm EDF · nacelle_pod_50mm_tandem design stub · bom_revN (5 propulsion + full avionics) | Rev N (superseded by Rev O) |
 | `serenity-rev-o.jsx` | **Rev O — CG-pivot nacelle + full gear train** — tilt pivot relocated from Z=74mm to Z=83mm (nacelle CG, derived from 15-component mass breakdown) · M=1.0 gear train fully specified (sector R=22mm → drive pinion N=12T → bevel pair 45° N=14T → crown pinion N=12T → nozzle ring rack R_eff=28mm) · blender_nacelle_revo.py generates left/right stator shells · nacelle_pod_50mm_tandem.scad parametric SCAD · bom_revO (full 50mm-EDF build) | Rev O (superseded by Rev P) |
 | `serenity-rev-p.jsx` | **Rev P — Cargo bay complete** — Rev S cargo section shell (100×90mm belly opening, hinge-pin blocks, SG90 servo pads, latch-catch lips) · port/stbd CF-PETG clamshell doors (piano hinge, 3mm CF rod, foam gasket seal) · 2× SG90 servo (door + release) via DRV8833 H-bridge · N20 winch + Dyneema SK75 0.5mm spool · auto-latch cargo cradle · GPS retention ring + FPV bezel · bom_revP.json/csv · 11-tab standalone spec | **Rev P — archived 2026-06-05** |
-| `serenity-rev-q.jsx` | **Rev Q — Hardened avionics baseline** — All 8 nodes now use EMI-hardened v2 capes (Cape-A-2 / Cape-B-2 / XCVR-49MHZ-2) at all positions. Placement: v2·v2·v2·v2. Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived. Old nacelle and fuselage EDF design variants archived. bom_revQ.json/csv. Comprehensive 11-tab standalone spec | **Rev Q ← current master** |
+| `serenity-rev-q.jsx` | **Rev Q — Hardened avionics baseline** — All 8 nodes now use EMI-hardened v2 capes (Wash / Zoë / XCVR-49MHZ-2) at all positions. Placement: v2·v2·v2·v2. Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived. Old nacelle and fuselage EDF design variants archived. bom_revQ.json/csv. Comprehensive 11-tab standalone spec | **Rev Q ← current master** |
 
 ### SVG Engineering Diagrams
 
@@ -183,8 +183,8 @@ Nacelle shells use Blender script instead — see `thingverse-serenity/blender_n
 | Nacelle ESC | 4× 40A 6S BLHeli32 BDSHOT (one per 50mm EDF) · 1× 80A 6S BLHeli32 (120mm rear) |
 | Total hover thrust | **~5,322 g** (~1,822 g nacelles + ~3,500 g rear EDF) · T/W ≈1.50 at 6S 4000mAh AUW |
 | Governor | **PID closed-loop RPM per EDF** · BDSHOT600 feedback · nacelle equalization (Rev L governor — unchanged) |
-| Avionics | **8× PocketBeagle 2 Industrial (AM6254)** · 4× Cape-A-2 (FC nodes, EMI-hardened) · 4× Cape-B-2 (CN nodes, EMI-hardened) · DK 2820-100003007-ND · $51.03 ea |
-| Avionics dry | ~460 g (8× PB2-I + 4× Cape-A-2 + 4× Cape-B-2 + 4× XCVR-49MHZ-2 + GPS×4 + radios) |
+| Avionics | **8× PocketBeagle 2 Industrial (AM6254)** · 4× Wash (FC nodes, EMI-hardened) · 4× Zoë (CN nodes, EMI-hardened) · DK 2820-100003007-ND · $51.03 ea |
+| Avionics dry | ~460 g (8× PB2-I + 4× Wash + 4× Zoë + 4× XCVR-49MHZ-2 + GPS×4 + radios) |
 | Cape variant | **v2·v2·v2·v2** (Rev Q — all positions use EMI-hardened v2; Cape-A-1/B-1/XCVR-49MHZ-1 archived) |
 | AUW (Rev O) | **~3,550 g · 6S 4000mAh · T/W ≈1.50** |
 | Max payload at T/W=1.0 | **~1,772 g (3.91 lb)** |

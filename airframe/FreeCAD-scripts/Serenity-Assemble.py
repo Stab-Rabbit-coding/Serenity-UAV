@@ -329,8 +329,8 @@ def assemble_avionics_bay():
     
     Components:
     - 8 × PocketBeagle 2 Industrial (AM6254) nodes
-    - 4 × Cape-A-2 (sensor capes: GPS, IMU, barometer, airspeed, FPV camera, TPM 2.0, ADC, ESC telemetry, PWM, GPIO)
-    - 4 × Cape-B-2 (comms capes: MAVLink/SiK 915 MHz, LoRa RFM95W 915 MHz, TI WL1837MOD WiFi/BT, 49 MHz TDDS transceiver, CAN FD, MIL-STD-1553B, RS-485, Ethernet RSTP ring, TPM 2.0, write-blocker CPLD, NX-enforced microSD)
+    - 4 × Wash (sensor capes: GPS, IMU, barometer, airspeed, FPV camera, TPM 2.0, ADC, ESC telemetry, PWM, GPIO)
+    - 4 × Zoë (comms capes: MAVLink/SiK 915 MHz, LoRa RFM95W 915 MHz, TI WL1837MOD WiFi/BT, 49 MHz TDDS transceiver, CAN FD, MIL-STD-1553B, RS-485, Ethernet RSTP ring, TPM 2.0, write-blocker CPLD, NX-enforced microSD)
     - XCVR-49MHZ-2 sub-module (per each node)
     - Power distribution board
     - Isolated transceiver modules (5 kV IEC 62368-1 / VDE 0884-11 certified)
@@ -339,10 +339,10 @@ def assemble_avionics_bay():
     assy = Assembly4Lib.newAssembly(doc, "AvionicsBay")
     
     # PocketBeagle 2 node positions: Bays A, B, D, E (4 rows, 2 columns)
-    # Bay A: nodes 0, 1
-    # Bay B: nodes 2, 3
-    # Bay D: nodes 4, 5
-    # Bay E: nodes 6, 7
+    # Bay A (Shepherd's room): nodes 0, 1
+    # Bay B (Inara's shuttle): nodes 2, 3
+    # Bay D (River's room):    nodes 4, 5
+    # Bay E (Simon's medbay):  nodes 6, 7
     
     bay_positions = {
         "BayA": {"offset": Vector(0, 0, 150), "nodes": [0, 1]},

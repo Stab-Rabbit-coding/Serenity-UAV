@@ -14,7 +14,7 @@ angle of each nacelle in the Serenity UAV.  One board is installed per nacelle
 (port and starboard) at the outboard end of the wing spar where the nacelle pivot
 bearing is located.
 
-The board reports 12-bit absolute angle data to the flight control Cape-A-2 node
+The board reports 12-bit absolute angle data to the flight control Wash node
 via a shielded I²C cable (ENC_SDA / ENC_SCL), allowing the PID controller to close
 the tilt servo loop with continuous angle feedback.
 
@@ -52,7 +52,7 @@ The AMS AS5600 12-bit magnetic rotary position sensor was selected:
 | C1   | 100 nF X5R ≥ 6.3 V               | VDD bypass decoupling                     | 0402          |
 | R_DIR| 10 kΩ 1 % 0402                    | DIR pull-down to GND (CCW direction)      | 0402          |
 | R_PGO| 10 kΩ 1 % 0402                    | PGO pull-up to +3V3 (output disabled)    | 0402          |
-| J1   | JST SM04B-GHS-TB (shielded body)  | 4-pin GH cable connector to Cape-A-2      | TH right-angle|
+| J1   | JST SM04B-GHS-TB (shielded body)  | 4-pin GH cable connector to Wash      | TH right-angle|
 | —    | Diametrically magnetised magnet   | 6 mm diam × 2.5 mm axial, N42 grade      | Press-fit     |
 
 ### Magnet Specification
@@ -71,17 +71,17 @@ The AMS AS5600 12-bit magnetic rotary position sensor was selected:
 ### J1 — Cable Connector
 
 JST SM04B-GHS-TB (shielded body), right-angle, mates with JST GHHR-04V-S on the
-STP cable from Cape-A-2 J_ENC.
+STP cable from Wash J_ENC.
 
 | Pin | Signal   | Description                               |
 |-----|----------|-------------------------------------------|
 | 1   | GND      | Power and signal return                   |
-| 2   | +3V3     | 3.3 V power from Cape-A-2                 |
-| 3   | ENC_SDA  | I²C SDA (to/from Cape-A-2)               |
-| 4   | ENC_SCL  | I²C SCL (from Cape-A-2)                   |
+| 2   | +3V3     | 3.3 V power from Wash                 |
+| 3   | ENC_SDA  | I²C SDA (to/from Wash)               |
+| 4   | ENC_SCL  | I²C SCL (from Wash)                   |
 | MP  | SHIELD   | Cable shield; floating at this board end  |
 
-**Shield note:** The cable drain wire connects to PGND at the Cape-A-2 J_ENC MP pin
+**Shield note:** The cable drain wire connects to PGND at the Wash J_ENC MP pin
 only.  The shield is left floating (not connected) at J1 MP on this board to prevent
 ground loops.  The board GND is a clean signal ground, not chassis PGND.
 
@@ -164,7 +164,7 @@ high-impedance when PGO is high, reducing power and noise.
 | Cable type            | Belden 9367 STP, 2 × 28 AWG twisted pairs, PVC jacket|
 | Pairs                 | Pair 1: ENC_SDA + GND; Pair 2: ENC_SCL + +3V3        |
 | Length                | 600 mm (nominal; measure per nacelle)                 |
-| Cape-A-2 end          | JST GHR-04V-S, drain wire crimped to MP contact        |
+| Wash end          | JST GHR-04V-S, drain wire crimped to MP contact        |
 | ENC-NACELLE-1 end     | JST GHR-04V-S, drain wire cut back and not connected  |
 | Ferrite chokes        | Würth 74271222 snap-on at both ends, over full bundle |
 | Jacket colour         | Grey or natural (to distinguish from power cables)    |
@@ -196,7 +196,7 @@ strength from external RF sources.
 |--------------------------------|--------------------------------------------------|
 | ESD/EMI protection             | PRTR5V0U2X on SDA and SCL lines                  |
 | VDD bypass                     | 100 nF X5R within 2 mm of U1                     |
-| Cable shielding                | Belden 9367 STP; single-point drain at Cape-A-2  |
+| Cable shielding                | Belden 9367 STP; single-point drain at Wash  |
 | Ferrite chokes                 | Würth 74271222 at both cable ends                 |
 | Magnet field vs. threat        | 50–100 mT magnet vs. 1.45 µT external H-field;   |
 |                                | 34 000 : 1 signal-to-threat ratio                |

@@ -52,7 +52,7 @@ straight aft and contributes **no vertical force** regardless of throttle.
 | 2× tilt servos (≥ 25 kg·cm @ 6 V) | 160 |
 | 3× nozzle servos (SG90 class) | 30 |
 | 8× PocketBeagle 2 Industrial SBC | 102 |
-| 8× Cape-A-2 / Cape-B-2 avionics capes | 400 |
+| 8× Wash / Zoë avionics capes | 400 |
 | 4× XCVR-49MHZ-2 transceiver boards | 80 |
 | Wiring harness + connectors + hardware | 260 |
 | PWR-DIST-1 power distribution board | 80 |
@@ -142,7 +142,7 @@ peak 376 A, cruise 240 A, peak power 8 347 W.
 | Subsystem | Count | Current per unit (A @ 5V) | Total (A @ 5V) |
 |---|---|---|---|
 | PocketBeagle 2 Industrial | 8 | 0.5 | 4.0 |
-| Cape-A-2 / Cape-B-2 peripherals | 8 | 0.4 | 3.2 |
+| Wash / Zoë peripherals | 8 | 0.4 | 3.2 |
 | XCVR-49MHZ-2 transceiver | 4 | 0.2 | 0.8 |
 | Misc (LEDs, TPM, sensors) | — | — | 0.5 |
 | **Avionics total** | | | **8.5 A @ 5 V = 42.5 W** |

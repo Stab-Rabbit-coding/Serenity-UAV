@@ -484,7 +484,7 @@ After cure:
 
 ### Node Install Order
 
-Install **CN1 + FC1** in Bay A (nose), **CN2 + FC2** in Bay B (dorsal fwd).
+Install **CN1 + FC1** in Shepherd's room / Bay A (nose), **CN2 + FC2** in Inara's shuttle / Bay B (dorsal fwd).
 
 **For each bay:**
 1. Seat Cape-B (CN node) on floor standoffs (M2.5 × 6mm). 4 screws.
@@ -517,10 +517,10 @@ hover rather than losing one nacelle entirely.
 
 | Signal | From | To | Via |
 |--------|------|----|-----|
-| ESC1 DSHOT (port EDF1) | Cape-A FC1 PRU Ch.0 | ESC1 | Conduit Bay A → port wing root |
-| ESC3 DSHOT (stbd EDF1) | Cape-A FC1 PRU Ch.1 | ESC3 | Conduit Bay A → stbd wing root |
-| ESC2 DSHOT (port EDF2) | Cape-A FC2 PRU Ch.0 | ESC2 | Conduit Bay B → port wing root |
-| ESC4 DSHOT (stbd EDF2) | Cape-A FC2 PRU Ch.1 | ESC4 | Conduit Bay B → stbd wing root |
+| ESC1 DSHOT (port EDF1) | Cape-A FC1 PRU Ch.0 | ESC1 | Conduit Shepherd's room (Bay A) → port wing root |
+| ESC3 DSHOT (stbd EDF1) | Cape-A FC1 PRU Ch.1 | ESC3 | Conduit Shepherd's room (Bay A) → stbd wing root |
+| ESC2 DSHOT (port EDF2) | Cape-A FC2 PRU Ch.0 | ESC2 | Conduit Inara's shuttle (Bay B) → port wing root |
+| ESC4 DSHOT (stbd EDF2) | Cape-A FC2 PRU Ch.1 | ESC4 | Conduit Inara's shuttle (Bay B) → stbd wing root |
 | ESC5 / rear EDF | — | — | **DEFERRED — Phase 11** (PRU Ch.2 reserved) |
 | Nacelle tilt servo 1 (port) | Cape-A FC1 servo rail | Servo-tilt-port | SERVO-PWR conduit |
 | Nacelle tilt servo 2 (stbd) | Cape-A FC2 servo rail | Servo-tilt-stbd | SERVO-PWR conduit |
@@ -563,13 +563,14 @@ hover rather than losing one nacelle entirely.
 
 **Goal:** All 8 nodes installed, full ring redundancy, obstacle avoidance operational.
 
-Install **CN3 + FC3** in Bay D (dorsal aft), **CN4 + FC4** in Bay E (aft service). Same procedure as Phase 6 for each bay.
+Install **CN3 + FC3** in River's room / Bay D (dorsal aft), **CN4 + FC4** in Simon's medbay / Bay E (aft service). Same procedure as Phase 6 for each bay.
 
 Connect remaining CAN FD / RS-485 / 1553 / ETH ring segments (CN3→FC3→CN4→FC4). Terminate CAN FD bus at FC4 (120Ω).
 
 Install 12× ToF sensor array:
-- Array A sensors on FC3 (Bay D): S1A, S3A, S4A, S5A, S6A, S2A
-- Array B sensors on FC1 (Bay A): S1B, S3B, S4B, S5B, S6B, S2B
+
+- Array A sensors on FC3 (River's room / Bay D): S1A, S3A, S4A, S5A, S6A, S2A
+- Array B sensors on FC1 (Shepherd's room / Bay A): S1B, S3B, S4B, S5B, S6B, S2B
 
 Verify full obstacle avoidance in firmware (dual-redundant arrays — A and B cover identical fields, any single FC failure leaves full coverage on the other).
 

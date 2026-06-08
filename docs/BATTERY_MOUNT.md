@@ -59,7 +59,7 @@ required before first flight (see §6 Procedure, step 3).
 | 4× BLHeli32 ESCs | 100 | 490 | 49 000 |
 | 2× tilt servos + CF pivot rods | 146 | 490 | 71 540 |
 | 8× PocketBeagle 2 Industrial | 104 | 295 | 30 680 |
-| 4× Cape-A-2 + 4× Cape-B-2 | 288 | 295 | 84 960 |
+| 4× Wash + 4× Zoë | 288 | 295 | 84 960 |
 | 4× XCVR-49MHZ-2 | 52 | 295 | 15 340 |
 | Kaylee (enclosed, 278 g) | 278 | 245 | 68 110 |
 | CF keel bar | 30 | 305 | 9 150 |
