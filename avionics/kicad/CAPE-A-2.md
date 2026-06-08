@@ -1,4 +1,4 @@
-# Wash (CAPE-A-2) — EMI-Hardened Flight Control & Sensor Cape
+# Wash — EMI-Hardened Flight Control & Sensor Cape
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Callsign:** Wash
@@ -11,7 +11,7 @@
 
 ## Purpose
 
-Wash (CAPE-A-2) is an electromagnetic-environment-hardened variant of CAPE-A-1 (Rev M) intended
+Wash is an electromagnetic-environment-hardened variant of CAPE-A-1 (Rev M) intended
 for operation in the nacelle bays and fuselage sections of the Serenity UAV where EDF motor
 switching noise, high-current ESC PWM harmonics, and external RF threats require a higher
 level of conducted and radiated immunity than the standard Rev M design provides.
@@ -54,7 +54,7 @@ Ethernet connector assignments:
 
 ### 2. CAN FD transceiver: ATA6561 → ISOW1044BDFMR
 
-| Parameter | CAPE-A-1 | Wash (CAPE-A-2) |
+| Parameter | CAPE-A-1 | Wash |
 |---|---|---|
 | Part | ATA6561 (SOIC-8) | ISOW1044BDFMR (SOIC-16) |
 | Isolation | None (non-isolated) | 5000 V RMS reinforced (IEC 62368-1) |
@@ -78,7 +78,7 @@ without compromising DC isolation.
 
 ### 3. RS-485 transceiver: MAX3485E → ADM2795EBRWZ
 
-| Parameter | CAPE-A-1 | Wash (CAPE-A-2) |
+| Parameter | CAPE-A-1 | Wash |
 |---|---|---|
 | Part | MAX3485E (SOIC-8) | ADM2795EBRWZ (SOIC-20W) |
 | Isolation | None (non-isolated) | 5000 V RMS reinforced (IEC 62368-1) |
@@ -318,7 +318,7 @@ routed through the π-filter (FB1/C11/C12) before distribution to the cape rail.
 - `AVIONICS_PB2_REDESIGN.md` — system architecture and power budgets
 - `XCVR-49MHZ-2.md` — EMI-hardened 49 MHz transceiver (companion board)
 - `CAPE-B-2.md` — EMI-hardened comms/logging cape (companion board)
-- `Wash (CAPE-A-2).kicad_sch` — schematic for this board (canonical filename: CAPE-A-2.kicad_sch)
+- `CAPE-A-2.kicad_sch` — schematic for this board (canonical filename: CAPE-A-2.kicad_sch)
 
 ---
 

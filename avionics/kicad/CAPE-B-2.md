@@ -1,4 +1,4 @@
-# Zoë (CAPE-B-2) — EMI-Hardened Communications, Logging & Payload Cape
+# Zoë — EMI-Hardened Communications, Logging & Payload Cape
 
 **Callsign:** Zoë
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
@@ -11,11 +11,11 @@
 
 ## Purpose
 
-Zoë (CAPE-B-2) is the electromagnetic-environment-hardened variant of CAPE-B-1
-(Rev M), designed for the same harsh nacelle and fuselage EM environment as CAPE-A-2.
+Zoë is the electromagnetic-environment-hardened variant of CAPE-B-1
+(Rev M), designed for the same harsh nacelle and fuselage EM environment as Wash.
 The communications payload of this cape (SiK 915 MHz, LoRa 915 MHz, WiFi 2.4/5 GHz,
 49 MHz RCRS) is inherently more susceptible to radiated interference than the purely
-digital CAPE-A-2, so hardening concentrates on conducted immunity for the wired
+digital Wash, so hardening concentrates on conducted immunity for the wired
 buses and supply rails, and on keeping the RF subsystem's susceptibility low through
 better supply filtering and digital-interface isolation from the RF groundplane.
 
@@ -25,7 +25,7 @@ better supply filtering and digital-interface isolation from the RF groundplane.
 
 ### 1. Ethernet PHY removal (space recovery)
 
-Identical rationale to CAPE-A-2: both DP83825I PHYs, their magnetics, and the two
+Identical rationale to Wash: both DP83825I PHYs, their magnetics, and the two
 ETH-P/ETH-N JST-GH connectors are removed. The 22 P2 expansion-header pins formerly
 allocated to RMII0/1, MDC, MDIO, and PHY control signals become no-connect.
 
@@ -34,14 +34,14 @@ without any overall board size increase from the CAPE-B-1 90 × 60 mm footprint.
 
 ### 2. CAN FD transceiver: ATA6561 → ISOW1044BDFMR
 
-Identical substitution to CAPE-A-2. See CAPE-A-2.md §2 for full rationale.
+Identical substitution to Wash. See CAPE-A-2.md §2 for full rationale.
 The isolated transceiver (ISOW1044BDFMR, SOIC-16, DigiKey 296-ISOW1044BDFMRCT-ND)
 provides 5 kV reinforced isolation, ±42 V bus fault tolerance, and an integrated DC/DC
 converter that generates the isolated bus-side supply from the 3.3 V logic rail.
 
 ### 3. RS-485 transceiver: MAX3485E → ADM2795EBRWZ
 
-Identical substitution to CAPE-A-2. See CAPE-A-2.md §3. Half-duplex direction-control
+Identical substitution to Wash. See CAPE-A-2.md §3. Half-duplex direction-control
 via RS485_DE (tied to both DE and RE_N) is preserved.
 
 ### 4. Common-mode chokes on CAN and RS-485 bus lines
@@ -125,13 +125,13 @@ protection:
 
 ### 10. Power entry filter
 
-Identical to CAPE-A-2: π-filter (C11 = 47 µF, FB1 = Würth 742792512, C12 = 10 µF +
+Identical to Wash: π-filter (C11 = 47 µF, FB1 = Würth 742792512, C12 = 10 µF +
 100 nF) on the +5V supply at J-PWR. See CAPE-A-2.md §6.
 
 ### 11. Chassis ground (PGND) implementation
 
-Same single-point chassis ground topology as CAPE-A-2. PGND additional connections
-specific to CAPE-B-2:
+Same single-point chassis ground topology as Wash. PGND additional connections
+specific to Zoë:
 
 - SMA connector shields for all antenna ports (SMA-915-SIK, SMA-915-LORA, SMA-WIFI,
 
@@ -143,21 +143,21 @@ specific to CAPE-B-2:
 
 ### 12. RF supply decoupling (upgraded from CAPE-B-1)
 
-CAPE-B-1 had 100 µF + 100 nF per radio VCC (U16 ferrite + bulk cap array). CAPE-B-2
+CAPE-B-1 had 100 µF + 100 nF per radio VCC (U16 ferrite + bulk cap array). Zoë
 upgrades to:
 
 | Radio | Input supply filter | VCC bypass |
 | --- | --- | --- |
 | SiK RFD900x | 10 µH inductance + 47 µF (before module VCC) | 100 nF + 10 nF at module pin |
 | RFM95W | 100 Ω ferrite + 10 µF + 100 nF | 100 nF + 10 nF at module pin |
-| WL1837MOD | TPS63031 output + 1 µH + 47 µF (CAPE-B-2 added) | 10 µF + 100 nF at module pin |
+| WL1837MOD | TPS63031 output + 1 µH + 47 µF (Zoë added) | 10 µF + 100 nF at module pin |
 | RCRS-49 J1 | 10 µF + 100 nF at J1 pin | (on XCVR-49MHZ-2 board) |
 
 ---
 
 ## PCB Layout Constraints (additions to CAPE-B-1 rules)
 
-The CAPE-A-2 layout constraints apply equally here. Additional CAPE-B-2 specifics:
+The Wash layout constraints apply equally here. Additional Zoë specifics:
 
 - **RF groundplane moat:** The RFD900x and RFM95W occupy the same RF section as in
 
@@ -323,7 +323,7 @@ headroom absorbed by the new isolated transceivers (~80 mA combined increase).
 
 ## EMC Compliance Targets
 
-Same as CAPE-A-2: IEC 61000-4-2 Level 4, IEC 61000-4-4 Level 4, IEC 61000-4-5 Level 3,
+Same as Wash: IEC 61000-4-2 Level 4, IEC 61000-4-4 Level 4, IEC 61000-4-5 Level 3,
 MIL-STD-461G RE102 Limit C, RS103 200 V/m.
 
 Additional RF susceptibility note: the RFD900x and RFM95W modules have their own

@@ -161,17 +161,17 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 **Open tasks:**
 - [ ] finish Wash PCB.  ensure all phy have shielded connectors, all nets are valid, all ferrite beads and isolation caps are in place.
-- [ ] Add sbus/uart dip to CAPE-A-2. 
-- [ ] **Generate CAPE-A-2 gerbers** — `CAPE-A-2.kicad_pcb` complete; run DRC to zero errors in
+- [ ] Add sbus/uart dip to Wash. 
+- [ ] **Generate Wash gerbers** — `CAPE-A-2.kicad_pcb` complete; run DRC to zero errors in
   KiCad; export to `avionics/kicad/gerbers/CAPE-A-2/`; re-export drill files.
-  - **BLOCKS CAPE-A-2 fab order**
-- [ ] **Generate CAPE-B-2 gerbers** — `CAPE-B-2.kicad_pcb` complete; same DRC + export procedure;
+  - **BLOCKS Wash fab order**
+- [ ] **Generate Zoë gerbers** — `CAPE-B-2.kicad_pcb` complete; same DRC + export procedure;
   export to `avionics/kicad/gerbers/CAPE-B-2/`.
-  - **BLOCKS CAPE-B-2 fab order**
+  - **BLOCKS Zoë fab order**
 
-- [x] remove wifi, sik, and loRa antennas from CAPE-B-2. Use filtered chokes on rf lines to route all RF signals from antennas to wifi, lora, zigbee,and sik xcvr circuits on CAPE-B-2, and/or use uart or i2c with filtering to connect isolated xcvrs to the cape. **Done (2026-06-05):** Added §13 antenna filter chains to CAPE-B-2.kicad_sch — each radio ANT pin now routes through a Johanson BPF (FL_LORA/FL_SIK: 0915LP15B0100E; FL_WIFI: 2450BP15B050E) and RCLAMP0502B ESD shunt to a dedicated SMA connector (J_SMA_LORA, J_SMA_WIFI, J_SMA_SIK). SiK uses Hirose U.FL J_SIK_ANT for module pigtail. All connector shells PGND. See CAPE-B-2.md §13.
-- [x] **Re-evaluate space / restore Ethernet to CAPE-B-2** — One DP83825I EMI-hardened PHY
-  added to Zoë (CAPE-B-2) at Rev Q; J_ETH_B connector populated. Board has adequate
+- [x] remove wifi, sik, and loRa antennas from Zoë. Use filtered chokes on rf lines to route all RF signals from antennas to wifi, lora, zigbee,and sik xcvr circuits on Zoë, and/or use uart or i2c with filtering to connect isolated xcvrs to the cape. **Done (2026-06-05):** Added §13 antenna filter chains to CAPE-B-2.kicad_sch — each radio ANT pin now routes through a Johanson BPF (FL_LORA/FL_SIK: 0915LP15B0100E; FL_WIFI: 2450BP15B050E) and RCLAMP0502B ESD shunt to a dedicated SMA connector (J_SMA_LORA, J_SMA_WIFI, J_SMA_SIK). SiK uses Hirose U.FL J_SIK_ANT for module pigtail. All connector shells PGND. See CAPE-B-2.md §13.
+- [x] **Re-evaluate space / restore Ethernet to Zoë** — One DP83825I EMI-hardened PHY
+  added to Zoë at Rev Q; J_ETH_B connector populated. Board has adequate
   space; RF SMA connectors remain. *(done 2026-06-07)*
 
 - [ ] **Generate XCVR-49MHZ-2 gerbers** — `XCVR-49MHZ-2.kicad_pcb` complete; export to
@@ -251,11 +251,11 @@ All Phase 1–3 items must be sequentially complete. Phase 4 verification runs i
 
 - Must minimize weight, size, and cost
 
-- [ ] PB2-I + CAPE-A-2 Enclosure
+- [ ] PB2-I + Wash Enclosure
 
 - Must account for all sensor inputs and flight control and comms outputs.
 
-- [ ] PB2-I + CAPE-B-2 Enclosure
+- [ ] PB2-I + Zoë Enclosure
 
 - Must account for RF routing from external antennas to internal transceivers
 
@@ -289,20 +289,20 @@ feelines
 ### 1.5 — Documentation
 
 - [x] **1.4.1 `serenity-rev-p.jsx`** — comprehensive 11-tab standalone Rev P specification created: Overview, Airframe, Propulsion, Avionics, Comms, Cargo, Security, Regulatory, BOM, Files, Build Status. Supersedes serenity-rev-o.jsx as current spec. *(done 2026-06-01)*
-- [x] **1.4.2 Wash (CAPE-A-2): rename + dual Ethernet PHY** — Board renamed to "Wash (CAPE-A-2)"
+- [x] **1.4.2 Wash: rename + dual Ethernet PHY** — Board renamed to "Wash"
   throughout schematic and markdown. Added 2× EMI-hardened DP83825I PHYs (J_ETH1, J_ETH2):
   HX1188NL magnetics, SRF2012-100Y CMC, PRTR5V0U2X TVS, TPS62933 1.8V supply per PHY.
   RMII0→PHY1 (PHY addr 0x01), RMII1→PHY2 (PHY addr 0x02). MDC/MDIO shared.
   CAPE-A-2.md §1 updated from "PHY removal" to "EMI-hardened dual Ethernet PHY". *(done 2026-06-07)*
-- [x] **1.4.3 Zoë (CAPE-B-2): rename + Ethernet PHY** — Board renamed to
-  "Zoë (CAPE-B-2)". Added 1× EMI-hardened DP83825I PHY (J_ETH_B): HX1188NL magnetics,
+- [x] **1.4.3 Zoë: rename + Ethernet PHY** — Board renamed to
+  "Zoë". Added 1× EMI-hardened DP83825I PHY (J_ETH_B): HX1188NL magnetics,
   SRF2012-100Y CMC, PRTR5V0U2X TVS ×2, TPS62933 1.8V supply. RMII0 interface, PHY addr 0x01.
   CAPE-B-2.md §1 updated from "PHY removal" to "EMI-hardened Ethernet PHY". *(done 2026-06-07)*
-- [x] **1.4.4 Wash (CAPE-A-2): add missing field connectors** — Connector audit found J_PWR,
+- [x] **1.4.4 Wash: add missing field connectors** — Connector audit found J_PWR,
   J_CAN, J_485, J_1553, J_GPS, J_SERVO, J_ESC absent from schematic despite protection circuits
   being present. All 7 connectors added (JST SM03B/SM04B/SM05B/SM06B-GHS-TB-1MP series). §14
   field connector table added to CAPE-A-2.md. *(done 2026-06-07)*
-- [x] **1.4.5 Zoë (CAPE-B-2): add missing field connectors** — J_PWR, J_CAN, J_485,
+- [x] **1.4.5 Zoë: add missing field connectors** — J_PWR, J_CAN, J_485,
   J_1553 added to schematic (JST SM03B/SM04B-GHS-TB-1MP). §14 field connector table added to
   CAPE-B-2.md. *(done 2026-06-07)*
 - [ ] **Update PHASED_BUILD_GUIDE.md** from Rev M 18-inch to Rev Q 24-inch specifications

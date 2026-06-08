@@ -25,7 +25,7 @@ constraints from XCVR-49MHZ-1 apply unchanged.
 
 ### 1. J1 host interface — EMI filter and protection
 
-The 6-pin 2.54 mm pitch header J1 that connects to CAPE-B-2's RCRS-49 port is the
+The 6-pin 2.54 mm pitch header J1 that connects to Zoë's RCRS-49 port is the
 primary EMI ingress path. Any high-frequency conducted noise arriving on the UART and
 PTT lines from the CAPE-B harness routes directly to the Si5351A logic interface
 and MCP4921 SPI port. XCVR-49MHZ-2 adds a three-tier protection network:
@@ -384,7 +384,7 @@ vacated AMS1117 SOT-223 pad area plus a 5 × 8 mm strip adjacent to J1.
 R = 2.5 mm quarter-circle arcs, centered on the M2.5 corner mounting holes
 (which are placed 2.5 mm from each edge). This eliminates the sharp right-angle
 corners that are prone to chipping during depanelization and handling, and matches
-the corner profile applied to CAPE-A-1, CAPE-A-2, XCVR-49MHZ-1 (also updated),
+the corner profile applied to CAPE-A-1, Wash, XCVR-49MHZ-1 (also updated),
 and the existing CAPE-B-1/B-2 boards (which already carried this profile).
 
 ---
@@ -426,13 +426,13 @@ The JST-GH SM06B-GHS-TB-1MP connector symbol for J1 now includes a SHIELD pin
 - **Cable type:** Belden 9533 6-conductor overall foil + braid shielded (or equivalent
   multi-conductor shielded, ≥ 28 AWG per conductor, overall shield coverage ≥ 85 %).
 - **Drain wire:** 28 AWG stranded, terminate to the J1 PGND mounting-tab pad.  Bond the
-  other end to CAPE-B-2's corresponding J_XCVR PGND pad.
+  other end to Zoë's corresponding J_XCVR PGND pad.
 - **Ferrite clamp:** Würth 74271222 snap-on ferrite (or Laird 28B0562-100) ≤ 25 mm from
-  the connector body at BOTH the XCVR-49MHZ-2 end and the CAPE-B-2 end.
+  the connector body at BOTH the XCVR-49MHZ-2 end and the Zoë end.
 - **Maximum cable length:** 150 mm (limited by signal integrity at 1200-baud AFSK and
   UART signal rise time ≤ 10 ns at 3.3 V LVCMOS).
 
-### Wiring to Host (CAPE-B-2 J_XCVR)
+### Wiring to Host (Zoë J_XCVR)
 
 The J1-to-J_XCVR harness is the primary EMI ingress path.  In addition to the
 cable shield, the following on-board measures are active (see §1):
@@ -457,7 +457,7 @@ cable shield, the following on-board measures are active (see §1):
 - `XCVR-49MHZ-1.kicad_sch` — original (Phase 1 stub) schematic
 - `XCVR-49MHZ-1.md` — original Phase 1 design notes and committed BOM
 - `CAPE-B-2.kicad_sch` — host board with J1 counter-connector
-- `CAPE-B-2.md` — CAPE-B-2 design notes
+- `CAPE-B-2.md` — Zoë design notes
 
 ---
 

@@ -154,7 +154,7 @@ Nacelle shells use Blender script instead — see `thingverse-serenity/blender_n
 | `PROJECT_INDEX.md` | This file |
 | `AVIONICS_PB2_REDESIGN.md` | **Rev K** — 8-node PocketBeagle 2 cooperative avionics architecture; Cape-A and Cape-B design specs |
 | `PHASED_BUILD_GUIDE.md` | **Rev M** — 8-phase phased build, procurement, and flight-test guide (PB2-I boards, eMMC boot, dual-EDF + PID governor) |
-| `bom_revQ.json` | **Rev Q** bill of materials — all-v2 capes at all positions; CAPE-A, CAPE-B, RCRS-49 v1 rows zeroed and marked archived; CAPE-A-2, CAPE-B-2, XCVR-49MHZ-2 as primary avionics; ~$2,137 est. |
+| `bom_revQ.json` | **Rev Q** bill of materials — all-v2 capes at all positions; CAPE-A, CAPE-B, RCRS-49 v1 rows zeroed and marked archived; Wash, Zoë, XCVR-49MHZ-2 as primary avionics; ~$2,137 est. |
 | `bom_revP.json` | **Rev P** bill of materials — in archives/; retained for traceability |
 | `bom_revO.json` | **Rev O** bill of materials — CG-pivot nacelle · M=1.0 gear train · 50mm tandem EDF · 24-inch hull · full avionics + antenna system |
 | `bom_revO.csv` | **Rev O** bill of materials (CSV for spreadsheet use) — 77 line items including 8 new Rev O gear-train rows; superseded M=0.5 rows retained at Qty=0 for traceability |
