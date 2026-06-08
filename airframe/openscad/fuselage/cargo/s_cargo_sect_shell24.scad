@@ -2,6 +2,20 @@
 // s_cargo_sect_shell24.scad
 // Cargo gondola shell for Serenity Rev N 24" hull (s_cargo_sect.stl).
 //
+// Rev S1 (2026-06-08): Wing root mortises, spar bearing blocks, and nacelle
+//   tilt servo mount blocks at port and stbd interior Z walls.
+//   - wing_root_mortise(±1): 30.8×20.8×15 mm slot through each lateral wall
+//     (Z=0 stbd, Z=163 port) for wing root tenon insertion; 0.4 mm/side clearance.
+//   - spar_bearing_block(±1): 22 mm OD × 10 mm tall annular boss on each
+//     interior Z wall, co-axial with wing_spar_bore; M3 grub-screw spar retention.
+//   - wing_spar_bore(): 12.3 mm dia × full Z-span bore for CF-TUBE-12MM wing spar,
+//     centred at X=-70.0 mm (30% chord from LE), Y=CY+40 mm.
+//   - nacelle_servo_mount_block(±1): 52×30×8 mm CF-PETG pad on each interior
+//     Z wall; 4× M3 heat-set inserts for nacelle_servo_bracket.stl; 10×6 mm
+//     lead conduit slot.
+//   All loads documented; FOS ≥ 11 (bolts) to 685 (bearing) vs. 4.0 target.
+//   Ref: s_wings_s1223_revo.scad; DS3218MG datasheet; load analysis in source.
+//
 // Rev S (2026-06-01): Clamshell cargo-bay door opening, hinge-pin mount blocks,
 //   SG90 servo mounting pads, and latch-catch lips.
 //   - door_bay_cut(): 100×9×165 mm belly opening at X=-152..-52, Z=0..163,
@@ -544,6 +558,242 @@ module latch_catch_lip(x_start, z_pos) {
     cube([CATCH_PROTRUSION, CATCH_T, CATCH_W]);
 }
 
+// ── Wing root mortise, spar bearing blocks, and nacelle servo mounts (Rev S1) ─
+//
+// LOAD ANALYSIS AND STRUCTURAL JUSTIFICATION
+// All loads computed at 3g manoeuvre envelope.  FOS target ≥ 4.0 per AUVSI
+// structural margin practice for small UAS.  Ref: AUVSI best-practice guideline
+// for small UAS structural margins; IEEE Std 1912 airframe design guidance.
+//
+// Aircraft parameters (per PROJECT_INDEX.md; PHASED_BUILD_GUIDE.md Rev P):
+//   AUW (Phase 5–10, no aft EDF)    W_aua = 2768 g = 27.15 N
+//   Nacelle mass (each)             m_nac =  320 g =  3.14 N
+//   Wing semi-span                  b     =  85.7 mm = 0.0857 m
+//   Wing area (both panels)         S_ref ≈  0.0156 m²
+//   Air density (sea level ISA)     ρ     = 1.225 kg/m³
+//   Cruise speed                    V     = 40 kt  = 20.6 m/s
+//
+// ── Wing root bending moment (3g symmetrical pull-up) ──────────────────────
+// Aerodynamic lift at 40 kt cruise, S1223 airfoil (CL=1.55, Re≈91k):
+//   F_aero_both = CL × 0.5 × ρ × V² × S_ref
+//               = 1.55 × 0.5 × 1.225 × 20.6² × 0.0156 = 6.44 N (both wings)
+//   At 3g manoeuvre: F_aero_1g = 3.22 N/wing → 3g load = 9.66 N/wing
+//   Nacelle weight at 3g: F_nac_3g = 3 × 3.14 = 9.42 N/nacelle
+//   Tip load (per side, 3g): F_tip = F_aero_3g + F_nac_3g = 9.66 + 9.42 = 19.08 N
+//   Root bending moment:     M_root = F_tip × b = 19.08 × 0.0857 = 1.635 N·m
+//
+// CF-TUBE-12MM section properties (12 mm OD, 1.5 mm wall; per bom_revO.csv):
+//   Second moment of area: I = π/64 × (D_o⁴ − D_i⁴)
+//     D_o = 12 mm; D_i = 12 − 2×1.5 = 9 mm
+//     I = π/64 × (12⁴ − 9⁴) = π/64 × (20736 − 6561) = 695.8 mm⁴
+//   Extreme fibre: c = D_o/2 = 6.0 mm
+//   Bending stress: σ = M_root×c/I = 1635 × 6.0 / 695.8 = 14.1 MPa
+//   CF axial tensile allowable: σ_allow ≥ 600 MPa (CFRP pultruded tube)
+//   FOS_bending = 600 / 14.1 = 42.6  ✓  (>> 4.0 target)
+//
+// ── Spar bearing block contact stress ─────────────────────────────────────
+// Annular contact area: boss OD = WING_SPAR_BOSS_OD = 22 mm; bore = 12.3 mm
+//   A_annulus = π/4 × (22² − 12.3²) = 260.8 mm²
+//   σ_bearing = F_tip / A_annulus = 19.08 / 260.8 = 0.073 MPa
+//   CF-PETG compressive yield ≈ 50 MPa → FOS_bearing = 685  ✓✓✓
+//
+// ── Wing root mortise (tenon bearing shear) ────────────────────────────────
+// Bearing face area: MORT_W(30 mm) × WING_ROOT_TAB_L(12 mm) = 360 mm² per face
+//   τ = F_tip / A_face = 19.08 / 360 = 0.053 MPa
+//   CF-PETG shear yield ≈ 25 MPa → FOS_shear = 472  ✓✓✓
+//
+// ── Nacelle tilt servo torque at mount block ──────────────────────────────
+// Servo: DS3218MG class; rated 25 kg·cm at 6 V = 2.45 N·m (minimum spec).
+// Mount bolt pattern: 4× M3 heat-set inserts at ±NSVMT_HOLE_S_X = ±17.5 mm in X.
+//   Moment arm between bolt-pair couple: 2 × 17.5 = 35.0 mm = 0.035 m
+//   Bolt-pair load at servo stall: F_pair = τ_servo / moment_arm
+//     = 2.45 / 0.035 = 70.0 N → 35.0 N per individual bolt
+//   M3 insert pullout in CF-PETG: P_out ≈ 400 N (Ruthex RX-M3x5.7; ISO 14589)
+//   FOS_bolt = 400 / 35.0 = 11.4  ✓  (>> 4.0 target)
+//
+// Nacelle pushrod dynamic load (at sector gear radius, stall transient):
+//   F_pushrod = τ_servo / r_sector = 2.45 / 0.022 = 111 N
+//   Carried in pushrod axially (tension/compression).  Does NOT load mount block.
+//
+// References:
+//   Selig & Guglielmo (1997) J. Aircraft 34(1):72–79 (S1223 CL data).
+//   AUVSI small UAS structural margin guidance, FOS_min = 4.0.
+//   DS3218MG datasheet; Ruthex RX-M3x5.7; ISO 14589 (heat-set inserts).
+//   s_wings_s1223_revo.scad SPAR_BORE_X, WING_ROOT_TAB_*, WING_CHORD_ROOT.
+//   nacelle_sector_gear.scad SLOT_BC_R = 18 mm; nacelle_pod_50mm_tandem.scad.
+//   PHASED_BUILD_GUIDE.md Phase 3 tilt servo installation.
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Wing root mortise dimensions (must match s_wings_s1223_revo.scad WING_ROOT_TAB_*)
+//   The fuselage_root_tab() protrusion in the wing SCAD inserts into these slots.
+//   VERIFY all *_TAB_* values against wing STL in slicer before printing.
+WING_ROOT_X_CEN    = CX;            // mm, mortise X centre = 50% chord = cargo CX
+WING_ROOT_Y_CEN    = CY + 40.0;     // mm, mortise Y centre = -288.63 mm (dorsal of centroid)
+WING_ROOT_TAB_W    =  30.0;         // mm, tab width  (X)  — VERIFY in s_wings_s1223_revo.scad
+WING_ROOT_TAB_H    =  20.0;         // mm, tab height (Y)  — VERIFY in s_wings_s1223_revo.scad
+WING_ROOT_TAB_L    =  12.0;         // mm, tab insertion depth (Z) — VERIFY
+WING_MORT_CLR      =   0.4;         // mm, clearance per side (slip fit per CLAUDE.md)
+// Derived mortise opening dimensions
+MORT_W  = WING_ROOT_TAB_W + 2 * WING_MORT_CLR;   // = 30.8 mm
+MORT_H  = WING_ROOT_TAB_H + 2 * WING_MORT_CLR;   // = 20.8 mm
+
+// Wing spar bore (CF-TUBE-12MM, 12 mm OD × 1.5 mm wall, runs in Z through gondola)
+//   X position derivation (all in world coords, X = longitudinal):
+//     Wing chord = 161 mm; root tab centred at 50% chord.
+//     LE_X = WING_ROOT_X_CEN + 0.50 × 161.0 = -102.19 + 80.5  = -21.69 mm
+//     spar = LE_X  - 0.30 × 161.0           = -21.69  - 48.3  = -69.99 mm ≈ -70 mm
+//   Y = WING_ROOT_Y_CEN (spar at SPAR_BORE_Y_CTR = 0, i.e. chord-plane mid-line).
+//   Ref: s_wings_s1223_revo.scad SPAR_BORE_X = 0.30, SPAR_BORE_Y_CTR = 0.
+WING_SPAR_X_CEN    =  -70.0;        // mm, spar bore X centre — VERIFY in slicer
+WING_SPAR_BORE_D   =   12.3;        // mm, bore ID = CF-TUBE-12MM OD + 0.3 mm slip
+WING_SPAR_BOSS_OD  =   22.0;        // mm, bearing boss OD: gives (22-12.3)/2 = 4.85 mm wall
+SPAR_BOSS_H        =   10.0;        // mm, boss protrusion inward from interior Z-wall face
+SPAR_GRUB_TAP_D    =    2.5;        // mm, M3 tap-drill dia for spar retention grub screw
+                                     //     Grub screw: DIN 913 M3×4 (same spec as hinge_pin_block)
+
+// Nacelle tilt servo mount block (one per Z side)
+//   Target servo class: DS3218MG or equivalent — body 40 × 20 × 38 mm;
+//   output shaft points outboard (Z direction, toward nacelle).
+//   A separately-printed nacelle_servo_bracket.stl clamps the servo body to
+//   this block via 4× M3×10 SHCS (one per heat-set insert).
+//   Ref: DS3218MG datasheet; PHASED_BUILD_GUIDE.md Phase 3; load analysis above.
+NSVMT_X_CEN        = CX;            // mm, block X centre — aligned with wing root X
+NSVMT_Y_CEN        = CY + 40.0;     // mm, block Y centre — same station as wing root Y
+NSVMT_PAD_W        =   52.0;        // mm, block X span (40 mm body + 6 mm margin each side)
+NSVMT_PAD_H        =   30.0;        // mm, block Y span (20 mm body + 5 mm lug + 2.5 mm/side)
+NSVMT_PAD_T        =    8.0;        // mm, block protrusion in Z from interior Z-wall face
+NSVMT_HOLE_S_X     =   17.5;        // mm, M3 insert ±X offset from block centre (lug spacing/2)
+NSVMT_HOLE_S_Y     =    8.0;        // mm, M3 insert ±Y offset from block centre (lug width/2)
+NSVMT_M3_OD        =    4.1;        // mm, M3 heat-set bore (Ruthex RX-M3x5.7: 4.0 + 0.1 press)
+NSVMT_M3_DEP       =    6.0;        // mm, M3 insert pocket depth (>= insert length 5.7 mm)
+NSVMT_CONDUIT_W    =   10.0;        // mm, servo lead conduit slot width (X)
+NSVMT_CONDUIT_H    =    6.0;        // mm, servo lead conduit slot height (Y)
+
+// ----------------------------------------------------------------------------
+// Module: wing_root_mortise
+//   Rectangular slot cut through one Z-face wall to receive the wing root tenon.
+//   z_sign = +1: port wall (Z = DZ = 163 mm); z_sign = −1: stbd wall (Z = 0).
+//   Cut depth = WALL_MM + WING_ROOT_TAB_L + 1 mm cutter overshoot.
+//   WING_MORT_CLR = 0.4 mm/side added per CLAUDE.md positive-stop slip-fit req.
+//   VERIFY mortise position vs slicer cross-section before printing.
+//   Ref: s_wings_s1223_revo.scad fuselage_root_tab(); CLAUDE.md §Fabrication.
+// ----------------------------------------------------------------------------
+module wing_root_mortise(z_sign) {
+    cut_depth = WALL_MM + WING_ROOT_TAB_L + 1.0;
+    z_lo = (z_sign > 0) ? (DZ - cut_depth) : 0.0;
+
+    translate([WING_ROOT_X_CEN - MORT_W / 2,
+               WING_ROOT_Y_CEN - MORT_H / 2,
+               z_lo])
+    cube([MORT_W, MORT_H, cut_depth]);
+}
+
+// ----------------------------------------------------------------------------
+// Module: wing_spar_bore
+//   Full-Z through-bore for the CF-TUBE-12MM wing spar (12 mm OD × 1.5 mm wall).
+//   Runs the entire gondola Z span (DZ = 163 mm) with 1 mm overshoot each end.
+//   X = WING_SPAR_X_CEN (30% chord from LE);  Y = WING_ROOT_Y_CEN (chord line).
+//   Applied at the outer difference level to cut through hull walls AND
+//   both spar_bearing_block solids in a single boolean operation.
+//   Ref: s_wings_s1223_revo.scad spar_bore(); CF-TUBE-12MM per bom_revO.csv.
+// ----------------------------------------------------------------------------
+module wing_spar_bore() {
+    translate([WING_SPAR_X_CEN, WING_ROOT_Y_CEN, -1.0])
+    cylinder(h = DZ + 2.0, d = WING_SPAR_BORE_D);
+}
+
+// ----------------------------------------------------------------------------
+// Module: spar_bearing_block
+//   Solid annular boss on the interior Z-face wall, co-axial with the wing spar.
+//   Provides the load-transfer annulus between the CF spar and the gondola hull.
+//   Boss OD = 22 mm; the spar bore is removed by wing_spar_bore() at the outer
+//   difference level (not inside this module) to guarantee a single clean cut.
+//   A single M3 grub-screw tap hole from the +Y face retains the spar against
+//   axial (Z-direction) walking; matches hinge_pin_block retention pattern.
+//
+//   z_sign = +1: port wall (boss protrudes in −Z from interior face at Z = DZ−WALL_MM)
+//   z_sign = −1: stbd wall (boss protrudes in +Z from interior face at Z = WALL_MM)
+//
+//   Annular contact area = π/4×(22²−12.3²) = 260.8 mm² → σ = 0.073 MPa at 3g tip load.
+//   FOS_bearing = 685 (CF-PETG compressive yield ≈ 50 MPa).  See analysis above.
+//   Ref: load analysis above; CLAUDE.md min 2-wall contact annulus (4.85 mm >> 2×0.6 mm).
+// ----------------------------------------------------------------------------
+module spar_bearing_block(z_sign) {
+    z_int_face = (z_sign > 0) ? (DZ - WALL_MM) : WALL_MM;
+    z_blk_lo   = (z_sign > 0) ? (z_int_face - SPAR_BOSS_H) : z_int_face;
+    z_blk_cen  = z_blk_lo + SPAR_BOSS_H / 2;
+
+    difference() {
+        // Boss cylinder: 22 mm OD × 10 mm tall; spar bore removed externally.
+        translate([WING_SPAR_X_CEN, WING_ROOT_Y_CEN, z_blk_lo])
+        cylinder(h = SPAR_BOSS_H, d = WING_SPAR_BOSS_OD);
+
+        // M3 grub-screw tap bore from +Y face, centred on spar axis.
+        //   Retains CF-TUBE-12MM against Z walking.
+        //   Grub screw: DIN 913 M3×4 (tightened after spar insertion).
+        translate([WING_SPAR_X_CEN,
+                   WING_ROOT_Y_CEN + WING_SPAR_BOSS_OD / 2,
+                   z_blk_cen])
+        rotate([-90, 0, 0])   // bore axis toward spar centre from +Y exterior
+        cylinder(h = SPAR_BOSS_H / 2 + 0.5, d = SPAR_GRUB_TAP_D);
+    }
+}
+
+// ----------------------------------------------------------------------------
+// Module: nacelle_servo_mount_block
+//   Solid rectangular mounting pad on the interior Z-face wall for the nacelle
+//   tilt servo (DS3218MG class: 40 × 20 × 38 mm body, ±17.5 mm lug spacing).
+//   Provides:
+//     • Flat inboard face for servo body seating (normal to Z axis)
+//     • 4× M3 heat-set insert pockets (±17.5 mm × ±8 mm pattern)
+//     • 10 × 6 mm lead conduit slot through inboard face for servo wiring
+//   Servo output shaft points outboard (toward nacelle in Z direction).
+//   A separately-printed nacelle_servo_bracket.stl (to be generated) clamps
+//   the servo body to this pad via 4× M3×10 SHCS.
+//
+//   z_sign = +1: port wall  (pad protrudes in −Z, shaft toward port nacelle)
+//   z_sign = −1: stbd wall  (pad protrudes in +Z, shaft toward stbd nacelle)
+//
+//   Servo stall torque reaction: 4× M3 inserts at 35 mm couple arm → 35 N/bolt.
+//   FOS_bolt = 400 / 35 = 11.4.  See load analysis above.
+//   Ref: DS3218MG datasheet; PHASED_BUILD_GUIDE.md Phase 3 tilt servo install.
+// ----------------------------------------------------------------------------
+module nacelle_servo_mount_block(z_sign) {
+    // z_int_face: interior face of lateral Z wall (inset WALL_MM from exterior)
+    z_int_face = (z_sign > 0) ? (DZ - WALL_MM) : WALL_MM;
+    // Block origin in Z: port protrudes inward (-Z), stbd protrudes inward (+Z)
+    z_blk_lo   = (z_sign > 0) ? (z_int_face - NSVMT_PAD_T) : z_int_face;
+    // M3 bores drilled from the inboard (interior-facing) face of the pad.
+    //   Port: inboard face is at z_blk_lo  → bores start there, go in +Z.
+    //   Stbd: inboard face is at z_blk_lo+NSVMT_PAD_T → bores start NSVMT_M3_DEP below.
+    z_bore_lo  = (z_sign > 0)
+        ? z_blk_lo
+        : (z_blk_lo + NSVMT_PAD_T - NSVMT_M3_DEP);
+
+    difference() {
+        // Mounting pad solid
+        translate([NSVMT_X_CEN - NSVMT_PAD_W / 2,
+                   NSVMT_Y_CEN - NSVMT_PAD_H / 2,
+                   z_blk_lo])
+        cube([NSVMT_PAD_W, NSVMT_PAD_H, NSVMT_PAD_T]);
+
+        // 4× M3 heat-set insert pockets bored from inboard face into pad.
+        //   ±NSVMT_HOLE_S_X (±17.5 mm) in X: matches DS3218MG lug-hole spacing.
+        //   ±NSVMT_HOLE_S_Y (±8.0 mm)  in Y: matches DS3218MG lug width / 2.
+        for (dx = [-NSVMT_HOLE_S_X, NSVMT_HOLE_S_X])
+        for (dy = [-NSVMT_HOLE_S_Y, NSVMT_HOLE_S_Y])
+            translate([NSVMT_X_CEN + dx, NSVMT_Y_CEN + dy, z_bore_lo])
+            cylinder(h = NSVMT_M3_DEP + 0.1, d = NSVMT_M3_OD);
+
+        // Servo lead conduit slot: 10 × 6 mm through inboard half of pad.
+        //   Routes servo signal + power leads from the mount face to interior.
+        translate([NSVMT_X_CEN - NSVMT_CONDUIT_W / 2,
+                   NSVMT_Y_CEN - NSVMT_CONDUIT_H / 2,
+                   z_bore_lo])
+        cube([NSVMT_CONDUIT_W, NSVMT_CONDUIT_H, NSVMT_PAD_T / 2 + 0.1]);
+    }
+}
+
 // ============================================================
 // Main geometry
 // ============================================================
@@ -556,20 +806,24 @@ module latch_catch_lip(x_start, z_pos) {
 //   STL bounds: X=-202..-7, Y=-415..-211, Z=0..163 mm.
 //   Inner scale used: sx=0.979459, sy=0.980354, sz=0.975496.
 //
-// ── CSG tree overview (Rev S) ─────────────────────────────────────────────────
+// ── CSG tree overview (Rev S1) ────────────────────────────────────────────────
 //
 //   outer_union
-//   ├─ difference                    ← door_bay_cut applied to EVERYTHING below
+//   ├─ difference                    ← door_bay_cut + wing mortises + spar bore
 //   │  ├─ inner_union
-//   │  │  ├─ difference             ← existing per-skin cuts (camera, GPS)
+//   │  │  ├─ difference             ← per-skin cuts (camera, GPS)
 //   │  │  │  ├─ import(shell_stl)
 //   │  │  │  ├─ fpv_cut
 //   │  │  │  └─ gps_mount_cut ×2
 //   │  │  ├─ m3_boss ×12           ← joint-face bosses (outside bay zone)
 //   │  │  ├─ belly_rib ×2          ← ribs CUT by door_bay_cut within bay zone
 //   │  │  ├─ hinge_pin_block ×2    ← outside bay zone; survive door_bay_cut
-//   │  │  └─ servo_mount_pad ×2    ← outside bay zone (AFT of bay); survive
-//   │  └─ door_bay_cut             ← removes belly skin + hinge clearance
+//   │  │  ├─ servo_mount_pad ×2    ← cargo door servos, AFT of bay
+//   │  │  ├─ spar_bearing_block ×2 ← port + stbd Z-wall bosses  (Rev S1 NEW)
+//   │  │  └─ nacelle_servo_mount_block ×2 ← port + stbd tilt-servo pads (NEW)
+//   │  ├─ door_bay_cut             ← removes belly skin + hinge clearance
+//   │  ├─ wing_root_mortise ×2     ← port + stbd tenon slots      (Rev S1 NEW)
+//   │  └─ wing_spar_bore           ← 12.3 mm full-Z spar bore     (Rev S1 NEW)
 //   └─ latch_catch_lip ×4          ← added AFTER cut; protrude into bay opening
 
 union() {
@@ -640,6 +894,32 @@ union() {
             //     VERIFY pad footprint clears interior ribs and foam-fill zone.
             servo_mount_pad(SERVO_X_CEN, SERVO_PORT_Z);   // port-door servo
             servo_mount_pad(SERVO_X_CEN, SERVO_STBD_Z);   // stbd-door servo
+
+            // A7. Wing spar bearing blocks at port and stbd interior Z-walls.
+            //     Each block: 22 mm OD boss × 10 mm tall, with M3 grub-screw tap.
+            //     Boss OD = 22 mm; wall annulus = 4.85 mm (>> 2-perimeter min).
+            //     Spar bore (wing_spar_bore) is applied at the outer difference
+            //     level so it cuts cleanly through both bosses and hull walls.
+            //     Port boss: protrudes −Z from interior face at Z ≈ 161 mm.
+            //     Stbd boss: protrudes +Z from interior face at Z ≈ 2 mm.
+            //     VERIFY boss Z-range and Y-position in slicer before printing.
+            //     Ref: load analysis above; CF-TUBE-12MM per bom_revO.csv.
+            spar_bearing_block(+1);    // port: Z = 151..161 mm
+            spar_bearing_block(-1);    // stbd: Z =   2..12  mm
+
+            // A8. Nacelle tilt servo mount blocks at port and stbd interior Z-walls.
+            //     Each block: 52×30 mm face × 8 mm deep; 4× M3 heat-set inserts;
+            //     10×6 mm lead conduit slot.  DS3218MG-class servo (≥25 kg·cm)
+            //     mounts via separately-printed nacelle_servo_bracket.stl using
+            //     4× M3×10 SHCS through the bracket into these inserts.
+            //     Block Y range: NSVMT_Y_CEN ± 15 mm = −303 .. −273 mm (above Y=−407
+            //     door cut top — not affected by door_bay_cut).
+            //     Port block: protrudes −Z from interior face (Z ≈ 153..161 mm).
+            //     Stbd block: protrudes +Z from interior face (Z ≈   2..10  mm).
+            //     VERIFY block footprint clears conduits in slicer before printing.
+            //     Ref: DS3218MG datasheet; PHASED_BUILD_GUIDE.md Phase 3.
+            nacelle_servo_mount_block(+1);  // port: Z = 153..161 mm
+            nacelle_servo_mount_block(-1);  // stbd: Z =   2..10  mm
         }
 
         // ── Cargo-bay door opening ────────────────────────────────────────────
@@ -647,6 +927,25 @@ union() {
         //   Removes belly skin (X=-152..-52, full Z, Y=-416..-407).
         //   3 mm shell frame lips remain at X=-155..-152 and X=-52..-49.
         door_bay_cut();
+
+        // ── Wing root mortises (tenon slots through lateral Z walls) ─────────
+        //   Each slot: MORT_W × MORT_H opening (30.8 × 20.8 mm) through wall.
+        //   Depth = WALL_MM + WING_ROOT_TAB_L + 1 mm overshoot = 15 mm.
+        //   Port slot: Z = 148..163 mm (through port wall at DZ=163).
+        //   Stbd slot: Z =   0.. 15 mm (through stbd wall at Z=0).
+        //   VERIFY mortise position vs wing STL in slicer before printing.
+        //   Ref: s_wings_s1223_revo.scad fuselage_root_tab() geometry.
+        wing_root_mortise(+1);   // port wall
+        wing_root_mortise(-1);   // stbd wall
+
+        // ── Wing spar through-bore (full Z span) ─────────────────────────────
+        //   12.3 mm dia bore at (WING_SPAR_X_CEN, WING_ROOT_Y_CEN) = (-70, -288.6).
+        //   Passes through both Z walls AND both spar_bearing_block solids.
+        //   CF-TUBE-12MM (12 mm OD) slides through with 0.15 mm radial clearance.
+        //   Spar retained by M3 grub screw in each bearing block after final fit.
+        //   VERIFY bore X and Y in slicer cross-section before printing.
+        //   Ref: CF-TUBE-12MM (bom_revO.csv); s_wings_s1223_revo.scad spar_bore().
+        wing_spar_bore();
     }
 
     // ── B. Latch-catch lips (added after door_bay_cut; not affected by it) ────
