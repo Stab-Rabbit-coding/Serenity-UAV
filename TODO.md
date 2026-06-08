@@ -310,9 +310,22 @@ feelines
 
 #### 1.4.4 flight control signal wiring
 
-#### 1.4.5 power distribution
+#### 1.4.5 power distribution board
 
 -[ ] "Kaylee, what happened to my ship?"  - "Everything's shiny, Captain."
+
+-[ ] Design EM Hardened Power Distribution Board - Kaylee.md, Kaylee.kicad_pro, Kaylee.kicad_sch, Kaylee.kicad_pcb
+
+- [ ] Verify Kaylee.kicad_pcb meets Power requirements
+-- [ ] Proper Amperage
+-- [ ] Proper fusing and wire size
+-- [ ] Protection against cascades
+-- [ ] Proper filtering and EM hardening
+-- [ ] Battery and circuit monitoring
+-- [ ] Size and weight
+
+- [ ] DRC check
+- [ ] Gerber printed
 
 ---
 
