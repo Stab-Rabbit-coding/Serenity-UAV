@@ -80,6 +80,16 @@ Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived (Rev Q, 2026-06-05). Gerbers for v2 ca
 use EMI-hardened -2 capes, providing uniform 5 kV galvanic isolation at every node. Single-SKU
 procurement; no dual-sourcing complexity; simplified DTS and firmware configuration.
 
+
+### Cargo Handling
+
+- Jayne handles cargo.
+
+- Payload design minimum is 8 oz (226g) in a 4" x 3" x 3" space.
+
+- Belly clamshell doors, winch, and gondola system allow for loading of cargo while in flight. (Just be careful about taking jobs from Mr. Nizka.)
+
+
 **Cargo handling (Rev P — complete):** clamshell cargo bay with CF-PETG port/starboard doors,
 8-barrel piano hinge on 3 mm CF rod, SG90 door servo + SG90 release servo via DRV8833 H-bridge,
 N20 winch motor + Dyneema SK75 0.5 mm line, auto-latch payload cradle, HX711 load cell, FPV camera
