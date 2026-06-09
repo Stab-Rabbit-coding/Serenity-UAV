@@ -38,10 +38,18 @@ def is_mesh_valid(mesh):
     """
     Return True if mesh is watertight globally, or all split bodies are watertight.
     A mesh with 0 bodies (non-manifold, unsplittable) fails.
+    Raises RuntimeError if graph engines are unavailable (networkx not installed).
     """
     if mesh.is_watertight:
         return True
-    bodies = mesh.split()
+    try:
+        bodies = mesh.split()
+    except Exception as e:
+        if "graph engines" in str(e).lower():
+            raise RuntimeError(
+                "mesh.split() requires networkx — add it to requirements-dev.txt"
+            ) from e
+        raise
     if not bodies:
         return False
     return all(b.is_watertight for b in bodies)
