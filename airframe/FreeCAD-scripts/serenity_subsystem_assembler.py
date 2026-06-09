@@ -336,4 +336,4 @@ class SerenitySubsystemAssembler:
                 Vector(0, 20, 50),  # Internal mounting
                 Rotation(0, 0, 0)
             )
-            door_servo.
+            door_servo.Label = "Door Servo (SG90)"

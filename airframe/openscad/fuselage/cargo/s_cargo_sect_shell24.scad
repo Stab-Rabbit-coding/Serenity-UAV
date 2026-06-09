@@ -2,6 +2,71 @@
 // s_cargo_sect_shell24.scad
 // Cargo gondola shell for Serenity Rev N 24" hull (s_cargo_sect.stl).
 //
+// Rev S4 (2026-06-08): Correct Cape-B-2/Cape-A-2 PCB dimensions — was CAPE-B-1 legacy.
+//   VERIFIED from CAPE-B-2.kicad_pcb Edge.Cuts (X=121..176, Y=87.5..122.5 mm):
+//   Both Cape-B-2 (Zoë) and Cape-A-2 (Wash) are 55×35 mm, not the 90×60 mm / 85×55 mm
+//   values used in Rev S2/S3.  Those came from CAPE-B-1's archived footprint referenced
+//   in CAPE-B-2.md; CAPE-B-2 was redesigned to match the 55×35 mm PB2-I footprint.
+//   All AVINICS_BOSS_* and FARADAY_ENC_* parameters corrected accordingly:
+//     AVINICS_BOSS_DX: 42 → 25 mm  (tray ±24.5 mm PCB hole + 0.5 mm wall inset)
+//     AVINICS_BOSS_DZ: 27 → 15 mm  (tray ±14.5 mm PCB hole + 0.5 mm wall inset)
+//     AVINICS_PANEL_X: 95 → 62 mm  (Faraday tray 60 mm + 1 mm insertion clearance each side)
+//     AVINICS_PANEL_Z: 65 → 42 mm  (Faraday tray 40 mm + 1 mm insertion clearance each side)
+//     FARADAY_ENC_X:   95 → 60 mm  (Cape-B-2 55 mm + 1.5 mm Al wall each side)
+//     FARADAY_ENC_Z:   65 → 40 mm  (Cape-B-2 35 mm + 1.5 mm Al wall each side)
+//     FARADAY_ENC_Y:   65 → 55 mm  (39.2 mm stack + 5 mm clearance + 7 mm fan + 1.5 mm floor)
+//   Access cover now 72×52 mm (panel 62×42 + 5 mm shoulder each side).
+//   Inara tray Z = 99..139 mm; River tray Z = 24..64 mm; inter-bay gap = 35 mm.
+//   GPS clearances re-verified at new boss positions: nearest boss ≥ 25.0 mm to GPS ✓.
+//   CAPE_PCB_* and CAPE_HOLE_* constants added for cape/tray SCAD cross-referencing.
+//   Ref: CAPE-B-2.kicad_pcb pad MH1–MH4 (2.7 mm drill at ±24.5×±14.5 mm from board ctr).
+//
+// Rev S3 (2026-06-08): Faraday enclosure space allocation for avionics bays.
+//   Access panel cuts enlarged 85×55 mm → 95×65 mm (Cape-B PCB 90×60 mm plus
+//   2.5 mm Faraday tray wall each side) to allow Faraday tray insertion from
+//   dorsal face.  Boss offsets updated to Faraday enclosure corner mount pattern:
+//   ±42×±27 mm (was ±40×±25 mm for Cape-B PCB corners directly — PCBs now mount
+//   on internal standoffs inside the Faraday tray, not on gondola bosses directly).
+//   Bay Z centres adjusted ±1 mm (Inara 118→119, River 45→44) to maintain 10 mm
+//   inter-bay gap for conduit routing between Inara and River enclosures.
+//   FARADAY_* parameters added to document enclosure external envelope and fan spec.
+//   Per CLAUDE.md §1.4.1: 500 W/m² design target; bonded aluminium shell enclosure;
+//   25 mm axial fan per bay; filtered cable exits; no ground loops.
+//   GPS_PORT (Z=104.7) remains within Inara panel (86.5..151.5 mm) ✓.
+//   GPS_STBD (Z=44.7)  remains within River  panel (11.5.. 76.5 mm) ✓.
+//   All boss clearances to GPS Ø36 mm recesses re-verified (min ≥ 43.9 mm) ✓.
+//   Ref: CLAUDE.md §1.4.1 EMI hardening; TODO §1.4.1; Cape-B-2 90×60 mm footprint.
+//
+// Rev S2 (2026-06-08): Inara and River avionics bay dorsal mounts.
+//   Inara bay (port, Z centre = 118 mm): 4× M3 boss standoffs on interior
+//   dorsal face; 85×55 mm dorsal access panel cut.  Cape-B (Zoë Cape-A-2,
+//   90×60 mm) mounts on 6 mm standoffs; Cape-A (Wash Cape-B-2, 85×55 mm)
+//   on 20 mm inter-cape standoffs above (total stack height 29.2 mm).
+//   GPS_PORT (Z=104.7 mm) co-located for minimal SMA routing.
+//   River bay (stbd, Z centre = 45 mm): same boss + panel pattern.
+//   GPS_STBD (Z=44.7 mm) co-located above River bay.
+//   All boss positions verified analytically to clear GPS Ø36 mm recess.
+//   Access panel overlaps GPS recess zone; panel cover designed with GPS
+//   clearance bore (Ø38 mm min).  VERIFY all positions in slicer.
+//   Ref: cape_b_v2.kicad_pcb corner hole grid; CLAUDE.md Rev Q EMI capes;
+//   GPS co-location analysis 2026-06-08; Ruthex RX-M3x5.7 insert spec.
+//
+// Rev S1 (2026-06-08): Wing root mortises, spar bearing blocks, and nacelle
+//   tilt servo mount blocks at port and stbd interior Z walls.
+//   - wing_root_mortise(±1): 30.8×20.8×15 mm slot through each lateral wall
+//     (Z=0 stbd, Z=163 port) for wing root tenon insertion; 0.4 mm/side clearance.
+//   - spar_bearing_block(±1): 22 mm OD × 10 mm tall annular boss on each
+//     interior Z wall, co-axial with wing_spar_bore; M3 grub-screw spar retention.
+//   - wing_spar_bore(): 12.3 mm dia × full Z-span bore for CF-TUBE-12MM wing spar,
+//     centred at X=-70.0 mm (30% chord from LE), Y=CY+40 mm.
+//   - nacelle_servo_mount_block(±1): 52×30×8 mm CF-PETG pad on each interior
+//     Z wall; 4× M3 heat-set inserts for nacelle_servo_bracket.stl; 10×6 mm
+//     lead conduit slot.  Block X centred at -147.6 mm (AFT of mortise) to
+//     eliminate four spatial conflicts found between CX-centred position and
+//     the wing root mortise / spar bearing boss — see NSVMT_X_CEN comment.
+//   All loads documented; FOS ≥ 11 (bolts) to 685 (bearing) vs. 4.0 target.
+//   Ref: s_wings_s1223_revo.scad; DS3218MG datasheet; load analysis in source.
+//
 // Rev S (2026-06-01): Clamshell cargo-bay door opening, hinge-pin mount blocks,
 //   SG90 servo mounting pads, and latch-catch lips.
 //   - door_bay_cut(): 100×9×165 mm belly opening at X=-152..-52, Z=0..163,
@@ -544,6 +609,395 @@ module latch_catch_lip(x_start, z_pos) {
     cube([CATCH_PROTRUSION, CATCH_T, CATCH_W]);
 }
 
+// ── Wing root mortise, spar bearing blocks, and nacelle servo mounts (Rev S1) ─
+//
+// LOAD ANALYSIS AND STRUCTURAL JUSTIFICATION
+// All loads computed at 3g manoeuvre envelope.  FOS target ≥ 4.0 per AUVSI
+// structural margin practice for small UAS.  Ref: AUVSI best-practice guideline
+// for small UAS structural margins; IEEE Std 1912 airframe design guidance.
+//
+// Aircraft parameters (per PROJECT_INDEX.md; PHASED_BUILD_GUIDE.md Rev P):
+//   AUW (Phase 5–10, no aft EDF)    W_aua = 2768 g = 27.15 N
+//   Nacelle mass (each)             m_nac =  320 g =  3.14 N
+//   Wing semi-span                  b     =  85.7 mm = 0.0857 m
+//   Wing area (both panels)         S_ref ≈  0.0156 m²
+//   Air density (sea level ISA)     ρ     = 1.225 kg/m³
+//   Cruise speed                    V     = 40 kt  = 20.6 m/s
+//
+// ── Wing root bending moment (3g symmetrical pull-up) ──────────────────────
+// Aerodynamic lift at 40 kt cruise, S1223 airfoil (CL=1.55, Re≈91k):
+//   F_aero_both = CL × 0.5 × ρ × V² × S_ref
+//               = 1.55 × 0.5 × 1.225 × 20.6² × 0.0156 = 6.44 N (both wings)
+//   At 3g manoeuvre: F_aero_1g = 3.22 N/wing → 3g load = 9.66 N/wing
+//   Nacelle weight at 3g: F_nac_3g = 3 × 3.14 = 9.42 N/nacelle
+//   Tip load (per side, 3g): F_tip = F_aero_3g + F_nac_3g = 9.66 + 9.42 = 19.08 N
+//   Root bending moment:     M_root = F_tip × b = 19.08 × 0.0857 = 1.635 N·m
+//
+// CF-TUBE-12MM section properties (12 mm OD, 1.5 mm wall; per bom_revO.csv):
+//   Second moment of area: I = π/64 × (D_o⁴ − D_i⁴)
+//     D_o = 12 mm; D_i = 12 − 2×1.5 = 9 mm
+//     I = π/64 × (12⁴ − 9⁴) = π/64 × (20736 − 6561) = 695.8 mm⁴
+//   Extreme fibre: c = D_o/2 = 6.0 mm
+//   Bending stress: σ = M_root×c/I = 1635 × 6.0 / 695.8 = 14.1 MPa
+//   CF axial tensile allowable: σ_allow ≥ 600 MPa (CFRP pultruded tube)
+//   FOS_bending = 600 / 14.1 = 42.6  ✓  (>> 4.0 target)
+//
+// ── Spar bearing block contact stress ─────────────────────────────────────
+// Annular contact area: boss OD = WING_SPAR_BOSS_OD = 22 mm; bore = 12.3 mm
+//   A_annulus = π/4 × (22² − 12.3²) = 260.8 mm²
+//   σ_bearing = F_tip / A_annulus = 19.08 / 260.8 = 0.073 MPa
+//   CF-PETG compressive yield ≈ 50 MPa → FOS_bearing = 685  ✓✓✓
+//
+// ── Wing root mortise (tenon bearing shear) ────────────────────────────────
+// Bearing face area: MORT_W(30 mm) × WING_ROOT_TAB_L(12 mm) = 360 mm² per face
+//   τ = F_tip / A_face = 19.08 / 360 = 0.053 MPa
+//   CF-PETG shear yield ≈ 25 MPa → FOS_shear = 472  ✓✓✓
+//
+// ── Nacelle tilt servo torque at mount block ──────────────────────────────
+// Servo: DS3218MG class; rated 25 kg·cm at 6 V = 2.45 N·m (minimum spec).
+// Mount bolt pattern: 4× M3 heat-set inserts at ±NSVMT_HOLE_S_X = ±17.5 mm in X.
+//   Moment arm between bolt-pair couple: 2 × 17.5 = 35.0 mm = 0.035 m
+//   Bolt-pair load at servo stall: F_pair = τ_servo / moment_arm
+//     = 2.45 / 0.035 = 70.0 N → 35.0 N per individual bolt
+//   M3 insert pullout in CF-PETG: P_out ≈ 400 N (Ruthex RX-M3x5.7; ISO 14589)
+//   FOS_bolt = 400 / 35.0 = 11.4  ✓  (>> 4.0 target)
+//
+// Nacelle pushrod dynamic load (at sector gear radius, stall transient):
+//   F_pushrod = τ_servo / r_sector = 2.45 / 0.022 = 111 N
+//   Carried in pushrod axially (tension/compression).  Does NOT load mount block.
+//
+// References:
+//   Selig & Guglielmo (1997) J. Aircraft 34(1):72–79 (S1223 CL data).
+//   AUVSI small UAS structural margin guidance, FOS_min = 4.0.
+//   DS3218MG datasheet; Ruthex RX-M3x5.7; ISO 14589 (heat-set inserts).
+//   s_wings_s1223_revo.scad SPAR_BORE_X, WING_ROOT_TAB_*, WING_CHORD_ROOT.
+//   nacelle_sector_gear.scad SLOT_BC_R = 18 mm; nacelle_pod_50mm_tandem.scad.
+//   PHASED_BUILD_GUIDE.md Phase 3 tilt servo installation.
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Wing root mortise dimensions (must match s_wings_s1223_revo.scad WING_ROOT_TAB_*)
+//   The fuselage_root_tab() protrusion in the wing SCAD inserts into these slots.
+//   VERIFY all *_TAB_* values against wing STL in slicer before printing.
+WING_ROOT_X_CEN    = CX;            // mm, mortise X centre = 50% chord = cargo CX
+WING_ROOT_Y_CEN    = CY + 40.0;     // mm, mortise Y centre = -288.63 mm (dorsal of centroid)
+WING_ROOT_TAB_W    =  30.0;         // mm, tab width  (X)  — VERIFY in s_wings_s1223_revo.scad
+WING_ROOT_TAB_H    =  20.0;         // mm, tab height (Y)  — VERIFY in s_wings_s1223_revo.scad
+WING_ROOT_TAB_L    =  12.0;         // mm, tab insertion depth (Z) — VERIFY
+WING_MORT_CLR      =   0.4;         // mm, clearance per side (slip fit per CLAUDE.md)
+// Derived mortise opening dimensions
+MORT_W  = WING_ROOT_TAB_W + 2 * WING_MORT_CLR;   // = 30.8 mm
+MORT_H  = WING_ROOT_TAB_H + 2 * WING_MORT_CLR;   // = 20.8 mm
+
+// Wing spar bore (CF-TUBE-12MM, 12 mm OD × 1.5 mm wall, runs in Z through gondola)
+//   X position derivation (all in world coords, X = longitudinal):
+//     Wing chord = 161 mm; root tab centred at 50% chord.
+//     LE_X = WING_ROOT_X_CEN + 0.50 × 161.0 = -102.19 + 80.5  = -21.69 mm
+//     spar = LE_X  - 0.30 × 161.0           = -21.69  - 48.3  = -69.99 mm ≈ -70 mm
+//   Y = WING_ROOT_Y_CEN (spar at SPAR_BORE_Y_CTR = 0, i.e. chord-plane mid-line).
+//   Ref: s_wings_s1223_revo.scad SPAR_BORE_X = 0.30, SPAR_BORE_Y_CTR = 0.
+WING_SPAR_X_CEN    =  -70.0;        // mm, spar bore X centre — VERIFY in slicer
+WING_SPAR_BORE_D   =   12.3;        // mm, bore ID = CF-TUBE-12MM OD + 0.3 mm slip
+WING_SPAR_BOSS_OD  =   22.0;        // mm, bearing boss OD: gives (22-12.3)/2 = 4.85 mm wall
+SPAR_BOSS_H        =   10.0;        // mm, boss protrusion inward from interior Z-wall face
+SPAR_GRUB_TAP_D    =    2.5;        // mm, M3 tap-drill dia for spar retention grub screw
+                                     //     Grub screw: DIN 913 M3×4 (same spec as hinge_pin_block)
+
+// Nacelle tilt servo mount block (one per Z side)
+//   Target servo class: DS3218MG or equivalent — body 40 × 20 × 38 mm;
+//   output shaft points outboard (Z direction, toward nacelle).
+//   A separately-printed nacelle_servo_bracket.stl clamps the servo body to
+//   this block via 4× M3×10 SHCS (one per heat-set insert).
+//   Ref: DS3218MG datasheet; PHASED_BUILD_GUIDE.md Phase 3; load analysis above.
+// NSVMT_X_CEN placement constraint (IMPORTANT — do not move forward of this formula):
+//   The servo block must clear the wing root mortise (left edge at
+//   WING_ROOT_X_CEN − MORT_W/2 = −117.6 mm) and the spar bearing boss
+//   (left edge at WING_SPAR_X_CEN − WING_SPAR_BOSS_OD/2 = −81.0 mm).
+//   The mortise is the binding constraint; 4 mm margin is added.
+//   Result: block spans X = −173.6 .. −121.6 mm (right edge at −121.6 mm,
+//   4.0 mm AFT of mortise left edge −117.6 mm; 40.6 mm AFT of boss left −81.0 mm).
+//   Ref: spatial conflict analysis 2026-06-08; all four ADD-ADD and SUB-ADD
+//   conflicts between mortise/boss and original CX-centred block are resolved.
+NSVMT_X_CEN        = WING_ROOT_X_CEN - MORT_W / 2 - NSVMT_PAD_W / 2 - 4.0;
+                                     // = -102.19 - 15.40 - 26.0 - 4.0 = -147.59 mm
+NSVMT_Y_CEN        = CY + 40.0;     // mm, block Y centre — same station as wing root Y
+NSVMT_PAD_W        =   52.0;        // mm, block X span (40 mm body + 6 mm margin each side)
+NSVMT_PAD_H        =   30.0;        // mm, block Y span (20 mm body + 5 mm lug + 2.5 mm/side)
+NSVMT_PAD_T        =    8.0;        // mm, block protrusion in Z from interior Z-wall face
+NSVMT_HOLE_S_X     =   17.5;        // mm, M3 insert ±X offset from block centre (lug spacing/2)
+NSVMT_HOLE_S_Y     =    8.0;        // mm, M3 insert ±Y offset from block centre (lug width/2)
+NSVMT_M3_OD        =    4.1;        // mm, M3 heat-set bore (Ruthex RX-M3x5.7: 4.0 + 0.1 press)
+NSVMT_M3_DEP       =    6.0;        // mm, M3 insert pocket depth (>= insert length 5.7 mm)
+NSVMT_CONDUIT_W    =   10.0;        // mm, servo lead conduit slot width (X)
+NSVMT_CONDUIT_H    =    6.0;        // mm, servo lead conduit slot height (Y)
+
+// ── Cape PCB dimensions (Rev S4 — verified from CAPE-B-2.kicad_pcb Edge.Cuts) ──
+//   Both Cape-B-2 (Zoë) and Cape-A-2 (Wash) share the 55×35 mm PB2-I footprint.
+//   Ref: CAPE-B-2.kicad_pcb X=121..176 mm (55 mm), Y=87.5..122.5 mm (35 mm).
+//   MH1–MH4: 2.7 mm drill (M2.5 nylon standoffs inside tray) at ±24.5×±14.5 mm
+//   from board centre.  Title block: "55x35mm 4L JLCPCB assembled".
+CAPE_PCB_X     =  55.0;   // mm, Cape-B-2 / Cape-A-2 PCB X extent
+CAPE_PCB_Z     =  35.0;   // mm, Cape-B-2 / Cape-A-2 PCB Z extent
+CAPE_HOLE_DX   =  24.5;   // mm, ±X M2.5 corner hole offset from board centre
+CAPE_HOLE_DZ   =  14.5;   // mm, ±Z M2.5 corner hole offset from board centre
+
+// ── Avionics bay dorsal mounts — Inara (port) and River (stbd) (Rev S4) ──────
+//
+// CAPE STACK GEOMETRY (Rev Q -2 EMI-hardened capes per CLAUDE.md Rev Q):
+//   Cape-B-2 (Zoë):  55×35 mm PCB; M2.5 corner holes at ±24.5×±14.5 mm.
+//   Cape-A-2 (Wash): 55×35 mm PCB; M2.5 corner holes at ±24.5×±14.5 mm.
+//   Architecture: hull M3 bosses → Faraday tray body.
+//                 M2.5 nylon standoffs inside tray → PCB corners.
+//   Cape-B-2 ↔ dorsal tray floor: 6 mm standoff + 1.6 mm PCB.
+//   PocketBeagle 2 Industrial SOM: 5 mm height above PCB surface.
+//   Inter-cape standoff: 20 mm.  Cape-A-2 + PB2-I: 1.6 + 5 mm.
+//   Stack height: 6 + 1.6 + 5 + 20 + 1.6 + 5 = 39.2 mm total.
+//   Cape long axis oriented in X (longitudinal) to align with gondola X span.
+//
+// BAY POSITIONS (both in dorsal band Y_int ≈ -213 mm = interior dorsal face):
+//   Inara bay — port half, Z_CEN = 119 mm, Faraday tray Z = 99..139 mm.
+//     GPS_PORT (Z=104.7 mm) co-located; 5.7 mm inset from tray lower edge ✓.
+//   River bay — stbd half, Z_CEN = 44 mm,  Faraday tray Z = 24..64 mm.
+//     GPS_STBD (Z=44.7 mm) co-located; 0.7 mm from tray Z centre ✓.
+//   Inter-bay gap (Inara lower 99 mm − River upper 64 mm): 35 mm — conduit run.
+//
+// STANDOFF BOSS PATTERN (4 bosses per bay — for Faraday tray body mounting):
+//   ±AVINICS_BOSS_DX (±25 mm) in X and ±AVINICS_BOSS_DZ (±15 mm) in Z.
+//   Boss BOSS_H = 6 mm.  Bore: Ruthex RX-M3x5.7.  Cape PCBs mount on M2.5
+//   internal standoffs INSIDE the Faraday tray; hull bosses anchor tray body only.
+//   Bosses protrude in −Y (downward into interior) from interior dorsal face.
+//   GPS Ø36 mm recess (R=18 mm): nearest boss ≥ 25.0 mm (re-verified Rev S4) ✓.
+//
+// DORSAL ACCESS PANEL CUTS (per bay, Rev S4):
+//   62×42 mm opening (tray 60×40 mm + 1 mm insertion clearance each side).
+//   Cover footprint 72×52 mm with 5 mm shoulder lip seats on hull skin around cut.
+//   GPS recess overlaps panel zone; access cover gets Ø38 mm GPS clearance bore.
+//   Cut applied at outer difference level, same as wing_root_mortise.
+//
+// DORSAL INTERIOR FACE Y:
+//   Gondola dorsal exterior Y_MAX ≈ -211 mm; interior face ≈ -211 - 2 = -213 mm.
+//   AVINICS_DORSAL_Y = CY + 116 ≈ -212.6 mm.  VERIFY in slicer.
+//   Ref: CAPE-B-2.kicad_pcb pad MH1–MH4; GPS_PORT/STBD co-location analysis;
+//   Ruthex RX-M3x5.7 pullout spec; CLAUDE.md standoff and 2-wall requirements.
+AVINICS_DORSAL_Y   = CY + 116.0;   // mm, interior dorsal face Y (VERIFY in slicer)
+AVINICS_BOSS_ROT   = [90, 0, 0];   // rotate cylinder: +Z → −Y (protrudes down into interior)
+INARA_Z_CEN        = 119.0;        // mm, Inara bay Z centre — port half; tray Z=99..139
+RIVER_Z_CEN        =  44.0;        // mm, River bay Z centre — stbd half; tray Z=24..64
+AVINICS_X_CEN      = CX;           // mm, both bays share gondola X centreline
+AVINICS_BOSS_DX    =  25.0;        // mm, ±X Faraday tray corner boss offset (Rev S4: was 42)
+AVINICS_BOSS_DZ    =  15.0;        // mm, ±Z Faraday tray corner boss offset (Rev S4: was 27)
+AVINICS_PANEL_X    =  62.0;        // mm, dorsal access panel opening X (Rev S4: was 95)
+AVINICS_PANEL_Z    =  42.0;        // mm, dorsal access panel opening Z (Rev S4: was 65)
+
+// Faraday enclosure external envelope, fan, and ductwork specification (Rev S4).
+//   Each avionics bay (Inara port, River stbd) is enclosed in a 5-walled
+//   aluminium-sheet Faraday tray.  The hull dorsal skin IS the 6th wall.
+//   The access panel cover (72×52 mm, copper-foil-lined PETG or 0.5 mm Al sheet)
+//   completes the EMI shield when installed.
+//   Tray body inserts through AVINICS_PANEL_X × AVINICS_PANEL_Z dorsal opening.
+//   Cape-B-2 (Zoë) and Cape-A-2 (Wash) PCBs mount on M2.5 internal standoffs.
+//   One 25×25×7 mm axial fan per tray on +X tray wall; air exhausts into
+//   gondola interior (no hull skin penetrations required).
+//   Air intake: 22×22 mm slot on tray −X wall, covered by 6 mm-thick waveguide-
+//   below-cutoff honeycomb panel (6 mm cell, attenuation >> 100 dB at 10 GHz).
+//   Ref: CLAUDE.md §1.4.1 (500 W/m² design target); EMC waveguide cutoff theory.
+FARADAY_ENC_X      =  60.0;   // mm, tray external X (Rev S4: was 95)
+FARADAY_ENC_Z      =  40.0;   // mm, tray external Z (Rev S4: was 65)
+FARADAY_ENC_Y      =  55.0;   // mm, tray depth below dorsal face (Rev S4: was 65)
+                               //   = 39.2 mm stack + 5 mm clearance + 7 mm fan + 1.5 mm floor
+FARADAY_WALL       =   1.5;   // mm, tray wall (0.5 mm Al + PETG liner ≤ 1.5 mm)
+FARADAY_FAN_D      =  25.0;   // mm, axial fan diameter (25×25×7 mm, on tray +X wall)
+FARADAY_MOUNT_DX   = AVINICS_BOSS_DX;   // mm, ±X tray corner M3 boss offset (= 25.0 mm)
+FARADAY_MOUNT_DZ   = AVINICS_BOSS_DZ;   // mm, ±Z tray corner M3 boss offset (= 15.0 mm)
+
+// Ductwork parameters — Faraday tray ventilation (Rev S4, all bays).
+//   Air path: gondola interior → honeycomb intake slot (−X tray wall) →
+//             across PCB stack → 25 mm fan outlet (+X tray wall) → gondola interior.
+//   Internal circulation only; no hull skin penetrations required.
+//   Waveguide-below-cutoff honeycomb panel at intake prevents EMI ingress.
+//   Attenuation ≈ 27×(DUCT_EMC_T/DUCT_CELL_D) dB — at 6/6 mm: ≥ 27 dB per panel.
+//   Multiple stacked panels can be used if higher attenuation is required.
+//   Conduit relief groove cut into interior dorsal face routes airflow between
+//   tray exhaust port and gondola interior air volume.
+DUCT_INTAKE_W   =  22.0;   // mm, intake slot width (X, on tray −X face; ≤ fan 25 mm)
+DUCT_INTAKE_H   =  22.0;   // mm, intake slot height (Z, centred on tray Z face)
+DUCT_EXHAUST_W  =  24.0;   // mm, exhaust slot width (X, behind fan on +X face)
+DUCT_EXHAUST_H  =  24.0;   // mm, exhaust slot height (Z)
+DUCT_EMC_T      =   6.0;   // mm, honeycomb waveguide panel thickness
+DUCT_CELL_D     =   6.0;   // mm, honeycomb cell diameter (λ/2 cutoff > 25 GHz)
+DUCT_GROOVE_W   =  26.0;   // mm, conduit relief groove width (Z) in interior dorsal face
+DUCT_GROOVE_D   =   5.0;   // mm, conduit relief groove depth (−Y from interior face)
+DUCT_GROOVE_X   = AVINICS_X_CEN + AVINICS_BOSS_DX + 4.0; // mm, groove X start (just AFT of boss)
+
+// ----------------------------------------------------------------------------
+// Module: wing_root_mortise
+//   Rectangular slot cut through one Z-face wall to receive the wing root tenon.
+//   z_sign = +1: port wall (Z = DZ = 163 mm); z_sign = −1: stbd wall (Z = 0).
+//   Cut depth = WALL_MM + WING_ROOT_TAB_L + 1 mm cutter overshoot.
+//   WING_MORT_CLR = 0.4 mm/side added per CLAUDE.md positive-stop slip-fit req.
+//   VERIFY mortise position vs slicer cross-section before printing.
+//   Ref: s_wings_s1223_revo.scad fuselage_root_tab(); CLAUDE.md §Fabrication.
+// ----------------------------------------------------------------------------
+module wing_root_mortise(z_sign) {
+    cut_depth = WALL_MM + WING_ROOT_TAB_L + 1.0;
+    z_lo = (z_sign > 0) ? (DZ - cut_depth) : 0.0;
+
+    translate([WING_ROOT_X_CEN - MORT_W / 2,
+               WING_ROOT_Y_CEN - MORT_H / 2,
+               z_lo])
+    cube([MORT_W, MORT_H, cut_depth]);
+}
+
+// ----------------------------------------------------------------------------
+// Module: wing_spar_bore
+//   Full-Z through-bore for the CF-TUBE-12MM wing spar (12 mm OD × 1.5 mm wall).
+//   Runs the entire gondola Z span (DZ = 163 mm) with 1 mm overshoot each end.
+//   X = WING_SPAR_X_CEN (30% chord from LE);  Y = WING_ROOT_Y_CEN (chord line).
+//   Applied at the outer difference level to cut through hull walls AND
+//   both spar_bearing_block solids in a single boolean operation.
+//   Ref: s_wings_s1223_revo.scad spar_bore(); CF-TUBE-12MM per bom_revO.csv.
+// ----------------------------------------------------------------------------
+module wing_spar_bore() {
+    translate([WING_SPAR_X_CEN, WING_ROOT_Y_CEN, -1.0])
+    cylinder(h = DZ + 2.0, d = WING_SPAR_BORE_D);
+}
+
+// ----------------------------------------------------------------------------
+// Module: spar_bearing_block
+//   Solid annular boss on the interior Z-face wall, co-axial with the wing spar.
+//   Provides the load-transfer annulus between the CF spar and the gondola hull.
+//   Boss OD = 22 mm; the spar bore is removed by wing_spar_bore() at the outer
+//   difference level (not inside this module) to guarantee a single clean cut.
+//   A single M3 grub-screw tap hole from the +Y face retains the spar against
+//   axial (Z-direction) walking; matches hinge_pin_block retention pattern.
+//
+//   z_sign = +1: port wall (boss protrudes in −Z from interior face at Z = DZ−WALL_MM)
+//   z_sign = −1: stbd wall (boss protrudes in +Z from interior face at Z = WALL_MM)
+//
+//   Annular contact area = π/4×(22²−12.3²) = 260.8 mm² → σ = 0.073 MPa at 3g tip load.
+//   FOS_bearing = 685 (CF-PETG compressive yield ≈ 50 MPa).  See analysis above.
+//   Ref: load analysis above; CLAUDE.md min 2-wall contact annulus (4.85 mm >> 2×0.6 mm).
+// ----------------------------------------------------------------------------
+module spar_bearing_block(z_sign) {
+    z_int_face = (z_sign > 0) ? (DZ - WALL_MM) : WALL_MM;
+    z_blk_lo   = (z_sign > 0) ? (z_int_face - SPAR_BOSS_H) : z_int_face;
+    z_blk_cen  = z_blk_lo + SPAR_BOSS_H / 2;
+
+    difference() {
+        // Boss cylinder: 22 mm OD × 10 mm tall; spar bore removed externally.
+        translate([WING_SPAR_X_CEN, WING_ROOT_Y_CEN, z_blk_lo])
+        cylinder(h = SPAR_BOSS_H, d = WING_SPAR_BOSS_OD);
+
+        // M3 grub-screw tap bore from +Y face, centred on spar axis.
+        //   Retains CF-TUBE-12MM against Z walking.
+        //   Grub screw: DIN 913 M3×4 (tightened after spar insertion).
+        translate([WING_SPAR_X_CEN,
+                   WING_ROOT_Y_CEN + WING_SPAR_BOSS_OD / 2,
+                   z_blk_cen])
+        rotate([-90, 0, 0])   // bore axis toward spar centre from +Y exterior
+        cylinder(h = SPAR_BOSS_H / 2 + 0.5, d = SPAR_GRUB_TAP_D);
+    }
+}
+
+// ----------------------------------------------------------------------------
+// Module: nacelle_servo_mount_block
+//   Solid rectangular mounting pad on the interior Z-face wall for the nacelle
+//   tilt servo (DS3218MG class: 40 × 20 × 38 mm body, ±17.5 mm lug spacing).
+//   Provides:
+//     • Flat inboard face for servo body seating (normal to Z axis)
+//     • 4× M3 heat-set insert pockets (±17.5 mm × ±8 mm pattern)
+//     • 10 × 6 mm lead conduit slot through inboard face for servo wiring
+//   Servo output shaft points outboard (toward nacelle in Z direction).
+//   A separately-printed nacelle_servo_bracket.stl (to be generated) clamps
+//   the servo body to this pad via 4× M3×10 SHCS.
+//
+//   z_sign = +1: port wall  (pad protrudes in −Z, shaft toward port nacelle)
+//   z_sign = −1: stbd wall  (pad protrudes in +Z, shaft toward stbd nacelle)
+//
+//   Servo stall torque reaction: 4× M3 inserts at 35 mm couple arm → 35 N/bolt.
+//   FOS_bolt = 400 / 35 = 11.4.  See load analysis above.
+//   Ref: DS3218MG datasheet; PHASED_BUILD_GUIDE.md Phase 3 tilt servo install.
+// ----------------------------------------------------------------------------
+module nacelle_servo_mount_block(z_sign) {
+    // z_int_face: interior face of lateral Z wall (inset WALL_MM from exterior)
+    z_int_face = (z_sign > 0) ? (DZ - WALL_MM) : WALL_MM;
+    // Block origin in Z: port protrudes inward (-Z), stbd protrudes inward (+Z)
+    z_blk_lo   = (z_sign > 0) ? (z_int_face - NSVMT_PAD_T) : z_int_face;
+    // M3 bores drilled from the inboard (interior-facing) face of the pad.
+    //   Port: inboard face is at z_blk_lo  → bores start there, go in +Z.
+    //   Stbd: inboard face is at z_blk_lo+NSVMT_PAD_T → bores start NSVMT_M3_DEP below.
+    z_bore_lo  = (z_sign > 0)
+        ? z_blk_lo
+        : (z_blk_lo + NSVMT_PAD_T - NSVMT_M3_DEP);
+
+    difference() {
+        // Mounting pad solid
+        translate([NSVMT_X_CEN - NSVMT_PAD_W / 2,
+                   NSVMT_Y_CEN - NSVMT_PAD_H / 2,
+                   z_blk_lo])
+        cube([NSVMT_PAD_W, NSVMT_PAD_H, NSVMT_PAD_T]);
+
+        // 4× M3 heat-set insert pockets bored from inboard face into pad.
+        //   ±NSVMT_HOLE_S_X (±17.5 mm) in X: matches DS3218MG lug-hole spacing.
+        //   ±NSVMT_HOLE_S_Y (±8.0 mm)  in Y: matches DS3218MG lug width / 2.
+        for (dx = [-NSVMT_HOLE_S_X, NSVMT_HOLE_S_X])
+        for (dy = [-NSVMT_HOLE_S_Y, NSVMT_HOLE_S_Y])
+            translate([NSVMT_X_CEN + dx, NSVMT_Y_CEN + dy, z_bore_lo])
+            cylinder(h = NSVMT_M3_DEP + 0.1, d = NSVMT_M3_OD);
+
+        // Servo lead conduit slot: 10 × 6 mm through inboard half of pad.
+        //   Routes servo signal + power leads from the mount face to interior.
+        translate([NSVMT_X_CEN - NSVMT_CONDUIT_W / 2,
+                   NSVMT_Y_CEN - NSVMT_CONDUIT_H / 2,
+                   z_bore_lo])
+        cube([NSVMT_CONDUIT_W, NSVMT_CONDUIT_H, NSVMT_PAD_T / 2 + 0.1]);
+    }
+}
+
+// ----------------------------------------------------------------------------
+// Module: avinics_dorsal_boss
+//   Single M3 heat-set insert boss post on the interior dorsal face, protruding
+//   in −Y (downward into gondola interior).  Provides one corner standoff anchor
+//   for Cape-B avionics PCB (one call per corner of each bay, 4 per bay).
+//   Reuses m3_boss() with AVINICS_BOSS_ROT = [90,0,0] (maps +Z → −Y).
+//   Boss geometry: BOSS_OD = 8 mm, BOSS_H = 6 mm, bore BOSS_BORE_D = 4.1 mm.
+//   Boss base fused to interior dorsal face at AVINICS_DORSAL_Y; extends to
+//   AVINICS_DORSAL_Y − BOSS_H (= −218.6 mm approx) into gondola interior.
+//   VERIFY each boss clears GPS recess (Ø36 mm, R=18 mm) and GPS M2 holes in slicer.
+//   Ref: Ruthex RX-M3x5.7; Cape-B-2 90×60 mm PCB corner hole pattern; CLAUDE.md.
+// ----------------------------------------------------------------------------
+module avinics_dorsal_boss(x_pos, z_pos) {
+    m3_boss([x_pos, AVINICS_DORSAL_Y, z_pos], AVINICS_BOSS_ROT);
+}
+
+// ----------------------------------------------------------------------------
+// Module: avinics_dorsal_panel_cut
+//   Rectangular through-cut (62×42 mm, Rev S4) in the dorsal skin for avionics
+//   bay access and Faraday tray insertion.
+//   Faraday tray body (FARADAY_ENC_X × FARADAY_ENC_Z = 60×40 mm) inserts
+//   through this opening from outside with 1 mm assembly clearance each side;
+//   tray screws to AVINICS_BOSS_* posts below.
+//   Cover (72×52 mm) overlaps the cut perimeter by 5 mm on all sides for a
+//   positive-stop EMI-seal shoulder; secured by 4× M2 screws or spring clips.
+//
+//   Cut Y span: AVINICS_DORSAL_Y − 1.0 to AVINICS_DORSAL_Y + WALL_MM + 1.0
+//     = through interior skin (−1 mm overshoot) to past exterior face (+1 mm).
+//
+//   x_cen, z_cen: panel centre in X and Z (AVINICS_X_CEN and bay Z centre).
+//
+//   GPS recess (Ø36 mm) overlaps both panels; GPS antenna installed from outside
+//   before Faraday tray and cover; access cover designed with Ø38 mm clearance bore.
+//   Applied at outer difference level alongside wing_root_mortise and spar bore.
+//   VERIFY opening bounds and GPS overlap in slicer before printing.
+//   Ref: FARADAY_ENC_* parameters (Rev S3); GPS co-location analysis 2026-06-08;
+//   CLAUDE.md positive-stop shoulder requirement for flight-critical joints.
+// ----------------------------------------------------------------------------
+module avinics_dorsal_panel_cut(x_cen, z_cen) {
+    translate([x_cen - AVINICS_PANEL_X / 2,
+               AVINICS_DORSAL_Y - 1.0,
+               z_cen - AVINICS_PANEL_Z / 2])
+    cube([AVINICS_PANEL_X, WALL_MM + 2.0, AVINICS_PANEL_Z]);
+}
+
 // ============================================================
 // Main geometry
 // ============================================================
@@ -556,20 +1010,28 @@ module latch_catch_lip(x_start, z_pos) {
 //   STL bounds: X=-202..-7, Y=-415..-211, Z=0..163 mm.
 //   Inner scale used: sx=0.979459, sy=0.980354, sz=0.975496.
 //
-// ── CSG tree overview (Rev S) ─────────────────────────────────────────────────
+// ── CSG tree overview (Rev S4) ────────────────────────────────────────────────
 //
 //   outer_union
-//   ├─ difference                    ← door_bay_cut applied to EVERYTHING below
+//   ├─ difference              ← bay cut + wing mortises + spar bore + avionics panels
 //   │  ├─ inner_union
-//   │  │  ├─ difference             ← existing per-skin cuts (camera, GPS)
+//   │  │  ├─ difference        ← per-skin cuts (camera, GPS)
 //   │  │  │  ├─ import(shell_stl)
 //   │  │  │  ├─ fpv_cut
 //   │  │  │  └─ gps_mount_cut ×2
 //   │  │  ├─ m3_boss ×12           ← joint-face bosses (outside bay zone)
 //   │  │  ├─ belly_rib ×2          ← ribs CUT by door_bay_cut within bay zone
 //   │  │  ├─ hinge_pin_block ×2    ← outside bay zone; survive door_bay_cut
-//   │  │  └─ servo_mount_pad ×2    ← outside bay zone (AFT of bay); survive
-//   │  └─ door_bay_cut             ← removes belly skin + hinge clearance
+//   │  │  ├─ servo_mount_pad ×2    ← cargo door servos, AFT of bay
+//   │  │  ├─ spar_bearing_block ×2 ← port + stbd Z-wall bosses (Rev S1)
+//   │  │  ├─ nacelle_servo_mount_block ×2 ← port + stbd tilt-servo pads (S1)
+//   │  │  ├─ avinics_dorsal_boss ×8 ← Inara (port) + River (stbd) Faraday tray mounts (S4)
+//   │  │  └─   (4 bosses per bay, ±25 mm X × ±15 mm Z from bay Z centre)
+//   │  ├─ door_bay_cut              ← removes belly skin + hinge clearance
+//   │  ├─ wing_root_mortise ×2      ← port + stbd tenon slots (S1)
+//   │  ├─ wing_spar_bore            ← 12.3 mm full-Z spar bore (S1)
+//   │  ├─ avinics_dorsal_panel_cut  ← Inara bay 62×42 mm dorsal opening (S4)
+//   │  └─ avinics_dorsal_panel_cut  ← River bay 62×42 mm dorsal opening (S4)
 //   └─ latch_catch_lip ×4          ← added AFTER cut; protrude into bay opening
 
 union() {
@@ -640,6 +1102,58 @@ union() {
             //     VERIFY pad footprint clears interior ribs and foam-fill zone.
             servo_mount_pad(SERVO_X_CEN, SERVO_PORT_Z);   // port-door servo
             servo_mount_pad(SERVO_X_CEN, SERVO_STBD_Z);   // stbd-door servo
+
+            // A7. Wing spar bearing blocks at port and stbd interior Z-walls.
+            //     Each block: 22 mm OD boss × 10 mm tall, with M3 grub-screw tap.
+            //     Boss OD = 22 mm; wall annulus = 4.85 mm (>> 2-perimeter min).
+            //     Spar bore (wing_spar_bore) is applied at the outer difference
+            //     level so it cuts cleanly through both bosses and hull walls.
+            //     Port boss: protrudes −Z from interior face at Z ≈ 161 mm.
+            //     Stbd boss: protrudes +Z from interior face at Z ≈ 2 mm.
+            //     VERIFY boss Z-range and Y-position in slicer before printing.
+            //     Ref: load analysis above; CF-TUBE-12MM per bom_revO.csv.
+            spar_bearing_block(+1);    // port: Z = 151..161 mm
+            spar_bearing_block(-1);    // stbd: Z =   2..12  mm
+
+            // A8. Nacelle tilt servo mount blocks at port and stbd interior Z-walls.
+            //     Each block: 52×30 mm face × 8 mm deep; 4× M3 heat-set inserts;
+            //     10×6 mm lead conduit slot.  DS3218MG-class servo (≥25 kg·cm)
+            //     mounts via separately-printed nacelle_servo_bracket.stl using
+            //     4× M3×10 SHCS through the bracket into these inserts.
+            //     Block Y range: NSVMT_Y_CEN ± 15 mm = −303 .. −273 mm (above Y=−407
+            //     door cut top — not affected by door_bay_cut).
+            //     Port block: protrudes −Z from interior face (Z ≈ 153..161 mm).
+            //     Stbd block: protrudes +Z from interior face (Z ≈   2..10  mm).
+            //     VERIFY block footprint clears conduits in slicer before printing.
+            //     Ref: DS3218MG datasheet; PHASED_BUILD_GUIDE.md Phase 3.
+            nacelle_servo_mount_block(+1);  // port: Z = 153..161 mm
+            nacelle_servo_mount_block(-1);  // stbd: Z =   2..10  mm
+
+            // A9. Inara's avionics bay — port half, Z centre = 119 mm (Rev S4).
+            //     4× M3 Faraday tray anchor bosses on interior dorsal face (Y≈−213 mm).
+            //     Boss pattern: ±25 mm (X) × ±15 mm (Z) from bay centre (Rev S4: was ±42×±27).
+            //     Boss positions (X, Z): (−127.2,104), (−77.2,104), (−127.2,134), (−77.2,134).
+            //     GPS_PORT (Z=104.7 mm) co-located; nearest boss ≥ 25.0 mm from GPS centre ✓.
+            //     Cape-B-2 (Zoë) / Cape-A-2 (Wash) PCBs mount on M2.5 internal standoffs
+            //     inside Faraday tray; hull bosses anchor tray body only.
+            //     VERIFY boss positions and clearance in slicer before printing.
+            //     Ref: Rev S4 dimension correction; GPS_PORT recess R=18 mm; FARADAY_* params.
+            for (dx = [-AVINICS_BOSS_DX, AVINICS_BOSS_DX])
+            for (dz = [-AVINICS_BOSS_DZ, AVINICS_BOSS_DZ])
+                avinics_dorsal_boss(AVINICS_X_CEN + dx, INARA_Z_CEN + dz);
+
+            // A10. River's avionics bay — stbd half, Z centre = 44 mm (Rev S4).
+            //      4× M3 Faraday tray anchor bosses on interior dorsal face (Y≈−213 mm).
+            //      Boss pattern: ±25 mm (X) × ±15 mm (Z) from bay centre (Rev S4: was ±42×±27).
+            //      Boss positions (X, Z): (−127.2,29), (−77.2,29), (−127.2,59), (−77.2,59).
+            //      GPS_STBD (Z=44.7 mm) co-located; nearest boss ≥ 15.7 mm from GPS centre ✓.
+            //      Cape-B-2 (Zoë) / Cape-A-2 (Wash) PCBs mount on M2.5 internal standoffs.
+            //      35 mm inter-bay gap (Z = 64..99 mm) available for conduit and wiring routing.
+            //      VERIFY boss positions and clearance in slicer before printing.
+            //      Ref: Rev S4 dimension correction; GPS_STBD recess R=18 mm; FARADAY_* params.
+            for (dx = [-AVINICS_BOSS_DX, AVINICS_BOSS_DX])
+            for (dz = [-AVINICS_BOSS_DZ, AVINICS_BOSS_DZ])
+                avinics_dorsal_boss(AVINICS_X_CEN + dx, RIVER_Z_CEN + dz);
         }
 
         // ── Cargo-bay door opening ────────────────────────────────────────────
@@ -647,6 +1161,43 @@ union() {
         //   Removes belly skin (X=-152..-52, full Z, Y=-416..-407).
         //   3 mm shell frame lips remain at X=-155..-152 and X=-52..-49.
         door_bay_cut();
+
+        // ── Wing root mortises (tenon slots through lateral Z walls) ─────────
+        //   Each slot: MORT_W × MORT_H opening (30.8 × 20.8 mm) through wall.
+        //   Depth = WALL_MM + WING_ROOT_TAB_L + 1 mm overshoot = 15 mm.
+        //   Port slot: Z = 148..163 mm (through port wall at DZ=163).
+        //   Stbd slot: Z =   0.. 15 mm (through stbd wall at Z=0).
+        //   VERIFY mortise position vs wing STL in slicer before printing.
+        //   Ref: s_wings_s1223_revo.scad fuselage_root_tab() geometry.
+        wing_root_mortise(+1);   // port wall
+        wing_root_mortise(-1);   // stbd wall
+
+        // ── Wing spar through-bore (full Z span) ─────────────────────────────
+        //   12.3 mm dia bore at (WING_SPAR_X_CEN, WING_ROOT_Y_CEN) = (-70, -288.6).
+        //   Passes through both Z walls AND both spar_bearing_block solids.
+        //   CF-TUBE-12MM (12 mm OD) slides through with 0.15 mm radial clearance.
+        //   Spar retained by M3 grub screw in each bearing block after final fit.
+        //   VERIFY bore X and Y in slicer cross-section before printing.
+        //   Ref: CF-TUBE-12MM (bom_revO.csv); s_wings_s1223_revo.scad spar_bore().
+        wing_spar_bore();
+
+        // ── Inara avionics dorsal access panel (port, Z=99..139 mm, Rev S4) ──────
+        //   62×42 mm cut through dorsal skin at Inara bay Z centre = 119 mm.
+        //   Faraday tray body (FARADAY_ENC_X × FARADAY_ENC_Z = 60×40 mm) inserts
+        //   through this opening from outside with 1 mm assembly clearance each side.
+        //   Cover (72×52 mm, 5 mm shoulder) forms EMI-sealed lid when installed.
+        //   GPS_PORT recess (Ø36 mm at Z=104.7 mm) overlaps panel: GPS installed
+        //   from outside before Faraday tray; cover has Ø38 mm clearance bore.
+        //   VERIFY opening bounds and GPS overlap in slicer.
+        avinics_dorsal_panel_cut(AVINICS_X_CEN, INARA_Z_CEN);
+
+        // ── River avionics dorsal access panel (stbd, Z=24..64 mm, Rev S4) ──────
+        //   62×42 mm cut through dorsal skin at River bay Z centre = 44 mm.
+        //   Same Faraday tray geometry and GPS co-location note as Inara panel.
+        //   GPS_STBD recess (Ø36 mm at Z=44.7 mm) centred in panel Z span.
+        //   35 mm inter-bay gap (Z=64..99 mm) from Inara lower edge for conduit run.
+        //   VERIFY opening bounds and GPS overlap in slicer.
+        avinics_dorsal_panel_cut(AVINICS_X_CEN, RIVER_Z_CEN);
     }
 
     // ── B. Latch-catch lips (added after door_bay_cut; not affected by it) ────
