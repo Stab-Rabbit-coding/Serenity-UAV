@@ -33,7 +33,56 @@ Airframevengineered to FAA and AUVSI standards for UAVs instead of relying on th
 
 There are seven specified compartments / bays in the aircraft as follows:
 
-- 
+- Shepherd's room
+
+  - EMI Hardened avionics bay in the head section, near the bridge.
+
+  - It has ventilation ducting, cable conduits, and a low-impedance bondig to other avionics compartments.
+
+  - External access via a removable hull panel.
+
+- Inara's shuttle
+ 
+  - EMI Hardened avionics bay in the cargo section.
+
+  - It has ventilation ducting, cable conduits, and a low-impedance bondig to other avionics compartments.
+
+  - External access via a removable hull panel above the port wing that looks like one of the shuttles.  Also accessible via the cargo bay.
+
+- River's room
+ 
+  - EMI Hardened avionics bay in the cargo section across from Inara's shuttle.
+
+  - It has ventilation ducting, cable conduits, and a low-impedance bondig to other avionics compartments.
+
+  - External access via a removable hull panel above the port wing that looks like one of the shuttles.  Also accessible via the cargo bay.
+
+- Simon's medbay 
+ 
+  - EMI Hardened avionics bay in the middle section.
+
+  - It has ventilation ducting, cable conduits, and a low-impedance bondig to other avionics compartments.
+
+  - Access via the cargo bay.
+
+- Kaylee's room
+
+  - EMI Hardened power distribution bay in the middle section.
+
+  - Accessible via the cargo bay.
+
+- Battery compartment
+
+  - Accessible via the cargo bay
+  - Allows quick field swapping of the battery. 
+
+- Cargo bay with Jayne's stuff
+
+  - Cargo bay with clamshell doors that can load and secure a 4" x 3" x 3" payload and provides access to other compartments.
+
+- **Deferred** Fuselage EDF. 
+
+ - EDF and motor compartment in rear cone.
 
 ### Wings
 
