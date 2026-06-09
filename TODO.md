@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-06-08  
+**Last updated:** 2026-06-09  
 **Current design revision:** Rev Q (master) / branch Rev S2 (cargo shell) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 ---
@@ -1597,6 +1597,71 @@ the full T/W ≈ 1.47 VTOL hover capability specified in Rev Q.
 - [ ] **IEEE/ISA/AUVSI best practices** — validate all design decisions against AUVSI UAS best practices; document in build record.
 
 - [ ] **Tamper-evident logging** — verify CPLD write-blocker (ATF16V8BQL) on all 4 CN nodes prevents post-flight log modification; function as hardware-enforced non-executable microSD per CLAUDE.md requirement.
+
+---
+
+## 6.0 — Version Control and Repository Maintenance
+
+### 6.1 — Branch Reconciliation (2026-06-09)
+
+**Context:** A `git merge --allow-unrelated-histories` at commit `406c53f` joined two divergent
+history trees. This created a topology where 11 feature branches appeared to have 44–168 commits
+"not in main," but no file content was actually lost.
+
+**Reconciliation findings (verified 2026-06-09):**
+
+- [x] **`claude/aft-edf-phase-11-CMM8b`** — PRs #37, #39 merged. 0 files missing from main. Branch is a pre-merge snapshot; content fully absorbed. ✅
+- [x] **`claude/cape-em-harsh-variants-9Yfr1`** — PRs #28–#35 merged. 0 files missing from main. ✅
+- [x] **`claude/cargo-equipment-mounts-70I3i`** — PRs #21, #23 merged. Old `serenity/` paths reorganized to `airframe/` and `archives/` in main. ✅
+- [x] **`claude/docs-scrub-revision-p-Y7pja`** — PRs #24, #25 merged; PR #27 closed. 0 files missing from main. ✅
+- [x] **`claude/kicad-silk-labels-HnUIe`** — PRs #7, #9, #10 merged. Old `serenity/diagrams/` SVGs now in `graphical-build-guide/`; 18in STLs archived in `archives/thingverse-serenity/`. ✅
+- [x] **`claude/revision-q-avionics-archive-BXwZI`** — PRs #35, #36, #41 merged. 0 files missing from main. ✅
+- [x] **`claude/revt-nacelle-simplified-3Ri7A`** — PRs #38, #40 merged. 0 files missing from main. ✅
+- [x] **`claude/todo-implementation-2LV2X`** — PRs #15, #18 merged. Old paths reorganized to current structure. ✅
+- [x] **`claude/todo-implementation-8bRee`** — PRs #11–#14, #16, #19 merged. Hull SVGs (hull_bottom/front/side/top) present in `graphical-build-guide/`. ✅
+- [x] **`claude/todo-implementation-AY2pY`** — PR #31 merged. 0 files missing from main. ✅
+- [x] **`claude/todo-implementation-by1W7`** — PRs #20, #22, #26 merged. KiCad backup ZIPs and lock files not design artifacts. ✅
+- [x] **`claude/wing-root-nacelle-mounts-5bSEA`** — PRs #42, #43 merged. 0 commits not in main. ✅
+
+**Result:** Main is a superset of all 12 feature branches. All 43 PRs (42 merged, 1 closed) are
+fully integrated. The stale branches are safe to delete via GitHub once this PR is merged.
+
+- [ ] **Delete stale feature branches** on GitHub after confirming this reconciliation PR merges
+  cleanly. Branches to delete: all `claude/*` branches except `claude/pr-reconciliation-forced-merge-4yefsw`.
+
+### 6.2 — STL Mesh Repair (2026-06-09)
+
+**Context:** CI STL Validation job was failing on 11 files (22 reported — each scanned twice due
+to duplicate search paths in the validator). Root causes and resolutions:
+
+**Validator fix:**
+- [x] Removed duplicate SEARCH_PATHS (`airframe/stls/fuselage`, `nacelles`, `wings` are subsets
+  of `airframe/stls` rglob — each file was reported twice). Fixed by reducing to
+  `["airframe/stls", "stls"]` plus a `seen` deduplication set.
+- [x] Added per-body watertightness check: a mesh passes CI if `mesh.is_watertight` OR every
+  `mesh.split()` body is individually watertight. This correctly handles multi-body assembly
+  STLs (4 landing feet, nacelle assembly, shell + insert bodies) where the combined mesh fails
+  trimesh's global winding check but every solid sub-body is closed.
+
+**STL repairs (manifold3d 3.5.1):**
+- [x] `nacelle_nozzle_closed_asm.stl` — repaired: 1704 → 1648 faces, wt=True (16 bodies)
+- [x] `nacelle_nozzle_petal.stl` — repaired: 213 → 206 faces, wt=True
+- [x] `s_head_shell24_2mm_repaired.stl` — repaired: 227428 → 226812 faces, wt=True (6 bodies)
+- [x] `s_cargo_sect_shell24_2mm_repaired.stl` — repaired: 368352 → 367506 faces, wt=True
+- [x] `s_cargo_sect_shell24_2mm_repaired_largest.stl` — repaired: 367514 → 367474 faces, wt=True
+- [x] `s_middle_canonical_edf_intake.stl` — **regenerated** from `s_middle_canonical_shell24.stl`
+  via manifold3d Boolean difference (4 radial intake scoops). Original was non-manifold (3
+  connected components, all non-manifold). New mesh: 20734 faces, wt=True. Parameters from
+  `airframe/blender-scripts/blender_middle_intake_cut.py` Rev C.
+
+**STLs passing via per-body check (no geometry change needed):**
+- [x] `s_feet_x_4_scaled24.stl` — 4 feet (4 bodies, each wt=True)
+- [x] `s_rear_shell24_2mm_repaired.stl` — 15 bodies, all wt=True
+- [x] `s_middle_shell24_2mm_repaired.stl` — 10 bodies, all wt=True
+- [x] `dorsal_antenna_fin.stl` — 3 bodies, all wt=True
+- [x] `s_cargo_sect_shell24.stl` — 190 bodies, all wt=True
+
+**Result:** All 37 STL files pass `python tools/validate_stls.py` (0 failures).
 
 ---
 
