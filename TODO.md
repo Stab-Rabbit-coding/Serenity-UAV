@@ -1629,6 +1629,40 @@ fully integrated. The stale branches are safe to delete via GitHub once this PR 
 - [ ] **Delete stale feature branches** on GitHub after confirming this reconciliation PR merges
   cleanly. Branches to delete: all `claude/*` branches except `claude/pr-reconciliation-forced-merge-4yefsw`.
 
+### 6.2 — STL Mesh Repair (2026-06-09)
+
+**Context:** CI STL Validation job was failing on 11 files (22 reported — each scanned twice due
+to duplicate search paths in the validator). Root causes and resolutions:
+
+**Validator fix:**
+- [x] Removed duplicate SEARCH_PATHS (`airframe/stls/fuselage`, `nacelles`, `wings` are subsets
+  of `airframe/stls` rglob — each file was reported twice). Fixed by reducing to
+  `["airframe/stls", "stls"]` plus a `seen` deduplication set.
+- [x] Added per-body watertightness check: a mesh passes CI if `mesh.is_watertight` OR every
+  `mesh.split()` body is individually watertight. This correctly handles multi-body assembly
+  STLs (4 landing feet, nacelle assembly, shell + insert bodies) where the combined mesh fails
+  trimesh's global winding check but every solid sub-body is closed.
+
+**STL repairs (manifold3d 3.5.1):**
+- [x] `nacelle_nozzle_closed_asm.stl` — repaired: 1704 → 1648 faces, wt=True (16 bodies)
+- [x] `nacelle_nozzle_petal.stl` — repaired: 213 → 206 faces, wt=True
+- [x] `s_head_shell24_2mm_repaired.stl` — repaired: 227428 → 226812 faces, wt=True (6 bodies)
+- [x] `s_cargo_sect_shell24_2mm_repaired.stl` — repaired: 368352 → 367506 faces, wt=True
+- [x] `s_cargo_sect_shell24_2mm_repaired_largest.stl` — repaired: 367514 → 367474 faces, wt=True
+- [x] `s_middle_canonical_edf_intake.stl` — **regenerated** from `s_middle_canonical_shell24.stl`
+  via manifold3d Boolean difference (4 radial intake scoops). Original was non-manifold (3
+  connected components, all non-manifold). New mesh: 20734 faces, wt=True. Parameters from
+  `airframe/blender-scripts/blender_middle_intake_cut.py` Rev C.
+
+**STLs passing via per-body check (no geometry change needed):**
+- [x] `s_feet_x_4_scaled24.stl` — 4 feet (4 bodies, each wt=True)
+- [x] `s_rear_shell24_2mm_repaired.stl` — 15 bodies, all wt=True
+- [x] `s_middle_shell24_2mm_repaired.stl` — 10 bodies, all wt=True
+- [x] `dorsal_antenna_fin.stl` — 3 bodies, all wt=True
+- [x] `s_cargo_sect_shell24.stl` — 190 bodies, all wt=True
+
+**Result:** All 37 STL files pass `python tools/validate_stls.py` (0 failures).
+
 ---
 
 *© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY 4.0*  
