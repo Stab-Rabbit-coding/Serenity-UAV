@@ -34,8 +34,10 @@ MISSING STLs:
   logs a WARNING for each missing file and skips that component rather
   than aborting.  See TODO.md §1.1 for the render-command checklist.
   Required STLs that block meaningful assembly visualisation:
-    - airframe/stls/nacelles/nacelle_pod_port.stl  (from nacelle_pod_50mm_tandem.scad -D NACELLE_SIDE=1)
-    - airframe/stls/nacelles/nacelle_pod_stbd.stl  (from nacelle_pod_50mm_tandem.scad -D NACELLE_SIDE=-1)
+    - airframe/stls/nacelles/nacelle_pod_port.stl
+      (from nacelle_pod_50mm_tandem.scad -D NACELLE_SIDE=1)
+    - airframe/stls/nacelles/nacelle_pod_stbd.stl
+      (from nacelle_pod_50mm_tandem.scad -D NACELLE_SIDE=-1)
   These are currently represented by the tip-cap STLs (nacelle_tip_cap_port/stbd.stl)
   as stand-ins until the full pod is rendered.
 
@@ -125,7 +127,6 @@ else:
 try:
     import FreeCAD
     import Mesh
-    import Part
     log.info("FreeCAD %s loaded.", FreeCAD.Version()[0])
 except ImportError as _e:
     log.error("Cannot import FreeCAD: %s", _e)
@@ -140,6 +141,7 @@ except ImportError as _e:
 # ---------------------------------------------------------------------------
 _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.normpath(os.path.join(_THIS_DIR, "..", "..", ".."))
+
 
 # Helper: resolve an STL path and warn if it is absent.
 def _stl(relative_path):
@@ -163,7 +165,8 @@ STL_REAR    = _stl("deferred/aft-edf/stls/s_rear_neck_intake_shell24.stl")
 STL_WING_PORT  = _stl("airframe/stls/wings/s_wing_port_s1223_revo.stl")
 STL_WING_STBD  = _stl("airframe/stls/wings/s_wing_stbd_s1223_revo.stl")
 STL_PYLON_PORT = _stl("airframe/stls/wings/s_wing_nacelle_pylon_revo.stl")
-STL_PYLON_STBD = _stl("airframe/stls/wings/s_wing_nacelle_pylon_revo.stl")  # same geometry, mirrored
+# Same STL as port pylon — mirrored in placement only.
+STL_PYLON_STBD = _stl("airframe/stls/wings/s_wing_nacelle_pylon_revo.stl")
 
 # --- Nacelle pods ---
 # Full pod STL requires manual render from SCAD.  Tip caps are stand-ins.
@@ -646,13 +649,20 @@ def build_assembly():
     log.info("-- Cargo bay subsystem")
     grp_cargo = make_group(doc, "Cargo_Bay", parent=root)
 
-    add_mesh_part(doc, grp_cargo, "Cargo_Door_Port",  STL_DOOR_PORT,   identity, COL_CARGO_SYS)
-    add_mesh_part(doc, grp_cargo, "Cargo_Door_Stbd",  STL_DOOR_STBD,   identity, COL_CARGO_SYS)
-    add_mesh_part(doc, grp_cargo, "Winch_Motor_Mount", STL_WINCH_MOUNT, identity, COL_CARGO_SYS)
-    add_mesh_part(doc, grp_cargo, "Winch_Spool",       STL_WINCH_SPOOL, identity, COL_CARGO_SYS)
-    add_mesh_part(doc, grp_cargo, "Cradle_Autolatch",  STL_AUTOLATCH,   identity, COL_CARGO_SYS)
-    add_mesh_part(doc, grp_cargo, "FPV_Bezel",         STL_FPV_BEZEL,   identity, COL_CARGO_SYS)
-    add_mesh_part(doc, grp_cargo, "GPS_Retention_Ring", STL_GPS_RING,   identity, COL_CARGO_SYS)
+    add_mesh_part(doc, grp_cargo, "Cargo_Door_Port",
+                  STL_DOOR_PORT, identity, COL_CARGO_SYS)
+    add_mesh_part(doc, grp_cargo, "Cargo_Door_Stbd",
+                  STL_DOOR_STBD, identity, COL_CARGO_SYS)
+    add_mesh_part(doc, grp_cargo, "Winch_Motor_Mount",
+                  STL_WINCH_MOUNT, identity, COL_CARGO_SYS)
+    add_mesh_part(doc, grp_cargo, "Winch_Spool",
+                  STL_WINCH_SPOOL, identity, COL_CARGO_SYS)
+    add_mesh_part(doc, grp_cargo, "Cradle_Autolatch",
+                  STL_AUTOLATCH, identity, COL_CARGO_SYS)
+    add_mesh_part(doc, grp_cargo, "FPV_Bezel",
+                  STL_FPV_BEZEL, identity, COL_CARGO_SYS)
+    add_mesh_part(doc, grp_cargo, "GPS_Retention_Ring",
+                  STL_GPS_RING, identity, COL_CARGO_SYS)
 
     # ── Optional viewport reorientation ─────────────────────────────────────
     # Set REORIENT_FOR_VIEWPORT = True to apply a +90° X-axis rotation to the
