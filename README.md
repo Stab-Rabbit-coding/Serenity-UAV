@@ -57,26 +57,29 @@ There are seven specified compartments / bays in the aircraft as follows:
 
   - External access via a removable hull panel above the port wing that looks like one of the shuttles.  Also accessible via the cargo bay.
 
-- Simon's medbay 
+- Simon's med-bay 
  
   - EMI Hardened avionics bay in the middle section.
 
   - It has ventilation ducting, cable conduits, and a low-impedance bondig to other avionics compartments.
 
-  - Access via the cargo bay.
+  - near Kaylee's room
+
+  - Access via Jayne's cargo-bay.
 
 - Kaylee's room
 
   - EMI Hardened power distribution bay in the middle section.
 
-  - Accessible via the cargo bay.
+  - Accessible via Jayne's cargo-bay.
 
 - Battery compartment
 
   - Accessible via the cargo bay
+
   - Allows quick field swapping of the battery. 
 
-- Cargo bay with Jayne's stuff
+- Jayne's cargo-bay
 
   - Cargo bay with clamshell doors that can load and secure a 4" x 3" x 3" payload and provides access to other compartments.
 
