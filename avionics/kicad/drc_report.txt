@@ -1,0 +1,2076 @@
+** Drc report for Kaylee.kicad_pcb **
+** Created on 2026-06-10T12:29:58-0400 **
+
+** Found 363 DRC violations **
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.0000 mm)
+    Rule: board setup constraints hole; error
+    @(86.0000 mm, 61.0000 mm): NPTH pad of H4
+    @(85.5000 mm, 57.5000 mm): PTH pad [CHASSIS] of J_SHLD_6V
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.0000 mm)
+    Rule: board setup constraints hole; error
+    @(86.0000 mm, 61.0000 mm): NPTH pad of H4
+    @(83.5000 mm, 60.5000 mm): PTH pad 3 [+6V] of J_6V
+[clearance]: Clearance violation (netclass 'VBAT' clearance 0.2000 mm; actual 0.0292 mm)
+    Rule: netclass 'VBAT'; error
+    @(65.9000 mm, 9.0000 mm): PTH pad 2 [VDIS] of F1
+    @(63.9500 mm, 8.0000 mm): Pad 2 [BEC1_VIN_F] of FB_5V1 on F.Cu
+[clearance]: Clearance violation (netclass 'PGND' clearance 0.2000 mm; actual 0.1001 mm)
+    Rule: netclass 'PGND'; error
+    @(84.0000 mm, 12.0000 mm): PTH pad 2 [PGND] of C2
+    @(85.0000 mm, 10.9625 mm): Pad 6 [BEC1_SW] of U_BEC_5V_1 on F.Cu
+[clearance]: Clearance violation (netclass 'VBAT' clearance 0.2000 mm; actual 0.0750 mm)
+    Rule: netclass 'VBAT'; error
+    @(34.0000 mm, 24.0000 mm): PTH pad 2 [CHASSIS] of C_Y2
+    @(35.6000 mm, 24.0000 mm): Pad 1 [VDIS] of C_DM1 on F.Cu
+[clearance]: Clearance violation (netclass 'PGND' clearance 0.2000 mm; actual 0.1500 mm)
+    Rule: netclass 'PGND'; error
+    @(46.8875 mm, 32.5000 mm): Pad 2 [MAIN_SNS_N] of U_IS_MAIN on F.Cu
+    @(46.8875 mm, 33.0000 mm): Pad 3 [PGND] of U_IS_MAIN on F.Cu
+[clearance]: Clearance violation (netclass 'POWER_5V' clearance 0.2000 mm; actual 0.1500 mm)
+    Rule: netclass 'POWER_5V'; error
+    @(46.8875 mm, 33.0000 mm): Pad 3 [PGND] of U_IS_MAIN on F.Cu
+    @(46.8875 mm, 33.5000 mm): Pad 4 [+5V] of U_IS_MAIN on F.Cu
+[clearance]: Clearance violation (netclass 'POWER_5V' clearance 0.2000 mm; actual 0.1500 mm)
+    Rule: netclass 'POWER_5V'; error
+    @(46.8875 mm, 33.5000 mm): Pad 4 [+5V] of U_IS_MAIN on F.Cu
+    @(46.8875 mm, 34.0000 mm): Pad 5 [PDB_SDA] of U_IS_MAIN on F.Cu
+[clearance]: Clearance violation (netclass 'VBAT' clearance 0.2000 mm; actual 0.1500 mm)
+    Rule: netclass 'VBAT'; error
+    @(51.1125 mm, 32.5000 mm): Pad 9 [<no net>] of U_IS_MAIN on F.Cu
+    @(51.1125 mm, 32.0000 mm): Pad 10 [VBAT] of U_IS_MAIN on F.Cu
+[clearance]: Clearance violation (netclass 'PGND' clearance 0.2000 mm; actual 0.1500 mm)
+    Rule: netclass 'PGND'; error
+    @(5.8875 mm, 52.5000 mm): Pad 2 [ESC1_SNS_N] of U_IS1 on F.Cu
+    @(5.8875 mm, 53.0000 mm): Pad 3 [PGND] of U_IS1 on F.Cu
+[clearance]: Clearance violation (netclass 'POWER_5V' clearance 0.2000 mm; actual 0.1500 mm)
+    Rule: netclass 'POWER_5V'; error
+    @(5.8875 mm, 53.0000 mm): Pad 3 [PGND] of U_IS1 on F.Cu
+    @(5.8875 mm, 53.5000 mm): Pad 4 [+5V] of U_IS1 on F.Cu
+[clearance]: Clearance violation (netclass 'POWER_5V' clearance 0.2000 mm; actual 0.1500 mm)
+    Rule: netclass 'POWER_5V'; error
+    @(5.8875 mm, 53.5000 mm): Pad 4 [+5V] of U_IS1 on F.Cu
+    @(5.8875 mm, 54.0000 mm): Pad 5 [PDB_SDA] of U_IS1 on F.Cu
+[clearance]: Clearance violation (netclass 'PGND' clearance 0.2000 mm; actual 0.1500 mm)
+    Rule: netclass 'PGND'; error
+    @(19.8875 mm, 52.5000 mm): Pad 2 [ESC2_SNS_N] of U_IS2 on F.Cu
+    @(19.8875 mm, 53.0000 mm): Pad 3 [PGND] of U_IS2 on F.Cu
+[clearance]: Clearance violation (netclass 'POWER_5V' clearance 0.2000 mm; actual 0.1500 mm)
+    Rule: netclass 'POWER_5V'; error
+    @(19.8875 mm, 53.0000 mm): Pad 3 [PGND] of U_IS2 on F.Cu
+    @(19.8875 mm, 53.5000 mm): Pad 4 [+5V] of U_IS2 on F.Cu
+[clearance]: Clearance violation (netclass 'POWER_5V' clearance 0.2000 mm; actual 0.1500 mm)
+    Rule: netclass 'POWER_5V'; error
+    @(19.8875 mm, 53.5000 mm): Pad 4 [+5V] of U_IS2 on F.Cu
+    @(19.8875 mm, 54.0000 mm): Pad 5 [PDB_SDA] of U_IS2 on F.Cu
+[clearance]: Clearance violation (netclass 'PGND' clearance 0.2000 mm; actual 0.1500 mm)
+    Rule: netclass 'PGND'; error
+    @(33.8875 mm, 52.5000 mm): Pad 2 [ESC3_SNS_N] of U_IS3 on F.Cu
+    @(33.8875 mm, 53.0000 mm): Pad 3 [PGND] of U_IS3 on F.Cu
+[clearance]: Clearance violation (netclass 'POWER_5V' clearance 0.2000 mm; actual 0.1500 mm)
+    Rule: netclass 'POWER_5V'; error
+    @(33.8875 mm, 53.0000 mm): Pad 3 [PGND] of U_IS3 on F.Cu
+    @(33.8875 mm, 53.5000 mm): Pad 4 [+5V] of U_IS3 on F.Cu
+[clearance]: Clearance violation (netclass 'POWER_5V' clearance 0.2000 mm; actual 0.1500 mm)
+    Rule: netclass 'POWER_5V'; error
+    @(33.8875 mm, 53.5000 mm): Pad 4 [+5V] of U_IS3 on F.Cu
+    @(33.8875 mm, 54.0000 mm): Pad 5 [PDB_SDA] of U_IS3 on F.Cu
+[clearance]: Clearance violation (netclass 'PGND' clearance 0.2000 mm; actual 0.1500 mm)
+    Rule: netclass 'PGND'; error
+    @(47.8875 mm, 52.5000 mm): Pad 2 [ESC4_SNS_N] of U_IS4 on F.Cu
+    @(47.8875 mm, 53.0000 mm): Pad 3 [PGND] of U_IS4 on F.Cu
+[clearance]: Clearance violation (netclass 'POWER_5V' clearance 0.2000 mm; actual 0.1500 mm)
+    Rule: netclass 'POWER_5V'; error
+    @(47.8875 mm, 53.0000 mm): Pad 3 [PGND] of U_IS4 on F.Cu
+    @(47.8875 mm, 53.5000 mm): Pad 4 [+5V] of U_IS4 on F.Cu
+[clearance]: Clearance violation (netclass 'POWER_5V' clearance 0.2000 mm; actual 0.1500 mm)
+    Rule: netclass 'POWER_5V'; error
+    @(47.8875 mm, 53.5000 mm): Pad 4 [+5V] of U_IS4 on F.Cu
+    @(47.8875 mm, 54.0000 mm): Pad 5 [PDB_SDA] of U_IS4 on F.Cu
+[shorting_items]: Items shorting two nets (nets PGND and CHASSIS)
+    Local override; error
+    @(55.0000 mm, 61.0000 mm): PTH pad 2 [PGND] of J_ESC4
+    @(59.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_I2C
+[shorting_items]: Items shorting two nets (nets PGND and BEC1_VIN_F)
+    Local override; error
+    @(74.0000 mm, 8.0000 mm): PTH pad 2 [PGND] of C_BEC1_IN
+    @(75.6000 mm, 8.0000 mm): Pad 1 [BEC1_VIN_F] of L_BEC1 on F.Cu
+[clearance]: Clearance violation (netclass 'Default' clearance 0.1500 mm; actual 0.0950 mm)
+    Rule: netclass 'Default'; error
+    @(83.5000 mm, 7.0375 mm): Pad 17 [BEC1_VIN_F] of U_BEC_5V_1 on F.Cu
+    @(83.9900 mm, 7.5000 mm): Pad 1 [<no net>] of R_FB1_2 on F.Cu
+[clearance]: Clearance violation (netclass 'Default' clearance 0.1500 mm; actual 0.0000 mm)
+    Rule: netclass 'Default'; error
+    @(84.0000 mm, 7.0375 mm): Pad 18 [BEC1_VIN_F] of U_BEC_5V_1 on F.Cu
+    @(83.9900 mm, 7.5000 mm): Pad 1 [<no net>] of R_FB1_2 on F.Cu
+[clearance]: Clearance violation (netclass 'PGND' clearance 0.2000 mm; actual 0.1150 mm)
+    Rule: netclass 'PGND'; error
+    @(84.5000 mm, 7.0375 mm): Pad 19 [BEC1_VIN_F] of U_BEC_5V_1 on F.Cu
+    @(85.0100 mm, 7.5000 mm): Pad 2 [PGND] of R_FB1_2 on F.Cu
+[clearance]: Clearance violation (netclass 'Default' clearance 0.1500 mm; actual 0.1150 mm)
+    Rule: netclass 'Default'; error
+    @(84.5000 mm, 7.0375 mm): Pad 19 [BEC1_VIN_F] of U_BEC_5V_1 on F.Cu
+    @(83.9900 mm, 7.5000 mm): Pad 1 [<no net>] of R_FB1_2 on F.Cu
+[shorting_items]: Items shorting two nets (nets BEC1_VIN_F and PGND)
+    Local override; error
+    @(85.0000 mm, 7.0375 mm): Pad 20 [BEC1_VIN_F] of U_BEC_5V_1 on F.Cu
+    @(85.0100 mm, 7.5000 mm): Pad 2 [PGND] of R_FB1_2 on F.Cu
+[clearance]: Clearance violation (netclass 'PGND' clearance 0.2000 mm; actual 0.0000 mm)
+    Rule: netclass 'PGND'; error
+    @(84.0000 mm, 9.0000 mm): Pad 21 [PGND] of U_BEC_5V_1 on F.Cu
+    @(83.9900 mm, 7.5000 mm): Pad 1 [<no net>] of R_FB1_2 on F.Cu
+[shorting_items]: Items shorting two nets (nets PGND and +5V)
+    Local override; error
+    @(75.0000 mm, 19.0000 mm): PTH pad 2 [PGND] of C_BEC1_OUT
+    @(78.7600 mm, 22.0000 mm): Pad 2 [+5V] of D_OR1 on F.Cu
+[shorting_items]: Items shorting two nets (nets +5V and BEC2_PRE_OR)
+    Local override; error
+    @(78.7600 mm, 22.0000 mm): Pad 2 [+5V] of D_OR1 on F.Cu
+    @(79.4900 mm, 24.5000 mm): Pad 1 [BEC2_PRE_OR] of R_FB2_1 on F.Cu
+[clearance]: Clearance violation (netclass 'POWER_5V' clearance 0.2000 mm; actual 0.0000 mm)
+    Rule: netclass 'POWER_5V'; error
+    @(78.7600 mm, 22.0000 mm): Pad 2 [+5V] of D_OR1 on F.Cu
+    @(80.5100 mm, 24.5000 mm): Pad 2 [<no net>] of R_FB2_1 on F.Cu
+[shorting_items]: Items shorting two nets (nets PGND and BEC2_VIN_F)
+    Local override; error
+    @(74.0000 mm, 28.0000 mm): PTH pad 2 [PGND] of C_BEC2_IN
+    @(75.6000 mm, 28.0000 mm): Pad 1 [BEC2_VIN_F] of L_BEC2 on F.Cu
+[shorting_items]: Items shorting two nets (nets PGND and +5V)
+    Local override; error
+    @(75.0000 mm, 39.0000 mm): PTH pad 2 [PGND] of C_BEC2_OUT
+    @(78.7600 mm, 42.0000 mm): Pad 2 [+5V] of D_OR2 on F.Cu
+[shorting_items]: Items shorting two nets (nets +5V and +6V)
+    Local override; error
+    @(78.7600 mm, 42.0000 mm): Pad 2 [+5V] of D_OR2 on F.Cu
+    @(79.4900 mm, 44.5000 mm): Pad 1 [+6V] of R_FB6_1 on F.Cu
+[clearance]: Clearance violation (netclass 'POWER_5V' clearance 0.2000 mm; actual 0.0000 mm)
+    Rule: netclass 'POWER_5V'; error
+    @(78.7600 mm, 42.0000 mm): Pad 2 [+5V] of D_OR2 on F.Cu
+    @(80.5100 mm, 44.5000 mm): Pad 2 [<no net>] of R_FB6_1 on F.Cu
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.1585 mm)
+    Rule: board setup constraints hole; error
+    @(82.1600 mm, 51.2500 mm): NPTH pad of J_5V
+    @(83.5000 mm, 50.0000 mm): PTH pad 2 [PGND] of J_5V
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.1650 mm)
+    Rule: board setup constraints hole; error
+    @(82.1600 mm, 51.2500 mm): NPTH pad of J_5V
+    @(81.5250 mm, 50.1350 mm): Pad 3 [BEC6V_VIN_F] of U_BEC_6V on F.Cu
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.0000 mm)
+    Rule: board setup constraints hole; error
+    @(82.1600 mm, 51.2500 mm): NPTH pad of J_5V
+    @(81.5250 mm, 51.4050 mm): Pad 4 [BEC6V_VIN_F] of U_BEC_6V on F.Cu
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.1585 mm)
+    Rule: board setup constraints hole; error
+    @(82.1600 mm, 51.2500 mm): NPTH pad of J_5V
+    @(83.5000 mm, 52.5000 mm): PTH pad 3 [+5V] of J_5V
+[clearance]: Clearance violation (netclass 'PGND' clearance 0.2000 mm; actual 0.0000 mm)
+    Rule: netclass 'PGND'; error
+    @(83.5000 mm, 47.5000 mm): PTH pad 1 [PGND] of J_5V
+    @(81.5250 mm, 47.5950 mm): Pad 1 [<no net>] of U_BEC_6V on F.Cu
+[shorting_items]: Items shorting two nets (nets PGND and BEC6V_VIN_F)
+    Local override; error
+    @(83.5000 mm, 50.0000 mm): PTH pad 2 [PGND] of J_5V
+    @(81.5250 mm, 50.1350 mm): Pad 3 [BEC6V_VIN_F] of U_BEC_6V on F.Cu
+[shorting_items]: Items shorting two nets (nets +5V and CHASSIS)
+    Local override; error
+    @(83.5000 mm, 52.5000 mm): PTH pad 3 [+5V] of J_5V
+    @(87.0000 mm, 53.5000 mm): PTH pad [CHASSIS] of J_SHLD_5V
+[shorting_items]: Items shorting two nets (nets +5V and CHASSIS)
+    Local override; error
+    @(83.5000 mm, 55.0000 mm): PTH pad 4 [+5V] of J_5V
+    @(85.5000 mm, 57.5000 mm): PTH pad [CHASSIS] of J_SHLD_6V
+[shorting_items]: Items shorting two nets (nets +5V and CHASSIS)
+    Local override; error
+    @(83.5000 mm, 55.0000 mm): PTH pad 4 [+5V] of J_5V
+    @(87.0000 mm, 53.5000 mm): PTH pad [CHASSIS] of J_SHLD_5V
+[shorting_items]: Items shorting two nets (nets +5V and PGND)
+    Local override; error
+    @(83.5000 mm, 55.0000 mm): PTH pad 4 [+5V] of J_5V
+    @(83.5000 mm, 55.5000 mm): PTH pad 1 [PGND] of J_6V
+[clearance]: Clearance violation (netclass 'POWER_5V' clearance 0.2000 mm; actual 0.0650 mm)
+    Rule: netclass 'POWER_5V'; error
+    @(87.0000 mm, 53.5000 mm): PTH pad [CHASSIS] of J_SHLD_5V
+    @(86.4750 mm, 50.1350 mm): Pad 6 [+6V] of U_BEC_6V on F.Cu
+[clearance]: Clearance violation (netclass 'Default' clearance 0.1500 mm; actual 0.0000 mm)
+    Rule: netclass 'Default'; error
+    @(87.0000 mm, 53.5000 mm): PTH pad [CHASSIS] of J_SHLD_5V
+    @(86.4750 mm, 51.4050 mm): Pad 5 [<no net>] of U_BEC_6V on F.Cu
+[shorting_items]: Items shorting two nets (nets CHASSIS and PGND)
+    Local override; error
+    @(87.0000 mm, 53.5000 mm): PTH pad [CHASSIS] of J_SHLD_5V
+    @(83.5000 mm, 55.5000 mm): PTH pad 1 [PGND] of J_6V
+[shorting_items]: Items shorting two nets (nets PGND and BEC6V_VIN_F)
+    Local override; error
+    @(74.0000 mm, 48.0000 mm): PTH pad 2 [PGND] of C_BEC_SV_IN
+    @(75.6000 mm, 48.0000 mm): Pad 1 [BEC6V_VIN_F] of L_BEC3 on F.Cu
+[clearance]: Clearance violation (netclass 'POWER_5V' clearance 0.2000 mm; actual 0.0000 mm)
+    Rule: netclass 'POWER_5V'; error
+    @(70.0000 mm, 59.0000 mm): PTH pad 1 [+6V] of C_BEC_SV_OUT
+    @(70.4750 mm, 58.6000 mm): Pad MP [<no net>] of J_ALERT on F.Cu
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.1585 mm)
+    Rule: board setup constraints hole; error
+    @(82.1600 mm, 59.2500 mm): NPTH pad of J_6V
+    @(83.5000 mm, 58.0000 mm): PTH pad 2 [PGND] of J_6V
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.1207 mm)
+    Rule: board setup constraints hole; error
+    @(82.1600 mm, 59.2500 mm): NPTH pad of J_6V
+    @(85.5000 mm, 57.5000 mm): PTH pad [CHASSIS] of J_SHLD_6V
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.1585 mm)
+    Rule: board setup constraints hole; error
+    @(82.1600 mm, 59.2500 mm): NPTH pad of J_6V
+    @(83.5000 mm, 60.5000 mm): PTH pad 3 [+6V] of J_6V
+[shorting_items]: Items shorting two nets (nets PGND and CHASSIS)
+    Local override; error
+    @(83.5000 mm, 55.5000 mm): PTH pad 1 [PGND] of J_6V
+    @(85.5000 mm, 57.5000 mm): PTH pad [CHASSIS] of J_SHLD_6V
+[shorting_items]: Items shorting two nets (nets PGND and CHASSIS)
+    Local override; error
+    @(83.5000 mm, 58.0000 mm): PTH pad 2 [PGND] of J_6V
+    @(85.5000 mm, 57.5000 mm): PTH pad [CHASSIS] of J_SHLD_6V
+[shorting_items]: Items shorting two nets (nets +6V and CHASSIS)
+    Local override; error
+    @(83.5000 mm, 60.5000 mm): PTH pad 3 [+6V] of J_6V
+    @(85.5000 mm, 57.5000 mm): PTH pad [CHASSIS] of J_SHLD_6V
+[clearance]: Clearance violation (netclass 'POWER_5V' clearance 0.2000 mm; actual 0.0000 mm)
+    Rule: netclass 'POWER_5V'; error
+    @(58.4900 mm, 59.0000 mm): Pad 1 [+5V] of R_ALERT on F.Cu
+    @(58.9000 mm, 58.6000 mm): Pad MP [<no net>] of J_I2C on F.Cu
+[clearance]: Clearance violation (netclass 'Default' clearance 0.1500 mm; actual 0.0000 mm)
+    Rule: netclass 'Default'; error
+    @(59.5100 mm, 59.0000 mm): Pad 2 [PDB_ALERT_N] of R_ALERT on F.Cu
+    @(58.9000 mm, 58.6000 mm): Pad MP [<no net>] of J_I2C on F.Cu
+[clearance]: Clearance violation (netclass 'Default' clearance 0.1500 mm; actual 0.0000 mm)
+    Rule: netclass 'Default'; error
+    @(58.9000 mm, 58.6000 mm): Pad MP [<no net>] of J_I2C on F.Cu
+    @(59.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_I2C
+[clearance]: Clearance violation (netclass 'Default' clearance 0.1500 mm; actual 0.0000 mm)
+    Rule: netclass 'Default'; error
+    @(65.1000 mm, 58.6000 mm): Pad MP [<no net>] of J_I2C on F.Cu
+    @(65.5250 mm, 58.6000 mm): Pad MP [<no net>] of J_ALERT on F.Cu
+[clearance]: Clearance violation (netclass 'Default' clearance 0.1500 mm; actual 0.0000 mm)
+    Rule: netclass 'Default'; error
+    @(65.1000 mm, 58.6000 mm): Pad MP [<no net>] of J_I2C on F.Cu
+    @(65.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_ALERT
+[shorting_items]: Items shorting two nets (nets PGND and CHASSIS)
+    Local override; error
+    @(60.1250 mm, 61.9500 mm): Pad 1 [PGND] of J_I2C on F.Cu
+    @(59.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_I2C
+[shorting_items]: Items shorting two nets (nets +5V and CHASSIS)
+    Local override; error
+    @(61.3750 mm, 61.9500 mm): Pad 2 [+5V] of J_I2C on F.Cu
+    @(59.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_I2C
+[shorting_items]: Items shorting two nets (nets PDB_SCL and CHASSIS)
+    Local override; error
+    @(62.6250 mm, 61.9500 mm): Pad 3 [PDB_SCL] of J_I2C on F.Cu
+    @(59.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_I2C
+[shorting_items]: Items shorting two nets (nets PDB_SCL and CHASSIS)
+    Local override; error
+    @(62.6250 mm, 61.9500 mm): Pad 3 [PDB_SCL] of J_I2C on F.Cu
+    @(65.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_ALERT
+[shorting_items]: Items shorting two nets (nets PDB_SDA and CHASSIS)
+    Local override; error
+    @(63.8750 mm, 61.9500 mm): Pad 4 [PDB_SDA] of J_I2C on F.Cu
+    @(65.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_ALERT
+[clearance]: Clearance violation (netclass 'Default' clearance 0.1500 mm; actual 0.0000 mm)
+    Rule: netclass 'Default'; error
+    @(65.5250 mm, 58.6000 mm): Pad MP [<no net>] of J_ALERT on F.Cu
+    @(65.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_ALERT
+[shorting_items]: Items shorting two nets (nets PGND and CHASSIS)
+    Local override; error
+    @(67.3750 mm, 61.9500 mm): Pad 1 [PGND] of J_ALERT on F.Cu
+    @(65.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_ALERT
+[shorting_items]: Items shorting two nets (nets PDB_ALERT_N and CHASSIS)
+    Local override; error
+    @(68.6250 mm, 61.9500 mm): Pad 2 [PDB_ALERT_N] of J_ALERT on F.Cu
+    @(65.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_ALERT
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(4.0000 mm, 4.0000 mm): Footprint H1
+    @(13.0000 mm, 19.0000 mm): Footprint J_BATT
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(86.0000 mm, 4.0000 mm): Footprint H2
+    @(79.0000 mm, 12.0000 mm): Footprint C2
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(86.0000 mm, 4.0000 mm): Footprint H2
+    @(84.0000 mm, 9.0000 mm): Footprint U_BEC_5V_1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(86.0000 mm, 4.0000 mm): Footprint H2
+    @(84.5000 mm, 7.5000 mm): Footprint R_FB1_2
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(4.0000 mm, 61.0000 mm): Footprint H3
+    @(8.0000 mm, 61.0000 mm): Footprint J_ESC1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(86.0000 mm, 61.0000 mm): Footprint H4
+    @(83.5000 mm, 55.5000 mm): Footprint J_6V
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(86.0000 mm, 61.0000 mm): Footprint H4
+    @(85.5000 mm, 57.5000 mm): Footprint J_SHLD_6V
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(13.0000 mm, 19.0000 mm): Footprint J_BATT
+    @(14.0000 mm, 24.0000 mm): Footprint D1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(13.0000 mm, 19.0000 mm): Footprint J_BATT
+    @(5.0000 mm, 20.0000 mm): Footprint J_PGND_BATT
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(56.0000 mm, 9.0000 mm): Footprint F1
+    @(68.0000 mm, 12.0000 mm): Footprint C1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(56.0000 mm, 9.0000 mm): Footprint F1
+    @(63.0000 mm, 8.0000 mm): Footprint FB_5V1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(56.0000 mm, 9.0000 mm): Footprint F1
+    @(69.0000 mm, 8.0000 mm): Footprint C_BEC1_IN
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(56.0000 mm, 9.0000 mm): Footprint F1
+    @(70.0000 mm, 19.0000 mm): Footprint C_BEC1_OUT
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(68.0000 mm, 12.0000 mm): Footprint C1
+    @(79.0000 mm, 12.0000 mm): Footprint C2
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(68.0000 mm, 12.0000 mm): Footprint C1
+    @(63.0000 mm, 8.0000 mm): Footprint FB_5V1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(68.0000 mm, 12.0000 mm): Footprint C1
+    @(69.0000 mm, 8.0000 mm): Footprint C_BEC1_IN
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(68.0000 mm, 12.0000 mm): Footprint C1
+    @(77.0000 mm, 8.0000 mm): Footprint L_BEC1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(68.0000 mm, 12.0000 mm): Footprint C1
+    @(70.0000 mm, 19.0000 mm): Footprint C_BEC1_OUT
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(68.0000 mm, 12.0000 mm): Footprint C1
+    @(77.5000 mm, 22.0000 mm): Footprint D_OR1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(79.0000 mm, 12.0000 mm): Footprint C2
+    @(69.0000 mm, 8.0000 mm): Footprint C_BEC1_IN
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(79.0000 mm, 12.0000 mm): Footprint C2
+    @(77.0000 mm, 8.0000 mm): Footprint L_BEC1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(79.0000 mm, 12.0000 mm): Footprint C2
+    @(84.0000 mm, 9.0000 mm): Footprint U_BEC_5V_1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(79.0000 mm, 12.0000 mm): Footprint C2
+    @(80.0000 mm, 7.5000 mm): Footprint R_FB1_1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(79.0000 mm, 12.0000 mm): Footprint C2
+    @(84.5000 mm, 7.5000 mm): Footprint R_FB1_2
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(79.0000 mm, 12.0000 mm): Footprint C2
+    @(70.0000 mm, 19.0000 mm): Footprint C_BEC1_OUT
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(79.0000 mm, 12.0000 mm): Footprint C2
+    @(77.5000 mm, 22.0000 mm): Footprint D_OR1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(22.0000 mm, 24.0000 mm): Footprint C_Y1
+    @(29.0000 mm, 24.0000 mm): Footprint C_Y2
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(29.0000 mm, 24.0000 mm): Footprint C_Y2
+    @(37.0000 mm, 24.0000 mm): Footprint C_DM1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(3.0000 mm, 40.5000 mm): Footprint F_ESC1
+    @(8.0000 mm, 47.0000 mm): Footprint RS_1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(3.0000 mm, 40.5000 mm): Footprint F_ESC1
+    @(8.0000 mm, 61.0000 mm): Footprint J_ESC1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(8.0000 mm, 47.0000 mm): Footprint RS_1
+    @(8.0000 mm, 61.0000 mm): Footprint J_ESC1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(8.0000 mm, 53.0000 mm): Footprint U_IS1
+    @(8.0000 mm, 61.0000 mm): Footprint J_ESC1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(8.0000 mm, 61.0000 mm): Footprint J_ESC1
+    @(17.0000 mm, 40.5000 mm): Footprint F_ESC2
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(17.0000 mm, 40.5000 mm): Footprint F_ESC2
+    @(22.0000 mm, 47.0000 mm): Footprint RS_2
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(17.0000 mm, 40.5000 mm): Footprint F_ESC2
+    @(22.0000 mm, 61.0000 mm): Footprint J_ESC2
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(22.0000 mm, 47.0000 mm): Footprint RS_2
+    @(22.0000 mm, 61.0000 mm): Footprint J_ESC2
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(22.0000 mm, 53.0000 mm): Footprint U_IS2
+    @(22.0000 mm, 61.0000 mm): Footprint J_ESC2
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(22.0000 mm, 61.0000 mm): Footprint J_ESC2
+    @(31.0000 mm, 40.5000 mm): Footprint F_ESC3
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(31.0000 mm, 40.5000 mm): Footprint F_ESC3
+    @(36.0000 mm, 47.0000 mm): Footprint RS_3
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(31.0000 mm, 40.5000 mm): Footprint F_ESC3
+    @(36.0000 mm, 61.0000 mm): Footprint J_ESC3
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(36.0000 mm, 47.0000 mm): Footprint RS_3
+    @(36.0000 mm, 61.0000 mm): Footprint J_ESC3
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(36.0000 mm, 53.0000 mm): Footprint U_IS3
+    @(36.0000 mm, 61.0000 mm): Footprint J_ESC3
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(36.0000 mm, 61.0000 mm): Footprint J_ESC3
+    @(45.0000 mm, 40.5000 mm): Footprint F_ESC4
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(45.0000 mm, 40.5000 mm): Footprint F_ESC4
+    @(50.0000 mm, 47.0000 mm): Footprint RS_4
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(45.0000 mm, 40.5000 mm): Footprint F_ESC4
+    @(50.0000 mm, 61.0000 mm): Footprint J_ESC4
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(50.0000 mm, 47.0000 mm): Footprint RS_4
+    @(50.0000 mm, 61.0000 mm): Footprint J_ESC4
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(50.0000 mm, 53.0000 mm): Footprint U_IS4
+    @(50.0000 mm, 61.0000 mm): Footprint J_ESC4
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(50.0000 mm, 61.0000 mm): Footprint J_ESC4
+    @(59.0000 mm, 54.0000 mm): Footprint D_I2C
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(50.0000 mm, 61.0000 mm): Footprint J_ESC4
+    @(59.0000 mm, 59.0000 mm): Footprint R_ALERT
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(50.0000 mm, 61.0000 mm): Footprint J_ESC4
+    @(62.0000 mm, 60.0000 mm): Footprint J_I2C
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(50.0000 mm, 61.0000 mm): Footprint J_ESC4
+    @(59.5000 mm, 62.5000 mm): Footprint J_SHLD_I2C
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(63.0000 mm, 8.0000 mm): Footprint FB_5V1
+    @(69.0000 mm, 8.0000 mm): Footprint C_BEC1_IN
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(69.0000 mm, 8.0000 mm): Footprint C_BEC1_IN
+    @(77.0000 mm, 8.0000 mm): Footprint L_BEC1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(69.0000 mm, 8.0000 mm): Footprint C_BEC1_IN
+    @(70.0000 mm, 19.0000 mm): Footprint C_BEC1_OUT
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(77.0000 mm, 8.0000 mm): Footprint L_BEC1
+    @(80.0000 mm, 7.5000 mm): Footprint R_FB1_1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(84.0000 mm, 9.0000 mm): Footprint U_BEC_5V_1
+    @(84.5000 mm, 7.5000 mm): Footprint R_FB1_2
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(70.0000 mm, 19.0000 mm): Footprint C_BEC1_OUT
+    @(77.5000 mm, 22.0000 mm): Footprint D_OR1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(70.0000 mm, 19.0000 mm): Footprint C_BEC1_OUT
+    @(69.0000 mm, 28.0000 mm): Footprint C_BEC2_IN
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(70.0000 mm, 19.0000 mm): Footprint C_BEC1_OUT
+    @(80.0000 mm, 24.5000 mm): Footprint R_FB2_1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(77.5000 mm, 22.0000 mm): Footprint D_OR1
+    @(69.0000 mm, 28.0000 mm): Footprint C_BEC2_IN
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(77.5000 mm, 22.0000 mm): Footprint D_OR1
+    @(80.0000 mm, 24.5000 mm): Footprint R_FB2_1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(63.0000 mm, 28.0000 mm): Footprint FB_5V2
+    @(69.0000 mm, 28.0000 mm): Footprint C_BEC2_IN
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(69.0000 mm, 28.0000 mm): Footprint C_BEC2_IN
+    @(77.0000 mm, 28.0000 mm): Footprint L_BEC2
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(69.0000 mm, 28.0000 mm): Footprint C_BEC2_IN
+    @(70.0000 mm, 39.0000 mm): Footprint C_BEC2_OUT
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(70.0000 mm, 39.0000 mm): Footprint C_BEC2_OUT
+    @(77.5000 mm, 42.0000 mm): Footprint D_OR2
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(70.0000 mm, 39.0000 mm): Footprint C_BEC2_OUT
+    @(69.0000 mm, 48.0000 mm): Footprint C_BEC_SV_IN
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(70.0000 mm, 39.0000 mm): Footprint C_BEC2_OUT
+    @(80.0000 mm, 44.5000 mm): Footprint R_FB6_1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(77.5000 mm, 42.0000 mm): Footprint D_OR2
+    @(69.0000 mm, 48.0000 mm): Footprint C_BEC_SV_IN
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(77.5000 mm, 42.0000 mm): Footprint D_OR2
+    @(80.0000 mm, 44.5000 mm): Footprint R_FB6_1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(83.5000 mm, 47.5000 mm): Footprint J_5V
+    @(87.0000 mm, 53.5000 mm): Footprint J_SHLD_5V
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(83.5000 mm, 47.5000 mm): Footprint J_5V
+    @(84.0000 mm, 49.5000 mm): Footprint U_BEC_6V
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(83.5000 mm, 47.5000 mm): Footprint J_5V
+    @(83.5000 mm, 55.5000 mm): Footprint J_6V
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(83.5000 mm, 47.5000 mm): Footprint J_5V
+    @(85.5000 mm, 57.5000 mm): Footprint J_SHLD_6V
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(87.0000 mm, 53.5000 mm): Footprint J_SHLD_5V
+    @(84.0000 mm, 49.5000 mm): Footprint U_BEC_6V
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(87.0000 mm, 53.5000 mm): Footprint J_SHLD_5V
+    @(83.5000 mm, 55.5000 mm): Footprint J_6V
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(87.0000 mm, 53.5000 mm): Footprint J_SHLD_5V
+    @(85.5000 mm, 57.5000 mm): Footprint J_SHLD_6V
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(63.0000 mm, 48.0000 mm): Footprint FB_6V
+    @(69.0000 mm, 48.0000 mm): Footprint C_BEC_SV_IN
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(69.0000 mm, 48.0000 mm): Footprint C_BEC_SV_IN
+    @(77.0000 mm, 48.0000 mm): Footprint L_BEC3
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(69.0000 mm, 48.0000 mm): Footprint C_BEC_SV_IN
+    @(70.0000 mm, 59.0000 mm): Footprint C_BEC_SV_OUT
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(70.0000 mm, 59.0000 mm): Footprint C_BEC_SV_OUT
+    @(62.0000 mm, 60.0000 mm): Footprint J_I2C
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(70.0000 mm, 59.0000 mm): Footprint C_BEC_SV_OUT
+    @(68.0000 mm, 60.0000 mm): Footprint J_ALERT
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(70.0000 mm, 59.0000 mm): Footprint C_BEC_SV_OUT
+    @(65.5000 mm, 62.5000 mm): Footprint J_SHLD_ALERT
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(83.5000 mm, 55.5000 mm): Footprint J_6V
+    @(85.5000 mm, 57.5000 mm): Footprint J_SHLD_6V
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(59.0000 mm, 59.0000 mm): Footprint R_ALERT
+    @(62.0000 mm, 60.0000 mm): Footprint J_I2C
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(59.0000 mm, 59.0000 mm): Footprint R_ALERT
+    @(59.5000 mm, 62.5000 mm): Footprint J_SHLD_I2C
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(62.0000 mm, 60.0000 mm): Footprint J_I2C
+    @(59.5000 mm, 62.5000 mm): Footprint J_SHLD_I2C
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(62.0000 mm, 60.0000 mm): Footprint J_I2C
+    @(68.0000 mm, 60.0000 mm): Footprint J_ALERT
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(62.0000 mm, 60.0000 mm): Footprint J_I2C
+    @(65.5000 mm, 62.5000 mm): Footprint J_SHLD_ALERT
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(59.5000 mm, 62.5000 mm): Footprint J_SHLD_I2C
+    @(65.5000 mm, 62.5000 mm): Footprint J_SHLD_ALERT
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(68.0000 mm, 60.0000 mm): Footprint J_ALERT
+    @(65.5000 mm, 62.5000 mm): Footprint J_SHLD_ALERT
+[silk_edge_clearance]: Silkscreen clipped by board edge
+    Rule: board setup constraints silk; warning
+    @(0.0000 mm, 0.0000 mm): Rectangle on Edge.Cuts
+    @(4.0000 mm, 0.5000 mm): Reference field of H1
+[silk_edge_clearance]: Silkscreen clipped by board edge
+    Rule: board setup constraints silk; warning
+    @(0.0000 mm, 0.0000 mm): Rectangle on Edge.Cuts
+    @(86.0000 mm, 0.5000 mm): Reference field of H2
+[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2500 mm; actual 0.0000 mm)
+    Rule: board setup constraints edge; error
+    @(0.0000 mm, 0.0000 mm): Rectangle on Edge.Cuts
+    @(87.0000 mm, 53.5000 mm): PTH pad [CHASSIS] of J_SHLD_5V
+[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2500 mm; actual 0.0000 mm)
+    Rule: board setup constraints edge; error
+    @(0.0000 mm, 0.0000 mm): Rectangle on Edge.Cuts
+    @(59.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_I2C
+[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2500 mm; actual 0.0000 mm)
+    Rule: board setup constraints edge; error
+    @(0.0000 mm, 0.0000 mm): Rectangle on Edge.Cuts
+    @(65.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_ALERT
+[hole_to_hole]: Drilled hole too close to other hole (board setup constraints min 0.2495 mm; actual 0.0000 mm)
+    Rule: board setup constraints; warning
+    @(83.5000 mm, 55.0000 mm): PTH pad 4 [+5V] of J_5V
+    @(83.5000 mm, 55.5000 mm): PTH pad 1 [PGND] of J_6V
+[hole_to_hole]: Drilled hole too close to other hole (board setup constraints min 0.2495 mm; actual 0.0000 mm)
+    Rule: board setup constraints; warning
+    @(83.5000 mm, 58.0000 mm): PTH pad 2 [PGND] of J_6V
+    @(85.5000 mm, 57.5000 mm): PTH pad [CHASSIS] of J_SHLD_6V
+[lib_footprint_mismatch]: Footprint 'MountingHole_3.2mm_M3' does not match copy in library 'MountingHole'.
+    Local override; warning
+    @(4.0000 mm, 4.0000 mm): Footprint H1
+[lib_footprint_mismatch]: Footprint 'MountingHole_3.2mm_M3' does not match copy in library 'MountingHole'.
+    Local override; warning
+    @(86.0000 mm, 4.0000 mm): Footprint H2
+[lib_footprint_mismatch]: Footprint 'MountingHole_3.2mm_M3' does not match copy in library 'MountingHole'.
+    Local override; warning
+    @(4.0000 mm, 61.0000 mm): Footprint H3
+[lib_footprint_mismatch]: Footprint 'MountingHole_3.2mm_M3' does not match copy in library 'MountingHole'.
+    Local override; warning
+    @(86.0000 mm, 61.0000 mm): Footprint H4
+[lib_footprint_mismatch]: Footprint 'AMASS_XT60PW-F_1x02_P7.20mm_Horizontal' does not match copy in library 'Connector_AMASS'.
+    Local override; warning
+    @(13.0000 mm, 19.0000 mm): Footprint J_BATT
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Kaylee'.
+    Local override; warning
+    @(31.0000 mm, 12.0000 mm): Footprint CM1
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Kaylee'.
+    Local override; warning
+    @(44.0000 mm, 12.0000 mm): Footprint CM2
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Kaylee'.
+    Local override; warning
+    @(56.0000 mm, 9.0000 mm): Footprint F1
+[lib_footprint_mismatch]: Footprint 'CP_Radial_D10.0mm_P5.00mm' does not match copy in library 'Capacitor_THT'.
+    Local override; warning
+    @(68.0000 mm, 12.0000 mm): Footprint C1
+[lib_footprint_mismatch]: Footprint 'CP_Radial_D10.0mm_P5.00mm' does not match copy in library 'Capacitor_THT'.
+    Local override; warning
+    @(79.0000 mm, 12.0000 mm): Footprint C2
+[lib_footprint_mismatch]: Footprint 'D_SMB' does not match copy in library 'Diode_SMD'.
+    Local override; warning
+    @(14.0000 mm, 24.0000 mm): Footprint D1
+[lib_footprint_mismatch]: Footprint 'C_Disc_D4.3mm_W1.9mm_P5.00mm' does not match copy in library 'Capacitor_THT'.
+    Local override; warning
+    @(22.0000 mm, 24.0000 mm): Footprint C_Y1
+[lib_footprint_mismatch]: Footprint 'C_Disc_D4.3mm_W1.9mm_P5.00mm' does not match copy in library 'Capacitor_THT'.
+    Local override; warning
+    @(29.0000 mm, 24.0000 mm): Footprint C_Y2
+[lib_footprint_mismatch]: Footprint 'L_1210_3225Metric' does not match copy in library 'Inductor_SMD'.
+    Local override; warning
+    @(37.0000 mm, 24.0000 mm): Footprint C_DM1
+[lib_footprint_mismatch]: Footprint 'C_0805_2012Metric' does not match copy in library 'Capacitor_SMD'.
+    Local override; warning
+    @(44.0000 mm, 24.0000 mm): Footprint C3
+[lib_footprint_mismatch]: Footprint 'MountingHole_3.2mm_M3_Pad_Via' does not match copy in library 'MountingHole'.
+    Local override; warning
+    @(5.0000 mm, 20.0000 mm): Footprint J_PGND_BATT
+[lib_footprint_mismatch]: Footprint 'MountingHole_3.2mm_M3_Pad_Via' does not match copy in library 'MountingHole'.
+    Local override; warning
+    @(5.0000 mm, 32.0000 mm): Footprint J_CHASSIS
+[lib_footprint_mismatch]: Footprint 'SOIC-8_3.9x4.9mm_P1.27mm' does not match copy in library 'Package_SO'.
+    Local override; warning
+    @(16.0000 mm, 33.0000 mm): Footprint Q_BATT_DSG
+[lib_footprint_mismatch]: Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.
+    Local override; warning
+    @(25.0000 mm, 33.0000 mm): Footprint R_DSG_G
+[lib_footprint_mismatch]: Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.
+    Local override; warning
+    @(30.5000 mm, 33.0000 mm): Footprint R_CHGND
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Kaylee'.
+    Local override; warning
+    @(39.0000 mm, 33.0000 mm): Footprint RS_MAIN
+[lib_footprint_mismatch]: Footprint 'MSOP-10_3x3mm_P0.5mm' does not match copy in library 'Package_SO'.
+    Local override; warning
+    @(49.0000 mm, 33.0000 mm): Footprint U_IS_MAIN
+[lib_footprint_mismatch]: Footprint 'Fuseholder_Blade_Mini_Keystone_3568' does not match copy in library 'Fuse'.
+    Local override; warning
+    @(3.0000 mm, 40.5000 mm): Footprint F_ESC1
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Kaylee'.
+    Local override; warning
+    @(8.0000 mm, 47.0000 mm): Footprint RS_1
+[lib_footprint_mismatch]: Footprint 'MSOP-10_3x3mm_P0.5mm' does not match copy in library 'Package_SO'.
+    Local override; warning
+    @(8.0000 mm, 53.0000 mm): Footprint U_IS1
+[lib_footprint_mismatch]: Footprint 'AMASS_XT30PW-F_1x02_P2.50mm_Horizontal' does not match copy in library 'Connector_AMASS'.
+    Local override; warning
+    @(8.0000 mm, 61.0000 mm): Footprint J_ESC1
+[lib_footprint_mismatch]: Footprint 'Fuseholder_Blade_Mini_Keystone_3568' does not match copy in library 'Fuse'.
+    Local override; warning
+    @(17.0000 mm, 40.5000 mm): Footprint F_ESC2
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Kaylee'.
+    Local override; warning
+    @(22.0000 mm, 47.0000 mm): Footprint RS_2
+[lib_footprint_mismatch]: Footprint 'MSOP-10_3x3mm_P0.5mm' does not match copy in library 'Package_SO'.
+    Local override; warning
+    @(22.0000 mm, 53.0000 mm): Footprint U_IS2
+[lib_footprint_mismatch]: Footprint 'AMASS_XT30PW-F_1x02_P2.50mm_Horizontal' does not match copy in library 'Connector_AMASS'.
+    Local override; warning
+    @(22.0000 mm, 61.0000 mm): Footprint J_ESC2
+[lib_footprint_mismatch]: Footprint 'Fuseholder_Blade_Mini_Keystone_3568' does not match copy in library 'Fuse'.
+    Local override; warning
+    @(31.0000 mm, 40.5000 mm): Footprint F_ESC3
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Kaylee'.
+    Local override; warning
+    @(36.0000 mm, 47.0000 mm): Footprint RS_3
+[lib_footprint_mismatch]: Footprint 'MSOP-10_3x3mm_P0.5mm' does not match copy in library 'Package_SO'.
+    Local override; warning
+    @(36.0000 mm, 53.0000 mm): Footprint U_IS3
+[lib_footprint_mismatch]: Footprint 'AMASS_XT30PW-F_1x02_P2.50mm_Horizontal' does not match copy in library 'Connector_AMASS'.
+    Local override; warning
+    @(36.0000 mm, 61.0000 mm): Footprint J_ESC3
+[lib_footprint_mismatch]: Footprint 'Fuseholder_Blade_Mini_Keystone_3568' does not match copy in library 'Fuse'.
+    Local override; warning
+    @(45.0000 mm, 40.5000 mm): Footprint F_ESC4
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Kaylee'.
+    Local override; warning
+    @(50.0000 mm, 47.0000 mm): Footprint RS_4
+[lib_footprint_mismatch]: Footprint 'MSOP-10_3x3mm_P0.5mm' does not match copy in library 'Package_SO'.
+    Local override; warning
+    @(50.0000 mm, 53.0000 mm): Footprint U_IS4
+[lib_footprint_mismatch]: Footprint 'AMASS_XT30PW-F_1x02_P2.50mm_Horizontal' does not match copy in library 'Connector_AMASS'.
+    Local override; warning
+    @(50.0000 mm, 61.0000 mm): Footprint J_ESC4
+[lib_footprint_mismatch]: Footprint 'C_0805_2012Metric' does not match copy in library 'Capacitor_SMD'.
+    Local override; warning
+    @(63.0000 mm, 8.0000 mm): Footprint FB_5V1
+[lib_footprint_mismatch]: Footprint 'CP_Radial_D10.0mm_P5.00mm' does not match copy in library 'Capacitor_THT'.
+    Local override; warning
+    @(69.0000 mm, 8.0000 mm): Footprint C_BEC1_IN
+[lib_footprint_mismatch]: Footprint 'L_1210_3225Metric' does not match copy in library 'Inductor_SMD'.
+    Local override; warning
+    @(77.0000 mm, 8.0000 mm): Footprint L_BEC1
+[lib_footprint_mismatch]: Footprint 'Texas_RGP0020D_VQFN-20-1EP_4x4mm_P0.5mm_EP2.7x2.7mm' does not match copy in library 'Package_DFN_QFN'.
+    Local override; warning
+    @(84.0000 mm, 9.0000 mm): Footprint U_BEC_5V_1
+[lib_footprint_mismatch]: Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.
+    Local override; warning
+    @(80.0000 mm, 7.5000 mm): Footprint R_FB1_1
+[lib_footprint_mismatch]: Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.
+    Local override; warning
+    @(84.5000 mm, 7.5000 mm): Footprint R_FB1_2
+[lib_footprint_mismatch]: Footprint 'CP_Radial_D10.0mm_P5.00mm' does not match copy in library 'Capacitor_THT'.
+    Local override; warning
+    @(70.0000 mm, 19.0000 mm): Footprint C_BEC1_OUT
+[lib_footprint_mismatch]: Footprint 'TO-252-3_TabPin2' does not match copy in library 'Package_TO_SOT_SMD'.
+    Local override; warning
+    @(77.5000 mm, 22.0000 mm): Footprint D_OR1
+[lib_footprint_mismatch]: Footprint 'C_0805_2012Metric' does not match copy in library 'Capacitor_SMD'.
+    Local override; warning
+    @(63.0000 mm, 28.0000 mm): Footprint FB_5V2
+[lib_footprint_mismatch]: Footprint 'CP_Radial_D10.0mm_P5.00mm' does not match copy in library 'Capacitor_THT'.
+    Local override; warning
+    @(69.0000 mm, 28.0000 mm): Footprint C_BEC2_IN
+[lib_footprint_mismatch]: Footprint 'L_1210_3225Metric' does not match copy in library 'Inductor_SMD'.
+    Local override; warning
+    @(77.0000 mm, 28.0000 mm): Footprint L_BEC2
+[lib_footprint_mismatch]: Footprint 'Texas_RGP0020D_VQFN-20-1EP_4x4mm_P0.5mm_EP2.7x2.7mm' does not match copy in library 'Package_DFN_QFN'.
+    Local override; warning
+    @(84.0000 mm, 29.0000 mm): Footprint U_BEC_5V_2
+[lib_footprint_mismatch]: Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.
+    Local override; warning
+    @(80.0000 mm, 24.5000 mm): Footprint R_FB2_1
+[lib_footprint_mismatch]: Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.
+    Local override; warning
+    @(84.5000 mm, 24.5000 mm): Footprint R_FB2_2
+[lib_footprint_mismatch]: Footprint 'CP_Radial_D10.0mm_P5.00mm' does not match copy in library 'Capacitor_THT'.
+    Local override; warning
+    @(70.0000 mm, 39.0000 mm): Footprint C_BEC2_OUT
+[lib_footprint_mismatch]: Footprint 'TO-252-3_TabPin2' does not match copy in library 'Package_TO_SOT_SMD'.
+    Local override; warning
+    @(77.5000 mm, 42.0000 mm): Footprint D_OR2
+[lib_footprint_mismatch]: Footprint 'Molex_Nano-Fit_105309-xx04_1x04_P2.50mm_Vertical' does not match copy in library 'Connector_Molex'.
+    Local override; warning
+    @(83.5000 mm, 47.5000 mm): Footprint J_5V
+[lib_footprint_mismatch]: Footprint 'MountingHole_3.2mm_M3_Pad_Via' does not match copy in library 'MountingHole'.
+    Local override; warning
+    @(87.0000 mm, 53.5000 mm): Footprint J_SHLD_5V
+[lib_footprint_mismatch]: Footprint 'C_0805_2012Metric' does not match copy in library 'Capacitor_SMD'.
+    Local override; warning
+    @(63.0000 mm, 48.0000 mm): Footprint FB_6V
+[lib_footprint_mismatch]: Footprint 'CP_Radial_D10.0mm_P5.00mm' does not match copy in library 'Capacitor_THT'.
+    Local override; warning
+    @(69.0000 mm, 48.0000 mm): Footprint C_BEC_SV_IN
+[lib_footprint_mismatch]: Footprint 'L_1210_3225Metric' does not match copy in library 'Inductor_SMD'.
+    Local override; warning
+    @(77.0000 mm, 48.0000 mm): Footprint L_BEC3
+[lib_footprint_mismatch]: Footprint 'SOIC-8_3.9x4.9mm_P1.27mm' does not match copy in library 'Package_SO'.
+    Local override; warning
+    @(84.0000 mm, 49.5000 mm): Footprint U_BEC_6V
+[lib_footprint_mismatch]: Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.
+    Local override; warning
+    @(80.0000 mm, 44.5000 mm): Footprint R_FB6_1
+[lib_footprint_mismatch]: Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.
+    Local override; warning
+    @(84.5000 mm, 44.5000 mm): Footprint R_FB6_2
+[lib_footprint_mismatch]: Footprint 'CP_Radial_D10.0mm_P5.00mm' does not match copy in library 'Capacitor_THT'.
+    Local override; warning
+    @(70.0000 mm, 59.0000 mm): Footprint C_BEC_SV_OUT
+[lib_footprint_mismatch]: Footprint 'Molex_Nano-Fit_105309-xx04_1x04_P2.50mm_Vertical' does not match copy in library 'Connector_Molex'.
+    Local override; warning
+    @(83.5000 mm, 55.5000 mm): Footprint J_6V
+[lib_footprint_mismatch]: Footprint 'MountingHole_3.2mm_M3_Pad_Via' does not match copy in library 'MountingHole'.
+    Local override; warning
+    @(85.5000 mm, 57.5000 mm): Footprint J_SHLD_6V
+[lib_footprint_mismatch]: Footprint 'SOT-363_SC-70-6' does not match copy in library 'Package_TO_SOT_SMD'.
+    Local override; warning
+    @(59.0000 mm, 54.0000 mm): Footprint D_I2C
+[lib_footprint_mismatch]: Footprint 'R_0402_1005Metric' does not match copy in library 'Resistor_SMD'.
+    Local override; warning
+    @(59.0000 mm, 59.0000 mm): Footprint R_ALERT
+[lib_footprint_mismatch]: Footprint 'JST_GH_BM04B-GHS-TBT_1x04-1MP_P1.25mm_Vertical' does not match copy in library 'Connector_JST'.
+    Local override; warning
+    @(62.0000 mm, 60.0000 mm): Footprint J_I2C
+[lib_footprint_mismatch]: Footprint 'MountingHole_3.2mm_M3_Pad_Via' does not match copy in library 'MountingHole'.
+    Local override; warning
+    @(59.5000 mm, 62.5000 mm): Footprint J_SHLD_I2C
+[lib_footprint_mismatch]: Footprint 'JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical' does not match copy in library 'Connector_JST'.
+    Local override; warning
+    @(68.0000 mm, 60.0000 mm): Footprint J_ALERT
+[lib_footprint_mismatch]: Footprint 'MountingHole_3.2mm_M3_Pad_Via' does not match copy in library 'MountingHole'.
+    Local override; warning
+    @(65.5000 mm, 62.5000 mm): Footprint J_SHLD_ALERT
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(86.0000 mm, 57.5000 mm): Reference field of H4
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(68.0000 mm, 8.5000 mm): Reference field of C1
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(70.5000 mm, 12.0000 mm): Circle of C1 on F.Silkscreen
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(79.0000 mm, 8.5000 mm): Reference field of C2
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(81.5000 mm, 12.0000 mm): Circle of C2 on F.Silkscreen
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(14.0000 mm, 20.5000 mm): Reference field of D1
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(22.0000 mm, 20.5000 mm): Reference field of C_Y1
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(5.0000 mm, 16.5000 mm): Reference field of J_PGND_BATT
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(5.0000 mm, 28.5000 mm): Reference field of J_CHASSIS
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(71.5000 mm, 8.0000 mm): Circle of C_BEC1_IN on F.Silkscreen
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(84.0000 mm, 5.5000 mm): Reference field of U_BEC_5V_1
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(84.5000 mm, 4.0000 mm): Reference field of R_FB1_2
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(72.5000 mm, 19.0000 mm): Circle of C_BEC1_OUT on F.Silkscreen
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(77.5000 mm, 18.5000 mm): Reference field of D_OR1
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(69.0000 mm, 24.5000 mm): Reference field of C_BEC2_IN
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(71.5000 mm, 28.0000 mm): Circle of C_BEC2_IN on F.Silkscreen
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(77.0000 mm, 24.5000 mm): Reference field of L_BEC2
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(84.0000 mm, 25.5000 mm): Reference field of U_BEC_5V_2
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(80.0000 mm, 21.0000 mm): Reference field of R_FB2_1
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(84.5000 mm, 21.0000 mm): Reference field of R_FB2_2
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(72.5000 mm, 39.0000 mm): Circle of C_BEC2_OUT on F.Silkscreen
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(77.5000 mm, 38.5000 mm): Reference field of D_OR2
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(83.5000 mm, 44.0000 mm): Reference field of J_5V
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(87.0000 mm, 50.0000 mm): Reference field of J_SHLD_5V
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(69.0000 mm, 44.5000 mm): Reference field of C_BEC_SV_IN
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(71.5000 mm, 48.0000 mm): Circle of C_BEC_SV_IN on F.Silkscreen
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(77.0000 mm, 44.5000 mm): Reference field of L_BEC3
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(80.0000 mm, 41.0000 mm): Reference field of R_FB6_1
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(84.5000 mm, 41.0000 mm): Reference field of R_FB6_2
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(72.5000 mm, 59.0000 mm): Circle of C_BEC_SV_OUT on F.Silkscreen
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(83.5000 mm, 52.0000 mm): Reference field of J_6V
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(85.5000 mm, 54.0000 mm): Reference field of J_SHLD_6V
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(59.0000 mm, 55.5000 mm): Reference field of R_ALERT
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(59.5000 mm, 59.0000 mm): Reference field of J_SHLD_I2C
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(65.5000 mm, 59.0000 mm): Reference field of J_SHLD_ALERT
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(86.0000 mm, 61.0000 mm): NPTH pad of H4
+    @(85.5000 mm, 57.5000 mm): PTH pad [CHASSIS] of J_SHLD_6V
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(86.0000 mm, 61.0000 mm): NPTH pad of H4
+    @(83.5000 mm, 60.5000 mm): PTH pad 3 [+6V] of J_6V
+[solder_mask_bridge]: Rear solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(86.0000 mm, 61.0000 mm): NPTH pad of H4
+    @(85.5000 mm, 57.5000 mm): PTH pad [CHASSIS] of J_SHLD_6V
+[solder_mask_bridge]: Rear solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(86.0000 mm, 61.0000 mm): NPTH pad of H4
+    @(83.5000 mm, 60.5000 mm): PTH pad 3 [+6V] of J_6V
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(55.0000 mm, 61.0000 mm): PTH pad 2 [PGND] of J_ESC4
+    @(59.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_I2C
+[solder_mask_bridge]: Rear solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(55.0000 mm, 61.0000 mm): PTH pad 2 [PGND] of J_ESC4
+    @(59.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_I2C
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(74.0000 mm, 8.0000 mm): PTH pad 2 [PGND] of C_BEC1_IN
+    @(75.6000 mm, 8.0000 mm): Pad 1 [BEC1_VIN_F] of L_BEC1 on F.Cu
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(84.0000 mm, 7.0375 mm): Pad 18 [BEC1_VIN_F] of U_BEC_5V_1 on F.Cu
+    @(83.9900 mm, 7.5000 mm): Pad 1 [<no net>] of R_FB1_2 on F.Cu
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(85.0000 mm, 7.0375 mm): Pad 20 [BEC1_VIN_F] of U_BEC_5V_1 on F.Cu
+    @(85.0100 mm, 7.5000 mm): Pad 2 [PGND] of R_FB1_2 on F.Cu
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(84.0000 mm, 9.0000 mm): Pad 21 [PGND] of U_BEC_5V_1 on F.Cu
+    @(83.9900 mm, 7.5000 mm): Pad 1 [<no net>] of R_FB1_2 on F.Cu
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(75.0000 mm, 19.0000 mm): PTH pad 2 [PGND] of C_BEC1_OUT
+    @(78.7600 mm, 22.0000 mm): Pad 2 [+5V] of D_OR1 on F.Cu
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(78.7600 mm, 22.0000 mm): Pad 2 [+5V] of D_OR1 on F.Cu
+    @(79.4900 mm, 24.5000 mm): Pad 1 [BEC2_PRE_OR] of R_FB2_1 on F.Cu
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(78.7600 mm, 22.0000 mm): Pad 2 [+5V] of D_OR1 on F.Cu
+    @(80.5100 mm, 24.5000 mm): Pad 2 [<no net>] of R_FB2_1 on F.Cu
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(74.0000 mm, 28.0000 mm): PTH pad 2 [PGND] of C_BEC2_IN
+    @(75.6000 mm, 28.0000 mm): Pad 1 [BEC2_VIN_F] of L_BEC2 on F.Cu
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(75.0000 mm, 39.0000 mm): PTH pad 2 [PGND] of C_BEC2_OUT
+    @(78.7600 mm, 42.0000 mm): Pad 2 [+5V] of D_OR2 on F.Cu
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(78.7600 mm, 42.0000 mm): Pad 2 [+5V] of D_OR2 on F.Cu
+    @(79.4900 mm, 44.5000 mm): Pad 1 [+6V] of R_FB6_1 on F.Cu
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(78.7600 mm, 42.0000 mm): Pad 2 [+5V] of D_OR2 on F.Cu
+    @(80.5100 mm, 44.5000 mm): Pad 2 [<no net>] of R_FB6_1 on F.Cu
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(82.1600 mm, 51.2500 mm): NPTH pad of J_5V
+    @(81.5250 mm, 51.4050 mm): Pad 4 [BEC6V_VIN_F] of U_BEC_6V on F.Cu
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(83.5000 mm, 47.5000 mm): PTH pad 1 [PGND] of J_5V
+    @(81.5250 mm, 47.5950 mm): Pad 1 [<no net>] of U_BEC_6V on F.Cu
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(83.5000 mm, 50.0000 mm): PTH pad 2 [PGND] of J_5V
+    @(81.5250 mm, 50.1350 mm): Pad 3 [BEC6V_VIN_F] of U_BEC_6V on F.Cu
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(83.5000 mm, 52.5000 mm): PTH pad 3 [+5V] of J_5V
+    @(87.0000 mm, 53.5000 mm): PTH pad [CHASSIS] of J_SHLD_5V
+[solder_mask_bridge]: Rear solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(83.5000 mm, 52.5000 mm): PTH pad 3 [+5V] of J_5V
+    @(87.0000 mm, 53.5000 mm): PTH pad [CHASSIS] of J_SHLD_5V
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(83.5000 mm, 55.0000 mm): PTH pad 4 [+5V] of J_5V
+    @(85.5000 mm, 57.5000 mm): PTH pad [CHASSIS] of J_SHLD_6V
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(83.5000 mm, 55.0000 mm): PTH pad 4 [+5V] of J_5V
+    @(87.0000 mm, 53.5000 mm): PTH pad [CHASSIS] of J_SHLD_5V
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(83.5000 mm, 55.0000 mm): PTH pad 4 [+5V] of J_5V
+    @(83.5000 mm, 55.5000 mm): PTH pad 1 [PGND] of J_6V
+[solder_mask_bridge]: Rear solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(83.5000 mm, 55.0000 mm): PTH pad 4 [+5V] of J_5V
+    @(85.5000 mm, 57.5000 mm): PTH pad [CHASSIS] of J_SHLD_6V
+[solder_mask_bridge]: Rear solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(83.5000 mm, 55.0000 mm): PTH pad 4 [+5V] of J_5V
+    @(87.0000 mm, 53.5000 mm): PTH pad [CHASSIS] of J_SHLD_5V
+[solder_mask_bridge]: Rear solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(83.5000 mm, 55.0000 mm): PTH pad 4 [+5V] of J_5V
+    @(83.5000 mm, 55.5000 mm): PTH pad 1 [PGND] of J_6V
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(87.0000 mm, 53.5000 mm): PTH pad [CHASSIS] of J_SHLD_5V
+    @(86.4750 mm, 51.4050 mm): Pad 5 [<no net>] of U_BEC_6V on F.Cu
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(87.0000 mm, 53.5000 mm): PTH pad [CHASSIS] of J_SHLD_5V
+    @(83.5000 mm, 55.5000 mm): PTH pad 1 [PGND] of J_6V
+[solder_mask_bridge]: Rear solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(87.0000 mm, 53.5000 mm): PTH pad [CHASSIS] of J_SHLD_5V
+    @(83.5000 mm, 55.5000 mm): PTH pad 1 [PGND] of J_6V
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(74.0000 mm, 48.0000 mm): PTH pad 2 [PGND] of C_BEC_SV_IN
+    @(75.6000 mm, 48.0000 mm): Pad 1 [BEC6V_VIN_F] of L_BEC3 on F.Cu
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(70.0000 mm, 59.0000 mm): PTH pad 1 [+6V] of C_BEC_SV_OUT
+    @(70.4750 mm, 58.6000 mm): Pad MP [<no net>] of J_ALERT on F.Cu
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(83.5000 mm, 55.5000 mm): PTH pad 1 [PGND] of J_6V
+    @(85.5000 mm, 57.5000 mm): PTH pad [CHASSIS] of J_SHLD_6V
+[solder_mask_bridge]: Rear solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(83.5000 mm, 55.5000 mm): PTH pad 1 [PGND] of J_6V
+    @(85.5000 mm, 57.5000 mm): PTH pad [CHASSIS] of J_SHLD_6V
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(83.5000 mm, 58.0000 mm): PTH pad 2 [PGND] of J_6V
+    @(85.5000 mm, 57.5000 mm): PTH pad [CHASSIS] of J_SHLD_6V
+[solder_mask_bridge]: Rear solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(83.5000 mm, 58.0000 mm): PTH pad 2 [PGND] of J_6V
+    @(85.5000 mm, 57.5000 mm): PTH pad [CHASSIS] of J_SHLD_6V
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(83.5000 mm, 60.5000 mm): PTH pad 3 [+6V] of J_6V
+    @(85.5000 mm, 57.5000 mm): PTH pad [CHASSIS] of J_SHLD_6V
+[solder_mask_bridge]: Rear solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(83.5000 mm, 60.5000 mm): PTH pad 3 [+6V] of J_6V
+    @(85.5000 mm, 57.5000 mm): PTH pad [CHASSIS] of J_SHLD_6V
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(58.4900 mm, 59.0000 mm): Pad 1 [+5V] of R_ALERT on F.Cu
+    @(58.9000 mm, 58.6000 mm): Pad MP [<no net>] of J_I2C on F.Cu
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(59.5100 mm, 59.0000 mm): Pad 2 [PDB_ALERT_N] of R_ALERT on F.Cu
+    @(58.9000 mm, 58.6000 mm): Pad MP [<no net>] of J_I2C on F.Cu
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(58.9000 mm, 58.6000 mm): Pad MP [<no net>] of J_I2C on F.Cu
+    @(59.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_I2C
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(65.1000 mm, 58.6000 mm): Pad MP [<no net>] of J_I2C on F.Cu
+    @(65.5250 mm, 58.6000 mm): Pad MP [<no net>] of J_ALERT on F.Cu
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(65.1000 mm, 58.6000 mm): Pad MP [<no net>] of J_I2C on F.Cu
+    @(65.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_ALERT
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(60.1250 mm, 61.9500 mm): Pad 1 [PGND] of J_I2C on F.Cu
+    @(59.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_I2C
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(61.3750 mm, 61.9500 mm): Pad 2 [+5V] of J_I2C on F.Cu
+    @(59.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_I2C
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(62.6250 mm, 61.9500 mm): Pad 3 [PDB_SCL] of J_I2C on F.Cu
+    @(59.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_I2C
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(62.6250 mm, 61.9500 mm): Pad 3 [PDB_SCL] of J_I2C on F.Cu
+    @(65.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_ALERT
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(63.8750 mm, 61.9500 mm): Pad 4 [PDB_SDA] of J_I2C on F.Cu
+    @(65.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_ALERT
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(65.5250 mm, 58.6000 mm): Pad MP [<no net>] of J_ALERT on F.Cu
+    @(65.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_ALERT
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(67.3750 mm, 61.9500 mm): Pad 1 [PGND] of J_ALERT on F.Cu
+    @(65.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_ALERT
+[solder_mask_bridge]: Front solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(68.6250 mm, 61.9500 mm): Pad 2 [PDB_ALERT_N] of J_ALERT on F.Cu
+    @(65.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_ALERT
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(77.0000 mm, 4.5000 mm): Reference field of L_BEC1
+    @(71.5000 mm, 8.0000 mm): Circle of C_BEC1_IN on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(80.0000 mm, 4.0000 mm): Reference field of R_FB1_1
+    @(77.0000 mm, 4.5000 mm): Reference field of L_BEC1
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(80.0000 mm, 4.0000 mm): Reference field of R_FB1_1
+    @(84.5000 mm, 4.0000 mm): Reference field of R_FB1_2
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(69.0000 mm, 4.5000 mm): Reference field of C_BEC1_IN
+    @(63.0000 mm, 4.5000 mm): Reference field of FB_5V1
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(69.0000 mm, 4.5000 mm): Reference field of C_BEC1_IN
+    @(71.5000 mm, 8.0000 mm): Circle of C_BEC1_IN on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(70.5000 mm, 12.0000 mm): Circle of C1 on F.Silkscreen
+    @(71.5000 mm, 8.0000 mm): Circle of C_BEC1_IN on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(81.5000 mm, 12.0000 mm): Circle of C2 on F.Silkscreen
+    @(71.5000 mm, 8.0000 mm): Circle of C_BEC1_IN on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(71.5000 mm, 8.0000 mm): Circle of C_BEC1_IN on F.Silkscreen
+    @(72.5000 mm, 19.0000 mm): Circle of C_BEC1_OUT on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(70.5000 mm, 12.0000 mm): Circle of C1 on F.Silkscreen
+    @(70.0000 mm, 15.5000 mm): Reference field of C_BEC1_OUT
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(72.5000 mm, 19.0000 mm): Circle of C_BEC1_OUT on F.Silkscreen
+    @(70.0000 mm, 15.5000 mm): Reference field of C_BEC1_OUT
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(70.5000 mm, 12.0000 mm): Circle of C1 on F.Silkscreen
+    @(81.5000 mm, 12.0000 mm): Circle of C2 on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(70.5000 mm, 12.0000 mm): Circle of C1 on F.Silkscreen
+    @(72.5000 mm, 19.0000 mm): Circle of C_BEC1_OUT on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(80.0000 mm, 21.0000 mm): Reference field of R_FB2_1
+    @(84.5000 mm, 21.0000 mm): Reference field of R_FB2_2
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(71.5000 mm, 28.0000 mm): Circle of C_BEC2_IN on F.Silkscreen
+    @(69.0000 mm, 24.5000 mm): Reference field of C_BEC2_IN
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(72.5000 mm, 19.0000 mm): Circle of C_BEC1_OUT on F.Silkscreen
+    @(69.0000 mm, 24.5000 mm): Reference field of C_BEC2_IN
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(80.0000 mm, 21.0000 mm): Reference field of R_FB2_1
+    @(72.5000 mm, 19.0000 mm): Circle of C_BEC1_OUT on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(77.0000 mm, 24.5000 mm): Reference field of L_BEC2
+    @(72.5000 mm, 19.0000 mm): Circle of C_BEC1_OUT on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(72.5000 mm, 19.0000 mm): Circle of C_BEC1_OUT on F.Silkscreen
+    @(71.5000 mm, 28.0000 mm): Circle of C_BEC2_IN on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(77.0000 mm, 24.5000 mm): Reference field of L_BEC2
+    @(71.5000 mm, 28.0000 mm): Circle of C_BEC2_IN on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(30.5000 mm, 29.5000 mm): Reference field of R_CHGND
+    @(25.0000 mm, 29.5000 mm): Reference field of R_DSG_G
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(80.0000 mm, 41.0000 mm): Reference field of R_FB6_1
+    @(72.5000 mm, 39.0000 mm): Circle of C_BEC2_OUT on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(69.0000 mm, 44.5000 mm): Reference field of C_BEC_SV_IN
+    @(72.5000 mm, 39.0000 mm): Circle of C_BEC2_OUT on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(77.0000 mm, 44.5000 mm): Reference field of L_BEC3
+    @(72.5000 mm, 39.0000 mm): Circle of C_BEC2_OUT on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(77.0000 mm, 44.5000 mm): Reference field of L_BEC3
+    @(71.5000 mm, 48.0000 mm): Circle of C_BEC_SV_IN on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(84.5000 mm, 41.0000 mm): Reference field of R_FB6_2
+    @(80.0000 mm, 41.0000 mm): Reference field of R_FB6_1
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(71.5000 mm, 28.0000 mm): Circle of C_BEC2_IN on F.Silkscreen
+    @(72.5000 mm, 39.0000 mm): Circle of C_BEC2_OUT on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(63.0000 mm, 24.5000 mm): Reference field of FB_5V2
+    @(69.0000 mm, 24.5000 mm): Reference field of C_BEC2_IN
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(70.0000 mm, 35.5000 mm): Reference field of C_BEC2_OUT
+    @(72.5000 mm, 39.0000 mm): Circle of C_BEC2_OUT on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(62.0000 mm, 56.5000 mm): Reference field of J_I2C
+    @(59.0000 mm, 55.5000 mm): Reference field of R_ALERT
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(59.5000 mm, 59.0000 mm): Reference field of J_SHLD_I2C
+    @(65.5000 mm, 59.0000 mm): Reference field of J_SHLD_ALERT
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(72.5000 mm, 39.0000 mm): Circle of C_BEC2_OUT on F.Silkscreen
+    @(71.5000 mm, 48.0000 mm): Circle of C_BEC_SV_IN on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(69.0000 mm, 44.5000 mm): Reference field of C_BEC_SV_IN
+    @(71.5000 mm, 48.0000 mm): Circle of C_BEC_SV_IN on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(71.5000 mm, 48.0000 mm): Circle of C_BEC_SV_IN on F.Silkscreen
+    @(72.5000 mm, 59.0000 mm): Circle of C_BEC_SV_OUT on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(68.0000 mm, 56.5000 mm): Reference field of J_ALERT
+    @(70.0000 mm, 55.5000 mm): Reference field of C_BEC_SV_OUT
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(72.5000 mm, 59.0000 mm): Circle of C_BEC_SV_OUT on F.Silkscreen
+    @(70.0000 mm, 55.5000 mm): Reference field of C_BEC_SV_OUT
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(68.0000 mm, 56.5000 mm): Reference field of J_ALERT
+    @(72.5000 mm, 59.0000 mm): Circle of C_BEC_SV_OUT on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(72.5000 mm, 59.0000 mm): Circle of C_BEC_SV_OUT on F.Silkscreen
+    @(65.5000 mm, 59.0000 mm): Reference field of J_SHLD_ALERT
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; warning
+    @(69.0000 mm, 44.5000 mm): Reference field of C_BEC_SV_IN
+    @(63.0000 mm, 44.5000 mm): Reference field of FB_6V
+
+** Found 180 unconnected pads **
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(13.5250 mm, 34.9050 mm): Pad 4 [VBAT] of Q_BATT_DSG on F.Cu
+    @(13.5250 mm, 33.6350 mm): Pad 3 [VBAT] of Q_BATT_DSG on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(13.5250 mm, 32.3650 mm): Pad 2 [VBAT] of Q_BATT_DSG on F.Cu
+    @(13.5250 mm, 33.6350 mm): Pad 3 [VBAT] of Q_BATT_DSG on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(13.5250 mm, 31.0950 mm): Pad 1 [VBAT] of Q_BATT_DSG on F.Cu
+    @(13.5250 mm, 32.3650 mm): Pad 2 [VBAT] of Q_BATT_DSG on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(31.0000 mm, 40.5000 mm): PTH pad 1 [VBAT] of F_ESC3
+    @(31.0000 mm, 43.9000 mm): PTH pad 1 [VBAT] of F_ESC3
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(17.0000 mm, 43.9000 mm): PTH pad 1 [VBAT] of F_ESC2
+    @(17.0000 mm, 40.5000 mm): PTH pad 1 [VBAT] of F_ESC2
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(45.0000 mm, 40.5000 mm): PTH pad 1 [VBAT] of F_ESC4
+    @(45.0000 mm, 43.9000 mm): PTH pad 1 [VBAT] of F_ESC4
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(3.0000 mm, 40.5000 mm): PTH pad 1 [VBAT] of F_ESC1
+    @(3.0000 mm, 43.9000 mm): PTH pad 1 [VBAT] of F_ESC1
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(36.4600 mm, 33.0000 mm): Pad 1 [VBAT] of RS_MAIN on F.Cu
+    @(41.5400 mm, 33.0000 mm): Pad 4 [VBAT] of RS_MAIN on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(13.5250 mm, 34.9050 mm): Pad 4 [VBAT] of Q_BATT_DSG on F.Cu
+    @(17.0000 mm, 40.5000 mm): PTH pad 1 [VBAT] of F_ESC2
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(41.5400 mm, 33.0000 mm): Pad 4 [VBAT] of RS_MAIN on F.Cu
+    @(45.0000 mm, 40.5000 mm): PTH pad 1 [VBAT] of F_ESC4
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(31.0000 mm, 40.5000 mm): PTH pad 1 [VBAT] of F_ESC3
+    @(36.4600 mm, 33.0000 mm): Pad 1 [VBAT] of RS_MAIN on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(51.1125 mm, 32.0000 mm): Pad 10 [VBAT] of U_IS_MAIN on F.Cu
+    @(41.5400 mm, 33.0000 mm): Pad 4 [VBAT] of RS_MAIN on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(13.5250 mm, 34.9050 mm): Pad 4 [VBAT] of Q_BATT_DSG on F.Cu
+    @(3.0000 mm, 40.5000 mm): PTH pad 1 [VBAT] of F_ESC1
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(17.0000 mm, 40.5000 mm): PTH pad 1 [VBAT] of F_ESC2
+    @(31.0000 mm, 40.5000 mm): PTH pad 1 [VBAT] of F_ESC3
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(83.5000 mm, 30.9625 mm): Pad 9 [PGND] of U_BEC_5V_2 on F.Cu
+    @(83.0000 mm, 30.9625 mm): Pad 10 [PGND] of U_BEC_5V_2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(83.5000 mm, 10.9625 mm): Pad 9 [PGND] of U_BEC_5V_1 on F.Cu
+    @(83.0000 mm, 10.9625 mm): Pad 10 [PGND] of U_BEC_5V_1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(84.0000 mm, 30.9625 mm): Pad 8 [PGND] of U_BEC_5V_2 on F.Cu
+    @(84.5000 mm, 30.9625 mm): Pad 7 [PGND] of U_BEC_5V_2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(83.5000 mm, 30.9625 mm): Pad 9 [PGND] of U_BEC_5V_2 on F.Cu
+    @(84.0000 mm, 30.9625 mm): Pad 8 [PGND] of U_BEC_5V_2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(84.0000 mm, 30.9625 mm): Pad 8 [PGND] of U_BEC_5V_2 on F.Cu
+    @(84.0000 mm, 29.0000 mm): Pad 21 [PGND] of U_BEC_5V_2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(84.0000 mm, 9.0000 mm): Pad 21 [PGND] of U_BEC_5V_1 on F.Cu
+    @(84.0000 mm, 10.9625 mm): Pad 8 [PGND] of U_BEC_5V_1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(83.5000 mm, 58.0000 mm): PTH pad 2 [PGND] of J_6V
+    @(83.5000 mm, 55.5000 mm): PTH pad 1 [PGND] of J_6V
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(83.5000 mm, 50.0000 mm): PTH pad 2 [PGND] of J_5V
+    @(83.5000 mm, 47.5000 mm): PTH pad 1 [PGND] of J_5V
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(85.0100 mm, 44.5000 mm): Pad 2 [PGND] of R_FB6_2 on F.Cu
+    @(83.5000 mm, 47.5000 mm): PTH pad 1 [PGND] of J_5V
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(73.0000 mm, 12.0000 mm): PTH pad 2 [PGND] of C1
+    @(74.0000 mm, 8.0000 mm): PTH pad 2 [PGND] of C_BEC1_IN
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(29.9900 mm, 33.0000 mm): Pad 1 [PGND] of R_CHGND on F.Cu
+    @(25.5100 mm, 33.0000 mm): Pad 2 [PGND] of R_DSG_G on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(84.0000 mm, 29.0000 mm): Pad 21 [PGND] of U_BEC_5V_2 on F.Cu
+    @(85.0100 mm, 24.5000 mm): Pad 2 [PGND] of R_FB2_2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(41.4600 mm, 14.5400 mm): PTH pad 4 [PGND] of CM2
+    @(41.4600 mm, 9.4600 mm): PTH pad 3 [PGND] of CM2
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(28.4600 mm, 14.5400 mm): PTH pad 4 [PGND] of CM1
+    @(28.4600 mm, 9.4600 mm): PTH pad 3 [PGND] of CM1
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(55.0000 mm, 61.0000 mm): PTH pad 2 [PGND] of J_ESC4
+    @(60.1250 mm, 61.9500 mm): Pad 1 [PGND] of J_I2C on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(83.5000 mm, 55.5000 mm): PTH pad 1 [PGND] of J_6V
+    @(83.5000 mm, 50.0000 mm): PTH pad 2 [PGND] of J_5V
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(44.9500 mm, 24.0000 mm): Pad 2 [PGND] of C3 on F.Cu
+    @(38.4000 mm, 24.0000 mm): Pad 2 [PGND] of C_DM1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(60.1250 mm, 61.9500 mm): Pad 1 [PGND] of J_I2C on F.Cu
+    @(67.3750 mm, 61.9500 mm): Pad 1 [PGND] of J_ALERT on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(75.0000 mm, 19.0000 mm): PTH pad 2 [PGND] of C_BEC1_OUT
+    @(73.0000 mm, 12.0000 mm): PTH pad 2 [PGND] of C1
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(75.0000 mm, 59.0000 mm): PTH pad 2 [PGND] of C_BEC_SV_OUT
+    @(67.3750 mm, 61.9500 mm): Pad 1 [PGND] of J_ALERT on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(55.0000 mm, 61.0000 mm): PTH pad 2 [PGND] of J_ESC4
+    @(58.0500 mm, 53.3500 mm): Pad 1 [PGND] of D_I2C on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(75.0000 mm, 59.0000 mm): PTH pad 2 [PGND] of C_BEC_SV_OUT
+    @(83.5000 mm, 58.0000 mm): PTH pad 2 [PGND] of J_6V
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(29.0000 mm, 24.0000 mm): PTH pad 1 [PGND] of C_Y2
+    @(29.9900 mm, 33.0000 mm): Pad 1 [PGND] of R_CHGND on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(74.0000 mm, 28.0000 mm): PTH pad 2 [PGND] of C_BEC2_IN
+    @(75.0000 mm, 19.0000 mm): PTH pad 2 [PGND] of C_BEC1_OUT
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(74.0000 mm, 48.0000 mm): PTH pad 2 [PGND] of C_BEC_SV_IN
+    @(75.0000 mm, 39.0000 mm): PTH pad 2 [PGND] of C_BEC2_OUT
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(44.9500 mm, 24.0000 mm): Pad 2 [PGND] of C3 on F.Cu
+    @(46.8875 mm, 33.0000 mm): Pad 3 [PGND] of U_IS_MAIN on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(28.4600 mm, 14.5400 mm): PTH pad 4 [PGND] of CM1
+    @(20.2000 mm, 19.0000 mm): PTH pad 2 [PGND] of J_BATT
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(29.0000 mm, 24.0000 mm): PTH pad 1 [PGND] of C_Y2
+    @(38.4000 mm, 24.0000 mm): Pad 2 [PGND] of C_DM1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(83.0000 mm, 10.9625 mm): Pad 10 [PGND] of U_BEC_5V_1 on F.Cu
+    @(74.0000 mm, 8.0000 mm): PTH pad 2 [PGND] of C_BEC1_IN
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(83.0000 mm, 30.9625 mm): Pad 10 [PGND] of U_BEC_5V_2 on F.Cu
+    @(74.0000 mm, 28.0000 mm): PTH pad 2 [PGND] of C_BEC2_IN
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(28.4600 mm, 14.5400 mm): PTH pad 4 [PGND] of CM1
+    @(29.0000 mm, 24.0000 mm): PTH pad 1 [PGND] of C_Y2
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(74.0000 mm, 48.0000 mm): PTH pad 2 [PGND] of C_BEC_SV_IN
+    @(83.5000 mm, 47.5000 mm): PTH pad 1 [PGND] of J_5V
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(11.8500 mm, 24.0000 mm): Pad 1 [PGND] of D1 on F.Cu
+    @(20.2000 mm, 19.0000 mm): PTH pad 2 [PGND] of J_BATT
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(38.4000 mm, 24.0000 mm): Pad 2 [PGND] of C_DM1 on F.Cu
+    @(41.4600 mm, 14.5400 mm): PTH pad 4 [PGND] of CM2
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(47.8875 mm, 53.0000 mm): Pad 3 [PGND] of U_IS4 on F.Cu
+    @(58.0500 mm, 53.3500 mm): Pad 1 [PGND] of D_I2C on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(47.8875 mm, 53.0000 mm): Pad 3 [PGND] of U_IS4 on F.Cu
+    @(41.0000 mm, 61.0000 mm): PTH pad 2 [PGND] of J_ESC3
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(13.0000 mm, 61.0000 mm): PTH pad 2 [PGND] of J_ESC1
+    @(19.8875 mm, 53.0000 mm): Pad 3 [PGND] of U_IS2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(27.0000 mm, 61.0000 mm): PTH pad 2 [PGND] of J_ESC2
+    @(33.8875 mm, 53.0000 mm): Pad 3 [PGND] of U_IS3 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(41.0000 mm, 61.0000 mm): PTH pad 2 [PGND] of J_ESC3
+    @(33.8875 mm, 53.0000 mm): Pad 3 [PGND] of U_IS3 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(5.8875 mm, 53.0000 mm): Pad 3 [PGND] of U_IS1 on F.Cu
+    @(13.0000 mm, 61.0000 mm): PTH pad 2 [PGND] of J_ESC1
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(19.8875 mm, 53.0000 mm): Pad 3 [PGND] of U_IS2 on F.Cu
+    @(27.0000 mm, 61.0000 mm): PTH pad 2 [PGND] of J_ESC2
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(74.0000 mm, 28.0000 mm): PTH pad 2 [PGND] of C_BEC2_IN
+    @(75.0000 mm, 39.0000 mm): PTH pad 2 [PGND] of C_BEC2_OUT
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(47.8875 mm, 53.0000 mm): Pad 3 [PGND] of U_IS4 on F.Cu
+    @(46.8875 mm, 33.0000 mm): Pad 3 [PGND] of U_IS_MAIN on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(18.4750 mm, 34.9050 mm): Pad 5 [VDIS] of Q_BATT_DSG on F.Cu
+    @(18.4750 mm, 33.6350 mm): Pad 6 [VDIS] of Q_BATT_DSG on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(18.4750 mm, 33.6350 mm): Pad 6 [VDIS] of Q_BATT_DSG on F.Cu
+    @(18.4750 mm, 32.3650 mm): Pad 7 [VDIS] of Q_BATT_DSG on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(65.9000 mm, 9.0000 mm): PTH pad 2 [VDIS] of F1
+    @(68.0000 mm, 12.0000 mm): PTH pad 1 [VDIS] of C1
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(62.0500 mm, 8.0000 mm): Pad 1 [VDIS] of FB_5V1 on F.Cu
+    @(65.9000 mm, 9.0000 mm): PTH pad 2 [VDIS] of F1
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(33.5400 mm, 14.5400 mm): PTH pad 2 [VDIS] of CM1
+    @(33.5400 mm, 9.4600 mm): PTH pad 1 [VDIS] of CM1
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(46.5400 mm, 14.5400 mm): PTH pad 2 [VDIS] of CM2
+    @(46.5400 mm, 9.4600 mm): PTH pad 1 [VDIS] of CM2
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(22.0000 mm, 24.0000 mm): PTH pad 1 [VDIS] of C_Y1
+    @(16.1500 mm, 24.0000 mm): Pad 2 [VDIS] of D1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(16.1500 mm, 24.0000 mm): Pad 2 [VDIS] of D1 on F.Cu
+    @(13.0000 mm, 19.0000 mm): PTH pad 1 [VDIS] of J_BATT
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(62.0500 mm, 8.0000 mm): Pad 1 [VDIS] of FB_5V1 on F.Cu
+    @(56.0000 mm, 9.0000 mm): PTH pad 1 [VDIS] of F1
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(35.6000 mm, 24.0000 mm): Pad 1 [VDIS] of C_DM1 on F.Cu
+    @(43.0500 mm, 24.0000 mm): Pad 1 [VDIS] of C3 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(18.4750 mm, 32.3650 mm): Pad 7 [VDIS] of Q_BATT_DSG on F.Cu
+    @(16.1500 mm, 24.0000 mm): Pad 2 [VDIS] of D1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(56.0000 mm, 9.0000 mm): PTH pad 1 [VDIS] of F1
+    @(46.5400 mm, 9.4600 mm): PTH pad 1 [VDIS] of CM2
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(33.5400 mm, 14.5400 mm): PTH pad 2 [VDIS] of CM1
+    @(35.6000 mm, 24.0000 mm): Pad 1 [VDIS] of C_DM1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(43.0500 mm, 24.0000 mm): Pad 1 [VDIS] of C3 on F.Cu
+    @(46.5400 mm, 14.5400 mm): PTH pad 2 [VDIS] of CM2
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(68.0000 mm, 12.0000 mm): PTH pad 1 [VDIS] of C1
+    @(79.0000 mm, 12.0000 mm): PTH pad 1 [VDIS] of C2
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(22.0000 mm, 24.0000 mm): PTH pad 1 [VDIS] of C_Y1
+    @(35.6000 mm, 24.0000 mm): Pad 1 [VDIS] of C_DM1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(68.0000 mm, 12.0000 mm): PTH pad 1 [VDIS] of C1
+    @(62.0500 mm, 28.0000 mm): Pad 1 [VDIS] of FB_5V2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(62.0500 mm, 28.0000 mm): Pad 1 [VDIS] of FB_5V2 on F.Cu
+    @(62.0500 mm, 48.0000 mm): Pad 1 [VDIS] of FB_6V on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(83.5000 mm, 55.0000 mm): PTH pad 4 [+5V] of J_5V
+    @(83.5000 mm, 52.5000 mm): PTH pad 3 [+5V] of J_5V
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(61.3750 mm, 61.9500 mm): Pad 2 [+5V] of J_I2C on F.Cu
+    @(58.4900 mm, 59.0000 mm): Pad 1 [+5V] of R_ALERT on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(58.4900 mm, 59.0000 mm): Pad 1 [+5V] of R_ALERT on F.Cu
+    @(59.9500 mm, 53.3500 mm): Pad 6 [+5V] of D_I2C on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(78.7600 mm, 22.0000 mm): Pad 2 [+5V] of D_OR1 on F.Cu
+    @(72.4600 mm, 22.0000 mm): Pad 2 [+5V] of D_OR1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(72.4600 mm, 42.0000 mm): Pad 2 [+5V] of D_OR2 on F.Cu
+    @(78.7600 mm, 42.0000 mm): Pad 2 [+5V] of D_OR2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(78.7600 mm, 42.0000 mm): Pad 2 [+5V] of D_OR2 on F.Cu
+    @(83.5000 mm, 52.5000 mm): PTH pad 3 [+5V] of J_5V
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(58.4900 mm, 59.0000 mm): Pad 1 [+5V] of R_ALERT on F.Cu
+    @(47.8875 mm, 53.5000 mm): Pad 4 [+5V] of U_IS4 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(33.8875 mm, 53.5000 mm): Pad 4 [+5V] of U_IS3 on F.Cu
+    @(19.8875 mm, 53.5000 mm): Pad 4 [+5V] of U_IS2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(19.8875 mm, 53.5000 mm): Pad 4 [+5V] of U_IS2 on F.Cu
+    @(5.8875 mm, 53.5000 mm): Pad 4 [+5V] of U_IS1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(47.8875 mm, 53.5000 mm): Pad 4 [+5V] of U_IS4 on F.Cu
+    @(33.8875 mm, 53.5000 mm): Pad 4 [+5V] of U_IS3 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(59.9500 mm, 53.3500 mm): Pad 6 [+5V] of D_I2C on F.Cu
+    @(72.4600 mm, 42.0000 mm): Pad 2 [+5V] of D_OR2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(72.4600 mm, 42.0000 mm): Pad 2 [+5V] of D_OR2 on F.Cu
+    @(72.4600 mm, 22.0000 mm): Pad 2 [+5V] of D_OR1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(47.8875 mm, 53.5000 mm): Pad 4 [+5V] of U_IS4 on F.Cu
+    @(46.8875 mm, 33.5000 mm): Pad 4 [+5V] of U_IS_MAIN on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(83.5000 mm, 63.0000 mm): PTH pad 4 [+6V] of J_6V
+    @(83.5000 mm, 60.5000 mm): PTH pad 3 [+6V] of J_6V
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(86.4750 mm, 50.1350 mm): Pad 6 [+6V] of U_BEC_6V on F.Cu
+    @(79.4900 mm, 44.5000 mm): Pad 1 [+6V] of R_FB6_1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(86.4750 mm, 50.1350 mm): Pad 6 [+6V] of U_BEC_6V on F.Cu
+    @(83.5000 mm, 60.5000 mm): PTH pad 3 [+6V] of J_6V
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(83.5000 mm, 60.5000 mm): PTH pad 3 [+6V] of J_6V
+    @(70.0000 mm, 59.0000 mm): PTH pad 1 [+6V] of C_BEC_SV_OUT
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(63.8750 mm, 61.9500 mm): Pad 4 [PDB_SDA] of J_I2C on F.Cu
+    @(59.9500 mm, 54.0000 mm): Pad 5 [PDB_SDA] of D_I2C on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(59.9500 mm, 54.0000 mm): Pad 5 [PDB_SDA] of D_I2C on F.Cu
+    @(47.8875 mm, 54.0000 mm): Pad 5 [PDB_SDA] of U_IS4 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(33.8875 mm, 54.0000 mm): Pad 5 [PDB_SDA] of U_IS3 on F.Cu
+    @(47.8875 mm, 54.0000 mm): Pad 5 [PDB_SDA] of U_IS4 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(33.8875 mm, 54.0000 mm): Pad 5 [PDB_SDA] of U_IS3 on F.Cu
+    @(19.8875 mm, 54.0000 mm): Pad 5 [PDB_SDA] of U_IS2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(19.8875 mm, 54.0000 mm): Pad 5 [PDB_SDA] of U_IS2 on F.Cu
+    @(5.8875 mm, 54.0000 mm): Pad 5 [PDB_SDA] of U_IS1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(47.8875 mm, 54.0000 mm): Pad 5 [PDB_SDA] of U_IS4 on F.Cu
+    @(46.8875 mm, 34.0000 mm): Pad 5 [PDB_SDA] of U_IS_MAIN on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(62.6250 mm, 61.9500 mm): Pad 3 [PDB_SCL] of J_I2C on F.Cu
+    @(59.9500 mm, 54.6500 mm): Pad 4 [PDB_SCL] of D_I2C on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(52.1125 mm, 54.0000 mm): Pad 6 [PDB_SCL] of U_IS4 on F.Cu
+    @(59.9500 mm, 54.6500 mm): Pad 4 [PDB_SCL] of D_I2C on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(10.1125 mm, 54.0000 mm): Pad 6 [PDB_SCL] of U_IS1 on F.Cu
+    @(24.1125 mm, 54.0000 mm): Pad 6 [PDB_SCL] of U_IS2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(24.1125 mm, 54.0000 mm): Pad 6 [PDB_SCL] of U_IS2 on F.Cu
+    @(38.1125 mm, 54.0000 mm): Pad 6 [PDB_SCL] of U_IS3 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(52.1125 mm, 54.0000 mm): Pad 6 [PDB_SCL] of U_IS4 on F.Cu
+    @(38.1125 mm, 54.0000 mm): Pad 6 [PDB_SCL] of U_IS3 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(51.1125 mm, 34.0000 mm): Pad 6 [PDB_SCL] of U_IS_MAIN on F.Cu
+    @(52.1125 mm, 54.0000 mm): Pad 6 [PDB_SCL] of U_IS4 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(59.5100 mm, 59.0000 mm): Pad 2 [PDB_ALERT_N] of R_ALERT on F.Cu
+    @(52.1125 mm, 53.5000 mm): Pad 7 [PDB_ALERT_N] of U_IS4 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(68.6250 mm, 61.9500 mm): Pad 2 [PDB_ALERT_N] of J_ALERT on F.Cu
+    @(59.5100 mm, 59.0000 mm): Pad 2 [PDB_ALERT_N] of R_ALERT on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(10.1125 mm, 53.5000 mm): Pad 7 [PDB_ALERT_N] of U_IS1 on F.Cu
+    @(24.1125 mm, 53.5000 mm): Pad 7 [PDB_ALERT_N] of U_IS2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(24.1125 mm, 53.5000 mm): Pad 7 [PDB_ALERT_N] of U_IS2 on F.Cu
+    @(38.1125 mm, 53.5000 mm): Pad 7 [PDB_ALERT_N] of U_IS3 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(52.1125 mm, 53.5000 mm): Pad 7 [PDB_ALERT_N] of U_IS4 on F.Cu
+    @(38.1125 mm, 53.5000 mm): Pad 7 [PDB_ALERT_N] of U_IS3 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(51.1125 mm, 33.5000 mm): Pad 7 [PDB_ALERT_N] of U_IS_MAIN on F.Cu
+    @(52.1125 mm, 53.5000 mm): Pad 7 [PDB_ALERT_N] of U_IS4 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(18.4750 mm, 31.0950 mm): Pad 8 [DSG_GATE] of Q_BATT_DSG on F.Cu
+    @(24.4900 mm, 33.0000 mm): Pad 1 [DSG_GATE] of R_DSG_G on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(8.0000 mm, 61.0000 mm): PTH pad 1 [ESC1_RS_OUT] of J_ESC1
+    @(10.5400 mm, 47.0000 mm): Pad 4 [ESC1_RS_OUT] of RS_1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(22.0000 mm, 61.0000 mm): PTH pad 1 [ESC2_RS_OUT] of J_ESC2
+    @(24.5400 mm, 47.0000 mm): Pad 4 [ESC2_RS_OUT] of RS_2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(36.0000 mm, 61.0000 mm): PTH pad 1 [ESC3_RS_OUT] of J_ESC3
+    @(38.5400 mm, 47.0000 mm): Pad 4 [ESC3_RS_OUT] of RS_3 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(50.0000 mm, 61.0000 mm): PTH pad 1 [ESC4_RS_OUT] of J_ESC4
+    @(52.5400 mm, 47.0000 mm): Pad 4 [ESC4_RS_OUT] of RS_4 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(59.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_I2C
+    @(65.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_ALERT
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(34.0000 mm, 24.0000 mm): PTH pad 2 [CHASSIS] of C_Y2
+    @(27.0000 mm, 24.0000 mm): PTH pad 2 [CHASSIS] of C_Y1
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(31.0100 mm, 33.0000 mm): Pad 2 [CHASSIS] of R_CHGND on F.Cu
+    @(34.0000 mm, 24.0000 mm): PTH pad 2 [CHASSIS] of C_Y2
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(5.0000 mm, 20.0000 mm): PTH pad [CHASSIS] of J_PGND_BATT
+    @(5.0000 mm, 32.0000 mm): PTH pad [CHASSIS] of J_CHASSIS
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(65.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_ALERT
+    @(85.5000 mm, 57.5000 mm): PTH pad [CHASSIS] of J_SHLD_6V
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(27.0000 mm, 24.0000 mm): PTH pad 2 [CHASSIS] of C_Y1
+    @(5.0000 mm, 20.0000 mm): PTH pad [CHASSIS] of J_PGND_BATT
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(31.0100 mm, 33.0000 mm): Pad 2 [CHASSIS] of R_CHGND on F.Cu
+    @(59.5000 mm, 62.5000 mm): PTH pad [CHASSIS] of J_SHLD_I2C
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(70.0000 mm, 19.0000 mm): PTH pad 1 [BEC1_PRE_OR] of C_BEC1_OUT
+    @(72.4600 mm, 19.7200 mm): Pad 1 [BEC1_PRE_OR] of D_OR1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(85.9625 mm, 10.0000 mm): Pad 11 [BEC1_PRE_OR] of U_BEC_5V_1 on F.Cu
+    @(79.4900 mm, 7.5000 mm): Pad 1 [BEC1_PRE_OR] of R_FB1_1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(79.4900 mm, 7.5000 mm): Pad 1 [BEC1_PRE_OR] of R_FB1_1 on F.Cu
+    @(72.4600 mm, 19.7200 mm): Pad 1 [BEC1_PRE_OR] of D_OR1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(70.0000 mm, 39.0000 mm): PTH pad 1 [BEC2_PRE_OR] of C_BEC2_OUT
+    @(72.4600 mm, 39.7200 mm): Pad 1 [BEC2_PRE_OR] of D_OR2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(72.4600 mm, 44.2800 mm): Pad 3 [BEC2_PRE_OR] of D_OR2 on F.Cu
+    @(72.4600 mm, 39.7200 mm): Pad 1 [BEC2_PRE_OR] of D_OR2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(79.4900 mm, 24.5000 mm): Pad 1 [BEC2_PRE_OR] of R_FB2_1 on F.Cu
+    @(72.4600 mm, 24.2800 mm): Pad 3 [BEC2_PRE_OR] of D_OR1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(85.9625 mm, 30.0000 mm): Pad 11 [BEC2_PRE_OR] of U_BEC_5V_2 on F.Cu
+    @(79.4900 mm, 24.5000 mm): Pad 1 [BEC2_PRE_OR] of R_FB2_1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(72.4600 mm, 24.2800 mm): Pad 3 [BEC2_PRE_OR] of D_OR1 on F.Cu
+    @(70.0000 mm, 39.0000 mm): PTH pad 1 [BEC2_PRE_OR] of C_BEC2_OUT
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(82.0375 mm, 10.0000 mm): Pad 5 [BEC1_SW] of U_BEC_5V_1 on F.Cu
+    @(85.0000 mm, 10.9625 mm): Pad 6 [BEC1_SW] of U_BEC_5V_1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(78.4000 mm, 8.0000 mm): Pad 2 [BEC1_SW] of L_BEC1 on F.Cu
+    @(82.0375 mm, 10.0000 mm): Pad 5 [BEC1_SW] of U_BEC_5V_1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(82.0375 mm, 30.0000 mm): Pad 5 [BEC2_SW] of U_BEC_5V_2 on F.Cu
+    @(85.0000 mm, 30.9625 mm): Pad 6 [BEC2_SW] of U_BEC_5V_2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(78.4000 mm, 28.0000 mm): Pad 2 [BEC2_SW] of L_BEC2 on F.Cu
+    @(82.0375 mm, 30.0000 mm): Pad 5 [BEC2_SW] of U_BEC_5V_2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(78.4000 mm, 48.0000 mm): Pad 2 [BEC6V_SW] of L_BEC3 on F.Cu
+    @(86.4750 mm, 47.5950 mm): Pad 8 [BEC6V_SW] of U_BEC_6V on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(12.9200 mm, 43.9000 mm): PTH pad 2 [ESC1_FUSED] of F_ESC1
+    @(12.9200 mm, 40.5000 mm): PTH pad 2 [ESC1_FUSED] of F_ESC1
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(5.4600 mm, 47.0000 mm): Pad 1 [ESC1_FUSED] of RS_1 on F.Cu
+    @(10.1125 mm, 52.0000 mm): Pad 10 [ESC1_FUSED] of U_IS1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(12.9200 mm, 43.9000 mm): PTH pad 2 [ESC1_FUSED] of F_ESC1
+    @(5.4600 mm, 47.0000 mm): Pad 1 [ESC1_FUSED] of RS_1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(26.9200 mm, 43.9000 mm): PTH pad 2 [ESC2_FUSED] of F_ESC2
+    @(26.9200 mm, 40.5000 mm): PTH pad 2 [ESC2_FUSED] of F_ESC2
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(19.4600 mm, 47.0000 mm): Pad 1 [ESC2_FUSED] of RS_2 on F.Cu
+    @(24.1125 mm, 52.0000 mm): Pad 10 [ESC2_FUSED] of U_IS2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(26.9200 mm, 43.9000 mm): PTH pad 2 [ESC2_FUSED] of F_ESC2
+    @(19.4600 mm, 47.0000 mm): Pad 1 [ESC2_FUSED] of RS_2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(40.9200 mm, 43.9000 mm): PTH pad 2 [ESC3_FUSED] of F_ESC3
+    @(40.9200 mm, 40.5000 mm): PTH pad 2 [ESC3_FUSED] of F_ESC3
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(33.4600 mm, 47.0000 mm): Pad 1 [ESC3_FUSED] of RS_3 on F.Cu
+    @(38.1125 mm, 52.0000 mm): Pad 10 [ESC3_FUSED] of U_IS3 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(40.9200 mm, 43.9000 mm): PTH pad 2 [ESC3_FUSED] of F_ESC3
+    @(33.4600 mm, 47.0000 mm): Pad 1 [ESC3_FUSED] of RS_3 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(54.9200 mm, 43.9000 mm): PTH pad 2 [ESC4_FUSED] of F_ESC4
+    @(54.9200 mm, 40.5000 mm): PTH pad 2 [ESC4_FUSED] of F_ESC4
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(47.4600 mm, 47.0000 mm): Pad 1 [ESC4_FUSED] of RS_4 on F.Cu
+    @(52.1125 mm, 52.0000 mm): Pad 10 [ESC4_FUSED] of U_IS4 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(54.9200 mm, 43.9000 mm): PTH pad 2 [ESC4_FUSED] of F_ESC4
+    @(47.4600 mm, 47.0000 mm): Pad 1 [ESC4_FUSED] of RS_4 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(38.3600 mm, 33.0000 mm): Pad 2 [MAIN_SNS_P] of RS_MAIN on F.Cu
+    @(46.8875 mm, 32.0000 mm): Pad 1 [MAIN_SNS_P] of U_IS_MAIN on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(39.6400 mm, 33.0000 mm): Pad 3 [MAIN_SNS_N] of RS_MAIN on F.Cu
+    @(46.8875 mm, 32.5000 mm): Pad 2 [MAIN_SNS_N] of U_IS_MAIN on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(5.8875 mm, 52.0000 mm): Pad 1 [ESC1_SNS_P] of U_IS1 on F.Cu
+    @(7.3600 mm, 47.0000 mm): Pad 2 [ESC1_SNS_P] of RS_1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(5.8875 mm, 52.5000 mm): Pad 2 [ESC1_SNS_N] of U_IS1 on F.Cu
+    @(8.6400 mm, 47.0000 mm): Pad 3 [ESC1_SNS_N] of RS_1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(19.8875 mm, 52.0000 mm): Pad 1 [ESC2_SNS_P] of U_IS2 on F.Cu
+    @(21.3600 mm, 47.0000 mm): Pad 2 [ESC2_SNS_P] of RS_2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(19.8875 mm, 52.5000 mm): Pad 2 [ESC2_SNS_N] of U_IS2 on F.Cu
+    @(22.6400 mm, 47.0000 mm): Pad 3 [ESC2_SNS_N] of RS_2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(33.8875 mm, 52.0000 mm): Pad 1 [ESC3_SNS_P] of U_IS3 on F.Cu
+    @(35.3600 mm, 47.0000 mm): Pad 2 [ESC3_SNS_P] of RS_3 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(33.8875 mm, 52.5000 mm): Pad 2 [ESC3_SNS_N] of U_IS3 on F.Cu
+    @(36.6400 mm, 47.0000 mm): Pad 3 [ESC3_SNS_N] of RS_3 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(47.8875 mm, 52.0000 mm): Pad 1 [ESC4_SNS_P] of U_IS4 on F.Cu
+    @(49.3600 mm, 47.0000 mm): Pad 2 [ESC4_SNS_P] of RS_4 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(47.8875 mm, 52.5000 mm): Pad 2 [ESC4_SNS_N] of U_IS4 on F.Cu
+    @(50.6400 mm, 47.0000 mm): Pad 3 [ESC4_SNS_N] of RS_4 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(83.5000 mm, 7.0375 mm): Pad 17 [BEC1_VIN_F] of U_BEC_5V_1 on F.Cu
+    @(83.0000 mm, 7.0375 mm): Pad 16 [BEC1_VIN_F] of U_BEC_5V_1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(84.0000 mm, 7.0375 mm): Pad 18 [BEC1_VIN_F] of U_BEC_5V_1 on F.Cu
+    @(83.5000 mm, 7.0375 mm): Pad 17 [BEC1_VIN_F] of U_BEC_5V_1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(84.5000 mm, 7.0375 mm): Pad 19 [BEC1_VIN_F] of U_BEC_5V_1 on F.Cu
+    @(84.0000 mm, 7.0375 mm): Pad 18 [BEC1_VIN_F] of U_BEC_5V_1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(85.0000 mm, 7.0375 mm): Pad 20 [BEC1_VIN_F] of U_BEC_5V_1 on F.Cu
+    @(84.5000 mm, 7.0375 mm): Pad 19 [BEC1_VIN_F] of U_BEC_5V_1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(82.0375 mm, 8.0000 mm): Pad 1 [BEC1_VIN_F] of U_BEC_5V_1 on F.Cu
+    @(83.0000 mm, 7.0375 mm): Pad 16 [BEC1_VIN_F] of U_BEC_5V_1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(85.9625 mm, 8.0000 mm): Pad 15 [BEC1_VIN_F] of U_BEC_5V_1 on F.Cu
+    @(85.0000 mm, 7.0375 mm): Pad 20 [BEC1_VIN_F] of U_BEC_5V_1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(63.9500 mm, 8.0000 mm): Pad 2 [BEC1_VIN_F] of FB_5V1 on F.Cu
+    @(69.0000 mm, 8.0000 mm): PTH pad 1 [BEC1_VIN_F] of C_BEC1_IN
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(75.6000 mm, 8.0000 mm): Pad 1 [BEC1_VIN_F] of L_BEC1 on F.Cu
+    @(82.0375 mm, 8.0000 mm): Pad 1 [BEC1_VIN_F] of U_BEC_5V_1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(69.0000 mm, 8.0000 mm): PTH pad 1 [BEC1_VIN_F] of C_BEC1_IN
+    @(75.6000 mm, 8.0000 mm): Pad 1 [BEC1_VIN_F] of L_BEC1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(83.5000 mm, 27.0375 mm): Pad 17 [BEC2_VIN_F] of U_BEC_5V_2 on F.Cu
+    @(83.0000 mm, 27.0375 mm): Pad 16 [BEC2_VIN_F] of U_BEC_5V_2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(84.0000 mm, 27.0375 mm): Pad 18 [BEC2_VIN_F] of U_BEC_5V_2 on F.Cu
+    @(83.5000 mm, 27.0375 mm): Pad 17 [BEC2_VIN_F] of U_BEC_5V_2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(84.5000 mm, 27.0375 mm): Pad 19 [BEC2_VIN_F] of U_BEC_5V_2 on F.Cu
+    @(84.0000 mm, 27.0375 mm): Pad 18 [BEC2_VIN_F] of U_BEC_5V_2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(85.0000 mm, 27.0375 mm): Pad 20 [BEC2_VIN_F] of U_BEC_5V_2 on F.Cu
+    @(84.5000 mm, 27.0375 mm): Pad 19 [BEC2_VIN_F] of U_BEC_5V_2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(82.0375 mm, 28.0000 mm): Pad 1 [BEC2_VIN_F] of U_BEC_5V_2 on F.Cu
+    @(83.0000 mm, 27.0375 mm): Pad 16 [BEC2_VIN_F] of U_BEC_5V_2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(85.9625 mm, 28.0000 mm): Pad 15 [BEC2_VIN_F] of U_BEC_5V_2 on F.Cu
+    @(85.0000 mm, 27.0375 mm): Pad 20 [BEC2_VIN_F] of U_BEC_5V_2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(63.9500 mm, 28.0000 mm): Pad 2 [BEC2_VIN_F] of FB_5V2 on F.Cu
+    @(69.0000 mm, 28.0000 mm): PTH pad 1 [BEC2_VIN_F] of C_BEC2_IN
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(75.6000 mm, 28.0000 mm): Pad 1 [BEC2_VIN_F] of L_BEC2 on F.Cu
+    @(82.0375 mm, 28.0000 mm): Pad 1 [BEC2_VIN_F] of U_BEC_5V_2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(69.0000 mm, 28.0000 mm): PTH pad 1 [BEC2_VIN_F] of C_BEC2_IN
+    @(75.6000 mm, 28.0000 mm): Pad 1 [BEC2_VIN_F] of L_BEC2 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(81.5250 mm, 50.1350 mm): Pad 3 [BEC6V_VIN_F] of U_BEC_6V on F.Cu
+    @(81.5250 mm, 48.8650 mm): Pad 2 [BEC6V_VIN_F] of U_BEC_6V on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(81.5250 mm, 51.4050 mm): Pad 4 [BEC6V_VIN_F] of U_BEC_6V on F.Cu
+    @(81.5250 mm, 50.1350 mm): Pad 3 [BEC6V_VIN_F] of U_BEC_6V on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(69.0000 mm, 48.0000 mm): PTH pad 1 [BEC6V_VIN_F] of C_BEC_SV_IN
+    @(63.9500 mm, 48.0000 mm): Pad 2 [BEC6V_VIN_F] of FB_6V on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(81.5250 mm, 48.8650 mm): Pad 2 [BEC6V_VIN_F] of U_BEC_6V on F.Cu
+    @(75.6000 mm, 48.0000 mm): Pad 1 [BEC6V_VIN_F] of L_BEC3 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(75.6000 mm, 48.0000 mm): Pad 1 [BEC6V_VIN_F] of L_BEC3 on F.Cu
+    @(69.0000 mm, 48.0000 mm): PTH pad 1 [BEC6V_VIN_F] of C_BEC_SV_IN
+
+** Found 0 Footprint errors **
+
+** End of Report **

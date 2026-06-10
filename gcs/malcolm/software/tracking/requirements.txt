@@ -1,0 +1,16 @@
+# Malcolm GCS tracking software Python dependencies
+# Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+# License: CC BY 4.0
+# Install: pip install -r requirements.txt
+
+# MAVLink library (includes pymavlink and mavutil)
+pymavlink>=2.4.41
+
+# YAML configuration loading
+PyYAML>=6.0.1
+
+# Serial port access (GCS GNSS receiver, optional USB-serial to PB2-I)
+pyserial>=3.5
+
+# Type checking (development only — not required at runtime)
+mypy>=1.8.0; extra == "dev"

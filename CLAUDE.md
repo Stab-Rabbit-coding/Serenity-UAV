@@ -74,7 +74,7 @@ The headless assembly script is `airframe/FreeCAD-scripts/serenity_assembly.py`.
 All 24"-scaled STLs use **hull-frame axes** - In FreeCAD, for SerenityAssembly.FCStd, the coordinates are as follows:
 
 - **X** — positive port (left)
-- **Y** — positive aft (back)
+- **Y** — positive aaft (back)
 - **Z** — positive dorsal (up)
 
 Placements below were manually validated in FreeCAD and extracted from `SerenityAssembly.FCStd` (2026-06-10). Minor joint fine-tuning (fractions of mm / degree) is still pending. Position units are mm; rotation is a unit quaternion **(Qx, Qy, Qz, Qw)** where Qw is the scalar.

@@ -215,7 +215,7 @@
         "wire_width": 6
       },
       {
-        "clearance": 3.0,
+        "clearance": 0.2,
         "name": "VBAT",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "priority": 0,
@@ -225,7 +225,7 @@
         "via_drill": 0.8
       },
       {
-        "clearance": 3.0,
+        "clearance": 0.2,
         "name": "PGND",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "priority": 0,

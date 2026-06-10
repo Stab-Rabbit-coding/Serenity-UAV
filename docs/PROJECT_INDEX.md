@@ -286,8 +286,102 @@ archive/                          — Pre-Rev Q gerber snapshots
 ## docs/
 
 ```
-bom_revP.json                     — Bill of materials (Rev P snapshot)
-[additional docs as generated]
+bom_revQ.json                     — Bill of materials (Rev Q, JSON — includes gcs section Rev Q1)
+PROJECT_INDEX.md                  — This file: active project directory tree
+```
+
+---
+
+## current-specification/
+
+```
+bom_revQ.csv                      — Bill of materials (Rev Q, CSV flat table — includes GCS rows Rev Q1)
+```
+
+---
+
+## gcs/
+
+Ground control station.  Malcolm ("CAPT Reynolds") is the ArduPilot-compatible GCS
+for Serenity UAV.  Architecture: 1× PocketBeagle 2 Industrial + Cape-B-2 (Zoë) +
+XCVR-49MHZ-2, USB CDC-ECM tethered to a host Debian Linux PC running QGroundControl.
+Five radio links: SiK 915 MHz, LoRa 915 MHz, WiFi 5 GHz, 49 MHz RCRS (AX.25),
+Zigbee 2.4 GHz.  Servo-driven two-axis antenna gimbal with AS5600 magnetic encoders.
+No external PAs (FCC-compliant with directional antennas).  IP65 field enclosure.
+
+```
+gcs/malcolm/
+  README.md                                — Malcolm GCS overview, architecture table, radio link
+                                             table, directory layout, build/setup steps, security notes
+  hardware/
+    docs/
+      malcolm_antenna_spec.md              — FCC EIRP compliance analysis for all 5 radio links;
+                                             gain tables; no-PA conclusion; WiFi Tx power reduction
+      malcolm_power_budget.md              — 5V and 6V rail budgets; field battery endurance calcs
+      malcolm_wiring.md                    — Connector/cable spec: USB CDC-ECM, servo harness,
+                                             encoder I²C, RF SMA, power rails, enclosure glands
+    enclosure/
+      openscad/
+        malcolm_field_enclosure.scad       — IP65 two-part body+lid enclosure for PB2-I+Cape-B-2;
+                                             110×80×55mm interior; EPDM gasket groove; 40mm fan
+                                             cutout; cable gland locations; RENDER_MODE 0/1/2
+    gimbal/
+      openscad/
+        malcolm_gimbal_pan.scad            — Pan stage: 6804 bearing (20×32×7mm), DS3218MG servo,
+                                             sector gear, 120×100×12mm base plate with M6 tripod
+                                             holes, 80mm OD turret; RENDER_MODE 0/1/2
+        malcolm_gimbal_tilt.scad           — Tilt stage: MF104ZZ bearings, DS3218MG servo, yoke
+                                             100mm wide, tilt range -10° to +90°
+        malcolm_gimbal_mount.scad          — Antenna plate 80×200×6mm CF-PETG; flanged pivot hubs
+                                             with MF104ZZ bore; encoder magnet pocket 6.1mm dia;
+                                             U-bolt clamps for 15mm Yagi boom; WiFi panel M4 holes
+  firmware/
+    pb2i/
+      CMakeLists.txt                       — cmake C11 build; mal_gimbal executable; mal_telemetry
+                                             static lib; strict security flags; MAVLINK_INCLUDE_DIR
+      dts/
+        k3-am6254-pocketbeagle2-malcolm-cape-b2.dts
+                                           — Device tree overlay: EHRPWM0 pan/tilt gimbal servos,
+                                             I²C2 TCA9548A+AS5600 encoders, UART2 SiK, UART5 RCRS
+      src/
+        mal_config.h                       — All compile-time constants: MAVLink sysids, UDP ports,
+                                             UART paths, LoRa SPI, WiFi tx_power_mbm, gimbal limits,
+                                             AS5600 register map, TPM key handle, heartbeat timeout
+        mal_gimbal.h                       — Gimbal API: init, set_target, update, get_position,
+                                             is_on_target; types mal_gimbal_pos_t, mal_gimbal_err_t
+        mal_gimbal.c                       — Gimbal implementation: sysfs PWM, TCA9548A mux select,
+                                             AS5600 angle read (STATUS MD bit check), zero-calibration,
+                                             rate-limited control, counts_to_deg, angle_to_duty_ns
+        mal_telemetry.h                    — Telemetry API: init, feed, get_position, get_status,
+                                             is_link_lost; types mal_aircraft_pos_t, mal_telemetry_status_t
+        mal_telemetry.c                    — MAVLink2 parser (mavlink_parse_char); handles HEARTBEAT
+                                             + GLOBAL_POSITION_INT; publishes JSON to UDP 127.0.0.1:14560
+  software/
+    config/
+      malcolm_config.yaml                  — YAML config: MAVLink source, tracker ports, gimbal_ctrl
+                                             ports, PB2-I host, GNSS device, WiFi tx_power_mbm,
+                                             RCRS default channel
+      mavlink_router.conf                  — mavlink-router config: pb2i_comms UDP 14551,
+                                             qgc UDP 14550, tracking UDP 14552; serial fallback stubs
+    install/
+      install_deps.sh                      — apt-get system packages; pip3 tracking requirements;
+                                             udev rule for u-blox GNSS (/dev/gnss_gcs)
+      install_qgc.sh                       — Download QGC AppImage; USB serial udev rules; desktop entry
+      install_mavlink_router.sh            — Clone+build mavlink-router; install config; systemd service
+    tracking/
+      requirements.txt                     — pymavlink≥2.4.41, PyYAML≥6.0.1, pyserial≥3.5, mypy
+      src/
+        telemetry_feed.py                  — pymavlink consumer: sysid=1 GLOBAL_POSITION_INT →
+                                             publishes position JSON to UDP :14560
+        tracker.py                         — Vincenty bearing + haversine range + Bennet 1982 refraction
+                                             elevation; GNSS reader; publishes gimbal targets to UDP :14570
+        gimbal_ctrl.py                     — Receives targets from tracker.py; software travel limits;
+                                             rate limiting 90°/s; dead-band 0.2°; sends GIMBAL_TARGET
+                                             JSON to PB2-I UDP :14571
+      tests/
+        test_tracker.py                    — 9 bearing/elevation unit tests: cardinal directions,
+                                             NE quadrant, horizontal/above/overhead/airborne elevations,
+                                             azimuth and elevation range assertions
 ```
 
 ---
