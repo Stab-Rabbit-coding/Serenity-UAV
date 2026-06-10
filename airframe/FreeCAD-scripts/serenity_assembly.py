@@ -36,7 +36,7 @@ Quaternion convention (FreeCAD App.Rotation): (Qx, Qy, Qz, Qw)
     Identity    : (0,   0,  0,  +1)
     90° about −X: (−√½, 0,  0,  +√½)  — Middle_Shell, Rear_Shell
     180° about +Z: (0,  0, +1,   0)   — Cargo_Shell
-    270° about +X: (+√½, 0, 0, −√½)  — Nacelles (hover)
+    270° about +X: (+√½, 0, 0, −√½)  — Nacelles (forward flight / cruise)
 
 References:
     [1] airframe/freecad/assembly/SerenityAssembly.FCStd — validated positions
@@ -91,9 +91,9 @@ PL_REAR_SHELL   = (   0.0,        203.1999999,  -31.9999360,  -_SQ2,  0.0,  0.0,
 PL_WING_PORT    = ( -80.9998380,   -6.9999860,   57.9998840,    0.0,  0.0,  0.0,   +1.0)
 PL_WING_STBD    = (-261.9994760,  -11.9999760,   57.9998840,    0.0,  0.0,  0.0,   +1.0)
 
-# -- Nacelles (hover configuration) -----------------------------------------
-# 270° about +X: rotates the nacelle axial axis (+Z, exhaust end) downward in
-# the hull frame so the EDFs fire vertically in hover.
+# -- Nacelles (forward-flight / cruise configuration) -----------------------
+# 270° about +X places nacelles in cruise attitude (validated in FCStd).
+# Hover attitude requires a different rotation.
 PL_NACELLE_PORT = (-385.0960040,  -69.9998600,   64.9719300,  +_SQ2,  0.0,  0.0,  -_SQ2)
 PL_NACELLE_STBD = (  46.9999060,  -63.9998720,   62.9998740,  +_SQ2,  0.0,  0.0,  -_SQ2)
 
@@ -278,11 +278,10 @@ def assemble():
     add_mesh(doc, _stl("wings/s_wing_nacelle_pylon_revo.stl"), "Pylon_Stbd")
 
     # -------------------------------------------------------------------
-    # NACELLE PODS (hover configuration — EDFs fire vertically downward)
+    # NACELLE PODS (forward-flight / cruise configuration)
     # Placements validated against SerenityAssembly.FCStd (2026-06-10).
     # Rev Q nacelle STLs (nacelle_port/stbd_revq.stl).
-    # The 270°-about-+X rotation maps nacelle axial +Z (exhaust) to
-    # hull −Y (down), placing the nacelle in hover attitude.
+    # 270° about +X is the cruise attitude; hover requires a different rotation.
     # -------------------------------------------------------------------
     print("[assembly] Nacelle pods ...", flush=True)
 
