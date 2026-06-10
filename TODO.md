@@ -2,8 +2,8 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-06-09  
-**Current design revision:** Rev Q (master) / branch Rev S2 (cargo shell) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
+**Last updated:** 2026-06-10  
+**Current design revision:** Rev Q1 (branch claude/pr-reconciliation-forced-merge-4yefsw) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 ---
 
@@ -40,6 +40,19 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
   - **BLOCKS Phase 1 (antenna installation)**
 
 ##### 1.1.1.1 *Head*
+
+**Geometry verification (hull-frame coordinate analysis, 2026-06-10):**
+
+- [ ] **Verify head-cargo mating boss positions in slicer.**
+  Hull-frame analysis (2026-06-10): `Head_Shell` Identity rotation, Base=[−332, −18, +61];
+  head aft face (head local_X=99) maps to hull_X = 99−332 = **−233 mm**.
+  `Cargo_Shell` 180°-Z rotation, Base=[−274.4, −282.8, 0]; matching cargo local_X =
+  −(−233) − 274.4 = **−41.4 mm** — corrected in `s_cargo_sect_shell24.scad` BOSS_FORE
+  (was X=−7, now X=−41.4). **VERIFY** both sections simultaneously in an assembly render
+  or slicer that shows both STLs in hull-frame placement.  Confirm 6 head BOSS_AFT bosses
+  (at head local_X=99) align with 6 cargo BOSS_FORE bosses (at cargo local_X=−41.4) in
+  the assembled hull.  All Y/Z offsets remain estimated; also VERIFY those after X is confirmed.
+  Ref: `s_head_shell24.scad` BOSS_AFT_* comments; `s_cargo_sect_shell24.scad` hull-frame block.
 
 **Rev O shell updates (sensor/antenna mounts from 2026-05-24):**
 
@@ -436,13 +449,21 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
   XT90 input pigtail route-through; 4× XT30 output ports facing AFT (toward ESC conduits).
   **Add to Phase 0 print schedule.**
 
-- [ ] **Kaylee PCB design checklist:**
-  - [ ] Proper amperage and fusing/wire sizing per 14 AWG capacity
-  - [ ] Protection against cascade failures (back-EMF, short circuits)
-  - [ ] Proper filtering and EMI hardening (per CLAUDE.md 500 W/m² target)
-  - [ ] Battery and circuit monitoring (voltage, current, cell balance telemetry)
-  - [ ] Size and weight within middle section ventral cavity
-  - [ ] DRC pass; gerbers generated for production
+- [x] **Kaylee PCB KiCad files generated (Rev A, 2026-06-10):**
+  - [x] `avionics/kicad/Kaylee.kicad_pro` — project file; net classes VBAT/PGND/POWER_5V/Default; DRC rules
+  - [x] `avionics/kicad/Kaylee.kicad_sch` — full schematic; 90×65 mm 4-layer; BQ76930 6S cell monitor;
+        dual TPS54620 5V BEC; TPS54540 6V BEC; 5× INA226 monitors; 4× ESC branches with 40A fuses +
+        470µF caps + CMC + 1 mΩ shunts; SMBJ33CA TVS; AON6556 discharge FET; dual Würth 7440640500 CM filter
+  - [x] `avionics/kicad/Kaylee.kicad_pcb` — PCB outline + 4-layer stackup (F.Cu signal, In1.Cu GND,
+        In2.Cu VBAT 4oz, B.Cu signal); 4× M3 NPTH mounting holes; all 19 nets declared
+  - [x] `avionics/kicad/gen_kaylee.py` — Python generator producing all three KiCad files
+
+- [ ] **Kaylee PCB — remaining design tasks (BLOCKS fabrication):**
+  - [ ] Run KiCad DRC; document and correct all violations
+  - [ ] Place all components on PCB (current pcb has board outline only)
+  - [ ] Route all traces; verify 4oz Cu on VBAT/PGND power planes
+  - [ ] Generate gerbers to `avionics/gerbers/Kaylee/`
+  - [ ] Verify size and weight: PCB target ≤ 90×65 mm, ≤ 0.110 lbm (≤ 50 g)
 
 - [ ] **Update REVN_BUILD_GUIDE_24IN.md Phase 1** to include Kaylee + battery tray installation
   in the pre-foam-pour checklist. Battery tray and hatch must be installed and hatch zone
