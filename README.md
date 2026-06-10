@@ -24,13 +24,11 @@ Serenity from the 2002 show. Designed using Claude AI.
 9. Pull the payload into the cargo bay and close the clamshells. 
 10. Exit the hazardous environment and return to origin.
 
-
 > During execution of this mission profile, be able to perform the following:
 
 1. Identify, categorized, log, and report rogue or unauthorized C2 commands and/or malicious logic from unauthorized or authorized transmitters.
 2. Identify unauthorized or unsafe behavior from one or more of the onboard compute nodes.
-3. Isolate effected node(s), gracefully failover functions, log, and report to ground control, while maintaining safety of flight. 
-
+3. Isolate effected node(s), gracefully failover functions, log, and report to ground control, while maintaining safety of flight.
 
 ---
 
