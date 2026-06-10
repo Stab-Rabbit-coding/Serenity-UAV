@@ -43,10 +43,10 @@ Bus order: **CN1 → FC1 → CN2 → FC2 → CN3 → FC3 → CN4 → FC4** — o
 
 | Bay | Pair | Cape variant | Rationale |
 |-----|------|-------------|-----------|
-| A — Shepherd's room (nose) | CN1 / FC1 | Zoë / Wash | Bus start termination node (CAN FD 120 Ω, RS-485 120 Ω, 1553B 78 Ω); 5 kV isolated transceivers |
-| B — Inara's shuttle | CN2 / FC2 | Zoë / Wash | Rev Q: upgraded from -1. Uniform EMI hardening; ADIN1300BCPZ provides 1000BASE-T with isolation |
-| D — River's room | CN3 / FC3 | Zoë / Wash | Rev Q: upgraded from -1. Same rationale as Inara's shuttle |
-| E — Simon's medbay (tail) | CN4 / FC4 | Zoë / Wash | Bus end termination node; 5 kV isolation at aft bus endpoint |
+| A — Shepherd's room (nose, sta 0–3.58 in / 0–91 mm) | CN1 / FC1 | Zoë / Wash | Bus start termination node (CAN FD 120 Ω, RS-485 120 Ω, 1553B 78 Ω); 5 kV isolated transceivers |
+| B — Inara's shuttle (sta 3.58–6.50 in / 91–165 mm) | CN2 / FC2 | Zoë / Wash | Rev Q: upgraded from -1. Uniform EMI hardening; ADIN1300BCPZ provides 1000BASE-T with isolation |
+| D — River's room (sta 9.88–12.60 in / 251–320 mm) | CN3 / FC3 | Zoë / Wash | Rev Q: upgraded from -1. Same rationale as Inara's shuttle |
+| E — Simon's medbay (tail, sta 12.60–15.28 in / 320–388 mm) | CN4 / FC4 | Zoë / Wash | Bus end termination node; 5 kV isolation at aft bus endpoint |
 
 Rev Q places 5 kV galvanic isolation at every node. Single-SKU procurement eliminates dual-sourcing.
 The ADIN1300BCPZ 1000BASE-T PHY on Wash / Zoë provides equivalent ring throughput to the
@@ -92,7 +92,7 @@ The RP2350 PIO state machines in RevJ handled servo PWM generation, Manchester I
 
 ## 3. Cape-A — Sensor & Flight Control
 
-**Footprint:** ~85 × 55 mm, 4-layer PCB, mounts on P1/P2 via female 0.1″ headers
+**Footprint:** ~3.35 × 2.17 in (~85 × 55 mm), 4-layer PCB, mounts on P1/P2 via female 0.1″ headers
 **Population:** All 4 Cape-A boards identical; sensor population optional per FC role
 
 ### 3.1 Cape-A IC inventory
@@ -151,7 +151,7 @@ The RP2350 PIO state machines in RevJ handled servo PWM generation, Manchester I
 
 ## 4. Cape-B — Comms, Logging & Payload
 
-**Footprint:** ~90 × 60 mm, 4-layer PCB, mounts on P1/P2
+**Footprint:** ~3.54 × 2.36 in (~90 × 60 mm), 4-layer PCB, mounts on P1/P2
 **Population:** All 4 Cape-B boards identical — all 4 radio interfaces populated on every board
 
 ### 4.1 Radio link assignment
@@ -352,8 +352,8 @@ GPS receivers (u-blox M10Q) are on all 4 Cape-A nodes. GNSS data is broadcast ov
 
 | Architecture | Compute boards | Capes / hats | Total avionics mass (est.) |
 | --- | --- | --- | --- |
-| RevJ (CM4 + CM3+ mixed) | CM4-LITE ×2 (15g) + CM4-CARRIER-2 ×2 (35g) + CM3+ ×2 (16g) + CM3-CARRIER-1 ×2 (18g) + COMMS-HAT-SWITCH (29g) + MICROHAT (10g) + SENSORHAT-1 ×2 (25g) | — | **148 g** |
-| PB2 redesign | PocketBeagle 2 ×8 (~80 g) | Cape-A ×4 (~50 g est.) + Cape-B ×4 (~65 g est.) | **~195 g** (+47 g) |
+| RevJ (CM4 + CM3+ mixed) | CM4-LITE ×2 (15g) + CM4-CARRIER-2 ×2 (35g) + CM3+ ×2 (16g) + CM3-CARRIER-1 ×2 (18g) + COMMS-HAT-SWITCH (29g) + MICROHAT (10g) + SENSORHAT-1 ×2 (25g) | — | **0.326 lbm (148 g)** |
+| PB2 redesign | PocketBeagle 2 ×8 (~80 g / 0.176 lbm) | Cape-A ×4 (~50 g / 0.110 lbm est.) + Cape-B ×4 (~65 g / 0.143 lbm est.) | **~0.430 lbm (~195 g)** (+0.104 lbm / +47 g) |
 
 The mass increase is real. Mitigation: Cape-A and Cape-B share 90% of the bus-interface components; a combined 4-layer board with a PB2 SODIMM-style socket (instead of P1/P2 stacking) could reduce individual board mass significantly. JLCPCB assembly for a shared-BOM 90×60mm 4-layer PCB is ~$8/board at quantity 10.
 

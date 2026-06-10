@@ -100,13 +100,32 @@
 // =============================================================================
 
 // ── Nacelle dimensions (from nacelle_pod_50mm_tandem.scad) ───────────────────
-NACELLE_L       = 148.3;  // [mm] total nacelle length
-NACELLE_OD_X    =  60.5;  // [mm] nacelle outer diameter, spanwise (X axis)
-NACELLE_OD_Y    =  67.0;  // [mm] nacelle outer diameter, fore-aft (Y axis)
-PIVOT_Z         =  83.0;  // [mm] nacelle CG station = tilt pivot Z
-PIVOT_BOSS_OD   =  16.0;  // [mm] nacelle pivot boss OD (CLEVIS_EAR_OD in nacelle SCAD)
-PIVOT_BOSS_DEPTH =   5.0; // [mm] nacelle pivot boss protrusion from X face
-PINION_A_Y      =  28.0;  // [mm] Pinion A Y offset from nacelle bore (meshing distance)
+// Imperial equivalents (for reference; all variables remain in mm):
+//   Nacelle length  : 5.84 in (148.3 mm)   [note: 1.25× nacelle uses 7.29 in / 185.2 mm]
+//   Nacelle OD (X)  : 2.38 in ( 60.5 mm)
+//   Nacelle OD (Y)  : 2.64 in ( 67.0 mm)
+//   Pivot Z station : 3.27 in ( 83.0 mm) from intake face
+//   Pivot boss OD   : 0.63 in ( 16.0 mm)
+//   Pylon span      : 3.46 in ( 88.0 mm) nacelle face to wing mount face
+//   Pylon body W    : 1.42 in ( 36.0 mm) Y direction
+//   Pylon body H    : 1.26 in ( 32.0 mm) Z direction
+//   Pylon wall min  : 0.118 in (  3.0 mm) CF-PETG
+// Hull-frame position (validated FreeCAD assembly — SerenityAssembly.FCStd):
+//   Wing_Port placement: X = −81.0 mm (−3.19 in), Y = −7.0 mm (−0.28 in),
+//                        Z = +58.0 mm (+2.28 in); Identity rotation.
+//   Wing_Stbd placement: X = −262.0 mm (−10.31 in), Y = −12.0 mm (−0.47 in),
+//                        Z = +58.0 mm (+2.28 in); Identity rotation.
+//   Nacelle_Port placement: X = −385.1 mm (−15.16 in), Y = −70.0 mm (−2.76 in),
+//                           Z = +65.0 mm (+2.56 in); 270° about +X (forward-flight).
+//   Nacelle_Stbd placement: X = +47.0 mm (+1.85 in), Y = −64.0 mm (−2.52 in),
+//                           Z = +63.0 mm (+2.48 in); 270° about +X (forward-flight).
+NACELLE_L       = 148.3;  // [mm] total nacelle length   = 5.84 in
+NACELLE_OD_X    =  60.5;  // [mm] nacelle outer diameter, spanwise (X axis)  = 2.38 in
+NACELLE_OD_Y    =  67.0;  // [mm] nacelle outer diameter, fore-aft (Y axis)  = 2.64 in
+PIVOT_Z         =  83.0;  // [mm] nacelle CG station = tilt pivot Z  = 3.27 in from intake
+PIVOT_BOSS_OD   =  16.0;  // [mm] nacelle pivot boss OD (CLEVIS_EAR_OD in nacelle SCAD)  = 0.63 in
+PIVOT_BOSS_DEPTH =   5.0; // [mm] nacelle pivot boss protrusion from X face  = 0.197 in
+PINION_A_Y      =  28.0;  // [mm] Pinion A Y offset from nacelle bore (meshing distance)  = 1.10 in
 
 // ── Spar (tilt axis) ─────────────────────────────────────────────────────────
 // The 4 mm CF spar is FIXED in the pylon (press-fit).
@@ -126,10 +145,11 @@ NAC_BOSS_SOCKET_L =  5.5; // [mm] socket depth (boss length 5 mm + 0.5 mm cleara
 // ── Pylon body ────────────────────────────────────────────────────────────────
 // Hollow rectangular tube centred on the spar axis (Y=0, Z=PIVOT_Z).
 // The interior is the harness wire channel.
-PYLON_SPAN      =  88.0;  // [mm] nacelle X-face → wing mount face — VERIFY vs STL
-PYLON_W         =  36.0;  // [mm] body outer width, Y direction (fore-aft)
-PYLON_H         =  32.0;  // [mm] body outer height, Z direction (centred on PIVOT_Z)
-PYLON_WALL      =   3.0;  // [mm] minimum wall thickness (CF-PETG: 4 × 0.6 mm nozzle)
+// Imperial: 3.46 × 1.42 × 1.26 in (88 × 36 × 32 mm)
+PYLON_SPAN      =  88.0;  // [mm] nacelle X-face → wing mount face — VERIFY vs STL  = 3.46 in
+PYLON_W         =  36.0;  // [mm] body outer width, Y direction (fore-aft)  = 1.42 in
+PYLON_H         =  32.0;  // [mm] body outer height, Z direction (centred on PIVOT_Z)  = 1.26 in
+PYLON_WALL      =   3.0;  // [mm] minimum wall thickness (CF-PETG: 4 × 0.6 mm nozzle)  = 0.118 in
                            //      Structural check: σ < 1.2 N/mm² at 3g AUW load
                            //      CF-PETG yield ≈ 50 MPa → FOS ≥ 40 — conservative.
 

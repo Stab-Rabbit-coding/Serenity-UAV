@@ -110,17 +110,33 @@
 //
 // Nacelle mass breakdown (at 1.25× scale, CF-PETG shell + stator + bosses)
 // -------------------------------------------------------------------------
-//   Item               Mass (g)   CG_Z (mm)   Moment (g·mm)
-//   ──────────────────────────────────────────────────────────
-//   EDF1 (upstream)       70         59.4         4158
-//   EDF2 (downstream)     70        150.6        10542
-//   ESC1 (in hub bore)    25         59.4         1485
-//   ESC2 (in hub bore)    25        150.6         3765
-//   Shell + stator CF-PETG 130       92.8        12064
-//   Total               320         99.6        32014
+//   Item               Mass (g / lbm)   CG_Z mm (in)   Moment (g·mm)
+//   ─────────────────────────────────────────────────────────────────────
+//   EDF1 (upstream)    70 g (0.154 lbm)    59.4 (2.34)     4158
+//   EDF2 (downstream)  70 g (0.154 lbm)   150.6 (5.93)    10542
+//   ESC1 (in hub bore) 25 g (0.055 lbm)    59.4 (2.34)     1485
+//   ESC2 (in hub bore) 25 g (0.055 lbm)   150.6 (5.93)     3765
+//   Shell+stator CF-PETG 130 g (0.287 lbm) 92.8 (3.65)    12064
+//   Total             320 g (0.706 lbm)    99.6 (3.92)    32014
 //
-//   CG_Z ≈ 32014 / 320 ≈ 100.0 mm → refined to PIVOT_Z = 103.75 mm (verified
-//   by hand with printer-sliced mass at 1.25× scale; accepted for first article).
+//   CG_Z ≈ 32014 / 320 ≈ 100.0 mm (3.94 in) → refined to PIVOT_Z = 103.75 mm
+//   (4.08 in); verified by hand with printer-sliced mass at 1.25× scale;
+//   accepted for first article.
+//
+// Nacelle key dimensions — imperial primary, mm in parentheses
+//   (OpenSCAD variable assignments remain in mm):
+//   Total length    : 7.29 in (185.2 mm) at 1.25× scale
+//   EDF bore ID     : 1.97 in (50.0 mm)
+//   EDF casing OD   : 2.17 in (55.0 mm)
+//   Nacelle OD (X)  : 2.97 in (75.4 mm)  spanwise bounding box
+//   Nacelle OD (Y)  : 3.28 in (83.3 mm)  fore-aft bounding box
+//   Wall minimum    : 0.098 in (2.5 mm)  CF-PETG
+//   Pivot station   : 4.08 in (103.75 mm) from intake face
+//   Stator zone     : 3.69–4.68 in (93.75–118.75 mm) from intake
+//   Nozzle pocket   : starts at 6.55 in (166.25 mm) from intake
+//   Per-nacelle thrust (static, 2× EDF × 90% stator eff):
+//     2.73 lbf (1,240 gf) per EDF × 2 × 0.90 = 4.91 lbf (2,232 gf) per nacelle
+//   Both nacelles total thrust: 9.84 lbf (4,464 gf)
 //
 // References
 // ----------
@@ -151,17 +167,19 @@
 
 // ── Primary dimensions ────────────────────────────────────────────────────────
 // All Z-axis values are at 1.25× reference scale (REF_SHELL_LENGTH = 148.3 mm
-// → physical length = 185.2 mm as measured from the repaired nacelle STL).
+// (5.84 in) → physical length = 185.2 mm (7.29 in) as measured from the
+// repaired nacelle STL).
 NACELLE_L       = 185.2;  // [mm] total nacelle length (intake face to nozzle exit)
-EDF_BORE_R      =  25.0;  // [mm] EDF bore inner radius → 50 mm ID (Xfly Galaxy X5)
-EDF_CASING_R    =  27.5;  // [mm] EDF casing outer radius → 55 mm OD
-WALL_T          =   2.5;  // [mm] minimum wall thickness — CF-PETG per CLAUDE.md
+                           //      = 7.29 in (185.2 mm)
+EDF_BORE_R      =  25.0;  // [mm] EDF bore inner radius → 50 mm (1.97 in) ID (Xfly Galaxy X5)
+EDF_CASING_R    =  27.5;  // [mm] EDF casing outer radius → 55 mm (2.17 in) OD
+WALL_T          =   2.5;  // [mm] minimum wall thickness — 0.098 in (2.5 mm) CF-PETG per CLAUDE.md
 
 // ── Outer nacelle dimensions (canonical Serenity shape at 1.25× scale) ───────
 // These are measured from the repaired STL bounding box.  They are provided for
 // reference only; the actual shell geometry comes from the imported STL.
-NACELLE_OD_X    =  75.4;  // [mm] nacelle bounding-box width, spanwise (X)
-NACELLE_OD_Y    =  83.3;  // [mm] nacelle bounding-box depth, fore-aft  (Y)
+NACELLE_OD_X    =  75.4;  // [mm] nacelle bounding-box width, spanwise (X)  = 2.97 in
+NACELLE_OD_Y    =  83.3;  // [mm] nacelle bounding-box depth, fore-aft  (Y) = 3.28 in
 
 // ── X-face positions at the pivot station (Z ≈ PIVOT_Z, Y ≈ 0) ───────────────
 // Measured from the centered-bore repaired STL at Z=103.75mm, Y<5mm.
@@ -189,10 +207,10 @@ NACELLE_SIDE    = +1;
 // ── EDF seat positions (1.25× scale) ─────────────────────────────────────────
 // EDF1 = upstream (intake-side) EDF.  EDF2 = downstream (exhaust-side) EDF.
 // Z values = reference values × 1.25.
-EDF1_Z_ENTRY    =  27.5;  // [mm] EDF1 forward face  (was 22.0 × 1.25)
-EDF1_Z_EXIT     =  90.0;  // [mm] EDF1 aft face      (was 72.0 × 1.25)
-EDF2_Z_ENTRY    = 122.5;  // [mm] EDF2 forward face  (was 98.0 × 1.25)
-EDF2_Z_EXIT     = 178.8;  // [mm] EDF2 aft face      (was 143.0 × 1.25)
+EDF1_Z_ENTRY    =  27.5;  // [mm] EDF1 forward face  (was 22.0 × 1.25)  = 1.08 in
+EDF1_Z_EXIT     =  90.0;  // [mm] EDF1 aft face      (was 72.0 × 1.25)  = 3.54 in
+EDF2_Z_ENTRY    = 122.5;  // [mm] EDF2 forward face  (was 98.0 × 1.25)  = 4.82 in
+EDF2_Z_EXIT     = 178.8;  // [mm] EDF2 aft face      (was 143.0 × 1.25) = 7.04 in
 
 // ── EDF motor-mount spider geometry (Rev T — shared by nacelle EDF1 spider
 //    and aft sleeve EDF2 spider) ───────────────────────────────────────────────
