@@ -15,7 +15,7 @@ FreeCADGui.ActiveDocument = FreeCADGui.getDocument(DOC.Name)
 # Replace with absolute paths to your STL (or STEP) files
 FILES = {
     "head": "/absolute/path/fuselage.stl",
-    "cargo": "airframe/stls/fuselage/cargo/s_cargo_sect_shell24_2mm_repaired.stl"
+    "cargo": "airframe/stls/fuselage/cargo/s_cargo_sect_shell24_2mm_repaired.stl",
     "wing": "airframe/stls/wings/s_wing_port_s1223_revo.stl",        # single wing STL (intended to be mirrored)
     "nacelle": "/absolute/path/nacelle.stl",  # single nacelle STL (intended to be mirrored)
     "middle": "airframe/stls/middle.stl",
