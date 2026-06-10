@@ -87,8 +87,8 @@ Placements below were manually validated in FreeCAD and extracted from `Serenity
 | Rear_Shell | 0.000 | +203.200 | −31.999 | −√½ | 0 | 0 | +√½ | 90° about −X |
 | Wing_Port | −80.999 | −7.000 | +57.999 | 0 | 0 | 0 | 1 | Identity — no rotation |
 | Wing_Stbd | −261.999 | −12.000 | +57.999 | 0 | 0 | 0 | 1 | Identity — no rotation |
-| Nacelle_Port | −385.096 | −69.999 | +64.972 | +√½ | 0 | 0 | −√½ | 270° about +X (hover) |
-| Nacelle_Stbd | +46.999 | −63.999 | +62.999 | +√½ | 0 | 0 | −√½ | 270° about +X (hover) |
+| Nacelle_Port | −385.096 | −69.999 | +64.972 | +√½ | 0 | 0 | −√½ | 270° about +X (forward flight) |
+| Nacelle_Stbd | +46.999 | −63.999 | +62.999 | +√½ | 0 | 0 | −√½ | 270° about +X (forward flight) |
 
 (√½ ≈ 0.7071068. Exact float values in `PL_*` constants in `serenity_assembly.py`.)
 
@@ -97,7 +97,7 @@ Placements below were manually validated in FreeCAD and extracted from `Serenity
 - **Identity (Head, Wings):** STL axes align directly with hull frame — no rotation needed.
 - **180° about +Z (Cargo):** Flips the section so the cargo bay opens downward (−Y) and the wing-root mating faces point outboard.
 - **90° about −X (Middle, Rear):** These sections are modelled in OpenSCAD with their axial direction along local Z; the rotation brings them upright so their dorsal axis aligns with hull +Y.
-- **270° about +X (Nacelles, hover):** Rotates the nacelle axial +Z (exhaust end) to point downward (−Y hull), placing the EDFs in vertical-thrust hover attitude. Cruise attitude uses a different rotation.
+- **270° about +X (Nacelles, forward flight):** Places the nacelles in cruise / forward-flight attitude as validated in SerenityAssembly.FCStd. Hover attitude uses a different rotation (nacelles tilted to fire thrust downward).
 
 **Spatial relationships (qualitative):**
 
@@ -106,7 +106,7 @@ Placements below were manually validated in FreeCAD and extracted from `Serenity
 - **Middle** is the narrow horseshoe-ring neck between cargo and rear. The ring is open at the bottom (−Y). The avionics bays are distributed along this section and the cargo section.
 - **Rear** is the aftmost fuselage section. It houses the engine room / tail cone, the dorsal pod, and the two landing skids. The skids run aft past the tail cone end.
 - **Wings** are symmetric about the aircraft centerline (Z ≈ 0 at the cargo section mating face). Each wing spans outboard in ±Z from its root at the cargo section.
-- **Nacelles** are outboard of the wings at the pylon tips. In hover attitude the nacelle axial axis is vertical; in cruise it tilts forward.
+- **Nacelles** are outboard of the wings at the pylon tips. The assembly shows forward-flight / cruise attitude. In hover the nacelles tilt to fire thrust downward.
 
 - **All legal and regulatory requirements will be based on United States jurisdiction**  All Radio transmissions shall comply with appropriate FCC regulations.  Markings, lights, and operation shall comply with all appropriate FAA aircraft regulations.
 
