@@ -26,6 +26,8 @@
 - The logs are saved to hardware-enforced non-executable microsd cards
 - Everything complies with NIST SP800-207
 
+- See README.md for design mission profile. 
+
 ## Design Philosophy
 
 - All design decisions are for an **actual physical build**, not hypothetical or conceptual work.
