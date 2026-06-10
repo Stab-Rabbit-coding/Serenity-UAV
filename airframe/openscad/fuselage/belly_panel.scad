@@ -3,11 +3,17 @@
 // Battery bay belly access panel — Serenity UAV 24" hull.
 //
 // Rev Q (2026-06-07): Initial release.
-//   Fits head/bridge section belly opening: 160 × 65 mm cutout.
-//   Panel sits in a 1.5 mm rebate so it is flush with hull skin.
+//   Fits head/bridge section belly opening:
+//     6.30 × 2.56 in (160 × 65 mm) cutout.
+//   Panel dimensions:
+//     Length : 6.30 in (160.0 mm) fore-aft
+//     Width  : 2.56 in ( 65.0 mm) lateral
+//     Thickness: 0.079 in (2.0 mm) face + 0.059 in (1.5 mm) rebate lip
+//   Panel sits in a 0.059 in (1.5 mm) rebate so it is flush with hull skin.
 //   Two M3 coin-slot (flathead / button-head) screws — no tool
 //   required; a coin or thumbnail turns the slot.
-//   EPDM foam tape (2 mm closed-cell) in rebate acts as dust seal.
+//   EPDM foam tape (0.079 in / 2 mm closed-cell) in rebate acts as dust seal.
+//   Estimated panel mass: ~0.013 lbm (~6 g).
 //
 //   The port and starboard panels are identical; a single spare
 //   covers both positions.
@@ -31,16 +37,17 @@ $fn = 64;
 
 // ------------------------------------------------------------
 // Panel dimensions
+// Imperial primary: 6.30 × 2.56 in (160 × 65 mm)
 // ------------------------------------------------------------
-PANEL_L  = 160.0;   // mm — fore-aft length (fits 160 mm hull opening)
-PANEL_W  =  65.0;   // mm — lateral width
-PANEL_T  =   2.0;   // mm — panel face thickness
+PANEL_L  = 160.0;   // mm — fore-aft length (fits 160 mm / 6.30 in hull opening)
+PANEL_W  =  65.0;   // mm — lateral width   = 2.56 in
+PANEL_T  =   2.0;   // mm — panel face thickness = 0.079 in
 
 // ------------------------------------------------------------
 // Rebate lip around perimeter (locates panel flush in hull)
 // ------------------------------------------------------------
-REBATE_D  = 1.5;    // mm — rebate depth into hull (panel lip stands proud by this)
-REBATE_W  = 4.0;    // mm — rebate lip width on panel edge
+REBATE_D  = 1.5;    // mm — rebate depth into hull  = 0.059 in (panel lip stands proud by this)
+REBATE_W  = 4.0;    // mm — rebate lip width on panel edge  = 0.157 in
 
 // ------------------------------------------------------------
 // Fastener bores (2× M3 coin-slot button-head screws)
