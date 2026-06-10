@@ -278,8 +278,9 @@ def assemble():
     # -------------------------------------------------------------------
     print("[assembly] Fuselage sections ...", flush=True)
 
-    add_mesh(doc, _stl("fuselage/s_head_shell24.stl"),            "Head_Shell")
-    add_mesh(doc, _stl("fuselage/s_middle_canonical_shell24.stl"), "Middle_Shell")
+    add_mesh(doc, _stl("fuselage/s_head_shell24_2mm_repaired.stl"), "Head_Shell")
+    add_mesh(doc, _stl("fuselage/cargo/s_cargo_sect_shell24_2mm_repaired.stl"), "Cargo_Shell")
+    add_mesh(doc, _stl("fuselage/s_middle_shell24_2mm_repaired.stl"), "Middle_Shell")
     add_mesh(doc, _stl("fuselage/cargo/s_cargo_sect_shell24.stl"), "Cargo_Shell")
 
     # Rear shell: use compiled version if available, fall back to repaired 2mm.
@@ -291,6 +292,28 @@ def assemble():
     # Landing gear (scaled Thingiverse parts, identity placement)
     add_mesh(doc, _stl("fuselage/s_feet_x_4_scaled24.stl"), "Landing_Feet")
     add_mesh(doc, _stl("fuselage/s_legs_scaled24.stl"),      "Landing_Legs")
+
+    # -------------------------------------------------------------------
+    # CARGO BAY SUB-ASSEMBLY (cargo section, identity placement)
+    # All cargo STLs share the hull world coordinate space via the cargo
+    # section — they are already positioned correctly at import.
+    # -------------------------------------------------------------------
+    print("[assembly] Cargo bay ...", flush=True)
+
+    cargo_stls = [
+        ("fuselage/cargo/cargo_door_port.stl",         "Cargo_Door_Port"),
+        ("fuselage/cargo/cargo_door_stbd.stl",         "Cargo_Door_Stbd"),
+        ("fuselage/cargo/cargo_cradle_autolatch.stl",  "Cargo_Cradle"),
+        ("fuselage/cargo/cargo_fpv_bezel.stl",         "Cargo_FPV_Bezel"),
+        ("fuselage/cargo/cargo_gps_retention_ring.stl","Cargo_GPS_Ring"),
+        ("fuselage/cargo/cargo_winch_motor_mount.stl", "Cargo_Winch_Mount"),
+        ("fuselage/cargo/cargo_winch_spool.stl",       "Cargo_Winch_Spool"),
+        ("fuselage/cargo/cargo_drv8833_tray.stl",      "Cargo_DRV8833_Tray"),
+        ("fuselage/cargo/cargo_door_servo_bracket.stl","Cargo_Door_Servo_Bracket"),
+        ("fuselage/cargo/cargo_release_servo_bracket.stl", "Cargo_Release_Servo_Bracket"),
+    ]
+    for rel, label in cargo_stls:
+        add_mesh(doc, _stl(rel), label)
 
     # -------------------------------------------------------------------
     # FUSELAGE ACCESSORIES (battery tray and belly panel)
@@ -526,29 +549,6 @@ def assemble():
     # DORSAL ANTENNA FIN (fuselage dorsal, identity placement)
     # -------------------------------------------------------------------
     add_mesh(doc, _stl("fuselage/dorsal_antenna_fin.stl"), "Dorsal_Antenna_Fin")
-
-    # -------------------------------------------------------------------
-    # CARGO BAY SUB-ASSEMBLY (cargo section, identity placement)
-    # All cargo STLs share the hull world coordinate space via the cargo
-    # section — they are already positioned correctly at import.
-    # -------------------------------------------------------------------
-    print("[assembly] Cargo bay ...", flush=True)
-
-    cargo_stls = [
-        ("fuselage/cargo/cargo_door_port.stl",         "Cargo_Door_Port"),
-        ("fuselage/cargo/cargo_door_stbd.stl",         "Cargo_Door_Stbd"),
-        ("fuselage/cargo/cargo_cradle_autolatch.stl",  "Cargo_Cradle"),
-        ("fuselage/cargo/cargo_fpv_bezel.stl",         "Cargo_FPV_Bezel"),
-        ("fuselage/cargo/cargo_gps_retention_ring.stl","Cargo_GPS_Ring"),
-        ("fuselage/cargo/cargo_winch_motor_mount.stl", "Cargo_Winch_Mount"),
-        ("fuselage/cargo/cargo_winch_spool.stl",       "Cargo_Winch_Spool"),
-        ("fuselage/cargo/cargo_drv8833_tray.stl",      "Cargo_DRV8833_Tray"),
-        ("fuselage/cargo/cargo_door_servo_bracket.stl","Cargo_Door_Servo_Bracket"),
-        ("fuselage/cargo/cargo_release_servo_bracket.stl",
-                                                       "Cargo_Release_Servo_Bracket"),
-    ]
-    for rel, label in cargo_stls:
-        add_mesh(doc, _stl(rel), label)
 
     # -------------------------------------------------------------------
     # Recompute and save

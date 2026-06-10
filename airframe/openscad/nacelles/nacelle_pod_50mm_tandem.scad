@@ -347,12 +347,12 @@ module nacelle_shell_imported() {
     if (NACELLE_SIDE > 0) {
         // ── Port (left) nacelle ───────────────────────────────────────────────
         translate([-BORE_CX_L, BORE_CY, 0])
-            import("../../stls/nacelles/s_eng_left_shell24_50mm_repaired.stl",
+            import("../../stls/nacelles/eng_left_shell24_50mm_repaired.stl",
                    convexity = 4);
     } else {
         // ── Starboard (right) nacelle ─────────────────────────────────────────
         translate([-BORE_CX_R, BORE_CY, 0])
-            import("../../stls/nacelles/s_eng_right_shell24_50mm_repaired.stl",
+            import("../../stls/nacelles/eng_right_shell24_50mm_repaired.stl",
                    convexity = 4);
     }
 }
@@ -685,7 +685,7 @@ module nav_wire_conduit(pylon_side = PYLON_SIDE) {
     face_dist = (pylon_side > 0) ? NACELLE_FACE_X_PYLON : NACELLE_FACE_X_FAR;
     face_x    = pylon_side * face_dist;
     cond_len  = NAV_CONDUIT_Z_HI - NAV_CONDUIT_Z_LO;
-    embed     = 1.0;  // 1 mm root into nacelle shell to prevent touching face
+    embed     = 4.0;  // 4 mm root into nacelle shell to prevent touching face
 
     x_offset = (pylon_side > 0)
                ? face_x - embed
