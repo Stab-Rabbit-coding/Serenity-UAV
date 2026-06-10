@@ -680,7 +680,9 @@ def comp_nanofit_4p(ref: str, value: str,
     lines = _fp_tht(lib, ref, value, x, y)
     lines += _crtyd(-2.75, -1.3, 2.75, 9.8)
     lines += _fab_rect(-1.65, 0.0, 1.65, 9.0)
-    lines.append(_pad_npth(-1.34, 3.75, 1.3))  # mechanical latch
+    # Latch at x=-2.1 (was -1.34): hole right edge at -1.45 gives 0.427 mm
+    # clearance to nearest signal-pad corner — satisfies 0.25 mm minimum.
+    lines.append(_pad_npth(-2.1, 3.75, 1.3))   # mechanical latch
     pads_y = [0.0, 2.5, 5.0, 7.5]
     for i, py in enumerate(pads_y):
         shape = "roundrect" if i == 0 else "oval"
@@ -1014,7 +1016,9 @@ def gen_pcb() -> str:
     # C1, C2 — 220µF/35V bulk decoupling caps on VDIS bus
     lines += comp_cp_d10("C1", "220uF/35V", 68.0, 12.0,
                           p_net=N("VDIS"), n_net=N("PGND"))
-    lines += comp_cp_d10("C2", "220uF/35V", 79.0, 12.0,
+    # C2 y=16 (was 12): pad2 at (84,12) was 0.057 mm from U_BEC_5V_1 pin6 at
+    # (85,12.96); moved to y=16 puts pad2 at (84,16) — 1.625 mm clearance.
+    lines += comp_cp_d10("C2", "220uF/35V", 79.0, 16.0,
                           p_net=N("VDIS"), n_net=N("PGND"))
 
     # D1 — SMBJ33CA bidir TVS (anode=PGND, cathode=VDIS)
@@ -1028,7 +1032,9 @@ def gen_pcb() -> str:
                           p1_net=N("PGND"), p2_net=N("CHASSIS"))
 
     # C_DM1 — 10µF/50V X7R 1210 (differential mode)
-    lines += comp_1210("C_DM1", "10uF/50V", 37.0, 24.0,
+    # x=40 (was 37): pad1 at (38.6,24) was 0.075 mm from C_Y2 pad2 (34,24);
+    # moved right gives 3.075 mm clearance; C3 pad1 at (42.95,24) still 0.925 mm away.
+    lines += comp_1210("C_DM1", "10uF/50V", 40.0, 24.0,
                         p1_net=N("VDIS"), p2_net=N("PGND"))
 
     # C3 — 100nF/50V X7R 0805 (HF bypass)
@@ -1149,13 +1155,16 @@ def gen_pcb() -> str:
 
     # ==========================================================
     # SECTION D: Dual redundant 5 V BEC (TPS54620 × 2 + OR diodes)
-    # BEC1 occupies y=5..25 at x=58..88
-    # BEC2 occupies y=25..45 at x=58..88
+    # BEC1: FB/cap/inductor y≈8, IC y=11, R_FB y=7.5, C_OUT y=19, D_OR1 y=22
+    # BEC2: FB/cap/inductor y≈28, IC y=31, R_FB y=27, C_OUT y=39, D_OR2 y=42
+    # J_5V at (83.5, 35) — placed between BEC2 IC and R_FB6 to avoid pin-past-edge
     # ==========================================================
 
     # BEC1 ----------------------------------------------------------
     # FB_5V1 — ferrite 0805 (VDIS → BEC1_VIN_F)
-    lines += comp_0805("FB_5V1", "WE-742792612", 63.0, 8.0,
+    # y=13 (was 8): F1 pad2 (VDIS) at (65.9,9) was 0.029 mm from FB_5V1 pad2
+    # (BEC1_VIN_F) at (63.95,8); at y=13 the clearance is ≥2 mm.
+    lines += comp_0805("FB_5V1", "WE-742792612", 63.0, 13.0,
                         p1_net=N("VDIS"), p2_net=N("BEC1_VIN_F"))
 
     # C_BEC1_IN — 100µF/50V radial input cap for BEC1
@@ -1163,12 +1172,14 @@ def gen_pcb() -> str:
                           p_net=N("BEC1_VIN_F"), n_net=N("PGND"))
 
     # L_BEC1 — 10µH/6A SMD inductor 1210
-    lines += comp_1210("L_BEC1", "WE-744314100_10uH", 77.0, 8.0,
+    # x=79 (was 77): clears C_BEC1_IN pad2 right edge at x=75 by 1.975 mm.
+    lines += comp_1210("L_BEC1", "WE-744314100_10uH", 79.0, 8.0,
                         p1_net=N("BEC1_VIN_F"), p2_net=N("BEC1_SW"))
 
     # U_BEC_5V_1 — TPS54620RGYT VQFN-20
     # Simplified net map: VIN=BEC1_VIN_F, SW=BEC1_SW, GND/EP=PGND, OUT→+5V
-    lines += comp_vqfn20("U_BEC_5V_1", "TPS54620RGYT", 84.0, 9.0, nets={
+    # y=11 (was 9): top row pads at y=9.04; clears R_FB1_2 bottom at 7.82 by 1.22 mm.
+    lines += comp_vqfn20("U_BEC_5V_1", "TPS54620RGYT", 84.0, 11.0, nets={
         "1": N("BEC1_VIN_F"), "2": NO_NET, "3": NO_NET, "4": NO_NET, "5": N("BEC1_SW"),
         "6": N("BEC1_SW"), "7": N("PGND"), "8": N("PGND"), "9": N("PGND"),
         "10": N("PGND"), "11": N("BEC1_PRE_OR"), "12": NO_NET, "13": NO_NET,
@@ -1178,20 +1189,25 @@ def gen_pcb() -> str:
     })
 
     # R_FB1_1, R_FB1_2 — feedback divider resistors (0402)
-    # Moved to y=7.5 (was 4.5) to clear H2 NPTH hole at (86, 4): hole edge
-    # is at x=84.4 and the 0402 pads (width 0.54 mm) at x=83.99/85.01, y=4.5
-    # were within the 0.25 mm hole-clearance constraint.
-    lines += comp_0402("R_FB1_1", "100k", 80.0, 7.5,
+    # y=14 (was 7.5, originally 4.5): y=4.5 violated H2 hole clearance;
+    # y=7.5 had 0.0 mm Default gap to L_BEC1 pad2; y=10 had 0.0 mm PGND gap
+    # to U_BEC_5V_1 EP thermal pad (bottom 12.35 mm).  y=14 clears all:
+    # U_BEC_5V_1 EP bottom (12.35) by 1.33 mm; L_BEC1 pad2 bottom (9.33) by 4.35 mm.
+    lines += comp_0402("R_FB1_1", "100k", 80.0, 14.0,
                         p1_net=N("BEC1_PRE_OR"), p2_net=NO_NET)
-    lines += comp_0402("R_FB1_2", "22.1k", 84.5, 7.5,
+    lines += comp_0402("R_FB1_2", "22.1k", 84.5, 14.0,
                         p1_net=NO_NET, p2_net=N("PGND"))
 
     # C_BEC1_OUT — 100µF/50V radial output cap
-    lines += comp_cp_d10("C_BEC1_OUT", "100uF/50V", 70.0, 19.0,
+    # x=60 (was 70): pad2 right edge at x=66 clears D_OR1 anode1 left at 66.86 by 0.86 mm
+    # and D_OR1 tab left at 71.06 by 5.06 mm.
+    lines += comp_cp_d10("C_BEC1_OUT", "100uF/50V", 60.0, 19.0,
                           p_net=N("BEC1_PRE_OR"), n_net=N("PGND"))
 
     # D_OR1 — MBRD1045CT DPAK (anode1=BEC1_PRE_OR, cathode=+5V, anode2=BEC2_PRE_OR)
-    lines += comp_dpak("D_OR1", "MBRD1045CT", 77.5, 22.0,
+    # x=73 (was 77.5): tab left edge moves to 71.06 — clears C_BEC1_OUT pad2 right (66)
+    # by 5.06 mm; R_FB2_1 at (80,27) clears tab right edge (77.46) by 2.54 mm.
+    lines += comp_dpak("D_OR1", "MBRD1045CT", 73.0, 22.0,
                         p1_net=N("BEC1_PRE_OR"),
                         p2_net=N("+5V"),
                         p3_net=N("BEC2_PRE_OR"))
@@ -1203,11 +1219,11 @@ def gen_pcb() -> str:
     # C_BEC2_IN
     lines += comp_cp_d10("C_BEC2_IN", "100uF/50V", 69.0, 28.0,
                           p_net=N("BEC2_VIN_F"), n_net=N("PGND"))
-    # L_BEC2
-    lines += comp_1210("L_BEC2", "WE-744314100_10uH", 77.0, 28.0,
+    # L_BEC2 — x=79 (was 77): same clearance fix as L_BEC1.
+    lines += comp_1210("L_BEC2", "WE-744314100_10uH", 79.0, 28.0,
                         p1_net=N("BEC2_VIN_F"), p2_net=N("BEC2_SW"))
-    # U_BEC_5V_2
-    lines += comp_vqfn20("U_BEC_5V_2", "TPS54620RGYT", 84.0, 29.0, nets={
+    # U_BEC_5V_2 — y=31 (was 29): top pads at y=29.04; clears R_FB2_2 bottom at 27.32.
+    lines += comp_vqfn20("U_BEC_5V_2", "TPS54620RGYT", 84.0, 31.0, nets={
         "1": N("BEC2_VIN_F"), "2": NO_NET, "3": NO_NET, "4": NO_NET, "5": N("BEC2_SW"),
         "6": N("BEC2_SW"), "7": N("PGND"), "8": N("PGND"), "9": N("PGND"),
         "10": N("PGND"), "11": N("BEC2_PRE_OR"), "12": NO_NET, "13": NO_NET,
@@ -1215,25 +1231,35 @@ def gen_pcb() -> str:
         "17": N("BEC2_VIN_F"), "18": N("BEC2_VIN_F"), "19": N("BEC2_VIN_F"),
         "20": N("BEC2_VIN_F"), "21": N("PGND"),
     })
-    # R_FB2_1, R_FB2_2
-    lines += comp_0402("R_FB2_1", "100k", 80.0, 24.5,
+    # R_FB2_1 at (80,34), R_FB2_2 at (86,34):
+    # y=34 clears U_BEC_5V_2 EP bottom (32.35 mm) by 1.33 mm.
+    # R_FB2_2 moved to x=86 (was 84.5) because x=84.5 placed pad1 at x=83.99,
+    # overlapping J_5V pin1 (PGND) circle at (83.5,35) r=1 mm.
+    # At x=86: pad1 left=85.22, clears J_5V right (84.5) by 0.72 mm and
+    # VQFN right-row pin11 bottom (32.73 mm) by 0.95 mm in Y.
+    lines += comp_0402("R_FB2_1", "100k", 80.0, 34.0,
                         p1_net=N("BEC2_PRE_OR"), p2_net=NO_NET)
-    lines += comp_0402("R_FB2_2", "22.1k", 84.5, 24.5,
+    lines += comp_0402("R_FB2_2", "22.1k", 86.0, 34.0,
                         p1_net=NO_NET, p2_net=N("PGND"))
-    # C_BEC2_OUT
-    lines += comp_cp_d10("C_BEC2_OUT", "100uF/50V", 70.0, 39.0,
+    # C_BEC2_OUT — x=60 (was 70): same fix as C_BEC1_OUT.
+    lines += comp_cp_d10("C_BEC2_OUT", "100uF/50V", 60.0, 39.0,
                           p_net=N("BEC2_PRE_OR"), n_net=N("PGND"))
-    # D_OR2 — second diode for OR (anode1 and anode3 both feed +5V)
-    lines += comp_dpak("D_OR2", "MBRD1045CT", 77.5, 42.0,
+    # D_OR2 — x=73 (was 77.5): same fix as D_OR1.
+    lines += comp_dpak("D_OR2", "MBRD1045CT", 73.0, 42.0,
                         p1_net=N("BEC2_PRE_OR"),
                         p2_net=N("+5V"),
                         p3_net=N("BEC2_PRE_OR"))
 
     # J_5V — Molex Nano-Fit 4P (GND, GND, +5V, +5V)
-    lines += comp_nanofit_4p("J_5V", "NanoFit-4P_5V", 83.5, 47.5, p_nets=[
+    # y=35 (was 47.5): placed immediately below U_BEC_5V_2 courtyard bottom (33.6);
+    # courtyard top=33.7, pin4 bottom=43.35; clears R_FB6_1 at (80,46) by 2.33 mm.
+    lines += comp_nanofit_4p("J_5V", "NanoFit-4P_5V", 83.5, 35.0, p_nets=[
         N("PGND"), N("PGND"), N("+5V"), N("+5V"),
     ])
-    lines += comp_m3_lug("J_SHLD_5V", 87.0, 53.5, net=N("CHASSIS"))
+    # J_SHLD_5V — chassis shield lug OMITTED from generated placement.
+    # Every position in x=78-88 conflicts with J_5V THT pads, J_6V THT pads, or
+    # U_BEC_5V_2/U_BEC_6V courtyard.  Place manually after connectors are finalised.
+    # See TODO.md §3 PCB Layout.
 
     # ==========================================================
     # SECTION E: 6 V servo BEC (TPS54540)
@@ -1247,8 +1273,9 @@ def gen_pcb() -> str:
     lines += comp_cp_d10("C_BEC_SV_IN", "100uF/50V", 69.0, 48.0,
                           p_net=N("BEC6V_VIN_F"), n_net=N("PGND"))
 
-    # L_BEC3 — 10µH 1210
-    lines += comp_1210("L_BEC3", "WE-744314100_10uH", 77.0, 48.0,
+    # L_BEC3 — 10µH 1210 — x=78 (was 77): clears C_BEC_SV_IN pad2 right (75) by
+    # 0.975 mm AND clears U_BEC_6V pin1 left edge (80.55) by 0.525 mm.
+    lines += comp_1210("L_BEC3", "WE-744314100_10uH", 78.0, 48.0,
                         p1_net=N("BEC6V_VIN_F"), p2_net=N("BEC6V_SW"))
 
     # U_BEC_6V — TPS54540DDAR SOIC-8
@@ -1260,21 +1287,28 @@ def gen_pcb() -> str:
     })
 
     # R_FB6_1, R_FB6_2 — feedback divider (0402)
-    lines += comp_0402("R_FB6_1", "100k", 80.0, 44.5,
+    # y=46 (was 44.5): clears J_5V courtyard bottom (44.8) and gives 2.33 mm pad gap.
+    lines += comp_0402("R_FB6_1", "100k", 80.0, 46.0,
                         p1_net=N("+6V"), p2_net=NO_NET)
-    lines += comp_0402("R_FB6_2", "30.1k", 84.5, 44.5,
+    lines += comp_0402("R_FB6_2", "30.1k", 84.5, 46.0,
                         p1_net=NO_NET, p2_net=N("PGND"))
 
-    # C_BEC_SV_OUT
-    lines += comp_cp_d10("C_BEC_SV_OUT", "100uF/50V", 70.0, 59.0,
+    # C_BEC_SV_OUT — y=56 (was 59): at y=59 the THT pad outer rings fell within
+    # 0.2 mm of J_ALERT MP pads at y=58.6.  At y=56 all pad-to-MP distances
+    # exceed 0.58 mm (both pad1 and pad2 verified analytically).
+    lines += comp_cp_d10("C_BEC_SV_OUT", "100uF/50V", 70.0, 56.0,
                           p_net=N("+6V"), n_net=N("PGND"))
 
     # J_6V — Molex Nano-Fit 4P
-    lines += comp_nanofit_4p("J_6V", "NanoFit-4P_6V", 83.5, 55.5, p_nets=[
+    # (81, 54): x=81 clears H4 NPTH at (86,61) by 2.3 mm; y=54 places courtyard top
+    # at 52.7 — just above U_BEC_6V courtyard bottom (52.63); pin4 bottom=62.35 ✓.
+    lines += comp_nanofit_4p("J_6V", "NanoFit-4P_6V", 81.0, 54.0, p_nets=[
         N("PGND"), N("PGND"), N("+6V"), N("+6V"),
     ])
-    # J_SHLD_6V moved to (85.5, 57.5) — was (87, 61) which overlapped H4 at (86, 61)
-    lines += comp_m3_lug("J_SHLD_6V", 85.5, 57.5, net=N("CHASSIS"))
+    # J_SHLD_6V — chassis shield lug OMITTED from generated placement.
+    # Every position near J_6V and C_BEC_SV_OUT in the y=54-65 band causes pad
+    # overlap shorts.  Place manually after output caps and connectors are finalised.
+    # See TODO.md §3 PCB Layout.
 
     # ==========================================================
     # SECTION F: BQ76930 6S cell monitor — OMITTED FROM GENERATED PLACEMENT
@@ -1302,19 +1336,30 @@ def gen_pcb() -> str:
     })
 
     # R_ALERT — 2.2kΩ 0402 pull-up to +5V for ALERT_N bus
-    lines += comp_0402("R_ALERT", "2.2k", 59.0, 59.0,
+    # x=66 (was 59→62): at x=59 pad1 (+5V) overlapped J_I2C MP; at x=62
+    # pad2 (PDB_ALERT_N) at (62.8,62) x-overlapped J_I2C pad3 (PDB_SCL) at
+    # (62.625,61.95) — both on different nets so PGND 0.2 mm required.
+    # x=66 gives 0.755 mm pad1-to-J_I2C pad4 gap and 2.9 mm to J_ALERT.
+    lines += comp_0402("R_ALERT", "2.2k", 66.0, 62.0,
                         p1_net=N("+5V"), p2_net=N("PDB_ALERT_N"))
 
     # J_I2C — JST-GH 4P (GND, +5V, SCL, SDA)
     lines += comp_jst_gh_4p("J_I2C", "JST-GH_4P_I2C", 62.0, 60.0,
                               p_nets=[N("PGND"), N("+5V"),
                                       N("PDB_SCL"), N("PDB_SDA")])
-    lines += comp_m3_lug("J_SHLD_I2C", 59.5, 62.5, net=N("CHASSIS"))
+    # J_SHLD_I2C — chassis shield lug OMITTED from generated placement.
+    # At (59.5, 62.5) the 6 mm copper pad overlaps J_ESC4 XT30 right pad
+    # (x=56.75) and J_I2C pads — every feasible y in this column creates a short.
+    # Place manually after ESC column and I2C connector are finalised.  See TODO.md §3.
 
     # J_ALERT — JST-GH 2P (GND, ALERT_N)
-    lines += comp_jst_gh_2p("J_ALERT", "JST-GH_2P_ALERT", 68.0, 60.0,
+    # x=71: C_BEC_SV_OUT was moved from y=59 to y=56 to clear J_ALERT MP pads
+    # at y=58.6 (constraint: |cap_y − 58.6| ≥ 0.846 mm).  J_I2C MP2 at
+    # (65.1,58.6) is 1.425 mm from J_ALERT MP1 left — clearance satisfied.
+    lines += comp_jst_gh_2p("J_ALERT", "JST-GH_2P_ALERT", 71.0, 60.0,
                               p1_net=N("PGND"), p2_net=N("PDB_ALERT_N"))
-    lines += comp_m3_lug("J_SHLD_ALERT", 65.5, 62.5, net=N("CHASSIS"))
+    # J_SHLD_ALERT — chassis shield lug OMITTED from generated placement.
+    # At (65.5, 62.5) the pad overlaps J_ALERT pads.  Place manually.  See TODO.md §3.
 
     # ==========================================================
     # COPPER ZONES

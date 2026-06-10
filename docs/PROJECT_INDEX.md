@@ -273,6 +273,7 @@ gerbers/
   Wash/                           — Wash (Cape-A-2) gerbers
   Zoë/                            — Zoë (Cape-B-2) gerbers
   XCVR-49MHZ-2/                   — XCVR-49MHZ-2 gerbers
+  Kaylee/                         — Kaylee PDB gerbers (Rev A, 2026-06-10)
 ```
 
 ### avionics/gerbers/
