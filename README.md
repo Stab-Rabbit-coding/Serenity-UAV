@@ -11,12 +11,26 @@ standards documented there (coding style, fabrication specs, licensing, and attr
 A functional, security-conscious Unmanned Aerial Vehicle based on the Firefly-class spacecraft
 Serenity from the 2002 show. Designed using Claude AI.
 
-Design mission profile:
+> Design mission profile:
 
-Take off VTOL.
-Fly into a 500W/m^2 Broadband Radio Frequency environment.
-Lower and release a payload from the cargo bay.
-Identify a payload on a moving platform. Synchronise flight with the platform.  Attach  the payload to the ho
+1. Take off VTOL.
+2. Land vertically with cargo bay open and load and secure a 4" x 3" x 3" 8oz Payload.
+3. Take off VTOL with payload.
+4. Fly into a 500W/m^2 broadband radio frequency environment.
+5. Lower and release the payload from the cargo bay onto a platform. 
+6. Identify a 4x3x3 inch payload on a moving platform.
+7. Synchronise flight with the platform.
+8. Attach the payload to the hoist and lift it from the platform.
+9. Pull the payload into the cargo bay and close the clamshells. 
+10. Exit the hazardous environment and return to origin.
+
+
+> During execution of this mission profile, be able to perform the following:
+
+1. Identify, categorized, log, and report rogue or unauthorized C2 commands and/or malicious logic from unauthorized or authorized transmitters.
+2. Identify unauthorized or unsafe behavior from one or more of the onboard compute nodes.
+3. Isolate effected node(s), gracefully failover functions, log, and report to ground control, while maintaining safety of flight. 
+
 
 ---
 
