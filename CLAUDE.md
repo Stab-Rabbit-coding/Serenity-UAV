@@ -42,6 +42,7 @@ Every component will be fabricated or procured; design accordingly.
   - Use **lbm** for mass (pounds-mass) and **lbf** for force (pounds-force); never write bare "lb" where the distinction matters.
   - Metric equivalents use **kg** for mass and **N** for force.
   - Thrust, lift, and aerodynamic loads are forces → lbf / (N).  Component weights and payload capacity are masses → lbm / (kg).
+  - **Airspeed and wind speed are expressed in knots (kt)** with m/s in parentheses where needed for calculation.  Never use mph or km/h for airspeed.
 
 - **Failover capability is a first-class requirement.**  Wherever possible, every system must have
 
