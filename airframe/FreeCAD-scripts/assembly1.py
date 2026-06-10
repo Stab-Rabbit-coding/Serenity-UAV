@@ -1,8 +1,11 @@
 # create_assembly_from_stl.py
 import os
-import FreeCAD, FreeCADGui
+import FreeCAD
+import FreeCADGui
 from FreeCAD import Vector, Rotation
-import Mesh, Part, ImportGui
+import Mesh
+import Part
+import ImportGui
 
 # Assembly4
 import Assembly4
@@ -65,6 +68,7 @@ def make_assembly_root(name="AircraftRoot"):
     root = DOC.addObject("App::Part", name)
     root.Label = name
     return root
+
 
 # ---------- Import & convert ----------
 parts = {}
