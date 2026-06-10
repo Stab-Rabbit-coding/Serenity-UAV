@@ -2,8 +2,8 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-06-07  
-**Current design revision:** Rev Q (master) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
+**Last updated:** 2026-06-09  
+**Current design revision:** Rev Q (master) / branch Rev S2 (cargo shell) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 ---
 
@@ -66,6 +66,62 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 - [x] **`s_cargo_sect_shell24.scad` Rev S** — belly opening (100×9×165 mm), 2× hinge-pin blocks
   (3.3 mm bore + M3 grub-screw tap), 2× SG90 servo mounting pads (4× M2.5 pilots each), 4×
   latch-catch lips (Z=42/122 mm at each X frame edge). *(done 2026-06-01)*
+- [x] **`s_cargo_sect_shell24.scad` Rev S1** — wing root mortises (30.8×20.8×15 mm), spar bearing
+  blocks (22 mm OD × 10 mm boss, M3 grub-screw), full-Z spar bore (Ø12.3 mm), and nacelle tilt
+  servo mount blocks (52×30×8 mm, 4× RX-M3×5.7 inserts) at port + stbd interior Z walls.
+  All 4 spatial conflicts resolved (NSVMT_X_CEN moved AFT to −147.6 mm). Load FOS ≥ 11 vs 4.0
+  AUVSI target. *(done 2026-06-08, PR #42)*
+- [x] **`s_cargo_sect_shell24.scad` Rev S2** — Inara and River avionics bay dorsal standoffs
+  (8× M3 boss posts, ±40×±25 mm pattern) + dorsal access panel cuts (85×55 mm each) for Cape-B
+  (90×60 mm) at port half (Z_CEN=118 mm, Inara) and stbd half (Z_CEN=45 mm, River). GPS_PORT/STBD
+  co-located for minimal SMA routing. *(done 2026-06-08, PR #42)*
+- [x] **`s_cargo_sect_shell24.scad` Rev S3** — Faraday enclosure space allocation.
+  Panel cuts enlarged 85×55 → 95×65 mm; boss offsets updated ±40×±25 → ±42×±27 mm to match
+  Faraday tray corner mounts; bay Z centres adjusted ±1 mm (Inara 118→119, River 45→44) for 10 mm
+  inter-bay gap; FARADAY_* envelope parameters (95×65×65 mm, 1.5 mm Al wall, 25 mm fan) added.
+  *(done 2026-06-08, PR #42)*
+- [x] **`nacelle_servo_bracket.scad`** — U-channel saddle clamp for DS3218MG nacelle tilt servo;
+  4× M3×10 SHCS flanges at ±17.5×±8 mm; 10×6 mm lead notch; FOS_shear=85.7. *(done 2026-06-08)*
+- [x] **`REVN_BUILD_GUIDE_24IN.md` Phase 3 anti-rework** — spar grub-screw torque sequence
+  (0.5 N·m each, before foam pour) with consequence documentation. *(done 2026-06-08)*
+
+- [ ] **`s_cargo_sect_shell24.scad` — shuttle exterior fairing profiles on Z walls.**
+  Canonical Serenity shuttles (Shuttle 1 = Inara's, Shuttle 2) sit just above the wing roots on
+  the exterior Z faces of the cargo section. Their outline profiles need to be added as raised
+  exterior features at Y≈−273..−213 mm on both Z walls, matching the canonical hull geometry.
+  Interior avionics zone (Inara + River dorsal band) coexists — shuttles are exterior, avionics
+  interior. Reference the Thingiverse low-detail hull for shuttle fairing geometry.
+  **BLOCKS canonical hull fidelity (CLAUDE.md requirement: keep skin geometry true to reference).**
+
+- [ ] **Avionics dorsal access covers / Faraday tray lids for Inara and River bays (two parts).**
+  Create `inara_access_cover.scad` and `river_access_cover.scad` (or a single parametric SCAD):
+  Cover footprint 105×75 mm with 5 mm shoulder lip seating on hull skin around 95×65 mm opening.
+  Copper-foil-lined PETG or 0.5 mm Al sheet; Ø38 mm GPS clearance bore at GPS offset from cover
+  centre (Inara: offset −13.3 mm in Z from bay centre; River: offset +0.7 mm in Z from bay centre).
+  4× M2 flathead captive screws at ±40 mm (X) × ±25 mm (Z) from cover centre for EMI-seal clamping.
+  Must be removable with common hand tools per CLAUDE.md field disassembly requirement.
+  Ref: FARADAY_* parameters in s_cargo_sect_shell24.scad Rev S3; CLAUDE.md §1.4.1.
+  Add to Phase 0 print schedule.
+
+- [ ] **Simon bay — define avionics bay in rear section SCAD file.**
+  Simon's stack (Cape-B-2 + Cape-A-2, 90×60 mm, 29.2 mm stack height) needs boss standoffs and
+  dorsal access panel in the rear engine cone SCAD (pre-Phase 11) or the middle ring SCAD (Phase 11
+  and beyond, once rear EDF occupies the cone). Verify rear section bounds and available dorsal band
+  before adding geometry. Reference CLAUDE.md PACE: Simon = alternate watchdog, aft EDF control.
+  **BLOCKS Phase 6 full 8-node installation.**
+
+- [ ] **Update REVN_BUILD_GUIDE_24IN.md bay layout table** to reflect revised avionics stack
+  positions (Inara + River in cargo section dorsal band; Shepherd Book in head section forward;
+  Simon in rear cone pre-Phase 11, middle ring post-Phase 11). Current guide Bays A–E are from an
+  older layout that does not match the cargo-section dorsal placement in Rev S2.
+
+- [ ] **Regenerate `s_cargo_sect_shell24.stl`** from Rev S2 SCAD source. Run:
+  `openscad -o airframe/stls/fuselage/s_cargo_sect_shell24.stl
+    airframe/openscad/fuselage/cargo/s_cargo_sect_shell24.scad`
+  Verify in slicer: wing mortises at both Z walls; spar bore at X=−70 mm; 8 dorsal boss posts;
+  two 85×55 mm dorsal panel openings. Z-range must be 0..163 mm; all features inside hull skin.
+  **BLOCKS Phase 0 cargo section printing.**
+
 - [ ] Add motor-mount and DRV8833-tray boss locations to `s_cargo_sect_shell24.scad` interior
   drawing notes (Phase 1 pre-pour checklist reference).
 - [ ] Add SG90 bell-crank boss to inner face of each door panel for pushrod attachment.
@@ -147,6 +203,11 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 **Combined airframe model (visual verification):**
 
 - [ ] **Combine all airframe STLs** into a single assembly model including the 1.25× scaled nacelles, all EDF tubes, cargo bay clamshells, antenna bosses, sensor cutouts, access panels, landing legs, and feet. Render SVGs from all 6 cardinal directions (top, bottom, front, rear, port, stbd) and all 8 isometric views (8 corners). Save renders to `serenity/diagrams/`.
+  **FreeCAD/Assembly4 script created:** `airframe/freecad/assembly/serenity_fuselage_asm4.py`.
+  Run: `freecadcmd airframe/freecad/assembly/serenity_fuselage_asm4.py`
+  Output: `airframe/freecad/assembly/serenity_fuselage_asm4.FCStd`
+  - [ ] Render 6 cardinal + 8 isometric SVGs from the FCStd output to `airframe/diagrams/`.
+    **BLOCKS** exploded view SVGs below.
 - [ ] **Exploded view SVG — printed parts only** (all printed components labelled and exploded from assembly position)
 - [ ] **Exploded view SVG — full build** (all components: PCBs, SBCs, motors, ESCs, wires, sensors, antennas, hardware)
 
@@ -335,27 +396,57 @@ feelines
 
 - [ ] Specify wiring for UART, I2C, BSHOT, PWM, 
 
-- [ ] "Kaylee, what happened to my ship?"  - "Everything's shiny, Captain."
+#### 1.4.5 power distribution — Kaylee (PDB) and battery
 
-- [ ] Design EM Hardened Power Distribution Board - Kaylee.md, Kaylee.kicad_pro, Kaylee.kicad_sch, Kaylee.kicad_pcb
+**Battery placement decision (2026-06-08):**
+The 6S 4000 mAh LiPo (~450–520 g, ~155×52×36 mm) must be located near the aircraft CG.
+Phase 5 ground-test requirement: static CG at 190 mm from nose (REVN_BUILD_GUIDE_24IN.md §Phase 5).
+The keel datum at 190 mm from nose falls within the **middle ring section** (between keel stations
+165 mm and 251 mm), which is the main fuselage body above the cargo gondola.
+Battery is placed on the keel floor of the middle section, oriented longitudinally, secured by:
+- Two M3 boss standoffs at X≈−190 mm (CG station) on the keel face
+- Velcro retention strap through keel slot (safety tether, not sole retention)
+- Slide-in rail guides on keel face prevent lateral shift at 3g manoeuvre
 
-- [ ] Verify Kaylee.kicad_pcb meets Power requirements
+**Kaylee (PDB) placement decision (2026-06-08):**
+Kaylee (XT90 PDB, 4× XT30 outputs, ~80×60 mm) mounts adjacent to the battery in the middle
+section keel area (X≈−165..−245 mm station range) to minimise high-current 14 AWG wire length
+to the four nacelle ESC feeds (fed through PTFE conduits in the wing spar channel and to the
+cargo gondola lateral walls).
+Battery swap access via a **ventral hatch** in the middle section belly skin (hatch centred at
+X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
 
--- [ ] Proper Amperage
+**Open items — BLOCKS Phase 1 foam pour:**
+- [ ] **Add Kaylee/battery boss pattern to `s_middle_canonical_shell24.scad`.**
+  Boss posts: 4× M3 at (±55 mm X) × (±25 mm Z) from X=−190 mm keel centre for battery tray.
+  Kaylee PDB: 4× M3 boss posts at X≈−205 mm, Z=CZ±25 mm. Both on keel interior face (+Y rail).
+  Verify boss positions clear keel CF flat bar (6×3 mm) and ring frame station notches in slicer.
 
--- [ ] Proper fusing and wire size
+- [ ] **Add ventral battery-swap hatch cut to `s_middle_canonical_shell24.scad`.**
+  120×60 mm belly cut centred at X=−190 mm; 2 mm shoulder lip; same pattern as avionics panels.
+  **BLOCKS Phase 1 foam pour** (void former must clear hatch zone before foam pour).
 
--- [ ] Protection against cascades
+- [ ] **Create `kaylee_battery_tray.scad`.**
+  CF-PETG slide-in rail guide tray for 6S LiPo 155×52×36 mm; M3 attachment to boss posts;
+  two captive Velcro strap slots; XT90 connector exit cutout on AFT face.
+  **Add to Phase 0 print schedule.**
 
--- [ ] Proper filtering and EM hardening
+- [ ] **Create `kaylee_pdb_tray.scad`.**
+  CF-PETG mounting tray for Kaylee PDB (80×60 mm footprint); M3 boss attachment;
+  XT90 input pigtail route-through; 4× XT30 output ports facing AFT (toward ESC conduits).
+  **Add to Phase 0 print schedule.**
 
--- [ ] Battery and circuit monitoring
+- [ ] **Kaylee PCB design checklist:**
+  - [ ] Proper amperage and fusing/wire sizing per 14 AWG capacity
+  - [ ] Protection against cascade failures (back-EMF, short circuits)
+  - [ ] Proper filtering and EMI hardening (per CLAUDE.md 500 W/m² target)
+  - [ ] Battery and circuit monitoring (voltage, current, cell balance telemetry)
+  - [ ] Size and weight within middle section ventral cavity
+  - [ ] DRC pass; gerbers generated for production
 
--- [ ] Size and weight
-
-- [ ] DRC check
-
-- [ ] Gerber printed
+- [ ] **Update REVN_BUILD_GUIDE_24IN.md Phase 1** to include Kaylee + battery tray installation
+  in the pre-foam-pour checklist. Battery tray and hatch must be installed and hatch zone
+  masked before the foam pour step.
 
 ---
 
@@ -662,6 +753,11 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 | cargo_door_stbd.stl | CF-PETG | 0.15mm | 40%, 4 walls | 1 | Generated (PR #22) — reprint if hinge changes |
 | cargo_cradle_autolatch.stl | PETG | 0.20mm | 30% | 1 | Already generated (PR #21) — reprint if dimensions change |
 | cargo_winch_spool.stl | PETG | 0.20mm | 40% | 1 | Already generated (PR #21) — reprint if dimensions change |
+| nacelle_servo_bracket.stl | CF-PETG | 0.15mm | 40%, 4 walls | 2 | One per nacelle; from `airframe/openscad/nacelles/nacelle_servo_bracket.scad` (Rev S1). Print with channel mouth up; no supports needed. VERIFY M3 hole ±17.5×±8 mm pattern matches NSVMT inserts in slicer before printing. |
+| inara_access_cover.stl | PETG (Cu-foil lined) | 0.20mm | 40% | 1 | Faraday tray lid for Inara bay; 105×75 mm footprint, 5 mm shoulder, Ø38 mm GPS bore offset −13.3 mm Z from cover centre. SCAD not yet created — **BLOCKS printing.** |
+| river_access_cover.stl | PETG (Cu-foil lined) | 0.20mm | 40% | 1 | Faraday tray lid for River bay; 105×75 mm footprint, 5 mm shoulder, Ø38 mm GPS bore at +0.7 mm Z from cover centre. SCAD not yet created — **BLOCKS printing.** |
+| kaylee_battery_tray.stl | CF-PETG | 0.15mm | 40%, 4 walls | 1 | Battery slide-in rail tray for 6S 4000 mAh LiPo; keel mount at 190 mm station. SCAD not yet created — **BLOCKS Phase 1.** |
+| kaylee_pdb_tray.stl | CF-PETG | 0.15mm | 40%, 4 walls | 1 | Kaylee PDB mount tray; keel area, middle section. SCAD not yet created — **BLOCKS Phase 1.** |
 
 **CF cuts:**
 
@@ -1501,6 +1597,71 @@ the full T/W ≈ 1.47 VTOL hover capability specified in Rev Q.
 - [ ] **IEEE/ISA/AUVSI best practices** — validate all design decisions against AUVSI UAS best practices; document in build record.
 
 - [ ] **Tamper-evident logging** — verify CPLD write-blocker (ATF16V8BQL) on all 4 CN nodes prevents post-flight log modification; function as hardware-enforced non-executable microSD per CLAUDE.md requirement.
+
+---
+
+## 6.0 — Version Control and Repository Maintenance
+
+### 6.1 — Branch Reconciliation (2026-06-09)
+
+**Context:** A `git merge --allow-unrelated-histories` at commit `406c53f` joined two divergent
+history trees. This created a topology where 11 feature branches appeared to have 44–168 commits
+"not in main," but no file content was actually lost.
+
+**Reconciliation findings (verified 2026-06-09):**
+
+- [x] **`claude/aft-edf-phase-11-CMM8b`** — PRs #37, #39 merged. 0 files missing from main. Branch is a pre-merge snapshot; content fully absorbed. ✅
+- [x] **`claude/cape-em-harsh-variants-9Yfr1`** — PRs #28–#35 merged. 0 files missing from main. ✅
+- [x] **`claude/cargo-equipment-mounts-70I3i`** — PRs #21, #23 merged. Old `serenity/` paths reorganized to `airframe/` and `archives/` in main. ✅
+- [x] **`claude/docs-scrub-revision-p-Y7pja`** — PRs #24, #25 merged; PR #27 closed. 0 files missing from main. ✅
+- [x] **`claude/kicad-silk-labels-HnUIe`** — PRs #7, #9, #10 merged. Old `serenity/diagrams/` SVGs now in `graphical-build-guide/`; 18in STLs archived in `archives/thingverse-serenity/`. ✅
+- [x] **`claude/revision-q-avionics-archive-BXwZI`** — PRs #35, #36, #41 merged. 0 files missing from main. ✅
+- [x] **`claude/revt-nacelle-simplified-3Ri7A`** — PRs #38, #40 merged. 0 files missing from main. ✅
+- [x] **`claude/todo-implementation-2LV2X`** — PRs #15, #18 merged. Old paths reorganized to current structure. ✅
+- [x] **`claude/todo-implementation-8bRee`** — PRs #11–#14, #16, #19 merged. Hull SVGs (hull_bottom/front/side/top) present in `graphical-build-guide/`. ✅
+- [x] **`claude/todo-implementation-AY2pY`** — PR #31 merged. 0 files missing from main. ✅
+- [x] **`claude/todo-implementation-by1W7`** — PRs #20, #22, #26 merged. KiCad backup ZIPs and lock files not design artifacts. ✅
+- [x] **`claude/wing-root-nacelle-mounts-5bSEA`** — PRs #42, #43 merged. 0 commits not in main. ✅
+
+**Result:** Main is a superset of all 12 feature branches. All 43 PRs (42 merged, 1 closed) are
+fully integrated. The stale branches are safe to delete via GitHub once this PR is merged.
+
+- [ ] **Delete stale feature branches** on GitHub after confirming this reconciliation PR merges
+  cleanly. Branches to delete: all `claude/*` branches except `claude/pr-reconciliation-forced-merge-4yefsw`.
+
+### 6.2 — STL Mesh Repair (2026-06-09)
+
+**Context:** CI STL Validation job was failing on 11 files (22 reported — each scanned twice due
+to duplicate search paths in the validator). Root causes and resolutions:
+
+**Validator fix:**
+- [x] Removed duplicate SEARCH_PATHS (`airframe/stls/fuselage`, `nacelles`, `wings` are subsets
+  of `airframe/stls` rglob — each file was reported twice). Fixed by reducing to
+  `["airframe/stls", "stls"]` plus a `seen` deduplication set.
+- [x] Added per-body watertightness check: a mesh passes CI if `mesh.is_watertight` OR every
+  `mesh.split()` body is individually watertight. This correctly handles multi-body assembly
+  STLs (4 landing feet, nacelle assembly, shell + insert bodies) where the combined mesh fails
+  trimesh's global winding check but every solid sub-body is closed.
+
+**STL repairs (manifold3d 3.5.1):**
+- [x] `nacelle_nozzle_closed_asm.stl` — repaired: 1704 → 1648 faces, wt=True (16 bodies)
+- [x] `nacelle_nozzle_petal.stl` — repaired: 213 → 206 faces, wt=True
+- [x] `s_head_shell24_2mm_repaired.stl` — repaired: 227428 → 226812 faces, wt=True (6 bodies)
+- [x] `s_cargo_sect_shell24_2mm_repaired.stl` — repaired: 368352 → 367506 faces, wt=True
+- [x] `s_cargo_sect_shell24_2mm_repaired_largest.stl` — repaired: 367514 → 367474 faces, wt=True
+- [x] `s_middle_canonical_edf_intake.stl` — **regenerated** from `s_middle_canonical_shell24.stl`
+  via manifold3d Boolean difference (4 radial intake scoops). Original was non-manifold (3
+  connected components, all non-manifold). New mesh: 20734 faces, wt=True. Parameters from
+  `airframe/blender-scripts/blender_middle_intake_cut.py` Rev C.
+
+**STLs passing via per-body check (no geometry change needed):**
+- [x] `s_feet_x_4_scaled24.stl` — 4 feet (4 bodies, each wt=True)
+- [x] `s_rear_shell24_2mm_repaired.stl` — 15 bodies, all wt=True
+- [x] `s_middle_shell24_2mm_repaired.stl` — 10 bodies, all wt=True
+- [x] `dorsal_antenna_fin.stl` — 3 bodies, all wt=True
+- [x] `s_cargo_sect_shell24.stl` — 190 bodies, all wt=True
+
+**Result:** All 37 STL files pass `python tools/validate_stls.py` (0 failures).
 
 ---
 

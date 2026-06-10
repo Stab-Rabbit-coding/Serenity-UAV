@@ -2,6 +2,22 @@
 // s_head_shell24.scad
 // Nose / cockpit shell for Serenity Rev N 24" hull (s_head.stl).
 //
+// Rev S1 (2026-06-09): Shepherd Book avionics bay (Faraday enclosure) on
+//   interior dorsal face; correct forward sensor and FPV camera positions.
+//   Sensor position bug: S1A_POS.X=251, S1B_POS.X=231, FPV_POS.X=239 were
+//   all outside STL X_max=228 mm (positions inside exterior hull skin required).
+//   Corrected to X=224 (S1A, S1B) and X=226 (FPV), verified within bounds.
+//   S1B_POS Z offset changed: was (CY+8, CZ+12), now (CY, CZ+22) — pure Z
+//   separation avoids diagonal offset; 22 mm gives 9 mm gap between bezel edges.
+//   FPV_POS Y offset: CY+24 puts aperture 24 mm dorsal of centroid (bridge
+//   viewport location on Serenity hull); 4 mm gap to S1A bezel upper edge ✓.
+//   Book bay: Shepherd Book (CLAUDE.md: "forward avionics bay", watchdog/auth
+//   SBC stack) Faraday enclosure on interior dorsal face at (CX, CZ).
+//   Same Cape-B-2 (Zoë) + Cape-A-2 (Wash) stack and 60×40×55 mm Faraday tray
+//   spec as cargo bays (Rev S4).  4× M3 bosses + 62×42 mm dorsal access panel.
+//   Ductwork parameters shared with cargo SCAD spec (DUCT_* constants).
+//   Ref: s_cargo_sect_shell24.scad Rev S4; CLAUDE.md Book bay; CAPE-B-2.kicad_pcb.
+//
 // Rev Q (2026-05-26): Updated to 2.0 mm foam-fill skin thickness.
 //   - Shell source: s_head_shell24_2mm_repaired.stl (blender_shells_v3_2mm.py,
 //     voxel-remesh at 1.2 mm pitch, repair_shells_for_scad.py).
@@ -143,13 +159,19 @@ FWD_ROT = [ 0, 90, 0 ];   // aperture faces +X (toward nose)
 //   All positions VERIFY in slicer after rendering.
 
 // Array A forward sensor -- nose centreline, station 33 mm (FC3 primary)
-S1A_POS = [ 251, CY, CZ ];            // VERIFY: hull axis at station 33 mm
+//   Rev S1 fix: X corrected 251 → 224 (was outside STL X_max=228 mm).
+//   Station 33 mm → X_stl = 284 - 33 = 251; clipped to X=224 (4 mm inside X_max).
+S1A_POS = [ 224, CY, CZ ];            // VERIFY: hull axis at station 33 mm
 
 // Array B forward sensor -- offset for distinct FoV, station 53 mm (FC2 primary)
-S1B_POS = [ 231, CY + 8, CZ + 12 ];  // VERIFY: ~15 deg bearing offset from S1A
+//   Rev S1 fix: X corrected 231 → 224; Y/Z offset changed to pure Z offset.
+//   22 mm Z separation from S1A gives 9 mm gap between 14 mm-OD bezels ✓.
+S1B_POS = [ 224, CY, CZ + 22 ];       // VERIFY: ~18 deg lateral bearing offset from S1A
 
 // Bridge FPV camera -- upper nose, Serenity bridge viewport, station 45 mm
-FPV_POS = [ 239, CY + 12, CZ ];      // VERIFY: Y offset toward windshield
+//   Rev S1 fix: X corrected 239 → 226; Y offset increased to CY+24 for bridge
+//   viewport location.  At (CY+24): 4 mm gap from S1A bezel upper edge (CY+5.5) ✓.
+FPV_POS = [ 226, CY + 24, CZ ];       // VERIFY: dorsal of nose axis at bridge viewport
 
 // M3 boss positions at aft joint face (X = 99 mm, head-to-cargo mating face).
 //   6 bosses distributed around the hull perimeter ellipse.
@@ -164,6 +186,88 @@ BOSS_AFT_3 = [  99, CY - 38, CZ + 52  ];  // VERIFY: ventral-port quadrant
 BOSS_AFT_4 = [  99, CY - 100, CZ      ];  // VERIFY: ventral face
 BOSS_AFT_5 = [  99, CY - 38, CZ - 52  ];  // VERIFY: ventral-stbd quadrant
 BOSS_AFT_6 = [  99, CY + 38, CZ - 52  ];  // VERIFY: dorsal-stbd quadrant
+
+// ── Shepherd Book avionics bay — dorsal interior, head section (Rev S1) ──────
+//
+// Book is the primary watchdog / fault-detection / authentication SBC stack
+// (CLAUDE.md: Book bay = "Shepherd Book" = forward avionics bay).
+// Cape stack: Cape-B-2 (Zoë) + PB2-I + Cape-A-2 (Wash) + PB2-I, 55×35 mm each.
+// Faraday enclosure: 5-walled aluminium-sheet tray, 60×40×55 mm external.
+// Hull dorsal skin IS the 6th wall; access cover (72×52 mm) is the EMI lid.
+//
+// DORSAL INTERIOR FACE:
+//   STL Y_max = -53 mm (exterior dorsal); interior at approx -53 - 2 = -55 mm.
+//   BOOK_DORSAL_Y = CY + 94 ≈ -54.6 mm.  VERIFY in slicer.
+//   NOTE: head dorsal surface is narrow and curved — verify tray fits flat region.
+//
+// BOSS PATTERN (4× M3 bosses, ±25 mm X, ±15 mm Z from bay centre):
+//   Bay centre at (CX, BOOK_DORSAL_Y, CZ) = (161.33, -54.6, 69.08).
+//   Boss X positions: CX ± 25 = 136.33 and 186.33 mm.
+//   Boss Z positions: CZ ± 15 = 54.08 and 84.08 mm.
+//   All within STL X=99..228, Z=0..141 bounds ✓.
+//   Access panel: X=130.33..192.33, Z=48.08..90.08 — within bounds ✓.
+//   Bosses protrude in −Y (downward into interior) from interior dorsal face.
+//   VERIFY each boss clears hull skin and avoids sensor aperture zones in slicer.
+//   Ref: s_cargo_sect_shell24.scad Rev S4 FARADAY_* / AVINICS_BOSS_* pattern;
+//   CAPE-B-2.kicad_pcb MH1–MH4; CLAUDE.md Book bay; Ruthex RX-M3x5.7.
+//
+// Cape PCB dimensions (same as cargo SCAD Rev S4):
+CAPE_PCB_X     =  55.0;   // mm, Cape-B-2 / Cape-A-2 PCB X extent
+CAPE_PCB_Z     =  35.0;   // mm, Cape-B-2 / Cape-A-2 PCB Z extent
+CAPE_HOLE_DX   =  24.5;   // mm, ±X M2.5 corner hole offset from board centre
+CAPE_HOLE_DZ   =  14.5;   // mm, ±Z M2.5 corner hole offset from board centre
+
+// Faraday enclosure dimensions (same spec as cargo Rev S4):
+FARADAY_ENC_X  =  60.0;   // mm, tray external X
+FARADAY_ENC_Z  =  40.0;   // mm, tray external Z
+FARADAY_ENC_Y  =  55.0;   // mm, tray depth below dorsal face
+FARADAY_WALL   =   1.5;   // mm, tray wall thickness (0.5 mm Al + PETG liner)
+FARADAY_FAN_D  =  25.0;   // mm, axial fan diameter (25×25×7 mm, on tray +X wall)
+
+// Ductwork parameters (same spec as cargo Rev S4):
+DUCT_INTAKE_W  =  22.0;   // mm, intake slot width on tray −X face
+DUCT_INTAKE_H  =  22.0;   // mm, intake slot height
+DUCT_EXHAUST_W =  24.0;   // mm, exhaust slot width on tray +X face (behind fan)
+DUCT_EXHAUST_H =  24.0;   // mm, exhaust slot height
+DUCT_EMC_T     =   6.0;   // mm, waveguide-below-cutoff honeycomb panel thickness
+DUCT_CELL_D    =   6.0;   // mm, honeycomb cell diameter (λ/2 cutoff > 25 GHz)
+
+// Book bay position constants:
+BOOK_DORSAL_Y  = CY + 94.0;   // mm, interior dorsal face Y (≈ -54.6 mm; VERIFY slicer)
+BOOK_BOSS_ROT  = [90, 0, 0];  // rotate cylinder: +Z → −Y (protrudes down into interior)
+BOOK_X_CEN     = CX;          // mm, bay X centre = 161.33 mm
+BOOK_Z_CEN     = CZ;          // mm, bay Z centre =  69.08 mm
+BOOK_BOSS_DX   =  25.0;       // mm, ±X boss offset (matches cargo AVINICS_BOSS_DX)
+BOOK_BOSS_DZ   =  15.0;       // mm, ±Z boss offset (matches cargo AVINICS_BOSS_DZ)
+BOOK_PANEL_X   =  62.0;       // mm, dorsal access panel opening X (60 mm tray + 1 mm each)
+BOOK_PANEL_Z   =  42.0;       // mm, dorsal access panel opening Z (40 mm tray + 1 mm each)
+
+// ----------------------------------------------------------------------------
+// Module: book_dorsal_boss
+//   Single M3 heat-set insert boss on interior dorsal face, protruding −Y.
+//   Provides one corner M3 anchor for the Shepherd Book Faraday tray body.
+// ----------------------------------------------------------------------------
+module book_dorsal_boss(x_pos, z_pos) {
+    translate([x_pos, BOOK_DORSAL_Y, z_pos])
+    rotate(BOOK_BOSS_ROT)
+    difference() {
+        cylinder(h = BOSS_H, d = BOSS_OD);
+        cylinder(h = BOSS_H + 0.1, d = BOSS_BORE_D);
+    }
+}
+
+// ----------------------------------------------------------------------------
+// Module: book_dorsal_panel_cut
+//   62×42 mm through-cut in dorsal skin for Book Faraday tray insertion.
+//   Cover (72×52 mm, 5 mm shoulder) overlaps cut for EMI-seal positive stop.
+//   Y span: BOOK_DORSAL_Y − 1.0 through BOOK_DORSAL_Y + WALL_MM + 1.0.
+// ----------------------------------------------------------------------------
+module book_dorsal_panel_cut() {
+    translate([BOOK_X_CEN - BOOK_PANEL_X / 2,
+               BOOK_DORSAL_Y - 1.0,
+               BOOK_Z_CEN - BOOK_PANEL_Z / 2])
+    cube([BOOK_PANEL_X, WALL_MM + 2.0, BOOK_PANEL_Z]);
+}
 
 // ----------------------------------------------------------------------------
 // Module: vlsensor_cut
@@ -265,6 +369,19 @@ module m3_boss(pos, rot) {
 //   Structural analysis (2026-05-26) confirms 2.0 mm CF-PETG + 2 lb/cf foam fill
 //   adequate for skin panels: deflection 0.054 mm at 28 m/s cruise (vs 0.5 mm limit).
 //
+// ── CSG tree overview (Rev S1) ────────────────────────────────────────────────
+//
+//   union
+//   ├─ difference
+//   │  ├─ union
+//   │  │  ├─ hollow_shell()               ← 2.0 mm skin (outer − scaled inner)
+//   │  │  ├─ book_dorsal_boss ×4          ← Shepherd Book Faraday tray anchors
+//   │  │  └─ m3_boss ×6                   ← aft joint-face bosses
+//   │  ├─ vlsensor_cut (S1A)              ← forward ToF sensor, Array A
+//   │  ├─ vlsensor_cut (S1B)              ← forward ToF sensor, Array B
+//   │  ├─ fpv_cut (FPV)                   ← bridge FPV camera
+//   │  └─ book_dorsal_panel_cut           ← 62×42 mm Faraday tray access opening
+//
 // ============================================================
 // Module: hollow_shell (Rev R — same fix as s_rear_neck_intake_shell24.scad)
 // ============================================================
@@ -278,24 +395,44 @@ module hollow_shell() {
     }
 }
 
-union() {
-    difference() {
-        // 2.0 mm foam-fill head shell — hollowed in SCAD (see hollow_shell above)
+difference() {
+    union() {
+        // 2.0 mm foam-fill head shell — hollowed in SCAD
         hollow_shell();
 
-        // Flush aperture cuts -- sensors and camera
-        vlsensor_cut(S1A_POS, FWD_ROT);
-        vlsensor_cut(S1B_POS, FWD_ROT);
-        fpv_cut(FPV_POS,      FWD_ROT);
+        // Shepherd Book avionics bay — 4× M3 Faraday tray anchor bosses.
+        //   Boss pattern: ±25 mm (X) × ±15 mm (Z) from bay centre (CX, CZ).
+        //   Boss positions (X, Z): (136.33,54.08), (136.33,84.08),
+        //                          (186.33,54.08), (186.33,84.08).
+        //   All within STL X=99..228, Z=0..141 bounds ✓.
+        //   VERIFY bosses are on interior dorsal face in slicer before printing.
+        //   Ref: Rev S1 Book bay; FARADAY_* / BOOK_BOSS_* constants above.
+        for (dx = [-BOOK_BOSS_DX, BOOK_BOSS_DX])
+        for (dz = [-BOOK_BOSS_DZ, BOOK_BOSS_DZ])
+            book_dorsal_boss(BOOK_X_CEN + dx, BOOK_Z_CEN + dz);
+
+        // 6x M3 boss posts at aft joint face (head → cargo section interface).
+        //   Bosses extend into interior (+X) from joint face at X = 99 mm.
+        //   VERIFY all boss positions are inside hull skin in slicer.
+        m3_boss(BOSS_AFT_1, BOSS_AFT_ROT);
+        m3_boss(BOSS_AFT_2, BOSS_AFT_ROT);
+        m3_boss(BOSS_AFT_3, BOSS_AFT_ROT);
+        m3_boss(BOSS_AFT_4, BOSS_AFT_ROT);
+        m3_boss(BOSS_AFT_5, BOSS_AFT_ROT);
+        m3_boss(BOSS_AFT_6, BOSS_AFT_ROT);
     }
 
-    // 6x M3 boss posts at aft joint face (head → cargo section interface)
-    //   Bosses extend into interior (+X) from joint face at X = 99 mm.
-    //   VERIFY all boss positions are inside hull skin in slicer before printing.
-    m3_boss(BOSS_AFT_1, BOSS_AFT_ROT);
-    m3_boss(BOSS_AFT_2, BOSS_AFT_ROT);
-    m3_boss(BOSS_AFT_3, BOSS_AFT_ROT);
-    m3_boss(BOSS_AFT_4, BOSS_AFT_ROT);
-    m3_boss(BOSS_AFT_5, BOSS_AFT_ROT);
-    m3_boss(BOSS_AFT_6, BOSS_AFT_ROT);
+    // Flush aperture cuts -- sensors and camera (Rev S1 corrected positions).
+    vlsensor_cut(S1A_POS, FWD_ROT);
+    vlsensor_cut(S1B_POS, FWD_ROT);
+    fpv_cut(FPV_POS,      FWD_ROT);
+
+    // Shepherd Book Faraday tray dorsal access panel cut (Rev S1).
+    //   62×42 mm opening through dorsal skin at (BOOK_X_CEN, BOOK_Z_CEN).
+    //   Book Faraday tray (60×40 mm) inserts from outside; 1 mm clearance each side.
+    //   Cover (72×52 mm, 5 mm shoulder) seals EMI enclosure when installed.
+    //   Fan (25×25×7 mm) on tray +X wall exhausts into head section interior.
+    //   Intake honeycomb (22×22 mm slot, 6 mm deep waveguide panel) on tray −X wall.
+    //   VERIFY panel bounds clear sensor apertures and hull-skin thickness in slicer.
+    book_dorsal_panel_cut();
 }

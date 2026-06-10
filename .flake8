@@ -1,3 +1,23 @@
 [flake8]
 max-line-length = 88
-extend-ignore = E203, W503
+# E203: whitespace before ':' — conflicts with black slice formatting
+# W503: line break before binary operator — conflicts with black
+# E221: multiple spaces before operator — used intentionally for column alignment
+# E222: multiple spaces after operator — used intentionally for column alignment
+extend-ignore = E203, W503, E221, E222
+
+# Pre-existing violations in legacy scripts.  These files were authored before
+# the lint baseline was established and are not touched by the current PR.
+# New files added under airframe/freecad/assembly/ are NOT covered here and
+# must be fully lint-clean.
+per-file-ignores =
+    airframe/FreeCAD-scripts/*.py:E127,E201,E231,E302,E501,F401,F541,F841,W291,W293
+    airframe/archive/blender-scripts/*.py:E128,E225,E228,E231,E251,E302,E401,E501,F401,F541,W293
+    airframe/blender-scripts/*.py:E114,E116,E127,E201,E231,E251,E261,E272,E302,E305,E401,E501,E701,E702,F401,F541,F841
+    airframe/gcode/davinci-jr-proto/*.py:E501
+    airframe/stls/fuselage/cargo/*.py:E261,E302,E501,F841
+    archives/*.py:E225,E228,E231,E302,E501,F841
+    avionics/firmware/fc/tools/*.py:E305
+    avionics/kicad/*.py:E127,E128,E231,E261,E302,E305,E401,E501,F401,F541,F841
+    graphical-build-guide/*.py:E201,E231,E302,E305,E501,E701,E702,F401,F541
+    tools/validate_stls.py:F841
