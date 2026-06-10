@@ -202,14 +202,14 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 
 **Combined airframe model (visual verification):**
 
-- [ ] **Combine all airframe STLs** into a single assembly model including the 1.25× scaled nacelles, all EDF tubes, cargo bay clamshells, antenna bosses, sensor cutouts, access panels, landing legs, and feet. Render SVGs from all 6 cardinal directions (top, bottom, front, rear, port, stbd) and all 8 isometric views (8 corners). Save renders to `serenity/diagrams/`.
-  **FreeCAD/Assembly4 script created:** `airframe/freecad/assembly/serenity_fuselage_asm4.py`.
-  Run: `freecadcmd airframe/freecad/assembly/serenity_fuselage_asm4.py`
-  Output: `airframe/freecad/assembly/serenity_fuselage_asm4.FCStd`
-  - [ ] Render 6 cardinal + 8 isometric SVGs from the FCStd output to `airframe/diagrams/`.
+- [ ] **Combine all airframe STLs** into a single assembly model including the 1.25× scaled nacelles, all EDF tubes, cargo bay clamshells, antenna bosses, sensor cutouts, access panels, landing legs, and feet.
+  **Canonical assembly script:** `airframe/FreeCAD-scripts/serenity_assembly.py` (8 major components validated 2026-06-10; nacelle internals, pylons, and accessories pending VERIFY).
+  Run headlessly: `freecad --background --python airframe/FreeCAD-scripts/serenity_assembly.py`
+  Output: `airframe/Serenity-Assembled.FCStd`
+  - [ ] **Render overview SVGs using FreeCAD TechDraw** — 6 cardinal directions (top, bottom, front, rear, port, stbd) and all 8 isometric views (8 corners). Headless script creates a TechDraw page per view and exports SVG via `TechDraw.writeSVGPage()`. Save to `airframe/diagrams/overview/`.
     **BLOCKS** exploded view SVGs below.
-- [ ] **Exploded view SVG — printed parts only** (all printed components labelled and exploded from assembly position)
-- [ ] **Exploded view SVG — full build** (all components: PCBs, SBCs, motors, ESCs, wires, sensors, antennas, hardware)
+- [ ] **Exploded view SVG — printed parts only** (all printed components labelled and exploded from assembly position). **Generate using FreeCAD:** drive part translations via a headless Python script that offsets each `Mesh::Feature` Placement along its explosion axis, then exports SVG via FreeCAD TechDraw. Save to `airframe/diagrams/exploded/`.
+- [ ] **Exploded view SVG — full build** (all components: PCBs, SBCs, motors, ESCs, wires, sensors, antennas, hardware). Same FreeCAD TechDraw headless approach as printed-parts exploded view. Save to `airframe/diagrams/exploded/`.
 
 ---
 

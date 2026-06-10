@@ -38,6 +38,12 @@ Every component will be fabricated or procured; design accordingly.
   Size fasteners, walls, and structural members for real loads. Quote actual masses and CG shifts
   when adding or removing geometry. Do not leave these as "TBD."
 
+- **All measurements shall be expressed imperial-primary with metric in parentheses: e.g. 10 in (254 mm), 2.5 lbm (1.13 kg), 4.8 lbf (21.4 N).**
+  - Use **lbm** for mass (pounds-mass) and **lbf** for force (pounds-force); never write bare "lb" where the distinction matters.
+  - Metric equivalents use **kg** for mass and **N** for force.
+  - Thrust, lift, and aerodynamic loads are forces → lbf / (N).  Component weights and payload capacity are masses → lbm / (kg).
+  - **Airspeed and wind speed are expressed in knots (kt)** with m/s in parentheses where needed for calculation.  Never use mph or km/h for airspeed.
+
 - **Failover capability is a first-class requirement.**  Wherever possible, every system must have
 
   a fallback mode or redundant path (dual ESCs, independent battery rails, manual override, etc.).
@@ -59,6 +65,48 @@ Every component will be fabricated or procured; design accordingly.
 - The middle section consists of a narrow neck surrounded by a horseshoe like ring that is open at the bottom
 
 - The rear section consists of a conical engine room with a pod centered above it and two skids below it. the skids are extensions of the horseshoe ring from the middle section, bent aft and extending past the end of the tail cone.
+
+#### FreeCAD Assembly Coordinate System and Validated Section Placements
+
+The canonical assembly document is `airframe/freecad/assembly/SerenityAssembly.FCStd`.
+The headless assembly script is `airframe/FreeCAD-scripts/serenity_assembly.py`.
+
+All 24"-scaled STLs use **hull-frame axes**:
+
+- **X** — positive toward nose (forward)
+- **Y** — positive dorsal (up)
+- **Z** — positive port (left)
+
+Placements below were manually validated in FreeCAD and extracted from `SerenityAssembly.FCStd` (2026-06-10). Minor joint fine-tuning (fractions of mm / degree) is still pending. Position units are mm; rotation is a unit quaternion **(Qx, Qy, Qz, Qw)** where Qw is the scalar.
+
+| Component | Px | Py | Pz | Qx | Qy | Qz | Qw | Rotation description |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Head_Shell | −331.999 | −18.000 | +60.999 | 0 | 0 | 0 | 1 | Identity — no rotation |
+| Cargo_Shell | −274.400 | −282.800 | 0.000 | 0 | 0 | 1 | 0 | 180° about +Z |
+| Middle_Shell | −350.999 | +130.400 | +10.017 | −√½ | 0 | 0 | +√½ | 90° about −X |
+| Rear_Shell | 0.000 | +203.200 | −31.999 | −√½ | 0 | 0 | +√½ | 90° about −X |
+| Wing_Port | −80.999 | −7.000 | +57.999 | 0 | 0 | 0 | 1 | Identity — no rotation |
+| Wing_Stbd | −261.999 | −12.000 | +57.999 | 0 | 0 | 0 | 1 | Identity — no rotation |
+| Nacelle_Port | −385.096 | −69.999 | +64.972 | +√½ | 0 | 0 | −√½ | 270° about +X (hover) |
+| Nacelle_Stbd | +46.999 | −63.999 | +62.999 | +√½ | 0 | 0 | −√½ | 270° about +X (hover) |
+
+(√½ ≈ 0.7071068. Exact float values in `PL_*` constants in `serenity_assembly.py`.)
+
+**Rotation meanings:**
+
+- **Identity (Head, Wings):** STL axes align directly with hull frame — no rotation needed.
+- **180° about +Z (Cargo):** Flips the section so the cargo bay opens downward (−Y) and the wing-root mating faces point outboard.
+- **90° about −X (Middle, Rear):** These sections are modelled in OpenSCAD with their axial direction along local Z; the rotation brings them upright so their dorsal axis aligns with hull +Y.
+- **270° about +X (Nacelles, hover):** Rotates the nacelle axial +Z (exhaust end) to point downward (−Y hull), placing the EDFs in vertical-thrust hover attitude. Cruise attitude uses a different rotation.
+
+**Spatial relationships (qualitative):**
+
+- **Head** is the forwardmost section; it contains the bridge and tapers to a narrow nose. Located at the most negative X values in the assembly.
+- **Cargo** is immediately aft of and below the head. The wing attachment flanges are on its upper outer edges. The cargo bay door opens toward −Y (belly). The cargo section has the largest cross-sectional area of the four fuselage sections.
+- **Middle** is the narrow horseshoe-ring neck between cargo and rear. The ring is open at the bottom (−Y). The avionics bays are distributed along this section and the cargo section.
+- **Rear** is the aftmost fuselage section. It houses the engine room / tail cone, the dorsal pod, and the two landing skids. The skids run aft past the tail cone end.
+- **Wings** are symmetric about the aircraft centerline (Z ≈ 0 at the cargo section mating face). Each wing spans outboard in ±Z from its root at the cargo section.
+- **Nacelles** are outboard of the wings at the pylon tips. In hover attitude the nacelle axial axis is vertical; in cruise it tilts forward.
 
 - **All legal and regulatory requirements will be based on United States jurisdiction**  All Radio transmissions shall comply with appropriate FCC regulations.  Markings, lights, and operation shall comply with all appropriate FAA aircraft regulations.
 
