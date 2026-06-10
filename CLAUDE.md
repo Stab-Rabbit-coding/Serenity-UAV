@@ -38,6 +38,11 @@ Every component will be fabricated or procured; design accordingly.
   Size fasteners, walls, and structural members for real loads. Quote actual masses and CG shifts
   when adding or removing geometry. Do not leave these as "TBD."
 
+- **All measurements shall be expressed imperial-primary with metric in parentheses: e.g. 10 in (254 mm), 2.5 lbm (1.13 kg), 4.8 lbf (21.4 N).**
+  - Use **lbm** for mass (pounds-mass) and **lbf** for force (pounds-force); never write bare "lb" where the distinction matters.
+  - Metric equivalents use **kg** for mass and **N** for force.
+  - Thrust, lift, and aerodynamic loads are forces → lbf / (N).  Component weights and payload capacity are masses → lbm / (kg).
+
 - **Failover capability is a first-class requirement.**  Wherever possible, every system must have
 
   a fallback mode or redundant path (dual ESCs, independent battery rails, manual override, etc.).
