@@ -45,27 +45,27 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 | Parameter | Value |
 |-----------|-------|
-| Hull length | 609.6 mm (24.00″) |
-| Beam (nacelle tip-to-tip) | ~486 mm |
-| Hull material | PETG (2.5 mm skin, 2 lb/ft³ closed-cell foam fill) |
-| Nacelle EDF | XFly Galaxy X5 50mm 12-blade 6S 3200KV — **1240 g thrust each** (xfly-model.eu) |
-| Propulsion (Phases 5–10) | 2× (2× 50mm EDF @ 6S tandem) nacelles — 1240 × 2 × 0.90 stator efficiency × 2 nacelles = **4,464 g** |
-| Propulsion (Phase 11 full) | As above + 1× 120mm EDF @ 6S fuselage rear — **7,964 g total thrust** |
+| Hull length | 24.00 in (609.6 mm) |
+| Beam (nacelle tip-to-tip) | ~19.1 in (~486 mm) |
+| Hull material | PETG (0.098 in / 2.5 mm skin, 2 lb/ft³ closed-cell foam fill) |
+| Nacelle EDF | XFly Galaxy X5 50mm 12-blade 6S 3200KV — **2.73 lbf (1,240 gf) thrust each** (xfly-model.eu) |
+| Propulsion (Phases 5–10) | 2× (2× 50mm EDF @ 6S tandem) nacelles — 1,240 gf × 2 × 0.90 stator efficiency × 2 nacelles = **9.84 lbf (4,464 gf)** |
+| Propulsion (Phase 11 full) | As above + 1× 120mm EDF @ 6S fuselage rear — **17.56 lbf (7,964 gf) total thrust** |
 | Counter-rotation | Port nacelle EDFs: CW from intake | Starboard: CCW — zero net torque reaction |
 | Inter-stage stators | 11-fin twisted stator, integrated into each nacelle print (CF-PETG) |
 | Nacelle tilt | 0° (cruise) → 90° (hover) → 120° (backing); hard stops −5° / 140° |
-| Tilt actuation | 1× digital servo per nacelle (≥25 kg·cm @ 6V), fuselage-mounted |
+| Tilt actuation | 1× digital servo per nacelle (≥347 oz·in / 25 kg·cm @ 6V), fuselage-mounted |
 | Iris nozzles (nacelles) | 2× nacelle, gear-linked to tilt pivot — no dedicated servo |
 | Iris nozzle (rear) | 1× rear, SG90 servo-actuated — **Phase 11 only** |
 | Nozzle closed | 0° nacelle tilt → petals form hull-matched engine cone (Serenity skin) |
 | Nozzle open | 90° nacelle tilt → petals hinge out, LED-backlit translucent-blue inner faces |
-| Rear EDF | 120mm @ 6S, exhaust straight aft; intake via 4 radial scoops at neck ~310mm — **DEFERRED Phase 11** |
-| AUW (Phases 5–10, no aft EDF) | ~2,768 g | Aft EDF system omitted (~840 g deferred): 120mm EDF ~400g + 80A ESC ~130g + CF-PETG intake frame ~90g + PETG plenum ~80g + nozzle frame/petals/servo/wiring ~140g |
-| Nacelle-only T/W (Phases 5–10) | **~1.61** | 4,464 g / 2,768 g — **full VTOL hover capable** without aft EDF |
-| AUW (Phase 11 full system) | ~3,608 g | With full aft EDF hardware installed |
-| Full-system T/W (Phase 11) | **~2.21** | 7,964 g / 3,608 g — enhanced performance, heavier payloads, higher cruise speed |
+| Rear EDF | 120mm @ 6S, exhaust straight aft; intake via 4 radial scoops at neck ~12.2 in (~310 mm) — **DEFERRED Phase 11** |
+| AUW (Phases 5–10, no aft EDF) | **6.10 lbm (2,768 g)** | Aft EDF system omitted (~1.85 lbm / ~840 g deferred): 120mm EDF ~400g + 80A ESC ~130g + CF-PETG intake frame ~90g + PETG plenum ~80g + nozzle frame/petals/servo/wiring ~140g |
+| Nacelle-only T/W (Phases 5–10) | **~1.61** | 9.84 lbf / 6.10 lbm — **full VTOL hover capable** without aft EDF |
+| AUW (Phase 11 full system) | **7.95 lbm (3,608 g)** | With full aft EDF hardware installed |
+| Full-system T/W (Phase 11) | **~2.21** | 17.56 lbf / 7.95 lbm — enhanced performance, heavier payloads, higher cruise speed |
 | Avionics | 8× PocketBeagle 2 Industrial (AM6254): FC1–FC4 (Cape-A) + CN1–CN4 (Cape-B) |
-| Cargo | 101.6 × 76.2 × 76.2 mm bay, clamshell doors, N20 winch |
+| Cargo | 4.00 × 3.00 × 3.00 in (101.6 × 76.2 × 76.2 mm) bay, clamshell doors, N20 winch |
 | Build estimate | ~100–120 hours across all phases |
 
 ---
@@ -152,8 +152,8 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 | Part | Material | Dimension | Notes |
 |------|----------|-----------|-------|
-| Keel | CF flat bar 6×3mm | 620 mm | Mark datums at 91, 165, 251, 320, 388mm from nose |
-| Wing spars | CF tube 12mm OD / 1.5mm wall | 2× 380 mm | Sand spar ends to fit wing-root spar pockets |
+| Keel | CF flat bar 6×3mm | 24.41 in (620 mm) | Mark datums at 3.58, 6.50, 9.88, 12.60, 15.28 in (91, 165, 251, 320, 388 mm) from nose |
+| Wing spars | CF tube 12mm OD / 1.5mm wall | 2× 14.96 in (380 mm) | Sand spar ends to fit wing-root spar pockets |
 | Pivot rods | CF solid rod 4mm OD | 2× cut to length per pivot housing drawing | Deburr ends; press-fit into MF104ZZ bearings |
 | Ring frames | CF plate 2mm | 5 profiles per station drawing | Fit to keel slot-notches |
 
@@ -161,7 +161,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 ### Phase 0 Checks
 
-- [ ] Nacelle bore caliper check: 55.0–56.0 mm ID at Z=10 mm and Z=80 mm
+- [ ] Nacelle bore caliper check: 2.165–2.205 in (55.0–56.0 mm) ID at Z=10 mm and Z=80 mm
 - [ ] Stator fins visible inside nacelle bore at Z≈63 mm (between the two EDF seats)
 - [ ] Hub bore clear at stator: 16 mm ID minimum (for EDF motor leads)
 - [ ] Tilt bracket gear dry-mesh: sector ↔ pinion backlash 0.1–0.2 mm
@@ -207,14 +207,14 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 **3. Bond access panel frames A–F into hull sections:**
 
-| Panel | Station (mm) | Bay | Closure |
-|-------|-------------|-----|---------|
-| A — Nose | 0–91 | CN1+FC1 | Bayonet PETG frame |
-| B — Dorsal Fwd | 91–165 | CN2+FC2 | 4× M2.5 screws |
-| C — Cargo Belly | 160–251 | Cargo | Hinge + latch |
-| D — Dorsal Aft | 251–320 | CN3+FC3 | 4× N42 magnets |
-| E — Aft Service | 320–388 | CN4+FC4 | 4× M2.5 screws |
-| F — Rear | 388–609 | EDF access | Bayonet PETG frame |
+| Panel | Station | Bay | Closure |
+|-------|---------|-----|---------|
+| A — Nose | 0–3.58 in (0–91 mm) | CN1+FC1 | Bayonet PETG frame |
+| B — Dorsal Fwd | 3.58–6.50 in (91–165 mm) | CN2+FC2 | 4× M2.5 screws |
+| C — Cargo Belly | 6.30–9.88 in (160–251 mm) | Cargo | Hinge + latch |
+| D — Dorsal Aft | 9.88–12.60 in (251–320 mm) | CN3+FC3 | 4× N42 magnets |
+| E — Aft Service | 12.60–15.28 in (320–388 mm) | CN4+FC4 | 4× M2.5 screws |
+| F — Rear | 15.28–23.98 in (388–609 mm) | EDF access | Bayonet PETG frame |
 
 **4. Install M2.5 nylon standoffs in bays A, B, D, E.**
 - Floor standoffs (6mm): Cape-B (90×60mm) hole pattern
@@ -498,8 +498,8 @@ After cure:
 **Goal:** ★ **FIRST FLIGHT** with 4-node avionics — full VTOL hover using nacelle EDFs only.
 
 > **Aft EDF not installed.** The 120mm fuselage EDF is deferred to Phase 11. The 4 nacelle EDFs
-> (XFly Galaxy X5, 1240 g each, 90% additive via stator = 2232 g/nacelle × 2 = 4464 g total)
-> deliver nacelle T/W ≈ **1.61** at the Phase 5–10 AUW of ~2,768 g — **sufficient for full VTOL
+> (XFly Galaxy X5, 2.73 lbf / 1,240 gf each, 90% additive via stator = 4.91 lbf (2,232 gf)/nacelle × 2 = 9.84 lbf (4,464 gf) total)
+> deliver nacelle T/W ≈ **1.61** at the Phase 5–10 AUW of 6.10 lbm (2,768 g) — **sufficient for full VTOL
 > hover**. Phase 11 adds the rear EDF to reach T/W ≈ 2.21 for enhanced payload and cruise performance.
 
 ### Node Install Order
@@ -570,7 +570,7 @@ hover rather than losing one nacelle entirely.
 
 **Tethered hover test first — nacelle EDFs only (T/W ≈ 1.61).**
 
-1. Secure tether lines to belly hard points. 5 kg breaking strength minimum, 3 m length.
+1. Secure tether lines to belly hard points. 11.0 lbm (5 kg) breaking strength minimum, 9.8 ft (3 m) length.
 2. Bring up on throttle to 30% with nacelles at 90° (hover position) — verify all 4 EDF sounds and lift response.
 3. Increase to 60% — verify stable hover and altitude-hold authority on tether.
 4. Verify nacelle nozzle opens correctly at 90° tilt (gear linkage — no dedicated servo).
@@ -619,10 +619,10 @@ Install clamshell cargo door hinges and latch. Bond cargo bay walls (per s_cargo
 |-----------|------|----------|
 | Wing spar | CF tube 12mm OD / 1.5mm wall | Bending stress at full nacelle torque (~0.13 Nm) ≈ 18 MPa — allowable CF ≥600 MPa |
 | Keel | CF flat bar 6×3mm | Carries fuselage bending; adequate for 24-inch hull at <5g manoeuvre |
-| Pivot rod | 4mm OD solid CF | Shear stress at 340g nacelle weight ≈ 27 MPa — allowable CF ≥300 MPa shear |
-| Pivot bearings | MF104ZZ 4×10×4mm × 2 per nacelle | Static capacity 490 N >> 3.3 N nacelle weight — fine |
-| Foam fill | 2 lb/ft³ closed-cell PU | Provides hull rigidity, crash absorption; adds ~180 g to total AUW |
-| Tilt servo | ≥25 kg·cm digital metal gear | Static torque req. ~13.6 kg·cm × 2 safety factor = 27 kg·cm min; 25 kg·cm rating marginal — prefer 30+ kg·cm |
+| Pivot rod | 4mm OD solid CF | Shear stress at 0.749 lbm (340 g) nacelle weight ≈ 27 MPa — allowable CF ≥300 MPa shear |
+| Pivot bearings | MF104ZZ 4×10×4mm × 2 per nacelle | Static capacity 110 lbf (490 N) >> 0.74 lbf (3.3 N) nacelle weight — fine |
+| Foam fill | 2 lb/ft³ closed-cell PU | Provides hull rigidity, crash absorption; adds ~0.397 lbm (~180 g) to total AUW |
+| Tilt servo | ≥347 oz·in (25 kg·cm) digital metal gear | Static torque req. ~189 oz·in (~13.6 kg·cm) × 2 safety factor = 374 oz·in (27 kg·cm) min; 347 oz·in (25 kg·cm) rating marginal — prefer 416+ oz·in (30+ kg·cm) |
 | Nacelle shell | CF-PETG 25% gyroid, 4 walls | Adequate for EDF thrust loads and nacelle-tilt reaction forces |
 
 ---
@@ -662,7 +662,7 @@ demonstrated flight envelope beyond Phase 5 minimums.
    excursion ≤0.5m during 90°→0° nacelle sweep.
 4. **Endurance baseline** — hover or slow forward flight until 3.7V/cell battery cutoff;
    record flight time and battery degradation.
-5. **Cross-wind test** — demonstrate stable forward flight in ≥10 kt crosswind.
+5. **Cross-wind test** — demonstrate stable forward flight in ≥10 kt (5.1 m/s) crosswind.
 
 **Phase 9 pass criteria:**
 - [ ] Measured nacelle-only T/W ≥0.55 on thrust stand

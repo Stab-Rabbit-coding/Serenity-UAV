@@ -3,24 +3,36 @@
 // Battery tray for Serenity UAV 24" hull — 6S 4000 mAh LiPo.
 //
 // Rev Q (2026-06-07): Initial release.
-//   CG analysis places battery centroid at ~84 mm from nose.
-//   Tray spans stations 60–130 mm inside head/bridge section.
+//   CG analysis places battery centroid at ~3.31 in (~84 mm) from nose.
+//   Tray spans stations 2.36–5.12 in (60–130 mm) inside head/bridge section.
 //   Tray slides on 6×3 mm CF flat bar keel via two bottom rail
-//   slots; ±20 mm fore-aft adjustment, locks at 10 mm detents
-//   via M3 thumb screws.
+//   slots; ±0.79 in (±20 mm) fore-aft adjustment, locks at
+//   0.39 in (10 mm) detents via M3 thumb screws.
 //
 //   Battery: Tattu / Gens Ace 4000 mAh 6S LiPo
-//     Nominal dims (Tattu R-Line): 142 × 50 × 38 mm (L × W × H)
-//     Mass: 750 g
+//     Nominal dims (Tattu R-Line): 5.59 × 1.97 × 1.50 in (142 × 50 × 38 mm) L×W×H
+//     Mass: 1.65 lbm (750 g)
+//
+//   Interior cavity (battery + 0.118 in / 3 mm foam each side):
+//     5.83 × 2.20 × 1.61 in (148 × 56 × 41 mm) L×W×H
+//
+//   Outer tray dimensions:
+//     6.06 × 2.44 × 1.77 in (154 × 62 × 45 mm) L×W×H
+//
+//   Wall thickness: 0.118 in (3.0 mm) CF-PETG side/front/rear
+//   Floor thickness: 0.157 in (4.0 mm) CF-PETG load-bearing
+//   Estimated printed mass: ~0.049 lbm (~22 g)
 //
 //   Retention — three independent mechanisms:
-//     1. Forward positive-stop rib (4 mm CF-PETG).
-//     2. Two 16 mm silicone cam-buckle straps (50 N each rated).
-//     3. 3 mm silicone anti-slip/vibration foam on floor and walls.
+//     1. Forward positive-stop rib (0.157 in / 4 mm CF-PETG).
+//     2. Two 0.63 in (16 mm) silicone cam-buckle straps (11.2 lbf / 50 N rated).
+//     3. 0.118 in (3 mm) silicone anti-slip/vibration foam on floor and walls.
 //   5G crash retention safety factor: 2.7× (see docs/BATTERY_MOUNT.md §3.2).
+//   Under 5G load: 36.8 N (8.27 lbf) upward; two straps provide 100 N (22.5 lbf).
 //
 //   Belly access panel (separate part: belly_panel.scad):
-//     160 × 65 mm PETG panel, 2× M3 coin-slot screws, 1.5 mm rebate.
+//     6.30 × 2.56 in (160 × 65 mm) PETG panel, 2× M3 coin-slot screws,
+//     0.059 in (1.5 mm) rebate.
 //
 // Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
@@ -47,43 +59,46 @@ $fn = 64;    // Facet count for cylinders/spheres
 
 // ------------------------------------------------------------
 // Battery dimensions (Tattu R-Line 4000 mAh 6S LiPo)
+// Imperial primary: 5.59 × 1.97 × 1.50 in (142 × 50 × 38 mm)
 // ------------------------------------------------------------
-BATT_L  = 142.0;   // mm — battery length (fore-aft)
-BATT_W  =  50.0;   // mm — battery width  (port-stbd)
-BATT_H  =  38.0;   // mm — battery height (top-bottom)
+BATT_L  = 142.0;   // mm — battery length  (fore-aft)   = 5.59 in
+BATT_W  =  50.0;   // mm — battery width   (port-stbd)  = 1.97 in
+BATT_H  =  38.0;   // mm — battery height  (top-bottom) = 1.50 in
 
 // ------------------------------------------------------------
-// Foam padding (3 mm closed-cell silicone, Shore A 20-30)
+// Foam padding (3 mm / 0.118 in closed-cell silicone, Shore A 20-30)
 // Applied to floor and all four side walls.
 // ------------------------------------------------------------
-FOAM    = 3.0;     // mm — foam thickness each face
+FOAM    = 3.0;     // mm — foam thickness each face  = 0.118 in
 
 // ------------------------------------------------------------
 // Wall and floor thicknesses (CF-PETG structural)
 // ------------------------------------------------------------
-WALL    = 3.0;     // mm — side/front/rear wall thickness
-FLOOR   = 4.0;     // mm — floor thickness (load-bearing)
+WALL    = 3.0;     // mm — side/front/rear wall thickness  = 0.118 in
+FLOOR   = 4.0;     // mm — floor thickness (load-bearing)  = 0.157 in
 
 // ------------------------------------------------------------
 // Interior cavity (battery + foam each side)
+// Imperial: 5.83 × 2.20 × 1.61 in (148 × 56 × 41 mm)
 // ------------------------------------------------------------
-CAV_L   = BATT_L + 2 * FOAM;    // 148 mm fore-aft
-CAV_W   = BATT_W + 2 * FOAM;    // 56  mm port-stbd
-CAV_H   = BATT_H + FOAM;        // 41  mm (foam on floor only; top is open)
+CAV_L   = BATT_L + 2 * FOAM;    // 148 mm (5.83 in) fore-aft
+CAV_W   = BATT_W + 2 * FOAM;    //  56 mm (2.20 in) port-stbd
+CAV_H   = BATT_H + FOAM;        //  41 mm (1.61 in) (foam on floor only; top is open)
 
 // ------------------------------------------------------------
 // Outer tray dimensions
+// Imperial: 6.06 × 2.44 × 1.77 in (154 × 62 × 45 mm)
 // ------------------------------------------------------------
-TRAY_L  = CAV_L + 2 * WALL;     // 154 mm
-TRAY_W  = CAV_W + 2 * WALL;     // 62  mm
-TRAY_H  = CAV_H + FLOOR;        // 45  mm
+TRAY_L  = CAV_L + 2 * WALL;     // 154 mm (6.06 in)
+TRAY_W  = CAV_W + 2 * WALL;     //  62 mm (2.44 in)
+TRAY_H  = CAV_H + FLOOR;        //  45 mm (1.77 in)
 
 // ------------------------------------------------------------
 // Rail system (CF-BAR-6×3 keel bar interface)
-// Two bottom slots run full tray length; rail travel ±20 mm.
+// Two bottom slots run full tray length; rail travel ±0.79 in (±20 mm).
 // ------------------------------------------------------------
-RAIL_W      = 6.5;    // mm — slot width  (6 mm bar + 0.25 mm clearance each side)
-RAIL_D      = 3.5;    // mm — slot depth  (3 mm bar + 0.25 mm clearance)
+RAIL_W      = 6.5;    // mm — slot width  (6 mm bar + 0.25 mm clearance each side)  = 0.256 in
+RAIL_D      = 3.5;    // mm — slot depth  (3 mm bar + 0.25 mm clearance)             = 0.138 in
 RAIL_INSET  = 8.0;    // mm — inset from outer tray edge Z-wise
 DETENT_DIA  = 3.2;    // mm — M3 detent screw bore diameter
 DETENT_STEP = 10.0;   // mm — detent spacing (10 mm increments along X)

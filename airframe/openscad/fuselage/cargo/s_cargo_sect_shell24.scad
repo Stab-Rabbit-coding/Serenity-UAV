@@ -161,6 +161,42 @@
 // IMPORTANT: Verify all mount, boss, and rib positions by measuring mesh
 // cross-sections in a slicer before printing.
 // ============================================================
+//
+// Hull-frame position (validated FreeCAD assembly — SerenityAssembly.FCStd,
+//   2026-06-10):
+//   Cargo_Shell placement in hull frame:
+//     Base: Px = −274.400 mm (−10.80 in), Py = −282.800 mm (−11.13 in), Pz = 0
+//     Rotation: 180° about Z  (local +X → hull −X;  local +Y → hull −Y)
+//   Forward transform: hull_X = −local_X − 274.4
+//                      hull_Y = −local_Y − 282.8
+//                      hull_Z = local_Z
+//   Inverse transform: local_X = −hull_X − 274.4
+//                      local_Y = −hull_Y − 282.8
+//                      local_Z = hull_Z
+//
+//   NOTE: the 180° rotation REVERSES the longitudinal axis.  What is the
+//   "fore" face in STL local space (local_X = −7) becomes the AFT face in
+//   the hull-frame assembly, and vice-versa.
+//
+//   Key hull-frame positions:
+//     STL fore face (local_X = −7):   hull_X = −(−7) − 274.4 = −267.4 mm (−10.53 in)
+//       → This is the AFT face of the cargo section in the assembled aircraft.
+//     STL aft face  (local_X = −202): hull_X = −(−202) − 274.4 = −72.4 mm (−2.85 in)
+//       → This is the FORE (nose-ward) face of the cargo section in the assembly.
+//     Centroid (CX = −102.19 mm): hull_X = −(−102.19) − 274.4 = −172.2 mm (−6.78 in)
+//     Centroid (CY = −328.63 mm): hull_Y = −(−328.63) − 282.8 = +45.8 mm (+1.80 in)
+//     Centroid (CZ =   74.70 mm): hull_Z = 74.70 mm (2.94 in)  [unchanged]
+//
+//   Head-to-cargo joint (2026-06-10 analysis):
+//     Head_Shell aft face at head local_X = 99 →
+//       hull_X = 99 + (−332) = −233 mm (−9.17 in)
+//     Matching cargo local_X for hull_X = −233:
+//       local_X = −(−233) − 274.4 = −41.4 mm
+//     BOSS_FORE positions corrected: X = −7 → X = −41.4 mm to place mating
+//     bosses at the correct joint station in hull space.
+//     All Y/Z offsets remain estimated; VERIFY in slicer.
+//
+// ============================================================
 
 SCALE_24  = 2.9294;   // 24" hull scale factor
 
@@ -327,19 +363,21 @@ GPS_PORT_POS = [ GPS_ANT_X, CY + GPS_DORSAL_Y_OFFSET, CZ + GPS_SEP ];
 //   VERIFY all coordinates in slicer -- position must sit on dorsal skin face.
 GPS_STBD_POS = [ GPS_ANT_X, CY + GPS_DORSAL_Y_OFFSET, CZ - GPS_SEP ];
 
-// M3 boss positions at fore joint face (X = -7 mm, cargo fore end).
-//   Bosses extend from fore face into interior (-X direction).
-//   BOSS_FORE_ROT: rotate([0,-90,0]) aligns cylinder axis along -X (into interior).
-//   Bounds at X=-7 joint: Y=-415..-211, Z=0..163; centroid CY=-329, CZ=75.
-//   All positions VERIFY in slicer -- boss must sit fully inside hull skin.
+// M3 boss positions at the head-to-cargo joint face.
+//   Joint hull_X = −233 mm → cargo local_X = −41.4 mm (see hull-frame block above).
+//   Bosses extend inboard from joint face in the −X direction (into cargo interior).
+//   BOSS_FORE_ROT: rotate([0,-90,0]) aligns cylinder axis along −X (into interior).
+//   STL bounds at X ≈ −41 station: Y = −415..−211, Z = 0..163; centroid CY=−329, CZ=75.
+//   All positions VERIFY in slicer after correction; boss must sit fully inside hull skin.
+//   Ref: head-to-cargo joint analysis in hull-frame block above; s_head_shell24.scad BOSS_AFT.
 BOSS_FORE_ROT = [ 0, -90, 0 ];
 
-BOSS_FORE_1 = [ -7, CY + 82,  CZ       ];  // VERIFY: dorsal, near Y=-247
-BOSS_FORE_2 = [ -7, CY + 41,  CZ + 55  ];  // VERIFY: dorsal-port
-BOSS_FORE_3 = [ -7, CY - 41,  CZ + 55  ];  // VERIFY: ventral-port
-BOSS_FORE_4 = [ -7, CY - 82,  CZ       ];  // VERIFY: ventral, near Y=-411
-BOSS_FORE_5 = [ -7, CY - 41,  CZ - 55  ];  // VERIFY: ventral-stbd
-BOSS_FORE_6 = [ -7, CY + 41,  CZ - 55  ];  // VERIFY: dorsal-stbd
+BOSS_FORE_1 = [ -41.4, CY + 82,  CZ       ];  // VERIFY: dorsal (hull_X = −233 mm joint)
+BOSS_FORE_2 = [ -41.4, CY + 41,  CZ + 55  ];  // VERIFY: dorsal-port
+BOSS_FORE_3 = [ -41.4, CY - 41,  CZ + 55  ];  // VERIFY: ventral-port
+BOSS_FORE_4 = [ -41.4, CY - 82,  CZ       ];  // VERIFY: ventral
+BOSS_FORE_5 = [ -41.4, CY - 41,  CZ - 55  ];  // VERIFY: ventral-stbd
+BOSS_FORE_6 = [ -41.4, CY + 41,  CZ - 55  ];  // VERIFY: dorsal-stbd
 
 // M3 boss positions at aft joint face (X = -202 mm, cargo aft end).
 //   Bosses extend from aft face into interior (+X direction).

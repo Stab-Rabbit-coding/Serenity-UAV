@@ -2,6 +2,39 @@
 // s_head_shell24.scad
 // Nose / cockpit shell for Serenity Rev N 24" hull (s_head.stl).
 //
+// Hull-frame position (validated FreeCAD assembly — SerenityAssembly.FCStd,
+//   2026-06-10):
+//   Head_Shell placement in hull frame:
+//     X = −331.999 mm (−13.07 in) from hull origin  [positive toward nose]
+//     Y = −18.000 mm (−0.71 in)                      [positive dorsal/up]
+//     Z = +60.999 mm (+2.40 in)                      [positive port/left]
+//     Rotation: Identity — no rotation needed; STL axes align directly with
+//               hull frame axes.
+//   Meaning: Head is the forwardmost section (most negative X in assembly).
+//   Station mapping within head STL: X_stl = 284 − station_mm.
+//   STL bounds: X = 99..228 mm (3.90..8.98 in), Y = −288..−53 mm,
+//               Z = 0..141 mm (0..5.55 in).
+//   Head section in 24" hull spans approximately stations 0–7.28 in (0–185 mm)
+//   from nose.  Aft mating face (head → cargo) at X_stl ≈ 99 mm = sta 3.54 in
+//   (90 mm from nose).
+//
+// Key dimensions — imperial primary, mm in parentheses (for reference only;
+//   all OpenSCAD variable assignments remain in mm):
+//   Hull skin (foam-fill): 0.079 in (2.0 mm) CF-PETG + 2 lb/cf closed-cell foam
+//   Wall cutter overlap (WALL_T): 0.138 in (3.5 mm) nominal
+//   STL bounding box:
+//     DX: 5.09 in (129.2 mm)
+//     DY: 9.25 in (234.9 mm)
+//     DZ: 5.52 in (140.2 mm)
+//   Centroid in 24"-scaled STL world coords:
+//     CX: 6.35 in (161.33 mm)
+//     CY: −5.85 in (−148.57 mm)  [dorsal/ventral; positive = up]
+//     CZ: 2.72 in (69.08 mm)     [lateral; positive = port]
+//   M3 boss OD: 0.315 in (8.0 mm), height: 0.236 in (6.0 mm)
+//   M3 heat-set bore: 0.161 in (4.1 mm)
+//   Cruise speed at which skin was validated: 54.4 kt (28 m/s); deflection
+//     ≤ 0.002 in (0.054 mm) on 2.0 mm CF-PETG + foam, vs 0.020 in (0.5 mm) limit.
+//
 // Rev S1 (2026-06-09): Shepherd Book avionics bay (Faraday enclosure) on
 //   interior dorsal face; correct forward sensor and FPV camera positions.
 //   Sensor position bug: S1A_POS.X=251, S1B_POS.X=231, FPV_POS.X=239 were
@@ -18,7 +51,7 @@
 //   Ductwork parameters shared with cargo SCAD spec (DUCT_* constants).
 //   Ref: s_cargo_sect_shell24.scad Rev S4; CLAUDE.md Book bay; CAPE-B-2.kicad_pcb.
 //
-// Rev Q (2026-05-26): Updated to 2.0 mm foam-fill skin thickness.
+// Rev Q (2026-05-26): Updated to 2.0 mm (0.079 in) foam-fill skin thickness.
 //   - Shell source: s_head_shell24_2mm_repaired.stl (blender_shells_v3_2mm.py,
 //     voxel-remesh at 1.2 mm pitch, repair_shells_for_scad.py).
 //   - WALL_T reduced 4.0 → 3.5 mm (nominal 2.0 mm + 1.5 mm cutter overlap).
@@ -26,7 +59,7 @@
 //     M3 bolts joining head to cargo section.
 //   - Foam fill (2 lb/cf closed-cell) provides structural core; bosses provide
 //     point-load capacity.  Structural analysis 2026-05-26 confirms 2.0 mm
-//     CF-PETG + foam adequate for skin panels at 28 m/s cruise.
+//     CF-PETG + foam adequate for skin panels at 54.4 kt (28 m/s) cruise.
 //   Ref: structural_analysis.py log, Serenity UAV project, 2026-05-26.
 //
 // Mounts (all flush with outer mold line -- zero external protrusion):
@@ -65,12 +98,16 @@
 //   Y -- vertical,    positive toward dorsal (up)   NOTE: Y is up, not Z
 //   Z -- lateral,     positive toward port  (left)
 //   Station mapping: X_stl = 284 - station_mm
+//     e.g. station 3.54 in (90 mm) → X_stl = 284 - 90 = 194
 //
-// Hull surface position estimates (wall = 2.0 mm):
-//   half_ext_Y = 2.0 / (1 - 0.982987) = 118 mm
-//   Hull Y-centreline (nose axis) approx CY = -149 mm
-//   Hull Z-centreline approx CZ = 69 mm
-//   STL bounds (from voxel-remesh repair): X=99..228, Y=-288..-53, Z=0..141
+// Hull surface position estimates (wall = 0.079 in / 2.0 mm):
+//   half_ext_Y = 2.0 / (1 - 0.982987) = 118 mm (4.65 in)
+//   Hull Y-centreline (nose axis) approx CY = -149 mm (-5.87 in)
+//   Hull Z-centreline approx CZ = 69 mm (2.72 in)
+//   STL bounds (from voxel-remesh repair):
+//     X = 99..228 mm (3.90..8.98 in)
+//     Y = -288..-53 mm (-11.34..-2.09 in)
+//     Z = 0..141 mm (0..5.55 in)
 //
 // Sensor references:
 //   VL53L5CX: ST UM2884 DocID032910 Rev 1, 2021.
