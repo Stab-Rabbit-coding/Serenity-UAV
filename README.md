@@ -37,8 +37,7 @@ source desktop-model specifications.
 
 ### Fuselage
 
-The design retains the four canonical sections — head, cargo, middle, and rear — from the
-source hull model:
+The design retains the four canonical sections — head, cargo, middle, and rear — from the source hull model:
 [thingiverse.com/thing:7330462](https://www.thingiverse.com/thing:7330462)
 ("Serenity Firefly with landing gear and swivel engines" by misubisu, CC BY 4.0).
 Scaled to 24 in (609 mm) overall length.

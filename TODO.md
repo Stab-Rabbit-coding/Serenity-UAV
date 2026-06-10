@@ -1510,7 +1510,7 @@ the full T/W ≈ 1.47 VTOL hover capability specified in Rev Q.
 
 - [x] serenity-fc Phase 6 stub (signal handling, idle loop placeholder) *(done 2026-05-25)*
 
-### 4.2 — FC Node (Cape-A) — Phase 7 Firmware
+### 4.2 — FC Node (Wash) — Phase 7 Firmware
 
 - [ ] **EDF ESC PID governor** — BDSHOT600 telemetry input on PRU-ICSS, EHRPWM output to ESCs, CAN FD cross-node synchronisation. Targets: settle <200ms, overshoot <5%; equalization |RPM_FWD − RPM_AFT| <100 RPM; fault latch on overtemp/overcurrent (no auto-recovery, GCS ack required).
 
@@ -1530,7 +1530,7 @@ the full T/W ≈ 1.47 VTOL hover capability specified in Rev Q.
 
 - [x] **governor_config.h** — template with calibrated k values per EDF; compile-time constants. *(done 2026-06-04)*
 
-### 4.3 — CN Node (Cape-B) — Phase 7 Firmware
+### 4.3 — CN Node (Zoë) — Phase 7 Firmware
 
 - [ ] **CAN FD heartbeat and telemetry forwarding** — broadcast 0x001–0x008 node health frames; relay MAVLink telemetry from elected FC master to SiK GCS link.
 
@@ -1559,6 +1559,20 @@ the full T/W ≈ 1.47 VTOL hover capability specified in Rev Q.
 - [ ] **GPS cross-check** — 4 GPS receivers (one per FC node); positions averaged; outlier >2m flagged and excluded from blend.
 
 - [ ] **Security message signing** — every inter-node CAN FD message signed; unauthenticated messages discarded; signing key material bound to node TPM endorsement key.
+
+### 4.5 - Ground Control (Mal)
+
+- [ ] **Ardupilot GSC Setup** - Install on Debian Linux PC.
+
+- [ ] **Zoë cape and PB2-I** - USB Teather to Mal system.  EMI enclosure optional, enclosure for field site required.
+
+  - [ ] Tracking software to keep track of bearing/range to aircraft and provide commands for directional antenna gimble servos
+
+- [ ] **Ground Station antennas and amplifiers** - Antenna systems for WiFi/Zigbee, LoRa, Sik, and 49MHz RCRS radios.
+
+  - [ ] External power amplifiers and filters as needed / authorized to provide assured communications to aircraft even when it's flying in a 500 W/m^2 EM environment.
+
+  - [ ] Servo driven Turret/Gimble for directional Antennas with encoders using existing connectors and drivers on Zoë board.
 
 ---
 
