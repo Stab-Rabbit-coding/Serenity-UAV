@@ -11,6 +11,13 @@ standards documented there (coding style, fabrication specs, licensing, and attr
 A functional, security-conscious Unmanned Aerial Vehicle based on the Firefly-class spacecraft
 Serenity from the 2002 show. Designed using Claude AI.
 
+Design mission profile:
+
+Take off VTOL.
+Fly into a 500W/m^2 Broadband Radio Frequency environment.
+Lower and release a payload from the cargo bay.
+Identify a payload on a moving platform. Synchronise flight with the platform.  Attach  the payload to the ho
+
 ---
 
 ## Specifications
