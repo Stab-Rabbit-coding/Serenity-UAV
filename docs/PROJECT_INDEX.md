@@ -70,13 +70,13 @@ All parametric source files.  Compiled to STLs via `airframe/FreeCAD-scripts/Mak
 #### airframe/openscad/fuselage/
 
 ```
-s_head_shell24.scad               — Nose/cockpit shell, 2mm CF-PETG skin (Rev R)
-s_middle_canonical_shell24.scad   — Horseshoe neck section shell (Rev R)
-s_rear_shell24.scad               — Aft engine-room shell, 2mm CF-PETG (Rev R)
+head_shell24.scad               — Nose/cockpit shell, 2mm CF-PETG skin (Rev R)
+middle_canonical_shell24.scad   — Horseshoe neck section shell (Rev R)
+rear_shell24.scad               — Aft engine-room shell, 2mm CF-PETG (Rev R)
 battery_tray.scad                 — 6S 4000mAh LiPo tray, keel-rail slide (Rev R)
 belly_panel.scad                  — Battery bay belly access panel (Rev R)
 cargo/
-  s_cargo_sect_shell24.scad       — Rev R cargo section shell with clamshell doors, avionics bays, GPS mounts
+  cargo_sect_shell24.scad       — Rev R cargo section shell with clamshell doors, avionics bays, GPS mounts
 ```
 
 #### airframe/openscad/nacelles/
@@ -99,9 +99,9 @@ nacelle_servo_bracket.scad          — Rev R DS3218MG tilt servo bracket with M
 #### airframe/openscad/wings/
 
 ```
-s_wings_s1223_revo.scad             — Rev R S1223 high-lift wing pair (carried fwd from Rev O)
+wings_s1223_revo.scad             — Rev R S1223 high-lift wing pair (carried fwd from Rev O)
                                       RENDER_SIDE=+1 port, -1 stbd, 0 both
-s_wing_nacelle_pylon_revo.scad      — Rev R nacelle tilt pylon (carried fwd from Rev O)
+wing_nacelle_pylon_revo.scad      — Rev R nacelle tilt pylon (carried fwd from Rev O)
 ```
 
 ### airframe/stls/
@@ -111,19 +111,19 @@ Compiled and repaired STLs ready for slicing.
 #### airframe/stls/fuselage/
 
 ```
-s_head_shell24.stl                — Head section (solid, for SCAD import ref)
-s_head_shell24_2mm_repaired.stl   — Head section 2mm hollow, manifold
-s_middle_canonical_shell24.stl    — Middle section
-s_middle_shell24_2mm_repaired.stl — Middle section 2mm hollow, manifold
-s_cargo_sect_shell24_2mm_repaired.stl — Cargo section 2mm hollow, manifold
-s_rear_shell24_2mm_repaired.stl   — Rear section 2mm hollow, manifold
-s_feet_x_4_scaled24.stl           — Landing feet × 4 (24" scale)
-s_legs_scaled24.stl               — Landing legs (24" scale)
+head_shell24.stl                — Head section (solid, for SCAD import ref)
+head_shell24_2mm_repaired.stl   — Head section 2mm hollow, manifold
+middle_canonical_shell24.stl    — Middle section
+middle_shell24_2mm_repaired.stl — Middle section 2mm hollow, manifold
+cargo_sect_shell24_2mm_repaired.stl — Cargo section 2mm hollow, manifold
+rear_shell24_2mm_repaired.stl   — Rear section 2mm hollow, manifold
+feet_x_4_scaled24.stl           — Landing feet × 4 (24" scale)
+legs_scaled24.stl               — Landing legs (24" scale)
 dorsal_antenna_fin.stl            — Dorsal antenna fin fairing
-s_middle_canonical_edf_intake.stl — Middle section EDF intake opening
+middle_canonical_edf_intake.stl — Middle section EDF intake opening
 cargo/
-  s_cargo_sect_shell24.stl              — Cargo shell (SCAD output)
-  s_cargo_sect_shell24_2mm_repaired_largest.stl — Repaired largest shell body
+  cargo_sect_shell24.stl              — Cargo shell (SCAD output)
+  cargo_sect_shell24_2mm_repaired_largest.stl — Repaired largest shell body
   cargo_door_port.stl                   — Port clamshell cargo door
   cargo_door_stbd.stl                   — Stbd clamshell cargo door
   cargo_cradle_autolatch.stl            — Auto-latch payload cradle
@@ -157,9 +157,9 @@ nozzles/
 #### airframe/stls/wings/
 
 ```
-s_wing_port_s1223_revo.stl        — Port wing (RENDER_SIDE=+1)
-s_wing_stbd_s1223_revo.stl        — Stbd wing (RENDER_SIDE=-1)
-s_wing_nacelle_pylon_revo.stl     — Nacelle tilt pylon (one per side)
+wing_port_s1223_revo.stl        — Port wing (RENDER_SIDE=+1)
+wing_stbd_s1223_revo.stl        — Stbd wing (RENDER_SIDE=-1)
+wing_nacelle_pylon_revo.stl     — Nacelle tilt pylon (one per side)
 ```
 
 ### airframe/ (root-level files)
@@ -420,17 +420,17 @@ Not archived — intended for a future build phase.
 ```
 README.md                         — Aft fuselage EDF design scope, rationale, and defer decision
 openscad/
-  s_aft_edf_plenum.scad           — Cross-shaped CF-PETG intake plenum manifold (120 mm EDF)
-  s_edf_120_motor_mount.scad      — 120 mm EDF motor mount ring
-  s_edf_120_thrust_tube.scad      — Thrust tube from plenum to iris nozzle
-  s_neck_intake_frame.scad        — Four-port radial intake scoop frame at neck station ~310 mm
-  s_rear_neck_intake_shell24.scad — Rear neck intake shell integration shell
+  aft_edf_plenum.scad           — Cross-shaped CF-PETG intake plenum manifold (120 mm EDF)
+  edf_120_motor_mount.scad      — 120 mm EDF motor mount ring
+  edf_120_thrust_tube.scad      — Thrust tube from plenum to iris nozzle
+  neck_intake_frame.scad        — Four-port radial intake scoop frame at neck station ~310 mm
+  rear_neck_intake_shell24.scad — Rear neck intake shell integration shell
 stls/
-  s_aft_edf_plenum.stl            — Compiled plenum STL
-  s_edf_120_motor_mount.stl       — Compiled motor mount STL
-  s_edf_120_thrust_tube.stl       — Compiled thrust tube STL
-  s_neck_intake_frame.stl         — Compiled intake frame STL
-  s_rear_shell24_2mm_edf_bored.stl — Rear shell with EDF bore cut
+  aft_edf_plenum.stl            — Compiled plenum STL
+  edf_120_motor_mount.stl       — Compiled motor mount STL
+  edf_120_thrust_tube.stl       — Compiled thrust tube STL
+  neck_intake_frame.stl         — Compiled intake frame STL
+  rear_shell24_2mm_edf_bored.stl — Rear shell with EDF bore cut
   rear_nozzle_frame.stl           — 8-petal iris nozzle ring frame
   rear_nozzle_petal.stl           — Single iris petal (print × 8)
   rear_nozzle_closed_asm.stl      — Iris assembly visual (closed position)

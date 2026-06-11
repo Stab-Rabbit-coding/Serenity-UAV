@@ -23,9 +23,9 @@ Design references:
     DRV8833 carrier PCB: 26 x 23 mm nominal (generic breakout or SparkFun ROB-14450)
     Dyneema SK75 0.5 mm braid: OD 0.5 mm, min break load >= 100 N (Lankhorst Euronete)
     u-blox ANN-MB-00 GPS patch antenna: 35 mm OD circular (data sheet rev 1.0)
-    Cargo shell GPS mount params (s_cargo_sect_shell24.scad):
+    Cargo shell GPS mount params (cargo_sect_shell24.scad):
         GPS_M2_BC_R = 22.0 mm, GPS_RECESS_D = 36.0 mm, GPS_M2_D = 2.4 mm
-    Cargo shell FPV mount params (s_cargo_sect_shell24.scad):
+    Cargo shell FPV mount params (cargo_sect_shell24.scad):
         FPV_BEZ_W = 29.0 mm, FPV_APER_D = 16.0 mm, FPV_M2_S = 14.0 mm
     Ruthex RX-M3x5.7 heat-set insert: bore 4.0 mm, OD 5.7 mm (reference only)
     DIN 7991 M2 flathead countersink: 90 deg included angle, OD 4.5 mm at M2
@@ -402,7 +402,7 @@ def make_autolatch_cradle():
     Auto-latch mechanism: four corner flex tabs (2 mm wall PETG, 10 mm tall)
     with 2 mm inward hooks that snap over matching 3 mm catch lips on the
     gondola clamshell door inner frame edge.  VERIFY catch lip geometry and
-    add to s_cargo_sect_shell24.scad clamshell door frame before first flight.
+    add to cargo_sect_shell24.scad clamshell door frame before first flight.
 
     Dyneema tie-off boss (12 mm OD, 12 mm tall): 2 mm slot for line passage;
     5 mm central bore for double-bowline knot seating below boss.
@@ -474,7 +474,7 @@ def make_gps_retention_ring():
       -- one for GPS-STBD mount (Z = CZ - 30 mm, FC/Sensor Cape 2 / redundant GPS)
 
     Clamps u-blox ANN-MB-00 35 mm circular patch GPS antenna into the flush
-    receptacle cut by gps_mount_cut() in s_cargo_sect_shell24.scad.
+    receptacle cut by gps_mount_cut() in cargo_sect_shell24.scad.
     Four M2 DIN 7991 flathead screws at 44 mm bolt circle (22 mm radius) pull
     the ring down onto the antenna body, seating it in the 36 mm x 6 mm recess.
 
@@ -486,7 +486,7 @@ def make_gps_retention_ring():
 
     Dims: 50 mm OD x 35 mm ID x 2.5 mm thick.
     Material: PETG.  Print: 0.15 mm layers, 4 perimeters, 25 % infill.
-    Reference: u-blox ANN-MB-00 data sheet rev 1.0; s_cargo_sect_shell24.scad.
+    Reference: u-blox ANN-MB-00 data sheet rev 1.0; cargo_sect_shell24.scad.
     """
     RING_OD = 50.0    # outer diameter: bolt circle 44 mm + 3 mm margin each side
     RING_ID = 35.0    # inner diameter: matches 35 mm GPS antenna OD exactly
@@ -503,7 +503,7 @@ def make_gps_retention_ring():
     ring = bsub(outer_disk, inner_bore)
 
     # 4x M2 countersunk holes at 45 / 135 / 225 / 315 deg on bolt circle
-    # Matches gps_mount_cut() 45-deg hole pattern in s_cargo_sect_shell24.scad
+    # Matches gps_mount_cut() 45-deg hole pattern in cargo_sect_shell24.scad
     cutters = []
     for angle_deg in (45, 135, 225, 315):
         ang = math.radians(angle_deg)
@@ -522,7 +522,7 @@ def make_fpv_bezel():
     FPV camera retention bezel for cargo gondola nadir (belly) mount.
 
     Clamps 28 mm standard FPV camera body in the flush aperture cut by
-    fpv_cut() in s_cargo_sect_shell24.scad.  Camera face sits flush with
+    fpv_cut() in cargo_sect_shell24.scad.  Camera face sits flush with
     gondola belly skin; bezel presses camera body from below.
     Four M2 DIN 7991 flathead screws at 14 x 14 mm grid retain bezel.
 
@@ -534,7 +534,7 @@ def make_fpv_bezel():
 
     Dims: 29 x 29 x 2.5 mm.
     Material: PETG.  Print: 0.15 mm layers, 4 perimeters, 25 % infill.
-    Reference: s_cargo_sect_shell24.scad fpv_cut() module.
+    Reference: cargo_sect_shell24.scad fpv_cut() module.
     """
     BEZ_W = 29.0    # outer square side (FPV_BEZ_W from shell SCAD)
     APER_R = 8.0    # lens aperture radius (FPV_APER_D / 2 = 8 mm)

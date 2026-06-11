@@ -1,5 +1,5 @@
 // =============================================================================
-// s_wing_nacelle_pylon_revo.scad
+// wing_nacelle_pylon_revo.scad
 // Serenity UAV — Rev R — Integrated Wing Nacelle Tilt Pylon
 // =============================================================================
 //
@@ -86,11 +86,11 @@
 // ---------------
 //   Port pylon (left nacelle, inboard +X):
 //     openscad -o s_wing_nacelle_pylon_port_revo.stl \
-//              s_wing_nacelle_pylon_revo.scad -D INBOARD_SIGN=+1
+//              wing_nacelle_pylon_revo.scad -D INBOARD_SIGN=+1
 //
 //   Starboard pylon (right nacelle, inboard −X — mirror):
 //     openscad -o s_wing_nacelle_pylon_stbd_revo.stl \
-//              s_wing_nacelle_pylon_revo.scad -D INBOARD_SIGN=-1
+//              wing_nacelle_pylon_revo.scad -D INBOARD_SIGN=-1
 //
 // =============================================================================
 
@@ -514,7 +514,7 @@ pylon(inboard_sign = INBOARD_SIGN);
 // Render commands:
 //   Port pylon:
 //     openscad -o s_wing_nacelle_pylon_port_revo.stl \
-//              s_wing_nacelle_pylon_revo.scad -D INBOARD_SIGN=1
+//              wing_nacelle_pylon_revo.scad -D INBOARD_SIGN=1
 //   Starboard pylon:
 //     openscad -o s_wing_nacelle_pylon_stbd_revo.stl \
-//              s_wing_nacelle_pylon_revo.scad -D INBOARD_SIGN=-1
+//              wing_nacelle_pylon_revo.scad -D INBOARD_SIGN=-1

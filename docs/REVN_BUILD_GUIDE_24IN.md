@@ -125,10 +125,10 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 | STL | Material | Layer | Infill | Qty | Notes |
 |-----|----------|-------|--------|-----|-------|
-| `s_head_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Nose-down orientation |
-| `s_middle_canonical_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Canonical belly — NO belly scoop. Generate from `serenity/stl/s_middle_canonical_shell24.scad`. |
-| `s_cargo_sect_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | |
-| `s_rear_neck_intake_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Hull neck section with 4 radial scoop windows. Generate from `deferred/aft-edf/openscad/s_rear_neck_intake_shell24.scad`. Cover the 4 windows with removable 3mm PETG blanks (silicone-sealed) until Phase 11. |
+| `head_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Nose-down orientation |
+| `middle_canonical_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Canonical belly — NO belly scoop. Generate from `serenity/stl/middle_canonical_shell24.scad`. |
+| `cargo_sect_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | |
+| `rear_neck_intake_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Hull neck section with 4 radial scoop windows. Generate from `deferred/aft-edf/openscad/rear_neck_intake_shell24.scad`. Cover the 4 windows with removable 3mm PETG blanks (silicone-sealed) until Phase 11. |
 | `s_wings_both_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | |
 | `s_eng_left_stator_shell24.stl` | **CF-PETG** | 0.15 mm | 25% gyroid, 4 walls | 1 | Port nacelle — run `blender_nacelle_integrated_v1.py` first to generate |
 | `s_eng_right_stator_shell24.stl` | **CF-PETG** | 0.15 mm | 25% gyroid, 4 walls | 1 | Starboard nacelle |
@@ -140,8 +140,8 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 | `nacelle_nozzle_ring.stl` | **CF-PETG** | 0.15 mm | 40% | 2 | Base ring; seals to nacelle nozzle exit face |
 | `rear_nozzle_petal.stl` | PETG + translucent-blue inner | 0.20 mm | 20% gyroid | 8 | **DEFERRED — Phase 11.** File at `deferred/aft-edf/stls/`. Do not print until Phase 11. |
 | `rear_nozzle_frame.stl` | **CF-PETG** | 0.15 mm | 30% | 1 | **DEFERRED — Phase 11.** File at `deferred/aft-edf/stls/`. Do not print until Phase 11. |
-| `s_feet_x_4_scaled24.stl` | **TPU 95A** | 0.25 mm | 40% | 1 | Direct-drive extruder required |
-| `s_legs_scaled24.stl` | **CF-PETG** | 0.15 mm | 30% | 1 | |
+| `feet_x_4_scaled24.stl` | **TPU 95A** | 0.25 mm | 40% | 1 | Direct-drive extruder required |
+| `legs_scaled24.stl` | **CF-PETG** | 0.15 mm | 30% | 1 | |
 | Tilt bracket w/ sector gear | **CF-PETG** | 0.12 mm | 40%, 4 walls | 2 | 0.12mm layer for M0.5 tooth accuracy |
 | Drive pinion (R=6mm, M0.5) | PETG or resin | 0.12 mm | 40% | 4 | 2 per nacelle (one either end of bevel shaft); resin gives best tooth finish |
 | Bevel gear pair (1:1, M0.5) | PETG or resin | 0.12 mm | 40% | 2 sets | 4 gears total; or source machined |
@@ -436,7 +436,7 @@ Crown pinion (R=6mm) → Nozzle inner ring rack (R=28mm)
    > Failure to complete these steps before foam pour requires drilling out the
    > foam from both bearing bores — a multi-hour rework that risks cracking
    > the 4.85 mm bearing-block annulus.
-   > Ref: s_cargo_sect_shell24.scad spar_bearing_block(); PHASED_BUILD_GUIDE Phase 4.
+   > Ref: cargo_sect_shell24.scad spar_bearing_block(); PHASED_BUILD_GUIDE Phase 4.
 
 5. **Connect pushrod** from servo arm to pivot arm (`s_pivot_arm_a_scaled24.stl`). Adjust pushrod length so that:
    - Servo 0° = nacelle 0° (horizontal / cruise)
@@ -598,7 +598,7 @@ Verify full obstacle avoidance in firmware (dual-redundant arrays — A and B co
 
 ## Phase 7 — Cargo System
 
-Install clamshell cargo door hinges and latch. Bond cargo bay walls (per s_cargo_sect_shell24.stl interior). Install N20 winch motor in aft bay, drum, and auto-latch cradle. Wire HX711 load cell to Cape-B CN2. Test release and retrieval with 250 g dummy load.
+Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_sect_shell24.stl interior). Install N20 winch motor in aft bay, drum, and auto-latch cradle. Wire HX711 load cell to Cape-B CN2. Test release and retrieval with 250 g dummy load.
 
 ---
 
@@ -635,10 +635,10 @@ Install clamshell cargo door hinges and latch. Bond cargo bay walls (per s_cargo
 | `blender_nacelle_integrated_v1.py` | Blender | Generate nacelle shells with integrated stators | `s_eng_left_stator_shell24.stl`, `s_eng_right_stator_shell24.stl` |
 | ~~`blender_intake_cut.py`~~ | ~~Blender~~ | ~~Cut 120mm belly intake in s_middle~~ | **Superseded** — belly scoop removed in Rev N; use canonical middle shell instead |
 | `blender_nozzle_gen.py` | Blender | Generate iris nozzle petals and rings | `nacelle_nozzle_petal.stl`, `nacelle_nozzle_ring.stl`, `rear_nozzle_petal.stl`, `rear_nozzle_frame.stl` |
-| `serenity/stl/s_middle_canonical_shell24.scad` | OpenSCAD | Canonical middle fuselage shell (belly restored) | `s_middle_canonical_shell24.stl` |
-| `deferred/aft-edf/openscad/s_rear_neck_intake_shell24.scad` | OpenSCAD | Rear neck shell with 4 radial scoop windows *(Phase 11)* | `s_rear_neck_intake_shell24.stl` |
-| `deferred/aft-edf/openscad/s_neck_intake_frame.scad` | OpenSCAD | CF-PETG structural intake frame ring *(Phase 11)* | `s_neck_intake_frame.stl` |
-| `deferred/aft-edf/openscad/s_aft_edf_plenum.scad` | OpenSCAD | Cross-shaped 4-to-1 plenum manifold *(Phase 11)* | `s_aft_edf_plenum.stl` |
+| `serenity/stl/middle_canonical_shell24.scad` | OpenSCAD | Canonical middle fuselage shell (belly restored) | `middle_canonical_shell24.stl` |
+| `deferred/aft-edf/openscad/rear_neck_intake_shell24.scad` | OpenSCAD | Rear neck shell with 4 radial scoop windows *(Phase 11)* | `rear_neck_intake_shell24.stl` |
+| `deferred/aft-edf/openscad/neck_intake_frame.scad` | OpenSCAD | CF-PETG structural intake frame ring *(Phase 11)* | `neck_intake_frame.stl` |
+| `deferred/aft-edf/openscad/aft_edf_plenum.scad` | OpenSCAD | Cross-shaped 4-to-1 plenum manifold *(Phase 11)* | `aft_edf_plenum.stl` |
 
 Blender scripts run headless: `blender --background --python <script>.py`  
 OpenSCAD STLs: `openscad -o <output>.stl <file>.scad`
@@ -724,9 +724,9 @@ achieve full VTOL hover capability (T/W ≈ 1.47).
 
 ### 11B — Intake Frame and Plenum
 
-1. Generate and print `s_neck_intake_frame.stl` from `deferred/aft-edf/openscad/s_neck_intake_frame.scad`
+1. Generate and print `neck_intake_frame.stl` from `deferred/aft-edf/openscad/neck_intake_frame.scad`
    (CF-PETG, 0.15mm, 40% gyroid, 4 walls).
-2. Generate and print `s_aft_edf_plenum.stl` from `deferred/aft-edf/openscad/s_aft_edf_plenum.scad`
+2. Generate and print `aft_edf_plenum.stl` from `deferred/aft-edf/openscad/aft_edf_plenum.scad`
    (PETG, 0.20mm, 20% gyroid).
 3. Remove temporary window covers from rear neck hull section.
 4. Dry-fit intake frame into 4 scoop windows (tongues ~0.2mm clearance); verify lip orientation (forward +X).

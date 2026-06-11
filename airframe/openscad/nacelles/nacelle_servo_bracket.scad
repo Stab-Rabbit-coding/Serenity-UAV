@@ -1,7 +1,7 @@
 // ============================================================
 // nacelle_servo_bracket.scad
 // U-channel saddle clamp for mounting a DS3218MG-class nacelle tilt servo
-// to the nacelle_servo_mount_block pads in s_cargo_sect_shell24.scad.
+// to the nacelle_servo_mount_block pads in cargo_sect_shell24.scad.
 //
 // Rev R (2026-06-11): Rev R baseline — initial design (Rev S1) carried forward; no geometry changes.
 // Rev S1 (2026-06-08): Initial release.
@@ -45,7 +45,7 @@
 //
 // Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // License: CC BY 4.0 -- creativecommons.org/licenses/by/4.0
-// Ref: DS3218MG datasheet; s_cargo_sect_shell24.scad NSVMT_* parameters;
+// Ref: DS3218MG datasheet; cargo_sect_shell24.scad NSVMT_* parameters;
 //      PHASED_BUILD_GUIDE.md Phase 3; ISO 4762; CLAUDE.md fabrication standards.
 // ============================================================
 

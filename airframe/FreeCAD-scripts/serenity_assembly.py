@@ -1,6 +1,6 @@
 """
 serenity_assembly.py — Serenity UAV full-airframe FreeCAD assembly.
-Revision: R1 (2026-06-11)
+Revision: R (2026-06-11)
 
 Imports all printed airframe STL components, applies coordinate transforms,
 and saves a single Serenity-Assembled.FCStd for review in FreeCAD.
@@ -40,7 +40,7 @@ Quaternion convention (FreeCAD App.Rotation): (Qx, Qy, Qz, Qw)
 
 References:
     [1] airframe/freecad/assembly/SerenityAssembly.FCStd — validated positions
-    [2] airframe/openscad/fuselage/s_head_shell24.scad — hull coordinate def.
+    [2] airframe/openscad/fuselage/head_shell24.scad — hull coordinate def.
     [3] airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad
     [4] CLAUDE.md — project standards.
 """
@@ -184,25 +184,25 @@ def assemble():
     # -------------------------------------------------------------------
     print("[assembly] Fuselage sections ...", flush=True)
 
-    head = add_mesh(doc, _stl("fuselage/s_head_shell24_2mm_repaired.stl"), "Head_Shell")
+    head = add_mesh(doc, _stl("fuselage/head_shell24_2mm_repaired.stl"), "Head_Shell")
     place_mesh(head, PL_HEAD_SHELL)
 
-    cargo = add_mesh(doc, _stl("fuselage/cargo/s_cargo_sect_shell24_2mm_repaired.stl"), "Cargo_Shell")
+    cargo = add_mesh(doc, _stl("fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl"), "Cargo_Shell")
     place_mesh(cargo, PL_CARGO_SHELL)
 
-    middle = add_mesh(doc, _stl("fuselage/s_middle_shell24_2mm_repaired.stl"), "Middle_Shell")
+    middle = add_mesh(doc, _stl("fuselage/middle_shell24_2mm_repaired.stl"), "Middle_Shell")
     place_mesh(middle, PL_MIDDLE_SHELL)
 
     # Prefer compiled rear shell; fall back to the repaired 2mm mesh.
-    rear_stl = _stl("fuselage/s_rear_shell24.stl")
+    rear_stl = _stl("fuselage/rear_shell24.stl")
     if not os.path.exists(rear_stl):
-        rear_stl = _stl("fuselage/s_rear_shell24_2mm_repaired.stl")
+        rear_stl = _stl("fuselage/rear_shell24_2mm_repaired.stl")
     rear = add_mesh(doc, rear_stl, "Rear_Shell")
     place_mesh(rear, PL_REAR_SHELL)
 
     # Landing gear (scaled Thingiverse parts; identity placement)
-    add_mesh(doc, _stl("fuselage/s_feet_x_4_scaled24.stl"), "Landing_Feet")
-    add_mesh(doc, _stl("fuselage/s_legs_scaled24.stl"),     "Landing_Legs")
+    add_mesh(doc, _stl("fuselage/feet_x_4_scaled24.stl"), "Landing_Feet")
+    add_mesh(doc, _stl("fuselage/legs_scaled24.stl"),     "Landing_Legs")
 
     # -------------------------------------------------------------------
     # CARGO BAY SUB-ASSEMBLY
@@ -260,10 +260,10 @@ def assemble():
     # -------------------------------------------------------------------
     print("[assembly] Wings ...", flush=True)
 
-    port_wing = add_mesh(doc, _stl("wings/s_wing_port_s1223_revo.stl"), "Wing_Port")
+    port_wing = add_mesh(doc, _stl("wings/wing_port_s1223_revo.stl"), "Wing_Port")
     place_mesh(port_wing, PL_WING_PORT)
 
-    stbd_wing = add_mesh(doc, _stl("wings/s_wing_stbd_s1223_revo.stl"), "Wing_Stbd")
+    stbd_wing = add_mesh(doc, _stl("wings/wing_stbd_s1223_revo.stl"), "Wing_Stbd")
     place_mesh(stbd_wing, PL_WING_STBD)
 
     # -------------------------------------------------------------------
@@ -274,8 +274,8 @@ def assemble():
     # -------------------------------------------------------------------
     print("[assembly] Nacelle tilt pylons ...", flush=True)
 
-    add_mesh(doc, _stl("wings/s_wing_nacelle_pylon_revo.stl"), "Pylon_Port")
-    add_mesh(doc, _stl("wings/s_wing_nacelle_pylon_revo.stl"), "Pylon_Stbd")
+    add_mesh(doc, _stl("wings/wing_nacelle_pylon_revo.stl"), "Pylon_Port")
+    add_mesh(doc, _stl("wings/wing_nacelle_pylon_revo.stl"), "Pylon_Stbd")
 
     # -------------------------------------------------------------------
     # NACELLE PODS (forward-flight / cruise configuration)

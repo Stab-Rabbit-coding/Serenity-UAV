@@ -198,7 +198,7 @@ Nacelle-only T/W ≈ 1.61 is sufficient for VTOL hover.
   + PETG plenum ~2.8 oz / 80 g + nozzle frame/petals/servo/wiring ~4.9 oz / 140 g)
 - **Phase 11 full-system:** AUW ~7.95 lbm (3,608 g) | Total thrust ~17.6 lbf (7,964 g) | T/W ≈ **2.21**
 - Fuselage EDF intake: 4 radial scoops at neck station ~12.2 in (310 mm) via
-  `s_neck_intake_frame.stl` + `s_aft_edf_plenum.stl` (cross-shaped 4-to-1 plenum manifold).
+  `neck_intake_frame.stl` + `aft_edf_plenum.stl` (cross-shaped 4-to-1 plenum manifold).
 
 ---
 

@@ -33,7 +33,7 @@ HULL CROSS-SECTION DATA (from blender_nozzle_gen.py analysis of shell24 files):
     EDF exit radius at hinge = 25mm (50mm fan / 2)
     Nacelle centroid in XY  = (34, -150) mm
 
-  Rear (s_rear_shell24.stl) — axis = X, exit at X=−246mm:
+  Rear (rear_shell24.stl) — axis = X, exit at X=−246mm:
     X=−246mm  section = 54mm Y × 66mm Z  →  approx mean_r=30mm, tip  (closed)
     X=−232mm  section =131mm Y ×119mm Z  →  mean_r=62.5mm at hinge
     EDF exit radius at hinge = 60mm (120mm fan / 2)

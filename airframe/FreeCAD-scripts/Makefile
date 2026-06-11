@@ -43,7 +43,7 @@ SCAD_FLAGS := --hardwarnings
 
 # -- Fuselage --------------------------------------------------
 FUSELAGE_STLS := \
-    $(STLS)/fuselage/s_rear_shell24.stl \
+    $(STLS)/fuselage/rear_shell24.stl \
     $(STLS)/fuselage/battery_tray.stl   \
     $(STLS)/fuselage/belly_panel.stl
 
@@ -61,9 +61,9 @@ NACELLE_STLS := \
 
 # -- Wings -----------------------------------------------------
 WING_STLS := \
-    $(STLS)/wings/s_wing_port_s1223_revo.stl  \
-    $(STLS)/wings/s_wing_stbd_s1223_revo.stl  \
-    $(STLS)/wings/s_wing_nacelle_pylon_revo.stl
+    $(STLS)/wings/wing_port_s1223_revo.stl  \
+    $(STLS)/wings/wing_stbd_s1223_revo.stl  \
+    $(STLS)/wings/wing_nacelle_pylon_revo.stl
 
 ALL_STLS := $(FUSELAGE_STLS) $(NACELLE_STLS) $(WING_STLS)
 
@@ -89,12 +89,12 @@ assembly: stls
 # ============================================================
 # Fuselage rules
 # ============================================================
-$(STLS)/fuselage/s_rear_shell24.stl: \
-        $(SCAD)/fuselage/s_rear_shell24.scad \
-        $(AIRFRAME)/archive/stls/fuselage/s_rear_shell24_repaired.stl
+$(STLS)/fuselage/rear_shell24.stl: \
+        $(SCAD)/fuselage/rear_shell24.scad \
+        $(AIRFRAME)/archive/stls/fuselage/rear_shell24_repaired.stl
 	@mkdir -p $(dir $@)
 	$(OPENSCAD) $(SCAD_FLAGS) \
-	    $(SCAD)/fuselage/s_rear_shell24.scad \
+	    $(SCAD)/fuselage/rear_shell24.scad \
 	    -o $@
 	@echo "[stl] $@"
 
@@ -196,29 +196,29 @@ $(STLS)/nacelles/nacelle_sector_gear.stl: \
 # Wings use the RENDER_SIDE parameter (-D flag):
 #   +1 = port wing, -1 = stbd wing, 0 = both (preview only)
 # ============================================================
-$(STLS)/wings/s_wing_port_s1223_revo.stl: \
-        $(SCAD)/wings/s_wings_s1223_revo.scad
+$(STLS)/wings/wing_port_s1223_revo.stl: \
+        $(SCAD)/wings/wings_s1223_revo.scad
 	@mkdir -p $(dir $@)
 	$(OPENSCAD) $(SCAD_FLAGS) \
 	    -D 'RENDER_SIDE=1' \
-	    $(SCAD)/wings/s_wings_s1223_revo.scad \
+	    $(SCAD)/wings/wings_s1223_revo.scad \
 	    -o $@
 	@echo "[stl] $@"
 
-$(STLS)/wings/s_wing_stbd_s1223_revo.stl: \
-        $(SCAD)/wings/s_wings_s1223_revo.scad
+$(STLS)/wings/wing_stbd_s1223_revo.stl: \
+        $(SCAD)/wings/wings_s1223_revo.scad
 	@mkdir -p $(dir $@)
 	$(OPENSCAD) $(SCAD_FLAGS) \
 	    -D 'RENDER_SIDE=-1' \
-	    $(SCAD)/wings/s_wings_s1223_revo.scad \
+	    $(SCAD)/wings/wings_s1223_revo.scad \
 	    -o $@
 	@echo "[stl] $@"
 
-$(STLS)/wings/s_wing_nacelle_pylon_revo.stl: \
-        $(SCAD)/wings/s_wing_nacelle_pylon_revo.scad
+$(STLS)/wings/wing_nacelle_pylon_revo.stl: \
+        $(SCAD)/wings/wing_nacelle_pylon_revo.scad
 	@mkdir -p $(dir $@)
 	$(OPENSCAD) $(SCAD_FLAGS) \
-	    $(SCAD)/wings/s_wing_nacelle_pylon_revo.scad \
+	    $(SCAD)/wings/wing_nacelle_pylon_revo.scad \
 	    -o $@
 	@echo "[stl] $@"
 

@@ -79,8 +79,8 @@ The da Vinci Jr. build volume is 150 × 150 × 150 mm.
 | `s_pivot_arm_a_scaled24.stl` | 44.8 | 50.1 | 14.3 | Tilt pivot arm |
 | `s_eng_pistons_scaled24.stl` | 32.8 | 58.9 | 13.2 | Piston fairings |
 | `s_wings_both_shell24.stl` | 137.1 | 128.8 | 19.4 | Both wings — fits flat |
-| `s_feet_x_4_scaled24.stl` | 78.2 | 98.4 | 9.0 | Landing feet ×4 |
-| `s_edf_120_motor_mount.stl` | 126.0 | 126.0 | 53.0 | 120 mm EDF spider mount |
+| `feet_x_4_scaled24.stl` | 78.2 | 98.4 | 9.0 | Landing feet ×4 |
+| `edf_120_motor_mount.stl` | 126.0 | 126.0 | 53.0 | 120 mm EDF spider mount |
 | `sector_gear_22mm.stl` | 28.5 | 28.5 | 4.0 | Sector gear (M0.5 era) |
 | `bevel_gear_housing.stl` | 20.0 | 20.0 | 20.0 | Bevel gear housing |
 | `pinion_a_bracket.stl` | 24.0 | 16.0 | 14.0 | Pinion A bearing bracket |
@@ -91,12 +91,12 @@ The da Vinci Jr. build volume is 150 × 150 × 150 mm.
 | ------ | ----------------- | ------------ | ------- | ----------------- |
 | `s_eng_left_stator_shell24_50mm.stl` | 75.6 × 96.2 × 172.6 | Z=172.6 > 150 | **86%** | 65.0 × 82.7 × 148.4 |
 | `s_eng_right_stator_shell24_50mm.stl` | 75.6 × 96.2 × 172.6 | Z=172.6 > 150 | **86%** | 65.0 × 82.7 × 148.4 |
-| `s_head_shell24.stl` | 129.4 × 235.1 × 140.7 | Y=235.1 > 150 | **63%** | 81.5 × 148.1 × 88.6 |
-| `s_middle_shell24.stl` | 177.1 × 164.8 × 73.2 | X=177.1 > 150 | **84%** | 148.8 × 138.4 × 61.5 |
-| `s_cargo_sect_shell24.stl` | 194.7 × 203.6 × 163.2 | Y=203.6 > 150 | **73%** | 142.1 × 148.6 × 119.1 |
-| `s_rear_shell24.stl` | 140.9 × 158.0 × 181.7 | Z=181.7 > 150 | **82%** | 115.5 × 129.6 × 149.0 |
-| `s_legs_scaled24.stl` | 96.1 × 150.1 × 7.5 | Y=150.1 > 150 | **99%** | 95.1 × 148.6 × 7.4 |
-| `s_edf_120_thrust_tube.stl` | 134.0 × 134.0 × 167.0 | Z=167.0 > 150 | **89%** | 119.3 × 119.3 × 148.6 |
+| `head_shell24.stl` | 129.4 × 235.1 × 140.7 | Y=235.1 > 150 | **63%** | 81.5 × 148.1 × 88.6 |
+| `middle_shell24.stl` | 177.1 × 164.8 × 73.2 | X=177.1 > 150 | **84%** | 148.8 × 138.4 × 61.5 |
+| `cargo_sect_shell24.stl` | 194.7 × 203.6 × 163.2 | Y=203.6 > 150 | **73%** | 142.1 × 148.6 × 119.1 |
+| `rear_shell24.stl` | 140.9 × 158.0 × 181.7 | Z=181.7 > 150 | **82%** | 115.5 × 129.6 × 149.0 |
+| `legs_scaled24.stl` | 96.1 × 150.1 × 7.5 | Y=150.1 > 150 | **99%** | 95.1 × 148.6 × 7.4 |
+| `edf_120_thrust_tube.stl` | 134.0 × 134.0 × 167.0 | Z=167.0 > 150 | **89%** | 119.3 × 119.3 × 148.6 |
 
 > **Scale tip:** Enter the percentage in XYZware → Transform → Scale (uniform).
 > Lock the aspect ratio checkbox. The fields accept a percentage value directly.
@@ -145,7 +145,7 @@ FPV bezel, winch spool and mount geometry.
 ### Batch B — Port Cargo Door (1 plate)
 
 **Goal:** Verify clamshell door hinge geometry, foam gasket channel, and door curvature
-matches hull belly face (visual and caliper check against s_cargo_sect_shell24.stl from Batch I).
+matches hull belly face (visual and caliper check against cargo_sect_shell24.stl from Batch I).
 
 | Part | Qty | Orientation | Notes |
 | ------ | ----- | ------------- | ------- |
@@ -337,7 +337,7 @@ forward spigot that registers in plenum bell.
 
 | Part | Qty | Orientation | Notes |
 | ------ | ----- | ------------- | ------- |
-| `s_edf_120_motor_mount.stl` | 1 | Motor face down (hub pointing up) | Supports on arms if needed |
+| `edf_120_motor_mount.stl` | 1 | Motor face down (hub pointing up) | Supports on arms if needed |
 
 | Setting | Value |
 | --------- | ------- |
@@ -403,7 +403,7 @@ Print with same settings. Verify CCW stator fins are mirrored vs. port pod.
 | Part | Qty | Orientation | Notes |
 | ------ | ----- | ------------- | ------- |
 | `s_wings_both_shell24.stl` | 1 | Flat (wing top-surface up) | Both wings in one file, fits flat |
-| `s_feet_x_4_scaled24.stl` | 1 | Flat (bottom face down) | All 4 feet in one print |
+| `feet_x_4_scaled24.stl` | 1 | Flat (bottom face down) | All 4 feet in one print |
 
 Plate footprint: wings (137×128 mm) + feet (78×98 mm) — print separately, one per plate.
 
@@ -440,7 +440,7 @@ Plate footprint: wings (137×128 mm) + feet (78×98 mm) — print separately, on
 
 | Part | Qty | Orientation | Notes |
 | ------ | ----- | ------------- | ------- |
-| `s_legs_scaled24.stl` | 1 | Flat (7.5 mm thickness vertical) | Long thin flat part |
+| `legs_scaled24.stl` | 1 | Flat (7.5 mm thickness vertical) | Long thin flat part |
 
 | Setting | Value |
 | --------- | ------- |
@@ -457,11 +457,11 @@ Plate footprint: wings (137×128 mm) + feet (78×98 mm) — print separately, on
 
 **Goal:** Hull silhouette and cockpit proportions check. Not for structural use.
 
-> **Scale:** 63% uniform. Load `s_head_shell24.stl` → Transform → Scale → 63%.
+> **Scale:** 63% uniform. Load `head_shell24.stl` → Transform → Scale → 63%.
 
 | Part | Qty | Orientation at 63% | Scaled size |
 | ------ | ----- | --------------------- | ------------- |
-| `s_head_shell24.stl` | 1 | Nose-up (cockpit facing down) | 81.5 × 148.1 × 88.6 mm |
+| `head_shell24.stl` | 1 | Nose-up (cockpit facing down) | 81.5 × 148.1 × 88.6 mm |
 
 | Setting | Value |
 | --------- | ------- |
@@ -476,11 +476,11 @@ Plate footprint: wings (137×128 mm) + feet (78×98 mm) — print separately, on
 
 ### Batch O — Mid Section at 84% (1 plate)
 
-> **Scale:** 84% uniform. Load `s_middle_shell24.stl` → Transform → Scale → 84%.
+> **Scale:** 84% uniform. Load `middle_shell24.stl` → Transform → Scale → 84%.
 
 | Part | Qty | Scaled size |
 | ------ | ----- | ------------- |
-| `s_middle_shell24.stl` | 1 | 148.8 × 138.4 × 61.5 mm |
+| `middle_shell24.stl` | 1 | 148.8 × 138.4 × 61.5 mm |
 
 Orient with the longest axis along X and the flat belly face down.
 
@@ -497,14 +497,14 @@ Orient with the longest axis along X and the flat belly face down.
 
 ### Batch P — Cargo Section at 73% (1 plate)
 
-> **Scale:** 73% uniform. Load `s_cargo_sect_shell24.stl` → Transform → Scale → 73%.
+> **Scale:** 73% uniform. Load `cargo_sect_shell24.stl` → Transform → Scale → 73%.
 > This is the pre-Rev-S shell — the Rev S SCAD with door cutout has not been exported
 > to STL yet. Print this for hull shape reference; door opening geometry is verified
 > separately via Batches B and C.
 
 | Part | Qty | Scaled size |
 | ------ | ----- | ------------- |
-| `s_cargo_sect_shell24.stl` | 1 | 142.1 × 148.6 × 119.1 mm |
+| `cargo_sect_shell24.stl` | 1 | 142.1 × 148.6 × 119.1 mm |
 
 Orient with belly face down.
 
@@ -521,11 +521,11 @@ Orient with belly face down.
 
 ### Batch Q — Rear Shell at 82% (1 plate)
 
-> **Scale:** 82% uniform. Load `s_rear_shell24.stl` → Transform → Scale → 82%.
+> **Scale:** 82% uniform. Load `rear_shell24.stl` → Transform → Scale → 82%.
 
 | Part | Qty | Scaled size |
 | ------ | ----- | ------------- |
-| `s_rear_shell24.stl` | 1 | 115.5 × 129.6 × 149.0 mm |
+| `rear_shell24.stl` | 1 | 115.5 × 129.6 × 149.0 mm |
 
 Orient with engine bell aft face down (largest circular opening on build plate).
 
@@ -576,7 +576,7 @@ repository. Generate from SCAD before printing:
 
 | Part | SCAD Source | Command |
 | ------ | ------------- | --------- |
-| Rev S cargo sect shell | `serenity/stl/s_cargo_sect_shell24.scad` | `openscad -o s_cargo_sect_shell24_revs.stl serenity/stl/s_cargo_sect_shell24.scad` |
+| Rev S cargo sect shell | `serenity/stl/cargo_sect_shell24.scad` | `openscad -o cargo_sect_shell24_revs.stl serenity/stl/cargo_sect_shell24.scad` |
 | M=1.0 sector gear | `serenity/stl/nacelle_sector_gear.scad` | `openscad -o nacelle_sector_gear.stl serenity/stl/nacelle_sector_gear.scad` |
 | M=1.0 drive pinions | `serenity/stl/nacelle_pinion.scad` | `openscad -o nacelle_pinion.stl serenity/stl/nacelle_pinion.scad` |
 | M=1.0 bevel gear pair | `serenity/stl/nacelle_bevel_pair.scad` | `openscad -o nacelle_bevel_pair.stl serenity/stl/nacelle_bevel_pair.scad` |
@@ -630,7 +630,7 @@ surface finish matters for the fit check.
 
 ### Cargo System (Batches A–D)
 
-- [ ] Both cargo doors fit against s_cargo_sect_shell24 belly curve (Batch P)
+- [ ] Both cargo doors fit against cargo_sect_shell24 belly curve (Batch P)
 
   — gap ≤2 mm along full door length
 
@@ -688,7 +688,7 @@ surface finish matters for the fit check.
 
 - Step 2: **Rev S cargo sect shell not yet exported:** Batch P uses the pre-Rev S STL (no
 
-   door cutout). Export `s_cargo_sect_shell24_revs.stl` from the updated SCAD and
+   door cutout). Export `cargo_sect_shell24_revs.stl` from the updated SCAD and
    print at 73% once available.
 
 - Step 3: **M=1.0 gear train parts not yet exported:** The Rev O M=1.0 sector gear, pinions,
