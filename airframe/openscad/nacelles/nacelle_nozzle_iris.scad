@@ -1,5 +1,5 @@
 // nacelle_nozzle_iris.scad
-// Serenity UAV Rev O — Nacelle Iris Nozzle Assembly (50 mm EDF bore)
+// Serenity UAV Rev R — Nacelle Iris Nozzle Assembly (50 mm EDF bore)
 //
 // Purpose:
 //   Complete iris nozzle assembly for one nacelle, driven by the nacelle tilt
@@ -57,7 +57,7 @@
 // Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 // Date:    2026-05-24
-// Rev:     O (initial release)
+// Rev:     R (2026-06-11): Rev R baseline — no geometry changes (carried forward from Rev O initial release).
 
 // ── Resolution ────────────────────────────────────────────────────────────────
 

@@ -3,6 +3,7 @@
 // U-channel saddle clamp for mounting a DS3218MG-class nacelle tilt servo
 // to the nacelle_servo_mount_block pads in s_cargo_sect_shell24.scad.
 //
+// Rev R (2026-06-11): Rev R baseline — initial design (Rev S1) carried forward; no geometry changes.
 // Rev S1 (2026-06-08): Initial release.
 //   Design for field disassembly per CLAUDE.md (common hand-tools only).
 //   Fasteners: 4× M3×10 SHCS into heat-set inserts on mount block.

@@ -76,32 +76,32 @@ s_rear_shell24.scad               — Aft engine-room shell, 2mm CF-PETG (Rev R)
 battery_tray.scad                 — 6S 4000mAh LiPo tray, keel-rail slide (Rev R)
 belly_panel.scad                  — Battery bay belly access panel (Rev R)
 cargo/
-  s_cargo_sect_shell24.scad       — Cargo section shell with clamshell doors (Rev R)
+  s_cargo_sect_shell24.scad       — Rev R cargo section shell with clamshell doors, avionics bays, GPS mounts
 ```
 
 #### airframe/openscad/nacelles/
 
 ```
-nacelle_pod_50mm_tandem_simple.scad — Rev T2 tandem pod, push-on nozzle (no iris)
-nacelle_pod_50mm_tandem.scad        — Rev T tandem pod, full iris gear train
-edf_stator_sleeve.scad              — 11-fin inter-stage stator sleeve (Rev A)
-edf_aft_spider_sleeve.scad          — Aft spider/motor-mount sleeve (Rev A)
+nacelle_pod_50mm_tandem_simple.scad — Rev R tandem pod, push-on nozzle (no iris; carried fwd from Rev T2)
+nacelle_pod_50mm_tandem.scad        — Rev R tandem pod, full iris gear train (carried fwd from Rev T)
+edf_stator_sleeve.scad              — Rev R 11-fin inter-stage stator sleeve (carried fwd from Rev A)
+edf_aft_spider_sleeve.scad          — Rev R aft spider/motor-mount sleeve (carried fwd from Rev A)
 edf_bore_sleeve.scad                — DEPRECATED (superseded by stator+spider)
-nacelle_nozzle_straight.scad        — Rev T2 push-on straight nozzle
-nacelle_nozzle_iris.scad            — Rev O 8-petal iris nozzle (iris version)
-nacelle_bevel_housing.scad          — Rev O bevel-gear housing
-nacelle_bevel_pair.scad             — Rev O M=1.0 14T 45° bevel pair
-nacelle_pinion.scad                 — Rev O M=1.0 12T pinion
-nacelle_sector_gear.scad            — Rev O M=1.0 38T sector gear
-nacelle_servo_bracket.scad          — DS3218MG tilt servo bracket with M3 bosses (Rev S1)
+nacelle_nozzle_straight.scad        — Rev R push-on straight nozzle (carried fwd from Rev T2)
+nacelle_nozzle_iris.scad            — Rev R 8-petal iris nozzle (carried fwd from Rev O)
+nacelle_bevel_housing.scad          — Rev R bevel-gear housing (carried fwd from Rev O)
+nacelle_bevel_pair.scad             — Rev R M=1.0 14T 45° bevel pair (carried fwd from Rev O)
+nacelle_pinion.scad                 — Rev R M=1.0 12T pinion (carried fwd from Rev O)
+nacelle_sector_gear.scad            — Rev R M=1.0 38T sector gear (carried fwd from Rev O)
+nacelle_servo_bracket.scad          — Rev R DS3218MG tilt servo bracket with M3 bosses
 ```
 
 #### airframe/openscad/wings/
 
 ```
-s_wings_s1223_revo.scad             — S1223 high-lift wing pair (Rev O)
+s_wings_s1223_revo.scad             — Rev R S1223 high-lift wing pair (carried fwd from Rev O)
                                       RENDER_SIDE=+1 port, -1 stbd, 0 both
-s_wing_nacelle_pylon_revo.scad      — Nacelle tilt pylon (Rev O)
+s_wing_nacelle_pylon_revo.scad      — Rev R nacelle tilt pylon (carried fwd from Rev O)
 ```
 
 ### airframe/stls/

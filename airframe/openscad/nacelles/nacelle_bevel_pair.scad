@@ -1,5 +1,5 @@
 // nacelle_bevel_pair.scad
-// Serenity UAV Rev O — Nacelle Tilt Linkage, 1:1 Straight Bevel Gear Pair
+// Serenity UAV Rev R — Nacelle Tilt Linkage, 1:1 Straight Bevel Gear Pair
 //
 // Purpose:
 //   A matched pair of M = 1.0 straight bevel gears providing a 90° shaft-angle
@@ -47,7 +47,7 @@
 // Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 // Date:    2026-05-24
-// Rev:     O (initial release)
+// Rev:     R (2026-06-11): Rev R baseline — no geometry changes (carried forward from Rev O initial release).
 
 // ── Resolution ────────────────────────────────────────────────────────────────
 

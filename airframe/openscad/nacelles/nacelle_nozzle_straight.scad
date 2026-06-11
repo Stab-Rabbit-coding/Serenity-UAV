@@ -1,13 +1,13 @@
 // =============================================================================
 // nacelle_nozzle_straight.scad
-// Serenity UAV — Rev T2 — Push-On Straight Nozzle with Decorative Petals
+// Serenity UAV — Rev R — Push-On Straight Nozzle with Decorative Petals
 // =============================================================================
 //
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // Project : Serenity-class Tilt-Rotor UAV (24-inch scale, Firefly TV ship)
 // License : CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 // Date    : 2026-06-07
-// Revision: Rev T2 (push-on boss retention — no threads)
+// Revision: Rev R (2026-06-11)   [carried forward from Rev T2 (push-on boss retention); no geometry changes]
 //
 // Description
 // -----------
