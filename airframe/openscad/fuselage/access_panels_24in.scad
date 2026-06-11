@@ -77,8 +77,9 @@
 // Rev:     R1 (2026-06-11): Rewrite — hull-conforming exterior faces via STL
 //   intersection; corrected M3 screw bore positions (was DX/2, now full ±DX);
 //   GPS clearance bore extended to full shoulder depth (3 mm) to clear GPS body;
-//   removed erroneous SCALE_24 re-application to pre-scaled middle hull STL in
-//   av_cover_ventral() (bug: would have produced ~85"-scale intersection slab).
+//   removed erroneous SCALE_24 re-application to pre-scaled middle hull STL.
+//   R1 → R (2026-06-11): Updated hull STL paths — s_ prefix dropped per Rev R
+//   repo-wide rename; paths migrated from archive/ to stls/fuselage/.
 //   Original Rev R: flat-face version (2026-06-11, same session).
 
 // ── Resolution ────────────────────────────────────────────────────────────────
@@ -91,12 +92,15 @@ $fn = 64;
 // Paths are relative to airframe/openscad/fuselage/ (this file's directory).
 // The middle section raw source requires SCALE_24 scaling (18" → 24").
 
-HEAD_SOLID_STL    = "../../archive/stls/fuselage/s_head_shell24_repaired.stl";
-CARGO_SOLID_STL   = "../../archive/stls/fuselage/s_cargo_sect_shell24_repaired.stl";
-// s_middle_shell24.stl is already exported at 24" scale (middle_canonical_shell24.scad
-// applies SCALE_24 = 2.9294 to the raw 18" Thingiverse source before export).
-// Do NOT re-scale when importing here.
-MIDDLE_SOLID_STL  = "../../archive/stls/fuselage/s_middle_shell24.stl";
+// Paths follow the Rev R naming convention (no s_ prefix).
+// head_shell24.stl and middle_canonical_shell24.stl are the solid canonical meshes
+// exported to airframe/stls/fuselage/ by head_shell24.scad and
+// middle_canonical_shell24.scad respectively.
+// cargo_sect_shell24_repaired.stl is the solid repaired cargo mesh (copied from archive
+// at the path already referenced by cargo_sect_shell24.scad).
+HEAD_SOLID_STL    = "../../stls/fuselage/head_shell24.stl";
+CARGO_SOLID_STL   = "../../stls/fuselage/cargo/cargo_sect_shell24_repaired.stl";
+MIDDLE_SOLID_STL  = "../../stls/fuselage/middle_canonical_shell24.stl";
 
 // ── Avionics-bay Faraday Cover Parameters ────────────────────────────────────
 

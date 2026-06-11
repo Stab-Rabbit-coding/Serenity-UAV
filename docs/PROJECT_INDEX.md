@@ -125,7 +125,8 @@ legs_scaled24.stl               — Landing legs (24" scale)
 dorsal_antenna_fin.stl            — Dorsal antenna fin fairing
 middle_canonical_edf_intake.stl — Middle section EDF intake opening
 cargo/
-  cargo_sect_shell24.stl              — Cargo shell (SCAD output)
+  cargo_sect_shell24.stl                 — Cargo shell (SCAD output)
+  cargo_sect_shell24_repaired.stl        — Cargo solid shell, manifold-repaired (used for intersection in access_panels_24in.scad)
   cargo_sect_shell24_2mm_repaired_largest.stl — Repaired largest shell body
   cargo_door_port.stl                   — Port clamshell cargo door
   cargo_door_stbd.stl                   — Stbd clamshell cargo door
