@@ -1,13 +1,13 @@
 // =============================================================================
 // s_wings_s1223_revo.scad
-// Serenity UAV — Rev O — Wing Pair with Selig S1223 Airfoil Profile
+// Serenity UAV — Rev R — Wing Pair with Selig S1223 Airfoil Profile
 // =============================================================================
 //
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // Project : Serenity-class Tilt-Rotor UAV (24-inch scale, Firefly TV ship)
 // License : CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 // Date    : 2026-05-24
-// Revision: Rev O
+// Revision: Rev R (2026-06-11)   [carried forward from Rev O (2026-05-24); no geometry changes]
 //
 // Description
 // -----------

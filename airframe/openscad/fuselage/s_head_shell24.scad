@@ -35,6 +35,7 @@
 //   Cruise speed at which skin was validated: 54.4 kt (28 m/s); deflection
 //     ≤ 0.002 in (0.054 mm) on 2.0 mm CF-PETG + foam, vs 0.020 in (0.5 mm) limit.
 //
+// Rev R (2026-06-11): Rev R baseline checkpoint — no geometry changes.
 // Rev S1 (2026-06-09): Shepherd Book avionics bay (Faraday enclosure) on
 //   interior dorsal face; correct forward sensor and FPV camera positions.
 //   Sensor position bug: S1A_POS.X=251, S1B_POS.X=231, FPV_POS.X=239 were

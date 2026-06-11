@@ -7,7 +7,7 @@ Outputs to avionics/kicad/:
     Kaylee.kicad_sch  (schematic, A1, v20240101)
     Kaylee.kicad_pcb  (90x65 mm 4-layer PCB outline + stackup)
 
-Reference: avionics/kicad/Kaylee.md  Rev A  2026-06-07
+Reference: avionics/kicad/Kaylee.md  Rev R  2026-06-11
 Author: Steve Griffing PE(CSE) CISSP-ISSEP CPP  |  CC BY 4.0
 Usage:  python3 gen_kaylee.py   (run from any dir)
 """
@@ -1460,7 +1460,7 @@ def gen_pcb() -> str:
         f'\t\t(stroke (width 0.05) (type default)) (layer "Edge.Cuts")',
         f'\t\t(uuid "{_next_uid()}"))',
         # Fab-layer board reference text
-        f'\t(gr_text "Kaylee Rev A" (at {W/2:.2f} {H + 2.5:.2f} 0) (layer "F.Fab")',
+        f'\t(gr_text "Kaylee Rev R" (at {W/2:.2f} {H + 2.5:.2f} 0) (layer "F.Fab")',
         f'\t\t(effects (font (size 1.5 1.5) (thickness 0.15)))',
         f'\t\t(uuid "{_next_uid()}"))',
         f'\t(gr_text "Griffing Technology LLC | CC BY 4.0" (at {W/2:.2f} {H + 5.0:.2f} 0)'

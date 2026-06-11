@@ -1,5 +1,5 @@
 // nacelle_sector_gear.scad
-// Serenity UAV Rev O — Nacelle Tilt Linkage, Fixed Sector Gear
+// Serenity UAV Rev R — Nacelle Tilt Linkage, Fixed Sector Gear
 //
 // Purpose:
 //   Sector gear fixed to the fuselage-side tilt bracket.  The sector does NOT
@@ -35,7 +35,7 @@
 // Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 // Date:    2026-05-24
-// Rev:     O (initial release)
+// Rev:     R (2026-06-11): Rev R baseline — no geometry changes (carried forward from Rev O initial release).
 
 // ── Resolution ────────────────────────────────────────────────────────────────
 

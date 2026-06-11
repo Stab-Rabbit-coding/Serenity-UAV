@@ -2,6 +2,7 @@
 // s_rear_shell24.scad
 // Aft fuselage section shell — Serenity UAV 24" hull.
 //
+// Rev R (2026-06-11): Rev R baseline — no geometry changes.
 // Rev Q (2026-06-07): Initial SCAD derivation from archived STL.
 //   Shell source: archive/stls/fuselage/s_rear_shell24_repaired.stl
 //   (solid manifold; pre-hollowed s_rear_shell24_2mm.stl exists in archive

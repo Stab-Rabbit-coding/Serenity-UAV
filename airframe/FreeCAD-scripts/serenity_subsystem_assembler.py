@@ -1,6 +1,6 @@
 """
 Serenity-UAV Subsystem Assembly Script
-FreeCAD Assembly4 subsystem builder - Rev Q (June 2026)
+FreeCAD Assembly4 subsystem builder - Rev R (June 2026)
 Assembles individual airframe subsystems from OpenSCAD-generated STL/STEP files
 
 Author: Generated for Serenity-UAV project

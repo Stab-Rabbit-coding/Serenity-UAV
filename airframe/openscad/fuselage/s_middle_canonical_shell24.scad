@@ -4,6 +4,7 @@
 // Belly restored to standard Serenity geometry -- NO belly scoop.
 // Replaces s_middle_intake_shell24.stl for the 4-radial-intake Rev N build.
 //
+// Rev R (2026-06-11): Rev R baseline checkpoint — no geometry changes.
 // Rev S1 (2026-06-09): Simon avionics bay (Faraday enclosure) on dorsal interior;
 //   Kaylee power distribution board and 6S battery tray on ventral interior.
 //   Simon is the aft avionics SBC stack (CLAUDE.md: aft EDF control, alternate

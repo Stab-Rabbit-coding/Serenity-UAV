@@ -2,8 +2,8 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**Revision:** A (EMI-hardened variant of XCVR-49MHZ-1)
-**Date:** 2026-06-02
+**Revision:** R (Rev R baseline; carried forward from Rev A — EMI-hardened variant of XCVR-49MHZ-1; no design changes)
+**Date:** 2026-06-11
 **Status:** Schematic complete — Phase 2 PCB layout pending
 
 ---

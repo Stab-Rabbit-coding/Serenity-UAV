@@ -2,6 +2,8 @@
 // s_cargo_sect_shell24.scad
 // Cargo gondola shell for Serenity Rev N 24" hull (s_cargo_sect.stl).
 //
+// Rev R (2026-06-11): Rev R baseline — consolidated from Rev S4 (2026-06-08); no geometry changes.
+//
 // Rev S4 (2026-06-08): Correct Cape-B-2/Cape-A-2 PCB dimensions — was CAPE-B-1 legacy.
 //   VERIFIED from CAPE-B-2.kicad_pcb Edge.Cuts (X=121..176, Y=87.5..122.5 mm):
 //   Both Cape-B-2 (Zoë) and Cape-A-2 (Wash) are 55×35 mm, not the 90×60 mm / 85×55 mm

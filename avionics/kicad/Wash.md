@@ -3,8 +3,8 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Callsign:** Wash
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**Revision:** A (EMI-hardened variant of CAPE-A-1 Rev M)
-**Date:** 2026-06-02
+**Revision:** R (Rev R baseline; carried forward from Rev A — EMI-hardened variant of CAPE-A-1 Rev M; no design changes)
+**Date:** 2026-06-11
 **Status:** Schematic complete — PCB layout pending
 
 ---
@@ -24,7 +24,7 @@ protective hardening — no firmware or DTS changes are required.
 
 ## Changes from CAPE-A-1 (Rev M)
 
-### 1. EMI-Hardened Dual Ethernet PHY (new in Rev A)
+### 1. EMI-Hardened Dual Ethernet PHY (Rev R baseline; introduced Rev A)
 
 Two Texas Instruments DP83825I 10/100BASE-TX PHYs are included with full EMI
 hardening. Each PHY connects via RMII to one of the PocketBeagle 2 AM6254's

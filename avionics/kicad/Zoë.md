@@ -181,7 +181,7 @@ The Wash layout constraints apply equally here. Additional Zoë specifics:
 
 ---
 
-## 13. Antenna Port Filter Chains (Rev A addition)
+## 13. Antenna Port Filter Chains (Rev R baseline; introduced Rev A)
 
 Each on-board RF transceiver has a dedicated antenna filter chain between its ANT pin
 and the SMA panel-mount connector. The goal is to prevent out-of-band conducted RF

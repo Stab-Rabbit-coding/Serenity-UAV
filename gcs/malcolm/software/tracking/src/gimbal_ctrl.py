@@ -3,7 +3,7 @@ gimbal_ctrl.py — Malcolm GCS gimbal controller: sends servo commands to PB2-I.
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
-Revision: Q1 (2026-06-10)
+Revision: R1 (2026-06-11)
 
 Receives gimbal target JSON from tracker.py (UDP on gimbal_port) and
 forwards the target to Malcolm's PB2-I firmware via a serial or UDP
