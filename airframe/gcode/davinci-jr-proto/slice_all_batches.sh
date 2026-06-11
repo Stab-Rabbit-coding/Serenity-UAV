@@ -224,7 +224,7 @@ run_batch() {
     # -----------------------------------------------------------------------
     I)
         batch_header I "120 mm EDF Motor Mount Spider"
-        slice "$OUT" 1 "25%" 0 "yes" "${STL_AFT_EDF}/s_edf_120_motor_mount.stl" \
+        slice "$OUT" 1 "25%" 0 "yes" "${STL_AFT_EDF}/edf_120_motor_mount.stl" \
             --support-material-buildplate-only
         ;;
 
@@ -235,7 +235,7 @@ run_batch() {
     # -----------------------------------------------------------------------
     J)
         batch_header J "120 mm EDF Thrust Tube (89% scale)"
-        slice "$OUT" 0.89 "20%" 0 "no" "${STL_AFT_EDF}/s_edf_120_thrust_tube.stl"
+        slice "$OUT" 0.89 "20%" 0 "no" "${STL_AFT_EDF}/edf_120_thrust_tube.stl"
         ;;
 
     # -----------------------------------------------------------------------
@@ -262,10 +262,10 @@ run_batch() {
     # -----------------------------------------------------------------------
     L)
         batch_header L "Landing Gear: Feet + Legs + Wings"
-        slice "$OUT" 1    "15%" 0 "no" "${STL_FUSELAGE}/s_feet_x_4_scaled24.stl"
-        slice "$OUT" 0.99 "15%" 0 "no" "${STL_FUSELAGE}/s_legs_scaled24.stl"
-        slice "$OUT" 0.93 "15%" 0 "no" "${STL_WINGS}/s_wing_port_s1223_revo.stl"
-        slice "$OUT" 0.93 "15%" 0 "no" "${STL_WINGS}/s_wing_stbd_s1223_revo.stl"
+        slice "$OUT" 1    "15%" 0 "no" "${STL_FUSELAGE}/feet_x_4_scaled24.stl"
+        slice "$OUT" 0.99 "15%" 0 "no" "${STL_FUSELAGE}/legs_scaled24.stl"
+        slice "$OUT" 0.93 "15%" 0 "no" "${STL_WINGS}/wing_port_s1223_revo.stl"
+        slice "$OUT" 0.93 "15%" 0 "no" "${STL_WINGS}/wing_stbd_s1223_revo.stl"
         ;;
 
     # -----------------------------------------------------------------------
@@ -275,7 +275,7 @@ run_batch() {
     # -----------------------------------------------------------------------
     M)
         batch_header M "Head Shell (63% scale)"
-        slice "$OUT" 0.63 "15%" 0 "yes" "${STL_FUSELAGE}/s_head_shell24.stl" \
+        slice "$OUT" 0.63 "15%" 0 "yes" "${STL_FUSELAGE}/head_shell24.stl" \
             --support-material-buildplate-only
         ;;
 
@@ -286,7 +286,7 @@ run_batch() {
     # -----------------------------------------------------------------------
     N)
         batch_header N "Middle Shell (84% scale)"
-        slice "$OUT" 0.84 "15%" 0 "no" "${STL_FUSELAGE}/s_middle_shell24.stl"
+        slice "$OUT" 0.84 "15%" 0 "no" "${STL_FUSELAGE}/middle_shell24.stl"
         ;;
 
     # -----------------------------------------------------------------------
@@ -296,7 +296,7 @@ run_batch() {
     # -----------------------------------------------------------------------
     O)
         batch_header O "Cargo Section Shell (73% scale)"
-        slice "$OUT" 0.73 "15%" 0 "yes" "${STL_CARGO_BAY}/s_cargo_sect_shell24.stl" \
+        slice "$OUT" 0.73 "15%" 0 "yes" "${STL_CARGO_BAY}/cargo_sect_shell24.stl" \
             --support-material-buildplate-only
         ;;
 
@@ -307,7 +307,7 @@ run_batch() {
     # -----------------------------------------------------------------------
     P)
         batch_header P "Rear Shell (82% scale)"
-        slice "$OUT" 0.82 "15%" 0 "yes" "${STL_AFT_EDF}/s_rear_shell24.stl" \
+        slice "$OUT" 0.82 "15%" 0 "yes" "${STL_AFT_EDF}/rear_shell24.stl" \
             --support-material-buildplate-only
         ;;
 
@@ -329,17 +329,17 @@ run_batch() {
     # -----------------------------------------------------------------------
     # BATCH VISUAL — Complete Aircraft Visual Reference — uniform 63% scale
     #
-    # 63% is the tightest constraint (s_head_shell24 Y=235.1 mm → 148.1 mm).
+    # 63% is the tightest constraint (head_shell24 Y=235.1 mm → 148.1 mm).
     # Every external and internal-visible part sliced at exactly 63% so the
     # assembled reference model is geometrically consistent.
     #
     # Part list (22 print jobs — complete aircraft):
     #
     #   HULL SECTIONS (4 prints)
-    #     s_head_shell24          129.4×235.1×140.7 → 81.5×148.1×88.6 mm
-    #     s_middle_shell24        177.1×164.8×73.2  → 111.6×103.9×46.1 mm
-    #     s_cargo_sect_shell24    194.7×203.6×163.2 → 122.7×128.3×102.8 mm
-    #     s_rear_shell24          140.9×158.0×181.7 → 88.8×99.5×114.4 mm
+    #     head_shell24          129.4×235.1×140.7 → 81.5×148.1×88.6 mm
+    #     middle_shell24        177.1×164.8×73.2  → 111.6×103.9×46.1 mm
+    #     cargo_sect_shell24    194.7×203.6×163.2 → 122.7×128.3×102.8 mm
+    #     rear_shell24          140.9×158.0×181.7 → 88.8×99.5×114.4 mm
     #
     #   NACELLE PODS — COMPLETE (2 prints, port + starboard)
     #     s_nacelle_port_revt     75.6×83.3×185.2   → 47.6×52.5×116.7 mm
@@ -347,10 +347,10 @@ run_batch() {
     #     nacelle_nozzle_closed_asm_repaired (×2)    62.0×62.0×19.5 → 39.1×39.1×12.3 mm
     #
     #   WINGS & LANDING GEAR (4 prints)
-    #     s_wing_port_s1223_revo   85.7×161.0×~20 → 54.0×101.4×12.6 mm
-    #     s_wing_stbd_s1223_revo   same
-    #     s_legs_scaled24          96.1×150.1×7.5  → 60.6×94.6×4.7 mm  (raft)
-    #     s_feet_x_4_scaled24      77.6×98.4×9.0   → 48.9×62.0×5.7 mm  (raft)
+    #     wing_port_s1223_revo   85.7×161.0×~20 → 54.0×101.4×12.6 mm
+    #     wing_stbd_s1223_revo   same
+    #     legs_scaled24          96.1×150.1×7.5  → 60.6×94.6×4.7 mm  (raft)
+    #     feet_x_4_scaled24      77.6×98.4×9.0   → 48.9×62.0×5.7 mm  (raft)
     #
     #   CARGO BAY (2 prints)
     #     cargo_door_port   108.0×33.7×87.0 → 68.0×21.2×54.8 mm
@@ -358,8 +358,8 @@ run_batch() {
     #
     #   REAR EDF — COMPLETE (4 prints)
     #     s_middle_intake_shell24  177.1×164.8×73.2  → 111.6×103.9×46.1 mm
-    #     s_edf_120_thrust_tube    134.0×134.0×167.0 → 84.4×84.4×105.2 mm
-    #     s_edf_120_motor_mount    126.0×126.0×53.0  → 79.4×79.4×33.4 mm
+    #     edf_120_thrust_tube    134.0×134.0×167.0 → 84.4×84.4×105.2 mm
+    #     edf_120_motor_mount    126.0×126.0×53.0  → 79.4×79.4×33.4 mm
     #     rear_nozzle_closed_asm   131.0×131.0×20.0  → 82.5×82.5×12.6 mm
     #
     #   VISUAL DETAILS (4 prints)
@@ -379,19 +379,19 @@ run_batch() {
 
         # ---- HULL SECTIONS ------------------------------------------------
         slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
-            "${STL_FUSELAGE}/s_head_shell24.stl" \
+            "${STL_FUSELAGE}/head_shell24.stl" \
             --support-material-buildplate-only
 
         slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
-            "${STL_FUSELAGE}/s_middle_shell24.stl" \
+            "${STL_FUSELAGE}/middle_shell24.stl" \
             --support-material-buildplate-only
 
         slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
-            "${STL_CARGO_BAY}/s_cargo_sect_shell24.stl" \
+            "${STL_CARGO_BAY}/cargo_sect_shell24.stl" \
             --support-material-buildplate-only
 
         slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
-            "${STL_AFT_EDF}/s_rear_shell24.stl" \
+            "${STL_AFT_EDF}/rear_shell24.stl" \
             --support-material-buildplate-only
 
         # ---- NACELLE PODS — COMPLETE (port + stbd) -------------------------
@@ -412,17 +412,17 @@ run_batch() {
 
         # ---- WINGS (port and starboard separately — S1223 airfoil) ---------
         slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
-            "${STL_WINGS}/s_wing_port_s1223_revo.stl"
+            "${STL_WINGS}/wing_port_s1223_revo.stl"
 
         slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
-            "${STL_WINGS}/s_wing_stbd_s1223_revo.stl"
+            "${STL_WINGS}/wing_stbd_s1223_revo.stl"
 
         # ---- LANDING GEAR --------------------------------------------------
         slice "$OUT" "$SCALE" "$INFILL" 1 "no" \
-            "${STL_FUSELAGE}/s_legs_scaled24.stl"
+            "${STL_FUSELAGE}/legs_scaled24.stl"
 
         slice "$OUT" "$SCALE" "$INFILL" 1 "no" \
-            "${STL_FUSELAGE}/s_feet_x_4_scaled24_repaired.stl"
+            "${STL_FUSELAGE}/feet_x_4_scaled24_repaired.stl"
 
         # ---- CARGO BAY DOORS -----------------------------------------------
         slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
@@ -439,10 +439,10 @@ run_batch() {
             --support-material-buildplate-only
 
         slice "$OUT" "$SCALE" "$INFILL" 0 "no" \
-            "${STL_AFT_EDF}/s_edf_120_thrust_tube.stl"
+            "${STL_AFT_EDF}/edf_120_thrust_tube.stl"
 
         slice "$OUT" "$SCALE" "$INFILL" 0 "yes" \
-            "${STL_AFT_EDF}/s_edf_120_motor_mount.stl" \
+            "${STL_AFT_EDF}/edf_120_motor_mount.stl" \
             --support-material-buildplate-only
 
         slice "$OUT" "$SCALE" "$INFILL" 0 "no" \

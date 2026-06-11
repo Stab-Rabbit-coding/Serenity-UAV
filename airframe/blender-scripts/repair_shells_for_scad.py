@@ -65,9 +65,9 @@ SHELL_DIR = os.path.join(BASE_DIR, "files-hollowed-18in")
 SHELLS_TO_REPAIR = [
     # ── Hull shells (used by serenity/stl/*.scad CGAL boolean operations) ──
     # Original 2.5 mm wall shells — repaired at 1.5 mm voxel pitch.
-    ("s_head_shell24.stl",           1.5),   # → s_head_shell24_repaired.stl
-    ("s_cargo_sect_shell24.stl",     1.5),   # → s_cargo_sect_shell24_repaired.stl
-    ("s_rear_shell24.stl",           1.5),   # → s_rear_shell24_repaired.stl
+    ("head_shell24.stl",           1.5),   # → head_shell24_repaired.stl
+    ("cargo_sect_shell24.stl",     1.5),   # → cargo_sect_shell24_repaired.stl
+    ("rear_shell24.stl",           1.5),   # → rear_shell24_repaired.stl
     # NOTE (Rev Q): _shell24_2mm_repaired.stl files are produced directly by
     # blender_shells_v3_2mm.py (Boolean DIFFERENCE method) and do NOT belong
     # here.  Voxel remesh fills their hollow interior — those entries removed.
@@ -86,7 +86,7 @@ SHELLS_TO_REPAIR = [
     ("s_wings_both_shell24.stl",     0.8),   # → s_wings_both_shell24_repaired.stl
     # ── Landing gear (CRITICAL — 99 NM edges, load-bearing) ──
     # 9.0 mm minimum dimension (very flat): 0.5 mm pitch gives 18 voxels/thickness.
-    ("s_feet_x_4_scaled24.stl",      0.5),   # → s_feet_x_4_scaled24_repaired.stl
+    ("feet_x_4_scaled24.stl",      0.5),   # → feet_x_4_scaled24_repaired.stl
     # ── Nozzle mechanism ──
     # Petals: 18-19 mm thin, 8 NM edges; closed assembly 57 NM edges.
     ("nacelle_nozzle_petal.stl",     0.8),   # → nacelle_nozzle_petal_repaired.stl

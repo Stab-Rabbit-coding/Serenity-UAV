@@ -8,7 +8,7 @@ Two mirrored halves split at the gondola lateral centreline (Z = 81.61 mm):
   * cargo_door_stbd.stl   — stbd half  (Z = 0..Z_HINGE mm)
 
 The exterior of each door exactly matches the canonical Rev-O gondola belly
-profile, extracted from s_cargo_sect_shell24_2mm_repaired.stl via face-normal
+profile, extracted from cargo_sect_shell24_2mm_repaired.stl via face-normal
 filtering and bilinear SciPy interpolation.  No boolean intersection is used
 (the shell STL is not watertight).
 
@@ -30,7 +30,7 @@ Print: 0.15 mm layers, 4 perimeters, ≥ 40 % infill
 
 References:
   * PHASED_BUILD_GUIDE.md §Phase 6 Cargo System
-  * s_cargo_sect_shell24.scad Rev O gondola-belly geometry
+  * cargo_sect_shell24.scad Rev O gondola-belly geometry
   * Serenity-UAV TODO.md cargo handling equipment mounts (completed)
 
 Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
@@ -47,7 +47,7 @@ from scipy.interpolate import griddata
 
 # ── Output directory ───────────────────────────────────────────────────────────
 OUT_DIR = "thingverse-serenity/files-hollowed-18in"
-SHELL_STL = os.path.join(OUT_DIR, "s_cargo_sect_shell24_2mm_repaired.stl")
+SHELL_STL = os.path.join(OUT_DIR, "cargo_sect_shell24_2mm_repaired.stl")
 
 # ── Gondola shell geometry (from bounds / belly-face analysis) ─────────────────
 # Shell bounds: X = -201.53..-7.42, Y = -414.81..-211.27, Z = 0..163.22 mm

@@ -2,7 +2,7 @@
 blender_intake_cut.py  —  run with:
     blender --background --python blender_intake_cut.py
 
-Cuts a 120 mm diameter EDF air intake into s_middle_shell24.stl.
+Cuts a 120 mm diameter EDF air intake into middle_shell24.stl.
 
 Geometry reference (s_middle at 24" scale):
   X: 92..270 mm  (fore-aft; X=92 is the aft/cargo-bay end)
@@ -37,7 +37,7 @@ INTAKE_X = 130.0
 INTAKE_Y = -67.0
 
 BASE    = os.path.dirname(os.path.abspath(__file__))
-IN_STL  = os.path.join(BASE, "files-hollowed-18in", "s_middle_shell24.stl")
+IN_STL  = os.path.join(BASE, "files-hollowed-18in", "middle_shell24.stl")
 OUT_STL = os.path.join(BASE, "files-hollowed-18in", "s_middle_intake_shell24.stl")
 # ─────────────────────────────────────────────────────────────────────────────
 

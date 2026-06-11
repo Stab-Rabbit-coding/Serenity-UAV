@@ -14,7 +14,7 @@ Coordinate system (24"-scaled STL world space = hull frame per CLAUDE.md):
     Z -- vertical,     positive dorsal (up)
     Station mapping: X_stl = 284 - station_mm
 
-Hull centreline references (from s_head_shell24.scad comments):
+Hull centreline references (from head_shell24.scad comments):
     Hull Y-centreline:  CY  ≈ -149 mm
     Hull Z-centreline:  CZ  ≈   69 mm
 
@@ -32,8 +32,8 @@ License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 Date:    2026-05-26
 
 References:
-    s_head_shell24.scad      — coordinate system documentation, hull centroid
-    s_wing_nacelle_pylon_revo.scad — PYLON_SPAN, PYLON_W, PYLON_H geometry
+    head_shell24.scad      — coordinate system documentation, hull centroid
+    wing_nacelle_pylon_revo.scad — PYLON_SPAN, PYLON_W, PYLON_H geometry
     nacelle_pod_50mm_tandem.scad   — NACELLE_FACE_X_PYLON, NACELLE_L
     Thingiverse Thing 14474 (Serenity Spaceship) — source hull geometry
 """
@@ -72,11 +72,11 @@ AMBIENT   = 0.28   # minimum shade fraction (0=dark, 1=no shading)
 # Colours are in 0..255 integer range.
 # ---------------------------------------------------------------------------
 
-# Hull Y-centreline and Z-centreline (world coords) — from s_head_shell24.scad.
+# Hull Y-centreline and Z-centreline (world coords) — from head_shell24.scad.
 HULL_CY = -149.0
 HULL_CZ =   69.0
 
-# Nacelle pylon geometry (from s_wing_nacelle_pylon_revo.scad).
+# Nacelle pylon geometry (from wing_nacelle_pylon_revo.scad).
 PYLON_SPAN    =  88.0   # [mm] nacelle face → wing-root face
 NACELLE_FACE_X =  34.0  # [mm] bore-centre to inboard nacelle X-face (= pylon attach)
 # Fuselage Z half-width at pylon station (approx, from head Z-bounds / 2).
@@ -106,10 +106,10 @@ def _rgb(r, g, b):
 
 PARTS = [
     # (filename,                        colour,            transform_fn_or_None)
-    ("s_head_shell24_repaired.stl",     _rgb(120, 130, 145), None),
-    ("s_middle_shell24.stl",            _rgb(130, 145, 160), None),
-    ("s_cargo_sect_shell24_repaired.stl",_rgb(110, 122, 135),None),
-    ("s_rear_shell24_repaired.stl",     _rgb(105, 118, 130), None),
+    ("head_shell24_repaired.stl",     _rgb(120, 130, 145), None),
+    ("middle_shell24.stl",            _rgb(130, 145, 160), None),
+    ("cargo_sect_shell24_repaired.stl",_rgb(110, 122, 135),None),
+    ("rear_shell24_repaired.stl",     _rgb(105, 118, 130), None),
     ("s_wings_both_shell24.stl",        _rgb( 90, 100, 115), None),
     # 1× nacelles (not repaired but suitable for overview rendering)
     ("s_eng_left_shell24.stl",          _rgb( 80, 120, 145), "nacelle_port"),

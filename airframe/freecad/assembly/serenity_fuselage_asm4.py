@@ -73,9 +73,9 @@ COORDINATE DERIVATION — KEY CONSTANTS:
     - Pylon flush with cargo Z wall (no gap, no protrusion beyond outer mold line)
 
 REFERENCES:
-  s_cargo_sect_shell24.scad   — cargo bounds, spar bore X, wing root mortise
-  s_wings_s1223_revo.scad     — wing planform, spar params, assembly orientation
-  s_wing_nacelle_pylon_revo.scad — PYLON_SPAN=88mm, PIVOT_Z=83mm
+  cargo_sect_shell24.scad   — cargo bounds, spar bore X, wing root mortise
+  wings_s1223_revo.scad     — wing planform, spar params, assembly orientation
+  wing_nacelle_pylon_revo.scad — PYLON_SPAN=88mm, PIVOT_Z=83mm
   nacelle_pod_50mm_tandem.scad — NACELLE_L=185.2mm, PIVOT_Z=103.75mm
   REVN_BUILD_GUIDE_24IN.md    — bay positions, keel datums
 
@@ -152,19 +152,19 @@ def _stl(relative_path):
 
 
 # --- Fuselage hull sections (all in shared project world space) ---
-STL_HEAD    = _stl("airframe/stls/fuselage/s_head_shell24.stl")
-STL_CARGO   = _stl("airframe/stls/fuselage/cargo/s_cargo_sect_shell24.stl")
-STL_MIDDLE  = _stl("airframe/stls/fuselage/s_middle_canonical_shell24.stl")
+STL_HEAD    = _stl("airframe/stls/fuselage/head_shell24.stl")
+STL_CARGO   = _stl("airframe/stls/fuselage/cargo/cargo_sect_shell24.stl")
+STL_MIDDLE  = _stl("airframe/stls/fuselage/middle_canonical_shell24.stl")
 # Rear section lives in deferred/aft-edf because it contains EDF scoop windows.
 # It is used here purely for visual assembly fidelity; Phase 11 only for flight.
-STL_REAR    = _stl("deferred/aft-edf/stls/s_rear_neck_intake_shell24.stl")
+STL_REAR    = _stl("deferred/aft-edf/stls/rear_neck_intake_shell24.stl")
 
 # --- Wings ---
-STL_WING_PORT  = _stl("airframe/stls/wings/s_wing_port_s1223_revo.stl")
-STL_WING_STBD  = _stl("airframe/stls/wings/s_wing_stbd_s1223_revo.stl")
-STL_PYLON_PORT = _stl("airframe/stls/wings/s_wing_nacelle_pylon_revo.stl")
+STL_WING_PORT  = _stl("airframe/stls/wings/wing_port_s1223_revo.stl")
+STL_WING_STBD  = _stl("airframe/stls/wings/wing_stbd_s1223_revo.stl")
+STL_PYLON_PORT = _stl("airframe/stls/wings/wing_nacelle_pylon_revo.stl")
 # Same STL as port pylon — mirrored in placement only.
-STL_PYLON_STBD = _stl("airframe/stls/wings/s_wing_nacelle_pylon_revo.stl")
+STL_PYLON_STBD = _stl("airframe/stls/wings/wing_nacelle_pylon_revo.stl")
 
 # --- Nacelle pods ---
 # Full pod STL requires manual render from SCAD.  Tip caps are stand-ins.
@@ -199,8 +199,8 @@ STL_FPV_BEZEL     = _stl("airframe/stls/fuselage/cargo/cargo_fpv_bezel.stl")
 STL_GPS_RING      = _stl("airframe/stls/fuselage/cargo/cargo_gps_retention_ring.stl")
 
 # --- Structural / landing gear ---
-STL_LEGS = _stl("airframe/stls/fuselage/s_legs_scaled24.stl")
-STL_FEET = _stl("airframe/stls/fuselage/s_feet_x_4_scaled24.stl")
+STL_LEGS = _stl("airframe/stls/fuselage/legs_scaled24.stl")
+STL_FEET = _stl("airframe/stls/fuselage/feet_x_4_scaled24.stl")
 
 # Output path for the assembly document
 OUT_FCStd = os.path.join(_THIS_DIR, "serenity_fuselage_asm4.FCStd")
@@ -221,11 +221,11 @@ WING_ROOT_Y_CEN  = -288.63    # mm, chord plane Y (= CY + 40)
 WING_LE_X        =  -21.69    # mm, wing root leading-edge world X
 WING_SPAR_X      =  -70.0     # mm, spar bore X (30% chord from LE)
 
-# ── Wing planform (from s_wings_s1223_revo.scad) ─────────────────────────────
+# ── Wing planform (from wings_s1223_revo.scad) ─────────────────────────────
 WING_SEMI_SPAN   =  85.7      # mm, root-face to tip-face span
 WING_CHORD_ROOT  = 161.0      # mm, root chord
 
-# ── Pylon geometry (from s_wing_nacelle_pylon_revo.scad) ─────────────────────
+# ── Pylon geometry (from wing_nacelle_pylon_revo.scad) ─────────────────────
 PYLON_SPAN       =  88.0      # mm, outboard extent (nacelle X-face to fuselage Z wall)
 
 # ── Nacelle geometry (from nacelle_pod_50mm_tandem.scad Rev T) ───────────────
@@ -478,7 +478,7 @@ def build_assembly():
 
     # ── Group: Port wing assembly ────────────────────────────────────────────
     #
-    # Wing STL internal frame (from s_wings_s1223_revo.scad §Assembly output):
+    # Wing STL internal frame (from wings_s1223_revo.scad §Assembly output):
     #   local X = spanwise  (root at X=0, tip at X=SEMI_SPAN=85.7 mm)
     #   local Y = chordwise (leading edge at Y=0, trailing edge at Y=161 mm)
     #   local Z = thickness (upper surface / sky = +Z)

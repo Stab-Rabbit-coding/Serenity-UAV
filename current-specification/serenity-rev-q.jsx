@@ -17,8 +17,8 @@
  *      sector_gear_22mm_fixed.* Canonical design: blender_nacelle_revo.py +
  *      nacelle_pod_50mm_tandem.scad.
  *   4. Old fuselage/EDF design variants archived: hull_engine_bell.stl,
- *      s_rear_shell24*.stl (pre-intake design), s_middle_intake_shell24.stl (pre-canonical),
- *      s_middle_shell24*.stl, all *_2mm.*, *_repaired.* fuselage STL mesh-repair copies,
+ *      rear_shell24*.stl (pre-intake design), s_middle_intake_shell24.stl (pre-canonical),
+ *      middle_shell24*.stl, all *_2mm.*, *_repaired.* fuselage STL mesh-repair copies,
  *      pre-Rev P cargo door placeholders. Canonical design per section fully established.
  *   5. Rev P JSX and bom_revP.csv moved to archives/; bom_revQ.json/csv created.
  *
@@ -161,7 +161,7 @@ function TabOverview() {
                         ["Avionics / Archive", "Cape-A-1, Cape-B-1, XCVR-49MHZ-1 KiCad, gerbers, and DTS archived to avionics/kicad/archive/, avionics/gerbers/archive/, avionics/firmware/dts/*/archive/", "✓ DONE", "2026-06-05"],
                         ["Airframe / Nacelle", "Old nacelle scripts archived: blender_nacelle_integrated_v1/v2.py, generate_shells_v2.py, generate_hollow_shells.py, *_2mm.py, *_50mm.py. Canonical: blender_nacelle_revo.py + nacelle_pod_50mm_tandem.scad", "✓ DONE", "2026-06-05"],
                         ["Airframe / Nacelle STLs", "Archived: s_nacelle_*_revt.stl, s_eng_*_50mm_repaired.stl, stator_50mm.stl, sector_gear_22mm_fixed.*, nacelle_nozzle_*_repaired.stl, rear_nozzle_petal_repaired.stl", "✓ DONE", "2026-06-05"],
-                        ["Airframe / Fuselage STLs", "Archived: hull_engine_bell.stl (pre-intake), s_rear_shell24*.stl (pre-intake design), s_middle_shell24*.stl, s_middle_intake_shell24.stl, s_head_shell24_*mm*.stl, *_repaired.stl variants, pre-Rev P cargo door placeholders", "✓ DONE", "2026-06-05"],
+                        ["Airframe / Fuselage STLs", "Archived: hull_engine_bell.stl (pre-intake), rear_shell24*.stl (pre-intake design), middle_shell24*.stl, s_middle_intake_shell24.stl, head_shell24_*mm*.stl, *_repaired.stl variants, pre-Rev P cargo door placeholders", "✓ DONE", "2026-06-05"],
                         ["Docs", "README, PROJECT_INDEX, AVIONICS_PB2_REDESIGN, CLAUDE.md all updated to Rev Q baseline. bom_revQ.json/csv created. serenity-rev-p.jsx and bom_revP.csv moved to archives/", "✓ DONE", "2026-06-05"],
                     ]}
                 />
@@ -267,21 +267,21 @@ function TabAirframe() {
                     cols={["STL", "Material", "Layer / Infill", "Qty", "Est. Mass"]}
                     accent={C.yellow}
                     rows={[
-                        ["s_head_shell24.stl",                "PETG",    "0.20 mm / 8% gyroid",    "1",  "95 g"],
-                        ["s_middle_canonical_shell24.stl",    "PETG",    "0.20 mm / 8% gyroid",    "1",  "135 g"],
-                        ["s_cargo_sect_shell24.stl (Rev S)",  "PETG",    "0.20 mm / 8% gyroid",    "1",  "165 g"],
-                        ["s_rear_neck_intake_shell24.stl",    "PETG",    "0.20 mm / 8% gyroid",    "1",  "225 g"],
-                        ["s_legs_scaled24.stl",               "CF-PETG", "0.15 mm / 30%",          "1",  "60 g"],
-                        ["s_feet_x_4_scaled24.stl",           "TPU 95A", "0.25 mm / 40%",          "1",  "80 g"],
-                        ["s_neck_intake_frame.stl",           "CF-PETG", "0.15 mm / 40% / 4 walls","1",  "85 g"],
-                        ["s_aft_edf_plenum.stl",              "PETG",    "0.20 mm / 20% gyroid",   "1",  "75 g"],
-                        ["s_edf_120_motor_mount.stl",         "CF-PETG", "0.15 mm / 40% / 4 walls","1",  "55 g"],
-                        ["s_edf_120_thrust_tube.stl",         "PETG",    "0.20 mm / 20% gyroid",   "1",  "45 g"],
+                        ["head_shell24.stl",                "PETG",    "0.20 mm / 8% gyroid",    "1",  "95 g"],
+                        ["middle_canonical_shell24.stl",    "PETG",    "0.20 mm / 8% gyroid",    "1",  "135 g"],
+                        ["cargo_sect_shell24.stl (Rev S)",  "PETG",    "0.20 mm / 8% gyroid",    "1",  "165 g"],
+                        ["rear_neck_intake_shell24.stl",    "PETG",    "0.20 mm / 8% gyroid",    "1",  "225 g"],
+                        ["legs_scaled24.stl",               "CF-PETG", "0.15 mm / 30%",          "1",  "60 g"],
+                        ["feet_x_4_scaled24.stl",           "TPU 95A", "0.25 mm / 40%",          "1",  "80 g"],
+                        ["neck_intake_frame.stl",           "CF-PETG", "0.15 mm / 40% / 4 walls","1",  "85 g"],
+                        ["aft_edf_plenum.stl",              "PETG",    "0.20 mm / 20% gyroid",   "1",  "75 g"],
+                        ["edf_120_motor_mount.stl",         "CF-PETG", "0.15 mm / 40% / 4 walls","1",  "55 g"],
+                        ["edf_120_thrust_tube.stl",         "PETG",    "0.20 mm / 20% gyroid",   "1",  "45 g"],
                         ["Access panel frames A–F + lids",    "PETG",    "0.20 mm / 100%",         "1 set","~90 g"],
                         ["s_eng_left_stator_shell24_revo.stl","CF-PETG", "0.15 mm / 25% / 4 walls","1",  "132 g"],
                         ["s_eng_right_stator_shell24_revo.stl","CF-PETG","0.15 mm / 25% / 4 walls","1",  "132 g"],
                         ["s_wing_nacelle_pylon_port/stbd.stl","CF-PETG", "0.15 mm / 40% / 4 walls","2",  "52 g ea"],
-                        ["s_wings_s1223_revo.stl (port+stbd)","CF-PETG", "0.15 mm / 40% / 4 walls","2",  "118 g ea"],
+                        ["wings_s1223_revo.stl (port+stbd)","CF-PETG", "0.15 mm / 40% / 4 walls","2",  "118 g ea"],
                         ["nacelle_nozzle_petal.stl",          "PETG",    "0.20 mm / 20% gyroid",   "16", "2 g ea"],
                         ["nacelle_nozzle_ring.stl",           "CF-PETG", "0.15 mm / 40%",          "2",  "18 g ea"],
                         ["rear_nozzle_petal.stl",             "PETG",    "0.20 mm / 20% gyroid",   "8",  "4 g ea"],
@@ -340,11 +340,11 @@ function TabPropulsion() {
                         ["Voltage",      "6S",             ""],
                         ["Thrust",       "~3,500 g",       "Exhaust straight aft"],
                         ["Location",     "Station ~430 mm from nose", "Inside engine bell, Panel F"],
-                        ["Intake",       "4 radial scoops at station ~310 mm", "s_neck_intake_frame + s_aft_edf_plenum"],
+                        ["Intake",       "4 radial scoops at station ~310 mm", "neck_intake_frame + aft_edf_plenum"],
                         ["Fan annular area", "~10,683 mm²","120 mm bore"],
                         ["Scoop capture area","~15,600 mm²","Ratio 1.46× — exceeds 1.3× duct-match minimum"],
-                        ["Motor mount",  "s_edf_120_motor_mount.stl", "CF-PETG 3-arm spider; M3 hub bolt pattern 24 mm BC"],
-                        ["Thrust tube",  "s_edf_120_thrust_tube.stl", "PETG 120 mm ID × 3 mm wall × 155 mm long"],
+                        ["Motor mount",  "edf_120_motor_mount.stl", "CF-PETG 3-arm spider; M3 hub bolt pattern 24 mm BC"],
+                        ["Thrust tube",  "edf_120_thrust_tube.stl", "PETG 120 mm ID × 3 mm wall × 155 mm long"],
                         ["ESC",          "80A 6S BLHeli32","110A burst; mounted in Panel F bay"],
                     ]}
                 />
@@ -611,7 +611,7 @@ function TabCargo() {
                     cols={["Item", "Status", "Notes"]}
                     accent={C.green}
                     rows={[
-                        ["s_cargo_sect_shell24.stl (Rev S)", "✓ DONE", "Belly opening 100×165 mm; 2× hinge-pin blocks; 2× SG90 servo pads; 4× latch-catch lips"],
+                        ["cargo_sect_shell24.stl (Rev S)", "✓ DONE", "Belly opening 100×165 mm; 2× hinge-pin blocks; 2× SG90 servo pads; 4× latch-catch lips"],
                         ["cargo_door_port.stl",   "✓ DONE", "CF-PETG; 8-barrel piano hinge; 3 mm CF rod; 3.15 mm bore"],
                         ["cargo_door_stbd.stl",   "✓ DONE", "Mirror of port door"],
                         ["cargo_winch_motor_mount.stl", "✓ DONE", "N20 motor press-fit; 4× M2.5 boss pattern"],
@@ -914,11 +914,11 @@ function TabFiles() {
                         ["airframe/blender-scripts/blender_nozzle_gen.py",      "Iris nozzle petal generator", "Canonical (active)"],
                         ["airframe/blender-scripts/blender_stator_gen.py",      "Stator vane geometry generator", "Canonical (active)"],
                         ["airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad","Nacelle pod — 50mm tandem, stator, gear bosses", "Canonical (active)"],
-                        ["airframe/openscad/fuselage/s_head_shell24.scad",      "Cockpit / nose section", "Canonical (active)"],
-                        ["airframe/openscad/fuselage/s_middle_canonical_shell24.scad","Fuselage mid-section, no belly scoop", "Canonical (active)"],
+                        ["airframe/openscad/fuselage/head_shell24.scad",      "Cockpit / nose section", "Canonical (active)"],
+                        ["airframe/openscad/fuselage/middle_canonical_shell24.scad","Fuselage mid-section, no belly scoop", "Canonical (active)"],
                         ["airframe/archive/blender-scripts/",                   "blender_nacelle_integrated_v1/v2.py, *_2mm.py, *_50mm.py, generate_shells_v2.py, generate_hollow_shells.py", "ARCHIVED Rev Q"],
                         ["airframe/archive/stls/nacelles/",                     "s_nacelle_*_revt.stl, *_50mm_repaired.stl, stator_50mm.stl, sector_gear_22mm_fixed.*", "ARCHIVED Rev Q"],
-                        ["airframe/archive/stls/fuselage/",                     "hull_engine_bell.stl, s_rear_shell24*.stl, s_middle_shell24*.stl, s_middle_intake_shell24.stl, all *_2mm.* and *_repaired.* variants", "ARCHIVED Rev Q"],
+                        ["airframe/archive/stls/fuselage/",                     "hull_engine_bell.stl, rear_shell24*.stl, middle_shell24*.stl, s_middle_intake_shell24.stl, all *_2mm.* and *_repaired.* variants", "ARCHIVED Rev Q"],
                     ]}
                 />
             </Card>
@@ -951,13 +951,13 @@ function TabBuildStatus() {
             color: C.yellow,
             items: [
                 ["Rev O nacelle stator shells (blender_nacelle_revo.py)", "○ OPEN — BLOCKS Phase 0"],
-                ["s_aft_edf_plenum.stl (SCAD export)", "○ OPEN — BLOCKS Phase 4"],
-                ["s_neck_intake_frame.stl (SCAD export)", "○ OPEN — BLOCKS Phase 1"],
-                ["s_rear_neck_intake_shell24.stl (SCAD export)", "○ OPEN — BLOCKS Phase 0"],
+                ["aft_edf_plenum.stl (SCAD export)", "○ OPEN — BLOCKS Phase 4"],
+                ["neck_intake_frame.stl (SCAD export)", "○ OPEN — BLOCKS Phase 1"],
+                ["rear_neck_intake_shell24.stl (SCAD export)", "○ OPEN — BLOCKS Phase 0"],
                 ["nacelle_sector_gear.stl + all 4 gear SCADs", "○ OPEN"],
-                ["s_wing_nacelle_pylon_revo.stl + s_wings_s1223_revo.stl", "○ OPEN"],
-                ["s_middle_canonical_shell24.stl", "○ OPEN"],
-                ["s_head_shell24.stl (Rev S sensor/antenna mounts)", "○ OPEN"],
+                ["wing_nacelle_pylon_revo.stl + wings_s1223_revo.stl", "○ OPEN"],
+                ["middle_canonical_shell24.stl", "○ OPEN"],
+                ["head_shell24.stl (Rev S sensor/antenna mounts)", "○ OPEN"],
                 ["s_rcrs49_wire_post.stl", "○ OPEN"],
                 ["Access panel frames A–F + lids (24\" version)", "○ OPEN"],
                 ["cargo_gondola_shell.stl", "○ OPEN — BLOCKS Phase 8"],

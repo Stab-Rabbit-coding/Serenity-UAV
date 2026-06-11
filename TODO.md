@@ -11,12 +11,12 @@
 
 | Domain | End State (Rev P) | Current Status |
 |--------|-------------------|----------------|
-| Hull   | 609.6 mm PETG / PU foam / CF skeleton | SCAD sources complete; cargo section shell updated to Rev S (clamshell opening); 3 Rev-O-specific STLs not yet rendered |
-| Nacelles | 2× 50mm tandem EDF, CG pivot Z=83mm, M=1.0 gear, iris nozzle | `nacelle_pod_50mm_tandem.scad` complete; Rev O stator shells (`_revo.stl`) NOT yet rendered |
+| Hull   | 609.6 mm PETG / PU foam / CF skeleton | SCAD sources complete; all four fuselage SCAD shells at Rev R; cargo section at Rev R (clamshell, avionics bays, GPS); STLs pending regeneration |
+| Nacelles | 2× 50mm tandem EDF, CG pivot Z=83mm, M=1.0 gear, iris nozzle | `nacelle_pod_50mm_tandem.scad` complete; Rev R stator shells (`_revo.stl`) pending render |
 | Nacelle EDFs | XFly Galaxy X5 50mm 12-blade 6S 3200KV, 1240g each; 2232g/nacelle (90% additive via stator); 4464g total | Baseline EDF selected (xfly-model.eu); nacelle T/W ≈ 1.61 at Phase 5–10 AUW — VTOL hover capable |
 | Rear propulsion | 120mm 6S EDF, 4-scoop radial intake, iris nozzle | **DEFERRED — Phase 11.** All design files moved to `deferred/aft-edf/`. SCAD and STLs complete. Adds ~3500g thrust; Phase 11 T/W ≈ 2.21. |
 | Cargo bay | Clamshell doors + SG90 servos + DRV8833 + N20 winch + Dyneema + auto-latch + GPS ring + FPV bezel | ✓ All 13 cargo STLs generated (PR #21 + PR #22 2026-06-01); BOM updated bom_revP.json/csv; gondola shell open |
-| PCBs | **Rev Q: all 8 nodes use the EM hardened Wash Flight Control and Zoë Comms/Security capes** at every position. The **Kaylee Power Distribution Board** ensures that everything stays shiny.  Two **XCVR-49MHZ-2** daughter boards provide connectivity on RCRS.  Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived 2026-06-05. **| Rev Q schematics complete (Wash: 2× EMI-hardened Ethernet PHY; Zoë: 1× Ethernet PHY; all field connectors added). Kaylee PCB DRC clean (0 shorts); gerbers generated 2026-06-10; manual component placement (Section F, shield lugs) and trace routing remain. |
+| PCBs | **Rev Q: all 8 nodes use the EM hardened Wash Flight Control and Zoë Comms/Security capes** at every position. The **Kaylee Power Distribution Board** ensures that everything stays shiny.  Two **XCVR-49MHZ-2** daughter boards provide connectivity on RCRS.  Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived 2026-06-05. **| Rev R schematics complete (Wash: 2× EMI-hardened Ethernet PHY; Zoë: 1× Ethernet PHY; all field connectors added). Kaylee PCB DRC clean (0 shorts); gerbers generated 2026-06-10; manual component placement (Section F, shield lugs) and trace routing remain. |
 | Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 ✓; serenity-fc Phase 6 stub only; all Phase 7 items open |
 | Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
 | Regulatory | FAA Part 107, ICAO nav lights, FCC Part 95 | FAA registration placeholder; XCVR-49MHZ-1 pre-compliance pending |
@@ -27,7 +27,7 @@
 
 Complete all items in this section before ordering PCBs or starting any physical build step.
 
-### 1.1 — 3D Models: Rev O SCAD → STL Exports
+### 1.1 — 3D Models: SCAD → STL Exports (Rev R baseline)
 
 All SCADs run on a host machine with OpenSCAD 2021.01+ or Blender 3.x+ (headless).
 Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
@@ -47,22 +47,22 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
   Hull-frame analysis (2026-06-10): `Head_Shell` Identity rotation, Base=[−332, −18, +61];
   head aft face (head local_X=99) maps to hull_X = 99−332 = **−233 mm**.
   `Cargo_Shell` 180°-Z rotation, Base=[−274.4, −282.8, 0]; matching cargo local_X =
-  −(−233) − 274.4 = **−41.4 mm** — corrected in `s_cargo_sect_shell24.scad` BOSS_FORE
+  −(−233) − 274.4 = **−41.4 mm** — corrected in `cargo_sect_shell24.scad` BOSS_FORE
   (was X=−7, now X=−41.4). **VERIFY** both sections simultaneously in an assembly render
   or slicer that shows both STLs in hull-frame placement.  Confirm 6 head BOSS_AFT bosses
   (at head local_X=99) align with 6 cargo BOSS_FORE bosses (at cargo local_X=−41.4) in
   the assembled hull.  All Y/Z offsets remain estimated; also VERIFY those after X is confirmed.
-  Ref: `s_head_shell24.scad` BOSS_AFT_* comments; `s_cargo_sect_shell24.scad` hull-frame block.
+  Ref: `head_shell24.scad` BOSS_AFT_* comments; `cargo_sect_shell24.scad` hull-frame block.
 
-**Rev O shell updates (sensor/antenna mounts from 2026-05-24):**
+**Rev R shell updates (sensor/antenna mounts; carried fwd from Rev O, 2026-05-24):**
 
-- [ ] **s_head_shell24.stl** — regenerate from `serenity/stl/s_head_shell24.scad` (dual VL53L5CX bosses, FPV mount, GPS dome, 49MHz post, SMA bulkheads added 2026-05-24). Verify all mount boss positions in slicer cross-section before printing.
+- [ ] **head_shell24.stl** — regenerate from `serenity/stl/head_shell24.scad` (dual VL53L5CX bosses, FPV mount, GPS dome, 49MHz post, SMA bulkheads added 2026-05-24). Verify all mount boss positions in slicer cross-section before printing.
 
 ##### 1.1.1.2 *Cargo*
 
-**Rev O shell updates (sensor/antenna mounts from 2026-05-24):**
+**Rev R shell updates (sensor/antenna mounts; carried fwd from Rev O, 2026-05-24):**
 
-- [ ] **s_cargo_sect_shell24.stl** — regenerate from `serenity/stl/s_cargo_sect_shell24.scad` (cargo nadir FPV mount added)
+- [ ] **cargo_sect_shell24.stl** — regenerate from `serenity/stl/cargo_sect_shell24.scad` (cargo nadir FPV mount added)
   - Both outputs go to `thingverse-serenity/files-hollowed-18in/`
 
 ###### 1.1.1.2.1 *Cargo Handling*
@@ -76,19 +76,19 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 - [x] **Clamshell door halves** — `cargo_door_port.stl` + `cargo_door_stbd.stl` generated by
   `serenity/stl/generate_cargo_doors.py` (trimesh/scipy bilinear interpolation from Rev-O shell
   belly faces). Both watertight; 8-barrel piano hinge, 3 mm CF rod, 3.15 mm bore. *(done 2026-06-01)*
-- [x] **`s_cargo_sect_shell24.scad` Rev S** — belly opening (100×9×165 mm), 2× hinge-pin blocks
+- [x] **`cargo_sect_shell24.scad` Rev S** — belly opening (100×9×165 mm), 2× hinge-pin blocks
   (3.3 mm bore + M3 grub-screw tap), 2× SG90 servo mounting pads (4× M2.5 pilots each), 4×
   latch-catch lips (Z=42/122 mm at each X frame edge). *(done 2026-06-01)*
-- [x] **`s_cargo_sect_shell24.scad` Rev S1** — wing root mortises (30.8×20.8×15 mm), spar bearing
+- [x] **`cargo_sect_shell24.scad` Rev S1** — wing root mortises (30.8×20.8×15 mm), spar bearing
   blocks (22 mm OD × 10 mm boss, M3 grub-screw), full-Z spar bore (Ø12.3 mm), and nacelle tilt
   servo mount blocks (52×30×8 mm, 4× RX-M3×5.7 inserts) at port + stbd interior Z walls.
   All 4 spatial conflicts resolved (NSVMT_X_CEN moved AFT to −147.6 mm). Load FOS ≥ 11 vs 4.0
   AUVSI target. *(done 2026-06-08, PR #42)*
-- [x] **`s_cargo_sect_shell24.scad` Rev S2** — Inara and River avionics bay dorsal standoffs
+- [x] **`cargo_sect_shell24.scad` Rev S2** — Inara and River avionics bay dorsal standoffs
   (8× M3 boss posts, ±40×±25 mm pattern) + dorsal access panel cuts (85×55 mm each) for Cape-B
   (90×60 mm) at port half (Z_CEN=118 mm, Inara) and stbd half (Z_CEN=45 mm, River). GPS_PORT/STBD
   co-located for minimal SMA routing. *(done 2026-06-08, PR #42)*
-- [x] **`s_cargo_sect_shell24.scad` Rev S3** — Faraday enclosure space allocation.
+- [x] **`cargo_sect_shell24.scad` Rev S3** — Faraday enclosure space allocation.
   Panel cuts enlarged 85×55 → 95×65 mm; boss offsets updated ±40×±25 → ±42×±27 mm to match
   Faraday tray corner mounts; bay Z centres adjusted ±1 mm (Inara 118→119, River 45→44) for 10 mm
   inter-bay gap; FARADAY_* envelope parameters (95×65×65 mm, 1.5 mm Al wall, 25 mm fan) added.
@@ -98,7 +98,7 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 - [x] **`REVN_BUILD_GUIDE_24IN.md` Phase 3 anti-rework** — spar grub-screw torque sequence
   (0.5 N·m each, before foam pour) with consequence documentation. *(done 2026-06-08)*
 
-- [ ] **`s_cargo_sect_shell24.scad` — shuttle exterior fairing profiles on Z walls.**
+- [ ] **`cargo_sect_shell24.scad` — shuttle exterior fairing profiles on Z walls.**
   Canonical Serenity shuttles (Shuttle 1 = Inara's, Shuttle 2) sit just above the wing roots on
   the exterior Z faces of the cargo section. Their outline profiles need to be added as raised
   exterior features at Y≈−273..−213 mm on both Z walls, matching the canonical hull geometry.
@@ -113,7 +113,7 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
   centre (Inara: offset −13.3 mm in Z from bay centre; River: offset +0.7 mm in Z from bay centre).
   4× M2 flathead captive screws at ±40 mm (X) × ±25 mm (Z) from cover centre for EMI-seal clamping.
   Must be removable with common hand tools per CLAUDE.md field disassembly requirement.
-  Ref: FARADAY_* parameters in s_cargo_sect_shell24.scad Rev S3; CLAUDE.md §1.4.1.
+  Ref: FARADAY_* parameters in cargo_sect_shell24.scad Rev S3; CLAUDE.md §1.4.1.
   Add to Phase 0 print schedule.
 
 - [ ] **Simon bay — define avionics bay in rear section SCAD file.**
@@ -126,16 +126,16 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 - [ ] **Update REVN_BUILD_GUIDE_24IN.md bay layout table** to reflect revised avionics stack
   positions (Inara + River in cargo section dorsal band; Shepherd Book in head section forward;
   Simon in rear cone pre-Phase 11, middle ring post-Phase 11). Current guide Bays A–E are from an
-  older layout that does not match the cargo-section dorsal placement in Rev S2.
+  older layout that does not match the cargo-section dorsal placement in Rev R.
 
-- [ ] **Regenerate `s_cargo_sect_shell24.stl`** from Rev S2 SCAD source. Run:
-  `openscad -o airframe/stls/fuselage/s_cargo_sect_shell24.stl
-    airframe/openscad/fuselage/cargo/s_cargo_sect_shell24.scad`
+- [ ] **Regenerate `cargo_sect_shell24.stl`** from Rev R SCAD source. Run:
+  `openscad -o airframe/stls/fuselage/cargo_sect_shell24.stl
+    airframe/openscad/fuselage/cargo/cargo_sect_shell24.scad`
   Verify in slicer: wing mortises at both Z walls; spar bore at X=−70 mm; 8 dorsal boss posts;
   two 85×55 mm dorsal panel openings. Z-range must be 0..163 mm; all features inside hull skin.
   **BLOCKS Phase 0 cargo section printing.**
 
-- [ ] Add motor-mount and DRV8833-tray boss locations to `s_cargo_sect_shell24.scad` interior
+- [ ] Add motor-mount and DRV8833-tray boss locations to `cargo_sect_shell24.scad` interior
   drawing notes (Phase 1 pre-pour checklist reference).
 - [ ] Add SG90 bell-crank boss to inner face of each door panel for pushrod attachment.
   - Export gondola shell to `thingverse-serenity/files-hollowed-18in/`
@@ -145,43 +145,43 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 
 ##### 1.1.1.3 *Middle Neck*
 
-- [ ] **s_neck_intake_frame.stl** — `openscad -o s_neck_intake_frame.stl deferred/aft-edf/openscad/s_neck_intake_frame.scad`
+- [ ] **neck_intake_frame.stl** — `openscad -o neck_intake_frame.stl deferred/aft-edf/openscad/neck_intake_frame.scad`
   - Verify: 4 registration tongues 5 mm depth; intake lips project 6 mm forward
   - Material: CF-PETG; **DEFERRED — BLOCKS Phase 11 only.** STL at `deferred/aft-edf/stls/`.
 
-- [ ] **s_rear_neck_intake_shell24.stl** — `openscad -o ... deferred/aft-edf/openscad/s_rear_neck_intake_shell24.scad`
+- [ ] **rear_neck_intake_shell24.stl** — `openscad -o ... deferred/aft-edf/openscad/rear_neck_intake_shell24.scad`
   - Verify: 4 radial scoop windows present; NECK_X station ~310 mm; window alignment
   - **DEFERRED — BLOCKS Phase 11.** Print in Phase 0 with windows covered by removable PETG blanks.
 
   **Rear intake system (OpenSCAD):**
 
-- [ ] **s_aft_edf_plenum.stl** — `openscad -o s_aft_edf_plenum.stl deferred/aft-edf/openscad/s_aft_edf_plenum.scad`
+- [ ] **aft_edf_plenum.stl** — `openscad -o aft_edf_plenum.stl deferred/aft-edf/openscad/aft_edf_plenum.scad`
   - Verify: 4 rectangular arms 65×60 mm, aft outlet 120 mm circular; no self-intersection
-  - **DEFERRED — BLOCKS Phase 11 only.** STL is already generated at `deferred/aft-edf/stls/s_aft_edf_plenum.stl`.
+  - **DEFERRED — BLOCKS Phase 11 only.** STL is already generated at `deferred/aft-edf/stls/aft_edf_plenum.stl`.
 
   **Canonical middle shell (OpenSCAD — belly restored, no belly scoop):**
 
-- [x] **s_middle_canonical_shell24.stl** — `openscad -o ... serenity/stl/s_middle_canonical_shell24.scad`
-  - Note: NOT the same as `s_middle_shell24.stl` (which has the obsolete belly intake cut). This is the Rev N canonical belly.
+- [x] **middle_canonical_shell24.stl** — `openscad -o ... serenity/stl/middle_canonical_shell24.scad`
+  - Note: NOT the same as `middle_shell24.stl` (which has the obsolete belly intake cut). This is the Rev N canonical belly.
 - [ ]
 
 ##### 1.1.1.4 *Rear Engine Cone*
 
 #### 1.1.2 **Wings**
 
-**Wing pylon (OpenSCAD — Rev O integrated design):**
+**Wing pylon (OpenSCAD — Rev R integrated design; carried fwd from Rev O):**
 
-- [ ] **s_wing_nacelle_pylon_revo.stl** — `openscad -o ... serenity/stl/s_wing_nacelle_pylon_revo.scad`
+- [ ] **wing_nacelle_pylon_revo.stl** — `openscad -o ... serenity/stl/wing_nacelle_pylon_revo.scad`
   - Verify WING_SLOT_W and WING_SLOT_H against `s_wings_both_shell24.stl` (caliper-measure from the mesh) before printing — estimated 50×40 mm at 2.197× Thingiverse scale
-- [ ] **s_wings_s1223_revo.stl** — `openscad -o ... serenity/stl/s_wings_s1223_revo.scad`
+- [ ] **wings_s1223_revo.stl** — `openscad -o ... serenity/stl/wings_s1223_revo.scad`
   - Verify WING_CHORD_ROOT, WING_CHORD_TIP, WING_SEMI_SPAN, WING_SWEEP_LE against original STL before printing
 
 #### 1.1.3 **Nacelles**
 
-**Nacelle shells (Blender, Rev O geometry — must run on host machine):**
+**Nacelle shells (Blender, Rev R geometry; carried fwd from Rev O — must run on host machine):**
 
-- [ ] **Rev O nacelle stator shells** — run `blender --background --python thingverse-serenity/blender_nacelle_revo.py` with `SWIRL_DIR=1` (port) and `SWIRL_DIR=-1` (stbd).
-  - Output: `s_eng_left_stator_shell24_revo.stl`, `s_eng_right_stator_shell24_revo.stl`
+- [ ] **nacelle stator shells (Rev R)** — run `blender --background --python thingverse-serenity/blender_nacelle_revo.py` with `SWIRL_DIR=1` (port) and `SWIRL_DIR=-1` (stbd).
+  - Output: `eng_left_stator_shell24_revo.stl`, `eng_right_stator_shell24_revo.stl`
   - Verify: Z-range 0–148.3 mm, bore ID 55.0–56.0 mm, 11 stator fins visible in Z=53–95 mm gap
   - **BLOCKS Phase 0 nacelle printing**
 
@@ -192,7 +192,7 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 
 ##### 1.1.3.2 *Tilt Gear Train*
 
-  **Rev O gear train (OpenSCAD — all 5 parts, M=1.0):**
+  **Rev R gear train (OpenSCAD — all 5 parts, M=1.0; carried fwd from Rev O):**
 
 - [ ] **nacelle_sector_gear.stl** — `openscad -o ... serenity/stl/nacelle_sector_gear.scad`
   - Spec: R=22mm, 38T, 155° arc; fixed to tilt bracket
@@ -251,7 +251,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
   integrated DC/DC converter, IEC 62368-1 / VDE 0884-11)
 - **RS-485**: MAX3485E (non-isolated) → ADM2795EBRWZ (ADI, SOIC-20W, 5 kV reinforced isolation +
   integrated DC/DC converter)
-- **Ethernet PHY (Rev Q)**: DP83825I (TI, LQFP-32, 10/100BASE-TX RMII) with EMI hardening:
+- **Ethernet PHY (Rev R baseline; introduced Rev Q)**: DP83825I (TI, LQFP-32, 10/100BASE-TX RMII) with EMI hardening:
   HX1188NL LAN magnetics (1500 V isolation), SRF2012-100Y CMC, PRTR5V0U2X TVS, TPS62933 1.8V
   supply. JST SM06B-GHS-TB-1MP connector (no RJ45). Wash: 2× PHY (RMII0+RMII1);
   Zoë: 1× PHY (RMII0).
@@ -278,7 +278,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 - [x] remove wifi, sik, and loRa antennas from Zoë. Use filtered chokes on rf lines to route all RF signals from antennas to wifi, lora, zigbee,and sik xcvr circuits on Zoë, and/or use uart or i2c with filtering to connect isolated xcvrs to the cape. **Done (2026-06-05):** Added §13 antenna filter chains to CAPE-B-2.kicad_sch — each radio ANT pin now routes through a Johanson BPF (FL_LORA/FL_SIK: 0915LP15B0100E; FL_WIFI: 2450BP15B050E) and RCLAMP0502B ESD shunt to a dedicated SMA connector (J_SMA_LORA, J_SMA_WIFI, J_SMA_SIK). SiK uses Hirose U.FL J_SIK_ANT for module pigtail. All connector shells PGND. See CAPE-B-2.md §13.
 - [x] **Re-evaluate space / restore Ethernet to Zoë** — One DP83825I EMI-hardened PHY
-  added to Zoë at Rev Q; J_ETH_B connector populated. Board has adequate
+  added to Zoë at Rev R (introduced Rev Q); J_ETH_B connector populated. Board has adequate
   space; RF SMA connectors remain. *(done 2026-06-07)*
 
 - [ ] **Generate XCVR-49MHZ-2 gerbers** — `XCVR-49MHZ-2.kicad_pcb` complete; export to
@@ -430,12 +430,12 @@ Battery swap access via a **ventral hatch** in the middle section belly skin (ha
 X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
 
 **Open items — BLOCKS Phase 1 foam pour:**
-- [ ] **Add Kaylee/battery boss pattern to `s_middle_canonical_shell24.scad`.**
+- [ ] **Add Kaylee/battery boss pattern to `middle_canonical_shell24.scad`.**
   Boss posts: 4× M3 at (±55 mm X) × (±25 mm Z) from X=−190 mm keel centre for battery tray.
   Kaylee PDB: 4× M3 boss posts at X≈−205 mm, Z=CZ±25 mm. Both on keel interior face (+Y rail).
   Verify boss positions clear keel CF flat bar (6×3 mm) and ring frame station notches in slicer.
 
-- [ ] **Add ventral battery-swap hatch cut to `s_middle_canonical_shell24.scad`.**
+- [ ] **Add ventral battery-swap hatch cut to `middle_canonical_shell24.scad`.**
   120×60 mm belly cut centred at X=−190 mm; 2 mm shoulder lip; same pattern as avionics panels.
   **BLOCKS Phase 1 foam pour** (void former must clear hatch zone before foam pour).
 
@@ -508,13 +508,13 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
   J_1553 added to schematic (JST SM03B/SM04B-GHS-TB-1MP). §14 field connector table added to
   CAPE-B-2.md. *(done 2026-06-07)*
 
-- [ ] **Update PHASED_BUILD_GUIDE.md** from Rev M 18-inch to Rev Q 24-inch specifications
-  (hull 609.6 mm, 50mm EDFs, v2·v2·v2·v2 node placement, Rev Q power system, cargo system).
+- [ ] **Update PHASED_BUILD_GUIDE.md** from Rev M 18-inch to Rev R 24-inch specifications
+  (hull 609.6 mm, 50mm EDFs, v2·v2·v2·v2 node placement, Rev R power system, cargo system).
 
 - [ ] **Sync `bom_revO.json` ↔ `bom_revO.csv`** — verify all XCVR-49MHZ-1 BOM items (Phase 5
   above) are reflected in both files once XCVR-49MHZ-1 Phase 5 is complete.
 
-- [ ] **Create `bom_revQ.json` + `bom_revQ.csv`** — Rev Q BOM: replace all v1 cape procurement
+- [x] **Create `bom_revQ.json` + `bom_revQ.csv`** — Rev Q BOM: replace all v1 cape procurement
   quantities with v2 equivalents (4× Wash, 4× Zoë, 4× XCVR-49MHZ-2). Remove Cape-A-1,
   Cape-B-1, XCVR-49MHZ-1 line items.
 
@@ -538,6 +538,35 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
 
   - **AVIONICS_PB2_REDESIGN.md**: Rev Q node placement already reflected.
   *(done 2026-06-07)*
+
+### 1.6 — Rev R: Component Revision Synchronisation + s_ Prefix Removal (2026-06-11)
+
+- [x] **1.6.1 Rev R propagation to all active files** — Updated all project-level revision headers
+  from Rev Q → Rev R (2026-06-11). Changes include: README.md battery spec table, all five
+  fuselage SCAD changelog entries, all GCS Malcolm firmware headers (Q1→R1), FreeCAD assembly
+  scripts, avionics firmware README, ENC-NACELLE-1.md, and 18 GCS Malcolm source files.
+  *(done 2026-06-11)*
+
+- [x] **1.6.2 Component revision synchronisation** — All component-level revision designations
+  updated to Rev R per CLAUDE.md: "All components are referenced as of the latest revision."
+  - Nacelle gear train (Rev O → Rev R): nacelle_nozzle_iris, nacelle_bevel_housing, nacelle_bevel_pair,
+    nacelle_pinion, nacelle_sector_gear
+  - EDF sleeves (Rev A → Rev R): edf_stator_sleeve, edf_aft_spider_sleeve
+  - Nacelle pod/nozzle (Rev T/T2 → Rev R): nacelle_pod_50mm_tandem, nacelle_pod_50mm_tandem_simple,
+    nacelle_nozzle_straight
+  - Wings/pylon (Rev O → Rev R): wings_s1223_revo, wing_nacelle_pylon_revo
+  - Cargo shell: Rev R baseline entry prepended to S4 changelog
+  - Servo bracket: Rev R baseline entry prepended to S1 entry
+  - Avionics: Wash.md, Kaylee.md, XCVR-49MHZ-2.md Rev A → Rev R; Zoë.md, Zoë.kicad_sch,
+    Kaylee.kicad_pcb, gen_kaylee.py, gen_kaylee_pcb.py updated.
+  *(done 2026-06-11)*
+
+- [x] **1.6.3 Remove `s_` prefix from all SCAD and STL file names** — Removed leading `s_` from
+  11 SCAD files and 19 STL files across `airframe/openscad/`, `airframe/stls/`, and
+  `deferred/aft-edf/`. Updated all references in 37 active text files (Python, Markdown, JSON,
+  SCAD, shell scripts, Makefile, JSX). Archive files and historical BOMs (bom_revP.json,
+  bom_revQ.json) intentionally not modified.
+  *(done 2026-06-11)*
 
 ### 1.5.1. Names
 
@@ -651,7 +680,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 ### 2.4 — Avionics (Phase 6 — 4-node minimum viable)
 
-*Rev Q: all nodes use v2 EMI-hardened capes. Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 are retired.*
+*Rev R: all nodes use v2 EMI-hardened capes. Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 are retired.*
 
 | Item | Qty | Unit Cost | Total | Notes |
 |------|-----|----------|-------|-------|
@@ -757,20 +786,20 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 | Part | Material | Layer | Infill | Qty |
 |------|----------|-------|--------|-----|
-| s_feet_x_4_scaled24.stl | TPU 95A | 0.25mm | 40% | 1 set |
-| s_legs_scaled24.stl | CF-PETG | 0.15mm | 30% | 1 |
-| s_head_shell24.stl | PETG | 0.20mm | 8% gyroid | 1 |
-| s_middle_canonical_shell24.stl | PETG | 0.20mm | 8% gyroid | 1 |
-| s_cargo_sect_shell24.stl | PETG | 0.20mm | 8% gyroid | 1 |
-| s_rear_neck_intake_shell24.stl | PETG | 0.20mm | 8% gyroid | 1 | Print now; cover 4 scoop windows with removable 3mm PETG blanks until Phase 11 |
-| s_wings_s1223_revo.stl | PETG | 0.20mm | 8% gyroid | 1 |
-| s_eng_left_stator_shell24_revo.stl | CF-PETG | 0.15mm | 25% gyroid, 4 walls | 1 |
-| s_eng_right_stator_shell24_revo.stl | CF-PETG | 0.15mm | 25% gyroid, 4 walls | 1 |
+| feet_x_4_scaled24.stl | TPU 95A | 0.25mm | 40% | 1 set |
+| legs_scaled24.stl | CF-PETG | 0.15mm | 30% | 1 |
+| head_shell24.stl | PETG | 0.20mm | 8% gyroid | 1 |
+| middle_canonical_shell24.stl | PETG | 0.20mm | 8% gyroid | 1 |
+| cargo_sect_shell24.stl | PETG | 0.20mm | 8% gyroid | 1 |
+| rear_neck_intake_shell24.stl | PETG | 0.20mm | 8% gyroid | 1 | Print now; cover 4 scoop windows with removable 3mm PETG blanks until Phase 11 |
+| wings_s1223_revo.stl | PETG | 0.20mm | 8% gyroid | 1 |
+| eng_left_stator_shell24_revo.stl | CF-PETG | 0.15mm | 25% gyroid, 4 walls | 1 |
+| eng_right_stator_shell24_revo.stl | CF-PETG | 0.15mm | 25% gyroid, 4 walls | 1 |
 | s_eng_piv_outer_scaled24.stl | CF-PETG | 0.15mm | 40%, 4 walls | 2 |
 | s_eng_piv_pins_scaled24.stl | CF-PETG | 0.15mm | 40% solid, 4 walls | 2 |
 | s_pivot_arm_a_scaled24.stl | CF-PETG | 0.15mm | 40%, 4 walls | 2 |
 | s_eng_pistons_scaled24.stl | PETG | 0.20mm | 20% gyroid | 2 |
-| s_wing_nacelle_pylon_revo.stl | CF-PETG | 0.15mm | 40%, 4 walls | 2 |
+| wing_nacelle_pylon_revo.stl | CF-PETG | 0.15mm | 40%, 4 walls | 2 |
 | nacelle_nozzle_petal.stl | PETG + translucent-blue inner | 0.20mm | 20% gyroid | 16 |
 | nacelle_nozzle_ring.stl | CF-PETG | 0.15mm | 40% | 2 |
 | nacelle_nozzle_iris.stl | PETG | 0.12mm | 40% | 2 |
@@ -787,7 +816,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 | cargo_door_stbd.stl | CF-PETG | 0.15mm | 40%, 4 walls | 1 | Generated (PR #22) — reprint if hinge changes |
 | cargo_cradle_autolatch.stl | PETG | 0.20mm | 30% | 1 | Already generated (PR #21) — reprint if dimensions change |
 | cargo_winch_spool.stl | PETG | 0.20mm | 40% | 1 | Already generated (PR #21) — reprint if dimensions change |
-| nacelle_servo_bracket.stl | CF-PETG | 0.15mm | 40%, 4 walls | 2 | One per nacelle; from `airframe/openscad/nacelles/nacelle_servo_bracket.scad` (Rev S1). Print with channel mouth up; no supports needed. VERIFY M3 hole ±17.5×±8 mm pattern matches NSVMT inserts in slicer before printing. |
+| nacelle_servo_bracket.stl | CF-PETG | 0.15mm | 40%, 4 walls | 2 | One per nacelle; from `airframe/openscad/nacelles/nacelle_servo_bracket.scad` (Rev R). Print with channel mouth up; no supports needed. VERIFY M3 hole ±17.5×±8 mm pattern matches NSVMT inserts in slicer before printing. |
 | inara_access_cover.stl | PETG (Cu-foil lined) | 0.20mm | 40% | 1 | Faraday tray lid for Inara bay; 105×75 mm footprint, 5 mm shoulder, Ø38 mm GPS bore offset −13.3 mm Z from cover centre. SCAD not yet created — **BLOCKS printing.** |
 | river_access_cover.stl | PETG (Cu-foil lined) | 0.20mm | 40% | 1 | Faraday tray lid for River bay; 105×75 mm footprint, 5 mm shoulder, Ø38 mm GPS bore at +0.7 mm Z from cover centre. SCAD not yet created — **BLOCKS printing.** |
 | kaylee_battery_tray.stl | CF-PETG | 0.15mm | 40%, 4 walls | 1 | Battery slide-in rail tray for 6S 4000 mAh LiPo; keel mount at 190 mm station. SCAD not yet created — **BLOCKS Phase 1.** |
@@ -1068,8 +1097,8 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 - [ ] Cap Simon's medbay (Bay E) end of ETH-EA conduit (will connect to FC4 in Phase 7); connect Shepherd's room (Bay A) end to CN1 Cape-B ETH-2.
 
-**CN2+FC2 installation — Inara's shuttle (Bay B, dorsal fwd) — Zoë / Wash (Rev Q):**
-> Rev Q: Inara's shuttle (Bay B) also uses v2 EMI-hardened capes (same as Shepherd's room). All four bays use Wash + Zoë.
+**CN2+FC2 installation — Inara's shuttle (Bay B, dorsal fwd) — Zoë / Wash (Rev R):**
+> Rev R: Inara's shuttle (Bay B) also uses v2 EMI-hardened capes (same as Shepherd's room). All four bays use Wash + Zoë.
 
 - [ ] Mount CN2 Zoë on Inara's shuttle (Bay B) floor standoffs; insert PB2-I; mount FC2 Wash above.
 
@@ -1175,8 +1204,8 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 **Goal:** All 8 nodes installed, full ring redundancy, 12× VL53L5CX dual-redundant obstacle avoidance operational.
 
-**CN3+FC3 installation — River's room (Bay D, dorsal aft) — Zoë / Wash (Rev Q):**
-> Rev Q: River's room (Bay D) also uses v2 EMI-hardened capes. All four bays uniform.
+**CN3+FC3 installation — River's room (Bay D, dorsal aft) — Zoë / Wash (Rev R):**
+> Rev R: River's room (Bay D) also uses v2 EMI-hardened capes. All four bays uniform.
 
 - [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Wash in Inara's shuttle (Bay B).
 
@@ -1407,7 +1436,7 @@ communication redundancy sufficient for real-world deployment.
 ### Phase 11 — Aft EDF Integration (Deferred)
 
 **Goal:** Install the 120mm 6S fuselage EDF and its supporting intake and nozzle system, achieving
-the full T/W ≈ 1.47 VTOL hover capability specified in Rev Q.
+the full T/W ≈ 1.47 VTOL hover capability specified in Rev R.
 
 **Dependency:** Phases 0–10 complete and proven in flight.
 
@@ -1430,15 +1459,15 @@ the full T/W ≈ 1.47 VTOL hover capability specified in Rev Q.
 
 **11B — Rear neck shell swap (if printed without windows):**
 
-- [ ] Print `s_rear_neck_intake_shell24.stl` from `deferred/aft-edf/openscad/s_rear_neck_intake_shell24.scad`. Verify NECK_X ≈ 310mm alignment in slicer.
+- [ ] Print `rear_neck_intake_shell24.stl` from `deferred/aft-edf/openscad/rear_neck_intake_shell24.scad`. Verify NECK_X ≈ 310mm alignment in slicer.
 
 - [ ] Remove temporary window covers from existing neck shell, or swap in the new windowed shell if a plain shell was used for Phases 0–10.
 
 **11C — STL generation and printing:**
 
-- [ ] Print `s_neck_intake_frame.stl` (CF-PETG, 0.15mm, 40% gyroid, 4 walls) from `deferred/aft-edf/openscad/s_neck_intake_frame.scad`.
+- [ ] Print `neck_intake_frame.stl` (CF-PETG, 0.15mm, 40% gyroid, 4 walls) from `deferred/aft-edf/openscad/neck_intake_frame.scad`.
 
-- [ ] Print `s_aft_edf_plenum.stl` (PETG, 0.20mm, 20% gyroid) from `deferred/aft-edf/openscad/s_aft_edf_plenum.scad`.
+- [ ] Print `aft_edf_plenum.stl` (PETG, 0.20mm, 20% gyroid) from `deferred/aft-edf/openscad/aft_edf_plenum.scad`.
 
 - [ ] Print `rear_nozzle_frame.stl` (CF-PETG, 0.15mm, 30%) from `deferred/aft-edf/stls/rear_nozzle_frame.stl` (already generated).
 
@@ -1446,7 +1475,7 @@ the full T/W ≈ 1.47 VTOL hover capability specified in Rev Q.
 
 **11D — Intake frame installation:**
 
-- [ ] Dry-fit `s_neck_intake_frame.stl` into 4 scoop windows; registration tongues insert with ~0.2mm clearance (sand if tight).
+- [ ] Dry-fit `neck_intake_frame.stl` into 4 scoop windows; registration tongues insert with ~0.2mm clearance (sand if tight).
 
 - [ ] Verify aerodynamic orientation: intake lips face forward (+X).
 
@@ -1456,7 +1485,7 @@ the full T/W ≈ 1.47 VTOL hover capability specified in Rev Q.
 
 **11E — Plenum manifold installation:**
 
-- [ ] Dry-fit `s_aft_edf_plenum.stl`; verify arm alignment and 120mm outlet centred.
+- [ ] Dry-fit `aft_edf_plenum.stl`; verify arm alignment and 120mm outlet centred.
 
 - [ ] Bond plenum forward arms to intake frame exits; fillet joints; cure 2h.
 
@@ -1605,7 +1634,7 @@ No additional transmit power amplifiers are FCC-compliant for any link in the st
 configuration with directional antennas.  See `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`.
 
 **File tree:** `gcs/malcolm/` — hardware docs, SCAD gimbal designs, PB2-I firmware, and
-host-PC software all created in Rev Q1.  See `gcs/malcolm/README.md` for layout.
+host-PC software all created in Rev R1.  See `gcs/malcolm/README.md` for layout.
 
 #### 4.5.1 — Malcolm Hardware Design
 
@@ -1890,20 +1919,20 @@ to duplicate search paths in the validator). Root causes and resolutions:
 **STL repairs (manifold3d 3.5.1):**
 - [x] `nacelle_nozzle_closed_asm.stl` — repaired: 1704 → 1648 faces, wt=True (16 bodies)
 - [x] `nacelle_nozzle_petal.stl` — repaired: 213 → 206 faces, wt=True
-- [x] `s_head_shell24_2mm_repaired.stl` — repaired: 227428 → 226812 faces, wt=True (6 bodies)
-- [x] `s_cargo_sect_shell24_2mm_repaired.stl` — repaired: 368352 → 367506 faces, wt=True
-- [x] `s_cargo_sect_shell24_2mm_repaired_largest.stl` — repaired: 367514 → 367474 faces, wt=True
-- [x] `s_middle_canonical_edf_intake.stl` — **regenerated** from `s_middle_canonical_shell24.stl`
+- [x] `head_shell24_2mm_repaired.stl` — repaired: 227428 → 226812 faces, wt=True (6 bodies)
+- [x] `cargo_sect_shell24_2mm_repaired.stl` — repaired: 368352 → 367506 faces, wt=True
+- [x] `cargo_sect_shell24_2mm_repaired_largest.stl` — repaired: 367514 → 367474 faces, wt=True
+- [x] `middle_canonical_edf_intake.stl` — **regenerated** from `middle_canonical_shell24.stl`
   via manifold3d Boolean difference (4 radial intake scoops). Original was non-manifold (3
   connected components, all non-manifold). New mesh: 20734 faces, wt=True. Parameters from
   `airframe/blender-scripts/blender_middle_intake_cut.py` Rev C.
 
 **STLs passing via per-body check (no geometry change needed):**
-- [x] `s_feet_x_4_scaled24.stl` — 4 feet (4 bodies, each wt=True)
-- [x] `s_rear_shell24_2mm_repaired.stl` — 15 bodies, all wt=True
-- [x] `s_middle_shell24_2mm_repaired.stl` — 10 bodies, all wt=True
+- [x] `feet_x_4_scaled24.stl` — 4 feet (4 bodies, each wt=True)
+- [x] `rear_shell24_2mm_repaired.stl` — 15 bodies, all wt=True
+- [x] `middle_shell24_2mm_repaired.stl` — 10 bodies, all wt=True
 - [x] `dorsal_antenna_fin.stl` — 3 bodies, all wt=True
-- [x] `s_cargo_sect_shell24.stl` — 190 bodies, all wt=True
+- [x] `cargo_sect_shell24.stl` — 190 bodies, all wt=True
 
 **Result:** All 37 STL files pass `python tools/validate_stls.py` (0 failures).
 

@@ -1,4 +1,4 @@
-// s_aft_edf_plenum.scad
+// aft_edf_plenum.scad
 // 4-to-1 cross-shaped internal air manifold for Serenity Rev N 24" hull
 // Routes airflow from 4 radial neck scoops (station ~310mm) to the 120mm
 // fuselage EDF (fan face at station ~430mm, inside Panel F engine bell).

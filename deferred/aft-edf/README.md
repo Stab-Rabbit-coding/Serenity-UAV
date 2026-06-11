@@ -41,20 +41,20 @@ performance.
 
 | File | Description |
 |------|-------------|
-| `s_rear_neck_intake_shell24.scad` | Rear hull neck section with 4 radial scoop window cutouts at station ~310 mm |
-| `s_neck_intake_frame.scad` | CF-PETG structural intake frame ring; bonds into the 4 scoop windows |
-| `s_aft_edf_plenum.scad` | Cross-shaped 4-to-1 PETG plenum manifold connecting intake arms to 120 mm EDF face |
-| `s_edf_120_motor_mount.scad` | Motor mount ring for the 120 mm EDF inside Panel F |
-| `s_edf_120_thrust_tube.scad` | Thrust tube / aft duct directing exhaust toward nozzle exit |
+| `rear_neck_intake_shell24.scad` | Rear hull neck section with 4 radial scoop window cutouts at station ~310 mm |
+| `neck_intake_frame.scad` | CF-PETG structural intake frame ring; bonds into the 4 scoop windows |
+| `aft_edf_plenum.scad` | Cross-shaped 4-to-1 PETG plenum manifold connecting intake arms to 120 mm EDF face |
+| `edf_120_motor_mount.scad` | Motor mount ring for the 120 mm EDF inside Panel F |
+| `edf_120_thrust_tube.scad` | Thrust tube / aft duct directing exhaust toward nozzle exit |
 
 ### STL files (`stls/`)
 
 | File | Material | Notes |
 |------|----------|-------|
-| `s_neck_intake_frame.stl` | CF-PETG | Print at 0.15 mm / 40% gyroid / 4 walls |
-| `s_aft_edf_plenum.stl` | PETG | Print at 0.20 mm / 20% gyroid; pressure-test before EDF install |
-| `s_edf_120_motor_mount.stl` | CF-PETG | Motor mount ring |
-| `s_edf_120_thrust_tube.stl` | CF-PETG | Thrust tube |
+| `neck_intake_frame.stl` | CF-PETG | Print at 0.15 mm / 40% gyroid / 4 walls |
+| `aft_edf_plenum.stl` | PETG | Print at 0.20 mm / 20% gyroid; pressure-test before EDF install |
+| `edf_120_motor_mount.stl` | CF-PETG | Motor mount ring |
+| `edf_120_thrust_tube.stl` | CF-PETG | Thrust tube |
 | `rear_nozzle_frame.stl` | CF-PETG | 8-rib structural nozzle ring; bonds to aft EDF duct exit |
 | `rear_nozzle_petal.stl` | PETG + translucent-blue inner | Iris petal × 8 |
 | `rear_nozzle_closed_asm.stl` | — | Assembly visualisation only; not printed |
@@ -69,13 +69,13 @@ See the full Phase 11 build instructions in:
 
 ### High-level steps
 
-1. Generate `s_rear_neck_intake_shell24.stl` from `openscad/s_rear_neck_intake_shell24.scad`
+1. Generate `rear_neck_intake_shell24.stl` from `openscad/rear_neck_intake_shell24.scad`
    (verify NECK_X station alignment in slicer — target ~310 mm from nose datum).
 2. Replace the temporary Phase 0 rear neck hull section (if it was printed without windows)
    OR remove temporary window covers from the existing neck section.
 3. Generate and print remaining STLs in `stls/` if not already done.
-4. Install `s_neck_intake_frame.stl` into the 4 scoop windows (structural epoxy, 24 h cure).
-5. Install `s_aft_edf_plenum.stl`; pressure-test before proceeding.
+4. Install `neck_intake_frame.stl` into the 4 scoop windows (structural epoxy, 24 h cure).
+5. Install `aft_edf_plenum.stl`; pressure-test before proceeding.
 6. Bench-test 120 mm EDF (correct rotation, no vibration); install in plenum outlet.
 7. Wire 80 A ESC in Panel F; route signal lead to FC2 PRU Ch.2.
 8. Install `rear_nozzle_frame.stl` + 8 petals + piano wire link ring.
@@ -98,7 +98,7 @@ See the full Phase 11 build instructions in:
 
 ## Notes on the Interim Build (Phases 0–10)
 
-- The **hull neck shell** (`s_rear_neck_intake_shell24.stl`) still needs to be printed in Phase 0
+- The **hull neck shell** (`rear_neck_intake_shell24.stl`) still needs to be printed in Phase 0
   as it is a structural hull section.  The 4 scoop windows should be covered with temporary
   flat-plate covers (cut from 3 mm PETG sheet) and sealed with removable silicone for Phases 0–10.
   The covers are removed in Phase 11 when the intake frame is installed.
