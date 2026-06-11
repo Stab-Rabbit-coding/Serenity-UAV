@@ -32,6 +32,59 @@ Complete all items in this section before ordering PCBs or starting any physical
 All SCADs run on a host machine with OpenSCAD 2021.01+ or Blender 3.x+ (headless).
 Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 
+#### 1.1.0 **Hull-Frame Coordinate Standardisation (R1, 2026-06-11)**
+
+All design artifacts standardised on the validated hull frame (X = +port, Y = +aft,
+Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
+"Hull-Frame Coordinate Standard".
+
+- [x] **`tools/bake_hull_frame.py` created** — idempotent STL bake tool; applies the
+  validated 2026-06-10 placements to STL vertex data; stamps binary header marker
+  `SerenityUAV HULL-FRAME R1`; refuses to double-transform. *(done 2026-06-11)*
+- [x] **9 STLs baked to hull frame** — Head, Cargo (both repair copies), Middle, Rear,
+  Wing×2, Nacelle×2. Watertight validation PASS before and after; facet counts
+  unchanged; re-read verification ≤ 1.5e-5 mm. *(done 2026-06-11)*
+- [x] **`serenity_assembly.py` Rev R1** — all 8 primary placements now identity;
+  `doc.saveAs()` fix; `freecadcmd` entry-point fix; `airframe/Serenity-Assembled.FCStd`
+  regenerated and world extents verified identical to the validated assembly.
+  *(done 2026-06-11)*
+- [x] **48 generator/analysis scripts stamped** with the hull-frame standard header
+  (SCAD, Blender, FreeCAD, cargo generators, build-guide tools; GCS and deferred
+  files annotated as documented exceptions). *(done 2026-06-11)*
+- [x] **Docs updated** — CLAUDE.md (baked-extents table + pipeline rule), README.md,
+  REPO_ENFORCEMENT.md, serenity-rev-r.jsx (R1 entry; axis typo fixed),
+  PROJECT_INDEX.md. *(done 2026-06-11)*
+- [x] **Resolve nacelle port/stbd label swap.** Confirmed by user FreeCAD layout
+  inspection (2026-06-11): harness conduit exits inboard face; original SCAD naming
+  was inverted. Fixed: STL files renamed (port↔stbd swap), binary 80-byte headers
+  patched, `bake_hull_frame.py` COMPONENTS corrected, `serenity_assembly.py` audit
+  comment updated, SCAD build commands corrected (port: SWIRL_DIR=−1/PYLON_SIDE=−1,
+  stbd: SWIRL_DIR=+1/PYLON_SIDE=+1), CLAUDE.md extents table corrected.
+  *(done 2026-06-11)*
+- [ ] **Re-verify head↔cargo joint bosses in hull Y.** The 2026-06-10 joint analysis
+  used hull X as the longitudinal mating axis; in the validated frame the longitudinal
+  axis is Y (sections mate at hull Y ≈ −71 mm; X is lateral). Re-check
+  BOSS_FORE/BOSS_AFT positions in `s_head_shell24.scad` / `s_cargo_sect_shell24.scad`
+  against the baked meshes. **BLOCKS head/cargo printing.**
+- [ ] **Regenerate cargo doors from the baked shell.** `cargo_door_port/stbd.stl`
+  (2026-06-01) predate both the repaired-shell re-orientation and the bake; regenerate
+  via `generate_cargo_doors.py` against the baked
+  `s_cargo_sect_shell24_2mm_repaired.stl` and verify the belly faces hull −Z.
+- [ ] **Consolidate duplicate cargo shell copies.**
+  `fuselage/s_cargo_sect_shell24_2mm_repaired.stl` (367,506 facets, later repair pass)
+  vs `fuselage/cargo/s_cargo_sect_shell24_2mm_repaired.stl` (368,352 facets, used by
+  the assembly). Both now baked; keep one canonical copy.
+- [ ] **Hull-frame placements for VERIFY parts.** Cargo mounts (8), pylons, EDF sleeves,
+  nozzles/gears, battery tray, belly panel, tip caps, dorsal antenna fin, landing
+  legs/feet remain part-local; validate each in FreeCAD against the baked hull and
+  either bake or record explicit placements in `serenity_assembly.py`.
+- [ ] **Generate `battery_tray.stl` and `belly_panel.stl`** from their SCAD sources —
+  currently missing (WARN during assembly regeneration).
+- [ ] **Archive deprecated FreeCAD prototypes** — `assembly1.py`, `Serenity-Assemble.py`,
+  `Serenity-Subsystem-Assembly.py`, `serenity_subsystem_assembler.py`,
+  `serenity_fuselage_asm4.py` are marked DEPRECATED (pre-R1 transforms would
+  double-transform baked STLs); move to `airframe/archive/` at next revision checkpoint.
+
 #### 1.1.1 **Fuselage**
 
 - [ ] **Access panel frames A–F + lids (24" Rev N)** — verify `files-hollowed-18in/` frames are sized for the 24" hull (97×63 mm bay footprint per REVN_BUILD_GUIDE_24IN.md Phase 1). If no 24" version exists, create `serenity/stl/access_panels_24in.scad` with 6 frame + 6 lid profiles.
@@ -53,6 +106,10 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
   (at head local_X=99) align with 6 cargo BOSS_FORE bosses (at cargo local_X=−41.4) in
   the assembled hull.  All Y/Z offsets remain estimated; also VERIFY those after X is confirmed.
   Ref: `s_head_shell24.scad` BOSS_AFT_* comments; `s_cargo_sect_shell24.scad` hull-frame block.
+  **R1 AUDIT (2026-06-11): this analysis used hull X as the longitudinal mating axis, but
+  in the validated hull frame X is LATERAL (+port) and the longitudinal axis is Y — the
+  baked head and cargo meshes mate at hull Y ≈ −71 mm.  Redo the joint analysis in hull Y
+  (see §1.1.0) before trusting BOSS_FORE = −41.4 mm.**
 
 **Rev O shell updates (sensor/antenna mounts from 2026-05-24):**
 
@@ -180,8 +237,10 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 
 **Nacelle shells (Blender, Rev O geometry — must run on host machine):**
 
-- [ ] **Rev O nacelle stator shells** — run `blender --background --python thingverse-serenity/blender_nacelle_revo.py` with `SWIRL_DIR=1` (port) and `SWIRL_DIR=-1` (stbd).
-  - Output: `s_eng_left_stator_shell24_revo.stl`, `s_eng_right_stator_shell24_revo.stl`
+- [ ] **Rev O nacelle stator shells** — run `blender --background --python thingverse-serenity/blender_nacelle_revo.py`.
+  - Port nacelle: `SWIRL_DIR=-1` (CCW from intake); stbd nacelle: `SWIRL_DIR=+1` (CW).
+    *(SWIRL_DIR assignments corrected 2026-06-11 per Rev R1/nacelle-swap — original directions were inverted.)*
+  - Output: `s_eng_left_stator_shell24_revo.stl` (stbd use), `s_eng_right_stator_shell24_revo.stl` (port use)
   - Verify: Z-range 0–148.3 mm, bore ID 55.0–56.0 mm, 11 stator fins visible in Z=53–95 mm gap
   - **BLOCKS Phase 0 nacelle printing**
 

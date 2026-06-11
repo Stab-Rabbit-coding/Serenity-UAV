@@ -162,17 +162,30 @@
 // cross-sections in a slicer before printing.
 // ============================================================
 //
-// Hull-frame position (validated FreeCAD assembly — SerenityAssembly.FCStd,
-//   2026-06-10):
-//   Cargo_Shell placement in hull frame:
+// HULL-FRAME COORDINATE STANDARD — Rev R1 (2026-06-11).  See CLAUDE.md.
+//   Hull frame (canonical for ALL design artifacts): X = +port (left),
+//   Y = +aft (back), Z = +dorsal (up); origin = SerenityAssembly.FCStd
+//   world origin.  This SCAD models the cargo section in its historical
+//   part-local frame; the PUBLISHED STL
+//   (airframe/stls/fuselage/cargo/s_cargo_sect_shell24_2mm_repaired.stl)
+//   is BAKED into hull frame by tools/bake_hull_frame.py using the
+//   placement validated in SerenityAssembly.FCStd (2026-06-10):
 //     Base: Px = −274.400 mm (−10.80 in), Py = −282.800 mm (−11.13 in), Pz = 0
-//     Rotation: 180° about Z  (local +X → hull −X port;  local +Y → hull −Y aft)
+//     Rotation: 180° about Z  (local +X → hull −X;  local +Y → hull −Y)
 //   Forward transform: hull_X = −local_X − 274.4   (port axis)
 //                      hull_Y = −local_Y − 282.8   (aft axis)
 //                      hull_Z = local_Z             (dorsal axis — unchanged)
 //   Inverse transform: local_X = −hull_X − 274.4
 //                      local_Y = −hull_Y − 282.8
 //                      local_Z = hull_Z
+//   Baked hull-frame bounds: X −267.0..−72.9, Y −71.5..+132.0, Z 0..163.2 mm.
+//   After ANY regeneration from this source, re-run:
+//       python3 tools/bake_hull_frame.py Cargo_Shell Cargo_Shell_Repair2
+//   R1 AUDIT NOTE: in the validated hull frame the LONGITUDINAL axis is Y
+//   (head and cargo sections mate at hull_Y ≈ −71 mm; X is lateral/port).
+//   The 2026-06-10 head-cargo joint analysis below uses hull_X as the
+//   mating axis — re-verify BOSS_FORE/BOSS_AFT positions against the
+//   baked meshes before printing (TODO.md §1.1.1.1).
 //
 //   NOTE: the 180° rotation REVERSES both the port and aft axes.  What is
 //   the "fore" face in STL local space (local_X = −7) becomes the AFT face

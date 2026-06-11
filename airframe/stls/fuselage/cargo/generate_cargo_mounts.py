@@ -1,4 +1,16 @@
 #!/usr/bin/env python3
+# ============================================================================
+# HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11).  See CLAUDE.md.
+#   Hull frame (canonical for ALL design artifacts): X = +port (left),
+#   Y = +aft (back), Z = +dorsal (up); origin = SerenityAssembly.FCStd
+#   world origin.  Primary-component STLs published to airframe/stls/
+#   are stored directly in hull frame, baked by tools/bake_hull_frame.py
+#   (marker 'SerenityUAV HULL-FRAME R1' in the binary STL header).
+#   NEVER re-bake a mesh derived from an already-baked file.
+#   This file:
+#     Generates part-local print meshes centred on their own origins.
+#     Hull-frame placements VERIFY pending (serenity_assembly.py).
+# ============================================================================
 """
 generate_cargo_mounts.py
 Generate STL files for all Serenity UAV cargo handling equipment mounts.

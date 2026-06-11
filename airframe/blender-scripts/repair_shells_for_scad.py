@@ -1,3 +1,18 @@
+# ============================================================================
+# HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11).  See CLAUDE.md.
+#   Hull frame (canonical for ALL design artifacts): X = +port (left),
+#   Y = +aft (back), Z = +dorsal (up); origin = SerenityAssembly.FCStd
+#   world origin.  Primary-component STLs published to airframe/stls/
+#   are stored directly in hull frame, baked by tools/bake_hull_frame.py
+#   (marker 'SerenityUAV HULL-FRAME R1' in the binary STL header).
+#   NEVER re-bake a mesh derived from an already-baked file.
+#   This file:
+#     Mesh-repair pipeline.  Repair PRESERVES the input mesh frame but
+#     Blender export DROPS the binary-STL bake marker.  Only repair
+#     pre-bake part-local sources and then bake the output; a repaired
+#     copy of an already-baked mesh is hull-frame WITHOUT a marker and
+#     must NOT be passed through tools/bake_hull_frame.py again.
+# ============================================================================
 """
 repair_shells_for_scad.py  — run with:
     blender --background --python repair_shells_for_scad.py

@@ -1,3 +1,17 @@
+// ===========================================================================
+// HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11).  See CLAUDE.md.
+//   Hull frame (canonical for ALL design artifacts): X = +port (left),
+//   Y = +aft (back), Z = +dorsal (up); origin = SerenityAssembly.FCStd
+//   world origin.  Primary-component STLs published to airframe/stls/
+//   are stored directly in hull frame, baked by tools/bake_hull_frame.py
+//   (marker 'SerenityUAV HULL-FRAME R1' in the binary STL header).
+//   NEVER re-bake a mesh derived from an already-baked file.
+//   This file:
+//     Part-local frame.  DEFERRED - Phase 11 (aft fuselage EDF).  On
+//     integration, position in hull frame per the validated assembly and
+//     bake or place explicitly; stations quoted from nose convert to hull
+//     Y via nose tip at hull Y = -305.6 mm.
+// ===========================================================================
 // s_edf_120_thrust_tube.scad
 // Thrust tube for Serenity Rev N 120mm rear EDF.
 //

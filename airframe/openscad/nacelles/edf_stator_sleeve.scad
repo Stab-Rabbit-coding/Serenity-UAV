@@ -1,3 +1,18 @@
+// ===========================================================================
+// HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11).  See CLAUDE.md.
+//   Hull frame (canonical for ALL design artifacts): X = +port (left),
+//   Y = +aft (back), Z = +dorsal (up); origin = SerenityAssembly.FCStd
+//   world origin.  Primary-component STLs published to airframe/stls/
+//   are stored directly in hull frame, baked by tools/bake_hull_frame.py
+//   (marker 'SerenityUAV HULL-FRAME R1' in the binary STL header).
+//   NEVER re-bake a mesh derived from an already-baked file.
+//   This file:
+//     Part-local print frame, coaxial with the nacelle duct (duct axis =
+//     local +Z, intake at Z = 0).  Hull placement derives from the nacelle
+//     pose (cruise = 270 deg about +X + translation; hover rotates about the
+//     tilt pivot at duct Z = 83 mm).  Assembly placement VERIFY pending
+//     (serenity_assembly.py).
+// ===========================================================================
 // =============================================================================
 // edf_stator_sleeve.scad
 // Serenity UAV — Rev A — EDF Inter-stage Stator Sleeve

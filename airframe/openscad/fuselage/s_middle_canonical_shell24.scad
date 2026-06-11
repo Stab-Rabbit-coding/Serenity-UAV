@@ -1,3 +1,21 @@
+// ===========================================================================
+// HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11).  See CLAUDE.md.
+//   Hull frame (canonical for ALL design artifacts): X = +port (left),
+//   Y = +aft (back), Z = +dorsal (up); origin = SerenityAssembly.FCStd
+//   world origin.  Primary-component STLs published to airframe/stls/
+//   are stored directly in hull frame, baked by tools/bake_hull_frame.py
+//   (marker 'SerenityUAV HULL-FRAME R1' in the binary STL header).
+//   NEVER re-bake a mesh derived from an already-baked file.
+//   This file:
+//     Middle (neck / horseshoe ring) section modelled in a part-local
+//     frame with the section axial direction along local Z.  The
+//     assembly's Middle_Shell mesh (s_middle_shell24_2mm_repaired.stl)
+//     is baked to hull frame (90 deg about -X + translation;
+//     COMPONENTS['Middle_Shell']).  Baked hull-frame bounds:
+//     X -258.5..-81.7, Y +130.4..+203.6, Z +1.4..+166.1 mm.  After
+//     regenerating the assembly mesh, re-run:
+//         python3 tools/bake_hull_frame.py Middle_Shell
+// ===========================================================================
 // ============================================================
 // s_middle_canonical_shell24.scad
 // Mid-fuselage shell for Serenity Rev N 24" hull (s_middle.stl).

@@ -1,3 +1,17 @@
+# ============================================================================
+# HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11).  See CLAUDE.md.
+#   Hull frame (canonical for ALL design artifacts): X = +port (left),
+#   Y = +aft (back), Z = +dorsal (up); origin = SerenityAssembly.FCStd
+#   world origin.  Primary-component STLs published to airframe/stls/
+#   are stored directly in hull frame, baked by tools/bake_hull_frame.py
+#   (marker 'SerenityUAV HULL-FRAME R1' in the binary STL header).
+#   NEVER re-bake a mesh derived from an already-baked file.
+#   This file:
+#     Generates nacelle meshes in the nacelle part-local frame (duct
+#     axis = local +Z, intake at Z = 0).  Published nacelle STLs must be
+#     baked to hull frame after regeneration:
+#         python3 tools/bake_hull_frame.py Nacelle_Port Nacelle_Stbd
+# ============================================================================
 """
 blender_nacelle_revo.py  —  run with:
     blender --background --python blender_nacelle_revo.py

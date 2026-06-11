@@ -2,21 +2,24 @@
 // s_head_shell24.scad
 // Nose / cockpit shell for Serenity Rev N 24" hull (s_head.stl).
 //
-// Hull-frame position (validated FreeCAD assembly — SerenityAssembly.FCStd,
-//   2026-06-10):
-//   Head_Shell placement in hull frame:
-//     X = −331.999 mm (−13.07 in) from hull origin  [positive port/left]
-//     Y = −18.000 mm (−0.71 in)                      [positive aft/back]
-//     Z = +60.999 mm (+2.40 in)                      [positive dorsal/up]
-//     Rotation: Identity — no rotation needed; STL axes align directly with
-//               hull frame axes.
-//   Meaning: Head is the forwardmost section (most negative Y in assembly).
-//   Station mapping within head STL: X_stl = 284 − station_mm.
-//   STL bounds: X = 99..228 mm (3.90..8.98 in), Y = −288..−53 mm,
-//               Z = 0..141 mm (0..5.55 in).
-//   Head section in 24" hull spans approximately stations 0–7.28 in (0–185 mm)
-//   from nose.  Aft mating face (head → cargo) at X_stl ≈ 99 mm = sta 3.54 in
-//   (90 mm from nose).
+// HULL-FRAME COORDINATE STANDARD — Rev R1 (2026-06-11).  See CLAUDE.md.
+//   Hull frame (canonical for ALL design artifacts): X = +port (left),
+//   Y = +aft (back), Z = +dorsal (up); origin = SerenityAssembly.FCStd
+//   world origin.
+//   This SCAD models the head in its historical part-local frame
+//   (axes parallel to hull frame; station mapping X_local = 284 −
+//   station_mm; local bounds X = 99..228 mm, Y = −288..−53 mm,
+//   Z = 0..141 mm).  The PUBLISHED STL
+//   (airframe/stls/fuselage/s_head_shell24_2mm_repaired.stl) is BAKED
+//   into hull frame by tools/bake_hull_frame.py (identity rotation +
+//   translation [−331.999, −18.000, +60.999] mm = the placement
+//   validated in SerenityAssembly.FCStd 2026-06-10); baked hull-frame
+//   bounds: X −232.8..−103.6, Y −305.6..−70.7, Z +61.2..+201.4 mm.
+//   After ANY regeneration from this source, re-run:
+//       python3 tools/bake_hull_frame.py Head_Shell
+//   Meaning: Head is the forwardmost section (most negative hull Y).
+//   Aft mating face (head → cargo) at X_local ≈ 99 mm = hull
+//   X ≈ −233 mm = sta 3.54 in (90 mm from nose).
 //
 // Key dimensions — imperial primary, mm in parentheses (for reference only;
 //   all OpenSCAD variable assignments remain in mm):

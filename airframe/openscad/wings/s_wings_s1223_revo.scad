@@ -1,3 +1,19 @@
+// ===========================================================================
+// HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11).  See CLAUDE.md.
+//   Hull frame (canonical for ALL design artifacts): X = +port (left),
+//   Y = +aft (back), Z = +dorsal (up); origin = SerenityAssembly.FCStd
+//   world origin.  Primary-component STLs published to airframe/stls/
+//   are stored directly in hull frame, baked by tools/bake_hull_frame.py
+//   (marker 'SerenityUAV HULL-FRAME R1' in the binary STL header).
+//   NEVER re-bake a mesh derived from an already-baked file.
+//   This file:
+//     Wing axes are parallel to hull axes (identity rotation); the
+//     published wing STLs are baked to hull frame by translation only
+//     (COMPONENTS['Wing_Port'] / COMPONENTS['Wing_Stbd']).  Baked
+//     hull-frame bounds: port X -93.0..+4.7, stbd X -347.7..-250.0;
+//     both Y -12..+154, Z +48.0..+81.7 mm.  After regeneration, re-run:
+//         python3 tools/bake_hull_frame.py Wing_Port Wing_Stbd
+// ===========================================================================
 // =============================================================================
 // s_wings_s1223_revo.scad
 // Serenity UAV — Rev O — Wing Pair with Selig S1223 Airfoil Profile

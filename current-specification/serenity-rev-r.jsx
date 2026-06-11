@@ -18,8 +18,20 @@
  *   4. Mission profile documentation: 10-step cargo mission + 3-step cyber-resilience
  *      criteria added to README.md.
  *   5. CLAUDE.md standards tightened: imperial-primary units with lbm/lbf distinction;
- *      airspeed in knots (kt); hull-frame coordinate system (X nose, Y dorsal, Z port)
- *      canonically defined with validated section placements.
+ *      airspeed in knots (kt); hull-frame coordinate system (X = +port, Y = +aft,
+ *      Z = +dorsal) canonically defined with validated section placements.
+ *
+ * Rev R1 (2026-06-11): Hull-frame coordinate standardisation.
+ *   Validated placements for all 8 primary components baked into the STL vertex
+ *   data by tools/bake_hull_frame.py (binary STL header marker
+ *   "SerenityUAV HULL-FRAME R1"); serenity_assembly.py imports everything at
+ *   identity.  Single coordinate system (hull frame) across all SCAD, STL,
+ *   Blender, and FreeCAD artifacts; exceptions: avionics KiCad files, Malcolm
+ *   GCS hardware, G-code.  48 generator/analysis scripts stamped with the
+ *   hull-frame standard header.  Open audit findings: nacelle port/stbd FCStd
+ *   labels appear swapped vs wings (resolve against SWIRL_DIR before printing);
+ *   2026-06-10 head-cargo joint analysis used hull X as the longitudinal axis
+ *   (it is Y) — BOSS positions to be re-verified.
  *   6. All Python scripts brought to flake8 compliance (E201/E122/E501/E251/F401/E231).
  *   7. Rev Q JSX and bom_revQ.csv/json remain active for historical reference;
  *      bom_revR.json/csv created for Rev R BOM baseline.
@@ -161,7 +173,8 @@ function TabOverview() {
                     rows={[
                         ["Avionics / Naming", "Cape-A-2 renamed to Wash; Cape-B-2 renamed to Zoë. CAPE-A-2 and CAPE-B-2 KiCad files archived to avionics/kicad/archive/. Wash.* and Zoë.* are now the sole active cape design files.", "✓ DONE", "2026-06-10"],
                         ["Avionics / Kaylee PDB", "Kaylee Power Distribution Board: KiCad pro/sch/pcb generated; DRC 0 shorts; gerbers generated to avionics/kicad/gerbers/. Kaylee.md design notes created.", "✓ DONE", "2026-06-10"],
-                        ["Airframe / FreeCAD", "SerenityAssembly.FCStd validated: position + quaternion for Head, Cargo, Middle, Rear, Wing×2, Nacelle×2 documented in CLAUDE.md and serenity_assembly.py. Hull-frame axes defined (X nose, Y dorsal, Z port).", "✓ DONE", "2026-06-10"],
+                        ["Airframe / FreeCAD", "SerenityAssembly.FCStd validated: position + quaternion for Head, Cargo, Middle, Rear, Wing×2, Nacelle×2 documented in CLAUDE.md and serenity_assembly.py. Hull-frame axes defined (X = +port, Y = +aft, Z = +dorsal).", "✓ DONE", "2026-06-10"],
+                        ["Airframe / Coordinates (R1)", "Hull-frame standardisation: validated placements baked into all 8 primary STLs (tools/bake_hull_frame.py, header marker 'SerenityUAV HULL-FRAME R1'); serenity_assembly.py imports at identity; 48 scripts stamped with the hull-frame standard header. Exceptions: avionics KiCad, Malcolm GCS, G-code. Open: nacelle port/stbd label swap vs wings; head-cargo joint axis re-verify.", "✓ DONE", "2026-06-11"],
                         ["Mission Profile", "10-step cargo mission and 3-step cyber-resilience criteria added to README.md.", "✓ DONE", "2026-06-10"],
                         ["Standards / CLAUDE.md", "Imperial-primary units formalised (lbm vs lbf); airspeed in knots (kt); hull-frame coordinate system canonically defined with validated placements.", "✓ DONE", "2026-06-10"],
                         ["Code Quality", "All Python scripts brought to flake8 compliance: E201/E122/E501/E251/F401/E231 violations resolved.", "✓ DONE", "2026-06-10"],

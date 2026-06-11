@@ -1,7 +1,7 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: Rev R (2026-06-10) -->
+<!-- Last updated: Rev R1 (2026-06-11) -->
 
 ## Repository Root
 
@@ -16,6 +16,21 @@ TODO.md                           — Work-breakdown structure and open items
 
 ---
 
+## tools/
+
+Repository-level engineering tools.
+
+```
+validate_stls.py                  — CI STL watertight validator (trimesh)
+bake_hull_frame.py                — R1: bakes validated FreeCAD placements into primary
+                                    STLs (hull frame: X=+port, Y=+aft, Z=+dorsal);
+                                    idempotent via 'SerenityUAV HULL-FRAME R1' STL
+                                    header marker; single source of the historical
+                                    placement constants (COMPONENTS)
+```
+
+---
+
 ## airframe/
 
 ### airframe/FreeCAD-scripts/
@@ -24,10 +39,13 @@ Assembly pipeline for FreeCAD 0.20+ with Assembly4.
 
 ```
 Makefile                          — Build: SCAD→STL (openscad) + headless assembly (freecad)
-serenity_assembly.py              — Full-airframe FreeCAD assembly (Rev Q, 2026-06-08)
-Serenity-Assemble.py              — Legacy subsystem stub (Assembly4Lib placeholders)
-Serenity-Subsystem-Assembly.py    — Legacy subsystem stub (Assembly4Lib placeholders)
-serenity_subsystem_assembler.py   — Legacy subsystem assembler class (stub)
+serenity_assembly.py              — Full-airframe FreeCAD assembly (Rev R1, 2026-06-11:
+                                    baked hull-frame STLs, identity placements; run with
+                                    freecadcmd)
+assembly1.py                      — DEPRECATED prototype (pre-R1 transforms; do not use)
+Serenity-Assemble.py              — DEPRECATED subsystem stub (Assembly4Lib placeholders)
+Serenity-Subsystem-Assembly.py    — DEPRECATED subsystem stub (Assembly4Lib placeholders)
+serenity_subsystem_assembler.py   — DEPRECATED subsystem assembler class (stub)
 ```
 
 ### airframe/blender-scripts/

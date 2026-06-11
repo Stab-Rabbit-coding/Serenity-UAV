@@ -1,3 +1,27 @@
+// ===========================================================================
+// HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11).  See CLAUDE.md.
+//   Hull frame (canonical for ALL design artifacts): X = +port (left),
+//   Y = +aft (back), Z = +dorsal (up); origin = SerenityAssembly.FCStd
+//   world origin.  Primary-component STLs published to airframe/stls/
+//   are stored directly in hull frame, baked by tools/bake_hull_frame.py
+//   (marker 'SerenityUAV HULL-FRAME R1' in the binary STL header).
+//   NEVER re-bake a mesh derived from an already-baked file.
+//   This file:
+//     Nacelle duct axis along local +Z with the intake at Z = 0.  The
+//     published nacelle STLs (nacelle_port/stbd_revq.stl) are baked to
+//     hull frame in CRUISE attitude (270 deg about +X + translation;
+//     COMPONENTS['Nacelle_Port'] / ['Nacelle_Stbd']).  Hover is a
+//     downstream rotation about the tilt pivot (duct Z = 83 mm), never a
+//     stored orientation.  After regeneration, re-run:
+//         python3 tools/bake_hull_frame.py Nacelle_Port Nacelle_Stbd
+//   Nacelle label correction (Rev R1/nacelle-swap, 2026-06-11):
+//     Port nacelle (hull +X):  SWIRL_DIR=-1, PYLON_SIDE=-1, NACELLE_SIDE=-1
+//     Stbd nacelle (hull -X):  SWIRL_DIR=+1, PYLON_SIDE=+1, NACELLE_SIDE=+1
+//     The harness conduit exits the inboard face; this geometry was confirmed
+//     by physical layout inspection in FreeCAD.  Filenames corrected to match
+//     physical mounting side; original SCAD defaults (SWIRL_DIR=+1 for port)
+//     were inverted relative to the fitted geometry.
+// ===========================================================================
 // =============================================================================
 // nacelle_pod_50mm_tandem.scad
 // Serenity UAV — Rev R — Tandem-EDF Nacelle Pod (50 mm bore, canonical hull)
@@ -98,8 +122,10 @@
 // EDF Motors
 // ----------
 // Both EDFs are Xfly Galaxy X5 2627-2700KV 50 mm 6S units.
-// Counter-rotation: port nacelle CW from intake (SWIRL_DIR=+1),
-//                   starboard nacelle CCW (SWIRL_DIR=-1).
+// Counter-rotation (Rev R1/nacelle-swap corrected):
+//   port nacelle CCW from intake (SWIRL_DIR=-1),
+//   starboard nacelle CW from intake (SWIRL_DIR=+1).
+//   Determined by harness-conduit inboard mounting geometry confirmed in FreeCAD.
 //
 // Scale note
 // ----------
@@ -150,13 +176,13 @@
 //
 // Usage
 // -----
-//   Port nacelle (CW, pylon on +X face):
-//     openscad -o s_nacelle_port_revp.stl nacelle_pod_50mm_tandem.scad \
-//              -D SWIRL_DIR=1 -D PYLON_SIDE=1 -D NACELLE_SIDE=1
-//
-//   Starboard nacelle (CCW, pylon on -X face):
-//     openscad -o s_nacelle_stbd_revp.stl nacelle_pod_50mm_tandem.scad \
+//   Port nacelle (RED nav light, pylon inboard on -X face, CCW from intake):
+//     openscad -o nacelle_port_revr.stl nacelle_pod_50mm_tandem.scad \
 //              -D SWIRL_DIR=-1 -D PYLON_SIDE=-1 -D NACELLE_SIDE=-1
+//
+//   Starboard nacelle (GREEN nav light, pylon inboard on +X face, CW from intake):
+//     openscad -o nacelle_stbd_revr.stl nacelle_pod_50mm_tandem.scad \
+//              -D SWIRL_DIR=1 -D PYLON_SIDE=1 -D NACELLE_SIDE=1
 //
 // =============================================================================
 
@@ -908,10 +934,10 @@ nacelle_pod(swirl_dir = SWIRL_DIR);
 //   4. Shaft conduit ID = 3.5 mm ± 0.1 mm (4 mm PTFE tube).
 //   5. Retention boss bores = 3.5 mm ± 0.05 mm (M3 × 6 mm OLF heat-set insert).
 //
-// Render commands:
-//   Port nacelle (RED nav light, pylon on +X, CW from intake):
-//     openscad -o s_nacelle_port_revs.stl nacelle_pod_50mm_tandem.scad \
-//              -D SWIRL_DIR=1 -D PYLON_SIDE=1 -D NACELLE_SIDE=1
-//   Starboard nacelle (GREEN nav light, pylon on -X, CCW from intake):
-//     openscad -o s_nacelle_stbd_revs.stl nacelle_pod_50mm_tandem.scad \
+// Render commands (Rev R1 nacelle-swap corrected):
+//   Port nacelle (RED nav light, pylon inboard on -X face, CCW from intake):
+//     openscad -o nacelle_port_revr.stl nacelle_pod_50mm_tandem.scad \
 //              -D SWIRL_DIR=-1 -D PYLON_SIDE=-1 -D NACELLE_SIDE=-1
+//   Starboard nacelle (GREEN nav light, pylon inboard on +X face, CW from intake):
+//     openscad -o nacelle_stbd_revr.stl nacelle_pod_50mm_tandem.scad \
+//              -D SWIRL_DIR=1 -D PYLON_SIDE=1 -D NACELLE_SIDE=1

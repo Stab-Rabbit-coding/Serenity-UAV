@@ -1,12 +1,12 @@
 """
 serenity_assembly.py — Serenity UAV full-airframe FreeCAD assembly.
-Revision: Q2 (2026-06-10)
+Revision: R1 (2026-06-11)
 
-Imports all printed airframe STL components, applies coordinate transforms,
-and saves a single Serenity-Assembled.FCStd for review in FreeCAD.
+Imports all printed airframe STL components and saves a single
+Serenity-Assembled.FCStd for review in FreeCAD.
 
 Run headlessly (no GUI required):
-    /usr/bin/freecad --background --python serenity_assembly.py
+    freecadcmd airframe/FreeCAD-scripts/serenity_assembly.py
 
 Or from the Makefile:
     make assembly   (from airframe/FreeCAD-scripts/)
@@ -17,30 +17,39 @@ Output: <repo>/airframe/Serenity-Assembled.FCStd
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
 
-Coordinate system — 24"-scaled STL world space (hull frame):
+Coordinate system — hull frame (canonical, CLAUDE.md):
     X  positive port (left)
     Y  positive aft (back)
     Z  positive dorsal (up)
+    Origin: SerenityAssembly.FCStd world origin.
 
-Placement data for the eight primary airframe components (four fuselage
-sections, port/stbd wings, port/stbd nacelles) was validated by manual
-positioning in FreeCAD and extracted from
-airframe/freecad/assembly/SerenityAssembly.FCStd (2026-06-10).
-Minor joint alignment fine-tuning (fractions of mm / degree) is expected.
+R1 COORDINATE STANDARDISATION (2026-06-11):
+    The validated placements for the eight primary airframe components
+    (four fuselage sections, port/stbd wings, port/stbd nacelles) —
+    manually positioned in FreeCAD and extracted from
+    airframe/freecad/assembly/SerenityAssembly.FCStd on 2026-06-10 —
+    are now BAKED INTO THE STL VERTEX DATA by tools/bake_hull_frame.py.
+    Every primary STL in airframe/stls/ is therefore stored directly in
+    hull-frame coordinates and is imported here with an IDENTITY
+    placement.  The historical placement constants (the former PL_*
+    tuples) live on as the single source of truth in
+    tools/bake_hull_frame.py COMPONENTS; after regenerating any primary
+    STL from its SCAD/Blender source, re-run that tool before use.
+    Baked files carry the marker "SerenityUAV HULL-FRAME R1" in their
+    binary STL header and are never double-transformed.
+
+    Nacelle STLs are stored in cruise / forward-flight attitude (the
+    validated assembly attitude).  Hover tilt is a rotation about the
+    nacelle pivot applied downstream, not a stored orientation.
 
 All other component placements (cargo accessories, battery tray,
 EDF sleeves, nozzles, pylons, tip caps) are approximations and carry
 a VERIFY marker indicating they require confirmation in FreeCAD.
 
-Quaternion convention (FreeCAD App.Rotation): (Qx, Qy, Qz, Qw)
-    Identity    : (0,   0,  0,  +1)
-    90° about −X: (−√½, 0,  0,  +√½)  — Middle_Shell, Rear_Shell
-    180° about +Z: (0,  0, +1,   0)   — Cargo_Shell
-    270° about +X: (+√½, 0, 0, −√½)  — Nacelles (forward flight / cruise)
-
 References:
-    [1] airframe/freecad/assembly/SerenityAssembly.FCStd — validated positions
-    [2] airframe/openscad/fuselage/s_head_shell24.scad — hull coordinate def.
+    [1] airframe/freecad/assembly/SerenityAssembly.FCStd — validated
+        positions (pre-bake; placements now identity after R1).
+    [2] tools/bake_hull_frame.py — canonical bake transforms.
     [3] airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad
     [4] CLAUDE.md — project standards.
 """
@@ -62,40 +71,18 @@ OUTPUT      = os.path.join(AIRFRAME, "Serenity-Assembled.FCStd")
 
 
 # ---------------------------------------------------------------------------
-# Validated placement constants — extracted from SerenityAssembly.FCStd,
-# manually positioned 2026-06-10.
+# R1: The eight primary components import with IDENTITY placements.
 #
-# Tuple format: (Px, Py, Pz, Qx, Qy, Qz, Qw)
-#   Position in mm (FreeCAD world space).
-#   Rotation as unit quaternion; Qw is the scalar.
-#
-# _SQ2 = 1/√2 ≈ 0.7071068, shared by all 90°-family rotations.
+# The validated placement tuples that previously lived here (PL_HEAD_SHELL,
+# PL_CARGO_SHELL, PL_MIDDLE_SHELL, PL_REAR_SHELL, PL_WING_PORT, PL_WING_STBD,
+# PL_NACELLE_PORT, PL_NACELLE_STBD) were baked into the STL vertex data on
+# 2026-06-11 and now reside solely in tools/bake_hull_frame.py COMPONENTS.
+# Do not reintroduce per-part transforms here; if a primary STL is
+# regenerated from source, re-run tools/bake_hull_frame.py instead.
 # ---------------------------------------------------------------------------
 
-_SQ2 = 0.7071067811865476
-
-# -- Fuselage sections -------------------------------------------------------
-# Head: no rotation — STL axes already match hull frame.
-PL_HEAD_SHELL   = (-331.9993360,  -17.9999640,   60.9998780,    0.0,  0.0,  0.0,   +1.0)
-
-# Cargo: 180° about +Z to flip the section into the hull-forward orientation.
-PL_CARGO_SHELL  = (-274.4000100, -282.8000440,    0.0,           0.0,  0.0, +1.0,    0.0)
-
-# Middle / Rear: 90° about −X to rotate the SCAD section axis into hull +Z (dorsal).
-PL_MIDDLE_SHELL = (-350.9992980,  130.4001963,   10.0174324,  -_SQ2,  0.0,  0.0,  +_SQ2)
-PL_REAR_SHELL   = (   0.0,        203.1999999,  -31.9999360,  -_SQ2,  0.0,  0.0,  +_SQ2)
-
-# -- Wings -------------------------------------------------------------------
-# Identity rotation: port and stbd wing SCAD output axes already align with
-# the hull frame for these STLs — no rotation is required.
-PL_WING_PORT    = ( -80.9998380,   -6.9999860,   57.9998840,    0.0,  0.0,  0.0,   +1.0)
-PL_WING_STBD    = (-261.9994760,  -11.9999760,   57.9998840,    0.0,  0.0,  0.0,   +1.0)
-
-# -- Nacelles (forward-flight / cruise configuration) -----------------------
-# 270° about +X places nacelles in cruise attitude (validated in FCStd).
-# Hover attitude requires a different rotation.
-PL_NACELLE_PORT = (-385.0960040,  -69.9998600,   64.9719300,  +_SQ2,  0.0,  0.0,  -_SQ2)
-PL_NACELLE_STBD = (  46.9999060,  -63.9998720,   62.9998740,  +_SQ2,  0.0,  0.0,  -_SQ2)
+# Identity placement shared by all baked hull-frame components.
+PL_IDENTITY = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0)
 
 
 # ---------------------------------------------------------------------------
@@ -178,27 +165,26 @@ def assemble():
 
     # -------------------------------------------------------------------
     # FUSELAGE SECTIONS
-    # Placements validated against SerenityAssembly.FCStd (2026-06-10).
-    # All four sections are placed as Mesh::Feature objects; they tile
-    # into the complete hull without additional offsets.
+    # R1: STL vertex data is already hull-frame (baked 2026-06-11 by
+    # tools/bake_hull_frame.py); all four sections import at identity
+    # and tile into the complete hull without additional offsets.
     # -------------------------------------------------------------------
     print("[assembly] Fuselage sections ...", flush=True)
 
     head = add_mesh(doc, _stl("fuselage/s_head_shell24_2mm_repaired.stl"), "Head_Shell")
-    place_mesh(head, PL_HEAD_SHELL)
+    place_mesh(head, PL_IDENTITY)
 
     cargo = add_mesh(doc, _stl("fuselage/cargo/s_cargo_sect_shell24_2mm_repaired.stl"), "Cargo_Shell")
-    place_mesh(cargo, PL_CARGO_SHELL)
+    place_mesh(cargo, PL_IDENTITY)
 
     middle = add_mesh(doc, _stl("fuselage/s_middle_shell24_2mm_repaired.stl"), "Middle_Shell")
-    place_mesh(middle, PL_MIDDLE_SHELL)
+    place_mesh(middle, PL_IDENTITY)
 
-    # Prefer compiled rear shell; fall back to the repaired 2mm mesh.
-    rear_stl = _stl("fuselage/s_rear_shell24.stl")
-    if not os.path.exists(rear_stl):
-        rear_stl = _stl("fuselage/s_rear_shell24_2mm_repaired.stl")
-    rear = add_mesh(doc, rear_stl, "Rear_Shell")
-    place_mesh(rear, PL_REAR_SHELL)
+    # R1: the baked repaired mesh is the canonical rear shell.  (The
+    # former preference for a compiled s_rear_shell24.stl is removed —
+    # a freshly compiled, un-baked file must not bypass the bake step.)
+    rear = add_mesh(doc, _stl("fuselage/s_rear_shell24_2mm_repaired.stl"), "Rear_Shell")
+    place_mesh(rear, PL_IDENTITY)
 
     # Landing gear (scaled Thingiverse parts; identity placement)
     add_mesh(doc, _stl("fuselage/s_feet_x_4_scaled24.stl"), "Landing_Feet")
@@ -206,10 +192,16 @@ def assemble():
 
     # -------------------------------------------------------------------
     # CARGO BAY SUB-ASSEMBLY
-    # These STLs are generated in cargo-section local coordinates; they
-    # do not require an additional transform once the Cargo_Shell is placed.
-    # VERIFY: confirm alignment against PL_CARGO_SHELL after hull joints
-    # are finalised.
+    # R1 coordinate audit (2026-06-11):
+    #   - cargo_door_port/stbd.stl were generated 2026-06-01 from the
+    #     pre-repair Rev-O shell pose and do NOT align with the
+    #     validated (now baked) Cargo_Shell orientation.  Regenerate
+    #     them from the baked shell via generate_cargo_doors.py, then
+    #     verify belly (−Z) orientation — tracked in TODO.md §1.1.1.2.1.
+    #   - The eight cargo mounts are part-local prints centred on their
+    #     own origins; they have never been positioned in hull frame.
+    # VERIFY: all eleven accessories below require hull-frame placement
+    # validation against the baked Cargo_Shell.
     # -------------------------------------------------------------------
     print("[assembly] Cargo bay ...", flush=True)
 
@@ -254,17 +246,15 @@ def assemble():
 
     # -------------------------------------------------------------------
     # WINGS
-    # Placements validated against SerenityAssembly.FCStd (2026-06-10).
-    # Both wing STLs use identity rotation; the SCAD output axes already
-    # align with the hull frame for s_wing_{port,stbd}_s1223_revo.stl.
+    # R1: baked hull-frame STLs — identity placement.
     # -------------------------------------------------------------------
     print("[assembly] Wings ...", flush=True)
 
     port_wing = add_mesh(doc, _stl("wings/s_wing_port_s1223_revo.stl"), "Wing_Port")
-    place_mesh(port_wing, PL_WING_PORT)
+    place_mesh(port_wing, PL_IDENTITY)
 
     stbd_wing = add_mesh(doc, _stl("wings/s_wing_stbd_s1223_revo.stl"), "Wing_Stbd")
-    place_mesh(stbd_wing, PL_WING_STBD)
+    place_mesh(stbd_wing, PL_IDENTITY)
 
     # -------------------------------------------------------------------
     # NACELLE TILT PYLONS
@@ -279,17 +269,23 @@ def assemble():
 
     # -------------------------------------------------------------------
     # NACELLE PODS (forward-flight / cruise configuration)
-    # Placements validated against SerenityAssembly.FCStd (2026-06-10).
-    # Rev Q nacelle STLs (nacelle_port/stbd_revq.stl).
-    # 270° about +X is the cruise attitude; hover requires a different rotation.
+    # R1: baked hull-frame STLs — identity placement; stored attitude is
+    # cruise.  Hover is a downstream rotation about the tilt pivot.
+    #
+    # nacelle_port_revq.stl: hull +X (port side), SWIRL_DIR=-1 (CCW),
+    #   harness conduit exits -X (inboard) face.
+    # nacelle_stbd_revq.stl: hull -X (starboard side), SWIRL_DIR=+1 (CW),
+    #   harness conduit exits +X (inboard) face.
+    # Labels corrected Rev R1/nacelle-swap (2026-06-11) after FreeCAD
+    # layout inspection confirmed the original naming was inverted.
     # -------------------------------------------------------------------
     print("[assembly] Nacelle pods ...", flush=True)
 
     port_nac = add_mesh(doc, _stl("nacelles/nacelle_port_revq.stl"), "Nacelle_Port")
-    place_mesh(port_nac, PL_NACELLE_PORT)
+    place_mesh(port_nac, PL_IDENTITY)
 
     stbd_nac = add_mesh(doc, _stl("nacelles/nacelle_stbd_revq.stl"), "Nacelle_Stbd")
-    place_mesh(stbd_nac, PL_NACELLE_STBD)
+    place_mesh(stbd_nac, PL_IDENTITY)
 
     # -------------------------------------------------------------------
     # NACELLE INTERNAL COMPONENTS (EDF sleeves, nozzles, gear train)
@@ -322,12 +318,19 @@ def assemble():
     doc.recompute()
 
     print(f"[assembly] Saving → {OUTPUT}", flush=True)
-    doc.save(OUTPUT)
+    # FreeCAD 1.0: Document.save() takes no path — saveAs() sets the
+    # file name and writes the document in one call.
+    doc.saveAs(OUTPUT)
     print("[assembly] Complete.", flush=True)
 
 
 # ---------------------------------------------------------------------------
 # Entry point
+#
+# Under "freecadcmd serenity_assembly.py" the executed module's __name__
+# is the file stem ("serenity_assembly"), not "__main__" — accept both
+# so the script runs in either invocation (verified FreeCAD 1.0.0,
+# 2026-06-11).
 # ---------------------------------------------------------------------------
-if __name__ == "__main__":
+if __name__ in ("__main__", "serenity_assembly"):
     assemble()

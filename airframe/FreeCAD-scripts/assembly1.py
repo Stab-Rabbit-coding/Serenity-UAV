@@ -1,3 +1,17 @@
+# ============================================================================
+# HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11).  See CLAUDE.md.
+#   Hull frame (canonical for ALL design artifacts): X = +port (left),
+#   Y = +aft (back), Z = +dorsal (up); origin = SerenityAssembly.FCStd
+#   world origin.  Primary-component STLs published to airframe/stls/
+#   are stored directly in hull frame, baked by tools/bake_hull_frame.py
+#   (marker 'SerenityUAV HULL-FRAME R1' in the binary STL header).
+#   NEVER re-bake a mesh derived from an already-baked file.
+#   This file:
+#     DEPRECATED PROTOTYPE - retained for reference only.  The canonical
+#     assembly script is airframe/FreeCAD-scripts/serenity_assembly.py.
+#     Placement/transform values in this file predate the R1 bake and MUST
+#     NOT be applied to the baked hull-frame STLs (double transform).
+# ============================================================================
 # create_assembly_from_stl.py
 import os
 import FreeCAD

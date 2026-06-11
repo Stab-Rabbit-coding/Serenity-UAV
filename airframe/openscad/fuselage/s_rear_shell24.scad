@@ -1,3 +1,21 @@
+// ===========================================================================
+// HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11).  See CLAUDE.md.
+//   Hull frame (canonical for ALL design artifacts): X = +port (left),
+//   Y = +aft (back), Z = +dorsal (up); origin = SerenityAssembly.FCStd
+//   world origin.  Primary-component STLs published to airframe/stls/
+//   are stored directly in hull frame, baked by tools/bake_hull_frame.py
+//   (marker 'SerenityUAV HULL-FRAME R1' in the binary STL header).
+//   NEVER re-bake a mesh derived from an already-baked file.
+//   This file:
+//     Rear (engine cone / pod / skids) section modelled in a part-local
+//     frame with the section axial direction along local Z.  The
+//     assembly's Rear_Shell mesh (s_rear_shell24_2mm_repaired.stl) is
+//     baked to hull frame (90 deg about -X + translation;
+//     COMPONENTS['Rear_Shell']).  Baked hull-frame bounds:
+//     X -246.0..-105.6, Y +203.2..+383.9, Z +3.4..+160.9 mm.  After
+//     regenerating the assembly mesh, re-run:
+//         python3 tools/bake_hull_frame.py Rear_Shell
+// ===========================================================================
 // ============================================================
 // s_rear_shell24.scad
 // Aft fuselage section shell — Serenity UAV 24" hull.

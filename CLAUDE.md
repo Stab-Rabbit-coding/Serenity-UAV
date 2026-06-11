@@ -26,7 +26,7 @@
 - The logs are saved to hardware-enforced non-executable microsd cards
 - Everything complies with NIST SP800-207
 
-- See README.md for design mission profile. 
+- See README.md for design mission profile.
 
 ## Design Philosophy
 
@@ -68,38 +68,54 @@ Every component will be fabricated or procured; design accordingly.
 
 - The rear section consists of a conical engine room with a pod centered above it and two skids below it. the skids are extensions of the horseshoe ring from the middle section, bent aft and extending past the end of the tail cone.
 
-#### FreeCAD Assembly Coordinate System and Validated Section Placements
+#### Hull-Frame Coordinate Standard (Rev R1 — baked, canonical)
 
 The canonical assembly document is `airframe/freecad/assembly/SerenityAssembly.FCStd`.
-The headless assembly script is `airframe/FreeCAD-scripts/serenity_assembly.py`.
+The headless assembly script is `airframe/FreeCAD-scripts/serenity_assembly.py` (run with `freecadcmd`).
 
-All 24"-scaled STLs use **hull-frame axes** - In FreeCAD, for SerenityAssembly.FCStd, the coordinates are as follows:
+**All design artifacts — SCAD sources, STLs, Blender/FreeCAD scripts, and documentation — use one coordinate system, the hull frame:**
 
-- **X** — positive port (left)
-- **Y** — positive aaft (back)
+- **X** — positive port (left) — the lateral axis
+- **Y** — positive aft (back) — the longitudinal axis (nose tip at Y ≈ −305.6 mm)
 - **Z** — positive dorsal (up)
+- **Origin** — the `SerenityAssembly.FCStd` world origin
 
-Placements below were manually validated in FreeCAD and extracted from `SerenityAssembly.FCStd` (2026-06-10). Minor joint fine-tuning (fractions of mm / degree) is still pending. Position units are mm; rotation is a unit quaternion **(Qx, Qy, Qz, Qw)** where Qw is the scalar.
+**R1 (2026-06-11) — placements are baked into the STLs.** The placements that were manually validated in FreeCAD on 2026-06-10 have been applied directly to the STL vertex data by `tools/bake_hull_frame.py`. Every primary STL in `airframe/stls/` is therefore stored **directly in hull-frame coordinates** and imports into FreeCAD with an **identity placement**. No per-part transform may be applied or re-derived when positioning these components. Baked files carry the marker `SerenityUAV HULL-FRAME R1` in their binary STL header; the bake tool refuses to transform a marked file, so the bake can never be applied twice.
 
-| Component | Px | Py | Pz | Qx | Qy | Qz | Qw | Rotation description |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Head_Shell | −331.999 | −18.000 | +60.999 | 0 | 0 | 0 | 1 | Identity — no rotation |
-| Cargo_Shell | −274.400 | −282.800 | 0.000 | 0 | 0 | 1 | 0 | 180° about +Z |
-| Middle_Shell | −350.999 | +130.400 | +10.017 | −√½ | 0 | 0 | +√½ | 90° about −X |
-| Rear_Shell | 0.000 | +203.200 | −31.999 | −√½ | 0 | 0 | +√½ | 90° about −X |
-| Wing_Port | −80.999 | −7.000 | +57.999 | 0 | 0 | 0 | 1 | Identity — no rotation |
-| Wing_Stbd | −261.999 | −12.000 | +57.999 | 0 | 0 | 0 | 1 | Identity — no rotation |
-| Nacelle_Port | −385.096 | −69.999 | +64.972 | +√½ | 0 | 0 | −√½ | 270° about +X (forward flight) |
-| Nacelle_Stbd | +46.999 | −63.999 | +62.999 | +√½ | 0 | 0 | −√½ | 270° about +X (forward flight) |
+**Pipeline rule:** generator scripts may model parts in a convenient part-local frame, but any regenerated primary-component STL must be re-baked before publishing:
 
-(√½ ≈ 0.7071068. Exact float values in `PL_*` constants in `serenity_assembly.py`.)
+```sh
+python3 tools/bake_hull_frame.py            # all components (idempotent)
+python3 tools/bake_hull_frame.py --check    # report baked state only
+```
 
-**Rotation meanings:**
+Never bake a mesh *derived from* an already-baked file (e.g. a Blender repair output of a baked STL is already hull-frame but loses the header marker).
 
-- **Identity (Head, Wings):** STL axes align directly with hull frame — no rotation needed.
-- **180° about +Z (Cargo):** Flips the section so the cargo bay opens downward (−Z, ventral) and the wing-root mating faces point outboard.
-- **90° about −X (Middle, Rear):** These sections are modelled in OpenSCAD with their axial direction along local Z; the rotation brings them upright so their dorsal axis aligns with hull +Z.
-- **270° about +X (Nacelles, forward flight):** Places the nacelles in cruise / forward-flight attitude as validated in SerenityAssembly.FCStd. Hover attitude uses a different rotation (nacelles tilted to fire thrust downward).
+**Validated baked extents (hull frame, mm):**
+
+| Component | X min..max | Y min..max | Z min..max |
+| --- | --- | --- | --- |
+| Head_Shell | −232.8..−103.6 | −305.6..−70.7 | +61.2..+201.4 |
+| Cargo_Shell | −267.0..−72.9 | −71.5..+132.0 | 0.0..+163.2 |
+| Middle_Shell | −258.5..−81.7 | +130.4..+203.6 | +1.4..+166.1 |
+| Rear_Shell | −246.0..−105.6 | +203.2..+383.9 | +3.4..+160.9 |
+| Wing_Port | −93.0..+4.7 | −7.0..+154.0 | +48.0..+81.7 |
+| Wing_Stbd | −347.7..−250.0 | −12.0..+149.0 | +48.0..+81.7 |
+| Nacelle_Port | +4.0..+86.0 | −64.0..+108.3 | +21.4..+104.7 |
+| Nacelle_Stbd | −428.1..−346.1 | −70.0..+102.3 | +23.3..+106.6 |
+
+The historical bake transforms (position + quaternion per component) live solely in `tools/bake_hull_frame.py` `COMPONENTS` — do not duplicate them elsewhere. Nacelle STLs are stored in **cruise / forward-flight attitude**; hover is a downstream rotation about the tilt pivot (duct station 83 mm), never a stored orientation. Minor joint fine-tuning (fractions of mm / degree) is still pending.
+
+**R1 audit findings:**
+
+- ~~Nacelle port/stbd labels swapped~~ — **RESOLVED 2026-06-11** (Rev R1/nacelle-swap). STL files renamed, binary headers patched, SCAD build commands corrected. Port nacelle: hull +X, SWIRL_DIR=−1, PYLON_SIDE=−1. Stbd nacelle: hull −X, SWIRL_DIR=+1, PYLON_SIDE=+1.
+- The 2026-06-10 head↔cargo joint analysis used hull X as the longitudinal mating axis; in the validated frame the longitudinal axis is **Y** (head and cargo mate at hull Y ≈ −71 mm). Re-verify BOSS_FORE/BOSS_AFT positions (TODO.md §1.1.1.1). **Open.**
+
+**Documented exceptions to the hull-frame standard:**
+
+- Avionics KiCad files keep KiCad board coordinates (each stack mounts in a different orientation).
+- Malcolm GCS hardware (ground-support equipment) uses part-local print frames.
+- G-code / printer files use printer-bed coordinates; slicers reorient baked STLs for printing as needed.
 
 **Spatial relationships (qualitative):**
 
@@ -107,8 +123,8 @@ Placements below were manually validated in FreeCAD and extracted from `Serenity
 - **Cargo** is immediately aft of and below the head. The wing attachment flanges are on its upper outer edges. The cargo bay door opens toward −Z (belly/ventral). The cargo section has the largest cross-sectional area of the four fuselage sections.
 - **Middle** is the narrow horseshoe-ring neck between cargo and rear. The ring is open at the bottom (−Z, ventral). The avionics bays are distributed along this section and the cargo section.
 - **Rear** is the aftmost fuselage section. It houses the engine room / tail cone, the dorsal pod, and the two landing skids. The skids run aft past the tail cone end.
-- **Wings** are symmetric about the aircraft lateral (X) centerline at approximately X ≈ −170 mm. Each wing spans outboard in ±X from its root at the cargo section lateral walls.
-- **Nacelles** are outboard of the wings at the pylon tips. The assembly shows forward-flight / cruise attitude. In hover the nacelles tilt to fire thrust downward.
+- **Wings** are symmetric about the aircraft lateral (X) centerline at approximately X ≈ −171 mm. Each wing spans outboard in ±X from its root at the cargo section lateral walls.
+- **Nacelles** are outboard of the wings at the pylon tips. The STLs and assembly are stored in forward-flight / cruise attitude. In hover the nacelles tilt to fire thrust downward.
 
 - **All legal and regulatory requirements will be based on United States jurisdiction**  All Radio transmissions shall comply with appropriate FCC regulations.  Markings, lights, and operation shall comply with all appropriate FAA aircraft regulations.
 
@@ -212,6 +228,7 @@ Inara has primarily camera, external sensors, and high bandwidth ground communic
 River provides primary control of the forward EDFs, and provides EDF and nacelle control command and syncing, and the most resilient comms. She may be crazy, but she comes through when no one else can. She has 49Mhz RCRS primary and LoRa secondary.
 
 Simon is the alternate watchdog for the ship, but most of his attention is on River. He's got aft EDF control and alternate nacelle control. He follows River's lead but makes sure she doesn't crash the ship. Simon also controls Jayne, and ensures that the cargo isn't jettisoned or the crew abandoned. He's got 49MHz as his primary antenna and SiK as his backup.
+
 ## Workflow Notes
 
 - Run Blender scripts with `blender --background --python <script>.py` — the machine supports headless execution.

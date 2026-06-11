@@ -1,4 +1,4 @@
-solid nacelle_tip_cap_stbd
+solid nacelle_tip_cap_port
   facet normal 0.991445 0.130526 0.000000
     outer loop
       vertex 40.0000 0.0000 0.0000
@@ -1343,4 +1343,4 @@ solid nacelle_tip_cap_stbd
       vertex 33.8074 -9.0587 0.0000
     endloop
   endfacet
-endsolid nacelle_tip_cap_stbd
+endsolid nacelle_tip_cap_port

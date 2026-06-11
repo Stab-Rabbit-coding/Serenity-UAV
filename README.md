@@ -54,6 +54,19 @@ Serenity from the 2002 show. Designed using Claude AI.
 Airframe engineered to FAA and AUVSI standards for UAVs rather than relying on the
 source desktop-model specifications.
 
+### Coordinate Standard (Rev R1)
+
+All design artifacts (SCAD, STL, Blender/FreeCAD scripts, documentation) use the
+single validated **hull frame**: X = +port (lateral), Y = +aft (longitudinal),
+Z = +dorsal, origin at the `SerenityAssembly.FCStd` world origin. As of R1
+(2026-06-11) the validated component placements are **baked into the published
+STL vertex data** by `tools/bake_hull_frame.py` (header marker
+`SerenityUAV HULL-FRAME R1`); the FreeCAD assembly imports every primary
+component at identity. Re-run the bake tool after regenerating any primary STL.
+Documented exceptions: avionics KiCad files (board coordinates), Malcolm GCS
+hardware (part-local), and G-code (printer bed). See CLAUDE.md
+"Hull-Frame Coordinate Standard" for the full rule set and baked extents.
+
 ### Fuselage
 
 The design retains the four canonical sections — head, cargo, middle, and rear — from the source hull model:
@@ -300,7 +313,7 @@ architecture; NIST SP 800-82 Rev 3 ICS security; every board has a TPM 2.0.
 ## References
 
 - Design conversation: [claude.ai/share/a1e3900e-d2bf-4690-ba63-25178e7de666](https://claude.ai/share/a1e3900e-d2bf-4690-ba63-25178e7de666)
-- Latest design revision spec: `current-specification/serenity-rev-q.jsx`
+- Latest design revision spec: `current-specification/serenity-rev-r.jsx`
 
 ---
 
