@@ -9,7 +9,7 @@
 
 ## Quick-Reference: End State vs. Current State
 
-| Domain | End State (Rev P) | Current Status |
+| Domain | End State | Current Status |
 |--------|-------------------|----------------|
 | Hull   | 609.6 mm PETG / PU foam / CF skeleton | SCAD sources complete; all four fuselage SCAD shells at Rev R; cargo section at Rev R (clamshell, avionics bays, GPS); STLs pending regeneration |
 | Nacelles | 2× 50mm tandem EDF, CG pivot Z=83mm, M=1.0 gear, iris nozzle | `nacelle_pod_50mm_tandem.scad` complete; Rev R stator shells (`_revo.stl`) pending render |
