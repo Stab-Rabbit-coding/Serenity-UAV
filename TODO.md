@@ -3,7 +3,7 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
 **Last updated:** 2026-06-10  
-**Current design revision:** Rev Q1 (branch claude/pr-reconciliation-forced-merge-4yefsw) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
+**Current design revision:** Rev R (2026-06-10) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 ---
 

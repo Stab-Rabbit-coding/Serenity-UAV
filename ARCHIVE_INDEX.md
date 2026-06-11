@@ -2,7 +2,7 @@
 
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
-<!-- Last updated: Rev Q (2026-06-10) -->
+<!-- Last updated: Rev R (2026-06-10) -->
 
 ---
 
@@ -10,7 +10,7 @@
 
 Superseded KiCad PCB designs. Design notes in `ARCHIVE-REVQ.md` inside this directory.
 
-```
+```text
 ARCHIVE-REVQ.md                     — Archival log with revision history and reason codes
 
 Archived 2026-06-10 (renamed to Wash / Zoë within Rev Q):
@@ -46,7 +46,7 @@ Pre-Rev Q (superseded by Cape-A/B architecture at Rev K):
 
 Superseded Blender scripts and STL files. Active scripts are in `airframe/blender-scripts/`.
 
-```
+```text
 blender-scripts/
   blender_nacelle_integrated_v1.py   — Nacelle integrated v1 (bore-center bug)
   blender_nacelle_integrated_v2.py   — Nacelle integrated v2 (fixed; superseded by
@@ -67,7 +67,7 @@ stls/nacelles/                       — Pre-Rev Q nacelle STLs (pre-tandem-EDF 
 
 Whole-project snapshots and superseded subsystems.
 
-```
+```text
 18in-scale-scad/                     — OpenSCAD sources at 18" scale (SCALE_18=2.1974×)
                                        Superseded by 24" scale at Rev N.
   s_cargo_door_scaled18.scad/.stl

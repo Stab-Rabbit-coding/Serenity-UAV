@@ -1,7 +1,7 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: Rev Q1 (2026-06-10) -->
+<!-- Last updated: Rev R (2026-06-10) -->
 
 ## Repository Root
 
@@ -287,7 +287,8 @@ archive/                          — Pre-Rev Q gerber snapshots
 ## docs/
 
 ```
-bom_revQ.json                     — Bill of materials (Rev Q, JSON — includes gcs section Rev Q1)
+bom_revR.json                     — Bill of materials (Rev R, JSON — active baseline)
+bom_revQ.json                     — Bill of materials (Rev Q, JSON — historical reference)
 PROJECT_INDEX.md                  — This file: active project directory tree
 ```
 
@@ -296,7 +297,11 @@ PROJECT_INDEX.md                  — This file: active project directory tree
 ## current-specification/
 
 ```
-bom_revQ.csv                      — Bill of materials (Rev Q, CSV flat table — includes GCS rows Rev Q1)
+serenity-rev-r.jsx                — Rev R interactive specification (CURRENT)
+serenity-rev-q.jsx                — Rev Q interactive specification (historical reference)
+bom_revR.csv                      — Bill of materials (Rev R, CSV flat table — active baseline)
+bom_revQ.csv                      — Bill of materials (Rev Q, CSV flat table — historical reference)
+LICENSE_AND_ATTRIBUTION.md        — Attribution chain for all upstream sources
 ```
 
 ---
