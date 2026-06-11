@@ -40,7 +40,9 @@ from typing import Optional
 import yaml
 
 
-DEFAULT_CONFIG_PATH = Path(__file__).parent.parent.parent / "config" / "malcolm_config.yaml"
+DEFAULT_CONFIG_PATH = (
+    Path(__file__).parent.parent.parent / "config" / "malcolm_config.yaml"
+)
 
 log = logging.getLogger(__name__)
 
@@ -159,8 +161,12 @@ class GimbalController:
             target_tilt = _clamp(target_tilt, -GIMBAL_TILT_DOWN_DEG, GIMBAL_TILT_UP_DEG)
 
             # Apply software rate limiting (firmware enforces the same in mal_gimbal.c).
-            new_pan  = _rate_limit(self._state.pan_deg,  target_pan,  GIMBAL_MAX_SLEW_DPS, dt)
-            new_tilt = _rate_limit(self._state.tilt_deg, target_tilt, GIMBAL_MAX_SLEW_DPS, dt)
+            new_pan = _rate_limit(
+                self._state.pan_deg, target_pan, GIMBAL_MAX_SLEW_DPS, dt,
+            )
+            new_tilt = _rate_limit(
+                self._state.tilt_deg, target_tilt, GIMBAL_MAX_SLEW_DPS, dt,
+            )
 
             # Only send command if the position has changed meaningfully (>0.2°).
             if (abs(new_pan  - self._state.pan_deg)  > 0.2

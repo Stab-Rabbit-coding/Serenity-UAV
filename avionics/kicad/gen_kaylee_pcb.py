@@ -477,7 +477,7 @@ def comp_tssop30(ref: str, value: str,
     lines += _fab_rect(-3.05, -4.85, 3.05, 4.85)
     px_l, px_r = -3.7125, 3.7125
     ys_l = [-4.55 + i * 0.65 for i in range(15)]
-    ys_r = [ 4.55 - i * 0.65 for i in range(15)]
+    ys_r = [4.55 - i * 0.65 for i in range(15)]
     for i, py in enumerate(ys_l):
         num = str(i + 1)
         lines.append(_pad_smd(num, px_l, py, 1.475, 0.40, nets.get(num, NO_NET)))
@@ -594,7 +594,7 @@ def comp_xt60pw_f(ref: str, value: str,
     lines += _fab_rect(-11.0, -16.5, 5.2, 4.5)
     # Mounting pin (no net)
     lines.append(_pad_npth(-10.35, -6.0, 1.5))
-    lines.append(_pad_npth(  3.15, -6.0, 1.5))
+    lines.append(_pad_npth(3.15, -6.0, 1.5))
     # Signal pads
     lines.append(_pad_tht("1",  0.0, 0.0, 4.0, 4.0, 2.5, p_net, "roundrect"))
     lines.append(_pad_tht("2",  7.2, 0.0, 4.0, 4.0, 2.5, n_net))
@@ -618,7 +618,7 @@ def comp_xt30pw_f(ref: str, value: str,
     lines += _crtyd(-4.5, -16.5, 9.5, 4.5)
     lines += _fab_rect(-4.0, -15.5, 9.0, 4.0)
     lines.append(_pad_npth(-3.0, -5.0, 1.2))
-    lines.append(_pad_npth( 8.0, -5.0, 1.2))
+    lines.append(_pad_npth(8.0, -5.0, 1.2))
     lines.append(_pad_tht("1",  0.0, 0.0, 3.5, 3.5, 2.0, p_net, "roundrect"))
     lines.append(_pad_tht("2",  5.0, 0.0, 3.5, 3.5, 2.0, n_net))
     lines += _fp_end()
@@ -1130,12 +1130,15 @@ def gen_pcb() -> str:
         # INA226 topmost pad top edge = 53 − 1.0 − 0.175 = 51.825 mm.
         # Pad gap = 51.825 − 48.25 = 3.575 mm ✓ (no overlap with adjacent col
         # shunt because INA stays within ±2.95 mm of cx).
-        lines += comp_msop10(f"U_IS{n}",
-                              f"INA226_{ina_addrs[i]}", cx, 53.0, nets={
-            "1": snp, "2": snn, "3": N("PGND"), "4": N("+5V"),
-            "5": N("PDB_SDA"), "6": N("PDB_SCL"), "7": N("PDB_ALERT_N"),
-            "8": NO_NET, "9": NO_NET, "10": fsd,
-        })
+        lines += comp_msop10(
+            f"U_IS{n}", f"INA226_{ina_addrs[i]}", cx, 53.0,
+            nets={
+                "1": snp, "2": snn, "3": N("PGND"), "4": N("+5V"),
+                "5": N("PDB_SDA"), "6": N("PDB_SCL"),
+                "7": N("PDB_ALERT_N"),
+                "8": NO_NET, "9": NO_NET, "10": fsd,
+            }
+        )
 
         # CM_ESCn — omitted from generated placement.
         # The Wurth 7440640500 body (11.3 mm dia) occupies the same y band

@@ -300,7 +300,7 @@ ROT_WING_PORT = rotation_from_quaternion(-0.5, -0.5, 0.5, 0.5)
 #   q = (-0.5, 0.5, 0.5, 0.5)
 ROT_WING_STBD = rotation_from_quaternion(-0.5, 0.5, 0.5, 0.5)
 
-# Port nacelle at 90° VTOL hover: local Z (bore)→-Z (down/ventral), local X→+X (outboard/port)
+# Port nacelle at 90° VTOL hover: local Z (bore)→-Z (ventral), local X→+X (port)
 #   q = (0.5, -0.5, 0.5, 0.5)
 #   VERIFY: intake face (local Z=0) should be UP (+world Z = dorsal) in FreeCAD view.
 ROT_NACELLE_PORT = rotation_from_quaternion(0.5, -0.5, 0.5, 0.5)

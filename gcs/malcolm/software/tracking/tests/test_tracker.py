@@ -10,11 +10,8 @@ Run with:
     pytest tests/test_tracker.py -v
 """
 
-import math
 import sys
 from pathlib import Path
-
-import pytest
 
 # Add the src directory to the module search path.
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
@@ -126,10 +123,11 @@ class TestElevation:
     def test_elevation_positive_for_airborne(self) -> None:
         """Any aircraft above the GCS altitude should have positive elevation."""
         gcs      = GeoPosition(lat_deg=30.0, lon_deg=-90.0, alt_m=10.0)
-        aircraft = GeoPosition(lat_deg=30.01,lon_deg=-90.01, alt_m=120.0)
+        aircraft = GeoPosition(lat_deg=30.01, lon_deg=-90.01, alt_m=120.0)
         target   = compute_gimbal_target(gcs, aircraft)
         assert target.elevation_deg > 0.0, (
-            f"Airborne aircraft should have positive elevation, got {target.elevation_deg:.2f}°"
+            "Airborne aircraft should have positive elevation, "
+            f"got {target.elevation_deg:.2f}°"
         )
 
 
