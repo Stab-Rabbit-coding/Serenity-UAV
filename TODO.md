@@ -34,10 +34,22 @@ Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
 
 #### 1.1.1 **Fuselage**
 
-- [ ] **Access panel frames A–F + lids (24" Rev N)** — verify `files-hollowed-18in/` frames are sized for the 24" hull (97×63 mm bay footprint per REVN_BUILD_GUIDE_24IN.md Phase 1). If no 24" version exists, create `serenity/stl/access_panels_24in.scad` with 6 frame + 6 lid profiles.
+- [x] **Access panel frames + covers (24" Rev R)** — `airframe/openscad/fuselage/access_panels_24in.scad` created 2026-06-11. Geometries derived from authoritative shell SCADs (Rev R baseline):
+  - 4× Faraday-bay covers (Shepherd/Inara/River/Simon): 72×52 mm, 4× M3 clearance bores, positive-stop shoulder; Inara + River covers include Ø42 mm GPS retention-ring recess.
+  - 2× ventral hatch covers: battery 160×60 mm, Kaylee 115×100 mm; M2.5 pilots into bonded frames.
+  - 2× ventral hatch frames: battery + Kaylee; 6 mm PETG wall, West System 105/206 epoxy-bonded to hull.
+  - **SUB-TASKS:**
+    - [ ] Export individual STLs (set RENDER variable in SCAD): shepherd, inara, river, simon, battery, battery_f, kaylee, kaylee_f → `airframe/stls/fuselage/`
+    - [ ] Verify cover shoulder fit in slicer cross-section (confirm 1.5 mm step seats on hull face)
+    - [ ] Verify GPS recess depth clears GPS retention ring (Inara: dZ=−14.3 mm, River: dZ=+0.7 mm)
+    - [ ] Confirm M3 bore positions match shell boss pattern (±25 mm × ±15 mm from bay centre)
 
-- [ ] **49MHz RCRS wire posts** — create `serenity/stl/s_rcrs49_wire_post.scad`: insulated PETG mast ~10 mm tall, 12×12 mm foot; generate both forward post (station ~120 mm, dorsal) and aft post (rear nozzle cone top)
+- [x] **49MHz RCRS wire posts** — `airframe/openscad/fuselage/rcrs49_wire_post.scad` created 2026-06-11. Single `wire_post()` module: 12×12×2 mm PETG base, 8×8×7 mm mast, Ø1.5 mm athwartships wire-retention bore at 2 mm from top. Print two: forward (sta ≈ 120 mm, dorsal) + temporary aft (sta ≈ 580 mm, dorsal).
   - **BLOCKS Phase 1 (antenna installation)**
+  - **SUB-TASKS:**
+    - [ ] Export STL → `airframe/stls/fuselage/rcrs49_wire_post.stl`
+    - [ ] Bond forward post to hull dorsal skin at sta 120 mm; dress wire to XCVR-49MHZ-2 feed
+    - [ ] Install temporary aft post at sta 580 mm; remove and replace with integrated mount in Phase 11
 
 ##### 1.1.1.1 *Head*
 
@@ -809,7 +821,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 | nacelle_pinion.stl | PETG or resin | 0.12mm | 40% | 4 |
 | nacelle_bevel_pair.stl | PETG or resin | 0.12mm | 40% | 2 sets |
 | nacelle_bevel_housing.stl | CF-PETG | 0.15mm | 40% | 2 |
-| s_rcrs49_wire_post.stl | PETG | 0.20mm | 100% | 2 |
+| rcrs49_wire_post.stl | PETG | 0.15mm | 40% | 2 |
 | Access panel frames A–F + lids | PETG | 0.20mm | 100% | 1 set |
 | s_cargo_gondola_shell.stl | PETG | 0.20mm | 15% gyroid | 1 |
 | cargo_door_port.stl | CF-PETG | 0.15mm | 40%, 4 walls | 1 | Generated (PR #22) — reprint if hinge changes |

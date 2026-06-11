@@ -73,8 +73,11 @@ All parametric source files.  Compiled to STLs via `airframe/FreeCAD-scripts/Mak
 head_shell24.scad               — Nose/cockpit shell, 2mm CF-PETG skin (Rev R)
 middle_canonical_shell24.scad   — Horseshoe neck section shell (Rev R)
 rear_shell24.scad               — Aft engine-room shell, 2mm CF-PETG (Rev R)
-battery_tray.scad                 — 6S 4000mAh LiPo tray, keel-rail slide (Rev R)
-belly_panel.scad                  — Battery bay belly access panel (Rev R)
+battery_tray.scad               — 6S 4000mAh LiPo tray, keel-rail slide (Rev R)
+belly_panel.scad                — Battery bay belly access panel (Rev R)
+access_panels_24in.scad         — All hull access panels: 4× Faraday-bay covers (Shepherd/Inara/River/Simon),
+                                    2× ventral hatch covers (battery/Kaylee), 2× ventral hatch frames (Rev R)
+rcrs49_wire_post.scad           — 49 MHz RCRS top-wire antenna post, 12×12 mm PETG mast (Rev R)
 cargo/
   cargo_sect_shell24.scad       — Rev R cargo section shell with clamshell doors, avionics bays, GPS mounts
 ```
@@ -122,7 +125,8 @@ legs_scaled24.stl               — Landing legs (24" scale)
 dorsal_antenna_fin.stl            — Dorsal antenna fin fairing
 middle_canonical_edf_intake.stl — Middle section EDF intake opening
 cargo/
-  cargo_sect_shell24.stl              — Cargo shell (SCAD output)
+  cargo_sect_shell24.stl                 — Cargo shell (SCAD output)
+  cargo_sect_shell24_repaired.stl        — Cargo solid shell, manifold-repaired (used for intersection in access_panels_24in.scad)
   cargo_sect_shell24_2mm_repaired_largest.stl — Repaired largest shell body
   cargo_door_port.stl                   — Port clamshell cargo door
   cargo_door_stbd.stl                   — Stbd clamshell cargo door
