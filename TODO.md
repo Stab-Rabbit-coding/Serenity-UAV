@@ -1634,7 +1634,7 @@ No additional transmit power amplifiers are FCC-compliant for any link in the st
 configuration with directional antennas.  See `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`.
 
 **File tree:** `gcs/malcolm/` — hardware docs, SCAD gimbal designs, PB2-I firmware, and
-host-PC software all created in Rev R1.  See `gcs/malcolm/README.md` for layout.
+host-PC software all created in Rev R.  See `gcs/malcolm/README.md` for layout.
 
 #### 4.5.1 — Malcolm Hardware Design
 

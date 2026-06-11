@@ -1,6 +1,6 @@
 """
 serenity_assembly.py — Serenity UAV full-airframe FreeCAD assembly.
-Revision: R1 (2026-06-11)
+Revision: R (2026-06-11)
 
 Imports all printed airframe STL components, applies coordinate transforms,
 and saves a single Serenity-Assembled.FCStd for review in FreeCAD.
