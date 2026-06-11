@@ -8,10 +8,10 @@ assembly from the repaired and scaled STL shell files:
     6 orthographic: top, bottom, port, starboard, bow, stern
     4 isometric:    port_bow, starboard_bow, port_quarter, starboard_quarter
 
-Coordinate system (24"-scaled STL world space, per s_head_shell24.scad):
-    X -- longitudinal, positive toward nose
-    Y -- vertical,     positive toward dorsal (up)
-    Z -- lateral,      positive toward port (left)
+Coordinate system (24"-scaled STL world space = hull frame per CLAUDE.md):
+    X -- lateral,      positive toward port  (left)
+    Y -- longitudinal, positive aft (back)
+    Z -- vertical,     positive dorsal (up)
     Station mapping: X_stl = 284 - station_mm
 
 Hull centreline references (from s_head_shell24.scad comments):

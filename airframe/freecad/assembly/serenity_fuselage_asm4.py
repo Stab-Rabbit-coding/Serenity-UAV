@@ -8,17 +8,15 @@ Creates a single .FCStd document containing all four fuselage hull sections,
 both wing panels, both wing-nacelle pylons, port and starboard nacelle pods,
 cargo-bay clamshell doors and subsystems, and landing legs/feet — all
 positioned in the project world coordinate system:
-    X = longitudinal, positive toward nose (+forward)
-    Y = vertical,     positive toward dorsal (+up)
-    Z = lateral,      positive toward port  (+left)
+    X = lateral,      positive toward port  (+left)
+    Y = longitudinal, positive aft (+back)
+    Z = vertical,     positive dorsal (+up)
 
 NOTE ON FREECAD VIEWPORT:
-  FreeCAD's default 3D viewport uses Z=up.  Because the project STLs use
-  Y=up, the assembled model will appear lying on its side in the default
-  Front view.  Use View → Standard Views → Right (Numpad 3) to see the
-  ship upright, or press V then H for the "Home" isometric view.
-  A REORIENT_FOR_VIEWPORT flag at the bottom of this file optionally
-  applies a +90° X-axis rotation to the root assembly for Z-up display.
+  FreeCAD's default 3D viewport uses Z=up, which matches the project hull
+  frame (Z=dorsal/up).  The assembled model should appear upright in the
+  default Front view.  The REORIENT_FOR_VIEWPORT flag at the bottom of this
+  file is no longer needed and defaults to False.
 
 USAGE:
   Headless (generates .FCStd only, no GUI):
@@ -302,18 +300,18 @@ ROT_WING_PORT = rotation_from_quaternion(-0.5, -0.5, 0.5, 0.5)
 #   q = (-0.5, 0.5, 0.5, 0.5)
 ROT_WING_STBD = rotation_from_quaternion(-0.5, 0.5, 0.5, 0.5)
 
-# Port nacelle at 90° VTOL hover: local Z (bore)→-Y (down), local X→+Z (outboard)
+# Port nacelle at 90° VTOL hover: local Z (bore)→-Z (down/ventral), local X→+X (outboard/port)
 #   q = (0.5, -0.5, 0.5, 0.5)
-#   VERIFY: intake face (local Z=0) should be UP (+world Y) in FreeCAD view.
+#   VERIFY: intake face (local Z=0) should be UP (+world Z = dorsal) in FreeCAD view.
 ROT_NACELLE_PORT = rotation_from_quaternion(0.5, -0.5, 0.5, 0.5)
 
-# Stbd nacelle at 90° VTOL hover: local Z (bore)→-Y (down), local X→-Z (stbd)
+# Stbd nacelle at 90° VTOL hover: local Z (bore)→-Z (down/ventral), local X→-X (stbd)
 #   q = (0.5, 0.5, -0.5, 0.5)
-#   VERIFY: mirrors port nacelle about Z=81.5 mm (cargo Z midplane).
+#   VERIFY: mirrors port nacelle about X=−170 mm (cargo X lateral midplane).
 ROT_NACELLE_STBD = rotation_from_quaternion(0.5, 0.5, -0.5, 0.5)
 
-# Port pylon: local Z (pylon length) → world +Z (outboard), local Y→+Y (dorsal)
-#   VERIFY: pylon inboard face must be flush with cargo port wall (Z=163 mm).
+# Port pylon: local Z (pylon length) → world +X (outboard/port), local Y→+Z (dorsal)
+#   VERIFY: pylon inboard face must be flush with cargo dorsal face (Z=163 mm).
 ROT_PYLON_PORT = rotation_from_quaternion(0.5, 0.5, -0.5, 0.5)
 
 # Stbd pylon: mirror of port pylon
@@ -488,10 +486,10 @@ def build_assembly():
     # World mapping (port wing):
     #   local X → world +Z  (spans outboard from cargo port wall)
     #   local Y → world -X  (TE in world = more aft = more -X)
-    #   local Z → world +Y  (sky = dorsal)
+    #   local Z → world +Z  (sky = dorsal)
     #
     # Translation: local origin (0,0,0) = root LE at chord-midplane.
-    #   World position = (LE_X, chord_plane_Y, cargo_port_Z)
+    #   World position = (LE_X, chord_plane_Y, cargo_dorsal_Z)
     #                  = (WING_LE_X, WING_ROOT_Y_CEN, CARGO_DZ)
     #                  = (-21.69, -288.63, 163.0)
     #
@@ -532,7 +530,7 @@ def build_assembly():
     # World mapping (stbd wing):
     #   local X → world -Z  (spans outboard from stbd wall = toward -Z)
     #   local Y → world -X  (TE aft, same as port)
-    #   local Z → world +Y  (sky = dorsal, same as port)
+    #   local Z → world +Z  (sky = dorsal, same as port)
     #
     # Translation: local origin at (LE_X, chord_plane_Y, cargo_stbd_Z=0)
     log.info("-- Starboard wing assembly")

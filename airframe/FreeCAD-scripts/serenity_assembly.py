@@ -18,9 +18,9 @@ Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
 
 Coordinate system — 24"-scaled STL world space (hull frame):
-    X  positive toward nose (forward)
-    Y  positive dorsal (up)
-    Z  positive port (left)
+    X  positive port (left)
+    Y  positive aft (back)
+    Z  positive dorsal (up)
 
 Placement data for the eight primary airframe components (four fuselage
 sections, port/stbd wings, port/stbd nacelles) was validated by manual
@@ -81,7 +81,7 @@ PL_HEAD_SHELL   = (-331.9993360,  -17.9999640,   60.9998780,    0.0,  0.0,  0.0,
 # Cargo: 180° about +Z to flip the section into the hull-forward orientation.
 PL_CARGO_SHELL  = (-274.4000100, -282.8000440,    0.0,           0.0,  0.0, +1.0,    0.0)
 
-# Middle / Rear: 90° about −X to rotate the SCAD section axis into hull +Y.
+# Middle / Rear: 90° about −X to rotate the SCAD section axis into hull +Z (dorsal).
 PL_MIDDLE_SHELL = (-350.9992980,  130.4001963,   10.0174324,  -_SQ2,  0.0,  0.0,  +_SQ2)
 PL_REAR_SHELL   = (   0.0,        203.1999999,  -31.9999360,  -_SQ2,  0.0,  0.0,  +_SQ2)
 

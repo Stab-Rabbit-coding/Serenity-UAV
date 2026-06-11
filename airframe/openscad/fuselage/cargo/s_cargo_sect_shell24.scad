@@ -140,10 +140,10 @@
 //     INNER_SY = 0.980354  (dim = 203.6 mm)
 //     INNER_SZ = 0.975496  (dim = 163.2 mm)
 //
-// Coordinate system (24"-scaled STL world space):
-//   X -- longitudinal, positive toward nose
-//   Y -- vertical,    positive toward dorsal (up)   NOTE: Y is up, not Z
-//   Z -- lateral,     positive toward port  (left)
+// Coordinate system (24"-scaled STL world space = hull frame per CLAUDE.md):
+//   X — lateral,      positive toward port  (left)
+//   Y — longitudinal, positive aft (back)   NOTE: Y is aft; Z is dorsal/up
+//   Z — vertical,     positive dorsal (up)
 //
 // Note on cargo gondola geometry:
 //   CY = -328.63 mm places the gondola well below the main fuselage keel.
@@ -166,17 +166,17 @@
 //   2026-06-10):
 //   Cargo_Shell placement in hull frame:
 //     Base: Px = −274.400 mm (−10.80 in), Py = −282.800 mm (−11.13 in), Pz = 0
-//     Rotation: 180° about Z  (local +X → hull −X;  local +Y → hull −Y)
-//   Forward transform: hull_X = −local_X − 274.4
-//                      hull_Y = −local_Y − 282.8
-//                      hull_Z = local_Z
+//     Rotation: 180° about Z  (local +X → hull −X port;  local +Y → hull −Y aft)
+//   Forward transform: hull_X = −local_X − 274.4   (port axis)
+//                      hull_Y = −local_Y − 282.8   (aft axis)
+//                      hull_Z = local_Z             (dorsal axis — unchanged)
 //   Inverse transform: local_X = −hull_X − 274.4
 //                      local_Y = −hull_Y − 282.8
 //                      local_Z = hull_Z
 //
-//   NOTE: the 180° rotation REVERSES the longitudinal axis.  What is the
-//   "fore" face in STL local space (local_X = −7) becomes the AFT face in
-//   the hull-frame assembly, and vice-versa.
+//   NOTE: the 180° rotation REVERSES both the port and aft axes.  What is
+//   the "fore" face in STL local space (local_X = −7) becomes the AFT face
+//   in the hull-frame assembly, and vice-versa.
 //
 //   Key hull-frame positions:
 //     STL fore face (local_X = −7):   hull_X = −(−7) − 274.4 = −267.4 mm (−10.53 in)
@@ -201,9 +201,9 @@
 SCALE_24  = 2.9294;   // 24" hull scale factor
 
 // Cargo gondola centroid in 24"-scaled STL world coordinates
-CX = -102.19;   // mm
-CY = -328.63;   // mm -- dorsal/ventral axis (positive = up)
-CZ =   74.70;   // mm -- lateral axis (positive = port)
+CX = -102.19;   // mm -- lateral axis (positive = port)
+CY = -328.63;   // mm -- longitudinal axis (positive = aft)
+CZ =   74.70;   // mm -- vertical axis (positive = dorsal/up)
 
 // Hollow-shell parameters (Rev R: computed from solid STL bounding box)
 // Bounding box of s_cargo_sect_shell24_repaired.stl after voxel-remesh (1.5 mm pitch):

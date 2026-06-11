@@ -5,12 +5,12 @@
 // Hull-frame position (validated FreeCAD assembly — SerenityAssembly.FCStd,
 //   2026-06-10):
 //   Head_Shell placement in hull frame:
-//     X = −331.999 mm (−13.07 in) from hull origin  [positive toward nose]
-//     Y = −18.000 mm (−0.71 in)                      [positive dorsal/up]
-//     Z = +60.999 mm (+2.40 in)                      [positive port/left]
+//     X = −331.999 mm (−13.07 in) from hull origin  [positive port/left]
+//     Y = −18.000 mm (−0.71 in)                      [positive aft/back]
+//     Z = +60.999 mm (+2.40 in)                      [positive dorsal/up]
 //     Rotation: Identity — no rotation needed; STL axes align directly with
 //               hull frame axes.
-//   Meaning: Head is the forwardmost section (most negative X in assembly).
+//   Meaning: Head is the forwardmost section (most negative Y in assembly).
 //   Station mapping within head STL: X_stl = 284 − station_mm.
 //   STL bounds: X = 99..228 mm (3.90..8.98 in), Y = −288..−53 mm,
 //               Z = 0..141 mm (0..5.55 in).
@@ -28,8 +28,8 @@
 //     DZ: 5.52 in (140.2 mm)
 //   Centroid in 24"-scaled STL world coords:
 //     CX: 6.35 in (161.33 mm)
-//     CY: −5.85 in (−148.57 mm)  [dorsal/ventral; positive = up]
-//     CZ: 2.72 in (69.08 mm)     [lateral; positive = port]
+//     CY: −5.85 in (−148.57 mm)  [longitudinal; positive = aft]
+//     CZ: 2.72 in (69.08 mm)     [vertical; positive = dorsal/up]
 //   M3 boss OD: 0.315 in (8.0 mm), height: 0.236 in (6.0 mm)
 //   M3 heat-set bore: 0.161 in (4.1 mm)
 //   Cruise speed at which skin was validated: 54.4 kt (28 m/s); deflection
@@ -93,10 +93,10 @@
 //     INNER_SY = 0.982987  (dim = 235.1 mm)
 //     INNER_SZ = 0.971563  (dim = 140.7 mm)
 //
-// Coordinate system (24"-scaled STL world space):
-//   X -- longitudinal, positive toward nose
-//   Y -- vertical,    positive toward dorsal (up)   NOTE: Y is up, not Z
-//   Z -- lateral,     positive toward port  (left)
+// Coordinate system (24"-scaled STL world space = hull frame per CLAUDE.md):
+//   X — lateral,      positive toward port  (left)
+//   Y — longitudinal, positive aft (back)   NOTE: Y is aft; Z is dorsal/up
+//   Z — vertical,     positive dorsal (up)
 //   Station mapping: X_stl = 284 - station_mm
 //     e.g. station 3.54 in (90 mm) → X_stl = 284 - 90 = 194
 //
@@ -128,9 +128,9 @@
 SCALE_24  = 2.9294;   // 24" hull scale factor
 
 // Head shell centroid in 24"-scaled STL world coordinates
-CX =  161.33;   // mm
-CY = -148.57;   // mm -- dorsal/ventral axis (positive = up)
-CZ =   69.08;   // mm -- lateral axis (positive = port)
+CX =  161.33;   // mm -- lateral axis (positive = port)
+CY = -148.57;   // mm -- longitudinal axis (positive = aft)
+CZ =   69.08;   // mm -- vertical axis (positive = dorsal/up)
 
 // Hollow-shell parameters (Rev R: computed from solid STL bounding box)
 // Bounding box of s_head_shell24_repaired.stl after voxel-remesh (1.5 mm pitch):

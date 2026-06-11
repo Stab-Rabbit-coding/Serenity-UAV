@@ -97,17 +97,17 @@ Placements below were manually validated in FreeCAD and extracted from `Serenity
 **Rotation meanings:**
 
 - **Identity (Head, Wings):** STL axes align directly with hull frame — no rotation needed.
-- **180° about +Z (Cargo):** Flips the section so the cargo bay opens downward (−Y) and the wing-root mating faces point outboard.
-- **90° about −X (Middle, Rear):** These sections are modelled in OpenSCAD with their axial direction along local Z; the rotation brings them upright so their dorsal axis aligns with hull +Y.
+- **180° about +Z (Cargo):** Flips the section so the cargo bay opens downward (−Z, ventral) and the wing-root mating faces point outboard.
+- **90° about −X (Middle, Rear):** These sections are modelled in OpenSCAD with their axial direction along local Z; the rotation brings them upright so their dorsal axis aligns with hull +Z.
 - **270° about +X (Nacelles, forward flight):** Places the nacelles in cruise / forward-flight attitude as validated in SerenityAssembly.FCStd. Hover attitude uses a different rotation (nacelles tilted to fire thrust downward).
 
 **Spatial relationships (qualitative):**
 
-- **Head** is the forwardmost section; it contains the bridge and tapers to a narrow nose. Located at the most negative X values in the assembly.
-- **Cargo** is immediately aft of and below the head. The wing attachment flanges are on its upper outer edges. The cargo bay door opens toward −Y (belly). The cargo section has the largest cross-sectional area of the four fuselage sections.
-- **Middle** is the narrow horseshoe-ring neck between cargo and rear. The ring is open at the bottom (−Y). The avionics bays are distributed along this section and the cargo section.
+- **Head** is the forwardmost section; it contains the bridge and tapers to a narrow nose. The nose tip reaches the most negative Y extent in the assembly (Y=aft, so most negative Y = most forward).
+- **Cargo** is immediately aft of and below the head. The wing attachment flanges are on its upper outer edges. The cargo bay door opens toward −Z (belly/ventral). The cargo section has the largest cross-sectional area of the four fuselage sections.
+- **Middle** is the narrow horseshoe-ring neck between cargo and rear. The ring is open at the bottom (−Z, ventral). The avionics bays are distributed along this section and the cargo section.
 - **Rear** is the aftmost fuselage section. It houses the engine room / tail cone, the dorsal pod, and the two landing skids. The skids run aft past the tail cone end.
-- **Wings** are symmetric about the aircraft centerline (Z ≈ 0 at the cargo section mating face). Each wing spans outboard in ±Z from its root at the cargo section.
+- **Wings** are symmetric about the aircraft lateral (X) centerline at approximately X ≈ −170 mm. Each wing spans outboard in ±X from its root at the cargo section lateral walls.
 - **Nacelles** are outboard of the wings at the pylon tips. The assembly shows forward-flight / cruise attitude. In hover the nacelles tilt to fire thrust downward.
 
 - **All legal and regulatory requirements will be based on United States jurisdiction**  All Radio transmissions shall comply with appropriate FCC regulations.  Markings, lights, and operation shall comply with all appropriate FAA aircraft regulations.
