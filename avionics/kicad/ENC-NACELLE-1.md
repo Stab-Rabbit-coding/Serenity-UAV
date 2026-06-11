@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**Revision:** Q (initial design, 2026-06-06)
+**Revision:** R (Rev R baseline — initial design carried forward; no schematic changes)
 **Status:** Schematic complete — PCB layout pending
 
 ---

@@ -16,7 +16,7 @@ blender_middle_intake_cut.py  —  Rev C  —  run with:
     blender --background --python blender_middle_intake_cut.py
 
 Cuts 4 radial rectangular intake-scoop windows into the Serenity UAV
-middle / neck shell (s_middle_canonical_shell24.stl).
+middle / neck shell (middle_canonical_shell24.stl).
 
 Coordinate system (sitting on print bed, same as rear shell):
   Z  = longitudinal (ship fore-aft).
@@ -45,14 +45,14 @@ Scoop window dimensions (SCOOP_W × SCOOP_H × SCOOP_AX):
 Capture area: 4 × 75 × 38 = 11 400 mm²  (≈ 107 % of 120 mm EDF fan annulus).
 
 Output:
-  stls/fuselage/s_middle_canonical_edf_intake.stl
+  stls/fuselage/middle_canonical_edf_intake.stl
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 Date:    2026-06-02  (Rev C — correct Z-longitudinal axis)
 
 References:
-  s_neck_intake_frame.scad Rev C (HULL_W2=89, HULL_H2=78, SCOOP_W=75,
+  neck_intake_frame.scad Rev C (HULL_W2=89, HULL_H2=78, SCOOP_W=75,
     SCOOP_H=38).
   Z-slice analysis: Serenity UAV project log 2026-06-02.
 """
@@ -79,9 +79,9 @@ OVERDEPTH     =  10.0    # [mm]  extra depth past centroid to ensure clean cut
 # File paths
 BASE    = os.path.dirname(os.path.abspath(__file__))
 IN_STL  = os.path.join(BASE, "..", "stls", "fuselage",
-                        "s_middle_canonical_shell24.stl")
+                        "middle_canonical_shell24.stl")
 OUT_STL = os.path.join(BASE, "..", "stls", "fuselage",
-                        "s_middle_canonical_edf_intake.stl")
+                        "middle_canonical_edf_intake.stl")
 
 # ── Utilities ─────────────────────────────────────────────────────────────────
 
@@ -210,6 +210,6 @@ sz = export_stl(hull, OUT_STL)
 print(f"\n  → {os.path.basename(OUT_STL)}  ({sz} KB)")
 print(f"""
   Capture area: 4 × {SCOOP_W:.0f} × {SCOOP_H:.0f} = {4*SCOOP_W*SCOOP_H:.0f} mm²
-  Bond s_neck_intake_frame.stl (Rev C) over the four openings.
+  Bond neck_intake_frame.stl (Rev C) over the four openings.
 """)
 print("Done.")

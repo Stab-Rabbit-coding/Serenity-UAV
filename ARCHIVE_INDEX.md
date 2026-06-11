@@ -2,7 +2,7 @@
 
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
-<!-- Last updated: Rev R (2026-06-10) -->
+<!-- Last updated: Rev R (2026-06-11) -->
 
 ---
 

@@ -3,7 +3,7 @@ tracker.py — Malcolm GCS antenna tracking: bearing and elevation calculator.
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
-Revision: Q1 (2026-06-10)
+Revision: R (2026-06-11)
 
 Receives aircraft position from telemetry_feed.py (UDP JSON datagrams on
 MAL_TRACKER_UDP_PORT) and GCS position from a local GNSS receiver, then

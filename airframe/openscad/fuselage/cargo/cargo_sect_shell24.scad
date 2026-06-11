@@ -1,6 +1,8 @@
 // ============================================================
-// s_cargo_sect_shell24.scad
+// cargo_sect_shell24.scad
 // Cargo gondola shell for Serenity Rev N 24" hull (s_cargo_sect.stl).
+//
+// Rev R (2026-06-11): Rev R baseline — consolidated from Rev S4 (2026-06-08); no geometry changes.
 //
 // Rev S4 (2026-06-08): Correct Cape-B-2/Cape-A-2 PCB dimensions — was CAPE-B-1 legacy.
 //   VERIFIED from CAPE-B-2.kicad_pcb Edge.Cuts (X=121..176, Y=87.5..122.5 mm):
@@ -65,7 +67,7 @@
 //     eliminate four spatial conflicts found between CX-centred position and
 //     the wing root mortise / spar bearing boss — see NSVMT_X_CEN comment.
 //   All loads documented; FOS ≥ 11 (bolts) to 685 (bearing) vs. 4.0 target.
-//   Ref: s_wings_s1223_revo.scad; DS3218MG datasheet; load analysis in source.
+//   Ref: wings_s1223_revo.scad; DS3218MG datasheet; load analysis in source.
 //
 // Rev S (2026-06-01): Clamshell cargo-bay door opening, hinge-pin mount blocks,
 //   SG90 servo mounting pads, and latch-catch lips.
@@ -95,7 +97,7 @@
 //   Ref: u-blox ANN-MB-00 data sheet rev 1.0; CLAUDE.md redundancy requirements.
 //
 // Rev Q (2026-05-26): Updated to 2.0 mm foam-fill skin thickness.
-//   - Shell source: s_cargo_sect_shell24_2mm_repaired.stl
+//   - Shell source: cargo_sect_shell24_2mm_repaired.stl
 //     (blender_shells_v3_2mm.py, voxel-remesh 1.2 mm pitch).
 //   - WALL_T reduced 4.0 → 3.5 mm (nominal 2.0 mm + 1.5 mm cutter overlap).
 //   - 6x M3 boss posts at fore joint face (X = -7 mm, cargo-to-mid junction).
@@ -219,7 +221,7 @@ CY = -328.63;   // mm -- longitudinal axis (positive = aft)
 CZ =   74.70;   // mm -- vertical axis (positive = dorsal/up)
 
 // Hollow-shell parameters (Rev R: computed from solid STL bounding box)
-// Bounding box of s_cargo_sect_shell24_repaired.stl after voxel-remesh (1.5 mm pitch):
+// Bounding box of cargo_sect_shell24_repaired.stl after voxel-remesh (1.5 mm pitch):
 //   X = -201.5 ..  -7.4  → DX = 194.1 mm
 //   Y = -414.8 .. -211.3 → DY = 203.5 mm
 //   Z =    0.0 ..  163.2 → DZ = 163.2 mm
@@ -382,7 +384,7 @@ GPS_STBD_POS = [ GPS_ANT_X, CY + GPS_DORSAL_Y_OFFSET, CZ - GPS_SEP ];
 //   BOSS_FORE_ROT: rotate([0,-90,0]) aligns cylinder axis along −X (into interior).
 //   STL bounds at X ≈ −41 station: Y = −415..−211, Z = 0..163; centroid CY=−329, CZ=75.
 //   All positions VERIFY in slicer after correction; boss must sit fully inside hull skin.
-//   Ref: head-to-cargo joint analysis in hull-frame block above; s_head_shell24.scad BOSS_AFT.
+//   Ref: head-to-cargo joint analysis in hull-frame block above; head_shell24.scad BOSS_AFT.
 BOSS_FORE_ROT = [ 0, -90, 0 ];
 
 BOSS_FORE_1 = [ -41.4, CY + 82,  CZ       ];  // VERIFY: dorsal (hull_X = −233 mm joint)
@@ -721,18 +723,18 @@ module latch_catch_lip(x_start, z_pos) {
 //   Selig & Guglielmo (1997) J. Aircraft 34(1):72–79 (S1223 CL data).
 //   AUVSI small UAS structural margin guidance, FOS_min = 4.0.
 //   DS3218MG datasheet; Ruthex RX-M3x5.7; ISO 14589 (heat-set inserts).
-//   s_wings_s1223_revo.scad SPAR_BORE_X, WING_ROOT_TAB_*, WING_CHORD_ROOT.
+//   wings_s1223_revo.scad SPAR_BORE_X, WING_ROOT_TAB_*, WING_CHORD_ROOT.
 //   nacelle_sector_gear.scad SLOT_BC_R = 18 mm; nacelle_pod_50mm_tandem.scad.
 //   PHASED_BUILD_GUIDE.md Phase 3 tilt servo installation.
 // ─────────────────────────────────────────────────────────────────────────────
 
-// Wing root mortise dimensions (must match s_wings_s1223_revo.scad WING_ROOT_TAB_*)
+// Wing root mortise dimensions (must match wings_s1223_revo.scad WING_ROOT_TAB_*)
 //   The fuselage_root_tab() protrusion in the wing SCAD inserts into these slots.
 //   VERIFY all *_TAB_* values against wing STL in slicer before printing.
 WING_ROOT_X_CEN    = CX;            // mm, mortise X centre = 50% chord = cargo CX
 WING_ROOT_Y_CEN    = CY + 40.0;     // mm, mortise Y centre = -288.63 mm (dorsal of centroid)
-WING_ROOT_TAB_W    =  30.0;         // mm, tab width  (X)  — VERIFY in s_wings_s1223_revo.scad
-WING_ROOT_TAB_H    =  20.0;         // mm, tab height (Y)  — VERIFY in s_wings_s1223_revo.scad
+WING_ROOT_TAB_W    =  30.0;         // mm, tab width  (X)  — VERIFY in wings_s1223_revo.scad
+WING_ROOT_TAB_H    =  20.0;         // mm, tab height (Y)  — VERIFY in wings_s1223_revo.scad
 WING_ROOT_TAB_L    =  12.0;         // mm, tab insertion depth (Z) — VERIFY
 WING_MORT_CLR      =   0.4;         // mm, clearance per side (slip fit per CLAUDE.md)
 // Derived mortise opening dimensions
@@ -745,7 +747,7 @@ MORT_H  = WING_ROOT_TAB_H + 2 * WING_MORT_CLR;   // = 20.8 mm
 //     LE_X = WING_ROOT_X_CEN + 0.50 × 161.0 = -102.19 + 80.5  = -21.69 mm
 //     spar = LE_X  - 0.30 × 161.0           = -21.69  - 48.3  = -69.99 mm ≈ -70 mm
 //   Y = WING_ROOT_Y_CEN (spar at SPAR_BORE_Y_CTR = 0, i.e. chord-plane mid-line).
-//   Ref: s_wings_s1223_revo.scad SPAR_BORE_X = 0.30, SPAR_BORE_Y_CTR = 0.
+//   Ref: wings_s1223_revo.scad SPAR_BORE_X = 0.30, SPAR_BORE_Y_CTR = 0.
 WING_SPAR_X_CEN    =  -70.0;        // mm, spar bore X centre — VERIFY in slicer
 WING_SPAR_BORE_D   =   12.3;        // mm, bore ID = CF-TUBE-12MM OD + 0.3 mm slip
 WING_SPAR_BOSS_OD  =   22.0;        // mm, bearing boss OD: gives (22-12.3)/2 = 4.85 mm wall
@@ -886,7 +888,7 @@ DUCT_GROOVE_X   = AVINICS_X_CEN + AVINICS_BOSS_DX + 4.0; // mm, groove X start (
 //   Cut depth = WALL_MM + WING_ROOT_TAB_L + 1 mm cutter overshoot.
 //   WING_MORT_CLR = 0.4 mm/side added per CLAUDE.md positive-stop slip-fit req.
 //   VERIFY mortise position vs slicer cross-section before printing.
-//   Ref: s_wings_s1223_revo.scad fuselage_root_tab(); CLAUDE.md §Fabrication.
+//   Ref: wings_s1223_revo.scad fuselage_root_tab(); CLAUDE.md §Fabrication.
 // ----------------------------------------------------------------------------
 module wing_root_mortise(z_sign) {
     cut_depth = WALL_MM + WING_ROOT_TAB_L + 1.0;
@@ -905,7 +907,7 @@ module wing_root_mortise(z_sign) {
 //   X = WING_SPAR_X_CEN (30% chord from LE);  Y = WING_ROOT_Y_CEN (chord line).
 //   Applied at the outer difference level to cut through hull walls AND
 //   both spar_bearing_block solids in a single boolean operation.
-//   Ref: s_wings_s1223_revo.scad spar_bore(); CF-TUBE-12MM per bom_revO.csv.
+//   Ref: wings_s1223_revo.scad spar_bore(); CF-TUBE-12MM per bom_revO.csv.
 // ----------------------------------------------------------------------------
 module wing_spar_bore() {
     translate([WING_SPAR_X_CEN, WING_ROOT_Y_CEN, -1.0])
@@ -1094,7 +1096,7 @@ union() {
             // A1. Shell with existing sensor/GPS aperture cuts.
             difference() {
                 // 2.0 mm foam-fill cargo gondola shell (manifold for CGAL ops)
-                import("../../../stls/fuselage/cargo/s_cargo_sect_shell24_repaired.stl");
+                import("../../../stls/fuselage/cargo/cargo_sect_shell24_repaired.stl");
 
                 // Nadir FPV camera aperture
                 fpv_cut(CARGO_CAM_POS, NADIR_ROT);
@@ -1219,7 +1221,7 @@ union() {
         //   Port slot: Z = 148..163 mm (through port wall at DZ=163).
         //   Stbd slot: Z =   0.. 15 mm (through stbd wall at Z=0).
         //   VERIFY mortise position vs wing STL in slicer before printing.
-        //   Ref: s_wings_s1223_revo.scad fuselage_root_tab() geometry.
+        //   Ref: wings_s1223_revo.scad fuselage_root_tab() geometry.
         wing_root_mortise(+1);   // port wall
         wing_root_mortise(-1);   // stbd wall
 
@@ -1229,7 +1231,7 @@ union() {
         //   CF-TUBE-12MM (12 mm OD) slides through with 0.15 mm radial clearance.
         //   Spar retained by M3 grub screw in each bearing block after final fit.
         //   VERIFY bore X and Y in slicer cross-section before printing.
-        //   Ref: CF-TUBE-12MM (bom_revO.csv); s_wings_s1223_revo.scad spar_bore().
+        //   Ref: CF-TUBE-12MM (bom_revO.csv); wings_s1223_revo.scad spar_bore().
         wing_spar_bore();
 
         // ── Inara avionics dorsal access panel (port, Z=99..139 mm, Rev S4) ──────

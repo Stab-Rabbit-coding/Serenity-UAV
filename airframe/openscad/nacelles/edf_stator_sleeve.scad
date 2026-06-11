@@ -15,14 +15,14 @@
 // ===========================================================================
 // =============================================================================
 // edf_stator_sleeve.scad
-// Serenity UAV — Rev A — EDF Inter-stage Stator Sleeve
+// Serenity UAV — Rev R — EDF Inter-stage Stator Sleeve
 // =============================================================================
 //
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // Project : Serenity-class Tilt-Rotor UAV (24-inch scale, Firefly TV ship)
 // License : CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 // Date    : 2026-05-29
-// Revision: Rev A
+// Revision: Rev R (2026-06-11)   [carried forward from Rev A (2026-05-29); no geometry changes]
 //
 // Description
 // -----------

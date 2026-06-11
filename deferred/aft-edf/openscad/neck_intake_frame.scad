@@ -12,9 +12,9 @@
 //     bake or place explicitly; stations quoted from nose convert to hull
 //     Y via nose tip at hull Y = -305.6 mm.
 // ===========================================================================
-// s_neck_intake_frame.scad
+// neck_intake_frame.scad
 // CF-PETG structural intake frame ring for Serenity Rev N 24" hull.
-// Bonds into the 4 radial scoop cutouts in s_middle_canonical_edf_intake.stl
+// Bonds into the 4 radial scoop cutouts in middle_canonical_edf_intake.stl
 // at the neck station (Z = 30 mm in the neck shell, Z-longitudinal coords).
 // Print in CF-PETG; bond with structural epoxy.
 //
@@ -28,7 +28,7 @@
 // Frame axial direction = Z (same as hull longitudinal).
 
 // ── Hull cross-section at intake station Z = 30 mm (measured, 24" scale) ────
-// Source: Z-slice sweep of s_middle_canonical_shell24.stl,
+// Source: Z-slice sweep of middle_canonical_shell24.stl,
 //   Serenity UAV project log 2026-06-02 (Z-longitudinal Rev C).
 // At Z=30: X span=177 mm (centre X=180.9), Y span=156.5 mm (centre Y=-77.8).
 // Half-dimensions from XY centreline:

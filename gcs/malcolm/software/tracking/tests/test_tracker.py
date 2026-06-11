@@ -3,7 +3,7 @@ test_tracker.py — Unit tests for tracker.py bearing and elevation calculations
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
-Revision: Q1 (2026-06-10)
+Revision: R (2026-06-11)
 
 Run with:
     cd gcs/malcolm/software/tracking

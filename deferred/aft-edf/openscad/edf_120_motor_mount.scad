@@ -12,7 +12,7 @@
 //     bake or place explicitly; stations quoted from nose convert to hull
 //     Y via nose tip at hull Y = -305.6 mm.
 // ===========================================================================
-// s_edf_120_motor_mount.scad
+// edf_120_motor_mount.scad
 // 120mm EDF motor-mount spider + forward fairing cone
 // for Serenity Rev N rear fuselage EDF installation.
 //
@@ -25,7 +25,7 @@
 // The outer ring clamps/bonds to the INNER bore of the EDF casing.
 //
 // Integration interfaces:
-//   Forward (Z=RING_L): registration spigot drops into s_aft_edf_plenum
+//   Forward (Z=RING_L): registration spigot drops into aft_edf_plenum
 //                       outlet bell at station ~430mm from nose.
 //   Aft (Z=0):          motor face at hub; M3 bolt pattern at BOLT_R.
 //   Cone tip (Z=-CONE_L): aerodynamic fairing, no fastener.

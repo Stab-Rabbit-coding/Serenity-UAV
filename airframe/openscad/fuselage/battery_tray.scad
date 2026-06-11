@@ -14,6 +14,7 @@
 // battery_tray.scad
 // Battery tray for Serenity UAV 24" hull — 6S 4000 mAh LiPo.
 //
+// Rev R (2026-06-11): Rev R baseline — no geometry changes.
 // Rev Q (2026-06-07): Initial release.
 //   CG analysis places battery centroid at ~3.31 in (~84 mm) from nose.
 //   Tray spans stations 2.36–5.12 in (60–130 mm) inside head/bridge section.

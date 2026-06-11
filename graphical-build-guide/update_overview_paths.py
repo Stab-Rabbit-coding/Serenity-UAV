@@ -45,10 +45,10 @@ STL_DIR = "/home/user/Serenity-UAV/thingverse-serenity/files-hollowed-18in"
 SVG_DIR = "/home/user/Serenity-UAV/serenity/diagrams"
 
 HULL_PARTS = [
-    "s_head_shell24.stl",
-    "s_middle_shell24.stl",
-    "s_rear_shell24.stl",
-    "s_cargo_sect_shell24.stl",
+    "head_shell24.stl",
+    "middle_shell24.stl",
+    "rear_shell24.stl",
+    "cargo_sect_shell24.stl",
     "s_wings_both_shell24.stl",
     "s_pivot_arm_a_scaled24.stl",
     "s_eng_piv_outer_scaled24.stl",

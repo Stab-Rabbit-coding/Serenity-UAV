@@ -14,7 +14,7 @@
 //     (serenity_assembly.py).
 // ===========================================================================
 // nacelle_bevel_housing.scad
-// Serenity UAV Rev O — Nacelle Tilt Linkage, Bevel Gear Housing
+// Serenity UAV Rev R — Nacelle Tilt Linkage, Bevel Gear Housing
 //
 // Purpose:
 //   Structural housing for the M = 1.0 bevel gear pair (nacelle_bevel_pair.scad)
@@ -52,7 +52,7 @@
 // Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 // Date:    2026-05-24
-// Rev:     O (initial release)
+// Rev:     R (2026-06-11): Rev R baseline — no geometry changes (carried forward from Rev O initial release).
 
 // ── Resolution ────────────────────────────────────────────────────────────────
 

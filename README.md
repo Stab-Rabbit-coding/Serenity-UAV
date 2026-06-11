@@ -180,12 +180,12 @@ systems with graceful degradation. Kaylee receives direction from the flight con
 | Parameter | Value |
 |-----------|-------|
 | Chemistry | LiPo, 6S (22.2 V nominal) |
-| Capacity | XXXX mAh |
-| Discharge rating | XX C |
-| Mass | XX.X oz (XX.X g) |
-| Dimensions (L × W × H) | XX.X″ × XX.X″ × XX.X″ (XX mm × XX mm × XX mm) |
+| Capacity | 4000 mAh |
+| Discharge rating | 60 C |
+| Mass | 26.5 oz (750 g) |
+| Dimensions (L × W × H) | 5.59″ × 1.97″ × 1.50″ (142 mm × 50 mm × 38 mm) |
 
-### Propulsion — Rev Q baseline
+### Propulsion — Rev R baseline
 
 **Nacelle EDFs (4 total — active all phases):**
 
@@ -211,7 +211,7 @@ Nacelle-only T/W ≈ 1.61 is sufficient for VTOL hover.
   + PETG plenum ~2.8 oz / 80 g + nozzle frame/petals/servo/wiring ~4.9 oz / 140 g)
 - **Phase 11 full-system:** AUW ~7.95 lbm (3,608 g) | Total thrust ~17.6 lbf (7,964 g) | T/W ≈ **2.21**
 - Fuselage EDF intake: 4 radial scoops at neck station ~12.2 in (310 mm) via
-  `s_neck_intake_frame.stl` + `s_aft_edf_plenum.stl` (cross-shaped 4-to-1 plenum manifold).
+  `neck_intake_frame.stl` + `aft_edf_plenum.stl` (cross-shaped 4-to-1 plenum manifold).
 
 ---
 
@@ -255,7 +255,7 @@ MAVLink/SiK 915 MHz, LoRa RFM95W 915 MHz, TI WL1837MOD WiFi/BT, 49 MHz RCRS tran
 ATF16V8BQL CPLD hardware write-blocker, non-executable log microSD.
 EMI-hardened v2 design (CAPE-B-2).
 
-**Rev Q — EMI-hardened v2 capes at ALL 8 positions.**
+**Rev R — EMI-hardened v2 capes at ALL 8 positions.**
 All nodes use 5 kV galvanic isolation:
 - CAN FD: ISOW1044BDFMR (TI)
 - RS-485: ADM2795EBRWZ (ADI)
@@ -320,7 +320,7 @@ architecture; NIST SP 800-82 Rev 3 ICS security; every board has a TPM 2.0.
 ## License
 
 Published under **Creative Commons Attribution 4.0 International** by Steve Griffing,
-PE(CSE), CISSP-ISSEP, CPP. Revision Q, June 2026.
+PE(CSE), CISSP-ISSEP, CPP. Revision R, June 2026.
 [creativecommons.org/licenses/by/4.0](https://creativecommons.org/licenses/by/4.0)
 
 ## Attribution
@@ -347,7 +347,7 @@ Covered under CC BY 4.0:
 - Circuit diagrams, pinout tables, and wiring specifications
 - Mechanical drawings and assembly specifications
 - Firmware architecture specifications and algorithm descriptions
-- This design document in all its revisions (A–Q and beyond)
+- This design document in all its revisions (A–R and beyond)
 - Any derived works must carry CC BY 4.0 and attribute all upstream authors
 
 Not covered / separate terms:

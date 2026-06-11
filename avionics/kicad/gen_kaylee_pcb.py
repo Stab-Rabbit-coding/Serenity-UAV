@@ -969,7 +969,7 @@ def gen_pcb() -> str:
         f'\t\t(stroke (width 0.05) (type default)) (layer "Edge.Cuts")',
         f'\t\t(uuid "{_uid()}"))',
         # Board ID text on F.Fab
-        f'\t(gr_text "Kaylee Rev A" (at {W/2:.2f} {H + 3.0:.2f} 0) (layer "F.Fab")',
+        f'\t(gr_text "Kaylee Rev R" (at {W/2:.2f} {H + 3.0:.2f} 0) (layer "F.Fab")',
         f'\t\t(effects (font (size 1.5 1.5) (thickness 0.15)))',
         f'\t\t(uuid "{_uid()}"))',
         f'\t(gr_text "Griffing Technology LLC | CC BY 4.0"'

@@ -3420,7 +3420,7 @@
     (pin "1" (uuid "c2000000-0000-0000-0000-000000000046"))
   )
 
-  (comment 1 "ETH_B sub-circuit: EMI-hardened 10/100BASE-TX Ethernet PHY — Rev Q addition")
+  (comment 1 "ETH_B sub-circuit: EMI-hardened 10/100BASE-TX Ethernet PHY — Rev R baseline")
   (comment 2 "DP83825I PHY + HX1188NL magnetics + TPS62933 1.8V SMPS + PRTR5V0U2X TVS + SRF2012 CMC")
   (comment 3 "JST SM06B-GHS-TB-1MP connector J_ETH_B — RMII0 to PocketBeagle 2 AM6254")
 

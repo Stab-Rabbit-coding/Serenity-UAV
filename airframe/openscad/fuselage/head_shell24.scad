@@ -1,5 +1,5 @@
 // ============================================================
-// s_head_shell24.scad
+// head_shell24.scad
 // Nose / cockpit shell for Serenity Rev N 24" hull (s_head.stl).
 //
 // HULL-FRAME COORDINATE STANDARD — Rev R1 (2026-06-11).  See CLAUDE.md.
@@ -38,6 +38,7 @@
 //   Cruise speed at which skin was validated: 54.4 kt (28 m/s); deflection
 //     ≤ 0.002 in (0.054 mm) on 2.0 mm CF-PETG + foam, vs 0.020 in (0.5 mm) limit.
 //
+// Rev R (2026-06-11): Rev R baseline checkpoint — no geometry changes.
 // Rev S1 (2026-06-09): Shepherd Book avionics bay (Faraday enclosure) on
 //   interior dorsal face; correct forward sensor and FPV camera positions.
 //   Sensor position bug: S1A_POS.X=251, S1B_POS.X=231, FPV_POS.X=239 were
@@ -52,10 +53,10 @@
 //   Same Cape-B-2 (Zoë) + Cape-A-2 (Wash) stack and 60×40×55 mm Faraday tray
 //   spec as cargo bays (Rev S4).  4× M3 bosses + 62×42 mm dorsal access panel.
 //   Ductwork parameters shared with cargo SCAD spec (DUCT_* constants).
-//   Ref: s_cargo_sect_shell24.scad Rev S4; CLAUDE.md Book bay; CAPE-B-2.kicad_pcb.
+//   Ref: cargo_sect_shell24.scad Rev S4; CLAUDE.md Book bay; CAPE-B-2.kicad_pcb.
 //
 // Rev Q (2026-05-26): Updated to 2.0 mm (0.079 in) foam-fill skin thickness.
-//   - Shell source: s_head_shell24_2mm_repaired.stl (blender_shells_v3_2mm.py,
+//   - Shell source: head_shell24_2mm_repaired.stl (blender_shells_v3_2mm.py,
 //     voxel-remesh at 1.2 mm pitch, repair_shells_for_scad.py).
 //   - WALL_T reduced 4.0 → 3.5 mm (nominal 2.0 mm + 1.5 mm cutter overlap).
 //   - 6x M3 heat-set boss posts added at aft joint face (X ≈ 99 mm) for
@@ -71,7 +72,7 @@
 //   FPV  -- 28 mm standard FPV camera, bridge forward-facing viewport, sta 45 mm
 //
 // GPS patch antenna and 49 MHz RCRS post are on the broad, flat dorsal surface
-// of the mid-fuselage section (s_middle_canonical_shell24.scad) where the
+// of the mid-fuselage section (middle_canonical_shell24.scad) where the
 // ground plane is larger and the sky view is unobstructed.
 //
 // Flush-mount design philosophy:
@@ -136,7 +137,7 @@ CY = -148.57;   // mm -- longitudinal axis (positive = aft)
 CZ =   69.08;   // mm -- vertical axis (positive = dorsal/up)
 
 // Hollow-shell parameters (Rev R: computed from solid STL bounding box)
-// Bounding box of s_head_shell24_repaired.stl after voxel-remesh (1.5 mm pitch):
+// Bounding box of head_shell24_repaired.stl after voxel-remesh (1.5 mm pitch):
 //   X =   99.2 .. 228.4  → DX = 129.2 mm
 //   Y = -287.6 .. -52.7  → DY = 234.9 mm
 //   Z =    0.2 .. 140.4  → DZ = 140.2 mm
@@ -248,7 +249,7 @@ BOSS_AFT_6 = [  99, CY + 38, CZ - 52  ];  // VERIFY: dorsal-stbd quadrant
 //   Access panel: X=130.33..192.33, Z=48.08..90.08 — within bounds ✓.
 //   Bosses protrude in −Y (downward into interior) from interior dorsal face.
 //   VERIFY each boss clears hull skin and avoids sensor aperture zones in slicer.
-//   Ref: s_cargo_sect_shell24.scad Rev S4 FARADAY_* / AVINICS_BOSS_* pattern;
+//   Ref: cargo_sect_shell24.scad Rev S4 FARADAY_* / AVINICS_BOSS_* pattern;
 //   CAPE-B-2.kicad_pcb MH1–MH4; CLAUDE.md Book bay; Ruthex RX-M3x5.7.
 //
 // Cape PCB dimensions (same as cargo SCAD Rev S4):
@@ -423,15 +424,15 @@ module m3_boss(pos, rot) {
 //   │  └─ book_dorsal_panel_cut           ← 62×42 mm Faraday tray access opening
 //
 // ============================================================
-// Module: hollow_shell (Rev R — same fix as s_rear_neck_intake_shell24.scad)
+// Module: hollow_shell (Rev R — same fix as rear_neck_intake_shell24.scad)
 // ============================================================
 module hollow_shell() {
     difference() {
-        import("../../thingverse-serenity/files-hollowed-18in/s_head_shell24_repaired.stl");
+        import("../../thingverse-serenity/files-hollowed-18in/head_shell24_repaired.stl");
         translate([CX, CY, CZ])
             scale([INNER_SX, INNER_SY, INNER_SZ])
             translate([-CX, -CY, -CZ])
-                import("../../thingverse-serenity/files-hollowed-18in/s_head_shell24_repaired.stl");
+                import("../../thingverse-serenity/files-hollowed-18in/head_shell24_repaired.stl");
     }
 }
 

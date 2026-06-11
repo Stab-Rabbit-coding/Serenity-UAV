@@ -4,7 +4,7 @@
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
- * Revision: Q1 (2026-06-10)
+ * Revision: R (2026-06-11)
  *
  * This module parses inbound MAVLink telemetry frames received on any of
  * Malcolm's radio links (SiK, LoRa, WiFi, RCRS-49) and:

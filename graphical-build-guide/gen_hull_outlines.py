@@ -273,10 +273,10 @@ def dim_line(x1, y1, x2, y2, label, offset=18, color=C_DIM, font_size=11):
 # ---------------------------------------------------------------------------
 
 FUSELAGE_PARTS = [
-    "s_head_shell24.stl",
-    "s_middle_shell24.stl",
-    "s_rear_shell24.stl",
-    "s_cargo_sect_shell24.stl",
+    "head_shell24.stl",
+    "middle_shell24.stl",
+    "rear_shell24.stl",
+    "cargo_sect_shell24.stl",
 ]
 WING_PARTS = ["s_wings_both_shell24.stl"]
 NACELLE_PARTS = [

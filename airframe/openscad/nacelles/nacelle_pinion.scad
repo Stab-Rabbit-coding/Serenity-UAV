@@ -14,7 +14,7 @@
 //     (serenity_assembly.py).
 // ===========================================================================
 // nacelle_pinion.scad
-// Serenity UAV Rev O — Nacelle Tilt Linkage, Drive Pinion A & Crown Pinion
+// Serenity UAV Rev R — Nacelle Tilt Linkage, Drive Pinion A & Crown Pinion
 //
 // Purpose:
 //   Two identical M = 1.0 spur pinions used at different positions in the
@@ -68,7 +68,7 @@
 // Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 // Date:    2026-05-24
-// Rev:     O (initial release)
+// Rev:     R (2026-06-11): Rev R baseline — no geometry changes (carried forward from Rev O initial release).
 
 // ── Resolution ────────────────────────────────────────────────────────────────
 

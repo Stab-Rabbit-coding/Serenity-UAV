@@ -17,11 +17,12 @@
 //         python3 tools/bake_hull_frame.py Middle_Shell
 // ===========================================================================
 // ============================================================
-// s_middle_canonical_shell24.scad
+// middle_canonical_shell24.scad
 // Mid-fuselage shell for Serenity Rev N 24" hull (s_middle.stl).
 // Belly restored to standard Serenity geometry -- NO belly scoop.
 // Replaces s_middle_intake_shell24.stl for the 4-radial-intake Rev N build.
 //
+// Rev R (2026-06-11): Rev R baseline checkpoint — no geometry changes.
 // Rev S1 (2026-06-09): Simon avionics bay (Faraday enclosure) on dorsal interior;
 //   Kaylee power distribution board and 6S battery tray on ventral interior.
 //   Simon is the aft avionics SBC stack (CLAUDE.md: aft EDF control, alternate
@@ -35,7 +36,7 @@
 //     4× M3 boss anchors; 110×70 mm ventral access hatch.
 //   Battery: 6S 4000 mAh LiPo ≈ 145×44×50 mm; ventral, station 190 mm, keel.
 //     Battery tray boss pattern: ±60 mm (X) × ±20 mm (Z) from tray centre.
-//   Ref: s_cargo_sect_shell24.scad Rev S4; CLAUDE.md Kaylee/Simon; CAPE-B-2.kicad_pcb.
+//   Ref: cargo_sect_shell24.scad Rev S4; CLAUDE.md Kaylee/Simon; CAPE-B-2.kicad_pcb.
 //
 // Mounts:
 //   S3A  -- VL53L5CX port-side ToF,  Array A (FC3), sta 267 mm

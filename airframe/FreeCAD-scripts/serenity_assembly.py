@@ -187,8 +187,8 @@ def assemble():
     place_mesh(rear, PL_IDENTITY)
 
     # Landing gear (scaled Thingiverse parts; identity placement)
-    add_mesh(doc, _stl("fuselage/s_feet_x_4_scaled24.stl"), "Landing_Feet")
-    add_mesh(doc, _stl("fuselage/s_legs_scaled24.stl"),     "Landing_Legs")
+    add_mesh(doc, _stl("fuselage/feet_x_4_scaled24.stl"), "Landing_Feet")
+    add_mesh(doc, _stl("fuselage/legs_scaled24.stl"),     "Landing_Legs")
 
     # -------------------------------------------------------------------
     # CARGO BAY SUB-ASSEMBLY
@@ -264,8 +264,8 @@ def assemble():
     # -------------------------------------------------------------------
     print("[assembly] Nacelle tilt pylons ...", flush=True)
 
-    add_mesh(doc, _stl("wings/s_wing_nacelle_pylon_revo.stl"), "Pylon_Port")
-    add_mesh(doc, _stl("wings/s_wing_nacelle_pylon_revo.stl"), "Pylon_Stbd")
+    add_mesh(doc, _stl("wings/wing_nacelle_pylon_revo.stl"), "Pylon_Port")
+    add_mesh(doc, _stl("wings/wing_nacelle_pylon_revo.stl"), "Pylon_Stbd")
 
     # -------------------------------------------------------------------
     # NACELLE PODS (forward-flight / cruise configuration)

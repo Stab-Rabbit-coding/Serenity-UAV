@@ -15,7 +15,7 @@
 """
 Serenity-UAV Subsystem Assembly Script
 Assembles individual subsystems using FreeCAD Assembly4
-Revision: Q (June 2026)
+Revision: R (June 2026)
 """
 
 import FreeCAD as App

@@ -3,7 +3,7 @@ telemetry_feed.py — Malcolm GCS MAVLink position consumer.
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
-Revision: Q1 (2026-06-10)
+Revision: R (2026-06-11)
 
 Connects to the mavlink-router MAVLink stream (UDP on localhost:14550, or
 serial to PB2-I USB) and extracts GLOBAL_POSITION_INT messages.  Publishes

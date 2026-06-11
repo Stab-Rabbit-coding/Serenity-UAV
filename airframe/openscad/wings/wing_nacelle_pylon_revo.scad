@@ -11,15 +11,15 @@
 //     placement not yet validated - VERIFY pending (serenity_assembly.py).
 // ===========================================================================
 // =============================================================================
-// s_wing_nacelle_pylon_revo.scad
-// Serenity UAV — Rev O — Integrated Wing Nacelle Tilt Pylon
+// wing_nacelle_pylon_revo.scad
+// Serenity UAV — Rev R — Integrated Wing Nacelle Tilt Pylon
 // =============================================================================
 //
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // Project : Serenity-class Tilt-Rotor UAV (24-inch scale, Firefly TV ship)
 // License : CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 // Date    : 2026-05-24
-// Revision: Rev O
+// Revision: Rev R (2026-06-11)   [carried forward from Rev O (2026-05-24); no geometry changes]
 //
 // Description
 // -----------
@@ -98,11 +98,11 @@
 // ---------------
 //   Port pylon (left nacelle, inboard +X):
 //     openscad -o s_wing_nacelle_pylon_port_revo.stl \
-//              s_wing_nacelle_pylon_revo.scad -D INBOARD_SIGN=+1
+//              wing_nacelle_pylon_revo.scad -D INBOARD_SIGN=+1
 //
 //   Starboard pylon (right nacelle, inboard −X — mirror):
 //     openscad -o s_wing_nacelle_pylon_stbd_revo.stl \
-//              s_wing_nacelle_pylon_revo.scad -D INBOARD_SIGN=-1
+//              wing_nacelle_pylon_revo.scad -D INBOARD_SIGN=-1
 //
 // =============================================================================
 
@@ -526,7 +526,7 @@ pylon(inboard_sign = INBOARD_SIGN);
 // Render commands:
 //   Port pylon:
 //     openscad -o s_wing_nacelle_pylon_port_revo.stl \
-//              s_wing_nacelle_pylon_revo.scad -D INBOARD_SIGN=1
+//              wing_nacelle_pylon_revo.scad -D INBOARD_SIGN=1
 //   Starboard pylon:
 //     openscad -o s_wing_nacelle_pylon_stbd_revo.stl \
-//              s_wing_nacelle_pylon_revo.scad -D INBOARD_SIGN=-1
+//              wing_nacelle_pylon_revo.scad -D INBOARD_SIGN=-1

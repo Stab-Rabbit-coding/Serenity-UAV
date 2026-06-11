@@ -17,12 +17,13 @@
 //         python3 tools/bake_hull_frame.py Rear_Shell
 // ===========================================================================
 // ============================================================
-// s_rear_shell24.scad
+// rear_shell24.scad
 // Aft fuselage section shell — Serenity UAV 24" hull.
 //
+// Rev R (2026-06-11): Rev R baseline — no geometry changes.
 // Rev Q (2026-06-07): Initial SCAD derivation from archived STL.
-//   Shell source: archive/stls/fuselage/s_rear_shell24_repaired.stl
-//   (solid manifold; pre-hollowed s_rear_shell24_2mm.stl exists in archive
+//   Shell source: archive/stls/fuselage/rear_shell24_repaired.stl
+//   (solid manifold; pre-hollowed rear_shell24_2mm.stl exists in archive
 //   but is not used here — hollow is generated via centroid-inset scaling
 //   for consistency with head and cargo shell SCAD files.)
 //
@@ -52,7 +53,7 @@
 //   Station mapping: X_stl = 284 - station_mm
 //
 // Shell derivation:
-//   STL measured bounds of s_rear_shell24_repaired.stl:
+//   STL measured bounds of rear_shell24_repaired.stl:
 //     X = -246.0 .. -105.6  → DX = 140.4 mm
 //     Y = -192.9 ..  -35.4  → DY = 157.5 mm
 //     Z =    0.0 ..  180.7  → DZ = 180.7 mm
@@ -80,7 +81,7 @@ $fn = 64;
 // ============================================================
 // STL source
 // ============================================================
-STL_PATH = "../../archive/stls/fuselage/s_rear_shell24_repaired.stl";
+STL_PATH = "../../archive/stls/fuselage/rear_shell24_repaired.stl";
 
 // ============================================================
 // Hull scale factor (24" from 18" Thingiverse base)

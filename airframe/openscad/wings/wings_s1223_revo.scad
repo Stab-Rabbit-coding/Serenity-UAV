@@ -15,15 +15,15 @@
 //         python3 tools/bake_hull_frame.py Wing_Port Wing_Stbd
 // ===========================================================================
 // =============================================================================
-// s_wings_s1223_revo.scad
-// Serenity UAV — Rev O — Wing Pair with Selig S1223 Airfoil Profile
+// wings_s1223_revo.scad
+// Serenity UAV — Rev R — Wing Pair with Selig S1223 Airfoil Profile
 // =============================================================================
 //
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // Project : Serenity-class Tilt-Rotor UAV (24-inch scale, Firefly TV ship)
 // License : CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 // Date    : 2026-05-24
-// Revision: Rev O
+// Revision: Rev R (2026-06-11)   [carried forward from Rev O (2026-05-24); no geometry changes]
 //
 // Description
 // -----------
@@ -84,26 +84,26 @@
 //   thickness Z=24mm.  The wings() module applies a coordinate permutation
 //   (X←Z, Y←X, Z←Y) to convert internal geometry to assembly orientation.
 //
-//   3° incidence is applied by s_wing_nacelle_pylon_revo.scad at the
+//   3° incidence is applied by wing_nacelle_pylon_revo.scad at the
 //   pylon attachment face — not baked into this geometry.
 //
 // Render Commands
 // ---------------
 //   Port wing (left):
-//     openscad -o s_wing_port_s1223_revo.stl \
-//              s_wings_s1223_revo.scad -D RENDER_SIDE=1
+//     openscad -o wing_port_s1223_revo.stl \
+//              wings_s1223_revo.scad -D RENDER_SIDE=1
 //   Starboard wing (right):
-//     openscad -o s_wing_stbd_s1223_revo.stl \
-//              s_wings_s1223_revo.scad -D RENDER_SIDE=-1
+//     openscad -o wing_stbd_s1223_revo.stl \
+//              wings_s1223_revo.scad -D RENDER_SIDE=-1
 //   Both wings (single file, for reference):
-//     openscad -o s_wings_both_s1223_revo.stl s_wings_s1223_revo.scad
+//     openscad -o s_wings_both_s1223_revo.stl wings_s1223_revo.scad
 //
 // References
 // ----------
 //   [1] Selig, M.S. & Guglielmo, J.J. (1997). "High-Lift Low Reynolds Number
 //       Airfoil Design." Journal of Aircraft, 34(1), 72–79.
 //   [2] UIUC Airfoil Database — S1223: m-selig.ae.illinois.edu/ads.html
-//   [3] s_wing_nacelle_pylon_revo.scad — pylon mount pocket dimensions.
+//   [3] wing_nacelle_pylon_revo.scad — pylon mount pocket dimensions.
 //   [4] CLAUDE.md — fabrication standards (4-perimeter CF-PETG, 3 mm wall).
 //   [5] bom_revO.csv — CF-TUBE-12MM (12 mm OD × 1.5 mm wall) wing spar spec.
 //
@@ -142,7 +142,7 @@ SPAR_BORE_X     =   0.30; // [chord fraction] bore centre, chordwise
                            // At tip : 0.30 × 104 = 31.2 mm from LE (internal X)
 SPAR_BORE_Y_CTR =   0.0;  // [mm] bore centre, internal Y offset (0 = chord line)
 
-// ── Pylon mount pocket (must match s_wing_nacelle_pylon_revo.scad) ────────────
+// ── Pylon mount pocket (must match wing_nacelle_pylon_revo.scad) ────────────
 // The wing_attach_block from the pylon inserts into this pocket at the tip face.
 WING_SLOT_W     =  50.0;  // [mm] VERIFY — pocket width in X (chordwise) direction
 WING_SLOT_H     =  40.0;  // [mm] VERIFY — pocket height in Y (thickness) direction
@@ -344,7 +344,7 @@ module spar_bore() {
 // ── Module: pylon_mount_pocket ────────────────────────────────────────────────
 // =============================================================================
 // Rectangular slot at the wing tip face (Z = WING_SEMI_SPAN - WING_SLOT_DEPTH).
-// Receives the wing_attach_block from s_wing_nacelle_pylon_revo.scad.
+// Receives the wing_attach_block from wing_nacelle_pylon_revo.scad.
 // The pocket centre is at WING_SLOT_X_CTR of the TIP chord, Y = 0 (chord line).
 //
 // The bolt clearance holes are drilled from the tip face inward along Z,
@@ -478,8 +478,8 @@ wings(render_side = RENDER_SIDE);
 //   values are estimates from wing area analysis (S_ref = 0.0156 m² both wings).
 //
 // Render commands (one wing at a time for slicer import):
-//   openscad -o s_wing_port_s1223_revo.stl \
-//            s_wings_s1223_revo.scad -D RENDER_SIDE=1
-//   openscad -o s_wing_stbd_s1223_revo.stl \
-//            s_wings_s1223_revo.scad -D RENDER_SIDE=-1
+//   openscad -o wing_port_s1223_revo.stl \
+//            wings_s1223_revo.scad -D RENDER_SIDE=1
+//   openscad -o wing_stbd_s1223_revo.stl \
+//            wings_s1223_revo.scad -D RENDER_SIDE=-1
 // =============================================================================

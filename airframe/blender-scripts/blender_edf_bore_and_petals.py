@@ -50,7 +50,7 @@ Step bores applied:
     Thrust-tube clearance bore (tube OD 126 mm + 1 mm each side).
 
 Output:
-  stls/fuselage/aft-edf/s_rear_shell24_2mm_edf_bored.stl
+  stls/fuselage/aft-edf/rear_shell24_2mm_edf_bored.stl
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
@@ -60,7 +60,7 @@ References:
   Hull centroid: blender_nozzle_gen.py, "Section centroid in YZ=(-117,36)".
   Nozzle petals: blender_nozzle_gen.py  rear_nozzle_petal.stl (use those).
   Nozzle frame:  blender_nozzle_gen.py  rear_nozzle_frame.stl.
-  Thrust tube:   s_edf_120_thrust_tube.scad Rev B (TUBE_L=136 mm).
+  Thrust tube:   edf_120_thrust_tube.scad Rev B (TUBE_L=136 mm).
   Axis determination: face-normal + Z-slice analysis, 2026-06-02.
 """
 
@@ -114,8 +114,8 @@ WEDGE_ARC_N     =  24
 # File paths
 BASE     = os.path.dirname(os.path.abspath(__file__))
 STLS     = os.path.join(BASE, "..", "stls", "fuselage", "aft-edf")
-IN_STL   = os.path.join(STLS, "s_rear_shell24_2mm_repaired.stl")
-OUT_BODY = os.path.join(STLS, "s_rear_shell24_2mm_edf_bored.stl")
+IN_STL   = os.path.join(STLS, "rear_shell24_2mm_repaired.stl")
+OUT_BODY = os.path.join(STLS, "rear_shell24_2mm_edf_bored.stl")
 OUT_PETAL_FMT = os.path.join(STLS, "rear_nozzle_petal_hull_{n}.stl")
 
 # ── Utilities ─────────────────────────────────────────────────────────────────

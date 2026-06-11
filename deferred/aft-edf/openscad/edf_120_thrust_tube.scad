@@ -12,7 +12,7 @@
 //     bake or place explicitly; stations quoted from nose convert to hull
 //     Y via nose tip at hull Y = -305.6 mm.
 // ===========================================================================
-// s_edf_120_thrust_tube.scad
+// edf_120_thrust_tube.scad
 // Thrust tube for Serenity Rev N 120mm rear EDF.
 //
 // Remixed from Thingiverse thing:2838324 (120mm fuselage EDF).
@@ -27,7 +27,7 @@
 //   Forward (Z=0):     forward spigot ID = EDF casing OD; locates tube on EDF exit.
 //   Aft (Z=TUBE_L):    bonding flange ring bonds to rear_nozzle_frame.stl base.
 //
-// Station reference (world X coordinates of s_rear_shell24_2mm_repaired.stl):
+// Station reference (world X coordinates of rear_shell24_2mm_repaired.stl):
 //   EDF exhaust face at X ≈ -90 mm (in cargo section, per plenum design).
 //   Nozzle frame shoulder at X = -226 mm (= aft face -246 + seat depth 20).
 //   Required span: 226 - 90 = 136 mm → TUBE_L = 136 mm.
