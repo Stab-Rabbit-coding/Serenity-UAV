@@ -172,7 +172,7 @@ systems with graceful degradation. Kaylee receives direction from the flight con
 | Mass | 26.5 oz (750 g) |
 | Dimensions (L × W × H) | 5.59″ × 1.97″ × 1.50″ (142 mm × 50 mm × 38 mm) |
 
-### Propulsion — Rev Q baseline
+### Propulsion — Rev R baseline
 
 **Nacelle EDFs (4 total — active all phases):**
 
@@ -242,7 +242,7 @@ MAVLink/SiK 915 MHz, LoRa RFM95W 915 MHz, TI WL1837MOD WiFi/BT, 49 MHz RCRS tran
 ATF16V8BQL CPLD hardware write-blocker, non-executable log microSD.
 EMI-hardened v2 design (CAPE-B-2).
 
-**Rev Q — EMI-hardened v2 capes at ALL 8 positions.**
+**Rev R — EMI-hardened v2 capes at ALL 8 positions.**
 All nodes use 5 kV galvanic isolation:
 - CAN FD: ISOW1044BDFMR (TI)
 - RS-485: ADM2795EBRWZ (ADI)
@@ -307,7 +307,7 @@ architecture; NIST SP 800-82 Rev 3 ICS security; every board has a TPM 2.0.
 ## License
 
 Published under **Creative Commons Attribution 4.0 International** by Steve Griffing,
-PE(CSE), CISSP-ISSEP, CPP. Revision Q, June 2026.
+PE(CSE), CISSP-ISSEP, CPP. Revision R, June 2026.
 [creativecommons.org/licenses/by/4.0](https://creativecommons.org/licenses/by/4.0)
 
 ## Attribution
@@ -334,7 +334,7 @@ Covered under CC BY 4.0:
 - Circuit diagrams, pinout tables, and wiring specifications
 - Mechanical drawings and assembly specifications
 - Firmware architecture specifications and algorithm descriptions
-- This design document in all its revisions (A–Q and beyond)
+- This design document in all its revisions (A–R and beyond)
 - Any derived works must carry CC BY 4.0 and attribute all upstream authors
 
 Not covered / separate terms:

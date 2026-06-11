@@ -23,16 +23,16 @@ are standard Linux processes that use POSIX APIs, i2c-dev, libgpiod 2.x, and pth
 
 ## Cape Variant Placement
 
-The eight nodes use a **v2 · v2 · v2 · v2** (nose → tail) cape variant layout — Rev Q all-EMI-hardened:
+The eight nodes use a **v2 · v2 · v2 · v2** (nose → tail) cape variant layout — Rev R all-EMI-hardened:
 
 | Bay | Room name | Pair | FC cape | CN cape | Rationale |
 |-----|-----------|------|---------|---------|-----------|
 | A (nose) | Shepherd's room | FC1 / CN1 | Wash | Zoë | Bus start termination; 5 kV isolated CAN FD / RS-485 / Ethernet at forward bus endpoint |
-| B | Inara's shuttle | FC2 / CN2 | Wash | Zoë | Rev Q: uniform EMI hardening across all bays |
-| D | River's room | FC3 / CN3 | Wash | Zoë | Rev Q: uniform EMI hardening across all bays |
+| B | Inara's shuttle | FC2 / CN2 | Wash | Zoë | Rev R: uniform EMI hardening across all bays |
+| D | River's room | FC3 / CN3 | Wash | Zoë | Rev R: uniform EMI hardening across all bays |
 | E (tail) | Simon's medbay | FC4 / CN4 | Wash | Zoë | Bus end termination; 5 kV isolation closest to nacelle motor wiring / rear EDF |
 
-Rev Q places 5 kV galvanic isolation at every node. Cape-A-1 / Cape-B-1 are archived.
+Rev R places 5 kV galvanic isolation at every node. Cape-A-1 / Cape-B-1 are archived (Rev Q, 2026-06-05).
 
 ## Directory Layout
 

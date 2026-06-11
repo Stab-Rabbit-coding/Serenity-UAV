@@ -2,6 +2,7 @@
 // belly_panel.scad
 // Battery bay belly access panel — Serenity UAV 24" hull.
 //
+// Rev R (2026-06-11): Rev R baseline — no geometry changes.
 // Rev Q (2026-06-07): Initial release.
 //   Fits head/bridge section belly opening:
 //     6.30 × 2.56 in (160 × 65 mm) cutout.

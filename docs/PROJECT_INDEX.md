@@ -1,7 +1,7 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: Rev R (2026-06-10) -->
+<!-- Last updated: Rev R (2026-06-11) -->
 
 ## Repository Root
 
@@ -24,10 +24,11 @@ Assembly pipeline for FreeCAD 0.20+ with Assembly4.
 
 ```
 Makefile                          — Build: SCAD→STL (openscad) + headless assembly (freecad)
-serenity_assembly.py              — Full-airframe FreeCAD assembly (Rev Q, 2026-06-08)
+serenity_assembly.py              — Full-airframe FreeCAD assembly (Rev R, 2026-06-11)
 Serenity-Assemble.py              — Legacy subsystem stub (Assembly4Lib placeholders)
 Serenity-Subsystem-Assembly.py    — Legacy subsystem stub (Assembly4Lib placeholders)
 serenity_subsystem_assembler.py   — Legacy subsystem assembler class (stub)
+assembly1.py                      — Legacy single-part assembly stub (placeholder)
 ```
 
 ### airframe/blender-scripts/
@@ -69,13 +70,13 @@ All parametric source files.  Compiled to STLs via `airframe/FreeCAD-scripts/Mak
 #### airframe/openscad/fuselage/
 
 ```
-s_head_shell24.scad               — Nose/cockpit shell, 2mm CF-PETG skin (Rev Q)
-s_middle_canonical_shell24.scad   — Horseshoe neck section shell (Rev Q)
-s_rear_shell24.scad               — Aft engine-room shell, 2mm CF-PETG (Rev Q, 2026-06-08)
-battery_tray.scad                 — 6S 4000mAh LiPo tray, keel-rail slide (Rev Q)
-belly_panel.scad                  — Battery bay belly access panel (Rev Q)
+s_head_shell24.scad               — Nose/cockpit shell, 2mm CF-PETG skin (Rev R)
+s_middle_canonical_shell24.scad   — Horseshoe neck section shell (Rev R)
+s_rear_shell24.scad               — Aft engine-room shell, 2mm CF-PETG (Rev R)
+battery_tray.scad                 — 6S 4000mAh LiPo tray, keel-rail slide (Rev R)
+belly_panel.scad                  — Battery bay belly access panel (Rev R)
 cargo/
-  s_cargo_sect_shell24.scad       — Cargo section shell with clamshell doors (Rev Q)
+  s_cargo_sect_shell24.scad       — Cargo section shell with clamshell doors (Rev R)
 ```
 
 #### airframe/openscad/nacelles/
@@ -92,6 +93,7 @@ nacelle_bevel_housing.scad          — Rev O bevel-gear housing
 nacelle_bevel_pair.scad             — Rev O M=1.0 14T 45° bevel pair
 nacelle_pinion.scad                 — Rev O M=1.0 12T pinion
 nacelle_sector_gear.scad            — Rev O M=1.0 38T sector gear
+nacelle_servo_bracket.scad          — DS3218MG tilt servo bracket with M3 bosses (Rev S1)
 ```
 
 #### airframe/openscad/wings/
@@ -215,7 +217,7 @@ cn/
 
 ### avionics/kicad/
 
-KiCad 7/9 PCB design files.  All active designs are Rev Q (EMI-hardened -2 variants).
+KiCad 7/9 PCB design files.  All active designs are Rev R (EMI-hardened -2 variants).
 
 ```
 Wash — Flight Control & Sensor Cape (Cape-A-2):
@@ -255,6 +257,7 @@ ENC-NACELLE-1 (nacelle encoder breakout):
 
 Python generation scripts:
   gen_kaylee.py                   — Kaylee PDB generator (pro + sch + pcb)
+  gen_kaylee_pcb.py               — Kaylee PDB PCB layout generator (standalone)
   gen_cape_a2.py                  — Schematic generator (Cape-A-2)
   gen_cape_a2_pcb.py              — PCB layout generator (Cape-A-2)
   gen_cape_b2.py                  — Schematic generator (Cape-B-2)
@@ -264,8 +267,12 @@ Python generation scripts:
   add_sensors_sbus.py             — SBUS sensor addition script
   apply_netlist.py                — Netlist application script
   fix_xcvr_labels.py              — XCVR net label fix script
+  replace_footprints.py           — Footprint replacement utility for KiCad PCBs
   check_impedance.py              — Impedance checker
   generate_gerbers.py             — Gerber export script
+  Serenity-Custom.pretty/         — Custom KiCad component footprint library
+  drc_report.txt                  — Latest KiCad DRC report (Wash/Zoë/XCVR)
+  xcrv-DRC.rpt                    — XCVR-49MHZ-2 DRC report
 
 gerbers/
   CAPE-A-1/                       — Cape-A-1 gerbers (ARCHIVED design)
@@ -287,9 +294,20 @@ archive/                          — Pre-Rev Q gerber snapshots
 ## docs/
 
 ```
+PROJECT_INDEX.md                  — This file: active project directory tree
+AVIONICS_PB2_REDESIGN.md          — 8× PocketBeagle 2 Industrial avionics redesign spec (Rev R)
+BATTERY_MOUNT.md                  — Battery CG analysis, retention load case, belly panel spec (Rev R)
+POWER_DISTRIBUTION.md             — Power architecture: Kaylee PDB rails, fuse map, cable spec (Rev R)
+REVN_BUILD_GUIDE_24IN.md          — Revision N+ 24-inch hull build guide (active, Rev R baseline)
+PHASED_BUILD_GUIDE.md             — Rev M 18-inch phased build guide (SUPERSEDED for 24-inch builds)
+PROTO_PRINT_DAVINCI_JR.md         — DaVinci Jr. PLA prototype print guide (Rev P, historical)
+README.md                         — Rev M 18-inch project overview (SUPERSEDED; active README.md at root)
 bom_revR.json                     — Bill of materials (Rev R, JSON — active baseline)
 bom_revQ.json                     — Bill of materials (Rev Q, JSON — historical reference)
-PROJECT_INDEX.md                  — This file: active project directory tree
+bom_revP.json                     — Bill of materials (Rev P, JSON — historical reference)
+MANIFEST.json                     — Rev F manifest (stale — historical reference only)
+references/
+  Thing-4677565-Serenity.stl      — Low-detail Thingiverse reference hull (geometry guide)
 ```
 
 ---
@@ -388,6 +406,105 @@ gcs/malcolm/
         test_tracker.py                    — 9 bearing/elevation unit tests: cardinal directions,
                                              NE quadrant, horizontal/above/overhead/airborne elevations,
                                              azimuth and elevation range assertions
+```
+
+---
+
+## deferred/
+
+Design files for systems deferred until core propulsion and avionics are proven.
+Not archived — intended for a future build phase.
+
+### deferred/aft-edf/
+
+```
+README.md                         — Aft fuselage EDF design scope, rationale, and defer decision
+openscad/
+  s_aft_edf_plenum.scad           — Cross-shaped CF-PETG intake plenum manifold (120 mm EDF)
+  s_edf_120_motor_mount.scad      — 120 mm EDF motor mount ring
+  s_edf_120_thrust_tube.scad      — Thrust tube from plenum to iris nozzle
+  s_neck_intake_frame.scad        — Four-port radial intake scoop frame at neck station ~310 mm
+  s_rear_neck_intake_shell24.scad — Rear neck intake shell integration shell
+stls/
+  s_aft_edf_plenum.stl            — Compiled plenum STL
+  s_edf_120_motor_mount.stl       — Compiled motor mount STL
+  s_edf_120_thrust_tube.stl       — Compiled thrust tube STL
+  s_neck_intake_frame.stl         — Compiled intake frame STL
+  s_rear_shell24_2mm_edf_bored.stl — Rear shell with EDF bore cut
+  rear_nozzle_frame.stl           — 8-petal iris nozzle ring frame
+  rear_nozzle_petal.stl           — Single iris petal (print × 8)
+  rear_nozzle_closed_asm.stl      — Iris assembly visual (closed position)
+  rear_nozzle_petal_hull_0.stl … rear_nozzle_petal_hull_7.stl  — Individual petal hulls
+```
+
+---
+
+## graphical-build-guide/
+
+SVG visual build guide cards and hull outline diagrams.
+Generated by `gen_hull_outlines.py` from blender-rendered views.
+
+```
+gen_hull_outlines.py              — SVG generation script (runs headless Blender)
+build_guide_00_cover.svg          — Cover card
+build_guide_01_print_prep.svg     — Print preparation
+build_guide_02_print_hull.svg     — Printing the hull sections
+build_guide_03_print_nacelle.svg  — Printing nacelle parts
+build_guide_04_cut_cf.svg         — Carbon fibre cut list
+build_guide_05_cf_skeleton.svg    — CF skeleton assembly
+build_guide_06_nacelle_pivot.svg  — Nacelle tilt pivot installation
+build_guide_07_edf_install.svg    — EDF installation
+build_guide_08_nozzle_gear.svg    — Iris nozzle gear train
+build_guide_09_avionics.svg       — Avionics bay layout
+build_guide_10_power_wiring.svg   — Power wiring
+build_guide_11_inter_board.svg    — Inter-board connections
+build_guide_12_security_hw.svg    — Security hardware (TPM, tamper seals)
+build_guide_13_nav_lights.svg     — Nav lights
+build_guide_14_antennas.svg       — Antenna placement
+build_guide_15_software.svg       — Software installation
+build_guide_16_calibration.svg    — Sensor calibration
+build_guide_17_ground_test.svg    — Ground test checklist
+build_guide_18_first_flight.svg   — First flight procedure
+build_guide_19_decal_placement.svg — Decal placement
+build_guide_20_node_placement.svg — Avionics node placement
+build_guide_21_node_install.svg   — Node installation
+build_guide_22_void_formers.svg   — Void formers for foam fill
+build_guide_23_foam_fill.svg      — Foam fill procedure
+build_guide_24_access_panels.svg  — Access panel locations
+build_guide_25_obstacle_sensors.svg — Obstacle sensor placement
+build_guide_26_cargo_bay_winch.svg — Cargo bay winch assembly
+build_plan.svg                    — Master build plan overview
+components_overview.svg           — Component overview diagram
+decal_sheet.svg                   — Decal sheet (CC BY 4.0 markings)
+hull_bottom.svg                   — Hull bottom orthographic view
+hull_front.svg                    — Hull front orthographic view
+hull_side.svg                     — Hull side orthographic view
+hull_top.svg                      — Hull top orthographic view
+overview_bottom.svg               — Overview bottom view (assembly)
+overview_front.svg                — Overview front view (assembly)
+overview_side.svg                 — Overview side view (assembly)
+overview_top.svg                  — Overview top view (assembly)
+overview_svgs/
+  serenity_bottom.svg             — Rendered bottom view
+  serenity_bow.svg                — Rendered bow view
+  serenity_port.svg               — Rendered port view
+  serenity_starboard.svg          — Rendered starboard view
+  serenity_stern.svg              — Rendered stern view
+  serenity_top.svg                — Rendered top view
+  serenity_iso_port_bow.svg       — Isometric port-bow view
+  serenity_iso_port_quarter.svg   — Isometric port-quarter view
+  serenity_iso_starboard_bow.svg  — Isometric starboard-bow view
+  serenity_iso_stbd_quarter.svg   — Isometric starboard-quarter view
+```
+
+---
+
+## tools/
+
+Standalone utility scripts (run from repo root).
+
+```
+validate_stls.py                  — Mesh validation: watertight check on all STLs in airframe/stls/
 ```
 
 ---
