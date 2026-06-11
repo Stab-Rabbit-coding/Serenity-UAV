@@ -30,7 +30,6 @@ import argparse
 import json
 import logging
 import math
-import queue
 import socket
 import sys
 import threading
@@ -50,7 +49,9 @@ WGS84_A: float = 6_378_137.0          # Semi-major axis (m)
 WGS84_F: float = 1.0 / 298.257_223_563  # Flattening
 WGS84_B: float = WGS84_A * (1.0 - WGS84_F)  # Semi-minor axis (m)
 
-DEFAULT_CONFIG_PATH = Path(__file__).parent.parent.parent / "config" / "malcolm_config.yaml"
+DEFAULT_CONFIG_PATH = (
+    Path(__file__).parent.parent.parent / "config" / "malcolm_config.yaml"
+)
 
 log = logging.getLogger(__name__)
 
@@ -94,7 +95,10 @@ def _bearing_vincenty(gcs: GeoPosition, aircraft: GeoPosition) -> float:
     dlon = math.radians(aircraft.lon_deg - gcs.lon_deg)
 
     x = math.cos(lat2) * math.sin(dlon)
-    y = math.cos(lat1) * math.sin(lat2) - math.sin(lat1) * math.cos(lat2) * math.cos(dlon)
+    y = (
+        math.cos(lat1) * math.sin(lat2)
+        - math.sin(lat1) * math.cos(lat2) * math.cos(dlon)
+    )
 
     bearing_rad = math.atan2(x, y)
     return (math.degrees(bearing_rad) + 360.0) % 360.0
@@ -150,9 +154,11 @@ def _elevation_deg(gcs: GeoPosition, aircraft: GeoPosition) -> float:
 
     # Atmospheric refraction correction (Bennet 1982).
     # Applies only when aircraft is near or below the geometric horizon.
+    _angle_rad = math.radians(
+        geometric_el_deg + 10.3 / (geometric_el_deg + 5.11)
+    )
     el_deg_corr = geometric_el_deg + 0.0 if geometric_el_deg > 15.0 else (
-        1.02 / math.tan(math.radians(geometric_el_deg + 10.3 / (geometric_el_deg + 5.11)))
-        / 60.0  # arcminutes → degrees
+        1.02 / math.tan(_angle_rad) / 60.0  # arcminutes → degrees
     )
 
     return el_deg_corr
@@ -302,7 +308,7 @@ class Tracker:
                 self._aircraft_pos = GeoPosition(
                     lat_deg=payload["lat_degE7"] / 1e7,
                     lon_deg=payload["lon_degE7"] / 1e7,
-                    alt_m  =payload["alt_mm"]    / 1000.0,
+                    alt_m=payload["alt_mm"] / 1000.0,
                 )
             except socket.timeout:
                 pass

@@ -31,7 +31,9 @@ import yaml
 from pymavlink import mavutil  # type: ignore[import]
 
 
-DEFAULT_CONFIG_PATH = Path(__file__).parent.parent.parent / "config" / "malcolm_config.yaml"
+DEFAULT_CONFIG_PATH = (
+    Path(__file__).parent.parent.parent / "config" / "malcolm_config.yaml"
+)
 MAVLINK_SYS_ID_AIRCRAFT = 1  # Must match MAL_AIRCRAFT_SYS_ID in mal_config.h
 
 log = logging.getLogger(__name__)
@@ -55,7 +57,10 @@ def run(config: dict) -> None:
     log.info("Connecting to MAVLink source: %s", listen_str)
     mav = mavutil.mavlink_connection(listen_str, source_system=255)
 
-    log.info("Waiting for heartbeat from aircraft (sysid=%d)...", MAVLINK_SYS_ID_AIRCRAFT)
+    log.info(
+        "Waiting for heartbeat from aircraft (sysid=%d)...",
+        MAVLINK_SYS_ID_AIRCRAFT,
+    )
     mav.wait_heartbeat(blocking=True, timeout=30)
     log.info("Heartbeat received — starting position feed to UDP :%d", tracker_port)
 
@@ -67,7 +72,10 @@ def run(config: dict) -> None:
         )
 
         if msg is None:
-            log.warning("No GLOBAL_POSITION_INT received within 5 s — link may be degraded")
+            log.warning(
+                "No GLOBAL_POSITION_INT received within 5 s"
+                " — link may be degraded"
+            )
             continue
 
         # Ignore messages from non-aircraft systems.

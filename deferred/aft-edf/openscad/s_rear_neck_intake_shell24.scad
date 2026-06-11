@@ -53,10 +53,10 @@
 //     INNER_SY = 0.974683  (dim = 158.0 mm)
 //     INNER_SZ = 0.977981  (dim = 181.7 mm)
 //
-// Coordinate system (24"-scaled STL world space):
-//   X -- longitudinal, positive toward nose
-//   Y -- vertical,    positive toward dorsal (up)   NOTE: Y is up, not Z
-//   Z -- lateral,     positive toward port  (left)
+// Coordinate system (24"-scaled STL world space = hull frame per CLAUDE.md):
+//   X — lateral,      positive toward port  (left)
+//   Y — longitudinal, positive aft (back)   NOTE: Y is aft; Z is dorsal/up
+//   Z — vertical,     positive dorsal (up)
 //
 // STL bounds (voxel-remesh repair): X=-246..-105, Y=-193..-35, Z=0..182.
 // Fore joint face at X = -105 mm (rear → cargo junction).
@@ -80,9 +80,9 @@
 SCALE_24  = 2.9294;   // 24" hull scale factor
 
 // Rear shell centroid in 24"-scaled STL world coordinates
-CX = -175.79;   // mm
-CY = -109.19;   // mm -- dorsal/ventral axis (positive = up)
-CZ =   68.55;   // mm -- lateral axis (positive = port)
+CX = -175.79;   // mm -- lateral axis (positive = port)
+CY = -109.19;   // mm -- longitudinal axis (positive = aft)
+CZ =   68.55;   // mm -- vertical axis (positive = dorsal/up)
 
 // Hollow-shell parameters (Rev R: computed from solid STL bounding box)
 // Bounding box of s_rear_shell24_repaired.stl after voxel-remesh (1.5 mm pitch):

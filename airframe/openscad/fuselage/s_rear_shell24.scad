@@ -27,10 +27,10 @@
 //   Walls:    4 perimeters
 //   Infill:   40% gyroid for boss/rib zones; 25% elsewhere
 //
-// Coordinate system (24"-scaled STL world space):
-//   X — longitudinal, positive toward nose (forward)
-//   Y — vertical,    positive dorsal (up)
-//   Z — lateral,     positive port (left)
+// Coordinate system (24"-scaled STL world space = hull frame per CLAUDE.md):
+//   X — lateral,      positive toward port  (left)
+//   Y — longitudinal, positive aft (back)
+//   Z — vertical,     positive dorsal (up)
 //   Station mapping: X_stl = 284 - station_mm
 //
 // Shell derivation:
@@ -72,9 +72,9 @@ SCALE_24 = 2.9294;
 // ============================================================
 // Bounding-box centroid in 24"-scaled STL world coordinates
 // ============================================================
-CX = -175.80;   // mm
-CY = -114.12;   // mm
-CZ =   90.36;   // mm
+CX = -175.80;   // mm -- lateral axis (positive = port)
+CY = -114.12;   // mm -- longitudinal axis (positive = aft)
+CZ =   90.36;   // mm -- vertical axis (positive = dorsal/up)
 
 // ============================================================
 // Hollow-shell parameters (2.0 mm foam-fill skin, centroid-inset method)

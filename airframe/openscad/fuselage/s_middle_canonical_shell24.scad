@@ -58,10 +58,10 @@
 //   INNER_SY = 0.959565
 //   INNER_SZ = 0.908966
 //
-// Coordinate system (24"-scaled STL world space):
-//   X -- longitudinal, positive toward nose
-//   Y -- vertical,    positive toward dorsal (up)   NOTE: Y is up, not Z
-//   Z -- lateral,     positive toward port  (left)
+// Coordinate system (24"-scaled STL world space = hull frame per CLAUDE.md):
+//   X — lateral,      positive toward port  (left)
+//   Y — longitudinal, positive aft (back)   NOTE: Y is aft; Z is dorsal/up
+//   Z — vertical,     positive dorsal (up)
 //
 // Hull surface estimates (wall = 2.5 mm):
 //   half_ext_Y = 2.5 / (1 - 0.959565) = 61.8 mm
@@ -88,9 +88,9 @@
 SCALE_24  = 2.9294;   // 24" hull scale factor
 
 // Mid-fuselage centroid in 24"-scaled STL world coordinates
-CX =  180.95;   // mm
-CY =  -67.28;   // mm -- dorsal/ventral axis (positive = up)
-CZ =   36.47;   // mm -- lateral axis (positive = port)
+CX =  180.95;   // mm -- lateral axis (positive = port)
+CY =  -67.28;   // mm -- longitudinal axis (positive = aft)
+CZ =   36.47;   // mm -- vertical axis (positive = dorsal/up)
 
 // Inner-shell scale factors (2.5 mm absolute wall)
 INNER_SX = 0.962373;
