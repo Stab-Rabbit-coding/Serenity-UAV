@@ -167,10 +167,10 @@ systems with graceful degradation. Kaylee receives direction from the flight con
 | Parameter | Value |
 |-----------|-------|
 | Chemistry | LiPo, 6S (22.2 V nominal) |
-| Capacity | XXXX mAh |
-| Discharge rating | XX C |
-| Mass | XX.X oz (XX.X g) |
-| Dimensions (L × W × H) | XX.X″ × XX.X″ × XX.X″ (XX mm × XX mm × XX mm) |
+| Capacity | 4000 mAh |
+| Discharge rating | 60 C |
+| Mass | 26.5 oz (750 g) |
+| Dimensions (L × W × H) | 5.59″ × 1.97″ × 1.50″ (142 mm × 50 mm × 38 mm) |
 
 ### Propulsion — Rev Q baseline
 
