@@ -30,7 +30,7 @@ what is still open, so the thread can be picked up cleanly.
   magnetics) footprints were present but unconnected. Their nets now
   mirror the ETH1 topology exactly:
 
-  ```
+  ```text
   ETH2 ──ETH2_LINE_{TX,RX}{P,N}──► T-ETH2 ──ETH2_{TX,RX}{P,N}──► ETH2-PHY
   ```
 
@@ -39,6 +39,24 @@ what is still open, so the thread can be picked up cleanly.
   `PHY2_RSTN`, and the `VCC2_ETH` / `GND` / `GND2_ETH` power and
   isolation domains. 44 pads assigned (ETH2-PHY 32, T-ETH2 8, ETH2 4);
   diff-pair chains verified end-to-end. *(Delivered in PR #59.)*
+
+- **Split the two Wash PHYs onto independent MDIO buses (2026-06-12).** Instead
+  of an address strap on a shared bus, PHY1 now uses `MDIO0`/`MDC0` (the CPSW
+  MDIO controller, PB2-P2 pins 17/18) and PHY2 uses `MDIO1`/`MDC1` (PB2-P2 pins
+  1/2, the two spare servo channels SERVO6/7). Each PB2-I NIC manages its own
+  PHY — no shared-address conflict. Both the PCB nets and the schematic global
+  labels were updated. *Firmware note:* PHY2's bus is a second (bit-banged
+  `mdio-gpio`) MDIO; confirm the two repurposed balls are GPIO-capable in the
+  PB2-I pinmux.
+
+- **Wired the floating field connectors to their signals (2026-06-12).** Every
+  JST field connector was placed but had no nets. Using each footprint's
+  Description pinout: SERVO-PWM pads 1–6 → `SERVO0–5` (servo PWM); ESC-TLM →
+  `UART_ESC_TX`/`RX`; GPIO-A…F → `GND`/`+3V3` (+ labelled `GPIO_EXP_*` signal);
+  CAN-FD → `CAN_H`/`CAN_L`; RS-485 → `RS485_A`/`B`; PWR-IN → `+5V`/`GND`. The
+  new connector shorts that DRC now reports are all against `TMESH_*` (the
+  pre-existing tamper-mesh overlap, resolved by the mesh rework below) — not the
+  connector wiring itself.
 
 - **Confirmed the design is PCB-driven.** Each cape's schematic
   (`*.kicad_sch`) defines only the PocketBeagle-2 header pin-mux (the

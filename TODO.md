@@ -278,7 +278,25 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
 
 ##### 1.1.4.1 *Legs*
 
+- [ ] Separate 4x leg stl into individual leg files, orient and test fit on freeCAD assembly
+
+- [ ] evaluate suitability of model legs for actual use
+
+  - [ ] evaluate static and dynamic alternatives
+
+    - [ ] Multipart / Unitary?
+
+    - [ ] Springs / Struts ?
+
+    - [ ] Mounting to hull
+
+  - [ ] Implement canonically and mechanically sound legs
+
 ##### 1.1.4.2 *Feet*
+
+- [ ] Modify feet as needed to mount to legs to provide stable landing
+
+
 
 **Remaining parts needing SCAD source creation then STL export:**
 
@@ -413,9 +431,31 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
   (`ETH2_LINE_*` → `T-ETH2` → `ETH2_*` → PHY), reusing the host-side `RMII1_*`,
   `MDIO`/`MDC`, `PHY2_INTRN`/`PHY2_RSTN`, `VCC2_ETH`/`GND`/`GND2_ETH` nets on
   PB2-P2. 44 pads assigned; diff pairs verified. *(PR #59, 2026-06-12)*
-- [ ] **Add MDIO address strap for the second Wash PHY.** ETH1-PHY and ETH2-PHY
-  share `MDIO`/`MDC` with no strap resistors → identical default address. Add a
-  strap resistor (or confirm RMII-only management). **BLOCKS dual-PHY management.**
+- [x] **Separate the two Wash PHYs onto independent MDIO buses** (instead of an
+  address strap). PHY1/ETH1-PHY → `MDIO0`/`MDC0` (CPSW MDIO, PB2-P2 pins 17/18);
+  PHY2/ETH2-PHY → `MDIO1`/`MDC1` (2nd bus, PB2-P2 pins 1/2 = the two spare servo
+  channels SERVO6/7). Each PB2-I NIC manages its own PHY; no shared-address
+  conflict. PCB + schematic global labels updated. *(2026-06-12)*
+  - **Firmware/DT:** PHY2's bus must be brought up as `mdio-gpio` (bit-banged) on
+    the two repurposed balls; verify they are GPIO-capable in the PB2-I pinmux.
+- [x] **Wire the field-connector pins to their signals on Wash** (connectors were
+  all floating). Done per each footprint's Description pinout: SERVO-PWM pads 1–6
+  → SERVO0–5 (PWM); ESC-TLM → UART_ESC_TX/RX; GPIO-A…F → GND/+3V3 (+ `GPIO_EXP_*`
+  signal pin labelled); CAN-FD → CAN_H/CAN_L; RS-485 → RS485_A/B; PWR-IN → +5V/GND.
+  *(2026-06-12)*
+- [ ] **Source the 6 `GPIO_EXP_A…F` signals.** The GPIO-A…F connector signal pins
+  have no driver — the PB2-I header is 100% allocated, so there is no spare GPIO.
+  Decide: free PB2 pins, add a GPIO-expander IC, or drop unused GPIO connectors.
+- [ ] **Add an ESC-PWM output connector for DSHOT0–3.** The four ESC/BDSHOT PWM
+  outputs (`DSHOT0–3`, PB2-P1 pins 3–6) have no connector on the PCB (the §14
+  `J_ESC` is not placed; `ESC-TLM` is telemetry UART only). Place a 4-pin ESC PWM
+  connector. **BLOCKS EDF ESC drive.**
+- [ ] **Reconcile Wash.md §14 field-connector table with the actual PCB
+  connectors** (PCB has SERVO-PWM 1×8 + GPIO-A…F + ESC-TLM; §14 lists J_SERVO/
+  J_ESC/J_GPS/J_ENC/J_SBUS/J_VBAT/J_FAN). Bring the doc and board into agreement.
+- [ ] **Wire the MIL-1553 connector + transformer.** `MIL-1553` connector and the
+  `1553-XFM` transformer coupling to the bus are unwired at the IC level; the
+  driver/receiver (DS26LV31/32) are only partially netted.
 - [ ] **Redesign the tamper mesh as a per-domain anti-tamper mesh (all 4 capes).**
   The current `TMESH_P`/`TMESH_N` cross-hatch grid on F.Cu/B.Cu shorts across SMD
   pads and across the isolated `GND2_*` domains (≈335 of Wash's 465 DRC errors;
