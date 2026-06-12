@@ -58,8 +58,12 @@ _STL_HEADER = b"SerenityUAV PLACEHOLDER R1"
 
 def _normal(v0, v1, v2):
     """Unit outward normal for triangle v0→v1→v2 (right-hand rule)."""
-    ax = v1[0] - v0[0]; ay = v1[1] - v0[1]; az = v1[2] - v0[2]
-    bx = v2[0] - v0[0]; by = v2[1] - v0[1]; bz = v2[2] - v0[2]
+    ax = v1[0] - v0[0]
+    ay = v1[1] - v0[1]
+    az = v1[2] - v0[2]
+    bx = v2[0] - v0[0]
+    by = v2[1] - v0[1]
+    bz = v2[2] - v0[2]
     nx = ay * bz - az * by
     ny = az * bx - ax * bz
     nz = ax * by - ay * bx
@@ -185,7 +189,8 @@ def _sector(r, h, angle_deg, n_seg=None):
         tris.append(_T(v0b, v1b, v1t))         # arc face T1
         tris.append(_T(v0b, v1t, v0t))         # arc face T2
     # Flat radial face at angle = 0
-    r0b = (r, 0.0, 0.0);  r0t = (r, 0.0, h)
+    r0b = (r, 0.0, 0.0)
+    r0t = (r, 0.0, h)
     tris.append(_T(bc, r0b, r0t))
     tris.append(_T(bc, r0t, tc))
     # Flat radial face at angle = angle_deg
@@ -198,8 +203,9 @@ def _sector(r, h, angle_deg, n_seg=None):
 
 def _translate(tris, dx, dy, dz):
     """Shift all vertices by (dx, dy, dz)."""
-    t = lambda v: (v[0] + dx, v[1] + dy, v[2] + dz)
-    return [(n, t(v0), t(v1), t(v2)) for (n, v0, v1, v2) in tris]
+    def _shift(v):
+        return (v[0] + dx, v[1] + dy, v[2] + dz)
+    return [(n, _shift(v0), _shift(v1), _shift(v2)) for (n, v0, v1, v2) in tris]
 
 
 def _cat(*tri_lists):
@@ -652,13 +658,17 @@ def gen_piano_wire_ring():
             b0 = 2.0 * math.pi * j / n_tube
             b1 = 2.0 * math.pi * (j + 1) / n_tube
             # Four vertices of a quad on the tube surface
+
             def vtx(a, b):
                 cx = (R + r * math.cos(b)) * math.cos(a)
                 cy = (R + r * math.cos(b)) * math.sin(a)
                 cz = r * math.sin(b)
                 return (cx, cy, cz)
-            v00 = vtx(a0, b0); v10 = vtx(a1, b0)
-            v01 = vtx(a0, b1); v11 = vtx(a1, b1)
+
+            v00 = vtx(a0, b0)
+            v10 = vtx(a1, b0)
+            v01 = vtx(a0, b1)
+            v11 = vtx(a1, b1)
             tris.append(_T(v00, v10, v11))
             tris.append(_T(v00, v11, v01))
     return tris
@@ -962,24 +972,28 @@ _COMPONENTS = [
      "SG90 9 g micro servo (×2 cargo + ×1 rear nozzle)"),
     # Bearings
     (gen_brg_mf104zz,        "bearings",   "MF104ZZ_4x10x4mm.stl",
-     "BRG-MF104ZZ",         "MF104ZZ flanged bearing 4×10×4 mm (×4, 2 per nacelle pivot)"),
+     "BRG-MF104ZZ",
+     "MF104ZZ flanged bearing 4×10×4 mm (×4, 2 per nacelle pivot)"),
     (gen_brg_mr63zz,         "bearings",   "MR63ZZ_3x6x2p5mm.stl",
      "BRG-MR63ZZ",          "MR63ZZ miniature bearing 3×6×2.5 mm (×8 gear pinions)"),
     (gen_brg_6804,           "bearings",   "B6804_20x32x7mm_GCS.stl",
      "MAL-BRG-6804",        "6804-2RS thin bearing 20×32×7 mm (×1 GCS gimbal pan)"),
     # Structural / CF hardware
     (gen_cf_rod_4mm,         "structural", "CF_rod_4mm_300mm_stock.stl",
-     "CF-ROD-4MM",           "4 mm solid CF pivot rod, 300 mm stock (×2 nacelles, cut 120 mm)"),
+     "CF-ROD-4MM",
+     "4 mm solid CF pivot rod, 300 mm stock (×2 nacelles, cut 120 mm)"),
     (gen_cf_rod_3mm,         "structural", "CF_rod_3mm_300mm_stock.stl",
      "SHAFT-CF-3MM",         "3 mm solid CF gear shaft rod, 300 mm stock (×1)"),
     (gen_cf_tube_12mm_spar,  "structural", "CF_tube_12mm_OD_1p5w_350mm_spar.stl",
      "CF-TUBE-12MM",         "12 mm OD 1.5 mm wall CF tube — wing spar 350 mm (×2)"),
     (gen_cf_bar_6x3,         "structural", "CF_bar_6x3mm_620mm_keel.stl",
-     "CF-BAR-6X3",           "6×3 mm CF flat bar 620 mm — hull keel + RCRS counterpoise (×1)"),
+     "CF-BAR-6X3",
+     "6×3 mm CF flat bar 620 mm — hull keel + RCRS counterpoise (×1)"),
     (gen_cf_plate_2mm,       "structural", "CF_plate_2mm_200x300mm.stl",
      "CF-PLATE-2MM",         "2 mm CF sheet 200×300 mm — ring frame stock (×1 sheet)"),
     (gen_ptfe_sleeve_4mm,    "structural", "PTFE_sleeve_4mm_OD_3mm_ID_52mm.stl",
-     "PTFE-SLEEVE-4MM",      "PTFE tube 4 mm OD × 3 mm ID × 52 mm — gear shaft sleeve (×1)"),
+     "PTFE-SLEEVE-4MM",
+     "PTFE tube 4 mm OD × 3 mm ID × 52 mm — gear shaft sleeve (×1)"),
     # Avionics
     (gen_pocketbeagle2,      "avionics",   "PocketBeagle2_Industrial_56x35mm.stl",
      "PB2-I-FC / PB2-I-CN / MAL-PB2-I",
@@ -1018,7 +1032,8 @@ _COMPONENTS = [
     (gen_drv8833,            "cargo",      "DRV8833_Hbridge_breakout.stl",
      "DRV8833-CARGO",        "DRV8833 dual H-bridge driver PCB 23×19 mm (×1)"),
     (gen_dyneema,            "cargo",      "Dyneema_SK75_0p5mm_coil.stl",
-     "DYNEEMA-SK75",         "Dyneema SK75 0.5 mm braided line coil — winch spool (×1)"),
+     "DYNEEMA-SK75",
+     "Dyneema SK75 0.5 mm braided line coil — winch spool (×1)"),
     # Gears
     (gen_sector_m1_r22,      "gears",      "Sector_gear_M1_R22mm.stl",
      "SECTOR-M1-R22",        "M=1.0 sector gear R=22 mm — fixed tilt bracket (×2)"),
@@ -1026,22 +1041,27 @@ _COMPONENTS = [
      "PINION-A-M1-12T / CROWN-M1-12T",
      "M=1.0 12T pinion / crown R=6 mm (×2 pinion-A + ×2 crown)"),
     (gen_bevel_m1_14t,       "gears",      "Bevel_M1_14T_pair.stl",
-     "BEVEL-M1-14T",         "M=1.0 bevel pair N=14T 45° — 90° axis redirect (×4 gears = 2 pairs)"),
+     "BEVEL-M1-14T",
+     "M=1.0 bevel pair N=14T 45° — 90° axis redirect (×4 gears = 2 pairs)"),
     (gen_bevel_housing,      "gears",      "Bevel_housing_CF_PETG.stl",
      "BEVEL-HOUSING",        "Bevel gear housing block CF-PETG 24×14×20 mm (×2)"),
     # Hardware
     (gen_pin_3x5,            "hardware",   "Pin_SS_3x5mm_hinge.stl",
-     "PIN-3X5",              "Stainless roll pin 3 mm × 5 mm — iris nozzle petal hinge (×24)"),
+     "PIN-3X5",
+     "Stainless roll pin 3 mm × 5 mm — iris nozzle petal hinge (×24)"),
     (gen_insert_m25,         "hardware",   "Insert_M25_brass_L5.stl",
      "INSERT-M25-BRASS",     "M2.5 brass heat-set insert OD 3.5 mm × L5 mm (×8)"),
     (gen_insert_m3,          "hardware",   "Insert_M3_brass_L5.stl",
      "INSERT-M3-WING",       "M3 brass heat-set insert OD 4.2 mm × L5 mm (×8)"),
     (gen_screw_m3x8,         "hardware",   "Screw_M3x8mm_button_ISO7380.stl",
-     "SCREW-M3-8-BTN",       "M3×8 stainless button-head cap screw ISO 7380 (×4 belly panel)"),
+     "SCREW-M3-8-BTN",
+     "M3×8 stainless button-head cap screw ISO 7380 (×4 belly panel)"),
     (gen_piano_wire_ring,    "hardware",   "Piano_wire_0p8mm_iris_ring.stl",
-     "PIANO-WIRE-0.8",       "0.8 mm music wire link ring — iris nozzle actuation (×3 rings)"),
+     "PIANO-WIRE-0.8",
+     "0.8 mm music wire link ring — iris nozzle actuation (×3 rings)"),
     (gen_batt_strap,         "hardware",   "Batt_strap_silicone_16mm_CAM.stl",
-     "BATT-STRAP-CAM",       "16 mm silicone cam-buckle strap 50 N — battery retention (×2)"),
+     "BATT-STRAP-CAM",
+     "16 mm silicone cam-buckle strap 50 N — battery retention (×2)"),
     # Lighting
     (gen_ws2812b_ring_50mm,  "lighting",   "WS2812B_ring_50mm.stl",
      "LED-WS2812B",          "WS2812B LED ring 50 mm dia — nozzle backlight (×3)"),
@@ -1049,7 +1069,8 @@ _COMPONENTS = [
      "LED-WS2812C-NAC",      "WS2812C-2020 SMD RGB LED — nacelle nav lights (×4)"),
     # Wiring
     (gen_ptfe_conduit_3mm,   "wiring",     "PTFE_conduit_4mm_OD_3mm_ID_700mm.stl",
-     "CONDUIT-PTFE",         "PTFE conduit 4 mm OD × 3 mm ID × 700 mm — data bus run (×1)"),
+     "CONDUIT-PTFE",
+     "PTFE conduit 4 mm OD × 3 mm ID × 700 mm — data bus run (×1)"),
     (gen_wire_4awg,          "wiring",     "Wire_4AWG_silicone_200mm_pair.stl",
      "WIRE-4AWG",            "4 AWG silicone wire pair 200 mm — main battery bus (×1)"),
     (gen_wire_10awg,         "wiring",     "Wire_10AWG_silicone_400mm.stl",
@@ -1071,7 +1092,8 @@ _COMPONENTS = [
     (gen_ant_915_omni,       "gcs",        "Antenna_915MHz_omni_5dBi.stl",
      "MAL-ANT-915-OMNI",     "5 dBi 915 MHz rubber duck — SiK/LoRa bench (×2 GCS)"),
     (gen_ant_915_yagi,       "gcs",        "Antenna_915MHz_Yagi_9dBi.stl",
-     "MAL-ANT-915-YAGI",     "9 dBi 915 MHz Yagi — shared SiK+LoRa field directional (×1)"),
+     "MAL-ANT-915-YAGI",
+     "9 dBi 915 MHz Yagi — shared SiK+LoRa field directional (×1)"),
     (gen_ant_wifi_panel,     "gcs",        "Antenna_5GHz_panel_14dBi.stl",
      "MAL-ANT-WIFI-PNL",     "14 dBi 5 GHz flat panel — Malcolm WiFi directional (×1)"),
     (gen_ant_49mhz_whip,     "gcs",        "Antenna_49MHz_whip_940mm.stl",
