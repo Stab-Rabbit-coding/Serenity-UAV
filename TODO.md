@@ -406,6 +406,37 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 **Open tasks:**
 
+##### 1.2a.1 *Cape DRC / routing / ETH2 status (2026-06-12)* — see `avionics/kicad/README.md`
+
+- [x] **Wire second Ethernet (ETH2) on Wash.** `ETH2` / `ETH2-PHY` (ADIN1300) /
+  `T-ETH2` (749010012A) were placed but unconnected; nets now mirror ETH1
+  (`ETH2_LINE_*` → `T-ETH2` → `ETH2_*` → PHY), reusing the host-side `RMII1_*`,
+  `MDIO`/`MDC`, `PHY2_INTRN`/`PHY2_RSTN`, `VCC2_ETH`/`GND`/`GND2_ETH` nets on
+  PB2-P2. 44 pads assigned; diff pairs verified. *(PR #59, 2026-06-12)*
+- [ ] **Add MDIO address strap for the second Wash PHY.** ETH1-PHY and ETH2-PHY
+  share `MDIO`/`MDC` with no strap resistors → identical default address. Add a
+  strap resistor (or confirm RMII-only management). **BLOCKS dual-PHY management.**
+- [ ] **Redesign the tamper mesh as a per-domain anti-tamper mesh (all 4 capes).**
+  The current `TMESH_P`/`TMESH_N` cross-hatch grid on F.Cu/B.Cu shorts across SMD
+  pads and across the isolated `GND2_*` domains (≈335 of Wash's 465 DRC errors;
+  similar on Zoë). Rework as one monitored mesh net per isolation region
+  (secure/`GND` + per-`GND2_CAN`/`GND2_ETH`/`GND2_RS485` field side), keeping the
+  0.5 mm `ISOLATION` creepage moat clear between domains. **BLOCKS DRC-clean.**
+- [ ] **Carry the tamper signal over the link for the TPM-less boards.** Kaylee
+  and XCVR-49MHZ-2 have no local TPM: route Kaylee's mesh signal to Wash and
+  XCVR's to Zoë over the inter-board link.
+- [ ] **Route the rearranged capes.** The manual component reseat left ~60 signal
+  nets per cape unrouted (7 power/ground nets are planes). Headless freerouting
+  was **not** usable (see toolchain findings in `avionics/kicad/README.md`):
+  KiCad 9.0.2 `ExportSpecctraDSN` is broken in standalone Python, and freerouting
+  2.1 headless never self-exits and emits incomplete SES. **Finish routing in the
+  KiCad GUI**; route the impedance-controlled Ethernet pairs interactively
+  (length-matched, 100 Ω ±10% MDI). **BLOCKS gerbers / fab.**
+- [ ] **Clear residual DRC after mesh + routing** (counts measured 2026-06-12,
+  error+warning): Wash 465 / 121 unconnected, Zoë 554 / 146, XCVR-49MHZ-2 421 /
+  160, Kaylee 221 / 181. Remaining types after the mesh fix are mostly
+  silk-over-copper, text-height, courtyard-overlap, and lib-footprint mismatch.
+
 - [ ] finish Wash PCB.  ensure all phy have shielded connectors, all nets are valid, all ferrite beads and isolation caps are in place.- [ ] Add sbus/uart dip to Wash.
 - [ ] **Generate Wash gerbers** — `CAPE-A-2.kicad_pcb` complete; run DRC to zero errors in
   KiCad; export to `avionics/kicad/gerbers/CAPE-A-2/`; re-export drill files.
