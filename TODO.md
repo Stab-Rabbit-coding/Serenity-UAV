@@ -443,13 +443,15 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
   → SERVO0–5 (PWM); ESC-TLM → UART_ESC_TX/RX; GPIO-A…F → GND/+3V3 (+ `GPIO_EXP_*`
   signal pin labelled); CAN-FD → CAN_H/CAN_L; RS-485 → RS485_A/B; PWR-IN → +5V/GND.
   *(2026-06-12)*
-- [ ] **Source the 6 `GPIO_EXP_A…F` signals.** The GPIO-A…F connector signal pins
-  have no driver — the PB2-I header is 100% allocated, so there is no spare GPIO.
-  Decide: free PB2 pins, add a GPIO-expander IC, or drop unused GPIO connectors.
-- [ ] **Add an ESC-PWM output connector for DSHOT0–3.** The four ESC/BDSHOT PWM
-  outputs (`DSHOT0–3`, PB2-P1 pins 3–6) have no connector on the PCB (the §14
-  `J_ESC` is not placed; `ESC-TLM` is telemetry UART only). Place a 4-pin ESC PWM
-  connector. **BLOCKS EDF ESC drive.**
+- [x] **Source the 6 `GPIO_EXP_A…F` signals via an I2C GPIO expander.** Added
+  `U-GPIO` (PCA9555DB, SSOP-24, addr 0x20) on the existing I2C1 bus with a
+  `C-GPIO` 100 nF decoupling cap; P0_0–P0_5 → GPIO_EXP_A–F. *(2026-06-12)*
+  - [ ] Verify/add I2C1 pull-ups (≈4.7 kΩ to +3V3 on SDA/SCL) — none on cape;
+    confirm whether the PB2-I provides them.
+  - [ ] Finalise placement of U-GPIO/C-GPIO (added at a tentative location).
+- [x] **Add an ESC-PWM output connector for DSHOT0–3.** Added `ESC-PWM`
+  (JST-GH 5-pin SM05B): pins 1–4 → DSHOT0–3, pin 5 → GND. *(2026-06-12)*
+  - [ ] Finalise ESC-PWM placement (added at a tentative location).
 - [ ] **Reconcile Wash.md §14 field-connector table with the actual PCB
   connectors** (PCB has SERVO-PWM 1×8 + GPIO-A…F + ESC-TLM; §14 lists J_SERVO/
   J_ESC/J_GPS/J_ENC/J_SBUS/J_VBAT/J_FAN). Bring the doc and board into agreement.
