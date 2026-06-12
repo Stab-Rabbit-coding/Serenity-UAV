@@ -297,6 +297,63 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
 
 ---
 
+#### 1.1.5 **Non-Printable Component Placeholders** *(Rev R1, 2026-06-12)*
+
+Dimensionally-accurate bounding-geometry STL placeholder files for all non-printable
+Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
+
+**Generator:** `airframe/placeholders/generate_placeholders.py`
+(pure Python, no external dependencies; run with `python3 generate_placeholders.py`)
+
+**FreeCAD catalog script:** `airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
+(loads all 65 placeholder STLs into a grid-layout catalog document;
+ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`)
+
+**Output:** `airframe/Serenity-Placeholders.FCStd` (65 components, 8-column grid)
+
+**Placeholder coverage (65 STLs, 5900 triangles total):**
+
+| Category | Count | Files |
+|---|---|---|
+| Propulsion (EDFs, ESCs) | 4 | `airframe/placeholders/propulsion/` |
+| Servos (DS3218MG, SG90) | 2 | `airframe/placeholders/servos/` |
+| Bearings (MF104ZZ, MR63ZZ, 6804) | 3 | `airframe/placeholders/bearings/` |
+| Structural CF (rods, tube, bar, plate, PTFE) | 6 | `airframe/placeholders/structural/` |
+| Avionics PCBs (PB2-I, Cape-A-2/B-2, XCVR, Kaylee, microSD) | 6 | `airframe/placeholders/avionics/` |
+| Power (LiPos, fuses, shunt) | 7 | `airframe/placeholders/power/` |
+| Cargo (N20, HX711, DRV8833, Dyneema) | 4 | `airframe/placeholders/cargo/` |
+| Gears M=1.0 (sector, pinion, bevel, housing) | 4 | `airframe/placeholders/gears/` |
+| Hardware (pins, inserts, screws, straps, wire ring) | 6 | `airframe/placeholders/hardware/` |
+| Lighting (WS2812B ring, WS2812C SMD) | 2 | `airframe/placeholders/lighting/` |
+| Wiring (conduit, harnesses, antenna wire, posts) | 6 | `airframe/placeholders/wiring/` |
+| GCS / Malcolm (enclosure, BECs, antennas, tripod, encoders) | 15 | `airframe/placeholders/gcs/` |
+
+**Completed (2026-06-12):**
+- [x] **Generate all 65 placeholder STLs** — `generate_placeholders.py` created;
+  all files verified `OK` (5900 total triangles). STL header marker:
+  `SerenityUAV PLACEHOLDER R1`. *(done 2026-06-12)*
+- [x] **FreeCAD catalog assembly script** — `serenity_placeholders_assembly.py` created;
+  65-component grid layout; run with `freecadcmd`. *(done 2026-06-12)*
+
+**Open sub-tasks:**
+- [ ] **Run FreeCAD catalog** — execute `serenity_placeholders_assembly.py` once
+  FreeCAD is available to verify grid layout and produce
+  `airframe/Serenity-Placeholders.FCStd`. Commit the FCStd to the repo.
+- [ ] **Hull-frame placement pass** — for the full-build exploded view (§1.1.4 task),
+  derive the hull-frame position and orientation of each placeholder (e.g., EDF
+  inside nacelle bore, battery tray in cargo section, avionics PCBs in bays)
+  and add `place_mesh()` calls to `serenity_placeholders_assembly.py`.
+- [ ] **Add Phase-11 (deferred) items to catalog** — `EDF_120mm_6S_deferred.stl` and
+  `ESC_80A_6S_BLHeli32_deferred.stl` are generated; confirm they appear in the
+  `deferred/aft-edf/` sub-assembly once that phase resumes.
+- [ ] **Mesh watertightness audit** — run `python tools/validate_stls.py` across
+  `airframe/placeholders/**/*.stl` after first CI run; resolve any non-manifold
+  findings (complex compound meshes: piano-wire torus ring, RF splitter ports, etc.).
+- [ ] **Link placeholders to BOM entries** — add `Placeholder_STL` field to
+  `docs/bom_revR.json` for each non-printable row pointing to its STL path.
+
+---
+
 ### 1.2 — PCB Design: Cape-A-1 and Cape-B-1
 
 - [x] **Regenerate Cape-A-1 gerbers** — `.kicad_pcb` modified 2026-05-23 (tamper-mesh commit); gerbers in `serenity/kicad/gerbers/CAPE-A-1/` are from 2026-05-22.
