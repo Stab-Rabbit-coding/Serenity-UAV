@@ -103,7 +103,7 @@ def build_head():
     dish_fill = rod(T + A * 2.0, T - A * DISH_BACK, DISH_R)
     inner_used = diff(inner_used, dish_fill)
 
-    shell = diff(O, inner_used)
+    shell = diff(Outr, inner_used)
 
     # Interior barb boss (coaxial), anchored in the solid fill, into the cavity.
     p_anchor = T - A * (DISH_BACK - 4.0)      # 4 mm inside the fill's inner end
