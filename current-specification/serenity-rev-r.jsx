@@ -485,7 +485,7 @@ function TabAvionics() {
                     cols={["Feature", "Detail"]}
                     accent={C.green}
                     rows={[
-                        ["Size",          "85×55 mm, 4-layer KiCad (Wash gerbers — active)"],
+                        ["Size",          "55×35 mm, 4-layer KiCad (Wash gerbers — active)"],
                         ["CAN FD",        "ISOW1044BDFMR 5 kV isolated CAN FD transceiver (TI) — IEC 62368-1 / VDE 0884-11 certified"],
                         ["RS-485",        "ADM2795EBRWZ 5 kV isolated RS-485 (ADI) — half-duplex, 1 Mbps"],
                         ["Ethernet",      "ADIN1300BCPZ 1000BASE-T PHY + 2× ISO7642FDWRR 6-ch digital isolators + Würth 749010012A transformer; JST GH 4P (no RJ45)"],
@@ -512,7 +512,7 @@ function TabAvionics() {
                     cols={["Feature", "Detail"]}
                     accent={C.pink}
                     rows={[
-                        ["Size",           "90×60 mm, 4-layer KiCad (Zoë gerbers — active)"],
+                        ["Size",           "55×35 mm, 4-layer KiCad (Zoë gerbers — active)"],
                         ["CAN FD",         "ISOW1044BDFMR 5 kV isolated (same as Wash)"],
                         ["RS-485",         "ADM2795EBRWZ 5 kV isolated (same as Wash)"],
                         ["Ethernet",       "ADIN1300BCPZ + ISO7642FDWRR × 2 + Würth transformer (same as Wash)"],
@@ -901,8 +901,8 @@ function TabFiles() {
                     cols={["File", "Board", "Status"]}
                     accent={C.green}
                     rows={[
-                        ["Wash.kicad_pcb / .kicad_sch", "Wash (85×55mm EMI-hardened FC)", "✓ ACTIVE — primary FC cape at all positions"],
-                        ["Zoë.kicad_pcb / .kicad_sch", "Zoë (90×60mm EMI-hardened CN)", "✓ ACTIVE — primary CN cape at all positions"],
+                        ["Wash.kicad_pcb / .kicad_sch", "Wash (55×35mm EMI-hardened FC)", "✓ ACTIVE — primary FC cape at all positions"],
+                        ["Zoë.kicad_pcb / .kicad_sch", "Zoë (55×35mm EMI-hardened CN)", "✓ ACTIVE — primary CN cape at all positions"],
                         ["XCVR-49MHZ-2.kicad_pcb / .kicad_sch", "XCVR-49MHZ-2 (55×35mm EMI-hardened)", "✓ ACTIVE — primary 49 MHz sub-module"],
                         ["Kaylee.kicad_pcb / .kicad_sch", "Kaylee PDB Rev A", "✓ ACTIVE — Rev R addition; DRC clean; gerbers generated 2026-06-10"],
                         ["CAPE-A-2 / CAPE-B-2", "v2 generic cape designators", "ARCHIVED — avionics/kicad/archive/ (Rev R 2026-06-10; renamed Wash/Zoë)"],

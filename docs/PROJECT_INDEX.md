@@ -214,8 +214,8 @@ structural/
   PTFE_sleeve_4mm_OD_3mm_ID_52mm.stl — PTFE gear shaft sleeve (BOM: PTFE-SLEEVE-4MM)
 avionics/
   PocketBeagle2_Industrial_56x35mm.stl — PB2-I SBC (BOM: PB2-I-FC/CN/MAL-PB2-I)
-  Cape_A2_PCB_85x55mm.stl         — Wash FC cape (BOM: CAPE-A-2)
-  Cape_B2_PCB_90x60mm.stl         — Zoë Comms cape (BOM: CAPE-B-2, MAL-CAPE-B-2)
+  Cape_A2_PCB_55x35mm.stl         — Wash FC cape 55×35mm (BOM: CAPE-A-2)
+  Cape_B2_PCB_55x35mm.stl         — Zoë Comms cape 55×35mm (BOM: CAPE-B-2, MAL-CAPE-B-2)
   XCVR_49MHZ2_PCB_55x35mm.stl     — 49 MHz sub-module (BOM: XCVR-49MHZ-2, MAL-XCVR-49MHZ-2)
   Kaylee_PDB_90x65mm.stl          — Power distribution board (BOM: Kaylee)
   microSD_64GB.stl                — 64 GB microSD log card (BOM: MICROSD-LOG)

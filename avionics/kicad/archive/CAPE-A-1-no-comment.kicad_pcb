@@ -16,7 +16,7 @@
     (rev "K")
     (company "Steve Griffing PE(CSE) CISSP-ISSEP CPP")
     (comment 1 "PocketBeagle 2 (AM6232) Flight-Control Cape — FC node")
-    (comment 2 "85x55mm 4-layer  ICM-42688-P BMP388 M10Q ATA6561 MAX3485E DS26LV31/32 DP83825Ix2 SLB9670")
+    (comment 2 "55x35mm 4-layer  ICM-42688-P BMP388 M10Q ATA6561 MAX3485E DS26LV31/32 DP83825Ix2 SLB9670")
     (comment 3 "CC BY 4.0 — creativecommons.org/licenses/by/4.0")
     (comment 4 "Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0")
     (comment 5 "Visual inspiration: Firefly/Serenity (C) Joss Whedon / Mutant Enemy / Universal Pictures")

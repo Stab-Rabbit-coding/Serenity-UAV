@@ -154,11 +154,11 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
   All 4 spatial conflicts resolved (NSVMT_X_CEN moved AFT to −147.6 mm). Load FOS ≥ 11 vs 4.0
   AUVSI target. *(done 2026-06-08, PR #42)*
 - [x] **`cargo_sect_shell24.scad` Rev S2** — Inara and River avionics bay dorsal standoffs
-  (8× M3 boss posts, ±40×±25 mm pattern) + dorsal access panel cuts (85×55 mm each) for Cape-B
-  (90×60 mm) at port half (Z_CEN=118 mm, Inara) and stbd half (Z_CEN=45 mm, River). GPS_PORT/STBD
+  (8× M3 boss posts, ±40×±25 mm pattern) + dorsal access panel cuts (62×42 mm each) for Cape-B
+  (55×35 mm) at port half (Z_CEN=118 mm, Inara) and stbd half (Z_CEN=45 mm, River). GPS_PORT/STBD
   co-located for minimal SMA routing. *(done 2026-06-08, PR #42)*
 - [x] **`cargo_sect_shell24.scad` Rev S3** — Faraday enclosure space allocation.
-  Panel cuts enlarged 85×55 → 95×65 mm; boss offsets updated ±40×±25 → ±42×±27 mm to match
+  Panel cuts enlarged 55×35 → 62×42 mm; boss offsets updated ±40×±25 → [TBD pending PCB layout — hole pattern must be derived from Wash.kicad_pcb / Zoë.kicad_pcb once layout is complete] to match
   Faraday tray corner mounts; bay Z centres adjusted ±1 mm (Inara 118→119, River 45→44) for 10 mm
   inter-bay gap; FARADAY_* envelope parameters (95×65×65 mm, 1.5 mm Al wall, 25 mm fan) added.
   *(done 2026-06-08, PR #42)*
@@ -186,7 +186,7 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
   Add to Phase 0 print schedule.
 
 - [ ] **Simon bay — define avionics bay in rear section SCAD file.**
-  Simon's stack (Cape-B-2 + Cape-A-2, 90×60 mm, 29.2 mm stack height) needs boss standoffs and
+  Simon's stack (Cape-B-2 + Cape-A-2, 55×35 mm (both), 29.2 mm stack height) needs boss standoffs and
   dorsal access panel in the rear engine cone SCAD (pre-Phase 11) or the middle ring SCAD (Phase 11
   and beyond, once rear EDF occupies the cone). Verify rear section bounds and available dorsal band
   before adding geometry. Reference CLAUDE.md PACE: Simon = alternate watchdog, aft EDF control.
@@ -201,7 +201,7 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
   `openscad -o airframe/stls/fuselage/cargo_sect_shell24.stl
     airframe/openscad/fuselage/cargo/cargo_sect_shell24.scad`
   Verify in slicer: wing mortises at both Z walls; spar bore at X=−70 mm; 8 dorsal boss posts;
-  two 85×55 mm dorsal panel openings. Z-range must be 0..163 mm; all features inside hull skin.
+  two 62×42 mm dorsal panel openings. Z-range must be 0..163 mm; all features inside hull skin.
   **BLOCKS Phase 0 cargo section printing.**
 
 - [ ] Add motor-mount and DRV8833-tray boss locations to `cargo_sect_shell24.scad` interior
@@ -1772,7 +1772,7 @@ host-PC software all created in Rev R.  See `gcs/malcolm/README.md` for layout.
 
 - [ ] **Malcolm field enclosure — print and fit-check** `gcs/malcolm/hardware/enclosure/openscad/malcolm_field_enclosure.scad`:
   export STL (`openscad -o malcolm_field_enclosure_body.stl ... -D RENDER_MODE=0`);
-  verify PCB standoff spacing matches Cape-B-2 90×60 mm mounting hole pattern in slicer;
+  verify PCB standoff spacing matches Cape-B-2 55×35 mm mounting hole pattern in slicer;
   run mesh validation; print body + lid in PETG (IP65 gasket groove accepts 3 mm EPDM cord).
   **Add to Phase Malcolm-1 print schedule.**
 

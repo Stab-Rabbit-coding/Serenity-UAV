@@ -641,7 +641,7 @@
       },
       {
         "ref": "CAPE-A-2",
-        "desc": "Cape-A-2 PCB 85×55 mm — EMI-hardened FC cape, ALL 4 FC positions. ISOW1044BDFMR 5kV CAN FD + ADM2795EBRWZ 5kV RS-485 + ADIN1300BCPZ 1000BASE-T. Gerbers: avionics/gerbers/CAPE-A-2/ (pending DRC). DTS: k3-am6254-pocketbeagle2-serenity-cape-a2.dts",
+        "desc": "Cape-A-2 PCB 55×35 mm — EMI-hardened FC cape, ALL 4 FC positions. ISOW1044BDFMR 5kV CAN FD + ADM2795EBRWZ 5kV RS-485 + ADIN1300BCPZ 1000BASE-T. Gerbers: avionics/gerbers/CAPE-A-2/ (pending DRC). DTS: k3-am6254-pocketbeagle2-serenity-cape-a2.dts",
         "qty": 4,
         "mass_g": 31,
         "cost_usd": 68,
@@ -652,7 +652,7 @@
       },
       {
         "ref": "CAPE-B-2",
-        "desc": "Cape-B-2 PCB 90×60 mm — EMI-hardened CN cape, ALL 4 CN positions. Same isolation stack as CAPE-A-2 plus all Cape-B payload ICs. Gerbers: avionics/gerbers/CAPE-B-2/ (pending DRC). DTS: k3-am6254-pocketbeagle2-serenity-cape-b2.dts",
+        "desc": "Cape-B-2 PCB 55×35 mm — EMI-hardened CN cape, ALL 4 CN positions. Same isolation stack as CAPE-A-2 plus all Cape-B payload ICs. Gerbers: avionics/gerbers/CAPE-B-2/ (pending DRC). DTS: k3-am6254-pocketbeagle2-serenity-cape-b2.dts",
         "qty": 4,
         "mass_g": 41,
         "cost_usd": 105,
@@ -1085,7 +1085,7 @@
         "cost_usd": 28.0,
         "supplier": "Amazon / Hammond Mfg",
         "pn": "Hammond 1455N1601 or equiv 145x90x65mm IP65",
-        "notes": "EPDM gasket; 40mm fan cutout; cable glands; PCB standoffs at 90×60mm Cape-B-2 hole pattern"
+        "notes": "EPDM gasket; 40mm fan cutout; cable glands; PCB standoffs at 55×35mm Cape-B-2 hole pattern"
       },
       {
         "ref": "MAL-TRIPOD",
