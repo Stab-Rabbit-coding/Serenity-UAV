@@ -136,6 +136,19 @@ _PLACEHOLDERS = [
     ("MAL-TCA9548A",       "gcs/TCA9548A_I2C_mux_breakout.stl",            "TCA9548A_mux"),
     ("MAL-BRG-6804",       "gcs/B6804_20x32x7mm_gimbal_pan.stl",           "B6804_gimbal"),
     ("MAL-TRIPOD",         "gcs/Malcolm_tripod_antenna_mast.stl",           "Malcolm_tripod"),
+    # Foam fill and interior void visualisation
+    ("FOAM-FILL-HEAD",    "foam/Foam_fill_head_125x231x136mm.stl",        "Foam_head_fill"),
+    ("FOAM-FILL-CARGO",   "foam/Foam_fill_cargo_190x200x159mm.stl",       "Foam_cargo_fill"),
+    ("FOAM-FILL-MIDDLE",  "foam/Foam_fill_middle_horseshoe_173x69x161mm.stl",
+     "Foam_middle_fill"),
+    ("FOAM-FILL-REAR",    "foam/Foam_fill_rear_136x177x154mm.stl",        "Foam_rear_fill"),
+    ("VOID-AVBAY",        "foam/Void_avionics_bay_62x42x75mm.stl",        "Void_avbay"),
+    ("VOID-CARGO-BAY",    "foam/Void_cargo_bay_120x150x80mm.stl",         "Void_cargo_bay"),
+    ("VOID-WIRE-TRUNK",   "foam/Void_wiring_trunk_30x700x20mm.stl",       "Void_wire_trunk"),
+    ("VOID-POWER-BUS",    "foam/Void_power_bus_25x500x25mm.stl",          "Void_power_bus"),
+    ("VOID-VENT-INTAKE",  "foam/Void_vent_intake_20x250x20mm.stl",        "Void_vent_intake"),
+    ("VOID-VENT-EXHAUST", "foam/Void_vent_exhaust_20x300x20mm.stl",       "Void_vent_exhaust"),
+    ("VOID-NACELLE-PYLON","foam/Void_nacelle_pylon_20x80x20mm.stl",       "Void_pylon"),
 ]
 
 

@@ -306,12 +306,12 @@ Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
 (pure Python, no external dependencies; run with `python3 generate_placeholders.py`)
 
 **FreeCAD catalog script:** `airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
-(loads all 65 placeholder STLs into a grid-layout catalog document;
+(loads all 76 placeholder STLs into a grid-layout catalog document;
  run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`)
 
-**Output:** `airframe/Serenity-Placeholders.FCStd` (65 components, 8-column grid)
+**Output:** `airframe/Serenity-Placeholders.FCStd` (76 components, 8-column grid)
 
-**Placeholder coverage (65 STLs, 5900 triangles total):**
+**Placeholder coverage (76 STLs, 6056 triangles total):**
 
 | Category | Count | Files |
 |---|---|---|
@@ -327,13 +327,18 @@ Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
 | Lighting (WS2812B ring, WS2812C SMD) | 2 | `airframe/placeholders/lighting/` |
 | Wiring (conduit, harnesses, antenna wire, posts) | 6 | `airframe/placeholders/wiring/` |
 | GCS / Malcolm (enclosure, BECs, antennas, tripod, encoders) | 15 | `airframe/placeholders/gcs/` |
+| Foam fill + interior voids (head/cargo/middle/rear fill; avbay, cargo bay, wiring trunk, power bus, ventilation, pylon pockets) | 11 | `airframe/placeholders/foam/` |
 
 **Completed (2026-06-12):**
-- [x] **Generate all 65 placeholder STLs** — `generate_placeholders.py` created;
-  all files verified `OK` (5900 total triangles). STL header marker:
-  `SerenityUAV PLACEHOLDER R1`. *(done 2026-06-12)*
+- [x] **Generate all 65 component placeholder STLs** — `generate_placeholders.py` created;
+  all files verified `OK`. STL header marker: `SerenityUAV PLACEHOLDER R1`. *(done 2026-06-12)*
 - [x] **FreeCAD catalog assembly script** — `serenity_placeholders_assembly.py` created;
-  65-component grid layout; run with `freecadcmd`. *(done 2026-06-12)*
+  component grid layout; run with `freecadcmd`. *(done 2026-06-12)*
+- [x] **Foam-fill and void visualization STLs** — 11 new STLs in `airframe/placeholders/foam/`:
+  4× FOAM-FILL-* (head/cargo/middle/rear hull sections) and 7× VOID-* (avionics bays,
+  cargo bay, wiring trunk, power bus, ventilation intake/exhaust, nacelle pylon pockets).
+  Total 76 components, 6056 triangles. Use tan/ochre for FOAM-FILL, translucent cyan for
+  VOID objects in FreeCAD. *(done 2026-06-12)*
 
 **Open sub-tasks:**
 - [ ] **Run FreeCAD catalog** — execute `serenity_placeholders_assembly.py` once
@@ -349,6 +354,11 @@ Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
 - [ ] **Mesh watertightness audit** — run `python tools/validate_stls.py` across
   `airframe/placeholders/**/*.stl` after first CI run; resolve any non-manifold
   findings (complex compound meshes: piano-wire torus ring, RF splitter ports, etc.).
+  **Known finding:** `Foam_fill_middle_horseshoe_173x69x161mm.stl` has coplanar
+  T-junction faces at Z=121 mm between left/right pillar tops and the arch bottom
+  (all three pieces share a common plane but are separate box meshes joined via `_cat()`).
+  Acceptable for visualisation; fix by replacing with a proper extruded U-shape when
+  trimesh/CSG support is available.
 - [ ] **Link placeholders to BOM entries** — add `Placeholder_STL` field to
   `docs/bom_revR.json` for each non-printable row pointing to its STL path.
 

@@ -1,7 +1,7 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: Rev R1 + placeholders (2026-06-12) -->
+<!-- Last updated: Rev R1 + placeholders + foam-fill voids (2026-06-12) -->
 
 ## Repository Root
 
@@ -270,13 +270,25 @@ gcs/
   TCA9548A_I2C_mux_breakout.stl   — TCA9548A I²C mux (BOM: MAL-TCA9548A)
   B6804_20x32x7mm_gimbal_pan.stl  — 6804-2RS bearing (BOM: MAL-BRG-6804, duplicate for GCS)
   Malcolm_tripod_antenna_mast.stl — Tripod/mast ≥1.5 m (BOM: MAL-TRIPOD)
+foam/
+  Foam_fill_head_125x231x136mm.stl      — Head section foam fill block (BOM: FOAM-FILL-HEAD)
+  Foam_fill_cargo_190x200x159mm.stl     — Cargo section foam fill block (BOM: FOAM-FILL-CARGO)
+  Foam_fill_middle_horseshoe_173x69x161mm.stl — Middle horseshoe U-frame fill (BOM: FOAM-FILL-MIDDLE)
+  Foam_fill_rear_136x177x154mm.stl      — Rear section foam fill block (BOM: FOAM-FILL-REAR)
+  Void_avionics_bay_62x42x75mm.stl      — Avionics bay void (×4: Shepherd/Inara/River/Simon)
+  Void_cargo_bay_120x150x80mm.stl       — Cargo bay belly void (BOM: VOID-CARGO-BAY)
+  Void_wiring_trunk_30x700x20mm.stl     — Dorsal wiring trunk void (BOM: VOID-WIRE-TRUNK)
+  Void_power_bus_25x500x25mm.stl        — Belly power bus void (BOM: VOID-POWER-BUS)
+  Void_vent_intake_20x250x20mm.stl      — Ventilation intake duct void (BOM: VOID-VENT-INTAKE)
+  Void_vent_exhaust_20x300x20mm.stl     — Ventilation exhaust duct void (BOM: VOID-VENT-EXHAUST)
+  Void_nacelle_pylon_20x80x20mm.stl     — Nacelle pylon foam pocket (×2, BOM: VOID-NACELLE-PYLON)
 ```
 
 ### airframe/FreeCAD-scripts/ (updated Rev R1 + placeholders)
 
 ```
 serenity_assembly.py              — Full hull-frame airframe assembly (Rev R1)
-serenity_placeholders_assembly.py — 65-component placeholder catalog (8-col grid,
+serenity_placeholders_assembly.py — 76-component placeholder catalog (8-col grid,
                                     run with freecadcmd; output Serenity-Placeholders.FCStd)
 assembly1.py                      — DEPRECATED
 Serenity-Assemble.py              — DEPRECATED

@@ -953,6 +953,229 @@ def gen_wire_post_49mhz():
     return _cat(base, mast, coil)
 
 
+# ---- Foam fill and interior void geometry -------------------------------- #
+#
+# Two complementary STL types visualise the interior of each hull section:
+#
+#   FOAM-FILL-*  — solid blocks representing the 2 lb/cf low-density PU foam
+#                  that fills each hull section interior void.  Display in
+#                  FreeCAD with a tan/ochre material to distinguish from
+#                  structural parts.
+#
+#   VOID-*       — solid blocks representing clearance pockets, wiring
+#                  trunks, and ventilation ducts that must remain foam-free.
+#                  Display in FreeCAD with a translucent cyan material.
+#
+# Coordinates: part-local display frames, centred at origin (placeholder
+# standard — NOT hull-frame).  Shell wall = 2 mm each side (CLAUDE.md).
+#
+# Hull section interior dimensions (baked STL extents − 2 mm wall/side):
+#   Head   :  125 × 231 × 136 mm  (nose-forward; tapered — box approx.)
+#   Cargo  :  190 × 200 × 159 mm
+#   Middle :  173 ×  69 × 161 mm  (horseshoe ring, open −Z / belly)
+#   Rear   :  136 × 177 × 154 mm
+#
+# References:
+#   [2] CLAUDE.md — Hull-Frame Coordinate Standard Rev R1, shell extents
+#   [4] docs/PHASED_BUILD_GUIDE.md — avionics bay dimensioning
+#   [5] docs/REVN_BUILD_GUIDE_24IN.md — wiring run routing notes
+
+
+def gen_foam_head():
+    """
+    Low-density foam fill block — head (bridge) section.
+
+    Approximates the interior void of Head_Shell (125 × 231 × 136 mm).
+    The head tapers toward the nose; the rectangular box is a conservative
+    bounding approximation.  Actual foam cut to fit during hull assembly.
+
+    BOM:  FOAM-FILL-HEAD (×1)
+    Material: 2 lb/cf (~32 kg/m³) closed-cell polyurethane foam.
+    Ref [2]: Head_Shell extents X:−232.8..−103.6, Y:−305.6..−70.7,
+             Z:+61.2..+201.4 (mm); interior = extents − 2 mm wall/side.
+    """
+    return _box(125.0, 231.0, 136.0)
+
+
+def gen_foam_cargo():
+    """
+    Low-density foam fill block — cargo section.
+
+    Approximates the interior void of Cargo_Shell (190 × 200 × 159 mm).
+    Avionics bays, cargo door, and Kaylee PDB bay are cut out during
+    fit-up; use VOID-AVBAY and VOID-CARGO-BAY overlays to plan clearances.
+
+    BOM:  FOAM-FILL-CARGO (×1)
+    Material: 2 lb/cf (~32 kg/m³) closed-cell polyurethane foam.
+    Ref [2]: Cargo_Shell extents X:−267.0..−72.9, Y:−71.5..+132.0,
+             Z:0.0..+163.2 (mm); interior = extents − 2 mm wall/side.
+    """
+    return _box(190.0, 200.0, 159.0)
+
+
+def gen_foam_middle():
+    """
+    Low-density foam fill — middle (horseshoe-ring) section.
+
+    The middle section is an open-bottomed ring (open at −Z / belly).
+    Foam fills the two vertical pillars and the top arch; the open belly
+    gap is left void to allow wiring and Kaylee PDB access.
+
+    Modelled as three rectangular blocks assembled into a U-frame:
+      Left  pillar : 30 × 69 × 161 mm at X = 0
+      Right pillar : 30 × 69 × 161 mm at X = 143
+      Top   arch   : 173 × 69 × 40 mm at Z = 121 (crowns both pillars)
+
+    BOM:  FOAM-FILL-MIDDLE (×1 U-frame assembly)
+    Material: 2 lb/cf (~32 kg/m³) closed-cell polyurethane foam.
+    Ref [2]: Middle_Shell extents X:−258.5..−81.7, Y:+130.4..+203.6,
+             Z:+1.4..+166.1 (mm); interior = extents − 2 mm wall/side.
+    """
+    wall     = 30.0    # pillar width in X (mm)
+    w        = 173.0   # total ring width (mm)
+    d        = 69.0    # ring depth in Y (mm)
+    h        = 161.0   # total ring height in Z (mm)
+    crown    = 40.0    # top arch height (mm)
+    # Pillar height stops at Z = h − crown so the arch sits on top without
+    # overlapping the pillar volume.  Coplanar faces at Z = 121 between
+    # pillar tops and arch bottom are an accepted non-manifold condition for
+    # this visualisation-only placeholder (not a print part).
+    pillar_h = h - crown   # 121 mm — pillar height below arch
+    pillar_l = _box(wall, d, pillar_h)
+    pillar_r = _translate(_box(wall, d, pillar_h), w - wall, 0.0, 0.0)
+    arch = _translate(_box(w, d, crown), 0.0, 0.0, pillar_h)
+    return _cat(pillar_l, pillar_r, arch)
+
+
+def gen_foam_rear():
+    """
+    Low-density foam fill block — rear (engine room / tail cone) section.
+
+    Approximates the interior void of Rear_Shell (136 × 177 × 154 mm).
+    Tail-cone EDF bay and dorsal pod are cut out during fit-up; use
+    VOID-EDF-REAR overlay (Phase 11) to verify those clearances when the
+    optional rear EDF is installed.
+
+    BOM:  FOAM-FILL-REAR (×1)
+    Material: 2 lb/cf (~32 kg/m³) closed-cell polyurethane foam.
+    Ref [2]: Rear_Shell extents X:−246.0..−105.6, Y:+203.2..+383.9,
+             Z:+3.4..+160.9 (mm); interior = extents − 2 mm wall/side.
+    """
+    return _box(136.0, 177.0, 154.0)
+
+
+def gen_void_avbay():
+    """
+    Avionics bay clearance void — one node stack pocket.
+
+    Each stack houses: PocketBeagle 2 Industrial (56×35 mm) + Wash
+    (Cape-A-2, 55×35 mm) + Zoë (Cape-B-2, 55×35 mm) + XCVR-49MHZ-2
+    (55×35 mm), stacked vertically on M3 standoffs.
+
+    Clear interior: 62 × 42 × 75 mm (footprint + 7 mm clearance each
+    lateral face; height = PB2 12 mm + 3 capes × 12 mm + 5 mm base pad).
+
+    Four identical bay pockets (one VOID-AVBAY placeholder per bay):
+      Shepherd's Room (bay 1) — watchdog / SiK primary
+      Inara's Shuttle (bay 2) — camera / WiFi primary
+      River's Room    (bay 3) — flight control / 49 MHz primary
+      Simon's Medbay  (bay 4) — aft EDF / 49 MHz secondary
+
+    BOM:  VOID-AVBAY (×4 bay positions — one placeholder per bay)
+    Ref [4]: docs/PHASED_BUILD_GUIDE.md avionics bay dimensioning.
+    """
+    # 62 mm = 55 + 7 mm clearance; 42 mm = 35 + 7 mm clearance
+    return _box(62.0, 42.0, 75.0)
+
+
+def gen_void_cargo_bay():
+    """
+    Cargo bay belly void — open payload well under cargo section.
+
+    The Jayne cargo handling system occupies the belly of the cargo
+    section.  Approximate clear volume: 120 × 150 × 80 mm.  The cargo
+    door opens in the −Z (ventral) direction; the N20 winch motor, HX711
+    load-cell ADC, and hook assembly must clear this pocket.
+
+    BOM:  VOID-CARGO-BAY (×1)
+    Ref [2]: CLAUDE.md cargo section description; Jayne cargo system.
+    """
+    return _box(120.0, 150.0, 80.0)
+
+
+def gen_void_wiring_trunk():
+    """
+    Dorsal wiring trunk void — primary longitudinal inter-node bus channel.
+
+    Runs the full fuselage length (~700 mm, nose-to-tail) along the dorsal
+    spine, housing the inter-node buses:
+      CAN FD, MIL-STD-1553, RS-485, and Ethernet (4-pair Cat-6).
+    Cross-section 30 × 20 mm (X × Z).
+
+    BOM:  VOID-WIRE-TRUNK (×1 longitudinal channel)
+    Ref [2]: CLAUDE.md onboard communications — CAN FD, 1553, RS-485,
+             Ethernet topology across all 8 avionics nodes.
+    """
+    return _box(30.0, 700.0, 20.0)
+
+
+def gen_void_power_bus():
+    """
+    Belly power bus conduit void — main battery cable run channel.
+
+    Longitudinal channel along the fuselage belly, housing 4 AWG main
+    battery cables, the 150 A MAXI fuse holder, and the Bourns 1 mΩ
+    shunt.  Cross-section 25 × 25 mm (X × Z), length 500 mm.
+
+    BOM:  VOID-POWER-BUS (×1 longitudinal channel)
+    Ref [2]: CLAUDE.md Kaylee PDB power distribution topology.
+    """
+    return _box(25.0, 500.0, 25.0)
+
+
+def gen_void_vent_intake():
+    """
+    Ventilation intake duct void — forward cooling airflow channel.
+
+    Feeds conditioned air from the forward hull intake to avionics and ESC
+    bays.  Cross-section 20 × 20 mm, length 250 mm.  Sized for ≥ 5 m/s
+    face velocity at cruise to satisfy the ≤ 55 °C avionics thermal limit
+    in the 500 W/m² EM design environment (CLAUDE.md).
+
+    BOM:  VOID-VENT-INTAKE (×1 duct channel)
+    Ref [2]: CLAUDE.md 500 W/m² EM operating environment requirement.
+    """
+    return _box(20.0, 250.0, 20.0)
+
+
+def gen_void_vent_exhaust():
+    """
+    Ventilation exhaust duct void — aft waste-heat routing channel.
+
+    Routes hot air from avionics and ESC bays to the fuselage underside
+    exit vent.  Cross-section 20 × 20 mm, length 300 mm.  Exits at the
+    belly skin of the cargo / middle section junction.
+
+    BOM:  VOID-VENT-EXHAUST (×1 duct channel)
+    Ref [2]: CLAUDE.md avionics thermal management (500 W/m² environment).
+    """
+    return _box(20.0, 300.0, 20.0)
+
+
+def gen_void_nacelle_pylon():
+    """
+    Nacelle pylon foam pocket — wing pylon root penetration clearance.
+
+    Two rectangular clearance pockets in the cargo section upper-lateral
+    foam where the CF wing pylons pass through the shell and foam layer.
+    Per-pylon pocket: 20 × 80 × 20 mm (X × Y × Z).
+
+    BOM:  VOID-NACELLE-PYLON (×2 — port pylon + starboard pylon)
+    Ref [2]: CLAUDE.md wing attachment to cargo section lateral walls.
+    """
+    return _box(20.0, 80.0, 20.0)
+
+
 # ---------------------------------------------------------------------------
 # Generation table: (generator_fn, subdir, filename, bom_ref, description)
 # ---------------------------------------------------------------------------
@@ -1120,6 +1343,44 @@ _COMPONENTS = [
      "MAL-BRG-6804",         "6804-2RS thin bearing 20×32×7 mm — GCS gimbal pan (×1)"),
     (gen_malcolm_tripod,     "gcs",        "Malcolm_tripod_antenna_mast.stl",
      "MAL-TRIPOD",           "Heavy-duty tripod / antenna mast ≥1.5 m (×1 GCS)"),
+    # Foam fill and interior void visualisation
+    (gen_foam_head,          "foam",  "Foam_fill_head_125x231x136mm.stl",
+     "FOAM-FILL-HEAD",
+     "Head section foam fill 125×231×136 mm — 2 lb/cf low-density PU"),
+    (gen_foam_cargo,         "foam",  "Foam_fill_cargo_190x200x159mm.stl",
+     "FOAM-FILL-CARGO",
+     "Cargo section foam fill 190×200×159 mm — 2 lb/cf low-density PU"),
+    (gen_foam_middle,        "foam",
+     "Foam_fill_middle_horseshoe_173x69x161mm.stl",
+     "FOAM-FILL-MIDDLE",
+     "Middle horseshoe foam fill 173×69×161 mm — 2 lb/cf PU, U-frame"),
+    (gen_foam_rear,          "foam",  "Foam_fill_rear_136x177x154mm.stl",
+     "FOAM-FILL-REAR",
+     "Rear section foam fill 136×177×154 mm — 2 lb/cf low-density PU"),
+    (gen_void_avbay,         "foam",  "Void_avionics_bay_62x42x75mm.stl",
+     "VOID-AVBAY",
+     "Avionics bay void 62×42×75 mm (×4: Shepherd/Inara/River/Simon)"),
+    (gen_void_cargo_bay,     "foam",  "Void_cargo_bay_120x150x80mm.stl",
+     "VOID-CARGO-BAY",
+     "Cargo belly void 120×150×80 mm — Jayne payload door opening"),
+    (gen_void_wiring_trunk,  "foam",
+     "Void_wiring_trunk_30x700x20mm.stl",
+     "VOID-WIRE-TRUNK",
+     "Dorsal wiring trunk void 30×700×20 mm — CAN/RS-485/Eth/1553"),
+    (gen_void_power_bus,     "foam",  "Void_power_bus_25x500x25mm.stl",
+     "VOID-POWER-BUS",
+     "Belly power bus void 25×500×25 mm — 4 AWG cables + shunt"),
+    (gen_void_vent_intake,   "foam",  "Void_vent_intake_20x250x20mm.stl",
+     "VOID-VENT-INTAKE",
+     "Ventilation intake duct void 20×250×20 mm — forward cooling"),
+    (gen_void_vent_exhaust,  "foam",
+     "Void_vent_exhaust_20x300x20mm.stl",
+     "VOID-VENT-EXHAUST",
+     "Ventilation exhaust duct void 20×300×20 mm — waste-heat routing"),
+    (gen_void_nacelle_pylon, "foam",
+     "Void_nacelle_pylon_20x80x20mm.stl",
+     "VOID-NACELLE-PYLON",
+     "Nacelle pylon foam pocket 20×80×20 mm (×2 port + stbd pylons)"),
 ]
 
 
