@@ -93,7 +93,7 @@ WIDE_LEN = DISH_BACK + BARB_LEN   # 2.5 mm channel from cavity up toward the tip
 
 
 def build_head():
-    O = load("head_shell24_2mm_repaired__outer.stl")
+    Outr = load("head_shell24_2mm_repaired__outer.stl")
     inner = load("head_shell24_2mm_repaired__inner.stl")
     opened = load("head_inner_opened.stl")
 
@@ -127,11 +127,11 @@ def build_head():
 
 
 def build_rear():
-    O = load("rear_shell24_2mm_repaired__outer.stl")
+    Outr = load("rear_shell24_2mm_repaired__outer.stl")
     inner = load("rear_shell24_2mm_repaired__inner.stl")
     opened = load("rear_inner_opened.stl")
     inner_used = inter(opened, inner)
-    shell = diff(O, inner_used)
+    shell = diff(Outr, inner_used)
     shell = drop_islands(shell)
     out = os.path.join(OUT, "rear_shell24_2mm_repaired.stl")
     shell.export(out)

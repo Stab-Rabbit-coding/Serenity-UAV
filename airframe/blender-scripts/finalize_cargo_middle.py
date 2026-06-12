@@ -41,11 +41,11 @@ def drop_islands(mesh, min_faces=100):
 
 
 def build(part, opened_name, out_name):
-    O = load(f"{part}__outer.stl")
+    Outr = load(f"{part}__outer.stl")
     inner = load(f"{part}__inner.stl")
     opened = load(opened_name)
     inner_used = trimesh.boolean.intersection([opened, inner], engine=ENG)
-    shell = trimesh.boolean.difference([O, inner_used], engine=ENG)
+    shell = trimesh.boolean.difference([Outr, inner_used], engine=ENG)
     shell = drop_islands(shell)
     out = os.path.join(OUT, out_name)
     shell.export(out)
