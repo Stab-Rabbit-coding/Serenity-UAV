@@ -80,8 +80,8 @@ _PLACEHOLDERS = [
     ("PTFE-SLEEVE-4MM",    "structural/PTFE_sleeve_4mm_OD_3mm_ID_52mm.stl", "PTFE_sleeve_4mm"),
     # Avionics
     ("PB2-I",              "avionics/PocketBeagle2_Industrial_56x35mm.stl",  "PocketBeagle2_Industrial"),
-    ("CAPE-A-2",           "avionics/Cape_A2_PCB_85x55mm.stl",              "Cape_A2"),
-    ("CAPE-B-2",           "avionics/Cape_B2_PCB_90x60mm.stl",              "Cape_B2"),
+    ("CAPE-A-2",           "avionics/Cape_A2_PCB_55x35mm.stl",              "Cape_A2"),
+    ("CAPE-B-2",           "avionics/Cape_B2_PCB_55x35mm.stl",              "Cape_B2"),
     ("XCVR-49MHZ-2",       "avionics/XCVR_49MHZ2_PCB_55x35mm.stl",         "XCVR_49MHZ2"),
     ("Kaylee",             "avionics/Kaylee_PDB_90x65mm.stl",               "Kaylee_PDB"),
     ("MICROSD-LOG",        "avionics/microSD_64GB.stl",                     "microSD_64GB"),

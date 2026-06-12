@@ -392,27 +392,31 @@ def gen_pocketbeagle2():
 
 def gen_cape_a2():
     """
-    Cape-A-2 PCB 85 × 55 mm — EMI-hardened Wash (Flight Control) cape.
-    Includes ISOW1044BDFMR CAN FD isolator, ADM2795EBRWZ RS-485, ADIN1300BCPZ ETH PHY.
-    Assembled height ~10 mm (PCB + tall isolation ICs + connectors).
+    Cape-A-2 PCB 55 × 35 mm — EMI-hardened Wash (Flight Control) cape.
+    Same form factor as PocketBeagle 2 Industrial SBC.
+    Includes ISOW1044BDFMR CAN FD isolator, ADM2795EBRWZ RS-485, 2× DP83825I ETH PHY.
+    Assembled height ~10 mm (PCB + isolation ICs + JST-GH connectors).
     BOM: CAPE-A-2 (×4, all FC positions).
+    Dimensions verified against Wash.kicad_pcb Edge.Cuts (X: 121–176, Y: 87.5–122.5 mm).
     """
-    pcb = _box(85.0, 55.0, 1.6)
-    components = _box(79.0, 49.0, 8.4)
+    pcb = _box(55.0, 35.0, 1.6)
+    components = _box(49.0, 29.0, 8.4)
     components = _translate(components, 3.0, 3.0, 1.6)
     return _cat(pcb, components)
 
 
 def gen_cape_b2():
     """
-    Cape-B-2 PCB 90 × 60 mm — EMI-hardened Zoë (Comms / Logging / Payload) cape.
+    Cape-B-2 PCB 55 × 35 mm — EMI-hardened Zoë (Comms / Logging / Payload) cape.
+    Same form factor as PocketBeagle 2 Industrial SBC and Cape-A-2.
     Adds MAVLink SiK, LoRa RFM95W, TI WL1837MOD WiFi/BT, SLB9670 TPM 2.0,
     ATF16V8BQL CPLD write-blocker, log microSD.
-    Assembled height ~12 mm.
+    Assembled height ~12 mm (RF module stack + JST-GH connectors).
     BOM: CAPE-B-2 (×4 aircraft), MAL-CAPE-B-2 (×1 GCS).
+    Dimensions verified against Zoë.kicad_pcb Edge.Cuts (X: 121–176, Y: 87.5–122.5 mm).
     """
-    pcb = _box(90.0, 60.0, 1.6)
-    components = _box(84.0, 54.0, 10.4)
+    pcb = _box(55.0, 35.0, 1.6)
+    components = _box(49.0, 29.0, 10.4)
     components = _translate(components, 3.0, 3.0, 1.6)
     return _cat(pcb, components)
 
@@ -998,11 +1002,11 @@ _COMPONENTS = [
     (gen_pocketbeagle2,      "avionics",   "PocketBeagle2_Industrial_56x35mm.stl",
      "PB2-I-FC / PB2-I-CN / MAL-PB2-I",
      "PocketBeagle 2 Industrial AM6254 SBC 56×35 mm (×8 aircraft + ×1 GCS)"),
-    (gen_cape_a2,            "avionics",   "Cape_A2_PCB_85x55mm.stl",
-     "CAPE-A-2",             "Cape-A-2 Wash FC cape PCB 85×55 mm (×4 aircraft)"),
-    (gen_cape_b2,            "avionics",   "Cape_B2_PCB_90x60mm.stl",
+    (gen_cape_a2,            "avionics",   "Cape_A2_PCB_55x35mm.stl",
+     "CAPE-A-2",             "Cape-A-2 Wash FC cape PCB 55×35 mm (×4 aircraft)"),
+    (gen_cape_b2,            "avionics",   "Cape_B2_PCB_55x35mm.stl",
      "CAPE-B-2 / MAL-CAPE-B-2",
-     "Cape-B-2 Zoë Comms cape PCB 90×60 mm (×4 aircraft + ×1 GCS)"),
+     "Cape-B-2 Zoë Comms cape PCB 55×35 mm (×4 aircraft + ×1 GCS)"),
     (gen_xcvr_49mhz2,        "avionics",   "XCVR_49MHZ2_PCB_55x35mm.stl",
      "XCVR-49MHZ-2 / MAL-XCVR-49MHZ-2",
      "XCVR-49MHZ-2 49 MHz RCRS sub-module 55×35 mm (×4 aircraft + ×1 GCS)"),
