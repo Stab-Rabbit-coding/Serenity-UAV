@@ -5,7 +5,7 @@
 - **Design and build a fully functional EDF Tilt Rotor UAV version of the Firefly Class Spaceship "Serenity" from the Joss Whedon TV show and movie.**
 - **Provide redundancy and failover in all systems possible**:
 - Avionics:  4 pairs of pocketbeagle2 industrial SBCs: 4 with a Flight Control and Sensor Cape, (called "Wash") (with GPS,  imu, compass, barometer, anti-collision range sensors,  airspeed, pid motor speed control, and nacelle tilt servos), and 4 with a Communications, Logging, and payload Cape, ( called "Zoë") .
-- Node variant placement (v2 · v2 · v2 · v2, nose → tail, Rev Q):  All 8 nodes use EMI-hardened -2 capes (Wash, Zoë, XCVR-49MHZ-2) at every position.  Rev Q standardises on the single hardened SKU across all bays, providing uniform 5 kV galvanic isolation on CAN FD, RS-485, and Ethernet at every node.  Cape-A-1, Cape-B-1, and XCVR-49MHZ-1 are archived as of Rev Q (2026-06-05).
+- Node variant placement (v2 · v2 · v2 · v2, nose → tail, Rev Q):  All 8 nodes use EMI-hardened -2 capes (Wash, Zoë, Emma) at every position.  Rev Q standardises on the single hardened SKU across all bays, providing uniform 5 kV galvanic isolation on CAN FD, RS-485, and Ethernet at every node.  Cape-A-1, Cape-B-1, and XCVR-49MHZ-1 are archived as of Rev Q (2026-06-05).
 - Onboard Communications:  Each of the 8 sbcs will be connected to the others via: Canbus FD, MILSTD 1553, RS485, & Ethernet
 - External Communications: The UAV uses WIFI at 5ghz, Zigbee at 2.4ghz, MavLink /SiK at 915Mhz, and AX.25 on the 49Mhz RCRS channels.  All four are usable for command and control of the aircraft.  The avionics capes also support sbus, but it's  not used.
 - Powerplant: Each Nacelle has two EDFs in series, under PID control.  The forward EDF in each nacelle is controlled primarily by one of the flight control SBCs and the aft is primarily controlled by a different sbc.
@@ -195,6 +195,8 @@ The historical bake transforms (position + quaternion per component) live solely
  The Comms/Logging/Payload Cape is named "Zoë" - "Big Damn Heros, sir."
 
  The Power Distribution Board is named "Kaylee" - "Everything is shiny."
+
+ The 49 MHz RCRS Transceiver Cape (XCVR-49MHZ-2) is named "Emma".
 
  The Cargo handling system is named "Jayne" - "I was aiming for his head."
 

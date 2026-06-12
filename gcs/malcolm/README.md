@@ -41,7 +41,7 @@ symmetric, tested ground-side interface for every radio link.
 | SiK 915 MHz   | RFD900x via UART2               | 5 dBi omni + 9 dBi Yagi  |
 | LoRa 915 MHz  | RFM95W via SPI1                 | 5 dBi omni + 9 dBi Yagi  |
 | WiFi 5 GHz    | TI WL1837MOD                    | 14 dBi flat panel        |
-| 49 MHz RCRS   | XCVR-49MHZ-2 via UART5          | 1/4-wave loaded whip     |
+| 49 MHz RCRS   | Emma via UART5          | 1/4-wave loaded whip     |
 | Zigbee 2.4 GHz| CC2652R7 via UART3 (optional)   | 3 dBi dipole             |
 
 ### Directional Antenna Gimbal
@@ -117,7 +117,7 @@ malcolm/
 ## Build and Setup
 
 1. **Hardware:** See `hardware/docs/malcolm_wiring.md`.  Flash PB2-I, seat Cape-B-2, attach
-   XCVR-49MHZ-2, connect antennas and field enclosure per wiring doc.
+   Emma, connect antennas and field enclosure per wiring doc.
 
 2. **Firmware:** Build Malcolm's PB2-I firmware:
    ```sh

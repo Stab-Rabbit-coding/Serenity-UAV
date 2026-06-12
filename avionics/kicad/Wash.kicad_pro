@@ -293,23 +293,22 @@
         "via_drill": 0.3
       },
       {
+        "clearance": 0.5,
+        "name": "ISOLATION",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": 0,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 0.2,
+        "via_diameter": 0.8,
+        "via_drill": 0.4
+      },
+      {
         "clearance": 0.2,
         "name": "POWER",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "priority": 1,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.5,
-        "via_diameter": 0.8,
-        "via_drill": 0.4
-      },
-      {
-        "clearance": 0.5,
-        "creepage": 8.0,
-        "name": "ISOLATION",
-        "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 0,
-        "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.2,
         "via_diameter": 0.8,
         "via_drill": 0.4
       }

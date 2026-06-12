@@ -88,14 +88,14 @@ an aircraft whose onboard receivers may be desensed by proximity to commercial R
 
 | Parameter               | Value                                 |
 |-------------------------|---------------------------------------|
-| Module                  | XCVR-49MHZ-2 (via Cape-B-2 UART5)    |
+| Module                  | Emma (via Cape-B-2 UART5)    |
 | PA output power (max)   | +20 dBm (100 mW) — Part 95 ceiling    |
 | Antenna                 | 1/4-wave base-loaded whip, ~0.94 m physical with loading coil; omnidirectional |
 | Ground radials          | 4× 1/4-wave radials (star pattern, flat on mast base) |
 | Coax loss (RG-58 2 m)   | −1.0 dB at 49 MHz                    |
 | Antenna efficiency      | ~80% (loading coil insertion loss ~−1 dB) |
 | **ERP (isotropic)**     | 20 − 1 − 1 = **18 dBm ERP** ✓ (≤20) |
-| PA assessment           | No external PA.  XCVR-49MHZ-2 PA is already at the Part 95 ERP ceiling. |
+| PA assessment           | No external PA.  Emma PA is already at the Part 95 ERP ceiling. |
 
 > **FCC Part 95.635:** RCRS station transmitter power shall not exceed 100 milliwatts (mW)
 > ERP.  Frequency accuracy ±0.005% per 47 CFR 95.655.

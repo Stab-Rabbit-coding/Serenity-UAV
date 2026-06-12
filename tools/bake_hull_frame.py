@@ -88,35 +88,31 @@ _SQ2 = 0.7071067811865476
 # ---------------------------------------------------------------------------
 COMPONENTS = {
     # Head: identity rotation — STL axes already matched the hull frame.
+    # Paths standardised to the no-"s_"-prefix published basenames (Rev R1,
+    # 2026-06-11): the regenerated watertight 2 mm shells from
+    # blender_shells_2mm_solidify.py + hollow_manifold.py are published under
+    # these names.  The duplicate "Cargo_Shell_Repair2" entry was consolidated
+    # into the single Cargo_Shell below (per the TODO.md mesh-repair log).
     "Head_Shell": (
-        "fuselage/s_head_shell24_2mm_repaired.stl",
+        "fuselage/head_shell24_2mm_repaired.stl",
         (-331.9993360, -17.9999640, 60.9998780,
          0.0, 0.0, 0.0, 1.0),
     ),
     # Cargo: 180 deg about +Z flips the section hull-forward.
     "Cargo_Shell": (
-        "fuselage/cargo/s_cargo_sect_shell24_2mm_repaired.stl",
-        (-274.4000100, -282.8000440, 0.0,
-         0.0, 0.0, 1.0, 0.0),
-    ),
-    # Later mesh-repair pass of the same cargo section (368352 ->
-    # 367506 facets per the TODO.md mesh-repair log).  Same local frame
-    # as Cargo_Shell, so it takes the same bake transform.  The two
-    # cargo-shell copies are flagged for consolidation in TODO.md.
-    "Cargo_Shell_Repair2": (
-        "fuselage/s_cargo_sect_shell24_2mm_repaired.stl",
+        "fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl",
         (-274.4000100, -282.8000440, 0.0,
          0.0, 0.0, 1.0, 0.0),
     ),
     # Middle / Rear: 90 deg about -X brings the SCAD section axis
     # (modelled along local Z) upright into hull +Z (dorsal).
     "Middle_Shell": (
-        "fuselage/s_middle_shell24_2mm_repaired.stl",
+        "fuselage/middle_shell24_2mm_repaired.stl",
         (-350.9992980, 130.4001963, 10.0174324,
          -_SQ2, 0.0, 0.0, _SQ2),
     ),
     "Rear_Shell": (
-        "fuselage/s_rear_shell24_2mm_repaired.stl",
+        "fuselage/rear_shell24_2mm_repaired.stl",
         (0.0, 203.1999999, -31.9999360,
          -_SQ2, 0.0, 0.0, _SQ2),
     ),

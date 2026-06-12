@@ -411,7 +411,7 @@ function TabPropulsion() {
                         ["Total thrust",     "~5,322 g", ""],
                         ["Hull prints + foam","~1,150 g","All shell sections + access panels + foam"],
                         ["Nacelle assemblies","~440 g",  "2× nacelle shells + EDFs + ESCs + gear + nozzle"],
-                        ["Avionics",         "~460 g",   "8× PB2-I + 4× Wash + 4× Zoë + 4× XCVR-49MHZ-2 + GPS×4 + radios"],
+                        ["Avionics",         "~460 g",   "8× PB2-I + 4× Wash + 4× Zoë + 4× Emma + GPS×4 + radios"],
                         ["Servos + linkage", "~160 g",   "2× tilt servo + 1× rear nozzle servo + pushrods"],
                         ["Power (6S 4000mAh)","~750 g",  "Primary flight battery"],
                         ["Misc hardware",    "~230 g",   "CF stock, fasteners, wiring, ESCs, bearings"],
@@ -442,7 +442,7 @@ function TabAvionics() {
                     Any node can fail over for any role.
                     <br /><br />
                     <span style={{ color: C.green }}>Rev Q change:</span> All 8 positions use EMI-hardened v2 capes
-                    (Wash / Zoë + XCVR-49MHZ-2). Placement is uniform v2·v2·v2·v2 nose to tail.
+                    (Wash / Zoë + Emma). Placement is uniform v2·v2·v2·v2 nose to tail.
                     Cape-A-1, Cape-B-1, XCVR-49MHZ-1 designs are archived.
                     <br />
                     <span style={{ color: C.green }}>Rev R change:</span> Cape-A-2 / Cape-B-2 generic designators retired.
@@ -519,7 +519,7 @@ function TabAvionics() {
                         ["SiK radio",      "SiK 915 MHz MAVLink — belly port SMA bulkhead"],
                         ["LoRa radio",     "RFM95W 915 MHz backup — belly stbd SMA bulkhead"],
                         ["WiFi/BT",        "TI WL1837MOD 2.4/5 GHz — dorsal fwd SMA bulkhead"],
-                        ["RCRS-49",        "XCVR-49MHZ-2 sub-module — 49 MHz AX.25 RC (EMI-hardened)"],
+                        ["RCRS-49",        "Emma sub-module — 49 MHz AX.25 RC (EMI-hardened)"],
                         ["Log μSD",        "Zoë microSD slot — hardware write-blocked via CPLD"],
                         ["CPLD",           "ATF16V8BQL — hardware-enforced non-executable log storage"],
                         ["NOR flash",      "W25Q128JV 128 Mb — circular log overflow buffer"],
@@ -532,7 +532,7 @@ function TabAvionics() {
                 />
             </Card>
 
-            <Card title="XCVR-49MHZ-2 — EMI-Hardened 49 MHz RCRS Transceiver" accent={C.orange}>
+            <Card title="Emma — EMI-Hardened 49 MHz RCRS Transceiver" accent={C.orange}>
                 <div style={{ fontFamily: M, fontSize: 11, color: C.green, marginBottom: 8 }}>
                     Rev R: Active design. XCVR-49MHZ-1 archived. All 4 CN positions use XCVR-49MHZ-2.
                 </div>
@@ -579,9 +579,9 @@ function TabAvionics() {
                     cols={["Bay / Room", "Station", "Lower CN (Zoë)", "Upper FC (Wash)", "Notes"]}
                     accent={C.yellow}
                     rows={[
-                        ["A — Shepherd's room (nose)",   "0–91 mm",   "CN1", "FC1", "5 kV CAN FD/RS-485/ETH isolation; GPS1; SiK + LoRa + WiFi + XCVR-49MHZ-2; CAN FD bus start 120Ω"],
-                        ["B — Inara's shuttle (fwd dors)","91–165 mm", "CN2", "FC2", "5 kV isolation; GPS2; XCVR-49MHZ-2"],
-                        ["D — River's room (aft dorsal)", "251–320 mm","CN3", "FC3", "5 kV isolation; GPS3; XCVR-49MHZ-2"],
+                        ["A — Shepherd's room (nose)",   "0–91 mm",   "CN1", "FC1", "5 kV CAN FD/RS-485/ETH isolation; GPS1; SiK + LoRa + WiFi + Emma; CAN FD bus start 120Ω"],
+                        ["B — Inara's shuttle (fwd dors)","91–165 mm", "CN2", "FC2", "5 kV isolation; GPS2; Emma"],
+                        ["D — River's room (aft dorsal)", "251–320 mm","CN3", "FC3", "5 kV isolation; GPS3; Emma"],
                         ["E — Simon's medbay (aft svc)",  "320–388 mm","CN4", "FC4", "5 kV CAN FD/RS-485/ETH isolation; GPS4; CAN FD bus end 120Ω permanent"],
                     ]}
                 />
@@ -620,7 +620,7 @@ function TabComms() {
                         ["SiK 915 MHz",  "SiK v2 MAVLink",           "915 MHz ISM", "Primary GCS telemetry (MAVLink)", "FCC Part 15 / module FCC ID required"],
                         ["LoRa 915 MHz", "RFM95W / LoRa",             "915 MHz ISM", "Backup GCS telemetry + long-range", "FCC Part 15 / module FCC ID required"],
                         ["WiFi 2.4/5GHz","TI WL1837MOD 802.11b/g/n/ac","ISM", "GCS app link; firmware update; video stream", "FCC Part 15 / WL1837MOD certified"],
-                        ["RCRS 49 MHz",  "XCVR-49MHZ-2 AX.25 AFSK",  "49.830–49.890 MHz RCRS", "RC command link (backup)", "FCC Part 95 (RCRS); FCC equipment authorization required before airborne TX"],
+                        ["RCRS 49 MHz",  "Emma AX.25 AFSK",  "49.830–49.890 MHz RCRS", "RC command link (backup)", "FCC Part 95 (RCRS); FCC equipment authorization required before airborne TX"],
                     ]}
                 />
             </Card>
@@ -633,7 +633,7 @@ function TabComms() {
                         ["Top wire",       "0.3 mm SS wire, ~470 mm dorsal spine", "Forward post ~120 mm → aft post ~600 mm from nose"],
                         ["Forward post",   "PETG mast, base-loading coil 38 µH + LC pi-net", "Bonded at dorsal ~120 mm; 3 mm clearance from GPS patch"],
                         ["Aft post",       "PETG mast, ceramic bead insulator", "Top of rear nozzle cone; insulated (open-circuit) end"],
-                        ["Counterpoise",   "CF keel bar 6×3 mm, 620 mm", "Connected to XCVR-49MHZ-2 GND on Zoë"],
+                        ["Counterpoise",   "CF keel bar 6×3 mm, 620 mm", "Connected to Emma GND on Zoë"],
                         ["XCVR Z₀",        "52.26 Ω for W=2.75 mm, H=1.6 mm, εr=4.5, T=35 µm", "PASS [45–55 Ω] — verified by check_impedance.py 2026-05-30"],
                     ]}
                 />
@@ -773,7 +773,7 @@ function TabRegulatory() {
                         ["SiK 915 MHz",         "FCC Part 15 ISM",     "✓ PASS", "Module must carry FCC ID marking; verify before installation"],
                         ["LoRa RFM95W 915 MHz", "FCC Part 15 ISM",     "✓ PASS", "Module FCC ID required; verify"],
                         ["WiFi WL1837MOD",       "FCC Part 15 ISM",     "✓ PASS", "TI WL1837MOD certified; verify FCC ID on module"],
-                        ["XCVR-49MHZ-2",         "FCC Part 95 (RCRS)", "○ OPEN", "Equipment authorization (FCC ID grant) required before airborne TX; pre-compliance checklist in WBS §1.3 Phase 4"],
+                        ["Emma",         "FCC Part 95 (RCRS)", "○ OPEN", "Equipment authorization (FCC ID grant) required before airborne TX; pre-compliance checklist in WBS §1.3 Phase 4"],
                         ["49 MHz channels",      "47 CFR 95.623",       "○ OPEN", "Channel selection (49.830–49.890 MHz) set in CN firmware; verify FCC channel table"],
                         ["49 MHz ERP",           "47 CFR 95.655",       "○ OPEN", "≤100 mW ERP; harmonic suppression ≥40 dBc at 98 MHz; verify with QUCS-S simulation"],
                     ]}
@@ -788,7 +788,7 @@ function TabRegulatory() {
                         ["AUVSI", "UAS best practices — structural redundancy, failsafe modes, pre-flight checklists", "Design compliant; validate at build"],
                         ["IEEE",  "IEEE 802.3 (Ethernet), ISO 11898 (CAN FD), NIST SP 800-72 (write-blocker)", "All wired bus protocols conformant"],
                         ["ISA",   "ISA-99/IEC 62443 — message authentication, secure boot, isolation barriers", "TPM + HMAC + 5 kV isolation architecture addresses core requirements"],
-                        ["IEC",   "IEC 62368-1 / VDE 0884-11 — 5 kV isolation barrier certification", "All isolation barriers on Wash / Zoë / XCVR-49MHZ-2 certified"],
+                        ["IEC",   "IEC 62368-1 / VDE 0884-11 — 5 kV isolation barrier certification", "All isolation barriers on Wash / Zoë / Emma certified"],
                         ["FAA",   "AC 107-2 (remote pilot operations), FAA Part 107 waivers if above 400 ft AGL", "Operator responsibility"],
                         ["ICAO",  "Annex 2 — nav light colours/positions; Annex 13 — accident reporting", "Nav light design conformant"],
                     ]}
@@ -805,8 +805,8 @@ function TabBOM() {
         { cat: "Tilt servos + linkage",        items: 3,  mass_g: 139,  cost: 32,   notes: "2× tilt servo + 1× rear nozzle SG90" },
         { cat: "Cargo servos",                 items: 2,  mass_g: 18,   cost: 6,    notes: "2× SG90 — door actuator + payload release" },
         { cat: "Gear train (M=1.0)",           items: 8,  mass_g: 62,   cost: 62,   notes: "Sector, pinion ×2, bevel ×2, crown, housing ×2, shafts, bearings" },
-        { cat: "Avionics (PB2-I + v2 capes)",  items: 6,  mass_g: 460,  cost: 1348, notes: "8× PB2-I + 4× Wash + 4× Zoë + 4× XCVR-49MHZ-2 + 4× log μSD" },
-        { cat: "PCB fabrication (JLCPCB)",     items: 3,  mass_g: 0,    cost: 680,  notes: "Wash ×4 + Zoë ×4 + XCVR-49MHZ-2 ×4 (assembled, active)" },
+        { cat: "Avionics (PB2-I + v2 capes)",  items: 6,  mass_g: 460,  cost: 1348, notes: "8× PB2-I + 4× Wash + 4× Zoë + 4× Emma + 4× log μSD" },
+        { cat: "PCB fabrication (JLCPCB)",     items: 3,  mass_g: 0,    cost: 680,  notes: "Wash ×4 + Zoë ×4 + Emma ×4 (assembled, active)" },
         { cat: "Power (batteries + PDB)",      items: 3,  mass_g: 1540, cost: 120,  notes: "6S 4000 mAh + 6S 2800 mAh + dual BEC PDB" },
         { cat: "Printed parts (filament)",     items: 3,  mass_g: 2000, cost: 106,  notes: "PETG ~1,400 g + CF-PETG ~650 g + TPU ~100 g" },
         { cat: "Structural (CF stock + foam)", items: 5,  mass_g: 980,  cost: 77,   notes: "Keel + spars + ring frames + PU foam + epoxy" },
@@ -851,7 +851,7 @@ function TabBOM() {
                     rows={[
                         ["Wash ×4 (unchanged from Rev Q)",     "$272", "$272", "$0"],
                         ["Zoë ×4 (unchanged from Rev Q)",      "$420", "$420", "$0"],
-                        ["XCVR-49MHZ-2 ×4 (unchanged)",        "$128", "$128", "$0"],
+                        ["Emma ×4 (unchanged)",        "$128", "$128", "$0"],
                         ["Kaylee PDB (new in Rev R)",           "—",    "~$45", "+$45"],
                         ["Total estimate",                      "~$2,137","~$2,182","~+$45"],
                     ]}
@@ -903,7 +903,7 @@ function TabFiles() {
                     rows={[
                         ["Wash.kicad_pcb / .kicad_sch", "Wash (55×35mm EMI-hardened FC)", "✓ ACTIVE — primary FC cape at all positions"],
                         ["Zoë.kicad_pcb / .kicad_sch", "Zoë (55×35mm EMI-hardened CN)", "✓ ACTIVE — primary CN cape at all positions"],
-                        ["XCVR-49MHZ-2.kicad_pcb / .kicad_sch", "XCVR-49MHZ-2 (55×35mm EMI-hardened)", "✓ ACTIVE — primary 49 MHz sub-module"],
+                        ["XCVR-49MHZ-2.kicad_pcb / .kicad_sch", "Emma (55×35mm EMI-hardened)", "✓ ACTIVE — primary 49 MHz sub-module"],
                         ["Kaylee.kicad_pcb / .kicad_sch", "Kaylee PDB Rev A", "✓ ACTIVE — Rev R addition; DRC clean; gerbers generated 2026-06-10"],
                         ["CAPE-A-2 / CAPE-B-2", "v2 generic cape designators", "ARCHIVED — avionics/kicad/archive/ (Rev R 2026-06-10; renamed Wash/Zoë)"],
                         ["CAPE-A-1 / CAPE-B-1 / XCVR-49MHZ-1", "v1 standard capes", "ARCHIVED — avionics/kicad/archive/ (Rev Q 2026-06-05)"],
@@ -919,12 +919,12 @@ function TabFiles() {
                         ["avionics/kicad/gerbers/Kaylee/", "Kaylee PDB",  "✓ GENERATED — DRC clean 2026-06-10; ready for fab review"],
                         ["avionics/kicad/gerbers/Wash/",   "Wash",        "○ PENDING — PCB layout and DRC sign-off required before fab submission"],
                         ["avionics/kicad/gerbers/Zoë/",   "Zoë",        "○ PENDING — PCB layout and DRC sign-off required before fab submission"],
-                        ["avionics/kicad/gerbers/XCVR-49MHZ-2/","XCVR-49MHZ-2","○ PENDING — DRC sign-off required before fab submission"],
+                        ["avionics/kicad/gerbers/XCVR-49MHZ-2/","Emma","○ PENDING — DRC sign-off required before fab submission"],
                         ["avionics/kicad/archive/",        "Cape-A-1, Cape-B-1, CAPE-A-2, CAPE-B-2, XCVR-49MHZ-1", "ARCHIVED Rev Q/R"],
                     ]}
                 />
                 <div style={{ marginTop: 8, fontFamily: M, fontSize: 11, color: C.orange }}>
-                    ⚠ Wash, Zoë, and XCVR-49MHZ-2 gerbers still pending PCB layout completion.
+                    ⚠ Wash, Zoë, and Emma gerbers still pending PCB layout completion.
                     Kaylee gerbers are the only fully generated set at Rev R.
                     Do not submit Wash/Zoë/XCVR for fabrication until DRC passes with 0 errors / 0 unconnected.
                 </div>
@@ -1015,13 +1015,13 @@ function TabBuildStatus() {
                 ["Kaylee PDB gerbers generated", "✓ DONE  Rev R 2026-06-10"],
                 ["Cape-A-2 / Cape-B-2 archived; Wash/Zoë naming finalised", "✓ DONE  Rev R 2026-06-10"],
                 ["Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 archived", "✓ DONE  Rev Q 2026-06-05"],
-                ["XCVR-49MHZ-2 RF trace Z₀ = 52.26 Ω", "✓ DONE  PASS"],
+                ["Emma RF trace Z₀ = 52.26 Ω", "✓ DONE  PASS"],
                 ["Wash PCB layout complete (EMI-hardened)", "○ OPEN — BLOCKS Phase 6 fab"],
                 ["Zoë PCB layout complete (EMI-hardened)", "○ OPEN — BLOCKS Phase 6 fab"],
-                ["XCVR-49MHZ-2 PCB layout complete (EMI-hardened)", "○ OPEN — BLOCKS Phase 6 fab"],
+                ["Emma PCB layout complete (EMI-hardened)", "○ OPEN — BLOCKS Phase 6 fab"],
                 ["Wash DRC pass + gerbers generated", "○ OPEN — BLOCKS Phase 6 fab"],
                 ["Zoë DRC pass + gerbers generated", "○ OPEN — BLOCKS Phase 6 fab"],
-                ["XCVR-49MHZ-2 DRC pass + gerbers generated", "○ OPEN"],
+                ["Emma DRC pass + gerbers generated", "○ OPEN"],
             ],
         },
         {
@@ -1070,7 +1070,7 @@ function TabBuildStatus() {
             items: [
                 ["CN1+FC1 (Shepherd's room/Bay A) + CN2+FC2 (Inara's shuttle/Bay B) Wash/Zoë installed", "○ BLOCKED by Phase 5 + PCB fab"],
                 ["Wash/Zoë PCBs received from JLCPCB", "○ BLOCKED by DRC + gerber regen"],
-                ["XCVR-49MHZ-2 sub-modules received", "○ BLOCKED by gerber regen"],
+                ["Emma sub-modules received", "○ BLOCKED by gerber regen"],
                 ["TPM provisioning (all 4 Shepherd's room + Inara's shuttle nodes)", "○ OPEN"],
                 ["CPLD write-blocker verification (Zoë)", "○ OPEN"],
                 ["Load k3-am6254-...-cape-a2.dts / cape-b2.dts overlays", "○ OPEN"],

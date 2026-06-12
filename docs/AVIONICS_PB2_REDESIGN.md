@@ -1,6 +1,6 @@
 # Serenity Avionics Redesign — 8× PocketBeagle 2 Industrial
 
-**Status:** Rev R baseline — All 8 nodes use EMI-hardened v2 capes (Wash / Zoë / XCVR-49MHZ-2)
+**Status:** Rev R baseline — All 8 nodes use EMI-hardened v2 capes (Wash / Zoë / Emma)
 **Date:** 2026-06-11 (Rev R: Wash/Zoë naming finalised; Kaylee PDB DRC-clean + gerbers; hull-frame coords validated; battery spec propagated)
 **Scope:** Avionics compute, cape specifications, bus topology, radio link architecture
 

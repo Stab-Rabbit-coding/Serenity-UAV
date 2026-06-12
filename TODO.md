@@ -16,7 +16,7 @@
 | Nacelle EDFs | XFly Galaxy X5 50mm 12-blade 6S 3200KV, 1240g each; 2232g/nacelle (90% additive via stator); 4464g total | Baseline EDF selected (xfly-model.eu); nacelle T/W ≈ 1.61 at Phase 5–10 AUW — VTOL hover capable |
 | Rear propulsion | 120mm 6S EDF, 4-scoop radial intake, iris nozzle | **DEFERRED — Phase 11.** All design files moved to `deferred/aft-edf/`. SCAD and STLs complete. Adds ~3500g thrust; Phase 11 T/W ≈ 2.21. |
 | Cargo bay | Clamshell doors + SG90 servos + DRV8833 + N20 winch + Dyneema + auto-latch + GPS ring + FPV bezel | ✓ All 13 cargo STLs generated (PR #21 + PR #22 2026-06-01); BOM updated bom_revP.json/csv; gondola shell open |
-| PCBs | **Rev Q: all 8 nodes use the EM hardened Wash Flight Control and Zoë Comms/Security capes** at every position. The **Kaylee Power Distribution Board** ensures that everything stays shiny.  Two **XCVR-49MHZ-2** daughter boards provide connectivity on RCRS.  Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived 2026-06-05. **| Rev R schematics complete (Wash: 2× EMI-hardened Ethernet PHY; Zoë: 1× Ethernet PHY; all field connectors added). Kaylee PCB DRC clean (0 shorts); gerbers generated 2026-06-10; manual component placement (Section F, shield lugs) and trace routing remain. |
+| PCBs | **Rev Q: all 8 nodes use the EM hardened Wash Flight Control and Zoë Comms/Security capes** at every position. The **Kaylee Power Distribution Board** ensures that everything stays shiny.  Two **Emma** daughter boards provide connectivity on RCRS.  Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived 2026-06-05. **| Rev R schematics complete (Wash: 2× EMI-hardened Ethernet PHY; Zoë: 1× Ethernet PHY; all field connectors added). Kaylee PCB DRC clean (0 shorts); gerbers generated 2026-06-10; manual component placement (Section F, shield lugs) and trace routing remain. |
 | Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 ✓; serenity-fc Phase 6 stub only; all Phase 7 items open |
 | Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
 | Regulatory | FAA Part 107, ICAO nav lights, FCC Part 95 | FAA registration placeholder; XCVR-49MHZ-1 pre-compliance pending |
@@ -101,7 +101,7 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
   - **BLOCKS Phase 1 (antenna installation)**
   - **SUB-TASKS:**
     - [ ] Export STL → `airframe/stls/fuselage/rcrs49_wire_post.stl`
-    - [ ] Bond forward post to hull dorsal skin at sta 120 mm; dress wire to XCVR-49MHZ-2 feed
+    - [ ] Bond forward post to hull dorsal skin at sta 120 mm; dress wire to Emma feed
     - [ ] Install temporary aft post at sta 580 mm; remove and replace with integrated mount in Phase 11
 
 ##### 1.1.1.1 *Head*
@@ -278,7 +278,25 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
 
 ##### 1.1.4.1 *Legs*
 
+- [ ] Separate 4x leg stl into individual leg files, orient and test fit on freeCAD assembly
+
+- [ ] evaluate suitability of model legs for actual use
+
+  - [ ] evaluate static and dynamic alternatives
+
+    - [ ] Multipart / Unitary?
+
+    - [ ] Springs / Struts ?
+
+    - [ ] Mounting to hull
+
+  - [ ] Implement canonically and mechanically sound legs
+
 ##### 1.1.4.2 *Feet*
+
+- [ ] Modify feet as needed to mount to legs to provide stable landing
+
+
 
 **Remaining parts needing SCAD source creation then STL export:**
 
@@ -319,7 +337,7 @@ Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
 | Servos (DS3218MG, SG90) | 2 | `airframe/placeholders/servos/` |
 | Bearings (MF104ZZ, MR63ZZ, 6804) | 3 | `airframe/placeholders/bearings/` |
 | Structural CF (rods, tube, bar, plate, PTFE) | 6 | `airframe/placeholders/structural/` |
-| Avionics PCBs (PB2-I, Cape-A-2/B-2, XCVR, Kaylee, microSD) | 6 | `airframe/placeholders/avionics/` |
+| Avionics PCBs (PB2-I, Cape-A-2/B-2, Emma, Kaylee, microSD) | 6 | `airframe/placeholders/avionics/` |
 | Power (LiPos, fuses, shunt) | 7 | `airframe/placeholders/power/` |
 | Cargo (N20, HX711, DRV8833, Dyneema) | 4 | `airframe/placeholders/cargo/` |
 | Gears M=1.0 (sector, pinion, bevel, housing) | 4 | `airframe/placeholders/gears/` |
@@ -376,7 +394,7 @@ Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
 
 ---
 
-### 1.2a — PCB Design: Wash, Zoë, and XCVR-49MHZ-2 (EMI-Hardened Variants)
+### 1.2a — PCB Design: Wash, Zoë, and Emma (EMI-Hardened Variants)
 
 #### ***EM hardening Objective is to ensure safe and controlled operations in hostile em/rf environments such as the vicinity of radiating commercial broadcast, amateur radio and cellular towers.***
 
@@ -393,7 +411,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
   HX1188NL LAN magnetics (1500 V isolation), SRF2012-100Y CMC, PRTR5V0U2X TVS, TPS62933 1.8V
   supply. JST SM06B-GHS-TB-1MP connector (no RJ45). Wash: 2× PHY (RMII0+RMII1);
   Zoë: 1× PHY (RMII0).
-- **XCVR-49MHZ-2**: SRF2012-100Y CMC on antenna coax shield, PRTR5V0U2X TVS on PTT/RX lines,
+- **Emma**: SRF2012-100Y CMC on antenna coax shield, PRTR5V0U2X TVS on PTT/RX lines,
   X2Y bridging capacitor on RF ground plane, Würth 742792512 ferrite bead on +5V rail
 
 **Transform scripts** (generate -2 files from -1 originals):
@@ -405,6 +423,61 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 - `avionics/kicad/gen_cape_b2_pcb.py` → `CAPE-B-2.kicad_pcb`
 
 **Open tasks:**
+
+##### 1.2a.1 *Cape DRC / routing / ETH2 status (2026-06-12)* — see `avionics/kicad/README.md`
+
+- [x] **Wire second Ethernet (ETH2) on Wash.** `ETH2` / `ETH2-PHY` (ADIN1300) /
+  `T-ETH2` (749010012A) were placed but unconnected; nets now mirror ETH1
+  (`ETH2_LINE_*` → `T-ETH2` → `ETH2_*` → PHY), reusing the host-side `RMII1_*`,
+  `MDIO`/`MDC`, `PHY2_INTRN`/`PHY2_RSTN`, `VCC2_ETH`/`GND`/`GND2_ETH` nets on
+  PB2-P2. 44 pads assigned; diff pairs verified. *(PR #59, 2026-06-12)*
+- [x] **Separate the two Wash PHYs onto independent MDIO buses** (instead of an
+  address strap). PHY1/ETH1-PHY → `MDIO0`/`MDC0` (CPSW MDIO, PB2-P2 pins 17/18);
+  PHY2/ETH2-PHY → `MDIO1`/`MDC1` (2nd bus, PB2-P2 pins 1/2 = the two spare servo
+  channels SERVO6/7). Each PB2-I NIC manages its own PHY; no shared-address
+  conflict. PCB + schematic global labels updated. *(2026-06-12)*
+  - **Firmware/DT:** PHY2's bus must be brought up as `mdio-gpio` (bit-banged) on
+    the two repurposed balls; verify they are GPIO-capable in the PB2-I pinmux.
+- [x] **Wire the field-connector pins to their signals on Wash** (connectors were
+  all floating). Done per each footprint's Description pinout: SERVO-PWM pads 1–6
+  → SERVO0–5 (PWM); ESC-TLM → UART_ESC_TX/RX; GPIO-A…F → GND/+3V3 (+ `GPIO_EXP_*`
+  signal pin labelled); CAN-FD → CAN_H/CAN_L; RS-485 → RS485_A/B; PWR-IN → +5V/GND.
+  *(2026-06-12)*
+- [x] **Source the 6 `GPIO_EXP_A…F` signals via an I2C GPIO expander.** Added
+  `U-GPIO` (PCA9555DB, SSOP-24, addr 0x20) on the existing I2C1 bus with a
+  `C-GPIO` 100 nF decoupling cap; P0_0–P0_5 → GPIO_EXP_A–F. *(2026-06-12)*
+  - [ ] Verify/add I2C1 pull-ups (≈4.7 kΩ to +3V3 on SDA/SCL) — none on cape;
+    confirm whether the PB2-I provides them.
+  - [ ] Finalise placement of U-GPIO/C-GPIO (added at a tentative location).
+- [x] **Add an ESC-PWM output connector for DSHOT0–3.** Added `ESC-PWM`
+  (JST-GH 5-pin SM05B): pins 1–4 → DSHOT0–3, pin 5 → GND. *(2026-06-12)*
+  - [ ] Finalise ESC-PWM placement (added at a tentative location).
+- [ ] **Reconcile Wash.md §14 field-connector table with the actual PCB
+  connectors** (PCB has SERVO-PWM 1×8 + GPIO-A…F + ESC-TLM; §14 lists J_SERVO/
+  J_ESC/J_GPS/J_ENC/J_SBUS/J_VBAT/J_FAN). Bring the doc and board into agreement.
+- [ ] **Wire the MIL-1553 connector + transformer.** `MIL-1553` connector and the
+  `1553-XFM` transformer coupling to the bus are unwired at the IC level; the
+  driver/receiver (DS26LV31/32) are only partially netted.
+- [ ] **Redesign the tamper mesh as a per-domain anti-tamper mesh (all 4 capes).**
+  The current `TMESH_P`/`TMESH_N` cross-hatch grid on F.Cu/B.Cu shorts across SMD
+  pads and across the isolated `GND2_*` domains (≈335 of Wash's 465 DRC errors;
+  similar on Zoë). Rework as one monitored mesh net per isolation region
+  (secure/`GND` + per-`GND2_CAN`/`GND2_ETH`/`GND2_RS485` field side), keeping the
+  0.5 mm `ISOLATION` creepage moat clear between domains. **BLOCKS DRC-clean.**
+- [ ] **Carry the tamper signal over the link for the TPM-less boards.** Kaylee
+  and Emma have no local TPM: route Kaylee's mesh signal to Wash and
+  Emma's to Zoë over the inter-board link.
+- [ ] **Route the rearranged capes.** The manual component reseat left ~60 signal
+  nets per cape unrouted (7 power/ground nets are planes). Headless freerouting
+  was **not** usable (see toolchain findings in `avionics/kicad/README.md`):
+  KiCad 9.0.2 `ExportSpecctraDSN` is broken in standalone Python, and freerouting
+  2.1 headless never self-exits and emits incomplete SES. **Finish routing in the
+  KiCad GUI**; route the impedance-controlled Ethernet pairs interactively
+  (length-matched, 100 Ω ±10% MDI). **BLOCKS gerbers / fab.**
+- [ ] **Clear residual DRC after mesh + routing** (counts measured 2026-06-12,
+  error+warning): Wash 465 / 121 unconnected, Zoë 554 / 146, Emma 421 /
+  160, Kaylee 221 / 181. Remaining types after the mesh fix are mostly
+  silk-over-copper, text-height, courtyard-overlap, and lib-footprint mismatch.
 
 - [ ] finish Wash PCB.  ensure all phy have shielded connectors, all nets are valid, all ferrite beads and isolation caps are in place.- [ ] Add sbus/uart dip to Wash.
 - [ ] **Generate Wash gerbers** — `CAPE-A-2.kicad_pcb` complete; run DRC to zero errors in
@@ -419,10 +492,10 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
   added to Zoë at Rev R (introduced Rev Q); J_ETH_B connector populated. Board has adequate
   space; RF SMA connectors remain. *(done 2026-06-07)*
 
-- [ ] **Generate XCVR-49MHZ-2 gerbers** — `XCVR-49MHZ-2.kicad_pcb` complete; export to
+- [ ] **Generate Emma gerbers** — `XCVR-49MHZ-2.kicad_pcb` complete; export to
   `avionics/kicad/gerbers/XCVR-49MHZ-2/`.
-  - **BLOCKS XCVR-49MHZ-2 fab order**
-- [ ] **FCC Part 95 Subpart D pre-compliance checklist for XCVR-49MHZ-2** — document center
+  - **BLOCKS Emma fab order**
+- [ ] **FCC Part 95 Subpart D pre-compliance checklist for Emma** — document center
   frequency accuracy (±0.005% per 47 CFR 95.655), ERP (≤100 mW), harmonic suppression ≥40 dBc at
   2nd/3rd harmonics, 47 CFR 95.603 FCC ID silkscreen labeling block.
 - [ ] **EMI isolation validation checklist** — verify isolation barrier clearance: ISOW1044BDFMR
@@ -653,7 +726,7 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
   above) are reflected in both files once XCVR-49MHZ-1 Phase 5 is complete.
 
 - [x] **Create `bom_revQ.json` + `bom_revQ.csv`** — Rev Q BOM: replace all v1 cape procurement
-  quantities with v2 equivalents (4× Wash, 4× Zoë, 4× XCVR-49MHZ-2). Remove Cape-A-1,
+  quantities with v2 equivalents (4× Wash, 4× Zoë, 4× Emma). Remove Cape-A-1,
   Cape-B-1, XCVR-49MHZ-1 line items.
 
 ---
@@ -665,7 +738,7 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
   all 8 avionics nodes). Changes include:
 
   - **TODO.md**: Rev P → Rev Q; node placement updated; §1.2a procurement updated to 4× Wash,
-    4× Zoë, 4× XCVR-49MHZ-2; Phase 6 / Phase 7 installation steps updated to v2 capes;
+    4× Zoë, 4× Emma; Phase 6 / Phase 7 installation steps updated to v2 capes;
     procurement tables updated; Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 retired from active BOM.
 
   - **CLAUDE.md**: Rev Q already reflected (v2·v2·v2·v2, archive notes).
@@ -825,7 +898,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 | PocketBeagle 2 Industrial (AM6254) | 4× | $51.03 | ~$204 | DK 2820-100003007-ND |
 | Wash (Wash) PCB (JLCPCB assembled) | 2× | ~$55 | ~$110 | FC1/Shepherd's room (Bay A) + FC2/Inara's shuttle (Bay B) (v2, EMI-hardened) |
 | Zoë (Zoë) PCB (JLCPCB assembled) | 2× | ~$95 | ~$190 | CN1/Shepherd's room (Bay A) + CN2/Inara's shuttle (Bay B) (v2, EMI-hardened) |
-| XCVR-49MHZ-2 PCB (JLCPCB assembled) | 2× | ~$25 | ~$50 | RCRS sub-module for CN1, CN2 (v2 EMI-hardened) |
+| Emma PCB (JLCPCB assembled) | 2× | ~$25 | ~$50 | RCRS sub-module for CN1, CN2 (v2 EMI-hardened) |
 | SiK 915MHz ground station radio | 1× | ~$15 | ~$15 | MAVLink GCS link |
 | microSD 64GB (log, write-blocked) | 2× | ~$10 | ~$20 | CN1-LOG, CN2-LOG |
 | JST-GH cables: CAN 3-pin, RS-485 3-pin, ETH 6-pin, 1553 4-pin, GPS 5-pin | assorted | — | ~$20 | Per §14 connector table |
@@ -842,7 +915,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 | PocketBeagle 2 Industrial (AM6254) | 4× | ~$204 | CN3, FC3, CN4, FC4 |
 | Wash (Wash) PCB (JLCPCB assembled) | 2× | ~$110 | FC3/River's room (Bay D) + FC4/Simon's medbay (Bay E) (v2) |
 | Zoë (Zoë) PCB (JLCPCB assembled) | 2× | ~$190 | CN3/River's room (Bay D) + CN4/Simon's medbay (Bay E) (v2) |
-| XCVR-49MHZ-2 PCB (assembled) | 2× | ~$50 | CN3, CN4 (v2 EMI-hardened) |
+| Emma PCB (assembled) | 2× | ~$50 | CN3, CN4 (v2 EMI-hardened) |
 | microSD 64GB (log) | 2× | ~$20 | CN3-LOG, CN4-LOG |
 | VL53L5CX 8×8 ToF sensor | 12× | ~$84 | Dual OA arrays |
 | TCA9548A 8-ch I²C multiplexer | 2× | ~$3 | One per array host |
@@ -1800,7 +1873,7 @@ host-PC software all created in Rev R.  See `gcs/malcolm/README.md` for layout.
 - [ ] **Procure Malcolm comms node hardware:**
   - 1× PocketBeagle 2 Industrial (AM6254) — same DigiKey PN 2820-100003007-ND
   - 1× Cape-B-2 (Zoë) PCB — order 1 additional unit when placing aircraft PCB order at JLCPCB
-  - 1× XCVR-49MHZ-2 sub-module — order 1 additional unit with aircraft XCVR order
+  - 1× Emma sub-module — order 1 additional unit with aircraft Emma order
   - 1× 64 GB microSD (Samsung or equiv, same as aircraft CN nodes)
   - 1× 5 V / 5 A switching BEC (Pololu D24V50F5 or equiv)
   - 1× 6 V / 2 A servo BEC (Pololu D24V22F6 or equiv)
@@ -1826,7 +1899,7 @@ host-PC software all created in Rev R.  See `gcs/malcolm/README.md` for layout.
 
 #### 4.5.2 — Malcolm Comms Node Setup (Phase Malcolm-2)
 
-**Dependency:** Cape-B-2 and XCVR-49MHZ-2 PCBs received from JLCPCB.
+**Dependency:** Cape-B-2 and Emma PCBs received from JLCPCB.
 
 - [ ] **Flash Debian Linux to Malcolm PB2-I eMMC** — same OS image as aircraft nodes.
   USB-C boot procedure per BeagleBone Debian documentation.
@@ -1864,7 +1937,7 @@ host-PC software all created in Rev R.  See `gcs/malcolm/README.md` for layout.
   - SiK UART2: `screen /dev/ttyS2 57600` — observe MAVLink framing bytes
   - LoRa SPI1: Python test: `python3 -c "import spidev; ..."` — read RFM95W version register (expected 0x12)
   - WiFi wlan0: `iw dev wlan0 scan` — observe available networks
-  - 49 MHz UART5: `screen /dev/ttyS5 1200` — verify XCVR-49MHZ-2 responds to KISS init
+  - 49 MHz UART5: `screen /dev/ttyS5 1200` — verify Emma responds to KISS init
   - I²C2 (encoders): `i2cdetect -y 2` — verify TCA9548A at 0x70 and AS5600 at 0x36
 
 - [ ] **Configure WiFi transmit power** per FCC EIRP compliance:
@@ -1957,7 +2030,7 @@ host-PC software all created in Rev R.  See `gcs/malcolm/README.md` for layout.
 
 - [ ] **49 MHz RCRS link test (1 km):**
   Aircraft at 1 km. Verify AX.25 KISS frames received on RCRS-49 link.
-  Log RSSI from XCVR-49MHZ-2 STATUS register.
+  Log RSSI from Emma STATUS register.
 
 - [ ] **Gimbal pointing accuracy test (outdoor, aircraft at 200–500 m):**
   With aircraft carrying a known position-fix (GPS HDOP ≤1.0), compare gimbal-pointed
