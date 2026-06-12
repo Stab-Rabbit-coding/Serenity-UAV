@@ -251,7 +251,7 @@ EMI-hardened v2 design (CAPE-A-2).
 
 **Zoë** (comms/logging cape — 4 nodes):
 MAVLink/SiK 915 MHz, LoRa RFM95W 915 MHz, TI WL1837MOD WiFi/BT, 49 MHz RCRS transceiver
-(XCVR-49MHZ-2 sub-module), CAN FD, MIL-STD-1553B, RS-485, Ethernet RSTP ring, TPM 2.0,
+(Emma sub-module), CAN FD, MIL-STD-1553B, RS-485, Ethernet RSTP ring, TPM 2.0,
 ATF16V8BQL CPLD hardware write-blocker, non-executable log microSD.
 EMI-hardened v2 design (CAPE-B-2).
 
@@ -260,7 +260,7 @@ All nodes use 5 kV galvanic isolation:
 - CAN FD: ISOW1044BDFMR (TI)
 - RS-485: ADM2795EBRWZ (ADI)
 - Ethernet: ADIN1300BCPZ PHY via dual ISO7642FDWRR + Würth 749010012A transformer (JST GH 4P)
-- XCVR-49MHZ-2: SRF2012-100Y CMC, PRTR5V0U2X TVS, X2Y bridging capacitor on antenna feed
+- Emma: SRF2012-100Y CMC, PRTR5V0U2X TVS, X2Y bridging capacitor on antenna feed
 
 All isolation barriers IEC 62368-1 / VDE 0884-11 certified at 5 kV.
 Cape-A-1, Cape-B-1, and XCVR-49MHZ-1 archived Rev Q (2026-06-05).
@@ -343,7 +343,7 @@ PE(CSE), CISSP-ISSEP, CPP. Revision R, June 2026.
 Covered under CC BY 4.0:
 
 - 3D-printable hull, nacelle, and nozzle design files (STL/SCAD/FCStd)
-- PCB schematics and Gerber files for Wash, Zoë, Kaylee, and XCVR-49MHZ-2
+- PCB schematics and Gerber files for Wash, Zoë, Kaylee, and Emma
 - Circuit diagrams, pinout tables, and wiring specifications
 - Mechanical drawings and assembly specifications
 - Firmware architecture specifications and algorithm descriptions

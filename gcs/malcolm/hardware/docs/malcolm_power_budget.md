@@ -12,7 +12,7 @@ Malcolm GCS uses two independent power rails in field configuration:
 
 | Rail    | Voltage | Source                         | Consumers |
 |---------|---------|--------------------------------|-----------|
-| +5 V    | 5.0 V   | 5 V / 5 A BEC from field pack  | PB2-I + Cape-B-2 + XCVR-49MHZ-2 |
+| +5 V    | 5.0 V   | 5 V / 5 A BEC from field pack  | PB2-I + Cape-B-2 + Emma |
 | Laptop  | 19–20 V | DC–DC or laptop adapter        | GCS host PC (laptop) |
 
 ---
@@ -26,7 +26,7 @@ Malcolm GCS uses two independent power rails in field configuration:
 | RFM95W LoRa (Tx)                | 0 (Rx)      | 120       | +20 dBm Tx burst, 40 mA Rx |
 | RFD900x SiK (Tx)                | 0 (Rx)      | 200       | +20 dBm Tx burst, 50 mA Rx |
 | TI WL1837MOD WiFi (Tx)          | 80          | 250       | Tx peak at +18 dBm; Rx ~80 mA |
-| XCVR-49MHZ-2 (Tx)               | 5 (idle)    | 220       | 100 mW PA burst during AX.25 Tx |
+| Emma (Tx)               | 5 (idle)    | 220       | 100 mW PA burst during AX.25 Tx |
 | AS5600 encoders × 2             | 3           | 6         | 1.5 mA each @ 3.3 V |
 | **Total 5 V rail**              | **~560**    | **~1400** | Peak during simultaneous SiK + WiFi Tx |
 
@@ -80,7 +80,7 @@ Host PC on AC mains
 ```
 3S–6S 5000 mAh LiPo field pack
         │
-        ├─► 5 V 5 A BEC ──────────────────► PB2-I + Cape-B-2 + XCVR  (~2 W avg)
+        ├─► 5 V 5 A BEC ──────────────────► PB2-I + Cape-B-2 + Emma  (~2 W avg)
         ├─► 6 V 2 A BEC ──────────────────► Gimbal servos             (~1.2 W avg)
         └─► DC–DC to 19 V (or laptop direct if 6S pack used) ──► GCS host PC (~20 W avg)
 ```

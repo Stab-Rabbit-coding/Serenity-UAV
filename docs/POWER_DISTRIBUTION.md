@@ -92,7 +92,7 @@ over-current threshold in governor_config.h: `EDF_ESC_OVERCURRENT_A = 80 A`).
 | PocketBeagle 2 Industrial (SoC active) | 8 | 500 | 1 200 | 4 000 | 9 600 |
 | Wash (sensor suite + CAN/RS-485) | 4 | 700 | 1 400 | 2 800 | 5 600 |
 | Zoë (radios TX simultaneous) | 4 | 1 500 | 2 500 | 6 000 | 10 000 |
-| XCVR-49MHZ-2 sub-modules | 4 | 100 | 250 | 400 | 1 000 |
+| Emma sub-modules | 4 | 100 | 250 | 400 | 1 000 |
 | WS2812B LED rings (3×) | 3 | 80 | 200 | 240 | 600 |
 | HX711 + load cell | 1 | 10 | 10 | 10 | 10 |
 | N20 winch motor (via DRV8833) | 1 | 200 | 500 | 200 | 500 |

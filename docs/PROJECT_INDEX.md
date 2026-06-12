@@ -216,7 +216,7 @@ avionics/
   PocketBeagle2_Industrial_56x35mm.stl — PB2-I SBC (BOM: PB2-I-FC/CN/MAL-PB2-I)
   Cape_A2_PCB_55x35mm.stl         — Wash FC cape 55×35mm (BOM: CAPE-A-2)
   Cape_B2_PCB_55x35mm.stl         — Zoë Comms cape 55×35mm (BOM: CAPE-B-2, MAL-CAPE-B-2)
-  XCVR_49MHZ2_PCB_55x35mm.stl     — 49 MHz sub-module (BOM: XCVR-49MHZ-2, MAL-XCVR-49MHZ-2)
+  XCVR_49MHZ2_PCB_55x35mm.stl     — 49 MHz sub-module (BOM: Emma, MAL-Emma)
   Kaylee_PDB_90x65mm.stl          — Power distribution board (BOM: Kaylee)
   microSD_64GB.stl                — 64 GB microSD log card (BOM: MICROSD-LOG)
 power/
@@ -378,7 +378,7 @@ Kaylee — Power Distribution Board (PDB):
   Kaylee.md                       — Design specification
   gen_kaylee.py                   — Python generator script (all 3 KiCad files)
 
-XCVR-49MHZ-2 (49 MHz transceiver sub-module):
+Emma (49 MHz transceiver sub-module):
   XCVR-49MHZ-2.kicad_pro
   XCVR-49MHZ-2.kicad_sch
   XCVR-49MHZ-2.kicad_pcb
@@ -397,7 +397,7 @@ Python generation scripts:
   gen_cape_a2_pcb.py              — PCB layout generator (Cape-A-2)
   gen_cape_b2.py                  — Schematic generator (Cape-B-2)
   gen_cape_b2_pcb.py              — PCB layout generator (Cape-B-2)
-  complete_xcvr_49mhz2.py         — XCVR-49MHZ-2 completion script
+  complete_xcvr_49mhz2.py         — Emma completion script
   add_eth_phy.py                  — Ethernet PHY addition script
   add_sensors_sbus.py             — SBUS sensor addition script
   apply_netlist.py                — Netlist application script
@@ -407,14 +407,14 @@ Python generation scripts:
   generate_gerbers.py             — Gerber export script
   Serenity-Custom.pretty/         — Custom KiCad component footprint library
   drc_report.txt                  — Latest KiCad DRC report (Wash/Zoë/XCVR)
-  xcrv-DRC.rpt                    — XCVR-49MHZ-2 DRC report
+  xcrv-DRC.rpt                    — Emma DRC report
 
 gerbers/
   CAPE-A-1/                       — Cape-A-1 gerbers (ARCHIVED design)
   CAPE-B-1/                       — Cape-B-1 gerbers (ARCHIVED design)
   Wash/                           — Wash (Cape-A-2) gerbers
   Zoë/                            — Zoë (Cape-B-2) gerbers
-  XCVR-49MHZ-2/                   — XCVR-49MHZ-2 gerbers
+  XCVR-49MHZ-2/                   — Emma gerbers
   Kaylee/                         — Kaylee PDB gerbers (Rev A, 2026-06-10)
 ```
 
@@ -463,7 +463,7 @@ LICENSE_AND_ATTRIBUTION.md        — Attribution chain for all upstream sources
 
 Ground control station.  Malcolm ("CAPT Reynolds") is the ArduPilot-compatible GCS
 for Serenity UAV.  Architecture: 1× PocketBeagle 2 Industrial + Cape-B-2 (Zoë) +
-XCVR-49MHZ-2, USB CDC-ECM tethered to a host Debian Linux PC running QGroundControl.
+Emma, USB CDC-ECM tethered to a host Debian Linux PC running QGroundControl.
 Five radio links: SiK 915 MHz, LoRa 915 MHz, WiFi 5 GHz, 49 MHz RCRS (AX.25),
 Zigbee 2.4 GHz.  Servo-driven two-axis antenna gimbal with AS5600 magnetic encoders.
 No external PAs (FCC-compliant with directional antennas).  IP65 field enclosure.

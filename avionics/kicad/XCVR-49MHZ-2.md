@@ -1,4 +1,4 @@
-# XCVR-49MHZ-2 — EMI-Hardened 49 MHz AX.25 Transceiver
+# Emma — EMI-Hardened 49 MHz AX.25 Transceiver
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
@@ -10,7 +10,7 @@
 
 ## Purpose
 
-XCVR-49MHZ-2 is an electromagnetic-environment-hardened variant of XCVR-49MHZ-1. The
+Emma is an electromagnetic-environment-hardened variant of XCVR-49MHZ-1. The
 board is a 49 MHz AX.25 KISS modem for FCC Part 95 Subpart D operation; the -2 variant
 adds conducted and radiated immunity measures to handle the EDF motor and ESC switching
 environment inside the Serenity UAV nacelles.
@@ -28,7 +28,7 @@ constraints from XCVR-49MHZ-1 apply unchanged.
 The 6-pin 2.54 mm pitch header J1 that connects to Zoë's RCRS-49 port is the
 primary EMI ingress path. Any high-frequency conducted noise arriving on the UART and
 PTT lines from the CAPE-B harness routes directly to the Si5351A logic interface
-and MCP4921 SPI port. XCVR-49MHZ-2 adds a three-tier protection network:
+and MCP4921 SPI port. Emma adds a three-tier protection network:
 
 ## Tier 1 — Common-mode choke (CM5)
 
@@ -62,7 +62,7 @@ and MCP4921 SPI port. XCVR-49MHZ-2 adds a three-tier protection network:
 
 ### 2. LDO upgrade: AMS1117-3.3 → MCP1703T-3302E/CB
 
-| Parameter | XCVR-49MHZ-1 | XCVR-49MHZ-2 |
+| Parameter | XCVR-49MHZ-1 | Emma |
 | --- | --- | --- |
 | Part | AMS1117-3.3 (SOT-223) | MCP1703T-3302E/CB (SOT-23A-5) |
 | PSRR (100 kHz) | 40 dB | 72 dB |
@@ -81,7 +81,7 @@ important for the 1200-baud AFSK modulation scheme.
 
 ### 3. Enhanced supply bypass cascade
 
-The original AMS1117 output had a single 10 µF + 100 nF bypass pair. XCVR-49MHZ-2
+The original AMS1117 output had a single 10 µF + 100 nF bypass pair. Emma
 adds a four-capacitor cascade to address both low-frequency (EDF PWM) and high-frequency
 (RF pickup) ripple:
 
@@ -111,7 +111,7 @@ temperature, preventing resonance shifts in the decoupling network.
 ### 4. Improved low-pass filter: 6-element Chebyshev
 
 XCVR-49MHZ-1 specified a 5-element Chebyshev LPF (FL1) with fc = 75 MHz and
-≥ 40 dBc attenuation at the 2nd harmonic (98 MHz). XCVR-49MHZ-2 upgrades to a
+≥ 40 dBc attenuation at the 2nd harmonic (98 MHz). Emma upgrades to a
 6-element design to add one additional pole, targeting ≥ 50 dBc at 98 MHz and
 ≥ 60 dBc at 147 MHz (3rd harmonic):
 
@@ -428,7 +428,7 @@ The JST-GH SM06B-GHS-TB-1MP connector symbol for J1 now includes a SHIELD pin
 - **Drain wire:** 28 AWG stranded, terminate to the J1 PGND mounting-tab pad.  Bond the
   other end to Zoë's corresponding J_XCVR PGND pad.
 - **Ferrite clamp:** Würth 74271222 snap-on ferrite (or Laird 28B0562-100) ≤ 25 mm from
-  the connector body at BOTH the XCVR-49MHZ-2 end and the Zoë end.
+  the connector body at BOTH the Emma end and the Zoë end.
 - **Maximum cable length:** 150 mm (limited by signal integrity at 1200-baud AFSK and
   UART signal rise time ≤ 10 ns at 3.3 V LVCMOS).
 
@@ -489,7 +489,7 @@ and is preserved here per project standards (CLAUDE.md §Coding Standards).
 
 ### File Header (removed from kicad_pcb)
 
-- **Board:** XCVR-49MHZ-2 EMI-Hardened 49 MHz AX.25 KISS Transceiver
+- **Board:** Emma EMI-Hardened 49 MHz AX.25 KISS Transceiver
 - **Date:**2026-06-03**Rev:** 2
 - **4-layer stackup:** F.Cu (signal) / In1.Cu (GND) / In2.Cu (+5V power) / B.Cu (signal)
 - **Board size:** 55 × 35 mm, origin at (100, 100) mm

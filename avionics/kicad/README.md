@@ -7,7 +7,7 @@ This directory holds the KiCad projects for the four cape/board types:
 | `Wash.kicad_*` | **Wash** | Flight-control & sensor cape (FC) |
 | `Zoë.kicad_*` | **Zoë** | Comms / logging / payload cape (CN) |
 | `Kaylee.kicad_*` | **Kaylee** | Power-distribution board (PDB) |
-| `XCVR-49MHZ-2.kicad_*` | **XCVR-49MHZ-2** | 49 MHz RCRS transceiver |
+| `XCVR-49MHZ-2.kicad_*` | **Emma** | 49 MHz RCRS transceiver |
 
 Per-board net/pin documentation lives in the matching `*.md` files
 (`Wash.md`, `Zoë.md`, `Kaylee.md`, `XCVR-49MHZ-2.md`). KiCad files keep
@@ -65,7 +65,7 @@ what is still open, so the thread can be picked up cleanly.
   board. "Update PCB from Schematic" therefore does **not** repopulate
   the component nets — net edits are made on the `.kicad_pcb`.
 
-- **Verified the boards load** in `pcbnew` (Wash 43, Zoë 42, XCVR 69,
+- **Verified the boards load** in `pcbnew` (Wash 43, Zoë 42, Emma 69,
   Kaylee 67 footprints) and characterised the violation landscape (below).
 
 ### ❌ Not done — open follow-up
@@ -78,8 +78,8 @@ what is still open, so the thread can be picked up cleanly.
    isolation region (secure/`GND` area plus one per `GND2_CAN` / `GND2_ETH`
    / `GND2_RS485` field side), with the 0.5 mm `ISOLATION` creepage moat
    kept clear between them. Wash and Zoë tie their mesh to the local TPM;
-   **Kaylee and XCVR have no local TPM**, so their tamper signal must be
-   carried over the inter-board link (XCVR → Zoë, Kaylee → Wash).
+   **Kaylee and Emma have no local TPM**, so their tamper signal must be
+   carried over the inter-board link (Emma → Zoë, Kaylee → Wash).
 
 2. **Routing / ratsnest.** The manual rearrangement left signal nets
    unrouted (~60 multi-pin signal nets per cape; the 7 power/ground nets
@@ -96,7 +96,7 @@ what is still open, so the thread can be picked up cleanly.
    | --- | --- | --- | --- |
    | Wash | 465 | 121 | mesh shorts, solder-mask bridges, clearance |
    | Zoë | 554 | 146 | mesh shorts, solder-mask bridges, clearance |
-   | XCVR-49MHZ-2 | 421 | 160 | silk-over-copper, text-height, mask bridges |
+   | Emma | 421 | 160 | silk-over-copper, text-height, mask bridges |
    | Kaylee | 221 | 181 | courtyard overlap, lib-footprint mismatch, silk |
 
 4. **MDIO addressing.** Both Wash PHYs (ETH1-PHY, ETH2-PHY) share the
@@ -133,7 +133,7 @@ These are recorded so the next person does not re-derive them:
 - **Recommended workflow:** finish routing in the **KiCad GUI** (where
   Specctra DSN export and the interactive/auto routers are reliable), with
   the Ethernet pairs routed by hand. The deterministic, non-routing work
-  (per-domain tamper-mesh zones, cosmetic/footprint DRC, the XCVR/Kaylee
+  (per-domain tamper-mesh zones, cosmetic/footprint DRC, the Emma/Kaylee
   link tamper signalling) can still be scripted headless via the board API.
 
 ---

@@ -60,7 +60,7 @@ required before first flight (see §6 Procedure, step 3).
 | 2× tilt servos + CF pivot rods | 0.322 lbm (146 g) | 19.29 in (490 mm) | 71 540 |
 | 8× PocketBeagle 2 Industrial | 0.229 lbm (104 g) | 11.61 in (295 mm) | 30 680 |
 | 4× Wash + 4× Zoë | 0.635 lbm (288 g) | 11.61 in (295 mm) | 84 960 |
-| 4× XCVR-49MHZ-2 | 0.115 lbm (52 g) | 11.61 in (295 mm) | 15 340 |
+| 4× Emma | 0.115 lbm (52 g) | 11.61 in (295 mm) | 15 340 |
 | Kaylee (enclosed, 278 g) | 0.613 lbm (278 g) | 9.65 in (245 mm) | 68 110 |
 | CF keel bar | 0.066 lbm (30 g) | 12.01 in (305 mm) | 9 150 |
 | Airframe (shell + foam fill + hardware) | 1.323 lbm (600 g) | 11.42 in (290 mm) | 174 000 |
