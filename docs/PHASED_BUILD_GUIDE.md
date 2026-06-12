@@ -50,8 +50,8 @@
 | T/W one nacelle lost | **1.64:1** — FC RTH |
 | Max payload | **3.07 lbm (1,392 g)** at T/W = 2.0 |
 | Compute nodes | **8 nodes:** FC1–FC4 (Cape-A, sensor/flight) + CN1–CN4 (Cape-B, comms/payload) |
-| FC node hardware | **PocketBeagle 2 Industrial (AM6254)** + Wash 85×55mm — ICM-42688-P IMU, BMP388 baro, u-blox M10Q GPS, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0** · DK 2820-100003007-ND |
-| CN node hardware | **PocketBeagle 2 Industrial (AM6254)** + Zoë 90×60mm — SiK 915MHz, LoRa RFM95W 915MHz, TI WL1837MOD WiFi/BT, RCRS-49 sub-module, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0**; ATF16V8BQL CPLD write-blocker (log μSD) · DK 2820-100003007-ND |
+| FC node hardware | **PocketBeagle 2 Industrial (AM6254)** + Wash 55×35mm — ICM-42688-P IMU, BMP388 baro, u-blox M10Q GPS, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0** · DK 2820-100003007-ND |
+| CN node hardware | **PocketBeagle 2 Industrial (AM6254)** + Zoë 55×35mm — SiK 915MHz, LoRa RFM95W 915MHz, TI WL1837MOD WiFi/BT, RCRS-49 sub-module, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0**; ATF16V8BQL CPLD write-blocker (log μSD) · DK 2820-100003007-ND |
 | Bay assignments | Shepherd's room (Bay A): CN1+FC1 · Inara's shuttle (Bay B): CN2+FC2 · River's room (Bay D): CN3+FC3 · Simon's medbay (Bay E): CN4+FC4 (CN lower, FC upper per bay) |
 | Cape variant layout | **v2 · v2 · v2 · v2 (nose → tail, Rev Q):** All 8 positions use Wash / Zoë (EMI-hardened, 5 kV isolated CAN FD / RS-485 / Ethernet transceivers). Single-SKU procurement; Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 archived as of Rev Q. |
 | Bus order | CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4 — CN and FC interleaved on all data buses (CAN FD, RS-485, 1553) and power distribution; any single segment or bay power failure leaves ≥2 FC + ≥2 CN on both sides of the break |
@@ -222,18 +222,18 @@ These rules eliminate costly structural rework. Read before you start Phase 1.
 | E — Aft Service | 12.60–15.28 in (320–388 mm) | CN4+FC4 (CN lower, FC upper) | 3.82×2.48×2.68 in (97×63×68 mm) EPS | 4× M2.5 screws     |
 | F — Engine Bell | 15.28–17.99 in (388–457 mm) | EDF access               | **NO FOAM**                  | Bayonet PETG frame |
 
-All 4 node bays use a uniform 97×63mm footprint — sized for Cape-B (90×60mm) + 7mm clearance. This simplifies void former fabrication: bays A–E (except cargo C) share the same footprint jig template.
+All 4 node bays use a uniform 62×42mm footprint — sized for Cape-B (55×35mm) + 7mm clearance. This simplifies void former fabrication: bays A–E (except cargo C) share the same footprint jig template.
 
-**3. Install M2.5 nylon standoffs in all four node bays** before hulls are joined. Each bay holds one CN node (Cape-B, lower) and one FC node (Cape-A, upper). Install floor standoffs at the Cape-B (90×60mm) hole pattern; install inter-cape standoffs at the Cape-A (85×55mm) hole pattern above:
+**3. Install M2.5 nylon standoffs in all four node bays** before hulls are joined. Each bay holds one CN node (Cape-B, lower) and one FC node (Cape-A, upper). Install floor standoffs at the Cape-B (55×35mm) hole pattern; install inter-cape standoffs at the Cape-A (55×35mm) hole pattern above:
 
 | Bay                      | Station   | Nodes (lower→upper)     | Lower footprint | Floor standoffs   | Inter-cape standoffs |
 | ------------------------ | --------- | ----------------------- | --------------- | ----------------- | -------------------- |
-| A (Nose, panel A)        | 0–91mm    | CN1 Cape-B → FC1 Cape-A | 90×60mm         | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm   |
-| B (Dorsal Fwd, panel B)  | 91–165mm  | CN2 Cape-B → FC2 Cape-A | 90×60mm         | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm   |
-| D (Dorsal Aft, panel D)  | 251–320mm | CN3 Cape-B → FC3 Cape-A | 90×60mm         | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm   |
-| E (Aft Service, panel E) | 320–388mm | CN4 Cape-B → FC4 Cape-A | 90×60mm         | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm   |
+| A (Nose, panel A)        | 0–91mm    | CN1 Cape-B → FC1 Cape-A | 55×35mm         | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm   |
+| B (Dorsal Fwd, panel B)  | 91–165mm  | CN2 Cape-B → FC2 Cape-A | 55×35mm         | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm   |
+| D (Dorsal Aft, panel D)  | 251–320mm | CN3 Cape-B → FC3 Cape-A | 55×35mm         | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm   |
+| E (Aft Service, panel E) | 320–388mm | CN4 Cape-B → FC4 Cape-A | 55×35mm         | 4× M2.5 nylon 6mm | 4× M2.5 nylon 20mm   |
 
-Cape-B (CN) mounts on 6mm floor standoffs. Cape-A (FC) mounts on 20mm inter-cape standoffs threaded into the Cape-B upper holes — ~44mm total stack height. Because Cape-A (85×55mm) is smaller than Cape-B (90×60mm), the inter-cape standoffs use inboard hole positions; verify clearance on the PCB design before ordering standoffs.
+Cape-B (CN) mounts on 6mm floor standoffs. Cape-A (FC) mounts on 20mm inter-cape standoffs threaded into the Cape-B upper holes — ~44mm total stack height. Cape-A and Cape-B share the same 55×35mm form factor; verify inter-cape standoff hole alignment against PCB layout before ordering standoffs.
 
 **Bus interleave benefit:** Each bay contains one CN and one FC node, sharing the same power tap and data bus segment. A power short, connector failure, or flooded bay takes out exactly one of each type — never all of either.
 
@@ -443,8 +443,8 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 | 16AWG silicone wire 0.5m                                              | 1×       | ~$4                              |
 | JST-XH 6S balance tap → XT30 (cells 1–4, 4S tap)                      | 1×       | ~$3                              |
 | PocketBeagle 2 Industrial (AM6254)                                    | 4×       | $51.03 ea (DK 2820-100003007-ND) |
-| Cape-A PCB 85×55mm 4L (JLCPCB assembled) — FC nodes                   | 2×       | ~$42ea                           |
-| Cape-B PCB 90×60mm 4L (JLCPCB assembled) — CN nodes                   | 2×       | ~$80ea                           |
+| Cape-A PCB 55×35mm 4L (JLCPCB assembled) — FC nodes                   | 2×       | ~$42ea                           |
+| Cape-B PCB 55×35mm 4L (JLCPCB assembled) — CN nodes                   | 2×       | ~$80ea                           |
 | RCRS-49 sub-module PCB (49MHz TDDS RC transceiver)                    | 2×       | ~$20ea                           |
 | SiK 915MHz ground station radio                                       | 1×       | ~$15                             |
 | microSD 32GB (log — 1 per CN node, write-blocked)                     | 2×       | ~$8ea                            |
@@ -690,8 +690,8 @@ apt install mavlink-router
 | Item                                               | Qty      | Approx. Cost                     |
 | -------------------------------------------------- | -------- | -------------------------------- |
 | PocketBeagle 2 Industrial (AM6254)                 | 4×       | $51.03 ea (DK 2820-100003007-ND) |
-| Cape-A PCB 85×55mm 4L (JLCPCB assembled) — FC3+FC4 | 2×       | ~$42ea                           |
-| Cape-B PCB 90×60mm 4L (JLCPCB assembled) — CN3+CN4 | 2×       | ~$80ea                           |
+| Cape-A PCB 55×35mm 4L (JLCPCB assembled) — FC3+FC4 | 2×       | ~$42ea                           |
+| Cape-B PCB 55×35mm 4L (JLCPCB assembled) — CN3+CN4 | 2×       | ~$80ea                           |
 | RCRS-49 sub-module PCB                             | 2×       | ~$20ea                           |
 | microSD 32GB log (CN3+CN4 only, write-blocked)     | 2×       | ~$8ea                            |
 | JST-GH CAN/RS-485/1553/ETH cables 150mm            | assorted | ~$20                             |
@@ -1149,14 +1149,14 @@ Bus order: **CN1 → FC1 → CN2 → FC2 → CN3 → FC3 → CN4 → FC4** (inte
 
 | Node | Bay             | Position           | Hardware                                   | Role (elected)                                                        | Security                                        |
 | ---- | --------------- | ------------------ | ------------------------------------------ | --------------------------------------------------------------------- | ----------------------------------------------- |
-| CN1  | A — Nose        | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 90×60mm | CN master or standby; radios master; CAN FD bus start (120Ω soldered) | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
-| FC1  | A — Nose        | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 85×55mm | FC master or standby; OA Array B host; 1553 primary BC                | SLB9670 TPM 2.0                                 |
-| CN2  | B — Dorsal Fwd  | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 90×60mm | CN master or standby                                                  | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
-| FC2  | B — Dorsal Fwd  | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 85×55mm | FC master or standby; 1553 standby BC                                 | SLB9670 TPM 2.0                                 |
-| CN3  | D — Dorsal Aft  | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 90×60mm | CN node                                                               | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
-| FC3  | D — Dorsal Aft  | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 85×55mm | FC node; OA Array A host                                              | SLB9670 TPM 2.0                                 |
-| CN4  | E — Aft Service | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 90×60mm | CN node; cargo control                                                | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
-| FC4  | E — Aft Service | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 85×55mm | FC node; CAN FD bus end (120Ω soldered)                               | SLB9670 TPM 2.0                                 |
+| CN1  | A — Nose        | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 55×35mm | CN master or standby; radios master; CAN FD bus start (120Ω soldered) | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
+| FC1  | A — Nose        | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 55×35mm | FC master or standby; OA Array B host; 1553 primary BC                | SLB9670 TPM 2.0                                 |
+| CN2  | B — Dorsal Fwd  | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 55×35mm | CN master or standby                                                  | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
+| FC2  | B — Dorsal Fwd  | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 55×35mm | FC master or standby; 1553 standby BC                                 | SLB9670 TPM 2.0                                 |
+| CN3  | D — Dorsal Aft  | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 55×35mm | CN node                                                               | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
+| FC3  | D — Dorsal Aft  | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 55×35mm | FC node; OA Array A host                                              | SLB9670 TPM 2.0                                 |
+| CN4  | E — Aft Service | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 55×35mm | CN node; cargo control                                                | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
+| FC4  | E — Aft Service | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 55×35mm | FC node; CAN FD bus end (120Ω soldered)                               | SLB9670 TPM 2.0                                 |
 
 **All FC nodes (Cape-A):** ICM-42688-P IMU · BMP388 baro · u-blox M10Q GPS · ATA6561 CAN FD · MAX3485E RS-485 · DS26LV31/32 + PE-68515 1553 · DP83825I ×2 Ethernet · SLB9670 TPM 2.0 · 8× servo PWM rail
 

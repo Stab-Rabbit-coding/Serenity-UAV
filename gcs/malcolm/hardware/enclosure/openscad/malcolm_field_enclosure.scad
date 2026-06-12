@@ -85,7 +85,7 @@ RF_GLAND_Z      = INT_H * 0.7; /* 5× SMA glands on right wall — upper zone   
 SERVO_GLAND_Z   = INT_H * 0.3; /* Multi-pin servo/I2C connector on left wall  */
 
 /* ---------------------------------------------------------------------------
- * Standoff pattern for Cape-B-2 PCB (90×60mm, M2.5 holes)
+ * Standoff pattern for Cape-B-2 PCB (55×35mm, M2.5 holes)
  * Origin at floor centre of interior.
  * ---------------------------------------------------------------------------*/
 STAND_H     = 3.0;  /* Standoff height off floor mm                           */

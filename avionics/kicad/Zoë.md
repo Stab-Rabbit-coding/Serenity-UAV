@@ -30,7 +30,7 @@ ETH-P/ETH-N JST-GH connectors are removed. The 22 P2 expansion-header pins forme
 allocated to RMII0/1, MDC, MDIO, and PHY control signals become no-connect.
 
 The freed board area (approximately 20 × 12 mm) accommodates the new EMI filter components
-without any overall board size increase from the CAPE-B-1 90 × 60 mm footprint.
+without any overall board size increase from the CAPE-B-1 55 × 35 mm footprint.
 
 ### 2. CAN FD transceiver: ATA6561 → ISOW1044BDFMR
 

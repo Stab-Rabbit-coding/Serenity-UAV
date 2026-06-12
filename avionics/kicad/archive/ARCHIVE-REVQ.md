@@ -17,8 +17,8 @@ the Wash and Zoë files are verified identical to these except for the board nam
 
 | File(s) | Board | Archived Reason |
 | --- | --- | --- |
-| `CAPE-A-2.kicad_{pcb,sch,pro,prl}`, `CAPE-A-2.md` | Cape-A-2 (EMI-hardened FC cape, 85×55 mm) | Renamed to Wash — content fully preserved in `Wash.*` |
-| `CAPE-B-2.kicad_{pcb,sch,pro,prl}`, `CAPE-B-2.md` | Cape-B-2 (EMI-hardened CN cape, 90×60 mm) | Renamed to Zoë — content fully preserved in `Zoë.*` |
+| `CAPE-A-2.kicad_{pcb,sch,pro,prl}`, `CAPE-A-2.md` | Cape-A-2 (EMI-hardened FC cape, 55×35 mm) | Renamed to Wash — content fully preserved in `Wash.*` |
+| `CAPE-B-2.kicad_{pcb,sch,pro,prl}`, `CAPE-B-2.md` | Cape-B-2 (EMI-hardened CN cape, 55×35 mm) | Renamed to Zoë — content fully preserved in `Zoë.*` |
 
 ### Archived 2026-06-05 — Revision Q baseline
 
@@ -27,8 +27,8 @@ at **Revision Q** as the design standardises on EMI-hardened v2 capes at all pos
 
 | File(s) | Board | Archived Reason |
 | --- | --- | --- |
-| `CAPE-A-1.kicad_{pcb,sch,pro,prl}` | Cape-A-1 (85×55 mm, standard) | Superseded by Cape-A-2 (EMI-hardened) at all FC positions |
-| `CAPE-B-1.kicad_{pcb,sch,pro,prl}` | Cape-B-1 (90×60 mm, standard) | Superseded by Cape-B-2 (EMI-hardened) at all CN positions |
+| `CAPE-A-1.kicad_{pcb,sch,pro,prl}` | Cape-A-1 (55×35 mm, standard) | Superseded by Cape-A-2 (EMI-hardened) at all FC positions |
+| `CAPE-B-1.kicad_{pcb,sch,pro,prl}` | Cape-B-1 (55×35 mm, standard) | Superseded by Cape-B-2 (EMI-hardened) at all CN positions |
 | `XCVR-49MHZ-1.kicad_{pcb,sch,pro,prl}` | XCVR-49MHZ-1 (55×35 mm, standard) | Superseded by XCVR-49MHZ-2 (EMI-hardened) at all CN positions |
 | `XCVR-49MHZ-1.md` | XCVR-49MHZ-1 design notes | Superseded; v2 design notes in `XCVR-49MHZ-2.md` |
 

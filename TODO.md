@@ -154,11 +154,11 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
   All 4 spatial conflicts resolved (NSVMT_X_CEN moved AFT to −147.6 mm). Load FOS ≥ 11 vs 4.0
   AUVSI target. *(done 2026-06-08, PR #42)*
 - [x] **`cargo_sect_shell24.scad` Rev S2** — Inara and River avionics bay dorsal standoffs
-  (8× M3 boss posts, ±40×±25 mm pattern) + dorsal access panel cuts (85×55 mm each) for Cape-B
-  (90×60 mm) at port half (Z_CEN=118 mm, Inara) and stbd half (Z_CEN=45 mm, River). GPS_PORT/STBD
+  (8× M3 boss posts, ±40×±25 mm pattern) + dorsal access panel cuts (62×42 mm each) for Cape-B
+  (55×35 mm) at port half (Z_CEN=118 mm, Inara) and stbd half (Z_CEN=45 mm, River). GPS_PORT/STBD
   co-located for minimal SMA routing. *(done 2026-06-08, PR #42)*
 - [x] **`cargo_sect_shell24.scad` Rev S3** — Faraday enclosure space allocation.
-  Panel cuts enlarged 85×55 → 95×65 mm; boss offsets updated ±40×±25 → ±42×±27 mm to match
+  Panel cuts enlarged 55×35 → 62×42 mm; boss offsets updated ±40×±25 → [TBD pending PCB layout — hole pattern must be derived from Wash.kicad_pcb / Zoë.kicad_pcb once layout is complete] to match
   Faraday tray corner mounts; bay Z centres adjusted ±1 mm (Inara 118→119, River 45→44) for 10 mm
   inter-bay gap; FARADAY_* envelope parameters (95×65×65 mm, 1.5 mm Al wall, 25 mm fan) added.
   *(done 2026-06-08, PR #42)*
@@ -186,7 +186,7 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
   Add to Phase 0 print schedule.
 
 - [ ] **Simon bay — define avionics bay in rear section SCAD file.**
-  Simon's stack (Cape-B-2 + Cape-A-2, 90×60 mm, 29.2 mm stack height) needs boss standoffs and
+  Simon's stack (Cape-B-2 + Cape-A-2, 55×35 mm (both), 29.2 mm stack height) needs boss standoffs and
   dorsal access panel in the rear engine cone SCAD (pre-Phase 11) or the middle ring SCAD (Phase 11
   and beyond, once rear EDF occupies the cone). Verify rear section bounds and available dorsal band
   before adding geometry. Reference CLAUDE.md PACE: Simon = alternate watchdog, aft EDF control.
@@ -201,7 +201,7 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
   `openscad -o airframe/stls/fuselage/cargo_sect_shell24.stl
     airframe/openscad/fuselage/cargo/cargo_sect_shell24.scad`
   Verify in slicer: wing mortises at both Z walls; spar bore at X=−70 mm; 8 dorsal boss posts;
-  two 85×55 mm dorsal panel openings. Z-range must be 0..163 mm; all features inside hull skin.
+  two 62×42 mm dorsal panel openings. Z-range must be 0..163 mm; all features inside hull skin.
   **BLOCKS Phase 0 cargo section printing.**
 
 - [ ] Add motor-mount and DRV8833-tray boss locations to `cargo_sect_shell24.scad` interior
@@ -294,6 +294,73 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     **BLOCKS** exploded view SVGs below.
 - [ ] **Exploded view SVG — printed parts only** (all printed components labelled and exploded from assembly position). **Generate using FreeCAD:** drive part translations via a headless Python script that offsets each `Mesh::Feature` Placement along its explosion axis, then exports SVG via FreeCAD TechDraw. Save to `airframe/diagrams/exploded/`.
 - [ ] **Exploded view SVG — full build** (all components: PCBs, SBCs, motors, ESCs, wires, sensors, antennas, hardware). Same FreeCAD TechDraw headless approach as printed-parts exploded view. Save to `airframe/diagrams/exploded/`.
+
+---
+
+#### 1.1.5 **Non-Printable Component Placeholders** *(Rev R1, 2026-06-12)*
+
+Dimensionally-accurate bounding-geometry STL placeholder files for all non-printable
+Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
+
+**Generator:** `airframe/placeholders/generate_placeholders.py`
+(pure Python, no external dependencies; run with `python3 generate_placeholders.py`)
+
+**FreeCAD catalog script:** `airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
+(loads all 76 placeholder STLs into a grid-layout catalog document;
+ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`)
+
+**Output:** `airframe/Serenity-Placeholders.FCStd` (76 components, 8-column grid)
+
+**Placeholder coverage (76 STLs, 6056 triangles total):**
+
+| Category | Count | Files |
+|---|---|---|
+| Propulsion (EDFs, ESCs) | 4 | `airframe/placeholders/propulsion/` |
+| Servos (DS3218MG, SG90) | 2 | `airframe/placeholders/servos/` |
+| Bearings (MF104ZZ, MR63ZZ, 6804) | 3 | `airframe/placeholders/bearings/` |
+| Structural CF (rods, tube, bar, plate, PTFE) | 6 | `airframe/placeholders/structural/` |
+| Avionics PCBs (PB2-I, Cape-A-2/B-2, XCVR, Kaylee, microSD) | 6 | `airframe/placeholders/avionics/` |
+| Power (LiPos, fuses, shunt) | 7 | `airframe/placeholders/power/` |
+| Cargo (N20, HX711, DRV8833, Dyneema) | 4 | `airframe/placeholders/cargo/` |
+| Gears M=1.0 (sector, pinion, bevel, housing) | 4 | `airframe/placeholders/gears/` |
+| Hardware (pins, inserts, screws, straps, wire ring) | 6 | `airframe/placeholders/hardware/` |
+| Lighting (WS2812B ring, WS2812C SMD) | 2 | `airframe/placeholders/lighting/` |
+| Wiring (conduit, harnesses, antenna wire, posts) | 6 | `airframe/placeholders/wiring/` |
+| GCS / Malcolm (enclosure, BECs, antennas, tripod, encoders) | 15 | `airframe/placeholders/gcs/` |
+| Foam fill + interior voids (head/cargo/middle/rear fill; avbay, cargo bay, wiring trunk, power bus, ventilation, pylon pockets) | 11 | `airframe/placeholders/foam/` |
+
+**Completed (2026-06-12):**
+- [x] **Generate all 65 component placeholder STLs** — `generate_placeholders.py` created;
+  all files verified `OK`. STL header marker: `SerenityUAV PLACEHOLDER R1`. *(done 2026-06-12)*
+- [x] **FreeCAD catalog assembly script** — `serenity_placeholders_assembly.py` created;
+  component grid layout; run with `freecadcmd`. *(done 2026-06-12)*
+- [x] **Foam-fill and void visualization STLs** — 11 new STLs in `airframe/placeholders/foam/`:
+  4× FOAM-FILL-* (head/cargo/middle/rear hull sections) and 7× VOID-* (avionics bays,
+  cargo bay, wiring trunk, power bus, ventilation intake/exhaust, nacelle pylon pockets).
+  Total 76 components, 6056 triangles. Use tan/ochre for FOAM-FILL, translucent cyan for
+  VOID objects in FreeCAD. *(done 2026-06-12)*
+
+**Open sub-tasks:**
+- [ ] **Run FreeCAD catalog** — execute `serenity_placeholders_assembly.py` once
+  FreeCAD is available to verify grid layout and produce
+  `airframe/Serenity-Placeholders.FCStd`. Commit the FCStd to the repo.
+- [ ] **Hull-frame placement pass** — for the full-build exploded view (§1.1.4 task),
+  derive the hull-frame position and orientation of each placeholder (e.g., EDF
+  inside nacelle bore, battery tray in cargo section, avionics PCBs in bays)
+  and add `place_mesh()` calls to `serenity_placeholders_assembly.py`.
+- [ ] **Add Phase-11 (deferred) items to catalog** — `EDF_120mm_6S_deferred.stl` and
+  `ESC_80A_6S_BLHeli32_deferred.stl` are generated; confirm they appear in the
+  `deferred/aft-edf/` sub-assembly once that phase resumes.
+- [ ] **Mesh watertightness audit** — run `python tools/validate_stls.py` across
+  `airframe/placeholders/**/*.stl` after first CI run; resolve any non-manifold
+  findings (complex compound meshes: piano-wire torus ring, RF splitter ports, etc.).
+  **Known finding:** `Foam_fill_middle_horseshoe_173x69x161mm.stl` has coplanar
+  T-junction faces at Z=121 mm between left/right pillar tops and the arch bottom
+  (all three pieces share a common plane but are separate box meshes joined via `_cat()`).
+  Acceptable for visualisation; fix by replacing with a proper extruded U-shape when
+  trimesh/CSG support is available.
+- [ ] **Link placeholders to BOM entries** — add `Placeholder_STL` field to
+  `docs/bom_revR.json` for each non-printable row pointing to its STL path.
 
 ---
 
@@ -1715,7 +1782,7 @@ host-PC software all created in Rev R.  See `gcs/malcolm/README.md` for layout.
 
 - [ ] **Malcolm field enclosure — print and fit-check** `gcs/malcolm/hardware/enclosure/openscad/malcolm_field_enclosure.scad`:
   export STL (`openscad -o malcolm_field_enclosure_body.stl ... -D RENDER_MODE=0`);
-  verify PCB standoff spacing matches Cape-B-2 90×60 mm mounting hole pattern in slicer;
+  verify PCB standoff spacing matches Cape-B-2 55×35 mm mounting hole pattern in slicer;
   run mesh validation; print body + lid in PETG (IP65 gasket groove accepts 3 mm EPDM cord).
   **Add to Phase Malcolm-1 print schedule.**
 

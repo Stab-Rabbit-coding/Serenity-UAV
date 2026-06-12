@@ -10,7 +10,7 @@
     (date "2026")
     (rev "K")
     (company "Steve Griffing PE(CSE) CISSP-ISSEP CPP")
-    (comment 1 "PocketBeagle 2 (AM6232) Flight-Control Cape — FC node  85×55mm 4-layer")
+    (comment 1 "PocketBeagle 2 (AM6232) Flight-Control Cape — FC node  55×35mm 4-layer")
     (comment 2 "ICM-42688-P · BMP388 · u-blox M10Q · ATA6561 · MAX3485E · DS26LV31/32 · PE-68515 · DP83825I×2 · SLB9670")
     (comment 3 "CC BY 4.0 — creativecommons.org/licenses/by/4.0")
     (comment 4 "Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0")

@@ -612,12 +612,12 @@
     "nodes": [
       {"ref": "PB2-I-FC", "desc": "PocketBeagle 2 Industrial (AM6254) — FC node, Cape-A", "qty": 4, "mass_g": 13, "cost_usd": 51.03},
       {"ref": "PB2-I-CN", "desc": "PocketBeagle 2 Industrial (AM6254) — CN node, Cape-B", "qty": 4, "mass_g": 13, "cost_usd": 51.03},
-      {"ref": "CAPE-A",   "desc": "Cape-A PCB 85×55 mm — Sensor + FC cape",               "qty": 4, "mass_g": 28, "cost_usd": 42},
-      {"ref": "CAPE-B",   "desc": "Cape-B PCB 90×60 mm — Comms + Logging + Payload cape", "qty": 4, "mass_g": 38, "cost_usd": 80},
+      {"ref": "CAPE-A",   "desc": "Cape-A PCB 55×35 mm — Sensor + FC cape",               "qty": 4, "mass_g": 28, "cost_usd": 42},
+      {"ref": "CAPE-B",   "desc": "Cape-B PCB 55×35 mm — Comms + Logging + Payload cape", "qty": 4, "mass_g": 38, "cost_usd": 80},
       {"ref": "RCRS-49",  "desc": "RCRS-49 sub-module PCB — 49 MHz TDDS RC. Antenna: top wire running dorsal hull spine from nose post (~120 mm) to EDF cone post (~600 mm), ~470 mm wire length, base-loaded (38 uH coil + LC pi-net at nose post), CF keel bar counterpoise.", "qty": 4, "mass_g": 12, "cost_usd": 25},
       {
         "ref":       "CAPE-A-2",
-        "desc":      "Cape-A-2 PCB 85×55 mm — EMI-hardened variant of Cape-A (branch claude/cape-em-harsh-variants-9Yfr1). Replaces ATA6561 with ISOW1044BDFMR (5 kV reinforced CAN FD isolation + integrated DC/DC); replaces MAX3485E with ADM2795EBRWZ (5 kV reinforced RS-485 isolation + integrated DC/DC); replaces DP83825I with ADIN1300BCPZ 1000BASE-T PHY isolated via 2× ISO7642FDWRR 6-channel digital isolators, Würth 749010012A ETH transformer, JST GH 4P Ethernet connector, SRF2012 CMC, PRTR5V0U2X TVS, SMAJ33CA TVS. All isolation barriers rated 5 kV, IEC 62368-1 compliant.",
+        "desc":      "Cape-A-2 PCB 55×35 mm — EMI-hardened variant of Cape-A (branch claude/cape-em-harsh-variants-9Yfr1). Replaces ATA6561 with ISOW1044BDFMR (5 kV reinforced CAN FD isolation + integrated DC/DC); replaces MAX3485E with ADM2795EBRWZ (5 kV reinforced RS-485 isolation + integrated DC/DC); replaces DP83825I with ADIN1300BCPZ 1000BASE-T PHY isolated via 2× ISO7642FDWRR 6-channel digital isolators, Würth 749010012A ETH transformer, JST GH 4P Ethernet connector, SRF2012 CMC, PRTR5V0U2X TVS, SMAJ33CA TVS. All isolation barriers rated 5 kV, IEC 62368-1 compliant.",
         "qty":       4,
         "mass_g":    31,
         "cost_usd":  68,
@@ -627,7 +627,7 @@
       },
       {
         "ref":       "CAPE-B-2",
-        "desc":      "Cape-B-2 PCB 90×60 mm — EMI-hardened variant of Cape-B (branch claude/cape-em-harsh-variants-9Yfr1). Same CAN FD, RS-485, and Ethernet isolation stack as CAPE-A-2 (ISOW1044BDFMR + ADM2795EBRWZ + ADIN1300BCPZ + 2× ISO7642FDWRR) plus all Cape-B payload ICs: MAVLink/SiK 915 MHz, LoRa RFM95W, TI WL1837MOD WiFi/BT, RCRS-49 sub-module header, SLB9670 TPM 2.0, ATF16V8BQL CPLD write-blocker, hardware-enforced log microSD. All isolation barriers 5 kV.",
+        "desc":      "Cape-B-2 PCB 55×35 mm — EMI-hardened variant of Cape-B (branch claude/cape-em-harsh-variants-9Yfr1). Same CAN FD, RS-485, and Ethernet isolation stack as CAPE-A-2 (ISOW1044BDFMR + ADM2795EBRWZ + ADIN1300BCPZ + 2× ISO7642FDWRR) plus all Cape-B payload ICs: MAVLink/SiK 915 MHz, LoRa RFM95W, TI WL1837MOD WiFi/BT, RCRS-49 sub-module header, SLB9670 TPM 2.0, ATF16V8BQL CPLD write-blocker, hardware-enforced log microSD. All isolation barriers 5 kV.",
         "qty":       4,
         "mass_g":    41,
         "cost_usd":  105,

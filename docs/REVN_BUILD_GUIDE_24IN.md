@@ -217,8 +217,8 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 | F — Rear | 15.28–23.98 in (388–609 mm) | EDF access | Bayonet PETG frame |
 
 **4. Install M2.5 nylon standoffs in bays A, B, D, E.**
-- Floor standoffs (6mm): Cape-B (90×60mm) hole pattern
-- Inter-cape standoffs (20mm): Cape-A (85×55mm) hole pattern above Cape-B
+- Floor standoffs (6mm): Cape-B (55×35mm) hole pattern
+- Inter-cape standoffs (20mm): Cape-A (55×35mm) hole pattern above Cape-B
 - Verify 44mm total stack height clears bay void former
 
 **5. Bond wing spar pocket inserts** at wing root stations, both sides. Spar must slide freely in/out for nacelle assembly access.
