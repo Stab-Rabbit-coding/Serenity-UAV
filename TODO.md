@@ -357,8 +357,8 @@ Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
   FAR-CAGE-AV (cage), FAR-GASKET-AV, FAR-FAN-40, FAR-EMI-VENT-40, FAR-BOND-STRAP,
   FAR-FT-PANEL, FAR-FERRITE-4MM; MAL-FAR-FAN, MAL-FAR-GASKET (GCS).
   BOM entries added to `current-specification/bom_revR.csv`.
-  **⚠ MASS NOTICE: Faraday system adds 512 g (1.13 lbm) to aircraft AUW
-  (reduced from 648 g by adopting 0.3 mm cage wall — 2026-06-13).
+  **⚠ MASS NOTICE: Faraday system adds 484 g (1.07 lbm) to aircraft AUW
+  (reduced from 648 g: cage → 0.1 mm Al foil bonded to foam — 2026-06-13).
   Hover T/W ≈ 1.09 — still below safe VTOL minimum (~1.2). See open
   mass budget review in §1.1.5 below.** *(done 2026-06-13)*
 - [x] **Faraday cage foam voids** — VOID-FAR-CAGE (76×56×88 mm cage pocket) and
@@ -393,12 +393,13 @@ Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
   KiCad schematic + layout (55×35 mm, LP π-filter + TVS on CAN FD ×2,
   RS-485, Ethernet RJ45, power JST-GH 2P). Run DRC; generate gerbers; add
   to `avionics/kicad/`. **BLOCKS Faraday cage final assembly.**
-- [ ] **Faraday mass budget review** — cage wall reduced to 0.3 mm 5052-H32 Al
-  (4 mm flanges + dimple grid; panel f₁ ≈ 680 Hz > EDF shaft ~470 Hz);
-  system mass now 512 g (1.13 lbm), T/W ≈ 1.09 — still below ~1.2 minimum.
+- [ ] **Faraday mass budget review** — cage wall reduced to 0.1 mm 5052-H34 Al
+  foil bonded to foam (elastic foundation raises panel f₁ ≈ 810 Hz >
+  EDF shaft ~470 Hz; no stiffening features needed); system mass now
+  484 g (1.07 lbm), T/W ≈ 1.09 — still below ~1.2 minimum.
   Remaining options to close gap:
-  (b) 4 ferrites/cage instead of 8 (saves 80 g → 432 g, T/W ≈ 1.11);
-  (c) 1 bond strap/cage instead of 2 (saves 40 g → 392 g / 472 g w/o b,
+  (b) 4 ferrites/cage instead of 8 (saves 80 g → 404 g, T/W ≈ 1.11);
+  (c) 1 bond strap/cage instead of 2 (saves 40 g → 364 g / 444 g w/o b,
       T/W ≈ 1.12 / 1.10);
   (d) accept T/W = 1.09 if EDF bin-test confirms nominal thrust exceeds
       spec (1240 g × 90% × 2 EDFs = 2232 g is a floor, not mean).

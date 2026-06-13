@@ -961,7 +961,7 @@ def gen_wire_post_49mhz():
 # environment requirement (CLAUDE.md).
 #
 # Subcomponents per aircraft bay (×4 bays):
-#   FAR-CAGE-AV      — cage + removable lid; 70×50×82 mm; 0.3 mm Al formed
+#   FAR-CAGE-AV      — cage assembly; 70×50×82 mm; 0.1 mm Al foil, foam-bonded
 #   FAR-GASKET-AV    — spring-contact EMI lid gasket; 250 mm strip
 #   FAR-FAN-40       — 40 mm 5 V axial fan; cage internal cooling
 #   FAR-EMI-VENT-40  — 40×40×6 mm Al honeycomb EMI vent panel (×2/cage)
@@ -981,24 +981,36 @@ def gen_wire_post_49mhz():
 
 def gen_far_cage_av():
     """
-    Avionics bay Faraday cage — custom 0.3 mm alodine aluminum enclosure.
+    Avionics bay Faraday cage assembly — foam-bonded 0.1 mm Al foil liner.
 
     Outer envelope: 70 × 50 × 82 mm (W × D × H).
-    Inner clear: ≈ 66 × 46 × 79 mm (≈ 2 mm wall each face).
+    Inner clear: ≈ 66 × 46 × 79 mm (≈ 2 mm notional wall each face).
     Removable lid (top 70 × 50 mm) secured by 4× M3 captive screws.
     One face (70 × 82 mm, aft) carries 40 mm fan aperture + EMI vent.
     Bottom: 4× M3 standoff mounting points aligned to bay boss pattern.
 
     BOM: FAR-CAGE-AV (×4 — Shepherd / Inara / River / Simon bays).
-    Material: 0.3 mm 5052-H32 Al, alodine MIL-DTL-5541 Type 2.
-      — 4 mm formed flanges on all mating edges (raises edge fixity toward
-        clamped; panel f₁ ≈ 479 Hz bare flanged).
-      — 1.5 mm pressed dimple grid at 12 mm pitch on both 70 × 82 mm
-        faces (≈ 2× bending stiffness; raises f₁ ≈ 680 Hz, above EDF
-        shaft frequency of ≈ 470 Hz at rated RPM).
-      — 0.8 mm brass insert strip riveted at all 8 M3 fastener locations
-        (lid × 4 + standoff × 4) to prevent pull-through in vibration.
-    Mass: ≈ 24 g/cage (22 g Al + 2 g brass inserts); ×4 = 96 g total.
+
+    Three-piece construction:
+      1. 5-wall liner — 0.1 mm 5052-H34 Al foil bonded into the
+         VOID-FAR-CAGE foam cavity with 3M DP190 flexible epoxy.
+         Foam elastic foundation raises panel f₁ ≈ 810 Hz (above EDF
+         shaft ≈ 470 Hz at rated RPM) without any formed stiffening.
+         Seam laps ≥ 25 mm bonded with conductive adhesive; alodine
+         MIL-DTL-5541 Type 2 treatment for corrosion protection.
+         Liner is non-removable — integral with airframe foam structure.
+         Flexible adhesive accommodates Al/foam CTE mismatch (≈ 2.7×
+         higher CTE for foam vs Al over ΔT = 30 °C operating range).
+      2. Lid perimeter channel — 0.8 mm 5052-H32 Al strip, 8 mm tall,
+         bonded to foam cavity opening face; provides rigid seating
+         surface for FAR-GASKET-AV EMI spring-contact lid gasket.
+      3. Removable lid — 0.5 mm 5052-H32 Al; 0.8 mm brass insert strips
+         at all 8 M3 fastener locations (lid × 4 + standoff × 4).
+         Field-serviceable with common hand tools (CLAUDE.md).
+
+    Mass: ≈ 17 g/cage (6 g foil + 4 g channel + 5 g lid + 2 g inserts);
+          ×4 cages = 68 g total.
+    RF: SE ≥ 60 dB at 100 MHz (SE_A + SE_R >> 60 dB even at 0.1 mm).
     Ref [2]: CLAUDE.md 500 W/m² EM operating environment.
     """
     # Outer bounding envelope modelled as solid box for clarity
@@ -1559,7 +1571,7 @@ _COMPONENTS = [
     # EMC / Faraday shielding
     (gen_far_cage_av,        "faraday", "Far_cage_AV_70x50x82mm.stl",
      "FAR-CAGE-AV",
-     "Avionics bay Faraday cage 70×50×82 mm — 0.3 mm alodine Al, formed (×4)"),
+     "Avionics bay Faraday cage 70×50×82 mm — 0.1 mm Al foil, foam-bonded (×4)"),
     (gen_far_gasket_av,      "faraday", "Far_gasket_AV_250x6x1mm.stl",
      "FAR-GASKET-AV",
      "EMI spring-contact lid gasket 250×6×1 mm — cage seal (×4)"),
