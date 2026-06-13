@@ -21,6 +21,7 @@ def convert_stl_to_shape(stl_path, step_path):
     print(f"Successfully converted {stl_path} to {step_path}")
 
 if __name__ == "__main__":
-    
+  
+
     # Pull paths directly from the command line arguments
     convert_stl_to_shape(sys.argv[1], sys.argv[2])
