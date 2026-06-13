@@ -373,13 +373,25 @@ Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
   VOID objects in FreeCAD. *(done 2026-06-12)*
 
 **Open sub-tasks:**
-- [ ] **Rear skid reinforcement — SCAD update** — add 4 mm CF rod press-fit channels
-  to `s_rear_neck_intake_shell24.scad` skid sections (2× channels, one per skid,
-  running full skid length); channels accept 4mm OD CF rod from CF-ROD-4MM stock.
-  Skids receive repeated ground impact; CF insert provides bending stiffness without
-  high-infill bulk. Alternative: use slicer modifier mesh to print skid cross-sections
-  at 40% gyroid + 6 perimeters if SCAD channel approach is impractical.
-  Update printed part mass in BOM after SCAD change and re-slice.
+- [ ] **Rear skid reinforcement — SCAD update (TWO files)**
+  The skids are the aft extensions of the middle-section horseshoe ring; the
+  middle/rear section cut was made purely for printability and carries no load.
+  The CF rod must therefore span BOTH sections continuously to reinforce the
+  full skid bending span and to tie the print joint together.
+  Changes required:
+  - `s_middle_canonical_shell24.scad`: add 4.2 mm bore channel along each
+    horseshoe-bent-aft skid arm from the horseshoe origin to the aft face
+    (middle/rear joint face at hull Y ≈ +203 mm).
+  - `s_rear_neck_intake_shell24.scad`: add matching coaxial 4.2 mm bore
+    channel through the skid extension from the joint face to the skid tip.
+  - Channels must be coaxially aligned across the joint face to accept a
+    single continuous rod. Nominal channel axis = hull Z-face centroid of
+    each skid cross-section.
+  - Rod: 4 mm OD solid CF from CF-ROD-4MM stock, ~250 mm per skid × 2
+    skids = ~500 mm total; insert from aft, epoxy (West System 105/206).
+  - Rod serves triple purpose: skid bending stiffness, middle/rear joint
+    tie-together, assembly alignment pin.
+  - Re-slice both parts after SCAD update; update masses in BOM.
   **BLOCKS first taxi/landing test.**
 - [ ] **Run FreeCAD catalog** — execute `serenity_placeholders_assembly.py` once
   FreeCAD is available to verify grid layout and produce
