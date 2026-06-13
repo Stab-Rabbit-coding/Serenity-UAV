@@ -1,0 +1,23 @@
+name: Stale Branches Cleanup
+
+on:
+  schedule:
+    # Runs at 00:00 every Sunday
+    - cron: '0 0 * * 0'
+  workflow_dispatch: # Allows you to trigger it manually via the UI
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check and Remove Stale Branches
+        uses: crwood/stale-branches@v6.0.0
+        with:
+          # Number of days before a branch is considered stale
+          days-before-stale: 30
+          # Branches you absolutely want to protect from deletion
+          ignored-branches: 'main,master,develop,release/*'
+          # Set to 'true' to actually delete branches. 'false' will only dry-run/report.
+          dry-run: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
