@@ -844,7 +844,7 @@ const CAT_C={CAN:C.can,"RS-485":C.rs4,"I²C":C.i2c};
 function BomTab(){
   const [cf,setCf]=useState("All");
   const rows=cf==="All"?BOM_DELTA:BOM_DELTA.filter(b=>b.cat===cf);
-  const total=BOM_DELTA.reduce((s,b)=>s+b.qty*(parseFloat(b.est.replace("$","").replace("ea",""))||0),0);
+  const total=BOM_DELTA.reduce((s,b)=>s+b.qty*(parseFloat(b.est.replace(/\$/g,"").replace(/ea/g,""))||0),0);
   return(<div>
     <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:12}}>
       {["All",...BOM_CATS_D].map(c=>(<button key={c} onClick={()=>setCf(c)} style={{background:cf===c?`${CAT_C[c]||C.accent}20`:"transparent",border:`1px solid ${cf===c?CAT_C[c]||C.accent:"rgba(0,229,255,0.14)"}`,color:cf===c?CAT_C[c]||C.accent:C.dimmer,padding:"3px 10px",fontFamily:M,fontSize:9,cursor:"pointer",borderRadius:2}}>{c}</button>))}
