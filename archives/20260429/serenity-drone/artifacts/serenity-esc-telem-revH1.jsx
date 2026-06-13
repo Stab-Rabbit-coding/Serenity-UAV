@@ -692,7 +692,7 @@ const CAT_COL_H1={MCU:C.lime,"ESC-Telem":C.teal,Isolation:C.iso,PCB:C.accent,REM
 function BomTab(){
   const [cf,setCf]=useState("All");
   const rows=cf==="All"?BOM_H1:BOM_H1.filter(b=>b.cat===cf);
-  const adds=BOM_H1.filter(b=>b.cat!=="REMOVED").reduce((s,b)=>{const u=parseFloat(b.est.replace("$","").replace("ea","").replace("~","").split(" ")[0])||0;return s+b.qty*u;},0);
+  const adds=BOM_H1.filter(b=>b.cat!=="REMOVED").reduce((s,b)=>{const u=parseFloat(b.est.replace(/\$/g,"").replace(/ea/g,"").replace(/~/g,"").split(" ")[0])||0;return s+b.qty*u;},0);
   const subs=BOM_H1.filter(b=>b.cat==="REMOVED").reduce((s,b)=>{const u=parseFloat(b.est.replace("−$","").replace("ea",""))||0;return s+b.qty*u;},0);
   return(<div>
     <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12,marginBottom:16}}>
