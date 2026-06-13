@@ -463,7 +463,7 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 
 - Step 3: Mount 2× 80A BLHeli32 ESCs against hull interior sides in bay C — foam tape + M2.5 tabs. These will be replaced in Phase 7; mount accessibly.
 
-- Step 4: Mount 1× BLHeli32 40A ESC in bay E for fuselage EDF.
+- Step 4: Mount 1× BLHeli32 50A ESC in bay E for the 55mm fuselage EDF (Phase 11 deferred).
 
 ## 5.Install 5V/5A BEC; output to avionics power rail.Verify 5.00V ±0.05V under 1A bench load before connecting avionics
 
@@ -1092,7 +1092,7 @@ Each run sweeps 0%→100%→0% throttle, fits k coefficient (T = k × RPM²), ou
 | ----- | ----------------------------------------------------- | ----------- | ----------- | --------------------------------------------- |
 | 0     | Print All Parts + Cut CF                              | ~$65        | ~$65        | Filament + CF materials + resin gears         |
 | 1     | Structure + All Future Provisions                     | ~$80        | ~$145       | Foam, epoxy, conduits, hardware               |
-| 2     | Nacelle Mechanics + Budget EDFs                       | ~$145       | ~$290       | Includes XFLY PRO (final fuselage EDF)        |
+| 2     | Nacelle Mechanics + Budget EDFs                       | ~$145       | ~$290       | 55mm fuselage EDF deferred to Phase 11        |
 | **3** | **Minimum Viable Flyer ★ FIRST FLIGHT**               | **~$740**   | **~$1,030** | CN1+FC1+CN2+FC2, power, ESCs, radios, battery |
 | 4     | Full 8-Node Architecture                              | ~$540       | ~$1,570     | CN3+FC3+CN4+FC4 — full ring redundancy        |
 | 5     | Obstacle Avoidance: 12× ToF                           | ~$110       | ~$1,680     | Dual-redundant OA arrays                      |
@@ -1139,7 +1139,7 @@ The phased approach reaches first flight at **~$1,030** and defers the $590 moto
 | C     | Cargo belly | 160–251mm | Hinge          | Cargo gondola, clamshell doors, winch motor                                                                                                                     |
 | D     | Dorsal aft  | 251–320mm | 4× N42 magnets | CN3 Cape-B (lower) + FC3 Cape-A (upper); CN3 RCRS-49; FC3 GPS coax (~275mm); ETH-BD/ETH-DE conduit ends; CN3 log μSD; Array A mux                               |
 | E     | Aft service | 320–388mm | 4× M2.5        | CN4 Cape-B (lower) + FC4 Cape-A (upper); CN4 RCRS-49; FC4 GPS coax (~350mm); ETH-DE/ETH-EA conduit ends; CAN FD 120Ω at FC4; CN4 log μSD; budget→Hobbywing ESCs |
-| F     | Engine bell | 388–457mm | Bayonet        | XFLY 40mm fuselage EDF, fuselage nozzle servo                                                                                                                   |
+| F     | Engine bell | 388–457mm | Bayonet        | 55mm fuselage EDF, fixed canonical elliptical nozzle, 4× RCS bleed-jet valves (Phase 11)                                                                        |
 
 ---
 
