@@ -345,13 +345,25 @@ Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
 | Lighting (WS2812B ring, WS2812C SMD) | 2 | `airframe/placeholders/lighting/` |
 | Wiring (conduit, harnesses, antenna wire, posts) | 6 | `airframe/placeholders/wiring/` |
 | GCS / Malcolm (enclosure, BECs, antennas, tripod, encoders) | 15 | `airframe/placeholders/gcs/` |
-| Foam fill + interior voids (head/cargo/middle/rear fill; avbay, cargo bay, wiring trunk, power bus, ventilation, pylon pockets) | 11 | `airframe/placeholders/foam/` |
+| Foam fill + interior voids (head/cargo/middle/rear fill; avbay, cargo bay, wiring trunk, power bus, ventilation, pylon pockets; Faraday cage pockets + vent duct spurs) | 13 | `airframe/placeholders/foam/` |
+| EMC / Faraday shielding (cage, gasket, fan, EMI vent, bond strap, feed-through panel, ferrite; Malcolm fan + gasket) | 9 (×2 STL files share gen_far_fan_40) | `airframe/placeholders/faraday/` |
 
 **Completed (2026-06-12):**
 - [x] **Generate all 65 component placeholder STLs** — `generate_placeholders.py` created;
   all files verified `OK`. STL header marker: `SerenityUAV PLACEHOLDER R1`. *(done 2026-06-12)*
 - [x] **FreeCAD catalog assembly script** — `serenity_placeholders_assembly.py` created;
   component grid layout; run with `freecadcmd`. *(done 2026-06-12)*
+- [x] **Faraday shielding hardware** — 9 new generators; 11 new STL files in `airframe/placeholders/faraday/`:
+  FAR-CAGE-AV (cage), FAR-GASKET-AV, FAR-FAN-40, FAR-EMI-VENT-40, FAR-BOND-STRAP,
+  FAR-FT-PANEL, FAR-FERRITE-4MM; MAL-FAR-FAN, MAL-FAR-GASKET (GCS).
+  BOM entries added to `current-specification/bom_revR.csv`.
+  **⚠ MASS WARNING: Faraday system adds 648 g (1.43 lbm) to aircraft AUW.
+  Hover T/W drops 1.24→1.05 — BELOW safe VTOL minimum (~1.2). Must resolve
+  before fabrication. Options: lighter cage material (0.3 mm Al = ~22 g vs 58 g),
+  reduce ferrites to 4/cage, or accept one bond strap per cage.** *(done 2026-06-13)*
+- [x] **Faraday cage foam voids** — VOID-FAR-CAGE (76×56×88 mm cage pocket) and
+  VOID-FAR-FAN-SPUR (44×44×50 mm vent duct spur) added to `airframe/placeholders/foam/`.
+  Use ×4 and ×8 copies respectively in FreeCAD to plan all 4 bays. *(done 2026-06-13)*
 - [x] **Foam-fill and void visualization STLs** — 11 new STLs in `airframe/placeholders/foam/`:
   4× FOAM-FILL-* (head/cargo/middle/rear hull sections) and 7× VOID-* (avionics bays,
   cargo bay, wiring trunk, power bus, ventilation intake/exhaust, nacelle pylon pockets).
@@ -377,6 +389,18 @@ Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
   (all three pieces share a common plane but are separate box meshes joined via `_cat()`).
   Acceptable for visualisation; fix by replacing with a proper extruded U-shape when
   trimesh/CSG support is available.
+- [ ] **FAR-FT-PANEL PCB design** — design the EMI-filtered feed-through panel
+  KiCad schematic + layout (55×35 mm, LP π-filter + TVS on CAN FD ×2,
+  RS-485, Ethernet RJ45, power JST-GH 2P). Run DRC; generate gerbers; add
+  to `avionics/kicad/`. **BLOCKS Faraday cage final assembly.**
+- [ ] **Faraday mass budget review** — Faraday system adds 648 g (1.43 lbm);
+  hover T/W drops 1.24→1.05 (BELOW minimum ~1.2). Evaluate options:
+  (a) 0.3 mm Al cage wall (→ ~22 g/cage, saves 144 g total);
+  (b) 4 ferrites/cage instead of 8 (saves 80 g);
+  (c) 1 bond strap/cage instead of 2 (saves 40 g);
+  (d) accept T/W = 1.05 if propellers add thrust margin.
+  Target: Faraday mass ≤ 400 g to restore T/W ≥ 1.1.
+  **BLOCKS final cage fabrication.**
 - [ ] **Link placeholders to BOM entries** — add `Placeholder_STL` field to
   `docs/bom_revR.json` for each non-printable row pointing to its STL path.
 

@@ -953,6 +953,179 @@ def gen_wire_post_49mhz():
     return _cat(base, mast, coil)
 
 
+# ---- EMC / Faraday shielding -------------------------------------------- #
+#
+# Custom Faraday cage assemblies for each avionics bay (Shepherd, Inara,
+# River, Simon) and for the Malcolm GCS enclosure.  Each aircraft cage
+# provides ≥60 dB RF attenuation to meet the 500 W/m² EM operating
+# environment requirement (CLAUDE.md).
+#
+# Subcomponents per aircraft bay (×4 bays):
+#   FAR-CAGE-AV      — cage + removable lid; 70×50×82 mm; 0.8 mm Al
+#   FAR-GASKET-AV    — spring-contact EMI lid gasket; 250 mm strip
+#   FAR-FAN-40       — 40 mm 5 V axial fan; cage internal cooling
+#   FAR-EMI-VENT-40  — 40×40×6 mm Al honeycomb EMI vent panel (×2/cage)
+#   FAR-BOND-STRAP   — 100 mm tinned-Cu braid bonding strap (×2/cage)
+#   FAR-FT-PANEL     — EMI-filtered feed-through panel; 55×35 mm PCB
+#   FAR-FERRITE-4MM  — 4 mm bore split ferrite clamp (×8/cage)
+#
+# GCS (Malcolm):
+#   MAL-FAR-FAN     — 40 mm 5 V fan for Hammond 1455N1601 enclosure
+#   MAL-FAR-GASKET  — 470 mm EMI spring gasket for Hammond lid seal
+#
+# References:
+#   [2] CLAUDE.md — 500 W/m² EM operating environment requirement
+#   [4] docs/PHASED_BUILD_GUIDE.md — avionics bay dimensioning
+#   [6] NIST SP800-82R3 — ICS security; NIST SP800-160 — system security
+
+
+def gen_far_cage_av():
+    """
+    Avionics bay Faraday cage — custom 0.8 mm alodine aluminum enclosure.
+
+    Outer envelope: 70 × 50 × 82 mm (W × D × H).
+    Inner clear: ≈ 66 × 46 × 79 mm (≈ 2 mm wall each face).
+    Removable lid (top 70 × 50 mm) secured by 4× M3 captive screws.
+    One face (70 × 82 mm, aft) carries 40 mm fan aperture + EMI vent.
+    Bottom: 4× M3 standoff mounting points aligned to bay boss pattern.
+
+    BOM: FAR-CAGE-AV (×4 — Shepherd / Inara / River / Simon bays).
+    Material: 0.8 mm 5052-H32 Al sheet, alodine MIL-DTL-5541 Type 2.
+    Ref [2]: CLAUDE.md 500 W/m² EM operating environment.
+    """
+    # Outer bounding envelope modelled as solid box for clarity
+    return _box(70.0, 50.0, 82.0)
+
+
+def gen_far_gasket_av():
+    """
+    EMI spring-contact lid gasket strip — avionics Faraday cage seal.
+
+    Beryllium-copper or stainless-steel spring finger strip:
+    250 mm total length × 6 mm height × 1 mm compressed thickness.
+    Seals all 4 sides of the FAR-CAGE-AV lid interface for ≥ 60 dB
+    RF attenuation at 500 MHz.  Modelled as straight strip (unformed).
+
+    BOM: FAR-GASKET-AV (×1 per cage = ×4 aircraft).
+    Example: Leader Tech F-100-B or Laird Soft Shield 325 series.
+    Ref [2]: CLAUDE.md 500 W/m² EM operating environment.
+    """
+    return _box(250.0, 6.0, 1.0)
+
+
+def gen_far_fan_40():
+    """
+    40 × 40 × 10 mm axial fan — internal Faraday cage cooling.
+
+    Typical: Sunon ME40101V1-000U-A99; 5 V DC; 4.8 CFM; 22 dBA.
+    Provides ≥ 5 m/s face velocity through the 40 × 40 mm aperture to
+    satisfy the ≤ 55 °C avionics thermal limit in the 500 W/m² EM
+    environment.  Modelled as square frame + centre hub cylinder.
+
+    BOM: FAR-FAN-40 (×4 aircraft); MAL-FAR-FAN (×1 GCS) — same model.
+    Ref [2]: CLAUDE.md 500 W/m² EM environment; avionics thermal limit.
+    """
+    frame = _box(40.0, 40.0, 10.0)
+    hub = _cyl(5.0, 10.0, n=16)
+    hub = _translate(hub, 15.0, 15.0, 0.0)
+    return _cat(frame, hub)
+
+
+def gen_far_emi_vent_40():
+    """
+    40 × 40 × 6 mm aluminum honeycomb EMI ventilation panel.
+
+    Installed over the fan inlet and outlet apertures of FAR-CAGE-AV.
+    Hexagonal cell: ~3 mm cell, 6 mm depth (L/d ≈ 2.0); analytical
+    attenuation ≥ 35 dB at 1 GHz per MIL-HDBK-419A §1.6.
+    Modelled as solid panel block (honeycomb interior not rendered).
+
+    BOM: FAR-EMI-VENT-40 (×2 per cage — inlet + outlet = ×8 aircraft).
+    Example: Laird 1-600600 series or custom-cut Al honeycomb stock.
+    Ref [2]: CLAUDE.md 500 W/m² EM operating environment.
+    """
+    return _box(40.0, 40.0, 6.0)
+
+
+def gen_far_bond_strap():
+    """
+    Tinned-copper braid bonding strap — cage-to-chassis ground bond.
+
+    Braid body 100 mm × 10 mm × 2 mm; M3 lug tabs (12 × 10 × 4 mm)
+    crimped at both ends.  Two straps per cage provide redundant bond
+    paths per the failover requirement (CLAUDE.md).  Connects the
+    FAR-CAGE-AV body to the airframe ground plane / Kaylee GND bus.
+    DC resistance ≤ 2.5 mΩ; rated 10 A continuous for fault-current.
+
+    BOM: FAR-BOND-STRAP (×2 per cage = ×8 aircraft).
+    Example: Panduit GB-10 or Keystone 3645 braid + M3 compression lugs.
+    Ref [2]: CLAUDE.md 500 W/m² EM environment; NIST SP800-82R3.
+    """
+    braid = _box(100.0, 10.0, 2.0)
+    lug_a = _box(12.0, 10.0, 4.0)
+    lug_b = _translate(_box(12.0, 10.0, 4.0), 88.0, 0.0, 0.0)
+    return _cat(braid, lug_a, lug_b)
+
+
+def gen_far_ft_panel():
+    """
+    EMI-filtered signal feed-through panel — cage cable penetrations.
+
+    Custom PCB, 55 × 35 mm (Cape form factor), 4 mm thick.
+    Carries all signals in/out of FAR-CAGE-AV through integrated
+    LC π-filters + TVS on every line:
+      CAN FD ×2 (JST-GH 4P), RS-485 ×1 (JST-GH 3P),
+      Ethernet ×1 (RJ45 mag), power rail ×1 (JST-GH 2P).
+    Continuous with the 5 kV isolation chain of Cape-A-2 / Cape-B-2.
+    Modelled as panel body + connector protrusion strip on one edge.
+
+    BOM: FAR-FT-PANEL (×1 per cage = ×4 aircraft).
+    Fabrication: JLCPCB from project gerbers (design pending — TODO).
+    Ref [2]: CLAUDE.md 500 W/m² EM environment; NIST SP800-82R3.
+    """
+    panel = _box(55.0, 35.0, 4.0)
+    # Connector protrusions on the cage-external face
+    conns = _box(55.0, 4.0, 8.0)
+    conns = _translate(conns, 0.0, 35.0, 0.0)
+    return _cat(panel, conns)
+
+
+def gen_far_ferrite_4mm():
+    """
+    Split ferrite clamp, 4 mm bore — cable EMI suppression at cage wall.
+
+    Material: type-31 NiZn ferrite (Fair-Rite / Würth); broadband
+    1 MHz–1 GHz; ~200 Ω impedance at 100 MHz.  Fitted to each cable
+    run at the cage penetration (FAR-FT-PANEL or fan aperture).
+    ~8 clamps per cage: CAN FD ×2, RS-485 ×1, Ethernet ×1, power ×1,
+    XCVR RF ×1, antenna ×1, spare ×1.
+    Outer 15 mm dia × 11 mm long; 4 mm bore.
+
+    BOM: FAR-FERRITE-4MM (×8 per cage = ×32 aircraft).
+    Example: Würth 742 716 1 series; Fair-Rite 0431167281.
+    Ref [2]: CLAUDE.md 500 W/m² EM environment; NIST SP800-82R3.
+    """
+    return _tube(7.5, 2.0, 11.0, n=24)
+
+
+def gen_mal_far_gasket():
+    """
+    EMI spring-contact gasket — Malcolm GCS Hammond 1455N1601 lid seal.
+
+    Replaces the standard EPDM weatherseal with a conductive spring
+    strip to add RF attenuation at the enclosure lid interface.
+    Hammond 1455N1601 lid perimeter = 2 × (145 + 90) mm = 470 mm.
+    Strip: 470 mm × 8 mm × 1.5 mm (heavier gauge to match Hammond
+    lid rebate depth; slightly wider than FAR-GASKET-AV).
+    Modelled as a single straight strip at uncompressed length.
+
+    BOM: MAL-FAR-GASKET (×1 GCS).
+    Example: Laird Soft Shield 325 or Leader Tech F-100-B wide grade.
+    Ref [2]: CLAUDE.md Malcolm GCS; MAL-ENCLOSURE 40 mm fan cutout.
+    """
+    return _box(470.0, 8.0, 1.5)
+
+
 # ---- Foam fill and interior void geometry -------------------------------- #
 #
 # Two complementary STL types visualise the interior of each hull section:
@@ -1176,6 +1349,38 @@ def gen_void_nacelle_pylon():
     return _box(20.0, 80.0, 20.0)
 
 
+def gen_void_far_cage():
+    """
+    Faraday cage pocket — foam clearance for FAR-CAGE-AV installation.
+
+    Sized for FAR-CAGE-AV (70 × 50 × 82 mm) plus 3 mm assembly clearance
+    each face: 76 × 56 × 88 mm.  Use ×4 in FreeCAD (one per bay).
+    VOID-AVBAY (62 × 42 × 75 mm) still correctly describes the PCB
+    stack cavity inside the cage; this void marks the outer cage envelope
+    in the hull foam.
+
+    BOM: VOID-FAR-CAGE (×4 foam cut positions — one per avionics bay).
+    Ref [4]: docs/PHASED_BUILD_GUIDE.md avionics bay dimensioning.
+    """
+    return _box(76.0, 56.0, 88.0)
+
+
+def gen_void_far_fan_spur():
+    """
+    Fan duct spur void — Faraday cage ventilation channel in hull foam.
+
+    Each cage requires two spur channels (inlet + outlet) connecting
+    the 40 mm fan face to the main 20 × 20 mm ventilation trunk runs.
+    Spur cross-section: 44 × 44 mm (40 mm fan OD + 2 mm frame each
+    side).  Spur length: 50 mm (cage face to main trunk junction).
+    Use ×8 in FreeCAD (2 spurs × 4 cages = 8 total channels).
+
+    BOM: VOID-FAR-FAN-SPUR (×8 channels — 2 per cage, 4 cages).
+    Ref [4]: docs/PHASED_BUILD_GUIDE.md ventilation routing.
+    """
+    return _box(44.0, 44.0, 50.0)
+
+
 # ---------------------------------------------------------------------------
 # Generation table: (generator_fn, subdir, filename, bom_ref, description)
 # ---------------------------------------------------------------------------
@@ -1343,6 +1548,34 @@ _COMPONENTS = [
      "MAL-BRG-6804",         "6804-2RS thin bearing 20×32×7 mm — GCS gimbal pan (×1)"),
     (gen_malcolm_tripod,     "gcs",        "Malcolm_tripod_antenna_mast.stl",
      "MAL-TRIPOD",           "Heavy-duty tripod / antenna mast ≥1.5 m (×1 GCS)"),
+    # EMC / Faraday shielding
+    (gen_far_cage_av,        "faraday", "Far_cage_AV_70x50x82mm.stl",
+     "FAR-CAGE-AV",
+     "Avionics bay Faraday cage 70×50×82 mm — 0.8 mm alodine Al (×4)"),
+    (gen_far_gasket_av,      "faraday", "Far_gasket_AV_250x6x1mm.stl",
+     "FAR-GASKET-AV",
+     "EMI spring-contact lid gasket 250×6×1 mm — cage seal (×4)"),
+    (gen_far_fan_40,         "faraday", "Far_fan_40mm_5V.stl",
+     "FAR-FAN-40",
+     "40×40×10 mm 5 V axial fan — Faraday cage cooling (×4 aircraft)"),
+    (gen_far_emi_vent_40,    "faraday", "Far_EMI_vent_40x40x6mm.stl",
+     "FAR-EMI-VENT-40",
+     "40×40×6 mm Al honeycomb EMI vent panel — inlet + outlet (×8)"),
+    (gen_far_bond_strap,     "faraday", "Far_bond_strap_100mm.stl",
+     "FAR-BOND-STRAP",
+     "100 mm tinned-Cu braid bonding strap, M3 lugs — cage GND (×8)"),
+    (gen_far_ft_panel,       "faraday", "Far_FT_panel_55x35mm.stl",
+     "FAR-FT-PANEL",
+     "EMI-filtered feed-through panel 55×35 mm — cage signals (×4)"),
+    (gen_far_ferrite_4mm,    "faraday", "Far_ferrite_4mm_ID.stl",
+     "FAR-FERRITE-4MM",
+     "Type-31 split ferrite clamp 4 mm bore — cable EMI (×32 total)"),
+    (gen_far_fan_40,         "faraday", "Mal_far_fan_40mm_5V.stl",
+     "MAL-FAR-FAN",
+     "40×40×10 mm 5 V fan — Malcolm enclosure cooling (×1 GCS)"),
+    (gen_mal_far_gasket,     "faraday", "Mal_far_gasket_470x8x1p5mm.stl",
+     "MAL-FAR-GASKET",
+     "EMI spring gasket 470×8×1.5 mm — Malcolm Hammond lid seal (×1)"),
     # Foam fill and interior void visualisation
     (gen_foam_head,          "foam",  "Foam_fill_head_125x231x136mm.stl",
      "FOAM-FILL-HEAD",
@@ -1381,6 +1614,13 @@ _COMPONENTS = [
      "Void_nacelle_pylon_20x80x20mm.stl",
      "VOID-NACELLE-PYLON",
      "Nacelle pylon foam pocket 20×80×20 mm (×2 port + stbd pylons)"),
+    (gen_void_far_cage,      "foam",    "Void_far_cage_76x56x88mm.stl",
+     "VOID-FAR-CAGE",
+     "Faraday cage foam pocket 76×56×88 mm (×4 bays, 3 mm clearance)"),
+    (gen_void_far_fan_spur,  "foam",
+     "Void_far_fan_spur_44x44x50mm.stl",
+     "VOID-FAR-FAN-SPUR",
+     "Cage vent duct spur 44×44×50 mm (×8 total — 2/cage × 4 cages)"),
 ]
 
 

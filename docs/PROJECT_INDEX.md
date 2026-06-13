@@ -1,7 +1,7 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: Rev R1 + placeholders + foam-fill voids (2026-06-12) -->
+<!-- Last updated: Rev R1 + placeholders + foam-fill voids + Faraday (2026-06-13) -->
 
 ## Repository Root
 
@@ -282,13 +282,25 @@ foam/
   Void_vent_intake_20x250x20mm.stl      — Ventilation intake duct void (BOM: VOID-VENT-INTAKE)
   Void_vent_exhaust_20x300x20mm.stl     — Ventilation exhaust duct void (BOM: VOID-VENT-EXHAUST)
   Void_nacelle_pylon_20x80x20mm.stl     — Nacelle pylon foam pocket (×2, BOM: VOID-NACELLE-PYLON)
+  Void_far_cage_76x56x88mm.stl          — Faraday cage foam pocket 76×56×88 mm (BOM: VOID-FAR-CAGE)
+  Void_far_fan_spur_44x44x50mm.stl      — Cage vent duct spur 44×44×50 mm (BOM: VOID-FAR-FAN-SPUR)
+faraday/
+  Far_cage_AV_70x50x82mm.stl            — Avionics bay Faraday cage 70×50×82 mm (BOM: FAR-CAGE-AV)
+  Far_gasket_AV_250x6x1mm.stl           — EMI spring-contact lid gasket strip (BOM: FAR-GASKET-AV)
+  Far_fan_40mm_5V.stl                   — 40 mm 5 V axial fan (BOM: FAR-FAN-40)
+  Far_EMI_vent_40x40x6mm.stl            — Al honeycomb EMI vent panel 40×40×6 mm (BOM: FAR-EMI-VENT-40)
+  Far_bond_strap_100mm.stl              — Tinned-Cu bonding strap 100 mm (BOM: FAR-BOND-STRAP)
+  Far_FT_panel_55x35mm.stl              — EMI-filtered feed-through panel 55×35 mm (BOM: FAR-FT-PANEL)
+  Far_ferrite_4mm_ID.stl                — Split ferrite clamp 4 mm bore (BOM: FAR-FERRITE-4MM)
+  Mal_far_fan_40mm_5V.stl               — Malcolm enclosure fan (BOM: MAL-FAR-FAN)
+  Mal_far_gasket_470x8x1p5mm.stl        — Malcolm Hammond lid EMI gasket (BOM: MAL-FAR-GASKET)
 ```
 
 ### airframe/FreeCAD-scripts/ (updated Rev R1 + placeholders)
 
 ```
 serenity_assembly.py              — Full hull-frame airframe assembly (Rev R1)
-serenity_placeholders_assembly.py — 76-component placeholder catalog (8-col grid,
+serenity_placeholders_assembly.py — 87-component placeholder catalog (8-col grid,
                                     run with freecadcmd; output Serenity-Placeholders.FCStd)
 assembly1.py                      — DEPRECATED
 Serenity-Assemble.py              — DEPRECATED
