@@ -124,14 +124,20 @@ and baked to hull frame.  SCAD fuselage shell files are secondary references onl
 ##### 1.1.1.0b *Section Joint Boss / Alignment Design (Rev R1 — all four fuselage sections)*
 
 All four fuselage section boundaries (head/cargo, cargo/middle, middle/rear) are
-**fabrication splits only** — they carry no structural load.  All inter-section bending,
-torsion, and shear loads are carried by (a) continuous 2 lb/cf foam fill bonded to the
-inner skin, (b) the CF-BAR-6X3 keel bar running the full hull length, (c) West System
-105/206 bonding epoxy on all mating surfaces, and (d) the 4 mm CF skid rods crossing the
-middle/rear split.
+**fabrication splits** introduced for printability — they are not and were not structural
+joints in the Thingiverse reference model (which was designed as a decorative display
+piece with no structural engineering for any load case).
 
-Each joint face must still satisfy **CLAUDE.md fabrication standard**: minimum 2-wall
-contact annulus + positive-stop shoulder; friction fits alone are not acceptable.
+**Structural continuity is an open engineering task.**  The Thingiverse geometry —
+wall thickness, cross-section shapes, and joint face geometry — was not designed to
+carry UAV bending moments, torsion, shear, vibration, or landing-impact loads.
+Candidate structural members (keel bar, CF ring plates, foam fill, CF skid rods) are
+identified but have not yet been sized or verified.  The tasks below, and the keel bar
+and ring plate re-evaluation tasks in §1.1.1, must all be completed before any structural
+claim can be made about the assembled fuselage.
+
+Each joint face must satisfy the **CLAUDE.md fabrication standard**: minimum 2-wall
+contact annulus + positive-stop shoulder; friction fits are not acceptable for any joint.
 
 Joint faces in hull-frame Y (confirmed from baked extents):
 - **Head / Cargo** — hull Y ≈ −71 mm (Head_Shell Y-max = −70.7 mm; Cargo_Shell Y-min = −71.5 mm)
@@ -448,6 +454,20 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
   - Skid arm geometry at the lower horseshoe legs correctly transitions into the rear section
   - Z-range +1.3..+166.1 mm in hull frame; total height ≈ 165 mm — fits build-volume vertical
   **BLOCKS middle section printing.**
+
+- [ ] **Kaylee's room — PDB mounting in inner neck** — the Kaylee Power Distribution Board
+  (Kaylee Rev A1; 75 g) is housed inside the inner neck of the middle section, accessible
+  through the open ventral face of the horseshoe ring.  The inner neck central location
+  minimises power run lengths to all four nacelles, all four avionics stacks, and the battery.
+  Required additions to the Blender middle mesh (or as bonded inserts):
+  - 4× M3 standoff boss posts for Kaylee PCB (55×35 mm board; ±20×±12.5 mm pattern from bore centre)
+  - Power cable exit notches (6 AWG leads, 4× nacelle ESC runs + avionics BEC tap)
+  - Ventilation opening or clearance to allow heat dissipation from TPS54620 regulators
+  - Access clearance from horseshoe ventral opening (confirm Kaylee can be inserted and removed
+    with hand tools — field disassembly requirement per CLAUDE.md)
+  - Confirm inner neck bore dimensions from baked `middle_shell24_2mm_repaired.stl` cross-section
+    at hull Y ≈ +165 mm (midpoint of middle section) before adding boss features.
+  **BLOCKS middle section Blender mesh update; BLOCKS Kaylee installation.**
 
 - [ ] **CF skid rod channels** — add 4.2 mm bore channel along each horseshoe-to-skid arm (lower
   legs of the horseshoe) in the Blender mesh, coaxial with the matching channels in the rear shell.

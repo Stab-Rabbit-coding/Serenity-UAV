@@ -207,7 +207,7 @@ The historical bake transforms (position + quaternion per component) live solely
 
  The Comms/Logging/Payload Cape is named "Zoë" - "Big Damn Heros, sir."
 
- The Power Distribution Board is named "Kaylee" - "Everything is shiny."
+ The Power Distribution Board is named "Kaylee" - "Everything is shiny."  Kaylee's room (the PDB bay) is located in the **inner neck of the middle section**, accessible through the open ventral face of the horseshoe ring.  This central location minimises power run lengths to all four nacelles, all four avionics stacks, and the battery.
 
  The 49 MHz RCRS + LoRa 915 MHz Transceiver Cape (XCVR-49MHZ-2 Rev R1) is named "Emma".  Emma connects to the stack via P1+P2 socket rails (replaces JST GH 6P as of Rev R1).  Only 2 Emma boards are installed: River's Room and Simon's Medbay.
 
