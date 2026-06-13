@@ -134,6 +134,36 @@ Joint faces in hull-frame Y (confirmed from baked extents):
   - Bond with West System 105/206; cure 24 h before foam pour.
   - **BLOCKS middle + rear section printing.**
 
+- [ ] **CF ring plate (CF-PLATE-2MM) station re-derivation from canonical hull geometry *(Rev R1)***
+  The five station numbers used in Rev N and earlier (91 mm, 165 mm, 251 mm, 320 mm, 388 mm) were
+  derived from the **pre-Rev N non-canonical hull model** and are invalid for the current baked
+  canonical hull-frame STLs.  Both the hull-Y positions and the 2D cross-sectional ring profiles
+  must be re-derived.  Station count target remains 3 (minimum: wing-spar forward bearing,
+  wing-spar aft bearing, aft landing-load reaction).
+
+  Station candidate zones (hull-frame Y, from baked section extents):
+  - **Spar-fore ring:** inside Cargo_Shell (Y = −71.5..+132.0 mm); locate at forward spar
+    bearing block centroid (derive from `cargo_sect_shell24.scad` SPAR_BORE_Y parameter).
+  - **Spar-aft ring:** inside Cargo_Shell; locate at aft spar bearing block centroid (same
+    SCAD, or ≈ spar-fore Y + spar bearing span).
+  - **Aft load ring:** inside Rear_Shell (Y = +203.2..+383.9 mm); locate where skid bending
+    moment transfers into the tail cone skin — nominally Y ≈ +260..+320 mm (midpoint of
+    rear section between skid roots and tail tip).
+
+  Procedure:
+  1. Read `cargo_sect_shell24.scad` to extract `SPAR_BORE_Y` (or equivalent parameter)
+     → that Y gives the spar-fore and spar-aft ring positions precisely.
+  2. For the aft ring, slice `s_rear_neck_intake_shell24.stl` at candidate Y stations in
+     OpenSCAD or FreeCAD; select the station where the hull inner skin forms a closed ring
+     with largest enclosed area (maximises ring stiffness contribution).
+  3. At each chosen Y station, extract the 2D inner-skin boundary from the baked STL
+     (e.g., FreeCAD `Cross-Section` feature on the baked mesh at that hull-Y plane) and
+     export as a DXF profile.  Jig-cut CF-PLATE-2MM sheet to each profile; notch for
+     CF-BAR-6X3 keel slot at bottom centre.
+  4. Update BOM CF-PLATE-2MM Notes with confirmed hull-Y values (replace current TBD).
+  5. Update `REVN_BUILD_GUIDE_24IN.md` keel datum marks to match new Y values.
+  **BLOCKS keel bar + ring plate fabrication; BLOCKS foam pour.**
+
 - [x] **Access panel frames + covers (24" Rev R)** — `airframe/openscad/fuselage/access_panels_24in.scad` created 2026-06-11. Geometries derived from authoritative shell SCADs (Rev R baseline):
   - 4× Faraday-bay covers (Shepherd/Inara/River/Simon): 72×52 mm, 4× M3 clearance bores, positive-stop shoulder; Inara + River covers include Ø42 mm GPS retention-ring recess.
   - 2× ventral hatch covers: battery 160×60 mm, Kaylee 115×100 mm; M2.5 pilots into bonded frames.
