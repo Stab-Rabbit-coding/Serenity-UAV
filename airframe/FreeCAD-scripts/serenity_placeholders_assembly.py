@@ -136,6 +136,16 @@ _PLACEHOLDERS = [
     ("MAL-TCA9548A",       "gcs/TCA9548A_I2C_mux_breakout.stl",            "TCA9548A_mux"),
     ("MAL-BRG-6804",       "gcs/B6804_20x32x7mm_gimbal_pan.stl",           "B6804_gimbal"),
     ("MAL-TRIPOD",         "gcs/Malcolm_tripod_antenna_mast.stl",           "Malcolm_tripod"),
+    # EMC / Faraday shielding
+    ("FAR-CAGE-AV",       "faraday/Far_cage_AV_70x50x82mm.stl",            "Far_cage_AV"),
+    ("FAR-GASKET-AV",     "faraday/Far_gasket_AV_250x6x1mm.stl",           "Far_gasket_AV"),
+    ("FAR-FAN-40",        "faraday/Far_fan_40mm_5V.stl",                   "Far_fan_40"),
+    ("FAR-EMI-VENT-40",   "faraday/Far_EMI_vent_40x40x6mm.stl",            "Far_EMI_vent"),
+    ("FAR-BOND-STRAP",    "faraday/Far_bond_strap_100mm.stl",              "Far_bond_strap"),
+    ("FAR-FT-PANEL",      "faraday/Far_FT_panel_55x35mm.stl",              "Far_FT_panel"),
+    ("FAR-FERRITE-4MM",   "faraday/Far_ferrite_4mm_ID.stl",                "Far_ferrite_4mm"),
+    ("MAL-FAR-FAN",       "faraday/Mal_far_fan_40mm_5V.stl",               "Mal_far_fan"),
+    ("MAL-FAR-GASKET",    "faraday/Mal_far_gasket_470x8x1p5mm.stl",        "Mal_far_gasket"),
     # Foam fill and interior void visualisation
     ("FOAM-FILL-HEAD",    "foam/Foam_fill_head_125x231x136mm.stl",        "Foam_head_fill"),
     ("FOAM-FILL-CARGO",   "foam/Foam_fill_cargo_190x200x159mm.stl",       "Foam_cargo_fill"),
@@ -149,6 +159,8 @@ _PLACEHOLDERS = [
     ("VOID-VENT-INTAKE",  "foam/Void_vent_intake_20x250x20mm.stl",        "Void_vent_intake"),
     ("VOID-VENT-EXHAUST", "foam/Void_vent_exhaust_20x300x20mm.stl",       "Void_vent_exhaust"),
     ("VOID-NACELLE-PYLON","foam/Void_nacelle_pylon_20x80x20mm.stl",       "Void_pylon"),
+    ("VOID-FAR-CAGE",     "foam/Void_far_cage_76x56x88mm.stl",            "Void_far_cage"),
+    ("VOID-FAR-FAN-SPUR", "foam/Void_far_fan_spur_44x44x50mm.stl",        "Void_far_fan_spur"),
 ]
 
 

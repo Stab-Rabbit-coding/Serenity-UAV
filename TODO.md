@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-06-11  
+**Last updated:** 2026-06-13  
 **Current design revision:** Rev R (2026-06-10) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 ---
@@ -86,6 +86,214 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
   double-transform baked STLs); move to `airframe/archive/` at next revision checkpoint.
 
 #### 1.1.1 **Fuselage**
+
+##### 1.1.1.0a *Blender-Canonical Source Adoption (Rev R1, 2026-06-13)*
+
+The four Blender-derived, 2 mm hollow, repaired fuselage shell STLs in
+`airframe/blender-scripts/files-hollowed-24in/` are now the **authoritative canonical
+sources** for all fuselage geometry.  They have been copied to `airframe/stls/fuselage/`
+and baked to hull frame.  SCAD fuselage shell files are secondary references only.
+
+**Baked on 2026-06-13 (all four verified OK, max error < 1.52e-05 mm):**
+- [x] `head_shell24_2mm_repaired.stl` — 790 036 tri; X −232.9..−103.5 / Y −305.7..−70.7 / Z +61.1..+201.5 mm
+- [x] `cargo_sect_shell24_2mm_repaired.stl` — 1 414 068 tri; X −267.0..−72.7 / Y −71.5..+132.0 / Z 0.0..+163.2 mm
+- [x] `middle_shell24_2mm_repaired.stl` — 855 328 tri; X −258.5..−81.6 / Y +130.4..+203.6 / Z +1.3..+166.1 mm *(see §1.1.1.3 — includes horseshoe ring + inner neck as ONE piece)*
+- [x] `rear_shell24_2mm_repaired.stl` — 1 095 972 tri; X −246.1..−105.5 / Y +203.2..+384.3 / Z +3.3..+161.1 mm
+
+**Open tasks:**
+- [ ] **Cargo section interior boss features** — the Blender-canonical cargo shell is the pure exterior skin.
+  All interior features added in SCAD Rev S/S1/S2/S3 (wing mortises, spar bore, servo mount pads,
+  hinge-pin blocks, latch lips, avionics standoffs, cargo bay opening, GPS domes) must be merged
+  back into the Blender mesh before printing.  Workflow: use the baked Blender cargo shell as the
+  outer surface; add interior boss geometry from SCAD Rev S3 source via Blender Boolean or OpenSCAD
+  hull combination.  Re-export, re-bake, verify watertight.  **BLOCKS cargo section printing.**
+- [ ] **Middle section inner neck — Phase 5-10 print guidance** — the Blender middle mesh includes
+  the inner neck (closed tube) and the outer horseshoe ring as one piece.  Confirm in slicer that
+  both elements appear correctly and that there are no thin-wall violations in the neck-to-horseshoe
+  web transitions.  The 4× EDF intake scoop openings in the inner neck are NOT cut in the current
+  mesh — confirm before slicing.  See §1.1.1.3 for details.  **BLOCKS middle section printing.**
+- [ ] **Deprecate SCAD fuselage shell files** — `s_head_shell24.scad`, `s_middle_canonical_shell24.scad`,
+  `s_rear_neck_intake_shell24.scad` are now secondary references.  At next revision checkpoint,
+  archive them to `airframe/archive/` and update PROJECT_INDEX.md / ARCHIVE_INDEX.md.
+  `cargo_sect_shell24.scad` (Rev S3) remains active as the source for interior boss geometry
+  until those features are merged into the Blender mesh (task above).
+- [ ] **Update `REVN_BUILD_GUIDE_24IN.md` fuselage shell source references** — replace SCAD
+  regeneration commands with Blender pipeline instructions (copy from `blender-scripts/files-hollowed-24in/`
+  → `stls/fuselage/` → run `python3 tools/bake_hull_frame.py`).
+
+##### 1.1.1.0b *Section Joint Boss / Alignment Design (Rev R1 — all four fuselage sections)*
+
+All four fuselage section boundaries (head/cargo, cargo/middle, middle/rear) are
+**fabrication splits only** — they carry no structural load.  All inter-section bending,
+torsion, and shear loads are carried by (a) continuous 2 lb/cf foam fill bonded to the
+inner skin, (b) the CF-BAR-6X3 keel bar running the full hull length, (c) West System
+105/206 bonding epoxy on all mating surfaces, and (d) the 4 mm CF skid rods crossing the
+middle/rear split.
+
+Each joint face must still satisfy **CLAUDE.md fabrication standard**: minimum 2-wall
+contact annulus + positive-stop shoulder; friction fits alone are not acceptable.
+
+Joint faces in hull-frame Y (confirmed from baked extents):
+- **Head / Cargo** — hull Y ≈ −71 mm (Head_Shell Y-max = −70.7 mm; Cargo_Shell Y-min = −71.5 mm)
+- **Cargo / Middle** — hull Y ≈ +131 mm (Cargo_Shell Y-max = +132.0 mm; Middle_Shell Y-min = +130.4 mm)
+- **Middle / Rear** — hull Y ≈ +203 mm (Middle_Shell Y-max = +203.6 mm; Rear_Shell Y-min = +203.2 mm)
+
+- [ ] **Head/Cargo joint boss design (hull Y ≈ −71 mm)**
+  - Add 3× alignment boss pins (3 mm OD CF rod stub, 8 mm depth each side) at equal
+    angular spacing around the joint perimeter, matching 3.2 mm bore in mating face.
+  - Add positive-stop shoulder (1.5 mm step, 2-wall PETG annulus, ≥ 6 mm wide) around
+    the full perimeter of both mating faces.
+  - Bond with West System 105/206; cure 24 h before foam pour.
+  - SCAD files: `s_head_shell24.scad` + `s_cargo_sect_shell24.scad`
+  - NOTE: R1 audit (§1.1.0) flagged that the 2026-06-10 BOSS analysis used the wrong
+    axis (hull X vs hull Y). Redo BOSS_FORE/BOSS_AFT positions in hull Y before SCAD
+    update — see §1.1.0 open item and §1.1.1.1.
+  - **BLOCKS head + cargo section printing (first joint must be verified in slicer).**
+
+- [ ] **Cargo/Middle joint boss design (hull Y ≈ +131 mm)**
+  - Add 3× alignment boss pins at equal angular spacing; positive-stop shoulder on both faces.
+  - SCAD files: `s_cargo_sect_shell24.scad` + `s_middle_canonical_shell24.scad`
+  - Verify that boss pins do not conflict with CF keel bar channel or avionics bay boss posts
+    already added to cargo section in Rev S2.
+  - Bond with West System 105/206; cure 24 h before foam pour.
+  - **BLOCKS cargo + middle section printing.**
+
+- [ ] **Middle/Rear joint boss design (hull Y ≈ +203 mm)**
+  - Add 3× alignment boss pins at equal angular spacing; positive-stop shoulder on both faces.
+  - NOTE: the 4 mm CF skid rods already cross this joint and serve as the primary alignment
+    pins for the skid arms; the 3 boss pins are needed for the horseshoe upper arch and tail
+    cone zone that the skid rods do not reach.
+  - SCAD files: `s_middle_canonical_shell24.scad` + `s_rear_neck_intake_shell24.scad`
+  - Boss pins must not intersect the 4.2 mm CF-rod bore channels in the skid arms.
+  - Bond with West System 105/206; cure 24 h before foam pour.
+  - **BLOCKS middle + rear section printing.**
+
+- [ ] **CF ring plate (CF-PLATE-2MM) — complete first-principles re-evaluation *(Rev R1)***
+  All prior design data for CF ring plates (station count, hull-Y positions, 2D profiles,
+  and structural function) were based on the **pre-Rev N non-canonical hull model** and
+  are entirely invalid for the current baked canonical Serenity geometry.  This is a
+  clean-sheet structural design task, not a re-derivation of old numbers.
+
+  **Step 1 — Structural load case inventory.**
+  Identify every load introduction point inside the hull that a ring frame could react:
+  - Wing spar pin loads (X-axis spar through cargo section; derive spar-bore Y stations
+    from `cargo_sect_shell24.scad` SPAR_BORE_Y / bearing block parameters).
+  - Nacelle tilt servo reaction (NSVMT blocks in cargo section; derive Y from SCAD
+    `NSVMT_X_CEN` or equivalent — note SCAD uses part-local frame; convert to hull Y).
+  - Skid landing-impact loads (aft section; CF rod reinforcement already handles skid-arm
+    bending; determine if tail-cone ovalisation under landing shock still warrants a ring).
+  - Fuselage bending under 2g manoeuvre (keel bar + foam carry primary moment; rings
+    provide shear-web anti-ovalisation — evaluate whether skin thickness + foam elastic
+    foundation make rings unnecessary in lightly-loaded sections).
+
+  **Step 2 — Hull cross-section survey at load stations.**
+  For each load station identified in Step 1, slice the baked canonical STL at that
+  hull-Y plane (FreeCAD Cross-Section on the baked mesh, or `python tools/bake_hull_frame.py`
+  cross-section output).  Characterise the inner-skin boundary:
+  - Is it a closed loop (full ring possible) or open (e.g., middle horseshoe open at −Z)?
+  - What is the enclosed area and minimum inscribed rectangle?
+  - Does the Serenity exterior geometry at that station allow a flat CF plate to seat
+    flush against the inner skin, or is the section too curved / tapered?
+
+  **Step 3 — Decide ring type, station count, and positions.**
+  Based on Steps 1–2, determine for each candidate station whether to use:
+  - Full closed ring (cargo or rear sections where skin forms a closed perimeter)
+  - Partial arch (middle horseshoe upper arch only; bottom open)
+  - No frame (head section is non-structural per Rev R1; foam + keel adequate)
+  - Integrated boss rib (if load is highly localised, a rib printed into the shell SCAD
+    may be lighter than a separate CF plate — evaluate for servo and spar stations)
+  Record chosen station count (≥1; ≤5), hull-Y for each, and ring type.
+
+  **Step 4 — Profile extraction and DXF generation.**
+  For each chosen station: export 2D inner-skin boundary as DXF (FreeCAD TechDraw or
+  `Draft.dxf` export of cross-section wire).  Add keel-bar notch (6×3 mm slot at hull
+  −Z centroid).  Add 3 mm clearance all-round from skin so ring can be inserted and
+  epoxy-bonded without force-fitting.  Save to `airframe/diagrams/ring_frames/`.
+
+  **Step 5 — Update BOM and build guide.**
+  - Update CF-PLATE-2MM Notes: confirmed station count, hull-Y values, ring types, mass.
+  - Update `REVN_BUILD_GUIDE_24IN.md` keel datum mark table with new hull-Y stations.
+  - If any station is replaced by an integrated shell rib, add SCAD sub-task under the
+    relevant shell file (§1.1.1.1–§1.1.1.4).
+  **BLOCKS keel bar + ring plate fabrication; BLOCKS foam pour.**
+
+- [ ] **Hull keel (CF-BAR-6X3) — complete first-principles re-evaluation *(Rev R1)***
+  A continuous bow-to-stern backbone is structurally justified (primary fuselage bending
+  moment arm; inter-section tie-rod spanning all fabrication splits).  However, the
+  canonical Serenity hull geometry makes the current straight 6×3 mm flat bar
+  infeasible as specified.  This is a clean-sheet keel design task.
+
+  **Known geometry constraints (from baked hull-frame extents):**
+  - **Head/Cargo Z step**: Head_Shell Z_min = +61.2 mm; Cargo_Shell Z_min = 0.0 mm.
+    A straight keel at the cargo belly cannot enter the head section without a ≈ 61 mm
+    vertical bend at hull Y ≈ −71 mm.
+  - **Middle section open belly**: Middle_Shell (Y = +130.4..+203.6 mm) is open at −Z
+    (horseshoe ring with no belly floor).  A belly keel has no skin to bond to for
+    ~73 mm of hull length here.  Foam fill provides distributed elastic support but no
+    hard attachment.
+  - **Head section structural role**: Head_Shell is non-structural per Rev R1 (foam + 2 mm
+    PETG skin adequate; avionics bays relocated to cargo + rear sections).  A keel that
+    terminates at the head/cargo joint face (hull Y ≈ −71 mm) may be fully adequate.
+  - **Datum marks**: the 91/165/251/320/388 mm station marks are tied to the stale pre-Rev N
+    ring plate positions and must be replaced by the new ring station outputs (see ring
+    plate re-evaluation task above).
+
+  **Step 1 — Decide keel span.**
+  Determine whether the keel must enter the head section or whether cargo-to-rear
+  (hull Y ≈ −71 mm → +384 mm, ≈ 455 mm) is structurally sufficient.  The head section
+  contributes little to global fuselage bending (short, tapered, non-structural) and has
+  an incompatible Z floor.  Cargo-to-rear span is preferred unless a specific head-section
+  load case (e.g., FPV/GPS nose mount inertia) justifies the extension.
+
+  **Step 2 — Determine Z routing through each section.**
+  At each hull section, identify the highest Z level that provides:
+  - Continuous bonding surface against inner skin or foam (closed loop or foam contact)
+  - Clearance from avionics bays, battery tray, servo mounts, spar bores, and wiring trunk
+  Candidate Z levels to survey (from section Z extents):
+  - Cargo belly: Z ≈ +5..+15 mm (below battery tray floor, above hull skin)
+  - Middle horseshoe: keel passes through the interior unsupported — foam alone provides
+    lateral stability; check that Z routing clears the wiring trunk PTFE conduit.
+  - Rear cone belly: Z ≈ +5..+15 mm (consistent with cargo level)
+  Target: a monotonically constant or gently varying Z route from cargo to rear that
+  requires no bends exceeding the material's minimum bend radius.
+
+  **Step 3 — Choose keel form and cross-section.**
+  Based on the Z routing determined in Step 2:
+  - **Straight flat bar (CF-BAR-6X3)**: viable only if Z routing is constant.  6 mm wide
+    face ideally oriented horizontally (resist vertical bending = primary fuselage mode).
+    Minimum bend radius for 6×3 CF bar ≈ 200–300 mm; tighter bends require separate spans.
+  - **Pre-bent flat bar**: single bar bent in the weak axis (3 mm thickness) to follow a
+    gentle Z curve.  Requires heat + jig; feasible if total Z variation over the keel span
+    is < 30 mm and bends are gradual.  Confirm with material supplier.
+  - **Segmented with lap splice**: two or three straight segments (e.g., cargo + rear);
+    overlapping lap joint (≥ 50 mm) at each join, bonded with West System 105/206 + peel
+    ply prep.  Maintains continuity without bending.  Adds ≤ 5 g mass at each splice.
+  - **CF tube**: round tube (e.g., 6 mm OD × 1 mm wall) is isotropic in bending, easier
+    to route curves, and can double as a wiring conduit.  Lower area moment of inertia
+    than a 6×3 flat bar in the primary bending axis — check adequacy.
+  - **CF tow/tape embedded in foam**: lays up along any geometry during foam pour; no
+    discrete part to install; non-inspectable after pour.  Lowest mass option but least
+    stiff and non-replaceable.
+
+  **Step 4 — Assess RF counterpoise function.**
+  CF-BAR-6X3 currently doubles as the 49 MHz RCRS antenna counterpoise.  CF has anisotropic
+  conductivity (longitudinal only, ≈ 5–10 kΩ/m vs copper ≈ 0.017 Ω/m); it is a poor RF
+  conductor.  At 49 MHz, λ = 6.12 m; λ/4 = 1.53 m; a 455–620 mm bar is ≈ λ/10 — a
+  dedicated copper counterpoise wire (AWG 22 stranded, < 2 g) bonded alongside the keel
+  is more reliable than relying on CF conductivity.  Decide: (a) keep CF keel as structural
+  only and add a separate copper counterpoise wire in the wiring trunk, or (b) embed a
+  copper braid in the keel lap joint.  Update Emma/XCVR antenna design accordingly.
+
+  **Step 5 — Update BOM, battery tray, and build guide.**
+  - Update CF-BAR-6X3 Notes: confirmed form, span, Z routing, cross-section, mass.
+  - Battery tray SCAD (`battery_tray.scad`): the "keel rail" interface must match the
+    new keel Z position and cross-section; update SCAD and re-export STL.
+  - Update `REVN_BUILD_GUIDE_24IN.md` keel installation section with new span, Z level,
+    lap joint positions, and ring plate notch locations (from ring plate re-evaluation).
+  - If separate copper counterpoise wire is chosen, add to BOM as WIRE-COUNTERPOISE-49MHZ.
+  **BLOCKS ring plate notch design; BLOCKS keel fabrication; BLOCKS foam pour.**
+  **Run concurrently with CF ring plate re-evaluation (ring plate notch geometry depends
+  on keel cross-section and Z position).**
 
 - [x] **Access panel frames + covers (24" Rev R)** — `airframe/openscad/fuselage/access_panels_24in.scad` created 2026-06-11. Geometries derived from authoritative shell SCADs (Rev R baseline):
   - 4× Faraday-bay covers (Shepherd/Inara/River/Simon): 72×52 mm, 4× M3 clearance bores, positive-stop shoulder; Inara + River covers include Ø42 mm GPS retention-ring recess.
@@ -214,13 +422,44 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
 
 ##### 1.1.1.3 *Middle Neck*
 
-- [ ] **neck_intake_frame.stl** — `openscad -o neck_intake_frame.stl deferred/aft-edf/openscad/neck_intake_frame.scad`
+**Canonical geometry (Rev R1, 2026-06-13):**
+The middle section is defined by `airframe/blender-scripts/files-hollowed-24in/middle_shell24_2mm_repaired.stl`
+(canonical Blender source) → baked to `airframe/stls/fuselage/middle_shell24_2mm_repaired.stl`.
+
+It is **ONE printed piece** comprising two distinct structural elements:
+1. **Outer horseshoe ring** — the U-shaped exterior frame surrounding the middle section, open at −Z (ventral).
+   The two lower arms of the horseshoe continue aft as the landing skids into the rear section.
+2. **Inner neck** — a tube-like enclosed passage running through the centre of the horseshoe,
+   connecting the cargo bay interior to the rear engine room interior within the hull skin.
+   Canonically this is a pressurised passage within the ship; in the UAV context it provides
+   structural continuity and a wiring/keel routing path through the narrowest hull section.
+
+**Phase 5–10 print state:** inner neck is a closed, uncut tube.
+Aft EDF intake scoops (4 radial openings into the inner neck for the 120 mm EDF airflow)
+are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phase 11.
+
+- [x] **Blender canonical source baked** — `middle_shell24_2mm_repaired.stl` (855 328 tri) baked
+  2026-06-13; extents X −258.5..−81.6 / Y +130.4..+203.6 / Z +1.3..+166.1 mm. *(done 2026-06-13)*
+
+- [ ] **Slicer verification** — open baked `middle_shell24_2mm_repaired.stl` in slicer and confirm:
+  - Both the outer horseshoe ring and inner neck are present as connected geometry
+  - No thin-wall violations at neck-to-horseshoe web transitions (min 1.6 mm wall at all points)
+  - Inner neck bore is closed (no EDF intake openings)
+  - Skid arm geometry at the lower horseshoe legs correctly transitions into the rear section
+  - Z-range +1.3..+166.1 mm in hull frame; total height ≈ 165 mm — fits build-volume vertical
+  **BLOCKS middle section printing.**
+
+- [ ] **CF skid rod channels** — add 4.2 mm bore channel along each horseshoe-to-skid arm (lower
+  legs of the horseshoe) in the Blender mesh, coaxial with the matching channels in the rear shell.
+  Export updated STL, re-bake, verify watertight.  See §1.1.0a skid task.  **BLOCKS taxi test.**
+
+- [ ] **Phase 11 — aft EDF intake scoop cuts** — at Phase 11, cut 4× radial scoop openings into
+  the inner neck to match the EDF plenum geometry (`deferred/aft-edf/openscad/neck_intake_frame.scad`).
+  These cuts are Phase 11 ONLY — the Phase 5–10 mesh is the closed-neck version.
+
+- [ ] **neck_intake_frame.stl (Phase 11)** — `openscad -o neck_intake_frame.stl deferred/aft-edf/openscad/neck_intake_frame.scad`
   - Verify: 4 registration tongues 5 mm depth; intake lips project 6 mm forward
   - Material: CF-PETG; **DEFERRED — BLOCKS Phase 11 only.** STL at `deferred/aft-edf/stls/`.
-
-- [ ] **rear_neck_intake_shell24.stl** — `openscad -o ... deferred/aft-edf/openscad/rear_neck_intake_shell24.scad`
-  - Verify: 4 radial scoop windows present; NECK_X station ~310 mm; window alignment
-  - **DEFERRED — BLOCKS Phase 11.** Print in Phase 0 with windows covered by removable PETG blanks.
 
   **Rear intake system (OpenSCAD):**
 
@@ -345,13 +584,27 @@ Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
 | Lighting (WS2812B ring, WS2812C SMD) | 2 | `airframe/placeholders/lighting/` |
 | Wiring (conduit, harnesses, antenna wire, posts) | 6 | `airframe/placeholders/wiring/` |
 | GCS / Malcolm (enclosure, BECs, antennas, tripod, encoders) | 15 | `airframe/placeholders/gcs/` |
-| Foam fill + interior voids (head/cargo/middle/rear fill; avbay, cargo bay, wiring trunk, power bus, ventilation, pylon pockets) | 11 | `airframe/placeholders/foam/` |
+| Foam fill + interior voids (head/cargo/middle/rear fill; avbay, cargo bay, wiring trunk, power bus, ventilation, pylon pockets; Faraday cage pockets + vent duct spurs) | 13 | `airframe/placeholders/foam/` |
+| EMC / Faraday shielding (cage, gasket, fan, EMI vent, bond strap, feed-through panel, ferrite; Malcolm fan + gasket) | 9 (×2 STL files share gen_far_fan_40) | `airframe/placeholders/faraday/` |
 
 **Completed (2026-06-12):**
 - [x] **Generate all 65 component placeholder STLs** — `generate_placeholders.py` created;
   all files verified `OK`. STL header marker: `SerenityUAV PLACEHOLDER R1`. *(done 2026-06-12)*
 - [x] **FreeCAD catalog assembly script** — `serenity_placeholders_assembly.py` created;
   component grid layout; run with `freecadcmd`. *(done 2026-06-12)*
+- [x] **Faraday shielding hardware** — 9 new generators; 11 new STL files in `airframe/placeholders/faraday/`:
+  FAR-CAGE-AV (cage), FAR-GASKET-AV, FAR-FAN-40, FAR-EMI-VENT-40, FAR-BOND-STRAP,
+  FAR-FT-PANEL, FAR-FERRITE-4MM; MAL-FAR-FAN, MAL-FAR-GASKET (GCS).
+  BOM entries added to `current-specification/bom_revR.csv`.
+  **⚠ MASS NOTICE: Faraday aircraft system now 364 g (0.80 lbm) after
+  ferrite reduction to 4/cage and 1 bond strap/cage. Full Rev R1 weight
+  reduction pass (Phase 11 deferrals, wiring gauge, PCB consolidation,
+  head infill, CF plates) brings cumulative T/W to ~1.19 without battery
+  swap; T/W ~1.25 with BATT-6S-2800. See §1.1.5 mass budget.**
+  *(done 2026-06-13)*
+- [x] **Faraday cage foam voids** — VOID-FAR-CAGE (76×56×88 mm cage pocket) and
+  VOID-FAR-FAN-SPUR (44×44×50 mm vent duct spur) added to `airframe/placeholders/foam/`.
+  Use ×4 and ×8 copies respectively in FreeCAD to plan all 4 bays. *(done 2026-06-13)*
 - [x] **Foam-fill and void visualization STLs** — 11 new STLs in `airframe/placeholders/foam/`:
   4× FOAM-FILL-* (head/cargo/middle/rear hull sections) and 7× VOID-* (avionics bays,
   cargo bay, wiring trunk, power bus, ventilation intake/exhaust, nacelle pylon pockets).
@@ -359,6 +612,26 @@ Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
   VOID objects in FreeCAD. *(done 2026-06-12)*
 
 **Open sub-tasks:**
+- [ ] **Rear skid reinforcement — SCAD update (TWO files)**
+  The skids are the aft extensions of the middle-section horseshoe ring; the
+  middle/rear section cut was made purely for printability and carries no load.
+  The CF rod must therefore span BOTH sections continuously to reinforce the
+  full skid bending span and to tie the print joint together.
+  Changes required:
+  - `s_middle_canonical_shell24.scad`: add 4.2 mm bore channel along each
+    horseshoe-bent-aft skid arm from the horseshoe origin to the aft face
+    (middle/rear joint face at hull Y ≈ +203 mm).
+  - `s_rear_neck_intake_shell24.scad`: add matching coaxial 4.2 mm bore
+    channel through the skid extension from the joint face to the skid tip.
+  - Channels must be coaxially aligned across the joint face to accept a
+    single continuous rod. Nominal channel axis = hull Z-face centroid of
+    each skid cross-section.
+  - Rod: 4 mm OD solid CF from CF-ROD-4MM stock, ~250 mm per skid × 2
+    skids = ~500 mm total; insert from aft, epoxy (West System 105/206).
+  - Rod serves triple purpose: skid bending stiffness, middle/rear joint
+    tie-together, assembly alignment pin.
+  - Re-slice both parts after SCAD update; update masses in BOM.
+  **BLOCKS first taxi/landing test.**
 - [ ] **Run FreeCAD catalog** — execute `serenity_placeholders_assembly.py` once
   FreeCAD is available to verify grid layout and produce
   `airframe/Serenity-Placeholders.FCStd`. Commit the FCStd to the repo.
@@ -377,6 +650,14 @@ Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
   (all three pieces share a common plane but are separate box meshes joined via `_cat()`).
   Acceptable for visualisation; fix by replacing with a proper extruded U-shape when
   trimesh/CSG support is available.
+- [ ] **FAR-FT-PANEL PCB design** — design the EMI-filtered feed-through panel
+  KiCad schematic + layout (55×35 mm, LP π-filter + TVS on CAN FD ×2,
+  RS-485, Ethernet RJ45, power JST-GH 2P). Run DRC; generate gerbers; add
+  to `avionics/kicad/`. **BLOCKS Faraday cage final assembly.**
+- [x] **Faraday mass budget review** — Faraday aircraft system 364 g (0.80 lbm)
+  after Rev R1 ferrite (4/cage) + strap (1/cage) reduction. Full weight
+  reduction pass (2026-06-13) brings estimated T/W to ~1.19; BATT-6S-2800
+  swap yields ~1.25 — above the 1.2 minimum. *(resolved 2026-06-13)*
 - [ ] **Link placeholders to BOM entries** — add `Placeholder_STL` field to
   `docs/bom_revR.json` for each non-printable row pointing to its STL path.
 
@@ -391,6 +672,46 @@ Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
 
 - [x] **Regenerate Cape-B-1 gerbers** — same timestamp issue. `serenity/kicad/gerbers/CAPE-B-1/` files are from 2026-05-22.
   - **BLOCKS Phase 6 fab order**
+
+---
+
+### 1.2b — PCB Redesigns: Emma Rev R1 / Zoë Rev R1 / Kaylee Rev A1
+
+These three boards require schematic + layout changes before the next fabrication order.
+All are on the `avionics/kicad/` branch; run DRC to zero errors before generating gerbers.
+
+- [ ] **Emma Rev R1 — add LoRa, replace JST with P1+P2 socket rails**
+  - Add RFM95W 915 MHz LoRa module (SPI interface to PB2-I via P1 header pins).
+  - Replace JST GH 6P connector with 2× 20-pin 2.54 mm socket rails (P1 + P2),
+    matching Zoë passthrough rail pinout so Emma stacks cleanly on top.
+  - Update SRF2012-100Y CMC + TVS guard to cover LoRa SPI and antenna lines.
+  - Update silk/fab layer: "Emma Rev R1 — 49 MHz AX.25 + LoRa 915 MHz".
+  - Fitted in: River's Room, Simon's Medbay only (2 boards total).
+  - Run DRC → zero errors; generate gerbers to `avionics/kicad/gerbers/Emma-R1/`.
+  - **BLOCKS Emma fabrication order.**
+
+- [ ] **Zoë (Cape-B-2) Rev R1 — remove LoRa, add P1+P2 passthrough rails**
+  - Remove RFM95W footprint and all associated SPI routing + LDO supply.
+  - Add 2× 20-pin 2.54 mm pass-through socket rails on upper face (upper sockets
+    match Emma P1+P2 pinout; lower pins pass through to Cape-A-2 / PB2-I stack).
+  - Carry all PB2 P1+P2 signals from lower pins to upper sockets; add 0 Ω options
+    on signals consumed by Zoë (WiFi, SiK, I²C, UART) so they are both used and
+    passed through.
+  - Update silk/fab: "Cape-B-2 Rev R1 — Zoë CN cape"; note Emma header on upper face.
+  - Run DRC → zero errors; generate gerbers to `avionics/kicad/gerbers/CAPE-B-2-R1/`.
+  - **BLOCKS Zoë + Emma fabrication order.**
+
+- [ ] **Kaylee Rev A1 — remove 6 V BEC, add 5 V servo output**
+  - Remove TPS54540 6 V/5 A BEC circuit (IC, inductor, output caps, feedback divider,
+    Molex Nano-Fit 6 V output connector).
+  - Add third TPS54620 5 V/3 A instance for dedicated servo rail (shares 5 V feedback
+    reference with avionics BECs; separate output capacitor bank; Molex Nano-Fit
+    connector labelled SERVO-5V).
+  - Verify 5 V servo current budget: 2× DS3218MG = 2× 500 mA stall = 1.0 A peak;
+    3 A rated output provides 3× headroom — adequate.
+  - Update silk/fab: "Kaylee Rev A1"; update schematic title block.
+  - Run DRC → zero errors; generate gerbers to `avionics/kicad/gerbers/Kaylee-A1/`.
+  - **BLOCKS Kaylee fabrication order.**
 
 ---
 
