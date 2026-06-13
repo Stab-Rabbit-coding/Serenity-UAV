@@ -50,20 +50,20 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 | Hull material | PETG (0.098 in / 2.5 mm skin, 2 lb/ft³ closed-cell foam fill) |
 | Nacelle EDF | XFly Galaxy X5 50mm 12-blade 6S 3200KV — **2.73 lbf (1,240 gf) thrust each** (xfly-model.eu) |
 | Propulsion (Phases 5–10) | 2× (2× 50mm EDF @ 6S tandem) nacelles — 1,240 gf × 2 × 0.90 stator efficiency × 2 nacelles = **9.84 lbf (4,464 gf)** |
-| Propulsion (Phase 11 full) | As above + 1× 120mm EDF @ 6S fuselage rear — **17.56 lbf (7,964 gf) total thrust** |
+| Propulsion (Phase 11 full) | As above + 1× 55mm EDF @ 6S fuselage rear — **~2.81 lbf (1,275 gf) net forward thrust** (cruise only; not summed into hover) |
 | Counter-rotation | Port nacelle EDFs: CW from intake | Starboard: CCW — zero net torque reaction |
 | Inter-stage stators | 11-fin twisted stator, integrated into each nacelle print (CF-PETG) |
 | Nacelle tilt | 0° (cruise) → 90° (hover) → 120° (backing); hard stops −5° / 140° |
 | Tilt actuation | 1× digital servo per nacelle (≥347 oz·in / 25 kg·cm @ 6V), fuselage-mounted |
 | Iris nozzles (nacelles) | 2× nacelle, gear-linked to tilt pivot — no dedicated servo |
-| Iris nozzle (rear) | 1× rear, SG90 servo-actuated — **Phase 11 only** |
+| Rear nozzle | 1× **fixed canonical elliptical** tail nozzle (2.06 × 1.76 in / 52.3 × 44.7 mm) — no iris, no servo — **Phase 11 only** |
 | Nozzle closed | 0° nacelle tilt → petals form hull-matched engine cone (Serenity skin) |
 | Nozzle open | 90° nacelle tilt → petals hinge out, LED-backlit translucent-blue inner faces |
-| Rear EDF | 120mm @ 6S, exhaust straight aft; intake via 4 radial scoops at neck ~12.2 in (~310 mm) — **DEFERRED Phase 11** |
-| AUW (Phases 5–10, no aft EDF) | **6.10 lbm (2,768 g)** | Aft EDF system omitted (~1.85 lbm / ~840 g deferred): 120mm EDF ~400g + 80A ESC ~130g + CF-PETG intake frame ~90g + PETG plenum ~80g + nozzle frame/petals/servo/wiring ~140g |
-| Nacelle-only T/W (Phases 5–10) | **~1.61** | 9.84 lbf / 6.10 lbm — **full VTOL hover capable** without aft EDF |
-| AUW (Phase 11 full system) | **7.95 lbm (3,608 g)** | With full aft EDF hardware installed |
-| Full-system T/W (Phase 11) | **~2.21** | 17.56 lbf / 7.95 lbm — enhanced performance, heavier payloads, higher cruise speed |
+| Rear EDF | 55mm @ 6S (~1,500 gf fan), exhaust straight aft through canonical nozzle; feeds **4 RCS bleed-air jets** (~15% flow, pitch/yaw); intake via reduced-area neck scoops at ~12.2 in (~310 mm) — **DEFERRED Phase 11** |
+| AUW (Phases 5–10, no aft EDF) | **6.10 lbm (2,768 g)** — aft EDF system omitted (~0.79 lbm / ~360 g deferred): 55mm EDF ~95g + 50A ESC ~35g + intake frame ~20g + plenum+RCS manifold ~50g + canonical nozzle ~30g + 4× RCS jets ~32g + 4× RCS valves ~36g + mount+thrust tube ~45g + wiring ~15g |
+| Nacelle-only T/W (Phases 5–10) | **~1.61** — 9.84 lbf / 6.10 lbm — **full VTOL hover capable** without aft EDF |
+| AUW (Phase 11 full system) | **6.90 lbm (3,130 g)** — with 55mm rear EDF + RCS hardware installed |
+| Hover T/W (Phase 11) | **~1.43** — 9.84 lbf / 6.90 lbm; rear EDF is forward-thrust only (cruise/range), not counted in hover. Keep hover payload light to stay ≥1.5. |
 | Avionics | 8× PocketBeagle 2 Industrial (AM6254): FC1–FC4 (Cape-A) + CN1–CN4 (Cape-B) |
 | Cargo | 4.00 × 3.00 × 3.00 in (101.6 × 76.2 × 76.2 mm) bay, clamshell doors, N20 winch |
 | Build estimate | ~100–120 hours across all phases |
@@ -98,7 +98,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 | 8 | Finishing: Decals + FAA + Docs | Legal, complete, documented | ~$25 |
 | 9 | Performance Tuning | PID governor optimisation, endurance, cross-wind hover | ~$0 |
 | 10 | Advanced Autonomy | BVLOS readiness, extended missions, multi-link redundancy | ~$0 |
-| 11 | **Aft EDF Integration** *(deferred)* | ★ **FULL VTOL** — 120mm rear EDF + intake + iris nozzle | ~$100 |
+| 11 | **Aft EDF Integration** *(deferred)* | ★ **CRUISE + RCS** — 55mm rear EDF + canonical nozzle + 4 RCS jets | ~$70 |
 
 > Costs are USD estimates as of 2026. PCB assembly assumes JLCPCB pricing.
 > Phase 11 is intentionally deferred until Phases 0–10 are proven in flight.
@@ -128,7 +128,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 | `head_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Nose-down orientation |
 | `middle_canonical_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Canonical belly — NO belly scoop. Generate from `serenity/stl/middle_canonical_shell24.scad`. |
 | `cargo_sect_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | |
-| `rear_neck_intake_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Hull neck section with 4 radial scoop windows. Generate from `deferred/aft-edf/openscad/rear_neck_intake_shell24.scad`. Cover the 4 windows with removable 3mm PETG blanks (silicone-sealed) until Phase 11. |
+| `rear_neck_intake_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Hull neck section with reduced-area scoop windows (sized for 55mm EDF). Generate from `deferred/aft-edf/openscad/rear_neck_intake_shell24.scad`. Cover the windows with removable 3mm PETG blanks (silicone-sealed) until Phase 11. |
 | `s_wings_both_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | |
 | `s_eng_left_stator_shell24.stl` | **CF-PETG** | 0.15 mm | 25% gyroid, 4 walls | 1 | Port nacelle — run `blender_nacelle_integrated_v1.py` first to generate |
 | `s_eng_right_stator_shell24.stl` | **CF-PETG** | 0.15 mm | 25% gyroid, 4 walls | 1 | Starboard nacelle |
@@ -138,8 +138,9 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 | `s_pivot_arm_a_scaled24.stl` | **CF-PETG** | 0.15 mm | 40%, 4 walls | 2 | Carries tilt servo pushrod |
 | `nacelle_nozzle_petal.stl` | PETG (body) + translucent-blue PETG (inner face) | 0.20 mm | 20% gyroid | 16 | 8 per nacelle; print inner face swap if dual-material unavailable |
 | `nacelle_nozzle_ring.stl` | **CF-PETG** | 0.15 mm | 40% | 2 | Base ring; seals to nacelle nozzle exit face |
-| `rear_nozzle_petal.stl` | PETG + translucent-blue inner | 0.20 mm | 20% gyroid | 8 | **DEFERRED — Phase 11.** File at `deferred/aft-edf/stls/`. Do not print until Phase 11. |
-| `rear_nozzle_frame.stl` | **CF-PETG** | 0.15 mm | 30% | 1 | **DEFERRED — Phase 11.** File at `deferred/aft-edf/stls/`. Do not print until Phase 11. |
+| `rear_nozzle_canonical.stl` | **CF-PETG** | 0.15 mm | 30%, 4 walls | 1 | **DEFERRED — Phase 11.** Fixed canonical elliptical tail nozzle (2.06×1.76 in). Requires regeneration for 55mm/canonical geometry (supersedes iris rear_nozzle_frame/petal). |
+| `rcs_thruster_nozzle.stl` | **CF-PETG** | 0.15 mm | 40%, 4 walls | 4 | **DEFERRED — Phase 11.** RCS bleed-air jet nozzle. Requires generation. |
+| `rcs_distribution_manifold.stl` | PETG | 0.20 mm | 30% | 1 | **DEFERRED — Phase 11.** 4-way RCS bleed manifold off the EDF plenum. Requires generation. |
 | `feet_x_4_scaled24.stl` | **TPU 95A** | 0.25 mm | 40% | 1 | Direct-drive extruder required |
 | `legs_scaled24.stl` | **CF-PETG** | 0.15 mm | 30% | 1 | |
 | Tilt bracket w/ sector gear | **CF-PETG** | 0.12 mm | 40%, 4 walls | 2 | 0.12mm layer for M0.5 tooth accuracy |
@@ -231,7 +232,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 - Belly port, X≈**260mm**: SiK 915MHz SMA-RP bulkhead *(relocated forward from 310mm — station 310mm is now the neck intake ring; 260mm is in cargo bay belly, Panel C, clear of intake frame)*
 - Belly stbd, X≈260mm: LoRa RFM95W 915MHz SMA-RP bulkhead
 - Dorsal, X≈**120mm**: **49MHz RCRS-49 forward wire post** — PETG insulated mast (~10mm tall, 12×12mm foot), bonded to dorsal hull skin just aft of bridge/cockpit section; loading coil + LC pi-network at this post; RG-316 coax routed internally to Bay A RCRS-49 module *(replaces dorsal fin + vertical whip — wire now runs nose-to-tail along hull spine)*
-- Aft dorsal hull, X≈580mm: **49MHz RCRS-49 temporary aft wire post** — PETG hook post (~10mm tall) bonded to aft dorsal hull skin near station ~580mm with 5-min epoxy; electrically open (insulated end). *(Note: the permanent aft post on `rear_nozzle_frame.stl` is a Phase 11 item. This temporary post is removed and replaced in Phase 11.)*
+- Aft dorsal hull, X≈580mm: **49MHz RCRS-49 temporary aft wire post** — PETG hook post (~10mm tall) bonded to aft dorsal hull skin near station ~580mm with 5-min epoxy; electrically open (insulated end). *(Note: the permanent aft post on the canonical tail nozzle (`rear_nozzle_canonical.stl`) is a Phase 11 item. This temporary post is removed and replaced in Phase 11.)*
 - Dorsal fwd, X≈140mm: WiFi 2.4/5GHz antenna
 - **49MHz top wire**: 0.3mm stainless steel wire or 22AWG enamelled copper, strung from forward post hook (~120mm) to temporary aft post hook (~580mm) with light tension (~20g); CF keel bar connected to RCRS-49 GND as counterpoise
 - **⚠ GPS clearance check**: forward wire post at ~120mm is ~43mm from GPS patch (both dorsal face). Bench-verify GPS HDOP ≤1.5 with RCRS-49 transmitting before flight. If GPS degrades, move GPS patch to ≥165mm from nose.
@@ -497,10 +498,11 @@ After cure:
 
 **Goal:** ★ **FIRST FLIGHT** with 4-node avionics — full VTOL hover using nacelle EDFs only.
 
-> **Aft EDF not installed.** The 120mm fuselage EDF is deferred to Phase 11. The 4 nacelle EDFs
+> **Aft EDF not installed.** The 55mm fuselage EDF is deferred to Phase 11. The 4 nacelle EDFs
 > (XFly Galaxy X5, 2.73 lbf / 1,240 gf each, 90% additive via stator = 4.91 lbf (2,232 gf)/nacelle × 2 = 9.84 lbf (4,464 gf) total)
 > deliver nacelle T/W ≈ **1.61** at the Phase 5–10 AUW of 6.10 lbm (2,768 g) — **sufficient for full VTOL
-> hover**. Phase 11 adds the rear EDF to reach T/W ≈ 2.21 for enhanced payload and cruise performance.
+> hover**. Phase 11 adds the rear EDF for forward-flight (cruise) thrust and RCS attitude authority — it
+> fires aft through the canonical nozzle and does not boost hover (Phase 11 hover T/W ≈ 1.43).
 
 ### Node Install Order
 
@@ -512,7 +514,7 @@ Install **CN1 + FC1** in Shepherd's room / Bay A (nose), **CN2 + FC2** in Inara'
 3. Plug 72-pin expansion connector between PB2-I and Cape.
 4. Connect CAN FD, RS-485, 1553, ETH chain connectors per bus harness.
 5. Connect ESC DSHOT signal leads to Cape-A PRU-ICSS header.
-6. Connect servo signal leads (2× tilt servos + 1× rear nozzle servo) to Cape-A servo rail.
+6. Connect servo signal leads (2× tilt servos; 4× RCS valve servos are Phase 11) to Cape-A servo rail.
 7. Connect GPS patch antenna coax to Cape-A GPS header. Mount GPS patch antenna on hull dorsal surface at nearest bay location.
 
 ### ESC Assignment — Cross-Nacelle Redundancy
@@ -527,11 +529,11 @@ hover rather than losing one nacelle entirely.
 | ESC2 | EDF2 (downstream / aft) | Port | Z=5..50mm | **FC2** |
 | ESC3 | EDF1 (upstream / fore) | Starboard | Z=76..126mm | **FC1** |
 | ESC4 | EDF2 (downstream / aft) | Starboard | Z=5..50mm | **FC2** |
-| ESC5 | 120mm rear EDF | Fuselage | — | **DEFERRED — Phase 11** |
+| ESC5 | 55mm rear EDF | Fuselage | — | **DEFERRED — Phase 11** |
 
 > **Failure mode (nacelles only):** FC1 loss → FC2 holds ESC2 (port aft) + ESC4 (stbd aft).
 > FC2 loss → FC1 holds ESC1 (port fore) + ESC3 (stbd fore). Half-thrust in both nacelles either way.
-> ESC5 and Panel F 80A ESC are not installed until Phase 11.
+> ESC5 and Panel F 50A ESC are not installed until Phase 11.
 
 ### Wiring Connections for 4-Node Minimum Build
 
@@ -544,7 +546,7 @@ hover rather than losing one nacelle entirely.
 | ESC5 / rear EDF | — | — | **DEFERRED — Phase 11** (PRU Ch.2 reserved) |
 | Nacelle tilt servo 1 (port) | Cape-A FC1 servo rail | Servo-tilt-port | SERVO-PWR conduit |
 | Nacelle tilt servo 2 (stbd) | Cape-A FC2 servo rail | Servo-tilt-stbd | SERVO-PWR conduit |
-| Rear nozzle servo | — | — | **DEFERRED — Phase 11** |
+| 4× RCS valve servos | — | — | **DEFERRED — Phase 11** |
 | LED strips | Cape-B CN1 GPIO | WS2812B ×3 | LED wiring harness |
 | CAN FD bus | CN1→FC1→CN2→FC2 | Ring (open at FC2 end) | CAN conduit, 120Ω term at CN1 |
 
@@ -564,7 +566,7 @@ hover rather than losing one nacelle entirely.
 - [ ] GPS lock achieved on all 4 FC nodes (CN1/CN2 may relay for minimum flight)
 - [ ] FAA registration applied
 - [ ] Battery C-rating confirmed for peak draw
-- [ ] *(Rear EDF, rear nozzle servo, and 80A Panel F ESC are Phase 11 items — do not install yet)*
+- [ ] *(Rear 55mm EDF, 4× RCS valve servos, and 50A Panel F ESC are Phase 11 items — do not install yet)*
 
 ### First Flight Protocol
 
@@ -634,11 +636,13 @@ Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_s
 | `blender_shells_v3.py` | Blender | Hollow and scale all hull STLs to 24" | `*_shell24.stl` (all hull sections) |
 | `blender_nacelle_integrated_v1.py` | Blender | Generate nacelle shells with integrated stators | `s_eng_left_stator_shell24.stl`, `s_eng_right_stator_shell24.stl` |
 | ~~`blender_intake_cut.py`~~ | ~~Blender~~ | ~~Cut 120mm belly intake in s_middle~~ | **Superseded** — belly scoop removed in Rev N; use canonical middle shell instead |
-| `blender_nozzle_gen.py` | Blender | Generate iris nozzle petals and rings | `nacelle_nozzle_petal.stl`, `nacelle_nozzle_ring.stl`, `rear_nozzle_petal.stl`, `rear_nozzle_frame.stl` |
+| `blender_nozzle_gen.py` | Blender | Generate nacelle iris nozzle petals and rings | `nacelle_nozzle_petal.stl`, `nacelle_nozzle_ring.stl` |
 | `serenity/stl/middle_canonical_shell24.scad` | OpenSCAD | Canonical middle fuselage shell (belly restored) | `middle_canonical_shell24.stl` |
-| `deferred/aft-edf/openscad/rear_neck_intake_shell24.scad` | OpenSCAD | Rear neck shell with 4 radial scoop windows *(Phase 11)* | `rear_neck_intake_shell24.stl` |
-| `deferred/aft-edf/openscad/neck_intake_frame.scad` | OpenSCAD | CF-PETG structural intake frame ring *(Phase 11)* | `neck_intake_frame.stl` |
-| `deferred/aft-edf/openscad/aft_edf_plenum.scad` | OpenSCAD | Cross-shaped 4-to-1 plenum manifold *(Phase 11)* | `aft_edf_plenum.stl` |
+| `deferred/aft-edf/openscad/rear_neck_intake_shell24.scad` | OpenSCAD | Rear neck shell with reduced-area scoop windows (55mm EDF) *(Phase 11 — regen)* | `rear_neck_intake_shell24.stl` |
+| `deferred/aft-edf/openscad/neck_intake_frame.scad` | OpenSCAD | CF-PETG structural intake frame ring (55mm) *(Phase 11 — regen)* | `neck_intake_frame.stl` |
+| `deferred/aft-edf/openscad/aft_edf_plenum.scad` | OpenSCAD | Plenum: 55mm EDF inlet + 4 RCS bleed taps *(Phase 11 — regen)* | `aft_edf_plenum.stl` |
+| `deferred/aft-edf/openscad/rear_nozzle_canonical.scad` | OpenSCAD | Fixed canonical elliptical tail nozzle (2.06×1.76 in) *(Phase 11 — new)* | `rear_nozzle_canonical.stl` |
+| `deferred/aft-edf/openscad/rcs_thruster.scad` | OpenSCAD | RCS bleed-jet nozzle + manifold + valve bracket *(Phase 11 — new)* | `rcs_thruster_nozzle.stl`, `rcs_distribution_manifold.stl`, `rcs_valve_bracket.stl` |
 
 Blender scripts run headless: `blender --background --python <script>.py`  
 OpenSCAD STLs: `openscad -o <output>.stl <file>.scad`
@@ -702,11 +706,14 @@ regulatory readiness for real-world deployment.
 
 ## Phase 11 — Aft EDF Integration *(Deferred)*
 
-**Goal:** Install the 120mm fuselage EDF, 4-scoop radial intake system, and rear iris nozzle to
-achieve full VTOL hover capability (T/W ≈ 1.47).
+**Goal:** Install the 55mm fuselage EDF, reduced-area intake, the fixed canonical elliptical tail
+nozzle, and 4 EDF-fed RCS bleed-air thrusters — adding forward-flight (cruise) thrust and pitch/yaw
+attitude authority. The rear EDF exhausts aft and contributes no hover lift.
 
 **Dependency:** Phases 0–10 complete and proven in flight.
 **Design files:** `deferred/aft-edf/` — see `deferred/aft-edf/README.md` for full detail.
+**NOTE (Rev R1 redesign):** the 120mm SCAD/STLs in `deferred/aft-edf/` are superseded. All rear-EDF
+geometry must be regenerated for the 55mm fan, the canonical nozzle, and the RCS system before fabrication.
 
 > This phase was deferred per the project design philosophy: *"The large fuselage EDF is now an
 > optional addition once everything else works."* (CLAUDE.md)
@@ -715,66 +722,68 @@ achieve full VTOL hover capability (T/W ≈ 1.47).
 
 | Item | Qty | Approx. Cost |
 |------|-----|-------------|
-| 120mm 6S EDF | 1× | ~$60–80 |
-| 80A 6S BLHeli32 ESC | 1× | ~$25–35 |
-| SG90 micro servo (rear nozzle) | 1× | ~$3 |
-| 3mm × 5mm SS hinge pins | 8× | ~$2 |
-| 0.8mm piano wire | ~200mm | ~$1 |
-| WS2812B LED ring (120mm duct) | 1× | ~$4 |
+| 55mm 6S EDF (~1,500 gf) | 1× | ~$35–55 |
+| 50A 6S BLHeli32 ESC | 1× | ~$18–28 |
+| SG90-class proportional valve servo (RCS) | 4× | ~$12 |
+| WS2812B LED ring (55mm duct) | 1× | ~$3 |
 
-### 11B — Intake Frame and Plenum
+### 11B — Intake Frame and Plenum (regenerate for 55mm + RCS)
 
-1. Generate and print `neck_intake_frame.stl` from `deferred/aft-edf/openscad/neck_intake_frame.scad`
-   (CF-PETG, 0.15mm, 40% gyroid, 4 walls).
-2. Generate and print `aft_edf_plenum.stl` from `deferred/aft-edf/openscad/aft_edf_plenum.scad`
-   (PETG, 0.20mm, 20% gyroid).
+1. **Regenerate and print** `neck_intake_frame.stl` from `deferred/aft-edf/openscad/neck_intake_frame.scad`
+   (CF-PETG, 0.15mm, 40% gyroid, 4 walls) — sized for the 55mm intake area.
+2. **Regenerate and print** `aft_edf_plenum.stl` from `deferred/aft-edf/openscad/aft_edf_plenum.scad`
+   (PETG, 0.20mm, 20% gyroid) — 55mm EDF inlet + 4 RCS bleed taps.
 3. Remove temporary window covers from rear neck hull section.
-4. Dry-fit intake frame into 4 scoop windows (tongues ~0.2mm clearance); verify lip orientation (forward +X).
+4. Dry-fit intake frame into the reduced-area scoop windows (tongues ~0.2mm clearance); verify lip orientation (forward, nose-ward).
 5. Bond with West System 105/206; cure 24h. Fillet all joints; cure 2h.
 6. Dry-fit plenum against intake frame exits; bond and fillet; cure 2h.
-7. Pressure-test: shop-vac one scoop, cover three — confirm draft at 120mm outlet, no joint leaks.
+7. Pressure-test: shop-vac one scoop — confirm draft at the 55mm EDF inlet and all 4 RCS bleed taps, no joint leaks.
 
-### 11C — 120mm EDF Installation
+### 11C — 55mm EDF Installation
 
 1. Bench-test EDF (correct rotation, no vibration). Verify fan rotation direction before installation.
 2. Install EDF retaining ring at station ~430mm inside Panel F. Bond; cure 1h.
-3. Seat EDF in plenum 120mm outlet; press to retaining lip; bond with 4 dabs slow-cure epoxy.
-4. Route motor leads to 80A ESC in Panel F bay; route DSHOT signal lead forward to FC2 PRU Ch.2.
-5. Bond 80A ESC in Panel F bay (foam tape + cable tie). Cure 2h before thrust application.
+3. Seat EDF in plenum 55mm inlet; press to retaining lip; bond with 4 dabs slow-cure epoxy.
+4. Route motor leads to 50A ESC in Panel F bay; route DSHOT signal lead forward to FC2 PRU Ch.2.
+5. Bond 50A ESC in Panel F bay (foam tape + cable tie). Cure 2h before thrust application.
 
-### 11D — Rear Nozzle
+### 11D — Canonical Nozzle + RCS Thrusters
 
-1. Print `rear_nozzle_frame.stl` + `rear_nozzle_petal.stl` ×8 from `deferred/aft-edf/stls/` if not done.
-2. Press `rear_nozzle_frame.stl` (8 fixed ribs) onto 120mm EDF duct exit at Panel F aft.
-3. Install 8 petals on 3mm hinge pins; bend 0.8mm piano wire link ring through all petal lugs.
-4. Install SG90 servo in Panel F; piano wire pushrod to nozzle inner ring.
-5. Calibrate: servo 0° = petals closed (hull bell profile); servo ~90° = fully open.
-6. Install WS2812B LED ring at duct exit.
+1. Generate and print `rear_nozzle_canonical.stl` (fixed canonical elliptical tail nozzle, 2.06×1.76 in exit; CF-PETG).
+2. Bond the canonical nozzle to the tail-cone exit at Panel F aft, blending into the canonical hull outer mold line. **Fixed — no moving petals, no servo.**
+3. Generate and print `rcs_distribution_manifold.stl` (×1), `rcs_thruster_nozzle.stl` (×4), `rcs_valve_bracket.stl` (×4).
+4. Bond the RCS manifold to the 4 plenum bleed taps; route bleed ducts to the 4 RCS jet stations.
+5. Install 4× SG90-class proportional valves on their brackets; link each to its bleed duct.
+6. Calibrate RCS valves: 0% = closed, 100% = full bleed jet. Map 2 jets to pitch, 2 to yaw.
+7. Install WS2812B LED ring at the canonical nozzle exit lip.
 
 ### 11E — 49MHz Antenna Upgrade
 
-1. Bond permanent aft 49MHz RCRS wire post to top of `rear_nozzle_frame.stl` (5-min epoxy).
+1. Bond permanent aft 49MHz RCRS wire post to the top of `rear_nozzle_canonical.stl` (5-min epoxy).
 2. Remove temporary aft post from ~580mm hull station.
-3. Restring 49MHz top wire (~470mm full span) from forward post to nozzle-frame aft post; ~20g tension.
+3. Restring 49MHz top wire (~470mm full span) from forward post to nozzle aft post; ~20g tension.
 
 ### 11F — Software and Commissioning
 
-1. Enable ESC5 in FC2 firmware (PRU Ch.2 BDSHOT); configure `EDF_THRUST_K` for 120mm motor.
-2. Verify all 5 ESC heartbeats on CAN FD; confirm FC2 cross-drive on single-FC failure scenario.
-3. Run `governor_cal.py` bench calibration for ESC5; update `governor_config.h`.
-4. **Tethered thrust test** — all 5 EDFs at 60% throttle, 10s; verify lift exceeds AUW on tether; ESC temps ≤70°C.
-5. **VTOL hover** — tethered 3× before free hover; altitude hold ±0.3m; all ESCs ≤70°C.
+1. Enable ESC5 in FC2 firmware (PRU Ch.2 BDSHOT); configure `EDF_THRUST_K` for the 55mm motor.
+2. Add the 4 RCS proportional-valve channels to the attitude-control mixer (2 pitch + 2 yaw); calibrate authority.
+3. Verify all 5 ESC heartbeats on CAN FD; confirm FC2 cross-drive on single-FC failure scenario.
+4. Run `governor_cal.py` bench calibration for ESC5; update `governor_config.h`.
+5. **Bench RCS test** — confirm pitch/yaw authority from the 4 bleed jets at cruise throttle.
+6. **Forward-flight thrust test** — rear EDF at 60% throttle; verify forward thrust and ESC temps ≤70°C. **Do not use the rear EDF for hover lift.**
 
 ### Phase 11 Checks
 
+- [ ] All regenerated rear-EDF STLs pass mesh watertightness verification
 - [ ] Intake frame tongues fully seated; shoulder flanges bonded flush; no gaps
-- [ ] Plenum pressure-test passed — no joint leakage
+- [ ] Plenum + RCS manifold pressure-test passed — draft at EDF inlet and all 4 RCS jets; no leakage
 - [ ] EDF at station ~430mm, centreline ±2mm; rotation verified before sealing
-- [ ] 80A ESC installed; ESC5 DSHOT signal to FC2 PRU Ch.2
-- [ ] Rear nozzle: 8 petals open/close evenly; servo calibrated (0° closed, 90° open)
-- [ ] Permanent 49MHz aft wire post on nozzle frame; top wire at full ~470mm span
-- [ ] T/W ≥1.10 measured on tether; stable VTOL hover 1m AGL ≥30s
-- [ ] All 5 ESC telemetry on CAN FD; ESC temps ≤70°C at hover power
+- [ ] 50A ESC installed; ESC5 DSHOT signal to FC2 PRU Ch.2
+- [ ] Canonical nozzle bonded flush to hull outer mold line; exit 2.06×1.76 in verified
+- [ ] All 4 RCS valves calibrated; pitch/yaw authority confirmed on bench
+- [ ] Permanent 49MHz aft wire post on canonical nozzle; top wire at full ~470mm span
+- [ ] Forward-thrust test passed; rear EDF NOT used for hover; ESC temps ≤70°C
+- [ ] All 5 ESC telemetry on CAN FD; ESC temps ≤70°C at cruise power
 
 ---
 
