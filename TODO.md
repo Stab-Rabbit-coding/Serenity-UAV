@@ -87,7 +87,41 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
 
 #### 1.1.1 **Fuselage**
 
-##### 1.1.1.0 *Section Joint Boss / Alignment Design (Rev R1 — all four fuselage sections)*
+##### 1.1.1.0a *Blender-Canonical Source Adoption (Rev R1, 2026-06-13)*
+
+The four Blender-derived, 2 mm hollow, repaired fuselage shell STLs in
+`airframe/blender-scripts/files-hollowed-24in/` are now the **authoritative canonical
+sources** for all fuselage geometry.  They have been copied to `airframe/stls/fuselage/`
+and baked to hull frame.  SCAD fuselage shell files are secondary references only.
+
+**Baked on 2026-06-13 (all four verified OK, max error < 1.52e-05 mm):**
+- [x] `head_shell24_2mm_repaired.stl` — 790 036 tri; X −232.9..−103.5 / Y −305.7..−70.7 / Z +61.1..+201.5 mm
+- [x] `cargo_sect_shell24_2mm_repaired.stl` — 1 414 068 tri; X −267.0..−72.7 / Y −71.5..+132.0 / Z 0.0..+163.2 mm
+- [x] `middle_shell24_2mm_repaired.stl` — 855 328 tri; X −258.5..−81.6 / Y +130.4..+203.6 / Z +1.3..+166.1 mm *(see §1.1.1.3 — includes horseshoe ring + inner neck as ONE piece)*
+- [x] `rear_shell24_2mm_repaired.stl` — 1 095 972 tri; X −246.1..−105.5 / Y +203.2..+384.3 / Z +3.3..+161.1 mm
+
+**Open tasks:**
+- [ ] **Cargo section interior boss features** — the Blender-canonical cargo shell is the pure exterior skin.
+  All interior features added in SCAD Rev S/S1/S2/S3 (wing mortises, spar bore, servo mount pads,
+  hinge-pin blocks, latch lips, avionics standoffs, cargo bay opening, GPS domes) must be merged
+  back into the Blender mesh before printing.  Workflow: use the baked Blender cargo shell as the
+  outer surface; add interior boss geometry from SCAD Rev S3 source via Blender Boolean or OpenSCAD
+  hull combination.  Re-export, re-bake, verify watertight.  **BLOCKS cargo section printing.**
+- [ ] **Middle section inner neck — Phase 5-10 print guidance** — the Blender middle mesh includes
+  the inner neck (closed tube) and the outer horseshoe ring as one piece.  Confirm in slicer that
+  both elements appear correctly and that there are no thin-wall violations in the neck-to-horseshoe
+  web transitions.  The 4× EDF intake scoop openings in the inner neck are NOT cut in the current
+  mesh — confirm before slicing.  See §1.1.1.3 for details.  **BLOCKS middle section printing.**
+- [ ] **Deprecate SCAD fuselage shell files** — `s_head_shell24.scad`, `s_middle_canonical_shell24.scad`,
+  `s_rear_neck_intake_shell24.scad` are now secondary references.  At next revision checkpoint,
+  archive them to `airframe/archive/` and update PROJECT_INDEX.md / ARCHIVE_INDEX.md.
+  `cargo_sect_shell24.scad` (Rev S3) remains active as the source for interior boss geometry
+  until those features are merged into the Blender mesh (task above).
+- [ ] **Update `REVN_BUILD_GUIDE_24IN.md` fuselage shell source references** — replace SCAD
+  regeneration commands with Blender pipeline instructions (copy from `blender-scripts/files-hollowed-24in/`
+  → `stls/fuselage/` → run `python3 tools/bake_hull_frame.py`).
+
+##### 1.1.1.0b *Section Joint Boss / Alignment Design (Rev R1 — all four fuselage sections)*
 
 All four fuselage section boundaries (head/cargo, cargo/middle, middle/rear) are
 **fabrication splits only** — they carry no structural load.  All inter-section bending,
@@ -388,13 +422,44 @@ Joint faces in hull-frame Y (confirmed from baked extents):
 
 ##### 1.1.1.3 *Middle Neck*
 
-- [ ] **neck_intake_frame.stl** — `openscad -o neck_intake_frame.stl deferred/aft-edf/openscad/neck_intake_frame.scad`
+**Canonical geometry (Rev R1, 2026-06-13):**
+The middle section is defined by `airframe/blender-scripts/files-hollowed-24in/middle_shell24_2mm_repaired.stl`
+(canonical Blender source) → baked to `airframe/stls/fuselage/middle_shell24_2mm_repaired.stl`.
+
+It is **ONE printed piece** comprising two distinct structural elements:
+1. **Outer horseshoe ring** — the U-shaped exterior frame surrounding the middle section, open at −Z (ventral).
+   The two lower arms of the horseshoe continue aft as the landing skids into the rear section.
+2. **Inner neck** — a tube-like enclosed passage running through the centre of the horseshoe,
+   connecting the cargo bay interior to the rear engine room interior within the hull skin.
+   Canonically this is a pressurised passage within the ship; in the UAV context it provides
+   structural continuity and a wiring/keel routing path through the narrowest hull section.
+
+**Phase 5–10 print state:** inner neck is a closed, uncut tube.
+Aft EDF intake scoops (4 radial openings into the inner neck for the 120 mm EDF airflow)
+are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phase 11.
+
+- [x] **Blender canonical source baked** — `middle_shell24_2mm_repaired.stl` (855 328 tri) baked
+  2026-06-13; extents X −258.5..−81.6 / Y +130.4..+203.6 / Z +1.3..+166.1 mm. *(done 2026-06-13)*
+
+- [ ] **Slicer verification** — open baked `middle_shell24_2mm_repaired.stl` in slicer and confirm:
+  - Both the outer horseshoe ring and inner neck are present as connected geometry
+  - No thin-wall violations at neck-to-horseshoe web transitions (min 1.6 mm wall at all points)
+  - Inner neck bore is closed (no EDF intake openings)
+  - Skid arm geometry at the lower horseshoe legs correctly transitions into the rear section
+  - Z-range +1.3..+166.1 mm in hull frame; total height ≈ 165 mm — fits build-volume vertical
+  **BLOCKS middle section printing.**
+
+- [ ] **CF skid rod channels** — add 4.2 mm bore channel along each horseshoe-to-skid arm (lower
+  legs of the horseshoe) in the Blender mesh, coaxial with the matching channels in the rear shell.
+  Export updated STL, re-bake, verify watertight.  See §1.1.0a skid task.  **BLOCKS taxi test.**
+
+- [ ] **Phase 11 — aft EDF intake scoop cuts** — at Phase 11, cut 4× radial scoop openings into
+  the inner neck to match the EDF plenum geometry (`deferred/aft-edf/openscad/neck_intake_frame.scad`).
+  These cuts are Phase 11 ONLY — the Phase 5–10 mesh is the closed-neck version.
+
+- [ ] **neck_intake_frame.stl (Phase 11)** — `openscad -o neck_intake_frame.stl deferred/aft-edf/openscad/neck_intake_frame.scad`
   - Verify: 4 registration tongues 5 mm depth; intake lips project 6 mm forward
   - Material: CF-PETG; **DEFERRED — BLOCKS Phase 11 only.** STL at `deferred/aft-edf/stls/`.
-
-- [ ] **rear_neck_intake_shell24.stl** — `openscad -o ... deferred/aft-edf/openscad/rear_neck_intake_shell24.scad`
-  - Verify: 4 radial scoop windows present; NECK_X station ~310 mm; window alignment
-  - **DEFERRED — BLOCKS Phase 11.** Print in Phase 0 with windows covered by removable PETG blanks.
 
   **Rear intake system (OpenSCAD):**
 
