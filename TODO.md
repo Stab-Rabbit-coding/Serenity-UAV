@@ -183,6 +183,84 @@ Joint faces in hull-frame Y (confirmed from baked extents):
     relevant shell file (§1.1.1.1–§1.1.1.4).
   **BLOCKS keel bar + ring plate fabrication; BLOCKS foam pour.**
 
+- [ ] **Hull keel (CF-BAR-6X3) — complete first-principles re-evaluation *(Rev R1)***
+  A continuous bow-to-stern backbone is structurally justified (primary fuselage bending
+  moment arm; inter-section tie-rod spanning all fabrication splits).  However, the
+  canonical Serenity hull geometry makes the current straight 6×3 mm flat bar
+  infeasible as specified.  This is a clean-sheet keel design task.
+
+  **Known geometry constraints (from baked hull-frame extents):**
+  - **Head/Cargo Z step**: Head_Shell Z_min = +61.2 mm; Cargo_Shell Z_min = 0.0 mm.
+    A straight keel at the cargo belly cannot enter the head section without a ≈ 61 mm
+    vertical bend at hull Y ≈ −71 mm.
+  - **Middle section open belly**: Middle_Shell (Y = +130.4..+203.6 mm) is open at −Z
+    (horseshoe ring with no belly floor).  A belly keel has no skin to bond to for
+    ~73 mm of hull length here.  Foam fill provides distributed elastic support but no
+    hard attachment.
+  - **Head section structural role**: Head_Shell is non-structural per Rev R1 (foam + 2 mm
+    PETG skin adequate; avionics bays relocated to cargo + rear sections).  A keel that
+    terminates at the head/cargo joint face (hull Y ≈ −71 mm) may be fully adequate.
+  - **Datum marks**: the 91/165/251/320/388 mm station marks are tied to the stale pre-Rev N
+    ring plate positions and must be replaced by the new ring station outputs (see ring
+    plate re-evaluation task above).
+
+  **Step 1 — Decide keel span.**
+  Determine whether the keel must enter the head section or whether cargo-to-rear
+  (hull Y ≈ −71 mm → +384 mm, ≈ 455 mm) is structurally sufficient.  The head section
+  contributes little to global fuselage bending (short, tapered, non-structural) and has
+  an incompatible Z floor.  Cargo-to-rear span is preferred unless a specific head-section
+  load case (e.g., FPV/GPS nose mount inertia) justifies the extension.
+
+  **Step 2 — Determine Z routing through each section.**
+  At each hull section, identify the highest Z level that provides:
+  - Continuous bonding surface against inner skin or foam (closed loop or foam contact)
+  - Clearance from avionics bays, battery tray, servo mounts, spar bores, and wiring trunk
+  Candidate Z levels to survey (from section Z extents):
+  - Cargo belly: Z ≈ +5..+15 mm (below battery tray floor, above hull skin)
+  - Middle horseshoe: keel passes through the interior unsupported — foam alone provides
+    lateral stability; check that Z routing clears the wiring trunk PTFE conduit.
+  - Rear cone belly: Z ≈ +5..+15 mm (consistent with cargo level)
+  Target: a monotonically constant or gently varying Z route from cargo to rear that
+  requires no bends exceeding the material's minimum bend radius.
+
+  **Step 3 — Choose keel form and cross-section.**
+  Based on the Z routing determined in Step 2:
+  - **Straight flat bar (CF-BAR-6X3)**: viable only if Z routing is constant.  6 mm wide
+    face ideally oriented horizontally (resist vertical bending = primary fuselage mode).
+    Minimum bend radius for 6×3 CF bar ≈ 200–300 mm; tighter bends require separate spans.
+  - **Pre-bent flat bar**: single bar bent in the weak axis (3 mm thickness) to follow a
+    gentle Z curve.  Requires heat + jig; feasible if total Z variation over the keel span
+    is < 30 mm and bends are gradual.  Confirm with material supplier.
+  - **Segmented with lap splice**: two or three straight segments (e.g., cargo + rear);
+    overlapping lap joint (≥ 50 mm) at each join, bonded with West System 105/206 + peel
+    ply prep.  Maintains continuity without bending.  Adds ≤ 5 g mass at each splice.
+  - **CF tube**: round tube (e.g., 6 mm OD × 1 mm wall) is isotropic in bending, easier
+    to route curves, and can double as a wiring conduit.  Lower area moment of inertia
+    than a 6×3 flat bar in the primary bending axis — check adequacy.
+  - **CF tow/tape embedded in foam**: lays up along any geometry during foam pour; no
+    discrete part to install; non-inspectable after pour.  Lowest mass option but least
+    stiff and non-replaceable.
+
+  **Step 4 — Assess RF counterpoise function.**
+  CF-BAR-6X3 currently doubles as the 49 MHz RCRS antenna counterpoise.  CF has anisotropic
+  conductivity (longitudinal only, ≈ 5–10 kΩ/m vs copper ≈ 0.017 Ω/m); it is a poor RF
+  conductor.  At 49 MHz, λ = 6.12 m; λ/4 = 1.53 m; a 455–620 mm bar is ≈ λ/10 — a
+  dedicated copper counterpoise wire (AWG 22 stranded, < 2 g) bonded alongside the keel
+  is more reliable than relying on CF conductivity.  Decide: (a) keep CF keel as structural
+  only and add a separate copper counterpoise wire in the wiring trunk, or (b) embed a
+  copper braid in the keel lap joint.  Update Emma/XCVR antenna design accordingly.
+
+  **Step 5 — Update BOM, battery tray, and build guide.**
+  - Update CF-BAR-6X3 Notes: confirmed form, span, Z routing, cross-section, mass.
+  - Battery tray SCAD (`battery_tray.scad`): the "keel rail" interface must match the
+    new keel Z position and cross-section; update SCAD and re-export STL.
+  - Update `REVN_BUILD_GUIDE_24IN.md` keel installation section with new span, Z level,
+    lap joint positions, and ring plate notch locations (from ring plate re-evaluation).
+  - If separate copper counterpoise wire is chosen, add to BOM as WIRE-COUNTERPOISE-49MHZ.
+  **BLOCKS ring plate notch design; BLOCKS keel fabrication; BLOCKS foam pour.**
+  **Run concurrently with CF ring plate re-evaluation (ring plate notch geometry depends
+  on keel cross-section and Z position).**
+
 - [x] **Access panel frames + covers (24" Rev R)** — `airframe/openscad/fuselage/access_panels_24in.scad` created 2026-06-11. Geometries derived from authoritative shell SCADs (Rev R baseline):
   - 4× Faraday-bay covers (Shepherd/Inara/River/Simon): 72×52 mm, 4× M3 clearance bores, positive-stop shoulder; Inara + River covers include Ø42 mm GPS retention-ring recess.
   - 2× ventral hatch covers: battery 160×60 mm, Kaylee 115×100 mm; M2.5 pilots into bonded frames.
