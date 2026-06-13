@@ -134,34 +134,53 @@ Joint faces in hull-frame Y (confirmed from baked extents):
   - Bond with West System 105/206; cure 24 h before foam pour.
   - **BLOCKS middle + rear section printing.**
 
-- [ ] **CF ring plate (CF-PLATE-2MM) station re-derivation from canonical hull geometry *(Rev R1)***
-  The five station numbers used in Rev N and earlier (91 mm, 165 mm, 251 mm, 320 mm, 388 mm) were
-  derived from the **pre-Rev N non-canonical hull model** and are invalid for the current baked
-  canonical hull-frame STLs.  Both the hull-Y positions and the 2D cross-sectional ring profiles
-  must be re-derived.  Station count target remains 3 (minimum: wing-spar forward bearing,
-  wing-spar aft bearing, aft landing-load reaction).
+- [ ] **CF ring plate (CF-PLATE-2MM) — complete first-principles re-evaluation *(Rev R1)***
+  All prior design data for CF ring plates (station count, hull-Y positions, 2D profiles,
+  and structural function) were based on the **pre-Rev N non-canonical hull model** and
+  are entirely invalid for the current baked canonical Serenity geometry.  This is a
+  clean-sheet structural design task, not a re-derivation of old numbers.
 
-  Station candidate zones (hull-frame Y, from baked section extents):
-  - **Spar-fore ring:** inside Cargo_Shell (Y = −71.5..+132.0 mm); locate at forward spar
-    bearing block centroid (derive from `cargo_sect_shell24.scad` SPAR_BORE_Y parameter).
-  - **Spar-aft ring:** inside Cargo_Shell; locate at aft spar bearing block centroid (same
-    SCAD, or ≈ spar-fore Y + spar bearing span).
-  - **Aft load ring:** inside Rear_Shell (Y = +203.2..+383.9 mm); locate where skid bending
-    moment transfers into the tail cone skin — nominally Y ≈ +260..+320 mm (midpoint of
-    rear section between skid roots and tail tip).
+  **Step 1 — Structural load case inventory.**
+  Identify every load introduction point inside the hull that a ring frame could react:
+  - Wing spar pin loads (X-axis spar through cargo section; derive spar-bore Y stations
+    from `cargo_sect_shell24.scad` SPAR_BORE_Y / bearing block parameters).
+  - Nacelle tilt servo reaction (NSVMT blocks in cargo section; derive Y from SCAD
+    `NSVMT_X_CEN` or equivalent — note SCAD uses part-local frame; convert to hull Y).
+  - Skid landing-impact loads (aft section; CF rod reinforcement already handles skid-arm
+    bending; determine if tail-cone ovalisation under landing shock still warrants a ring).
+  - Fuselage bending under 2g manoeuvre (keel bar + foam carry primary moment; rings
+    provide shear-web anti-ovalisation — evaluate whether skin thickness + foam elastic
+    foundation make rings unnecessary in lightly-loaded sections).
 
-  Procedure:
-  1. Read `cargo_sect_shell24.scad` to extract `SPAR_BORE_Y` (or equivalent parameter)
-     → that Y gives the spar-fore and spar-aft ring positions precisely.
-  2. For the aft ring, slice `s_rear_neck_intake_shell24.stl` at candidate Y stations in
-     OpenSCAD or FreeCAD; select the station where the hull inner skin forms a closed ring
-     with largest enclosed area (maximises ring stiffness contribution).
-  3. At each chosen Y station, extract the 2D inner-skin boundary from the baked STL
-     (e.g., FreeCAD `Cross-Section` feature on the baked mesh at that hull-Y plane) and
-     export as a DXF profile.  Jig-cut CF-PLATE-2MM sheet to each profile; notch for
-     CF-BAR-6X3 keel slot at bottom centre.
-  4. Update BOM CF-PLATE-2MM Notes with confirmed hull-Y values (replace current TBD).
-  5. Update `REVN_BUILD_GUIDE_24IN.md` keel datum marks to match new Y values.
+  **Step 2 — Hull cross-section survey at load stations.**
+  For each load station identified in Step 1, slice the baked canonical STL at that
+  hull-Y plane (FreeCAD Cross-Section on the baked mesh, or `python tools/bake_hull_frame.py`
+  cross-section output).  Characterise the inner-skin boundary:
+  - Is it a closed loop (full ring possible) or open (e.g., middle horseshoe open at −Z)?
+  - What is the enclosed area and minimum inscribed rectangle?
+  - Does the Serenity exterior geometry at that station allow a flat CF plate to seat
+    flush against the inner skin, or is the section too curved / tapered?
+
+  **Step 3 — Decide ring type, station count, and positions.**
+  Based on Steps 1–2, determine for each candidate station whether to use:
+  - Full closed ring (cargo or rear sections where skin forms a closed perimeter)
+  - Partial arch (middle horseshoe upper arch only; bottom open)
+  - No frame (head section is non-structural per Rev R1; foam + keel adequate)
+  - Integrated boss rib (if load is highly localised, a rib printed into the shell SCAD
+    may be lighter than a separate CF plate — evaluate for servo and spar stations)
+  Record chosen station count (≥1; ≤5), hull-Y for each, and ring type.
+
+  **Step 4 — Profile extraction and DXF generation.**
+  For each chosen station: export 2D inner-skin boundary as DXF (FreeCAD TechDraw or
+  `Draft.dxf` export of cross-section wire).  Add keel-bar notch (6×3 mm slot at hull
+  −Z centroid).  Add 3 mm clearance all-round from skin so ring can be inserted and
+  epoxy-bonded without force-fitting.  Save to `airframe/diagrams/ring_frames/`.
+
+  **Step 5 — Update BOM and build guide.**
+  - Update CF-PLATE-2MM Notes: confirmed station count, hull-Y values, ring types, mass.
+  - Update `REVN_BUILD_GUIDE_24IN.md` keel datum mark table with new hull-Y stations.
+  - If any station is replaced by an integrated shell rib, add SCAD sub-task under the
+    relevant shell file (§1.1.1.1–§1.1.1.4).
   **BLOCKS keel bar + ring plate fabrication; BLOCKS foam pour.**
 
 - [x] **Access panel frames + covers (24" Rev R)** — `airframe/openscad/fuselage/access_panels_24in.scad` created 2026-06-11. Geometries derived from authoritative shell SCADs (Rev R baseline):
