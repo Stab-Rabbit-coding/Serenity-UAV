@@ -80,6 +80,7 @@ def add_hole_marker(cx, cy, diameter):
 
 # Mounting Standoff Pattern (Calculated relative to Base Plate)
 standoffs = [(18.0, 18.0), (62.0, 18.0), (18.0, 42.0), (62.0, 42.0)]
+
 for sx, sy in standoffs:
     add_hole_marker(x0 + sx - thk, y0 + sy - thk, 2.8)
 
