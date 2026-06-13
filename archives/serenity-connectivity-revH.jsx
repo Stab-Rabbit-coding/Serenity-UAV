@@ -699,7 +699,7 @@ function BomTab(){
   const [cf,setCf]=useState("All");
   const rows=cf==="All"?BOM_H:BOM_H.filter(b=>b.cat===cf);
   const newCost=BOM_H.filter(b=>!b.est.includes("already")).reduce((s,b)=>{
-    const u=parseFloat(b.est.replace("$","").replace("ea",""))||0; return s+b.qty*u;
+    const u=parseFloat(b.est.replace(/\$/g,"").replace(/ea/g,""))||0; return s+b.qty*u;
   },0);
   return(<div>
     <div style={{background:"rgba(255,191,36,0.06)",border:`1px solid rgba(255,191,36,0.2)`,borderRadius:4,padding:"10px 14px",marginBottom:14,fontFamily:M,fontSize:10,color:C.dim}}>
