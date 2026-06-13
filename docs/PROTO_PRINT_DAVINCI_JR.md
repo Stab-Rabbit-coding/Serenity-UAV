@@ -264,37 +264,41 @@ Plate footprint with 5 mm spacing: (31+5)×4 × (22.8+5)×2 = 144 × 55.6 mm —
 
 ---
 
-### Batch G — Rear Nozzle Frame + Petals (1 plate, 2 prints)
+### Batch G — Canonical Tail Nozzle + RCS Jets (Phase 11, regenerate first)
 
-**Goal:** Verify 120 mm EDF iris frame and petal count (8 moving + 8 fixed ribs).
+**Goal:** Verify the fixed canonical elliptical tail nozzle (2.06×1.76 in / 52.3×44.7 mm exit)
+fits the 55 mm EDF duct, and proof the 4 RCS bleed-jet nozzles. **These geometries must be
+regenerated for the Rev R1 rear-EDF redesign before this batch is printed (the old iris
+`rear_nozzle_frame`/`rear_nozzle_petal` STLs are superseded).**
 
-> **Note:** rear_nozzle_frame (131×131×20 mm) is the largest single-plate item
-> that fits at 1:1 with 19 mm of bed margin each side. Apply extra glue stick.
-
-| Part | Qty | Orientation | Notes |
-| ------ | ----- | ------------- | ------- |
-| `rear_nozzle_frame.stl` | 1 | Frame face down | Print alone — fills 131×131 footprint |
-
-Then second print for petals:
+> **Note:** `rear_nozzle_canonical.stl` is the largest single-plate item in this batch; print
+> nozzle face down. Apply extra glue stick.
 
 | Part | Qty | Orientation | Notes |
 | ------ | ----- | ------------- | ------- |
-| `rear_nozzle_petal.stl` | 4 | Flat (outer face down) | 4 per plate, 2 plates for full 8 |
+| `rear_nozzle_canonical.stl` | 1 | Nozzle face down | Print alone — fixed canonical elliptical tail nozzle |
+
+Then second print for the RCS hardware:
+
+| Part | Qty | Orientation | Notes |
+| ------ | ----- | ------------- | ------- |
+| `rcs_thruster_nozzle.stl` | 4 | Flat (jet outlet up) | 4 per plate |
+| `rcs_distribution_manifold.stl` | 1 | Flat | 4-way bleed split off the EDF plenum |
 
 | Setting (both prints) | Value |
 | --------- | ------- |
 | Quality | Normal (0.2 mm) |
-| Fill | **20%** |
+| Fill | **30%** |
 | Surface | 2 shells |
-| Support | **Off** (frame ribs design for flat print) |
-| Raft | **On** for frame (large footprint needs extra adhesion) |
-| Est. time | ~3 h frame + ~1.5 h petals |
+| Support | **Off** (design for flat print) |
+| Raft | **On** for nozzle (large footprint needs extra adhesion) |
+| Est. time | ~3 h nozzle + ~1.5 h RCS parts |
 
 ## Verify after print
 
-- [ ] 8 fixed rib bases are solid — no delamination
-- [ ] 120 mm EDF would seat inside frame ID (measure with calipers)
-- [ ] Hinge pin bores (3 mm) open on all 8 petal slots in frame
+- [ ] Canonical nozzle exit measures 2.06×1.76 in (52.3×44.7 mm) with calipers
+- [ ] 55 mm EDF duct would seat inside the nozzle inlet ID
+- [ ] All 4 RCS jet outlets are open and unobstructed; manifold bleed ports clear
 
 ---
 
