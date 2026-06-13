@@ -373,6 +373,14 @@ Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
   VOID objects in FreeCAD. *(done 2026-06-12)*
 
 **Open sub-tasks:**
+- [ ] **Rear skid reinforcement — SCAD update** — add 4 mm CF rod press-fit channels
+  to `s_rear_neck_intake_shell24.scad` skid sections (2× channels, one per skid,
+  running full skid length); channels accept 4mm OD CF rod from CF-ROD-4MM stock.
+  Skids receive repeated ground impact; CF insert provides bending stiffness without
+  high-infill bulk. Alternative: use slicer modifier mesh to print skid cross-sections
+  at 40% gyroid + 6 perimeters if SCAD channel approach is impractical.
+  Update printed part mass in BOM after SCAD change and re-slice.
+  **BLOCKS first taxi/landing test.**
 - [ ] **Run FreeCAD catalog** — execute `serenity_placeholders_assembly.py` once
   FreeCAD is available to verify grid layout and produce
   `airframe/Serenity-Placeholders.FCStd`. Commit the FCStd to the repo.
