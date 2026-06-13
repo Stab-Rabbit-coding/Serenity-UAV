@@ -357,10 +357,12 @@ Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
   FAR-CAGE-AV (cage), FAR-GASKET-AV, FAR-FAN-40, FAR-EMI-VENT-40, FAR-BOND-STRAP,
   FAR-FT-PANEL, FAR-FERRITE-4MM; MAL-FAR-FAN, MAL-FAR-GASKET (GCS).
   BOM entries added to `current-specification/bom_revR.csv`.
-  **⚠ MASS NOTICE: Faraday system adds 484 g (1.07 lbm) to aircraft AUW
-  (reduced from 648 g: cage → 0.1 mm Al foil bonded to foam — 2026-06-13).
-  Hover T/W ≈ 1.09 — still below safe VTOL minimum (~1.2). See open
-  mass budget review in §1.1.5 below.** *(done 2026-06-13)*
+  **⚠ MASS NOTICE: Faraday aircraft system now 364 g (0.80 lbm) after
+  ferrite reduction to 4/cage and 1 bond strap/cage. Full Rev R1 weight
+  reduction pass (Phase 11 deferrals, wiring gauge, PCB consolidation,
+  head infill, CF plates) brings cumulative T/W to ~1.19 without battery
+  swap; T/W ~1.25 with BATT-6S-2800. See §1.1.5 mass budget.**
+  *(done 2026-06-13)*
 - [x] **Faraday cage foam voids** — VOID-FAR-CAGE (76×56×88 mm cage pocket) and
   VOID-FAR-FAN-SPUR (44×44×50 mm vent duct spur) added to `airframe/placeholders/foam/`.
   Use ×4 and ×8 copies respectively in FreeCAD to plan all 4 bays. *(done 2026-06-13)*
@@ -393,18 +395,10 @@ Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
   KiCad schematic + layout (55×35 mm, LP π-filter + TVS on CAN FD ×2,
   RS-485, Ethernet RJ45, power JST-GH 2P). Run DRC; generate gerbers; add
   to `avionics/kicad/`. **BLOCKS Faraday cage final assembly.**
-- [ ] **Faraday mass budget review** — cage wall reduced to 0.1 mm 5052-H34 Al
-  foil bonded to foam (elastic foundation raises panel f₁ ≈ 810 Hz >
-  EDF shaft ~470 Hz; no stiffening features needed); system mass now
-  484 g (1.07 lbm), T/W ≈ 1.09 — still below ~1.2 minimum.
-  Remaining options to close gap:
-  (b) 4 ferrites/cage instead of 8 (saves 80 g → 404 g, T/W ≈ 1.11);
-  (c) 1 bond strap/cage instead of 2 (saves 40 g → 364 g / 444 g w/o b,
-      T/W ≈ 1.12 / 1.10);
-  (d) accept T/W = 1.09 if EDF bin-test confirms nominal thrust exceeds
-      spec (1240 g × 90% × 2 EDFs = 2232 g is a floor, not mean).
-  Target: Faraday mass ≤ 400 g to restore T/W ≥ 1.12.
-  **BLOCKS final cage fabrication.**
+- [x] **Faraday mass budget review** — Faraday aircraft system 364 g (0.80 lbm)
+  after Rev R1 ferrite (4/cage) + strap (1/cage) reduction. Full weight
+  reduction pass (2026-06-13) brings estimated T/W to ~1.19; BATT-6S-2800
+  swap yields ~1.25 — above the 1.2 minimum. *(resolved 2026-06-13)*
 - [ ] **Link placeholders to BOM entries** — add `Placeholder_STL` field to
   `docs/bom_revR.json` for each non-printable row pointing to its STL path.
 
@@ -419,6 +413,46 @@ Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
 
 - [x] **Regenerate Cape-B-1 gerbers** — same timestamp issue. `serenity/kicad/gerbers/CAPE-B-1/` files are from 2026-05-22.
   - **BLOCKS Phase 6 fab order**
+
+---
+
+### 1.2b — PCB Redesigns: Emma Rev R1 / Zoë Rev R1 / Kaylee Rev A1
+
+These three boards require schematic + layout changes before the next fabrication order.
+All are on the `avionics/kicad/` branch; run DRC to zero errors before generating gerbers.
+
+- [ ] **Emma Rev R1 — add LoRa, replace JST with P1+P2 socket rails**
+  - Add RFM95W 915 MHz LoRa module (SPI interface to PB2-I via P1 header pins).
+  - Replace JST GH 6P connector with 2× 20-pin 2.54 mm socket rails (P1 + P2),
+    matching Zoë passthrough rail pinout so Emma stacks cleanly on top.
+  - Update SRF2012-100Y CMC + TVS guard to cover LoRa SPI and antenna lines.
+  - Update silk/fab layer: "Emma Rev R1 — 49 MHz AX.25 + LoRa 915 MHz".
+  - Fitted in: River's Room, Simon's Medbay only (2 boards total).
+  - Run DRC → zero errors; generate gerbers to `avionics/kicad/gerbers/Emma-R1/`.
+  - **BLOCKS Emma fabrication order.**
+
+- [ ] **Zoë (Cape-B-2) Rev R1 — remove LoRa, add P1+P2 passthrough rails**
+  - Remove RFM95W footprint and all associated SPI routing + LDO supply.
+  - Add 2× 20-pin 2.54 mm pass-through socket rails on upper face (upper sockets
+    match Emma P1+P2 pinout; lower pins pass through to Cape-A-2 / PB2-I stack).
+  - Carry all PB2 P1+P2 signals from lower pins to upper sockets; add 0 Ω options
+    on signals consumed by Zoë (WiFi, SiK, I²C, UART) so they are both used and
+    passed through.
+  - Update silk/fab: "Cape-B-2 Rev R1 — Zoë CN cape"; note Emma header on upper face.
+  - Run DRC → zero errors; generate gerbers to `avionics/kicad/gerbers/CAPE-B-2-R1/`.
+  - **BLOCKS Zoë + Emma fabrication order.**
+
+- [ ] **Kaylee Rev A1 — remove 6 V BEC, add 5 V servo output**
+  - Remove TPS54540 6 V/5 A BEC circuit (IC, inductor, output caps, feedback divider,
+    Molex Nano-Fit 6 V output connector).
+  - Add third TPS54620 5 V/3 A instance for dedicated servo rail (shares 5 V feedback
+    reference with avionics BECs; separate output capacitor bank; Molex Nano-Fit
+    connector labelled SERVO-5V).
+  - Verify 5 V servo current budget: 2× DS3218MG = 2× 500 mA stall = 1.0 A peak;
+    3 A rated output provides 3× headroom — adequate.
+  - Update silk/fab: "Kaylee Rev A1"; update schematic title block.
+  - Run DRC → zero errors; generate gerbers to `avionics/kicad/gerbers/Kaylee-A1/`.
+  - **BLOCKS Kaylee fabrication order.**
 
 ---
 

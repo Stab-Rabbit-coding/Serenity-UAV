@@ -5,7 +5,7 @@
 - **Design and build a fully functional EDF Tilt Rotor UAV version of the Firefly Class Spaceship "Serenity" from the Joss Whedon TV show and movie.**
 - **Provide redundancy and failover in all systems possible**:
 - Avionics:  4 pairs of pocketbeagle2 industrial SBCs: 4 with a Flight Control and Sensor Cape, (called "Wash") (with GPS,  imu, compass, barometer, anti-collision range sensors,  airspeed, pid motor speed control, and nacelle tilt servos), and 4 with a Communications, Logging, and payload Cape, ( called "Zoë") .
-- Node variant placement (v2 · v2 · v2 · v2, nose → tail, Rev Q):  All 8 nodes use EMI-hardened -2 capes (Wash, Zoë, Emma) at every position.  Rev Q standardises on the single hardened SKU across all bays, providing uniform 5 kV galvanic isolation on CAN FD, RS-485, and Ethernet at every node.  Cape-A-1, Cape-B-1, and XCVR-49MHZ-1 are archived as of Rev Q (2026-06-05).
+- Node variant placement (Rev R1):  All 8 nodes carry Wash (Cape-A-2) and Zoë (Cape-B-2), providing uniform 5 kV galvanic isolation on CAN FD, RS-485, and Ethernet at every node.  Emma XCVR boards are installed only in **River's Room and Simon's Medbay** — the two bays whose primary external radio is 49 MHz RCRS; Shepherd's Room and Inara's Shuttle do not carry Emma boards.  Zoë Rev R1 adds P1+P2 passthrough socket rails on its upper face; Emma plugs onto these rails on the River and Simon stacks.  Cape-A-1, Cape-B-1, and XCVR-49MHZ-1 are archived as of Rev Q (2026-06-05).  Kaylee Rev A1 removes the 6 V servo BEC; tilt servos run on the 5 V rail (~21 kg·cm, above the ~16 kg·cm tilt load requirement).
 - Onboard Communications:  Each of the 8 sbcs will be connected to the others via: Canbus FD, MILSTD 1553, RS485, & Ethernet
 - External Communications: The UAV uses WIFI at 5ghz, Zigbee at 2.4ghz, MavLink /SiK at 915Mhz, and AX.25 on the 49Mhz RCRS channels.  All four are usable for command and control of the aircraft.  The avionics capes also support sbus, but it's  not used.
 - Powerplant: Each Nacelle has two EDFs in series, under PID control.  The forward EDF in each nacelle is controlled primarily by one of the flight control SBCs and the aft is primarily controlled by a different sbc.
@@ -196,7 +196,7 @@ The historical bake transforms (position + quaternion per component) live solely
 
  The Power Distribution Board is named "Kaylee" - "Everything is shiny."
 
- The 49 MHz RCRS Transceiver Cape (XCVR-49MHZ-2) is named "Emma".
+ The 49 MHz RCRS + LoRa 915 MHz Transceiver Cape (XCVR-49MHZ-2 Rev R1) is named "Emma".  Emma connects to the stack via P1+P2 socket rails (replaces JST GH 6P as of Rev R1).  Only 2 Emma boards are installed: River's Room and Simon's Medbay.
 
  The Cargo handling system is named "Jayne" - "I was aiming for his head."
 
@@ -225,11 +225,11 @@ Mal is the ground control station - He's the boss.
 
 Shepherd is the crew's conscience and therefore takes care of primarily watchdog, fault detection, failover, and authentication. His stack has SiK primary and WiFi secondary.
 
-Inara has primarily camera, external sensors, and high bandwidth ground communication. Her stack is connected to WiFi primarily and LoRa secondary.
+Inara has primarily camera, external sensors, and high bandwidth ground communication. Her stack is connected to WiFi primarily and SiK/MAVLink secondary.  (LoRa is no longer on Inara's stack — LoRa moved to Emma boards on River and Simon; Rev R1.)
 
-River provides primary control of the forward EDFs, and provides EDF and nacelle control command and syncing, and the most resilient comms. She may be crazy, but she comes through when no one else can. She has 49Mhz RCRS primary and LoRa secondary.
+River provides primary control of the forward EDFs, and provides EDF and nacelle control command and syncing, and the most resilient comms. She may be crazy, but she comes through when no one else can. She has 49 MHz RCRS primary and LoRa 915 MHz secondary — both via her Emma board (Rev R1).
 
-Simon is the alternate watchdog for the ship, but most of his attention is on River. He's got aft EDF control and alternate nacelle control. He follows River's lead but makes sure she doesn't crash the ship. Simon also controls Jayne, and ensures that the cargo isn't jettisoned or the crew abandoned. He's got 49MHz as his primary antenna and SiK as his backup.
+Simon is the alternate watchdog for the ship, but most of his attention is on River. He's got aft EDF control and alternate nacelle control. He follows River's lead but makes sure she doesn't crash the ship. Simon also controls Jayne, and ensures that the cargo isn't jettisoned or the crew abandoned. He's got 49 MHz RCRS primary and SiK as his backup — both external radios co-resident on his Emma board (Rev R1 adds LoRa to Emma; Simon thus carries 49 MHz + LoRa + SiK via Cape-B-2).
 
 ## Workflow Notes
 
