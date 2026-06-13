@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-06-11  
+**Last updated:** 2026-06-13  
 **Current design revision:** Rev R (2026-06-10) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 ---
@@ -86,6 +86,53 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
   double-transform baked STLs); move to `airframe/archive/` at next revision checkpoint.
 
 #### 1.1.1 **Fuselage**
+
+##### 1.1.1.0 *Section Joint Boss / Alignment Design (Rev R1 — all four fuselage sections)*
+
+All four fuselage section boundaries (head/cargo, cargo/middle, middle/rear) are
+**fabrication splits only** — they carry no structural load.  All inter-section bending,
+torsion, and shear loads are carried by (a) continuous 2 lb/cf foam fill bonded to the
+inner skin, (b) the CF-BAR-6X3 keel bar running the full hull length, (c) West System
+105/206 bonding epoxy on all mating surfaces, and (d) the 4 mm CF skid rods crossing the
+middle/rear split.
+
+Each joint face must still satisfy **CLAUDE.md fabrication standard**: minimum 2-wall
+contact annulus + positive-stop shoulder; friction fits alone are not acceptable.
+
+Joint faces in hull-frame Y (confirmed from baked extents):
+- **Head / Cargo** — hull Y ≈ −71 mm (Head_Shell Y-max = −70.7 mm; Cargo_Shell Y-min = −71.5 mm)
+- **Cargo / Middle** — hull Y ≈ +131 mm (Cargo_Shell Y-max = +132.0 mm; Middle_Shell Y-min = +130.4 mm)
+- **Middle / Rear** — hull Y ≈ +203 mm (Middle_Shell Y-max = +203.6 mm; Rear_Shell Y-min = +203.2 mm)
+
+- [ ] **Head/Cargo joint boss design (hull Y ≈ −71 mm)**
+  - Add 3× alignment boss pins (3 mm OD CF rod stub, 8 mm depth each side) at equal
+    angular spacing around the joint perimeter, matching 3.2 mm bore in mating face.
+  - Add positive-stop shoulder (1.5 mm step, 2-wall PETG annulus, ≥ 6 mm wide) around
+    the full perimeter of both mating faces.
+  - Bond with West System 105/206; cure 24 h before foam pour.
+  - SCAD files: `s_head_shell24.scad` + `s_cargo_sect_shell24.scad`
+  - NOTE: R1 audit (§1.1.0) flagged that the 2026-06-10 BOSS analysis used the wrong
+    axis (hull X vs hull Y). Redo BOSS_FORE/BOSS_AFT positions in hull Y before SCAD
+    update — see §1.1.0 open item and §1.1.1.1.
+  - **BLOCKS head + cargo section printing (first joint must be verified in slicer).**
+
+- [ ] **Cargo/Middle joint boss design (hull Y ≈ +131 mm)**
+  - Add 3× alignment boss pins at equal angular spacing; positive-stop shoulder on both faces.
+  - SCAD files: `s_cargo_sect_shell24.scad` + `s_middle_canonical_shell24.scad`
+  - Verify that boss pins do not conflict with CF keel bar channel or avionics bay boss posts
+    already added to cargo section in Rev S2.
+  - Bond with West System 105/206; cure 24 h before foam pour.
+  - **BLOCKS cargo + middle section printing.**
+
+- [ ] **Middle/Rear joint boss design (hull Y ≈ +203 mm)**
+  - Add 3× alignment boss pins at equal angular spacing; positive-stop shoulder on both faces.
+  - NOTE: the 4 mm CF skid rods already cross this joint and serve as the primary alignment
+    pins for the skid arms; the 3 boss pins are needed for the horseshoe upper arch and tail
+    cone zone that the skid rods do not reach.
+  - SCAD files: `s_middle_canonical_shell24.scad` + `s_rear_neck_intake_shell24.scad`
+  - Boss pins must not intersect the 4.2 mm CF-rod bore channels in the skid arms.
+  - Bond with West System 105/206; cure 24 h before foam pour.
+  - **BLOCKS middle + rear section printing.**
 
 - [x] **Access panel frames + covers (24" Rev R)** — `airframe/openscad/fuselage/access_panels_24in.scad` created 2026-06-11. Geometries derived from authoritative shell SCADs (Rev R baseline):
   - 4× Faraday-bay covers (Shepherd/Inara/River/Simon): 72×52 mm, 4× M3 clearance bores, positive-stop shoulder; Inara + River covers include Ø42 mm GPS retention-ring recess.
