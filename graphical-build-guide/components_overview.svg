@@ -36,11 +36,11 @@
 
 <rect x="30" y="40" width="180" height="55" rx="4" fill="#00e5ff0d" stroke="#00e5ff" stroke-width="1.2"/>
 <text x="38" y="56" font-size="10" fill="#00e5ff" font-weight="bold">POCKETBEAGLE2 + CAPE-A-1</text>
-<text x="38" y="69" font-size="8" fill="rgba(255,255,255,0.88)">Flight Controller · CAPE-A-1 85×55mm · AM6254</text>
+<text x="38" y="69" font-size="8" fill="rgba(255,255,255,0.88)">Flight Controller · CAPE-A-1 55×35mm · AM6254</text>
 <text x="38" y="82" font-size="7" fill="rgba(255,255,255,0.78)">Bay A-E: FC1-FC4 · sta 0-388mm · 4× nodes</text>
 <rect x="30" y="110" width="180" height="55" rx="4" fill="#4ade800d" stroke="#4ade80" stroke-width="1.2"/>
 <text x="38" y="126" font-size="10" fill="#4ade80" font-weight="bold">POCKETBEAGLE2 + CAPE-B-1</text>
-<text x="38" y="139" font-size="8" fill="rgba(255,255,255,0.88)">Comms/Log/Payload · CAPE-B-1 90×60mm · AM6254</text>
+<text x="38" y="139" font-size="8" fill="rgba(255,255,255,0.88)">Comms/Log/Payload · CAPE-B-1 55×35mm · AM6254</text>
 <text x="38" y="152" font-size="7" fill="rgba(255,255,255,0.78)">Bay A-E: CN1-CN4 · sta 0-388mm · 4× nodes</text>
 <rect x="30" y="180" width="180" height="55" rx="4" fill="#c084fc0d" stroke="#c084fc" stroke-width="1.2"/>
 <text x="38" y="196" font-size="10" fill="#c084fc" font-weight="bold">SLB9670 TPM 2.0 (all 8 nodes)</text>

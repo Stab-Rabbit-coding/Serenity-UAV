@@ -1,6 +1,6 @@
 # Serenity Avionics Redesign — 8× PocketBeagle 2 Industrial
 
-**Status:** Rev R baseline — All 8 nodes use EMI-hardened v2 capes (Wash / Zoë / XCVR-49MHZ-2)
+**Status:** Rev R baseline — All 8 nodes use EMI-hardened v2 capes (Wash / Zoë / Emma)
 **Date:** 2026-06-11 (Rev R: Wash/Zoë naming finalised; Kaylee PDB DRC-clean + gerbers; hull-frame coords validated; battery spec propagated)
 **Scope:** Avionics compute, cape specifications, bus topology, radio link architecture
 
@@ -92,7 +92,7 @@ The RP2350 PIO state machines in RevJ handled servo PWM generation, Manchester I
 
 ## 3. Cape-A — Sensor & Flight Control
 
-**Footprint:** ~3.35 × 2.17 in (~85 × 55 mm), 4-layer PCB, mounts on P1/P2 via female 0.1″ headers
+**Footprint:** ~2.17 × 1.38 in (~55 × 35 mm), 4-layer PCB, mounts on P1/P2 via female 0.1″ headers
 **Population:** All 4 Cape-A boards identical; sensor population optional per FC role
 
 ### 3.1 Cape-A IC inventory
@@ -151,7 +151,7 @@ The RP2350 PIO state machines in RevJ handled servo PWM generation, Manchester I
 
 ## 4. Cape-B — Comms, Logging & Payload
 
-**Footprint:** ~3.54 × 2.36 in (~90 × 60 mm), 4-layer PCB, mounts on P1/P2
+**Footprint:** ~2.17 × 1.38 in (~55 × 35 mm), 4-layer PCB, mounts on P1/P2
 **Population:** All 4 Cape-B boards identical — all 4 radio interfaces populated on every board
 
 ### 4.1 Radio link assignment
@@ -355,7 +355,7 @@ GPS receivers (u-blox M10Q) are on all 4 Cape-A nodes. GNSS data is broadcast ov
 | RevJ (CM4 + CM3+ mixed) | CM4-LITE ×2 (15g) + CM4-CARRIER-2 ×2 (35g) + CM3+ ×2 (16g) + CM3-CARRIER-1 ×2 (18g) + COMMS-HAT-SWITCH (29g) + MICROHAT (10g) + SENSORHAT-1 ×2 (25g) | — | **0.326 lbm (148 g)** |
 | PB2 redesign | PocketBeagle 2 ×8 (~80 g / 0.176 lbm) | Cape-A ×4 (~50 g / 0.110 lbm est.) + Cape-B ×4 (~65 g / 0.143 lbm est.) | **~0.430 lbm (~195 g)** (+0.104 lbm / +47 g) |
 
-The mass increase is real. Mitigation: Cape-A and Cape-B share 90% of the bus-interface components; a combined 4-layer board with a PB2 SODIMM-style socket (instead of P1/P2 stacking) could reduce individual board mass significantly. JLCPCB assembly for a shared-BOM 90×60mm 4-layer PCB is ~$8/board at quantity 10.
+The mass increase is real. Mitigation: Cape-A and Cape-B share 90% of the bus-interface components; a combined 4-layer board with a PB2 SODIMM-style socket (instead of P1/P2 stacking) could reduce individual board mass significantly. JLCPCB assembly for a shared-BOM 55×35mm 4-layer PCB is ~$8/board at quantity 10.
 
 ### Power
 

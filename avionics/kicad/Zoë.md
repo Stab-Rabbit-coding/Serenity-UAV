@@ -30,7 +30,7 @@ ETH-P/ETH-N JST-GH connectors are removed. The 22 P2 expansion-header pins forme
 allocated to RMII0/1, MDC, MDIO, and PHY control signals become no-connect.
 
 The freed board area (approximately 20 × 12 mm) accommodates the new EMI filter components
-without any overall board size increase from the CAPE-B-1 90 × 60 mm footprint.
+without any overall board size increase from the CAPE-B-1 55 × 35 mm footprint.
 
 ### 2. CAN FD transceiver: ATA6561 → ISOW1044BDFMR
 
@@ -109,7 +109,7 @@ WiFi TX switching noise from coupling into the digital SPI and UART lines:
 
 ### 9. RCRS-49 sub-module header (J1) EMI filter
 
-The J1 6-pin JST-GH header connecting to the XCVR-49MHZ-2 sub-module has the following
+The J1 6-pin JST-GH header connecting to the Emma sub-module has the following
 protection:
 
 - TVS-RCRS (PRTR5V0U2X): protects UART_RCRS_TX, UART_RCRS_RX, and PTT_N lines
@@ -151,7 +151,7 @@ upgrades to:
 | SiK RFD900x | 10 µH inductance + 47 µF (before module VCC) | 100 nF + 10 nF at module pin |
 | RFM95W | 100 Ω ferrite + 10 µF + 100 nF | 100 nF + 10 nF at module pin |
 | WL1837MOD | TPS63031 output + 1 µH + 47 µF (Zoë added) | 10 µF + 100 nF at module pin |
-| RCRS-49 J1 | 10 µF + 100 nF at J1 pin | (on XCVR-49MHZ-2 board) |
+| RCRS-49 J1 | 10 µF + 100 nF at J1 pin | (on Emma board) |
 
 ---
 
@@ -177,7 +177,7 @@ The Wash layout constraints apply equally here. Additional Zoë specifics:
 
 - **RCRS-49 header J1:** Place within 5 mm of the board edge so the cable run to the
 
-  XCVR-49MHZ-2 module is minimised. Apply a PGND guard pour around J1.
+  Emma module is minimised. Apply a PGND guard pour around J1.
 
 ---
 
@@ -346,7 +346,7 @@ All field connectors are shielded JST-GH (or SMA/U.FL for RF). SHIELD pins conne
 | J_485 | SM03B-GHS-TB-1MP | 1=RS485_B_P, 2=RS485_B_N, 3=GND, MP=PGND | RS-485 |
 | J_1553 | SM04B-GHS-TB-1MP | 1=BUS_1553_B_P, 2=BUS_1553_B_N, 3=GND, 4=PGND, MP=PGND | MIL-STD-1553B |
 | J_ETH_B | SM06B-GHS-TB-1MP | 1=GND, 2=ETHB_TX+, 3=ETHB_TX-, 4=ETHB_RX+, 5=ETHB_RX-, 6=GND, MP=PGND | Ethernet PHY |
-| J_XCVR | SM06B-GHS-TB-1MP | 1=GND, 2=+5V, 3=UART_RCRS_TX, 4=XCVR_RX_RAW, 5=XCVR_PTT_N, 6=+3V3, MP=PGND | XCVR-49MHZ-2 header |
+| J_XCVR | SM06B-GHS-TB-1MP | 1=GND, 2=+5V, 3=UART_RCRS_TX, 4=XCVR_RX_RAW, 5=XCVR_PTT_N, 6=+3V3, MP=PGND | Emma header |
 | J_FAN | SM03B-GHS-TB-1MP | 1=GND, 2=+5V, 3=FAN_PWM_B, MP=PGND | Bay ventilation fan |
 | J_SD | MicroSD (Molex 503182-1852) | SDIO: CLK/CMD/D0-D3/CD/WP | Logging microSD |
 | J_SMA_LORA | SMA (50 Ω) | RF center conductor = LORA_ANT; shell = PGND | LoRa 915 MHz antenna |

@@ -40,12 +40,12 @@ Serenity from the 2002 show. Designed using Claude AI.
 | Wingspan | 19.1 in (486 mm) |
 | Height | 7.2 in (182 mm) |
 | AUW — Phases 5–10 (nacelles only) | ~6.10 lbm (2,768 g) |
-| AUW — Phase 11 (full system) | ~7.95 lbm (3,608 g) |
+| AUW — Phase 11 (full system) | ~6.90 lbm (3,130 g) |
 | Payload capacity (minimum) | 8.0 oz (226 g) in a 4″ × 3″ × 3″ bay |
-| Thrust — nacelles only | 9.84 lbf (4,464 g) |
-| Thrust — Phase 11 total | ~17.6 lbf (7,964 g) |
-| T/W — nacelles only | ≈ 1.61 (full VTOL hover capable) |
-| T/W — Phase 11 | ≈ 2.21 |
+| Thrust — nacelles only (vertical/hover) | 9.84 lbf (4,464 g) |
+| Thrust — Phase 11 rear EDF (forward/cruise) | ~2.81 lbf (1,275 g) net after RCS bleed |
+| T/W — nacelles only (hover) | ≈ 1.61 (full VTOL hover capable) |
+| T/W — Phase 11 (hover, nacelles only) | ≈ 1.43 (rear EDF is forward-thrust only) |
 
 ---
 
@@ -123,8 +123,9 @@ Designed for quick field-swapping of the flight battery.
 Provides payload loading/release and access to Kaylee's room, the battery compartment,
 Simon's medbay, and the port/starboard avionics bays (Inara's and River's).
 
-**Deferred — Fuselage EDF compartment** *(Phase 11 only)*: EDF and motor bay in the
-rear cone. Design files in `deferred/aft-edf/`.
+**Deferred — Fuselage EDF compartment** *(Phase 11 only)*: 55 mm EDF and motor bay in the
+rear cone, exhausting through the canonical elliptical tail nozzle and feeding 4 RCS bleed-air
+thrusters. Design files in `deferred/aft-edf/`.
 
 ### Wings
 
@@ -141,8 +142,9 @@ Two nacelles (port + starboard), each housing two 1.97 in (50 mm) EDFs in tandem
 forward nacelle face (nacelle CG) — eliminates gravity torque on the tilt servo at all
 angles. One digital servo ≥ 347 oz·in (25 kg·cm) @ 6 V per nacelle, fuselage-mounted.
 
-**Variable-area nozzles (Rev O — M=1.0 / DP 25.4 gear train):** 8-petal iris on all
-EDF exits.
+**Variable-area nozzles (Rev O — M=1.0 / DP 25.4 gear train):** 8-petal iris on the two
+nacelle EDF exits. The rear fuselage EDF uses the **fixed canonical Serenity tail nozzle**
+(elliptical, not an iris — see Phase 11 below).
 
 - Nacelle nozzles (2×): gear-linked passively to the tilt pivot — no dedicated servo.
   0° nacelle tilt = nozzle fully closed; 90° tilt = nozzle fully open (full burn).
@@ -200,18 +202,29 @@ AUW ~6.10 lbm (2,768 g) | Thrust 9.84 lbf (4,464 g) | T/W ≈ **1.61** — full 
 
 ---
 
-#### DEFERRED — Phase 11: Fuselage EDF
+#### DEFERRED — Phase 11: Fuselage EDF + RCS
 
 Design files in `deferred/aft-edf/`. Physical build deferred until all other systems are proven.
-Nacelle-only T/W ≈ 1.61 is sufficient for VTOL hover.
+Nacelle-only T/W ≈ 1.61 is sufficient for VTOL hover; the rear EDF adds cruise thrust and
+attitude authority, **not** hover lift.
 
-- 1 × 4.72 in (120 mm) EDF in the rear fuselage cone — ~7.72 lbf (3,500 g) thrust, exhaust straight aft.
-- Deferred EDF system mass: ~1.85 lbm (840 g) total
-  (EDF ~14.1 oz / 400 g + ESC ~4.6 oz / 130 g + CF-PETG intake frame ~3.2 oz / 90 g
-  + PETG plenum ~2.8 oz / 80 g + nozzle frame/petals/servo/wiring ~4.9 oz / 140 g)
-- **Phase 11 full-system:** AUW ~7.95 lbm (3,608 g) | Total thrust ~17.6 lbf (7,964 g) | T/W ≈ **2.21**
-- Fuselage EDF intake: 4 radial scoops at neck station ~12.2 in (310 mm) via
-  `neck_intake_frame.stl` + `aft_edf_plenum.stl` (cross-shaped 4-to-1 plenum manifold).
+- 1 × 2.17 in (55 mm) 6S EDF in the rear fuselage cone — ~3.31 lbf (1,500 g) fan thrust,
+  exhausting through the **fixed canonical elliptical tail nozzle** (2.06 in × 1.76 in /
+  52.3 mm × 44.7 mm, ~1,836 mm² exit). Because the canonical nozzle fires straight aft, the
+  rear EDF provides **horizontal forward thrust only** (cruise/range) — it is not counted in hover T/W.
+- **4 RCS (reaction-control) bleed-air thrusters** fed from the EDF discharge plenum, tapping
+  ~15 % of EDF mass flow for pitch/yaw attitude authority (proportional-valve modulated).
+  Net forward thrust after bleed: ~2.81 lbf (1,275 g).
+- Deferred EDF system mass: ~0.79 lbm (360 g) total
+  (EDF ~3.4 oz / 95 g + ESC ~1.2 oz / 35 g + CF-PETG intake frame ~0.7 oz / 20 g
+  + PETG plenum + RCS manifold ~1.8 oz / 50 g + fixed canonical nozzle ~1.1 oz / 30 g
+  + 4× RCS jets/ducts ~1.1 oz / 32 g + 4× RCS proportional valves ~1.3 oz / 36 g
+  + motor mount + thrust tube ~1.6 oz / 45 g + wiring ~0.5 oz / 15 g)
+- **Phase 11 full-system:** AUW ~6.90 lbm (3,130 g) | Rear forward thrust ~2.81 lbf (1,275 g) |
+  Hover T/W ≈ **1.43** (nacelles only; above the 1.0 hover floor, below the 1.5 comfort target —
+  keep hover payload light, or treat the rear EDF as a cruise-only device).
+- Fuselage EDF intake: reduced-area neck scoops at station ~12.2 in (310 mm) via
+  `neck_intake_frame.stl` + `aft_edf_plenum.stl` (plenum sized for the 55 mm fan + RCS taps).
 
 ---
 
@@ -223,7 +236,7 @@ Nacelle-only T/W ≈ 1.61 is sufficient for VTOL hover.
 | Cargo door servo | 1 | SG90 class |
 | Cargo release servo | 1 | SG90 class |
 | Cargo winch motor | 1 | N20 gear motor, ~300 RPM |
-| **Deferred Phase 11** rear nozzle servo | 1 | SG90 class |
+| **Deferred Phase 11** RCS proportional valve servos | 4 | SG90 class (one per RCS bleed jet) |
 
 Cargo door + release controlled via DRV8833 H-bridge on the Simon node.
 
@@ -251,7 +264,7 @@ EMI-hardened v2 design (CAPE-A-2).
 
 **Zoë** (comms/logging cape — 4 nodes):
 MAVLink/SiK 915 MHz, LoRa RFM95W 915 MHz, TI WL1837MOD WiFi/BT, 49 MHz RCRS transceiver
-(XCVR-49MHZ-2 sub-module), CAN FD, MIL-STD-1553B, RS-485, Ethernet RSTP ring, TPM 2.0,
+(Emma sub-module), CAN FD, MIL-STD-1553B, RS-485, Ethernet RSTP ring, TPM 2.0,
 ATF16V8BQL CPLD hardware write-blocker, non-executable log microSD.
 EMI-hardened v2 design (CAPE-B-2).
 
@@ -260,7 +273,7 @@ All nodes use 5 kV galvanic isolation:
 - CAN FD: ISOW1044BDFMR (TI)
 - RS-485: ADM2795EBRWZ (ADI)
 - Ethernet: ADIN1300BCPZ PHY via dual ISO7642FDWRR + Würth 749010012A transformer (JST GH 4P)
-- XCVR-49MHZ-2: SRF2012-100Y CMC, PRTR5V0U2X TVS, X2Y bridging capacitor on antenna feed
+- Emma: SRF2012-100Y CMC, PRTR5V0U2X TVS, X2Y bridging capacitor on antenna feed
 
 All isolation barriers IEC 62368-1 / VDE 0884-11 certified at 5 kV.
 Cape-A-1, Cape-B-1, and XCVR-49MHZ-1 archived Rev Q (2026-06-05).
@@ -343,7 +356,7 @@ PE(CSE), CISSP-ISSEP, CPP. Revision R, June 2026.
 Covered under CC BY 4.0:
 
 - 3D-printable hull, nacelle, and nozzle design files (STL/SCAD/FCStd)
-- PCB schematics and Gerber files for Wash, Zoë, Kaylee, and XCVR-49MHZ-2
+- PCB schematics and Gerber files for Wash, Zoë, Kaylee, and Emma
 - Circuit diagrams, pinout tables, and wiring specifications
 - Mechanical drawings and assembly specifications
 - Firmware architecture specifications and algorithm descriptions

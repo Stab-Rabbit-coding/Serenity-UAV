@@ -31,6 +31,7 @@ hardening. Each PHY connects via RMII to one of the PocketBeagle 2 AM6254's
 two RGMII/RMII Ethernet ports (RMII0 and RMII1).
 
 EMI hardening measures per PHY:
+
 - **LAN magnetics:** Pulse Electronics HX1188NL dual 10/100BASE-TX transformer
   with integrated common-mode choke (1500 V isolation, SOIC-16).
 - **Additional CMC:** Bourns SRF2012-100Y on PHY-side MDI lines (belt-and-suspenders).
@@ -302,6 +303,7 @@ routed through the π-filter (FB1/C11/C12) before distribution to the cape rail.
 | J_FAN | SM03B-GHS-TB-1MP | 1=GND, 2=+5V, 3=FAN_PWM_A, MP=PGND | Bay ventilation fan PWM control |
 
 **Notes:**
+
 - GPS pin 3 (GPS_TX) connects to PocketBeagle 2 UART2_RX: the GPS module transmits, the SBC receives.
 - GPS pin 4 (GPS_RX) connects to PocketBeagle 2 UART2_TX: the SBC transmits, the GPS module receives.
 - SERVO_CH3 on J_SERVO pin 6 is a spare servo channel; populate as needed.
