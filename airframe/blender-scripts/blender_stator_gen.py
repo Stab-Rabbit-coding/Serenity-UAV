@@ -222,6 +222,6 @@ print(f"  Print × 4 (one per nacelle)")
 print(f"\n  INSTALL: press-fit between EDF1 and EDF2 in the nacelle bore.")
 print(f"  Flat face (z=0) faces downstream (EDF2). Top face faces EDF1.")
 print(f"  Secure with 3 dabs of epoxy to outer ring after dry-fit.")
-print(f"  SWIRL_DIR={SWIRL_DIR}: vane deflects {'CW' if SWIRL_DIR>0 else 'CCW'} "
+print(f"  SWIRL_DIR={SWIRL_DIR}: vane deflects {'CW' if SWIRL_DIR > 0 else 'CCW'} "
       f"inlet swirl to axial. Flip to -1 if EDF runs opposite hand.")
 print()

@@ -195,12 +195,12 @@ FreeCAD catalog: `airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`.
 generate_placeholders.py          — Standalone generator (python3, no dependencies)
 propulsion/
   EDF_50mm_6S.stl                 — 50 mm 6S EDF (BOM: EDF-50-6S, ×4)
-  EDF_120mm_6S_deferred.stl       — 120 mm 6S rear EDF (BOM: EDF-120-6S, Phase 11 deferred)
+  EDF_55mm_6S_deferred.stl        — 55 mm 6S rear EDF (BOM: EDF-55-6S, Phase 11 deferred)
   ESC_40A_6S_BLHeli32.stl         — 40 A BLHeli32 ESC (BOM: ESC-40A-6S, ×4)
-  ESC_80A_6S_BLHeli32_deferred.stl — 80 A ESC (BOM: ESC-80A-6S, Phase 11 deferred)
+  ESC_50A_6S_BLHeli32_deferred.stl — 50 A ESC (BOM: ESC-50A-6S, Phase 11 deferred)
 servos/
   DS3218MG_25kgcm.stl             — DS3218MG servo (BOM: SERVO-TILT, MAL-GIMBAL-SERVO)
-  SG90_micro.stl                  — SG90 micro servo (BOM: SERVO-CARGO, SERVO-REAR-NOZZLE)
+  SG90_micro.stl                  — SG90 micro servo (BOM: SERVO-CARGO, SERVO-RCS-VALVE)
 bearings/
   MF104ZZ_4x10x4mm.stl            — MF104ZZ flanged bearing (BOM: BRG-MF104ZZ, ×4)
   MR63ZZ_3x6x2p5mm.stl            — MR63ZZ miniature bearing (BOM: BRG-MR63ZZ, ×8)
@@ -567,22 +567,29 @@ Not archived — intended for a future build phase.
 ```
 README.md                         — Aft fuselage EDF design scope, rationale, and defer decision
 openscad/
-  aft_edf_plenum.scad           — Cross-shaped CF-PETG intake plenum manifold (120 mm EDF)
-  edf_120_motor_mount.scad      — 120 mm EDF motor mount ring
-  edf_120_thrust_tube.scad      — Thrust tube from plenum to iris nozzle
-  neck_intake_frame.scad        — Four-port radial intake scoop frame at neck station ~310 mm
+  aft_edf_plenum.scad           — Intake plenum manifold (55 mm EDF inlet + 4 RCS bleed taps) — REGEN for Rev R1
+  edf_55_motor_mount.scad       — 55 mm EDF motor mount ring — REGEN for Rev R1
+  edf_55_thrust_tube.scad       — Thrust tube from plenum to 55 mm EDF — REGEN for Rev R1
+  neck_intake_frame.scad        — Reduced-area radial intake scoop frame at neck station ~310 mm (55 mm) — REGEN
   rear_neck_intake_shell24.scad — Rear neck intake shell integration shell
+  rear_nozzle_canonical.scad    — Fixed canonical elliptical tail nozzle 2.06×1.76 in (NEW, Rev R1)
+  rcs_thruster.scad             — RCS bleed-jet nozzle + 4-way manifold + valve bracket (NEW, Rev R1)
 stls/
-  aft_edf_plenum.stl            — Compiled plenum STL
-  edf_120_motor_mount.stl       — Compiled motor mount STL
-  edf_120_thrust_tube.stl       — Compiled thrust tube STL
+  aft_edf_plenum.stl            — Compiled plenum STL (regen for 55 mm + RCS)
+  edf_55_motor_mount.stl        — Compiled motor mount STL
+  edf_55_thrust_tube.stl        — Compiled thrust tube STL
   neck_intake_frame.stl         — Compiled intake frame STL
   rear_shell24_2mm_edf_bored.stl — Rear shell with EDF bore cut
-  rear_nozzle_frame.stl           — 8-petal iris nozzle ring frame
-  rear_nozzle_petal.stl           — Single iris petal (print × 8)
-  rear_nozzle_closed_asm.stl      — Iris assembly visual (closed position)
-  rear_nozzle_petal_hull_0.stl … rear_nozzle_petal_hull_7.stl  — Individual petal hulls
+  rear_nozzle_canonical.stl       — Fixed canonical elliptical tail nozzle (supersedes iris frame/petals)
+  rcs_thruster_nozzle.stl         — RCS bleed-air jet nozzle (× 4)
+  rcs_distribution_manifold.stl   — 4-way RCS bleed manifold off EDF plenum
+  rcs_valve_bracket.stl           — SG90-class proportional valve mount (× 4)
 ```
+
+> **Rev R1 (2026-06-13):** the rear EDF changed from 120 mm (iris nozzle) to 55 mm with a fixed
+> canonical elliptical tail nozzle + 4 RCS bleed-air thrusters. The old 120 mm SCAD/STLs
+> (`edf_120_*`, `rear_nozzle_frame/petal*`) are superseded and must be regenerated; archive the
+> old files when the Rev R1 geometry is produced.
 
 ---
 
