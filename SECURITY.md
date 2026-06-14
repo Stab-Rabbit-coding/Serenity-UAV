@@ -4,12 +4,12 @@
 
 Everything not in the archives is getting security baked in.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+| Revision | Supported          |
+| -------- | ------------------ |
+| R1       | :white_check_mark: |
+| R        | :white_check_mark: |
+| Q1       | :x:                |
+| < Q      | :x:                |
 
 ## Reporting a Vulnerability
 
