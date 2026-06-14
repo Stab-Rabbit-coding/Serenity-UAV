@@ -17,17 +17,28 @@ an aircraft whose onboard receivers may be desensed by proximity to commercial R
 
 ## FCC Regulatory Baseline
 
-| Link              | Regulation           | EIRP Limit (outdoor)    |
-|-------------------|----------------------|-------------------------|
-| SiK 915 MHz ISM   | FCC Part 15.247      | 30 dBm (1 W) omnidirectional; with directional antenna >6 dBi, reduce Tx 1 dB per 3 dB above 6 dBi |
-| LoRa 915 MHz ISM  | FCC Part 15.247      | Same as SiK             |
-| WiFi 5 GHz UNII-3 | FCC Part 15 UNII     | 30 dBm (5.725–5.850 GHz)|
-| 49 MHz RCRS       | FCC Part 95 Subpart D| 20 dBm (100 mW) ERP     |
-| Zigbee 2.4 GHz    | FCC Part 15.247      | 30 dBm                  |
+> **Standards citations:** All regulations in this document are from the current
+> Electronic Code of Federal Regulations (eCFR) at ecfr.gov.  See `REFERENCES.md`
+> for full catalog entries with URLs and section-level detail.
+>
+> **IMPORTANT — 47 CFR Part 95 section numbers:** 47 CFR Part 95 was reorganized
+> under FCC Report and Order FCC 17-24, effective July 3, 2018.  Section numbers
+> §95.635, §95.655, and §95.639 cited in this document are **pre-2017 section numbers**
+> that may no longer be current.  These must be verified against the current eCFR
+> before first flight: https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-95
 
-> **Note:** Part 15.247 directional antenna rule (47 CFR 15.247(b)(3)(ii)): for antennas
-> with gain > 6 dBi, the transmitter output power must be reduced 1 dB for every 3 dB that
-> the antenna gain exceeds 6 dBi, such that total EIRP does not exceed 30 dBm.
+| Link              | Regulation                                        | REF-ID          | EIRP Limit (outdoor)    |
+|-------------------|---------------------------------------------------|-----------------|-------------------------|
+| SiK 915 MHz ISM   | 47 CFR §15.247(b)(3)(i) and §15.247(b)(3)(ii)    | REF-FCC-001     | 30 dBm; with directional antenna >6 dBi, reduce Tx 1 dB per 3 dB above 6 dBi |
+| LoRa 915 MHz ISM  | 47 CFR §15.247(b)(3)(i) and §15.247(b)(3)(ii)    | REF-FCC-001     | Same as SiK             |
+| WiFi 5 GHz UNII-3 | 47 CFR §15.407(a)(3)                              | REF-FCC-002     | 30 dBm EIRP (5.725–5.850 GHz)|
+| 49 MHz RCRS       | 47 CFR Part 95 RCRS ERP limit (verify current §) | REF-FCC-003     | 20 dBm (100 mW) ERP — section # requires eCFR verification |
+| Zigbee 2.4 GHz    | 47 CFR §15.247(b)(3)(i)                           | REF-FCC-001     | 30 dBm                  |
+
+> **Part 15.247 directional antenna rule** [REF-FCC-001 §15.247(b)(3)(ii)]: for intentional
+> radiators using directional antennas with gain > 6 dBi, the conducted transmitter output
+> power must be reduced 1 dB for every 3 dB that the antenna gain exceeds 6 dBi, such that
+> total EIRP does not exceed 30 dBm.
 
 ---
 
@@ -97,8 +108,12 @@ an aircraft whose onboard receivers may be desensed by proximity to commercial R
 | **ERP (isotropic)**     | 20 − 1 − 1 = **18 dBm ERP** ✓ (≤20) |
 | PA assessment           | No external PA.  Emma PA is already at the Part 95 ERP ceiling. |
 
-> **FCC Part 95.635:** RCRS station transmitter power shall not exceed 100 milliwatts (mW)
-> ERP.  Frequency accuracy ±0.005% per 47 CFR 95.655.
+> **RCRS ERP limit** [REF-FCC-003]: RCRS station transmitter power shall not exceed
+> 100 milliwatts (mW) ERP.  Frequency accuracy ±0.005% [REF-FCC-003].
+> **ACTION REQUIRED:** The section numbers previously cited (§95.635 for ERP limit,
+> §95.655 for frequency accuracy) are pre-2017 section numbers.  Verify current
+> section numbers against eCFR.gov before first flight.  See REFERENCES.md
+> "Open Standards Verification Items" table.
 
 ---
 

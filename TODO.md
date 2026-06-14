@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-06-13  
+**Last updated:** 2026-06-14  
 **Current design revision:** Rev R (2026-06-10) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 ---
@@ -19,7 +19,82 @@
 | PCBs | **Rev Q: all 8 nodes use the EM hardened Wash Flight Control and Zoë Comms/Security capes** at every position. The **Kaylee Power Distribution Board** ensures that everything stays shiny.  Two **Emma** daughter boards provide connectivity on RCRS.  Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived 2026-06-05. **| Rev R schematics complete (Wash: 2× EMI-hardened Ethernet PHY; Zoë: 1× Ethernet PHY; all field connectors added). Kaylee PCB DRC clean (0 shorts); gerbers generated 2026-06-10; manual component placement (Section F, shield lugs) and trace routing remain. |
 | Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 ✓; serenity-fc Phase 6 stub only; all Phase 7 items open |
 | Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
-| Regulatory | FAA Part 107, ICAO nav lights, FCC Part 95 | FAA registration placeholder; XCVR-49MHZ-1 pre-compliance pending |
+| Regulatory | FAA Part 107 [REF-FAA-002], Part 48 §48.205 [REF-FAA-001], §91.209 [REF-FAA-003], FCC Part 15 [REF-FCC-001, REF-FCC-002], Part 95 RCRS [REF-FCC-003] | FAA registration placeholder; XCVR-49MHZ-2 pre-compliance pending; Part 95 section numbers require post-2017 reorganization verification (§0.1) |
+
+---
+
+## 0.0 — Standards Vetting and Regulatory Compliance
+
+All items in this section must be resolved before any physical build step.  See `REFERENCES.md`
+for the full standards catalog.  All open verification items from `REFERENCES.md` are
+tracked here.
+
+### 0.1 — FCC Part 95 Section Number Verification
+
+47 CFR Part 95 was reorganized under FCC Report and Order FCC 17-24 (effective July 3, 2018).
+Section numbers for RCRS provisions changed.  The following must be verified against
+current eCFR (https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-95)
+and updated in `REFERENCES.md`, `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`,
+and all firmware/DTS files that cite Part 95 section numbers.
+
+- [ ] **Verify current section for RCRS ERP limit (100 mW / 20 dBm)** — was §95.635
+  (pre-2017). Update `REFERENCES.md` REF-FCC-003 and `malcolm_antenna_spec.md` with
+  verified current section number.  **BLOCKS RCRS pre-compliance testing.**
+- [ ] **Verify current section for RCRS frequency accuracy (±0.005%)** — was §95.655
+  (pre-2017). Update `REFERENCES.md` and `malcolm_antenna_spec.md`.
+- [ ] **Verify current section for RCRS PTT sequencing (≥7 ms before TX)** — was §95.639
+  (pre-2017). Update `REFERENCES.md` and Emma (XCVR-49MHZ-2) firmware.
+
+### 0.2 — Incorrect Reference Correction
+
+- [x] **Remove NIST SP 800-72 write-blocker citation** *(done 2026-06-14)* — NIST SP 800-72
+  (2004) is "Guidelines on PDA Forensics" and is unrelated to write-blocker design.
+  Replaced with NIST SP 800-92 §4.4.2 [REF-NIST-004] in `README.md` Patent Notice section.
+  See `REFERENCES.md` "Removed / Superseded Citations" table.
+
+### 0.3 — 14 CFR Part 47 vs Part 48 Clarification
+
+- [ ] **Replace 14 CFR Part 47 references with Part 48 §48.205 where applicable** —
+  14 CFR Part 47 covers manned aircraft registration marks; UAS display requirements are
+  in 14 CFR Part 48 §48.205 [REF-FAA-001].  Audit `docs/REVN_BUILD_GUIDE_24IN.md` and
+  `graphical-build-guide/decal_sheet.svg` for any Part 47 citations and update to Part 48
+  §48.205 with the REF-FAA-001 REF-ID.
+
+### 0.4 — AUVSI/ASTM Standards Identification
+
+- [ ] **Identify specific ASTM F38 Committee standards applicable to airframe engineering** —
+  `CLAUDE.md` and `README.md` reference "AUVSI standards" without a specific numbered
+  standard.  Review ASTM F38 Committee publications (https://www.astm.org/committee/F38)
+  and identify which of the following apply; add verified entries to `REFERENCES.md`:
+  - ASTM F3322 (sUAS Battery Safety) — evaluate for LiPo 6S 4000 mAh pack spec
+  - ASTM F3269 (Methods to Safely Bound UAS Flight Behavior) — evaluate for failover design
+  - ASTM F3003 (Quality Assurance for Small UAS) — evaluate for flight testing plan
+
+### 0.5 — Citation Completeness Audit (All Source Files)
+
+- [ ] **Audit SVG build guide files for standards citations** — 26 SVG build guide cards
+  in `graphical-build-guide/` reference standards (FAA registration, navigation lights,
+  MIL-STD-1553B bus wiring).  Update each SVG's embedded text/metadata to include REF-IDs
+  and section numbers.  Priority: `decal_sheet.svg`, `build_guide_13_nav_lights.svg`,
+  `build_guide_11_inter_board.svg`, `build_guide_18_first_flight.svg`.
+- [ ] **Audit remaining firmware source files for standards citations** — review all `.c`,
+  `.h`, and Python firmware files in `avionics/firmware/` for any implicit standards
+  references (timing constants from MIL-STD-1553B, power limits, etc.) and add REF-IDs.
+- [ ] **Audit KiCad companion markdown files** — `avionics/kicad/Wash.md`, `Zoë.md`,
+  `Kaylee.md`, and `XCVR-49MHZ-2.md` for standards citations; update with REF-IDs and
+  section numbers.  In particular, verify IEC 62368-1 creepage/clearance requirements
+  are addressed in PCB layout notes for all isolation barriers.
+
+### 0.6 — IEC 62368-1 PCB Layout Isolation Verification
+
+- [ ] **Verify creepage and clearance distances in Wash PCB layout** [REF-IEC-001 Cl.5.5.2]
+  — must maintain minimum creepage and clearance for 5 kV reinforced insulation across each
+  isolation barrier (ISOW1044BDFMR, ISO7642FDWRR, Würth 749010012A).  **BLOCKS PCB fab.**
+- [ ] **Verify creepage and clearance distances in Zoë PCB layout** [REF-IEC-001 Cl.5.5.2]
+  — same requirements as Wash.  **BLOCKS PCB fab.**
+- [ ] **Document verified creepage/clearance values** in `avionics/kicad/Wash.md` and
+  `avionics/kicad/Zoë.md` per the IEC 62368-1 Cl.5.5.2 table for reinforced insulation
+  at the working voltage.
 
 ---
 

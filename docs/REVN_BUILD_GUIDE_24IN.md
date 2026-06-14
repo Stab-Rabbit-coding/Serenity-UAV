@@ -607,8 +607,12 @@ Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_s
 ## Phase 8 — Finishing
 
 1. **Decals and paint.** Airbrush or hand-paint hull sections in Serenity's distinctive brown. Panel lines with thin wash.
-2. **NAV lights.** ICAO Annex 2: port = red, stbd = green, aft/top = white strobe. Wire to Cape-B CN4 GPIO.
-3. **FAA registration.** Display on hull exterior per 14 CFR 47 — replace N00000 on decal sheet with your issued number.
+2. **NAV lights.** Port = red, starboard = green, aft/top = white strobe
+   [REF-FAA-003 §91.209(a)] / [REF-ICAO-001 Ch.3 §3.1.9]. Wire to Cape-B CN4 GPIO.
+3. **FAA registration.** Display on hull exterior per 14 CFR Part 48 §48.205(b)(1)
+   [REF-FAA-001 §48.205] — minimum 3 in (76 mm) characters, clearly visible.
+   Replace N00000 on decal sheet with your FAA-issued number.
+   Note: 14 CFR Part 47 applies to manned aircraft; the applicable UAS regulation is Part 48.
 4. **Firmware security provisioning.** Program Cape-B CPLD write-blocker (ATF16V8BQL). Provision SLB9670 TPM 2.0 endorsement keys on all 8 nodes. Keys cannot be regenerated without physical node replacement.
 5. **Weight and balance.** Measure actual AUW with battery. CG should be at 40–45% of hull length from nose. Adjust battery position in cargo bay for trim if needed.
 6. **Documentation.** Log all configuration in `governor_config.h`. Archive MAVLink parameter file. Photograph completed build for insurance / forensic baseline.
@@ -691,7 +695,8 @@ regulatory readiness for real-world deployment.
    cradle auto-latched on return.
 4. **Simulated node failure in flight** — cut one FC node; verify remaining nodes maintain flight ≥30s; RTL.
 5. **Emergency RTL validation** — disable all links; verify RTL within 5s of link loss, lands within 3m of home.
-6. **Regulatory documentation review** — FAA Part 107 certificate current; registration visible;
+6. **Regulatory documentation review** — FAA Part 107 [REF-FAA-002] Remote Pilot Certificate
+   current; FAA Part 48 [REF-FAA-001 §48.205] registration number visible on hull exterior;
    pre-flight checklist signed; flight area LAANC authorised.
 
 **Phase 10 pass criteria:**

@@ -6,10 +6,12 @@
 ## Repository Root
 
 ```
-CLAUDE.md                         — Project instructions and standards
+CLAUDE.md                         — Project instructions and standards (includes Standards Vetting Policy)
 PROJECT_INDEX.md                  — This file
 ARCHIVE_INDEX.md                  — Archive file tree (see below)
 README.md                         — Project overview
+REFERENCES.md                     — Standards and regulatory reference catalog (REF-IDs, verified URLs,
+                                    chapter/section/paragraph per citation, repo usage index)
 REPO_ENFORCEMENT.md               — Repository rules
 TODO.md                           — Work-breakdown structure and open items
 ```
