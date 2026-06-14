@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-06-13  
+**Last updated:** 2026-06-14  
 **Current design revision:** Rev R (2026-06-10) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 ---
@@ -19,7 +19,82 @@
 | PCBs | **Rev Q: all 8 nodes use the EM hardened Wash Flight Control and Zoë Comms/Security capes** at every position. The **Kaylee Power Distribution Board** ensures that everything stays shiny.  Two **Emma** daughter boards provide connectivity on RCRS.  Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived 2026-06-05. **| Rev R schematics complete (Wash: 2× EMI-hardened Ethernet PHY; Zoë: 1× Ethernet PHY; all field connectors added). Kaylee PCB DRC clean (0 shorts); gerbers generated 2026-06-10; manual component placement (Section F, shield lugs) and trace routing remain. |
 | Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 ✓; serenity-fc Phase 6 stub only; all Phase 7 items open |
 | Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
-| Regulatory | FAA Part 107, ICAO nav lights, FCC Part 95 | FAA registration placeholder; XCVR-49MHZ-1 pre-compliance pending |
+| Regulatory | FAA Part 107 [REF-FAA-002], Part 48 §48.205 [REF-FAA-001], §91.209 [REF-FAA-003], FCC Part 15 [REF-FCC-001, REF-FCC-002], Part 95 RCRS [REF-FCC-003] | FAA registration placeholder; XCVR-49MHZ-2 pre-compliance pending; Part 95 section numbers require post-2017 reorganization verification (§0.1) |
+
+---
+
+## 0.0 — Standards Vetting and Regulatory Compliance
+
+All items in this section must be resolved before any physical build step.  See `REFERENCES.md`
+for the full standards catalog.  All open verification items from `REFERENCES.md` are
+tracked here.
+
+### 0.1 — FCC Part 95 Section Number Verification
+
+47 CFR Part 95 was reorganized under FCC Report and Order FCC 17-24 (effective July 3, 2018).
+Section numbers for RCRS provisions changed.  The following must be verified against
+current eCFR (https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-95)
+and updated in `REFERENCES.md`, `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`,
+and all firmware/DTS files that cite Part 95 section numbers.
+
+- [ ] **Verify current section for RCRS ERP limit (100 mW / 20 dBm)** — was §95.635
+  (pre-2017). Update `REFERENCES.md` REF-FCC-003 and `malcolm_antenna_spec.md` with
+  verified current section number.  **BLOCKS RCRS pre-compliance testing.**
+- [ ] **Verify current section for RCRS frequency accuracy (±0.005%)** — was §95.655
+  (pre-2017). Update `REFERENCES.md` and `malcolm_antenna_spec.md`.
+- [ ] **Verify current section for RCRS PTT sequencing (≥7 ms before TX)** — was §95.639
+  (pre-2017). Update `REFERENCES.md` and Emma (XCVR-49MHZ-2) firmware.
+
+### 0.2 — Incorrect Reference Correction
+
+- [x] **Remove NIST SP 800-72 write-blocker citation** *(done 2026-06-14)* — NIST SP 800-72
+  (2004) is "Guidelines on PDA Forensics" and is unrelated to write-blocker design.
+  Replaced with NIST SP 800-92 §4.4.2 [REF-NIST-004] in `README.md` Patent Notice section.
+  See `REFERENCES.md` "Removed / Superseded Citations" table.
+
+### 0.3 — 14 CFR Part 47 vs Part 48 Clarification
+
+- [ ] **Replace 14 CFR Part 47 references with Part 48 §48.205 where applicable** —
+  14 CFR Part 47 covers manned aircraft registration marks; UAS display requirements are
+  in 14 CFR Part 48 §48.205 [REF-FAA-001].  Audit `docs/REVN_BUILD_GUIDE_24IN.md` and
+  `graphical-build-guide/decal_sheet.svg` for any Part 47 citations and update to Part 48
+  §48.205 with the REF-FAA-001 REF-ID.
+
+### 0.4 — AUVSI/ASTM Standards Identification
+
+- [ ] **Identify specific ASTM F38 Committee standards applicable to airframe engineering** —
+  `CLAUDE.md` and `README.md` reference "AUVSI standards" without a specific numbered
+  standard.  Review ASTM F38 Committee publications (https://www.astm.org/committee/F38)
+  and identify which of the following apply; add verified entries to `REFERENCES.md`:
+  - ASTM F3322 (sUAS Battery Safety) — evaluate for LiPo 6S 4000 mAh pack spec
+  - ASTM F3269 (Methods to Safely Bound UAS Flight Behavior) — evaluate for failover design
+  - ASTM F3003 (Quality Assurance for Small UAS) — evaluate for flight testing plan
+
+### 0.5 — Citation Completeness Audit (All Source Files)
+
+- [ ] **Audit SVG build guide files for standards citations** — 26 SVG build guide cards
+  in `graphical-build-guide/` reference standards (FAA registration, navigation lights,
+  MIL-STD-1553B bus wiring).  Update each SVG's embedded text/metadata to include REF-IDs
+  and section numbers.  Priority: `decal_sheet.svg`, `build_guide_13_nav_lights.svg`,
+  `build_guide_11_inter_board.svg`, `build_guide_18_first_flight.svg`.
+- [ ] **Audit remaining firmware source files for standards citations** — review all `.c`,
+  `.h`, and Python firmware files in `avionics/firmware/` for any implicit standards
+  references (timing constants from MIL-STD-1553B, power limits, etc.) and add REF-IDs.
+- [ ] **Audit KiCad companion markdown files** — `avionics/kicad/Wash.md`, `Zoë.md`,
+  `Kaylee.md`, and `XCVR-49MHZ-2.md` for standards citations; update with REF-IDs and
+  section numbers.  In particular, verify IEC 62368-1 creepage/clearance requirements
+  are addressed in PCB layout notes for all isolation barriers.
+
+### 0.6 — IEC 62368-1 PCB Layout Isolation Verification
+
+- [ ] **Verify creepage and clearance distances in Wash PCB layout** [REF-IEC-001 Cl.5.5.2]
+  — must maintain minimum creepage and clearance for 5 kV reinforced insulation across each
+  isolation barrier (ISOW1044BDFMR, ISO7642FDWRR, Würth 749010012A).  **BLOCKS PCB fab.**
+- [ ] **Verify creepage and clearance distances in Zoë PCB layout** [REF-IEC-001 Cl.5.5.2]
+  — same requirements as Wash.  **BLOCKS PCB fab.**
+- [ ] **Document verified creepage/clearance values** in `avionics/kicad/Wash.md` and
+  `avionics/kicad/Zoë.md` per the IEC 62368-1 Cl.5.5.2 table for reinforced insulation
+  at the working voltage.
 
 ---
 
@@ -556,25 +631,59 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
 #### 1.1.4 **Landing Gear**
 
-##### 1.1.4.1 *Legs*
+Landing gear structural analysis complete: `docs/LANDING_GEAR_ANALYSIS.md` (Rev R1, 2026-06-14).
+Parametric SCAD: `airframe/openscad/fuselage/landing_leg_assy.scad` (Rev R1).
 
-- [ ] Separate 4x leg stl into individual leg files, orient and test fit on freeCAD assembly
+Design: 4× CF-PETG flat-spring cantilever legs (22 × 10 mm, 185 mm total) + 4× TPU 95A feet
+(existing Thingiverse geometry) + 3× M3 PA6 nylon shear-bolt fuse per leg + 2 mm Dyneema
+safety cord.  Fuse load: ≈848 N (190.7 lbf) per leg = 1.69× the 6 ft drop design force.
+Peak deceleration at 6 ft Phase 11 drop: 65.3g (avionics isolation rated for 100g).
 
-- [ ] evaluate suitability of model legs for actual use
+##### 1.1.4.1 *Landing Leg SCAD and STL*
 
-  - [ ] evaluate static and dynamic alternatives
+- [ ] **LG-05 Render `leg_body_r1.stl` from SCAD** — run:
+  `openscad -o airframe/stls/fuselage/landing-gear/leg_body_r1.stl -D 'PART="leg"' airframe/openscad/fuselage/landing_leg_assy.scad`
+  Verify mesh watertight; record vertex extents.  **BLOCKS leg printing.**
 
-    - [ ] Multipart / Unitary?
+- [ ] **LG-04 Verify HULL_ATTACH_POS[] in SCAD against cargo belly contour** — open
+  `PART="assy"` in FreeCAD and confirm the 4 leg positions do not conflict with existing
+  avionics bay bosses, GPS dome cutouts, or CF keel bar channel in `cargo_sect_shell24.scad`.
 
-    - [ ] Springs / Struts ?
+- [ ] **LG-02 Integrate hull boss geometry into `cargo_sect_shell24.scad`** — add 4×
+  hull boss sockets (30 × 18 × 28 mm protrusions below the cargo belly, centred on
+  HULL_ATTACH_POS[] coordinates) as a union with the shell belly.  Boss slot (22.4 × 10.4 mm
+  through-pocket, 20 mm deep) is subtracted.  Run DRC mesh check.  **BLOCKS hull print.**
 
-    - [ ] Mounting to hull
+- [ ] **LG-05b Render `hull_boss_r1.stl`** via `PART="boss"` and verify geometry before
+  integrating into cargo shell.
 
-  - [ ] Implement canonically and mechanically sound legs
+##### 1.1.4.2 *Rear Skid Reinforcement*
 
-##### 1.1.4.2 *Feet*
+- [ ] **LG-03 CF rod channel in `middle_canonical_shell24.scad` rear skid arms** — add
+  3 mm bore channel (CF rod, ~140 mm per skid) per `docs/LANDING_GEAR_ANALYSIS.md §8`.
+  Re-export STL, re-bake, verify watertight.  **BLOCKS taxi test.**
 
-- [ ] Modify feet as needed to mount to legs to provide stable landing
+##### 1.1.4.3 *Feet*
+
+- [ ] Verify existing TPU foot geometry (`feet_x_4_scaled24.stl`) fits the leg body foot
+  socket (22.4 × 10.4 mm, 20 mm deep cavity in `leg_body_r1.stl`).  Resize or regenerate
+  foot as needed to match the socket dimensions.  Print test in TPU 95A.
+
+##### 1.1.4.4 *Fuse Qualification Testing (BLOCKS first flight)*
+
+- [ ] **LG-01 Shear-test M3 × 12 PA6 nylon bolts** — fabricate 3 representative test
+  fixtures simulating the leg boss slot; test 10 samples each at 0°, 15°, and 30° off-axis.
+  Target: fuse load 848 N ± 150 N (190.7 ± 33.7 lbf) per leg (3 bolts combined).
+  Record results in `docs/LANDING_GEAR_ANALYSIS.md §7.3`.  **BLOCKS first flight.**
+
+- [ ] **LG-06 Drop test prototype leg** — mount a leg + foot assembly to a mass-equivalent
+  fixture (6.90 lbm / 3,130 g).  Drop from 1.5 ft (elastic) and 6 ft (design).  Confirm:
+  (a) elastic spring-back ≤1.5 ft; (b) no hull boss damage at 6 ft; (c) fuse activates
+  cleanly above design load.  Record peak g-force with shock logger.  **BLOCKS first flight.**
+
+- [ ] **LG-07 Confirm avionics Faraday enclosure 100g shock rating** — the 6 ft drop
+  produces 65.3g peak; enclosures must be verified to withstand ≥100g without losing
+  electrical continuity.  See avionics PCB fab checklist.  **BLOCKS first flight.**
 
 
 

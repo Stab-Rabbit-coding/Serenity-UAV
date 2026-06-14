@@ -434,4 +434,30 @@ This reduces cape NRE: one shared 4-layer bus board, two smaller function boards
 
 ---
 
+---
+
+## 13. Applicable Standards
+
+All design decisions in this document have been vetted against the following standards.
+Full catalog with official URLs and specific clause details is in `REFERENCES.md`.
+
+| REF-ID | Standard | Clauses Applied | Application in This Design |
+|---|---|---|---|
+| REF-MIL-001 | MIL-STD-1553B (Notice 2, 1996) | §3.1 (definitions), §4.1 (bus characteristics), §4.2 (terminal types), §4.3 (word formats), §4.4 (message formats), §4.6 (coupling methods), Table IV (response time 4–12 µs) | 8-node linear bus; PRU Manchester II codec; 78 Ω termination; DS26LV31/32; PE-68515 coupling transformer |
+| REF-ISO-001 | ISO 11898-1:2015+Amd.1:2020 (CAN FD) | Clause 8 (CAN data frame), Clause 10 (CAN FD frame), Clause 12 (bit timing) | AM6254 MCAN at 1 Mbps arbitration / 5 Mbps data; ATA6561 transceivers; 120 Ω termination |
+| REF-IEC-001 | IEC 62368-1 Ed. 3.0 (2018) | Clause 5.5.2 (creepage/clearance for reinforced insulation) | 5 kV isolation barriers on CAN FD (ISOW1044BDFMR), RS-485 (ADM2795EBRWZ), Ethernet (ADIN1300BCPZ + ISO7642FDWRR + Würth 749010012A) |
+| REF-VDE-001 | VDE V 0884-11:2017-01 | Clause 4.3 (reinforced insulation class), Clause 5.3 (5000 Vrms hipot) | Same isolation devices as above; compliance verified per component datasheet certifications |
+| REF-NIST-001 | NIST SP 800-207 (Zero Trust, 2020) | §2.1 (authenticate every connection), §3.3 (device agent/TPM) | Per-node TPM 2.0 (SLB9670); TPM-bound SHA-256 HMAC on all transmitted frames |
+| REF-NIST-002 | NIST SP 800-82 Rev 3 (OT Security, 2023) | §5.3 (network segmentation), §5.4 (defense in depth), §6.2.5 (EMI) | Multiple independent bus types as defense-in-depth; galvanic isolation; 500 W/m² EMI hardening design objective |
+| REF-NIST-004 | NIST SP 800-92 (Log Management, 2006) | §4.4.2 (protecting log data via hardware enforcement) | ATF16V8BQL CPLD write-block on each Zoë node; append-only non-executable log microSD |
+| REF-ISA-001 | ISA/IEC 62443-3-3:2013 | SR 3.1 (comms integrity), SR 4.2 (cryptography), SR 7.6 (network hardening) | HMAC authentication; TPM key storage; 5 kV isolation as physical security hardening |
+| REF-IEEE-001 | IEEE 802.3-2022 (Ethernet) | Clause 22 (RMII), Clause 24 (100BASE-TX), Clause 38 (1500 Vrms isolation transformer) | CPSW3G RMII; ADIN1300BCPZ / DP83825I PHYs; Würth 749010012A transformer |
+| REF-IEEE-002 | IEEE 802.11-2020 (WiFi) | Clause 17 (OFDM 5 GHz), Clause 19 (802.11n) | TI WL1837MOD SDIO; 5 GHz UNII-3 primary, 2.4 GHz fallback |
+| REF-IEEE-003 | IEEE 802.15.4-2020 (Zigbee PHY) | Clause 10 (2.4 GHz O-QPSK) | CC2652R7 optional Zigbee backup mesh |
+| REF-FCC-003 | 47 CFR Part 95 (RCRS) | ERP ≤ 100 mW (20 dBm) — verify current section; ±0.005% frequency accuracy — verify current section | Emma 49 MHz RCRS link; River's Room and Simon's Medbay nodes only |
+| REF-PROTO-001 | AX.25 v2.2 (1998) | §6.2 (I Frame), §6.3 (S Frames) | AX.25 framing on 49 MHz RCRS link |
+| REF-PROTO-002 | MAVLink v2.0 | Packet format, message signing | SiK 915 MHz MAVLink C2 link |
+
+---
+
 *End of document. Supersedes RevJ CM4/CM3+ node architecture for avionics compute.*

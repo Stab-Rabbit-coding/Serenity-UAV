@@ -38,7 +38,8 @@
  * verified against the PocketBeagle 2 expansion header pin map.
  * ═══════════════════════════════════════════════════════════════════════════
  *
- * EMI-hardened -2 variant: 5 kV IEC 62368-1 isolation on CAN FD, RS-485, Ethernet
+ * EMI-hardened -2 variant: 5 kV reinforced insulation on CAN FD, RS-485, Ethernet
+ * [REF-IEC-001 Cl.5.5.2] / [REF-VDE-001 Cl.4.3, Cl.5.3] — per component datasheet certs
  *
  * Cape-A-2 peripheral map:
  *   SPI0      — ICM-42688-P IMU, BMP388 barometer, SLB9670 TPM 2.0
@@ -57,13 +58,19 @@
  *   PRU-ICSS0/PRU1 — Extended servo PWM channels 6-7 (deterministic)
  *
  * References:
- *   [1] TI AM6254 TRM, SPRUJ40 — pad table, PRU-ICSS, CPSW3G, MCAN
+ *   [1] TI AM6254 TRM, SPRUJ40 — pad table §7.1, PRU-ICSS §12, CPSW3G §13, MCAN §15
  *   [2] PocketBeagle 2 Industrial schematic, BeagleBoard.org hardware repo
  *   [3] ISOW1044BDFMR datasheet, TI SLLSEP5 — isolated CAN FD transceiver
+ *       [REF-IEC-001 Cl.5.5.2] / [REF-VDE-001 Cl.4.3, Cl.5.3] — 5 kV RI
+ *       [REF-ISO-001 Cl.10, Cl.12] — CAN FD protocol interface
  *   [4] ADM2795EBRWZ datasheet, Analog Devices — isolated RS-485 transceiver
+ *       [REF-IEC-001 Cl.5.5.2] / [REF-VDE-001 Cl.4.3, Cl.5.3] — 5 kV RI
  *   [5] ADIN1300BCPZ datasheet, Analog Devices Rev B — 100/1000BASE-T PHY
+ *       [REF-IEEE-001 Cl.22 RMII, Cl.24 100BASE-TX]
  *   [6] ISO7642FDWRR datasheet, TI SLLSEP2 — 6-channel digital isolator
- *   [7] Würth Elektronik 749010012A datasheet — Ethernet transformer 1500 V
+ *       [REF-IEC-001 Cl.5.5.2] — isolation component in Ethernet barrier
+ *   [7] Würth Elektronik 749010012A datasheet — Ethernet transformer 1500 Vrms
+ *       [REF-IEEE-001 Cl.38] — 1500 Vrms port isolation per IEEE 802.3
  *   [8] MMC5983MA datasheet, MEMSIC DS-MMC5983MA-A, Rev 0.3
  *   [9] INA226 datasheet, TI SBOS547C
  *   [10] PRTR5V0U2X datasheet, Nexperia — TVS for ESD/transient protection
