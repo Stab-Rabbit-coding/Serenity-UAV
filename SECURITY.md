@@ -5,11 +5,11 @@
 Everything not in the archives is getting security baked in.
 
 | Revision | Supported          |
-| ------- | ------------------ |
-| R1   | :white_check_mark: |
-| R   | :x:                |
-| Q1   | :white_check_mark: |
-| < Q   | :x:                |
+| -------- | ------------------ |
+| R1       | :white_check_mark: |
+| R        | :white_check_mark: |
+| Q1       | :x:                |
+| < Q      | :x:                |
 
 ## Reporting a Vulnerability
 
