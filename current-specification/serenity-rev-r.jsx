@@ -191,11 +191,11 @@ function TabOverview() {
                         ["Beam (nacelle tips)", "~486 mm",                  "Tip-to-tip across tilt axis"],
                         ["Height (landed)",     "182 mm",                   "To top of dorsal hull"],
                         ["Hull material",       "PETG shell + PU foam + CF skeleton", "2.5 mm skin, 2 lb/ft³ closed-cell foam fill"],
-                        ["Propulsion",         "2× (2× 50 mm EDF @ 6S) nacelles + 1× 120 mm EDF @ 6S fuselage", "Counter-rotating nacelle pairs"],
+                        ["Propulsion",         "2× (2× 50 mm EDF @ 6S) nacelles + 1× 55 mm EDF @ 6S fuselage (Phase 11, cruise + RCS)", "Counter-rotating nacelle pairs"],
                         ["Nacelle tilt",       "0° (cruise) → 90° (hover) → 120° (backing)", "Hard stops −5° / 140°"],
-                        ["Nozzle actuation",   "Passive gear train per nacelle; SG90 for rear nozzle", "M=1.0 sector → pinion → bevel → crown → iris ring"],
-                        ["Total hover thrust",  "~5,322 g",                 "1,822 g nacelles + 3,500 g rear EDF"],
-                        ["AUW (6S 4000 mAh)",  "~3,550 g",                 "Estimated; T/W ≈ 1.50"],
+                        ["Nozzle actuation",   "Passive gear train per nacelle; rear nozzle is FIXED canonical (no servo)", "M=1.0 sector → pinion → bevel → crown → iris ring (nacelles only)"],
+                        ["Hover thrust (nacelles)",  "~4,464 g",            "4× 1,240 g × 0.9 stator; rear EDF is forward-thrust only"],
+                        ["AUW (6S 4000 mAh)",  "~3,130 g (Phase 11)",      "Hover T/W ≈ 1.43 (nacelles only)"],
                         ["Avionics",           "8× PocketBeagle 2 Industrial (AM6254)", "4× FC (Wash) + 4× CN (Zoë) — ALL v2"],
                         ["Cape variant",       "EMI-hardened v2 at ALL 8 positions",   "v2·v2·v2·v2 (Rev R baseline — Wash/Zoë naming finalised)"],
                         ["Data buses",         "Ethernet RSTP · CAN FD · RS-485 · MIL-STD-1553B", "All 4 on every node"],
@@ -270,7 +270,7 @@ function TabAirframe() {
                         ["C (wing root)",                 "Bay C", "~165–251 mm","Hinge+latch",   "ESC pairs, servo leads, wing spar access"],
                         ["D — River's room (aft dorsal)", "Bay D", "~251–320 mm","Screw/bayonet", "CN3 (Zoë) + FC3 (Wash)"],
                         ["E — Simon's medbay (aft svc)",  "Bay E", "~320–388 mm","Screw/bayonet", "CN4 (Zoë) + FC4 (Wash)"],
-                        ["F (engine bell)","Bay F","~388–600 mm","Magnet+snap",   "120 mm EDF, 80A ESC, plenum, rear nozzle servo"],
+                        ["F (engine bell)","Bay F","~388–600 mm","Magnet+snap",   "55 mm EDF, 50A ESC, plenum, canonical nozzle, 4× RCS valves (Phase 11)"],
                     ]}
                 />
                 <div style={{ marginTop: 8, fontFamily: M, fontSize: 11, color: C.dimmer }}>
@@ -292,8 +292,8 @@ function TabAirframe() {
                         ["feet_x_4_scaled24.stl",           "TPU 95A", "0.25 mm / 40%",          "1",  "80 g"],
                         ["neck_intake_frame.stl",           "CF-PETG", "0.15 mm / 40% / 4 walls","1",  "85 g"],
                         ["aft_edf_plenum.stl",              "PETG",    "0.20 mm / 20% gyroid",   "1",  "75 g"],
-                        ["edf_120_motor_mount.stl",         "CF-PETG", "0.15 mm / 40% / 4 walls","1",  "55 g"],
-                        ["edf_120_thrust_tube.stl",         "PETG",    "0.20 mm / 20% gyroid",   "1",  "45 g"],
+                        ["edf_55_motor_mount.stl",          "CF-PETG", "0.15 mm / 40% / 4 walls","1",  "25 g"],
+                        ["edf_55_thrust_tube.stl",          "PETG",    "0.20 mm / 20% gyroid",   "1",  "20 g"],
                         ["Access panel frames A–F + lids",    "PETG",    "0.20 mm / 100%",         "1 set","~90 g"],
                         ["s_eng_left_stator_shell24_revo.stl","CF-PETG", "0.15 mm / 25% / 4 walls","1",  "132 g"],
                         ["s_eng_right_stator_shell24_revo.stl","CF-PETG","0.15 mm / 25% / 4 walls","1",  "132 g"],
@@ -301,8 +301,10 @@ function TabAirframe() {
                         ["wings_s1223_revo.stl (port+stbd)","CF-PETG", "0.15 mm / 40% / 4 walls","2",  "118 g ea"],
                         ["nacelle_nozzle_petal.stl",          "PETG",    "0.20 mm / 20% gyroid",   "16", "2 g ea"],
                         ["nacelle_nozzle_ring.stl",           "CF-PETG", "0.15 mm / 40%",          "2",  "18 g ea"],
-                        ["rear_nozzle_petal.stl",             "PETG",    "0.20 mm / 20% gyroid",   "8",  "4 g ea"],
-                        ["rear_nozzle_frame.stl",             "CF-PETG", "0.15 mm / 30%",          "1",  "55 g"],
+                        ["rear_nozzle_canonical.stl",         "CF-PETG", "0.15 mm / 30% / 4 walls","1",  "30 g"],
+                        ["rcs_thruster_nozzle.stl",           "CF-PETG", "0.15 mm / 40% / 4 walls","4",  "8 g ea"],
+                        ["rcs_distribution_manifold.stl",     "PETG",    "0.20 mm / 30%",          "1",  "25 g"],
+                        ["rcs_valve_bracket.stl",             "CF-PETG", "0.15 mm / 40%",          "4",  "10 g ea"],
                         ["nacelle_sector_gear.stl",           "Resin SLA","0.05 mm / solid",       "2",  "8 g ea"],
                         ["nacelle_pinion.stl (drive + crown)","Resin SLA","0.05 mm / solid",       "4",  "3 g ea"],
                         ["nacelle_bevel_pair.stl",            "Resin SLA","0.05 mm / solid",       "4",  "4 g ea"],
@@ -340,29 +342,32 @@ function TabPropulsion() {
                         ["EDF2 position",       "Z=98..143 mm from intake", "Downstream"],
                         ["Inter-stage stator",  "11-fin twisted, Z=75..95 mm", "CF-PETG, integral to nacelle shell; 33° vane angle"],
                         ["Counter-rotation",    "Port CW, stbd CCW from intake", "Zero net torque reaction on fuselage"],
-                        ["Thrust per EDF",      "~460 g",          "Budget 6S 50 mm tier"],
-                        ["Thrust per nacelle",  "~911 g",          "Two EDFs in tandem"],
-                        ["Total nacelle thrust","~1,822 g",        "Both nacelles combined"],
+                        ["Thrust per EDF",      "~1,240 g",        "XFly Galaxy X5 50 mm 12-blade 6S 3200 KV"],
+                        ["Thrust per nacelle",  "~2,232 g",        "2 EDFs in tandem × 0.9 stator efficiency"],
+                        ["Total nacelle thrust","~4,464 g",        "Both nacelles combined (hover/vertical)"],
                         ["Canonical SCAD",      "nacelle_pod_50mm_tandem.scad", "Parametric; SWIRL_DIR=1 (port), -1 (stbd)"],
                     ]}
                 />
             </Card>
 
-            <Card title="Rear EDF — 120 mm" accent={C.red}>
+            <Card title="Rear EDF — 55 mm (Phase 11 deferred)" accent={C.red}>
                 <Table
                     cols={["Parameter", "Value", "Notes"]}
                     accent={C.red}
                     rows={[
-                        ["EDF size",     "120 mm",         "Single unit, engine bell"],
+                        ["EDF size",     "55 mm",          "Single unit, tail cone"],
                         ["Voltage",      "6S",             ""],
-                        ["Thrust",       "~3,500 g",       "Exhaust straight aft"],
-                        ["Location",     "Station ~430 mm from nose", "Inside engine bell, Panel F"],
-                        ["Intake",       "4 radial scoops at station ~310 mm", "neck_intake_frame + aft_edf_plenum"],
-                        ["Fan annular area", "~10,683 mm²","120 mm bore"],
-                        ["Scoop capture area","~15,600 mm²","Ratio 1.46× — exceeds 1.3× duct-match minimum"],
-                        ["Motor mount",  "edf_120_motor_mount.stl", "CF-PETG 3-arm spider; M3 hub bolt pattern 24 mm BC"],
-                        ["Thrust tube",  "edf_120_thrust_tube.stl", "PETG 120 mm ID × 3 mm wall × 155 mm long"],
-                        ["ESC",          "80A 6S BLHeli32","110A burst; mounted in Panel F bay"],
+                        ["Fan thrust",   "~1,500 g",       "~1,275 g net forward after ~15% RCS bleed"],
+                        ["Thrust axis",  "Horizontal (forward/cruise) only", "Canonical nozzle fires aft — NOT counted in hover T/W"],
+                        ["Nozzle",       "Fixed canonical elliptical 2.06×1.76 in", "52.3×44.7 mm exit (~1,836 mm²); no iris, no servo"],
+                        ["RCS",          "4× bleed-air jets (~15% flow)", "Pitch/yaw attitude authority; SG90-class proportional valves"],
+                        ["Location",     "Station ~430 mm from nose", "Inside tail cone, Panel F"],
+                        ["Intake",       "Reduced-area neck scoops at station ~310 mm", "neck_intake_frame + aft_edf_plenum (regen for 55 mm)"],
+                        ["Fan area",     "~2,376 mm²",     "55 mm fan"],
+                        ["Scoop capture area","~3,090 mm²","Ratio ~1.3× duct-match"],
+                        ["Motor mount",  "edf_55_motor_mount.stl", "CF-PETG 3-arm spider"],
+                        ["Thrust tube",  "edf_55_thrust_tube.stl", "PETG 55 mm ID duct"],
+                        ["ESC",          "50A 6S BLHeli32","~65A burst; XT60; F_ESC5 = 60A MIDI"],
                     ]}
                 />
             </Card>
@@ -406,23 +411,24 @@ function TabPropulsion() {
                     cols={["Item", "Value", "Notes"]}
                     accent={C.green}
                     rows={[
-                        ["Nacelle thrust",   "~1,822 g", "2× (2× 50 mm EDF) = 4 EDFs × ~460 g ea"],
-                        ["Rear EDF thrust",  "~3,500 g", "120 mm 6S"],
-                        ["Total thrust",     "~5,322 g", ""],
+                        ["Nacelle hover thrust","~4,464 g","2× (2× 50 mm EDF) = 4 × 1,240 g × 0.9 stator — VERTICAL (hover)"],
+                        ["Rear EDF thrust",  "~1,275 g", "55 mm 6S, net forward after RCS bleed — HORIZONTAL (cruise), not summed into hover"],
                         ["Hull prints + foam","~1,150 g","All shell sections + access panels + foam"],
                         ["Nacelle assemblies","~440 g",  "2× nacelle shells + EDFs + ESCs + gear + nozzle"],
                         ["Avionics",         "~460 g",   "8× PB2-I + 4× Wash + 4× Zoë + 4× Emma + GPS×4 + radios"],
-                        ["Servos + linkage", "~160 g",   "2× tilt servo + 1× rear nozzle servo + pushrods"],
+                        ["Servos + linkage", "~155 g",   "2× tilt servo + pushrods (4× RCS valves are Phase 11)"],
                         ["Power (6S 4000mAh)","~750 g",  "Primary flight battery"],
+                        ["Rear EDF system (Phase 11)","~360 g","55 mm EDF + 50A ESC + canonical nozzle + 4 RCS jets/valves + plenum/mount"],
                         ["Misc hardware",    "~230 g",   "CF stock, fasteners, wiring, ESCs, bearings"],
-                        ["AUW (estimated)",  "~3,590 g", "All of the above; T/W ≈ 1.48"],
-                        ["T/W at AUW",       "~1.48",    "5,322 ÷ 3,590 = 1.482"],
-                        ["Max payload at T/W=1.0","~1,732 g","Hover capability margin"],
+                        ["AUW Phases 5–10",  "~2,768 g", "Hover T/W ≈ 1.61 (4,464 ÷ 2,768)"],
+                        ["AUW Phase 11",     "~3,130 g", "Hover T/W ≈ 1.43 (4,464 ÷ 3,130) — rear EDF not counted"],
+                        ["Max hover payload at T/W=1.0","~1,696 g","Phases 5–10 (4,464 − 2,768)"],
                     ]}
                 />
                 <div style={{ marginTop: 8, fontFamily: M, fontSize: 11, color: C.dimmer }}>
-                    AUW slightly higher than Rev P (+~40 g) due to 4× Wash + 4× Zoë replacing 4× Cape-A-1 + 4× Cape-B-1.
-                    T/W remains well above 1.0 hover threshold.
+                    Rev R1: rear EDF 120 mm → 55 mm with a fixed canonical elliptical nozzle + 4 RCS bleed jets.
+                    It now provides forward-flight (cruise) thrust and pitch/yaw attitude authority — NOT hover lift —
+                    so it is not summed into hover T/W. Hover remains nacelle-driven (T/W ≈ 1.61 Phases 5–10).
                 </div>
             </Card>
         </div>
@@ -493,7 +499,7 @@ function TabAvionics() {
                         ["Barometer",     "BMP388 / BMP390 (SPI) — altitude hold PID"],
                         ["GPS",           "u-blox M10Q via UART — NMEA/UBX; HDOP gating ≤1.5"],
                         ["ESC PWM",       "EHRPWM / PRU-ICSS — BDSHOT600; 5 outputs (4× nacelle + 1× rear)"],
-                        ["Servo PWM",     "3 channels — 2× nacelle tilt + 1× rear nozzle"],
+                        ["Servo PWM",     "2 channels active — 2× nacelle tilt (+4× RCS valves at Phase 11)"],
                         ["ToF array",     "TCA9548A 8-ch I²C mux + MCP23008 XSHUT expander → 6× VL53L5CX per node"],
                         ["TPM",           "SLB9670 TPM 2.0 (SPI) — attestation + HMAC signing"],
                         ["Tamper mesh",   "F.Cu / B.Cu TMESH_P/N nets routed to TPM GPIO — physical intrusion detect"],
@@ -676,7 +682,7 @@ function TabCargo() {
                         ["Door opening",        "100 × 165 mm belly opening", "Station 165..330 mm"],
                         ["Door hinge pin",      "3 mm CF rod", "8-barrel piano hinge; 3.15 mm bore (clearance)"],
                         ["Latch-catch lips",    "4× lips at Z=42/122 mm per X frame edge", ""],
-                        ["Max payload",         "~400 g nominal / ~250 g Phase 8 target","At T/W ≈ 1.48"],
+                        ["Max payload",         "~400 g nominal / ~250 g Phase 8 target","Within hover T/W ≈ 1.61 (Phases 5–10)"],
                     ]}
                 />
             </Card>
@@ -801,8 +807,8 @@ function TabRegulatory() {
 /* ── BOM summary tab ───────────────────────────────────────────────────────── */
 function TabBOM() {
     const categories = [
-        { cat: "Propulsion (EDFs + ESCs)",    items: 5,  mass_g: 865,  cost: 287,  notes: "4× 50mm EDF + 4× 40A ESC + 1× 120mm EDF + 1× 80A ESC" },
-        { cat: "Tilt servos + linkage",        items: 3,  mass_g: 139,  cost: 32,   notes: "2× tilt servo + 1× rear nozzle SG90" },
+        { cat: "Propulsion (EDFs + ESCs)",    items: 4,  mass_g: 510,  cost: 239,  notes: "4× 50mm EDF + 4× 40A ESC + 1× 55mm EDF + 1× 50A ESC (rear pair Phase 11 deferred)" },
+        { cat: "Tilt servos + linkage",        items: 2,  mass_g: 130,  cost: 26,   notes: "2× tilt servo + pushrods (rear nozzle servo deleted — canonical nozzle is fixed)" },
         { cat: "Cargo servos",                 items: 2,  mass_g: 18,   cost: 6,    notes: "2× SG90 — door actuator + payload release" },
         { cat: "Gear train (M=1.0)",           items: 8,  mass_g: 62,   cost: 62,   notes: "Sector, pinion ×2, bevel ×2, crown, housing ×2, shafts, bearings" },
         { cat: "Avionics (PB2-I + v2 capes)",  items: 6,  mass_g: 460,  cost: 1348, notes: "8× PB2-I + 4× Wash + 4× Zoë + 4× Emma + 4× log μSD" },
@@ -858,7 +864,7 @@ function TabBOM() {
                 />
                 <div style={{ marginTop: 8, fontFamily: M, fontSize: 11, color: C.dimmer }}>
                     Rev R cost increase is minimal — only the Kaylee PDB is new.
-                    All avionics cape costs carry forward from Rev Q unchanged. T/W remains ≥1.48.
+                    All avionics cape costs carry forward from Rev Q unchanged. Hover T/W ≈ 1.61 (Phases 5–10) / 1.43 (Phase 11).
                 </div>
             </Card>
 
@@ -970,7 +976,7 @@ function TabFiles() {
                         ["README.md",                               "Project overview, specs, mission profile, attribution", "Rev R ← CURRENT"],
                         ["CLAUDE.md",                               "Project engineering requirements; hull-frame coordinates; imperial-primary units", "Rev R ← CURRENT"],
                         ["TODO.md",                                 "Full phased WBS", "Rev R ← CURRENT"],
-                        ["docs/PROJECT_INDEX.md",                   "Complete file manifest, quick specs", "Rev R ← CURRENT"],
+                        ["PROJECT_INDEX.md",                        "Complete file manifest, quick specs", "Rev R ← CURRENT"],
                         ["docs/AVIONICS_PB2_REDESIGN.md",           "8-node PB2-I architecture — Rev R baseline", "Rev R ← CURRENT"],
                         ["docs/REVN_BUILD_GUIDE_24IN.md",           "9-phase 24-inch build guide", "Rev R (carried forward)"],
                         ["docs/bom_revR.json",                      "Rev R BOM — machine-readable, all v2 capes + Kaylee PDB", "Rev R ← CURRENT"],
