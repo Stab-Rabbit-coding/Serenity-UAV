@@ -91,6 +91,7 @@ fuselage section must start from the corresponding Blender source file in that
 directory — SCAD files for fuselage shells are secondary references only.
 
 Bake pipeline for fuselage sections:
+
 1. Update source in `airframe/blender-scripts/files-hollowed-24in/`
 2. Copy updated file to `airframe/stls/fuselage/` (or `fuselage/cargo/` for cargo)
 3. Run bake tool (step 3 below)
@@ -112,8 +113,8 @@ Never bake a mesh *derived from* an already-baked file (e.g. a Blender repair ou
 | Cargo_Shell | −267.0..−72.7 | −71.5..+132.0 | 0.0..+163.2 |
 | Middle_Shell | −258.5..−81.6 | +130.4..+203.6 | +1.3..+166.1 |
 | Rear_Shell | −246.1..−105.5 | +203.2..+384.3 | +3.3..+161.1 |
-| Wing_Port | −93.0..+4.7 | −7.0..+154.0 | +48.0..+81.7 |
-| Wing_Stbd | −347.7..−250.0 | −12.0..+149.0 | +48.0..+81.7 |
+| Wing_Port | −93.0..+4.7 | −7.0..+122.0 | +48.0..+77.0 |
+| Wing_Stbd | −347.7..−250.0 | −12.0..+117.0 | +48.0..+77.0 |
 | Nacelle_Port | +4.0..+86.0 | −64.0..+108.3 | +21.4..+104.7 |
 | Nacelle_Stbd | −428.1..−346.1 | −70.0..+102.3 | +23.3..+106.6 |
 

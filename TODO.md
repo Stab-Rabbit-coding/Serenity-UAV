@@ -518,9 +518,12 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 **Wing pylon (OpenSCAD — Rev R integrated design; carried fwd from Rev O):**
 
 - [ ] **wing_nacelle_pylon_revo.stl** — `openscad -o ... serenity/stl/wing_nacelle_pylon_revo.scad`
-  - Verify WING_SLOT_W and WING_SLOT_H against `s_wings_both_shell24.stl` (caliper-measure from the mesh) before printing — estimated 50×40 mm at 2.197× Thingiverse scale
-- [ ] **wings_s1223_revo.stl** — `openscad -o ... serenity/stl/wings_s1223_revo.scad`
-  - Verify WING_CHORD_ROOT, WING_CHORD_TIP, WING_SEMI_SPAN, WING_SWEEP_LE against original STL before printing
+  - Verify WING_SLOT_W and WING_SLOT_H against tip chord 93 mm (Rev R1 planform) before printing — pocket 50×40 mm uses 54 % of tip chord; confirm pylon block clears airfoil walls
+  - Verify WING_BOLT_R (16 mm) does not exceed S1223 half-thickness at 50 % tip chord (≈ 9.6 mm above chord line at 93 mm chord); reduce to ≤ 12 mm if pylon block geometry requires it
+- [ ] **wings_s1223_revo.stl** — Rev R1 planform (2026-06-14): root 129 mm, tip 93 mm, zero LE sweep; STLs regenerated and baked ✓
+  - **[OPEN]** Verify cargo-section wing-root mortise dimensions against new root chord 129 mm (was 161 mm); `cargo_sect_shell24.scad` mortise slot (currently 30.8×20.8×15 mm) may need resizing and re-centring
+  - **[OPEN]** Re-check root-tab centre position: with 129 mm chord the tab centres at hull Y ≈ +57.5 mm (was +73.5 mm); confirm mortise centre in cargo SCAD matches
+  - **[OPEN]** Verify wing TE position (hull Y≈+122 mm port, +117 mm stbd) clears cargo-section aft interior features; cargo aft boundary is hull Y≈+132 mm — 10 mm clearance
 
 #### 1.1.3 **Nacelles**
 

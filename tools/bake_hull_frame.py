@@ -117,13 +117,16 @@ COMPONENTS = {
          -_SQ2, 0.0, 0.0, _SQ2),
     ),
     # Wings: identity rotation, translation only.
+    # Filenames use the no-"s_"-prefix convention (Rev R1, 2026-06-11).
+    # Chord updated to 129/93 mm (root/tip) and LE sweep zeroed in Rev R1
+    # 2026-06-14; bake translation unchanged (LE root stays at hull Y=-7).
     "Wing_Port": (
-        "wings/s_wing_port_s1223_revo.stl",
+        "wings/wing_port_s1223_revo.stl",
         (-80.9998380, -6.9999860, 57.9998840,
          0.0, 0.0, 0.0, 1.0),
     ),
     "Wing_Stbd": (
-        "wings/s_wing_stbd_s1223_revo.stl",
+        "wings/wing_stbd_s1223_revo.stl",
         (-261.9994760, -11.9999760, 57.9998840,
          0.0, 0.0, 0.0, 1.0),
     ),
