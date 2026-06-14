@@ -34,7 +34,7 @@
                           └───────────────────────────────────────────┘
 ```
 
-Each ESC feeds one 50 mm EDF (Phases 5–10). Phase 11 adds ESC5 for the 120 mm fuselage EDF.
+Each ESC feeds one 50 mm EDF (Phases 5–10). Phase 11 adds ESC5 for the 55 mm fuselage EDF.
 
 ---
 
@@ -78,7 +78,7 @@ voltage is ~19.65 V — all ESCs and BECs maintain regulation throughout.
 | ESC2 – Port Aft  50 mm EDF | 1 | 18 | 40 | 18 | 40 |
 | ESC3 – Stbd Fwd 50 mm EDF | 1 | 18 | 40 | 18 | 40 |
 | ESC4 – Stbd Aft  50 mm EDF | 1 | 18 | 40 | 18 | 40 |
-| **ESC5 – Fuse 120 mm EDF (Ph. 11)** | 1 | 50 | 80 | DNP | DNP |
+| **ESC5 – Fuse 55 mm EDF (Ph. 11)** | 1 | 40 | 65 | DNP | DNP |
 | **Propulsion subtotal (Ph. 5–10)** | — | — | — | **72** | **160** |
 
 XFly Galaxy X5 50 mm 12-blade 6S 3200 KV at 1 240 g max thrust ≈ 400 W per EDF →
@@ -109,11 +109,11 @@ At 5 V / 22.2 V conversion: 27.3 A × 5 V / 22.2 V ≈ **6.2 A from VBAT** at pe
 | Load | Qty | Stall (mA) | Running (mA) | Total run (mA) |
 |------|-----|-----------|--------------|----------------|
 | Nacelle tilt servos (DS3218MG, ≥25 kg·cm @ 6 V) | 2 | 1 500 | 150 | 300 |
-| Rear nozzle servo (SG90, Phase 11) | 1 | 700 | 70 | 70 |
+| RCS proportional valve servos (SG90 class, Phase 11) | 4 | 700 | 70 | 280 |
 | Cargo door servo (SG90) | 1 | 700 | 70 | 70 |
 | Cargo release servo (SG90) | 1 | 700 | 70 | 70 |
-| **6 V subtotal (running)** | — | — | — | **510** |
-| **6 V subtotal (all stalled simultaneously)** | — | — | — | **5 300** |
+| **6 V subtotal (running)** | — | — | — | **720** |
+| **6 V subtotal (all stalled simultaneously)** | — | — | — | **7 400** |
 
 All-servo stall is a transient; the BEC is sized for 5 A continuous (stall of 2×DS3218MG
 + 3×SG90 ≈ 5.1 A — marginal; the 6 V BEC is sized at 5 A with up to 7 A burst for
@@ -193,10 +193,11 @@ At an ESC-side short circuit (worst-case: ESC output directly to GND via zero im
 
 ### 5.2 Phase 11 ESC5 Fusing (Deferred)
 
-The 120 mm aft EDF ESC5 (80 A continuous, 110 A burst) shall use:
-- F_ESC5: **100 A midi blade fuse** (Littelfuse 0299100.ZXNV, MIDI housing)
-- Wire: **8 AWG silicone** from PDB to ESC5 (≥ 73 A rated free air)
-- ESC5 output: XT60 (not XT30 — XT30 is rated 30 A continuous)
+The 55 mm aft EDF ESC5 (50 A continuous, ~65 A burst) shall use:
+
+- F_ESC5: **60 A midi blade fuse** (Littelfuse 0299060.ZXNV, MIDI housing)
+- Wire: **10 AWG silicone** from PDB to ESC5 (≥ 55 A rated free air)
+- ESC5 output: XT60 (not XT30 — XT30 is rated 30 A continuous; 55 mm EDF draws ~40 A)
 
 ### 5.3 Fuse Temperature Derating
 
@@ -555,22 +556,25 @@ installation regardless of throttle setting.
 | EDF group | Unit count | Thrust per unit | Group thrust | Contributes to VTOL lift? |
 |---|---|---|---|---|
 | Nacelle EDFs — XFly Galaxy X5 50 mm 6S 3200 KV (Phases 5–10) | 4 | 1,240 g (2.73 lbf) each; **2,232 g (4.92 lbf) per nacelle pair** at 90 % stator eff. | **4,464 g (9.84 lbf)** | **YES** |
-| Rear fuselage EDF — 120 mm 6S (Phase 11, DNP) | 1 | ~3,500 g (~7.72 lbf) est. | ~3,500 g | **NO — horizontal thrust only** |
+| Rear fuselage EDF — 55 mm 6S (Phase 11, DNP) | 1 | ~1,500 g (3.31 lbf) fan; ~1,275 g (2.81 lbf) net forward after ~15 % RCS bleed | ~1,275 g forward | **NO — horizontal (cruise) thrust only; fixed canonical aft nozzle** |
 
 ### 12.2 Thrust-to-Weight Ratios
 
 <!-- AUW figures from TODO.md (authoritative build guide):
        Phase 5–10 AUW = ~2,768 g (4-node minimum viable flyer; from TODO.md §Phase 5).
-       Phase 11 AUW   = ~3,608 g (all 8 nodes + 120 mm EDF system + hover battery).
+       Phase 11 AUW   = ~3,130 g (Phase 5–10 + ~360 g 55 mm rear-EDF + RCS system).
      CLAUDE.md spec: "Use 2232g per nacelle for static thrust."
-     T/W at Phase 5–10: 4,464 / 2,768 = 1.61 — VTOL hover is achievable from Phase 5. -->
+     The rear EDF fires aft through the fixed canonical nozzle → horizontal (cruise) thrust only;
+       it is NOT counted in hover T/W. Hover T/W is set by the 4 nacelle EDFs alone.
+     T/W at Phase 5–10: 4,464 / 2,768 = 1.61 — VTOL hover is achievable from Phase 5.
+     T/W at Phase 11:   4,464 / 3,130 = 1.43 (nacelles only; rear EDF adds cruise thrust, not lift). -->
 
 **Phase 5–10 VTOL thrust (nacelle-only):** 2 nacelles × 2,232 g = **4,464 g (9.84 lbf)**
 
-| Mission profile | AUW | T/W | Assessment |
+| Mission profile | AUW | T/W (hover) | Assessment |
 |---|---|---|---|
 | Phase 5–10 (4-node min. viable, ~2,768 g) | **2,768 g (6.10 lb)** | 4,464 / 2,768 = **1.61** | Above 1.5 target — **VTOL hover achievable from Phase 5** |
-| Phase 11 (full 8-node + 120 mm EDF, ~3,608 g) | **3,608 g (7.95 lb)** | (4,464 + 3,500) / 3,608 = **2.21** | Excellent VTOL margin with rear EDF contributing |
+| Phase 11 (full + 55 mm rear EDF, ~3,130 g) | **3,130 g (6.90 lb)** | 4,464 / 3,130 = **1.43** | Rear EDF is forward-thrust only (not summed into hover). Above 1.0 floor, below 1.5 comfort target — keep hover payload light; rear EDF improves cruise/range, not hover. |
 
 Required T/W ≥ **1.5** for stable hover with adequate attitude control margin.
 Phase 5–10 nacelle-only configuration meets this requirement at **T/W = 1.61**.
@@ -585,7 +589,7 @@ Phase 5–10 nacelle-only configuration meets this requirement at **T/W = 1.61**
 | With full hover battery (+225 g cargo→hover swap) | 2,993 g | **1.49** | Slightly below 1.5; use cargo battery for initial hover proving |
 | With Phase 6 (+4 nodes, ≈ +200 g avionics) | 2,968 g | **1.50** | At target with additional nodes |
 | With 12-blade fan upgrade (+320 g thrust) | 2,768 g | (4,464+320)/2,768 = **1.73** | Recommended for confident margin |
-| Rear EDF variable-deflector bucket at 45°, Phase 11 (adds ~2,475 g vertical) | 3,608 g | **2.21** | Long-term; iris nozzle provides mechanical basis |
+| Phase 11 full build (55 mm rear EDF + RCS, ~3,130 g) | 3,130 g | 4,464/3,130 = **1.43** | Rear EDF fires aft (canonical nozzle) — cruise thrust only, no hover lift. RCS jets give pitch/yaw authority. Keep hover payload light to stay ≥1.5. |
 
 ### 12.4 Note on POWER_SYSTEM_Q.md §2.3 (Superseded)
 
@@ -619,7 +623,7 @@ by this document as of Rev Q (2026-06-07).
 | Phase | Position | EDF model | ESC model | Rating | Connector | Fuse |
 |---|---|---|---|---|---|---|
 | Phases 5–10 | Each nacelle EDF (×4) | XFly Galaxy X5 50 mm 12-blade 6S 3200 KV | Generic BLHeli32 60 A 6S | 60 A / 6S | XT30 (30 A cont.) | 40 A mini blade |
-| Phase 11 | Rear fuselage 120 mm | 120 mm 6S (TBD) | Generic BLHeli32 80 A 6S | 80 A / 6S | XT60 | 100 A MIDI blade |
+| Phase 11 | Rear fuselage 55 mm | 55 mm 6S (~1,500 gf) | Generic BLHeli32 50 A 6S | 50 A / 6S | XT60 | 60 A MIDI blade |
 
 ### 13.2 Nacelle ESC Firmware Configuration (All Four Units)
 
@@ -642,23 +646,27 @@ All nacelle ESCs (ESC1–ESC4) shall be programmed identically to:
   hardware fuse at a lower trip threshold to allow orderly ESC shutdown before
   the 40 A fuse clears)*
 
-### 13.3 Phase 11 ESC5 — Rear Fuselage 120 mm EDF
+### 13.3 Phase 11 ESC5 — Rear Fuselage 55 mm EDF
 
 <!-- ESC5 is DNP (Do Not Populate) for all Phases 5–10.
      When Phase 11 commences, populate J_ESC5 and F_ESC5 on the Kaylee board
      per the Kaylee.md §Phase 11 bring-up procedure.
-     Signal routing: Simon's medbay (Bay E, FC4 node), UART1-TX. -->
+     Signal routing: Simon's medbay (Bay E, FC4 node), UART1-TX.
+     The 55 mm rear EDF is a forward-thrust (cruise) device and also feeds 4 RCS bleed jets
+       via proportional valves on the 6 V servo rail (see §3.3). -->
 
-When the 120 mm fuselage EDF is integrated (Phase 11):
+When the 55 mm fuselage EDF is integrated (Phase 11):
 
 1. Populate **J_ESC5** (XT60PW-F footprint on Kaylee, DNP in Phases 5–10)
-   with the 80 A BLHeli32 ESC harness.
-2. Install **F_ESC5** (100 A MIDI blade fuse, Littelfuse 0299100.ZXNV)
+   with the 50 A BLHeli32 ESC harness.
+2. Install **F_ESC5** (60 A MIDI blade fuse, Littelfuse 0299060.ZXNV)
    in the corresponding MIDI fuse holder on Kaylee (see §5.2).
 3. Route the ESC5 DSHOT600 signal cable to **Simon's medbay (Bay E, FC4 node),
    UART1-TX** — Simon is the primary EDF5 controller per the PACE task matrix
    in CLAUDE.md.
-4. Re-run Kaylee DRC and verify no connector spacing violations after population.
+4. Connect the 4 RCS proportional-valve servos to the 6 V servo bus; map to the
+   FC attitude mixer (2 pitch + 2 yaw).
+5. Re-run Kaylee DRC and verify no connector spacing violations after population.
 
 ---
 
@@ -670,7 +678,7 @@ When the 120 mm fuselage EDF is integrated (Phase 11):
      Battery rail: ±25 mm adjustable on keel → ±5 mm CG travel.
      Kaylee mass: 278 g installed (PCB + enclosure + hardware).
      AUW reference: Phase 5–10 = ~2,768 g (TODO.md authoritative);
-       Phase 11 full build = ~3,608 g (all 8 nodes + 120 mm EDF + hover battery).
+       Phase 11 full build = ~3,130 g (Phase 5–10 + ~360 g 55 mm rear-EDF + RCS system).
      All stations measured from nose tip (Serenity bow) along
        the longitudinal (X) axis, positive aft.
      Imperial primary, metric parenthetical per CLAUDE.md.
@@ -698,7 +706,7 @@ When the 120 mm fuselage EDF is integrated (Phase 11):
 | 6S 4,000 mAh LiPo (hover battery) | 750 | 190 (adjustable) | 142,500 |
 | Kaylee PDB — Phases 5–10 (PCB + enclosure) | 278 | 200 (fixed, keel mid) | 55,600 |
 | 4× nacelle ESCs (BLHeli32 60 A 6S, ×4) | 220 | 90 (wing root) | 19,800 |
-| 1× rear EDF ESC — Phase 11, DNP (BLHeli32 80 A 6S) | 40 | 490 (aft bay) | 19,600 |
+| 1× rear EDF ESC — Phase 11, DNP (BLHeli32 50 A 6S) | 40 | 490 (aft bay) | 19,600 |
 | Keel bonding strap (MIL-B-5087B 19 mm Cu braid) | 35 | 250 | 8,750 |
 | **Subtotal — Phases 5–10 (excl. DNP ESC5)** | **1,283** | **CG = (142,500 + 55,600 + 19,800 + 8,750) / 1,243 = 182 mm** | |
 
@@ -719,7 +727,7 @@ Correction: slide battery aft 8 mm on the rail.
      the battery mass (750 g) is a fraction of Phase 5–10 AUW (2,768 g). The remaining
      ~6 mm offset shall be balanced by aft servo/wiring mass placement during final
      assembly. Use the CG sensitivity formula below to calculate additional trim
-     adjustments. Phase 11 AUW (3,608 g) reduces sensitivity constant to 0.208. -->
+     adjustments. Phase 11 AUW (3,130 g) reduces sensitivity constant to 0.240. -->
 
 Balance the remaining ~6 mm offset by placement of aft servo wiring and mounting
 hardware. Verify on the physical CG rig before first flight.
@@ -727,7 +735,7 @@ hardware. Verify on the physical CG rig before first flight.
 ### 14.3 Battery CG Sensitivity
 
 <!-- Formula: ΔCG ≈ (battery_mass / AUW) × Δbatt_position
-     Phase 5–10 AUW = 2,768 g (TODO.md authoritative). Phase 11 AUW = 3,608 g.
+     Phase 5–10 AUW = 2,768 g (TODO.md authoritative). Phase 11 AUW = 3,130 g.
      Hover battery sensitivity constant = 750 / 2,768 = 0.271 (Phase 5–10).
      Cargo battery (525 g) sensitivity = 525 / 2,568 = 0.204 (Phase 5, no hover batt.).
      This is a first-order approximation; use full moment table for precise trim. -->
@@ -746,14 +754,14 @@ Phase 5–10 cargo battery sensitivity (525 g, AUW ~2,543 g):
     = 0.206 × Δ mm per mm of battery slide
 ```
 
-Phase 11 full build hover battery sensitivity (750 g, AUW 3,608 g):
+Phase 11 full build hover battery sensitivity (750 g, AUW 3,130 g):
 
 ```
-ΔCG ≈ (750 / 3,608) × Δbatt_position
-    = 0.208 × Δ mm per mm of battery slide
+ΔCG ≈ (750 / 3,130) × Δbatt_position
+    = 0.240 × Δ mm per mm of battery slide
 ```
 
-The hover battery at Phase 5 is **31 % more CG-sensitive** than at Phase 11 full
+The hover battery at Phase 5 is **13 % more CG-sensitive** than at Phase 11 full
 build — use fine (5 mm) increments when trimming with the minimum-viable build.
 
 ---
