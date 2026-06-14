@@ -665,9 +665,9 @@ module latch_catch_lip(x_start, z_pos) {
 // ── Wing root mortise, spar bearing blocks, and nacelle servo mounts (Rev S1) ─
 //
 // LOAD ANALYSIS AND STRUCTURAL JUSTIFICATION
-// All loads computed at 3g manoeuvre envelope.  FOS target ≥ 4.0 per AUVSI
-// structural margin practice for small UAS.  Ref: AUVSI best-practice guideline
-// for small UAS structural margins; IEEE Std 1912 airframe design guidance.
+// All loads computed at 3g manoeuvre envelope.  FOS target ≥ 4.0: design-team
+// judgment value for FDM composite joints with non-linear failure modes.  Design
+// reference: ASTM F2910-14 [ASTM F38] sUAS design specification.
 //
 // Aircraft parameters (per PROJECT_INDEX.md; PHASED_BUILD_GUIDE.md Rev P):
 //   AUW (Phase 5–10, no aft EDF)    W_aua = 2768 g = 27.15 N
@@ -721,7 +721,7 @@ module latch_catch_lip(x_start, z_pos) {
 //
 // References:
 //   Selig & Guglielmo (1997) J. Aircraft 34(1):72–79 (S1223 CL data).
-//   AUVSI small UAS structural margin guidance, FOS_min = 4.0.
+  //   ASTM F2910-14 [ASTM F38]; FOS_min = 4.0 design judgment for FDM composite joints.
 //   DS3218MG datasheet; Ruthex RX-M3x5.7; ISO 14589 (heat-set inserts).
 //   wings_s1223_revo.scad SPAR_BORE_X, WING_ROOT_TAB_*, WING_CHORD_ROOT.
 //   nacelle_sector_gear.scad SLOT_BC_R = 18 mm; nacelle_pod_50mm_tandem.scad.
