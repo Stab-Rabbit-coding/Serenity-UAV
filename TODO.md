@@ -631,25 +631,59 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
 #### 1.1.4 **Landing Gear**
 
-##### 1.1.4.1 *Legs*
+Landing gear structural analysis complete: `docs/LANDING_GEAR_ANALYSIS.md` (Rev R1, 2026-06-14).
+Parametric SCAD: `airframe/openscad/fuselage/landing_leg_assy.scad` (Rev R1).
 
-- [ ] Separate 4x leg stl into individual leg files, orient and test fit on freeCAD assembly
+Design: 4× CF-PETG flat-spring cantilever legs (22 × 10 mm, 185 mm total) + 4× TPU 95A feet
+(existing Thingiverse geometry) + 3× M3 PA6 nylon shear-bolt fuse per leg + 2 mm Dyneema
+safety cord.  Fuse load: ≈848 N (190.7 lbf) per leg = 1.69× the 6 ft drop design force.
+Peak deceleration at 6 ft Phase 11 drop: 65.3g (avionics isolation rated for 100g).
 
-- [ ] evaluate suitability of model legs for actual use
+##### 1.1.4.1 *Landing Leg SCAD and STL*
 
-  - [ ] evaluate static and dynamic alternatives
+- [ ] **LG-05 Render `leg_body_r1.stl` from SCAD** — run:
+  `openscad -o airframe/stls/fuselage/landing-gear/leg_body_r1.stl -D 'PART="leg"' airframe/openscad/fuselage/landing_leg_assy.scad`
+  Verify mesh watertight; record vertex extents.  **BLOCKS leg printing.**
 
-    - [ ] Multipart / Unitary?
+- [ ] **LG-04 Verify HULL_ATTACH_POS[] in SCAD against cargo belly contour** — open
+  `PART="assy"` in FreeCAD and confirm the 4 leg positions do not conflict with existing
+  avionics bay bosses, GPS dome cutouts, or CF keel bar channel in `cargo_sect_shell24.scad`.
 
-    - [ ] Springs / Struts ?
+- [ ] **LG-02 Integrate hull boss geometry into `cargo_sect_shell24.scad`** — add 4×
+  hull boss sockets (30 × 18 × 28 mm protrusions below the cargo belly, centred on
+  HULL_ATTACH_POS[] coordinates) as a union with the shell belly.  Boss slot (22.4 × 10.4 mm
+  through-pocket, 20 mm deep) is subtracted.  Run DRC mesh check.  **BLOCKS hull print.**
 
-    - [ ] Mounting to hull
+- [ ] **LG-05b Render `hull_boss_r1.stl`** via `PART="boss"` and verify geometry before
+  integrating into cargo shell.
 
-  - [ ] Implement canonically and mechanically sound legs
+##### 1.1.4.2 *Rear Skid Reinforcement*
 
-##### 1.1.4.2 *Feet*
+- [ ] **LG-03 CF rod channel in `middle_canonical_shell24.scad` rear skid arms** — add
+  3 mm bore channel (CF rod, ~140 mm per skid) per `docs/LANDING_GEAR_ANALYSIS.md §8`.
+  Re-export STL, re-bake, verify watertight.  **BLOCKS taxi test.**
 
-- [ ] Modify feet as needed to mount to legs to provide stable landing
+##### 1.1.4.3 *Feet*
+
+- [ ] Verify existing TPU foot geometry (`feet_x_4_scaled24.stl`) fits the leg body foot
+  socket (22.4 × 10.4 mm, 20 mm deep cavity in `leg_body_r1.stl`).  Resize or regenerate
+  foot as needed to match the socket dimensions.  Print test in TPU 95A.
+
+##### 1.1.4.4 *Fuse Qualification Testing (BLOCKS first flight)*
+
+- [ ] **LG-01 Shear-test M3 × 12 PA6 nylon bolts** — fabricate 3 representative test
+  fixtures simulating the leg boss slot; test 10 samples each at 0°, 15°, and 30° off-axis.
+  Target: fuse load 848 N ± 150 N (190.7 ± 33.7 lbf) per leg (3 bolts combined).
+  Record results in `docs/LANDING_GEAR_ANALYSIS.md §7.3`.  **BLOCKS first flight.**
+
+- [ ] **LG-06 Drop test prototype leg** — mount a leg + foot assembly to a mass-equivalent
+  fixture (6.90 lbm / 3,130 g).  Drop from 1.5 ft (elastic) and 6 ft (design).  Confirm:
+  (a) elastic spring-back ≤1.5 ft; (b) no hull boss damage at 6 ft; (c) fuse activates
+  cleanly above design load.  Record peak g-force with shock logger.  **BLOCKS first flight.**
+
+- [ ] **LG-07 Confirm avionics Faraday enclosure 100g shock rating** — the 6 ft drop
+  produces 65.3g peak; enclosures must be verified to withstand ≥100g without losing
+  electrical continuity.  See avionics PCB fab checklist.  **BLOCKS first flight.**
 
 
 
