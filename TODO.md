@@ -399,13 +399,6 @@ Joint faces in hull-frame Y (confirmed from baked extents):
   Ref: FARADAY_* parameters in cargo_sect_shell24.scad Rev S3; CLAUDE.md §1.4.1.
   Add to Phase 0 print schedule.
 
-- [ ] **Simon bay — define avionics bay in rear section SCAD file.**
-  Simon's stack (Cape-B-2 + Cape-A-2, 55×35 mm (both), 29.2 mm stack height) needs boss standoffs and
-  dorsal access panel in the rear engine cone SCAD (pre-Phase 11) or the middle ring SCAD (Phase 11
-  and beyond, once rear EDF occupies the cone). Verify rear section bounds and available dorsal band
-  before adding geometry. Reference CLAUDE.md PACE: Simon = alternate watchdog, aft EDF control.
-  **BLOCKS Phase 6 full 8-node installation.**
-
 - [ ] **Update REVN_BUILD_GUIDE_24IN.md bay layout table** to reflect revised avionics stack
   positions (Inara + River in cargo section dorsal band; Shepherd Book in head section forward;
   Simon in rear cone pre-Phase 11, middle ring post-Phase 11). Current guide Bays A–E are from an
@@ -473,6 +466,26 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
   legs of the horseshoe) in the Blender mesh, coaxial with the matching channels in the rear shell.
   Export updated STL, re-bake, verify watertight.  See §1.1.0a skid task.  **BLOCKS taxi test.**
 
+- [ ] **Simon bay — define avionics bay in the MIDDLE section (moved here from §1.1.1.2, 2026-06-13).**
+  Simon's stack (Cape-B-2 + Cape-A-2, 55×35 mm both, 39.2 mm stack height) + Faraday tray (60×40×55 mm)
+  mounts in the **middle inner-neck dorsal** interior. Add boss standoffs + dorsal access panel to the
+  middle Blender/SCAD source. Verify the inner-neck dorsal band has clearance (middle Z ≈ 1.3..166 mm,
+  thin horseshoe section — confirm the inscribed cavity holds the 60×40×55 tray before placing bosses).
+  Ref: CLAUDE.md PACE (Simon = alternate watchdog, aft EDF control); shuttle Faraday-fit method in
+  `engrave_plaques.py`/cavity-profile check. **BLOCKS Phase 6 full 8-node installation.**
+
+- [ ] **Kaylee room — PDB + battery bay, middle VENTRAL (2026-06-13).**
+  The Kaylee power-distribution board and the main battery mount together in the middle section's
+  ventral region (the open −Z side of the horseshoe). Define the mounting bay / strap points there;
+  keep mass low and central for CG. Coordinate with §1.4.5 (power distribution).
+
+- [ ] **Avionics-bay interior name marks (DEFERRED, 2026-06-13).** Engrave/emboss bay identifiers
+  (INARA port shuttle, RIVER stbd shuttle, SHEPHERD head fwd, SIMON middle dorsal, KAYLEE middle
+  ventral) on each bay interior. First attempt (flat recessed plaque via `engrave_plaques.py`) did
+  not read cleanly on the morph-opened organic cavity walls; pending a method decision (raised letters
+  on a flat boss pad, or smooth the bay wall first). Mechanism is watertight and stays inside the 2 mm
+  skin. Scripts: `make_bay_text.py`, `engrave_plaques.py`.
+
 - [ ] **Phase 11 — aft EDF intake scoop cuts** — at Phase 11, cut the reduced-area radial scoop
   openings (sized for the 55 mm EDF, ~3,090 mm² total capture at 1.3× duct match) into the inner
   neck to match the resized EDF plenum geometry (`deferred/aft-edf/openscad/neck_intake_frame.scad`).
@@ -505,9 +518,12 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 **Wing pylon (OpenSCAD — Rev R integrated design; carried fwd from Rev O):**
 
 - [ ] **wing_nacelle_pylon_revo.stl** — `openscad -o ... serenity/stl/wing_nacelle_pylon_revo.scad`
-  - Verify WING_SLOT_W and WING_SLOT_H against `s_wings_both_shell24.stl` (caliper-measure from the mesh) before printing — estimated 50×40 mm at 2.197× Thingiverse scale
-- [ ] **wings_s1223_revo.stl** — `openscad -o ... serenity/stl/wings_s1223_revo.scad`
-  - Verify WING_CHORD_ROOT, WING_CHORD_TIP, WING_SEMI_SPAN, WING_SWEEP_LE against original STL before printing
+  - Verify WING_SLOT_W and WING_SLOT_H against tip chord 93 mm (Rev R1 planform) before printing — pocket 50×40 mm uses 54 % of tip chord; confirm pylon block clears airfoil walls
+  - Verify WING_BOLT_R (16 mm) does not exceed S1223 half-thickness at 50 % tip chord (≈ 9.6 mm above chord line at 93 mm chord); reduce to ≤ 12 mm if pylon block geometry requires it
+- [ ] **wings_s1223_revo.stl** — Rev R1 planform (2026-06-14): root 129 mm, tip 93 mm, zero LE sweep; STLs regenerated and baked ✓
+  - **[OPEN]** Verify cargo-section wing-root mortise dimensions against new root chord 129 mm (was 161 mm); `cargo_sect_shell24.scad` mortise slot (currently 30.8×20.8×15 mm) may need resizing and re-centring
+  - **[OPEN]** Re-check root-tab centre position: with 129 mm chord the tab centres at hull Y ≈ +57.5 mm (was +73.5 mm); confirm mortise centre in cargo SCAD matches
+  - **[OPEN]** Verify wing TE position (hull Y≈+122 mm port, +117 mm stbd) clears cargo-section aft interior features; cargo aft boundary is hull Y≈+132 mm — 10 mm clearance
 
 #### 1.1.3 **Nacelles**
 

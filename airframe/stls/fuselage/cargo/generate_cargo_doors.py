@@ -155,8 +155,8 @@ def build_belly_interpolator(shell_stl: str):
     mask = (fn[:, 1] < -0.5) & (fc[:, 1] < -370.0)
     belly = fc[mask]
     print(f"[belly] {mask.sum()} belly faces extracted "
-          f"Z={belly[:,2].min():.1f}..{belly[:,2].max():.1f}  "
-          f"Y={belly[:,1].min():.2f}..{belly[:,1].max():.2f}")
+          f"Z={belly[:, 2].min():.1f}..{belly[:, 2].max():.1f}  "
+          f"Y={belly[:, 1].min():.2f}..{belly[:, 1].max():.2f}")
 
     bx = belly[:, 0]
     bz = belly[:, 2]
@@ -376,7 +376,7 @@ def save(mesh: trimesh.Trimesh, name: str) -> None:
     dims = b[1] - b[0]
     print(f"[save] {name}: "
           f"{dims[0]:.1f}×{dims[1]:.1f}×{dims[2]:.1f} mm  "
-          f"Z={b[0,2]:.2f}..{b[1,2]:.2f}  "
+          f"Z={b[0, 2]:.2f}..{b[1, 2]:.2f}  "
           f"faces={len(mesh.faces)}  watertight={mesh.is_watertight}")
 
 

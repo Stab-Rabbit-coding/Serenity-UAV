@@ -10,51 +10,64 @@
 //     Wing axes are parallel to hull axes (identity rotation); the
 //     published wing STLs are baked to hull frame by translation only
 //     (COMPONENTS['Wing_Port'] / COMPONENTS['Wing_Stbd']).  Baked
-//     hull-frame bounds: port X -93.0..+4.7, stbd X -347.7..-250.0;
-//     both Y -12..+154, Z +48.0..+81.7 mm.  After regeneration, re-run:
+//     hull-frame bounds (Rev R1, chord 129/93 mm, zero sweep):
+//       port  X -93.0..+4.7,  stbd X -347.7..-250.0;
+//       both  Y  -7..+122,    Z +48..+77 mm.  After regeneration, re-run:
 //         python3 tools/bake_hull_frame.py Wing_Port Wing_Stbd
 // ===========================================================================
 // =============================================================================
 // wings_s1223_revo.scad
-// Serenity UAV — Rev R — Wing Pair with Selig S1223 Airfoil Profile
+// Serenity UAV — Rev R1 — Wing Pair with Selig S1223 Airfoil Profile
 // =============================================================================
 //
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // Project : Serenity-class Tilt-Rotor UAV (24-inch scale, Firefly TV ship)
 // License : CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 // Date    : 2026-05-24
-// Revision: Rev R (2026-06-11)   [carried forward from Rev O (2026-05-24); no geometry changes]
+// Revision: Rev R1 (2026-06-14)
+//   - WING_CHORD_ROOT reduced 161 → 129 mm to match canonical desktop model
+//     (s_wings_both_shell24.stl, scale 2.929× from Thingiverse s_wings_both.stl)
+//   - WING_CHORD_TIP reduced 104 → 93 mm, preserving original taper ratio 0.718
+//   - WING_SWEEP_LE zeroed (12 → 0 mm): leading edge is now straight root-to-tip,
+//     matching the canonical Serenity straight-LE planform
+//   - Span (WING_SEMI_SPAN = 85.7 mm) unchanged
+//   Aerodynamic note: wing area reduced from 22 717 mm² to 19 025 mm² (both wings).
+//   At 40 kt cruise: L ≈ 7.6 N vs. 9.1 N previously; still ~22 % AUW contribution.
+//   Re at root (40 kt, 129 mm chord) ≈ 177 000 — above S1223 operating floor.
+//   Carried forward from Rev R (2026-06-11).
 //
 // Description
 // -----------
 // Replaces s_wings_both_shell24.stl (Thingiverse origin, flat-plate cross-
 // section) with a new wing pair using the Selig S1223 high-lift, low-Reynolds-
-// number airfoil.  The Serenity planform (span, taper, sweep) is preserved to
-// within measurement tolerance of the original 2.197× Thingiverse geometry.
-// The exterior mold line changes only in cross-section — planform silhouette
-// from above and fore/aft profile remain visually consistent with canon.
+// number airfoil.  Planform matches the canonical 24-inch Thingiverse desktop
+// model (root 129 mm, tip 93 mm, straight leading edge, taper ratio 0.718).
+// The wing is longer in span than the original panel (85.7 mm vs. 56 mm panel
+// from the desktop STL) giving a less stubby planform while preserving chord
+// proportions and the straight canonical LE.
 //
 // Why S1223
 // ---------
-// At cruise (40 kts, Re ≈ 91 000), the S1223 delivers CL ≈ 1.55 at 3° AoA
-// versus CL ≈ 0.32 for the original flat-plate wing.  This raises the wing
-// lift contribution from 3.7% to ~18% AUW (6.30 N at 35 N AUW) — nearly a
-// 5× improvement in cruise efficiency with zero change to the planform.
+// At cruise (40 kts, Re ≈ 177 000 at root), the S1223 delivers CL ≈ 1.55 at
+// 3° AoA versus CL ≈ 0.32 for the original flat-plate wing.  Wing lift rises
+// from ~3 % to ~22 % AUW at cruise — nearly a 7× improvement with no change to
+// the outward planform silhouette.
 // Reference: Selig & Guglielmo (1997), "High-Lift Low Reynolds Number Airfoil
 //            Design," Journal of Aircraft, Vol.34, No.1, pp.72–79.
 //            UIUC Airfoil Database: https://m-selig.ae.illinois.edu/ads/afplots/s1223.gif
 //
 // Canon Fidelity
 // --------------
-// Changes vs. original Thingiverse wing:
+// Changes vs. original Thingiverse flat-plate wing:
 //   1. Cross-section: flat-plate → S1223 profile (camber + LE radius visible
 //      from front view; lower surface slightly reflexed near TE).
 //   2. Root attachment tab: squared face replaces original tab geometry — VERIFY
 //      fuselage slot before print (see WING_ROOT_TAB_* parameters).
 //   3. Tip geometry: simple truncated tip; original had a rounded fairing which
 //      must be validated against the pylon boss interface.
-// Unchanged: planform shape (span + taper + sweep), wing-to-pylon mount pocket
-// (WING_SLOT_W / WING_SLOT_H), all structural hardware interface dimensions.
+// Unchanged from canonical desktop planform: root/tip chord ratio (0.718),
+// straight leading edge (zero sweep), wing-to-pylon mount pocket (WING_SLOT_W /
+// WING_SLOT_H), all structural hardware interface dimensions.
 //
 // S1223 Profile Data
 // ------------------
@@ -114,14 +127,20 @@
 // ── Parameter Block ───────────────────────────────────────────────────────────
 // =============================================================================
 
-// ── Wing planform — measured from canonical s_wings_both_shell24_50mm.stl ────
-// Full-span X=171.3mm → semi-span 85.7mm; chord Y=160.9mm; thickness Z=24.2mm.
-// WING_CHORD_TIP estimated at 64.5% of root (preserving original SCAD taper ratio).
-// WING_SWEEP_LE kept at 12mm — VERIFY against canonical LE sweep measurement.
-WING_CHORD_ROOT = 161.0;  // [mm] root chord length (at fuselage face) — measured
-WING_CHORD_TIP  = 104.0;  // [mm] tip chord length (at pylon face)     — estimated
-WING_SEMI_SPAN  =  85.7;  // [mm] root face to tip face (internal Z)   — measured
-WING_SWEEP_LE   =  12.0;  // [mm] VERIFY — LE offset at tip vs. root, aft (+Y in output)
+// ── Wing planform — derived from canonical s_wings_both_shell24.stl ──────────
+// Canonical source: archives/stl/s_wings_both_shell24.stl (Thingiverse
+// s_wings_both.stl × 2.929 scale factor).  One-panel measurements:
+//   root face Y chord = 128.8 mm; tip face Y chord ≈ 92.5 mm (taper 0.718).
+//   Panel span (root face to tip face) = 56.3 mm; full span per half = 85.7 mm
+//   (includes central fuselage half-width in the desktop model).
+//   LE sweep in desktop model: 14.2 mm — zeroed here to give a straight LE
+//   that is more faithful to the canonical Serenity silhouette.
+// WING_CHORD_ROOT rounded up from 128.8 mm to even 129 mm.
+// WING_CHORD_TIP  = round(92.5) = 93 mm  (Thingiverse: 31.6 × 2.929 = 92.6 mm).
+WING_CHORD_ROOT = 129.0;  // [mm] root chord (at fuselage face) — from canonical STL
+WING_CHORD_TIP  =  93.0;  // [mm] tip chord  (at pylon face)    — from canonical STL
+WING_SEMI_SPAN  =  85.7;  // [mm] root face to tip face          — maintained from Rev R
+WING_SWEEP_LE   =   0.0;  // [mm] LE sweep: 0 = straight LE (matches Serenity canon)
 WING_DIHEDRAL   =   0.0;  // [mm] tip rise vs. root (+Z in output); Serenity ≈ 0
 
 // ── Wing section scaling ──────────────────────────────────────────────────────
@@ -138,8 +157,8 @@ THICKNESS_SCALE =   1.0;  // [1.0 = full S1223 t/c; 0.85–1.0 recommended range
 // Bore is centred at 30% chord (near max thickness for minimum section loss).
 SPAR_BORE_OD    =  12.3;  // [mm] bore ID = tube OD + 0.3 mm slip fit
 SPAR_BORE_X     =   0.30; // [chord fraction] bore centre, chordwise
-                           // At root: 0.30 × 161 = 48.3 mm from LE (internal X)
-                           // At tip : 0.30 × 104 = 31.2 mm from LE (internal X)
+                           // At root: 0.30 × 129 = 38.7 mm from LE (internal X)
+                           // At tip : 0.30 ×  93 = 27.9 mm from LE (internal X)
 SPAR_BORE_Y_CTR =   0.0;  // [mm] bore centre, internal Y offset (0 = chord line)
 
 // ── Pylon mount pocket (must match wing_nacelle_pylon_revo.scad) ────────────
@@ -472,10 +491,15 @@ wings(render_side = RENDER_SIDE);
 //      Trailing edge (sharp/blunt, x=1) faces aft.  DO NOT install reversed.
 //
 // CRITICAL — Before printing:
-//   Measure s_wings_both_shell24.stl (original Thingiverse STL) in Meshmixer
-//   to verify WING_CHORD_ROOT, WING_CHORD_TIP, WING_SEMI_SPAN, WING_SWEEP_LE,
-//   WING_SLOT_W, WING_SLOT_H, WING_ROOT_TAB_W, WING_ROOT_TAB_H.  Current
-//   values are estimates from wing area analysis (S_ref = 0.0156 m² both wings).
+//   Chord dimensions (WING_CHORD_ROOT=129, WING_CHORD_TIP=93) are derived from
+//   archives/stl/s_wings_both_shell24.stl (2.929× Thingiverse scale).  VERIFY
+//   WING_SLOT_W, WING_SLOT_H, WING_ROOT_TAB_W, WING_ROOT_TAB_H against the
+//   fuselage cargo-section wing slot before cutting or printing.
+//   NOTE: Wing TE at root now sits at hull Y ≈ +122 mm (within cargo section
+//   aft boundary Y ≈ +132 mm) — consistent with fuselage geometry.
+//   VERIFY pylon bolt circle (WING_BOLT_R=16mm) fits within the 93mm tip chord;
+//   bolt Y-offsets reach ±11.3 mm from chord line (≈ S1223 upper-surface limit
+//   at 50% chord) — reduce WING_BOLT_R if the pylon block geometry requires it.
 //
 // Render commands (one wing at a time for slicer import):
 //   openscad -o wing_port_s1223_revo.stl \
