@@ -76,6 +76,7 @@ def add_hole_marker(cx, cy, diameter):
         c.ViewObject.DisplayMode = "Wire"
     return c
 
+
 # --- Feature Cutout Layout Processing ---
 
 # Mounting Standoff Pattern (Calculated relative to Base Plate)
