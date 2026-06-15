@@ -55,6 +55,7 @@ serenity_subsystem_assembler.py   — DEPRECATED subsystem assembler class (stub
 Headless Blender Python scripts for shell hollowing and STL generation.
 
 ```
+add_structural_features.py        — Structural feature booleans on all 4 baked shells (Rev R1 2026-06-14): joint face bores, boss-pin bores, keel channel, ring-frame pockets, skid-rod bores; exports inner-profile CSVs
 blender_edf_bore_and_petals.py    — EDF bore + nozzle petal geometry
 blender_hollow_shells.py          — Centroid-inset 2mm shell hollowing (all 4 sections)
 blender_intake_cut.py             — Fuselage EDF intake cut
@@ -127,6 +128,16 @@ nacelle_servo_bracket.scad          — Rev R DS3218MG tilt servo bracket with M
 wings_s1223_revo.scad             — Rev R S1223 high-lift wing pair (carried fwd from Rev O)
                                       RENDER_SIDE=+1 port, -1 stbd, 0 both
 wing_nacelle_pylon_revo.scad      — Rev R nacelle tilt pylon (carried fwd from Rev O)
+```
+
+### airframe/diagrams/
+
+Reference diagrams and machine-readable profiles generated from hull analysis.
+
+```
+ring_frames/
+  ring_cargo_Y30_inner.csv    — Inner cross-section boundary at hull Y=+30 mm (9 paths, 4314 vertices); input for CF ring DXF
+  ring_rear_Y290_inner.csv    — Inner cross-section boundary at hull Y=+290 mm (14 paths, 2813 vertices); input for CF ring DXF
 ```
 
 ### airframe/stls/
@@ -458,6 +469,7 @@ archive/                          — Pre-Rev Q gerber snapshots
 
 ```
 PROJECT_INDEX.md                  — This file: active project directory tree
+structural_analysis.md            — First-principles structural analysis (Rev R1, 2026-06-14): keel, ring frames, joint bosses, skid rods, AUW, FOS calculations
 AVIONICS_PB2_REDESIGN.md          — 8× PocketBeagle 2 Industrial avionics redesign spec (Rev R)
 BATTERY_MOUNT.md                  — Battery CG analysis, retention load case, belly panel spec (Rev R)
 LANDING_GEAR_ANALYSIS.md          — Landing gear structural analysis: 6 ft drop, fuse sizing, lateral loads (Rev R1)
