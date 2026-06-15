@@ -2,10 +2,39 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**Revision:** R1.1 (2026-06-15) — Redesign to 4-strut pyramid geometry
+**Revision:** R1.3 (2026-06-15) — Canonical trapezoidal brace-frame geometry
 
-> **Rev R1 (2026-06-14)** flat-plate cantilever design superseded.
-> Key impact numbers (§3) carry forward unchanged.
+> **Rev R1.2 / R1.1 / R1** prior pyramid and flat-plate designs superseded.
+> Impact energy numbers (§3) carry forward unchanged from R1.
+
+---
+
+## 0. Geometry Change Note (Rev R1.3)
+
+The Rev R1.3 geometry matches the canonical Serenity landing leg silhouette:
+one **main vertical strut** per corner, braced to the hull by two **isosceles
+triangular arms** at different heights, forming a trapezoidal frame in side view.
+
+**Upper arm**: base crossbeam at UPPER_BOSS_Z = 70 mm above belly (on cargo
+side wall); apex at UPPER_APEX_Z = −5 mm (strut top, just below belly).
+Arm strut length ≈ 79.1 mm; isosceles triangle base = 50 mm.
+
+**Lower arm**: base crossbeam at LOWER_BOSS_Z = 5 mm (belly-to-side
+transition); apex at LOWER_APEX_Z = −45 mm (node on main strut).
+Arm strut length ≈ 55.9 mm; same base = 50 mm.
+
+**Trapezoidal frame in side view** (hull-X direction):
+- Left side (hull wall): 70 − 5 = **65 mm**
+- Right side (strut segment): 5 − 45 = **40 mm**  (trapezoid confirmed — not a parallelogram)
+- Top (upper arm diagonal): 79.1 mm
+- Bottom (lower arm diagonal): 55.9 mm
+
+**Main strut**: OD 18 mm CF-PETG, length 143 mm (belly to foot top), continues
+60 mm below lower arm node (LOWER_APEX_Z − STRUT_BOT_Z = 45 − 148 = 103 mm).
+Total ground clearance = 148 + 12 = **160 mm (6.3 in)**.
+
+Sections §4 and §5 below will be revised when detailed stress analysis of the
+trapezoidal frame is complete (TODO LG-09).
 
 ---
 

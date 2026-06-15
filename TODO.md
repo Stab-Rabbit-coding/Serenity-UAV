@@ -631,48 +631,60 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
 #### 1.1.4 **Landing Gear**
 
-Landing gear structural analysis: `docs/LANDING_GEAR_ANALYSIS.md` (Rev R1.1, 2026-06-15).
-Parametric SCAD: `airframe/openscad/fuselage/landing_leg_assy.scad` (Rev R1.1).
+Landing gear structural analysis: `docs/LANDING_GEAR_ANALYSIS.md` (Rev R1.3, 2026-06-15).
+Parametric SCAD: `airframe/openscad/fuselage/landing_leg_assy.scad` (Rev R1.3).
 
-Design (Rev R1.1): **4-strut pyramid** per cargo corner — 4 CF-PETG arm struts (OD 12 mm)
-converge at a PETG junction hub (crush zone) 85 mm below belly; CF-PETG column (OD 18 mm,
-60 mm) descends to TPU 95A foot.  16 hull boss cylinders (OD 22 mm, CF-PETG) integral to
-cargo belly — 4 per corner.  Full 3-D lateral stability: inverted-A frame in both hull-X and
-hull-Y planes.  1× M3 × 20 PA6 nylon retention bolt per boss (4 per assembly = 1,131 N
-lateral fuse capacity, 2.26× the 501 N per-assembly design force).  PETG hub crush zone
-≈ 2,850 N (2.0× design load).  Strut Euler buckling ≈ 5,302 N per strut (13.9× margin).
-Peak decel estimate: ≤183g at 10 mm hub deflection; hub compliance expected to reduce this
-— requires LG-08 quasi-static test.
+Design (Rev R1.3): **Canonical trapezoidal brace-frame** — one CF-PETG main vertical strut
+(OD 18 mm, 143 mm) per cargo corner, braced by TWO isosceles triangular arms to the hull:
+- **Upper arm** (OD 12 mm struts, 79.1 mm each): crossbeam + V connects cargo SIDE WALL at
+  Z = +70 mm (above belly) to strut top at Z = −5 mm.
+- **Lower arm** (OD 12 mm struts, 55.9 mm each): crossbeam + V connects belly-edge transition
+  at Z = +5 mm to strut at Z = −45 mm.
+- **Trapezoidal frame** in side view: hull side = 65 mm, strut side = 40 mm (not parallel).
+- **Total ground clearance**: 160 mm (6.3 in).
+- **8 hull boss cylinders per aircraft** (OD 22 mm, CF-PETG): 4 side-wall bosses (upper arm,
+  protrude laterally outward) + 4 belly-edge bosses (lower arm, protrude downward).
+- 2 PETG junction nodes per leg (crush zones) + 1× M3 × 20 PA6 nylon bolt per boss
+  (4 total per leg, 1,131 N lateral fuse capacity, 2.26× design force).
+- 2 mm Dyneema safety cord per leg.
 
-**Rev R1 flat-plate cantilever design superseded 2026-06-15.**
+**Rev R1–R1.2 designs (flat-plate cantilever and pyramid variants) superseded 2026-06-15.**
 
 ##### 1.1.4.1 *Landing Leg SCAD and STL Exports*
 
-- [ ] **LG-05 Render STLs from revised SCAD** (Rev R1.1) — run all five parts:
+- [ ] **LG-05 Render STLs from SCAD Rev R1.3** — run all seven parts:
   ```
-  openscad -o airframe/stls/fuselage/landing-gear/arm_strut_r1.stl \
-    -D 'PART="strut"' airframe/openscad/fuselage/landing_leg_assy.scad
-  openscad -o airframe/stls/fuselage/landing-gear/junct_hub_r1.stl \
-    -D 'PART="hub"' airframe/openscad/fuselage/landing_leg_assy.scad
-  openscad -o airframe/stls/fuselage/landing-gear/leg_column_r1.stl \
-    -D 'PART="column"' airframe/openscad/fuselage/landing_leg_assy.scad
-  openscad -o airframe/stls/fuselage/landing-gear/hull_boss_cyl_r1.stl \
-    -D 'PART="boss"' airframe/openscad/fuselage/landing_leg_assy.scad
+  openscad -o airframe/stls/fuselage/landing-gear/arm_upper_r1.stl \
+    -D 'PART="arm_upper"' airframe/openscad/fuselage/landing_leg_assy.scad
+  openscad -o airframe/stls/fuselage/landing-gear/arm_lower_r1.stl \
+    -D 'PART="arm_lower"' airframe/openscad/fuselage/landing_leg_assy.scad
+  openscad -o airframe/stls/fuselage/landing-gear/main_strut_r1.stl \
+    -D 'PART="main_strut"' airframe/openscad/fuselage/landing_leg_assy.scad
+  openscad -o airframe/stls/fuselage/landing-gear/junct_node_r1.stl \
+    -D 'PART="node"' airframe/openscad/fuselage/landing_leg_assy.scad
+  openscad -o airframe/stls/fuselage/landing-gear/boss_side_r1.stl \
+    -D 'PART="boss_side"' airframe/openscad/fuselage/landing_leg_assy.scad
+  openscad -o airframe/stls/fuselage/landing-gear/boss_belly_r1.stl \
+    -D 'PART="boss_belly"' airframe/openscad/fuselage/landing_leg_assy.scad
   openscad -o airframe/stls/fuselage/landing-gear/foot_pad_r1.stl \
     -D 'PART="foot"' airframe/openscad/fuselage/landing_leg_assy.scad
   ```
   Verify all meshes watertight; record vertex extents.  **BLOCKS leg printing.**
 
-- [ ] **LG-04 Verify HULL_ATTACH_POS[] against cargo belly contour** — open
-  `PART="assy"` in FreeCAD and confirm all 4 corner positions (and their 4 boss
-  cylinders each) clear existing avionics bay bosses, GPS dome cutout, and CF keel
-  bar channel in `cargo_sect_shell24.scad`.  Boss spread: SPREAD_X = 40 mm,
-  SPREAD_Y = 60 mm per corner.  Adjust HULL_ATTACH_POS[] if clearances are violated.
+- [ ] **LG-04 Verify HULL_ATTACH_POS[] against cargo belly contour** — open `PART="assy"`
+  in FreeCAD and confirm all 4 corner positions clear avionics bay bosses, GPS dome
+  cutout, and CF keel channel in `cargo_sect_shell24.scad`.  Verify that UPPER_BOSS_Z =
+  70 mm sits on the flat side wall (not in the belly-to-side fillet zone).  Adjust
+  coordinates if clearances violated.
 
-- [ ] **LG-02 Integrate 16 hull boss cylinders into `cargo_sect_shell24.scad`** —
-  add 4 boss cylinders (OD 22 mm, H 30 mm, bore 12.4 mm) per corner as a union
-  with the cargo belly.  Boss top face at belly Z = 0; bosses protrude in hull −Z.
-  Run DRC mesh check.  **BLOCKS hull print.**
+- [ ] **LG-02 Integrate hull bosses into `cargo_sect_shell24.scad`** — add 4 side-wall boss
+  cylinders (OD 22 mm protrude laterally from side wall, at Z = UPPER_BOSS_Z ± SPREAD_Y/2)
+  and 4 belly-edge boss cylinders (OD 22 mm protrude downward from belly edge, at
+  Z = LOWER_BOSS_Z ± SPREAD_Y/2) per corner.  Run DRC mesh check.  **BLOCKS hull print.**
+
+- [ ] **LG-09 Update stress analysis in `docs/LANDING_GEAR_ANALYSIS.md`** for Rev R1.3
+  trapezoidal frame — compute arm strut compression/shear loads at design drop, verify
+  main strut buckling margin, and size PETG node crush zones for 2× design load.
 
 ##### 1.1.4.2 *Rear Skid Reinforcement*
 
@@ -682,25 +694,27 @@ Peak decel estimate: ≤183g at 10 mm hub deflection; hub compliance expected to
 
 ##### 1.1.4.3 *Feet*
 
-- [ ] Verify that SCAD PART="foot" produces a foot pad (55 × 55 × 12 mm TPU 95A) with
-  correct column spigot socket (FOOT_POST_D = 14.0 mm bore, FOOT_POST_H = 8 mm deep)
-  and 2× M3 bolt holes.  Print test in TPU 95A and confirm column plug fit.
+- [ ] Verify SCAD PART="foot" produces foot pad 55 × 55 × 12 mm (TPU 95A) with correct
+  main strut socket (SOCK_MAIN_D = 14 mm bore, SOCK_MAIN_H = 8 mm deep) and 2× M3 bolt
+  holes.  Print test in TPU 95A and confirm main strut spigot fit.
 
 ##### 1.1.4.4 *Qualification Testing (BLOCKS first flight)*
 
 - [ ] **LG-01 Lateral retention bolt test — M3 × 20 PA6 nylon** — fabricate representative
-  boss fixture; shear-test 10 samples each at 0°, 15°, 30° off-axis lateral load.
-  Target per bolt: ≥ 282 N (63.4 lbf).  Record in `docs/LANDING_GEAR_ANALYSIS.md §15`.
+  boss fixture (side-wall and belly-edge variants); shear-test 10 samples each at 0°, 15°,
+  30° off-axis.  Target per bolt: ≥ 282 N.  Record in `docs/LANDING_GEAR_ANALYSIS.md §9`.
   **BLOCKS first flight.**
 
-- [ ] **LG-06 Drop test prototype leg assembly** — mount one complete 4-strut pyramid assembly
-  to a 6.90 lbm (3,130 g) mass-equivalent fixture.  Drop from 1.5 ft (elastic check)
-  and 6 ft (design load).  Confirm: (a) no hull boss bearing damage at 6 ft;
-  (b) hub crush is the overload failure mode; (c) leg assembly retains on safety cord.
-  Record peak g with shock logger.  **BLOCKS first flight.**
+- [ ] **LG-06 Drop test prototype leg assembly** — mount one complete trapezoidal brace
+  assembly to 6.90 lbm (3,130 g) fixture.  Drop from 1.5 ft and 6 ft.  Confirm: (a) no
+  hull boss damage; (b) PETG node crush is overload failure mode; (c) leg retained on
+  safety cord.  Log peak g.  **BLOCKS first flight.**
 
-- [ ] **LG-07 Confirm avionics enclosure shock rating ≥ 100g** — compare measured peak
-  g (LG-06) to avionics enclosure rating.  See PCB fab checklist.  **BLOCKS first flight.**
+- [ ] **LG-07 Confirm avionics enclosure ≥ 100g shock rating.**  See PCB fab checklist.
+  **BLOCKS first flight.**
+
+- [ ] **LG-08 PETG junction node quasi-static compression test** — confirm crush onset ≥ 2×
+  design load (≥ 1,002 N per assembly).  Adjust node infill if needed.  **BLOCKS first flight.**
 
 - [ ] **LG-08 PETG junction hub quasi-static compression test** — compress one printed PETG
   hub (25 % gyroid, HUB_R = 11 mm) at 1 mm/min in a fixture simulating the 4-strut load
