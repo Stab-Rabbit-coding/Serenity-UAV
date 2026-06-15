@@ -24,7 +24,7 @@
 - Every message, internal and external, is digitally signed and authenticated.
 - Everything is logged.  Sensors, messages, camera feed.
 - The logs are saved to hardware-enforced non-executable microsd cards
-- Everything complies with NIST SP800-207
+- Everything complies with NIST SP 800-207 Zero Trust Architecture [REF-NIST-001 §2.1, §2.2, §3.3]
 
 - See README.md for design mission profile.
 
@@ -32,6 +32,20 @@
 
 - All design decisions are for an **actual physical build**, not hypothetical or conceptual work.
 Every component will be fabricated or procured; design accordingly.
+
+## Standards Vetting Policy
+
+- **Every design specification with any effect beyond cosmetic appearance must be vetted against applicable industry standards and/or regulations before implementation.**  Standards citations shall be recorded in `REFERENCES.md`, which catalogs every applicable standard with:
+  - Standard designation and full title
+  - Validated URL for official access (verified against the issuing body)
+  - Specific chapter, section, and paragraph applied
+  - Every repository location where the standard is cited
+
+- **All citations throughout the codebase** — in code comments, documentation, schematics, and build guides — shall reference the `REFERENCES.md` REF-ID (e.g., `[REF-FCC-001 §15.247(b)(3)(ii)]`) and shall include chapter, section, and paragraph to enable auditing.
+
+- **No fabricated, unverifiable, or incorrectly attributed references are permitted.**  Any citation that cannot be traced to a specific published document with a validated URL must be removed or corrected.  Removed or superseded citations are documented in the "Removed / Superseded Citations" section of `REFERENCES.md`.
+
+- **Applicable standards bodies for this project:** FAA (airworthiness, registration, operations), FCC (radio frequency), NIST (cybersecurity and information security), DoD/DLA (MIL-STD bus protocols), ISO (data bus protocols), IEC (component safety), VDE (isolator certification), IEEE (networking standards), ISA/IEC 62443 (OT/ICS cybersecurity), AUVSI/ASTM F38 (UAS design guidelines), and ICAO (international aviation rules).
 
 ## Engineering Requirements
 
@@ -91,6 +105,7 @@ fuselage section must start from the corresponding Blender source file in that
 directory — SCAD files for fuselage shells are secondary references only.
 
 Bake pipeline for fuselage sections:
+
 1. Update source in `airframe/blender-scripts/files-hollowed-24in/`
 2. Copy updated file to `airframe/stls/fuselage/` (or `fuselage/cargo/` for cargo)
 3. Run bake tool (step 3 below)
@@ -112,8 +127,8 @@ Never bake a mesh *derived from* an already-baked file (e.g. a Blender repair ou
 | Cargo_Shell | −267.0..−72.7 | −71.5..+132.0 | 0.0..+163.2 |
 | Middle_Shell | −258.5..−81.6 | +130.4..+203.6 | +1.3..+166.1 |
 | Rear_Shell | −246.1..−105.5 | +203.2..+384.3 | +3.3..+161.1 |
-| Wing_Port | −93.0..+4.7 | −7.0..+154.0 | +48.0..+81.7 |
-| Wing_Stbd | −347.7..−250.0 | −12.0..+149.0 | +48.0..+81.7 |
+| Wing_Port | −93.0..+4.7 | −7.0..+122.0 | +48.0..+77.0 |
+| Wing_Stbd | −347.7..−250.0 | −12.0..+117.0 | +48.0..+77.0 |
 | Nacelle_Port | +4.0..+86.0 | −64.0..+108.3 | +21.4..+104.7 |
 | Nacelle_Stbd | −428.1..−346.1 | −70.0..+102.3 | +23.3..+106.6 |
 
@@ -139,9 +154,16 @@ The historical bake transforms (position + quaternion per component) live solely
 - **Wings** are symmetric about the aircraft lateral (X) centerline at approximately X ≈ −171 mm. Each wing spans outboard in ±X from its root at the cargo section lateral walls.
 - **Nacelles** are outboard of the wings at the pylon tips. The STLs and assembly are stored in forward-flight / cruise attitude. In hover the nacelles tilt to fire thrust downward.
 
-- **All legal and regulatory requirements will be based on United States jurisdiction**  All Radio transmissions shall comply with appropriate FCC regulations.  Markings, lights, and operation shall comply with all appropriate FAA aircraft regulations.
+- **All legal and regulatory requirements will be based on United States jurisdiction**
+  All radio transmissions shall comply with FCC regulations [REF-FCC-001, REF-FCC-002, REF-FCC-003].
+  Markings shall comply with [REF-FAA-001 §48.205].
+  Navigation lights shall comply with [REF-FAA-003 §91.209(a)].
+  Flight operations shall comply with [REF-FAA-002].
 
-- **All designs will be validated against appropriate industry best practice.**  Specific applicable standards bodies are AUVSI, IEEE, and ISA.
+- **All designs will be validated against appropriate industry best practice.**
+  Applicable standards bodies and specific references: AUVSI [REF-AUVSI-001], IEEE [REF-IEEE-001,
+  REF-IEEE-002, REF-IEEE-003], ISA [REF-ISA-001], ISO [REF-ISO-001], IEC [REF-IEC-001],
+  VDE [REF-VDE-001], ICAO [REF-ICAO-001].  See `REFERENCES.md` for the full catalog.
 
 ## Coding Standards
 
@@ -149,7 +171,9 @@ The historical bake transforms (position + quaternion per component) live solely
 
 - All code and documentation shall be written in accordance with **strict linting rules and all linting standards shall be observed.**
 
-- NIST SP800-82R3, 160, and 207 shall be complied with in information processing
+- NIST SP 800-82 Rev 3 [REF-NIST-002 §5.3, §5.4, §6.2.5], NIST SP 800-160 Vol 1 Rev 1
+  [REF-NIST-003 Ch.3], and NIST SP 800-207 [REF-NIST-001 §2.1] shall be complied with
+  in information processing and system security engineering
 
 - All code shall use 4 space indenting, whether or not required by the language.
 
@@ -245,6 +269,8 @@ River provides primary control of the forward EDFs, and provides EDF and nacelle
 Simon is the alternate watchdog for the ship, but most of his attention is on River. He's got aft EDF control and alternate nacelle control. He follows River's lead but makes sure she doesn't crash the ship. Simon also controls Jayne, and ensures that the cargo isn't jettisoned or the crew abandoned. He's got 49 MHz RCRS primary and SiK as his backup — both external radios co-resident on his Emma board (Rev R1 adds LoRa to Emma; Simon thus carries 49 MHz + LoRa + SiK via Cape-B-2).
 
 ## Workflow Notes
+
+- **When adding a standards citation:** look up the standard in `REFERENCES.md` by REF-ID; if it is not yet in the catalog, add it to `REFERENCES.md` with a validated URL and the specific section cited, then use the REF-ID in the code or doc.  Never invent or guess a section number — if the section cannot be verified, mark it as "requires verification" in `REFERENCES.md` and add a TODO §0.x item.
 
 - Run Blender scripts with `blender --background --python <script>.py` — the machine supports headless execution.
 
