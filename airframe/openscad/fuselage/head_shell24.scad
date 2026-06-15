@@ -2,6 +2,14 @@
 // head_shell24.scad
 // Nose / cockpit shell for Serenity Rev N 24" hull (s_head.stl).
 //
+// Rev R1a (2026-06-15): Integrated bow_sensor_pod.scad cuts for
+//   the two canonical convex domes at the bow flat face:
+//   Dome A (dorsal)  → 19 mm Nano camera socket [REF-SENSOR-001]
+//   Dome B (ventral) → TFmini-S long-range ToF (12 m) [REF-SENSOR-002]
+//                       + 12 mm crosshair laser bore (30° below horizon,
+//                         optionally energised) [REF-IEC-002, REF-FDA-001]
+//   See bow_sensor_pod.scad for all dimensions and regulatory notes.
+//
 // HULL-FRAME COORDINATE STANDARD — Rev R1 (2026-06-11).  See CLAUDE.md.
 //   Hull frame (canonical for ALL design artifacts): X = +port (left),
 //   Y = +aft (back), Z = +dorsal (up); origin = SerenityAssembly.FCStd
@@ -38,6 +46,9 @@
 //   Cruise speed at which skin was validated: 54.4 kt (28 m/s); deflection
 //     ≤ 0.002 in (0.054 mm) on 2.0 mm CF-PETG + foam, vs 0.020 in (0.5 mm) limit.
 //
+// Rev R1a (2026-06-15): Integrated bow_sensor_pod.scad cuts (dome A: 19 mm Nano
+//   camera; dome B: TFmini-S ToF + 12 mm crosshair laser 30° below horizon).
+//   All bow positions marked VERIFY in slicer before printing.
 // Rev R (2026-06-11): Rev R baseline checkpoint — no geometry changes.
 // Rev S1 (2026-06-09): Shepherd Book avionics bay (Faraday enclosure) on
 //   interior dorsal face; correct forward sensor and FPV camera positions.
@@ -70,6 +81,12 @@
 //   S1A  -- VL53L5CX forward ToF sensor, Array A (FC3 primary), sta 33 mm
 //   S1B  -- VL53L5CX forward ToF sensor, Array B (FC2 primary), sta 53 mm
 //   FPV  -- 28 mm standard FPV camera, bridge forward-facing viewport, sta 45 mm
+//   BOW-CAM  -- 19 mm Nano camera socket, dorsal bow dome (bow_sensor_pod.scad)
+//               [REF-SENSOR-001]
+//   BOW-TOF  -- Benewake TFmini-S long-range ToF, ventral bow dome
+//               [REF-SENSOR-002]
+//   BOW-LASER -- 12 mm crosshair laser bore, 30° below horizon, aircraft CL
+//               [REF-IEC-002, REF-FDA-001]
 //
 // GPS patch antenna and 49 MHz RCRS post are on the broad, flat dorsal surface
 // of the mid-fuselage section (middle_canonical_shell24.scad) where the
@@ -128,6 +145,9 @@
 // IMPORTANT: All mount and boss positions are estimated.  Verify by rendering in
 // OpenSCAD and measuring mesh cross-sections in a slicer before printing.
 // ============================================================
+
+// Bow sensor pod — CSG subtraction modules (Rev R1a)
+use <bow_sensor_pod.scad>
 
 SCALE_24  = 2.9294;   // 24" hull scale factor
 
@@ -410,7 +430,7 @@ module m3_boss(pos, rot) {
 //   Structural analysis (2026-05-26) confirms 2.0 mm CF-PETG + 2 lb/cf foam fill
 //   adequate for skin panels: deflection 0.054 mm at 28 m/s cruise (vs 0.5 mm limit).
 //
-// ── CSG tree overview (Rev S1) ────────────────────────────────────────────────
+// ── CSG tree overview (Rev R1a) ───────────────────────────────────────────────
 //
 //   union
 //   ├─ difference
@@ -421,7 +441,11 @@ module m3_boss(pos, rot) {
 //   │  ├─ vlsensor_cut (S1A)              ← forward ToF sensor, Array A
 //   │  ├─ vlsensor_cut (S1B)              ← forward ToF sensor, Array B
 //   │  ├─ fpv_cut (FPV)                   ← bridge FPV camera
-//   │  └─ book_dorsal_panel_cut           ← 62×42 mm Faraday tray access opening
+//   │  ├─ book_dorsal_panel_cut           ← 62×42 mm Faraday tray access opening
+//   │  └─ bow_pod_cuts()                  ← bow sensor pod (Rev R1a):
+//   │       bow_camera_cut  (Dome A)      ←   19 mm Nano camera, dorsal dome
+//   │       bow_tof_cut     (Dome B + 6Z) ←   TFmini-S ToF, ventral dome
+//   │       bow_laser_cut   (Dome B - 7Z) ←   12 mm crosshair laser, 30° dn
 //
 // ============================================================
 // Module: hollow_shell (Rev R — same fix as rear_neck_intake_shell24.scad)
@@ -467,6 +491,12 @@ difference() {
     vlsensor_cut(S1A_POS, FWD_ROT);
     vlsensor_cut(S1B_POS, FWD_ROT);
     fpv_cut(FPV_POS,      FWD_ROT);
+
+    // Bow sensor pod cuts (Rev R1a) — dome A: 19 mm Nano camera;
+    //   dome B: TFmini-S ToF + 12 mm crosshair laser (30° below horizon).
+    //   All bow positions VERIFY in slicer before printing.
+    //   See bow_sensor_pod.scad and TODO.md §1.1.1.1a.
+    bow_pod_cuts();
 
     // Shepherd Book Faraday tray dorsal access panel cut (Rev S1).
     //   62×42 mm opening through dorsal skin at (BOOK_X_CEN, BOOK_Z_CEN).

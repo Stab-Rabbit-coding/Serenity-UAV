@@ -89,7 +89,9 @@ All parametric source files.  Compiled to STLs via `airframe/FreeCAD-scripts/Mak
 #### airframe/openscad/fuselage/
 
 ```
-head_shell24.scad               — Nose/cockpit shell, 2mm CF-PETG skin (Rev R)
+head_shell24.scad               — Nose/cockpit shell, 2mm CF-PETG skin (Rev R1a); integrates bow_sensor_pod.scad
+bow_sensor_pod.scad             — Bow sensor pod CSG cuts: 19mm Nano camera (dome A), TFmini-S ToF + 12mm
+                                    crosshair laser 30° below horizon (dome B); use'd by head_shell24.scad (Rev R1a)
 middle_canonical_shell24.scad   — Horseshoe neck section shell (Rev R)
 rear_shell24.scad               — Aft engine-room shell, 2mm CF-PETG (Rev R)
 battery_tray.scad               — 6S 4000mAh LiPo tray, keel-rail slide (Rev R)
