@@ -153,13 +153,12 @@ landing-gear/
   foot_2_scaled24.stl           — Individual foot 2 (Thingiverse reference)
   foot_3_scaled24.stl           — Individual foot 3 (Thingiverse reference)
   foot_4_scaled24.stl           — Individual foot 4 (Thingiverse reference)
-  [arm_upper_r1.stl]            — PENDING: Rev R1.3 upper arm frame CF-PETG (PART="arm_upper"; 4 per aircraft)
-  [arm_lower_r1.stl]            — PENDING: Rev R1.3 lower arm frame CF-PETG (PART="arm_lower"; 4 per aircraft)
-  [main_strut_r1.stl]           — PENDING: Rev R1.3 main vertical strut CF-PETG (PART="main_strut"; 4 per aircraft)
-  [junct_node_r1.stl]           — PENDING: Rev R1.3 arm-to-strut junction node PETG crush zone (PART="node"; 8 per aircraft)
-  [boss_side_r1.stl]            — PENDING: Rev R1.3 side-wall boss cylinder reference (PART="boss_side"; integral to cargo)
-  [boss_belly_r1.stl]           — PENDING: Rev R1.3 belly-edge boss cylinder reference (PART="boss_belly"; integral to cargo)
-  [foot_pad_r1.stl]             — PENDING: Rev R1.3 TPU foot pad (PART="foot"; 4 per aircraft)
+  [arm_upper_r1.stl]            — PENDING: Rev R1.4 upper corner V-arm CF-PETG (PART="arm_upper"; 4 per aircraft; struts ≈77.6 mm)
+  [arm_lower_r1.stl]            — PENDING: Rev R1.4 lower corner V-arm CF-PETG (PART="arm_lower"; 4 per aircraft; struts ≈53.9 mm)
+  [main_strut_r1.stl]           — PENDING: Rev R1.4 main vertical strut CF-PETG OD18 mm × 143 mm (PART="main_strut"; 4 per aircraft)
+  [junct_node_r1.stl]           — PENDING: Rev R1.4 arm-to-strut junction node PETG crush zone R9 mm (PART="node"; 8 per aircraft)
+  [hull_boss_r1.stl]            — PENDING: Rev R1.4 generic hull boss cylinder CF-PETG OD22 mm (PART="boss"; 16 per aircraft; 4 per corner)
+  [foot_pad_r1.stl]             — PENDING: Rev R1.4 TPU 95A foot pad 55×55×12 mm (PART="foot"; 4 per aircraft)
 dorsal_antenna_fin.stl            — Dorsal antenna fin fairing
 middle_canonical_edf_intake.stl — Middle section EDF intake opening
 cargo/

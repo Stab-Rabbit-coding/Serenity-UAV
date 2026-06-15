@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-06-14  
+**Last updated:** 2026-06-15  
 **Current design revision:** Rev R (2026-06-10) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 ---
@@ -631,28 +631,32 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
 #### 1.1.4 **Landing Gear**
 
-Landing gear structural analysis: `docs/LANDING_GEAR_ANALYSIS.md` (Rev R1.3, 2026-06-15).
-Parametric SCAD: `airframe/openscad/fuselage/landing_leg_assy.scad` (Rev R1.3).
+Landing gear structural analysis: `docs/LANDING_GEAR_ANALYSIS.md` (Rev R1.4, 2026-06-15).
+Parametric SCAD: `airframe/openscad/fuselage/landing_leg_assy.scad` (Rev R1.4).
 
-Design (Rev R1.3): **Canonical trapezoidal brace-frame** — one CF-PETG main vertical strut
-(OD 18 mm, 143 mm) per cargo corner, braced by TWO isosceles triangular arms to the hull:
-- **Upper arm** (OD 12 mm struts, 79.1 mm each): crossbeam + V connects cargo SIDE WALL at
-  Z = +70 mm (above belly) to strut top at Z = −5 mm.
-- **Lower arm** (OD 12 mm struts, 55.9 mm each): crossbeam + V connects belly-edge transition
-  at Z = +5 mm to strut at Z = −45 mm.
-- **Trapezoidal frame** in side view: hull side = 65 mm, strut side = 40 mm (not parallel).
+Design (Rev R1.4): **Canonical corner V-brace frame** — one CF-PETG main vertical strut
+(OD 18 mm, 143 mm) per cargo corner, braced by TWO isosceles triangular V-arms to the hull:
+- **Upper arm** (OD 12 mm tubes, struts ≈ 77.6 mm each): V spans from strut apex at
+  Z = −5 mm to **Boss A** on the CARGO END-WALL (fore/aft face) and **Boss B** on the
+  OUTBOARD SIDE-WALL (port/stbd face), both at Z = +70 mm.  Diagonal crossbeam ≈ 28.3 mm
+  spans between Boss A and Boss B across the chamfered hull corner.
+- **Lower arm** (OD 12 mm tubes, struts ≈ 53.9 mm each): V spans from strut apex at
+  Z = −45 mm to Boss A (end-wall) and Boss B (side-wall), both at Z = +5 mm.  Same
+  diagonal crossbeam geometry.
+- **Trapezoidal frame** in 45° diagonal cross-section: hull side = 65 mm, strut side = 40 mm.
 - **Total ground clearance**: 160 mm (6.3 in).
-- **8 hull boss cylinders per aircraft** (OD 22 mm, CF-PETG): 4 side-wall bosses (upper arm,
-  protrude laterally outward) + 4 belly-edge bosses (lower arm, protrude downward).
-- 2 PETG junction nodes per leg (crush zones) + 1× M3 × 20 PA6 nylon bolt per boss
-  (4 total per leg, 1,131 N lateral fuse capacity, 2.26× design force).
+- **16 hull boss cylinders per aircraft** (OD 22 mm, CF-PETG, generic `hull_boss_face()`):
+  4 per corner (2 per arm × 2 arms).  Boss A bosses protrude from end-wall (fore/aft face);
+  Boss B bosses protrude from side-wall (port/stbd face).
+- 2 PETG junction nodes per leg (crush zones, sphere R = 9 mm, 25 % gyroid) +
+  1× M3 × 20 PA6 nylon bolt per boss (4 total per leg) for lateral retention.
 - 2 mm Dyneema safety cord per leg.
 
-**Rev R1–R1.2 designs (flat-plate cantilever and pyramid variants) superseded 2026-06-15.**
+**Rev R1–R1.3 designs (flat-plate, pyramid, and fore-aft-only trapezoidal variants) superseded 2026-06-15.**
 
 ##### 1.1.4.1 *Landing Leg SCAD and STL Exports*
 
-- [ ] **LG-05 Render STLs from SCAD Rev R1.3** — run all seven parts:
+- [ ] **LG-05 Render STLs from SCAD Rev R1.4** — run all six parts:
   ```
   openscad -o airframe/stls/fuselage/landing-gear/arm_upper_r1.stl \
     -D 'PART="arm_upper"' airframe/openscad/fuselage/landing_leg_assy.scad
@@ -662,10 +666,8 @@ Design (Rev R1.3): **Canonical trapezoidal brace-frame** — one CF-PETG main ve
     -D 'PART="main_strut"' airframe/openscad/fuselage/landing_leg_assy.scad
   openscad -o airframe/stls/fuselage/landing-gear/junct_node_r1.stl \
     -D 'PART="node"' airframe/openscad/fuselage/landing_leg_assy.scad
-  openscad -o airframe/stls/fuselage/landing-gear/boss_side_r1.stl \
-    -D 'PART="boss_side"' airframe/openscad/fuselage/landing_leg_assy.scad
-  openscad -o airframe/stls/fuselage/landing-gear/boss_belly_r1.stl \
-    -D 'PART="boss_belly"' airframe/openscad/fuselage/landing_leg_assy.scad
+  openscad -o airframe/stls/fuselage/landing-gear/hull_boss_r1.stl \
+    -D 'PART="boss"' airframe/openscad/fuselage/landing_leg_assy.scad
   openscad -o airframe/stls/fuselage/landing-gear/foot_pad_r1.stl \
     -D 'PART="foot"' airframe/openscad/fuselage/landing_leg_assy.scad
   ```
@@ -674,17 +676,21 @@ Design (Rev R1.3): **Canonical trapezoidal brace-frame** — one CF-PETG main ve
 - [ ] **LG-04 Verify HULL_ATTACH_POS[] against cargo belly contour** — open `PART="assy"`
   in FreeCAD and confirm all 4 corner positions clear avionics bay bosses, GPS dome
   cutout, and CF keel channel in `cargo_sect_shell24.scad`.  Verify that UPPER_BOSS_Z =
-  70 mm sits on the flat side wall (not in the belly-to-side fillet zone).  Adjust
-  coordinates if clearances violated.
+  70 mm sits on the flat side wall (not in the belly-to-side fillet zone).  Verify Boss B
+  positions (X = −73 mm port edge, X = −267 mm stbd edge) land on the hull side-wall face,
+  and Boss A positions (Y = −71 mm fore edge, Y = +132 mm aft edge) land on the hull end-wall
+  face.  Adjust HULL_ATTACH_POS[] coordinates if any boss misses its face.
 
-- [ ] **LG-02 Integrate hull bosses into `cargo_sect_shell24.scad`** — add 4 side-wall boss
-  cylinders (OD 22 mm protrude laterally from side wall, at Z = UPPER_BOSS_Z ± SPREAD_Y/2)
-  and 4 belly-edge boss cylinders (OD 22 mm protrude downward from belly edge, at
-  Z = LOWER_BOSS_Z ± SPREAD_Y/2) per corner.  Run DRC mesh check.  **BLOCKS hull print.**
+- [ ] **LG-02 Integrate hull bosses into `cargo_sect_shell24.scad`** — add 4 boss cylinders
+  per corner (16 total): upper Boss A and lower Boss A protrude from the cargo end-wall (fore
+  or aft face); upper Boss B and lower Boss B protrude from the cargo side-wall (port or stbd
+  face).  All use the same hull_boss_face() geometry (OD 22 mm, BOSS_H 30 mm, ANCHOR_H 8 mm).
+  Run DRC mesh check.  **BLOCKS hull print.**
 
-- [ ] **LG-09 Update stress analysis in `docs/LANDING_GEAR_ANALYSIS.md`** for Rev R1.3
-  trapezoidal frame — compute arm strut compression/shear loads at design drop, verify
-  main strut buckling margin, and size PETG node crush zones for 2× design load.
+- [ ] **LG-09 Update stress analysis in `docs/LANDING_GEAR_ANALYSIS.md`** for Rev R1.4
+  corner V-brace — compute arm strut compression loads (2 struts per arm sharing the V load),
+  verify main strut buckling margin for 143 mm length, size PETG node crush zones for 2×
+  design load (≥ 1,405 N per assembly), and verify diagonal crossbeam in torsion/bending.
 
 ##### 1.1.4.2 *Rear Skid Reinforcement*
 

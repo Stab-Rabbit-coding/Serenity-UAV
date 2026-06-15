@@ -2,39 +2,77 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**Revision:** R1.3 (2026-06-15) — Canonical trapezoidal brace-frame geometry
+**Revision:** R1.4 (2026-06-15) — Canonical corner V-brace frame geometry
 
-> **Rev R1.2 / R1.1 / R1** prior pyramid and flat-plate designs superseded.
+> **Rev R1.3** (trapezoidal brace, fore-aft arm spread only) **superseded 2026-06-15.**
+> **Rev R1.2 / R1.1 / R1** prior pyramid and flat-plate designs also superseded.
 > Impact energy numbers (§3) carry forward unchanged from R1.
 
 ---
 
-## 0. Geometry Change Note (Rev R1.3)
+## 0. Geometry Change Note (Rev R1.4)
 
-The Rev R1.3 geometry matches the canonical Serenity landing leg silhouette:
-one **main vertical strut** per corner, braced to the hull by two **isosceles
-triangular arms** at different heights, forming a trapezoidal frame in side view.
+The Rev R1.4 geometry matches the canonical Serenity landing leg silhouette:
+one **main vertical strut** per cargo corner, braced to the hull by two
+**isosceles triangular V-arms** (upper and lower), each spanning to
+**TWO DIFFERENT HULL FACES** at that corner.
 
-**Upper arm**: base crossbeam at UPPER_BOSS_Z = 70 mm above belly (on cargo
-side wall); apex at UPPER_APEX_Z = −5 mm (strut top, just below belly).
-Arm strut length ≈ 79.1 mm; isosceles triangle base = 50 mm.
+**Corner V-brace anatomy (one arm):**
+- **Boss A** — on the **cargo END-WALL** (fore face for fore corners, aft face
+  for aft corners).  Protrudes outward from that face.
+  Offset: ARM_HALF_SPREAD = 20 mm in hull-Y from strut centreline.
+- **Boss B** — on the **cargo OUTBOARD SIDE-WALL** (port face for port corners,
+  stbd face for stbd corners).  Protrudes outward laterally.
+  Offset: ARM_HALF_SPREAD = 20 mm in hull-X (outboard) from strut centreline.
+- **Crossbeam** — spans diagonally 45° (corner-to-corner) from Boss A to Boss B
+  at the same Z height, bridging the chamfered cargo corner.
+  Crossbeam length = √(20² + 20²) = 20√2 ≈ **28.3 mm**.
+- **Two arm struts** — equal-length diagonals from each boss down to the apex
+  (junction node on main strut).  Equal arm lengths follow from |ΔX| = |ΔY| = 20 mm
+  with identical ΔZ → isosceles triangle confirmed ✓.
 
-**Lower arm**: base crossbeam at LOWER_BOSS_Z = 5 mm (belly-to-side
+**Upper arm**: Boss A + Boss B at Z = UPPER_BOSS_Z = +70 mm (cargo side wall,
+above belly); apex at UPPER_APEX_Z = −5 mm (strut top, just below belly).
+Each arm strut length ≈ √(20² + 75²) = **77.6 mm**.
+
+**Lower arm**: Boss A + Boss B at Z = LOWER_BOSS_Z = +5 mm (belly-edge
 transition); apex at LOWER_APEX_Z = −45 mm (node on main strut).
-Arm strut length ≈ 55.9 mm; same base = 50 mm.
+Each arm strut length ≈ √(20² + 50²) = **53.9 mm**.
 
-**Trapezoidal frame in side view** (hull-X direction):
-- Left side (hull wall): 70 − 5 = **65 mm**
-- Right side (strut segment): 5 − 45 = **40 mm**  (trapezoid confirmed — not a parallelogram)
-- Top (upper arm diagonal): 79.1 mm
-- Bottom (lower arm diagonal): 55.9 mm
+**Trapezoidal frame profile** (diagonal 45° plane through corner, side view):
+- Hull side (end-wall + outboard from Boss A to Boss B): 70 − 5 = **65 mm**
+- Strut side (upper apex to lower apex): |−5 − (−45)| = **40 mm**
+  (unequal sides → confirmed trapezoid, not parallelogram ✓)
 
-**Main strut**: OD 18 mm CF-PETG, length 143 mm (belly to foot top), continues
-60 mm below lower arm node (LOWER_APEX_Z − STRUT_BOT_Z = 45 − 148 = 103 mm).
-Total ground clearance = 148 + 12 = **160 mm (6.3 in)**.
+**Bottom view (cargo belly corner, looking up):**
+```
+    hull end-wall    hull side-wall
+          \\                //
+            [A]===========[ B]   ← crossbeam (diagonal across chamfer)
+               \         /
+                \  arms /
+                 \     /
+                  [ ● ]          ← strut centreline (apex node)
+                    |
+                    |  main strut
+                    ▼
+                  [foot]
+```
 
-Sections §4 and §5 below will be revised when detailed stress analysis of the
-trapezoidal frame is complete (TODO LG-09).
+**Main strut**: OD 18 mm CF-PETG, continuous from upper apex (Z = −5 mm) to
+foot top (Z = STRUT_BOT_Z = −148 mm); length **143 mm**.
+Total ground clearance = 148 + FOOT_H 12 = **160 mm (6.3 in)**.
+
+**Boss count per corner:** 2 upper arm × 2 bosses + 2 lower arm × 2 bosses
+= **4 bosses per leg, 16 per aircraft** (all identical generic hull_boss_face).
+
+Detailed arm strut stress analysis (§4 and §5) will be updated for the R1.4
+corner V-brace geometry under TODO LG-09.  The R1 pyramid numbers below are
+retained as a reference baseline; the arm strut cross-section and AUW are
+unchanged, so the buckling and stress margins are qualitatively valid.
+
+> **TODO LG-09:** Update §2.3 and §§4–5 for R1.4 arm geometry
+> (2-strut-per-arm V-brace, 2 bosses per arm, diagonal crossbeam).
 
 ---
 
@@ -69,29 +107,42 @@ The landing gear does NOT need to be reusable after a 6 ft drop.
 
 The **Phase 11 AUW of 6.90 lbm (3,130 g) is the design case**.
 
-### 2.2 Landing Gear Configuration (Rev R1.1)
+### 2.2 Landing Gear Configuration (Rev R1.4)
 
-- **4 × main leg assemblies** — 4-strut pyramid (CF-PETG arm struts + PETG
-  junction hub + CF-PETG column), one at each cargo belly corner.
-- **4 × hull boss cylinders per leg assembly** (16 total) — CF-PETG, integral
-  to the cargo belly shell.
+- **4 × corner V-brace leg assemblies** — one per cargo belly corner; each
+  assembly: 1 CF-PETG main strut + 2 CF-PETG V-arm frames + 2 PETG junction
+  nodes + 4 hull boss cylinders (integral to cargo shell) + 1 TPU foot pad.
+- **4 hull boss cylinders per leg assembly** (16 total) — CF-PETG, integral
+  to the cargo shell (2 per arm × 2 arms = 4 per corner).
 - **4 × TPU 95A foot pads** — one per assembly; friction and surface compliance.
 - **2 × rear skids** — integral to the horseshoe ring of the middle section; NOT
   produced by `landing_leg_assy.scad`.
 
-### 2.3 Pyramid Geometry
+### 2.3 Corner V-Brace Geometry (Rev R1.4)
 
-Each leg assembly comprises:
-- 4 hull boss cylinders (BOSS_OD = 22 mm) arranged in a 2 × 2 grid at
-  Z = 0 (cargo belly), spaced SPREAD_X = 40 mm laterally and SPREAD_Y = 60 mm
-  fore-aft, centred on the corner position.
-- 4 arm struts (STRUT_OD = 12 mm, wall = 2 mm, CF-PETG) radiating from the
-  4 boss tops inward and downward to a junction hub at Z = −JUNCT_Z = −85 mm.
-- 1 vertical column (COL_OD = 18 mm, wall = 2.5 mm, CF-PETG) from junction
-  hub to foot pad top at Z = −(JUNCT_Z + COL_H) = −145 mm.
-- 1 TPU 95A foot pad (FOOT_H = 12 mm) at ground contact, Z = −157 mm.
+Each leg assembly (one cargo corner) comprises:
 
-**Total ground clearance (cargo belly to sole):** 157 mm (6.2 in).
+| Component | Qty | Material | Key dimensions |
+|---|---|---|---|
+| Main vertical strut | 1 | CF-PETG | OD 18 mm, wall 2.5 mm, L = 143 mm |
+| Upper V-arm (crossbeam + 2 struts) | 1 | CF-PETG | OD 12 mm, wall 2 mm; struts 77.6 mm each |
+| Lower V-arm (crossbeam + 2 struts) | 1 | CF-PETG | OD 12 mm, wall 2 mm; struts 53.9 mm each |
+| Upper junction node | 1 | PETG | sphere R = 9 mm, 25 % gyroid |
+| Lower junction node | 1 | PETG | sphere R = 9 mm, 25 % gyroid |
+| Hull boss cylinder | 4 | CF-PETG | OD 22 mm, bore 12.4 mm, H = 30 mm |
+| TPU foot pad | 1 | TPU 95A | 55 × 55 × 12 mm |
+
+Boss positions per corner (hull frame):
+- **Upper Boss A** (end-wall, fore or aft face): Z = +70 mm above belly
+- **Upper Boss B** (side-wall, port or stbd face): Z = +70 mm above belly
+- **Lower Boss A** (end-wall): Z = +5 mm (belly-edge transition)
+- **Lower Boss B** (side-wall): Z = +5 mm
+
+**Total ground clearance (cargo belly to sole):** 160 mm (6.3 in).
+
+> The analysis in §§4–5 was written for the R1 pyramid geometry.  The arm strut
+> cross-section (12 mm OD, 2 mm wall) and AUW are unchanged.  Detailed re-analysis
+> for the R1.4 V-brace geometry is tracked as TODO LG-09.
 
 ---
 
@@ -386,42 +437,57 @@ before first flight.
 
 ## 11. Materials Specification
 
-### 11.1 Arm Struts (4 per assembly, 16 total)
+### 11.1 Upper V-Arm Frame (4 per aircraft, one per corner)
 
 | Parameter | Value |
 |---|---|
 | Material | CF-PETG |
-| Cross-section | OD 12 mm, wall 2 mm, ID 8 mm |
-| Length | 91.3 mm (max; outboard-fore strut) |
+| Tube cross-section | OD 12 mm, wall 2 mm, ID 8 mm |
+| Arm strut length | ≈ 77.6 mm each (2 per frame) |
+| Crossbeam length | ≈ 28.3 mm (diagonal across corner) |
 | Layer height | 0.15 mm |
 | Perimeters | 4 |
 | Infill | 40 % gyroid |
-| Print orientation | Lying flat (long axis horizontal) |
-| Estimated mass | ≈ 4 g each × 16 = 64 g total |
+| Print orientation | Flat (triangle in XY plane) |
+| Estimated mass | ≈ 7 g each × 4 = 28 g total |
 
-### 11.2 Junction Hub (4 per aircraft)
+### 11.2 Lower V-Arm Frame (4 per aircraft, one per corner)
+
+| Parameter | Value |
+|---|---|
+| Material | CF-PETG |
+| Tube cross-section | OD 12 mm, wall 2 mm, ID 8 mm |
+| Arm strut length | ≈ 53.9 mm each (2 per frame) |
+| Crossbeam length | ≈ 28.3 mm |
+| Layer height | 0.15 mm |
+| Perimeters | 4 |
+| Infill | 40 % gyroid |
+| Print orientation | Flat |
+| Estimated mass | ≈ 5 g each × 4 = 20 g total |
+
+### 11.3 Junction Nodes (8 per aircraft, 2 per corner)
 
 | Parameter | Value |
 |---|---|
 | Material | **PETG** (not CF-PETG — intentional crush zone) |
-| Diameter | 22 mm sphere |
+| Geometry | Sphere R = 9 mm with socket bores |
 | Layer height | 0.15 mm |
 | Infill | **25 % gyroid** |
 | Print orientation | Upright |
-| Estimated mass | ≈ 6 g each × 4 = 24 g total |
+| Estimated mass | ≈ 3 g each × 8 = 24 g total |
 
-### 11.3 Column (4 per aircraft)
+### 11.3a Main Vertical Strut (4 per aircraft, one per corner)
 
 | Parameter | Value |
 |---|---|
 | Material | CF-PETG |
 | Cross-section | OD 18 mm, wall 2.5 mm, ID 13 mm |
-| Length | 60 mm |
+| Length | 143 mm |
 | Layer height | 0.15 mm |
 | Perimeters | 4 |
 | Infill | 40 % gyroid |
 | Print orientation | Upright |
-| Estimated mass | ≈ 9 g each × 4 = 36 g total |
+| Estimated mass | ≈ 18 g each × 4 = 72 g total |
 
 ### 11.4 Hull Boss Cylinders (16 per aircraft, integral to cargo shell)
 
@@ -458,14 +524,15 @@ before first flight.
 
 | Item | Qty | Description |
 |---|---|---|
-| Arm strut | 16 | CF-PETG, OD 12 mm × 91.3 mm per SCAD PART="strut" |
-| Junction hub | 4 | PETG 25 % gyroid per SCAD PART="hub" |
-| Column | 4 | CF-PETG per SCAD PART="column" |
-| Hull boss cylinder | 16 | CF-PETG, integral to cargo shell (PART="boss" reference) |
+| Upper V-arm frame | 4 | CF-PETG, SCAD PART="arm_upper" |
+| Lower V-arm frame | 4 | CF-PETG, SCAD PART="arm_lower" |
+| Junction node | 8 | PETG 25 % gyroid, SCAD PART="node"; 2 per corner |
+| Main strut | 4 | CF-PETG OD 18 mm × 143 mm, SCAD PART="main_strut" |
+| Hull boss cylinder | 16 | CF-PETG, integral to cargo shell, SCAD PART="boss" reference; 4 per corner |
 | TPU foot | 4 | TPU 95A, SCAD PART="foot" |
-| M3 × 20 nylon SHCS | 16 | Retention / lateral fuse (1 per boss) |
+| M3 × 20 nylon SHCS | 16 | Retention / lateral fuse (1 per boss, 4 per corner) |
 | M3 × 10 SS SHCS | 8 | Foot retention (2 per foot) |
-| Dyneema SK75, 2 mm | 2.0 m | Safety cord (4 × 500 mm) |
+| Dyneema SK75, 2 mm | 2.0 m | Safety cord (4 × 500 mm; per corner: foot → lower node → upper node → 2 bosses) |
 | 3 mm CF rod | 280 mm | Rear skid reinforcement (2 × 140 mm) |
 | CA thin | — | CF rod adhesive, rear skids |
 | Spare nylon bolt set | 16 | Replacement M3 × 20 nylon (one full set) |
