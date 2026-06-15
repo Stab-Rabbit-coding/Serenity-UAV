@@ -48,8 +48,8 @@
 //   Servo stall: 2.45 N·m (DS3218MG, 6 V min spec).
 //   Couple arm (bolt pair): 2×17.5 = 35 mm → F_pair = 70 N → 35 N/bolt.
 //   M3×10 SHCS in CF-PETG direct shear: ≥ 3000 N (8.8 grade, ISO 4762).
-//   FOS_shear = 3000 / 35 = 85.7  ✓✓ (>> 4.0 target, AUVSI guidance).
-//   Ref: ISO 4762 M3×10 SHCS; DS3218MG datasheet; AUVSI UAS structural margin.
+//   FOS_shear = 3000 / 35 = 85.7  ✓✓ (>> 4.0 design-judgment target for FDM joints).
+//   Ref: ISO 4762 M3×10 SHCS; DS3218MG datasheet; ASTM F2910-14 [ASTM F38].
 //
 // MATERIAL: CF-PETG, 0.15 mm layer height, 4 perimeters, ≥ 40% infill.
 //   Print orientation: channel mouth facing up (−Y in print bed coords) to
