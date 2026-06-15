@@ -6,10 +6,12 @@
 ## Repository Root
 
 ```
-CLAUDE.md                         — Project instructions and standards
+CLAUDE.md                         — Project instructions and standards (includes Standards Vetting Policy)
 PROJECT_INDEX.md                  — This file
 ARCHIVE_INDEX.md                  — Archive file tree (see below)
 README.md                         — Project overview
+REFERENCES.md                     — Standards and regulatory reference catalog (REF-IDs, verified URLs,
+                                    chapter/section/paragraph per citation, repo usage index)
 REPO_ENFORCEMENT.md               — Repository rules
 TODO.md                           — Work-breakdown structure and open items
 ```
@@ -96,6 +98,9 @@ belly_panel.scad                — Battery bay belly access panel (Rev R)
 access_panels_24in.scad         — All hull access panels: 4× Faraday-bay covers (Shepherd/Inara/River/Simon),
                                     2× ventral hatch covers (battery/Kaylee), 2× ventral hatch frames (Rev R)
 rcrs49_wire_post.scad           — 49 MHz RCRS top-wire antenna post, 12×12 mm PETG mast (Rev R)
+landing_leg_assy.scad           — Rev R1 4× field-replaceable landing legs (CF-PETG flat spring,
+                                    22×10mm, 185mm) + hull boss + 3×M3 nylon shear-bolt fuse;
+                                    see docs/LANDING_GEAR_ANALYSIS.md for structural analysis
 cargo/
   cargo_sect_shell24.scad       — Rev R cargo section shell with clamshell doors, avionics bays, GPS mounts
 ```
@@ -148,8 +153,19 @@ middle_canonical_shell24.stl    — Middle section
 middle_shell24_2mm_repaired.stl — Middle section 2mm hollow, manifold
 cargo_sect_shell24_2mm_repaired.stl — Cargo section 2mm hollow, manifold
 rear_shell24_2mm_repaired.stl   — Rear section 2mm hollow, manifold
-feet_x_4_scaled24.stl           — Landing feet × 4 (24" scale)
-legs_scaled24.stl               — Landing legs (24" scale)
+landing-gear/
+  legs_scaled24.stl             — Original Thingiverse landing legs × 4 (24" scale, cosmetic reference)
+  leg_1_scaled24.stl            — Individual leg 1 (Thingiverse reference)
+  leg_2_scaled24.stl            — Individual leg 2 (Thingiverse reference)
+  leg_3_scaled24.stl            — Individual leg 3 (Thingiverse reference)
+  leg_4_scaled24.stl            — Individual leg 4 (Thingiverse reference)
+  feet_x_4_scaled24.stl         — Landing feet × 4 (Thingiverse reference, TPU 95A)
+  foot_1_scaled24.stl           — Individual foot 1 (Thingiverse reference)
+  foot_2_scaled24.stl           — Individual foot 2 (Thingiverse reference)
+  foot_3_scaled24.stl           — Individual foot 3 (Thingiverse reference)
+  foot_4_scaled24.stl           — Individual foot 4 (Thingiverse reference)
+  [leg_body_r1.stl]             — PENDING: Rev R1 engineered leg (generate from landing_leg_assy.scad PART="leg")
+  [hull_boss_r1.stl]            — PENDING: Rev R1 hull boss profile (PART="boss")
 dorsal_antenna_fin.stl            — Dorsal antenna fin fairing
 middle_canonical_edf_intake.stl — Middle section EDF intake opening
 cargo/
@@ -456,6 +472,7 @@ PROJECT_INDEX.md                  — This file: active project directory tree
 structural_analysis.md            — First-principles structural analysis (Rev R1, 2026-06-14): keel, ring frames, joint bosses, skid rods, AUW, FOS calculations
 AVIONICS_PB2_REDESIGN.md          — 8× PocketBeagle 2 Industrial avionics redesign spec (Rev R)
 BATTERY_MOUNT.md                  — Battery CG analysis, retention load case, belly panel spec (Rev R)
+LANDING_GEAR_ANALYSIS.md          — Landing gear structural analysis: 6 ft drop, fuse sizing, lateral loads (Rev R1)
 POWER_DISTRIBUTION.md             — Power architecture: Kaylee PDB rails, fuse map, cable spec (Rev R)
 REVN_BUILD_GUIDE_24IN.md          — Revision N+ 24-inch hull build guide (active, Rev R baseline)
 PHASED_BUILD_GUIDE.md             — Rev M 18-inch phased build guide (SUPERSEDED for 24-inch builds)

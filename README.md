@@ -51,8 +51,9 @@ Serenity from the 2002 show. Designed using Claude AI.
 
 ## Airframe
 
-Airframe engineered to FAA and AUVSI standards for UAVs rather than relying on the
-source desktop-model specifications.
+Airframe engineered to FAA [REF-FAA-001, REF-FAA-002, REF-FAA-003] and AUVSI
+[REF-AUVSI-001] standards for UAVs rather than relying on the source desktop-model
+specifications.
 
 ### Coordinate Standard (Rev R1)
 
@@ -275,7 +276,8 @@ All nodes use 5 kV galvanic isolation:
 - Ethernet: ADIN1300BCPZ PHY via dual ISO7642FDWRR + Würth 749010012A transformer (JST GH 4P)
 - Emma: SRF2012-100Y CMC, PRTR5V0U2X TVS, X2Y bridging capacitor on antenna feed
 
-All isolation barriers IEC 62368-1 / VDE 0884-11 certified at 5 kV.
+All isolation barriers certified at 5 kV reinforced insulation
+[REF-IEC-001 Cl.5.5.2] / [REF-VDE-001 Cl.4.3 and Cl.5.3].
 Cape-A-1, Cape-B-1, and XCVR-49MHZ-1 archived Rev Q (2026-06-05).
 Gerbers for v2 capes pending DRC sign-off.
 
@@ -288,13 +290,16 @@ Gerbers for v2 capes pending DRC sign-off.
 | SiK / MAVLink | 915 MHz | Shepherd (primary), Inara (secondary) |
 | WiFi | 5 GHz | Inara (primary), Shepherd (secondary) |
 | LoRa | 915 MHz | River (primary), Simon (secondary) |
-| AX.25 / RCRS | 49 MHz | River + Simon (FCC Part 95 RCRS) |
+| AX.25 / RCRS | 49 MHz | River + Simon (FCC Part 95 RCRS [REF-FCC-003] / AX.25 framing [REF-PROTO-001]) |
 | Zigbee | 2.4 GHz | Zoë nodes (secondary mesh) |
 
-**Security:** Every message (internal and external) is digitally signed and authenticated.
+**Security:** Every message (internal and external) is digitally signed and authenticated
+[REF-NIST-001 §2.1 — Zero Trust Architecture: no implicit trust by network location].
 All sensor data, messages, and camera feeds are logged to hardware-enforced non-executable
-microSD cards (ATF16V8BQL CPLD write-blocker on each Zoë node). NIST SP 800-207 Zero Trust
-architecture; NIST SP 800-82 Rev 3 ICS security; every board has a TPM 2.0.
+microSD cards (ATF16V8BQL CPLD write-blocker on each Zoë node)
+[REF-NIST-004 §4.4.2 — log data protection via hardware write-block].
+NIST SP 800-207 Zero Trust architecture [REF-NIST-001]; NIST SP 800-82 Rev 3 OT security
+[REF-NIST-002]; every board has a TPM 2.0 [REF-NIST-001 §3.3 — device agent attestation].
 
 **PACE workload assignments:**
 
@@ -378,13 +383,17 @@ Not covered / separate terms:
 This license does NOT grant rights to any patents held by component manufacturers or the
 design authors. The design uses standard open hardware interfaces (CAN FD, Ethernet, SDIO,
 SPI, I²C, MAVLink). If you commercialise products based on this design, conduct your own
-freedom-to-operate analysis. The write-blocker CPLD design follows published NIST SP 800-72
-principles; no patent claims are made on the implementation.
+freedom-to-operate analysis. The write-blocker CPLD design implements append-only log
+enforcement consistent with log data protection principles in NIST SP 800-92 §4.4.2
+[REF-NIST-004]; no patent claims are made on the implementation.
 
 ### Forensic Evidence Integrity Note
 
 The write-blocker and NX enforcement hardware described in this design are intended to
-support forensic data integrity in UAV operations contexts. They are NOT certified forensic
-tools per NIST/SWGDE standards. Do not use this design as the sole mechanism for evidence
-preservation in legal proceedings without independent verification of the implementation
-against your jurisdiction's evidence handling requirements.
+support operational log integrity, not forensic evidence collection.  They implement
+log data protection principles consistent with NIST SP 800-92 §4.4.2 [REF-NIST-004].
+They are NOT certified forensic tools under NIST CFTT (Computer Forensics Tool Testing)
+Program specifications or SWGDE (Scientific Working Group on Digital Evidence) standards.
+Do not use this design as the sole mechanism for evidence preservation in legal proceedings
+without independent verification of the implementation against your jurisdiction's
+evidence handling requirements.

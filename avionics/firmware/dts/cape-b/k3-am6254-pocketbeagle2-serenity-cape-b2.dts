@@ -67,17 +67,29 @@
  * References:
  *   [1]  TI AM6254 TRM, SPRUJ40 — pad table, PRU-ICSS, CPSW3G, MCAN
  *   [2]  PocketBeagle 2 Industrial schematic, BeagleBoard.org hardware repo
- *   [3]  Chepponis & Karn, KISS TNC, ARRL 6th CNF 1987 (AX.25 link)
- *   [4]  47 CFR Part 95 Subpart D (RCRS 49 MHz channel plan)
- *   [5]  47 CFR Part 15 Subpart C (LoRa 915 MHz, unlicensed)
+ *   [3]  AX.25 Link Access Protocol for Amateur Packet Radio v2.2, TAPR/ARRL, July 1998
+ *        [REF-PROTO-001 §6.2 I Frame, §6.3 S Frames] — AX.25 framing on 49 MHz link
+ *   [4]  47 CFR Part 95, Personal Radio Services — RCRS 49 MHz channel plan
+ *        [REF-FCC-003] — ERP ≤ 100 mW (20 dBm), ±0.005% freq accuracy
+ *        NOTE: Part 95 reorganized July 3, 2018 (FCC 17-24); specific section numbers
+ *        for ERP limit, frequency accuracy, and PTT timing require verification
+ *        against current eCFR: https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-95
+ *   [5]  47 CFR §15.247, Operation in 902-928 MHz ISM band (LoRa 915 MHz, unlicensed)
+ *        [REF-FCC-001 §15.247(a)(1), §15.247(b)(3)(i)] — 30 dBm EIRP limit
  *   [6]  Si5351A/B/C-B Datasheet, Skyworks, Rev 1.4
  *   [7]  Infineon SLB9670 TPM 2.0 Datasheet
  *   [8]  WL1837MOD (TI WL1837) Integration Guide
- *   [9]  MIL-STD-1553B, DoD Interface Standard, 21 Sep 1978
+ *   [9]  MIL-STD-1553B with Notice 2, DoD Interface Standard, 30 Sep 1996
+ *        [REF-MIL-001 §4.1 bus characteristics, §4.3 word formats, §4.6 coupling,
+ *        Table IV response time 4-12 µs] — 1 Mbps, 78 Ω, Manchester II encoding
  *   [10] ISOW1044BDFMR datasheet, TI SLLSEP5 — isolated CAN FD transceiver
+ *        [REF-IEC-001 Cl.5.5.2] / [REF-VDE-001 Cl.4.3, Cl.5.3] — 5 kV RI certification
  *   [11] ADM2795EBRWZ datasheet, Analog Devices — isolated RS-485 transceiver
+ *        [REF-IEC-001 Cl.5.5.2] / [REF-VDE-001 Cl.4.3, Cl.5.3] — 5 kV RI certification
  *   [12] ADIN1300BCPZ datasheet, Analog Devices Rev B — 100/1000BASE-T PHY
+ *        [REF-IEEE-001 Cl.22 RMII, Cl.24 100BASE-TX] — Ethernet PHY interface
  *   [13] ISO7642FDWRR datasheet, TI SLLSEP2 — 6-channel digital isolator
+ *        [REF-IEC-001 Cl.5.5.2] — isolation component in Ethernet barrier
  *   [14] Würth Elektronik 749010012A datasheet — Ethernet transformer 1500 V
  *   [15] PRTR5V0U2X datasheet, Nexperia — TVS for ESD/transient protection
  */

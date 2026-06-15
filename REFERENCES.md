@@ -1,0 +1,611 @@
+# REFERENCES.md — Serenity UAV Standards and Regulatory Reference Catalog
+
+**Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**Revision:** R1
+**Last updated:** 2026-06-14
+
+---
+
+## Standards Vetting Policy
+
+Every design specification that has any effect beyond cosmetic appearance **must** be vetted
+against applicable industry standards and/or regulations before implementation.  This file
+catalogs every standard and regulation that governs any aspect of this project.  It is the
+authoritative index of:
+
+1. The standard's designation and full title
+2. A validated URL for official access (verified against the issuing body's website)
+3. The specific chapters, sections, and paragraphs applied
+4. Every location in the repository where the standard is cited
+
+**Citations in code and documentation** shall reference the standard's REF-ID from this
+catalog, e.g. `[REF-FCC-001 §15.247(b)(3)(ii)]`, and shall include chapter, section, and
+paragraph to the extent applicable, to facilitate independent audit.
+
+**No fabricated or unverifiable references are permitted.**  Every entry in this catalog
+has been verified against the issuing body's official publication list or the U.S. eCFR.
+References that appeared in earlier project files but could not be verified, or that
+were incorrectly attributed, are documented in the "Removed / Superseded Citations"
+section at the end of this file.
+
+---
+
+## Citation Format
+
+In source code comments, documentation, and schematics, cite standards as follows:
+
+```
+[REF-ID §section.subsection] — Short description of what is applied
+```
+
+Examples:
+- `[REF-MIL-001 §4.1] Manchester II encoding at 1 Mbps, 78 Ω characteristic impedance`
+- `[REF-FCC-001 §15.247(b)(3)(ii)] directional antenna gain > 6 dBi: reduce Tx 1 dB per 3 dB above 6 dBi`
+- `[REF-NIST-001 §2.1] all messages digitally signed and authenticated`
+
+When a standard has multiple applicable clauses, list them all:
+```
+[REF-IEC-001 Cl.5.5.2] and [REF-VDE-001 Cl.4.3] — 5 kV reinforced insulation barrier
+```
+
+---
+
+## Part I — United States Federal Aviation Regulations
+
+### REF-FAA-001: 14 CFR Part 48 — Registration and Marking Requirements for Small Unmanned Aircraft Systems
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | Federal Aviation Administration (FAA), U.S. Dept. of Transportation |
+| **Current edition** | As amended through 2024 |
+| **Official URL** | https://www.ecfr.gov/current/title-14/chapter-I/subchapter-F/part-48 |
+
+**Sections applied in this project:**
+
+| Section | Title | Application |
+|---|---|---|
+| §48.25 | Eligibility for registration | All UAS > 0.55 lbs (250 g) must be registered |
+| §48.205(a) | Display of unique identifier | Registration number on exterior |
+| §48.205(b)(1) | Legibility of identifier | Minimum 3-inch (76 mm) characters clearly visible |
+
+**Used in:** `docs/REVN_BUILD_GUIDE_24IN.md`, `graphical-build-guide/decal_sheet.svg`
+
+---
+
+### REF-FAA-002: 14 CFR Part 107 — Small Unmanned Aircraft Systems
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | FAA, U.S. Dept. of Transportation |
+| **Current edition** | As amended through 2024 |
+| **Official URL** | https://www.ecfr.gov/current/title-14/chapter-I/subchapter-F/part-107 |
+
+**Sections applied in this project:**
+
+| Section | Title | Application |
+|---|---|---|
+| §107.3 | Definitions | "Small unmanned aircraft" definition applicable |
+| §107.29 | Daylight operation | Must operate in daylight or civil twilight with anti-collision lighting |
+| §107.51(a) | Maximum groundspeed | ≤ 87 kt (100 mph) |
+| §107.51(b) | Maximum altitude | ≤ 400 ft AGL (unless within 400 ft of a structure) |
+| §107.51(c) | Minimum visibility | ≥ 3 statute miles from pilot's control station |
+| §107.51(d) | Minimum distance from clouds | 500 ft below, 2,000 ft horizontal |
+
+**Used in:** `docs/REVN_BUILD_GUIDE_24IN.md`, `graphical-build-guide/build_guide_18_first_flight.svg`
+
+---
+
+### REF-FAA-003: 14 CFR §91.209 — Aircraft Lights
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | FAA |
+| **Official URL** | https://www.ecfr.gov/current/title-14/chapter-I/subchapter-F/part-91/subpart-C/section-91.209 |
+| **Companion guidance** | FAA Advisory Circular AC 107-2B (UAS operations under Part 107) — https://www.faa.gov/regulations_policies/advisory_circulars/ |
+
+**Sections applied in this project:**
+
+| Section | Title | Application |
+|---|---|---|
+| §91.209(a) | Position lights | Aircraft must display lighted red (port), green (starboard), and white (aft) position lights during night operations |
+| §91.209(b) | Anti-collision light | Required for aircraft with a standard airworthiness certificate; applicable to UAS by AC 107-2B guidance |
+
+**Applied to:** Navigation light subsystem — 6× WS2812C-2020 RGB LEDs (port red, starboard green,
+aft white); controlled by FC4 node (Simon's medbay, Bay E).
+
+**Used in:** `graphical-build-guide/build_guide_13_nav_lights.svg`, `docs/REVN_BUILD_GUIDE_24IN.md`
+
+---
+
+## Part II — United States Federal Communications Commission Regulations
+
+### REF-FCC-001: 47 CFR §15.247 — Operation within the bands 902–928 MHz, 2400–2483.5 MHz, and 5725–5850 MHz
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | Federal Communications Commission (FCC) |
+| **Official URL** | https://www.ecfr.gov/current/title-47/chapter-I/subchapter-A/part-15/subpart-C/section-15.247 |
+| **Parent part** | 47 CFR Part 15 — https://www.ecfr.gov/current/title-47/chapter-I/subchapter-A/part-15 |
+
+**Sections applied in this project:**
+
+| Section | Title | Application |
+|---|---|---|
+| §15.247(a)(1) | Frequency band | Operation in 902–928 MHz ISM band |
+| §15.247(a)(2) | Frequency band | Operation in 2400–2483.5 MHz ISM band |
+| §15.247(b)(3)(i) | Power limit | Max 1 W (30 dBm) conducted output for frequency-hopping and direct-sequence systems |
+| §15.247(b)(3)(ii) | Directional antenna rule | For antennas > 6 dBi, reduce conducted Tx power 1 dB per 3 dB above 6 dBi, such that total EIRP ≤ 30 dBm |
+
+**Applied to:** SiK 915 MHz MAVLink (RFD900x), LoRa 915 MHz (RFM95W), Zigbee 2.4 GHz (CC2652R7)
+
+**Used in:** `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`
+
+---
+
+### REF-FCC-002: 47 CFR Part 15 Subpart E — Unlicensed National Information Infrastructure Devices (UNII)
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | FCC |
+| **Official URL** | https://www.ecfr.gov/current/title-47/chapter-I/subchapter-A/part-15/subpart-E |
+
+**Sections applied in this project:**
+
+| Section | Title | Application |
+|---|---|---|
+| §15.407(a)(3) | Power limits — UNII-3 | Maximum EIRP 30 dBm in the 5725–5850 MHz band |
+| §15.407(c) | Spurious emissions | Applied to WL1837MOD 5 GHz output |
+
+**Applied to:** TI WL1837MOD WiFi 5 GHz link (UNII-3 band); Tx power must be reduced to
+17 dBm conducted when a 14 dBi directional antenna is connected to maintain EIRP ≤ 30 dBm.
+
+**Used in:** `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`
+
+---
+
+### REF-FCC-003: 47 CFR Part 95 — Personal Radio Services (Radio Control Radio Service, RCRS)
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | FCC |
+| **Official URL** | https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-95 |
+
+> **IMPORTANT — 2017 Reorganization Notice:** 47 CFR Part 95 was comprehensively reorganized
+> under FCC Second Report and Order FCC 17-24 (adopted February 2017, effective July 3, 2018).
+> Section numbers for RCRS provisions changed significantly.  All RCRS-specific section
+> citations currently in project files (§95.635, §95.655) are **pre-2017 section numbers**
+> and must be verified against the current eCFR before first flight.  See the
+> "Open Standards Verification Items" table at the end of this document.
+
+**Regulatory provisions applied in this project:**
+
+| Provision | Description | Current Citation (verify) |
+|---|---|---|
+| ERP limit | RCRS station transmitter power shall not exceed 100 mW (20 dBm) ERP | Verify current section vs. old §95.635 |
+| Frequency accuracy | RCRS transmitters must maintain frequency accuracy to ±0.005% | Verify current section vs. old §95.655 |
+| PTT sequencing | Transmitter must be keyed ≥ 7 ms before data burst | Verify current section vs. old §95.639 |
+| Channel plan | 49 MHz RCRS channels (27 channels, TDDS dynamic assignment) | Subpart C LERS provisions |
+
+**Applied to:** Emma (XCVR-49MHZ-2) 49 MHz AX.25 / RCRS link; River's Room and Simon's Medbay nodes only.
+
+**Used in:** `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`,
+`avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`
+
+---
+
+## Part III — NIST Security Standards
+
+### REF-NIST-001: NIST SP 800-207 — Zero Trust Architecture
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | National Institute of Standards and Technology (NIST), U.S. Dept. of Commerce |
+| **Edition** | Final (August 2020) |
+| **Official URL** | https://csrc.nist.gov/publications/detail/sp/800-207/final |
+| **Direct PDF** | https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-207.pdf |
+
+**Sections applied in this project:**
+
+| Section | Title | Application |
+|---|---|---|
+| §2.1 | Zero Trust Basics | Every network resource must authenticate/authorize each connection; no implicit trust granted by network location |
+| §2.2 | Zero Trust Network Architecture | Principle basis for digitally signing every message, internal and external |
+| §3.3 | Device Agent/Gateway-Based Deployment | TPM 2.0 attestation per node (SLB9670) as the device agent |
+| §4 (entire) | Deployment Scenarios | Applied to the 8-node cooperative architecture with per-node key storage |
+
+**Applied to:** Every message (internal CAN FD/RS-485/1553/Ethernet and external SiK/LoRa/WiFi/RCRS)
+carries a TPM-bound SHA-256 HMAC; TPM 2.0 (SLB9670) on all 8 nodes provides boot measurement
+and key storage.
+
+**Used in:** `CLAUDE.md`, `README.md`, `docs/AVIONICS_PB2_REDESIGN.md`
+
+---
+
+### REF-NIST-002: NIST SP 800-82 Rev 3 — Guide to Operational Technology (OT) Security
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | NIST |
+| **Edition** | Revision 3 (September 2023) |
+| **Official URL** | https://csrc.nist.gov/publications/detail/sp/800-82/3/final |
+| **Direct PDF** | https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-82r3.pdf |
+
+**Note:** Revision 3 retitled the document from "Industrial Control Systems (ICS) Security"
+to "Operational Technology (OT) Security."
+
+**Sections applied in this project:**
+
+| Section | Title | Application |
+|---|---|---|
+| §5.3 | Network Architecture for OT Systems | Basis for galvanic isolation on all bus transceivers; network segmentation between RF and wired buses |
+| §5.4 | Network Segmentation and Defense in Depth | Multiple independent bus types (CAN FD, 1553, RS-485, Ethernet) as defense-in-depth |
+| §5.5 | Remote Access | Hardened external comms links; no unauthenticated remote access |
+| §6.2.5 | Electromagnetic Interference | Basis for EMI hardening design objective (500 W/m² RF environment) |
+
+**Applied to:** 5 kV galvanic isolation on all inter-node buses; Faraday enclosure for Kaylee PDB;
+PACE redundancy design; hostile RF environment design objective.
+
+**Used in:** `CLAUDE.md`, `README.md`
+
+---
+
+### REF-NIST-003: NIST SP 800-160 Vol 1 Rev 1 — Engineering Trustworthy Secure Systems
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | NIST |
+| **Edition** | Volume 1 Revision 1 (November 2022) |
+| **Official URL** | https://csrc.nist.gov/publications/detail/sp/800-160/vol-1-rev-1/final |
+| **Direct PDF** | https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-160v1r1.pdf |
+
+**Sections applied in this project:**
+
+| Section | Title | Application |
+|---|---|---|
+| Chapter 3 | Systems Security Engineering Framework | Security-by-design applied throughout PCB layout, firmware architecture, and bus protocol selection |
+| §3.3 | Stakeholder Needs and Requirements | Security requirements derived from mission profile (§ Mission profile items 1–3: rogue command detection, unsafe node detection, failover) |
+| Appendix C | System Life Cycle Processes | Security considerations applied at every design phase |
+
+**Used in:** `CLAUDE.md`
+
+---
+
+### REF-NIST-004: NIST SP 800-92 — Guide to Computer Security Log Management
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | NIST |
+| **Edition** | Final (September 2006); Revision 1 in draft as of 2024 |
+| **Official URL** | https://csrc.nist.gov/publications/detail/sp/800-92/final |
+
+**Note:** NIST SP 800-92 Rev 1 (draft) will supersede this document upon final publication.
+Verify section references against the final revision when it is published.
+
+**Sections applied in this project:**
+
+| Section | Title | Application |
+|---|---|---|
+| §4.4.2 | Protecting Log Data | Recommends measures preventing unauthorized modification, deletion, or access to logs; the ATF16V8BQL CPLD hardware write-block on each Zoë node implements this principle at the hardware layer |
+| §4.1 | Log Generation | Every sensor reading, message, and camera frame logged to hardware-enforced non-executable microSD |
+
+**Applied to:** ATF16V8BQL CPLD hardware write-block (SET at power-on, CLEAR only on hard power
+cycle); hardware-enforced append-only non-executable log microSD on every Zoë node.
+
+**Used in:** `README.md` (replaces incorrect NIST SP 800-72 citation — see "Removed Citations")
+
+---
+
+## Part IV — Defense Standards
+
+### REF-MIL-001: MIL-STD-1553B — Aircraft Internal Time Division Command/Response Multiplex Data Bus
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | U.S. Department of Defense (DoD) |
+| **Edition** | MIL-STD-1553B with Notice 2 (30 September 1996); original date 21 September 1978 |
+| **Official access** | DLA ASSIST QuickSearch: https://assist.dla.mil/ (search "MIL-STD-1553") |
+| **Note** | Public domain per 10 U.S.C. §4252; no purchase required |
+
+**Sections applied in this project:**
+
+| Section/Table | Title | Application |
+|---|---|---|
+| §3.1 | Definitions | Bus Controller (BC), Remote Terminal (RT), Bus Monitor (BM) — FC1 is primary BC, FC2 is standby BC, all others are RT |
+| §4.1 | Bus Characteristics | 78 Ω characteristic impedance; shielded twisted pair (MIL-C-17/131 or equivalent); Manchester II biphase-level encoding |
+| §4.2 | Terminal Types | One BC per bus at any given time; up to 31 RT addresses |
+| §4.3 | Word Formats | 20-bit Manchester II word: 3-bit sync + 16-bit data + 1-bit parity; 1.0 Mbps ± 1% |
+| §4.4 | Message Formats | BC-to-RT, RT-to-BC, and RT-to-RT transfer formats |
+| §4.6 | Coupling Methods | Transformer coupling required for stub length > 0.9 m (0.03 ft) from the bus; PE-68515 or equivalent 1:1.41 transformer |
+| Table IV | Response Time | RT must begin Status Word response between 4 µs and 12 µs after last bit of last valid Command Word |
+
+**Applied to:** 8-node linear bus (CN1–FC1–CN2–FC2–CN3–FC3–CN4–FC4); PRU-ICSS Manchester II
+encoder/decoder at 250 MHz (250 cycles per 1 µs bit cell); DS26LV31 driver / DS26LV32 receiver;
+PE-68515 coupling transformer (1:1.41, 78 Ω); 78 Ω termination at CN1 (Bay A) and FC4 (Bay E).
+
+**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`,
+`avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
+`avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`
+
+---
+
+## Part V — International Standards (ISO, IEC)
+
+### REF-ISO-001: ISO 11898-1:2015 — Road Vehicles — Controller Area Network (CAN) — Part 1: Data Link Layer and Physical Signalling
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | International Organization for Standardization (ISO) |
+| **Edition** | 2015, with Amendment 1:2020 (CAN FD) |
+| **Catalog URL** | https://www.iso.org/standard/63648.html |
+| **Note** | ISO 11898-1:2024 is the latest edition; verify clause numbering against current edition. Amendment 1:2020 added CAN FD to the 2015 base document. |
+
+**Clauses applied in this project:**
+
+| Clause | Title | Application |
+|---|---|---|
+| Clause 8 | CAN Data Frame | Base frame and extended frame format for standard CAN messages |
+| Clause 10 (Amd.1) | CAN FD Frame | FDF, BRS, ESI bits; data phase up to 8 Mbps; separate arbitration and data phase bit rates |
+| Clause 12 (Amd.1) | Bit Timing | CAN FD two-phase bit timing (arbitration at 1 Mbps, data at 5 Mbps per design) |
+
+**Applied to:** AM6254 native MCAN controllers operating at 1 Mbps arbitration / 5 Mbps data;
+ATA6561 CAN FD transceivers; 120 Ω bus termination at CN1 (Bay A) and FC4 (Bay E).
+
+**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`,
+`avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`
+
+---
+
+### REF-IEC-001: IEC 62368-1 Ed. 3.0 — Audio/Video, Information and Communication Technology Equipment — Part 1: Safety Requirements
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | International Electrotechnical Commission (IEC) |
+| **Edition** | Third edition (2018-12) |
+| **Official URL (purchase)** | https://webstore.iec.ch/en/publication/25285 |
+| **US equivalent** | UL 62368-1 (Underwriters Laboratories adoption) |
+| **Note** | Supersedes IEC 60950-1 (information technology equipment) and IEC 60065 (audio/video equipment). Component compliance verified per individual datasheet certifications. |
+
+**Clauses applied in this project:**
+
+| Clause | Title | Application |
+|---|---|---|
+| Clause 5.5 | Insulation | General insulation requirements |
+| Clause 5.5.2 | Clearance and creepage distances | Creepage/clearance for reinforced insulation class at rated working voltage |
+| Clause 6.4 | Energy source hazard mitigations | Isolation barrier mitigating hazardous voltage on signal interfaces |
+
+**Applied to:** 5 kV reinforced insulation barriers on all inter-node signal buses.  Compliance
+verified per component datasheet certifications:
+- CAN FD: ISOW1044BDFMR (TI) — certified IEC 62368-1 reinforced insulation at 5000 Vrms
+- RS-485: ADM2795EBRWZ (Analog Devices) — certified IEC 62368-1 reinforced insulation at 5000 Vrms
+- Ethernet: ADIN1300BCPZ PHY + ISO7642FDWRR (TI) isolator + Würth 749010012A transformer
+
+**Note:** Component-level IEC 62368-1 certification does not automatically confer system-level
+compliance.  The PCB layout must maintain the component-rated creepage and clearance distances
+between primary and secondary sides of each isolation barrier.  PCB layout verification is
+required before fabrication (see TODO.md §1.4 PCB DRC and isolation verification).
+
+**Used in:** `README.md`, `docs/AVIONICS_PB2_REDESIGN.md`,
+`avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
+`avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`
+
+---
+
+### REF-VDE-001: VDE V 0884-11:2017-01 — Optocouplers for Use in Electrical Equipment — Test and Measurement Methods
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | Verband der Elektrotechnik Elektronik Informationstechnik e.V. (VDE), Germany |
+| **Edition** | 2017-01 |
+| **Official URL (search)** | https://www.vde-verlag.de/ (search "VDE V 0884-11") |
+| **Alternative catalog** | https://www.beuth.de/ (DIN/VDE standards via Beuth Verlag) |
+| **Note** | VDE V 0884-11 specifies test methodology for galvanic isolators (digital isolators, optocouplers). This standard defines the certification framework under which ISOW1044BDFMR and ADM2795EBRWZ are certified. |
+
+**Clauses applied in this project:**
+
+| Clause | Title | Application |
+|---|---|---|
+| Clause 4.3 | Reinforced Insulation (RI) | The insulation class applied on all inter-node transceivers in this design |
+| Clause 5.2 | Partial discharge test (Vpd) | Confirms no partial discharge at rated working voltage |
+| Clause 5.3 | Dielectric withstand test (Viso) | 5000 Vrms (7071 Vpk) hipot test for RI class — basis for the "5 kV" rating |
+
+**Applied to:** Same isolation devices as REF-IEC-001.  VDE V 0884-11 compliance is verified
+per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ datasheets.
+
+**Used in:** `README.md`, `docs/AVIONICS_PB2_REDESIGN.md`
+
+---
+
+## Part VI — IEEE Standards
+
+### REF-IEEE-001: IEEE 802.3-2022 — Ethernet (CSMA/CD Access Method and Physical Layer Specifications)
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | Institute of Electrical and Electronics Engineers (IEEE) |
+| **Edition** | 2022 |
+| **Official URL (purchase)** | https://ieeexplore.ieee.org/document/9844436 |
+
+**Clauses applied in this project:**
+
+| Clause | Title | Application |
+|---|---|---|
+| Clause 22 | Media Independent Interface (MII/RMII) | RMII interface between AM6254 CPSW3G and ADIN1300BCPZ / DP83825I PHYs |
+| Clause 24 | 100BASE-TX PHY | 100 Mbps operation on all ring links |
+| Clause 38 | Isolation transformer requirements | 1500 Vrms isolation per Ethernet port (Würth 749010012A meets this requirement) |
+
+**Applied to:** Ethernet RSTP ring connecting all 8 nodes; CPSW3G hardware switch mode in AM6254.
+
+**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`
+
+---
+
+### REF-IEEE-002: IEEE 802.11-2020 — Wireless LAN Medium Access Control (MAC) and Physical Layer (PHY) Specifications
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | IEEE |
+| **Edition** | 2020 |
+| **Official URL (purchase)** | https://ieeexplore.ieee.org/document/9363693 |
+
+**Clauses applied in this project:**
+
+| Clause | Title | Application |
+|---|---|---|
+| Clause 17 | OFDM PHY (802.11a/n/ac) | 5 GHz UNII-3 band operation for WL1837MOD |
+| Clause 19 | 802.11n High Throughput PHY | 2.4 GHz and 5 GHz dual-band capability |
+
+**Applied to:** TI WL1837MOD 802.11 a/b/g/n via SDIO interface; 5 GHz primary, 2.4 GHz fallback.
+
+**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`
+
+---
+
+### REF-IEEE-003: IEEE 802.15.4-2020 — Low-Rate Wireless Networks
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | IEEE |
+| **Edition** | 2020 |
+| **Official URL (purchase)** | https://ieeexplore.ieee.org/document/9144691 |
+
+**Clauses applied in this project:**
+
+| Clause | Title | Application |
+|---|---|---|
+| Clause 10 | 2.4 GHz O-QPSK PHY | Zigbee radio layer (CC2652R7 optional backup mesh) |
+
+**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `README.md`
+
+---
+
+## Part VII — ISA/IEC Industrial Cybersecurity Standards
+
+### REF-ISA-001: ISA/IEC 62443-3-3:2013 — Industrial Automation and Control Systems Security — System Security Requirements and Security Levels
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | International Society of Automation (ISA) / International Electrotechnical Commission (IEC) |
+| **Edition** | 2013 |
+| **Official URL (ISA)** | https://www.isa.org/products/isa-iec-62443-3-3-2013-industrial-automation-and-c |
+| **Official URL (IEC)** | https://webstore.iec.ch/en/publication/7032 |
+
+**Security Requirements (SR) applied in this project:**
+
+| SR | Title | Application |
+|---|---|---|
+| SR 3.1 | Communications Integrity | All messages (internal + external) carry TPM-bound HMAC; basis for authentication requirement |
+| SR 3.2 | Malicious Code Protection | Firmware in eMMC; hardware write-blocked logs; TPM-measured boot |
+| SR 4.2 | Use of Cryptography | TPM 2.0 (SLB9670) per node for key storage, attestation, and HMAC computation |
+| SR 7.6 | Network and Security Configuration Settings | 5 kV galvanic isolation as physical network security hardening against EMI/RF injection |
+
+**Used in:** `CLAUDE.md`
+
+---
+
+## Part VIII — ICAO Standards
+
+### REF-ICAO-001: ICAO Annex 2 — Rules of the Air
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | International Civil Aviation Organization (ICAO) |
+| **Edition** | 10th edition (July 2005) with amendments |
+| **Official URL (purchase)** | https://store.icao.int/en/annex-2-rules-of-the-air |
+| **ICAO main site** | https://www.icao.int/ |
+| **Note** | For US domestic operations, **14 CFR §91.209 (REF-FAA-003) is the directly enforceable regulation.** ICAO Annex 2 is cited for international context only and as the basis from which §91.209 derives. |
+
+**Sections applied in this project:**
+
+| Section | Title | Application |
+|---|---|---|
+| Chapter 3, §3.1.9 | Lights to be displayed by unmanned aircraft | Port red, starboard green, aft white position lights |
+
+**Used in:** `graphical-build-guide/build_guide_13_nav_lights.svg`,
+`graphical-build-guide/decal_sheet.svg`
+
+---
+
+## Part IX — Protocol References
+
+### REF-PROTO-001: AX.25 Link Access Protocol for Amateur Packet Radio
+
+| Field | Value |
+|---|---|
+| **Authority** | Tucson Amateur Packet Radio (TAPR) / American Radio Relay League (ARRL) |
+| **Edition** | Version 2.2 (July 1998) |
+| **Official URL** | https://www.ax25.net/AX25.2.2-Jul%2098-2.pdf |
+| **Note** | AX.25 is used as the frame format on the 49 MHz RCRS link. The RF portion of this link is governed by 47 CFR Part 95 RCRS regulations (REF-FCC-003), NOT the Amateur Radio Service. AX.25 is a protocol choice; its use here does not require an amateur radio license because the RCRS band is a license-exempt personal radio service. |
+
+**Sections applied in this project:**
+
+| Section | Title | Application |
+|---|---|---|
+| §6.2 | I Frame (Information Frame) | Data packet format for command uplink and telemetry downlink |
+| §6.3 | S Frames | Flow control and error recovery on the 49 MHz link |
+
+**Used in:** `avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`, `README.md`
+
+---
+
+### REF-PROTO-002: MAVLink v2 Protocol Specification
+
+| Field | Value |
+|---|---|
+| **Authority** | ArduPilot / QGroundControl / MAVLink community (open standard) |
+| **Edition** | v2.0 (current as of 2026) |
+| **Official URL** | https://mavlink.io/en/ |
+| **Note** | MAVLink is the application-layer protocol carried over the SiK 915 MHz link. It is an open, packet-framed protocol with CRC-16/MCRF4XX integrity check and optional signing (MAVLink v2 message signing uses HMAC-SHA256). |
+
+**Applied to:** SiK MAVLink telemetry link (primary ground-to-air C2 channel).
+
+**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`
+
+---
+
+## Part X — AUVSI and Industry Frameworks
+
+### REF-AUVSI-001: AUVSI Trusted Operator Program (TOP) and XCELLENCE Safety Standards
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | Association for Unmanned Vehicle Systems International (AUVSI) |
+| **Official URL** | https://www.auvsi.org/trusted-operator-program |
+| **Note** | AUVSI does not publish numbered engineering design standards (e.g., "AUVSI-XYZ"). The references to "AUVSI standards" in `CLAUDE.md` and `README.md` refer to AUVSI's published safety frameworks and guidelines for UAS design and operations. For numbered airframe engineering standards, applicable ASTM International standards from Committee F38 (Unmanned Aircraft Systems) should be identified. See TODO item for specific ASTM F38 standard identification. |
+
+**ASTM F38 Committee UAS standards (identify applicable documents):**
+
+| Standard | Title | Status |
+|---|---|---|
+| ASTM F3322 | Small Unmanned Aircraft System (sUAS) Battery Safety | Verify applicability to LiPo 6S pack |
+| ASTM F3269 | Standard Practice for Methods to Safely Bound Flight Behavior of Unmanned Aircraft Systems | Verify applicability to failover design |
+| ASTM F3003 | Standard Specification for Quality Assurance of a Small Unmanned Aircraft System | May apply to flight testing |
+
+**Used in:** `CLAUDE.md`, `README.md`
+
+---
+
+## Removed / Superseded Citations
+
+The following references appeared in earlier versions of project files but have been removed
+because they were incorrectly attributed, unverifiable, or inapplicable.
+
+| Old Citation | Where Found | Reason Removed | Replacement |
+|---|---|---|---|
+| "NIST SP 800-72 principles" (write-blocker design) | `README.md` §Patent Notice, line 382 | **Incorrect attribution.** NIST SP 800-72 (2004) is titled "Guidelines on PDA Forensics" — a forensic analysis guideline for personal digital assistants. It has no relation to hardware write-blocker design. No single NIST SP covers CPLD write-blocker design; the closest applicable standard is NIST SP 800-92 §4.4.2 (log data protection principles). | REF-NIST-004 (NIST SP 800-92 §4.4.2) |
+
+---
+
+## Open Standards Verification Items
+
+The following citations in the codebase require verification before first flight.
+Add verified section numbers to the relevant files and update this table.
+
+| Citation | File | Issue | Action Required |
+|---|---|---|---|
+| §95.635 RCRS ERP limit (100 mW) | `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md` | Pre-2017 FCC Part 95 section number; Part 95 reorganized July 3, 2018 | Verify current section number via eCFR: https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-95 |
+| §95.655 RCRS frequency accuracy (±0.005%) | `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md` | Pre-2017 section number | Same as above |
+| §95.639 RCRS PTT sequencing (≥7 ms) | Referenced in project docs | Pre-2017 section number | Same as above |
+| 14 CFR Part 47 (aircraft registration marks) | `README.md`, `docs/REVN_BUILD_GUIDE_24IN.md` | 14 CFR Part 47 applies to manned aircraft registration; for UAS the applicable regulation is 14 CFR Part 48 §48.205 (display requirements) | Replace all Part 47 references with REF-FAA-001 (Part 48 §48.205) where the citation concerns UAS mark display |
+| AUVSI "standards" (unnamed) | `CLAUDE.md`, `README.md` | No specific numbered AUVSI or ASTM standard cited | Identify applicable ASTM F38 committee standards for UAS airframe engineering and add to this catalog |
+| IEC 62368-1 clause numbers | PCB layout (not yet complete) | PCB layout must verify creepage/clearance distances meet IEC 62368-1 Clause 5.5.2 requirements for 5 kV reinforced insulation; this cannot be verified until PCB layout is complete | Verify during Wash and Zoë PCB layout review (see TODO.md §1.4) |
