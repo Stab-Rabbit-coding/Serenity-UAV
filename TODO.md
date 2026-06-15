@@ -162,6 +162,83 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
 
 #### 1.1.1 **Fuselage**
 
+##### 1.1.1.1a *Bow Sensor Pod — Head Section (Rev R1a, 2026-06-15)*
+
+Forward-facing sensor assembly at the bow flat face replacing the two canonical convex domes.
+SCAD source: `airframe/openscad/fuselage/bow_sensor_pod.scad` (use'd by head_shell24.scad).
+All dome positions are estimated; every item below must be completed before printing.
+
+###### Slicer Verification (BLOCKS head section printing)
+
+- [ ] **Open `head_shell24_2mm_repaired.stl` in slicer and cross-section at hull Y ≈ −283 mm
+  (SCAD Y = BOW_FACE_Y = −283) to confirm bow flat face location.**
+  Adjust `BOW_FACE_Y` in `bow_sensor_pod.scad` until the flat face cross-section passes through
+  the flat-face geometry visible at the bow tip.
+- [ ] **Verify Dome A (dorsal camera) position: SCAD [161.33, −283, 83.08].**
+  Cross-section at Z = 83 mm (hull Z = 144 mm) to confirm the aperture circle lands inside the
+  hull skin at the bow face.  Adjust `DOME_A_Z` if the position is outside the hull wall.
+  **BLOCKS Dome A camera socket printing.**
+- [ ] **Verify Dome B (ventral ToF/laser) position: SCAD [161.33, −283, 60.08].**
+  Cross-section at Z = 60 mm (hull Z = 121 mm) to confirm the aperture lands inside hull skin.
+  Adjust `DOME_B_Z` if the position is outside the hull wall.
+  **BLOCKS Dome B ToF/laser socket printing.**
+- [ ] **Verify ToF pocket interior clearance.**  The TFmini-S body pocket is 36×20×22 mm deep;
+  confirm the pocket does not breach the head section interior structure at the bow.
+- [ ] **Verify laser bore clearance.**  The 12.5 mm × 38 mm bore angled 30° below horizon must
+  not intersect the Shepherd Book Faraday tray or any other interior feature.  Check in
+  slicer by sectioning along the bore axis direction.
+- [ ] **Verify all bow sensor apertures are within hull skin (no voids through foam core).**
+  The 2 mm CF-PETG skin must be intact around each aperture; confirm 2-wall annulus preserved.
+- [ ] **Run mesh validation** (`python3 tools/validate_stls.py`) after regenerating
+  `head_shell24_2mm_repaired.stl` from SCAD with bow pod cuts applied.  All findings to be
+  resolved before printing.
+
+###### Carrier and Bezel Parts (follow-on SCAD files)
+
+- [ ] **Design `bow_camera_bezel.scad`** — printed retainer cap that replaces the dorsal dome
+  geometry, contains 12 mm lens bore, 4× M2 threaded inserts, and 21×21 mm external flange
+  matching the hull socket recess.  2 mm CF-PETG, 4-perimeter, ≥ 40% infill.
+- [ ] **Design `bow_tof_laser_bezel.scad`** — printed assembly cap for dome B; contains
+  8 mm PMMA disc socket (ToF aperture), 12 mm laser exit bore (angled 30° down), external
+  flange.  Mounts flush at hull exterior.
+- [ ] **Source PMMA windows for both apertures:**
+  - Dome A: no window (camera lens exposed through hull bore, protected by bezel flange)
+  - Dome B ToF: 8 mm dia × 2 mm thick PMMA disc (uncoated; PMMA transmits 905 nm IR)
+  - Dome B laser: 5 mm dia × 2 mm PMMA exit window (optional; laser module may be sealed)
+
+###### Avionics Integration
+
+- [ ] **Wire TFmini-S UART to Shepherd Wash (Cape-A-2) UART2 port.**
+  Run 28 AWG 4-conductor (TX, RX, 5 V, GND) loom from bow pod area to Shepherd's Room bay.
+  Route inside head section interior; secure with cable saddles bonded to inner hull wall.
+  Shield pair twisted, overall braid shield grounded at Cape end only.
+  Firmware: add TFmini-S UART driver to Shepherd `serenity-fc` Phase 7 task list.
+- [ ] **Wire bow camera video output to Inara's stack video input** per camera/payload PACE
+  priority assignment (CLAUDE.md).  Use RG178 coax; keep run ≤ 300 mm to bow tip.
+- [ ] **Wire laser GPIO enable to Shepherd Wash GPIO** via 2N7002 N-channel MOSFET:
+  - Gate → Wash GPIO (via 10 kΩ series resistor)
+  - 10 kΩ pull-down to GND (default state: laser disabled)
+  - Source → GND
+  - Drain → laser anode via 10 Ω current-limit resistor (confirms ≤ 5 mW at rated voltage)
+  - Physical safety key-switch in series with enable GPIO per [REF-FDA-001 §1040.10(f)(1)]
+    before operating near persons.
+- [ ] **Add laser enable command to MAVLink C2 interface** [REF-PROTO-002] with explicit
+  operator acknowledgement required before energising (prevents accidental enable).
+- [ ] **Add standards REF-IDs to bow_sensor_pod.scad firmware integration notes** once driver
+  code is in place.  Ref: [REF-SENSOR-002] TFmini-S UART protocol, [REF-NIST-001 §2.1] ZTA.
+
+###### Mass Budget Entry
+
+- Bow camera (RunCam Nano 4 or equiv.): 3.6 g (0.13 oz) [REF-SENSOR-001]
+- TFmini-S ToF sensor: 5.0 g (0.18 oz) [REF-SENSOR-002]
+- Crosshair laser module: ≈ 8 g (0.28 oz) (estimate; varies by COTS supplier)
+- Printed bezels (2×): ≈ 4 g total (estimate; update from slicer mass report)
+- Wiring / connectors: ≈ 5 g (estimate)
+- **Total bow pod mass addition: ≈ 25.6 g (0.90 oz)**
+  Update master BOM `docs/bom_revR.json` once bezel masses confirmed in slicer.
+
+---
+
 ##### 1.1.1.0a *Blender-Canonical Source Adoption (Rev R1, 2026-06-13)*
 
 The four Blender-derived, 2 mm hollow, repaired fuselage shell STLs in

@@ -391,6 +391,35 @@ required before fabrication (see TODO.md §1.4 PCB DRC and isolation verificatio
 
 ---
 
+### REF-IEC-002: IEC 60825-1:2014+AMD1:2021 — Safety of Laser Products — Part 1: Equipment Classification and Requirements
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | International Electrotechnical Commission (IEC) |
+| **Edition** | Second edition 2014-05, consolidated with Amendment 1 (2021-11) |
+| **Official URL (purchase)** | https://webstore.iec.ch/en/publication/5587 |
+| **US equivalent** | ANSI Z136.1-2022 (American National Standard for Safe Use of Lasers) |
+| **FDA harmonization** | IEC 60825-1 is harmonized with FDA 21 CFR Part 1040 [REF-FDA-001]; devices meeting IEC 60825-1 classification satisfy FDA emission limits for the corresponding laser class |
+
+**Clauses applied in this project:**
+
+| Clause | Title | Application |
+|---|---|---|
+| §3.60 | Accessible emission limit (AEL) | AEL for Class 3R at 630–680 nm: ≤ 5 mW CW (≤ 1 mW × MPE ratio) |
+| §4.3.3 | Class 3R definition | Class 3R: low-risk lasers where direct beam viewing is hazardous; beam from diffuse reflection generally safe |
+| Table 3 | AEL values for continuous-wave lasers | 650 nm, Class 3R: AEL = 5 mW; confirms ≤ 5 mW crosshair laser is within Class 3R boundary |
+| §5.1 | Classification requirements | Manufacturer must classify laser product and provide required labels |
+| §5.4 | Engineering controls for Class 3R | Class 3R devices require interlocked protective housing; this design implements GPIO-controlled enable with pull-down default-off |
+
+**Applied to:** 12 mm OD crosshair-pattern laser module (5 mW, 650 nm) installed in the bow
+sensor pod (bow_sensor_pod.scad, BOW-LASER mount, dome B ventral position); bore-sighted
+at 30° below horizon on aircraft CL.
+
+**Used in:** `airframe/openscad/fuselage/bow_sensor_pod.scad`,
+`airframe/openscad/fuselage/head_shell24.scad`
+
+---
+
 ### REF-VDE-001: VDE V 0884-11:2017-01 — Optocouplers for Use in Electrical Equipment — Test and Measurement Methods
 
 | Field | Value |
@@ -582,6 +611,108 @@ per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ da
 | ASTM F3003 | Standard Specification for Quality Assurance of a Small Unmanned Aircraft System | May apply to flight testing |
 
 **Used in:** `CLAUDE.md`, `README.md`
+
+---
+
+## Part XI — FDA / CDRH Laser Product Regulations
+
+### REF-FDA-001: 21 CFR Part 1040 — Performance Standards for Light-Emitting Products
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | U.S. Food and Drug Administration (FDA), Center for Devices and Radiological Health (CDRH) |
+| **Current edition** | As amended through 2024 |
+| **Official URL** | https://www.ecfr.gov/current/title-21/chapter-I/subchapter-J/part-1040 |
+| **Parent subchapter** | 21 CFR Subchapter J — Radiological Health (https://www.ecfr.gov/current/title-21/chapter-I/subchapter-J) |
+| **Note** | Harmonized with IEC 60825-1 [REF-IEC-002] for laser emission limits. Applies to any laser product manufactured or imported for sale in the United States. |
+
+**Sections applied in this project:**
+
+| Section | Title | Application |
+|---|---|---|
+| §1040.10(b) | Classification | Laser products must be classified into one of four classes based on accessible emission levels |
+| §1040.10(d) | Performance requirements | Class 3R (21 CFR equivalent: Class IIIa): interlocks, emission indicator, beam attenuator required |
+| §1040.10(f)(1) | Safety interlock | Protective housing must incorporate a safety interlock preventing access to the beam; administrative GPIO control satisfies software interlock; physical interlock required for product shipment / commercial sale |
+| §1040.10(g) | Labels and warnings | Required laser radiation warning label on product housing; Class IIIa (3R) label text and symbol required |
+
+**Applied to:** 12 mm OD crosshair-pattern laser module (≤ 5 mW, 650 nm) in bow sensor pod.
+The laser module installed in this design is a commercial off-the-shelf (COTS) component;
+operator is responsible for confirming the COTS module carries required FDA/CDRH certification
+labels before installation.  The GPIO enable circuit (2N7002 MOSFET, default-off 10 kΩ
+pull-down) satisfies the software interlock requirement.  A physical safety key switch
+shall be wired in series with the enable GPIO line before this platform is operated in
+an environment where persons may be present in the beam path.
+
+**Used in:** `airframe/openscad/fuselage/bow_sensor_pod.scad`,
+`airframe/openscad/fuselage/head_shell24.scad`
+
+---
+
+## Part XII — Sensor and Component Specifications
+
+### REF-SENSOR-001: RunCam Nano 4 — 19 mm Nano Format FPV Camera Specification
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | RunCam Technology Co., Ltd. |
+| **Product** | RunCam Nano 4 (or equivalent 19 mm Nano format camera) |
+| **Official product page** | https://www.runcam.com/nano4 |
+| **Specification document** | RunCam Nano 4 product specification sheet (available at product page above) |
+| **Note** | This REF-ID covers the 19 mm Nano camera format standard as implemented by the RunCam Nano 4. Any 19 mm Nano format camera (19×19 mm body, M7 lens thread, 12 mm clear aperture, 4× M2 mount holes on 14×14 mm pitch) may be substituted provided it meets equivalent video output and environmental specifications. |
+
+**Specifications applied in this design:**
+
+| Parameter | Value | Source |
+|---|---|---|
+| Body dimensions | 19×19×19 mm | RunCam Nano 4 data sheet |
+| Lens aperture (clear) | 12 mm diameter | RunCam Nano 4 data sheet |
+| Mount hole pattern | 4× M2 on 14×14 mm pitch (±7 mm from lens centre) | Industry-standard 19 mm Nano mount |
+| Operating voltage | 5 V (nominal) | RunCam Nano 4 data sheet |
+| Weight | 3.6 g | RunCam Nano 4 data sheet |
+
+**Applied to:** Dome A (dorsal) bow camera socket in
+`airframe/openscad/fuselage/bow_sensor_pod.scad`; socket dimensions designed for 19 mm Nano
+format compatibility (CAM_APER_D = 12 mm, CAM_BEZ_W = 21 mm, CAM_M2_PITCH = 14 mm).
+
+**Used in:** `airframe/openscad/fuselage/bow_sensor_pod.scad`,
+`airframe/openscad/fuselage/head_shell24.scad`
+
+---
+
+### REF-SENSOR-002: Benewake TFmini-S — Long-Range Time-of-Flight Ranging Module Specification
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Benewake (Beijing) Co., Ltd. |
+| **Product** | TFmini-S Time-of-Flight Ranging Module |
+| **Official product page** | https://www.benewake.com/product/TFminiS.html |
+| **Technical manual** | TFmini-S Product Manual v1.0.x (available at product page above) |
+| **Note** | Selected for forward-ranging at the bow because its 12 m indoor / 7 m outdoor range substantially exceeds the VL53L5CX obstacle-avoidance sensors (4 m) used elsewhere in the airframe. Compact form factor (35×18.5×21 mm) fits within the narrow bow tip cross-section. |
+
+**Specifications applied in this design:**
+
+| Parameter | Value | Source |
+|---|---|---|
+| Range (indoor) | 0.1–12 m (SNR > 3, Lambertian target reflectance ≥ 10%) | TFmini-S Product Manual |
+| Range (outdoor) | 0.1–7 m (strong ambient light) | TFmini-S Product Manual |
+| Field of view | 2.3° (full angle) | TFmini-S Product Manual |
+| Update rate | 1–100 Hz (configurable) | TFmini-S Product Manual |
+| Interface | UART 115200 baud or I2C 400 kHz (software-selectable) | TFmini-S Product Manual |
+| Operating voltage | 4.5–6 V (5 V nominal) | TFmini-S Product Manual |
+| Current | 140 mA average; 800 mA peak | TFmini-S Product Manual |
+| Body dimensions | 35×18.5×21 mm (L × W × H) | TFmini-S Product Manual |
+| Optical aperture | 8 mm diameter (single TX/RX PMMA lens) | TFmini-S Product Manual |
+| Weight | 5 g | TFmini-S Product Manual |
+
+**Applied to:** Dome B (ventral) ToF sensor socket in
+`airframe/openscad/fuselage/bow_sensor_pod.scad`; pocket dimensions designed for
+TFmini-S body with 0.5 mm clearance per dimension (TOF_BODY_X = 36 mm,
+TOF_BODY_Y = 20 mm, TOF_BODY_D = 22 mm).  UART routed to Shepherd's room
+Wash (Cape-A-2) UART2 port; I2C available as fallback per Zero Trust data-path
+redundancy policy [REF-NIST-001 §2.1].
+
+**Used in:** `airframe/openscad/fuselage/bow_sensor_pod.scad`,
+`airframe/openscad/fuselage/head_shell24.scad`
 
 ---
 
