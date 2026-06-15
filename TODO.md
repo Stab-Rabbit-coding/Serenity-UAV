@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-06-14  
+**Last updated:** 2026-06-15  
 **Current design revision:** Rev R (2026-06-10) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 ---
@@ -882,30 +882,39 @@ Peak deceleration at 6 ft Phase 11 drop: 65.3g (avionics isolation rated for 100
 ##### 1.1.4.2 *Rear Skid Reinforcement*
 
 - [ ] **LG-03 CF rod channel in `middle_canonical_shell24.scad` rear skid arms** — add
-  3 mm bore channel (CF rod, ~140 mm per skid) per `docs/LANDING_GEAR_ANALYSIS.md §8`.
+  3 mm bore channel (CF rod, ~140 mm per skid) per `docs/LANDING_GEAR_ANALYSIS.md §10`.
   Re-export STL, re-bake, verify watertight.  **BLOCKS taxi test.**
 
 ##### 1.1.4.3 *Feet*
 
-- [ ] Verify existing TPU foot geometry (`feet_x_4_scaled24.stl`) fits the leg body foot
-  socket (22.4 × 10.4 mm, 20 mm deep cavity in `leg_body_r1.stl`).  Resize or regenerate
-  foot as needed to match the socket dimensions.  Print test in TPU 95A.
+- [ ] Verify SCAD PART="foot" produces foot pad 55 × 55 × 12 mm (TPU 95A) with correct
+  main strut socket (SOCK_MAIN_D = 14 mm bore, SOCK_MAIN_H = 8 mm deep) and 2× M3 bolt
+  holes.  Print test in TPU 95A and confirm main strut spigot fit.
 
-##### 1.1.4.4 *Fuse Qualification Testing (BLOCKS first flight)*
+##### 1.1.4.4 *Qualification Testing (BLOCKS first flight)*
 
-- [ ] **LG-01 Shear-test M3 × 12 PA6 nylon bolts** — fabricate 3 representative test
-  fixtures simulating the leg boss slot; test 10 samples each at 0°, 15°, and 30° off-axis.
-  Target: fuse load 848 N ± 150 N (190.7 ± 33.7 lbf) per leg (3 bolts combined).
-  Record results in `docs/LANDING_GEAR_ANALYSIS.md §7.3`.  **BLOCKS first flight.**
+- [ ] **LG-01 Lateral retention bolt test — M3 × 20 PA6 nylon** — fabricate representative
+  boss fixture (side-wall and belly-edge variants); shear-test 10 samples each at 0°, 15°,
+  30° off-axis.  Target per bolt: ≥ 282 N.  Record in `docs/LANDING_GEAR_ANALYSIS.md §9`.
+  **BLOCKS first flight.**
 
-- [ ] **LG-06 Drop test prototype leg** — mount a leg + foot assembly to a mass-equivalent
-  fixture (6.90 lbm / 3,130 g).  Drop from 1.5 ft (elastic) and 6 ft (design).  Confirm:
-  (a) elastic spring-back ≤1.5 ft; (b) no hull boss damage at 6 ft; (c) fuse activates
-  cleanly above design load.  Record peak g-force with shock logger.  **BLOCKS first flight.**
+- [ ] **LG-06 Drop test prototype leg assembly** — mount one complete trapezoidal brace
+  assembly to 6.90 lbm (3,130 g) fixture.  Drop from 1.5 ft and 6 ft.  Confirm: (a) no
+  hull boss damage; (b) PETG node crush is overload failure mode; (c) leg retained on
+  safety cord.  Log peak g.  **BLOCKS first flight.**
 
-- [ ] **LG-07 Confirm avionics Faraday enclosure 100g shock rating** — the 6 ft drop
-  produces 65.3g peak; enclosures must be verified to withstand ≥100g without losing
-  electrical continuity.  See avionics PCB fab checklist.  **BLOCKS first flight.**
+- [ ] **LG-07 Confirm avionics enclosure ≥ 100g shock rating.**  See PCB fab checklist.
+  **BLOCKS first flight.**
+
+- [ ] **LG-08 PETG junction node quasi-static compression test** — confirm crush onset ≥ 2×
+  design load (≥ 1,002 N per assembly).  Adjust node infill if needed.  **BLOCKS first flight.**
+
+- [ ] **LG-08 PETG junction hub quasi-static compression test** — compress one printed PETG
+  hub (25 % gyroid, HUB_R = 11 mm) at 1 mm/min in a fixture simulating the 4-strut load
+  distribution.  Record crush force, crush initiation load, and energy absorbed to 10 mm
+  deflection.  Refine peak-g estimate in `docs/LANDING_GEAR_ANALYSIS.md §4.3 and §6`.
+  Adjust hub infill or geometry if required to achieve crush onset ≥ 2× design load
+  (≥ 1,002 N per assembly) while keeping peak decel ≤ 100g.  **BLOCKS first flight.**
 
 
 

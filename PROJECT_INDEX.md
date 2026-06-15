@@ -166,8 +166,12 @@ landing-gear/
   foot_2_scaled24.stl           — Individual foot 2 (Thingiverse reference)
   foot_3_scaled24.stl           — Individual foot 3 (Thingiverse reference)
   foot_4_scaled24.stl           — Individual foot 4 (Thingiverse reference)
-  [leg_body_r1.stl]             — PENDING: Rev R1 engineered leg (generate from landing_leg_assy.scad PART="leg")
-  [hull_boss_r1.stl]            — PENDING: Rev R1 hull boss profile (PART="boss")
+  [arm_upper_r1.stl]            — PENDING: Rev R1.4 upper corner V-arm CF-PETG (PART="arm_upper"; 4 per aircraft; struts ≈77.6 mm)
+  [arm_lower_r1.stl]            — PENDING: Rev R1.4 lower corner V-arm CF-PETG (PART="arm_lower"; 4 per aircraft; struts ≈53.9 mm)
+  [main_strut_r1.stl]           — PENDING: Rev R1.4 main vertical strut CF-PETG OD18 mm × 143 mm (PART="main_strut"; 4 per aircraft)
+  [junct_node_r1.stl]           — PENDING: Rev R1.4 arm-to-strut junction node PETG crush zone R9 mm (PART="node"; 8 per aircraft)
+  [hull_boss_r1.stl]            — PENDING: Rev R1.4 generic hull boss cylinder CF-PETG OD22 mm (PART="boss"; 16 per aircraft; 4 per corner)
+  [foot_pad_r1.stl]             — PENDING: Rev R1.4 TPU 95A foot pad 55×55×12 mm (PART="foot"; 4 per aircraft)
 dorsal_antenna_fin.stl            — Dorsal antenna fin fairing
 middle_canonical_edf_intake.stl — Middle section EDF intake opening
 cargo/

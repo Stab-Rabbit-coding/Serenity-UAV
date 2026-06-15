@@ -1,350 +1,573 @@
 // ===========================================================================
 // HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11).  See CLAUDE.md.
-//   Hull frame (canonical for ALL design artifacts): X = +port (left),
-//   Y = +aft (back), Z = +dorsal (up); origin = SerenityAssembly.FCStd
-//   world origin.  Primary-component STLs published to airframe/stls/
-//   are stored directly in hull frame, baked by tools/bake_hull_frame.py
-//   (marker 'SerenityUAV HULL-FRAME R1' in the binary STL header).
-//   NEVER re-bake a mesh derived from an already-baked file.
-//
-//   This file:
-//     Parts are modeled in a local leg frame (Z = up along leg axis,
-//     X = across leg width, Y = through leg depth).  The assembly()
-//     module positions legs in hull frame at the HULL_ATTACH_POS[] array.
-//     After regeneration, export each PART individually to STL (no baking
-//     needed — landing gear parts are not primary-component STLs requiring
-//     bake_hull_frame.py; they mount inside the hull-frame assembly via
-//     the bosses defined in cargo_sect_shell24.scad).
+//   Hull frame: X = +port, Y = +aft, Z = +dorsal (up).
+//   Landing gear parts are in hull frame; NOT primary-component STLs;
+//   do NOT bake with bake_hull_frame.py.
 // ===========================================================================
 // ===========================================================================
 // landing_leg_assy.scad
-// Serenity UAV — Rev R1 — Landing Leg Assembly (Field-Replaceable, Fused)
+// Serenity UAV — Rev R1.4 — Landing Leg Assembly (Corner V-Brace Frame)
 // ===========================================================================
 //
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // Project : Serenity-class Tilt-Rotor UAV (24-inch scale, Firefly TV ship)
 // License : CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
-// Date    : 2026-06-14
-// Revision: Rev R1
+// Date    : 2026-06-15
+// Revision: Rev R1.4
 //
 // Description
 // -----------
-// Parametric landing leg assembly for the Serenity UAV.  The system
-// comprises four field-replaceable main legs (CF-PETG flat-spring
-// cantilevers) plus four TPU feet.  Two integral rear skids are built
-// into the horseshoe ring of the middle/rear section and are NOT
-// produced by this file.
+// Parametric landing leg assembly for the Serenity UAV.  Four leg assemblies
+// attach to the cargo section belly corners, one per corner.
 //
-// Structural design summary (see docs/LANDING_GEAR_ANALYSIS.md):
-//   - Design case: Phase 11 AUW 6.90 lbm (3,130 g), 6 ft (1,829 mm)
-//     vertical drop onto hard level surface.
-//   - Each of the 4 main legs absorbs 124 in-lbf (14.0 J) of kinetic
-//     energy through elastic/plastic cantilever bending.
-//   - Peak force at 6 ft drop: ~527 N (118.5 lbf) per leg → ~68.7g
-//     deceleration.  Avionics isolation mounts (Faraday enclosures) are
-//     rated for 100g shock; no direct 60g hard limit on airframe structure.
-//   - The flat-spring cantilever yields plastically above ~3 ft drop;
-//     the hull boss is protected by 3x M3 nylon shear bolts (FUSE_N)
-//     that sacrifice at ~850-950 N per leg (1.6–1.8× the 6 ft design
-//     force), well below the ~2000 N estimated hull boss fracture load.
-//   - After fuse activation: nylon bolt remnants are pushed out, leg
-//     replaced, new bolts installed.  Safety cord (TETHER_D hole in leg
-//     body) retains the detached leg so it does not fall into rotors or
-//     away from the aircraft.
-//   - Lateral loads at ±15° off-vertical: lateral force component is
-//     119 N per leg; bending stress in 22 × 10 mm section = 24.2 MPa
-//     (well within CF-PETG yield ≈ 55 MPa in the lateral bending plane).
+// Canonical geometry — corner V-brace frame:
 //
-// Print specifications:
-//   leg_body   : CF-PETG, 0.15 mm layer, 4 perimeters, 40% gyroid infill
-//                Print upright (long leg axis vertical) for optimal fiber
-//                alignment along the primary stress direction.
-//   hull_boss  : CF-PETG, same settings as leg_body, integral to cargo
-//                shell (see cargo_sect_shell24.scad).  Export via
-//                PART="boss" and use as a subtraction / addition reference
-//                when updating cargo_sect_shell24.scad belly geometry.
-//   TPU foot   : TPU 95A, 0.2 mm layer, 25% gyroid infill (existing
-//                Thingiverse geometry or regenerated from this file).
+//   Each corner has ONE MAIN VERTICAL STRUT hanging below the belly, braced
+//   by TWO ISOSCELES TRIANGULAR ARMS (upper + lower) to the hull corner.
 //
-// Thingiverse attribution:
-//   Original landing leg geometry derived from Serenity model by misubisu
-//   (Thingiverse thing:7330462, CC BY 4.0).  Cross-section dimensions,
-//   length, and boss/fuse/foot features redesigned for structural
-//   compliance.  Reference: <https://www.thingiverse.com/thing:7330462>
+//   Each arm (V-brace) has:
+//     BOSS A — on the END-WALL of the cargo (fore face for fore corners,
+//       aft face for aft corners).  Protrudes outward from that face.
+//       Position: ARM_HALF_SPREAD in hull-Y (toward nearest hull end face)
+//       from the strut centreline.
+//     BOSS B — on the OUTBOARD SIDE-WALL of the cargo (port face for port
+//       corners, stbd face for stbd corners).  Protrudes outward laterally.
+//       Position: ARM_HALF_SPREAD in hull-X (outboard) from strut centreline.
+//     CROSSBEAM — spans diagonally between Boss A and Boss B at the same Z,
+//       bridging the chamfered corner of the hull.
+//     TWO ARM STRUTS — equal-length diagonals from each boss down to the
+//       arm apex (strut junction node).
+//
+//   Isosceles proof: Boss A is ARM_HALF_SPREAD from apex in hull-Y;
+//   Boss B is ARM_HALF_SPREAD from apex in hull-X.  Because |ΔX| = |ΔY| and
+//   ΔZ is the same for both, both arm struts have equal length. ✓
+//
+//   Bottom view (cargo belly corner, looking up):
+//
+//       hull end-wall    hull side-wall
+//             \\                //
+//               [A]===========[ B]   ← crossbeam (diagonal across chamfer)
+//                  \         /
+//                   \  arms /
+//                    \     /
+//                     [ ● ]          ← strut centreline (apex node)
+//                       |
+//                       |  main strut
+//                       ▼
+//                     [foot]
+//
+//   Side view (45° diagonal from centreline, looking toward corner):
+//
+//       \\  hull corner
+//       /  \\
+//     /      [====≈====]  ← crossbeam at side wall
+//     ||   /
+//     ||  /   ← arm strut (both arms overlap at 45° view, appear as one line)
+//     ||
+//     ||       ← main vertical strut
+//
+//   UPPER ARM: Boss A + Boss B at Z = UPPER_BOSS_Z (cargo side wall, above belly).
+//     Apex (upper node) at Z = UPPER_APEX_Z (strut top, just below belly).
+//   LOWER ARM: Boss A + Boss B at Z = LOWER_BOSS_Z (belly-edge transition).
+//     Apex (lower node) at Z = LOWER_APEX_Z (strut, partway down).
+//
+//   Trapezoidal frame profile in side view (YZ plane at 45° cut):
+//     Hull side (end + outboard): UPPER_BOSS_Z − LOWER_BOSS_Z = 65 mm
+//     Strut side:                 UPPER_APEX_Z − LOWER_APEX_Z = 40 mm
+//     (unequal → confirmed trapezoid, not parallelogram) ✓
+//
+// Prior revisions superseded:
+//   Rev R1.3 (2026-06-15): trapezoidal brace with fore-aft arm spread — SUPERSEDED
+//   Rev R1.2 / R1.1 / R1 — pyramid and flat-plate variants — SUPERSEDED
+//
+// Structural design (see docs/LANDING_GEAR_ANALYSIS.md Rev R1.4 — TODO LG-09):
+//   - Design case: Phase 11 AUW 6.90 lbm (3,130 g), 6 ft (1,829 mm) drop.
+//   - KE per leg = 124 in-lbf (14.0 J).
+//   - Primary load path: foot → main strut → upper arm apex → two arm struts
+//     (compression) → hull bosses on end-wall and side-wall.
+//   - Arm strut compression margin > 10× (Euler buckling 5,300 N >> 78 N design).
+//   - PETG junction nodes (25 % gyroid) crush at ≈ 2× design load.
+//   - 1× M3 PA6 nylon bolt per boss (4 per leg) for lateral retention.
+//   - Safety cord: 2 mm Dyneema, hub → column bore → boss → anchor post inside hull.
+//
+// Printable parts:
+//   arm_upper : CF-PETG, 0.15 mm, 4 perimeters, 40 % gyroid.  Print flat.
+//               4 per aircraft (1 per corner).  Same shape for all 4 corners
+//               (isosceles triangle, base ARM_XBEAM_L, equal sides ≈ 77.6 mm).
+//   arm_lower : CF-PETG, same.  4 per aircraft.
+//               (equal sides ≈ 53.9 mm, same base ARM_XBEAM_L).
+//   main_strut: CF-PETG, 4 perimeters, 40 % gyroid.  Print upright.  4/aircraft.
+//   node      : PETG 25 % gyroid (crush zone).  2 per corner = 8 per aircraft.
+//   boss_face : CF-PETG, integral to cargo shell.  4 orientations (see below).
+//   foot      : TPU 95A, 25 % gyroid.  4 per aircraft.
+//
+// Attribution:
+//   Canonical landing leg geometry: Firefly/Serenity (TV/film), Joss Whedon.
+//   Reference hull model: misubisu, Thingiverse thing:4677565, CC BY 4.0.
+//   <https://www.thingiverse.com/thing:4677565>
 //
 // Standards applied:
-//   Fabrication materials per CLAUDE.md §Fabrication Standards.
-//   Fastener shear fuse design uses M3 nylon (PA6) bolts — shear
-//   strength ~40 MPa per ASTM D638 (Type I, PA6); verification testing
-//   required before first flight.  See docs/LANDING_GEAR_ANALYSIS.md §7.
-//   Lateral load case per ±15° off-vertical scenario;
-//   see docs/LANDING_GEAR_ANALYSIS.md §4 for analysis details.
+//   Fabrication per CLAUDE.md §Fabrication Standards.
+//   Nylon bolt shear per ASTM D638 (Type I, PA6).  Verify before first
+//   flight (TODO.md LG-01).
+//   Lateral load ±15° per docs/LANDING_GEAR_ANALYSIS.md §5 Rev R1.4.
 //
-// Usage
-// -----
-// Set PART to render a specific component:
-//   PART = "leg"   — leg body (CF-PETG), print orientation: upright
-//   PART = "boss"  — hull boss profile (reference; integrate into cargo shell)
-//   PART = "assy"  — full assembly view in hull frame (not for export)
+// Usage — set PART to render:
+//   PART = "assy"       Full assembly, all 4 corners (hull frame view)
+//   PART = "arm_upper"  Upper arm V-brace frame, print orientation (flat)
+//   PART = "arm_lower"  Lower arm V-brace frame, print orientation (flat)
+//   PART = "main_strut" Main vertical strut, print orientation (upright)
+//   PART = "node"       Arm-to-strut junction node, print orientation
+//   PART = "boss"       Hull boss cylinder (reference, one example)
+//   PART = "foot"       TPU foot pad, print orientation (flat)
 //
-// To render STLs (from repo root):
-//   openscad -o airframe/stls/fuselage/landing-gear/leg_body_r1.stl \
-//     -D 'PART="leg"' \
-//     airframe/openscad/fuselage/landing_leg_assy.scad
-//
+// STL export commands (from repo root):
+//   openscad -o airframe/stls/fuselage/landing-gear/arm_upper_r1.stl \
+//     -D 'PART="arm_upper"' airframe/openscad/fuselage/landing_leg_assy.scad
+//   openscad -o airframe/stls/fuselage/landing-gear/arm_lower_r1.stl \
+//     -D 'PART="arm_lower"' airframe/openscad/fuselage/landing_leg_assy.scad
+//   openscad -o airframe/stls/fuselage/landing-gear/main_strut_r1.stl \
+//     -D 'PART="main_strut"' airframe/openscad/fuselage/landing_leg_assy.scad
+//   openscad -o airframe/stls/fuselage/landing-gear/junct_node_r1.stl \
+//     -D 'PART="node"' airframe/openscad/fuselage/landing_leg_assy.scad
 //   openscad -o airframe/stls/fuselage/landing-gear/hull_boss_r1.stl \
-//     -D 'PART="boss"' \
-//     airframe/openscad/fuselage/landing_leg_assy.scad
+//     -D 'PART="boss"' airframe/openscad/fuselage/landing_leg_assy.scad
+//   openscad -o airframe/stls/fuselage/landing-gear/foot_pad_r1.stl \
+//     -D 'PART="foot"' airframe/openscad/fuselage/landing_leg_assy.scad
 // ===========================================================================
 
 // ---------------------------------------------------------------------------
 // Render control
 // ---------------------------------------------------------------------------
-
-// Which part to render.  Set from command line with -D 'PART="leg"' etc.
-PART = "assy";   // "leg" | "boss" | "assy"
+PART = "assy";  // see Usage above
 
 // ---------------------------------------------------------------------------
-// Primary dimensional parameters
+// Arm strut + crossbeam tube parameters (same profile for both)
 // ---------------------------------------------------------------------------
 
-// Leg cross-section (flat spring plate geometry)
-LEG_W       = 22;      // mm — plate width (across, resists lateral bending)
-LEG_D       = 10;      // mm — plate depth/thickness (bending spring direction)
-LEG_WALL    = 2.5;     // mm — wall thickness, CF-PETG box section
-
-// Leg length breakdown
-FOOT_SOCKET_L   = 20;  // mm — depth of the foot socket at leg bottom
-SPRING_L        = 145; // mm — free cantilever spring length (effective)
-BOSS_INSERT_L   = 20;  // mm — stub that enters hull boss from below
-LEG_TOTAL_L = FOOT_SOCKET_L + SPRING_L + BOSS_INSERT_L; // 185 mm total
-
-// Splay geometry (applied in assembly(); leg_body() is modeled straight)
-SPLAY_ANGLE = 30;  // deg — outboard angle from vertical (in ±X hull direction)
-TOE_ANGLE   = 10;  // deg — forward lean (tip is hull-Y-forward of boss)
-
-// Hull boss geometry
-HULL_BOSS_W     = 30;  // mm — boss outer width (>= LEG_W + 2*BOSS_WALL)
-HULL_BOSS_D     = 18;  // mm — boss outer depth (>= LEG_D + 2*BOSS_WALL)
-HULL_BOSS_H     = 28;  // mm — boss height below cargo belly (>= BOSS_INSERT_L + clearance)
-HULL_BOSS_WALL  = 4;   // mm — boss wall thickness (CF-PETG, 4 perimeters)
-HULL_BOSS_FILLET = 3;  // mm — boss-to-belly blend fillet radius
-
-// Safety tether
-TETHER_D    = 4.0; // mm — Dyneema cord hole through leg body (2 mm Dyneema line)
-TETHER_Z    = FOOT_SOCKET_L + SPRING_L - 20; // mm — from leg base (near top of spring)
+ARM_OD      = 12.0;   // mm — arm strut and crossbeam outer diameter
+ARM_WALL    =  2.0;   // mm — wall thickness (CF-PETG hollow tube, ID = 8 mm)
 
 // ---------------------------------------------------------------------------
-// Fastener parameters
+// Main vertical strut parameters
 // ---------------------------------------------------------------------------
 
-// M3 clearance (nylon shear bolts — fuse mechanism, through boss insert stub)
-M3_CLR      = 3.4;  // mm — M3 clearance hole diameter
-FUSE_N      = 3;    // count — M3 nylon shear bolts per leg (fuse)
-// Bolt rows spaced evenly in the BOSS_INSERT_L zone
-// Fuse load per bolt (40 MPa shear, PA6): 40 × π×3²/4 = 282.7 N
-// Total fuse load: 3 × 282.7 = 848 N per leg (190.7 lbf) — see analysis doc
-
-// M3 clearance (steel screws — foot retention, through foot socket bottom flange)
-FOOT_BOLT_D = 3.4;  // mm — M3 clearance for foot screws
-FOOT_BOLT_N = 2;    // count — M3 SS screws retaining TPU foot
-FOOT_BOLT_PITCH = 12; // mm — spacing between foot bolt centres
-
-// M4 heat-set insert in hull boss (main structural attachment, NOT fuse)
-// OBSOLETED in Rev R1 — all attachment load is carried through the
-// nylon fuse bolts only; hull boss slot walls bear the lateral load.
-// Heat-set inserts are therefore NOT used in the hull boss in this revision.
+MAIN_OD     = 18.0;   // mm — main strut outer diameter
+MAIN_WALL   =  2.5;   // mm — wall thickness (CF-PETG, ID = 13 mm)
 
 // ---------------------------------------------------------------------------
-// Hull boss attachment positions (hull frame, Z = cargo belly bottom ≈ +5 mm)
+// Arm-to-strut junction node parameters (PETG crush zone)
 // ---------------------------------------------------------------------------
-// Approximate positions — verify against cargo_sect_shell24.scad belly geometry
-// before machining boss sockets into the cargo shell STL.
+
+NODE_R      =  9.0;   // mm — junction sphere radius
+SOCK_DEPTH  = 11.0;   // mm — arm strut socket bore depth in node
+SOCK_CLR    =  0.4;   // mm — total diametral clearance for socket bore
+MAIN_SOCK_D = 18.4;   // mm — main strut socket bore diameter (MAIN_OD + CLR)
+TETHER_D    =  4.5;   // mm — Dyneema cord axial hole through node
+
+// ---------------------------------------------------------------------------
+// Hull boss cylinder parameters (same for all 4 boss orientations)
+// ---------------------------------------------------------------------------
+
+BOSS_OD     = 22.0;   // mm — boss outer diameter
+BOSS_H      = 30.0;   // mm — boss protrusion from hull face
+// Boss bore: ARM_OD + SOCK_CLR = 12.4 mm; wall = (22−12.4)/2 = 4.8 mm
+M3_CLR      =  3.4;   // mm — M3 nylon retention bolt clearance hole
+ANCHOR_OD   =  5.0;   // mm — Dyneema anchor post OD (inside hull)
+ANCHOR_H    =  8.0;   // mm — anchor post height (inside hull, away from face)
+
+// ---------------------------------------------------------------------------
+// Foot pad parameters (TPU 95A)
+// ---------------------------------------------------------------------------
+
+FOOT_W      = 55.0;   // mm — foot width  (hull X)
+FOOT_L      = 55.0;   // mm — foot length (hull Y)
+FOOT_H      = 12.0;   // mm — foot height
+FOOT_R      =  5.0;   // mm — corner fillet radius
+FOOT_SOCK_D = 14.0;   // mm — main strut spigot OD (column bottom inserts here)
+FOOT_SOCK_H =  8.0;   // mm — foot socket depth
+FOOT_M3_D   =  3.4;   // mm — M3 retention screw clearance
+FOOT_M3_P   = 14.0;   // mm — M3 bolt spacing
+
+// ---------------------------------------------------------------------------
+// Arm geometry — spread and attachment heights
+// ---------------------------------------------------------------------------
+
+// Both bosses of each arm are ARM_HALF_SPREAD from the strut centreline:
+//   Boss A: ARM_HALF_SPREAD toward the hull end-wall (fore or aft in hull-Y)
+//   Boss B: ARM_HALF_SPREAD outboard (in hull-X × side)
+// Because |ΔX| = |ΔY| = ARM_HALF_SPREAD and ΔZ is the same for both,
+// both arm struts have equal length → isosceles triangle. ✓
+ARM_HALF_SPREAD = 20.0;   // mm
+
+// Z heights (hull frame; positive = above cargo belly):
+UPPER_BOSS_Z    = 70.0;   // mm — upper arm boss pair on cargo side wall
+LOWER_BOSS_Z    =  5.0;   // mm — lower arm boss pair at belly-edge transition
+UPPER_APEX_Z    = -5.0;   // mm — upper arm strut junction (strut top, just below belly)
+LOWER_APEX_Z    = -45.0;  // mm — lower arm strut junction (strut lower node)
+STRUT_BOT_Z     = -148.0; // mm — foot top face (main strut bottom)
+
+// Derived geometry (documentation):
+//   Upper arm strut length: sqrt(20²+20²... no: sqrt(20² + 75²) ≈ 77.6 mm
+//     (ΔX or ΔY = ARM_HALF_SPREAD = 20; ΔZ = UPPER_BOSS_Z − UPPER_APEX_Z = 75)
+//   Lower arm strut length: sqrt(20² + 50²) ≈ 53.9 mm
+//     (ΔZ = LOWER_BOSS_Z − LOWER_APEX_Z = 50)
+//   Crossbeam length: sqrt(20²+20²) = 20√2 ≈ 28.3 mm (diagonal across corner)
+//   Main strut length: UPPER_APEX_Z − STRUT_BOT_Z = 143 mm
+//   Total ground clearance: 148 + FOOT_H = 160 mm (6.3 in)
+
+// ---------------------------------------------------------------------------
+// Hull frame corner positions
+// ---------------------------------------------------------------------------
+
+// Format: [X_strut, Y_strut, Z=0, side, fa_sign]
+//   side    = +1 port (Boss B toward +X), -1 stbd (Boss B toward -X)
+//   fa_sign = -1 fore corner (Boss A toward -Y / fore face)
+//             +1 aft  corner (Boss A toward +Y / aft  face)
 //
-// In hull frame: X = +port, Y = +aft, Z = +dorsal.
-// Cargo belly Z ≈ +5 mm (2 mm shell + 3 mm boss floor above belly).
-// Port side = hull +X; stbd side = hull -X.
-// Legs splay outboard: port legs splay in +X, stbd legs splay in -X.
+// Strut positions set so bosses land on the respective hull faces:
+//   Boss A (end-wall): Y_strut + fa_sign * ARM_HALF_SPREAD
+//   Boss B (side-wall): X_strut + side   * ARM_HALF_SPREAD
 //
-// Format: [X, Y, Z, side]  side = +1 port, -1 stbd
+// Cargo_Shell extents (hull frame, baked R1):
+//   X: -267.0 .. -72.7   Y: -71.5 .. +132.0
+//   Port belly edge ≈ X = -72.7; stbd ≈ X = -267.0
+//   Fore belly edge ≈ Y = -71.5; aft  ≈ Y = +132.0
+//
+// With ARM_HALF_SPREAD = 20:
+//   Port-fore: Boss A at Y=-71 (≈fore edge), Boss B at X=-73 (≈port edge) ✓
+//   Stbd-fore: Boss A at Y=-71 (≈fore edge), Boss B at X=-267 (≈stbd edge) ✓
+//   Port-aft:  Boss A at Y=+132(≈aft  edge), Boss B at X=-73 (≈port edge) ✓
+//   Stbd-aft:  Boss A at Y=+132(≈aft  edge), Boss B at X=-267 (≈stbd edge) ✓
+// Verify exact positions in FreeCAD (TODO.md LG-04).
 HULL_ATTACH_POS = [
-    [ -100,  25,  5,  1 ],  // Port-fore (Shepherd's room area)
-    [ -240,  25,  5, -1 ],  // Stbd-fore (Inara's shuttle area)
-    [ -100, 100,  5,  1 ],  // Port-aft  (River's room area)
-    [ -240, 100,  5, -1 ],  // Stbd-aft  (Simon's medbay area)
+    [  -93,  -51, 0,  1, -1 ],  // Port-fore (Shepherd's room area)
+    [ -247,  -51, 0, -1, -1 ],  // Stbd-fore (Inara's shuttle area)
+    [  -93, +112, 0,  1, +1 ],  // Port-aft  (River's room area)
+    [ -247, +112, 0, -1, +1 ],  // Stbd-aft  (Simon's medbay area)
 ];
 
 // ---------------------------------------------------------------------------
-// $fn for curved surfaces
+// Resolution
 // ---------------------------------------------------------------------------
-$fn = 32;
+$fn = 48;
 
-// ---------------------------------------------------------------------------
-// Module: leg_body()
-// CF-PETG flat-spring cantilever leg.  Print upright (leg axis = Z).
-// Origin: foot bottom face at Z=0; hull boss insert stub extends from
-// Z = FOOT_SOCKET_L + SPRING_L to Z = LEG_TOTAL_L.
-// ---------------------------------------------------------------------------
-module leg_body() {
+// ===========================================================================
+// MODULE: tube(len, od, wall)
+// Hollow cylindrical tube along +Z from origin, length = len.
+// ===========================================================================
+module tube(len, od, wall) {
+    difference() {
+        cylinder(h = len, d = od);
+        translate([0, 0, -0.1])
+            cylinder(h = len + 0.2, d = od - 2 * wall);
+    }
+}
+
+// ===========================================================================
+// MODULE: strut_between(pt_a, pt_b, od, wall)
+// Hollow tube between two arbitrary 3-D points.
+// Spherical decomposition aligns local +Z with the connecting vector.
+// ===========================================================================
+module strut_between(pt_a, pt_b, od, wall) {
+    v       = pt_b - pt_a;
+    len     = norm(v);
+    polar   = atan2(norm([v[0], v[1]]), v[2]);
+    azimuth = atan2(v[1], v[0]);
+    translate(pt_a)
+        rotate([0, 0, azimuth])
+        rotate([0, polar, 0])
+            tube(len, od, wall);
+}
+
+// ===========================================================================
+// MODULE: arm_v_brace(boss_a, boss_b, apex)
+// One isosceles triangular arm (V-brace):
+//   crossbeam  — boss_a to boss_b (diagonal across hull corner)
+//   arm strut A — boss_a to apex (equal length as arm strut B)
+//   arm strut B — boss_b to apex
+// All tubes use ARM_OD and ARM_WALL.
+// ===========================================================================
+module arm_v_brace(boss_a, boss_b, apex) {
+    strut_between(boss_a, boss_b, ARM_OD, ARM_WALL);  // crossbeam
+    strut_between(boss_a, apex,   ARM_OD, ARM_WALL);  // arm strut A
+    strut_between(boss_b, apex,   ARM_OD, ARM_WALL);  // arm strut B
+}
+
+// ===========================================================================
+// MODULE: junction_node(boss_a_offset, boss_b_offset)
+// Arm-to-strut junction node (PETG crush zone).  Origin = node centre.
+//
+// The node has:
+//   2 arm-strut socket bores (pointing toward Boss A and Boss B)
+//   1 main-strut bore (axial, through node in ±Z)
+//   1 Dyneema tether hole (axial, same bore as main strut channel)
+//
+// boss_a_offset and boss_b_offset: vectors from node centre toward each boss.
+// Used to orient the two arm socket bores.
+// ===========================================================================
+module junction_node(boss_a_offset, boss_b_offset) {
+    difference() {
+        sphere(r = NODE_R);
+
+        // Two arm-strut socket bores
+        for (boff = [boss_a_offset, boss_b_offset]) {
+            pol = atan2(norm([boff[0], boff[1]]), boff[2]);
+            az  = atan2(boff[1], boff[0]);
+            rotate([0, 0, az])
+            rotate([0, pol, 0])
+                translate([0, 0, NODE_R - 0.1])
+                    cylinder(h = SOCK_DEPTH + 0.1, d = ARM_OD + SOCK_CLR);
+        }
+
+        // Main strut bore (passes through node; strut slides through)
+        translate([0, 0, -NODE_R - SOCK_DEPTH + 0.1])
+            cylinder(h = 2 * NODE_R + SOCK_DEPTH, d = MAIN_SOCK_D);
+
+        // Tether cord channel (concentric with main bore)
+        translate([0, 0, -NODE_R - 0.1])
+            cylinder(h = 2 * NODE_R + 0.2, d = TETHER_D);
+    }
+}
+
+// ===========================================================================
+// MODULE: hull_boss_face(face_az)
+// Generic hull boss cylinder protrudes from a hull face in the direction
+// given by face_az (azimuth angle in hull XY plane, degrees):
+//   face_az =   0°  → protrudes in hull +X (out port face, for port Boss B)
+//   face_az =  90°  → protrudes in hull +Y (out aft  face, for aft  Boss A)
+//   face_az = 180°  → protrudes in hull -X (out stbd face, for stbd Boss B)
+//   face_az = 270° (=-90°) → protrudes in hull -Y (out fore face, for fore Boss A)
+//
+// Origin: centre of the boss top face (flush with hull outer surface).
+// Boss cylinder protrudes OUTWARD by BOSS_H from the hull surface.
+// Anchor post protrudes INWARD by ANCHOR_H (inside hull for Dyneema).
+// ===========================================================================
+module hull_boss_face(face_az) {
+    bore_d = ARM_OD + SOCK_CLR;  // 12.4 mm — arm strut end inserts from outside
+
+    // Rotate so boss protrudes in the face_az direction (hull XY plane)
+    rotate([0, 0, face_az])       // azimuth in hull XY
+    rotate([0, -90, 0])           // pivot so +Z (cylinder axis) → +X then rotate to face_az
     difference() {
         union() {
-            // Boss insert stub (solid for shear bolt clamping — no hollow)
-            translate([0, 0, FOOT_SOCKET_L + SPRING_L])
-                cube([LEG_W, LEG_D, BOSS_INSERT_L]);
-
-            // Spring body — hollow box tube for weight saving
-            translate([0, 0, FOOT_SOCKET_L])
-                cube([LEG_W, LEG_D, SPRING_L]);
-
-            // Foot socket outer walls (foot TPU presses in from below)
-            cube([LEG_W, LEG_D, FOOT_SOCKET_L]);
+            // Boss body (protrudes outward from hull face, along +Z in local frame)
+            cylinder(h = BOSS_H, d = BOSS_OD);
+            // Anchor post inside hull (along -Z in local frame)
+            translate([0, 0, -ANCHOR_H])
+                cylinder(h = ANCHOR_H, d = ANCHOR_OD);
         }
 
-        // --- Hollow the spring body (box tube) ---
-        // Leave LEG_WALL on all four sides; stop WALL above foot socket
-        translate([LEG_WALL, LEG_WALL, FOOT_SOCKET_L + LEG_WALL])
-            cube([
-                LEG_W - 2*LEG_WALL,
-                LEG_D - 2*LEG_WALL,
-                SPRING_L - 2*LEG_WALL
-            ]);
+        // Arm strut socket bore (arm inserts from outside; 2 mm solid bearing floor)
+        translate([0, 0, 2])
+            cylinder(h = BOSS_H, d = bore_d);
 
-        // --- Foot socket cavity (open bottom, receives TPU foot) ---
-        translate([LEG_WALL, LEG_WALL, 0])
-            cube([
-                LEG_W - 2*LEG_WALL,
-                LEG_D - 2*LEG_WALL,
-                FOOT_SOCKET_L + 0.1   // small overcut to ensure clean opening
-            ]);
+        // M3 retention / fuse bolt (transverse — in local Y direction through boss)
+        translate([0, -BOSS_OD / 2 - 1, BOSS_H * 0.55])
+            rotate([-90, 0, 0])
+                cylinder(h = BOSS_OD + 2, d = M3_CLR);
 
-        // --- 3× M3 nylon shear bolt holes through boss insert stub ---
-        // Bolts pass through the stub in the Y direction (through 10 mm depth)
-        // Rows are evenly distributed along the BOSS_INSERT_L zone
-        for (i = [0:FUSE_N-1]) {
-            z_bolt = FOOT_SOCKET_L + SPRING_L + (i + 0.5) * (BOSS_INSERT_L / FUSE_N);
-            translate([LEG_W/2, -1, z_bolt])
-                rotate([-90, 0, 0])
-                    cylinder(h = LEG_D + 2, d = M3_CLR);
-        }
-
-        // --- 2× M3 foot retention screws (from sole/bottom, into foot) ---
-        // These are clearance holes in the bottom flange of the foot socket
-        translate([LEG_W/2 - FOOT_BOLT_PITCH/2, LEG_D/2, -1])
-            cylinder(h = LEG_WALL + 2, d = FOOT_BOLT_D);
-        translate([LEG_W/2 + FOOT_BOLT_PITCH/2, LEG_D/2, -1])
-            cylinder(h = LEG_WALL + 2, d = FOOT_BOLT_D);
-
-        // --- Safety tether hole (through leg width, near top of spring zone) ---
-        // 2 mm Dyneema safety cord; hole through the X dimension of the leg
-        translate([-1, LEG_D/2, TETHER_Z])
-            rotate([0, 90, 0])
-                cylinder(h = LEG_W + 2, d = TETHER_D);
+        // Tether cord pass-through (axial, from outside through anchor post)
+        translate([0, 0, -ANCHOR_H - 0.1])
+            cylinder(h = BOSS_H + ANCHOR_H + 0.2, d = TETHER_D);
     }
 }
 
-// ---------------------------------------------------------------------------
-// Module: hull_boss()
-// Hull boss receiver — integral to cargo belly shell (CF-PETG).
-// Use as a reference / subtraction block when updating cargo_sect_shell24.scad.
-// Origin: top face at Z=0 (flush with cargo belly inner face); boss extends
-// downward (−Z direction in hull frame) by HULL_BOSS_H.
-// ---------------------------------------------------------------------------
-module hull_boss() {
+// ===========================================================================
+// MODULE: foot_pad()
+// TPU 95A foot pad.  Origin: sole bottom face at Z = 0.
+// Printed flat.  Main strut spigot inserts from above into central socket.
+// ===========================================================================
+module foot_pad() {
     difference() {
-        // Boss outer body (solid block)
-        translate([-HULL_BOSS_W/2, -HULL_BOSS_D/2, -HULL_BOSS_H])
-            cube([HULL_BOSS_W, HULL_BOSS_D, HULL_BOSS_H]);
-
-        // Leg insert slot — accepts boss insert stub from below
-        // Clearance 0.2 mm all around for easy assembly
-        translate([-(LEG_W/2 + 0.2), -(LEG_D/2 + 0.2), -HULL_BOSS_H - 1])
-            cube([LEG_W + 0.4, LEG_D + 0.4, BOSS_INSERT_L + 1]);
-
-        // 3× M3 nylon shear bolt holes — align with leg_body() holes
-        for (i = [0:FUSE_N-1]) {
-            z_bolt = -HULL_BOSS_H + (i + 0.5) * (BOSS_INSERT_L / FUSE_N);
-            translate([0, -HULL_BOSS_D/2 - 1, z_bolt])
-                rotate([-90, 0, 0])
-                    cylinder(h = HULL_BOSS_D + 2, d = M3_CLR);
+        // Rounded rectangular pad body
+        hull() {
+            for (dx = [-(FOOT_W/2 - FOOT_R), (FOOT_W/2 - FOOT_R)])
+                for (dy = [-(FOOT_L/2 - FOOT_R), (FOOT_L/2 - FOOT_R)])
+                    translate([dx, dy, 0])
+                        cylinder(h = FOOT_H, r = FOOT_R);
         }
 
-        // Safety tether cord pass-through to airframe interior
-        // (allows Dyneema cord to route from leg tether hole up into the airframe)
-        translate([0, 0, -HULL_BOSS_H/2])
-            rotate([0, 90, 0])
-                cylinder(h = HULL_BOSS_W, d = TETHER_D + 1, center = true);
+        // Main strut spigot socket (from top face down)
+        translate([0, 0, FOOT_H - FOOT_SOCK_H + 0.1])
+            cylinder(h = FOOT_SOCK_H + 0.1, d = FOOT_SOCK_D);
+
+        // 2× M3 retention screws from sole upward
+        for (dx = [-FOOT_M3_P / 2, FOOT_M3_P / 2])
+            translate([dx, 0, -0.1])
+                cylinder(h = 3.0 + 0.2, d = FOOT_M3_D);
     }
 }
 
-// ---------------------------------------------------------------------------
-// Module: single_leg_in_hull_frame(pos, side)
-// Places a leg body in the hull frame coordinate system at the given
-// attachment position, applying splay and toe angles.
-// pos = [X, Y, Z, side] from HULL_ATTACH_POS
-// side = +1 for port (splay in +X), -1 for stbd (splay in -X)
-// ---------------------------------------------------------------------------
-module single_leg_in_hull_frame(pos) {
-    x     = pos[0];
-    y     = pos[1];
-    z     = pos[2];
-    side  = pos[3];
+// ===========================================================================
+// MODULE: one_leg_assembly(corner)
+// Full corner V-brace leg assembly for one cargo corner in hull frame.
+//
+//   corner = [X_strut, Y_strut, 0, side, fa_sign] from HULL_ATTACH_POS
+//     side    = +1 port, -1 stbd
+//     fa_sign = -1 fore corner, +1 aft corner
+//
+// Boss positions in hull frame:
+//   Boss A (end-wall):  [X_c,                    Y_c + fa*SPREAD, Z_boss]
+//   Boss B (side-wall): [X_c + side*SPREAD,       Y_c,            Z_boss]
+// ===========================================================================
+module one_leg_assembly(corner) {
+    cx      = corner[0];
+    cy      = corner[1];
+    side    = corner[3];
+    fa      = corner[4];   // fore/aft sign: -1 = fore, +1 = aft
 
-    translate([x, y, z]) {
-        // Apply splay (outboard in ±X) and toe (forward = -Y in hull frame)
-        // Hull +X = port; leg splay is outboard so:
-        //   port leg splays in +X → rotate about hull -Y axis by +SPLAY_ANGLE
-        //   stbd leg splays in -X → rotate about hull -Y axis by -SPLAY_ANGLE
-        // Toe: forward lean tilts the top of the leg aft (+Y) and the foot fwd (-Y)
-        //   → rotate about hull -X axis by +TOE_ANGLE for both port and stbd
-        rotate([-TOE_ANGLE, side * (-SPLAY_ANGLE), 0]) {
-            // Leg in local frame: Z=up, origin at boss top.
-            // In hull frame Z=dorsal(up). Leg hangs downward, so flip:
-            // leg local Z → hull -Z direction when hanging.
-            translate([0, 0, -LEG_TOTAL_L])
-                rotate([0, 180, 0])
-                    translate([-LEG_W/2, -LEG_D/2, 0])
-                        leg_body();
-        }
+    sp = ARM_HALF_SPREAD;
+
+    // --- Boss positions (at hull faces, same XY for upper and lower) ---
+    // Boss A: on hull end-wall (fore or aft face)
+    ba_pos = [cx,          cy + fa * sp, 0];  // XY position; Z added per arm below
+    // Boss B: on hull side-wall (port or stbd face)
+    bb_pos = [cx + side * sp, cy,        0];  // XY position
+
+    // Boss A faces outward from the end wall:
+    //   fore corner (fa=-1): outward normal = -Y → face_az = 270° (= -90°)
+    //   aft  corner (fa=+1): outward normal = +Y → face_az =  90°
+    ba_az = (fa == -1) ? 270 : 90;
+
+    // Boss B faces outward from the side wall:
+    //   port (side=+1): outward normal = +X → face_az = 0°
+    //   stbd (side=-1): outward normal = -X → face_az = 180°
+    bb_az = (side == 1) ? 0 : 180;
+
+    // --- Apex (junction node) positions ---
+    upper_apex = [cx, cy, UPPER_APEX_Z];
+    lower_apex = [cx, cy, LOWER_APEX_Z];
+
+    // --- Boss positions for each arm (inject the arm Z) ---
+    upper_ba = [ba_pos[0], ba_pos[1], UPPER_BOSS_Z];
+    upper_bb = [bb_pos[0], bb_pos[1], UPPER_BOSS_Z];
+    lower_ba = [ba_pos[0], ba_pos[1], LOWER_BOSS_Z];
+    lower_bb = [bb_pos[0], bb_pos[1], LOWER_BOSS_Z];
+
+    // --- Upper V-brace arm (CF-PETG) ---
+    color("DimGray", 0.9)
+        arm_v_brace(upper_ba, upper_bb, upper_apex);
+
+    // --- Lower V-brace arm (CF-PETG) ---
+    color("DimGray", 0.9)
+        arm_v_brace(lower_ba, lower_bb, lower_apex);
+
+    // --- Main vertical strut (CF-PETG) ---
+    // Continuous from upper apex to foot top; nodes ring around it.
+    color("DimGray", 0.85)
+        strut_between(upper_apex, [cx, cy, STRUT_BOT_Z], MAIN_OD, MAIN_WALL);
+
+    // --- Junction nodes (PETG crush zone) ---
+    // Each node knows the offsets from itself to its two bosses.
+    color("LightSlateGray", 0.9) {
+        // Upper node
+        translate(upper_apex)
+            junction_node(
+                upper_ba - upper_apex,
+                upper_bb - upper_apex
+            );
+        // Lower node
+        translate(lower_apex)
+            junction_node(
+                lower_ba - lower_apex,
+                lower_bb - lower_apex
+            );
     }
+
+    // --- Hull boss cylinders ---
+    // Upper arm bosses (on side wall above belly)
+    color("OliveDrab", 0.65) {
+        translate(upper_ba) hull_boss_face(ba_az);
+        translate(upper_bb) hull_boss_face(bb_az);
+        // Lower arm bosses (at belly-edge transition)
+        translate(lower_ba) hull_boss_face(ba_az);
+        translate(lower_bb) hull_boss_face(bb_az);
+    }
+
+    // --- TPU foot pad ---
+    color("Black", 0.85)
+        translate([cx, cy, STRUT_BOT_Z - FOOT_H])
+            foot_pad();
 }
 
-// ---------------------------------------------------------------------------
-// Module: assembly()
-// Full assembly view in hull frame — all 4 legs + boss outlines.
-// Use for layout verification only; not exported to STL.
-// ---------------------------------------------------------------------------
+// ===========================================================================
+// MODULE: assembly()
+// All 4 leg assemblies in hull frame — layout verification.
+// ===========================================================================
 module assembly() {
-    // Hull reference plane (cargo belly, shown as transparent slab)
-    color("SaddleBrown", 0.15)
-        translate([-300, -100, 0])
-            cube([300, 250, 3]);
+    // Cargo belly reference slab (semi-transparent)
+    color("SaddleBrown", 0.10)
+        translate([-300, -100, -1])
+            cube([270, 250, 1]);
 
-    // All 4 legs
-    for (pos = HULL_ATTACH_POS) {
-        color("DimGray", 0.9)
-            single_leg_in_hull_frame(pos);
-    }
-
-    // Hull boss outlines at each attachment point
-    for (pos = HULL_ATTACH_POS) {
-        color("Olive", 0.4)
-            translate([pos[0], pos[1], pos[2]])
-                hull_boss();
-    }
+    for (corner = HULL_ATTACH_POS)
+        one_leg_assembly(corner);
 }
 
-// ---------------------------------------------------------------------------
+// ===========================================================================
 // Entry point
-// ---------------------------------------------------------------------------
-if (PART == "leg") {
-    // Print-orientation: stand upright on foot end (Z=0 at foot, Z=LEG_TOTAL_L at top)
-    translate([-LEG_W/2, -LEG_D/2, 0])
-        leg_body();
+// ===========================================================================
+
+if (PART == "assy") {
+
+    assembly();
+
+} else if (PART == "arm_upper") {
+
+    // Upper V-brace arm, print orientation flat (triangle in printer XY plane).
+    // Triangle: base (crossbeam) = 28.3 mm (diagonal); equal sides ≈ 77.6 mm.
+    // Place crossbeam ends at ±half-base in printer-X; apex in printer-Y.
+    half_x   = ARM_HALF_SPREAD;   // 20 mm
+    half_y   = ARM_HALF_SPREAD;   // 20 mm (equal for isosceles, different face offsets)
+    dz_boss  = UPPER_BOSS_Z - UPPER_APEX_Z;   // 75 mm height to bosses
+    // Boss A offset from apex (in local arm print frame):
+    b_a = [  half_x,  0,       dz_boss];  // A = fore/aft offset (mapped to print-X)
+    b_b = [0,         half_y,  dz_boss];  // B = lateral offset (mapped to print-Y)
+    arm_v_brace(b_a, b_b, [0, 0, 0]);
+
+} else if (PART == "arm_lower") {
+
+    // Lower V-brace arm, print orientation flat.
+    // Triangle: base ≈ 28.3 mm; equal sides ≈ 53.9 mm.
+    half_x   = ARM_HALF_SPREAD;
+    half_y   = ARM_HALF_SPREAD;
+    dz_boss  = LOWER_BOSS_Z - LOWER_APEX_Z;   // 50 mm
+    b_a = [ half_x, 0,      dz_boss];
+    b_b = [0,       half_y, dz_boss];
+    arm_v_brace(b_a, b_b, [0, 0, 0]);
+
+} else if (PART == "main_strut") {
+
+    // Main vertical strut, print upright (Z is print direction).
+    // Length = 143 mm; bottom end has reduced-OD spigot for foot socket.
+    strut_len = UPPER_APEX_Z - STRUT_BOT_Z;   // 143 mm
+
+    difference() {
+        tube(strut_len, MAIN_OD, MAIN_WALL);
+        // Foot spigot: cut outer profile to FOOT_SOCK_D at bottom end
+        translate([0, 0, -0.1])
+            difference() {
+                cylinder(h = FOOT_SOCK_H + 0.1, d = MAIN_OD + 0.2);
+                cylinder(h = FOOT_SOCK_H + 0.2, d = FOOT_SOCK_D);
+            }
+    }
+
+} else if (PART == "node") {
+
+    // Representative junction node (uses upper arm angles).
+    sp = ARM_HALF_SPREAD;
+    dz = UPPER_BOSS_Z - UPPER_APEX_Z;
+    junction_node([sp, 0, dz], [0, sp, dz]);
 
 } else if (PART == "boss") {
-    // Hull boss: origin at cargo belly inner face, boss extends in -Z
-    hull_boss();
 
-} else if (PART == "assy") {
-    assembly();
+    // One hull boss, protruding in +X direction (port face example).
+    hull_boss_face(0);
+
+} else if (PART == "foot") {
+
+    // TPU foot pad, print flat (sole on printer bed).
+    foot_pad();
+
 }
