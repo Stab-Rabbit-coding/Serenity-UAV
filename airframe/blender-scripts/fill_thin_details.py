@@ -22,6 +22,11 @@ those thin details come out SOLID in the final shell.  Opening is anti-extensive
 than the original 2 mm anywhere — no new breaches.  (The hollow_manifold.py step
 additionally intersects opened with the original inner to guarantee this.)
 
+Operates on shell operands derived from the Serenity hull geometry: "Serenity
+Firefly with landing gear and swivel engines" by misubisu
+(thingiverse.com/thing:7330462, CC BY 4.0).
+Full attribution chain: current-specification/LICENSE_AND_ATTRIBUTION.md §2.
+
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 License: CC BY 4.0  —  creativecommons.org/licenses/by/4.0
 """

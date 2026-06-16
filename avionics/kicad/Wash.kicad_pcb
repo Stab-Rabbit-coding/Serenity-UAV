@@ -15,7 +15,7 @@
 		(comment 2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
 		(comment 3 "PocketBeagle 2 Industrial (AM6254) expansion — 55x35mm 4L JLCPCB assembled")
 		(comment 4 "ICM-42688-P IMU | BMP388 Baro | SAM-M10Q GPS | ISOW1044BDFMR CAN FD (iso) | ADM2795EBRWZ RS-485 (iso) | DS26LV31/32 1553 | ADIN1300+ISO7642 ETH (iso) | SLB9670 TPM2 | EMI: SRF2012 CMC | PRTR5V0U2X TVS | SMAJ33CA 1553 | 742792512 FB")
-		(comment 5 "Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0 | Firefly/Serenity fan-work, not officially licensed")
+		(comment 5 "Hull: misubisu CC BY 4.0 | Nozzle: BamJr CC BY 4.0 | Firefly/Serenity fan-work, not officially licensed")
 	)
 	(layers
 		(0 "F.Cu" signal)

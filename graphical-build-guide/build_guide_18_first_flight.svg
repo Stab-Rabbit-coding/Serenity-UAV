@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Serenity-Class Tiltrotor UAV — Build Guide — Step 18 — First Flight -->
 <!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP  CC BY 4.0 -->
-<!-- Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0 -->
+<!-- Hull: misubisu CC BY 4.0 | Nozzle: BamJr CC BY 4.0 -->
 <!-- Visual: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
 <rect width="1200" height="900" fill="#f5f0e8"/>
@@ -15,7 +15,7 @@
 <text x="24" y="90" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 9 — FIRST FLIGHT</text>
 <text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">VTOL hover · transition test · cargo mission</text>
 <rect x="0" y="872" width="1200" height="28" fill="#006db7"/>
-<text x="600" y="890" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
+<text x="600" y="890" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0">Hull: misubisu CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
 <rect x="16" y="112" width="720" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
 <rect x="752" y="112" width="432" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
 <rect x="760" y="120" width="416" height="114" rx="8" fill="#fffdf6" stroke="#006db7" stroke-width="2"/>

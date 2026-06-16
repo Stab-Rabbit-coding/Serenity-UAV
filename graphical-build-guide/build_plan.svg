@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Serenity-Class Tiltrotor — Phased Build Plan (Rev J) -->
 <!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP  CC BY 4.0 -->
-<!-- Hull: Peter Farell CC BY 4.0  Nozzle: BamJr CC BY 4.0 -->
+<!-- Hull: misubisu CC BY 4.0  Nozzle: BamJr CC BY 4.0 -->
 <!-- Visual inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy / Universal Pictures -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 820" width="960" height="820">
 <defs>
@@ -233,5 +233,5 @@
 <!-- Cost summary line -->
 <text x="480" y="791" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="rgba(255,255,255,0.55)">First flight at Phase 6: ~$640 total · Full 8-node: ~$1,120 · Total ~$1,900  |  All conduits/voids installed Phase 1 — no structural rework after foam pour</text>
 <!-- Attribution -->
-<text x="480" y="810" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(163,230,53,0.8)">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
+<text x="480" y="810" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(163,230,53,0.8)">Hull: misubisu CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
 </svg>

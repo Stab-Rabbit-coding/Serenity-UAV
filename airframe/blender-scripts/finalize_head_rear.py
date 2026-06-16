@@ -3,6 +3,10 @@
 finalize_head_rear.py  —  build the final head and rear 2 mm shells with thin
 exterior details filled solid, plus the head starboard parabolic-dish pitot.
 
+# Hull geometry derives from "Serenity Firefly with landing gear and swivel
+# engines" by misubisu (thingiverse.com/thing:7330462, CC BY 4.0).
+# Full attribution chain: current-specification/LICENSE_AND_ATTRIBUTION.md §2.
+
     python3 finalize_head_rear.py
 
 Inputs (airframe/blender-scripts/files-hollowed-24in/operands/):
