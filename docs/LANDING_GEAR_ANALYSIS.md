@@ -2,77 +2,97 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**Revision:** R1.4 (2026-06-15) — Canonical corner V-brace frame geometry
+**Revision:** R1.5 (2026-06-16) — Single-arm corner bracket geometry, matched to
+author reference part `airframe/freecad/assembly/strong-leg.stl`
 
-> **Rev R1.3** (trapezoidal brace, fore-aft arm spread only) **superseded 2026-06-15.**
-> **Rev R1.2 / R1.1 / R1** prior pyramid and flat-plate designs also superseded.
-> Impact energy numbers (§3) carry forward unchanged from R1.
+> **Rev R1.4** (two-arm upper+lower corner V-brace, 160 mm hanging-strut
+> ground clearance) **superseded 2026-06-16.**  R1.4 did not match the
+> canonical Serenity leg silhouette; it assumed a tall hanging strut that is
+> not present in the author's reference geometry.
+> **Rev R1.3 / R1.2 / R1.1 / R1** prior trapezoidal, pyramid, and flat-plate
+> designs also superseded.
+> Impact energy numbers (§3) carry forward unchanged from R1 — AUW and drop
+> height are independent of leg geometry.
 
 ---
 
-## 0. Geometry Change Note (Rev R1.4)
+## 0. Geometry Change Note (Rev R1.5)
 
-The Rev R1.4 geometry matches the canonical Serenity landing leg silhouette:
-one **main vertical strut** per cargo corner, braced to the hull by two
-**isosceles triangular V-arms** (upper and lower), each spanning to
-**TWO DIFFERENT HULL FACES** at that corner.
+Rev R1.5 replaces the R1.4 two-arm (upper + lower) corner V-brace with a
+**single-arm corner bracket**, matching the author-modeled reference part
+`airframe/freecad/assembly/strong-leg.stl` (placed at the 4 cargo corners in
+`airframe/freecad/assembly/SerenityAssembly.FCStd` as objects `Union`,
+`Union001`, `Union002`, `Union003`).  Geometry was reverse-derived from that
+STL and the FCStd placements on 2026-06-16.
 
-**Corner V-brace anatomy (one arm):**
-- **Boss A** — on the **cargo END-WALL** (fore face for fore corners, aft face
-  for aft corners).  Protrudes outward from that face.
-  Offset: ARM_HALF_SPREAD = 20 mm in hull-Y from strut centreline.
-- **Boss B** — on the **cargo OUTBOARD SIDE-WALL** (port face for port corners,
-  stbd face for stbd corners).  Protrudes outward laterally.
-  Offset: ARM_HALF_SPREAD = 20 mm in hull-X (outboard) from strut centreline.
-- **Crossbeam** — spans diagonally 45° (corner-to-corner) from Boss A to Boss B
-  at the same Z height, bridging the chamfered cargo corner.
-  Crossbeam length = √(20² + 20²) = 20√2 ≈ **28.3 mm**.
-- **Two arm struts** — equal-length diagonals from each boss down to the apex
-  (junction node on main strut).  Equal arm lengths follow from |ΔX| = |ΔY| = 20 mm
-  with identical ΔZ → isosceles triangle confirmed ✓.
+**Corner single-arm bracket anatomy:**
 
-**Upper arm**: Boss A + Boss B at Z = UPPER_BOSS_Z = +70 mm (cargo side wall,
-above belly); apex at UPPER_APEX_Z = −5 mm (strut top, just below belly).
-Each arm strut length ≈ √(20² + 75²) = **77.6 mm**.
+- **Main vertical strut** — hangs a short distance below the belly to a
+  small foot cap.  The strut top passes **up through a belly bore** into
+  the cargo bay interior to a single junction node.
+- **Junction node** — INSIDE the cargo bay, above the belly
+  (Z = UPPER_APEX_Z = +28 mm).  Not a hanging strut tip below the hull, as
+  in R1.4 — the node sits inside the hull volume.
+- **One V-arm** (not two) reaches up and outward from the node to two boss
+  attachments on the cargo wall, well above the belly:
+  - **Boss A** — on the cargo **END-WALL** (fore face for fore corners, aft
+    face for aft corners).  Offset ARM_HALF_SPREAD = 20 mm in hull-Y from
+    the strut centreline.
+  - **Boss B** — on the cargo **OUTBOARD SIDE-WALL** (port face for port
+    corners, stbd face for stbd corners).  Offset ARM_HALF_SPREAD = 20 mm
+    in hull-X from the strut centreline.
+  - **Crossbeam** — spans diagonally from Boss A to Boss B at
+    Z = UPPER_BOSS_Z = +60 mm, bridging the chamfered cargo corner.
+    Length = √(20² + 20²) = 20√2 ≈ **28.3 mm** (unchanged from R1.4).
+  - **Two arm struts** — equal-length diagonals from each boss down to the
+    node.  |ΔX| = |ΔY| = 20 mm with identical ΔZ = 32 mm →
+    isosceles triangle confirmed ✓.  Length = √(20² + 32²) ≈ **37.7 mm**
+    (R1.4's upper arm was 77.6 mm; R1.5 is much shorter because
+    UPPER_APEX_Z moved from −5 mm to +28 mm).
 
-**Lower arm**: Boss A + Boss B at Z = LOWER_BOSS_Z = +5 mm (belly-edge
-transition); apex at LOWER_APEX_Z = −45 mm (node on main strut).
-Each arm strut length ≈ √(20² + 50²) = **53.9 mm**.
+**R1.4's lower arm (Boss A/B at +5 mm, apex at −45 mm) is eliminated.**
+There is now exactly one V-arm and one junction node per corner.
 
-**Trapezoidal frame profile** (diagonal 45° plane through corner, side view):
-- Hull side (end-wall + outboard from Boss A to Boss B): 70 − 5 = **65 mm**
-- Strut side (upper apex to lower apex): |−5 − (−45)| = **40 mm**
-  (unequal sides → confirmed trapezoid, not parallelogram ✓)
+**Main strut**: OD 18 mm CF-PETG (unchanged cross-section), continuous from
+the junction node (Z = UPPER_APEX_Z = +28 mm) down through the belly bore
+to the foot-cap top (Z = STRUT_BOT_Z = −7 mm); length = 28 − (−7) =
+**35 mm** (R1.4 was 143 mm).
 
-**Bottom view (cargo belly corner, looking up):**
+**Ground clearance — confirmed Serenity-accurate by author, 2026-06-16:**
+
 ```
-    hull end-wall    hull side-wall
-          \\                //
-            [A]===========[ B]   ← crossbeam (diagonal across chamfer)
-               \         /
-                \  arms /
-                 \     /
-                  [ ● ]          ← strut centreline (apex node)
-                    |
-                    |  main strut
-                    ▼
-                  [foot]
+Ground clearance = |STRUT_BOT_Z| + FOOT_H = 7 + 10 = 17 mm (0.67 in)
 ```
 
-**Main strut**: OD 18 mm CF-PETG, continuous from upper apex (Z = −5 mm) to
-foot top (Z = STRUT_BOT_Z = −148 mm); length **143 mm**.
-Total ground clearance = 148 + FOOT_H 12 = **160 mm (6.3 in)**.
+This is intentionally LOW.  The Serenity hull sits close to the ground; the
+leg's structural leverage comes from the tall side-wall boss attachment
+(60 mm above the belly), not from strut length.  **This supersedes the
+160 mm clearance figure carried in Rev R1–R1.4**, which assumed a tall
+hanging-strut silhouette not present in the canonical reference geometry.
 
-**Boss count per corner:** 2 upper arm × 2 bosses + 2 lower arm × 2 bosses
-= **4 bosses per leg, 16 per aircraft** (all identical generic hull_boss_face).
+**Foot cap**: small rounded TPU cap, FOOT_D 25 mm × FOOT_H 10 mm
+(R1.4 used a 55 × 55 × 12 mm rectangular pad — replaced; the reference
+geometry shows a compact foot, not a wide pad).
 
-Detailed arm strut stress analysis (§4 and §5) will be updated for the R1.4
-corner V-brace geometry under TODO LG-09.  The R1 pyramid numbers below are
-retained as a reference baseline; the arm strut cross-section and AUW are
-unchanged, so the buckling and stress margins are qualitatively valid.
+**Boss count per corner:** 1 arm × 2 bosses = **2 bosses per leg, 8 per
+aircraft** (down from R1.4's 16).
 
-> **TODO LG-09:** Update §2.3 and §§4–5 for R1.4 arm geometry
-> (2-strut-per-arm V-brace, 2 bosses per arm, diagonal crossbeam).
+> **OPERATIONAL CONSTRAINT — cargo bay clamshell doors (new, 2026-06-16):**
+> With only 17 mm ground clearance, the cargo doors (Rev R1a, ≈ 12 mm panel
+> thickness, hinged at hull centreline X ≈ −170 mm) can strike the ground
+> at any door angle other than fully CLOSED (0°) or fully OPEN (180°, panel
+> horizontal, clearing the ground by ≈ 5 mm).  At intermediate angles the
+> door tip swings below ground level before reaching 180°.
+> **FLIGHT RULE: cargo doors shall be commanded to 0° or 180° ONLY while
+> the UAV is on the ground.**  Partial-open ground operation is prohibited.
+> See TODO.md LG-10.
+>
+> **TODO LG-02a:** The main strut passes through the cargo belly panel
+> (within the cargo door's lateral span at all 4 corners) to reach the
+> junction node inside the cargo bay.  A through-bore must be added to
+> `cargo_sect_shell24.scad` / the cargo door panel geometry at each strut
+> centreline.  Bore diameter ≥ MAIN_OD + clearance = 18 + 1 = 19 mm.  Not
+> yet implemented in any SCAD.  Blocks hull print.
 
 ---
 
@@ -107,48 +127,45 @@ The landing gear does NOT need to be reusable after a 6 ft drop.
 
 The **Phase 11 AUW of 6.90 lbm (3,130 g) is the design case**.
 
-### 2.2 Landing Gear Configuration (Rev R1.4)
+### 2.2 Landing Gear Configuration (Rev R1.5)
 
-- **4 × corner V-brace leg assemblies** — one per cargo belly corner; each
-  assembly: 1 CF-PETG main strut + 2 CF-PETG V-arm frames + 2 PETG junction
-  nodes + 4 hull boss cylinders (integral to cargo shell) + 1 TPU foot pad.
-- **4 hull boss cylinders per leg assembly** (16 total) — CF-PETG, integral
-  to the cargo shell (2 per arm × 2 arms = 4 per corner).
-- **4 × TPU 95A foot pads** — one per assembly; friction and surface compliance.
+- **4 × corner single-arm leg assemblies** — one per cargo belly corner;
+  each assembly: 1 CF-PETG main strut + 1 CF-PETG V-arm frame (crossbeam +
+  2 struts) + 1 PETG junction node + 2 hull boss cylinders (integral to
+  cargo shell) + 1 TPU foot cap.
+- **2 hull boss cylinders per leg assembly** (8 total) — CF-PETG, integral
+  to the cargo shell (1 per arm strut end).
+- **4 × TPU 95A foot caps** — one per assembly; friction and surface compliance.
 - **2 × rear skids** — integral to the horseshoe ring of the middle section; NOT
   produced by `landing_leg_assy.scad`.
 
-### 2.3 Corner V-Brace Geometry (Rev R1.4)
+### 2.3 Corner Single-Arm Geometry (Rev R1.5)
 
 Each leg assembly (one cargo corner) comprises:
 
 | Component | Qty | Material | Key dimensions |
 |---|---|---|---|
-| Main vertical strut | 1 | CF-PETG | OD 18 mm, wall 2.5 mm, L = 143 mm |
-| Upper V-arm (crossbeam + 2 struts) | 1 | CF-PETG | OD 12 mm, wall 2 mm; struts 77.6 mm each |
-| Lower V-arm (crossbeam + 2 struts) | 1 | CF-PETG | OD 12 mm, wall 2 mm; struts 53.9 mm each |
-| Upper junction node | 1 | PETG | sphere R = 9 mm, 25 % gyroid |
-| Lower junction node | 1 | PETG | sphere R = 9 mm, 25 % gyroid |
-| Hull boss cylinder | 4 | CF-PETG | OD 22 mm, bore 12.4 mm, H = 30 mm |
-| TPU foot pad | 1 | TPU 95A | 55 × 55 × 12 mm |
+| Main vertical strut | 1 | CF-PETG | OD 18 mm, wall 2.5 mm, L = 35 mm |
+| V-arm (crossbeam + 2 struts) | 1 | CF-PETG | OD 12 mm, wall 2 mm; struts 37.7 mm each; crossbeam 28.3 mm |
+| Junction node | 1 | PETG | sphere R = 9 mm, 25 % gyroid |
+| Hull boss cylinder | 2 | CF-PETG | OD 22 mm, bore 12.4 mm, H = 20 mm |
+| TPU foot cap | 1 | TPU 95A | ⌀25 × 10 mm |
 
 Boss positions per corner (hull frame):
-- **Upper Boss A** (end-wall, fore or aft face): Z = +70 mm above belly
-- **Upper Boss B** (side-wall, port or stbd face): Z = +70 mm above belly
-- **Lower Boss A** (end-wall): Z = +5 mm (belly-edge transition)
-- **Lower Boss B** (side-wall): Z = +5 mm
 
-**Total ground clearance (cargo belly to sole):** 160 mm (6.3 in).
+- **Boss A** (end-wall, fore or aft face): Z = UPPER_BOSS_Z = +60 mm above belly
+- **Boss B** (side-wall, port or stbd face): Z = UPPER_BOSS_Z = +60 mm above belly
+- **Junction node**: Z = UPPER_APEX_Z = +28 mm above belly (inside cargo bay)
+- **Foot-cap top / main strut bottom**: Z = STRUT_BOT_Z = −7 mm (below belly)
 
-> The analysis in §§4–5 was written for the R1 pyramid geometry.  The arm strut
-> cross-section (12 mm OD, 2 mm wall) and AUW are unchanged.  Detailed re-analysis
-> for the R1.4 V-brace geometry is tracked as TODO LG-09.
+**Total ground clearance (cargo belly to sole):** 17 mm (0.67 in) —
+confirmed Serenity-accurate by author, 2026-06-16 (see §0).
 
 ---
 
 ## 3. Impact Velocity and Kinetic Energy
 
-*(Numbers unchanged from Rev R1 — carry forward.)*
+Numbers unchanged from Rev R1 — independent of leg geometry; carry forward.
 
 ### 3.1 Free-Fall Velocity
 
@@ -180,29 +197,33 @@ KE_per_assy = 496.8 / 4 = 124.2 in·lbf  (14.0 J) per assembly
 
 ---
 
-## 4. Pyramid Strut Analysis
+## 4. Arm Strut Analysis (Rev R1.5 single-arm geometry)
 
 ### 4.1 Strut Geometry
 
-Each arm strut connects a hull boss at Z = 0 to the junction hub at Z = −85 mm.
+Each leg has TWO arm struts (Boss A and Boss B), each connecting a hull
+boss at Z = UPPER_BOSS_Z = +60 mm to the junction node at
+Z = UPPER_APEX_Z = +28 mm.
 
-Boss offsets from hub centre (local corner frame, outboard-fore example):
+Boss offset from node centre (each strut has a horizontal offset in only
+ONE of hull-X or hull-Y, not both — Boss A offsets in Y only, Boss B
+offsets in X only):
 
 ```
-Δx = SPREAD_X / 2 = 20 mm (outboard in hull X)
-Δy = SPREAD_Y / 2 = 30 mm (fore = hull −Y direction)
-Δz = JUNCT_Z      = 85 mm (upward from hub to boss)
+Δhoriz = ARM_HALF_SPREAD = 20 mm  (X for Boss B, Y for Boss A)
+Δz     = UPPER_BOSS_Z − UPPER_APEX_Z = 60 − 28 = 32 mm
 ```
 
 | Parameter | Value |
 |---|---|
-| Strut length (outboard-fore) | √(20² + 30² + 85²) = √8333 = **91.3 mm** |
-| Strut angle from vertical | atan(√(20² + 30²) / 85) = atan(0.425) = **23.0°** |
-| Vertical component of strut axis | cos(23.0°) = 0.920 |
+| Arm strut length | √(20² + 32²) = √1424 = **37.7 mm** |
+| Strut angle from vertical | atan(20 / 32) = atan(0.625) = **32.0°** |
+| Vertical component of strut axis | cos(32.0°) = 0.848 |
 
 ### 4.2 Strut Cross-Section Properties
 
-Strut: STRUT_OD = 12 mm, wall = 2 mm, ID = 8 mm (CF-PETG hollow tube).
+Strut: STRUT_OD = 12 mm, wall = 2 mm, ID = 8 mm (CF-PETG hollow tube) —
+unchanged from R1.4.
 
 ```
 A_strut = π(12² − 8²)/4 = π × 80 / 4 = 62.8 mm²
@@ -213,80 +234,67 @@ E_CF-PETG = 5,500 MPa (in-plane, printed; conservative)
 
 ### 4.3 Load Path — Vertical Impact
 
-Under a vertical landing impact, the ground reaction force F_total acts upward
-on the foot pad and is transmitted:
+Under a vertical landing impact, the ground reaction force acts upward on
+the foot cap and is transmitted:
 
 ```
-foot → column (compression) → hub → 4 arm struts (compression)
-     → 4 hull bosses → cargo belly shell → airframe
+foot → main strut (compression) → junction node → 2 arm struts (compression)
+     → 2 hull bosses → cargo wall shell → airframe
 ```
 
-Force per strut (4 struts share equally for a central, symmetric impact):
-
-```
-F_vertical per assy = F_total / 4 (4 assemblies)
-F_vert per strut    = (F_total/4) / 4 = F_total / 16
-
-At 6 ft drop (from energy method):
-  ½ k_equiv × δ² = 14.0 J → requires spring rate / deflection estimate.
-```
-
-**Column spring rate (CF-PETG column in compression):**
-
-```
-k_col = E × A / L
-      = 5,500 × (π(18²−13²)/4) / 60
-      = 5,500 × 122.5 / 60
-      = 11,230 N/mm  (extremely stiff)
-```
-
-The column is far stiffer than any equivalent cantilever leg.  Energy
-absorption at the design drop is therefore dominated by **plastic
-deformation of the junction hub** (PETG, 25 % gyroid, intentionally weaker)
-and by the TPU foot viscoelastic damping.
-
-To estimate the peak force experienced by the structure, use the impulse-
-momentum approach (rigid body, no spring credit):
+**Peak impact force (impulse-momentum, rigid body, no spring credit) —
+unchanged from R1.4; independent of leg geometry:**
 
 ```
 Δv = v_impact = 5.99 m/s
 m  = 3.130 kg  (Phase 11 AUW)
-δ  = assumed 10 mm deflection before hub crush initiates (hub + foot compliance)
+δ  = assumed 10 mm deflection before node crush initiates (node + foot compliance)
 
 F_peak ≈ m × v² / (2 × δ)
        = 3.130 × 5.99² / (2 × 0.010)
        = 3.130 × 35.88 / 0.020
        = 5,620 N  total (all 4 assemblies)
        = 1,405 N  per assembly
-       = 351 N    per strut (vertical component)
+```
+
+**Force per arm strut — Rev R1.5 has only 2 struts per assembly (vs R1.4's
+4), so each strut now carries DOUBLE the per-strut share:**
+
+```
+F_vert per strut = F_per_assy / 2 = 1,405 / 2 = 702.5 N
 ```
 
 ### 4.4 Per-Strut Axial Force
 
 ```
-F_axial per strut = 351 / cos(23.0°) = 351 / 0.920 = 381 N
+F_axial per strut = 702.5 / cos(32.0°) = 702.5 / 0.848 = 828.4 N
 ```
 
 ### 4.5 Euler Column Buckling Check (Strut)
 
-With pin-pin end conditions, effective length = strut length = 91.3 mm:
+With pin-pin end conditions, effective length = strut length = 37.7 mm
+(R1.4 was 77.6 mm — much shorter, substantially improving buckling margin):
 
 ```
 P_crit = π² E I / L²
-       = π² × 5,500 × 816 / 91.3²
-       = 44,200,000 / 8,336
-       = 5,302 N per strut
+       = π² × 5,500 × 816 / 37.7²
+       = 44,294,765 / 1,424
+       = 31,107 N per strut
 ```
 
-**Buckling margin:** 5,302 / 381 = **13.9×** — no buckling risk.
+**Buckling margin:** 31,107 / 828.4 = **37.5×** — no buckling risk
+(R1.4 was 13.9×; the shorter R1.5 strut is much more buckling-resistant).
 
 ### 4.6 Strut Axial Stress
 
 ```
-σ_axial = F_axial / A = 381 / 62.8 = 6.1 MPa  (vs σ_yield 55 MPa)
+σ_axial = F_axial / A = 828.4 / 62.8 = 13.2 MPa  (vs σ_yield 55 MPa)
 ```
 
-**Margin of safety: 8.0×** — struts remain fully elastic at design drop.
+**Margin of safety: 4.2×** — struts remain fully elastic at design drop.
+(R1.4 was 8.0×; R1.5's per-strut load is doubled because there are half as
+many struts, so the stress margin is correspondingly reduced, but remains
+comfortably positive.)
 
 ### 4.7 Peak Deceleration
 
@@ -294,13 +302,14 @@ P_crit = π² E I / L²
 a_peak = F_total / m = 5,620 / 3.130 = 1,796 m/s² = 183 g
 ```
 
-This assumes 10 mm deflection.  Hub crush compliance will be larger, reducing
-peak g to an acceptable range.
+This assumes 10 mm deflection.  Node crush compliance will be larger,
+reducing peak g to an acceptable range.  Unchanged from R1.4 — independent
+of arm geometry.
 
-> **TODO LG-08:** Measure hub crush compliance by quasi-static loading of a
-> printed PETG hub at 25 % gyroid infill.  Calculate actual δ and refine peak-g
+> **TODO LG-08:** Measure node crush compliance by quasi-static loading of a
+> printed PETG node at 25 % gyroid infill.  Calculate actual δ and refine peak-g
 > estimate.  Confirm ≤ 100g shock rating of avionics enclosures is met, or
-> increase JUNCT_Z to increase total system compliance.
+> increase node compliance to increase total system compliance.
 
 ---
 
@@ -313,99 +322,167 @@ F_vert_component    = 1,405 × cos(15°) = 1,357 N
 F_lateral_component = 1,405 × sin(15°) =   364 N  (in hull XZ or YZ plane)
 ```
 
-### 5.1 Lateral Load Resolution in Pyramid
+### 5.1 Lateral Load Resolution in Single-Arm Bracket
 
-For lateral force in the hull-X direction:
-
-- Outboard struts (on the side toward the lateral force) see increased
-  compression; inboard struts see reduced compression.
-- The differential force per strut (2 outboard, 2 inboard):
-
-```
-ΔF_strut_axial = F_lateral × (SPREAD_X/2) / (4 × JUNCT_Z × sin(angle_x))
-               = 364 × 20 / (4 × 85 × sin(atan(20/85)))
-               = 7,280 / (4 × 85 × 0.229)
-               = 7,280 / 77.9
-               = 93.5 N additional axial per outboard strut
-```
-
-Total worst-case strut axial force (vertical + lateral combined):
+Unlike R1.4's symmetric 4-strut pyramid (2 struts on each side of any given
+lateral axis), R1.5's single arm has only ONE strut with a horizontal
+offset in hull-X (Boss B) and only ONE strut with a horizontal offset in
+hull-Y (Boss A).  **There is no redundant strut on the loaded side** — a
+pure hull-X lateral load is reacted primarily by Boss B's strut alone, with
+the crossbeam carrying some load to Boss A.  Conservatively (no load
+sharing credit), the full lateral component is resolved along the loaded
+strut's own axis:
 
 ```
-F_axial_max = 381 + 93.5 / cos(23.0°) = 381 + 102 = 483 N
-σ_axial_max = 483 / 62.8 = 7.7 MPa  (<< 55 MPa yield) ✓
+Strut B unit vector (node → boss B) = (20, 0, 32) / 37.7 = (0.530, 0, 0.848)
+ΔF_strut = F_lateral × 0.530 = 364 × 0.530 = 192.9 N additional axial
 ```
+
+Combined with the baseline vertical axial force from §4.4 (conservatively
+not de-rated for the cos(15°) reduction, matching R1.4's approach):
+
+```
+F_axial_max = 828.4 + 192.9 = 1,021.3 N
+σ_axial_max = 1,021.3 / 62.8 = 16.3 MPa  (<< 55 MPa yield) ✓
+Stress margin: 55 / 16.3 = 3.4×
+Buckling margin at F_axial_max: 31,107 / 1,021.3 = 30.5× ✓
+```
+
+Both margins remain comfortably positive, but **R1.5's lack of strut
+redundancy on a per-axis basis is a real reduction in robustness compared
+to R1.4's 4-strut pyramid** — there is no longer a second strut to share an
+off-axis lateral load.  This is an accepted trade-off to match the
+author's reference geometry; see TODO LG-11 below regarding the boss fuse
+bolt margin, which is the more constraining consequence of this change.
 
 ### 5.2 Lateral Load at Boss Fuse Bolt
 
-The retention bolt at each boss is loaded in shear by the lateral component
-distributed to that boss.  With 4 bolts:
+The retention bolt at each boss is loaded in shear by the lateral
+component.  R1.5 has only **2 bosses per assembly** (vs R1.4's 4), so each
+bolt's share of the lateral load is correspondingly larger.
+
+**Even-distribution case** (load shared equally across both bolts):
 
 ```
-F_shear_per_bolt = F_lateral / 4 = 364 / 4 = 91 N
+F_shear_per_bolt = F_lateral / 2 = 364 / 2 = 182 N
 Fuse capacity (1× M3 PA6 nylon, 40 MPa shear):
   F_fuse = 40 × π × 3² / 4 = 282.8 N per bolt
-Margin: 282.8 / 91 = 3.1×  (fuse bolts do NOT activate at design lateral load) ✓
+Margin: 282.8 / 182 = 1.55×  (passes, but markedly tighter than R1.4's 3.1×)
 ```
+
+**Worst-case single-bolt case** (conservative, no load sharing — consistent
+with the §5.1 assumption that Boss B's strut alone reacts a pure-axis
+lateral load):
+
+```
+F_shear_per_bolt_worst = F_lateral = 364 N
+Margin: 282.8 / 364 = 0.78×  →  FAILS  (fuse bolt could shear below the
+design ±15° lateral load if Boss B's bolt alone reacts the full lateral
+shear, with no contribution from Boss A / the crossbeam)
+```
+
+> **⚠ TODO LG-11 (new, blocks first flight):** The worst-case single-bolt
+> boss fuse margin is sub-unity (0.78×) under the conservative
+> no-load-sharing assumption.  Mitigate by ONE of:
+> (a) FEA or test verification that the crossbeam provides sufficient
+> load sharing to Boss A in practice (reducing Boss B's bolt share
+> below the 364 N worst case), or
+> (b) add a 2nd M3 PA6 nylon bolt per boss (4 per leg, 16 per aircraft,
+> reverting to R1.4's bolt count while keeping R1.5's 2-boss-per-leg
+> arm geometry), or
+> (c) upsize the boss retention bolt to M4 PA6 nylon
+> (F_fuse = 40 × π × 4²/4 = 502.7 N; margin vs 364 N worst case =
+> 1.38× — passes).
+> Recommend (c) as the lowest-impact fix (no SCAD boss-bore geometry
+> change beyond an M3→M4 clearance hole diameter, M3_CLR 3.4→4.4 mm).
+> **Not yet implemented** — current SCAD retains M3_CLR = 3.4 mm pending
+> this decision.
 
 **Fuse bolts are retention / lateral overload devices, not the primary vertical
 energy fuse.**  The primary overload protection under severe (>3× design)
-vertical load is junction hub crush.
+vertical load is junction node crush (§6).
 
 ---
 
-## 6. Junction Hub — Crush Zone
+## 6. Junction Node — Crush Zone
 
-The junction hub is printed in **PETG at 25 % gyroid infill** (not CF-PETG).
-PETG σ_yield ≈ 30 MPa.  The hub sphere (HUB_R = 11 mm) has effective cross-
-sectional area reduced by infill:
+The junction node is printed in **PETG at 25 % gyroid infill** (not
+CF-PETG).  PETG σ_yield ≈ 30 MPa.  The node sphere (NODE_R = 9 mm,
+⌀18 mm) has effective cross-sectional area reduced by infill:
 
 ```
-A_hub_eff ≈ 0.25 × π × 22² / 4 = 0.25 × 380 = 95 mm²
-F_crush ≈ σ_yield_PETG × A_hub_eff = 30 × 95 = 2,850 N  (rough estimate)
+A_node_eff ≈ 0.25 × π × 18² / 4 = 0.25 × 254.5 = 63.6 mm²
+F_crush ≈ σ_yield_PETG × A_node_eff = 30 × 63.6 = 1,908 N  (rough estimate)
 ```
 
-Hub crush activates at approximately 2,850 N total vertical, which is 2.0×
-the 1,405 N design load per assembly.  Hub crush is progressive and absorbs
-significant energy before the boss bearing faces see high stress.
+**R1.5 has only ONE junction node per leg** (R1.4 had two — upper and
+lower — in series, each handling part of the load path).  The single R1.5
+node now carries the FULL per-assembly vertical load directly:
 
-> **TODO LG-08:** Quasi-static compression test on representative PETG hub
-> sample to characterise crush force and energy absorption.
+```
+Margin: 1,908 / 1,405 = 1.36×  (R1.4 was 2.0× per node, with load split
+   across two nodes in series)
+```
+
+This margin is positive but tighter than R1.4.  Node crush activates at
+approximately 1.36× the 1,405 N design load per assembly — still
+progressive and absorbs energy before boss bearing faces see high stress,
+but with reduced margin against accidental premature crush on a hard
+landing within the design envelope.
+
+> **TODO LG-08:** Quasi-static compression test on representative PETG node
+> sample to characterise crush force and energy absorption.  Given the
+> reduced 1.36× margin (vs R1.4's 2.0×), this test is **upgraded to
+> blocking** for first flight (was advisory in R1.4).
 
 ---
 
 ## 7. Foot Impact Cushioning
 
-The TPU 95A foot pad (55 × 55 × 12 mm) provides initial compliance.
-With 25 % gyroid infill, effective modulus ≈ 8.75 MPa (approximation).
+The TPU 95A foot cap (⌀25 × 10 mm — R1.4 used a 55 × 55 × 12 mm pad,
+reduced in R1.5 to match the compact foot silhouette of
+`strong-leg.stl`) provides initial compliance.  With 25 % gyroid infill,
+effective modulus ≈ 8.75 MPa (approximation).
 
 ```
-k_foot = E_eff × A / t = 8.75 × (55 × 55) / 12 ≈ 22,135 N/mm  (stiff)
+A_foot = π × 25² / 4 = 491 mm²
+k_foot = E_eff × A / t = 8.75 × 491 / 10 ≈ 430 N/mm
 ```
+
+(R1.4's larger pad gave k_foot ≈ 22,135 N/mm; the smaller R1.5 foot cap is
+significantly less stiff axially, which is favorable for impact
+compliance, though the bearing area on soft ground is also reduced.)
 
 The foot provides viscoelastic damping (hysteresis) and surface compliance
 over rough terrain.  **No credit is taken for foot energy absorption in the
 primary drop analysis.**
+
+> **TODO (new):** R1.5's smaller foot footprint (491 mm² vs R1.4's
+> 3,025 mm²) increases ground bearing pressure on soft terrain by ~6×.
+> Acceptable for the hard-level-ground design case (§1 item 1); flag as an
+> operational limitation for soft-field landings.
 
 ---
 
 ## 8. Hull Boss Bearing Check
 
 Under design vertical load, the strut end bears against the top face of the
-boss bore (annular area of boss wall above bore):
+boss bore (annular area of boss wall above bore).  R1.5 has **2 bosses per
+assembly** (vs R1.4's 4):
 
 ```
 Bore ID = STRUT_OD + 0.4 = 12.4 mm
 BOSS_OD = 22 mm
 A_bearing = π(22² − 12.4²) / 4 = π(484 − 153.76) / 4 = 259 mm²  per boss
-4 bosses total bearing area per assembly = 1,036 mm²
+2 bosses total bearing area per assembly = 518 mm²
 
 F_per_assy = 1,405 N (design load)
-σ_bearing = 1,405 / 1,036 = 1.36 MPa  (vs CF-PETG bearing strength ≈ 70 MPa)
-Bearing margin of safety: 70 / 1.36 = 51×
+σ_bearing = 1,405 / 518 = 2.71 MPa  (vs CF-PETG bearing strength ≈ 70 MPa)
+Bearing margin of safety: 70 / 2.71 = 25.8×
 ```
 
-**Hull boss bearing stress is negligible at design load — hull is protected.**
+**Hull boss bearing stress remains negligible at design load — hull is
+protected** (R1.4 margin was 51×; still very large at 25.8×).
 
 ---
 
@@ -413,12 +490,14 @@ Bearing margin of safety: 70 / 1.36 = 51×
 
 | Level | Element | Material | Activates At |
 |---|---|---|---|
-| 1 (primary compliance) | TPU foot + PETG hub elastic | TPU 95A + PETG | Any load |
-| 2 (crush fuse) | PETG junction hub 25 % infill | PETG | ≈ 2,850 N per assy |
-| 3 (retention / lateral) | M3 PA6 nylon bolts (1 per boss) | PA6 nylon | ≈ 283 N lateral per bolt |
-| 4 (never reached) | Hull boss bearing | CF-PETG | > 70 MPa bearing → > 72,000 N |
+| 1 (primary compliance) | TPU foot + PETG node elastic | TPU 95A + PETG | Any load |
+| 2 (crush fuse) | PETG junction node 25 % infill | PETG | ≈ 1,908 N per assy (margin 1.36×) |
+| 3 (retention / lateral) | M3 PA6 nylon bolts (1 per boss) | PA6 nylon | ≈ 283 N lateral per bolt — **see TODO LG-11, worst-case margin < 1** |
+| 4 (never reached) | Hull boss bearing | CF-PETG | > 70 MPa bearing → > 36,000 N |
 
 The cargo shell and hull bosses are never at risk under the design load.
+**TODO LG-11 (boss bolt worst-case margin) must be resolved before first
+flight** — this is a new finding specific to R1.5's reduced boss count.
 
 ---
 
@@ -427,7 +506,7 @@ The cargo shell and hull bosses are never at risk under the design load.
 The two rear skids are built into the horseshoe ring of the middle section
 (see `airframe/openscad/fuselage/middle_canonical_shell24.scad`).  They
 must be reinforced with a CF rod (3 mm diameter, pultruded carbon fibre)
-before first flight.
+before first flight.  Unchanged from R1.4.
 
 - CF rod OD: 3 mm; modulus: ~130 GPa
 - Length per skid: approximately 140 mm
@@ -437,35 +516,21 @@ before first flight.
 
 ## 11. Materials Specification
 
-### 11.1 Upper V-Arm Frame (4 per aircraft, one per corner)
+### 11.1 V-Arm Frame (4 per aircraft, one per corner)
 
 | Parameter | Value |
 |---|---|
 | Material | CF-PETG |
 | Tube cross-section | OD 12 mm, wall 2 mm, ID 8 mm |
-| Arm strut length | ≈ 77.6 mm each (2 per frame) |
+| Arm strut length | ≈ 37.7 mm each (2 per frame) |
 | Crossbeam length | ≈ 28.3 mm (diagonal across corner) |
 | Layer height | 0.15 mm |
 | Perimeters | 4 |
 | Infill | 40 % gyroid |
 | Print orientation | Flat (triangle in XY plane) |
-| Estimated mass | ≈ 7 g each × 4 = 28 g total |
+| Estimated mass | ≈ 4 g each × 4 = 16 g total |
 
-### 11.2 Lower V-Arm Frame (4 per aircraft, one per corner)
-
-| Parameter | Value |
-|---|---|
-| Material | CF-PETG |
-| Tube cross-section | OD 12 mm, wall 2 mm, ID 8 mm |
-| Arm strut length | ≈ 53.9 mm each (2 per frame) |
-| Crossbeam length | ≈ 28.3 mm |
-| Layer height | 0.15 mm |
-| Perimeters | 4 |
-| Infill | 40 % gyroid |
-| Print orientation | Flat |
-| Estimated mass | ≈ 5 g each × 4 = 20 g total |
-
-### 11.3 Junction Nodes (8 per aircraft, 2 per corner)
+### 11.2 Junction Nodes (4 per aircraft, 1 per corner)
 
 | Parameter | Value |
 |---|---|
@@ -474,39 +539,39 @@ before first flight.
 | Layer height | 0.15 mm |
 | Infill | **25 % gyroid** |
 | Print orientation | Upright |
-| Estimated mass | ≈ 3 g each × 8 = 24 g total |
+| Estimated mass | ≈ 3 g each × 4 = 12 g total |
 
-### 11.3a Main Vertical Strut (4 per aircraft, one per corner)
+### 11.3 Main Vertical Strut (4 per aircraft, one per corner)
 
 | Parameter | Value |
 |---|---|
 | Material | CF-PETG |
 | Cross-section | OD 18 mm, wall 2.5 mm, ID 13 mm |
-| Length | 143 mm |
+| Length | 35 mm |
 | Layer height | 0.15 mm |
 | Perimeters | 4 |
 | Infill | 40 % gyroid |
 | Print orientation | Upright |
-| Estimated mass | ≈ 18 g each × 4 = 72 g total |
+| Estimated mass | ≈ 5 g each × 4 = 20 g total |
 
-### 11.4 Hull Boss Cylinders (16 per aircraft, integral to cargo shell)
+### 11.4 Hull Boss Cylinders (8 per aircraft, integral to cargo shell)
 
 | Parameter | Value |
 |---|---|
 | Material | CF-PETG |
-| Geometry | OD 22 mm, bore 12.4 mm, height 30 mm |
-| Integration | Union with `cargo_sect_shell24.scad` belly; 4 per corner |
-| Fuse bolt | 1× M3 × 20 mm PA6 nylon SHCS per boss |
+| Geometry | OD 22 mm, bore 12.4 mm, height 20 mm |
+| Integration | Union with `cargo_sect_shell24.scad` walls; 2 per corner |
+| Fuse bolt | 1× M3 (pending TODO LG-11 — may become M4 or 2× M3) PA6 nylon SHCS per boss |
 
-### 11.5 TPU Foot Pads
+### 11.5 TPU Foot Caps
 
 | Parameter | Value |
 |---|---|
 | Material | TPU 95A |
-| Dimensions | 55 × 55 × 12 mm |
+| Dimensions | ⌀25 × 10 mm |
 | Layer height | 0.20 mm |
 | Infill | 25 % gyroid |
-| Fasteners | 2× M3 × 10 mm SS SHCS per foot |
+| Fasteners | Spigot press-fit (FOOT_SOCK_D 14 mm × FOOT_SOCK_H 6 mm); no bolts |
 
 ### 11.6 Safety Cord
 
@@ -514,9 +579,9 @@ before first flight.
 |---|---|
 | Material | Dyneema SK75, 2 mm diameter |
 | Break strength | ≥ 750 N (168 lbf) |
-| Length per assembly | ≈ 500 mm (foot → hub → boss → anchor post inside hull) |
-| Anchor (hull end) | Loop on printed anchor post stub (ANCHOR_POST_OD = 5 mm) |
-| Anchor (leg end) | Loop through hub TETHER_D hole, overhand knot |
+| Length per assembly | ≈ 150 mm (foot → strut bore → node → boss → anchor post inside hull) |
+| Anchor (hull end) | Loop on printed anchor post stub (ANCHOR_OD = 5 mm) |
+| Anchor (leg end) | Loop through node TETHER_D hole, overhand knot |
 
 ---
 
@@ -524,57 +589,63 @@ before first flight.
 
 | Item | Qty | Description |
 |---|---|---|
-| Upper V-arm frame | 4 | CF-PETG, SCAD PART="arm_upper" |
-| Lower V-arm frame | 4 | CF-PETG, SCAD PART="arm_lower" |
-| Junction node | 8 | PETG 25 % gyroid, SCAD PART="node"; 2 per corner |
-| Main strut | 4 | CF-PETG OD 18 mm × 143 mm, SCAD PART="main_strut" |
-| Hull boss cylinder | 16 | CF-PETG, integral to cargo shell, SCAD PART="boss" reference; 4 per corner |
-| TPU foot | 4 | TPU 95A, SCAD PART="foot" |
-| M3 × 20 nylon SHCS | 16 | Retention / lateral fuse (1 per boss, 4 per corner) |
-| M3 × 10 SS SHCS | 8 | Foot retention (2 per foot) |
-| Dyneema SK75, 2 mm | 2.0 m | Safety cord (4 × 500 mm; per corner: foot → lower node → upper node → 2 bosses) |
+| V-arm frame | 4 | CF-PETG, SCAD PART="arm" |
+| Junction node | 4 | PETG 25 % gyroid, SCAD PART="node"; 1 per corner |
+| Main strut | 4 | CF-PETG OD 18 mm × 35 mm, SCAD PART="main_strut" |
+| Hull boss cylinder | 8 | CF-PETG, integral to cargo shell, SCAD PART="boss" reference; 2 per corner |
+| TPU foot cap | 4 | TPU 95A, SCAD PART="foot" |
+| M3 × 16 nylon SHCS | 8 | Retention / lateral fuse (1 per boss, 2 per corner) — pending TODO LG-11 |
+| Dyneema SK75, 2 mm | 0.6 m | Safety cord (4 × 150 mm) |
 | 3 mm CF rod | 280 mm | Rear skid reinforcement (2 × 140 mm) |
-| CA thin | — | CF rod adhesive, rear skids |
-| Spare nylon bolt set | 16 | Replacement M3 × 20 nylon (one full set) |
+| CA thin | — | CF rod and node/strut adhesive |
+| Spare nylon bolt set | 8 | Replacement M3 × 16 nylon (one full set) |
 
 ---
 
 ## 13. Assembly Procedure
 
-1. **Hull boss integration:** Merge 4 boss cylinder positions per corner into
-   `cargo_sect_shell24.scad` belly.  Print cargo section with bosses integral.
+1. **Hull boss integration:** Merge 2 boss cylinder positions per corner into
+   `cargo_sect_shell24.scad` walls (end-wall + side-wall).  Add the
+   MAIN_OD + clearance belly bore at each strut centreline (TODO LG-02a).
+   Print cargo section with bosses integral.
 
-2. **Strut print:** Print 4 × 4 = 16 arm struts (CF-PETG, lying flat).
+2. **Arm print:** Print 4 V-arm frames (CF-PETG, lying flat).
 
-3. **Hub print:** Print 4 junction hubs (PETG, upright, 25 % gyroid).
+3. **Node print:** Print 4 junction nodes (PETG, upright, 25 % gyroid).
 
-4. **Column print:** Print 4 columns (CF-PETG, upright).
+4. **Strut print:** Print 4 main struts (CF-PETG, upright).
 
-5. **Hub assembly:** Insert 4 strut top ends into hub sockets; apply thin CA.
-   Insert column top end into hub column socket; apply thin CA.  Allow cure.
+5. **Node assembly:** Insert the 2 arm strut top ends into the node's arm
+   sockets; apply thin CA.  Insert the main strut top end into the node's
+   main-strut bore from below; apply thin CA.  Allow cure.
 
-6. **Safety cord:** Route Dyneema through hub tether hole and up through column
-   bore.  Tie loop at hub end.  Thread free end up through boss tether hole.
-   Tie loop around boss anchor post stub inside hull.
+6. **Safety cord:** Route Dyneema through the node tether hole and down
+   through the main strut bore.  Tie loop at node end.  Thread free end out
+   through a boss tether hole.  Tie loop around the boss anchor post stub
+   inside the hull.
 
-7. **Boss insertion:** Slide each strut top end into the corresponding hull boss
-   bore from below.  Align M3 fuse bolt holes.  Install 1× M3 × 20 nylon SHCS
-   per boss — finger-tight + 1/4 turn only.
+7. **Belly insertion:** From outside the hull, pass the main strut up
+   through the belly bore until the node seats inside the cargo bay and the
+   two arm boss ends align with the hull boss bores.
 
-8. **Foot installation:** Press TPU foot socket over column spigot.
-   Install 2× M3 × 10 SS SHCS from foot sole.  Torque to 0.3 N·m.
+8. **Boss insertion:** Slide each arm strut end into the corresponding hull
+   boss bore.  Align M3 fuse bolt holes.  Install 1× M3 × 16 nylon SHCS per
+   boss — finger-tight + 1/4 turn only.
+
+9. **Foot installation:** Press TPU foot cap socket over the main strut
+   bottom spigot.  Secure with thin CA at the spigot/socket interface.
 
 ---
 
 ## 14. Field Replacement Procedure
 
-After hub crush or other overload:
+After node crush or other overload:
 
 1. Locate leg assembly on safety cord.
-2. Remove all 4 M3 nylon retention bolts (drill out remnants if sheared).
-3. Pull strut / hub / column assembly downward from hull bosses.
-4. Inspect boss bores; clean; check for cracks.
-5. Install replacement assembly (steps 5–8 of assembly procedure above).
+2. Remove both M3 nylon retention bolts (drill out remnants if sheared).
+3. Pull strut / node / arm assembly downward, out through the belly bore.
+4. Inspect boss bores and belly bore; clean; check for cracks.
+5. Install replacement assembly (steps 5–9 of assembly procedure above).
 
 **Required tools:** 2.5 mm hex key (M3), 3.3 mm drill (bolt removal), CA adhesive.
 
@@ -584,11 +655,14 @@ After hub crush or other overload:
 
 | ID | Item | Blocks |
 |---|---|---|
-| LG-01 | Shear-test 10 samples of M3 × 20 PA6 nylon in representative boss fixture; confirm lateral fuse ≥ 282 N per bolt | First flight |
-| LG-02 | Integrate 16 hull boss cylinders into `cargo_sect_shell24.scad`; run DRC mesh check | Hull print |
+| LG-01 | Shear-test 10 samples of M3 × 16 PA6 nylon in representative boss fixture; confirm lateral fuse ≥ 282 N per bolt | First flight |
+| LG-02 | Integrate 8 hull boss cylinders into `cargo_sect_shell24.scad`; run DRC mesh check | Hull print |
+| LG-02a | **(new R1.5)** Add MAIN_OD + clearance (≥19 mm) through-bore in cargo belly / door panel at each of the 4 strut centrelines, for main strut pass-through to the interior junction node | Hull print |
 | LG-03 | Add CF rod channel to `middle_canonical_shell24.scad` rear skid section | Hull print |
 | LG-04 | Verify HULL_ATTACH_POS[] in SCAD against cargo belly contour in FreeCAD assembly | Hull print |
-| LG-05 | Render STLs (PART="strut", "hub", "column", "boss", "foot"); verify all watertight | STL export |
+| LG-05 | Render STLs (PART="arm", "node", "main_strut", "boss", "foot"); verify all watertight | STL export — **done 2026-06-16, watertight confirmed** |
 | LG-06 | Drop test prototype assembly at 1.5 ft (elastic check) and 6 ft (design); log peak g with shock logger | Pre-flight |
-| LG-07 | Confirm avionics enclosure ≥ 100g shock rating (design deceleration estimated ≤ 183g peak at 10 mm deflection; hub compliance expected to reduce this — LG-08 required) | PCB fab |
-| LG-08 | Quasi-static compression test on PETG hub (25 % gyroid) — measure crush force and compliance; refine peak-g estimate; confirm ≤ 100g at avionics | Pre-flight |
+| LG-07 | Confirm avionics enclosure ≥ 100g shock rating (design deceleration estimated ≤ 183g peak at 10 mm deflection; node compliance expected to reduce this — LG-08 required) | PCB fab |
+| LG-08 | Quasi-static compression test on PETG node (25 % gyroid) — measure crush force and compliance; refine peak-g estimate; confirm ≤ 100g at avionics.  **Upgraded to blocking** (R1.5 node margin reduced to 1.36×, was 2.0× in R1.4) | First flight |
+| LG-10 | **(new R1.5)** Document and enforce flight-ops rule: cargo doors shall be commanded to 0° or 180° ONLY while UAV is on the ground (17 mm ground clearance means intermediate door angles strike the ground) | Flight ops procedure / pre-flight checklist |
+| LG-11 | **(new R1.5)** Worst-case single-bolt boss fuse margin is sub-unity (0.78×, §5.2).  Resolve via FEA/test load-sharing verification, 2nd M3 bolt per boss, or upsize to M4 (recommended) | First flight |
