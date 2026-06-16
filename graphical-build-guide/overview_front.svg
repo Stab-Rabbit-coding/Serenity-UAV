@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP CC BY 4.0 -->
 <!-- Canon: QMx Official Serenity Blueprints (Mandel/Earls 2007) 269ft×170ft×79ft -->
-<!-- Scale: 18" (457.2mm)  Hull: Peter Farell CC BY 4.0  Nozzle: BamJr CC BY 4.0 -->
+<!-- Scale: 24" (609.6mm)  Hull: misubisu CC BY 4.0  Nozzle: BamJr CC BY 4.0 -->
 <!-- Visual: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal Fan work -->
 <!-- SIDE PROFILE KEY RATIOS:
      dome peak = 0.218×L = 99.7mm above CL  (iconic high bridge)
@@ -9,7 +9,7 @@
      neck total = 28.8mm  neck:cargo = 0.32:1  (dramatic pinch)
      nacelle_ctr=97.7mm OD=93.5mm datum=82.1mm outer=144.5mm -->
 <!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP CC BY 4.0 -->
-<!-- Hull: Peter Farell CC BY 4.0  Nozzle: BamJr CC BY 4.0 -->
+<!-- Hull: misubisu CC BY 4.0  Nozzle: BamJr CC BY 4.0 -->
 <!-- Visual: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal Fan work -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 500" width="680" height="500">
 <defs>
@@ -90,5 +90,5 @@
 <line x1="159.4" y1="478.0" x2="520.6" y2="478.0" stroke="#ff6b35" stroke-width="0.7" marker-start="url(#ar2)" marker-end="url(#ar)"/>
 <text x="340.0" y="493.0" text-anchor="middle" font-family="'OpenDyslexic','OpenDyslexic Bold',sans-serif" font-size="9" fill="rgba(255,255,255,0.82)">~486mm (19.1") nacelle tip-to-tip · Canon 170ft</text>
 <text x="340.0" y="290.0" text-anchor="middle" font-family="'OpenDyslexic','OpenDyslexic Bold',sans-serif" font-size="8" fill="#a3e635">nacelle CL to CL ~218mm (8.6")</text>
-<text x="10" y="494" font-family="'OpenDyslexic Mono','OpenDyslexicMono',monospace" font-size="7" fill="rgba(163,230,53,0.85)">© 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP CC BY 4.0  Hull: Peter Farell CC BY 4.0  Nozzle: BamJr CC BY 4.0  Fan engineering work</text>
+<text x="10" y="494" font-family="'OpenDyslexic Mono','OpenDyslexicMono',monospace" font-size="7" fill="rgba(163,230,53,0.85)">© 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP CC BY 4.0  Hull: misubisu CC BY 4.0  Nozzle: BamJr CC BY 4.0  Fan engineering work</text>
 </svg>

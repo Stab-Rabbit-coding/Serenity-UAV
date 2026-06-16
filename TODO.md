@@ -2911,4 +2911,4 @@ to duplicate search paths in the validator). Root causes and resolutions:
 ---
 
 *© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY 4.0*  
-*Hull: Peter Farell CC BY 4.0 · Nozzles: BamJr CC BY 4.0 · Inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy / Universal — Not an officially licensed product.*
+*Hull: misubisu CC BY 4.0 · Nozzles: BamJr CC BY 4.0 · Inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy / Universal — Not an officially licensed product.*

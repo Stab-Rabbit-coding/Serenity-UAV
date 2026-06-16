@@ -15,7 +15,7 @@
 		(comment 2 "CC BY 4.0 creativecommons.org/licenses/by/4.0 — Steve Griffing PE(CSE) CISSP-ISSEP CPP")
 		(comment 3 "55x35mm 4L JLCPCB — FCC Part 95 Subpart D — 49.830–49.890 MHz AFSK 1200bd AX.25")
 		(comment 4 "EMI hardening: SRF2012 CMC + PRTR5V0U2X TVS + Wuerth 742792512 FB + X2Y 4.7nF cap")
-		(comment 5 "Hull: Peter Farell CC BY 4.0 | Firefly/Serenity fan-work, not officially licensed")
+		(comment 5 "Hull: misubisu CC BY 4.0 | Firefly/Serenity fan-work, not officially licensed")
 	)
 	(layers
 		(0 "F.Cu" signal)

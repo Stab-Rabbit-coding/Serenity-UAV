@@ -6,6 +6,10 @@ Generates 2.0 mm wall WATERTIGHT HOLLOW shells for the four Serenity UAV
 fuselage sections (head, cargo, middle, rear) at the 24" hull scale, for
 foam-filled (2 lb/cf low-density closed-cell foam) printing.
 
+Hull geometry derives from "Serenity Firefly with landing gear and swivel
+engines" by misubisu (thingiverse.com/thing:7330462, CC BY 4.0).
+Full attribution chain: current-specification/LICENSE_AND_ATTRIBUTION.md §2.
+
 WHY THIS SCRIPT EXISTS (root-cause fix, 2026-06-11)
 ---------------------------------------------------
 The predecessor archive/blender-scripts/blender_shells_v3_2mm.py built the

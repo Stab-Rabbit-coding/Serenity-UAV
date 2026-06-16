@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- © 2026 Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP  CC BY 4.0 -->
-<!-- Hull: Peter Farell CC BY 4.0  Nozzle: BamJr CC BY 4.0 -->
+<!-- Hull: misubisu CC BY 4.0  Nozzle: BamJr CC BY 4.0 -->
 <!-- Visual inspiration: Firefly/Serenity (C) Joss Whedon/Mutant Enemy/Universal Pictures -->
 <!-- Fan engineering work - not an officially licensed product -->
 <!-- Build Guide Step 19 — Decal Placement -->
@@ -190,5 +190,5 @@
 <text x="770" y="620" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">Characters must be legible. Minimum</text>
 <text x="770" y="634" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c62828">REPLACE N00000 with your FAA number!</text>
 <rect x="0" y="872" width="1200" height="28" fill="#006db7"/>
-<text x="600" y="890" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
+<text x="600" y="890" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0">Hull: misubisu CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
 </svg>

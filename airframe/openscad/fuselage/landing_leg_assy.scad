@@ -15,6 +15,11 @@
 // Date    : 2026-06-15
 // Revision: Rev R1.4
 //
+// Mounting geometry mates to the canonical hull derived from "Serenity
+// Firefly with landing gear and swivel engines" by misubisu
+// (thingiverse.com/thing:7330462, CC BY 4.0).
+// Full attribution chain: current-specification/LICENSE_AND_ATTRIBUTION.md §2.
+//
 // Description
 // -----------
 // Parametric landing leg assembly for the Serenity UAV.  Four leg assemblies

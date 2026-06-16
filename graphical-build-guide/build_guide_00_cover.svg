@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Serenity-Class Tiltrotor UAV — Build Guide — Cover -->
 <!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP  CC BY 4.0 -->
-<!-- Hull: Peter Farell CC BY 4.0 | Nozzle: BamJr CC BY 4.0 -->
+<!-- Hull: misubisu CC BY 4.0 | Nozzle: BamJr CC BY 4.0 -->
 <!-- Visual: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
 <defs>
@@ -27,7 +27,7 @@
 <text x="600" y="196" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#f5c518">ILLUSTRATED BUILD GUIDE</text>
 <text x="600" y="236" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="14" fill="#c8dff0">Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP</text>
 <text x="600" y="258" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#c8dff0">© 2026  ·  CC BY 4.0  ·  creativecommons.org/licenses/by/4.0</text>
-<text x="600" y="295" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="rgba(200,223,240,0.95)">Hull: Peter Farell CC BY 4.0  ·  Nozzle: BamJr CC BY 4.0  ·  Visual: Firefly/Serenity © Joss Whedon / Universal — Fan engineering work</text>
+<text x="600" y="295" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="rgba(200,223,240,0.95)">Hull: misubisu CC BY 4.0  ·  Nozzle: BamJr CC BY 4.0  ·  Visual: Firefly/Serenity © Joss Whedon / Universal — Fan engineering work</text>
 <polygon points="600,580 611,571 629,562 644,562 659,559 669,559 682,560 694,562 709,566 725,571 738,568 751,566 781,569 781,591 751,594 738,592 725,589 709,594 694,598 682,600 669,601 659,601 644,598 629,598 611,589 600,580" fill="rgba(100,180,255,0.25)" stroke="#c8dff0" stroke-width="2.5"/>
 <line x1="663" y1="555" x2="679" y2="412" stroke="#c8dff0" stroke-width="2.5"/>
 <ellipse cx="677" cy="412" rx="18" ry="7" fill="rgba(255,150,80,0.3)" stroke="#ff7518" stroke-width="2.5"/>

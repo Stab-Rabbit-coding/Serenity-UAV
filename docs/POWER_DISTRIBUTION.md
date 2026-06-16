@@ -573,8 +573,8 @@ installation regardless of throttle setting.
 
 | Mission profile | AUW | T/W (hover) | Assessment |
 |---|---|---|---|
-| Phase 5–10 (4-node min. viable, ~2,768 g) | **2,768 g (6.10 lb)** | 4,464 / 2,768 = **1.61** | Above 1.5 target — **VTOL hover achievable from Phase 5** |
-| Phase 11 (full + 55 mm rear EDF, ~3,130 g) | **3,130 g (6.90 lb)** | 4,464 / 3,130 = **1.43** | Rear EDF is forward-thrust only (not summed into hover). Above 1.0 floor, below 1.5 comfort target — keep hover payload light; rear EDF improves cruise/range, not hover. |
+| Phase 5–10 (4-node min. viable, ~2,768 g) | **2,768 g (6.10 lbm)** | 4,464 / 2,768 = **1.61** | Above 1.5 target — **VTOL hover achievable from Phase 5** |
+| Phase 11 (full + 55 mm rear EDF, ~3,130 g) | **3,130 g (6.90 lbm)** | 4,464 / 3,130 = **1.43** | Rear EDF is forward-thrust only (not summed into hover). Above 1.0 floor, below 1.5 comfort target — keep hover payload light; rear EDF improves cruise/range, not hover. |
 
 Required T/W ≥ **1.5** for stable hover with adequate attitude control margin.
 Phase 5–10 nacelle-only configuration meets this requirement at **T/W = 1.61**.

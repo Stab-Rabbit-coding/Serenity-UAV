@@ -17,6 +17,12 @@ blender_edf_bore_and_petals.py  —  Rev D  —  run with:
 
 Cuts the EDF bore and nozzle-frame seat into the Serenity UAV rear cone hull.
 
+Rear cone hull geometry derives from "Serenity Firefly with landing gear and
+swivel engines" by misubisu (thingiverse.com/thing:7330462, CC BY 4.0); the
+nozzle/petal mechanism references BamJr's Variable Area EDF Nozzles
+(thingiverse.com/thing:2991269, CC BY 4.0).
+Full attribution chain: current-specification/LICENSE_AND_ATTRIBUTION.md §2-3.
+
 Coordinate system (sitting on print bed):
   Z  = longitudinal (ship fore-aft).
         Z = 0   → flat forward interface face (on print bed, mates with cargo).

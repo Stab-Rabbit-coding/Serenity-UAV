@@ -1,10 +1,17 @@
 <!-- OpenDyslexic font for screen reading (CC BY 4.0) -->
 
-# Serenity-Class Tiltrotor UAV — Rev M (18" Canonical Build)
+# Serenity-Class Tiltrotor UAV — Rev M (18" Canonical Build) — SUPERSEDED
+
+> **⚠ SUPERSEDED for 24-inch builds.** This document describes the Rev M 18-inch hull with
+> dual 80mm EDFs (Changesun XRP 3660-2700KV) and an XFLY X4 PRO 5850KV fuselage EDF — propulsion
+> and mass figures here do **not** match the current baseline. For the current 24-inch Rev P–R1
+> build (50mm x-fly 2627-3200KV nacelle EDFs, 1,240 g/EDF, 2,232 g/nacelle), use the top-level
+> **README.md**, **docs/REVN_BUILD_GUIDE_24IN.md**, and **TODO.md**. This file is retained as a
+> historical reference for the Rev M 18-inch design iteration only.
 
 **Author:** Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**Year:**2026  |**Status:** Public release
+**Year:**2026  |**Status:** Superseded — historical reference only (see banner above)
 
 > Rev M supersedes Rev L. Hardware upgrade: all 8 PocketBeagle 2 (AM6232) replaced by PocketBeagle 2 Industrial (AM6254).
 > AM6254 quad Cortex-A53 1.4GHz · 1GB DDR4 · 64GB eMMC · −40°C to 85°C industrial. Propulsion + governor unchanged from Rev L.

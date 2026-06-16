@@ -12,6 +12,10 @@
 #     baked to hull frame after regeneration:
 #         python3 tools/bake_hull_frame.py Nacelle_Port Nacelle_Stbd
 # ============================================================================
+# Nozzle mechanism derives from "Variable Area EDF Nozzles" by BamJr
+# (thingiverse.com/thing:2991269, CC BY 4.0); EDF bore reference from the
+# 50mm EDF Housing (thingiverse.com/thing:4560034, CC BY 4.0, presumed).
+# Full attribution chain: current-specification/LICENSE_AND_ATTRIBUTION.md §3-4.
 """
 blender_nacelle_revo.py  —  run with:
     blender --background --python blender_nacelle_revo.py

@@ -4,6 +4,10 @@ finalize_cargo_middle.py  —  build the final cargo and middle 2 mm shells with
 thin exterior details filled solid (morphological opening), preserving the two
 cargo-section shuttle bays hollow (avionics compartments).
 
+Hull geometry derives from "Serenity Firefly with landing gear and swivel
+engines" by misubisu (thingiverse.com/thing:7330462, CC BY 4.0).
+Full attribution chain: current-specification/LICENSE_AND_ATTRIBUTION.md §2.
+
     python3 finalize_cargo_middle.py
 
 Same fill approach as finalize_head_rear.py: inner_used = opened INTERSECT original
