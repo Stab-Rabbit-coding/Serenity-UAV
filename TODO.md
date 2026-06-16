@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-06-14  
+**Last updated:** 2026-06-15  
 **Current design revision:** Rev R (2026-06-10) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 ---
@@ -170,6 +170,83 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
 
 #### 1.1.1 **Fuselage**
 
+##### 1.1.1.1a *Bow Sensor Pod — Head Section (Rev R1a, 2026-06-15)*
+
+Forward-facing sensor assembly at the bow flat face replacing the two canonical convex domes.
+SCAD source: `airframe/openscad/fuselage/bow_sensor_pod.scad` (use'd by head_shell24.scad).
+All dome positions are estimated; every item below must be completed before printing.
+
+###### Slicer Verification (BLOCKS head section printing)
+
+- [ ] **Open `head_shell24_2mm_repaired.stl` in slicer and cross-section at hull Y ≈ −283 mm
+  (SCAD Y = BOW_FACE_Y = −283) to confirm bow flat face location.**
+  Adjust `BOW_FACE_Y` in `bow_sensor_pod.scad` until the flat face cross-section passes through
+  the flat-face geometry visible at the bow tip.
+- [ ] **Verify Dome A (dorsal camera) position: SCAD [161.33, −283, 83.08].**
+  Cross-section at Z = 83 mm (hull Z = 144 mm) to confirm the aperture circle lands inside the
+  hull skin at the bow face.  Adjust `DOME_A_Z` if the position is outside the hull wall.
+  **BLOCKS Dome A camera socket printing.**
+- [ ] **Verify Dome B (ventral ToF/laser) position: SCAD [161.33, −283, 60.08].**
+  Cross-section at Z = 60 mm (hull Z = 121 mm) to confirm the aperture lands inside hull skin.
+  Adjust `DOME_B_Z` if the position is outside the hull wall.
+  **BLOCKS Dome B ToF/laser socket printing.**
+- [ ] **Verify ToF pocket interior clearance.**  The TFmini-S body pocket is 36×20×22 mm deep;
+  confirm the pocket does not breach the head section interior structure at the bow.
+- [ ] **Verify laser bore clearance.**  The 12.5 mm × 38 mm bore angled 30° below horizon must
+  not intersect the Shepherd Book Faraday tray or any other interior feature.  Check in
+  slicer by sectioning along the bore axis direction.
+- [ ] **Verify all bow sensor apertures are within hull skin (no voids through foam core).**
+  The 2 mm CF-PETG skin must be intact around each aperture; confirm 2-wall annulus preserved.
+- [ ] **Run mesh validation** (`python3 tools/validate_stls.py`) after regenerating
+  `head_shell24_2mm_repaired.stl` from SCAD with bow pod cuts applied.  All findings to be
+  resolved before printing.
+
+###### Carrier and Bezel Parts (follow-on SCAD files)
+
+- [ ] **Design `bow_camera_bezel.scad`** — printed retainer cap that replaces the dorsal dome
+  geometry, contains 12 mm lens bore, 4× M2 threaded inserts, and 21×21 mm external flange
+  matching the hull socket recess.  2 mm CF-PETG, 4-perimeter, ≥ 40% infill.
+- [ ] **Design `bow_tof_laser_bezel.scad`** — printed assembly cap for dome B; contains
+  8 mm PMMA disc socket (ToF aperture), 12 mm laser exit bore (angled 30° down), external
+  flange.  Mounts flush at hull exterior.
+- [ ] **Source PMMA windows for both apertures:**
+  - Dome A: no window (camera lens exposed through hull bore, protected by bezel flange)
+  - Dome B ToF: 8 mm dia × 2 mm thick PMMA disc (uncoated; PMMA transmits 905 nm IR)
+  - Dome B laser: 5 mm dia × 2 mm PMMA exit window (optional; laser module may be sealed)
+
+###### Avionics Integration
+
+- [ ] **Wire TFmini-S UART to Shepherd Wash (Cape-A-2) UART2 port.**
+  Run 28 AWG 4-conductor (TX, RX, 5 V, GND) loom from bow pod area to Shepherd's Room bay.
+  Route inside head section interior; secure with cable saddles bonded to inner hull wall.
+  Shield pair twisted, overall braid shield grounded at Cape end only.
+  Firmware: add TFmini-S UART driver to Shepherd `serenity-fc` Phase 7 task list.
+- [ ] **Wire bow camera video output to Inara's stack video input** per camera/payload PACE
+  priority assignment (CLAUDE.md).  Use RG178 coax; keep run ≤ 300 mm to bow tip.
+- [ ] **Wire laser GPIO enable to Shepherd Wash GPIO** via 2N7002 N-channel MOSFET:
+  - Gate → Wash GPIO (via 10 kΩ series resistor)
+  - 10 kΩ pull-down to GND (default state: laser disabled)
+  - Source → GND
+  - Drain → laser anode via 10 Ω current-limit resistor (confirms ≤ 5 mW at rated voltage)
+  - Physical safety key-switch in series with enable GPIO per [REF-FDA-001 §1040.10(f)(1)]
+    before operating near persons.
+- [ ] **Add laser enable command to MAVLink C2 interface** [REF-PROTO-002] with explicit
+  operator acknowledgement required before energising (prevents accidental enable).
+- [ ] **Add standards REF-IDs to bow_sensor_pod.scad firmware integration notes** once driver
+  code is in place.  Ref: [REF-SENSOR-002] TFmini-S UART protocol, [REF-NIST-001 §2.1] ZTA.
+
+###### Mass Budget Entry
+
+- Bow camera (RunCam Nano 4 or equiv.): 3.6 g (0.13 oz) [REF-SENSOR-001]
+- TFmini-S ToF sensor: 5.0 g (0.18 oz) [REF-SENSOR-002]
+- Crosshair laser module: ≈ 8 g (0.28 oz) (estimate; varies by COTS supplier)
+- Printed bezels (2×): ≈ 4 g total (estimate; update from slicer mass report)
+- Wiring / connectors: ≈ 5 g (estimate)
+- **Total bow pod mass addition: ≈ 25.6 g (0.90 oz)**
+  Update master BOM `docs/bom_revR.json` once bezel masses confirmed in slicer.
+
+---
+
 ##### 1.1.1.0a *Blender-Canonical Source Adoption (Rev R1, 2026-06-13)*
 
 The four Blender-derived, 2 mm hollow, repaired fuselage shell STLs in
@@ -227,37 +304,55 @@ Joint faces in hull-frame Y (confirmed from baked extents):
 - **Cargo / Middle** — hull Y ≈ +131 mm (Cargo_Shell Y-max = +132.0 mm; Middle_Shell Y-min = +130.4 mm)
 - **Middle / Rear** — hull Y ≈ +203 mm (Middle_Shell Y-max = +203.6 mm; Rear_Shell Y-min = +203.2 mm)
 
-- [ ] **Head/Cargo joint boss design (hull Y ≈ −71 mm)**
-  - Add 3× alignment boss pins (3 mm OD CF rod stub, 8 mm depth each side) at equal
-    angular spacing around the joint perimeter, matching 3.2 mm bore in mating face.
-  - Add positive-stop shoulder (1.5 mm step, 2-wall PETG annulus, ≥ 6 mm wide) around
-    the full perimeter of both mating faces.
+- [x] **Head/Cargo joint boss design (hull Y ≈ −71 mm)** *(done 2026-06-14)*
+  - 3× Ø3.2 mm boss-pin bores (8 mm depth each side) at hull (X,Z):
+    (−168.3, +143.9), (−138.0, +91.4), (−198.6, +91.4) mm; Y-range −79..−62 mm.
+  - Face bore-open: Ø hull interior opened at Y −85..−68 mm (inner-face rectangle).
+  - Positive-stop provided by pin depth; no separate shoulder lip needed (pin geometry
+    self-registers both sections).
+  - Implemented in `airframe/blender-scripts/add_structural_features.py` (BOSS_PIN_BORES
+    joint1 + FACE_BORE_CUTTERS head_aft / cargo_fwd); all four shells verify PASS.
+  - See `docs/structural_analysis.md` §4 for boss-pin sizing and load analysis.
   - Bond with West System 105/206; cure 24 h before foam pour.
-  - SCAD files: `s_head_shell24.scad` + `s_cargo_sect_shell24.scad`
-  - NOTE: R1 audit (§1.1.0) flagged that the 2026-06-10 BOSS analysis used the wrong
-    axis (hull X vs hull Y). Redo BOSS_FORE/BOSS_AFT positions in hull Y before SCAD
-    update — see §1.1.0 open item and §1.1.1.1.
-  - **BLOCKS head + cargo section printing (first joint must be verified in slicer).**
+  - **SUB-TASKS OPEN:** verify boss-pin bore positions in slicer cross-section at
+    hull Y ≈ −71 mm before head/cargo printing. *(BLOCKS head + cargo printing)*
 
-- [ ] **Cargo/Middle joint boss design (hull Y ≈ +131 mm)**
-  - Add 3× alignment boss pins at equal angular spacing; positive-stop shoulder on both faces.
-  - SCAD files: `s_cargo_sect_shell24.scad` + `s_middle_canonical_shell24.scad`
-  - Verify that boss pins do not conflict with CF keel bar channel or avionics bay boss posts
-    already added to cargo section in Rev S2.
+- [x] **Cargo/Middle joint boss design (hull Y ≈ +131 mm)** *(done 2026-06-14)*
+  - 3× Ø3.2 mm boss-pin bores (8 mm depth each side) at hull (X,Z):
+    (−170.1, +115.0), (−139.8, +62.5), (−200.4, +62.5) mm; Y-range +121..+141 mm.
+  - Face bore-open: hull interior opened at Y +122..+134 mm and Y +128..+145 mm (aft
+    cargo + fwd middle rectangles respectively).
+  - Implemented in `add_structural_features.py` (BOSS_PIN_BORES joint2 + FACE_BORE_CUTTERS
+    cargo_aft / middle_fwd); boss pins verified clear of keel channel (X −171.8..−168.2).
   - Bond with West System 105/206; cure 24 h before foam pour.
-  - **BLOCKS cargo + middle section printing.**
+  - **SUB-TASKS OPEN:** verify in slicer at hull Y ≈ +131 mm. *(BLOCKS cargo + middle printing)*
 
-- [ ] **Middle/Rear joint boss design (hull Y ≈ +203 mm)**
-  - Add 3× alignment boss pins at equal angular spacing; positive-stop shoulder on both faces.
-  - NOTE: the 4 mm CF skid rods already cross this joint and serve as the primary alignment
-    pins for the skid arms; the 3 boss pins are needed for the horseshoe upper arch and tail
-    cone zone that the skid rods do not reach.
-  - SCAD files: `s_middle_canonical_shell24.scad` + `s_rear_neck_intake_shell24.scad`
-  - Boss pins must not intersect the 4.2 mm CF-rod bore channels in the skid arms.
+- [x] **Middle/Rear joint boss design (hull Y ≈ +203 mm)** *(done 2026-06-14)*
+  - 3× Ø3.2 mm boss-pin bores (8 mm depth each side) at hull (X,Z):
+    (−170.1, +109.6), (−139.8, +57.1), (−200.4, +57.1) mm; Y-range +193..+213 mm.
+  - Face bore-open: hull interior opened at Y +193..+207 mm and Y +201..+217 mm (aft
+    middle + fwd rear rectangles respectively).
+  - CF skid-rod bores (Ø4.2 mm, 60 mm total, 30 mm per section) at (X=−202, Z=+18)
+    and (X=−135, Z=+20); boss pins verified non-intersecting with skid-rod bores.
+  - Implemented in `add_structural_features.py`; all shells verify PASS.
   - Bond with West System 105/206; cure 24 h before foam pour.
-  - **BLOCKS middle + rear section printing.**
+  - **SUB-TASKS OPEN:** verify in slicer at hull Y ≈ +203 mm. *(BLOCKS middle + rear printing)*
 
-- [ ] **CF ring plate (CF-PLATE-2MM) — complete first-principles re-evaluation *(Rev R1)***
+- [x] **CF ring plate (CF-PLATE-2MM) — complete first-principles re-evaluation *(Rev R1)*** *(done 2026-06-14)*
+  Full analysis in `docs/structural_analysis.md`.  2 rings selected (down from prior 5):
+  cargo Y=+30 mm (wing-spar load zone) and rear Y=+290 mm (landing anti-ovalisation zone).
+  Inner-profile CSVs exported to `airframe/diagrams/ring_frames/` for DXF cut file generation.
+  See structural_analysis.md §3 for load case inventory and §5 for ring pocket dimensions.
+  Ring-frame pockets cut into cargo and rear shells by `add_structural_features.py`.
+  **SUB-TASKS OPEN:**
+  - [ ] Import `ring_cargo_Y30_inner.csv` and `ring_rear_Y290_inner.csv` into FreeCAD;
+    add 3 mm clearance offset + keel-notch slot (6 mm wide × 3 mm deep at hull −Z centroid);
+    export DXF to `airframe/diagrams/ring_frames/`. *(BLOCKS CF-PLATE-2MM fabrication)*
+  - [ ] Update BOM: CF-PLATE-2MM Notes — 2 rings (cargo Y = +30 mm, rear Y = +290 mm),
+    mass TBD from DXF enclosed area × 2 mm × 1.54 g/cm³. Revise prior count from 5 to 2.
+  - [ ] Update `REVN_BUILD_GUIDE_24IN.md` keel datum-mark table with hull-Y ring stations
+    (+30 mm, +290 mm) to replace the stale 91/165/251/320/388 mm values.
+
   All prior design data for CF ring plates (station count, hull-Y positions, 2D profiles,
   and structural function) were based on the **pre-Rev N non-canonical hull model** and
   are entirely invalid for the current baked canonical Serenity geometry.  This is a
@@ -306,7 +401,26 @@ Joint faces in hull-frame Y (confirmed from baked extents):
     relevant shell file (§1.1.1.1–§1.1.1.4).
   **BLOCKS keel bar + ring plate fabrication; BLOCKS foam pour.**
 
-- [ ] **Hull keel (CF-BAR-6X3) — complete first-principles re-evaluation *(Rev R1)***
+- [x] **Hull keel (CF-BAR-6X3) — complete first-principles re-evaluation *(Rev R1)*** *(done 2026-06-14)*
+  Full analysis in `docs/structural_analysis.md` §2.  Decisions:
+  - Keel spans cargo-to-rear (hull Y −71..+384 mm ≈ 455 mm), two lap-spliced segments.
+  - Cargo segment: Z ≈ +1..+2 mm (belly, just above skin floor). Rear segment: Z ≈ +4.7..+5.7 mm.
+  - CF-BAR-6X3 retained; oriented 6 mm vertical (strong axis), 3 mm horizontal. FOS ≥ 24.8 at 2g.
+  - Head section excluded (incompatible Z floor at Z=+61 mm, non-structural, short section).
+  - Middle section: keel passes through unsupported in foam; no hard attachment.
+  - RF counterpoise: separate AWG 22 copper stranded wire alongside keel (CF bar inadequate at 49 MHz).
+    BOM item WIRE-COUNTERPOISE-49MHZ added.
+  - Keel locating channels cut into cargo and rear shells by `add_structural_features.py`.
+  **SUB-TASKS OPEN:**
+  - [ ] Add WIRE-COUNTERPOISE-49MHZ to BOM: AWG 22 stranded tinned copper, 460 mm,
+    < 2 g, routed alongside keel inside foam from cargo to rear, terminated at Emma
+    antenna feed on River's Room stack. *(BLOCKS Emma antenna installation)*
+  - [ ] Update `battery_tray.scad` keel-rail slot to Z ≈ +1..+2 mm (cargo belly);
+    re-export STL to `airframe/stls/fuselage/battery_tray.stl`. *(BLOCKS foam pour)*
+  - [ ] Update `REVN_BUILD_GUIDE_24IN.md` keel installation section: span Y −71..+384 mm
+    (455 mm), lap-splice at middle/rear joint Y ≈ +203 mm (50 mm overlap), ring-notch
+    positions at Y = +30 mm and Y = +290 mm. *(BLOCKS keel fabrication)*
+
   A continuous bow-to-stern backbone is structurally justified (primary fuselage bending
   moment arm; inter-section tie-rod spanning all fabrication splits).  However, the
   canonical Serenity hull geometry makes the current straight 6×3 mm flat bar
@@ -656,6 +770,114 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
 #### 1.1.4 **Landing Gear**
 
+**Structural Assessment (2026-06-14):**
+
+- Aircraft AUW Phase 5–10: 6.10 lbm (2,768 g); 3g hard-landing load per leg: 20.4 N (4.6 lbf).
+- Leg cross-section 37.5 mm × 7.5 mm CF-PETG at 30 % infill gives effective area ≈ 178 mm²;
+  compressive capacity ≈ 4,450 N → safety factor 218:1.  CF-PETG is the **correct material**.
+- Feet: TPU 95A at 9 mm thick gives landing compliance + grip.  **No separate springs required**
+  for Phase 1 (TPU feet provide sufficient shock absorption; add Belleville washers to socket
+  if hard-field landings cause cracking in Phase 2).
+- **Metal struts are not warranted** — dead mass at 5× the CF-PETG weight for no structural gain.
+- Leg is a 37.5 mm × 7.5 mm diagonal flat slab, 81.5 mm strut length; local foot-to-socket
+  vector ≈ (0.386, 0.922, 0) in part-local frame (not axis-aligned).
+- Ground clearance at 23° tilt: **31 mm (1.22 in)**. This is **insufficient** for the 3-in payload
+  mission (need ≥ 76 mm / 3.0 in). See §1.1.4.1 sub-task for leg extension requirement.
+
+**Canonical socket locations (hull frame, on cargo-section lower sides):**
+
+| Socket   | Hull X (mm) | Hull Y (mm) | Hull Z (mm) | Description                 |
+|----------|-------------|-------------|-------------|-----------------------------|
+| fwd-port | −96         | +2          | +44         | leg_3 top — port side, fwd  |
+| fwd-stbd | −242        | +2          | +44         | leg_2 top — stbd side, fwd  |
+| aft-port | −96         | +107        | +44         | leg_4 top — port side, aft  |
+| aft-stbd | −242        | +107        | +44         | leg_1 top — stbd side, aft  |
+
+All sockets 44 mm above cargo belly (Z = 0); sockets are on the lower **sides** of the cargo
+section (not the flat belly floor), consistent with canonical Serenity leg attachment.
+
+**Canonical foot positions (hull frame, all level at ground-contact Z = −31 mm):**
+
+| Foot               | Hull X (mm) | Hull Y (mm) | Ground Z (mm) | Notes                        |
+|--------------------|-------------|-------------|---------------|------------------------------|
+| foot_1 (fwd-port)  | −73.5       | −20.5       | −31           | TPU 95A; 43.9 × 43.9 × 9 mm  |
+| foot_3 (fwd-stbd)  | −264.5      | −20.5       | −31           | same                         |
+| foot_4 (aft-port)  | −73.5       | +129.5      | −31           | same                         |
+| foot_2 (aft-stbd)  | −264.5      | +129.5      | −31           | same                         |
+
+Stance: 191 mm (7.52 in) lateral × 150 mm (5.91 in) fore-aft;
+CG centroid at X ≈ −169 mm (symmetric) ✓.
+
+**FreeCAD assembly status (2026-06-14):** Leg and foot placements corrected in
+`airframe/freecad/assembly/SerenityAssembly.FCStd` — all 4 sockets at Z = 44 mm,
+all 4 feet at ground Z = −31 mm, tilt = 23°, azimuth = 45° from Y axis.
+Backup saved as `SerenityAssembly.FCStd.bak2`.
+
+##### 1.1.4.1 *Legs*
+
+- [x] Separate 4x leg stl into individual leg files *(done — leg_1 through leg_4 in
+  `airframe/stls/fuselage/landing-gear/`)*
+
+- [x] Orient and test-fit in FreeCAD assembly; correct azimuth to 45°, level all sockets
+  to Z = 44 mm, all feet to ground Z = −31 mm *(done 2026-06-14)*
+
+- [ ] **Verify visually in FreeCAD** — open `SerenityAssembly.FCStd`, confirm all 4 legs
+  splay at 45° to centerline, all feet coplanar (no tilt visible), legs attach to lower sides
+  of cargo section at approximately the same height.
+
+- [ ] evaluate suitability of model legs for actual use
+
+  - [x] **Multipart / Unitary?** — Unitary (one-piece CF-PETG print per leg).
+    Adequate structural factor (218:1 in compression); no articulation required for fixed gear.
+
+  - [x] **Springs / Struts?** — Not required for Phase 1.  TPU 95A feet provide compliance.
+    If hard-field cracking occurs: add Belleville washer stack (5 mm OD, 10 mm free length)
+    inside socket between leg shoulder and hull — defer to Phase 2.
+
+  - [ ] **Ground clearance is insufficient** — current clearance 31 mm (1.22 in);
+    payload mission requires ≥ 76 mm (3.0 in).  **Resolution options (choose one):**
+    - Extend leg length from 81.5 mm to ≥ 110 mm (new SCAD-generated strut, same cross-section);
+      OR
+    - Redesign as retractable gear (not recommended — complexity, mass, failure modes);
+      OR
+    - Accept current clearance and load payload with aircraft raised on a stand.
+    **Recommended:** extend strut length to 115 mm, maintain 23° tilt and 45° azimuth.
+    Recompute foot positions and re-place in assembly.  **BLOCKS payload mission.**
+
+  - [ ] **Mounting to hull — design socket bosses** on cargo-section lower sides.
+    Boss spec (CF-PETG, printed integral to cargo shell inner wall):
+    - Interior socket: 37.5 × 7.5 mm pocket (+ 0.2 mm clearance per side = 37.9 × 7.9 mm)
+    - Wall: 2-perimeter annulus (0.8 mm per side minimum) → boss exterior ≈ 40 × 10 mm
+    - Depth: 15 mm (≥ 2× leg wall thickness)
+    - Positive-stop shoulder: 2 mm lip at socket entry (CLAUDE.md requirement)
+    - Lock: M3 × 10 mm bolt through boss side wall into captive M3 hex insert (5 mm OD)
+    - 4 bosses, one at each canonical socket coordinate (see table above)
+    - Add boss geometry to Blender cargo-section source in
+      `airframe/blender-scripts/files-hollowed-24in/`; re-bake after modifying.
+    **BLOCKS first taxi/landing test.**
+
+  - [ ] **Bake legs and feet to hull frame** after finalizing leg length and socket positions.
+    Neither leg_1–4 STLs nor foot_1–4 STLs carry the `SerenityUAV HULL-FRAME R1` marker.
+    Run `python3 tools/bake_hull_frame.py` after adding them to `COMPONENTS` dict.
+
+  - [ ] Implement canonically and mechanically sound legs *(in progress — length extension pending)*
+
+##### 1.1.4.2 *Feet*
+
+- [x] Feet separated into individual STLs (`foot_1` through `foot_4` in landing-gear/).
+
+- [x] All 4 feet placed at same ground-contact Z = −31 mm in FreeCAD assembly *(done 2026-06-14;
+  prior foot_3 had a 6 mm placement error that has been corrected)*.
+
+- [ ] Modify feet as needed to mount to legs.
+  Current foot pad: 43.9 × 43.9 × 9 mm TPU 95A (from Thingiverse model).
+  Required: a pocket or socket feature on the top face (Z_max, local = 9 mm) to accept the
+  37.5 × 7.5 mm leg end with a 5 mm deep socket + M2.5 through-bolt.  Evaluate whether the
+  stock foot geometry already provides this or if a new SCAD source is needed.
+
+- [ ] **Assess foot grip on concrete/asphalt** — TPU 95A is adequate for smooth surfaces.
+  For field operations (grass, gravel): consider adding a 3 mm textured grip ring or
+  rubber disk insert (Sorbothane 50A, 40 mm OD × 3 mm) bonded to foot bottom face.
 Landing gear structural analysis complete: `docs/LANDING_GEAR_ANALYSIS.md` (Rev R1, 2026-06-14).
 Parametric SCAD: `airframe/openscad/fuselage/landing_leg_assy.scad` (Rev R1).
 
@@ -690,30 +912,39 @@ Peak deceleration at 6 ft Phase 11 drop: 65.3g (avionics isolation rated for 100
 ##### 1.1.4.2 *Rear Skid Reinforcement*
 
 - [ ] **LG-03 CF rod channel in `middle_canonical_shell24.scad` rear skid arms** — add
-  3 mm bore channel (CF rod, ~140 mm per skid) per `docs/LANDING_GEAR_ANALYSIS.md §8`.
+  3 mm bore channel (CF rod, ~140 mm per skid) per `docs/LANDING_GEAR_ANALYSIS.md §10`.
   Re-export STL, re-bake, verify watertight.  **BLOCKS taxi test.**
 
 ##### 1.1.4.3 *Feet*
 
-- [ ] Verify existing TPU foot geometry (`feet_x_4_scaled24.stl`) fits the leg body foot
-  socket (22.4 × 10.4 mm, 20 mm deep cavity in `leg_body_r1.stl`).  Resize or regenerate
-  foot as needed to match the socket dimensions.  Print test in TPU 95A.
+- [ ] Verify SCAD PART="foot" produces foot pad 55 × 55 × 12 mm (TPU 95A) with correct
+  main strut socket (SOCK_MAIN_D = 14 mm bore, SOCK_MAIN_H = 8 mm deep) and 2× M3 bolt
+  holes.  Print test in TPU 95A and confirm main strut spigot fit.
 
-##### 1.1.4.4 *Fuse Qualification Testing (BLOCKS first flight)*
+##### 1.1.4.4 *Qualification Testing (BLOCKS first flight)*
 
-- [ ] **LG-01 Shear-test M3 × 12 PA6 nylon bolts** — fabricate 3 representative test
-  fixtures simulating the leg boss slot; test 10 samples each at 0°, 15°, and 30° off-axis.
-  Target: fuse load 848 N ± 150 N (190.7 ± 33.7 lbf) per leg (3 bolts combined).
-  Record results in `docs/LANDING_GEAR_ANALYSIS.md §7.3`.  **BLOCKS first flight.**
+- [ ] **LG-01 Lateral retention bolt test — M3 × 20 PA6 nylon** — fabricate representative
+  boss fixture (side-wall and belly-edge variants); shear-test 10 samples each at 0°, 15°,
+  30° off-axis.  Target per bolt: ≥ 282 N.  Record in `docs/LANDING_GEAR_ANALYSIS.md §9`.
+  **BLOCKS first flight.**
 
-- [ ] **LG-06 Drop test prototype leg** — mount a leg + foot assembly to a mass-equivalent
-  fixture (6.90 lbm / 3,130 g).  Drop from 1.5 ft (elastic) and 6 ft (design).  Confirm:
-  (a) elastic spring-back ≤1.5 ft; (b) no hull boss damage at 6 ft; (c) fuse activates
-  cleanly above design load.  Record peak g-force with shock logger.  **BLOCKS first flight.**
+- [ ] **LG-06 Drop test prototype leg assembly** — mount one complete trapezoidal brace
+  assembly to 6.90 lbm (3,130 g) fixture.  Drop from 1.5 ft and 6 ft.  Confirm: (a) no
+  hull boss damage; (b) PETG node crush is overload failure mode; (c) leg retained on
+  safety cord.  Log peak g.  **BLOCKS first flight.**
 
-- [ ] **LG-07 Confirm avionics Faraday enclosure 100g shock rating** — the 6 ft drop
-  produces 65.3g peak; enclosures must be verified to withstand ≥100g without losing
-  electrical continuity.  See avionics PCB fab checklist.  **BLOCKS first flight.**
+- [ ] **LG-07 Confirm avionics enclosure ≥ 100g shock rating.**  See PCB fab checklist.
+  **BLOCKS first flight.**
+
+- [ ] **LG-08 PETG junction node quasi-static compression test** — confirm crush onset ≥ 2×
+  design load (≥ 1,002 N per assembly).  Adjust node infill if needed.  **BLOCKS first flight.**
+
+- [ ] **LG-08 PETG junction hub quasi-static compression test** — compress one printed PETG
+  hub (25 % gyroid, HUB_R = 11 mm) at 1 mm/min in a fixture simulating the 4-strut load
+  distribution.  Record crush force, crush initiation load, and energy absorbed to 10 mm
+  deflection.  Refine peak-g estimate in `docs/LANDING_GEAR_ANALYSIS.md §4.3 and §6`.
+  Adjust hub infill or geometry if required to achieve crush onset ≥ 2× design load
+  (≥ 1,002 N per assembly) while keeping peak decel ≤ 100g.  **BLOCKS first flight.**
 
 
 

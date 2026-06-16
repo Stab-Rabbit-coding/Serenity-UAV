@@ -55,6 +55,7 @@ serenity_subsystem_assembler.py   — DEPRECATED subsystem assembler class (stub
 Headless Blender Python scripts for shell hollowing and STL generation.
 
 ```
+add_structural_features.py        — Structural feature booleans on all 4 baked shells (Rev R1 2026-06-14): joint face bores, boss-pin bores, keel channel, ring-frame pockets, skid-rod bores; exports inner-profile CSVs
 blender_edf_bore_and_petals.py    — EDF bore + nozzle petal geometry
 blender_hollow_shells.py          — Centroid-inset 2mm shell hollowing (all 4 sections)
 blender_intake_cut.py             — Fuselage EDF intake cut
@@ -89,7 +90,9 @@ All parametric source files.  Compiled to STLs via `airframe/FreeCAD-scripts/Mak
 #### airframe/openscad/fuselage/
 
 ```
-head_shell24.scad               — Nose/cockpit shell, 2mm CF-PETG skin (Rev R)
+head_shell24.scad               — Nose/cockpit shell, 2mm CF-PETG skin (Rev R1a); integrates bow_sensor_pod.scad
+bow_sensor_pod.scad             — Bow sensor pod CSG cuts: 19mm Nano camera (dome A), TFmini-S ToF + 12mm
+                                    crosshair laser 30° below horizon (dome B); use'd by head_shell24.scad (Rev R1a)
 middle_canonical_shell24.scad   — Horseshoe neck section shell (Rev R)
 rear_shell24.scad               — Aft engine-room shell, 2mm CF-PETG (Rev R)
 battery_tray.scad               — 6S 4000mAh LiPo tray, keel-rail slide (Rev R)
@@ -97,8 +100,10 @@ belly_panel.scad                — Battery bay belly access panel (Rev R)
 access_panels_24in.scad         — All hull access panels: 4× Faraday-bay covers (Shepherd/Inara/River/Simon),
                                     2× ventral hatch covers (battery/Kaylee), 2× ventral hatch frames (Rev R)
 rcrs49_wire_post.scad           — 49 MHz RCRS top-wire antenna post, 12×12 mm PETG mast (Rev R)
-landing_leg_assy.scad           — Rev R1 4× field-replaceable landing legs (CF-PETG flat spring,
-                                    22×10mm, 185mm) + hull boss + 3×M3 nylon shear-bolt fuse;
+landing_leg_assy.scad           — Rev R1.5 4× corner single-arm leg brackets (CF-PETG main
+                                    strut + V-arm, PETG crush node, 2× hull boss, TPU foot
+                                    cap), 17mm ground clearance, matches author reference part
+                                    airframe/freecad/assembly/strong-leg.stl;
                                     see docs/LANDING_GEAR_ANALYSIS.md for structural analysis
 cargo/
   cargo_sect_shell24.scad       — Rev R cargo section shell with clamshell doors, avionics bays, GPS mounts
@@ -129,6 +134,16 @@ wings_s1223_revo.scad             — Rev R S1223 high-lift wing pair (carried f
 wing_nacelle_pylon_revo.scad      — Rev R nacelle tilt pylon (carried fwd from Rev O)
 ```
 
+### airframe/diagrams/
+
+Reference diagrams and machine-readable profiles generated from hull analysis.
+
+```
+ring_frames/
+  ring_cargo_Y30_inner.csv    — Inner cross-section boundary at hull Y=+30 mm (9 paths, 4314 vertices); input for CF ring DXF
+  ring_rear_Y290_inner.csv    — Inner cross-section boundary at hull Y=+290 mm (14 paths, 2813 vertices); input for CF ring DXF
+```
+
 ### airframe/stls/
 
 Compiled and repaired STLs ready for slicing.
@@ -153,9 +168,14 @@ landing-gear/
   foot_2_scaled24.stl           — Individual foot 2 (Thingiverse reference)
   foot_3_scaled24.stl           — Individual foot 3 (Thingiverse reference)
   foot_4_scaled24.stl           — Individual foot 4 (Thingiverse reference)
-  landing_legs_hull_r1.stl      — All 4 engineered legs in hull-frame coords (PART="hull_legs", Rev R1a 2026-06-16)
-  [leg_body_r1.stl]             — PENDING: single printable leg body (PART="leg")
-  [hull_boss_r1.stl]            — PENDING: hull boss profile (PART="boss")
+  landing_legs_hull_r1.stl      — All 4 engineered single-arm leg brackets in hull-frame
+                                   coords (PART="hull_legs", Rev R1.5 2026-06-16); watertight,
+                                   confirmed against author's strong-leg.stl reference geometry
+  [arm_r1.stl]                  — PENDING: Rev R1.5 V-arm CF-PETG (PART="arm"; 4 per aircraft; struts ≈37.7 mm)
+  [main_strut_r1.stl]           — PENDING: Rev R1.5 main vertical strut CF-PETG OD18 mm × 35 mm (PART="main_strut"; 4 per aircraft)
+  [junct_node_r1.stl]           — PENDING: Rev R1.5 arm-to-strut junction node PETG crush zone R9 mm (PART="node"; 4 per aircraft)
+  [hull_boss_r1.stl]            — PENDING: Rev R1.5 generic hull boss cylinder CF-PETG OD22 mm (PART="boss"; 8 per aircraft; 2 per corner)
+  [foot_pad_r1.stl]             — PENDING: Rev R1.5 TPU 95A foot cap ⌀25×10 mm (PART="foot"; 4 per aircraft)
 dorsal_antenna_fin.stl            — Dorsal antenna fin fairing
 middle_canonical_edf_intake.stl — Middle section EDF intake opening
 cargo/
@@ -459,6 +479,7 @@ archive/                          — Pre-Rev Q gerber snapshots
 
 ```
 PROJECT_INDEX.md                  — This file: active project directory tree
+structural_analysis.md            — First-principles structural analysis (Rev R1, 2026-06-14): keel, ring frames, joint bosses, skid rods, AUW, FOS calculations
 AVIONICS_PB2_REDESIGN.md          — 8× PocketBeagle 2 Industrial avionics redesign spec (Rev R)
 BATTERY_MOUNT.md                  — Battery CG analysis, retention load case, belly panel spec (Rev R)
 LANDING_GEAR_ANALYSIS.md          — Landing gear structural analysis: 6 ft drop, fuse sizing, lateral loads (Rev R1)
