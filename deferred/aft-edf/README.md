@@ -4,9 +4,16 @@
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
 **Status:** DEFERRED — not archived; build pending after all other systems are proven.
 
----
+> **STALE DESIGN — requires regeneration before Phase 11.** The files in this folder describe a
+> superseded 120 mm EDF + 8-petal iris nozzle design. The current canonical fuselage EDF
+> (per CLAUDE.md) is a **55 mm 6S unit** feeding a **fixed** elliptical exit nozzle
+> (2.06 in × 1.76 in / 52.3 mm × 44.7 mm — explicitly NOT an iris) plus 4 RCS bleed-air thrusters
+> tapping ~15% of EDF mass flow. The OpenSCAD/STL files below have not yet been regenerated for
+> this spec; see TODO.md §Phase 11 (`rear_nozzle_canonical.stl`, `rcs_thruster_nozzle.stl`,
+> `rcs_distribution_manifold.stl`, `rcs_valve_bracket.stl`) for the replacement file list and
+> required changes. Do not treat the 120 mm/iris description below as current.
 
-## What This Is
+## What This Is (legacy 120 mm design — see staleness notice above)
 
 This folder holds all design files for the large fuselage (aft/rear) EDF system: the 120 mm
 6S electric ducted fan mounted inside the engine bell section, fed by four radial intake scoops

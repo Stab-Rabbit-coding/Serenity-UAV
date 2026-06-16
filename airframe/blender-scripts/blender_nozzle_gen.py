@@ -13,6 +13,11 @@
 #     tilt pivot at duct Z = 83 mm).  Assembly placement VERIFY pending
 #     (serenity_assembly.py).
 # ============================================================================
+# Nozzle mechanism derives from "Variable Area EDF Nozzles" by BamJr
+# (thingiverse.com/thing:2991269, CC BY 4.0), used as the actuation reference;
+# exterior geometry is generated from the Serenity hull cross-sections (hull
+# source: misubisu, thingiverse.com/thing:7330462, CC BY 4.0).
+# Full attribution chain: current-specification/LICENSE_AND_ATTRIBUTION.md §2-3.
 """
 blender_nozzle_gen.py  —  run with:
     blender --background --python blender_nozzle_gen.py

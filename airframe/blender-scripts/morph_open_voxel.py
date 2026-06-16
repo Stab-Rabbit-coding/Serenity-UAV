@@ -18,6 +18,11 @@ The surface is recovered with marching cubes.  The interior cavity surface need
 not be smooth (it is hidden and foam-filled); exterior fidelity is unaffected
 because only the inner operand is changed.
 
+Operates on shell operands derived from the Serenity hull geometry: "Serenity
+Firefly with landing gear and swivel engines" by misubisu
+(thingiverse.com/thing:7330462, CC BY 4.0).
+Full attribution chain: current-specification/LICENSE_AND_ATTRIBUTION.md §2.
+
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 License: CC BY 4.0  —  creativecommons.org/licenses/by/4.0
 """

@@ -214,5 +214,5 @@
 <text x="40" y="562" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#374151">Bay A (CN1/FC1): Cape-B-2 / Cape-A-2 — 5 kV isolated transceivers at CAN FD/RS-485/1553B bus start termination, closest to external connectors and forward cable runs.</text>
 <text x="40" y="576" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#374151">Bay B (CN2/FC2) &amp; Bay D (CN3/FC3): Cape-B-1 / Cape-A-1 — inner ring nodes; direct RMII dual-Ethernet to CPSW3G for maximum throughput.  Bay E (CN4/FC4): Cape-B-2 / Cape-A-2 — 5 kV isolated at bus end, adjacent to nacelle and rear EDF wiring.</text>
 <rect x="0" y="872" width="1400" height="28" fill="#006db7"/>
-<text x="700" y="890" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0">Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
+<text x="700" y="890" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0">Hull: misubisu CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
 </svg>

@@ -3,7 +3,7 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
 **Revision:** R1
-**Last updated:** 2026-06-14
+**Last updated:** 2026-06-16
 
 ---
 
@@ -69,7 +69,8 @@ When a standard has multiple applicable clauses, list them all:
 | §48.205(a) | Display of unique identifier | Registration number on exterior |
 | §48.205(b)(1) | Legibility of identifier | Minimum 3-inch (76 mm) characters clearly visible |
 
-**Used in:** `docs/REVN_BUILD_GUIDE_24IN.md`, `graphical-build-guide/decal_sheet.svg`
+**Used in:** `docs/REVN_BUILD_GUIDE_24IN.md`, `graphical-build-guide/decal_sheet.svg`,
+`README.md`, `TODO.md`, `CLAUDE.md`
 
 ---
 
@@ -92,7 +93,8 @@ When a standard has multiple applicable clauses, list them all:
 | §107.51(c) | Minimum visibility | ≥ 3 statute miles from pilot's control station |
 | §107.51(d) | Minimum distance from clouds | 500 ft below, 2,000 ft horizontal |
 
-**Used in:** `docs/REVN_BUILD_GUIDE_24IN.md`, `graphical-build-guide/build_guide_18_first_flight.svg`
+**Used in:** `docs/REVN_BUILD_GUIDE_24IN.md`, `graphical-build-guide/build_guide_18_first_flight.svg`,
+`README.md`, `TODO.md`, `CLAUDE.md`, `airframe/openscad/fuselage/bow_sensor_pod.scad`
 
 ---
 
@@ -114,7 +116,8 @@ When a standard has multiple applicable clauses, list them all:
 **Applied to:** Navigation light subsystem — 6× WS2812C-2020 RGB LEDs (port red, starboard green,
 aft white); controlled by FC4 node (Simon's medbay, Bay E).
 
-**Used in:** `graphical-build-guide/build_guide_13_nav_lights.svg`, `docs/REVN_BUILD_GUIDE_24IN.md`
+**Used in:** `graphical-build-guide/build_guide_13_nav_lights.svg`, `docs/REVN_BUILD_GUIDE_24IN.md`,
+`README.md`, `TODO.md`, `CLAUDE.md`
 
 ---
 
@@ -139,7 +142,8 @@ aft white); controlled by FC4 node (Simon's medbay, Bay E).
 
 **Applied to:** SiK 915 MHz MAVLink (RFD900x), LoRa 915 MHz (RFM95W), Zigbee 2.4 GHz (CC2652R7)
 
-**Used in:** `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`
+**Used in:** `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`, `TODO.md`, `CLAUDE.md`,
+`avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`
 
 ---
 
@@ -160,7 +164,7 @@ aft white); controlled by FC4 node (Simon's medbay, Bay E).
 **Applied to:** TI WL1837MOD WiFi 5 GHz link (UNII-3 band); Tx power must be reduced to
 17 dBm conducted when a 14 dBi directional antenna is connected to maintain EIRP ≤ 30 dBm.
 
-**Used in:** `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`
+**Used in:** `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`, `TODO.md`, `CLAUDE.md`
 
 ---
 
@@ -190,7 +194,8 @@ aft white); controlled by FC4 node (Simon's medbay, Bay E).
 **Applied to:** Emma (XCVR-49MHZ-2) 49 MHz AX.25 / RCRS link; River's Room and Simon's Medbay nodes only.
 
 **Used in:** `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`,
-`avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`
+`avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`,
+`README.md`, `TODO.md`, `CLAUDE.md`, `docs/AVIONICS_PB2_REDESIGN.md`
 
 ---
 
@@ -218,7 +223,8 @@ aft white); controlled by FC4 node (Simon's medbay, Bay E).
 carries a TPM-bound SHA-256 HMAC; TPM 2.0 (SLB9670) on all 8 nodes provides boot measurement
 and key storage.
 
-**Used in:** `CLAUDE.md`, `README.md`, `docs/AVIONICS_PB2_REDESIGN.md`
+**Used in:** `CLAUDE.md`, `README.md`, `docs/AVIONICS_PB2_REDESIGN.md`, `TODO.md`,
+`airframe/openscad/fuselage/bow_sensor_pod.scad`
 
 ---
 
@@ -246,7 +252,7 @@ to "Operational Technology (OT) Security."
 **Applied to:** 5 kV galvanic isolation on all inter-node buses; Faraday enclosure for Kaylee PDB;
 PACE redundancy design; hostile RF environment design objective.
 
-**Used in:** `CLAUDE.md`, `README.md`
+**Used in:** `CLAUDE.md`, `README.md`, `docs/AVIONICS_PB2_REDESIGN.md`
 
 ---
 
@@ -292,7 +298,8 @@ Verify section references against the final revision when it is published.
 **Applied to:** ATF16V8BQL CPLD hardware write-block (SET at power-on, CLEAR only on hard power
 cycle); hardware-enforced append-only non-executable log microSD on every Zoë node.
 
-**Used in:** `README.md` (replaces incorrect NIST SP 800-72 citation — see "Removed Citations")
+**Used in:** `README.md` (replaces incorrect NIST SP 800-72 citation — see "Removed Citations"),
+`TODO.md`, `docs/AVIONICS_PB2_REDESIGN.md`
 
 ---
 
@@ -352,7 +359,7 @@ PE-68515 coupling transformer (1:1.41, 78 Ω); 78 Ω termination at CN1 (Bay A) 
 ATA6561 CAN FD transceivers; 120 Ω bus termination at CN1 (Bay A) and FC4 (Bay E).
 
 **Used in:** `docs/AVIONICS_PB2_REDESIGN.md`,
-`avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`
+`avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`, `CLAUDE.md`
 
 ---
 
@@ -387,7 +394,8 @@ required before fabrication (see TODO.md §1.4 PCB DRC and isolation verificatio
 
 **Used in:** `README.md`, `docs/AVIONICS_PB2_REDESIGN.md`,
 `avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
-`avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`
+`avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`,
+`TODO.md`, `CLAUDE.md`, `airframe/openscad/fuselage/bow_sensor_pod.scad`
 
 ---
 
@@ -441,7 +449,9 @@ at 30° below horizon on aircraft CL.
 **Applied to:** Same isolation devices as REF-IEC-001.  VDE V 0884-11 compliance is verified
 per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ datasheets.
 
-**Used in:** `README.md`, `docs/AVIONICS_PB2_REDESIGN.md`
+**Used in:** `README.md`, `docs/AVIONICS_PB2_REDESIGN.md`, `CLAUDE.md`,
+`avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
+`avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`
 
 ---
 
@@ -465,7 +475,9 @@ per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ da
 
 **Applied to:** Ethernet RSTP ring connecting all 8 nodes; CPSW3G hardware switch mode in AM6254.
 
-**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`
+**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `CLAUDE.md`,
+`avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
+`avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`
 
 ---
 
@@ -486,7 +498,7 @@ per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ da
 
 **Applied to:** TI WL1837MOD 802.11 a/b/g/n via SDIO interface; 5 GHz primary, 2.4 GHz fallback.
 
-**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`
+**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `CLAUDE.md`
 
 ---
 
@@ -504,7 +516,7 @@ per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ da
 |---|---|---|
 | Clause 10 | 2.4 GHz O-QPSK PHY | Zigbee radio layer (CC2652R7 optional backup mesh) |
 
-**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `README.md`
+**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `README.md`, `CLAUDE.md`
 
 ---
 
@@ -528,7 +540,7 @@ per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ da
 | SR 4.2 | Use of Cryptography | TPM 2.0 (SLB9670) per node for key storage, attestation, and HMAC computation |
 | SR 7.6 | Network and Security Configuration Settings | 5 kV galvanic isolation as physical network security hardening against EMI/RF injection |
 
-**Used in:** `CLAUDE.md`
+**Used in:** `CLAUDE.md`, `docs/AVIONICS_PB2_REDESIGN.md`
 
 ---
 
@@ -551,7 +563,7 @@ per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ da
 | Chapter 3, §3.1.9 | Lights to be displayed by unmanned aircraft | Port red, starboard green, aft white position lights |
 
 **Used in:** `graphical-build-guide/build_guide_13_nav_lights.svg`,
-`graphical-build-guide/decal_sheet.svg`
+`graphical-build-guide/decal_sheet.svg`, `CLAUDE.md`, `docs/REVN_BUILD_GUIDE_24IN.md`
 
 ---
 
@@ -573,7 +585,8 @@ per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ da
 | §6.2 | I Frame (Information Frame) | Data packet format for command uplink and telemetry downlink |
 | §6.3 | S Frames | Flow control and error recovery on the 49 MHz link |
 
-**Used in:** `avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`, `README.md`
+**Used in:** `avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`, `README.md`,
+`docs/AVIONICS_PB2_REDESIGN.md`
 
 ---
 
@@ -588,7 +601,7 @@ per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ da
 
 **Applied to:** SiK MAVLink telemetry link (primary ground-to-air C2 channel).
 
-**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`
+**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `TODO.md`
 
 ---
 
@@ -644,7 +657,7 @@ shall be wired in series with the enable GPIO line before this platform is opera
 an environment where persons may be present in the beam path.
 
 **Used in:** `airframe/openscad/fuselage/bow_sensor_pod.scad`,
-`airframe/openscad/fuselage/head_shell24.scad`
+`airframe/openscad/fuselage/head_shell24.scad`, `TODO.md`
 
 ---
 
@@ -675,7 +688,7 @@ an environment where persons may be present in the beam path.
 format compatibility (CAM_APER_D = 12 mm, CAM_BEZ_W = 21 mm, CAM_M2_PITCH = 14 mm).
 
 **Used in:** `airframe/openscad/fuselage/bow_sensor_pod.scad`,
-`airframe/openscad/fuselage/head_shell24.scad`
+`airframe/openscad/fuselage/head_shell24.scad`, `TODO.md`
 
 ---
 
@@ -712,7 +725,7 @@ Wash (Cape-A-2) UART2 port; I2C available as fallback per Zero Trust data-path
 redundancy policy [REF-NIST-001 §2.1].
 
 **Used in:** `airframe/openscad/fuselage/bow_sensor_pod.scad`,
-`airframe/openscad/fuselage/head_shell24.scad`
+`airframe/openscad/fuselage/head_shell24.scad`, `TODO.md`
 
 ---
 

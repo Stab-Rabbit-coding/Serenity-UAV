@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Serenity-Class Tiltrotor — Component Overview -->
 <!-- © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP  CC BY 4.0 -->
-<!-- Hull: Peter Farell CC BY 4.0  Nozzle: BamJr CC BY 4.0 -->
+<!-- Hull: misubisu CC BY 4.0  Nozzle: BamJr CC BY 4.0 -->
 <!-- Visual inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy / Universal Pictures -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" width="900" height="620">
 <defs>
@@ -152,7 +152,7 @@
 <text x="698" y="362" font-size="7" fill="rgba(255,255,255,0.78)">Drives nozzle ring rack · long. shaft</text>
 <rect x="690" y="390" width="190" height="55" rx="4" fill="#ff6b350d" stroke="#ff6b35" stroke-width="1.2"/>
 <text x="698" y="406" font-size="10" fill="#ff6b35" font-weight="bold">SERENITY HULL</text>
-<text x="698" y="419" font-size="8" fill="rgba(255,255,255,0.88)">CC BY 4.0 Peter Farell remix · PETG shell</text>
+<text x="698" y="419" font-size="8" fill="rgba(255,255,255,0.88)">CC BY 4.0 misubisu remix · PETG shell</text>
 <text x="698" y="432" font-size="7" fill="rgba(255,255,255,0.78)">609.6mm (24.00") · 2.5mm wall · foam fill</text>
 <rect x="690" y="460" width="190" height="55" rx="4" fill="#ff6b350d" stroke="#ff6b35" stroke-width="1.2"/>
 <text x="698" y="476" font-size="10" fill="#ff6b35" font-weight="bold">NACELLE PODS ×2</text>
@@ -168,5 +168,5 @@
   letter-spacing="2">SERENITY-CLASS TILTROTOR — COMPONENT OVERVIEW</text>
 <text x="10" y="26" font-family="'OpenDyslexic Mono','OpenDyslexicMono',monospace" font-size="7" fill="rgba(163,230,53,0.95)">
   © 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP · CC BY 4.0
-  · Hull: Peter Farell CC BY 4.0 · Nozzle: BamJr CC BY 4.0</text>
+  · Hull: misubisu CC BY 4.0 · Nozzle: BamJr CC BY 4.0</text>
 </svg>

@@ -34,8 +34,9 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 | Work | Author | License | Source |
 |------|--------|---------|--------|
-| Hull geometry | misubisu / Peter Farell | CC BY 4.0 | printables.com/model/548545 |
-| Iris nozzle concept | BamJr | CC BY 4.0 | thingiverse.com/thing:2991269 |
+| Hull geometry | misubisu | CC BY 4.0 | thingiverse.com/thing:7330462 |
+| Hull geometry (historical, Rev M and earlier 18") | Peter Farell | CC BY 4.0 | printables.com/model/548545 |
+| Iris nozzle concept (nacelle) | BamJr | CC BY 4.0 | thingiverse.com/thing:2991269 |
 | Blueprint proportions | Mandel + Earls / QMx / Universal | © 2007 QMx | 269 ft × 170 ft × 79 ft ratios |
 | All other design | Steve Griffing | CC BY 4.0 | This project |
 
