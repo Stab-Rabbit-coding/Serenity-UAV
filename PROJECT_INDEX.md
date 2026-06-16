@@ -153,16 +153,18 @@ landing-gear/
   foot_2_scaled24.stl           — Individual foot 2 (Thingiverse reference)
   foot_3_scaled24.stl           — Individual foot 3 (Thingiverse reference)
   foot_4_scaled24.stl           — Individual foot 4 (Thingiverse reference)
-  [leg_body_r1.stl]             — PENDING: Rev R1 engineered leg (generate from landing_leg_assy.scad PART="leg")
-  [hull_boss_r1.stl]            — PENDING: Rev R1 hull boss profile (PART="boss")
+  landing_legs_hull_r1.stl      — All 4 engineered legs in hull-frame coords (PART="hull_legs", Rev R1a 2026-06-16)
+  [leg_body_r1.stl]             — PENDING: single printable leg body (PART="leg")
+  [hull_boss_r1.stl]            — PENDING: hull boss profile (PART="boss")
 dorsal_antenna_fin.stl            — Dorsal antenna fin fairing
 middle_canonical_edf_intake.stl — Middle section EDF intake opening
 cargo/
   cargo_sect_shell24.stl                 — Cargo shell (SCAD output)
   cargo_sect_shell24_repaired.stl        — Cargo solid shell, manifold-repaired (used for intersection in access_panels_24in.scad)
   cargo_sect_shell24_2mm_repaired_largest.stl — Repaired largest shell body
-  cargo_door_port.stl                   — Port clamshell cargo door
-  cargo_door_stbd.stl                   — Stbd clamshell cargo door
+  cargo_door_port.stl                   — Port clamshell cargo door (hull-frame, Rev R1a 2026-06-16)
+  cargo_door_stbd.stl                   — Stbd clamshell cargo door (hull-frame, Rev R1a 2026-06-16)
+  generate_cargo_doors.py               — Door STL generator (Rev R1a, hull frame; see CLAUDE.md)
   cargo_cradle_autolatch.stl            — Auto-latch payload cradle
   cargo_fpv_bezel.stl                   — FPV camera bezel
   cargo_gps_retention_ring.stl          — GPS antenna retention ring
@@ -171,7 +173,6 @@ cargo/
   cargo_drv8833_tray.stl                — DRV8833 H-bridge PCB tray
   cargo_door_servo_bracket.stl          — Door servo bracket
   cargo_release_servo_bracket.stl       — Payload release servo bracket
-  generate_cargo_doors.py               — Door STL generation script
   generate_cargo_mounts.py              — Mount STL generation script
 ```
 

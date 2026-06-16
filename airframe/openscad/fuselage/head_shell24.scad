@@ -40,20 +40,30 @@
 //
 // Rev R (2026-06-11): Rev R baseline checkpoint — no geometry changes.
 // Rev S1 (2026-06-09): Shepherd Book avionics bay (Faraday enclosure) on
-//   interior dorsal face; correct forward sensor and FPV camera positions.
-//   Sensor position bug: S1A_POS.X=251, S1B_POS.X=231, FPV_POS.X=239 were
-//   all outside STL X_max=228 mm (positions inside exterior hull skin required).
-//   Corrected to X=224 (S1A, S1B) and X=226 (FPV), verified within bounds.
-//   S1B_POS Z offset changed: was (CY+8, CZ+12), now (CY, CZ+22) — pure Z
-//   separation avoids diagonal offset; 22 mm gives 9 mm gap between bezel edges.
-//   FPV_POS Y offset: CY+24 puts aperture 24 mm dorsal of centroid (bridge
-//   viewport location on Serenity hull); 4 mm gap to S1A bezel upper edge ✓.
-//   Book bay: Shepherd Book (CLAUDE.md: "forward avionics bay", watchdog/auth
-//   SBC stack) Faraday enclosure on interior dorsal face at (CX, CZ).
-//   Same Cape-B-2 (Zoë) + Cape-A-2 (Wash) stack and 60×40×55 mm Faraday tray
-//   spec as cargo bays (Rev S4).  4× M3 bosses + 62×42 mm dorsal access panel.
+//   interior dorsal face.  Book bay: Cape-B-2 (Zoë) + Cape-A-2 (Wash) stack,
+//   60×40×55 mm Faraday tray, 4× M3 bosses + 62×42 mm dorsal access panel.
 //   Ductwork parameters shared with cargo SCAD spec (DUCT_* constants).
 //   Ref: cargo_sect_shell24.scad Rev S4; CLAUDE.md Book bay; CAPE-B-2.kicad_pcb.
+// Rev S2 (2026-06-16): Forward sensor and FPV camera positions corrected to
+//   nose face.  Rev S1 positions (X=224/226, Y=CY, Z=CZ±offset) placed all
+//   three apertures on the port LATERAL face (X near X_max=228), not the nose.
+//   Root cause: FWD_ROT=[0,90,0] aimed cylinders in +X (port) direction, and
+//   the position constants reused X as the longitudinal axis (legacy convention)
+//   while the hull-frame STL uses Y as longitudinal (nose at Y≈−287.7 mm).
+//   Fix: FWD_ROT=[90,0,0] (Rx+90° maps cylinder +Z → global −Y = toward nose);
+//   S1A/S1B/FPV repositioned to nose face (Y≈−268 to −280, X=CX±15, Z=CZ−5).
+//   Camera (FPV) on starboard side (X=CX−15 = viewer's LEFT in nose-on view,
+//   red highlight in head_front_Yneg_rg.png); ToF arrays S1A/S1B on port side
+//   (X=CX+15 = viewer's RIGHT, green highlight).  Laser pointer is co-located
+//   with S1A/S1B (same physical unit or adjacent small bore — see TODO §1 for
+//   separate laser pointer mount once hardware is specified).
+//   VERIFY all three positions at the nose exterior surface in slicer before
+//   printing; adjust Y if the nose face is more/less forward than −280 mm at
+//   the sensor's (X, Z) coordinates.
+//   Also fixed: hollow_shell() import path updated from
+//   thingverse-serenity/files-hollowed-18in/ (archived, wrong scale) to
+//   blender-scripts/files-hollowed-24in/head_shell24_2mm_repaired.stl
+//   (canonical 24in 2mm-wall source; already hollow, no re-scale needed).
 //
 // Rev Q (2026-05-26): Updated to 2.0 mm (0.079 in) foam-fill skin thickness.
 //   - Shell source: head_shell24_2mm_repaired.stl (blender_shells_v3_2mm.py,
@@ -67,9 +77,11 @@
 //   Ref: structural_analysis.py log, Serenity UAV project, 2026-05-26.
 //
 // Mounts (all flush with outer mold line -- zero external protrusion):
-//   S1A  -- VL53L5CX forward ToF sensor, Array A (FC3 primary), sta 33 mm
-//   S1B  -- VL53L5CX forward ToF sensor, Array B (FC2 primary), sta 53 mm
-//   FPV  -- 28 mm standard FPV camera, bridge forward-facing viewport, sta 45 mm
+//   S1A  -- VL53L5CX fwd ToF, Array A (FC3), port side of nose face; laser co-located
+//   S1B  -- VL53L5CX fwd ToF, Array B (FC2), port side of nose face, aft of S1A
+//   FPV  -- 28 mm standard FPV camera, starboard side of nose face
+//           Green marker = S1A/S1B (port); red marker = FPV (stbd) in
+//           head_front_Yneg_rg.png reference image.
 //
 // GPS patch antenna and 49 MHz RCRS post are on the broad, flat dorsal surface
 // of the mid-fuselage section (middle_canonical_shell24.scad) where the
@@ -101,8 +113,9 @@
 //   X — lateral,      positive toward port  (left)
 //   Y — longitudinal, positive aft (back)   NOTE: Y is aft; Z is dorsal/up
 //   Z — vertical,     positive dorsal (up)
-//   Station mapping: X_stl = 284 - station_mm
-//     e.g. station 3.54 in (90 mm) → X_stl = 284 - 90 = 194
+//   Nose tip: Y_stl ≈ −287.7 mm (most negative Y = most forward in the STL).
+//   Station mapping (forward sensor positions): Y_stl = −287.7 + station_mm
+//     e.g. 10 mm aft of nose tip → Y_stl = −287.7 + 10 = −277.7 mm
 //
 // Hull surface position estimates (wall = 0.079 in / 2.0 mm):
 //   half_ext_Y = 2.0 / (1 - 0.982987) = 118 mm (4.65 in)
@@ -191,33 +204,45 @@ FPV_BOARD_D  =  5.0;   // mm -- camera body pocket depth (interior)
 $fn = 64;
 
 // Orientation rotation vectors
-//   STL axes: X=forward, Y=dorsal (+up), Z=port (+left).
-//   Ry(+90 deg) maps default +Z cylinder to +X:  rotate([ 0, 90, 0 ])
-FWD_ROT = [ 0, 90, 0 ];   // aperture faces +X (toward nose)
+//   Axes: X=lateral (port=+), Y=longitudinal (aft=+, nose=−Y), Z=dorsal (up=+).
+//   Rx(+90°) maps default +Z cylinder to −Y: rotate([90,0,0]).
+//   Applied to apertures on nose face so they face −Y (outward toward front).
+FWD_ROT = [ 90, 0, 0 ];   // aperture faces −Y (toward nose / forward)
 
-// Mount position constants -- 24"-scaled STL world coordinates
-//   X_stl = 284 - station_mm.  Y/Z at estimated hull centreline.
+// Mount position constants -- 24"-scaled STL world coordinates (hull frame, mm)
+//   Nose face: Y ≈ −287.7 mm (nose tip); apertures at Y = −280 to −268 mm.
 //   All positions VERIFY in slicer after rendering.
 
-// Array A forward sensor -- nose centreline, station 33 mm (FC3 primary)
-//   Rev S1 fix: X corrected 251 → 224 (was outside STL X_max=228 mm).
-//   Station 33 mm → X_stl = 284 - 33 = 251; clipped to X=224 (4 mm inside X_max).
-S1A_POS = [ 224, CY, CZ ];            // VERIFY: hull axis at station 33 mm
+// Array A forward sensor — port side of nose face, ToF Array A (FC3 primary)
+//   Rev S2 fix: repositioned from port lateral face to nose face.
+//   X = CX + 15 mm → port of centre; viewer's RIGHT in nose-on view (green marker).
+//   Y = −280 mm → ≈ 7.7 mm aft of nose tip (Y_tip = −287.7); on nose exterior.
+//   Z = CZ − 5 mm → slightly below centroid height.
+//   Laser pointer co-located here (same physical housing or adjacent small bore).
+//   VERIFY Y is at/inside nose exterior at these X, Z coordinates in slicer.
+S1A_POS = [ CX + 15.0, -280.0, CZ - 5.0 ];   // VERIFY: port side, nose face
 
-// Array B forward sensor -- offset for distinct FoV, station 53 mm (FC2 primary)
-//   Rev S1 fix: X corrected 231 → 224; Y/Z offset changed to pure Z offset.
-//   22 mm Z separation from S1A gives 9 mm gap between 14 mm-OD bezels ✓.
-S1B_POS = [ 224, CY, CZ + 22 ];       // VERIFY: ~18 deg lateral bearing offset from S1A
+// Array B forward sensor — port side, aft of S1A for distinct longitudinal station
+//   X = CX + 15 mm → same lateral and vertical as S1A (coincides in front-view
+//   projection → appears as one green spot; dual-redundant arrays at same FoV).
+//   Y = −268 mm → ≈ 19.7 mm aft of nose tip; distinct station from S1A.
+//   VERIFY Y is at/inside nose exterior at these X, Z coordinates in slicer.
+S1B_POS = [ CX + 15.0, -268.0, CZ - 5.0 ];   // VERIFY: port side, nose face, aft of S1A
 
-// Bridge FPV camera -- upper nose, Serenity bridge viewport, station 45 mm
-//   Rev S1 fix: X corrected 239 → 226; Y offset increased to CY+24 for bridge
-//   viewport location.  At (CY+24): 4 mm gap from S1A bezel upper edge (CY+5.5) ✓.
-FPV_POS = [ 226, CY + 24, CZ ];       // VERIFY: dorsal of nose axis at bridge viewport
+// Forward FPV camera — starboard side of nose face
+//   Rev S2 fix: repositioned from port lateral face to nose face, starboard side.
+//   X = CX − 15 mm → stbd of centre; viewer's LEFT in nose-on view (red marker).
+//   Y = −280 mm → same longitudinal station as S1A; matched nose-face position.
+//   Z = CZ − 5 mm → same height as S1A / S1B.
+//   VERIFY Y is at/inside nose exterior at these X, Z coordinates in slicer.
+FPV_POS = [ CX - 15.0, -280.0, CZ - 5.0 ];   // VERIFY: stbd side, nose face
 
-// M3 boss positions at aft joint face (X = 99 mm, head-to-cargo mating face).
+// M3 boss positions at aft joint face (aft face = Y ≈ −53 mm in hull frame).
+//   NOTE: These positions use X=99 as the aft face (legacy X=longitudinal convention,
+//   same root cause as Rev S2 sensor correction).  In hull frame, the aft joint face
+//   is at Y ≈ −53, not X=99.  BOSS_AFT_ROT = [0,90,0] faces bosses in +X (port),
+//   but aft-face bosses should face −Y (aft-to-fwd, into head interior).  See TODO.
 //   6 bosses distributed around the hull perimeter ellipse.
-//   Positions estimated from STL bounds (Y=-288..-53, Z=0..141) and hull centroid.
-//   BOSS_AFT_ROT: rotate([0,90,0]) aligns cylinder axis along +X (into interior).
 //   All positions VERIFY in slicer -- boss must be fully inside the hull skin.
 BOSS_AFT_ROT = [ 0, 90, 0 ];
 
@@ -424,21 +449,22 @@ module m3_boss(pos, rot) {
 //   │  └─ book_dorsal_panel_cut           ← 62×42 mm Faraday tray access opening
 //
 // ============================================================
-// Module: hollow_shell (Rev R — same fix as rear_neck_intake_shell24.scad)
+// Module: hollow_shell
 // ============================================================
+// Rev S2 (2026-06-16): replaced hollow_shell() difference-of-scales approach with a
+//   direct import of the canonical 24-inch 2mm-wall Blender source.  The old import
+//   referenced ../../thingverse-serenity/files-hollowed-18in/ (18-inch scale, now
+//   archived); the Blender pipeline already produces a watertight 2 mm hollow shell,
+//   so re-hollowing in SCAD was incorrect.  Source: blender-scripts/files-hollowed-24in.
+//   INNER_SX/INNER_SY/INNER_SZ constants are retained in case they are useful for
+//   future operations but are no longer used here.
 module hollow_shell() {
-    difference() {
-        import("../../thingverse-serenity/files-hollowed-18in/head_shell24_repaired.stl");
-        translate([CX, CY, CZ])
-            scale([INNER_SX, INNER_SY, INNER_SZ])
-            translate([-CX, -CY, -CZ])
-                import("../../thingverse-serenity/files-hollowed-18in/head_shell24_repaired.stl");
-    }
+    import("../../blender-scripts/files-hollowed-24in/head_shell24_2mm_repaired.stl");
 }
 
 difference() {
     union() {
-        // 2.0 mm foam-fill head shell — hollowed in SCAD
+        // 2.0 mm foam-fill head shell — pre-hollowed by Blender pipeline
         hollow_shell();
 
         // Shepherd Book avionics bay — 4× M3 Faraday tray anchor bosses.
@@ -463,10 +489,11 @@ difference() {
         m3_boss(BOSS_AFT_6, BOSS_AFT_ROT);
     }
 
-    // Flush aperture cuts -- sensors and camera (Rev S1 corrected positions).
-    vlsensor_cut(S1A_POS, FWD_ROT);
-    vlsensor_cut(S1B_POS, FWD_ROT);
-    fpv_cut(FPV_POS,      FWD_ROT);
+    // Flush aperture cuts — nose-face sensors and camera (Rev S2 corrected positions).
+    //   FWD_ROT=[90,0,0]: cylinder −Z→ global −Y = toward nose. See Rev S2 note.
+    vlsensor_cut(S1A_POS, FWD_ROT);   // port side, ToF Array A + laser pointer
+    vlsensor_cut(S1B_POS, FWD_ROT);   // port side, ToF Array B
+    fpv_cut(FPV_POS,      FWD_ROT);   // starboard side, FPV camera
 
     // Shepherd Book Faraday tray dorsal access panel cut (Rev S1).
     //   62×42 mm opening through dorsal skin at (BOOK_X_CEN, BOOK_Z_CEN).

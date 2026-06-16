@@ -4,52 +4,62 @@
 #   Hull frame (canonical for ALL design artifacts): X = +port (left),
 #   Y = +aft (back), Z = +dorsal (up); origin = SerenityAssembly.FCStd
 #   world origin.  Primary-component STLs published to airframe/stls/
-#   are stored directly in hull frame, baked by tools/bake_hull_frame.py
-#   (marker 'SerenityUAV HULL-FRAME R1' in the binary STL header).
-#   NEVER re-bake a mesh derived from an already-baked file.
-#   This file:
-#     Reads the cargo shell mesh, which as of R1 is BAKED hull-frame
-#     (s_cargo_sect_shell24_2mm_repaired.stl).  The published door STLs
-#     (cargo_door_port/stbd.stl, generated 2026-06-01) predate the bake
-#     AND the validated orientation - regenerate from the baked shell
-#     and verify the belly faces toward hull -Z (TODO.md 1.1.1.2.1).
+#   are stored directly in hull frame, baked by tools/bake_hull_frame.py.
+#
+#   This file (Rev R1a, 2026-06-16):
+#     Generates cargo bay clamshell doors from the baked hull-frame cargo
+#     shell (cargo_sect_shell24_2mm_repaired.stl).
+#
+#     Coordinate conventions used throughout:
+#       X = lateral (port = +X, stbd = -X); ship CL at X ≈ -170 mm
+#       Y = longitudinal fore-aft (+Y = aft); bay spans Y ≈ +2 to +108 mm
+#       Z = dorsal-ventral (+Z = up); belly at Z ≈ 0
+#
+#     Hinge line: runs along Y at X = X_HINGE (ship CL), Z = belly exterior Z
+#     Port door:  X from X_HINGE to X_MAX (hull +X / port half)
+#     Stbd door:  X from X_MIN  to X_HINGE (hull -X / stbd half)
+#
+#     The script reads belly-facing triangles (normal Z < 0, centroid Z < 10 mm)
+#     from the baked shell and builds a bilinear SciPy interpolator
+#     belly_z(x2d, y2d) -> Z_ext.  Each door panel's exterior surface follows
+#     that contour; the interior is offset +2 mm in +Z.  Four piano-hinge
+#     knuckles per door, interleaved port/stbd, axis along Y.
+#
+#   Previous revision (pre-R1 / 2026-06-01): used a pre-bake shell in a
+#   different coordinate frame (Y = vertical, Z = lateral).  Those STLs are
+#   superseded by this revision; see TODO.md §1.1.1.2.1 (now resolved).
 # ============================================================================
 """
-generate_cargo_doors.py
-Generate clamshell cargo-bay door STL files for the Serenity UAV gondola.
+generate_cargo_doors.py — Rev R1a (2026-06-16)
+Generate clamshell cargo-bay door STL files in hull-frame coordinates.
 
-Two mirrored halves split at the gondola lateral centreline (Z = 81.61 mm):
-  * cargo_door_port.stl   — port half  (Z = Z_HINGE..163.22 mm)
-  * cargo_door_stbd.stl   — stbd half  (Z = 0..Z_HINGE mm)
+Two mirrored halves split at the ship lateral centreline (X = X_HINGE ≈ -170 mm):
+  * cargo_door_port.stl   — port half  (X = X_HINGE .. X_MAX)
+  * cargo_door_stbd.stl   — stbd half  (X = X_MIN   .. X_HINGE)
 
-The exterior of each door exactly matches the canonical Rev-O gondola belly
-profile, extracted from cargo_sect_shell24_2mm_repaired.stl via face-normal
-filtering and bilinear SciPy interpolation.  No boolean intersection is used
-(the shell STL is not watertight).
-
-Door geometry:
-  * Exterior surface  — interpolated from gondola belly faces
-  * Interior surface  — exterior + 2 mm offset (uniform wall thickness)
-  * Four hinge knuckles per door (CF-PETG, 6 mm OD, 12 mm long, 3.3 mm bore
-    for 3 mm CF pin + 0.15 mm radial clearance)
-  * Knuckles for port and stbd halves are longitudinally interleaved so the
-    eight barrels form one continuous piano-hinge along Z = Z_HINGE
+Door geometry (hull frame):
+  * Exterior surface  — interpolated from cargo belly faces (Z ≈ 0, normal = -Z)
+  * Interior surface  — exterior + WALL_T mm offset in +Z
+  * Four hinge knuckles per door (CF-PETG, 6 mm OD, 12 mm long, 3.15 mm bore
+    for 3 mm CF pin + 0.15 mm radial clearance per side)
+  * Knuckles for port and stbd halves are interleaved along Y so the eight
+    barrels form one continuous piano-hinge running along Y at X = X_HINGE
 
 Hinge hardware:
-  * CF rod: 3 mm OD × gondola-belly-width long (163.22 mm + 4 mm end stops)
+  * CF rod: 3 mm OD × bay-width long (Y_BAY_LEN + 4 mm end stops)
   * Knuckle bore: 3.15 mm (3 mm + 2 × 0.075 mm clearance each side)
-  * Pin seats in M3 grub-screw blocks epoxied to gondola inner shell wall
+  * Pin retained by M3 grub-screw blocks epoxied to shell inner wall
 
 Material: CF-PETG (door body and knuckles)
 Print: 0.15 mm layers, 4 perimeters, ≥ 40 % infill
 
 References:
-  * PHASED_BUILD_GUIDE.md §Phase 6 Cargo System
-  * cargo_sect_shell24.scad Rev O gondola-belly geometry
-  * Serenity-UAV TODO.md cargo handling equipment mounts (completed)
+  * docs/LANDING_GEAR_ANALYSIS.md — leg/boss attachment positions confirm bay Y span
+  * airframe/openscad/fuselage/cargo/cargo_sect_shell24.scad — belly geometry
+  * CLAUDE.md §Hull-Frame Coordinate Standard (Rev R1)
 
 Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-License: CC BY 4.0
+License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
 """
 
 import os
@@ -60,210 +70,214 @@ import trimesh
 import trimesh.transformations as tft
 from scipy.interpolate import griddata
 
-# ── Output directory ───────────────────────────────────────────────────────────
-OUT_DIR = "thingverse-serenity/files-hollowed-18in"
-SHELL_STL = os.path.join(OUT_DIR, "cargo_sect_shell24_2mm_repaired.stl")
+# ---------------------------------------------------------------------------
+# Paths — resolved relative to this script file
+# ---------------------------------------------------------------------------
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+SHELL_STL  = os.path.join(SCRIPT_DIR, "cargo_sect_shell24_2mm_repaired.stl")
+OUT_DIR    = SCRIPT_DIR
 
-# ── Gondola shell geometry (from bounds / belly-face analysis) ─────────────────
-# Shell bounds: X = -201.53..-7.42, Y = -414.81..-211.27, Z = 0..163.22 mm
-Z_SHELL_MIN = 0.0       # stbd extremity
-Z_SHELL_MAX = 163.22    # port extremity
-Z_HINGE = Z_SHELL_MAX / 2.0    # = 81.61 mm — symmetric hinge centreline
+# ---------------------------------------------------------------------------
+# Hull-frame cargo shell geometry (from CLAUDE.md validated baked extents)
+#   Cargo_Shell: X -267.0..-72.7,  Y -71.5..+132.0,  Z 0.0..163.2  (mm)
+# ---------------------------------------------------------------------------
+X_SHELL_MIN = -267.0    # stbd extremity (hull -X)
+X_SHELL_MAX =  -72.7    # port extremity (hull +X)
+X_HINGE = (X_SHELL_MIN + X_SHELL_MAX) / 2.0   # ship lateral CL ≈ -169.85 mm
 
-# Nominal exterior belly Y in the flat nadir zone (Z ≈ 10..150 mm)
-Y_BELLY_EXT = -413.6    # mm
-Y_BELLY_INT = Y_BELLY_EXT + 2.0    # interior surface (2 mm wall) = -411.6 mm
+# Cargo bay opening: longitudinal span centred between leg attach points.
+# Landing-gear HULL_ATTACH_POS Y rows: 25 mm and 100 mm.  Bay spans Y=2..108.
+Y_BAY_LEN = 106.0       # mm — longitudinal door span
+Y_BAY_CEN  = 55.0       # mm — Y centre of bay opening
+Y_BAY_FWD  = Y_BAY_CEN - Y_BAY_LEN / 2.0   # =  2.0 mm
+Y_BAY_AFT  = Y_BAY_CEN + Y_BAY_LEN / 2.0   # = 108.0 mm
 
-# Cargo-bay opening longitudinal span, centred on the gondola (X ≈ -102 mm)
-X_BAY_LEN = 106.0       # mm — slightly wider than 4 in (101.6 mm) for frame
-X_BAY_CEN = -102.0      # mm
-X_BAY_AFT = X_BAY_CEN - X_BAY_LEN / 2.0   # = -155.0 mm
-X_BAY_FWD = X_BAY_CEN + X_BAY_LEN / 2.0   # = -49.0 mm
+# Fall-back exterior belly Z (used when interpolator misses a point)
+Z_BELLY_FALLBACK = 0.5  # mm
+
+# Wall thickness (door body, interior offset in +Z direction)
+WALL_T = 2.0            # mm
 
 # Grid resolution for belly-surface sampling
-GRID_DX = 3.0   # mm step in X
-GRID_DZ = 3.0   # mm step in Z
+GRID_DX = 3.0           # mm step in X
+GRID_DY = 3.0           # mm step in Y
 
-# Wall thickness
-WALL_T = 2.0    # mm
+# ---------------------------------------------------------------------------
+# Hinge knuckle parameters (axis along Y, barrel tangent to belly exterior)
+# ---------------------------------------------------------------------------
+PIN_D        = 3.0              # mm — CF rod OD
+PIN_CL       = 0.075            # mm — radial clearance per side
+PIN_BORE_R   = PIN_D / 2.0 + PIN_CL    # 1.575 mm bore radius
+KNUCKLE_OD   = 6.0              # mm
+KNUCKLE_R    = KNUCKLE_OD / 2.0
+KNUCKLE_LEN  = 12.0             # mm — barrel axial length
+KNUCKLE_SECTIONS = 36           # polygon approximation
 
-# ── Hinge hardware parameters ──────────────────────────────────────────────────
-PIN_D = 3.0             # mm, CF rod OD
-PIN_CL = 0.075          # mm, radial clearance (each side)
-PIN_BORE_R = (PIN_D / 2.0) + PIN_CL    # = 1.575 mm bore radius
-KNUCKLE_OD = 6.0        # mm
-KNUCKLE_R = KNUCKLE_OD / 2.0           # = 3.0 mm
-KNUCKLE_LEN = 12.0      # mm, barrel length per knuckle
-KNUCKLE_SEP = 1.0       # mm, axial gap between adjacent knuckles
-KNUCKLE_SECTIONS = 36   # polygon approximation
+# Knuckle Y-positions: 4 per door, interleaved port/stbd along Y
+# Total 8 knuckles, pitch P = (Y_BAY_LEN - KNUCKLE_LEN) / 7
+_PITCH   = (Y_BAY_LEN - KNUCKLE_LEN) / 7.0         # ≈ 13.43 mm
+_Y_START = Y_BAY_FWD + KNUCKLE_LEN / 2.0            # first knuckle centre Y
 
-# Knuckle X-positions (four per door, interleaved port / stbd)
-# Spaced 22 mm apart within the 106 mm bay; interleaved so gap = 11 mm
-KNUCKLE_X_PORT = [-65.0, -98.0, -131.0, -142.0 - KNUCKLE_LEN / 2.0]
-KNUCKLE_X_STBD = [-57.0 + KNUCKLE_LEN / 2.0, -79.0, -112.0, -145.0]
+# Port knuckles at even slots (0, 2, 4, 6) along Y
+KNUCKLE_Y_PORT = [_Y_START + 2 * k * _PITCH for k in range(4)]
+# Stbd knuckles at odd slots (1, 3, 5, 7) along Y
+KNUCKLE_Y_STBD = [_Y_START + (2 * k + 1) * _PITCH for k in range(4)]
 
-# Recalculate to proper interleaved positions
-# 4 port + 4 stbd knuckles, alternating, total span ≈ 106 mm
-# 8 knuckles total (4 port + 4 stbd), alternating along the hinge line.
-# Pitch P = centre-to-centre distance between adjacent knuckles (one per side).
-# Total span from first centre to last = 7 P, and the first/last centres sit
-# L/2 inboard from the bay ends, so:  7P = X_BAY_LEN - KNUCKLE_LEN  →  P ≈ 13.4 mm
-# Gap between adjacent knuckles = P - L ≈ 1.4 mm (adequate clearance).
-_PITCH  = (X_BAY_LEN - KNUCKLE_LEN) / 7.0          # ≈ 13.43 mm (adjacent pitch)
-_X_START = X_BAY_AFT + KNUCKLE_LEN / 2.0            # = -149.0 mm (slot-0 centre)
-
-# Port knuckles occupy even slots (0, 2, 4, 6); spacing = 2 × pitch
-KNUCKLE_X_PORT = [_X_START + 2 * k * _PITCH for k in range(4)]
-# Stbd knuckles occupy odd slots (1, 3, 5, 7); start one pitch offset from PORT
-KNUCKLE_X_STBD = [_X_START + (2 * k + 1) * _PITCH for k in range(4)]
-
-# Hinge pin centre: sits just inside the exterior belly surface so knuckle
-# barrel outer edge is flush with the belly.  Pin centre at:
-#   Y = Y_BELLY_EXT + KNUCKLE_R  (barrel tangent to exterior belly face)
-#   Z = Z_HINGE
-KNUCKLE_Y = Y_BELLY_EXT + KNUCKLE_R    # = -413.6 + 3.0 = -410.6 mm
-KNUCKLE_Z = Z_HINGE                     # = 81.61 mm
+# Knuckle centre: hinge line at X = X_HINGE; Z tangent to belly exterior
+KNUCKLE_X = X_HINGE                         # lateral position (hinge line)
+KNUCKLE_Z = Z_BELLY_FALLBACK + KNUCKLE_R    # ≈ 3.5 mm (tangent to belly)
 
 
-# ── Helper: load shell and build belly-surface interpolator ───────────────────
+# ---------------------------------------------------------------------------
+# Helper: load shell and build belly-surface Z interpolator
+# ---------------------------------------------------------------------------
 
 def build_belly_interpolator(shell_stl: str):
     """
-    Load the gondola shell STL, filter belly-facing triangles, and return a
-    callable  belly_y(X_arr, Z_arr) → Y_arr  using bilinear SciPy griddata.
+    Load the baked hull-frame cargo shell STL and return a callable
+    belly_z(x2d, y2d) -> Z_ext that gives the exterior belly Z-coordinate at
+    any (X, Y) position over the cargo bay opening.
 
-    The shell STL is not watertight so boolean operations are avoided.
-    Face centroids with face_normal[Y] < -0.5 AND centroid[Y] < -370 mm are
-    classified as belly faces; their (X, Z, Y) triples feed the interpolator.
+    Belly faces are identified by:
+      * Face normal Z component < -0.5  (pointing downward / ventral)
+      * Face centroid Z < 10 mm         (near the bottom of the shell)
 
     Parameters
     ----------
     shell_stl : str
-        Path to the gondola shell STL.
+        Path to the baked hull-frame cargo shell STL.
 
     Returns
     -------
-    belly_y : callable
-        belly_y(x_2d, z_2d) → y_2d  (same shape as inputs).
+    belly_z : callable  belly_z(x_2d, y_2d) -> z_2d  (same shape as inputs).
     """
     print(f"[belly] loading {shell_stl} …")
     shell = trimesh.load(shell_stl, process=False)
-    fc = shell.triangles_center    # shape (F, 3)
-    fn = shell.face_normals        # shape (F, 3)
+    fc = shell.triangles_center    # (F, 3) — face centroids
+    fn = shell.face_normals        # (F, 3) — face normals
 
-    # Select belly-facing faces (downward normal, below Y=-370)
-    mask = (fn[:, 1] < -0.5) & (fc[:, 1] < -370.0)
+    # Select ventral-facing faces (normal pointing -Z, near bottom of shell)
+    mask = (fn[:, 2] < -0.5) & (fc[:, 2] < 10.0)
     belly = fc[mask]
+    if mask.sum() == 0:
+        print("[belly] WARNING: no belly faces found — using flat fallback")
+        def belly_z(x2d, y2d):
+            return np.full_like(x2d, Z_BELLY_FALLBACK, dtype=float)
+        return belly_z
+
+    bx = belly[:, 0]   # X positions of belly face centroids
+    by = belly[:, 1]   # Y positions
+    bz = belly[:, 2]   # Z positions (exterior surface)
+
     print(f"[belly] {mask.sum()} belly faces extracted "
-          f"Z={belly[:, 2].min():.1f}..{belly[:, 2].max():.1f}  "
-          f"Y={belly[:, 1].min():.2f}..{belly[:, 1].max():.2f}")
+          f"X={bx.min():.1f}..{bx.max():.1f}  "
+          f"Y={by.min():.1f}..{by.max():.1f}  "
+          f"Z={bz.min():.2f}..{bz.max():.2f}")
 
-    bx = belly[:, 0]
-    bz = belly[:, 2]
-    by = belly[:, 1]   # exterior Y values
+    def belly_z(x2d, y2d):
+        """Interpolate exterior belly Z at 2-D arrays of (X, Y) positions."""
+        pts = np.column_stack([x2d.ravel(), y2d.ravel()])
+        z = griddata((bx, by), bz, pts, method="linear",
+                     fill_value=Z_BELLY_FALLBACK)
+        return z.reshape(x2d.shape)
 
-    def belly_y(x2d, z2d):
-        """Interpolate exterior belly Y at 2-D arrays of (X, Z) positions."""
-        pts = np.column_stack([x2d.ravel(), z2d.ravel()])
-        y = griddata((bx, bz), by, pts, method="linear",
-                     fill_value=Y_BELLY_EXT)
-        return y.reshape(x2d.shape)
-
-    return belly_y
+    return belly_z
 
 
-# ── Helper: build closed solid mesh from exterior belly surface grid ───────────
+# ---------------------------------------------------------------------------
+# Helper: build closed door panel mesh from belly Z surface grid
+# ---------------------------------------------------------------------------
 
-def build_panel_mesh(x_grid: np.ndarray, z_grid: np.ndarray,
-                     y_ext: np.ndarray, wall_t: float = WALL_T) -> trimesh.Trimesh:
+def build_panel_mesh(x_grid: np.ndarray, y_grid: np.ndarray,
+                     z_ext: np.ndarray, wall_t: float = WALL_T) -> trimesh.Trimesh:
     """
-    Construct a closed, manifold-intended triangular mesh representing a door
-    panel whose exterior surface follows y_ext(X, Z) and whose interior surface
-    is offset by wall_t in the +Y direction.
+    Construct a closed triangular mesh for one door panel half.
+
+    Exterior surface follows z_ext(X, Y); interior is offset by wall_t in +Z.
 
     Parameters
     ----------
-    x_grid : 1-D array, length M
-    z_grid : 1-D array, length N
-    y_ext  : 2-D array (M, N), exterior Y at each (x_grid[i], z_grid[j])
-    wall_t : float, mm — inward offset for interior surface
+    x_grid : 1-D array, length M — lateral X positions (port or stbd half)
+    y_grid : 1-D array, length N — longitudinal Y positions (bay span)
+    z_ext  : 2-D array (M, N) — exterior belly Z at each (x_grid[i], y_grid[j])
+    wall_t : float, mm — inward (+Z) offset for interior surface
 
     Returns
     -------
     trimesh.Trimesh
     """
-    M, N = len(x_grid), len(z_grid)
-    y_int = y_ext + wall_t    # interior Y (closer to +Y / inward)
+    M, N = len(x_grid), len(y_grid)
+    z_int = z_ext + wall_t    # interior Z (+Z / inward toward hull)
 
-    # ── Vertex arrays ──────────────────────────────────────────────────────────
-    # Exterior vertices: index = i*N + j  (0 .. M*N-1)
-    # Interior vertices: index = M*N + i*N + j
+    # Exterior vertices index = i*N + j  (range 0 .. M*N-1)
+    # Interior vertices index = M*N + i*N + j
     ev = np.zeros((M * N, 3), dtype=float)
     iv = np.zeros((M * N, 3), dtype=float)
     for i in range(M):
         for j in range(N):
             k = i * N + j
-            ev[k] = [x_grid[i], y_ext[i, j], z_grid[j]]
-            iv[k] = [x_grid[i], y_int[i, j], z_grid[j]]
+            ev[k] = [x_grid[i], y_grid[j], z_ext[i, j]]
+            iv[k] = [x_grid[i], y_grid[j], z_int[i, j]]
 
     verts = np.vstack([ev, iv])
 
-    def ei(i, j): return i * N + j           # exterior index
-    def ii(i, j): return M * N + i * N + j   # interior index
+    def ei(i, j): return i * N + j           # exterior vertex index
+    def ii(i, j): return M * N + i * N + j   # interior vertex index
 
     faces = []
 
-    # ── Exterior surface — normal → -Y (downward / outward) ──────────────────
-    # For quad (i,j)(i+1,j)(i+1,j+1)(i,j+1):
-    #   (a,b,c): (b-a)×(c-a) = (dx,0,0)×(dx,0,dz) → (0,-dx·dz,0) → -Y ✓
-    #   (a,c,d): same orientation ✓
+    # Exterior surface — normal → -Z (ventral / downward)
+    # For quad (i,j)(i+1,j)(i+1,j+1)(i,j+1) in hull frame (X=lateral, Y=fore-aft):
+    # With vertices (a,b,c): b-a ≈ (dx,0,0), c-a ≈ (dx,dy,0)
+    # → (b-a)×(c-a) ≈ (0, 0, +dx·dy) → +Z normal.
+    # Reverse winding [a,c,b] to get -Z (exterior belly faces ventral):
     for i in range(M - 1):
         for j in range(N - 1):
-            a, b = ei(i, j),   ei(i+1, j)
-            c, d = ei(i+1, j+1), ei(i, j+1)
-            faces.append([a, b, c])
+            a, b = ei(i, j),     ei(i + 1, j)
+            c, d = ei(i + 1, j + 1), ei(i, j + 1)
+            faces.append([a, c, b])    # reversed → -Z
+            faces.append([a, d, c])    # reversed
+
+    # Interior surface — normal → +Z (dorsal / inward) — forward winding
+    for i in range(M - 1):
+        for j in range(N - 1):
+            a, b = ii(i, j),     ii(i + 1, j)
+            c, d = ii(i + 1, j + 1), ii(i, j + 1)
+            faces.append([a, b, c])    # forward → +Z
             faces.append([a, c, d])
 
-    # ── Interior surface — normal → +Y (upward / inward) — reversed order ────
-    for i in range(M - 1):
-        for j in range(N - 1):
-            a, b = ii(i, j),   ii(i+1, j)
-            c, d = ii(i+1, j+1), ii(i, j+1)
-            faces.append([a, c, b])
-            faces.append([a, d, c])
-
-    # ── X_MIN edge (i=0) — normal → -X (aft face) ────────────────────────────
+    # X_MIN edge (i=0) — normal → -X (outboard or hinge edge)
     # Quad: ext(0,j), ext(0,j+1), int(0,j+1), int(0,j)
-    # (a,b,c): (b-a)×(c-a) = (0,0,dz)×(0,wt,dz) → (-dz·wt,0,0) → -X ✓
+    # (a,b,c): b-a=(0,dy,0), c-a=(0,dy,wt) → cross=(dy·wt, 0, 0) → +X
+    # Reverse to get -X:
     for j in range(N - 1):
-        a, b = ei(0, j),   ei(0, j+1)
-        c, d = ii(0, j+1), ii(0, j)
-        faces.append([a, b, c])
-        faces.append([a, c, d])
-
-    # ── X_MAX edge (i=M-1) — normal → +X (fwd face) — reversed ──────────────
-    for j in range(N - 1):
-        a, b = ei(M-1, j),   ei(M-1, j+1)
-        c, d = ii(M-1, j+1), ii(M-1, j)
+        a, b = ei(0, j),     ei(0, j + 1)
+        c, d = ii(0, j + 1), ii(0, j)
         faces.append([a, c, b])
         faces.append([a, d, c])
 
-    # ── Z_MIN edge (j=0) — normal → -Z (stbd / outer / hinge edge) ──────────
+    # X_MAX edge (i=M-1) — normal → +X (outboard or hinge edge) — forward winding
+    for j in range(N - 1):
+        a, b = ei(M - 1, j),     ei(M - 1, j + 1)
+        c, d = ii(M - 1, j + 1), ii(M - 1, j)
+        faces.append([a, b, c])
+        faces.append([a, c, d])
+
+    # Y_MIN edge (j=0) — normal → -Y (forward edge of bay)
     # Quad: ext(i,0), int(i,0), int(i+1,0), ext(i+1,0)
-    # (a,d,c): (d-a)×(c-a) = (0,wt,0)×(dx,wt,0) → (0,0,-dx·wt) → -Z ✓
+    # Need -Y normal: (d-a)=(dx,0,0), (c-a)=(dx,0,wt) → cross=(0,-dx·wt,0) → -Y ✓
     for i in range(M - 1):
-        a, b = ei(i, 0),   ei(i+1, 0)
-        c, d = ii(i+1, 0), ii(i, 0)
-        faces.append([a, d, c])
-        faces.append([a, c, b])
-
-    # ── Z_MAX edge (j=N-1) — normal → +Z (port / outer / hinge edge) ─────────
-    # (a,b,c): (b-a)×(c-a) = (dx,0,0)×(dx,wt,0) → (0,0,dx·wt) → +Z ✓
-    for i in range(M - 1):
-        a, b = ei(i, N-1),   ei(i+1, N-1)
-        c, d = ii(i+1, N-1), ii(i, N-1)
+        a, b = ei(i, 0),     ei(i + 1, 0)
+        c, d = ii(i + 1, 0), ii(i, 0)
         faces.append([a, b, c])
         faces.append([a, c, d])
+
+    # Y_MAX edge (j=N-1) — normal → +Y (aft edge of bay) — reversed winding
+    for i in range(M - 1):
+        a, b = ei(i, N - 1),     ei(i + 1, N - 1)
+        c, d = ii(i + 1, N - 1), ii(i, N - 1)
+        faces.append([a, c, b])
+        faces.append([a, d, c])
 
     faces = np.array(faces, dtype=np.int64)
     mesh = trimesh.Trimesh(vertices=verts, faces=faces, process=True)
@@ -272,50 +286,55 @@ def build_panel_mesh(x_grid: np.ndarray, z_grid: np.ndarray,
     return mesh
 
 
-# ── Helper: build a single hinge knuckle solid ────────────────────────────────
+# ---------------------------------------------------------------------------
+# Helper: build a single hinge knuckle (axis along Y)
+# ---------------------------------------------------------------------------
 
-def make_knuckle(x_centre: float) -> trimesh.Trimesh:
+def make_knuckle(y_centre: float) -> trimesh.Trimesh:
     """
-    Build a hinge-knuckle barrel: a cylinder (KNUCKLE_OD × KNUCKLE_LEN) with a
-    coaxial bore (PIN_BORE_R × KNUCKLE_LEN + 2 mm).  Axis runs in X; knuckle
-    centre at (x_centre, KNUCKLE_Y, KNUCKLE_Z).
+    Build one hinge-knuckle barrel: cylinder (KNUCKLE_OD × KNUCKLE_LEN) with a
+    coaxial bore (PIN_BORE_R × KNUCKLE_LEN + 2 mm).  Axis runs along Y (fore-aft);
+    knuckle centre at (KNUCKLE_X, y_centre, KNUCKLE_Z).
 
     Returns
     -------
     trimesh.Trimesh — manifold knuckle solid
     """
-    # Outer barrel — cylinder with axis along Z, then rotate to X
+    # Build cylinder with default axis along Z, then rotate so axis aligns with Y.
+    # Rotation -90° about X maps Z → +Y: (x,y,z) → (x, z, -y).
+    rot_z_to_y = tft.rotation_matrix(-np.pi / 2, [1, 0, 0])
+
     barrel = trimesh.creation.cylinder(
         radius=KNUCKLE_R, height=KNUCKLE_LEN, sections=KNUCKLE_SECTIONS
     )
-    # Rotate so cylinder axis aligns with X
-    barrel.apply_transform(tft.rotation_matrix(np.pi / 2, [0, 1, 0]))
+    barrel.apply_transform(rot_z_to_y)
 
-    # Pin bore — slightly longer to ensure clean cut-through
     bore = trimesh.creation.cylinder(
         radius=PIN_BORE_R, height=KNUCKLE_LEN + 2.0, sections=KNUCKLE_SECTIONS
     )
-    bore.apply_transform(tft.rotation_matrix(np.pi / 2, [0, 1, 0]))
+    bore.apply_transform(rot_z_to_y)
 
     knuckle = trimesh.boolean.difference([barrel, bore], engine="manifold")
 
-    # Translate to final position
+    # Translate to hinge-line position
     knuckle.apply_transform(
-        tft.translation_matrix([x_centre, KNUCKLE_Y, KNUCKLE_Z])
+        tft.translation_matrix([KNUCKLE_X, y_centre, KNUCKLE_Z])
     )
     return knuckle
 
 
-# ── Door generators ────────────────────────────────────────────────────────────
+# ---------------------------------------------------------------------------
+# Door generators
+# ---------------------------------------------------------------------------
 
-def make_door(side: str, belly_y_fn) -> trimesh.Trimesh:
+def make_door(side: str, belly_z_fn) -> trimesh.Trimesh:
     """
-    Build one clamshell door half.
+    Build one clamshell door half in hull-frame coordinates.
 
     Parameters
     ----------
     side : str — "port" or "stbd"
-    belly_y_fn : callable — belly_y(x2d, z2d) → y_ext_2d
+    belly_z_fn : callable — belly_z(x2d, y2d) -> Z_ext_2d
 
     Returns
     -------
@@ -323,42 +342,41 @@ def make_door(side: str, belly_y_fn) -> trimesh.Trimesh:
     """
     assert side in ("port", "stbd"), "side must be 'port' or 'stbd'"
 
-    # Z extents for this door half
+    # X extents and knuckle positions for this half
     if side == "port":
-        z_min = Z_HINGE
-        z_max = Z_SHELL_MAX
-        knuckle_x_list = KNUCKLE_X_PORT
+        x_min = X_HINGE
+        x_max = X_SHELL_MAX
+        knuckle_y_list = KNUCKLE_Y_PORT
     else:
-        z_min = Z_SHELL_MIN
-        z_max = Z_HINGE
-        knuckle_x_list = KNUCKLE_X_STBD
+        x_min = X_SHELL_MIN
+        x_max = X_HINGE
+        knuckle_y_list = KNUCKLE_Y_STBD
 
-    # Sample grid
-    x_grid = np.arange(X_BAY_AFT, X_BAY_FWD + GRID_DX, GRID_DX)
-    z_grid = np.arange(z_min, z_max + GRID_DZ, GRID_DZ)
+    # Sample grid over the door panel
+    x_grid = np.arange(x_min, x_max + GRID_DX, GRID_DX)
+    y_grid = np.arange(Y_BAY_FWD, Y_BAY_AFT + GRID_DY, GRID_DY)
 
-    xg, zg = np.meshgrid(x_grid, z_grid, indexing="ij")   # shape (M, N)
-    y_ext = belly_y_fn(xg, zg)                             # exterior belly Y
+    xg, yg = np.meshgrid(x_grid, y_grid, indexing="ij")   # shape (M, N)
+    z_ext  = belly_z_fn(xg, yg)                            # exterior belly Z
 
     print(f"[{side}] grid {xg.shape}  "
           f"X={x_grid[0]:.1f}..{x_grid[-1]:.1f}  "
-          f"Z={z_grid[0]:.1f}..{z_grid[-1]:.1f}  "
-          f"Y_ext={y_ext.min():.2f}..{y_ext.max():.2f}")
+          f"Y={y_grid[0]:.1f}..{y_grid[-1]:.1f}  "
+          f"Z_ext={z_ext.min():.2f}..{z_ext.max():.2f}")
 
     # Build door panel mesh
-    panel = build_panel_mesh(x_grid, z_grid, y_ext, wall_t=WALL_T)
+    panel = build_panel_mesh(x_grid, y_grid, z_ext, wall_t=WALL_T)
     print(f"[{side}] panel verts={len(panel.vertices)} "
           f"faces={len(panel.faces)} watertight={panel.is_watertight}")
 
-    # Build and union knuckle barrels
-    knuckles = [make_knuckle(xc) for xc in knuckle_x_list]
+    # Build and union hinge knuckle barrels
+    knuckles = [make_knuckle(yc) for yc in knuckle_y_list]
 
     print(f"[{side}] unioning {len(knuckles)} knuckles …")
     try:
         door = trimesh.boolean.union([panel] + knuckles, engine="manifold")
     except Exception as exc:
         print(f"[{side}] WARNING: union failed ({exc}), concatenating meshes")
-        # Fallback: concatenate as a multi-body (still valid STL for slicing)
         door = trimesh.util.concatenate([panel] + knuckles)
 
     print(f"[{side}] door verts={len(door.vertices)} "
@@ -366,7 +384,9 @@ def make_door(side: str, belly_y_fn) -> trimesh.Trimesh:
     return door
 
 
-# ── Save helper ────────────────────────────────────────────────────────────────
+# ---------------------------------------------------------------------------
+# Save helper
+# ---------------------------------------------------------------------------
 
 def save(mesh: trimesh.Trimesh, name: str) -> None:
     """Export mesh to STL and print a summary."""
@@ -376,40 +396,43 @@ def save(mesh: trimesh.Trimesh, name: str) -> None:
     dims = b[1] - b[0]
     print(f"[save] {name}: "
           f"{dims[0]:.1f}×{dims[1]:.1f}×{dims[2]:.1f} mm  "
+          f"X={b[0, 0]:.2f}..{b[1, 0]:.2f}  "
+          f"Y={b[0, 1]:.2f}..{b[1, 1]:.2f}  "
           f"Z={b[0, 2]:.2f}..{b[1, 2]:.2f}  "
           f"faces={len(mesh.faces)}  watertight={mesh.is_watertight}")
 
 
-# ── Main ───────────────────────────────────────────────────────────────────────
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
 
 def main() -> int:
-    """Generate port and stbd clamshell door STLs."""
+    """Generate port and stbd clamshell door STLs in hull-frame coordinates."""
     if not os.path.isfile(SHELL_STL):
-        print(f"ERROR: shell STL not found: {SHELL_STL}", file=sys.stderr)
-        return 1
-    if not os.path.isdir(OUT_DIR):
-        print(f"ERROR: output directory not found: {OUT_DIR}", file=sys.stderr)
+        print(f"ERROR: hull-frame cargo shell STL not found: {SHELL_STL}",
+              file=sys.stderr)
         return 1
 
-    print("=== Cargo clamshell door generation ===")
-    print(f"Hinge Z = {Z_HINGE:.2f} mm")
-    print(f"Knuckle Y centre = {KNUCKLE_Y:.2f} mm  (barrel flush with belly exterior)")
-    print(f"Pin bore radius = {PIN_BORE_R:.3f} mm  (3 mm CF rod + {PIN_CL*2:.2f} mm dia clearance)")
-    print(f"Cargo bay X span: {X_BAY_AFT:.1f} to {X_BAY_FWD:.1f} mm "
-          f"(length = {X_BAY_LEN:.1f} mm)")
+    print("=== Cargo clamshell door generation — Rev R1a (hull frame) ===")
+    print(f"Hull-frame convention: X=+port, Y=+aft, Z=+dorsal")
+    print(f"Cargo shell:  X={X_SHELL_MIN:.1f}..{X_SHELL_MAX:.1f}  "
+          f"Ship CL X_HINGE={X_HINGE:.2f} mm")
+    print(f"Bay span:     Y={Y_BAY_FWD:.1f}..{Y_BAY_AFT:.1f} mm "
+          f"(length={Y_BAY_LEN:.1f} mm)")
+    print(f"Hinge knuckle Z centre = {KNUCKLE_Z:.2f} mm  "
+          f"(barrel tangent to belly at Z≈{Z_BELLY_FALLBACK:.1f})")
+    print(f"Knuckle bore radius = {PIN_BORE_R:.3f} mm  "
+          f"(3 mm CF rod + {PIN_CL*2:.2f} mm dia clearance)")
     print()
 
-    # Build belly-surface interpolator once (shared by both doors)
-    belly_y = build_belly_interpolator(SHELL_STL)
+    belly_z = build_belly_interpolator(SHELL_STL)
     print()
 
-    # Port door
-    port_door = make_door("port", belly_y)
+    port_door = make_door("port", belly_z)
     save(port_door, "cargo_door_port.stl")
     print()
 
-    # Stbd door
-    stbd_door = make_door("stbd", belly_y)
+    stbd_door = make_door("stbd", belly_z)
     save(stbd_door, "cargo_door_stbd.stl")
     print()
 

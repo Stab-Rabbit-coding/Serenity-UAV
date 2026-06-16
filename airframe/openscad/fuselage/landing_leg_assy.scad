@@ -334,6 +334,18 @@ module assembly() {
 }
 
 // ---------------------------------------------------------------------------
+// Module: hull_legs_only()
+// Four landing legs positioned in hull frame with no reference geometry.
+// Exported as a single STL for assembly visualisation and render scripts.
+// The result is in hull-frame coordinates (X=+port, Y=+aft, Z=+dorsal).
+// ---------------------------------------------------------------------------
+module hull_legs_only() {
+    for (pos = HULL_ATTACH_POS) {
+        single_leg_in_hull_frame(pos);
+    }
+}
+
+// ---------------------------------------------------------------------------
 // Entry point
 // ---------------------------------------------------------------------------
 if (PART == "leg") {
@@ -347,4 +359,8 @@ if (PART == "leg") {
 
 } else if (PART == "assy") {
     assembly();
+
+} else if (PART == "hull_legs") {
+    // All 4 legs in hull-frame coordinates — use for assembly STL export and renders.
+    hull_legs_only();
 }

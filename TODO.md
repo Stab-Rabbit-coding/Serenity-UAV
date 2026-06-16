@@ -141,10 +141,18 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
   axis is Y (sections mate at hull Y ≈ −71 mm; X is lateral). Re-check
   BOSS_FORE/BOSS_AFT positions in `s_head_shell24.scad` / `s_cargo_sect_shell24.scad`
   against the baked meshes. **BLOCKS head/cargo printing.**
-- [ ] **Regenerate cargo doors from the baked shell.** `cargo_door_port/stbd.stl`
+- [x] **Regenerate cargo doors from the baked shell.** `cargo_door_port/stbd.stl`
   (2026-06-01) predate both the repaired-shell re-orientation and the bake; regenerate
   via `generate_cargo_doors.py` against the baked
   `s_cargo_sect_shell24_2mm_repaired.stl` and verify the belly faces hull −Z.
+  **DONE 2026-06-16**: `generate_cargo_doors.py` rewritten for hull frame (Rev R1a).
+  Belly faces detected by normal Z < −0.5.  Both doors watertight.
+  - [ ] **Verify cargo door fit in slicer** — open `cargo_door_port.stl` and
+    `cargo_door_stbd.stl` in slicer; confirm hinge knuckles align at X ≈ −170 mm
+    and panels cover Y = 2..108 mm at Z ≈ 0.  Verify no overlap with hull boss
+    sockets (HULL_ATTACH_POS Y = 25, 100 mm).  **BLOCKS cargo door printing.**
+  - [ ] **Piano-hinge CF rod** — verify 3 mm CF rod passes through all 8 knuckle
+    bores (3.15 mm bore); test in printed prototype before final assembly.
 - [ ] **Consolidate duplicate cargo shell copies.**
   `fuselage/s_cargo_sect_shell24_2mm_repaired.stl` (367,506 facets, later repair pass)
   vs `fuselage/cargo/s_cargo_sect_shell24_2mm_repaired.stl` (368,352 facets, used by
@@ -414,7 +422,24 @@ Joint faces in hull-frame Y (confirmed from baked extents):
 
 **Rev R shell updates (sensor/antenna mounts; carried fwd from Rev O, 2026-05-24):**
 
-- [ ] **head_shell24.stl** — regenerate from `serenity/stl/head_shell24.scad` (dual VL53L5CX bosses, FPV mount, GPS dome, 49MHz post, SMA bulkheads added 2026-05-24). Verify all mount boss positions in slicer cross-section before printing.
+- [ ] **head_shell24.stl** — regenerate from `airframe/openscad/fuselage/head_shell24.scad` Rev S2.
+  - Rev S2 (2026-06-16) corrected FWD_ROT and all three nose-face aperture positions;
+    see Rev S2 note at top of SCAD for root-cause detail.
+  - [ ] **Verify S1A, S1B, FPV positions at nose surface in slicer** — load generated STL
+    and cross-section at Y ≈ −268 to −280 mm (pre-bake frame); confirm apertures cut
+    cleanly through the nose-face hull skin, not the port lateral skin.
+    Adjust S1A_POS / S1B_POS / FPV_POS Y values if nose face is at a different Y
+    at the sensor's (X, Z) coordinates.
+  - [ ] **Specify laser pointer mount** — laser pointer is currently documented as
+    co-located with S1A/S1B (green highlight, port side nose face), but no separate
+    aperture is cut.  Once laser pointer hardware is selected, add a laser_cut()
+    module with the appropriate bore size adjacent to or integrated with S1A aperture.
+  - [ ] **Correct BOSS_AFT positions** — BOSS_AFT_* in `head_shell24.scad` use X=99 as
+    the aft face (legacy X=longitudinal convention, same root cause as Rev S2 sensor
+    correction).  Hull-frame aft joint face is at Y ≈ −53 mm; BOSS_AFT_ROT should be
+    [0,90,0] only if facing into the joint (−Y direction → [−90,0,0]).  See §1.1.0
+    open item and §1.1.1 for the full correction plan — this is a pre-existing blocker.
+  - Verify Faraday tray cutout and all other non-boss geometry unchanged after SCAD re-render.
 
 ##### 1.1.1.2 *Cargo*
 
@@ -640,6 +665,11 @@ safety cord.  Fuse load: ≈848 N (190.7 lbf) per leg = 1.69× the 6 ft drop des
 Peak deceleration at 6 ft Phase 11 drop: 65.3g (avionics isolation rated for 100g).
 
 ##### 1.1.4.1 *Landing Leg SCAD and STL*
+
+- [x] **Hull-legs assembly STL generated** (`PART="hull_legs"` mode added 2026-06-16):
+  `airframe/stls/fuselage/landing-gear/landing_legs_hull_r1.stl` — all 4 legs in
+  hull-frame coordinates (splayed 30° outboard, 10° toe-forward from HULL_ATTACH_POS).
+  Used in render suite and assembly visualisation.
 
 - [ ] **LG-05 Render `leg_body_r1.stl` from SCAD** — run:
   `openscad -o airframe/stls/fuselage/landing-gear/leg_body_r1.stl -D 'PART="leg"' airframe/openscad/fuselage/landing_leg_assy.scad`
