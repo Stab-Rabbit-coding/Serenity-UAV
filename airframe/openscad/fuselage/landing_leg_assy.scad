@@ -575,7 +575,7 @@ if (PART == "assy") {
 
 } else if (PART == "foot") {
 
-    // TPU foot cap, print flat (sole on printer bed).
-    foot_cap();
+    // TPU foot pad, print flat (sole on printer bed).
+    foot_pad();
 
 }

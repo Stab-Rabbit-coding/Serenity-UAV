@@ -2,7 +2,7 @@
 
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
-<!-- Last updated: Rev R (2026-06-11) -->
+<!-- Last updated: 2026-06-16 — full file-tree audit and correction pass -->
 
 ---
 
@@ -45,8 +45,16 @@ Pre-Rev Q (superseded by Cape-A/B architecture at Rev K):
 ## airframe/archive/
 
 Superseded Blender scripts and STL files. Active scripts are in `airframe/blender-scripts/`.
+Design notes in `ARCHIVE-REVQ.md` inside this directory (distinct from the KiCad archive's
+own `ARCHIVE-REVQ.md`).
 
 ```text
+ARCHIVE-REVQ.md                      — Airframe design archival log, Rev Q (2026-06-05):
+                                        revision history and reason codes for archived
+                                        airframe geometry/scripts
+edf_bore_sleeve.scad                 — DEPRECATED nacelle EDF bore sleeve (superseded by
+                                        edf_stator_sleeve.scad + edf_aft_spider_sleeve.scad)
+
 blender-scripts/
   blender_nacelle_integrated_v1.py   — Nacelle integrated v1 (bore-center bug)
   blender_nacelle_integrated_v2.py   — Nacelle integrated v2 (fixed; superseded by
@@ -56,9 +64,64 @@ blender-scripts/
   generate_hollow_shells.py          — Early hollowing script (pre-Rev N)
   generate_shells_v2.py              — Shell generation v2 (pre-Rev N)
 
-stls/fuselage/                       — Pre-Rev Q fuselage STLs (18" scale and
-                                        earlier 24" iterations)
-stls/nacelles/                       — Pre-Rev Q nacelle STLs (pre-tandem-EDF design)
+stls/fuselage/                       — Pre-Rev Q fuselage STLs (18" scale and earlier 24"
+                                        iterations): hull_engine_bell.stl,
+                                        s_cargo_door_scaled24.stl,
+                                        s_cargo_door_strutts_scaled24.stl,
+                                        s_cargo_sect_shell24.stl, s_cargo_sect_shell24_2mm.stl,
+                                        s_cargo_sect_shell24_repaired.stl,
+                                        s_cargo_sect_shell24_revs.stl,
+                                        s_feet_x_4_scaled24_repaired.stl,
+                                        s_head_shell24_2mm.stl, s_head_shell24_2mm_repaired.stl,
+                                        s_head_shell24_repaired.stl,
+                                        s_middle_intake_shell24.stl, s_middle_shell24.stl,
+                                        s_middle_shell24_2mm.stl,
+                                        s_middle_shell24_2mm_repaired.stl, s_rear_shell24.stl,
+                                        s_rear_shell24_2mm.stl,
+                                        s_rear_shell24_2mm_repaired.stl,
+                                        s_rear_shell24_repaired.stl
+stls/nacelles/                       — Pre-Rev Q nacelle STLs (pre-tandem-EDF design):
+                                        edf_bore_sleeve.stl, nacelle_port_revt.stl,
+                                        nacelle_stbd_revt.stl, sector_gear_22mm_fixed.obj,
+                                        sector_gear_22mm_fixed.stl, stator_50mm.stl
+  nozzles/                            — nacelle_nozzle_closed_asm_repaired.stl,
+                                        nacelle_nozzle_petal_repaired.stl,
+                                        rear_nozzle_petal_repaired.stl
+```
+
+---
+
+## avionics/firmware/dts/cape-a/archive/ and cape-b/archive/
+
+Superseded device-tree sources, pre-Rev-R1 -a2/-b2 cape naming. Active device trees are
+`avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts` and
+`avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`.
+
+```text
+cape-a/archive/
+  k3-am6254-pocketbeagle2-serenity-cape-a.dts   — Pre-R1 Wash device tree (superseded by -cape-a2.dts)
+
+cape-b/archive/
+  k3-am6254-pocketbeagle2-serenity-cape-b.dts   — Pre-R1 Zoë device tree (superseded by -cape-b2.dts)
+```
+
+---
+
+## avionics/gerbers/archive/
+
+Pre-Rev Q gerber snapshots for boards superseded by the Cape-A-2/Cape-B-2/XCVR-49MHZ-2 (-2
+EMI-hardened) designs. Distinct from the duplicate ARCHIVED-named gerber sets that remain in the
+active `avionics/kicad/gerbers/CAPE-A-1/` and `CAPE-B-1/` paths (see PROJECT_INDEX.md).
+
+```text
+CAPE-A-1/    — 17 gerber/drill files: B_Cu, B_Mask, B_Paste, B_Silkscreen, Edge_Cuts, F_Cu,
+               F_Mask, F_Paste, F_Silkscreen, In1_Cu, In2_Cu, NPTH-drl_map, NPTH.drl,
+               PTH-drl_map, PTH.drl, job.gbrjob, .net
+CAPE-B-1/    — 17 gerber/drill files: same set as CAPE-A-1/ (B_Cu, B_Mask, B_Paste,
+               B_Silkscreen, Edge_Cuts, F_Cu, F_Mask, F_Paste, F_Silkscreen, In1_Cu, In2_Cu,
+               NPTH-drl_map, NPTH.drl, PTH-drl_map, PTH.drl, job.gbrjob, .net)
+XCVR-49MHZ-1/ — 14 gerber/drill files: B_Cu, B_Mask, B_Paste, B_Silkscreen, Edge_Cuts, F_Cu,
+               F_Mask, F_Paste, F_Silkscreen, In1_Cu, In2_Cu, drl_map.pdf, job.gtl, .drl
 ```
 
 ---

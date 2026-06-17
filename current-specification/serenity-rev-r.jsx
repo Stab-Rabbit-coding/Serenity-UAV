@@ -40,8 +40,8 @@
  * Every subsystem is documented in full for standalone reference.
  *
  * Attribution:
- *   Hull geometry: Peter Farell (printables.com/model/548545) — CC BY 4.0
- *   Iris nozzle concept: BamJr (thingiverse.com/thing:2991269) — CC BY 4.0
+ *   Hull geometry: misubisu (thingiverse.com/thing:7330462) — CC BY 4.0
+ *   Iris nozzle concept (nacelle): BamJr (thingiverse.com/thing:2991269) — CC BY 4.0
  *   Visual inspiration: Firefly / Serenity © Joss Whedon / Mutant Enemy / Universal
  *     (Fan engineering work — not an officially licensed product)
  *
@@ -187,7 +187,7 @@ function TabOverview() {
                 <Table
                     cols={["Parameter", "Value", "Notes"]}
                     rows={[
-                        ["Hull length",         "609.6 mm (24.00 in)",      "Serenity-class, Peter Farell geometry × 2.9294"],
+                        ["Hull length",         "609.6 mm (24.00 in)",      "Serenity-class, misubisu geometry × 2.9294"],
                         ["Beam (nacelle tips)", "~486 mm",                  "Tip-to-tip across tilt axis"],
                         ["Height (landed)",     "182 mm",                   "To top of dorsal hull"],
                         ["Hull material",       "PETG shell + PU foam + CF skeleton", "2.5 mm skin, 2 lb/ft³ closed-cell foam fill"],
@@ -1239,8 +1239,8 @@ export default function RevRSpec() {
             }}>
                 Serenity-Class Tiltrotor UAV Rev R · Steve Griffing PE(CSE) CISSP-ISSEP CPP ·
                 CC BY 4.0 creativecommons.org/licenses/by/4.0 · 2026-06-10 ·
-                Hull geometry CC BY 4.0 Peter Farell (printables.com/model/548545) ·
-                Iris nozzle concept CC BY 4.0 BamJr (thingiverse.com/thing:2991269) ·
+                Hull geometry CC BY 4.0 misubisu (thingiverse.com/thing:7330462) ·
+                Iris nozzle concept (nacelle) CC BY 4.0 BamJr (thingiverse.com/thing:2991269) ·
                 Visual inspiration Joss Whedon / Mutant Enemy / Universal © all rights reserved
             </div>
         </div>

@@ -88,11 +88,15 @@
 //   Ref: structural_analysis.py log, Serenity UAV project, 2026-05-26.
 //
 // Mounts (all flush with outer mold line -- zero external protrusion):
-//   S1A  -- VL53L5CX fwd ToF, Array A (FC3), port side of nose face; laser co-located
-//   S1B  -- VL53L5CX fwd ToF, Array B (FC2), port side of nose face, aft of S1A
-//   FPV  -- 28 mm standard FPV camera, starboard side of nose face
-//           Green marker = S1A/S1B (port); red marker = FPV (stbd) in
-//           head_front_Yneg_rg.png reference image.
+//   S1A  -- VL53L5CX forward ToF sensor, Array A (FC3 primary), sta 33 mm
+//   S1B  -- VL53L5CX forward ToF sensor, Array B (FC2 primary), sta 53 mm
+//   FPV  -- 28 mm standard FPV camera, bridge forward-facing viewport, sta 45 mm
+//   BOW-CAM  -- 19 mm Nano camera socket, dorsal bow dome (bow_sensor_pod.scad)
+//               [REF-SENSOR-001]
+//   BOW-TOF  -- Benewake TFmini-S long-range ToF, ventral bow dome
+//               [REF-SENSOR-002]
+//   BOW-LASER -- 12 mm crosshair laser bore, 30° below horizon, aircraft CL
+//               [REF-IEC-002, REF-FDA-001]
 //
 // GPS patch antenna and 49 MHz RCRS post are on the broad, flat dorsal surface
 // of the mid-fuselage section (middle_canonical_shell24.scad) where the
@@ -512,6 +516,12 @@ difference() {
     vlsensor_cut(S1A_POS, FWD_ROT);   // port side, ToF Array A + laser pointer
     vlsensor_cut(S1B_POS, FWD_ROT);   // port side, ToF Array B
     fpv_cut(FPV_POS,      FWD_ROT);   // starboard side, FPV camera
+
+    // Bow sensor pod cuts (Rev R1a) — dome A: 19 mm Nano camera;
+    //   dome B: TFmini-S ToF + 12 mm crosshair laser (30° below horizon).
+    //   All bow positions VERIFY in slicer before printing.
+    //   See bow_sensor_pod.scad and TODO.md §1.1.1.1a.
+    bow_pod_cuts();
 
     // Shepherd Book Faraday tray dorsal access panel cut (Rev S1).
     //   62×42 mm opening through dorsal skin at (BOOK_X_CEN, BOOK_Z_CEN).

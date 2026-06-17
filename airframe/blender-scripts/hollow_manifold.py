@@ -17,6 +17,10 @@ After the boolean, tiny enclosed islands left by the voxel remesh (sub-
 ISLAND_FACE_MIN connected components — internal "bubbles") are dropped, so the
 result is exactly the outer skin + inner cavity surface = one watertight solid.
 
+Hull geometry derives from "Serenity Firefly with landing gear and swivel
+engines" by misubisu (thingiverse.com/thing:7330462, CC BY 4.0).
+Full attribution chain: current-specification/LICENSE_AND_ATTRIBUTION.md §2.
+
 Run (no Blender needed; trimesh + manifold3d only):
     python3 airframe/blender-scripts/hollow_manifold.py
 

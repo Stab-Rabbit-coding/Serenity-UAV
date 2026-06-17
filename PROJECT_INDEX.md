@@ -1,19 +1,34 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: Rev R1 + placeholders + foam-fill voids + Faraday (2026-06-13) -->
+<!-- Last updated: 2026-06-16 — full file-tree audit and correction pass -->
 
 ## Repository Root
 
 ```
+.editorconfig                     — Editor whitespace/indent rules (4-space, per coding standard)
+.flake8                           — Python lint configuration
+.gitignore                        — Repository-wide VCS ignore rules
+.liveui.json                      — Live UI preview configuration
+.github/workflows/ci.yml          — CI pipeline (lint, STL validation, build checks)
+.github/workflows/ossar.yml       — OSSAR static-analysis security workflow
+.github/workflows/stale-branches.yml — Stale branch cleanup workflow
+.vscode/extensions.json           — Recommended VS Code extensions
 CLAUDE.md                         — Project instructions and standards (includes Standards Vetting Policy)
+LICENSE                           — Repository license (CC BY 4.0)
 PROJECT_INDEX.md                  — This file
 ARCHIVE_INDEX.md                  — Archive file tree (see below)
 README.md                         — Project overview
 REFERENCES.md                     — Standards and regulatory reference catalog (REF-IDs, verified URLs,
                                     chapter/section/paragraph per citation, repo usage index)
 REPO_ENFORCEMENT.md               — Repository rules
+SECURITY.md                       — Security policy and vulnerability reporting
 TODO.md                           — Work-breakdown structure and open items
+freecad-stl2part.py                — Standalone FreeCAD STL→Part conversion utility
+package.json                       — Node.js dependency manifest (tooling/preview support)
+package-lock.json                  — Node.js dependency lockfile
+previewConfig.json                 — Live preview configuration
+requirements-dev.txt               — Python development dependencies
 ```
 
 ---
@@ -44,6 +59,8 @@ Makefile                          — Build: SCAD→STL (openscad) + headless as
 serenity_assembly.py              — Full-airframe FreeCAD assembly (Rev R1, 2026-06-11:
                                     baked hull-frame STLs, identity placements; run with
                                     freecadcmd)
+faraday-enclosure.py              — Faraday-cage avionics enclosure FreeCAD generator
+make_flat_pattern.py              — Sheet-metal/flat-pattern unfold utility for FreeCAD parts
 assembly1.py                      — DEPRECATED prototype (pre-R1 transforms; do not use)
 Serenity-Assemble.py              — DEPRECATED subsystem stub (Assembly4Lib placeholders)
 Serenity-Subsystem-Assembly.py    — DEPRECATED subsystem stub (Assembly4Lib placeholders)
@@ -62,13 +79,26 @@ blender_intake_cut.py             — Fuselage EDF intake cut
 blender_middle_intake_cut.py      — Middle section intake cut
 blender_nacelle_revo.py           — Nacelle pod shell from hull STL
 blender_nozzle_gen.py             — Iris nozzle petal geometry
+blender_shells_2mm_solidify.py    — 2mm solidify-modifier hollowing pass (Blender pipeline)
 blender_shells_v3.py              — Rev N 24" hull shell generation
 blender_stator_gen.py             — 11-fin inter-stage stator
 check_nacelle_alignment.py        — Nacelle bore alignment verification
+engrave_plaques.py                — Engraves identification plaques into hull shells
+engrave_shuttles.py               — Engraves avionics bay shuttle/crew-quarter labels
+fill_thin_details.py              — Fills thin-wall mesh details prior to hollowing
+finalize_cargo_middle.py          — Final cargo + middle section mesh finishing pass
+finalize_head_rear.py             — Final head + rear section mesh finishing pass
 generate_overview_svgs.py         — SVG renders from 6 cardinal + 8 isometric views
+hollow_manifold.py                — Manifold-safe shell hollowing utility
 inspect_shell_center.py           — STL centroid measurement utility
+make_bay_text.py                  — Generates avionics bay name text meshes (Shepherd/Inara/River/Simon)
+make_shuttle_text.py              — Generates shuttle/section label text meshes
+morph_open_voxel.py                — Voxel-remesh based mesh morph/open-surface repair
 repair_shells_for_scad.py         — Mesh repair pipeline (voxel-remesh → manifold)
-files-hollowed-18in/              — 18" source STLs (Thingiverse base, SCALE_24=2.9294×)
+verify_shells.py                  — Post-hollow shell mesh verification (watertight/manifold check)
+files-hollowed-24in/              — Canonical Rev R1 24" hollowed shell source STLs (pre-bake; see
+                                    CLAUDE.md Hull-Frame Coordinate Standard) + operands/ boolean
+                                    operand meshes (inner/outer split surfaces, engraved text meshes)
 ```
 
 ### airframe/gcode/davinci-jr-proto/
@@ -76,11 +106,24 @@ files-hollowed-18in/              — 18" source STLs (Thingiverse base, SCALE_2
 Prototype print batches (DaVinci Jr., PLA, visual-only parts).
 
 ```
+.gitignore                        — VCS ignore rules for generated g-code batch output
 davinci_jr_pla.ini                — Slicer profile
-slice_all_batches.sh              — Batch slicer script
+slice_all_batches.sh              — Batch slicer script (Phase 11 deferred aft-EDF parts; see
+                                    docs/PROTO_PRINT_DAVINCI_JR.md)
 xyz_wrap.py                       — XYZ encryption wrapper
 batch_A/ … batch_Q/               — Print batches A–Q (see TODO.md §1.1)
 batch_VISUAL/                     — Visual-only prototype parts
+```
+
+### airframe/freecad/assembly/
+
+Working FreeCAD assembly directory (in-progress / backup state; not yet the published
+canonical `SerenityAssembly.FCStd` referenced by CLAUDE.md's Hull-Frame Coordinate Standard).
+
+```
+SerenityAssembly.FCStd.bak2       — [PENDING] FreeCAD assembly backup; canonical
+                                    SerenityAssembly.FCStd not yet present on disk
+serenity_fuselage_asm4.py         — Fuselage sub-assembly script (Assembly4 workflow, in progress)
 ```
 
 ### airframe/openscad/
@@ -199,8 +242,25 @@ cargo/
 #### airframe/stls/nacelles/
 
 ```
+edf_aft_spider_sleeve.stl         — Aft spider/motor-mount sleeve (compiled from
+                                    nacelles/edf_aft_spider_sleeve.scad)
+edf_stator_sleeve.stl             — 11-fin inter-stage stator sleeve (compiled from
+                                    nacelles/edf_stator_sleeve.scad)
+eng_left_shell24_50mm_repaired.stl  — Port nacelle EDF engine shell, 50 mm, manifold-repaired;
+                                    required by tools/bake_hull_frame.py,
+                                    airframe/FreeCAD-scripts/serenity_assembly.py, and the
+                                    FreeCAD-scripts Makefile (do not archive)
+eng_right_shell24_50mm_repaired.stl — Stbd nacelle EDF engine shell, 50 mm, manifold-repaired;
+                                    same active-pipeline dependency as eng_left_* (do not archive)
+nacelle_bevel_housing.stl         — Bevel gear housing (also duplicated under nozzles/, see below)
+nacelle_bevel_pair.stl            — 14T 45° bevel pair (also duplicated under nozzles/, see below)
 nacelle_pinion.stl                — M=1.0 12T pinion
+nacelle_port_revq.stl             — Port nacelle pod shell, Rev Q baseline; required by
+                                    tools/bake_hull_frame.py, serenity_assembly.py, and the
+                                    FreeCAD-scripts Makefile (active, do not archive)
 nacelle_sector_gear.stl           — M=1.0 38T sector gear
+nacelle_stbd_revq.stl             — Stbd nacelle pod shell, Rev Q baseline; same active-pipeline
+                                    dependency as nacelle_port_revq.stl (do not archive)
 nacelle_tip_cap_port.stl          — Port nacelle intake tip cap
 nacelle_tip_cap_stbd.stl          — Stbd nacelle intake tip cap
 nozzles/
@@ -232,9 +292,14 @@ FreeCAD catalog: `airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`.
 generate_placeholders.py          — Standalone generator (python3, no dependencies)
 propulsion/
   EDF_50mm_6S.stl                 — 50 mm 6S EDF (BOM: EDF-50-6S, ×4)
-  EDF_55mm_6S_deferred.stl        — 55 mm 6S rear EDF (BOM: EDF-55-6S, Phase 11 deferred)
+  EDF_120mm_6S_deferred.stl       — [STALE NAME] 120 mm 6S rear EDF placeholder; on-disk filename
+                                    still reflects the pre-Rev-R1 120 mm rear EDF (superseded
+                                    spec is 55 mm, see CLAUDE.md); pending regeneration to
+                                    EDF_55mm_6S_deferred.stl for Phase 11
   ESC_40A_6S_BLHeli32.stl         — 40 A BLHeli32 ESC (BOM: ESC-40A-6S, ×4)
-  ESC_50A_6S_BLHeli32_deferred.stl — 50 A ESC (BOM: ESC-50A-6S, Phase 11 deferred)
+  ESC_80A_6S_BLHeli32_deferred.stl — [STALE NAME] 80 A ESC placeholder; on-disk filename still
+                                    reflects the pre-Rev-R1 120 mm EDF's ESC sizing; pending
+                                    regeneration to ESC_50A_6S_BLHeli32_deferred.stl for Phase 11
 servos/
   DS3218MG_25kgcm.stl             — DS3218MG servo (BOM: SERVO-TILT, MAL-GIMBAL-SERVO)
   SG90_micro.stl                  — SG90 micro servo (BOM: SERVO-CARGO, SERVO-RCS-VALVE)
@@ -349,7 +414,10 @@ Makefile                          — Build rules
 ### airframe/ (root-level files)
 
 ```
-Serenity-Assembled.FCStd          — FreeCAD full-airframe assembly (235MB)
+[Serenity-Assembled.FCStd]        — [PENDING] FreeCAD full-airframe assembly; not yet generated
+                                    on disk. See airframe/freecad/assembly/ for in-progress
+                                    working files and serenity_assembly.py for the headless
+                                    generation script.
 ```
 
 ---
@@ -391,6 +459,7 @@ fc/
   tools/
     governor_cal.py               — EDF governor calibration tool
     requirements.txt
+    .gitignore                    — VCS ignore rules for calibration tool output
 cn/
   CMakeLists.txt
   src/
@@ -404,6 +473,9 @@ cn/
 KiCad 7/9 PCB design files.  All active designs are Rev R (EMI-hardened -2 variants).
 
 ```
+README.md                         — KiCad directory overview, generation workflow, DRC notes
+.gitignore                        — VCS ignore rules for KiCad backups/autosave/fp-info-cache
+
 Wash — Flight Control & Sensor Cape (Cape-A-2):
   Wash.kicad_pro                  — KiCad project file
   Wash.kicad_sch                  — Schematic
@@ -424,6 +496,7 @@ Kaylee — Power Distribution Board (PDB):
   Kaylee.kicad_pro                — KiCad project file (Rev A, 2026-06-10)
   Kaylee.kicad_sch                — Schematic (Rev A, 90×65 mm 4-layer)
   Kaylee.kicad_pcb                — PCB outline + stackup (Rev A)
+  Kaylee.kicad_prl                — Layout rules
   Kaylee.md                       — Design specification
   gen_kaylee.py                   — Python generator script (all 3 KiCad files)
 
@@ -502,11 +575,14 @@ references/
 
 ```
 serenity-rev-r.jsx                — Rev R interactive specification (CURRENT)
-serenity-rev-q.jsx                — Rev Q interactive specification (historical reference)
 bom_revR.csv                      — Bill of materials (Rev R, CSV flat table — active baseline)
-bom_revQ.csv                      — Bill of materials (Rev Q, CSV flat table — historical reference)
 LICENSE_AND_ATTRIBUTION.md        — Attribution chain for all upstream sources
 ```
+
+> Note: `serenity-rev-q.jsx` and `bom_revQ.csv` are NOT present in this directory; the Rev Q
+> historical references live in `archives/` (`archives/serenity-rev-q.jsx`,
+> `archives/bom_revQ.csv`, `archives/docs-superseded/bom_revQ.csv`,
+> `archives/docs-superseded/serenity-rev-q.jsx`). See ARCHIVE_INDEX.md.
 
 ---
 
@@ -606,29 +682,42 @@ Not archived — intended for a future build phase.
 ```
 README.md                         — Aft fuselage EDF design scope, rationale, and defer decision
 openscad/
-  aft_edf_plenum.scad           — Intake plenum manifold (55 mm EDF inlet + 4 RCS bleed taps) — REGEN for Rev R1
-  edf_55_motor_mount.scad       — 55 mm EDF motor mount ring — REGEN for Rev R1
-  edf_55_thrust_tube.scad       — Thrust tube from plenum to 55 mm EDF — REGEN for Rev R1
-  neck_intake_frame.scad        — Reduced-area radial intake scoop frame at neck station ~310 mm (55 mm) — REGEN
+  aft_edf_plenum.scad           — Intake plenum manifold — [PRE-R1] still 120 mm geometry, pending
+                                    regen to 55 mm EDF inlet + 4 RCS bleed taps
+  edf_120_motor_mount.scad      — [PRE-R1] 120 mm EDF motor mount ring; pending regen to
+                                    edf_55_motor_mount.scad (still required by
+                                    blender_edf_bore_and_petals.py / slice_all_batches.sh — do
+                                    not archive until Rev R1 replacement exists)
+  edf_120_thrust_tube.scad      — [PRE-R1] 120 mm thrust tube; pending regen to
+                                    edf_55_thrust_tube.scad (still required by active build
+                                    pipeline files — do not archive until replaced)
+  neck_intake_frame.scad        — [PRE-R1] Reduced-area radial intake scoop frame; pending regen
+                                    for 55 mm EDF
   rear_neck_intake_shell24.scad — Rear neck intake shell integration shell
-  rear_nozzle_canonical.scad    — Fixed canonical elliptical tail nozzle 2.06×1.76 in (NEW, Rev R1)
-  rcs_thruster.scad             — RCS bleed-jet nozzle + 4-way manifold + valve bracket (NEW, Rev R1)
 stls/
-  aft_edf_plenum.stl            — Compiled plenum STL (regen for 55 mm + RCS)
-  edf_55_motor_mount.stl        — Compiled motor mount STL
-  edf_55_thrust_tube.stl        — Compiled thrust tube STL
-  neck_intake_frame.stl         — Compiled intake frame STL
-  rear_shell24_2mm_edf_bored.stl — Rear shell with EDF bore cut
-  rear_nozzle_canonical.stl       — Fixed canonical elliptical tail nozzle (supersedes iris frame/petals)
-  rcs_thruster_nozzle.stl         — RCS bleed-air jet nozzle (× 4)
-  rcs_distribution_manifold.stl   — 4-way RCS bleed manifold off EDF plenum
-  rcs_valve_bracket.stl           — SG90-class proportional valve mount (× 4)
+  aft_edf_plenum.stl              — [PRE-R1] Compiled plenum STL, still 120 mm geometry
+  edf_120_motor_mount.stl         — [PRE-R1] Compiled motor mount STL
+  edf_120_thrust_tube.stl         — [PRE-R1] Compiled thrust tube STL
+  neck_intake_frame.stl           — Compiled intake frame STL
+  rear_shell24_2mm_edf_bored.stl  — Rear shell with EDF bore cut
+  rear_nozzle_closed_asm.stl      — [PRE-R1] Iris nozzle closed-position assembly (visual)
+  rear_nozzle_frame.stl           — [PRE-R1] Iris nozzle frame ring
+  rear_nozzle_petal.stl           — [PRE-R1] Single iris nozzle petal
+  rear_nozzle_petal_hull_0.stl … rear_nozzle_petal_hull_7.stl — [PRE-R1] Iris petal convex-hull
+                                    boolean operands (× 8)
 ```
 
-> **Rev R1 (2026-06-13):** the rear EDF changed from 120 mm (iris nozzle) to 55 mm with a fixed
-> canonical elliptical tail nozzle + 4 RCS bleed-air thrusters. The old 120 mm SCAD/STLs
-> (`edf_120_*`, `rear_nozzle_frame/petal*`) are superseded and must be regenerated; archive the
-> old files when the Rev R1 geometry is produced.
+> **Rev R1 (2026-06-13) — REGEN PENDING:** the rear EDF spec changed from 120 mm (iris nozzle) to
+> 55 mm with a fixed canonical elliptical tail nozzle + 4 RCS bleed-air thrusters (per CLAUDE.md).
+> The on-disk SCAD/STL files in this directory **still reflect the pre-Rev-R1 120 mm / iris-nozzle
+> geometry** — `edf_120_motor_mount.scad`, `edf_120_thrust_tube.scad`, `rear_nozzle_frame/petal*`
+> have not yet been regenerated as `edf_55_motor_mount.scad`, `edf_55_thrust_tube.scad`,
+> `rear_nozzle_canonical.scad`, `rcs_thruster.scad`, etc. `edf_120_motor_mount.scad` and
+> `edf_120_thrust_tube.scad` remain **active** (referenced by
+> `airframe/blender-scripts/blender_edf_bore_and_petals.py`,
+> `airframe/gcode/davinci-jr-proto/slice_all_batches.sh`, and
+> `docs/PROTO_PRINT_DAVINCI_JR.md`) and must not be archived until the Rev R1 55 mm/RCS
+> replacements are generated. This is a deferred-but-active Phase 11 scope, not stale work.
 
 ---
 
@@ -639,6 +728,9 @@ Generated by `gen_hull_outlines.py` from blender-rendered views.
 
 ```
 gen_hull_outlines.py              — SVG generation script (runs headless Blender)
+probe_stl.py                      — STL geometry probe utility (extents/centroid reporting for
+                                    diagram camera framing)
+update_overview_paths.py          — Rewrites overview SVG file path references after regeneration
 build_guide_00_cover.svg          — Cover card
 build_guide_01_print_prep.svg     — Print preparation
 build_guide_02_print_hull.svg     — Printing the hull sections
@@ -688,6 +780,11 @@ overview_svgs/
   serenity_iso_port_quarter.svg   — Isometric port-quarter view
   serenity_iso_starboard_bow.svg  — Isometric starboard-bow view
   serenity_iso_stbd_quarter.svg   — Isometric starboard-quarter view
+shellview/                        — Blender shell-inspection render dump: ~70 PNG renders
+                                    (head/cargo/middle/rear sections, inner/outer hollow-wall
+                                    comparisons, axis-labeled views, cross-sections, engrave
+                                    previews) generated while iterating the hollowing pipeline,
+                                    plus port_wall.stl (single-wall reference geometry probe)
 ```
 
 ---

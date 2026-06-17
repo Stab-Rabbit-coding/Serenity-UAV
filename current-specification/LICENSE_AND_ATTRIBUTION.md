@@ -4,7 +4,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Project:** Serenity-Class Tri-Fan Tiltrotor Unmanned Aerial Vehicle
-**Revision:** N (current)
+**Revision:** R1 (current — hull/nozzle source citations below updated 2026-06-16; full Rev O–R1 design changelog lives in TODO.md and REFERENCES.md)
 **License:** Creative Commons Attribution 4.0 International (CC BY 4.0)
 
 ---
@@ -46,6 +46,12 @@ Full license text: https://creativecommons.org/licenses/by/4.0/legalcode
 | **PE Discipline** | **Control Systems Engineering** |
 | **Security Cert.** | CISSP-ISSEP — Information Systems Security Engineering Professional |
 | **Physical Sec.** | CPP — Certified Protection Professional (ASIS International) |
+
+Steve Griffing is the sole proprietor of **Griffing Technology LLC**. PCB silkscreens and title
+blocks (Wash, Zoë, Kaylee, Emma/XCVR-49MHZ-2, and their predecessors) carry both the personal
+copyright/license line and the "Griffing Technology LLC" company mark, since these boards may be
+offered commercially beyond this project. Personal copyright is retained regardless of the company
+mark's presence on a given board.
 
 ---
 
@@ -112,7 +118,28 @@ rights holders before using the Serenity name or likeness in trade.
 
 ---
 
-### 2. Serenity Firefly-Class 3D Model (Hull Geometry Basis)
+### 2. Serenity Firefly-Class 3D Model (Hull Geometry Basis — current, Rev P–R1)
+
+| Field | Detail |
+| ------- | -------- |
+| **Title** | Serenity Firefly with landing gear and swivel engines |
+| **Author** | misubisu |
+| **Source** | [thingiverse.com/thing:7330462](https://www.thingiverse.com/thing:7330462) |
+| **License** | CC BY 4.0 |
+| **Use** | Hull outer geometry adapted; retains the four canonical sections (head, cargo, middle, rear); scaled to 24 in (609 mm) overall length; hollowed to 2.0 mm watertight CF-PETG shell; structurally redesigned with CF skeleton and foam fill for UAV flight loads. |
+
+## Remix attribution template
+
+```text
+
+Hull: "Serenity Firefly with landing gear and swivel engines" by misubisu
+thingiverse.com/thing:7330462 · CC BY 4.0
+Remixed by Steve Griffing: scaled 24 in (609 mm), hollowed to 2.0 mm
+watertight CF-PETG shell, CF skeleton and foam fill added. CC BY 4.0.
+
+```
+
+### 2a. Serenity, Firefly Class (Hull Geometry Basis — historical, pre-Rev O)
 
 | Field | Detail |
 | ------- | -------- |
@@ -120,18 +147,15 @@ rights holders before using the Serenity name or likeness in trade.
 | **Author** | Peter Farell |
 | **Source** | [printables.com/model/548545](https://www.printables.com/model/548545) |
 | **License** | CC BY 4.0 |
-| **Use** | Hull outer geometry adapted; scaled to 365 mm (14.4"); hollowed to 1.5 mm thin-wall shell; structurally redesigned with CF skeleton for UAV flight loads. |
+| **Use** | **Superseded.** Hull outer geometry basis for the original concept-stage build, scaled to 365 mm (14.4"), hollowed to 1.5 mm thin-wall shell. Replaced by the misubisu model (above) when the project moved to the 18 in Rev M and later 24 in Rev P–R1 builds. Retained here for historical attribution traceability only — no current STL is derived from this source. |
 
-## Remix attribution template
+### 2b. Low-Detail Orientation Guide Model (Section-Placement Reference Only)
 
-```text
-
-Hull: "Serenity, Firefly Class" by Peter Farell
-printables.com/model/548545 · CC BY 4.0
-Remixed by Steve Griffing: scaled 365mm (14.4"), hollowed thin-wall,
-CF skeleton added. CC BY 4.0.
-
-```
+| Field | Detail |
+| ------- | -------- |
+| **Title** | (untitled low-poly Serenity reference) |
+| **Source** | [thingiverse.com/thing:4677565](https://www.thingiverse.com/thing:4677565) |
+| **Use** | Used only as a qualitative geometry guide for orienting the head, cargo, middle, and rear fuselage sections relative to each other (per CLAUDE.md "Aircraft Geometry"). Not a source of hull surface geometry — no STL or mesh data is derived from this model. |
 
 ---
 
@@ -143,8 +167,8 @@ CF skeleton added. CC BY 4.0.
 | **Author** | BamJr |
 | **Source** | [thingiverse.com/thing:2991269](https://www.thingiverse.com/thing:2991269) |
 | **License** | CC BY 4.0 |
-| **Use (nacelle)** | Scaled to 70 mm (2.76") ID. Servo removed. M0.5 rack teeth added to inner ring OD. Outer housing integrated with Serenity bell geometry. Gear-coupled to nacelle tilt pivot via sector/bevel/crown chain — fully passive, no servo. |
-| **Use (fuselage)** | Scaled to 40 mm (1.57") ID. SG90 servo actuation retained. Integrated with Serenity engine bell. |
+| **Use (nacelle)** | Scaled to 70 mm (2.76") ID. Servo removed. M0.5 rack teeth added to inner ring OD. Outer housing integrated with Serenity bell geometry. Gear-coupled to nacelle tilt pivot via sector/bevel/crown chain — fully passive, no servo. **Current — active design.** |
+| **Use (fuselage)** | **Superseded — deferred Phase 11 legacy design only.** Scaled to 40 mm (1.57") ID, SG90 servo actuated, 8-petal iris integrated with a 120 mm fuselage EDF (`deferred/aft-edf/`). Per CLAUDE.md, the canonical fuselage EDF is now a 55 mm 6S unit with a **fixed** elliptical exit nozzle (2.06 in × 1.76 in / 52.3 mm × 44.7 mm) feeding 4 RCS bleed-air thrusters — it is explicitly NOT an iris. The `deferred/aft-edf/` files predate this change and require regeneration for the 55 mm + canonical-nozzle + RCS spec before Phase 11 (tracked in TODO.md §Phase 11). |
 
 ## Remix attribution template
 
@@ -182,6 +206,18 @@ dual motor mounts, 11-fin stator vanes between seats, variable-area iris.
 CC BY 4.0.
 
 ```
+
+---
+
+### 5. x-fly 2627-3200KV EDF (Nacelle Thrust Specification Basis)
+
+| Field | Detail |
+| ------- | -------- |
+| **Title** | x-fly 2627-3200KV 12-fin 50 mm 6S EDF |
+| **Type** | Third-party commercial hardware product — no design files redistributed |
+| **Source** | xfly-model.eu — commercial EDF unit datasheet |
+| **License** | N/A — proprietary commercial product; cited here only as the dimensional/performance basis for the nacelle thrust specification, not as a remixed design asset |
+| **Use** | Manufacturer-rated thrust (1,240 g per EDF) is the baseline for all nacelle static-thrust calculations in this project. Two units in series per nacelle, 90% additive efficiency assumed for the 11-fin custom stator: 1,240 g × 2 × 0.90 = 2,232 g per nacelle. See CLAUDE.md "Project Objective" and `deferred/aft-edf/README.md`. |
 
 ---
 

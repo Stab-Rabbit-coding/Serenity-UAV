@@ -11,6 +11,9 @@
 #     frame.  Outputs destined for airframe/stls/ primary components
 #     must be baked to hull frame via tools/bake_hull_frame.py.
 # ============================================================================
+# Hull geometry derives from "Serenity Firefly with landing gear and swivel
+# engines" by misubisu (thingiverse.com/thing:7330462, CC BY 4.0).
+# Full attribution chain: current-specification/LICENSE_AND_ATTRIBUTION.md §2.
 """
 blender_hollow_shells.py  —  run with:
     blender --background --python blender_hollow_shells.py
