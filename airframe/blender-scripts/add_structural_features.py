@@ -540,18 +540,27 @@ def process_rear(mesh):
 
 def verify(mesh, name):
     """
-    Manufacturing-watertight gate: no boundary edges, no non-manifold edges, no
-    detached chunks of any size (a single-piece fuselage section must split into
-    exactly 1 body), winding consistent, and `mesh.is_watertight` true.
+    Manufacturing-watertight gate: no open boundary edges, no non-manifold edges,
+    no small junk fragments (< JUNK_FACE_LIMIT faces), winding consistent, and
+    `mesh.is_watertight` true.  Body count is NOT capped — a properly hollowed
+    2 mm shell legitimately splits into 2+ large components (outer surface +
+    disconnected inner surface, which never share an edge; rear additionally has
+    skid/pod cavity lobes).  See verify_shells.py module docstring for the
+    empirical confirmation (signed sub-volumes summing to the exact
+    structural_analysis.md mass-budget figures).
 
     MESH-01 fix (2026-06-16): the previous gate only checked open-boundary edges
     (count == 1) and a 64-500-face junk-component window.  It missed non-manifold
     edges (count > 2, the actual defect signature left by near-coincident cutter
-    faces) and multi-body fragmentation above 500 faces, and never hard-required
-    `is_watertight` — so it reported "PASS" on shells that were not watertight and,
-    in the rear shell's case, split into 3 disconnected solid islands.  See
-    TODO.md MESH-01 for the full incident writeup.
+    faces) and never hard-required `is_watertight` — so it reported "PASS" on
+    shells that were not watertight and, in the rear shell's case, fragmented into
+    multiple disconnected solid islands.  An initial fix over-corrected to require
+    exactly 1 body, which incorrectly failed the legitimate outer+inner double-wall
+    topology; reverted in favour of a junk-fragment-size check.  See TODO.md
+    MESH-01 for the full incident writeup.
     """
+    JUNK_FACE_LIMIT = 64
+
     edge_counts = np.bincount(
         mesh.edges_unique_inverse,
         minlength=len(mesh.edges_unique),
@@ -561,12 +570,14 @@ def verify(mesh, name):
 
     comps = mesh.split(only_watertight=False)
     bodies = len(comps)
+    junk = [c for c in comps if len(c.faces) < JUNK_FACE_LIMIT]
 
-    status = "PASS" if (b_count == 0 and nm_count == 0 and bodies == 1
+    status = "PASS" if (b_count == 0 and nm_count == 0 and not junk
                         and mesh.is_winding_consistent
                         and mesh.is_watertight) else "FAIL"
     print(f"    verify {name}: {status}  "
           f"boundary={b_count}  nonmanifold={nm_count}  bodies={bodies}  "
+          f"junk_fragments={len(junk)}  "
           f"winding={mesh.is_winding_consistent}  "
           f"watertight={mesh.is_watertight}  "
           f"vol={mesh.volume:.0f} mm³  "

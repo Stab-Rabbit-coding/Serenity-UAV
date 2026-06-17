@@ -112,13 +112,17 @@ def check(path):
         f"        facets={len(mesh.faces):>7d}  winding_ok={mesh.is_winding_consistent}"
         f"  watertight={mesh.is_watertight}\n"
         f"        open_boundary_edges={open_edges}  nonmanifold_edges={nonmanifold_edges}"
-        f"  bodies={len(comps)}"
-        f"  cosmetic[degenerate_faces={degen}, sliver_fragments={len(fragments)}]"
+        f"  large_bodies={len(big_extra)} (informational; see docstring)"
+        f"  junk_fragments={len(fragments)} (real defect if > 0)"
+        f"  degenerate_faces={degen} (cosmetic)"
         f"  vol={mesh.volume:.0f} mm^3"
     )
     if len(big_extra) > 1:
         sizes = sorted((len(c.faces) for c in big_extra), reverse=True)[:12]
-        summary += f"\n        DETACHED CHUNKS (real defect) face counts: {sizes}"
+        summary += f"\n        large body face counts: {sizes}"
+    if fragments:
+        sizes = sorted((len(c.faces) for c in fragments), reverse=True)[:12]
+        summary += f"\n        JUNK FRAGMENTS (real defect) face counts: {sizes}"
     return passed, summary
 
 
