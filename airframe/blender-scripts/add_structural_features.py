@@ -136,10 +136,21 @@ BOSS_PIN_RADIUS = 1.6   # mm — Ø 3.2 mm bore (CF rod 3.0 mm OD + 0.1 mm clear
 # Rear belly outer Z ≈ 3.7 mm → inner Z ≈ 5.7 mm → groove at Z = [4.7, 5.7].
 # Middle section has no belly (horseshoe open at -Z) → no channel.
 # Basis: structural_analysis.md §4.5
+#
+# MESH-01 fix (2026-06-16): the groove's outer face (z_max for cargo, z_max for
+# rear) previously landed exactly ON the shell's existing inner-wall surface —
+# a zero-overlap coincident face that the manifold3d boolean difference turned
+# into non-manifold edges / degenerate slivers (see TODO.md MESH-01). CUT_OVERLAP
+# pushes that face CUT_OVERLAP past the existing surface, into the already-hollow
+# interior, where there is no material to over-remove.
+CUT_OVERLAP = 0.5   # mm — clearance past an existing mesh surface for any cutter
+                    # face meant to coincide with it (avoids manifold3d non-manifold
+                    # edges from exactly-coplanar cut/surface faces; MESH-01 fix)
+
 KEEL_CHANNEL = {
-    "cargo": {"x_range": (-171.75, -168.25), "z_range": (1.0, 2.0),
+    "cargo": {"x_range": (-171.75, -168.25), "z_range": (1.0, 2.0 + CUT_OVERLAP),
               "y_range": (-71.5, +132.0)},
-    "rear":  {"x_range": (-171.75, -168.25), "z_range": (4.7,  5.7),
+    "rear":  {"x_range": (-171.75, -168.25), "z_range": (4.7, 5.7 + CUT_OVERLAP),
               "y_range": (+203.2, +384.3)},
 }
 
@@ -148,34 +159,55 @@ KEEL_CHANNEL = {
 # locating groove for the 2 mm CF plate to slide into.
 # Inner surface estimated as outer bounding-box inset 2 mm each side.
 # Basis: structural_analysis.md §5.5
-# Format: list of (x_min, x_max, z_min, z_max, y_min, y_max) slab cutters.
+#
+# MESH-01 fix (2026-06-16): the original hardcoded top/bottom slab Z-ranges were on
+# the WRONG side of the inner surface — they sat entirely in the already-hollow
+# interior and never actually touched the solid wall, so the pocket groove was never
+# cut at the top/bottom of the ring (only port/stbd were ever real cuts). Replaced
+# with _ring_pocket_slabs(), which derives all 4 slabs from the outer bounds + wall
+# inset so the pocket geometry is provably on the solid-material side, with
+# CUT_OVERLAP clearance past every face that meets the existing mesh surface (both
+# the inner-wall face and the four corners where adjacent slabs must overlap).
+POCKET_DEPTH = 1.0     # mm — groove depth, per structural_analysis.md §5.5
+WALL_INSET   = 2.0     # mm — 2 mm wall thickness (outer-to-inner offset)
+
+
+def _ring_pocket_slabs(x_outer, z_outer, y_centre, y_half=1.25,
+                        inset=WALL_INSET, depth=POCKET_DEPTH, overlap=CUT_OVERLAP):
+    """
+    Return the 4 perimeter slab cutters (top, port, stbd, bottom) for a ring-frame
+    pocket, given the OUTER cross-section bounds at the ring station.
+
+    Each slab removes `depth` mm of the solid wall starting at the inner (cavity-
+    facing) surface; the face that meets the existing inner surface is pushed
+    `overlap` mm further into the already-hollow interior (MESH-01 fix), and the
+    in-plane extent of each slab is grown by `overlap` mm so adjacent slabs overlap
+    at the four corners instead of leaving an uncut sliver.
+    """
+    xo_min, xo_max = x_outer
+    zo_min, zo_max = z_outer
+    xi_min, xi_max = xo_min + inset, xo_max - inset
+    zi_min, zi_max = zo_min + inset, zo_max - inset
+    y0, y1 = y_centre - y_half, y_centre + y_half
+
+    top    = (xi_min - overlap, xi_max + overlap,
+              zi_max - overlap, zi_max + depth, y0, y1)
+    bottom = (xi_min - overlap, xi_max + overlap,
+              zi_min - depth, zi_min + overlap, y0, y1)
+    port   = (xi_min - overlap, xi_min + depth,
+              zi_min - overlap, zi_max + overlap, y0, y1)
+    stbd   = (xi_max - depth, xi_max + overlap,
+              zi_min - overlap, zi_max + overlap, y0, y1)
+    return [top, port, stbd, bottom]
+
+
 RING_POCKETS = {
     # Cargo wing-spar zone, Y = +30 mm
     # Outer bounds at Y=30: X[-257.6..-81.1]  Z[+0.5..+158.6]
-    # Inner (2 mm inset): X[-255.6..-83.1]  Z[+2.5..+156.6]
-    "cargo_Y30": [
-        # Top slab
-        (-255.6, -83.1,  155.6, 156.6,  28.75, 31.25),
-        # Port slab
-        (-256.6, -255.6,   2.5, 155.6,  28.75, 31.25),
-        # Stbd slab
-        (-83.1,  -82.1,    2.5, 155.6,  28.75, 31.25),
-        # Bottom slab
-        (-255.6, -83.1,    2.5,   3.5,  28.75, 31.25),
-    ],
+    "cargo_Y30": _ring_pocket_slabs((-257.6, -81.1), (0.5, 158.6), 30.0),
     # Rear anti-ovalisation zone, Y = +290 mm
     # Outer bounds at Y=290: X[-235.5..-116.0]  Z[+11.9..+152.4]
-    # Inner (2 mm inset): X[-233.5..-118.0]  Z[+13.9..+150.4]
-    "rear_Y290": [
-        # Top slab
-        (-233.5, -118.0,  149.4, 150.4, 288.75, 291.25),
-        # Port slab
-        (-234.5, -233.5,   13.9, 149.4, 288.75, 291.25),
-        # Stbd slab
-        (-118.0, -117.0,   13.9, 149.4, 288.75, 291.25),
-        # Bottom slab
-        (-233.5, -118.0,   13.9,  14.9, 288.75, 291.25),
-    ],
+    "rear_Y290": _ring_pocket_slabs((-235.5, -116.0), (11.9, 152.4), 290.0),
 }
 
 # ---------- CF skid-rod bores (Ø 4.2 mm cylinders, Y-axis, 60 mm total) ----------
@@ -256,8 +288,15 @@ def _subtract_all(shell, cutters):
 
     Applies each subtraction sequentially to avoid the union-of-cutters step,
     which can produce non-manifold geometry when cutter boxes share coplanar faces.
-    After every subtraction, sub-100-face junk components are dropped so the next
-    difference always receives a clean volume.
+
+    MESH-01 fix (2026-06-16): the manifold3d round-trip repair (_to_manifold_volume)
+    is now applied after EVERY subtraction, not just once before the loop.  Each
+    individual difference can leave a handful of degenerate float32 triangles where
+    a cutter face nearly coincides with the existing surface (see CUT_OVERLAP above);
+    repairing immediately prevents those defects from compounding across dozens of
+    sequential cuts, which is what produced the non-watertight / multi-body shells
+    documented in TODO.md MESH-01. After every subtraction, sub-1000-face junk
+    components are also dropped so the next difference always receives a clean volume.
     """
     result = shell
     for i, cutter in enumerate(cutters):
@@ -279,6 +318,9 @@ def _subtract_all(shell, cutters):
             result = trimesh.util.concatenate(keep)
         elif len(keep) == 1:
             result = keep[0]
+
+        # Repair after every cut (MESH-01 fix) rather than only once before the loop.
+        result = _to_manifold_volume(result)
 
     return result
 
@@ -498,25 +540,33 @@ def process_rear(mesh):
 
 def verify(mesh, name):
     """
-    Manufacturing-watertight gate: no boundary edges; no large detached chunks (≥ 64
-    faces); winding consistent.  Matches the criteria in verify_shells.py.
+    Manufacturing-watertight gate: no boundary edges, no non-manifold edges, no
+    detached chunks of any size (a single-piece fuselage section must split into
+    exactly 1 body), winding consistent, and `mesh.is_watertight` true.
+
+    MESH-01 fix (2026-06-16): the previous gate only checked open-boundary edges
+    (count == 1) and a 64-500-face junk-component window.  It missed non-manifold
+    edges (count > 2, the actual defect signature left by near-coincident cutter
+    faces) and multi-body fragmentation above 500 faces, and never hard-required
+    `is_watertight` — so it reported "PASS" on shells that were not watertight and,
+    in the rear shell's case, split into 3 disconnected solid islands.  See
+    TODO.md MESH-01 for the full incident writeup.
     """
-    # Boundary edges appear exactly once across all face-edge occurrences.
-    # edges_unique_inverse maps each entry of mesh.edges to its unique-edge index,
-    # so bincount gives the occurrence count per unique edge.
     edge_counts = np.bincount(
         mesh.edges_unique_inverse,
         minlength=len(mesh.edges_unique),
     )
-    b_count = int(np.sum(edge_counts == 1))
+    b_count = int(np.sum(edge_counts == 1))        # open boundary edges
+    nm_count = int(np.sum(edge_counts > 2))         # non-manifold edges
 
     comps = mesh.split(only_watertight=False)
-    junk = [c for c in comps if 64 <= len(c.faces) < 500]
+    bodies = len(comps)
 
-    status = "PASS" if (b_count == 0 and not junk
-                        and mesh.is_winding_consistent) else "FAIL"
+    status = "PASS" if (b_count == 0 and nm_count == 0 and bodies == 1
+                        and mesh.is_winding_consistent
+                        and mesh.is_watertight) else "FAIL"
     print(f"    verify {name}: {status}  "
-          f"boundary={b_count}  "
+          f"boundary={b_count}  nonmanifold={nm_count}  bodies={bodies}  "
           f"winding={mesh.is_winding_consistent}  "
           f"watertight={mesh.is_watertight}  "
           f"vol={mesh.volume:.0f} mm³  "
