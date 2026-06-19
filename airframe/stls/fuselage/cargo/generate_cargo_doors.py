@@ -161,6 +161,7 @@ def build_belly_interpolator(shell_stl: str):
     belly = fc[mask]
     if mask.sum() == 0:
         print("[belly] WARNING: no belly faces found — using flat fallback")
+
         def belly_z(x2d, y2d):
             return np.full_like(x2d, Z_BELLY_FALLBACK, dtype=float)
         return belly_z
@@ -414,7 +415,7 @@ def main() -> int:
         return 1
 
     print("=== Cargo clamshell door generation — Rev R1a (hull frame) ===")
-    print(f"Hull-frame convention: X=+port, Y=+aft, Z=+dorsal")
+    print("Hull-frame convention: X=+port, Y=+aft, Z=+dorsal")
     print(f"Cargo shell:  X={X_SHELL_MIN:.1f}..{X_SHELL_MAX:.1f}  "
           f"Ship CL X_HINGE={X_HINGE:.2f} mm")
     print(f"Bay span:     Y={Y_BAY_FWD:.1f}..{Y_BAY_AFT:.1f} mm "
