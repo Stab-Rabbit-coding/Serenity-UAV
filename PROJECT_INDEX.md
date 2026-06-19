@@ -143,8 +143,10 @@ belly_panel.scad                — Battery bay belly access panel (Rev R)
 access_panels_24in.scad         — All hull access panels: 4× Faraday-bay covers (Shepherd/Inara/River/Simon),
                                     2× ventral hatch covers (battery/Kaylee), 2× ventral hatch frames (Rev R)
 rcrs49_wire_post.scad           — 49 MHz RCRS top-wire antenna post, 12×12 mm PETG mast (Rev R)
-landing_leg_assy.scad           — Rev R1 4× field-replaceable landing legs (CF-PETG flat spring,
-                                    22×10mm, 185mm) + hull boss + 3×M3 nylon shear-bolt fuse;
+landing_leg_assy.scad           — Rev R1.5 4× corner single-arm leg brackets (CF-PETG main
+                                    strut + V-arm, PETG crush node, 2× hull boss, TPU foot
+                                    cap), 17mm ground clearance, matches author reference part
+                                    airframe/freecad/assembly/strong-leg.stl;
                                     see docs/LANDING_GEAR_ANALYSIS.md for structural analysis
 cargo/
   cargo_sect_shell24.scad       — Rev R cargo section shell with clamshell doors, avionics bays, GPS mounts
@@ -209,20 +211,23 @@ landing-gear/
   foot_2_scaled24.stl           — Individual foot 2 (Thingiverse reference)
   foot_3_scaled24.stl           — Individual foot 3 (Thingiverse reference)
   foot_4_scaled24.stl           — Individual foot 4 (Thingiverse reference)
-  [arm_upper_r1.stl]            — PENDING: Rev R1.4 upper corner V-arm CF-PETG (PART="arm_upper"; 4 per aircraft; struts ≈77.6 mm)
-  [arm_lower_r1.stl]            — PENDING: Rev R1.4 lower corner V-arm CF-PETG (PART="arm_lower"; 4 per aircraft; struts ≈53.9 mm)
-  [main_strut_r1.stl]           — PENDING: Rev R1.4 main vertical strut CF-PETG OD18 mm × 143 mm (PART="main_strut"; 4 per aircraft)
-  [junct_node_r1.stl]           — PENDING: Rev R1.4 arm-to-strut junction node PETG crush zone R9 mm (PART="node"; 8 per aircraft)
-  [hull_boss_r1.stl]            — PENDING: Rev R1.4 generic hull boss cylinder CF-PETG OD22 mm (PART="boss"; 16 per aircraft; 4 per corner)
-  [foot_pad_r1.stl]             — PENDING: Rev R1.4 TPU 95A foot pad 55×55×12 mm (PART="foot"; 4 per aircraft)
+  landing_legs_hull_r1.stl      — All 4 engineered single-arm leg brackets in hull-frame
+                                   coords (PART="hull_legs", Rev R1.5 2026-06-16); watertight,
+                                   confirmed against author's strong-leg.stl reference geometry
+  [arm_r1.stl]                  — PENDING: Rev R1.5 V-arm CF-PETG (PART="arm"; 4 per aircraft; struts ≈37.7 mm)
+  [main_strut_r1.stl]           — PENDING: Rev R1.5 main vertical strut CF-PETG OD18 mm × 35 mm (PART="main_strut"; 4 per aircraft)
+  [junct_node_r1.stl]           — PENDING: Rev R1.5 arm-to-strut junction node PETG crush zone R9 mm (PART="node"; 4 per aircraft)
+  [hull_boss_r1.stl]            — PENDING: Rev R1.5 generic hull boss cylinder CF-PETG OD22 mm (PART="boss"; 8 per aircraft; 2 per corner)
+  [foot_pad_r1.stl]             — PENDING: Rev R1.5 TPU 95A foot cap ⌀25×10 mm (PART="foot"; 4 per aircraft)
 dorsal_antenna_fin.stl            — Dorsal antenna fin fairing
 middle_canonical_edf_intake.stl — Middle section EDF intake opening
 cargo/
   cargo_sect_shell24.stl                 — Cargo shell (SCAD output)
   cargo_sect_shell24_repaired.stl        — Cargo solid shell, manifold-repaired (used for intersection in access_panels_24in.scad)
   cargo_sect_shell24_2mm_repaired_largest.stl — Repaired largest shell body
-  cargo_door_port.stl                   — Port clamshell cargo door
-  cargo_door_stbd.stl                   — Stbd clamshell cargo door
+  cargo_door_port.stl                   — Port clamshell cargo door (hull-frame, Rev R1a 2026-06-16)
+  cargo_door_stbd.stl                   — Stbd clamshell cargo door (hull-frame, Rev R1a 2026-06-16)
+  generate_cargo_doors.py               — Door STL generator (Rev R1a, hull frame; see CLAUDE.md)
   cargo_cradle_autolatch.stl            — Auto-latch payload cradle
   cargo_fpv_bezel.stl                   — FPV camera bezel
   cargo_gps_retention_ring.stl          — GPS antenna retention ring
@@ -231,7 +236,6 @@ cargo/
   cargo_drv8833_tray.stl                — DRV8833 H-bridge PCB tray
   cargo_door_servo_bracket.stl          — Door servo bracket
   cargo_release_servo_bracket.stl       — Payload release servo bracket
-  generate_cargo_doors.py               — Door STL generation script
   generate_cargo_mounts.py              — Mount STL generation script
 ```
 
@@ -547,6 +551,7 @@ archive/                          — Pre-Rev Q gerber snapshots
 ## docs/
 
 ```
+PROJECT_INDEX.md                  — This file: active project directory tree
 structural_analysis.md            — First-principles structural analysis (Rev R1, 2026-06-14): keel, ring frames, joint bosses, skid rods, AUW, FOS calculations
 AVIONICS_PB2_REDESIGN.md          — 8× PocketBeagle 2 Industrial avionics redesign spec (Rev R)
 BATTERY_MOUNT.md                  — Battery CG analysis, retention load case, belly panel spec (Rev R)
