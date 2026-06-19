@@ -1138,8 +1138,19 @@ All are on the `avionics/kicad/` branch; run DRC to zero errors before generatin
   - Fitted in: River's Room, Simon's Medbay only (2 boards total).
   - Run DRC → zero errors; generate gerbers to `avionics/kicad/gerbers/Emma-R1/`.
   - **BLOCKS Emma fabrication order.**
+  - [x] Components added to Emma board.
+  - [x] Emma Kicad files renamed from XCVR to Emma
+  - [x] Footprints arranged so that all components fit
+  - [ ] EMI spacing verified 
+  - [ ] Labels and silk arranged for readability
+  - [ ] Traces and nets regenerated and drc issues resolved
+  - [ ] Gerbers exported
 
 - [ ] **Zoë (Cape-B-2) Rev R1 — remove LoRa, add P1+P2 passthrough rails**
+ - [x] Components arranged so that no footprint collisions are present
+ - [ ] EMI spacing verified
+ - [ ] Nets and vias fixed
+ - [ ] DRC rules checked.
   - Remove RFM95W footprint and all associated SPI routing + LDO supply.
   - Add 2× 20-pin 2.54 mm pass-through socket rails on upper face (upper sockets
     match Emma P1+P2 pinout; lower pins pass through to Cape-A-2 / PB2-I stack).
