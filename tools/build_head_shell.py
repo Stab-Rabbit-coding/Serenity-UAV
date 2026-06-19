@@ -133,9 +133,9 @@ WALL_MM = 2.0
 # manifold3d helpers — small wrappers matching SCAD primitive semantics
 # ---------------------------------------------------------------------------
 
-def cyl(height, d, fn=FN):
+def cyl(hght, d, fn=FN):
     """Cylinder along +Z from z=0, matching SCAD cylinder(h, d)."""
-    return m3d.Manifold.cylinder(height=height, radius_low=d / 2.0, circular_segments=fn)
+    return m3d.Manifold.cylinder(hght=hght, radius_low=d / 2.0, circular_segments=fn)
 
 
 def cube_corner(size):
