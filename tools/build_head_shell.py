@@ -135,8 +135,7 @@ WALL_MM = 2.0
 
 def cyl(height, d, fn=FN):
     """Cylinder along +Z from z=0, matching SCAD cylinder(h, d)."""
-    return m3d.Manifold.cylinder(height=height, radius_low=d / 2.0,
-                                  circular_segments=fn)
+    return m3d.Manifold.cylinder(height=height, radius_low=d / 2.0, circular_segments=fn)
 
 
 def cube_corner(size):
