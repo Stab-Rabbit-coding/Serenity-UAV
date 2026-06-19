@@ -415,7 +415,7 @@ def main() -> int:
         return 1
 
     print("=== Cargo clamshell door generation — Rev R1a (hull frame) ===")
-    print(f"Hull-frame convention: X=+port, Y=+aft, Z=+dorsal")
+    print("Hull-frame convention: X=+port, Y=+aft, Z=+dorsal")
     print(f"Cargo shell:  X={X_SHELL_MIN:.1f}..{X_SHELL_MAX:.1f}  "
           f"Ship CL X_HINGE={X_HINGE:.2f} mm")
     print(f"Bay span:     Y={Y_BAY_FWD:.1f}..{Y_BAY_AFT:.1f} mm "
