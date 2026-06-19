@@ -161,6 +161,7 @@ def build_belly_interpolator(shell_stl: str):
     belly = fc[mask]
     if mask.sum() == 0:
         print("[belly] WARNING: no belly faces found — using flat fallback")
+
         def belly_z(x2d, y2d):
             return np.full_like(x2d, Z_BELLY_FALLBACK, dtype=float)
         return belly_z
