@@ -17,10 +17,10 @@ jobs:
         uses: crwood/stale-branches@v6.0.0
         with:
           # Number of days before a branch is considered stale
-          days-before-stale: 30
+          days-before-stale: 15
           # Branches you absolutely want to protect from deletion
           ignored-branches: 'main,master,develop,release/*'
           # Set to 'true' to actually delete branches. 'false' will only dry-run/report.
-          dry-run: false
+          dry-run: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
