@@ -73,7 +73,7 @@ Every component will be fabricated or procured; design accordingly.
 
 - **Keep the skin geometry of Serenity true to the reference models** to the greatest extent possible. Interior modifications (bore carving, sleeve insertion, boss protrusions) must blend into the canonical exterior hull.  Do not alter the outer mold line unless structurally required.
 
-- **Serenity has a very complex geometry, so bounding boxes and centroid calculations will  be inadequate for positioning and orienting parts.** Use this low detail model of Serenity <https://www.thingiverse.com/thing:4677565> as a guide to the geometry of the hull, when orienting the head, cargo, middle, and rear sections of the fuselage.
+- **Serenity has a very complex geometry, so bounding boxes and centroid calculations will  be inadequate for positioning and orienting parts.** Use the validated orientation and positions listed below for determining where parts fit in space.  If there's uncertainty, ask the user to do a manual placement in freecad.  Be ready to tweak final fine alignment after receiving rough positioning. 
 
 - The head section contains the bridge, and forms a narrow forward portion.
 
@@ -185,7 +185,7 @@ The historical bake transforms (position + quaternion per component) live solely
 ## Licensing and Attribution
 
 - All work is **published under CC BY 4.0**.
-- The author of this project is Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+- The author of this project is Steve Griffing, PE(CSE), CISSP-ISSEP, CPP.  The avionics boards are marked with his personally owned LLC name, but he retains personal copyright. 
 
 - Every design decision, algorithm, or geometry technique that draws on an external reference
   **must be cited** in the relevant source file docstring or commit message.
@@ -194,9 +194,10 @@ The historical bake transforms (position + quaternion per component) live solely
 
 ## Fabrication Standards
 
-- Primary structural material: **CF-PETG** (0.15 mm layer height, 4 perimeters, ≥ 40% infill for load-bearing regions; 25% infill for non-structural fill).
+- **CF-PETG** (0.15 mm layer height, 4 perimeters, ≥ 40% infill for load-bearing regions; 25% infill for non-structural fill). 
 
-- Secondary / non-structural: **PETG** at same layer height.
+  - Legacy references to PETG must be updated to CF-PETG when found in the repo.  References to any other print material must be verified.
+  - The prototype designed for printing on an DaVinci Jr isn't expected to be a fully functional or full size prototype, and won't meet these standards. 
 
 - The canonical exterior skin **shall be hollowed to 2.0 mm while maintaining a watertight mesh surface without any voids or holes**, except as explicitly specified in build. The mating surfaces between the four fuselage sections, (head, cargo, middle, rear), will be open to allow construction access.
 
