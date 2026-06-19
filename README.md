@@ -117,8 +117,8 @@ cargo bay and adjacent to Simon's medbay and the engine cone.
 Houses the Kaylee Power Distribution Board (PDB) and battery management system.
 Accessible via Jayne's cargo bay.
 
-**Battery compartment** — Middle/cargo section, accessible via Jayne's cargo bay.
-Designed for quick field-swapping of the flight battery.
+**Battery compartment** — head/cargo section, accessible via Jayne's cargo bay.
+Designed for quick field-swapping of the flight battery. Allows mounting of different size batteries based on various intended flight profiles, and allows adjustment for per flight weight and balance tuning.
 
 **Jayne's cargo bay** — Belly clamshell cargo bay with actuated doors.
 Provides payload loading/release and access to Kaylee's room, the battery compartment,
