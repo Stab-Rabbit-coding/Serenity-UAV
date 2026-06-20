@@ -15421,6 +15421,7 @@
 			(size 2.95 1.27)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
+			(net 1 "GND")
 			(uuid "8bacc902-5a9a-4fed-96d5-9cd9cfd5dfe4")
 		)
 		(pad "2" smd roundrect
@@ -15428,7 +15429,7 @@
 			(size 2.95 1.27)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
-			(net 49 "LORA_RESETN")
+			(net 53 "SPI1_MISO")
 			(uuid "24102758-f943-407e-bbc8-fb64ad1f9a19")
 		)
 		(pad "3" smd roundrect
@@ -15436,6 +15437,7 @@
 			(size 2.95 1.27)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
+			(net 54 "SPI1_MOSI")
 			(uuid "f372540f-089f-4eac-8ae3-fd17f9b0f85e")
 		)
 		(pad "4" smd roundrect
@@ -15443,6 +15445,7 @@
 			(size 2.95 1.27)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
+			(net 55 "SPI1_CLK")
 			(uuid "d8e16781-7d62-46d5-b667-a623e97738b9")
 		)
 		(pad "5" smd roundrect
@@ -15450,6 +15453,7 @@
 			(size 2.95 1.27)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
+			(net 56 "SPI1_CS_LORA")
 			(uuid "342f0d01-4698-466c-a30c-fc93af302fa8")
 		)
 		(pad "6" smd roundrect
@@ -15457,6 +15461,7 @@
 			(size 2.95 1.27)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
+			(net 49 "LORA_RESETN")
 			(uuid "b2de4c97-b1c7-4fb8-a901-3752273624dd")
 		)
 		(pad "7" smd roundrect
@@ -15471,6 +15476,7 @@
 			(size 2.95 1.27)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
+			(net 1 "GND")
 			(uuid "d6142190-fb0e-4668-a0e0-005d50717e48")
 		)
 		(pad "9" smd roundrect
@@ -15485,7 +15491,7 @@
 			(size 2.95 1.27)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
-			(net 53 "SPI1_MISO")
+			(net 1 "GND")
 			(uuid "973b9912-5ef3-4217-85a8-dd2fd91e1ea0")
 		)
 		(pad "11" smd roundrect
@@ -15493,7 +15499,6 @@
 			(size 2.95 1.27)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
-			(net 54 "SPI1_MOSI")
 			(uuid "9e0c0c83-18e1-4a35-b647-e0b47c5ac32c")
 		)
 		(pad "12" smd roundrect
@@ -15501,7 +15506,6 @@
 			(size 2.95 1.27)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
-			(net 55 "SPI1_CLK")
 			(uuid "dd1de196-e762-451a-a0b8-7aba42689ff6")
 		)
 		(pad "13" smd roundrect
@@ -15509,7 +15513,6 @@
 			(size 2.95 1.27)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
-			(net 56 "SPI1_CS_LORA")
 			(uuid "ecaa35f7-13de-4507-ac75-621334069b82")
 		)
 		(pad "14" smd roundrect

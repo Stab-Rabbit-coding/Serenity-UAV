@@ -1180,6 +1180,19 @@ All are on the `avionics/kicad/` branch; run DRC to zero errors before generatin
   - [x] Components added to Emma board.
   - [x] Emma Kicad files renamed from XCVR to Emma
   - [x] Footprints arranged so that all components fit
+  - [x] **LoRa (RFM95W) pin mapping corrected (2026-06-20)** — as-placed, SPI1_MISO/MOSI/CLK/
+    SPI1_CS_LORA were wired to pads 10–13 (real pins GND/DIO3/DIO4/3.3V per
+    [REF-RFMOD-001]) and LORA_RESETN to pad 2 (real pin MISO): a wrong-pin-number error
+    that would have driven the SPI clock onto the module's 3.3V pin if fabricated as-is,
+    not merely a missing connection. Corrected to pads 2–6 (MISO/MOSI/SCK/NSS/RESET) and
+    1/8/10 (GND) per the verified HopeRF datasheet. **Still open, blocks fabrication:**
+    - [ ] Pad 9 (ANT) and pad 13 (3.3V) carry no net — module has no antenna or power path
+    - [ ] DIO0–DIO5 (pads 7, 11, 12, 14–16) unassigned pending P1-header GPIO budget decision
+    - [ ] Footprint pad size (2.95×1.27 mm) is oversized vs. real RFM95W castellated pads
+    - [ ] Footprint physically overlaps CAPE-B IF (JST GH 6P) — needs repositioning
+    - [ ] CAPE-B IF (JST GH 6P) connector is still present and fully wired — "replace JST
+      with P1+P2 socket rails" has NOT happened; verify whether PB2-P1/P2 sockets already
+      carry all 6 of its signals before removing it
   - [ ] EMI spacing verified 
   - [ ] Labels and silk arranged for readability
   - [ ] Traces and nets regenerated and drc issues resolved
