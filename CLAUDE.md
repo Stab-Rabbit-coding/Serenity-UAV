@@ -69,6 +69,8 @@ Every component will be fabricated or procured; design accordingly.
 
   not wrappers. Wall thickness, infill, and material must be specified for each housing.
 
+- **PCBs are tightly packed. all final component positioning will be done manually, after pcbs are populated and nets are built by script.**  If a kicad drc violation requires repositioning a component, refer the action to the user.
+
 ### Aircraft Geometery
 
 - **Keep the skin geometry of Serenity true to the reference models** to the greatest extent possible. Interior modifications (bore carving, sleeve insertion, boss protrusions) must blend into the canonical exterior hull.  Do not alter the outer mold line unless structurally required.
