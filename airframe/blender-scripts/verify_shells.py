@@ -12,11 +12,30 @@ fragments (the signature of the old centroid-inset "hull breaches").
 
 Gate (per section, all must hold to PASS):
   * 0 open boundary edges (edges used by exactly one face),
+  * 0 non-manifold edges (edges used by more than 2 faces),
   * winding consistent,
-  * watertight,
-  * no "junk" body with > JUNK_FACE_LIMIT faces other than the main solid
-    (a hollow sealed shell legitimately has 2 surface shells: outer + inner;
-     trimesh body_count therefore reports 2 for a clean shell).
+  * watertight (mesh.is_watertight, hard requirement),
+  * 0 small junk fragments (< JUNK_FACE_LIMIT faces) — voxel-remesh /
+    boolean-pipeline noise, not real geometry.
+
+  Body count is NOT capped: a properly hollowed 2 mm shell legitimately splits
+  into 2 large components (an outer surface with positive signed volume and a
+  separate, fully disconnected inner surface with negative signed volume — they
+  never share an edge), and the rear section legitimately has additional large
+  lobes (skid-arm / dorsal-pod cavity surfaces).  Confirmed empirically
+  2026-06-16: middle's two large bodies have signed volumes +1,287,847 mm^3 and
+  -1,055,410 mm^3, summing to 232,437 mm^3 — the exact mass-budget figure in
+  docs/structural_analysis.md.  A real defect shows up as non-manifold/open
+  edges or small (< 64-face) sliver fragments, not as "more than one body".
+
+  MESH-01 fix (2026-06-16): the previous gate allowed up to 3 large (>= 64 face)
+  detached components and never required mesh.is_watertight or checked for
+  non-manifold edges, so it reported "PASS" on add_structural_features.py output
+  that was not watertight (cargo, middle, rear) and, for rear, had genuinely
+  fragmented into 3 disconnected solid islands plus hundreds of slivers.  An
+  initial over-correction (requiring exactly 1 body) was tried and reverted
+  after it incorrectly failed the legitimate outer+inner double-wall topology
+  on every section.  See TODO.md MESH-01.
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 License: CC BY 4.0  —  creativecommons.org/licenses/by/4.0
@@ -54,46 +73,56 @@ def boundary_edge_count(mesh):
     return len(trimesh.grouping.group_rows(mesh.edges_sorted, require_count=1))
 
 
+def nonmanifold_edge_count(mesh):
+    """Edges referenced by more than two faces (non-manifold)."""
+    edge_counts = np.bincount(
+        mesh.edges_unique_inverse,
+        minlength=len(mesh.edges_unique),
+    )
+    return int(np.sum(edge_counts > 2))
+
+
 def check(path):
     """
     Return (passed, summary_string) for one shell STL.
 
-    Pass criterion is MANUFACTURING watertightness, not bit-exact float32
-    watertightness.  A real defect is an open hole (a boundary edge used by one
-    face) or a detached chunk (a connected component with >= JUNK_FACE_LIMIT
-    faces).  Fine boolean detail (engravings, the dish-spike tip) plus the float32
-    STL format leave a handful of zero-area degenerate faces / sub-micron
-    non-manifold edges that a slicer ignores; those are reported for information
-    but do not fail the part.  The original hull breaches showed up as boundary
-    edges AND large detached inner-shell fragments (hundreds/thousands of faces),
-    which this still catches.
+    Pass criterion is real manufacturing watertightness: 0 open boundary edges,
+    0 non-manifold edges, 0 small junk fragments (< JUNK_FACE_LIMIT faces),
+    winding consistent, and mesh.is_watertight true.  Body count is informational
+    only — see the module docstring for why a clean shell legitimately splits
+    into 2+ large bodies (outer/inner double-wall, plus extra lobes on rear).
     """
     mesh = trimesh.load(path, process=True)
 
     open_edges = boundary_edge_count(mesh)
+    nonmanifold_edges = nonmanifold_edge_count(mesh)
     comps = mesh.split(only_watertight=False)
     fragments = [c for c in comps if len(c.faces) < JUNK_FACE_LIMIT]
     big_extra = [c for c in comps if len(c.faces) >= JUNK_FACE_LIMIT]
     # zero-area degenerate faces (float32 slivers) — cosmetic
     degen = int((mesh.area_faces < 1e-9).sum())
 
-    # A clean shell may be one solid (1-3 surface shells: outer + cavity lobes).
-    # More than a handful of large components means a real detached chunk.
-    real_breach = (open_edges > 0) or (len(big_extra) > 3) or (not mesh.is_winding_consistent)
+    real_breach = (open_edges > 0 or nonmanifold_edges > 0 or len(fragments) > 0
+                   or not mesh.is_winding_consistent or not mesh.is_watertight)
     passed = not real_breach
 
     status = "PASS" if passed else "FAIL"
     summary = (
         f"[{status}] {os.path.basename(path)}\n"
         f"        facets={len(mesh.faces):>7d}  winding_ok={mesh.is_winding_consistent}"
-        f"  watertight(strict)={mesh.is_watertight}\n"
-        f"        open_boundary_edges={open_edges}  large_shells={len(big_extra)}"
-        f"  cosmetic[degenerate_faces={degen}, sliver_fragments={len(fragments)}]"
+        f"  watertight={mesh.is_watertight}\n"
+        f"        open_boundary_edges={open_edges}  nonmanifold_edges={nonmanifold_edges}"
+        f"  large_bodies={len(big_extra)} (informational; see docstring)"
+        f"  junk_fragments={len(fragments)} (real defect if > 0)"
+        f"  degenerate_faces={degen} (cosmetic)"
         f"  vol={mesh.volume:.0f} mm^3"
     )
-    if len(big_extra) > 3:
+    if len(big_extra) > 1:
         sizes = sorted((len(c.faces) for c in big_extra), reverse=True)[:12]
-        summary += f"\n        DETACHED CHUNKS (real defect) face counts: {sizes}"
+        summary += f"\n        large body face counts: {sizes}"
+    if fragments:
+        sizes = sorted((len(c.faces) for c in fragments), reverse=True)[:12]
+        summary += f"\n        JUNK FRAGMENTS (real defect) face counts: {sizes}"
     return passed, summary
 
 

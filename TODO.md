@@ -338,6 +338,33 @@ Joint faces in hull-frame Y (confirmed from baked extents):
   - Bond with West System 105/206; cure 24 h before foam pour.
   - **SUB-TASKS OPEN:** verify in slicer at hull Y ≈ +203 mm. *(BLOCKS middle + rear printing)*
 
+- [ ] **MESH-01 `add_structural_features.py` boolean cuts left non-watertight / fragmented
+  shells on cargo, middle, and rear** *(found 2026-06-16, reviewing 03_top.png render)* —
+  what looks like "huge cutouts / air where there should be hull" in the rendered build-guide
+  images is **not** the intended bore-open joint design; it is a meshing defect from the
+  boss-pin/keel-channel/ring-pocket boolean subtractions in `add_structural_features.py`.
+  - `python3 airframe/blender-scripts/verify_shells.py --published` reports "ALL PASS" but
+    its own per-shell output shows `watertight(strict)=False` for cargo, middle, and rear,
+    and `large_shells=3` for rear (i.e. the rear shell is split into 3 disconnected solid
+    islands, not one continuous hull) — the gate's pass criteria (`open_edges==0` and
+    `large_shells<=3`) do not actually require `is_watertight`, so this slipped through.
+  - Non-manifold edges (shared by 4–6 faces instead of 2) and hundreds of zero-area sliver
+    fragments cluster exactly at the boss-pin/keel-channel/ring-pocket cut sites: cargo at
+    Y ≈ −68..−58 mm (Joint 1) and Y ≈ 121–122 mm (Joint 2); rear at Y ≈ 217–233 mm
+    (Joint 3 / skid-rod bore zone).  Head (boss-pin bores only, no keel/ring cuts) is fully
+    clean — pointing at the keel-locating-channel and ring-frame-pocket box cutters
+    (`KEEL_CHANNEL`, `RING_POCKETS` in `add_structural_features.py`) as the likely root
+    cause: their cut surfaces sit within float-epsilon of the shell's existing 2 mm wall,
+    producing degenerate/non-manifold triangulation in the `manifold3d` boolean difference.
+  - Cargo's computed volume (6,234,838 mm³) is ~17× the §2 mass-budget figure
+    (370,509 mm³) — a strong independent signal of broken topology, not just cosmetic noise.
+  - **Fix path:** add finite clearance/overlap to the keel-channel and ring-pocket cutters
+    so they fully traverse the wall instead of grazing it; re-run
+    `add_structural_features.py`; tighten `verify_shells.py`'s gate to hard-fail on
+    `is_watertight=False` and on `large_shells>1` (a clean single-piece shell should split
+    into exactly 1 surface body, not be allowed up to 3).  Re-run `bake_hull_frame.py --check`
+    after re-export.  **BLOCKS cargo/middle/rear printing and any FEA based on current STLs.**
+
 - [x] **CF ring plate (CF-PLATE-2MM) — complete first-principles re-evaluation *(Rev R1)*** *(done 2026-06-14)*
   Full analysis in `docs/structural_analysis.md`.  2 rings selected (down from prior 5):
   cargo Y=+30 mm (wing-spar load zone) and rear Y=+290 mm (landing anti-ovalisation zone).
@@ -1146,8 +1173,19 @@ All are on the `avionics/kicad/` branch; run DRC to zero errors before generatin
   - Fitted in: River's Room, Simon's Medbay only (2 boards total).
   - Run DRC → zero errors; generate gerbers to `avionics/kicad/gerbers/Emma-R1/`.
   - **BLOCKS Emma fabrication order.**
+  - [x] Components added to Emma board.
+  - [x] Emma Kicad files renamed from XCVR to Emma
+  - [x] Footprints arranged so that all components fit
+  - [ ] EMI spacing verified 
+  - [ ] Labels and silk arranged for readability
+  - [ ] Traces and nets regenerated and drc issues resolved
+  - [ ] Gerbers exported
 
 - [ ] **Zoë (Cape-B-2) Rev R1 — remove LoRa, add P1+P2 passthrough rails**
+ - [x] Components arranged so that no footprint collisions are present
+ - [ ] EMI spacing verified
+ - [ ] Nets and vias fixed
+ - [ ] DRC rules checked.
   - Remove RFM95W footprint and all associated SPI routing + LDO supply.
   - Add 2× 20-pin 2.54 mm pass-through socket rails on upper face (upper sockets
     match Emma P1+P2 pinout; lower pins pass through to Cape-A-2 / PB2-I stack).
