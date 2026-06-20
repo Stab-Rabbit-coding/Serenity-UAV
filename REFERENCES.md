@@ -3,7 +3,7 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
 **Revision:** R1
-**Last updated:** 2026-06-16
+**Last updated:** 2026-06-20
 
 ---
 
@@ -232,6 +232,40 @@ fix is complete.
 **Used in:** `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`,
 `avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`,
 `README.md`, `TODO.md`, `CLAUDE.md`, `docs/AVIONICS_PB2_REDESIGN.md`
+
+---
+
+### REF-FCC-004: 47 CFR Part 95 Subpart C — Radio Control Radio Service (RCRS) — Evaluated and Rejected for Emma's 49 MHz Link
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | FCC |
+| **Official URL** | https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-95/subpart-C |
+| **Status** | **Not used in design.** Researched 2026-06-20 as a candidate replacement band/service for Emma's 49 MHz link (to recover the power/range budget §15.235 does not permit — see REF-FCC-003 and TODO.md §0.1) and rejected. Retained here per the Standards Vetting Policy so the rejection is auditable and is not re-investigated from scratch in a future session. |
+
+**Regulatory provisions reviewed:**
+
+| Provision | Description | Citation |
+|---|---|---|
+| 72 MHz channel plan | 50 channels, 72.01–72.99 MHz, 20 kHz spacing; **usable only to control and operate model aircraft** | §95.763(b) |
+| 75 MHz channel plan | 30 channels, 75.41–75.99 MHz, 20 kHz spacing; **usable only to control and operate model surface craft** | §95.763(c) |
+| 26–28 MHz channel plan | 6 channels, 26.995–27.255 MHz | §95.763(a) |
+| Frequency tolerance | ±20 ppm at 72/75 MHz; ±50 ppm (or ±100 ppm under the ≤2.5 W on/off-only exception) at 26–28 MHz | §95.765 |
+| Transmitter power | Mean output power ≤ 0.75 W on 72/75 MHz | §95.767 |
+| Permissible use | RCRS transmitters may be used **only for one-way communications** (telecommand, and on 26–28 MHz only, narrow on/off-indicator telemetry); **"No person shall use a RCRS transmitter to transmit data"** | §95.731 |
+| Equipment certification | No certification exception exists for 72/75 MHz transmitters (the §95.735 non-certified-transmitter exception applies only to the 26–28 MHz band) | §95.735 |
+| Licensing | Operated without an individual license ("licensed by rule"), but the equipment itself requires Part 95-specific FCC certification, separate from the Part 15 §2.803/§15.19 process REF-FCC-003 already requires for Emma | §95.305 |
+
+**Findings — why RCRS does not apply to Emma:**
+
+1. **No 78 MHz allocation exists.** §95.763 defines only the 26–28 MHz, 72 MHz, and 75 MHz channel plans; there is no 78 MHz RCRS band in 47 CFR Part 95 at any subpart.
+2. **Aircraft/surface split forecloses 75 MHz.** Serenity is an aircraft. §95.763(c) restricts 75 MHz channels to model *surface* craft by rule; only the 72 MHz band (§95.763(b)) is available to an aircraft under RCRS.
+3. **§95.731 is disqualifying regardless of band or power.** Emma's payload is bidirectional AX.25 KISS-framed packet data (signed/authenticated messages, telemetry, command — required by the Zero Trust policy, REF-NIST-001 §2.1) — squarely "data" under §95.731's prohibition. RCRS permits only one-way telecommand/indicator-telemetry traffic; it cannot legally carry this link's actual payload even though §95.767's 0.75 W power ceiling is ≈42 dB higher than the ≈30 µW EIRP REF-FCC-003 permits under §15.235.
+4. **No certification or licensing simplification.** Moving to 72 MHz would still require a from-scratch Part 95 equipment certification (no §95.735 exception above 26–28 MHz); it does not reduce the certification burden already carried under Part 15.
+
+**Conclusion:** RCRS is incompatible with this link's function (bidirectional signed data), not just its frequency, and is **not adopted**. See TODO.md §0.1 for the disposition of the underlying range/power-budget problem.
+
+**Used in:** `TODO.md` §0.1
 
 ---
 
