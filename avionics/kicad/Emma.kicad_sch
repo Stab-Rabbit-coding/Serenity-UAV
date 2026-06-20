@@ -210,11 +210,14 @@
       (pin_numbers (hide yes))
       (property "Reference" "J" (at 0 5.08 0)
         (effects (font (size 1.27 1.27))))
-      (property "Value" "SMA_Edge" (at 0 -5.08 0)
+      (property "Value" "RPSMA_Edge" (at 0 -5.08 0)
         (effects (font (size 1.27 1.27))))
       (property "Footprint"
         "Connector_Coaxial:SMA_Amphenol_132289_EdgeMount" (at 0 0 0)
         (effects (font (size 1.27 1.27)) (hide yes)))
+      (property "Description"
+        "RP-SMA edge-launch jack, 50 Ohm -- Amphenol 132289RP (reverse-polarity variant of 132289; identical PCB footprint, different mating gender) -- 47 CFR Part 15 15.203 unique-coupling antenna port"
+        (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (symbol "Conn_SMA_0_1"
         (rectangle (start -2.54 2.54) (end 2.54 -2.54)
           (stroke (width 0) (type default)) (fill (type background))))
@@ -299,9 +302,12 @@
     (uuid "49020000-0000-0000-0000-000000000140")
     (property "Reference" "J2" (at 280.00 93.00 0)
       (effects (font (size 1.27 1.27))))
-    (property "Value" "SMA_Edge" (at 280.00 107.00 0)
+    (property "Value" "RPSMA_Edge" (at 280.00 107.00 0)
       (effects (font (size 1.27 1.27))))
     (property "Footprint" "Connector_Coaxial:SMA_Amphenol_132289_EdgeMount"
+      (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Description"
+      "RP-SMA edge-launch jack, 50 Ohm -- Amphenol 132289RP -- 49 MHz Part 15 15.235 antenna output, §15.203 unique coupling"
       (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (pin "1" (uuid "49020000-0000-0000-0000-000000000141"))
     (pin "2" (uuid "49020000-0000-0000-0000-000000000142")))

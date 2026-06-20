@@ -19,7 +19,7 @@
 | PCBs | **Rev Q: all 8 nodes use the EM hardened Wash Flight Control and Zoë Comms/Security capes** at every position. The **Kaylee Power Distribution Board** ensures that everything stays shiny.  Two **Emma** daughter boards provide connectivity on 49 MHz (Part 15 §15.235).  Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived 2026-06-05. **| Rev R schematics complete (Wash: 2× EMI-hardened Ethernet PHY; Zoë: 1× Ethernet PHY; all field connectors added). Kaylee PCB DRC clean (0 shorts); gerbers generated 2026-06-10; manual component placement (Section F, shield lugs) and trace routing remain. |
 | Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 ✓; serenity-fc Phase 6 stub only; all Phase 7 items open |
 | Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
-| Regulatory | FAA Part 107 [REF-FAA-002], Part 48 §48.205 [REF-FAA-001], §91.209 [REF-FAA-003], FCC Part 15 [REF-FCC-001, REF-FCC-002, REF-FCC-003 §15.235] | FAA registration placeholder; XCVR-49MHZ-2 pre-compliance pending; §15.235 power budget and §15.203 antenna-connector gaps open (§0.1) |
+| Regulatory | FAA Part 107 [REF-FAA-002], Part 48 §48.205 [REF-FAA-001], §91.209 [REF-FAA-003], FCC Part 15 [REF-FCC-001, REF-FCC-002, REF-FCC-003 §15.235] | FAA registration placeholder; XCVR-49MHZ-2 pre-compliance pending; §15.235 power budget gap open, §15.203 antenna-connector gap resolved in design (§0.1) |
 
 ---
 
@@ -60,19 +60,23 @@ text) has been removed and logged under "Removed / Superseded Citations."
   support the originally intended ~100 mW / multi-mile link, or whether the design intent for
   this link must be revised to match what Part 15 actually permits.  **Architecturally
   significant — do not resolve without user review.**
-- [ ] **NEW — §15.203 antenna/connector non-compliance, confirmed violation (verified against
-  rule text 2026-06-20).** Emma's RF port is a generic SMA edge connector
-  (`gcs/malcolm/hardware/docs/malcolm_wiring.md` line 86, both aircraft-side and on Malcolm's
-  Emma sub-module) — a standard antenna jack.  §15.203 text: *"the use of a standard antenna
+- [x] **§15.203 antenna/connector non-compliance, confirmed violation, resolved in design
+  2026-06-20.** Emma's RF port (J2) previously used a generic SMA edge connector (Amphenol
+  132289) — a standard antenna jack.  §15.203 text: *"the use of a standard antenna
   jack or electrical connector is prohibited."*  This obligation binds the manufacturer
   ("responsible party") directly — being the manufacturer does not create a self-authorization
   exception; if anything it is the manufacturer who bears the §2.803/§15.19 equipment-
   authorization burden.  §15.203's narrow exceptions (carrier-current devices; professionally
   installed radiators measured at the install site, e.g. perimeter protection/field disturbance
-  sensors) do not apply to Emma.  Requires a hardware redesign of Emma's antenna port
-  (permanently-attached antenna or a unique/non-standard coupling, e.g. RP-SMA or a proprietary
-  keyed connector) before first flight or equipment authorization filing; tracked here, not yet
-  scheduled into a Rev.
+  sensors) do not apply to Emma.  **Resolution:** J2 changed to Amphenol **132289RP**
+  (RP-SMA, reverse-polarity counterpart of 132289, identical PCB footprint, reversed mating-pin
+  gender) — satisfies §15.203's "unique coupling" provision since generic standard-SMA
+  antennas/cables cannot mechanically connect.  Updated `avionics/kicad/Emma.kicad_sch`,
+  `avionics/kicad/Emma.kicad_pcb` (footprint Value/Description properties and silkscreen),
+  `avionics/kicad/Emma.md`, `gcs/malcolm/hardware/docs/malcolm_wiring.md`, and
+  `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`.  **Open follow-up:** physical board
+  re-spin/fabrication run to populate 132289RP in place of 132289 on built boards — the
+  design-level fix is complete but no boards have been re-fabricated yet.
 - [ ] **Remaining firmware/build-guide references to "RCRS"/old Part 95 section numbers**
   (§1.3, §1.3's PCB pre-compliance checklist, Phase-build install steps, BOM rows, etc.) still
   need a pass to update wording/citations to Part 15 §15.235; not all instances have been swept
@@ -2886,7 +2890,7 @@ host-PC software all created in Rev R.  See `gcs/malcolm/README.md` for layout.
 
 ### 5.1 — FCC (external radio systems)
 
-- [ ] **XCVR-49MHZ-1/2 FCC Part 15 §15.235 compliance** — field strength ≤10,000 µV/m at 3 m (≈30 µW / −15.2 dBm EIRP-equivalent, requiring a firmware PA limit from the as-designed +20 dBm down to ≈ −13 dBm — see §0.1), harmonic suppression per §15.235(b)/§15.209. Document via pre-compliance checklist (1.3 Phase 4). Formal FCC equipment authorization (FCC ID grant via TCB) required before airborne transmission on 49MHz channels (47 CFR §2.803/§15.19, not Part 95 §95.603). **§15.203 antenna-connector gap also open — see §0.1.**
+- [ ] **XCVR-49MHZ-1/2 FCC Part 15 §15.235 compliance** — field strength ≤10,000 µV/m at 3 m (≈30 µW / −15.2 dBm EIRP-equivalent, requiring a firmware PA limit from the as-designed +20 dBm down to ≈ −13 dBm — see §0.1), harmonic suppression per §15.235(b)/§15.209. Document via pre-compliance checklist (1.3 Phase 4). Formal FCC equipment authorization (FCC ID grant via TCB) required before airborne transmission on 49MHz channels (47 CFR §2.803/§15.19, not Part 95 §95.603). **§15.203 antenna-connector gap resolved in design (RP-SMA, see §0.1); board re-spin pending.**
 
 - [x] **SiK 915MHz** — operates under FCC Part 15 / ISM band (no license required for operation). Verify SiK radio module carries FCC ID marking.
 

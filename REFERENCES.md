@@ -201,8 +201,8 @@ aft white); controlled by FC4 node (Simon's medbay, Bay E).
 No operator or station license is required — the band is license-exempt under Part 15, not
 because it is an RCRS personal radio service.
 
-**§15.203 finding — confirmed violation, being the manufacturer does not exempt it
-(verified 2026-06-20):** §15.203's design obligation is imposed directly on "the responsible
+**§15.203 finding — confirmed violation, resolved in design (verified/resolved
+2026-06-20):** §15.203's design obligation is imposed directly on "the responsible
 party" — i.e., the manufacturer/certificate holder — not on third parties who might later swap
 an antenna. Self-manufacture creates no exception: the rule exists specifically to constrain what
 the manufacturer is permitted to ship, and the manufacturer bears the equipment-authorization
@@ -217,13 +217,17 @@ prohibited."* (47 CFR §15.203, https://www.ecfr.gov/current/title-47/chapter-I/
 The section also exempts carrier-current devices and intentional radiators that must be
 professionally installed and measured at the installation site (e.g., perimeter protection
 systems, field disturbance sensors) — Emma is neither, so no exemption applies. Per
-`gcs/malcolm/hardware/docs/malcolm_wiring.md`, Emma's RF port is a standard SMA connector on
-both the aircraft and Malcolm GCS sub-modules — **this is a confirmed §15.203 violation, not an
-open question**, and must be redesigned (permanently-attached antenna or a genuinely
-non-standard/unique coupling, e.g. a keyed or proprietary connector — reverse-polarity SMA/RP-SMA
-is the common industry approach for Part 15 license-exempt radios) before first flight or formal
-equipment authorization. See TODO.md §0.1; this is a hardware change, deferred per user direction
-(2026-06-20) pending dedicated design review.
+`gcs/malcolm/hardware/docs/malcolm_wiring.md`, Emma's RF port previously used a standard SMA
+connector (Amphenol 132289) on both the aircraft and Malcolm GCS sub-modules — **this was a
+confirmed §15.203 violation**. **Resolution (2026-06-20):** J2 is now specified as Amphenol
+**132289RP**, the reverse-polarity (RP-SMA) counterpart of 132289 — same PCB footprint, reversed
+mating-pin gender, mechanically incompatible with generic commercial SMA antennas/cables, which
+satisfies §15.203's "unique coupling" provision. Updated in `avionics/kicad/Emma.kicad_sch`,
+`avionics/kicad/Emma.kicad_pcb`, `avionics/kicad/Emma.md`,
+`gcs/malcolm/hardware/docs/malcolm_wiring.md`, and
+`gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`. See TODO.md §0.1 — remaining step is the
+physical board re-spin/fabrication run to populate 132289RP in place of 132289; the design-level
+fix is complete.
 
 **Used in:** `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`,
 `avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`,
@@ -780,7 +784,7 @@ Add verified section numbers to the relevant files and update this table.
 
 | Citation | File | Issue | Action Required |
 |---|---|---|---|
-| §15.203 antenna restriction (Emma 49 MHz RF connector) | Emma (XCVR-49MHZ-2) hardware design, `avionics/kicad/Emma.md`, `gcs/malcolm/hardware/docs/malcolm_wiring.md` (confirms a standard SMA connector on Emma's RF port, both aircraft-side and on Malcolm's Emma sub-module) | **Confirmed violation, verified against rule text 2026-06-20 — no exception applies.** §15.203 text ("...the use of a standard antenna jack or electrical connector is prohibited") binds the manufacturer/responsible party directly; being the manufacturer (rather than a third-party modifier) does not exempt this design. Emma uses a generic SMA edge connector, a standard jack; the carrier-current and professional-installation/on-site-measurement exceptions in §15.203 do not apply to Emma | Redesign Emma's 49 MHz antenna port as a permanently-attached antenna or a unique/non-standard coupling (e.g. RP-SMA or a proprietary keyed connector) before first flight or equipment authorization filing; this is a hardware change, not a documentation fix, and is deferred per user direction (2026-06-20) pending dedicated design review |
+| §15.203 antenna restriction (Emma 49 MHz RF connector) | Emma (XCVR-49MHZ-2) hardware design, `avionics/kicad/Emma.md`, `avionics/kicad/Emma.kicad_sch`, `avionics/kicad/Emma.kicad_pcb`, `gcs/malcolm/hardware/docs/malcolm_wiring.md` | **Confirmed violation, resolved in design 2026-06-20.** §15.203 text ("...the use of a standard antenna jack or electrical connector is prohibited") binds the manufacturer/responsible party directly; being the manufacturer (rather than a third-party modifier) does not exempt this design. Emma's J2 previously used a generic SMA edge connector (Amphenol 132289), a standard jack; the carrier-current and professional-installation/on-site-measurement exceptions in §15.203 do not apply to Emma | **Resolved:** J2 changed to Amphenol 132289RP (RP-SMA, reverse-polarity counterpart of 132289, identical PCB footprint) across schematic, PCB footprint/silkscreen, and documentation, satisfying §15.203's "unique coupling" provision. Remaining step is the physical board re-spin/fabrication run to populate the new part — tracked in TODO.md §0.1 |
 | 14 CFR Part 47 (aircraft registration marks) | `README.md`, `docs/REVN_BUILD_GUIDE_24IN.md` | 14 CFR Part 47 applies to manned aircraft registration; for UAS the applicable regulation is 14 CFR Part 48 §48.205 (display requirements) | Replace all Part 47 references with REF-FAA-001 (Part 48 §48.205) where the citation concerns UAS mark display |
 | AUVSI "standards" (unnamed) | `CLAUDE.md`, `README.md` | No specific numbered AUVSI or ASTM standard cited | Identify applicable ASTM F38 committee standards for UAS airframe engineering and add to this catalog |
 | IEC 62368-1 clause numbers | PCB layout (not yet complete) | PCB layout must verify creepage/clearance distances meet IEC 62368-1 Clause 5.5.2 requirements for 5 kV reinforced insulation; this cannot be verified until PCB layout is complete | Verify during Wash and Zoë PCB layout review (see TODO.md §1.4) |

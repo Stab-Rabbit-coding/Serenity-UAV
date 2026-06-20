@@ -127,12 +127,15 @@ an aircraft whose onboard receivers may be desensed by proximity to commercial R
 > strength ≤ 10,000 µV/m at 3 m (average detector); peak limits of §15.35 also apply.
 > Band-edge attenuation and out-of-band emission limits per §15.235(b)/§15.209.  Antenna
 > restriction per §15.203 — text: *"the use of a standard antenna jack or electrical
-> connector is prohibited."*  **Confirmed violation, verified against rule text 2026-06-20:**
-> Emma's RF port uses a generic SMA edge connector (`malcolm_wiring.md` line 86), a standard
+> connector is prohibited."*  **§15.203 violation resolved in design (2026-06-20):**
+> Emma's RF port previously used a generic SMA edge connector (Amphenol 132289), a standard
 > jack.  §15.203 binds the manufacturer/responsible party directly — being the manufacturer
 > does not exempt this design, and the section's narrow exceptions (carrier-current devices;
-> professionally installed radiators measured at the install site) do not apply here.  See
-> `REFERENCES.md` "Open Standards Verification Items."
+> professionally installed radiators measured at the install site) do not apply here.  J2 is
+> now specified as Amphenol **132289RP** (RP-SMA, reverse-polarity counterpart of 132289 with
+> identical PCB footprint), satisfying §15.203's "unique coupling" provision —
+> `malcolm_wiring.md` line 86 updated accordingly.  See `REFERENCES.md` "Open Standards
+> Verification Items" for status; physical board re-spin to populate 132289RP is pending.
 >
 > **Design impact — open item:** At the compliant ≈ 48 µW conducted power level, this
 > link's realistic range drops from the "miles" implied by the original 100 mW RCRS
@@ -201,7 +204,7 @@ versus its intended role as a resilient long-range backup; see Link 4 and TODO.m
 | LoRa to splitter     | LMR-195   | 0.5 m  | SMA-male     | SMA-female  | −0.3 dB |
 | Splitter to gimbal   | LMR-195   | 0.5 m  | SMA-male     | SMA-female  | −0.3 dB |
 | WiFi to gimbal panel | LMR-195   | 1 m    | RP-SMA-male  | RP-SMA-female | −1.0 dB |
-| 49 MHz whip          | RG-58     | 2 m    | SMA-male     | PL-259      | −1.0 dB |
+| 49 MHz whip          | RG-58     | 2 m    | RP-SMA-male  | PL-259      | −1.0 dB |
 | GNSS to PB2-I        | RG-316    | 0.3 m  | SMA-male     | SMA-male    | −0.2 dB |
 
 All shield connections must be bonded to chassis ground at both ends to minimise
