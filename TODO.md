@@ -60,12 +60,19 @@ text) has been removed and logged under "Removed / Superseded Citations."
   support the originally intended ~100 mW / multi-mile link, or whether the design intent for
   this link must be revised to match what Part 15 actually permits.  **Architecturally
   significant — do not resolve without user review.**
-- [ ] **NEW — §15.203 antenna/connector non-compliance, confirmed.** Emma's RF port is a
-  generic SMA edge connector (`gcs/malcolm/hardware/docs/malcolm_wiring.md` line 86, both
-  aircraft-side and on Malcolm's Emma sub-module) — a standard antenna jack, which §15.203
-  prohibits on a Part 15 intentional radiator absent an exception.  Requires a hardware
-  redesign of Emma's antenna port (permanently-attached antenna or unique/non-standard
-  coupling) before first flight; tracked here, not yet scheduled into a Rev.
+- [ ] **NEW — §15.203 antenna/connector non-compliance, confirmed violation (verified against
+  rule text 2026-06-20).** Emma's RF port is a generic SMA edge connector
+  (`gcs/malcolm/hardware/docs/malcolm_wiring.md` line 86, both aircraft-side and on Malcolm's
+  Emma sub-module) — a standard antenna jack.  §15.203 text: *"the use of a standard antenna
+  jack or electrical connector is prohibited."*  This obligation binds the manufacturer
+  ("responsible party") directly — being the manufacturer does not create a self-authorization
+  exception; if anything it is the manufacturer who bears the §2.803/§15.19 equipment-
+  authorization burden.  §15.203's narrow exceptions (carrier-current devices; professionally
+  installed radiators measured at the install site, e.g. perimeter protection/field disturbance
+  sensors) do not apply to Emma.  Requires a hardware redesign of Emma's antenna port
+  (permanently-attached antenna or a unique/non-standard coupling, e.g. RP-SMA or a proprietary
+  keyed connector) before first flight or equipment authorization filing; tracked here, not yet
+  scheduled into a Rev.
 - [ ] **Remaining firmware/build-guide references to "RCRS"/old Part 95 section numbers**
   (§1.3, §1.3's PCB pre-compliance checklist, Phase-build install steps, BOM rows, etc.) still
   need a pass to update wording/citations to Part 15 §15.235; not all instances have been swept

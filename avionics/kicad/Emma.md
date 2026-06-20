@@ -403,6 +403,17 @@ roughly 35 dB; firmware must limit conducted output to ≈ −13 dBm (≈ 48 µW
 compliance — see `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md` Link 4 and
 `TODO.md` §0.1.
 
+**Antenna connector — confirmed §15.203 violation, verified against rule text 2026-06-20:**
+the RF connector on this board is a standard SMA edge jack. §15.203 states "the use of a
+standard antenna jack or electrical connector is prohibited," and that obligation binds the
+manufacturer/responsible party directly — being the manufacturer (Griffing Technology LLC)
+creates no self-authorization exception, since the manufacturer is exactly who bears the
+§2.803/§15.19 equipment-authorization burden. §15.203's exceptions for carrier-current
+devices and professionally-installed, on-site-measured radiators do not apply to this board.
+Requires redesign to a permanently-attached antenna or a unique/non-standard coupling
+(e.g. RP-SMA or a proprietary keyed connector) before first flight or equipment authorization
+filing — see `REFERENCES.md` "Open Standards Verification Items" and `TODO.md` §0.1.
+
 ---
 
 ## Security Notes

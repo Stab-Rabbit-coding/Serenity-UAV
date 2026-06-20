@@ -126,9 +126,12 @@ an aircraft whose onboard receivers may be desensed by proximity to commercial R
 > **§15.235 field strength limit** [REF-FCC-003 §15.235(a)]: fundamental emission field
 > strength ≤ 10,000 µV/m at 3 m (average detector); peak limits of §15.35 also apply.
 > Band-edge attenuation and out-of-band emission limits per §15.235(b)/§15.209.  Antenna
-> restriction per §15.203 (no standard antenna jack on the intentional radiator absent
-> an exception) — **confirmed gap:** Emma's RF port uses a generic SMA edge connector
-> (`malcolm_wiring.md` line 86), which is a standard jack and not currently exempt; see
+> restriction per §15.203 — text: *"the use of a standard antenna jack or electrical
+> connector is prohibited."*  **Confirmed violation, verified against rule text 2026-06-20:**
+> Emma's RF port uses a generic SMA edge connector (`malcolm_wiring.md` line 86), a standard
+> jack.  §15.203 binds the manufacturer/responsible party directly — being the manufacturer
+> does not exempt this design, and the section's narrow exceptions (carrier-current devices;
+> professionally installed radiators measured at the install site) do not apply here.  See
 > `REFERENCES.md` "Open Standards Verification Items."
 >
 > **Design impact — open item:** At the compliant ≈ 48 µW conducted power level, this

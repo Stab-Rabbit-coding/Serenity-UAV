@@ -637,13 +637,13 @@
       },
       {
         "ref":       "XCVR-49MHZ-2",
-        "desc":      "XCVR-49MHZ-2 sub-module PCB — EMI-hardened 49 MHz AX.25 RCRS transceiver (branch claude/cape-em-harsh-variants-9Yfr1). Adds SRF2012-100Y CMC on antenna feed coax shield, PRTR5V0U2X SOT-363 TVS on PTT/RX signal lines, X2Y bridging capacitor on RF ground plane, Würth 742792512 ferrite bead on +5V supply, JST GH 6P to Cape-B. 55×35 mm 4-layer PCB. FCC Part 95 Subpart D compliant.",
+        "desc":      "XCVR-49MHZ-2 sub-module PCB — EMI-hardened 49 MHz AX.25 RCRS transceiver (branch claude/cape-em-harsh-variants-9Yfr1). Adds SRF2012-100Y CMC on antenna feed coax shield, PRTR5V0U2X SOT-363 TVS on PTT/RX signal lines, X2Y bridging capacitor on RF ground plane, Würth 742792512 ferrite bead on +5V supply, JST GH 6P to Cape-B. 55×35 mm 4-layer PCB. ~~FCC Part 95 Subpart D compliant.~~ [correction 2026-06-20: Part 95 RCRS does not cover 49 MHz; correct authority is 47 CFR Part 15 §15.235 -- REF-FCC-003]",
         "qty":       4,
         "mass_g":    13,
         "cost_usd":  32,
         "supplier":  "JLCPCB (fab from project gerbers)",
         "search":    "serenity/kicad/ XCVR-49MHZ-2 gerbers + BOM",
-        "notes":     "EMI-hardened variant of XCVR-49MHZ-1/RCRS-49; gerbers not yet generated (see TODO §1.2a); FCC Part 95 Subpart D pre-compliance pending"
+        "notes":     "EMI-hardened variant of XCVR-49MHZ-1/RCRS-49; gerbers not yet generated (see TODO §1.2a); ~~FCC Part 95 Subpart D pre-compliance pending~~ [correction 2026-06-20: see REF-FCC-003, 47 CFR Part 15 §15.235]"
       },
       {"ref": "MICROSD-LOG", "desc": "64 GB microSD — Cape-B write-blocked flight log",    "qty": 4, "mass_g": 1,  "cost_usd": 12}
     ],
