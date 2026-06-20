@@ -14,7 +14,7 @@
 Zoë is the electromagnetic-environment-hardened variant of CAPE-B-1
 (Rev M), designed for the same harsh nacelle and fuselage EM environment as Wash.
 The communications payload of this cape (SiK 915 MHz, LoRa 915 MHz, WiFi 2.4/5 GHz,
-49 MHz RCRS) is inherently more susceptible to radiated interference than the purely
+49 MHz Part 15 §15.235) is inherently more susceptible to radiated interference than the purely
 digital Wash, so hardening concentrates on conducted immunity for the wired
 buses and supply rails, and on keeping the RF subsystem's susceptibility low through
 better supply filtering and digital-interface isolation from the RF groundplane.

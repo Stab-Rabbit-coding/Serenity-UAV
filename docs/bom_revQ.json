@@ -669,7 +669,7 @@
         "cost_usd": 32,
         "supplier": "JLCPCB (fab from project gerbers)",
         "search": "serenity/kicad/ XCVR-49MHZ-2 gerbers + BOM",
-        "notes": "EMI-hardened variant of XCVR-49MHZ-1/RCRS-49; gerbers not yet generated (see TODO §1.2a); FCC Part 95 Subpart D pre-compliance pending",
+        "notes": "EMI-hardened variant of XCVR-49MHZ-1/RCRS-49; gerbers not yet generated (see TODO §1.2a); ~~FCC Part 95 Subpart D pre-compliance pending~~ [correction 2026-06-20: Part 95 RCRS does not cover 49 MHz; correct authority is 47 CFR Part 15 §15.235 -- REF-FCC-003]",
         "note": "Rev Q primary XCVR — all positions"
       },
       {
@@ -985,7 +985,7 @@
         "cost_usd": 18.0,
         "supplier": "AliExpress / in-house cut",
         "pn": "49MHz loaded whip SO-239 with radial kit",
-        "notes": "~0.94 m physical; ERP ≤18 dBm (FCC Part 95 limit 20 dBm); tripod-mast mounted"
+        "notes": "~0.94 m physical; ~~ERP ≤18 dBm (FCC Part 95 limit 20 dBm)~~ [correction 2026-06-20: governing rule is 47 CFR Part 15 §15.235, EIRP ceiling ≈30 µW / -15.2 dBm, not a 20 dBm Part 95 limit -- REF-FCC-003]; tripod-mast mounted. SO-239 standard connector also conflicts with the §15.203 antenna restriction -- see TODO.md §0.1."
       },
       {
         "ref": "MAL-ANT-ZIGBEE",

@@ -5,10 +5,10 @@
 - **Design and build a fully functional EDF Tilt Rotor UAV version of the Firefly Class Spaceship "Serenity" from the Joss Whedon TV show and movie.**
 - **Provide redundancy and failover in all systems possible**:
 - Avionics:  4 pairs of pocketbeagle2 industrial SBCs: 4 with a Flight Control and Sensor Cape, (called "Wash") (with GPS,  imu, compass, barometer, anti-collision range sensors,  airspeed, pid motor speed control, and nacelle tilt servos), and 4 with a Communications, Logging, and payload Cape, ( called "Zoë") .
-- Node variant placement (Rev R1):  All 8 nodes carry Wash (Cape-A-2) and Zoë (Cape-B-2), providing uniform 5 kV galvanic isolation on CAN FD, RS-485, and Ethernet at every node.  Emma XCVR boards are installed only in **River's Room and Simon's Medbay** — the two bays whose primary external radio is 49 MHz RCRS; Shepherd's Room and Inara's Shuttle do not carry Emma boards.  Cape-A-1, Cape-B-1, and XCVR-49MHZ-1 are archived as of Rev Q (2026-06-05).
+- Node variant placement (Rev R1):  All 8 nodes carry Wash (Cape-A-2) and Zoë (Cape-B-2), providing uniform 5 kV galvanic isolation on CAN FD, RS-485, and Ethernet at every node.  Emma XCVR boards are installed only in **River's Room and Simon's Medbay** — the two bays whose primary external radio is 49 MHz (47 CFR Part 15 §15.235, not RCRS — see REF-FCC-003); Shepherd's Room and Inara's Shuttle do not carry Emma boards.  Cape-A-1, Cape-B-1, and XCVR-49MHZ-1 are archived as of Rev Q (2026-06-05).
 - **Planned (not yet implemented in KiCad — tracked in TODO.md §1.2b):** Emma Rev R1 (add LoRa, replace JST GH 6P with P1+P2 socket rails), Zoë (Cape-B-2) Rev R1 (remove LoRa, add P1+P2 passthrough rails matching Emma's pinout on the River and Simon stacks), and Kaylee Rev A1 (remove the 6 V servo BEC; tilt servos to run on the 5 V rail, ~21 kg·cm capacity vs the ~16 kg·cm tilt load requirement).  Until these PCB redesigns land, Zoë.kicad_sch still uses the JST-GH 6P Emma connector and Kaylee.kicad_sch still carries the 6 V/5 A `U_BEC_6V` (TPS54540DDAR) servo rail — see Kaylee.md and Zoë.md, which describe the as-built (pre-A1/pre-R1) design.
 - Onboard Communications:  Each of the 8 sbcs will be connected to the others via: Canbus FD, MILSTD 1553, RS485, & Ethernet
-- External Communications: The UAV uses WIFI at 5ghz, Zigbee at 2.4ghz, MavLink /SiK at 915Mhz, and AX.25 on the 49Mhz RCRS channels.  All four are usable for command and control of the aircraft.  The avionics capes also support sbus, but it's  not used.
+- External Communications: The UAV uses WIFI at 5ghz, Zigbee at 2.4ghz, MavLink /SiK at 915Mhz, and AX.25 on the 49Mhz channel (47 CFR Part 15 §15.235, an unlicensed band — not Part 95 RCRS).  All four are usable for command and control of the aircraft.  The avionics capes also support sbus, but it's  not used.
 - Powerplant: Each Nacelle has two EDFs in series, under PID control.  The forward EDF in each nacelle is controlled primarily by one of the flight control SBCs and the aft is primarily controlled by a different sbc.
 
 - **Each Nacelle EDF is specified as a 50mm 6S EDF generating 1240g thrust based on the x-fly 2627-3200kv 12 fin design.**  Estimate a 90% efficiency on the 11 fin stator.  **Use 2232g per nacelle for static thrust.**  All thrust calculations will use this baseline.
@@ -237,7 +237,7 @@ The historical bake transforms (position + quaternion per component) live solely
 
  The Power Distribution Board is named "Kaylee" - "Everything is shiny."  Kaylee's room (the PDB bay) is located in the **inner neck of the middle section**, accessible through the open ventral face of the horseshoe ring.  This central location minimises power run lengths to all four nacelles, all four avionics stacks, and the battery.
 
- The 49 MHz RCRS + LoRa 915 MHz Transceiver Cape (XCVR-49MHZ-2 Rev R1) is named "Emma".  Emma connects to the stack via P1+P2 socket rails (replaces JST GH 6P as of Rev R1).  Only 2 Emma boards are installed: River's Room and Simon's Medbay.
+ The 49 MHz (Part 15 §15.235) + LoRa 915 MHz Transceiver Cape (XCVR-49MHZ-2 Rev R1) is named "Emma".  Emma connects to the stack via P1+P2 socket rails (replaces JST GH 6P as of Rev R1).  Only 2 Emma boards are installed: River's Room and Simon's Medbay.
 
  The Cargo handling system is named "Jayne" - "I was aiming for his head."
 
@@ -268,9 +268,9 @@ Shepherd is the crew's conscience and therefore takes care of primarily watchdog
 
 Inara has primarily camera, external sensors, and high bandwidth ground communication. Her stack is connected to WiFi primarily and SiK/MAVLink secondary.  (LoRa is no longer on Inara's stack — LoRa moved to Emma boards on River and Simon; Rev R1.)
 
-River provides primary control of the forward EDFs, and provides EDF and nacelle control command and syncing, and the most resilient comms. She may be crazy, but she comes through when no one else can. She has 49 MHz RCRS primary and LoRa 915 MHz secondary — both via her Emma board (Rev R1).
+River provides primary control of the forward EDFs, and provides EDF and nacelle control command and syncing, and the most resilient comms. She may be crazy, but she comes through when no one else can. She has 49 MHz (Part 15 §15.235) primary and LoRa 915 MHz secondary — both via her Emma board (Rev R1).
 
-Simon is the alternate watchdog for the ship, but most of his attention is on River. He's got aft EDF control and alternate nacelle control. He follows River's lead but makes sure she doesn't crash the ship. Simon also controls Jayne, and ensures that the cargo isn't jettisoned or the crew abandoned. He's got 49 MHz RCRS primary and SiK as his backup — both external radios co-resident on his Emma board (Rev R1 adds LoRa to Emma; Simon thus carries 49 MHz + LoRa + SiK via Cape-B-2).
+Simon is the alternate watchdog for the ship, but most of his attention is on River. He's got aft EDF control and alternate nacelle control. He follows River's lead but makes sure she doesn't crash the ship. Simon also controls Jayne, and ensures that the cargo isn't jettisoned or the crew abandoned. He's got 49 MHz (Part 15 §15.235) primary and SiK as his backup — both external radios co-resident on his Emma board (Rev R1 adds LoRa to Emma; Simon thus carries 49 MHz + LoRa + SiK via Cape-B-2).
 
 ## Workflow Notes
 

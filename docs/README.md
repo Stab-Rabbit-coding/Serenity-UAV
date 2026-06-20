@@ -57,7 +57,7 @@
 | CG target | 190 mm (7.48") from nose |
 | GPS patch | 59.4 mm from nose |
 | SiK 915MHz belly | 253.7 mm from nose |
-| 49MHz RCRS dorsal | 365.8 mm from nose |
+| 49MHz Part 15 dorsal | 365.8 mm from nose |
 | Avionics | **8× PocketBeagle 2 Industrial (AM6254)** · FC1–FC4 Cape-A · CN1–CN4 Cape-B · DK 2820-100003007-ND · $51.03 ea |
 | Navigation lights | ICAO Annex 2 · 14 CFR 91.209 · PCA9685 I²C PWM driver |
 | FAA registration | **N00000 PLACEHOLDER — replace before flight** |

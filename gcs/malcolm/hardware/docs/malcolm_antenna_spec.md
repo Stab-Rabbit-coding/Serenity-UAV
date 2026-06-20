@@ -21,18 +21,19 @@ an aircraft whose onboard receivers may be desensed by proximity to commercial R
 > Electronic Code of Federal Regulations (eCFR) at ecfr.gov.  See `REFERENCES.md`
 > for full catalog entries with URLs and section-level detail.
 >
-> **IMPORTANT — 47 CFR Part 95 section numbers:** 47 CFR Part 95 was reorganized
-> under FCC Report and Order FCC 17-24, effective July 3, 2018.  Section numbers
-> §95.635, §95.655, and §95.639 cited in this document are **pre-2017 section numbers**
-> that may no longer be current.  These must be verified against the current eCFR
-> before first flight: https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-95
+> **Correction (2026-06-20):** The 49 MHz Emma link was previously cited against
+> 47 CFR Part 95 (Radio Control Radio Service, RCRS).  Part 95 Subpart C RCRS covers
+> only the 26–28 MHz, 72 MHz, and 75 MHz bands — it does not include 49 MHz.  The
+> 49.82–49.90 MHz band is governed instead by **47 CFR Part 15 §15.235**, an
+> unlicensed intentional-radiator rule with a **field-strength** limit (not an
+> EIRP/ERP limit).  See Link 4 below for the corrected compliance analysis.
 
 | Link              | Regulation                                        | REF-ID          | EIRP Limit (outdoor)    |
 |-------------------|---------------------------------------------------|-----------------|-------------------------|
 | SiK 915 MHz ISM   | 47 CFR §15.247(b)(3)(i) and §15.247(b)(3)(ii)    | REF-FCC-001     | 30 dBm; with directional antenna >6 dBi, reduce Tx 1 dB per 3 dB above 6 dBi |
 | LoRa 915 MHz ISM  | 47 CFR §15.247(b)(3)(i) and §15.247(b)(3)(ii)    | REF-FCC-001     | Same as SiK             |
 | WiFi 5 GHz UNII-3 | 47 CFR §15.407(a)(3)                              | REF-FCC-002     | 30 dBm EIRP (5.725–5.850 GHz)|
-| 49 MHz RCRS       | 47 CFR Part 95 RCRS ERP limit (verify current §) | REF-FCC-003     | 20 dBm (100 mW) ERP — section # requires eCFR verification |
+| 49 MHz Part 15    | 47 CFR §15.235 — field strength ≤ 10,000 µV/m at 3 m | REF-FCC-003 | ≈ −15.2 dBm (≈ 30 µW) EIRP-equivalent — see Link 4 |
 | Zigbee 2.4 GHz    | 47 CFR §15.247(b)(3)(i)                           | REF-FCC-001     | 30 dBm                  |
 
 > **Part 15.247 directional antenna rule** [REF-FCC-001 §15.247(b)(3)(ii)]: for intentional
@@ -95,25 +96,57 @@ an aircraft whose onboard receivers may be desensed by proximity to commercial R
 
 ---
 
-## Link 4 — 49 MHz RCRS (AX.25, emergency backup)
+## Link 4 — 49 MHz Part 15 §15.235 (AX.25, emergency backup)
+
+> **Regulatory correction (2026-06-20):** This link was previously documented under
+> 47 CFR Part 95 RCRS with an assumed 100 mW (+20 dBm) ERP ceiling.  Part 95 RCRS does
+> not cover 49 MHz; the governing rule is **47 CFR §15.235**, which limits the
+> *field strength* of the fundamental emission to ≤ 10,000 µV/m at 3 m — not an
+> EIRP/ERP power figure directly.  Converting that field-strength limit to an
+> equivalent EIRP via the standard far-field relation EIRP = E²·4πd²/Z₀ (Z₀ = 377 Ω
+> free-space impedance) gives:
+>
+> EIRP_max = (0.01 V/m)² × 4π × (3 m)² / 377 Ω ≈ **30 µW ≈ −15.2 dBm**
+>
+> This is **≈ 35 dB lower** than the 100 mW previously assumed for this link.
 
 | Parameter               | Value                                 |
 |-------------------------|---------------------------------------|
 | Module                  | Emma (via Cape-B-2 UART5)    |
-| PA output power (max)   | +20 dBm (100 mW) — Part 95 ceiling    |
-| Antenna                 | 1/4-wave base-loaded whip, ~0.94 m physical with loading coil; omnidirectional |
+| PA output power, as-designed | +20 dBm (100 mW) — **non-compliant with §15.235**, see below |
+| Antenna                 | 1/4-wave base-loaded whip, ~0.94 m physical with loading coil; omnidirectional, ~0 dBi assumed |
 | Ground radials          | 4× 1/4-wave radials (star pattern, flat on mast base) |
 | Coax loss (RG-58 2 m)   | −1.0 dB at 49 MHz                    |
 | Antenna efficiency      | ~80% (loading coil insertion loss ~−1 dB) |
-| **ERP (isotropic)**     | 20 − 1 − 1 = **18 dBm ERP** ✓ (≤20) |
-| PA assessment           | No external PA.  Emma PA is already at the Part 95 ERP ceiling. |
+| **EIRP at PA = +20 dBm** | 20 + 0 − 1 − 1 = **18 dBm (≈ 63 mW)** — exceeds the §15.235 limit by ≈ 33 dB |
+| §15.235 EIRP ceiling     | **≈ −15.2 dBm (≈ 30 µW)** |
+| **PA output required for compliance** | −15.2 − 0 + 1 + 1 = **≈ −13.2 dBm (≈ 48 µW)** conducted |
+| PA assessment           | Emma's PA must be firmware-limited to ≈ −13 dBm (≈ 48 µW) conducted, not +20 dBm, to meet §15.235.  No external PA is permitted on this link in any configuration. |
 
-> **RCRS ERP limit** [REF-FCC-003]: RCRS station transmitter power shall not exceed
-> 100 milliwatts (mW) ERP.  Frequency accuracy ±0.005% [REF-FCC-003].
-> **ACTION REQUIRED:** The section numbers previously cited (§95.635 for ERP limit,
-> §95.655 for frequency accuracy) are pre-2017 section numbers.  Verify current
-> section numbers against eCFR.gov before first flight.  See REFERENCES.md
-> "Open Standards Verification Items" table.
+> **§15.235 field strength limit** [REF-FCC-003 §15.235(a)]: fundamental emission field
+> strength ≤ 10,000 µV/m at 3 m (average detector); peak limits of §15.35 also apply.
+> Band-edge attenuation and out-of-band emission limits per §15.235(b)/§15.209.  Antenna
+> restriction per §15.203 — text: *"the use of a standard antenna jack or electrical
+> connector is prohibited."*  **§15.203 violation resolved in design (2026-06-20):**
+> Emma's RF port previously used a generic SMA edge connector (Amphenol 132289), a standard
+> jack.  §15.203 binds the manufacturer/responsible party directly — being the manufacturer
+> does not exempt this design, and the section's narrow exceptions (carrier-current devices;
+> professionally installed radiators measured at the install site) do not apply here.  J2 is
+> now specified as Amphenol **132289RP** (RP-SMA, reverse-polarity counterpart of 132289 with
+> identical PCB footprint), satisfying §15.203's "unique coupling" provision —
+> `malcolm_wiring.md` line 86 updated accordingly.  See `REFERENCES.md` "Open Standards
+> Verification Items" for status; physical board re-spin to populate 132289RP is pending.
+>
+> **Design impact — open item:** At the compliant ≈ 48 µW conducted power level, this
+> link's realistic range drops from the "miles" implied by the original 100 mW RCRS
+> assumption to likely well under a quarter mile (exact figure depends on receiver
+> sensitivity and ground-wave propagation at 49 MHz; not yet analyzed).  This
+> contradicts the link's design role as River's resilient long-range backup comms path
+> (see `CLAUDE.md` Avionics Workload Balancing).  Re-architecting this link — e.g. a
+> different frequency or a licensed service that permits higher power near 49 MHz — is
+> tracked as an open item in `TODO.md` §0.1 and is **not resolved by this revision**;
+> the PA power ceiling above reflects what §15.235 actually permits today, not a
+> redesign of the link.
 
 ---
 
@@ -137,13 +170,16 @@ an aircraft whose onboard receivers may be desensed by proximity to commercial R
 | SiK 915 MHz   | 27.5 dBm (Yagi)   | 30 dBm    | ✓ PASS |
 | LoRa 915 MHz  | 25.0 dBm (Yagi)   | 30 dBm    | ✓ PASS |
 | WiFi 5 GHz    | 30.0 dBm (panel, adjusted) | 30 dBm | ✓ PASS (Tx reduced to 17 dBm) |
-| 49 MHz RCRS   | 18 dBm ERP        | 20 dBm    | ✓ PASS |
+| 49 MHz Part 15| ≈ −13.2 dBm PA req'd (≈ 48 µW), vs. ≈ 18 dBm EIRP at as-designed +20 dBm PA | ≈ −15.2 dBm (≈ 30 µW) EIRP | ✗ NON-COMPLIANT as designed — PA must be firmware-limited to ≈ −13 dBm; see Link 4 |
 | Zigbee 2.4 GHz| 22.5 dBm          | 30 dBm    | ✓ PASS |
 
 **Conclusion:** No external power amplifiers are FCC-compliant for any Malcolm GCS link
 in the standard configuration while maintaining compliance with directional antennas.
 The link budget relies on directional antenna gain (not increased Tx power) to compensate
-for aircraft-side receiver desense in hostile RF environments.
+for aircraft-side receiver desense in hostile RF environments.  **Exception:** the 49 MHz
+Emma link is not compliant as currently designed — Emma's PA must be firmware-limited from
++20 dBm to ≈ −13 dBm to satisfy §15.235, which severely curtails this link's usable range
+versus its intended role as a resilient long-range backup; see Link 4 and TODO.md §0.1.
 
 ---
 
@@ -168,7 +204,7 @@ for aircraft-side receiver desense in hostile RF environments.
 | LoRa to splitter     | LMR-195   | 0.5 m  | SMA-male     | SMA-female  | −0.3 dB |
 | Splitter to gimbal   | LMR-195   | 0.5 m  | SMA-male     | SMA-female  | −0.3 dB |
 | WiFi to gimbal panel | LMR-195   | 1 m    | RP-SMA-male  | RP-SMA-female | −1.0 dB |
-| 49 MHz whip          | RG-58     | 2 m    | SMA-male     | PL-259      | −1.0 dB |
+| 49 MHz whip          | RG-58     | 2 m    | RP-SMA-male  | PL-259      | −1.0 dB |
 | GNSS to PB2-I        | RG-316    | 0.3 m  | SMA-male     | SMA-male    | −0.2 dB |
 
 All shield connections must be bonded to chassis ground at both ends to minimise

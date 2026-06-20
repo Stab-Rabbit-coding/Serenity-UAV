@@ -696,7 +696,7 @@
         "cost_usd": 32,
         "supplier": "JLCPCB (fab from project gerbers)",
         "search": "serenity/kicad/ XCVR-49MHZ-2 gerbers + BOM",
-        "notes": "EMI-hardened variant of XCVR-49MHZ-1/RCRS-49; gerbers not yet generated (see TODO §1.2a); FCC Part 95 Subpart D pre-compliance pending",
+        "notes": "EMI-hardened variant of XCVR-49MHZ-1/RCRS-49; gerbers not yet generated (see TODO §1.2a); FCC Part 15 §15.235 pre-compliance pending (not Part 95 — see REF-FCC-003)",
         "note": "Rev Q primary XCVR — all positions"
       },
       {
@@ -1012,7 +1012,7 @@
         "cost_usd": 18.0,
         "supplier": "AliExpress / in-house cut",
         "pn": "49MHz loaded whip SO-239 with radial kit",
-        "notes": "~0.94 m physical; ERP ≤18 dBm (FCC Part 95 limit 20 dBm); tripod-mast mounted"
+        "notes": "~0.94 m physical; per FCC Part 15 §15.235 field-strength limit, EIRP ceiling is ≈-15.2 dBm (≈30 µW), not 20 dBm — see REF-FCC-003 / malcolm_antenna_spec.md"
       },
       {
         "ref": "MAL-ANT-ZIGBEE",
