@@ -2,6 +2,37 @@
 
 > *Can't stop the signal, and can't take the sky from me.*
 
+## Table of Contents
+
+- [Authoritative Project Instructions](#authoritative-project-instructions)
+- [Specifications](#specifications)
+- [Airframe](#airframe)
+  - [Coordinate Standard (Rev R1)](#coordinate-standard-rev-r1)
+  - [Fuselage](#fuselage)
+    - [Compartments and Bays](#compartments-and-bays)
+  - [Wings](#wings)
+  - [Nacelles](#nacelles)
+  - [Landing Gear](#landing-gear)
+- [Powerplant](#powerplant)
+  - [Power Distribution](#power-distribution)
+  - [Battery](#battery)
+  - [Propulsion — Rev R baseline](#propulsion--rev-r-baseline)
+    - [DEFERRED — Phase 11: Fuselage EDF + RCS](#deferred--phase-11-fuselage-edf--rcs)
+  - [Servos and Motors](#servos-and-motors)
+- [Avionics](#avionics)
+  - [Ground Control — Mal](#ground-control--mal)
+  - [Onboard — 8-node cooperative architecture](#onboard--8-node-cooperative-architecture)
+- [Cargo Handling — Jayne](#cargo-handling--jayne)
+- [References](#references)
+- [License](#license)
+- [Attribution](#attribution)
+  - [Component License Map](#component-license-map)
+  - [What This License Covers](#what-this-license-covers)
+  - [Patent Notice](#patent-notice)
+  - [Forensic Evidence Integrity Note](#forensic-evidence-integrity-note)
+
+---
+
 ## Authoritative Project Instructions
 
 The canonical workspace instructions and design policy are maintained in `CLAUDE.md`. All
