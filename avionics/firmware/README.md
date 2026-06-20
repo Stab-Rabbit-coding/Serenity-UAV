@@ -145,6 +145,6 @@ Key management uses the Linux TPM2 PKCS#11 provider (`pkcs11-provider`).
 - AX.25 Link Access Protocol v2.2, ARRL, 1998
 - KISS TNC Protocol: Chepponis & Karn, ARRL 6th Computer Networking Conference, 1987
 - Si5351A/B/C-B Datasheet, Skyworks (formerly Silicon Labs), Rev 1.4
-- 47 CFR Part 95 Subpart D — Remote Control Radio Service
+- 47 CFR Part 15 §15.235 — Operation within the band 49.82–49.90 MHz
 - libgpiod API documentation — kernel.org
 - Linux i2c-dev interface — kernel.org/doc/Documentation/i2c/dev-interface.rst

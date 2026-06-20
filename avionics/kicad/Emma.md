@@ -11,7 +11,8 @@
 ## Purpose
 
 Emma is an electromagnetic-environment-hardened variant of XCVR-49MHZ-1. The
-board is a 49 MHz AX.25 KISS modem for FCC Part 95 Subpart D operation; the -2 variant
+board is a 49 MHz AX.25 KISS modem operating under 47 CFR Part 15 §15.235 (an unlicensed
+intentional-radiator rule, not Part 95 RCRS — see REFERENCES.md REF-FCC-003); the -2 variant
 adds conducted and radiated immunity measures to handle the EDF motor and ESC switching
 environment inside the Serenity UAV nacelles.
 
@@ -126,8 +127,9 @@ XCVR-49MHZ-1 specified a 5-element Chebyshev LPF (FL1) with fc = 75 MHz and
 
 > **SPICE/QUCS-S verification** required in Phase 4 per XCVR-49MHZ-1 design notes.
 > The 6-element network is specifically designed to ensure ≥ 60 dBc at 147 MHz
-> (per 47 CFR 95.655 requirement for spurious above 1 GHz when harmonically related
-> to a sub-30-MHz fundamental — the relevant limit at the 3rd harmonic of 49 MHz).
+> (3rd harmonic of 49 MHz), to meet the out-of-band emission limits of 47 CFR §15.209
+> applied via §15.235(b) (REF-FCC-003) — not Part 95 §95.655, which does not apply to
+> this band.
 
 ### 5. Chassis ground (PGND) and shielding
 
@@ -135,7 +137,7 @@ XCVR-49MHZ-1 specified a 5-element Chebyshev LPF (FL1) with fc = 75 MHz and
 
 A PGND copper pour ring (3 mm wide, all four board edges) connects to:
 
-- The SMA J2 connector shell (shield contact, outer conductor)
+- The RP-SMA J2 connector shell (shield contact, outer conductor)
 - All four M3 corner mounting holes
 - The PE4259-63 T/R switch body GND pad (RF section, In1.Cu)
 - TVS-SMA (SMAJ5.0A, see §6)
@@ -156,7 +158,7 @@ The shield can:
 
 ### 6. Antenna port TVS protection
 
-A SMAJ5.0A bidirectional TVS is placed on the SMA J2 antenna port center conductor,
+A SMAJ5.0A bidirectional TVS is placed on the RP-SMA J2 antenna port center conductor,
 clamping any cable-injected transients to ±5 V before the PE4259-63 T/R switch.
 The TVS is a SOD-123FL package, placed within 2 mm of J2, with the cathode to PGND.
 
@@ -169,7 +171,7 @@ The TVS is a SOD-123FL package, placed within 2 mm of J2, with the cathode to PG
 
 - **PGND pour:** In1.Cu GND plane is divided at the midpoint between digital and RF
 
-  sections; the RF side pour is labeled PGND and connects to the SMA shell. The
+  sections; the RF side pour is labeled PGND and connects to the RP-SMA shell. The
   digital side is plain GND. The moat is bridged by a 10 nF C0G capacitor (C27)
   for RF, referencing PGND on one side and GND on the other.
 
@@ -187,7 +189,7 @@ The TVS is a SOD-123FL package, placed within 2 mm of J2, with the cathode to PG
 
   of J1 and outside the shield can.
 
-- **SMA TVS placement:** TVS-SMA (SMAJ5.0A) must be within 2 mm of J2 on the board
+- **RP-SMA TVS placement:** TVS-SMA (SMAJ5.0A) must be within 2 mm of J2 on the board
 
   edge side, outside the shield can.
 
@@ -231,8 +233,9 @@ functionally wrong connections.
 ### 9. SBUS Receiver Mode — Hardware-Select Inverter and MUX
 
 SBUS (used by RC receivers and autopilots) operates at 100000 baud with **inverted
-logic polarity** relative to standard UART. The 49 MHz RCRS channels are legal SBUS
-carrier frequencies under FCC Part 95 Subpart D; adding hardware inversion and a
+logic polarity** relative to standard UART. The 49 MHz channels are legal SBUS
+carrier frequencies under 47 CFR Part 15 §15.235 (not Part 95 Subpart D, which does not
+cover this band); adding hardware inversion and a
 mode-select switch allows the transceiver to serve as an SBUS receiver input to the
 flight-control SBCs without requiring firmware changes to the UART peripheral.
 
@@ -392,8 +395,29 @@ and the existing CAPE-B-1/B-2 boards (which already carried this profile).
 ## Regulatory Constraints
 
 Unchanged from XCVR-49MHZ-1. The 6-element LPF provides additional margin vs. the
-5-element version, improving compliance margin for 47 CFR 95.655 spurious emission
-limits.
+5-element version, improving compliance margin for the 47 CFR §15.209 out-of-band
+emission limits applied via §15.235(b) (REF-FCC-003) — not Part 95 §95.655, which does
+not apply to this band.  Note: the PA chain (MMBT2222A + 2N3866) is sized for ~100 mW
+output, which exceeds the §15.235 field-strength-equivalent EIRP ceiling of ≈ 30 µW by
+roughly 35 dB; firmware must limit conducted output to ≈ −13 dBm (≈ 48 µW) for
+compliance — see `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md` Link 4 and
+`TODO.md` §0.1.
+
+**Antenna connector — §15.203 violation resolved in design (2026-06-20):** the board
+previously used a standard SMA edge jack (Amphenol 132289). §15.203 states "the use of a
+standard antenna jack or electrical connector is prohibited," and that obligation binds the
+manufacturer/responsible party directly — being the manufacturer (Griffing Technology LLC)
+creates no self-authorization exception, since the manufacturer is exactly who bears the
+§2.803/§15.19 equipment-authorization burden. §15.203's exceptions for carrier-current
+devices and professionally-installed, on-site-measured radiators do not apply to this board.
+J2 is now specified as Amphenol **132289RP**, the reverse-polarity (RP-SMA) counterpart of
+132289 — same PCB footprint, mating gender reversed so generic standard-SMA antennas/cables
+cannot connect, satisfying §15.203's "unique coupling" provision. See `REFERENCES.md`
+"Open Standards Verification Items" and `TODO.md` §0.1 for status; physical board re-spin
+to populate 132289RP in place of 132289 is the remaining fabrication step.
+
+> *"That sounds like the Alliance. Unite all the planets under one rule so that everybody
+> can be interfered with or ignored equally."* — Mal, *Firefly*, "The Train Job" (2002)
 
 ---
 
@@ -442,12 +466,16 @@ cable shield, the following on-board measures are active (see §1):
 - **FB-TX** series 0402 ferrite beads (Würth 742792510) on each of UART_TX, UART_RX,
   and PTT_N after CM5
 
-### SMA Antenna Cable (J2)
+### RP-SMA Antenna Cable (J2)
 
-- **Cable type:** RG-316 or RG-178 50 Ω coaxial, maximum 500 mm.
-- **Ferrite clamp:** One Würth 74271222 on the coaxial near the SMA connector body
+- **Connector:** Amphenol 132289RP RP-SMA edge-launch jack (reverse-polarity
+  counterpart of 132289; §15.203 unique-coupling antenna restriction, see
+  "Regulatory Constraints" above).
+- **Cable type:** RG-316 or RG-178 50 Ω coaxial, maximum 500 mm, terminated in an
+  RP-SMA plug to mate with J2.
+- **Ferrite clamp:** One Würth 74271222 on the coaxial near the RP-SMA connector body
   at the antenna end (if cable length > 100 mm), to suppress common-mode current.
-- **TVS-SMA:** SMAJ5.0A bidirectional TVS on the SMA center conductor is already
+- **TVS-SMA:** SMAJ5.0A bidirectional TVS on the RP-SMA center conductor is already
   fitted (§6); no additional external protection required.
 
 ---
@@ -473,7 +501,7 @@ cable shield, the following on-board measures are active (see §1):
 
 - Step 5: XCVR-49MHZ-1.md — Phase 1 design decisions (IC selection rationale)
 
-- Step 6: 47 CFR 95.655 — FCC spurious emission requirements
+- Step 6: 47 CFR §15.235(b) / §15.209 — FCC out-of-band emission requirements (not Part 95 §95.655, which does not apply to this band)
 
 - Step 7: QUCS-S / SPICE Chebyshev filter synthesis reference:
 
@@ -504,7 +532,7 @@ The suffix "CAN" in `CMC_CAN` follows the project naming convention for the ante
 common-mode choke per the task specification "CMC_CAN: SRF2012 near antenna path".
 This component suppresses common-mode currents on the antenna feed line to reduce
 conducted EMI per IEEE 1613 / CISPR 32.
-Pad 1 = ANT input (from RF section); Pad 2 = ANT output (clean side, toward J2 SMA).
+Pad 1 = ANT input (from RF section); Pad 2 = ANT output (clean side, toward J2 RP-SMA).
 Both KiCad pads are assigned to net ANT because a separate ANT_CMC_OUT net was not
 declared; the functional distinction is physical placement only.
 
@@ -518,7 +546,7 @@ declared; the functional distinction is physical placement only.
 | J1 | 4 | PTT_N |
 | J1 | 5 | RSSI_ANA |
 | J1 | 6 | +3V3 | Right-most pin |
-| J2 | 1 | ANT | SMA centre pin, 0.9 mm drill, thru-hole circle |
+| J2 | 1 | ANT | RP-SMA centre pin, 0.9 mm drill, thru-hole circle |
 | J2 | 2 | GND | Upper GND tab, 1.0 mm drill |
 | J2 | 3 | GND | Lower GND tab, 1.0 mm drill |
 | CMC_CAN | 1 | ANT | Input from RF section; left pad, silkscreen notch marks pin 1 |

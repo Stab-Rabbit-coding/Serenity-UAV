@@ -98,10 +98,11 @@
 //   Ref: ST UM2884 DocID032910 Rev 1, 2021.
 //
 // Antenna references:
-//   SiK 915 MHz: FCC 47 CFR Part 97 / ISM.
-//   ZigBee 2.4 GHz: IEEE 802.15.4; FCC Part 15.
-//   WiFi 5 GHz: IEEE 802.11ac; FCC Part 15.
-//   49 MHz RCRS: FCC 47 CFR Part 95 Subpart H.
+//   SiK 915 MHz: FCC 47 CFR Part 15 Section 15.247 (REF-FCC-001).
+//   ZigBee 2.4 GHz: IEEE 802.15.4; FCC Part 15 Section 15.247 (REF-FCC-001).
+//   WiFi 5 GHz: IEEE 802.11ac; FCC Part 15 Subpart E Section 15.407 (REF-FCC-002).
+//   49 MHz: FCC 47 CFR Part 15 Section 15.235 (REF-FCC-003) -- not Part 95 RCRS,
+//   which does not cover this band.
 // ============================================================
 
 SCALE_24  = 2.9294;   // 24" hull scale factor

@@ -454,8 +454,8 @@ Full catalog with official URLs and specific clause details is in `REFERENCES.md
 | REF-IEEE-001 | IEEE 802.3-2022 (Ethernet) | Clause 22 (RMII), Clause 24 (100BASE-TX), Clause 38 (1500 Vrms isolation transformer) | CPSW3G RMII; ADIN1300BCPZ / DP83825I PHYs; Würth 749010012A transformer |
 | REF-IEEE-002 | IEEE 802.11-2020 (WiFi) | Clause 17 (OFDM 5 GHz), Clause 19 (802.11n) | TI WL1837MOD SDIO; 5 GHz UNII-3 primary, 2.4 GHz fallback |
 | REF-IEEE-003 | IEEE 802.15.4-2020 (Zigbee PHY) | Clause 10 (2.4 GHz O-QPSK) | CC2652R7 optional Zigbee backup mesh |
-| REF-FCC-003 | 47 CFR Part 95 (RCRS) | ERP ≤ 100 mW (20 dBm) — verify current section; ±0.005% frequency accuracy — verify current section | Emma 49 MHz RCRS link; River's Room and Simon's Medbay nodes only |
-| REF-PROTO-001 | AX.25 v2.2 (1998) | §6.2 (I Frame), §6.3 (S Frames) | AX.25 framing on 49 MHz RCRS link |
+| REF-FCC-003 | 47 CFR Part 15 §15.235 | Field strength ≤ 10,000 µV/m at 3 m (≈ 30 µW / −15.2 dBm EIRP-equivalent) — not Part 95 RCRS, which does not cover 49 MHz | Emma 49 MHz link; River's Room and Simon's Medbay nodes only |
+| REF-PROTO-001 | AX.25 v2.2 (1998) | §6.2 (I Frame), §6.3 (S Frames) | AX.25 framing on 49 MHz link |
 | REF-PROTO-002 | MAVLink v2.0 | Packet format, message signing | SiK 915 MHz MAVLink C2 link |
 
 ---

@@ -40,7 +40,7 @@ The gimbal servos and AS5600 encoders connect to Cape-B-2 servo and I²C outputs
 | J_SMA_SIK          | SiK 915 MHz    | LMR-195    | ANT-915-OMNI (stationary) or → RF splitter → ANT-915-YAGI (gimbal) |
 | J_SMA_LORA         | LoRa 915 MHz   | LMR-195    | ANT-915-OMNI (stationary) or → same RF splitter port             |
 | J_SMA_WIFI         | WiFi 5 GHz     | LMR-195    | ANT-WIFI-PNL (gimbal-mounted flat panel) |
-| Emma J2 (SMA edge) | 49 MHz RCRS    | RG-58      | ANT-49MHZ (fixed mast whip)   |
+| Emma J2 (RP-SMA edge) | 49 MHz Part 15 | RG-58    | ANT-49MHZ (fixed mast whip)   |
 | GNSS antenna port  | GNSS           | RG-316     | ANT-GNSS (u-blox active patch, GCS position fix) |
 | Zigbee SMA (opt.)  | Zigbee 2.4 GHz | LMR-195    | ANT-ZIGBEE (fixed dipole)     |
 
@@ -83,7 +83,7 @@ The gimbal servos and AS5600 encoders connect to Cape-B-2 servo and I²C outputs
 ## Emma Sub-Module
 
 Emma seats on Cape-B-2 J_XCVR header (JST-GH 6P).  No separate wiring required
-for signal lines.  The RF SMA connector on Emma routes to ANT-49MHZ via RG-58.
+for signal lines.  The RF RP-SMA connector on Emma routes to ANT-49MHZ via RG-58.
 
 ---
 

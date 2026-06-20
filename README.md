@@ -101,14 +101,14 @@ fairing in the canonical model). Also accessible via Jayne's cargo bay.
 
 **River's room** — Avionics bay (Bay C), starboard side of the cargo section.
 Primary tasking: forward EDF control, nacelle tilt command/sync, and resilient comms.
-Wash + Zoë stack. 49 MHz RCRS primary / LoRa secondary comms.
+Wash + Zoë stack. 49 MHz (Part 15 §15.235) primary / LoRa secondary comms.
 Ventilation ducting, cable conduits, and low-impedance bonding to other avionics bays.
 External access via a removable hull panel above the starboard wing. Also accessible
 via Jayne's cargo bay.
 
 **Simon's medbay** — Aft avionics bay (Bay D), middle section.
 Primary tasking: aft EDF control, alternate watchdog, and cargo/payload oversight.
-Wash + Zoë stack. 49 MHz RCRS primary / SiK secondary comms.
+Wash + Zoë stack. 49 MHz (Part 15 §15.235) primary / SiK secondary comms.
 Ventilation ducting, cable conduits, and low-impedance bonding to other avionics bays.
 Adjacent to Kaylee's room. Accessible via Jayne's cargo bay.
 
@@ -264,7 +264,7 @@ GPS, IMU, barometer, airspeed sensor, FPV camera, TPM 2.0, ADC, ESC telemetry, P
 EMI-hardened v2 design (CAPE-A-2).
 
 **Zoë** (comms/logging cape — 4 nodes):
-MAVLink/SiK 915 MHz, LoRa RFM95W 915 MHz, TI WL1837MOD WiFi/BT, 49 MHz RCRS transceiver
+MAVLink/SiK 915 MHz, LoRa RFM95W 915 MHz, TI WL1837MOD WiFi/BT, 49 MHz (Part 15 §15.235) transceiver
 (Emma sub-module), CAN FD, MIL-STD-1553B, RS-485, Ethernet RSTP ring, TPM 2.0,
 ATF16V8BQL CPLD hardware write-blocker, non-executable log microSD.
 EMI-hardened v2 design (CAPE-B-2).
@@ -290,7 +290,7 @@ Gerbers for v2 capes pending DRC sign-off.
 | SiK / MAVLink | 915 MHz | Shepherd (primary), Inara (secondary) |
 | WiFi | 5 GHz | Inara (primary), Shepherd (secondary) |
 | LoRa | 915 MHz | River (primary), Simon (secondary) |
-| AX.25 / RCRS | 49 MHz | River + Simon (FCC Part 95 RCRS [REF-FCC-003] / AX.25 framing [REF-PROTO-001]) |
+| AX.25 / 49 MHz | 49 MHz | River + Simon (47 CFR Part 15 §15.235 [REF-FCC-003] / AX.25 framing [REF-PROTO-001]) |
 | Zigbee | 2.4 GHz | Zoë nodes (secondary mesh) |
 
 **Security:** Every message (internal and external) is digitally signed and authenticated

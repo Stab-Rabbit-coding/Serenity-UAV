@@ -15,7 +15,7 @@ and Cape-B expansion boards.
 | Overlay | Cape | Node | Peripherals |
 | --------- | ------ | ------ | ------------- |
 | `cape-a/k3-am6254-pocketbeagle2-serenity-cape-a.dtbo` | Cape-A | FC nodes (4×) | IMU, barometer, TPM, ToF, GNSS, RS-485, CAN FD, Ethernet, EHRPWM, MIL-STD-1553 |
-| `cape-b/k3-am6254-pocketbeagle2-serenity-cape-b.dtbo` | Cape-B | CN nodes (4×) | TPM, LoRa, NOR flash, logging SD, SiK radio, RS-485, RCRS 49 MHz, CAN FD, Ethernet, WiFi, cargo servo, MIL-STD-1553 |
+| `cape-b/k3-am6254-pocketbeagle2-serenity-cape-b.dtbo` | Cape-B | CN nodes (4×) | TPM, LoRa, NOR flash, logging SD, SiK radio, RS-485, 49 MHz (Part 15 §15.235), CAN FD, Ethernet, WiFi, cargo servo, MIL-STD-1553 |
 
 ## Prerequisites
 
@@ -117,7 +117,7 @@ be verified against the PocketBeagle 2 expansion header pin map.
 | Logging microSD | SPI1 CS3 | `mmc-spi-slot` | ext4, noexec, CPLD WP |
 | RFD900x SiK 915 MHz | UART2 | n/a | MAVLink, HW CTS/RTS |
 | RS-485 MAX3485E | UART4 | n/a | DE/RE# GPIO direction |
-| XCVR-49MHZ-1 RCRS | UART5 | n/a | AX.25, 57600 8N1, PTT_N GPIO |
+| XCVR-49MHZ-1 (49 MHz Part 15) | UART5 | n/a | AX.25, 57600 8N1, PTT_N GPIO |
 | CAN FD ATA6561 | MCAN0 | `m_can` | 1/8 Mbps |
 | Ethernet DP83825I ×2 | CPSW3G | `dp83825i` | 100BASE-TX RSTP ring |
 | WL1837MOD WiFi | MMC1 / SDIO | `ti,wl1837` | 5 GHz 802.11ac, 4-bit |
@@ -148,5 +148,5 @@ PRU firmware source is in `serenity/firmware/pru/` (Phase 7).
 - PocketBeagle 2 Industrial schematic — BeagleBoard.org hardware repository
 - BeagleBone Debian Trixie `extlinux.conf` overlay documentation
 - MIL-STD-1553B, DoD Interface Standard, 21 Sep 1978
-- 47 CFR Part 95 Subpart D (RCRS 49 MHz channel plan)
+- 47 CFR Part 15 §15.235 (49 MHz channel plan; not Part 95 RCRS, which does not cover this band)
 - 47 CFR Part 15 Subpart C (unlicensed 915 MHz LoRa)

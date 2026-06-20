@@ -9,8 +9,9 @@
  * synthesiser used as the carrier-frequency DDS on the XCVR-49MHZ-1 board.
  * It is connected to the CN node (AM6254) via the Cape-B I²C bus (J1 pin).
  *
- * This driver programs CLK0 to one of the five FCC Part 95 Subpart D (RCRS)
- * channels:
+ * This driver programs CLK0 to one of the five 49 MHz channels licensed for
+ * unlicensed operation under 47 CFR Part 15 §15.235 (not FCC Part 95 RCRS —
+ * Part 95 does not cover 49 MHz; see REFERENCES.md REF-FCC-003):
  *
  *   Channel 0 — 49.830 MHz
  *   Channel 1 — 49.845 MHz
@@ -45,10 +46,11 @@ extern "C" {
 #define SI5351_I2C_ADDR  ((uint8_t)0x60U)
 
 /* ---------------------------------------------------------------------------
- * RCRS channel definitions (47 CFR 95.623)
+ * 49 MHz channel definitions (47 CFR Part 15 §15.235; not 47 CFR 95.623 —
+ * that section is Part 95 RCRS, which does not apply to this band)
  * ---------------------------------------------------------------------------*/
 
-/** Number of legal 49 MHz RCRS channels. */
+/** Number of legal 49 MHz channels. */
 #define SI5351_RCRS_NUM_CHANNELS  (5U)
 
 /** RCRS channel 0 — 49.830 MHz. */
