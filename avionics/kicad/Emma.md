@@ -416,6 +416,9 @@ cannot connect, satisfying §15.203's "unique coupling" provision. See `REFERENC
 "Open Standards Verification Items" and `TODO.md` §0.1 for status; physical board re-spin
 to populate 132289RP in place of 132289 is the remaining fabrication step.
 
+> *"That sounds like the Alliance. Unite all the planets under one rule so that everybody
+> can be interfered with or ignored equally."* — Mal, *Firefly*, "The Train Job" (2002)
+
 ---
 
 ## Security Notes
