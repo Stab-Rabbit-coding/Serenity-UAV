@@ -123,6 +123,8 @@ aft white); controlled by FC4 node (Simon's medbay, Bay E).
 
 ## Part II — United States Federal Communications Commission Regulations
 
+> "Can't stop the signal." — Mr. Universe. We can, however, stay inside Part 15/95 limits while we transmit it.
+
 ### REF-FCC-001: 47 CFR §15.247 — Operation within the bands 902–928 MHz, 2400–2483.5 MHz, and 5725–5850 MHz
 
 | Field | Value |
@@ -396,35 +398,6 @@ required before fabrication (see TODO.md §1.4 PCB DRC and isolation verificatio
 `avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
 `avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`,
 `TODO.md`, `CLAUDE.md`, `airframe/openscad/fuselage/bow_sensor_pod.scad`
-
----
-
-### REF-IEC-002: IEC 60825-1:2014+AMD1:2021 — Safety of Laser Products — Part 1: Equipment Classification and Requirements
-
-| Field | Value |
-|---|---|
-| **Issuing authority** | International Electrotechnical Commission (IEC) |
-| **Edition** | Second edition 2014-05, consolidated with Amendment 1 (2021-11) |
-| **Official URL (purchase)** | https://webstore.iec.ch/en/publication/5587 |
-| **US equivalent** | ANSI Z136.1-2022 (American National Standard for Safe Use of Lasers) |
-| **FDA harmonization** | IEC 60825-1 is harmonized with FDA 21 CFR Part 1040 [REF-FDA-001]; devices meeting IEC 60825-1 classification satisfy FDA emission limits for the corresponding laser class |
-
-**Clauses applied in this project:**
-
-| Clause | Title | Application |
-|---|---|---|
-| §3.60 | Accessible emission limit (AEL) | AEL for Class 3R at 630–680 nm: ≤ 5 mW CW (≤ 1 mW × MPE ratio) |
-| §4.3.3 | Class 3R definition | Class 3R: low-risk lasers where direct beam viewing is hazardous; beam from diffuse reflection generally safe |
-| Table 3 | AEL values for continuous-wave lasers | 650 nm, Class 3R: AEL = 5 mW; confirms ≤ 5 mW crosshair laser is within Class 3R boundary |
-| §5.1 | Classification requirements | Manufacturer must classify laser product and provide required labels |
-| §5.4 | Engineering controls for Class 3R | Class 3R devices require interlocked protective housing; this design implements GPIO-controlled enable with pull-down default-off |
-
-**Applied to:** 12 mm OD crosshair-pattern laser module (5 mW, 650 nm) installed in the bow
-sensor pod (bow_sensor_pod.scad, BOW-LASER mount, dome B ventral position); bore-sighted
-at 30° below horizon on aircraft CL.
-
-**Used in:** `airframe/openscad/fuselage/bow_sensor_pod.scad`,
-`airframe/openscad/fuselage/head_shell24.scad`
 
 ---
 

@@ -4,6 +4,8 @@
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
 **Revision:** R1.4 (2026-06-15) — Canonical corner V-brace frame geometry
 
+> "She's tore up plenty, but she'll fly true." — Mal, on a ship that's seen worse landings than this one's rated for.
+
 > **Rev R1.3** (trapezoidal brace, fore-aft arm spread only) **superseded 2026-06-15.**
 > **Rev R1.2 / R1.1 / R1** prior pyramid and flat-plate designs also superseded.
 > Impact energy numbers (§3) carry forward unchanged from R1.
