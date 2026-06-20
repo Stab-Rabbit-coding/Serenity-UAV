@@ -170,30 +170,40 @@ aft white); controlled by FC4 node (Simon's medbay, Bay E).
 
 ---
 
-### REF-FCC-003: 47 CFR Part 95 — Personal Radio Services (Radio Control Radio Service, RCRS)
+### REF-FCC-003: 47 CFR Part 15 §15.235 — Operation Within the Band 49.82–49.90 MHz
 
 | Field | Value |
 |---|---|
 | **Issuing authority** | FCC |
-| **Official URL** | https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-95 |
+| **Official URL** | https://www.ecfr.gov/current/title-47/chapter-I/subchapter-A/part-15/subpart-C/section-15.235 |
 
-> **IMPORTANT — 2017 Reorganization Notice:** 47 CFR Part 95 was comprehensively reorganized
-> under FCC Second Report and Order FCC 17-24 (adopted February 2017, effective July 3, 2018).
-> Section numbers for RCRS provisions changed significantly.  All RCRS-specific section
-> citations currently in project files (§95.635, §95.655) are **pre-2017 section numbers**
-> and must be verified against the current eCFR before first flight.  See the
-> "Open Standards Verification Items" table at the end of this document.
+> **Correction (2026-06-20):** Earlier project revisions cited the Emma 49 MHz link against
+> 47 CFR **Part 95** (Radio Control Radio Service, RCRS).  Part 95 Subpart C RCRS covers only
+> the 26–28 MHz, 72 MHz, and 75 MHz bands — it does **not** include 49 MHz.  The 49.82–49.90 MHz
+> band is an unlicensed, license-exempt intentional-radiator band governed by **47 CFR Part 15
+> Subpart C §15.235**, not Part 95.  The previous "RCRS"/"TDDS"/"LERS"/"27 channels" terminology
+> could not be traced to any verifiable Part 95 text and has been removed; see "Removed /
+> Superseded Citations" below.
 
 **Regulatory provisions applied in this project:**
 
-| Provision | Description | Current Citation (verify) |
+| Provision | Description | Citation |
 |---|---|---|
-| ERP limit | RCRS station transmitter power shall not exceed 100 mW (20 dBm) ERP | Verify current section vs. old §95.635 |
-| Frequency accuracy | RCRS transmitters must maintain frequency accuracy to ±0.005% | Verify current section vs. old §95.655 |
-| PTT sequencing | Transmitter must be keyed ≥ 7 ms before data burst | Verify current section vs. old §95.639 |
-| Channel plan | 49 MHz RCRS channels (27 channels, TDDS dynamic assignment) | Subpart C LERS provisions |
+| Field strength limit | Fundamental emission ≤ 10,000 µV/m at 3 m (average detector); peak limits of §15.35 also apply | §15.235(a) |
+| Band-edge attenuation | Emissions within 10 kHz of the 49.82/49.90 MHz band edges attenuated ≥ 26 dB below the unmodulated carrier level, or to the general §15.209 limit, whichever is the lesser attenuation (more permissive) | §15.235(b) |
+| Out-of-band emissions | Emissions removed more than 10 kHz from the band edge must meet the general radiated-emission limits of §15.209 | §15.209, §15.235(b) |
+| Certification disclosure | Any emission exceeding 20 µV/m at 3 m must be disclosed in the equipment certification application | §15.235(c) |
+| No-interference-protection | Device must accept interference from other sources and must not cause harmful interference; operates on an unprotected, license-exempt basis | §15.5 |
+| Antenna restriction | Intentional radiator may use only the antenna furnished by the manufacturer, supplied as a permanently attached antenna or via a unique (non-standard) coupling; a standard antenna jack/connector is prohibited absent a §15.203 exception | §15.203 |
+| Equipment authorization | Requires FCC Certification through a Telecommunication Certification Body (TCB) prior to marketing; device must bear an FCC ID and Part 15 compliance statement | §2.803, §15.19 |
 
-**Applied to:** Emma (XCVR-49MHZ-2) 49 MHz AX.25 / RCRS link; River's Room and Simon's Medbay nodes only.
+**Applied to:** Emma (XCVR-49MHZ-2) 49 MHz AX.25 link; River's Room and Simon's Medbay nodes only.
+No operator or station license is required — the band is license-exempt under Part 15, not
+because it is an RCRS personal radio service.
+
+**Open item:** Emma's RF connector design must be checked against the §15.203 antenna
+restriction (no standard external antenna jack permitted on the intentional radiator) before
+first flight; see TODO.md §0.1.
 
 **Used in:** `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`,
 `avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`,
@@ -221,7 +231,7 @@ aft white); controlled by FC4 node (Simon's medbay, Bay E).
 | §3.3 | Device Agent/Gateway-Based Deployment | TPM 2.0 attestation per node (SLB9670) as the device agent |
 | §4 (entire) | Deployment Scenarios | Applied to the 8-node cooperative architecture with per-node key storage |
 
-**Applied to:** Every message (internal CAN FD/RS-485/1553/Ethernet and external SiK/LoRa/WiFi/RCRS)
+**Applied to:** Every message (internal CAN FD/RS-485/1553/Ethernet and external SiK/LoRa/WiFi/49 MHz)
 carries a TPM-bound SHA-256 HMAC; TPM 2.0 (SLB9670) on all 8 nodes provides boot measurement
 and key storage.
 
@@ -578,7 +588,7 @@ per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ da
 | **Authority** | Tucson Amateur Packet Radio (TAPR) / American Radio Relay League (ARRL) |
 | **Edition** | Version 2.2 (July 1998) |
 | **Official URL** | https://www.ax25.net/AX25.2.2-Jul%2098-2.pdf |
-| **Note** | AX.25 is used as the frame format on the 49 MHz RCRS link. The RF portion of this link is governed by 47 CFR Part 95 RCRS regulations (REF-FCC-003), NOT the Amateur Radio Service. AX.25 is a protocol choice; its use here does not require an amateur radio license because the RCRS band is a license-exempt personal radio service. |
+| **Note** | AX.25 is used as the frame format on the 49 MHz link. The RF portion of this link is governed by 47 CFR Part 15 §15.235 (REF-FCC-003), NOT the Amateur Radio Service and NOT Part 95 RCRS. AX.25 is a protocol choice; its use here does not require an amateur radio license because the 49.82–49.90 MHz band is a license-exempt, unlicensed Part 15 band. |
 
 **Sections applied in this project:**
 
@@ -739,6 +749,7 @@ because they were incorrectly attributed, unverifiable, or inapplicable.
 | Old Citation | Where Found | Reason Removed | Replacement |
 |---|---|---|---|
 | "NIST SP 800-72 principles" (write-blocker design) | `README.md` §Patent Notice, line 382 | **Incorrect attribution.** NIST SP 800-72 (2004) is titled "Guidelines on PDA Forensics" — a forensic analysis guideline for personal digital assistants. It has no relation to hardware write-blocker design. No single NIST SP covers CPLD write-blocker design; the closest applicable standard is NIST SP 800-92 §4.4.2 (log data protection principles). | REF-NIST-004 (NIST SP 800-92 §4.4.2) |
+| 47 CFR Part 95 RCRS (§95.635 ERP limit, §95.655 frequency accuracy, §95.639 PTT sequencing, "TDDS"/"LERS"/"27 channels" terminology) | `REFERENCES.md` REF-FCC-003, `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`, `CLAUDE.md`, `README.md`, `TODO.md`, `docs/AVIONICS_PB2_REDESIGN.md` | **Incorrect band classification.** Part 95 Subpart C (Radio Control Radio Service) covers only the 26–28 MHz, 72 MHz, and 75 MHz bands — it has no provisions for 49 MHz. The "TDDS"/"LERS"/27-channel terminology could not be traced to any verifiable Part 95 text. The 49.82–49.90 MHz band actually used by Emma is governed by 47 CFR Part 15 §15.235, an unlicensed intentional-radiator band, not a licensed/license-exempt personal radio service. | REF-FCC-003 (47 CFR Part 15 §15.235) |
 
 ---
 
@@ -749,9 +760,7 @@ Add verified section numbers to the relevant files and update this table.
 
 | Citation | File | Issue | Action Required |
 |---|---|---|---|
-| §95.635 RCRS ERP limit (100 mW) | `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md` | Pre-2017 FCC Part 95 section number; Part 95 reorganized July 3, 2018 | Verify current section number via eCFR: https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-95 |
-| §95.655 RCRS frequency accuracy (±0.005%) | `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md` | Pre-2017 section number | Same as above |
-| §95.639 RCRS PTT sequencing (≥7 ms) | Referenced in project docs | Pre-2017 section number | Same as above |
+| §15.203 antenna restriction (Emma 49 MHz RF connector) | Emma (XCVR-49MHZ-2) hardware design, `avionics/kicad/Emma.md`, `gcs/malcolm/hardware/docs/malcolm_wiring.md` (confirms a standard SMA connector on Emma's RF port, both aircraft-side and on Malcolm's Emma sub-module) | **Confirmed gap, not yet resolved.** Intentional radiators under Part 15 may not use a standard antenna jack/connector absent a §15.203 exception; Emma uses a generic SMA edge connector, which is a standard jack | Redesign Emma's 49 MHz antenna port as a permanently-attached antenna or a unique (non-standard) coupling before first flight, or identify an applicable §15.203 exception; this is a hardware change, not a documentation fix, and is deferred per user direction (2026-06-20) pending dedicated design review |
 | 14 CFR Part 47 (aircraft registration marks) | `README.md`, `docs/REVN_BUILD_GUIDE_24IN.md` | 14 CFR Part 47 applies to manned aircraft registration; for UAS the applicable regulation is 14 CFR Part 48 §48.205 (display requirements) | Replace all Part 47 references with REF-FAA-001 (Part 48 §48.205) where the citation concerns UAS mark display |
 | AUVSI "standards" (unnamed) | `CLAUDE.md`, `README.md` | No specific numbered AUVSI or ASTM standard cited | Identify applicable ASTM F38 committee standards for UAS airframe engineering and add to this catalog |
 | IEC 62368-1 clause numbers | PCB layout (not yet complete) | PCB layout must verify creepage/clearance distances meet IEC 62368-1 Clause 5.5.2 requirements for 5 kV reinforced insulation; this cannot be verified until PCB layout is complete | Verify during Wash and Zoë PCB layout review (see TODO.md §1.4) |

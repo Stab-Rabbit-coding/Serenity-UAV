@@ -13,7 +13,7 @@
 		(rev "2")
 		(comment 1 "Serenity-Class Tiltrotor UAV — 49 MHz AX.25 RCRS Transceiver Module Rev 2")
 		(comment 2 "CC BY 4.0 creativecommons.org/licenses/by/4.0 — Steve Griffing PE(CSE) CISSP-ISSEP CPP")
-		(comment 3 "55x35mm 4L JLCPCB — FCC Part 95 Subpart D — 49.830–49.890 MHz AFSK 1200bd AX.25")
+		(comment 3 "55x35mm 4L JLCPCB — FCC 47 CFR Part 15 15.235 — 49.830–49.890 MHz AFSK 1200bd AX.25")
 		(comment 4 "EMI hardening: SRF2012 CMC + PRTR5V0U2X TVS + Wuerth 742792512 FB + X2Y 4.7nF cap")
 		(comment 5 "Hull: misubisu CC BY 4.0 | Firefly/Serenity fan-work, not officially licensed")
 	)
@@ -15873,7 +15873,7 @@
 			)
 		)
 	)
-	(gr_text "49 MHz AX.25 KISS Transceiver\nXCVR-49MHZ-2 Rev 2 — EMI-Hardened\nFCC Part 95 Subpart D\n49.830-49.890 MHz  AFSK 1200bd\nCC BY 4.0 — June 2026\nSteve Griffing\nPE(CSE), CISSP-ISSEP, CPP\nGriffing Technology LLC\ngithub.com/Stab-Rabbit-Coding"
+	(gr_text "49 MHz AX.25 KISS Transceiver\nXCVR-49MHZ-2 Rev 2 — EMI-Hardened\nFCC 47 CFR Part 15 15.235\n49.830-49.890 MHz  AFSK 1200bd\nCC BY 4.0 — June 2026\nSteve Griffing\nPE(CSE), CISSP-ISSEP, CPP\nGriffing Technology LLC\ngithub.com/Stab-Rabbit-Coding"
 		(at 142.5 116.5 270)
 		(layer "B.SilkS")
 		(uuid "64164594-3fdf-49f4-b199-12c2ac0bf07d")

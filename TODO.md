@@ -16,10 +16,10 @@
 | Nacelle EDFs | XFly Galaxy X5 50mm 12-blade 6S 3200KV, 1240g each; 2232g/nacelle (90% additive via stator); 4464g total | Baseline EDF selected (xfly-model.eu); nacelle T/W ≈ 1.61 at Phase 5–10 AUW — VTOL hover capable |
 | Rear propulsion | 55mm 6S EDF, reduced-area neck intake, **fixed canonical elliptical tail nozzle** (2.06×1.76 in / 52.3×44.7 mm) + **4 RCS bleed-air thrusters** | **DEFERRED — Phase 11.** Design files in `deferred/aft-edf/` — SCAD/STLs require regeneration for 55mm + canonical nozzle + RCS (see §Phase 11). Adds ~1275g forward thrust (cruise only, after ~15% RCS bleed); rear EDF NOT counted in hover T/W; Phase 11 hover T/W ≈ 1.43. |
 | Cargo bay | Clamshell doors + SG90 servos + DRV8833 + N20 winch + Dyneema + auto-latch + GPS ring + FPV bezel | ✓ All 13 cargo STLs generated (PR #21 + PR #22 2026-06-01); BOM updated bom_revP.json/csv; gondola shell open |
-| PCBs | **Rev Q: all 8 nodes use the EM hardened Wash Flight Control and Zoë Comms/Security capes** at every position. The **Kaylee Power Distribution Board** ensures that everything stays shiny.  Two **Emma** daughter boards provide connectivity on RCRS.  Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived 2026-06-05. **| Rev R schematics complete (Wash: 2× EMI-hardened Ethernet PHY; Zoë: 1× Ethernet PHY; all field connectors added). Kaylee PCB DRC clean (0 shorts); gerbers generated 2026-06-10; manual component placement (Section F, shield lugs) and trace routing remain. |
+| PCBs | **Rev Q: all 8 nodes use the EM hardened Wash Flight Control and Zoë Comms/Security capes** at every position. The **Kaylee Power Distribution Board** ensures that everything stays shiny.  Two **Emma** daughter boards provide connectivity on 49 MHz (Part 15 §15.235).  Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived 2026-06-05. **| Rev R schematics complete (Wash: 2× EMI-hardened Ethernet PHY; Zoë: 1× Ethernet PHY; all field connectors added). Kaylee PCB DRC clean (0 shorts); gerbers generated 2026-06-10; manual component placement (Section F, shield lugs) and trace routing remain. |
 | Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 ✓; serenity-fc Phase 6 stub only; all Phase 7 items open |
 | Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
-| Regulatory | FAA Part 107 [REF-FAA-002], Part 48 §48.205 [REF-FAA-001], §91.209 [REF-FAA-003], FCC Part 15 [REF-FCC-001, REF-FCC-002], Part 95 RCRS [REF-FCC-003] | FAA registration placeholder; XCVR-49MHZ-2 pre-compliance pending; Part 95 section numbers require post-2017 reorganization verification (§0.1) |
+| Regulatory | FAA Part 107 [REF-FAA-002], Part 48 §48.205 [REF-FAA-001], §91.209 [REF-FAA-003], FCC Part 15 [REF-FCC-001, REF-FCC-002, REF-FCC-003 §15.235] | FAA registration placeholder; XCVR-49MHZ-2 pre-compliance pending; §15.235 power budget and §15.203 antenna-connector gaps open (§0.1) |
 
 ---
 
@@ -29,21 +29,47 @@ All items in this section must be resolved before any physical build step.  See 
 for the full standards catalog.  All open verification items from `REFERENCES.md` are
 tracked here.
 
-### 0.1 — FCC Part 95 Section Number Verification
+### 0.1 — FCC Part 95 Section Number Verification — RESOLVED: wrong CFR Part, not just stale section numbers
 
-47 CFR Part 95 was reorganized under FCC Report and Order FCC 17-24 (effective July 3, 2018).
-Section numbers for RCRS provisions changed.  The following must be verified against
-current eCFR (https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-95)
-and updated in `REFERENCES.md`, `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`,
-and all firmware/DTS files that cite Part 95 section numbers.
+**Resolved 2026-06-20.** The original premise of this item — that the 49 MHz Emma link's
+§95.635/§95.655/§95.639 citations were merely *pre-2017 section numbers* needing renumbering —
+was incorrect.  47 CFR Part 95 Subpart C (Radio Control Radio Service, RCRS) covers only the
+26–28 MHz, 72 MHz, and 75 MHz bands; it has **no provisions for 49 MHz at all**, under any
+section number, in any year.  The 49.82–49.90 MHz band actually used by Emma is governed by
+**47 CFR Part 15 §15.235**, an unlicensed intentional-radiator rule with a field-strength
+limit, not Part 95 RCRS.  `REFERENCES.md` REF-FCC-003 has been rewritten accordingly, and the
+"TDDS"/"LERS"/"27 channels" terminology in the old entry (unverifiable against any real Part 95
+text) has been removed and logged under "Removed / Superseded Citations."
 
-- [ ] **Verify current section for RCRS ERP limit (100 mW / 20 dBm)** — was §95.635
-  (pre-2017). Update `REFERENCES.md` REF-FCC-003 and `malcolm_antenna_spec.md` with
-  verified current section number.  **BLOCKS RCRS pre-compliance testing.**
-- [ ] **Verify current section for RCRS frequency accuracy (±0.005%)** — was §95.655
-  (pre-2017). Update `REFERENCES.md` and `malcolm_antenna_spec.md`.
-- [ ] **Verify current section for RCRS PTT sequencing (≥7 ms before TX)** — was §95.639
-  (pre-2017). Update `REFERENCES.md` and Emma (XCVR-49MHZ-2) firmware.
+- [x] **Correct REF-FCC-003 in `REFERENCES.md`** — replaced Part 95 RCRS citation with
+  47 CFR Part 15 §15.235 (plus §15.5, §15.203, §15.209 as applicable); added the old citation
+  to "Removed / Superseded Citations."  *(2026-06-20)*
+- [x] **Rework `malcolm_antenna_spec.md` Link 4 compliance math** — §15.235 is a field-strength
+  limit (≤10,000 µV/m at 3 m), not an EIRP/ERP figure.  Converting via EIRP = E²·4πd²/377Ω gives
+  an EIRP ceiling of **≈ −15.2 dBm (≈ 30 µW)** — about 35 dB below the 100 mW (+20 dBm) the spec
+  previously assumed.  Emma's PA must be firmware-limited to ≈ −13 dBm (≈ 48 µW) conducted to
+  comply, not +20 dBm.  *(2026-06-20)*
+- [x] **Update CLAUDE.md, TODO.md status lines, and other docs** referring to the 49 MHz link as
+  "RCRS" — relabeled as "49 MHz (Part 15 §15.235)" throughout active (non-archived) docs.
+  *(2026-06-20)*
+- [ ] **NEW — Re-architect the 49 MHz link's power/range budget.**  At the §15.235-compliant
+  ≈ 48 µW conducted power level, this link's realistic range is likely well under a quarter
+  mile, which contradicts its design role as River's resilient long-range backup comms path
+  (see CLAUDE.md Avionics Workload Balancing).  Research whether a different frequency/band or
+  a licensed service (e.g. Part 90 land mobile, or relocating off 49 MHz entirely) can legally
+  support the originally intended ~100 mW / multi-mile link, or whether the design intent for
+  this link must be revised to match what Part 15 actually permits.  **Architecturally
+  significant — do not resolve without user review.**
+- [ ] **NEW — §15.203 antenna/connector non-compliance, confirmed.** Emma's RF port is a
+  generic SMA edge connector (`gcs/malcolm/hardware/docs/malcolm_wiring.md` line 86, both
+  aircraft-side and on Malcolm's Emma sub-module) — a standard antenna jack, which §15.203
+  prohibits on a Part 15 intentional radiator absent an exception.  Requires a hardware
+  redesign of Emma's antenna port (permanently-attached antenna or unique/non-standard
+  coupling) before first flight; tracked here, not yet scheduled into a Rev.
+- [ ] **Remaining firmware/build-guide references to "RCRS"/old Part 95 section numbers**
+  (§1.3, §1.3's PCB pre-compliance checklist, Phase-build install steps, BOM rows, etc.) still
+  need a pass to update wording/citations to Part 15 §15.235; not all instances have been swept
+  in this revision — see repo-wide grep for "RCRS" to find remaining occurrences.
 
 ### 0.2 — Incorrect Reference Correction
 
@@ -1278,9 +1304,11 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 - [ ] **Generate Emma gerbers** — `XCVR-49MHZ-2.kicad_pcb` complete; export to
   `avionics/kicad/gerbers/XCVR-49MHZ-2/`.
   - **BLOCKS Emma fab order**
-- [ ] **FCC Part 95 Subpart D pre-compliance checklist for Emma** — document center
-  frequency accuracy (±0.005% per 47 CFR 95.655), ERP (≤100 mW), harmonic suppression ≥40 dBc at
-  2nd/3rd harmonics, 47 CFR 95.603 FCC ID silkscreen labeling block.
+- [ ] **FCC Part 15 §15.235 pre-compliance checklist for Emma** — document field strength
+  (≤10,000 µV/m at 3 m per §15.235(a), ≈30 µW / −15.2 dBm EIRP-equivalent — requires firmware
+  PA limit, not the ≤100 mW previously assumed), harmonic suppression ≥40 dBc at 2nd/3rd
+  harmonics (§15.235(b)/§15.209), FCC ID silkscreen labeling block (§2.803/§15.19).  Not
+  Part 95 — see §0.1.
 - [ ] **EMI isolation validation checklist** — verify isolation barrier clearance: ISOW1044BDFMR
   5 kV working voltage; ADM2795EBRWZ 5 kV working voltage; measure CMRR at 1 MHz on CAN and
   RS-485 channels; verify differential impedance 100 Ω ±10% on ETH MDI traces.
@@ -1301,7 +1329,7 @@ All Phase 1–3 items must be sequentially complete. Phase 4 verification runs i
 
 **Phase 1 — IC Selection (gates all downstream work):**
 
-- [x] **Resolve DDS choice** — **Si5351A-B-GT selected** (Silicon Labs, MSOP-10) + EPSON TG2520SMN 25 MHz ±0.5 ppm TCXO. I²C direct to 49 MHz; firmware driver already written (`si5351.c`); < ±1 ppm system stability, meeting Part 95 ±0.005% with > 25× margin. AD9833 eliminated (max 12.5 MHz; required ×4 external PLL). *(decided 2026-05-31)*
+- [x] **Resolve DDS choice** — **Si5351A-B-GT selected** (Silicon Labs, MSOP-10) + EPSON TG2520SMN 25 MHz ±0.5 ppm TCXO. I²C direct to 49 MHz; firmware driver already written (`si5351.c`); < ±1 ppm system stability, well within any plausible frequency-tolerance requirement (the ±0.005% figure cited at the time of this decision was a Part 95 RCRS value that does not apply to this band — see §0.1; no Part 15 §15.235 frequency-tolerance requirement is at issue here). AD9833 eliminated (max 12.5 MHz; required ×4 external PLL). *(decided 2026-05-31)*
 
 - [x] **Evaluate PA options** — **Two-stage discrete BJT selected**: MMBT2222A (SOT-23, driver) + 2N3866 (SOT-39, final). Class-A/AB; +5 V supply direct; ≈ 100 mW ERP; ≈ $1.60 BOM; ≥ 40 dBc harmonic suppression via FL1 LPF (SPICE verify Phase 4). RA07H4047M eliminated (requires 7.2–13.6 V; needs boost converter). *(decided 2026-05-31)*
 
@@ -1347,11 +1375,11 @@ All Phase 1–3 items must be sequentially complete. Phase 4 verification runs i
 
 **Phase 4 — Verification and Compliance:**
 
-- [ ] **SPICE/QUCS simulation of FL1 LPF** — verify harmonic suppression meets 47 CFR 95.655 before board spin.
+- [ ] **SPICE/QUCS simulation of FL1 LPF** — verify harmonic suppression meets 47 CFR §15.235(b)/§15.209 before board spin (not Part 95 §95.655, which does not apply to this band).
 
 - [x] **50 Ω trace impedance check** — Z₀ = 52.26 Ω for W=2.75 mm, H=1.6 mm, εr=4.5, T=35 µm → **PASS** [45–55 Ω]. *(done 2026-05-30 — serenity/kicad/check_impedance.py)*
 
-- [ ] **FCC Part 95 pre-compliance checklist** — document: center frequency accuracy, ERP calculation, harmonic levels, labeling requirements (47 CFR 95.603 FCC ID block on silkscreen).
+- [ ] **FCC Part 15 §15.235 pre-compliance checklist** — document: field strength (≤10,000 µV/m at 3 m), harmonic levels (§15.235(b)/§15.209), labeling requirements (FCC ID block on silkscreen, §2.803/§15.19).  Not Part 95 §95.603 — see §0.1.
 
 **Phase 5 — Production Files:**
 
@@ -1874,7 +1902,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 - [ ] Install 49MHz RCRS forward wire post (dorsal, X≈120mm, bonded with 5-min epoxy).
 
-- [ ] Install 49MHz RCRS **temporary** aft wire post: PETG hook bonded to aft dorsal hull skin near station ~580mm (NOT on rear nozzle frame — that post is Phase 11). This temporary post reduces antenna length slightly but maintains FCC Part 95 ERP compliance.
+- [ ] Install 49MHz RCRS **temporary** aft wire post: PETG hook bonded to aft dorsal hull skin near station ~580mm (NOT on rear nozzle frame — that post is Phase 11). This temporary post reduces antenna length slightly; field-strength compliance with 47 CFR §15.235 is firmware power-limited (see §0.1), not antenna-length dependent.
 
 - [ ] String 49MHz top wire (0.3mm SS wire or 22AWG enamelled Cu) from forward post to temporary aft post with ~20g tension; CF keel connected to RCRS-49 GND as counterpoise.
 
@@ -2138,7 +2166,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 - [ ] Configure MAVLink routing (mavlink-router) on elected FC master → SiK 915MHz on CN master.
 
-- [ ] Install RCRS-49 daemon on CN1 and CN2 (select channel per 47 CFR 95.623).
+- [ ] Install RCRS-49 daemon on CN1 and CN2 (select channel per 47 CFR §15.235; not §95.623, which does not apply to this band).
 
 **Ground tests:**
 
@@ -2851,7 +2879,7 @@ host-PC software all created in Rev R.  See `gcs/malcolm/README.md` for layout.
 
 ### 5.1 — FCC (external radio systems)
 
-- [ ] **XCVR-49MHZ-1 FCC Part 95 compliance** — center frequency accuracy ±0.005%, ERP ≤100mW, harmonic suppression ≥40dBc (47 CFR 95.655). Document via pre-compliance checklist (1.3 Phase 4). Formal FCC equipment authorization (FCC ID grant) required before airborne transmission on 49MHz channels (47 CFR 95.603).
+- [ ] **XCVR-49MHZ-1/2 FCC Part 15 §15.235 compliance** — field strength ≤10,000 µV/m at 3 m (≈30 µW / −15.2 dBm EIRP-equivalent, requiring a firmware PA limit from the as-designed +20 dBm down to ≈ −13 dBm — see §0.1), harmonic suppression per §15.235(b)/§15.209. Document via pre-compliance checklist (1.3 Phase 4). Formal FCC equipment authorization (FCC ID grant via TCB) required before airborne transmission on 49MHz channels (47 CFR §2.803/§15.19, not Part 95 §95.603). **§15.203 antenna-connector gap also open — see §0.1.**
 
 - [x] **SiK 915MHz** — operates under FCC Part 15 / ISM band (no license required for operation). Verify SiK radio module carries FCC ID marking.
 

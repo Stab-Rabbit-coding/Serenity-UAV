@@ -10,7 +10,7 @@
     (comment 1 "FC Node — 49 MHz AX.25 RCRS Comms Link for Serenity UAV")
     (comment 2 "Copyright 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP | Griffing Technology LLC")
     (comment 3 "License: CC BY 4.0  |  creativecommons.org/licenses/by/4.0")
-    (comment 4 "FCC Part 95 Subpart D — 49.830 MHz AFSK 1200 bd AX.25/KISS")
+    (comment 4 "FCC 47 CFR Part 15 15.235 — 49.830 MHz AFSK 1200 bd AX.25/KISS")
   )
 
   (lib_symbols

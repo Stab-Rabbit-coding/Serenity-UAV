@@ -588,7 +588,7 @@ LICENSE_AND_ATTRIBUTION.md        — Attribution chain for all upstream sources
 Ground control station.  Malcolm ("CAPT Reynolds") is the ArduPilot-compatible GCS
 for Serenity UAV.  Architecture: 1× PocketBeagle 2 Industrial + Cape-B-2 (Zoë) +
 Emma, USB CDC-ECM tethered to a host Debian Linux PC running QGroundControl.
-Five radio links: SiK 915 MHz, LoRa 915 MHz, WiFi 5 GHz, 49 MHz RCRS (AX.25),
+Five radio links: SiK 915 MHz, LoRa 915 MHz, WiFi 5 GHz, 49 MHz Part 15 §15.235 (AX.25),
 Zigbee 2.4 GHz.  Servo-driven two-axis antenna gimbal with AS5600 magnetic encoders.
 No external PAs (FCC-compliant with directional antennas).  IP65 field enclosure.
 

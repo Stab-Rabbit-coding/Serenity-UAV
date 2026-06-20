@@ -112,7 +112,9 @@ See the full Phase 11 build instructions in:
 - The **49 MHz RCRS aft wire post** (normally bonded to the top of `rear_nozzle_frame.stl`)
   is temporarily omitted.  For Phases 0–10 the 49 MHz antenna is a shorter end-fed wire from
   the forward post to a temporary hook bonded to the aft dorsal hull skin near station ~580 mm.
-  The antenna performance is reduced but still compliant with Part 95 ERP requirements.
+  The antenna performance is reduced; field strength must still be re-verified against the
+  47 CFR Part 15 §15.235 limit (≈30 µW / −15.2 dBm EIRP-equivalent — not Part 95, which does
+  not cover 49 MHz; see REF-FCC-003) with the shortened wire.
 - The **Panel F bay** remains empty of EDF/ESC hardware until Phase 11.  Panel F still serves
   as an access panel; keep the bay clean and free of debris.
 

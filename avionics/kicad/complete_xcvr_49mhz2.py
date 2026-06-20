@@ -564,7 +564,7 @@ def main():
     attr = (
         "49 MHz AX.25 KISS Transceiver\n"
         "XCVR-49MHZ-2 Rev 2 — EMI-Hardened\n"
-        "FCC Part 95 Subpart D\n"
+        "FCC 47 CFR Part 15 15.235\n"
         "49.830-49.890 MHz  AFSK 1200bd\n"
         "CC BY 4.0 — June 2026\n"
         "Steve Griffing\n"

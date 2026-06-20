@@ -11,7 +11,8 @@
 ## Purpose
 
 Emma is an electromagnetic-environment-hardened variant of XCVR-49MHZ-1. The
-board is a 49 MHz AX.25 KISS modem for FCC Part 95 Subpart D operation; the -2 variant
+board is a 49 MHz AX.25 KISS modem operating under 47 CFR Part 15 §15.235 (an unlicensed
+intentional-radiator rule, not Part 95 RCRS — see REFERENCES.md REF-FCC-003); the -2 variant
 adds conducted and radiated immunity measures to handle the EDF motor and ESC switching
 environment inside the Serenity UAV nacelles.
 
@@ -126,8 +127,9 @@ XCVR-49MHZ-1 specified a 5-element Chebyshev LPF (FL1) with fc = 75 MHz and
 
 > **SPICE/QUCS-S verification** required in Phase 4 per XCVR-49MHZ-1 design notes.
 > The 6-element network is specifically designed to ensure ≥ 60 dBc at 147 MHz
-> (per 47 CFR 95.655 requirement for spurious above 1 GHz when harmonically related
-> to a sub-30-MHz fundamental — the relevant limit at the 3rd harmonic of 49 MHz).
+> (3rd harmonic of 49 MHz), to meet the out-of-band emission limits of 47 CFR §15.209
+> applied via §15.235(b) (REF-FCC-003) — not Part 95 §95.655, which does not apply to
+> this band.
 
 ### 5. Chassis ground (PGND) and shielding
 
@@ -231,8 +233,9 @@ functionally wrong connections.
 ### 9. SBUS Receiver Mode — Hardware-Select Inverter and MUX
 
 SBUS (used by RC receivers and autopilots) operates at 100000 baud with **inverted
-logic polarity** relative to standard UART. The 49 MHz RCRS channels are legal SBUS
-carrier frequencies under FCC Part 95 Subpart D; adding hardware inversion and a
+logic polarity** relative to standard UART. The 49 MHz channels are legal SBUS
+carrier frequencies under 47 CFR Part 15 §15.235 (not Part 95 Subpart D, which does not
+cover this band); adding hardware inversion and a
 mode-select switch allows the transceiver to serve as an SBUS receiver input to the
 flight-control SBCs without requiring firmware changes to the UART peripheral.
 
@@ -392,8 +395,13 @@ and the existing CAPE-B-1/B-2 boards (which already carried this profile).
 ## Regulatory Constraints
 
 Unchanged from XCVR-49MHZ-1. The 6-element LPF provides additional margin vs. the
-5-element version, improving compliance margin for 47 CFR 95.655 spurious emission
-limits.
+5-element version, improving compliance margin for the 47 CFR §15.209 out-of-band
+emission limits applied via §15.235(b) (REF-FCC-003) — not Part 95 §95.655, which does
+not apply to this band.  Note: the PA chain (MMBT2222A + 2N3866) is sized for ~100 mW
+output, which exceeds the §15.235 field-strength-equivalent EIRP ceiling of ≈ 30 µW by
+roughly 35 dB; firmware must limit conducted output to ≈ −13 dBm (≈ 48 µW) for
+compliance — see `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md` Link 4 and
+`TODO.md` §0.1.
 
 ---
 
@@ -473,7 +481,7 @@ cable shield, the following on-board measures are active (see §1):
 
 - Step 5: XCVR-49MHZ-1.md — Phase 1 design decisions (IC selection rationale)
 
-- Step 6: 47 CFR 95.655 — FCC spurious emission requirements
+- Step 6: 47 CFR §15.235(b) / §15.209 — FCC out-of-band emission requirements (not Part 95 §95.655, which does not apply to this band)
 
 - Step 7: QUCS-S / SPICE Chebyshev filter synthesis reference:
 
