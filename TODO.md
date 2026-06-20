@@ -11,7 +11,7 @@
 
 | Domain | End State | Current Status |
 |--------|-------------------|----------------|
-| Hull   | 609.6 mm PETG / PU foam / CF skeleton | SCAD sources complete; all four fuselage SCAD shells at Rev R; cargo section at Rev R (clamshell, avionics bays, GPS); STLs pending regeneration |
+| Hull   | 609.6 mm CF-PETG / PU foam / CF skeleton | SCAD sources complete; all four fuselage SCAD shells at Rev R; cargo section at Rev R (clamshell, avionics bays, GPS); STLs pending regeneration |
 | Nacelles | 2× 50mm tandem EDF, CG pivot Z=83mm, M=1.0 gear, iris nozzle | `nacelle_pod_50mm_tandem.scad` complete; Rev R stator shells (`_revo.stl`) pending render |
 | Nacelle EDFs | XFly Galaxy X5 50mm 12-blade 6S 3200KV, 1240g each; 2232g/nacelle (90% additive via stator); 4464g total | Baseline EDF selected (xfly-model.eu); nacelle T/W ≈ 1.61 at Phase 5–10 AUW — VTOL hover capable |
 | Rear propulsion | 55mm 6S EDF, reduced-area neck intake, **fixed canonical elliptical tail nozzle** (2.06×1.76 in / 52.3×44.7 mm) + **4 RCS bleed-air thrusters** | **DEFERRED — Phase 11.** Design files in `deferred/aft-edf/` — SCAD/STLs require regeneration for 55mm + canonical nozzle + RCS (see §Phase 11). Adds ~1275g forward thrust (cruise only, after ~15% RCS bleed); rear EDF NOT counted in hover T/W; Phase 11 hover T/W ≈ 1.43. |
@@ -462,7 +462,7 @@ Joint faces in hull-frame Y (confirmed from baked extents):
     ~73 mm of hull length here.  Foam fill provides distributed elastic support but no
     hard attachment.
   - **Head section structural role**: Head_Shell is non-structural per Rev R1 (foam + 2 mm
-    PETG skin adequate; avionics bays relocated to cargo + rear sections).  A keel that
+    CF-PETG skin adequate; avionics bays relocated to cargo + rear sections).  A keel that
     terminates at the head/cargo joint face (hull Y ≈ −71 mm) may be fully adequate.
   - **Datum marks**: the 91/165/251/320/388 mm station marks are tied to the stale pre-Rev N
     ring plate positions and must be replaced by the new ring station outputs (see ring
@@ -528,7 +528,7 @@ Joint faces in hull-frame Y (confirmed from baked extents):
 - [x] **Access panel frames + covers (24" Rev R)** — `airframe/openscad/fuselage/access_panels_24in.scad` created 2026-06-11. Geometries derived from authoritative shell SCADs (Rev R baseline):
   - 4× Faraday-bay covers (Shepherd/Inara/River/Simon): 72×52 mm, 4× M3 clearance bores, positive-stop shoulder; Inara + River covers include Ø42 mm GPS retention-ring recess.
   - 2× ventral hatch covers: battery 160×60 mm, Kaylee 115×100 mm; M2.5 pilots into bonded frames.
-  - 2× ventral hatch frames: battery + Kaylee; 6 mm PETG wall, West System 105/206 epoxy-bonded to hull.
+  - 2× ventral hatch frames: battery + Kaylee; 6 mm CF-PETG wall, West System 105/206 epoxy-bonded to hull.
   - **SUB-TASKS:**
     - [ ] Export individual STLs (set RENDER variable in SCAD): shepherd, inara, river, simon, battery, battery_f, kaylee, kaylee_f → `airframe/stls/fuselage/`
     - [ ] Verify cover shoulder fit in slicer cross-section (confirm 1.5 mm step seats on hull face)
@@ -958,6 +958,8 @@ Peak deceleration at 6 ft Phase 11 drop: 65.3g (avionics isolation rated for 100
   holes.  Print test in TPU 95A and confirm main strut spigot fit.
 
 ##### 1.1.4.4 *Qualification Testing (BLOCKS first flight)*
+
+*"Time for some thrilling heroics." — Mal. Drop tests count.*
 
 - [ ] **LG-01 Lateral retention bolt test — M3 × 20 PA6 nylon** — fabricate representative
   boss fixture (side-wall and belly-edge variants); shear-test 10 samples each at 0°, 15°,
@@ -1616,8 +1618,8 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 | Item | Qty | Notes |
 |------|-----|-------|
-| PETG filament | ~1,200 g | Hull sections, access panels, nozzle parts, cargo gondola |
-| CF-PETG filament | ~500 g | Nacelle pods, tilt brackets, pylon, intake frame — hardened-steel nozzle required |
+| PETG filament | ~1,200 g | Access panels, nozzle parts, cargo gondola — **TODO: recompute split, hull sections moved to CF-PETG row below per CLAUDE.md Fabrication Standards** |
+| CF-PETG filament | ~500 g | Hull sections (head, middle, cargo, rear neck, wings), nacelle pods, tilt brackets, pylon, intake frame — hardened-steel nozzle required |
 | TPU 95A filament | ~200 g | Landing skid feet — direct-drive extruder required |
 | CF flat bar 6×3mm | ~700 mm | Keel 620 mm + 80 mm ring frame offcuts |
 | CF tube 12mm OD / 1.5mm wall | ~850 mm | Wing spars 2×380 mm + 90 mm scrap |
@@ -1781,11 +1783,11 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 |------|----------|-------|--------|-----| ------ |
 | feet_x_4_scaled24.stl | TPU 95A | 0.25mm | 40% | 1 set | |
 | legs_scaled24.stl | CF-PETG | 0.15mm | 30% | 1 | |
-| head_shell24.stl | PETG | 0.20mm | 8% gyroid | 1 | |
-| middle_canonical_shell24.stl | PETG | 0.20mm | 8% gyroid | 1 | |
-| cargo_sect_shell24.stl | PETG | 0.20mm | 8% gyroid | 1 | |
-| rear_neck_intake_shell24.stl | PETG | 0.20mm | 8% gyroid | 1 | Print now; cover reduced-area scoop windows (sized for 55mm EDF) with removable 3mm PETG blanks until Phase 11 |
-| wings_s1223_revo.stl | PETG | 0.20mm | 8% gyroid | 1 | |
+| head_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | |
+| middle_canonical_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | |
+| cargo_sect_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | |
+| rear_neck_intake_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | Print now; cover reduced-area scoop windows (sized for 55mm EDF) with removable 3mm PETG blanks until Phase 11 |
+| wings_s1223_revo.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | |
 | eng_left_stator_shell24_revo.stl | CF-PETG | 0.15mm | 25% gyroid, 4 walls | 1 | |
 | eng_right_stator_shell24_revo.stl | CF-PETG | 0.15mm | 25% gyroid, 4 walls | 1 | |
 | s_eng_piv_outer_scaled24.stl | CF-PETG | 0.15mm | 40%, 4 walls | 2 | |
@@ -2469,7 +2471,7 @@ before Phase 11 fabrication (see §11C). Old iris files (`rear_nozzle_frame.stl`
 
 - [ ] **Regenerate** `neck_intake_frame.scad` for the 55 mm intake area; print `neck_intake_frame.stl` (CF-PETG, 0.15mm, 40% gyroid, 4 walls).
 
-- [ ] **Regenerate** `aft_edf_plenum.scad`: 55 mm circular EDF inlet + 4 RCS bleed taps (~15% flow); print `aft_edf_plenum.stl` (PETG, 0.20mm, 20% gyroid).
+- [ ] **Regenerate** `aft_edf_plenum.scad`: 55 mm circular EDF inlet + 4 RCS bleed taps (~15% flow); print `aft_edf_plenum.stl` (CF-PETG, 0.20mm, 20% gyroid) — EDF housing, treated as structural per CLAUDE.md Fabrication Standards.
 
 - [ ] **Generate** `rear_nozzle_canonical.scad`: fixed canonical elliptical tail nozzle, exit 2.06×1.76 in (52.3×44.7 mm, ~1,836 mm²), hull-matched outer surface; print `rear_nozzle_canonical.stl` (CF-PETG, 0.15mm, 30%, 4 walls). **No iris, no servo.**
 
@@ -2947,6 +2949,8 @@ to duplicate search paths in the validator). Root causes and resolutions:
 **Result:** All 37 STL files pass `python tools/validate_stls.py` (0 failures).
 
 ---
+
+*"We're still flying. That's not nothing." — Mal.*
 
 *© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY 4.0*  
 *Hull: misubisu CC BY 4.0 · Nozzles: BamJr CC BY 4.0 · Inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy / Universal — Not an officially licensed product.*

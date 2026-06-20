@@ -218,7 +218,7 @@ attitude authority, **not** hover lift.
   Net forward thrust after bleed: ~2.81 lbf (1,275 g).
 - Deferred EDF system mass: ~0.79 lbm (360 g) total
   (EDF ~3.4 oz / 95 g + ESC ~1.2 oz / 35 g + CF-PETG intake frame ~0.7 oz / 20 g
-  + PETG plenum + RCS manifold ~1.8 oz / 50 g + fixed canonical nozzle ~1.1 oz / 30 g
+  + CF-PETG plenum + RCS manifold ~1.8 oz / 50 g + fixed canonical nozzle ~1.1 oz / 30 g
   + 4× RCS jets/ducts ~1.1 oz / 32 g + 4× RCS proportional valves ~1.3 oz / 36 g
   + motor mount + thrust tube ~1.6 oz / 45 g + wiring ~0.5 oz / 15 g)
 - **Phase 11 full-system:** AUW ~6.90 lbm (3,130 g) | Rear forward thrust ~2.81 lbf (1,275 g) |

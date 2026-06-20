@@ -196,7 +196,6 @@ head_shell24.stl                — Head section (solid, for SCAD import ref)
 head_shell24_2mm_repaired.stl   — Head section 2mm hollow, manifold
 middle_canonical_shell24.stl    — Middle section
 middle_shell24_2mm_repaired.stl — Middle section 2mm hollow, manifold
-cargo_sect_shell24_2mm_repaired.stl — Cargo section 2mm hollow, manifold
 rear_shell24_2mm_repaired.stl   — Rear section 2mm hollow, manifold
 landing-gear/
   legs_scaled24.stl             — Original Thingiverse landing legs × 4 (24" scale, cosmetic reference)
@@ -221,9 +220,8 @@ landing-gear/
 dorsal_antenna_fin.stl            — Dorsal antenna fin fairing
 middle_canonical_edf_intake.stl — Middle section EDF intake opening
 cargo/
-  cargo_sect_shell24.stl                 — Cargo shell (SCAD output)
+  cargo_sect_shell24_2mm_repaired.stl    — Cargo section 2mm hollow, manifold
   cargo_sect_shell24_repaired.stl        — Cargo solid shell, manifold-repaired (used for intersection in access_panels_24in.scad)
-  cargo_sect_shell24_2mm_repaired_largest.stl — Repaired largest shell body
   cargo_door_port.stl                   — Port clamshell cargo door (hull-frame, Rev R1a 2026-06-16)
   cargo_door_stbd.stl                   — Stbd clamshell cargo door (hull-frame, Rev R1a 2026-06-16)
   generate_cargo_doors.py               — Door STL generator (Rev R1a, hull frame; see CLAUDE.md)
