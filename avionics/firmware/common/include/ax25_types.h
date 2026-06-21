@@ -2,6 +2,7 @@
  * @file    ax25_types.h
  * @brief   AX.25 v2.2 frame type definitions and address constants.
  *
+ * Copyright 2026 Steve Griffing
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
@@ -29,8 +30,8 @@
  *   [Information — 0..256 bytes]
  */
 
-#ifndef AX25_TYPES_H
-#define AX25_TYPES_H
+#ifndef AVIONICS_FIRMWARE_COMMON_INCLUDE_AX25_TYPES_H_
+#define AVIONICS_FIRMWARE_COMMON_INCLUDE_AX25_TYPES_H_
 
 #include <stdint.h>
 #include <stddef.h>
@@ -44,26 +45,26 @@ extern "C" {
  * ---------------------------------------------------------------------------*/
 
 /** Length of one AX.25 address field (callsign + SSID byte). */
-#define AX25_ADDR_LEN       (7U)
+#define AX25_ADDR_LEN      (7U)
 
 /** Maximum number of digipeater hops. */
-#define AX25_MAX_DIGI       (8U)
+#define AX25_MAX_DIGI      (8U)
 
 /** Control field value for UI (unnumbered information) frames. */
-#define AX25_CTRL_UI        ((uint8_t)0x03U)
+#define AX25_CTRL_UI       ((uint8_t)0x03U)
 
 /** Protocol ID: no layer-3 protocol (raw data / telemetry). */
-#define AX25_PID_NO_L3      ((uint8_t)0xF0U)
+#define AX25_PID_NO_L3     ((uint8_t)0xF0U)
 
 /** Maximum information field length per AX.25 v2.2 §2.1. */
-#define AX25_MAX_INFO_LEN   (256U)
+#define AX25_MAX_INFO_LEN  (256U)
 
 /**
  * Maximum total AX.25 frame length (excl. HDLC flags and FCS, which are
  * added/stripped by the modem).  Destination + source + 8 digi + ctrl + pid
  * + info = 7 + 7 + 56 + 1 + 1 + 256 = 328 bytes.
  */
-#define AX25_MAX_FRAME_LEN  (328U)
+#define AX25_MAX_FRAME_LEN (328U)
 
 /* ---------------------------------------------------------------------------
  * Address field
@@ -92,14 +93,14 @@ typedef struct {
  * strips these before handing the frame to the CN node via KISS).
  */
 typedef struct {
-    ax25_addr_t  dest;                  /**< Destination station address */
-    ax25_addr_t  src;                   /**< Source station address */
-    ax25_addr_t  digi[AX25_MAX_DIGI];  /**< Digipeater addresses (if any) */
-    uint8_t      n_digi;                /**< Number of digipeaters present (0..8) */
-    uint8_t      ctrl;                  /**< Control byte (should be CTRL_UI = 0x03) */
-    uint8_t      pid;                   /**< Protocol ID byte */
-    uint8_t      info[AX25_MAX_INFO_LEN]; /**< Information field payload */
-    uint16_t     info_len;              /**< Number of valid info bytes */
+    ax25_addr_t dest;                /**< Destination station address */
+    ax25_addr_t src;                 /**< Source station address */
+    ax25_addr_t digi[AX25_MAX_DIGI]; /**< Digipeater addresses (if any) */
+    uint8_t     n_digi; /**< Number of digipeaters present (0..8) */
+    uint8_t     ctrl;   /**< Control byte (should be CTRL_UI = 0x03) */
+    uint8_t     pid;    /**< Protocol ID byte */
+    uint8_t     info[AX25_MAX_INFO_LEN]; /**< Information field payload */
+    uint16_t    info_len;                /**< Number of valid info bytes */
 } ax25_ui_frame_t;
 
 /* ---------------------------------------------------------------------------
@@ -107,19 +108,19 @@ typedef struct {
  * ---------------------------------------------------------------------------*/
 
 /** Command/Response bit (bit 7 of SSID byte). */
-#define AX25_SSID_CR_BIT    ((uint8_t)0x80U)
+#define AX25_SSID_CR_BIT   ((uint8_t)0x80U)
 
 /** Reserved bit 1 (must be 1 per spec). */
-#define AX25_SSID_RES1_BIT  ((uint8_t)0x40U)
+#define AX25_SSID_RES1_BIT ((uint8_t)0x40U)
 
 /** Reserved bit 2 (must be 1 per spec). */
-#define AX25_SSID_RES2_BIT  ((uint8_t)0x20U)
+#define AX25_SSID_RES2_BIT ((uint8_t)0x20U)
 
 /** SSID value mask (bits 4..1 of the SSID byte → values 0..15). */
-#define AX25_SSID_MASK      ((uint8_t)0x1EU)
+#define AX25_SSID_MASK     ((uint8_t)0x1EU)
 
 /** End-of-address flag: set in the last address byte of the whole field. */
-#define AX25_SSID_EOA_BIT   ((uint8_t)0x01U)
+#define AX25_SSID_EOA_BIT  ((uint8_t)0x01U)
 
 /* ---------------------------------------------------------------------------
  * Station identifier constants for the Serenity UAV
@@ -139,13 +140,13 @@ typedef struct {
  * ---------------------------------------------------------------------------*/
 
 /** Ground control station identifier (AX.25 addressing only). */
-#define AX25_CALLSIGN_GCS   "GCS000"
+#define AX25_CALLSIGN_GCS  "GCS000"
 
 /** UAV station identifier placeholder — replace with assigned identifier. */
-#define AX25_CALLSIGN_UAV   "UAV000"
+#define AX25_CALLSIGN_UAV  "UAV000"
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* AX25_TYPES_H */
+#endif  // AVIONICS_FIRMWARE_COMMON_INCLUDE_AX25_TYPES_H_
