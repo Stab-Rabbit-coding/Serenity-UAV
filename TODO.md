@@ -91,7 +91,8 @@ text) has been removed and logged under "Removed / Superseded Citations."
 - [ ] **Remaining firmware/build-guide references to "RCRS"/old Part 95 section numbers**
   (§1.3, §1.3's PCB pre-compliance checklist, Phase-build install steps, BOM rows, etc.) still
   need a pass to update wording/citations to Part 15 §15.235; not all instances have been swept
-  in this revision — see repo-wide grep for "RCRS" to find remaining occurrences.
+  in this revision — see repo-wide grep for "RCRS" to find remaining occurrences.  *(One
+  instance resolved 2026-06-21: `avionics/firmware/common/include/ax25_types.h` — see §0.3.)*
 
 ### 0.2 — Incorrect Reference Correction
 
@@ -100,13 +101,24 @@ text) has been removed and logged under "Removed / Superseded Citations."
   Replaced with NIST SP 800-92 §4.4.2 [REF-NIST-004] in `README.md` Patent Notice section.
   See `REFERENCES.md` "Removed / Superseded Citations" table.
 
-### 0.3 — 14 CFR Part 47 vs Part 48 Clarification
+### 0.3 — 14 CFR Part 47 vs Part 48 Clarification — RESOLVED
 
-- [ ] **Replace 14 CFR Part 47 references with Part 48 §48.205 where applicable** —
-  14 CFR Part 47 covers manned aircraft registration marks; UAS display requirements are
-  in 14 CFR Part 48 §48.205 [REF-FAA-001].  Audit `docs/REVN_BUILD_GUIDE_24IN.md` and
-  `graphical-build-guide/decal_sheet.svg` for any Part 47 citations and update to Part 48
-  §48.205 with the REF-FAA-001 REF-ID.
+**Resolved 2026-06-21.** `docs/REVN_BUILD_GUIDE_24IN.md` and `graphical-build-guide/decal_sheet.svg`
+were audited and carry no erroneous Part 47 citation (the build guide already includes a
+clarifying note that Part 47 applies to manned aircraft).  The actual miscitation was found
+instead in `avionics/firmware/common/include/ax25_types.h`, which incorrectly cited 14 CFR
+Part 47 for UAS registration and claimed the 49 MHz AX.25 link requires an FCC amateur radio
+license under 47 CFR Part 97 — both wrong, and inconsistent with this project's own
+`REFERENCES.md` REF-PROTO-001 note that the link is license-exempt under 47 CFR Part 15
+§15.235 [REF-FCC-003].
+
+- [x] **Replace 14 CFR Part 47 references with Part 48 §48.205 where applicable** —
+  corrected `ax25_types.h` to cite 14 CFR Part 48 §48.205 [REF-FAA-001] for aircraft
+  registration display (a requirement independent of AX.25 addressing) and to clarify the
+  station identifier fields are not amateur callsigns and require no Part 97 license
+  [REF-PROTO-001].  Also replaced the file's stale "RCRS link" wording (see §0.1) with the
+  correct Part 15 §15.235 citation.  `REFERENCES.md` REF-FAA-001 and REF-PROTO-001 "Used in"
+  lists and the Open Standards Verification Items table updated accordingly.  *(2026-06-21)*
 
 ### 0.4 — AUVSI/ASTM Standards Identification
 

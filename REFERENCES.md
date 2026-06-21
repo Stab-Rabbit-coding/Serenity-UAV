@@ -118,7 +118,7 @@ When a standard has multiple applicable clauses, list them all:
 | §48.205(b)(1) | Legibility of identifier | Minimum 3-inch (76 mm) characters clearly visible |
 
 **Used in:** `docs/REVN_BUILD_GUIDE_24IN.md`, `graphical-build-guide/decal_sheet.svg`,
-`README.md`, `TODO.md`, `CLAUDE.md`
+`README.md`, `TODO.md`, `CLAUDE.md`, `avionics/firmware/common/include/ax25_types.h`
 
 ---
 
@@ -704,7 +704,7 @@ per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ da
 | §6.3 | S Frames | Flow control and error recovery on the 49 MHz link |
 
 **Used in:** `avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`, `README.md`,
-`docs/AVIONICS_PB2_REDESIGN.md`
+`docs/AVIONICS_PB2_REDESIGN.md`, `avionics/firmware/common/include/ax25_types.h`
 
 ---
 
@@ -903,6 +903,6 @@ Add verified section numbers to the relevant files and update this table.
 | Citation | File | Issue | Action Required |
 |---|---|---|---|
 | §15.203 antenna restriction (Emma 49 MHz RF connector) | Emma (XCVR-49MHZ-2) hardware design, `avionics/kicad/Emma.md`, `avionics/kicad/Emma.kicad_sch`, `avionics/kicad/Emma.kicad_pcb`, `gcs/malcolm/hardware/docs/malcolm_wiring.md` | **Confirmed violation, resolved in design 2026-06-20.** §15.203 text ("...the use of a standard antenna jack or electrical connector is prohibited") binds the manufacturer/responsible party directly; being the manufacturer (rather than a third-party modifier) does not exempt this design. Emma's J2 previously used a generic SMA edge connector (Amphenol 132289), a standard jack; the carrier-current and professional-installation/on-site-measurement exceptions in §15.203 do not apply to Emma | **Resolved:** J2 changed to Amphenol 132289RP (RP-SMA, reverse-polarity counterpart of 132289, identical PCB footprint) across schematic, PCB footprint/silkscreen, and documentation, satisfying §15.203's "unique coupling" provision. Remaining step is the physical board re-spin/fabrication run to populate the new part — tracked in TODO.md §0.1 |
-| 14 CFR Part 47 (aircraft registration marks) | `README.md`, `docs/REVN_BUILD_GUIDE_24IN.md` | 14 CFR Part 47 applies to manned aircraft registration; for UAS the applicable regulation is 14 CFR Part 48 §48.205 (display requirements) | Replace all Part 47 references with REF-FAA-001 (Part 48 §48.205) where the citation concerns UAS mark display |
+| 14 CFR Part 47 (aircraft registration marks) | **Resolved 2026-06-21.** `README.md` and `docs/REVN_BUILD_GUIDE_24IN.md` carry no erroneous Part 47 citation (the build guide already notes Part 47 is for manned aircraft); the actual miscitation was found in `avionics/firmware/common/include/ax25_types.h`, which incorrectly stated Part 47 governs aircraft registration and that the AX.25 link requires an FCC amateur license (Part 97) | Corrected `ax25_types.h` to cite Part 48 §48.205 [REF-FAA-001] for registration and to note the 49 MHz link is license-exempt under Part 15 §15.235 [REF-FCC-003], per REF-PROTO-001 |
 | AUVSI "standards" (unnamed) | `CLAUDE.md`, `README.md` | No specific numbered AUVSI or ASTM standard cited | Identify applicable ASTM F38 committee standards for UAS airframe engineering and add to this catalog |
 | IEC 62368-1 clause numbers | PCB layout (not yet complete) | PCB layout must verify creepage/clearance distances meet IEC 62368-1 Clause 5.5.2 requirements for 5 kV reinforced insulation; this cannot be verified until PCB layout is complete | Verify during Wash and Zoë PCB layout review (see TODO.md §1.4) |

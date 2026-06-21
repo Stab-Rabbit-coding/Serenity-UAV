@@ -6,12 +6,13 @@
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * Reference: AX.25 Link Access Protocol for Amateur Packet Radio, Version 2.2,
- *   Tucson Amateur Packet Radio (TAPR) / ARRL, 1998.
+ *   Tucson Amateur Packet Radio (TAPR) / ARRL, 1998 [REF-PROTO-001].
  *   Available: https://www.tapr.org/pdf/AX25.2.2.pdf
  *
- * Only the subset of AX.25 needed for the Serenity UAV RCRS link is defined
- * here.  The UAV uses UI (unnumbered information) frames for telemetry and
- * command packets; connection-oriented modes are not required.
+ * Only the subset of AX.25 needed for the Serenity UAV 49 MHz link (Emma,
+ * 47 CFR Part 15 §15.235 [REF-FCC-003]) is defined here.  The UAV uses
+ * UI (unnumbered information) frames for telemetry and command packets;
+ * connection-oriented modes are not required.
  *
  * AX.25 address field:
  *   Each callsign occupies 7 bytes: 6 bytes of ASCII callsign (left-justified,
@@ -121,21 +122,26 @@ typedef struct {
 #define AX25_SSID_EOA_BIT   ((uint8_t)0x01U)
 
 /* ---------------------------------------------------------------------------
- * Callsign constants for the Serenity UAV
+ * Station identifier constants for the Serenity UAV
  *
- * The UAV must be licensed under a valid amateur radio callsign before
- * operation.  Replace SERENITY_CALLSIGN with the assigned callsign and
- * set the SSID to the node number (0–15) as appropriate.
+ * AX.25 is used here only as a frame format; the 49 MHz RF link itself is
+ * authorized under 47 CFR Part 15 §15.235 [REF-FCC-003], a license-exempt
+ * unlicensed-intentional-radiator rule, NOT the Amateur Radio Service.
+ * No FCC amateur license (47 CFR Part 97) is required to operate this link,
+ * and these AX.25 address fields are station identifiers for protocol
+ * addressing only — they are not amateur callsigns [REF-PROTO-001].
+ * Replace SERENITY_CALLSIGN with the assigned station identifier and set
+ * the SSID to the node number (0–15) as appropriate.
  *
- * IMPORTANT: FAA 14 CFR Part 47 also requires aircraft registration.
- * The amateur radio identification requirement (FCC 47 CFR Part 97) is
- * separate from and in addition to the aircraft registration number.
+ * IMPORTANT: Aircraft registration display is a separate requirement under
+ * 14 CFR Part 48 §48.205 [REF-FAA-001] (NOT Part 47, which applies to manned
+ * aircraft), and is independent of this AX.25 station identifier.
  * ---------------------------------------------------------------------------*/
 
-/** Ground control station callsign (operator, must hold valid license). */
+/** Ground control station identifier (AX.25 addressing only). */
 #define AX25_CALLSIGN_GCS   "GCS000"
 
-/** UAV callsign placeholder — replace with licensed amateur callsign. */
+/** UAV station identifier placeholder — replace with assigned identifier. */
 #define AX25_CALLSIGN_UAV   "UAV000"
 
 #ifdef __cplusplus
