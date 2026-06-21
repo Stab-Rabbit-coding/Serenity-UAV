@@ -810,6 +810,42 @@ format compatibility (CAM_APER_D = 12 mm, CAM_BEZ_W = 21 mm, CAM_M2_PITCH = 14 m
 
 ---
 
+### REF-RFMOD-001: HopeRF RFM95W/96W/98W — Low Power Long Range Transceiver Module, Pin Description
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Shenzhen Hope Microelectronics Co., Ltd. (HOPERF) |
+| **Product** | RFM95W/96W/98W LoRa transceiver module, version 2.0 datasheet |
+| **Official product page** | https://www.hoperf.com/modules/lora/RFM95W.html |
+| **Datasheet URL** | https://www.hoperf.com/uploads/RFM96W-V2.0_1695351477.pdf (123 pp.) |
+| **Section applied** | §1.3 Pin Diagram, §1.4 Pin Description, Table 2 (p. 10–11) |
+
+**Pin assignment applied in this design (16-pin module, Table 2):**
+
+| Pin | Name | Pin | Name | Pin | Name | Pin | Name |
+|---|---|---|---|---|---|---|---|
+| 1 | GND | 5 | NSS | 9 | ANT | 13 | 3.3V |
+| 2 | MISO | 6 | RESET | 10 | GND | 14 | DIO0 |
+| 3 | MOSI | 7 | DIO5 | 11 | DIO3 | 15 | DIO1 |
+| 4 | SCK | 8 | GND | 12 | DIO4 | 16 | DIO2 |
+
+**Applied to:** `avionics/kicad/Emma.kicad_pcb` footprint "LoRa" (HOPERF_RFM9XW_SMD,
+RFM95W per `TODO.md` §1.2b). **Corrected 2026-06-20:** the as-placed footprint had
+SPI1_MISO/MOSI/CLK/SPI1_CS_LORA wired to pads 10–13 (real pins GND/DIO3/DIO4/3.3V) and
+LORA_RESETN wired to pad 2 (real pin MISO) — a wrong-pin-number error, not merely a
+missing connection; left as-built, the SPI clock signal would have driven the module's
+3.3V supply pin. Pads 2–6 now carry MISO/MOSI/SCK/NSS/RESET per the table above; pads
+1/8/10 tied to GND. **Still open:** pad 9 (ANT) and pad 13 (3.3V) carry no net — this
+module has no antenna or power connection yet — and DIO0–DIO5 (pads 7, 11, 12, 14–16)
+are unassigned pending a GPIO budget decision on the P1 header. Footprint pad size
+(2.95×1.27 mm per pad) is also oversized versus the module's real castellated-pad
+dimensions and the footprint physically overlaps `CAPE-B IF`; both require a footprint
+correction and reposition before fabrication. Tracked in `TODO.md` §1.2b.
+
+**Used in:** `avionics/kicad/Emma.kicad_pcb`, `avionics/kicad/Emma.md`, `TODO.md`
+
+---
+
 ### REF-SENSOR-002: Benewake TFmini-S — Long-Range Time-of-Flight Ranging Module Specification
 
 | Field | Value |
