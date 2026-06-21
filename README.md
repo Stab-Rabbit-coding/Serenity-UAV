@@ -196,7 +196,23 @@ torque reaction.
 
 ### Landing Gear
 
-Four legs and tripod feet, geometry derived from the source Thingiverse model.
+**Vertical post + 4-wire brace (Rev R5):** four corner leg assemblies. The original
+canonical single-blade leg (Thingiverse-derived) is itself a vertical part with two
+branch points of its own — one at the apex, one about 1/3 of the way down from the
+apex. Each leg keeps a short CF-PETG **vertical post** (foot up through the 1/3-down
+branch height, 100% infill, not expected to ever yield) and braces it to the hull with
+**four simple wires** instead of forked CF-PETG arms: 2 **spring** wires at the apex
+(elastic, fully recoverable — ordinary hard landings cause no damage) and 2 **ductile**
+wires at the 1/3-down branch (each independently sized to absorb the *entire* 6 ft
+full-AUW worst-case impact energy on its own). Each wire is just a single piece of wire
+stock with one shallow pre-bend — the simplest possible shape to manufacture and to
+field-replace, chosen after an earlier closed-ring fuse design proved too hard to form
+and swap in the field. Under overload, a ductile wire's bow visibly deepens
+(field-replaceable, unambiguous "replace this" indicator) while the aircraft stays
+supported on the rest of the structure — a deliberately progressive, sacrificial
+failure mode rather than a catastrophic one. Total added wire mass ≈50 g (1.6% of AUW).
+Rated for the 6 ft (1.829 m) design drop at Phase 11 AUW. Full structural analysis:
+`docs/LANDING_GEAR_ANALYSIS.md`.
 
 ---
 

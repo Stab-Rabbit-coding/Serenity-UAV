@@ -24,9 +24,13 @@ License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
 """
 
 import bpy
+import logging
 import math
 import os
 from mathutils import Vector, Euler
+
+log = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -203,7 +207,10 @@ def clear_scene() -> None:
         try:
             bpy.data.batch_remove((block,))
         except Exception:
-            pass
+            # Block may already be orphan-purged by a prior batch_remove call
+            # in this loop; log rather than silently swallow per CLAUDE.md
+            # "Everything is logged."
+            log.debug("batch_remove failed for %r", block, exc_info=True)
 
 # ---------------------------------------------------------------------------
 # Materials
