@@ -156,6 +156,26 @@ license under 47 CFR Part 97 — both wrong, and inconsistent with this project'
     `avionics/kicad/Zoë.md` per the IEC 62368-1 Cl.5.5.2 table for reinforced insulation
     at the working voltage.
 
+### 0.7 — CI Lint Scope Fix and Repo-Wide Lint Debt
+
+- [x] **`run-lint` (`github/super-linter@v4`) was grading every PR against the entire
+    repository, not its diff** — `VALIDATE_ALL_CODEBASE: true` in
+    `.github/workflows/super-linter.yml` caused even single-file PRs (e.g. PR #107,
+    TODO.md-only) to fail ~17 sub-linter categories simultaneously (CLANG_FORMAT, CPP,
+    CSS, EDITORCONFIG, GITHUB_ACTIONS, JAVASCRIPT_STANDARD, JSCPD, JSON, JSX, MARKDOWN,
+    NATURAL_LANGUAGE, PYTHON_BLACK, PYTHON_PYLINT, PYTHON_FLAKE8, PYTHON_ISORT,
+    PYTHON_MYPY, SHELL_SHFMT). Confirmed pre-existing: the same check already failed on
+    `main` at the PR #105 merge commit. Fixed by setting `VALIDATE_ALL_CODEBASE: false`
+    so `run-lint` only grades changed files in the push/PR diff. *(done 2026-06-21)*
+- [ ] **Repo-wide lint debt remains un-remediated** (now no longer diff-blocking, but
+    still present in the working tree) — observed counts as of the PR #107 full-codebase
+    run: EDITORCONFIG 697, PYTHON_BLACK 72, PYTHON_FLAKE8 56, PYTHON_ISORT 47, JSCPD 39,
+    MARKDOWN 32, CLANG_FORMAT 26, CPP 25, PYTHON_MYPY 7, NATURAL_LANGUAGE 17,
+    JAVASCRIPT_STANDARD 5, SHELL_SHFMT 4, CSS 3, PYTHON_PYLINT 2, JSX 6, JSON 1,
+    GITHUB_ACTIONS 1. Needs a dedicated remediation pass, file-type by file-type,
+    separate from feature work, so each touched file is fixed under its own
+    diff-scoped lint pass rather than a single repo-wide sweep.
+
 ---
 
 ## 1.0 — Design Artifacts (Pre-Fabrication)
