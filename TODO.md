@@ -834,80 +834,66 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
 #### 1.1.4 **Landing Gear**
 
-**Canonical leg model (Rev R4, 2026-06-20): Strong-Leg + per-arm ductile wire-loop
-fuse.** The current canonical leg is `airframe/stls/fuselage/landing-gear/strong-leg.stl`
-— built by FreeCAD boolean operation directly on the existing, already-validated
-single-blade canonical leg (`leg_1`…`leg_4_scaled24.stl`, misubisu Thingiverse hull,
-CC BY 4.0): the leg is stood up vertical, **duplicated**, the duplicate **rotated 30°
-about the leg's own vertical centreline**, and the two **unioned** into one watertight
-CF-PETG part. This retires the Rev R1.4 parametric corner V-brace concept
-(`landing_leg_assy.scad`), which was never rendered or printed. Full structural
-analysis: `docs/LANDING_GEAR_ANALYSIS.md` (Rev R4, 2026-06-20).
+**Canonical leg model (Rev R5, 2026-06-20): vertical post + 4-wire brace.** The
+original canonical single-blade leg (`leg_1`…`leg_4_scaled24.stl`, misubisu Thingiverse
+hull, CC BY 4.0) is itself a vertical part with **two branch points of its own** — one
+at the **apex** (top) and one about **1/3 of the way down from the apex**. The
+Strong-Leg's duplicate + 30°-rotate + union construction doubles each into a pair, so
+the Strong-Leg actually has **four branch points** (2 at the apex, 2 at the 1/3-down
+point), not the single fork-into-two-arms that Rev R2–R4 approximated. Rev R5 models
+this directly: the CF-PETG is kept only as a short **vertical post** (foot up through
+the 1/3-down branch height), and all four branch attachments are replaced with **four
+simple wires** instead of forked CF-PETG arms or arm-tip fuses. Full structural
+analysis: `docs/LANDING_GEAR_ANALYSIS.md` (Rev R5, 2026-06-20).
 
-**Resulting geometry (measured from the exported mesh, see analysis doc §0/§2.3):**
+**Why the wires, and why this shape:** rigorous re-verification of the Rev R2 (bare
+CF-PETG Strong-Leg) design found a real single-point-of-failure risk — the post/trunk's
+fixed cross-section could not be made stronger than the arms by infill alone, and the
+real system stiffness implied a peak force far above what the structure could survive
+elastically. Rev R3 fixed this with an elastic spring-steel leaf (≈163 g, no clear
+worst-case margin) and Rev R4 with a closed-ring ductile wire fuse (≈73 g, but hard to
+manufacture/field-replace — precision winding + separate tabs). **Rev R5 uses the
+simplest possible wire shape — a single straight piece of wire stock with one shallow
+pre-bend (a shallow "bow," not a closed loop)** — formable with a simple bending jig or
+by hand, easily field-replaced with cut-to-length stock:
 
-- **One foot attachment point** at the bottom — mates with the **existing canonical TPU
-  foot pad** (`foot_1`…`foot_4_scaled24.stl`, 43.9 × 43.9 × 9.0 mm, unmodified outer form).
-- **Two hull-attachment arms** at the top, ≈28–30° apart in azimuth. Each arm tip now
-  carries a **ductile wire-loop fuse** (8 total, 2 per leg) in place of a rigid spigot,
-  landing on its own hull boss socket (8 boss sockets total, 2 per corner).
+| Branch level | Height from foot | Wires | Role |
+|---|---|---|---|
+| Apex | ≈79.8 mm | 2× **spring** wire (Ø3.17 mm, L=45mm) | Elastic, recoverable — sized for the 1.5 ft elastic-check energy |
+| 1/3-down from apex | ≈53.2 mm | 2× **ductile** wire (Ø4.35 mm, L=30mm) | Plastic, sacrificial — **each independently** sized for the full 6 ft worst-case per-leg energy (14.04 J) |
 
-**Rigorous re-verification (2026-06-20) found the bare CF-PETG leg alone does NOT
-safely pass** — the trunk (single load path below the fork) has a fixed cross-section
-that cannot be made stronger than the two arms combined by infill alone, and the real
-system stiffness is ~4.5× higher than the originally assumed compliance, implying an
-elastic peak force (~6,400 N) that would exceed the trunk's max achievable capacity
-(~2,740 N). **Two fixes were added, both required:**
+**Result:** total added wire mass ≈50 g (1.6% AUW); CF-PETG post mass ≈130 g (sized
+with 2× margin at the combined worst-case force — the post is not expected to yield at
+all); hull boss bearing margin ≥1.56× at the combined-pair force. This satisfies
+Requirement 3 of `docs/LANDING_GEAR_ANALYSIS.md` §1 with the cleanest margin structure
+of any revision so far. Final certification of the bowed-strut mechanics requires the
+instrumented drop test (LG-14) — hand calculation identifies the design point but
+cannot fully certify post-yield material behavior.
 
-1. **Ductile wire-loop fuse, one per arm** (`airframe/openscad/fuselage/wire_loop_fuse.scad`):
-   a closed ring of ductile spring-steel wire (Ø4 mm, 12 mm mean radius) that
-   progressively flattens via a 4-plastic-hinge collapse mechanism under overload,
-   absorbing the bulk of the 6 ft full-AUW per-leg energy (14.04 J) at a predictable
-   ≈1,956 N per fuse — comfortably below the arms' and the widened trunk's yield
-   capacity. ≈9.1 g per fuse, ≈73 g total. A flattened ring is a visible, unambiguous
-   "replace this" field-inspection indicator. **This is the primary sacrificial
-   element** (an elastic spring-steel leaf was evaluated first in Rev R3 and rejected —
-   it needed ≈163 g to store the same energy elastically, with no clear margin in the
-   worst case; ductile plastic deformation is 15–60× more energy-dense than elastic
-   strain energy, hence the much lighter wire-loop fuse).
-2. **Geometrically widened trunk** (not just higher infill — the cross-section itself
-   grows from ≈7.4×8.8 mm to ≈9.9×11.8 mm in the foot-to-fork zone, 100% infill): kept
-   as a secondary backstop, ensuring arms fail before the trunk if both of one leg's
-   fuses are ever exhausted on a severe asymmetric landing.
-
-**With both fixes, the design passes with comfortable, hand-calculable margins at every
-stage** (≥1.15× at the CF-PETG structure, ≥2.0× at the hull boss) **and the CF-PETG
-structure is not expected to yield at all in the nominal 6 ft design case** — only the
-field-replaceable wire fuses are expected to activate. This satisfies Requirement 3 of
-`docs/LANDING_GEAR_ANALYSIS.md` §1. Final certification of the ring-collapse mechanics
-requires the instrumented drop test (LG-14) — hand calculation identifies the design
-point but cannot fully certify post-yield material behavior.
-
-**Demonstration STLs** (schematic — placeholder boss cylinder, standalone unbaked leg;
-generated by `tools/build_landing_gear_views.py` + the wire-loop-fuse SCAD; see
-`docs/LANDING_GEAR_ANALYSIS.md` §16): `wire_loop_fuse_nominal.stl`,
-`wire_loop_fuse_deformed.stl`, `landing_gear_assembled.stl`, `landing_gear_exploded.stl`,
-`landing_gear_deformed.stl` — all in `airframe/stls/fuselage/landing-gear/`.
-
-**FreeCAD assembly status (2026-06-20):** Four corner copies exist in
-`airframe/freecad/assembly/SerenityAssembly.FCStd` as Boolean-result objects `Union`,
-`Union001`, `Union002`, `Union003` (90°-stepped rotation: 0°/90°/180°/270°). All four are
-confirmed in their correct corner locations (per the designer, 2026-06-20). The separate
-standalone `strong-leg.stl` export was pulled away from the hull during the
-duplicate/rotate/union editing session and was used only to measure the geometry above —
-it carries no placement information.
+**Demonstration STLs** (schematic — placeholder boss cylinders, standalone unbaked
+post; generated by `tools/build_landing_gear_views.py` + `wire_brace_leg.scad`; see
+`docs/LANDING_GEAR_ANALYSIS.md` §16): `post.stl`, `spring_wire_nominal.stl` /
+`_deformed.stl`, `ductile_wire_nominal.stl` / `_deformed.stl`,
+`landing_gear_assembled.stl`, `landing_gear_exploded.stl`, `landing_gear_deformed.stl`
+— all in `airframe/stls/fuselage/landing-gear/`.
 
 **Superseded prior assessments (retained for history only):** Rev R1 (2026-06-14,
 single-blade leg, 37.5×7.5 mm slab, 30% infill, 218:1 compression margin, 31 mm ground
 clearance — still insufficient for the 3-in payload mission, extension to ≥110 mm strut
 length recommended, carried forward as an open item below). Rev R2 (Strong-Leg, no
-fuse, infill-only trunk fix — invalidated by the Rev R3 re-verification). Rev R3
-(Strong-Leg + elastic spring-steel leaf — superseded by the lighter, more predictable
-wire-loop fuse above).
+fuse — invalidated by the Rev R3 re-verification). Rev R3 (Strong-Leg + elastic
+spring-steel leaf). Rev R4 (Strong-Leg + per-arm closed-ring ductile fuse — superseded
+by the simpler, manufacturable bowed-wire shape above).
+
+**FreeCAD assembly status (2026-06-20):** Four corner copies of the prior Strong-Leg
+geometry exist in `airframe/freecad/assembly/SerenityAssembly.FCStd` as Boolean-result
+objects `Union`, `Union001`, `Union002`, `Union003` (90°-stepped rotation), confirmed in
+their correct corner locations; the Rev R5 post replaces only the upper portion of that
+geometry (foot-to-1/3-down-branch is unchanged) — see LG-10.
 
 **Foot positions (hull frame, approximate — last validated 2026-06-14 against the Rev R1
-single-leg layout; pending re-confirmation against the Strong-Leg's single foot point
-once LG-10 bake is complete, all level at ground-contact Z ≈ −31 mm):**
+single-leg layout; pending re-confirmation once LG-10 bake is complete, all level at
+ground-contact Z ≈ −31 mm):**
 
 | Foot               | Hull X (mm) | Hull Y (mm) | Ground Z (mm) | Notes                        |
 |--------------------|-------------|-------------|---------------|------------------------------|
@@ -917,83 +903,66 @@ once LG-10 bake is complete, all level at ground-contact Z ≈ −31 mm):**
 | foot_2 (aft-stbd)  | −264.5      | +129.5      | −31           | same                         |
 
 Stance: 191 mm (7.52 in) lateral × 150 mm (5.91 in) fore-aft;
-CG centroid at X ≈ −169 mm (symmetric) ✓ (Rev R1 baseline — re-verify once Strong-Leg
+CG centroid at X ≈ −169 mm (symmetric) ✓ (Rev R1 baseline — re-verify once Rev R5
 foot positions are baked).
 
-##### 1.1.4.1 *Strong-Leg — Placement and Bake*
+##### 1.1.4.1 *Vertical Post — Modeling and Bake*
 
-- [x] Build Strong-Leg via FreeCAD duplicate + 30° rotate + union of the canonical
-  single-blade leg *(done — `strong-leg.stl`, watertight, 1 body, 9,612 mm³)*.
-
-- [x] Place 4 corner copies in `SerenityAssembly.FCStd` (`Union`, `Union001`,
-  `Union002`, `Union003`, 90°-stepped rotation) *(done — all 4 confirmed in correct
-  corner locations, 2026-06-20)*.
-
-- [ ] **Verify visually in FreeCAD** — confirm all 4 Strong-Legs splay consistently,
-  both arms per leg reach a hull side wall, feet are coplanar at the same ground Z.
-  **Z-leveling rule:** if any of the 4 feet deviate in Z, align all 4 to the **most
-  negative (lowest) Z** of the four — i.e. extend the shorter legs to match the longest,
-  never shorten the longest to match the others, so every foot reaches the ground plane
-  with no leg left floating short of contact.
-
-- [ ] **LG-10 Bake the 4 placed Strong-Legs to hull frame.** Export 4 placed STLs (or
-  document a single part + 4 `bake_hull_frame.py` placements). Run
-  `python3 tools/bake_hull_frame.py` after adding to `COMPONENTS`.
-  **BLOCKS hull boss integration (LG-02) and leg printing (LG-05).**
-
-- [ ] **Ground clearance check carried forward from Rev R1** — overall Strong-Leg
-  envelope (79.8 mm foot-to-arm-tip) matches the original single-blade leg length, so
-  the prior 31 mm (1.22 in) ground-clearance finding still applies and is still
-  insufficient for the ≥76 mm (3.0 in) payload-mission requirement. Resolve per the
-  Rev R1 options (extend overall leg length, accept reduced clearance for ground
-  loading only, or raise the airframe on a stand for payload loading).
-  **BLOCKS payload mission.**
-
-- [ ] **LG-12 Widened-trunk print profile** — re-model the trunk's local cross-section
-  (local Z = 0–20 mm above the foot) to ≈9.9 × 11.8 mm (up from ≈7.4 × 8.8 mm) and print
-  that zone at 100% infill; arms and fork remain at the standard ≥40% gyroid
-  (`CLAUDE.md` minimum). See `docs/LANDING_GEAR_ANALYSIS.md` §4.5. Mass cost ≈4 g total.
-  **BLOCKS first flight.**
-
-##### 1.1.4.2 *Ductile Wire-Loop Fuse*
-
-- [x] Design and render nominal + deformed wire-loop fuse SCAD/STL *(done —
-  `airframe/openscad/fuselage/wire_loop_fuse.scad`, `wire_loop_fuse_nominal.stl` /
-  `wire_loop_fuse_deformed.stl`, both watertight 1-body meshes)*.
+- [x] Build and render the Rev R5 post + wire SCAD/STL *(done —
+  `airframe/openscad/fuselage/wire_brace_leg.scad`, `post.stl`,
+  `spring_wire_nominal/_deformed.stl`, `ductile_wire_nominal/_deformed.stl`, all
+  watertight)*.
 
 - [x] Build assembled / exploded / deformed demonstration compound STLs *(done —
   `tools/build_landing_gear_views.py` → `landing_gear_assembled.stl`,
-  `landing_gear_exploded.stl`, `landing_gear_deformed.stl`; schematic placeholder boss,
-  unbaked standalone leg — see `docs/LANDING_GEAR_ANALYSIS.md` §16)*.
+  `landing_gear_exploded.stl`, `landing_gear_deformed.stl`; schematic placeholder
+  bosses, unbaked standalone post — see `docs/LANDING_GEAR_ANALYSIS.md` §16)*.
 
-- [ ] **LG-15 Select and procure ductile spring-steel wire stock/temper** for the fuse
-  (§4.3 of the analysis doc); confirm achievable flow stress (target ≈550 MPa) and
-  ductility by coupon bend test; finalize the fuse mounting-pin detail (currently TBD
-  in the BOM). **BLOCKS leg fabrication.**
+- [ ] **LG-12 Model the post per the §4.6 dimensions** (round column, smooth 8mm
+  conical taper — no stepped ledge — lower section Ø22.9mm foot→taper start, upper
+  section Ø11.96mm taper end→apex, both 100% infill) in the FreeCAD/Blender source,
+  replacing the Rev R2–R4 forked Strong-Leg
+  geometry. **BLOCKS first flight.**
 
-- [ ] **LG-16 Confirm chosen wire temper survives forming** into the ring shape without
-  premature cracking — coordinate with LG-15. **BLOCKS leg fabrication.**
+- [ ] **LG-10 Finalize the 4 corner post placements** in `SerenityAssembly.FCStd`; bake
+  to hull frame; export 4 placed STLs. **Z-leveling rule:** if any of the 4 feet
+  deviate in Z, align all 4 to the **most negative (lowest) Z** of the four. **BLOCKS
+  hull boss integration (LG-02) and leg printing (LG-05).**
+
+- [ ] **Ground clearance check carried forward from Rev R1** — overall post envelope
+  (79.8 mm foot-to-apex) matches the original single-blade leg length, so the prior
+  31 mm (1.22 in) ground-clearance finding still applies and is still insufficient for
+  the ≥76 mm (3.0 in) payload-mission requirement. **BLOCKS payload mission.**
+
+##### 1.1.4.2 *Spring and Ductile Wires*
+
+- [ ] **LG-15 Select and procure both wire grades/tempers** — spring (full elastic
+  range, working stress ≈900 MPa) and ductile (plastic-bend ductility, flow stress
+  ≈550 MPa); confirm by coupon test. **BLOCKS leg fabrication.**
+
+- [ ] **LG-16 Confirm the ductile wire temper survives forming** into the bowed-strut
+  shape without premature cracking — coordinate with LG-15. **BLOCKS leg fabrication.**
+
+- [ ] **LG-13 Define the wire-to-socket retention detail** (pin / set screw /
+  adhesive) at both the post end and the hull boss end; verify against the §4.8
+  lateral load (`docs/LANDING_GEAR_ANALYSIS.md` §4.8). The previous M3/M4 nylon
+  shear-bolt fuse concept (Rev R2–R4, sized for a rigid spigot) no longer applies
+  directly to a wire end. **BLOCKS first flight.**
 
 ##### 1.1.4.3 *Hull Boss Sockets*
 
-- [ ] **LG-02 Design and integrate 8 hull boss sockets** (2 per corner, one per arm) into
-  `cargo_sect_shell24.scad` / cargo shell Blender source. Boss spec: OD ≈13 × 12 mm, bore
-  9.7 × 8.7 mm (arm steady cross-section + 0.2 mm clearance) + fuse tab clearance,
-  depth ≥12 mm, 2-wall (1.6 mm) annulus + positive-stop shoulder per `CLAUDE.md`. Run
-  DRC mesh check. **BLOCKS hull print. Depends on LG-10.**
-
-- [ ] **LG-13 Boss fastener call-out** — 2× M3 × 16 mm PA6 nylon SHCS per boss (4 per leg,
-  16 per aircraft); confirmed adequate (≈1.22× margin) now that the wire fuses cap peak
-  force (`docs/LANDING_GEAR_ANALYSIS.md` §5) — no M4 upsizing needed.
+- [ ] **LG-02 Design and integrate 16 hull boss sockets** (4 per corner, one per wire)
+  into `cargo_sect_shell24.scad` / cargo shell Blender source. Boss spec: OD ≈10×9 mm,
+  bore ≈6×5 mm, 2-wall annulus + positive-stop shoulder per `CLAUDE.md`. Run DRC mesh
+  check. **BLOCKS hull print. Depends on LG-10.**
 
 ##### 1.1.4.4 *Canonical Foot — Socket Modification*
 
 - [x] Feet separated into individual STLs (`foot_1` through `foot_4` in landing-gear/);
   canonical Thingiverse geometry, 43.9 × 43.9 × 9.04 mm TPU 95A, unmodified outer form.
 
-- [ ] **Add top-face socket to canonical foot** — 7.6 × 9.0 mm bore × 5.0 mm deep
-  (leg foot-tip cross-section 7.41 × 8.77 mm + 0.2 mm clearance), centred on the top
-  face. Retention: 1× M2.5 × 12 mm SS through-bolt. See
+- [ ] **Add top-face socket to canonical foot** — 7.6 × 9.0 mm bore × 5.0 mm deep,
+  centred on the top face. Retention: 1× M2.5 × 12 mm SS through-bolt. See
   `docs/LANDING_GEAR_ANALYSIS.md` §7. New SCAD/Blender modifier needed (stock foot mesh
   has no socket feature today).
 
@@ -1001,11 +970,14 @@ foot positions are baked).
   For field operations (grass, gravel): consider adding a 3 mm textured grip ring or
   rubber disk insert (Sorbothane 50A, 40 mm OD × 3 mm) bonded to foot bottom face.
 
-##### 1.1.4.5 *Superseded — Rev R1.4 Parametric V-Brace*
+##### 1.1.4.5 *Superseded — Rev R1.4 V-Brace and Rev R4 Closed-Ring Fuse*
 
 - [x] **Rev R1.4 corner V-brace (`landing_leg_assy.scad`) is retired**, superseded
-  2026-06-20 by the Strong-Leg (§1.1.4 above). The parametric SCAD file is left in the
-  repo for reference but is no longer the basis for leg geometry, bosses, or feet.
+  2026-06-20. The parametric SCAD file is left in the repo for reference only.
+
+- [x] **Rev R4 closed-ring wire fuse (`wire_loop_fuse.scad`) is retired**, superseded
+  2026-06-20 by the simpler bowed-wire shape (§1.1.4 above) for manufacturability. The
+  SCAD file is left in the repo for reference only (retirement note added at its top).
 
 ##### 1.1.4.6 *Rear Skid Reinforcement (unrelated subsystem)*
 
@@ -1022,28 +994,23 @@ foot positions are baked).
 
 *"Time for some thrilling heroics." — Mal. Drop tests count.*
 
-- [ ] **LG-01 Lateral retention bolt test — M3 × 16 PA6 nylon** — fabricate representative
-  boss fixture; shear-test 10 samples at 0°, 15°, 30° off-axis. Target per bolt: ≥ 283 N.
-  Record in `docs/LANDING_GEAR_ANALYSIS.md §15`. **BLOCKS first flight.**
-
-- [ ] **LG-06 Drop test prototype Strong-Leg assembly** — mount one complete assembly to a
+- [ ] **LG-06 Drop test prototype leg assembly** — mount one complete assembly to a
   6.90 lbm (3,130 g) fixture. Drop from 1.5 ft (elastic check — confirm zero permanent
-  set on leg and fuses). **BLOCKS first flight.**
+  set on the post and both wire types). **BLOCKS first flight.**
 
-- [ ] **LG-07 Confirm avionics enclosure shock rating** against the fuse-mediated
-  deceleration profile (re-derive peak-g once LG-14 data exists — the flat 183g figure
-  from earlier revisions no longer applies once the wire fuses are in the load path).
-  See PCB fab checklist. **BLOCKS first flight.**
+- [ ] **LG-07 Confirm avionics enclosure shock rating** against the wire-mediated
+  deceleration profile (re-derive peak-g once LG-14 data exists). See PCB fab
+  checklist. **BLOCKS first flight.**
 
-- [ ] **LG-11 Coupon-test CF-PETG** at 4 perimeters / 40% gyroid infill in the 7–10 mm
-  section-size range to replace the 0.70 effective-area assumption
-  (`docs/LANDING_GEAR_ANALYSIS.md §4.2`). **BLOCKS first flight.**
+- [ ] **LG-11 Coupon-test CF-PETG** at 4 perimeters / 100% infill (post is now fully
+  solid-infill, §4.6) to confirm the achievable effective modulus/strength.
+  **BLOCKS first flight.**
 
 - [ ] **LG-14 Instrumented drop test (load cell + high-speed video) at 6 ft full-AUW** —
-  confirm the wire fuses collapse at the predicted ≈1,956 N/fuse; confirm the
-  ring-collapse mechanics match the idealized 4-hinge model
-  (`docs/LANDING_GEAR_ANALYSIS.md` §4.3); confirm the CF-PETG structure stays elastic
-  per §4.4. **This is the test that certifies the Rev R4 design — hand calculation
+  confirm the ductile wires collapse at the predicted ≈4,298 N/wire; confirm the
+  bowed-strut mechanics match the idealized 2-hinge model
+  (`docs/LANDING_GEAR_ANALYSIS.md` §4.1); confirm the post and spring wires stay
+  elastic. **This is the test that certifies the Rev R5 design — hand calculation
   identifies the design point but cannot fully certify post-yield material behavior.**
   **BLOCKS first flight.**
 
@@ -1221,7 +1188,37 @@ All are on the `avionics/kicad/` branch; run DRC to zero errors before generatin
       carry all 6 of its signals before removing it
   - [ ] EMI spacing verified 
   - [ ] Labels and silk arranged for readability
-  - [ ] Traces and nets regenerated and drc issues resolved
+  - [x] **Traces and nets regenerated and DRC issues resolved — partial (2026-06-20).**
+    Schematic ERC: file-load crash (stray `;;` comment) + J1 SHIELD/MP pin mirroring fixed,
+    0 errors. PCB DRC: all 12 shorting_items, 1 tracks_crossing, 1 courtyards_overlap, 2
+    hole_clearance resolved to 0 (was non-zero at session start). GND zone (In1.Cu) and +5V
+    zone (In2.Cu) were declared but never actually filled/saved — filled via pcbnew's
+    ZONE_FILLER, resolving 24 connections at no design risk. 65 GND pads stitched with new
+    vias; +3V3 (31 pads, no plane exists on this 4-layer stackup) and 14 more nets (+5V,
+    +5V_FILT, ANT, COMP_IN, DDS_RF, MODE_SEL, PA_INT, PTT_N, RF_LPF_N1, RSSI_ANA, UART_TX/RX,
+    UART_TX_F/RX_F) routed via MST + obstacle-aware A* pathfinding, each verified by a
+    DRC re-run before moving on. Remaining `clearance` errors (15) are pre-existing,
+    inherent to 0.5mm-pitch IC footprints (49M DDS, TX DAC) — not fixable without a
+    footprint change.
+    - [ ] **Still unrouted — 13 nets** (`RF_TX`, `RF_FILT`, `RF_LPF_N2`, `RX_LNA`,
+      `TCXO_OUT`, `AFSK_IN`, `AFSK_OUT`, `DDS_CLK`, `DDS_DAT`, `SBUS_OUT`, `RF_RX`,
+      `RSSI_RAW`, `UART_RX_MUX`) plus scattered edges within partially-routed nets — sit
+      in pockets too tight for a 0.2mm-trace/0.25mm-clearance model to route automatically
+      without risking a marginal connection. Needs thinner trace width, B.Cu fallback
+      routing, or manual GUI placement.
+    - [ ] **Ethernet differential pairs deferred** (`RMII1_*`, `MDIO`, `MDC`, `PHY2_RSTN`,
+      `PHY2_INTRN`, `EMMA_ETH_TXP/TXN/RXP/RXN`, `EMMA_ETH_LINE_TXP/TXN/RXP/RXN`) — these are
+      differential pairs through the T-ETH isolation transformer; need length/impedance-
+      matched routing, not generic pathfinding.
+    - [ ] **LoRa SPI bus deferred** (`LORA_RESETN`, `SPI1_MISO/MOSI/CLK/CS_LORA`) — same
+      reasoning, lower risk than the Ethernet pairs but not yet attempted.
+    - [ ] **`GND2_ETH`/`VCC2_ETH` deferred — confirmed isolated domain (2026-06-20).**
+      Per user: ETH-PHY/T-ETH/PB2-P1/P2 were intentionally added to Emma so it can provide
+      a second Ethernet port for the Zoë stack (matching Wash's 2-PHY config) and so Emma
+      can connect to Ethernet standalone, outside Serenity. `GND2_ETH` is the isolated
+      secondary side of the T-ETH transformer — must NOT be bridged to the main GND plane
+      (would defeat the isolation). Needs a small isolated copper island/plane, not via-
+      stitching to In1.Cu.
   - [ ] Gerbers exported
 
 - [ ] **Zoë (Cape-B-2) Rev R1 — remove LoRa, add P1+P2 passthrough rails**
