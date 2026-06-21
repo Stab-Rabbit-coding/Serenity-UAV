@@ -56,7 +56,6 @@ References:
 
 import math
 import os
-import sys
 
 import FreeCAD as App
 import Mesh
@@ -65,10 +64,10 @@ import Mesh
 # Path setup — resolved relative to this script file so the script works
 # regardless of the current working directory.
 # ---------------------------------------------------------------------------
-SCRIPT_DIR  = os.path.dirname(os.path.abspath(__file__))
-AIRFRAME    = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
-STL_DIR     = os.path.join(AIRFRAME, "stls")
-OUTPUT      = os.path.join(AIRFRAME, "Serenity-Assembled.FCStd")
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+AIRFRAME = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
+STL_DIR = os.path.join(AIRFRAME, "stls")
+OUTPUT = os.path.join(AIRFRAME, "Serenity-Assembled.FCStd")
 
 
 # ---------------------------------------------------------------------------
@@ -89,6 +88,7 @@ PL_IDENTITY = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0)
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def _stl(rel_path):
     """Return absolute path under STL_DIR."""
@@ -124,10 +124,7 @@ def place_mesh(obj, placement):
     if obj is None:
         return
     px, py, pz, qx, qy, qz, qw = placement
-    obj.Placement = App.Placement(
-        App.Vector(px, py, pz),
-        App.Rotation(qx, qy, qz, qw)
-    )
+    obj.Placement = App.Placement(App.Vector(px, py, pz), App.Rotation(qx, qy, qz, qw))
 
 
 def transform_mesh(obj, rows):
@@ -135,9 +132,9 @@ def transform_mesh(obj, rows):
     Apply a 4×4 transform matrix directly to the mesh geometry of obj.
 
     rows: 3-tuple or 4-tuple of 4-element rows:
-        ( [r0c0, r0c1, r0c2, r0c3],
-          [r1c0, r1c1, r1c2, r1c3],
-          [r2c0, r2c1, r2c2, r2c3] )
+        [r0c0, r0c1, r0c2, r0c3]
+        [r1c0, r1c1, r1c2, r1c3]
+        [r2c0, r2c1, r2c2, r2c3]
     The fourth row [0,0,0,1] is appended automatically.
 
     Uses Mesh.Mesh.transform() which supports det = ±1 matrices (improper
@@ -260,6 +257,7 @@ def nacelle_rows(side, r_local, t_local):
 # Main assembly
 # ---------------------------------------------------------------------------
 
+
 def assemble():
     """Build the Serenity UAV full-airframe assembly document."""
 
@@ -277,10 +275,14 @@ def assemble():
     head = add_mesh(doc, _stl("fuselage/s_head_shell24_2mm_repaired.stl"), "Head_Shell")
     place_mesh(head, PL_IDENTITY)
 
-    cargo = add_mesh(doc, _stl("fuselage/cargo/s_cargo_sect_shell24_2mm_repaired.stl"), "Cargo_Shell")
+    cargo = add_mesh(
+        doc, _stl("fuselage/cargo/s_cargo_sect_shell24_2mm_repaired.stl"), "Cargo_Shell"
+    )
     place_mesh(cargo, PL_IDENTITY)
 
-    middle = add_mesh(doc, _stl("fuselage/s_middle_shell24_2mm_repaired.stl"), "Middle_Shell")
+    middle = add_mesh(
+        doc, _stl("fuselage/s_middle_shell24_2mm_repaired.stl"), "Middle_Shell"
+    )
     place_mesh(middle, PL_IDENTITY)
 
     # R1: the baked repaired mesh is the canonical rear shell.  (The
@@ -291,7 +293,7 @@ def assemble():
 
     # Landing gear (scaled Thingiverse parts; identity placement)
     add_mesh(doc, _stl("fuselage/feet_x_4_scaled24.stl"), "Landing_Feet")
-    add_mesh(doc, _stl("fuselage/legs_scaled24.stl"),     "Landing_Legs")
+    add_mesh(doc, _stl("fuselage/legs_scaled24.stl"), "Landing_Legs")
 
     # -------------------------------------------------------------------
     # CARGO BAY SUB-ASSEMBLY
@@ -309,16 +311,19 @@ def assemble():
     print("[assembly] Cargo bay ...", flush=True)
 
     cargo_stls = [
-        ("fuselage/cargo/cargo_door_port.stl",             "Cargo_Door_Port"),
-        ("fuselage/cargo/cargo_door_stbd.stl",             "Cargo_Door_Stbd"),
-        ("fuselage/cargo/cargo_cradle_autolatch.stl",      "Cargo_Cradle"),
-        ("fuselage/cargo/cargo_fpv_bezel.stl",             "Cargo_FPV_Bezel"),
-        ("fuselage/cargo/cargo_gps_retention_ring.stl",    "Cargo_GPS_Ring"),
-        ("fuselage/cargo/cargo_winch_motor_mount.stl",     "Cargo_Winch_Mount"),
-        ("fuselage/cargo/cargo_winch_spool.stl",           "Cargo_Winch_Spool"),
-        ("fuselage/cargo/cargo_drv8833_tray.stl",          "Cargo_DRV8833_Tray"),
-        ("fuselage/cargo/cargo_door_servo_bracket.stl",    "Cargo_Door_Servo_Bracket"),
-        ("fuselage/cargo/cargo_release_servo_bracket.stl", "Cargo_Release_Servo_Bracket"),
+        ("fuselage/cargo/cargo_door_port.stl", "Cargo_Door_Port"),
+        ("fuselage/cargo/cargo_door_stbd.stl", "Cargo_Door_Stbd"),
+        ("fuselage/cargo/cargo_cradle_autolatch.stl", "Cargo_Cradle"),
+        ("fuselage/cargo/cargo_fpv_bezel.stl", "Cargo_FPV_Bezel"),
+        ("fuselage/cargo/cargo_gps_retention_ring.stl", "Cargo_GPS_Ring"),
+        ("fuselage/cargo/cargo_winch_motor_mount.stl", "Cargo_Winch_Mount"),
+        ("fuselage/cargo/cargo_winch_spool.stl", "Cargo_Winch_Spool"),
+        ("fuselage/cargo/cargo_drv8833_tray.stl", "Cargo_DRV8833_Tray"),
+        ("fuselage/cargo/cargo_door_servo_bracket.stl", "Cargo_Door_Servo_Bracket"),
+        (
+            "fuselage/cargo/cargo_release_servo_bracket.stl",
+            "Cargo_Release_Servo_Bracket",
+        ),
     ]
     for rel, label in cargo_stls:
         add_mesh(doc, _stl(rel), label)
@@ -333,19 +338,25 @@ def assemble():
 
     tray = add_mesh(doc, _stl("fuselage/battery_tray.stl"), "Battery_Tray")
     if tray:
-        transform_mesh(tray, [
-            [1, 0, 0,  172.0],   # VERIFY: X offset (fore edge at station 112 mm)
-            [0, 1, 0, -263.0],   # VERIFY: Y (keel underside, ≈ CY_head - TRAY_H)
-            [0, 0, 1,   41.0],   # VERIFY: Z (centred: CZ_hull - TRAY_W/2)
-        ])
+        transform_mesh(
+            tray,
+            [
+                [1, 0, 0, 172.0],  # VERIFY: X offset (fore edge at station 112 mm)
+                [0, 1, 0, -263.0],  # VERIFY: Y (keel underside, ≈ CY_head - TRAY_H)
+                [0, 0, 1, 41.0],  # VERIFY: Z (centred: CZ_hull - TRAY_W/2)
+            ],
+        )
 
     panel = add_mesh(doc, _stl("fuselage/belly_panel.stl"), "Belly_Panel")
     if panel:
-        transform_mesh(panel, [
-            [1, 0, 0,  172.0],   # VERIFY: aligns with tray opening
-            [0, 1, 0, -267.0],   # VERIFY: flush with belly skin
-            [0, 0, 1,   41.0],   # VERIFY: centred under tray
-        ])
+        transform_mesh(
+            panel,
+            [
+                [1, 0, 0, 172.0],  # VERIFY: aligns with tray opening
+                [0, 1, 0, -267.0],  # VERIFY: flush with belly skin
+                [0, 0, 1, 41.0],  # VERIFY: centred under tray
+            ],
+        )
 
     # -------------------------------------------------------------------
     # WINGS
@@ -402,19 +413,22 @@ def assemble():
     # no-gear-train "_simple"/"_straight" variant is not on the tracked
     # build path and is NOT placed here).
     # -------------------------------------------------------------------
-    print("[assembly] Nacelle internal components (gear train, nozzle, sleeves) ...", flush=True)
+    print(
+        "[assembly] Nacelle internal components (gear train, nozzle, sleeves) ...",
+        flush=True,
+    )
 
     # Nacelle local-frame Z stations, mm (nacelle_pod_50mm_tandem.scad):
     #   intake Z=0 .. STATOR_SLV_Z_START=90.0 .. AFT_SLV_Z_START=122.5 ..
     #   NOZZLE_RING_Z(=CROWN_Z)=166.25 .. NACELLE_L=185.2 (nozzle exit).
     #   PIVOT_Z is the gear-train station, inside the sleeve span.
-    STATOR_SLV_Z_START  = 90.0
-    AFT_SLV_Z_START      = 122.5
-    PIVOT_Z              = 103.75   # gear-train station = nacelle CG
-    PINION_A_Y           = 28.0     # = sector R(22) + pinion R(6), mm
-    CROWN_Z              = 166.25   # = NOZZLE_RING_Z
-    NACELLE_FACE_X_PYLON = 34.0     # mm, inboard (pylon-side) X face
-    NACELLE_FACE_X_FAR   = 38.0     # mm, outboard (tip) X face
+    STATOR_SLV_Z_START = 90.0
+    AFT_SLV_Z_START = 122.5
+    PIVOT_Z = 103.75  # gear-train station = nacelle CG
+    PINION_A_Y = 28.0  # = sector R(22) + pinion R(6), mm
+    CROWN_Z = 166.25  # = NOZZLE_RING_Z
+    NACELLE_FACE_X_PYLON = 34.0  # mm, inboard (pylon-side) X face
+    NACELLE_FACE_X_FAR = 38.0  # mm, outboard (tip) X face
 
     for side in ("port", "stbd"):
         label = "Port" if side == "port" else "Stbd"
@@ -425,18 +439,26 @@ def assemble():
         # nacelle duct (own local +Z = nacelle local +Z; sleeve forward
         # face at its own Z = 0) — identity rotation, translate to the
         # sleeve's forward-face station.
-        sleeve = add_mesh(doc, _stl("nacelles/edf_stator_sleeve.stl"),
-                           f"Nacelle_{label}_Stator_Sleeve")
-        transform_mesh(sleeve, nacelle_rows(
-            side, _IDENTITY3, (0.0, 0.0, STATOR_SLV_Z_START)))
+        sleeve = add_mesh(
+            doc,
+            _stl("nacelles/edf_stator_sleeve.stl"),
+            f"Nacelle_{label}_Stator_Sleeve",
+        )
+        transform_mesh(
+            sleeve, nacelle_rows(side, _IDENTITY3, (0.0, 0.0, STATOR_SLV_Z_START))
+        )
 
         # ── EDF2 aft spider sleeve ────────────────────────────────────────
         # edf_aft_spider_sleeve.scad: same coaxial convention, forward
         # face at nacelle Z = AFT_SLV_Z_START.
-        aft_sleeve = add_mesh(doc, _stl("nacelles/edf_aft_spider_sleeve.stl"),
-                               f"Nacelle_{label}_Aft_Spider_Sleeve")
-        transform_mesh(aft_sleeve, nacelle_rows(
-            side, _IDENTITY3, (0.0, 0.0, AFT_SLV_Z_START)))
+        aft_sleeve = add_mesh(
+            doc,
+            _stl("nacelles/edf_aft_spider_sleeve.stl"),
+            f"Nacelle_{label}_Aft_Spider_Sleeve",
+        )
+        transform_mesh(
+            aft_sleeve, nacelle_rows(side, _IDENTITY3, (0.0, 0.0, AFT_SLV_Z_START))
+        )
 
         # ── Drive Pinion A (meshes the fixed sector gear) ────────────────
         # nacelle_pod_50mm_tandem.scad pinion_a_boss(): rotate([0,90,0])
@@ -445,10 +467,12 @@ def assemble():
         # mesh).  nacelle_pinion.stl is modelled coaxial with its own
         # local Z by default (standard print orientation for a gear
         # blank), so the same Y-axis 90 deg rotation aligns it.
-        pinion_a = add_mesh(doc, _stl("nacelles/nacelle_pinion.stl"),
-                             f"Nacelle_{label}_Drive_Pinion_A")
-        transform_mesh(pinion_a, nacelle_rows(
-            side, _rot_y(90.0), (0.0, PINION_A_Y, PIVOT_Z)))
+        pinion_a = add_mesh(
+            doc, _stl("nacelles/nacelle_pinion.stl"), f"Nacelle_{label}_Drive_Pinion_A"
+        )
+        transform_mesh(
+            pinion_a, nacelle_rows(side, _rot_y(90.0), (0.0, PINION_A_Y, PIVOT_Z))
+        )
 
         # ── Crown Pinion (drives the nozzle-ring rack) ───────────────────
         # BUG FLAG (2026-06-21): nacelle_pod_50mm_tandem.scad's
@@ -461,10 +485,12 @@ def assemble():
         # DOCUMENTED-CORRECT identity rotation, not the boss's coded
         # rotation — the boss code, not this placement, is what needs
         # fixing (TODO.md §1.1.3).
-        crown_pinion = add_mesh(doc, _stl("nacelles/nacelle_pinion.stl"),
-                                 f"Nacelle_{label}_Crown_Pinion")
-        transform_mesh(crown_pinion, nacelle_rows(
-            side, _IDENTITY3, (0.0, PINION_A_Y, CROWN_Z)))
+        crown_pinion = add_mesh(
+            doc, _stl("nacelles/nacelle_pinion.stl"), f"Nacelle_{label}_Crown_Pinion"
+        )
+        transform_mesh(
+            crown_pinion, nacelle_rows(side, _IDENTITY3, (0.0, PINION_A_Y, CROWN_Z))
+        )
 
         # ── Bevel gear housing ────────────────────────────────────────────
         # nacelle_bevel_housing.scad: origin = block centroid = the point
@@ -473,17 +499,23 @@ def assemble():
         # centre.  Housing header states its own axes already align with
         # the nacelle frame ("+Z = toward nozzle, +X = toward sector gear
         # / pinion A mesh side, +Y = outboard face") — identity rotation.
-        housing = add_mesh(doc, _stl("nacelles/nacelle_bevel_housing.stl"),
-                            f"Nacelle_{label}_Bevel_Housing")
-        transform_mesh(housing, nacelle_rows(
-            side, _IDENTITY3, (0.0, PINION_A_Y, PIVOT_Z)))
+        housing = add_mesh(
+            doc,
+            _stl("nacelles/nacelle_bevel_housing.stl"),
+            f"Nacelle_{label}_Bevel_Housing",
+        )
+        transform_mesh(
+            housing, nacelle_rows(side, _IDENTITY3, (0.0, PINION_A_Y, PIVOT_Z))
+        )
 
         # ── Bevel gear pair (A + B, pre-meshed single STL) ───────────────
         # Seats inside the housing at the same bore-intersection point.
-        bevel_pair = add_mesh(doc, _stl("nacelles/nacelle_bevel_pair.stl"),
-                               f"Nacelle_{label}_Bevel_Pair")
-        transform_mesh(bevel_pair, nacelle_rows(
-            side, _IDENTITY3, (0.0, PINION_A_Y, PIVOT_Z)))
+        bevel_pair = add_mesh(
+            doc, _stl("nacelles/nacelle_bevel_pair.stl"), f"Nacelle_{label}_Bevel_Pair"
+        )
+        transform_mesh(
+            bevel_pair, nacelle_rows(side, _IDENTITY3, (0.0, PINION_A_Y, PIVOT_Z))
+        )
 
         # ── Fixed sector gear ─────────────────────────────────────────────
         # Mounted to the fuselage/pylon tilt bracket, NOT the nacelle —
@@ -496,10 +528,14 @@ def assemble():
         # Drive Pinion A (axis parallel to local X) since the two gears
         # mesh together.
         sector_x = pylon * NACELLE_FACE_X_PYLON
-        sector_gear = add_mesh(doc, _stl("nacelles/nacelle_sector_gear.stl"),
-                                f"Nacelle_{label}_Sector_Gear")
-        transform_mesh(sector_gear, nacelle_rows(
-            side, _rot_y(90.0), (sector_x, 0.0, PIVOT_Z)))
+        sector_gear = add_mesh(
+            doc,
+            _stl("nacelles/nacelle_sector_gear.stl"),
+            f"Nacelle_{label}_Sector_Gear",
+        )
+        transform_mesh(
+            sector_gear, nacelle_rows(side, _rot_y(90.0), (sector_x, 0.0, PIVOT_Z))
+        )
 
         # ── Nozzle iris assembly ──────────────────────────────────────────
         # nacelle_nozzle_iris.stl is the combined render (inner ring +
@@ -517,10 +553,12 @@ def assemble():
         # continuity) since that is what is physically built into the
         # printed parts; the nozzle_iris.scad radius math should be
         # reconciled against it (TODO.md §1.1.3).
-        nozzle = add_mesh(doc, _stl("nacelles/nozzles/nacelle_nozzle_iris.stl"),
-                           f"Nacelle_{label}_Nozzle_Iris")
-        transform_mesh(nozzle, nacelle_rows(
-            side, _IDENTITY3, (0.0, 0.0, CROWN_Z)))
+        nozzle = add_mesh(
+            doc,
+            _stl("nacelles/nozzles/nacelle_nozzle_iris.stl"),
+            f"Nacelle_{label}_Nozzle_Iris",
+        )
+        transform_mesh(nozzle, nacelle_rows(side, _IDENTITY3, (0.0, 0.0, CROWN_Z)))
 
         # ── Tip cap (outboard X-face end cap) ─────────────────────────────
         # NO ACTIVE SCAD SOURCE EXISTS for nacelle_tip_cap_port/stbd.stl
@@ -530,10 +568,12 @@ def assemble():
         # confirm or replace once a source file or a manual FreeCAD
         # placement exists (TODO.md §1.1.3).
         tip_x = -pylon * NACELLE_FACE_X_FAR
-        tip_cap = add_mesh(doc, _stl(f"nacelles/nacelle_tip_cap_{side}.stl"),
-                            f"Nacelle_{label}_Tip_Cap")
-        transform_mesh(tip_cap, nacelle_rows(
-            side, _IDENTITY3, (tip_x, 0.0, PIVOT_Z)))
+        tip_cap = add_mesh(
+            doc,
+            _stl(f"nacelles/nacelle_tip_cap_{side}.stl"),
+            f"Nacelle_{label}_Tip_Cap",
+        )
+        transform_mesh(tip_cap, nacelle_rows(side, _IDENTITY3, (tip_x, 0.0, PIVOT_Z)))
 
     # -------------------------------------------------------------------
     # NACELLE SERVO BRACKET — left UNPLACED pending manual resolution
@@ -559,8 +599,12 @@ def assemble():
     # unplaced (add_mesh() only, origin/identity) pending the user doing
     # a manual placement in FreeCAD per CLAUDE.md; see TODO.md §1.1.3.
     # -------------------------------------------------------------------
-    add_mesh(doc, _stl("nacelles/nacelle_servo_bracket.stl"), "Nacelle_Servo_Bracket_Port")
-    add_mesh(doc, _stl("nacelles/nacelle_servo_bracket.stl"), "Nacelle_Servo_Bracket_Stbd")
+    add_mesh(
+        doc, _stl("nacelles/nacelle_servo_bracket.stl"), "Nacelle_Servo_Bracket_Port"
+    )
+    add_mesh(
+        doc, _stl("nacelles/nacelle_servo_bracket.stl"), "Nacelle_Servo_Bracket_Stbd"
+    )
 
     # -------------------------------------------------------------------
     # DORSAL ANTENNA FIN
