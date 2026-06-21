@@ -1,0 +1,16 @@
+---
+# clang-format configuration for the Serenity UAV firmware sources.
+#
+# CLAUDE.md mandates 4-space indentation for all code "whether or not
+# required by the language" — this overrides clang-format's Google-style
+# default of 2.  Macro-value and struct-member alignment are enabled to
+# match the column-aligned commenting style already hand-applied across
+# avionics/firmware/common/include/*.h.
+BasedOnStyle: Google
+IndentWidth: 4
+ColumnLimit: 80
+SortIncludes: Never
+AlignConsecutiveMacros: AcrossEmptyLinesAndComments
+AlignConsecutiveDeclarations: true
+AlignTrailingComments: true
+PointerAlignment: Left
