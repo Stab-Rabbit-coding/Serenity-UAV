@@ -1388,7 +1388,22 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     160, Kaylee 221 / 181. Remaining types after the mesh fix are mostly
     silk-over-copper, text-height, courtyard-overlap, and lib-footprint mismatch.
 
-- [ ] finish Wash PCB.  ensure all phy have shielded connectors, all nets are valid, all ferrite beads and isolation caps are in place.- [ ] Add sbus/uart dip to Wash.
+- [ ] **Finish Wash PCB (CAPE-A-2) close-out pass:**
+    - [ ] Verify every external-facing connector (SERVO-PWM, ESC-PWM, MIL-1553, CAN-FD,
+        RS-485, ETH) is a shielded-shell part with shell tied to PGND — audit against
+        the footprint Description pinout already documented at §1.2 line ~1340.
+    - [ ] Run ERC/DRC net-validity pass — confirm zero unconnected nets outside the
+        13-net Emma-style residual list; cross-check against the 465/121 DRC count
+        already logged for Wash at §1.2.
+    - [ ] Verify all ferrite beads are placed at each digital/RF section boundary and
+        on +5V/+3V3 entering from off-board connectors (pattern already used on
+        Emma's +5V boundary, §1.2/§1.3 Phase 3).
+    - [ ] Verify isolation caps/creepage moat (0.5 mm `ISOLATION`) are intact after the
+        per-domain tamper-mesh rework (§1.2, "Redesign the tamper mesh").
+- [ ] **Add SBUS/UART DIP switch to Wash** — add a 2-position DIP (or solder-jumper
+    pair) to select SBUS vs. plain UART framing on the existing J_SBUS-equivalent
+    pad, matching the J_SBUS line item already in Wash.md §14's field-connector
+    table (§1.2, "Reconcile Wash.md §14...").
 - [ ] **Generate Wash gerbers** — `CAPE-A-2.kicad_pcb` complete; run DRC to zero errors in
     KiCad; export to `avionics/kicad/gerbers/CAPE-A-2/`; re-export drill files.
     - **BLOCKS Wash fab order**
@@ -1422,9 +1437,39 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 - [ ] **Merge `claude/cape-em-harsh-variants-9Yfr1` → master** after gerbers pass DRC and
     pre-compliance checklist is signed off.
 
-- [ ] Design Faraday cages / boxes to protect all PCBs, minimizing weight and space but ensuring needed protection.
+- [ ] **Design Faraday cages / boxes to protect all PCBs** — minimize weight/space while meeting
+    the 500 W/m² design objective. Placeholder geometry (FAR-CAGE-AV 76×56×88 mm, FAR-GASKET-AV,
+    FAR-FAN-40, FAR-EMI-VENT-40, FAR-BOND-STRAP, FAR-FT-PANEL, FAR-FERRITE-4MM) already exists at
+    §1.1.5 (364 g / 0.80 lbm system total) — these sub-tasks convert the placeholders into
+    real, build-ready enclosures:
+    - [ ] **Shepherd's Room cage** (Cape-A-2 + Cape-B-2 stack, no Emma) — final wall thickness,
+        seam/gasket detail, FAR-FAN-40 mount, FAR-EMI-VENT-40 vent location.
+    - [ ] **Inara's Shuttle cage** (Cape-A-2 + Cape-B-2 stack, no Emma) — same scope as Shepherd's.
+    - [ ] **River's Room cage** (Cape-A-2 + Cape-B-2 + Emma stack) — add Emma board clearance and
+        LoRa/49 MHz feedthrough ports to the FAR-FT-PANEL design.
+    - [ ] **Simon's Medbay cage** (Cape-A-2 + Cape-B-2 + Emma stack) — same scope as River's Room.
+    - [ ] **Kaylee (PDB) enclosure** — verify whether the PDB needs a full Faraday cage or only a
+        bond strap to the keel ground plane (no TPM/RF on Kaylee; see §1.2 "Carry the tamper
+        signal over the link for the TPM-less boards").
+    - [ ] Bond each cage to the airframe ground reference via FAR-BOND-STRAP with no second
+        return path (avoid ground loops per §1.4.1 prose constraint).
+    - [ ] Re-run the §1.1.5 mass budget after all 5 enclosures are finalized — confirm cumulative
+        T/W stays ≥1.2 (currently estimated ~1.19–1.25, §1.1.5).
 
-- [ ] Specify / implement tightly twisted pair bonded shielded wiring and cables throughout the aircraft.
+- [ ] **Specify / implement tightly twisted pair bonded shielded wiring throughout the aircraft** —
+    per-bus-type wiring spec (duplicates the per-bus breakdown tracked at §1.4.3/§1.4.4; this
+    item is the airframe-wide harness/cable-selection pass, those are the connector/pinout pass):
+    - [ ] CAN FD trunk (inter-node ring) — shielded twisted pair, 120 Ω characteristic impedance,
+        drain wire bonded at each node chassis, not floating mid-run.
+    - [ ] RS-485 trunk — shielded twisted pair, 120 Ω, daisy-chain topology, end termination at
+        the two physical bus ends only.
+    - [ ] MIL-STD-1553B bus — twinax/twisted-shielded-pair per the existing 1553-XFM transformer
+        coupling spec (§1.2), stub length ≤1 ft from coupler to RT.
+    - [ ] Ethernet (CPSW3G ring) — shielded Cat5e/Cat6, 100 Ω ±10% MDI pairs matching the
+        impedance-controlled PCB traces already specified at §1.2.
+    - [ ] Servo/PWM and ESC telemetry leads — twisted pair, routed ≥5 mm from RF/antenna runs.
+    - [ ] Power harness (14 AWG nacelle feeds, battery-to-Kaylee) — twisted where co-routed with
+        signal wiring; ferrite bead at each digital/RF section boundary crossing.
 
 ---
 
@@ -1473,41 +1518,106 @@ work that was actually completed against this stub before it was retired:
 
 #### 1.4.1 Faraday Enclosures
 
+**Design constraints (apply to every enclosure below):**
+
 - Must have proper bonding/grounding without loops.
 
 - Must have a fan and appropriate cooling
 
 - Must minimize weight, size, and cost
 
-- [ ] PB2-I + Wash Enclosure
-
 - Must account for all sensor inputs and flight control and comms outputs.
-
-- [ ] PB2-I + Zoë Enclosure
 
 - Must account for RF routing from external antennas to internal transceivers
 
 - Must protect the log uSD
 
+- [ ] **PB2-I + Wash Enclosure** (Shepherd's Room / Inara's Shuttle — no Emma board):
+    - [ ] Confirm internal clearance for PB2-Industrial + Cape-A-2 stack height against
+        the FAR-CAGE-AV placeholder envelope (76×56×88 mm, §1.1.5).
+    - [ ] Cut-outs for GPS/IMU/barometer sensor leads, ToF array cabling, servo/ESC
+        connectors, and the microSD log slot — each cut-out gets its own FAR-FT-PANEL
+        feedthrough or grommet, not an open hole.
+    - [ ] Mount FAR-FAN-40 + FAR-EMI-VENT-40 on the low-pressure side of the enclosure;
+        verify intake/exhaust path does not create a direct RF leakage slot.
+    - [ ] Bond enclosure to chassis ground via FAR-BOND-STRAP (single point, no loop).
+- [ ] **PB2-I + Zoë Enclosure** (all 4 bays — Cape-B-2, plus Emma in River's Room /
+    Simon's Medbay only):
+    - [ ] Confirm internal clearance for PB2-Industrial + Cape-B-2 (+ Emma where fitted)
+        stack height against the FAR-CAGE-AV placeholder envelope.
+    - [ ] Cut-outs for CAN FD/RS-485/Ethernet/MIL-1553 connectors, SMA antenna feeds
+        (WiFi/SiK/LoRa per §1.4.2), and the microSD log slot — feedthrough or grommet
+        per cut-out.
+    - [ ] River's Room / Simon's Medbay variant: add the LoRa + 49 MHz SMA feedthrough
+        pair for Emma; Shepherd's Room / Inara's Shuttle variant omits these.
+    - [ ] Mount FAR-FAN-40 + FAR-EMI-VENT-40; bond via FAR-BOND-STRAP.
+
 #### 1.4.2. Antenna Placement and feedlines
 
-feelines
+**Count basis:** 2 antennas for each of the 4 external comm links (Wi-Fi 5 GHz, Zigbee 2.4 GHz,
+MAVLink/SiK 915 MHz, AX.25 49 MHz), plus 2 GPS/GNSS antennas. Only 2 stacks (River, Simon) carry
+49 MHz + LoRa 915 MHz Emma boards; no stack carries both LoRa and SiK on the same 915 MHz ISM
+band at once. Per-stack radio assignment is fixed by the PACE table in `CLAUDE.md` (Shepherd:
+SiK primary / Wi-Fi secondary; Inara: Wi-Fi primary / SiK secondary; River: 49 MHz primary /
+LoRa secondary; Simon: 49 MHz primary / SiK secondary).
 
-- [ ] 2 antennas for each of the 4 comm links, plus 2 gps/gnss antennas. This alsomeansthere are only 2 49MHz xcvrs. Each avionics stack has two. No Avionics stack has both LoRa and SiK, since those use the same 900mhz ism band.
-
-- [ ] antenna mounts
-
-- [ ] feedlines
-
-- [ ] chokes
+- [ ] **Resolve total antenna count per stack against the PACE radio table** — reconcile the
+    "2 per comm link" basis above with the actual per-stack radio fit (Shepherd/Inara: Wi-Fi +
+    SiK, no Emma; River/Simon: 49 MHz + LoRa + SiK via Emma) before fixing mount positions.
+    **BLOCKS antenna mounts below.**
+- [ ] **Antenna mounts:**
+    - [ ] Shepherd's Room — Wi-Fi 5 GHz panel/patch mount + SiK 915 MHz whip mount.
+    - [ ] Inara's Shuttle — Wi-Fi 5 GHz panel/patch mount + SiK 915 MHz whip mount.
+    - [ ] River's Room — 49 MHz 1/4-wave whip mount (per XCVR-49MHZ-2 antenna spec, §1.3) +
+        LoRa 915 MHz whip mount (shares Emma's RFM95W feed).
+    - [ ] Simon's Medbay — 49 MHz 1/4-wave whip mount + SiK 915 MHz whip mount.
+    - [ ] 4× GPS/GNSS patch antenna mounts (one per FC node, per §4.4 "GPS cross-check").
+    - [ ] Zigbee 2.4 GHz antenna mount — confirm which stack(s) carry the Zigbee radio; not
+        currently listed in any Cape-B-2 antenna filter chain (§1.2, "remove Wi-Fi, sik, and
+        loRa antennas from Zoë"). **Flag for clarification if Zigbee hardware is not yet on
+        the BOM.**
+- [ ] **Feedlines** — coax run from each antenna mount to its SMA bulkhead connector
+    (J_SMA_LORA/J_SMA_WIFI/J_SMA_SIK already defined on Cape-B-2, §1.2): specify cable type
+    (e.g. RG-316 or equiv. low-loss for the run lengths involved), max run length per link
+    budget, and routing path through the Faraday enclosure feedthrough panel (FAR-FT-PANEL,
+    §1.1.5) without crossing digital-section keep-out zones.
+- [ ] **Chokes** — ferrite choke placement on each feedline at the Faraday enclosure
+    boundary crossing, matching the filtered-choke treatment already implemented on Zoë's
+    antenna filter chain (§1.2, Johanson BPF + RCLAMP0502B per radio).
 
 #### 1.4.3 internode communication wiring
 
-- [ ] Specify Signal wiring for CAN-FD, RS485, MIL-1553b, Ethernet
+Per-bus signal wiring specification for the 4 internode buses (CAN FD, MIL-STD-1553B, RS-485,
+Ethernet) connecting all 8 nodes — see CLAUDE.md "Onboard Communications."
+
+- [ ] **CAN FD** — specify bus topology (linear trunk vs. star), termination (120 Ω at each
+    physical end), node tap spacing, and connector pinout per node; cross-reference the
+    CAN_H/CAN_L footprint pinout already fixed on Wash (§1.2).
+- [ ] **RS-485** — specify daisy-chain topology, termination, and connector pinout per node;
+    cross-reference the RS485_A/B footprint pinout already fixed on Wash (§1.2).
+- [ ] **MIL-STD-1553B** — specify bus controller / remote terminal wiring per node role
+    (§4.2 "MIL-STD-1553B RT implementation," §4.3 "MIL-STD-1553B BC/RT tasks"); stub length
+    and transformer-coupling placement per node, matching the 1553-XFM coupling already
+    partially netted on Wash (§1.2).
+- [ ] **Ethernet** — specify CPSW3G ring topology (node-to-node order), cable category, and
+    connector pinout; cross-reference the 100 Ω ±10% MDI impedance-controlled traces already
+    specified on Wash/Zoë (§1.2) and the RSTP ring management firmware task (§4.3).
 
 #### 1.4.4 flight control signal wiring
 
-- [ ] Specify wiring for UART, I2C, BSHOT, PWM,
+Per-signal-type wiring specification for sensor/actuator signals local to each FC node.
+
+- [ ] **UART** — specify wiring for GPS (u-blox M10Q NMEA/UBX, §4.2), SBUS-equivalent
+    (§1.2 "Add SBUS/UART DIP switch to Wash"), and any inter-cape UART links.
+- [ ] **I2C** — specify wiring for IMU/barometer (ICM-42688-P, BMP388/390 — note these are
+    SPI per §4.2, verify bus assignment), ToF array mux (TCA9548A) and XSHUT GPIO expander
+    (MCP23008), and the `U-GPIO` PCA9555DB expander already added to Wash (§1.2).
+- [ ] **BDSHOT/DSHOT (ESC telemetry)** — specify wiring for the ESC-PWM connector (DSHOT0–3,
+    JST-GH 5-pin, already defined on Wash §1.2) and BDSHOT600 telemetry return path on PRU-ICSS
+    (§4.2 "EDF ESC PID governor").
+- [ ] **PWM** — specify wiring for nacelle tilt servo control (EHRPWM/PRU, §4.2 "Nacelle tilt
+    servo PWM generation") and the SERVO-PWM 1×8 connector pinout already defined on Wash
+    (§1.2).
 
 #### 1.4.5 power distribution — Kaylee (PDB) and battery
 
@@ -1841,39 +1951,39 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 - [ ] **Flight Envelope Document** — create `docs/flight_envelope.md` covering:
 
-    - V_min (minimum control airspeed) vs. nacelle tilt angle — computed from wing area, CL_max, and nacelle thrust fraction
+    - [ ] V_min (minimum control airspeed) vs. nacelle tilt angle — computed from wing area, CL_max, and nacelle thrust fraction
 
-    - V_max (never-exceed speed) vs. structural load limit and EDF rpm ceiling
+    - [ ] V_max (never-exceed speed) vs. structural load limit and EDF rpm ceiling
 
-    - Altitude operating limits (AGL and MSL) per FAA Part 107 and battery performance
+    - [ ] Altitude operating limits (AGL and MSL) per FAA Part 107 and battery performance
 
-    - Maximum demonstrated crosswind per nacelle angle increment (0°, 30°, 60°, 90°)
+    - [ ] Maximum demonstrated crosswind per nacelle angle increment (0°, 30°, 60°, 90°)
 
-    - Transition corridor: altitude AGL floor for nacelle 90°→0° sweep (minimum safe altitude to initiate transition)
+    - [ ] Transition corridor: altitude AGL floor for nacelle 90°→0° sweep (minimum safe altitude to initiate transition)
 
 - [ ] **Failsafe Threshold Document** — create `docs/failsafe_thresholds.md` covering:
 
-    - Battery low-voltage alert threshold per cell (default 3.7V/cell) and RTL cutoff (3.5V/cell)
+    - [ ] Battery low-voltage alert threshold per cell (default 3.7V/cell) and RTL cutoff (3.5V/cell)
 
-    - Node heartbeat timeout for master re-election (default 100ms on CAN FD)
+    - [ ] Node heartbeat timeout for master re-election (default 100ms on CAN FD)
 
-    - Radio loss timer before automatic RTL (default 5s for SiK/LoRa; 10s for 49 MHz (Part 15 §15.235) as backup)
+    - [ ] Radio loss timer before automatic RTL (default 5s for SiK/LoRa; 10s for 49 MHz (Part 15 §15.235) as backup)
 
-    - ESC thermal cutback threshold (default 85°C) and shutdown threshold (95°C)
+    - [ ] ESC thermal cutback threshold (default 85°C) and shutdown threshold (95°C)
 
-    - ToF obstacle avoidance halt clearance (default 1.0m) and resume clearance (default 1.5m)
+    - [ ] ToF obstacle avoidance halt clearance (default 1.0m) and resume clearance (default 1.5m)
 
-    - All thresholds must be defined as compile-time constants in `firmware/common/failsafe_config.h`
+    - [ ] All thresholds must be defined as compile-time constants in `firmware/common/failsafe_config.h`
 
 - [ ] **Electrical Fault Margin Validation** — create `docs/electrical_fault_margins.md` covering:
 
-    - Maximum ESC short-circuit current at 6S and required fuse break time; verify XT30 + 100A poly fuse coordinates with ESC MOSFET safe operating area
+    - [ ] Maximum ESC short-circuit current at 6S and required fuse break time; verify XT30 + 100A poly fuse coordinates with ESC MOSFET safe operating area
 
-    - BEC brown-out threshold: minimum input voltage at which 5V BEC output stays in regulation (≥4.90V); verify with actual 14AWG wire resistance at peak current
+    - [ ] BEC brown-out threshold: minimum input voltage at which 5V BEC output stays in regulation (≥4.90V); verify with actual 14AWG wire resistance at peak current
 
-    - Main bus fuse sizing: peak current = 4× EDF ESCs (4× 40A) = 160A nacelle peak; verify main XT90 connector rating and main fuse break curve do not nuisance-trip on motor surge
+    - [ ] Main bus fuse sizing: peak current = 4× EDF ESCs (4× 40A) = 160A nacelle peak; verify main XT90 connector rating and main fuse break curve do not nuisance-trip on motor surge
 
-    - Balance of plant: verify that loss of any single PWR conduit tap does not collapse the 5V avionics rail (BEC must tolerate single-segment loss)
+    - [ ] Balance of plant: verify that loss of any single PWR conduit tap does not collapse the 5V avionics rail (BEC must tolerate single-segment loss)
 
 **Printer setup:**
 
@@ -2694,18 +2804,49 @@ before Phase 11 fabrication (see §11C). Old iris files (`rear_nozzle_frame.stl`
 ### 4.2 — FC Node (Wash) — Phase 7 Firmware
 
 - [ ] **EDF ESC PID governor** — BDSHOT600 telemetry input on PRU-ICSS, EHRPWM output to ESCs, CAN FD cross-node synchronisation. Targets: settle <200ms, overshoot <5%; equalization |RPM_FWD − RPM_AFT| <100 RPM; fault latch on overtemp/overcurrent (no auto-recovery, GCS ack required).
+    - [ ] PRU-ICSS BDSHOT600 telemetry decoder (RPM, voltage, current, temp frames).
+    - [ ] EHRPWM throttle output driver with `governor_config.h` k-coefficient (§4.1, already calibrated).
+    - [ ] CAN FD cross-node RPM sync message (fwd/aft pairing across River/Simon).
+    - [ ] PID tuning bench test against `governor_cal.py` thrust-stand data; verify settle/overshoot/equalization targets above.
+    - [ ] Overtemp/overcurrent fault-latch unit test (no auto-recovery path).
 
 - [ ] **Nacelle tilt servo PWM generation** — EHRPWM or PRU; travel limits −5°/140° enforced in firmware; symmetric 2° tracking both nacelles.
+    - [ ] EHRPWM/PRU servo output driver with firmware-enforced travel limits (−5°/140°).
+    - [ ] Symmetric tracking control loop (port/stbd nacelle ≤2° divergence).
+    - [ ] Bench test: command full sweep, verify limit clamping and tracking error budget.
 
 - [ ] **IMU / barometer sensor fusion** — ICM-42688-P (SPI), BMP388/BMP390 (SPI); complementary or Kalman filter for attitude; altitude hold PID using barometric altitude + GPS.
+    - [ ] ICM-42688-P SPI driver (accel/gyro read, calibration/bias removal).
+    - [ ] BMP388/BMP390 SPI driver (pressure/altitude read).
+    - [ ] Attitude filter (complementary or Kalman) fusing IMU + barometer.
+    - [ ] Altitude-hold PID using fused barometric + GPS altitude.
+    - [ ] Bench test: static and bench-rotation attitude accuracy check.
 
 - [ ] **ToF sensor array management** — VL53L5CX ×6 per node via TCA9548A I²C mux; XSHUT sequencing via MCP23008; OA fusion (Array A + Array B cross-check); halt at 1.0m clearance.
+    - [ ] TCA9548A I²C mux driver (channel select for 6× VL53L5CX per node).
+    - [ ] MCP23008 XSHUT sequencing driver (sensor power-up ordering, address conflict avoidance).
+    - [ ] VL53L5CX 8×8 ranging driver and per-sensor data aggregation.
+    - [ ] Array A / Array B cross-check fusion logic; halt-at-1.0m / resume-at-1.5m hysteresis (matches §4.4 "OA integration").
+    - [ ] Bench test: known-distance target sweep, verify halt/resume thresholds.
 
 - [ ] **u-blox M10Q GNSS integration** — UART NMEA/UBX parse; position fix broadcast on CAN FD; HDOP gating (≤1.5 for valid position); multi-node position cross-check (≤2m disagreement threshold).
+    - [ ] UART NMEA/UBX parser (position, velocity, HDOP, fix-type fields).
+    - [ ] HDOP gating logic (reject fix if HDOP >1.5).
+    - [ ] CAN FD position-fix broadcast frame.
+    - [ ] Multi-node cross-check consumer (flag/exclude outliers >2m, feeds §4.4 "GPS cross-check").
+    - [ ] Bench/field test: static fix HDOP and 4-node position agreement.
 
 - [ ] **MIL-STD-1553B RT implementation** — PRU-ICSS Manchester II encoder/decoder; RT address assignment per node role; BC arbitration on FC1 and FC2.
+    - [ ] PRU-ICSS Manchester II encode/decode driver.
+    - [ ] RT address assignment table per node role (FC1–FC4).
+    - [ ] BC arbitration logic for FC1 (primary) / FC2 (standby).
+    - [ ] Bench test against the 1553-XFM transformer coupling hardware (§1.2 "Wire the MIL-1553 connector + transformer").
 
 - [ ] **TPM-bound attestation** — SLB9670 TPM 2.0 HMAC on all outbound flight-critical CAN FD messages; pcrs extend on each boot; boot measurement chain.
+    - [ ] SLB9670 TPM 2.0 driver (HMAC key derivation, PCR extend calls).
+    - [ ] Boot measurement chain (PCR extend at each boot stage).
+    - [ ] Outbound CAN FD HMAC signing hook for flight-critical message classes.
+    - [ ] Bench test: tamper/replay rejection unit test against signed vs. unsigned frames.
 
 - [x] **governor_cal.py** — thrust stand calibration script: sweeps 0%→100%→0% throttle, fits k coefficient (T = k × RPM²), outputs `EDF_THRUST_K` for `governor_config.h`. *(done 2026-06-04)*
 
@@ -2714,32 +2855,77 @@ before Phase 11 fabrication (see §11C). Old iris files (`rear_nozzle_frame.stl`
 ### 4.3 — CN Node (Zoë) — Phase 7 Firmware
 
 - [ ] **CAN FD heartbeat and telemetry forwarding** — broadcast 0x001–0x008 node health frames; relay MAVLink telemetry from elected FC master to SiK GCS link.
+    - [ ] 0x001–0x008 node health frame broadcaster (per-node heartbeat content/period).
+    - [ ] MAVLink telemetry relay path: FC master CAN FD → CN master → SiK GCS link.
+    - [ ] Bench test: heartbeat timeout detection feeding §4.4 "Node role election protocol."
 
 - [ ] **MIL-STD-1553B BC/RT tasks** — BC on CN1 (standby), RT on CN2–CN4; mirror FC bus controller arbitration.
+    - [ ] BC standby logic on CN1 (mirrors FC1/FC2 arbitration, §4.2).
+    - [ ] RT implementation on CN2–CN4 (shares PRU-ICSS Manchester II driver with §4.2).
+    - [ ] Bench test against 1553-XFM transformer coupling hardware (§1.2).
 
 - [ ] **RS-485 inter-board messaging** — structured message format (header/payload/CRC); inter-node command and status relay.
+    - [ ] Define structured frame format (header/payload/CRC) shared across all 8 nodes.
+    - [ ] Driver for the RS485_A/B footprint pinout already fixed on Wash/Zoë (§1.2).
+    - [ ] Bench test: CRC-reject malformed frame, command/status round-trip between two nodes.
 
 - [ ] **Ethernet RSTP ring management** — CPSW3G bridge configuration; RSTP fast-failover (<1s) verification; ring segment health monitoring.
+    - [ ] CPSW3G bridge configuration for the 8-node ring topology (§1.4.3).
+    - [ ] RSTP fast-failover implementation and timer tuning.
+    - [ ] Ring segment health monitoring/reporting hook (feeds CAN FD heartbeat above).
+    - [ ] Bench test: physically break one ring segment, verify <1s failover.
 
 - [ ] **Signed-log write via CPLD write-blocker** — log records written as read-only-append through ATF16V8BQL latch interface; NOR flash (W25Q128JV) circular buffer for overflow.
+    - [ ] ATF16V8BQL CPLD write-blocker interface driver (enforces append-only).
+    - [ ] microSD log writer (primary store) per node's write-blocked card.
+    - [ ] W25Q128JV NOR flash circular buffer driver for overflow when microSD is full/unavailable.
+    - [ ] Bench test: attempt out-of-order/overwrite write, verify CPLD blocks it.
 
 - [ ] **TPM-bound HMAC on all outbound AX.25 payloads** — each 49 MHz (Part 15 §15.235) packet includes HMAC-SHA256 computed from SLB9670 stored key; receiver nodes verify before acting.
+    - [ ] SLB9670 stored-key HMAC-SHA256 signer for outbound AX.25/49 MHz frames (Emma boards, River/Simon).
+    - [ ] Receiver-side verification gate (discard unsigned/invalid before acting, mirrors §4.4 "Security message signing").
+    - [ ] Bench test: signed/unsigned/corrupted-signature frame acceptance matrix.
 
 - [ ] **Cargo control** — DRV8833 winch H-bridge, HX711 load cell (payload weight sensing), SG90 door and release servos; state machine: IDLE → DEPLOY → DELIVERED → RETRACT → LATCHED.
+    - [ ] DRV8833 H-bridge winch driver.
+    - [ ] HX711 load-cell driver (payload weight sensing, overload cutoff).
+    - [ ] SG90 door + release servo driver.
+    - [ ] State machine implementation: IDLE → DEPLOY → DELIVERED → RETRACT → LATCHED, with fault states.
+    - [ ] Bench test: full cycle with simulated payload load, verify HX711 cutoff and state transitions.
 
 - [ ] **MAVLink routing configuration** — mavlink-router config: elected CN master routes FC master telemetry to all 4 radio links (SiK, LoRa, Wi-Fi, 49 MHz (Part 15 §15.235) backup).
+    - [ ] mavlink-router config file per CN role (master vs. standby).
+    - [ ] Per-link output adapter: SiK, LoRa (Emma), Wi-Fi, 49 MHz (Part 15 §15.235) (Emma, backup).
+    - [ ] Bench test: verify telemetry reaches Malcolm GCS over each of the 4 links independently.
 
 ### 4.4 — Both Nodes
 
 - [ ] **Node role election protocol** — CAN FD priority arbitration at boot; lowest node-ID wins master role; automatic failover on heartbeat timeout (100ms); FC master and CN master elected independently.
+    - [ ] Boot-time CAN FD priority arbitration (lowest node-ID wins, per PACE table in CLAUDE.md).
+    - [ ] Independent FC-master / CN-master election state machines.
+    - [ ] Failover trigger on 100ms heartbeat timeout (consumes §4.3 heartbeat broadcast).
+    - [ ] Bench test: kill the current master, verify failover to next PACE tier within timeout.
 
 - [ ] **Autonomous navigation** — 3-waypoint GPS mission execution; altitude hold ±0.3m; waypoint radius 2m; RTL on any link loss >5s.
+    - [ ] Waypoint mission sequencer (3-waypoint minimum viable mission).
+    - [ ] Altitude-hold integration with §4.2 barometric/GPS altitude PID.
+    - [ ] Waypoint-radius capture logic (2m) and RTL trigger on link loss >5s.
+    - [ ] Field test: full 3-waypoint mission with deliberate link-loss RTL trigger.
 
 - [ ] **OA integration** — ToF halt trigger feeds into navigation; velocity command zeroed within 1.0m of obstacle; resumes when clear.
+    - [ ] Navigation-layer consumer for §4.2 ToF array halt/resume signal.
+    - [ ] Velocity command zeroing at 1.0m clearance; resume logic at 1.5m clearance.
+    - [ ] Bench/field test: approach a target obstacle, verify halt/resume hysteresis in flight.
 
 - [ ] **GPS cross-check** — 4 GPS receivers (one per FC node); positions averaged; outlier >2m flagged and excluded from blend.
+    - [ ] Multi-node position collection (4× u-blox M10Q via §4.2 CAN FD broadcast).
+    - [ ] Averaging/blend algorithm with outlier exclusion (>2m disagreement).
+    - [ ] Bench test: inject a synthetic outlier fix, verify exclusion from blend.
 
 - [ ] **Security message signing** — every inter-node CAN FD message signed; unauthenticated messages discarded; signing key material bound to node TPM endorsement key.
+    - [ ] CAN FD message signing hook bound to each node's TPM endorsement key (SLB9670, §4.2).
+    - [ ] Receiver-side verification gate; discard unauthenticated frames before acting.
+    - [ ] Bench test: inject unsigned/forged frame on the bus, verify it is discarded and logged.
 
 ### 4.5 — Ground Control (Malcolm / "CAPT Reynolds")
 
