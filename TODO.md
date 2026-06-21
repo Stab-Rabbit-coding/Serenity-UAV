@@ -52,14 +52,25 @@ text) has been removed and logged under "Removed / Superseded Citations."
 - [x] **Update CLAUDE.md, TODO.md status lines, and other docs** referring to the 49 MHz link as
   "RCRS" — relabeled as "49 MHz (Part 15 §15.235)" throughout active (non-archived) docs.
   *(2026-06-20)*
-- [ ] **NEW — Re-architect the 49 MHz link's power/range budget.**  At the §15.235-compliant
-  ≈ 48 µW conducted power level, this link's realistic range is likely well under a quarter
-  mile, which contradicts its design role as River's resilient long-range backup comms path
-  (see CLAUDE.md Avionics Workload Balancing).  Research whether a different frequency/band or
-  a licensed service (e.g. Part 90 land mobile, or relocating off 49 MHz entirely) can legally
-  support the originally intended ~100 mW / multi-mile link, or whether the design intent for
-  this link must be revised to match what Part 15 actually permits.  **Architecturally
-  significant — do not resolve without user review.**
+- [x] **Re-architect the 49 MHz link's power/range budget — RCRS researched and rejected
+  2026-06-20 (REF-FCC-004).**  At the §15.235-compliant ≈ 48 µW conducted power level, this
+  link's realistic range is likely well under a quarter mile, which contradicts its design role
+  as River's resilient long-range backup comms path (see CLAUDE.md Avionics Workload Balancing).
+  47 CFR Part 95 Subpart C RCRS (72/75 MHz) was evaluated as a candidate replacement — it
+  permits 0.75 W mean output (§95.767), ≈42 dB above the §15.235 ceiling — and rejected for three
+  independent reasons: (1) **§95.731 prohibits RCRS transmitters from carrying data at all**
+  ("No person shall use a RCRS transmitter to transmit data"; one-way telecommand/indicator-
+  telemetry only) — disqualifying regardless of band or power, since Emma's actual payload is
+  bidirectional signed/authenticated AX.25 packet data required by the Zero Trust policy
+  (REF-NIST-001 §2.1); (2) Serenity is an aircraft, so §95.763(c) restricts it to the 72 MHz
+  band only — 75 MHz is surface-craft-only by rule, and **78 MHz is not an RCRS allocation at
+  all**; (3) moving to 72 MHz would still require a from-scratch Part 95 equipment certification
+  (§95.735's non-certified-transmitter exception covers only 26–28 MHz), so it does not reduce
+  the certification burden already carried under Part 15.  Full citation trail in
+  `REFERENCES.md` REF-FCC-004.  **Remaining open item:** the underlying range/power-budget
+  problem is still unresolved — candidates not yet researched are Part 90 land mobile (licensed,
+  permits data) or revising the design intent for this link to match what Part 15 §15.235
+  actually permits.  **Architecturally significant — do not resolve without user review.**
 - [x] **§15.203 antenna/connector non-compliance, confirmed violation, resolved in design
   2026-06-20.** Emma's RF port (J2) previously used a generic SMA edge connector (Amphenol
   132289) — a standard antenna jack.  §15.203 text: *"the use of a standard antenna
@@ -1666,7 +1677,7 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
 
 - [x] The Power Distribution Board is named "Kaylee" - "Everything is shiny." *(implemented: Kaylee.md, PWR-DIST-1.kicad_sch)*
 
-- [ ] The Cargo handling system is named "Jayne's bunk" - "I was aiming for his head."
+- [x] The Cargo handling system is named "Jayne" - "I was aiming for his head." *(implemented: README.md §Cargo Handling — Jayne, CLAUDE.md, generate_placeholders.py, middle_canonical_shell24.scad)*
 
 - [x] The forward avionics bay is named "Shepherd's room" (Bay A) - "I have heathens enough right here." *(implemented 2026-06-07)*
 

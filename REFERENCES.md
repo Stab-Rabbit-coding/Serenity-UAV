@@ -3,7 +3,55 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
 **Revision:** R1
-**Last updated:** 2026-06-16
+**Last updated:** 2026-06-20
+
+---
+
+## Table of Contents
+
+- [Standards Vetting Policy](#standards-vetting-policy)
+- [Citation Format](#citation-format)
+- [Part I — United States Federal Aviation Regulations](#part-i--united-states-federal-aviation-regulations)
+  - [REF-FAA-001: 14 CFR Part 48 — Registration and Marking Requirements for Small Unmanned Aircraft Systems](#ref-faa-001-14-cfr-part-48--registration-and-marking-requirements-for-small-unmanned-aircraft-systems)
+  - [REF-FAA-002: 14 CFR Part 107 — Small Unmanned Aircraft Systems](#ref-faa-002-14-cfr-part-107--small-unmanned-aircraft-systems)
+  - [REF-FAA-003: 14 CFR §91.209 — Aircraft Lights](#ref-faa-003-14-cfr-91209--aircraft-lights)
+- [Part II — United States Federal Communications Commission Regulations](#part-ii--united-states-federal-communications-commission-regulations)
+  - [REF-FCC-001: 47 CFR §15.247 — Operation within the bands 902–928 MHz, 2400–2483.5 MHz, and 5725–5850 MHz](#ref-fcc-001-47-cfr-15247--operation-within-the-bands-902928-mhz-240024835-mhz-and-57255850-mhz)
+  - [REF-FCC-002: 47 CFR Part 15 Subpart E — Unlicensed National Information Infrastructure Devices (UNII)](#ref-fcc-002-47-cfr-part-15-subpart-e--unlicensed-national-information-infrastructure-devices-unii)
+  - [REF-FCC-003: 47 CFR Part 15 §15.235 — Operation Within the Band 49.82–49.90 MHz](#ref-fcc-003-47-cfr-part-15-15235--operation-within-the-band-49824990-mhz)
+  - [REF-FCC-004: 47 CFR Part 95 Subpart C — Radio Control Radio Service (RCRS) — Evaluated and Rejected for Emma's 49 MHz Link](#ref-fcc-004-47-cfr-part-95-subpart-c--radio-control-radio-service-rcrs--evaluated-and-rejected-for-emmas-49-mhz-link)
+- [Part III — NIST Security Standards](#part-iii--nist-security-standards)
+  - [REF-NIST-001: NIST SP 800-207 — Zero Trust Architecture](#ref-nist-001-nist-sp-800-207--zero-trust-architecture)
+  - [REF-NIST-002: NIST SP 800-82 Rev 3 — Guide to Operational Technology (OT) Security](#ref-nist-002-nist-sp-800-82-rev-3--guide-to-operational-technology-ot-security)
+  - [REF-NIST-003: NIST SP 800-160 Vol 1 Rev 1 — Engineering Trustworthy Secure Systems](#ref-nist-003-nist-sp-800-160-vol-1-rev-1--engineering-trustworthy-secure-systems)
+  - [REF-NIST-004: NIST SP 800-92 — Guide to Computer Security Log Management](#ref-nist-004-nist-sp-800-92--guide-to-computer-security-log-management)
+- [Part IV — Defense Standards](#part-iv--defense-standards)
+  - [REF-MIL-001: MIL-STD-1553B — Aircraft Internal Time Division Command/Response Multiplex Data Bus](#ref-mil-001-mil-std-1553b--aircraft-internal-time-division-commandresponse-multiplex-data-bus)
+- [Part V — International Standards (ISO, IEC)](#part-v--international-standards-iso-iec)
+  - [REF-ISO-001: ISO 11898-1:2015 — Road Vehicles — Controller Area Network (CAN) — Part 1: Data Link Layer and Physical Signalling](#ref-iso-001-iso-11898-12015--road-vehicles--controller-area-network-can--part-1-data-link-layer-and-physical-signalling)
+  - [REF-IEC-001: IEC 62368-1 Ed. 3.0 — Audio/Video, Information and Communication Technology Equipment — Part 1: Safety Requirements](#ref-iec-001-iec-62368-1-ed-30--audiovideo-information-and-communication-technology-equipment--part-1-safety-requirements)
+  - [REF-IEC-002: IEC 60825-1:2014+AMD1:2021 — Safety of Laser Products — Part 1: Equipment Classification and Requirements](#ref-iec-002-iec-60825-12014amd12021--safety-of-laser-products--part-1-equipment-classification-and-requirements)
+  - [REF-VDE-001: VDE V 0884-11:2017-01 — Optocouplers for Use in Electrical Equipment — Test and Measurement Methods](#ref-vde-001-vde-v-0884-112017-01--optocouplers-for-use-in-electrical-equipment--test-and-measurement-methods)
+- [Part VI — IEEE Standards](#part-vi--ieee-standards)
+  - [REF-IEEE-001: IEEE 802.3-2022 — Ethernet (CSMA/CD Access Method and Physical Layer Specifications)](#ref-ieee-001-ieee-8023-2022--ethernet-csmacd-access-method-and-physical-layer-specifications)
+  - [REF-IEEE-002: IEEE 802.11-2020 — Wireless LAN Medium Access Control (MAC) and Physical Layer (PHY) Specifications](#ref-ieee-002-ieee-80211-2020--wireless-lan-medium-access-control-mac-and-physical-layer-phy-specifications)
+  - [REF-IEEE-003: IEEE 802.15.4-2020 — Low-Rate Wireless Networks](#ref-ieee-003-ieee-802154-2020--low-rate-wireless-networks)
+- [Part VII — ISA/IEC Industrial Cybersecurity Standards](#part-vii--isaiec-industrial-cybersecurity-standards)
+  - [REF-ISA-001: ISA/IEC 62443-3-3:2013 — Industrial Automation and Control Systems Security — System Security Requirements and Security Levels](#ref-isa-001-isaiec-62443-3-32013--industrial-automation-and-control-systems-security--system-security-requirements-and-security-levels)
+- [Part VIII — ICAO Standards](#part-viii--icao-standards)
+  - [REF-ICAO-001: ICAO Annex 2 — Rules of the Air](#ref-icao-001-icao-annex-2--rules-of-the-air)
+- [Part IX — Protocol References](#part-ix--protocol-references)
+  - [REF-PROTO-001: AX.25 Link Access Protocol for Amateur Packet Radio](#ref-proto-001-ax25-link-access-protocol-for-amateur-packet-radio)
+  - [REF-PROTO-002: MAVLink v2 Protocol Specification](#ref-proto-002-mavlink-v2-protocol-specification)
+- [Part X — AUVSI and Industry Frameworks](#part-x--auvsi-and-industry-frameworks)
+  - [REF-AUVSI-001: AUVSI Trusted Operator Program (TOP) and XCELLENCE Safety Standards](#ref-auvsi-001-auvsi-trusted-operator-program-top-and-xcellence-safety-standards)
+- [Part XI — FDA / CDRH Laser Product Regulations](#part-xi--fda--cdrh-laser-product-regulations)
+  - [REF-FDA-001: 21 CFR Part 1040 — Performance Standards for Light-Emitting Products](#ref-fda-001-21-cfr-part-1040--performance-standards-for-light-emitting-products)
+- [Part XII — Sensor and Component Specifications](#part-xii--sensor-and-component-specifications)
+  - [REF-SENSOR-001: RunCam Nano 4 — 19 mm Nano Format FPV Camera Specification](#ref-sensor-001-runcam-nano-4--19-mm-nano-format-fpv-camera-specification)
+  - [REF-SENSOR-002: Benewake TFmini-S — Long-Range Time-of-Flight Ranging Module Specification](#ref-sensor-002-benewake-tfmini-s--long-range-time-of-flight-ranging-module-specification)
+- [Removed / Superseded Citations](#removed--superseded-citations)
+- [Open Standards Verification Items](#open-standards-verification-items)
 
 ---
 
@@ -232,6 +280,40 @@ fix is complete.
 **Used in:** `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`,
 `avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`,
 `README.md`, `TODO.md`, `CLAUDE.md`, `docs/AVIONICS_PB2_REDESIGN.md`
+
+---
+
+### REF-FCC-004: 47 CFR Part 95 Subpart C — Radio Control Radio Service (RCRS) — Evaluated and Rejected for Emma's 49 MHz Link
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | FCC |
+| **Official URL** | https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-95/subpart-C |
+| **Status** | **Not used in design.** Researched 2026-06-20 as a candidate replacement band/service for Emma's 49 MHz link (to recover the power/range budget §15.235 does not permit — see REF-FCC-003 and TODO.md §0.1) and rejected. Retained here per the Standards Vetting Policy so the rejection is auditable and is not re-investigated from scratch in a future session. |
+
+**Regulatory provisions reviewed:**
+
+| Provision | Description | Citation |
+|---|---|---|
+| 72 MHz channel plan | 50 channels, 72.01–72.99 MHz, 20 kHz spacing; **usable only to control and operate model aircraft** | §95.763(b) |
+| 75 MHz channel plan | 30 channels, 75.41–75.99 MHz, 20 kHz spacing; **usable only to control and operate model surface craft** | §95.763(c) |
+| 26–28 MHz channel plan | 6 channels, 26.995–27.255 MHz | §95.763(a) |
+| Frequency tolerance | ±20 ppm at 72/75 MHz; ±50 ppm (or ±100 ppm under the ≤2.5 W on/off-only exception) at 26–28 MHz | §95.765 |
+| Transmitter power | Mean output power ≤ 0.75 W on 72/75 MHz | §95.767 |
+| Permissible use | RCRS transmitters may be used **only for one-way communications** (telecommand, and on 26–28 MHz only, narrow on/off-indicator telemetry); **"No person shall use a RCRS transmitter to transmit data"** | §95.731 |
+| Equipment certification | No certification exception exists for 72/75 MHz transmitters (the §95.735 non-certified-transmitter exception applies only to the 26–28 MHz band) | §95.735 |
+| Licensing | Operated without an individual license ("licensed by rule"), but the equipment itself requires Part 95-specific FCC certification, separate from the Part 15 §2.803/§15.19 process REF-FCC-003 already requires for Emma | §95.305 |
+
+**Findings — why RCRS does not apply to Emma:**
+
+1. **No 78 MHz allocation exists.** §95.763 defines only the 26–28 MHz, 72 MHz, and 75 MHz channel plans; there is no 78 MHz RCRS band in 47 CFR Part 95 at any subpart.
+2. **Aircraft/surface split forecloses 75 MHz.** Serenity is an aircraft. §95.763(c) restricts 75 MHz channels to model *surface* craft by rule; only the 72 MHz band (§95.763(b)) is available to an aircraft under RCRS.
+3. **§95.731 is disqualifying regardless of band or power.** Emma's payload is bidirectional AX.25 KISS-framed packet data (signed/authenticated messages, telemetry, command — required by the Zero Trust policy, REF-NIST-001 §2.1) — squarely "data" under §95.731's prohibition. RCRS permits only one-way telecommand/indicator-telemetry traffic; it cannot legally carry this link's actual payload even though §95.767's 0.75 W power ceiling is ≈42 dB higher than the ≈30 µW EIRP REF-FCC-003 permits under §15.235.
+4. **No certification or licensing simplification.** Moving to 72 MHz would still require a from-scratch Part 95 equipment certification (no §95.735 exception above 26–28 MHz); it does not reduce the certification burden already carried under Part 15.
+
+**Conclusion:** RCRS is incompatible with this link's function (bidirectional signed data), not just its frequency, and is **not adopted**. See TODO.md §0.1 for the disposition of the underlying range/power-budget problem.
+
+**Used in:** `TODO.md` §0.1
 
 ---
 
