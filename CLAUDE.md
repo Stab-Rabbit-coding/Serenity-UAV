@@ -85,6 +85,19 @@ Every component will be fabricated or procured; design accordingly.
 
 - The rear section consists of a conical engine room with a pod centered above it and two skids below it. the skids are extensions of the horseshoe ring from the middle section, bent aft and extending past the end of the tail cone.
 
+- **Canonical landing leg model (Rev R2): the Strong-Leg.** The current canonical leg for
+  all 4 cargo-corner landing gear assemblies is `airframe/stls/fuselage/landing-gear/strong-leg.stl`
+  — built directly from the existing canonical single-blade leg (misubisu Thingiverse hull,
+  CC BY 4.0) by FreeCAD boolean operation: duplicate the leg, rotate the duplicate 30° about
+  its own vertical centreline, and union the two into one watertight CF-PETG part. The result
+  keeps a single foot attachment point (mates with the unmodified canonical TPU foot pad) but
+  forks into two independent arms at the hull end, each landing on its own hull boss — giving
+  every leg two redundant load paths so it fails progressively (one arm cracks) rather than
+  catastrophically under overload. This retires the Rev R1.4 parametric corner V-brace concept
+  (`airframe/openscad/fuselage/landing_leg_assy.scad`), which was never rendered or printed.
+  Full structural analysis and joint-fitting specs: `docs/LANDING_GEAR_ANALYSIS.md` (Rev R2);
+  build tasks: `TODO.md` §1.1.4.
+
 #### Hull-Frame Coordinate Standard (Rev R1 — baked, canonical)
 
 The canonical assembly document is `airframe/freecad/assembly/SerenityAssembly.FCStd`.

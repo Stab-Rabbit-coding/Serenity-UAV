@@ -834,33 +834,80 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
 #### 1.1.4 **Landing Gear**
 
-**Structural Assessment (2026-06-14):**
+**Canonical leg model (Rev R4, 2026-06-20): Strong-Leg + per-arm ductile wire-loop
+fuse.** The current canonical leg is `airframe/stls/fuselage/landing-gear/strong-leg.stl`
+— built by FreeCAD boolean operation directly on the existing, already-validated
+single-blade canonical leg (`leg_1`…`leg_4_scaled24.stl`, misubisu Thingiverse hull,
+CC BY 4.0): the leg is stood up vertical, **duplicated**, the duplicate **rotated 30°
+about the leg's own vertical centreline**, and the two **unioned** into one watertight
+CF-PETG part. This retires the Rev R1.4 parametric corner V-brace concept
+(`landing_leg_assy.scad`), which was never rendered or printed. Full structural
+analysis: `docs/LANDING_GEAR_ANALYSIS.md` (Rev R4, 2026-06-20).
 
-- Aircraft AUW Phase 5–10: 6.10 lbm (2,768 g); 3g hard-landing load per leg: 20.4 N (4.6 lbf).
-- Leg cross-section 37.5 mm × 7.5 mm CF-PETG at 30 % infill gives effective area ≈ 178 mm²;
-  compressive capacity ≈ 4,450 N → safety factor 218:1.  CF-PETG is the **correct material**.
-- Feet: TPU 95A at 9 mm thick gives landing compliance + grip.  **No separate springs required**
-  for Phase 1 (TPU feet provide sufficient shock absorption; add Belleville washers to socket
-  if hard-field landings cause cracking in Phase 2).
-- **Metal struts are not warranted** — dead mass at 5× the CF-PETG weight for no structural gain.
-- Leg is a 37.5 mm × 7.5 mm diagonal flat slab, 81.5 mm strut length; local foot-to-socket
-  vector ≈ (0.386, 0.922, 0) in part-local frame (not axis-aligned).
-- Ground clearance at 23° tilt: **31 mm (1.22 in)**. This is **insufficient** for the 3-in payload
-  mission (need ≥ 76 mm / 3.0 in). See §1.1.4.1 sub-task for leg extension requirement.
+**Resulting geometry (measured from the exported mesh, see analysis doc §0/§2.3):**
 
-**Canonical socket locations (hull frame, on cargo-section lower sides):**
+- **One foot attachment point** at the bottom — mates with the **existing canonical TPU
+  foot pad** (`foot_1`…`foot_4_scaled24.stl`, 43.9 × 43.9 × 9.0 mm, unmodified outer form).
+- **Two hull-attachment arms** at the top, ≈28–30° apart in azimuth. Each arm tip now
+  carries a **ductile wire-loop fuse** (8 total, 2 per leg) in place of a rigid spigot,
+  landing on its own hull boss socket (8 boss sockets total, 2 per corner).
 
-| Socket   | Hull X (mm) | Hull Y (mm) | Hull Z (mm) | Description                 |
-|----------|-------------|-------------|-------------|-----------------------------|
-| fwd-port | −96         | +2          | +44         | leg_3 top — port side, fwd  |
-| fwd-stbd | −242        | +2          | +44         | leg_2 top — stbd side, fwd  |
-| aft-port | −96         | +107        | +44         | leg_4 top — port side, aft  |
-| aft-stbd | −242        | +107        | +44         | leg_1 top — stbd side, aft  |
+**Rigorous re-verification (2026-06-20) found the bare CF-PETG leg alone does NOT
+safely pass** — the trunk (single load path below the fork) has a fixed cross-section
+that cannot be made stronger than the two arms combined by infill alone, and the real
+system stiffness is ~4.5× higher than the originally assumed compliance, implying an
+elastic peak force (~6,400 N) that would exceed the trunk's max achievable capacity
+(~2,740 N). **Two fixes were added, both required:**
 
-All sockets 44 mm above cargo belly (Z = 0); sockets are on the lower **sides** of the cargo
-section (not the flat belly floor), consistent with canonical Serenity leg attachment.
+1. **Ductile wire-loop fuse, one per arm** (`airframe/openscad/fuselage/wire_loop_fuse.scad`):
+   a closed ring of ductile spring-steel wire (Ø4 mm, 12 mm mean radius) that
+   progressively flattens via a 4-plastic-hinge collapse mechanism under overload,
+   absorbing the bulk of the 6 ft full-AUW per-leg energy (14.04 J) at a predictable
+   ≈1,956 N per fuse — comfortably below the arms' and the widened trunk's yield
+   capacity. ≈9.1 g per fuse, ≈73 g total. A flattened ring is a visible, unambiguous
+   "replace this" field-inspection indicator. **This is the primary sacrificial
+   element** (an elastic spring-steel leaf was evaluated first in Rev R3 and rejected —
+   it needed ≈163 g to store the same energy elastically, with no clear margin in the
+   worst case; ductile plastic deformation is 15–60× more energy-dense than elastic
+   strain energy, hence the much lighter wire-loop fuse).
+2. **Geometrically widened trunk** (not just higher infill — the cross-section itself
+   grows from ≈7.4×8.8 mm to ≈9.9×11.8 mm in the foot-to-fork zone, 100% infill): kept
+   as a secondary backstop, ensuring arms fail before the trunk if both of one leg's
+   fuses are ever exhausted on a severe asymmetric landing.
 
-**Canonical foot positions (hull frame, all level at ground-contact Z = −31 mm):**
+**With both fixes, the design passes with comfortable, hand-calculable margins at every
+stage** (≥1.15× at the CF-PETG structure, ≥2.0× at the hull boss) **and the CF-PETG
+structure is not expected to yield at all in the nominal 6 ft design case** — only the
+field-replaceable wire fuses are expected to activate. This satisfies Requirement 3 of
+`docs/LANDING_GEAR_ANALYSIS.md` §1. Final certification of the ring-collapse mechanics
+requires the instrumented drop test (LG-14) — hand calculation identifies the design
+point but cannot fully certify post-yield material behavior.
+
+**Demonstration STLs** (schematic — placeholder boss cylinder, standalone unbaked leg;
+generated by `tools/build_landing_gear_views.py` + the wire-loop-fuse SCAD; see
+`docs/LANDING_GEAR_ANALYSIS.md` §16): `wire_loop_fuse_nominal.stl`,
+`wire_loop_fuse_deformed.stl`, `landing_gear_assembled.stl`, `landing_gear_exploded.stl`,
+`landing_gear_deformed.stl` — all in `airframe/stls/fuselage/landing-gear/`.
+
+**FreeCAD assembly status (2026-06-20):** Four corner copies exist in
+`airframe/freecad/assembly/SerenityAssembly.FCStd` as Boolean-result objects `Union`,
+`Union001`, `Union002`, `Union003` (90°-stepped rotation: 0°/90°/180°/270°). All four are
+confirmed in their correct corner locations (per the designer, 2026-06-20). The separate
+standalone `strong-leg.stl` export was pulled away from the hull during the
+duplicate/rotate/union editing session and was used only to measure the geometry above —
+it carries no placement information.
+
+**Superseded prior assessments (retained for history only):** Rev R1 (2026-06-14,
+single-blade leg, 37.5×7.5 mm slab, 30% infill, 218:1 compression margin, 31 mm ground
+clearance — still insufficient for the 3-in payload mission, extension to ≥110 mm strut
+length recommended, carried forward as an open item below). Rev R2 (Strong-Leg, no
+fuse, infill-only trunk fix — invalidated by the Rev R3 re-verification). Rev R3
+(Strong-Leg + elastic spring-steel leaf — superseded by the lighter, more predictable
+wire-loop fuse above).
+
+**Foot positions (hull frame, approximate — last validated 2026-06-14 against the Rev R1
+single-leg layout; pending re-confirmation against the Strong-Leg's single foot point
+once LG-10 bake is complete, all level at ground-contact Z ≈ −31 mm):**
 
 | Foot               | Hull X (mm) | Hull Y (mm) | Ground Z (mm) | Notes                        |
 |--------------------|-------------|-------------|---------------|------------------------------|
@@ -870,156 +917,135 @@ section (not the flat belly floor), consistent with canonical Serenity leg attac
 | foot_2 (aft-stbd)  | −264.5      | +129.5      | −31           | same                         |
 
 Stance: 191 mm (7.52 in) lateral × 150 mm (5.91 in) fore-aft;
-CG centroid at X ≈ −169 mm (symmetric) ✓.
+CG centroid at X ≈ −169 mm (symmetric) ✓ (Rev R1 baseline — re-verify once Strong-Leg
+foot positions are baked).
 
-**FreeCAD assembly status (2026-06-14):** Leg and foot placements corrected in
-`airframe/freecad/assembly/SerenityAssembly.FCStd` — all 4 sockets at Z = 44 mm,
-all 4 feet at ground Z = −31 mm, tilt = 23°, azimuth = 45° from Y axis.
-Backup saved as `SerenityAssembly.FCStd.bak2`.
+##### 1.1.4.1 *Strong-Leg — Placement and Bake*
 
-##### 1.1.4.1 *Legs*
+- [x] Build Strong-Leg via FreeCAD duplicate + 30° rotate + union of the canonical
+  single-blade leg *(done — `strong-leg.stl`, watertight, 1 body, 9,612 mm³)*.
 
-- [x] Separate 4x leg stl into individual leg files *(done — leg_1 through leg_4 in
-  `airframe/stls/fuselage/landing-gear/`)*
+- [x] Place 4 corner copies in `SerenityAssembly.FCStd` (`Union`, `Union001`,
+  `Union002`, `Union003`, 90°-stepped rotation) *(done — all 4 confirmed in correct
+  corner locations, 2026-06-20)*.
 
-- [x] Orient and test-fit in FreeCAD assembly; correct azimuth to 45°, level all sockets
-  to Z = 44 mm, all feet to ground Z = −31 mm *(done 2026-06-14)*
+- [ ] **Verify visually in FreeCAD** — confirm all 4 Strong-Legs splay consistently,
+  both arms per leg reach a hull side wall, feet are coplanar at the same ground Z.
+  **Z-leveling rule:** if any of the 4 feet deviate in Z, align all 4 to the **most
+  negative (lowest) Z** of the four — i.e. extend the shorter legs to match the longest,
+  never shorten the longest to match the others, so every foot reaches the ground plane
+  with no leg left floating short of contact.
 
-- [ ] **Verify visually in FreeCAD** — open `SerenityAssembly.FCStd`, confirm all 4 legs
-  splay at 45° to centerline, all feet coplanar (no tilt visible), legs attach to lower sides
-  of cargo section at approximately the same height.
+- [ ] **LG-10 Bake the 4 placed Strong-Legs to hull frame.** Export 4 placed STLs (or
+  document a single part + 4 `bake_hull_frame.py` placements). Run
+  `python3 tools/bake_hull_frame.py` after adding to `COMPONENTS`.
+  **BLOCKS hull boss integration (LG-02) and leg printing (LG-05).**
 
-- [ ] evaluate suitability of model legs for actual use
+- [ ] **Ground clearance check carried forward from Rev R1** — overall Strong-Leg
+  envelope (79.8 mm foot-to-arm-tip) matches the original single-blade leg length, so
+  the prior 31 mm (1.22 in) ground-clearance finding still applies and is still
+  insufficient for the ≥76 mm (3.0 in) payload-mission requirement. Resolve per the
+  Rev R1 options (extend overall leg length, accept reduced clearance for ground
+  loading only, or raise the airframe on a stand for payload loading).
+  **BLOCKS payload mission.**
 
-  - [x] **Multipart / Unitary?** — Unitary (one-piece CF-PETG print per leg).
-    Adequate structural factor (218:1 in compression); no articulation required for fixed gear.
+- [ ] **LG-12 Widened-trunk print profile** — re-model the trunk's local cross-section
+  (local Z = 0–20 mm above the foot) to ≈9.9 × 11.8 mm (up from ≈7.4 × 8.8 mm) and print
+  that zone at 100% infill; arms and fork remain at the standard ≥40% gyroid
+  (`CLAUDE.md` minimum). See `docs/LANDING_GEAR_ANALYSIS.md` §4.5. Mass cost ≈4 g total.
+  **BLOCKS first flight.**
 
-  - [x] **Springs / Struts?** — Not required for Phase 1.  TPU 95A feet provide compliance.
-    If hard-field cracking occurs: add Belleville washer stack (5 mm OD, 10 mm free length)
-    inside socket between leg shoulder and hull — defer to Phase 2.
+##### 1.1.4.2 *Ductile Wire-Loop Fuse*
 
-  - [ ] **Ground clearance is insufficient** — current clearance 31 mm (1.22 in);
-    payload mission requires ≥ 76 mm (3.0 in).  **Resolution options (choose one):**
-    - Extend leg length from 81.5 mm to ≥ 110 mm (new SCAD-generated strut, same cross-section);
-      OR
-    - Redesign as retractable gear (not recommended — complexity, mass, failure modes);
-      OR
-    - Accept current clearance and load payload with aircraft raised on a stand.
-    **Recommended:** extend strut length to 115 mm, maintain 23° tilt and 45° azimuth.
-    Recompute foot positions and re-place in assembly.  **BLOCKS payload mission.**
+- [x] Design and render nominal + deformed wire-loop fuse SCAD/STL *(done —
+  `airframe/openscad/fuselage/wire_loop_fuse.scad`, `wire_loop_fuse_nominal.stl` /
+  `wire_loop_fuse_deformed.stl`, both watertight 1-body meshes)*.
 
-  - [ ] **Mounting to hull — design socket bosses** on cargo-section lower sides.
-    Boss spec (CF-PETG, printed integral to cargo shell inner wall):
-    - Interior socket: 37.5 × 7.5 mm pocket (+ 0.2 mm clearance per side = 37.9 × 7.9 mm)
-    - Wall: 2-perimeter annulus (0.8 mm per side minimum) → boss exterior ≈ 40 × 10 mm
-    - Depth: 15 mm (≥ 2× leg wall thickness)
-    - Positive-stop shoulder: 2 mm lip at socket entry (CLAUDE.md requirement)
-    - Lock: M3 × 10 mm bolt through boss side wall into captive M3 hex insert (5 mm OD)
-    - 4 bosses, one at each canonical socket coordinate (see table above)
-    - Add boss geometry to Blender cargo-section source in
-      `airframe/blender-scripts/files-hollowed-24in/`; re-bake after modifying.
-    **BLOCKS first taxi/landing test.**
+- [x] Build assembled / exploded / deformed demonstration compound STLs *(done —
+  `tools/build_landing_gear_views.py` → `landing_gear_assembled.stl`,
+  `landing_gear_exploded.stl`, `landing_gear_deformed.stl`; schematic placeholder boss,
+  unbaked standalone leg — see `docs/LANDING_GEAR_ANALYSIS.md` §16)*.
 
-  - [ ] **Bake legs and feet to hull frame** after finalizing leg length and socket positions.
-    Neither leg_1–4 STLs nor foot_1–4 STLs carry the `SerenityUAV HULL-FRAME R1` marker.
-    Run `python3 tools/bake_hull_frame.py` after adding them to `COMPONENTS` dict.
+- [ ] **LG-15 Select and procure ductile spring-steel wire stock/temper** for the fuse
+  (§4.3 of the analysis doc); confirm achievable flow stress (target ≈550 MPa) and
+  ductility by coupon bend test; finalize the fuse mounting-pin detail (currently TBD
+  in the BOM). **BLOCKS leg fabrication.**
 
-  - [ ] Implement canonically and mechanically sound legs *(in progress — length extension pending)*
+- [ ] **LG-16 Confirm chosen wire temper survives forming** into the ring shape without
+  premature cracking — coordinate with LG-15. **BLOCKS leg fabrication.**
 
-##### 1.1.4.2 *Feet*
+##### 1.1.4.3 *Hull Boss Sockets*
 
-- [x] Feet separated into individual STLs (`foot_1` through `foot_4` in landing-gear/).
+- [ ] **LG-02 Design and integrate 8 hull boss sockets** (2 per corner, one per arm) into
+  `cargo_sect_shell24.scad` / cargo shell Blender source. Boss spec: OD ≈13 × 12 mm, bore
+  9.7 × 8.7 mm (arm steady cross-section + 0.2 mm clearance) + fuse tab clearance,
+  depth ≥12 mm, 2-wall (1.6 mm) annulus + positive-stop shoulder per `CLAUDE.md`. Run
+  DRC mesh check. **BLOCKS hull print. Depends on LG-10.**
 
-- [x] All 4 feet placed at same ground-contact Z = −31 mm in FreeCAD assembly *(done 2026-06-14;
-  prior foot_3 had a 6 mm placement error that has been corrected)*.
+- [ ] **LG-13 Boss fastener call-out** — 2× M3 × 16 mm PA6 nylon SHCS per boss (4 per leg,
+  16 per aircraft); confirmed adequate (≈1.22× margin) now that the wire fuses cap peak
+  force (`docs/LANDING_GEAR_ANALYSIS.md` §5) — no M4 upsizing needed.
 
-- [ ] Modify feet as needed to mount to legs.
-  Current foot pad: 43.9 × 43.9 × 9 mm TPU 95A (from Thingiverse model).
-  Required: a pocket or socket feature on the top face (Z_max, local = 9 mm) to accept the
-  37.5 × 7.5 mm leg end with a 5 mm deep socket + M2.5 through-bolt.  Evaluate whether the
-  stock foot geometry already provides this or if a new SCAD source is needed.
+##### 1.1.4.4 *Canonical Foot — Socket Modification*
+
+- [x] Feet separated into individual STLs (`foot_1` through `foot_4` in landing-gear/);
+  canonical Thingiverse geometry, 43.9 × 43.9 × 9.04 mm TPU 95A, unmodified outer form.
+
+- [ ] **Add top-face socket to canonical foot** — 7.6 × 9.0 mm bore × 5.0 mm deep
+  (leg foot-tip cross-section 7.41 × 8.77 mm + 0.2 mm clearance), centred on the top
+  face. Retention: 1× M2.5 × 12 mm SS through-bolt. See
+  `docs/LANDING_GEAR_ANALYSIS.md` §7. New SCAD/Blender modifier needed (stock foot mesh
+  has no socket feature today).
 
 - [ ] **Assess foot grip on concrete/asphalt** — TPU 95A is adequate for smooth surfaces.
   For field operations (grass, gravel): consider adding a 3 mm textured grip ring or
   rubber disk insert (Sorbothane 50A, 40 mm OD × 3 mm) bonded to foot bottom face.
-Landing gear structural analysis complete: `docs/LANDING_GEAR_ANALYSIS.md` (Rev R1, 2026-06-14).
-Parametric SCAD: `airframe/openscad/fuselage/landing_leg_assy.scad` (Rev R1).
 
-Design: 4× CF-PETG flat-spring cantilever legs (22 × 10 mm, 185 mm total) + 4× TPU 95A feet
-(existing Thingiverse geometry) + 3× M3 PA6 nylon shear-bolt fuse per leg + 2 mm Dyneema
-safety cord.  Fuse load: ≈848 N (190.7 lbf) per leg = 1.69× the 6 ft drop design force.
-Peak deceleration at 6 ft Phase 11 drop: 65.3g (avionics isolation rated for 100g).
+##### 1.1.4.5 *Superseded — Rev R1.4 Parametric V-Brace*
 
-##### 1.1.4.1 *Landing Leg SCAD and STL*
+- [x] **Rev R1.4 corner V-brace (`landing_leg_assy.scad`) is retired**, superseded
+  2026-06-20 by the Strong-Leg (§1.1.4 above). The parametric SCAD file is left in the
+  repo for reference but is no longer the basis for leg geometry, bosses, or feet.
 
-- [ ] **`landing_legs_hull_r1.stl` is orphaned** — it was rendered from a pre-R1.4
-  single-leg design (`PART="hull_legs"` → `single_leg_in_hull_frame()`) that no longer
-  exists in `landing_leg_assy.scad`; the file was superseded by the Rev R1.4 corner
-  V-brace frame (`docs/LANDING_GEAR_ANALYSIS.md` Rev R1.4) during the 2026-06-16 merge.
-  Delete the stale STL or re-render an `assy`-mode equivalent if a single combined
-  hull-frame STL is still wanted for render scripts (see
-  `airframe/blender-scripts/serenity_render_views.py` line 97, which still references it).
-
-- [ ] **LG-09 Update §2.3 and §§4–5 of `docs/LANDING_GEAR_ANALYSIS.md` for R1.4 arm
-  geometry** (2-strut-per-arm V-brace, 2 bosses per arm, diagonal crossbeam) — carried
-  over from the analysis doc's own TODO note.
-
-- [ ] **LG-05 Render the six Rev R1.4 part STLs from SCAD** — run for each PART value
-  (`arm_upper`, `arm_lower`, `main_strut`, `node`, `boss`, `foot`) per the export commands
-  in `landing_leg_assy.scad` header.  Verify each mesh watertight; record vertex extents.
-  **BLOCKS leg printing.**
-
-- [ ] **LG-04 Verify HULL_ATTACH_POS[] in SCAD against cargo belly contour** — open
-  `PART="assy"` in FreeCAD and confirm the 4 leg positions do not conflict with existing
-  avionics bay bosses, GPS dome cutouts, or CF keel bar channel in `cargo_sect_shell24.scad`.
-
-- [ ] **LG-02 Integrate hull boss geometry into `cargo_sect_shell24.scad`** — add 16×
-  hull boss sockets (BOSS_OD 22 mm CF-PETG bosses, 4 per corner per Rev R1.4) as a union
-  with the shell, centred on the upper/lower arm boss positions derived from
-  HULL_ATTACH_POS[].  Boss bore (ARM_OD + SOCK_CLR = 12.4 mm) is subtracted.  Run DRC
-  mesh check.  **BLOCKS hull print.**
-
-- [ ] **LG-05b Render `hull_boss_r1.stl`** via `PART="boss"` and verify geometry before
-  integrating into cargo shell.
-
-##### 1.1.4.2 *Rear Skid Reinforcement*
+##### 1.1.4.6 *Rear Skid Reinforcement (unrelated subsystem)*
 
 - [ ] **LG-03 CF rod channel in `middle_canonical_shell24.scad` rear skid arms** — add
   3 mm bore channel (CF rod, ~140 mm per skid) per `docs/LANDING_GEAR_ANALYSIS.md §10`.
   Re-export STL, re-bake, verify watertight.  **BLOCKS taxi test.**
 
-##### 1.1.4.3 *Feet*
+- [ ] **`landing_legs_hull_r1.stl` is orphaned** — rendered from an even earlier
+  pre-R1.4 single-leg SCAD mode that no longer exists in `landing_leg_assy.scad` (now
+  itself retired, §1.1.4.5 above). Delete the stale STL or update
+  `airframe/blender-scripts/serenity_render_views.py` line 97, which still references it.
 
-- [ ] Verify SCAD PART="foot" produces foot pad 55 × 55 × 12 mm (TPU 95A) with correct
-  main strut socket (SOCK_MAIN_D = 14 mm bore, SOCK_MAIN_H = 8 mm deep) and 2× M3 bolt
-  holes.  Print test in TPU 95A and confirm main strut spigot fit.
-
-##### 1.1.4.4 *Qualification Testing (BLOCKS first flight)*
+##### 1.1.4.7 *Qualification Testing (BLOCKS first flight)*
 
 *"Time for some thrilling heroics." — Mal. Drop tests count.*
 
-- [ ] **LG-01 Lateral retention bolt test — M3 × 20 PA6 nylon** — fabricate representative
-  boss fixture (side-wall and belly-edge variants); shear-test 10 samples each at 0°, 15°,
-  30° off-axis.  Target per bolt: ≥ 282 N.  Record in `docs/LANDING_GEAR_ANALYSIS.md §9`.
+- [ ] **LG-01 Lateral retention bolt test — M3 × 16 PA6 nylon** — fabricate representative
+  boss fixture; shear-test 10 samples at 0°, 15°, 30° off-axis. Target per bolt: ≥ 283 N.
+  Record in `docs/LANDING_GEAR_ANALYSIS.md §15`. **BLOCKS first flight.**
+
+- [ ] **LG-06 Drop test prototype Strong-Leg assembly** — mount one complete assembly to a
+  6.90 lbm (3,130 g) fixture. Drop from 1.5 ft (elastic check — confirm zero permanent
+  set on leg and fuses). **BLOCKS first flight.**
+
+- [ ] **LG-07 Confirm avionics enclosure shock rating** against the fuse-mediated
+  deceleration profile (re-derive peak-g once LG-14 data exists — the flat 183g figure
+  from earlier revisions no longer applies once the wire fuses are in the load path).
+  See PCB fab checklist. **BLOCKS first flight.**
+
+- [ ] **LG-11 Coupon-test CF-PETG** at 4 perimeters / 40% gyroid infill in the 7–10 mm
+  section-size range to replace the 0.70 effective-area assumption
+  (`docs/LANDING_GEAR_ANALYSIS.md §4.2`). **BLOCKS first flight.**
+
+- [ ] **LG-14 Instrumented drop test (load cell + high-speed video) at 6 ft full-AUW** —
+  confirm the wire fuses collapse at the predicted ≈1,956 N/fuse; confirm the
+  ring-collapse mechanics match the idealized 4-hinge model
+  (`docs/LANDING_GEAR_ANALYSIS.md` §4.3); confirm the CF-PETG structure stays elastic
+  per §4.4. **This is the test that certifies the Rev R4 design — hand calculation
+  identifies the design point but cannot fully certify post-yield material behavior.**
   **BLOCKS first flight.**
-
-- [ ] **LG-06 Drop test prototype leg assembly** — mount one complete trapezoidal brace
-  assembly to 6.90 lbm (3,130 g) fixture.  Drop from 1.5 ft and 6 ft.  Confirm: (a) no
-  hull boss damage; (b) PETG node crush is overload failure mode; (c) leg retained on
-  safety cord.  Log peak g.  **BLOCKS first flight.**
-
-- [ ] **LG-07 Confirm avionics enclosure ≥ 100g shock rating.**  See PCB fab checklist.
-  **BLOCKS first flight.**
-
-- [ ] **LG-08 PETG junction node quasi-static compression test** — confirm crush onset ≥ 2×
-  design load (≥ 1,002 N per assembly).  Adjust node infill if needed.  **BLOCKS first flight.**
-
-- [ ] **LG-08 PETG junction hub quasi-static compression test** — compress one printed PETG
-  hub (25 % gyroid, HUB_R = 11 mm) at 1 mm/min in a fixture simulating the 4-strut load
-  distribution.  Record crush force, crush initiation load, and energy absorbed to 10 mm
-  deflection.  Refine peak-g estimate in `docs/LANDING_GEAR_ANALYSIS.md §4.3 and §6`.
-  Adjust hub infill or geometry if required to achieve crush onset ≥ 2× design load
-  (≥ 1,002 N per assembly) while keeping peak decel ≤ 100g.  **BLOCKS first flight.**
 
 
 

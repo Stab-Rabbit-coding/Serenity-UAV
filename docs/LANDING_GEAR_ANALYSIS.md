@@ -2,79 +2,49 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**Revision:** R1.4 (2026-06-15) — Canonical corner V-brace frame geometry
+**Revision:** R4 (2026-06-20) — Strong-Leg + per-arm ductile wire-loop fuse (final hybrid)
 
 > "She's tore up plenty, but she'll fly true." — Mal, on a ship that's seen worse landings than this one's rated for.
 
-> **Rev R1.3** (trapezoidal brace, fore-aft arm spread only) **superseded 2026-06-15.**
-> **Rev R1.2 / R1.1 / R1** prior pyramid and flat-plate designs also superseded.
-> Impact energy numbers (§3) carry forward unchanged from R1.
+> **Rev R3** (Strong-Leg + elastic spring-steel leaf) **superseded 2026-06-20.** The
+> spring-steel leaf was replaced by a much lighter **per-arm ductile wire-loop crash
+> fuse** (one per arm, 8 total) — see §0 for why. The widened-trunk geometric fix from
+> R3 §4.5 is **retained as a backstop**. Rev R2 / R1.4 / R1.3 / R1.2 / R1.1 / R1 remain
+> superseded. Energy numbers (§3) still carry forward unchanged.
 
 ---
 
-## 0. Geometry Change Note (Rev R1.4)
+## 0. What Changed in Rev R4, and Why
 
-The Rev R1.4 geometry matches the canonical Serenity landing leg silhouette:
-one **main vertical strut** per cargo corner, braced to the hull by two
-**isosceles triangular V-arms** (upper and lower), each spanning to
-**TWO DIFFERENT HULL FACES** at that corner.
+Rev R3 added a 163 g elastic spring-steel leaf to fix a real problem found by rigorous
+re-verification: the bare CF-PETG Strong-Leg's trunk is a geometrically fixed single
+point of failure, and the system is far stiffer than earlier revisions assumed. That
+fix worked, but elastic energy storage is fundamentally limited (σ²/2E) — absorbing
+14 J elastically and recoverably needs a genuinely large amount of spring-steel volume,
+and even the carefully-sized R3 leaf left an unresolved "what if the spring fractures
+instead of bending" force-spike risk (§4.4 of Rev R3).
 
-**Corner V-brace anatomy (one arm):**
-- **Boss A** — on the **cargo END-WALL** (fore face for fore corners, aft face
-  for aft corners).  Protrudes outward from that face.
-  Offset: ARM_HALF_SPREAD = 20 mm in hull-Y from strut centreline.
-- **Boss B** — on the **cargo OUTBOARD SIDE-WALL** (port face for port corners,
-  stbd face for stbd corners).  Protrudes outward laterally.
-  Offset: ARM_HALF_SPREAD = 20 mm in hull-X (outboard) from strut centreline.
-- **Crossbeam** — spans diagonally 45° (corner-to-corner) from Boss A to Boss B
-  at the same Z height, bridging the chamfered cargo corner.
-  Crossbeam length = √(20² + 20²) = 20√2 ≈ **28.3 mm**.
-- **Two arm struts** — equal-length diagonals from each boss down to the apex
-  (junction node on main strut).  Equal arm lengths follow from |ΔX| = |ΔY| = 20 mm
-  with identical ΔZ → isosceles triangle confirmed ✓.
+**Plastic (ductile) deformation stores energy far more densely than elastic deformation**
+— typically 15–60× more energy per unit volume, because it isn't limited to staying
+below yield. Rev R4 exploits this directly: a small **ductile wire ring**, installed
+between each arm tip and its hull boss (replacing the rigid spigot), is designed to
+plastically flatten under overload — a well-characterized, four-plastic-hinge ring
+collapse mechanism — absorbing the full worst-case per-leg energy in **~73 g total
+for 8 fuses**, versus 163 g for one spring leaf, **while also restoring the original
+two-independent-arms redundancy story that motivated the Strong-Leg's geometry in the
+first place**: one fuse can fire while the other arm's fuse and the rest of the
+structure stay intact and load-bearing.
 
-**Upper arm**: Boss A + Boss B at Z = UPPER_BOSS_Z = +70 mm (cargo side wall,
-above belly); apex at UPPER_APEX_Z = −5 mm (strut top, just below belly).
-Each arm strut length ≈ √(20² + 75²) = **77.6 mm**.
+The trade is reusability: the wire ring takes a permanent set once it fires (it doesn't
+spring back), so it's a single-use, field-replaceable item — exactly like the existing
+M3/M4 nylon fuse bolts already specified elsewhere in this design, and consistent with
+Requirement 3's "defined, observable, field-repairable" sacrificial-element intent. A
+flattened ring is also a far more obvious, unambiguous "this needs replacing" indicator
+than an internal CF-PETG crack would have been.
 
-**Lower arm**: Boss A + Boss B at Z = LOWER_BOSS_Z = +5 mm (belly-edge
-transition); apex at LOWER_APEX_Z = −45 mm (node on main strut).
-Each arm strut length ≈ √(20² + 50²) = **53.9 mm**.
-
-**Trapezoidal frame profile** (diagonal 45° plane through corner, side view):
-- Hull side (end-wall + outboard from Boss A to Boss B): 70 − 5 = **65 mm**
-- Strut side (upper apex to lower apex): |−5 − (−45)| = **40 mm**
-  (unequal sides → confirmed trapezoid, not parallelogram ✓)
-
-**Bottom view (cargo belly corner, looking up):**
-```
-    hull end-wall    hull side-wall
-          \\                //
-            [A]===========[ B]   ← crossbeam (diagonal across chamfer)
-               \         /
-                \  arms /
-                 \     /
-                  [ ● ]          ← strut centreline (apex node)
-                    |
-                    |  main strut
-                    ▼
-                  [foot]
-```
-
-**Main strut**: OD 18 mm CF-PETG, continuous from upper apex (Z = −5 mm) to
-foot top (Z = STRUT_BOT_Z = −148 mm); length **143 mm**.
-Total ground clearance = 148 + FOOT_H 12 = **160 mm (6.3 in)**.
-
-**Boss count per corner:** 2 upper arm × 2 bosses + 2 lower arm × 2 bosses
-= **4 bosses per leg, 16 per aircraft** (all identical generic hull_boss_face).
-
-Detailed arm strut stress analysis (§4 and §5) will be updated for the R1.4
-corner V-brace geometry under TODO LG-09.  The R1 pyramid numbers below are
-retained as a reference baseline; the arm strut cross-section and AUW are
-unchanged, so the buckling and stress margins are qualitatively valid.
-
-> **TODO LG-09:** Update §2.3 and §§4–5 for R1.4 arm geometry
-> (2-strut-per-arm V-brace, 2 bosses per arm, diagonal crossbeam).
+The widened CF-PETG trunk (Rev R3 §4.5) is kept as a secondary backstop in case both of
+one leg's wire fuses are somehow exhausted on a single severe, asymmetric landing — at
+negligible extra mass (~4 g/leg).
 
 ---
 
@@ -87,9 +57,10 @@ Serenity UAV main landing gear.  The landing gear system must:
    design all-up weight (AUW) without cracking the hull shell.
 2. **Absorb lateral loads** from not-quite-vertical landings (design case ±15°
    from vertical).
-3. **Fail internally under overload** — if a leg assembly is overstressed the
-   failure mode must be a defined sacrificial element inside the assembly, not
-   cracking of the cargo shell or hull boss.
+3. **Fail internally under overload, progressively rather than catastrophically** — if a
+   leg assembly is overstressed, the failure mode must be a defined, observable, partial
+   degradation that still leaves the aircraft supported, not a single catastrophic event
+   that drops the aircraft or cracks the cargo shell or hull boss.
 4. **Be field-replaceable** using only common hand tools.
 5. **Provide 3-D lateral stability** — legs must resist tipping loads in
    both the hull-X (lateral) and hull-Y (fore-aft) directions.
@@ -98,7 +69,7 @@ The landing gear does NOT need to be reusable after a 6 ft drop.
 
 ---
 
-## 2. Aircraft Data and Landing Geometry
+## 2. Aircraft Data and Strong-Leg Geometry
 
 ### 2.1 All-Up Weight
 
@@ -109,322 +80,292 @@ The landing gear does NOT need to be reusable after a 6 ft drop.
 
 The **Phase 11 AUW of 6.90 lbm (3,130 g) is the design case**.
 
-### 2.2 Landing Gear Configuration (Rev R1.4)
+### 2.2 Landing Gear Configuration (Rev R4)
 
-- **4 × corner V-brace leg assemblies** — one per cargo belly corner; each
-  assembly: 1 CF-PETG main strut + 2 CF-PETG V-arm frames + 2 PETG junction
-  nodes + 4 hull boss cylinders (integral to cargo shell) + 1 TPU foot pad.
-- **4 hull boss cylinders per leg assembly** (16 total) — CF-PETG, integral
-  to the cargo shell (2 per arm × 2 arms = 4 per corner).
-- **4 × TPU 95A foot pads** — one per assembly; friction and surface compliance.
-- **2 × rear skids** — integral to the horseshoe ring of the middle section; NOT
-  produced by `landing_leg_assy.scad`.
+- **4 × Strong-Leg assemblies** — one per cargo belly corner; each assembly: 1
+  single-piece CF-PETG Strong-Leg (foot point + 2 hull-attachment arms, trunk widened
+  per §4.5) + 2 ductile wire-loop fuses (one per arm, between arm tip and hull boss) +
+  1 canonical TPU 95A foot pad + 2 hull boss sockets (integral to cargo shell) + fuse
+  bolts per boss.
+- **8 ductile wire-loop fuses total** (2 per leg × 4 legs) — see §4.3.
+- **8 hull boss sockets total** (2 per leg × 4 legs), CF-PETG, integral to the cargo shell.
+- **4 × TPU 95A canonical foot pads** — existing Thingiverse-derived geometry, unmodified
+  outer form; friction and surface compliance.
+- **2 × rear skids** — integral to the horseshoe ring of the middle section; unrelated
+  subsystem, unchanged by this revision (see §10).
 
-### 2.3 Corner V-Brace Geometry (Rev R1.4)
+### 2.3 Strong-Leg Geometry (measured from `strong-leg.stl`)
 
-Each leg assembly (one cargo corner) comprises:
+The Strong-Leg is built by FreeCAD boolean operation directly on the existing,
+already-validated single-blade canonical leg (`leg_1_scaled24.stl`…`leg_4_scaled24.stl`,
+misubisu Thingiverse hull, CC BY 4.0): the leg is stood up vertical, **duplicated**, the
+duplicate **rotated 30° about the leg's own vertical centreline**, and the two **unioned**
+into one watertight CF-PETG part. All dimensions below were measured directly from the
+exported mesh (3,301 vertices, 6,598 faces, single body, volume 9,612 mm³) using
+`trimesh` cross-sectioning, not assumed from nominal CAD intent — consistent with the
+project's "actual physical build" philosophy (`CLAUDE.md`).
 
-| Component | Qty | Material | Key dimensions |
+**Overall envelope:** 36.1 × 36.8 × 79.8 mm — the 79.8 mm vertical extent matches the
+original single-blade leg's 79.84 mm strut length.
+
+| Feature | Description |
+|---|---|
+| Foot point | Single point at the bottom; both source legs' feet coincide here |
+| Trunk (foot → fork) | Single combined load path, local height ≈ 0–20 mm above foot |
+| Fork transition | Complex multi-lobe cross-section, local height ≈ 20–44 mm above foot |
+| Arm 1 | Fully separate prong, local height ≈ 44–80 mm above foot; tip carries wire fuse 1 → hull boss 1 |
+| Arm 2 | Fully separate prong, same height range; tip carries wire fuse 2 → hull boss 2 |
+
+**Foot-to-arm-tip vectors** (measured, one corner instance — also the basis for the
+demonstration STLs in §16):
+
+| | Vector (local frame) | Length | Angle from vertical |
 |---|---|---|---|
-| Main vertical strut | 1 | CF-PETG | OD 18 mm, wall 2.5 mm, L = 143 mm |
-| Upper V-arm (crossbeam + 2 struts) | 1 | CF-PETG | OD 12 mm, wall 2 mm; struts 77.6 mm each |
-| Lower V-arm (crossbeam + 2 struts) | 1 | CF-PETG | OD 12 mm, wall 2 mm; struts 53.9 mm each |
-| Upper junction node | 1 | PETG | sphere R = 9 mm, 25 % gyroid |
-| Lower junction node | 1 | PETG | sphere R = 9 mm, 25 % gyroid |
-| Hull boss cylinder | 4 | CF-PETG | OD 22 mm, bore 12.4 mm, H = 30 mm |
-| TPU foot pad | 1 | TPU 95A | 55 × 55 × 12 mm |
+| Foot point | (−114.72, −142.65, −13.00) | — | — |
+| Arm 1 tip | (−96.30, −111.35, 66.17) | 87.1 mm | 24.6° |
+| Arm 2 tip | (−84.86, −124.32, 66.17) | 86.6 mm | 23.9° |
 
-Boss positions per corner (hull frame):
-- **Upper Boss A** (end-wall, fore or aft face): Z = +70 mm above belly
-- **Upper Boss B** (side-wall, port or stbd face): Z = +70 mm above belly
-- **Lower Boss A** (end-wall): Z = +5 mm (belly-edge transition)
-- **Lower Boss B** (side-wall): Z = +5 mm
+Angle between the two arm vectors (azimuthal spread): **≈28°** measured (30° design
+rotation; the difference is centroid-measurement noise on the tapered tip).
 
-**Total ground clearance (cargo belly to sole):** 160 mm (6.3 in).
+**Cross-sectional areas** (horizontal slices, perpendicular to the vertical working axis):
 
-> The analysis in §§4–5 was written for the R1 pyramid geometry.  The arm strut
-> cross-section (12 mm OD, 2 mm wall) and AUW are unchanged.  Detailed re-analysis
-> for the R1.4 V-brace geometry is tracked as TODO LG-09.
+| Location | Local height above foot | Area (mm²) | Approx. rectangle |
+|---|---|---|---|
+| Foot-adjacent trunk (as-printed; widened target in §4.5) | ~3 mm | **52.5** (→ widened to ≈117) | 7.41 × 8.77 mm (→ ≈9.9 × 11.8) |
+| Trunk, growing toward fork | ~15 mm | 183.3 | 16.6 × 18.1 mm |
+| Each arm, steady mid-span | 44–58 mm | **58.5** | 8.13 × 9.55 mm |
+| Each arm tip (now carries a wire fuse instead of plugging directly into the boss) | 60–67 mm | 2–40 (taper) | — |
+
+**FreeCAD assembly status (2026-06-20):** four corner copies exist in
+`airframe/freecad/assembly/SerenityAssembly.FCStd` as Boolean-result objects `Union`,
+`Union001`, `Union002`, `Union003` (90°-stepped rotation: 0°/90°/180°/270°), all four
+confirmed in their correct corner locations. **Z-leveling rule:** if the 4 feet deviate
+in Z once placed, all 4 are aligned to the **most negative (lowest) Z** of the four.
+
+> **TODO LG-10:** Bake the 4 placed Strong-Leg corner copies to hull frame and export 4
+> placed STLs for printing. **BLOCKS hull boss integration (LG-02) and leg printing (LG-05).**
 
 ---
 
 ## 3. Impact Velocity and Kinetic Energy
 
-*(Numbers unchanged from Rev R1 — carry forward.)*
+Unchanged from Rev R1 — AUW and drop height are unaffected by the fuse-design change.
 
 ### 3.1 Free-Fall Velocity
 
-From rest at height h = 6 ft (1.829 m = 72.0 in) above the ground:
-
-```
-v = √(2 g h)
-  = √(2 × 386.09 in/s² × 72.0 in)
-  = √55,597 in²/s²
-  = 235.8 in/s  (19.65 ft/s, 5.99 m/s)
+```text
+v = √(2 g h) = √(2 × 386.09 in/s² × 72.0 in) = 235.8 in/s  (19.65 ft/s, 5.99 m/s)
 ```
 
 ### 3.2 Total Kinetic Energy at Impact
 
-```
-KE_total = ½ m v²
-         = ½ × (6.90 lbm / 386.09 lbm·in/lbf·s²) × 235.8² in²/s²
-         = ½ × 0.01787 lbf·s²/in × 55,602 in²/s²
-         = 496.8 in·lbf  (56.1 J)
+```text
+KE_total = ½ m v² = 496.8 in·lbf  (56.1 J)
 ```
 
 ### 3.3 Energy per Leg Assembly
 
-Conservative assumption: 4 leg assemblies absorb all energy, rear skids 0%:
-
-```
-KE_per_assy = 496.8 / 4 = 124.2 in·lbf  (14.0 J) per assembly
+```text
+KE_per_assy (6 ft, full AUW)   = 56.1 / 4 = 14.04 J  (124.2 in·lbf)
+KE_per_assy (1.5 ft, full AUW) =  3.51 J  (elastic-check energy, TODO.md LG-06)
 ```
 
 ---
 
-## 4. Pyramid Strut Analysis
+## 4. Rigorous Force, Stiffness, and Fuse-Collapse Analysis (Rev R4)
 
-### 4.1 Strut Geometry
+### 4.1 System Stiffness (No Spring — Foot + Leg Only)
 
-Each arm strut connects a hull boss at Z = 0 to the junction hub at Z = −85 mm.
+Without a spring in the load path, the relevant elastic stiffness prior to any fuse
+activating is the same one identified as too-stiff in the Rev R3 re-verification:
 
-Boss offsets from hub centre (local corner frame, outboard-fore example):
-
-```
-Δx = SPREAD_X / 2 = 20 mm (outboard in hull X)
-Δy = SPREAD_Y / 2 = 30 mm (fore = hull −Y direction)
-Δz = JUNCT_Z      = 85 mm (upward from hub to boss)
-```
-
-| Parameter | Value |
-|---|---|
-| Strut length (outboard-fore) | √(20² + 30² + 85²) = √8333 = **91.3 mm** |
-| Strut angle from vertical | atan(√(20² + 30²) / 85) = atan(0.425) = **23.0°** |
-| Vertical component of strut axis | cos(23.0°) = 0.920 |
-
-### 4.2 Strut Cross-Section Properties
-
-Strut: STRUT_OD = 12 mm, wall = 2 mm, ID = 8 mm (CF-PETG hollow tube).
-
-```
-A_strut = π(12² − 8²)/4 = π × 80 / 4 = 62.8 mm²
-I_strut = π(12⁴ − 8⁴)/64 = π × 16,640 / 64 = 816 mm⁴
-E_CF-PETG = 5,500 MPa (in-plane, printed; conservative)
-σ_yield   = 55 MPa
+```text
+k_leg (trunk + arms in series, axial)      ≈ 6,700 N/mm
+k_foot (TPU 95A, 43.94×43.94×9.04 mm pad)  ≈ 1,870 N/mm
+k_system (foot + leg in series)            ≈ 1,460 N/mm
 ```
 
-### 4.3 Load Path — Vertical Impact
+This stiffness governs the small elastic deflection **before** the wire fuses begin to
+collapse (§4.3) — it is not the mechanism that absorbs the bulk of the 14.04 J, the
+fuses are.
 
-Under a vertical landing impact, the ground reaction force F_total acts upward
-on the foot pad and is transmitted:
+### 4.2 The Trunk Is Still a Geometrically Fixed Weak Point (Unchanged Finding)
 
-```
-foot → column (compression) → hub → 4 arm struts (compression)
-     → 4 hull bosses → cargo belly shell → airframe
-```
-
-Force per strut (4 struts share equally for a central, symmetric impact):
-
-```
-F_vertical per assy = F_total / 4 (4 assemblies)
-F_vert per strut    = (F_total/4) / 4 = F_total / 16
-
-At 6 ft drop (from energy method):
-  ½ k_equiv × δ² = 14.0 J → requires spring rate / deflection estimate.
+```text
+Max achievable trunk yield force (as-printed, 52.5 mm² nominal, 100% infill) ≈ 2,740 N
+Combined-arm yield force (vertical, even split, 58.5 mm² nominal arms, 40% infill) ≈ 4,105 N
+Trunk effective area needed to exceed the arms' combined capacity ≈ 74.6 mm²
 ```
 
-**Column spring rate (CF-PETG column in compression):**
+This finding from Rev R3 is unchanged by the fuse swap — infill alone cannot fix it,
+which is why the trunk is still widened geometrically (§4.5).
 
-```
-k_col = E × A / L
-      = 5,500 × (π(18²−13²)/4) / 60
-      = 5,500 × 122.5 / 60
-      = 11,230 N/mm  (extremely stiff)
-```
+### 4.3 Per-Arm Wire-Loop Fuse — Sizing
 
-The column is far stiffer than any equivalent cantilever leg.  Energy
-absorption at the design drop is therefore dominated by **plastic
-deformation of the junction hub** (PETG, 25 % gyroid, intentionally weaker)
-and by the TPU foot viscoelastic damping.
+**Geometry:** a closed ductile-wire ring (mean radius `RING_R` = 12 mm, wire diameter
+`WIRE_D` = 4.0 mm, solid round cross-section), oriented with its plane containing the
+arm's load axis, with a short straight mounting tab at each end (into the hull boss
+bore and into the CF-PETG arm tip respectively) — replacing the rigid spigot that
+previously plugged the arm directly into the boss. SCAD source:
+`airframe/openscad/fuselage/wire_loop_fuse.scad`. Under axial overload the ring
+progressively flattens via a classic four-plastic-hinge ring-collapse mechanism (two
+hinges at the load points, two at 90° from them).
 
-To estimate the peak force experienced by the structure, use the impulse-
-momentum approach (rigid body, no spring credit):
-
-```
-Δv = v_impact = 5.99 m/s
-m  = 3.130 kg  (Phase 11 AUW)
-δ  = assumed 10 mm deflection before hub crush initiates (hub + foot compliance)
-
-F_peak ≈ m × v² / (2 × δ)
-       = 3.130 × 5.99² / (2 × 0.010)
-       = 3.130 × 35.88 / 0.020
-       = 5,620 N  total (all 4 assemblies)
-       = 1,405 N  per assembly
-       = 351 N    per strut (vertical component)
+```text
+Material: ductile spring-steel wire, tempered for plastic ductility (NOT full-hard) — flow stress ≈ 550 MPa
+M_p (plastic moment, solid round wire) = σ_flow × WIRE_D³ / 6 ≈ 5,867 N·mm
+P_collapse (per fuse, axial along the arm) = 4 × M_p / RING_R ≈ 1,956 N
+Usable crush stroke ≈ RING_R = 12 mm
+Energy capacity per fuse over that stroke ≈ 23.5 J  (1.7× the full 14.04 J per-leg worst case,
+                                                       sized independently per arm — NOT a 50/50 split —
+                                                       as a margin against uneven/asymmetric landings)
+Mass per fuse ≈ 9.1 g  →  8 fuses (2/leg × 4 legs) ≈ 73 g total
 ```
 
-### 4.4 Per-Strut Axial Force
+### 4.4 Worst-Case 6 ft Drop — Full Force/Energy Sequence (Symmetric Nominal Case)
 
-```
-F_axial per strut = 351 / cos(23.0°) = 351 / 0.920 = 381 N
-```
+```text
+Total leg (vertical) force at which BOTH arm fuses begin to collapse simultaneously
+  = 2 × P_collapse × cos(24.3°) ≈ 3,565 N
 
-### 4.5 Euler Column Buckling Check (Strut)
-
-With pin-pin end conditions, effective length = strut length = 91.3 mm:
-
-```
-P_crit = π² E I / L²
-       = π² × 5,500 × 816 / 91.3²
-       = 44,200,000 / 8,336
-       = 5,302 N per strut
+Elastic energy absorbed before collapse begins (at k_system ≈ 1,460 N/mm) ≈ 4.35 J
+Remaining energy absorbed by both fuses crushing at the ≈3,565 N plateau ≈ 9.69 J
+  → vertical stroke needed ≈ 2.7 mm → axial stroke per fuse ≈ 3.0 mm (of 12 mm available — 4× reserve)
 ```
 
-**Buckling margin:** 5,302 / 381 = **13.9×** — no buckling risk.
+**Margins at the fuse plateau force (3,565 N):**
 
-### 4.6 Strut Axial Stress
-
-```
-σ_axial = F_axial / A = 381 / 62.8 = 6.1 MPa  (vs σ_yield 55 MPa)
-```
-
-**Margin of safety: 8.0×** — struts remain fully elastic at design drop.
-
-### 4.7 Peak Deceleration
-
-```
-a_peak = F_total / m = 5,620 / 3.130 = 1,796 m/s² = 183 g
+```text
+vs combined-arm yield (4,105 N)         : 1.15×
+vs widened-trunk yield (4,926 N, §4.5)  : 1.38×
+vs hull boss bearing capacity (10,020 N): 2.81×
 ```
 
-This assumes 10 mm deflection.  Hub crush compliance will be larger, reducing
-peak g to an acceptable range.
+**This is the key result of Rev R4: in the nominal symmetric 6 ft full-AUW drop, the
+wire fuses absorb essentially all of the energy beyond the small initial elastic phase,
+at a force comfortably below both the arms' and the widened trunk's yield capacity. The
+CF-PETG structure is never expected to yield at the design case — only the
+field-replaceable wire fuses do, using only ~3 mm of their 12 mm available stroke.**
 
-> **TODO LG-08:** Measure hub crush compliance by quasi-static loading of a
-> printed PETG hub at 25 % gyroid infill.  Calculate actual δ and refine peak-g
-> estimate.  Confirm ≤ 100g shock rating of avionics enclosures is met, or
-> increase JUNCT_Z to increase total system compliance.
+**Asymmetric / single-arm-worst-case check:** because each fuse is independently sized
+for the *full* 14.04 J (not half), a severely uneven landing that dumps the entire
+per-leg energy through one arm alone still uses only 7.2 mm of that fuse's 12 mm
+stroke (§4.3) — comfortable margin, and the other arm's structure is never engaged at
+all in that scenario.
+
+### 4.5 Widened Trunk — Retained as a Secondary Backstop
+
+Unchanged from Rev R3: the trunk's local cross-section is widened geometrically (not
+just infill) so that if both of one leg's fuses are ever exhausted, the arms still fail
+before the trunk:
+
+```text
+New trunk cross-section (100% infill): ≈9.9 × 11.8 mm (nominal ≈117 mm², up from 7.41 × 8.77 mm / 52.5 mm²)
+New trunk yield force ≈ 4,926 N  vs combined-arm yield ≈ 4,105 N  →  arms fail first, 1.20× margin
+Mass cost: ≈1 g per leg, ≈4 g for the aircraft
+```
+
+> **TODO LG-12:** widen the trunk's local cross-section to ≈9.9 × 11.8 mm (local Z =
+> 0–20 mm above the foot) in the FreeCAD/Blender source, print that zone at 100%
+> infill. **BLOCKS first flight.**
+
+### 4.6 Hull Boss Bearing Check
+
+```text
+Boss bore ≈ 9.7 × 8.7 mm, Boss OD ≈ 13 × 12 mm (2-wall annulus per CLAUDE.md)
+A_bearing per boss = 71.6 mm², A_bearing per leg (2 bosses) = 143.2 mm²
+F_bearing_capacity ≈ 70 MPa × 143.2 mm² ≈ 10,020 N per leg
+
+Margin vs fuse-collapse plateau force (3,565 N) = 2.81×
+Margin vs widened-trunk yield (4,926 N, last-resort backstop) = 2.03×
+```
+
+**The hull boss — and by extension the cargo shell — is well protected at every stage
+of this analysis**, with no thin-margin force-spike scenario remaining (contrast with
+the Rev R3 spring's 1.16× spike-case margin, which this revision eliminates).
+
+### 4.7 Euler Column Buckling Check (Arm)
+
+```text
+Post-fork arm length ≈ 25.1 mm, I_weak ≈ 428 mm⁴
+P_crit = π² E I / L² ≈ 36,990 N  →  margin ≥ 8.0× even at the highest force considered (4,926 N)
+```
+
+No buckling risk.
 
 ---
 
 ## 5. Lateral Load Analysis (±15° Off-Vertical)
 
-For a landing at 15° from vertical, with F_per_assy = 1,405 N total:
+Using the fuse-collapse plateau force (§4.4) as the governing total leg force, since the
+fuses cap how much force the structure ever sees:
 
-```
-F_vert_component    = 1,405 × cos(15°) = 1,357 N
-F_lateral_component = 1,405 × sin(15°) =   364 N  (in hull XZ or YZ plane)
-```
-
-### 5.1 Lateral Load Resolution in Pyramid
-
-For lateral force in the hull-X direction:
-
-- Outboard struts (on the side toward the lateral force) see increased
-  compression; inboard struts see reduced compression.
-- The differential force per strut (2 outboard, 2 inboard):
-
-```
-ΔF_strut_axial = F_lateral × (SPREAD_X/2) / (4 × JUNCT_Z × sin(angle_x))
-               = 364 × 20 / (4 × 85 × sin(atan(20/85)))
-               = 7,280 / (4 × 85 × 0.229)
-               = 7,280 / 77.9
-               = 93.5 N additional axial per outboard strut
+```text
+F_vert_component    = 3,565 × cos(15°) ≈ 3,444 N
+F_lateral_component = 3,565 × sin(15°) ≈    923 N
+F_shear_per_bolt (2 bosses, 2 bolts per boss = 4 bolts) = 923 / 4 ≈ 231 N
 ```
 
-Total worst-case strut axial force (vertical + lateral combined):
-
-```
-F_axial_max = 381 + 93.5 / cos(23.0°) = 381 + 102 = 483 N
-σ_axial_max = 483 / 62.8 = 7.7 MPa  (<< 55 MPa yield) ✓
+```text
+Fuse capacity (1× M3 PA6 nylon, 40 MPa shear) = 283 N per bolt
+Margin: 283 / 231 = 1.22×
 ```
 
-### 5.2 Lateral Load at Boss Fuse Bolt
+This is workable with the standard M3 nylon bolt at the fuse-capped force level (unlike
+the Rev R3 pre-spring-collapse reference force, which exceeded it). **Recommendation:**
+keep 2× M3 PA6 nylon bolts per boss (4 per leg, 16 total) for a comfortable margin; the
+M4 upsizing proposed in Rev R3 is no longer necessary now that the wire fuses cap the
+peak force the structure can transmit.
 
-The retention bolt at each boss is loaded in shear by the lateral component
-distributed to that boss.  With 4 bolts:
-
-```
-F_shear_per_bolt = F_lateral / 4 = 364 / 4 = 91 N
-Fuse capacity (1× M3 PA6 nylon, 40 MPa shear):
-  F_fuse = 40 × π × 3² / 4 = 282.8 N per bolt
-Margin: 282.8 / 91 = 3.1×  (fuse bolts do NOT activate at design lateral load) ✓
-```
-
-**Fuse bolts are retention / lateral overload devices, not the primary vertical
-energy fuse.**  The primary overload protection under severe (>3× design)
-vertical load is junction hub crush.
+> **TODO LG-13 (revised):** retain 2× M3 × 16 mm PA6 nylon SHCS per boss (16 total);
+> Rev R3's M4 upsizing recommendation is superseded now that the wire fuses cap peak
+> force at the §4.4 plateau.
 
 ---
 
-## 6. Junction Hub — Crush Zone
+## 6. Progressive Failure / Fuse Strategy (Rev R4)
 
-The junction hub is printed in **PETG at 25 % gyroid infill** (not CF-PETG).
-PETG σ_yield ≈ 30 MPa.  The hub sphere (HUB_R = 11 mm) has effective cross-
-sectional area reduced by infill:
-
-```
-A_hub_eff ≈ 0.25 × π × 22² / 4 = 0.25 × 380 = 95 mm²
-F_crush ≈ σ_yield_PETG × A_hub_eff = 30 × 95 = 2,850 N  (rough estimate)
-```
-
-Hub crush activates at approximately 2,850 N total vertical, which is 2.0×
-the 1,405 N design load per assembly.  Hub crush is progressive and absorbs
-significant energy before the boss bearing faces see high stress.
-
-> **TODO LG-08:** Quasi-static compression test on representative PETG hub
-> sample to characterise crush force and energy absorption.
-
----
-
-## 7. Foot Impact Cushioning
-
-The TPU 95A foot pad (55 × 55 × 12 mm) provides initial compliance.
-With 25 % gyroid infill, effective modulus ≈ 8.75 MPa (approximation).
-
-```
-k_foot = E_eff × A / t = 8.75 × (55 × 55) / 12 ≈ 22,135 N/mm  (stiff)
-```
-
-The foot provides viscoelastic damping (hysteresis) and surface compliance
-over rough terrain.  **No credit is taken for foot energy absorption in the
-primary drop analysis.**
-
----
-
-## 8. Hull Boss Bearing Check
-
-Under design vertical load, the strut end bears against the top face of the
-boss bore (annular area of boss wall above bore):
-
-```
-Bore ID = STRUT_OD + 0.4 = 12.4 mm
-BOSS_OD = 22 mm
-A_bearing = π(22² − 12.4²) / 4 = π(484 − 153.76) / 4 = 259 mm²  per boss
-4 bosses total bearing area per assembly = 1,036 mm²
-
-F_per_assy = 1,405 N (design load)
-σ_bearing = 1,405 / 1,036 = 1.36 MPa  (vs CF-PETG bearing strength ≈ 70 MPa)
-Bearing margin of safety: 70 / 1.36 = 51×
-```
-
-**Hull boss bearing stress is negligible at design load — hull is protected.**
-
----
-
-## 9. Fuse Mechanism Summary
-
-| Level | Element | Material | Activates At |
+| Level | Element | Activates at | Behavior |
 |---|---|---|---|
-| 1 (primary compliance) | TPU foot + PETG hub elastic | TPU 95A + PETG | Any load |
-| 2 (crush fuse) | PETG junction hub 25 % infill | PETG | ≈ 2,850 N per assy |
-| 3 (retention / lateral) | M3 PA6 nylon bolts (1 per boss) | PA6 nylon | ≈ 283 N lateral per bolt |
-| 4 (never reached) | Hull boss bearing | CF-PETG | > 70 MPa bearing → > 72,000 N |
+| 1 (elastic, no damage) | TPU foot + rigid CF-PETG leg | up to ≈3,565 N total leg force | Fully elastic, fully recoverable — ordinary hard landings cause no damage anywhere |
+| 2 (primary sacrificial fuse, per arm) | Ductile wire-loop fuse (one per arm, 8 total) | ≈1,956 N axial per fuse (≈3,565 N total leg, both arms, symmetric case) | Ring progressively flattens via a 4-hinge plastic mechanism; absorbs the bulk of the 6 ft worst-case energy at a near-constant, predictable force; visibly deformed afterward — unambiguous field-inspection indicator |
+| 3 (lateral fuse) | M3 PA6 nylon bolts, 2 per boss | ≈283 N shear per bolt | Retention bolts shear before the hull boss is overloaded laterally |
+| 4 (backstop, arm-first hierarchy) | One arm of the Strong-Leg | only if a fuse's 12 mm stroke is fully exhausted | Arm cracks before the (widened) trunk, 1.20× margin (§4.5) |
+| 5 (last-resort, not expected to be reached) | Widened trunk | only if both arms have already failed | Single load path; kept above the arms' combined capacity by design |
+| 6 (protected at all credible loads) | Hull boss / cargo shell | > 70 MPa bearing (§4.6) | ≥2.0× margin at every force level considered in this analysis — the hull is never expected to see damaging load |
 
-The cargo shell and hull bosses are never at risk under the design load.
+This satisfies Requirement 3 (§1) with a clean, hand-calculable margin at every stage:
+the wire fuses are the **intended, designed, predictable** sacrificial element (Level 2),
+genuinely redundant per arm, and the CF-PETG structure (Levels 4–5) and hull (Level 6)
+are not expected to be engaged at all in the nominal 6 ft full-AUW design case — they
+remain as backstops for asymmetric or beyond-design overload only.
+
+---
+
+## 7. Foot Interface (Canonical TPU Foot Pad)
+
+Unchanged from Rev R2: 43.94 × 43.94 × 9.04 mm TPU 95A, canonical Thingiverse-derived
+geometry, unmodified outer form. No spring root to accommodate (Rev R3's spring leaf is
+removed) — the foot socket reverts to the Rev R2 sizing, fitted to the leg's own foot
+cross-section:
+
+| Parameter | Value |
+|---|---|
+| Socket location | Top face (Z_max = 9.04 mm local), centred |
+| Socket bore | 7.6 × 9.0 mm (leg foot cross-section 7.41 × 8.77 mm + 0.2 mm clearance) |
+| Socket depth | 5.0 mm (leaves 4.0 mm TPU floor) |
+| Retention | 1× M2.5 × 12 mm SS through-bolt + thin CA at socket walls |
+
+---
+
+## 8–9. (Reserved — merged into §4.6 and §6)
 
 ---
 
 ## 10. Rear Skids
+
+Unchanged from Rev R1 — unrelated subsystem.
 
 The two rear skids are built into the horseshoe ring of the middle section
 (see `airframe/openscad/fuselage/middle_canonical_shell24.scad`).  They
@@ -439,86 +380,59 @@ before first flight.
 
 ## 11. Materials Specification
 
-### 11.1 Upper V-Arm Frame (4 per aircraft, one per corner)
+### 11.1 Ductile Wire-Loop Fuse (8 per aircraft, 2 per leg — new in Rev R4)
+
+| Parameter | Value |
+|---|---|
+| Material | Ductile spring-steel wire, tempered for plastic ductility (flow stress ≈550 MPa) — NOT full-hard temper |
+| Geometry | Closed ring, mean radius 12 mm, wire diameter 4.0 mm, with two straight mounting tabs (8 mm long, 6×3 mm, Ø2.5 mm pin hole) |
+| Source | `airframe/openscad/fuselage/wire_loop_fuse.scad` (PART="nominal" / PART="deformed") |
+| Mounting | Pinned: one tab into the hull boss bore, one tab into the CF-PETG arm tip socket |
+| Estimated mass | ≈9.1 g each × 8 = **≈73 g total** |
+
+### 11.2 Strong-Leg (4 per aircraft, one per corner; trunk widened per §4.5)
 
 | Parameter | Value |
 |---|---|
 | Material | CF-PETG |
-| Tube cross-section | OD 12 mm, wall 2 mm, ID 8 mm |
-| Arm strut length | ≈ 77.6 mm each (2 per frame) |
-| Crossbeam length | ≈ 28.3 mm (diagonal across corner) |
+| Source | `airframe/stls/fuselage/landing-gear/strong-leg.stl`, trunk zone re-modeled wider per §4.5 |
+| Overall envelope | 36.1 × 36.8 × 79.8 mm (foot to arm tips) |
 | Layer height | 0.15 mm |
 | Perimeters | 4 |
-| Infill | 40 % gyroid |
-| Print orientation | Flat (triangle in XY plane) |
-| Estimated mass | ≈ 7 g each × 4 = 28 g total |
+| Trunk zone (local Z 0–20 mm above foot) | Widened cross-section ≈9.9 × 11.8 mm, **100% infill** |
+| Arms and fork | Unchanged geometry, 40% gyroid (CLAUDE.md minimum) |
+| Print orientation | Upright, foot down |
+| Estimated mass | ≈23 g each × 4 = ≈92 g total |
 
-### 11.2 Lower V-Arm Frame (4 per aircraft, one per corner)
-
-| Parameter | Value |
-|---|---|
-| Material | CF-PETG |
-| Tube cross-section | OD 12 mm, wall 2 mm, ID 8 mm |
-| Arm strut length | ≈ 53.9 mm each (2 per frame) |
-| Crossbeam length | ≈ 28.3 mm |
-| Layer height | 0.15 mm |
-| Perimeters | 4 |
-| Infill | 40 % gyroid |
-| Print orientation | Flat |
-| Estimated mass | ≈ 5 g each × 4 = 20 g total |
-
-### 11.3 Junction Nodes (8 per aircraft, 2 per corner)
-
-| Parameter | Value |
-|---|---|
-| Material | **PETG** (not CF-PETG — intentional crush zone) |
-| Geometry | Sphere R = 9 mm with socket bores |
-| Layer height | 0.15 mm |
-| Infill | **25 % gyroid** |
-| Print orientation | Upright |
-| Estimated mass | ≈ 3 g each × 8 = 24 g total |
-
-### 11.3a Main Vertical Strut (4 per aircraft, one per corner)
+### 11.3 Hull Boss Sockets (8 per aircraft, 2 per corner)
 
 | Parameter | Value |
 |---|---|
 | Material | CF-PETG |
-| Cross-section | OD 18 mm, wall 2.5 mm, ID 13 mm |
-| Length | 143 mm |
-| Layer height | 0.15 mm |
-| Perimeters | 4 |
-| Infill | 40 % gyroid |
-| Print orientation | Upright |
-| Estimated mass | ≈ 18 g each × 4 = 72 g total |
+| Geometry | OD ≈ 13 × 12 mm, bore 9.7 × 8.7 mm, depth ≥ 12 mm + fuse tab clearance |
+| Integration | Union with `cargo_sect_shell24.scad` belly/side wall; 2 per corner |
+| Fuse bolts | 2× M3 × 16 mm PA6 nylon SHCS per boss (§5) |
 
-### 11.4 Hull Boss Cylinders (16 per aircraft, integral to cargo shell)
-
-| Parameter | Value |
-|---|---|
-| Material | CF-PETG |
-| Geometry | OD 22 mm, bore 12.4 mm, height 30 mm |
-| Integration | Union with `cargo_sect_shell24.scad` belly; 4 per corner |
-| Fuse bolt | 1× M3 × 20 mm PA6 nylon SHCS per boss |
-
-### 11.5 TPU Foot Pads
+### 11.4 TPU Foot Pads (4 per aircraft, unchanged canonical geometry)
 
 | Parameter | Value |
 |---|---|
 | Material | TPU 95A |
-| Dimensions | 55 × 55 × 12 mm |
+| Dimensions | 43.94 × 43.94 × 9.04 mm (unmodified outer form) |
+| New feature | Top-face socket, 7.6 × 9.0 mm bore × 5.0 mm deep (§7) |
 | Layer height | 0.20 mm |
 | Infill | 25 % gyroid |
-| Fasteners | 2× M3 × 10 mm SS SHCS per foot |
+| Fasteners | 1× M2.5 × 12 mm SS through-bolt per foot |
 
-### 11.6 Safety Cord
+### 11.5 Safety Cord
 
 | Parameter | Value |
 |---|---|
 | Material | Dyneema SK75, 2 mm diameter |
 | Break strength | ≥ 750 N (168 lbf) |
-| Length per assembly | ≈ 500 mm (foot → hub → boss → anchor post inside hull) |
+| Length per assembly | ≈ 400 mm (foot → leg bore → boss → anchor post inside hull) |
 | Anchor (hull end) | Loop on printed anchor post stub (ANCHOR_POST_OD = 5 mm) |
-| Anchor (leg end) | Loop through hub TETHER_D hole, overhand knot |
+| Anchor (leg end) | Loop through a tether hole near the foot, overhand knot |
 
 ---
 
@@ -526,59 +440,64 @@ before first flight.
 
 | Item | Qty | Description |
 |---|---|---|
-| Upper V-arm frame | 4 | CF-PETG, SCAD PART="arm_upper" |
-| Lower V-arm frame | 4 | CF-PETG, SCAD PART="arm_lower" |
-| Junction node | 8 | PETG 25 % gyroid, SCAD PART="node"; 2 per corner |
-| Main strut | 4 | CF-PETG OD 18 mm × 143 mm, SCAD PART="main_strut" |
-| Hull boss cylinder | 16 | CF-PETG, integral to cargo shell, SCAD PART="boss" reference; 4 per corner |
-| TPU foot | 4 | TPU 95A, SCAD PART="foot" |
-| M3 × 20 nylon SHCS | 16 | Retention / lateral fuse (1 per boss, 4 per corner) |
-| M3 × 10 SS SHCS | 8 | Foot retention (2 per foot) |
-| Dyneema SK75, 2 mm | 2.0 m | Safety cord (4 × 500 mm; per corner: foot → lower node → upper node → 2 bosses) |
-| 3 mm CF rod | 280 mm | Rear skid reinforcement (2 × 140 mm) |
-| CA thin | — | CF rod adhesive, rear skids |
-| Spare nylon bolt set | 16 | Replacement M3 × 20 nylon (one full set) |
+| Ductile wire-loop fuse | 8 | Spring-steel wire ring, 2 per leg (one per arm) — **new in Rev R4**, replaces Rev R3's spring leaf |
+| Strong-Leg | 4 | CF-PETG, single-piece print, widened trunk per §4.5 |
+| Hull boss socket | 8 | CF-PETG, integral to cargo shell; 2 per corner |
+| TPU foot pad | 4 | TPU 95A, canonical Thingiverse geometry + top socket |
+| M3 × 16 nylon SHCS | 16 | Boss retention / lateral fuse (2 per boss, 4 per corner) |
+| M2.5 × 12 SS bolt | 4 | Foot retention (1 per foot) |
+| Fuse mounting pin, Ø2.5 mm | 16 | 2 per fuse (boss-side + arm-side tab), 8 fuses |
+| Dyneema SK75, 2 mm | 1.6 m | Safety cord (4 × 400 mm) |
+| 3 mm CF rod | 280 mm | Rear skid reinforcement (2 × 140 mm, unrelated subsystem, §10) |
+| CA thin | — | Leg-to-foot socket bonding, CF rod adhesive |
+| Spare nylon bolt set | 16 | Replacement M3 × 16 nylon (one full set) |
+| Spare wire-loop fuse set | 8 | One full replacement set — the fuse is the primary sacrificial item and is expected to be consumed on any genuine hard/worst-case landing |
 
 ---
 
 ## 13. Assembly Procedure
 
-1. **Hull boss integration:** Merge 4 boss cylinder positions per corner into
-   `cargo_sect_shell24.scad` belly.  Print cargo section with bosses integral.
+1. **Hull boss integration:** Add 8 boss socket positions (2 per corner) to
+   `cargo_sect_shell24.scad` belly/side wall.  Print cargo section with bosses integral.
 
-2. **Strut print:** Print 4 × 4 = 16 arm struts (CF-PETG, lying flat).
+2. **Leg print:** Print 4 Strong-Legs (CF-PETG, upright, foot down; widened trunk zone
+   at 100% infill per §4.5 print-profile modifier).
 
-3. **Hub print:** Print 4 junction hubs (PETG, upright, 25 % gyroid).
+3. **Fuse fabrication:** Form 8 wire-loop fuses to the §4.3 profile from ductile
+   spring-steel wire stock; temper for plastic ductility per §4.3/§6.
 
-4. **Column print:** Print 4 columns (CF-PETG, upright).
+4. **Foot print:** Print 4 canonical TPU 95A feet with the top-face socket (§7).
 
-5. **Hub assembly:** Insert 4 strut top ends into hub sockets; apply thin CA.
-   Insert column top end into hub column socket; apply thin CA.  Allow cure.
+5. **Fuse installation:** Pin one tab of each wire-loop fuse into its arm tip socket,
+   the other tab into the corresponding hull boss bore.
 
-6. **Safety cord:** Route Dyneema through hub tether hole and up through column
-   bore.  Tie loop at hub end.  Thread free end up through boss tether hole.
-   Tie loop around boss anchor post stub inside hull.
+6. **Leg-to-foot assembly:** Insert leg foot tip into foot top-face socket; apply thin
+   CA at socket walls; install M2.5 × 12 mm SS through-bolt.
 
-7. **Boss insertion:** Slide each strut top end into the corresponding hull boss
-   bore from below.  Align M3 fuse bolt holes.  Install 1× M3 × 20 nylon SHCS
-   per boss — finger-tight + 1/4 turn only.
+7. **Safety cord:** Route Dyneema through the leg's foot-end tether hole.  Tie loop.
+   Thread free end up through one arm and the corresponding boss tether hole.  Tie loop
+   around the boss anchor post stub inside the hull.
 
-8. **Foot installation:** Press TPU foot socket over column spigot.
-   Install 2× M3 × 10 SS SHCS from foot sole.  Torque to 0.3 N·m.
+8. **Boss insertion:** Slide each fuse's boss-side tab into its hull boss bore.  Install
+   2× M3 × 16 mm nylon SHCS per boss — finger-tight + 1/4 turn only.
 
 ---
 
 ## 14. Field Replacement Procedure
 
-After hub crush or other overload:
+After a fuse fires (visibly flattened ring) or other overload (§6):
 
 1. Locate leg assembly on safety cord.
-2. Remove all 4 M3 nylon retention bolts (drill out remnants if sheared).
-3. Pull strut / hub / column assembly downward from hull bosses.
+2. Remove all 4 M3 nylon retention bolts (2 bosses × 2 bolts) (drill out remnants if sheared).
+3. Pull the Strong-Leg downward from both hull bosses.
 4. Inspect boss bores; clean; check for cracks.
-5. Install replacement assembly (steps 5–8 of assembly procedure above).
+5. Remove the fuse mounting pins; replace any visibly flattened wire-loop fuse(s); a
+   fuse that has fired is a single-use item and must not be reinstalled.
+6. Install replacement fuse(s) and Strong-Leg (steps 5–8 of assembly procedure above);
+   reuse the foot pad if undamaged.
 
-**Required tools:** 2.5 mm hex key (M3), 3.3 mm drill (bolt removal), CA adhesive.
+**Required tools:** 2.5 mm hex key (M3), 2 mm hex key (M2.5), small punch/pin tool
+(fuse mounting pins), 3.3 mm drill (bolt removal), CA adhesive.
 
 ---
 
@@ -586,11 +505,37 @@ After hub crush or other overload:
 
 | ID | Item | Blocks |
 |---|---|---|
-| LG-01 | Shear-test 10 samples of M3 × 20 PA6 nylon in representative boss fixture; confirm lateral fuse ≥ 282 N per bolt | First flight |
-| LG-02 | Integrate 16 hull boss cylinders into `cargo_sect_shell24.scad`; run DRC mesh check | Hull print |
-| LG-03 | Add CF rod channel to `middle_canonical_shell24.scad` rear skid section | Hull print |
-| LG-04 | Verify HULL_ATTACH_POS[] in SCAD against cargo belly contour in FreeCAD assembly | Hull print |
-| LG-05 | Render STLs (PART="strut", "hub", "column", "boss", "foot"); verify all watertight | STL export |
-| LG-06 | Drop test prototype assembly at 1.5 ft (elastic check) and 6 ft (design); log peak g with shock logger | Pre-flight |
-| LG-07 | Confirm avionics enclosure ≥ 100g shock rating (design deceleration estimated ≤ 183g peak at 10 mm deflection; hub compliance expected to reduce this — LG-08 required) | PCB fab |
-| LG-08 | Quasi-static compression test on PETG hub (25 % gyroid) — measure crush force and compliance; refine peak-g estimate; confirm ≤ 100g at avionics | Pre-flight |
+| LG-01 | Shear-test 10 samples of M3 × 16 PA6 nylon in representative boss fixture; confirm lateral fuse ≥ 283 N per bolt | First flight |
+| LG-02 | Integrate 8 hull boss sockets into `cargo_sect_shell24.scad`; run DRC mesh check | Hull print |
+| LG-03 | Add CF rod channel to `middle_canonical_shell24.scad` rear skid section (unrelated subsystem) | Hull print |
+| LG-05 | Bake and render final placed Strong-Leg STLs (4 corners) with the widened trunk, after LG-10 placement is finalized | Leg printing |
+| LG-06 | Drop test prototype leg assembly at 1.5 ft (elastic check — confirm zero permanent set on the leg/fuses) | Pre-flight |
+| LG-07 | Confirm avionics enclosure shock rating against the fuse-mediated deceleration profile (re-derive peak-g once LG-14 data exists) | PCB fab |
+| LG-10 | Bake the 4 placed Strong-Leg corner copies to hull frame and export 4 placed STLs | Hull boss integration, leg printing |
+| LG-11 | Coupon-test CF-PETG at 4 perimeters / 40% gyroid infill to replace the 0.70 effective-area assumption (§4.2) | First flight |
+| LG-12 | Widen the trunk cross-section geometrically (≈9.9 × 11.8 mm, 100% infill) per §4.5 | First flight |
+| LG-13 | Confirm 2× M3 × 16 mm PA6 nylon per boss is adequate at the fuse-capped force level (§5) | First flight |
+| LG-14 | Instrumented drop test (load cell + high-speed video) at 6 ft full-AUW: confirm the wire fuses collapse at the predicted ≈1,956 N/fuse, confirm the ring-collapse mechanics (§4.3) match the idealized 4-hinge model, confirm the CF-PETG structure stays elastic per §4.4. This is the test that certifies the Rev R4 design. | First flight |
+| LG-15 | Select and procure ductile spring-steel wire stock/temper for the fuse (§4.3); confirm achievable flow stress and ductility by coupon bend test; finalize fuse mounting-pin detail | Leg fabrication |
+| LG-16 | **New.** Select and procure the ductile spring-steel wire grade/temper specifically for plastic-bend ductility (not elastic spring performance) — coordinate with LG-15; confirm chosen temper survives forming into the §4.3 ring shape without premature cracking | Leg fabrication |
+
+---
+
+## 16. Generated Demonstration Models (Rev R4)
+
+Schematic STLs illustrating this design were generated to support visual review. These
+use a simple placeholder cylinder for the hull boss (LG-02 integration is still open)
+and the standalone exported Strong-Leg (not yet baked to a final corner placement,
+LG-10) — they are illustrative, not final-production geometry:
+
+| File | Description |
+|---|---|
+| `airframe/stls/fuselage/landing-gear/wire_loop_fuse_nominal.stl` | One wire-loop fuse, undeformed |
+| `airframe/stls/fuselage/landing-gear/wire_loop_fuse_deformed.stl` | One wire-loop fuse, crushed/flattened to the §4.3 minor-axis collapse state — the field-inspection "this needs replacing" reference shape |
+| `airframe/stls/fuselage/landing-gear/landing_gear_assembled.stl` | Leg + foot + 2 fuses (nominal) + 2 boss placeholders, in correct relative position |
+| `airframe/stls/fuselage/landing-gear/landing_gear_exploded.stl` | Same parts, separated along each part's local insertion axis for visual clarity |
+| `airframe/stls/fuselage/landing-gear/landing_gear_deformed.stl` | Same as assembled, but arm 1's fuse is swapped for the deformed variant and its boss is pulled in against the shortened fuse — shows the post-overload state with one arm fired and one arm still intact, the Level 2/4 progressive-failure behavior from §6 |
+
+Generated by `tools/build_landing_gear_views.py` (Python/`trimesh`) and
+`airframe/openscad/fuselage/wire_loop_fuse.scad` (OpenSCAD). Re-run both after any
+change to the fuse dimensions, the Strong-Leg foot/tip geometry, or the boss placeholder.

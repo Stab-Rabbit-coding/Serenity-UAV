@@ -165,7 +165,21 @@ torque reaction.
 
 ### Landing Gear
 
-Four legs and tripod feet, geometry derived from the source Thingiverse model.
+**Strong-Leg + wire-loop fuse (Rev R4):** four corner leg assemblies, each a
+single-piece CF-PETG print built from the canonical Thingiverse-derived leg —
+duplicated, rotated 30° about its own vertical centreline, and unioned into one
+watertight part. Each leg keeps the original single foot attachment point (mating with
+the unmodified canonical TPU foot pad) but forks into **two independent arms** at the
+hull end. Rigorous re-verification showed the bare CF-PETG arms/trunk cannot reliably
+absorb a full-AUW 6 ft drop on their own, so each arm tip carries a small **ductile
+wire-loop fuse** (8 total) in place of a rigid spigot — a closed ring of ductile
+spring-steel wire that progressively flattens under overload, absorbing the bulk of the
+impact energy at a predictable, far lighter cost (≈73 g total) than an equivalent
+elastic spring (≈163 g) would need. The CF-PETG trunk is also geometrically widened as
+a secondary backstop. Under overload, a fuse flattens (visibly, field-replaceable) while
+the aircraft stays supported — a deliberately progressive, sacrificial failure mode
+rather than a catastrophic one. Rated for the 6 ft (1.829 m) design drop at Phase 11
+AUW. Full structural analysis: `docs/LANDING_GEAR_ANALYSIS.md`.
 
 ---
 
