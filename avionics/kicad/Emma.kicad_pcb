@@ -15876,7 +15876,7 @@
 			)
 		)
 	)
-	(gr_text "49 MHz AX.25 KISS Transceiver\nXCVR-49MHZ-2 Rev 2 — EMI-Hardened\nFCC 47 CFR Part 15 15.235\n49.830-49.890 MHz  AFSK 1200bd\nCC BY 4.0 — June 2026\nSteve Griffing\nPE(CSE), CISSP-ISSEP, CPP\nGriffing Technology LLC\ngithub.com/Stab-Rabbit-Coding"
+	(gr_text "49 MHz AX.25 KISS Transceiver\nXCVR-49MHZ-2 Rev 2 — EMI-Hardened\nFCC 47 CFR Part 15 15.235\n49.830-49.890 MHz  AFSK 1200bd\nFCC ID: PENDING CERTIFICATION\nComplies w/ FCC Pt.15: (1) may not\ncause harmful interference (2) must\naccept any interference received\nCC BY 4.0 — June 2026\nSteve Griffing\nPE(CSE), CISSP-ISSEP, CPP\nGriffing Technology LLC\ngithub.com/Stab-Rabbit-Coding"
 		(at 142.5 116.5 270)
 		(layer "B.SilkS")
 		(uuid "64164594-3fdf-49f4-b199-12c2ac0bf07d")
