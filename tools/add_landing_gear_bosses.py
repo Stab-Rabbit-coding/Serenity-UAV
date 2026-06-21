@@ -42,11 +42,11 @@ DUCTILE_L = 30.0
 HULL_ATTACH_Z = 44.0  # mm above cargo belly -- validated Rev R1 socket height
 
 BOSS_OD = 10.0
-BOSS_LEN = 24.0          # generous length -- robust overlap even where the
-                          # local hull surface is sharply curved (e.g. near
-                          # a chamfer), at the cost of embedding deeper than
-                          # structurally necessary; refine once LG-10 placement
-                          # is finalized and the real local curvature is known.
+# BOSS_LEN: generous length -- robust overlap even where the local hull
+# surface is sharply curved (e.g. near a chamfer), at the cost of embedding
+# deeper than structurally necessary; refine once LG-10 placement is
+# finalized and the real local curvature is known.
+BOSS_LEN = 24.0
 BOSS_EMBED = 14.0        # mm pushed into the shell (along the surface normal)
 BORE_D = 5.5             # mm, wire-end clearance bore
 BORE_DEPTH = 10.0        # mm
@@ -89,13 +89,18 @@ def attachment_points():
     out = []
     for label, x, y, zrot in CORNERS:
         rot, t = corner_transform(x, y, zrot)
-        for branch_name, z_local, length in [("spring", POST_TOP_Z, SPRING_L), ("ductile", POST_MID_Z, DUCTILE_L)]:
+        branches = [
+            ("spring", POST_TOP_Z, SPRING_L),
+            ("ductile", POST_MID_Z, DUCTILE_L),
+        ]
+        for branch_name, z_local, length in branches:
             socket_world = rot @ np.array([0, 0, z_local]) + t
             for sign in (-1, 1):
                 d_local = branch_direction(90 + sign * AZ_SPLIT)
                 d_world = rot @ d_local
                 far_point = socket_world + d_world * length
-                out.append((f"{label}-{branch_name}-{'a' if sign < 0 else 'b'}", far_point, d_world))
+                suffix = "a" if sign < 0 else "b"
+                out.append((f"{label}-{branch_name}-{suffix}", far_point, d_world))
     return out
 
 
@@ -114,7 +119,9 @@ def boss_geometry(center, normal, wire_dir):
     boss_center = center + normal * (BOSS_LEN / 2.0 - BOSS_EMBED)
     boss.apply_translation(boss_center)
 
-    bore = trimesh.creation.cylinder(radius=BORE_D / 2.0, height=BORE_DEPTH * 2.5, sections=24)
+    bore = trimesh.creation.cylinder(
+        radius=BORE_D / 2.0, height=BORE_DEPTH * 2.5, sections=24
+    )
     bore.apply_transform(align_z_to(wire_dir))
     bore.apply_translation(center + wire_dir * (BORE_DEPTH * 0.3))
 
@@ -128,7 +135,10 @@ def main():
     print(f"  {len(bodies)} bodies", flush=True)
     outer = max(bodies, key=lambda b: b.volume)
     inner = min(bodies, key=lambda b: b.volume)
-    print(f"  outer: {len(outer.vertices)} verts, watertight={outer.is_watertight}", flush=True)
+    print(
+        f"  outer: {len(outer.vertices)} verts, watertight={outer.is_watertight}",
+        flush=True,
+    )
 
     points = attachment_points()
     targets = np.array([p[1] for p in points])
@@ -140,7 +150,11 @@ def main():
         center = closest[i]
         normal = normals[i]
         boss, bore = boss_geometry(center, normal, wire_dir)
-        print(f"[{i+1:2d}/16] {label:20s} dist_to_surface={dist[i]:5.1f}mm  unioning boss ...", flush=True)
+        print(
+            f"[{i+1:2d}/16] {label:20s} dist_to_surface={dist[i]:5.1f}mm  "
+            f"unioning boss ...",
+            flush=True,
+        )
         result = result.union(boss, engine="manifold")
         result = result.difference(bore, engine="manifold")
 
@@ -153,17 +167,25 @@ def main():
         main_body = max(result_bodies, key=lambda b: len(b.vertices))
         for b in result_bodies:
             if b is not main_body:
-                print(f"  [WARN] dropped a disconnected island near {b.bounds.tolist()} "
-                      f"({len(b.vertices)} verts) -- a boss failed to weld there; "
-                      f"needs a second pass after LG-10 placement is finalized.", flush=True)
+                print(
+                    f"  [WARN] dropped a disconnected island near "
+                    f"{b.bounds.tolist()} ({len(b.vertices)} verts) -- a boss "
+                    f"failed to weld there; needs a second pass after LG-10 "
+                    f"placement is finalized.",
+                    flush=True,
+                )
         result = main_body
 
     print("Recombining with inner shell ...", flush=True)
     combined = trimesh.util.concatenate([result, inner])
     combined.export(OUTPUT_STL)
     print(f"Saved -> {OUTPUT_STL}", flush=True)
-    print(f"Final: bodies={combined.body_count}, "
-          f"outer watertight={result.is_watertight}, inner watertight={inner.is_watertight}", flush=True)
+    print(
+        f"Final: bodies={combined.body_count}, "
+        f"outer watertight={result.is_watertight}, "
+        f"inner watertight={inner.is_watertight}",
+        flush=True,
+    )
 
 
 if __name__ == "__main__":

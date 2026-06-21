@@ -90,18 +90,29 @@ def place_boss(direction, far_point):
 
 def place_foot(foot_mesh, foot_pt):
     fb = foot_mesh.bounds
-    top_face_center = np.array([(fb[0][0] + fb[1][0]) / 2.0, (fb[0][1] + fb[1][1]) / 2.0, fb[1][2]])
+    top_face_center = np.array(
+        [(fb[0][0] + fb[1][0]) / 2.0, (fb[0][1] + fb[1][1]) / 2.0, fb[1][2]]
+    )
     placed = foot_mesh.copy()
     placed.apply_translation(foot_pt - top_face_center)
     return placed
 
 
-def build(post, foot, spring_wire, ductile_wire, foot_pt, explode=False, deformed_ductile=None):
+def build(
+    post,
+    foot,
+    spring_wire,
+    ductile_wire,
+    foot_pt,
+    explode=False,
+    deformed_ductile=None,
+):
     offset_socket = EXPLODE_OFFSET * 0.5 if explode else 0.0
     offset_far = EXPLODE_OFFSET * 0.5 if explode else 0.0
 
     parts = [post.copy()]
-    foot_placed = place_foot(foot, foot_pt - np.array([0, 0, EXPLODE_OFFSET if explode else 0.0]))
+    foot_offset = np.array([0, 0, EXPLODE_OFFSET if explode else 0.0])
+    foot_placed = place_foot(foot, foot_pt - foot_offset)
     parts.append(foot_placed)
 
     socket_top = foot_pt + np.array([0, 0, POST_TOP_Z])
@@ -109,7 +120,6 @@ def build(post, foot, spring_wire, ductile_wire, foot_pt, explode=False, deforme
 
     for az_sign in (-1, 1):
         direction = branch_direction(90 + az_sign * AZ_SPLIT)
-        socket_pt = socket_top + np.array([0, 0, offset_socket]) * 0  # socket stays put
         wire, half_len = place_wire(spring_wire, socket_top, direction, offset_socket)
         parts.append(wire)
         far_point = socket_top + direction * (offset_socket + 2 * half_len + offset_far)
@@ -142,7 +152,8 @@ def main():
     ductile_nom = trimesh.load(f"{GEAR_DIR}/ductile_wire_nominal.stl")
     ductile_def = trimesh.load(f"{GEAR_DIR}/ductile_wire_deformed.stl")
 
-    foot_pt = np.array([0.0, 0.0, 0.0])  # post-local frame, foot already at its own origin
+    # post-local frame, foot already at its own origin
+    foot_pt = np.array([0.0, 0.0, 0.0])
 
     assembled, n = build(post, foot, spring_nom, ductile_nom, foot_pt, explode=False)
     assembled.export(f"{GEAR_DIR}/landing_gear_assembled.stl")
@@ -152,7 +163,15 @@ def main():
     exploded.export(f"{GEAR_DIR}/landing_gear_exploded.stl")
     print(f"exploded: {n} parts, bounds {exploded.bounds.tolist()}")
 
-    deformed, n = build(post, foot, spring_nom, ductile_nom, foot_pt, explode=False, deformed_ductile=ductile_def)
+    deformed, n = build(
+        post,
+        foot,
+        spring_nom,
+        ductile_nom,
+        foot_pt,
+        explode=False,
+        deformed_ductile=ductile_def,
+    )
     deformed.export(f"{GEAR_DIR}/landing_gear_deformed.stl")
     print(f"deformed: {n} parts, bounds {deformed.bounds.tolist()}")
 
