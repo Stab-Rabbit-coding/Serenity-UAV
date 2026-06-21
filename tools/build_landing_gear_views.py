@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
-"""Build assembled / exploded / deformed demonstration STLs for the Rev R3
-Strong-Leg + per-arm wire-loop fuse landing gear assembly.
+"""Build assembled / exploded / deformed demonstration STLs for the Rev R5
+vertical-post + 4-wire-brace landing gear (2 spring wires at the apex branch,
+2 ductile wires at the 1/3-down branch).
 
 This is a SCHEMATIC illustration of the design described in
-docs/LANDING_GEAR_ANALYSIS.md Rev R3, not a finalized hull-integrated
+docs/LANDING_GEAR_ANALYSIS.md Rev R5, not a finalized hull-integrated
 assembly: the hull boss is a simple placeholder cylinder (LG-02, the real
-boss SCAD integration, is still open), and the Strong-Leg used is the
-standalone exported part (pulled away from the hull per CLAUDE.md / TODO
-LG-10), not yet baked to a final corner placement.
+boss SCAD integration, is still open), and the canonical foot pad is
+positioned under the post's foot point without a finalized socket detail.
 
 Outputs (airframe/stls/fuselage/landing-gear/):
-    landing_gear_assembled.stl   -- leg + foot + 2 wire fuses + 2 boss
+    landing_gear_assembled.stl   -- post + foot + 2 spring wires (apex) +
+                                     2 ductile wires (1/3-down) + 4 boss
                                      placeholders, in correct relative
-                                     position, nominal (undeformed) fuses.
+                                     position, all wires nominal.
     landing_gear_exploded.stl    -- same parts, separated along each part's
                                      local insertion axis for visual clarity.
-    landing_gear_deformed.stl    -- same as assembled, but one arm's wire
-                                     fuse is swapped for the crushed/deformed
-                                     variant and the boss on that arm is
-                                     pulled in to sit against the shortened
-                                     fuse, showing the post-overload state.
+    landing_gear_deformed.stl    -- same as assembled, but the ductile wires
+                                     are swapped for the fired/flattened
+                                     variant, showing the post-overload state
+                                     (spring pair still nominal/intact).
 
 Run: python3 tools/build_landing_gear_views.py
 """
@@ -29,116 +29,132 @@ import trimesh
 
 GEAR_DIR = "airframe/stls/fuselage/landing-gear"
 
-# Measured Strong-Leg geometry (docs/LANDING_GEAR_ANALYSIS.md SS2.3) -- the
-# foot point and the two arm-tip centroids, in the standalone exported
-# part's own coordinate frame.
-FOOT_PT = np.array([-114.71834564, -142.64599609, -12.99771976])
-TIP1 = np.array([-96.30127746, -111.34827438, 66.17362423])
-TIP2 = np.array([-84.86322096, -124.32145078, 66.17362423])
+LEAN_ANG = 24.0   # deg from vertical
+AZ_SPLIT = 15.0   # deg, +/- within each pair
+POST_MID_Z = 79.8 * 2.0 / 3.0   # 1/3-down branch height (ductile pair)
+POST_TOP_Z = 79.8                # apex branch height (spring pair)
+SPRING_L = 45.0
+DUCTILE_L = 30.0
 
 BOSS_OD = 13.0
 BOSS_LEN = 12.0
-EXPLODE_OFFSET = 30.0  # mm, separation distance for the exploded view
+EXPLODE_OFFSET = 25.0
+
+
+def branch_direction(az_deg):
+    """Unit vector for a branch bored at LEAN_ANG from vertical (+Z), at
+    azimuth az_deg measured the same way OpenSCAD's rotate([0, LEAN_ANG, az])
+    applies it to the +Z axis.
+    """
+    lean = np.radians(LEAN_ANG)
+    az = np.radians(az_deg)
+    # Equivalent to rotating +Z by LEAN_ANG about Y then by az about Z.
+    v = np.array([np.sin(lean), 0, np.cos(lean)])
+    rot_z = np.array([
+        [np.cos(az), -np.sin(az), 0],
+        [np.sin(az), np.cos(az), 0],
+        [0, 0, 1],
+    ])
+    return rot_z @ v
 
 
 def align_z_to(direction):
-    """Return a 4x4 transform rotating the local +Z axis onto `direction`."""
     direction = direction / np.linalg.norm(direction)
     return trimesh.geometry.align_vectors([0, 0, 1], direction)
 
 
-def place_along_arm(mesh, foot, tip, start_offset, local_z_extent_half):
-    """Orient `mesh` (built with its load axis along local Z, centred at its
-    own origin) so its local +Z axis points from foot toward tip, and
-    translate it so its -Z end sits at `start_offset` mm along that
-    direction beyond the tip.
-    """
-    direction = tip - foot
-    unit = direction / np.linalg.norm(direction)
-    xform = align_z_to(unit)
-    placed = mesh.copy()
-    placed.apply_transform(xform)
-    anchor = tip + unit * (start_offset + local_z_extent_half)
-    placed.apply_translation(anchor)
-    return placed, unit
-
-
 def boss_placeholder():
-    """Simple schematic hull boss: a short cylinder, bore omitted (LG-02
-    integration is still open -- see docs/LANDING_GEAR_ANALYSIS.md SS4.6).
-    """
     return trimesh.creation.cylinder(radius=BOSS_OD / 2.0, height=BOSS_LEN, sections=48)
 
 
-def place_foot(foot_mesh, foot_pt, offset_along_neg_z=0.0):
-    """Translate the canonical foot pad so its top face centre sits
-    `offset_along_neg_z` mm below the leg's foot point (0 = touching).
+def place_wire(wire_mesh, socket_pt, direction, start_offset):
+    """Orient wire_mesh (built with its chord along local Z, centred at its
+    own origin) along `direction`, with its near (-Z) end starting
+    `start_offset` mm out from socket_pt along that direction.
     """
+    xform = align_z_to(direction)
+    placed = wire_mesh.copy()
+    placed.apply_transform(xform)
+    half_len = placed.extents[2] / 2.0
+    anchor = socket_pt + direction * (start_offset + half_len)
+    placed.apply_translation(anchor)
+    return placed, half_len
+
+
+def place_boss(direction, far_point):
+    boss_inst = boss_placeholder()
+    boss_inst.apply_transform(align_z_to(direction))
+    boss_inst.apply_translation(far_point + direction * (BOSS_LEN / 2.0))
+    return boss_inst
+
+
+def place_foot(foot_mesh, foot_pt):
     fb = foot_mesh.bounds
     top_face_center = np.array([(fb[0][0] + fb[1][0]) / 2.0, (fb[0][1] + fb[1][1]) / 2.0, fb[1][2]])
     placed = foot_mesh.copy()
-    target = foot_pt - np.array([0, 0, offset_along_neg_z])
-    placed.apply_translation(target - top_face_center)
+    placed.apply_translation(foot_pt - top_face_center)
     return placed
 
 
+def build(post, foot, spring_wire, ductile_wire, foot_pt, explode=False, deformed_ductile=None):
+    offset_socket = EXPLODE_OFFSET * 0.5 if explode else 0.0
+    offset_far = EXPLODE_OFFSET * 0.5 if explode else 0.0
+
+    parts = [post.copy()]
+    foot_placed = place_foot(foot, foot_pt - np.array([0, 0, EXPLODE_OFFSET if explode else 0.0]))
+    parts.append(foot_placed)
+
+    socket_top = foot_pt + np.array([0, 0, POST_TOP_Z])
+    socket_mid = foot_pt + np.array([0, 0, POST_MID_Z])
+
+    for az_sign in (-1, 1):
+        direction = branch_direction(90 + az_sign * AZ_SPLIT)
+        socket_pt = socket_top + np.array([0, 0, offset_socket]) * 0  # socket stays put
+        wire, half_len = place_wire(spring_wire, socket_top, direction, offset_socket)
+        parts.append(wire)
+        far_point = socket_top + direction * (offset_socket + 2 * half_len + offset_far)
+        parts.append(place_boss(direction, far_point))
+
+    ductile_mesh = deformed_ductile if deformed_ductile is not None else ductile_wire
+    for az_sign in (-1, 1):
+        direction = branch_direction(90 + az_sign * AZ_SPLIT)
+        wire, half_len = place_wire(ductile_mesh, socket_mid, direction, offset_socket)
+        parts.append(wire)
+        far_point = socket_mid + direction * (offset_socket + 2 * half_len + offset_far)
+        parts.append(place_boss(direction, far_point))
+
+    return trimesh.util.concatenate(parts), len(parts)
+
+
+def largest_body(mesh):
+    """Drop tiny disconnected CSG slivers (e.g. where two angled socket
+    bores cross near the post centreline) -- keep only the largest body."""
+    bodies = mesh.split()
+    if len(bodies) <= 1:
+        return mesh
+    return max(bodies, key=lambda b: b.volume)
+
+
 def main():
-    leg = trimesh.load(f"{GEAR_DIR}/strong-leg.stl")
+    post = largest_body(trimesh.load(f"{GEAR_DIR}/post.stl"))
     foot = trimesh.load(f"{GEAR_DIR}/foot_1_scaled24.stl")
-    fuse_nom = trimesh.load(f"{GEAR_DIR}/wire_loop_fuse_nominal.stl")
-    fuse_def = trimesh.load(f"{GEAR_DIR}/wire_loop_fuse_deformed.stl")
+    spring_nom = trimesh.load(f"{GEAR_DIR}/spring_wire_nominal.stl")
+    ductile_nom = trimesh.load(f"{GEAR_DIR}/ductile_wire_nominal.stl")
+    ductile_def = trimesh.load(f"{GEAR_DIR}/ductile_wire_deformed.stl")
 
-    fuse_nom_half_z = fuse_nom.extents[2] / 2.0
-    fuse_def_half_z = fuse_def.extents[2] / 2.0
-    boss = boss_placeholder()
+    foot_pt = np.array([0.0, 0.0, 0.0])  # post-local frame, foot already at its own origin
 
-    # ---- Assembled view (nominal, touching) ----
-    parts = [leg, place_foot(foot, FOOT_PT, offset_along_neg_z=0.0)]
-    for tip in (TIP1, TIP2):
-        fuse, unit = place_along_arm(fuse_nom, FOOT_PT, tip, start_offset=0.0, local_z_extent_half=fuse_nom_half_z)
-        parts.append(fuse)
-        boss_inst = boss.copy()
-        boss_xform = align_z_to(unit)
-        boss_inst.apply_transform(boss_xform)
-        boss_anchor = tip + unit * (2 * fuse_nom_half_z + BOSS_LEN / 2.0)
-        boss_inst.apply_translation(boss_anchor)
-        parts.append(boss_inst)
-    assembled = trimesh.util.concatenate(parts)
+    assembled, n = build(post, foot, spring_nom, ductile_nom, foot_pt, explode=False)
     assembled.export(f"{GEAR_DIR}/landing_gear_assembled.stl")
-    print(f"assembled: {len(parts)} parts, bounds {assembled.bounds.tolist()}")
+    print(f"assembled: {n} parts, bounds {assembled.bounds.tolist()}")
 
-    # ---- Exploded view ----
-    parts_exp = [leg, place_foot(foot, FOOT_PT, offset_along_neg_z=EXPLODE_OFFSET)]
-    for tip in (TIP1, TIP2):
-        fuse, unit = place_along_arm(
-            fuse_nom, FOOT_PT, tip, start_offset=EXPLODE_OFFSET * 0.5, local_z_extent_half=fuse_nom_half_z
-        )
-        parts_exp.append(fuse)
-        boss_inst = boss.copy()
-        boss_xform = align_z_to(unit)
-        boss_inst.apply_transform(boss_xform)
-        boss_anchor = tip + unit * (EXPLODE_OFFSET * 0.5 + 2 * fuse_nom_half_z + EXPLODE_OFFSET * 0.5 + BOSS_LEN / 2.0)
-        boss_inst.apply_translation(boss_anchor)
-        parts_exp.append(boss_inst)
-    exploded = trimesh.util.concatenate(parts_exp)
+    exploded, n = build(post, foot, spring_nom, ductile_nom, foot_pt, explode=True)
     exploded.export(f"{GEAR_DIR}/landing_gear_exploded.stl")
-    print(f"exploded: {len(parts_exp)} parts, bounds {exploded.bounds.tolist()}")
+    print(f"exploded: {n} parts, bounds {exploded.bounds.tolist()}")
 
-    # ---- Deformed view: arm 1's fuse has fired (crushed), arm 2 intact ----
-    parts_def = [leg, place_foot(foot, FOOT_PT, offset_along_neg_z=0.0)]
-    tip_fuse_pairs = [(TIP1, fuse_def, fuse_def_half_z), (TIP2, fuse_nom, fuse_nom_half_z)]
-    for tip, fuse_mesh, half_z in tip_fuse_pairs:
-        fuse, unit = place_along_arm(fuse_mesh, FOOT_PT, tip, start_offset=0.0, local_z_extent_half=half_z)
-        parts_def.append(fuse)
-        boss_inst = boss.copy()
-        boss_xform = align_z_to(unit)
-        boss_inst.apply_transform(boss_xform)
-        boss_anchor = tip + unit * (2 * half_z + BOSS_LEN / 2.0)
-        boss_inst.apply_translation(boss_anchor)
-        parts_def.append(boss_inst)
-    deformed = trimesh.util.concatenate(parts_def)
+    deformed, n = build(post, foot, spring_nom, ductile_nom, foot_pt, explode=False, deformed_ductile=ductile_def)
     deformed.export(f"{GEAR_DIR}/landing_gear_deformed.stl")
-    print(f"deformed: {len(parts_def)} parts, bounds {deformed.bounds.tolist()}")
+    print(f"deformed: {n} parts, bounds {deformed.bounds.tolist()}")
 
 
 if __name__ == "__main__":

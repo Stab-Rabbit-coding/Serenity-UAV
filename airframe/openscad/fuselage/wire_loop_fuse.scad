@@ -5,7 +5,14 @@
 // ===========================================================================
 // ===========================================================================
 // wire_loop_fuse.scad
-// Serenity UAV -- Rev R3 -- Strong-Leg per-arm ductile wire-loop crash fuse
+// Serenity UAV -- Rev R4 -- Strong-Leg per-arm ductile wire-loop crash fuse
+// *** RETIRED 2026-06-20, superseded by Rev R5 (wire_brace_leg.scad) ***
+// The closed-ring fuse below was judged hard to manufacture/field-replace
+// (precision wire winding + separate tabs). Rev R5 replaces it with a much
+// simpler single-bend "bowed wire" strut (see wire_brace_leg.scad) and also
+// replaces the forked CF-PETG arms entirely with FOUR such wires (2 spring,
+// 2 ductile) rather than fusing only the arm tips. Kept here for reference
+// only -- see docs/LANDING_GEAR_ANALYSIS.md Rev R5 for the current design.
 // ===========================================================================
 //
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP

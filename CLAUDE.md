@@ -85,18 +85,26 @@ Every component will be fabricated or procured; design accordingly.
 
 - The rear section consists of a conical engine room with a pod centered above it and two skids below it. the skids are extensions of the horseshoe ring from the middle section, bent aft and extending past the end of the tail cone.
 
-- **Canonical landing leg model (Rev R2): the Strong-Leg.** The current canonical leg for
-  all 4 cargo-corner landing gear assemblies is `airframe/stls/fuselage/landing-gear/strong-leg.stl`
-  — built directly from the existing canonical single-blade leg (misubisu Thingiverse hull,
-  CC BY 4.0) by FreeCAD boolean operation: duplicate the leg, rotate the duplicate 30° about
-  its own vertical centreline, and union the two into one watertight CF-PETG part. The result
-  keeps a single foot attachment point (mates with the unmodified canonical TPU foot pad) but
-  forks into two independent arms at the hull end, each landing on its own hull boss — giving
-  every leg two redundant load paths so it fails progressively (one arm cracks) rather than
-  catastrophically under overload. This retires the Rev R1.4 parametric corner V-brace concept
-  (`airframe/openscad/fuselage/landing_leg_assy.scad`), which was never rendered or printed.
-  Full structural analysis and joint-fitting specs: `docs/LANDING_GEAR_ANALYSIS.md` (Rev R2);
-  build tasks: `TODO.md` §1.1.4.
+- **Canonical landing leg model (Rev R5): vertical post + 4-wire brace.** The original
+  canonical single-blade leg (misubisu Thingiverse hull, CC BY 4.0) is itself a vertical
+  part with two branch points of its own — one at the apex (top) and one about 1/3 of
+  the way down from the apex. Each of the 4 cargo-corner landing gear assemblies keeps
+  only a short CF-PETG **vertical post** (foot up through the 1/3-down branch height,
+  100% infill, not expected to ever yield) and braces it to the hull with **four simple
+  wires**: 2 **spring** wires at the apex (elastic, fully recoverable for ordinary hard
+  landings) and 2 **ductile** wires at the 1/3-down branch (each independently sized to
+  absorb the entire 6 ft full-AUW worst-case impact energy on its own, by progressively
+  deepening a single pre-formed bow — a visible, field-replaceable "fired" indicator).
+  Each wire is a single piece of wire stock with one shallow pre-bend, chosen
+  specifically for manufacturability and field replacement over more complex shapes
+  (an elastic spring-steel leaf and a closed-ring wire fuse were both evaluated and
+  rejected in earlier revisions — see `docs/LANDING_GEAR_ANALYSIS.md` Rev R3/R4 history).
+  This retires the Rev R1.4 parametric corner V-brace concept
+  (`airframe/openscad/fuselage/landing_leg_assy.scad`, never rendered or printed) and
+  the intermediate "Strong-Leg" forked-CF-PETG-arm concept (Rev R2–R4). SCAD source:
+  `airframe/openscad/fuselage/wire_brace_leg.scad`. Full structural analysis and
+  joint-fitting specs: `docs/LANDING_GEAR_ANALYSIS.md` (Rev R5); build tasks: `TODO.md`
+  §1.1.4.
 
 #### Hull-Frame Coordinate Standard (Rev R1 — baked, canonical)
 
