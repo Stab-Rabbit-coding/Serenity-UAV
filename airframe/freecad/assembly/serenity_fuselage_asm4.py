@@ -384,7 +384,9 @@ def add_mesh_part(doc, group, name, stl_path, placement, colour):
             if len(colour) > 3:
                 obj.ViewObject.Transparency = int((1.0 - colour[3]) * 100)
     except Exception:
-        pass  # headless mode — ViewObject not available
+        # headless mode — ViewObject not available; log rather than
+        # silently swallow per CLAUDE.md "Everything is logged."
+        log.debug("ViewObject color set skipped for %s (headless)", name, exc_info=True)
 
     group.addObject(obj)
     log.info("  ADD   %-32s  (%s)", name, os.path.basename(stl_path))

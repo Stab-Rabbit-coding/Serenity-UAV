@@ -13,6 +13,7 @@
 #     NOT be applied to the baked hull-frame STLs (double transform).
 # ============================================================================
 # create_assembly_from_stl.py
+import logging
 import os
 import FreeCAD
 import FreeCADGui
@@ -23,6 +24,9 @@ import ImportGui
 
 # Assembly4
 import Assembly4
+
+log = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 DOC = FreeCAD.newDocument("AircraftAssembly")
 FreeCAD.setActiveDocument(DOC.Name)
@@ -68,7 +72,15 @@ def mesh_to_solid(mesh_obj, label=None, tolerance=0.1):
         solid = Part.makeSolid(shp)
         part_obj.Shape = solid
     except Exception:
-        pass
+        # Open/non-manifold mesh shapes cannot always be solidified; the
+        # part_obj keeps its (already-assigned) open shell shape in that
+        # case.  Log rather than silently swallow per CLAUDE.md "Everything
+        # is logged."
+        log.warning(
+            "makeSolid failed for %s; keeping open-shell shape",
+            label or mesh_obj.Label,
+            exc_info=True,
+        )
     # hide original mesh
     mesh_obj.ViewObject.Visibility = False
     return part_obj
