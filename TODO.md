@@ -88,11 +88,22 @@ text) has been removed and logged under "Removed / Superseded Citations."
     `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`.  **Open follow-up:** physical board
     re-spin/fabrication run to populate 132289RP in place of 132289 on built boards — the
     design-level fix is complete but no boards have been re-fabricated yet.
-- [ ] **Remaining firmware/build-guide references to "RCRS"/old Part 95 section numbers**
-    (§1.3, §1.3's PCB pre-compliance checklist, Phase-build install steps, BOM rows, etc.) still
-    need a pass to update wording/citations to Part 15 §15.235; not all instances have been swept
-    in this revision — see repo-wide grep for "RCRS" to find remaining occurrences.  *(One
-    instance resolved 2026-06-21: `avionics/firmware/common/include/ax25_types.h` — see §0.3.)*
+- [x] **Remaining `TODO.md` references to "RCRS"/old Part 95 section numbers** — swept 2026-06-21:
+    all 24 mislabeled instances (§1.5 BOM note, Avionics Workload Balancing, §2.5 procurement
+    table, Phase 5/6/7/9/10/11 build/test steps, §4.3/4.4 firmware tasks) relabeled to
+    "49 MHz (Part 15 §15.235)"; §1.3 (XCVR-49MHZ-1) marked SUPERSEDED — see below. *(One instance
+    resolved 2026-06-21: `avionics/firmware/common/include/ax25_types.h` — see §0.3.)*
+- [ ] **Remaining non-`TODO.md` references to "RCRS"** — repo-wide grep for "RCRS" still finds
+    instances outside `TODO.md` in `gcs/malcolm/firmware/pb2i/src/mal_config.h`,
+    `mal_telemetry.h`, `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`, `avionics/kicad/Emma.md`,
+    `Zoë.md`, `add_sensors_sbus.py`, `avionics/firmware/{README.md,cn/src/*}`,
+    `avionics/firmware/dts/README.md`, `docs/PHASED_BUILD_GUIDE.md`, `docs/AVIONICS_PB2_REDESIGN.md`,
+    `docs/REVN_BUILD_GUIDE_24IN.md`, `docs/bom_revQ.json`, `docs/bom_revR.json`,
+    `graphical-build-guide/*.svg`, and `PROJECT_INDEX.md` (archived files under `archives/` and
+    `current-specification/serenity-rev-r.jsx` intentionally excluded per `CLAUDE.md`'s
+    archival-revision policy; `REFERENCES.md`'s RCRS mentions are all correct, explanatory uses
+    in REF-FCC-004's "evaluated and rejected" analysis, not mislabels — no fix needed there).
+    Not yet swept — out of scope for this pass.
 
 ### 0.2 — Incorrect Reference Correction
 
@@ -566,7 +577,7 @@ Joint faces in hull-frame Y (confirmed from baked extents):
         stiff and non-replaceable.
 
     **Step 4 — Assess RF counterpoise function.**
-    CF-BAR-6X3 currently doubles as the 49 MHz RCRS antenna counterpoise.  CF has anisotropic
+    CF-BAR-6X3 currently doubles as the 49 MHz (Part 15 §15.235) antenna counterpoise.  CF has anisotropic
     conductivity (longitudinal only, ≈ 5–10 kΩ/m vs copper ≈ 0.017 Ω/m); it is a poor RF
     conductor.  At 49 MHz, λ = 6.12 m; λ/4 = 1.53 m; a 455–620 mm bar is ≈ λ/10 — a
     dedicated copper counterpoise wire (AWG 22 stranded, < 2 g) bonded alongside the keel
@@ -595,7 +606,7 @@ Joint faces in hull-frame Y (confirmed from baked extents):
         - [ ] Verify GPS recess depth clears GPS retention ring (Inara: dZ=−14.3 mm, River: dZ=+0.7 mm)
         - [ ] Confirm M3 bore positions match shell boss pattern (±25 mm × ±15 mm from bay centre)
 
-- [x] **49MHz RCRS wire posts** — `airframe/openscad/fuselage/rcrs49_wire_post.scad` created 2026-06-11. Single `wire_post()` module: 12×12×2 mm PETG base, 8×8×7 mm mast, Ø1.5 mm athwartships wire-retention bore at 2 mm from top. Print two: forward (sta ≈ 120 mm, dorsal) + temporary aft (sta ≈ 580 mm, dorsal).
+- [x] **49 MHz (Part 15 §15.235) wire posts** — `airframe/openscad/fuselage/rcrs49_wire_post.scad` created 2026-06-11. Single `wire_post()` module: 12×12×2 mm PETG base, 8×8×7 mm mast, Ø1.5 mm athwartships wire-retention bore at 2 mm from top. Print two: forward (sta ≈ 120 mm, dorsal) + temporary aft (sta ≈ 580 mm, dorsal).
     - **BLOCKS Phase 1 (antenna installation)**
     - **SUB-TASKS:**
         - [ ] Export STL → `airframe/stls/fuselage/rcrs49_wire_post.stl`
@@ -1462,9 +1473,19 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 ---
 
-### 1.3 — PCB Design: XCVR-49MHZ-1 (49 MHz AX.25 RCRS Transceiver)
+### 1.3 — PCB Design: XCVR-49MHZ-1 (49 MHz AX.25 Transceiver) — SUPERSEDED
 
-Stub KiCad project at `serenity/kicad/XCVR-49MHZ-1.*`. Design notes in `serenity/kicad/XCVR-49MHZ-1.md`.
+**Superseded 2026-06-21.** XCVR-49MHZ-1 was archived as of Rev Q (2026-06-05) per `CLAUDE.md`
+(`Cape-A-1, Cape-B-1, and XCVR-49MHZ-1 are archived as of Rev Q`) and replaced by **Emma**
+(XCVR-49MHZ-2 Rev R1), whose schematic, layout, and production-file tasks are tracked under
+§1.2b and §1.2a, not here. The remaining unchecked Phase 2–5 items below were never started and
+will not be pursued on this stub design — Emma's circuit topology (Si5351A DDS + discrete BJT PA
++ software Bell 202 AFSK, per the Phase 1 decisions retained below for historical record)
+carried forward, but layout, ERC/DRC, and production-file work happen on the Emma KiCad project
+(`avionics/kicad/Emma.kicad_sch`/`.kicad_pcb`), now archived at `avionics/kicad/archive/`
+and `avionics/gerbers/archive/XCVR-49MHZ-1/`. No further action item remains open here.
+
+Stub KiCad project (archived) at `avionics/kicad/archive/XCVR-49MHZ-1.*`.
 All Phase 1–3 items must be sequentially complete. Phase 4 verification runs in parallel with Phase 3.
 
 **Phase 1 — IC Selection (gates all downstream work):**
@@ -1481,59 +1502,15 @@ All Phase 1–3 items must be sequentially complete. Phase 4 verification runs i
 
 - [x] **Confirm TCM3105 availability** — TCM3105 confirmed discontinued (TI); no in-production drop-in. **Software Bell 202 AFSK selected**: AM6254 Cape-B MCU generates/decodes audio; TX via MCP4921 SPI 12-bit DAC; RX via LM393 comparator + passive RC bandpass filter. *(decided 2026-05-31)*
 
-**Phase 2 — Schematic:**
-
-- [ ] **U1 DDS sub-circuit** — power decoupling, SPI/I²C to J1, frequency configuration load sequence; channel select (49.830–49.890 MHz) software-configurable.
-
-- [ ] **U2 AFSK modem sub-circuit** — software Bell 202 on Cape-B MCU; MCP4921 SPI 12-bit DAC (TX audio to U3 modulator); LM393 comparator + passive RC bandpass filter (RX demod); UART to J1 pins 3/4; LM393 output as CD (carrier detect) to Cape-B GPIO.
-
-- [ ] **U3 PA + modulator sub-circuit** — DDS carrier in, AFSK audio in, RF out to FL1; PTT_N gate; bias network and 50 Ω output matching.
-
-- [ ] **FL1 5-element Chebyshev LPF** — calculate values for fc=75 MHz, 50 Ω; verify −40 dBc at 98 MHz (2nd harmonic of 49 MHz). Simulate in QUCS-S before committing values.
-
-- [ ] **U4 LNA + envelope detector RX chain** — MGA-82563 input, gain/NF budget, RSSI voltage divider to J1 pin 6.
-
-- [ ] **U5 TX/RX switch** — PE4259-63 SPDT; PTT_N control; isolation must protect LNA during TX (PE4259 ≥35 dB TX→RX isolation).
-
-- [ ] **U6 3.3 V LDO and power tree** — AMS1117-3.3 from +5V; bulk decoupling; ferrite bead between digital and RF sections on +5V.
-
-- [ ] **J1 and J2 connectors** with all pin labels.
-
-- [ ] **Run ERC; resolve all errors.**
-
-**Phase 3 — PCB Layout:**
-
-- [ ] **Set up layer stack** — 4L: F.Cu signal / In1.Cu GND / In2.Cu +3V3 / B.Cu signal; 1.6 mm total thickness (JLCPCB standard).
-
-- [ ] **Place components** — RF section (right 25 mm): U1, U3, U4, U5, FL1, J2; digital section (left 30 mm): U2, U6, J1.
-
-- [ ] **Route RF path** — 50 Ω microstrip, 2.75 mm wide on F.Cu (Z₀ = 52.26 Ω confirmed by `check_impedance.py` 2026-05-30); continuous GND stitching vias; no 90° bends.
-
-- [ ] **Route digital signals** — UART traces ≥5 mm from RF section boundary; ferrite bead (BLM18PG221SN1D or equiv.) on +5V at boundary.
-
-- [ ] **LPF shield keep-out** — mark Coilcraft SER inductor cans on F.Fab; orient perpendicular; verify no mutual coupling.
-
-- [ ] **Thermal vias under U3 PA** — exposed pad to In1.Cu GND; minimum 9× 0.3 mm vias; verify <85°C case at 100 mW continuous TX.
-
-- [ ] **SMA J2 edge placement** — flush to right board edge; 3 mm Cu keep-out either side of feed line from edge to U5.
-
-- [ ] **Run DRC; resolve all errors.**
-
-**Phase 4 — Verification and Compliance:**
-
-- [ ] **SPICE/QUCS simulation of FL1 LPF** — verify harmonic suppression meets 47 CFR §15.235(b)/§15.209 before board spin (not Part 95 §95.655, which does not apply to this band).
+**Phases 2–5 (Schematic, PCB Layout, Verification, Production Files) — not pursued.**
+Superseded before schematic capture began; U1–U6 sub-circuit design, layout, DRC/ERC, and
+gerber/BOM export for this stub were never started and carry forward instead as the Emma
+Rev R1 tasks already tracked in §1.2b and §1.2a. The two items below are the only Phase 4/5
+work that was actually completed against this stub before it was retired:
 
 - [x] **50 Ω trace impedance check** — Z₀ = 52.26 Ω for W=2.75 mm, H=1.6 mm, εr=4.5, T=35 µm → **PASS** [45–55 Ω]. *(done 2026-05-30 — serenity/kicad/check_impedance.py)*
 
-- [ ] **FCC Part 15 §15.235 pre-compliance checklist** — document: field strength (≤10,000 µV/m at 3 m), harmonic levels (§15.235(b)/§15.209), labeling requirements (FCC ID block on silkscreen, §2.803/§15.19).  Not Part 95 §95.603 — see §0.1.
-
-**Phase 5 — Production Files:**
-
-- [ ] **Export gerbers** to `serenity/kicad/gerbers/XCVR-49MHZ-1/`
-
-- [ ] **Export BOM** — add XCVR-49MHZ-1 line items to `serenity/docs/bom_revN.csv` and `bom_revN.json`
-
-- [x] **Update `PROJECT_INDEX.md`** to list XCVR-49MHZ-1. *(done 2026-05-25)*
+- [x] **Update `PROJECT_INDEX.md`** to list XCVR-49MHZ-1. *(done 2026-05-25; entry since moved to `ARCHIVE_INDEX.md` per the archival above)*
 
 ---
 
@@ -1843,7 +1820,7 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
 
 - Inara has primarily camera, external sensors, and high bandwidth ground communication.  Her stack is connected to  Wi-Fi primarily and LoRa secondary.
 
-- River provides primary control of the forward EDFs, and provides EDF and nacelle control command and syncing, and the most resilient comms.  She may be crazy, but she comes through when no one else can.  She has 49Mhz RCRS primary and LoRa secondary.
+- River provides primary control of the forward EDFs, and provides EDF and nacelle control command and syncing, and the most resilient comms.  She may be crazy, but she comes through when no one else can.  She has 49 MHz (Part 15 §15.235) primary and LoRa secondary.
 
 - Simon is the alternate watchdog for the ship, but most of his attention is on River.  He's got aft EDF control and alternate nacelle control. He follows River's lead but makes sure she doesn't crash the ship. Simon also controls Jayne, and ensures that the cargo isn't jettisoned or the crew abandoned. He's got 49MHz as his primary antenna and SiK as his backup.
 
@@ -1882,7 +1859,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 | M3 heat-set threaded inserts | 4× | Cargo gondola belly hard points |
 | N42 neodymium disc magnet 6×2mm | 8× | Panel D (4 in frame + 4 in lid) |
 | SMA panel-mount bulkhead | 3× | SiK 915MHz (belly) + LoRa 915MHz (belly) + Wi-Fi (dorsal fwd) |
-| 0.3mm stainless wire or 22AWG enamelled Cu | ~500 mm | 49MHz RCRS top wire |
+| 0.3mm stainless wire or 22AWG enamelled Cu | ~500 mm | 49 MHz (Part 15 §15.235) top wire |
 | Ceramic bead insulator 3mm ID | 1× | Aft end of 49MHz wire (insulated/open end) |
 
 ### 2.3 — Propulsion System (Phases 2–4)
@@ -1921,7 +1898,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 | PocketBeagle 2 Industrial (AM6254) | 4× | $51.03 | ~$204 | DK 2820-100003007-ND |
 | Wash (Wash) PCB (JLCPCB assembled) | 2× | ~$55 | ~$110 | FC1/Shepherd's room (Bay A) + FC2/Inara's shuttle (Bay B) (v2, EMI-hardened) |
 | Zoë (Zoë) PCB (JLCPCB assembled) | 2× | ~$95 | ~$190 | CN1/Shepherd's room (Bay A) + CN2/Inara's shuttle (Bay B) (v2, EMI-hardened) |
-| Emma PCB (JLCPCB assembled) | 2× | ~$25 | ~$50 | RCRS sub-module for CN1, CN2 (v2 EMI-hardened) |
+| Emma PCB (JLCPCB assembled) | 2× | ~$25 | ~$50 | 49 MHz (Part 15 §15.235) sub-module for CN1, CN2 (v2 EMI-hardened) |
 | SiK 915MHz ground station radio | 1× | ~$15 | ~$15 | MAVLink GCS link |
 | microSD 64GB (log, write-blocked) | 2× | ~$10 | ~$20 | CN1-LOG, CN2-LOG |
 | JST-GH cables: CAN 3-pin, RS-485 3-pin, ETH 6-pin, 1553 4-pin, GPS 5-pin | assorted | — | ~$20 | Per §14 connector table |
@@ -1990,7 +1967,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
     - [ ] Node heartbeat timeout for master re-election (default 100ms on CAN FD)
 
-    - [ ] Radio loss timer before automatic RTL (default 5s for SiK/LoRa; 10s for RCRS-49 as backup)
+    - [ ] Radio loss timer before automatic RTL (default 5s for SiK/LoRa; 10s for 49 MHz (Part 15 §15.235) as backup)
 
     - [ ] ESC thermal cutback threshold (default 85°C) and shutdown threshold (95°C)
 
@@ -2111,11 +2088,11 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 - [ ] Install SMA bulkheads: belly port (SiK 915MHz, X≈260mm), belly stbd (LoRa, X≈260mm), dorsal (Wi-Fi, X≈140mm).
 
-- [ ] Install 49MHz RCRS forward wire post (dorsal, X≈120mm, bonded with 5-min epoxy).
+- [ ] Install 49 MHz (Part 15 §15.235) forward wire post (dorsal, X≈120mm, bonded with 5-min epoxy).
 
-- [ ] Install 49MHz RCRS **temporary** aft wire post: PETG hook bonded to aft dorsal hull skin near station ~580mm (NOT on rear nozzle frame — that post is Phase 11). This temporary post reduces antenna length slightly; field-strength compliance with 47 CFR §15.235 is firmware power-limited (see §0.1), not antenna-length dependent.
+- [ ] Install 49 MHz (Part 15 §15.235) **temporary** aft wire post: PETG hook bonded to aft dorsal hull skin near station ~580mm (NOT on rear nozzle frame — that post is Phase 11). This temporary post reduces antenna length slightly; field-strength compliance with 47 CFR §15.235 is firmware power-limited (see §0.1), not antenna-length dependent.
 
-- [ ] String 49MHz top wire (0.3mm SS wire or 22AWG enamelled Cu) from forward post to temporary aft post with ~20g tension; CF keel connected to RCRS-49 GND as counterpoise.
+- [ ] String 49MHz top wire (0.3mm SS wire or 22AWG enamelled Cu) from forward post to temporary aft post with ~20g tension; CF keel connected to the 49 MHz (Part 15 §15.235) GND as counterpoise.
 
 - [ ] Install 12× VL53L5CX flush-mount PETG frames (6.5mm hull cutouts); apply 0.5mm PMMA disc over each aperture with UV adhesive.
 
@@ -2320,7 +2297,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 - [ ] Install log μSD (64GB) in CN1 Cape-B log slot. Label: **CN1-LOG**.
 
-- [ ] Seat RCRS-49 sub-module on CN1 Cape-B header; connect RCRS coax to forward 49MHz wire post.
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN1 Cape-B header; connect its coax to forward 49 MHz wire post.
 
 - [ ] Connect CN1 radio pigtails: SiK 915MHz → belly port SMA; LoRa → belly stbd SMA; Wi-Fi → dorsal fwd SMA.
 
@@ -2343,7 +2320,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 - [ ] Install log μSD (64GB) in CN2 Cape-B log slot. Label: **CN2-LOG**.
 
-- [ ] Seat RCRS-49 sub-module on CN2 Zoë J_XCVR header.
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN2 Zoë J_XCVR header.
 
 - [ ] Route FC2 GPS coax through dorsal PTFE sleeve (sta ~130mm); mount GPS patch on dorsal hull, face UP.
 
@@ -2377,7 +2354,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 - [ ] Configure MAVLink routing (mavlink-router) on elected FC master → SiK 915MHz on CN master.
 
-- [ ] Install RCRS-49 daemon on CN1 and CN2 (select channel per 47 CFR §15.235; not §95.623, which does not apply to this band).
+- [ ] Install the 49 MHz (Part 15 §15.235) daemon on CN1 and CN2 (select channel per 47 CFR §15.235; not §95.623, which does not apply to this band).
 
 **Ground tests:**
 
@@ -2393,7 +2370,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 - [ ] GPS lock: HDOP ≤1.5 on both FC nodes; positions agree within 2m.
 
-- [ ] Radio checks: MAVLink heartbeat in QGC (SiK + LoRa backup); RCRS-49 RC channels correct; Wi-Fi GCS telemetry.
+- [ ] Radio checks: MAVLink heartbeat in QGC (SiK + LoRa backup); 49 MHz (Part 15 §15.235) RC channels correct; Wi-Fi GCS telemetry.
 
 - [ ] Node failover: kill FC master power → standby assumes authority within 100ms on tether.
 
@@ -2450,7 +2427,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 - [ ] Flash OS to eMMC; install log μSD. Label: **CN3-LOG**.
 
-- [ ] Seat RCRS-49 sub-module on CN3 Zoë J_XCVR header.
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN3 Zoë J_XCVR header.
 
 - [ ] Route FC3 GPS coax through dorsal PTFE sleeve (sta ~275mm); mount GPS patch, face UP.
 
@@ -2471,7 +2448,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 - [ ] Flash OS to eMMC; install log μSD. Label: **CN4-LOG**.
 
-- [ ] Seat RCRS-49 sub-module on CN4 header.
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN4 header.
 
 - [ ] Route FC4 GPS coax through dorsal PTFE sleeve (sta ~350mm); mount GPS patch, face UP.
 
@@ -2526,7 +2503,7 @@ Array A (hosted by FC3, River's room / Bay D):
 - [ ] Install 6× VL53L5CX in Array A flush-mount frames; wire to TCA9548A ch.0–5 in River's room (Bay D); separate I²C bus (electrically isolated from Array B).
 - [ ] Apply 0.5mm PMMA disc over each sensor aperture with UV adhesive.
 - [ ] Configure OA fusion in firmware: halt at 1.0m obstacle clearance; either array independent on single-FC failure.
-- [ ] GPS clearance check for 49MHz wire post proximity: bench-verify HDOP ≤1.5 with RCRS-49 transmitting; if GPS degrades, move GPS patch to ≥165mm from forward post.
+- [ ] GPS clearance check for 49MHz wire post proximity: bench-verify HDOP ≤1.5 with the 49 MHz (Part 15 §15.235) link transmitting; if GPS degrades, move GPS patch to ≥165mm from forward post.
 
 **Phase 6 pass criteria:**
 
@@ -2642,7 +2619,7 @@ communication redundancy sufficient for real-world deployment.
 
 **Dependency:** Phase 9 complete.
 
-- [ ] **BVLOS communication validation** — verify handover between all 4 radio links (SiK, LoRa, Wi-Fi, RCRS-49) in a degraded RF environment; mission continues on any single surviving link.
+- [ ] **BVLOS communication validation** — verify handover between all 4 radio links (SiK, LoRa, Wi-Fi, 49 MHz (Part 15 §15.235)) in a degraded RF environment; mission continues on any single surviving link.
 
 - [ ] **Extended waypoint missions** — ≥10-waypoint autonomous mission at ≤400 ft AGL; verify all obstacle avoidance halts function through the full mission.
 
@@ -2764,7 +2741,7 @@ before Phase 11 fabrication (see §11C). Old iris files (`rear_nozzle_frame.stl`
 
 **11H — 49MHz antenna upgrade:**
 
-- [ ] Bond permanent aft 49MHz RCRS wire post to top of the canonical tail nozzle (5-min epoxy).
+- [ ] Bond permanent aft 49 MHz (Part 15 §15.235) wire post to top of the canonical tail nozzle (5-min epoxy).
 
 - [ ] Remove temporary aft post from station ~580mm.
 
@@ -2904,7 +2881,7 @@ before Phase 11 fabrication (see §11C). Old iris files (`rear_nozzle_frame.stl`
     - [ ] W25Q128JV NOR flash circular buffer driver for overflow when microSD is full/unavailable.
     - [ ] Bench test: attempt out-of-order/overwrite write, verify CPLD blocks it.
 
-- [ ] **TPM-bound HMAC on all outbound AX.25 payloads** — each RCRS-49 packet includes HMAC-SHA256 computed from SLB9670 stored key; receiver nodes verify before acting.
+- [ ] **TPM-bound HMAC on all outbound AX.25 payloads** — each 49 MHz (Part 15 §15.235) packet includes HMAC-SHA256 computed from SLB9670 stored key; receiver nodes verify before acting.
     - [ ] SLB9670 stored-key HMAC-SHA256 signer for outbound AX.25/49 MHz frames (Emma boards, River/Simon).
     - [ ] Receiver-side verification gate (discard unsigned/invalid before acting, mirrors §4.4 "Security message signing").
     - [ ] Bench test: signed/unsigned/corrupted-signature frame acceptance matrix.
@@ -2916,9 +2893,9 @@ before Phase 11 fabrication (see §11C). Old iris files (`rear_nozzle_frame.stl`
     - [ ] State machine implementation: IDLE → DEPLOY → DELIVERED → RETRACT → LATCHED, with fault states.
     - [ ] Bench test: full cycle with simulated payload load, verify HX711 cutoff and state transitions.
 
-- [ ] **MAVLink routing configuration** — mavlink-router config: elected CN master routes FC master telemetry to all 4 radio links (SiK, LoRa, Wi-Fi, RCRS-49 backup).
+- [ ] **MAVLink routing configuration** — mavlink-router config: elected CN master routes FC master telemetry to all 4 radio links (SiK, LoRa, Wi-Fi, 49 MHz (Part 15 §15.235) backup).
     - [ ] mavlink-router config file per CN role (master vs. standby).
-    - [ ] Per-link output adapter: SiK, LoRa (Emma), Wi-Fi, RCRS-49 (Emma, backup).
+    - [ ] Per-link output adapter: SiK, LoRa (Emma), Wi-Fi, 49 MHz (Part 15 §15.235) (Emma, backup).
     - [ ] Bench test: verify telemetry reaches Malcolm GCS over each of the 4 links independently.
 
 ### 4.4 — Both Nodes
@@ -3093,7 +3070,7 @@ host-PC software all created in Rev R.  See `gcs/malcolm/README.md` for layout.
     All 9 bearing/elevation tests must pass.
 
 - [ ] **Implement `gcs/malcolm/firmware/pb2i/src/mal_comms.c` and `mal_comms.h`** — GCS-side
-    comms daemon: USB CDC-ECM bridge, MAVLink authentication (TPM HMAC), RCRS-49 KISS relay,
+    comms daemon: USB CDC-ECM bridge, MAVLink authentication (TPM HMAC), 49 MHz (Part 15 §15.235) KISS relay,
     LoRa relay, Wi-Fi UDP relay, mavlink-router integration.  Structure parallel to aircraft
     `avionics/firmware/cn/src/main.c`.  Add `mal_comms` target to `CMakeLists.txt`.
     **BLOCKS Phase Malcolm-2 full multi-link operation.**
@@ -3132,7 +3109,7 @@ host-PC software all created in Rev R.  See `gcs/malcolm/README.md` for layout.
 
 - [ ] **Multi-link communication bench test:** connect aircraft (Phase 5 minimum) to Malcolm;
     verify QGC heartbeat on each link independently (disable 3, test 1, rotate):
-    SiK 915 MHz → LoRa 915 MHz → Wi-Fi 5 GHz → RCRS-49 MHz.
+    SiK 915 MHz → LoRa 915 MHz → Wi-Fi 5 GHz → 49 MHz (Part 15 §15.235).
     All 4 links must deliver ≥1 MAVLink heartbeat per 5 s with aircraft at 1 m range.
 
 - [ ] **915 MHz link margin test (open field, 1 km):**
@@ -3144,8 +3121,8 @@ host-PC software all created in Rev R.  See `gcs/malcolm/README.md` for layout.
     Aircraft at 200 m. Observe Wi-Fi telemetry rate in QGC.
     Required: ≥100 kbps sustained (adequate for video + MAVLink telemetry at 200 m).
 
-- [ ] **49 MHz RCRS link test (1 km):**
-    Aircraft at 1 km. Verify AX.25 KISS frames received on RCRS-49 link.
+- [ ] **49 MHz (Part 15 §15.235) link test (1 km):**
+    Aircraft at 1 km. Verify AX.25 KISS frames received on the 49 MHz (Part 15 §15.235) link.
     Log RSSI from Emma STATUS register.
 
 - [ ] **Gimbal pointing accuracy test (outdoor, aircraft at 200–500 m):**
