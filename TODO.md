@@ -764,6 +764,8 @@ Joint faces in hull-frame Y (confirmed from baked extents):
         - [ ] Confirm M3 bore positions match shell boss pattern (±25 mm × ±15 mm from bay centre)
 
 - [x] **49 MHz (Part 15 §15.235) wire posts** — `airframe/openscad/fuselage/rcrs49_wire_post.scad` created 2026-06-11. Single `wire_post()` module: 12×12×2 mm PETG base, 8×8×7 mm mast, Ø1.5 mm athwartships wire-retention bore at 2 mm from top. Print two: forward (sta ≈ 120 mm, dorsal) + temporary aft (sta ≈ 580 mm, dorsal).
+
+- [ ] **Add second 49 MHz antenna or create mux for sharing the antenna between the two Emma Transceivers.**
     - **BLOCKS Phase 1 (antenna installation)**
     - **SUB-TASKS:**
         - [ ] Export STL → `airframe/stls/fuselage/rcrs49_wire_post.stl`
