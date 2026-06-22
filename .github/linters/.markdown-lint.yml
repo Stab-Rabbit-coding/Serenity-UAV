@@ -6,4 +6,4 @@
 # Setting indent: 4 here keeps markdownlint's list-indent rule consistent
 # with editorconfig-checker instead of fighting it.
 MD007:
-  indent: 4
+    indent: 4
