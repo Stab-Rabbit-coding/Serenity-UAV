@@ -875,16 +875,31 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 ##### 1.1.3.1 *Nozzle*
 
 - [ ] **nacelle_nozzle_iris.stl** — `openscad -o ... serenity/stl/nacelle_nozzle_iris.scad`
-    - Spec: 50 mm iris — inner ring (M=1.0 rack), outer housing, 8-petal geometry
+    - Spec (Rev R1, 2026-06-22): 50 mm iris — full-circle M=1.0 ring gear
+        (72T, R=36mm pitch, replaces the old partial rack), outer housing,
+        8-petal geometry sized to hit 75%→105% of the 50 mm bore (18.75→26.25 mm
+        tip radius) across the -5°/140° nacelle tilt range. **Must be
+        regenerated** — geometry changed; not yet rendered (no OpenSCAD binary
+        available in the dev session that made the change — see note below).
+- [ ] **nacelle_nozzle_idler.stl** *(NEW component, 2026-06-22)* —
+    `openscad -o ... serenity/stl/nacelle_nozzle_idler.scad`
+    - Spec: compound idler gear (Idler-In 44T/R=22mm meshes Crown Pinion;
+        Idler-Out 15T/R=7.5mm meshes the nozzle ring gear) plus a two-boss
+        mounting bracket. Resolves the Crown-Pinion-to-ring radius mismatch
+        (see §1.1.3.3 below). Never yet rendered — new file.
 
 ##### 1.1.3.2 *Tilt Gear Train*
 
     **Rev R gear train (OpenSCAD — all 5 parts, M=1.0; carried fwd from Rev O):**
 
 - [ ] **nacelle_sector_gear.stl** — `openscad -o ... serenity/stl/nacelle_sector_gear.scad`
-    - Spec: R=22mm, 38T, 155° arc; fixed to tilt bracket
+    - Spec (Rev R1.1, 2026-06-22): R=22mm, **58T, ≈151.3° arc** (was 38T/≈99.1°,
+        grown to cover the widened -5°/140° mechanical tilt range); fixed to
+        tilt bracket. **Must be regenerated** — geometry changed.
 - [ ] **nacelle_pinion.stl** — `openscad -o ... serenity/stl/nacelle_pinion.scad`
-    - Spec: N=12T, D-bore shaft (×4 total: drive pinion + crown pinion per nacelle)
+    - Spec: N=12T, D-bore shaft (×4 total: drive pinion + crown pinion per nacelle).
+        Comment-only update 2026-06-22 (Stage 3 ratio/mating-interface text);
+        no geometry change — re-render not required for this file alone.
 - [ ] **nacelle_bevel_pair.stl** — `openscad -o ... serenity/stl/nacelle_bevel_pair.scad`
     - Spec: N=14T, 45° pitch cone, 1:1, 90° axis redirect
 - [ ] **nacelle_bevel_housing.stl** — `openscad -o ... serenity/stl/nacelle_bevel_housing.scad`
@@ -906,12 +921,57 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     the Crown Pinion as Z-axis/longitudinal (no rotation). The FreeCAD placement
     above uses the documented-correct identity rotation; the SCAD boss code is
     what actually needs correcting.
-- [ ] **Resolve the unresolved Crown-Pinion-to-rack mesh radius in
-    `nacelle_nozzle_iris.scad`** (~lines 118-125) — an author scratch-pad computes
-    four candidate radii (28/37/31/38 mm) and ends mid-thought ("Wait —") with
-    none ever chosen. The FreeCAD placement above uses the pod file's actual
-    coded value (Y = 28 mm, shared with Pinion A); reconcile the iris file's
-    comment math against it.
+- [x] **Resolve the unresolved Crown-Pinion-to-rack mesh radius in
+    `nacelle_nozzle_iris.scad`** *(resolved 2026-06-22)* — an author
+    scratch-pad had computed four candidate radii (28/37/31/38 mm) and ended
+    mid-thought ("Wait —") with none ever chosen. Root cause: the Crown
+    Pinion's hull-frame Y-offset is fixed at 28 mm (shaft-conduit continuity
+    through the bevel pair, shared with Pinion A), but the nozzle ring's
+    required pitch radius (36 mm, sized for the petal/hinge geometry) is
+    incompatible with a direct mesh at that offset. **Fix: added a compound
+    idler gear stage** (`nacelle_nozzle_idler.scad`, new file) between the
+    Crown Pinion and the nozzle ring — Idler-In (44T, R=22mm) meshes the
+    Crown Pinion at the fixed 28.1 mm centre distance; Idler-Out (15T,
+    R=7.5mm) meshes the new full-circle ring gear (72T, R=36mm) at a
+    43.6 mm centre distance. A valid idler-shaft position exists per the
+    triangle inequality (|28.1-43.6|=15.5mm ≤ 28mm ≤ 28.1+43.6=71.7mm).
+    Also replaced the old partial rack with a full-circle ring gear,
+    eliminating the arc-coverage sizing problem entirely. Also fixed a
+    latent bug found during the rework: `LINK_HOLE_R` (28 mm) exceeded
+    `PETAL_LENGTH` (18 mm) — the piano-wire link hole was off the physical
+    end of the petal; corrected to `LINK_HOLE_R=16mm`, `PETAL_LENGTH=20mm`.
+    Updated `nacelle_pinion.scad`'s Stage 3 ratio derivation and mating
+    tables to match. **STL regeneration and mesh verification for all
+    affected files are still pending — see new sub-tasks below; this dev
+    session had no OpenSCAD binary or `trimesh` module available, so
+    neither could be performed or verified here.**
+- [ ] **Render updated/new gear-train STLs** — `nacelle_nozzle_iris.scad`,
+    `nacelle_sector_gear.scad`, and the new `nacelle_nozzle_idler.scad` all
+    changed geometry on 2026-06-22 (see §1.1.3.1/§1.1.3.2 above) and have
+    never been rendered with the new parameters. Run
+    `openscad -o <name>.stl <name>.scad` for each once an OpenSCAD
+    installation is available, then update `airframe/stls/nacelles/`.
+- [ ] **Mesh-verify the regenerated nacelle gear-train STLs** per CLAUDE.md
+    ("A mesh verification shall be run after every 3D model modification") —
+    **not performed for the 2026-06-22 idler-gear rework**: this dev session
+    had neither an `openscad` binary nor the `trimesh` Python module
+    installed, so the STLs above could not even be rendered, let alone
+    checked for watertightness. Must be done in an environment with both
+    tools before these parts are considered print-ready.
+- [ ] **Verify idler-bracket-to-bevel-housing clearance** — the new
+    `nacelle_nozzle_idler.scad` idler gear mounts via its own bracket to the
+    nozzle outer housing (not the bevel housing), on a shaft position solved
+    only by the 1-D triangle-inequality check (centre distances only); the
+    actual 2D/3D clearance against the bevel housing
+    (`nacelle_bevel_housing.scad`) and nacelle pod wall has not been checked.
+    Verify once both STLs are rendered (see above) and the idler shaft's
+    angular position about the nozzle axis is chosen.
+- [ ] **Place `nacelle_nozzle_idler.scad` in hull frame** —
+    `airframe/FreeCAD-scripts/serenity_assembly.py`'s 2026-06-21 nacelle
+    component mapping (§1.1.3.3 above) predates this new component; add it
+    alongside Crown Pinion / Nozzle Iris using the same bake-quaternion
+    composition pattern, once the idler shaft's angular position is chosen
+    (see clearance check above).
 - [ ] **Confirm Sector Gear standoff distance from the nacelle face** — no SCAD
     source exists yet for the fuselage/pylon tilt bracket that carries the fixed
     sector gear, so the FreeCAD placement above approximates the standoff at
@@ -2233,9 +2293,18 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 - [ ] Thread 2mm steel longitudinal shaft through nacelle wall channel toward nozzle end.
 
-- [ ] Mount crown pinion on shaft at nozzle end; mesh with nozzle inner ring rack; set backlash 0.1–0.2mm.
+- [ ] Mount crown pinion on shaft at nozzle end; mesh with Idler-In on the
+    compound idler gear (`nacelle_nozzle_idler.scad`); set backlash 0.1–0.2mm.
 
-- [ ] **Full sweep test:** rotate nacelle 0°→90°; verify nozzle inner ring rotates ~71°; petals open fully. Verify nozzle inner ring hard stop prevents over-drive at >90°.
+- [ ] Mount idler gear on its bracket to the nozzle outer housing; mesh
+    Idler-Out with the full-circle nozzle ring gear; set backlash 0.1–0.2mm.
+
+- [ ] **Full sweep test (Rev R1, 2026-06-22):** rotate nacelle -5°→140°;
+    verify nozzle ring gear rotates from ≈-1.33° to ≈38.45° (≈23.86° at the
+    90° hover reference point), and petals swing from ≈18.76 mm to
+    ≈34.42 mm tip radius (75%→105% of the 50 mm bore at the 0°/90°
+    reference points) without binding against `HOUSING_INNER_R`=37.5 mm.
+    Verify nozzle ring hard stop prevents over-drive beyond -5°/140°.
 
 - [ ] Confirm petal closed position matches nacelle hull profile at 0°.
 

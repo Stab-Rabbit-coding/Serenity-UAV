@@ -99,7 +99,8 @@
 //   • Nozzle ring pocket at exhaust exit (iris ring seat)
 //   • CG-aligned pivot X-face boss (two MF104ZZ bearing bosses at PIVOT_Z)
 //   • Drive Pinion A boss (MR63ZZ, at Y=PINION_A_Y=28mm, meshes sector gear)
-//   • Crown Pinion boss (MR63ZZ, near nozzle ring, drives nozzle rack)
+//   • Crown Pinion boss (MR63ZZ, near nozzle ring, drives idler gear which
+//       in turn drives the nozzle ring gear — see nacelle_nozzle_idler.scad)
 //   • Longitudinal gear-shaft conduit (3 mm CF rod in PTFE sleeve)
 //   • External D-section nav-light wire conduit (inboard X-face)
 //   • Harness exit port (ESC and nav-light leads to pylon channel)
@@ -196,7 +197,7 @@
 // (5.84 in) → physical length = 185.2 mm (7.29 in) as measured from the
 // repaired nacelle STL).
 NACELLE_L       = 185.2;  // [mm] total nacelle length (intake face to nozzle exit)
-                           //      = 7.29 in (185.2 mm)
+                            //      = 7.29 in (185.2 mm)
 EDF_BORE_R      =  25.0;  // [mm] EDF bore inner radius → 50 mm (1.97 in) ID (Xfly Galaxy X5)
 EDF_CASING_R    =  27.5;  // [mm] EDF casing outer radius → 55 mm (2.17 in) OD
 WALL_T          =   2.5;  // [mm] minimum wall thickness — 0.098 in (2.5 mm) CF-PETG per CLAUDE.md
@@ -222,7 +223,7 @@ NACELLE_FACE_X_FAR   = 38.0;  // [mm] far-side   X face from bore centre
 BORE_CX_L = 42.72;   // [mm] left  (port) nacelle bore X in STL space
 BORE_CX_R = 155.02;  // [mm] right (stbd) nacelle bore X in STL space
 BORE_CY   = 190.79;  // [mm] bore Y offset (both nacelles — negate to translate)
-                      //      in STL space Y = -190.79; translate adds +190.79.
+                        //      in STL space Y = -190.79; translate adds +190.79.
 
 // ── Nacelle side selector ─────────────────────────────────────────────────────
 // +1 = port (left) nacelle, imports s_eng_left_shell24_50mm_repaired.stl
@@ -324,7 +325,7 @@ SLEEVE_BOSS_OD  =   7.0;  // [mm] boss OD (M3 insert 3.5 mm OD + 2 × 1.75 mm wa
 SLEEVE_BOSS_L   =   6.0;  // [mm] boss protrusion into pocket (= insert depth)
 
 SWIRL_DIR       =  +1;    // [+1 / -1] default port nacelle CW from intake
-                           //           override: -D SWIRL_DIR=-1
+                            //           override: -D SWIRL_DIR=-1
 
 // ── CG-derived tilt pivot (1.25× scale) ──────────────────────────────────────
 // Pivot at nacelle CG eliminates gravity-induced servo torque.
@@ -392,12 +393,12 @@ module nacelle_shell_imported() {
         // ── Port (left) nacelle ───────────────────────────────────────────────
         translate([-BORE_CX_L, BORE_CY, 0])
             import("../../stls/nacelles/eng_left_shell24_50mm_repaired.stl",
-                   convexity = 4);
+                    convexity = 4);
     } else {
         // ── Starboard (right) nacelle ─────────────────────────────────────────
         translate([-BORE_CX_R, BORE_CY, 0])
             import("../../stls/nacelles/eng_right_shell24_50mm_repaired.stl",
-                   convexity = 4);
+                    convexity = 4);
     }
 }
 
@@ -414,12 +415,12 @@ module thrust_tube() {
     translate([0, 0, EDF1_Z_ENTRY])
         difference() {
             cylinder(r = EDF_CASING_R,
-                     h = tube_len,
-                     center = false);
+                    h = tube_len,
+                    center = false);
             translate([0, 0, -0.01])
                 cylinder(r = EDF_BORE_R,
-                         h = tube_len + 0.02,
-                         center = false);
+                        h = tube_len + 0.02,
+                        center = false);
         }
 }
 
@@ -441,8 +442,8 @@ module inlet_bell() {
                         z_frac = i / N_STATIONS,
                         z_abs  = z_frac * INLET_BELL_L,
                         r_in   = EDF_BORE_R
-                                 + INLET_BELL_FLARE * 0.5
-                                   * (1 + cos(180 * z_frac))
+                                + INLET_BELL_FLARE * 0.5
+                                    * (1 + cos(180 * z_frac))
                     )
                     [r_in, z_abs]
                 ],
@@ -452,8 +453,8 @@ module inlet_bell() {
                         z_frac = i / N_STATIONS,
                         z_abs  = z_frac * INLET_BELL_L,
                         r_in   = EDF_BORE_R
-                                 + INLET_BELL_FLARE * 0.5
-                                   * (1 + cos(180 * z_frac)),
+                                + INLET_BELL_FLARE * 0.5
+                                    * (1 + cos(180 * z_frac)),
                         r_out  = r_in + WALL_T
                     )
                     [r_out, z_abs]
@@ -485,13 +486,13 @@ module sleeve_retention_bosses() {
         translate([SLEEVE_BOSS_R, 0, NOZZLE_RING_Z])
             difference() {
                 cylinder(r = SLEEVE_BOSS_OD / 2,
-                         h = SLEEVE_BOSS_L,
-                         center = false);
+                        h = SLEEVE_BOSS_L,
+                        center = false);
                 // M3 heat-set insert bore (blind, opening toward nozzle end).
                 translate([0, 0, -0.01])
                     cylinder(r = M3_INSERT_D / 2,
-                             h = M3_INSERT_L + 0.01,
-                             center = false);
+                            h = M3_INSERT_L + 0.01,
+                            center = false);
             }
     }
 }
@@ -530,8 +531,8 @@ module edf1_nacelle_spider() {
             // Screw head sits on intake face; shaft exits nozzle face into motor.
             translate([MOTOR_BOLT_R, 0, z_ctr - arm_h / 2 - 0.01])
                 cylinder(r = M3_CLEAR_D / 2,
-                         h = arm_h + 0.02,
-                         center = false);
+                        h = arm_h + 0.02,
+                        center = false);
         }
     }
 
@@ -613,11 +614,11 @@ module pivot_x_face_boss() {
         rotate([0, sign * 90, 0])
             difference() {
                 cylinder(r = boss_od / 2,
-                         h = boss_wall + embed,
-                         center = false);
+                        h = boss_wall + embed,
+                        center = false);
                 cylinder(r = PIVOT_BEAR_OD / 2,
-                         h = boss_wall + embed + 0.02,
-                         center = false);
+                        h = boss_wall + embed + 0.02,
+                        center = false);
             }
 
         // ── Load-spreading web (hull() avoids coplanar face issues) ───────────
@@ -627,11 +628,11 @@ module pivot_x_face_boss() {
             rotate([0, sign * 90, 0])
                 difference() {
                     cylinder(r = boss_od / 2,
-                             h = 0.4,
-                             center = false);
+                            h = 0.4,
+                            center = false);
                     cylinder(r = boss_od / 2 - WALL_T,
-                             h = 0.41,
-                             center = false);
+                            h = 0.41,
+                            center = false);
                 }
 
             // Flat disc anchoring web to nacelle outer face
@@ -654,11 +655,11 @@ module pinion_a_boss() {
         rotate([0, 90, 0])
             difference() {
                 cylinder(r = PINION_A_BOSS_OD / 2,
-                         h = PINION_A_BOSS_L,
-                         center = true);
+                        h = PINION_A_BOSS_L,
+                        center = true);
                 cylinder(r = PINION_A_SHAFT_D / 2,
-                         h = PINION_A_BOSS_L + 0.02,
-                         center = true);
+                        h = PINION_A_BOSS_L + 0.02,
+                        center = true);
             }
 }
 
@@ -673,11 +674,11 @@ module crown_pinion_boss() {
         rotate([0, 90, 0])
             difference() {
                 cylinder(r = CROWN_BOSS_OD / 2,
-                         h = CROWN_BOSS_L,
-                         center = true);
+                        h = CROWN_BOSS_L,
+                        center = true);
                 cylinder(r = PINION_A_SHAFT_D / 2,
-                         h = CROWN_BOSS_L + 0.02,
-                         center = true);
+                        h = CROWN_BOSS_L + 0.02,
+                        center = true);
             }
 }
 
@@ -693,12 +694,12 @@ module shaft_conduit() {
     translate([0, PINION_A_Y, PINION_A_Z])
         difference() {
             cylinder(r = SHAFT_CONDUIT_OD / 2,
-                     h = conduit_len,
-                     center = false);
+                    h = conduit_len,
+                    center = false);
             translate([0, 0, -0.01])
                 cylinder(r = SHAFT_CONDUIT_ID / 2,
-                         h = conduit_len + 0.02,
-                         center = false);
+                        h = conduit_len + 0.02,
+                        center = false);
         }
 }
 
@@ -711,8 +712,8 @@ module shaft_conduit() {
 module nozzle_ring_pocket() {
     translate([0, 0, NOZZLE_RING_Z])
         cylinder(r = NOZZLE_RING_OD / 2,
-                 h = NOZZLE_RING_H + 0.02,
-                 center = false);
+                h = NOZZLE_RING_H + 0.02,
+                center = false);
 }
 
 
@@ -732,19 +733,19 @@ module nav_wire_conduit(pylon_side = PYLON_SIDE) {
     embed     = 4.0;  // 4 mm root into nacelle shell to prevent touching face
 
     x_offset = (pylon_side > 0)
-               ? face_x - embed
-               : face_x - NAV_CONDUIT_D;
+                ? face_x - embed
+                : face_x - NAV_CONDUIT_D;
 
     bore_cx = (pylon_side > 0)
-              ? NAV_CONDUIT_D / 2 + embed
-              : NAV_CONDUIT_D / 2;
+                ? NAV_CONDUIT_D / 2 + embed
+                : NAV_CONDUIT_D / 2;
 
     translate([x_offset, -NAV_CONDUIT_W / 2, NAV_CONDUIT_Z_LO])
         difference() {
             cube([NAV_CONDUIT_D + embed, NAV_CONDUIT_W, cond_len]);
             translate([bore_cx, NAV_CONDUIT_W / 2, -0.01])
                 cylinder(r = NAV_CONDUIT_BORE / 2,
-                         h = cond_len + 0.02);
+                        h = cond_len + 0.02);
         }
 }
 
@@ -845,16 +846,16 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
             // Extends 0.01 mm past each end to open voxel-remesh end caps.
             translate([0, 0, -0.01])
                 cylinder(r = EDF_BORE_R,
-                         h = NACELLE_L + 0.02,
-                         center = false);
+                        h = NACELLE_L + 0.02,
+                        center = false);
 
             // ── Enlarged bore for sleeve zone (Rev T) ─────────────────────
             // STATOR_SLV_Z_START (90 mm) to AFT_SLV_Z_END (166.25 mm).
             // Bore step at STATOR_SLV_Z_START provides stator sleeve forward stop.
             translate([0, 0, STATOR_SLV_Z_START])
                 cylinder(r = SLEEVE_BORE_R,
-                         h = AFT_SLV_Z_END - STATOR_SLV_Z_START,
-                         center = false);
+                        h = AFT_SLV_Z_END - STATOR_SLV_Z_START,
+                        center = false);
 
             // ── Sleeve key slots (anti-rotation, both sleeves) ─────────────
             // 3× longitudinal slots at 0°/120°/240° spanning full sleeve zone.
@@ -878,7 +879,7 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
                     cylinder(
                         r      = PIVOT_BORE_D / 2,
                         h      = NACELLE_FACE_X_PYLON + NACELLE_FACE_X_FAR
-                                 + 2 * PIVOT_BOSS_DEPTH + 4,
+                                + 2 * PIVOT_BOSS_DEPTH + 4,
                         center = true
                     );
 

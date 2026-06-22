@@ -474,7 +474,8 @@ def assemble():
             pinion_a, nacelle_rows(side, _rot_y(90.0), (0.0, PINION_A_Y, PIVOT_Z))
         )
 
-        # ── Crown Pinion (drives the nozzle-ring rack) ───────────────────
+        # ── Crown Pinion (drives the idler gear, which drives the nozzle
+        #    ring gear — nacelle_nozzle_idler.scad) ───────────────────────
         # BUG FLAG (2026-06-21): nacelle_pod_50mm_tandem.scad's
         # crown_pinion_boss() copies pinion_a_boss()'s rotate([0,90,0])
         # X-axis-bore pattern verbatim.  Both nacelle_pinion.scad
@@ -543,16 +544,21 @@ def assemble():
         # nacelle_nozzle_iris.scad; rotationally symmetric about the bore
         # axis, so identity rotation is a low-risk assumption.  Translate
         # to NOZZLE_RING_Z (= CROWN_Z).
-        # SCRATCH-PAD FLAG (2026-06-21): nacelle_nozzle_iris.scad's own
-        # comments (~lines 118-125) contain an unresolved author
-        # scratch-pad computing three different candidate mesh radii
-        # (28/37/31/38 mm) for the Crown-Pinion-to-rack distance, ending
-        # mid-thought ("Wait —") with no value ever chosen.  This
-        # placement uses the nacelle pod file's actual CODED Crown Pinion
-        # offset (Y = 28 mm, shared with Pinion A for shaft-conduit
-        # continuity) since that is what is physically built into the
-        # printed parts; the nozzle_iris.scad radius math should be
-        # reconciled against it (TODO.md §1.1.3).
+        # RESOLVED 2026-06-22 (TODO.md §1.1.3): nacelle_nozzle_iris.scad's
+        # own comments (~lines 118-125) used to contain an unresolved
+        # author scratch-pad computing three different candidate mesh
+        # radii (28/37/31/38 mm) for a direct Crown-Pinion-to-rack mesh,
+        # ending mid-thought ("Wait —") with no value ever chosen.  Root
+        # cause: the Crown Pinion's fixed Y = 28 mm offset (shared with
+        # Pinion A for shaft-conduit continuity) is geometrically
+        # incompatible with the nozzle ring's required 36 mm pitch radius.
+        # Fix: a compound idler gear (nacelle_nozzle_idler.scad, new file)
+        # now sits between the Crown Pinion and the nozzle ring, meshing
+        # the former at the fixed 28.1 mm centre distance and the latter
+        # (now a full-circle ring gear, not a partial rack) at 43.6 mm.
+        # The idler's own hull-frame placement is PENDING — its angular
+        # position about the nozzle axis is not yet chosen (TODO.md
+        # §1.1.3.3) — so it is not yet placed by this script.
         nozzle = add_mesh(
             doc,
             _stl("nacelles/nozzles/nacelle_nozzle_iris.stl"),
