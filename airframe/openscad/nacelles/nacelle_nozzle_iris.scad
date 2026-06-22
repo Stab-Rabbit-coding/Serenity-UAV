@@ -393,11 +393,28 @@ module nozzle_throat_and_housing() {
                 }
 
                 // ── Tangential hinge bosses (central lug, ×8) ────────────────────
+                // Built OUTWARD ONLY from the throat tube's OD (boss centre
+                // offset to BOSS_OD/2 - 1.0 mm beyond R_HINGE, i.e. only
+                // 1 mm of overlap into the existing tube wall for fusion) —
+                // a boss simply CENTRED on R_HINGE (as in an earlier draft)
+                // dips to R_HINGE - BOSS_OD/2 = 23.4 mm, INSIDE the
+                // THROAT_INNER_R = 25 mm bore, and the throat-bore cut below
+                // then slices off that inward dip, severing the boss from
+                // the tube entirely (found 2026-06-22 via mesh verification
+                // — the boss came out as a disconnected floating body).
+                // The hinge pin axis itself stays exactly at R_HINGE
+                // (unchanged — required by the flap kinematics derivation
+                // above); only the boss's OWN material is shifted outward —
+                // the existing tube wall (solid from THROAT_INNER_R=25 to
+                // THROAT_OUTER_R=27.5) already provides the bore's inner
+                // bearing surface "for free."
+                HINGE_BOSS_OD = HINGE_BORE_D + 5.0;
+                HINGE_BOSS_X_CEN = R_HINGE + HINGE_BOSS_OD / 2 - 1.0;
                 for (i = [0 : N_FLAPS - 1]) {
                     rotate([0, 0, i * 360 / N_FLAPS]) {
-                        translate([R_HINGE, 0, HINGE_Z])
+                        translate([HINGE_BOSS_X_CEN, 0, HINGE_Z])
                             rotate([90, 0, 0])
-                                cylinder(h = HINGE_KNUCKLE_W, d = HINGE_BORE_D + 5.0, center = true);
+                                cylinder(h = HINGE_KNUCKLE_W, d = HINGE_BOSS_OD, center = true);
                     }
                 }
             }

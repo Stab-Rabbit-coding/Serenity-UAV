@@ -52,6 +52,7 @@ import struct
 import numpy as np
 import trimesh
 from manifold3d import Manifold as _Manifold, Mesh as _Mesh
+from shapely.geometry import Polygon
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -77,26 +78,45 @@ MARKER = b"SerenityUAV HULL-FRAME R1"
 # Basis: docs/structural_analysis.md Rev R1 2026-06-14
 # ---------------------------------------------------------------------------
 
-# ---------- bore-open joint-face cutters (rectangular box, subtracted) ----------
-# Each cutter is (x_min, x_max, z_min, z_max, y_min, y_max).
-# Sized to ~80% of the inner cross-section at each face — conservative so the
-# cutter never exits the outer skin on any of the complex Serenity profiles.
-# Cross-section survey data: see docs/structural_analysis.md §7 + shell survey.
-
-FACE_BORE_CUTTERS = {
-    # Head aft face (Y = -70.7 mm): cutter from 14 mm inside head to 2.7 mm past face
-    "head_aft":   (-228.9, -107.6,  65.3, 152.4,  -85.0,  -68.0),
+# ---------- bore-open joint-face cutters (measured-geometry, subtracted) ----------
+#
+# HOLE-01 fix (2026-06-22): this used to be a hand-picked rectangular box per
+# joint, "sized to ~80% of the inner cross-section at each face." That sizing
+# assumed the cross-section's Z-height is roughly constant across its X-width,
+# which is false for Serenity's tapering/oval/horseshoe profiles — at the
+# lateral edges of every one of the six joints the true hull is shorter in Z
+# than the box, so the box's full Z-range exited through the side skin and
+# punched a clean hole through the fuselage wall instead of staying inside the
+# cavity. Confirmed on the pristine pre-cut shells: all 6 joints punched
+# through at the lateral edges (cargo_aft and middle_fwd punched through
+# across roughly half their X-span). This is what produced the "huge gaps
+# between sections" defect. See TODO.md HOLE-01 for the incident writeup.
+#
+# Fix: instead of guessing a box, _bore_open_cutter() measures the actual
+# inner-cavity cross-section of the shell being processed (it slices the
+# REAL mesh, not an assumed bounding box) at several stations across the
+# joint's Y-span, insets each one by FACE_BORE_MARGIN, and intersects them
+# all together. The result is, by construction, never larger than the
+# narrowest true cavity opening anywhere in that Y-span, so it can never
+# reach the inner wall — let alone the outer skin — regardless of how the
+# cross-section tapers. Only the Y-span (how deep into each section the bore
+# reaches) is still a hand-picked constant; X/Z shape is always measured.
+FACE_BORE_Y_RANGES = {
+    # Head aft face (Y = -70.7 mm): bore from 14 mm inside head to 2.7 mm past face
+    "head_aft":   (-85.0,  -68.0),
     # Cargo fwd face (Y = -71.5 mm): from 2 mm before face to 13.5 mm inside cargo
-    "cargo_fwd":  (-224.2, -111.4,  64.1, 142.8,  -75.0,  -58.0),
+    "cargo_fwd":  (-75.0,  -58.0),
     # Cargo aft face (Y = +132.0 mm): 10 mm inside cargo to 2 mm past face
-    "cargo_aft":  (-250.8,  -89.3,   4.0, 150.4, +122.0, +134.0),
+    "cargo_aft":  (+122.0, +134.0),
     # Middle fwd face (Y = +130.4 mm): 2 mm before face to 14.6 mm inside middle
-    "middle_fwd": (-254.4,  -85.7,  16.2, 139.0, +128.0, +145.0),
+    "middle_fwd": (+128.0, +145.0),
     # Middle aft face (Y = +203.6 mm): 10 mm inside middle to 3.4 mm past face
-    "middle_aft": (-231.4, -108.7,   7.7, 141.5, +193.0, +207.0),
+    "middle_aft": (+193.0, +207.0),
     # Rear fwd face (Y = +203.2 mm): 2 mm before face to 13.8 mm inside rear
-    "rear_fwd":   (-241.0, -110.5,   8.3, 153.2, +201.0, +217.0),
+    "rear_fwd":   (+201.0, +217.0),
 }
+FACE_BORE_MARGIN = 1.5     # mm — inset from the measured inner-cavity wall
+FACE_BORE_SAMPLES = 7      # Y stations sampled across each joint's span
 
 # ---------- boss-pin bores (Ø 3.2 mm cylinders, Y-axis, 8 mm each section) ----------
 # Positions on r = 35 mm circle at 0° / 120° / 240° from cross-section centroid.
@@ -258,6 +278,77 @@ def _y_cylinder(x_cen, z_cen, y_start, y_end, radius, sections=32):
     return cyl
 
 
+def _inner_cavity_polygon(mesh, y, margin):
+    """
+    Return the shell's inner-cavity cross-section (X, Z) at hull Y = y, inset by
+    `margin` mm, or None if no valid cross-section is found at that station.
+
+    A 2 mm-wall hollow shell sliced at any interior Y produces (at least) two
+    closed loops: the outer skin boundary and the inner cavity boundary. The
+    inner cavity is always the smaller-area loop. Insetting it (negative
+    buffer) keeps the returned polygon strictly inside the cavity, away from
+    the inner wall.
+    """
+    section = mesh.section(plane_origin=[0.0, y, 0.0], plane_normal=[0.0, 1.0, 0.0])
+    if section is None:
+        return None
+    polys = []
+    for loop in section.discrete:
+        arr = np.asarray(loop)
+        p = Polygon(arr[:, [0, 2]])
+        if p.is_valid and p.area > 1.0:
+            polys.append(p)
+    if len(polys) < 2:
+        return None
+    polys.sort(key=lambda p: p.area)
+    inset = polys[0].buffer(-margin)
+    return None if inset.is_empty else inset
+
+
+def _bore_open_cutter(mesh, y_range, margin=FACE_BORE_MARGIN, samples=FACE_BORE_SAMPLES):
+    """
+    Build a bore-open cutter for a joint face that is, by construction, always
+    inside the shell's measured inner cavity across the given hull-Y span —
+    it can never reach the inner wall, let alone punch through the outer skin
+    (see HOLE-01 fix note on FACE_BORE_Y_RANGES above).
+
+    Samples the inner-cavity cross-section (inset by `margin`) at `samples`
+    stations spanning y_range and intersects them all, so the result is safe
+    even where the cavity tapers across the span (e.g. near a section's
+    narrowing nose/tail). Raises if no safe opening exists anywhere in range
+    — that means y_range needs to be narrowed for this shell, not silently
+    produce a tiny or empty cut.
+    """
+    common = None
+    for y in np.linspace(y_range[0], y_range[1], samples):
+        poly = _inner_cavity_polygon(mesh, y, margin)
+        if poly is None:
+            continue
+        common = poly if common is None else common.intersection(poly)
+        if common.is_empty:
+            break
+    if common is None or common.is_empty or common.area < 1.0:
+        raise RuntimeError(
+            f"_bore_open_cutter: no safe inner-cavity opening across "
+            f"y_range={y_range} (margin={margin} mm) — narrow y_range or "
+            f"reduce margin and re-survey this joint")
+    if common.geom_type == "MultiPolygon":
+        common = max(common.geoms, key=lambda g: g.area)
+
+    height = y_range[1] - y_range[0]
+    extrusion = trimesh.creation.extrude_polygon(common, height=height)
+    # extrude_polygon builds (x, y, z) = (poly_x, poly_y, [0, height]); remap
+    # to hull frame: hull_X = poly_x, hull_Z = poly_y, hull_Y = z + y_range[0].
+    remap = np.array([
+        [1.0, 0.0, 0.0, 0.0],
+        [0.0, 0.0, 1.0, y_range[0]],
+        [0.0, 1.0, 0.0, 0.0],
+        [0.0, 0.0, 0.0, 1.0],
+    ])
+    extrusion.apply_transform(remap)
+    return extrusion
+
+
 def _to_manifold_volume(mesh):
     """
     Round-trip the mesh through manifold3d's Manifold constructor to repair the small
@@ -406,8 +497,7 @@ def process_head(mesh):
     cutters = []
 
     # Bore-open aft face
-    xm, xx, zm, zx, ym, yx = FACE_BORE_CUTTERS["head_aft"]
-    cutters.append(_box(xm, xx, zm, zx, ym, yx))
+    cutters.append(_bore_open_cutter(mesh, FACE_BORE_Y_RANGES["head_aft"]))
 
     # Boss-pin bores (Joint 1)
     j = BOSS_PIN_BORES["joint1"]
@@ -436,8 +526,7 @@ def process_cargo(mesh):
 
     # Bore-open faces
     for key in ("cargo_fwd", "cargo_aft"):
-        xm, xx, zm, zx, ym, yx = FACE_BORE_CUTTERS[key]
-        cutters.append(_box(xm, xx, zm, zx, ym, yx))
+        cutters.append(_bore_open_cutter(mesh, FACE_BORE_Y_RANGES[key]))
 
     # Boss-pin bores (Joints 1 and 2)
     for jname in ("joint1", "joint2"):
@@ -475,8 +564,7 @@ def process_middle(mesh):
 
     # Bore-open faces
     for key in ("middle_fwd", "middle_aft"):
-        xm, xx, zm, zx, ym, yx = FACE_BORE_CUTTERS[key]
-        cutters.append(_box(xm, xx, zm, zx, ym, yx))
+        cutters.append(_bore_open_cutter(mesh, FACE_BORE_Y_RANGES[key]))
 
     # Boss-pin bores (Joints 2 and 3)
     for jname in ("joint2", "joint3"):
@@ -507,8 +595,7 @@ def process_rear(mesh):
     cutters = []
 
     # Bore-open fwd face
-    xm, xx, zm, zx, ym, yx = FACE_BORE_CUTTERS["rear_fwd"]
-    cutters.append(_box(xm, xx, zm, zx, ym, yx))
+    cutters.append(_bore_open_cutter(mesh, FACE_BORE_Y_RANGES["rear_fwd"]))
 
     # Boss-pin bores (Joint 3)
     j = BOSS_PIN_BORES["joint3"]

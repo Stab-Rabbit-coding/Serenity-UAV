@@ -385,19 +385,50 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     all of which describe the doors hinging at the **outboard flank/belly edge** and
     swinging **down and out from the aircraft, full 180° range of motion**, to open the
     bottom of the cargo bay. **DONE 2026-06-22 (Rev R1b, with user)**:
-    `generate_cargo_doors.py` corrected — port door hinge line moved to X_SHELL_MAX
-    (≈ −72.7 mm), stbd door hinge line moved to X_SHELL_MIN (≈ −267.0 mm); both doors'
-    free edges meet at X_CL when closed. Removed the port/stbd knuckle Y-interleaving
-    (no longer meaningful — each door is now its own independent piano hinge pinned to
-    the fuselage, not a shared centreline hinge joining the two panels). Knuckle Z is
-    now sampled from the belly interpolator at each hinge X rather than a bare literal.
-    Both STLs regenerated and verified watertight (port 100.2×108.0×11.8 mm, stbd
-    102.0×108.0×11.9 mm).
+    `generate_cargo_doors.py` corrected so each door hinges independently at its own
+    outboard belly edge with its free edge at X_CL — see corner-curvature note below
+    for why the hinge X is NOT the cargo-section bounding box (X_SHELL_MIN/MAX). Removed
+    the port/stbd knuckle Y-interleaving (no longer meaningful — each door is now its
+    own independent piano hinge pinned to the fuselage, not a shared centreline hinge
+    joining the two panels). Knuckle Z is now sampled from the belly interpolator at
+    each hinge X rather than a bare literal.
+    - [x] **Fix door-surface discontinuity found during verification.** First Rev R1b
+        pass still produced doors with a visible crease: the door grid extended to the
+        cargo-section bounding-box X (±72.7/−267 mm), but the real ventral belly mesh
+        only exists out to X ≈ −114..−225 mm — beyond that the interpolator silently
+        fell back to a flat plane, producing a sharp step roughly halfway across each
+        door. **DONE 2026-06-22**: hinge lines are now derived at runtime from the
+        actual detected belly-mesh edge (per-Y-row worst-case extent, so every sampled
+        point has real data), AND a row/column despike pass (`despike_grid()`,
+        max 1.0 mm/step) suppresses a second, smaller artifact at the aft-outboard
+        corner where the belly curves toward vertical (into the side wall/aft
+        bulkhead) faster than a single-valued height-field can represent — that corner
+        also overlaps the documented landing-gear HULL_ATTACH_POS Y ≈ 100 mm boss
+        region. The despike is a print-safety net, not a substitute for verifying
+        the aft-outboard corner shape in FreeCAD — see sub-tasks below.
+    - [x] **Fix disconnected knuckles / non-straight hinge axis found during
+        verification.** The despiked-panel fix (above) sampled each knuckle's Z
+        independently from the belly contour, so the 4 knuckles per door landed at
+        4 different Z heights — physically wrong (a single CF rod is rigid and
+        straight) and some knuckles ended up too far from the panel surface to union
+        into the same solid (disconnected, floating geometry). **DONE 2026-06-22**:
+        all 4 knuckles on a door now share one constant (X, Z) hinge axis (Z = mean
+        of the panel's actual contour at the 4 knuckle positions + KNUCKLE_R); each
+        knuckle is bonded to the contoured panel via a small per-knuckle gusset block
+        (`make_knuckle_gusset()`) bridging whatever local Z gap exists between the
+        straight axis and the panel surface at that knuckle's Y. Final doors: port
+        55.2×106.0×9.1 mm (hinge X ≈ −117.6 mm, hinge Z ≈ 5.11 mm), stbd
+        55.7×106.0×9.2 mm (hinge X ≈ −222.5 mm, hinge Z ≈ 5.22 mm); both verified as a
+        single connected watertight body (`trimesh` `split()` → 1 body each).
     - [ ] **Verify cargo door fit in slicer** — open `cargo_door_port.stl` and
-        `cargo_door_stbd.stl` in slicer; confirm hinge knuckles align at X ≈ −72.7 mm
-        (port) and X ≈ −267.0 mm (stbd), free edges meet at X ≈ −169.85 mm, and panels
-        cover Y = 2..108 mm at Z ≈ 0. Verify no overlap with hull boss sockets
-        (HULL_ATTACH_POS Y = 25, 100 mm). **BLOCKS cargo door printing.**
+        `cargo_door_stbd.stl` in slicer; confirm hinge knuckles align at X ≈ −117.6 mm
+        (port) and X ≈ −222.5 mm (stbd), free edges meet at X ≈ −169.85 mm, and panels
+        cover Y = 2..108 mm at Z ≈ 0..5 mm. Pay particular attention to the aft-outboard
+        corner of each door (Y → 108, near the hinge edge) — this is where the despike
+        safety net (above) is masking real but algorithmically-unresolved hull
+        curvature; confirm by eye it isn't flattened in a way that leaves a gap against
+        the real hull. Verify no overlap with hull boss sockets (HULL_ATTACH_POS
+        Y = 25, 100 mm). **BLOCKS cargo door printing.**
     - [ ] **Piano-hinge CF rod (×2, independent)** — verify 3 mm CF rod passes through
         each door's own 4 knuckle bores (3.15 mm bore) — port and stbd are now two
         separate pins/rods, not one shared centreline pin; test in printed prototype
@@ -407,8 +438,10 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
         lines ~329-340) still describe a pre-bake, part-local frame (Y = vertical,
         Z = lateral) from before the hull-frame rewrite, and were never updated for the
         Rev R1a/R1b door geometry. Re-derive the shell-side hinge-pin retention blocks
-        from the corrected hull-frame hinge lines (port X ≈ −72.7 mm, stbd X ≈ −267.0 mm)
-        before cutting the belly opening. **BLOCKS cargo door installation.**
+        from the corrected hull-frame hinge lines (port X ≈ −117.6 mm, stbd X ≈ −222.5 mm —
+        the real detected belly edge, not the cargo-section bounding box; re-run
+        `generate_cargo_doors.py` and read the printed "safe belly-mesh X extent" if the
+        shell STL changes) before cutting the belly opening. **BLOCKS cargo door installation.**
 - [ ] **Consolidate duplicate cargo shell copies.**
     `fuselage/s_cargo_sect_shell24_2mm_repaired.stl` (367,506 facets, later repair pass)
     vs `fuselage/cargo/s_cargo_sect_shell24_2mm_repaired.stl` (368,352 facets, used by

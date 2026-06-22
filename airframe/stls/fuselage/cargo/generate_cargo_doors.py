@@ -136,6 +136,19 @@ KNUCKLE_R    = KNUCKLE_OD / 2.0
 KNUCKLE_LEN  = 12.0             # mm — barrel axial length
 KNUCKLE_SECTIONS = 36           # polygon approximation
 
+# A real CF rod is rigid and straight, so all 4 knuckles on one door MUST
+# share one constant (X, Z) — only Y may vary along the hinge line.  But the
+# belly exterior the door panel follows is contoured (it rises and falls by
+# several mm along Y even at the hinge edge), so a straight hinge line
+# generally will NOT sit flush against the panel at every knuckle position.
+# Each knuckle gets its own GUSSET — a small solid bridging block — to
+# positively connect the straight-axis knuckle to the contoured panel edge
+# at that knuckle's actual Y, regardless of the local mismatch.  Without
+# this, knuckles whose local panel Z differs from the chosen hinge Z by more
+# than KNUCKLE_R simply float, disconnected from the rest of the door solid.
+GUSSET_DEPTH = 6.0              # mm — inboard reach into the panel from the hinge edge
+GUSSET_PAD   = 0.5              # mm — extra margin on the bridging box's Z span
+
 # Knuckle Y-positions: 4 per door, evenly spaced along that door's OWN
 # outboard hinge line.  Port and stbd hinges are independent piano hinges
 # (each door pinned to the fuselage on its own flank) — NOT interleaved onto
@@ -222,10 +235,30 @@ def build_belly_interpolator(shell_stl: str, y_min: float, y_max: float):
           f"Y={by.min():.1f}..{by.max():.1f}  "
           f"Z={bz.min():.2f}..{bz.max():.2f}")
 
+    # The belly is doubly curved, so its detected edge is NOT a constant X
+    # across Y — it wanders in/out by several mm row to row.  Taking the
+    # single most-outward X found anywhere in the bay (the naive global
+    # min/max) would put the hinge line outside the real data for most other
+    # Y rows, and griddata silently falls back to a flat Z there — a
+    # discontinuity at every row except the one row that actually reaches
+    # that far.  Instead, bin by Y (bin width = GRID_DY, matching the door's
+    # own sampling grid) and take the WORST CASE across rows: the innermost
+    # of each row's outward reach.  That guarantees every sampled grid point,
+    # at every Y, lands on real belly data.
     bay_mask = (by >= y_min) & (by <= y_max)
-    x_min_bay = float(bx[bay_mask].min())
-    x_max_bay = float(bx[bay_mask].max())
-    print(f"[belly] real belly-mesh X extent within bay Y={y_min:.1f}..{y_max:.1f}: "
+    bx_bay, by_bay = bx[bay_mask], by[bay_mask]
+    row_bins = np.arange(y_min, y_max + GRID_DY, GRID_DY)
+    row_max_x, row_min_x = [], []
+    for lo, hi in zip(row_bins[:-1], row_bins[1:]):
+        row_sel = (by_bay >= lo) & (by_bay < hi)
+        if row_sel.sum() == 0:
+            continue
+        row_max_x.append(bx_bay[row_sel].max())
+        row_min_x.append(bx_bay[row_sel].min())
+    x_min_bay = float(max(row_min_x))   # safe stbd hinge line
+    x_max_bay = float(min(row_max_x))   # safe port hinge line
+    print(f"[belly] safe belly-mesh X extent within bay Y={y_min:.1f}..{y_max:.1f} "
+          f"(worst-case across {len(row_max_x)} Y-rows, real data on every row): "
           f"X={x_min_bay:.2f}..{x_max_bay:.2f}  (door grids/hinges use this, "
           f"not the cargo-section bounding box)")
 
@@ -237,6 +270,46 @@ def build_belly_interpolator(shell_stl: str, y_min: float, y_max: float):
         return z.reshape(x2d.shape)
 
     return belly_z, x_min_bay, x_max_bay
+
+
+# Max per-grid-step Z change accepted as genuine belly curvature.  The clean
+# centre of the belly never exceeds ~0.5 mm per GRID_DX/GRID_DY step (see
+# DESPIKE_MAX_STEP discussion below); anything bigger is the height-field
+# breaking down where the hull curves toward vertical, not real contour.
+DESPIKE_MAX_STEP = 1.0   # mm
+
+
+def despike_grid(z: np.ndarray, max_step: float = DESPIKE_MAX_STEP,
+                  iterations: int = 3) -> np.ndarray:
+    """
+    Suppress height-field artifacts near the aft/outboard corner of the bay,
+    where the cargo shell's belly curves so sharply toward the side wall and
+    aft bulkhead that a single-valued Z(X, Y) sample breaks down (two
+    triangles at nearly the same X, Y can have very different real Z — see
+    TODO.md §1.1.1.2 corner-curvature note).  Without this, griddata's
+    nearest scattered points there alias into multi-mm spikes that show up
+    as a visible crack/step in the printed door.
+
+    Walks each row and column of the grid outward from the free edge and
+    clamps any step exceeding max_step to the previous (inboard) value,
+    holding the surface flat past the point where real belly data becomes
+    unreliable.  Iterated a few passes, alternating X/Y axes, to converge —
+    a clamp applied along one axis can introduce a new step along the other.
+
+    This is a print-safety net, not a substitute for the corner geometry
+    being verified in FreeCAD before fabrication (see TODO.md §1.1.1.2).
+    """
+    z2 = z.copy()
+    for _ in range(iterations):
+        # X axis (rows)
+        for i in range(1, z2.shape[0]):
+            bad = np.abs(z2[i] - z2[i - 1]) > max_step
+            z2[i][bad] = z2[i - 1][bad]
+        # Y axis (columns)
+        for j in range(1, z2.shape[1]):
+            bad = np.abs(z2[:, j] - z2[:, j - 1]) > max_step
+            z2[:, j][bad] = z2[:, j - 1][bad]
+    return z2
 
 
 # ---------------------------------------------------------------------------
@@ -379,6 +452,50 @@ def make_knuckle(x_centre: float, y_centre: float, z_centre: float) -> trimesh.T
     return knuckle
 
 
+def make_knuckle_gusset(hinge_x: float, y_centre: float, z_hinge: float,
+                         local_panel_z: float, side: str) -> trimesh.Trimesh:
+    """
+    Build a small bridging block that positively connects one knuckle
+    (on the door's straight hinge axis, at z_hinge) to the door panel's
+    actual contoured exterior surface at this knuckle's Y (local_panel_z) —
+    see GUSSET_DEPTH/GUSSET_PAD comment above KNUCKLE_OD for why this is
+    needed: the hinge axis is straight but the panel surface it attaches to
+    is not, so the two don't generally touch on their own.
+
+    The block spans this knuckle's Y length, reaches GUSSET_DEPTH inboard
+    from the hinge edge into the panel body (side determines which X
+    direction is "inboard"), and spans Z from below the lower of
+    {knuckle, local panel} to above the higher of the two, so it always
+    overlaps both solids regardless of which one is locally higher.
+
+    Parameters
+    ----------
+    hinge_x : float — this door's hinge-line X (same for every knuckle)
+    y_centre : float — this knuckle's Y centre
+    z_hinge : float — this door's single straight-axis hinge Z (same for
+        every knuckle on this door)
+    local_panel_z : float — the door panel's actual exterior Z at
+        (hinge_x, y_centre), sampled from the (despiked) panel grid
+    side : str — "port" or "stbd"; selects which X direction is inboard
+
+    Returns
+    -------
+    trimesh.Trimesh — manifold gusset block
+    """
+    z_lo = min(local_panel_z, z_hinge - KNUCKLE_R) - GUSSET_PAD
+    z_hi = max(local_panel_z + WALL_T, z_hinge + KNUCKLE_R) + GUSSET_PAD
+    if side == "port":
+        x_lo, x_hi = hinge_x - GUSSET_DEPTH, hinge_x + KNUCKLE_R
+    else:
+        x_lo, x_hi = hinge_x - KNUCKLE_R, hinge_x + GUSSET_DEPTH
+
+    extents = [x_hi - x_lo, KNUCKLE_LEN, z_hi - z_lo]
+    centre = [(x_lo + x_hi) / 2.0, y_centre, (z_lo + z_hi) / 2.0]
+    gusset = trimesh.creation.box(extents=extents)
+    gusset.apply_transform(tft.translation_matrix(centre))
+    return gusset
+
+
 # ---------------------------------------------------------------------------
 # Door generators
 # ---------------------------------------------------------------------------
@@ -424,6 +541,17 @@ def make_door(side: str, belly_z_fn, free_edge_x: float, hinge_x: float,
     xg, yg = np.meshgrid(x_grid, y_grid, indexing="ij")   # shape (M, N)
     z_ext  = belly_z_fn(xg, yg)                            # exterior belly Z
 
+    # despike_grid() anchors its X-axis walk at row index 0 and propagates
+    # outward, trusting that end as real data.  x_grid is always sorted
+    # ascending (low to high X), so row 0 is the free edge (X_CL) only for
+    # the port door (free_edge_x < hinge_x there); for the stbd door the
+    # free edge is at the HIGH end (row -1).  Flip so the trusted free edge
+    # is always at row 0 before despiking, then flip back.
+    free_edge_at_low_x = free_edge_x <= hinge_x
+    z_for_despike = z_ext if free_edge_at_low_x else z_ext[::-1, :]
+    z_ext = despike_grid(z_for_despike)
+    z_ext = z_ext if free_edge_at_low_x else z_ext[::-1, :]
+
     print(f"[{side}] grid {xg.shape}  "
           f"X={x_grid[0]:.1f}..{x_grid[-1]:.1f}  "
           f"Y={y_grid[0]:.1f}..{y_grid[-1]:.1f}  "
@@ -434,22 +562,34 @@ def make_door(side: str, belly_z_fn, free_edge_x: float, hinge_x: float,
     print(f"[{side}] panel verts={len(panel.vertices)} "
           f"faces={len(panel.faces)} watertight={panel.is_watertight}")
 
-    # Build and union hinge knuckle barrels along this door's own outboard
-    # hinge line (hinge_x), with Z sampled from the belly interpolator at the
-    # real edge of the belly mesh — now within the interpolator's real data,
-    # not the flat fallback.
-    yc_arr = np.array(knuckle_y_list)
-    xc_arr = np.full_like(yc_arr, hinge_x)
-    knuckle_z_list = belly_z_fn(xc_arr, yc_arr) + KNUCKLE_R
-    knuckles = [make_knuckle(hinge_x, yc, zc)
-                for yc, zc in zip(knuckle_y_list, knuckle_z_list)]
+    # Hinge axis: a real CF rod is rigid and straight, so ALL knuckles on
+    # this door share ONE (X, Z) — only Y varies.  X is hinge_x already;
+    # Z is the mean of the panel's actual exterior contour at the 4 knuckle
+    # Y positions (sampled from the despiked panel edge column itself, so it
+    # tracks whatever the panel really is, not the raw/spiky belly data).
+    edge_col = z_ext[-1, :] if free_edge_at_low_x else z_ext[0, :]
+    local_panel_z_at_knuckles = np.interp(knuckle_y_list, y_grid, edge_col)
+    z_hinge = float(local_panel_z_at_knuckles.mean()) + KNUCKLE_R
+    print(f"[{side}] straight hinge axis: X={hinge_x:.2f}  Z={z_hinge:.2f} mm  "
+          f"(local panel Z at knuckles: "
+          f"{np.array2string(local_panel_z_at_knuckles, precision=2)})")
 
-    print(f"[{side}] unioning {len(knuckles)} knuckles …")
+    knuckles = [make_knuckle(hinge_x, yc, z_hinge) for yc in knuckle_y_list]
+
+    # Each knuckle sits on the straight hinge axis, but the panel surface it
+    # must bond to is contoured — bridge the gap with a per-knuckle gusset
+    # (see make_knuckle_gusset) so every knuckle is positively connected,
+    # not just floating near the panel.
+    gussets = [make_knuckle_gusset(hinge_x, yc, z_hinge, lz, side)
+               for yc, lz in zip(knuckle_y_list, local_panel_z_at_knuckles)]
+
+    print(f"[{side}] unioning {len(knuckles)} knuckles + {len(gussets)} gussets …")
     try:
-        door = trimesh.boolean.union([panel] + knuckles, engine="manifold")
+        door = trimesh.boolean.union(
+            [panel] + knuckles + gussets, engine="manifold")
     except Exception as exc:
         print(f"[{side}] WARNING: union failed ({exc}), concatenating meshes")
-        door = trimesh.util.concatenate([panel] + knuckles)
+        door = trimesh.util.concatenate([panel] + knuckles + gussets)
 
     print(f"[{side}] door verts={len(door.vertices)} "
           f"faces={len(door.faces)} watertight={door.is_watertight}")
