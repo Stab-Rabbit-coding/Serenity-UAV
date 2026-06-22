@@ -890,6 +890,51 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 - [ ] **nacelle_bevel_housing.stl** — `openscad -o ... serenity/stl/nacelle_bevel_housing.scad`
     - Spec: CF-PETG, 24×14×20 mm housing block
 
+##### 1.1.3.3 *FreeCAD Hull-Frame Placement (gear train, nozzle, sleeves)*
+
+- [x] **Map all nacelle-internal mechanism components to hull frame for both port
+    and stbd, in `airframe/FreeCAD-scripts/serenity_assembly.py`** *(done, 2026-06-21)*
+    — added `R_BAKE` / `T_BAKE` / `PYLON_SIDE` constants and a `nacelle_rows()`
+    composition helper (`T_hull = T_nacelle_bake ∘ T_subcomponent_local`, derived
+    by hand-expanding the shared nacelle bake quaternion); placed via
+    `transform_mesh()` (VERIFY tier, not `place_mesh()`) for both sides:
+    Stator Sleeve, Aft Spider Sleeve, Drive Pinion A, Crown Pinion, Bevel
+    Housing, Bevel Pair, Sector Gear, Nozzle Iris, and Tip Cap.
+- [ ] **Fix `crown_pinion_boss()` in `nacelle_pod_50mm_tandem.scad`** — it copies
+    `pinion_a_boss()`'s `rotate([0,90,0])` X-axis-bore pattern verbatim, but both
+    `nacelle_pinion.scad` and `nacelle_bevel_housing.scad` independently document
+    the Crown Pinion as Z-axis/longitudinal (no rotation). The FreeCAD placement
+    above uses the documented-correct identity rotation; the SCAD boss code is
+    what actually needs correcting.
+- [ ] **Resolve the unresolved Crown-Pinion-to-rack mesh radius in
+    `nacelle_nozzle_iris.scad`** (~lines 118-125) — an author scratch-pad computes
+    four candidate radii (28/37/31/38 mm) and ends mid-thought ("Wait —") with
+    none ever chosen. The FreeCAD placement above uses the pod file's actual
+    coded value (Y = 28 mm, shared with Pinion A); reconcile the iris file's
+    comment math against it.
+- [ ] **Confirm Sector Gear standoff distance from the nacelle face** — no SCAD
+    source exists yet for the fuselage/pylon tilt bracket that carries the fixed
+    sector gear, so the FreeCAD placement above approximates the standoff at
+    `NACELLE_FACE_X_PYLON = 34 mm`. Re-verify once the tilt bracket is modeled.
+- [ ] **Model or source `nacelle_tip_cap_port/stbd.stl`** — no active SCAD source
+    exists for either tip cap; the FreeCAD placement above is a best-guess
+    placeholder (outboard X face, identity rotation, on the pivot Z station).
+- [ ] **Resolve `cargo_sect_shell24.scad`'s `nacelle_servo_mount_block(z_sign)`
+    "port wall"/"stbd wall" labelling** — working the file's own
+    `NSVMT_X_CEN`/`NSVMT_Y_CEN`/`z_sign` logic against Cargo_Shell's validated
+    bake transform (`hull_Z = local_Z`, unchanged) puts both pads at the same
+    hull X/Y and only Z = 157.2 mm (z_sign=+1) vs. Z = 6.0 mm (z_sign=-1) —
+    neither value falls inside either nacelle's validated hull-Z span
+    (Nacelle_Port +21.4..+104.7, Nacelle_Stbd +23.3..+106.6). The labelling
+    predates the hull-frame standard and does not correspond to the validated
+    hull Z axis. `Nacelle_Servo_Bracket_Port`/`_Stbd` are therefore left
+    **unplaced** (`add_mesh()` only) in `serenity_assembly.py` pending either a
+    `z_sign` fix in the SCAD file or a manual FreeCAD placement by the user, per
+    CLAUDE.md's "ask the user to do a manual placement" guidance. Note also that
+    `nacelle_servo_bracket.stl` does not yet exist in `airframe/stls/` — only the
+    SCAD source (`airframe/openscad/nacelles/nacelle_servo_bracket.scad`) has
+    been authored; it must be rendered before this placement is meaningful.
+
 #### 1.1.4 **Landing Gear**
 
 **Canonical leg model (Rev R5, 2026-06-20): vertical post + 4-wire brace.** The
