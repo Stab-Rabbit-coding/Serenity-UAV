@@ -1,0 +1,9 @@
+# markdownlint configuration for super-linter's MARKDOWN check.
+#
+# MD007 (ul-indent) default expects 2-space nested-list indentation.
+# This repo's .editorconfig sets indent_size = 4 for all files, including
+# *.md, and CLAUDE.md mandates 4-space indenting throughout the codebase.
+# Setting indent: 4 here keeps markdownlint's list-indent rule consistent
+# with editorconfig-checker instead of fighting it.
+MD007:
+  indent: 4
