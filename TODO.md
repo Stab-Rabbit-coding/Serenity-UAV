@@ -167,6 +167,30 @@ license under 47 CFR Part 97 — both wrong, and inconsistent with this project'
     `avionics/kicad/Zoë.md` per the IEC 62368-1 Cl.5.5.2 table for reinforced insulation
     at the working voltage.
 
+### 0.7 — CI Lint Scope and Repo-Wide Lint Debt (open — deferred to separate remediation effort)
+
+- [ ] **`run-lint` (`github/super-linter@v4`) grades every PR against the entire
+    repository, not its diff** — `VALIDATE_ALL_CODEBASE: true` in
+    `.github/workflows/super-linter.yml` causes even single-file PRs (e.g. PR #107,
+    TODO.md-only) to fail ~17 sub-linter categories simultaneously (`CLANG_FORMAT`, `CPP`,
+    `CSS`, `EDITORCONFIG`, `GITHUB_ACTIONS`, `JAVASCRIPT_STANDARD`, `JSCPD`, `JSON`, `JSX`,
+    `MARKDOWN`, `NATURAL_LANGUAGE`, `PYTHON_BLACK`, `PYTHON_PYLINT`, `PYTHON_FLAKE8`,
+    `PYTHON_ISORT`, `PYTHON_MYPY`, `SHELL_SHFMT`). Confirmed pre-existing: the same check already fails on
+    `main` at the PR #105 merge commit, so this is not a regression from #107.
+    Decision (2026-06-21): defer changing `VALIDATE_ALL_CODEBASE` for now; track as a
+    separate remediation effort rather than a CI config change bundled with feature work.
+- [ ] **Repo-wide lint debt** — observed counts as of the PR #107 full-codebase run:
+    `EDITORCONFIG` 697, `PYTHON_BLACK` 72, `PYTHON_FLAKE8` 56, `PYTHON_ISORT` 47, `JSCPD` 39,
+    `MARKDOWN` 32, `CLANG_FORMAT` 26, `CPP` 25, `PYTHON_MYPY` 7, `NATURAL_LANGUAGE` 17,
+    `JAVASCRIPT_STANDARD` 5, `SHELL_SHFMT` 4, `CSS` 3, `PYTHON_PYLINT` 2, `JSX` 6, `JSON` 1,
+    `GITHUB_ACTIONS` 1. Needs a dedicated remediation pass, file type by file type,
+    separate from feature work, so each touched file is fixed under its own
+    diff-scoped lint pass rather than a single repo-wide sweep.
+- [ ] Note for whoever picks this up: applying the `VALIDATE_ALL_CODEBASE: false`
+    scope fix also requires a GitHub credential with the `workflow` OAuth scope —
+    neither this session's git push credential nor its GitHub MCP token could write
+    to `.github/workflows/super-linter.yml` (`403 ... without 'workflow' scope`).
+
 ---
 
 ## 1.0 — Design Artifacts (Pre-Fabrication)
@@ -3126,13 +3150,11 @@ host-PC software all created in Rev R.  See `gcs/malcolm/README.md` for layout.
 
 - [ ] **Build and install Malcolm PB2-I firmware:**
 
-    ```sh
-    cd gcs/malcolm/firmware/pb2i
-    mkdir build && cd build
-    cmake -DCMAKE_TOOLCHAIN_FILE=../toolchain-aarch64.cmake ..
-    make -j$(nproc)
-    sudo make install
-    ```
+        cd gcs/malcolm/firmware/pb2i
+        mkdir build && cd build
+        cmake -DCMAKE_TOOLCHAIN_FILE=../toolchain-aarch64.cmake ..
+        make -j$(nproc)
+        sudo make install
 
     Verify `mal_gimbal` binary installed at `/usr/local/bin/mal_gimbal`.
 
@@ -3157,11 +3179,9 @@ host-PC software all created in Rev R.  See `gcs/malcolm/README.md` for layout.
 
 - [ ] **Run installation scripts in order:**
 
-    ```sh
-    sudo bash gcs/malcolm/software/install/install_deps.sh
-    sudo bash gcs/malcolm/software/install/install_mavlink_router.sh
-    bash gcs/malcolm/software/install/install_qgc.sh
-    ```
+        sudo bash gcs/malcolm/software/install/install_deps.sh
+        sudo bash gcs/malcolm/software/install/install_mavlink_router.sh
+        bash gcs/malcolm/software/install/install_qgc.sh
 
     Verify: `mavlink-routerd --version`; `~/Applications/QGroundControl.AppImage --version` (launches GUI).
 
@@ -3175,11 +3195,9 @@ host-PC software all created in Rev R.  See `gcs/malcolm/README.md` for layout.
 
 - [ ] **Run tracking software tests:**
 
-    ```sh
-    cd gcs/malcolm/software/tracking
-    pip install -r requirements.txt
-    pytest tests/test_tracker.py -v
-    ```
+        cd gcs/malcolm/software/tracking
+        pip install -r requirements.txt
+        pytest tests/test_tracker.py -v
 
     All 9 bearing/elevation tests must pass.
 
