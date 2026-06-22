@@ -278,14 +278,25 @@ def _y_cylinder(x_cen, z_cen, y_start, y_end, radius, sections=32):
     return cyl
 
 
+CAVITY_JUNK_FLOOR = 5.0   # mm^2 — loops smaller than this are mesh artifacts
+                          # (degenerate slivers, boss/rib details), never the
+                          # real inner-cavity boundary; see HOLE-01 fix note.
+
+
 def _inner_cavity_polygon(mesh, y, margin):
     """
     Return the shell's inner-cavity cross-section (X, Z) at hull Y = y, inset by
     `margin` mm, or None if no valid cross-section is found at that station.
 
-    A 2 mm-wall hollow shell sliced at any interior Y produces (at least) two
-    closed loops: the outer skin boundary and the inner cavity boundary. The
-    inner cavity is always the smaller-area loop. Insetting it (negative
+    A 2 mm-wall hollow shell sliced at any interior Y produces, ideally, two
+    closed loops: the outer skin boundary (largest area) and the inner cavity
+    boundary (second-largest). In practice the slicer can also return several
+    tiny sliver loops from mesh detail or float32 voxel-remesh noise — taking
+    the SMALLEST loop above a trivial area threshold (the original approach)
+    picked up these slivers instead of the real cavity, which silently shrank
+    or emptied the cutter (see HOLE-01 fix note on FACE_BORE_Y_RANGES above).
+    The second-largest loop, with a sanity floor (CAVITY_JUNK_FLOOR) well
+    above any plausible artifact, is the robust choice. Insetting it (negative
     buffer) keeps the returned polygon strictly inside the cavity, away from
     the inner wall.
     """
@@ -296,12 +307,12 @@ def _inner_cavity_polygon(mesh, y, margin):
     for loop in section.discrete:
         arr = np.asarray(loop)
         p = Polygon(arr[:, [0, 2]])
-        if p.is_valid and p.area > 1.0:
+        if p.is_valid and p.area > CAVITY_JUNK_FLOOR:
             polys.append(p)
     if len(polys) < 2:
         return None
-    polys.sort(key=lambda p: p.area)
-    inset = polys[0].buffer(-margin)
+    polys.sort(key=lambda p: p.area, reverse=True)
+    inset = polys[1].buffer(-margin)
     return None if inset.is_empty else inset
 
 
@@ -312,41 +323,56 @@ def _bore_open_cutter(mesh, y_range, margin=FACE_BORE_MARGIN, samples=FACE_BORE_
     it can never reach the inner wall, let alone punch through the outer skin
     (see HOLE-01 fix note on FACE_BORE_Y_RANGES above).
 
-    Samples the inner-cavity cross-section (inset by `margin`) at `samples`
-    stations spanning y_range and intersects them all, so the result is safe
-    even where the cavity tapers across the span (e.g. near a section's
-    narrowing nose/tail). Raises if no safe opening exists anywhere in range
-    — that means y_range needs to be narrowed for this shell, not silently
-    produce a tiny or empty cut.
+    Lofted per-segment construction: the cavity cross-section is measured at
+    `samples` stations spanning y_range, and a separate prism is extruded
+    between each consecutive pair of stations using the INTERSECTION of just
+    those two stations' (inset) cavity polygons. This follows a tapering
+    cavity (e.g. near a section's narrowing nose/tail) instead of one global
+    intersection across the whole span, which a single local pinch point
+    would collapse to empty even though most of the span has plenty of
+    clearance. A segment whose pair-wise intersection is empty is simply
+    skipped (a real local pinch — nothing safe to cut there); the function
+    only raises if EVERY segment across the whole span is empty.
     """
-    common = None
-    for y in np.linspace(y_range[0], y_range[1], samples):
-        poly = _inner_cavity_polygon(mesh, y, margin)
-        if poly is None:
+    ys = np.linspace(y_range[0], y_range[1], samples)
+    polys = [_inner_cavity_polygon(mesh, y, margin) for y in ys]
+
+    segments = []
+    for i in range(len(ys) - 1):
+        p0, p1 = polys[i], polys[i + 1]
+        if p0 is None or p1 is None:
             continue
-        common = poly if common is None else common.intersection(poly)
-        if common.is_empty:
-            break
-    if common is None or common.is_empty or common.area < 1.0:
+        seg_poly = p0.intersection(p1)
+        if seg_poly.is_empty or seg_poly.area < 1.0:
+            continue
+        if seg_poly.geom_type == "MultiPolygon":
+            seg_poly = max(seg_poly.geoms, key=lambda g: g.area)
+        height = ys[i + 1] - ys[i]
+        extrusion = trimesh.creation.extrude_polygon(seg_poly, height=height)
+        # extrude_polygon builds (x, y, z) = (poly_x, poly_y, [0, height]);
+        # remap to hull frame: hull_X = poly_x, hull_Z = poly_y,
+        # hull_Y = z + ys[i].
+        remap = np.array([
+            [1.0, 0.0, 0.0, 0.0],
+            [0.0, 0.0, 1.0, ys[i]],
+            [0.0, 1.0, 0.0, 0.0],
+            [0.0, 0.0, 0.0, 1.0],
+        ])
+        extrusion.apply_transform(remap)
+        segments.append(extrusion)
+
+    if not segments:
         raise RuntimeError(
-            f"_bore_open_cutter: no safe inner-cavity opening across "
+            f"_bore_open_cutter: no safe inner-cavity opening anywhere across "
             f"y_range={y_range} (margin={margin} mm) — narrow y_range or "
             f"reduce margin and re-survey this joint")
-    if common.geom_type == "MultiPolygon":
-        common = max(common.geoms, key=lambda g: g.area)
-
-    height = y_range[1] - y_range[0]
-    extrusion = trimesh.creation.extrude_polygon(common, height=height)
-    # extrude_polygon builds (x, y, z) = (poly_x, poly_y, [0, height]); remap
-    # to hull frame: hull_X = poly_x, hull_Z = poly_y, hull_Y = z + y_range[0].
-    remap = np.array([
-        [1.0, 0.0, 0.0, 0.0],
-        [0.0, 0.0, 1.0, y_range[0]],
-        [0.0, 1.0, 0.0, 0.0],
-        [0.0, 0.0, 0.0, 1.0],
-    ])
-    extrusion.apply_transform(remap)
-    return extrusion
+    # Return each segment as its own watertight solid rather than one
+    # concatenated mesh: adjacent segments' polygons can differ slightly
+    # (different pairwise intersections), so gluing them into a single mesh
+    # risks non-manifold seams at the shared Y plane. _subtract_all() already
+    # takes a list and subtracts cutters one at a time, so independent
+    # segments are the natural fit.
+    return segments
 
 
 def _to_manifold_volume(mesh):
@@ -497,7 +523,7 @@ def process_head(mesh):
     cutters = []
 
     # Bore-open aft face
-    cutters.append(_bore_open_cutter(mesh, FACE_BORE_Y_RANGES["head_aft"]))
+    cutters.extend(_bore_open_cutter(mesh, FACE_BORE_Y_RANGES["head_aft"]))
 
     # Boss-pin bores (Joint 1)
     j = BOSS_PIN_BORES["joint1"]
@@ -526,7 +552,7 @@ def process_cargo(mesh):
 
     # Bore-open faces
     for key in ("cargo_fwd", "cargo_aft"):
-        cutters.append(_bore_open_cutter(mesh, FACE_BORE_Y_RANGES[key]))
+        cutters.extend(_bore_open_cutter(mesh, FACE_BORE_Y_RANGES[key]))
 
     # Boss-pin bores (Joints 1 and 2)
     for jname in ("joint1", "joint2"):
@@ -564,7 +590,7 @@ def process_middle(mesh):
 
     # Bore-open faces
     for key in ("middle_fwd", "middle_aft"):
-        cutters.append(_bore_open_cutter(mesh, FACE_BORE_Y_RANGES[key]))
+        cutters.extend(_bore_open_cutter(mesh, FACE_BORE_Y_RANGES[key]))
 
     # Boss-pin bores (Joints 2 and 3)
     for jname in ("joint2", "joint3"):
@@ -595,7 +621,7 @@ def process_rear(mesh):
     cutters = []
 
     # Bore-open fwd face
-    cutters.append(_bore_open_cutter(mesh, FACE_BORE_Y_RANGES["rear_fwd"]))
+    cutters.extend(_bore_open_cutter(mesh, FACE_BORE_Y_RANGES["rear_fwd"]))
 
     # Boss-pin bores (Joint 3)
     j = BOSS_PIN_BORES["joint3"]

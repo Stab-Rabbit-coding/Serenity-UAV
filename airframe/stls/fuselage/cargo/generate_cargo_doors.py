@@ -280,7 +280,7 @@ DESPIKE_MAX_STEP = 1.0   # mm
 
 
 def despike_grid(z: np.ndarray, max_step: float = DESPIKE_MAX_STEP,
-                  iterations: int = 3) -> np.ndarray:
+                 iterations: int = 3) -> np.ndarray:
     """
     Suppress height-field artifacts near the aft/outboard corner of the bay,
     where the cargo shell's belly curves so sharply toward the side wall and

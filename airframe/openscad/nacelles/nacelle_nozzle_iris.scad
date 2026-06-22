@@ -424,8 +424,17 @@ module nozzle_throat_and_housing() {
                 cylinder(h = THROAT_LEN + 0.2, r = THROAT_INNER_R);
 
             // ── Unison ring bore — clears RING_OUTER_R inside the outer shell ──
+            // Stops at RING_CAVITY_Z_HI, NOT at THROAT_LEN: the ring itself
+            // only occupies Z = 0..RING_H = 8 mm, so hollowing the shell out
+            // to HOUSING_INNER_R = 37.5 mm any further than necessary would
+            // reach into the hinge-boss region (Z ~10.9..19.1, radius up to
+            // ~34.7 mm, both INSIDE 37.5 mm) and scoop the bosses out from
+            // under the tube — found 2026-06-22 via mesh verification (the
+            // bosses came out as disconnected floating bodies, severed at
+            // exactly this cut's Z end).  1 mm margin past the ring height.
+            RING_CAVITY_Z_HI = RING_H + 1.0;   // [mm] = 9.0
             translate([0, 0, -HOUSING_LIP_H - 0.1])
-                cylinder(h = THROAT_LEN + HOUSING_LIP_H + 0.2, r = HOUSING_INNER_R);
+                cylinder(h = RING_CAVITY_Z_HI + HOUSING_LIP_H + 0.1, r = HOUSING_INNER_R);
 
             // ── Idler-access slot ────────────────────────────────────────────────
             rotate([0, 0, IDLER_SLOT_ANG]) {
