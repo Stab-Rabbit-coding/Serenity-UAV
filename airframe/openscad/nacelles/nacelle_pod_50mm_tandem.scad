@@ -99,7 +99,8 @@
 //   • Nozzle ring pocket at exhaust exit (iris ring seat)
 //   • CG-aligned pivot X-face boss (two MF104ZZ bearing bosses at PIVOT_Z)
 //   • Drive Pinion A boss (MR63ZZ, at Y=PINION_A_Y=28mm, meshes sector gear)
-//   • Crown Pinion boss (MR63ZZ, near nozzle ring, drives nozzle rack)
+//   • Crown Pinion boss (MR63ZZ, near nozzle ring, drives idler gear which
+//       in turn drives the nozzle ring gear — see nacelle_nozzle_idler.scad)
 //   • Longitudinal gear-shaft conduit (3 mm CF rod in PTFE sleeve)
 //   • External D-section nav-light wire conduit (inboard X-face)
 //   • Harness exit port (ESC and nav-light leads to pylon channel)

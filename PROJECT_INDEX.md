@@ -159,11 +159,12 @@ edf_stator_sleeve.scad              — Rev R 11-fin inter-stage stator sleeve (
 edf_aft_spider_sleeve.scad          — Rev R aft spider/motor-mount sleeve (carried fwd from Rev A)
 edf_bore_sleeve.scad                — DEPRECATED (superseded by stator+spider)
 nacelle_nozzle_straight.scad        — Rev R push-on straight nozzle (carried fwd from Rev T2)
-nacelle_nozzle_iris.scad            — Rev R 8-petal iris nozzle (carried fwd from Rev O)
+nacelle_nozzle_iris.scad            — Rev R1 8-petal iris nozzle, full-circle M=1.0 72T ring gear (carried fwd from Rev O; idler-gear rework 2026-06-22)
+nacelle_nozzle_idler.scad           — Rev R1 compound idler gear (44T/15T), Crown-Pinion-to-ring-gear stage (NEW 2026-06-22)
 nacelle_bevel_housing.scad          — Rev R bevel-gear housing (carried fwd from Rev O)
 nacelle_bevel_pair.scad             — Rev R M=1.0 14T 45° bevel pair (carried fwd from Rev O)
 nacelle_pinion.scad                 — Rev R M=1.0 12T pinion (carried fwd from Rev O)
-nacelle_sector_gear.scad            — Rev R M=1.0 38T sector gear (carried fwd from Rev O)
+nacelle_sector_gear.scad            — Rev R1 M=1.0 58T sector gear, -5°/140° range (carried fwd from Rev O; grown from 38T 2026-06-22)
 nacelle_servo_bracket.scad          — Rev R DS3218MG tilt servo bracket with M3 bosses
 ```
 
@@ -255,7 +256,8 @@ nacelle_pinion.stl                — M=1.0 12T pinion
 nacelle_port_revq.stl             — Port nacelle pod shell, Rev Q baseline; required by
                                     tools/bake_hull_frame.py, serenity_assembly.py, and the
                                     FreeCAD-scripts Makefile (active, do not archive)
-nacelle_sector_gear.stl           — M=1.0 38T sector gear
+nacelle_sector_gear.stl           — M=1.0 38T sector gear (STALE: source grew to 58T
+                                    2026-06-22, see §1.1.3.2 — not yet re-rendered)
 nacelle_stbd_revq.stl             — Stbd nacelle pod shell, Rev Q baseline; same active-pipeline
                                     dependency as nacelle_port_revq.stl (do not archive)
 nacelle_tip_cap_port.stl          — Port nacelle intake tip cap
@@ -263,7 +265,11 @@ nacelle_tip_cap_stbd.stl          — Stbd nacelle intake tip cap
 nozzles/
   nacelle_bevel_housing.stl       — Bevel gear housing
   nacelle_bevel_pair.stl          — 14T 45° bevel pair
-  nacelle_nozzle_iris.stl         — 8-petal iris nozzle ring
+  nacelle_nozzle_iris.stl         — 8-petal iris nozzle ring (STALE: source reworked to a
+                                    full-circle ring gear + idler-gear stage 2026-06-22, see
+                                    TODO.md §1.1.3.1 — not yet re-rendered)
+  nacelle_nozzle_idler.stl        — NOT YET RENDERED: compound idler gear (44T/15T), new
+                                    component 2026-06-22, see TODO.md §1.1.3.1
   nacelle_nozzle_petal.stl        — Single iris petal (print × 8)
   nacelle_nozzle_ring.stl         — Iris nozzle ring body
   nacelle_nozzle_closed_asm.stl   — Iris assembly (closed position, visual)

@@ -21,23 +21,73 @@
 //   nacelle tilt-to-nozzle gear train:
 //
 //     Drive Pinion A — mounted on the nacelle tilt shaft; meshes with the
-//       fixed sector gear (nacelle_sector_gear.scad).  As the nacelle tilts
-//       0–90°, Pinion A rotates 330° on its shaft.  Shaft is transverse
-//       (nacelle Y-axis).  Pinion A output shaft passes into Bevel Gear A
+//       fixed sector gear (nacelle_sector_gear.scad).  The sector gear is
+//       centred ON the tilt pivot axis and does not rotate, while Pinion A
+//       is carried by the nacelle and orbits the pivot axis as the nacelle
+//       tilts -- this is an epicyclic (sun-fixed/planet-on-carrier) mesh,
+//       NOT a simple two-gear mesh.  As the nacelle tilts 0-90 deg, Pinion A
+//       rotates 420 deg on its shaft (see "Gear ratio context" below for the
+//       epicyclic derivation).  Shaft is transverse (nacelle Y-axis).
+//       Pinion A output shaft passes into Bevel Gear A
 //       (nacelle_bevel_pair.scad).
 //
 //     Crown Pinion — mounted on the longitudinal shaft (nacelle Z-axis) at
-//       the nozzle end; meshes with the M = 1.0 rack on the inner face of
-//       the rotating nozzle ring (nacelle_nozzle_iris.scad).  Rotation of the
-//       crown pinion drives ring rotation of ≈ 70.7° over the full tilt range.
+//       the nozzle end; meshes with Idler-In, the input gear of the
+//       compound idler stage (nacelle_nozzle_idler.scad), at the fixed
+//       28.1 mm centre distance set by shaft-conduit continuity through
+//       the bevel pair.  The idler's output gear (Idler-Out) drives the
+//       full-circle nozzle ring gear (nacelle_nozzle_iris.scad).  Rotation
+//       of the crown pinion drives ring rotation of ≈ 38.45° over the full
+//       -5°/140° tilt range (see "Gear ratio context" below).
 //
 //   Both pinions are dimensionally identical; only their installation position
 //   and axis orientation differ.
 //
 // Gear ratio context:
-//   Sector R = 22 mm, Pinion R = 6 mm → step-up ratio = 22/6 = 3.667
-//   Crown Pinion R = 6 mm, Nozzle Ring R_eff = 28 mm → step-down ratio = 6/28
-//   Full chain: 90° × (22/6) × (6/28) = 70.7° nozzle ring travel
+//   Stage 1 (Sector -> Pinion A) is EPICYCLIC, not a simple mesh: the
+//   sector gear (sun) is fixed and centred on the tilt pivot axis; Pinion A
+//   (planet) is carried by the nacelle (carrier) and orbits the pivot axis
+//   as the nacelle tilts.  Rolling-without-slip contact-point velocity
+//   matching at the mesh point (sector surface velocity = 0, since the
+//   sector is fixed) gives the standard sun-fixed epicyclic relation:
+//     omega_pinionA = omega_nacelle x (1 + R_sector / R_pinionA)
+//                   = omega_nacelle x (1 + 22/6) = omega_nacelle x 4.667
+//   For a 90 deg nacelle tilt: theta_pinionA = 90 deg x 4.667 = 420 deg.
+//   (The naive simple-mesh ratio 22/6 = 3.667, giving 330 deg, OMITS the
+//   "+1" orbital term and is WRONG for this topology -- corrected 2026-06-22.)
+//
+//   Stage 2 (Bevel Gear A -> Bevel Gear B, nacelle_bevel_pair.scad) is a
+//   1:1 fixed-axis bevel pair (both gears' axes are fixed relative to the
+//   nacelle -- no epicyclic term applies here): theta_bevelB = theta_pinionA
+//   = 420 deg.  Crown Pinion is rigidly keyed to the same shaft as Bevel
+//   Gear B, so theta_crownPinion = 420 deg as well.
+//
+//   Stage 3 (Crown Pinion -> Idler -> Nozzle Ring) is now a two-mesh
+//   fixed-axis chain in the nacelle-local frame (the Crown Pinion, the
+//   idler shaft, and the nozzle ring are all carried by the nacelle; none
+//   orbits another locally), via the compound idler gear
+//   (nacelle_nozzle_idler.scad):
+//     theta_idler  = theta_crownPinion x (R_crownPinion / R_idlerIn)
+//                  = theta_crownPinion x (6 / 22)
+//     theta_ring   = theta_idler x (R_idlerOut / R_ring)
+//                  = theta_idler x (7.5 / 36)
+//     => theta_ring / theta_crownPinion = (6/22) x (7.5/36) = 1/17.6
+//   RESOLVED 2026-06-22 (TODO.md §1.1.3): the Crown Pinion's hull-frame
+//   Y-offset is fixed at 28 mm by shaft-conduit continuity through the
+//   bevel pair, while the nozzle ring's required pitch radius (36 mm, sized
+//   for the petal/hinge geometry in nacelle_nozzle_iris.scad) is
+//   geometrically incompatible with a direct 28 mm mesh.  Rather than force
+//   either dimension to an unsuitable value, a compound idler gear
+//   (Idler-In R=22 mm meshes Crown Pinion at 28.1 mm centre distance;
+//   Idler-Out R=7.5 mm meshes the ring at 43.6 mm centre distance) was
+//   inserted between them, decoupling the two radii and supplying
+//   additional reduction.  A free idler-shaft position exists because the
+//   two centre distances and the fixed 28 mm Crown-Pinion-axis-to-ring-axis
+//   span satisfy the triangle inequality: |28.1-43.6| = 15.5 mm <= 28 mm
+//   <= 28.1+43.6 = 71.7 mm.  Full chain: for a 90 deg nacelle tilt,
+//   theta_crownPinion = 420 deg (Stage 1 x Stage 2), so theta_ring =
+//   420 / 17.6 = 23.86 deg.  See nacelle_nozzle_idler.scad and
+//   nacelle_nozzle_iris.scad for the full derivation and petal kinematics.
 //
 // Mating interfaces:
 //   Drive Pinion A:
@@ -47,8 +97,9 @@
 //     • Bevel Gear A shaft bore (nacelle_bevel_pair.scad): 3 mm CF shaft.
 //     • MR63ZZ bearings (×2): 3 mm ID × 6 mm OD × 2.5 mm; press-fit into housing.
 //   Crown Pinion:
-//     • Nozzle inner ring rack (nacelle_nozzle_iris.scad):
-//         Pitch circle R = 6 mm tangent to rack pitch line at ring inner face.
+//     • Idler-In, compound idler gear (nacelle_nozzle_idler.scad):
+//         Mesh at pitch circles: crown pinion R = 6 mm, Idler-In R = 22 mm.
+//         Centre distance = 28.0 mm nominal; 28.1 mm installed (0.10 mm backlash).
 //     • MR63ZZ bearings (×2): same as Drive Pinion A.
 //     • Longitudinal shaft: 3 mm CF tube.
 //
@@ -69,6 +120,20 @@
 // License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 // Date:    2026-05-24
 // Rev:     R (2026-06-11): Rev R baseline — no geometry changes (carried forward from Rev O initial release).
+// Rev:     R1 (2026-06-22): Corrected Drive Pinion A rotation comment (330 deg
+//          -> 420 deg): the original figure used the naive simple-mesh ratio
+//          (Rs/Rp), omitting the "+1" orbital term required because the
+//          sector gear (sun) is fixed and centred on the tilt pivot while
+//          Pinion A (planet) is carried by the nacelle -- an epicyclic, not
+//          simple, mesh.  No geometry changed, comment-only fix.
+// Rev:     R1.1 (2026-06-22): Resolved the Stage 3 (Crown Pinion -> Nozzle
+//          Ring) open issue: replaced the direct Crown-Pinion-to-rack mesh
+//          with a compound idler gear stage (nacelle_nozzle_idler.scad, new
+//          file), decoupling the Crown Pinion's fixed 28 mm hull-frame
+//          offset from the nozzle ring's required pitch radius.  Rewrote
+//          "Gear ratio context" Stage 3 derivation, Mating Interfaces, and
+//          Fit Confirmation table accordingly.  No geometry change to this
+//          file's own pinions; comment/documentation update only.
 
 // ── Resolution ────────────────────────────────────────────────────────────────
 
@@ -227,9 +292,9 @@ module drive_pinion_a() {
     }
 }
 
-// crown_pinion() — Crown Pinion: meshes with nozzle inner ring rack.
+// crown_pinion() — Crown Pinion: meshes with Idler-In (nacelle_nozzle_idler.scad).
 //   Installation axis: longitudinal (nacelle Z-axis), at nozzle end of shaft.
-//   Rack pitch line at inner face of nozzle ring (R_eff = 28 mm).
+//   Mesh centre distance to Idler-In = 28.1 mm (Idler-In R = 22 mm).
 //   Geometry identical to drive_pinion_a(); orientation is set by assembler.
 //   Origin: same as drive_pinion_a().
 module crown_pinion() {
@@ -243,8 +308,8 @@ module crown_pinion() {
 //   ──────────────────────  ────────────────────────────  ─────────────────────
 //   Tooth pitch R = 6 mm    Sector gear pitch R = 22 mm   0.10 mm backlash
 //   (Drive Pinion A)        nacelle_sector_gear.scad       (Δ centre distance)
-//   Tooth pitch R = 6 mm    Nozzle ring rack R_eff = 28    0.10 mm backlash
-//   (Crown Pinion)          nacelle_nozzle_iris.scad        (rack mesh)
+//   Tooth pitch R = 6 mm    Idler-In pitch R = 22 mm      0.10 mm backlash
+//   (Crown Pinion)          nacelle_nozzle_idler.scad      (Δ centre distance)
 //   SHAFT_BORE 3.2 mm       3 mm CF shaft                  0.2 mm diametral clr
 //   BEARING_SEAT_D 6.05 mm  MR63ZZ OD 6.0 mm              0.05 mm interference
 //                                                           (press fit in PETG)
