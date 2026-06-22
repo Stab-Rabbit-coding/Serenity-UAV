@@ -3081,13 +3081,11 @@ host-PC software all created in Rev R.  See `gcs/malcolm/README.md` for layout.
 
 - [ ] **Build and install Malcolm PB2-I firmware:**
 
-    ```sh
-    cd gcs/malcolm/firmware/pb2i
-    mkdir build && cd build
-    cmake -DCMAKE_TOOLCHAIN_FILE=../toolchain-aarch64.cmake ..
-    make -j$(nproc)
-    sudo make install
-    ```
+        cd gcs/malcolm/firmware/pb2i
+        mkdir build && cd build
+        cmake -DCMAKE_TOOLCHAIN_FILE=../toolchain-aarch64.cmake ..
+        make -j$(nproc)
+        sudo make install
 
     Verify `mal_gimbal` binary installed at `/usr/local/bin/mal_gimbal`.
 
@@ -3112,11 +3110,9 @@ host-PC software all created in Rev R.  See `gcs/malcolm/README.md` for layout.
 
 - [ ] **Run installation scripts in order:**
 
-    ```sh
-    sudo bash gcs/malcolm/software/install/install_deps.sh
-    sudo bash gcs/malcolm/software/install/install_mavlink_router.sh
-    bash gcs/malcolm/software/install/install_qgc.sh
-    ```
+        sudo bash gcs/malcolm/software/install/install_deps.sh
+        sudo bash gcs/malcolm/software/install/install_mavlink_router.sh
+        bash gcs/malcolm/software/install/install_qgc.sh
 
     Verify: `mavlink-routerd --version`; `~/Applications/QGroundControl.AppImage --version` (launches GUI).
 
@@ -3130,11 +3126,9 @@ host-PC software all created in Rev R.  See `gcs/malcolm/README.md` for layout.
 
 - [ ] **Run tracking software tests:**
 
-    ```sh
-    cd gcs/malcolm/software/tracking
-    pip install -r requirements.txt
-    pytest tests/test_tracker.py -v
-    ```
+        cd gcs/malcolm/software/tracking
+        pip install -r requirements.txt
+        pytest tests/test_tracker.py -v
 
     All 9 bearing/elevation tests must pass.
 
