@@ -151,19 +151,19 @@ function arc_pts(r, a1, a2, n) =
 //
 function annular_wedge(r_in, r_out, a1, a2, n) =
     concat(arc_pts(r_in,  a1, a2, n),
-           arc_pts(r_out, a2, a1, n));
+            arc_pts(r_out, a2, a1, n));
 
 // ── Nozzle Bore and Ring Dimensions ───────────────────────────────────────────
 
 BORE_R        = 25.0;   // [mm] 50 mm EDF bore radius (airflow passage centre) —
-                         //   fixed by the 50 mm EDF spec (CLAUDE.md); unchanged.
+                        //   fixed by the 50 mm EDF spec (CLAUDE.md); unchanged.
 RING_INNER_R  = 26.0;   // [mm] inner radius of rotating ring (1 mm clearance
-                         //   over the bore so the ring lip never restricts flow)
+                        //   over the bore so the ring lip never restricts flow)
 RING_GEAR_PITCH_R = 36.0;   // [mm] pitch radius of the full-circle gear cut into
-                         //   the ring's outer rim (meshes Idler-Out, R = 7.5 mm,
-                         //   nacelle_nozzle_idler.scad)
+                        //   the ring's outer rim (meshes Idler-Out, R = 7.5 mm,
+                        //   nacelle_nozzle_idler.scad)
 RING_H        =  8.0;   // [mm] axial height (depth) of rotating ring — matches
-                         //   GEAR_H_OUT in nacelle_nozzle_idler.scad
+                        //   GEAR_H_OUT in nacelle_nozzle_idler.scad
 
 // ── Ring Gear Parameters (M=1.0, full-circle, on outer rim) ───────────────────
 //
@@ -218,19 +218,19 @@ IDLER_SLOT_ANG  =   0.0;   // [deg] angular position of slot (at +Y face, 0°) �
 N_PETALS         =  8;       // [count] number of iris petals
 PETAL_SPAN_DEG   = 50.0;     // [deg] angular span per petal (45° + 5° overlap)
 PETAL_HINGE_R    = 38.75;    // [mm] hinge pin circle radius (on outer housing) —
-                              //   chosen so PETAL_HINGE_R - PETAL_LENGTH =
-                              //   NOZZLE_CLOSED_R exactly at phi = 0 (see header)
+                                //   chosen so PETAL_HINGE_R - PETAL_LENGTH =
+                                //   NOZZLE_CLOSED_R exactly at phi = 0 (see header)
 HINGE_PIN_D      =  3.0;     // [mm] stainless steel hinge pin OD
 HINGE_BORE_D     =  3.2;     // [mm] clearance bore for 3 mm hinge pin (0.2 mm clr)
 PETAL_THICKNESS  =  2.5;     // [mm] petal body thickness
 PETAL_LENGTH     = 20.0;     // [mm] radial length (hinge to tip)
 LINK_HOLE_D      =  1.2;     // [mm] piano-wire link ring slot (0.8 mm wire + clr)
 LINK_HOLE_R      = 16.0;     // [mm] radial position of link hole from petal hinge
-                              //   (Rev R1: corrected from 28 mm, which exceeded
-                              //   PETAL_LENGTH = 18 mm and put the hole off the
-                              //   physical petal — see TODO.md §1.1.3. 16 mm is
-                              //   80 % of the new 20 mm PETAL_LENGTH, leaving a
-                              //   4 mm solid tip past the hole.)
+                                //   (Rev R1: corrected from 28 mm, which exceeded
+                                //   PETAL_LENGTH = 18 mm and put the hole off the
+                                //   physical petal — see TODO.md §1.1.3. 16 mm is
+                                //   80 % of the new 20 mm PETAL_LENGTH, leaving a
+                                //   4 mm solid tip past the hole.)
 
 // Petal curvature: petals are curved to match nacelle exterior hull contour
 // at closed position.  The outer face is convex (radius = HOUSING_OUTER_R)
@@ -247,11 +247,11 @@ NOZZLE_OPEN_R    = 26.25;   // [mm] nozzle exit radius at 90° tilt = 105 % of B
 DRIVE_POST_H   = 3.0;    // [mm] post height above ring face
 DRIVE_POST_D   = 2.0;    // [mm] post diameter (link ring loops over post)
 DRIVE_POST_R   = RING_INNER_R;   // [mm] = 26.0  radial position of drive posts.
-                          //   Rev R1: moved from the ring's mid-annulus
-                          //   ((RING_INNER_R+RING_OUTER_R)/2) to the inner lip
-                          //   so the post/link-hole lever ratio (26/16 = 1.625)
-                          //   matches the ring-rotation figures in the header
-                          //   without exceeding LINK_HOLE_R ≤ PETAL_LENGTH.
+                        //   Rev R1: moved from the ring's mid-annulus
+                        //   ((RING_INNER_R+RING_OUTER_R)/2) to the inner lip
+                        //   so the post/link-hole lever ratio (26/16 = 1.625)
+                        //   matches the ring-rotation figures in the header
+                        //   without exceeding LINK_HOLE_R ≤ PETAL_LENGTH.
 
 // ── Module: nozzle_inner_ring() ───────────────────────────────────────────────
 //
@@ -361,8 +361,8 @@ module nozzle_outer_housing() {
         rotate([0, 0, IDLER_SLOT_ANG]) {
             translate([HOUSING_INNER_R, -IDLER_SLOT_W / 2, HOUSING_H * 0.2])
                 cube([IDLER_SLOT_H + (HOUSING_OUTER_R - HOUSING_INNER_R) + 0.1,
-                      IDLER_SLOT_W,
-                      HOUSING_H * 0.6]);
+                        IDLER_SLOT_W,
+                        HOUSING_H * 0.6]);
         }
     }
 }
@@ -431,8 +431,8 @@ module nozzle_petal() {
         // petal to inner ring drive post.
         // Slot is oriented tangentially (perpendicular to petal radial axis).
         translate([LINK_HOLE_R * cos(PETAL_SPAN_DEG / 2),
-                   LINK_HOLE_R * sin(PETAL_SPAN_DEG / 2),
-                   -0.1]) {
+                    LINK_HOLE_R * sin(PETAL_SPAN_DEG / 2),
+                    -0.1]) {
             // Round slot: hull of two small cylinders for slot length
             hull() {
                 translate([-1.5, 0, 0])

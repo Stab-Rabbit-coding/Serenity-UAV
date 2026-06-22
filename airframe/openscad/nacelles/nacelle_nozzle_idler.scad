@@ -136,14 +136,14 @@ ANGULAR_PITCH_OUT = 360.0 / N_TEETH_OUT;         // [deg] = 24.0°
 // ── Axial Layout ──────────────────────────────────────────────────────────────
 
 GEAR_H_IN    =  8.0;    // [mm] Idler-In tooth face width (matches Crown Pinion
-                         //   PINION_H = 8 mm, nacelle_pinion.scad)
+                        //   PINION_H = 8 mm, nacelle_pinion.scad)
 GEAR_GAP     =  2.0;    // [mm] axial clearance web between the two gear sections
 GEAR_H_OUT   =  8.0;    // [mm] Idler-Out tooth face width (matches Nozzle Ring
-                         //   RING_H = 8 mm, nacelle_nozzle_iris.scad)
+                        //   RING_H = 8 mm, nacelle_nozzle_iris.scad)
 HUB_EXTENSION =  2.0;   // [mm] hub extension beyond each outer gear face,
-                         //   provides the bearing seat shoulder
+                        //   provides the bearing seat shoulder
 TOTAL_H = HUB_EXTENSION + GEAR_H_IN + GEAR_GAP + GEAR_H_OUT + HUB_EXTENSION;
-                         // [mm] = 22.0  total shaft span
+                        // [mm] = 22.0  total shaft span
 
 // ── Shaft and Bearing Parameters ──────────────────────────────────────────────
 
@@ -152,7 +152,7 @@ SHAFT_KEY_W    =  1.0;   // [mm] flat key chord width (D-profile anti-rotation)
 BEARING_OD     =  6.0;   // [mm] MR63ZZ outer diameter
 BEARING_W      =  2.5;   // [mm] MR63ZZ axial width
 BEARING_SEAT_D =  6.05;  // [mm] press-fit bore for MR63ZZ (6 mm OD + 0.05 mm
-                         //   interference — resin/PETG elastic enough to seat)
+                        //   interference — resin/PETG elastic enough to seat)
 
 // ── Idler Bracket Parameters ──────────────────────────────────────────────────
 
@@ -173,7 +173,7 @@ function arc_pts(r, a1, a2, n) =
 
 function annular_wedge(r_in, r_out, a1, a2, n) =
     concat(arc_pts(r_in,  a1, a2, n),
-           arc_pts(r_out, a2, a1, n));
+            arc_pts(r_out, a2, a1, n));
 
 // ── Module Definitions ────────────────────────────────────────────────────────
 

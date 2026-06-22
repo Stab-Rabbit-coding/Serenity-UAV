@@ -876,17 +876,17 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
 - [ ] **nacelle_nozzle_iris.stl** — `openscad -o ... serenity/stl/nacelle_nozzle_iris.scad`
     - Spec (Rev R1, 2026-06-22): 50 mm iris — full-circle M=1.0 ring gear
-      (72T, R=36mm pitch, replaces the old partial rack), outer housing,
-      8-petal geometry sized to hit 75%→105% of the 50 mm bore (18.75→26.25 mm
-      tip radius) across the -5°/140° nacelle tilt range. **Must be
-      regenerated** — geometry changed; not yet rendered (no OpenSCAD binary
-      available in the dev session that made the change — see note below).
+        (72T, R=36mm pitch, replaces the old partial rack), outer housing,
+        8-petal geometry sized to hit 75%→105% of the 50 mm bore (18.75→26.25 mm
+        tip radius) across the -5°/140° nacelle tilt range. **Must be
+        regenerated** — geometry changed; not yet rendered (no OpenSCAD binary
+        available in the dev session that made the change — see note below).
 - [ ] **nacelle_nozzle_idler.stl** *(NEW component, 2026-06-22)* —
     `openscad -o ... serenity/stl/nacelle_nozzle_idler.scad`
     - Spec: compound idler gear (Idler-In 44T/R=22mm meshes Crown Pinion;
-      Idler-Out 15T/R=7.5mm meshes the nozzle ring gear) plus a two-boss
-      mounting bracket. Resolves the Crown-Pinion-to-ring radius mismatch
-      (see §1.1.3.3 below). Never yet rendered — new file.
+        Idler-Out 15T/R=7.5mm meshes the nozzle ring gear) plus a two-boss
+        mounting bracket. Resolves the Crown-Pinion-to-ring radius mismatch
+        (see §1.1.3.3 below). Never yet rendered — new file.
 
 ##### 1.1.3.2 *Tilt Gear Train*
 
@@ -894,12 +894,12 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
 - [ ] **nacelle_sector_gear.stl** — `openscad -o ... serenity/stl/nacelle_sector_gear.scad`
     - Spec (Rev R1.1, 2026-06-22): R=22mm, **58T, ≈151.3° arc** (was 38T/≈99.1°,
-      grown to cover the widened -5°/140° mechanical tilt range); fixed to
-      tilt bracket. **Must be regenerated** — geometry changed.
+        grown to cover the widened -5°/140° mechanical tilt range); fixed to
+        tilt bracket. **Must be regenerated** — geometry changed.
 - [ ] **nacelle_pinion.stl** — `openscad -o ... serenity/stl/nacelle_pinion.scad`
     - Spec: N=12T, D-bore shaft (×4 total: drive pinion + crown pinion per nacelle).
-      Comment-only update 2026-06-22 (Stage 3 ratio/mating-interface text);
-      no geometry change — re-render not required for this file alone.
+        Comment-only update 2026-06-22 (Stage 3 ratio/mating-interface text);
+        no geometry change — re-render not required for this file alone.
 - [ ] **nacelle_bevel_pair.stl** — `openscad -o ... serenity/stl/nacelle_bevel_pair.scad`
     - Spec: N=14T, 45° pitch cone, 1:1, 90° axis redirect
 - [ ] **nacelle_bevel_housing.stl** — `openscad -o ... serenity/stl/nacelle_bevel_housing.scad`

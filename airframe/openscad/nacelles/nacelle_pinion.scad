@@ -144,7 +144,7 @@ $fn = 72;   // standard circle resolution
 MODULE          =  1.0;   // [mm] AGMA Module
 PRESSURE_ANGLE  = 20.0;   // [deg] standard involute pressure angle
 N_TEETH         = 12;     // [count] 12-tooth pinion (minimum practical for M=1
-                          //   PETG/resin without undercut at 20° PA)
+                        //   PETG/resin without undercut at 20° PA)
 
 // ── Derived Gear Geometry ─────────────────────────────────────────────────────
 
@@ -162,19 +162,19 @@ SPACE_HALF_ANG = ANGULAR_PITCH / 4;  // [deg] = 7.5° (quarter of angular pitch)
 // ── Shaft and Bearing Parameters ──────────────────────────────────────────────
 
 PINION_H        =  8.0;   // [mm] tooth face width
-                          //   = 2 × MR63ZZ axial width (2.5 mm each) + 3 mm gap
+                        //   = 2 × MR63ZZ axial width (2.5 mm each) + 3 mm gap
 SHAFT_BORE      =  3.2;   // [mm] MR63ZZ inner bore ID 3 mm + 0.2 mm clearance
 SHAFT_KEY_W     =  1.0;   // [mm] flat key chord width (D-profile anti-rotation)
 HUB_OD          =  5.5;   // [mm] hub outer diameter (seats between bearings)
 HUB_EXTENSION   =  2.0;   // [mm] hub extension beyond tooth face each side
-                          //   provides bearing seat shoulder; total shaft span
-                          //   = PINION_H + 2 × HUB_EXTENSION = 12.0 mm
+                        //   provides bearing seat shoulder; total shaft span
+                        //   = PINION_H + 2 × HUB_EXTENSION = 12.0 mm
 
 // Bearing seat dimensions (MR63ZZ: 3 mm ID, 6 mm OD, 2.5 mm wide):
 BEARING_OD      =  6.0;   // [mm] MR63ZZ outer diameter
 BEARING_W       =  2.5;   // [mm] MR63ZZ axial width
 BEARING_SEAT_D  =  6.05;  // [mm] press-fit bore for MR63ZZ (6 mm OD + 0.05 mm
-                          //   interference — resin/PETG elastic enough to seat)
+                        //   interference — resin/PETG elastic enough to seat)
 
 // ── Module Definitions ────────────────────────────────────────────────────────
 
@@ -220,8 +220,8 @@ module shaft_bore_with_key() {
     union() {
         // Circular bore — 3.2 mm clearance
         cylinder(h = PINION_H + 2 * HUB_EXTENSION + 0.2,
-                 d = SHAFT_BORE,
-                 center = true);
+                d = SHAFT_BORE,
+                center = true);
 
         // Key flat: subtract by intersecting with a box that cuts the flat side.
         // The flat is at Y = -(SHAFT_BORE/2 - SHAFT_KEY_W) from bore centre.
@@ -230,9 +230,9 @@ module shaft_bore_with_key() {
         // The flat chord: X spans full bore width, Y is a thin slab.
         translate([0, SHAFT_BORE / 2 - SHAFT_KEY_W / 2, 0])
             cube([SHAFT_BORE + 0.2,
-                  SHAFT_KEY_W,
-                  PINION_H + 2 * HUB_EXTENSION + 0.2],
-                 center = true);
+                SHAFT_KEY_W,
+                PINION_H + 2 * HUB_EXTENSION + 0.2],
+                center = true);
     }
 }
 
