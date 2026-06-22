@@ -214,6 +214,9 @@ Superseded Citations" table.
     the Rev R1 baseline (all 8 nodes now carry Wash/Cape-A-2 + Zoë/Cape-B-2 per CLAUDE.md).
     This is a content-currency problem independent of citations — needs a dedicated pass
     (likely a content rewrite, not a text-substitution fix) with visual verification.
+    **Superseded by, and folded into, the "Rebuild `graphical-build-guide/`..." item in
+    §1.5 Documentation** — that item replaces these cards' art wholesale rather than
+    patching the hardware depiction in place.
   - [ ] The remaining ~30 non-priority SVGs were not individually swept for citations in
     this pass (only spot-checked); a full sweep with rendering verification is still open.
 - [x] **Audit remaining firmware source files for standards citations — done 2026-06-22.**
@@ -667,9 +670,12 @@ Joint faces in hull-frame Y (confirmed from baked extents):
         BOM item WIRE-COUNTERPOISE-49MHZ added.
     - Keel locating channels cut into cargo and rear shells by `add_structural_features.py`.
     **SUB-TASKS OPEN:**
-    - [ ] Add WIRE-COUNTERPOISE-49MHZ to BOM: AWG 22 stranded tinned copper, 460 mm,
-        < 2 g, routed alongside keel inside foam from cargo to rear, terminated at Emma
-        antenna feed on River's Room stack. *(BLOCKS Emma antenna installation)*
+    - [x] Add WIRE-COUNTERPOISE-49MHZ to BOM: AWG 22 stranded tinned copper, 460 mm,
+        2 g, routed alongside keel inside foam from cargo to rear, terminated at Emma
+        antenna feed on River's Room stack. *(done 2026-06-22 — was referenced here since
+        Rev R1 but never actually added; backfilled as part of §1.4.2 antenna work, which
+        also added a second counterpoise wire, WIRE-COUNTERPOISE-49MHZ-2, for Simon's
+        independent 49 MHz antenna.)*
     - [ ] Update `battery_tray.scad` keel-rail slot to Z ≈ +1..+2 mm (cargo belly);
         re-export STL to `airframe/stls/fuselage/battery_tray.stl`. *(BLOCKS foam pour)*
     - [ ] Update `REVN_BUILD_GUIDE_24IN.md` keel installation section: span Y −71..+384 mm
@@ -765,7 +771,7 @@ Joint faces in hull-frame Y (confirmed from baked extents):
 
 - [x] **49 MHz (Part 15 §15.235) wire posts** — `airframe/openscad/fuselage/rcrs49_wire_post.scad` created 2026-06-11. Single `wire_post()` module: 12×12×2 mm PETG base, 8×8×7 mm mast, Ø1.5 mm athwartships wire-retention bore at 2 mm from top. Print two: forward (sta ≈ 120 mm, dorsal) + temporary aft (sta ≈ 580 mm, dorsal).
 
-- [ ] **Add second 49 MHz antenna or create mux for sharing the antenna between the two Emma Transceivers.**
+
     - **BLOCKS Phase 1 (antenna installation)**
     - **SUB-TASKS:**
         - [ ] Export STL → `airframe/stls/fuselage/rcrs49_wire_post.stl`
@@ -1746,6 +1752,16 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 - [x] **Re-evaluate space / restore Ethernet to Zoë** — One DP83825I EMI-hardened PHY
     added to Zoë at Rev R (introduced Rev Q); J_ETH_B connector populated. Board has adequate
     space; RF SMA connectors remain. *(done 2026-06-07)*
+- [ ] **Zigbee RF chain was never actually added to Zoë — PCB scope gap (flagged 2026-06-22,
+    cross-ref §1.4.2).** The "remove Wi-Fi, sik, and loRa antennas" item above (2026-06-05)
+    names Zigbee as a target XCVR circuit, but only LoRa/SiK/Wi-Fi filter chains were built;
+    `Zoë.kicad_sch` has no CC2652R7 (or equivalent Zigbee SoC), no Zigbee antenna filter, and
+    no SMA/diplexer pad. `CLAUDE.md` lists Zigbee 2.4 GHz as one of the 4 required external
+    C2 links — this is a real hardware gap, not yet scheduled to a revision. **Antenna
+    strategy already decided (§1.4.2, 2026-06-22):** restrict WL1837MOD Wi-Fi to 5 GHz only
+    and feed CC2652R7's 2.4 GHz path through a passive 2.4/5 GHz diplexer onto the existing
+    shared Wi-Fi antenna (no separate Zigbee antenna/SMA pad needed). Still open: add
+    CC2652R7 + diplexer to a Cape-B-2 schematic revision; decide which bay(s) carry it.
 
 - [ ] **Generate Emma gerbers** — `XCVR-49MHZ-2.kicad_pcb` complete; export to
     `avionics/kicad/gerbers/XCVR-49MHZ-2/`.
@@ -1879,36 +1895,153 @@ work that was actually completed against this stub before it was retired:
 
 #### 1.4.2. Antenna Placement and feedlines
 
-**Count basis:** 2 antennas for each of the 4 external comm links (Wi-Fi 5 GHz, Zigbee 2.4 GHz,
-MAVLink/SiK 915 MHz, AX.25 49 MHz), plus 2 GPS/GNSS antennas. Only 2 stacks (River, Simon) carry
-49 MHz + LoRa 915 MHz Emma boards; no stack carries both LoRa and SiK on the same 915 MHz ISM
-band at once. Per-stack radio assignment is fixed by the PACE table in `CLAUDE.md` (Shepherd:
-SiK primary / Wi-Fi secondary; Inara: Wi-Fi primary / SiK secondary; River: 49 MHz primary /
-LoRa secondary; Simon: 49 MHz primary / SiK secondary).
+- [x] **Resolve total antenna count per stack against the PACE radio table** *(done
+    2026-06-22)* — the prior "2 antennas per comm link × 4 links + 2 GPS = 10" count basis
+    was wrong on two counts: (a) no stack actually mounts an antenna for all 4 external
+    links — each of the 4 bays carries exactly 2 external-link antennas (its PACE
+    primary + secondary, per `CLAUDE.md`), not one-per-link-globally; (b) GPS/GNSS is
+    one patch **per FC node (Wash, Cape-A-2)**, and there are 4 FC nodes (one per bay),
+    not 2. Resolved count, reconciled against current (pre-Rev-R1) hardware fit:
 
-- [ ] **Resolve total antenna count per stack against the PACE radio table** — reconcile the
-    "2 per comm link" basis above with the actual per-stack radio fit (Shepherd/Inara: Wi-Fi +
-    SiK, no Emma; River/Simon: 49 MHz + LoRa + SiK via Emma) before fixing mount positions.
-    **BLOCKS antenna mounts below.**
-- [ ] **Antenna mounts:**
-    - [ ] Shepherd's Room — Wi-Fi 5 GHz panel/patch mount + SiK 915 MHz whip mount.
-    - [ ] Inara's Shuttle — Wi-Fi 5 GHz panel/patch mount + SiK 915 MHz whip mount.
-    - [ ] River's Room — 49 MHz 1/4-wave whip mount (per XCVR-49MHZ-2 antenna spec, §1.3) +
-        LoRa 915 MHz whip mount (shares Emma's RFM95W feed).
-    - [ ] Simon's Medbay — 49 MHz 1/4-wave whip mount + SiK 915 MHz whip mount.
-    - [ ] 4× GPS/GNSS patch antenna mounts (one per FC node, per §4.4 "GPS cross-check").
-    - [ ] Zigbee 2.4 GHz antenna mount — confirm which stack(s) carry the Zigbee radio; not
-        currently listed in any Cape-B-2 antenna filter chain (§1.2, "remove Wi-Fi, sik, and
-        loRa antennas from Zoë"). **Flag for clarification if Zigbee hardware is not yet on
-        the BOM.**
-- [ ] **Feedlines** — coax run from each antenna mount to its SMA bulkhead connector
-    (J_SMA_LORA/J_SMA_WIFI/J_SMA_SIK already defined on Cape-B-2, §1.2): specify cable type
-    (e.g. RG-316 or equiv. low-loss for the run lengths involved), max run length per link
-    budget, and routing path through the Faraday enclosure feedthrough panel (FAR-FT-PANEL,
-    §1.1.5) without crossing digital-section keep-out zones.
-- [ ] **Chokes** — ferrite choke placement on each feedline at the Faraday enclosure
-    boundary crossing, matching the filtered-choke treatment already implemented on Zoë's
-    antenna filter chain (§1.2, Johanson BPF + RCLAMP0502B per radio).
+    | Bay | Radios fitted | External antennas | GPS |
+    | --- | --- | --- | --- |
+    | Shepherd's Room (Bay A) | Zoë: Wi-Fi, SiK, LoRa chain present on PCB | SiK whip (primary) + Wi-Fi patch (secondary) = 2 | 1 |
+    | Inara's Shuttle (Bay B) | Zoë: Wi-Fi, SiK, LoRa chain present on PCB | Wi-Fi patch (primary) + SiK whip (secondary) = 2 | 1 |
+    | River's Room (Bay D) | Zoë + Emma (49 MHz) | 49 MHz whip (primary) + LoRa whip (secondary, fed from Zoë's `J_SMA_LORA`) = 2 | 1 |
+    | Simon's Medbay (Bay E) | Zoë + Emma (49 MHz) | 49 MHz whip (primary, **independent antenna — see new sub-task below**) + SiK whip (secondary) = 2 | 1 |
+
+    **Total: 8 external C2/payload-link antennas + 4 GPS patches = 12 physical antennas.**
+    Every Zoë (Cape-B-2) carries identical Wi-Fi/SiK/LoRa RF front ends per board (all
+    4 Zoë boards are the same PCB), but only the antenna feeding that bay's PACE-assigned
+    primary/secondary link is populated — the unused chain's SMA pad is left unpopulated
+    (no antenna, no feedline) rather than wasting mass/hull penetrations on a link that
+    bay never uses. **Zigbee 2.4 GHz has no antenna mount** — see flagged gap below; it is
+    excluded from the 12-antenna count until the hardware gap is resolved.
+
+- [x] **Antenna mounts** *(types and stations resolved 2026-06-22; physical hull
+    placement still needs FreeCAD/slicer verification — see sub-tasks)*:
+    - [x] **Shepherd's Room** (Bay A, nose, sta ≈ 59 mm) — SiK 915 MHz ¼-wave RP-SMA whip
+        (primary) + Wi-Fi 5 GHz RP-SMA whip (secondary). Mount both on the dorsal hull
+        skin near the bay, ≥ 30 mm apart (reduce 915/5800 MHz front-end desense).
+    - [x] **Inara's Shuttle** (Bay B, dorsal fwd, sta ≈ 130 mm) — Wi-Fi 5 GHz RP-SMA whip
+        (primary) + SiK 915 MHz RP-SMA whip (secondary). Same dorsal mount style and
+        spacing as Shepherd's.
+    - [x] **River's Room** (Bay D, dorsal aft, sta ≈ 275 mm) — 49 MHz top-wire antenna
+        (existing `WIRE-49MHZ`/`POST-FWD-49`/`POST-AFT-49`, §1.1.1.0b; primary) + LoRa
+        915 MHz RP-SMA whip (secondary, fed from Zoë `J_SMA_LORA`).
+    - [x] **Simon's Medbay** (Bay E, aft service, sta ≈ 350 mm) — **independent** 49 MHz
+        top-wire antenna, new (primary; see dedicated sub-task below — do not share
+        River's antenna) + SiK 915 MHz RP-SMA whip (secondary).
+    - [x] **4× GPS/GNSS patch antenna mounts** — one per FC node (Wash, Cape-A-2), all
+        dorsal hull, face up, per existing routing tasks (Phase 5/6 install steps,
+        TODO.md lines ~2645/2666/2773/2794): FC1 sta ≈ 59 mm, FC2 sta ≈ 130 mm,
+        FC3 sta ≈ 275 mm, FC4 sta ≈ 350 mm. ≥ 3 mm clearance from the 49 MHz wire posts
+        (already a documented constraint on `POST-FWD-49`).
+    - [ ] **Zigbee 2.4 GHz antenna mount — BLOCKED, hardware gap confirmed; antenna
+        strategy decided 2026-06-22 (with user).** Zoë (Cape-B-2) Rev R has no Zigbee
+        transceiver, antenna filter chain, or SMA pad (the CC2652R7 Zigbee radio exists
+        only in the archived COMMS-HAT-1 design, not in the current Rev R Cape-B-2
+        schematic) — **no antenna can be mounted for hardware that does not exist on
+        the board**, so this remains a genuine PCB scope gap, not just a placement
+        question. **Decision:** rather than a time-shared coexistence switch, split
+        the existing dual-band Wi-Fi antenna by frequency instead of by time —
+        **restrict WL1837MOD Wi-Fi to 5 GHz only** (already the spec for the Wi-Fi
+        whip mounts above) and feed the freed 2.4 GHz path to the future CC2652R7
+        Zigbee module through a passive **2.4/5 GHz diplexer** ahead of one shared
+        broadband antenna. Because Wi-Fi and Zigbee no longer overlap in frequency,
+        this needs no `RF_NCOEX` coexistence arbitration and no switching — both
+        radios can transmit/receive simultaneously through the diplexer, unlike a
+        switched-antenna approach. The diplexer (and the antenna it feeds) remains a
+        single passive point of failure shared between the two radios, but a passive
+        component is materially more reliable than an active coexistence switch, and
+        Wi-Fi/Zigbee are not PACE failover partners of each other (unlike River/Simon's
+        49 MHz link, sharing here doesn't undermine the redundancy mandate).
+        Still open: which bay carries the Zigbee module once added, diplexer part
+        selection, and Cape-B-2 schematic work to add the CC2652R7 RF chain.
+        **Cross-reference added to §1.2a as a tracked PCB scope gap.**
+    - [ ] **Verify all 8 dorsal mount stations (Shepherd/Inara/River/Simon ×2 each) in
+        FreeCAD against the baked hull** — confirm ≥ 30 mm antenna-to-antenna spacing is
+        actually achievable on the as-built dorsal skin at each bay's station, and that
+        no mount collides with an access-panel cover (§1.1.1.0a), the bow sensor pod
+        (§1.1.1.1a), or the dorsal antenna fin (`dorsal_antenna_fin.stl`).
+        **BLOCKS antenna mount printing.**
+
+- [x] **Feedlines** *(cable spec and run-length budget resolved 2026-06-22)*:
+    - Cable: **RG-316** (50 Ω, PTFE dielectric, silver-plated copper braid) for every
+        aircraft-side antenna-to-SMA-bulkhead run. RG-316 is already the spec used for
+        Emma's own 49 MHz feed (`Emma.md` lines 553–554); standardizing on one cable type
+        for all 8 runs simplifies stock and crimping tooling.
+    - Run-length budget: **≤ 300 mm per run** for Wi-Fi/SiK/LoRa whip-to-bulkhead runs
+        (antenna is mounted directly over its bay); **≤ 500 mm** for the 49 MHz runs
+        (River's existing run and Simon's new run both route from the bay's Emma J2 to
+        the forward wire-post loading coil, matching the existing 500 mm ceiling already
+        set in `Emma.md`). RG-316 loss at 915 MHz/2.4 GHz over these lengths is
+        ≈ 0.3–0.5 dB — negligible against the link budgets in `malcolm_antenna_spec.md`.
+    - Routing: each run exits its bay's Faraday enclosure through an SMA bulkhead
+        feedthrough in the FAR-FT-PANEL (§1.1.5, still in design) and is dressed along
+        the hull skin to its mount, kept ≥ 5 mm clear of the digital-section keep-out
+        zones (CAN FD/RS-485/Ethernet/1553 trunk, per §1.4.4 wiring keep-outs).
+        **BLOCKS final feedline length confirmation until FAR-FT-PANEL mechanical
+        design (§1.1.5) is complete.**
+
+- [x] **Chokes** *(part and placement resolved 2026-06-22)* — one **Würth 74271222**
+    snap-on ferrite clamp per antenna feedline, placed within 25 mm of the Faraday
+    enclosure boundary crossing on the *inside* (cage) end of the run. This mirrors the
+    treatment Emma already applies to its own 49 MHz feedline (`Emma.md` lines 553–557)
+    and is consistent with the 500 W/m² EMI design objective (`CLAUDE.md`). 8 feedlines
+    (Shepherd ×2, Inara ×2, River's LoRa run, Simon's SiK run, plus River's and Simon's
+    49 MHz runs) → **8× Würth 74271222 required**, added to BOM.
+
+- [x] **Second 49 MHz antenna for Simon's Medbay** *(decision made 2026-06-22, with
+    user)* — Simon's Emma board currently has no antenna feed at all; only River's J2 is
+    wired to the single existing `WIRE-49MHZ` top-wire antenna. **Decision: build a
+    second, fully independent 49 MHz antenna for Simon rather than sharing River's
+    antenna through a mux/switch or passive splitter.** A shared antenna (switched or
+    split) makes the antenna/switch a single point of failure for *both* stacks' 49 MHz
+    link, which directly contradicts the first-class redundancy requirement in
+    `CLAUDE.md` — and the mass cost of a second antenna is trivial (≈ 9–11 g, see BOM)
+    against that benefit. *(Moved here from former §1.1.1.0.1, 2026-06-22.)*
+    - [x] **Design mirrors the existing River system**: PETG forward wire post + 38 µH
+        base-loading coil, stainless-steel top wire, aft wire post with ceramic
+        insulator, AWG 22 stranded copper counterpoise alongside the keel, RG-316 feed
+        to Simon's Emma J2 (≤ 500 mm), Würth 74271222 choke at the Faraday crossing —
+        same component set as `POST-FWD-49`/`WIRE-49MHZ`/`POST-AFT-49`/
+        `WIRE-COUNTERPOISE-49MHZ`, new reference IDs (see BOM).
+    - [ ] **Route on the ventral (keel) line, not parallel to the existing dorsal wire**
+        — the existing wire already uses nearly the full usable dorsal ridge length
+        (sta ≈ 120–580 mm on a ≈ 690 mm hull); a second full-length wire run on the same
+        ridge would sit well under one wavelength (λ = 6.12 m at 49 MHz) from the first,
+        risking mutual coupling/detuning of both antennas. Routing ventral, alongside the
+        existing keel (which already carries the first antenna's copper counterpoise,
+        §1.1.1.0b), gives the only meaningfully different routing available on this
+        airframe. **This conflicts with existing ventral hardware (battery hatch,
+        Kaylee hatch, cargo belly opening, landing-gear posts, skid rods) and MUST be
+        checked in FreeCAD before any post is bonded or printed** — proposed working
+        stations are fwd post ≈ sta 250 mm, aft post ≈ sta 450 mm (shortened ≈ 200 mm
+        span vs. River's 470 mm; loading coil must be retuned for the shorter element).
+        **BLOCKS Simon's 49 MHz antenna fabrication.**
+    - [ ] **Bench-verify isolation between the two 49 MHz antennas** (River's dorsal,
+        Simon's ventral) before first flight — confirm neither antenna's feedpoint
+        impedance shifts unacceptably with the other antenna present, and that
+        simultaneous Emma TX on one does not desense the other's receiver beyond an
+        acceptable margin. Use the same HDOP-with-TX-active bench test already specified
+        for `POST-FWD-49` as a model.
+
+- [x] **Ensure all transceivers have antenna placement and wiring from Zoë and/or Emma
+    boards to mounted antennas** *(moved here from former §1.1.1.0.1, 2026-06-22)* —
+    satisfied by the mount/feedline/choke specs above for all populated radio chains;
+    remaining open items are the Zigbee hardware gap (flagged above) and the FreeCAD/
+    bench verification sub-tasks, which are tracked individually rather than left as one
+    generic catch-all.
+
+**Mass/cost added to `docs/bom_revR.json` `avionics.antenna_system` (2026-06-22):** 11 new
+line items — ANT-WIFI-5G ×2, ANT-SIK-915 ×3, ANT-LORA-915 ×1, ANT-GPS-PATCH ×4,
+WIRE-COUNTERPOISE-49MHZ ×1 (backfilled, was referenced but never added),
+WIRE-49MHZ-2/POST-FWD-49-2/POST-AFT-49-2/WIRE-COUNTERPOISE-49MHZ-2 (Simon's independent
+49 MHz antenna), COAX-RG316-AIRFRAME ×1, CHOKE-FERRITE-ANT ×8 — **+93 g / +$90** beyond
+the pre-existing 3-item 49 MHz antenna entry (9 g / $16). New `antenna_system` total:
+**102 g / $106.** This is a small fraction of the ~3,590 g AUW noted in `totals.note`;
+no AUW/T-W recheck needed at this magnitude.
 
 #### 1.4.3 internode communication wiring
 
@@ -2045,6 +2178,34 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
 
 - [ ] **Update PHASED_BUILD_GUIDE.md** from Rev M 18-inch to Rev R 24-inch specifications
     (hull 609.6 mm, 50mm EDFs, v2·v2·v2·v2 node placement, Rev R power system, cargo system).
+
+- [ ] **Rebuild `graphical-build-guide/` (38 SVGs) from Blender/FreeCAD-derived platform
+    graphics, replacing the pre-Rev-N hand-drawn line art.** Two stale-geometry problems,
+    not one:
+  - The 26 numbered `build_guide_XX_*.svg` step cards (antenna placement, node install,
+    inter-board wiring, first flight, etc.) are hand-drawn schematic line art — the
+    airframe silhouettes in them were never derived from actual model geometry at all,
+    and (per the §0.5 audit above) several depict the **archived** Cape-A-1/Cape-B-1
+    hardware instead of the Rev R1 Wash/Zoë baseline
+    (`build_guide_09_avionics.svg`, `build_guide_11_inter_board.svg`,
+    `build_guide_12_security_hw.svg`, `build_guide_20_node_placement.svg`,
+    `build_guide_21_node_install.svg`, `build_plan.svg`, `components_overview.svg`) —
+    this item supersedes that follow-up.
+  - The existing partial outline-derivation pipeline
+    (`graphical-build-guide/gen_hull_outlines.py`, `update_overview_paths.py`) only
+    covers the 4 `overview_*.svg` files, and sources from
+    `thingverse-serenity/files-hollowed-18in/` — pre-Rev-N 18-inch geometry, not the
+    current Rev R1 24-inch baked hull-frame STLs in `airframe/stls/`.
+  - **Approach:** render the current canonical geometry (baked `airframe/stls/` per
+    CLAUDE.md's Hull-Frame Coordinate Standard, or directly from
+    `airframe/freecad/assembly/SerenityAssembly.FCStd` / `serenity_assembly.py`) using
+    Blender (`airframe/blender-scripts/serenity_render_views.py` already does isometric/
+    cardinal renders and is the natural starting point) or FreeCAD TechDraw, and use
+    those renders/silhouettes as the new base art for every card, in place of hand-drawn
+    shapes. Re-verify all standards citations and hardware depictions added in §0.5
+    survive the rebuild (don't lose the `[REF-ID]` work doing this).
+  - Large, multi-file effort — scope into phases (e.g. overview cards first, then
+    per-system build-guide cards) before starting; do not attempt as one pass.
 
 - [ ] **Sync `bom_revO.json` ↔ `bom_revO.csv`** — verify all XCVR-49MHZ-1 BOM items (Phase 5
     above) are reflected in both files once XCVR-49MHZ-1 Phase 5 is complete.
