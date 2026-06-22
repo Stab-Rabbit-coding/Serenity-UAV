@@ -144,8 +144,6 @@ These rules eliminate costly structural rework. Read before you start Phase 1.
 | `engine_bell.stl`               | PETG     | 0.20mm | 20% gyroid | 1     | 3 walls                                                                                     |
 | **`nacelle_pod_80mm.stl`**      | CF-PETG  | 0.15mm | 25%        | 2     | **Phase 2 fit** — budget single-EDF housing (short, ~144mm)                                 |
 | **`nacelle_pod_dual_80mm.stl`** | CF-PETG  | 0.15mm | 25%        | 2     | **Phase 7 fit** — 230mm tandem dual-EDF pod, 83mm ID, 6-vane flow-straightener rib at 110mm |
-| `nacelle_tip_cap_port.stl`      | PETG     | 0.20mm | 20%        | 1     | RED nav light recess                                                                        |
-| `nacelle_tip_cap_stbd.stl`      | PETG     | 0.20mm | 20%        | 1     | GREEN nav light recess                                                                      |
 | `tilt_bracket_140deg.stl`       | CF-PETG  | 0.15mm | 40%        | 2     | 4 walls — hard stop at 140°                                                                 |
 | `spar_bracket.stl`              | CF-PETG  | 0.15mm | 40%        | 1     | 4 walls                                                                                     |
 | `nozzle_outer_housing.stl`      | PETG     | 0.20mm | 20% gyroid | 3     | 2 nacelle + 1 fuselage                                                                      |

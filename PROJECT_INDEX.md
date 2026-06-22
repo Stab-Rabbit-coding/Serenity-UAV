@@ -260,8 +260,6 @@ nacelle_sector_gear.stl           — M=1.0 58T sector gear, -5°/140° range; r
                                     2026-06-22, see §1.1.3.2
 nacelle_stbd_revq.stl             — Stbd nacelle pod shell, Rev Q baseline; same active-pipeline
                                     dependency as nacelle_port_revq.stl (do not archive)
-nacelle_tip_cap_port.stl          — Port nacelle intake tip cap
-nacelle_tip_cap_stbd.stl          — Stbd nacelle intake tip cap
 nozzles/
 nacelle_bevel_housing.stl       — Bevel gear housing
 nacelle_bevel_pair.stl          — 14T 45° bevel pair

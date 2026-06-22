@@ -1050,6 +1050,7 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     selector changed from comment-toggle to a `RENDER_PART` `-D` string
     param ("gear" | "bracket"), matching the wings' `RENDER_SIDE` convention,
     and wired into the Makefile.
+- [ ] rebuild petals using the bamj variable nozzle [REF xxx] as a guide, using the gear train already developed.  **The nozzle shall provide a smooth conical exit for the thrust tube, no matter its final diameter** exit diameter will be 75% of bore at 0 deg (forward) and 105% of bore at or above 90 deg (virtical or backing)
 
 ##### 1.1.3.2 *Tilt Gear Train*
 
@@ -1157,41 +1158,64 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     **Follow-up (new, not done here):** reconcile the pylon file's 30.25 mm
     ellipse approximation to the nacelle's measured 34.0 mm in a future
     pylon-model pass — out of scope for this nozzle/gear-train fix.
-- [ ] **Model or source `nacelle_tip_cap_port/stbd.stl`** — investigated
-    2026-06-22: the existing placeholder STL (both port and stbd, identical)
-    is a simple stepped/annular disk, OD 80 mm, ID 70 mm, 8 mm tall, with no
-    asymmetric features — geometrically trivial to parametrize as an
-    OpenSCAD source. **Not authored — blocked on a functional definition**:
-    nothing in the repo documents what this cap actually needs to do (cap
-    the outboard pivot-bearing boss? aerodynamic tip fairing? field-access
-    hatch?), and the answer changes the required geometry (a bearing cap
-    needs a bore/seal interface; a fairing doesn't). **Ask the user** before
-    authoring a parametric replacement.
-- [ ] **NEW — `cargo_sect_shell24.scad`'s port/stbd mirroring uses the wrong
-    axis, and the problem is broader than `nacelle_servo_mount_block()`
-    alone (found 2026-06-22)** — the file's own header documents its local
-    axes identically to hull frame (`CZ` comment: "vertical axis (positive
-    = dorsal/up)"; bake transform: `hull_Z = local_Z`, no remap). But
-    `nacelle_servo_mount_block(z_sign)`, `wing_root_mortise(z_sign)`, AND
-    `spar_bearing_block(z_sign)` all label their `z_sign=+1`/`-1` cases
-    "port wall (Z=DZ=163mm)" / "stbd wall (Z=0)" — i.e. they mirror across
-    the **vertical** axis (top vs. bottom of the cargo bay interior) while
-    calling it port/stbd, which is inherently a **lateral** (X-axis)
-    distinction. Concretely: both `nacelle_servo_mount_block(+1)` and `(-1)`
-    use the *identical* `NSVMT_X_CEN`/`NSVMT_Y_CEN` and differ only in Z —
-    i.e. both pads currently land at the same lateral (X) position, one
-    near the bay's dorsal interior face and one near its ventral interior
-    face, neither of which is "toward the port nacelle" or "toward the stbd
-    nacelle" in any meaningful sense. **This same `z_sign` pattern is reused
-    for `wing_root_mortise()` and `spar_bearing_block()` — the wing-root
-    attachment and spar bearing, both load-bearing — so this may not be a
-    cosmetic mislabel.** Given the structural stakes and the size of the
-    fix (re-deriving X-mirrored positions for three features, one of which
-    carries flight loads), this needs the user's review/manual placement
-    per CLAUDE.md before any of the three call sites are changed — **not
-    attempted here.** `nacelle_servo_bracket.stl` also still does not exist
-    in `airframe/stls/` (only the SCAD source has been authored); render it
-    once the placement question above is resolved.
+- [x] **`nacelle_tip_cap_port/stbd.stl` — ARCHIVED 2026-06-22**, per user
+    instruction ("legacy part, no longer needed"). STLs moved to
+    `airframe/archive/stls/nacelles/` (see `ARCHIVE_INDEX.md`); placement
+    code and the now-unused `NACELLE_FACE_X_FAR` constant removed from
+    `serenity_assembly.py`; references removed from
+    `airframe/blender-scripts/serenity_render_views.py`,
+    `docs/PHASED_BUILD_GUIDE.md`, and `PROJECT_INDEX.md`. Note for the
+    record: `PHASED_BUILD_GUIDE.md`'s now-removed rows described this part
+    as housing the RED/GREEN nav-light recess (port/stbd) — if nav-light
+    mounting is still needed, it isn't currently assigned to any other
+    component; flagging in case that function still needs a home.
+    `current-specification/LICENSE_AND_ATTRIBUTION.md` also references this
+    part in an already-stale (pre-Rev-R1 naming) file-tree snapshot — not
+    touched here, pre-existing staleness unrelated to this archival.
+- [x] **`cargo_sect_shell24.scad`'s port/stbd mirroring used the wrong axis
+    — FIXED 2026-06-22** (adjudicated against CLAUDE.md's hull-frame
+    standard, per explicit user direction). Root cause confirmed: the wing
+    subsystem (`wing_root_mortise()`, `wing_spar_bore()`,
+    `spar_bearing_block()`, `nacelle_servo_mount_block()`) had been modelled
+    using the WING's own internal pre-permutation convention
+    (`wings_s1223_revo.scad`: "X: chordwise, Y: thickness, Z: spanwise")
+    without ever applying that file's own `X<-Z, Y<-X, Z<-Y` permutation to
+    hull-aligned axes before use here — i.e. an un-translated foreign
+    coordinate system, exactly what CLAUDE.md's hull-frame standard exists
+    to prevent. Added `CARGO_X_WALL_PORT`/`CARGO_X_WALL_STBD` (measured
+    lateral wall positions, mapped through this file's own validated bake
+    transform: `local_X=-201.5 -> hull_X=-72.9` PORT, `local_X=-7.4 ->
+    hull_X=-267.0` STBD) and `WING_ROOT_Z_CEN=62.5` (fixed root height for
+    both sides, from CLAUDE.md's validated baked Wing_Port/Wing_Stbd Z
+    extent +48..+77 mm); re-derived all four modules to mirror across X
+    with this fixed Z. Bonus fix: `wing_spar_bore()` now runs the full
+    lateral span through BOTH walls (a real continuous tip-to-tip spar
+    passage) — previously it was a short Z-axis bore that never reached the
+    far wall at all, so the two wings were never actually structurally
+    connected by a shared spar.
+    **Two items deliberately left open by this fix, not resolved:**
+  - The spar/mortise chordwise (Y) offset still uses the pre-existing
+    `WING_ROOT_Y_CEN` value as an interim stand-in; the true offset needs
+    re-deriving against the current 129 mm Rev R1 root chord (already
+    tracked: TODO.md §1.1.2 "Verify cargo-section wing-root mortise
+    dimensions against new root chord 129 mm").
+  - **NEW, more serious — `WING_ROOT_Z_CEN`=62.5 mm overlaps River's
+    avionics bay (Z 24..64 mm)**: the spar bearing boss alone (Z
+    51.5..73.5) already overlaps River's upper 51.5..64 mm band. This is
+    a real structural/packaging conflict, independent of the axis bug —
+    it was masked before only because the old (wrong) code happened to
+    place the wing hardware at the gondola's Z extremes, nowhere near
+    Z=24..64. `nacelle_servo_mount_block()`'s own Z-placement
+    (`NSVMT_Z_OFFSET`, +30.5 mm from `WING_ROOT_Z_CEN`) was chosen only to
+    clear the wing mortise/spar boss with the same 4 mm margin the
+    original code used, and was NOT checked against River's bay — it may
+    also land inside or near it. **Needs a structural/packaging decision
+    (move River's bay? reduce its footprint? confirm the wing spar's
+    actual swept volume doesn't reach the Faraday tray?) before any of
+    this geometry is considered final — not resolved here.**
+    `nacelle_servo_bracket.stl` still does not exist in `airframe/stls/`
+    (only the SCAD source has been authored); render it once the Z-conflict
+    above is resolved.
 
 #### 1.1.4 **Landing Gear**
 

@@ -428,7 +428,6 @@ def assemble():
     PINION_A_Y = 28.0  # = sector R(22) + pinion R(6), mm
     CROWN_Z = 166.25  # = NOZZLE_RING_Z
     NACELLE_FACE_X_PYLON = 34.0  # mm, inboard (pylon-side) X face
-    NACELLE_FACE_X_FAR = 38.0  # mm, outboard (tip) X face
 
     for side in ("port", "stbd"):
         label = "Port" if side == "port" else "Stbd"
@@ -607,20 +606,11 @@ def assemble():
             nacelle_rows(side, _IDENTITY3, (idler_x, idler_y, CROWN_Z - 11.0)),
         )
 
-        # ── Tip cap (outboard X-face end cap) ─────────────────────────────
-        # NO ACTIVE SCAD SOURCE EXISTS for nacelle_tip_cap_port/stbd.stl
-        # (confirmed via repo-wide search, 2026-06-21) — local-frame axis
-        # convention is UNVALIDATED.  Placed at the outboard (far) X face
-        # on the pivot Z station as a best-guess VERIFY placeholder;
-        # confirm or replace once a source file or a manual FreeCAD
-        # placement exists (TODO.md §1.1.3).
-        tip_x = -pylon * NACELLE_FACE_X_FAR
-        tip_cap = add_mesh(
-            doc,
-            _stl(f"nacelles/nacelle_tip_cap_{side}.stl"),
-            f"Nacelle_{label}_Tip_Cap",
-        )
-        transform_mesh(tip_cap, nacelle_rows(side, _IDENTITY3, (tip_x, 0.0, PIVOT_Z)))
+        # Tip cap (outboard X-face end cap) — ARCHIVED 2026-06-22, legacy
+        # part, no longer needed.  STLs moved to airframe/archive/stls/
+        # nacelles/; see ARCHIVE_INDEX.md.  (Previously a best-guess VERIFY
+        # placeholder with no active SCAD source — see TODO.md §1.1.3
+        # history.)
 
     # -------------------------------------------------------------------
     # NACELLE SERVO BRACKET — left UNPLACED pending manual resolution

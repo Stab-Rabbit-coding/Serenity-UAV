@@ -106,6 +106,8 @@ Every component will be fabricated or procured; design accordingly.
   joint-fitting specs: `docs/LANDING_GEAR_ANALYSIS.md` (Rev R5); build tasks: `TODO.md`
   §1.1.4.
 
+- Each nacelle has a variable diameter exhaust nozzle, driven passively by gear train, based on nacelle tilt. **The nozzles shall provide a smooth conical exit for the edf thrust tube, no matter its final diameter** exit diameter will be 75% of bore at 0 deg (forward) and 105% of bore at or above 90 deg (virtical or backing).
+
 #### Hull-Frame Coordinate Standard (Rev R1 — baked, canonical)
 
 The canonical assembly document is `airframe/freecad/assembly/SerenityAssembly.FCStd`.
