@@ -747,7 +747,7 @@
     "antenna_system": [
       {
         "ref": "WIRE-49MHZ",
-        "desc": "49 MHz top wire — 0.3 mm stainless steel, ~470 mm, dorsal spine",
+        "desc": "49 MHz top wire (River's antenna) — 0.3 mm stainless steel, ~470 mm, PORT flank, shoulder height (relocated 2026-06-22 from dorsal spine — see §1.4.2)",
         "qty": 1,
         "mass_g": 3,
         "cost_usd": 5,
@@ -757,7 +757,7 @@
       },
       {
         "ref": "POST-FWD-49",
-        "desc": "Forward wire post + base-loading coil — PETG post + 38 uH coil + LC pi-net at dorsal hull ~120 mm from nose",
+        "desc": "Forward wire post + base-loading coil (River's antenna) — PETG post + 38 uH coil + LC pi-net, port flank ~120 mm from nose (relocated 2026-06-22 from dorsal hull — see §1.4.2)",
         "qty": 1,
         "mass_g": 4,
         "cost_usd": 8,
@@ -767,7 +767,7 @@
       },
       {
         "ref": "POST-AFT-49",
-        "desc": "Aft wire post + ceramic bead insulator — top of rear nozzle cone ~600 mm from nose",
+        "desc": "Aft wire post + ceramic bead insulator (River's antenna) — port flank near rear nozzle cone ~600 mm from nose (relocated 2026-06-22 from dorsal — see §1.4.2)",
         "qty": 1,
         "mass_g": 2,
         "cost_usd": 3,
@@ -817,7 +817,7 @@
       },
       {
         "ref": "WIRE-COUNTERPOISE-49MHZ",
-        "desc": "49 MHz counterpoise — AWG 22 stranded tinned copper, 460 mm, routed alongside keel inside foam (cargo to rear), terminated at River's Emma antenna feed",
+        "desc": "49 MHz counterpoise (River's antenna) — AWG 22 stranded tinned copper, 460 mm, routed alongside the structural keel inside foam (cargo to rear) — interior/embedded, unaffected by the port-flank relocation of the radiating wire above — terminated at River's Emma antenna feed",
         "qty": 1,
         "mass_g": 2,
         "cost_usd": 2,
@@ -827,27 +827,27 @@
       },
       {
         "ref": "WIRE-49MHZ-2",
-        "desc": "Second, independent 49 MHz top wire — 0.3 mm stainless steel, ~200 mm, ventral/keel line — feeds Simon's Medbay Emma board (River and Simon do not share an antenna, §1.4.2)",
+        "desc": "Second, independent 49 MHz top wire (Simon's antenna) — 0.3 mm stainless steel, ~470 mm (same length as WIRE-49MHZ), STARBOARD flank, shoulder height — feeds Simon's Medbay Emma board (River and Simon do not share an antenna, §1.4.2)",
         "qty": 1,
-        "mass_g": 1,
-        "cost_usd": 3,
+        "mass_g": 3,
+        "cost_usd": 5,
         "supplier": "Amazon / AliExpress",
         "search": "Stainless steel wire 0.3 mm dia 1 m spool",
-        "notes": "Shortened vs WIRE-49MHZ (470 mm) to fit ventral routing between existing belly hatches/landing gear — loading coil must be retuned for the shorter element; exact span needs FreeCAD verification, §1.4.2"
+        "notes": "Routing corrected 2026-06-22 (with user) from an earlier shortened ventral/keel proposal — the cargo bay clamshell doors hinge at the outboard flank/belly edge and swing to 180°, conflicting with any ventral or low-flank post; starboard flank at shoulder height (mirroring River's port-flank relocation) clears the door and gives full-length electrical performance. Exact shoulder-height line still needs FreeCAD verification against the door swing envelope, §1.4.2"
       },
       {
         "ref": "POST-FWD-49-2",
-        "desc": "Simon's forward wire post + base-loading coil — ventral hull, proposed sta ~250 mm (pending FreeCAD verification, §1.4.2)",
+        "desc": "Simon's forward wire post + base-loading coil — starboard flank, shoulder height, ~120 mm from nose (mirrors POST-FWD-49; pending FreeCAD verification against cargo door swing envelope, §1.4.2)",
         "qty": 1,
         "mass_g": 4,
         "cost_usd": 8,
         "supplier": "In-house / AliExpress",
         "search": "38 uH air-core inductor + variable cap + PETG printed post",
-        "notes": "Mirrors POST-FWD-49; coil value to be retuned on bench for the shorter ~200 mm element"
+        "notes": "Mirrors POST-FWD-49; same 38 uH coil value (full-length element, not shortened)"
       },
       {
         "ref": "POST-AFT-49-2",
-        "desc": "Simon's aft wire post + ceramic bead insulator — ventral hull, proposed sta ~450 mm (pending FreeCAD verification, §1.4.2)",
+        "desc": "Simon's aft wire post + ceramic bead insulator — starboard flank, shoulder height, ~600 mm from nose (mirrors POST-AFT-49; pending FreeCAD verification, §1.4.2)",
         "qty": 1,
         "mass_g": 2,
         "cost_usd": 3,
@@ -857,10 +857,10 @@
       },
       {
         "ref": "WIRE-COUNTERPOISE-49MHZ-2",
-        "desc": "Second 49 MHz counterpoise for Simon's antenna — AWG 22 stranded tinned copper, ~200 mm, routed alongside keel, terminated at Simon's Emma antenna feed",
+        "desc": "Second 49 MHz counterpoise for Simon's antenna — AWG 22 stranded tinned copper, ~460 mm, routed alongside the structural keel inside foam (interior/embedded, unaffected by the starboard-flank relocation of the radiating wire above), terminated at Simon's Emma antenna feed",
         "qty": 1,
-        "mass_g": 1,
-        "cost_usd": 1,
+        "mass_g": 2,
+        "cost_usd": 2,
         "supplier": "Amazon / AliExpress",
         "search": "AWG 22 stranded tinned copper wire",
         "notes": "Mirrors WIRE-COUNTERPOISE-49MHZ for Simon's independent antenna, §1.4.2"

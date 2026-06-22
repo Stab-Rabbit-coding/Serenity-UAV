@@ -223,9 +223,9 @@ middle_canonical_edf_intake.stl — Middle section EDF intake opening
 cargo/
 cargo_sect_shell24_2mm_repaired.stl    — Cargo section 2mm hollow, manifold
 cargo_sect_shell24_repaired.stl        — Cargo solid shell, manifold-repaired (used for intersection in access_panels_24in.scad)
-cargo_door_port.stl                   — Port clamshell cargo door (hull-frame, Rev R1a 2026-06-16)
-cargo_door_stbd.stl                   — Stbd clamshell cargo door (hull-frame, Rev R1a 2026-06-16)
-generate_cargo_doors.py               — Door STL generator (Rev R1a, hull frame; see CLAUDE.md)
+cargo_door_port.stl                   — Port clamshell cargo door, hinges outboard at X≈-72.7mm (hull-frame, Rev R1b 2026-06-22)
+cargo_door_stbd.stl                   — Stbd clamshell cargo door, hinges outboard at X≈-267.0mm (hull-frame, Rev R1b 2026-06-22)
+generate_cargo_doors.py               — Door STL generator (Rev R1b, hull frame; see CLAUDE.md)
 cargo_cradle_autolatch.stl            — Auto-latch payload cradle
 cargo_fpv_bezel.stl                   — FPV camera bezel
 cargo_gps_retention_ring.stl          — GPS antenna retention ring

@@ -6,7 +6,7 @@
 #   world origin.  Primary-component STLs published to airframe/stls/
 #   are stored directly in hull frame, baked by tools/bake_hull_frame.py.
 #
-#   This file (Rev R1a, 2026-06-16):
+#   This file (Rev R1b, 2026-06-22):
 #     Generates cargo bay clamshell doors from the baked hull-frame cargo
 #     shell (cargo_sect_shell24_2mm_repaired.stl).
 #
@@ -15,38 +15,61 @@
 #       Y = longitudinal fore-aft (+Y = aft); bay spans Y ≈ +2 to +108 mm
 #       Z = dorsal-ventral (+Z = up); belly at Z ≈ 0
 #
-#     Hinge line: runs along Y at X = X_HINGE (ship CL), Z = belly exterior Z
-#     Port door:  X from X_HINGE to X_MAX (hull +X / port half)
-#     Stbd door:  X from X_MIN  to X_HINGE (hull -X / stbd half)
+#     Hinge lines run along Y at the OUTBOARD flank/belly edge of each door —
+#     X = X_MIN (stbd side) and X = X_MAX (port side), Z = belly exterior Z
+#     at that flank.  The two free edges meet at the ship centreline X_CL
+#     when closed.  Each door is its own independent piano hinge pinned to
+#     the fuselage (NOT a shared centreline hinge joining the two panels):
+#     swinging open, each door rotates about its own outboard pin and drops
+#     DOWN AND OUT from the aircraft, through a 180 deg range of motion,
+#     opening the bottom of the cargo bay between the two hinge lines.
+#     Port door:  X from X_CL to X_MAX (hull +X / port half), hinge at X_MAX
+#     Stbd door:  X from X_MIN  to X_CL (hull -X / stbd half), hinge at X_MIN
 #
 #     The script reads belly-facing triangles (normal Z < 0, centroid Z < 10 mm)
 #     from the baked shell and builds a bilinear SciPy interpolator
 #     belly_z(x2d, y2d) -> Z_ext.  Each door panel's exterior surface follows
 #     that contour; the interior is offset +2 mm in +Z.  Four piano-hinge
-#     knuckles per door, interleaved port/stbd, axis along Y.
+#     knuckles per door, evenly spaced along that door's own outboard hinge
+#     line, axis along Y.
+#
+#   Rev R1a (2026-06-16) incorrectly placed both doors' hinge knuckles at the
+#   centreline X_CL with the free edges at the hull sides — backwards from
+#   the door behaviour already assumed everywhere else in the repo (see
+#   TODO.md §1.4.2 and rcrs49_wire_post.scad, both of which describe the
+#   doors hinging at the outboard flank/belly edge and swinging up to 180 deg
+#   — that text was written assuming the corrected geometry below).  Rev R1b
+#   corrects the hinge location; *(corrected 2026-06-22, with user)*.
 #
 #   Previous revision (pre-R1 / 2026-06-01): used a pre-bake shell in a
 #   different coordinate frame (Y = vertical, Z = lateral).  Those STLs are
 #   superseded by this revision; see TODO.md §1.1.1.2.1 (now resolved).
 # ============================================================================
 """
-generate_cargo_doors.py — Rev R1a (2026-06-16)
+generate_cargo_doors.py — Rev R1b (2026-06-22)
 Generate clamshell cargo-bay door STL files in hull-frame coordinates.
 
-Two mirrored halves split at the ship lateral centreline (X = X_HINGE ≈ -170 mm):
-  * cargo_door_port.stl   — port half  (X = X_HINGE .. X_MAX)
-  * cargo_door_stbd.stl   — stbd half  (X = X_MIN   .. X_HINGE)
+Two mirrored halves split at the ship lateral centreline (X = X_CL ≈ -170 mm),
+each hinged independently at its own OUTBOARD flank/belly edge:
+  * cargo_door_port.stl   — port half  (X = X_CL .. X_MAX), hinge at X_MAX
+  * cargo_door_stbd.stl   — stbd half  (X = X_MIN   .. X_CL), hinge at X_MIN
+
+The free (non-hinged) edge of each door sits at the centreline X_CL and the
+two doors meet there when closed.  Opening, each door swings on its own
+outboard pin DOWN AND OUT from the aircraft through a 180 deg range of
+motion, clearing the full belly opening between the two hinge lines.
 
 Door geometry (hull frame):
   * Exterior surface  — interpolated from cargo belly faces (Z ≈ 0, normal = -Z)
   * Interior surface  — exterior + WALL_T mm offset in +Z
   * Four hinge knuckles per door (CF-PETG, 6 mm OD, 12 mm long, 3.15 mm bore
-    for 3 mm CF pin + 0.15 mm radial clearance per side)
-  * Knuckles for port and stbd halves are interleaved along Y so the eight
-    barrels form one continuous piano-hinge running along Y at X = X_HINGE
+    for 3 mm CF pin + 0.15 mm radial clearance per side), evenly spaced along
+    that door's own outboard hinge line (no interleaving — port and stbd
+    hinges are mechanically independent, each pinned to the fuselage, not to
+    each other)
 
-Hinge hardware:
-  * CF rod: 3 mm OD × bay-width long (Y_BAY_LEN + 4 mm end stops)
+Hinge hardware (one independent piano hinge per door):
+  * CF rod: 3 mm OD × bay-width long (Y_BAY_LEN + 4 mm end stops), one per side
   * Knuckle bore: 3.15 mm (3 mm + 2 × 0.075 mm clearance each side)
   * Pin retained by M3 grub-screw blocks epoxied to shell inner wall
 
@@ -83,7 +106,7 @@ OUT_DIR    = SCRIPT_DIR
 # ---------------------------------------------------------------------------
 X_SHELL_MIN = -267.0    # stbd extremity (hull -X)
 X_SHELL_MAX =  -72.7    # port extremity (hull +X)
-X_HINGE = (X_SHELL_MIN + X_SHELL_MAX) / 2.0   # ship lateral CL ≈ -169.85 mm
+X_CL = (X_SHELL_MIN + X_SHELL_MAX) / 2.0   # ship lateral CL ≈ -169.85 mm
 
 # Cargo bay opening: longitudinal span centred between leg attach points.
 # Landing-gear HULL_ATTACH_POS Y rows: 25 mm and 100 mm.  Bay spans Y=2..108.
@@ -113,43 +136,67 @@ KNUCKLE_R    = KNUCKLE_OD / 2.0
 KNUCKLE_LEN  = 12.0             # mm — barrel axial length
 KNUCKLE_SECTIONS = 36           # polygon approximation
 
-# Knuckle Y-positions: 4 per door, interleaved port/stbd along Y
-# Total 8 knuckles, pitch P = (Y_BAY_LEN - KNUCKLE_LEN) / 7
-_PITCH   = (Y_BAY_LEN - KNUCKLE_LEN) / 7.0         # ≈ 13.43 mm
+# Knuckle Y-positions: 4 per door, evenly spaced along that door's OWN
+# outboard hinge line.  Port and stbd hinges are independent piano hinges
+# (each door pinned to the fuselage on its own flank) — NOT interleaved onto
+# a shared pin, since the hinge lines are no longer coincident.
+_PITCH   = (Y_BAY_LEN - KNUCKLE_LEN) / 3.0          # ≈ 31.33 mm, 4 evenly spaced
 _Y_START = Y_BAY_FWD + KNUCKLE_LEN / 2.0            # first knuckle centre Y
 
-# Port knuckles at even slots (0, 2, 4, 6) along Y
-KNUCKLE_Y_PORT = [_Y_START + 2 * k * _PITCH for k in range(4)]
-# Stbd knuckles at odd slots (1, 3, 5, 7) along Y
-KNUCKLE_Y_STBD = [_Y_START + (2 * k + 1) * _PITCH for k in range(4)]
+KNUCKLE_Y_PORT = [_Y_START + k * _PITCH for k in range(4)]
+KNUCKLE_Y_STBD = [_Y_START + k * _PITCH for k in range(4)]
 
-# Knuckle centre: hinge line at X = X_HINGE; Z tangent to belly exterior
-KNUCKLE_X = X_HINGE                         # lateral position (hinge line)
-KNUCKLE_Z = Z_BELLY_FALLBACK + KNUCKLE_R    # ≈ 3.5 mm (tangent to belly)
+# Knuckle hinge-line X: OUTBOARD flank/belly edge of each door, not the
+# centreline.  This is NOT X_SHELL_MIN/MAX — those are the full cargo-section
+# bounding-box extremes (the widest point of the hull cross-section, e.g. at
+# the wing-root flare), which lie well outside the flat ventral belly panel
+# the doors actually need to cover.  Using the bbox extremes (Rev R1a/early
+# R1b) produced door grids that ran ~45 mm past the real belly-mesh data into
+# the curved side wall, where the interpolator's flat fallback plane met the
+# real contour in a visible crease roughly halfway across each door.
+# The correct hinge line is the actual detected edge of the belly mesh,
+# computed at runtime in main() from the baked shell via
+# build_belly_interpolator()'s returned (x_min, x_max) — that is where the
+# flat belly genuinely transitions into the curved flank, matching the
+# "outboard flank/belly edge" language used elsewhere in the repo.  See
+# main() / make_door() — hinge_x is passed in explicitly, not read as a
+# module-level constant.
 
 
 # ---------------------------------------------------------------------------
 # Helper: load shell and build belly-surface Z interpolator
 # ---------------------------------------------------------------------------
 
-def build_belly_interpolator(shell_stl: str):
+def build_belly_interpolator(shell_stl: str, y_min: float, y_max: float):
     """
     Load the baked hull-frame cargo shell STL and return a callable
     belly_z(x2d, y2d) -> Z_ext that gives the exterior belly Z-coordinate at
-    any (X, Y) position over the cargo bay opening.
+    any (X, Y) position over the cargo bay opening, plus the actual detected
+    X extent of the belly mesh within the bay's Y span.
 
     Belly faces are identified by:
       * Face normal Z component < -0.5  (pointing downward / ventral)
       * Face centroid Z < 10 mm         (near the bottom of the shell)
 
+    The returned (x_min, x_max) is the real edge of that ventral surface —
+    where the flat belly transitions into the curved side wall — restricted
+    to y_min..y_max.  Door panels and hinge lines MUST be built from this,
+    not from the cargo section's overall bounding box: the bounding box
+    extends well past the belly into the side wall, and sampling the
+    interpolator out there falls back to a flat plane, producing a visible
+    crease where the real contour ends.
+
     Parameters
     ----------
     shell_stl : str
         Path to the baked hull-frame cargo shell STL.
+    y_min, y_max : float
+        Bay longitudinal span (mm) used to restrict the belly-edge search.
 
     Returns
     -------
     belly_z : callable  belly_z(x_2d, y_2d) -> z_2d  (same shape as inputs).
+    x_min, x_max : float  — detected belly mesh X extent within y_min..y_max.
     """
     print(f"[belly] loading {shell_stl} …")
     shell = trimesh.load(shell_stl, process=False)
@@ -164,7 +211,7 @@ def build_belly_interpolator(shell_stl: str):
 
         def belly_z(x2d, y2d):
             return np.full_like(x2d, Z_BELLY_FALLBACK, dtype=float)
-        return belly_z
+        return belly_z, X_CL - 50.0, X_CL + 50.0
 
     bx = belly[:, 0]   # X positions of belly face centroids
     by = belly[:, 1]   # Y positions
@@ -175,6 +222,13 @@ def build_belly_interpolator(shell_stl: str):
           f"Y={by.min():.1f}..{by.max():.1f}  "
           f"Z={bz.min():.2f}..{bz.max():.2f}")
 
+    bay_mask = (by >= y_min) & (by <= y_max)
+    x_min_bay = float(bx[bay_mask].min())
+    x_max_bay = float(bx[bay_mask].max())
+    print(f"[belly] real belly-mesh X extent within bay Y={y_min:.1f}..{y_max:.1f}: "
+          f"X={x_min_bay:.2f}..{x_max_bay:.2f}  (door grids/hinges use this, "
+          f"not the cargo-section bounding box)")
+
     def belly_z(x2d, y2d):
         """Interpolate exterior belly Z at 2-D arrays of (X, Y) positions."""
         pts = np.column_stack([x2d.ravel(), y2d.ravel()])
@@ -182,7 +236,7 @@ def build_belly_interpolator(shell_stl: str):
                      fill_value=Z_BELLY_FALLBACK)
         return z.reshape(x2d.shape)
 
-    return belly_z
+    return belly_z, x_min_bay, x_max_bay
 
 
 # ---------------------------------------------------------------------------
@@ -291,11 +345,12 @@ def build_panel_mesh(x_grid: np.ndarray, y_grid: np.ndarray,
 # Helper: build a single hinge knuckle (axis along Y)
 # ---------------------------------------------------------------------------
 
-def make_knuckle(y_centre: float) -> trimesh.Trimesh:
+def make_knuckle(x_centre: float, y_centre: float, z_centre: float) -> trimesh.Trimesh:
     """
     Build one hinge-knuckle barrel: cylinder (KNUCKLE_OD × KNUCKLE_LEN) with a
     coaxial bore (PIN_BORE_R × KNUCKLE_LEN + 2 mm).  Axis runs along Y (fore-aft);
-    knuckle centre at (KNUCKLE_X, y_centre, KNUCKLE_Z).
+    knuckle centre at (x_centre, y_centre, z_centre) — the door's own outboard
+    hinge line, NOT the ship centreline.
 
     Returns
     -------
@@ -319,7 +374,7 @@ def make_knuckle(y_centre: float) -> trimesh.Trimesh:
 
     # Translate to hinge-line position
     knuckle.apply_transform(
-        tft.translation_matrix([KNUCKLE_X, y_centre, KNUCKLE_Z])
+        tft.translation_matrix([x_centre, y_centre, z_centre])
     )
     return knuckle
 
@@ -328,7 +383,8 @@ def make_knuckle(y_centre: float) -> trimesh.Trimesh:
 # Door generators
 # ---------------------------------------------------------------------------
 
-def make_door(side: str, belly_z_fn) -> trimesh.Trimesh:
+def make_door(side: str, belly_z_fn, free_edge_x: float, hinge_x: float,
+              knuckle_y_list) -> trimesh.Trimesh:
     """
     Build one clamshell door half in hull-frame coordinates.
 
@@ -336,6 +392,11 @@ def make_door(side: str, belly_z_fn) -> trimesh.Trimesh:
     ----------
     side : str — "port" or "stbd"
     belly_z_fn : callable — belly_z(x2d, y2d) -> Z_ext_2d
+    free_edge_x : float — X of the edge that meets the other door (= X_CL)
+    hinge_x : float — X of this door's own outboard hinge line, taken from
+        the belly mesh's real detected edge (NOT the cargo-section bounding
+        box — see build_belly_interpolator)
+    knuckle_y_list : sequence of float — Y centres of this door's 4 knuckles
 
     Returns
     -------
@@ -343,19 +404,22 @@ def make_door(side: str, belly_z_fn) -> trimesh.Trimesh:
     """
     assert side in ("port", "stbd"), "side must be 'port' or 'stbd'"
 
-    # X extents and knuckle positions for this half
-    if side == "port":
-        x_min = X_HINGE
-        x_max = X_SHELL_MAX
-        knuckle_y_list = KNUCKLE_Y_PORT
-    else:
-        x_min = X_SHELL_MIN
-        x_max = X_HINGE
-        knuckle_y_list = KNUCKLE_Y_STBD
-
-    # Sample grid over the door panel
-    x_grid = np.arange(x_min, x_max + GRID_DX, GRID_DX)
-    y_grid = np.arange(Y_BAY_FWD, Y_BAY_AFT + GRID_DY, GRID_DY)
+    # Door panel spans from the free edge (meets the other door, at X_CL) to
+    # this door's own outboard hinge line.  Both bounds come from real belly
+    # mesh data, so the whole panel is sampled within the interpolator's
+    # convex hull — no flat-fallback region, no discontinuity.
+    #
+    # Use linspace (not arange) so the grid's outer edge lands EXACTLY on
+    # hinge_x rather than one step past it.  arange(x_min, x_max + GRID_DX,
+    # GRID_DX) can overshoot x_max by up to one step depending on float
+    # rounding — that overshoot point falls just outside the real belly-mesh
+    # data and griddata silently returns the flat fallback there, producing
+    # a small but real step right at the hinge line.
+    x_min, x_max = sorted([free_edge_x, hinge_x])
+    n_x = max(2, round((x_max - x_min) / GRID_DX) + 1)
+    n_y = max(2, round((Y_BAY_AFT - Y_BAY_FWD) / GRID_DY) + 1)
+    x_grid = np.linspace(x_min, x_max, n_x)
+    y_grid = np.linspace(Y_BAY_FWD, Y_BAY_AFT, n_y)
 
     xg, yg = np.meshgrid(x_grid, y_grid, indexing="ij")   # shape (M, N)
     z_ext  = belly_z_fn(xg, yg)                            # exterior belly Z
@@ -370,8 +434,15 @@ def make_door(side: str, belly_z_fn) -> trimesh.Trimesh:
     print(f"[{side}] panel verts={len(panel.vertices)} "
           f"faces={len(panel.faces)} watertight={panel.is_watertight}")
 
-    # Build and union hinge knuckle barrels
-    knuckles = [make_knuckle(yc) for yc in knuckle_y_list]
+    # Build and union hinge knuckle barrels along this door's own outboard
+    # hinge line (hinge_x), with Z sampled from the belly interpolator at the
+    # real edge of the belly mesh — now within the interpolator's real data,
+    # not the flat fallback.
+    yc_arr = np.array(knuckle_y_list)
+    xc_arr = np.full_like(yc_arr, hinge_x)
+    knuckle_z_list = belly_z_fn(xc_arr, yc_arr) + KNUCKLE_R
+    knuckles = [make_knuckle(hinge_x, yc, zc)
+                for yc, zc in zip(knuckle_y_list, knuckle_z_list)]
 
     print(f"[{side}] unioning {len(knuckles)} knuckles …")
     try:
@@ -414,26 +485,36 @@ def main() -> int:
               file=sys.stderr)
         return 1
 
-    print("=== Cargo clamshell door generation — Rev R1a (hull frame) ===")
+    print("=== Cargo clamshell door generation — Rev R1b (hull frame) ===")
     print("Hull-frame convention: X=+port, Y=+aft, Z=+dorsal")
-    print(f"Cargo shell:  X={X_SHELL_MIN:.1f}..{X_SHELL_MAX:.1f}  "
-          f"Ship CL X_HINGE={X_HINGE:.2f} mm")
+    print(f"Cargo shell bounding box: X={X_SHELL_MIN:.1f}..{X_SHELL_MAX:.1f}  "
+          f"Ship CL X_CL={X_CL:.2f} mm")
     print(f"Bay span:     Y={Y_BAY_FWD:.1f}..{Y_BAY_AFT:.1f} mm "
           f"(length={Y_BAY_LEN:.1f} mm)")
-    print(f"Hinge knuckle Z centre = {KNUCKLE_Z:.2f} mm  "
-          f"(barrel tangent to belly at Z≈{Z_BELLY_FALLBACK:.1f})")
     print(f"Knuckle bore radius = {PIN_BORE_R:.3f} mm  "
           f"(3 mm CF rod + {PIN_CL*2:.2f} mm dia clearance)")
     print()
 
-    belly_z = build_belly_interpolator(SHELL_STL)
+    belly_z, belly_x_min, belly_x_max = build_belly_interpolator(
+        SHELL_STL, Y_BAY_FWD, Y_BAY_AFT)
     print()
 
-    port_door = make_door("port", belly_z)
+    # Hinge lines are the REAL detected edges of the belly mesh — port door
+    # hinges at the port-side edge, stbd door at the stbd-side edge.  Free
+    # edges (both doors) meet at X_CL when closed.
+    hinge_x_port = belly_x_max
+    hinge_x_stbd = belly_x_min
+    print(f"Port hinge line: X={hinge_x_port:.2f} mm (outboard belly edge, NOT centreline)")
+    print(f"Stbd hinge line: X={hinge_x_stbd:.2f} mm (outboard belly edge, NOT centreline)")
+    print(f"Free edges meet at X_CL={X_CL:.2f} mm when closed; each door "
+          f"swings down/out 180 deg about its own outboard pin")
+    print()
+
+    port_door = make_door("port", belly_z, X_CL, hinge_x_port, KNUCKLE_Y_PORT)
     save(port_door, "cargo_door_port.stl")
     print()
 
-    stbd_door = make_door("stbd", belly_z)
+    stbd_door = make_door("stbd", belly_z, X_CL, hinge_x_stbd, KNUCKLE_Y_STBD)
     save(stbd_door, "cargo_door_stbd.stl")
     print()
 

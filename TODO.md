@@ -378,12 +378,37 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     `s_cargo_sect_shell24_2mm_repaired.stl` and verify the belly faces hull −Z.
     **DONE 2026-06-16**: `generate_cargo_doors.py` rewritten for hull frame (Rev R1a).
     Belly faces detected by normal Z < −0.5.  Both doors watertight.
+- [x] **Correct hinge location: outboard flank, not centreline.** Rev R1a (above)
+    placed both doors' piano-hinge knuckles at the ship centreline X_CL (≈ −169.85 mm)
+    with the free edges at the hull sides — backwards from the door behaviour already
+    documented everywhere else in the repo (TODO.md §1.4.2, README.md, `rcrs49_wire_post.scad`),
+    all of which describe the doors hinging at the **outboard flank/belly edge** and
+    swinging **down and out from the aircraft, full 180° range of motion**, to open the
+    bottom of the cargo bay. **DONE 2026-06-22 (Rev R1b, with user)**:
+    `generate_cargo_doors.py` corrected — port door hinge line moved to X_SHELL_MAX
+    (≈ −72.7 mm), stbd door hinge line moved to X_SHELL_MIN (≈ −267.0 mm); both doors'
+    free edges meet at X_CL when closed. Removed the port/stbd knuckle Y-interleaving
+    (no longer meaningful — each door is now its own independent piano hinge pinned to
+    the fuselage, not a shared centreline hinge joining the two panels). Knuckle Z is
+    now sampled from the belly interpolator at each hinge X rather than a bare literal.
+    Both STLs regenerated and verified watertight (port 100.2×108.0×11.8 mm, stbd
+    102.0×108.0×11.9 mm).
     - [ ] **Verify cargo door fit in slicer** — open `cargo_door_port.stl` and
-        `cargo_door_stbd.stl` in slicer; confirm hinge knuckles align at X ≈ −170 mm
-        and panels cover Y = 2..108 mm at Z ≈ 0.  Verify no overlap with hull boss
-        sockets (HULL_ATTACH_POS Y = 25, 100 mm).  **BLOCKS cargo door printing.**
-    - [ ] **Piano-hinge CF rod** — verify 3 mm CF rod passes through all 8 knuckle
-        bores (3.15 mm bore); test in printed prototype before final assembly.
+        `cargo_door_stbd.stl` in slicer; confirm hinge knuckles align at X ≈ −72.7 mm
+        (port) and X ≈ −267.0 mm (stbd), free edges meet at X ≈ −169.85 mm, and panels
+        cover Y = 2..108 mm at Z ≈ 0. Verify no overlap with hull boss sockets
+        (HULL_ATTACH_POS Y = 25, 100 mm). **BLOCKS cargo door printing.**
+    - [ ] **Piano-hinge CF rod (×2, independent)** — verify 3 mm CF rod passes through
+        each door's own 4 knuckle bores (3.15 mm bore) — port and stbd are now two
+        separate pins/rods, not one shared centreline pin; test in printed prototype
+        before final assembly.
+    - [ ] **Sync `cargo_sect_shell24.scad` hinge-pin blocks to the Rev R1b hinge lines.**
+        The shell's `HINGE_Y`/`HINGE_Z` grub-screw block parameters (cargo_sect_shell24.scad
+        lines ~329-340) still describe a pre-bake, part-local frame (Y = vertical,
+        Z = lateral) from before the hull-frame rewrite, and were never updated for the
+        Rev R1a/R1b door geometry. Re-derive the shell-side hinge-pin retention blocks
+        from the corrected hull-frame hinge lines (port X ≈ −72.7 mm, stbd X ≈ −267.0 mm)
+        before cutting the belly opening. **BLOCKS cargo door installation.**
 - [ ] **Consolidate duplicate cargo shell copies.**
     `fuselage/s_cargo_sect_shell24_2mm_repaired.stl` (367,506 facets, later repair pass)
     vs `fuselage/cargo/s_cargo_sect_shell24_2mm_repaired.stl` (368,352 facets, used by
@@ -769,14 +794,15 @@ Joint faces in hull-frame Y (confirmed from baked extents):
         - [ ] Verify GPS recess depth clears GPS retention ring (Inara: dZ=−14.3 mm, River: dZ=+0.7 mm)
         - [ ] Confirm M3 bore positions match shell boss pattern (±25 mm × ±15 mm from bay centre)
 
-- [x] **49 MHz (Part 15 §15.235) wire posts** — `airframe/openscad/fuselage/rcrs49_wire_post.scad` created 2026-06-11. Single `wire_post()` module: 12×12×2 mm PETG base, 8×8×7 mm mast, Ø1.5 mm athwartships wire-retention bore at 2 mm from top. Print two: forward (sta ≈ 120 mm, dorsal) + temporary aft (sta ≈ 580 mm, dorsal).
-
+- [x] **49 MHz (Part 15 §15.235) wire posts** — `airframe/openscad/fuselage/rcrs49_wire_post.scad` created 2026-06-11. Single `wire_post()` module: 12×12×2 mm PETG base, 8×8×7 mm mast, Ø1.5 mm athwartships wire-retention bore at 2 mm from top. **Relocated 2026-06-22 (§1.4.2):** dorsal-centreline mount superseded — print FOUR posts (two antennas, two posts each): River's antenna forward (sta ≈ 120 mm) + aft (sta ≈ 580 mm) on the **port flank**, Simon's antenna forward + aft (same stations) on the **starboard flank**, both at shoulder height. Reasons: (a) a single shared dorsal run put River's and Simon's independent 49 MHz antennas (§1.4.2) too close together at 49 MHz; (b) the cargo bay clamshell doors hinge at the outboard flank/belly edge and swing up to 180° (`generate_cargo_doors.py`), so any ventral or low-flank exterior post in the cargo bay's Y-span is in the door's path — shoulder height, port/starboard, clears both.
 
     - **BLOCKS Phase 1 (antenna installation)**
     - **SUB-TASKS:**
-        - [ ] Export STL → `airframe/stls/fuselage/rcrs49_wire_post.stl`
-        - [ ] Bond forward post to hull dorsal skin at sta 120 mm; dress wire to Emma feed
-        - [ ] Install temporary aft post at sta 580 mm; remove and replace with integrated mount in Phase 11
+        - [ ] Export STL → `airframe/stls/fuselage/rcrs49_wire_post.stl` (×4 instances, no geometry change needed — same module, different bond points)
+        - [ ] **Verify port/starboard shoulder-height mount line in FreeCAD against the cargo door's 180°-open swing envelope** (door panel width, hinge at outboard flank/belly edge) before bonding any post — confirm shoulder height is actually clear at every station along sta 120–580 mm, not just at the door's own Y-span. **BLOCKS bonding both antennas' posts.**
+        - [ ] Bond River's forward post to the port flank at sta 120 mm; dress wire aft to River's Emma J2
+        - [ ] Bond Simon's forward post to the starboard flank at sta 120 mm; dress wire aft to Simon's Emma J2
+        - [ ] Install both temporary aft posts (port + starboard) at sta 580 mm; remove and replace with integrated mounts in Phase 11
 
 ##### 1.1.1.1 *Head*
 
@@ -833,9 +859,8 @@ Joint faces in hull-frame Y (confirmed from baked extents):
     - [x] cargo_winch_motor_mount (CF-PETG), cargo_winch_spool (PETG), cargo_door_servo_bracket (CF-PETG), cargo_release_servo_bracket (CF-PETG), cargo_drv8833_tray (PETG), cargo_cradle_autolatch (PETG), cargo_gps_retention_ring (PETG), cargo_fpv_bezel (PETG)
 
 - [ ] **Cargo gondola shell** — create `serenity/stl/s_cargo_gondola_shell.scad`: 112×85×22 mm belly pod, 4× M3 hard point pattern, 18 mm protrusion below hull line
-- [x] **Clamshell door halves** — `cargo_door_port.stl` + `cargo_door_stbd.stl` generated by
-    `serenity/stl/generate_cargo_doors.py` (trimesh/scipy bilinear interpolation from Rev-O shell
-    belly faces). Both watertight; 8-barrel piano hinge, 3 mm CF rod, 3.15 mm bore. *(done 2026-06-01)*
+- [ ] **Clamshell door halves** — `cargo_door_port.stl` + `cargo_door_stbd.stl` generated by
+    `serenity/stl/generate_cargo_doors.py` Doors hinge on port and starboard sides and meet at the centerline.  Doors open out to 180 deg, allowing landing over and loading 4"x3"x3" cargo payload, or raising/lowering it in flight via the internal winch. (trimesh/scipy bilinear interpolation from Rev-O shell belly faces). 8-barrel piano hinge, 3 mm CF rod, 3.15 mm bore.
 - [x] **`cargo_sect_shell24.scad` Rev S** — belly opening (100×9×165 mm), 2× hinge-pin blocks
     (3.3 mm bore + M3 grub-screw tap), 2× SG90 servo mounting pads (4× M2.5 pilots each), 4×
     latch-catch lips (Z=42/122 mm at each X frame edge). *(done 2026-06-01)*
@@ -1174,7 +1199,11 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     touched here, pre-existing staleness unrelated to this archival.
 - [x] **`cargo_sect_shell24.scad`'s port/stbd mirroring used the wrong axis
     — FIXED 2026-06-22** (adjudicated against CLAUDE.md's hull-frame
-    standard, per explicit user direction). Root cause confirmed: the wing
+    standard, per explicit user direction). Rendered and mesh-verified after
+    the fix: `openscad --hardwarnings cargo_sect_shell24.scad` compiles
+    clean (no warnings), output fully watertight (14 connected solids, 0
+    bad) — bounds X −204.0..−7.4, Y −415.6..−211.3, Z 0.0..163.2 mm, matching
+    the file's own documented STL bounding box. Root cause confirmed: the wing
     subsystem (`wing_root_mortise()`, `wing_spar_bore()`,
     `spar_bearing_block()`, `nacelle_servo_mount_block()`) had been modelled
     using the WING's own internal pre-permutation convention
@@ -1952,15 +1981,22 @@ work that was actually completed against this stub before it was retired:
         spacing as Shepherd's.
     - [x] **River's Room** (Bay D, dorsal aft, sta ≈ 275 mm) — 49 MHz top-wire antenna
         (existing `WIRE-49MHZ`/`POST-FWD-49`/`POST-AFT-49`, §1.1.1.0b; primary) + LoRa
-        915 MHz RP-SMA whip (secondary, fed from Zoë `J_SMA_LORA`).
+        915 MHz RP-SMA whip (secondary, fed from Zoë `J_SMA_LORA`). **Relocated
+        2026-06-22 (with user): the 49 MHz top wire moves from the dorsal centreline to
+        the PORT flank, shoulder height** — see the port/starboard sub-task below;
+        LoRa whip stays dorsal.
     - [x] **Simon's Medbay** (Bay E, aft service, sta ≈ 350 mm) — **independent** 49 MHz
-        top-wire antenna, new (primary; see dedicated sub-task below — do not share
-        River's antenna) + SiK 915 MHz RP-SMA whip (secondary).
+        top-wire antenna, new, on the **STARBOARD flank, shoulder height** (primary; see
+        dedicated sub-task below — do not share River's antenna) + SiK 915 MHz RP-SMA
+        whip (secondary, stays dorsal).
     - [x] **4× GPS/GNSS patch antenna mounts** — one per FC node (Wash, Cape-A-2), all
         dorsal hull, face up, per existing routing tasks (Phase 5/6 install steps,
         TODO.md lines ~2645/2666/2773/2794): FC1 sta ≈ 59 mm, FC2 sta ≈ 130 mm,
         FC3 sta ≈ 275 mm, FC4 sta ≈ 350 mm. ≥ 3 mm clearance from the 49 MHz wire posts
-        (already a documented constraint on `POST-FWD-49`).
+        (already a documented constraint on `POST-FWD-49`) — now a flank-to-dorsal
+        clearance check rather than a same-surface one, since the 49 MHz posts moved
+        off the dorsal centreline (below); re-verify the 3 mm figure still applies once
+        the shoulder-height mount line is fixed.
     - [ ] **Zigbee 2.4 GHz antenna mount — BLOCKED, hardware gap confirmed; antenna
         strategy decided 2026-06-22 (with user).** Zoë (Cape-B-2) Rev R has no Zigbee
         transceiver, antenna filter chain, or SMA pad (the CC2652R7 Zigbee radio exists
@@ -1983,12 +2019,16 @@ work that was actually completed against this stub before it was retired:
         Still open: which bay carries the Zigbee module once added, diplexer part
         selection, and Cape-B-2 schematic work to add the CC2652R7 RF chain.
         **Cross-reference added to §1.2a as a tracked PCB scope gap.**
-    - [ ] **Verify all 8 dorsal mount stations (Shepherd/Inara/River/Simon ×2 each) in
-        FreeCAD against the baked hull** — confirm ≥ 30 mm antenna-to-antenna spacing is
-        actually achievable on the as-built dorsal skin at each bay's station, and that
-        no mount collides with an access-panel cover (§1.1.1.0a), the bow sensor pod
-        (§1.1.1.1a), or the dorsal antenna fin (`dorsal_antenna_fin.stl`).
-        **BLOCKS antenna mount printing.**
+    - [ ] **Verify the 6 dorsal mount stations (Shepherd ×2, Inara ×2, River's LoRa whip,
+        Simon's SiK whip) in FreeCAD against the baked hull** — confirm ≥ 30 mm
+        antenna-to-antenna spacing is actually achievable on the as-built dorsal skin at
+        each bay's station, and that no mount collides with an access-panel cover
+        (§1.1.1.0a), the bow sensor pod (§1.1.1.1a), or the dorsal antenna fin
+        (`dorsal_antenna_fin.stl`). **BLOCKS dorsal antenna mount printing.**
+    - [ ] **Verify the 2 flank mount lines (River's 49 MHz, port; Simon's 49 MHz,
+        starboard) in FreeCAD against the cargo clamshell door swing envelope** — see
+        the dedicated sub-task under "Second 49 MHz antenna" below.
+        **BLOCKS flank antenna mount printing.**
 
 - [x] **Feedlines** *(cable spec and run-length budget resolved 2026-06-22)*:
     - Cable: **RG-316** (50 Ω, PTFE dielectric, silver-plated copper braid) for every
@@ -2017,35 +2057,53 @@ work that was actually completed against this stub before it was retired:
     49 MHz runs) → **8× Würth 74271222 required**, added to BOM.
 
 - [x] **Second 49 MHz antenna for Simon's Medbay** *(decision made 2026-06-22, with
-    user)* — Simon's Emma board currently has no antenna feed at all; only River's J2 is
-    wired to the single existing `WIRE-49MHZ` top-wire antenna. **Decision: build a
-    second, fully independent 49 MHz antenna for Simon rather than sharing River's
-    antenna through a mux/switch or passive splitter.** A shared antenna (switched or
-    split) makes the antenna/switch a single point of failure for *both* stacks' 49 MHz
-    link, which directly contradicts the first-class redundancy requirement in
-    `CLAUDE.md` — and the mass cost of a second antenna is trivial (≈ 9–11 g, see BOM)
-    against that benefit. *(Moved here from former §1.1.1.0.1, 2026-06-22.)*
-    - [x] **Design mirrors the existing River system**: PETG forward wire post + 38 µH
-        base-loading coil, stainless-steel top wire, aft wire post with ceramic
-        insulator, AWG 22 stranded copper counterpoise alongside the keel, RG-316 feed
-        to Simon's Emma J2 (≤ 500 mm), Würth 74271222 choke at the Faraday crossing —
-        same component set as `POST-FWD-49`/`WIRE-49MHZ`/`POST-AFT-49`/
+    user; routing corrected 2026-06-22, with user)* — Simon's Emma board currently has
+    no antenna feed at all; only River's J2 is wired to the single existing
+    `WIRE-49MHZ` top-wire antenna. **Decision: build a second, fully independent 49 MHz
+    antenna for Simon rather than sharing River's antenna through a mux/switch or
+    passive splitter.** A shared antenna (switched or split) makes the antenna/switch a
+    single point of failure for *both* stacks' 49 MHz link, which directly contradicts
+    the first-class redundancy requirement in `CLAUDE.md` — and the mass cost of a
+    second antenna is trivial (≈ 9–11 g, see BOM) against that benefit. *(Moved here
+    from former §1.1.1.0.1, 2026-06-22.)*
+    - [x] **Design mirrors the existing River system, full length**: PETG forward wire
+        post + 38 µH base-loading coil, ~470 mm stainless-steel top wire (same length as
+        `WIRE-49MHZ`, not shortened), aft wire post with ceramic insulator, AWG 22
+        stranded copper counterpoise (routed inside the foam alongside the structural
+        keel — the keel itself is interior/embedded and not affected by the exterior
+        clamshell door swing discussed below, so this counterpoise routing is unchanged),
+        RG-316 feed to Simon's Emma J2 (≤ 500 mm), Würth 74271222 choke at the Faraday
+        crossing — same component set as `POST-FWD-49`/`WIRE-49MHZ`/`POST-AFT-49`/
         `WIRE-COUNTERPOISE-49MHZ`, new reference IDs (see BOM).
-    - [ ] **Route on the ventral (keel) line, not parallel to the existing dorsal wire**
-        — the existing wire already uses nearly the full usable dorsal ridge length
-        (sta ≈ 120–580 mm on a ≈ 690 mm hull); a second full-length wire run on the same
-        ridge would sit well under one wavelength (λ = 6.12 m at 49 MHz) from the first,
-        risking mutual coupling/detuning of both antennas. Routing ventral, alongside the
-        existing keel (which already carries the first antenna's copper counterpoise,
-        §1.1.1.0b), gives the only meaningfully different routing available on this
-        airframe. **This conflicts with existing ventral hardware (battery hatch,
-        Kaylee hatch, cargo belly opening, landing-gear posts, skid rods) and MUST be
-        checked in FreeCAD before any post is bonded or printed** — proposed working
-        stations are fwd post ≈ sta 250 mm, aft post ≈ sta 450 mm (shortened ≈ 200 mm
-        span vs. River's 470 mm; loading coil must be retuned for the shorter element).
-        **BLOCKS Simon's 49 MHz antenna fabrication.**
-    - [ ] **Bench-verify isolation between the two 49 MHz antennas** (River's dorsal,
-        Simon's ventral) before first flight — confirm neither antenna's feedpoint
+    - [x] **Route on the STARBOARD flank, shoulder height — not ventral, not dorsal
+        centreline** *(corrected 2026-06-22, with user)* — two routings were rejected:
+        (1) a second full-length wire parallel to River's on the same dorsal ridge would
+        sit well under one wavelength (λ = 6.12 m at 49 MHz) from the first, risking
+        mutual coupling/detuning of both antennas; (2) a ventral/keel-line run (the
+        original proposal here) was rejected outright once `generate_cargo_doors.py`
+        was checked — the cargo bay clamshell doors hinge at the **outboard flank/belly
+        edge** and swing up to **180°**, sweeping the lower flank and belly through the
+        door's full Y-span; any exterior wire post mounted there is in the door's path.
+        **Resolution: both antennas move off the dorsal centreline entirely.** River's
+        existing antenna relocates to the **port** flank, shoulder height; Simon's new
+        antenna goes on the **starboard** flank, shoulder height, same sta ≈ 120–580 mm
+        span and full ~470 mm length as River's. Shoulder height is chosen specifically
+        because it is above the door's swing reach (door hinges at the bottom-outboard
+        edge) and laterally separated from its mirror-image counterpart by the full
+        fuselage width (port vs. starboard), solving both the coupling and the door
+        problems at once — see updated `rcrs49_wire_post.scad` header and §1.1.1.0b.
+        **SUB-TASKS OPEN:**
+    - [ ] **Verify the exact shoulder-height Z offset in FreeCAD against the cargo
+        door's 180°-open envelope** (door panel width from the hinge line) at every
+        station along sta 120–580 mm, not just within the door bay's own Y-span —
+        confirm port and starboard mount lines clear the door on both sides.
+        **BLOCKS bonding either antenna's posts.**
+    - [ ] **Confirm the port/starboard mount line also clears the wing roots** (wings
+        attach at the cargo section's lateral walls, `CLAUDE.md`) — the flank line
+        passes close to this area within the cargo section.
+        **BLOCKS Simon's 49 MHz antenna fabrication; BLOCKS River's antenna relocation.**
+    - [ ] **Bench-verify isolation between the two 49 MHz antennas** (River's port,
+        Simon's starboard) before first flight — confirm neither antenna's feedpoint
         impedance shifts unacceptably with the other antenna present, and that
         simultaneous Emma TX on one does not desense the other's receiver beyond an
         acceptable margin. Use the same HDOP-with-TX-active bench test already specified
@@ -2058,14 +2116,16 @@ work that was actually completed against this stub before it was retired:
     bench verification sub-tasks, which are tracked individually rather than left as one
     generic catch-all.
 
-**Mass/cost added to `docs/bom_revR.json` `avionics.antenna_system` (2026-06-22):** 11 new
-line items — ANT-WIFI-5G ×2, ANT-SIK-915 ×3, ANT-LORA-915 ×1, ANT-GPS-PATCH ×4,
-WIRE-COUNTERPOISE-49MHZ ×1 (backfilled, was referenced but never added),
-WIRE-49MHZ-2/POST-FWD-49-2/POST-AFT-49-2/WIRE-COUNTERPOISE-49MHZ-2 (Simon's independent
-49 MHz antenna), COAX-RG316-AIRFRAME ×1, CHOKE-FERRITE-ANT ×8 — **+93 g / +$90** beyond
-the pre-existing 3-item 49 MHz antenna entry (9 g / $16). New `antenna_system` total:
-**102 g / $106.** This is a small fraction of the ~3,590 g AUW noted in `totals.note`;
-no AUW/T-W recheck needed at this magnitude.
+**Mass/cost added to `docs/bom_revR.json` `avionics.antenna_system` (2026-06-22, updated
+after the port/starboard routing correction):** 11 new line items — ANT-WIFI-5G ×2,
+ANT-SIK-915 ×3, ANT-LORA-915 ×1, ANT-GPS-PATCH ×4, WIRE-COUNTERPOISE-49MHZ ×1
+(backfilled, was referenced but never added), WIRE-49MHZ-2/POST-FWD-49-2/POST-AFT-49-2/
+WIRE-COUNTERPOISE-49MHZ-2 (Simon's independent 49 MHz antenna, full-length starboard
+design, not the earlier shortened ventral proposal), COAX-RG316-AIRFRAME ×1,
+CHOKE-FERRITE-ANT ×8 — **+96 g / +$93** beyond the pre-existing 3-item 49 MHz antenna
+entry (9 g / $16, itself relocated port-flank, mass unchanged). New `antenna_system`
+total: **105 g / $109.** This is a small fraction of the ~3,590 g AUW noted in
+`totals.note`; no AUW/T-W recheck needed at this magnitude.
 
 #### 1.4.3 internode communication wiring
 
