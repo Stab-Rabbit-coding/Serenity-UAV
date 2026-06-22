@@ -938,7 +938,7 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     `nacelle_nozzle_idler.scad` idler gear mounts via its own bracket to the
     nozzle outer housing (not the bevel housing), on a shaft position solved
     only by the 1-D triangle-inequality check (centre distances only); the
-    actual 2-D/3-D clearance against the bevel housing
+    actual 2D/3D clearance against the bevel housing
     (`nacelle_bevel_housing.scad`) and nacelle pod wall has not been checked.
     Verify once both STLs are rendered (see above) and the idler shaft's
     angular position about the nozzle axis is chosen.

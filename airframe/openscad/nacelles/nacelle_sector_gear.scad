@@ -86,13 +86,13 @@ MODULE          =  1.0;   // [mm] AGMA Module — tooth size standard
 PRESSURE_ANGLE  = 20.0;   // [deg] standard involute pressure angle
 PITCH_R         = 22.0;   // [mm] pitch circle radius of sector gear
 SECTOR_TEETH    = 58;     // [count] number of teeth spanning the active arc
-                          //   58 T covers ≈151.3° (see SECTOR_ARC_DEG below) —
-                          //   encompasses the nacelle's Rev R1 operating range
-                          //   of -5° to 140° mechanical hard stops (145° span)
-                          //   plus ≈3° entry/exit mesh margin each end
-                          //   (145+3+3 = 151° nominal).  Grown from the Rev O
-                          //   34T/38T figures when the operating range widened
-                          //   from 0-90° to -5°/140° — see TODO.md §1.1.3.
+                        //   58 T covers ≈151.3° (see SECTOR_ARC_DEG below) —
+                        //   encompasses the nacelle's Rev R1 operating range
+                        //   of -5° to 140° mechanical hard stops (145° span)
+                        //   plus ≈3° entry/exit mesh margin each end
+                        //   (145+3+3 = 151° nominal).  Grown from the Rev O
+                        //   34T/38T figures when the operating range widened
+                        //   from 0-90° to -5°/140° — see TODO.md §1.1.3.
 BODY_H          =  3.0;   // [mm] plate (web) thickness behind teeth
 MOUNT_BORE_D    =  4.2;   // [mm] M4 clearance bore at pivot axis
 SLOT_BC_R       = 18.0;   // [mm] bolt-circle radius for M2.5 adjustment slots
@@ -150,7 +150,7 @@ function arc_pts(r, a1, a2, n) =
 //
 function annular_wedge(r_in, r_out, a1, a2, n) =
     concat(arc_pts(r_in,  a1, a2, n),
-           arc_pts(r_out, a2, a1, n));
+            arc_pts(r_out, a2, a1, n));
 
 // ── Module Definitions ────────────────────────────────────────────────────────
 
