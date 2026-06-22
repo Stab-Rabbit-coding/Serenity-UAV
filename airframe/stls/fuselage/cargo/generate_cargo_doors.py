@@ -453,7 +453,7 @@ def make_knuckle(x_centre: float, y_centre: float, z_centre: float) -> trimesh.T
 
 
 def make_knuckle_gusset(hinge_x: float, y_centre: float, z_hinge: float,
-                         local_panel_z: float, side: str) -> trimesh.Trimesh:
+                        local_panel_z: float, side: str) -> trimesh.Trimesh:
     """
     Build a small bridging block that positively connects one knuckle
     (on the door's straight hinge axis, at z_hinge) to the door panel's
