@@ -150,7 +150,7 @@
 <rect x="626" y="244" width="548" height="16" rx="2" fill="transparent"/>
 <text x="632" y="256" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222" font-weight="normal">Radios + nav lights + ant.</text>
 <text x="815" y="256" text-anchor="end" font-family="'Arial Black','Arial',sans-serif" font-weight="bold" font-size="9" fill="#222222">33</text>
-<text x="825" y="256" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="rgba(60,80,100,0.97)">SiK+RCRS+6xLED+GPS</text>
+<text x="825" y="256" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="rgba(60,80,100,0.97)">SiK+49MHz+6xLED+GPS</text>
 <line x1="628" y1="273" x2="1172" y2="273" stroke="#dde4ea" stroke-width="1"/>
 <rect x="626" y="268" width="548" height="16" rx="2" fill="transparent"/>
 <text x="632" y="280" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222" font-weight="normal">4x CAPE-A-1 (XIAO)</text>

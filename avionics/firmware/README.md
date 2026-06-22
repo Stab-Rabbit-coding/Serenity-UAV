@@ -48,7 +48,7 @@ firmware/
 │   └── src/
 │       ├── main.c       # Daemon entry point, argument parsing, signal handling
 │       ├── si5351.h     # Si5351A DDS I²C driver API
-│       ├── si5351.c     # Si5351A frequency programming (RCRS 49 MHz channels)
+│       ├── si5351.c     # Si5351A frequency programming (49 MHz Part 15 §15.235 channels)
 │       ├── xcvr_kiss.h  # XCVR-49MHZ-1 KISS/AX.25 driver API
 │       └── xcvr_kiss.c  # KISS framing, PTT sequencing, UART I/O
 ├── fc/                  # FC node daemon (stub — Phase 7)

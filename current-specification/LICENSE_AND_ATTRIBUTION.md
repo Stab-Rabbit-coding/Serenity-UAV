@@ -66,7 +66,7 @@ The following elements are original work by Steve Griffing, released under CC BY
 - Nacelle nozzle gear geometry and STL files
 - All KiCad PCB source files in this repository
 - Flight controller firmware architecture and algorithm specifications
-- 49 MHz RCRS TDDS (Time-Division Dual-Simplex) protocol specification
+- 49 MHz (47 CFR Part 15 §15.235) AX.25/KISS PTT-sequenced link implementation
 - All SVG engineering diagrams in `diagrams/`
 - All wiring diagrams, pin-out tables, and system integration specifications
 - Build guide and assembly documentation

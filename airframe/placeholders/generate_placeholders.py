@@ -353,7 +353,7 @@ def gen_cf_tube_12mm_spar():
 
 def gen_cf_bar_6x3():
     """
-    6 × 3 mm CF flat bar 620 mm — hull keel + 49 MHz RCRS counterpoise.
+    6 × 3 mm CF flat bar 620 mm — hull keel + 49 MHz (Part 15 §15.235) counterpoise.
     BOM: CF-BAR-6X3 (×1).
     """
     return _box(620.0, 6.0, 3.0)
@@ -423,7 +423,7 @@ def gen_cape_b2():
 
 def gen_xcvr_49mhz2():
     """
-    XCVR-49MHZ-2 sub-module PCB 55 × 35 mm — EMI-hardened 49 MHz AX.25 RCRS transceiver.
+    XCVR-49MHZ-2 sub-module PCB 55 × 35 mm — EMI-hardened 49 MHz (Part 15 §15.235) AX.25 transceiver.
     SRF2012-100Y CMC, PRTR5V0U2X TVS, X2Y cap; 4-layer 55 × 35 mm PCB.
     Assembled height ~6 mm.
     BOM: XCVR-49MHZ-2 (×4 aircraft), MAL-XCVR-49MHZ-2 (×1 GCS).
@@ -941,7 +941,7 @@ def gen_malcolm_tripod():
 
 def gen_wire_post_49mhz():
     """
-    49 MHz RCRS wire post + base-loading coil — dorsal hull antenna mount.
+    49 MHz (Part 15 §15.235) wire post + base-loading coil — dorsal hull antenna mount.
     PETG post 12×12×9 mm; coil wound on post; modelled as square mast + small cylinder.
     BOM: POST-FWD-49, POST-AFT-49 (×2 total, forward + aft hull positions).
     """
@@ -1440,7 +1440,7 @@ _COMPONENTS = [
      "CF-TUBE-12MM",         "12 mm OD 1.5 mm wall CF tube — wing spar 350 mm (×2)"),
     (gen_cf_bar_6x3,         "structural", "CF_bar_6x3mm_620mm_keel.stl",
      "CF-BAR-6X3",
-     "6×3 mm CF flat bar 620 mm — hull keel + RCRS counterpoise (×1)"),
+     "6×3 mm CF flat bar 620 mm — hull keel + 49 MHz (Part 15 §15.235) counterpoise (×1)"),
     (gen_cf_plate_2mm,       "structural", "CF_plate_2mm_200x300mm.stl",
      "CF-PLATE-2MM",         "2 mm CF sheet 200×300 mm — ring frame stock (×1 sheet)"),
     (gen_ptfe_sleeve_4mm,    "structural", "PTFE_sleeve_4mm_OD_3mm_ID_52mm.stl",
@@ -1457,7 +1457,7 @@ _COMPONENTS = [
      "Cape-B-2 Zoë Comms cape PCB 55×35 mm (×4 aircraft + ×1 GCS)"),
     (gen_xcvr_49mhz2,        "avionics",   "XCVR_49MHZ2_PCB_55x35mm.stl",
      "XCVR-49MHZ-2 / MAL-XCVR-49MHZ-2",
-     "XCVR-49MHZ-2 49 MHz RCRS sub-module 55×35 mm (×4 aircraft + ×1 GCS)"),
+     "XCVR-49MHZ-2 49 MHz (Part 15 §15.235) sub-module 55×35 mm (×4 aircraft + ×1 GCS)"),
     (gen_kaylee_pdb,         "avionics",   "Kaylee_PDB_90x65mm.stl",
      "Kaylee",               "Kaylee Power Distribution Board 90×65 mm (×1)"),
     (gen_microsd,            "avionics",   "microSD_64GB.stl",

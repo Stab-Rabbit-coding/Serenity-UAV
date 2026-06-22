@@ -51,6 +51,8 @@
 
 /* ---------------------------------------------------------------------------
  * SiK 915 MHz radio (RFD900x or compatible, UART2)
+ * 902-928 MHz ISM band [REF-FCC-001 §15.247(a)(1)]; conducted power limit
+ * [REF-FCC-001 §15.247(b)(3)(i)] applies (see MAL_LORA_TX_POWER_DBM below).
  * ---------------------------------------------------------------------------*/
 
 /** UART device for SiK radio. */
@@ -66,7 +68,12 @@
 /** SPI device for RFM95W. */
 #define MAL_LORA_SPI_DEV            "/dev/spidev1.0"
 
-/** RFM95W output power setting (dBm).  Must be ≤20 dBm. */
+/**
+ * RFM95W output power setting (dBm).  Must be ≤20 dBm conducted (RFM95W
+ * hardware maximum); separately bounded by the 1 W (30 dBm) conducted limit
+ * for frequency-hopping/direct-sequence systems in the 902-928 MHz ISM band
+ * [REF-FCC-001 §15.247(b)(3)(i)].
+ */
 #define MAL_LORA_TX_POWER_DBM       (20U)
 
 /** LoRa spreading factor (SF7–SF12). */
@@ -84,14 +91,15 @@
 
 /**
  * WiFi transmit power override (dBm).  When using the 14 dBi panel antenna,
- * reduce to 17 dBm to stay within 30 dBm FCC EIRP limit.
+ * reduce to 17 dBm to stay within the 30 dBm EIRP limit for UNII-3
+ * [REF-FCC-002 §15.407(a)(3)].
  * Set to 0 to use kernel default; set with: iw dev wlan0 set txpower fixed 1700
  * (iw uses mBm units; 17 dBm = 1700 mBm).
  */
 #define MAL_WIFI_TX_POWER_MBM       (1700U)
 
 /* ---------------------------------------------------------------------------
- * 49 MHz RCRS (XCVR-49MHZ-2, UART5)
+ * 49 MHz [REF-FCC-003 §15.235] (XCVR-49MHZ-2, UART5)
  * ---------------------------------------------------------------------------*/
 
 /** UART device for XCVR-49MHZ-2. */
@@ -101,7 +109,7 @@
 #define MAL_RCRS_BAUD               (1200U)
 
 /**
- * Default RCRS channel index (0–4 → 49.830, 49.845, 49.860, 49.875, 49.890 MHz).
+ * Default 49 MHz channel index (0–4 → 49.830, 49.845, 49.860, 49.875, 49.890 MHz).
  * Must match aircraft node channel assignment.  River = Channel 0; Simon = Channel 1.
  */
 #define MAL_RCRS_DEFAULT_CHANNEL    (0U)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """gen_kaylee_pcb.py — Generate complete Kaylee.kicad_pcb with all component placements.
 
-Kaylee is the EMI-hardened Power Distribution Board for the Serenity UAV.
+Kaylee is the EMI-hardened [REF-NIST-002 §6.2.5] Power Distribution Board for the Serenity UAV.
 90 × 65 mm, 4-layer FR4-TG170, 4 oz Cu on F.Cu/In2.Cu, 1 oz on In1.Cu/B.Cu.
 
 Schematic sections (from gen_kaylee.py / Kaylee.kicad_sch):

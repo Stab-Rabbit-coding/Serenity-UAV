@@ -142,7 +142,7 @@ battery_tray.scad               — 6S 4000mAh LiPo tray, keel-rail slide (Rev R
 belly_panel.scad                — Battery bay belly access panel (Rev R)
 access_panels_24in.scad         — All hull access panels: 4× Faraday-bay covers (Shepherd/Inara/River/Simon),
                                     2× ventral hatch covers (battery/Kaylee), 2× ventral hatch frames (Rev R)
-rcrs49_wire_post.scad           — 49 MHz RCRS top-wire antenna post, 12×12 mm PETG mast (Rev R)
+rcrs49_wire_post.scad           — 49 MHz (Part 15 §15.235) top-wire antenna post, 12×12 mm PETG mast (Rev R)
 landing_leg_assy.scad           — Rev R1 4× field-replaceable landing legs (CF-PETG flat spring,
                                     22×10mm, 185mm) + hull boss + 3×M3 nylon shear-bolt fuse;
                                     see docs/LANDING_GEAR_ANALYSIS.md for structural analysis
@@ -256,8 +256,8 @@ nacelle_pinion.stl                — M=1.0 12T pinion
 nacelle_port_revq.stl             — Port nacelle pod shell, Rev Q baseline; required by
                                     tools/bake_hull_frame.py, serenity_assembly.py, and the
                                     FreeCAD-scripts Makefile (active, do not archive)
-nacelle_sector_gear.stl           — M=1.0 38T sector gear (STALE: source grew to 58T
-                                    2026-06-22, see §1.1.3.2 — not yet re-rendered)
+nacelle_sector_gear.stl           — M=1.0 58T sector gear, -5°/140° range; re-rendered
+                                    2026-06-22, see §1.1.3.2
 nacelle_stbd_revq.stl             — Stbd nacelle pod shell, Rev Q baseline; same active-pipeline
                                     dependency as nacelle_port_revq.stl (do not archive)
 nacelle_tip_cap_port.stl          — Port nacelle intake tip cap
@@ -265,11 +265,14 @@ nacelle_tip_cap_stbd.stl          — Stbd nacelle intake tip cap
 nozzles/
 nacelle_bevel_housing.stl       — Bevel gear housing
 nacelle_bevel_pair.stl          — 14T 45° bevel pair
-nacelle_nozzle_iris.stl         — 8-petal iris nozzle ring (STALE: source reworked to a
-                                    full-circle ring gear + idler-gear stage 2026-06-22, see
-                                    TODO.md §1.1.3.1 — not yet re-rendered)
-nacelle_nozzle_idler.stl        — NOT YET RENDERED: compound idler gear (44T/15T), new
-                                    component 2026-06-22, see TODO.md §1.1.3.1
+nacelle_nozzle_iris.stl         — Combined assembly-preview render (housing + ring + 8
+                                    petals, closed position) of the Rev R1 full-circle
+                                    ring gear + idler-gear stage; re-rendered 2026-06-22,
+                                    see TODO.md §1.1.3.1
+nacelle_nozzle_idler.stl        — Compound idler gear (44T/15T), Crown-Pinion-to-ring
+                                    stage; rendered 2026-06-22, see TODO.md §1.1.3.1
+nacelle_nozzle_idler_bracket.stl — Two-boss bracket for the idler gear above; rendered
+                                    2026-06-22, see TODO.md §1.1.3.1
 nacelle_nozzle_petal.stl        — Single iris petal (print × 8)
 nacelle_nozzle_ring.stl         — Iris nozzle ring body
 nacelle_nozzle_closed_asm.stl   — Iris assembly (closed position, visual)
@@ -631,7 +634,7 @@ firmware/
         dts/
         k3-am6254-pocketbeagle2-malcolm-cape-b2.dts
                                             — Device tree overlay: EHRPWM0 pan/tilt gimbal servos,
-                                            I²C2 TCA9548A+AS5600 encoders, UART2 SiK, UART5 RCRS
+                                            I²C2 TCA9548A+AS5600 encoders, UART2 SiK, UART5 49 MHz
         src/
         mal_config.h                       — All compile-time constants: MAVLink sysids, UDP ports,
                                             UART paths, LoRa SPI, WiFi tx_power_mbm, gimbal limits,
@@ -649,7 +652,7 @@ software/
     config/
         malcolm_config.yaml                  — YAML config: MAVLink source, tracker ports, gimbal_ctrl
                                             ports, PB2-I host, GNSS device, WiFi tx_power_mbm,
-                                            RCRS default channel
+                                            49 MHz default channel
         mavlink_router.conf                  — mavlink-router config: pb2i_comms UDP 14551,
                                             qgc UDP 14550, tracking UDP 14552; serial fallback stubs
     install/

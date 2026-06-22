@@ -126,7 +126,7 @@ typedef struct {
     /** I²C bus number for Si5351A, e.g. 1 for /dev/i2c-1. */
     int             si5351_i2c_bus;
 
-    /** Default RCRS channel (0–4) at startup. */
+    /** Default 49 MHz channel (0–4) at startup. */
     unsigned int    default_channel;
 
     /** RX callback — invoked for every received AX.25 frame. */
@@ -155,7 +155,7 @@ int xcvr_kiss_open(const xcvr_kiss_config_t *config,
                    xcvr_kiss_ctx_t          **ctx_out);
 
 /**
- * @brief Transmit an AX.25 frame over the 49 MHz RCRS link.
+ * @brief Transmit an AX.25 [REF-PROTO-001] frame over the 49 MHz [REF-FCC-003 §15.235] link.
  *
  * Sequence:
  *   1. Select @c channel on the Si5351A DDS.
@@ -170,7 +170,7 @@ int xcvr_kiss_open(const xcvr_kiss_config_t *config,
  * by an internal mutex; they will block but will not fail.
  *
  * @param[in] ctx          Driver context.
- * @param[in] channel      RCRS channel index 0–4.
+ * @param[in] channel      49 MHz channel index 0–4.
  * @param[in] ax25_payload Raw AX.25 frame bytes (no HDLC flags / FCS).
  * @param[in] payload_len  Length of @c ax25_payload in bytes (≤ KISS_MAX_AX25_LEN).
  * @return 0 on success, negative errno on error.
@@ -181,7 +181,7 @@ int xcvr_kiss_transmit(xcvr_kiss_ctx_t *ctx,
                        size_t           payload_len);
 
 /**
- * @brief Query the currently selected RCRS channel.
+ * @brief Query the currently selected 49 MHz channel.
  *
  * @param[in] ctx  Driver context.
  * @return Channel index 0–4, or UINT_MAX if not yet set.

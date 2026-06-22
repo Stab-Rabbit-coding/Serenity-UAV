@@ -6,8 +6,9 @@
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  * Revision: R (2026-06-11)
  *
- * This module parses inbound MAVLink telemetry frames received on any of
- * Malcolm's radio links (SiK, LoRa, WiFi, RCRS-49) and:
+ * This module parses inbound MAVLink v2 [REF-PROTO-002] telemetry frames
+ * received on any of Malcolm's radio links (SiK, LoRa, WiFi,
+ * 49 MHz [REF-FCC-003 §15.235]) and:
  *
  *   1. Publishes the current aircraft position to the tracking software via
  *      a UDP datagram on MAL_TRACKER_UDP_PORT.

@@ -207,11 +207,23 @@ IDLER_SLOT_W    =  10.0;   // [mm] slot width (circumferential; > Idler-Out tip
                             //   removal.  Idler installed before housing bonded.)
 IDLER_SLOT_H    =   6.0;   // [mm] slot radial depth, added to wall thickness
                             //   (matches Rev R CROWN_SLOT_H convention)
-IDLER_SLOT_ANG  =   0.0;   // [deg] angular position of slot (at +Y face, 0°) —
-                            //   final angle is a packaging choice constrained by
-                            //   the idler-position triangle inequality in
-                            //   nacelle_nozzle_idler.scad; PENDING verification
-                            //   in serenity_assembly.py (TODO.md §1.1.3.3).
+IDLER_SLOT_ANG  =  50.9;   // [deg] angular position of slot, measured from this
+                            //   part's local +X axis (TODO.md §1.1.3.3, resolved
+                            //   2026-06-22).  Solved from the two simultaneous
+                            //   centre-distance constraints in
+                            //   nacelle_nozzle_idler.scad — Crown Pinion sits at
+                            //   local (X=0, Y=28) (PINION_A_Y, nacelle_pod_50mm_
+                            //   tandem.scad), and the idler shaft must be 28.1 mm
+                            //   from that point AND 43.6 mm from this ring's axis
+                            //   (0,0).  Solving the two circle equations gives
+                            //   shaft position (X=+27.485, Y=33.846), i.e. 50.92°
+                            //   from +X (rounded to 50.9°).  This is one of the
+                            //   two valid mirror-image solutions (the other is
+                            //   129.08° at X=-27.485); +X was chosen arbitrarily
+                            //   — no other component occupies this angular sector
+                            //   at this Z station.  NOTE: the idler's AXIAL (Z)
+                            //   placement is a separate, still-open question — see
+                            //   TODO.md §1.1.3.3 "idler axial mesh-band mismatch".
 
 // ── Petal Dimensions ──────────────────────────────────────────────────────────
 
@@ -478,7 +490,7 @@ module nozzle_petal() {
 // Export each part individually (uncomment one section at a time):
 //
 // Render inner ring:
-nozzle_inner_ring();
+// nozzle_inner_ring();
 //
 // Render outer housing:
 // nozzle_outer_housing();
@@ -486,12 +498,19 @@ nozzle_inner_ring();
 // Render one petal (print × 8):
 // nozzle_petal();
 //
-// Assembly preview — all 8 petals at closed position + housing + ring:
-// nozzle_outer_housing();
-// nozzle_inner_ring();
-// for (i = [0 : N_PETALS - 1]) {
-//     rotate([0, 0, i * 360 / N_PETALS])
-//         translate([PETAL_HINGE_R, 0, 0])
-//             rotate([0, 0, -PETAL_SPAN_DEG / 2])
-//                 nozzle_petal();
-// }
+// Assembly preview — all 8 petals at closed position + housing + ring.
+// This is the DEFAULT render: serenity_assembly.py imports
+// nacelle_nozzle_iris.stl as the combined assembly (see its comment at the
+// nozzle placement block) for spatial/clearance purposes, not as a
+// print-ready single part — the ring/housing/petals are still printed as
+// three separate parts pulled from this same file (uncomment one block at
+// a time above) or, for the petal, from blender_nozzle_gen.py's
+// nacelle_nozzle_petal.stl.
+nozzle_outer_housing();
+nozzle_inner_ring();
+for (i = [0 : N_PETALS - 1]) {
+    rotate([0, 0, i * 360 / N_PETALS])
+        translate([PETAL_HINGE_R, 0, 0])
+            rotate([0, 0, -PETAL_SPAN_DEG / 2])
+                nozzle_petal();
+}

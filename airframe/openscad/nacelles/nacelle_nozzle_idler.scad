@@ -60,6 +60,27 @@
 //   resolved in the housing model / serenity_assembly.py, not a ratio
 //   constraint).
 //
+//   RESOLVED 2026-06-22 (TODO.md §1.1.3.3): solving the two circle equations
+//   (centred on Crown Pinion at local (0, 28) and on the nozzle axis (0, 0))
+//   gives idler shaft position (X=+27.485, Y=33.846) mm, i.e. 50.92° from the
+//   local +X axis (the other mirror solution is 129.08° at X=-27.485; +X
+//   chosen arbitrarily, see nacelle_nozzle_iris.scad IDLER_SLOT_ANG = 50.9°).
+//
+//   OPEN ISSUE found during this resolution, NOT yet fixed (TODO.md §1.1.3.3
+//   "idler axial mesh-band mismatch"): this idler's two gear sections are
+//   axially separated by GEAR_H_IN + GEAR_GAP = 10 mm (Idler-In's band starts
+//   at local Z = HUB_EXTENSION = 2; Idler-Out's band starts 10 mm later, at
+//   local Z = 12).  But Crown Pinion (nacelle_pinion.scad, placed at global Z
+//   = CROWN_Z = 166.25 mm) and the Nozzle Ring (nacelle_nozzle_iris.scad,
+//   placed at global Z = NOZZLE_RING_Z = CROWN_Z, i.e. THE SAME STATION) both
+//   occupy the identical 166.25-174.25 mm Z band.  A single idler shaft
+//   cannot present two gear sections 10 mm apart and mesh two targets that
+//   are 0 mm apart.  Either Crown Pinion's Z must move to create the needed
+//   axial offset from the Ring, or the idler's own GEAR_GAP / section order
+//   must change to match the existing Crown-Pinion/Ring spacing (currently
+//   zero).  Needs a design decision before this idler can be placed in
+//   serenity_assembly.py with a verified (not placeholder) Z.
+//
 //   Compound ratio:
 //     omega_idler / omega_crownPinion = R_crownPinion / R_idlerIn = 6 / 22 = 0.27273
 //     omega_ring   / omega_idler      = R_idlerOut / R_ring       = 7.5 / 36 = 0.20833
@@ -313,6 +334,16 @@ module idler_bracket() {
 //   Bracket bosses          Nozzle outer housing wall      M2.5 bonded/bolted
 
 // ── Render ────────────────────────────────────────────────────────────────────
+//
+// RENDER_PART selects which printable part this file outputs (-D flag, same
+// convention as wings_s1223_revo.scad's RENDER_SIDE):
+//   "gear"    (default) -> idler_gear()    -> nacelle_nozzle_idler.stl
+//   "bracket"            -> idler_bracket() -> nacelle_nozzle_idler_bracket.stl
 
-idler_gear();
-// idler_bracket();
+RENDER_PART = "gear";   // [string] "gear" | "bracket"
+
+if (RENDER_PART == "bracket") {
+    idler_bracket();
+} else {
+    idler_gear();
+}

@@ -669,17 +669,25 @@ module pinion_a_boss() {
 // =============================================================================
 // MR63ZZ bearing boss for Crown Pinion at CROWN_Z.  Co-planar with Pinion A
 // in Y so the longitudinal CF shaft runs straight.
+//
+// Crown Pinion is documented (nacelle_pinion.scad, nacelle_bevel_housing.scad)
+// as mounted on the longitudinal shaft (nacelle Z-axis) — unlike Pinion A,
+// which is transverse (X-axis, meshes the fixed sector gear on the tilt
+// pivot) and needs rotate([0, 90, 0]) to lay its bore along X.  This boss
+// must NOT carry that rotation: cylinder() already extrudes along Z by
+// default, the correct bore axis here.  Fixed 2026-06-22 — see TODO.md
+// §1.1.3.3 ("crown_pinion_boss() copies pinion_a_boss()'s rotate([0,90,0])
+// X-axis-bore pattern verbatim").
 module crown_pinion_boss() {
     translate([0, PINION_A_Y, CROWN_Z])
-        rotate([0, 90, 0])
-            difference() {
-                cylinder(r = CROWN_BOSS_OD / 2,
-                        h = CROWN_BOSS_L,
-                        center = true);
-                cylinder(r = PINION_A_SHAFT_D / 2,
-                        h = CROWN_BOSS_L + 0.02,
-                        center = true);
-            }
+        difference() {
+            cylinder(r = CROWN_BOSS_OD / 2,
+                    h = CROWN_BOSS_L,
+                    center = true);
+            cylinder(r = PINION_A_SHAFT_D / 2,
+                    h = CROWN_BOSS_L + 0.02,
+                    center = true);
+        }
 }
 
 

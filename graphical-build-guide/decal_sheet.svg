@@ -92,7 +92,7 @@
 <text x="317" y="310" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">A4 — BELL (vert.)</text>
 <rect x="620" y="75" width="560" height="280" rx="8" ry="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,50,50,0.3)" stroke-width="1"/>
 <text x="900" y="90" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="11" fill="#c62828"  letter-spacing="1">B — FAA REGISTRATION (REQUIRED BY LAW)</text>
-<text x="900" y="105" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#dde4ea" font-weight="normal">14 CFR Part 48  ·  Replace N00000 with your issued FAA registration number</text>
+<text x="900" y="105" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#dde4ea" font-weight="normal">[REF-FAA-001 §48.205]  ·  Replace N00000 with your issued FAA registration number</text>
 <rect x="630" y="115" width="510" height="75" rx="4" ry="4" fill="#ffffff" stroke="#111111" stroke-width="2"/>
 <rect x="630" y="115" width="510" height="20" fill="#444444"/>
 <text x="885" y="129" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="8" fill="#ffffff"  letter-spacing="1">FAA REGISTRATION  ·  UNITED STATES OF AMERICA</text>
@@ -215,7 +215,7 @@
 <text x="304" y="792" text-anchor="end" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#111111" font-weight="normal">Part 107 Operations</text>
 <rect x="30" y="796" width="280" height="14" fill="#dde4ea"/>
 <text x="36" y="806" text-anchor="start" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="8" fill="#444444" >AUW MAX</text>
-<text x="304" y="806" text-anchor="end" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#111111" font-weight="normal">1,103 g  (2.43 lb)</text>
+<text x="304" y="806" text-anchor="end" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#111111" font-weight="normal">3,130 g  (6.90 lb)</text>
 <rect x="30" y="810" width="280" height="14" fill="#ffffff"/>
 <text x="36" y="820" text-anchor="start" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="8" fill="#444444" >FAA REG</text>
 <text x="304" y="820" text-anchor="end" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#111111" font-weight="normal">N00000</text>
@@ -264,7 +264,7 @@
 <text x="1156" y="838" text-anchor="end" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#111111" font-weight="normal">250 g maximum</text>
 <rect x="935" y="841" width="225" height="13" fill="#dde4ea"/>
 <text x="939" y="851" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#444444" font-weight="normal">AUW MAX</text>
-<text x="1156" y="851" text-anchor="end" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#111111" font-weight="normal">1,103 g  (2.43 lb)</text>
+<text x="1156" y="851" text-anchor="end" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#111111" font-weight="normal">3,130 g  (6.90 lb)</text>
 <rect x="931" y="736" width="233" height="118" rx="9" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
 <text x="935" y="734" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">D4 — OPERATING LIMITS (fuselage top)</text>
 <rect x="30" y="850" width="600" height="40" rx="4" ry="4" fill="#c62828" stroke="#111111" stroke-width="1.5"/>
@@ -298,7 +298,7 @@
 <text x="232" y="947" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#dde4ea" font-weight="normal">Belly · White · 60FPM</text>
 <text x="218" y="960" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="10" fill="#f5c518">▪</text>
 <text x="232" y="960" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#dde4ea" font-weight="normal">Landing · White · On ops</text>
-<text x="205" y="968" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="6.5" fill="#888888" font-weight="normal">ICAO Annex 2  ·  14 CFR 91.209  ·  FAA AC 107-2B</text>
+<text x="205" y="968" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="6.5" fill="#888888" font-weight="normal">[REF-ICAO-001]  ·  [REF-FAA-003 §91.209(a)]  ·  FAA AC 107-2B</text>
 <rect x="26" y="906" width="358" height="68" rx="9" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
 <text x="30" y="904" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">D8 — NAV LIGHT REFERENCE (cockpit interior)</text>
 <rect x="395" y="910" width="280" height="60" rx="4" ry="4" fill="#006db7" stroke="#dde4ea" stroke-width="1.5"/>
@@ -309,9 +309,9 @@
 <text x="535" y="942" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="#ffffff" font-weight="normal">MAVLink telemetry</text>
 <text x="671" y="942" text-anchor="end" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#e8d08b" font-weight="normal">≤1,094 yd</text>
 <rect x="395" y="946" width="280" height="14" fill="rgba(255,255,255,0)"/>
-<text x="399" y="956" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#f5c518" font-weight="normal">49 MHz RCRS</text>
+<text x="399" y="956" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#f5c518" font-weight="normal">49 MHz Pt.15 §15.235</text>
 <text x="535" y="956" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="#ffffff" font-weight="normal">Primary RC link</text>
-<text x="671" y="956" text-anchor="end" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#e8d08b" font-weight="normal">≤547 yd</text>
+<text x="671" y="956" text-anchor="end" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#e8d08b" font-weight="normal">range TBD</text>
 <rect x="395" y="960" width="280" height="14" fill="rgba(255,255,255,0.88)"/>
 <text x="399" y="970" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#f5c518" font-weight="normal">WiFi 2.4/5G</text>
 <text x="535" y="970" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="#ffffff" font-weight="normal">Ground debug</text>
@@ -412,7 +412,7 @@
 <text x="923" y="1327" text-anchor="start" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">• Reg block B1: belly between skids · MUST be visible</text>
 <text x="923" y="1341" text-anchor="start" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">• Reg block B2: each nacelle outboard face</text>
 <text x="923" y="1355" text-anchor="start" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">• Chinese 宁静 C3: aft hull port side</text>
-<text x="923" y="1369" text-anchor="start" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">• FAA regs require number legible from 25ft</text>
+<text x="923" y="1369" text-anchor="start" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="rgba(220,240,220,0.9)" font-weight="normal">• [REF-FAA-001 §48.205(b)(1)]: characters ≥3" (76mm) tall</text>
 <rect x="0" y="1660" width="1200" height="40" rx="0" ry="0" fill="#111111" stroke="none" stroke-width="1"/>
 <text x="600" y="1678" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#e8d08b" font-weight="normal">© 2026 Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP  ·  CC BY 4.0  ·  creativecommons.org/licenses/by/4.0</text>
 <text x="600" y="1692" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7.5" fill="#888888" font-weight="normal">Visual inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy Productions / Universal Pictures  ·  Fan engineering work — not an officially licensed product</text>

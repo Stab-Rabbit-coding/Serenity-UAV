@@ -157,7 +157,22 @@ upgrades to:
 
 ## PCB Layout Constraints (additions to CAPE-B-1 rules)
 
-The Wash layout constraints apply equally here. Additional Zoë specifics:
+The Wash layout constraints apply equally here, including the ≥ 8 mm creepage / ≥ 1.5 mm
+clearance requirement between GND1 and GND2 copper pours on the ISOW1044BDFMR and
+ADM2795EBRWZ [REF-IEC-001 §5.5.2] [REF-VDE-001 Cl.4.3] — see Wash.md "Isolation creepage."
+
+> **Verification status (2026-06-22, `kicad-cli pcb drc` against `Zoë.kicad_pcb`,
+> KiCad 9.0.2): NOT MET — BLOCKS PCB fab.** Same finding as Wash, with different
+> numbers: after excluding same-package pin-to-pin spacing, DRC found **9 genuine
+> cross-domain clearance violations** between the `TMESH_P`/`TMESH_N` tamper-detect
+> mesh (and, in one case, a primary-side Ethernet PHY ground pad) and the isolated
+> `GND2_CAN`/`GND2_RS485` domains, with actual measured spacing as low as **0.0 mm**
+> (direct contact) — short of the 0.5 mm `ISOLATION` netclass DRC minimum and the
+> ≥ 8 mm physical creepage target. Tracked in `TODO.md` §1.2a alongside Wash's
+> equivalent finding. Not fixed here — referred to the user per `CLAUDE.md`'s
+> manual-footprint-placement policy.
+
+Additional Zoë specifics:
 
 - **RF groundplane moat:** The RFD900x and RFM95W occupy the same RF section as in
 
@@ -376,8 +391,8 @@ schematic bus ring without net name conflicts.
 2. Analog Devices ADM2795E Data Sheet Rev. B
 3. Würth Elektronik EMC Design Guide (2023) — ferrite bead placement
 4. TI WL1837MOD Hardware Design Guide (SWRU491) — supply filtering guidance
-5. IEC 61000-4-5:2017 — surge immunity
-6. MIL-STD-461G:2015
+5. IEC 61000-4-5:2017 — surge immunity (not yet in REFERENCES.md catalog — see TODO.md §0.5)
+6. MIL-STD-461G:2015 (not yet in REFERENCES.md catalog — see TODO.md §0.5)
 7. Johanson Technology 0915LP15B0100E Data Sheet — 902–928 MHz bandpass filter
 8. Johanson Technology 2450BP15B050E Data Sheet — 2.4 GHz bandpass filter
 9. Semtech RCLAMP0502B Data Sheet — RF ESD protection, 0.15 pF, SOD-882

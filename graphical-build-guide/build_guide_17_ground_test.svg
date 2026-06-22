@@ -42,7 +42,7 @@
 <text x="800" y="158" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">QGroundControl (GCS laptop)</text>
 <rect x="768" y="167" width="26" height="16" rx="4" fill="#c2185b" stroke="#222222" stroke-width="1"/>
 <text x="781" y="180" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
-<text x="800" y="180" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">49MHz RCRS ground transmitter</text>
+<text x="800" y="180" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">49MHz Part 15 §15.235 ground transmitter</text>
 <rect x="768" y="189" width="26" height="16" rx="4" fill="#f5c518" stroke="#222222" stroke-width="1"/>
 <text x="781" y="202" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
 <text x="800" y="202" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Luggage scale (thrust measure)</text>
@@ -61,7 +61,7 @@
 <text x="792" y="328" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Connect GCS laptop · verify MAVLink heartbeat + attitude display</text>
 <circle cx="776" cy="347" r="9" fill="#006db7"/>
 <text x="776" y="351" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
-<text x="792" y="352" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">RC RCRS transmitter: verify all channels in QGC RC calibration</text>
+<text x="792" y="352" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">49 MHz RC transmitter: verify all channels in QGC RC calibration</text>
 <circle cx="776" cy="371" r="9" fill="#006db7"/>
 <text x="776" y="375" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4</text>
 <text x="792" y="376" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">GPS outdoors: wait for HDOP ≤1.5 and ≥6 satellites</text>
@@ -92,7 +92,7 @@
 <rect x="488" y="417" width="14" height="14" rx="2" fill="#2e7d32" opacity="0.5" stroke="#2e7d32" stroke-width="1"/>
 <text x="506" y="428" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">MAVLink heartbeat in QGC</text>
 <rect x="488" y="436" width="14" height="14" rx="2" fill="#2e7d32" opacity="0.5" stroke="#2e7d32" stroke-width="1"/>
-<text x="506" y="447" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">RC channels respond (RCRS)</text>
+<text x="506" y="447" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">RC channels respond (49 MHz)</text>
 <rect x="488" y="455" width="14" height="14" rx="2" fill="#2e7d32" opacity="0.5" stroke="#2e7d32" stroke-width="1"/>
 <text x="506" y="466" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#222222">GPS fix HDOP ≤1.5</text>
 <rect x="488" y="474" width="14" height="14" rx="2" fill="#2e7d32" opacity="0.5" stroke="#2e7d32" stroke-width="1"/>

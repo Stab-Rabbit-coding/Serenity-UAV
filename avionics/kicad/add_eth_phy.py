@@ -4,13 +4,15 @@ add_eth_phy.py — Add one EM-hardened Ethernet port to Wash and Zoë.
 
 Components added:
   ADIN1300BCPZ  : ADI industrial 10/100/1000BASE-T PHY, IEC 61000-4 hardened,
-                  RMII interface, -40/+85 C.
+                  RMII interface [REF-IEEE-001 Clause 22], -40/+85 C.
                   Ref: analog.com/media/en/technical-documentation/data-sheets/ADIN1300.pdf
   ISO7642FDWRR  : TI 6-channel 150 Mbps 5 kV digital isolator (SOIC-16W), x2.
-                  Isolates RMII bus at same 5 kV level as ISOW1044 on CAN.
+                  Isolates RMII bus at same 5 kV reinforced-isolation level as
+                  ISOW1044 on CAN [REF-IEC-001 §5.5.2] [REF-VDE-001 Cl.4.3].
                   Ref: ti.com/product/ISO7642
   749010012A    : Wurth SMD 10/100BASE-TX Ethernet transformer with integrated CMC.
-                  Provides galvanic isolation on the MDI side.  8-pin SMD.
+                  Provides galvanic isolation on the MDI side, 1500 Vrms per
+                  [REF-IEEE-001 Clause 38].  8-pin SMD.
                   Ref: Wurth Electronics 749010012A datasheet.
   JST GH 4P     : JST GH series 4-pin connector for Ethernet harness.
                   TX+/TX-/RX+/RX- on 1.25 mm pitch.  Lightweight, locking.

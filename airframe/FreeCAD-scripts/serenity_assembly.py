@@ -476,16 +476,15 @@ def assemble():
 
         # ── Crown Pinion (drives the idler gear, which drives the nozzle
         #    ring gear — nacelle_nozzle_idler.scad) ───────────────────────
-        # BUG FLAG (2026-06-21): nacelle_pod_50mm_tandem.scad's
-        # crown_pinion_boss() copies pinion_a_boss()'s rotate([0,90,0])
+        # FIXED 2026-06-22 (TODO.md §1.1.3.3): nacelle_pod_50mm_tandem.scad's
+        # crown_pinion_boss() used to copy pinion_a_boss()'s rotate([0,90,0])
         # X-axis-bore pattern verbatim.  Both nacelle_pinion.scad
         # ("mounted on the longitudinal shaft (nacelle Z-axis)") and
         # nacelle_bevel_housing.scad ("Longitudinal bore (Z-axis): houses
         # Bevel Gear B + longitudinal shaft") independently document the
-        # Crown Pinion as Z-axis (no rotation).  Placed here with the
-        # DOCUMENTED-CORRECT identity rotation, not the boss's coded
-        # rotation — the boss code, not this placement, is what needs
-        # fixing (TODO.md §1.1.3).
+        # Crown Pinion as Z-axis (no rotation) — the boss code has now been
+        # corrected to match (rotate removed); this placement already used
+        # the documented-correct identity rotation, so no change here.
         crown_pinion = add_mesh(
             doc, _stl("nacelles/nacelle_pinion.stl"), f"Nacelle_{label}_Crown_Pinion"
         )
@@ -521,13 +520,22 @@ def assemble():
         # ── Fixed sector gear ─────────────────────────────────────────────
         # Mounted to the fuselage/pylon tilt bracket, NOT the nacelle —
         # coaxial with the pivot axis, so it does not rotate with nacelle
-        # tilt.  Approximated here at the pylon-side X face, on the pivot
-        # axis (Y=0, Z=PIVOT_Z); no SCAD source for the tilt bracket
-        # itself was found, so the exact standoff distance from the
-        # nacelle face is unconfirmed — VERIFY against the bracket
-        # geometry once it exists (TODO.md §1.1.3).  Same rotation as
-        # Drive Pinion A (axis parallel to local X) since the two gears
-        # mesh together.
+        # tilt.  Placed here at the pylon-side X face, on the pivot axis
+        # (Y=0, Z=PIVOT_Z).  Same rotation as Drive Pinion A (axis parallel
+        # to local X) since the two gears mesh together.
+        # CONFIRMED 2026-06-22 (TODO.md §1.1.3.3): the tilt bracket DOES have
+        # a SCAD source — airframe/openscad/wings/wing_nacelle_pylon_revo.scad
+        # — which bolts the sector gear to its pylon face at PYLON_X0 =
+        # NACELLE_OD_X/2 = 30.25 mm (using that file's own simplified
+        # synthetic-ellipse NACELLE_OD_X = 60.5 mm).  NACELLE_FACE_X_PYLON =
+        # 34.0 mm (below) instead matches nacelle_pod_50mm_tandem.scad's own
+        # constant of the same name, which that file's header states is
+        # "taken from the actual nacelle STL measurements rather than the
+        # synthetic-ellipse NACELLE_OD_X/2" — i.e. 34.0 mm is the validated,
+        # measured standoff, not a guess; the pylon file's 30.25 mm ellipse
+        # approximation is the less accurate of the two and should be
+        # reconciled to 34.0 mm in a future pylon-model pass (not done here;
+        # out of scope for this nacelle/nozzle assembly fix).
         sector_x = pylon * NACELLE_FACE_X_PYLON
         sector_gear = add_mesh(
             doc,
@@ -556,15 +564,48 @@ def assemble():
         # now sits between the Crown Pinion and the nozzle ring, meshing
         # the former at the fixed 28.1 mm centre distance and the latter
         # (now a full-circle ring gear, not a partial rack) at 43.6 mm.
-        # The idler's own hull-frame placement is PENDING — its angular
-        # position about the nozzle axis is not yet chosen (TODO.md
-        # §1.1.3.3) — so it is not yet placed by this script.
         nozzle = add_mesh(
             doc,
             _stl("nacelles/nozzles/nacelle_nozzle_iris.stl"),
             f"Nacelle_{label}_Nozzle_Iris",
         )
         transform_mesh(nozzle, nacelle_rows(side, _IDENTITY3, (0.0, 0.0, CROWN_Z)))
+
+        # ── Crown-Pinion-to-Ring idler gear + bracket ────────────────────
+        # nacelle_nozzle_idler.scad.  Angular position (X, Y) RESOLVED
+        # 2026-06-22 (TODO.md §1.1.3.3): solving the two simultaneous
+        # centre-distance constraints (28.1 mm from Crown Pinion at local
+        # (0, PINION_A_Y); 43.6 mm from the nozzle axis) gives shaft
+        # position (X=+27.485, Y=33.846) — matches IDLER_SLOT_ANG = 50.9°
+        # in nacelle_nozzle_iris.scad (one of two valid mirror solutions;
+        # +X chosen arbitrarily, nothing else occupies that sector here).
+        # Z is STILL A PLACEHOLDER (VERIFY tier, not place_mesh()): this
+        # resolution surfaced a NEW, separate open issue — the idler's own
+        # two gear sections are 10 mm apart axially (GEAR_H_IN + GEAR_GAP),
+        # but Crown Pinion and the Nozzle Ring currently sit at the exact
+        # same Z station (CROWN_Z = NOZZLE_RING_Z), so a single idler shaft
+        # cannot mesh both as currently speced.  Placed here centred on
+        # CROWN_Z pending that design decision — see nacelle_nozzle_idler.
+        # scad header and TODO.md §1.1.3.3 "idler axial mesh-band mismatch".
+        idler_x, idler_y = 27.485, 33.846
+        idler = add_mesh(
+            doc,
+            _stl("nacelles/nozzles/nacelle_nozzle_idler.stl"),
+            f"Nacelle_{label}_Nozzle_Idler",
+        )
+        transform_mesh(
+            idler, nacelle_rows(side, _IDENTITY3, (idler_x, idler_y, CROWN_Z - 11.0))
+        )
+
+        idler_bracket = add_mesh(
+            doc,
+            _stl("nacelles/nozzles/nacelle_nozzle_idler_bracket.stl"),
+            f"Nacelle_{label}_Nozzle_Idler_Bracket",
+        )
+        transform_mesh(
+            idler_bracket,
+            nacelle_rows(side, _IDENTITY3, (idler_x, idler_y, CROWN_Z - 11.0)),
+        )
 
         # ── Tip cap (outboard X-face end cap) ─────────────────────────────
         # NO ACTIVE SCAD SOURCE EXISTS for nacelle_tip_cap_port/stbd.stl

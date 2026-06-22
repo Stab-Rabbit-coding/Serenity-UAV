@@ -434,20 +434,24 @@ Total VBAT draw (avionics + servos at peak, from VBAT side):
 ## EMC Compliance Targets
 
 The Serenity UAV design environment is 500 W/m² (equivalent E-field:
-E = √(P × Z₀) = √(500 × 377) **≈ 434 V/m**). This exceeds all standard
-MIL-STD-461G limits and represents operation near commercial broadcast or
+E = √(P × Z₀) = √(500 × 377) **≈ 434 V/m**) [REF-NIST-002 §6.2.5]. This exceeds all
+standard MIL-STD-461G limits and represents operation near commercial broadcast or
 cellular antenna structures. All Kaylee EMC design decisions are referenced
 to this threat level.
 
 | Standard / Threat | Level | Test | Mitigation |
 |---|---|---|---|
 | **500 W/m² (434 V/m) radiated susceptibility** | **Design requirement** | CW field immersion, 30 MHz – 6 GHz | Kaylee shielded aluminum enclosure (SE ≥ 60 dB); two-stage CM1+CM2; Y-caps C_Y1/C_Y2; I2C TVS D_I2C; 360° EMC cable glands |
-| MIL-STD-461G RS103 | 200 V/m (200 MHz – 1 GHz) | Radiated susceptibility | Enclosure SE ≥ 60 dB covers RS103 by margin |
-| MIL-STD-461G CS114 | Curve 05 (bulk cable injection) | Conducted susceptibility | Two-stage CM filter (CM1+CM2 in series = > 80 dB at 10 MHz); Y-caps to chassis |
-| MIL-STD-461G CS101 | 50 V, 30 Hz – 150 kHz | Power bus susceptibility | 2× 220 µF + 10 µF C_DM1 bulk; BEC regulation |
-| MIL-STD-461G CE102 | Limit B (conducted emission) | Conducted emission | CM1+CM2 input chokes; π-filter on each BEC |
-| IEC 61000-4-5 | Level 3 (±2 kV CM, ±1 kV DM) | Surge on VBAT | D1 SMBJ33CA TVS + bulk caps + Y-caps |
-| IEC 61000-4-2 | Level 4 (±8 kV contact) | ESD on connectors | D1 TVS; shielded enclosure prevents direct connector exposure |
+| MIL-STD-461G RS103 † | 200 V/m (200 MHz – 1 GHz) | Radiated susceptibility | Enclosure SE ≥ 60 dB covers RS103 by margin |
+| MIL-STD-461G CS114 † | Curve 05 (bulk cable injection) | Conducted susceptibility | Two-stage CM filter (CM1+CM2 in series = > 80 dB at 10 MHz); Y-caps to chassis |
+| MIL-STD-461G CS101 † | 50 V, 30 Hz – 150 kHz | Power bus susceptibility | 2× 220 µF + 10 µF C_DM1 bulk; BEC regulation |
+| MIL-STD-461G CE102 † | Limit B (conducted emission) | Conducted emission | CM1+CM2 input chokes; π-filter on each BEC |
+| IEC 61000-4-5 † | Level 3 (±2 kV CM, ±1 kV DM) | Surge on VBAT | D1 SMBJ33CA TVS + bulk caps + Y-caps |
+| IEC 61000-4-2 † | Level 4 (±8 kV contact) | ESD on connectors | D1 TVS; shielded enclosure prevents direct connector exposure |
+
+† MIL-STD-461G and IEC 61000-4-2/-4-5 are not yet in the `REFERENCES.md` catalog
+(no REF-ID exists for them) — tracked in `TODO.md` §0.5 as a research item, not
+fabricated here.
 
 Pre-compliance testing against CE102, CS101, and CS114 at system level is required
 before first flight. Full MIL-STD-461G / 500 W/m² qualification testing is deferred

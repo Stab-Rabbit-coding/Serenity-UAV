@@ -690,7 +690,7 @@
       },
       {
         "ref": "XCVR-49MHZ-2",
-        "desc": "XCVR-49MHZ-2 sub-module — EMI-hardened 49 MHz AX.25 RCRS, ALL 4 CN positions. SRF2012-100Y CMC + PRTR5V0U2X TVS + X2Y cap. RF Z0=52.26Ω PASS. Gerbers: avionics/gerbers/XCVR-49MHZ-2/ (pending DRC).",
+        "desc": "XCVR-49MHZ-2 sub-module — EMI-hardened 49 MHz AX.25 (Part 15 §15.235), ALL 4 CN positions. SRF2012-100Y CMC + PRTR5V0U2X TVS + X2Y cap. RF Z0=52.26Ω PASS. Gerbers: avionics/gerbers/XCVR-49MHZ-2/ (pending DRC).",
         "qty": 4,
         "mass_g": 13,
         "cost_usd": 32,
@@ -763,7 +763,7 @@
         "cost_usd": 8,
         "supplier": "In-house / AliExpress",
         "search": "38 uH air-core inductor + variable cap + PETG printed post",
-        "notes": "3 mm clearance from GPS patch face; bench-test HDOP ≤1.5 with RCRS TX active before first flight"
+        "notes": "3 mm clearance from GPS patch face; bench-test HDOP ≤1.5 with Emma (49 MHz) TX active before first flight"
       },
       {
         "ref": "POST-AFT-49",
@@ -932,7 +932,7 @@
   },
   "rev_q_summary": "Rev Q standardises all 8 avionics nodes on EMI-hardened v2 capes. Changes from Rev P: (1) All 4 FC positions now use Cape-A-2 (Bay A/B/D/E); (2) All 4 CN positions now use Cape-B-2; (3) All 4 XCVR sub-modules now use XCVR-49MHZ-2. Cape-A-1, Cape-B-1, XCVR-49MHZ-1 KiCad, gerbers, and DTS archived. Old nacelle and fuselage EDF design variants archived (see airframe/archive/). AUW impact: +~40 g. Cost impact: +~$232 (inner bays upgraded to v2).",
   "gcs": {
-    "note": "Rev Q1 — Malcolm GCS (Ground Control Station). Host PC + PB2-I comms node + Cape-B-2 + XCVR-49MHZ-2. Five radio links: SiK 915 MHz, LoRa 915 MHz, WiFi 5 GHz, 49 MHz RCRS, Zigbee 2.4 GHz. Servo-driven two-axis antenna gimbal with AS5600 magnetic encoders. IP65 field enclosure. No external PAs (FCC-compliant). See gcs/malcolm/hardware/docs/malcolm_antenna_spec.md.",
+    "note": "Rev Q1 — Malcolm GCS (Ground Control Station). Host PC + PB2-I comms node + Cape-B-2 + XCVR-49MHZ-2. Five radio links: SiK 915 MHz, LoRa 915 MHz, WiFi 5 GHz, 49 MHz (Part 15 §15.235), Zigbee 2.4 GHz. Servo-driven two-axis antenna gimbal with AS5600 magnetic encoders. IP65 field enclosure. No external PAs (FCC-compliant). See gcs/malcolm/hardware/docs/malcolm_antenna_spec.md.",
     "items": [
       {
         "ref": "MAL-PB2-I",
@@ -952,11 +952,11 @@
         "cost_usd": 105.0,
         "supplier": "JLCPCB (in-house fab)",
         "pn": "order with aircraft Cape-B-2 batch",
-        "notes": "Same PCB as aircraft CN; SiK+LoRa+WiFi+Zigbee+RCRS interfaces"
+        "notes": "Same PCB as aircraft CN; SiK+LoRa+WiFi+Zigbee+49 MHz interfaces"
       },
       {
         "ref": "MAL-XCVR-49MHZ-2",
-        "desc": "XCVR-49MHZ-2 49 MHz RCRS sub-module — Malcolm RCRS link",
+        "desc": "XCVR-49MHZ-2 49 MHz (Part 15 §15.235) sub-module — Malcolm Emma link",
         "qty": 1,
         "mass_g": 18,
         "cost_usd": 32.0,
