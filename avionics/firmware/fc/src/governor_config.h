@@ -30,13 +30,13 @@
  * │  1  │ PORT_AFT    │  50 mm  │ FC2 (secondary to port fwd)    │
  * │  2  │ STBD_FWD    │  50 mm  │ FC2                            │
  * │  3  │ STBD_AFT    │  50 mm  │ FC3 (secondary to stbd fwd)    │
- * │  4  │ FUSE        │ 120 mm  │ FC3                            │
+ * │  4  │ FUSE        │  55 mm  │ FC3                            │
  * └─────┴─────────────┴─────────┴────────────────────────────────┘
  *
  * References:
  *   [1] FlightLine / Freewing 50 mm EDF product data sheet, 2023 —
- *       typical performance: ~7.85 N (800 gf) at 28 000 RPM on 4S LiPo.
- *   [2] Freewing 120 mm 4400 kV 6S EDF product data sheet, 2023 —
+ *       typical performance: ~7.85 N (800 gf) at 28 000 RPM on 6S LiPo.
+ *   [2] Freewing 55 mm 4400 kV 6S EDF product data sheet, 2023 —
  *       typical performance: ~29.4 N (3 000 gf) at 16 000 RPM on 6S LiPo.
  *   [3] Mahony, R., Hamel, T., Pflimlin, J.-M., "Nonlinear Complementary
  *       Filters on the Special Orthogonal Group," IEEE Trans. Autom.
@@ -68,19 +68,19 @@
  * @{
  */
 
-/** Port-nacelle forward EDF (50 mm, 4S).  Primary FC node: FC1. */
+/** Port-nacelle forward EDF (50 mm, 6S).  Primary FC node: FC1. */
 #define EDF_ID_PORT_FWD     (0U)
 
-/** Port-nacelle aft EDF (50 mm, 4S).  Primary FC node: FC2. */
+/** Port-nacelle aft EDF (50 mm, 6S).  Primary FC node: FC2. */
 #define EDF_ID_PORT_AFT     (1U)
 
-/** Stbd-nacelle forward EDF (50 mm, 4S).  Primary FC node: FC2. */
+/** Stbd-nacelle forward EDF (50 mm, 6S).  Primary FC node: FC2. */
 #define EDF_ID_STBD_FWD     (2U)
 
-/** Stbd-nacelle aft EDF (50 mm, 4S).  Primary FC node: FC3. */
+/** Stbd-nacelle aft EDF (50 mm, 6S).  Primary FC node: FC3. */
 #define EDF_ID_STBD_AFT     (3U)
 
-/** Fuselage rear EDF (120 mm, 6S).  Primary FC node: FC3. */
+/** Fuselage rear EDF (55 mm, 6S).  Primary FC node: FC3. */
 #define EDF_ID_FUSE         (4U)
 
 /** Total number of distinct EDF channels in the propulsion system. */
@@ -96,7 +96,7 @@
  *
  * Design-estimate basis — see References [1] and [2]:
  *   50 mm  — 7.85 N at 28 000 RPM  →  k = 7.85 / (28 000)² ≈ 1.00×10⁻⁸
- *   120 mm — 29.4 N at 16 000 RPM  →  k = 29.4  / (16 000)² ≈ 1.15×10⁻⁷
+ *   55 mm — 29.4 N at 16 000 RPM  →  k = 29.4  / (16 000)² ≈ 1.15×10⁻⁷
  *
  * !! UNCALIBRATED — run governor_cal.py on a thrust stand before flight !!
  *
@@ -147,11 +147,11 @@
 /** 50 mm EDF — software redline.  Do not command above this. */
 #define EDF_RPM_MAX_50MM        (35000U)
 
-/** 120 mm EDF — minimum armed idle RPM. */
-#define EDF_RPM_IDLE_120MM      (4000U)
+/** 55 mm EDF — minimum armed idle RPM. */
+#define EDF_RPM_IDLE_55MM      (4000U)
 
-/** 120 mm EDF — software redline.  Do not command above this. */
-#define EDF_RPM_MAX_120MM       (18000U)
+/** 55 mm EDF — software redline.  Do not command above this. */
+#define EDF_RPM_MAX_55MM       (18000U)
 
 /** @} */
 
@@ -205,14 +205,14 @@
 /** Derivative gain — 50 mm EDF class. */
 #define EDF_GOV_KD_50MM     (9.000e-6)
 
-/** Proportional gain — 120 mm EDF class. */
-#define EDF_GOV_KP_120MM    (0.000120)
+/** Proportional gain — 55 mm EDF class. */
+#define EDF_GOV_KP_55MM    (0.000120)
 
-/** Integral gain — 120 mm EDF class. */
-#define EDF_GOV_KI_120MM    (3.000e-6)
+/** Integral gain — 55 mm EDF class. */
+#define EDF_GOV_KI_55MM    (3.000e-6)
 
-/** Derivative gain — 120 mm EDF class. */
-#define EDF_GOV_KD_120MM    (6.000e-6)
+/** Derivative gain — 55 mm EDF class. */
+#define EDF_GOV_KD_55MM    (6.000e-6)
 
 /** @} */
 
