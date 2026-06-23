@@ -1,13 +1,13 @@
 /**
  * @file    governor_config.h
- * @brief   EDF PID governor compile-time constants — thrust model, control
+ * @brief   EDF PID controller compile-time constants — thrust model, control
  *          parameters, and ESC safety thresholds.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * This header provides all compile-time tuning constants for the EDF PID RPM
- * governor implemented in the Cape-A / FC node Phase 7 firmware.  The
+ * controller implemented in the Cape-A / FC node Phase 7 firmware.  The
  * governing thrust equation for each EDF is:
  *
  *   T [N]  =  EDF_THRUST_K_<ID>  ×  RPM²
@@ -58,9 +58,9 @@
  * EDF Identification Indices
  * ============================================================================
  *
- * These constants identify each EDF throughout governor firmware, CAN FD
+ * These constants identify each EDF throughout controller firmware, CAN FD
  * message IDs, fault registers, and the calibration tool.  The index
- * matches the EDF_THRUST_K_* array position used in governor logic.
+ * matches the EDF_THRUST_K_* array position used in controller logic.
  */
 
 /**
@@ -131,7 +131,7 @@
  * ============================================================================
  *
  * The idle floor is the minimum RPM maintained whenever an EDF is armed.
- * It keeps bearings lubricated and prevents governor integrator wind-up.
+ * It keeps bearings lubricated and prevents controller integrator wind-up.
  * The maximum is the software redline; the ESC's own over-speed protection
  * provides a hardware backstop above this value.
  */
@@ -161,7 +161,7 @@
  *
  * Each nacelle houses two EDFs in series (forward + aft) that are commanded
  * to the same RPM setpoint.  If |RPM_FWD − RPM_AFT| exceeds the threshold
- * below, the governor latches FAULT_EDF_MISMATCH, broadcasts the fault on
+ * below, the controller latches FAULT_EDF_MISMATCH, broadcasts the fault on
  * CAN FD, and idles both EDFs in that nacelle.  Recovery requires an explicit
  * GCS acknowledgement — no auto-recovery (per CLAUDE.md fault semantics).
  *
@@ -175,7 +175,7 @@
 #define EDF_RPM_PAIR_MISMATCH_MAX   (100U)
 
 /* ============================================================================
- * PID Governor Tuning Constants
+ * PID Controller Tuning Constants
  * ============================================================================
  *
  * Velocity-form discrete-time PID executed at EDF_GOV_LOOP_HZ (1 kHz,
@@ -192,14 +192,14 @@
  */
 
 /**
- * @defgroup pid_gains  PID governor tuning constants
+ * @defgroup pid_gains  PID controller tuning constants
  * @{
  */
 
 /** Proportional gain — 50 mm EDF class. */
 #define EDF_GOV_KP_50MM     (0.000180)
 
-/** Integral gain — 50 mm EDF class (per governor tick at 1 kHz). */
+/** Integral gain — 50 mm EDF class (per controller tick at 1 kHz). */
 #define EDF_GOV_KI_50MM     (4.500e-6)
 
 /** Derivative gain — 50 mm EDF class. */

@@ -1044,9 +1044,24 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
 - [x] **middle_canonical_shell24.stl** — `openscad -o ... serenity/stl/middle_canonical_shell24.scad`
     - Note: NOT the same as `middle_shell24.stl` (which has the obsolete belly intake cut). This is the Rev N canonical belly.
-- [ ]
+
+###### 1.1.1.3.1 *Anti-Collision Strobe*
+
+- [ ] Mount ant-collision strobe on belly of middle section in accordance with [REF-FAA-003]
+
+    - [ ] Create cableways from mount point to avionics bay
+
+    - [ ] Wire strobe to led pwd output on Wash cape in Simon's medbay
 
 ##### 1.1.1.4 *Rear Engine Cone*
+
+###### 1.1.1.4.1 *Anti-Collision Tail Light*
+
+- [ ] Mount ant-collision steady white tail light on upper pod of rear section in accordance with [REF-FAA-003]
+
+    - [ ] Create cableways from mount point to avionics bay
+
+    - [ ] Wire strobe to led pwd output on Wash cape in Simon's medbay
 
 #### 1.1.2 **Wings**
 
@@ -1278,6 +1293,17 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     `nacelle_servo_bracket.stl` still does not exist in `airframe/stls/`
     (only the SCAD source has been authored); render it once the Z-conflict
     above is resolved.
+##### 1.1.3.4 *Nacelle Intake*
+
+- [ ] Trim the intake bell to the canonical leading nacelle dome.  The leading edge of the nacelle should be at the intersection of the canonical dome and the cosine intake.
+
+##### 1.1.3.5 *Nacelle Lighting*
+
+- [ ] Move the port (red) and starboard (green) navigation lights from the inward face of the nacelle to the outward face, so that they provide the specified range of visibility.  Verify against [REF-FAA-003].
+
+- [ ] Route navigation light wires through a cableway *within, not protruding from* the canonical nacelle skin.  Use existing EDF cableways to the greatest extent practicable to simplify building and maintenance.
+
+- [ ] Remove the exhaust LED rings with their wire-harnesses from the design completely.
 
 #### 1.1.4 **Landing Gear**
 
