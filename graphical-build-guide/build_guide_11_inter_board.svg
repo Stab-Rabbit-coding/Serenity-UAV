@@ -28,7 +28,7 @@
 <text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">11 / 26</text>
 <rect x="0" y="64" width="1200" height="40" fill="#dde4ea" rx="0"/>
 <text x="24" y="90" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 6 — 8-NODE INTER-BOARD BUS WIRING</text>
-<text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">RSTP Ethernet + CAN FD + RS-485 + MIL-STD-1553B · 8-node ring</text>
+<text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">RSTP Ethernet + CAN FD + RS-485 + [REF-MIL-001] · 8-node ring</text>
 <rect x="0" y="872" width="1200" height="28" fill="#006db7"/>
 <text x="600" y="890" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0">Hull: misubisu CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
 <rect x="16" y="112" width="720" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
@@ -55,7 +55,7 @@
 <text x="792" y="284" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Route Ethernet along PORT keel spine · tie every 40mm</text>
 <circle cx="776" cy="303" r="9" fill="#006db7"/>
 <text x="776" y="307" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">3</text>
-<text x="792" y="308" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Connect CAN FD: CAPE-A-1 ↔ CAPE-B-1 ↔ daisy-chain to next bay (ISO 11898-1)</text>
+<text x="792" y="308" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Connect CAN FD: CAPE-A-1 ↔ CAPE-B-1 ↔ daisy-chain to next bay [REF-ISO-001]</text>
 <circle cx="776" cy="327" r="9" fill="#006db7"/>
 <text x="776" y="331" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">4</text>
 <text x="792" y="332" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Route CAN along STARBOARD keel spine · ≥20mm from Ethernet</text>

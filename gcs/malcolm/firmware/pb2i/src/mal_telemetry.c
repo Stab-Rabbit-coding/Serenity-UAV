@@ -108,6 +108,14 @@ static void handle_heartbeat(const mavlink_message_t *msg)
 
 /**
  * @brief  Dispatch a fully-parsed MAVLink message to the appropriate handler.
+ *
+ * @note   Sysid filtering only — this does NOT verify the MAVLink v2
+ *         [REF-PROTO-002] HMAC-SHA256 message signature, despite
+ *         MAL_TPM_KEY_HANDLE (mal_config.h) provisioning a TPM key slot for
+ *         that purpose.  CLAUDE.md requires every message, internal and
+ *         external, to be digitally signed and authenticated
+ *         [REF-NIST-001 §2.1, §2.2].  Tracked as an open functional gap in
+ *         TODO.md §0.5 — do not treat sysid filtering as authentication.
  */
 static void dispatch_message(const mavlink_message_t *msg)
 {

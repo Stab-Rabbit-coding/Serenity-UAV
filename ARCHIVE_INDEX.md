@@ -84,6 +84,11 @@ stls/nacelles/                       — Pre-Rev Q nacelle STLs (pre-tandem-EDF 
                                         edf_bore_sleeve.stl, nacelle_port_revt.stl,
                                         nacelle_stbd_revt.stl, sector_gear_22mm_fixed.obj,
                                         sector_gear_22mm_fixed.stl, stator_50mm.stl
+                                      Archived 2026-06-22 (legacy part, no longer needed):
+                                        nacelle_tip_cap_port.stl, nacelle_tip_cap_stbd.stl
+                                        — no SCAD source ever existed; placement code removed
+                                        from serenity_assembly.py (was a best-guess VERIFY
+                                        placeholder; see TODO.md §1.1.3 history)
   nozzles/                            — nacelle_nozzle_closed_asm_repaired.stl,
                                         nacelle_nozzle_petal_repaired.stl,
                                         rear_nozzle_petal_repaired.stl

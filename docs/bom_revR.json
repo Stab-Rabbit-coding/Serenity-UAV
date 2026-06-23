@@ -690,7 +690,7 @@
       },
       {
         "ref": "XCVR-49MHZ-2",
-        "desc": "XCVR-49MHZ-2 sub-module — EMI-hardened 49 MHz AX.25 RCRS, ALL 4 CN positions. SRF2012-100Y CMC + PRTR5V0U2X TVS + X2Y cap. RF Z0=52.26Ω PASS. Gerbers: avionics/gerbers/XCVR-49MHZ-2/ (pending DRC).",
+        "desc": "XCVR-49MHZ-2 sub-module — EMI-hardened 49 MHz AX.25 (Part 15 §15.235), ALL 4 CN positions. SRF2012-100Y CMC + PRTR5V0U2X TVS + X2Y cap. RF Z0=52.26Ω PASS. Gerbers: avionics/gerbers/XCVR-49MHZ-2/ (pending DRC).",
         "qty": 4,
         "mass_g": 13,
         "cost_usd": 32,
@@ -747,7 +747,7 @@
     "antenna_system": [
       {
         "ref": "WIRE-49MHZ",
-        "desc": "49 MHz top wire — 0.3 mm stainless steel, ~470 mm, dorsal spine",
+        "desc": "49 MHz top wire (River's antenna) — 0.3 mm stainless steel, ~470 mm, PORT flank, shoulder height (relocated 2026-06-22 from dorsal spine — see §1.4.2)",
         "qty": 1,
         "mass_g": 3,
         "cost_usd": 5,
@@ -757,23 +757,133 @@
       },
       {
         "ref": "POST-FWD-49",
-        "desc": "Forward wire post + base-loading coil — PETG post + 38 uH coil + LC pi-net at dorsal hull ~120 mm from nose",
+        "desc": "Forward wire post + base-loading coil (River's antenna) — PETG post + 38 uH coil + LC pi-net, port flank ~120 mm from nose (relocated 2026-06-22 from dorsal hull — see §1.4.2)",
         "qty": 1,
         "mass_g": 4,
         "cost_usd": 8,
         "supplier": "In-house / AliExpress",
         "search": "38 uH air-core inductor + variable cap + PETG printed post",
-        "notes": "3 mm clearance from GPS patch face; bench-test HDOP ≤1.5 with RCRS TX active before first flight"
+        "notes": "3 mm clearance from GPS patch face; bench-test HDOP ≤1.5 with Emma (49 MHz) TX active before first flight"
       },
       {
         "ref": "POST-AFT-49",
-        "desc": "Aft wire post + ceramic bead insulator — top of rear nozzle cone ~600 mm from nose",
+        "desc": "Aft wire post + ceramic bead insulator (River's antenna) — port flank near rear nozzle cone ~600 mm from nose (relocated 2026-06-22 from dorsal — see §1.4.2)",
         "qty": 1,
         "mass_g": 2,
         "cost_usd": 3,
         "supplier": "AliExpress",
         "search": "Ceramic standoff insulator 3 mm + PETG post",
         "notes": "Strain-relief wire at aft post; open-circuit (insulated) termination"
+      },
+      {
+        "ref": "ANT-WIFI-5G",
+        "desc": "Wi-Fi 5 GHz RP-SMA whip antenna (2 dBi) — Shepherd's Room + Inara's Shuttle; WL1837MOD restricted to 5 GHz-only operation (frees 2.4 GHz path for future Zigbee diplexer, §1.4.2)",
+        "qty": 2,
+        "mass_g": 3,
+        "cost_usd": 4,
+        "supplier": "Amazon / AliExpress",
+        "search": "5.8GHz RP-SMA whip antenna 2dBi small",
+        "notes": "Estimate; confirm gain/VSWR against WL1837MOD datasheet once part selected"
+      },
+      {
+        "ref": "ANT-SIK-915",
+        "desc": "SiK 915 MHz RP-SMA 1/4-wave whip antenna — Shepherd's Room, Inara's Shuttle, Simon's Medbay",
+        "qty": 3,
+        "mass_g": 5,
+        "cost_usd": 3,
+        "supplier": "Amazon / AliExpress",
+        "search": "915MHz RP-SMA whip antenna RFD900 stock",
+        "notes": "Estimate; same style as stock RFD900x antenna"
+      },
+      {
+        "ref": "ANT-LORA-915",
+        "desc": "LoRa 915 MHz RP-SMA whip antenna — River's Room (secondary link, fed from Zoë J_SMA_LORA)",
+        "qty": 1,
+        "mass_g": 5,
+        "cost_usd": 3,
+        "supplier": "Amazon / AliExpress",
+        "search": "915MHz RP-SMA whip antenna LoRa",
+        "notes": "Estimate; same part family as ANT-SIK-915"
+      },
+      {
+        "ref": "ANT-GPS-PATCH",
+        "desc": "Active GNSS patch antenna, integrated LNA — one per FC node (Wash, Cape-A-2), mounted dorsal hull face-up",
+        "qty": 4,
+        "mass_g": 6,
+        "cost_usd": 9,
+        "supplier": "AliExpress / Digikey",
+        "search": "active GPS GNSS patch antenna 25x25mm SMA",
+        "notes": "Estimate; 3 mm clearance required from 49 MHz wire posts (existing POST-FWD-49 constraint, §1.1.1.0b)"
+      },
+      {
+        "ref": "WIRE-COUNTERPOISE-49MHZ",
+        "desc": "49 MHz counterpoise (River's antenna) — AWG 22 stranded tinned copper, 460 mm, routed alongside the structural keel inside foam (cargo to rear) — interior/embedded, unaffected by the port-flank relocation of the radiating wire above — terminated at River's Emma antenna feed",
+        "qty": 1,
+        "mass_g": 2,
+        "cost_usd": 2,
+        "supplier": "Amazon / AliExpress",
+        "search": "AWG 22 stranded tinned copper wire",
+        "notes": "Backfilled into BOM 2026-06-22 — §1.1.1.0b called for this item but it was never added; CF keel bar is a poor RF conductor at 49 MHz so a dedicated copper counterpoise is required"
+      },
+      {
+        "ref": "WIRE-49MHZ-2",
+        "desc": "Second, independent 49 MHz top wire (Simon's antenna) — 0.3 mm stainless steel, ~470 mm (same length as WIRE-49MHZ), STARBOARD flank, shoulder height — feeds Simon's Medbay Emma board (River and Simon do not share an antenna, §1.4.2)",
+        "qty": 1,
+        "mass_g": 3,
+        "cost_usd": 5,
+        "supplier": "Amazon / AliExpress",
+        "search": "Stainless steel wire 0.3 mm dia 1 m spool",
+        "notes": "Routing corrected 2026-06-22 (with user) from an earlier shortened ventral/keel proposal — the cargo bay clamshell doors hinge at the outboard flank/belly edge and swing to 180°, conflicting with any ventral or low-flank post; starboard flank at shoulder height (mirroring River's port-flank relocation) clears the door and gives full-length electrical performance. Exact shoulder-height line still needs FreeCAD verification against the door swing envelope, §1.4.2"
+      },
+      {
+        "ref": "POST-FWD-49-2",
+        "desc": "Simon's forward wire post + base-loading coil — starboard flank, shoulder height, ~120 mm from nose (mirrors POST-FWD-49; pending FreeCAD verification against cargo door swing envelope, §1.4.2)",
+        "qty": 1,
+        "mass_g": 4,
+        "cost_usd": 8,
+        "supplier": "In-house / AliExpress",
+        "search": "38 uH air-core inductor + variable cap + PETG printed post",
+        "notes": "Mirrors POST-FWD-49; same 38 uH coil value (full-length element, not shortened)"
+      },
+      {
+        "ref": "POST-AFT-49-2",
+        "desc": "Simon's aft wire post + ceramic bead insulator — starboard flank, shoulder height, ~600 mm from nose (mirrors POST-AFT-49; pending FreeCAD verification, §1.4.2)",
+        "qty": 1,
+        "mass_g": 2,
+        "cost_usd": 3,
+        "supplier": "AliExpress",
+        "search": "Ceramic standoff insulator 3 mm + PETG post",
+        "notes": "Mirrors POST-AFT-49; open-circuit (insulated) termination"
+      },
+      {
+        "ref": "WIRE-COUNTERPOISE-49MHZ-2",
+        "desc": "Second 49 MHz counterpoise for Simon's antenna — AWG 22 stranded tinned copper, ~460 mm, routed alongside the structural keel inside foam (interior/embedded, unaffected by the starboard-flank relocation of the radiating wire above), terminated at Simon's Emma antenna feed",
+        "qty": 1,
+        "mass_g": 2,
+        "cost_usd": 2,
+        "supplier": "Amazon / AliExpress",
+        "search": "AWG 22 stranded tinned copper wire",
+        "notes": "Mirrors WIRE-COUNTERPOISE-49MHZ for Simon's independent antenna, §1.4.2"
+      },
+      {
+        "ref": "COAX-RG316-AIRFRAME",
+        "desc": "RG-316 coax, bulk reel — all 8 aircraft antenna-to-SMA-bulkhead feedline runs (Wi-Fi ×2, SiK ×3, LoRa ×1, 49 MHz ×2)",
+        "qty": 1,
+        "mass_g": 25,
+        "cost_usd": 9,
+        "supplier": "Amazon / Digikey",
+        "search": "RG-316 coax cable 50 ohm reel",
+        "notes": "3 m reel covers 8 runs at ≤300 mm (whips) / ≤500 mm (49 MHz) each with margin; includes RP-SMA/SMA crimp connectors, §1.4.2"
+      },
+      {
+        "ref": "CHOKE-FERRITE-ANT",
+        "desc": "Würth 74271222 snap-on ferrite clamp — one per antenna feedline at Faraday enclosure boundary crossing (8×)",
+        "qty": 8,
+        "mass_g": 1,
+        "cost_usd": 1,
+        "supplier": "Digikey / Mouser",
+        "search": "Wurth Elektronik 74271222 snap-on ferrite",
+        "notes": "Mirrors choke treatment already used on Emma's internal 49 MHz feedline, Emma.md lines 553–557, §1.4.2"
       }
     ]
   },
@@ -932,7 +1042,7 @@
   },
   "rev_q_summary": "Rev Q standardises all 8 avionics nodes on EMI-hardened v2 capes. Changes from Rev P: (1) All 4 FC positions now use Cape-A-2 (Bay A/B/D/E); (2) All 4 CN positions now use Cape-B-2; (3) All 4 XCVR sub-modules now use XCVR-49MHZ-2. Cape-A-1, Cape-B-1, XCVR-49MHZ-1 KiCad, gerbers, and DTS archived. Old nacelle and fuselage EDF design variants archived (see airframe/archive/). AUW impact: +~40 g. Cost impact: +~$232 (inner bays upgraded to v2).",
   "gcs": {
-    "note": "Rev Q1 — Malcolm GCS (Ground Control Station). Host PC + PB2-I comms node + Cape-B-2 + XCVR-49MHZ-2. Five radio links: SiK 915 MHz, LoRa 915 MHz, WiFi 5 GHz, 49 MHz RCRS, Zigbee 2.4 GHz. Servo-driven two-axis antenna gimbal with AS5600 magnetic encoders. IP65 field enclosure. No external PAs (FCC-compliant). See gcs/malcolm/hardware/docs/malcolm_antenna_spec.md.",
+    "note": "Rev Q1 — Malcolm GCS (Ground Control Station). Host PC + PB2-I comms node + Cape-B-2 + XCVR-49MHZ-2. Five radio links: SiK 915 MHz, LoRa 915 MHz, WiFi 5 GHz, 49 MHz (Part 15 §15.235), Zigbee 2.4 GHz. Servo-driven two-axis antenna gimbal with AS5600 magnetic encoders. IP65 field enclosure. No external PAs (FCC-compliant). See gcs/malcolm/hardware/docs/malcolm_antenna_spec.md.",
     "items": [
       {
         "ref": "MAL-PB2-I",
@@ -952,11 +1062,11 @@
         "cost_usd": 105.0,
         "supplier": "JLCPCB (in-house fab)",
         "pn": "order with aircraft Cape-B-2 batch",
-        "notes": "Same PCB as aircraft CN; SiK+LoRa+WiFi+Zigbee+RCRS interfaces"
+        "notes": "Same PCB as aircraft CN; SiK+LoRa+WiFi+Zigbee+49 MHz interfaces"
       },
       {
         "ref": "MAL-XCVR-49MHZ-2",
-        "desc": "XCVR-49MHZ-2 49 MHz RCRS sub-module — Malcolm RCRS link",
+        "desc": "XCVR-49MHZ-2 49 MHz (Part 15 §15.235) sub-module — Malcolm Emma link",
         "qty": 1,
         "mass_g": 18,
         "cost_usd": 32.0,

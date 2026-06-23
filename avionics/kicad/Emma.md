@@ -578,9 +578,9 @@ cable shield, the following on-board measures are active (see §1):
 
 - Step 4: Laird MSA Series Shield Can Selection Guide
 
-- Step 5: XCVR-49MHZ-1.md — Phase 1 design decisions (IC selection rationale)
+- Step 5: `archive/XCVR-49MHZ-1.md` — Phase 1 design decisions (IC selection rationale)
 
-- Step 6: 47 CFR §15.235(b) / §15.209 — FCC out-of-band emission requirements (not Part 95 §95.655, which does not apply to this band)
+- Step 6: [REF-FCC-003 §15.235(b)] / [REF-FCC-003 §15.209] — FCC out-of-band emission requirements (not Part 95 §95.655, which does not apply to this band)
 
 - Step 7: QUCS-S / SPICE Chebyshev filter synthesis reference:
 

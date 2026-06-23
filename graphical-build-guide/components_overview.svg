@@ -71,8 +71,8 @@
 <text x="258" y="69" font-size="8" fill="rgba(255,255,255,0.88)">MAVLink 2.0 · 100mW · ≤1,094 yd range</text>
 <text x="258" y="82" font-size="7" fill="rgba(255,255,255,0.78)">CAPE-B-1 · belly port SMA-RP sta 260mm · UART</text>
 <rect x="250" y="110" width="180" height="55" rx="4" fill="#f472b60d" stroke="#f472b6" stroke-width="1.2"/>
-<text x="258" y="126" font-size="10" fill="#f472b6" font-weight="bold">49MHz RCRS TDDS</text>
-<text x="258" y="139" font-size="8" fill="rgba(255,255,255,0.88)">6-ch · 10mW · ≤547 yd · TDDS</text>
+<text x="258" y="126" font-size="10" fill="#f472b6" font-weight="bold">49MHz Part 15 §15.235</text>
+<text x="258" y="139" font-size="8" fill="rgba(255,255,255,0.88)">5-ch · ≈48µW conducted · AX.25</text>
 <text x="258" y="152" font-size="7" fill="rgba(255,255,255,0.78)">Top wire 470mm · 120mm fwd post + aft post at stern</text>
 <rect x="250" y="180" width="180" height="55" rx="4" fill="#c084fc0d" stroke="#c084fc" stroke-width="1.2"/>
 <text x="258" y="196" font-size="10" fill="#c084fc" font-weight="bold">CC2652P7 (opt.)</text>

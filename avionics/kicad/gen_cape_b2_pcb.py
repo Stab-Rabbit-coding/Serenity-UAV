@@ -2,19 +2,23 @@
 """
 gen_cape_b2_pcb.py — Transform CAPE-B-1.kicad_pcb into Zoë.kicad_pcb.
 
-Zoë is the EMI-hardened Comms, Logging & Payload Cape for the Serenity UAV.
+Zoë is the EMI-hardened [REF-NIST-002 §6.2.5] Comms, Logging & Payload Cape for the Serenity UAV.
 This script performs the following PCB-level transformations:
 
     A. Updates the title block (title, rev, comment line) to reflect Zoë.
     B. Replaces the ATA6561 CAN transceiver footprint (SOIC-8) with the
-       ISOW1044BDFMR (SOIC-16W, 5 kV reinforced isolation + integrated DC/DC).
+       ISOW1044BDFMR (SOIC-16W, 5 kV reinforced isolation + integrated DC/DC)
+       [REF-IEC-001 §5.5.2] [REF-VDE-001 Cl.4.3].
     C. Replaces the MAX3485E RS-485 transceiver footprint (SOIC-8) with the
-       ADM2795EBRWZ (SOIC-20W, 5 kV reinforced isolation + integrated DC/DC).
+       ADM2795EBRWZ (SOIC-20W, 5 kV reinforced isolation + integrated DC/DC)
+       [REF-IEC-001 §5.5.2] [REF-VDE-001 Cl.4.3].
     D. Removes both DP83825I Ethernet PHY footprints (LQFP-48).
     E. Removes the ETH1 and ETH2 JST-GH-6P connector footprints.
     F. Adds the ADIN1300BCPZ EMI-hardened PHY (LFCSP-48).
-    G. Adds two ISO7642FDWRR digital isolators (SOIC-16W) for RMII isolation.
-    H. Adds the Würth 749010012A SMD Ethernet transformer (8-pad SMD).
+    G. Adds two ISO7642FDWRR digital isolators (SOIC-16W) for RMII isolation
+       [REF-IEEE-001 Clause 22] at the same 5 kV level [REF-IEC-001 §5.5.2].
+    H. Adds the Würth 749010012A SMD Ethernet transformer (8-pad SMD),
+       1500 Vrms isolation per [REF-IEEE-001 Clause 38].
     I. Adds a JST GH 4-pin Ethernet harness connector (J-ETH).
     J. Adds EMI protection components: SRF2012-100Y common-mode chokes,
        PRTR5V0U2X TVS arrays, SMAJ33CA 1553 TVS, Würth 742792512 ferrite bead,

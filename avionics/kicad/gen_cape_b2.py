@@ -4,7 +4,7 @@
 gen_cape_b2.py  —  Generate Zoë.kicad_sch from CAPE-B-1.kicad_sch
 =======================================================================
 Transforms the CAPE-B-1 Comms/Logging/Payload Cape schematic into the
-EMI-hardened Zoë variant by:
+EMI-hardened [REF-NIST-002 §6.2.5] Zoë variant by:
 
   A. Updating the title block (title, rev, date).
   B. Replacing ATA6561 (non-isolated CAN) with ISOW1044BDFMR

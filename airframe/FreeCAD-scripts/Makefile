@@ -57,7 +57,9 @@ NACELLE_STLS := \
     $(STLS)/nacelles/nozzles/nacelle_bevel_pair.stl      \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_iris.stl     \
     $(STLS)/nacelles/nacelle_pinion.stl                  \
-    $(STLS)/nacelles/nacelle_sector_gear.stl
+    $(STLS)/nacelles/nacelle_sector_gear.stl             \
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_idler.stl    \
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_idler_bracket.stl
 
 # -- Wings -----------------------------------------------------
 WING_STLS := \
@@ -188,6 +190,24 @@ $(STLS)/nacelles/nacelle_sector_gear.stl: \
 	@mkdir -p $(dir $@)
 	$(OPENSCAD) $(SCAD_FLAGS) \
 	    $(SCAD)/nacelles/nacelle_sector_gear.scad \
+	    -o $@
+	@echo "[stl] $@"
+
+$(STLS)/nacelles/nozzles/nacelle_nozzle_idler.stl: \
+        $(SCAD)/nacelles/nacelle_nozzle_idler.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) \
+	    -D 'RENDER_PART="gear"' \
+	    $(SCAD)/nacelles/nacelle_nozzle_idler.scad \
+	    -o $@
+	@echo "[stl] $@"
+
+$(STLS)/nacelles/nozzles/nacelle_nozzle_idler_bracket.stl: \
+        $(SCAD)/nacelles/nacelle_nozzle_idler.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) \
+	    -D 'RENDER_PART="bracket"' \
+	    $(SCAD)/nacelles/nacelle_nozzle_idler.scad \
 	    -o $@
 	@echo "[stl] $@"
 

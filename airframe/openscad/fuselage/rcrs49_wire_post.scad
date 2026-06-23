@@ -3,17 +3,29 @@
 //
 // Purpose:
 //   Simple insulated PETG mast posts for the top-wire element of the AX.25 /
-//   49 MHz RCRS antenna.  The antenna wire runs fore-to-aft along the hull
-//   dorsal spine.  Two posts support the wire endpoints:
+//   49 MHz RCRS antenna(s).  TWO independent antennas are built from this
+//   same post (River's Room and Simon's Medbay each need their own — see
+//   TODO.md §1.4.2, 2026-06-22) — print FOUR posts total, two per antenna:
 //
-//   Forward post — installed at station ≈ 4.72 in (120 mm) from nose,
-//     dorsal hull centreline.  Bonded to hull skin at head/cargo section.
+//   River's antenna — PORT flank, shoulder height (between the dorsal ridge
+//     and the cargo clamshell door's ventral hinge/swing zone — see below).
+//     Forward post at station ≈ 4.72 in (120 mm) from nose (head section).
+//     Aft post at station ≈ 22.8 in (580 mm) from nose (rear section,
+//     temporary; replaced by integrated mount in Phase 11).
 //
-//   Aft temporary post — installed at station ≈ 22.8 in (580 mm) from nose,
-//     dorsal hull centreline.  Temporary mount to aft fuselage dorsal pod.
-//     Replaced by permanent integrated mount in a later revision (Phase 11).
+//   Simon's antenna — STARBOARD flank, mirrored station and shoulder height.
 //
-//   Both posts use this same module.  Print one for each endpoint.
+//   Rev R moved both antennas off the dorsal centreline and off any ventral
+//   routing (2026-06-22): a single shared dorsal run put both elements too
+//   close together (mutual coupling/detuning risk at 49 MHz on this small
+//   an airframe); a ventral/keel run was rejected outright because the cargo
+//   bay clamshell doors (`generate_cargo_doors.py`) hinge at the outboard
+//   flank/belly edge and swing up to 180°, sweeping the lower flank and
+//   belly through the door's Y-span — any exterior post mounted there would
+//   be in the door's path. Port/starboard at shoulder height (well above
+//   the door's reach, well separated from each other) clears both problems.
+//   Exact shoulder-height Z offset still needs a FreeCAD cross-section check
+//   against the door swing envelope before bonding any post — see TODO.md.
 //
 // Geometry:
 //   Base:  0.47 × 0.47 × 0.079 in (12 × 12 × 2 mm) flat foot — bonded or
@@ -30,16 +42,22 @@
 //   bore roundness.
 //
 // Installation:
-//   Bond base to hull dorsal skin with West System 105/206 structural epoxy.
-//   Thread 49 MHz antenna wire through bore; dress wire aft to aft post.
-//   For forward post, feed wire forward to the XCVR-49MHZ-2 feed point on
-//   Shepherd (head section) or River (cargo section) stack.
+//   Bond base to hull skin (port flank for River's antenna, starboard flank
+//   for Simon's — NOT dorsal centreline, NOT ventral/keel line) at shoulder
+//   height with West System 105/206 structural epoxy.  Thread 49 MHz antenna
+//   wire through bore; dress wire aft to aft post.  For each forward post,
+//   feed wire to that bay's own Emma (XCVR-49MHZ-2) J2: River's Room for the
+//   port antenna, Simon's Medbay for the starboard antenna — the two Emma
+//   boards do not share an antenna (TODO.md §1.4.2, redundancy mandate).
 //
 // References:
-//   docs/REVN_BUILD_GUIDE_24IN.md, Phase 1, Step 8:
-//     "Print from rcrs49_wire_post.scad: forward post (~120 mm from nose,
-//      dorsal) + aft post (~580 mm from nose, dorsal)."
-//   CLAUDE.md §Component Naming: River = 49 MHz RCRS primary antenna.
+//   docs/REVN_BUILD_GUIDE_24IN.md, Phase 1, Step 8 (superseded by §1.4.2
+//     port/starboard relocation, 2026-06-22 — update build guide to match):
+//     "Print from rcrs49_wire_post.scad: forward post (~120 mm from nose) +
+//      aft post (~580 mm from nose)" — now ×2 sets (port + starboard).
+//   CLAUDE.md §Component Naming: River = 49 MHz RCRS primary antenna;
+//     Simon also carries 49 MHz primary (independent antenna, starboard).
+//   TODO.md §1.4.2 (2026-06-22): port/starboard relocation rationale.
 //
 // Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
@@ -99,7 +117,10 @@ module wire_post() {
 
 // ── Render ────────────────────────────────────────────────────────────────────
 //
-// Renders one post.  Print two: one for the forward position (sta ~120 mm)
-// and one for the temporary aft position (sta ~580 mm).
+// Renders one post.  The module is generic (no port/starboard parameter —
+// orientation comes from how the printed post is bonded to the hull
+// surface).  Print FOUR total: River's antenna (port flank) forward
+// (sta ~120 mm) + aft (sta ~580 mm), and Simon's antenna (starboard flank)
+// forward (sta ~120 mm) + aft (sta ~580 mm).  See TODO.md §1.4.2.
 
 wire_post();

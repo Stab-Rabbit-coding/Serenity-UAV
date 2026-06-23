@@ -104,11 +104,8 @@ COMPONENTS = [
     # Pylon (wing-to-nacelle tilt pivot): placement unverified in FreeCAD.
     ("wings/wing_nacelle_pylon_revo.stl",
      "Pylon",          DETAIL_COLOR),
-    # Nacelle tip caps (port and stbd)
-    ("nacelles/nacelle_tip_cap_port.stl",
-     "TipCap_Port",    NACELLE_COLOR),
-    ("nacelles/nacelle_tip_cap_stbd.stl",
-     "TipCap_Stbd",    NACELLE_COLOR),
+    # Nacelle tip caps ARCHIVED 2026-06-22 (legacy part, no longer needed) —
+    # STLs moved to airframe/archive/stls/nacelles/; see ARCHIVE_INDEX.md.
     # Dorsal antenna fin (fuselage top)
     ("fuselage/dorsal_antenna_fin.stl",
      "Dorsal_Fin",     DETAIL_COLOR),

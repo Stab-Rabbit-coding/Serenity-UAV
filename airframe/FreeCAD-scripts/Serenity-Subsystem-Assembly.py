@@ -347,7 +347,7 @@ def assemble_avionics_bay():
     - 4 × Zoë (comms capes: MAVLink/SiK 915 MHz, LoRa RFM95W 915 MHz, TI WL1837MOD WiFi/BT, 49 MHz TDDS transceiver, CAN FD, MIL-STD-1553B, RS-485, Ethernet RSTP ring, TPM 2.0, write-blocker CPLD, NX-enforced microSD)
     - XCVR-49MHZ-2 sub-module (per each node)
     - Power distribution board
-    - Isolated transceiver modules (5 kV IEC 62368-1 / VDE 0884-11 certified)
+    - Isolated transceiver modules (5 kV [REF-IEC-001 §5.5.2] / [REF-VDE-001 Cl.4.3] certified)
     """
     doc = App.newDocument("AvionicsBay_Assembly")
     assy = Assembly4Lib.newAssembly(doc, "AvionicsBay")

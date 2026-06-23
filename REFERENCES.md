@@ -43,8 +43,11 @@
 - [Part IX — Protocol References](#part-ix--protocol-references)
     - [REF-PROTO-001: AX.25 Link Access Protocol for Amateur Packet Radio](#ref-proto-001-ax25-link-access-protocol-for-amateur-packet-radio)
     - [REF-PROTO-002: MAVLink v2 Protocol Specification](#ref-proto-002-mavlink-v2-protocol-specification)
-- [Part X — AUVSI and Industry Frameworks](#part-x--auvsi-and-industry-frameworks)
+- [Part X — AUVSI, ASTM F38, and Industry Frameworks](#part-x--auvsi-astm-f38-and-industry-frameworks)
     - [REF-AUVSI-001: AUVSI Trusted Operator Program (TOP) and XCELLENCE Safety Standards](#ref-auvsi-001-auvsi-trusted-operator-program-top-and-xcellence-safety-standards)
+    - [REF-ASTM-001: ASTM F2910-22 — Design and Construction of a Small Unmanned Aircraft System (sUAS)](#ref-astm-001-astm-f2910-22--design-and-construction-of-a-small-unmanned-aircraft-system-suas)
+    - [REF-ASTM-002: ASTM F3005-22 — Batteries for Use in Small Unmanned Aircraft Systems (sUAS)](#ref-astm-002-astm-f3005-22--batteries-for-use-in-small-unmanned-aircraft-systems-suas)
+    - [REF-ASTM-003: ASTM F3269-21 — Methods to Safely Bound Behavior of Aircraft Systems Containing Complex Functions Using Run-Time Assurance](#ref-astm-003-astm-f3269-21--methods-to-safely-bound-behavior-of-aircraft-systems-containing-complex-functions-using-run-time-assurance)
 - [Part XI — FDA / CDRH Laser Product Regulations](#part-xi--fda--cdrh-laser-product-regulations)
     - [REF-FDA-001: 21 CFR Part 1040 — Performance Standards for Light-Emitting Products](#ref-fda-001-21-cfr-part-1040--performance-standards-for-light-emitting-products)
 - [Part XII — Sensor and Component Specifications](#part-xii--sensor-and-component-specifications)
@@ -136,6 +139,7 @@ When a standard has multiple applicable clauses, list them all:
 |---|---|---|
 | §107.3 | Definitions | "Small unmanned aircraft" definition applicable |
 | §107.29 | Daylight operation | Must operate in daylight or civil twilight with anti-collision lighting |
+| §107.31 | Visual line of sight (VLOS) aircraft operation | Remote PIC/visual observer must maintain unaided VLOS with the aircraft throughout flight |
 | §107.51(a) | Maximum groundspeed | ≤ 87 kt (100 mph) |
 | §107.51(b) | Maximum altitude | ≤ 400 ft AGL (unless within 400 ft of a structure) |
 | §107.51(c) | Minimum visibility | ≥ 3 statute miles from pilot's control station |
@@ -728,7 +732,7 @@ per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ da
 
 ---
 
-## Part X — AUVSI and Industry Frameworks
+## Part X — AUVSI, ASTM F38, and Industry Frameworks
 
 ### REF-AUVSI-001: AUVSI Trusted Operator Program (TOP) and XCELLENCE Safety Standards
 
@@ -736,17 +740,76 @@ per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ da
 |---|---|
 | **Issuing authority** | Association for Unmanned Vehicle Systems International (AUVSI) |
 | **Official URL** | <https://www.auvsi.org/trusted-operator-program> |
-| **Note** | AUVSI does not publish numbered design standards (e.g., "AUVSI-XYZ"). References to "AUVSI standards" in `CLAUDE.md`/`README.md` mean AUVSI's published safety frameworks and guidelines. For numbered airframe standards, applicable ASTM F38 (Unmanned Aircraft Systems) standards should be identified — see TODO.md for the tracking item. |
-
-**ASTM F38 Committee UAS standards (identify applicable documents):**
-
-| Standard | Title | Status |
-|---|---|---|
-| ASTM F3322 | Small Unmanned Aircraft System (sUAS) Battery Safety | Verify applicability to LiPo 6S pack |
-| ASTM F3269 | Standard Practice for Methods to Safely Bound Flight Behavior of Unmanned Aircraft Systems | Verify applicability to failover design |
-| ASTM F3003 | Standard Specification for Quality Assurance of a Small Unmanned Aircraft System | May apply to flight testing |
+| **Note** | AUVSI does not publish numbered design standards (e.g., "AUVSI-XYZ"). References to "AUVSI standards" in `CLAUDE.md`/`README.md` mean AUVSI's published safety frameworks and guidelines. For numbered airframe standards, see the verified ASTM F38 Committee entries below. |
 
 **Used in:** `CLAUDE.md`, `README.md`
+
+---
+
+### REF-ASTM-001: ASTM F2910-22 — Design and Construction of a Small Unmanned Aircraft System (sUAS)
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | ASTM International, Committee F38 (Unmanned Aircraft Systems), Subcommittee F38.01 (Airworthiness) |
+| **Edition** | F2910-22 |
+| **Official URL** | <https://store.astm.org/f2910-22.html> |
+| **Scope** | Design, construction, and test requirements for a small unmanned aircraft system (sUAS), max takeoff gross weight ≤ 55 lbm (25 kg) — covers general requirements, structure, propulsion, propellers, fuel/oil systems (not applicable, all-electric), cooling, and documentation. |
+
+**Applied to:** Serenity airframe structural design (skin hollowing, mating-surface annulus/shoulder
+requirements, fastener/wall sizing per CLAUDE.md Engineering Requirements) and EDF propulsion
+system design (printed EDF housings as structural components).  AUW well under the 55 lbm
+(25 kg) sUAS weight class (current estimate ≈ 8 lbm / 3.6 kg, see `docs/bom_revR.json`), so the
+standard's scope applies without a GAA weight exemption.
+
+**Used in:** `CLAUDE.md`, `README.md`
+
+---
+
+### REF-ASTM-002: ASTM F3005-22 — Batteries for Use in Small Unmanned Aircraft Systems (sUAS)
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | ASTM International, Committee F38, Subcommittee F38.01 |
+| **Edition** | F3005-22 |
+| **Official URL** | <https://store.astm.org/f3005-22.html> |
+| **Scope** | Requirements for sUAS batteries — terminology, cell specification, mechanical and electrical design, and pack maintenance/documentation. Subordinate to REF-ASTM-001 (F2910). Does not address the systems utilizing the battery or use-phase safety (lithium-chemistry packs cannot be exempted from this standard). |
+| **Correction note (2026-06-22)** | TODO.md §0.4 originally listed "ASTM F3322" as the candidate battery-safety standard. **F3322 is incorrect** — it is the *Standard Specification for Small Unmanned Aircraft System (sUAS) Parachutes*, unrelated to batteries and not applicable to Serenity (no deployable recovery parachute in the design). The correct battery standard is F3005. See "Removed / Superseded Citations" below. |
+
+**Applied to:** LiPo 6S 4000 mAh main battery pack (cell specification, mechanical mounting, pack
+documentation).
+
+**Used in:** `CLAUDE.md`, `README.md`
+
+---
+
+### REF-ASTM-003: ASTM F3269-21 — Methods to Safely Bound Behavior of Aircraft Systems Containing Complex Functions Using Run-Time Assurance
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | ASTM International, Committee F38, Subcommittee F38.01 |
+| **Edition** | F3269-21 (supersedes F3269-17, "...Flight Behavior of Unmanned Aircraft Systems...") |
+| **Official URL** | <https://store.astm.org/f3269-21.html> |
+| **Scope** | Design/test practice providing a run-time-assurance (RTA) architectural framework so that flight behavior of a complex/unverifiable function is constrained to a safe envelope by an independent monitor, without requiring traditional design-time certification (e.g. DO-178C) of the complex function itself. |
+
+**Applied to:** The PACE-prioritized failover architecture across Wash/Zoë avionics stacks
+(Watchdog, Comms, Flight Control, Payload Control primary/alternate/contingency/emergency
+assignments — see CLAUDE.md "Avionics Workload Balancing"): each PACE tier acts as an
+independent run-time monitor/take-over path bounding the behavior of the primary controller,
+consistent with F3269's RTA framework.
+
+**Used in:** `CLAUDE.md`, `README.md`
+
+---
+
+### Evaluated and rejected — ASTM F3003 (withdrawn)
+
+ASTM F3003-14, *Standard Specification for Quality Assurance of a Small Unmanned Aircraft
+System (sUAS)*, was the third candidate originally listed in TODO.md §0.4 for "may apply to
+flight testing."  **F3003 was withdrawn by ASTM in January 2023 with no replacement
+standard** (confirmed via ASTM's official store listing).  It is not cited anywhere in this
+project.  No other active F38 standard fills the withdrawn QA-program role as of this
+verification (2026-06-22); REF-ASTM-001 (F2910) already covers design/construction/test
+requirements for the airframe itself.
 
 ---
 
@@ -897,6 +960,8 @@ because they were incorrectly attributed, unverifiable, or inapplicable.
 |---|---|---|---|
 | "NIST SP 800-72 principles" (write-blocker design) | `README.md` §Patent Notice, line 382 | **Incorrect attribution.** NIST SP 800-72 (2004) is "Guidelines on PDA Forensics" — unrelated to write-blocker design. The closest applicable standard is NIST SP 800-92 §4.4.2 (log data protection principles). | REF-NIST-004 (NIST SP 800-92 §4.4.2) |
 | 47 CFR Part 95 RCRS (§95.635/§95.655/§95.639, "TDDS"/"LERS"/"27 channels") | REF-FCC-003, `malcolm_antenna_spec.md`, `CLAUDE.md`, `README.md`, `TODO.md`, `AVIONICS_PB2_REDESIGN.md` | **Wrong band.** RCRS covers only 26–28/72/75 MHz, not 49 MHz; "TDDS"/"LERS"/27-channel terms untraceable. Emma's 49.82–49.90 MHz band is Part 15 §15.235, unlicensed. | REF-FCC-003 (Part 15 §15.235) |
+| "ASTM F3322 — sUAS Battery Safety" | TODO.md §0.4 (candidate list, not yet cited in active docs) | **Incorrect attribution.** F3322 is the *Standard Specification for Small Unmanned Aircraft System (sUAS) Parachutes* — unrelated to batteries, and not applicable to Serenity (no deployable recovery parachute). | REF-ASTM-002 (ASTM F3005-22, sUAS battery specification) |
+| "ASTM F3003 — Quality Assurance of a Small Unmanned Aircraft System" | TODO.md §0.4 (candidate list, not yet cited in active docs) | **Withdrawn standard.** F3003-14 was withdrawn by ASTM in January 2023 with no replacement. | None — see REF-ASTM-001 (F2910) for design/construction/test coverage |
 
 ---
 
@@ -909,5 +974,5 @@ Add verified section numbers to the relevant files and update this table.
 |---|---|---|---|
 | §15.203 antenna restriction (Emma RF connector) | Emma board files, `malcolm_wiring.md` | **Confirmed, resolved 2026-06-20.** §15.203 binds the manufacturer directly. J2 used a generic SMA edge connector (Amphenol 132289), a standard jack; no exception applies. | **Resolved:** J2 changed to 132289RP (RP-SMA, same footprint), satisfying §15.203. Board re-spin tracked in TODO.md §0.1 |
 | 14 CFR Part 47 (aircraft registration marks) | `ax25_types.h` | **Resolved 2026-06-21.** README/build guide had no erroneous citation; the miscitation was in `ax25_types.h`, which stated Part 47 governs registration and AX.25 needs an amateur license (Part 97) | Corrected to cite Part 48 §48.205 [REF-FAA-001]; link is license-exempt under Part 15 §15.235 [REF-FCC-003], per REF-PROTO-001 |
-| AUVSI "standards" (unnamed) | `CLAUDE.md`, `README.md` | No specific numbered AUVSI or ASTM standard cited | Identify applicable ASTM F38 committee standards for UAS airframe engineering and add to this catalog |
+| AUVSI "standards" (unnamed) | `CLAUDE.md`, `README.md` | **Resolved 2026-06-22.** No specific numbered AUVSI standard exists (AUVSI publishes frameworks, not numbered design standards). Identified and verified three applicable ASTM F38 standards. | Added REF-ASTM-001 (F2910-22, design/construction/test), REF-ASTM-002 (F3005-22, batteries), REF-ASTM-003 (F3269-21, run-time assurance/failover). `CLAUDE.md`/`README.md` AUVSI text is accurate as-is (AUVSI frameworks, not numbered standards) — no doc text change needed there. |
 | IEC 62368-1 clause numbers | PCB layout (not yet complete) | PCB layout must verify creepage/clearance distances meet IEC 62368-1 Clause 5.5.2 requirements for 5 kV reinforced insulation; this cannot be verified until PCB layout is complete | Verify during Wash and Zoë PCB layout review (see TODO.md §1.4) |

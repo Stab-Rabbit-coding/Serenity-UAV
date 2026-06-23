@@ -15,7 +15,7 @@
  *   - The RX thread blocks on read(); no busy-wait or polling.
  *   - TX is serialised by a mutex; the PTT window is held for the minimum
  *     required duration and no longer, as good engineering practice for a
- *     Part 15 §15.235 unlicensed device sharing the band (47 CFR §15.5).
+ *     [REF-FCC-003 §15.235] unlicensed device sharing the band [REF-FCC-003 §15.5].
  *   - All error paths close resources in reverse acquisition order to avoid
  *     resource leaks.
  *
