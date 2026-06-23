@@ -3,6 +3,6 @@
     "debug.closeReadonlyTabsOnEnd": true,
     "markdown.validate.enabled": true,
     "markdownlint.config": {
-        "indentation": { "style": "space", "size": 4 },
+        "MD007": { "indent": 4 }
     }
 }
