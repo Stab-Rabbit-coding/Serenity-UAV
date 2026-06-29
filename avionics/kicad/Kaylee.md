@@ -112,7 +112,7 @@ Wash end the drain wire connects to the cape chassis GND point.
 
 ### Main Bus Path
 
-```
+```text
                      ← enclosure wall ←
 J_BATT(+) ── (EMC cable gland) ── CM1 ── CM2 ── F1 (150 A MAXI fuse) ── VBAT rail
 J_BATT(−) ── (EMC cable gland) ── CM1 ── CM2 ──────────────────────────── PGND rail
@@ -164,7 +164,7 @@ to any other EDF, including the partner EDF sharing the same nacelle:
   ESC PWM switching noise and ringing from coupling back into the VDIS rail or into adjacent
   ESC current monitors (INA226 measurement integrity preserved at full throttle).
 
-```
+```text
 VDIS ──── F_ESCn (40 A mini blade fuse, automotive housing) ──────────────────────
                 │
          C_DECn (Panasonic EEUFC1V471, 470 µF / 35 V, low-ESR electrolytic)
@@ -184,7 +184,7 @@ J_ESCn(−) ──── PGND (power return — GND shared, no shunt)
 
 ### 5 V BEC (Dual Redundant)
 
-```
+```text
 VDIS ──── FB_5V1 (Würth 742792612, 10 µH, 2 A) ──── BEC5V_1 section
                   │
            C_BEC1_IN (100 µF / 50 V)
@@ -209,7 +209,7 @@ after diode drop).
 
 ### 6 V BEC
 
-```
+```text
 VDIS ──── FB_6V (Würth 742792612, 10 µH, 2 A) ────
                │
           C_BEC_SV_IN (100 µF / 50 V)
@@ -223,7 +223,7 @@ VDIS ──── FB_6V (Würth 742792612, 10 µH, 2 A) ────
 
 ### BQ76930 Cell Monitor
 
-```
+```text
 J_BAL pins (BAL_GND, B1–B6) ──► BQ76930 (VC0–VC6, BAL_GND)
 J_NTC ──────────────────────────► BQ76930 TS1 input (10 kΩ NTC)
 
@@ -366,7 +366,7 @@ All operate at 400 kHz (Fast Mode). Pull-ups: 4.7 kΩ to 5 V at J_I2C host end.
 
 The INA226 calibration register (0x05) sets the current-measurement scale.
 
-```
+```text
 CAL = floor(0.00512 / (CURRENT_LSB × R_shunt_Ω))
 where CURRENT_LSB = I_max / 32768
 ```
@@ -399,7 +399,7 @@ On start-up, the `cell_mon_bq769x0` driver writes the following registers:
 
 ### OV_TRIP / UV_TRIP Calculation
 
-```
+```text
 OV_TRIP register = floor((V_OV / GAIN − OFFSET) / 16)
 UV_TRIP register = floor((V_UV / GAIN − OFFSET) / 16)
 ```
@@ -442,16 +442,12 @@ to this threat level.
 | Standard / Threat | Level | Test | Mitigation |
 |---|---|---|---|
 | **500 W/m² (434 V/m) radiated susceptibility** | **Design requirement** | CW field immersion, 30 MHz – 6 GHz | Kaylee shielded aluminum enclosure (SE ≥ 60 dB); two-stage CM1+CM2; Y-caps C_Y1/C_Y2; I2C TVS D_I2C; 360° EMC cable glands |
-| MIL-STD-461G RS103 † | 200 V/m (200 MHz – 1 GHz) | Radiated susceptibility | Enclosure SE ≥ 60 dB covers RS103 by margin |
-| MIL-STD-461G CS114 † | Curve 05 (bulk cable injection) | Conducted susceptibility | Two-stage CM filter (CM1+CM2 in series = > 80 dB at 10 MHz); Y-caps to chassis |
-| MIL-STD-461G CS101 † | 50 V, 30 Hz – 150 kHz | Power bus susceptibility | 2× 220 µF + 10 µF C_DM1 bulk; BEC regulation |
-| MIL-STD-461G CE102 † | Limit B (conducted emission) | Conducted emission | CM1+CM2 input chokes; π-filter on each BEC |
-| IEC 61000-4-5 † | Level 3 (±2 kV CM, ±1 kV DM) | Surge on VBAT | D1 SMBJ33CA TVS + bulk caps + Y-caps |
-| IEC 61000-4-2 † | Level 4 (±8 kV contact) | ESD on connectors | D1 TVS; shielded enclosure prevents direct connector exposure |
-
-† MIL-STD-461G and IEC 61000-4-2/-4-5 are not yet in the `REFERENCES.md` catalog
-(no REF-ID exists for them) — tracked in `TODO.md` §0.5 as a research item, not
-fabricated here.
+| MIL-STD-461G RS103 [REF-MIL-002] | 200 V/m (200 MHz – 1 GHz) | Radiated susceptibility | Enclosure SE ≥ 60 dB covers RS103 by margin |
+| MIL-STD-461G CS114 [REF-MIL-002] | Curve 05 (bulk cable injection) | Conducted susceptibility | Two-stage CM filter (CM1+CM2 in series = > 80 dB at 10 MHz); Y-caps to chassis |
+| MIL-STD-461G CS101 [REF-MIL-002] | 50 V, 30 Hz – 150 kHz | Power bus susceptibility | 2× 220 µF + 10 µF C_DM1 bulk; BEC regulation |
+| MIL-STD-461G CE102 [REF-MIL-002] | Limit B (conducted emission) | Conducted emission | CM1+CM2 input chokes; π-filter on each BEC |
+| IEC 61000-4-5 [REF-IEC-005] | Level 3 (±2 kV CM, ±1 kV DM) | Surge on VBAT | D1 SMBJ33CA TVS + bulk caps + Y-caps |
+| IEC 61000-4-2 [REF-IEC-003] | Level 4 (±8 kV contact) | ESD on connectors | D1 TVS; shielded enclosure prevents direct connector exposure |
 
 Pre-compliance testing against CE102, CS101, and CS114 at system level is required
 before first flight. Full MIL-STD-461G / 500 W/m² qualification testing is deferred

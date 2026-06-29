@@ -168,7 +168,7 @@ Superseded Citations" table.
     added REF-ASTM-001 (F2910-22 — Design and Construction of a Small Unmanned Aircraft
     System), REF-ASTM-002 (F3005-22 — Batteries for Use in Small Unmanned Aircraft Systems —
     applies to the LiPo 6S 4000 mAh pack), and REF-ASTM-003 (F3269-21 — Methods to Safely Bound
-    Behavior of Aircraft Systems Containing Complex Functions Using Run-Time Assurance —
+    Behavior of Aircraft Systems Containing Complex Functions Using runtime assurance —
     applies to the PACE failover architecture).  Logged F3322 (misidentified — parachutes, not
     batteries) and F3003 (withdrawn 2023) in `REFERENCES.md` "Removed / Superseded Citations."
     *(2026-06-22)*
@@ -197,17 +197,31 @@ Superseded Citations" table.
     correct as-is — it is the aircraft's actual Jayne cargo-handling design payload (see
     `docs/PHASED_BUILD_GUIDE.md` "T/W with 250 g cargo"), not a regulatory citation.
     **Follow-up items opened from this audit (not yet resolved):**
-  - [ ] `build_guide_18_first_flight.svg`'s Part 107/VLOS warning callouts (lines ~59–60)
+    - [ ] `build_guide_18_first_flight.svg`'s Part 107/VLOS warning callouts (lines ~59–60)
     need citations but their fixed-width boxes are already near-full; requires either a
     layout change or rendering verification (see `/verify` skill) before editing text length.
-  - [ ] No standards entry exists yet in `REFERENCES.md` for RS-485 (TIA/EIA-485) —
+    - [x] **Resolved 2026-06-29.** No standards entry exists yet in `REFERENCES.md` for RS-485 (TIA/EIA-485) —
     referenced informally in `build_guide_11_inter_board.svg` and elsewhere; needs
     research before a REF-ID can be cited (do not fabricate).
-  - [ ] The anti-collision/strobe "60 FPM" flash-rate figure in `build_guide_13_nav_lights.svg`
-    and `decal_sheet.svg` has no traceable REF-ID in `REFERENCES.md` under REF-FAA-003;
-    likely traces to 14 CFR §23.1401 or AC 20-30B convention but not yet verified — needs
-    research before citing.
-  - [ ] Seven additional SVGs (`build_guide_09_avionics.svg`, `build_guide_11_inter_board.svg`,
+    **Resolution:** Added REF-TIA-001 (ANSI/TIA-485-A:1998) to `REFERENCES.md` Part XIII
+    with sections applied (§5 driver output, §6 receiver input, §7 bus loading, §9 cable
+    characteristics).  References 5-6 in `Wash.md` and `Zoë.md` updated with `[REF-TIA-001]`.
+    Exact product-page URL not confirmed (webstore blocked); added to Open Standards
+    Verification Items table in `REFERENCES.md`.
+    - [x] **Resolved 2026-06-29.** The anti-collision/strobe "60 FPM" flash-rate figure in
+    `build_guide_13_nav_lights.svg` and `decal_sheet.svg` has no traceable REF-ID in
+    `REFERENCES.md` under REF-FAA-003; likely traces to 14 CFR §23.1401 or AC 20-30B
+    convention but not yet verified — needs research before citing.
+    **Resolution:** Researched 14 CFR Part 107 §107.29(b) (anti-collision light visible
+    3 statute miles — no flash rate specified), Part 23 §23.1401 (reorganized 2017; the
+    prescriptive flash-rate text no longer exists in current eCFR), and Part 25 §25.1401(f)
+    (transport category 40–100 FPM — not applicable to Part 107 sUAS). No
+    currently-enforceable regulatory standard mandates a specific flash rate for Part 107
+    UAS anti-collision lights. "60 FPM" is a design convention in the conventional
+    aviation range (40–100 FPM). No regulatory citation is appropriate; the figure is a
+    design target. Documented in `REFERENCES.md` Open Standards Verification Items table.
+    No change required in the SVG files.
+    - [ ] Seven additional SVGs (`build_guide_09_avionics.svg`, `build_guide_11_inter_board.svg`,
     `build_guide_12_security_hw.svg`, `build_guide_20_node_placement.svg`,
     `build_guide_21_node_install.svg`, `build_plan.svg`, `components_overview.svg`) are
     built entirely or partly around the **archived** Cape-A-1/Cape-B-1 hardware instead of
@@ -217,14 +231,19 @@ Superseded Citations" table.
     **Superseded by, and folded into, the "Rebuild `graphical-build-guide/`..." item in
     §1.5 Documentation** — that item replaces these cards' art wholesale rather than
     patching the hardware depiction in place.
-  - [ ] The remaining ~30 non-priority SVGs were not individually swept for citations in
+    - [ ] The remaining ~30 non-priority SVGs were not individually swept for citations in
     this pass (only spot-checked); a full sweep with rendering verification is still open.
+    **Partial progress 2026-06-29:** `build_guide_17_ground_test.svg` line 45 updated —
+    appended `[REF-FCC-003]` to the "49MHz Part 15 §15.235 ground transmitter" text (text
+    length verified safe vs. containing `<rect>` bounds before editing).
+    `build_guide_18_first_flight.svg` Part 107/VLOS callout boxes remain at overflow; still
+    requires layout change or rendering verification before citation text can be added.
 - [x] **Audit remaining firmware source files for standards citations — done 2026-06-22.**
     Reviewed all `.c`/`.h` files in `avionics/firmware/`, `gcs/malcolm/firmware/`, and the
     relevant `avionics/kicad/*.py` generator scripts.  Added bracketed `[REF-ID §section]`
     citations (all map to existing `REFERENCES.md` entries — none fabricated): FCC power-limit
     comments in `mal_config.h` (`[REF-FCC-001 §15.247(b)(3)(i)]` for SiK/LoRa,
-    `[REF-FCC-002 §15.407(a)(3)]` for WiFi, `[REF-FCC-003 §15.235]` for the 49 MHz block);
+    `[REF-FCC-002 §15.407(a)(3)]` for Wi-Fi, `[REF-FCC-003 §15.235]` for the 49 MHz block);
     `[REF-PROTO-002]` (MAVLink v2) added to `mal_telemetry.h`; `[REF-PROTO-001]`/
     `[REF-FCC-003 §15.235/§15.5]` added to `avionics/firmware/cn/src/xcvr_kiss.{c,h}`;
     `[REF-IEC-001 §5.5.2]`/`[REF-VDE-001 Cl.4.3]` (5 kV reinforced isolation) and
@@ -251,29 +270,35 @@ Superseded Citations" table.
     called `XCVR-49MHZ-2.md` does not exist under that name — the board's companion file is
     `Emma.md` (XCVR-49MHZ-2 is its formal/silkscreen designation; Emma is the callsign used
     for the file). Findings per file:
-  - `Wash.md`: added `[REF-IEC-001 §5.5.2]`/`[REF-VDE-001 Cl.4.3]` to the existing
+    - `Wash.md`: added `[REF-IEC-001 §5.5.2]`/`[REF-VDE-001 Cl.4.3]` to the existing
     "≥8 mm creepage / ≥1.5 mm clearance" PCB layout rule (§"Isolation creepage") and to
     reference item 4; fixed a stale `XCVR-49MHZ-2.md` filename reference (→ `Emma.md`) in
     "Related Files"; flagged reference items 5–6 (IEC 61000-4-5, MIL-STD-461G) and the EMC
     Compliance Targets table as citing standards with no REF-ID yet in `REFERENCES.md`
     (marked with a `†` footnote, not fabricated).
-  - `Zoë.md`: its creepage/clearance rule is inherited by explicit reference to Wash
+    - `Zoë.md`: its creepage/clearance rule is inherited by explicit reference to Wash
     ("The Wash layout constraints apply equally here") — no separate citation needed.
     Same `†` footnote treatment applied to its reference-list items 5–6.
-  - `Kaylee.md`: added `[REF-NIST-002 §6.2.5]` to the 500 W/m² EMI design-objective
+    - `Kaylee.md`: added `[REF-NIST-002 §6.2.5]` to the 500 W/m² EMI design-objective
     statement; same `†` footnote treatment applied to its MIL-STD-461G/IEC 61000-4-x EMC
     table rows. The BQ76930 cell-tap "≥8 mm creepage" note (line ~594) is a basic-insulation
     multi-cell-BMS spacing rule, not the project's 5 kV reinforced-insulation topic — left
     uncited (no applicable REF-ID exists; would need an IPC-2221 catalog entry, not yet
     researched).
-  - `Emma.md`: already well-cited (REF-FCC-003 referenced throughout, correctly). Converted
+    - `Emma.md`: already well-cited (REF-FCC-003 referenced throughout, correctly). Converted
     two informal citations to bracket form, and fixed a dangling reference to the archived
     `XCVR-49MHZ-1.md` (→ `archive/XCVR-49MHZ-1.md`).
-  - [ ] **New follow-up:** MIL-STD-461G (EMI/EMC emissions and susceptibility for aircraft)
-    and IEC 61000-4-2/-4-4/-4-5 (ESD/EFT/surge immunity test methods) are cited by name
-    across `Wash.md`, `Zoë.md`, and `Kaylee.md` but have no `REFERENCES.md` catalog entry —
-    needs the same official-source verification treatment given to REF-ASTM-* in §0.4
-    before REF-IDs can be assigned.
+    - [x] **Resolved 2026-06-29.** MIL-STD-461G (EMI/EMC emissions and susceptibility for
+    aircraft) and IEC 61000-4-2/-4-4/-4-5 (ESD/EFT/surge immunity test methods) are cited
+    by name across `Wash.md`, `Zoë.md`, and `Kaylee.md` but have no `REFERENCES.md` catalog
+    entry — needs the same official-source verification treatment given to REF-ASTM-* in
+    §0.4 before REF-IDs can be assigned.
+    **Resolution:** Added REF-MIL-002 (MIL-STD-461G) to `REFERENCES.md` Part IV and
+    REF-IEC-003/004/005 (IEC 61000-4-2/4-4/4-5) to Part V.  All `†` footnotes in
+    `Wash.md`, `Zoë.md`, and `Kaylee.md` replaced with proper `[REF-MIL-002]` /
+    `[REF-IEC-003]` / `[REF-IEC-004]` / `[REF-IEC-005]` bracketed citations.  Exact
+    IEC webstore product-page URLs not confirmed (site returns JavaScript-rendered homepage
+    to WebFetch); added to Open Standards Verification Items table pending manual lookup.
 
 ### 0.6 — IEC 62368-1 PCB Layout Isolation Verification
 
@@ -305,16 +330,14 @@ Superseded Citations" table.
 
 ### 0.7 — CI Lint Scope and Repo-Wide Lint Debt (open — deferred to separate remediation effort)
 
-- [ ] **`run-lint` (`github/super-linter@v4`) grades every PR against the entire
-    repository, not its diff** — `VALIDATE_ALL_CODEBASE: true` in
-    `.github/workflows/super-linter.yml` causes even single-file PRs (e.g. PR #107,
-    TODO.md-only) to fail ~17 sub-linter categories simultaneously (`CLANG_FORMAT`, `CPP`,
-    `CSS`, `EDITORCONFIG`, `GITHUB_ACTIONS`, `JAVASCRIPT_STANDARD`, `JSCPD`, `JSON`, `JSX`,
-    `MARKDOWN`, `NATURAL_LANGUAGE`, `PYTHON_BLACK`, `PYTHON_PYLINT`, `PYTHON_FLAKE8`,
-    `PYTHON_ISORT`, `PYTHON_MYPY`, `SHELL_SHFMT`). Confirmed pre-existing: the same check already fails on
-    `main` at the PR #105 merge commit, so this is not a regression from #107.
-    Decision (2026-06-21): defer changing `VALIDATE_ALL_CODEBASE` for now; track as a
-    separate remediation effort rather than a CI config change bundled with feature work.
+- [x] **Resolved (confirmed 2026-06-29). `run-lint` (`github/super-linter@v4`) scope fix.**
+    Originally described as `VALIDATE_ALL_CODEBASE: true` causing every PR to fail
+    ~17 sub-linter categories against the full repository rather than its diff (PR #107 etc.).
+    Decision (2026-06-21) was to defer the change pending a credential with `workflow`
+    OAuth scope.  **Confirmed in a later session:** `.github/workflows/super-linter.yml`
+    already has `VALIDATE_ALL_CODEBASE: false` (line 35) — the scope fix was applied
+    at some point (the original `true` state is now in git history only).  No further
+    action needed on this specific item.
 - [ ] **Repo-wide lint debt** — observed counts as of the PR #107 full-codebase run:
     `EDITORCONFIG` 697, `PYTHON_BLACK` 72, `PYTHON_FLAKE8` 56, `PYTHON_ISORT` 47, `JSCPD` 39,
     `MARKDOWN` 32, `CLANG_FORMAT` 26, `CPP` 25, `PYTHON_MYPY` 7, `NATURAL_LANGUAGE` 17,
@@ -322,10 +345,6 @@ Superseded Citations" table.
     `GITHUB_ACTIONS` 1. Needs a dedicated remediation pass, file type by file type,
     separate from feature work, so each touched file is fixed under its own
     diff-scoped lint pass rather than a single repo-wide sweep.
-- [ ] Note for whoever picks this up: applying the `VALIDATE_ALL_CODEBASE: false`
-    scope fix also requires a GitHub credential with the `workflow` OAuth scope —
-    neither this session's git push credential nor its GitHub MCP token could write
-    to `.github/workflows/super-linter.yml` (`403 ... without 'workflow' scope`).
 
 ---
 
@@ -381,7 +400,7 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
 - [x] **Correct hinge location: outboard flank, not centreline.** Rev R1a (above)
     placed both doors' piano-hinge knuckles at the ship centreline X_CL (≈ −169.85 mm)
     with the free edges at the hull sides — backwards from the door behaviour already
-    documented everywhere else in the repo (TODO.md §1.4.2, README.md, `rcrs49_wire_post.scad`),
+    documented everywhere else in the repository (TODO.md §1.4.2, README.md, `rcrs49_wire_post.scad`),
     all of which describe the doors hinging at the **outboard flank/belly edge** and
     swinging **down and out from the aircraft, full 180° range of motion**, to open the
     bottom of the cargo bay. **DONE 2026-06-22 (Rev R1b, with user)**:
@@ -827,7 +846,14 @@ Joint faces in hull-frame Y (confirmed from baked extents):
         - [ ] Verify GPS recess depth clears GPS retention ring (Inara: dZ=−14.3 mm, River: dZ=+0.7 mm)
         - [ ] Confirm M3 bore positions match shell boss pattern (±25 mm × ±15 mm from bay centre)
 
-- [x] **49 MHz (Part 15 §15.235) wire posts** — `airframe/openscad/fuselage/rcrs49_wire_post.scad` created 2026-06-11. Single `wire_post()` module: 12×12×2 mm PETG base, 8×8×7 mm mast, Ø1.5 mm athwartships wire-retention bore at 2 mm from top. **Relocated 2026-06-22 (§1.4.2):** dorsal-centreline mount superseded — print FOUR posts (two antennas, two posts each): River's antenna forward (sta ≈ 120 mm) + aft (sta ≈ 580 mm) on the **port flank**, Simon's antenna forward + aft (same stations) on the **starboard flank**, both at shoulder height. Reasons: (a) a single shared dorsal run put River's and Simon's independent 49 MHz antennas (§1.4.2) too close together at 49 MHz; (b) the cargo bay clamshell doors hinge at the outboard flank/belly edge and swing up to 180° (`generate_cargo_doors.py`), so any ventral or low-flank exterior post in the cargo bay's Y-span is in the door's path — shoulder height, port/starboard, clears both.
+- [x] **49 MHz (Part 15 §15.235) wire posts** — `airframe/openscad/fuselage/rcrs49_wire_post.scad` created 2026-06-11.
+    Single `wire_post()` module: 12×12×2 mm PETG base, 8×8×7 mm mast, Ø1.5 mm athwartships wire-retention bore at 2 mm from top.
+    **Relocated 2026-06-22 (§1.4.2):** dorsal-centreline mount superseded — print FOUR posts (two antennas, two posts each):
+    River's antenna forward (sta ≈ 120 mm) + aft (sta ≈ 580 mm) on the **port flank**, Simon's antenna forward + aft (same
+    stations) on the **starboard flank**, both at shoulder height.
+    Reasons: (a) a single shared dorsal run put River's and Simon's independent 49 MHz antennas (§1.4.2) too close together;
+    (b) the cargo bay clamshell doors hinge at the outboard flank/belly edge and swing up to 180° (`generate_cargo_doors.py`),
+    so any ventral or low-flank exterior post in the cargo bay's Y-span is in the door's path — shoulder height, port/starboard, clears both.
 
     - **BLOCKS Phase 1 (antenna installation)**
     - **SUB-TASKS:**
@@ -1271,12 +1297,12 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     far wall at all, so the two wings were never actually structurally
     connected by a shared spar.
     **Two items deliberately left open by this fix, not resolved:**
-  - The spar/mortise chordwise (Y) offset still uses the pre-existing
+    - The spar/mortise chordwise (Y) offset still uses the pre-existing
     `WING_ROOT_Y_CEN` value as an interim stand-in; the true offset needs
     re-deriving against the current 129 mm Rev R1 root chord (already
     tracked: TODO.md §1.1.2 "Verify cargo-section wing-root mortise
     dimensions against new root chord 129 mm").
-  - **NEW, more serious — `WING_ROOT_Z_CEN`=62.5 mm overlaps River's
+    - **NEW, more serious — `WING_ROOT_Z_CEN`=62.5 mm overlaps River's
     avionics bay (Z 24..64 mm)**: the spar bearing boss alone (Z
     51.5..73.5) already overlaps River's upper 51.5..64 mm band. This is
     a real structural/packaging conflict, independent of the axis bug —
@@ -2023,7 +2049,7 @@ work that was actually completed against this stub before it was retired:
     | Simon's Medbay (Bay E) | Zoë + Emma (49 MHz) | 49 MHz whip (primary, **independent antenna — see new sub-task below**) + SiK whip (secondary) = 2 | 1 |
 
     **Total: 8 external C2/payload-link antennas + 4 GPS patches = 12 physical antennas.**
-    Every Zoë (Cape-B-2) carries identical Wi-Fi/SiK/LoRa RF front ends per board (all
+    Every Zoë (Cape-B-2) carries identical Wi-Fi/SiK/LoRa RF frontends per board (all
     4 Zoë boards are the same PCB), but only the antenna feeding that bay's PACE-assigned
     primary/secondary link is populated — the unused chain's SMA pad is left unpopulated
     (no antenna, no feedline) rather than wasting mass/hull penetrations on a link that
@@ -2328,7 +2354,7 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
 - [ ] **Rebuild `graphical-build-guide/` (38 SVGs) from Blender/FreeCAD-derived platform
     graphics, replacing the pre-Rev-N hand-drawn line art.** Two stale-geometry problems,
     not one:
-  - The 26 numbered `build_guide_XX_*.svg` step cards (antenna placement, node install,
+    - The 26 numbered `build_guide_XX_*.svg` step cards (antenna placement, node install,
     inter-board wiring, first flight, etc.) are hand-drawn schematic line art — the
     airframe silhouettes in them were never derived from actual model geometry at all,
     and (per the §0.5 audit above) several depict the **archived** Cape-A-1/Cape-B-1
@@ -2337,12 +2363,12 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
     `build_guide_12_security_hw.svg`, `build_guide_20_node_placement.svg`,
     `build_guide_21_node_install.svg`, `build_plan.svg`, `components_overview.svg`) —
     this item supersedes that follow-up.
-  - The existing partial outline-derivation pipeline
+    - The existing partial outline-derivation pipeline
     (`graphical-build-guide/gen_hull_outlines.py`, `update_overview_paths.py`) only
     covers the 4 `overview_*.svg` files, and sources from
     `thingverse-serenity/files-hollowed-18in/` — pre-Rev-N 18-inch geometry, not the
     current Rev R1 24-inch baked hull-frame STLs in `airframe/stls/`.
-  - **Approach:** render the current canonical geometry (baked `airframe/stls/` per
+    - **Approach:** render the current canonical geometry (baked `airframe/stls/` per
     CLAUDE.md's Hull-Frame Coordinate Standard, or directly from
     `airframe/freecad/assembly/SerenityAssembly.FCStd` / `serenity_assembly.py`) using
     Blender (`airframe/blender-scripts/serenity_render_views.py` already does isometric/
@@ -2350,7 +2376,7 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
     those renders/silhouettes as the new base art for every card, in place of hand-drawn
     shapes. Re-verify all standards citations and hardware depictions added in §0.5
     survive the rebuild (don't lose the `[REF-ID]` work doing this).
-  - Large, multi-file effort — scope into phases (e.g. overview cards first, then
+    - Large, multi-file effort — scope into phases (e.g. overview cards first, then
     per-system build-guide cards) before starting; do not attempt as one pass.
 
 - [ ] **Sync `bom_revO.json` ↔ `bom_revO.csv`** — verify all XCVR-49MHZ-1 BOM items (Phase 5

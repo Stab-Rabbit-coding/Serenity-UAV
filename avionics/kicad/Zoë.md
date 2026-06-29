@@ -338,8 +338,8 @@ headroom absorbed by the new isolated transceivers (~80 mA combined increase).
 
 ## EMC Compliance Targets
 
-Same as Wash: IEC 61000-4-2 Level 4, IEC 61000-4-4 Level 4, IEC 61000-4-5 Level 3,
-MIL-STD-461G RE102 Limit C, RS103 200 V/m.
+Same as Wash: IEC 61000-4-2 Level 4 [REF-IEC-003], IEC 61000-4-4 Level 4 [REF-IEC-004],
+IEC 61000-4-5 Level 3 [REF-IEC-005], MIL-STD-461G RE102 Limit C, RS103 200 V/m [REF-MIL-002].
 
 Additional RF susceptibility note: the RFD900x and RFM95W modules have their own
 internal LNA protectors. The PRTR5V0U2X TVS arrays on J1 protect the UART interface,
@@ -391,8 +391,8 @@ schematic bus ring without net name conflicts.
 2. Analog Devices ADM2795E Data Sheet Rev. B
 3. Würth Elektronik EMC Design Guide (2023) — ferrite bead placement
 4. TI WL1837MOD Hardware Design Guide (SWRU491) — supply filtering guidance
-5. IEC 61000-4-5:2017 — surge immunity (not yet in REFERENCES.md catalog — see TODO.md §0.5)
-6. MIL-STD-461G:2015 (not yet in REFERENCES.md catalog — see TODO.md §0.5)
+5. IEC 61000-4-5:2014+AMD1:2017 — surge immunity [REF-IEC-005]
+6. MIL-STD-461G:2015 — EM emissions and susceptibility requirements for aircraft [REF-MIL-002]
 7. Johanson Technology 0915LP15B0100E Data Sheet — 902–928 MHz bandpass filter
 8. Johanson Technology 2450BP15B050E Data Sheet — 2.4 GHz bandpass filter
 9. Semtech RCLAMP0502B Data Sheet — RF ESD protection, 0.15 pF, SOD-882

@@ -284,15 +284,11 @@ to the Serenity UAV airframe operating environment:
 
 | Standard | Level | Test | Notes |
 | --- | --- | --- | --- |
-| IEC 61000-4-2 † | Level 4 (±8 kV contact, ±15 kV air) | ESD | TVS arrays at all field connectors |
-| IEC 61000-4-4 † | Level 4 (4 kV peak) | EFT/Burst on signal lines | CMCs + isolated transceivers |
-| IEC 61000-4-5 † | Level 3 (2 kV CM, 1 kV DM) | Surge | ±42 V bus fault on CAN/RS-485 |
-| MIL-STD-461G RE102 † | Limit C | Radiated emissions | 100BASE-TX EMI suppressed via HX1188NL magnetics, CMCs, and TVS arrays |
-| MIL-STD-461G RS103 † | 200 V/m, 10 kHz–18 GHz | Radiated susceptibility | Isolated buses + chassis ground |
-
-† MIL-STD-461G and IEC 61000-4-2/-4-4/-4-5 are not yet in the `REFERENCES.md` catalog
-(no REF-ID exists for them) — tracked in `TODO.md` §0.5 as a research item, not
-fabricated here.
+| IEC 61000-4-2 [REF-IEC-003] | Level 4 (±8 kV contact, ±15 kV air) | ESD | TVS arrays at all field connectors |
+| IEC 61000-4-4 [REF-IEC-004] | Level 4 (4 kV peak) | EFT/Burst on signal lines | CMCs + isolated transceivers |
+| IEC 61000-4-5 [REF-IEC-005] | Level 3 (2 kV CM, 1 kV DM) | Surge | ±42 V bus fault on CAN/RS-485 |
+| MIL-STD-461G RE102 [REF-MIL-002] | Limit C | Radiated emissions | 100BASE-TX EMI suppressed via HX1188NL magnetics, CMCs, and TVS arrays |
+| MIL-STD-461G RS103 [REF-MIL-002] | 200 V/m, 10 kHz–18 GHz | Radiated susceptibility | Isolated buses + chassis ground |
 
 Pre-compliance testing against IEC 61000-4-2 through 4-5 is required before first
 flight. Formal MIL-STD-461G testing is deferred pending airframe integration.
@@ -349,8 +345,8 @@ routed through the π-filter (FB1/C11/C12) before distribution to the cape rail.
 2. Analog Devices ADM2795E Data Sheet Rev. B — isolation boundary capacitor guidance
 3. Bourns SRF2012 Series Data Sheet — common-mode choke attenuation curves
 4. IEC 62368-1:2018 Annex G — creepage/clearance for reinforced insulation [REF-IEC-001 §5.5.2]
-5. IEC 61000-4-5:2017 — surge immunity test levels (not yet in REFERENCES.md catalog — see TODO.md §0.5)
-6. MIL-STD-461G:2015 — EM emissions and susceptibility requirements for aircraft (not yet in REFERENCES.md catalog — see TODO.md §0.5)
+5. IEC 61000-4-5:2014+AMD1:2017 — surge immunity test levels [REF-IEC-005]
+6. MIL-STD-461G:2015 — EM emissions and susceptibility requirements for aircraft [REF-MIL-002]
 7. Texas Instruments DP83825I Data Sheet (SNLS505C) — 10/100BASE-TX RMII PHY, RBIAS and bypass cap recommendations
 8. Pulse Electronics HX1188NL Data Sheet — dual 10/100BASE-TX LAN transformer application circuit, center-tap termination
 9. Texas Instruments TPS62933 Data Sheet (SLVSGM7) — 3.3V→1.8V SMPS, FB divider, output filter design
