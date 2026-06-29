@@ -51,7 +51,7 @@
     - [REF-AUVSI-001: AUVSI Trusted Operator Program (TOP) and XCELLENCE Safety Standards](#ref-auvsi-001-auvsi-trusted-operator-program-top-and-xcellence-safety-standards)
     - [REF-ASTM-001: ASTM F2910-22 — Design and Construction of a Small Unmanned Aircraft System (sUAS)](#ref-astm-001-astm-f2910-22--design-and-construction-of-a-small-unmanned-aircraft-system-suas)
     - [REF-ASTM-002: ASTM F3005-22 — Batteries for Use in Small Unmanned Aircraft Systems (sUAS)](#ref-astm-002-astm-f3005-22--batteries-for-use-in-small-unmanned-aircraft-systems-suas)
-    - [REF-ASTM-003: ASTM F3269-21 — Methods to Safely Bound Behavior of Aircraft Systems Containing Complex Functions Using Run-Time Assurance](#ref-astm-003-astm-f3269-21--methods-to-safely-bound-behavior-of-aircraft-systems-containing-complex-functions-using-run-time-assurance)
+    - [REF-ASTM-003: ASTM F3269-21 — Methods to Safely Bound Behavior of Aircraft Systems Containing Complex Functions Using runtime assurance](#ref-astm-003-astm-f3269-21--methods-to-safely-bound-behavior-of-aircraft-systems-containing-complex-functions-using-runtime-assurance)
 - [Part XI — FDA / CDRH Laser Product Regulations](#part-xi--fda--cdrh-laser-product-regulations)
     - [REF-FDA-001: 21 CFR Part 1040 — Performance Standards for Light-Emitting Products](#ref-fda-001-21-cfr-part-1040--performance-standards-for-light-emitting-products)
 - [Part XII — Sensor and Component Specifications](#part-xii--sensor-and-component-specifications)
@@ -886,7 +886,7 @@ documentation).
 
 ---
 
-### REF-ASTM-003: ASTM F3269-21 — Methods to Safely Bound Behavior of Aircraft Systems Containing Complex Functions Using Run-Time Assurance
+### REF-ASTM-003: ASTM F3269-21 — Methods to Safely Bound Behavior of Aircraft Systems Containing Complex Functions Using runtime assurance
 
 | Field | Value |
 |---|---|
@@ -898,7 +898,7 @@ documentation).
 **Applied to:** The PACE-prioritized failover architecture across Wash/Zoë avionics stacks
 (Watchdog, Comms, Flight Control, Payload Control primary/alternate/contingency/emergency
 assignments — see CLAUDE.md "Avionics Workload Balancing"): each PACE tier acts as an
-independent run-time monitor/take-over path bounding the behavior of the primary controller,
+independent runtime monitor/take-over path bounding the behavior of the primary controller,
 consistent with F3269's RTA framework.
 
 **Used in:** `CLAUDE.md`, `README.md`
@@ -1110,7 +1110,7 @@ Add verified section numbers to the relevant files and update this table.
 |---|---|---|---|
 | §15.203 antenna restriction (Emma RF connector) | Emma board files, `malcolm_wiring.md` | **Confirmed, resolved 2026-06-20.** §15.203 binds the manufacturer directly. J2 used a generic SMA edge connector (Amphenol 132289), a standard jack; no exception applies. | **Resolved:** J2 changed to 132289RP (RP-SMA, same footprint), satisfying §15.203. Board re-spin tracked in TODO.md §0.1 |
 | 14 CFR Part 47 (aircraft registration marks) | `ax25_types.h` | **Resolved 2026-06-21.** README/build guide had no erroneous citation; the miscitation was in `ax25_types.h`, which stated Part 47 governs registration and AX.25 needs an amateur license (Part 97) | Corrected to cite Part 48 §48.205 [REF-FAA-001]; link is license-exempt under Part 15 §15.235 [REF-FCC-003], per REF-PROTO-001 |
-| AUVSI "standards" (unnamed) | `CLAUDE.md`, `README.md` | **Resolved 2026-06-22.** No specific numbered AUVSI standard exists (AUVSI publishes frameworks, not numbered design standards). Identified and verified three applicable ASTM F38 standards. | Added REF-ASTM-001 (F2910-22, design/construction/test), REF-ASTM-002 (F3005-22, batteries), REF-ASTM-003 (F3269-21, run-time assurance/failover). `CLAUDE.md`/`README.md` AUVSI text is accurate as-is (AUVSI frameworks, not numbered standards) — no doc text change needed there. |
+| AUVSI "standards" (unnamed) | `CLAUDE.md`, `README.md` | **Resolved 2026-06-22.** No specific numbered AUVSI standard exists (AUVSI publishes frameworks, not numbered design standards). Identified and verified three applicable ASTM F38 standards. | Added REF-ASTM-001 (F2910-22, design/construction/test), REF-ASTM-002 (F3005-22, batteries), REF-ASTM-003 (F3269-21, runtime assurance/failover). `CLAUDE.md`/`README.md` AUVSI text is accurate as-is (AUVSI frameworks, not numbered standards) — no doc text change needed there. |
 | IEC 62368-1 clause numbers | PCB layout (not yet complete) | PCB layout must verify creepage/clearance distances meet IEC 62368-1 Clause 5.5.2 requirements for 5 kV reinforced insulation; this cannot be verified until PCB layout is complete | Verify during Wash and Zoë PCB layout review (see TODO.md §1.4) |
 | REF-IEC-003 (IEC 61000-4-2) exact product URL | `REFERENCES.md` REF-IEC-003 | Exact webstore.iec.ch product-page URL not confirmed during catalog entry (WebFetch redirected to homepage during verification attempt 2026-06-29); standard designation and content are correct | Confirm product page URL via <https://webstore.iec.ch/> search for "IEC 61000-4-2" and update REF-IEC-003 |
 | REF-IEC-004 (IEC 61000-4-4) exact product URL | `REFERENCES.md` REF-IEC-004 | Same as REF-IEC-003 — webstore URL not confirmed 2026-06-29 | Confirm via <https://webstore.iec.ch/> search "IEC 61000-4-4" |

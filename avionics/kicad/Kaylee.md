@@ -112,7 +112,7 @@ Wash end the drain wire connects to the cape chassis GND point.
 
 ### Main Bus Path
 
-```
+```text
                      ← enclosure wall ←
 J_BATT(+) ── (EMC cable gland) ── CM1 ── CM2 ── F1 (150 A MAXI fuse) ── VBAT rail
 J_BATT(−) ── (EMC cable gland) ── CM1 ── CM2 ──────────────────────────── PGND rail
@@ -164,7 +164,7 @@ to any other EDF, including the partner EDF sharing the same nacelle:
   ESC PWM switching noise and ringing from coupling back into the VDIS rail or into adjacent
   ESC current monitors (INA226 measurement integrity preserved at full throttle).
 
-```
+```text
 VDIS ──── F_ESCn (40 A mini blade fuse, automotive housing) ──────────────────────
                 │
          C_DECn (Panasonic EEUFC1V471, 470 µF / 35 V, low-ESR electrolytic)
@@ -184,7 +184,7 @@ J_ESCn(−) ──── PGND (power return — GND shared, no shunt)
 
 ### 5 V BEC (Dual Redundant)
 
-```
+```text
 VDIS ──── FB_5V1 (Würth 742792612, 10 µH, 2 A) ──── BEC5V_1 section
                   │
            C_BEC1_IN (100 µF / 50 V)
@@ -209,7 +209,7 @@ after diode drop).
 
 ### 6 V BEC
 
-```
+```text
 VDIS ──── FB_6V (Würth 742792612, 10 µH, 2 A) ────
                │
           C_BEC_SV_IN (100 µF / 50 V)
@@ -223,7 +223,7 @@ VDIS ──── FB_6V (Würth 742792612, 10 µH, 2 A) ────
 
 ### BQ76930 Cell Monitor
 
-```
+```text
 J_BAL pins (BAL_GND, B1–B6) ──► BQ76930 (VC0–VC6, BAL_GND)
 J_NTC ──────────────────────────► BQ76930 TS1 input (10 kΩ NTC)
 
@@ -366,7 +366,7 @@ All operate at 400 kHz (Fast Mode). Pull-ups: 4.7 kΩ to 5 V at J_I2C host end.
 
 The INA226 calibration register (0x05) sets the current-measurement scale.
 
-```
+```text
 CAL = floor(0.00512 / (CURRENT_LSB × R_shunt_Ω))
 where CURRENT_LSB = I_max / 32768
 ```
@@ -399,7 +399,7 @@ On start-up, the `cell_mon_bq769x0` driver writes the following registers:
 
 ### OV_TRIP / UV_TRIP Calculation
 
-```
+```text
 OV_TRIP register = floor((V_OV / GAIN − OFFSET) / 16)
 UV_TRIP register = floor((V_UV / GAIN − OFFSET) / 16)
 ```
