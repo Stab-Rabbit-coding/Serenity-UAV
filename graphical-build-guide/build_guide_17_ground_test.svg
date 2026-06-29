@@ -42,7 +42,7 @@
 <text x="800" y="158" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">QGroundControl (GCS laptop)</text>
 <rect x="768" y="167" width="26" height="16" rx="4" fill="#c2185b" stroke="#222222" stroke-width="1"/>
 <text x="781" y="180" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
-<text x="800" y="180" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">49MHz Part 15 §15.235 ground transmitter</text>
+<text x="800" y="180" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">49MHz Part 15 §15.235 ground transmitter [REF-FCC-003]</text>
 <rect x="768" y="189" width="26" height="16" rx="4" fill="#f5c518" stroke="#222222" stroke-width="1"/>
 <text x="781" y="202" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1×</text>
 <text x="800" y="202" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Luggage scale (thrust measure)</text>

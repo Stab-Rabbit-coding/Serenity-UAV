@@ -200,13 +200,27 @@ Superseded Citations" table.
   - [ ] `build_guide_18_first_flight.svg`'s Part 107/VLOS warning callouts (lines ~59–60)
     need citations but their fixed-width boxes are already near-full; requires either a
     layout change or rendering verification (see `/verify` skill) before editing text length.
-  - [ ] No standards entry exists yet in `REFERENCES.md` for RS-485 (TIA/EIA-485) —
+  - [x] **Resolved 2026-06-29.** No standards entry exists yet in `REFERENCES.md` for RS-485 (TIA/EIA-485) —
     referenced informally in `build_guide_11_inter_board.svg` and elsewhere; needs
     research before a REF-ID can be cited (do not fabricate).
-  - [ ] The anti-collision/strobe "60 FPM" flash-rate figure in `build_guide_13_nav_lights.svg`
-    and `decal_sheet.svg` has no traceable REF-ID in `REFERENCES.md` under REF-FAA-003;
-    likely traces to 14 CFR §23.1401 or AC 20-30B convention but not yet verified — needs
-    research before citing.
+    **Resolution:** Added REF-TIA-001 (ANSI/TIA-485-A:1998) to `REFERENCES.md` Part XIII
+    with sections applied (§5 driver output, §6 receiver input, §7 bus loading, §9 cable
+    characteristics).  References 5-6 in `Wash.md` and `Zoë.md` updated with `[REF-TIA-001]`.
+    Exact product-page URL not confirmed (webstore blocked); added to Open Standards
+    Verification Items table in `REFERENCES.md`.
+  - [x] **Resolved 2026-06-29.** The anti-collision/strobe "60 FPM" flash-rate figure in
+    `build_guide_13_nav_lights.svg` and `decal_sheet.svg` has no traceable REF-ID in
+    `REFERENCES.md` under REF-FAA-003; likely traces to 14 CFR §23.1401 or AC 20-30B
+    convention but not yet verified — needs research before citing.
+    **Resolution:** Researched 14 CFR Part 107 §107.29(b) (anti-collision light visible
+    3 statute miles — no flash rate specified), Part 23 §23.1401 (reorganized 2017; the
+    prescriptive flash-rate text no longer exists in current eCFR), and Part 25 §25.1401(f)
+    (transport category 40–100 FPM — not applicable to Part 107 sUAS). No
+    currently-enforceable regulatory standard mandates a specific flash rate for Part 107
+    UAS anti-collision lights. "60 FPM" is a design convention in the conventional
+    aviation range (40–100 FPM). No regulatory citation is appropriate; the figure is a
+    design target. Documented in `REFERENCES.md` Open Standards Verification Items table.
+    No change required in the SVG files.
   - [ ] Seven additional SVGs (`build_guide_09_avionics.svg`, `build_guide_11_inter_board.svg`,
     `build_guide_12_security_hw.svg`, `build_guide_20_node_placement.svg`,
     `build_guide_21_node_install.svg`, `build_plan.svg`, `components_overview.svg`) are
@@ -219,6 +233,11 @@ Superseded Citations" table.
     patching the hardware depiction in place.
   - [ ] The remaining ~30 non-priority SVGs were not individually swept for citations in
     this pass (only spot-checked); a full sweep with rendering verification is still open.
+    **Partial progress 2026-06-29:** `build_guide_17_ground_test.svg` line 45 updated —
+    appended `[REF-FCC-003]` to the "49MHz Part 15 §15.235 ground transmitter" text (text
+    length verified safe vs. containing `<rect>` bounds before editing).
+    `build_guide_18_first_flight.svg` Part 107/VLOS callout boxes remain at overflow; still
+    requires layout change or rendering verification before citation text can be added.
 - [x] **Audit remaining firmware source files for standards citations — done 2026-06-22.**
     Reviewed all `.c`/`.h` files in `avionics/firmware/`, `gcs/malcolm/firmware/`, and the
     relevant `avionics/kicad/*.py` generator scripts.  Added bracketed `[REF-ID §section]`
@@ -269,11 +288,17 @@ Superseded Citations" table.
   - `Emma.md`: already well-cited (REF-FCC-003 referenced throughout, correctly). Converted
     two informal citations to bracket form, and fixed a dangling reference to the archived
     `XCVR-49MHZ-1.md` (→ `archive/XCVR-49MHZ-1.md`).
-  - [ ] **New follow-up:** MIL-STD-461G (EMI/EMC emissions and susceptibility for aircraft)
-    and IEC 61000-4-2/-4-4/-4-5 (ESD/EFT/surge immunity test methods) are cited by name
-    across `Wash.md`, `Zoë.md`, and `Kaylee.md` but have no `REFERENCES.md` catalog entry —
-    needs the same official-source verification treatment given to REF-ASTM-* in §0.4
-    before REF-IDs can be assigned.
+  - [x] **Resolved 2026-06-29.** MIL-STD-461G (EMI/EMC emissions and susceptibility for
+    aircraft) and IEC 61000-4-2/-4-4/-4-5 (ESD/EFT/surge immunity test methods) are cited
+    by name across `Wash.md`, `Zoë.md`, and `Kaylee.md` but have no `REFERENCES.md` catalog
+    entry — needs the same official-source verification treatment given to REF-ASTM-* in
+    §0.4 before REF-IDs can be assigned.
+    **Resolution:** Added REF-MIL-002 (MIL-STD-461G) to `REFERENCES.md` Part IV and
+    REF-IEC-003/004/005 (IEC 61000-4-2/4-4/4-5) to Part V.  All `†` footnotes in
+    `Wash.md`, `Zoë.md`, and `Kaylee.md` replaced with proper `[REF-MIL-002]` /
+    `[REF-IEC-003]` / `[REF-IEC-004]` / `[REF-IEC-005]` bracketed citations.  Exact
+    IEC webstore product-page URLs not confirmed (site returns JavaScript-rendered homepage
+    to WebFetch); added to Open Standards Verification Items table pending manual lookup.
 
 ### 0.6 — IEC 62368-1 PCB Layout Isolation Verification
 
@@ -305,16 +330,14 @@ Superseded Citations" table.
 
 ### 0.7 — CI Lint Scope and Repo-Wide Lint Debt (open — deferred to separate remediation effort)
 
-- [ ] **`run-lint` (`github/super-linter@v4`) grades every PR against the entire
-    repository, not its diff** — `VALIDATE_ALL_CODEBASE: true` in
-    `.github/workflows/super-linter.yml` causes even single-file PRs (e.g. PR #107,
-    TODO.md-only) to fail ~17 sub-linter categories simultaneously (`CLANG_FORMAT`, `CPP`,
-    `CSS`, `EDITORCONFIG`, `GITHUB_ACTIONS`, `JAVASCRIPT_STANDARD`, `JSCPD`, `JSON`, `JSX`,
-    `MARKDOWN`, `NATURAL_LANGUAGE`, `PYTHON_BLACK`, `PYTHON_PYLINT`, `PYTHON_FLAKE8`,
-    `PYTHON_ISORT`, `PYTHON_MYPY`, `SHELL_SHFMT`). Confirmed pre-existing: the same check already fails on
-    `main` at the PR #105 merge commit, so this is not a regression from #107.
-    Decision (2026-06-21): defer changing `VALIDATE_ALL_CODEBASE` for now; track as a
-    separate remediation effort rather than a CI config change bundled with feature work.
+- [x] **Resolved (confirmed 2026-06-29). `run-lint` (`github/super-linter@v4`) scope fix.**
+    Originally described as `VALIDATE_ALL_CODEBASE: true` causing every PR to fail
+    ~17 sub-linter categories against the full repo rather than its diff (PR #107 etc.).
+    Decision (2026-06-21) was to defer the change pending a credential with `workflow`
+    OAuth scope.  **Confirmed in a later session:** `.github/workflows/super-linter.yml`
+    already has `VALIDATE_ALL_CODEBASE: false` (line 35) — the scope fix was applied
+    at some point (the original `true` state is now in git history only).  No further
+    action needed on this specific item.
 - [ ] **Repo-wide lint debt** — observed counts as of the PR #107 full-codebase run:
     `EDITORCONFIG` 697, `PYTHON_BLACK` 72, `PYTHON_FLAKE8` 56, `PYTHON_ISORT` 47, `JSCPD` 39,
     `MARKDOWN` 32, `CLANG_FORMAT` 26, `CPP` 25, `PYTHON_MYPY` 7, `NATURAL_LANGUAGE` 17,
@@ -322,10 +345,6 @@ Superseded Citations" table.
     `GITHUB_ACTIONS` 1. Needs a dedicated remediation pass, file type by file type,
     separate from feature work, so each touched file is fixed under its own
     diff-scoped lint pass rather than a single repo-wide sweep.
-- [ ] Note for whoever picks this up: applying the `VALIDATE_ALL_CODEBASE: false`
-    scope fix also requires a GitHub credential with the `workflow` OAuth scope —
-    neither this session's git push credential nor its GitHub MCP token could write
-    to `.github/workflows/super-linter.yml` (`403 ... without 'workflow' scope`).
 
 ---
 

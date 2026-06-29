@@ -3,7 +3,7 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
 **Revision:** R1
-**Last updated:** 2026-06-20
+**Last updated:** 2026-06-29
 
 ---
 
@@ -27,10 +27,14 @@
     - [REF-NIST-004: NIST SP 800-92 — Guide to Computer Security Log Management](#ref-nist-004-nist-sp-800-92--guide-to-computer-security-log-management)
 - [Part IV — Defense Standards](#part-iv--defense-standards)
     - [REF-MIL-001: MIL-STD-1553B — Aircraft Internal Time Division Command/Response Multiplex Data Bus](#ref-mil-001-mil-std-1553b--aircraft-internal-time-division-commandresponse-multiplex-data-bus)
+    - [REF-MIL-002: MIL-STD-461G — Requirements for the Control of Electromagnetic Interference Characteristics of Subsystems and Equipment](#ref-mil-002-mil-std-461g--requirements-for-the-control-of-electromagnetic-interference-characteristics-of-subsystems-and-equipment)
 - [Part V — International Standards (ISO, IEC)](#part-v--international-standards-iso-iec)
     - [REF-ISO-001: ISO 11898-1:2015 — Road Vehicles — Controller Area Network (CAN) — Part 1: Data Link Layer and Physical Signalling](#ref-iso-001-iso-11898-12015--road-vehicles--controller-area-network-can--part-1-data-link-layer-and-physical-signalling)
     - [REF-IEC-001: IEC 62368-1 Ed. 3.0 — Audio/Video, Information and Communication Technology Equipment — Part 1: Safety Requirements](#ref-iec-001-iec-62368-1-ed-30--audiovideo-information-and-communication-technology-equipment--part-1-safety-requirements)
     - [REF-IEC-002: IEC 60825-1:2014+AMD1:2021 — Safety of Laser Products — Part 1: Equipment Classification and Requirements](#ref-iec-002-iec-60825-12014amd12021--safety-of-laser-products--part-1-equipment-classification-and-requirements)
+    - [REF-IEC-003: IEC 61000-4-2:2008 — Electromagnetic Compatibility (EMC) — Testing and Measurement Techniques — Electrostatic Discharge (ESD) Immunity Test](#ref-iec-003-iec-61000-4-22008--electromagnetic-compatibility-emc--testing-and-measurement-techniques--electrostatic-discharge-esd-immunity-test)
+    - [REF-IEC-004: IEC 61000-4-4:2012 — Electromagnetic Compatibility (EMC) — Testing and Measurement Techniques — Electrical Fast Transient/Burst (EFT/Burst) Immunity Test](#ref-iec-004-iec-61000-4-42012--electromagnetic-compatibility-emc--testing-and-measurement-techniques--electrical-fast-transientburst-eftburst-immunity-test)
+    - [REF-IEC-005: IEC 61000-4-5:2014+AMD1:2017 — Electromagnetic Compatibility (EMC) — Testing and Measurement Techniques — Surge Immunity Test](#ref-iec-005-iec-61000-4-52014amd12017--electromagnetic-compatibility-emc--testing-and-measurement-techniques--surge-immunity-test)
     - [REF-VDE-001: VDE V 0884-11:2017-01 — Optocouplers for Use in Electrical Equipment — Test and Measurement Methods](#ref-vde-001-vde-v-0884-112017-01--optocouplers-for-use-in-electrical-equipment--test-and-measurement-methods)
 - [Part VI — IEEE Standards](#part-vi--ieee-standards)
     - [REF-IEEE-001: IEEE 802.3-2022 — Ethernet (CSMA/CD Access Method and Physical Layer Specifications)](#ref-ieee-001-ieee-8023-2022--ethernet-csmacd-access-method-and-physical-layer-specifications)
@@ -53,6 +57,8 @@
 - [Part XII — Sensor and Component Specifications](#part-xii--sensor-and-component-specifications)
     - [REF-SENSOR-001: RunCam Nano 4 — 19 mm Nano Format FPV Camera Specification](#ref-sensor-001-runcam-nano-4--19-mm-nano-format-fpv-camera-specification)
     - [REF-SENSOR-002: Benewake TFmini-S — Long-Range Time-of-Flight Ranging Module Specification](#ref-sensor-002-benewake-tfmini-s--long-range-time-of-flight-ranging-module-specification)
+- [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
+    - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Removed / Superseded Citations](#removed--superseded-citations)
 - [Open Standards Verification Items](#open-standards-verification-items)
 
@@ -463,6 +469,35 @@ PE-68515 coupling transformer (1:1.41, 78 Ω); 78 Ω termination at CN1 (Bay A) 
 
 ---
 
+### REF-MIL-002: MIL-STD-461G — Requirements for the Control of Electromagnetic Interference Characteristics of Subsystems and Equipment
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | U.S. Department of Defense (DoD), Assistant Secretary of Defense for Acquisition |
+| **Edition** | Revision G (11 August 2015); Change Notice 1 (CN1) issued 9 December 2019 |
+| **Official access** | DLA ASSIST QuickSearch: <https://assist.dla.mil/> (search "MIL-STD-461") |
+| **Note** | Public domain per 10 U.S.C. §4252; no purchase required. Revision G supersedes MIL-STD-461F (2007). The CN1 addendum corrects test procedures; G+CN1 is the current applicable revision. |
+
+**Requirements applied in this project:**
+
+| Requirement | Title | Application |
+|---|---|---|
+| RE102 | Radiated Emissions, Electric Field | Limit C applies to all avionics subsystems; 100BASE-TX EMI suppressed via HX1188NL magnetics, CMCs, and TVS arrays on Wash and Zoë |
+| RS103 | Radiated Susceptibility, Electric Field | 200 V/m, 10 kHz–18 GHz; isolated buses + chassis-grounded Kaylee enclosure provide margin |
+| CS101 | Conducted Susceptibility, Power Leads | 50 V, 30 Hz – 150 kHz; π-filter bulk caps on Kaylee BECs |
+| CS114 | Conducted Susceptibility, Bulk Cable Injection | Curve 05; two-stage CM filter (CM1+CM2, > 80 dB at 10 MHz) + Y-caps to chassis |
+| CE102 | Conducted Emissions, Power Leads | Limit B; CM1+CM2 input chokes + π-filter on each BEC |
+
+**Applied to:** Wash (Cape-A-2), Zoë (Cape-B-2), and Kaylee EMC compliance targets.  The
+design environment (500 W/m², E ≈ 434 V/m) [REF-NIST-002 §6.2.5] exceeds all MIL-STD-461G
+RS103 limits; compliance with 200 V/m RS103 is a design floor, not the design ceiling.  Full
+MIL-STD-461G qualification testing is deferred pending airframe integration.
+
+**Used in:** `avionics/kicad/Wash.md`, `avionics/kicad/Zoë.md`, `avionics/kicad/Kaylee.md`,
+`docs/AVIONICS_PB2_REDESIGN.md`
+
+---
+
 ## Part V — International Standards (ISO, IEC)
 
 ### REF-ISO-001: ISO 11898-1:2015 — Road Vehicles — Controller Area Network (CAN) — Part 1: Data Link Layer and Physical Signalling
@@ -579,6 +614,75 @@ per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ da
 **Used in:** `README.md`, `docs/AVIONICS_PB2_REDESIGN.md`, `CLAUDE.md`,
 `avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
 `avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`
+
+---
+
+### REF-IEC-003: IEC 61000-4-2:2008 — Electromagnetic Compatibility (EMC) — Testing and Measurement Techniques — Electrostatic Discharge (ESD) Immunity Test
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | International Electrotechnical Commission (IEC) |
+| **Edition** | Second edition (2008-12) |
+| **Official URL (purchase)** | <https://webstore.iec.ch/> — search "IEC 61000-4-2" |
+| **Note** | Supersedes IEC 61000-4-2:1995+AMD1:1998+AMD2:2000. Exact webstore product-page URL not confirmed during catalog entry (see Open Standards Verification Items). |
+
+**Clauses applied in this project:**
+
+| Clause | Title | Application |
+|---|---|---|
+| §5 | Classification of ESD generators | Contact discharge ±8 kV (Level 4), air discharge ±15 kV (Level 4) at all field connectors |
+| §8 | Test levels | Level 4 is the highest defined test level; selected as design target for the 500 W/m² hostile EMI environment [REF-NIST-002 §6.2.5] |
+
+**Applied to:** TVS arrays (PRTR5V0U2X) at all JST-GH field connectors on Wash and Zoë;
+shielded Kaylee enclosure provides ESD isolation for PDB connectors.
+
+**Used in:** `avionics/kicad/Wash.md`, `avionics/kicad/Zoë.md`, `avionics/kicad/Kaylee.md`
+
+---
+
+### REF-IEC-004: IEC 61000-4-4:2012 — Electromagnetic Compatibility (EMC) — Testing and Measurement Techniques — Electrical Fast Transient/Burst (EFT/Burst) Immunity Test
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | IEC |
+| **Edition** | Third edition (2012-04) |
+| **Official URL (purchase)** | <https://webstore.iec.ch/> — search "IEC 61000-4-4" |
+| **Note** | Supersedes IEC 61000-4-4:2004+AMD1:2010. Exact webstore product-page URL not confirmed during catalog entry (see Open Standards Verification Items). |
+
+**Clauses applied in this project:**
+
+| Clause | Title | Application |
+|---|---|---|
+| §5.2 | Test levels | Level 4 (4 kV peak, 5/50 ns) on all signal lines |
+
+**Applied to:** Common-mode chokes (CM2: Bourns SRF2012-100Y) and isolated transceivers
+(ISOW1044BDFMR, ADM2795EBRWZ) on Wash and Zoë signal buses.
+
+**Used in:** `avionics/kicad/Wash.md`, `avionics/kicad/Zoë.md`
+
+---
+
+### REF-IEC-005: IEC 61000-4-5:2014+AMD1:2017 — Electromagnetic Compatibility (EMC) — Testing and Measurement Techniques — Surge Immunity Test
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | IEC |
+| **Edition** | Third edition 2014-05, consolidated with Amendment 1 (2017-03) |
+| **Official URL (purchase)** | <https://webstore.iec.ch/> — search "IEC 61000-4-5" |
+| **Note** | Supersedes IEC 61000-4-5:2005. The 2017 Amendment 1 introduced clarifications to coupling/decoupling network parameters. Exact webstore product-page URL not confirmed during catalog entry (see Open Standards Verification Items). |
+
+**Clauses applied in this project:**
+
+| Clause | Title | Application |
+|---|---|---|
+| §5.2 | Test levels | Level 3 (2 kV CM, 1 kV DM) on CAN FD and RS-485 bus lines; Level 3 (±2 kV CM, ±1 kV DM) on VBAT |
+| Annex A | Combination wave generator | Defines the 1.2/50 µs (voltage) / 8/20 µs (current) surge waveform |
+
+**Applied to:** ADM2795EBRWZ RS-485 transceiver (rated ±42 V bus fault — exceeds IEC 61000-4-5
+Level 3 ±2 kV CM surge on bus); SMBJ33CA TVS (D1) on Kaylee VBAT line; PRTR5V0U2X TVS
+arrays at field connectors on Wash and Zoë.
+
+**Used in:** `avionics/kicad/Wash.md`, `avionics/kicad/Zoë.md`, `avionics/kicad/Kaylee.md`
 
 ---
 
@@ -951,6 +1055,38 @@ redundancy policy [REF-NIST-001 §2.1].
 
 ---
 
+## Part XIII — Telecommunications Standards
+
+### REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | Telecommunications Industry Association (TIA), formerly Electronic Industries Alliance (EIA) |
+| **Designation** | ANSI/TIA-485-A:1998 (also known as EIA-485, TIA/EIA-485-A) |
+| **Official URL** | <https://www.tiaonline.org/standards/> — search "TIA-485"; also available via ANSI webstore: <https://webstore.ansi.org/> |
+| **Note** | Originally published as EIA-485 by the Electronic Industries Alliance; re-designated ANSI/TIA-485-A when EIA's telecommunications sector became TIA.  The "A" revision (1998) is the current active edition.  This is a purchased standard.  Exact product-page URL not confirmed during catalog entry; access through TIA standards portal or ANSI webstore (see Open Standards Verification Items). |
+
+**Sections applied in this project:**
+
+| Section | Title | Application |
+|---|---|---|
+| §5 | Driver output characteristics | ±1.5 V minimum differential; ±6 V maximum; source impedance constraints |
+| §6 | Receiver input characteristics | 200 mV hysteresis; −7 V to +12 V common-mode range |
+| §7 | Bus loading | Up to 32 unit loads (UL) per bus segment; each ADM2795EBRWZ loads ≤ 1 UL per node |
+| §9 | Cable characteristics | 120 Ω characteristic impedance; matched by 120 Ω termination at CN1 and FC4 |
+
+**Applied to:** 8-node RS-485 half-duplex multidrop bus; ADM2795EBRWZ isolated RS-485
+transceivers on Wash (Cape-A-2) and Zoë (Cape-B-2); 120 Ω termination resistors at CN1
+(Shepherd's Room / Bay A) and FC4 (Simon's Medbay / Bay E).
+
+**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `docs/REVN_BUILD_GUIDE_24IN.md`,
+`avionics/kicad/Wash.md`, `avionics/kicad/Zoë.md`,
+`avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
+`avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`,
+`graphical-build-guide/build_guide_11_inter_board.svg`
+
+---
+
 ## Removed / Superseded Citations
 
 The following references appeared in earlier versions of project files but have been removed
@@ -976,3 +1112,8 @@ Add verified section numbers to the relevant files and update this table.
 | 14 CFR Part 47 (aircraft registration marks) | `ax25_types.h` | **Resolved 2026-06-21.** README/build guide had no erroneous citation; the miscitation was in `ax25_types.h`, which stated Part 47 governs registration and AX.25 needs an amateur license (Part 97) | Corrected to cite Part 48 §48.205 [REF-FAA-001]; link is license-exempt under Part 15 §15.235 [REF-FCC-003], per REF-PROTO-001 |
 | AUVSI "standards" (unnamed) | `CLAUDE.md`, `README.md` | **Resolved 2026-06-22.** No specific numbered AUVSI standard exists (AUVSI publishes frameworks, not numbered design standards). Identified and verified three applicable ASTM F38 standards. | Added REF-ASTM-001 (F2910-22, design/construction/test), REF-ASTM-002 (F3005-22, batteries), REF-ASTM-003 (F3269-21, run-time assurance/failover). `CLAUDE.md`/`README.md` AUVSI text is accurate as-is (AUVSI frameworks, not numbered standards) — no doc text change needed there. |
 | IEC 62368-1 clause numbers | PCB layout (not yet complete) | PCB layout must verify creepage/clearance distances meet IEC 62368-1 Clause 5.5.2 requirements for 5 kV reinforced insulation; this cannot be verified until PCB layout is complete | Verify during Wash and Zoë PCB layout review (see TODO.md §1.4) |
+| REF-IEC-003 (IEC 61000-4-2) exact product URL | `REFERENCES.md` REF-IEC-003 | Exact webstore.iec.ch product-page URL not confirmed during catalog entry (WebFetch redirected to homepage during verification attempt 2026-06-29); standard designation and content are correct | Confirm product page URL via <https://webstore.iec.ch/> search for "IEC 61000-4-2" and update REF-IEC-003 |
+| REF-IEC-004 (IEC 61000-4-4) exact product URL | `REFERENCES.md` REF-IEC-004 | Same as REF-IEC-003 — webstore URL not confirmed 2026-06-29 | Confirm via <https://webstore.iec.ch/> search "IEC 61000-4-4" |
+| REF-IEC-005 (IEC 61000-4-5) exact product URL | `REFERENCES.md` REF-IEC-005 | Same as REF-IEC-003 — webstore URL not confirmed 2026-06-29 | Confirm via <https://webstore.iec.ch/> search "IEC 61000-4-5" |
+| REF-TIA-001 (ANSI/TIA-485-A) exact product URL | `REFERENCES.md` REF-TIA-001 | TIA standards portal URL not confirmed via WebFetch 2026-06-29 (domain blocked by permission hook) | Confirm product page via <https://www.tiaonline.org/standards/> or <https://webstore.ansi.org/> search "TIA-485-A" |
+| Anti-collision flash rate "60 FPM" | `build_guide_13_nav_lights.svg`, `decal_sheet.svg` | **Resolved 2026-06-29.** Researched 14 CFR Part 107 §107.29(b) (anti-collision light visible 3 statute miles — no flash rate specified), old Part 23 §23.1401 (reorganized 2017, prescriptive flash-rate text no longer exists in current eCFR), and Part 25 §25.1401(f) (transport category, 40–100 FPM — not directly applicable to this sUAS). No currently-enforceable regulatory standard applicable to Part 107 UAS mandates a specific flash rate. "60 FPM" in the build guide is a design convention within the conventional aviation anti-collision light range (40–100 FPM). No regulatory citation is required or appropriate; the figure is a design target, not a compliance claim. | No citation required — design convention documented here. |
