@@ -36,6 +36,7 @@ For work within a specific subsystem, also consult the **federated `CLAUDE.md` f
 ## Critical Standards You Must Follow
 
 ### Code and Commit Quality
+
 - All code shall be clean and syntactically correct
 - 4-space indenting throughout
 - Verbose comments in strict conformity to each language
@@ -43,13 +44,15 @@ For work within a specific subsystem, also consult the **federated `CLAUDE.md` f
 - All code must pass strict linting rules
 
 ### Documentation
+
 - Every design specification with any effect beyond cosmetic appearance must be vetted against applicable industry standards
 - All standards citations use `[REF-ID §section.subsection.paragraph]` format from `REFERENCES.md`
 - No fabricated, unverifiable, or incorrectly attributed references are permitted
 - All measurements: **imperial-primary with metric in parentheses** (e.g., 10 in (254 mm))
-  - Use **lbm** for mass, **lbf** for force, **kt** for airspeed
+- Use **lbm** for mass, **lbf** for force, **kt** for airspeed
 
 ### Design Philosophy
+
 - All designs are for **actual physical builds**, not hypothetical work
 - Every component will be fabricated or procured
 - Account for real weights, balance, power, space, and component capabilities
@@ -57,23 +60,27 @@ For work within a specific subsystem, also consult the **federated `CLAUDE.md` f
 - Failover capability is a first-class requirement
 
 ### Fabrication Standards
+
 - **Material:** CF-PETG (0.15 mm layer height, 4 perimeters, ≥40% infill for load-bearing)
 - **Shell walls:** hollowed to 2.0 mm while maintaining a **watertight mesh** with no voids or holes
 - All load-bearing mating surfaces: minimum 2-wall contact annulus + positive-stop shoulder
 - **Mesh validation:** Run after every 3D model modification; report all findings to `TODO.md`
 
 ### PCB Design
+
 - Every schematic and PCB must run through KiCad's DRC (Design Rules Checker)
 - Resolve all DRC violations or document them in `TODO.md` with the reason
 - Production-ready Gerber files required for fabrication
 - If a DRC violation requires repositioning a component footprint, **refer the action to the user** — other modifications are allowed
 
 ### STL and SCAD
+
 - All models must be clean and watertight; ready to slice for printing
 - Any regenerated primary-component STL must be re-baked before publishing
 - After SCAD changes, verify Z-range and bore-diameter in console output before committing
 
 ### File Management
+
 - Prefer editing existing files over creating new ones
 - Do not add features, refactor, or introduce abstractions beyond what the task requires
 - Keep `PROJECT_INDEX.md` up to date when adding active files
@@ -81,10 +88,12 @@ For work within a specific subsystem, also consult the **federated `CLAUDE.md` f
 - When adding a standards citation, update `REFERENCES.md` with a validated URL and specific section/paragraph
 
 ### Git Commits
+
 - **Create NEW commits** rather than amending existing ones (unless explicitly requested)
 - Never skip hooks (`--no-verify`) or bypass signing (`--no-gpg-sign`)
 - Never force-push to main/master
 - Use HEREDOC syntax for commit messages with multi-line bodies:
+
   ```sh
   git commit -m "$(cat <<'EOF'
   Commit message here.
@@ -97,6 +106,7 @@ For work within a specific subsystem, also consult the **federated `CLAUDE.md` f
 ### Coordinate System (Hull Frame)
 
 **All design artifacts use the single validated hull frame:**
+
 - **X** = positive port (left)
 - **Y** = positive aft (back)  
 - **Z** = positive dorsal (up)
@@ -123,7 +133,10 @@ As of R1 (2026-06-11), placements are **baked into primary STL vertex data** via
 ## Conflict Resolution
 
 **If you encounter conflicting guidance:**
-1. Subordinate CLAUDE.md (scope-specific) > Root CLAUDE.md (project-wide)
+
+1. Root CLAUDE.md (project-wide) > Subordinate CLAUDE.md (scope-specific)
+1.1. The subordinate CLAUDE.md guidance is authoritative unless excluded by the root CLAUDE.md.
+1.2 All conflicts between Root and Subordinate CLAUDE.md **shall** be immediately be brought to the user's attention for adjudication.  No work will procede until adjudication is received.  
 2. REFERENCES.md (verified standards) > comments or assumptions
 3. Actual code/model state > documentation (if they diverge, update the docs to match reality and investigate why they diverged)
 
