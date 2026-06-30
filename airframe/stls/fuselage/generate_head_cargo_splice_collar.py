@@ -144,11 +144,15 @@ def main():
         return sorted(out, reverse=True)
 
     print("head/cargo splice collar (Rev R1, hull frame):")
-    print(f"  profile: head inner @Y={SAMPLE_Y}  gap={BOND_GAP}  wall={WALL_T}  L={COLLAR_L}")
-    print(f"  bounds: X {b[0][0]:.1f}..{b[1][0]:.1f}  Y {b[0][1]:.1f}..{b[1][1]:.1f}  "
+    print(f"  profile: head inner @Y={SAMPLE_Y}  gap={BOND_GAP}  wall={WALL_T}"
+          f"  L={COLLAR_L}")
+    print(f"  bounds: X {b[0][0]:.1f}..{b[1][0]:.1f}  "
+          f"Y {b[0][1]:.1f}..{b[1][1]:.1f}  "
           f"Z {b[0][2]:.1f}..{b[1][2]:.1f} mm")
-    print(f"  watertight={solid.is_watertight}  facets={len(solid.faces)}  "
-          f"volume={solid.volume:.0f} mm^3  mass(CF-PETG)={solid.volume * 1.27e-3:.1f} g")
+    print(f"  watertight={solid.is_watertight}  "
+          f"facets={len(solid.faces)}  "
+          f"volume={solid.volume:.0f} mm^3  "
+          f"mass(CF-PETG)={solid.volume * 1.27e-3:.1f} g")
     all_fit = True
     for y in (-78.0, -76.0, -74.0):
         ha = _loop_areas(head, y)
@@ -158,9 +162,11 @@ def main():
         head_inner, collar_outer = ha[1], ca[0]
         fit = collar_outer < head_inner
         all_fit &= fit
-        print(f"  fit @Y={y}: collar_outer {collar_outer:.0f} < head_inner {head_inner:.0f} "
-              f"mm^2 → {'OK' if fit else 'INTERFERENCE'}")
-    print(f"  FIT OVER SPAN: {'OK — collar clears the head inner wall' if all_fit else 'CHECK'}")
+        print(f"  fit @Y={y}: collar_outer {collar_outer:.0f} "
+              f"< head_inner {head_inner:.0f} mm^2 "
+              f"→ {'OK' if fit else 'INTERFERENCE'}")
+    msg = 'OK — collar clears the head inner wall' if all_fit else 'CHECK'
+    print(f"  FIT OVER SPAN: {msg}")
     print(f"  wrote {out}")
 
 
