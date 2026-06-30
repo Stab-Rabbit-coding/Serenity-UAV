@@ -45,10 +45,10 @@ When auditing a citation:
 **When adding a new standards citation:**
 1. Look up the standard in `REFERENCES.md` by REF-ID
 2. If not yet in the catalog, add it with:
-   - Full title and issuing body
-   - Validated URL (tested against official issuing body)
-   - Date accessed and verification date
-   - Specific section cited
+    - Full title and issuing body
+    - Validated URL (tested against official issuing body)
+    - Date accessed and verification date
+    - Specific section cited
 3. Use the REF-ID in the code or doc
 4. Add the code/doc location to the REF-ID's citation index in `REFERENCES.md`
 
@@ -149,7 +149,7 @@ All measurements shall be expressed **imperial-primary with metric in parenthese
 
 **Comments in code:**
 - Should explain the *why*, not the *what* (code already shows what it does)
-- For KiCad files: use markdown companion files (comments in KiCad files using `;` or `#` are **prohibited**). Use structured comment blocks: `( comment 1 "hello world" )`
+- For KiCad files: use Markdown companion files (comments in KiCad files using `;` or `#` are **prohibited**). Use structured comment blocks: `( comment 1 "hello world" )`
 
 **External documentation:**
 - Should provide high-level context, design rationale, and usage examples

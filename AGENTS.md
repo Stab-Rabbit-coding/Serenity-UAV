@@ -13,7 +13,7 @@ The **canonical project instructions and standards are in [`CLAUDE.md`](CLAUDE.m
 - **No Reference, citation, standard, or other resource will ever be fabricated.**
 - Every resource will be properly cited, whether or not it's required by copyright or license
 - All work done by AI will be distinguished from that done by a human user
-- Human contributers will be referenced by their github usernames, unless otherwise specified in a the project's governing documents.
+- Human contributers will be referenced by their GitHub usernames, unless otherwise specified in a the project's governing documents.
 - Each AI system and model will be cited for its own contribution (i.e. Gemini must be distinguished from Grok, from Claude, and Haiku 4.5 needs a separate citation from Opus 4.8)
 - **Every design decision, algorithm, or geometry technique that draws on an external reference must be cited in the relevant source file docstring and commit message.**
 - **Derivative files must carry the full attribution chain back to upstream sources.**
@@ -47,7 +47,7 @@ For work within a specific subsystem, also consult the **federated `CLAUDE.md` f
 - All standards citations use `[REF-ID §section.subsection.paragraph]` format from `REFERENCES.md`
 - No fabricated, unverifiable, or incorrectly attributed references are permitted
 - All measurements: **imperial-primary with metric in parentheses** (e.g., 10 in (254 mm))
-  - Use **lbm** for mass, **lbf** for force, **kt** for airspeed
+    - Use **lbm** for mass, **lbf** for force, **kt** for airspeed
 
 ### Design Philosophy
 - All designs are for **actual physical builds**, not hypothetical work

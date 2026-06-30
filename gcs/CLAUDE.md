@@ -27,7 +27,7 @@ Malcolm is responsible for:
 ### External Communications Channels
 
 Malcolm communicates with Serenity via:
-1. **WiFi (5 GHz):** Primary high-bandwidth channel for telemetry and camera feed
+1. **Wi-Fi (5 GHz):** Primary high-bandwidth channel for telemetry and camera feed
 2. **Zigbee (2.4 GHz):** Secondary mesh network for command retry and extended range
 3. **SiK / MAVLink (915 MHz):** Backup control channel (900 MHz unlicensed ISM)
 4. **49 MHz (Part 15 §15.235):** Ultra-reliable emergency command/response in harsh RF environments
@@ -69,13 +69,13 @@ Operators shall be able to:
 
 All messages between Malcolm and Serenity shall:
 - Use a standard message wrapper with:
-  - Message type (command, telemetry, acknowledgment, error)
-  - Source (ground / node ID)
-  - Destination (all / specific node / all flight controllers)
-  - Sequence number (for retransmission tracking)
-  - Timestamp (synchronized to UAV time)
-  - Cryptographic signature (HMAC or public-key)
-  - Payload (command or data)
+    - Message type (command, telemetry, acknowledgment, error)
+    - Source (ground / node ID)
+    - Destination (all / specific node / all flight controllers)
+    - Sequence number (for retransmission tracking)
+    - Timestamp (synchronized to UAV time)
+    - Cryptographic signature (HMAC or public-key)
+    - Payload (command or data)
 
 ### Command Priority Levels
 
@@ -84,7 +84,7 @@ Commands are prioritized for failover and queuing:
 | Level | Type | Example | Channel | Retransmit |
 | --- | --- | --- | --- | --- |
 | **CRITICAL** | Safety override | "Land now", "Cut power", "Disarm" | All + SiK primary | Yes, every 100ms |
-| **HIGH** | Flight control | "Navigate to waypoint", "Change altitude" | WiFi primary, SiK backup | Yes, every 500ms |
+| **HIGH** | Flight control | "Navigate to waypoint", "Change altitude" | Wi-Fi primary, SiK backup | Yes, every 500ms |
 | **MEDIUM** | Payload control | "Deploy cargo", "Activate hoist" | Any (best quality) | Yes, on timeout |
 | **LOW** | Status query | "Report battery voltage" | Any | No retransmit |
 
@@ -136,14 +136,14 @@ Logs are saved to local storage and optionally uploaded after flight for forensi
 
 Malcolm can run on:
 - **Desktop / laptop:** Windows, macOS, Linux with standard telemetry radio interface
-- **Tablet/mobile:** Android or iOS with WiFi or USB radio dongle
+- **Tablet/mobile:** Android or iOS with Wi-Fi or USB radio dongle
 - **Embedded SBC:** Raspberry Pi or similar for autonomous ground station operation
 
 ### Radio Interface
 
 Malcolm must support:
-- Standard USB radio dongles (SiK, WiFi USB adapters)
-- Integrated WiFi and Bluetooth (for tablet-based operation)
+- Standard USB radio dongles (SiK, Wi-Fi USB adapters)
+- Integrated Wi-Fi and Bluetooth (for tablet-based operation)
 - Multiple radios simultaneously (for redundancy and channel switching)
 
 ### Power
