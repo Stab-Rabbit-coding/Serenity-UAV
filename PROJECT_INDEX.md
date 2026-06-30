@@ -14,6 +14,8 @@
 .github/workflows/ossar.yml       — OSSAR static-analysis security workflow
 .github/workflows/stale-branches.yml — Stale branch cleanup workflow
 .vscode/extensions.json           — Recommended VS Code extensions
+AGENTS.md                         — Instructions for AI agents (authoritative source: CLAUDE.md;
+                                    federated guidance in subordinate folders)
 CLAUDE.md                         — Project instructions and standards (includes Standards Vetting Policy)
 LICENSE                           — Repository license (CC BY 4.0)
 PROJECT_INDEX.md                  — This file
