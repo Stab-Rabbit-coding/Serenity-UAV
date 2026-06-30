@@ -49,7 +49,7 @@ For work within a specific subsystem, also consult the **federated `CLAUDE.md` f
 - All standards citations use `[REF-ID §section.subsection.paragraph]` format from `REFERENCES.md`
 - No fabricated, unverifiable, or incorrectly attributed references are permitted
 - All measurements: **imperial-primary with metric in parentheses** (e.g., 10 in (254 mm))
-  - Use **lbm** for mass, **lbf** for force, **kt** for airspeed
+    - Use **lbm** for mass, **lbf** for force, **kt** for airspeed
 
 ### Design Philosophy
 
