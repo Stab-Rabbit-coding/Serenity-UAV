@@ -148,7 +148,13 @@ def transform_mesh(obj, rows):
         r.append([0.0, 0.0, 0.0, 1.0])
     flat = [v for row in r for v in row]
     m = App.Matrix(*flat)
-    obj.Mesh.transform(m)
+    # FreeCAD 1.0: obj.Mesh returns an immutable reference — transforming it
+    # in place raises "This object is immutable".  Copy, transform the copy,
+    # then reassign.  (Previously blocked the assembly save at the first
+    # transform_mesh call; FCStd had been stale since the FreeCAD 1.0 upgrade.)
+    mesh = obj.Mesh.copy()
+    mesh.transform(m)
+    obj.Mesh = mesh
 
 
 # ---------------------------------------------------------------------------
@@ -272,28 +278,42 @@ def assemble():
     # -------------------------------------------------------------------
     print("[assembly] Fuselage sections ...", flush=True)
 
-    head = add_mesh(doc, _stl("fuselage/s_head_shell24_2mm_repaired.stl"), "Head_Shell")
+    head = add_mesh(doc, _stl("fuselage/head_shell24_2mm_repaired.stl"), "Head_Shell")
     place_mesh(head, PL_IDENTITY)
 
     cargo = add_mesh(
-        doc, _stl("fuselage/cargo/s_cargo_sect_shell24_2mm_repaired.stl"), "Cargo_Shell"
+        doc, _stl("fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl"), "Cargo_Shell"
     )
     place_mesh(cargo, PL_IDENTITY)
 
     middle = add_mesh(
-        doc, _stl("fuselage/s_middle_shell24_2mm_repaired.stl"), "Middle_Shell"
+        doc, _stl("fuselage/middle_shell24_2mm_repaired.stl"), "Middle_Shell"
     )
     place_mesh(middle, PL_IDENTITY)
 
     # R1: the baked repaired mesh is the canonical rear shell.  (The
     # former preference for a compiled s_rear_shell24.stl is removed —
     # a freshly compiled, un-baked file must not bypass the bake step.)
-    rear = add_mesh(doc, _stl("fuselage/s_rear_shell24_2mm_repaired.stl"), "Rear_Shell")
+    rear = add_mesh(doc, _stl("fuselage/rear_shell24_2mm_repaired.stl"), "Rear_Shell")
     place_mesh(rear, PL_IDENTITY)
 
-    # Landing gear (scaled Thingiverse parts; identity placement)
-    add_mesh(doc, _stl("fuselage/feet_x_4_scaled24.stl"), "Landing_Feet")
-    add_mesh(doc, _stl("fuselage/legs_scaled24.stl"), "Landing_Legs")
+    # Internal head/cargo splice collar (Rev R1, hull frame — spans the joint at
+    # hull Y ≈ -71 mm; identity placement).  Secures the head section to the
+    # cargo section: 2-wall bonded double-lap + anti-ovalisation ring.  See
+    # docs/structural_analysis.md §4a and TODO.md §1.1.0.
+    splice = add_mesh(
+        doc, _stl("fuselage/head_cargo_splice_collar.stl"), "Head_Cargo_Splice_Collar"
+    )
+    place_mesh(splice, PL_IDENTITY)
+
+    # Landing gear — RETIRED single-blade parts (part-local print frame; NOT
+    # hull-placed).  Superseded by the Rev R5 vertical-post + 4-wire-brace
+    # design (post.stl + spring/ductile wires); hull-frame placement of the
+    # Rev R5 gear is tracked under TODO.md §1.1.4, not §1.1.0.  Paths corrected
+    # to the landing-gear/ subdirectory so the refs resolve; these remain
+    # VERIFY/part-local until the §1.1.4 wire-brace placement lands.
+    add_mesh(doc, _stl("fuselage/landing-gear/feet_x_4_scaled24.stl"), "Landing_Feet")
+    add_mesh(doc, _stl("fuselage/landing-gear/legs_scaled24.stl"), "Landing_Legs")
 
     # -------------------------------------------------------------------
     # CARGO BAY SUB-ASSEMBLY
@@ -313,6 +333,10 @@ def assemble():
     cargo_stls = [
         ("fuselage/cargo/cargo_door_port.stl", "Cargo_Door_Port"),
         ("fuselage/cargo/cargo_door_stbd.stl", "Cargo_Door_Stbd"),
+        # Shell-side hinge-pin retention blocks (Rev R1c, hull frame — already
+        # in hull coordinates, identity placement; merged into Cargo_Shell at
+        # print time per TODO.md §1.1.1.0a).
+        ("fuselage/cargo/cargo_hinge_retention.stl", "Cargo_Hinge_Retention"),
         ("fuselage/cargo/cargo_cradle_autolatch.stl", "Cargo_Cradle"),
         ("fuselage/cargo/cargo_fpv_bezel.stl", "Cargo_FPV_Bezel"),
         ("fuselage/cargo/cargo_gps_retention_ring.stl", "Cargo_GPS_Ring"),
@@ -364,10 +388,10 @@ def assemble():
     # -------------------------------------------------------------------
     print("[assembly] Wings ...", flush=True)
 
-    port_wing = add_mesh(doc, _stl("wings/s_wing_port_s1223_revo.stl"), "Wing_Port")
+    port_wing = add_mesh(doc, _stl("wings/wing_port_s1223_revo.stl"), "Wing_Port")
     place_mesh(port_wing, PL_IDENTITY)
 
-    stbd_wing = add_mesh(doc, _stl("wings/s_wing_stbd_s1223_revo.stl"), "Wing_Stbd")
+    stbd_wing = add_mesh(doc, _stl("wings/wing_stbd_s1223_revo.stl"), "Wing_Stbd")
     place_mesh(stbd_wing, PL_IDENTITY)
 
     # -------------------------------------------------------------------

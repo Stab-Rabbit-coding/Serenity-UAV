@@ -2,7 +2,26 @@
 
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
-<!-- Last updated: 2026-06-16 — full file-tree audit and correction pass -->
+<!-- Last updated: 2026-06-29 — archived deprecated FreeCAD prototype scripts -->
+
+---
+
+## airframe/archive/FreeCAD-scripts/
+
+Deprecated FreeCAD prototype assembly scripts.  All predate the Rev R1 hull-frame
+bake; their placement/transform values would double-transform the baked hull-frame
+STLs and MUST NOT be applied.  The canonical assembly script is
+`airframe/FreeCAD-scripts/serenity_assembly.py`.
+
+```text
+Archived 2026-06-29 (Rev R — superseded by serenity_assembly.py):
+  assembly1.py                      — Earliest prototype (pre-R1 transforms)
+  Serenity-Assemble.py              — Subsystem stub (Assembly4Lib placeholders)
+  Serenity-Subsystem-Assembly.py    — Subsystem stub (Assembly4Lib placeholders)
+  serenity_subsystem_assembler.py   — Subsystem assembler class (stub)
+  serenity_fuselage_asm4.py         — Fuselage Assembly4 sub-assembly script
+                                       (was airframe/freecad/assembly/)
+```
 
 ---
 
