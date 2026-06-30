@@ -91,7 +91,7 @@ Each phase includes specific tests to verify the build is correct:
 - **Structural:** Load testing (if applicable), no-load fit check
 - **Electrical:** Continuity testing, polarity check, no short circuits
 - **Mechanical:** Servo range of motion, landing gear shock response
-- **Software:** System boot, node-to-node CAN communication, node-to-ground WiFi
+- **Software:** System boot, node-to-node CAN communication, node-to-ground Wi-Fi
 
 ## Illustrations and Graphics
 
@@ -143,7 +143,7 @@ Each phase build guide includes a **completion checklist** that must be verified
 - [ ] Wings and nacelles attached and balanced
 - [ ] All four avionics stacks populated and tested (CAN communication verified)
 - [ ] Battery and power distribution installed and voltage-verified
-- [ ] Radio links tested (WiFi, SiK/MAVLink, optional 49 MHz, optional Zigbee)
+- [ ] Radio links tested (Wi-Fi, SiK/MAVLink, optional 49 MHz, optional Zigbee)
 - [ ] Sensors functional (IMU, GPS, compass, airspeed)
 - [ ] Motor controllers programmed and motor spin test completed (props removed)
 - [ ] Servo tests completed (nacelle tilt, cargo bay, hoist)

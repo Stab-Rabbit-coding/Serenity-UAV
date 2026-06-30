@@ -85,10 +85,10 @@ Before publishing a revised specification:
 2. Verify that all cited components and measurements are correct
 3. Update all cross-references to other specifications
 4. If this is a new revision letter:
-   - Archive the previous revision to `archives/`
-   - Update `ARCHIVE_INDEX.md`
-   - Update `PROJECT_INDEX.md`
-   - Ensure all active component documentation points to the new revision
+    - Archive the previous revision to `archives/`
+    - Update `ARCHIVE_INDEX.md`
+    - Update `PROJECT_INDEX.md`
+    - Ensure all active component documentation points to the new revision
 
 ### Version Control Best Practices
 

@@ -28,7 +28,7 @@ All Wash capes are identical and all Zoë capes are identical, but each stack ha
 #### Shepherd's Room (Bay A) — Forward Avionics
 **Primary tasking:** watchdog, fault detection, failover, authentication  
 **Stack:** Wash + Zoë  
-**Comms:** SiK primary / WiFi secondary  
+**Comms:** SiK primary / Wi-Fi secondary  
 **PACE assignments:**
 - Watchdog: **P**rimary
 - Comms: **A**lternative
@@ -38,7 +38,7 @@ All Wash capes are identical and all Zoë capes are identical, but each stack ha
 #### Inara's Shuttle (Bay B) — Port Avionics
 **Primary tasking:** camera, external sensors, high-bandwidth ground communications  
 **Stack:** Wash + Zoë  
-**Comms:** WiFi primary / LoRa secondary (Note: LoRa moved to Emma boards on River/Simon in Rev R1)  
+**Comms:** Wi-Fi primary / LoRa secondary (Note: LoRa moved to Emma boards on River/Simon in Rev R1)  
 **PACE assignments:**
 - Watchdog: **A**lternative
 - Comms: **P**rimary
@@ -74,7 +74,7 @@ All Wash capes are identical and all Zoë capes are identical, but each stack ha
 - Ethernet (galvanically isolated at every node)
 
 **External command and control (all four usable for autonomous or manual C2):**
-- WiFi at 5 GHz
+- Wi-Fi at 5 GHz
 - Zigbee at 2.4 GHz
 - MAVLink / SiK at 915 MHz
 - AX.25 on 49 MHz channel (47 CFR Part 15 §15.235 — unlicensed, not Part 95 RCRS)
@@ -101,7 +101,7 @@ Provides flight control input, sensor fusion, and motor speed control via PID:
 ### Zoë — Communications, Logging, and Payload Cape
 
 Provides external communications, onboard logging, and payload interface:
-- All four external radio transceivers (WiFi, Zigbee, SiK/MAVLink, protocol stack software)
+- All four external radio transceivers (Wi-Fi, Zigbee, SiK/MAVLink, protocol stack software)
 - Onboard data logging to hardware-enforced non-executable microSD card
 - Payload I/O interfaces
 
@@ -156,11 +156,11 @@ Every schematic and PCB modification **must** be verified:
 ### Schematics and PCB Files
 
 - Every cape requires:
-  - Complete schematic file (`.kicad_sch`)
-  - Complete PCB layout (`.kicad_pcb`)
-  - Copper traces ready for production
-  - Proper IC footprints for all components
-  - Production-ready Gerber files
+    - Complete schematic file (`.kicad_sch`)
+    - Complete PCB layout (`.kicad_pcb`)
+    - Copper traces ready for production
+    - Proper IC footprints for all components
+    - Production-ready Gerber files
 
 ## Security and Cryptography Requirements
 
@@ -197,7 +197,7 @@ All radio transmissions must comply with **FCC regulations**:
 - **49 MHz band:** 47 CFR Part 15 §15.235 (unlicensed ISM, not Part 95 RCRS) — used for high-RF-field environments
 - **915 MHz SiK/MAVLink:** 47 CFR Part 15 §15.247 (unlicensed ISM)
 - **2.4 GHz Zigbee:** 47 CFR Part 15 §15.247 (unlicensed ISM)
-- **5 GHz WiFi:** 47 CFR Part 15 §15.407 (unlicensed UNII)
+- **5 GHz Wi-Fi:** 47 CFR Part 15 §15.407 (unlicensed UNII)
 
 Citations: [REF-FCC-001, REF-FCC-002, REF-FCC-003]
 
