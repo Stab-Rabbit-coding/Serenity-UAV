@@ -734,21 +734,31 @@ Joint faces in hull-frame Y (confirmed from baked extents):
         cargo_aft / middle_fwd); boss pins verified clear of keel channel (X −171.8..−168.2).
     - Bond with West System 105/206; cure 24 h before foam pour.
     - **SUB-TASKS OPEN:** verify in slicer at hull Y ≈ +131 mm. *(BLOCKS cargo + middle printing)*
-    - [ ] **Cargo/Middle splice-collar analysis + design (mirror head/cargo §1.1.0).**
+    - [ ] **Cargo/Middle splice analysis + design (mirror head/cargo §1.1.0).**
         Like the head/cargo joint, the boss pins here are alignment dowels, not a structural
         load path, and a bare thin-shell butt bond peels.  Repeat the first-principles
         method used for head/cargo (resolved 2026-06-29 — see §1.1.0 and
         `docs/structural_analysis.md` §7.3): (1) determine the loads carried across this
         joint — note the **wing-spar reaction is just forward at Y ≈ +30 mm** and the
         cargo/middle joint also sees the aft-fuselage + middle/rear cantilever, so loads may
-        be higher than head/cargo; (2) survey the joint cross-section from the baked meshes
-        (the **middle section is open at −Z / ventral** — a horseshoe, NOT a closed ring —
-        so a full-perimeter collar is impossible; design a **partial arch collar** following
-        the closed upper/flank portion only, or an alternative); (3) size the splice
-        structure; (4) build a generator mirroring
-        `generate_head_cargo_splice_collar.py` → `cargo_middle_splice_collar.stl` (hull
+        be higher than head/cargo; (2) survey the joint cross-section from the baked meshes.
+        **IMPORTANT — the middle section is NOT just an open horseshoe.** It is ONE printed
+        piece with (a) the outer horseshoe ring (open at −Z / ventral, its lower arms
+        continuing aft as the landing skids) AND (b) a **CLOSED inner-neck tube** that runs
+        the full length of the middle along the centreline (X ≈ −170 mm), connecting the
+        cargo-bay interior to the rear engine-room interior through the centre of the
+        horseshoe (confirmed by section analysis 2026-06-29 — multiple closed nested
+        contours persist along Y; see CLAUDE.md "middle section is one printed piece").
+        The **closed inner neck is the natural full-perimeter structural tie** between cargo
+        and rear — a full tubular splice collar/sleeve IS feasible on the neck (unlike the
+        open horseshoe).  The **continuous hull keel (CF-BAR-6X3, §4) already runs cargo→rear
+        through the inner neck** (currently "unsupported in foam" — re-evaluate bonding it to
+        the neck wall as the primary tie).  Design options: a tubular splice inside the inner
+        neck, bonding the keel hard to the neck, and/or a partial arch on the outer horseshoe;
+        (3) size the splice; (4) build a generator → `cargo_middle_splice_collar.stl` (hull
         frame); (5) update assembly, BOM, `structural_analysis.md` §7, PROJECT_INDEX.
-        **BLOCKS cargo + middle structural joint.**
+        Survey the inner-neck cross-section at the joint face at design time (after MESH-01 is
+        fixed, for clean sections).  **BLOCKS cargo + middle structural joint.**
 
 - [x] **Middle/Rear joint boss design (hull Y ≈ +203 mm)** *(done 2026-06-14)*
     - 3× Ø3.2 mm boss-pin bores (8 mm depth each side) at hull (X,Z):
@@ -763,16 +773,20 @@ Joint faces in hull-frame Y (confirmed from baked extents):
     - [ ] **Middle/Rear splice structure analysis + design (mirror head/cargo §1.1.0).**
         Repeat the first-principles method (see §1.1.0 and `docs/structural_analysis.md`
         §7.3): (1) determine the loads — this joint carries the **rear cone + dorsal pod +
-        landing-skid-tip impact** (2.5g skid loads, §6) reacted forward, plus the
-        **CF skid rods already cross this joint** (Ø4 mm, Y +173..+233) and act as primary
-        tie-rods/alignment (FOS 205 in tension, §6.2) — so the splice need only address skin
-        peel and anti-ovalisation of the cone, not primary bending; (2) survey the joint
-        cross-section (middle is open-ventral horseshoe; rear cone is closed) from the baked
-        meshes; (3) decide whether a **partial collar / internal cone ring** is needed beyond
-        the existing skid rods + the rear Y=+290 anti-ovalisation ring (§5), or whether those
-        suffice; (4) if a collar is warranted, build a generator →
-        `middle_rear_splice_collar.stl` and update assembly/BOM/`structural_analysis.md`/
-        PROJECT_INDEX.  **BLOCKS middle + rear structural joint.**
+        landing-skid-tip impact** (2.5g skid loads, §6) reacted forward.  Two structural
+        paths already cross this joint: the **CF skid rods** (Ø4 mm, Y +173..+233) at the
+        horseshoe-to-skid lower arms, acting as primary tie-rods/alignment (FOS 205 in
+        tension, §6.2), AND the **closed inner-neck tube** running down the centreline into
+        the rear engine room (the middle is NOT just an open horseshoe — it carries the
+        closed inner neck connecting cargo→rear; see the Cargo/Middle item above and CLAUDE.md).
+        So the splice need only address skin peel and cone anti-ovalisation, not primary
+        bending; (2) survey the joint cross-section from the baked meshes — characterise BOTH
+        the inner-neck tube (closed) and the outer horseshoe/skid arms where they meet the
+        rear cone; (3) decide whether a **partial collar / internal cone ring / inner-neck
+        sleeve** is needed beyond the existing skid rods + inner neck + the rear Y=+290
+        anti-ovalisation ring (§5), or whether those suffice; (4) if a collar is warranted,
+        build a generator → `middle_rear_splice_collar.stl` and update assembly/BOM/
+        `structural_analysis.md`/PROJECT_INDEX.  **BLOCKS middle + rear structural joint.**
 
 - [ ] **MESH-01 `add_structural_features.py` boolean cuts left non-watertight / fragmented
     shells on cargo, middle, and rear** *(found 2026-06-16, reviewing 03_top.png render)* —

@@ -94,9 +94,16 @@ Vertices sampled at X = −170 ± 3 mm (hull centerline):
 | Middle | open at −Z | — | Horseshoe open ventral; keel unsupported |
 | Rear | ≈ 3.7 | ≈ 5.7 | Cone belly; slight curve |
 
-The middle section horseshoe ring is open at −Z for 73 mm (hull Y +130 → +203 mm).  The
-keel bar spans this gap freely, held laterally by foam fill alone.  At 2g bending, the
-73 mm unsupported span deflects:
+The middle section's outer *horseshoe ring* is open at −Z (ventral) for 73 mm (hull
+Y +130 → +203 mm), so there is no belly floor at the keel's low-Z level to bond to.
+**Note (2026-06-29):** the middle is NOT only the open horseshoe — it also carries the
+**closed inner-neck tube** running the full length along the centreline (X ≈ −170 mm),
+connecting the cargo-bay interior to the rear engine-room interior (see §7.3 and CLAUDE.md).
+The keel passes *through* this closed neck, so "held by foam alone" is a worst-case
+assumption: **bonding the keel to the inner-neck wall is an available hard load path**
+and should be evaluated in the keel re-evaluation and the cargo/middle + middle/rear joint
+design (TODO.md §1.1.1.0b).  The deflection below conservatively assumes no neck bond.
+At 2g bending, the 73 mm unsupported span deflects:
 
 ```
 δ_mid = (w × L⁴) / (8 × E × I)   [uniform load, unsupported span]
