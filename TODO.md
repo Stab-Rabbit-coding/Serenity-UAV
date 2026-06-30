@@ -389,8 +389,38 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
 - [ ] **Re-verify head↔cargo joint bosses in hull Y.** The 2026-06-10 joint analysis
     used hull X as the longitudinal mating axis; in the validated frame the longitudinal
     axis is Y (sections mate at hull Y ≈ −71 mm; X is lateral). Re-check
-    BOSS_FORE/BOSS_AFT positions in `s_head_shell24.scad` / `s_cargo_sect_shell24.scad`
+    BOSS_FORE/BOSS_AFT positions in `head_shell24.scad` / `cargo_sect_shell24.scad`
     against the baked meshes. **BLOCKS head/cargo printing.**
+    - **Verification DONE 2026-06-29 (trimesh Y-cross-sections of the baked shells).**
+        The SCAD `BOSS_FORE`/`BOSS_AFT` parameters are **obsolete** — the canonical joint
+        bosses now come from `add_structural_features.py` `BOSS_PIN_BORES["joint1"]`
+        (hull frame), the SCAD shells being secondary references (§1.1.1.0a).  Findings:
+        - Joint faces mate correctly: HEAD aft Y-max = −70.73, CARGO fwd Y-min = −71.54
+            → mate at hull Y ≈ −71. ✓
+        - **The §1.1.1.0b "8 mm depth each side" claim is NOT met as-baked.** Measured
+            Y-engagement of the three Ø3.2 boss pins (cut Y-range −79..−62):
+            Pin A dorsal (−168.3,+143.9) HEAD 2.0 / CARGO 12.5 mm; Pin B (−138.0,+91.4)
+            HEAD 2.0 / CARGO 3.5 mm; Pin C (−198.6,+91.4) HEAD 2.0 / CARGO 4.5 mm.
+        - Root cause: straight Y-axis pins at a single (X,Z) engage a tapering 2 mm wall
+            only over a short span — the head aft wall walks off within ~2 mm, and because
+            the cargo is broader than the head the two **flank** pins (B,C at Z=+91.4)
+            coincide with both shells' walls only right at the joint face.  Only the
+            **dorsal** pin A (tops align) engages deeply.
+        - **RESOLVED 2026-06-29 — internal splice collar designed (`PRINT-HEAD-CARGO-COLLAR`).**
+            First-principles load check: the joint is **not strength-limited** (worst-case
+            9 g crash → M ≈ 6.7 N·m on a ~350 mm-perimeter ring → < 1 MPa peak).  The real
+            need is peel resistance + alignment + anti-ovalisation + the CLAUDE.md
+            "2-wall annulus + positive stop."  Designed an internal bonded **splice collar**
+            (`airframe/stls/fuselage/generate_head_cargo_splice_collar.py` →
+            `head_cargo_splice_collar.stl`, hull frame, ~13.4 g, watertight, verified
+            clearing the head inner wall): 2 mm wall, L = 16 mm (8 mm/side), profile = head
+            inner contour @Y=−79 inset 2 mm, bonded across the joint with West System
+            105/206 + 406 filler → shear-loaded double-lap, FOS > 100 on the bond.  The 3
+            boss pins are **re-roled to alignment dowels only.**  Added to
+            `serenity_assembly.py`, BOM (`bom_revR.csv`), `docs/structural_analysis.md` §7.3,
+            `PROJECT_INDEX.md`.  **Remaining:** boss-pin bores get re-cut by
+            `add_structural_features.py` when MESH-01 is fixed (pin positions unchanged,
+            now dowels); the collar bonds to the printed shells at assembly.
 - [x] **Regenerate cargo doors from the baked shell.** `cargo_door_port/stbd.stl`
     (2026-06-01) predate both the repaired-shell re-orientation and the bake; regenerate
     via `generate_cargo_doors.py` against the baked
@@ -448,33 +478,94 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
         curvature; confirm by eye it isn't flattened in a way that leaves a gap against
         the real hull. Verify no overlap with hull boss sockets (HULL_ATTACH_POS
         Y = 25, 100 mm). **BLOCKS cargo door printing.**
+        - **Programmatic cross-check DONE 2026-06-29 (7/7 PASS, trimesh):** port door
+            X −169.85..−114.60 (hinge X=−117.6), stbd X −225.51..−169.85 (hinge X=−222.5),
+            free edges meet at CL X=−169.85, panels span Y 2..108 at Z≈0..8.7 (hinge
+            Z≈5.1), doors do not interpenetrate at CL (Δ < 0.3 mm), both watertight single
+            bodies, and the 4 Rev R1c retention blocks present/watertight with coaxial
+            bores.  **Still open:** the visual aft-outboard-corner despike eyeball and the
+            HULL_ATTACH_POS Y=25/100 boss-overlap check — the latter references the
+            *retired* `landing_leg_assy.scad`; redo against the Rev R5 wire-brace hull
+            bosses once those are finalized in the cargo shell (§1.1.4).
     - [ ] **Piano-hinge CF rod (×2, independent)** — verify 3 mm CF rod passes through
         each door's own 4 knuckle bores (3.15 mm bore) — port and stbd are now two
         separate pins/rods, not one shared centreline pin; test in printed prototype
         before final assembly.
-    - [ ] **Sync `cargo_sect_shell24.scad` hinge-pin blocks to the Rev R1b hinge lines.**
-        The shell's `HINGE_Y`/`HINGE_Z` grub-screw block parameters (cargo_sect_shell24.scad
-        lines ~329-340) still describe a pre-bake, part-local frame (Y = vertical,
-        Z = lateral) from before the hull-frame rewrite, and were never updated for the
-        Rev R1a/R1b door geometry. Re-derive the shell-side hinge-pin retention blocks
-        from the corrected hull-frame hinge lines (port X ≈ −117.6 mm, stbd X ≈ −222.5 mm —
-        the real detected belly edge, not the cargo-section bounding box; re-run
-        `generate_cargo_doors.py` and read the printed "safe belly-mesh X extent" if the
-        shell STL changes) before cutting the belly opening. **BLOCKS cargo door installation.**
-- [ ] **Consolidate duplicate cargo shell copies.**
-    `fuselage/s_cargo_sect_shell24_2mm_repaired.stl` (367,506 facets, later repair pass)
-    vs `fuselage/cargo/s_cargo_sect_shell24_2mm_repaired.stl` (368,352 facets, used by
-    the assembly). Both now baked; keep one canonical copy.
-- [ ] **Hull-frame placements for VERIFY parts.** Cargo mounts (8), pylons, EDF sleeves,
+        - **Geometry cross-check DONE 2026-06-29:** each door's 4 knuckle bores (Ø3.15)
+            and the two Rev R1c shell-side retention-block bores (Ø3.3,
+            `cargo_hinge_retention.stl`) are coaxial on the door's rod axis (port
+            X=−117.6/Z=5.11, stbd X=−222.5/Z=5.22), rod span Y +2..+108.  Printed-prototype
+            insertion test still required (physical).
+    - [x] **Sync `cargo_sect_shell24.scad` hinge-pin blocks to the Rev R1b hinge lines.**
+        **DONE 2026-06-29 (Rev R1c).**  The legacy `hinge_pin_block()` /
+        `HINGE_Y`/`HINGE_Z` parameters describe a single shared hinge along the legacy
+        part-local LATERAL axis in the pre-bake frame (Y = vertical, Z = lateral) —
+        backwards from the Rev R1b design (two independent piano hinges pinned at the
+        outboard belly edges, axes along hull Y).  Reframing that one module inside the
+        legacy SCAD (whose `door_bay_cut`/servo/latch modules are still legacy-frame and
+        interdependent) would leave the SCAD internally inconsistent, and the published
+        cargo shell is now Blender-canonical (§1.1.1.0a), so the correct realization is a
+        new self-contained hull-frame generator:
+        **`airframe/stls/fuselage/cargo/generate_cargo_hinge_retention.py` (Rev R1c) →
+        `cargo_hinge_retention.stl`** (4 blocks, 2 per door; to be boolean-unioned into
+        the Blender cargo shell during the §1.1.1.0a interior-feature merge).  Verified
+        against the baked door STLs: bore axes coincide with the door rod axes (port
+        X=−117.6/Z=5.11, stbd X=−222.5/Z=5.22; bore Ø3.3 on rod span Y +2..+108), all 4
+        blocks watertight, each bonds to intact belly skin outside the bay aperture
+        (600–800 shell verts inside each block envelope), and all clear the Y 2..108
+        aperture.  Legacy `hinge_pin_block()` marked **SUPERSEDED** in
+        `cargo_sect_shell24.scad` (module header + A5 call site) but retained so the
+        legacy SCAD still renders until the door-bay subsystem is reframed.  Added to
+        `serenity_assembly.py` (identity placement, hull frame) and `PROJECT_INDEX.md`.
+        flake8-clean.
+- [x] **Consolidate duplicate cargo shell copies.** **DONE 2026-06-29.**  The
+    `fuselage/`-level copy no longer exists on disk; a single canonical copy remains at
+    `fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl` (the `s_` prefix was dropped
+    project-wide — see CLAUDE.md "File-naming").  It is baked (header marker
+    `SerenityUAV HULL-FRAME R1 Cargo_Shell` present; extents X −267.0..−72.7,
+    Y −71.5..132.0, Z 0..163.2 mm, matching the CLAUDE.md table).  All active references
+    (`serenity_assembly.py`, `tools/bake_hull_frame.py`, `serenity_render_views.py`,
+    `bom_revR.csv`) use the `fuselage/cargo/` path; the stale `s_cargo…` reference in
+    `serenity_assembly.py` was corrected.  NOTE: the canonical copy still carries the
+    **MESH-01 fragmentation defect** (71,131 disconnected bodies, `is_watertight=False`) —
+    that is the separately-tracked MESH-01 blocker above, not a consolidation issue.
+- [ ] **Hull-frame placements for VERIFY parts** (assembly-load blocker resolved; visual
+    fit-validation remains). Cargo mounts (8), pylons, EDF sleeves,
     nozzles/gears, battery tray, belly panel, tip caps, dorsal antenna fin, landing
     legs/feet remain part-local; validate each in FreeCAD against the baked hull and
     either bake or record explicit placements in `serenity_assembly.py`.
-- [ ] **Generate `battery_tray.stl` and `belly_panel.stl`** from their SCAD sources —
-    currently missing (WARN during assembly regeneration).
-- [ ] **Archive deprecated FreeCAD prototypes** — `assembly1.py`, `Serenity-Assemble.py`,
-    `Serenity-Subsystem-Assembly.py`, `serenity_subsystem_assembler.py`,
-    `serenity_fuselage_asm4.py` are marked DEPRECATED (pre-R1 transforms would
-    double-transform baked STLs); move to `airframe/archive/` at next revision checkpoint.
+    - **2026-06-29 — assembly now regenerates cleanly (was broken/stale since Jun 11).**
+        Fixed a latent FreeCAD-1.0 bug in `transform_mesh()`: `obj.Mesh` returns an
+        immutable reference, so the in-place `.transform()` raised "This object is
+        immutable" and aborted every save (the first `transform_mesh` call hit it).
+        Changed to copy → transform → reassign.  This unblocked the VERIFY-tier
+        placements: battery tray, belly panel, and all nacelle-internal components
+        (gears/sleeves/nozzle, §1.1.3.3) now apply their `transform_mesh()` placements,
+        and `airframe/Serenity-Assembled.FCStd` rebuilds with 0 WARN/MISSING/error.
+    - Also resolved all missing-STL refs that were WARN-skipping: stale `s_`-prefixed
+        primary-shell/wing/cargo paths corrected; generated the two missing VERIFY STLs
+        (battery_tray, belly_panel) and `nacelles/nacelle_servo_bracket.stl`; corrected
+        the landing-gear feet/legs paths to the `landing-gear/` subdir (flagged RETIRED —
+        Rev R5 wire-brace supersedes; hull placement is §1.1.4).
+    - **REMAINING (FreeCAD-manual, user step per CLAUDE.md):** visual fit-validation of
+        the part-local items still placed by estimate (cargo mounts ×8, pylons, tip caps,
+        dorsal antenna fin, battery tray/belly panel transforms) against the baked hull,
+        then bake or commit final placements.  The assembly loading cleanly is the
+        prerequisite that was blocking this.
+- [x] **Generate `battery_tray.stl` and `belly_panel.stl`** from their SCAD sources —
+    **DONE 2026-06-29.**  Rendered from `airframe/openscad/fuselage/battery_tray.scad`
+    and `belly_panel.scad` to `airframe/stls/fuselage/`.  Both watertight, single body
+    (battery_tray 252 facets, local 154×47×62 mm; belly_panel 548 facets, 160×3.5×65 mm).
+    Part-local / VERIFY-tier (NOT in `bake_hull_frame.py` COMPONENTS); placed via
+    `transform_mesh()` in `serenity_assembly.py` — the two WARNs are now gone and the
+    assembly regenerates cleanly (see VERIFY-parts item below).
+- [x] **Archive deprecated FreeCAD prototypes** — **DONE 2026-06-29.**  `assembly1.py`,
+    `Serenity-Assemble.py`, `Serenity-Subsystem-Assembly.py`,
+    `serenity_subsystem_assembler.py`, and `serenity_fuselage_asm4.py` (the last from
+    `airframe/freecad/assembly/`) `git mv`-ed to `airframe/archive/FreeCAD-scripts/`
+    (history preserved).  No active references remained.  `PROJECT_INDEX.md` entries
+    removed; `ARCHIVE_INDEX.md` section "airframe/archive/FreeCAD-scripts/" added.
+    The canonical `SerenityAssembly.FCStd` was left in place in `airframe/freecad/assembly/`.
 
 #### 1.1.1 **Fuselage**
 
@@ -622,6 +713,15 @@ Joint faces in hull-frame Y (confirmed from baked extents):
         joint1 + FACE_BORE_CUTTERS head_aft / cargo_fwd); all four shells verify PASS.
     - See `docs/structural_analysis.md` §4 for boss-pin sizing and load analysis.
     - Bond with West System 105/206; cure 24 h before foam pour.
+    - **CORRECTION 2026-06-29 (verified against baked meshes — see §1.1.0 "Re-verify
+        head↔cargo joint bosses in hull Y"):** the "8 mm depth each side" and
+        "positive-stop by pin depth" claims above are **not achieved as-baked**.  Measured
+        Y-engagement: dorsal pin A = HEAD 2.0 / CARGO 12.5 mm; flank pins B,C = HEAD 2.0 /
+        CARGO 3.5–4.5 mm.  Straight Y pins through a tapering 2 mm wall give shallow
+        engagement, and the broader cargo means the flank pins meet both walls only at the
+        joint face.  Pins act as alignment dowels; the bonded West System lap is the
+        primary load path.  Achieving true positive-stop depth needs boss pads or
+        per-shell pin (X,Z) — structural decision flagged in §1.1.0.
     - **SUB-TASKS OPEN:** verify boss-pin bore positions in slicer cross-section at
         hull Y ≈ −71 mm before head/cargo printing. *(BLOCKS head + cargo printing)*
 
@@ -634,6 +734,21 @@ Joint faces in hull-frame Y (confirmed from baked extents):
         cargo_aft / middle_fwd); boss pins verified clear of keel channel (X −171.8..−168.2).
     - Bond with West System 105/206; cure 24 h before foam pour.
     - **SUB-TASKS OPEN:** verify in slicer at hull Y ≈ +131 mm. *(BLOCKS cargo + middle printing)*
+    - [ ] **Cargo/Middle splice-collar analysis + design (mirror head/cargo §1.1.0).**
+        Like the head/cargo joint, the boss pins here are alignment dowels, not a structural
+        load path, and a bare thin-shell butt bond peels.  Repeat the first-principles
+        method used for head/cargo (resolved 2026-06-29 — see §1.1.0 and
+        `docs/structural_analysis.md` §7.3): (1) determine the loads carried across this
+        joint — note the **wing-spar reaction is just forward at Y ≈ +30 mm** and the
+        cargo/middle joint also sees the aft-fuselage + middle/rear cantilever, so loads may
+        be higher than head/cargo; (2) survey the joint cross-section from the baked meshes
+        (the **middle section is open at −Z / ventral** — a horseshoe, NOT a closed ring —
+        so a full-perimeter collar is impossible; design a **partial arch collar** following
+        the closed upper/flank portion only, or an alternative); (3) size the splice
+        structure; (4) build a generator mirroring
+        `generate_head_cargo_splice_collar.py` → `cargo_middle_splice_collar.stl` (hull
+        frame); (5) update assembly, BOM, `structural_analysis.md` §7, PROJECT_INDEX.
+        **BLOCKS cargo + middle structural joint.**
 
 - [x] **Middle/Rear joint boss design (hull Y ≈ +203 mm)** *(done 2026-06-14)*
     - 3× Ø3.2 mm boss-pin bores (8 mm depth each side) at hull (X,Z):
@@ -645,6 +760,19 @@ Joint faces in hull-frame Y (confirmed from baked extents):
     - Implemented in `add_structural_features.py`; all shells verify PASS.
     - Bond with West System 105/206; cure 24 h before foam pour.
     - **SUB-TASKS OPEN:** verify in slicer at hull Y ≈ +203 mm. *(BLOCKS middle + rear printing)*
+    - [ ] **Middle/Rear splice structure analysis + design (mirror head/cargo §1.1.0).**
+        Repeat the first-principles method (see §1.1.0 and `docs/structural_analysis.md`
+        §7.3): (1) determine the loads — this joint carries the **rear cone + dorsal pod +
+        landing-skid-tip impact** (2.5g skid loads, §6) reacted forward, plus the
+        **CF skid rods already cross this joint** (Ø4 mm, Y +173..+233) and act as primary
+        tie-rods/alignment (FOS 205 in tension, §6.2) — so the splice need only address skin
+        peel and anti-ovalisation of the cone, not primary bending; (2) survey the joint
+        cross-section (middle is open-ventral horseshoe; rear cone is closed) from the baked
+        meshes; (3) decide whether a **partial collar / internal cone ring** is needed beyond
+        the existing skid rods + the rear Y=+290 anti-ovalisation ring (§5), or whether those
+        suffice; (4) if a collar is warranted, build a generator →
+        `middle_rear_splice_collar.stl` and update assembly/BOM/`structural_analysis.md`/
+        PROJECT_INDEX.  **BLOCKS middle + rear structural joint.**
 
 - [ ] **MESH-01 `add_structural_features.py` boolean cuts left non-watertight / fragmented
     shells on cargo, middle, and rear** *(found 2026-06-16, reviewing 03_top.png render)* —
@@ -881,6 +1009,13 @@ Joint faces in hull-frame Y (confirmed from baked extents):
     in the validated hull frame X is LATERAL (+port) and the longitudinal axis is Y — the
     baked head and cargo meshes mate at hull Y ≈ −71 mm.  Redo the joint analysis in hull Y
     (see §1.1.0) before trusting BOSS_FORE = −41.4 mm.**
+    **RESOLVED 2026-06-29 (see §1.1.0 "Re-verify head↔cargo joint bosses in hull Y"):**
+    the hull-Y verification was done against the baked meshes.  `BOSS_FORE = −41.4 mm`
+    (and the whole SCAD `BOSS_FORE`/`BOSS_AFT` scheme) is **obsolete** — the canonical
+    joint-1 bosses are `add_structural_features.py` `BOSS_PIN_BORES["joint1"]` in hull
+    frame.  Faces mate at hull Y ≈ −71 ✓; measured pin engagement is shallow on the two
+    flank pins (the "8 mm each side" target is not met as-baked) — flagged for a
+    structural decision in §1.1.0.
 
 **Rev R shell updates (sensor/antenna mounts; carried fwd from Rev O, 2026-05-24):**
 

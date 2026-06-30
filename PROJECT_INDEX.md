@@ -61,11 +61,13 @@ serenity_assembly.py              — Full-airframe FreeCAD assembly (Rev R1, 20
                                     freecadcmd)
 faraday-enclosure.py              — Faraday-cage avionics enclosure FreeCAD generator
 make_flat_pattern.py              — Sheet-metal/flat-pattern unfold utility for FreeCAD parts
-assembly1.py                      — DEPRECATED prototype (pre-R1 transforms; do not use)
-Serenity-Assemble.py              — DEPRECATED subsystem stub (Assembly4Lib placeholders)
-Serenity-Subsystem-Assembly.py    — DEPRECATED subsystem stub (Assembly4Lib placeholders)
-serenity_subsystem_assembler.py   — DEPRECATED subsystem assembler class (stub)
+serenity_placeholders_assembly.py — Placeholder-block assembly (massing/CG study)
 ```
+
+(5 deprecated prototype scripts — assembly1.py, Serenity-Assemble.py,
+Serenity-Subsystem-Assembly.py, serenity_subsystem_assembler.py,
+serenity_fuselage_asm4.py — archived 2026-06-29 to
+airframe/archive/FreeCAD-scripts/; see ARCHIVE_INDEX.md.)
 
 ### airframe/blender-scripts/
 
@@ -121,10 +123,13 @@ Working FreeCAD assembly directory (in-progress / backup state; not yet the publ
 canonical `SerenityAssembly.FCStd` referenced by CLAUDE.md's Hull-Frame Coordinate Standard).
 
 ```text
-SerenityAssembly.FCStd.bak2       — [PENDING] FreeCAD assembly backup; canonical
-                                    SerenityAssembly.FCStd not yet present on disk
-serenity_fuselage_asm4.py         — Fuselage sub-assembly script (Assembly4 workflow, in progress)
+SerenityAssembly.FCStd            — FreeCAD assembly document (canonical per CLAUDE.md
+                                    Hull-Frame Coordinate Standard)
+SerenityAssembly.FCStd.bak2       — FreeCAD assembly backup
 ```
+
+(serenity_fuselage_asm4.py archived 2026-06-29 to airframe/archive/FreeCAD-scripts/;
+see ARCHIVE_INDEX.md.)
 
 ### airframe/openscad/
 
@@ -198,6 +203,10 @@ head_shell24_2mm_repaired.stl   — Head section 2mm hollow, manifold
 middle_canonical_shell24.stl    — Middle section
 middle_shell24_2mm_repaired.stl — Middle section 2mm hollow, manifold
 rear_shell24_2mm_repaired.stl   — Rear section 2mm hollow, manifold
+battery_tray.stl                — 6S LiPo battery tray (part-local, VERIFY placement)
+belly_panel.stl                 — Battery-bay belly access panel (part-local, VERIFY)
+head_cargo_splice_collar.stl    — Internal head/cargo joint splice collar (hull-frame, Rev R1, ~13g)
+generate_head_cargo_splice_collar.py — Splice-collar generator (hull frame, from head inner contour)
 landing-gear/
 legs_scaled24.stl             — Original Thingiverse landing legs × 4 (24" scale, cosmetic reference)
 leg_1_scaled24.stl            — Individual leg 1 (Thingiverse reference)
@@ -226,6 +235,8 @@ cargo_sect_shell24_repaired.stl        — Cargo solid shell, manifold-repaired 
 cargo_door_port.stl                   — Port clamshell cargo door, hinges outboard at X≈-117.6mm (hull-frame, Rev R1b 2026-06-22)
 cargo_door_stbd.stl                   — Stbd clamshell cargo door, hinges outboard at X≈-222.5mm (hull-frame, Rev R1b 2026-06-22)
 generate_cargo_doors.py               — Door STL generator (Rev R1b, hull frame; see CLAUDE.md)
+cargo_hinge_retention.stl             — Shell-side hinge-pin retention blocks (4: 2/door; hull-frame, Rev R1c 2026-06-29)
+generate_cargo_hinge_retention.py     — Retention-block generator (Rev R1c, hull frame; merged into cargo shell)
 cargo_cradle_autolatch.stl            — Auto-latch payload cradle
 cargo_fpv_bezel.stl                   — FPV camera bezel
 cargo_gps_retention_ring.stl          — GPS antenna retention ring
@@ -408,12 +419,14 @@ Mal_far_gasket_470x8x1p5mm.stl        — Malcolm Hammond lid EMI gasket (BOM: M
 serenity_assembly.py              — Full hull-frame airframe assembly (Rev R1)
 serenity_placeholders_assembly.py — 87-component placeholder catalog (8-col grid,
                                     run with freecadcmd; output Serenity-Placeholders.FCStd)
-assembly1.py                      — DEPRECATED
-Serenity-Assemble.py              — DEPRECATED
-Serenity-Subsystem-Assembly.py    — DEPRECATED
-serenity_subsystem_assembler.py   — DEPRECATED
+faraday-enclosure.py              — Faraday-cage avionics enclosure generator
+make_flat_pattern.py              — Sheet-metal/flat-pattern unfold utility
 Makefile                          — Build rules
 ```
+
+(Deprecated prototypes assembly1.py, Serenity-Assemble.py,
+Serenity-Subsystem-Assembly.py, serenity_subsystem_assembler.py, and
+serenity_fuselage_asm4.py archived 2026-06-29 — see ARCHIVE_INDEX.md.)
 
 ### airframe/ (root-level files)
 

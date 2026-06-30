@@ -303,6 +303,13 @@ Simon is the alternate watchdog for the ship, but most of his attention is on Ri
 
 - Output STLs go to `airframe/stls/` (subdirectories: `fuselage/`, `nacelles/`, `wings/`).
 - When a script regenerates STLs, verify Z-range and bore-diameter in the console output before committing.
+- **File-naming — `s_` prefix dropped (Rev R1).**  The legacy `s_` prefix on shell/STL/SCAD
+  basenames (e.g. `s_cargo_sect_shell24_2mm_repaired.stl`) was dropped to simplify naming.
+  The only place the prefixed names survive is deep in `airframe/archive/`.  All active
+  references shall use the unprefixed name (e.g. `cargo_sect_shell24_2mm_repaired.stl`); when
+  a stale `s_`-prefixed reference is encountered in active code or docs, drop the prefix and
+  correct the string in place as part of whatever task touches it (do not open a dedicated
+  hunt for them).
 
 - Any time that an assistant creates a todo list to accomplish a task for the build, the steps shall be added as sup-tasks in the appropriate paragraph of the root repo TODO.md wbs, conforming to proper style, so that unresolved issues can be picked up in future sessons.
 
