@@ -34,6 +34,21 @@
 - All design decisions are for an **actual physical build**, not hypothetical or conceptual work.
 Every component will be fabricated or procured; design accordingly.
 
+## Scope-Specific Guidance
+
+This root `CLAUDE.md` provides **project-wide standards** applicable to all folders. For specific guidance within a particular subsystem, consult the federated `CLAUDE.md` file in that folder:
+
+- **[airframe/CLAUDE.md](airframe/CLAUDE.md)** — Structural design, CAD/3D modeling, hull-frame coordinate system, fabrication standards (CF-PETG, wall thickness, infill), STL validation, SCAD conventions, FreeCAD assembly
+- **[avionics/CLAUDE.md](avionics/CLAUDE.md)** — KiCad PCB design, cape naming (Wash, Zoë, Emma, Kaylee), avionics stacks, security and cryptography, DRC workflow, communications protocols
+- **[docs/CLAUDE.md](docs/CLAUDE.md)** — Documentation standards, standards vetting policy, references management, measurements and units, version control
+- **[gcs/CLAUDE.md](gcs/CLAUDE.md)** — Ground Control Station (Malcolm), command and control, telemetry display, communications channels, operator interface
+- **[tools/CLAUDE.md](tools/CLAUDE.md)** — Build scripts and automation, hull-frame bake tool, Blender pipeline, SCAD generation, mesh validation
+- **[current-specification/CLAUDE.md](current-specification/CLAUDE.md)** — Active design specifications, revision numbering, traceability matrix, standards citations
+- **[graphical-build-guide/CLAUDE.md](graphical-build-guide/CLAUDE.md)** — Phased build instructions, fabrication checklists, assembly sequences, troubleshooting guides
+- **[deferred/CLAUDE.md](deferred/CLAUDE.md)** — Phase 11+ work (rear EDF, RCS), planned upgrades (Emma R1, Zoë R1, Kaylee A1), alternative designs
+
+Each federated file assumes you have already read this root document. **This root file is authoritative for all project-wide standards.** Subordinate files provide additional detail and scope-specific workflows.
+
 ## Standards Vetting Policy
 
 - **Every design specification with any effect beyond cosmetic appearance must be vetted against applicable industry standards and/or regulations before implementation.**  Standards citations shall be recorded in `REFERENCES.md`, which catalogs every applicable standard with:
