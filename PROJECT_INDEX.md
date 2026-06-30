@@ -14,6 +14,8 @@
 .github/workflows/ossar.yml       — OSSAR static-analysis security workflow
 .github/workflows/stale-branches.yml — Stale branch cleanup workflow
 .vscode/extensions.json           — Recommended VS Code extensions
+AGENTS.md                         — Instructions for AI agents (authoritative source: CLAUDE.md;
+                                    federated guidance in subordinate folders)
 CLAUDE.md                         — Project instructions and standards (includes Standards Vetting Policy)
 LICENSE                           — Repository license (CC BY 4.0)
 PROJECT_INDEX.md                  — This file
@@ -35,9 +37,11 @@ requirements-dev.txt               — Python development dependencies
 
 ## tools/
 
-Repository-level engineering tools.
+Repository-level engineering tools and build automation.
 
 ```text
+CLAUDE.md                         — Build tools and automation standards (hull-frame bake tool,
+                                    Blender pipeline, SCAD generation, mesh validation)
 validate_stls.py                  — CI STL watertight validator (trimesh)
 bake_hull_frame.py                — R1: bakes validated FreeCAD placements into primary
                                     STLs (hull frame: X=+port, Y=+aft, Z=+dorsal);
@@ -49,6 +53,14 @@ bake_hull_frame.py                — R1: bakes validated FreeCAD placements int
 ---
 
 ## airframe/
+
+Structural design, fabrication, 3D modeling, and CAD assembly.
+
+```text
+CLAUDE.md                         — Airframe design standards (coordinate system, CAD/3D
+                                    modeling, hull-frame bake, fabrication specs, STL
+                                    validation, structural joints, landing gear)
+```
 
 ### airframe/FreeCAD-scripts/
 
@@ -441,6 +453,15 @@ serenity_fuselage_asm4.py archived 2026-06-29 — see ARCHIVE_INDEX.md.)
 
 ## avionics/
 
+KiCad PCB schematics and layouts, electronics design, firmware, and communications stack.
+
+```text
+CLAUDE.md                         — Avionics design standards (cape naming, KiCad DRC
+                                    workflow, security/cryptography, communications
+                                    protocols, external radio regulations, avionics
+                                    architecture)
+```
+
 ### avionics/firmware/
 
 CMake-based firmware for PocketBeagle 2 Industrial (AM6254) nodes.
@@ -567,7 +588,12 @@ archive/                          — Pre-Rev Q gerber snapshots
 
 ## docs/
 
+Project documentation, design specifications, analysis reports, and standards references.
+
 ```text
+CLAUDE.md                         — Documentation standards (standards vetting policy,
+                                    references management, measurements and units,
+                                    version control, traceability matrix)
 PROJECT_INDEX.md                  — This file: active project directory tree
 structural_analysis.md            — First-principles structural analysis (Rev R1, 2026-06-14): keel, ring frames, joint bosses, skid rods, AUW, FOS calculations
 AVIONICS_PB2_REDESIGN.md          — 8× PocketBeagle 2 Industrial avionics redesign spec (Rev R)
@@ -590,7 +616,12 @@ Thing-4677565-Serenity.stl      — Low-detail Thingiverse reference hull (geome
 
 ## current-specification/
 
+Active design specifications, requirements, and version-controlled design baselines.
+
 ```text
+CLAUDE.md                         — Specification standards (revision policy, document
+                                    structure, standards citations, traceability matrix,
+                                    specification approval workflow)
 serenity-rev-r.jsx                — Rev R interactive specification (CURRENT)
 bom_revR.csv                      — Bill of materials (Rev R, CSV flat table — active baseline)
 LICENSE_AND_ATTRIBUTION.md        — Attribution chain for all upstream sources
@@ -605,14 +636,17 @@ LICENSE_AND_ATTRIBUTION.md        — Attribution chain for all upstream sources
 
 ## gcs/
 
-Ground control station.  Malcolm ("CAPT Reynolds") is the ArduPilot-compatible GCS
-for Serenity UAV.  Architecture: 1× PocketBeagle 2 Industrial + Cape-B-2 (Zoë) +
-Emma, USB CDC-ECM tethered to a host Debian Linux PC running QGroundControl.
+Ground control station and mission planning software. Malcolm ("CAPT Reynolds") is the
+ArduPilot-compatible GCS for Serenity UAV.  Architecture: 1× PocketBeagle 2 Industrial +
+Cape-B-2 (Zoë) + Emma, USB CDC-ECM tethered to a host Debian Linux PC running QGroundControl.
 Five radio links: SiK 915 MHz, LoRa 915 MHz, Wi-Fi 5 GHz, 49 MHz Part 15 §15.235 (AX.25),
 Zigbee 2.4 GHz.  Servo-driven two-axis antenna gimbal with AS5600 magnetic encoders.
 No external PAs (FCC-compliant with directional antennas).  IP65 field enclosure.
 
 ```text
+CLAUDE.md                         — GCS design standards (operator interface, command
+                                    authentication, telemetry display, communications
+                                    protocols, security/compliance, hardware requirements)
 gcs/malcolm/
 README.md                                — Malcolm GCS overview, architecture table, radio link
                                             table, directory layout, build/setup steps, security notes
@@ -691,8 +725,15 @@ software/
 
 ## deferred/
 
-Design files for systems deferred until core propulsion and avionics are proven.
-Not archived — intended for a future build phase.
+Design work deferred beyond the current build phase (Phases 5–10). Includes planned upgrades
+(Emma R1, Zoë R1, Kaylee A1) and Phase 11+ systems (rear EDF, RCS). Not archived — intended
+for future build phases.
+
+```text
+CLAUDE.md                         — Deferred work standards (status categories, planned
+                                    upgrades, Phase 11+ scope, design decision history,
+                                    phase numbering convention)
+```
 
 ### deferred/aft-edf/
 
@@ -740,10 +781,14 @@ rear_nozzle_petal_hull_0.stl … rear_nozzle_petal_hull_7.stl — [PRE-R1] Iris 
 
 ## graphical-build-guide/
 
-SVG visual build guide cards and hull outline diagrams.
-Generated by `gen_hull_outlines.py` from blender-rendered views.
+Visual build guides, assembly sequences, fabrication checklists, and troubleshooting documentation.
+SVG visual build guide cards and hull outline diagrams generated by `gen_hull_outlines.py`
+from blender-rendered views.
 
 ```text
+CLAUDE.md                         — Build guide standards (phased approach, guide structure,
+                                    illustrations/graphics, troubleshooting, phase
+                                    completion sign-off)
 gen_hull_outlines.py              — SVG generation script (runs headless Blender)
 probe_stl.py                      — STL geometry probe utility (extents/centroid reporting for
                                     diagram camera framing)
