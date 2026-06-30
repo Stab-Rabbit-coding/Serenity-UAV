@@ -43,6 +43,8 @@ Repository-level engineering tools and build automation.
 CLAUDE.md                         — Build tools and automation standards (hull-frame bake tool,
                                     Blender pipeline, SCAD generation, mesh validation)
 validate_stls.py                  — CI STL watertight validator (trimesh)
+verify_bow_pod.py                 — Bow sensor pod geometry verifier: ray-casts the camera/ToF/laser bores
+                                    against the baked head shell on the 40° flat (replaces manual slicer checks)
 bake_hull_frame.py                — R1: bakes validated FreeCAD placements into primary
                                     STLs (hull frame: X=+port, Y=+aft, Z=+dorsal);
                                     idempotent via 'SerenityUAV HULL-FRAME R1' STL
@@ -151,8 +153,11 @@ All parametric source files.  Compiled to STLs via `airframe/FreeCAD-scripts/Mak
 
 ```text
 head_shell24.scad               — Nose/cockpit shell, 2mm CF-PETG skin (Rev R1a); integrates bow_sensor_pod.scad
-bow_sensor_pod.scad             — Bow sensor pod CSG cuts: 19mm Nano camera (dome A), TFmini-S ToF + 12mm
-                                    crosshair laser 30° below horizon (dome B); use'd by head_shell24.scad (Rev R1a)
+bow_sensor_pod.scad             — Bow sensor pod CSG cuts on the 40° nose flat (Rev R1c): camera (PORT bump)
+                                    10mm lens, ToF (STBD bump) 8mm, crosshair laser (CL) 6mm exit; bumps shaved +
+                                    4× M2 inserts; use'd by head_shell24.scad
+bow_sensor_faceplate.scad       — Combined bow sensor faceplate (Rev R1c): single 28×16×2.5mm CF-PETG plate
+                                    carrying all three bow apertures; replaces the two camera bumps / separate bezels
 middle_canonical_shell24.scad   — Horseshoe neck section shell (Rev R)
 rear_shell24.scad               — Aft engine-room shell, 2mm CF-PETG (Rev R)
 battery_tray.scad               — 6S 4000mAh LiPo tray, keel-rail slide (Rev R)

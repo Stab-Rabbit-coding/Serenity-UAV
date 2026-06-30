@@ -582,10 +582,12 @@ required before fabrication (see TODO.md §1.4 PCB DRC and isolation verificatio
 | §5.4 | Engineering controls for Class 3R | Class 3R devices require interlocked protective housing; this design implements GPIO-controlled enable with pull-down default-off |
 
 **Applied to:** 12 mm OD crosshair-pattern laser module (5 mW, 650 nm) installed in the bow
-sensor pod (bow_sensor_pod.scad, BOW-LASER mount, dome B ventral position); bore-sighted
-at 30° below horizon on aircraft CL.
+sensor pod (bow_sensor_pod.scad, BOW-LASER mount; Rev R1c on the centreline of the 40° bow
+flat, rear-mounted with a 6 mm beam exit); bore-sighted on aircraft CL, normal to the flat
+(40° below horizon).
 
 **Used in:** `airframe/openscad/fuselage/bow_sensor_pod.scad`,
+`airframe/openscad/fuselage/bow_sensor_faceplate.scad`,
 `airframe/openscad/fuselage/head_shell24.scad`
 
 ---
@@ -947,6 +949,7 @@ shall be wired in series with the enable GPIO line before this platform is opera
 an environment where persons may be present in the beam path.
 
 **Used in:** `airframe/openscad/fuselage/bow_sensor_pod.scad`,
+`airframe/openscad/fuselage/bow_sensor_faceplate.scad`,
 `airframe/openscad/fuselage/head_shell24.scad`, `TODO.md`
 
 ---
@@ -975,9 +978,11 @@ an environment where persons may be present in the beam path.
 
 **Applied to:** Dome A (dorsal) bow camera socket in
 `airframe/openscad/fuselage/bow_sensor_pod.scad`; socket dimensions designed for 19 mm Nano
-format compatibility (CAM_APER_D = 12 mm, CAM_BEZ_W = 21 mm, CAM_M2_PITCH = 14 mm).
+format compatibility (Rev R1c: CAM_APER_D = 10 mm lens bore on the 40° bow flat; the
+camera body pockets behind the flat and is retained by bow_sensor_faceplate.scad).
 
 **Used in:** `airframe/openscad/fuselage/bow_sensor_pod.scad`,
+`airframe/openscad/fuselage/bow_sensor_faceplate.scad`,
 `airframe/openscad/fuselage/head_shell24.scad`
 
 ---
@@ -1051,6 +1056,7 @@ Wash (Cape-A-2) UART2 port; I2C available as fallback per Zero Trust data-path
 redundancy policy [REF-NIST-001 §2.1].
 
 **Used in:** `airframe/openscad/fuselage/bow_sensor_pod.scad`,
+`airframe/openscad/fuselage/bow_sensor_faceplate.scad`,
 `airframe/openscad/fuselage/head_shell24.scad`, `TODO.md`
 
 ---
