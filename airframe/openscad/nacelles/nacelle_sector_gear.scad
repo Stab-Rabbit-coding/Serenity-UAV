@@ -23,8 +23,23 @@
 //   rotation that ultimately drives the iris nozzle open/closed.
 //
 //   Gear ratio contribution (sector side):
-//     Nacelle tilt 0–90° → Pinion A rotates (22/6) × 90° = 330°
-//   Full system ratio: 90° × (22/6) × (6/28) = 70.7° nozzle ring travel.
+//     This mesh is EPICYCLIC (sun-fixed/planet-on-carrier), not a simple
+//     two-gear mesh: the sector (sun) is fixed and centred on the tilt
+//     pivot axis, while Pinion A (planet) is carried by the nacelle and
+//     orbits the pivot axis as the nacelle tilts.  Contact-point velocity
+//     matching gives omega_pinionA = omega_nacelle × (1 + R_sector/R_pinionA):
+//       Nacelle tilt 0–90° → Pinion A rotates 90° × (1 + 22/6) = 420°
+//     (The naive simple-mesh ratio 22/6 × 90° = 330° omits the orbital "+1"
+//     term and is WRONG for this topology — corrected 2026-06-22; see
+//     nacelle_pinion.scad for the full derivation.)
+//   Mechanical range (Rev R1): -5° to 140° hard stops (145° span), widened
+//     from the original 0-90° operating range — see SECTOR_TEETH below.
+//   Full system ratio: downstream stages (bevel pair, crown pinion, idler
+//     gear, nozzle ring) — see nacelle_pinion.scad and
+//     nacelle_nozzle_idler.scad for the full derivation
+//     (omega_ring/omega_crownPinion = 1/17.6; resolved 2026-06-22, TODO.md
+//     §1.1.3 — the crown-pinion/nozzle-ring radius mismatch that was
+//     previously an open issue is now resolved via an idler gear stage).
 //
 // Mating interfaces:
 //   • Drive Pinion A (nacelle_pinion.scad):
@@ -51,6 +66,15 @@
 // License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 // Date:    2026-05-24
 // Rev:     R (2026-06-11): Rev R baseline — no geometry changes (carried forward from Rev O initial release).
+// Rev:     R1 (2026-06-22): Corrected epicyclic ratio comment (330° -> 420°,
+//          omitted orbital "+1" term) and stale sector-arc figure (155° ->
+//          99.1°, matching SECTOR_ARC_DEG).  Comment-only.
+// Rev:     R1.1 (2026-06-22): Geometry change — grew SECTOR_TEETH 38 -> 58
+//          (SECTOR_ARC_DEG 99.1° -> 151.3°) to cover the widened -5°/140°
+//          mechanical tilt range (was 0-90°+/-5° overtravel).  Companion
+//          change to the crown-pinion/nozzle-ring mismatch (TODO.md
+//          §1.1.3) added a new idler gear stage — see
+//          nacelle_nozzle_idler.scad.
 
 // ── Resolution ────────────────────────────────────────────────────────────────
 
@@ -61,10 +85,14 @@ $fn = 72;   // standard circle resolution for all rotational solids
 MODULE          =  1.0;   // [mm] AGMA Module — tooth size standard
 PRESSURE_ANGLE  = 20.0;   // [deg] standard involute pressure angle
 PITCH_R         = 22.0;   // [mm] pitch circle radius of sector gear
-SECTOR_TEETH    = 38;     // [count] number of teeth spanning the active arc
-                          //   38 T covers 155° — encompasses the nacelle's
-                          //   operating range of 0° (cruise) to 90° (hover)
-                          //   plus ±5° overtravel hard-stop margin each end.
+SECTOR_TEETH    = 58;     // [count] number of teeth spanning the active arc
+                        //   58 T covers ≈151.3° (see SECTOR_ARC_DEG below) —
+                        //   encompasses the nacelle's Rev R1 operating range
+                        //   of -5° to 140° mechanical hard stops (145° span)
+                        //   plus ≈3° entry/exit mesh margin each end
+                        //   (145+3+3 = 151° nominal).  Grown from the Rev O
+                        //   34T/38T figures when the operating range widened
+                        //   from 0-90° to -5°/140° — see TODO.md §1.1.3.
 BODY_H          =  3.0;   // [mm] plate (web) thickness behind teeth
 MOUNT_BORE_D    =  4.2;   // [mm] M4 clearance bore at pivot axis
 SLOT_BC_R       = 18.0;   // [mm] bolt-circle radius for M2.5 adjustment slots
@@ -95,7 +123,7 @@ ANGULAR_PITCH = 360.0 / N_FULL;  // [deg] = 2.609° per tooth
 SPACE_HALF_ANG = ANGULAR_PITCH / 2;  // [deg] half-width of tooth space
 
 // Sector arc angle based on actual tooth count:
-SECTOR_ARC_DEG = SECTOR_TEETH * ANGULAR_PITCH;  // [deg] ≈ 99.1° for 38 T
+SECTOR_ARC_DEG = SECTOR_TEETH * ANGULAR_PITCH;  // [deg] ≈ 151.3° for 58 T
 
 // Starting angle of sector arc.  Zero the midpoint of the sector at 0° so the
 // sector spans symmetrically about the tilt-bracket centreline.
@@ -122,7 +150,7 @@ function arc_pts(r, a1, a2, n) =
 //
 function annular_wedge(r_in, r_out, a1, a2, n) =
     concat(arc_pts(r_in,  a1, a2, n),
-           arc_pts(r_out, a2, a1, n));
+            arc_pts(r_out, a2, a1, n));
 
 // ── Module Definitions ────────────────────────────────────────────────────────
 

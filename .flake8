@@ -12,6 +12,7 @@ extend-ignore = E203, W503, E221, E222
 # must be fully lint-clean.
 per-file-ignores =
     airframe/FreeCAD-scripts/*.py:E127,E201,E231,E302,E501,F401,F541,F841,W291,W293
+    airframe/archive/FreeCAD-scripts/*.py:E127,E201,E231,E302,E501,F401,F541,F841,W291,W293
     airframe/archive/blender-scripts/*.py:E128,E225,E228,E231,E251,E302,E401,E501,F401,F541,W293
     airframe/blender-scripts/*.py:E114,E116,E127,E201,E231,E251,E261,E272,E302,E305,E401,E501,E701,E702,F401,F541,F841
     airframe/gcode/davinci-jr-proto/*.py:E501

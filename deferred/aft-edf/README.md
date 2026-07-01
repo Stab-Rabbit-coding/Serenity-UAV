@@ -87,7 +87,7 @@ See the full Phase 11 build instructions in:
 7. Wire 80 A ESC in Panel F; route signal lead to FC2 PRU Ch.2.
 8. Install `rear_nozzle_frame.stl` + 8 petals + piano wire link ring.
 9. Install SG90 rear nozzle servo; calibrate: 0° = closed, ~90° = fully open.
-10. Install aft 49 MHz RCRS wire post on top of nozzle frame; extend 49 MHz top wire to aft hook.
+10. Install aft 49 MHz (Part 15 §15.235) wire post on top of nozzle frame; extend 49 MHz top wire to aft hook.
 11. Verify T/W with all 5 EDFs; commission full VTOL hover.
 
 ### Procurement (Phase 11)
@@ -109,7 +109,7 @@ See the full Phase 11 build instructions in:
   as it is a structural hull section.  The 4 scoop windows should be covered with temporary
   flat-plate covers (cut from 3 mm PETG sheet) and sealed with removable silicone for Phases 0–10.
   The covers are removed in Phase 11 when the intake frame is installed.
-- The **49 MHz RCRS aft wire post** (normally bonded to the top of `rear_nozzle_frame.stl`)
+- The **49 MHz (Part 15 §15.235) aft wire post** (normally bonded to the top of `rear_nozzle_frame.stl`)
   is temporarily omitted.  For Phases 0–10 the 49 MHz antenna is a shorter end-fed wire from
   the forward post to a temporary hook bonded to the aft dorsal hull skin near station ~580 mm.
   The antenna performance is reduced; field strength must still be re-verified against the

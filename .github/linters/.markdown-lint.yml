@@ -1,0 +1,23 @@
+# markdownlint configuration for super-linter's MARKDOWN check.
+#
+# super-linter does not merge a custom config with its bundled default
+# (TEMPLATES/.markdown-lint.yml) -- supplying any file here replaces it
+# outright. So this file reproduces that default verbatim and overrides
+# only MD007: this repo's .editorconfig sets indent_size = 4 for all
+# files (including *.md), and CLAUDE.md mandates 4-space indenting
+# throughout, so MD007's indent is set to 4 instead of the default 2.
+#
+# Linter rules doc: https://github.com/DavidAnson/markdownlint
+MD004: false
+MD007:
+    indent: 4
+MD013:
+    line_length: 400
+    tables: false
+    code_blocks: false
+MD026:
+    punctuation: ".,;:!。，；:"
+MD029: false
+MD033: false
+MD036: false
+blank_lines: false

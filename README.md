@@ -2,6 +2,37 @@
 
 > *Can't stop the signal, and can't take the sky from me.*
 
+## Table of Contents
+
+- [Authoritative Project Instructions](#authoritative-project-instructions)
+- [Specifications](#specifications)
+- [Airframe](#airframe)
+  - [Coordinate Standard (Rev R1)](#coordinate-standard-rev-r1)
+  - [Fuselage](#fuselage)
+    - [Compartments and Bays](#compartments-and-bays)
+  - [Wings](#wings)
+  - [Nacelles](#nacelles)
+  - [Landing Gear](#landing-gear)
+- [Powerplant](#powerplant)
+  - [Power Distribution](#power-distribution)
+  - [Battery](#battery)
+  - [Propulsion — Rev R baseline](#propulsion--rev-r-baseline)
+    - [DEFERRED — Phase 11: Fuselage EDF + RCS](#deferred--phase-11-fuselage-edf--rcs)
+  - [Servos and Motors](#servos-and-motors)
+- [Avionics](#avionics)
+  - [Ground Control — Mal](#ground-control--mal)
+  - [Onboard — 8-node cooperative architecture](#onboard--8-node-cooperative-architecture)
+- [Cargo Handling — Jayne](#cargo-handling--jayne)
+- [References](#references)
+- [License](#license)
+- [Attribution](#attribution)
+  - [Component License Map](#component-license-map)
+  - [What This License Covers](#what-this-license-covers)
+  - [Patent Notice](#patent-notice)
+  - [Forensic Evidence Integrity Note](#forensic-evidence-integrity-note)
+
+---
+
 ## Authoritative Project Instructions
 
 The canonical workspace instructions and design policy are maintained in `CLAUDE.md`. All
@@ -165,7 +196,23 @@ torque reaction.
 
 ### Landing Gear
 
-Four legs and tripod feet, geometry derived from the source Thingiverse model.
+**Vertical post + 4-wire brace (Rev R5):** four corner leg assemblies. The original
+canonical single-blade leg (Thingiverse-derived) is itself a vertical part with two
+branch points of its own — one at the apex, one about 1/3 of the way down from the
+apex. Each leg keeps a short CF-PETG **vertical post** (foot up through the 1/3-down
+branch height, 100% infill, not expected to ever yield) and braces it to the hull with
+**four simple wires** instead of forked CF-PETG arms: 2 **spring** wires at the apex
+(elastic, fully recoverable — ordinary hard landings cause no damage) and 2 **ductile**
+wires at the 1/3-down branch (each independently sized to absorb the *entire* 6 ft
+full-AUW worst-case impact energy on its own). Each wire is just a single piece of wire
+stock with one shallow pre-bend — the simplest possible shape to manufacture and to
+field-replace, chosen after an earlier closed-ring fuse design proved too hard to form
+and swap in the field. Under overload, a ductile wire's bow visibly deepens
+(field-replaceable, unambiguous "replace this" indicator) while the aircraft stays
+supported on the rest of the structure — a deliberately progressive, sacrificial
+failure mode rather than a catastrophic one. Total added wire mass ≈50 g (1.6% of AUW).
+Rated for the 6 ft (1.829 m) design drop at Phase 11 AUW. Full structural analysis:
+`docs/LANDING_GEAR_ANALYSIS.md`.
 
 ---
 

@@ -162,11 +162,11 @@ Each Cape-B board carries all 4 radio types. Software assigns one CN node as pri
 | --- | --- | --- | --- | --- |
 | MAVLink telemetry | SiK v3 module (RFD900x footprint) | UART + GPIO | 902–928 MHz | Bidirectional telemetry / command uplink |
 | Long-range backup | RFM95W LoRa | SPI + DIO IRQ | 902–928 MHz (separate channel plan) | Backup command / low-rate telemetry |
-| RC control | RCRS-49 sub-module | UART + timing GPIO | 49 MHz TDDS | Pilot RC input, dynamic channel assignment |
+| RC control | Emma (XCVR-49MHZ-2) sub-module | UART + timing GPIO | 49 MHz (Part 15 §15.235) | Pilot RC input, dynamic channel assignment |
 | Local mesh / GCS | TI WL1837MOD | SDIO | 2.4 + 5 GHz WiFi (802.11 a/b/g/n) + BT 5.0 | Ground station AP, short-range streaming; BT for tablet GCS |
 
 > **SiK + LoRa coexistence:** Both operate in the 902–928 MHz US ISM band. Coordinate channel plans at firmware level — SiK on 915 MHz center, LoRa on 903 MHz or 927 MHz. Physical separation of SMA ports ≥50 mm, separate ground pours under each RF section.
-> **RCRS-49 sub-module:** The RCRS-49 is a custom 49 MHz TDDS PCB (separate from this cape). Cape-B provides a 6-pin JST-GH header (5 V, GND, UART TX, UART RX, TDDS-SYNC GPIO, n/c) and an SMA bulkhead for the 49 MHz loaded whip. The sub-module plugs in; the RF section remains on the RCRS-49 board.
+> **Emma (XCVR-49MHZ-2) sub-module:** Emma is a custom 49 MHz (Part 15 §15.235) AX.25 PCB (separate from this cape). Cape-B provides a 6-pin JST-GH header (5 V, GND, UART TX, UART RX, PTT-SYNC GPIO, n/c) and an SMA bulkhead for the 49 MHz loaded whip. The sub-module plugs in; the RF section remains on the Emma board.
 
 ### 4.2 Cape-B IC inventory
 
@@ -180,7 +180,7 @@ Each Cape-B board carries all 4 radio types. Software assigns one CN node as pri
 | U5 | RFD900x (or SiK v3 mod.) | UART, CTS/RTS | SiK 915 MHz MAVLink radio |
 | U6 | RFM95W | SPI, DIO0–DIO3 | LoRa 915 MHz long-range backup |
 | U7 | TI WL1837MOD | SDIO (4-bit) | WiFi 802.11 a/b/g/n (2.4 + 5 GHz) + BT 5.0 — uses TI wl18xx mainline kernel driver |
-| — | RCRS-49 sub-module | JST-GH 6-pin header | 49 MHz TDDS RC control |
+| — | Emma (XCVR-49MHZ-2) sub-module | JST-GH 6-pin header | 49 MHz (Part 15 §15.235) RC control |
 | U8 | W25Q128JV | SPI | 128 Mbit NOR flash — circular flight log buffer (non-executable) |
 | U9 | microSD socket | SPI | Removable log card — hardware write-block enforced by U10 |
 | U10 | ATF16V8BQL CPLD | GPIO latch → SD-WP pin | Write-block latch: SET at power-on by boot sequence, CLEAR only on hard power cycle; implements non-executable append-only log semantics identical to RevJ CPLD write-blocker |
@@ -217,7 +217,7 @@ Each Cape-B board carries all 4 radio types. Software assigns one CN node as pri
 | --- | --- | --- |
 | SMA-915-SIK | 902–928 MHz | SiK λ/4 monopole whip (82 mm) |
 | SMA-915-LORA | 902–928 MHz | LoRa λ/4 monopole or SMA whip |
-| SMA-49 | 49 MHz | RCRS-49 loaded whip (via sub-module) |
+| SMA-49 | 49 MHz | Emma (XCVR-49MHZ-2) loaded whip (via sub-module) |
 | SMA-WIFI | 2.4 / 5 GHz | WL1837MOD PCB antenna or U.FL → SMA pigtail |
 
 ### 4.6 Cape-B power budget
@@ -315,10 +315,10 @@ All 4 radio links are physically present on every Cape-B board. At any given tim
 | --- | --- | --- |
 | SiK 915 MHz MAVLink | CN1 | CN2 → CN3 → CN4 |
 | LoRa 915 MHz backup | CN2 | CN3 → CN4 → CN1 |
-| RCRS 49 MHz RC | CN3 | CN4 → CN1 → CN2 |
+| 49 MHz (Part 15 §15.235) RC | CN3 | CN4 → CN1 → CN2 |
 | WiFi 2.4 GHz / BLE | CN4 | CN1 → CN2 → CN3 |
 
-Failover trigger: CAN FD heartbeat loss from primary CN node for ≥200 ms. The next-priority node activates its radio master TX and announces takeover via CAN FD. No pilot input is interrupted; the RC link failover handoff is transparent because all CN nodes are receiving RCRS-49 TDDS frames simultaneously (receive-all mode), and only the TX/processing primary changes.
+Failover trigger: CAN FD heartbeat loss from primary CN node for ≥200 ms. The next-priority node activates its radio master TX and announces takeover via CAN FD. No pilot input is interrupted; the RC link failover handoff is transparent because all CN nodes are receiving Emma 49 MHz AX.25 frames simultaneously (receive-all mode), and only the TX/processing primary changes.
 
 GPS receivers (u-blox M10Q) are on all 4 Cape-A nodes. GNSS data is broadcast over CAN FD (DroneCAN GPS message). FC1 uses its local M10Q as primary; if FC1 fails, FC2's M10Q becomes the active GPS source via CAN FD arbitration.
 
@@ -341,7 +341,7 @@ GPS receivers (u-blox M10Q) are on all 4 Cape-A nodes. GNSS data is broadcast ov
 | --- | --- | --- | --- |
 | CN1 | SiK 915 MHz | Primary system log writer | Any CN role |
 | CN2 | LoRa 915 MHz | Secondary log (redundant writes) | SiK master if CN1 down |
-| CN3 | RCRS 49 MHz | Cargo management primary (winch, doors, latch) | LoRa master if CN2 down |
+| CN3 | 49 MHz (Part 15 §15.235) | Cargo management primary (winch, doors, latch) | LoRa master if CN2 down |
 | CN4 | WiFi / BLE | Cargo management backup | RC master if CN3 down |
 
 ---
@@ -389,7 +389,7 @@ Both cape variants require the same two PRU firmware images:
 - Synchronised multi-channel update from shared memory command buffer
 - EHRPWM handles 6 channels natively; PRU-1 handles 2 overflow channels
 
-Cape-B PRU-1 is used for cargo servo PWM (2 channels only) + TDDS sync timing for RCRS-49.
+Cape-B PRU-1 is used for cargo servo PWM (2 channels only) + PTT sync timing for Emma (XCVR-49MHZ-2).
 
 ---
 
@@ -407,7 +407,7 @@ TPM 2.0 (SLB9670) is present on **both Cape-A and Cape-B** — all 8 nodes carry
 | --- | --- | --- |
 | CPSW3G RMII/RGMII availability on PocketBeagle 2 P1/P2 | Medium | Verify against BeagleBoard PB2 hardware reference manual before Cape-A layout. Fallback: W5500 SPI. |
 | PRU I/O pin availability on P1/P2 | Medium | Confirm PRU_PRU0_GPIO pins are routed to P1/P2 expansion headers on PB2. |
-| RCRS-49 sub-module connector footprint | Low | Define JST-GH 6-pin header pinout with RCRS-49 firmware team before Cape-B layout. |
+| Emma (XCVR-49MHZ-2) sub-module connector footprint | Low | Define JST-GH 6-pin header pinout with Emma firmware team before Cape-B layout. |
 | SiK + LoRa 915 MHz coexistence channel plan | Medium | Validate with spectrum analyzer — both in 902–928 MHz ISM band, minimum 2 MHz separation required between channels. |
 | PB2 boot time in failover scenario | High | Benchmark: measure time from 5 V applied to CAN FD heartbeat present. Target <15 s. If >15 s, implement kexec warm-restart and/or pre-arm node-ready gating. |
 | Cape power connector to vehicle bus | Low | Specify: Molex Nano-Fit 4-pin (5 V, 5 V, GND, GND) per node, rated 6 A. 4 FC + 4 CN = 8 connectors to PDB. |

@@ -53,19 +53,19 @@ extern "C" {
 /** Number of legal 49 MHz channels. */
 #define SI5351_RCRS_NUM_CHANNELS  (5U)
 
-/** RCRS channel 0 — 49.830 MHz. */
+/** 49 MHz channel 0 — 49.830 MHz. */
 #define SI5351_RCRS_CH0_HZ  (49830000UL)
 
-/** RCRS channel 1 — 49.845 MHz. */
+/** 49 MHz channel 1 — 49.845 MHz. */
 #define SI5351_RCRS_CH1_HZ  (49845000UL)
 
-/** RCRS channel 2 — 49.860 MHz. */
+/** 49 MHz channel 2 — 49.860 MHz. */
 #define SI5351_RCRS_CH2_HZ  (49860000UL)
 
-/** RCRS channel 3 — 49.875 MHz. */
+/** 49 MHz channel 3 — 49.875 MHz. */
 #define SI5351_RCRS_CH3_HZ  (49875000UL)
 
-/** RCRS channel 4 — 49.890 MHz. */
+/** 49 MHz channel 4 — 49.890 MHz. */
 #define SI5351_RCRS_CH4_HZ  (49890000UL)
 
 /* ---------------------------------------------------------------------------
@@ -99,14 +99,14 @@ typedef struct si5351_ctx si5351_ctx_t;
 int si5351_open(int bus_num, uint8_t i2c_addr, si5351_ctx_t **ctx_out);
 
 /**
- * @brief Program CLK0 to the specified RCRS channel and enable the output.
+ * @brief Program CLK0 to the specified 49 MHz channel and enable the output.
  *
  * Sets PLLA to (channel_freq_hz × 14) and CLK0 output divider to 14 (integer
  * mode).  Resets the PLLA to guarantee phase alignment after the PLL
  * frequency changes.
  *
  * @param[in] ctx          Driver context from si5351_open().
- * @param[in] channel      RCRS channel index 0–4 (maps to 49.830–49.890 MHz).
+ * @param[in] channel      49 MHz channel index 0–4 (maps to 49.830–49.890 MHz).
  * @return 0 on success, -EINVAL if channel ≥ SI5351_RCRS_NUM_CHANNELS,
  *         negative errno on I²C error.
  */

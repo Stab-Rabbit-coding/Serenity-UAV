@@ -373,6 +373,85 @@ pad 3), which constitutes a real short-circuit risk and must be corrected.
 
 ---
 
+## As-Built Full Component List (PCB Source of Truth, 2026-06-20)
+
+The BOM delta tables above only cover the §1–§9 changes from XCVR-49MHZ-1. They do not
+itemize the Phase 1 carryover circuitry (DDS, PA chain, LPF, T/R switch, LNA, AFSK
+modem) or the Rev R1 Ethernet/LoRa additions, none of which had ever been fully
+captured in this document. The table below is generated directly from
+`Emma.kicad_pcb`'s footprint list (the as-placed source of truth) so it cannot drift
+from the actual board the way a hand-maintained BOM can.
+
+| Ref | Value / Part | Footprint | Function |
+|---|---|---|---|
+| **DDS / TCXO** | | | |
+| 49M DDS | Si5351A-B-GT | MSOP-10 | I²C DDS synthesizer, 49 MHz carrier |
+| TCXO 25M | TG2520SMN ±0.5 ppm | Oscillator SMD 4-pin | 25 MHz reference for the DDS |
+| OSC By | 100 nF | C 0402 | TCXO +3V3 bypass |
+| U1 ByA, U1 ByB | 100 nF ×2 | C 0402 | Si5351A VDDA/VDD bypass |
+| **PA chain** | | | |
+| PA Drvr | MMBT2222A | SOT-23 | Class-A driver stage |
+| PA 100mW | 2N3866 | SOT-89-3 | Class-AB final, 100 mW |
+| PA Rb1, PA Rc1, PA Rb2, PA Re | 10k / 100R / 1k / 10R | R 0402 | Driver/final bias network |
+| PA Cb1, PA Cb2, PA By, PA By2 | 100 pF / 100 pF / 100 nF / 1 nF | C 0402 | Interstage coupling + bypass |
+| **6-element LPF** | | | |
+| L1 100n, L2 180n, L3 180n | Coilcraft 0805HQ series | L 0805 | LPF series elements |
+| C1 120p, C2 180p, C3 120p | C0G 0402 | C 0402 | LPF shunt elements |
+| **T/R switch, LNA, antenna** | | | |
+| T/R Sw | PE4259-63 | SOT-363 | SPDT TX/RX switch, ≥35 dB isolation |
+| LNA | MGA-82563 | SOT-363 | 2.4 dB NF LNA, 50–6000 MHz |
+| LNA By | 100 nF | C 0402 | LNA +3V3 bypass |
+| ANT CMC | SRF2012-100Y | Bourns SRF2012 | Antenna line CMC |
+| ANT TVS | PRTR5V0U2X | SOT-363 | Antenna ESD |
+| SMA ESD | SMAJ5.0A | SOD-123F | §6 antenna port TVS |
+| GND X2Y | 4.7 nF X2Y C0G | C 0402 | GND–PGND moat bridge (RF side) |
+| ANT RPSMA | Amphenol 132289RP | SMA edge mount | J2, §15.203-compliant RP-SMA |
+| **RSSI / AFSK demod (RX)** | | | |
+| RX Demod | LM393 | SOT-23-5 | AFSK comparator demodulator |
+| Th Hi, Th Lo | 10k / 10k | R 0402 | LM393 threshold divider |
+| RSSI Hi, RSSI Lo | 10k / 10k | R 0402 | RSSI scale divider |
+| 1.2k R/C, 2.2k R/C | RC bandpass | R/C 0402 | 1200/2200 Hz AFSK tone filters |
+| **AFSK / TX DAC** | | | |
+| TX DAC | MCP4921 | SOT-23-8 | 12-bit SPI DAC, TX-AFSK audio |
+| AFSK Cp | 1 µF | C 0402 | DAC→PA audio coupling |
+| **UART / SBUS digital chain** | | | |
+| UART CMC | SRF2012-100Y | SRF2012 | UART TX/RX pair CMC (Tier 1, §1) |
+| UART TVS | PRTR5V0U2X | SOT-363 | UART TX/RX ESD (Tier 3, §1) |
+| TX Bead, RX Bead, PTT Bead | 742792510 ×3 | L 0402 | Series ferrite beads (Tier 2, §1) |
+| INV1 | SN74LVC1G04 | SOT-23-5 | UART_RX_F → SBUS_OUT inverter (§9) |
+| MUX1 | SN74LVC1G157 | SC-70-6 | UART/SBUS select mux (§9) |
+| S1 | SPST SMD | 2-pin slide | UART/SBUS mode switch (§9) |
+| R_MODE | 10k | R 0402 | MODE_SEL pull-down, default UART |
+| C_INV, C_MUX | 100 nF ×2 | C 0402 | INV1/MUX1 VCC bypass |
+| **Power supply** | | | |
+| LDO 3V3 | MCP1703T-3302E | SOT-23A-5 | §2 LDO upgrade |
+| LDO By | 100 nF | C 0402 | LDO bypass |
+| +5V Bead | 742792512 | C 0805 footprint (bead) | +5V input ferrite |
+| +5V 100u, +5V 100n | 100 µF / 100 nF | C 1210 / C 0402 | §3 +5V bypass cascade |
+| +3V 100u, +3V 10n, +3V 100n, +3V 10u | 100 µF / 10 nF / 100 nF / 10 µF | C 1210/0402/0402/0805 | §3 +3V3 bypass cascade |
+| CMP By, DAC By, SW By | 100 nF ×3 | C 0402 | Local +3V3 bypass at U2B/U2A/U5 |
+| PGND 10n | 10 nF C0G | C 0402 | §7 GND–PGND moat bridge (digital side ref) |
+| **Connectors** | | | |
+| CAPE-B IF | JST-GH-6P (custom) | JST_GH_6P | Host UART/PTT/RSSI/+3V3 interface |
+| PB2-P1, PB2-P2 | PB2I 2×18 sockets | 2x18 socket | Rev R1 PocketBeagle2 header rails |
+| **Ethernet (Rev R1 addition — see TODO.md §1.2b)** | | | |
+| ETH-PHY | ADIN1300BCPZ | QFN-48, B.Cu | Second Ethernet PHY, gives Emma (and the Zoë stack it plugs into) a 2nd port matching Wash's 2-PHY config; also lets Emma run Ethernet standalone outside Serenity |
+| T-ETH | Würth 749010012A | ETH_XFMR_8P, B.Cu | RMII-side isolation transformer; secondary (`*_ETH2`/`GND2_ETH`/`VCC2_ETH`) is a galvanically isolated domain — **must not be bridged to the main GND/+5V planes** |
+| J-ETH | JST-GH-4P (custom) | JST_GH_4P | Isolated-side Ethernet line connector |
+| **LoRa (Rev R1 addition — see TODO.md §1.2b, REF-RFMOD-001)** | | | |
+| LoRa | RFM95W | HOPERF_RFM9XW_SMD, B.Cu | 915 MHz LoRa module. Pin mapping corrected 2026-06-20 against the verified HopeRF datasheet; ANT/3V3/DIO0–5 still unassigned and footprint pad geometry/position still need correction — see TODO.md |
+| **Mechanical** | | | |
+| (4×, unlabeled) | M2.5 mounting hole | MountingHole_2.7mm_M2.5 | Corner mounts |
+
+**Note on net names referencing "U1"/"U2A"/"U2B"/"U3"/"U3A"/"U3B"/"U4"/"U5"/"U6" in
+component values** (e.g. "U1 ByA", "PA By (U3 PA VCC Bypass)"): these are internal
+designator shorthands from the original schematic capture (U1 = 49M DDS, U2A/U2B =
+RX Demod's two comparator stages, U3A/U3B = PA Drvr/PA 100mW, U4 = LNA, U5 = T/R Sw,
+U6 = LDO 3V3) and predate the present flat reference-designator scheme; they are
+preserved in the `Value` field as placed and should not be read as separate components.
+
+---
+
 ## Board Size and Stackup
 
 **Board size:** 55 × 35 mm — unchanged from XCVR-49MHZ-1.
@@ -499,9 +578,9 @@ cable shield, the following on-board measures are active (see §1):
 
 - Step 4: Laird MSA Series Shield Can Selection Guide
 
-- Step 5: XCVR-49MHZ-1.md — Phase 1 design decisions (IC selection rationale)
+- Step 5: `archive/XCVR-49MHZ-1.md` — Phase 1 design decisions (IC selection rationale)
 
-- Step 6: 47 CFR §15.235(b) / §15.209 — FCC out-of-band emission requirements (not Part 95 §95.655, which does not apply to this band)
+- Step 6: [REF-FCC-003 §15.235(b)] / [REF-FCC-003 §15.209] — FCC out-of-band emission requirements (not Part 95 §95.655, which does not apply to this band)
 
 - Step 7: QUCS-S / SPICE Chebyshev filter synthesis reference:
 

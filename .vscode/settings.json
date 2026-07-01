@@ -1,0 +1,8 @@
+{
+    "debug.allowBreakpointsEverywhere": true,
+    "debug.closeReadonlyTabsOnEnd": true,
+    "markdown.validate.enabled": true,
+    "markdownlint.config": {
+        "MD007": { "indent": 4 }
+    }
+}

@@ -179,9 +179,24 @@ value cannot address.
 
 - **Isolation creepage:** Maintain ≥ 8 mm creepage and ≥ 1.5 mm clearance between
 
-  GND1 and GND2 copper pours on the ISOW1044BDFMR and ADM2795EBRWZ. Per IEC 62368-1
-  Annex G, 5 kV reinforced isolation at 250 V working voltage requires ≥ 8 mm creepage
-  in pollution degree 2 environment.
+  GND1 and GND2 copper pours on the ISOW1044BDFMR and ADM2795EBRWZ
+  [REF-IEC-001 §5.5.2] [REF-VDE-001 Cl.4.3]. Per IEC 62368-1 Annex G, 5 kV
+  reinforced isolation at 250 V working voltage requires ≥ 8 mm creepage in
+  pollution degree 2 environment.
+
+  > **Verification status (2026-06-22, `kicad-cli pcb drc` against `Wash.kicad_pcb`,
+  > KiCad 9.0.2): NOT MET — BLOCKS PCB fab.** The board does not currently meet this
+  > requirement. After excluding same-package pin-to-pin spacing (adjacent pins on the
+  > secondary side of the same isolator IC, which the `ISOLATION` netclass rule also
+  > flags but which are not a primary/secondary creepage issue), DRC found **13 genuine
+  > cross-domain clearance violations**, all between the `TMESH_P`/`TMESH_N`
+  > tamper-detect mesh and `GND2_CAN`/`GND2_ETH` isolated-domain pads/tracks, with
+  > actual measured spacing as low as **0.125 mm** — far short of both the 0.5 mm
+  > `ISOLATION` netclass DRC minimum and the ≥ 8 mm physical creepage target above.
+  > Root cause and full violation count are already tracked in `TODO.md` §1.2a (tamper
+  > mesh routed through the isolated `GND2_*` domains; ≈335 of Wash's then-465 DRC
+  > errors). This verification did not change layout — per `CLAUDE.md`, footprint/route
+  > rework to close this gap is referred to the user, not performed automatically.
 
 - **CMC placement:** CM1 and CM2 must be placed on the board side of the field
 
@@ -269,11 +284,11 @@ to the Serenity UAV airframe operating environment:
 
 | Standard | Level | Test | Notes |
 | --- | --- | --- | --- |
-| IEC 61000-4-2 | Level 4 (±8 kV contact, ±15 kV air) | ESD | TVS arrays at all field connectors |
-| IEC 61000-4-4 | Level 4 (4 kV peak) | EFT/Burst on signal lines | CMCs + isolated transceivers |
-| IEC 61000-4-5 | Level 3 (2 kV CM, 1 kV DM) | Surge | ±42 V bus fault on CAN/RS-485 |
-| MIL-STD-461G RE102 | Limit C | Radiated emissions | 100BASE-TX EMI suppressed via HX1188NL magnetics, CMCs, and TVS arrays |
-| MIL-STD-461G RS103 | 200 V/m, 10 kHz–18 GHz | Radiated susceptibility | Isolated buses + chassis ground |
+| IEC 61000-4-2 [REF-IEC-003] | Level 4 (±8 kV contact, ±15 kV air) | ESD | TVS arrays at all field connectors |
+| IEC 61000-4-4 [REF-IEC-004] | Level 4 (4 kV peak) | EFT/Burst on signal lines | CMCs + isolated transceivers |
+| IEC 61000-4-5 [REF-IEC-005] | Level 3 (2 kV CM, 1 kV DM) | Surge | ±42 V bus fault on CAN/RS-485 |
+| MIL-STD-461G RE102 [REF-MIL-002] | Limit C | Radiated emissions | 100BASE-TX EMI suppressed via HX1188NL magnetics, CMCs, and TVS arrays |
+| MIL-STD-461G RS103 [REF-MIL-002] | 200 V/m, 10 kHz–18 GHz | Radiated susceptibility | Isolated buses + chassis ground |
 
 Pre-compliance testing against IEC 61000-4-2 through 4-5 is required before first
 flight. Formal MIL-STD-461G testing is deferred pending airframe integration.
@@ -318,7 +333,7 @@ routed through the π-filter (FB1/C11/C12) before distribution to the cape rail.
 
 - `CAPE-A-1.kicad_sch` — standard (non-EMI-hardened) variant, Rev M baseline
 - `AVIONICS_PB2_REDESIGN.md` — system architecture and power budgets
-- `XCVR-49MHZ-2.md` — EMI-hardened 49 MHz transceiver (companion board)
+- `Emma.md` — EMI-hardened 49 MHz transceiver, XCVR-49MHZ-2 (companion board)
 - `Zoë.md` — EMI-hardened comms/logging cape (companion board)
 - `Wash.kicad_sch` — schematic for this board (canonical filename: Wash.kicad_sch)
 
@@ -329,9 +344,9 @@ routed through the π-filter (FB1/C11/C12) before distribution to the cape rail.
 1. TI Application Note SLLA337A — "Isolation Boundary Layout Guidelines for ISOW Devices"
 2. Analog Devices ADM2795E Data Sheet Rev. B — isolation boundary capacitor guidance
 3. Bourns SRF2012 Series Data Sheet — common-mode choke attenuation curves
-4. IEC 62368-1:2018 Annex G — creepage/clearance for reinforced insulation
-5. IEC 61000-4-5:2017 — surge immunity test levels
-6. MIL-STD-461G:2015 — EM emissions and susceptibility requirements for aircraft
+4. IEC 62368-1:2018 Annex G — creepage/clearance for reinforced insulation [REF-IEC-001 §5.5.2]
+5. IEC 61000-4-5:2014+AMD1:2017 — surge immunity test levels [REF-IEC-005]
+6. MIL-STD-461G:2015 — EM emissions and susceptibility requirements for aircraft [REF-MIL-002]
 7. Texas Instruments DP83825I Data Sheet (SNLS505C) — 10/100BASE-TX RMII PHY, RBIAS and bypass cap recommendations
 8. Pulse Electronics HX1188NL Data Sheet — dual 10/100BASE-TX LAN transformer application circuit, center-tap termination
 9. Texas Instruments TPS62933 Data Sheet (SLVSGM7) — 3.3V→1.8V SMPS, FB divider, output filter design

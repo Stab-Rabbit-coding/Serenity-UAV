@@ -24,9 +24,13 @@ License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
 """
 
 import bpy
+import logging
 import math
 import os
 from mathutils import Vector, Euler
+
+log = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -100,11 +104,8 @@ COMPONENTS = [
     # Pylon (wing-to-nacelle tilt pivot): placement unverified in FreeCAD.
     ("wings/wing_nacelle_pylon_revo.stl",
      "Pylon",          DETAIL_COLOR),
-    # Nacelle tip caps (port and stbd)
-    ("nacelles/nacelle_tip_cap_port.stl",
-     "TipCap_Port",    NACELLE_COLOR),
-    ("nacelles/nacelle_tip_cap_stbd.stl",
-     "TipCap_Stbd",    NACELLE_COLOR),
+    # Nacelle tip caps ARCHIVED 2026-06-22 (legacy part, no longer needed) —
+    # STLs moved to airframe/archive/stls/nacelles/; see ARCHIVE_INDEX.md.
     # Dorsal antenna fin (fuselage top)
     ("fuselage/dorsal_antenna_fin.stl",
      "Dorsal_Fin",     DETAIL_COLOR),
@@ -203,7 +204,10 @@ def clear_scene() -> None:
         try:
             bpy.data.batch_remove((block,))
         except Exception:
-            pass
+            # Block may already be orphan-purged by a prior batch_remove call
+            # in this loop; log rather than silently swallow per CLAUDE.md
+            # "Everything is logged."
+            log.debug("batch_remove failed for %r", block, exc_info=True)
 
 # ---------------------------------------------------------------------------
 # Materials

@@ -94,9 +94,16 @@ Vertices sampled at X = −170 ± 3 mm (hull centerline):
 | Middle | open at −Z | — | Horseshoe open ventral; keel unsupported |
 | Rear | ≈ 3.7 | ≈ 5.7 | Cone belly; slight curve |
 
-The middle section horseshoe ring is open at −Z for 73 mm (hull Y +130 → +203 mm).  The
-keel bar spans this gap freely, held laterally by foam fill alone.  At 2g bending, the
-73 mm unsupported span deflects:
+The middle section's outer *horseshoe ring* is open at −Z (ventral) for 73 mm (hull
+Y +130 → +203 mm), so there is no belly floor at the keel's low-Z level to bond to.
+**Note (2026-06-29):** the middle is NOT only the open horseshoe — it also carries the
+**closed inner-neck tube** running the full length along the centreline (X ≈ −170 mm),
+connecting the cargo-bay interior to the rear engine-room interior (see §7.3 and CLAUDE.md).
+The keel passes *through* this closed neck, so "held by foam alone" is a worst-case
+assumption: **bonding the keel to the inner-neck wall is an available hard load path**
+and should be evaluated in the keel re-evaluation and the cargo/middle + middle/rear joint
+design (TODO.md §1.1.1.0b).  The deflection below conservatively assumes no neck bond.
+At 2g bending, the 73 mm unsupported span deflects:
 
 ```
 δ_mid = (w × L⁴) / (8 × E × I)   [uniform load, unsupported span]
@@ -419,6 +426,64 @@ from any pin > 37 mm >> 4.2/2 mm bore radius):
 | --- | --- | --- | --- |
 | Port | −202.0 | +18.0 | +173 → +233 |
 | Stbd | −135.0 | +20.0 | +173 → +233 |
+
+### 7.3 Head/Cargo Joint — Splice Collar (Rev R1, 2026-06-29)
+
+**Correction to §7.1.**  The §7.1 premises that the joints "carry no structural flight
+load," that "the wall IS the annulus," and that the boss pins provide an "8 mm positive
+stop each side" are **not correct for the head/cargo joint** and were revised after a
+verification against the baked meshes (TODO.md §1.1.0):
+
+- The head is a **forward cantilever** (~0.59 kg of shell + Shepherd avionics + bow pod
+  + foam, CG at hull Y ≈ −157 mm).  Its inertial loads ARE reacted at the head/cargo
+  joint — §4.1 itself states the head mass "is reacted at the head/cargo joint by the
+  boss pins."  So the joint is structural, not merely a print split.
+- Measured boss-pin engagement is **2.0–4.5 mm**, not 8 mm: straight Y-axis pins at a
+  fixed (X,Z) only intersect the tapering 2 mm skin over a short span, and because the
+  cargo is broader than the head the two flank pins (B, C at Z = +91.4) coincide with
+  both shells' walls only at the joint face.  The pins are **alignment dowels**, not a
+  positive-stop load path.
+- A bare bonded **butt** joint of two 2 mm shells loads the bondline in **peel/cleavage**
+  (the weak adhesive mode), regardless of average stress.
+
+**Load check (it is the *form*, not the *strength*, that governs).** Joint loads at
+hull Y = −71, arm to head CG = 86 mm, ultimate = limit × joint-FOS 4.0:
+
+| Case | Ult. factor | Shear V | Moment M |
+| --- | --- | --- | --- |
+| 2g maneuver × 4.0 | 8.0g | 46 N | 3 977 N·mm |
+| 2.5g landing × 4.0 | 10.0g | 58 N | 4 972 N·mm |
+| 9g crash × 1.5 | 13.5g | 78 N | 6 712 N·mm |
+
+The joint ring (perimeter ≈ 350 mm, t = 2 mm) has S_x ≈ 7 000–10 000 mm³, so even the
+9 g crash moment gives a peak fibre stress **M/S ≈ 0.7 MPa** — far below the CF-PETG and
+epoxy allowables (≈ 5 MPa for the PETG-bond-limited case).  **The joint is not
+strength-limited.**  What is actually required is peel resistance, alignment, and
+anti-ovalisation of the thin section, plus the CLAUDE.md fabrication standard's
+"minimum 2-wall contact annulus and positive-stop shoulder."
+
+**Design — internal bonded splice collar (`PRINT-HEAD-CARGO-COLLAR`).**  A printed
+CF-PETG ring, profile = the head inner-wall contour at Y = −79 mm inset 2 mm, 2 mm wall,
+L = 16 mm (8 mm into each section), centred on the joint (hull Y −79..−63).  It:
+
+- turns the peel-loaded butt joint into a **shear-loaded bonded double-lap** — the head
+  skin, the collar, and the cargo skin form a continuous 2-wall contact annulus over the
+  full perimeter;
+- the butted head-aft / cargo-fwd cut faces are the **positive stop**;
+- the closed ring **stiffens the joint cross-section** (anti-ovalisation).
+
+Bond: West System 105/206 thickened with 406 colloidal silica — a structural bonded
+doubler designed to bridge the 1–2 mm bondline (the collar is intentionally 2 mm clear of
+the skin so it inserts cleanly past the bore-opened aft face and the section taper; the
+boss dowel pins do the concentric piloting).  Bonded double-lap shear area ≈ 350 mm × 8 mm
+× 2 sides ≈ 5 600 mm²; the worst-case bending couple tension (~125 N over a ~54 mm lever)
+gives a bond shear < 0.05 MPa → **FOS > 100 on the bond**; the collar is sized by
+handling/printability (~13.4 g), not stress.
+
+Geometry verified watertight and clearing the head inner wall over the bonding span
+(`generate_head_cargo_splice_collar.py`).  The **3 boss dowel pins are retained for
+registration only** (re-roled from "structural").  Cargo/Middle (Joint 2) and Middle/Rear
+(Joint 3) require the same first-principles treatment — see TODO.md §1.1.1.0b.
 
 ---
 
