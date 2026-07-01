@@ -678,12 +678,51 @@ and baked to hull frame.  SCAD fuselage shell files are secondary references onl
 - [x] `rear_shell24_2mm_repaired.stl` — 1 095 972 tri; X −246.1..−105.5 / Y +203.2..+384.3 / Z +3.3..+161.1 mm
 
 **Open tasks:**
-- [ ] **Cargo section interior boss features** — the Blender-canonical cargo shell is the pure exterior skin.
-    All interior features added in SCAD Rev S/S1/S2/S3 (wing mortises, spar bore, servo mount pads,
-    hinge-pin blocks, latch lips, avionics standoffs, cargo bay opening, GPS domes) must be merged
-    back into the Blender mesh before printing.  Workflow: use the baked Blender cargo shell as the
-    outer surface; add interior boss geometry from SCAD Rev S3 source via Blender Boolean or OpenSCAD
-    hull combination.  Re-export, re-bake, verify watertight.  **BLOCKS cargo section printing.**
+
+- [x] **Cargo section interior boss features** — **DONE 2026-06-30** via new
+    `airframe/blender-scripts/merge_cargo_interior.py` (Rev R1).  Starts from the clean
+    Blender source, bakes to hull frame, and merges every cargo interior feature in ONE
+    robust manifold3d pass (union all cutters / union all positives → single
+    `(shell + positives) − negatives`).  Result: **watertight=True, single connected body,
+    0 boundary/0 non-manifold edges, vol 323 188 mm³ (≈ 339 g as-printed .. 414 g solid
+    CF-PETG)** — this simultaneously fixes MESH-01 for cargo (see MESH-01 item below).
+    Merged this pass:
+    - **Interior-wall removal** — the leftover cargo-bay floor "duct" the Blender hollowing
+        left inside the cavity (a ~54×38 mm closed box blister on the belly floor, hull
+        X −196..−142, Y −15..+102, Z 6..44), confirmed by cross-section + render before cut.
+    - **Clamshell doors** — belly aperture cut hull X[−222.5..−117.6] × Y[+2..+108] between
+        the two hinge lines, + the 4 Rev R1c hinge-pin retention blocks (imported verbatim
+        from `generate_cargo_hinge_retention.py`), fused into the shell.
+    - **Section-joint features** (head/cargo Joint 1 + cargo/middle Joint 2): bore-open
+        fwd/aft faces, 6× Ø3.2 boss-pin bores, keel locating channel, Y=+30 ring-frame
+        pocket — single-sourced from `add_structural_features.py`.
+    - **Wing mortices** — Ø12.3 spar bore (full lateral span, both walls), 2 root mortises,
+        and 2× Ø22 spar-bearing bosses, at the **re-derived** chordwise stations (129 mm Rev
+        R1 root chord, LE root hull Y=−7: spar 30% → Y=+31.7; mortise 50% → Y=+57.5; Z=62.5).
+        Supersedes the SCAD `WING_ROOT_Y_CEN=CY+40` (hull Y≈+6) stale-161mm-chord stand-in
+        (§1.1.2).  All lateral-wall/dorsal features are seated against the wall position
+        **sampled from the real baked mesh** at each feature's (Y,Z) — the walls curve
+        inboard with Z, so a bbox-extremity pin would float off the wall.
+    - **Interior support structures** — 2 nacelle-servo mount pads (Z=93, clears spar boss
+        by ~4 mm) + M3 bores; **Inara** (port) avionics-bay standoff bosses (4, dorsal).
+    - **SUB-TASKS OPEN (VERIFY / deferred — do not block MESH-01 or door/joint printing):**
+        - [ ] Verify wing spar/mortise fit in FreeCAD against the baked wing STL root/tab
+            (Y stations re-derived, not yet eyeballed vs `wings_s1223_revo.scad`; §1.1.2).
+        - [ ] **Deferred (legacy Y-as-dorsal SCAD frame — need hull re-derivation before
+            cutting):** Inara/River dorsal Faraday **access-panel cuts**; **River** (stbd)
+            avionics bay (dropped this pass per the wing-spar Z conflict, §1.1.3.3); GPS×2
+            and FPV flush skin recesses; door-servo pads; latch-catch lips.  The SCAD
+            GPS/FPV/servo/latch/avionics modules were authored in the pre-R1 mental frame
+            (Y=vertical/dorsal) and do NOT map to correct hull positions via the bake
+            transform — only the wing/servo subsystem was reconciled in Rev R1 2026-06-22.
+        - [ ] **Leg-mount clearance (§1.1.4):** the deferred Rev R5 wire-brace corner leg
+            bosses must clear the **aft** door hinge retention blocks — those sit at the
+            hinge X (−117.6 port / −222.5 stbd) over hull Y +109..+121, only ~9 mm aft of
+            the aft leg-attach row (Y≈100).  `merge_cargo_interior.py`'s keep-out check
+            flags this ("aft-port/aft-stbd: REVIEW"); design the leg bosses to fit forward
+            of / clear the retention blocks.
+        - [ ] Door latching: the aperture is a clean opening (no seating rabbet); the
+            deferred latch-catch lips + `cargo_cradle_autolatch` hooks provide closure.
 - [ ] **Middle section inner neck — Phase 5-10 print guidance** — the Blender middle mesh includes
     the inner neck (closed tube) and the outer horseshoe ring as one piece.  Confirm in slicer that
     both elements appear correctly and that there are no thin-wall violations in the neck-to-horseshoe
@@ -813,6 +852,18 @@ Joint faces in hull-frame Y (confirmed from baked extents):
 
 - [ ] **MESH-01 `add_structural_features.py` boolean cuts left non-watertight / fragmented
     shells on cargo, middle, and rear** *(found 2026-06-16, reviewing 03_top.png render)* —
+    **ROOT CAUSE FIXED IN CODE + RESOLVED FOR CARGO 2026-06-30; middle + rear still need a
+    regen pass.**  Root cause was NOT (only) the cutter-vs-wall epsilon grazing but the
+    fragile `_subtract_all` loop: it subtracted cutters one at a time via
+    `trimesh.boolean.difference(engine="manifold")` with a per-step repair on a 1.4 M-face
+    shell, compounding degenerate slivers into 10⁴+ disconnected bodies.  `_subtract_all`
+    now unions ALL cutters into one Manifold and does a SINGLE `shell − union` (boolean of
+    closed manifolds is closed by construction → guaranteed watertight out).  **Cargo** is
+    fully resolved by `merge_cargo_interior.py` using this approach (watertight=True, single
+    body, vol 323 188 mm³ — see §1.1.1.0a).  **REMAINING:** regenerate `middle` and `rear`
+    from their **clean Blender sources** with the fixed `add_structural_features.py`
+    (it now SKIPs cargo), then re-run `bake_hull_frame.py --check` and re-verify.  Historical
+    diagnosis below retained for the record.
     what looks like "huge cutouts / air where there should be hull" in the rendered build-guide
     images is **not** the intended bore-open joint design; it is a meshing defect from the
     boss-pin/keel-channel/ring-pocket boolean subtractions in `add_structural_features.py`.

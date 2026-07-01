@@ -47,8 +47,8 @@ References:
     - JEDEC JESD75-5 LFCSP package standard
 """
 
-import re
 import os
+import re
 
 # ---------------------------------------------------------------------------
 # File paths
@@ -63,7 +63,7 @@ DST_PATH = os.path.join(SCRIPT_DIR, "Wash.kicad_pcb")
 # All original CAPE-A-1 UUIDs are remapped to use "a2000000-0000-0000-0000-"
 # prefix so Wash is unambiguously distinct in any KiCad project database.
 OLD_UUID_RE = re.compile(
-    r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
+    r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
 )
 NEW_UUID_PREFIX = "a2000000-0000-0000-0000-"
 
@@ -85,6 +85,7 @@ def next_uuid() -> str:
 # ---------------------------------------------------------------------------
 # S-expression bracket parser
 # ---------------------------------------------------------------------------
+
 
 def find_balanced(text: str, start: int) -> int:
     """Return the index ONE PAST the closing ')' balancing the '(' at *start*.
@@ -109,14 +110,14 @@ def find_balanced(text: str, start: int) -> int:
         ch = text[i]
         if escape_next:
             escape_next = False
-        elif ch == '\\' and in_string:
+        elif ch == "\\" and in_string:
             escape_next = True
         elif ch == '"':
             in_string = not in_string
         elif not in_string:
-            if ch == '(':
+            if ch == "(":
                 depth += 1
-            elif ch == ')':
+            elif ch == ")":
                 depth -= 1
                 if depth == 0:
                     return i + 1
@@ -138,7 +139,7 @@ def find_footprint(text: str, ref: str):
         (start, end) tuple or (None, None) if not found.
     """
     i = 0
-    pattern = re.compile(r'\(footprint\s')
+    pattern = re.compile(r"\(footprint\s")
     while i < len(text):
         m = pattern.search(text, i)
         if not m:
@@ -170,9 +171,9 @@ def remove_footprint(text: str, ref: str) -> str:
     # Remove the block plus any leading newline/whitespace on its line
     prefix = text[:start]
     # Step back over whitespace on the same line to remove clean indentation
-    while prefix and prefix[-1] in ('\t', ' '):
+    while prefix and prefix[-1] in ("\t", " "):
         prefix = prefix[:-1]
-    if prefix.endswith('\n'):
+    if prefix.endswith("\n"):
         prefix = prefix[:-1]
     result = prefix + text[end:]
     print(f"  Removed footprint '{ref}'")
@@ -210,91 +211,114 @@ def replace_footprint(text: str, ref: str, new_block: str) -> str:
 SOIC16W_Y = [-4.445, -3.175, -1.905, -0.635, 0.635, 1.905, 3.175, 4.445]
 
 
-def _pad(num: str, x: float, y: float, net_num: int, net_name: str,
-         size_x: float = 1.95, size_y: float = 0.60,
-         angle: float = 0.0) -> str:
+def _pad(
+    num: str,
+    x: float,
+    y: float,
+    net_num: int,
+    net_name: str,
+    size_x: float = 1.95,
+    size_y: float = 0.60,
+    angle: float = 0.0,
+) -> str:
     """Generate a single SMD roundrect pad entry."""
     at_str = f"{x} {y}" if angle == 0.0 else f"{x} {y} {angle}"
-    net_str = f"\n\t\t\t(net {net_num} \"{net_name}\")" if net_num > 0 else ""
+    net_str = f'\n\t\t\t(net {net_num} "{net_name}")' if net_num > 0 else ""
     return (
-        f"\t\t(pad \"{num}\" smd roundrect\n"
+        f'\t\t(pad "{num}" smd roundrect\n'
         f"\t\t\t(at {at_str})\n"
         f"\t\t\t(size {size_x} {size_y})\n"
-        f"\t\t\t(layers \"F.Cu\" \"F.Mask\" \"F.Paste\")\n"
+        f'\t\t\t(layers "F.Cu" "F.Mask" "F.Paste")\n'
         f"\t\t\t(roundrect_rratio 0.25){net_str}\n"
-        f"\t\t\t(uuid \"{next_uuid()}\")\n"
+        f'\t\t\t(uuid "{next_uuid()}")\n'
         f"\t\t)\n"
     )
 
 
-def _pad_rect(num: str, x: float, y: float, net_num: int, net_name: str,
-              size_x: float = 0.80, size_y: float = 1.60) -> str:
+def _pad_rect(
+    num: str,
+    x: float,
+    y: float,
+    net_num: int,
+    net_name: str,
+    size_x: float = 0.80,
+    size_y: float = 1.60,
+) -> str:
     """Generate a single SMD rect pad entry (for JST connectors)."""
-    net_str = f"\n\t\t\t(net {net_num} \"{net_name}\")" if net_num > 0 else ""
+    net_str = f'\n\t\t\t(net {net_num} "{net_name}")' if net_num > 0 else ""
     return (
-        f"\t\t(pad \"{num}\" smd rect\n"
-        f"\t\t\t(at {x} {y})\n"
-        f"\t\t\t(size {size_x} {size_y})\n"
-        f"\t\t\t(layers \"F.Cu\" \"F.Mask\" \"F.Paste\")\n"
-        f"\t\t\t(uuid \"{next_uuid()}\")\n"
-        f"\t\t\t{net_str}\n"
-        f"\t\t)\n"
-    ) if net_num == 0 else (
-        f"\t\t(pad \"{num}\" smd rect\n"
-        f"\t\t\t(at {x} {y})\n"
-        f"\t\t\t(size {size_x} {size_y})\n"
-        f"\t\t\t(layers \"F.Cu\" \"F.Mask\" \"F.Paste\")\n"
-        f"\t\t\t(net {net_num} \"{net_name}\")\n"
-        f"\t\t\t(uuid \"{next_uuid()}\")\n"
-        f"\t\t)\n"
+        (
+            f'\t\t(pad "{num}" smd rect\n'
+            f"\t\t\t(at {x} {y})\n"
+            f"\t\t\t(size {size_x} {size_y})\n"
+            f'\t\t\t(layers "F.Cu" "F.Mask" "F.Paste")\n'
+            f'\t\t\t(uuid "{next_uuid()}")\n'
+            f"\t\t\t{net_str}\n"
+            f"\t\t)\n"
+        )
+        if net_num == 0
+        else (
+            f'\t\t(pad "{num}" smd rect\n'
+            f"\t\t\t(at {x} {y})\n"
+            f"\t\t\t(size {size_x} {size_y})\n"
+            f'\t\t\t(layers "F.Cu" "F.Mask" "F.Paste")\n'
+            f'\t\t\t(net {net_num} "{net_name}")\n'
+            f'\t\t\t(uuid "{next_uuid()}")\n'
+            f"\t\t)\n"
+        )
     )
 
 
-def _prop(name: str, value: str, at_x: float, at_y: float,
-          layer: str = "F.SilkS", size: float = 1.0,
-          hide: bool = False) -> str:
+def _prop(
+    name: str,
+    value: str,
+    at_x: float,
+    at_y: float,
+    layer: str = "F.SilkS",
+    size: float = 1.0,
+    hide: bool = False,
+) -> str:
     """Generate a (property ...) entry."""
     hide_str = "\n\t\t\t(hide yes)" if hide else ""
     return (
-        f"\t\t(property \"{name}\" \"{value}\"\n"
+        f'\t\t(property "{name}" "{value}"\n'
         f"\t\t\t(at {at_x} {at_y} 0)\n"
-        f"\t\t\t(layer \"{layer}\"){hide_str}\n"
-        f"\t\t\t(uuid \"{next_uuid()}\")\n"
+        f'\t\t\t(layer "{layer}"){hide_str}\n'
+        f'\t\t\t(uuid "{next_uuid()}")\n'
         f"\t\t\t(effects (font (size {size} {size}) (thickness 0.15)))\n"
         f"\t\t)\n"
     )
 
 
-def _soic_silk_lines(half_w: float, half_h: float,
-                     corner_indent: float = 1.0) -> str:
+def _soic_silk_lines(half_w: float, half_h: float, corner_indent: float = 1.0) -> str:
     """Generate F.SilkS corner lines for an SOIC package body outline."""
     lines = []
     # Top-left and top-right (notch for pin-1 marker)
     lines.append(
         f"\t\t(fp_line (start -{half_w} -{half_h - corner_indent}) "
         f"(end -{half_w} -{half_h}) (stroke (width 0.12) (type solid)) "
-        f"(layer \"F.SilkS\") (uuid \"{next_uuid()}\"))\n"
+        f'(layer "F.SilkS") (uuid "{next_uuid()}"))\n'
     )
     lines.append(
         f"\t\t(fp_line (start -{half_w} -{half_h}) "
         f"(end {half_w} -{half_h}) (stroke (width 0.12) (type solid)) "
-        f"(layer \"F.SilkS\") (uuid \"{next_uuid()}\"))\n"
+        f'(layer "F.SilkS") (uuid "{next_uuid()}"))\n'
     )
     lines.append(
         f"\t\t(fp_line (start {half_w} -{half_h}) "
         f"(end {half_w} {half_h}) (stroke (width 0.12) (type solid)) "
-        f"(layer \"F.SilkS\") (uuid \"{next_uuid()}\"))\n"
+        f'(layer "F.SilkS") (uuid "{next_uuid()}"))\n'
     )
     lines.append(
         f"\t\t(fp_line (start {half_w} {half_h}) "
         f"(end -{half_w} {half_h}) (stroke (width 0.12) (type solid)) "
-        f"(layer \"F.SilkS\") (uuid \"{next_uuid()}\"))\n"
+        f'(layer "F.SilkS") (uuid "{next_uuid()}"))\n'
     )
     lines.append(
         f"\t\t(fp_line (start -{half_w} {half_h}) "
         f"(end -{half_w} {half_h - corner_indent}) "
         f"(stroke (width 0.12) (type solid)) "
-        f"(layer \"F.SilkS\") (uuid \"{next_uuid()}\"))\n"
+        f'(layer "F.SilkS") (uuid "{next_uuid()}"))\n'
     )
     return "".join(lines)
 
@@ -315,13 +339,12 @@ def _soic_courtyard(cx_outer: float, cy_outer: float) -> str:
         lines.append(
             f"\t\t(fp_line (start {x0} {y0}) (end {x1} {y1}) "
             f"(stroke (width 0.05) (type solid)) "
-            f"(layer \"F.CrtYd\") (uuid \"{next_uuid()}\"))\n"
+            f'(layer "F.CrtYd") (uuid "{next_uuid()}"))\n'
         )
     return "".join(lines)
 
 
-def make_soic16w(ref: str, value: str, x: float, y: float,
-                 pin_nets: dict) -> str:
+def make_soic16w(ref: str, value: str, x: float, y: float, pin_nets: dict) -> str:
     """Generate a complete SOIC-16W footprint block.
 
     Package: 7.5 × 10.3 mm, 1.27 mm pitch (JEDEC MS-012W).
@@ -353,12 +376,12 @@ def make_soic16w(ref: str, value: str, x: float, y: float,
     cyd = _soic_courtyard(cx_outer=6.4, cy_outer=5.55)
 
     return (
-        f"\t(footprint \"SOIC-16W_7.5x10.3mm_P1.27mm\"\n"
-        f"\t\t(layer \"F.Cu\")\n"
-        f"\t\t(uuid \"{next_uuid()}\")\n"
+        f'\t(footprint "SOIC-16W_7.5x10.3mm_P1.27mm"\n'
+        f'\t\t(layer "F.Cu")\n'
+        f'\t\t(uuid "{next_uuid()}")\n'
         f"\t\t(at {x} {y})\n"
-        f"\t\t(descr \"SOIC-16W, 7.5x10.3mm, 1.27mm pitch — {value}\")\n"
-        f"\t\t(tags \"SOIC SO SOIC16W isolated\")\n"
+        f'\t\t(descr "SOIC-16W, 7.5x10.3mm, 1.27mm pitch — {value}")\n'
+        f'\t\t(tags "SOIC SO SOIC16W isolated")\n'
         f"{_prop('Reference', ref, 0, -6.0)}"
         f"{_prop('Value', value, 0, 6.0, layer='F.Fab')}"
         f"{_prop('Datasheet', '', 0, 0, layer='F.Fab', hide=True)}"
@@ -379,8 +402,7 @@ def make_soic16w(ref: str, value: str, x: float, y: float,
 SOIC20W_Y = [-5.715, -4.445, -3.175, -1.905, -0.635, 0.635, 1.905, 3.175, 4.445, 5.715]
 
 
-def make_soic20w(ref: str, value: str, x: float, y: float,
-                 pin_nets: dict) -> str:
+def make_soic20w(ref: str, value: str, x: float, y: float, pin_nets: dict) -> str:
     """Generate a complete SOIC-20W footprint block.
 
     Package: 7.5 × 12.8 mm, 1.27 mm pitch (JEDEC MS-013).
@@ -409,12 +431,12 @@ def make_soic20w(ref: str, value: str, x: float, y: float,
     cyd = _soic_courtyard(cx_outer=6.4, cy_outer=6.85)
 
     return (
-        f"\t(footprint \"SOIC-20W_7.5x12.8mm_P1.27mm\"\n"
-        f"\t\t(layer \"F.Cu\")\n"
-        f"\t\t(uuid \"{next_uuid()}\")\n"
+        f'\t(footprint "SOIC-20W_7.5x12.8mm_P1.27mm"\n'
+        f'\t\t(layer "F.Cu")\n'
+        f'\t\t(uuid "{next_uuid()}")\n'
         f"\t\t(at {x} {y})\n"
-        f"\t\t(descr \"SOIC-20W, 7.5x12.8mm, 1.27mm pitch — {value}\")\n"
-        f"\t\t(tags \"SOIC SO SOIC20W isolated\")\n"
+        f'\t\t(descr "SOIC-20W, 7.5x12.8mm, 1.27mm pitch — {value}")\n'
+        f'\t\t(tags "SOIC SO SOIC20W isolated")\n'
         f"{_prop('Reference', ref, 0, -7.2)}"
         f"{_prop('Value', value, 0, 7.2, layer='F.Fab')}"
         f"{_prop('Datasheet', '', 0, 0, layer='F.Fab', hide=True)}"
@@ -443,25 +465,31 @@ def make_soic20w(ref: str, value: str, x: float, y: float,
 _LFCSP48_OFFSETS = [i * 0.5 - 2.75 for i in range(12)]  # -2.75 to +2.75
 
 
-def _lfcsp_pad(num: str, x: float, y: float, net_num: int,
-               net_name: str, w: float = 0.30, h: float = 0.65,
-               angle: float = 0.0) -> str:
+def _lfcsp_pad(
+    num: str,
+    x: float,
+    y: float,
+    net_num: int,
+    net_name: str,
+    w: float = 0.30,
+    h: float = 0.65,
+    angle: float = 0.0,
+) -> str:
     """Generate a single QFN/LFCSP pad."""
     at_str = f"{x:.4f} {y:.4f}" if angle == 0.0 else f"{x:.4f} {y:.4f} {angle}"
-    net_str = f"\n\t\t\t(net {net_num} \"{net_name}\")" if net_num > 0 else ""
+    net_str = f'\n\t\t\t(net {net_num} "{net_name}")' if net_num > 0 else ""
     return (
-        f"\t\t(pad \"{num}\" smd roundrect\n"
+        f'\t\t(pad "{num}" smd roundrect\n'
         f"\t\t\t(at {at_str})\n"
         f"\t\t\t(size {w} {h})\n"
-        f"\t\t\t(layers \"F.Cu\" \"F.Mask\" \"F.Paste\")\n"
+        f'\t\t\t(layers "F.Cu" "F.Mask" "F.Paste")\n'
         f"\t\t\t(roundrect_rratio 0.25){net_str}\n"
-        f"\t\t\t(uuid \"{next_uuid()}\")\n"
+        f'\t\t\t(uuid "{next_uuid()}")\n'
         f"\t\t)\n"
     )
 
 
-def make_lfcsp48(ref: str, value: str, x: float, y: float,
-                 pin_nets: dict) -> str:
+def make_lfcsp48(ref: str, value: str, x: float, y: float, pin_nets: dict) -> str:
     """Generate a LFCSP-48 (7×7 mm, 0.5 mm pitch) footprint block.
 
     Pin numbering follows ADI LFCSP convention: pin 1 at bottom-left,
@@ -481,37 +509,33 @@ def make_lfcsp48(ref: str, value: str, x: float, y: float,
     for i, ox in enumerate(_LFCSP48_OFFSETS):
         pin = i + 1
         nn, nm = pin_nets.get(pin, (0, ""))
-        pads_str += _lfcsp_pad(str(pin), ox, 4.0, nn, nm,
-                               w=0.30, h=0.65)
+        pads_str += _lfcsp_pad(str(pin), ox, 4.0, nn, nm, w=0.30, h=0.65)
     # Left side: pins 13-24, X=-4.0, Y top→bottom (decreasing from +2.75)
     for i, oy in enumerate(reversed(_LFCSP48_OFFSETS)):
         pin = 13 + i
         nn, nm = pin_nets.get(pin, (0, ""))
-        pads_str += _lfcsp_pad(str(pin), -4.0, oy, nn, nm,
-                               w=0.65, h=0.30)
+        pads_str += _lfcsp_pad(str(pin), -4.0, oy, nn, nm, w=0.65, h=0.30)
     # Top side: pins 25-36, Y=-4.0, X right→left (decreasing from +2.75)
     for i, ox in enumerate(reversed(_LFCSP48_OFFSETS)):
         pin = 25 + i
         nn, nm = pin_nets.get(pin, (0, ""))
-        pads_str += _lfcsp_pad(str(pin), ox, -4.0, nn, nm,
-                               w=0.30, h=0.65)
+        pads_str += _lfcsp_pad(str(pin), ox, -4.0, nn, nm, w=0.30, h=0.65)
     # Right side: pins 37-48, X=+4.0, Y bottom→top (increasing from -2.75)
     for i, oy in enumerate(_LFCSP48_OFFSETS):
         pin = 37 + i
         nn, nm = pin_nets.get(pin, (0, ""))
-        pads_str += _lfcsp_pad(str(pin), 4.0, oy, nn, nm,
-                               w=0.65, h=0.30)
+        pads_str += _lfcsp_pad(str(pin), 4.0, oy, nn, nm, w=0.65, h=0.30)
     # Exposed pad (EP): pin 49, GND, 5.65×5.65 mm
     nn_gnd, nm_gnd = pin_nets.get(49, (51, "GND"))
     pads_str += (
-        f"\t\t(pad \"49\" thru_hole roundrect\n"
+        f'\t\t(pad "49" thru_hole roundrect\n'
         f"\t\t\t(at 0 0)\n"
         f"\t\t\t(size 5.65 5.65)\n"
         f"\t\t\t(drill oval 0.5 0.5)\n"
-        f"\t\t\t(layers \"*.Cu\" \"*.Mask\")\n"
+        f'\t\t\t(layers "*.Cu" "*.Mask")\n'
         f"\t\t\t(roundrect_rratio 0.0)\n"
-        f"\t\t\t(net {nn_gnd} \"{nm_gnd}\")\n"
-        f"\t\t\t(uuid \"{next_uuid()}\")\n"
+        f'\t\t\t(net {nn_gnd} "{nm_gnd}")\n'
+        f'\t\t\t(uuid "{next_uuid()}")\n'
         f"\t\t)\n"
     )
     # Body outline on Fab, 3.5mm half-width
@@ -519,15 +543,15 @@ def make_lfcsp48(ref: str, value: str, x: float, y: float,
     fab_lines = (
         f"\t\t(fp_rect (start -3.5 -3.5) (end 3.5 3.5) "
         f"(stroke (width 0.1) (type solid)) (fill no) "
-        f"(layer \"F.Fab\") (uuid \"{next_uuid()}\"))\n"
+        f'(layer "F.Fab") (uuid "{next_uuid()}"))\n'
     )
     return (
-        f"\t(footprint \"QFN-48-1EP_7x7mm_P0.5mm_EP5.65x5.65mm\"\n"
-        f"\t\t(layer \"F.Cu\")\n"
-        f"\t\t(uuid \"{next_uuid()}\")\n"
+        f'\t(footprint "QFN-48-1EP_7x7mm_P0.5mm_EP5.65x5.65mm"\n'
+        f'\t\t(layer "F.Cu")\n'
+        f'\t\t(uuid "{next_uuid()}")\n'
         f"\t\t(at {x} {y})\n"
-        f"\t\t(descr \"LFCSP-48 (CP-48-3), 7x7mm, 0.5mm pitch — {value}\")\n"
-        f"\t\t(tags \"QFN LFCSP 48 7x7 EMI PHY\")\n"
+        f'\t\t(descr "LFCSP-48 (CP-48-3), 7x7mm, 0.5mm pitch — {value}")\n'
+        f'\t\t(tags "QFN LFCSP 48 7x7 EMI PHY")\n'
         f"{_prop('Reference', ref, 0, -5.0)}"
         f"{_prop('Value', value, 0, 5.0, layer='F.Fab')}"
         f"{_prop('Datasheet', '', 0, 0, layer='F.Fab', hide=True)}"
@@ -569,23 +593,21 @@ def make_eth_xfmr(ref: str, x: float, y: float, pin_nets: dict) -> str:
     for i, py in enumerate(ETH_XFMR_Y):
         pin = i + 1
         nn, nm = pin_nets.get(pin, (0, ""))
-        pads_str += _pad(str(pin), -2.5, py, nn, nm,
-                         size_x=1.20, size_y=0.60)
+        pads_str += _pad(str(pin), -2.5, py, nn, nm, size_x=1.20, size_y=0.60)
     # Right: pins 5-8 (line side)
     for i, py in enumerate(ETH_XFMR_Y):
         pin = i + 5
         nn, nm = pin_nets.get(pin, (0, ""))
-        pads_str += _pad(str(pin), 2.5, py, nn, nm,
-                         size_x=1.20, size_y=0.60)
+        pads_str += _pad(str(pin), 2.5, py, nn, nm, size_x=1.20, size_y=0.60)
 
     cyd = _soic_courtyard(cx_outer=3.8, cy_outer=2.3)
     return (
-        f"\t(footprint \"ETH_XFMR_8P_5x3.5mm\"\n"
-        f"\t\t(layer \"F.Cu\")\n"
-        f"\t\t(uuid \"{next_uuid()}\")\n"
+        f'\t(footprint "ETH_XFMR_8P_5x3.5mm"\n'
+        f'\t\t(layer "F.Cu")\n'
+        f'\t\t(uuid "{next_uuid()}")\n'
         f"\t\t(at {x} {y})\n"
-        f"\t\t(descr \"SMD Ethernet transformer 8-pad — Würth 749010012A\")\n"
-        f"\t\t(tags \"transformer Ethernet SMD magnetics 100BASE-TX\")\n"
+        f'\t\t(descr "SMD Ethernet transformer 8-pad — Würth 749010012A")\n'
+        f'\t\t(tags "transformer Ethernet SMD magnetics 100BASE-TX")\n'
         f"{_prop('Reference', ref, 0, -2.7)}"
         f"{_prop('Value', '749010012A', 0, 2.7, layer='F.Fab')}"
         f"{_prop('Datasheet', '', 0, 0, layer='F.Fab', hide=True)}"
@@ -603,8 +625,8 @@ def make_eth_xfmr(ref: str, x: float, y: float, pin_nets: dict) -> str:
 # Pad layout: 4 pads in a row, 1.25mm pitch, centred at origin
 # Pad size: 0.80 × 1.60 mm, type: smd rect
 
-def make_jst_gh4p(ref: str, value: str, x: float, y: float,
-                  pin_nets: dict) -> str:
+
+def make_jst_gh4p(ref: str, value: str, x: float, y: float, pin_nets: dict) -> str:
     """Generate JST GH 4-pin connector footprint (SM04B-GHS-TB).
 
     Args:
@@ -621,17 +643,16 @@ def make_jst_gh4p(ref: str, value: str, x: float, y: float,
     for i, px in enumerate(pad_xs):
         pin = i + 1
         nn, nm = pin_nets.get(pin, (0, ""))
-        pads_str += _pad_rect(str(pin), px, 0.0, nn, nm,
-                               size_x=0.80, size_y=1.60)
+        pads_str += _pad_rect(str(pin), px, 0.0, nn, nm, size_x=0.80, size_y=1.60)
 
     cyd = _soic_courtyard(cx_outer=2.8, cy_outer=1.5)
     return (
-        f"\t(footprint \"JST_GH_4P\"\n"
-        f"\t\t(layer \"F.Cu\")\n"
-        f"\t\t(uuid \"{next_uuid()}\")\n"
+        f'\t(footprint "JST_GH_4P"\n'
+        f'\t\t(layer "F.Cu")\n'
+        f'\t\t(uuid "{next_uuid()}")\n'
         f"\t\t(at {x} {y})\n"
-        f"\t\t(descr \"JST GH 4-pin SMD connector, 1.25mm pitch — SM04B-GHS-TB\")\n"
-        f"\t\t(tags \"JST GH 4P Ethernet harness\")\n"
+        f'\t\t(descr "JST GH 4-pin SMD connector, 1.25mm pitch — SM04B-GHS-TB")\n'
+        f'\t\t(tags "JST GH 4P Ethernet harness")\n'
         f"{_prop('Reference', ref, 0, -1.8, size=0.8)}"
         f"{_prop('Value', value, 0, 1.8, layer='F.Fab', size=0.8)}"
         f"{_prop('Datasheet', '', 0, 0, layer='F.Fab', hide=True)}"
@@ -649,6 +670,7 @@ def make_jst_gh4p(ref: str, value: str, x: float, y: float,
 # Package: Bourns SRF2012, 2.0×1.2mm body, 4 terminals (A1/A2 left, B1/B2 right)
 # Pad centres: X=±1.65mm, Y=±0.35mm; pad size: 0.90×0.50mm
 
+
 def make_srf2012(ref: str, x: float, y: float, pin_nets: dict) -> str:
     """Generate SRF2012-100Y 4-terminal common-mode choke footprint.
 
@@ -663,22 +685,20 @@ def make_srf2012(ref: str, x: float, y: float, pin_nets: dict) -> str:
     Returns:
         Complete KiCad PCB footprint block string.
     """
-    layout = [(-1.65, -0.35, 1), (-1.65, 0.35, 2),
-              (1.65, -0.35, 3), (1.65, 0.35, 4)]
+    layout = [(-1.65, -0.35, 1), (-1.65, 0.35, 2), (1.65, -0.35, 3), (1.65, 0.35, 4)]
     pads_str = ""
     for px, py, pin in layout:
         nn, nm = pin_nets.get(pin, (0, ""))
-        pads_str += _pad(str(pin), px, py, nn, nm,
-                         size_x=0.90, size_y=0.50)
+        pads_str += _pad(str(pin), px, py, nn, nm, size_x=0.90, size_y=0.50)
 
     cyd = _soic_courtyard(cx_outer=2.4, cy_outer=1.0)
     return (
-        f"\t(footprint \"Bourns_SRF2012_4T\"\n"
-        f"\t\t(layer \"F.Cu\")\n"
-        f"\t\t(uuid \"{next_uuid()}\")\n"
+        f'\t(footprint "Bourns_SRF2012_4T"\n'
+        f'\t\t(layer "F.Cu")\n'
+        f'\t\t(uuid "{next_uuid()}")\n'
         f"\t\t(at {x} {y})\n"
-        f"\t\t(descr \"Bourns SRF2012-100Y common-mode choke, 4-terminal 2012\")\n"
-        f"\t\t(tags \"CMC common-mode choke EMI filter 2012\")\n"
+        f'\t\t(descr "Bourns SRF2012-100Y common-mode choke, 4-terminal 2012")\n'
+        f'\t\t(tags "CMC common-mode choke EMI filter 2012")\n'
         f"{_prop('Reference', ref, 0, -1.2, size=0.6)}"
         f"{_prop('Value', 'SRF2012-100Y', 0, 1.2, layer='F.Fab', size=0.6)}"
         f"\t\t(attr smd)\n"
@@ -694,6 +714,7 @@ def make_srf2012(ref: str, x: float, y: float, pin_nets: dict) -> str:
 # ---------------------------------------------------------------------------
 # Package: SOT-363 (SC-88), 6 leads, 3 per side, 0.65mm pitch
 # Pad size: 0.90×0.55mm; row spacing: 2.60mm; Y offsets: ±0.65, 0
+
 
 def make_prtr5v0u2x(ref: str, x: float, y: float, pin_nets: dict) -> str:
     """Generate PRTR5V0U2X SOT-363 TVS diode array footprint.
@@ -711,23 +732,26 @@ def make_prtr5v0u2x(ref: str, x: float, y: float, pin_nets: dict) -> str:
     """
     # Left side: 1,2,3 top to bottom; right side: 4,5,6 bottom to top
     layout = [
-        (-1.30, -0.65, 1), (-1.30, 0.0, 2), (-1.30, 0.65, 3),
-        (1.30, 0.65, 4),   (1.30, 0.0, 5),  (1.30, -0.65, 6),
+        (-1.30, -0.65, 1),
+        (-1.30, 0.0, 2),
+        (-1.30, 0.65, 3),
+        (1.30, 0.65, 4),
+        (1.30, 0.0, 5),
+        (1.30, -0.65, 6),
     ]
     pads_str = ""
     for px, py, pin in layout:
         nn, nm = pin_nets.get(pin, (0, ""))
-        pads_str += _pad(str(pin), px, py, nn, nm,
-                         size_x=0.90, size_y=0.55)
+        pads_str += _pad(str(pin), px, py, nn, nm, size_x=0.90, size_y=0.55)
 
     cyd = _soic_courtyard(cx_outer=2.1, cy_outer=1.3)
     return (
-        f"\t(footprint \"SOT-363_SC-88\"\n"
-        f"\t\t(layer \"F.Cu\")\n"
-        f"\t\t(uuid \"{next_uuid()}\")\n"
+        f'\t(footprint "SOT-363_SC-88"\n'
+        f'\t\t(layer "F.Cu")\n'
+        f'\t\t(uuid "{next_uuid()}")\n'
         f"\t\t(at {x} {y})\n"
-        f"\t\t(descr \"Nexperia PRTR5V0U2X — SOT-363 dual TVS protection array\")\n"
-        f"\t\t(tags \"TVS ESD SOT363 SC88 EMI protection\")\n"
+        f'\t\t(descr "Nexperia PRTR5V0U2X — SOT-363 dual TVS protection array")\n'
+        f'\t\t(tags "TVS ESD SOT363 SC88 EMI protection")\n'
         f"{_prop('Reference', ref, 0, -1.5, size=0.6)}"
         f"{_prop('Value', 'PRTR5V0U2X', 0, 1.5, layer='F.Fab', size=0.6)}"
         f"\t\t(attr smd)\n"
@@ -743,6 +767,7 @@ def make_prtr5v0u2x(ref: str, x: float, y: float, pin_nets: dict) -> str:
 # ---------------------------------------------------------------------------
 # Package: DO-214AC (SMA), body 4.4×2.7mm, lead pitch ~5.4mm
 # Pad size: 2.0×2.7mm, centres at X=±2.7mm
+
 
 def make_smaj33ca(ref: str, x: float, y: float, pin_nets: dict) -> str:
     """Generate SMAJ33CA DO-214AC (SMA) TVS diode footprint.
@@ -765,12 +790,12 @@ def make_smaj33ca(ref: str, x: float, y: float, pin_nets: dict) -> str:
 
     cyd = _soic_courtyard(cx_outer=4.0, cy_outer=2.0)
     return (
-        f"\t(footprint \"DO-214AC_SMA\"\n"
-        f"\t\t(layer \"F.Cu\")\n"
-        f"\t\t(uuid \"{next_uuid()}\")\n"
+        f'\t(footprint "DO-214AC_SMA"\n'
+        f'\t\t(layer "F.Cu")\n'
+        f'\t\t(uuid "{next_uuid()}")\n'
         f"\t\t(at {x} {y})\n"
-        f"\t\t(descr \"SMAJ33CA — DO-214AC (SMA) 33V TVS, bidirectional\")\n"
-        f"\t\t(tags \"TVS SMA DO-214AC 33V 1553 EMI\")\n"
+        f'\t\t(descr "SMAJ33CA — DO-214AC (SMA) 33V TVS, bidirectional")\n'
+        f'\t\t(tags "TVS SMA DO-214AC 33V 1553 EMI")\n'
         f"{_prop('Reference', ref, 0, -2.2, size=0.7)}"
         f"{_prop('Value', 'SMAJ33CA', 0, 2.2, layer='F.Fab', size=0.7)}"
         f"\t\t(attr smd)\n"
@@ -786,8 +811,8 @@ def make_smaj33ca(ref: str, x: float, y: float, pin_nets: dict) -> str:
 # ---------------------------------------------------------------------------
 # Pad size: 1.55×1.40mm, centres at X=±1.15mm (IPC-7351 0805 land pattern)
 
-def make_0805(ref: str, value: str, x: float, y: float,
-              pin_nets: dict) -> str:
+
+def make_0805(ref: str, value: str, x: float, y: float, pin_nets: dict) -> str:
     """Generate standard 0805 SMD two-pad footprint.
 
     Pins: 1 = pad A (left), 2 = pad B (right).
@@ -808,12 +833,12 @@ def make_0805(ref: str, value: str, x: float, y: float,
 
     cyd = _soic_courtyard(cx_outer=2.2, cy_outer=1.1)
     return (
-        f"\t(footprint \"C_0805_2012Metric\"\n"
-        f"\t\t(layer \"F.Cu\")\n"
-        f"\t\t(uuid \"{next_uuid()}\")\n"
+        f'\t(footprint "C_0805_2012Metric"\n'
+        f'\t\t(layer "F.Cu")\n'
+        f'\t\t(uuid "{next_uuid()}")\n'
         f"\t\t(at {x} {y})\n"
-        f"\t\t(descr \"0805 SMD — {value}\")\n"
-        f"\t\t(tags \"0805 SMD passive\")\n"
+        f'\t\t(descr "0805 SMD — {value}")\n'
+        f'\t\t(tags "0805 SMD passive")\n'
         f"{_prop('Reference', ref, 0, -1.5, size=0.6)}"
         f"{_prop('Value', value, 0, 1.5, layer='F.Fab', size=0.6)}"
         f"\t\t(attr smd)\n"
@@ -830,6 +855,7 @@ def make_0805(ref: str, value: str, x: float, y: float,
 # X2Y caps: 2 signal pads (ends) + 2 GND pads (sides)
 # Pad size: signal 0.60×0.55mm, GND 0.55×0.40mm
 # Centres: signal X=±0.8mm Y=0; GND X=0 Y=±0.4mm
+
 
 def make_x2y_cap(ref: str, x: float, y: float, pin_nets: dict) -> str:
     """Generate X2Y bridging capacitor footprint (4-terminal 0402-style).
@@ -857,12 +883,12 @@ def make_x2y_cap(ref: str, x: float, y: float, pin_nets: dict) -> str:
 
     cyd = _soic_courtyard(cx_outer=1.4, cy_outer=0.8)
     return (
-        f"\t(footprint \"X2Y_Cap_4T_0402\"\n"
-        f"\t\t(layer \"F.Cu\")\n"
-        f"\t\t(uuid \"{next_uuid()}\")\n"
+        f'\t(footprint "X2Y_Cap_4T_0402"\n'
+        f'\t\t(layer "F.Cu")\n'
+        f'\t\t(uuid "{next_uuid()}")\n'
         f"\t\t(at {x} {y})\n"
-        f"\t\t(descr \"X2Y bridging capacitor 4.7nF — signal-to-GND isolation bridge\")\n"
-        f"\t\t(tags \"X2Y cap 4-terminal isolation bridge EMI\")\n"
+        f'\t\t(descr "X2Y bridging capacitor 4.7nF — signal-to-GND isolation bridge")\n'
+        f'\t\t(tags "X2Y cap 4-terminal isolation bridge EMI")\n'
         f"{_prop('Reference', ref, 0, -1.1, size=0.5)}"
         f"{_prop('Value', '4.7nF X2Y', 0, 1.1, layer='F.Fab', size=0.5)}"
         f"\t\t(attr smd)\n"
@@ -876,6 +902,7 @@ def make_x2y_cap(ref: str, x: float, y: float, pin_nets: dict) -> str:
 # ---------------------------------------------------------------------------
 # Net list helpers
 # ---------------------------------------------------------------------------
+
 
 def insert_new_nets(text: str, new_nets: dict) -> str:
     """Insert new net declarations after the last existing (net N ...) line.
@@ -904,6 +931,7 @@ def insert_new_nets(text: str, new_nets: dict) -> str:
 # ---------------------------------------------------------------------------
 # UUID remapping
 # ---------------------------------------------------------------------------
+
 
 def remap_uuids(text: str) -> str:
     """Remap all original UUIDs to the Wash UUID namespace.
@@ -968,12 +996,12 @@ NEW_NETS_A2 = {
 #   1=VCC1  2=TXD  3=STB_N  4=RXD  5=NC  6=NC  7=NC  8=GND1
 #   9=CANH  10=CANL  11=NC  12=GND2  13=GND2  14=VCC2_OUT  15=NC  16=NC
 ISOW_NETS = {
-    1:  (9,  "+3V3"),
-    2:  (52, "MCAN0_TX"),
-    3:  (15, "CAN_STB"),
-    4:  (44, "MCAN0_RX"),
-    8:  (51, "GND"),
-    9:  (89, "CAN_H"),
+    1: (9, "+3V3"),
+    2: (52, "MCAN0_TX"),
+    3: (15, "CAN_STB"),
+    4: (44, "MCAN0_RX"),
+    8: (51, "GND"),
+    9: (89, "CAN_H"),
     10: (74, "CAN_L"),
     12: (83, "GND2_CAN"),
     13: (83, "GND2_CAN"),
@@ -988,14 +1016,14 @@ ISOW_NETS = {
 #   9=NC  10=NC  11=VDD2  12=GND2  13=GND2  14=A  15=B
 #   16=NC  17=NC  18=GND2  19=GND2  20=VDD2
 ADM_NETS = {
-    1:  (9,  "+3V3"),
-    2:  (51, "GND"),
-    3:  (63, "RS485_TX"),
-    4:  (65, "RS485_DE"),
-    5:  (65, "RS485_DE"),    # RE_N tied to DE for half-duplex
-    6:  (41, "RS485_RX"),
-    7:  (51, "GND"),
-    8:  (51, "GND"),
+    1: (9, "+3V3"),
+    2: (51, "GND"),
+    3: (63, "RS485_TX"),
+    4: (65, "RS485_DE"),
+    5: (65, "RS485_DE"),  # RE_N tied to DE for half-duplex
+    6: (41, "RS485_RX"),
+    7: (51, "GND"),
+    8: (51, "GND"),
     11: (86, "VCC2_RS485"),
     12: (85, "GND2_RS485"),
     13: (85, "GND2_RS485"),
@@ -1021,21 +1049,21 @@ ADM_NETS = {
 #                GND, GND, GND
 ADIN_NETS = {
     # Bottom: MDI signals
-    1:  (91, "ETH_TXP"),
-    2:  (92, "ETH_TXN"),
-    3:  (51, "GND"),
-    4:  (93, "ETH_RXP"),
-    5:  (94, "ETH_RXN"),
-    6:  (51, "GND"),
-    7:  (88, "VCC2_ETH"),
-    8:  (88, "VCC2_ETH"),
-    9:  (88, "VCC2_ETH"),
+    1: (91, "ETH_TXP"),
+    2: (92, "ETH_TXN"),
+    3: (51, "GND"),
+    4: (93, "ETH_RXP"),
+    5: (94, "ETH_RXN"),
+    6: (51, "GND"),
+    7: (88, "VCC2_ETH"),
+    8: (88, "VCC2_ETH"),
+    9: (88, "VCC2_ETH"),
     10: (51, "GND"),
     11: (51, "GND"),
     12: (51, "GND"),
     # Left: control signals
     18: (14, "MDIO"),
-    19: (3,  "MDC"),
+    19: (3, "MDC"),
     20: (53, "PHY1_INTRN"),
     21: (87, "GND2_ETH"),
     22: (87, "GND2_ETH"),
@@ -1043,7 +1071,7 @@ ADIN_NETS = {
     25: (87, "GND2_ETH"),
     26: (36, "RMII0_TX_EN"),
     27: (23, "RMII0_TXD1"),
-    28: (2,  "RMII0_TXD0"),
+    28: (2, "RMII0_TXD0"),
     29: (19, "RMII0_REF_CLK"),
     30: (56, "RMII0_RXD0"),
     31: (20, "RMII0_RXD1"),
@@ -1068,43 +1096,43 @@ ADIN_NETS = {
 # TX isolator: MCU→PHY direction (input side 1, output side 2)
 #   Ch1=REF_CLK, Ch2=TXD0, Ch3=TXD1, Ch4=TX_EN, Ch5=MDC, Ch6=PHY1_RSTN
 ISO_TX_NETS = {
-    1:  (9,  "+3V3"),         # VCC1 (MCU domain 3.3V)
-    2:  (19, "RMII0_REF_CLK"),# A1 → REF_CLK in
-    3:  (2,  "RMII0_TXD0"),   # A2 → TXD0 in
-    4:  (23, "RMII0_TXD1"),   # A3 → TXD1 in
-    5:  (36, "RMII0_TX_EN"),  # A4 → TX_EN in
-    6:  (3,  "MDC"),           # A5 → MDC in
-    7:  (22, "PHY1_RSTN"),    # A6 → RSTN in
-    8:  (51, "GND"),           # GND1
-    9:  (87, "GND2_ETH"),     # GND2 (isolated ETH domain)
-    10: (22, "PHY1_RSTN"),    # B6 → RSTN out (to ADIN1300)
-    11: (3,  "MDC"),           # B5 → MDC out
+    1: (9, "+3V3"),  # VCC1 (MCU domain 3.3V)
+    2: (19, "RMII0_REF_CLK"),  # A1 → REF_CLK in
+    3: (2, "RMII0_TXD0"),  # A2 → TXD0 in
+    4: (23, "RMII0_TXD1"),  # A3 → TXD1 in
+    5: (36, "RMII0_TX_EN"),  # A4 → TX_EN in
+    6: (3, "MDC"),  # A5 → MDC in
+    7: (22, "PHY1_RSTN"),  # A6 → RSTN in
+    8: (51, "GND"),  # GND1
+    9: (87, "GND2_ETH"),  # GND2 (isolated ETH domain)
+    10: (22, "PHY1_RSTN"),  # B6 → RSTN out (to ADIN1300)
+    11: (3, "MDC"),  # B5 → MDC out
     12: (36, "RMII0_TX_EN"),  # B4 → TX_EN out
-    13: (23, "RMII0_TXD1"),   # B3 → TXD1 out
-    14: (2,  "RMII0_TXD0"),   # B2 → TXD0 out
-    15: (19, "RMII0_REF_CLK"),# B1 → REF_CLK out
-    16: (88, "VCC2_ETH"),     # VCC2 (isolated ETH 3.3V)
+    13: (23, "RMII0_TXD1"),  # B3 → TXD1 out
+    14: (2, "RMII0_TXD0"),  # B2 → TXD0 out
+    15: (19, "RMII0_REF_CLK"),  # B1 → REF_CLK out
+    16: (88, "VCC2_ETH"),  # VCC2 (isolated ETH 3.3V)
 }
 
 # ISO7642FDWRR RX isolator (PHY→MCU direction)
 #   Ch1=RXD0, Ch2=RXD1, Ch3=CRS_DV, Ch4=RX_ER, Ch5=PHY1_INTRN, Ch6=MDIO
 ISO_RX_NETS = {
-    1:  (88, "VCC2_ETH"),     # VCC1 (isolated ETH domain)
-    2:  (56, "RMII0_RXD0"),   # A1 → RXD0 in
-    3:  (20, "RMII0_RXD1"),   # A2 → RXD1 in
-    4:  (10, "RMII0_CRS_DV"), # A3 → CRS_DV in
-    5:  (55, "RMII0_RX_ER"),  # A4 → RX_ER in
-    6:  (53, "PHY1_INTRN"),   # A5 → nINT in
-    7:  (14, "MDIO"),          # A6 → MDIO in
-    8:  (87, "GND2_ETH"),     # GND1 (isolated ETH domain)
-    9:  (51, "GND"),           # GND2 (MCU domain)
-    10: (14, "MDIO"),          # B6 → MDIO out
-    11: (53, "PHY1_INTRN"),   # B5 → nINT out
+    1: (88, "VCC2_ETH"),  # VCC1 (isolated ETH domain)
+    2: (56, "RMII0_RXD0"),  # A1 → RXD0 in
+    3: (20, "RMII0_RXD1"),  # A2 → RXD1 in
+    4: (10, "RMII0_CRS_DV"),  # A3 → CRS_DV in
+    5: (55, "RMII0_RX_ER"),  # A4 → RX_ER in
+    6: (53, "PHY1_INTRN"),  # A5 → nINT in
+    7: (14, "MDIO"),  # A6 → MDIO in
+    8: (87, "GND2_ETH"),  # GND1 (isolated ETH domain)
+    9: (51, "GND"),  # GND2 (MCU domain)
+    10: (14, "MDIO"),  # B6 → MDIO out
+    11: (53, "PHY1_INTRN"),  # B5 → nINT out
     12: (55, "RMII0_RX_ER"),  # B4 → RX_ER out
-    13: (10, "RMII0_CRS_DV"), # B3 → CRS_DV out
-    14: (20, "RMII0_RXD1"),   # B2 → RXD1 out
-    15: (56, "RMII0_RXD0"),   # B1 → RXD0 out
-    16: (9,  "+3V3"),           # VCC2 (MCU domain 3.3V)
+    13: (10, "RMII0_CRS_DV"),  # B3 → CRS_DV out
+    14: (20, "RMII0_RXD1"),  # B2 → RXD1 out
+    15: (56, "RMII0_RXD0"),  # B1 → RXD0 out
+    16: (9, "+3V3"),  # VCC2 (MCU domain 3.3V)
 }
 
 # Würth 749010012A transformer pin→net mapping
@@ -1133,10 +1161,10 @@ J_ETH_NETS = {
 # SRF2012 CMC for CAN bus field lines
 # A1/A2 = field-side terminal pair, B1/B2 = IC-side terminal pair
 CMC_CAN_NETS = {
-    1: (89, "CAN_H"),   # A1 → CAN H field
-    2: (74, "CAN_L"),   # A2 → CAN L field
-    3: (89, "CAN_H"),   # B1 → CAN H to connector
-    4: (74, "CAN_L"),   # B2 → CAN L to connector
+    1: (89, "CAN_H"),  # A1 → CAN H field
+    2: (74, "CAN_L"),  # A2 → CAN L field
+    3: (89, "CAN_H"),  # B1 → CAN H to connector
+    4: (74, "CAN_L"),  # B2 → CAN L to connector
 }
 
 # SRF2012 CMC for RS-485 bus field lines
@@ -1168,14 +1196,14 @@ TVS_RS485_NETS = {
 # Bidirectional, pins: 1=A, 2=K (anode toward bus, cathode to reference)
 TVS_1553_NETS = {
     1: (51, "GND"),
-    2: (0,  ""),
+    2: (0, ""),
 }
 
 # Würth 742792512 ferrite bead on power entry
 # 0805 2-terminal: pin 1 = power-in (+5V), pin 2 = power-out to board
 FB1_NETS = {
     1: (54, "+5V"),
-    2: (54, "+5V"),   # Same net, bead provides HF filtering
+    2: (54, "+5V"),  # Same net, bead provides HF filtering
 }
 
 # X2Y bridging cap CAN isolation boundary
@@ -1200,6 +1228,7 @@ X2Y_RS485_NETS = {
 # Main transform
 # ---------------------------------------------------------------------------
 
+
 def transform() -> None:
     """Execute all CAPE-A-1 → Wash PCB transformations."""
     print(f"Reading {SRC_PATH}")
@@ -1210,27 +1239,18 @@ def transform() -> None:
     # A. Title block update
     # -----------------------------------------------------------------------
     print("Updating title block …")
+    text = text.replace('(title "CAPE-A-1")', '(title "Wash")')
+    text = text.replace('(rev "M")', '(rev "A-STUB")')
     text = text.replace(
-        '(title "CAPE-A-1")',
-        '(title "Wash")'
-    )
-    text = text.replace(
-        '(rev "M")',
-        '(rev "A-STUB")'
-    )
-    text = text.replace(
-        "(comment 4 \"ICM-42688-P IMU | BMP388 Baro | SAM-M10Q GPS | "
+        '(comment 4 "ICM-42688-P IMU | BMP388 Baro | SAM-M10Q GPS | '
         "ATA6561 CAN FD | MAX3485E RS-485 | DS26LV31/32 1553 | "
-        "DP83825I x2 ETH | SLB9670 TPM2 | 6x GPIO expansion headers\")",
-        "(comment 4 \"ICM-42688-P IMU | BMP388 Baro | SAM-M10Q GPS | "
+        'DP83825I x2 ETH | SLB9670 TPM2 | 6x GPIO expansion headers")',
+        '(comment 4 "ICM-42688-P IMU | BMP388 Baro | SAM-M10Q GPS | '
         "ISOW1044BDFMR CAN FD (iso) | ADM2795EBRWZ RS-485 (iso) | "
         "DS26LV31/32 1553 | ADIN1300+ISO7642 ETH (iso) | SLB9670 TPM2 | "
-        "EMI: SRF2012 CMC | PRTR5V0U2X TVS | SMAJ33CA 1553 | 742792512 FB\")"
+        'EMI: SRF2012 CMC | PRTR5V0U2X TVS | SMAJ33CA 1553 | 742792512 FB")',
     )
-    text = text.replace(
-        '(date "2026")',
-        '(date "2026-06-04")'
-    )
+    text = text.replace('(date "2026")', '(date "2026-06-04")')
 
     # -----------------------------------------------------------------------
     # B. Add new net declarations
@@ -1271,11 +1291,11 @@ def transform() -> None:
     # -----------------------------------------------------------------------
     print("Adding new Ethernet PHY stack …")
     new_fps = (
-        make_soic16w("U-ISO-TX", "ISO7642FDWRR", 133.0, 103.0, ISO_TX_NETS) +
-        make_lfcsp48("ETH-PHY", "ADIN1300BCPZ", 143.0, 103.0, ADIN_NETS) +
-        make_soic16w("U-ISO-RX", "ISO7642FDWRR", 154.0, 103.0, ISO_RX_NETS) +
-        make_eth_xfmr("T-ETH", 160.0, 103.0, ETH_XFMR_NETS) +
-        make_jst_gh4p("J-ETH", "JST-GH-4P-ETH", 165.0, 103.0, J_ETH_NETS)
+        make_soic16w("U-ISO-TX", "ISO7642FDWRR", 133.0, 103.0, ISO_TX_NETS)
+        + make_lfcsp48("ETH-PHY", "ADIN1300BCPZ", 143.0, 103.0, ADIN_NETS)
+        + make_soic16w("U-ISO-RX", "ISO7642FDWRR", 154.0, 103.0, ISO_RX_NETS)
+        + make_eth_xfmr("T-ETH", 160.0, 103.0, ETH_XFMR_NETS)
+        + make_jst_gh4p("J-ETH", "JST-GH-4P-ETH", 165.0, 103.0, J_ETH_NETS)
     )
 
     # -----------------------------------------------------------------------
@@ -1283,14 +1303,14 @@ def transform() -> None:
     # -----------------------------------------------------------------------
     print("Adding EMI protection components …")
     new_fps += (
-        make_srf2012("CMC-CAN",   127.5, 96.5,  CMC_CAN_NETS) +
-        make_prtr5v0u2x("TVS-CAN",  131.0, 96.5,  TVS_CAN_NETS) +
-        make_srf2012("CMC-RS485",  127.5, 99.5,  CMC_RS485_NETS) +
-        make_prtr5v0u2x("TVS-RS485", 131.0, 99.5,  TVS_RS485_NETS) +
-        make_smaj33ca("TVS-1553",  149.0, 119.0, TVS_1553_NETS) +
-        make_0805("FB1", "742792512", 128.0, 122.0, FB1_NETS) +
-        make_x2y_cap("X2Y-CAN",   132.0, 113.5, X2Y_CAN_NETS) +
-        make_x2y_cap("X2Y-RS485", 132.0, 109.5, X2Y_RS485_NETS)
+        make_srf2012("CMC-CAN", 127.5, 96.5, CMC_CAN_NETS)
+        + make_prtr5v0u2x("TVS-CAN", 131.0, 96.5, TVS_CAN_NETS)
+        + make_srf2012("CMC-RS485", 127.5, 99.5, CMC_RS485_NETS)
+        + make_prtr5v0u2x("TVS-RS485", 131.0, 99.5, TVS_RS485_NETS)
+        + make_smaj33ca("TVS-1553", 149.0, 119.0, TVS_1553_NETS)
+        + make_0805("FB1", "742792512", 128.0, 122.0, FB1_NETS)
+        + make_x2y_cap("X2Y-CAN", 132.0, 113.5, X2Y_CAN_NETS)
+        + make_x2y_cap("X2Y-RS485", 132.0, 109.5, X2Y_RS485_NETS)
     )
 
     # Insert all new footprints before the final closing paren

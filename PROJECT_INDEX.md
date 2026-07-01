@@ -88,7 +88,8 @@ airframe/archive/FreeCAD-scripts/; see ARCHIVE_INDEX.md.)
 Headless Blender Python scripts for shell hollowing and STL generation.
 
 ```text
-add_structural_features.py        — Structural feature booleans on all 4 baked shells (Rev R1 2026-06-14): joint face bores, boss-pin bores, keel channel, ring-frame pockets, skid-rod bores; exports inner-profile CSVs
+add_structural_features.py        — Structural joint-feature booleans on head/middle/rear baked shells (Rev R1; MESH-01 root-cause fix 2026-06-30 = single batched manifold3d difference; cargo now DELEGATED to merge_cargo_interior.py): joint face bores, boss-pin bores, keel channel, ring-frame pockets, skid-rod bores; exports inner-profile CSVs
+merge_cargo_interior.py           — DEFINITIVE cargo-shell processor (Rev R1 2026-06-30): clean-source bake + one robust manifold3d pass merging interior-wall (duct) removal, clamshell door aperture + hinge retention blocks, head/cargo + cargo/middle joint features, wing spar/mortises/bosses (re-derived chord), nacelle-servo pads, Inara avionics bosses; watertight single body
 blender_edf_bore_and_petals.py    — EDF bore + nozzle petal geometry
 blender_hollow_shells.py          — Centroid-inset 2mm shell hollowing (all 4 sections)
 blender_intake_cut.py             — Fuselage EDF intake cut

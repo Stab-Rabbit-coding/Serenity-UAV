@@ -30,6 +30,7 @@
 # ============================================================
 
 import sys
+
 import numpy as np
 
 try:
@@ -49,8 +50,8 @@ HEAD_STL = "airframe/stls/fuselage/head_shell24_2mm_repaired.stl"
 # ToF STARBOARD bump, laser on CL between them; all bores NORMAL to the
 # flat.  Positions are part-local SCAD [x, y, z]; keep in sync with
 # bow_sensor_pod.scad CAM_POS / TOF_POS / LASER_POS.
-CAM_POS = (170.80, -282.68, 55.01)    # 10 mm camera lens, port bump
-TOF_POS = (154.33, -282.98, 55.61)    # TFmini-S ToF, starboard bump
+CAM_POS = (170.80, -282.68, 55.01)  # 10 mm camera lens, port bump
+TOF_POS = (154.33, -282.98, 55.61)  # TFmini-S ToF, starboard bump
 LASER_POS = (161.33, -281.94, 56.14)  # crosshair laser exit, on CL
 
 # Flat outward normal (bore axis, exterior-facing): tilt 40 deg about +X.
@@ -90,7 +91,8 @@ def cast(mesh, centre, axis):
     origin = centre + axis * 60.0
     direction = -axis
     locs, _, _ = mesh.ray.intersects_location(
-        ray_origins=origin[None, :], ray_directions=direction[None, :])
+        ray_origins=origin[None, :], ray_directions=direction[None, :]
+    )
     if len(locs) == 0:
         return np.empty((0,)), np.empty((0, 3))
     # Signed distance from centre measured along the interior direction:
@@ -102,12 +104,16 @@ def cast(mesh, centre, axis):
 
 def report_bore(name, mesh, centre_hull, axis, pocket_depth):
     print(f"\n── {name} ──")
-    print(f"   aperture centre (hull mm): "
-          f"({centre_hull[0]:+.2f}, {centre_hull[1]:+.2f}, {centre_hull[2]:+.2f})")
+    print(
+        f"   aperture centre (hull mm): "
+        f"({centre_hull[0]:+.2f}, {centre_hull[1]:+.2f}, {centre_hull[2]:+.2f})"
+    )
     signed, locs = cast(mesh, centre_hull, axis)
     if len(signed) < 2:
-        print(f"   *** FAIL: only {len(signed)} skin crossing(s) on bore axis — "
-              f"aperture does NOT land on a solid 2-wall skin.")
+        print(
+            f"   *** FAIL: only {len(signed)} skin crossing(s) on bore axis — "
+            f"aperture does NOT land on a solid 2-wall skin."
+        )
         return False
     # Exterior face = last crossing on the exterior side (signed<=~0),
     # interior face = first crossing on the interior side.
@@ -128,12 +134,18 @@ def report_bore(name, mesh, centre_hull, axis, pocket_depth):
         note = ""
 
     wall = int_s - ext_s
-    print(f"   exterior skin pierced at hull Y = {ext_p[1]:+.2f} mm  "
-          f"(SCAD-placed face Y {centre_hull[1]:+.2f} mm){note}")
-    print(f"   wall thickness along bore = {wall:.2f} mm "
-          f"({'OK >=2 mm' if wall >= 1.8 else 'THIN <2 mm — CHECK'})")
-    print(f"   aperture-centre offset from exterior skin = {offset:+.2f} mm "
-          f"({'on skin' if abs(offset) < 1.0 else 'OFF skin — adjust position'})")
+    print(
+        f"   exterior skin pierced at hull Y = {ext_p[1]:+.2f} mm  "
+        f"(SCAD-placed face Y {centre_hull[1]:+.2f} mm){note}"
+    )
+    print(
+        f"   wall thickness along bore = {wall:.2f} mm "
+        f"({'OK >=2 mm' if wall >= 1.8 else 'THIN <2 mm — CHECK'})"
+    )
+    print(
+        f"   aperture-centre offset from exterior skin = {offset:+.2f} mm "
+        f"({'on skin' if abs(offset) < 1.0 else 'OFF skin — adjust position'})"
+    )
 
     # Interior pocket: does pocket_depth stay inside the cavity?
     # Walk crossings deeper than the interior face; the next crossing is the
@@ -147,14 +159,20 @@ def report_bore(name, mesh, centre_hull, axis, pocket_depth):
         clearance = far - int_s
     pd_txt = f"{pocket_depth:.1f} mm"
     if clearance == float("inf"):
-        print(f"   interior pocket depth {pd_txt}: open cavity beyond inner "
-              f"face (no far wall on axis) — OK")
+        print(
+            f"   interior pocket depth {pd_txt}: open cavity beyond inner "
+            f"face (no far wall on axis) — OK"
+        )
     elif clearance >= pocket_depth:
-        print(f"   interior pocket depth {pd_txt}: cavity clearance "
-              f"{clearance:.1f} mm to far wall — OK")
+        print(
+            f"   interior pocket depth {pd_txt}: cavity clearance "
+            f"{clearance:.1f} mm to far wall — OK"
+        )
     else:
-        print(f"   *** WARN: interior pocket {pd_txt} exceeds {clearance:.1f} mm "
-              f"cavity clearance — pocket would breach far interior feature.")
+        print(
+            f"   *** WARN: interior pocket {pd_txt} exceeds {clearance:.1f} mm "
+            f"cavity clearance — pocket would breach far interior feature."
+        )
     ok = (wall >= 1.8) and (abs(offset) < 1.5)
     print(f"   verdict: {'PASS' if ok else 'REVIEW'}")
     return ok
@@ -164,8 +182,10 @@ def main():
     print("Loading baked head shell:", HEAD_STL)
     mesh = trimesh.load(HEAD_STL, process=False)
     lo, hi = mesh.bounds
-    print(f"   hull extents  X {lo[0]:+.1f}..{hi[0]:+.1f}  "
-          f"Y {lo[1]:+.1f}..{hi[1]:+.1f}  Z {lo[2]:+.1f}..{hi[2]:+.1f} mm")
+    print(
+        f"   hull extents  X {lo[0]:+.1f}..{hi[0]:+.1f}  "
+        f"Y {lo[1]:+.1f}..{hi[1]:+.1f}  Z {lo[2]:+.1f}..{hi[2]:+.1f} mm"
+    )
     print(f"   watertight={mesh.is_watertight}  tris={len(mesh.faces)}")
 
     cam = local_to_hull(*CAM_POS)
@@ -174,12 +194,17 @@ def main():
 
     # All three bores are normal to the 40 deg flat.
     results = []
-    results.append(report_bore("Camera (PORT bump) — 10 mm lens", mesh, cam,
-                               FLAT_N, CAM_BODY_D))
-    results.append(report_bore("ToF (STARBOARD bump) — TFmini-S", mesh, tof,
-                               FLAT_N, TOF_BODY_D))
-    results.append(report_bore("Laser (CL) — 6 mm exit, normal to flat", mesh,
-                               las, FLAT_N, LASER_BORE_L))
+    results.append(
+        report_bore("Camera (PORT bump) — 10 mm lens", mesh, cam, FLAT_N, CAM_BODY_D)
+    )
+    results.append(
+        report_bore("ToF (STARBOARD bump) — TFmini-S", mesh, tof, FLAT_N, TOF_BODY_D)
+    )
+    results.append(
+        report_bore(
+            "Laser (CL) — 6 mm exit, normal to flat", mesh, las, FLAT_N, LASER_BORE_L
+        )
+    )
 
     # Aperture-row fit across the 26.4 mm flat width (hull X).
     print("\n── aperture-row fit on the 40 deg flat (hull X) ──")
@@ -193,8 +218,10 @@ def main():
     for (n1, a1, b1), (n2, a2, b2) in zip(spans, spans[1:]):
         gap = a2 - b1
         flag = "OK" if gap >= -0.3 else f"OVERLAP {-gap:.1f} mm"
-        print(f"   {n1:>6} [{a1:+.1f}..{b1:+.1f}] | {n2:<6} [{a2:+.1f}..{b2:+.1f}]"
-              f"  gap {gap:+.1f} mm  {flag}")
+        print(
+            f"   {n1:>6} [{a1:+.1f}..{b1:+.1f}] | {n2:<6} [{a2:+.1f}..{b2:+.1f}]"
+            f"  gap {gap:+.1f} mm  {flag}"
+        )
     row_lo = min(s[1] for s in spans)
     row_hi = max(s[2] for s in spans)
     flat_lo, flat_hi = FLAT_CENTER_X - half, FLAT_CENTER_X + half

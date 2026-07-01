@@ -80,8 +80,8 @@ import trimesh
 # ---------------------------------------------------------------------------
 # Mating constants — keep in sync with generate_cargo_doors.py
 # ---------------------------------------------------------------------------
-BAY_Y_FWD = 2.0       # mm — fwd edge of door bay (rod start)
-BAY_Y_AFT = 108.0     # mm — aft edge of door bay (rod end)
+BAY_Y_FWD = 2.0  # mm — fwd edge of door bay (rod start)
+BAY_Y_AFT = 108.0  # mm — aft edge of door bay (rod end)
 
 # Per-door rod axis (hull X, Z).  Verified against the baked door STLs.
 ROD_AXES = {
@@ -93,18 +93,18 @@ ROD_AXES = {
 #   stbd hinge X = -222.5 is OUTBOARD of CL (more negative) → block extends +X
 INBOARD_SIGN = {"port": -1.0, "stbd": +1.0}
 
-ROD_BORE_D = 3.3      # mm — Ø3.3 bore (3.0 CF rod + 0.15 mm/side clearance)
-GRUB_TAP_D = 2.5      # mm — M3 grub-screw tap-drill (coarse, pitch 0.5)
-GRUB_DEPTH = 4.0      # mm — tap depth below the block +Z face
+ROD_BORE_D = 3.3  # mm — Ø3.3 bore (3.0 CF rod + 0.15 mm/side clearance)
+GRUB_TAP_D = 2.5  # mm — M3 grub-screw tap-drill (coarse, pitch 0.5)
+GRUB_DEPTH = 4.0  # mm — tap depth below the block +Z face
 
 # Block envelope
-BLK_LEN_Y = 12.0      # mm — Y length of each block (rod bearing length)
-BLK_W_X = 9.0         # mm — X width (bore wall + bonding flange, extends inboard)
-BLK_BASE_Z = 0.5      # mm — block base Z (overlaps belly skin for boolean fusion)
-BLK_WALL_TOP = 2.5    # mm — material above the bore for the grub-screw boss
-GAP_TO_BAY = 1.0      # mm — clearance between block inner Y face and bay edge
+BLK_LEN_Y = 12.0  # mm — Y length of each block (rod bearing length)
+BLK_W_X = 9.0  # mm — X width (bore wall + bonding flange, extends inboard)
+BLK_BASE_Z = 0.5  # mm — block base Z (overlaps belly skin for boolean fusion)
+BLK_WALL_TOP = 2.5  # mm — material above the bore for the grub-screw boss
+GAP_TO_BAY = 1.0  # mm — clearance between block inner Y face and bay edge
 
-SECTIONS = 48         # cylinder facet count
+SECTIONS = 48  # cylinder facet count
 
 
 def _block(side, station):
@@ -115,16 +115,16 @@ def _block(side, station):
 
     # Y extent: block sits OUTSIDE the bay, abutting its edge with GAP_TO_BAY.
     if station == "fwd":
-        y_hi = BAY_Y_FWD - GAP_TO_BAY          # inner face just fwd of bay
+        y_hi = BAY_Y_FWD - GAP_TO_BAY  # inner face just fwd of bay
         y_lo = y_hi - BLK_LEN_Y
     else:
-        y_lo = BAY_Y_AFT + GAP_TO_BAY          # inner face just aft of bay
+        y_lo = BAY_Y_AFT + GAP_TO_BAY  # inner face just aft of bay
         y_hi = y_lo + BLK_LEN_Y
     y_cen = 0.5 * (y_lo + y_hi)
 
     # X extent: from the hinge axis outboard edge, extending INBOARD by BLK_W_X
     # (keeps the block over solid belly and clear of the door swing envelope).
-    x_outboard = hx - sgn * 1.0                 # 1 mm outboard of axis
+    x_outboard = hx - sgn * 1.0  # 1 mm outboard of axis
     x_inboard = hx + sgn * BLK_W_X
     x_lo, x_hi = sorted([x_outboard, x_inboard])
 
@@ -141,14 +141,20 @@ def _block(side, station):
 
     # Y-axis rod through-bore at (hx, hz); overshoot 1 mm each end for clean cut.
     bore = trimesh.creation.cylinder(
-        radius=ROD_BORE_D / 2.0, height=(y_hi - y_lo) + 2.0, sections=SECTIONS,
+        radius=ROD_BORE_D / 2.0,
+        height=(y_hi - y_lo) + 2.0,
+        sections=SECTIONS,
     )
-    bore.apply_transform(trimesh.transformations.rotation_matrix(np.pi / 2.0, [1, 0, 0]))
+    bore.apply_transform(
+        trimesh.transformations.rotation_matrix(np.pi / 2.0, [1, 0, 0])
+    )
     bore.apply_transform(trimesh.transformations.translation_matrix([hx, y_cen, hz]))
 
     # M3 grub-screw tap from +Z face down onto the bore.
     grub = trimesh.creation.cylinder(
-        radius=GRUB_TAP_D / 2.0, height=GRUB_DEPTH + 0.5, sections=SECTIONS,
+        radius=GRUB_TAP_D / 2.0,
+        height=GRUB_DEPTH + 0.5,
+        sections=SECTIONS,
     )
     gz = z_hi - GRUB_DEPTH / 2.0 + 0.25
     grub.apply_transform(trimesh.transformations.translation_matrix([hx, y_cen, gz]))
@@ -168,17 +174,21 @@ def main():
         for station in ("fwd", "aft"):
             b = _block(side, station)
             bb = b.bounds
-            print(f"  {side:4s} {station:3s}: X {bb[0][0]:7.2f}..{bb[1][0]:7.2f}  "
-                  f"Y {bb[0][1]:7.2f}..{bb[1][1]:7.2f}  Z {bb[0][2]:6.2f}..{bb[1][2]:6.2f}  "
-                  f"watertight={b.is_watertight}")
+            print(
+                f"  {side:4s} {station:3s}: X {bb[0][0]:7.2f}..{bb[1][0]:7.2f}  "
+                f"Y {bb[0][1]:7.2f}..{bb[1][1]:7.2f}  Z {bb[0][2]:6.2f}..{bb[1][2]:6.2f}  "
+                f"watertight={b.is_watertight}"
+            )
             blocks.append(b)
 
     combined = trimesh.util.concatenate(blocks)
     combined.export(out)
     print("\n  rod axes: port (X=-117.6, Z=5.11), stbd (X=-222.5, Z=5.22)")
     print(f"  wrote {out}")
-    print(f"  total blocks={len(blocks)}  facets={len(combined.faces)}  "
-          f"bodies={len(combined.split(only_watertight=False))}")
+    print(
+        f"  total blocks={len(blocks)}  facets={len(combined.faces)}  "
+        f"bodies={len(combined.split(only_watertight=False))}"
+    )
 
 
 if __name__ == "__main__":

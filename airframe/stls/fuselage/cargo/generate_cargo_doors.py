@@ -97,44 +97,44 @@ from scipy.interpolate import griddata
 # Paths — resolved relative to this script file
 # ---------------------------------------------------------------------------
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-SHELL_STL  = os.path.join(SCRIPT_DIR, "cargo_sect_shell24_2mm_repaired.stl")
-OUT_DIR    = SCRIPT_DIR
+SHELL_STL = os.path.join(SCRIPT_DIR, "cargo_sect_shell24_2mm_repaired.stl")
+OUT_DIR = SCRIPT_DIR
 
 # ---------------------------------------------------------------------------
 # Hull-frame cargo shell geometry (from CLAUDE.md validated baked extents)
 #   Cargo_Shell: X -267.0..-72.7,  Y -71.5..+132.0,  Z 0.0..163.2  (mm)
 # ---------------------------------------------------------------------------
-X_SHELL_MIN = -267.0    # stbd extremity (hull -X)
-X_SHELL_MAX =  -72.7    # port extremity (hull +X)
-X_CL = (X_SHELL_MIN + X_SHELL_MAX) / 2.0   # ship lateral CL ≈ -169.85 mm
+X_SHELL_MIN = -267.0  # stbd extremity (hull -X)
+X_SHELL_MAX = -72.7  # port extremity (hull +X)
+X_CL = (X_SHELL_MIN + X_SHELL_MAX) / 2.0  # ship lateral CL ≈ -169.85 mm
 
 # Cargo bay opening: longitudinal span centred between leg attach points.
 # Landing-gear HULL_ATTACH_POS Y rows: 25 mm and 100 mm.  Bay spans Y=2..108.
-Y_BAY_LEN = 106.0       # mm — longitudinal door span
-Y_BAY_CEN  = 55.0       # mm — Y centre of bay opening
-Y_BAY_FWD  = Y_BAY_CEN - Y_BAY_LEN / 2.0   # =  2.0 mm
-Y_BAY_AFT  = Y_BAY_CEN + Y_BAY_LEN / 2.0   # = 108.0 mm
+Y_BAY_LEN = 106.0  # mm — longitudinal door span
+Y_BAY_CEN = 55.0  # mm — Y centre of bay opening
+Y_BAY_FWD = Y_BAY_CEN - Y_BAY_LEN / 2.0  # =  2.0 mm
+Y_BAY_AFT = Y_BAY_CEN + Y_BAY_LEN / 2.0  # = 108.0 mm
 
 # Fall-back exterior belly Z (used when interpolator misses a point)
 Z_BELLY_FALLBACK = 0.5  # mm
 
 # Wall thickness (door body, interior offset in +Z direction)
-WALL_T = 2.0            # mm
+WALL_T = 2.0  # mm
 
 # Grid resolution for belly-surface sampling
-GRID_DX = 3.0           # mm step in X
-GRID_DY = 3.0           # mm step in Y
+GRID_DX = 3.0  # mm step in X
+GRID_DY = 3.0  # mm step in Y
 
 # ---------------------------------------------------------------------------
 # Hinge knuckle parameters (axis along Y, barrel tangent to belly exterior)
 # ---------------------------------------------------------------------------
-PIN_D        = 3.0              # mm — CF rod OD
-PIN_CL       = 0.075            # mm — radial clearance per side
-PIN_BORE_R   = PIN_D / 2.0 + PIN_CL    # 1.575 mm bore radius
-KNUCKLE_OD   = 6.0              # mm
-KNUCKLE_R    = KNUCKLE_OD / 2.0
-KNUCKLE_LEN  = 12.0             # mm — barrel axial length
-KNUCKLE_SECTIONS = 36           # polygon approximation
+PIN_D = 3.0  # mm — CF rod OD
+PIN_CL = 0.075  # mm — radial clearance per side
+PIN_BORE_R = PIN_D / 2.0 + PIN_CL  # 1.575 mm bore radius
+KNUCKLE_OD = 6.0  # mm
+KNUCKLE_R = KNUCKLE_OD / 2.0
+KNUCKLE_LEN = 12.0  # mm — barrel axial length
+KNUCKLE_SECTIONS = 36  # polygon approximation
 
 # A real CF rod is rigid and straight, so all 4 knuckles on one door MUST
 # share one constant (X, Z) — only Y may vary along the hinge line.  But the
@@ -146,15 +146,15 @@ KNUCKLE_SECTIONS = 36           # polygon approximation
 # at that knuckle's actual Y, regardless of the local mismatch.  Without
 # this, knuckles whose local panel Z differs from the chosen hinge Z by more
 # than KNUCKLE_R simply float, disconnected from the rest of the door solid.
-GUSSET_DEPTH = 6.0              # mm — inboard reach into the panel from the hinge edge
-GUSSET_PAD   = 0.5              # mm — extra margin on the bridging box's Z span
+GUSSET_DEPTH = 6.0  # mm — inboard reach into the panel from the hinge edge
+GUSSET_PAD = 0.5  # mm — extra margin on the bridging box's Z span
 
 # Knuckle Y-positions: 4 per door, evenly spaced along that door's OWN
 # outboard hinge line.  Port and stbd hinges are independent piano hinges
 # (each door pinned to the fuselage on its own flank) — NOT interleaved onto
 # a shared pin, since the hinge lines are no longer coincident.
-_PITCH   = (Y_BAY_LEN - KNUCKLE_LEN) / 3.0          # ≈ 31.33 mm, 4 evenly spaced
-_Y_START = Y_BAY_FWD + KNUCKLE_LEN / 2.0            # first knuckle centre Y
+_PITCH = (Y_BAY_LEN - KNUCKLE_LEN) / 3.0  # ≈ 31.33 mm, 4 evenly spaced
+_Y_START = Y_BAY_FWD + KNUCKLE_LEN / 2.0  # first knuckle centre Y
 
 KNUCKLE_Y_PORT = [_Y_START + k * _PITCH for k in range(4)]
 KNUCKLE_Y_STBD = [_Y_START + k * _PITCH for k in range(4)]
@@ -179,6 +179,7 @@ KNUCKLE_Y_STBD = [_Y_START + k * _PITCH for k in range(4)]
 # ---------------------------------------------------------------------------
 # Helper: load shell and build belly-surface Z interpolator
 # ---------------------------------------------------------------------------
+
 
 def build_belly_interpolator(shell_stl: str, y_min: float, y_max: float):
     """
@@ -213,8 +214,8 @@ def build_belly_interpolator(shell_stl: str, y_min: float, y_max: float):
     """
     print(f"[belly] loading {shell_stl} …")
     shell = trimesh.load(shell_stl, process=False)
-    fc = shell.triangles_center    # (F, 3) — face centroids
-    fn = shell.face_normals        # (F, 3) — face normals
+    fc = shell.triangles_center  # (F, 3) — face centroids
+    fn = shell.face_normals  # (F, 3) — face normals
 
     # Select ventral-facing faces (normal pointing -Z, near bottom of shell)
     mask = (fn[:, 2] < -0.5) & (fc[:, 2] < 10.0)
@@ -224,16 +225,19 @@ def build_belly_interpolator(shell_stl: str, y_min: float, y_max: float):
 
         def belly_z(x2d, y2d):
             return np.full_like(x2d, Z_BELLY_FALLBACK, dtype=float)
+
         return belly_z, X_CL - 50.0, X_CL + 50.0
 
-    bx = belly[:, 0]   # X positions of belly face centroids
-    by = belly[:, 1]   # Y positions
-    bz = belly[:, 2]   # Z positions (exterior surface)
+    bx = belly[:, 0]  # X positions of belly face centroids
+    by = belly[:, 1]  # Y positions
+    bz = belly[:, 2]  # Z positions (exterior surface)
 
-    print(f"[belly] {mask.sum()} belly faces extracted "
-          f"X={bx.min():.1f}..{bx.max():.1f}  "
-          f"Y={by.min():.1f}..{by.max():.1f}  "
-          f"Z={bz.min():.2f}..{bz.max():.2f}")
+    print(
+        f"[belly] {mask.sum()} belly faces extracted "
+        f"X={bx.min():.1f}..{bx.max():.1f}  "
+        f"Y={by.min():.1f}..{by.max():.1f}  "
+        f"Z={bz.min():.2f}..{bz.max():.2f}"
+    )
 
     # The belly is doubly curved, so its detected edge is NOT a constant X
     # across Y — it wanders in/out by several mm row to row.  Taking the
@@ -255,18 +259,19 @@ def build_belly_interpolator(shell_stl: str, y_min: float, y_max: float):
             continue
         row_max_x.append(bx_bay[row_sel].max())
         row_min_x.append(bx_bay[row_sel].min())
-    x_min_bay = float(max(row_min_x))   # safe stbd hinge line
-    x_max_bay = float(min(row_max_x))   # safe port hinge line
-    print(f"[belly] safe belly-mesh X extent within bay Y={y_min:.1f}..{y_max:.1f} "
-          f"(worst-case across {len(row_max_x)} Y-rows, real data on every row): "
-          f"X={x_min_bay:.2f}..{x_max_bay:.2f}  (door grids/hinges use this, "
-          f"not the cargo-section bounding box)")
+    x_min_bay = float(max(row_min_x))  # safe stbd hinge line
+    x_max_bay = float(min(row_max_x))  # safe port hinge line
+    print(
+        f"[belly] safe belly-mesh X extent within bay Y={y_min:.1f}..{y_max:.1f} "
+        f"(worst-case across {len(row_max_x)} Y-rows, real data on every row): "
+        f"X={x_min_bay:.2f}..{x_max_bay:.2f}  (door grids/hinges use this, "
+        f"not the cargo-section bounding box)"
+    )
 
     def belly_z(x2d, y2d):
         """Interpolate exterior belly Z at 2-D arrays of (X, Y) positions."""
         pts = np.column_stack([x2d.ravel(), y2d.ravel()])
-        z = griddata((bx, by), bz, pts, method="linear",
-                     fill_value=Z_BELLY_FALLBACK)
+        z = griddata((bx, by), bz, pts, method="linear", fill_value=Z_BELLY_FALLBACK)
         return z.reshape(x2d.shape)
 
     return belly_z, x_min_bay, x_max_bay
@@ -276,11 +281,12 @@ def build_belly_interpolator(shell_stl: str, y_min: float, y_max: float):
 # centre of the belly never exceeds ~0.5 mm per GRID_DX/GRID_DY step (see
 # DESPIKE_MAX_STEP discussion below); anything bigger is the height-field
 # breaking down where the hull curves toward vertical, not real contour.
-DESPIKE_MAX_STEP = 1.0   # mm
+DESPIKE_MAX_STEP = 1.0  # mm
 
 
-def despike_grid(z: np.ndarray, max_step: float = DESPIKE_MAX_STEP,
-                 iterations: int = 3) -> np.ndarray:
+def despike_grid(
+    z: np.ndarray, max_step: float = DESPIKE_MAX_STEP, iterations: int = 3
+) -> np.ndarray:
     """
     Suppress height-field artifacts near the aft/outboard corner of the bay,
     where the cargo shell's belly curves so sharply toward the side wall and
@@ -316,8 +322,10 @@ def despike_grid(z: np.ndarray, max_step: float = DESPIKE_MAX_STEP,
 # Helper: build closed door panel mesh from belly Z surface grid
 # ---------------------------------------------------------------------------
 
-def build_panel_mesh(x_grid: np.ndarray, y_grid: np.ndarray,
-                     z_ext: np.ndarray, wall_t: float = WALL_T) -> trimesh.Trimesh:
+
+def build_panel_mesh(
+    x_grid: np.ndarray, y_grid: np.ndarray, z_ext: np.ndarray, wall_t: float = WALL_T
+) -> trimesh.Trimesh:
     """
     Construct a closed triangular mesh for one door panel half.
 
@@ -335,7 +343,7 @@ def build_panel_mesh(x_grid: np.ndarray, y_grid: np.ndarray,
     trimesh.Trimesh
     """
     M, N = len(x_grid), len(y_grid)
-    z_int = z_ext + wall_t    # interior Z (+Z / inward toward hull)
+    z_int = z_ext + wall_t  # interior Z (+Z / inward toward hull)
 
     # Exterior vertices index = i*N + j  (range 0 .. M*N-1)
     # Interior vertices index = M*N + i*N + j
@@ -349,8 +357,11 @@ def build_panel_mesh(x_grid: np.ndarray, y_grid: np.ndarray,
 
     verts = np.vstack([ev, iv])
 
-    def ei(i, j): return i * N + j           # exterior vertex index
-    def ii(i, j): return M * N + i * N + j   # interior vertex index
+    def ei(i, j):
+        return i * N + j  # exterior vertex index
+
+    def ii(i, j):
+        return M * N + i * N + j  # interior vertex index
 
     faces = []
 
@@ -361,17 +372,17 @@ def build_panel_mesh(x_grid: np.ndarray, y_grid: np.ndarray,
     # Reverse winding [a,c,b] to get -Z (exterior belly faces ventral):
     for i in range(M - 1):
         for j in range(N - 1):
-            a, b = ei(i, j),     ei(i + 1, j)
+            a, b = ei(i, j), ei(i + 1, j)
             c, d = ei(i + 1, j + 1), ei(i, j + 1)
-            faces.append([a, c, b])    # reversed → -Z
-            faces.append([a, d, c])    # reversed
+            faces.append([a, c, b])  # reversed → -Z
+            faces.append([a, d, c])  # reversed
 
     # Interior surface — normal → +Z (dorsal / inward) — forward winding
     for i in range(M - 1):
         for j in range(N - 1):
-            a, b = ii(i, j),     ii(i + 1, j)
+            a, b = ii(i, j), ii(i + 1, j)
             c, d = ii(i + 1, j + 1), ii(i, j + 1)
-            faces.append([a, b, c])    # forward → +Z
+            faces.append([a, b, c])  # forward → +Z
             faces.append([a, c, d])
 
     # X_MIN edge (i=0) — normal → -X (outboard or hinge edge)
@@ -379,14 +390,14 @@ def build_panel_mesh(x_grid: np.ndarray, y_grid: np.ndarray,
     # (a,b,c): b-a=(0,dy,0), c-a=(0,dy,wt) → cross=(dy·wt, 0, 0) → +X
     # Reverse to get -X:
     for j in range(N - 1):
-        a, b = ei(0, j),     ei(0, j + 1)
+        a, b = ei(0, j), ei(0, j + 1)
         c, d = ii(0, j + 1), ii(0, j)
         faces.append([a, c, b])
         faces.append([a, d, c])
 
     # X_MAX edge (i=M-1) — normal → +X (outboard or hinge edge) — forward winding
     for j in range(N - 1):
-        a, b = ei(M - 1, j),     ei(M - 1, j + 1)
+        a, b = ei(M - 1, j), ei(M - 1, j + 1)
         c, d = ii(M - 1, j + 1), ii(M - 1, j)
         faces.append([a, b, c])
         faces.append([a, c, d])
@@ -395,14 +406,14 @@ def build_panel_mesh(x_grid: np.ndarray, y_grid: np.ndarray,
     # Quad: ext(i,0), int(i,0), int(i+1,0), ext(i+1,0)
     # Need -Y normal: (d-a)=(dx,0,0), (c-a)=(dx,0,wt) → cross=(0,-dx·wt,0) → -Y ✓
     for i in range(M - 1):
-        a, b = ei(i, 0),     ei(i + 1, 0)
+        a, b = ei(i, 0), ei(i + 1, 0)
         c, d = ii(i + 1, 0), ii(i, 0)
         faces.append([a, b, c])
         faces.append([a, c, d])
 
     # Y_MAX edge (j=N-1) — normal → +Y (aft edge of bay) — reversed winding
     for i in range(M - 1):
-        a, b = ei(i, N - 1),     ei(i + 1, N - 1)
+        a, b = ei(i, N - 1), ei(i + 1, N - 1)
         c, d = ii(i + 1, N - 1), ii(i, N - 1)
         faces.append([a, c, b])
         faces.append([a, d, c])
@@ -417,6 +428,7 @@ def build_panel_mesh(x_grid: np.ndarray, y_grid: np.ndarray,
 # ---------------------------------------------------------------------------
 # Helper: build a single hinge knuckle (axis along Y)
 # ---------------------------------------------------------------------------
+
 
 def make_knuckle(x_centre: float, y_centre: float, z_centre: float) -> trimesh.Trimesh:
     """
@@ -446,14 +458,13 @@ def make_knuckle(x_centre: float, y_centre: float, z_centre: float) -> trimesh.T
     knuckle = trimesh.boolean.difference([barrel, bore], engine="manifold")
 
     # Translate to hinge-line position
-    knuckle.apply_transform(
-        tft.translation_matrix([x_centre, y_centre, z_centre])
-    )
+    knuckle.apply_transform(tft.translation_matrix([x_centre, y_centre, z_centre]))
     return knuckle
 
 
-def make_knuckle_gusset(hinge_x: float, y_centre: float, z_hinge: float,
-                        local_panel_z: float, side: str) -> trimesh.Trimesh:
+def make_knuckle_gusset(
+    hinge_x: float, y_centre: float, z_hinge: float, local_panel_z: float, side: str
+) -> trimesh.Trimesh:
     """
     Build a small bridging block that positively connects one knuckle
     (on the door's straight hinge axis, at z_hinge) to the door panel's
@@ -500,8 +511,10 @@ def make_knuckle_gusset(hinge_x: float, y_centre: float, z_hinge: float,
 # Door generators
 # ---------------------------------------------------------------------------
 
-def make_door(side: str, belly_z_fn, free_edge_x: float, hinge_x: float,
-              knuckle_y_list) -> trimesh.Trimesh:
+
+def make_door(
+    side: str, belly_z_fn, free_edge_x: float, hinge_x: float, knuckle_y_list
+) -> trimesh.Trimesh:
     """
     Build one clamshell door half in hull-frame coordinates.
 
@@ -538,8 +551,8 @@ def make_door(side: str, belly_z_fn, free_edge_x: float, hinge_x: float,
     x_grid = np.linspace(x_min, x_max, n_x)
     y_grid = np.linspace(Y_BAY_FWD, Y_BAY_AFT, n_y)
 
-    xg, yg = np.meshgrid(x_grid, y_grid, indexing="ij")   # shape (M, N)
-    z_ext  = belly_z_fn(xg, yg)                            # exterior belly Z
+    xg, yg = np.meshgrid(x_grid, y_grid, indexing="ij")  # shape (M, N)
+    z_ext = belly_z_fn(xg, yg)  # exterior belly Z
 
     # despike_grid() anchors its X-axis walk at row index 0 and propagates
     # outward, trusting that end as real data.  x_grid is always sorted
@@ -552,15 +565,19 @@ def make_door(side: str, belly_z_fn, free_edge_x: float, hinge_x: float,
     z_ext = despike_grid(z_for_despike)
     z_ext = z_ext if free_edge_at_low_x else z_ext[::-1, :]
 
-    print(f"[{side}] grid {xg.shape}  "
-          f"X={x_grid[0]:.1f}..{x_grid[-1]:.1f}  "
-          f"Y={y_grid[0]:.1f}..{y_grid[-1]:.1f}  "
-          f"Z_ext={z_ext.min():.2f}..{z_ext.max():.2f}")
+    print(
+        f"[{side}] grid {xg.shape}  "
+        f"X={x_grid[0]:.1f}..{x_grid[-1]:.1f}  "
+        f"Y={y_grid[0]:.1f}..{y_grid[-1]:.1f}  "
+        f"Z_ext={z_ext.min():.2f}..{z_ext.max():.2f}"
+    )
 
     # Build door panel mesh
     panel = build_panel_mesh(x_grid, y_grid, z_ext, wall_t=WALL_T)
-    print(f"[{side}] panel verts={len(panel.vertices)} "
-          f"faces={len(panel.faces)} watertight={panel.is_watertight}")
+    print(
+        f"[{side}] panel verts={len(panel.vertices)} "
+        f"faces={len(panel.faces)} watertight={panel.is_watertight}"
+    )
 
     # Hinge axis: a real CF rod is rigid and straight, so ALL knuckles on
     # this door share ONE (X, Z) — only Y varies.  X is hinge_x already;
@@ -570,9 +587,11 @@ def make_door(side: str, belly_z_fn, free_edge_x: float, hinge_x: float,
     edge_col = z_ext[-1, :] if free_edge_at_low_x else z_ext[0, :]
     local_panel_z_at_knuckles = np.interp(knuckle_y_list, y_grid, edge_col)
     z_hinge = float(local_panel_z_at_knuckles.mean()) + KNUCKLE_R
-    print(f"[{side}] straight hinge axis: X={hinge_x:.2f}  Z={z_hinge:.2f} mm  "
-          f"(local panel Z at knuckles: "
-          f"{np.array2string(local_panel_z_at_knuckles, precision=2)})")
+    print(
+        f"[{side}] straight hinge axis: X={hinge_x:.2f}  Z={z_hinge:.2f} mm  "
+        f"(local panel Z at knuckles: "
+        f"{np.array2string(local_panel_z_at_knuckles, precision=2)})"
+    )
 
     knuckles = [make_knuckle(hinge_x, yc, z_hinge) for yc in knuckle_y_list]
 
@@ -580,19 +599,22 @@ def make_door(side: str, belly_z_fn, free_edge_x: float, hinge_x: float,
     # must bond to is contoured — bridge the gap with a per-knuckle gusset
     # (see make_knuckle_gusset) so every knuckle is positively connected,
     # not just floating near the panel.
-    gussets = [make_knuckle_gusset(hinge_x, yc, z_hinge, lz, side)
-               for yc, lz in zip(knuckle_y_list, local_panel_z_at_knuckles)]
+    gussets = [
+        make_knuckle_gusset(hinge_x, yc, z_hinge, lz, side)
+        for yc, lz in zip(knuckle_y_list, local_panel_z_at_knuckles)
+    ]
 
     print(f"[{side}] unioning {len(knuckles)} knuckles + {len(gussets)} gussets …")
     try:
-        door = trimesh.boolean.union(
-            [panel] + knuckles + gussets, engine="manifold")
+        door = trimesh.boolean.union([panel] + knuckles + gussets, engine="manifold")
     except Exception as exc:
         print(f"[{side}] WARNING: union failed ({exc}), concatenating meshes")
         door = trimesh.util.concatenate([panel] + knuckles + gussets)
 
-    print(f"[{side}] door verts={len(door.vertices)} "
-          f"faces={len(door.faces)} watertight={door.is_watertight}")
+    print(
+        f"[{side}] door verts={len(door.vertices)} "
+        f"faces={len(door.faces)} watertight={door.is_watertight}"
+    )
     return door
 
 
@@ -600,43 +622,55 @@ def make_door(side: str, belly_z_fn, free_edge_x: float, hinge_x: float,
 # Save helper
 # ---------------------------------------------------------------------------
 
+
 def save(mesh: trimesh.Trimesh, name: str) -> None:
     """Export mesh to STL and print a summary."""
     path = os.path.join(OUT_DIR, name)
     mesh.export(path)
     b = mesh.bounds
     dims = b[1] - b[0]
-    print(f"[save] {name}: "
-          f"{dims[0]:.1f}×{dims[1]:.1f}×{dims[2]:.1f} mm  "
-          f"X={b[0, 0]:.2f}..{b[1, 0]:.2f}  "
-          f"Y={b[0, 1]:.2f}..{b[1, 1]:.2f}  "
-          f"Z={b[0, 2]:.2f}..{b[1, 2]:.2f}  "
-          f"faces={len(mesh.faces)}  watertight={mesh.is_watertight}")
+    print(
+        f"[save] {name}: "
+        f"{dims[0]:.1f}×{dims[1]:.1f}×{dims[2]:.1f} mm  "
+        f"X={b[0, 0]:.2f}..{b[1, 0]:.2f}  "
+        f"Y={b[0, 1]:.2f}..{b[1, 1]:.2f}  "
+        f"Z={b[0, 2]:.2f}..{b[1, 2]:.2f}  "
+        f"faces={len(mesh.faces)}  watertight={mesh.is_watertight}"
+    )
 
 
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
+
 def main() -> int:
     """Generate port and stbd clamshell door STLs in hull-frame coordinates."""
     if not os.path.isfile(SHELL_STL):
-        print(f"ERROR: hull-frame cargo shell STL not found: {SHELL_STL}",
-              file=sys.stderr)
+        print(
+            f"ERROR: hull-frame cargo shell STL not found: {SHELL_STL}", file=sys.stderr
+        )
         return 1
 
     print("=== Cargo clamshell door generation — Rev R1b (hull frame) ===")
     print("Hull-frame convention: X=+port, Y=+aft, Z=+dorsal")
-    print(f"Cargo shell bounding box: X={X_SHELL_MIN:.1f}..{X_SHELL_MAX:.1f}  "
-          f"Ship CL X_CL={X_CL:.2f} mm")
-    print(f"Bay span:     Y={Y_BAY_FWD:.1f}..{Y_BAY_AFT:.1f} mm "
-          f"(length={Y_BAY_LEN:.1f} mm)")
-    print(f"Knuckle bore radius = {PIN_BORE_R:.3f} mm  "
-          f"(3 mm CF rod + {PIN_CL*2:.2f} mm dia clearance)")
+    print(
+        f"Cargo shell bounding box: X={X_SHELL_MIN:.1f}..{X_SHELL_MAX:.1f}  "
+        f"Ship CL X_CL={X_CL:.2f} mm"
+    )
+    print(
+        f"Bay span:     Y={Y_BAY_FWD:.1f}..{Y_BAY_AFT:.1f} mm "
+        f"(length={Y_BAY_LEN:.1f} mm)"
+    )
+    print(
+        f"Knuckle bore radius = {PIN_BORE_R:.3f} mm  "
+        f"(3 mm CF rod + {PIN_CL*2:.2f} mm dia clearance)"
+    )
     print()
 
     belly_z, belly_x_min, belly_x_max = build_belly_interpolator(
-        SHELL_STL, Y_BAY_FWD, Y_BAY_AFT)
+        SHELL_STL, Y_BAY_FWD, Y_BAY_AFT
+    )
     print()
 
     # Hinge lines are the REAL detected edges of the belly mesh — port door
@@ -644,10 +678,16 @@ def main() -> int:
     # edges (both doors) meet at X_CL when closed.
     hinge_x_port = belly_x_max
     hinge_x_stbd = belly_x_min
-    print(f"Port hinge line: X={hinge_x_port:.2f} mm (outboard belly edge, NOT centreline)")
-    print(f"Stbd hinge line: X={hinge_x_stbd:.2f} mm (outboard belly edge, NOT centreline)")
-    print(f"Free edges meet at X_CL={X_CL:.2f} mm when closed; each door "
-          f"swings down/out 180 deg about its own outboard pin")
+    print(
+        f"Port hinge line: X={hinge_x_port:.2f} mm (outboard belly edge, NOT centreline)"
+    )
+    print(
+        f"Stbd hinge line: X={hinge_x_stbd:.2f} mm (outboard belly edge, NOT centreline)"
+    )
+    print(
+        f"Free edges meet at X_CL={X_CL:.2f} mm when closed; each door "
+        f"swings down/out 180 deg about its own outboard pin"
+    )
     print()
 
     port_door = make_door("port", belly_z, X_CL, hinge_x_port, KNUCKLE_Y_PORT)

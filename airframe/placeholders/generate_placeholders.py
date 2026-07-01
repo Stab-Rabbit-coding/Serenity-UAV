@@ -104,6 +104,7 @@ def _out(subdir, filename):
 # Geometric primitive builders — return list of (normal, v0, v1, v2) tuples
 # ---------------------------------------------------------------------------
 
+
 def _box(lx, ly, lz):
     """12-triangle solid box: (0,0,0) → (lx, ly, lz)."""
     x, y, z = lx, ly, lz
@@ -138,10 +139,10 @@ def _cyl(r, h, n=32):
     tris = []
     for k in range(n):
         k1 = (k + 1) % n
-        tris.append(_T(bc, vb[k1], vb[k]))          # bottom cap −Z
-        tris.append(_T(tc, vt[k], vt[k1]))          # top cap +Z
-        tris.append(_T(vb[k], vb[k1], vt[k1]))      # side quad T1
-        tris.append(_T(vb[k], vt[k1], vt[k]))       # side quad T2
+        tris.append(_T(bc, vb[k1], vb[k]))  # bottom cap −Z
+        tris.append(_T(tc, vt[k], vt[k1]))  # top cap +Z
+        tris.append(_T(vb[k], vb[k1], vt[k1]))  # side quad T1
+        tris.append(_T(vb[k], vt[k1], vt[k]))  # side quad T2
     return tris
 
 
@@ -157,7 +158,7 @@ def _tube(r_o, r_i, h, n=32):
         k1 = (k + 1) % n
         # Bottom annulus −Z
         tris.append(_T(ob[k], ib[k1], ob[k1]))
-        tris.append(_T(ob[k], ib[k],  ib[k1]))
+        tris.append(_T(ob[k], ib[k], ib[k1]))
         # Top annulus +Z
         tris.append(_T(ot[k], ot[k1], it[k1]))
         tris.append(_T(ot[k], it[k1], it[k]))
@@ -165,7 +166,7 @@ def _tube(r_o, r_i, h, n=32):
         tris.append(_T(ob[k], ob[k1], ot[k1]))
         tris.append(_T(ob[k], ot[k1], ot[k]))
         # Inner wall −R
-        tris.append(_T(ib[k], it[k],  it[k1]))
+        tris.append(_T(ib[k], it[k], it[k1]))
         tris.append(_T(ib[k], it[k1], ib[k1]))
     return tris
 
@@ -180,14 +181,14 @@ def _sector(r, h, angle_deg, n_seg=None):
     bc, tc = (0.0, 0.0, 0.0), (0.0, 0.0, h)
     tris = []
     for k in range(n_seg):
-        v0b = (vc[k][0],     vc[k][1],     0.0)
+        v0b = (vc[k][0], vc[k][1], 0.0)
         v1b = (vc[k + 1][0], vc[k + 1][1], 0.0)
-        v0t = (vc[k][0],     vc[k][1],     h)
+        v0t = (vc[k][0], vc[k][1], h)
         v1t = (vc[k + 1][0], vc[k + 1][1], h)
-        tris.append(_T(bc, v1b, v0b))          # bottom −Z
-        tris.append(_T(tc, v0t, v1t))          # top +Z
-        tris.append(_T(v0b, v1b, v1t))         # arc face T1
-        tris.append(_T(v0b, v1t, v0t))         # arc face T2
+        tris.append(_T(bc, v1b, v0b))  # bottom −Z
+        tris.append(_T(tc, v0t, v1t))  # top +Z
+        tris.append(_T(v0b, v1b, v1t))  # arc face T1
+        tris.append(_T(v0b, v1t, v0t))  # arc face T2
     # Flat radial face at angle = 0
     r0b = (r, 0.0, 0.0)
     r0t = (r, 0.0, h)
@@ -203,8 +204,10 @@ def _sector(r, h, angle_deg, n_seg=None):
 
 def _translate(tris, dx, dy, dz):
     """Shift all vertices by (dx, dy, dz)."""
+
     def _shift(v):
         return (v[0] + dx, v[1] + dy, v[2] + dz)
+
     return [(n, _shift(v0), _shift(v1), _shift(v2)) for (n, v0, v1, v2) in tris]
 
 
@@ -222,6 +225,7 @@ def _cat(*tri_lists):
 
 # ---- Propulsion ---------------------------------------------------------- #
 
+
 def gen_edf_50mm_6s():
     """
     50 mm 6S EDF unit — Surpass Hobby / XFly Galaxy X5 2627-3200KV style.
@@ -229,9 +233,9 @@ def gen_edf_50mm_6s():
     BOM: EDF-50-6S (×4, 2 per nacelle tandem).
     Ref [3]: XFly Galaxy X5 datasheet.
     """
-    duct = _tube(25.0, 22.5, 50.0, n=32)          # 50 mm OD, 45 mm bore
-    motor = _cyl(13.5, 28.0, n=24)                # 27 mm motor can
-    motor = _translate(motor, 0.0, 0.0, 11.0)     # centred in duct
+    duct = _tube(25.0, 22.5, 50.0, n=32)  # 50 mm OD, 45 mm bore
+    motor = _cyl(13.5, 28.0, n=24)  # 27 mm motor can
+    motor = _translate(motor, 0.0, 0.0, 11.0)  # centred in duct
     return _cat(duct, motor)
 
 
@@ -267,6 +271,7 @@ def gen_esc_80a():
 
 # ---- Servos -------------------------------------------------------------- #
 
+
 def gen_ds3218mg():
     """
     DS3218MG 25 kg·cm digital metal-gear servo.
@@ -295,6 +300,7 @@ def gen_sg90():
 
 # ---- Bearings ------------------------------------------------------------ #
 
+
 def gen_brg_mf104zz():
     """
     MF104ZZ flanged ball bearing 4 × 10 × 4 mm.
@@ -302,8 +308,8 @@ def gen_brg_mf104zz():
     BOM: BRG-MF104ZZ (×4, 2 per nacelle pivot housing).
     """
     race = _tube(5.0, 2.0, 4.0, n=24)
-    flange = _tube(5.75, 2.0, 0.5, n=24)          # slightly larger OD flange
-    flange = _translate(flange, 0.0, 0.0, -0.5)   # at bottom (Z=-0.5 to 0)
+    flange = _tube(5.75, 2.0, 0.5, n=24)  # slightly larger OD flange
+    flange = _translate(flange, 0.0, 0.0, -0.5)  # at bottom (Z=-0.5 to 0)
     return _cat(race, flange)
 
 
@@ -326,6 +332,7 @@ def gen_brg_6804():
 
 
 # ---- Structural / CF hardware -------------------------------------------- #
+
 
 def gen_cf_rod_4mm():
     """
@@ -377,6 +384,7 @@ def gen_ptfe_sleeve_4mm():
 
 # ---- Avionics PCBs -------------------------------------------------------- #
 
+
 def gen_pocketbeagle2():
     """
     PocketBeagle 2 Industrial AM6254 SBC — 56 × 35 mm PCB, ~8 mm assembled height.
@@ -385,7 +393,7 @@ def gen_pocketbeagle2():
     Ref [3]: BeagleBoard.org PocketBeagle 2 Industrial datasheet.
     """
     pcb = _box(56.0, 35.0, 1.6)
-    components = _box(50.0, 30.0, 6.4)            # component zone top side
+    components = _box(50.0, 30.0, 6.4)  # component zone top side
     components = _translate(components, 3.0, 2.5, 1.6)
     return _cat(pcb, components)
 
@@ -461,6 +469,7 @@ def gen_microsd():
 
 # ---- Power --------------------------------------------------------------- #
 
+
 def gen_lipo_6s_4000mah():
     """
     6S 4000 mAh 60C LiPo — primary hover / high-endurance flight battery.
@@ -471,7 +480,7 @@ def gen_lipo_6s_4000mah():
     """
     body = _box(138.0, 44.0, 36.0)
     xt60 = _box(12.0, 10.0, 8.0)
-    xt60 = _translate(xt60, 0.0, 17.0, 36.0)      # top centre
+    xt60 = _translate(xt60, 0.0, 17.0, 36.0)  # top centre
     return _cat(body, xt60)
 
 
@@ -528,6 +537,7 @@ def gen_shunt_1mohm():
 
 # ---- Cargo system -------------------------------------------------------- #
 
+
 def gen_n20_motor():
     """
     N20 300 RPM 6 V gear motor — cargo clamshell winch.
@@ -560,6 +570,7 @@ def gen_drv8833():
 
 
 # ---- Gears (M=1.0 resin-print or SDP-SI) ---------------------------------- #
+
 
 def gen_sector_m1_r22():
     """
@@ -609,6 +620,7 @@ def gen_bevel_housing():
 
 # ---- Miscellaneous hardware ---------------------------------------------- #
 
+
 def gen_pin_3x5():
     """
     Stainless roll pin 3 mm OD × 5 mm — iris nozzle petal hinge.
@@ -651,10 +663,10 @@ def gen_piano_wire_ring():
     Modelled as a torus-approximated ring: tube R_torus=14 mm, wire r=0.4 mm.
     BOM: PIANO-WIRE-0.8 (×1 stock; 3 bent rings total).
     """
-    R = 14.0         # link ring radius (mm)
-    r = 0.4          # wire cross-section radius
-    n_ring = 32      # segments around the ring
-    n_tube = 8       # segments around the wire cross-section
+    R = 14.0  # link ring radius (mm)
+    r = 0.4  # wire cross-section radius
+    n_ring = 32  # segments around the ring
+    n_tube = 8  # segments around the wire cross-section
     tris = []
     for i in range(n_ring):
         a0 = 2.0 * math.pi * i / n_ring
@@ -700,6 +712,7 @@ def gen_dyneema():
 
 # ---- Lighting ------------------------------------------------------------ #
 
+
 def gen_ws2812b_ring_50mm():
     """
     WS2812B addressable RGB LED ring — 50 mm dia nozzle backlight.
@@ -720,6 +733,7 @@ def gen_ws2812c_2020():
 
 
 # ---- Wiring -------------------------------------------------------------- #
+
 
 def gen_ptfe_conduit_3mm():
     """
@@ -770,6 +784,7 @@ def gen_wire_49mhz():
 
 # ---- GCS (Malcolm) components -------------------------------------------- #
 
+
 def gen_malcolm_enclosure():
     """
     Hammond 1455N1601 IP65 aluminium project box — Malcolm field enclosure.
@@ -781,7 +796,7 @@ def gen_malcolm_enclosure():
     # Fan cutout face (front panel detail): approximate as recessed cylinder
     fan = _cyl(20.0, 5.0, n=24)
     fan = _translate(fan, 72.5 - 20.0, 0.0, 32.5 - 20.0)
-    return _cat(body)             # solid body only (internal detail omitted)
+    return _cat(body)  # solid body only (internal detail omitted)
 
 
 def gen_pololu_bec_5v():
@@ -808,7 +823,7 @@ def gen_ant_915_omni():
     Approximate: 5 mm dia × 120 mm tall whip element.
     BOM: MAL-ANT-915-OMNI (×2: one SiK + one LoRa).
     """
-    base = _cyl(6.0, 15.0, n=16)         # SMA/RP-SMA base
+    base = _cyl(6.0, 15.0, n=16)  # SMA/RP-SMA base
     whip = _cyl(2.5, 105.0, n=12)
     whip = _translate(whip, 0.0, 0.0, 15.0)
     return _cat(base, whip)
@@ -822,10 +837,10 @@ def gen_ant_915_yagi():
     """
     boom = _box(1200.0, 20.0, 20.0)
     elements = _cat(
-        _translate(_cyl(1.5, 60.0, n=12),  100.0, 10.0, 20.0),
-        _translate(_cyl(1.5, 55.0, n=12),  350.0, 10.0, 20.0),
-        _translate(_cyl(1.5, 50.0, n=12),  600.0, 10.0, 20.0),
-        _translate(_cyl(1.5, 47.0, n=12),  850.0, 10.0, 20.0),
+        _translate(_cyl(1.5, 60.0, n=12), 100.0, 10.0, 20.0),
+        _translate(_cyl(1.5, 55.0, n=12), 350.0, 10.0, 20.0),
+        _translate(_cyl(1.5, 50.0, n=12), 600.0, 10.0, 20.0),
+        _translate(_cyl(1.5, 47.0, n=12), 850.0, 10.0, 20.0),
         _translate(_cyl(1.5, 45.0, n=12), 1100.0, 10.0, 20.0),
     )
     return _cat(boom, elements)
@@ -946,10 +961,10 @@ def gen_wire_post_49mhz():
     PETG post 12×12×9 mm; coil wound on post; modelled as square mast + small cylinder.
     BOM: POST-FWD-49, POST-AFT-49 (×2 total, forward + aft hull positions).
     """
-    base = _box(12.0, 12.0, 2.0)          # mount flange
-    mast = _box(8.0, 8.0, 7.0)            # mast
+    base = _box(12.0, 12.0, 2.0)  # mount flange
+    mast = _box(8.0, 8.0, 7.0)  # mast
     mast = _translate(mast, 2.0, 2.0, 2.0)
-    coil = _tube(4.0, 3.0, 12.0, n=16)   # base-loading coil bobbin
+    coil = _tube(4.0, 3.0, 12.0, n=16)  # base-loading coil bobbin
     coil = _translate(coil, 6.0 - 4.0, 6.0 - 4.0, 9.0)
     return _cat(base, mast, coil)
 
@@ -1225,16 +1240,16 @@ def gen_foam_middle():
     Ref [2]: Middle_Shell extents X:−258.5..−81.7, Y:+130.4..+203.6,
              Z:+1.4..+166.1 (mm); interior = extents − 2 mm wall/side.
     """
-    wall     = 30.0    # pillar width in X (mm)
-    w        = 173.0   # total ring width (mm)
-    d        = 69.0    # ring depth in Y (mm)
-    h        = 161.0   # total ring height in Z (mm)
-    crown    = 40.0    # top arch height (mm)
+    wall = 30.0  # pillar width in X (mm)
+    w = 173.0  # total ring width (mm)
+    d = 69.0  # ring depth in Y (mm)
+    h = 161.0  # total ring height in Z (mm)
+    crown = 40.0  # top arch height (mm)
     # Pillar height stops at Z = h − crown so the arch sits on top without
     # overlapping the pillar volume.  Coplanar faces at Z = 121 between
     # pillar tops and arch bottom are an accepted non-manifold condition for
     # this visualisation-only placeholder (not a print part).
-    pillar_h = h - crown   # 121 mm — pillar height below arch
+    pillar_h = h - crown  # 121 mm — pillar height below arch
     pillar_l = _box(wall, d, pillar_h)
     pillar_r = _translate(_box(wall, d, pillar_h), w - wall, 0.0, 0.0)
     arch = _translate(_box(w, d, crown), 0.0, 0.0, pillar_h)
@@ -1408,248 +1423,637 @@ def gen_void_far_fan_spur():
 
 _COMPONENTS = [
     # Propulsion
-    (gen_edf_50mm_6s,       "propulsion", "EDF_50mm_6S.stl",
-     "EDF-50-6S",           "50 mm 6S EDF — nacelle tandem (×4 aircraft)"),
-    (gen_edf_120mm_6s,      "propulsion", "EDF_120mm_6S_deferred.stl",
-     "EDF-120-6S",          "120 mm 6S rear EDF — Phase 11 deferred (×1)"),
-    (gen_esc_40a,            "propulsion", "ESC_40A_6S_BLHeli32.stl",
-     "ESC-40A-6S",          "40 A 6S BLHeli32 DSHOT600 ESC (×4)"),
-    (gen_esc_80a,            "propulsion", "ESC_80A_6S_BLHeli32_deferred.stl",
-     "ESC-80A-6S",          "80 A 6S BLHeli32 ESC — Phase 11 deferred (×1)"),
+    (
+        gen_edf_50mm_6s,
+        "propulsion",
+        "EDF_50mm_6S.stl",
+        "EDF-50-6S",
+        "50 mm 6S EDF — nacelle tandem (×4 aircraft)",
+    ),
+    (
+        gen_edf_120mm_6s,
+        "propulsion",
+        "EDF_120mm_6S_deferred.stl",
+        "EDF-120-6S",
+        "120 mm 6S rear EDF — Phase 11 deferred (×1)",
+    ),
+    (
+        gen_esc_40a,
+        "propulsion",
+        "ESC_40A_6S_BLHeli32.stl",
+        "ESC-40A-6S",
+        "40 A 6S BLHeli32 DSHOT600 ESC (×4)",
+    ),
+    (
+        gen_esc_80a,
+        "propulsion",
+        "ESC_80A_6S_BLHeli32_deferred.stl",
+        "ESC-80A-6S",
+        "80 A 6S BLHeli32 ESC — Phase 11 deferred (×1)",
+    ),
     # Servos
-    (gen_ds3218mg,           "servos",     "DS3218MG_25kgcm.stl",
-     "SERVO-TILT / MAL-GIMBAL-SERVO",
-     "DS3218MG digital metal-gear servo (×2 nacelle tilt + ×2 GCS gimbal)"),
-    (gen_sg90,               "servos",     "SG90_micro.stl",
-     "SERVO-CARGO / SERVO-REAR-NOZZLE",
-     "SG90 9 g micro servo (×2 cargo + ×1 rear nozzle)"),
+    (
+        gen_ds3218mg,
+        "servos",
+        "DS3218MG_25kgcm.stl",
+        "SERVO-TILT / MAL-GIMBAL-SERVO",
+        "DS3218MG digital metal-gear servo (×2 nacelle tilt + ×2 GCS gimbal)",
+    ),
+    (
+        gen_sg90,
+        "servos",
+        "SG90_micro.stl",
+        "SERVO-CARGO / SERVO-REAR-NOZZLE",
+        "SG90 9 g micro servo (×2 cargo + ×1 rear nozzle)",
+    ),
     # Bearings
-    (gen_brg_mf104zz,        "bearings",   "MF104ZZ_4x10x4mm.stl",
-     "BRG-MF104ZZ",
-     "MF104ZZ flanged bearing 4×10×4 mm (×4, 2 per nacelle pivot)"),
-    (gen_brg_mr63zz,         "bearings",   "MR63ZZ_3x6x2p5mm.stl",
-     "BRG-MR63ZZ",          "MR63ZZ miniature bearing 3×6×2.5 mm (×8 gear pinions)"),
-    (gen_brg_6804,           "bearings",   "B6804_20x32x7mm_GCS.stl",
-     "MAL-BRG-6804",        "6804-2RS thin bearing 20×32×7 mm (×1 GCS gimbal pan)"),
+    (
+        gen_brg_mf104zz,
+        "bearings",
+        "MF104ZZ_4x10x4mm.stl",
+        "BRG-MF104ZZ",
+        "MF104ZZ flanged bearing 4×10×4 mm (×4, 2 per nacelle pivot)",
+    ),
+    (
+        gen_brg_mr63zz,
+        "bearings",
+        "MR63ZZ_3x6x2p5mm.stl",
+        "BRG-MR63ZZ",
+        "MR63ZZ miniature bearing 3×6×2.5 mm (×8 gear pinions)",
+    ),
+    (
+        gen_brg_6804,
+        "bearings",
+        "B6804_20x32x7mm_GCS.stl",
+        "MAL-BRG-6804",
+        "6804-2RS thin bearing 20×32×7 mm (×1 GCS gimbal pan)",
+    ),
     # Structural / CF hardware
-    (gen_cf_rod_4mm,         "structural", "CF_rod_4mm_300mm_stock.stl",
-     "CF-ROD-4MM",
-     "4 mm solid CF pivot rod, 300 mm stock (×2 nacelles, cut 120 mm)"),
-    (gen_cf_rod_3mm,         "structural", "CF_rod_3mm_300mm_stock.stl",
-     "SHAFT-CF-3MM",         "3 mm solid CF gear shaft rod, 300 mm stock (×1)"),
-    (gen_cf_tube_12mm_spar,  "structural", "CF_tube_12mm_OD_1p5w_350mm_spar.stl",
-     "CF-TUBE-12MM",         "12 mm OD 1.5 mm wall CF tube — wing spar 350 mm (×2)"),
-    (gen_cf_bar_6x3,         "structural", "CF_bar_6x3mm_620mm_keel.stl",
-     "CF-BAR-6X3",
-     "6×3 mm CF flat bar 620 mm — hull keel + 49 MHz (Part 15 §15.235)"
-     " counterpoise (×1)"),
-    (gen_cf_plate_2mm,       "structural", "CF_plate_2mm_200x300mm.stl",
-     "CF-PLATE-2MM",         "2 mm CF sheet 200×300 mm — ring frame stock (×1 sheet)"),
-    (gen_ptfe_sleeve_4mm,    "structural", "PTFE_sleeve_4mm_OD_3mm_ID_52mm.stl",
-     "PTFE-SLEEVE-4MM",
-     "PTFE tube 4 mm OD × 3 mm ID × 52 mm — gear shaft sleeve (×1)"),
+    (
+        gen_cf_rod_4mm,
+        "structural",
+        "CF_rod_4mm_300mm_stock.stl",
+        "CF-ROD-4MM",
+        "4 mm solid CF pivot rod, 300 mm stock (×2 nacelles, cut 120 mm)",
+    ),
+    (
+        gen_cf_rod_3mm,
+        "structural",
+        "CF_rod_3mm_300mm_stock.stl",
+        "SHAFT-CF-3MM",
+        "3 mm solid CF gear shaft rod, 300 mm stock (×1)",
+    ),
+    (
+        gen_cf_tube_12mm_spar,
+        "structural",
+        "CF_tube_12mm_OD_1p5w_350mm_spar.stl",
+        "CF-TUBE-12MM",
+        "12 mm OD 1.5 mm wall CF tube — wing spar 350 mm (×2)",
+    ),
+    (
+        gen_cf_bar_6x3,
+        "structural",
+        "CF_bar_6x3mm_620mm_keel.stl",
+        "CF-BAR-6X3",
+        "6×3 mm CF flat bar 620 mm — hull keel + 49 MHz (Part 15 §15.235)"
+        " counterpoise (×1)",
+    ),
+    (
+        gen_cf_plate_2mm,
+        "structural",
+        "CF_plate_2mm_200x300mm.stl",
+        "CF-PLATE-2MM",
+        "2 mm CF sheet 200×300 mm — ring frame stock (×1 sheet)",
+    ),
+    (
+        gen_ptfe_sleeve_4mm,
+        "structural",
+        "PTFE_sleeve_4mm_OD_3mm_ID_52mm.stl",
+        "PTFE-SLEEVE-4MM",
+        "PTFE tube 4 mm OD × 3 mm ID × 52 mm — gear shaft sleeve (×1)",
+    ),
     # Avionics
-    (gen_pocketbeagle2,      "avionics",   "PocketBeagle2_Industrial_56x35mm.stl",
-     "PB2-I-FC / PB2-I-CN / MAL-PB2-I",
-     "PocketBeagle 2 Industrial AM6254 SBC 56×35 mm (×8 aircraft + ×1 GCS)"),
-    (gen_cape_a2,            "avionics",   "Cape_A2_PCB_55x35mm.stl",
-     "CAPE-A-2",             "Cape-A-2 Wash FC cape PCB 55×35 mm (×4 aircraft)"),
-    (gen_cape_b2,            "avionics",   "Cape_B2_PCB_55x35mm.stl",
-     "CAPE-B-2 / MAL-CAPE-B-2",
-     "Cape-B-2 Zoë Comms cape PCB 55×35 mm (×4 aircraft + ×1 GCS)"),
-    (gen_xcvr_49mhz2,        "avionics",   "XCVR_49MHZ2_PCB_55x35mm.stl",
-     "XCVR-49MHZ-2 / MAL-XCVR-49MHZ-2",
-     "XCVR-49MHZ-2 49 MHz (Part 15 §15.235) sub-module 55×35 mm"
-     " (×4 aircraft + ×1 GCS)"),
-    (gen_kaylee_pdb,         "avionics",   "Kaylee_PDB_90x65mm.stl",
-     "Kaylee",               "Kaylee Power Distribution Board 90×65 mm (×1)"),
-    (gen_microsd,            "avionics",   "microSD_64GB.stl",
-     "MICROSD-LOG / MAL-MICROSD-LOG",
-     "64 GB microSD — write-blocked flight log (×4 aircraft + ×1 GCS)"),
+    (
+        gen_pocketbeagle2,
+        "avionics",
+        "PocketBeagle2_Industrial_56x35mm.stl",
+        "PB2-I-FC / PB2-I-CN / MAL-PB2-I",
+        "PocketBeagle 2 Industrial AM6254 SBC 56×35 mm (×8 aircraft + ×1 GCS)",
+    ),
+    (
+        gen_cape_a2,
+        "avionics",
+        "Cape_A2_PCB_55x35mm.stl",
+        "CAPE-A-2",
+        "Cape-A-2 Wash FC cape PCB 55×35 mm (×4 aircraft)",
+    ),
+    (
+        gen_cape_b2,
+        "avionics",
+        "Cape_B2_PCB_55x35mm.stl",
+        "CAPE-B-2 / MAL-CAPE-B-2",
+        "Cape-B-2 Zoë Comms cape PCB 55×35 mm (×4 aircraft + ×1 GCS)",
+    ),
+    (
+        gen_xcvr_49mhz2,
+        "avionics",
+        "XCVR_49MHZ2_PCB_55x35mm.stl",
+        "XCVR-49MHZ-2 / MAL-XCVR-49MHZ-2",
+        "XCVR-49MHZ-2 49 MHz (Part 15 §15.235) sub-module 55×35 mm"
+        " (×4 aircraft + ×1 GCS)",
+    ),
+    (
+        gen_kaylee_pdb,
+        "avionics",
+        "Kaylee_PDB_90x65mm.stl",
+        "Kaylee",
+        "Kaylee Power Distribution Board 90×65 mm (×1)",
+    ),
+    (
+        gen_microsd,
+        "avionics",
+        "microSD_64GB.stl",
+        "MICROSD-LOG / MAL-MICROSD-LOG",
+        "64 GB microSD — write-blocked flight log (×4 aircraft + ×1 GCS)",
+    ),
     # Power
-    (gen_lipo_6s_4000mah,    "power",      "LiPo_6S_4000mAh_138x44x36mm.stl",
-     "BATT-6S-4000",         "6S 4000 mAh 60C LiPo — primary flight battery (×1)"),
-    (gen_lipo_6s_2800mah,    "power",      "LiPo_6S_2800mAh_115x35x35mm.stl",
-     "BATT-6S-2800",         "6S 2800 mAh LiPo — cargo-delivery battery (×1)"),
-    (gen_lipo_4s_10000mah_gcs, "power",    "LiPo_4S_10000mAh_175x64x38mm_GCS.stl",
-     "MAL-FIELD-BATTERY",    "4S 10000 mAh GCS field battery (×1)"),
-    (gen_fuse_maxi_150a,     "power",      "Fuse_MAXI_150A.stl",
-     "FUSE-MAIN-150A",       "150 A MAXI blade fuse — main battery bus (×1 on Kaylee)"),
-    (gen_fuse_mini_40a,      "power",      "Fuse_mini_40A.stl",
-     "FUSE-ESC-40A",         "40 A mini blade fuse — per-ESC branch (×4 on Kaylee)"),
-    (gen_shunt_1mohm,        "power",      "Shunt_CSS2H_2512K_1mohm.stl",
-     "SHUNT-1MOHM",          "Bourns CSS2H 1 mΩ Kelvin shunt, 2512 SMD (×5 on Kaylee)"),
+    (
+        gen_lipo_6s_4000mah,
+        "power",
+        "LiPo_6S_4000mAh_138x44x36mm.stl",
+        "BATT-6S-4000",
+        "6S 4000 mAh 60C LiPo — primary flight battery (×1)",
+    ),
+    (
+        gen_lipo_6s_2800mah,
+        "power",
+        "LiPo_6S_2800mAh_115x35x35mm.stl",
+        "BATT-6S-2800",
+        "6S 2800 mAh LiPo — cargo-delivery battery (×1)",
+    ),
+    (
+        gen_lipo_4s_10000mah_gcs,
+        "power",
+        "LiPo_4S_10000mAh_175x64x38mm_GCS.stl",
+        "MAL-FIELD-BATTERY",
+        "4S 10000 mAh GCS field battery (×1)",
+    ),
+    (
+        gen_fuse_maxi_150a,
+        "power",
+        "Fuse_MAXI_150A.stl",
+        "FUSE-MAIN-150A",
+        "150 A MAXI blade fuse — main battery bus (×1 on Kaylee)",
+    ),
+    (
+        gen_fuse_mini_40a,
+        "power",
+        "Fuse_mini_40A.stl",
+        "FUSE-ESC-40A",
+        "40 A mini blade fuse — per-ESC branch (×4 on Kaylee)",
+    ),
+    (
+        gen_shunt_1mohm,
+        "power",
+        "Shunt_CSS2H_2512K_1mohm.stl",
+        "SHUNT-1MOHM",
+        "Bourns CSS2H 1 mΩ Kelvin shunt, 2512 SMD (×5 on Kaylee)",
+    ),
     # Cargo
-    (gen_n20_motor,          "cargo",      "N20_motor_300RPM_6V.stl",
-     "N20-WINCH",            "N20 300 RPM gear motor — cargo winch (×1)"),
-    (gen_hx711,              "cargo",      "HX711_loadcell_ADC_breakout.stl",
-     "HX711-LC",             "HX711 24-bit load-cell ADC module (×1)"),
-    (gen_drv8833,            "cargo",      "DRV8833_Hbridge_breakout.stl",
-     "DRV8833-CARGO",        "DRV8833 dual H-bridge driver PCB 23×19 mm (×1)"),
-    (gen_dyneema,            "cargo",      "Dyneema_SK75_0p5mm_coil.stl",
-     "DYNEEMA-SK75",
-     "Dyneema SK75 0.5 mm braided line coil — winch spool (×1)"),
+    (
+        gen_n20_motor,
+        "cargo",
+        "N20_motor_300RPM_6V.stl",
+        "N20-WINCH",
+        "N20 300 RPM gear motor — cargo winch (×1)",
+    ),
+    (
+        gen_hx711,
+        "cargo",
+        "HX711_loadcell_ADC_breakout.stl",
+        "HX711-LC",
+        "HX711 24-bit load-cell ADC module (×1)",
+    ),
+    (
+        gen_drv8833,
+        "cargo",
+        "DRV8833_Hbridge_breakout.stl",
+        "DRV8833-CARGO",
+        "DRV8833 dual H-bridge driver PCB 23×19 mm (×1)",
+    ),
+    (
+        gen_dyneema,
+        "cargo",
+        "Dyneema_SK75_0p5mm_coil.stl",
+        "DYNEEMA-SK75",
+        "Dyneema SK75 0.5 mm braided line coil — winch spool (×1)",
+    ),
     # Gears
-    (gen_sector_m1_r22,      "gears",      "Sector_gear_M1_R22mm.stl",
-     "SECTOR-M1-R22",        "M=1.0 sector gear R=22 mm — fixed tilt bracket (×2)"),
-    (gen_pinion_m1_12t,      "gears",      "Pinion_M1_12T_R6mm.stl",
-     "PINION-A-M1-12T / CROWN-M1-12T",
-     "M=1.0 12T pinion / crown R=6 mm (×2 pinion-A + ×2 crown)"),
-    (gen_bevel_m1_14t,       "gears",      "Bevel_M1_14T_pair.stl",
-     "BEVEL-M1-14T",
-     "M=1.0 bevel pair N=14T 45° — 90° axis redirect (×4 gears = 2 pairs)"),
-    (gen_bevel_housing,      "gears",      "Bevel_housing_CF_PETG.stl",
-     "BEVEL-HOUSING",        "Bevel gear housing block CF-PETG 24×14×20 mm (×2)"),
+    (
+        gen_sector_m1_r22,
+        "gears",
+        "Sector_gear_M1_R22mm.stl",
+        "SECTOR-M1-R22",
+        "M=1.0 sector gear R=22 mm — fixed tilt bracket (×2)",
+    ),
+    (
+        gen_pinion_m1_12t,
+        "gears",
+        "Pinion_M1_12T_R6mm.stl",
+        "PINION-A-M1-12T / CROWN-M1-12T",
+        "M=1.0 12T pinion / crown R=6 mm (×2 pinion-A + ×2 crown)",
+    ),
+    (
+        gen_bevel_m1_14t,
+        "gears",
+        "Bevel_M1_14T_pair.stl",
+        "BEVEL-M1-14T",
+        "M=1.0 bevel pair N=14T 45° — 90° axis redirect (×4 gears = 2 pairs)",
+    ),
+    (
+        gen_bevel_housing,
+        "gears",
+        "Bevel_housing_CF_PETG.stl",
+        "BEVEL-HOUSING",
+        "Bevel gear housing block CF-PETG 24×14×20 mm (×2)",
+    ),
     # Hardware
-    (gen_pin_3x5,            "hardware",   "Pin_SS_3x5mm_hinge.stl",
-     "PIN-3X5",
-     "Stainless roll pin 3 mm × 5 mm — iris nozzle petal hinge (×24)"),
-    (gen_insert_m25,         "hardware",   "Insert_M25_brass_L5.stl",
-     "INSERT-M25-BRASS",     "M2.5 brass heat-set insert OD 3.5 mm × L5 mm (×8)"),
-    (gen_insert_m3,          "hardware",   "Insert_M3_brass_L5.stl",
-     "INSERT-M3-WING",       "M3 brass heat-set insert OD 4.2 mm × L5 mm (×8)"),
-    (gen_screw_m3x8,         "hardware",   "Screw_M3x8mm_button_ISO7380.stl",
-     "SCREW-M3-8-BTN",
-     "M3×8 stainless button-head cap screw ISO 7380 (×4 belly panel)"),
-    (gen_piano_wire_ring,    "hardware",   "Piano_wire_0p8mm_iris_ring.stl",
-     "PIANO-WIRE-0.8",
-     "0.8 mm music wire link ring — iris nozzle actuation (×3 rings)"),
-    (gen_batt_strap,         "hardware",   "Batt_strap_silicone_16mm_CAM.stl",
-     "BATT-STRAP-CAM",
-     "16 mm silicone cam-buckle strap 50 N — battery retention (×2)"),
+    (
+        gen_pin_3x5,
+        "hardware",
+        "Pin_SS_3x5mm_hinge.stl",
+        "PIN-3X5",
+        "Stainless roll pin 3 mm × 5 mm — iris nozzle petal hinge (×24)",
+    ),
+    (
+        gen_insert_m25,
+        "hardware",
+        "Insert_M25_brass_L5.stl",
+        "INSERT-M25-BRASS",
+        "M2.5 brass heat-set insert OD 3.5 mm × L5 mm (×8)",
+    ),
+    (
+        gen_insert_m3,
+        "hardware",
+        "Insert_M3_brass_L5.stl",
+        "INSERT-M3-WING",
+        "M3 brass heat-set insert OD 4.2 mm × L5 mm (×8)",
+    ),
+    (
+        gen_screw_m3x8,
+        "hardware",
+        "Screw_M3x8mm_button_ISO7380.stl",
+        "SCREW-M3-8-BTN",
+        "M3×8 stainless button-head cap screw ISO 7380 (×4 belly panel)",
+    ),
+    (
+        gen_piano_wire_ring,
+        "hardware",
+        "Piano_wire_0p8mm_iris_ring.stl",
+        "PIANO-WIRE-0.8",
+        "0.8 mm music wire link ring — iris nozzle actuation (×3 rings)",
+    ),
+    (
+        gen_batt_strap,
+        "hardware",
+        "Batt_strap_silicone_16mm_CAM.stl",
+        "BATT-STRAP-CAM",
+        "16 mm silicone cam-buckle strap 50 N — battery retention (×2)",
+    ),
     # Lighting
-    (gen_ws2812b_ring_50mm,  "lighting",   "WS2812B_ring_50mm.stl",
-     "LED-WS2812B",          "WS2812B LED ring 50 mm dia — nozzle backlight (×3)"),
-    (gen_ws2812c_2020,       "lighting",   "WS2812C_2020_SMD.stl",
-     "LED-WS2812C-NAC",      "WS2812C-2020 SMD RGB LED — nacelle nav lights (×4)"),
+    (
+        gen_ws2812b_ring_50mm,
+        "lighting",
+        "WS2812B_ring_50mm.stl",
+        "LED-WS2812B",
+        "WS2812B LED ring 50 mm dia — nozzle backlight (×3)",
+    ),
+    (
+        gen_ws2812c_2020,
+        "lighting",
+        "WS2812C_2020_SMD.stl",
+        "LED-WS2812C-NAC",
+        "WS2812C-2020 SMD RGB LED — nacelle nav lights (×4)",
+    ),
     # Wiring
-    (gen_ptfe_conduit_3mm,   "wiring",     "PTFE_conduit_4mm_OD_3mm_ID_700mm.stl",
-     "CONDUIT-PTFE",
-     "PTFE conduit 4 mm OD × 3 mm ID × 700 mm — data bus run (×1)"),
-    (gen_wire_4awg,          "wiring",     "Wire_4AWG_silicone_200mm_pair.stl",
-     "WIRE-4AWG",            "4 AWG silicone wire pair 200 mm — main battery bus (×1)"),
-    (gen_wire_10awg,         "wiring",     "Wire_10AWG_silicone_400mm.stl",
-     "WIRE-10AWG",           "10 AWG silicone wire 400 mm — ESC branch (×1)"),
-    (gen_wire_28awg_stp,     "wiring",     "Wire_28AWG_STP_bundle_500mm.stl",
-     "WIRE-28AWG-STP",       "28 AWG shielded twisted pair 500 mm — signal leads (×1)"),
-    (gen_wire_49mhz,         "wiring",     "Wire_49MHz_antenna_0p3mm_470mm.stl",
-     "WIRE-49MHZ",           "0.3 mm stainless dorsal antenna wire 470 mm (×1)"),
-    (gen_wire_post_49mhz,    "wiring",     "Post_49MHz_base_load_coil.stl",
-     "POST-FWD-49 / POST-AFT-49",
-     "49 MHz wire post + base-loading coil (×2: forward + aft hull)"),
+    (
+        gen_ptfe_conduit_3mm,
+        "wiring",
+        "PTFE_conduit_4mm_OD_3mm_ID_700mm.stl",
+        "CONDUIT-PTFE",
+        "PTFE conduit 4 mm OD × 3 mm ID × 700 mm — data bus run (×1)",
+    ),
+    (
+        gen_wire_4awg,
+        "wiring",
+        "Wire_4AWG_silicone_200mm_pair.stl",
+        "WIRE-4AWG",
+        "4 AWG silicone wire pair 200 mm — main battery bus (×1)",
+    ),
+    (
+        gen_wire_10awg,
+        "wiring",
+        "Wire_10AWG_silicone_400mm.stl",
+        "WIRE-10AWG",
+        "10 AWG silicone wire 400 mm — ESC branch (×1)",
+    ),
+    (
+        gen_wire_28awg_stp,
+        "wiring",
+        "Wire_28AWG_STP_bundle_500mm.stl",
+        "WIRE-28AWG-STP",
+        "28 AWG shielded twisted pair 500 mm — signal leads (×1)",
+    ),
+    (
+        gen_wire_49mhz,
+        "wiring",
+        "Wire_49MHz_antenna_0p3mm_470mm.stl",
+        "WIRE-49MHZ",
+        "0.3 mm stainless dorsal antenna wire 470 mm (×1)",
+    ),
+    (
+        gen_wire_post_49mhz,
+        "wiring",
+        "Post_49MHz_base_load_coil.stl",
+        "POST-FWD-49 / POST-AFT-49",
+        "49 MHz wire post + base-loading coil (×2: forward + aft hull)",
+    ),
     # GCS
-    (gen_malcolm_enclosure,  "gcs",        "Malcolm_enclosure_IP65_145x90x65mm.stl",
-     "MAL-ENCLOSURE",        "Hammond 1455N1601 IP65 Al enclosure 145×90×65 mm (×1)"),
-    (gen_pololu_bec_5v,      "gcs",        "Pololu_D24V50F5_5V5A_BEC.stl",
-     "MAL-PWR-5V-BEC",       "Pololu D24V50F5 5 V/5 A step-down BEC (×1 GCS)"),
-    (gen_pololu_bec_6v,      "gcs",        "Pololu_D24V22F6_6V2A_BEC.stl",
-     "MAL-PWR-6V-BEC",       "Pololu D24V22F6 6 V/2.2 A step-down BEC (×1 GCS)"),
-    (gen_ant_915_omni,       "gcs",        "Antenna_915MHz_omni_5dBi.stl",
-     "MAL-ANT-915-OMNI",     "5 dBi 915 MHz rubber duck — SiK/LoRa bench (×2 GCS)"),
-    (gen_ant_915_yagi,       "gcs",        "Antenna_915MHz_Yagi_9dBi.stl",
-     "MAL-ANT-915-YAGI",
-     "9 dBi 915 MHz Yagi — shared SiK+LoRa field directional (×1)"),
-    (gen_ant_wifi_panel,     "gcs",        "Antenna_5GHz_panel_14dBi.stl",
-     "MAL-ANT-WIFI-PNL",     "14 dBi 5 GHz flat panel — Malcolm WiFi directional (×1)"),
-    (gen_ant_49mhz_whip,     "gcs",        "Antenna_49MHz_whip_940mm.stl",
-     "MAL-ANT-49MHZ",        "49 MHz base-loaded ¼-wave whip + radials ~940 mm (×1)"),
-    (gen_ant_zigbee,         "gcs",        "Antenna_2p4GHz_zigbee_rubber_duck.stl",
-     "MAL-ANT-ZIGBEE",       "3 dBi 2.4 GHz rubber duck — Zigbee link (×1 GCS)"),
-    (gen_ant_gnss_patch,     "gcs",        "Antenna_GNSS_patch_ANN_MB00.stl",
-     "MAL-ANT-GPS",          "u-blox ANN-MB-00 active GNSS patch 25×25×5 mm (×1)"),
-    (gen_gps_module,         "gcs",        "GPS_module_M10Q_SparkFun.stl",
-     "MAL-GPS-MODULE",       "SparkFun M10Q GNSS breakout PCB 25×25×7 mm (×1)"),
-    (gen_rf_splitter,        "gcs",        "RF_splitter_915MHz_2way_ZFSC.stl",
-     "MAL-RF-SPLITTER",      "Mini-Circuits ZFSC-2-1W-S+ 2-way 915 MHz splitter (×1)"),
-    (gen_as5600_encoder,     "gcs",        "AS5600_encoder_breakout_15x15mm.stl",
-     "MAL-GIMBAL-ENC",       "AS5600 12-bit magnetic encoder breakout (×2 pan + tilt)"),
-    (gen_n42_magnet,         "gcs",        "N42_disc_magnet_6x2mm.stl",
-     "MAL-GIMBAL-MAG",       "N42 diametric disc magnet 6×2 mm — AS5600 rotor (×2)"),
-    (gen_tca9548a,           "gcs",        "TCA9548A_I2C_mux_breakout.stl",
-     "MAL-TCA9548A",         "TCA9548A 1-to-8 I²C mux breakout 25×15×4 mm (×1 GCS)"),
-    (gen_brg_6804,           "gcs",        "B6804_20x32x7mm_gimbal_pan.stl",
-     "MAL-BRG-6804",         "6804-2RS thin bearing 20×32×7 mm — GCS gimbal pan (×1)"),
-    (gen_malcolm_tripod,     "gcs",        "Malcolm_tripod_antenna_mast.stl",
-     "MAL-TRIPOD",           "Heavy-duty tripod / antenna mast ≥1.5 m (×1 GCS)"),
+    (
+        gen_malcolm_enclosure,
+        "gcs",
+        "Malcolm_enclosure_IP65_145x90x65mm.stl",
+        "MAL-ENCLOSURE",
+        "Hammond 1455N1601 IP65 Al enclosure 145×90×65 mm (×1)",
+    ),
+    (
+        gen_pololu_bec_5v,
+        "gcs",
+        "Pololu_D24V50F5_5V5A_BEC.stl",
+        "MAL-PWR-5V-BEC",
+        "Pololu D24V50F5 5 V/5 A step-down BEC (×1 GCS)",
+    ),
+    (
+        gen_pololu_bec_6v,
+        "gcs",
+        "Pololu_D24V22F6_6V2A_BEC.stl",
+        "MAL-PWR-6V-BEC",
+        "Pololu D24V22F6 6 V/2.2 A step-down BEC (×1 GCS)",
+    ),
+    (
+        gen_ant_915_omni,
+        "gcs",
+        "Antenna_915MHz_omni_5dBi.stl",
+        "MAL-ANT-915-OMNI",
+        "5 dBi 915 MHz rubber duck — SiK/LoRa bench (×2 GCS)",
+    ),
+    (
+        gen_ant_915_yagi,
+        "gcs",
+        "Antenna_915MHz_Yagi_9dBi.stl",
+        "MAL-ANT-915-YAGI",
+        "9 dBi 915 MHz Yagi — shared SiK+LoRa field directional (×1)",
+    ),
+    (
+        gen_ant_wifi_panel,
+        "gcs",
+        "Antenna_5GHz_panel_14dBi.stl",
+        "MAL-ANT-WIFI-PNL",
+        "14 dBi 5 GHz flat panel — Malcolm WiFi directional (×1)",
+    ),
+    (
+        gen_ant_49mhz_whip,
+        "gcs",
+        "Antenna_49MHz_whip_940mm.stl",
+        "MAL-ANT-49MHZ",
+        "49 MHz base-loaded ¼-wave whip + radials ~940 mm (×1)",
+    ),
+    (
+        gen_ant_zigbee,
+        "gcs",
+        "Antenna_2p4GHz_zigbee_rubber_duck.stl",
+        "MAL-ANT-ZIGBEE",
+        "3 dBi 2.4 GHz rubber duck — Zigbee link (×1 GCS)",
+    ),
+    (
+        gen_ant_gnss_patch,
+        "gcs",
+        "Antenna_GNSS_patch_ANN_MB00.stl",
+        "MAL-ANT-GPS",
+        "u-blox ANN-MB-00 active GNSS patch 25×25×5 mm (×1)",
+    ),
+    (
+        gen_gps_module,
+        "gcs",
+        "GPS_module_M10Q_SparkFun.stl",
+        "MAL-GPS-MODULE",
+        "SparkFun M10Q GNSS breakout PCB 25×25×7 mm (×1)",
+    ),
+    (
+        gen_rf_splitter,
+        "gcs",
+        "RF_splitter_915MHz_2way_ZFSC.stl",
+        "MAL-RF-SPLITTER",
+        "Mini-Circuits ZFSC-2-1W-S+ 2-way 915 MHz splitter (×1)",
+    ),
+    (
+        gen_as5600_encoder,
+        "gcs",
+        "AS5600_encoder_breakout_15x15mm.stl",
+        "MAL-GIMBAL-ENC",
+        "AS5600 12-bit magnetic encoder breakout (×2 pan + tilt)",
+    ),
+    (
+        gen_n42_magnet,
+        "gcs",
+        "N42_disc_magnet_6x2mm.stl",
+        "MAL-GIMBAL-MAG",
+        "N42 diametric disc magnet 6×2 mm — AS5600 rotor (×2)",
+    ),
+    (
+        gen_tca9548a,
+        "gcs",
+        "TCA9548A_I2C_mux_breakout.stl",
+        "MAL-TCA9548A",
+        "TCA9548A 1-to-8 I²C mux breakout 25×15×4 mm (×1 GCS)",
+    ),
+    (
+        gen_brg_6804,
+        "gcs",
+        "B6804_20x32x7mm_gimbal_pan.stl",
+        "MAL-BRG-6804",
+        "6804-2RS thin bearing 20×32×7 mm — GCS gimbal pan (×1)",
+    ),
+    (
+        gen_malcolm_tripod,
+        "gcs",
+        "Malcolm_tripod_antenna_mast.stl",
+        "MAL-TRIPOD",
+        "Heavy-duty tripod / antenna mast ≥1.5 m (×1 GCS)",
+    ),
     # EMC / Faraday shielding
-    (gen_far_cage_av,        "faraday", "Far_cage_AV_70x50x82mm.stl",
-     "FAR-CAGE-AV",
-     "Avionics bay Faraday cage 70×50×82 mm — 0.1 mm Al foil, foam-bonded (×4)"),
-    (gen_far_gasket_av,      "faraday", "Far_gasket_AV_250x6x1mm.stl",
-     "FAR-GASKET-AV",
-     "EMI spring-contact lid gasket 250×6×1 mm — cage seal (×4)"),
-    (gen_far_fan_40,         "faraday", "Far_fan_40mm_5V.stl",
-     "FAR-FAN-40",
-     "40×40×10 mm 5 V axial fan — Faraday cage cooling (×4 aircraft)"),
-    (gen_far_emi_vent_40,    "faraday", "Far_EMI_vent_40x40x6mm.stl",
-     "FAR-EMI-VENT-40",
-     "40×40×6 mm Al honeycomb EMI vent panel — inlet + outlet (×8)"),
-    (gen_far_bond_strap,     "faraday", "Far_bond_strap_100mm.stl",
-     "FAR-BOND-STRAP",
-     "100 mm tinned-Cu braid bonding strap, M3 lugs — cage GND (×8)"),
-    (gen_far_ft_panel,       "faraday", "Far_FT_panel_55x35mm.stl",
-     "FAR-FT-PANEL",
-     "EMI-filtered feed-through panel 55×35 mm — cage signals (×4)"),
-    (gen_far_ferrite_4mm,    "faraday", "Far_ferrite_4mm_ID.stl",
-     "FAR-FERRITE-4MM",
-     "Type-31 split ferrite clamp 4 mm bore — cable EMI (×32 total)"),
-    (gen_far_fan_40,         "faraday", "Mal_far_fan_40mm_5V.stl",
-     "MAL-FAR-FAN",
-     "40×40×10 mm 5 V fan — Malcolm enclosure cooling (×1 GCS)"),
-    (gen_mal_far_gasket,     "faraday", "Mal_far_gasket_470x8x1p5mm.stl",
-     "MAL-FAR-GASKET",
-     "EMI spring gasket 470×8×1.5 mm — Malcolm Hammond lid seal (×1)"),
+    (
+        gen_far_cage_av,
+        "faraday",
+        "Far_cage_AV_70x50x82mm.stl",
+        "FAR-CAGE-AV",
+        "Avionics bay Faraday cage 70×50×82 mm — 0.1 mm Al foil, foam-bonded (×4)",
+    ),
+    (
+        gen_far_gasket_av,
+        "faraday",
+        "Far_gasket_AV_250x6x1mm.stl",
+        "FAR-GASKET-AV",
+        "EMI spring-contact lid gasket 250×6×1 mm — cage seal (×4)",
+    ),
+    (
+        gen_far_fan_40,
+        "faraday",
+        "Far_fan_40mm_5V.stl",
+        "FAR-FAN-40",
+        "40×40×10 mm 5 V axial fan — Faraday cage cooling (×4 aircraft)",
+    ),
+    (
+        gen_far_emi_vent_40,
+        "faraday",
+        "Far_EMI_vent_40x40x6mm.stl",
+        "FAR-EMI-VENT-40",
+        "40×40×6 mm Al honeycomb EMI vent panel — inlet + outlet (×8)",
+    ),
+    (
+        gen_far_bond_strap,
+        "faraday",
+        "Far_bond_strap_100mm.stl",
+        "FAR-BOND-STRAP",
+        "100 mm tinned-Cu braid bonding strap, M3 lugs — cage GND (×8)",
+    ),
+    (
+        gen_far_ft_panel,
+        "faraday",
+        "Far_FT_panel_55x35mm.stl",
+        "FAR-FT-PANEL",
+        "EMI-filtered feed-through panel 55×35 mm — cage signals (×4)",
+    ),
+    (
+        gen_far_ferrite_4mm,
+        "faraday",
+        "Far_ferrite_4mm_ID.stl",
+        "FAR-FERRITE-4MM",
+        "Type-31 split ferrite clamp 4 mm bore — cable EMI (×32 total)",
+    ),
+    (
+        gen_far_fan_40,
+        "faraday",
+        "Mal_far_fan_40mm_5V.stl",
+        "MAL-FAR-FAN",
+        "40×40×10 mm 5 V fan — Malcolm enclosure cooling (×1 GCS)",
+    ),
+    (
+        gen_mal_far_gasket,
+        "faraday",
+        "Mal_far_gasket_470x8x1p5mm.stl",
+        "MAL-FAR-GASKET",
+        "EMI spring gasket 470×8×1.5 mm — Malcolm Hammond lid seal (×1)",
+    ),
     # Foam fill and interior void visualisation
-    (gen_foam_head,          "foam",  "Foam_fill_head_125x231x136mm.stl",
-     "FOAM-FILL-HEAD",
-     "Head section foam fill 125×231×136 mm — 2 lb/cf low-density PU"),
-    (gen_foam_cargo,         "foam",  "Foam_fill_cargo_190x200x159mm.stl",
-     "FOAM-FILL-CARGO",
-     "Cargo section foam fill 190×200×159 mm — 2 lb/cf low-density PU"),
-    (gen_foam_middle,        "foam",
-     "Foam_fill_middle_horseshoe_173x69x161mm.stl",
-     "FOAM-FILL-MIDDLE",
-     "Middle horseshoe foam fill 173×69×161 mm — 2 lb/cf PU, U-frame"),
-    (gen_foam_rear,          "foam",  "Foam_fill_rear_136x177x154mm.stl",
-     "FOAM-FILL-REAR",
-     "Rear section foam fill 136×177×154 mm — 2 lb/cf low-density PU"),
-    (gen_void_avbay,         "foam",  "Void_avionics_bay_62x42x75mm.stl",
-     "VOID-AVBAY",
-     "Avionics bay void 62×42×75 mm (×4: Shepherd/Inara/River/Simon)"),
-    (gen_void_cargo_bay,     "foam",  "Void_cargo_bay_120x150x80mm.stl",
-     "VOID-CARGO-BAY",
-     "Cargo belly void 120×150×80 mm — Jayne payload door opening"),
-    (gen_void_wiring_trunk,  "foam",
-     "Void_wiring_trunk_30x700x20mm.stl",
-     "VOID-WIRE-TRUNK",
-     "Dorsal wiring trunk void 30×700×20 mm — CAN/RS-485/Eth/1553"),
-    (gen_void_power_bus,     "foam",  "Void_power_bus_25x500x25mm.stl",
-     "VOID-POWER-BUS",
-     "Belly power bus void 25×500×25 mm — 4 AWG cables + shunt"),
-    (gen_void_vent_intake,   "foam",  "Void_vent_intake_20x250x20mm.stl",
-     "VOID-VENT-INTAKE",
-     "Ventilation intake duct void 20×250×20 mm — forward cooling"),
-    (gen_void_vent_exhaust,  "foam",
-     "Void_vent_exhaust_20x300x20mm.stl",
-     "VOID-VENT-EXHAUST",
-     "Ventilation exhaust duct void 20×300×20 mm — waste-heat routing"),
-    (gen_void_nacelle_pylon, "foam",
-     "Void_nacelle_pylon_20x80x20mm.stl",
-     "VOID-NACELLE-PYLON",
-     "Nacelle pylon foam pocket 20×80×20 mm (×2 port + stbd pylons)"),
-    (gen_void_far_cage,      "foam",    "Void_far_cage_76x56x88mm.stl",
-     "VOID-FAR-CAGE",
-     "Faraday cage foam pocket 76×56×88 mm (×4 bays, 3 mm clearance)"),
-    (gen_void_far_fan_spur,  "foam",
-     "Void_far_fan_spur_44x44x50mm.stl",
-     "VOID-FAR-FAN-SPUR",
-     "Cage vent duct spur 44×44×50 mm (×8 total — 2/cage × 4 cages)"),
+    (
+        gen_foam_head,
+        "foam",
+        "Foam_fill_head_125x231x136mm.stl",
+        "FOAM-FILL-HEAD",
+        "Head section foam fill 125×231×136 mm — 2 lb/cf low-density PU",
+    ),
+    (
+        gen_foam_cargo,
+        "foam",
+        "Foam_fill_cargo_190x200x159mm.stl",
+        "FOAM-FILL-CARGO",
+        "Cargo section foam fill 190×200×159 mm — 2 lb/cf low-density PU",
+    ),
+    (
+        gen_foam_middle,
+        "foam",
+        "Foam_fill_middle_horseshoe_173x69x161mm.stl",
+        "FOAM-FILL-MIDDLE",
+        "Middle horseshoe foam fill 173×69×161 mm — 2 lb/cf PU, U-frame",
+    ),
+    (
+        gen_foam_rear,
+        "foam",
+        "Foam_fill_rear_136x177x154mm.stl",
+        "FOAM-FILL-REAR",
+        "Rear section foam fill 136×177×154 mm — 2 lb/cf low-density PU",
+    ),
+    (
+        gen_void_avbay,
+        "foam",
+        "Void_avionics_bay_62x42x75mm.stl",
+        "VOID-AVBAY",
+        "Avionics bay void 62×42×75 mm (×4: Shepherd/Inara/River/Simon)",
+    ),
+    (
+        gen_void_cargo_bay,
+        "foam",
+        "Void_cargo_bay_120x150x80mm.stl",
+        "VOID-CARGO-BAY",
+        "Cargo belly void 120×150×80 mm — Jayne payload door opening",
+    ),
+    (
+        gen_void_wiring_trunk,
+        "foam",
+        "Void_wiring_trunk_30x700x20mm.stl",
+        "VOID-WIRE-TRUNK",
+        "Dorsal wiring trunk void 30×700×20 mm — CAN/RS-485/Eth/1553",
+    ),
+    (
+        gen_void_power_bus,
+        "foam",
+        "Void_power_bus_25x500x25mm.stl",
+        "VOID-POWER-BUS",
+        "Belly power bus void 25×500×25 mm — 4 AWG cables + shunt",
+    ),
+    (
+        gen_void_vent_intake,
+        "foam",
+        "Void_vent_intake_20x250x20mm.stl",
+        "VOID-VENT-INTAKE",
+        "Ventilation intake duct void 20×250×20 mm — forward cooling",
+    ),
+    (
+        gen_void_vent_exhaust,
+        "foam",
+        "Void_vent_exhaust_20x300x20mm.stl",
+        "VOID-VENT-EXHAUST",
+        "Ventilation exhaust duct void 20×300×20 mm — waste-heat routing",
+    ),
+    (
+        gen_void_nacelle_pylon,
+        "foam",
+        "Void_nacelle_pylon_20x80x20mm.stl",
+        "VOID-NACELLE-PYLON",
+        "Nacelle pylon foam pocket 20×80×20 mm (×2 port + stbd pylons)",
+    ),
+    (
+        gen_void_far_cage,
+        "foam",
+        "Void_far_cage_76x56x88mm.stl",
+        "VOID-FAR-CAGE",
+        "Faraday cage foam pocket 76×56×88 mm (×4 bays, 3 mm clearance)",
+    ),
+    (
+        gen_void_far_fan_spur,
+        "foam",
+        "Void_far_fan_spur_44x44x50mm.stl",
+        "VOID-FAR-FAN-SPUR",
+        "Cage vent duct spur 44×44×50 mm (×8 total — 2/cage × 4 cages)",
+    ),
 ]
 
 
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
+
 
 def main():
     """Generate all placeholder STL files and print a summary report."""
@@ -1660,7 +2064,7 @@ def main():
     print("Serenity UAV — Placeholder STL generation (Rev R BOM)")
     print("=" * 60)
 
-    for (fn, subdir, fname, bom_ref, description) in _COMPONENTS:
+    for fn, subdir, fname, bom_ref, description in _COMPONENTS:
         path = _out(subdir, fname)
         try:
             tris = fn()
@@ -1674,8 +2078,10 @@ def main():
             print(f"  ERR {fname}: {exc}")
 
     print("=" * 60)
-    print(f"Generated {generated}/{len(_COMPONENTS)} files, "
-          f"{total_tris} total triangles.")
+    print(
+        f"Generated {generated}/{len(_COMPONENTS)} files, "
+        f"{total_tris} total triangles."
+    )
     if errors:
         print(f"ERRORS ({len(errors)}):")
         for name, exc in errors:
