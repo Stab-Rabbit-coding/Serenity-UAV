@@ -24,7 +24,7 @@
 // rotate(BOW_ROT) = rotate([130,0,0]).  [REF-SENSOR-001, REF-SENSOR-002,
 // REF-IEC-002, REF-FDA-001]
 //
-// Windows (source per TODO.md §1.1.1.1a):
+// Windows:
 //   ToF: 8 mm dia x 2 mm PMMA disc (rear counterbore; transmits 905 nm IR).
 //   Laser: optional 5 mm dia x 2 mm PMMA exit window.
 //   Camera: open 10 mm lens bore (no window; bezel flange shades the lens).

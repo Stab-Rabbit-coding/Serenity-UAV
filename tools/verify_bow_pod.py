@@ -4,9 +4,8 @@
 #
 # Geometric verification of the bow sensor pod aperture
 # positions (bow_sensor_pod.scad) against the BAKED, hull-frame
-# head shell STL.  This replaces the manual "open in slicer and
-# cross-section" checks in TODO.md §1.1.1.1a with reproducible
-# ray-cast geometry checks against the canonical mesh.
+# head shell STL.  Performs reproducible ray-cast geometry checks
+# against the canonical mesh to validate aperture positioning.
 #
 # For each bore (Dome A camera, Dome B ToF, Dome B laser) the tool
 # casts a ray along the bore axis through the SCAD-specified

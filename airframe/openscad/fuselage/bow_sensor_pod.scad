@@ -23,8 +23,7 @@
 // This file defines ONLY the CSG subtraction volumes (negative
 // material) cut into the head shell.  The printed exterior retainer is
 // the single combined faceplate bow_sensor_faceplate.scad (Rev R1c,
-// supersedes the earlier separate camera/ToF/laser bezels).  See
-// TODO.md §1.1.1.1a.
+// supersedes the earlier separate camera/ToF/laser bezels).
 //
 // ── Coordinate system ────────────────────────────────────────
 //
@@ -59,8 +58,7 @@
 // All positions are ESTIMATED from the Thingiverse source mesh
 // geometry (CLAUDE.md §Aircraft Geometry reference).  Verify every
 // constant in a slicer cross-section at Y = BOW_FACE_Y before
-// printing.  See TODO.md §1.1.1.1a for the complete slicer
-// verification task list.
+// printing for final design validation.
 //
 // ── Regulatory notes ─────────────────────────────────────────
 //
@@ -407,7 +405,7 @@ module bow_face_seat(ctr, w, h) {
 //     Laser (CL):               6 mm beam exit + 12.5 mm bore behind.
 //
 //   Verified against the baked canonical mesh by tools/verify_bow_pod.py;
-//   fine-tune fractional-mm in FreeCAD.  See TODO.md §1.1.1.1a.
+//   fine-tune fractional-mm in FreeCAD as needed.
 // ----------------------------------------------------------------------------
 module bow_pod_cuts() {
     // Faceplate seat — remove the two camera bumps, prep mount inserts
