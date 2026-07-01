@@ -58,12 +58,15 @@ LASER_POS = (161.33, -281.94, 56.14)  # crosshair laser exit, on CL
 FLAT_N = np.array([0.0, -np.cos(np.radians(40.0)), -np.sin(np.radians(40.0))])
 
 # Face aperture diameters and interior pocket depths.
-CAM_APER = 10.0;  CAM_BODY_D = 21.0
-TOF_APER = 8.0;   TOF_BODY_D = 22.0
-LASER_EXIT = 6.0; LASER_BORE_L = 38.0
+CAM_APER = 10.0
+CAM_BODY_D = 21.0
+TOF_APER = 8.0
+TOF_BODY_D = 22.0
+LASER_EXIT = 6.0
+LASER_BORE_L = 38.0
 
 # Flat extents (hull), for the aperture-row fit check.
-FLAT_W = 26.4    # mm — flat width spec (1.04 in)
+FLAT_W = 26.4  # mm — flat width spec (1.04 in)
 FLAT_CENTER_X = -167.15
 
 # Bore axis unit vectors in hull frame (exterior-facing, i.e. toward bow tip).
@@ -116,12 +119,12 @@ def report_bore(name, mesh, centre_hull, axis, pocket_depth):
         near = np.argsort(np.abs(signed))[:2]
         near.sort()
         ext_s, int_s = signed[near[0]], signed[near[1]]
-        ext_p, int_p = locs[near[0]], locs[near[1]]
+        ext_p = locs[near[0]]
         offset = ext_s
         note = " (aperture centre not exactly on skin; see offset)"
     else:
         ext_s, int_s = signed[ext_idx[-1]], signed[int_idx[0]]
-        ext_p, int_p = locs[ext_idx[-1]], locs[int_idx[0]]
+        ext_p = locs[ext_idx[-1]]
         offset = ext_s
         note = ""
 
@@ -198,11 +201,16 @@ def main():
     flat_lo, flat_hi = FLAT_CENTER_X - half, FLAT_CENTER_X + half
     spill_lo = max(0.0, flat_lo - row_lo)
     spill_hi = max(0.0, row_hi - flat_hi)
-    print(f"   row span hull X [{row_lo:+.1f}..{row_hi:+.1f}] = {row_hi - row_lo:.1f} mm "
-          f"in flat [{flat_lo:+.1f}..{flat_hi:+.1f}] ({FLAT_W:.1f} mm)")
+    row_span = row_hi - row_lo
+    print(
+        f"   row span hull X [{row_lo:+.1f}..{row_hi:+.1f}] = {row_span:.1f} mm "
+        f"in flat [{flat_lo:+.1f}..{flat_hi:+.1f}] ({FLAT_W:.1f} mm)"
+    )
     if spill_lo or spill_hi:
-        print(f"   over-run onto flat roll-off: stbd {spill_lo:.1f} mm / port {spill_hi:.1f} mm "
-              f"(faceplate bridges; fine-tune in FreeCAD)")
+        print(
+            f"   over-run onto flat roll-off: stbd {spill_lo:.1f} mm / "
+            f"port {spill_hi:.1f} mm (faceplate bridges; fine-tune in FreeCAD)"
+        )
     else:
         print("   row fits within the flat width")
 
