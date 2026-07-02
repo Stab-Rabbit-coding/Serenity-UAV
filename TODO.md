@@ -618,25 +618,27 @@ SCAD: `airframe/openscad/fuselage/bow_sensor_pod.scad` (cuts) +
 - [x] **Superseded `bow_camera_bezel.scad` + `bow_tof_laser_bezel.scad`** — three 15–21 mm
     bezel flanges cannot coexist on the 26.4 mm flat; consolidated into the one faceplate
     (separate files removed before commit).
-- [x] **PMMA window spec finalised** (sourcing remains a procurement action):
-    - Camera: open Ø10 lens bore (no window; faceplate shades the lens)
-    - ToF: 8 mm dia × 2 mm PMMA disc (uncoated; transmits 905 nm IR) — rear counterbore
-    - Laser: 5 mm dia × 2 mm PMMA exit window (optional; sealed modules may omit)
-- [ ] **Procure PMMA discs** (ToF 8 mm, laser 5 mm) — physical purchase. *(external)*
+- [ ] Res
+- [ ] **PMMA window spec finalised** (sourcing remains a procurement action):
+    - [x] Camera: open Ø10 lens bore (no window; faceplate shades the lens)
+    - [x] ToF: 8 mm dia × 2 mm PMMA disc (uncoated; transmits 905 nm IR) — rear counterbore
+    - [ ] Laser: 3 mm dia × 2 mm PMMA exit window (optional; sealed modules may omit)
+- [ ] **Procure PMMA discs** (ToF 8 mm, laser 2 mm) — physical purchase. *(external)*
 - [x] **Laser down-angle review** — **APPROVED 2026-06-30 (user).** The laser is mounted normal
     to the 40° bow flat (40° below horizon, vs the Rev R1 30°); this is the accepted final
     orientation, no re-aim required.
 
 ###### Avionics Integration *(physical wiring + firmware — external to this CAD task)*
 
-- [ ] **Wire TFmini-S UART to Shepherd Wash (Cape-A-2) UART2 port.**
+- [ ] **Create RP2350 (or similar) based Camera/TOF/laser mcu board** which can send feeds to all control boards. to reduce single points of failure.  Must have TPM and be emi hardened.  Keep this board as simple and small as possible, mounted as close to the sensor suite as practicable.  Prefer export via existing databuses (i.e. canbus, rs485, if it makes sense)
+
+- [ ] **Wire TFmini-S UART to bow sensor MCU.**
     Run 28 AWG 4-conductor (TX, RX, 5 V, GND) loom from bow pod area to Shepherd's Room bay.
     Route inside head section interior; secure with cable saddles bonded to inner hull wall.
     Shield pair twisted, overall braid shield grounded at Cape end only.
     Firmware: add TFmini-S UART driver to Shepherd `serenity-fc` Phase 7 task list.
-- [ ] **Wire bow camera video output to Inara's stack video input** per camera/payload PACE
-    priority assignment (CLAUDE.md).  Use RG178 coax; keep run ≤ 300 mm to bow tip.
-- [ ] **Wire laser GPIO enable to Shepherd Wash GPIO** via 2N7002 N-channel MOSFET:
+- [ ] **Wire bow camera video output to bow sensor MCU** per camera/payload PACE priority assignment (CLAUDE.md).  Use RG178 coax; keep run ≤ 300 mm to bow tip.
+- [ ] **Wire laser GPIO enable bow sensor MCU** via 2N7002 N-channel MOSFET:
     - Gate → Wash GPIO (via 10 kΩ series resistor)
     - 10 kΩ pull-down to GND (default state: laser disabled)
     - Source → GND
@@ -1124,6 +1126,7 @@ Joint faces in hull-frame Y (confirmed from baked extents):
         correction).  Hull-frame aft joint face is at Y ≈ −53 mm; BOSS_AFT_ROT should be
         [0,90,0] only if facing into the joint (−Y direction → [−90,0,0]).  See §1.1.0
         open item and §1.1.1 for the full correction plan — this is a pre-existing blocker.
+    - [ ] create mounting bracket for camera/tof/laser control pcb
     - Verify Faraday tray cutout and all other non-boss geometry unchanged after SCAD re-render.
 
 ##### 1.1.1.2 *Cargo*
