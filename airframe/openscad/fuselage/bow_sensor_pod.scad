@@ -1,9 +1,9 @@
 // ============================================================
-// bow_sensor_pod.scad — Rev R1 (2026-06-15)
+// bow_sensor_pod.scad — Rev R1c (2026-06-30)
 //
 // Forward-facing bow sensor assembly for Serenity 24" hull.
-// Replaces the two canonical convex domes at the head section
-// bow flat face with functional sensor aperture sockets:
+// Replaces the modeller's two convex camera bumps on the 40° bow
+// mounting flat with functional sensor aperture sockets:
 //
 //   Dome A (dorsal)  → 19 mm Nano camera socket
 //                      e.g. RunCam Nano 4 or equivalent nano-19
@@ -21,9 +21,9 @@
 //                      [REF-IEC-002, REF-FDA-001]
 //
 // This file defines ONLY the CSG subtraction volumes (negative
-// material).  Printed carrier bezels and hardware are separate files
-// (bow_camera_bezel.scad, bow_tof_laser_bezel.scad — future work;
-// see TODO.md §1.1.1.1a).
+// material) cut into the head shell.  The printed exterior retainer is
+// the single combined faceplate bow_sensor_faceplate.scad (Rev R1c,
+// supersedes the earlier separate camera/ToF/laser bezels).
 //
 // ── Coordinate system ────────────────────────────────────────
 //
@@ -58,8 +58,7 @@
 // All positions are ESTIMATED from the Thingiverse source mesh
 // geometry (CLAUDE.md §Aircraft Geometry reference).  Verify every
 // constant in a slicer cross-section at Y = BOW_FACE_Y before
-// printing.  See TODO.md §1.1.1.1a for the complete slicer
-// verification task list.
+// printing for final design validation.
 //
 // ── Regulatory notes ─────────────────────────────────────────
 //
@@ -89,58 +88,97 @@ $fn = 64;
 BOW_CX = 161.33;   // mm — lateral centroid = aircraft CL
 BOW_CZ =  69.08;   // mm — vertical centroid of head section
 
-// ── Bow flat face — longitudinal station ─────────────────────────────
-//   Head section STL Y_min = -288 mm (nose tip).  The canonical
-//   Serenity bow has a subtly flat face ~4–6 mm aft of the very point.
-//   VERIFY by slicer cross-section at Y = -285 to -280; adjust
-//   BOW_FACE_Y until both dome pockets land within the hull skin.
-BOW_FACE_Y = -283.0;   // mm — SCAD Y of bow exterior face; VERIFY slicer
+// ── Nose-tip flat-face layout (Rev R1c, 2026-06-30) ──────────────────
+//   SUPERSEDES the Rev R1 vertical "Dome A/Dome B" stack and the
+//   interim Rev R1b straight-forward (-Y) tip layout.  Geometric
+//   verification of the baked canonical head shell (tools/verify_bow_pod.py
+//   against airframe/stls/fuselage/head_shell24_2mm_repaired.stl) located
+//   the canonical bow MOUNTING FLAT: a ~26.4 x 15 mm planar face whose
+//   outward normal is tilted 39.8 deg about the +X (port/stbd) axis from
+//   forward, i.e. n = (0, -0.766, -0.643) — it faces forward-and-down and
+//   runs down-and-aft from the nose tip.  Flat centre hull (-167, -301,
+//   120).  The modeller placed TWO convex camera bumps on this flat (the
+//   ship's two bow cameras), at hull X -161 (port) and X -175 (stbd),
+//   ~2.2 mm proud; per design direction (2026-06-30) those bumps are
+//   REPLACED by the functional camera (port) and ToF (stbd) apertures,
+//   and a crosshair laser is added on the centreline between them.  All
+//   three apertures lie on the one flat and are carried by a single
+//   combined faceplate (bow_sensor_faceplate.scad).
+//
+//   Distribution (HORIZONTAL, on the flat):
+//       camera -> PORT bump (+X)   ToF -> STBD bump (-X)   laser -> CL
+//
+//   Bores are NORMAL to the 40 deg flat (BOW_ROT below).  Aperture face
+//   points were measured as the skin intersection along the flat normal;
+//   they fit the 26.4 mm width in one row (span ~25.5 mm).  Positions are
+//   PART-LOCAL SCAD coords (hull = local + [-332,-18,+61]; bake_hull_frame
+//   Head_Shell).  This is a verified ROUGH fit — final fractional-mm
+//   alignment (and the ~1.5 mm stbd over-run of the ToF onto the flat
+//   roll-off) is to be confirmed in FreeCAD per CLAUDE.md complex-geometry
+//   policy.  Re-run tools/verify_bow_pod.py after any change.
+//
+//   Hull-frame X convention: +X = PORT (left), -X = STARBOARD (right).
 
-// ── Dome A — dorsal (camera socket) ─────────────────────────────────
-//   Estimated 14 mm dorsal of vertical centroid; on aircraft CL.
-//   VERIFY Z in slicer cross-section at Y = BOW_FACE_Y.
-DOME_A_X = BOW_CX;            // mm — laterally on aircraft CL
-DOME_A_Y = BOW_FACE_Y;        // mm — bow exterior face
-DOME_A_Z = BOW_CZ + 14.0;    // mm ≈ 83 mm dorsal; VERIFY slicer
+// Camera — 19 mm Nano socket, on the PORT camera bump.
+//   hull (-161.20, -300.68, 116.01) -> SCAD below.  Face lens bore 10 mm.
+CAM_POS   = [170.80, -282.68, 55.01];   // SCAD [x,y,z]; on flat, skin-verified
 
-// ── Dome B — ventral (ToF + laser socket) ───────────────────────────
-//   Estimated 9 mm ventral of vertical centroid; on aircraft CL.
-//   VERIFY Z in slicer cross-section at Y = BOW_FACE_Y.
-//   ToF aperture offset 6 mm dorsal of dome-B centre to provide
-//   clearance above the angled laser bore.
-//   Laser bore centre 7 mm ventral of dome-B centre.
-DOME_B_X = BOW_CX;            // mm — laterally on aircraft CL
-DOME_B_Y = BOW_FACE_Y;        // mm — bow exterior face
-DOME_B_Z = BOW_CZ - 9.0;     // mm ≈ 60 mm ventral; VERIFY slicer
+// ToF — TFmini-S socket, on the STARBOARD camera bump.
+//   Body rolled vertical (TOF_BODY_ROLL) so its 36 mm long axis runs in
+//   the flat's in-plane vertical, narrowing its lateral footprint.
+//   hull (-177.67, -300.98, 116.61) -> SCAD below.
+TOF_POS   = [154.33, -282.98, 55.61];   // SCAD [x,y,z]; on flat, skin-verified
+TOF_BODY_ROLL = 90;                     // deg — roll body about bore axis
 
-TOF_Z_OFFSET   =  6.0;   // mm — ToF centre above DOME_B_Z
-LASER_Z_OFFSET = -7.0;   // mm — laser bore centre below DOME_B_Z
+// Laser — crosshair bore, on aircraft CL, between the two bumps.
+//   Rear-mounted: only a 6 mm beam exit pierces the flat (12.5 mm module
+//   bore is behind the skin); bore NORMAL to the flat (40 deg below
+//   horizon, was 30 deg in Rev R1 — re-aim in FreeCAD if 30 deg desired).
+//   hull (-170.67, -299.94, 117.14) -> SCAD below.
+LASER_POS = [161.33, -281.94, 56.14];   // SCAD [x,y,z]; on CL, skin-verified
+
+// Combined faceplate footprint on the flat (for the bump-removal seat
+// cutter).  Centre = mean of the three aperture face points (balances the
+// asymmetric camera/ToF row); sized to clear all three apertures.
+//   hull (-169.85, -300.53, 116.59) -> SCAD below.
+FACEPLATE_CTR = [162.15, -282.53, 55.59];  // SCAD aperture-row centroid
+FACEPLATE_W   = 29.0;   // mm — seat width  (X, port-stbd)
+FACEPLATE_H   = 17.0;   // mm — seat height (flat in-plane vertical)
 
 // ── Wall / cutter parameters (match head_shell24.scad) ───────────────
 WALL_MM = 2.0;    // mm — hull skin thickness
 WALL_T  = 3.5;    // mm — cutter overlap (2.0 mm skin + 1.5 mm clearance)
 
 // ── Rotation constants ───────────────────────────────────────────────
-BOW_ROT   = [ 90, 0, 0];   // forward-facing: +Z cylinder → -Y (forward)
-LASER_ROT = [120, 0, 0];   // 30° below horizon: +Z → [0,-0.866,-0.500]
+//   BOW_ROT maps a +Z-axis cutter onto the flat's outward normal:
+//   Rx(130 deg)[0,0,1] = [0,-sin130,cos130] = [0,-0.766,-0.643] = n.  The
+//   130 = 90 (forward) + 40 (flat tilt about X).  All three apertures and
+//   the faceplate seat share this orientation.
+BOW_ROT   = [130, 0, 0];   // normal to the 40 deg bow flat
+LASER_ROT = [130, 0, 0];   // laser normal to flat (see LASER_POS note)
+LASER_EXIT_D = 6.0;        // mm — beam exit aperture through the skin
 
 // ============================================================
 // A — 19 mm Nano camera socket
 // ============================================================
 //
 // Camera format: 19 mm Nano (RunCam Nano 4 or equivalent).
-// Body: 19×19×19 mm.  Lens: M7 thread, 12 mm clear bore.
-// Mount: 4× M2 on 14×14 mm pitch (± 7 mm from lens centre).
-// Exterior: 12 mm lens bore + 21×21×1 mm bezel recess +
-//   4× M2 DIN 7991 90° countersunk holes.
-// Interior: 20×20×21 mm camera body pocket (19 mm + 0.5 mm
-//   clearance per side, 19 mm depth + 2 mm connector clearance).
+// Body: 19×19×19 mm.  Lens: M7 thread.
+// Rev R1c: the shell carries ONLY a 10 mm lens aperture + a 20×20×21 mm
+//   interior body pocket; the exterior seat, bezel and all mount
+//   fasteners moved to the combined faceplate (bow_sensor_faceplate.scad)
+//   and the shared seat cut bow_face_seat().  Legacy CAM_BEZ_*/CAM_M2_*
+//   constants below are retained for reference only (unused by the cut).
 //
 // [REF-SENSOR-001] RunCam Nano 4 product specification.
 
-CAM_APER_D    = 12.0;   // mm — lens aperture bore diameter
-CAM_BEZ_W     = 21.0;   // mm — bezel recess width (19 mm + 1 mm/side)
-CAM_BEZ_DEP   =  1.0;   // mm — bezel recess depth (camera face flush)
+CAM_APER_D    = 10.0;   // mm — lens aperture bore (Rev R1c: trimmed 12->10
+                        //      so camera+laser+ToF apertures fit the 26.4 mm
+                        //      flat width; a Nano lens needs only ~8 mm)
+CAM_BEZ_W     = 21.0;   // mm — (legacy) standalone-bezel recess width;
+                        //      unused now the combined faceplate seats on
+                        //      the flat — see bow_sensor_faceplate.scad
+CAM_BEZ_DEP   =  1.0;   // mm — (legacy) bezel recess depth
 CAM_M2_D      =  2.2;   // mm — M2 clearance through-hole (ISO 286 H12)
 CAM_M2_PITCH  = 14.0;   // mm — M2 hole pitch (± 7 mm from centre)
 CAM_CSK2_OD   =  4.5;   // mm — M2 flathead countersink OD (DIN 7991 90°)
@@ -166,27 +204,14 @@ module bow_camera_cut(pos) {
     rotate(BOW_ROT)
     translate([0, 0, -(WALL_T + 1)]) {
 
-        // Lens aperture bore — through full hull skin
+        // Lens aperture bore — through full hull skin (10 mm, Rev R1c).
+        //   Bezel recess and the 4x M2 face countersinks are deleted in
+        //   Rev R1c: the combined faceplate (bow_sensor_faceplate.scad)
+        //   provides the exterior seat and all mount fasteners.
         cylinder(h = WALL_T + 2, d = CAM_APER_D);
 
-        // Bezel seating recess — 1 mm deep at exterior face, 21×21 mm
-        //   Camera face sits flush at hull outer surface.
-        translate([-CAM_BEZ_W / 2, -CAM_BEZ_W / 2, WALL_T + 1 - CAM_BEZ_DEP])
-            cube([CAM_BEZ_W, CAM_BEZ_W, CAM_BEZ_DEP + 1]);
-
-        // 4× M2 countersunk mount holes (± 7 mm from lens centre)
-        //   DIN 7991 90° flathead countersink from exterior.
-        //   [REF-IEC-001 Cl.5.5.2] clearance maintained from camera PCB.
-        for (dx = [-CAM_M2_PITCH / 2, CAM_M2_PITCH / 2])
-        for (dy = [-CAM_M2_PITCH / 2, CAM_M2_PITCH / 2])
-            translate([dx, dy, 0]) {
-                cylinder(h = WALL_T + 2, d = CAM_M2_D);
-                translate([0, 0, WALL_T + 1 - CAM_CSK2_D])
-                    cylinder(h = CAM_CSK2_D + 1, d1 = CAM_M2_D, d2 = CAM_CSK2_OD);
-            }
-
         // Interior camera body pocket — 20×20×21 mm, opens to interior
-        //   z < 0 goes deeper into interior (aft/+Y in hull frame).
+        //   z < 0 goes deeper into interior (behind the flat, into nose).
         translate([-CAM_BODY_W / 2, -CAM_BODY_H / 2, -CAM_BODY_D])
             cube([CAM_BODY_W, CAM_BODY_H, CAM_BODY_D + 1]);
     }
@@ -206,10 +231,12 @@ module bow_camera_cut(pos) {
 //   Optical aperture: single PMMA lens, 8 mm diameter, centred on
 //     the 35×18.5 mm face.  [REF-SENSOR-002]
 //
-// Mount design:
-//   Exterior: 8 mm PMMA aperture bore + 11 mm OD × 0.5 mm seat ring
-//   + 4× M1.6 DIN 7991 90° countersunk holes on R = 7 mm bolt circle.
-//   Interior: 36×20×22 mm body pocket (sensor + 0.5 mm each dim).
+// Mount design (Rev R1c):
+//   Shell cut: 8 mm aperture bore + 36×20×22 mm interior body pocket,
+//     rolled vertical (TOF_BODY_ROLL) to pack to starboard on the flat.
+//   Exterior PMMA disc seat + 8.4 mm counterbore and mount fasteners are
+//     on the combined faceplate (bow_sensor_faceplate.scad); legacy
+//     TOF_RING_*/TOF_M16_* constants below are reference only (unused).
 //   PMMA window: 8 mm dia × 2 mm thick; PMMA transmits 905 nm IR ✓.
 //   Avionics interface: UART routed to Shepherd (Wash UART2, I2C fallback).
 //   [REF-NIST-001 §2.1] all sensor telemetry authenticated per ZTA policy.
@@ -226,33 +253,32 @@ TOF_BODY_Y    = 20.0;   // mm — interior pocket Y (18.5 mm + 0.75 mm/side)
 TOF_BODY_D    = 22.0;   // mm — interior pocket depth (21 mm + 1 mm clear)
 
 // ----------------------------------------------------------------------------
-// Module: bow_tof_cut(pos)
+// Module: bow_tof_cut(pos, roll)
 //   Subtracts the TFmini-S forward-facing sensor socket from head shell.
-//   pos = [x, y, z] of aperture centre on the hull EXTERIOR face.
+//   pos  = [x, y, z] of aperture centre on the hull EXTERIOR face.
+//   roll = body rotation (deg) about the bore axis.  The aperture, seat
+//          ring and bolt circle are all rotationally symmetric, so roll
+//          only reorients the rectangular interior body pocket.  roll =
+//          90 turns the 36 mm long pocket axis from lateral (X) to
+//          vertical (Z), narrowing the lateral footprint to 20 mm so the
+//          starboard ToF clears the centreline laser bore.
 //   Aperture faces -Y (forward) via BOW_ROT.
 // ----------------------------------------------------------------------------
-module bow_tof_cut(pos) {
+module bow_tof_cut(pos, roll = 0) {
     translate(pos)
     rotate(BOW_ROT)
+    rotate([0, 0, roll])
     translate([0, 0, -(WALL_T + 1)]) {
 
-        // PMMA aperture bore — through full hull skin
+        // PMMA aperture bore — through full hull skin (8 mm).
+        //   PMMA disc seat ring and the 4x M1.6 face countersinks are
+        //   deleted in Rev R1c; the combined faceplate carries the PMMA
+        //   window and the mount fasteners.
         cylinder(h = WALL_T + 2, d = TOF_APER_D);
 
-        // PMMA disc seat ring — 0.5 mm recess at exterior face, 11 mm OD
-        translate([0, 0, WALL_T + 1 - TOF_RING_DEP])
-            cylinder(h = TOF_RING_DEP + 1, d = TOF_RING_OD);
-
-        // 4× M1.6 countersunk mount holes (bolt circle R = 7 mm, 45° offset)
-        for (a = [45, 135, 225, 315])
-            rotate([0, 0, a])
-            translate([TOF_M16_R, 0, 0]) {
-                cylinder(h = WALL_T + 2, d = TOF_M16_D);
-                translate([0, 0, WALL_T + 1 - TOF_CSK16_D])
-                    cylinder(h = TOF_CSK16_D + 1, d1 = TOF_M16_D, d2 = TOF_CSK16_OD);
-            }
-
-        // Interior sensor body pocket — 36×20×22 mm, opens to interior
+        // Interior sensor body pocket — 36×20×22 mm, opens to interior.
+        //   Rolled 90° (TOF_BODY_ROLL) so the 36 mm axis runs in the
+        //   flat's in-plane vertical, behind the flat into the nose.
         translate([-TOF_BODY_X / 2, -TOF_BODY_Y / 2, -TOF_BODY_D])
             cube([TOF_BODY_X, TOF_BODY_Y, TOF_BODY_D + 1]);
     }
@@ -274,10 +300,11 @@ module bow_tof_cut(pos) {
 //   At 50 ft (15.2 m) AGL the crosshair is ≈ 26.3 m (86.4 ft) ahead.
 //   All ranges measured along ground track.
 //
-// Alignment: bore axis passes through aircraft lateral CL (DOME_B_X =
-//   BOW_CX = 161.33 mm SCAD = aircraft CL).  Laser is aligned to
-//   aircraft CL both laterally (X = CL) and vertically (bore in
-//   the YZ symmetry plane of the aircraft).
+// Alignment (Rev R1c): bore axis passes through aircraft lateral CL
+//   (LASER_POS X = BOW_CX = 161.33 mm SCAD = aircraft CL) and is normal
+//   to the 40° bow flat (40° below horizon).  Rev R1c rear-mounts the
+//   module: only LASER_EXIT_D (6 mm) pierces the flat; the 12.5 mm
+//   module bore is behind the skin.  See bow_laser_cut().
 //
 // Enable circuit: laser anode → 10 Ω current-set resistor → drain of
 //   2N7002 N-channel MOSFET → GND.  Gate driven by Shepherd Wash
@@ -307,15 +334,57 @@ module bow_laser_cut(pos) {
     rotate(LASER_ROT)
     translate([0, 0, -(WALL_T + 1)]) {
 
-        // Main laser module bore — 12.5 mm ID through hull skin and into interior
-        cylinder(h = WALL_T + 1 + LASER_BORE_L, d = LASER_BORE_D);
+        // Beam exit aperture — 6 mm through the hull skin (Rev R1c
+        //   rear-mount: only the beam exits on the flat, so the laser's
+        //   face footprint is 6 mm, not the 12.5 mm module bore).
+        cylinder(h = WALL_T + 2, d = LASER_EXIT_D);
 
-        // M3 lateral set-screw hole — perpendicular to bore axis (in local XY plane)
+        // Module bore — 12.5 mm, BEHIND the skin into the interior.
+        //   z = 0 is the interior face of the skin; the module is loaded
+        //   from inside the nose and butts up under the 6 mm exit.
+        translate([0, 0, -LASER_BORE_L])
+            cylinder(h = LASER_BORE_L + 0.1, d = LASER_BORE_D);
+
+        // M3 lateral set-screw hole — perpendicular to bore axis.
         //   Locks the laser module against axial and rotational movement.
-        //   Local X → lateral (port/stbd in hull frame).
-        translate([0, 0, WALL_T + 1 + LASER_SETSCR_OFST])
+        translate([0, 0, -LASER_SETSCR_OFST])
             rotate([0, 90, 0])
             cylinder(h = LASER_BORE_D + 4, d = LASER_SETSCR_D, center = true);
+    }
+}
+
+// ============================================================
+// D — Faceplate seat (bump removal) + mount inserts
+// ============================================================
+//
+// The modeller placed two convex camera bumps (~2.2 mm proud) on the
+// bow flat.  bow_face_seat() shaves everything proud of the flat plane
+// over the faceplate footprint, leaving a clean planar seat for the
+// combined faceplate (bow_sensor_faceplate.scad), and drills 4 blind
+// M2 heat-set-insert holes near the corners to anchor it.
+
+SEAT_CLEAR   = 6.0;   // mm — material removed proud of flat (clears 2.2 mm bumps)
+FP_INS_D     = 3.0;   // mm — M2 heat-set insert pilot hole
+FP_INS_DEP   = 6.0;   // mm — insert depth into the skin/interior
+FP_INS_X     = 11.0;  // mm — insert X offset (matches faceplate FP_M2_X)
+FP_INS_Y     = 6.0;   // mm — insert Y offset (matches faceplate FP_M2_Y)
+
+// ----------------------------------------------------------------------------
+// Module: bow_face_seat(ctr, w, h)
+//   ctr = faceplate centre on the flat (SCAD).  w,h = seat extents on the
+//   flat (X width, in-plane height).  Oriented normal to the 40° flat.
+// ----------------------------------------------------------------------------
+module bow_face_seat(ctr, w, h) {
+    translate(ctr)
+    rotate(BOW_ROT)
+    translate([0, 0, -(WALL_T + 1)]) {
+        // Shave bump material proud of the flat plane (z = WALL_T+1)
+        translate([-w / 2, -h / 2, WALL_T + 1 - 0.01])
+            cube([w, h, SEAT_CLEAR]);
+        // 4× M2 insert pilot holes, blind into the interior
+        for (sx = [-1, 1], sy = [-1, 1])
+            translate([sx * FP_INS_X, sy * FP_INS_Y, -FP_INS_DEP])
+                cylinder(h = FP_INS_DEP + 0.5, d = FP_INS_D);
     }
 }
 
@@ -328,26 +397,28 @@ module bow_laser_cut(pos) {
 //   Combined subtraction for the full bow sensor pod assembly.
 //   Intended to be used inside a difference() in head_shell24.scad.
 //
-//   Dome A (dorsal, Z ≈ 83 mm):
-//     19 mm Nano camera socket, forward-facing, on aircraft CL.
+//   Nose-tip flat-face layout (Rev R1c) — all on the 40° bow flat,
+//   covered by one combined faceplate (bow_sensor_faceplate.scad):
+//     Faceplate seat: bumps shaved flat + 4× M2 inserts.
+//     Camera (PORT bump, +X):  10 mm lens aperture + body pocket.
+//     ToF (STARBOARD bump, -X): 8 mm aperture + body pocket (rolled).
+//     Laser (CL):               6 mm beam exit + 12.5 mm bore behind.
 //
-//   Dome B (ventral, Z ≈ 60 mm):
-//     TFmini-S ToF socket, 6 mm dorsal of dome-B centre, fwd-facing.
-//     12 mm crosshair laser bore, 7 mm ventral of dome-B centre,
-//       30° below horizon, on aircraft CL.
-//
-//   All positions VERIFY in slicer at Y = BOW_FACE_Y before printing.
-//   See TODO.md §1.1.1.1a for the complete verification task list.
+//   Verified against the baked canonical mesh by tools/verify_bow_pod.py;
+//   fine-tune fractional-mm in FreeCAD as needed.
 // ----------------------------------------------------------------------------
 module bow_pod_cuts() {
-    // Dome A — 19 mm Nano camera socket (dorsal dome)
-    bow_camera_cut([DOME_A_X, DOME_A_Y, DOME_A_Z]);
+    // Faceplate seat — remove the two camera bumps, prep mount inserts
+    bow_face_seat(FACEPLATE_CTR, FACEPLATE_W, FACEPLATE_H);
 
-    // Dome B — TFmini-S ToF socket (6 mm dorsal of dome-B centre)
-    bow_tof_cut([DOME_B_X, DOME_B_Y, DOME_B_Z + TOF_Z_OFFSET]);
+    // Camera — 19 mm Nano socket, on the PORT bump
+    bow_camera_cut(CAM_POS);
 
-    // Dome B — crosshair laser bore (7 mm ventral of dome-B centre, 30° down)
-    bow_laser_cut([DOME_B_X, DOME_B_Y, DOME_B_Z + LASER_Z_OFFSET]);
+    // ToF — TFmini-S socket, on the STARBOARD bump, body rolled vertical
+    bow_tof_cut(TOF_POS, TOF_BODY_ROLL);
+
+    // Laser — beam exit on CL, module bore behind, normal to flat
+    bow_laser_cut(LASER_POS);
 }
 
 // Standalone preview — render only the cut volumes for position verification.

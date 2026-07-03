@@ -111,7 +111,11 @@ Build documentation shall include:
 - **Step numbers** with clear, sequential instructions
 - **Component lists** with part numbers, quantities, and sources
 - **Material specifications** (filament type, print settings, fastener grade)
-- **Safety warnings** for hazardous operations
+- **Safety hazard markings** for hazardous operations will in 
+    - A *WARNING* signifies a hazard to personnel
+    - A *CAUTION* signifies a hazard to equipment
+    - All instructions that pose hazards to personnel and or equipment if not done correctly shall have a caution and or warning note specifying the nature of the hazard.
+
 - **Tool requirements** (specialized fixtures, soldering iron settings, etc.)
 - **Verification steps** to confirm correct assembly
 - **Troubleshooting** for common issues

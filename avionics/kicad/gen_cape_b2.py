@@ -53,6 +53,7 @@ import sys
 # 1. UTILITY S-EXPRESSION HELPERS
 # ---------------------------------------------------------------------------
 
+
 def find_balanced_sexp(text: str, start: int) -> int:
     """Return the index one past the closing ')' of the s-expression that
     opens at *start*.  The character at *start* must be '('.
@@ -70,9 +71,9 @@ def find_balanced_sexp(text: str, start: int) -> int:
     depth = 0
     i = start
     while i < len(text):
-        if text[i] == '(':
+        if text[i] == "(":
             depth += 1
-        elif text[i] == ')':
+        elif text[i] == ")":
             depth -= 1
             if depth == 0:
                 return i + 1
@@ -124,7 +125,7 @@ def remove_sexp_block(text: str, pattern: str) -> str:
     # Consume only the trailing newline so we don't leave a blank line.
     # Do NOT consume leading spaces of the next block — doing so strips its
     # indentation and breaks subsequent pattern-based removals.
-    while end < len(text) and text[end] in '\r\n':
+    while end < len(text) and text[end] in "\r\n":
         end += 1
     return text[:idx] + text[end:]
 
@@ -1031,6 +1032,7 @@ INST_X2Y_RS485_GND_BOT = """\
 # 4b. XCVR_RX_RAW TVS protection — Change I (v2 EMI addition)
 # ---------------------------------------------------------------------------
 
+
 def inst_xcvr_rx_tvs(cx: float, cy: float) -> str:
     """Return the PRTR5V0U2X TVS instance on the XCVR_RX_RAW input line.
 
@@ -1065,12 +1067,12 @@ def inst_xcvr_rx_tvs(cx: float, cy: float) -> str:
     #   A2 at (-5.08, -1.27, 0)  tip = (cx-5.08, cy-1.27)
     #   K  at (+5.08, 0.00, 180) tip = (cx+5.08, cy)
     #   GND at (0, +5.08, 270)   tip = (cx, cy+5.08)  [power_in pin pointing down]
-    left_x = cx - 5.08          # 132.92
-    right_x = cx + 5.08         # 143.08
-    y_a1 = cy + 1.27            # 562.54
-    y_a2 = cy - 1.27            # 560.00
-    y_k = cy                    # 561.27
-    y_gnd_pin = cy + 5.08       # 566.35
+    left_x = cx - 5.08  # 132.92
+    right_x = cx + 5.08  # 143.08
+    y_a1 = cy + 1.27  # 562.54
+    y_a2 = cy - 1.27  # 560.00
+    y_k = cy  # 561.27
+    y_gnd_pin = cy + 5.08  # 566.35
 
     # UUIDs use the b2000000 prefix directly since this string is inserted
     # before UUID remapping (step H).
@@ -1084,7 +1086,7 @@ def inst_xcvr_rx_tvs(cx: float, cy: float) -> str:
     gnd_inst_uuid = "b2000000-0000-0000-0000-000000000fc7"
     gnd_pwr_uuid = "b2000000-0000-0000-0000-000000000fc8"
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "PRTR5V0U2X") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{inst_uuid}")
@@ -1109,7 +1111,7 @@ def inst_xcvr_rx_tvs(cx: float, cy: float) -> str:
     (property "Reference" "#PWR0FC1" (at {right_x:.2f} {y_k:.2f} 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Value" "GND" (at {right_x + 2.54:.2f} {y_k:.2f} 0) (effects (font (size 1.27 1.27))))
     (pin "1" (uuid "{gnd_pwr_uuid}"))
-  )'''
+  )"""
 
 
 # ---------------------------------------------------------------------------
@@ -1125,28 +1127,44 @@ def inst_xcvr_rx_tvs(cx: float, cy: float) -> str:
 #   441.43 (PHY2_INTRN), 443.97 (PHY2_RSTN)
 
 PHY_NC_Y = [
-    390.63, 393.17, 395.71, 398.25, 400.79, 403.33, 405.87, 408.41,
-    410.95, 413.49, 416.03, 418.57, 421.11, 423.65, 426.19, 428.73,
-    431.27, 433.81,
-    436.35, 438.89,
-    441.43, 443.97,
+    390.63,
+    393.17,
+    395.71,
+    398.25,
+    400.79,
+    403.33,
+    405.87,
+    408.41,
+    410.95,
+    413.49,
+    416.03,
+    418.57,
+    421.11,
+    423.65,
+    426.19,
+    428.73,
+    431.27,
+    433.81,
+    436.35,
+    438.89,
+    441.43,
+    443.97,
 ]
+
 
 def build_phy_no_connects() -> str:
     """Build no_connect marker strings for all former PHY connector pins."""
     parts = []
     for i, y in enumerate(PHY_NC_Y):
         uid = f"b2000000-0000-0000-0000-00000000nc{i:02d}"
-        parts.append(
-            f"  (no_connect (at 67.54 {y:.2f})\n"
-            f"    (uuid \"{uid}\"))\n"
-        )
+        parts.append(f"  (no_connect (at 67.54 {y:.2f})\n" f'    (uuid "{uid}"))\n')
     return "".join(parts)
 
 
 # ---------------------------------------------------------------------------
 # 6. UUID REMAPPING (Change H)
 # ---------------------------------------------------------------------------
+
 
 def remap_uuids(text: str) -> str:
     """Replace all UUID prefix '00000000-0000-0000-0000-' with
@@ -1163,15 +1181,13 @@ def remap_uuids(text: str) -> str:
     -------
     str  — Text with remapped UUIDs.
     """
-    return text.replace(
-        "00000000-0000-0000-0000-",
-        "b2000000-0000-0000-0000-"
-    )
+    return text.replace("00000000-0000-0000-0000-", "b2000000-0000-0000-0000-")
 
 
 # ---------------------------------------------------------------------------
 # 7. MAIN TRANSFORMATION PIPELINE
 # ---------------------------------------------------------------------------
+
 
 def transform(src: str) -> str:
     """Apply all Zoë transformations to the CAPE-B-1 source text.
@@ -1190,35 +1206,20 @@ def transform(src: str) -> str:
     # A. Title block update
     # ------------------------------------------------------------------
     text = text.replace(
-        '(title "CAPE-B-1")',
-        '(title "Zoë EMI-Hardened Comms, Logging & Payload Cape")'
+        '(title "CAPE-B-1")', '(title "Zoë EMI-Hardened Comms, Logging & Payload Cape")'
     )
-    text = text.replace(
-        '(date "2026-05-21")',
-        '(date "2026-06-03")'
-    )
-    text = text.replace(
-        '(rev "M")',
-        '(rev "2")'
-    )
+    text = text.replace('(date "2026-05-21")', '(date "2026-06-03")')
+    text = text.replace('(rev "M")', '(rev "2")')
 
     # ------------------------------------------------------------------
     # B. Replace ATA6561 lib_symbol with ISOW1044BDFMR
     # ------------------------------------------------------------------
-    text = replace_sexp_block(
-        text,
-        '  (symbol "ATA6561"',
-        LIB_ISOW1044BDFMR
-    )
+    text = replace_sexp_block(text, '  (symbol "ATA6561"', LIB_ISOW1044BDFMR)
 
     # ------------------------------------------------------------------
     # C. Replace MAX3485E lib_symbol with ADM2795EBRWZ
     # ------------------------------------------------------------------
-    text = replace_sexp_block(
-        text,
-        '  (symbol "MAX3485E"',
-        LIB_ADM2795EBRWZ
-    )
+    text = replace_sexp_block(text, '  (symbol "MAX3485E"', LIB_ADM2795EBRWZ)
 
     # ------------------------------------------------------------------
     # F (lib_symbols). Insert new EMI lib_symbols before closing ')' of
@@ -1226,16 +1227,14 @@ def transform(src: str) -> str:
     # own line immediately before the first symbol instance.
     # ------------------------------------------------------------------
     new_libs = (
-        LIB_SRF2012 +
-        LIB_PRTR5V0U2X +
-        LIB_SMAJ33CA +
-        LIB_FERRITE_BEAD +
-        LIB_X2Y_4N7
+        LIB_SRF2012 + LIB_PRTR5V0U2X + LIB_SMAJ33CA + LIB_FERRITE_BEAD + LIB_X2Y_4N7
     )
     # The lib_symbols block ends with exactly '  )\n' on its own line.
-    text = text.replace('  )\n  (symbol (lib_id "Conn_36")',
-                        new_libs + '  )\n  (symbol (lib_id "Conn_36")',
-                        1)
+    text = text.replace(
+        '  )\n  (symbol (lib_id "Conn_36")',
+        new_libs + '  )\n  (symbol (lib_id "Conn_36")',
+        1,
+    )
 
     # ------------------------------------------------------------------
     # B (instances). Replace ATA6561 symbol instance with ISOW1044BDFMR.
@@ -1243,11 +1242,7 @@ def transform(src: str) -> str:
     text = replace_sexp_block(
         text,
         '  (symbol (lib_id "ATA6561")',
-        INST_ISOW1044 +
-        INST_CAN_VCC1 +
-        INST_CAN_GND1 +
-        INST_CAN_VCC2 +
-        INST_CAN_ISOGND
+        INST_ISOW1044 + INST_CAN_VCC1 + INST_CAN_GND1 + INST_CAN_VCC2 + INST_CAN_ISOGND,
     )
 
     # ------------------------------------------------------------------
@@ -1256,12 +1251,12 @@ def transform(src: str) -> str:
     text = replace_sexp_block(
         text,
         '  (symbol (lib_id "MAX3485E")',
-        INST_ADM2795 +
-        INST_RS485_VCC1 +
-        INST_RS485_GND1 +
-        INST_RS485_VCC2 +
-        INST_RS485_GND2 +
-        WIRE_ADM_RE_DE
+        INST_ADM2795
+        + INST_RS485_VCC1
+        + INST_RS485_GND1
+        + INST_RS485_VCC2
+        + INST_RS485_GND2
+        + WIRE_ADM_RE_DE,
     )
 
     # ------------------------------------------------------------------
@@ -1340,65 +1335,65 @@ def transform(src: str) -> str:
     text = replace_sexp_block(
         text,
         '  (global_label "CAN_H" (shape bidirectional) (at 222.70 167.46 0)',
-        WIRE_CANH_TO_CMC
+        WIRE_CANH_TO_CMC,
     )
     text = replace_sexp_block(
         text,
         '  (global_label "CAN_L" (shape bidirectional) (at 222.70 170.00 0)',
-        WIRE_CANL_TO_CMC
+        WIRE_CANL_TO_CMC,
     )
 
     # Replace original RS485_A / RS485_B labels with routing wires.
     text = replace_sexp_block(
         text,
         '  (global_label "RS485_A" (shape bidirectional) (at 352.70 167.46 0)',
-        WIRE_A_TO_CMC_RS485
+        WIRE_A_TO_CMC_RS485,
     )
     text = replace_sexp_block(
         text,
         '  (global_label "RS485_B" (shape bidirectional) (at 352.70 170.00 0)',
-        WIRE_B_TO_CMC_RS485
+        WIRE_B_TO_CMC_RS485,
     )
 
     # Replace original +5V power symbol at (72.62, 123.09) with FB_PWR chain.
     text = replace_sexp_block(
         text,
         '  (symbol (lib_id "+5V") (at 72.62 123.09 0)',
-        INST_FB_PWR + INST_5V_FILTERED + WIRE_FB_5V + WIRE_CONN_FB
+        INST_FB_PWR + INST_5V_FILTERED + WIRE_FB_5V + WIRE_CONN_FB,
     )
 
     # Append all new EMI instances before the closing ')' of the schematic.
     emi_block = (
-        INST_CMC_CAN +
-        LABEL_CAN_H_CMC +
-        LABEL_CAN_L_CMC +
-        INST_D_CAN +
-        INST_D_CAN_GND +
-        LABEL_D_CAN_A1 +
-        LABEL_D_CAN_A2 +
-        NC_D_CAN_K +
-        INST_CMC_RS485 +
-        LABEL_RS485_A_CMC +
-        LABEL_RS485_B_CMC +
-        INST_D_RS485 +
-        INST_D_RS485_GND +
-        LABEL_D_RS485_A1 +
-        LABEL_D_RS485_A2 +
-        NC_D_RS485_K +
-        INST_D_1553 +
-        INST_D_1553_GND +
-        LABEL_D_1553_A +
-        INST_X2Y_CAN +
-        INST_X2Y_CAN_GND_TOP +
-        INST_X2Y_CAN_GND_BOT +
-        INST_X2Y_RS485 +
-        INST_X2Y_RS485_GND_TOP +
-        INST_X2Y_RS485_GND_BOT +
-        nc_block
+        INST_CMC_CAN
+        + LABEL_CAN_H_CMC
+        + LABEL_CAN_L_CMC
+        + INST_D_CAN
+        + INST_D_CAN_GND
+        + LABEL_D_CAN_A1
+        + LABEL_D_CAN_A2
+        + NC_D_CAN_K
+        + INST_CMC_RS485
+        + LABEL_RS485_A_CMC
+        + LABEL_RS485_B_CMC
+        + INST_D_RS485
+        + INST_D_RS485_GND
+        + LABEL_D_RS485_A1
+        + LABEL_D_RS485_A2
+        + NC_D_RS485_K
+        + INST_D_1553
+        + INST_D_1553_GND
+        + LABEL_D_1553_A
+        + INST_X2Y_CAN
+        + INST_X2Y_CAN_GND_TOP
+        + INST_X2Y_CAN_GND_BOT
+        + INST_X2Y_RS485
+        + INST_X2Y_RS485_GND_TOP
+        + INST_X2Y_RS485_GND_BOT
+        + nc_block
     )
 
     # Insert EMI block before the final closing paren of the schematic.
-    assert text.rstrip().endswith(')'), "Unexpected schematic ending"
+    assert text.rstrip().endswith(")"), "Unexpected schematic ending"
     text = text.rstrip()[:-1] + emi_block + ")\n"
 
     # ------------------------------------------------------------------
@@ -1407,7 +1402,7 @@ def transform(src: str) -> str:
     #    We append a new instance before the final closing ')'.
     # ------------------------------------------------------------------
     xcvr_tvs_block = inst_xcvr_rx_tvs(138.0, 561.27)
-    assert text.rstrip().endswith(')'), "Unexpected schematic ending after EMI block"
+    assert text.rstrip().endswith(")"), "Unexpected schematic ending after EMI block"
     text = text.rstrip()[:-1] + xcvr_tvs_block + "\n)\n"
 
     # ------------------------------------------------------------------
@@ -1423,11 +1418,7 @@ def transform(src: str) -> str:
     # inserting it just after the (paper "A1") line.
     SHEET_UUID_LINE = '  (uuid "b2000000-0000-0000-0000-000000000001")\n'
     if '(uuid "b2000000-0000-0000-0000-000000000001")' not in text:
-        text = text.replace(
-            '  (paper "A1")\n',
-            '  (paper "A1")\n' + SHEET_UUID_LINE,
-            1
-        )
+        text = text.replace('  (paper "A1")\n', '  (paper "A1")\n' + SHEET_UUID_LINE, 1)
 
     # ------------------------------------------------------------------
     # H. Remap all UUID prefixes.
@@ -1440,6 +1431,7 @@ def transform(src: str) -> str:
 # ---------------------------------------------------------------------------
 # 8. ENTRY POINT
 # ---------------------------------------------------------------------------
+
 
 def main() -> int:
     """Read CAPE-B-1.kicad_sch, apply all transforms, write Zoë.kicad_sch.
@@ -1468,14 +1460,21 @@ def main() -> int:
     dst_path.write_text(dst_text, encoding="utf-8")
 
     # ---- Quick sanity checks ----------------------------------------
-    line_count = dst_text.count('\n')
+    line_count = dst_text.count("\n")
     print(f"Lines    : {line_count}")
 
     ok = True
 
     # Must contain new EMI parts.
-    for token in ["ISOW1044BDFMR", "ADM2795EBRWZ", "SRF2012", "PRTR5V0U2X",
-                  "SMAJ33CA", "Ferrite_Bead", "X2Y_4N7"]:
+    for token in [
+        "ISOW1044BDFMR",
+        "ADM2795EBRWZ",
+        "SRF2012",
+        "PRTR5V0U2X",
+        "SMAJ33CA",
+        "Ferrite_Bead",
+        "X2Y_4N7",
+    ]:
         n = dst_text.count(token)
         if n == 0:
             print(f"FAIL: '{token}' not found in output", file=sys.stderr)
@@ -1487,25 +1486,23 @@ def main() -> int:
     for token in ["DP83825I", "ATA6561", "MAX3485E"]:
         n = dst_text.count(token)
         if n != 0:
-            print(f"FAIL: '{token}' still present ({n} occurrences)",
-                  file=sys.stderr)
+            print(f"FAIL: '{token}' still present ({n} occurrences)", file=sys.stderr)
             ok = False
         else:
             print(f"OK   : '{token}' absent (correctly removed/replaced)")
 
     # RMII/MDC/MDIO labels should be gone.
-    for token in ["RMII", "\"MDC\"", "\"MDIO\""]:
+    for token in ["RMII", '"MDC"', '"MDIO"']:
         n = dst_text.count(token)
         if n != 0:
-            print(f"FAIL: PHY signal '{token}' still present ({n}x)",
-                  file=sys.stderr)
+            print(f"FAIL: PHY signal '{token}' still present ({n}x)", file=sys.stderr)
             ok = False
         else:
             print(f"OK   : '{token}' absent")
 
     # Rev and title updated.
     if '(rev "2")' in dst_text:
-        print("OK   : rev=\"2\" present")
+        print('OK   : rev="2" present')
     else:
         print("FAIL: rev not updated", file=sys.stderr)
         ok = False

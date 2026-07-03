@@ -127,7 +127,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 | STL | Material | Layer | Infill | Qty | Notes |
 |-----|----------|-------|--------|-----|-------|
 | `head_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Nose-down orientation |
-| `middle_canonical_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Canonical belly — NO belly scoop. Generate from `serenity/stl/middle_canonical_shell24.scad`. |
+| `middle_canonical_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Canonical belly — NO belly scoop. **Rev R1 canonical source is the Blender pipeline** (`middle_shell24_2mm_repaired.stl`, see Blender Script Reference below), not the legacy `middle_canonical_shell24.scad`. |
 | `cargo_sect_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | |
 | `rear_neck_intake_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | Hull neck section with reduced-area scoop windows (sized for 55mm EDF). Generate from `deferred/aft-edf/openscad/rear_neck_intake_shell24.scad`. Cover the windows with removable 3mm PETG blanks (silicone-sealed) until Phase 11. |
 | `s_wings_both_shell24.stl` | PETG | 0.20 mm | 8% gyroid | 1 | |
@@ -636,9 +636,26 @@ Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_s
 
 ## Blender Script Reference
 
+> **Fuselage shell source — Rev R1 canonical (Blender pipeline, supersedes SCAD regen).**
+> The four 2 mm hollow fuselage shells (head, cargo, middle, rear) are NO LONGER
+> regenerated from OpenSCAD.  Their **authoritative canonical sources** are the
+> Blender-derived, repaired STLs in `airframe/blender-scripts/files-hollowed-24in/`
+> (`head_shell24_2mm_repaired.stl`, `cargo_sect_shell24_2mm_repaired.stl`,
+> `middle_shell24_2mm_repaired.stl`, `rear_shell24_2mm_repaired.stl`).  To (re)publish:
+> (1) edit/copy the source in `airframe/blender-scripts/files-hollowed-24in/`;
+> (2) copy it to `airframe/stls/fuselage/` (or `fuselage/cargo/` for cargo);
+> (3) run `python3 tools/bake_hull_frame.py` to bake hull-frame coords + header marker;
+> (4) verify Z-range/watertightness before committing.  The SCAD shell files
+> (`s_head_shell24.scad`, `s_middle_canonical_shell24.scad`,
+> `s_rear_neck_intake_shell24.scad`, `cargo_sect_shell24.scad`) are **secondary
+> references only** (cargo SCAD still sources interior boss geometry pending the
+> §1.1.1.0a merge).  See CLAUDE.md "Canonical fuselage source — Blender pipeline" and
+> TODO.md §1.1.1.0a.
+
 | Script / File | Tool | Purpose | Output |
 |---------------|------|---------|--------|
-| `blender_shells_v3.py` | Blender | Hollow and scale all hull STLs to 24" | `*_shell24.stl` (all hull sections) |
+| `airframe/blender-scripts/files-hollowed-24in/` → `tools/bake_hull_frame.py` | Blender + bake | **Canonical** 2 mm hollow fuselage shells (head/cargo/middle/rear) | `*_shell24_2mm_repaired.stl` (baked, hull-frame) |
+| `blender_shells_v3.py` | Blender | *(legacy)* hollow/scale hull STLs to 24" — superseded by the canonical Blender sources above | `*_shell24.stl` (all hull sections) |
 | `blender_nacelle_integrated_v1.py` | Blender | Generate nacelle shells with integrated stators | `s_eng_left_stator_shell24.stl`, `s_eng_right_stator_shell24.stl` |
 | ~~`blender_intake_cut.py`~~ | ~~Blender~~ | ~~Cut 120mm belly intake in s_middle~~ | **Superseded** — belly scoop removed in Rev N; use canonical middle shell instead |
 | `blender_nozzle_gen.py` | Blender | Generate nacelle iris nozzle petals and rings | `nacelle_nozzle_petal.stl`, `nacelle_nozzle_ring.stl` |

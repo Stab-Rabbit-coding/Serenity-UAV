@@ -9,13 +9,21 @@ All four input STLs must already be baked (header carries "SerenityUAV HULL-FRAM
 Features added per shell:
 
     Head:   bore-open aft face; 3× boss-pin bores (Joint 1)
-    Cargo:  bore-open fwd + aft faces; 6× boss-pin bores (Joints 1+2);
-            keel locating channel; ring-frame pocket at Y = +30 mm
+    Cargo:  DELEGATED to merge_cargo_interior.py (Rev R1, 2026-06-30) — that
+            script starts from the clean Blender source and merges the joint
+            features AND every cargo interior feature (clamshell doors, wing
+            spar/mortises, bosses, interior-wall removal) in one robust
+            manifold3d pass.  Cargo is SKIPPED here (see main()).
     Middle: bore-open fwd + aft faces; 6× boss-pin bores (Joints 2+3);
             2× CF skid-rod channels (port + stbd)
     Rear:   bore-open fwd face; 3× boss-pin bores (Joint 3);
             keel locating channel; ring-frame pocket at Y = +290 mm;
             2× CF skid-rod channels (port + stbd)
+
+MESH-01 root-cause fix (2026-06-30): _subtract_all now unions all cutters and
+does a single manifold3d difference instead of fragile sequential per-cut
+booleans — see that function's docstring.  Middle and rear still need a
+clean-source regeneration pass with this fixed core (TODO.md MESH-01).
 
 Ring-frame inner-profile CSVs are also exported to airframe/diagrams/ring_frames/.
 
@@ -44,14 +52,15 @@ Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
 """
 
-import os
-import sys
 import csv
+import os
 import struct
+import sys
 
 import numpy as np
 import trimesh
-from manifold3d import Manifold as _Manifold, Mesh as _Mesh
+from manifold3d import Manifold as _Manifold
+from manifold3d import Mesh as _Mesh
 from shapely.geometry import Polygon
 
 # ---------------------------------------------------------------------------
@@ -64,11 +73,12 @@ RING_CSV_DIR = os.path.join(REPO_ROOT, "airframe", "diagrams", "ring_frames")
 
 # Canonical baked shell paths (hull frame, identity placement)
 SHELLS = {
-    "head":   os.path.join(STL_DIR, "fuselage", "head_shell24_2mm_repaired.stl"),
-    "cargo":  os.path.join(STL_DIR, "fuselage", "cargo",
-                           "cargo_sect_shell24_2mm_repaired.stl"),
+    "head": os.path.join(STL_DIR, "fuselage", "head_shell24_2mm_repaired.stl"),
+    "cargo": os.path.join(
+        STL_DIR, "fuselage", "cargo", "cargo_sect_shell24_2mm_repaired.stl"
+    ),
     "middle": os.path.join(STL_DIR, "fuselage", "middle_shell24_2mm_repaired.stl"),
-    "rear":   os.path.join(STL_DIR, "fuselage", "rear_shell24_2mm_repaired.stl"),
+    "rear": os.path.join(STL_DIR, "fuselage", "rear_shell24_2mm_repaired.stl"),
 }
 
 MARKER = b"SerenityUAV HULL-FRAME R1"
@@ -103,20 +113,20 @@ MARKER = b"SerenityUAV HULL-FRAME R1"
 # reaches) is still a hand-picked constant; X/Z shape is always measured.
 FACE_BORE_Y_RANGES = {
     # Head aft face (Y = -70.7 mm): bore from 14 mm inside head to 2.7 mm past face
-    "head_aft":   (-85.0,  -68.0),
+    "head_aft": (-85.0, -68.0),
     # Cargo fwd face (Y = -71.5 mm): from 2 mm before face to 13.5 mm inside cargo
-    "cargo_fwd":  (-75.0,  -58.0),
+    "cargo_fwd": (-75.0, -58.0),
     # Cargo aft face (Y = +132.0 mm): 10 mm inside cargo to 2 mm past face
-    "cargo_aft":  (+122.0, +134.0),
+    "cargo_aft": (+122.0, +134.0),
     # Middle fwd face (Y = +130.4 mm): 2 mm before face to 14.6 mm inside middle
     "middle_fwd": (+128.0, +145.0),
     # Middle aft face (Y = +203.6 mm): 10 mm inside middle to 3.4 mm past face
     "middle_aft": (+193.0, +207.0),
     # Rear fwd face (Y = +203.2 mm): 2 mm before face to 13.8 mm inside rear
-    "rear_fwd":   (+201.0, +217.0),
+    "rear_fwd": (+201.0, +217.0),
 }
-FACE_BORE_MARGIN = 1.5     # mm — inset from the measured inner-cavity wall
-FACE_BORE_SAMPLES = 7      # Y stations sampled across each joint's span
+FACE_BORE_MARGIN = 1.5  # mm — inset from the measured inner-cavity wall
+FACE_BORE_SAMPLES = 7  # Y stations sampled across each joint's span
 
 # ---------- boss-pin bores (Ø 3.2 mm cylinders, Y-axis, 8 mm each section) ----------
 # Positions on r = 35 mm circle at 0° / 120° / 240° from cross-section centroid.
@@ -126,29 +136,29 @@ BOSS_PIN_BORES = {
     "joint1": {  # Head / Cargo, hull Y ≈ -71 mm
         "y_range": (-79.0, -62.0),
         "pins": [
-            (-168.3, +143.9),   # Pin A — top
-            (-138.0,  +91.4),   # Pin B — lower stbd
-            (-198.6,  +91.4),   # Pin C — lower port
+            (-168.3, +143.9),  # Pin A — top
+            (-138.0, +91.4),  # Pin B — lower stbd
+            (-198.6, +91.4),  # Pin C — lower port
         ],
     },
     "joint2": {  # Cargo / Middle, hull Y ≈ +131 mm
         "y_range": (+121.0, +141.0),
         "pins": [
-            (-170.1, +115.0),   # Pin A — top
-            (-139.8,  +62.5),   # Pin B — lower stbd
-            (-200.4,  +62.5),   # Pin C — lower port
+            (-170.1, +115.0),  # Pin A — top
+            (-139.8, +62.5),  # Pin B — lower stbd
+            (-200.4, +62.5),  # Pin C — lower port
         ],
     },
     "joint3": {  # Middle / Rear, hull Y ≈ +203 mm
         "y_range": (+193.0, +213.0),
         "pins": [
-            (-170.1, +109.6),   # Pin A — top
-            (-139.8,  +57.1),   # Pin B — lower stbd
-            (-200.4,  +57.1),   # Pin C — lower port
+            (-170.1, +109.6),  # Pin A — top
+            (-139.8, +57.1),  # Pin B — lower stbd
+            (-200.4, +57.1),  # Pin C — lower port
         ],
     },
 }
-BOSS_PIN_RADIUS = 1.6   # mm — Ø 3.2 mm bore (CF rod 3.0 mm OD + 0.1 mm clearance/side)
+BOSS_PIN_RADIUS = 1.6  # mm — Ø 3.2 mm bore (CF rod 3.0 mm OD + 0.1 mm clearance/side)
 
 # ---------- keel locating channel (3.5 mm wide × 1.0 mm deep, inner belly surface) ----------
 # Groove centred at hull X = -170 mm; 1 mm removed from inner surface.
@@ -163,15 +173,21 @@ BOSS_PIN_RADIUS = 1.6   # mm — Ø 3.2 mm bore (CF rod 3.0 mm OD + 0.1 mm clear
 # into non-manifold edges / degenerate slivers (see TODO.md MESH-01). CUT_OVERLAP
 # pushes that face CUT_OVERLAP past the existing surface, into the already-hollow
 # interior, where there is no material to over-remove.
-CUT_OVERLAP = 0.5   # mm — clearance past an existing mesh surface for any cutter
-                    # face meant to coincide with it (avoids manifold3d non-manifold
-                    # edges from exactly-coplanar cut/surface faces; MESH-01 fix)
+CUT_OVERLAP = 0.5  # mm — clearance past an existing mesh surface for any cutter
+# face meant to coincide with it (avoids manifold3d non-manifold
+# edges from exactly-coplanar cut/surface faces; MESH-01 fix)
 
 KEEL_CHANNEL = {
-    "cargo": {"x_range": (-171.75, -168.25), "z_range": (1.0, 2.0 + CUT_OVERLAP),
-              "y_range": (-71.5, +132.0)},
-    "rear":  {"x_range": (-171.75, -168.25), "z_range": (4.7, 5.7 + CUT_OVERLAP),
-              "y_range": (+203.2, +384.3)},
+    "cargo": {
+        "x_range": (-171.75, -168.25),
+        "z_range": (1.0, 2.0 + CUT_OVERLAP),
+        "y_range": (-71.5, +132.0),
+    },
+    "rear": {
+        "x_range": (-171.75, -168.25),
+        "z_range": (4.7, 5.7 + CUT_OVERLAP),
+        "y_range": (+203.2, +384.3),
+    },
 }
 
 # ---------- ring-frame pockets (2.5 mm wide in Y, 1.0 mm deep, 4 side cutters) ----------
@@ -188,12 +204,19 @@ KEEL_CHANNEL = {
 # inset so the pocket geometry is provably on the solid-material side, with
 # CUT_OVERLAP clearance past every face that meets the existing mesh surface (both
 # the inner-wall face and the four corners where adjacent slabs must overlap).
-POCKET_DEPTH = 1.0     # mm — groove depth, per structural_analysis.md §5.5
-WALL_INSET   = 2.0     # mm — 2 mm wall thickness (outer-to-inner offset)
+POCKET_DEPTH = 1.0  # mm — groove depth, per structural_analysis.md §5.5
+WALL_INSET = 2.0  # mm — 2 mm wall thickness (outer-to-inner offset)
 
 
-def _ring_pocket_slabs(x_outer, z_outer, y_centre, y_half=1.25,
-                        inset=WALL_INSET, depth=POCKET_DEPTH, overlap=CUT_OVERLAP):
+def _ring_pocket_slabs(
+    x_outer,
+    z_outer,
+    y_centre,
+    y_half=1.25,
+    inset=WALL_INSET,
+    depth=POCKET_DEPTH,
+    overlap=CUT_OVERLAP,
+):
     """
     Return the 4 perimeter slab cutters (top, port, stbd, bottom) for a ring-frame
     pocket, given the OUTER cross-section bounds at the ring station.
@@ -210,14 +233,31 @@ def _ring_pocket_slabs(x_outer, z_outer, y_centre, y_half=1.25,
     zi_min, zi_max = zo_min + inset, zo_max - inset
     y0, y1 = y_centre - y_half, y_centre + y_half
 
-    top    = (xi_min - overlap, xi_max + overlap,
-              zi_max - overlap, zi_max + depth, y0, y1)
-    bottom = (xi_min - overlap, xi_max + overlap,
-              zi_min - depth, zi_min + overlap, y0, y1)
-    port   = (xi_min - overlap, xi_min + depth,
-              zi_min - overlap, zi_max + overlap, y0, y1)
-    stbd   = (xi_max - depth, xi_max + overlap,
-              zi_min - overlap, zi_max + overlap, y0, y1)
+    top = (xi_min - overlap, xi_max + overlap, zi_max - overlap, zi_max + depth, y0, y1)
+    bottom = (
+        xi_min - overlap,
+        xi_max + overlap,
+        zi_min - depth,
+        zi_min + overlap,
+        y0,
+        y1,
+    )
+    port = (
+        xi_min - overlap,
+        xi_min + depth,
+        zi_min - overlap,
+        zi_max + overlap,
+        y0,
+        y1,
+    )
+    stbd = (
+        xi_max - depth,
+        xi_max + overlap,
+        zi_min - overlap,
+        zi_max + overlap,
+        y0,
+        y1,
+    )
     return [top, port, stbd, bottom]
 
 
@@ -235,14 +275,15 @@ RING_POCKETS = {
 # Positions from STL vertex survey; see structural_analysis.md §6.3.
 SKID_ROD_BORES = [
     # (x_centre, z_centre, y_start, y_end)
-    (-202.0, 18.0, +173.0, +233.0),   # port arm
-    (-135.0, 20.0, +173.0, +233.0),   # stbd arm
+    (-202.0, 18.0, +173.0, +233.0),  # port arm
+    (-135.0, 20.0, +173.0, +233.0),  # stbd arm
 ]
-SKID_ROD_RADIUS = 2.1   # mm — Ø 4.2 mm bore (CF rod 4.0 mm OD + 0.1 mm clearance/side)
+SKID_ROD_RADIUS = 2.1  # mm — Ø 4.2 mm bore (CF rod 4.0 mm OD + 0.1 mm clearance/side)
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def _box(x0, x1, z0, z1, y0, y1):
     """
@@ -254,9 +295,7 @@ def _box(x0, x1, z0, z1, y0, y1):
     dx, dy, dz = x1 - x0, y1 - y0, z1 - z0
     # Hull frame: X=0, Y=1, Z=2  →  trimesh box extents in [X, Y, Z]
     box = trimesh.creation.box(extents=[dx, dy, dz])
-    centre = np.array([(x0 + x1) / 2.0,
-                       (y0 + y1) / 2.0,
-                       (z0 + z1) / 2.0])
+    centre = np.array([(x0 + x1) / 2.0, (y0 + y1) / 2.0, (z0 + z1) / 2.0])
     box.apply_translation(centre)
     return box
 
@@ -278,9 +317,9 @@ def _y_cylinder(x_cen, z_cen, y_start, y_end, radius, sections=32):
     return cyl
 
 
-CAVITY_JUNK_FLOOR = 5.0   # mm^2 — loops smaller than this are mesh artifacts
-                          # (degenerate slivers, boss/rib details), never the
-                          # real inner-cavity boundary; see HOLE-01 fix note.
+CAVITY_JUNK_FLOOR = 5.0  # mm^2 — loops smaller than this are mesh artifacts
+# (degenerate slivers, boss/rib details), never the
+# real inner-cavity boundary; see HOLE-01 fix note.
 
 
 def _inner_cavity_polygon(mesh, y, margin):
@@ -316,7 +355,9 @@ def _inner_cavity_polygon(mesh, y, margin):
     return None if inset.is_empty else inset
 
 
-def _bore_open_cutter(mesh, y_range, margin=FACE_BORE_MARGIN, samples=FACE_BORE_SAMPLES):
+def _bore_open_cutter(
+    mesh, y_range, margin=FACE_BORE_MARGIN, samples=FACE_BORE_SAMPLES
+):
     """
     Build a bore-open cutter for a joint face that is, by construction, always
     inside the shell's measured inner cavity across the given hull-Y span —
@@ -352,12 +393,14 @@ def _bore_open_cutter(mesh, y_range, margin=FACE_BORE_MARGIN, samples=FACE_BORE_
         # extrude_polygon builds (x, y, z) = (poly_x, poly_y, [0, height]);
         # remap to hull frame: hull_X = poly_x, hull_Z = poly_y,
         # hull_Y = z + ys[i].
-        remap = np.array([
-            [1.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 1.0, ys[i]],
-            [0.0, 1.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 1.0],
-        ])
+        remap = np.array(
+            [
+                [1.0, 0.0, 0.0, 0.0],
+                [0.0, 0.0, 1.0, ys[i]],
+                [0.0, 1.0, 0.0, 0.0],
+                [0.0, 0.0, 0.0, 1.0],
+            ]
+        )
         extrusion.apply_transform(remap)
         segments.append(extrusion)
 
@@ -365,7 +408,8 @@ def _bore_open_cutter(mesh, y_range, margin=FACE_BORE_MARGIN, samples=FACE_BORE_
         raise RuntimeError(
             f"_bore_open_cutter: no safe inner-cavity opening anywhere across "
             f"y_range={y_range} (margin={margin} mm) — narrow y_range or "
-            f"reduce margin and re-survey this joint")
+            f"reduce margin and re-survey this joint"
+        )
     # Return each segment as its own watertight solid rather than one
     # concatenated mesh: adjacent segments' polygons can differ slightly
     # (different pairwise intersections), so gluing them into a single mesh
@@ -399,47 +443,57 @@ def _to_manifold_volume(mesh):
     return repaired
 
 
+def _manifold_from_trimesh(tm):
+    """trimesh.Trimesh -> manifold3d.Manifold (float32, as manifold3d uses)."""
+    return _Manifold(
+        _Mesh(
+            vert_properties=tm.vertices.astype(np.float32),
+            tri_verts=tm.faces.astype(np.uint32),
+        )
+    )
+
+
+def _trimesh_from_manifold(man):
+    """manifold3d.Manifold -> trimesh.Trimesh (float64 vertices)."""
+    msh = man.to_mesh()
+    return trimesh.Trimesh(
+        vertices=np.asarray(msh.vert_properties, dtype=np.float64)[:, :3],
+        faces=np.asarray(msh.tri_verts, dtype=np.int64),
+        process=False,
+    )
+
+
 def _subtract_all(shell, cutters):
     """
-    Subtract a list of cutter meshes from the shell using manifold3d.
+    Subtract ALL cutters from the shell in ONE robust manifold3d expression:
+    union every cutter into a single Manifold, then evaluate  shell - union.
 
-    Applies each subtraction sequentially to avoid the union-of-cutters step,
-    which can produce non-manifold geometry when cutter boxes share coplanar faces.
+    MESH-01 fix (2026-06-30): the previous implementation subtracted cutters
+    one at a time with trimesh.boolean.difference(engine="manifold") plus a
+    per-step _to_manifold_volume "repair" on a ~1.4 M-face shell, then dropped
+    sub-1000-face junk.  That fragile sequential round-trip is the actual root
+    cause of MESH-01 — it left the published cargo/middle/rear shells
+    non-watertight and fragmented (cargo: 71 131 disconnected bodies,
+    is_watertight=False; TODO.md MESH-01).
 
-    MESH-01 fix (2026-06-16): the manifold3d round-trip repair (_to_manifold_volume)
-    is now applied after EVERY subtraction, not just once before the loop.  Each
-    individual difference can leave a handful of degenerate float32 triangles where
-    a cutter face nearly coincides with the existing surface (see CUT_OVERLAP above);
-    repairing immediately prevents those defects from compounding across dozens of
-    sequential cuts, which is what produced the non-watertight / multi-body shells
-    documented in TODO.md MESH-01. After every subtraction, sub-1000-face junk
-    components are also dropped so the next difference always receives a clean volume.
+    Boolean subtraction/union of closed 2-manifolds is closed by construction,
+    so unioning the cutters and doing a single difference is both robust
+    (guaranteed watertight out, no compounding degenerate slivers, no junk
+    components to sweep) and far faster than dozens of full-mesh round-trips.
+    This is the same manifold3d-direct approach proven on the cargo section by
+    merge_cargo_interior.py (watertight=True, single body, volume = the
+    structural_analysis.md mass-budget figure).  CUT_OVERLAP (finite clearance
+    past coincident surfaces) is still applied on the cutter geometry so no cut
+    face lands exactly on an existing wall.
     """
-    result = shell
-    for i, cutter in enumerate(cutters):
-        # Ensure cutter normals are consistent (trimesh.creation objects should be,
-        # but rotations can flip winding on degenerate faces).
-        if not cutter.is_volume:
-            cutter.fix_normals()
-        try:
-            result = trimesh.boolean.difference([result, cutter], engine="manifold")
-        except Exception as exc:
-            print(f"    [WARN] cutter {i} difference failed ({exc}); skipping")
-            continue
-
-        # Drop junk components after each step.  Main body is hundreds of
-        # thousands of faces; anything under 1000 is a boolean artifact.
-        comps = result.split(only_watertight=False)
-        keep = [c for c in comps if len(c.faces) >= 1000]
-        if len(keep) > 1:
-            result = trimesh.util.concatenate(keep)
-        elif len(keep) == 1:
-            result = keep[0]
-
-        # Repair after every cut (MESH-01 fix) rather than only once before the loop.
-        result = _to_manifold_volume(result)
-
-    return result
+    if not cutters:
+        return shell
+    shell_man = _manifold_from_trimesh(shell)
+    neg = None
+    for cutter in cutters:
+        cm = _manifold_from_trimesh(cutter)
+        neg = cm if neg is None else (neg + cm)
+    return _trimesh_from_manifold(shell_man - neg)
 
 
 def _stamp_header_export(mesh, out_path, shell_name):
@@ -451,7 +505,7 @@ def _stamp_header_export(mesh, out_path, shell_name):
     features, not re-applying a placement transform).
     """
     count = len(mesh.faces)
-    tris = mesh.vertices[mesh.faces]           # (N, 3, 3) float64
+    tris = mesh.vertices[mesh.faces]  # (N, 3, 3) float64
 
     # Recompute normals from CCW winding
     e1 = tris[:, 1, :] - tris[:, 0, :]
@@ -467,8 +521,9 @@ def _stamp_header_export(mesh, out_path, shell_name):
     rec["data"][:, 0:3] = normals.astype("<f4")
     rec["data"][:, 3:12] = tris.reshape(count, 9).astype("<f4")
 
-    header_str = (MARKER + b" " + shell_name.encode("ascii")
-                  + b" structural-features 2026-06-14")
+    header_str = (
+        MARKER + b" " + shell_name.encode("ascii") + b" structural-features 2026-06-14"
+    )
     header = header_str[:80].ljust(80, b"\0")
 
     with open(out_path, "wb") as fh:
@@ -501,16 +556,19 @@ def _export_ring_profile(shell_mesh, y_station, csv_path):
             pts = section.vertices[entity.points]
             for pt in pts:
                 writer.writerow([f"{pt[0]:.3f}", f"{pt[2]:.3f}", idx])
-            writer.writerow(["", "", ""])   # blank row between paths
+            writer.writerow(["", "", ""])  # blank row between paths
 
     all_pts = section.vertices
-    print(f"    ring profile @ Y={y_station}: {len(section.entities)} paths, "
-          f"{len(all_pts)} vertices → {os.path.basename(csv_path)}")
+    print(
+        f"    ring profile @ Y={y_station}: {len(section.entities)} paths, "
+        f"{len(all_pts)} vertices → {os.path.basename(csv_path)}"
+    )
 
 
 # ---------------------------------------------------------------------------
 # Per-shell processing
 # ---------------------------------------------------------------------------
+
 
 def process_head(mesh):
     """
@@ -563,9 +621,16 @@ def process_cargo(mesh):
 
     # Keel locating channel
     kc = KEEL_CHANNEL["cargo"]
-    cutters.append(_box(kc["x_range"][0], kc["x_range"][1],
-                        kc["z_range"][0], kc["z_range"][1],
-                        kc["y_range"][0], kc["y_range"][1]))
+    cutters.append(
+        _box(
+            kc["x_range"][0],
+            kc["x_range"][1],
+            kc["z_range"][0],
+            kc["z_range"][1],
+            kc["y_range"][0],
+            kc["y_range"][1],
+        )
+    )
 
     # Ring-frame pocket at Y = +30 mm (4 side cutters)
     for xm, xx, zm, zx, ym, yx in RING_POCKETS["cargo_Y30"]:
@@ -631,9 +696,16 @@ def process_rear(mesh):
 
     # Keel locating channel
     kc = KEEL_CHANNEL["rear"]
-    cutters.append(_box(kc["x_range"][0], kc["x_range"][1],
-                        kc["z_range"][0], kc["z_range"][1],
-                        kc["y_range"][0], kc["y_range"][1]))
+    cutters.append(
+        _box(
+            kc["x_range"][0],
+            kc["x_range"][1],
+            kc["z_range"][0],
+            kc["z_range"][1],
+            kc["y_range"][0],
+            kc["y_range"][1],
+        )
+    )
 
     # Ring-frame pocket at Y = +290 mm
     for xm, xx, zm, zx, ym, yx in RING_POCKETS["rear_Y290"]:
@@ -650,6 +722,7 @@ def process_rear(mesh):
 # ---------------------------------------------------------------------------
 # Verification gate
 # ---------------------------------------------------------------------------
+
 
 def verify(mesh, name):
     """
@@ -678,23 +751,33 @@ def verify(mesh, name):
         mesh.edges_unique_inverse,
         minlength=len(mesh.edges_unique),
     )
-    b_count = int(np.sum(edge_counts == 1))        # open boundary edges
-    nm_count = int(np.sum(edge_counts > 2))         # non-manifold edges
+    b_count = int(np.sum(edge_counts == 1))  # open boundary edges
+    nm_count = int(np.sum(edge_counts > 2))  # non-manifold edges
 
     comps = mesh.split(only_watertight=False)
     bodies = len(comps)
     junk = [c for c in comps if len(c.faces) < JUNK_FACE_LIMIT]
 
-    status = "PASS" if (b_count == 0 and nm_count == 0 and not junk
-                        and mesh.is_winding_consistent
-                        and mesh.is_watertight) else "FAIL"
-    print(f"    verify {name}: {status}  "
-          f"boundary={b_count}  nonmanifold={nm_count}  bodies={bodies}  "
-          f"junk_fragments={len(junk)}  "
-          f"winding={mesh.is_winding_consistent}  "
-          f"watertight={mesh.is_watertight}  "
-          f"vol={mesh.volume:.0f} mm³  "
-          f"faces={len(mesh.faces):,}")
+    status = (
+        "PASS"
+        if (
+            b_count == 0
+            and nm_count == 0
+            and not junk
+            and mesh.is_winding_consistent
+            and mesh.is_watertight
+        )
+        else "FAIL"
+    )
+    print(
+        f"    verify {name}: {status}  "
+        f"boundary={b_count}  nonmanifold={nm_count}  bodies={bodies}  "
+        f"junk_fragments={len(junk)}  "
+        f"winding={mesh.is_winding_consistent}  "
+        f"watertight={mesh.is_watertight}  "
+        f"vol={mesh.volume:.0f} mm³  "
+        f"faces={len(mesh.faces):,}"
+    )
     return status == "PASS"
 
 
@@ -702,33 +785,48 @@ def verify(mesh, name):
 # Main
 # ---------------------------------------------------------------------------
 
+
 def main():
     """Process all four fuselage shells and export ring-frame profiles."""
     print("=== add_structural_features.py  Rev R1  2026-06-14 ===")
 
     processors = {
-        "head":   process_head,
-        "cargo":  process_cargo,
+        "head": process_head,
+        "cargo": process_cargo,
         "middle": process_middle,
-        "rear":   process_rear,
+        "rear": process_rear,
     }
 
     # Ring-frame profile export: slice BEFORE modification (geometry unchanged at
     # those Y stations — ring pockets only affect a 2.5 mm Y slice).
     print("\n--- ring-frame inner-profile CSV export ---")
     cargo_mesh_raw = trimesh.load(SHELLS["cargo"], process=True)
-    rear_mesh_raw  = trimesh.load(SHELLS["rear"],  process=True)
+    rear_mesh_raw = trimesh.load(SHELLS["rear"], process=True)
     _export_ring_profile(
-        cargo_mesh_raw, 30.0,
+        cargo_mesh_raw,
+        30.0,
         os.path.join(RING_CSV_DIR, "ring_cargo_Y30_inner.csv"),
     )
     _export_ring_profile(
-        rear_mesh_raw, 290.0,
+        rear_mesh_raw,
+        290.0,
         os.path.join(RING_CSV_DIR, "ring_rear_Y290_inner.csv"),
     )
 
+    # Cargo is now processed by airframe/blender-scripts/merge_cargo_interior.py,
+    # which starts from the CLEAN Blender source and merges the joint features
+    # AND all cargo interior features (doors, wing, bosses, interior-wall
+    # removal) in one robust manifold3d pass (TODO.md §1.1.1.0a).  Running the
+    # joint cuts here as well would double-process the cargo joints, so cargo is
+    # skipped.  Middle and rear still need a clean-source regeneration pass with
+    # the MESH-01-fixed _subtract_all above (TODO.md MESH-01 / §1.1.1.0a).
+    SKIP = {"cargo"}
+
     results = {}
     for name, path in SHELLS.items():
+        if name in SKIP:
+            print(f"\n--- {name}: SKIPPED (see merge_cargo_interior.py) ---")
+            continue
         print(f"\n--- {name} ({path}) ---")
         mesh = trimesh.load(path, process=True)
         print(f"  loaded: {len(mesh.faces):,} faces  vol={mesh.volume:.0f} mm³")
@@ -750,12 +848,18 @@ def main():
         print(f"  {name:10s}: {status}")
     any_fail = any(s == "FAIL" for s in results.values())
     if any_fail:
-        print("\nWARN: one or more shells failed verification — inspect before printing.")
+        print(
+            "\nWARN: one or more shells failed verification — inspect before printing."
+        )
         sys.exit(1)
     else:
         print("\nAll shells PASS manufacturing-watertight gate.")
-        print("Run: python3 tools/bake_hull_frame.py --check  (to confirm HULL-FRAME R1 marker)")
-        print("Slicer verification of feature positions is required before first print.")
+        print(
+            "Run: python3 tools/bake_hull_frame.py --check  (to confirm HULL-FRAME R1 marker)"
+        )
+        print(
+            "Slicer verification of feature positions is required before first print."
+        )
 
 
 if __name__ == "__main__":

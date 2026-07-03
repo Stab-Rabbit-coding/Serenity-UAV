@@ -329,6 +329,16 @@
       "qty": 1,
       "mass_g": 8,
       "notes": "Rev P new (PR #21 2026-05-30). 28 mm dia FOV cutout; accepts standard 28 mm M12 lens FPV module; 4× M2 mounting screws to forward bulkhead; camera cable routes to Cape-B MIPI/USB."
+    },
+    {
+      "stl": "bow_sensor_faceplate.stl",
+      "desc": "Combined bow sensor faceplate — single CF-PETG plate on the 40-deg nose flat carrying camera (PORT) + laser exit (CL) + ToF (STARBOARD); replaces the modeller's two camera bumps and the superseded separate bezels",
+      "material": "CF-PETG",
+      "layer_mm": 0.15,
+      "infill": ">=40%",
+      "qty": 1,
+      "mass_g": 1,
+      "notes": "Rev R1c new (2026-06-30, TODO.md §1.1.1.1a). SCAD airframe/openscad/fuselage/bow_sensor_faceplate.scad. 28x16x2.5 mm plate, seats in bow_face_seat (bumps shaved to the 40-deg flat + 4x M2 inserts). Apertures: camera 10 mm, laser exit 6 mm, ToF 8 mm + rear 8.4 mm PMMA disc counterbore. 4x M2 flathead from exterior into seat inserts. Verified on 40-deg flat by tools/verify_bow_pod.py (3/3 bores on skin). Measured solid volume 0.65 cm3; mass 0.03 oz (0.83 g) at CF-PETG ~1.29 g/cm3 — confirm in slicer."
     }
   ],
   "propulsion": {
@@ -1014,6 +1024,22 @@
         "notes": "Applied to 2×2 mm door flange groove; dust and moisture seal; max compression 50% — do not overtighten latch; replace if adhesion fails after repeated door cycles"
       }
     ]
+  },
+  "bow_sensor_pod": {
+    "desc": "Forward-facing bow sensor pod on the 40-deg nose mounting flat (Rev R1c): camera on the PORT camera-bump, ToF on the STARBOARD camera-bump, crosshair laser on CL between them; all bores normal to the flat, covered by one combined faceplate (bow_sensor_faceplate.stl). Replaces the modeller's two convex camera bumps. SCAD: airframe/openscad/fuselage/bow_sensor_pod.scad. Aperture placement verified against the baked canonical head shell by tools/verify_bow_pod.py (3/3 bores on skin, walls >=2.2 mm; ToF over-runs the flat ~1.3 mm onto the roll-off, bridged by the faceplate).",
+    "standards": ["REF-SENSOR-001", "REF-SENSOR-002", "REF-IEC-002", "REF-FDA-001", "REF-NIST-001", "REF-PROTO-002"],
+    "items": [
+      {"ref": "BOW-CAM", "desc": "Bow camera — RunCam Nano 4 (19 mm Nano), forward video to Inara's stack", "qty": 1, "mass_g": 3.6, "mass_oz": 0.13, "std": "REF-SENSOR-001"},
+      {"ref": "BOW-TOF", "desc": "Benewake TFmini-S long-range ToF (12 m indoor / 7 m outdoor, 100 Hz, UART/I2C) to Shepherd Wash UART2", "qty": 1, "mass_g": 5.0, "mass_oz": 0.18, "std": "REF-SENSOR-002"},
+      {"ref": "BOW-LASER", "desc": "12 mm crosshair laser module, <=5 mW 650 nm Class 3R, 30 deg below horizon on CL; GPIO-enabled via 2N7002 with key-switch interlock", "qty": 1, "mass_g": 8.0, "mass_oz": 0.28, "std": "REF-IEC-002, REF-FDA-001", "notes": "Mass is a COTS-supplier estimate; varies by module."},
+      {"ref": "BOW-PMMA-TOF", "desc": "PMMA disc window for ToF aperture — 8 mm dia x 2 mm, uncoated (transmits 905 nm IR)", "qty": 1, "mass_g": 0.1, "supplier": "source per TODO §1.1.1.1a"},
+      {"ref": "BOW-PMMA-LASER", "desc": "PMMA exit window for laser — 5 mm dia x 2 mm (optional; sealed modules may omit)", "qty": 1, "mass_g": 0.1, "supplier": "source per TODO §1.1.1.1a"},
+      {"ref": "bow_sensor_faceplate.stl", "desc": "Printed combined bow faceplate (CF-PETG), camera+laser+ToF in one plate", "qty": 1, "mass_g": 0.8, "mass_oz": 0.03},
+      {"ref": "BOW-WIRING", "desc": "Wiring/connectors — TFmini-S 28 AWG 4-cond loom to Shepherd's Room, RG178 camera coax to Inara, laser GPIO/MOSFET lead", "qty": 1, "mass_g": 5.0, "mass_oz": 0.18}
+    ],
+    "total_mass_g": 22.6,
+    "total_mass_oz": 0.80,
+    "notes": "Total bow-pod mass addition ~= 0.80 oz (22.6 g) [imperial-primary]. Faceplate mass is a measured solid-volume estimate at CF-PETG ~1.29 g/cm3 (confirm in slicer); camera/laser sensor masses are COTS-supplier figures. Net AUW change vs the modeller's two convex bumps is essentially nil (bumps removed, ~0.8 g faceplate added). Earlier TODO estimate ~25.6 g used a ~4 g twin-bezel placeholder now superseded by the single faceplate."
   },
   "totals": {
     "print_time_est_h": "~65–90 h across all parts (Rev P adds ~5–10 h cargo prints vs Rev O)",

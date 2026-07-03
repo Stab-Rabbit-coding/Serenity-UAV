@@ -569,60 +569,76 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
 
 #### 1.1.1 **Fuselage**
 
-##### 1.1.1.1a *Bow Sensor Pod — Head Section (Rev R1a, 2026-06-15)*
+##### 1.1.1.1a *Bow Sensor Pod — Head Section (Rev R1c, 2026-06-30)*
 
-Forward-facing sensor assembly at the bow flat face replacing the two canonical convex domes.
-SCAD source: `airframe/openscad/fuselage/bow_sensor_pod.scad` (use'd by head_shell24.scad).
-All dome positions are estimated; every item below must be completed before printing.
+Forward-facing sensor assembly on the canonical **40°-tilted bow mounting flat**
+(~26.4 × 15 mm, outward normal 39.8° about +X), replacing the modeller's two convex
+camera bumps.  **Rev R1c redesign (2026-06-30):** geometric verification against the
+baked canonical head shell showed the Rev R1 dorsal/ventral dome estimates were off
+(dorsal camera floated ~10 mm proud of the rounded nose).  Per user direction the three
+apertures are now CLUSTERED on the 40° flat and distributed HORIZONTALLY — **camera on
+the PORT camera-bump, ToF on the STARBOARD camera-bump, crosshair laser on CL between
+them** — all bores normal to the flat, carried by ONE combined faceplate.
+SCAD: `airframe/openscad/fuselage/bow_sensor_pod.scad` (cuts) +
+`airframe/openscad/fuselage/bow_sensor_faceplate.scad` (faceplate); verifier:
+`tools/verify_bow_pod.py`.
 
-###### Slicer Verification (BLOCKS head section printing)
+###### Geometric Verification — DONE 2026-06-30 (replaces manual slicer cross-sections)
 
-- [ ] **Open `head_shell24_2mm_repaired.stl` in slicer and cross-section at hull Y ≈ −283 mm
-    (SCAD Y = BOW_FACE_Y = −283) to confirm bow flat face location.**
-    Adjust `BOW_FACE_Y` in `bow_sensor_pod.scad` until the flat face cross-section passes through
-    the flat-face geometry visible at the bow tip.
-- [ ] **Verify Dome A (dorsal camera) position: SCAD [161.33, −283, 83.08].**
-    Cross-section at Z = 83 mm (hull Z = 144 mm) to confirm the aperture circle lands inside the
-    hull skin at the bow face.  Adjust `DOME_A_Z` if the position is outside the hull wall.
-    **BLOCKS Dome A camera socket printing.**
-- [ ] **Verify Dome B (ventral ToF/laser) position: SCAD [161.33, −283, 60.08].**
-    Cross-section at Z = 60 mm (hull Z = 121 mm) to confirm the aperture lands inside hull skin.
-    Adjust `DOME_B_Z` if the position is outside the hull wall.
-    **BLOCKS Dome B ToF/laser socket printing.**
-- [ ] **Verify ToF pocket interior clearance.**  The TFmini-S body pocket is 36×20×22 mm deep;
-    confirm the pocket does not breach the head section interior structure at the bow.
-- [ ] **Verify laser bore clearance.**  The 12.5 mm × 38 mm bore angled 30° below horizon must
-    not intersect the Shepherd Book Faraday tray or any other interior feature.  Check in
-    slicer by sectioning along the bore axis direction.
-- [ ] **Verify all bow sensor apertures are within hull skin (no voids through foam core).**
-    The 2 mm CF-PETG skin must be intact around each aperture; confirm 2-wall annulus preserved.
-- [ ] **Run mesh validation** (`python3 tools/validate_stls.py`) after regenerating
-    `head_shell24_2mm_repaired.stl` from SCAD with bow pod cuts applied.  All findings to be
-    resolved before printing.
+- [x] **Built `tools/verify_bow_pod.py`** — ray-casts each bore against the baked
+    `head_shell24_2mm_repaired.stl` and reports skin-landing, wall thickness, interior-pocket
+    clearance, and aperture-row fit.  Reproducible; supersedes the eyeball-in-slicer checks.
+- [x] **Located the canonical bow mounting flat** — centre hull (−167, −301, 120), normal
+    (0, −0.766, −0.643) = 39.8° about X, ~26.4 × 15 mm (matches the 1.04 × 0.59 in spec).
+- [x] **Placed + skin-verified all three apertures on the flat (3/3 PASS):** camera hull
+    (−161.2, −300.7, 116.0) Ø10; ToF hull (−177.7, −301.0, 116.6) Ø8; laser hull
+    (−170.7, −299.9, 117.1) Ø6 exit.  All land on skin (offset ≤ 0.01 mm), walls ≥ 2.2 mm,
+    interior bores clear ≥ 103 mm into the nose (no pocket breach).
+- [x] **Confirmed fit:** aperture row spans 25.5 mm in the 26.4 mm flat; ToF over-runs the
+    starboard roll-off ~1.3 mm (bridged by the faceplate).
+- [ ] **User FreeCAD fine-tune (fractional mm):** confirm the ToF 1.3 mm over-run and the
+    camera↔laser↔ToF body-pocket packing behind the flat in `SerenityAssembly.FCStd`;
+    re-run `tools/verify_bow_pod.py`.  *(rough fit verified; final alignment per CLAUDE.md
+    complex-geometry policy)*
+- [ ] **Re-run mesh validation after head shell regen** — once `bow_pod_cuts()` (+ the bump-
+    removal seat) are merged into the canonical head shell (see Blender-merge note below),
+    run `python3 tools/validate_stls.py` and resolve all findings.  *(BLOCKS head printing)*
+- [ ] **Merge `bow_pod_cuts()` into the canonical Blender head shell** — like the cargo
+    interior bosses (§1.1.1.0a), the bow cuts currently live only in SCAD; they must be
+    applied to `head_shell24_2mm_repaired.stl` (Blender boolean or OpenSCAD hull) and re-baked
+    before the head can print.  *(BLOCKS head printing)*
 
-###### Carrier and Bezel Parts (follow-on SCAD files)
+###### Combined Faceplate — DONE 2026-06-30 (supersedes the two separate bezels)
 
-- [ ] **Design `bow_camera_bezel.scad`** — printed retainer cap that replaces the dorsal dome
-    geometry, contains 12 mm lens bore, 4× M2 threaded inserts, and 21×21 mm external flange
-    matching the hull socket recess.  2 mm CF-PETG, 4-perimeter, ≥ 40% infill.
-- [ ] **Design `bow_tof_laser_bezel.scad`** — printed assembly cap for dome B; contains
-    8 mm PMMA disc socket (ToF aperture), 12 mm laser exit bore (angled 30° down), external
-    flange.  Mounts flush at hull exterior.
-- [ ] **Source PMMA windows for both apertures:**
-    - Dome A: no window (camera lens exposed through hull bore, protected by bezel flange)
-    - Dome B ToF: 8 mm dia × 2 mm thick PMMA disc (uncoated; PMMA transmits 905 nm IR)
-    - Dome B laser: 5 mm dia × 2 mm PMMA exit window (optional; laser module may be sealed)
+- [x] **Designed `bow_sensor_faceplate.scad`** — single 28 × 16 × 2.5 mm CF-PETG plate on the
+    40° flat carrying camera (Ø10 lens), laser (Ø6 exit) and ToF (Ø8 + rear 8.4 mm PMMA disc
+    counterbore); 4× M2 flathead from exterior into seat heat-set inserts.  Rendered + mesh-
+    validated (watertight, manifold; ~0.83 g).  The shell-side seat (`bow_face_seat()` in
+    bow_sensor_pod.scad) shaves the two camera bumps flat and drills the 4 inserts.
+- [x] **Superseded `bow_camera_bezel.scad` + `bow_tof_laser_bezel.scad`** — three 15–21 mm
+    bezel flanges cannot coexist on the 26.4 mm flat; consolidated into the one faceplate
+    (separate files removed before commit).
+- [ ] Res
+- [ ] **PMMA window spec finalised** (sourcing remains a procurement action):
+    - [x] Camera: open Ø10 lens bore (no window; faceplate shades the lens)
+    - [x] ToF: 8 mm dia × 2 mm PMMA disc (uncoated; transmits 905 nm IR) — rear counterbore
+    - [ ] Laser: 3 mm dia × 2 mm PMMA exit window (optional; sealed modules may omit)
+- [ ] **Procure PMMA discs** (ToF 8 mm, laser 2 mm) — physical purchase. *(external)*
+- [x] **Laser down-angle review** — **APPROVED 2026-06-30 (user).** The laser is mounted normal
+    to the 40° bow flat (40° below horizon, vs the Rev R1 30°); this is the accepted final
+    orientation, no re-aim required.
 
-###### Avionics Integration
+###### Avionics Integration *(physical wiring + firmware — external to this CAD task)*
 
-- [ ] **Wire TFmini-S UART to Shepherd Wash (Cape-A-2) UART2 port.**
+- [ ] **Create RP2350 (or similar) based Camera/TOF/laser mcu board** which can send feeds to all control boards. to reduce single points of failure.  Must have TPM and be emi hardened.  Keep this board as simple and small as possible, mounted as close to the sensor suite as practicable.  Prefer export via existing databuses (i.e. canbus, rs485, if it makes sense)
+
+- [ ] **Wire TFmini-S UART to bow sensor MCU.**
     Run 28 AWG 4-conductor (TX, RX, 5 V, GND) loom from bow pod area to Shepherd's Room bay.
     Route inside head section interior; secure with cable saddles bonded to inner hull wall.
     Shield pair twisted, overall braid shield grounded at Cape end only.
     Firmware: add TFmini-S UART driver to Shepherd `serenity-fc` Phase 7 task list.
-- [ ] **Wire bow camera video output to Inara's stack video input** per camera/payload PACE
-    priority assignment (CLAUDE.md).  Use RG178 coax; keep run ≤ 300 mm to bow tip.
-- [ ] **Wire laser GPIO enable to Shepherd Wash GPIO** via 2N7002 N-channel MOSFET:
+- [ ] **Wire bow camera video output to bow sensor MCU** per camera/payload PACE priority assignment (CLAUDE.md).  Use RG178 coax; keep run ≤ 300 mm to bow tip.
+- [ ] **Wire laser GPIO enable bow sensor MCU** via 2N7002 N-channel MOSFET:
     - Gate → Wash GPIO (via 10 kΩ series resistor)
     - 10 kΩ pull-down to GND (default state: laser disabled)
     - Source → GND
@@ -634,14 +650,18 @@ All dome positions are estimated; every item below must be completed before prin
 - [ ] **Add standards REF-IDs to bow_sensor_pod.scad firmware integration notes** once driver
     code is in place.  Ref: [REF-SENSOR-002] TFmini-S UART protocol, [REF-NIST-001 §2.1] ZTA.
 
-###### Mass Budget Entry
+###### Mass Budget Entry — DONE 2026-06-30 (in `docs/bom_revR.json` → `bow_sensor_pod`)
 
-- Bow camera (RunCam Nano 4 or equiv.): 3.6 g (0.13 oz) [REF-SENSOR-001]
-- TFmini-S ToF sensor: 5.0 g (0.18 oz) [REF-SENSOR-002]
-- Crosshair laser module: ≈ 8 g (0.28 oz) (estimate; varies by COTS supplier)
-- Printed bezels (2×): ≈ 4 g total (estimate; update from slicer mass report)
-- Wiring / connectors: ≈ 5 g (estimate)
-- **Total bow pod mass addition: ≈ 25.6 g (0.90 oz)**
+- [x] **BOM updated** — `bow_sensor_faceplate.stl` added to `print_schedule`; dedicated
+    `bow_sensor_pod` mass block added (imperial-primary).  Net AUW change vs the two convex
+    bumps is ≈ nil (bumps removed, ~0.8 g faceplate added).
+- Bow camera (RunCam Nano 4 or equiv.): 0.13 oz (3.6 g) [REF-SENSOR-001]
+- TFmini-S ToF sensor: 0.18 oz (5.0 g) [REF-SENSOR-002]
+- Crosshair laser module: ≈ 0.28 oz (8 g) (estimate; varies by COTS supplier)
+- Printed faceplate (CF-PETG, measured solid vol 0.65 cm³): ≈ 0.03 oz (0.8 g)
+- PMMA windows (2×): ≈ 0.2 g
+- Wiring / connectors: ≈ 0.18 oz (5 g) (estimate)
+- **Total bow pod mass addition: ≈ 0.80 oz (22.6 g)** *(was ~25.6 g with the twin-bezel placeholder)*
     Update master BOM `docs/bom_revR.json` once bezel masses confirmed in slicer.
 
 ---
@@ -660,12 +680,51 @@ and baked to hull frame.  SCAD fuselage shell files are secondary references onl
 - [x] `rear_shell24_2mm_repaired.stl` — 1 095 972 tri; X −246.1..−105.5 / Y +203.2..+384.3 / Z +3.3..+161.1 mm
 
 **Open tasks:**
-- [ ] **Cargo section interior boss features** — the Blender-canonical cargo shell is the pure exterior skin.
-    All interior features added in SCAD Rev S/S1/S2/S3 (wing mortises, spar bore, servo mount pads,
-    hinge-pin blocks, latch lips, avionics standoffs, cargo bay opening, GPS domes) must be merged
-    back into the Blender mesh before printing.  Workflow: use the baked Blender cargo shell as the
-    outer surface; add interior boss geometry from SCAD Rev S3 source via Blender Boolean or OpenSCAD
-    hull combination.  Re-export, re-bake, verify watertight.  **BLOCKS cargo section printing.**
+
+- [x] **Cargo section interior boss features** — **DONE 2026-06-30** via new
+    `airframe/blender-scripts/merge_cargo_interior.py` (Rev R1).  Starts from the clean
+    Blender source, bakes to hull frame, and merges every cargo interior feature in ONE
+    robust manifold3d pass (union all cutters / union all positives → single
+    `(shell + positives) − negatives`).  Result: **watertight=True, single connected body,
+    0 boundary/0 non-manifold edges, vol 323 188 mm³ (≈ 339 g as-printed .. 414 g solid
+    CF-PETG)** — this simultaneously fixes MESH-01 for cargo (see MESH-01 item below).
+    Merged this pass:
+    - **Interior-wall removal** — the leftover cargo-bay floor "duct" the Blender hollowing
+        left inside the cavity (a ~54×38 mm closed box blister on the belly floor, hull
+        X −196..−142, Y −15..+102, Z 6..44), confirmed by cross-section + render before cut.
+    - **Clamshell doors** — belly aperture cut hull X[−222.5..−117.6] × Y[+2..+108] between
+        the two hinge lines, + the 4 Rev R1c hinge-pin retention blocks (imported verbatim
+        from `generate_cargo_hinge_retention.py`), fused into the shell.
+    - **Section-joint features** (head/cargo Joint 1 + cargo/middle Joint 2): bore-open
+        fwd/aft faces, 6× Ø3.2 boss-pin bores, keel locating channel, Y=+30 ring-frame
+        pocket — single-sourced from `add_structural_features.py`.
+    - **Wing mortices** — Ø12.3 spar bore (full lateral span, both walls), 2 root mortises,
+        and 2× Ø22 spar-bearing bosses, at the **re-derived** chordwise stations (129 mm Rev
+        R1 root chord, LE root hull Y=−7: spar 30% → Y=+31.7; mortise 50% → Y=+57.5; Z=62.5).
+        Supersedes the SCAD `WING_ROOT_Y_CEN=CY+40` (hull Y≈+6) stale-161mm-chord stand-in
+        (§1.1.2).  All lateral-wall/dorsal features are seated against the wall position
+        **sampled from the real baked mesh** at each feature's (Y,Z) — the walls curve
+        inboard with Z, so a bbox-extremity pin would float off the wall.
+    - **Interior support structures** — 2 nacelle-servo mount pads (Z=93, clears spar boss
+        by ~4 mm) + M3 bores; **Inara** (port) avionics-bay standoff bosses (4, dorsal).
+    - **SUB-TASKS OPEN (VERIFY / deferred — do not block MESH-01 or door/joint printing):**
+        - [ ] Verify wing spar/mortise fit in FreeCAD against the baked wing STL root/tab
+            (Y stations re-derived, not yet eyeballed vs `wings_s1223_revo.scad`; §1.1.2).
+        - [ ] **Deferred (legacy Y-as-dorsal SCAD frame — need hull re-derivation before
+            cutting):** Inara/River dorsal Faraday **access-panel cuts**; **River** (stbd)
+            avionics bay (dropped this pass per the wing-spar Z conflict, §1.1.3.3); GPS×2
+            and FPV flush skin recesses; door-servo pads; latch-catch lips.  The SCAD
+            GPS/FPV/servo/latch/avionics modules were authored in the pre-R1 mental frame
+            (Y=vertical/dorsal) and do NOT map to correct hull positions via the bake
+            transform — only the wing/servo subsystem was reconciled in Rev R1 2026-06-22.
+        - [ ] **Leg-mount clearance (§1.1.4):** the deferred Rev R5 wire-brace corner leg
+            bosses must clear the **aft** door hinge retention blocks — those sit at the
+            hinge X (−117.6 port / −222.5 stbd) over hull Y +109..+121, only ~9 mm aft of
+            the aft leg-attach row (Y≈100).  `merge_cargo_interior.py`'s keep-out check
+            flags this ("aft-port/aft-stbd: REVIEW"); design the leg bosses to fit forward
+            of / clear the retention blocks.
+        - [ ] Door latching: the aperture is a clean opening (no seating rabbet); the
+            deferred latch-catch lips + `cargo_cradle_autolatch` hooks provide closure.
 - [ ] **Middle section inner neck — Phase 5-10 print guidance** — the Blender middle mesh includes
     the inner neck (closed tube) and the outer horseshoe ring as one piece.  Confirm in slicer that
     both elements appear correctly and that there are no thin-wall violations in the neck-to-horseshoe
@@ -676,9 +735,14 @@ and baked to hull frame.  SCAD fuselage shell files are secondary references onl
     archive them to `airframe/archive/` and update PROJECT_INDEX.md / ARCHIVE_INDEX.md.
     `cargo_sect_shell24.scad` (Rev S3) remains active as the source for interior boss geometry
     until those features are merged into the Blender mesh (task above).
-- [ ] **Update `REVN_BUILD_GUIDE_24IN.md` fuselage shell source references** — replace SCAD
-    regeneration commands with Blender pipeline instructions (copy from `blender-scripts/files-hollowed-24in/`
-    → `stls/fuselage/` → run `python3 tools/bake_hull_frame.py`).
+- [x] **Update `REVN_BUILD_GUIDE_24IN.md` fuselage shell source references** — **DONE 2026-06-30.**
+    Added an authoritative "Fuselage shell source — Rev R1 canonical (Blender pipeline)" callout
+    to the Blender Script Reference (copy from `airframe/blender-scripts/files-hollowed-24in/`
+    → `airframe/stls/fuselage/` → `python3 tools/bake_hull_frame.py`), added the Blender-canonical
+    row to the script table, and flagged the legacy `middle_canonical_shell24.scad` regen note.
+    - [ ] *Remaining:* the legacy print-schedule table still lists pre-Rev-R1 PETG/8%-gyroid
+        settings and old shell basenames; reconcile to CF-PETG 2 mm canonical at the next
+        build-guide pass (out of scope for the source-reference fix).
 
 ##### 1.1.1.0b *Section Joint Boss / Alignment Design (Rev R1 — all four fuselage sections)*
 
@@ -790,6 +854,18 @@ Joint faces in hull-frame Y (confirmed from baked extents):
 
 - [ ] **MESH-01 `add_structural_features.py` boolean cuts left non-watertight / fragmented
     shells on cargo, middle, and rear** *(found 2026-06-16, reviewing 03_top.png render)* —
+    **ROOT CAUSE FIXED IN CODE + RESOLVED FOR CARGO 2026-06-30; middle + rear still need a
+    regen pass.**  Root cause was NOT (only) the cutter-vs-wall epsilon grazing but the
+    fragile `_subtract_all` loop: it subtracted cutters one at a time via
+    `trimesh.boolean.difference(engine="manifold")` with a per-step repair on a 1.4 M-face
+    shell, compounding degenerate slivers into 10⁴+ disconnected bodies.  `_subtract_all`
+    now unions ALL cutters into one Manifold and does a SINGLE `shell − union` (boolean of
+    closed manifolds is closed by construction → guaranteed watertight out).  **Cargo** is
+    fully resolved by `merge_cargo_interior.py` using this approach (watertight=True, single
+    body, vol 323 188 mm³ — see §1.1.1.0a).  **REMAINING:** regenerate `middle` and `rear`
+    from their **clean Blender sources** with the fixed `add_structural_features.py`
+    (it now SKIPs cargo), then re-run `bake_hull_frame.py --check` and re-verify.  Historical
+    diagnosis below retained for the record.
     what looks like "huge cutouts / air where there should be hull" in the rendered build-guide
     images is **not** the intended bore-open joint design; it is a meshing defect from the
     boss-pin/keel-channel/ring-pocket boolean subtractions in `add_structural_features.py`.
@@ -1050,6 +1126,7 @@ Joint faces in hull-frame Y (confirmed from baked extents):
         correction).  Hull-frame aft joint face is at Y ≈ −53 mm; BOSS_AFT_ROT should be
         [0,90,0] only if facing into the joint (−Y direction → [−90,0,0]).  See §1.1.0
         open item and §1.1.1 for the full correction plan — this is a pre-existing blocker.
+    - [ ] create mounting bracket for camera/tof/laser control pcb
     - Verify Faraday tray cutout and all other non-boss geometry unchanged after SCAD re-render.
 
 ##### 1.1.1.2 *Cargo*
