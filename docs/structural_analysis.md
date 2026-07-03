@@ -485,6 +485,112 @@ Geometry verified watertight and clearing the head inner wall over the bonding s
 registration only** (re-roled from "structural").  Cargo/Middle (Joint 2) and Middle/Rear
 (Joint 3) require the same first-principles treatment — see TODO.md §1.1.1.0b.
 
+### 7.4 Cargo/Middle Joint — Splice Collar (Rev R1, 2026-07-03)
+
+**Cross-section survey (trimesh, baked STLs).** Both mating faces are closed sections at
+this joint: the CARGO aft face (cleanest station surveyed, hull Y = +122 mm, two loops,
+areas 20 205 / 18 955 mm²) and the MIDDLE fwd face (hull Y = +137 mm, two main loops,
+areas 15 336 / 14 335 mm², plus two Ø~12 mm boss-pin-bore holes).  Convex-hull-area ratio
+at Y = +137 mm is 0.98 (nearly convex) — the middle section's ventral horseshoe opening
+does not begin until further aft (multiple separated loops appear only past hull
+Y ≈ +175 mm).  **A full-perimeter ring collar is feasible here**, exactly as at the
+head/cargo joint.
+
+**MESH-01 caveat.** `airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl` is
+not watertight as of this writing (TODO.md MESH-01; 41 disconnected bodies), and the defect
+band overlaps this collar's cargo-side bonding span (hull Y +123.7..+139.7).  The nearest
+clean cargo station (Y = +122 mm) is used below as a size sanity check only, not a true
+fit verification over the cargo-side bonding span; re-verify once MESH-01 is resolved for
+cargo. The MIDDLE shell is fully watertight (single body) and its side of the fit is
+verified directly.
+
+**Load check.** This joint is a fabrication split, but not load-free: everything aft of it
+(middle shell + rear shell + avionics/wiring, using the same "~300 g avionics per section"
+allocation §4.3 already uses for the head- and rear-cantilever checks) is cantilevered from
+this joint.  Mass aft = middle (295 + 300 = 595 g) + rear (314 + 300 = 614 g) = 1209 g.
+Arm = half the aft-of-joint fuselage length (uniform-distributed-load convention, §4.3) =
+(384.3 − 131.1) / 2 = 126.6 mm.  Ultimate factors per §7.3's joint-FOS-4.0 convention:
+
+| Case | Ult. factor | Shear V | Moment M |
+| --- | --- | --- | --- |
+| 2g maneuver × 4.0 | 8.0g | 94.9 N | 12 010 N·mm |
+| 2.5g landing × 4.0 | 10.0g | 118.6 N | 15 020 N·mm |
+| 9g crash × 1.5 | 13.5g | 160.1 N | 20 260 N·mm |
+
+Real section modulus computed from the digitized middle profile at Y = +137 mm (thin-wall
+line integral about the lateral bending axis, wall t = 2 mm): perimeter 454 mm,
+S_x = 31 984 mm³.  Peak fibre stress at 9g crash = 20 260 / 31 984 = **0.63 MPa** — well
+below the ~5 MPa CF-PETG/epoxy allowable.  **Not strength-limited**, same conclusion as
+Joint 1; governing requirements are peel resistance, alignment, and anti-ovalisation.
+
+**Design — internal bonded splice collar (`PRINT-CARGO-MIDDLE-COLLAR`).**  Profile = MIDDLE
+inner-wall contour at hull Y = +137 mm (clean, 5.9 mm aft of the joint), inset by a 2 mm
+bond gap, 2 mm wall.  L = 16 mm (8 mm into each section), centred on hull Y = +131.1 mm
+(midpoint of the measured cargo aft face, +131.74 mm, and middle fwd face, +130.40 mm).
+Middle is the narrower section here (inner area ≈ 14 300 mm² vs cargo's ≈ 19 000 mm² at the
+nearest clean cargo station), so the collar slips into cargo with a larger, epoxy-filled
+gap — the same asymmetric-fit pattern as the head/cargo collar.
+
+Bond: West System 105/206 + 406 filler.  Double-lap shear area ≈ 454 mm perim × 8 mm ×
+2 sides ≈ 7264 mm²; worst-case bending couple tension (~160 N at 9g crash over a ~70 mm
+lever) gives bond shear ≪ 0.1 MPa → **FOS > 100 on the bond**; the collar (~17.0 g,
+watertight, single body, verified via `generate_cargo_middle_splice_collar.py`) is sized by
+handling/printability, not stress.  The 3 boss dowel pins (Joint 2, §7.2) are retained for
+registration only.
+
+### 7.5 Middle/Rear Joint — Splice Collar (Rev R1, 2026-07-03)
+
+**Cross-section survey (trimesh, baked STLs).** At the joint plane itself the middle
+cross-section is still a single closed tube: convex-hull-area ratio 0.96–1.00 for hull
+Y = 195–203 mm (the ventral horseshoe opening does not appear until further forward, past
+hull Y ≈ +191 mm going toward the cargo end).  **This resolves the open question in
+TODO.md §1.1.1.0b about whether only a partial/inner-neck-only sleeve is feasible here: a
+full-perimeter ring collar covering the WHOLE section is feasible**, exactly as at Joints 1
+and 2, because the section has not yet opened into the horseshoe-plus-inner-neck topology
+at the joint plane.
+
+**MESH-01 caveat.** `airframe/stls/fuselage/rear_shell24_2mm_repaired.stl` is not
+watertight as of this writing (TODO.md MESH-01; 36 disconnected bodies), and the defect
+band (hull Y ≈ +205..+230 mm) overlaps this collar's rear-side bonding span (hull
+Y +203.4..+219.4).  The nearest clean rear station (Y = +233 mm, ≈ 30 mm aft of the joint)
+is used below as a size sanity check only; re-verify once MESH-01 is resolved for rear.
+The MIDDLE shell is fully watertight (single body) and its side of the fit is verified
+directly.
+
+**Load check — shell bending only.**  The skid-tip impact load is carried by the CF skid
+rods (Ø4 mm, hull Y +173..+233, FOS 205 in axial tension, §6.2) and the closed inner-neck
+tube, not this collar; this check covers only the shell-bending demand on the splice
+itself, mirroring §7.1's "form, not strength" framing.  Mass aft of this joint = rear shell
+(314 + 300 = 614 g, the same figure §4.3 already uses for the rear-cantilever check).  Arm
+= half the rear section length = (384.3 − 203.4) / 2 = 90.5 mm.
+
+| Case | Ult. factor | Shear V | Moment M |
+| --- | --- | --- | --- |
+| 2g maneuver × 4.0 | 8.0g | 48.2 N | 4 365 N·mm |
+| 2.5g landing × 4.0 | 10.0g | 60.2 N | 5 451 N·mm |
+| 9g crash × 1.5 | 13.5g | 81.3 N | 7 362 N·mm |
+
+Real section modulus computed from the digitized middle profile at Y = +195 mm: perimeter
+442 mm, S_x = 27 713 mm³.  Peak fibre stress at 9g crash = 7 362 / 27 713 =
+**0.27 MPa** — even lower than Joint 2, well below the ~5 MPa allowable.  **Not
+strength-limited.**
+
+**Design — internal bonded splice collar (`PRINT-MIDDLE-REAR-COLLAR`).**  Profile = MIDDLE
+inner-wall contour at hull Y = +195 mm (clean, 8.4 mm forward of the joint), inset by a
+2 mm bond gap, 2 mm wall.  L = 16 mm (8 mm into each section), centred on hull
+Y = +203.4 mm (midpoint of the measured middle aft face, +203.62 mm, and rear fwd face,
++203.20 mm).  Middle is again the narrower section (inner area ≈ 11 400 mm² at Y = +195 mm
+vs the rear's ≈ 13 600–13 800 mm² at the nearest clean rear stations), so the collar slips
+into rear with a larger, epoxy-filled gap.  The CF skid-rod bores (X = −202/−135,
+Z = 18/20 mm) sit well outside the collar's wall ring at this Y — no interference.
+
+Bond: West System 105/206 + 406 filler.  Double-lap shear area ≈ 442 mm perim × 8 mm ×
+2 sides ≈ 7072 mm²; worst-case bending couple tension (~81 N at 9g crash over a ~65 mm
+lever) gives bond shear ≪ 0.05 MPa → **FOS > 100 on the bond**; the collar (~15.9 g,
+watertight, single body, verified via `generate_middle_rear_splice_collar.py`) is sized by
+handling/printability, not stress.  The 3 boss dowel pins (Joint 3, §7.2) are retained for
+registration only; the CF skid rods remain the primary skid-impact load path.
+
 ---
 
 ## 8. Summary: Features Added to Shell STLs

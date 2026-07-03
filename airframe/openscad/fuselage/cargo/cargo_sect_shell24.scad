@@ -362,45 +362,61 @@ CATCH_Z_STBD     = 42.0;  // mm, stbd-side catch lip Z centreline
 CATCH_Z_PORT     = 122.0; // mm, port-side catch lip Z centreline
 
 // Orientation rotation vectors
-//   STL axes: X=forward, Y=dorsal (+up), Z=port (+left).
-//   Rx(+90 deg) maps local +Z -> global +Y (dorsal); NADIR_ROT reverses that.
-//   Rx(+90 deg) = rotate([ 90, 0, 0]): aperture faces -Y (toward ground / nadir).
-//   Rx(-90 deg) = rotate([-90, 0, 0]): aperture faces +Y (toward sky  / dorsal).
-NADIR_ROT  = [  90, 0, 0 ];  // aperture faces -Y (toward ground)
-DORSAL_ROT = [ -90, 0, 0 ];  // aperture faces +Y (toward sky)
+//   Rev R2 (2026-07-03) — CORRECTED.  The "STL axes: X=forward, Y=dorsal,
+//   Z=port" comment this replaced was itself the bug: same class of legacy-
+//   permutation error already fixed for the wing subsystem in Rev R1 (see
+//   header note).  Empirically confirmed against the real canonical mesh
+//   (airframe/blender-scripts/files-hollowed-24in/cargo_sect_shell24_2mm_repaired.stl):
+//   local Z range 0..163.2 mm matches the documented bake-invariant hull Z
+//   range exactly (CLAUDE.md "hull_Z = local_Z, unchanged") -- Z IS dorsal.
+//   X range -201.7..-7.4 mm matches CARGO_X_WALL_PORT/STBD (fixed Rev R1) --
+//   X IS lateral.  Y is longitudinal, as this file's own header (line ~171)
+//   always correctly stated.  The GPS/avionics-bay/nadir-camera modules below
+//   were the only ones still using the old (Y=dorsal) mental model; fixed
+//   here.  Cutter cylinders are built along local +Z by default (see
+//   gps_mount_cut/fpv_cut bodies) so a DORSAL cut (exterior face at high Z,
+//   cutting toward lower Z into the interior) needs NO rotation, and a NADIR
+//   cut (exterior face at Z=0, cutting toward higher Z into the interior)
+//   needs a 180 deg flip.
+DORSAL_ROT = [   0, 0, 0 ];  // no rotation -- cutter's native -Z cut direction
+                              //   already points from a high-Z exterior face
+                              //   inward, matching the dorsal skin.
+NADIR_ROT  = [ 180, 0, 0 ];  // flips cutter to cut toward +Z, matching a
+                              //   Z=0 (belly) exterior face cutting inward.
 
-// Cargo nadir camera position
-//   Interior belly face at Y=-413; camera centred on gondola X/Z centreline.
-//   VERIFY gondola belly Y-coordinate in slicer before printing.
-CARGO_CAM_POS = [ CX, CY - 76, CZ ];   // VERIFY: gondola belly, nadir face
+// Dorsal / nadir exterior skin Z -- measured directly from the canonical
+// mesh bounds above (not reused from any of the legacy Y-based numbers).
+DORSAL_Z_EXT = 163.2;   // mm, exterior dorsal (top) skin
+NADIR_Z_EXT  =   0.0;   // mm, exterior nadir (belly) skin
 
-// GPS antenna dorsal-face Y offset from centroid
-//   STL dorsal (top) face: Y_MAX ≈ -211 mm (exterior); interior at ≈ -213 mm.
-//   Mount centre CY + GPS_DORSAL_Y_OFFSET ≈ -211.6 mm (just inside exterior face).
-//   Cut spans (pos.y - WALL_T - 1) = -217 mm to (pos.y + 1) = -211 mm, clearing
-//   both interior (-213 mm) and exterior (-211 mm) skin faces.
-//   VERIFY: measure actual Y_MAX from dorsal face in slicer before printing.
-GPS_DORSAL_Y_OFFSET = 117;  // mm above CY; VERIFY in slicer
+// Cargo nadir camera position -- lateral + longitudinal centreline, belly
+// exterior face.  (Previously offset CY-76 in the Y slot under the legacy
+// Y=dorsal model; that offset served no purpose once Z correctly carries
+// the nadir/dorsal distinction, so it is dropped, not reused.)
+CARGO_CAM_POS = [ CX, CY, NADIR_Z_EXT ];   // VERIFY in slicer before printing
 
-// GPS antenna longitudinal position: mid-gondola for unobstructed sky access.
-GPS_ANT_X = CX;  // = -102.19 mm
+// GPS antennas -- dorsal-facing, mounted on the actual dorsal (Z-max) skin.
+// Confirmed Rev R2 (2026-07-03, user decision): Inara/River bays are a
+// port/stbd PAIR at a shared longitudinal station (not fore/aft sequential).
+GPS_STATION_Y = CY;   // mm, shared longitudinal (Y) station -- mid-gondola,
+                       //   clear of the ring-frame pocket (hull Y=+30 <->
+                       //   local Y=-312.8) and the joint-boss zones.
+                       //   VERIFY in slicer before printing.
 
-// GPS lateral separation from gondola Z centreline (CZ = 74.70 mm).
-//   Port:  CZ + GPS_SEP = 104.7 mm -- within Z = 0..163 mm gondola bounds.
-//   Stbd:  CZ - GPS_SEP =  44.7 mm -- within Z = 0..163 mm gondola bounds.
+// GPS lateral (X) separation from the gondola centreline (CX = -102.19 mm).
+//   Port:  CX - GPS_SEP  (more-negative local X, toward CARGO_X_WALL_PORT).
+//   Stbd:  CX + GPS_SEP  (less-negative local X, toward CARGO_X_WALL_STBD).
 //   Centre-to-centre: 60 mm -- adequate lateral RF isolation; retention rings
 //   clear each other (22 mm bolt radius leaves 16 mm gap between rings).
-GPS_SEP = 30.0;  // mm -- each antenna offset from Z centreline
+GPS_SEP = 30.0;  // mm -- each antenna's X offset from the lateral centreline (unchanged from legacy value)
 
 // GPS-PORT: port-side antenna, connected to FC/Sensor Cape 1 (primary GPS).
-//   Z = CZ + GPS_SEP = 104.70 mm; 58.3 mm from port wall (Z=163); ample.
 //   VERIFY all coordinates in slicer -- position must sit on dorsal skin face.
-GPS_PORT_POS = [ GPS_ANT_X, CY + GPS_DORSAL_Y_OFFSET, CZ + GPS_SEP ];
+GPS_PORT_POS = [ CX - GPS_SEP, GPS_STATION_Y, DORSAL_Z_EXT ];
 
 // GPS-STBD: starboard-side antenna, connected to FC/Sensor Cape 2 (redundant GPS).
-//   Z = CZ - GPS_SEP = 44.70 mm; 22.7 mm from stbd wall (Z=0); within bounds.
 //   VERIFY all coordinates in slicer -- position must sit on dorsal skin face.
-GPS_STBD_POS = [ GPS_ANT_X, CY + GPS_DORSAL_Y_OFFSET, CZ - GPS_SEP ];
+GPS_STBD_POS = [ CX + GPS_SEP, GPS_STATION_Y, DORSAL_Z_EXT ];
 
 // M3 boss positions at the head-to-cargo joint face.
 //   Joint hull_X = −233 mm → cargo local_X = −41.4 mm (see hull-frame block above).
@@ -547,6 +563,34 @@ module gps_mount_cut(pos, rot) {
         translate([0, 0, -GPS_SMA_PKT_DEP])
         cylinder(h = GPS_SMA_PKT_DEP + 0.5, d = GPS_SMA_PKT_D);
     }
+}
+
+// ----------------------------------------------------------------------------
+// Module: vera_board_bosses (added Rev R2, 2026-07-03)
+//   4x M3 heat-set insert boss posts for the Vera vision/ToF/laser PCB
+//   (avionics/kicad/Vera.kicad_pcb, 46x48 mm double-sided board, mounting
+//   holes at board-local (4,4)/(42,4)/(4,44)/(42,44) -- i.e. +/-19 mm x
+//   +/-20 mm from board centre).  Mounted on the belly interior floor,
+//   standing up (+Z) from just above the nadir exterior skin, centred on
+//   CARGO_CAM_POS's (X,Y) station so the board sits directly above/behind
+//   the camera aperture -- short local harness runs to J_CAM1/J_CAM2/
+//   J_TOF/J_LASER (see Vera.md "Mechanical Mounting and Wiring").
+//   Boss base at Z = WALL_MM (interior nadir face); extends to
+//   Z = WALL_MM + BOSS_H (= 8 mm) -- an 8 mm standoff starting allowance,
+//   pending real (non-placeholder) component-height verification per
+//   Vera.md.  PROPOSED placement -- verify in FreeCAD before printing
+//   (this hull's geometry is too complex for bounding-box placement per
+//   CLAUDE.md "Assembly and Placement").
+//   Ref: avionics/kicad/Vera.md; TODO.md §1.2c.3.
+// ----------------------------------------------------------------------------
+VERA_HOLE_DX = 19.0;   // mm, +/-X half-spacing of Vera's mounting-hole pattern
+VERA_HOLE_DY = 20.0;   // mm, +/-Y half-spacing of Vera's mounting-hole pattern
+VERA_STATION_X = CX;         // mm, lateral centreline, same as CARGO_CAM_POS
+VERA_STATION_Y = CY;         // mm, longitudinal station, same as CARGO_CAM_POS
+module vera_board_bosses() {
+    for (dx = [-VERA_HOLE_DX, VERA_HOLE_DX])
+    for (dy = [-VERA_HOLE_DY, VERA_HOLE_DY])
+        m3_boss([VERA_STATION_X + dx, VERA_STATION_Y + dy, WALL_MM], [0, 0, 0]);
 }
 
 // ----------------------------------------------------------------------------
@@ -921,60 +965,76 @@ CAPE_HOLE_DZ   =  14.5;   // mm, ±Z M2.5 corner hole offset from board centre
 //   GPS recess overlaps panel zone; access cover gets Ø38 mm GPS clearance bore.
 //   Cut applied at outer difference level, same as wing_root_mortise.
 //
-// DORSAL INTERIOR FACE Y:
-//   Gondola dorsal exterior Y_MAX ≈ -211 mm; interior face ≈ -211 - 2 = -213 mm.
-//   AVINICS_DORSAL_Y = CY + 116 ≈ -212.6 mm.  VERIFY in slicer.
+// DORSAL FACE Z (Rev R2, 2026-07-03 — CORRECTED, see NADIR_ROT/DORSAL_ROT
+//   header note above for the root-cause of the fix):
+//   Gondola dorsal exterior skin at DORSAL_Z_EXT = 163.2 mm (measured from
+//   the canonical mesh, see above) -- this replaces the legacy
+//   "AVINICS_DORSAL_Y = CY + 116" value, which placed the tray/boss features
+//   in the wrong (longitudinal) axis entirely.
+//   Bay separation is now lateral (X), confirmed by user decision 2026-07-03:
+//   Inara (port) / River (stbd) are a port/stbd PAIR at a shared
+//   longitudinal station, matching their names and the GPS_PORT/GPS_STBD
+//   antenna-diversity co-location.  Original numeric intent (35 mm inter-bay
+//   gap, tray 60x40 mm footprint, 25/15 mm corner boss offsets) is preserved
+//   -- only the axis each number is APPLIED to has changed:
+//     legacy "X"-named quantities (the tray's declared "long axis... in X")
+//       -> now the real longitudinal (Y) footprint dimension
+//     legacy "Z"-named quantities (used to differentiate Inara/River bays)
+//       -> now the real lateral (X) separation-axis dimension
 //   Ref: CAPE-B-2.kicad_pcb pad MH1–MH4; GPS_PORT/STBD co-location analysis;
 //   Ruthex RX-M3x5.7 pullout spec; CLAUDE.md standoff and 2-wall requirements.
-AVINICS_DORSAL_Y   = CY + 116.0;   // mm, interior dorsal face Y (VERIFY in slicer)
-AVINICS_BOSS_ROT   = [90, 0, 0];   // rotate cylinder: +Z → −Y (protrudes down into interior)
-INARA_Z_CEN        = 119.0;        // mm, Inara bay Z centre — port half; tray Z=99..139
-RIVER_Z_CEN        =  44.0;        // mm, River bay Z centre — stbd half; tray Z=24..64
-AVINICS_X_CEN      = CX;           // mm, both bays share gondola X centreline
-AVINICS_BOSS_DX    =  25.0;        // mm, ±X Faraday tray corner boss offset (Rev S4: was 42)
-AVINICS_BOSS_DZ    =  15.0;        // mm, ±Z Faraday tray corner boss offset (Rev S4: was 27)
-AVINICS_PANEL_X    =  62.0;        // mm, dorsal access panel opening X (Rev S4: was 95)
-AVINICS_PANEL_Z    =  42.0;        // mm, dorsal access panel opening Z (Rev S4: was 65)
+AVIONICS_BOSS_ROT  = [0, 0, 0];    // no rotation -- see DORSAL_ROT note above
+BAY_GAP            =  35.0;        // mm, edge-to-edge gap between Inara/River trays (unchanged intent)
 
-// Faraday enclosure external envelope, fan, and ductwork specification (Rev S4).
+// Faraday enclosure external envelope, fan, and ductwork specification (Rev S4;
+// axis roles corrected Rev R2 -- see header note above.  Original "X"/"Z" tray
+// dimension names are kept as-is below but their real-world roles are now
+// longitudinal (Y) / lateral (X) respectively, matching how the Rev S4 numbers
+// were actually derived (60 mm = "long axis... in X" = the real longitudinal
+// footprint; 40 mm = the bay-separation-axis footprint = real lateral X).
 //   Each avionics bay (Inara port, River stbd) is enclosed in a 5-walled
 //   aluminium-sheet Faraday tray.  The hull dorsal skin IS the 6th wall.
 //   The access panel cover (72×52 mm, copper-foil-lined PETG or 0.5 mm Al sheet)
 //   completes the EMI shield when installed.
-//   Tray body inserts through AVINICS_PANEL_X × AVINICS_PANEL_Z dorsal opening.
+//   Tray body inserts through AVINICS_PANEL_X × AVINICS_PANEL_Y dorsal opening.
 //   Cape-B-2 (Zoë) and Cape-A-2 (Wash) PCBs mount on M2.5 internal standoffs.
-//   One 25×25×7 mm axial fan per tray on +X tray wall; air exhausts into
-//   gondola interior (no hull skin penetrations required).
-//   Air intake: 22×22 mm slot on tray −X wall, covered by 6 mm-thick waveguide-
-//   below-cutoff honeycomb panel (6 mm cell, attenuation >> 100 dB at 10 GHz).
+//   One 25×25×7 mm axial fan per tray on one tray wall; air exhausts into
+//   gondola interior (no hull skin penetrations required).  Intake covered by
+//   6 mm-thick waveguide-below-cutoff honeycomb panel (6 mm cell, attenuation
+//   >> 100 dB at 10 GHz).  Fan/intake wall assignment is an internal Faraday-
+//   tray detail, not a hull-cut feature -- not re-derived here.
 //   Ref: CLAUDE.md §1.4.1 (500 W/m² design target); EMC waveguide cutoff theory.
-FARADAY_ENC_X      =  60.0;   // mm, tray external X (Rev S4: was 95)
-FARADAY_ENC_Z      =  40.0;   // mm, tray external Z (Rev S4: was 65)
+FARADAY_ENC_X      =  40.0;   // mm, tray external footprint, lateral (X, bay-separation) axis (Rev S4: was 95, mislabelled "Z")
+FARADAY_ENC_Z      =  60.0;   // mm, tray external footprint, longitudinal (Y) axis (Rev S4: was 65, mislabelled "X"; name kept for cross-reference continuity)
 FARADAY_ENC_Y      =  55.0;   // mm, tray depth below dorsal face (Rev S4: was 65)
                                //   = 39.2 mm stack + 5 mm clearance + 7 mm fan + 1.5 mm floor
 FARADAY_WALL       =   1.5;   // mm, tray wall (0.5 mm Al + PETG liner ≤ 1.5 mm)
-FARADAY_FAN_D      =  25.0;   // mm, axial fan diameter (25×25×7 mm, on tray +X wall)
-FARADAY_MOUNT_DX   = AVINICS_BOSS_DX;   // mm, ±X tray corner M3 boss offset (= 25.0 mm)
-FARADAY_MOUNT_DZ   = AVINICS_BOSS_DZ;   // mm, ±Z tray corner M3 boss offset (= 15.0 mm)
+FARADAY_FAN_D      =  25.0;   // mm, axial fan diameter (25×25×7 mm)
+BAY_SEP_X          = FARADAY_ENC_X + BAY_GAP;   // = 75 mm centre-to-centre (same as legacy 119-44=75)
+INARA_X_CEN        = CX - BAY_SEP_X / 2;   // mm, Inara bay X centre -- port half (more-negative local X)
+RIVER_X_CEN        = CX + BAY_SEP_X / 2;   // mm, River bay X centre -- stbd half (less-negative local X)
+AVIONICS_STATION_Y = GPS_STATION_Y;         // mm, shared longitudinal station, co-located with GPS
+AVINICS_BOSS_DY    =  25.0;        // mm, ±Y (longitudinal) Faraday tray corner boss offset (Rev S4: was 42, mislabelled "X")
+AVINICS_BOSS_DX    =  15.0;        // mm, ±X (lateral) Faraday tray corner boss offset (Rev S4: was 27, mislabelled "Z")
+AVINICS_PANEL_Y    =  62.0;        // mm, dorsal access panel opening, longitudinal (Rev S4: was 95, mislabelled "X")
+AVINICS_PANEL_X    =  42.0;        // mm, dorsal access panel opening, lateral (Rev S4: was 65, mislabelled "Z")
+FARADAY_MOUNT_DX   = AVINICS_BOSS_DX;   // mm, ±X tray corner M3 boss offset (= 15.0 mm)
+FARADAY_MOUNT_DY   = AVINICS_BOSS_DY;   // mm, ±Y tray corner M3 boss offset (= 25.0 mm)
 
-// Ductwork parameters — Faraday tray ventilation (Rev S4, all bays).
-//   Air path: gondola interior → honeycomb intake slot (−X tray wall) →
-//             across PCB stack → 25 mm fan outlet (+X tray wall) → gondola interior.
-//   Internal circulation only; no hull skin penetrations required.
-//   Waveguide-below-cutoff honeycomb panel at intake prevents EMI ingress.
+// Ductwork parameters — Faraday tray ventilation (Rev S4, all bays).  Internal
+// circulation only; no hull skin penetrations required.  Fan/intake wall
+// assignment is an internal tray-hardware detail, unaffected by the hull-axis
+// fix above.
 //   Attenuation ≈ 27×(DUCT_EMC_T/DUCT_CELL_D) dB — at 6/6 mm: ≥ 27 dB per panel.
-//   Multiple stacked panels can be used if higher attenuation is required.
-//   Conduit relief groove cut into interior dorsal face routes airflow between
-//   tray exhaust port and gondola interior air volume.
-DUCT_INTAKE_W   =  22.0;   // mm, intake slot width (X, on tray −X face; ≤ fan 25 mm)
-DUCT_INTAKE_H   =  22.0;   // mm, intake slot height (Z, centred on tray Z face)
-DUCT_EXHAUST_W  =  24.0;   // mm, exhaust slot width (X, behind fan on +X face)
-DUCT_EXHAUST_H  =  24.0;   // mm, exhaust slot height (Z)
+DUCT_INTAKE_W   =  22.0;   // mm, intake slot width (≤ fan 25 mm)
+DUCT_INTAKE_H   =  22.0;   // mm, intake slot height
+DUCT_EXHAUST_W  =  24.0;   // mm, exhaust slot width (behind fan)
+DUCT_EXHAUST_H  =  24.0;   // mm, exhaust slot height
 DUCT_EMC_T      =   6.0;   // mm, honeycomb waveguide panel thickness
 DUCT_CELL_D     =   6.0;   // mm, honeycomb cell diameter (λ/2 cutoff > 25 GHz)
-DUCT_GROOVE_W   =  26.0;   // mm, conduit relief groove width (Z) in interior dorsal face
-DUCT_GROOVE_D   =   5.0;   // mm, conduit relief groove depth (−Y from interior face)
-DUCT_GROOVE_X   = AVINICS_X_CEN + AVINICS_BOSS_DX + 4.0; // mm, groove X start (just AFT of boss)
+DUCT_GROOVE_W   =  26.0;   // mm, conduit relief groove width (Y) in interior dorsal face
+DUCT_GROOVE_D   =   5.0;   // mm, conduit relief groove depth (−Z from interior face)
+DUCT_GROOVE_X   = INARA_X_CEN + AVINICS_BOSS_DX + 4.0; // mm, groove X start (just outboard of Inara boss)
 
 // ----------------------------------------------------------------------------
 // Module: wing_root_mortise
@@ -1135,33 +1195,37 @@ module nacelle_servo_mount_block(side) {
 // ----------------------------------------------------------------------------
 // Module: avinics_dorsal_boss
 //   Single M3 heat-set insert boss post on the interior dorsal face, protruding
-//   in −Y (downward into gondola interior).  Provides one corner standoff anchor
+//   in −Z (downward into gondola interior).  Provides one corner standoff anchor
 //   for Cape-B avionics PCB (one call per corner of each bay, 4 per bay).
-//   Reuses m3_boss() with AVINICS_BOSS_ROT = [90,0,0] (maps +Z → −Y).
+//   Rev R2 (2026-07-03): corrected to use the real dorsal (Z) axis for depth
+//   and the real (X,Y) plane for in-panel position -- see header note above.
+//   Reuses m3_boss() with AVIONICS_BOSS_ROT = [0,0,0] (no rotation needed).
 //   Boss geometry: BOSS_OD = 8 mm, BOSS_H = 6 mm, bore BOSS_BORE_D = 4.1 mm.
-//   Boss base fused to interior dorsal face at AVINICS_DORSAL_Y; extends to
-//   AVINICS_DORSAL_Y − BOSS_H (= −218.6 mm approx) into gondola interior.
+//   Boss base fused to interior dorsal face at DORSAL_Z_EXT; extends to
+//   DORSAL_Z_EXT − BOSS_H into gondola interior.
 //   VERIFY each boss clears GPS recess (Ø36 mm, R=18 mm) and GPS M2 holes in slicer.
 //   Ref: Ruthex RX-M3x5.7; Cape-B-2 90×60 mm PCB corner hole pattern; CLAUDE.md.
 // ----------------------------------------------------------------------------
-module avinics_dorsal_boss(x_pos, z_pos) {
-    m3_boss([x_pos, AVINICS_DORSAL_Y, z_pos], AVINICS_BOSS_ROT);
+module avinics_dorsal_boss(x_pos, y_pos) {
+    m3_boss([x_pos, y_pos, DORSAL_Z_EXT], AVIONICS_BOSS_ROT);
 }
 
 // ----------------------------------------------------------------------------
 // Module: avinics_dorsal_panel_cut
 //   Rectangular through-cut (62×42 mm, Rev S4) in the dorsal skin for avionics
 //   bay access and Faraday tray insertion.
-//   Faraday tray body (FARADAY_ENC_X × FARADAY_ENC_Z = 60×40 mm) inserts
-//   through this opening from outside with 1 mm assembly clearance each side;
-//   tray screws to AVINICS_BOSS_* posts below.
+//   Rev R2 (2026-07-03): corrected to real (X,Y) in-panel plane / Z depth --
+//   see header note above.
+//   Faraday tray body (FARADAY_ENC_X × FARADAY_ENC_Z = 40×60 mm, lateral x
+//   longitudinal) inserts through this opening from outside with 1 mm assembly
+//   clearance each side; tray screws to AVINICS_BOSS_* posts below.
 //   Cover (72×52 mm) overlaps the cut perimeter by 5 mm on all sides for a
 //   positive-stop EMI-seal shoulder; secured by 4× M2 screws or spring clips.
 //
-//   Cut Y span: AVINICS_DORSAL_Y − 1.0 to AVINICS_DORSAL_Y + WALL_MM + 1.0
+//   Cut Z span: DORSAL_Z_EXT − WALL_MM − 1.0 to DORSAL_Z_EXT + 1.0
 //     = through interior skin (−1 mm overshoot) to past exterior face (+1 mm).
 //
-//   x_cen, z_cen: panel centre in X and Z (AVINICS_X_CEN and bay Z centre).
+//   x_cen, y_cen: panel centre in X (lateral) and Y (longitudinal).
 //
 //   GPS recess (Ø36 mm) overlaps both panels; GPS antenna installed from outside
 //   before Faraday tray and cover; access cover designed with Ø38 mm clearance bore.
@@ -1170,11 +1234,11 @@ module avinics_dorsal_boss(x_pos, z_pos) {
 //   Ref: FARADAY_ENC_* parameters (Rev S3); GPS co-location analysis 2026-06-08;
 //   CLAUDE.md positive-stop shoulder requirement for flight-critical joints.
 // ----------------------------------------------------------------------------
-module avinics_dorsal_panel_cut(x_cen, z_cen) {
+module avinics_dorsal_panel_cut(x_cen, y_cen) {
     translate([x_cen - AVINICS_PANEL_X / 2,
-               AVINICS_DORSAL_Y - 1.0,
-               z_cen - AVINICS_PANEL_Z / 2])
-    cube([AVINICS_PANEL_X, WALL_MM + 2.0, AVINICS_PANEL_Z]);
+               y_cen - AVINICS_PANEL_Y / 2,
+               DORSAL_Z_EXT - WALL_MM - 1.0])
+    cube([AVINICS_PANEL_X, AVINICS_PANEL_Y, WALL_MM + 2.0]);
 }
 
 // ============================================================
@@ -1321,31 +1385,38 @@ union() {
             nacelle_servo_mount_block(+1);  // port wall
             nacelle_servo_mount_block(-1);  // stbd wall
 
-            // A9. Inara's avionics bay — port half, Z centre = 119 mm (Rev S4).
-            //     4× M3 Faraday tray anchor bosses on interior dorsal face (Y≈−213 mm).
-            //     Boss pattern: ±25 mm (X) × ±15 mm (Z) from bay centre (Rev S4: was ±42×±27).
-            //     Boss positions (X, Z): (−127.2,104), (−77.2,104), (−127.2,134), (−77.2,134).
-            //     GPS_PORT (Z=104.7 mm) co-located; nearest boss ≥ 25.0 mm from GPS centre ✓.
+            // A8b. Vera vision/ToF/laser PCB mounting bosses (Rev R2, 2026-07-03).
+            //      4x M3 bosses on the belly interior floor, centred on
+            //      CARGO_CAM_POS's (X,Y) station.  See vera_board_bosses() header.
+            vera_board_bosses();
+
+            // A9. Inara's avionics bay — port half (Rev R2: X centre = CX-37.5 mm,
+            //     shared longitudinal station with River and GPS).
+            //     4× M3 Faraday tray anchor bosses on interior dorsal face (Z≈DORSAL_Z_EXT).
+            //     Boss pattern: ±15 mm (X) × ±25 mm (Y) from bay centre.
+            //     GPS_PORT co-located (same X); nearest boss ≥ 5 mm from GPS centre.
             //     Cape-B-2 (Zoë) / Cape-A-2 (Wash) PCBs mount on M2.5 internal standoffs
             //     inside Faraday tray; hull bosses anchor tray body only.
             //     VERIFY boss positions and clearance in slicer before printing.
-            //     Ref: Rev S4 dimension correction; GPS_PORT recess R=18 mm; FARADAY_* params.
+            //     Ref: Rev S4 dimension correction (Rev R2 axis fix); GPS_PORT recess
+            //     R=18 mm; FARADAY_* params.
             for (dx = [-AVINICS_BOSS_DX, AVINICS_BOSS_DX])
-            for (dz = [-AVINICS_BOSS_DZ, AVINICS_BOSS_DZ])
-                avinics_dorsal_boss(AVINICS_X_CEN + dx, INARA_Z_CEN + dz);
+            for (dy = [-AVINICS_BOSS_DY, AVINICS_BOSS_DY])
+                avinics_dorsal_boss(INARA_X_CEN + dx, AVIONICS_STATION_Y + dy);
 
-            // A10. River's avionics bay — stbd half, Z centre = 44 mm (Rev S4).
-            //      4× M3 Faraday tray anchor bosses on interior dorsal face (Y≈−213 mm).
-            //      Boss pattern: ±25 mm (X) × ±15 mm (Z) from bay centre (Rev S4: was ±42×±27).
-            //      Boss positions (X, Z): (−127.2,29), (−77.2,29), (−127.2,59), (−77.2,59).
-            //      GPS_STBD (Z=44.7 mm) co-located; nearest boss ≥ 15.7 mm from GPS centre ✓.
+            // A10. River's avionics bay — stbd half (Rev R2: X centre = CX+37.5 mm,
+            //      shared longitudinal station with Inara and GPS).
+            //      4× M3 Faraday tray anchor bosses on interior dorsal face (Z≈DORSAL_Z_EXT).
+            //      Boss pattern: ±15 mm (X) × ±25 mm (Y) from bay centre.
+            //      GPS_STBD co-located (same X); nearest boss ≥ 5 mm from GPS centre.
             //      Cape-B-2 (Zoë) / Cape-A-2 (Wash) PCBs mount on M2.5 internal standoffs.
-            //      35 mm inter-bay gap (Z = 64..99 mm) available for conduit and wiring routing.
+            //      35 mm inter-bay gap (X) available for conduit and wiring routing.
             //      VERIFY boss positions and clearance in slicer before printing.
-            //      Ref: Rev S4 dimension correction; GPS_STBD recess R=18 mm; FARADAY_* params.
+            //      Ref: Rev S4 dimension correction (Rev R2 axis fix); GPS_STBD recess
+            //      R=18 mm; FARADAY_* params.
             for (dx = [-AVINICS_BOSS_DX, AVINICS_BOSS_DX])
-            for (dz = [-AVINICS_BOSS_DZ, AVINICS_BOSS_DZ])
-                avinics_dorsal_boss(AVINICS_X_CEN + dx, RIVER_Z_CEN + dz);
+            for (dy = [-AVINICS_BOSS_DY, AVINICS_BOSS_DY])
+                avinics_dorsal_boss(RIVER_X_CEN + dx, AVIONICS_STATION_Y + dy);
         }
 
         // ── Cargo-bay door opening ────────────────────────────────────────────
@@ -1386,23 +1457,24 @@ union() {
         //   Ref: CF-TUBE-12MM (bom_revO.csv); wings_s1223_revo.scad spar_bore().
         wing_spar_bore();
 
-        // ── Inara avionics dorsal access panel (port, Z=99..139 mm, Rev S4) ──────
-        //   62×42 mm cut through dorsal skin at Inara bay Z centre = 119 mm.
-        //   Faraday tray body (FARADAY_ENC_X × FARADAY_ENC_Z = 60×40 mm) inserts
+        // ── Inara avionics dorsal access panel (port, Rev R2 axis fix) ──────
+        //   42×62 mm cut (lateral X × longitudinal Y) through dorsal skin at
+        //   Inara bay X centre = CX-37.5 mm, shared Y station with GPS/River.
+        //   Faraday tray body (FARADAY_ENC_X × FARADAY_ENC_Z = 40×60 mm) inserts
         //   through this opening from outside with 1 mm assembly clearance each side.
         //   Cover (72×52 mm, 5 mm shoulder) forms EMI-sealed lid when installed.
-        //   GPS_PORT recess (Ø36 mm at Z=104.7 mm) overlaps panel: GPS installed
-        //   from outside before Faraday tray; cover has Ø38 mm clearance bore.
+        //   GPS_PORT recess overlaps panel: GPS installed from outside before
+        //   Faraday tray; cover has Ø38 mm clearance bore.
         //   VERIFY opening bounds and GPS overlap in slicer.
-        avinics_dorsal_panel_cut(AVINICS_X_CEN, INARA_Z_CEN);
+        avinics_dorsal_panel_cut(INARA_X_CEN, AVIONICS_STATION_Y);
 
-        // ── River avionics dorsal access panel (stbd, Z=24..64 mm, Rev S4) ──────
-        //   62×42 mm cut through dorsal skin at River bay Z centre = 44 mm.
+        // ── River avionics dorsal access panel (stbd, Rev R2 axis fix) ──────
+        //   42×62 mm cut through dorsal skin at River bay X centre = CX+37.5 mm,
+        //   shared Y station with Inara/GPS.
         //   Same Faraday tray geometry and GPS co-location note as Inara panel.
-        //   GPS_STBD recess (Ø36 mm at Z=44.7 mm) centred in panel Z span.
-        //   35 mm inter-bay gap (Z=64..99 mm) from Inara lower edge for conduit run.
+        //   35 mm inter-bay gap (X) from Inara for conduit run.
         //   VERIFY opening bounds and GPS overlap in slicer.
-        avinics_dorsal_panel_cut(AVINICS_X_CEN, RIVER_Z_CEN);
+        avinics_dorsal_panel_cut(RIVER_X_CEN, AVIONICS_STATION_Y);
     }
 
     // ── B. Latch-catch lips (added after door_bay_cut; not affected by it) ────

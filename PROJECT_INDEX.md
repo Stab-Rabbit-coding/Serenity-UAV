@@ -1,7 +1,7 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: 2026-06-16 — full file-tree audit and correction pass -->
+<!-- Last updated: 2026-07-03 — Vera board EMI-hardened + manually compacted to 46x48mm (gen_vera.py, gen_vera_pcb.py, Vera.kicad_*, Vera.md) -->
 
 ## Repository Root
 
@@ -225,6 +225,10 @@ battery_tray.stl                — 6S LiPo battery tray (part-local, VERIFY pla
 belly_panel.stl                 — Battery-bay belly access panel (part-local, VERIFY)
 head_cargo_splice_collar.stl    — Internal head/cargo joint splice collar (hull-frame, Rev R1, ~13g)
 generate_head_cargo_splice_collar.py — Splice-collar generator (hull frame, from head inner contour)
+cargo_middle_splice_collar.stl  — Internal cargo/middle joint splice collar (hull-frame, Rev R1, ~17g)
+generate_cargo_middle_splice_collar.py — Splice-collar generator (hull frame, from middle inner contour)
+middle_rear_splice_collar.stl   — Internal middle/rear joint splice collar (hull-frame, Rev R1, ~16g)
+generate_middle_rear_splice_collar.py — Splice-collar generator (hull frame, from middle inner contour)
 landing-gear/
 legs_scaled24.stl             — Original Thingiverse landing legs × 4 (24" scale, cosmetic reference)
 leg_1_scaled24.stl            — Individual leg 1 (Thingiverse reference)
@@ -543,6 +547,22 @@ Kaylee.kicad_pcb                — PCB outline + stackup (Rev A)
 Kaylee.kicad_prl                — Layout rules
 Kaylee.md                       — Design specification
 gen_kaylee.py                   — Python generator script (all 3 KiCad files)
+
+Vera — Nose/Cargo-Bay Vision, ToF & Laser Board (STANDALONE, not a PB2-I cape):
+Vera.kicad_pro                  — KiCad project file (design exploration, 2026-07-03)
+Vera.kicad_sch                  — Schematic (net-correct, EMI-hardened; U1/U2/U3/U5/U_PMIC
+                                   use placeholder pin numbers/footprints, see gen_vera.py)
+Vera.kicad_pcb                  — PCB layout (46×48 mm, double-sided F.Cu+B.Cu, 4-layer,
+                                   rounded corners, EMI-hardened; manually compacted in KiCad
+                                   GUI past gen_vera_pcb.py's 78x80mm script output — footprint
+                                   placement only, traces not routed)
+Vera.md                         — Design specification, BOM, EMI-hardening status (matches
+                                   Wash/Zoe Rev R baseline)
+gen_vera.py                     — Python generator script (kicad_pro + kicad_sch)
+gen_vera_pcb.py                 — Python generator script (kicad_pcb, 78x80mm layout; NOT in
+                                   sync with the hand-compacted 46x48mm Vera.kicad_pcb —
+                                   re-running it overwrites the compaction, see Vera.md)
+[see TODO.md §1.2c and avionics/CLAUDE.md "Vera" for full status/open items]
 
 Emma (49 MHz transceiver sub-module):
 Emma.kicad_pro

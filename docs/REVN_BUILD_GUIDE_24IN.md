@@ -154,10 +154,10 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 | Part | Material | Dimension | Notes |
 |------|----------|-----------|-------|
-| Keel | CF flat bar 6×3mm | 24.41 in (620 mm) | Mark datums at 3.58, 6.50, 9.88, 12.60, 15.28 in (91, 165, 251, 320, 388 mm) from nose |
+| Keel | CF flat bar 6×3mm, 2 lap-spliced segments | Cargo 8.0 in (203 mm) + Rear 7.1 in (181 mm); spans hull Y −71..+384 mm (17.9 in / 455 mm) — head and middle sections are keelless (docs/structural_analysis.md §4.1–§4.2) | Bar oriented 3mm lateral (X) × 6mm vertical (Z), strong axis vertical; 100 mm (3.9 in) lap-splice overlap centred at the middle/rear joint (hull Y ≈ +203 mm); ring-notch positions at hull Y = +30 mm and +290 mm (replaces stale 91/165/251/320/388 mm nose-station marks) |
 | Wing spars | CF tube 12mm OD / 1.5mm wall | 2× 14.96 in (380 mm) | Sand spar ends to fit wing-root spar pockets |
 | Pivot rods | CF solid rod 4mm OD | 2× cut to length per pivot housing drawing | Deburr ends; press-fit into MF104ZZ bearings |
-| Ring frames | CF plate 2mm | 5 profiles per station drawing | Fit to keel slot-notches |
+| Ring frames | CF plate 2mm | 2 profiles: hull Y = +30 mm (cargo) and +290 mm (rear) — down from 5 pre-Rev N stations; see airframe/diagrams/ring_frames/*.dxf | Fit to keel slot-notches; cargo profile is PROVISIONAL pending cargo-mesh fix (TODO §1.1.1) |
 
 > ⚠ **CF dust hazard.** Wear N95 mask + safety glasses. Cut outdoors or with dust extraction.
 
@@ -203,9 +203,9 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 > **Critical:** Complete steps 1–12 before mixing any foam (step 13).
 
-**1. Epoxy keel through all hull sections.** Datum marks at 91, 165, 251, 320, 388mm. Cure 2 h minimum.
+**1. Epoxy keel segments into the cargo and rear sections only** (head and middle sections are keelless — see docs/structural_analysis.md §4.1–§4.2). Keel spans hull Y −71 mm → +384 mm (455 mm / 17.9 in) as two lap-spliced CF-BAR-6X3 segments: cargo (hull Y −71..+132 mm) and rear (hull Y +203..+384 mm), bar oriented 3 mm lateral (X) × 6 mm vertical (Z). Lap-splice the two segments with a 100 mm (3.9 in) overlap centred on the middle/rear joint (hull Y ≈ +203 mm), bonded with West System 105/206 + peel-ply prep. Ring-notch datum marks at hull Y = +30 mm and +290 mm (supersedes the stale 91/165/251/320/388 mm nose-station marks, which were tied to the pre-Rev N ring-plate layout). Cure 2 h minimum.
 
-**2. Bond ring frames to keel** at all 5 station notches. Cure 1 h.
+**2. Bond ring frames to keel** at the 2 station notches: hull Y = +30 mm (cargo, wing-spar zone) and +290 mm (rear, landing zone) — down from 5 stations in the pre-Rev N layout (see airframe/diagrams/ring_frames/*.dxf; the cargo profile is PROVISIONAL pending the open cargo-mesh fix, TODO §1.1.1). Cure 1 h.
 
 **3. Bond access panel frames A–F into hull sections:**
 

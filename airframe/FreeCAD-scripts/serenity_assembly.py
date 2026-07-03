@@ -306,6 +306,29 @@ def assemble():
     )
     place_mesh(splice, PL_IDENTITY)
 
+    # Internal cargo/middle splice collar (Rev R1, hull frame — spans the joint at
+    # hull Y ≈ +131 mm; identity placement).  Secures the cargo section to the
+    # middle section: 2-wall bonded double-lap + anti-ovalisation ring.  See
+    # docs/structural_analysis.md §7.4 and TODO.md §1.1.1.0b.
+    splice2 = add_mesh(
+        doc,
+        _stl("fuselage/cargo_middle_splice_collar.stl"),
+        "Cargo_Middle_Splice_Collar",
+    )
+    place_mesh(splice2, PL_IDENTITY)
+
+    # Internal middle/rear splice collar (Rev R1, hull frame — spans the joint at
+    # hull Y ≈ +203 mm; identity placement).  Secures the middle section to the
+    # rear section: 2-wall bonded double-lap + anti-ovalisation ring; complements
+    # (does not replace) the CF skid rods as the skid-impact load path.  See
+    # docs/structural_analysis.md §7.5 and TODO.md §1.1.1.0b.
+    splice3 = add_mesh(
+        doc,
+        _stl("fuselage/middle_rear_splice_collar.stl"),
+        "Middle_Rear_Splice_Collar",
+    )
+    place_mesh(splice3, PL_IDENTITY)
+
     # Landing gear — RETIRED single-blade parts (part-local print frame; NOT
     # hull-placed).  Superseded by the Rev R5 vertical-post + 4-wire-brace
     # design (post.stl + spring/ductile wires); hull-frame placement of the
