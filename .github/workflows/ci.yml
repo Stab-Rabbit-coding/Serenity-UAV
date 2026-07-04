@@ -60,7 +60,8 @@ jobs:
         run: |
           sudo add-apt-repository --yes ppa:kicad/kicad-9.0-releases
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends kicad-cli
+          sudo apt-get install -y --no-install-recommends kicad
+          kicad-cli --version
       - name: Run KiCad ERC/DRC validator (changed files only)
         run: |
           git fetch origin main
