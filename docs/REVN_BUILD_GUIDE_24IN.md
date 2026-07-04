@@ -1,5 +1,5 @@
-<!-- markdownlint-disable MD041 -- intentional accessibility font-loading preamble
-     (OpenDyslexic, CC BY 4.0) must precede the document's H1. -->
+<!-- markdownlint-disable MD041 -->
+<!-- Intentional accessibility font-loading preamble (OpenDyslexic, CC BY 4.0) must precede the document's H1. -->
 <!-- OpenDyslexic font for screen reading (CC BY 4.0) -->
 <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/opendyslexic">
 <style>
@@ -195,7 +195,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 | M2.5 × 8mm SS button screws | 64× | Standoff attachment + panel B/E fasteners |
 | M3 heat-set inserts | 4× | Cargo gondola belly hard points |
 | N42 neodymium disc magnet 6×2mm | 8× | Panel D (4 in frame + 4 in lid) |
-| SMA panel-mount bulkhead | 3× | 915MHz SiK (belly) + LoRa (belly) + WiFi (dorsal fwd). Note: the 49MHz (Part 15 §15.235) link now uses a dorsal wire antenna — no belly SMA for that system |
+| SMA panel-mount bulkhead | 3× | 915MHz SiK (belly) + LoRa (belly) + Wi-Fi (dorsal fwd). Note: the 49MHz (Part 15 §15.235) link now uses a dorsal wire antenna — no belly SMA for that system |
 | PETG wire post (49MHz fwd + aft) | 2× | Print from s_rcrs49_wire_post.scad: forward post (~120mm from nose, dorsal) + aft post (top of rear nozzle cone). Both ~10mm tall insulated hooks |
 | 0.3mm stainless steel wire or 22AWG enamelled Cu | ~500mm | 49MHz (Part 15 §15.235) top wire |
 | Ceramic bead insulator (3mm ID) | 1× | Aft end of 49MHz wire (insulated/open) |
@@ -243,7 +243,7 @@ pre-Rev N ring-plate layout). Cure 2 h minimum.
 - Belly stbd, X≈260mm: LoRa RFM95W 915MHz SMA-RP bulkhead
 - Dorsal, X≈**120mm**: **49MHz (Part 15 §15.235) forward wire post** — PETG insulated mast (~10mm tall, 12×12mm foot), bonded to dorsal hull skin just aft of bridge/cockpit section; loading coil + LC pi-network at this post; RG-316 coax routed internally to Bay A Emma (XCVR-49MHZ-2) module *(replaces dorsal fin + vertical whip — wire now runs nose-to-tail along hull spine)*
 - Aft dorsal hull, X≈580mm: **49MHz (Part 15 §15.235) temporary aft wire post** — PETG hook post (~10mm tall) bonded to aft dorsal hull skin near station ~580mm with 5-min epoxy; electrically open (insulated end). *(Note: the permanent aft post on the canonical tail nozzle (`rear_nozzle_canonical.stl`) is a Phase 11 item. This temporary post is removed and replaced in Phase 11.)*
-- Dorsal fwd, X≈140mm: WiFi 2.4/5GHz antenna
+- Dorsal fwd, X≈140mm: Wi-Fi 2.4/5GHz antenna
 - **49MHz top wire**: 0.3mm stainless steel wire or 22AWG enamelled copper, strung from forward post hook (~120mm) to temporary aft post hook (~580mm) with light tension (~20g); CF keel bar connected to Emma (XCVR-49MHZ-2) GND as counterpoise
 - **⚠ GPS clearance check**: forward wire post at ~120mm is ~43mm from GPS patch (both dorsal face). Bench-verify GPS HDOP ≤1.5 with Emma (49 MHz) transmitting before flight. If GPS degrades, move GPS patch to ≥165mm from nose.
 
@@ -716,7 +716,7 @@ regulatory readiness for real-world deployment.
 **Dependency:** Phase 9 complete.
 
 1. **Multi-link failover mission** — fly 5-waypoint mission; disable each radio link in sequence
-   (SiK → LoRa → WiFi → 49 MHz Emma); verify mission continues on surviving link.
+   (SiK → LoRa → Wi-Fi → 49 MHz Emma); verify mission continues on surviving link.
 2. **10-waypoint autonomous mission** — full mission at ≤120m AGL including obstacle avoidance halts.
 3. **Autonomous cargo delivery** — takeoff → transit → deploy payload at waypoint → return → land;
    cradle auto-latched on return.
