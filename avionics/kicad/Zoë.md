@@ -5,7 +5,14 @@
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
 **Revision:** R (Rev R baseline — Zoë naming finalised from CAPE-B-2; EMI-hardened variant of CAPE-B-1 Rev M, Ethernet PHY restored)
 **Date:** 2026-06-07
-**Status:** Schematic complete — PCB layout pending
+**Status:** Schematic complete — PCB layout pending. **Rev S1 reconciliation IN PROGRESS
+(2026-07-04):** the PCB is already at the intended end-state (LoRa removed, P1/P2 +TOP
+passthrough rails placed) but the **schematic lags** — it still carries the LoRa block, the
+now-obsolete `J_XCVR` Emma-cable connector, and an SBUS block, and uses a **different
+reference-designator convention** from the PCB (only ~10 of ~50 refs match). A load-blocking
+stray-`(comment)` bug in `Zoë.kicad_sch` was fixed 2026-07-04 (it now opens in kicad-cli).
+The remaining schematic reconciliation needs a **user-confirmed sch↔pcb reference-designator
+remap** before edits — see TODO.md §1.2b and `avionics/CLAUDE.md`.
 
 ---
 

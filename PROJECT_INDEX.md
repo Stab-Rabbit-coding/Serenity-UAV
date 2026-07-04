@@ -1,7 +1,7 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: 2026-07-03 — Vera board EMI-hardened + manually compacted to 46x48mm (gen_vera.py, gen_vera_pcb.py, Vera.kicad_*, Vera.md) -->
+<!-- Last updated: 2026-07-04 — Emma schematic-first reconciliation (gen_emma_sch.py, mod_emma_pcb.py; Emma.kicad_sch authored to match PCB, ERC 0 errors, exact parity); Zoë.kicad_sch load-blocking comment bug fixed -->
 
 ## Repository Root
 
@@ -585,6 +585,9 @@ gen_cape_a2_pcb.py              — PCB layout generator (Cape-A-2)
 gen_cape_b2.py                  — Schematic generator (Cape-B-2)
 gen_cape_b2_pcb.py              — PCB layout generator (Cape-B-2)
 complete_xcvr_49mhz2.py         — Emma completion script
+gen_emma_sch.py                 — Emma schematic-first generator (authors Emma.kicad_sch from the as-placed PCB; 2026-07-04 reconciliation)
+mod_emma_pcb.py                 — Emma PCB transform (pcbnew: drop J1, UART→PB2 rails, PTT_N/RSSI_DCD reassign, add RSSI comparator; 2026-07-04)
+cleanup_emma_drc.py             — Emma DRC debt cleanup (pcbnew: mask expansion 0.1→0.05mm, delete redundant close GND tracks; 2026-07-04)
 add_eth_phy.py                  — Ethernet PHY addition script
 add_sensors_sbus.py             — SBUS sensor addition script
 apply_netlist.py                — Netlist application script

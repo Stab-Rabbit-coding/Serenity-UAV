@@ -119,12 +119,24 @@ section):
 
 - `Zoë.kicad_sch` still has a real `RFM95W` (LoRa) symbol — LoRa has NOT been removed from
   the schematic. Still has `Conn_JST_GH_06P`/`04P`/`03P` symbols too.
-- `Zoë.kicad_pcb` already has BOTH the JST_GH connectors AND real `2x18_P1_Socket` /
-  `2x18_P2_Socket` footprints placed — the P1+P2 passthrough-rail addition is further along
-  on the PCB than the schematic reflects, mirroring Emma's PCB-ahead-of-schematic gap.
-- **Net effect:** "remove LoRa" has NOT happened (LoRa is real and present, schematic and
-  PCB agree on that much); "add P1+P2 rails" is PCB-placed but not schematic-confirmed.
-  Needs the same reconciliation decision as Emma (see above) before calling this done.
+- **Updated finding 2026-07-04 (verified against the files, deeper than prior text):**
+  `Zoë.kicad_pcb` is actually already at the intended end-state — **LoRa (RFM95W) is REMOVED
+  from the PCB** and the `2x18_P1/P2_Socket` + `PB2-P1/P2-TOP` passthrough rails are placed.
+  The **schematic lags the PCB** here (opposite of the earlier assumption). Worse, schematic
+  and PCB use **different reference-designator conventions for the same parts** (`CMC_CAN`
+  vs `CMC-CAN`, `X2Y_RS485` vs `X2Y-RS485`, `WINCH-DRV` vs `WINCH DRV`, `RS485` vs `RS-485`,
+  `WIFI-BT` vs `WIFI & BT`, …) — only ~10 of ~50 refs match exactly. `Zoë.kicad_sch` also
+  still carries the **LoRa block** (`LORA`/RFM95W, `FL_LORA`, `D_ANT_LORA`, `J_SMA_LORA`,
+  `BPF_915`×2), the now-obsolete **`J_XCVR`** Emma-cable connector (should disappear for the
+  same reason Emma's J1 did), and an **SBUS block** the PCB lacks.
+- **Load-blocking bug FIXED 2026-07-04:** `Zoë.kicad_sch` would not open in `kicad-cli` 9.0.2
+  at all — three `(comment …)` blocks were at the schematic top level (only valid inside
+  `title_block`); converted to a `(text …)` annotation. Zoë now loads and ERC runs.
+- **Net effect:** "remove LoRa" is DONE on the PCB, PENDING on the schematic; "add P1+P2
+  rails" is DONE on the PCB, PENDING on the schematic. The remaining schematic-side
+  reconciliation needs a **user-confirmed sch↔pcb reference-designator remap** before edits
+  (flight-hardware footprint↔symbol association must not be guessed) — REFERRED TO USER,
+  TODO.md §1.2b.
 
 **Status:** Archived: Cape-B-1
 
@@ -155,14 +167,21 @@ started":
   silk labels) without ever touching the schematic — a real schematic/PCB parity gap, not
   a documentation-only inconsistency. This explains the "35 hard, 305 soft" DRC/ERC finding
   count seen when Emma is checked outside the `--changed-since`-scoped CI job.
-- **Net effect:** the LoRa+P1P2 migration is NOT "planned, not started" (the previous version
-  of this file's text) and NOT "done" either — the PCB layout is materially ahead of the
-  schematic, so no ERC can currently confirm the LoRa/P1P2 circuit is electrically correct,
-  and the legacy JST_GH_6P interface appears to still be live alongside the new hardware
-  rather than removed. **This needs a user decision**: either (a) author the missing
-  schematic content to match the PCB and then decide whether to remove the legacy JST_GH_6P
-  pads, or (b) treat the PCB-side LoRa/P1P2 work as provisional and revert/ignore it,
-  redoing the migration schematic-first. Tracked as open work in TODO.md §1.2b.  
+- **RECONCILED 2026-07-04 (schematic-first migration, user decisions locked).** The gap was
+  closed by making the schematic the source of truth. `avionics/kicad/gen_emma_sch.py`
+  authored a complete `Emma.kicad_sch` from the as-placed PCB (loads in `kicad-cli` 9.0.2,
+  **ERC 0 errors**); `avionics/kicad/mod_emma_pcb.py` (pcbnew) transformed the PCB to match.
+  **sch↔pcb parity is exact** (74 refs, 104 nets, 0 per-net pin-count mismatches). User
+  decisions applied: (a) **J1 (JST_GH_6P) DROPPED** — modem UART moved onto the PB2 rails
+  (`UART_RCRS_RX`/`_TX`, honoring the "replace JST GH 6P with P1+P2" intent over keeping J1);
+  (b) **PTT_N** → PB2-P2 payload GPIO, presence-gated by a cape-detect DT overlay (Emma has no
+  MCU; the fixed PB2 pinout has no spare GPIO); (c) **RSSI → 1-bit `RSSI_DCD`** via a new
+  on-board comparator `RSSI_CMP` (analog RSSI can't ride the rail — AM6254 GPADC uses dedicated
+  analog balls). Remaining open items (TODO.md §1.2b): final placement+routing of the 4 new
+  parts (parked off-board, refer to user), `RSSI_CMP` part/pinout datasheet vetting, PTT/RSSI
+  pinmux firmware sign-off (Simon payload contention), and 3 pre-existing in-circuit stubs the
+  schematic surfaced (`RF_ANT_SW`, `PA_EMIT`, `DDS_FSYNC`). Old EMI-stub schematic kept as
+  `Emma.kicad_sch.stub-bak`.  
 **Installed in:** River's Room (Bay C) and Simon's Medbay (Bay D) only  
 **Status:** Archived: XCVR-49MHZ-1, Cape-A-1, Cape-B-1
 
