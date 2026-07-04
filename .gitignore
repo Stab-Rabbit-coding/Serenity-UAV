@@ -1,5 +1,12 @@
 #3DBenchy - The jolly 3D printing torture-test by CreativeTools.se - 763622 - part 1 of 2.zip
 
+# Python bytecode cache (never commit — regenerated locally, and machine-
+# generated .pyc files were previously (wrongly) tracked; see TODO.md / CI fix
+# notes for the removal commit)
+__pycache__/
+*.pyc
+*.pyo
+
 # Claude Code agent worktrees and session data
 .claude/
 

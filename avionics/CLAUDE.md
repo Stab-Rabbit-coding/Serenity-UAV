@@ -121,6 +121,81 @@ Provides unlicensed-band communications for environments with restricted radio a
 **Installed in:** River's Room (Bay C) and Simon's Medbay (Bay D) only  
 **Status:** Archived: XCVR-49MHZ-1, Cape-A-1, Cape-B-1
 
+### Vera — Nose/Cargo-Bay Vision, ToF & Laser Board
+
+**Vera is a standalone, compact PCB — not a PocketBeagle 2 Industrial cape.** Unlike
+Wash/Zoë/Emma, it does not use the P1+P2 header stack and does not mount onto a PB2-I node.
+It is its own independent board with its own power input (5V VCC, GND, PGND) and its own
+processors (AM62A vision SoC + MSPM0G3507 MCU), connecting to the rest of the airframe only
+through the shielded JST-GH Ethernet ring and CAN-FD trunk connectors, as a peer network node
+rather than a stacked daughterboard.
+
+One shared PCB design installed at **two physical locations**: the bow sensor pod (nose) and
+the cargo bay nadir FPV mount (`cargo_fpv_bezel`).  Supersedes the RunCam Nano 4 analog
+camera (REF-SENSOR-001, superseded) originally specified for the bow sensor pod.  Vera is
+deliberately split into a **vision half** and a **control half** on the same board — two
+real, currently-produced silicon vendors, not a fictional single-chip "port":
+
+**Vision half:**
+
+- **TI AM62A3/AM62A7** (Sitara, in production) — MIPI CSI-2 v1.3 camera input, 7th-gen VPAC/ISP,
+  H.264 (Level 5.2) / H.265 (Level 5.1 High-tier) hardware encode up to 4K.
+- Runs **TI's own open-source Linux BSP** (mainline-adjacent kernel, V4L2 capture, GStreamer
+  encode pipeline) — genuinely open-source tooling, but explicitly **not** OpenIPC. OpenIPC's
+  supported-hardware list (SigmaStar/GokeMicro/HiSilicon/Ingenic/Fullhan/Anyka/Allwinner/
+  Ambarella/Novatek/Rockchip/Xiongmai) does not include any TI part, and TI's earlier DaVinci
+  DM38x family (DM385/DM388) that an earlier design iteration considered is **NRND** (Not
+  Recommended for New Designs) — excluded from this design for that reason.
+- Chosen over a SigmaStar/OpenIPC path specifically for toolchain uniformity with the
+  PocketBeagle 2 Industrial's TI Sitara AM6254 SoC (shared cross-compiler, kernel driver
+  patterns, and debug tooling across Wash/Zoë and Vera).
+
+**Control half:**
+
+- **TI MSPM0G3507** MCU — native hardware MCAN (CAN-FD) peripheral; shares TI toolchain
+  with the vision half and with the AM6254 real-time domain on Wash/Zoë.
+- **Infineon OPTIGA SLB9670** SPI TPM 2.0 — same part already standardized fleet-wide on all
+  8 Wash/Zoë nodes (REFERENCES.md §3.3/§4.2); Vera reuses it rather than introducing a new TPM
+  part number.
+- **Microchip KSZ9477** Ethernet switch — the only part in this family confirmed (via AN3474)
+  to hardware-offload HSR/PRP ring redundancy per IEC 62439-3; LAN9355/KSZ9563 do **not**
+  implement this and must not be substituted for the ring-redundancy role.
+- **TI ISOW1044BDFMR** galvanically isolated CAN-FD transceiver (SOIC-16W, 5 kV reinforced
+  insulation) — matches the Wash/Zoë Rev R EMI-hardening standard (TODO.md §1.2a); an earlier
+  pass of this board used the non-isolated TCAN1042HG-Q1, corrected 2026-07-03.
+- Shielded JST-GH connectors for the Ethernet ring (in/out, 5-pin: GND + TX±/RX±) and the
+  CAN-FD trunk (4-pin), per the project's field-connector convention; metal shroud tied to
+  PGND (chassis), never to the digital signal GND.
+
+**EMI hardening (added 2026-07-03, matches Wash/Zoë Rev R baseline exactly):** each Ethernet
+port carries Wurth 749010012A magnetics + 2× Bourns SRF2012-100Y CMC + 2× Nexperia
+PRTR5V0U2X TVS before the ring connector; the CAN-FD bus carries the same CMC + TVS pairing
+after U4. All parts/pinouts reused verbatim from this project's own verified
+`gen_cape_a2.py`/`gen_cape_a2_pcb.py` — not fabricated. See `Vera.md` "EMI Hardening Status".
+
+**ToF sensor:** Benewake TFmini-S (REF-SENSOR-002), unchanged from the existing bow sensor
+pod design — read by the MSPM0G3507 over UART, republished signed over both the Ethernet
+ring and CAN-FD.
+
+**Laser (crosshair pointer) — location-specific, do not use one part for both sites:**
+
+- **Nose:** 2"×2" (51×51 mm) crosshair at 50 ft (15.2 m) requires ≈0.19° fan angle — a
+  near-collimated, high-power 520 nm green module. No off-the-shelf catalog part publishes
+  this tight a divergence; a custom-collimated module is required, and at the optical power
+  needed to be camera-visible in daylight it falls in **IEC 60825-1 Class 3B** (5–500 mW CW),
+  not the Class 3R (≤5 mW) used elsewhere in this design. Class 3B requires a key-controlled
+  interlock, an emission indicator, a beam-stop/shutter, and warning labeling — the existing
+  GPIO-default-off pull-down is necessary but not sufficient on its own. **Do not source or
+  wire this module until REFERENCES.md carries a verified Class 3B datasheet citation with a
+  real part number** (tracked in TODO.md §1.2c).
+- **Cargo bay:** 3"×3" (76×76 mm) at 5 ft (1.5 m) requires only ≈2.86° fan angle — well within
+  the existing 5 mW 650 nm Class 3R crosshair module already vetted (REF-IEC-002, REF-FDA-001)
+  for the bow sensor pod. No safety-class escalation needed at this location; reuse the
+  existing Class 3R module and driver circuit (2N7002 MOSFET, 10 kΩ pull-down, GPIO enable).
+
+**Status:** Design exploration only — no `.kicad_sch`/`.kicad_pcb` exists yet. See TODO.md
+§1.2c (hardware) and §4.6 (firmware) for the WBS breakdown.
+
 ### Kaylee — Power Distribution Board (PDB)
 
 Central power management and distribution:

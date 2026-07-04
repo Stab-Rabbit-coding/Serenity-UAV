@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD041 -->
+<!-- Intentional accessibility font-loading preamble (OpenDyslexic, CC BY 4.0) must precede the document's H1. -->
 <!-- OpenDyslexic font for screen reading (CC BY 4.0) -->
 <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/opendyslexic">
 <style>
@@ -23,7 +25,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 > retention ring, FPV bezel, 3M foam gasket door seal. All other subsystems identical to Rev O.
 > See `serenity-rev-p.jsx` for the complete Rev P specification and `bom_revP.json`/`bom_revP.csv`
 > for the full Rev P bill of materials.
-
+>
 > Fan engineering work inspired by the Firefly-class transport ship *Serenity*  
 > from *Firefly* (Fox, 2002) and *Serenity* (Universal, 2005).  
 > © Joss Whedon / Mutant Enemy Productions — **Not an officially licensed product.**
@@ -154,10 +156,10 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 | Part | Material | Dimension | Notes |
 |------|----------|-----------|-------|
-| Keel | CF flat bar 6×3mm | 24.41 in (620 mm) | Mark datums at 3.58, 6.50, 9.88, 12.60, 15.28 in (91, 165, 251, 320, 388 mm) from nose |
+| Keel | CF flat bar 6×3mm, 2 lap-spliced segments | Cargo 8.0 in (203 mm) + Rear 7.1 in (181 mm); spans hull Y −71..+384 mm (17.9 in / 455 mm) — head and middle sections are keelless (docs/structural_analysis.md §4.1–§4.2) | Bar oriented 3mm lateral (X) × 6mm vertical (Z), strong axis vertical; 100 mm (3.9 in) lap-splice overlap centred at the middle/rear joint (hull Y ≈ +203 mm); ring-notch positions at hull Y = +30 mm and +290 mm (replaces stale 91/165/251/320/388 mm nose-station marks) |
 | Wing spars | CF tube 12mm OD / 1.5mm wall | 2× 14.96 in (380 mm) | Sand spar ends to fit wing-root spar pockets |
 | Pivot rods | CF solid rod 4mm OD | 2× cut to length per pivot housing drawing | Deburr ends; press-fit into MF104ZZ bearings |
-| Ring frames | CF plate 2mm | 5 profiles per station drawing | Fit to keel slot-notches |
+| Ring frames | CF plate 2mm | 2 profiles: hull Y = +30 mm (cargo) and +290 mm (rear) — down from 5 pre-Rev N stations; see airframe/diagrams/ring_frames/*.dxf | Fit to keel slot-notches; cargo profile is PROVISIONAL pending cargo-mesh fix (TODO §1.1.1) |
 
 > ⚠ **CF dust hazard.** Wear N95 mask + safety glasses. Cut outdoors or with dust extraction.
 
@@ -193,7 +195,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 | M2.5 × 8mm SS button screws | 64× | Standoff attachment + panel B/E fasteners |
 | M3 heat-set inserts | 4× | Cargo gondola belly hard points |
 | N42 neodymium disc magnet 6×2mm | 8× | Panel D (4 in frame + 4 in lid) |
-| SMA panel-mount bulkhead | 3× | 915MHz SiK (belly) + LoRa (belly) + WiFi (dorsal fwd). Note: the 49MHz (Part 15 §15.235) link now uses a dorsal wire antenna — no belly SMA for that system |
+| SMA panel-mount bulkhead | 3× | 915MHz SiK (belly) + LoRa (belly) + Wi-Fi (dorsal fwd). Note: the 49MHz (Part 15 §15.235) link now uses a dorsal wire antenna — no belly SMA for that system |
 | PETG wire post (49MHz fwd + aft) | 2× | Print from s_rcrs49_wire_post.scad: forward post (~120mm from nose, dorsal) + aft post (top of rear nozzle cone). Both ~10mm tall insulated hooks |
 | 0.3mm stainless steel wire or 22AWG enamelled Cu | ~500mm | 49MHz (Part 15 §15.235) top wire |
 | Ceramic bead insulator (3mm ID) | 1× | Aft end of 49MHz wire (insulated/open) |
@@ -203,9 +205,16 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 > **Critical:** Complete steps 1–12 before mixing any foam (step 13).
 
-**1. Epoxy keel through all hull sections.** Datum marks at 91, 165, 251, 320, 388mm. Cure 2 h minimum.
+**1. Epoxy keel segments into the cargo and rear sections only** (head and middle sections are
+keelless — see docs/structural_analysis.md §4.1–§4.2). Keel spans hull Y −71 mm → +384 mm
+(455 mm / 17.9 in) as two lap-spliced CF-BAR-6X3 segments: cargo (hull Y −71..+132 mm) and rear
+(hull Y +203..+384 mm), bar oriented 3 mm lateral (X) × 6 mm vertical (Z). Lap-splice the two
+segments with a 100 mm (3.9 in) overlap centred on the middle/rear joint (hull Y ≈ +203 mm),
+bonded with West System 105/206 + peel-ply prep. Ring-notch datum marks at hull Y = +30 mm and
++290 mm (supersedes the stale 91/165/251/320/388 mm nose-station marks, which were tied to the
+pre-Rev N ring-plate layout). Cure 2 h minimum.
 
-**2. Bond ring frames to keel** at all 5 station notches. Cure 1 h.
+**2. Bond ring frames to keel** at the 2 station notches: hull Y = +30 mm (cargo, wing-spar zone) and +290 mm (rear, landing zone) — down from 5 stations in the pre-Rev N layout (see airframe/diagrams/ring_frames/*.dxf; the cargo profile is PROVISIONAL pending the open cargo-mesh fix, TODO §1.1.1). Cure 1 h.
 
 **3. Bond access panel frames A–F into hull sections:**
 
@@ -234,7 +243,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 - Belly stbd, X≈260mm: LoRa RFM95W 915MHz SMA-RP bulkhead
 - Dorsal, X≈**120mm**: **49MHz (Part 15 §15.235) forward wire post** — PETG insulated mast (~10mm tall, 12×12mm foot), bonded to dorsal hull skin just aft of bridge/cockpit section; loading coil + LC pi-network at this post; RG-316 coax routed internally to Bay A Emma (XCVR-49MHZ-2) module *(replaces dorsal fin + vertical whip — wire now runs nose-to-tail along hull spine)*
 - Aft dorsal hull, X≈580mm: **49MHz (Part 15 §15.235) temporary aft wire post** — PETG hook post (~10mm tall) bonded to aft dorsal hull skin near station ~580mm with 5-min epoxy; electrically open (insulated end). *(Note: the permanent aft post on the canonical tail nozzle (`rear_nozzle_canonical.stl`) is a Phase 11 item. This temporary post is removed and replaced in Phase 11.)*
-- Dorsal fwd, X≈140mm: WiFi 2.4/5GHz antenna
+- Dorsal fwd, X≈140mm: Wi-Fi 2.4/5GHz antenna
 - **49MHz top wire**: 0.3mm stainless steel wire or 22AWG enamelled copper, strung from forward post hook (~120mm) to temporary aft post hook (~580mm) with light tension (~20g); CF keel bar connected to Emma (XCVR-49MHZ-2) GND as counterpoise
 - **⚠ GPS clearance check**: forward wire post at ~120mm is ~43mm from GPS patch (both dorsal face). Bench-verify GPS HDOP ≤1.5 with Emma (49 MHz) transmitting before flight. If GPS degrades, move GPS patch to ≥165mm from nose.
 
@@ -288,7 +297,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 **Goal:** Both nacelles fully assembled — EDFs installed, stators integral, nozzle iris fitted, gear linkage dry-meshed and verified.
 
-### Materials Needed
+### Materials Needed — Phase 2
 
 | Item | Qty | Notes |
 |------|-----|-------|
@@ -309,7 +318,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 **For each nacelle** (port first, then starboard — VERIFY ROTATION DIRECTION DIFFERS):
 
-1. **Test EDF rotation direction before installation.** Connect to bench ESC + power supply (safe prop/duct test only). 
+1. **Test EDF rotation direction before installation.** Connect to bench ESC + power supply (safe prop/duct test only).
    - Port EDF must spin **CW viewed from intake** (fore end).
    - Starboard EDF must spin **CCW viewed from intake**.
    - To reverse: swap any two motor phase wires at the ESC.
@@ -355,7 +364,7 @@ The nozzle iris is driven passively from the tilt pivot — no dedicated servo.
 
 **Gear train (per nacelle):**
 
-```
+```text
 Tilt pivot rotation
     ↓
 Sector gear (R=22mm, fixed to tilt bracket — does NOT rotate with nacelle)
@@ -399,7 +408,7 @@ Crown pinion (R=6mm) → Nozzle inner ring rack (R=28mm)
 
 **Goal:** Both nacelles mounted on fuselage, pivot freely on bearings, tilt driven by fuselage-mounted servos with correct hard stops.
 
-### Materials Needed
+### Materials Needed — Phase 3
 
 | Item | Qty | Notes |
 |------|-----|-------|
@@ -707,7 +716,7 @@ regulatory readiness for real-world deployment.
 **Dependency:** Phase 9 complete.
 
 1. **Multi-link failover mission** — fly 5-waypoint mission; disable each radio link in sequence
-   (SiK → LoRa → WiFi → 49 MHz Emma); verify mission continues on surviving link.
+   (SiK → LoRa → Wi-Fi → 49 MHz Emma); verify mission continues on surviving link.
 2. **10-waypoint autonomous mission** — full mission at ≤120m AGL including obstacle avoidance halts.
 3. **Autonomous cargo delivery** — takeoff → transit → deploy payload at waypoint → return → land;
    cradle auto-latched on return.

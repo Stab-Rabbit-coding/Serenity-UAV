@@ -300,6 +300,20 @@ def _box(x0, x1, z0, z1, y0, y1):
     return box
 
 
+def _keel_channel_cutter(section_key):
+    """Return the keel-locating-channel box cutter for KEEL_CHANNEL[section_key]
+    (shared by process_cargo and process_rear — same geometry construction)."""
+    kc = KEEL_CHANNEL[section_key]
+    return _box(
+        kc["x_range"][0],
+        kc["x_range"][1],
+        kc["z_range"][0],
+        kc["z_range"][1],
+        kc["y_range"][0],
+        kc["y_range"][1],
+    )
+
+
 def _y_cylinder(x_cen, z_cen, y_start, y_end, radius, sections=32):
     """
     Return a trimesh cylinder aligned with the hull Y axis (positive aft).
@@ -493,7 +507,21 @@ def _subtract_all(shell, cutters):
     for cutter in cutters:
         cm = _manifold_from_trimesh(cutter)
         neg = cm if neg is None else (neg + cm)
-    return _trimesh_from_manifold(shell_man - neg)
+    result = _trimesh_from_manifold(shell_man - neg)
+
+    # Post-boolean cleanup (2026-07-02, MESH-01 follow-up): the manifold3d ->
+    # trimesh round trip can leave a small number (observed: 1-2) of zero-area
+    # degenerate triangles at cut boundaries where float64 (manifold3d output)
+    # is later re-quantized to float32 on binary STL export. These degenerate
+    # faces show up as spurious non-manifold edges / isolated near-zero-volume
+    # "junk" bodies only AFTER the STL round trip, even though the in-memory
+    # result reports watertight=True. Stripping them here (before export)
+    # keeps the exported file watertight through the float32 round trip too.
+    # See TODO.md MESH-01 for the incident writeup (found while regenerating
+    # the middle shell — 2 non-manifold edges / one 2-face 0-volume fragment).
+    result.update_faces(result.nondegenerate_faces())
+    result.remove_unreferenced_vertices()
+    return result
 
 
 def _stamp_header_export(mesh, out_path, shell_name):
@@ -620,17 +648,7 @@ def process_cargo(mesh):
             cutters.append(_y_cylinder(x_pin, z_pin, y0, y1, BOSS_PIN_RADIUS))
 
     # Keel locating channel
-    kc = KEEL_CHANNEL["cargo"]
-    cutters.append(
-        _box(
-            kc["x_range"][0],
-            kc["x_range"][1],
-            kc["z_range"][0],
-            kc["z_range"][1],
-            kc["y_range"][0],
-            kc["y_range"][1],
-        )
-    )
+    cutters.append(_keel_channel_cutter("cargo"))
 
     # Ring-frame pocket at Y = +30 mm (4 side cutters)
     for xm, xx, zm, zx, ym, yx in RING_POCKETS["cargo_Y30"]:
@@ -695,17 +713,7 @@ def process_rear(mesh):
         cutters.append(_y_cylinder(x_pin, z_pin, y0, y1, BOSS_PIN_RADIUS))
 
     # Keel locating channel
-    kc = KEEL_CHANNEL["rear"]
-    cutters.append(
-        _box(
-            kc["x_range"][0],
-            kc["x_range"][1],
-            kc["z_range"][0],
-            kc["z_range"][1],
-            kc["y_range"][0],
-            kc["y_range"][1],
-        )
-    )
+    cutters.append(_keel_channel_cutter("rear"))
 
     # Ring-frame pocket at Y = +290 mm
     for xm, xx, zm, zx, ym, yx in RING_POCKETS["rear_Y290"]:

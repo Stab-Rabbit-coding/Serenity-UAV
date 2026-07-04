@@ -181,6 +181,11 @@ def report_bore(name, mesh, centre_hull, axis, pocket_depth):
 def main():
     print("Loading baked head shell:", HEAD_STL)
     mesh = trimesh.load(HEAD_STL, process=False)
+    # Binary STL stores each triangle with its own unwelded vertex copies;
+    # process=False skips trimesh's usual auto-merge, which otherwise makes
+    # is_watertight/ray-intersection checks unreliable on an unwelded mesh
+    # (found 2026-07-03 while re-verifying post bow-pod-cut merge).
+    mesh.merge_vertices()
     lo, hi = mesh.bounds
     print(
         f"   hull extents  X {lo[0]:+.1f}..{hi[0]:+.1f}  "

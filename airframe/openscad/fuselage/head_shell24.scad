@@ -343,6 +343,35 @@ module book_dorsal_boss(x_pos, z_pos) {
 }
 
 // ----------------------------------------------------------------------------
+// Module: vera_board_bosses (added Rev R2, 2026-07-03)
+//   4x M3 heat-set insert boss posts for the Vera vision/ToF/laser PCB
+//   (avionics/kicad/Vera.kicad_pcb, 46x48 mm double-sided board, mounting
+//   holes at board-local (4,4)/(42,4)/(4,44)/(42,44), i.e. +/-19 mm x
+//   +/-20 mm from board centre), nose install.
+//   PROPOSED placement, NOT FreeCAD-verified: standoff ~20 mm aft (local +Y,
+//   into the hull, away from the bow flat) of bow_sensor_pod.scad's
+//   FACEPLATE_CTR, centred on BOW_CX (aircraft centreline).  The board's
+//   hole pattern is approximated here as spread in local (X, Z) at a fixed
+//   Y station -- an approximation of the true bow-flat-normal-aligned plane
+//   (BOW_ROT = [130,0,0]) rather than an exact match to it.  Per CLAUDE.md
+//   "Assembly and Placement" (bounding-box/centroid placement is inadequate
+//   for this hull's geometry) this position and the interior wall/pocket
+//   clearance against bow_camera_cut/bow_tof_cut MUST be verified in
+//   FreeCAD before printing -- do not treat as final.
+//   Ref: avionics/kicad/Vera.md "Mechanical Mounting and Wiring"; TODO.md
+//   §1.2c.3; bow_sensor_pod.scad FACEPLATE_CTR/BOW_CX.
+// ----------------------------------------------------------------------------
+VERA_NOSE_HOLE_DX = 19.0;   // mm, +/-X half-spacing of Vera's mounting-hole pattern
+VERA_NOSE_HOLE_DZ = 20.0;   // mm, +/-Z half-spacing of Vera's mounting-hole pattern
+VERA_NOSE_STATION_Y = FACEPLATE_CTR[1] + 20.0;   // mm, ~20 mm aft (into hull) of the faceplate
+VERA_NOSE_STATION_Z = FACEPLATE_CTR[2];          // mm, level with the sensor cluster
+module vera_board_bosses() {
+    for (dx = [-VERA_NOSE_HOLE_DX, VERA_NOSE_HOLE_DX])
+    for (dz = [-VERA_NOSE_HOLE_DZ, VERA_NOSE_HOLE_DZ])
+        m3_boss([BOW_CX + dx, VERA_NOSE_STATION_Y, VERA_NOSE_STATION_Z + dz], [0, 0, 0]);
+}
+
+// ----------------------------------------------------------------------------
 // Module: book_dorsal_panel_cut
 //   62×42 mm through-cut in dorsal skin for Book Faraday tray insertion.
 //   Cover (72×52 mm, 5 mm shoulder) overlaps cut for EMI-seal positive stop.
@@ -501,6 +530,11 @@ difference() {
         for (dx = [-BOOK_BOSS_DX, BOOK_BOSS_DX])
         for (dz = [-BOOK_BOSS_DZ, BOOK_BOSS_DZ])
             book_dorsal_boss(BOOK_X_CEN + dx, BOOK_Z_CEN + dz);
+
+        // Vera vision/ToF/laser PCB mounting bosses, nose install (Rev R2,
+        // 2026-07-03).  PROPOSED placement -- see vera_board_bosses() header;
+        // needs FreeCAD verification before printing.
+        vera_board_bosses();
 
         // 6x M3 boss posts at aft joint face (head → cargo section interface).
         //   Bosses extend into interior (+X) from joint face at X = 99 mm.

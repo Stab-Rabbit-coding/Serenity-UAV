@@ -35,4 +35,10 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: "main"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # PYTHON_FLAKE8 disabled: ci.yml's dedicated "Python lint" job already
+          # runs flake8 (and gates STL Validation on it via `needs:`) -- running
+          # it a second time here via super-linter was a pure duplicate check.
+          # super-linter still covers Python via black/isort/mypy/pylint, which
+          # ci.yml does not.
+          VALIDATE_PYTHON_FLAKE8: false
 

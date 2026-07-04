@@ -14,10 +14,31 @@
 // battery_tray.scad
 // Battery tray for Serenity UAV 24" hull — 6S 4000 mAh LiPo.
 //
+// Rev R1 (2026-07-03): keel-rail slot geometry corrected to match the
+//   Rev R1 keel first-principles re-evaluation (docs/structural_analysis.md
+//   §4.3): CF-BAR-6X3 is oriented 3 mm lateral (hull X) x 6 mm vertical
+//   (hull Z) -- the strong axis vertical, NOT the 6 mm-lateral x 3 mm-
+//   vertical orientation this file previously assumed. RAIL_W/RAIL_D swapped
+//   accordingly (was 6.5/3.5 mm, now 3.5/6.5 mm). Keel Z at this station is
+//   cargo belly Z ≈ +1..+2 mm (§4.2); no change needed to the tray's own
+//   floor/rail features for that (Z placement is set by the assembly
+//   transform, not this part file).
+//   **OPEN ITEM (flagged, not resolved here):** this header's "stations
+//   60-130mm inside head/bridge section" text is stale -- the Rev R1 keel
+//   spans cargo-to-rear only (hull Y -71..+384mm; head is keelless, see
+//   structural_analysis.md §4.1), and other TODO.md entries (§1.1.1 "battery
+//   tray in cargo section") now place this tray in the CARGO section, on the
+//   cargo keel segment. A separate, older note (TODO.md ~line 2818-2830,
+//   2026-06-08 Kaylee placement decision) instead describes a battery boss
+//   pattern in the MIDDLE section keel face. These two placements conflict
+//   and are NOT reconciled by this edit -- re-verify the tray's actual
+//   hull-Y station and update this header before final placement in
+//   serenity_assembly.py. See TODO.md §1.1.1.0b.
 // Rev R (2026-06-11): Rev R baseline — no geometry changes.
 // Rev Q (2026-06-07): Initial release.
 //   CG analysis places battery centroid at ~3.31 in (~84 mm) from nose.
 //   Tray spans stations 2.36–5.12 in (60–130 mm) inside head/bridge section.
+//   [Rev R1: section placement under review -- see Rev R1 note above.]
 //   Tray slides on 6×3 mm CF flat bar keel via two bottom rail
 //   slots; ±0.79 in (±20 mm) fore-aft adjustment, locks at
 //   0.39 in (10 mm) detents via M3 thumb screws.
@@ -29,12 +50,27 @@
 //   Interior cavity (battery + 0.118 in / 3 mm foam each side):
 //     5.83 × 2.20 × 1.61 in (148 × 56 × 41 mm) L×W×H
 //
-//   Outer tray dimensions:
-//     6.06 × 2.44 × 1.77 in (154 × 62 × 45 mm) L×W×H
+//   Outer tray dimensions (Rev R1, 2026-07-03 -- floor thickened, see below):
+//     6.06 × 2.03 × 2.44 in (154 × 51.5 × 62 mm) L×H×W
+//     (H includes the forward stop rib, proud of the side walls by design;
+//     wall top is 6.06 x 1.949 x 2.44 in / 154 x 49.5 x 62 mm)
 //
 //   Wall thickness: 0.118 in (3.0 mm) CF-PETG side/front/rear
-//   Floor thickness: 0.157 in (4.0 mm) CF-PETG load-bearing
-//   Estimated printed mass: ~0.049 lbm (~22 g)
+//   Floor thickness: 0.335 in (8.5 mm) CF-PETG load-bearing -- increased from
+//     4.0 mm (Rev R/Q) to clear the corrected 6.5 mm-deep keel-rail slot
+//     (RAIL_D, see Rev R1 rail-system note above) with a 2.0 mm solid margin.
+//   Estimated mass: solid-CAD-volume x 1.27 g/cm^3 (CF-PETG, per
+//     docs/structural_analysis.md §2 convention) = 133 519 mm^3 x 1.27 g/cm^3
+//     = ~169.5 g (0.374 lbm), verified 2026-07-03 by rendering this file with
+//     `openscad` and computing mesh volume (trimesh). This is a **100%-solid
+//     upper bound** -- it does not derate for the 40% gyroid infill specified
+//     below, since no infill-vs-wall mass-splitting convention is established
+//     elsewhere in this repo; confirm the actual printed mass in the slicer
+//     before finalizing the AUW budget (docs/structural_analysis.md §2).
+//     This supersedes the earlier ~22 g placeholder, which predates the
+//     Rev R1 rail-slot correction and appears to have been a rough estimate,
+//     not a computed figure (a first-principles hand check of the original
+//     4 mm-floor geometry already gives on the order of 100 g solid).
 //
 //   Retention — three independent mechanisms:
 //     1. Forward positive-stop rib (0.157 in / 4 mm CF-PETG).
@@ -55,7 +91,8 @@
 //   Layer:    0.15 mm
 //   Walls:    4 perimeters
 //   Infill:   40% gyroid (load-bearing)
-//   Est. mass: ~22 g
+//   Est. mass: ~169.5 g solid-CAD upper bound (Rev R1, 2026-07-03); confirm
+//     infill-derated mass in slicer -- see Rev R1 note above.
 //
 // Coordinate system (tray-local, origin = tray front-interior corner):
 //   X — longitudinal: positive toward nose (forward)
@@ -88,7 +125,13 @@ FOAM    = 3.0;     // mm — foam thickness each face  = 0.118 in
 // Wall and floor thicknesses (CF-PETG structural)
 // ------------------------------------------------------------
 WALL    = 3.0;     // mm — side/front/rear wall thickness  = 0.118 in
-FLOOR   = 4.0;     // mm — floor thickness (load-bearing)  = 0.157 in
+// Rev R1 (2026-07-03): floor thickness increased 4.0 -> 8.5 mm. The rail
+// slot depth (RAIL_D) grew from 3.5 to 6.5 mm to clear the keel bar's actual
+// 6 mm vertical face (see Rev R1 rail-system note above); FLOOR must exceed
+// RAIL_D with a positive margin so the slot does not breach the cavity
+// floor. 8.5 mm leaves a 2.0 mm solid margin above the rail slot, matching
+// the project's general 2 mm minimum-wall convention (CLAUDE.md).
+FLOOR   = 8.5;     // mm — floor thickness (load-bearing)  = 0.335 in
 
 // ------------------------------------------------------------
 // Interior cavity (battery + foam each side)
@@ -109,9 +152,15 @@ TRAY_H  = CAV_H + FLOOR;        //  45 mm (1.77 in)
 // ------------------------------------------------------------
 // Rail system (CF-BAR-6×3 keel bar interface)
 // Two bottom slots run full tray length; rail travel ±0.79 in (±20 mm).
+// Rev R1 (2026-07-03): keel bar orientation per structural_analysis.md §4.3
+// is 3 mm lateral (hull X) x 6 mm vertical (hull Z) -- strong axis vertical.
+// In this file's tray-local frame (Z = lateral, Y = vertical), the rail slot
+// WIDTH (Z direction) clears the bar's 3 mm lateral face and the rail slot
+// DEPTH (Y direction) clears the bar's 6 mm vertical face -- reversed from
+// the pre-Rev-R1 6.5/3.5 mm values.
 // ------------------------------------------------------------
-RAIL_W      = 6.5;    // mm — slot width  (6 mm bar + 0.25 mm clearance each side)  = 0.256 in
-RAIL_D      = 3.5;    // mm — slot depth  (3 mm bar + 0.25 mm clearance)             = 0.138 in
+RAIL_W      = 3.5;    // mm — slot width  (3 mm bar + 0.25 mm clearance each side)  = 0.138 in
+RAIL_D      = 6.5;    // mm — slot depth  (6 mm bar + 0.25 mm clearance each side)  = 0.256 in
 RAIL_INSET  = 8.0;    // mm — inset from outer tray edge Z-wise
 DETENT_DIA  = 3.2;    // mm — M3 detent screw bore diameter
 DETENT_STEP = 10.0;   // mm — detent spacing (10 mm increments along X)

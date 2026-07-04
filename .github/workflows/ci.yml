@@ -45,3 +45,24 @@ jobs:
       - name: Run STL validator
         run: |
           python tools/validate_stls.py
+
+  kicad-validate:
+    name: KiCad Validation
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history + must be able to resolve origin/main for the
+          # --changed-since diff scope (see tools/validate_kicad.py).
+          fetch-depth: 0
+      - name: Install kicad-cli
+        run: |
+          sudo add-apt-repository --yes ppa:kicad/kicad-9.0-releases
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends kicad
+          kicad-cli --version
+      - name: Run KiCad ERC/DRC validator (changed files only)
+        run: |
+          git fetch origin main
+          python3 tools/validate_kicad.py --changed-since origin/main --verbose

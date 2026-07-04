@@ -3,7 +3,7 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
 **Revision:** R1
-**Last updated:** 2026-06-29
+**Last updated:** 2026-07-03
 
 ---
 
@@ -55,8 +55,12 @@
 - [Part XI — FDA / CDRH Laser Product Regulations](#part-xi--fda--cdrh-laser-product-regulations)
     - [REF-FDA-001: 21 CFR Part 1040 — Performance Standards for Light-Emitting Products](#ref-fda-001-21-cfr-part-1040--performance-standards-for-light-emitting-products)
 - [Part XII — Sensor and Component Specifications](#part-xii--sensor-and-component-specifications)
-    - [REF-SENSOR-001: RunCam Nano 4 — 19 mm Nano Format FPV Camera Specification](#ref-sensor-001-runcam-nano-4--19-mm-nano-format-fpv-camera-specification)
+    - [REF-SENSOR-001: RunCam Nano 4 — 19 mm Nano Format FPV Camera Specification (SUPERSEDED)](#ref-sensor-001-runcam-nano-4--19-mm-nano-format-fpv-camera-specification-superseded)
     - [REF-SENSOR-002: Benewake TFmini-S — Long-Range Time-of-Flight Ranging Module Specification](#ref-sensor-002-benewake-tfmini-s--long-range-time-of-flight-ranging-module-specification)
+    - [REF-SENSOR-003: TI AM62Ax Sitara Processors — Vision SoC Datasheet](#ref-sensor-003-ti-am62ax-sitara-processors--vision-soc-datasheet)
+    - [REF-SENSOR-004: TI MSPM0G3507 — Mixed-Signal MCU with CAN-FD Interface](#ref-sensor-004-ti-mspm0g3507--mixed-signal-mcu-with-can-fd-interface)
+    - [REF-SENSOR-005: Microchip KSZ9477 — Ethernet Switch with HSR/PRP Hardware Redundancy](#ref-sensor-005-microchip-ksz9477--ethernet-switch-with-hsrprp-hardware-redundancy)
+    - [REF-SENSOR-006: TI TCAN1042HG-Q1 — CAN-FD Transceiver](#ref-sensor-006-ti-tcan1042hg-q1--can-fd-transceiver)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Removed / Superseded Citations](#removed--superseded-citations)
@@ -581,10 +585,31 @@ required before fabrication (see TODO.md §1.4 PCB DRC and isolation verificatio
 | §5.1 | Classification requirements | Manufacturer must classify laser product and provide required labels |
 | §5.4 | Engineering controls for Class 3R | Class 3R devices require interlocked protective housing; this design implements GPIO-controlled enable with pull-down default-off |
 
-**Applied to:** 12 mm OD crosshair-pattern laser module (5 mW, 650 nm) installed in the bow
-sensor pod (bow_sensor_pod.scad, BOW-LASER mount; Rev R1c on the centreline of the 40° bow
-flat, rear-mounted with a 6 mm beam exit); bore-sighted on aircraft CL, normal to the flat
-(40° below horizon).
+**Applied to (Class 3R, cargo bay only — 2026-07-03 update):** 12 mm OD crosshair-pattern
+laser module (5 mW, 650 nm) installed in the cargo bay nadir FPV mount (`cargo_fpv_bezel`,
+Vera board); required fan angle for a 3"×3" (76×76 mm) crosshair at 5 ft (1.5 m) is only
+≈2.86°, well within reach of an off-the-shelf 5 mW Class 3R module — no change from the
+original bow pod laser spec, just relocated. This module is **no longer installed in the bow
+sensor pod** — see the Class 3B entry below for the nose laser, which has a materially
+different optical throw requirement.
+
+**Class 3B application — nose laser (added 2026-07-03):**
+
+| Clause | Title | Application |
+|---|---|---|
+| §4.3.4 | Class 3B definition | Class 3B: direct intrabeam viewing is always hazardous; diffuse reflection viewing is normally still safe. Applies to CW visible lasers with accessible emission >5 mW up to 500 mW. |
+| Table 3 | AEL values for continuous-wave lasers | 520 nm falls in the visible band; Class 3B upper bound 500 mW CW |
+| §5.4 | Engineering controls for Class 3B | Requires: key-controlled interlock, emission indicator (visible when armed), a beam-stop or shutter, and protective housing — beyond the GPIO-default-off pull-down alone used for the Class 3R module |
+| §7 | Labeling | Class 3B warning label and aperture label required on the module housing |
+
+**Applied to:** bow sensor pod (nose, Vera board) crosshair laser. A 2"×2" (51×51 mm) crosshair
+at 50 ft (15.2 m) requires ≈0.19° fan angle — no catalog 520 nm crosshair module publishes
+this tight a divergence, so a custom-collimated module is required, and the optical power
+needed for daylight camera visibility at that divergence places it in Class 3B rather than
+Class 3R. **Open item — do not fabricate:** the specific part number, verified mW rating, and
+manufacturer-stated (or independently computed) IEC 60825-1 class are not yet established;
+this design step is not complete until a real datasheet is cited here in place of this
+placeholder text. Tracked in TODO.md §1.2c.
 
 **Used in:** `airframe/openscad/fuselage/bow_sensor_pod.scad`,
 `airframe/openscad/fuselage/bow_sensor_faceplate.scad`,
@@ -956,7 +981,12 @@ an environment where persons may be present in the beam path.
 
 ## Part XII — Sensor and Component Specifications
 
-### REF-SENSOR-001: RunCam Nano 4 — 19 mm Nano Format FPV Camera Specification
+### REF-SENSOR-001: RunCam Nano 4 — 19 mm Nano Format FPV Camera Specification (SUPERSEDED)
+
+**Status: SUPERSEDED 2026-07-03.** Replaced by the Vera board's TI AM62Ax digital vision SoC
+(REF-SENSOR-003) at both the bow sensor pod (nose) and the cargo bay nadir FPV mount. This
+entry is retained per project revision policy (components are referenced as of their last
+active revision even after superseding) — do not delete.
 
 | Field | Value |
 |---|---|
@@ -1061,6 +1091,112 @@ redundancy policy [REF-NIST-001 §2.1].
 
 ---
 
+### REF-SENSOR-003: TI AM62Ax Sitara Processors — Vision SoC Datasheet
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Texas Instruments |
+| **Product** | AM62A3/AM62A7 Sitara Processor (AM62Ax family) |
+| **Official product page** | <https://www.ti.com/product/AM62A7> |
+| **Datasheet URL** | <https://www.ti.com/lit/ds/symlink/am62a7.pdf> (Rev. E) |
+| **Lifecycle status** | PRODUCTION DATA (current, not NRND) |
+| **Note** | Selected over TI's earlier DaVinci DM38x family (DM385/DM388, datasheet SPRS821D) because DM38x is **NRND** (Not Recommended for New Designs) per TI's own product page. AM62Ax is also selected over an OpenIPC-supported SigmaStar/GokeMicro/HiSilicon/Ingenic SoC for toolchain uniformity with the PocketBeagle 2 Industrial's TI Sitara AM6254; it runs TI's own open-source Linux BSP (V4L2/GStreamer), not OpenIPC — OpenIPC's supported-hardware list does not include any TI part. |
+
+**Specifications applied in this design:**
+
+| Parameter | Value | Source |
+|---|---|---|
+| Camera input | MIPI CSI-2 v1.3, MIPI D-PHY 1.2, 1–4 data lanes up to 1.5 Gbps/lane | AM62Ax datasheet Rev. E |
+| ISP | 7th-generation VPAC (Vision Processing Accelerator) with integrated ISP | AM62Ax datasheet Rev. E |
+| Video encode | H.264 Baseline/Main/High Profile up to Level 5.2; HEVC (H.265) Main Profile up to Level 5.1 High-tier; up to 4K UHD (3840×2160) | AM62Ax datasheet Rev. E |
+| Package | 484-ball FCBGA/FCCSP | AM62Ax datasheet Rev. E |
+
+**Applied to:** Vera board vision half (nose bow sensor pod and cargo bay nadir FPV mount) —
+see `avionics/CLAUDE.md` "Vera — Nose/Cargo-Bay Vision, ToF & Laser Cape". **Open item:** the
+484-ball FCBGA package is a substantial escalation in assembly difficulty versus the discrete
+components elsewhere in this design; PCB fabrication/assembly house capability for this
+package must be confirmed before board layout (tracked in TODO.md §1.2c).
+
+**Used in:** `avionics/CLAUDE.md`, `TODO.md`
+
+---
+
+### REF-SENSOR-004: TI MSPM0G3507 — Mixed-Signal MCU with CAN-FD Interface
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Texas Instruments |
+| **Product** | MSPM0G3507 (MSPM0G350x family) |
+| **Official product page** | <https://www.ti.com/product/MSPM0G3507> |
+| **Datasheet URL** | <https://www.ti.com/lit/ds/symlink/mspm0g3507.pdf> |
+| **Lifecycle status** | PRODUCTION DATA |
+
+**Specifications applied in this design:**
+
+| Parameter | Value | Source |
+|---|---|---|
+| Core | Arm Cortex-M0+ @ 80 MHz | MSPM0G3507 datasheet |
+| CAN interface | Native hardware MCAN peripheral (CAN-FD capable) | MSPM0G3507 datasheet title: "Mixed-Signal Microcontrollers With CAN-FD Interface" |
+| Package options | 48-pin LQFP (PT), 48-pin VQFN (RGZ), 32-pin VQFN (RHB), 32-/28-pin VSSOP | MSPM0G3507 datasheet |
+
+**Applied to:** Vera board control half — reads Benewake TFmini-S (REF-SENSOR-002) over UART,
+drives the location-specific crosshair laser GPIO, and republishes signed sensor data over
+both the Ethernet ring (via REF-SENSOR-005) and the CAN-FD trunk (via REF-SENSOR-006).
+Selected specifically for its native MCAN peripheral and shared TI toolchain with the
+PocketBeagle 2 Industrial's AM6254 real-time domain — avoids the software-PIO CAN-FD
+synthesis that a non-TI MCU (e.g. RP2350) would require.
+
+**Used in:** `avionics/CLAUDE.md`, `TODO.md`
+
+---
+
+### REF-SENSOR-005: Microchip KSZ9477 — Ethernet Switch with HSR/PRP Hardware Redundancy
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Microchip Technology Inc. |
+| **Product** | KSZ9477 7-Port Gigabit Ethernet Switch |
+| **Official product page** | <https://www.microchip.com/en-us/product/ksz9477> |
+| **Application note** | AN3474 — "KSZ9477 High-Availability Seamless Redundancy" |
+| **Note** | Selected specifically because it is confirmed (per AN3474) to hardware-offload HSR (High-availability Seamless Redundancy) and PRP (Parallel Redundancy Protocol) per IEC 62439-3 — HSR tag insertion, TX frame duplication, RX duplicate-frame discard. Two other Microchip switch parts (LAN9355, KSZ9563) were considered and **rejected** for this role: neither datasheet documents HSR/PRP/MRP hardware support; substituting either would leave the Ethernet ring without hardware-level redundancy and is not permitted for the ring-node role. |
+
+**Applied to:** Vera board control half — Ethernet ring pass-through node (in/out via shielded
+JST-GH connectors), with hardware-level HSR/PRP failover so a link break elsewhere in the ring
+does not require software topology management on the PocketBeagle 2 nodes.
+
+**Open item:** exact IEC 62439-3 clause numbers (Clause 4 HSR / Clause 5 PRP) applied to this
+design require verification against the current IEC 62439-3 edition before final citation —
+tracked in TODO.md §1.2c and in "Open Standards Verification Items" below.
+
+**Used in:** `avionics/CLAUDE.md`, `TODO.md`
+
+---
+
+### REF-SENSOR-006: TI TCAN1042HG-Q1 — CAN-FD Transceiver
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Texas Instruments |
+| **Product** | TCAN1042HG-Q1 |
+| **Official product page** | <https://www.ti.com/product/TCAN1042-Q1> |
+| **Datasheet URL** | <https://www.ti.com/lit/ds/symlink/tcan1042hg-q1.pdf> |
+| **Qualification** | AEC-Q100 Grade 1 |
+| **Note** | The "HG" suffix variant is required for full CAN-FD data-phase rate (5 Mbps); the plain TCAN1042-Q1 (no suffix) supports classic CAN and CAN-FD only up to 2 Mbps. Specify TCAN1042HG-Q1 explicitly in the BOM to avoid ordering the slower part. |
+
+**Specifications applied in this design:**
+
+| Parameter | Value | Source |
+|---|---|---|
+| Data rate | Up to 5 Mbps (CAN-FD data phase) | TCAN1042HG-Q1 datasheet |
+| Package | SOIC-8 or VSON-8 (3×3 mm) | TCAN1042HG-Q1 datasheet |
+
+**Applied to:** Vera board control half — CAN-FD trunk transceiver, MSPM0G3507 MCAN peripheral
+to shielded JST-GH CAN-FD connector.
+
+**Used in:** `avionics/CLAUDE.md`, `TODO.md`
+
+---
+
 ## Part XIII — Telecommunications Standards
 
 ### REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)
@@ -1104,6 +1240,8 @@ because they were incorrectly attributed, unverifiable, or inapplicable.
 | 47 CFR Part 95 RCRS (§95.635/§95.655/§95.639, "TDDS"/"LERS"/"27 channels") | REF-FCC-003, `malcolm_antenna_spec.md`, `CLAUDE.md`, `README.md`, `TODO.md`, `AVIONICS_PB2_REDESIGN.md` | **Wrong band.** RCRS covers only 26–28/72/75 MHz, not 49 MHz; "TDDS"/"LERS"/27-channel terms untraceable. Emma's 49.82–49.90 MHz band is Part 15 §15.235, unlicensed. | REF-FCC-003 (Part 15 §15.235) |
 | "ASTM F3322 — sUAS Battery Safety" | TODO.md §0.4 (candidate list, not yet cited in active docs) | **Incorrect attribution.** F3322 is the *Standard Specification for Small Unmanned Aircraft System (sUAS) Parachutes* — unrelated to batteries, and not applicable to Serenity (no deployable recovery parachute). | REF-ASTM-002 (ASTM F3005-22, sUAS battery specification) |
 | "ASTM F3003 — Quality Assurance of a Small Unmanned Aircraft System" | TODO.md §0.4 (candidate list, not yet cited in active docs) | **Withdrawn standard.** F3003-14 was withdrawn by ASTM in January 2023 with no replacement. | None — see REF-ASTM-001 (F2910) for design/construction/test coverage |
+| RunCam Nano 4 analog camera (REF-SENSOR-001) at bow sensor pod | `avionics/CLAUDE.md`, `TODO.md` §1.1.1.1a | **Superseded by design decision (2026-07-03), not an error.** Replaced by the Vera board's TI AM62Ax digital vision SoC (REF-SENSOR-003) at both the nose and cargo bay locations. | REF-SENSOR-003 (TI AM62Ax) |
+| "TI DM38x + remixed OpenIPC firmware" (early Vera design concept from an external AI-assisted brainstorm, never committed) | Not committed to any file — caught during REFERENCES.md drafting 2026-07-03 | **Infeasible as proposed.** TI DM385/DM388 (DaVinci DM38x) are NRND; OpenIPC's supported-hardware list contains no TI part, not even at R&D stage — porting would mean a from-scratch ISP/encoder bring-up on a chip TI is discontinuing, not a firmware port. Also: the same source proposed LAN9355/KSZ9563 for "MRP" ring redundancy (neither chip implements it) and an "ST33GTPMISPI" TPM part number that does not exist. | REF-SENSOR-003 (TI AM62Ax, in-production, TI's own open BSP), REF-SENSOR-005 (KSZ9477, real HSR/PRP support), Infineon SLB9670 (fleet-standard TPM, REFERENCES.md §3.3/§4.2) |
 
 ---
 
@@ -1123,3 +1261,5 @@ Add verified section numbers to the relevant files and update this table.
 | REF-IEC-005 (IEC 61000-4-5) exact product URL | `REFERENCES.md` REF-IEC-005 | Same as REF-IEC-003 — webstore URL not confirmed 2026-06-29 | Confirm via <https://webstore.iec.ch/> search "IEC 61000-4-5" |
 | REF-TIA-001 (ANSI/TIA-485-A) exact product URL | `REFERENCES.md` REF-TIA-001 | TIA standards portal URL not confirmed via WebFetch 2026-06-29 (domain blocked by permission hook) | Confirm product page via <https://www.tiaonline.org/standards/> or <https://webstore.ansi.org/> search "TIA-485-A" |
 | Anti-collision flash rate "60 FPM" | `build_guide_13_nav_lights.svg`, `decal_sheet.svg` | **Resolved 2026-06-29.** Researched 14 CFR Part 107 §107.29(b) (anti-collision light visible 3 statute miles — no flash rate specified), old Part 23 §23.1401 (reorganized 2017, prescriptive flash-rate text no longer exists in current eCFR), and Part 25 §25.1401(f) (transport category, 40–100 FPM — not directly applicable to this sUAS). No currently-enforceable regulatory standard applicable to Part 107 UAS mandates a specific flash rate. "60 FPM" in the build guide is a design convention within the conventional aviation anti-collision light range (40–100 FPM). No regulatory citation is required or appropriate; the figure is a design target, not a compliance claim. | No citation required — design convention documented here. |
+| REF-SENSOR-005 (KSZ9477 HSR/PRP) IEC 62439-3 clause numbers | `REFERENCES.md` REF-SENSOR-005 | AN3474 confirms HSR/PRP hardware support but exact IEC 62439-3 Clause 4 (HSR)/Clause 5 (PRP) sub-clause numbers applied have not been cross-checked against the standard text itself | Obtain IEC 62439-3 and confirm clause numbers before final PCB layout citation (TODO.md §1.2c) |
+| Nose crosshair laser (Vera board) Class 3B part number and rating | `REFERENCES.md` REF-IEC-002 (Class 3B application), `avionics/CLAUDE.md` | No real, sourced part number exists yet for a 520 nm, ≈0.19° divergence, Class 3B crosshair module — placeholder design intent only | Source a real datasheet with manufacturer-stated mW output and IEC 60825-1 class before procurement; update REF-IEC-002 with the verified citation (TODO.md §1.2c). Do not fabricate or procure against the placeholder. |
