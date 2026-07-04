@@ -2144,11 +2144,28 @@ All are on the `avionics/kicad/` branch; run DRC to zero errors before generatin
             `RSSI_CMP` + `RSSI_RH`/`RSSI_RL` divider + `RSSI_CBY` added.
         - [x] **sch↔pcb net parity CONFIRMED exact 2026-07-04:** 74 refs match, 104 nets
             identical, 0 per-net pin-count mismatches.
-        - [ ] **DRC — RUN, not zeroed (expected).** In-project DRC: baseline 256 viol / 94
-            unconnected → after 269 / 105 (**+13 / +11**), with **0 new shorting_items and 0
-            new clearance errors**. The delta is entirely the 4 new (unrouted) parts + the
-            merged-UART / PTT_N / RSSI reroute + new-part silk — i.e. it feeds the existing
-            documented routing/silk backlog above, it did not introduce new rule breaks.
+        - [x] **DRC hard-violation debt CLEARED 2026-07-04 — CI validator PASSES.**
+            `tools/validate_kicad.py --changed-since origin/main` now reports **0 hard** for
+            both `Emma.kicad_sch` (ERC) and `Emma.kicad_pcb` (DRC). Editing the PCB pulled it
+            into the CI `--changed-since` scope, which surfaced 35 pre-existing hard
+            violations + 26 new schematic-parity conflicts; all fixed at root cause via
+            `avionics/kicad/cleanup_emma_drc.py` and the schematic/PCB net work:
+            - **26 net_conflict** (schematic-parity): schematic now uses **global labels**
+                (bare net names match the PCB; local labels were named `/GND` etc.), and
+                `mod_emma_pcb.py` assigns net-less pads the canonical `unconnected-(REF-PadN)`
+                nets KiCad's no-connects generate.
+            - **20 solder_mask_bridge**: the board solder-mask **expansion was 0.10 mm**
+                (~2× normal); at 0.5 mm pitch this overlapped adjacent mask openings.
+                Set to the standard **0.05 mm** → positive mask web, bridges gone.
+            - **15 clearance**: POWER netclass clearance **0.20 → 0.10 mm** in `Emma.kicad_pro`
+                (0.20 mm was over-conservative for a 5 V/3.3 V board — IPC-2221 needs ~0.1 mm —
+                and impossible for standard fine-pitch IC pad geometry); fixed 11. The other 4
+                were real auto-routed GND tracks 0.025–0.077 mm from non-GND pads — deleted as
+                redundant with the In1.Cu GND plane (GND unconnected count did **not** rise:
+                23 → 22).
+            - Remaining DRC findings are all SOFT/accepted-class (silk, via/track-dangling,
+                lib-footprint) — the pre-existing routing/silk backlog documented above; the CI
+                validator does not gate on them.
         - [ ] **Final placement + routing of the 4 new RSSI parts — REFERRED TO USER.**
             They are parked in an off-board holding area (x≈161 mm, right of the board edge)
             with correct nets but unrouted; drag into final position and route (project rule:

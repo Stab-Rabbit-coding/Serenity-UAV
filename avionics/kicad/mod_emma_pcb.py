@@ -120,6 +120,23 @@ def main():
                 pad.SetNet(get_or_add_net(board, nn))
                 print(f"PB2-P2 pad {pad.GetNumber()}: {old} -> {nn}")
 
+    # --- 2b. give every net-less pad the KiCad-canonical
+    #     "unconnected-(REF-PadN)" net that the schematic's no_connect flags
+    #     generate, so `pcb drc --schematic-parity` sees identical net-name
+    #     strings (otherwise each floating pad reports net_conflict "Pad missing
+    #     net given by schematic").  Must run before any board.Remove().
+    nc = 0
+    for fp in board.GetFootprints():
+        ref = fp.GetReference()
+        if not ref:
+            continue
+        for pad in fp.Pads():
+            num = pad.GetNumber()
+            if num and pad.GetNetname() == "":
+                pad.SetNet(get_or_add_net(board, f"unconnected-({ref}-Pad{num})"))
+                nc += 1
+    print(f"assigned unconnected-() nets to {nc} net-less pads")
+
     # --- 3. add RSSI carrier-detect sub-circuit (PROVISIONAL placement) ----
     # Load/add/assign the new footprints BEFORE any board.Remove(): a Remove()
     # invalidates the SWIG IO-plugin state that FootprintLoad relies on.

@@ -274,16 +274,18 @@ NETCOUNT: dict = {}
 
 
 def label(net, x, y, ang):
+    # ALL nets are emitted as GLOBAL labels.  Two reasons:
+    #   1. `kicad-cli pcb drc --schematic-parity` compares net-name STRINGS; a
+    #      local label on the root sheet is named "/GND" (sheet-path prefix),
+    #      which conflicts with the PCB's bare "GND" — every multi-pin net would
+    #      flag net_conflict.  A global label is named "GND" (no prefix), so the
+    #      schematic net names match the board exactly.
+    #   2. Single-pin nets (PB2 passthrough SoC signals) legitimately continue
+    #      off-sheet, for which a global label is the correct construct.
     just = "left" if ang == 0 else "right"
-    if NETCOUNT.get(net, 0) <= 1:
-        return (
-            f'  (global_label "{esc(net)}" (shape passive) (at {x:.2f} {y:.2f} {ang}) '
-            f"(effects (font (size {SIZE} {SIZE})) (justify {just})) "
-            f'(uuid "{uid()}"))'
-        )
     return (
-        f'  (label "{esc(net)}" (at {x:.2f} {y:.2f} {ang}) '
-        f"(effects (font (size {SIZE} {SIZE})) (justify {just} bottom)) "
+        f'  (global_label "{esc(net)}" (shape passive) (at {x:.2f} {y:.2f} {ang}) '
+        f"(effects (font (size {SIZE} {SIZE})) (justify {just})) "
         f'(uuid "{uid()}"))'
     )
 
