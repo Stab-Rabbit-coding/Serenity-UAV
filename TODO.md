@@ -2,8 +2,9 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-07-03  
-**Current design revision:** Rev R (2026-06-10) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
+**Last updated:** 2026-07-04  
+**Current design revision:** Rev S (2026-07-04, see §6.3 "Rev S Checkpoint" for the consolidated
+changelog since Rev R) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 ---
 
@@ -11,12 +12,12 @@
 
 | Domain | End State | Current Status |
 |--------|-------------------|----------------|
-| Hull   | 609.6 mm CF-PETG / PU foam / CF skeleton | SCAD sources complete; all four fuselage SCAD shells at Rev R; cargo section at Rev R (clamshell, avionics bays, GPS); STLs pending regeneration |
-| Nacelles | 2× 50mm tandem EDF, CG pivot Z=83mm, M=1.0 gear, iris nozzle | `nacelle_pod_50mm_tandem.scad` complete; Rev R stator shells (`_revo.stl`) pending render |
+| Hull   | 609.6 mm CF-PETG / PU foam / CF skeleton | SCAD sources complete; all four fuselage SCAD shells at Rev S; cargo section at Rev S (clamshell, avionics bays, GPS, axis-bug fixed); bow-pod cuts merged into the head shell; STLs pending regeneration where noted in §1.1 |
+| Nacelles | 2× 50mm tandem EDF, CG pivot Z=83mm, M=1.0 gear, iris nozzle | `nacelle_pod_50mm_tandem.scad` complete; Rev S stator shells (`_revo.stl`) pending render |
 | Nacelle EDFs | XFly Galaxy X5 50mm 12-blade 6S 3200KV, 1240g each; 2232g/nacelle (90% additive via stator); 4464g total | Baseline EDF selected (xfly-model.eu); nacelle T/W ≈ 1.61 at Phase 5–10 AUW — VTOL hover capable |
 | Rear propulsion | 55mm 6S EDF, reduced-area neck intake, **fixed canonical elliptical tail nozzle** (2.06×1.76 in / 52.3×44.7 mm) + **4 RCS bleed-air thrusters** | **DEFERRED — Phase 11.** Files in `deferred/aft-edf/` — SCAD/STLs need regeneration for 55mm + nozzle + RCS. Adds ~1275g forward thrust; rear EDF not counted in hover T/W; Phase 11 hover T/W ≈ 1.43. |
 | Cargo bay | Clamshell doors + SG90 servos + DRV8833 + N20 winch + Dyneema + auto-latch + GPS ring + FPV bezel | ✓ All 13 cargo STLs generated (PR #21 + PR #22 2026-06-01); BOM updated bom_revP.json/csv; gondola shell open |
-| PCBs | **Rev Q:** all 8 nodes use EM-hardened Wash/Zoë capes. **Kaylee** is the PDB. Two **Emma** boards give 49 MHz connectivity (Part 15 §15.235). Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived 2026-06-05. | Rev R schematics complete (Wash: 2× EMI-hardened Ethernet PHY; Zoë: 1×). Kaylee PCB DRC clean (0 shorts); gerbers generated 2026-06-10; manual placement and trace routing remain. |
+| PCBs | **Rev Q:** all 8 nodes use EM-hardened Wash/Zoë capes. **Kaylee** is the PDB. Two **Emma** boards give 49 MHz connectivity (Part 15 §15.235). Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived 2026-06-05. **Rev S adds Vera** (standalone vision/ToF/laser board, nose + cargo install). | Rev S schematics complete (Wash: 2× EMI-hardened Ethernet PHY; Zoë: 1×; Vera: EMI-hardened to the same standard, DRC/ERC clean). Kaylee PCB DRC clean (0 shorts); gerbers generated 2026-06-10; manual placement and trace routing remain (Wash/Kaylee/Emma carry a pre-existing DRC backlog, see §1.2a). |
 | Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 ✓; serenity-fc Phase 6 stub only; all Phase 7 items open |
 | Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
 | Regulatory | FAA Part 107 [REF-FAA-002], Part 48 §48.205 [REF-FAA-001], §91.209 [REF-FAA-003], FCC Part 15 [REF-FCC-001, REF-FCC-002, REF-FCC-003 §15.235] | FAA registration placeholder; XCVR-49MHZ-2 pre-compliance pending; §15.235 power budget gap open, §15.203 antenna-connector gap resolved in design (§0.1) |
@@ -352,7 +353,7 @@ Superseded Citations" table.
 
 Complete all items in this section before ordering PCBs or starting any physical build step.
 
-### 1.1 — 3D Models: SCAD → STL Exports (Rev R baseline)
+### 1.1 — 3D Models: SCAD → STL Exports (Rev S baseline; carried forward from Rev R)
 
 All SCADs run on a host machine with OpenSCAD 2021.01+ or Blender 3.x+ (headless).
 Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
@@ -1397,9 +1398,11 @@ Joint faces in hull-frame Y (confirmed from baked extents):
 - [ ] **Update REVN_BUILD_GUIDE_24IN.md bay layout table** to reflect revised avionics stack
     positions (Inara + River in cargo section dorsal band; Shepherd Book in head section forward;
     Simon in rear cone pre-Phase 11, middle ring post-Phase 11). Current guide Bays A–E are from an
-    older layout that does not match the cargo-section dorsal placement in Rev R.
+    older layout that does not match the cargo-section dorsal placement in Rev S (formerly
+    Rev R — the axis-bug fix in §1.1.1.0a doesn't change the bay positions this item refers to).
 
-- [ ] **Regenerate `cargo_sect_shell24.stl`** from Rev R SCAD source. Run:
+- [ ] **Regenerate `cargo_sect_shell24.stl`** from the current Rev S SCAD source (includes the
+    Rev R2/Rev S GPS/avionics/nadir-camera axis-bug fix, §1.1.1.0a). Run:
     `openscad -o airframe/stls/fuselage/cargo_sect_shell24.stl
         airframe/openscad/fuselage/cargo/cargo_sect_shell24.scad`
     Verify in slicer: wing mortises at both Z walls; spar bore at X=−70 mm; 8 dorsal boss posts;
@@ -1525,7 +1528,7 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
 #### 1.1.2 **Wings**
 
-**Wing pylon (OpenSCAD — Rev R integrated design; carried fwd from Rev O):**
+**Wing pylon (OpenSCAD — Rev S integrated design; carried fwd from Rev O):**
 
 - [ ] **wing_nacelle_pylon_revo.stl** — `openscad -o ... serenity/stl/wing_nacelle_pylon_revo.scad`
     - Verify WING_SLOT_W and WING_SLOT_H against tip chord 93 mm (Rev R1 planform) before printing — pocket 50×40 mm uses 54 % of tip chord; confirm pylon block clears airfoil walls
@@ -1537,7 +1540,7 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
 #### 1.1.3 **Nacelles**
 
-**Nacelle shells (Blender, Rev R geometry; carried fwd from Rev O — must run on host machine):**
+**Nacelle shells (Blender, Rev S geometry; carried fwd from Rev O — must run on host machine):**
 
 - [x] **Rev R1 nacelle stator shells** — **investigated 2026-06-22: this item is
     STALE / superseded, not run.** `blender_nacelle_revo.py` (now at
@@ -1587,7 +1590,7 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
 ##### 1.1.3.2 *Tilt Gear Train*
 
-    **Rev R gear train (OpenSCAD — all 5 parts, M=1.0; carried fwd from Rev O):**
+    **Rev S gear train (OpenSCAD — all 5 parts, M=1.0; carried fwd from Rev O):**
 
 - [x] **nacelle_sector_gear.stl** — `openscad -o ... serenity/stl/nacelle_sector_gear.scad`
     *(rendered 2026-06-22)* — Rev R1.1: R=22mm, **58T, ≈151.3° arc** (was
@@ -1969,7 +1972,7 @@ foot positions are baked).
 #### 1.1.5 **Non-Printable Component Placeholders** *(Rev R1, 2026-06-12)*
 
 Dimensionally-accurate bounding-geometry STL placeholder files for all non-printable
-Rev R BOM components, for use in FreeCAD exploded-view and build-guide assembly.
+Rev S BOM components, for use in FreeCAD exploded-view and build-guide assembly.
 
 **Generator:** `airframe/placeholders/generate_placeholders.py`
 (pure Python, no external dependencies; run with `python3 generate_placeholders.py`)
@@ -2450,7 +2453,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     integrated DC/DC converter, IEC 62368-1 / VDE 0884-11)
 - **RS-485**: MAX3485E (non-isolated) → ADM2795EBRWZ (ADI, SOIC-20W, 5 kV reinforced isolation +
     integrated DC/DC converter)
-- **Ethernet PHY (Rev R baseline; introduced Rev Q)**: DP83825I (TI, LQFP-32, 10/100BASE-TX RMII) with EMI hardening:
+- **Ethernet PHY (Rev S baseline; introduced Rev Q)**: DP83825I (TI, LQFP-32, 10/100BASE-TX RMII) with EMI hardening:
     HX1188NL LAN magnetics (1500 V isolation), SRF2012-100Y CMC, PRTR5V0U2X TVS, TPS62933 1.8V
     supply. JST SM06B-GHS-TB-1MP connector (no RJ45). Wash: 2× PHY (RMII0+RMII1);
     Zoë: 1× PHY (RMII0).
@@ -2752,9 +2755,9 @@ work that was actually completed against this stub before it was retired:
         off the dorsal centreline (below); re-verify the 3 mm figure still applies once
         the shoulder-height mount line is fixed.
     - [ ] **Zigbee 2.4 GHz antenna mount — BLOCKED, hardware gap confirmed; antenna
-        strategy decided 2026-06-22 (with user).** Zoë (Cape-B-2) Rev R has no Zigbee
+        strategy decided 2026-06-22 (with user).** Zoë (Cape-B-2) Rev S has no Zigbee
         transceiver, antenna filter chain, or SMA pad (the CC2652R7 Zigbee radio exists
-        only in the archived COMMS-HAT-1 design, not in the current Rev R Cape-B-2
+        only in the archived COMMS-HAT-1 design, not in the current Rev S Cape-B-2
         schematic) — **no antenna can be mounted for hardware that does not exist on
         the board**, so this remains a genuine PCB scope gap, not just a placement
         question. **Decision:** rather than a time-shared coexistence switch, split
@@ -3017,8 +3020,8 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
     J_1553 added to schematic (JST SM03B/SM04B-GHS-TB-1MP). §14 field connector table added to
     CAPE-B-2.md. *(done 2026-06-07)*
 
-- [ ] **Update PHASED_BUILD_GUIDE.md** from Rev M 18-inch to Rev R 24-inch specifications
-    (hull 609.6 mm, 50mm EDFs, v2·v2·v2·v2 node placement, Rev R power system, cargo system).
+- [ ] **Update PHASED_BUILD_GUIDE.md** from Rev M 18-inch to Rev S 24-inch specifications
+    (hull 609.6 mm, 50mm EDFs, v2·v2·v2·v2 node placement, Rev S power system, cargo system).
 
 - [ ] **Rebuild `graphical-build-guide/` (38 SVGs) from Blender/FreeCAD-derived platform
     graphics, replacing the pre-Rev-N hand-drawn line art.** Two stale-geometry problems,
@@ -4627,6 +4630,81 @@ to duplicate search paths in the validator). Root causes and resolutions:
 - [x] `cargo_sect_shell24.stl` — 190 bodies, all wt=True
 
 **Result:** All 37 STL files pass `python tools/validate_stls.py` (0 failures).
+
+### 6.3 — Rev S Checkpoint (2026-07-04)
+
+**Per the revision policy (root `CLAUDE.md` / `current-specification/CLAUDE.md`):** Rev S is a
+comprehensive checkpoint that integrates every Rev R1/R1c/R1d/R2 modification below as the new
+baseline. All active components are now referenced as of Rev S; modification numbering resets
+(the next incremental change is S1). This section is the audit trail — it does not restate the
+detailed rationale already recorded at each item's own dated entry elsewhere in this file, it
+indexes them.
+
+**Integrated since Rev R (2026-06-10):**
+
+- **Rev R1 (2026-06-11) — Hull-frame coordinate standardisation.** All 8 primary components
+    baked into STL vertex data (`tools/bake_hull_frame.py`); nacelle port/stbd label swap fixed;
+    identity-placement FreeCAD assembly.
+- **Rev R1c (2026-06-30) — Bow sensor pod redesign.** Camera/ToF/laser clustered on the 40° bow
+    flat, one combined faceplate (`bow_sensor_faceplate.scad`), geometric verification tool
+    (`tools/verify_bow_pod.py`).
+- **Cargo interior merge pipeline (2026-06-30).** `merge_cargo_interior.py` — definitive cargo
+    processor; fixed the MESH-01 fragmentation defect for cargo (single robust manifold3d
+    boolean, not sequential per-cutter subtraction); merged clamshell doors, joint features, wing
+    spar/mortises, nacelle-servo pads, Inara avionics bosses.
+- **Vera board (2026-07-03).** New standalone vision/ToF/laser PCB (nose + cargo-bay install,
+    one shared design) — schematic + PCB, EMI-hardened to the Wash/Zoë Rev R standard, DRC/ERC
+    clean of all real electrical checks. See `avionics/kicad/Vera.md`.
+- **Head/Cargo, Cargo/Middle, Middle/Rear splice collars (2026-06-29 / 2026-07-03).** All three
+    fuselage structural joints now have a first-principles load check and a printed internal
+    splice collar generator (`generate_head_cargo_splice_collar.py`,
+    `generate_cargo_middle_splice_collar.py`, `generate_middle_rear_splice_collar.py`);
+    watertight, verified against real cross-sections, not estimated.
+- **MESH-01 — middle shell resolved (2026-07-03).** Watertight, single body, verified volume.
+    **Rear shell NOT resolved** — root cause is a pre-damaged Blender-canonical source
+    (independent of the cutting logic); still open, tracked at §1.1.1.0b.
+- **Ring-frame DXF export + keel/battery-tray fix (2026-07-03).** Rear ring plate final; cargo
+    ring plate PROVISIONAL (blocked on the still-open rear-shell MESH-01 item above — do not cut
+    stock from it). Battery tray keel-rail orientation bug found and fixed.
+- **Cargo GPS/avionics/nadir-camera axis-bug fix — Rev R2 (2026-07-03).** GPS, Inara/River
+    avionics-bay mounts, and the nadir camera in `cargo_sect_shell24.scad` were using the
+    longitudinal (Y) axis as if it were dorsal — same bug class as the Rev R1 wing-root fix.
+    Fixed; Inara/River confirmed as a port/stbd lateral pair. Same bug found (not yet fixed) in
+    the door-servo/latch modules and in `head_shell24.scad`'s Shepherd's-Book mount — carried
+    forward as open Rev S work, see §1.1.1.0a.
+- **Bow-pod cuts merged into the head shell (2026-07-03).** `merge_head_interior.py` — camera/
+    ToF/laser apertures and faceplate seat now actually cut into the published head shell
+    (previously SCAD-only); watertight, single body, all 69 project STLs pass validation.
+- **CI overhaul (2026-07-04).** Added `tools/validate_kicad.py` + a `kicad-validate` job (real
+    `kicad-cli` ERC/DRC, changed-files-scoped so it doesn't fail on Wash/Kaylee's pre-existing
+    backlog); removed all tracked `.pyc`/`__pycache__` files and added them to `.gitignore`;
+    fixed real lint/CI failures (duplicate code, markdownlint, textlint terminology, DevSkim
+    false positives on "CMC"); removed `ossar.yml` (redundant with the repo's native CodeQL
+    default setup) and disabled super-linter's duplicate `PYTHON_FLAKE8` check.
+
+**Open items carried into Rev S (not resolved by this checkpoint — see their own WBS entries):**
+rear-shell MESH-01 mesh repair; cargo ring-plate re-cut once that's fixed; door-servo/latch/
+belly-rib and Shepherd's-Book axis-bug fixes; leg-boss final X/Y (LG-10); access-panel dorsal-
+frame rewrite; wire-post shoulder-height Z; a 3-way battery-tray placement conflict (head/cargo/
+middle).
+
+**Not updated by this checkpoint:** `current-specification/serenity-rev-r.jsx` (the full,
+non-delta interactive spec document) still describes the Rev R state — this project's own
+convention calls for a `serenity-rev-s.jsx` at each letter revision, but authoring a complete
+1200+ line non-delta replacement is a separate, large documentation task, not done as part of
+this checkpoint. Flagged here rather than silently left inconsistent. Also not updated:
+`docs/bom_revR.json` (the larger, hand-structured JSON BOM — `current-specification/bom_revR.csv`
+was superseded to `bom_revS.csv`, but a matching `docs/bom_revS.json` was not authored this pass).
+
+**Pre-existing documentation inconsistency found (not introduced or resolved by this
+checkpoint):** `avionics/CLAUDE.md`'s Zoë and Emma sections self-conflict on whether the
+Zoë-LoRa-removal / Emma-LoRa-addition (P1+P2 passthrough rails replacing JST GH 6P) is DONE or
+still PLANNED — Zoë's own entry says both "Current revision: Cape-B-2 (Rev R1)" and "Planned
+(not yet in KiCad): Rev R1" for what reads as the same change, and Emma's "Current revision"
+line describes the LoRa+P1P2 change as already active while root `CLAUDE.md`'s Node Variant
+Placement section calls the identical Emma change "Planned (not yet implemented in KiCad)".
+This needs a user decision (which is actually true) before it can be correctly labeled Rev S vs
+Rev S1 (planned) — left as-is rather than guessed at.
 
 ---
 

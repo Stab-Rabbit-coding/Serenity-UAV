@@ -2,8 +2,11 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**Revision:** R1
-**Last updated:** 2026-07-03
+**Revision:** S
+**Last updated:** 2026-07-04
+**Revision history:** Rev R (2026-06-10) → Rev R1 (2026-06-11, hull-frame bake) → Rev S
+(2026-07-04, comprehensive checkpoint — integrates all Rev R1/R1c/R1d/R2 modifications;
+see TODO.md "Rev S Checkpoint" for the full consolidated changelog)
 
 ---
 

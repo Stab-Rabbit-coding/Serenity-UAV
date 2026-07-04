@@ -16,7 +16,8 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Year:** 2026 | **Status:** Public release — Rev R baseline (2026-06-11)
+**Year:** 2026 | **Status:** Public release — Rev S baseline (2026-07-04, integrates all Rev
+R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 
 > **Rev P note:** This guide covers the Rev P baseline which adds a complete cargo bay system
 > to the Rev O CG-pivot tiltrotor. Rev P new items: Rev S cargo section shell (clamshell door

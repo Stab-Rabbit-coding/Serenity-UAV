@@ -95,7 +95,7 @@ Provides flight control input, sensor fusion, and motor speed control via PID:
 - PID motor speed control for EDFs
 - Nacelle tilt servo control
 
-**Current revision:** Cape-A-2 (Rev R1)  
+**Current revision:** Cape-A-2 (Rev S, carrying forward the Rev R1 hull-frame/naming baseline unchanged)  
 **Status:** Archived: Cape-A-1
 
 ### Zoë — Communications, Logging, and Payload Cape
