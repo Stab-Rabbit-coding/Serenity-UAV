@@ -2092,19 +2092,19 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
 
 ---
 
-### 1.2b — PCB Redesigns: Emma Rev R1 / Zoë Rev R1 / Kaylee Rev A1
+### 1.2b — PCB Redesigns: Emma Rev S1 / Zoë Rev S1 / Kaylee Rev S1
 
 These three boards require schematic + layout changes before the next fabrication order.
 All are on the `avionics/kicad/` branch; run DRC to zero errors before generating gerbers.
 
-- [ ] **Emma Rev R1 — add LoRa, replace JST with P1+P2 socket rails**
+- [ ] **Emma Rev S1 — add LoRa, replace JST with P1+P2 socket rails**
     - Add RFM95W 915 MHz LoRa module (SPI interface to PB2-I via P1 header pins).
     - Replace JST GH 6P connector with 2× 20-pin 2.54 mm socket rails (P1 + P2),
         matching Zoë passthrough rail pinout so Emma stacks cleanly on top.
     - Update SRF2012-100Y CMC + TVS guard to cover LoRa SPI and antenna lines.
-    - Update silk/fab layer: "Emma Rev R1 — 49 MHz AX.25 + LoRa 915 MHz".
+    - Update silk/fab layer: "Emma Rev S1 — 49 MHz AX.25 + LoRa 915 MHz".
     - Fitted in: River's Room, Simon's Medbay only (2 boards total).
-    - Run DRC → zero errors; generate gerbers to `avionics/kicad/gerbers/Emma-R1/`.
+    - Run DRC → zero errors; generate gerbers to `avionics/kicad/gerbers/Emma-S1/`.
     - **BLOCKS Emma fabrication order.**
     - [x] Components added to Emma board.
     - [x] Emma Kicad files renamed from XCVR to Emma
@@ -2176,22 +2176,32 @@ All are on the `avionics/kicad/` branch; run DRC to zero errors before generatin
         174 silk warnings, not yet production-ready. Do not export gerbers for fabrication
         until routing and silk cleanup are complete — see items above.**
 
-- [ ] **Zoë (Cape-B-2) Rev R1 — remove LoRa, add P1+P2 passthrough rails**
+- [ ] **Zoë (Cape-B-2) Rev S1 — remove LoRa, add P1+P2 passthrough rails**
     - [x] Components arranged so that no footprint collisions are present
+    - [x] **P1/P2 socket-rail footprints already placed (verified 2026-07-04).**
+        `Zoë.kicad_pcb` already has real `2x18_P1_Socket`/`2x18_P2_Socket` footprints —
+        placed via the same `complete_xcvr_49mhz2.py`-style direct-PCB-edit approach used
+        on Emma, not via the schematic. `Zoë.kicad_sch` still has a real `RFM95W` (LoRa)
+        symbol and the JST-GH connectors — schematic has NOT been updated to either add
+        the P1/P2 headers or remove LoRa. Same PCB-ahead-of-schematic gap as Emma; see
+        `avionics/CLAUDE.md` "Cape Naming and Revision History" for the full finding.
     - [ ] EMI spacing verified
     - [ ] Nets and vias fixed
     - [ ] DRC rules checked.
+    - [ ] **Verify the already-placed P1/P2 sockets actually carry the same signals the
+        schematic's RFM95W/JST-GH nets expect** before removing anything — don't assume the
+        PCB-side work is correct just because footprints exist; it was never ERC-checked.
     - Remove RFM95W footprint and all associated SPI routing + LDO supply.
     - Add 2× 20-pin 2.54 mm pass-through socket rails on upper face (upper sockets
         match Emma P1+P2 pinout; lower pins pass through to Cape-A-2 / PB2-I stack).
     - Carry all PB2 P1+P2 signals from lower pins to upper sockets; add 0 Ω options
         on signals consumed by Zoë (Wi-Fi, SiK, I²C, UART) so they are both used and
         passed through.
-    - Update silk/fab: "Cape-B-2 Rev R1 — Zoë CN cape"; note Emma header on upper face.
-    - Run DRC → zero errors; generate gerbers to `avionics/kicad/gerbers/CAPE-B-2-R1/`.
+    - Update silk/fab: "Cape-B-2 Rev S1 — Zoë CN cape"; note Emma header on upper face.
+    - Run DRC → zero errors; generate gerbers to `avionics/kicad/gerbers/CAPE-B-2-S1/`.
     - **BLOCKS Zoë + Emma fabrication order.**
 
-- [ ] **Kaylee Rev A1 — remove 6 V BEC, add 5 V servo output**
+- [ ] **Kaylee Rev S1 — remove 6 V BEC, add 5 V servo output**
     - Remove TPS54540 6 V/5 A BEC circuit (IC, inductor, output caps, feedback divider,
         Molex Nano-Fit 6 V output connector).
     - Add third TPS54620 5 V/3 A instance for dedicated servo rail (shares 5 V feedback
@@ -2199,8 +2209,8 @@ All are on the `avionics/kicad/` branch; run DRC to zero errors before generatin
         connector labelled SERVO-5V).
     - Verify 5 V servo current budget: 2× DS3218MG = 2× 500 mA stall = 1.0 A peak;
         3 A rated output provides 3× headroom — adequate.
-    - Update silk/fab: "Kaylee Rev A1"; update schematic title block.
-    - Run DRC → zero errors; generate gerbers to `avionics/kicad/gerbers/Kaylee-A1/`.
+    - Update silk/fab: "Kaylee Rev S1"; update schematic title block.
+    - Run DRC → zero errors; generate gerbers to `avionics/kicad/gerbers/Kaylee-S1/`.
     - **BLOCKS Kaylee fabrication order.**
 
 ---
@@ -4696,15 +4706,21 @@ this checkpoint. Flagged here rather than silently left inconsistent. Also not u
 `docs/bom_revR.json` (the larger, hand-structured JSON BOM — `current-specification/bom_revR.csv`
 was superseded to `bom_revS.csv`, but a matching `docs/bom_revS.json` was not authored this pass).
 
-**Pre-existing documentation inconsistency found (not introduced or resolved by this
-checkpoint):** `avionics/CLAUDE.md`'s Zoë and Emma sections self-conflict on whether the
-Zoë-LoRa-removal / Emma-LoRa-addition (P1+P2 passthrough rails replacing JST GH 6P) is DONE or
-still PLANNED — Zoë's own entry says both "Current revision: Cape-B-2 (Rev R1)" and "Planned
-(not yet in KiCad): Rev R1" for what reads as the same change, and Emma's "Current revision"
-line describes the LoRa+P1P2 change as already active while root `CLAUDE.md`'s Node Variant
-Placement section calls the identical Emma change "Planned (not yet implemented in KiCad)".
-This needs a user decision (which is actually true) before it can be correctly labeled Rev S vs
-Rev S1 (planned) — left as-is rather than guessed at.
+**Pre-existing documentation inconsistency — INVESTIGATED AND RESOLVED 2026-07-04.** The
+Zoë/Emma LoRa-migration status (flagged above as an unresolved self-contradiction) was checked
+directly against the real KiCad files rather than guessed. Ground truth: neither board is
+cleanly "done" or "not started" — both PCB layouts (`Emma.kicad_pcb`, `Zoë.kicad_pcb`) already
+have real `2x18_P1_Socket`/`2x18_P2_Socket` footprints placed (and Emma's PCB additionally has
+a real, routed RFM95W LoRa footprint), all added directly via `avionics/kicad/
+complete_xcvr_49mhz2.py`'s `pcbnew`-API scripting — but NEITHER schematic (`Emma.kicad_sch`,
+`Zoë.kicad_sch`) was updated to match: Emma's schematic has zero LoRa/P1P2 content at all
+(just an EMI-hardening stub), and Zoë's schematic still has its original RFM95W symbol and
+JST-GH connectors untouched. Both boards' legacy JST-GH connectors remain physically present
+and live on the PCB alongside the new hardware. `avionics/CLAUDE.md` and root `CLAUDE.md` have
+been corrected to describe this accurately (PCB-ahead-of-schematic, not "planned" or "done");
+TODO.md §1.2b's Emma/Zoë items renumbered Rev R1 → Rev S1 and given the same finding. Still
+needs a **user decision**: author the missing schematic content to match the PCB work, or
+treat it as provisional/unverified and redo the migration schematic-first.
 
 ---
 
