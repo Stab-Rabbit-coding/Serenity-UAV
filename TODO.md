@@ -1293,7 +1293,7 @@ Joint faces in hull-frame Y (confirmed from baked extents):
 
 **Geometry verification (hull-frame coordinate analysis, 2026-06-10):**
 
-- [ ] **Verify head-cargo mating boss positions in slicer.**
+- [x] **Verify head-cargo mating boss positions in slicer — SUPERSEDED, see RESOLVED note below.**
     Hull-frame analysis (2026-06-10): `Head_Shell` Identity rotation, Base=[−332, −18, +61];
     head aft face (head local_X=99) maps to hull_X = 99−332 = **−233 mm**.
     `Cargo_Shell` 180°-Z rotation, Base=[−274.4, −282.8, 0]; matching cargo local_X =
