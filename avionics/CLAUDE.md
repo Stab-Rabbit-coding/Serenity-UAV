@@ -8,14 +8,15 @@ This folder contains all electronics design and implementation: KiCad schematics
 
 ## Onboard Avionics Architecture — 8-Node Cooperative System
 
-**Platform:** Four pairs of **PocketBeagle2 Industrial SBCs** (8 nodes total, Rev R1 placement):
+**Platform:** Four pairs of **PocketBeagle2 Industrial SBCs** (8 nodes total, Rev S placement,
+established at Rev R1):
 - All 8 nodes carry **Wash** (Flight Control and Sensor Cape) and **Zoë** (Communications, Logging, and Payload Cape)
 - All 8 nodes carry **TPM** (Trusted Platform Module) for cryptographic operations
 
-**Emma Transceiver Cape** (49 MHz Part 15 §15.235 + LoRa 915 MHz):
+**Emma Transceiver Cape** (49 MHz Part 15 §15.235, as-built; LoRa 915 MHz + P1/P2 rails are
+IN PROGRESS, PCB-ahead-of-schematic — see "Cape Naming and Revision History" below for the
+full, verified real status):
 - Installed in **River's Room** (Bay C, starboard cargo) and **Simon's Medbay** (Bay D, middle section) only
-- Emma Rev R1: adds LoRa, replaces JST GH 6P with P1+P2 socket rails
-- Connects via P1+P2 socket rails on Wash and Zoë (as of Rev R1)
 
 **Power Distribution — Kaylee (PDB):**
 - Central location: inner neck of middle section, minimizes power run lengths to all four nacelles, all four avionics stacks, and the battery
@@ -38,7 +39,9 @@ All Wash capes are identical and all Zoë capes are identical, but each stack ha
 #### Inara's Shuttle (Bay B) — Port Avionics
 **Primary tasking:** camera, external sensors, high-bandwidth ground communications  
 **Stack:** Wash + Zoë  
-**Comms:** Wi-Fi primary / LoRa secondary (Note: LoRa moved to Emma boards on River/Simon in Rev R1)  
+**Comms:** Wi-Fi primary / LoRa secondary (Zoë still carries a real LoRa radio today; moving it
+to Emma boards on River/Simon is IN PROGRESS, PCB-ahead-of-schematic — see "Cape Naming and
+Revision History" below)  
 **PACE assignments:**
 - Watchdog: **A**lternative
 - Comms: **P**rimary
@@ -47,7 +50,9 @@ All Wash capes are identical and all Zoë capes are identical, but each stack ha
 
 #### River's Room (Bay C) — Starboard Avionics
 **Primary tasking:** forward EDF control, nacelle tilt command/sync, resilient comms  
-**Stack:** Wash + Zoë + **Emma** (49 MHz primary, LoRa secondary)  
+**Stack:** Wash + Zoë + **Emma** (49 MHz primary today; LoRa secondary via Emma is IN
+PROGRESS, PCB-ahead-of-schematic — Zoë still carries the live LoRa radio too until this is
+reconciled, see "Cape Naming and Revision History" below)  
 **Comms:** 49 MHz (Part 15 §15.235) primary / LoRa 915 MHz secondary  
 **PACE assignments:**
 - Watchdog: **C**ontingency
@@ -57,7 +62,9 @@ All Wash capes are identical and all Zoë capes are identical, but each stack ha
 
 #### Simon's Medbay (Bay D) — Aft Avionics
 **Primary tasking:** aft EDF control, alternate watchdog, cargo/payload oversight  
-**Stack:** Wash + Zoë + **Emma** (49 MHz primary, LoRa secondary)  
+**Stack:** Wash + Zoë + **Emma** (49 MHz primary today; LoRa secondary via Emma is IN
+PROGRESS, PCB-ahead-of-schematic — Zoë still carries the live LoRa radio too until this is
+reconciled, see "Cape Naming and Revision History" below)  
 **Comms:** 49 MHz (Part 15 §15.235) primary / SiK secondary  
 **PACE assignments:**
 - Watchdog: **A**lternative
@@ -95,7 +102,8 @@ Provides flight control input, sensor fusion, and motor speed control via PID:
 - PID motor speed control for EDFs
 - Nacelle tilt servo control
 
-**Current revision:** Cape-A-2 (Rev R1)  
+**Current revision:** Cape-A-2 (Rev S; see `Wash.md` "Revision: R" — no design changes since
+Rev R, carried forward unchanged)  
 **Status:** Archived: Cape-A-1
 
 ### Zoë — Communications, Logging, and Payload Cape
@@ -105,19 +113,56 @@ Provides external communications, onboard logging, and payload interface:
 - Onboard data logging to hardware-enforced non-executable microSD card
 - Payload I/O interfaces
 
-**Current revision:** Cape-B-2 (Rev R1)  
-**Planned (not yet in KiCad):** Rev R1 (remove LoRa, add P1+P2 passthrough rails matching Emma's pinout on River and Simon stacks)  
-**Status:** Archived: Cape-B-1  
-**LoRa note:** As of Rev R1, LoRa functionality migrated to Emma boards (River and Simon stacks only); Zoë.kicad_sch still carries JST-GH 6P Emma connector from earlier revision but this will be replaced with P1+P2 rails in the planned Rev R1 redesign.
+**Current revision / real status (verified 2026-07-04, not assumed from prior doc text):**
+Cape-B-2 (Rev S; `Zoë.md` "Revision: R" — same partial-migration state as Emma, see that
+section):
 
-### Emma — 49 MHz + LoRa Transceiver Cape (Rev R1)
+- `Zoë.kicad_sch` still has a real `RFM95W` (LoRa) symbol — LoRa has NOT been removed from
+  the schematic. Still has `Conn_JST_GH_06P`/`04P`/`03P` symbols too.
+- `Zoë.kicad_pcb` already has BOTH the JST_GH connectors AND real `2x18_P1_Socket` /
+  `2x18_P2_Socket` footprints placed — the P1+P2 passthrough-rail addition is further along
+  on the PCB than the schematic reflects, mirroring Emma's PCB-ahead-of-schematic gap.
+- **Net effect:** "remove LoRa" has NOT happened (LoRa is real and present, schematic and
+  PCB agree on that much); "add P1+P2 rails" is PCB-placed but not schematic-confirmed.
+  Needs the same reconciliation decision as Emma (see above) before calling this done.
+
+**Status:** Archived: Cape-B-1
+
+### Emma — 49 MHz Transceiver Cape (Rev R baseline; LoRa+P1P2 addition IN PROGRESS — PCB layout ahead of schematic, see below)
 
 Provides unlicensed-band communications for environments with restricted radio access:
-- 49 MHz transceiver (47 CFR Part 15 §15.235 — unlicensed, suitable for high-RF-field environments)
-- LoRa 915 MHz radio (Rev R1 addition)
+
+- 49 MHz transceiver (47 CFR Part 15 §15.235 — unlicensed, suitable for high-RF-field environments) — as-built
+- LoRa 915 MHz radio — **real HOPERF_RFM9XW_SMD (RFM95W) footprint with real nets
+  (LORA_RESETN, LORA_DIO0, SPI1_CS_LORA) is physically placed and routed on
+  `Emma.kicad_pcb`, but there is NO corresponding symbol anywhere in `Emma.kicad_sch`**
+  (verified 2026-07-04: 11 LoRa/RFM95 references in the PCB, 0 in the schematic)
 - Galvanically isolated transceiver interfaces
 
-**Current revision:** XCVR-49MHZ-2 Rev R1 (adds LoRa, replaces JST GH 6P with P1+P2 socket rails)  
+**Current revision / real status (verified 2026-07-04, not assumed from prior doc text):**
+this board is in a genuine, uncomfortable in-between state, not a clean "done" or "not
+started":
+
+- `Emma.kicad_pcb` physically has BOTH the legacy `JST_GH_6P` "CAPE-B IF" connector (real
+  nets: GND, UART_TX, UART_RX, PTT_N, RSSI_ANA, +3V3 — actively connected, not vestigial)
+  AND the new `2x18_P1_Socket` / `2x18_P2_Socket` footprints AND the LoRa module, all three
+  present simultaneously.
+- `Emma.kicad_sch` (Emma.md "Revision: R") only contains a minimal EMI-hardening stub
+  (CMC/TVS/ferrite/SMA coax/one JST_GH_06P symbol) — none of the LoRa module, the P1/P2
+  sockets, or the 49 MHz transceiver IC itself appear in the schematic at all.
+- Root cause: `avionics/kicad/complete_xcvr_49mhz2.py` added the PCB-side components and
+  routing directly via the `pcbnew` Python API (BOM placement, net assignment, RF routing,
+  silk labels) without ever touching the schematic — a real schematic/PCB parity gap, not
+  a documentation-only inconsistency. This explains the "35 hard, 305 soft" DRC/ERC finding
+  count seen when Emma is checked outside the `--changed-since`-scoped CI job.
+- **Net effect:** the LoRa+P1P2 migration is NOT "planned, not started" (the previous version
+  of this file's text) and NOT "done" either — the PCB layout is materially ahead of the
+  schematic, so no ERC can currently confirm the LoRa/P1P2 circuit is electrically correct,
+  and the legacy JST_GH_6P interface appears to still be live alongside the new hardware
+  rather than removed. **This needs a user decision**: either (a) author the missing
+  schematic content to match the PCB and then decide whether to remove the legacy JST_GH_6P
+  pads, or (b) treat the PCB-side LoRa/P1P2 work as provisional and revert/ignore it,
+  redoing the migration schematic-first. Tracked as open work in TODO.md §1.2b.  
 **Installed in:** River's Room (Bay C) and Simon's Medbay (Bay D) only  
 **Status:** Archived: XCVR-49MHZ-1, Cape-A-1, Cape-B-1
 

@@ -649,8 +649,11 @@ Active design specifications, requirements, and version-controlled design baseli
 CLAUDE.md                         — Specification standards (revision policy, document
                                     structure, standards citations, traceability matrix,
                                     specification approval workflow)
-serenity-rev-r.jsx                — Rev R interactive specification (CURRENT)
-bom_revR.csv                      — Bill of materials (Rev R, CSV flat table — active baseline)
+serenity-rev-r.jsx                — Rev R interactive specification (SUPERSEDED by Rev S per
+                                    TODO.md §6.3; a serenity-rev-s.jsx complete non-delta
+                                    replacement has not yet been authored — flagged open item)
+bom_revS.csv                      — Bill of materials (Rev S, CSV flat table — active baseline;
+                                    supersedes bom_revR.csv, archived 2026-07-04)
 LICENSE_AND_ATTRIBUTION.md        — Attribution chain for all upstream sources
 ```
 

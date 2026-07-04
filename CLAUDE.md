@@ -8,9 +8,25 @@
 - Node variant placement (Rev R1):  All 8 nodes carry Wash (Cape-A-2) and Zoë (Cape-B-2), providing uniform 5 kV galvanic isolation on CAN FD, RS-485, and Ethernet at every node.
   Emma XCVR boards are installed only in **River's Room and Simon's Medbay** — the two bays whose primary external radio is 49 MHz (47 CFR Part 15 §15.235, not RCRS — see REF-FCC-003); Shepherd's Room and Inara's Shuttle do not carry Emma boards.
   Cape-A-1, Cape-B-1, and XCVR-49MHZ-1 are archived as of Rev Q (2026-06-05).
-- **Planned (not yet implemented in KiCad — tracked in TODO.md §1.2b):** Emma Rev R1 (add LoRa, replace JST GH 6P with P1+P2 socket rails), Zoë (Cape-B-2) Rev R1 (remove LoRa, add P1+P2 passthrough rails matching Emma's pinout on the River and Simon stacks),
-  and Kaylee Rev A1 (remove the 6 V servo BEC; tilt servos to run on the 5 V rail, ~21 kg·cm capacity vs the ~16 kg·cm tilt load requirement).
-  Until these PCB redesigns land, Zoë.kicad_sch still uses the JST-GH 6P Emma connector and Kaylee.kicad_sch still carries the 6 V/5 A `U_BEC_6V` (TPS54540DDAR) servo rail — see Kaylee.md and Zoë.md, which describe the as-built (pre-A1/pre-R1) design.
+- **Emma (add LoRa, replace JST GH 6P with P1+P2 socket rails) and Zoë (remove LoRa, add P1+P2
+  passthrough rails) — IN PROGRESS, PCB layout ahead of schematic (verified 2026-07-04, see
+  `avionics/CLAUDE.md` "Cape Naming and Revision History" for the full finding).** Both boards'
+  PCB layouts already have real `2x18_P1_Socket`/`2x18_P2_Socket` footprints placed (added via
+  `avionics/kicad/complete_xcvr_49mhz2.py`, a `pcbnew`-API script that edited the PCB directly
+  without updating either schematic); Emma's PCB also has a real, routed LoRa (RFM95W)
+  footprint with no schematic backing at all. Neither schematic reflects this work, and
+  Zoë's legacy JST-GH 6P connector and LoRa symbol are both still live in both capes' files —
+  this is not a clean "done" or "not started," it needs a user decision on reconciliation
+  (author the missing schematic content vs. treat the PCB-side work as provisional and redo
+  schematic-first). Tracked in TODO.md §1.2b.
+- **Kaylee — remove the 6 V servo BEC; tilt servos to run on the 5 V rail** (~21 kg·cm capacity
+  vs the ~16 kg·cm tilt load requirement) — planned, not yet implemented in KiCad; the
+  numbering of this modification (previously mislabeled "Rev A1") should follow the current
+  Rev S baseline once picked up (i.e. Rev S1, matching Emma/Zoë) — flagged, not renumbered here
+  since Kaylee's own schematic/PCB have not been touched to verify current state the way Emma/
+  Zoë were.
+  Kaylee.kicad_sch still carries the 6 V/5 A `U_BEC_6V` (TPS54540DDAR) servo rail — see
+  Kaylee.md, which describes the as-built (pre-modification) design.
 - Onboard Communications:  Each of the 8 sbcs will be connected to the others via: Canbus FD, MILSTD 1553, RS485, & Ethernet
 - External Communications: The UAV uses Wi-Fi at 5ghz, Zigbee at 2.4ghz, MavLink /SiK at 915Mhz, and AX.25 on the 49Mhz channel (47 CFR Part 15 §15.235, an unlicensed band — not Part 95 RCRS).  All four are usable for command and control of the aircraft.  The avionics capes also support sbus, but it's  not used.
 - Powerplant: Each Nacelle has two EDFs in series, under PID control.  The forward EDF in each nacelle is controlled primarily by one of the flight control SBCs and the aft is primarily controlled by a different sbc.
