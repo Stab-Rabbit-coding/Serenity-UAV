@@ -8,17 +8,22 @@
 - Node variant placement (Rev R1):  All 8 nodes carry Wash (Cape-A-2) and Zoë (Cape-B-2), providing uniform 5 kV galvanic isolation on CAN FD, RS-485, and Ethernet at every node.
   Emma XCVR boards are installed only in **River's Room and Simon's Medbay** — the two bays whose primary external radio is 49 MHz (47 CFR Part 15 §15.235, not RCRS — see REF-FCC-003); Shepherd's Room and Inara's Shuttle do not carry Emma boards.
   Cape-A-1, Cape-B-1, and XCVR-49MHZ-1 are archived as of Rev Q (2026-06-05).
-- **Emma (add LoRa, replace JST GH 6P with P1+P2 socket rails) and Zoë (remove LoRa, add P1+P2
-  passthrough rails) — IN PROGRESS, PCB layout ahead of schematic (verified 2026-07-04, see
-  `avionics/CLAUDE.md` "Cape Naming and Revision History" for the full finding).** Both boards'
-  PCB layouts already have real `2x18_P1_Socket`/`2x18_P2_Socket` footprints placed (added via
-  `avionics/kicad/complete_xcvr_49mhz2.py`, a `pcbnew`-API script that edited the PCB directly
-  without updating either schematic); Emma's PCB also has a real, routed LoRa (RFM95W)
-  footprint with no schematic backing at all. Neither schematic reflects this work, and
-  Zoë's legacy JST-GH 6P connector and LoRa symbol are both still live in both capes' files —
-  this is not a clean "done" or "not started," it needs a user decision on reconciliation
-  (author the missing schematic content vs. treat the PCB-side work as provisional and redo
-  schematic-first). Tracked in TODO.md §1.2b.
+- **Emma (add LoRa, replace JST GH 6P with P1+P2 socket rails): RECONCILED 2026-07-04 via a
+  schematic-first migration (user decisions locked).** A complete `Emma.kicad_sch` was
+  authored from the as-placed PCB (`avionics/kicad/gen_emma_sch.py`; loads, ERC 0 errors) and
+  the PCB transformed to match (`avionics/kicad/mod_emma_pcb.py`); sch↔pcb parity is exact (74
+  refs, 104 nets). J1 (JST-GH-6P) was DROPPED (modem UART moved onto the PB2 rails), PTT_N and
+  a new RSSI carrier-detect (`RSSI_DCD`, on-board comparator) ride presence-gated PB2-P2
+  payload GPIOs. Open items (final placement/routing of 4 new parts, comparator datasheet
+  vetting, pinmux firmware sign-off) are in TODO.md §1.2b.
+- **Zoë (remove LoRa, add P1+P2 passthrough rails): PCB already at end-state, schematic
+  lags.** Verified 2026-07-04: `Zoë.kicad_pcb` already has LoRa removed and the P1/P2 (+TOP)
+  passthrough rails placed; `Zoë.kicad_sch` still carries the LoRa block, the obsolete
+  `J_XCVR` Emma-cable connector, and an SBUS block, AND uses a **different reference-designator
+  convention** from the PCB. A load-blocking stray-`(comment)` bug in `Zoë.kicad_sch` was fixed
+  (it now opens in kicad-cli). The remaining schematic reconciliation needs a user-confirmed
+  sch↔pcb reference remap (flight-hardware footprint↔symbol association must not be guessed) —
+  see `avionics/CLAUDE.md` and TODO.md §1.2b.
 - **Kaylee — remove the 6 V servo BEC; tilt servos to run on the 5 V rail** (~21 kg·cm capacity
   vs the ~16 kg·cm tilt load requirement) — planned, not yet implemented in KiCad; the
   numbering of this modification (previously mislabeled "Rev A1") should follow the current

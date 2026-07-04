@@ -2,9 +2,20 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**Revision:** R (Rev R baseline; carried forward from Rev A — EMI-hardened variant of XCVR-49MHZ-1; no design changes)
-**Date:** 2026-06-11
-**Status:** Schematic complete — Phase 2 PCB layout pending
+**Revision:** S1 (Rev S baseline + schematic-first reconciliation 2026-07-04)
+**Date:** 2026-07-04
+**Status:** Schematic-first reconciliation COMPLETE — `Emma.kicad_sch` authored from the
+as-placed PCB (`gen_emma_sch.py`), PCB transformed to match (`mod_emma_pcb.py`); sch↔pcb
+parity exact (74 refs / 104 nets / 0 pin-count mismatches), ERC 0 errors. J1 (JST-GH-6P)
+DROPPED — modem UART now rides the PB2-P1 rails (`UART_RCRS_RX`/`_TX`); PTT_N and a new
+on-board `RSSI_DCD` carrier-detect ride presence-gated PB2-P2 payload GPIOs. Open (TODO.md
+§1.2b): manual placement/routing of the 4 new RSSI parts (parked off-board), `RSSI_CMP`
+part/pinout datasheet vetting, PTT/RSSI pinmux firmware sign-off, and 3 pre-existing
+in-circuit stubs the schematic surfaced (`RF_ANT_SW`, `PA_EMIT`, `DDS_FSYNC`).
+
+> **Note:** the "As-Built" tables below predate the 2026-07-04 reconciliation and still
+> list J1 "CAPE-B IF" as present; J1 has since been removed and the modem UART moved to the
+> PB2 rails. `Emma.kicad_sch` (not these tables) is now the source of truth.
 
 ---
 
