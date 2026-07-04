@@ -176,7 +176,7 @@ Superseded Citations" table.
 ### 0.5 — Citation Completeness Audit (All Source Files)
 
 - [x] **Audit SVG build guide files for standards citations — priority files done 2026-06-22.**
-    Full-repo audit confirmed zero `[REF-ID]` citations existed anywhere in
+    Full-repository audit confirmed zero `[REF-ID]` citations existed anywhere in
     `graphical-build-guide/` (38 SVGs, not 26).  Added bracketed `[REF-ID §section]`
     citations to the four priority files at every location where it was safe to do so
     without overflowing a fixed-width text box (verified by reading surrounding `<rect>`
@@ -344,7 +344,7 @@ Superseded Citations" table.
     `JAVASCRIPT_STANDARD` 5, `SHELL_SHFMT` 4, `CSS` 3, `PYTHON_PYLINT` 2, `JSX` 6, `JSON` 1,
     `GITHUB_ACTIONS` 1. Needs a dedicated remediation pass, file type by file type,
     separate from feature work, so each touched file is fixed under its own
-    diff-scoped lint pass rather than a single repo-wide sweep.
+    diff-scoped lint pass rather than a single repository-wide sweep.
 
 ---
 
@@ -600,13 +600,48 @@ SCAD: `airframe/openscad/fuselage/bow_sensor_pod.scad` (cuts) +
     camera↔laser↔ToF body-pocket packing behind the flat in `SerenityAssembly.FCStd`;
     re-run `tools/verify_bow_pod.py`.  *(rough fit verified; final alignment per CLAUDE.md
     complex-geometry policy)*
-- [ ] **Re-run mesh validation after head shell regen** — once `bow_pod_cuts()` (+ the bump-
-    removal seat) are merged into the canonical head shell (see Blender-merge note below),
-    run `python3 tools/validate_stls.py` and resolve all findings.  *(BLOCKS head printing)*
-- [ ] **Merge `bow_pod_cuts()` into the canonical Blender head shell** — like the cargo
-    interior bosses (§1.1.1.0a), the bow cuts currently live only in SCAD; they must be
-    applied to `head_shell24_2mm_repaired.stl` (Blender boolean or OpenSCAD hull) and re-baked
-    before the head can print.  *(BLOCKS head printing)*
+- [x] **Merge `bow_pod_cuts()` into the canonical Blender head shell — DONE 2026-07-03.**
+    New `airframe/blender-scripts/merge_head_interior.py` (Rev R1d), mirroring
+    `merge_cargo_interior.py`'s robust single-union/single-boolean pattern: loads the
+    already-published, already-baked, already boss/aft-face-featured
+    `head_shell24_2mm_repaired.stl` (deliberately does NOT redo the joint-boss work already
+    done by `add_structural_features.py`'s `process_head()`), builds the camera/ToF/laser/
+    faceplate-seat cutters exactly as `bow_sensor_pod.scad` defines them (same positions,
+    same `rotate([130,0,0])`, same wall-overshoot), unions them into one cutter solid, and
+    does ONE `shell − cutters` manifold3d boolean. Found and fixed a real bug along the way:
+    the published STL loads with `process=False` (skips vertex welding — each STL triangle
+    stores its own unwelded vertex copies), which made `trimesh` report
+    `is_watertight=False` and made manifold3d reject the mesh outright
+    (`Error.NotManifold`, producing an empty result) until `mesh.merge_vertices()` was added
+    (matching the call `merge_cargo_interior.py` already makes — I'd missed it on the first
+    pass). Also found one real disconnected 158-face/3.16 mm³ boolean-artifact sliver where
+    two cutters graze each other; added a `keep_largest_body()` cleanup (analogous to
+    `merge_cargo_interior.py`'s `drop_slivers()`) to discard it.
+    **Verified (not just claimed):** `is_watertight=True`, `is_winding_consistent=True`,
+    **1 body**, 0 boundary/0 non-manifold edges, volume 183,192 mm³ (down from 186,709 mm³
+    pre-cut — a sane ~3,500 mm³ reduction from the 3 bore/pocket cutters + bump-shave).
+    `tools/bake_hull_frame.py --check` confirms the `HULL-FRAME R1` marker survived (no
+    re-bake needed — only booleans were applied, matching the identity-rotation head bake).
+    `python3 tools/validate_stls.py` — **all 69 STL files pass watertight, including this
+    one.**
+    Vera's nose-mount bosses (`vera_board_bosses()`, added earlier this session) and
+    Shepherd's Book-bay bosses (`book_dorsal_boss()`, known unfixed legacy-axis bug) were
+    DELIBERATELY EXCLUDED from this merge — both remain SCAD-only proposals, not baked into
+    the fabrication mesh, per their own open-item flags (merging an unverified/buggy
+    placement would falsely certify it).
+- [x] **Re-run mesh validation after head shell regen — DONE 2026-07-03** (see above,
+    `validate_stls.py` all-pass). Also re-ran `tools/verify_bow_pod.py` post-cut and found
+    (and fixed) the SAME unwelded-STL loading bug there (`mesh.merge_vertices()` was missing
+    — one-line fix). **Note on interpreting that tool post-cut:** `verify_bow_pod.py`
+    ray-casts to find "first skin hit" along each bore axis — that check is only meaningful
+    *before* cutting (confirming a proposed position lands on real skin, which it already
+    did: 3/3 PASS, 2026-06-30). Run *after* the cut, the intended spot is now a hole, so the
+    ray correctly sails through and reports hitting the *far* wall instead — an expected
+    consequence of the tool's pre-cut design, not a regression. The actually meaningful
+    post-cut check — `mesh.contains()` at each of the three aperture-centre hull points —
+    confirms all three are void (outside the solid), i.e. the cuts landed exactly where
+    intended: camera (−161.20,−300.68,+116.01), ToF (−177.67,−300.98,+116.61), laser
+    (−170.67,−299.94,+117.14) — all `contains=False` ✓.
 
 ###### Combined Faceplate — DONE 2026-06-30 (supersedes the two separate bezels)
 
@@ -618,7 +653,6 @@ SCAD: `airframe/openscad/fuselage/bow_sensor_pod.scad` (cuts) +
 - [x] **Superseded `bow_camera_bezel.scad` + `bow_tof_laser_bezel.scad`** — three 15–21 mm
     bezel flanges cannot coexist on the 26.4 mm flat; consolidated into the one faceplate
     (separate files removed before commit).
-- [ ] Res
 - [ ] **PMMA window spec finalised** (sourcing remains a procurement action):
     - [x] Camera: open Ø10 lens bore (no window; faceplate shades the lens)
     - [x] ToF: 8 mm dia × 2 mm PMMA disc (uncoated; transmits 905 nm IR) — rear counterbore
@@ -1019,9 +1053,9 @@ Joint faces in hull-frame Y (confirmed from baked extents):
     - [x] **DONE 2026-07-03.** Updated `current-specification/bom_revR.csv` CF-PLATE-2MM
         Notes: 2 rings (cargo Y=+30mm, rear Y=+290mm); mass computed from actual DXF
         enclosed area × 2 mm × **1.6 g/cm³** (not the 1.54 g/cm³ previously cited here —
-        1.54 has no other citation anywhere in this repo, while 1.6 g/cm³ is already the
+        1.54 has no other citation anywhere in this repository, while 1.6 g/cm³ is already the
         CF-plate density used in structural_analysis.md §5.6; superseding 1.54 with the
-        repo-verified 1.6 figure). Rear (final): 36.2 g. Cargo (provisional): 77.7 g.
+        repository-verified 1.6 figure). Rear (final): 36.2 g. Cargo (provisional): 77.7 g.
         Combined 113.9 g — supersedes the ~300 g bounding-rectangle/fill-factor estimate in
         structural_analysis.md §5.6. Revised prior count from 5 to 2.
     - [x] **DONE 2026-07-03.** Updated `REVN_BUILD_GUIDE_24IN.md` keel/ring-frame table and
@@ -1202,10 +1236,26 @@ Joint faces in hull-frame Y (confirmed from baked extents):
     - 2× ventral hatch covers: battery 160×60 mm, Kaylee 115×100 mm; M2.5 pilots into bonded frames.
     - 2× ventral hatch frames: battery + Kaylee; 6 mm CF-PETG wall, West System 105/206 epoxy-bonded to hull.
     - **SUB-TASKS:**
-        - [ ] Export individual STLs (set RENDER variable in SCAD): shepherd, inara, river, simon, battery, battery_f, kaylee, kaylee_f → `airframe/stls/fuselage/` — **NOT DONE 2026-07-03**: `openscad -o` export could not be run this session (sandboxed sub-agent Bash permission hook blocks any command containing `-o`, and the main session hit a separate OpenSCAD-render permission block); must be run by the user or an unrestricted session.
-        - [ ] Verify cover shoulder fit in slicer cross-section (confirm 1.5 mm step seats on hull face) — blocked on STL export above.
-        - [ ] **Verify GPS recess depth clears GPS retention ring — FOUND STALE 2026-07-03.** The file's GPS bore logic (Inara dZ=−14.3, River dZ=+0.7, side-wall Z=104.7/44.7) predates this session's cargo-shell GPS axis-bug fix (§1.1.1.0a Rev R2, 2026-07-03): GPS_PORT/GPS_STBD are now both on the **dorsal face** (hull Z=163.2 max, hull Y≈45.8, X≈−142.2/−202.2 — verified via cargo bake transform, matches Cargo_Shell's validated Z-max exactly). `access_panels_24in.scad` needs its GPS clearance geometry re-derived to the dorsal frame before this check has any meaning.
-        - [ ] **Confirm M3 bore positions match shell boss pattern — FOUND STALE 2026-07-03.** `access_panels_24in.scad` AV_SCREW_DX/DZ = 25/15 mm (X-Z in-plane, side-wall frame) do not match current `cargo_sect_shell24.scad` AVINICS_BOSS_DX/DY = 15/25 mm (X-Y in-plane, dorsal frame, Rev S4 relabel). Both magnitude and axis differ. File needs re-derivation before export.
+        - [ ] Export individual STLs (set RENDER variable in SCAD): shepherd, inara, river, simon,
+            battery, battery_f, kaylee, kaylee_f → `airframe/stls/fuselage/` — **NOT DONE
+            2026-07-03**: `openscad -o` export could not be run this session (sandboxed sub-agent
+            Bash permission hook blocks any command containing `-o`, and the main session hit a
+            separate OpenSCAD-render permission block); must be run by the user or an unrestricted
+            session.
+        - [ ] Verify cover shoulder fit in slicer cross-section (confirm 1.5 mm step seats on hull
+            face) — blocked on STL export above.
+        - [ ] **Verify GPS recess depth clears GPS retention ring — FOUND STALE 2026-07-03.** The
+            file's GPS bore logic (Inara dZ=−14.3, River dZ=+0.7, side-wall Z=104.7/44.7) predates
+            this session's cargo-shell GPS axis-bug fix (§1.1.1.0a Rev R2, 2026-07-03):
+            GPS_PORT/GPS_STBD are now both on the **dorsal face** (hull Z=163.2 max, hull Y≈45.8,
+            X≈−142.2/−202.2 — verified via cargo bake transform, matches Cargo_Shell's validated
+            Z-max exactly). `access_panels_24in.scad` needs its GPS clearance geometry re-derived
+            to the dorsal frame before this check has any meaning.
+        - [ ] **Confirm M3 bore positions match shell boss pattern — FOUND STALE 2026-07-03.**
+            `access_panels_24in.scad` AV_SCREW_DX/DZ = 25/15 mm (X-Z in-plane, side-wall frame) do
+            not match current `cargo_sect_shell24.scad` AVINICS_BOSS_DX/DY = 15/25 mm (X-Y
+            in-plane, dorsal frame, Rev S4 relabel). Both magnitude and axis differ. File needs
+            re-derivation before export.
 
 - [x] **49 MHz (Part 15 §15.235) wire posts** — `airframe/openscad/fuselage/rcrs49_wire_post.scad` created 2026-06-11.
     Single `wire_post()` module: 12×12×2 mm PETG base, 8×8×7 mm mast, Ø1.5 mm athwartships wire-retention bore at 2 mm from top.
@@ -1218,8 +1268,23 @@ Joint faces in hull-frame Y (confirmed from baked extents):
 
     - **BLOCKS Phase 1 (antenna installation)**
     - **SUB-TASKS:**
-        - [ ] Export STL → `airframe/stls/fuselage/rcrs49_wire_post.stl` (×4 instances, no geometry change needed — same module, different bond points) — **NOT DONE 2026-07-03**: `openscad -o` export could not be run in this sandboxed session (Bash permission hook blocks any `-o`-flagged command); rerun with an unrestricted session.
-        - [ ] **Verify port/starboard shoulder-height mount line in FreeCAD against the cargo door's 180°-open swing envelope** — **partially verified 2026-07-03 (source-level only, no STL yet)**: confirmed the door bay's Y-span (hull Y 2–108, per `generate_cargo_doors.py`) converts to station-from-nose 307.6–413.6 mm (nose tip hull Y=−305.6), which sits entirely inside the post run (sta 120–580 mm) — the mid-run wire, not just the two discrete posts, crosses the door's swing zone and must clear it. Door swing envelope = a semicircle radius ≈52–55 mm (measured door width) centered at hinge (X=−117.6 port/−222.5 stbd, Z≈5.1–5.2), spanning only hull Y 2–108. `rcrs49_wire_post.scad` still has **no defined shoulder-height Z value** (flagged open in its own header) — cannot compute a real clearance margin until that Z is set; recommend Z ≥ 65 mm (hinge Z + envelope radius + margin) at any station falling within hull Y 2–108, then re-verify numerically. **Still BLOCKS bonding both antennas' posts.**
+        - [ ] Export STL → `airframe/stls/fuselage/rcrs49_wire_post.stl` (×4 instances, no geometry
+            change needed — same module, different bond points) — **NOT DONE 2026-07-03**:
+            `openscad -o` export could not be run in this sandboxed session (Bash permission hook
+            blocks any `-o`-flagged command); rerun with an unrestricted session.
+        - [ ] **Verify port/starboard shoulder-height mount line in FreeCAD against the cargo
+            door's 180°-open swing envelope** — **partially verified 2026-07-03 (source-level
+            only, no STL yet)**: confirmed the door bay's Y-span (hull Y 2–108, per
+            `generate_cargo_doors.py`) converts to station-from-nose 307.6–413.6 mm (nose tip hull
+            Y=−305.6), which sits entirely inside the post run (sta 120–580 mm) — the mid-run
+            wire, not just the two discrete posts, crosses the door's swing zone and must clear
+            it. Door swing envelope = a semicircle radius ≈52–55 mm (measured door width)
+            centered at hinge (X=−117.6 port/−222.5 stbd, Z≈5.1–5.2), spanning only hull Y 2–108.
+            `rcrs49_wire_post.scad` still has **no defined shoulder-height Z value** (flagged open
+            in its own header) — cannot compute a real clearance margin until that Z is set;
+            recommend Z ≥ 65 mm (hinge Z + envelope radius + margin) at any station falling within
+            hull Y 2–108, then re-verify numerically. **Still BLOCKS bonding both antennas'
+            posts.**
         - [ ] Bond River's forward post to the port flank at sta 120 mm; dress wire aft to River's Emma J2
         - [ ] Bond Simon's forward post to the starboard flank at sta 120 mm; dress wire aft to Simon's Emma J2
         - [ ] Install both temporary aft posts (port + starboard) at sta 580 mm; remove and replace with integrated mounts in Phase 11
@@ -2664,7 +2729,7 @@ work that was actually completed against this stub before it was retired:
     placement still needs FreeCAD/slicer verification — see sub-tasks)*:
     - [x] **Shepherd's Room** (Bay A, nose, sta ≈ 59 mm) — SiK 915 MHz ¼-wave RP-SMA whip
         (primary) + Wi-Fi 5 GHz RP-SMA whip (secondary). Mount both on the dorsal hull
-        skin near the bay, ≥ 30 mm apart (reduce 915/5800 MHz front-end desense).
+        skin near the bay, ≥ 30 mm apart (reduce 915/5800 MHz frontend desense).
     - [x] **Inara's Shuttle** (Bay B, dorsal fwd, sta ≈ 130 mm) — Wi-Fi 5 GHz RP-SMA whip
         (primary) + SiK 915 MHz RP-SMA whip (secondary). Same dorsal mount style and
         spacing as Shepherd's.

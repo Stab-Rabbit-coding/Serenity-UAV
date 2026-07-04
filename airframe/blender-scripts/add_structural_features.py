@@ -300,6 +300,20 @@ def _box(x0, x1, z0, z1, y0, y1):
     return box
 
 
+def _keel_channel_cutter(section_key):
+    """Return the keel-locating-channel box cutter for KEEL_CHANNEL[section_key]
+    (shared by process_cargo and process_rear — same geometry construction)."""
+    kc = KEEL_CHANNEL[section_key]
+    return _box(
+        kc["x_range"][0],
+        kc["x_range"][1],
+        kc["z_range"][0],
+        kc["z_range"][1],
+        kc["y_range"][0],
+        kc["y_range"][1],
+    )
+
+
 def _y_cylinder(x_cen, z_cen, y_start, y_end, radius, sections=32):
     """
     Return a trimesh cylinder aligned with the hull Y axis (positive aft).
@@ -634,17 +648,7 @@ def process_cargo(mesh):
             cutters.append(_y_cylinder(x_pin, z_pin, y0, y1, BOSS_PIN_RADIUS))
 
     # Keel locating channel
-    kc = KEEL_CHANNEL["cargo"]
-    cutters.append(
-        _box(
-            kc["x_range"][0],
-            kc["x_range"][1],
-            kc["z_range"][0],
-            kc["z_range"][1],
-            kc["y_range"][0],
-            kc["y_range"][1],
-        )
-    )
+    cutters.append(_keel_channel_cutter("cargo"))
 
     # Ring-frame pocket at Y = +30 mm (4 side cutters)
     for xm, xx, zm, zx, ym, yx in RING_POCKETS["cargo_Y30"]:
@@ -709,17 +713,7 @@ def process_rear(mesh):
         cutters.append(_y_cylinder(x_pin, z_pin, y0, y1, BOSS_PIN_RADIUS))
 
     # Keel locating channel
-    kc = KEEL_CHANNEL["rear"]
-    cutters.append(
-        _box(
-            kc["x_range"][0],
-            kc["x_range"][1],
-            kc["z_range"][0],
-            kc["z_range"][1],
-            kc["y_range"][0],
-            kc["y_range"][1],
-        )
-    )
+    cutters.append(_keel_channel_cutter("rear"))
 
     # Ring-frame pocket at Y = +290 mm
     for xm, xx, zm, zx, ym, yx in RING_POCKETS["rear_Y290"]:

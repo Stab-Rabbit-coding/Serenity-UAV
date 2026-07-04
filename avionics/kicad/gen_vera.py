@@ -23,8 +23,8 @@ IMPORTANT — verification status (do not treat as fab-ready without addressing 
     - EMI hardening chain (added 2026-07-03, matching Wash/Zoe Rev R baseline) uses REAL,
       already-verified parts and pinouts reused from this project's own working
       gen_cape_a2.py: Wurth 749010012A magnetics (8-pin, real footprint), Bourns
-      SRF2012-100Y CMC (4-pin, real footprint), Nexperia PRTR5V0U2X TVS (3-pin per
-      instance, real footprint), TI ISOW1044BDFMR isolated CAN-FD transceiver (real
+      SRF2012-100Y common-mode choke (4-pin, real footprint), Nexperia PRTR5V0U2X TVS
+      (3-pin per instance, real footprint), TI ISOW1044BDFMR isolated CAN-FD transceiver (real
       SOIC-16W footprint, same part Wash/Zoe use). These are NOT placeholders.
     - Q1 (AO3400) pinout IS the real, standard datasheet pinout for that part.
 
@@ -196,14 +196,25 @@ def gen_pro() -> str:
                 "zones_allow_external_fillets": False,
                 "zones_min_antigap_margin": 0.0,
             },
-            "ipc2581": {"dist": "", "distpn": "", "internal_id": "", "mfg": "", "mpn": ""},
+            "ipc2581": {
+                "dist": "",
+                "distpn": "",
+                "internal_id": "",
+                "mfg": "",
+                "mpn": "",
+            },
             "layer_pairs": [],
             "layer_presets": [],
             "viewports": [],
         },
         "boards": [],
         "cvpcb": {"equivalence_files": []},
-        "erc": {"erc_exclusions": [], "meta": {"version": 0}, "pin_map": [], "rule_severities": []},
+        "erc": {
+            "erc_exclusions": [],
+            "meta": {"version": 0},
+            "pin_map": [],
+            "rule_severities": [],
+        },
         "libraries": {"pinned_footprint_libs": [], "pinned_symbol_libs": []},
         "meta": {"filename": "Vera.kicad_pro", "version": 3},
         "net_settings": {
@@ -288,8 +299,15 @@ def gen_pro() -> str:
         },
         "pcbnew": {
             "last_paths": {
-                "gencad": "", "idf": "", "netlist": "", "plot": "",
-                "pos_files": "", "specctra_dsn": "", "step": "", "svg": "", "vrml": "",
+                "gencad": "",
+                "idf": "",
+                "netlist": "",
+                "plot": "",
+                "pos_files": "",
+                "specctra_dsn": "",
+                "step": "",
+                "svg": "",
+                "vrml": "",
             },
             "page_layout_descr_file": "",
         },
@@ -342,19 +360,25 @@ def gen_pro() -> str:
 # kicad_sch low-level helpers (same conventions as gen_kaylee.py)
 # ---------------------------------------------------------------------------
 
+
 def _pin_def(ptype, shape, px, py, ang, length, name, number):
-    return (f'      (pin {ptype} {shape} (at {px:.2f} {py:.2f} {ang}) (length {length:.2f})\n'
-            f'        (name "{name}" (effects (font (size 1.016 1.016))))\n'
-            f'        (number "{number}" (effects (font (size 1.016 1.016)))))')
+    return (
+        f"      (pin {ptype} {shape} (at {px:.2f} {py:.2f} {ang}) (length {length:.2f})\n"
+        f'        (name "{name}" (effects (font (size 1.016 1.016))))\n'
+        f'        (number "{number}" (effects (font (size 1.016 1.016)))))'
+    )
 
 
 def _rect(x1, y1, x2, y2):
-    return (f'      (rectangle (start {x1:.2f} {y1:.2f}) (end {x2:.2f} {y2:.2f})\n'
-            f'        (stroke (width 0.254) (type default)) (fill (type background))))')
+    return (
+        f"      (rectangle (start {x1:.2f} {y1:.2f}) (end {x2:.2f} {y2:.2f})\n"
+        f"        (stroke (width 0.254) (type default)) (fill (type background))))"
+    )
 
 
 def lib_symbol_2pin_h(name, in_bom="yes"):
-    return f"""  (symbol "{name}" (in_bom {in_bom}) (on_board yes)
+    return (
+        f"""  (symbol "{name}" (in_bom {in_bom}) (on_board yes)
     (property "Reference" "R" (at 0 -2.54 0) (effects (font (size 1.27 1.27))))
     (property "Value" "{name}" (at 0 2.54 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
@@ -362,15 +386,20 @@ def lib_symbol_2pin_h(name, in_bom="yes"):
       (rectangle (start -2.54 -1.27) (end 2.54 1.27)
         (stroke (width 0.254) (type default)) (fill (type background))))
     (symbol "{name}_1_1"
-""" + _pin_def("passive", "line", -3.81, 0, 0, 1.27, "1", "1") + "\n" + \
-        _pin_def("passive", "line", 3.81, 0, 180, 1.27, "2", "2") + """
+"""
+        + _pin_def("passive", "line", -3.81, 0, 0, 1.27, "1", "1")
+        + "\n"
+        + _pin_def("passive", "line", 3.81, 0, 180, 1.27, "2", "2")
+        + """
     )
   )"""
+    )
 
 
 def lib_symbol_nmos(name):
     """Generic 3-pin logic-level N-MOSFET SOT-23 symbol (G, D, S)."""
-    return f"""  (symbol "{name}" (in_bom yes) (on_board yes)
+    return (
+        f"""  (symbol "{name}" (in_bom yes) (on_board yes)
     (property "Reference" "Q" (at 0 -6.35 0) (effects (font (size 1.27 1.27))))
     (property "Value" "{name}" (at 0 6.35 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
@@ -378,18 +407,24 @@ def lib_symbol_nmos(name):
       (rectangle (start -5.08 -5.08) (end 5.08 5.08)
         (stroke (width 0.254) (type default)) (fill (type background))))
     (symbol "{name}_1_1"
-""" + _pin_def("input", "line", -7.62, 0, 0, 2.54, "G", "1") + "\n" + \
-        _pin_def("passive", "line", 2.54, 7.62, 270, 2.54, "D", "3") + "\n" + \
-        _pin_def("passive", "line", 2.54, -7.62, 90, 2.54, "S", "2") + """
+"""
+        + _pin_def("input", "line", -7.62, 0, 0, 2.54, "G", "1")
+        + "\n"
+        + _pin_def("passive", "line", 2.54, 7.62, 270, 2.54, "D", "3")
+        + "\n"
+        + _pin_def("passive", "line", 2.54, -7.62, 90, 2.54, "S", "2")
+        + """
     )
   )"""
+    )
 
 
 def lib_symbol_srf2012():
     """SRF2012-100Y — 100uH common-mode choke, 2-winding, 4-terminal.
     Reused verbatim (pin layout) from this project's own verified Wash/Zoë
     generator (gen_cape_a2.py lib_sym_srf2012) — real, already-working part."""
-    return """  (symbol "SRF2012-100Y" (in_bom yes) (on_board yes)
+    return (
+        """  (symbol "SRF2012-100Y" (in_bom yes) (on_board yes)
     (property "Reference" "CMC" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
     (property "Value" "SRF2012-100Y" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Inductor_SMD:L_Taiyo-Yuden_NR-20xx" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
@@ -403,12 +438,18 @@ def lib_symbol_srf2012():
         (stroke (width 0.127) (type dash)) (fill (type none)))
     )
     (symbol "SRF2012-100Y_1_1"
-""" + _pin_def("passive", "line", -7.62, -2.54, 0, 2.54, "L1A", "1") + "\n" + \
-        _pin_def("passive", "line", 7.62, -2.54, 180, 2.54, "L1B", "2") + "\n" + \
-        _pin_def("passive", "line", -7.62, 2.54, 0, 2.54, "L2A", "3") + "\n" + \
-        _pin_def("passive", "line", 7.62, 2.54, 180, 2.54, "L2B", "4") + """
+"""
+        + _pin_def("passive", "line", -7.62, -2.54, 0, 2.54, "L1A", "1")
+        + "\n"
+        + _pin_def("passive", "line", 7.62, -2.54, 180, 2.54, "L1B", "2")
+        + "\n"
+        + _pin_def("passive", "line", -7.62, 2.54, 0, 2.54, "L2A", "3")
+        + "\n"
+        + _pin_def("passive", "line", 7.62, 2.54, 180, 2.54, "L2B", "4")
+        + """
     )
   )"""
+    )
 
 
 def lib_symbol_prtr5v0u2x():
@@ -416,7 +457,8 @@ def lib_symbol_prtr5v0u2x():
     from this project's own verified Wash/Zoë generator (gen_cape_a2.py
     lib_sym_prtr5v0u2x). One instance protects one differential pair
     (A1/A2 = the two lines, K = common cathode to ground)."""
-    return """  (symbol "PRTR5V0U2X" (in_bom yes) (on_board yes)
+    return (
+        """  (symbol "PRTR5V0U2X" (in_bom yes) (on_board yes)
     (property "Reference" "D" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
     (property "Value" "PRTR5V0U2X" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Package_TO_SOT_SMD:SOT-363_SC-70-6" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
@@ -425,31 +467,40 @@ def lib_symbol_prtr5v0u2x():
       (rectangle (start -5.08 -3.81) (end 5.08 3.81)
         (stroke (width 0.254) (type default)) (fill (type background))))
     (symbol "PRTR5V0U2X_1_1"
-""" + _pin_def("passive", "line", -7.62, -2.54, 0, 2.54, "A1", "1") + "\n" + \
-        _pin_def("passive", "line", -7.62, 2.54, 0, 2.54, "A2", "2") + "\n" + \
-        _pin_def("passive", "line", 7.62, 0.0, 180, 2.54, "K", "3") + """
+"""
+        + _pin_def("passive", "line", -7.62, -2.54, 0, 2.54, "A1", "1")
+        + "\n"
+        + _pin_def("passive", "line", -7.62, 2.54, 0, 2.54, "A2", "2")
+        + "\n"
+        + _pin_def("passive", "line", 7.62, 0.0, 180, 2.54, "K", "3")
+        + """
     )
   )"""
+    )
 
 
 def lib_symbol_conn_np(name, n, pin_names=None):
     """Generic N-pin single-row connector symbol (pins on left side)."""
     pin_names = pin_names or [str(i + 1) for i in range(n)]
     half = (n - 1) * 1.27
-    lines = [f'  (symbol "{name}" (in_bom yes) (on_board yes)',
-             f'    (property "Reference" "J" (at 0 {-(half + 3.81):.2f} 0) (effects (font (size 1.27 1.27))))',
-             f'    (property "Value" "{name}" (at 0 {(half + 3.81):.2f} 0) (effects (font (size 1.27 1.27))))',
-             f'    (property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))',
-             f'    (symbol "{name}_0_1"',
-             f'      (rectangle (start -2.54 {-half - 1.27:.2f}) (end 2.54 {half + 1.27:.2f})',
-             f'        (stroke (width 0.254) (type default)) (fill (type background))))',
-             f'    (symbol "{name}_1_1"']
+    lines = [
+        f'  (symbol "{name}" (in_bom yes) (on_board yes)',
+        f'    (property "Reference" "J" (at 0 {-(half + 3.81):.2f} 0) (effects (font (size 1.27 1.27))))',
+        f'    (property "Value" "{name}" (at 0 {(half + 3.81):.2f} 0) (effects (font (size 1.27 1.27))))',
+        f'    (property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))',
+        f'    (symbol "{name}_0_1"',
+        f"      (rectangle (start -2.54 {-half - 1.27:.2f}) (end 2.54 {half + 1.27:.2f})",
+        f"        (stroke (width 0.254) (type default)) (fill (type background))))",
+        f'    (symbol "{name}_1_1"',
+    ]
     for i in range(n):
         py = -half + i * 2.54
-        lines.append(_pin_def("passive", "line", -5.08, py, 0, 2.54, pin_names[i], str(i + 1)))
-    lines.append('    )')
-    lines.append('  )')
-    return '\n'.join(lines)
+        lines.append(
+            _pin_def("passive", "line", -5.08, py, 0, 2.54, pin_names[i], str(i + 1))
+        )
+    lines.append("    )")
+    lines.append("  )")
+    return "\n".join(lines)
 
 
 def lib_symbol_generic_ic(name, footprint, datasheet, left, right, size=(15.24, 15.24)):
@@ -457,15 +508,17 @@ def lib_symbol_generic_ic(name, footprint, datasheet, left, right, size=(15.24, 
     hx, hy = size
     n_l, n_r = len(left), len(right)
     top = max(n_l, n_r) * 1.27
-    lines = [f'  (symbol "{name}" (in_bom yes) (on_board yes)',
-             f'    (property "Reference" "U" (at 0 {-(top + 3.81):.2f} 0) (effects (font (size 1.27 1.27))))',
-             f'    (property "Value" "{name}" (at 0 {(top + 3.81):.2f} 0) (effects (font (size 1.27 1.27))))',
-             f'    (property "Footprint" "{footprint}" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))',
-             f'    (property "Datasheet" "{datasheet}" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))',
-             f'    (symbol "{name}_0_1"',
-             f'      (rectangle (start {-hx:.2f} {-hy:.2f}) (end {hx:.2f} {hy:.2f})',
-             f'        (stroke (width 0.254) (type default)) (fill (type background))))',
-             f'    (symbol "{name}_1_1"']
+    lines = [
+        f'  (symbol "{name}" (in_bom yes) (on_board yes)',
+        f'    (property "Reference" "U" (at 0 {-(top + 3.81):.2f} 0) (effects (font (size 1.27 1.27))))',
+        f'    (property "Value" "{name}" (at 0 {(top + 3.81):.2f} 0) (effects (font (size 1.27 1.27))))',
+        f'    (property "Footprint" "{footprint}" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))',
+        f'    (property "Datasheet" "{datasheet}" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))',
+        f'    (symbol "{name}_0_1"',
+        f"      (rectangle (start {-hx:.2f} {-hy:.2f}) (end {hx:.2f} {hy:.2f})",
+        f"        (stroke (width 0.254) (type default)) (fill (type background))))",
+        f'    (symbol "{name}_1_1"',
+    ]
     n = len(left)
     start_y = -((n - 1) * 2.54) / 2.0
     for i, (pname, pnum, ptype) in enumerate(left):
@@ -476,9 +529,9 @@ def lib_symbol_generic_ic(name, footprint, datasheet, left, right, size=(15.24, 
     for i, (pname, pnum, ptype) in enumerate(right):
         py = start_y + i * 2.54
         lines.append(_pin_def(ptype, "line", hx + 2.54, py, 180, 2.54, pname, pnum))
-    lines.append('    )')
-    lines.append('  )')
-    return '\n'.join(lines)
+    lines.append("    )")
+    lines.append("  )")
+    return "\n".join(lines)
 
 
 def _ic_pin_xy(left, right, pin_name, size):
@@ -540,7 +593,8 @@ def lib_sym_power(name, bar_top=True):
     yend = 1.27 if bar_top else -1.27
     pin_angle = 270 if bar_top else 90
     pin_y = 1.27 if bar_top else -1.27
-    return f"""  (symbol "{name}" (power) (in_bom no) (on_board no)
+    return (
+        f"""  (symbol "{name}" (power) (in_bom no) (on_board no)
     (property "Reference" "#PWR" (at 0 -3.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Value" "{name}" (at 0 {yend:.2f} 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
@@ -549,27 +603,30 @@ def lib_sym_power(name, bar_top=True):
       (polyline (pts (xy -1.27 {ybox:.2f}) (xy 0 {yend:.2f}) (xy 1.27 {ybox:.2f}))
         (stroke (width 0) (type default)) (fill (type none))))
     (symbol "{name}_1_1"
-""" + _pin_def("power_in", "line", 0.0, pin_y, pin_angle, 1.27, "~", "1") + """
+"""
+        + _pin_def("power_in", "line", 0.0, pin_y, pin_angle, 1.27, "~", "1")
+        + """
   )
   )"""
+    )
 
 
 def sym_inst(lib_id, ref, value, cx, cy, rot=0, footprint="", datasheet=""):
     lines = [
         f'  (symbol (lib_id "{lib_id}") (at {cx:.2f} {cy:.2f} {rot})',
-        f'    (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)',
+        f"    (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)",
         f'    (uuid "{_next_uid()}")',
         f'    (property "Reference" "{ref}" (at {cx:.2f} {cy - 3.81:.2f} {rot})',
-        f'      (effects (font (size 1.27 1.27))))',
+        f"      (effects (font (size 1.27 1.27))))",
         f'    (property "Value" "{value}" (at {cx:.2f} {cy + 3.81:.2f} {rot})',
-        f'      (effects (font (size 1.27 1.27))))',
+        f"      (effects (font (size 1.27 1.27))))",
         f'    (property "Footprint" "{footprint}" (at 0 0 0)',
-        f'      (effects (font (size 1.27 1.27)) (hide yes)))',
+        f"      (effects (font (size 1.27 1.27)) (hide yes)))",
         f'    (property "Datasheet" "{datasheet}" (at 0 0 0)',
-        f'      (effects (font (size 1.27 1.27)) (hide yes)))',
-        '  )',
+        f"      (effects (font (size 1.27 1.27)) (hide yes)))",
+        "  )",
     ]
-    return '\n'.join(lines)
+    return "\n".join(lines)
 
 
 # bar_top-ness per power-flag lib_id — must match the lib_sym_power(...) calls
@@ -578,8 +635,13 @@ def sym_inst(lib_id, ref, value, cx, cy, rot=0, footprint="", datasheet=""):
 # origin, so placing the origin at a target coordinate misses the real
 # electrical connection point by 1.27mm unless compensated for here.
 _PWR_BAR_TOP = {
-    "+5V": True, "+3V3": True, "VDD_CORE": True, "VDDSHV": True, "VDDR": True,
-    "GND": False, "PGND": False,
+    "+5V": True,
+    "+3V3": True,
+    "VDD_CORE": True,
+    "VDDSHV": True,
+    "VDDR": True,
+    "GND": False,
+    "PGND": False,
 }
 
 
@@ -601,37 +663,41 @@ def pwr_sym(lib_id, tx, ty, rot=0):
         rot = 0
     lines = [
         f'  (symbol (lib_id "{lib_id}") (at {cx:.2f} {cy:.2f} {rot})',
-        f'    (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)',
+        f"    (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)",
         f'    (uuid "{_next_uid()}")',
         f'    (property "Reference" "#PWR" (at {cx:.2f} {cy:.2f} 0)',
-        f'      (effects (font (size 1.27 1.27)) (hide yes)))',
+        f"      (effects (font (size 1.27 1.27)) (hide yes)))",
         f'    (property "Value" "{lib_id}" (at {cx:.2f} {cy - 2.54:.2f} 0)',
-        f'      (effects (font (size 1.27 1.27))))',
+        f"      (effects (font (size 1.27 1.27))))",
         f'    (property "Footprint" "" (at 0 0 0)',
-        f'      (effects (font (size 1.27 1.27)) (hide yes)))',
+        f"      (effects (font (size 1.27 1.27)) (hide yes)))",
         f'    (property "Datasheet" "" (at 0 0 0)',
-        f'      (effects (font (size 1.27 1.27)) (hide yes)))',
+        f"      (effects (font (size 1.27 1.27)) (hide yes)))",
         f'    (pin "1" (uuid "{_next_uid()}"))',
-        '  )',
+        "  )",
     ]
-    return '\n'.join(lines)
+    return "\n".join(lines)
 
 
 def glabel(name, x, y, rot=0, shape="bidirectional"):
-    return (f'  (global_label "{name}" (shape {shape}) (at {x:.2f} {y:.2f} {rot})\n'
-            f'    (effects (font (size 1.016 1.016)))\n'
-            f'    (uuid "{_next_uid()}")\n'
-            f'    (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {x:.2f} {y:.2f} 0)\n'
-            f'      (effects (font (size 1.016 1.016)) (hide yes))))')
+    return (
+        f'  (global_label "{name}" (shape {shape}) (at {x:.2f} {y:.2f} {rot})\n'
+        f"    (effects (font (size 1.016 1.016)))\n"
+        f'    (uuid "{_next_uid()}")\n'
+        f'    (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {x:.2f} {y:.2f} 0)\n'
+        f"      (effects (font (size 1.016 1.016)) (hide yes))))"
+    )
 
 
 def text_note(txt, x, y, size=1.27):
     # KiCad's S-expression string literals require the literal two-character
     # escape "\n", not an embedded raw newline — multi-line notes must be escaped.
-    esc = txt.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n')
-    return (f'  (text "{esc}" (at {x:.2f} {y:.2f} 0)\n'
-            f'    (effects (font (size {size:.2f} {size:.2f})))\n'
-            f'    (uuid "{_next_uid()}"))')
+    esc = txt.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
+    return (
+        f'  (text "{esc}" (at {x:.2f} {y:.2f} 0)\n'
+        f"    (effects (font (size {size:.2f} {size:.2f})))\n"
+        f'    (uuid "{_next_uid()}"))'
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -647,38 +713,59 @@ def text_note(txt, x, y, size=1.27):
 # docstring) — real pin NUMBERS are still not verified, only body size is.
 AM62A_SIZE = (9.0, 9.0)  # AM62A7: 18x18mm 484-ball FCBGA/FCCSP (AMB/ANF package)
 AM62A_L = [
-    ("VDD_CORE", "A1", "power_in"), ("VDDSHV_MAIN", "A2", "power_in"),
-    ("VDDR_CORE", "A3", "power_in"), ("GND", "A4", "power_in"),
-    ("PORz", "B1", "input"), ("BOOT_MODE0", "B2", "input"),
-    ("CAM_I2C_SDA", "C1", "bidirectional"), ("CAM_I2C_SCL", "C2", "input"),
-    ("CAM_RESET_N", "C3", "output"), ("CAM_PWDN", "C4", "output"),
-    ("CSI_CLK_P", "D1", "input"), ("CSI_CLK_N", "D2", "input"),
-    ("CSI_D0_P", "D3", "input"), ("CSI_D0_N", "D4", "input"),
+    ("VDD_CORE", "A1", "power_in"),
+    ("VDDSHV_MAIN", "A2", "power_in"),
+    ("VDDR_CORE", "A3", "power_in"),
+    ("GND", "A4", "power_in"),
+    ("PORz", "B1", "input"),
+    ("BOOT_MODE0", "B2", "input"),
+    ("CAM_I2C_SDA", "C1", "bidirectional"),
+    ("CAM_I2C_SCL", "C2", "input"),
+    ("CAM_RESET_N", "C3", "output"),
+    ("CAM_PWDN", "C4", "output"),
+    ("CSI_CLK_P", "D1", "input"),
+    ("CSI_CLK_N", "D2", "input"),
+    ("CSI_D0_P", "D3", "input"),
+    ("CSI_D0_N", "D4", "input"),
 ]
 AM62A_R = [
-    ("RGMII1_TXC", "P1", "output"), ("RGMII1_TXCTL", "P2", "output"),
-    ("RGMII1_TXD0", "P3", "output"), ("RGMII1_RXC", "P4", "input"),
-    ("RGMII1_RXCTL", "P5", "input"), ("RGMII1_RXD0", "P6", "input"),
-    ("MDIO", "P7", "bidirectional"), ("MDC", "P8", "output"),
-    ("MCU_UART_TX", "R1", "output"), ("MCU_UART_RX", "R2", "input"),
+    ("RGMII1_TXC", "P1", "output"),
+    ("RGMII1_TXCTL", "P2", "output"),
+    ("RGMII1_TXD0", "P3", "output"),
+    ("RGMII1_RXC", "P4", "input"),
+    ("RGMII1_RXCTL", "P5", "input"),
+    ("RGMII1_RXD0", "P6", "input"),
+    ("MDIO", "P7", "bidirectional"),
+    ("MDC", "P8", "output"),
+    ("MCU_UART_TX", "R1", "output"),
+    ("MCU_UART_RX", "R2", "input"),
     ("SD_CARD", "R3", "bidirectional"),
 ]
 
 MSPM0_SIZE = (3.55, 2.45)  # MSPM0G3507 VSSOP-28 (DGS): real body ~7.1x4.9mm
 MSPM0_L = [
-    ("+3V3", "1", "power_in"), ("GND", "2", "power_in"),
-    ("NRST", "3", "input"), ("SWCLK", "4", "input"),
+    ("+3V3", "1", "power_in"),
+    ("GND", "2", "power_in"),
+    ("NRST", "3", "input"),
+    ("SWCLK", "4", "input"),
     ("SWDIO", "5", "bidirectional"),
-    ("MCAN_TX", "6", "output"), ("MCAN_RX", "7", "input"),
-    ("UART0_TX", "8", "output"), ("UART0_RX", "9", "input"),
-    ("UART1_TX", "22", "output"), ("UART1_RX", "23", "input"),
+    ("MCAN_TX", "6", "output"),
+    ("MCAN_RX", "7", "input"),
+    ("UART0_TX", "8", "output"),
+    ("UART0_RX", "9", "input"),
+    ("UART1_TX", "22", "output"),
+    ("UART1_RX", "23", "input"),
 ]
 MSPM0_R = [
-    ("SPI0_CS_TPM", "10", "output"), ("SPI0_SCK", "11", "output"),
-    ("SPI0_MOSI", "12", "output"), ("SPI0_MISO", "13", "input"),
+    ("SPI0_CS_TPM", "10", "output"),
+    ("SPI0_SCK", "11", "output"),
+    ("SPI0_MOSI", "12", "output"),
+    ("SPI0_MISO", "13", "input"),
     ("TPM_PIRQ", "14", "input"),
-    ("SPI1_CS_SW", "15", "output"), ("SPI1_SCK", "16", "output"),
-    ("SPI1_MOSI", "17", "output"), ("SPI1_MISO", "18", "input"),
+    ("SPI1_CS_SW", "15", "output"),
+    ("SPI1_SCK", "16", "output"),
+    ("SPI1_MOSI", "17", "output"),
+    ("SPI1_MISO", "18", "input"),
     ("GPIO_LASER_EN", "19", "output"),
     ("GPIO_LASER_KEY", "20", "input"),
     ("GPIO_LASER_IND", "21", "output"),
@@ -686,40 +773,58 @@ MSPM0_R = [
 
 KSZ_SIZE = (7.0, 7.0)  # KSZ9477STXI: 128-TQFP-EP, real body 14x14mm
 KSZ_L = [
-    ("+3V3", "1", "power_in"), ("+1V2", "2", "power_in"),
-    ("GND", "3", "power_in"), ("RESET_N", "4", "input"),
-    ("INT_N", "5", "output"), ("XTAL_25M", "6", "input"),
-    ("SPI_CS_HOST", "7", "input"), ("SPI_SCK_HOST", "8", "input"),
-    ("SPI_MOSI_HOST", "9", "input"), ("SPI_MISO_HOST", "10", "output"),
+    ("+3V3", "1", "power_in"),
+    ("+1V2", "2", "power_in"),
+    ("GND", "3", "power_in"),
+    ("RESET_N", "4", "input"),
+    ("INT_N", "5", "output"),
+    ("XTAL_25M", "6", "input"),
+    ("SPI_CS_HOST", "7", "input"),
+    ("SPI_SCK_HOST", "8", "input"),
+    ("SPI_MOSI_HOST", "9", "input"),
+    ("SPI_MISO_HOST", "10", "output"),
 ]
 # Each integrated-PHY port needs a FULL differential pair set (TX+/-, RX+/-) —
 # a single MDIP/MDIN pair (as an earlier pass of this file had) under-models a
 # real 10/100BASE-TX port, which needs both pairs. Fixed 2026-07-03 alongside
 # adding the magnetics/CMC/TVS EMI-hardening chain those pairs feed into.
 KSZ_R = [
-    ("P1_RGMII_TXC", "20", "input"), ("P1_RGMII_TXCTL", "21", "input"),
-    ("P1_RGMII_TXD0", "22", "input"), ("P1_RGMII_RXC", "23", "output"),
-    ("P1_RGMII_RXCTL", "24", "output"), ("P1_RGMII_RXD0", "25", "output"),
-    ("P2_TXP", "26", "output"), ("P2_TXN", "27", "output"),
-    ("P2_RXP", "28", "input"), ("P2_RXN", "29", "input"),
-    ("P3_TXP", "30", "output"), ("P3_TXN", "31", "output"),
-    ("P3_RXP", "32", "input"), ("P3_RXN", "33", "input"),
+    ("P1_RGMII_TXC", "20", "input"),
+    ("P1_RGMII_TXCTL", "21", "input"),
+    ("P1_RGMII_TXD0", "22", "input"),
+    ("P1_RGMII_RXC", "23", "output"),
+    ("P1_RGMII_RXCTL", "24", "output"),
+    ("P1_RGMII_RXD0", "25", "output"),
+    ("P2_TXP", "26", "output"),
+    ("P2_TXN", "27", "output"),
+    ("P2_RXP", "28", "input"),
+    ("P2_RXN", "29", "input"),
+    ("P3_TXP", "30", "output"),
+    ("P3_TXN", "31", "output"),
+    ("P3_RXP", "32", "input"),
+    ("P3_RXN", "33", "input"),
 ]
 
 TPM_SIZE = (2.5, 2.5)  # Infineon SLB9670: PG-VQFN-32, real body ~5x5mm
 TPM_L = [
-    ("+3V3", "1", "power_in"), ("GND", "2", "power_in"),
-    ("SPI_CS", "3", "input"), ("SPI_CLK", "4", "input"),
+    ("+3V3", "1", "power_in"),
+    ("GND", "2", "power_in"),
+    ("SPI_CS", "3", "input"),
+    ("SPI_CLK", "4", "input"),
 ]
 TPM_R = [
-    ("SPI_MOSI", "5", "input"), ("SPI_MISO", "6", "output"),
-    ("PIRQ", "7", "output"), ("RESET_N", "8", "input"),
+    ("SPI_MOSI", "5", "input"),
+    ("SPI_MISO", "6", "output"),
+    ("PIRQ", "7", "output"),
+    ("RESET_N", "8", "input"),
 ]
 
 PMIC_SIZE = (2.5, 2.5)  # TI TPS65219: VQFN-32 (RSM), real body 5x5mm
 PMIC_L = [
-    ("VIN", "1", "power_in"), ("GND", "2", "power_in"),
-    ("EN", "3", "input"), ("I2C_SDA", "4", "bidirectional"),
+    ("VIN", "1", "power_in"),
+    ("GND", "2", "power_in"),
+    ("EN", "3", "input"),
+    ("I2C_SDA", "4", "bidirectional"),
     ("I2C_SCL", "5", "input"),
 ]
 PMIC_R = [
@@ -738,13 +843,17 @@ PMIC_R = [
 # non-isolated TCAN1042HG-Q1 to match Wash/Zoë's CAN-FD isolation standard.
 ISOW_SIZE = (3.75, 5.15)  # SOIC-16W_7.5x10.3mm — real, from Wash's own footprint
 ISOW_L = [
-    ("GND1", "1", "power_in"), ("TXD", "2", "input"),
-    ("STB_N", "3", "input"), ("RXD", "4", "output"),
+    ("GND1", "1", "power_in"),
+    ("TXD", "2", "input"),
+    ("STB_N", "3", "input"),
+    ("RXD", "4", "output"),
     ("VCC1", "6", "power_in"),
 ]
 ISOW_R = [
-    ("ISOGND", "10", "power_in"), ("CANL", "14", "bidirectional"),
-    ("CANH", "15", "bidirectional"), ("VCC2", "11", "power_in"),
+    ("ISOGND", "10", "power_in"),
+    ("CANL", "14", "bidirectional"),
+    ("CANH", "15", "bidirectional"),
+    ("VCC2", "11", "power_in"),
 ]
 
 # Wurth 749010012A — 10/100BASE-TX SMD transformer w/ integrated CMC, real
@@ -752,12 +861,16 @@ ISOW_R = [
 # role was stale/incorrect — the actual working generator uses this part).
 XFMR_SIZE = (5.5, 4.0)  # estimated typical low-profile 10/100 SMD transformer body
 XFMR_L = [
-    ("PHY_TXP", "1", "input"), ("PHY_TXN", "2", "input"),
-    ("PHY_RXP", "3", "output"), ("PHY_RXN", "4", "output"),
+    ("PHY_TXP", "1", "input"),
+    ("PHY_TXN", "2", "input"),
+    ("PHY_RXP", "3", "output"),
+    ("PHY_RXN", "4", "output"),
 ]
 XFMR_R = [
-    ("LINE_TXP", "5", "output"), ("LINE_TXN", "6", "output"),
-    ("LINE_RXP", "7", "input"), ("LINE_RXN", "8", "input"),
+    ("LINE_TXP", "5", "output"),
+    ("LINE_TXN", "6", "output"),
+    ("LINE_RXP", "7", "input"),
+    ("LINE_RXN", "8", "input"),
 ]
 
 # SRF2012-100Y and PRTR5V0U2X modeled through the same lib_symbol_generic_ic
@@ -765,11 +878,17 @@ XFMR_R = [
 # to avoid re-introducing the lib_symbol Y-up/Y-down flip bug that a hand-wired
 # version of this exact chain hit once already in this session (glabels placed
 # at un-flipped local pin coordinates landed on the WRONG physical pin).
-CMC_SIZE = (1.0, 0.6)  # Bourns SRF2012-100Y: real body ~2.0x1.2mm (2012 metric); half-extent
+CMC_SIZE = (
+    1.0,
+    0.6,
+)  # Bourns SRF2012-100Y: real body ~2.0x1.2mm (2012 metric); half-extent
 CMC_L = [("L1A", "1", "passive"), ("L2A", "3", "passive")]
 CMC_R = [("L1B", "2", "passive"), ("L2B", "4", "passive")]
 
-TVS_SIZE = (1.05, 0.625)  # Nexperia PRTR5V0U2X: real body ~2.1x1.25mm (SOT-363/SC-70-6); half-extent
+TVS_SIZE = (
+    1.05,
+    0.625,
+)  # Nexperia PRTR5V0U2X: real body ~2.1x1.25mm (SOT-363/SC-70-6); half-extent
 TVS_L = [("A1", "1", "passive"), ("A2", "2", "passive")]
 TVS_R = [("K", "3", "passive")]
 
@@ -778,76 +897,132 @@ TVS_R = [("K", "3", "passive")]
 # kicad_sch body
 # ---------------------------------------------------------------------------
 
+
 def gen_sch() -> str:
     parts = []
 
     # -------------------------------------------------------------------
     # lib_symbols
     # -------------------------------------------------------------------
-    lib = ['  (lib_symbols',
-           lib_symbol_2pin_h("C_Generic"),
-           lib_symbol_2pin_h("R_Generic"),
-           lib_symbol_nmos("AO3400"),
-           lib_symbol_conn_np("Conn_JST_GH_02P", 2, ["1", "2"]),
-           lib_symbol_conn_np("Conn_JST_GH_04P", 4, ["1", "2", "3", "4"]),
-           lib_symbol_conn_np("Conn_JST_GH_05P", 5, ["1", "2", "3", "4", "5"]),
-           lib_symbol_conn_np("Conn_JST_SH_02P", 2, ["1", "2"]),
-           lib_symbol_generic_ic(
-               "TI_AM62A7", "Vera:BGA484_23x23mm_P1mm_PLACEHOLDER",
-               "https://www.ti.com/lit/ds/symlink/am62a7.pdf",
-               left=AM62A_L, right=AM62A_R, size=AM62A_SIZE),
-           lib_symbol_generic_ic(
-               "TI_MSPM0G3507", "Package_DFN_QFN:VQFN-48_PLACEHOLDER_7x7mm_P0.5mm",
-               "https://www.ti.com/lit/ds/symlink/mspm0g3507.pdf",
-               left=MSPM0_L, right=MSPM0_R, size=MSPM0_SIZE),
-           lib_symbol_generic_ic(
-               "MICROCHIP_KSZ9477", "Vera:QFN128_PLACEHOLDER_16x16mm_P0.4mm",
-               "https://www.microchip.com/en-us/product/ksz9477",
-               left=KSZ_L, right=KSZ_R, size=KSZ_SIZE),
-           lib_symbol_generic_ic(
-               "TI_ISOW1044BDFMR", "Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm",
-               "https://www.ti.com/lit/ds/sllseo9/sllseo9.pdf",
-               left=ISOW_L, right=ISOW_R, size=ISOW_SIZE),
-           lib_symbol_generic_ic(
-               "WURTH_ETH_XFMR", "Transformer_SMD:Wurth_749010012A_10-100BASE-TX",
-               "https://www.we-online.com/catalog/datasheet/749010012A.pdf",
-               left=XFMR_L, right=XFMR_R, size=XFMR_SIZE),
-           lib_symbol_generic_ic(
-               "BOURNS_SRF2012_100Y", "Inductor_SMD:L_Taiyo-Yuden_NR-20xx",
-               "https://www.coilcraft.com/getmedia/3a436de1-46ad-49b9-b3a8-9a3faa3ecf61/srf2012.pdf",
-               left=CMC_L, right=CMC_R, size=CMC_SIZE),
-           lib_symbol_generic_ic(
-               "NEXPERIA_PRTR5V0U2X", "Package_TO_SOT_SMD:SOT-363_SC-70-6",
-               "https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf",
-               left=TVS_L, right=TVS_R, size=TVS_SIZE),
-           lib_symbol_generic_ic(
-               "INFINEON_SLB9670", "Vera:TPM_SLB9670_PLACEHOLDER",
-               "https://www.infineon.com/dgdl/Infineon-SLB9670-DataSheet.pdf",
-               left=TPM_L, right=TPM_R, size=TPM_SIZE),
-           lib_symbol_generic_ic(
-               "TI_TPS65219", "Vera:PMIC_TPS65219_PLACEHOLDER_WQFN32",
-               "https://www.ti.com/lit/ds/symlink/tps65219.pdf",
-               left=PMIC_L, right=PMIC_R, size=PMIC_SIZE),
-           lib_sym_power("+5V"),
-           lib_sym_power("+3V3"),
-           lib_sym_power("VDD_CORE"),
-           lib_sym_power("VDDSHV"),
-           lib_sym_power("VDDR"),
-           lib_sym_power("GND", bar_top=False),
-           lib_sym_power("PGND", bar_top=False),
-           '  )']
+    lib = [
+        "  (lib_symbols",
+        lib_symbol_2pin_h("C_Generic"),
+        lib_symbol_2pin_h("R_Generic"),
+        lib_symbol_nmos("AO3400"),
+        lib_symbol_conn_np("Conn_JST_GH_02P", 2, ["1", "2"]),
+        lib_symbol_conn_np("Conn_JST_GH_04P", 4, ["1", "2", "3", "4"]),
+        lib_symbol_conn_np("Conn_JST_GH_05P", 5, ["1", "2", "3", "4", "5"]),
+        lib_symbol_conn_np("Conn_JST_SH_02P", 2, ["1", "2"]),
+        lib_symbol_generic_ic(
+            "TI_AM62A7",
+            "Vera:BGA484_23x23mm_P1mm_PLACEHOLDER",
+            "https://www.ti.com/lit/ds/symlink/am62a7.pdf",
+            left=AM62A_L,
+            right=AM62A_R,
+            size=AM62A_SIZE,
+        ),
+        lib_symbol_generic_ic(
+            "TI_MSPM0G3507",
+            "Package_DFN_QFN:VQFN-48_PLACEHOLDER_7x7mm_P0.5mm",
+            "https://www.ti.com/lit/ds/symlink/mspm0g3507.pdf",
+            left=MSPM0_L,
+            right=MSPM0_R,
+            size=MSPM0_SIZE,
+        ),
+        lib_symbol_generic_ic(
+            "MICROCHIP_KSZ9477",
+            "Vera:QFN128_PLACEHOLDER_16x16mm_P0.4mm",
+            "https://www.microchip.com/en-us/product/ksz9477",
+            left=KSZ_L,
+            right=KSZ_R,
+            size=KSZ_SIZE,
+        ),
+        lib_symbol_generic_ic(
+            "TI_ISOW1044BDFMR",
+            "Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm",
+            "https://www.ti.com/lit/ds/sllseo9/sllseo9.pdf",
+            left=ISOW_L,
+            right=ISOW_R,
+            size=ISOW_SIZE,
+        ),
+        lib_symbol_generic_ic(
+            "WURTH_ETH_XFMR",
+            "Transformer_SMD:Wurth_749010012A_10-100BASE-TX",
+            "https://www.we-online.com/catalog/datasheet/749010012A.pdf",
+            left=XFMR_L,
+            right=XFMR_R,
+            size=XFMR_SIZE,
+        ),
+        lib_symbol_generic_ic(
+            "BOURNS_SRF2012_100Y",
+            "Inductor_SMD:L_Taiyo-Yuden_NR-20xx",
+            "https://www.coilcraft.com/getmedia/3a436de1-46ad-49b9-b3a8-9a3faa3ecf61/srf2012.pdf",
+            left=CMC_L,
+            right=CMC_R,
+            size=CMC_SIZE,
+        ),
+        lib_symbol_generic_ic(
+            "NEXPERIA_PRTR5V0U2X",
+            "Package_TO_SOT_SMD:SOT-363_SC-70-6",
+            "https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf",
+            left=TVS_L,
+            right=TVS_R,
+            size=TVS_SIZE,
+        ),
+        lib_symbol_generic_ic(
+            "INFINEON_SLB9670",
+            "Vera:TPM_SLB9670_PLACEHOLDER",
+            "https://www.infineon.com/dgdl/Infineon-SLB9670-DataSheet.pdf",
+            left=TPM_L,
+            right=TPM_R,
+            size=TPM_SIZE,
+        ),
+        lib_symbol_generic_ic(
+            "TI_TPS65219",
+            "Vera:PMIC_TPS65219_PLACEHOLDER_WQFN32",
+            "https://www.ti.com/lit/ds/symlink/tps65219.pdf",
+            left=PMIC_L,
+            right=PMIC_R,
+            size=PMIC_SIZE,
+        ),
+        lib_sym_power("+5V"),
+        lib_sym_power("+3V3"),
+        lib_sym_power("VDD_CORE"),
+        lib_sym_power("VDDSHV"),
+        lib_sym_power("VDDR"),
+        lib_sym_power("GND", bar_top=False),
+        lib_sym_power("PGND", bar_top=False),
+        "  )",
+    ]
     parts.extend(lib)
 
-    parts.append(text_note(
-        "VERA — Nose/Cargo-Bay Vision, ToF & Laser Board  |  STANDALONE PCB, NOT a PB2-I cape", 10, 8, 2.0))
-    parts.append(text_note(
-        "Connects to airframe ONLY via J_ETH_IN / J_ETH_OUT (Ethernet ring) and J_CANFD "
-        "(CAN-FD trunk). Own +5V power input at J_PWR.", 10, 12, 1.0))
-    parts.append(text_note(
-        "SIMPLIFIED SCHEMATIC SYMBOLS: U1 (AM62A7), U2 (KSZ9477), U5 (SLB9670) show "
-        "representative pins only; real pin numbers not yet verified against datasheets. "
-        "See file docstring in gen_vera.py. Do not fabricate without completing TODO.md §1.2c.",
-        10, 15, 1.0))
+    parts.append(
+        text_note(
+            "VERA — Nose/Cargo-Bay Vision, ToF & Laser Board  |  STANDALONE PCB, NOT a PB2-I cape",
+            10,
+            8,
+            2.0,
+        )
+    )
+    parts.append(
+        text_note(
+            "Connects to airframe ONLY via J_ETH_IN / J_ETH_OUT (Ethernet ring) and J_CANFD "
+            "(CAN-FD trunk). Own +5V power input at J_PWR.",
+            10,
+            12,
+            1.0,
+        )
+    )
+    parts.append(
+        text_note(
+            "SIMPLIFIED SCHEMATIC SYMBOLS: U1 (AM62A7), U2 (KSZ9477), U5 (SLB9670) show "
+            "representative pins only; real pin numbers not yet verified against datasheets. "
+            "See file docstring in gen_vera.py. Do not fabricate without completing TODO.md §1.2c.",
+            10,
+            15,
+            1.0,
+        )
+    )
 
     # =====================================================================
     # Section A — Power input and regulation
@@ -855,15 +1030,33 @@ def gen_sch() -> str:
     parts.append(text_note("=== Section A: Power Input + PMIC ===", 10, 25))
 
     cx, cy = 20, 40
-    parts.append(sym_inst("Conn_JST_GH_02P", "J_PWR", "JST-GH 2P (shielded) +5V/GND", cx, cy))
+    parts.append(
+        sym_inst("Conn_JST_GH_02P", "J_PWR", "JST-GH 2P (shielded) +5V/GND", cx, cy)
+    )
     parts.append(glabel_conn("+5V", cx, cy, 2, 0))
     parts.append(glabel_conn("GND", cx, cy, 2, 1))
 
     # R_Generic/C_Generic (lib_symbol_2pin_h) pins are at exact local (+-3.81, 0).
-    parts.append(sym_inst("R_Generic", "J_CHASSIS_R", "0R chassis PGND-GND bond (single point)", 20, 55))
+    parts.append(
+        sym_inst(
+            "R_Generic",
+            "J_CHASSIS_R",
+            "0R chassis PGND-GND bond (single point)",
+            20,
+            55,
+        )
+    )
     parts.append(glabel("GND", 20 - 3.81, 55, rot=180))
     parts.append(glabel("PGND", 20 + 3.81, 55, rot=0))
-    parts.append(sym_inst("C_Generic", "C_ISO", "100nF/500V (parallel w/ R_CHASSIS, GND-PGND bridge)", 20, 60))
+    parts.append(
+        sym_inst(
+            "C_Generic",
+            "C_ISO",
+            "100nF/500V (parallel w/ R_CHASSIS, GND-PGND bridge)",
+            20,
+            60,
+        )
+    )
     parts.append(glabel("GND", 20 - 3.81, 60, rot=180))
     parts.append(glabel("PGND", 20 + 3.81, 60, rot=0))
 
@@ -874,16 +1067,25 @@ def gen_sch() -> str:
     parts.append(glabel_pin("PMIC_EN", cx, cy, PMIC_L, PMIC_R, "EN", PMIC_SIZE))
     parts.append(glabel_pin("PMIC_SDA", cx, cy, PMIC_L, PMIC_R, "I2C_SDA", PMIC_SIZE))
     parts.append(glabel_pin("PMIC_SCL", cx, cy, PMIC_L, PMIC_R, "I2C_SCL", PMIC_SIZE))
-    parts.append(glabel_pin("VDD_CORE", cx, cy, PMIC_L, PMIC_R, "BUCK1_VDD_CORE", PMIC_SIZE))
-    parts.append(glabel_pin("VDDSHV", cx, cy, PMIC_L, PMIC_R, "BUCK2_VDDSHV", PMIC_SIZE))
+    parts.append(
+        glabel_pin("VDD_CORE", cx, cy, PMIC_L, PMIC_R, "BUCK1_VDD_CORE", PMIC_SIZE)
+    )
+    parts.append(
+        glabel_pin("VDDSHV", cx, cy, PMIC_L, PMIC_R, "BUCK2_VDDSHV", PMIC_SIZE)
+    )
     parts.append(glabel_pin("VDDR", cx, cy, PMIC_L, PMIC_R, "BUCK3_VDDR", PMIC_SIZE))
     parts.append(glabel_pin("+3V3", cx, cy, PMIC_L, PMIC_R, "LDO1_3V3_CTRL", PMIC_SIZE))
 
-    parts.append(text_note(
-        "+3V3 = TPS65219 LDO1 output; shared logic rail for U2/U3/U5/U4 control-half parts.\n"
-        "VDD_CORE/VDDSHV/VDDR feed U1 (AM62A) per TI SLVAFD0 app note power sequencing —\n"
-        "sequencing/enable logic not modelled here; verify against SLVAFD0 before layout.",
-        cx - 17, cy + 20, 0.9))
+    parts.append(
+        text_note(
+            "+3V3 = TPS65219 LDO1 output; shared logic rail for U2/U3/U5/U4 control-half parts.\n"
+            "VDD_CORE/VDDSHV/VDDR feed U1 (AM62A) per TI SLVAFD0 app note power sequencing —\n"
+            "sequencing/enable logic not modelled here; verify against SLVAFD0 before layout.",
+            cx - 17,
+            cy + 20,
+            0.9,
+        )
+    )
 
     # =====================================================================
     # Section B — Vision half: AM62A7 + camera interface
@@ -897,52 +1099,119 @@ def gen_sch() -> str:
     parts.append(pwr_pin("VDDR", cx, cy, AM62A_L, AM62A_R, "VDDR_CORE", AM62A_SIZE))
     parts.append(pwr_pin("GND", cx, cy, AM62A_L, AM62A_R, "GND", AM62A_SIZE))
     parts.append(glabel_pin("SOC_PORZ", cx, cy, AM62A_L, AM62A_R, "PORz", AM62A_SIZE))
-    parts.append(glabel_pin("SOC_BOOT0", cx, cy, AM62A_L, AM62A_R, "BOOT_MODE0", AM62A_SIZE))
-    parts.append(glabel_pin("CAM_SDA", cx, cy, AM62A_L, AM62A_R, "CAM_I2C_SDA", AM62A_SIZE))
-    parts.append(glabel_pin("CAM_SCL", cx, cy, AM62A_L, AM62A_R, "CAM_I2C_SCL", AM62A_SIZE))
-    parts.append(glabel_pin("CAM_RESET_N", cx, cy, AM62A_L, AM62A_R, "CAM_RESET_N", AM62A_SIZE))
-    parts.append(glabel_pin("CAM_PWDN", cx, cy, AM62A_L, AM62A_R, "CAM_PWDN", AM62A_SIZE))
-    parts.append(glabel_pin("CSI_CLK_P", cx, cy, AM62A_L, AM62A_R, "CSI_CLK_P", AM62A_SIZE))
-    parts.append(glabel_pin("CSI_CLK_N", cx, cy, AM62A_L, AM62A_R, "CSI_CLK_N", AM62A_SIZE))
-    parts.append(glabel_pin("CSI_D0_P", cx, cy, AM62A_L, AM62A_R, "CSI_D0_P", AM62A_SIZE))
-    parts.append(glabel_pin("CSI_D0_N", cx, cy, AM62A_L, AM62A_R, "CSI_D0_N", AM62A_SIZE))
+    parts.append(
+        glabel_pin("SOC_BOOT0", cx, cy, AM62A_L, AM62A_R, "BOOT_MODE0", AM62A_SIZE)
+    )
+    parts.append(
+        glabel_pin("CAM_SDA", cx, cy, AM62A_L, AM62A_R, "CAM_I2C_SDA", AM62A_SIZE)
+    )
+    parts.append(
+        glabel_pin("CAM_SCL", cx, cy, AM62A_L, AM62A_R, "CAM_I2C_SCL", AM62A_SIZE)
+    )
+    parts.append(
+        glabel_pin("CAM_RESET_N", cx, cy, AM62A_L, AM62A_R, "CAM_RESET_N", AM62A_SIZE)
+    )
+    parts.append(
+        glabel_pin("CAM_PWDN", cx, cy, AM62A_L, AM62A_R, "CAM_PWDN", AM62A_SIZE)
+    )
+    parts.append(
+        glabel_pin("CSI_CLK_P", cx, cy, AM62A_L, AM62A_R, "CSI_CLK_P", AM62A_SIZE)
+    )
+    parts.append(
+        glabel_pin("CSI_CLK_N", cx, cy, AM62A_L, AM62A_R, "CSI_CLK_N", AM62A_SIZE)
+    )
+    parts.append(
+        glabel_pin("CSI_D0_P", cx, cy, AM62A_L, AM62A_R, "CSI_D0_P", AM62A_SIZE)
+    )
+    parts.append(
+        glabel_pin("CSI_D0_N", cx, cy, AM62A_L, AM62A_R, "CSI_D0_N", AM62A_SIZE)
+    )
 
-    parts.append(glabel_pin("RGMII1_TXC", cx, cy, AM62A_L, AM62A_R, "RGMII1_TXC", AM62A_SIZE))
-    parts.append(glabel_pin("RGMII1_TXCTL", cx, cy, AM62A_L, AM62A_R, "RGMII1_TXCTL", AM62A_SIZE))
-    parts.append(glabel_pin("RGMII1_TXD0", cx, cy, AM62A_L, AM62A_R, "RGMII1_TXD0", AM62A_SIZE))
-    parts.append(glabel_pin("RGMII1_RXC", cx, cy, AM62A_L, AM62A_R, "RGMII1_RXC", AM62A_SIZE))
-    parts.append(glabel_pin("RGMII1_RXCTL", cx, cy, AM62A_L, AM62A_R, "RGMII1_RXCTL", AM62A_SIZE))
-    parts.append(glabel_pin("RGMII1_RXD0", cx, cy, AM62A_L, AM62A_R, "RGMII1_RXD0", AM62A_SIZE))
+    parts.append(
+        glabel_pin("RGMII1_TXC", cx, cy, AM62A_L, AM62A_R, "RGMII1_TXC", AM62A_SIZE)
+    )
+    parts.append(
+        glabel_pin("RGMII1_TXCTL", cx, cy, AM62A_L, AM62A_R, "RGMII1_TXCTL", AM62A_SIZE)
+    )
+    parts.append(
+        glabel_pin("RGMII1_TXD0", cx, cy, AM62A_L, AM62A_R, "RGMII1_TXD0", AM62A_SIZE)
+    )
+    parts.append(
+        glabel_pin("RGMII1_RXC", cx, cy, AM62A_L, AM62A_R, "RGMII1_RXC", AM62A_SIZE)
+    )
+    parts.append(
+        glabel_pin("RGMII1_RXCTL", cx, cy, AM62A_L, AM62A_R, "RGMII1_RXCTL", AM62A_SIZE)
+    )
+    parts.append(
+        glabel_pin("RGMII1_RXD0", cx, cy, AM62A_L, AM62A_R, "RGMII1_RXD0", AM62A_SIZE)
+    )
     parts.append(glabel_pin("MDIO", cx, cy, AM62A_L, AM62A_R, "MDIO", AM62A_SIZE))
     parts.append(glabel_pin("MDC", cx, cy, AM62A_L, AM62A_R, "MDC", AM62A_SIZE))
     # UART link to U3 (MSPM0G3507): crossed TX->RX, not net-name-matched TX->TX.
-    parts.append(glabel_pin("UART_A2M", cx, cy, AM62A_L, AM62A_R, "MCU_UART_TX", AM62A_SIZE))
-    parts.append(glabel_pin("UART_M2A", cx, cy, AM62A_L, AM62A_R, "MCU_UART_RX", AM62A_SIZE))
-    parts.append(glabel_pin("SD_CARD_NC", cx, cy, AM62A_L, AM62A_R, "SD_CARD", AM62A_SIZE, ))
+    parts.append(
+        glabel_pin("UART_A2M", cx, cy, AM62A_L, AM62A_R, "MCU_UART_TX", AM62A_SIZE)
+    )
+    parts.append(
+        glabel_pin("UART_M2A", cx, cy, AM62A_L, AM62A_R, "MCU_UART_RX", AM62A_SIZE)
+    )
+    parts.append(
+        glabel_pin(
+            "SD_CARD_NC",
+            cx,
+            cy,
+            AM62A_L,
+            AM62A_R,
+            "SD_CARD",
+            AM62A_SIZE,
+        )
+    )
 
     # J_CAM — camera module connector (CSI + I2C + power)
     cx, cy = 140, 100
-    parts.append(sym_inst("Conn_JST_GH_04P", "J_CAM1", "JST-GH 4P — CSI_CLK_P/N, CSI_D0_P/N", cx, cy))
+    parts.append(
+        sym_inst(
+            "Conn_JST_GH_04P", "J_CAM1", "JST-GH 4P — CSI_CLK_P/N, CSI_D0_P/N", cx, cy
+        )
+    )
     parts.append(glabel_conn("CSI_CLK_P", cx, cy, 4, 0))
     parts.append(glabel_conn("CSI_CLK_N", cx, cy, 4, 1))
     parts.append(glabel_conn("CSI_D0_P", cx, cy, 4, 2))
     parts.append(glabel_conn("CSI_D0_N", cx, cy, 4, 3))
-    parts.append(sym_inst("Conn_JST_GH_04P", "J_CAM2", "JST-GH 4P — CAM_SDA/SCL, CAM_RESET_N, +3V3", cx, cy + 20))
+    parts.append(
+        sym_inst(
+            "Conn_JST_GH_04P",
+            "J_CAM2",
+            "JST-GH 4P — CAM_SDA/SCL, CAM_RESET_N, +3V3",
+            cx,
+            cy + 20,
+        )
+    )
     parts.append(glabel_conn("CAM_SDA", cx, cy + 20, 4, 0))
     parts.append(glabel_conn("CAM_SCL", cx, cy + 20, 4, 1))
     parts.append(glabel_conn("CAM_RESET_N", cx, cy + 20, 4, 2))
     parts.append(glabel_conn("+3V3", cx, cy + 20, 4, 3))
-    parts.append(text_note(
-        "Camera sensor module is a separate board mounted at the bow/cargo aperture, not on\n"
-        "Vera itself. Only 1 of 4 real MIPI CSI-2 data lanes shown for schematic clarity —\n"
-        "see gen_vera.py docstring. SD_CARD_NC left unconnected — placeholder pin, no\n"
-        "physical microSD on Vera (logging lives on Wash/Zoe per CLAUDE.md).",
-        cx - 7, cy + 30, 0.9))
+    parts.append(
+        text_note(
+            "Camera sensor module is a separate board mounted at the bow/cargo aperture, not on\n"
+            "Vera itself. Only 1 of 4 real MIPI CSI-2 data lanes shown for schematic clarity —\n"
+            "see gen_vera.py docstring. SD_CARD_NC left unconnected — placeholder pin, no\n"
+            "physical microSD on Vera (logging lives on Wash/Zoe per CLAUDE.md).",
+            cx - 7,
+            cy + 30,
+            0.9,
+        )
+    )
 
     # =====================================================================
     # Section C — Control half: MSPM0G3507 + TPM + KSZ9477 + CAN-FD
     # =====================================================================
-    parts.append(text_note("=== Section C: Control Half — MSPM0G3507 + TPM + Switch + CAN-FD ===", 10, 150))
+    parts.append(
+        text_note(
+            "=== Section C: Control Half — MSPM0G3507 + TPM + Switch + CAN-FD ===",
+            10,
+            150,
+        )
+    )
 
     cx, cy = 55, 175
     parts.append(sym_inst("TI_MSPM0G3507", "U3", "TI MSPM0G3507", cx, cy))
@@ -951,29 +1220,69 @@ def gen_sch() -> str:
     parts.append(glabel_pin("MCU_NRST", cx, cy, MSPM0_L, MSPM0_R, "NRST", MSPM0_SIZE))
     parts.append(glabel_pin("MCU_SWCLK", cx, cy, MSPM0_L, MSPM0_R, "SWCLK", MSPM0_SIZE))
     parts.append(glabel_pin("MCU_SWDIO", cx, cy, MSPM0_L, MSPM0_R, "SWDIO", MSPM0_SIZE))
-    parts.append(glabel_pin("CANFD_TX", cx, cy, MSPM0_L, MSPM0_R, "MCAN_TX", MSPM0_SIZE))
-    parts.append(glabel_pin("CANFD_RX", cx, cy, MSPM0_L, MSPM0_R, "MCAN_RX", MSPM0_SIZE))
+    parts.append(
+        glabel_pin("CANFD_TX", cx, cy, MSPM0_L, MSPM0_R, "MCAN_TX", MSPM0_SIZE)
+    )
+    parts.append(
+        glabel_pin("CANFD_RX", cx, cy, MSPM0_L, MSPM0_R, "MCAN_RX", MSPM0_SIZE)
+    )
     # UART0: link to U1 (AM62A7), crossed TX->RX (see U1 placement above).
-    parts.append(glabel_pin("UART_M2A", cx, cy, MSPM0_L, MSPM0_R, "UART0_TX", MSPM0_SIZE))
-    parts.append(glabel_pin("UART_A2M", cx, cy, MSPM0_L, MSPM0_R, "UART0_RX", MSPM0_SIZE))
+    parts.append(
+        glabel_pin("UART_M2A", cx, cy, MSPM0_L, MSPM0_R, "UART0_TX", MSPM0_SIZE)
+    )
+    parts.append(
+        glabel_pin("UART_A2M", cx, cy, MSPM0_L, MSPM0_R, "UART0_RX", MSPM0_SIZE)
+    )
     # UART1: dedicated link to TFmini-S (J_TOF), separate from the AM62A link.
-    parts.append(glabel_pin("UART_TOF_TX", cx, cy, MSPM0_L, MSPM0_R, "UART1_TX", MSPM0_SIZE))
-    parts.append(glabel_pin("UART_TOF_RX", cx, cy, MSPM0_L, MSPM0_R, "UART1_RX", MSPM0_SIZE))
+    parts.append(
+        glabel_pin("UART_TOF_TX", cx, cy, MSPM0_L, MSPM0_R, "UART1_TX", MSPM0_SIZE)
+    )
+    parts.append(
+        glabel_pin("UART_TOF_RX", cx, cy, MSPM0_L, MSPM0_R, "UART1_RX", MSPM0_SIZE)
+    )
 
-    parts.append(glabel_pin("TPM_SPI_CS", cx, cy, MSPM0_L, MSPM0_R, "SPI0_CS_TPM", MSPM0_SIZE))
-    parts.append(glabel_pin("TPM_SPI_SCK", cx, cy, MSPM0_L, MSPM0_R, "SPI0_SCK", MSPM0_SIZE))
-    parts.append(glabel_pin("TPM_SPI_MOSI", cx, cy, MSPM0_L, MSPM0_R, "SPI0_MOSI", MSPM0_SIZE))
-    parts.append(glabel_pin("TPM_SPI_MISO", cx, cy, MSPM0_L, MSPM0_R, "SPI0_MISO", MSPM0_SIZE))
-    parts.append(glabel_pin("TPM_PIRQ", cx, cy, MSPM0_L, MSPM0_R, "TPM_PIRQ", MSPM0_SIZE))
-    parts.append(glabel_pin("SW_SPI_CS", cx, cy, MSPM0_L, MSPM0_R, "SPI1_CS_SW", MSPM0_SIZE))
-    parts.append(glabel_pin("SW_SPI_SCK", cx, cy, MSPM0_L, MSPM0_R, "SPI1_SCK", MSPM0_SIZE))
-    parts.append(glabel_pin("SW_SPI_MOSI", cx, cy, MSPM0_L, MSPM0_R, "SPI1_MOSI", MSPM0_SIZE))
-    parts.append(glabel_pin("SW_SPI_MISO", cx, cy, MSPM0_L, MSPM0_R, "SPI1_MISO", MSPM0_SIZE))
-    parts.append(glabel_pin("LASER_EN", cx, cy, MSPM0_L, MSPM0_R, "GPIO_LASER_EN", MSPM0_SIZE))
-    parts.append(glabel_pin("LASER_KEY_IN", cx, cy, MSPM0_L, MSPM0_R, "GPIO_LASER_KEY", MSPM0_SIZE))
-    parts.append(glabel_pin("LASER_IND", cx, cy, MSPM0_L, MSPM0_R, "GPIO_LASER_IND", MSPM0_SIZE))
+    parts.append(
+        glabel_pin("TPM_SPI_CS", cx, cy, MSPM0_L, MSPM0_R, "SPI0_CS_TPM", MSPM0_SIZE)
+    )
+    parts.append(
+        glabel_pin("TPM_SPI_SCK", cx, cy, MSPM0_L, MSPM0_R, "SPI0_SCK", MSPM0_SIZE)
+    )
+    parts.append(
+        glabel_pin("TPM_SPI_MOSI", cx, cy, MSPM0_L, MSPM0_R, "SPI0_MOSI", MSPM0_SIZE)
+    )
+    parts.append(
+        glabel_pin("TPM_SPI_MISO", cx, cy, MSPM0_L, MSPM0_R, "SPI0_MISO", MSPM0_SIZE)
+    )
+    parts.append(
+        glabel_pin("TPM_PIRQ", cx, cy, MSPM0_L, MSPM0_R, "TPM_PIRQ", MSPM0_SIZE)
+    )
+    parts.append(
+        glabel_pin("SW_SPI_CS", cx, cy, MSPM0_L, MSPM0_R, "SPI1_CS_SW", MSPM0_SIZE)
+    )
+    parts.append(
+        glabel_pin("SW_SPI_SCK", cx, cy, MSPM0_L, MSPM0_R, "SPI1_SCK", MSPM0_SIZE)
+    )
+    parts.append(
+        glabel_pin("SW_SPI_MOSI", cx, cy, MSPM0_L, MSPM0_R, "SPI1_MOSI", MSPM0_SIZE)
+    )
+    parts.append(
+        glabel_pin("SW_SPI_MISO", cx, cy, MSPM0_L, MSPM0_R, "SPI1_MISO", MSPM0_SIZE)
+    )
+    parts.append(
+        glabel_pin("LASER_EN", cx, cy, MSPM0_L, MSPM0_R, "GPIO_LASER_EN", MSPM0_SIZE)
+    )
+    parts.append(
+        glabel_pin(
+            "LASER_KEY_IN", cx, cy, MSPM0_L, MSPM0_R, "GPIO_LASER_KEY", MSPM0_SIZE
+        )
+    )
+    parts.append(
+        glabel_pin("LASER_IND", cx, cy, MSPM0_L, MSPM0_R, "GPIO_LASER_IND", MSPM0_SIZE)
+    )
 
-    parts.append(sym_inst("C_Generic", "C_MCU1", "100nF 0402 decoupling", cx - 5, cy + 30))
+    parts.append(
+        sym_inst("C_Generic", "C_MCU1", "100nF 0402 decoupling", cx - 5, cy + 30)
+    )
     parts.append(pwr_sym("+3V3", cx - 5 - 3.81, cy + 30, rot=0))
     parts.append(pwr_sym("GND", cx - 5 + 3.81, cy + 30, rot=0))
 
@@ -991,7 +1300,9 @@ def gen_sch() -> str:
 
     # KSZ9477
     cx, cy = 115, 195
-    parts.append(sym_inst("MICROCHIP_KSZ9477", "U2", "Microchip KSZ9477 7-port switch", cx, cy))
+    parts.append(
+        sym_inst("MICROCHIP_KSZ9477", "U2", "Microchip KSZ9477 7-port switch", cx, cy)
+    )
     parts.append(pwr_pin("+3V3", cx, cy, KSZ_L, KSZ_R, "+3V3", KSZ_SIZE))
     parts.append(glabel_pin("SW_1V2", cx, cy, KSZ_L, KSZ_R, "+1V2", KSZ_SIZE))
     parts.append(pwr_pin("GND", cx, cy, KSZ_L, KSZ_R, "GND", KSZ_SIZE))
@@ -999,27 +1310,61 @@ def gen_sch() -> str:
     parts.append(glabel_pin("SW_INT_N", cx, cy, KSZ_L, KSZ_R, "INT_N", KSZ_SIZE))
     parts.append(glabel_pin("SW_XTAL_25M", cx, cy, KSZ_L, KSZ_R, "XTAL_25M", KSZ_SIZE))
     parts.append(glabel_pin("SW_SPI_CS", cx, cy, KSZ_L, KSZ_R, "SPI_CS_HOST", KSZ_SIZE))
-    parts.append(glabel_pin("SW_SPI_SCK", cx, cy, KSZ_L, KSZ_R, "SPI_SCK_HOST", KSZ_SIZE))
-    parts.append(glabel_pin("SW_SPI_MOSI", cx, cy, KSZ_L, KSZ_R, "SPI_MOSI_HOST", KSZ_SIZE))
-    parts.append(glabel_pin("SW_SPI_MISO", cx, cy, KSZ_L, KSZ_R, "SPI_MISO_HOST", KSZ_SIZE))
+    parts.append(
+        glabel_pin("SW_SPI_SCK", cx, cy, KSZ_L, KSZ_R, "SPI_SCK_HOST", KSZ_SIZE)
+    )
+    parts.append(
+        glabel_pin("SW_SPI_MOSI", cx, cy, KSZ_L, KSZ_R, "SPI_MOSI_HOST", KSZ_SIZE)
+    )
+    parts.append(
+        glabel_pin("SW_SPI_MISO", cx, cy, KSZ_L, KSZ_R, "SPI_MISO_HOST", KSZ_SIZE)
+    )
 
-    parts.append(glabel_pin("RGMII1_TXC", cx, cy, KSZ_L, KSZ_R, "P1_RGMII_TXC", KSZ_SIZE))
-    parts.append(glabel_pin("RGMII1_TXCTL", cx, cy, KSZ_L, KSZ_R, "P1_RGMII_TXCTL", KSZ_SIZE))
-    parts.append(glabel_pin("RGMII1_TXD0", cx, cy, KSZ_L, KSZ_R, "P1_RGMII_TXD0", KSZ_SIZE))
-    parts.append(glabel_pin("RGMII1_RXC", cx, cy, KSZ_L, KSZ_R, "P1_RGMII_RXC", KSZ_SIZE))
-    parts.append(glabel_pin("RGMII1_RXCTL", cx, cy, KSZ_L, KSZ_R, "P1_RGMII_RXCTL", KSZ_SIZE))
-    parts.append(glabel_pin("RGMII1_RXD0", cx, cy, KSZ_L, KSZ_R, "P1_RGMII_RXD0", KSZ_SIZE))
+    parts.append(
+        glabel_pin("RGMII1_TXC", cx, cy, KSZ_L, KSZ_R, "P1_RGMII_TXC", KSZ_SIZE)
+    )
+    parts.append(
+        glabel_pin("RGMII1_TXCTL", cx, cy, KSZ_L, KSZ_R, "P1_RGMII_TXCTL", KSZ_SIZE)
+    )
+    parts.append(
+        glabel_pin("RGMII1_TXD0", cx, cy, KSZ_L, KSZ_R, "P1_RGMII_TXD0", KSZ_SIZE)
+    )
+    parts.append(
+        glabel_pin("RGMII1_RXC", cx, cy, KSZ_L, KSZ_R, "P1_RGMII_RXC", KSZ_SIZE)
+    )
+    parts.append(
+        glabel_pin("RGMII1_RXCTL", cx, cy, KSZ_L, KSZ_R, "P1_RGMII_RXCTL", KSZ_SIZE)
+    )
+    parts.append(
+        glabel_pin("RGMII1_RXD0", cx, cy, KSZ_L, KSZ_R, "P1_RGMII_RXD0", KSZ_SIZE)
+    )
     parts.append(glabel_pin("ETH_IN_KSZ_TXP", cx, cy, KSZ_L, KSZ_R, "P2_TXP", KSZ_SIZE))
     parts.append(glabel_pin("ETH_IN_KSZ_TXN", cx, cy, KSZ_L, KSZ_R, "P2_TXN", KSZ_SIZE))
     parts.append(glabel_pin("ETH_IN_KSZ_RXP", cx, cy, KSZ_L, KSZ_R, "P2_RXP", KSZ_SIZE))
     parts.append(glabel_pin("ETH_IN_KSZ_RXN", cx, cy, KSZ_L, KSZ_R, "P2_RXN", KSZ_SIZE))
-    parts.append(glabel_pin("ETH_OUT_KSZ_TXP", cx, cy, KSZ_L, KSZ_R, "P3_TXP", KSZ_SIZE))
-    parts.append(glabel_pin("ETH_OUT_KSZ_TXN", cx, cy, KSZ_L, KSZ_R, "P3_TXN", KSZ_SIZE))
-    parts.append(glabel_pin("ETH_OUT_KSZ_RXP", cx, cy, KSZ_L, KSZ_R, "P3_RXP", KSZ_SIZE))
-    parts.append(glabel_pin("ETH_OUT_KSZ_RXN", cx, cy, KSZ_L, KSZ_R, "P3_RXN", KSZ_SIZE))
+    parts.append(
+        glabel_pin("ETH_OUT_KSZ_TXP", cx, cy, KSZ_L, KSZ_R, "P3_TXP", KSZ_SIZE)
+    )
+    parts.append(
+        glabel_pin("ETH_OUT_KSZ_TXN", cx, cy, KSZ_L, KSZ_R, "P3_TXN", KSZ_SIZE)
+    )
+    parts.append(
+        glabel_pin("ETH_OUT_KSZ_RXP", cx, cy, KSZ_L, KSZ_R, "P3_RXP", KSZ_SIZE)
+    )
+    parts.append(
+        glabel_pin("ETH_OUT_KSZ_RXN", cx, cy, KSZ_L, KSZ_R, "P3_RXN", KSZ_SIZE)
+    )
 
     # Y1 crystal for KSZ9477 (25 MHz)
-    parts.append(sym_inst("C_Generic", "Y1", "25MHz crystal (2-pin symbol simplified)", cx - 40, cy + 25))
+    parts.append(
+        sym_inst(
+            "C_Generic",
+            "Y1",
+            "25MHz crystal (2-pin symbol simplified)",
+            cx - 40,
+            cy + 25,
+        )
+    )
     parts.append(glabel("SW_XTAL_25M", cx - 40 - 3.81, cy + 25, rot=180))
     parts.append(pwr_sym("GND", cx - 40 + 3.81, cy + 25, rot=180))
 
@@ -1028,71 +1373,231 @@ def gen_sch() -> str:
     # KSZ9477 port -> Wurth 749010012A magnetics -> SRF2012-100Y CMC (x2,
     # one per differential pair) -> PRTR5V0U2X TVS (x2, shunt) -> connector.
     # =====================================================================
-    parts.append(text_note(
-        "EMI hardening chain per Ethernet port (matches Wash/Zoe Rev R baseline):\n"
-        "KSZ9477 -> Wurth 749010012A magnetics -> SRF2012-100Y CMC x2 -> PRTR5V0U2X\n"
-        "TVS x2 (shunt to GND) -> JST-GH 5P connector (GND,TXP,TXN,RXP,RXN).",
-        220, 150, 0.9))
+    parts.append(
+        text_note(
+            "EMI hardening chain per Ethernet port (matches Wash/Zoe Rev R baseline):\n"
+            "KSZ9477 -> Wurth 749010012A magnetics -> SRF2012-100Y common-mode choke x2 ->\n"
+            "PRTR5V0U2X TVS x2 (shunt to GND) -> JST-GH 5P connector (GND,TXP,TXN,RXP,RXN).",
+            220,
+            150,
+            0.9,
+        )
+    )
 
-    def eth_port_chain(port_label, cx0, cy0, ksz_txp, ksz_txn, ksz_rxp, ksz_rxn,
-                        xfmr_ref, cmc_tx_ref, cmc_rx_ref, tvs_tx_ref, tvs_rx_ref, conn_ref):
+    def eth_port_chain(
+        port_label,
+        cx0,
+        cy0,
+        ksz_txp,
+        ksz_txn,
+        ksz_rxp,
+        ksz_rxn,
+        xfmr_ref,
+        cmc_tx_ref,
+        cmc_rx_ref,
+        tvs_tx_ref,
+        tvs_rx_ref,
+        conn_ref,
+    ):
         # Magnetics: KSZ side (PHY_TX/RX) <-> Line side (LINE_TX/RX)
         parts.append(sym_inst("WURTH_ETH_XFMR", xfmr_ref, "Wurth 749010012A", cx0, cy0))
-        parts.append(glabel_pin(ksz_txp, cx0, cy0, XFMR_L, XFMR_R, "PHY_TXP", XFMR_SIZE))
-        parts.append(glabel_pin(ksz_txn, cx0, cy0, XFMR_L, XFMR_R, "PHY_TXN", XFMR_SIZE))
-        parts.append(glabel_pin(ksz_rxp, cx0, cy0, XFMR_L, XFMR_R, "PHY_RXP", XFMR_SIZE))
-        parts.append(glabel_pin(ksz_rxn, cx0, cy0, XFMR_L, XFMR_R, "PHY_RXN", XFMR_SIZE))
-        parts.append(glabel_pin(f"{port_label}_XFMR_TXP", cx0, cy0, XFMR_L, XFMR_R, "LINE_TXP", XFMR_SIZE))
-        parts.append(glabel_pin(f"{port_label}_XFMR_TXN", cx0, cy0, XFMR_L, XFMR_R, "LINE_TXN", XFMR_SIZE))
-        parts.append(glabel_pin(f"{port_label}_XFMR_RXP", cx0, cy0, XFMR_L, XFMR_R, "LINE_RXP", XFMR_SIZE))
-        parts.append(glabel_pin(f"{port_label}_XFMR_RXN", cx0, cy0, XFMR_L, XFMR_R, "LINE_RXN", XFMR_SIZE))
+        parts.append(
+            glabel_pin(ksz_txp, cx0, cy0, XFMR_L, XFMR_R, "PHY_TXP", XFMR_SIZE)
+        )
+        parts.append(
+            glabel_pin(ksz_txn, cx0, cy0, XFMR_L, XFMR_R, "PHY_TXN", XFMR_SIZE)
+        )
+        parts.append(
+            glabel_pin(ksz_rxp, cx0, cy0, XFMR_L, XFMR_R, "PHY_RXP", XFMR_SIZE)
+        )
+        parts.append(
+            glabel_pin(ksz_rxn, cx0, cy0, XFMR_L, XFMR_R, "PHY_RXN", XFMR_SIZE)
+        )
+        parts.append(
+            glabel_pin(
+                f"{port_label}_XFMR_TXP",
+                cx0,
+                cy0,
+                XFMR_L,
+                XFMR_R,
+                "LINE_TXP",
+                XFMR_SIZE,
+            )
+        )
+        parts.append(
+            glabel_pin(
+                f"{port_label}_XFMR_TXN",
+                cx0,
+                cy0,
+                XFMR_L,
+                XFMR_R,
+                "LINE_TXN",
+                XFMR_SIZE,
+            )
+        )
+        parts.append(
+            glabel_pin(
+                f"{port_label}_XFMR_RXP",
+                cx0,
+                cy0,
+                XFMR_L,
+                XFMR_R,
+                "LINE_RXP",
+                XFMR_SIZE,
+            )
+        )
+        parts.append(
+            glabel_pin(
+                f"{port_label}_XFMR_RXN",
+                cx0,
+                cy0,
+                XFMR_L,
+                XFMR_R,
+                "LINE_RXN",
+                XFMR_SIZE,
+            )
+        )
 
         # CMC (belt-and-suspenders common-mode suppression), one per pair.
         cx1, cy1 = cx0 + 18, cy0 - 6
-        parts.append(sym_inst("BOURNS_SRF2012_100Y", cmc_tx_ref, "Bourns SRF2012-100Y (TX pair)", cx1, cy1))
-        parts.append(glabel_pin(f"{port_label}_XFMR_TXP", cx1, cy1, CMC_L, CMC_R, "L1A", CMC_SIZE))
-        parts.append(glabel_pin(f"{port_label}_TXP", cx1, cy1, CMC_L, CMC_R, "L1B", CMC_SIZE))
-        parts.append(glabel_pin(f"{port_label}_XFMR_TXN", cx1, cy1, CMC_L, CMC_R, "L2A", CMC_SIZE))
-        parts.append(glabel_pin(f"{port_label}_TXN", cx1, cy1, CMC_L, CMC_R, "L2B", CMC_SIZE))
+        parts.append(
+            sym_inst(
+                "BOURNS_SRF2012_100Y",
+                cmc_tx_ref,
+                "Bourns SRF2012-100Y (TX pair)",
+                cx1,
+                cy1,
+            )
+        )
+        parts.append(
+            glabel_pin(
+                f"{port_label}_XFMR_TXP", cx1, cy1, CMC_L, CMC_R, "L1A", CMC_SIZE
+            )
+        )
+        parts.append(
+            glabel_pin(f"{port_label}_TXP", cx1, cy1, CMC_L, CMC_R, "L1B", CMC_SIZE)
+        )
+        parts.append(
+            glabel_pin(
+                f"{port_label}_XFMR_TXN", cx1, cy1, CMC_L, CMC_R, "L2A", CMC_SIZE
+            )
+        )
+        parts.append(
+            glabel_pin(f"{port_label}_TXN", cx1, cy1, CMC_L, CMC_R, "L2B", CMC_SIZE)
+        )
 
         cx2, cy2 = cx0 + 18, cy0 + 6
-        parts.append(sym_inst("BOURNS_SRF2012_100Y", cmc_rx_ref, "Bourns SRF2012-100Y (RX pair)", cx2, cy2))
-        parts.append(glabel_pin(f"{port_label}_XFMR_RXP", cx2, cy2, CMC_L, CMC_R, "L1A", CMC_SIZE))
-        parts.append(glabel_pin(f"{port_label}_RXP", cx2, cy2, CMC_L, CMC_R, "L1B", CMC_SIZE))
-        parts.append(glabel_pin(f"{port_label}_XFMR_RXN", cx2, cy2, CMC_L, CMC_R, "L2A", CMC_SIZE))
-        parts.append(glabel_pin(f"{port_label}_RXN", cx2, cy2, CMC_L, CMC_R, "L2B", CMC_SIZE))
+        parts.append(
+            sym_inst(
+                "BOURNS_SRF2012_100Y",
+                cmc_rx_ref,
+                "Bourns SRF2012-100Y (RX pair)",
+                cx2,
+                cy2,
+            )
+        )
+        parts.append(
+            glabel_pin(
+                f"{port_label}_XFMR_RXP", cx2, cy2, CMC_L, CMC_R, "L1A", CMC_SIZE
+            )
+        )
+        parts.append(
+            glabel_pin(f"{port_label}_RXP", cx2, cy2, CMC_L, CMC_R, "L1B", CMC_SIZE)
+        )
+        parts.append(
+            glabel_pin(
+                f"{port_label}_XFMR_RXN", cx2, cy2, CMC_L, CMC_R, "L2A", CMC_SIZE
+            )
+        )
+        parts.append(
+            glabel_pin(f"{port_label}_RXN", cx2, cy2, CMC_L, CMC_R, "L2B", CMC_SIZE)
+        )
 
         # TVS (shunt to GND) on each pair — anode taps the line, doesn't break the net.
         cx3, cy3 = cx0 + 36, cy0 - 6
-        parts.append(sym_inst("NEXPERIA_PRTR5V0U2X", tvs_tx_ref, "Nexperia PRTR5V0U2X (TX pair)", cx3, cy3))
-        parts.append(glabel_pin(f"{port_label}_TXP", cx3, cy3, TVS_L, TVS_R, "A1", TVS_SIZE))
-        parts.append(glabel_pin(f"{port_label}_TXN", cx3, cy3, TVS_L, TVS_R, "A2", TVS_SIZE))
+        parts.append(
+            sym_inst(
+                "NEXPERIA_PRTR5V0U2X",
+                tvs_tx_ref,
+                "Nexperia PRTR5V0U2X (TX pair)",
+                cx3,
+                cy3,
+            )
+        )
+        parts.append(
+            glabel_pin(f"{port_label}_TXP", cx3, cy3, TVS_L, TVS_R, "A1", TVS_SIZE)
+        )
+        parts.append(
+            glabel_pin(f"{port_label}_TXN", cx3, cy3, TVS_L, TVS_R, "A2", TVS_SIZE)
+        )
         parts.append(pwr_pin("GND", cx3, cy3, TVS_L, TVS_R, "K", TVS_SIZE))
 
         cx4, cy4 = cx0 + 36, cy0 + 6
-        parts.append(sym_inst("NEXPERIA_PRTR5V0U2X", tvs_rx_ref, "Nexperia PRTR5V0U2X (RX pair)", cx4, cy4))
-        parts.append(glabel_pin(f"{port_label}_RXP", cx4, cy4, TVS_L, TVS_R, "A1", TVS_SIZE))
-        parts.append(glabel_pin(f"{port_label}_RXN", cx4, cy4, TVS_L, TVS_R, "A2", TVS_SIZE))
+        parts.append(
+            sym_inst(
+                "NEXPERIA_PRTR5V0U2X",
+                tvs_rx_ref,
+                "Nexperia PRTR5V0U2X (RX pair)",
+                cx4,
+                cy4,
+            )
+        )
+        parts.append(
+            glabel_pin(f"{port_label}_RXP", cx4, cy4, TVS_L, TVS_R, "A1", TVS_SIZE)
+        )
+        parts.append(
+            glabel_pin(f"{port_label}_RXN", cx4, cy4, TVS_L, TVS_R, "A2", TVS_SIZE)
+        )
         parts.append(pwr_pin("GND", cx4, cy4, TVS_L, TVS_R, "K", TVS_SIZE))
 
         # Connector: JST-GH 5P (GND, TX+, TX-, RX+, RX-) — matches Wash's real
         # verified footprint (JST_GH_SM05B-GHS-TB_1x05-1MP), not a fabricated 6P.
         cx5, cy5 = cx0 + 54, cy0
-        parts.append(sym_inst("Conn_JST_GH_05P", conn_ref,
-                               f"JST-GH 5P (shielded) — Ethernet ring {port_label.split('_')[-1].lower()}",
-                               cx5, cy5))
+        parts.append(
+            sym_inst(
+                "Conn_JST_GH_05P",
+                conn_ref,
+                f"JST-GH 5P (shielded) — Ethernet ring {port_label.split('_')[-1].lower()}",
+                cx5,
+                cy5,
+            )
+        )
         parts.append(glabel_conn("PGND_SHIELD", cx5, cy5, 5, 0))
         parts.append(glabel_conn(f"{port_label}_TXP", cx5, cy5, 5, 1))
         parts.append(glabel_conn(f"{port_label}_TXN", cx5, cy5, 5, 2))
         parts.append(glabel_conn(f"{port_label}_RXP", cx5, cy5, 5, 3))
         parts.append(glabel_conn(f"{port_label}_RXN", cx5, cy5, 5, 4))
 
-    eth_port_chain("ETH_IN", 175, 160,
-                   "ETH_IN_KSZ_TXP", "ETH_IN_KSZ_TXN", "ETH_IN_KSZ_RXP", "ETH_IN_KSZ_RXN",
-                   "T1", "CMC1", "CMC2", "D1", "D2", "J_ETH_IN")
-    eth_port_chain("ETH_OUT", 175, 210,
-                   "ETH_OUT_KSZ_TXP", "ETH_OUT_KSZ_TXN", "ETH_OUT_KSZ_RXP", "ETH_OUT_KSZ_RXN",
-                   "T2", "CMC3", "CMC4", "D3", "D4", "J_ETH_OUT")
+    eth_port_chain(
+        "ETH_IN",
+        175,
+        160,
+        "ETH_IN_KSZ_TXP",
+        "ETH_IN_KSZ_TXN",
+        "ETH_IN_KSZ_RXP",
+        "ETH_IN_KSZ_RXN",
+        "T1",
+        "CMC1",
+        "CMC2",
+        "D1",
+        "D2",
+        "J_ETH_IN",
+    )
+    eth_port_chain(
+        "ETH_OUT",
+        175,
+        210,
+        "ETH_OUT_KSZ_TXP",
+        "ETH_OUT_KSZ_TXN",
+        "ETH_OUT_KSZ_RXP",
+        "ETH_OUT_KSZ_RXN",
+        "T2",
+        "CMC3",
+        "CMC4",
+        "D3",
+        "D4",
+        "J_ETH_OUT",
+    )
 
     parts.append(glabel("PGND", 300, 240, rot=0))
     parts.append(glabel("PGND_SHIELD", 300, 243, rot=0))
@@ -1104,20 +1609,28 @@ def gen_sch() -> str:
     # + PRTR5V0U2X TVS on the bus side, matching Wash's real CAN chain.
     # =====================================================================
     cx, cy = 40, 235
-    parts.append(sym_inst("TI_ISOW1044BDFMR", "U4", "TI ISOW1044BDFMR (isolated CAN-FD)", cx, cy))
+    parts.append(
+        sym_inst("TI_ISOW1044BDFMR", "U4", "TI ISOW1044BDFMR (isolated CAN-FD)", cx, cy)
+    )
     parts.append(pwr_pin("GND", cx, cy, ISOW_L, ISOW_R, "GND1", ISOW_SIZE))
     parts.append(glabel_pin("CANFD_TX", cx, cy, ISOW_L, ISOW_R, "TXD", ISOW_SIZE))
     parts.append(glabel_pin("CANFD_STBY_N", cx, cy, ISOW_L, ISOW_R, "STB_N", ISOW_SIZE))
     parts.append(glabel_pin("CANFD_RX", cx, cy, ISOW_L, ISOW_R, "RXD", ISOW_SIZE))
     parts.append(pwr_pin("+3V3", cx, cy, ISOW_L, ISOW_R, "VCC1", ISOW_SIZE))
-    parts.append(glabel_pin("CANFD_ISOGND", cx, cy, ISOW_L, ISOW_R, "ISOGND", ISOW_SIZE))
+    parts.append(
+        glabel_pin("CANFD_ISOGND", cx, cy, ISOW_L, ISOW_R, "ISOGND", ISOW_SIZE)
+    )
     parts.append(glabel_pin("CANFD_ISO_L", cx, cy, ISOW_L, ISOW_R, "CANL", ISOW_SIZE))
     parts.append(glabel_pin("CANFD_ISO_H", cx, cy, ISOW_L, ISOW_R, "CANH", ISOW_SIZE))
     parts.append(glabel_pin("+5V", cx, cy, ISOW_L, ISOW_R, "VCC2", ISOW_SIZE))
 
     # CMC_CAN — SRF2012-100Y on the isolated bus side (belt-and-suspenders).
     cx1, cy1 = cx + 25, cy
-    parts.append(sym_inst("BOURNS_SRF2012_100Y", "CMC5", "Bourns SRF2012-100Y (CAN bus)", cx1, cy1))
+    parts.append(
+        sym_inst(
+            "BOURNS_SRF2012_100Y", "CMC5", "Bourns SRF2012-100Y (CAN bus)", cx1, cy1
+        )
+    )
     parts.append(glabel_pin("CANFD_ISO_H", cx1, cy1, CMC_L, CMC_R, "L1A", CMC_SIZE))
     parts.append(glabel_pin("CANFD_H", cx1, cy1, CMC_L, CMC_R, "L1B", CMC_SIZE))
     parts.append(glabel_pin("CANFD_ISO_L", cx1, cy1, CMC_L, CMC_R, "L2A", CMC_SIZE))
@@ -1126,22 +1639,37 @@ def gen_sch() -> str:
     # TVS_CAN — PRTR5V0U2X shunt on CANH/CANL, cathode to chassis PGND (bus-side
     # protection references chassis ground, not the isolated logic-side GND).
     cx2, cy2 = cx + 43, cy
-    parts.append(sym_inst("NEXPERIA_PRTR5V0U2X", "D5", "Nexperia PRTR5V0U2X (CAN bus)", cx2, cy2))
+    parts.append(
+        sym_inst("NEXPERIA_PRTR5V0U2X", "D5", "Nexperia PRTR5V0U2X (CAN bus)", cx2, cy2)
+    )
     parts.append(glabel_pin("CANFD_H", cx2, cy2, TVS_L, TVS_R, "A1", TVS_SIZE))
     parts.append(glabel_pin("CANFD_L", cx2, cy2, TVS_L, TVS_R, "A2", TVS_SIZE))
     parts.append(pwr_pin("PGND", cx2, cy2, TVS_L, TVS_R, "K", TVS_SIZE))
 
     # J_CANFD connector
     cx, cy = 100, 235
-    parts.append(sym_inst("Conn_JST_GH_04P", "J_CANFD", "JST-GH 4P (shielded) — 5V, CAN-H, CAN-L, GND", cx, cy))
+    parts.append(
+        sym_inst(
+            "Conn_JST_GH_04P",
+            "J_CANFD",
+            "JST-GH 4P (shielded) — 5V, CAN-H, CAN-L, GND",
+            cx,
+            cy,
+        )
+    )
     parts.append(glabel_conn("+5V", cx, cy, 4, 0))
     parts.append(glabel_conn("CANFD_H", cx, cy, 4, 1))
     parts.append(glabel_conn("CANFD_L", cx, cy, 4, 2))
     parts.append(glabel_conn("GND", cx, cy, 4, 3))
-    parts.append(text_note(
-        "PGND_SHIELD = JST-GH metal shroud, bonded to chassis/Faraday ground only —\n"
-        "tied to digital GND at a single RC isolation point (see Section A), never directly.",
-        cx - 20, cy + 40, 0.9))
+    parts.append(
+        text_note(
+            "PGND_SHIELD = JST-GH metal shroud, bonded to chassis/Faraday ground only —\n"
+            "tied to digital GND at a single RC isolation point (see Section A), never directly.",
+            cx - 20,
+            cy + 40,
+            0.9,
+        )
+    )
 
     # =====================================================================
     # Section D — ToF sensor + laser driver (location-specific population)
@@ -1149,17 +1677,30 @@ def gen_sch() -> str:
     parts.append(text_note("=== Section D: ToF (TFmini-S) + Laser Driver ===", 10, 230))
 
     cx, cy = 40, 250
-    parts.append(sym_inst("Conn_JST_GH_04P", "J_TOF", "JST-GH 4P — TFmini-S (+5V, GND, TX, RX)", cx, cy))
+    parts.append(
+        sym_inst(
+            "Conn_JST_GH_04P",
+            "J_TOF",
+            "JST-GH 4P — TFmini-S (+5V, GND, TX, RX)",
+            cx,
+            cy,
+        )
+    )
     parts.append(glabel_conn("+5V", cx, cy, 4, 0))
     parts.append(glabel_conn("GND", cx, cy, 4, 1))
     # Net names are from TFmini-S's own TX/RX perspective (matches its datasheet
     # labeling and TODO.md's existing wiring note) — crossed to U3's UART1 RX/TX above.
     parts.append(glabel_conn("UART_TOF_TX", cx, cy, 4, 2))
     parts.append(glabel_conn("UART_TOF_RX", cx, cy, 4, 3))
-    parts.append(text_note(
-        "TFmini-S has its OWN dedicated MSPM0G3507 UART instance (UART1) — separate from\n"
-        "the UART0 link to U1 (AM62A7). No net-sharing/contention between the two links.",
-        cx - 5, cy + 10, 0.9))
+    parts.append(
+        text_note(
+            "TFmini-S has its OWN dedicated MSPM0G3507 UART instance (UART1) — separate from\n"
+            "the UART0 link to U1 (AM62A7). No net-sharing/contention between the two links.",
+            cx - 5,
+            cy + 10,
+            0.9,
+        )
+    )
 
     # Laser driver — Q1 AO3400, R1 gate, R2 pulldown
     # AO3400 local pin offsets (from lib_symbol_nmos): G=(-7.62,0), D=(2.54,7.62), S=(2.54,-7.62).
@@ -1176,44 +1717,60 @@ def gen_sch() -> str:
     parts.append(glabel("LASER_EN", cx - 25 - 3.81, cy, rot=180))
     parts.append(glabel("LASER_GATE", cx - 25 + 3.81, cy, rot=0))
 
-    parts.append(sym_inst("R_Generic", "R2", "10k 0402 pulldown (default-off)", cx - 25, cy + 10))
+    parts.append(
+        sym_inst("R_Generic", "R2", "10k 0402 pulldown (default-off)", cx - 25, cy + 10)
+    )
     parts.append(glabel("LASER_GATE", cx - 25 - 3.81, cy + 10, rot=180))
     parts.append(pwr_sym("GND", cx - 25 + 3.81, cy + 10, rot=0))
 
     cx2, cy2 = cx + 35, cy
-    parts.append(sym_inst("Conn_JST_SH_02P", "J_LASER", "JST-SH 2P — laser module (+5V, cathode/drain)", cx2, cy2))
+    parts.append(
+        sym_inst(
+            "Conn_JST_SH_02P",
+            "J_LASER",
+            "JST-SH 2P — laser module (+5V, cathode/drain)",
+            cx2,
+            cy2,
+        )
+    )
     parts.append(glabel_conn("+5V", cx2, cy2, 2, 0))
     parts.append(glabel_conn("LASER_CATHODE", cx2, cy2, 2, 1))
 
-    parts.append(text_note(
-        "LOCATION-SPECIFIC POPULATION — see avionics/CLAUDE.md \"Vera\" and REF-IEC-002:\n"
-        "  Cargo bay (3\"x3\" @ 5ft): populate with existing 5mW 650nm Class 3R module\n"
-        "    (reuses driver above as-is; GPIO-default-off pull-down is sufficient).\n"
-        "  Nose (2\"x2\" @ 50ft): Class 3B 520nm module (part TBD, TODO.md §1.2c) requires\n"
-        "    ADDITIONAL key-interlock (LASER_KEY_IN to MSPM0G3507, gates LASER_EN in\n"
-        "    firmware) and emission-indicator LED (LASER_IND) shown wired to U3 above but\n"
-        "    not yet populated with a physical LED/interlock switch on this sheet — add\n"
-        "    before nose variant fabrication.",
-        cx - 20, cy + 20, 0.9))
+    parts.append(
+        text_note(
+            'LOCATION-SPECIFIC POPULATION — see avionics/CLAUDE.md "Vera" and REF-IEC-002:\n'
+            '  Cargo bay (3"x3" @ 5ft): populate with existing 5mW 650nm Class 3R module\n'
+            "    (reuses driver above as-is; GPIO-default-off pull-down is sufficient).\n"
+            '  Nose (2"x2" @ 50ft): Class 3B 520nm module (part TBD, TODO.md §1.2c) requires\n'
+            "    ADDITIONAL key-interlock (LASER_KEY_IN to MSPM0G3507, gates LASER_EN in\n"
+            "    firmware) and emission-indicator LED (LASER_IND) shown wired to U3 above but\n"
+            "    not yet populated with a physical LED/interlock switch on this sheet — add\n"
+            "    before nose variant fabrication.",
+            cx - 20,
+            cy + 20,
+            0.9,
+        )
+    )
 
     # -------------------------------------------------------------------
     # Compose
     # -------------------------------------------------------------------
-    sch = ['(kicad_sch (version 20240101) (generator eeschema)',
-           '  (paper "A2")',
-           '  (title_block',
-           '    (title "Vera — Nose/Cargo-Bay Vision, ToF & Laser Board")'
-           ' (date "2026-07-03") (rev "-") (company "Griffing Technology LLC")',
-           '    (comment 1 "Serenity UAV — STANDALONE board, NOT a PocketBeagle 2 Industrial cape")',
-           '    (comment 2 "Copyright 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP |'
-           ' Griffing Technology LLC")',
-           '    (comment 3 "License: CC BY 4.0  |  creativecommons.org/licenses/by/4.0")',
-           '    (comment 4 "DESIGN EXPLORATION — see gen_vera.py docstring for verification status")',
-           '  )',
-           ]
+    sch = [
+        "(kicad_sch (version 20240101) (generator eeschema)",
+        '  (paper "A2")',
+        "  (title_block",
+        '    (title "Vera — Nose/Cargo-Bay Vision, ToF & Laser Board")'
+        ' (date "2026-07-03") (rev "-") (company "Griffing Technology LLC")',
+        '    (comment 1 "Serenity UAV — STANDALONE board, NOT a PocketBeagle 2 Industrial cape")',
+        '    (comment 2 "Copyright 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP |'
+        ' Griffing Technology LLC")',
+        '    (comment 3 "License: CC BY 4.0  |  creativecommons.org/licenses/by/4.0")',
+        '    (comment 4 "DESIGN EXPLORATION — see gen_vera.py docstring for verification status")',
+        "  )",
+    ]
     sch.extend(parts)
-    sch.append(')')
-    return '\n'.join(sch)
+    sch.append(")")
+    return "\n".join(sch)
 
 
 # ---------------------------------------------------------------------------

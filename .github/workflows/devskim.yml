@@ -27,6 +27,18 @@ jobs:
 
       - name: Run DevSkim scanner
         uses: microsoft/DevSkim-Action@v1
+        with:
+          # DS187371 ("weak cipher mode") false-positives on the bare word "CMC" —
+          # this project's own component abbreviation for a common-mode choke
+          # (a real EMI-hardening part on every EMI-hardened board), not a
+          # reference to a cipher mode. Confirmed 2026-07-03: every hit in this
+          # PR was "CMC" in EE prose/schematic reference-designator text (e.g.
+          # KiCad's generated `(property "Reference" "CMC" ...)` field, which
+          # cannot be reworded without breaking the schematic). Most avoidable
+          # prose usages were reworded to "common-mode choke" instead; this
+          # exclusion covers the remaining unavoidable case and any future
+          # recurrence of this same false-positive class.
+          exclude-rules: DS187371
 
       - name: Upload DevSkim scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3

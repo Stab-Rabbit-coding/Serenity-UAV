@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD041 -- intentional accessibility font-loading preamble
+     (OpenDyslexic, CC BY 4.0) must precede the document's H1. -->
 <!-- OpenDyslexic font for screen reading (CC BY 4.0) -->
 <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/opendyslexic">
 <style>
@@ -23,7 +25,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 > retention ring, FPV bezel, 3M foam gasket door seal. All other subsystems identical to Rev O.
 > See `serenity-rev-p.jsx` for the complete Rev P specification and `bom_revP.json`/`bom_revP.csv`
 > for the full Rev P bill of materials.
-
+>
 > Fan engineering work inspired by the Firefly-class transport ship *Serenity*  
 > from *Firefly* (Fox, 2002) and *Serenity* (Universal, 2005).  
 > © Joss Whedon / Mutant Enemy Productions — **Not an officially licensed product.**
@@ -203,7 +205,14 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 > **Critical:** Complete steps 1–12 before mixing any foam (step 13).
 
-**1. Epoxy keel segments into the cargo and rear sections only** (head and middle sections are keelless — see docs/structural_analysis.md §4.1–§4.2). Keel spans hull Y −71 mm → +384 mm (455 mm / 17.9 in) as two lap-spliced CF-BAR-6X3 segments: cargo (hull Y −71..+132 mm) and rear (hull Y +203..+384 mm), bar oriented 3 mm lateral (X) × 6 mm vertical (Z). Lap-splice the two segments with a 100 mm (3.9 in) overlap centred on the middle/rear joint (hull Y ≈ +203 mm), bonded with West System 105/206 + peel-ply prep. Ring-notch datum marks at hull Y = +30 mm and +290 mm (supersedes the stale 91/165/251/320/388 mm nose-station marks, which were tied to the pre-Rev N ring-plate layout). Cure 2 h minimum.
+**1. Epoxy keel segments into the cargo and rear sections only** (head and middle sections are
+keelless — see docs/structural_analysis.md §4.1–§4.2). Keel spans hull Y −71 mm → +384 mm
+(455 mm / 17.9 in) as two lap-spliced CF-BAR-6X3 segments: cargo (hull Y −71..+132 mm) and rear
+(hull Y +203..+384 mm), bar oriented 3 mm lateral (X) × 6 mm vertical (Z). Lap-splice the two
+segments with a 100 mm (3.9 in) overlap centred on the middle/rear joint (hull Y ≈ +203 mm),
+bonded with West System 105/206 + peel-ply prep. Ring-notch datum marks at hull Y = +30 mm and
++290 mm (supersedes the stale 91/165/251/320/388 mm nose-station marks, which were tied to the
+pre-Rev N ring-plate layout). Cure 2 h minimum.
 
 **2. Bond ring frames to keel** at the 2 station notches: hull Y = +30 mm (cargo, wing-spar zone) and +290 mm (rear, landing zone) — down from 5 stations in the pre-Rev N layout (see airframe/diagrams/ring_frames/*.dxf; the cargo profile is PROVISIONAL pending the open cargo-mesh fix, TODO §1.1.1). Cure 1 h.
 
@@ -288,7 +297,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 **Goal:** Both nacelles fully assembled — EDFs installed, stators integral, nozzle iris fitted, gear linkage dry-meshed and verified.
 
-### Materials Needed
+### Materials Needed — Phase 2
 
 | Item | Qty | Notes |
 |------|-----|-------|
@@ -309,7 +318,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 **For each nacelle** (port first, then starboard — VERIFY ROTATION DIRECTION DIFFERS):
 
-1. **Test EDF rotation direction before installation.** Connect to bench ESC + power supply (safe prop/duct test only). 
+1. **Test EDF rotation direction before installation.** Connect to bench ESC + power supply (safe prop/duct test only).
    - Port EDF must spin **CW viewed from intake** (fore end).
    - Starboard EDF must spin **CCW viewed from intake**.
    - To reverse: swap any two motor phase wires at the ESC.
@@ -355,7 +364,7 @@ The nozzle iris is driven passively from the tilt pivot — no dedicated servo.
 
 **Gear train (per nacelle):**
 
-```
+```text
 Tilt pivot rotation
     ↓
 Sector gear (R=22mm, fixed to tilt bracket — does NOT rotate with nacelle)
@@ -399,7 +408,7 @@ Crown pinion (R=6mm) → Nozzle inner ring rack (R=28mm)
 
 **Goal:** Both nacelles mounted on fuselage, pivot freely on bearings, tilt driven by fuselage-mounted servos with correct hard stops.
 
-### Materials Needed
+### Materials Needed — Phase 3
 
 | Item | Qty | Notes |
 |------|-----|-------|

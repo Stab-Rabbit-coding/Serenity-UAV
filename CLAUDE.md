@@ -291,7 +291,19 @@ The 49 MHz (Part 15 §15.235) + LoRa 915 MHz Transceiver Cape (XCVR-49MHZ-2 Rev 
 
 The Cargo handling system is named "Jayne" - "I was aiming for his head."
 
-The nose/cargo-bay Vision, ToF & Laser board is named "Vera" - Jayne's rifle, "she's a good gun."  Vera is a **standalone, compact PCB — not a PocketBeagle 2 Industrial cape** (it does not use the P1+P2 header stack or plug onto a Wash/Zoë node); it connects to the rest of the airframe only via the shielded JST-GH Ethernet ring and CAN-FD trunk connectors, with its own 5V power input. One shared board design (TI AM62A vision SoC + TI MSPM0G3507 CAN-FD coprocessor + Infineon SLB9670 TPM + Microchip KSZ9477 HSR/PRP-capable Ethernet switch) is installed at two locations: the bow sensor pod (nose, `airframe/openscad/fuselage/bow_sensor_pod.scad`) and the cargo bay nadir FPV mount (`cargo_fpv_bezel`).  Each location's crosshair laser module differs to match its optical throw requirement (nose: 2"×2" (51×51 mm) at 50 ft (15.2 m); cargo bay: 3"×3" (76×76 mm) at 5 ft (1.5 m)) — see `avionics/CLAUDE.md` for the full architecture and `REFERENCES.md` Part XII for component citations.  Vera **supersedes** the RunCam Nano 4 analog camera (REF-SENSOR-001, retained in REFERENCES.md as a superseded citation) originally specified for the bow sensor pod.
+The nose/cargo-bay Vision, ToF & Laser board is named "Vera" - Jayne's rifle, "she's a good gun."
+Vera is a **standalone, compact PCB — not a PocketBeagle 2 Industrial cape** (it does not use
+the P1+P2 header stack or plug onto a Wash/Zoë node); it connects to the rest of the airframe
+only via the shielded JST-GH Ethernet ring and CAN-FD trunk connectors, with its own 5V power
+input. One shared board design (TI AM62A vision SoC + TI MSPM0G3507 CAN-FD coprocessor +
+Infineon SLB9670 TPM + Microchip KSZ9477 HSR/PRP-capable Ethernet switch) is installed at two
+locations: the bow sensor pod (nose, `airframe/openscad/fuselage/bow_sensor_pod.scad`) and the
+cargo bay nadir FPV mount (`cargo_fpv_bezel`).  Each location's crosshair laser module differs
+to match its optical throw requirement (nose: 2"×2" (51×51 mm) at 50 ft (15.2 m); cargo bay:
+3"×3" (76×76 mm) at 5 ft (1.5 m)) — see `avionics/CLAUDE.md` for the full architecture and
+`REFERENCES.md` Part XII for component citations.  Vera **supersedes** the RunCam Nano 4 analog
+camera (REF-SENSOR-001, retained in REFERENCES.md as a superseded citation) originally
+specified for the bow sensor pod.
 
 The forward avionics bay is named "Shepherd's room" - "I have heathens enough right here."
 

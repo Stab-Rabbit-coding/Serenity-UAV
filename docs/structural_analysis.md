@@ -105,7 +105,7 @@ and should be evaluated in the keel re-evaluation and the cargo/middle + middle/
 design (TODO.md §1.1.1.0b).  The deflection below conservatively assumes no neck bond.
 At 2g bending, the 73 mm unsupported span deflects:
 
-```
+```text
 δ_mid = (w × L⁴) / (8 × E × I)   [uniform load, unsupported span]
 w = AUW / total_span = 73.5 / 455 = 0.162 N/mm
 E_CF = 135 000 N/mm²
@@ -134,14 +134,14 @@ bonded with West System 105/206 + peel-ply prep.  Total two-segment mass ≈ 18 
 Bar orientation: **3 mm flat (X, lateral) × 6 mm vertical (Z)** — maximises second moment
 of area in the primary bending axis (pitch / vertical bending).
 
-```
+```text
 I_z = (3 × 6³) / 12 = 54 mm⁴
 ```
 
 Bending adequacy (2g pitching, forward fuselage cantilevered from wing spar station
 Y ≈ +30 mm to head/cargo joint Y ≈ −71 mm, arm L = 101 mm):
 
-```
+```text
 Head section mass (forward of wing station):  m_fwd ≈ 237 g (shell) + ~300 g (avionics, wiring) ≈ 537 g
 2g load:  F = 2 × 0.537 × 9.81 = 10.5 N
 Bending moment at wing station:  M = F × L = 10.5 × 101 = 1061 N·mm
@@ -152,7 +152,7 @@ FOS = 1500 / 58.9 = 25.5  ✓  PASS (>1.5 required)
 
 Analogous check for aft fuselage (rear section mass ≈ 314 + 300 = 614 g, arm 181 mm):
 
-```
+```text
 M = 2 × 0.614 × 9.81 × 181 / 2 = 1089 N·mm  (uniform distribution → ½ arm)
 σ = 1089 × 3 / 54 = 60.5 N/mm²
 FOS = 1500 / 60.5 = 24.8  ✓  PASS
@@ -196,7 +196,7 @@ hull Y ≈ −71 + (282.8 − 147.6) = −71 + 135.2 ≈ +64 mm.  (Approximate; 
 
 **Cargo, Y = +30 mm (wing spar zone):**
 
-```
+```text
 Outer bounds:  X[−257.6 .. −81.1]  Z[+0.5 .. +158.6]
 Width = 176.5 mm (6.95 in),  height = 158.2 mm (6.23 in)
 Section type:  CLOSED (full ring possible; belly closed at Z ≈ 0)
@@ -207,7 +207,7 @@ Keel bar notch required: 3.5 mm wide × 1.0 mm deep at X = −170 mm, Z_bottom
 
 **Rear, Y = +290 mm (landing load / anti-ovalisation):**
 
-```
+```text
 Outer bounds:  X[−235.5 .. −116.0]  Z[+11.9 .. +152.4]
 Width = 119.5 mm (4.70 in),  height = 140.5 mm (5.53 in)
 Section type:  CLOSED (cone is closed at all Y in rear section)
@@ -217,7 +217,7 @@ Inscribed rectangle:  115.5 × 136.5 mm
 
 **Middle/Rear joint, Y ≈ +203 mm:**
 
-```
+```text
 Middle aft (Y=192):  X[−235.4 .. −104.7]  Z[+3.7 .. +145.5]
 Section type:  OPEN at −Z (horseshoe; no belly floor)
 CF skid rods serve as primary alignment pins at this joint.
@@ -296,7 +296,7 @@ middle/rear joint (Y = +173 → +233 mm).
 
 Landing load (2.5g, both skids share equally):
 
-```
+```text
 F_per_skid = 2.5 × 73.5 / 2 = 91.9 N per skid
 Rod in bending: arm from skid tip (Y ≈ +380) to joint (Y ≈ +203) = 177 mm
 M_max = 91.9 × 177 = 16 266 N·mm
@@ -307,7 +307,7 @@ CF tensile strength ≈ 1500 N/mm² → FOS = 0.40  ✗  FAIL for hollow rod
 
 **Switch to solid CF-ROD-4MM (4 mm OD, solid):**
 
-```
+```text
 I_solid = π × 4⁴ / 64 = 12.57 mm⁴
 σ = 16 266 × 2 / 12.57 = 2588 N/mm²
 FOS = 1500 / 2588 = 0.58  ✗  STILL FAIL at 2.5g for full overhang
@@ -318,7 +318,7 @@ This confirms that a single 4 mm CF rod cannot carry the full 2.5g skid bending 
 the foam fill provides distributed elastic support along the skid arm, and the skid arm
 PETG skin (2 mm CF-PETG) carries significant shear.  Combined:
 
-```
+```text
 PETG skid arm cross-section (approx 76 × 23 mm²):
 I_PETG ≈ (2 × 76 × 23³) / 12 ≈ [box shell method] ... conservative estimate:
 Two 2-mm walls at ±38 mm from neutral axis (76 mm outer width):
@@ -342,7 +342,7 @@ governing criterion.**
 
 Joint tie-rod adequacy (axial tension at 2.5g × half-AUW = 91.9 N):
 
-```
+```text
 σ_tension = F / A = 91.9 / (π × 2²) = 7.3 N/mm²  << σ_u 1500 N/mm²
 FOS = 205  ✓  PASS  (extreme margin; CF-ROD-4MM is more than adequate as tie-rod)
 ```
@@ -434,8 +434,8 @@ load," that "the wall IS the annulus," and that the boss pins provide an "8 mm p
 stop each side" are **not correct for the head/cargo joint** and were revised after a
 verification against the baked meshes (TODO.md §1.1.0):
 
-- The head is a **forward cantilever** (~0.59 kg of shell + Shepherd avionics + bow pod
-  + foam, CG at hull Y ≈ −157 mm).  Its inertial loads ARE reacted at the head/cargo
+- The head is a **forward cantilever** (~0.59 kg of shell + Shepherd avionics + bow
+  pod + foam, CG at hull Y ≈ −157 mm).  Its inertial loads ARE reacted at the head/cargo
   joint — §4.1 itself states the head mass "is reacted at the head/cargo joint by the
   boss pins."  So the joint is structural, not merely a print split.
 - Measured boss-pin engagement is **2.0–4.5 mm**, not 8 mm: straight Y-axis pins at a
