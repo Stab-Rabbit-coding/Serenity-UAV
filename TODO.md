@@ -2109,7 +2109,7 @@ All are on the `avionics/kicad/` branch; run DRC to zero errors before generatin
     - [ ] **Schematic-first reconciliation — DECISIONS LOCKED 2026-07-04 (user).**
         Resolves the PCB-ahead-of-schematic gap by authoring `Emma.kicad_sch` to be the
         source of truth, matching the as-placed PCB except for the topology changes below.
-        Migration is driven by an auditable generator (`gen_emma_sch.py`, repo script
+        Migration is driven by an auditable generator (`gen_emma_sch.py`, repository script
         convention) and gated on `kicad-cli sch erc` / `pcb drc`.
         - **DROP J1 (JST-GH-6P "CAPE-B IF").** The modem host UART moves onto the PB2
             passthrough rails: modem TX → `UART_RCRS_RX` (PB2-P1 pin 15), modem RX →

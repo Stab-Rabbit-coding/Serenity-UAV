@@ -4,3 +4,7 @@ report.txt
 *.lck
 ~*.kicad_*
 *-backups/
+
+# migration backups (originals recoverable from git history)
+*.premod-bak
+*.stub-bak

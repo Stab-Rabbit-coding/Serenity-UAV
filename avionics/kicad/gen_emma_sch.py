@@ -43,7 +43,7 @@ HERE = Path(__file__).resolve().parent
 PCB = HERE / "Emma.kicad_pcb"
 OUT = HERE / "Emma.kicad_sch"
 
-UPREFIX = "49030000-0000-0000-0000-"          # Rev S1 schematic UUID band
+UPREFIX = "49030000-0000-0000-0000-"  # Rev S1 schematic UUID band
 SHEET_UUID = UPREFIX + "000000000001"
 _ucount = [0x1000]
 
@@ -64,10 +64,10 @@ def parse(toks, i):
     node = []
     while i < len(toks):
         t = toks[i]
-        if t == '(':
+        if t == "(":
             child, i = parse(toks, i + 1)
             node.append(child)
-        elif t == ')':
+        elif t == ")":
             return node, i + 1
         else:
             node.append(t)
@@ -111,13 +111,13 @@ def read_pcb():
         seen = set()
         for pad in find_all(fp, "pad"):
             pn = unq(pad[1])
-            if pn in seen:            # dedupe multi-line pad repeats
+            if pn in seen:  # dedupe multi-line pad repeats
                 continue
             seen.add(pn)
             net = find_one(pad, "net")
             netname = unq(net[2]) if net and len(net) > 2 else ""
             pads.append((pn, netname))
-        if ref:                       # skip anonymous mounting holes
+        if ref:  # skip anonymous mounting holes
             comps.append({"ref": ref, "value": val or "", "pads": pads})
     return comps
 
@@ -125,11 +125,11 @@ def read_pcb():
 # ---------------------------------------------------------------------------
 # 3. Apply the locked topology transform to the pad-net model
 # ---------------------------------------------------------------------------
-NET_RENAME = {                        # J1 removal: modem UART -> PB2 rails
-    "UART_TX": "UART_RCRS_RX",        # modem transmits -> host receives
-    "UART_RX": "UART_RCRS_TX",        # modem receives  <- host transmits
+NET_RENAME = {  # J1 removal: modem UART -> PB2 rails
+    "UART_TX": "UART_RCRS_RX",  # modem transmits -> host receives
+    "UART_RX": "UART_RCRS_TX",  # modem receives  <- host transmits
 }
-DROP_REFS = {"CAPE-B IF"}             # J1 JST-GH-6P removed
+DROP_REFS = {"CAPE-B IF"}  # J1 JST-GH-6P removed
 
 
 def transform(comps):
@@ -142,21 +142,46 @@ def transform(comps):
             net = NET_RENAME.get(net, net)
             # PB2-P2 payload-pin repurpose (presence-gated overlay)
             if c["ref"] == "PB2-P2" and pn == "1":
-                net = "PTT_N"         # was SERVO7 ball
+                net = "PTT_N"  # was SERVO7 ball
             if c["ref"] == "PB2-P2" and pn == "2":
-                net = "RSSI_DCD"      # was SERVO6 ball
+                net = "RSSI_DCD"  # was SERVO6 ball
             pads.append((pn, net))
         out.append({"ref": c["ref"], "value": c["value"], "pads": pads})
     # --- add the new RSSI->DCD comparator subcircuit (schematic + later PCB) ---
-    out.append({"ref": "RSSI_CMP", "value": "LMV331 RSSI Carrier-Detect Comparator",
-                "pads": [("1", "RSSI_ANA"), ("2", "+3V3"), ("3", "RSSI_REF"),
-                         ("4", "GND"), ("5", "RSSI_DCD")]})
-    out.append({"ref": "RSSI_RH", "value": "100k RSSI DCD Threshold Upper",
-                "pads": [("1", "+3V3"), ("2", "RSSI_REF")]})
-    out.append({"ref": "RSSI_RL", "value": "100k RSSI DCD Threshold Lower",
-                "pads": [("1", "RSSI_REF"), ("2", "GND")]})
-    out.append({"ref": "RSSI_CBY", "value": "100nF RSSI_CMP VCC Bypass",
-                "pads": [("1", "+3V3"), ("2", "GND")]})
+    out.append(
+        {
+            "ref": "RSSI_CMP",
+            "value": "LMV331 RSSI Carrier-Detect Comparator",
+            "pads": [
+                ("1", "RSSI_ANA"),
+                ("2", "+3V3"),
+                ("3", "RSSI_REF"),
+                ("4", "GND"),
+                ("5", "RSSI_DCD"),
+            ],
+        }
+    )
+    out.append(
+        {
+            "ref": "RSSI_RH",
+            "value": "100k RSSI DCD Threshold Upper",
+            "pads": [("1", "+3V3"), ("2", "RSSI_REF")],
+        }
+    )
+    out.append(
+        {
+            "ref": "RSSI_RL",
+            "value": "100k RSSI DCD Threshold Lower",
+            "pads": [("1", "RSSI_REF"), ("2", "GND")],
+        }
+    )
+    out.append(
+        {
+            "ref": "RSSI_CBY",
+            "value": "100nF RSSI_CMP VCC Bypass",
+            "pads": [("1", "+3V3"), ("2", "GND")],
+        }
+    )
     return out
 
 
@@ -165,7 +190,8 @@ def transform(comps):
 # ---------------------------------------------------------------------------
 PIN_PITCH = 2.54
 STUB = 3.81
-SIZE = 1.27              # text size
+SIZE = 1.27  # text size
+
 
 # power/rail nets that should be drawn as a rail label (visual grouping only;
 # still ordinary local labels electrically).
@@ -177,23 +203,31 @@ def lib_symbol(ref, pads):
     """Generic rectangle symbol; pins split left/right, all electrical 'passive'."""
     n = len(pads)
     left = pads[: (n + 1) // 2]
-    right = pads[(n + 1) // 2:]
+    right = pads[(n + 1) // 2 :]
     rows = max(len(left), len(right), 1)
     half_h = (rows * PIN_PITCH) / 2 + PIN_PITCH
     half_w = 12.7
     libid = f"S_{sanitize(ref)}"
     s = []
-    s.append(f'    (symbol "{libid}" (pin_names (offset 1.016)) '
-             f'(exclude_from_sim no) (in_bom yes) (on_board yes)')
-    s.append(f'      (property "Reference" "U" (at 0 {half_h+1.27:.2f} 0) '
-             f'(effects (font (size {SIZE} {SIZE}))))')
-    s.append(f'      (property "Value" "{esc(ref)}" (at 0 {-half_h-1.27:.2f} 0) '
-             f'(effects (font (size {SIZE} {SIZE}))))')
+    s.append(
+        f'    (symbol "{libid}" (pin_names (offset 1.016)) '
+        f"(exclude_from_sim no) (in_bom yes) (on_board yes)"
+    )
+    s.append(
+        f'      (property "Reference" "U" (at 0 {half_h+1.27:.2f} 0) '
+        f"(effects (font (size {SIZE} {SIZE}))))"
+    )
+    s.append(
+        f'      (property "Value" "{esc(ref)}" (at 0 {-half_h-1.27:.2f} 0) '
+        f"(effects (font (size {SIZE} {SIZE}))))"
+    )
     s.append(f'      (symbol "{libid}_0_1"')
-    s.append(f'        (rectangle (start {-half_w:.2f} {half_h:.2f}) '
-             f'(end {half_w:.2f} {-half_h:.2f}) '
-             f'(stroke (width 0.2540) (type default)) (fill (type background)))')
-    s.append(f'      )')
+    s.append(
+        f"        (rectangle (start {-half_w:.2f} {half_h:.2f}) "
+        f"(end {half_w:.2f} {-half_h:.2f}) "
+        f"(stroke (width 0.2540) (type default)) (fill (type background)))"
+    )
+    s.append(f"      )")
     s.append(f'      (symbol "{libid}_1_1"')
     # left pins (angle 0 -> connection point on far left)
     for i, (pn, net) in enumerate(left):
@@ -202,29 +236,33 @@ def lib_symbol(ref, pads):
     for i, (pn, net) in enumerate(right):
         y = half_h - PIN_PITCH * (i + 1)
         s.append(pin_def(half_w + PIN_PITCH, y, 180, pn, net))
-    s.append(f'      )')
-    s.append(f'    )')
+    s.append(f"      )")
+    s.append(f"    )")
     return "\n".join(s), left, right, half_w, half_h
 
 
 def pin_def(x, y, ang, pn, net):
-    return (f'        (pin passive line (at {x:.2f} {y:.2f} {ang}) '
-            f'(length {PIN_PITCH}) '
-            f'(name "{esc(net)}" (effects (font (size {SIZE} {SIZE})))) '
-            f'(number "{esc(pn)}" (effects (font (size {SIZE} {SIZE})))))')
+    return (
+        f"        (pin passive line (at {x:.2f} {y:.2f} {ang}) "
+        f"(length {PIN_PITCH}) "
+        f'(name "{esc(net)}" (effects (font (size {SIZE} {SIZE})))) '
+        f'(number "{esc(pn)}" (effects (font (size {SIZE} {SIZE})))))'
+    )
 
 
 def sanitize(ref):
-    return re.sub(r'[^A-Za-z0-9_+.-]', '_', ref)
+    return re.sub(r"[^A-Za-z0-9_+.-]", "_", ref)
 
 
 def esc(s):
-    return s.replace('\\', '\\\\').replace('"', '\\"')
+    return s.replace("\\", "\\\\").replace('"', '\\"')
 
 
 def wire(x1, y1, x2, y2):
-    return (f'  (wire (pts (xy {x1:.2f} {y1:.2f}) (xy {x2:.2f} {y2:.2f})) '
-            f'(stroke (width 0) (type default)) (uuid "{uid()}"))')
+    return (
+        f"  (wire (pts (xy {x1:.2f} {y1:.2f}) (xy {x2:.2f} {y2:.2f})) "
+        f'(stroke (width 0) (type default)) (uuid "{uid()}"))'
+    )
 
 
 # Net occurrence counts (pin count per net across the whole board); populated in
@@ -232,18 +270,22 @@ def wire(x1, y1, x2, y2):
 # passthrough signals (e.g. the unused PB2 rail pins) or pre-existing in-circuit
 # stubs — they are emitted as GLOBAL labels so ERC does not flag them as
 # "dangling" local labels (a global label legitimately continues off-sheet).
-NETCOUNT = {}
+NETCOUNT: dict = {}
 
 
 def label(net, x, y, ang):
     just = "left" if ang == 0 else "right"
     if NETCOUNT.get(net, 0) <= 1:
-        return (f'  (global_label "{esc(net)}" (shape passive) (at {x:.2f} {y:.2f} {ang}) '
-                f'(effects (font (size {SIZE} {SIZE})) (justify {just})) '
-                f'(uuid "{uid()}"))')
-    return (f'  (label "{esc(net)}" (at {x:.2f} {y:.2f} {ang}) '
-            f'(effects (font (size {SIZE} {SIZE})) (justify {just} bottom)) '
-            f'(uuid "{uid()}"))')
+        return (
+            f'  (global_label "{esc(net)}" (shape passive) (at {x:.2f} {y:.2f} {ang}) '
+            f"(effects (font (size {SIZE} {SIZE})) (justify {just})) "
+            f'(uuid "{uid()}"))'
+        )
+    return (
+        f'  (label "{esc(net)}" (at {x:.2f} {y:.2f} {ang}) '
+        f"(effects (font (size {SIZE} {SIZE})) (justify {just} bottom)) "
+        f'(uuid "{uid()}"))'
+    )
 
 
 def emit_instance(ref, value, X, Y, left, right, half_w, half_h):
@@ -252,24 +294,32 @@ def emit_instance(ref, value, X, Y, left, right, half_w, half_h):
     out = []
     libid = f"S_{sanitize(ref)}"
     out.append(f'  (symbol (lib_id "{libid}") (at {X:.2f} {Y:.2f} 0) (unit 1)')
-    out.append(f'    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) '
-               f'(uuid "{uid()}")')
-    out.append(f'    (property "Reference" "{esc(ref)}" (at {X:.2f} {Y-half_h-1.27:.2f} 0) '
-               f'(effects (font (size {SIZE} {SIZE}))))')
-    out.append(f'    (property "Value" "{esc(value)}" (at {X:.2f} {Y+half_h+1.27:.2f} 0) '
-               f'(effects (font (size {SIZE} {SIZE}))))')
+    out.append(
+        f"    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) "
+        f'(uuid "{uid()}")'
+    )
+    out.append(
+        f'    (property "Reference" "{esc(ref)}" (at {X:.2f} {Y-half_h-1.27:.2f} 0) '
+        f"(effects (font (size {SIZE} {SIZE}))))"
+    )
+    out.append(
+        f'    (property "Value" "{esc(value)}" (at {X:.2f} {Y+half_h+1.27:.2f} 0) '
+        f"(effects (font (size {SIZE} {SIZE}))))"
+    )
     npad = len(left) + len(right)
     for pn, _ in left + right:
         out.append(f'    (pin "{esc(pn)}" (uuid "{uid()}"))')
-    out.append(f'    (instances (project "Emma" (path "/{SHEET_UUID}" '
-               f'(reference "{esc(ref)}") (unit 1))))')
-    out.append(f'  )')
+    out.append(
+        f'    (instances (project "Emma" (path "/{SHEET_UUID}" '
+        f'(reference "{esc(ref)}") (unit 1))))'
+    )
+    out.append(f"  )")
     # wires + labels
     wl = []
     for i, (pn, net) in enumerate(left):
         ly = half_h - PIN_PITCH * (i + 1)
-        cx, cy = X - half_w - PIN_PITCH, Y - ly          # pin connection point
-        if not net:                                      # unconnected pad on PCB
+        cx, cy = X - half_w - PIN_PITCH, Y - ly  # pin connection point
+        if not net:  # unconnected pad on PCB
             wl.append(no_connect(cx, cy))
             continue
         lx = cx - STUB
@@ -295,41 +345,106 @@ def no_connect(x, y):
 # 5. Functional grouping + grid layout
 # ---------------------------------------------------------------------------
 GROUP = [
-    ("POWER SUPPLY (5V input filter, MCP1703 LDO, bypass cascade)",
-     ["+5V Bead", "+5V 100u", "+5V 100n", "LDO 3V3", "LDO By", "+3V 100u",
-      "+3V 10u", "+3V 100n", "+3V 10n", "GND X2Y", "PGND 10n"]),
-    ("DDS / TCXO (Si5351A 49 MHz synthesiser)",
-     ["TCXO 25M", "OSC By", "49M DDS", "U1 ByA", "U1 ByB"]),
-    ("PA CHAIN (MMBT2222A driver + 2N3866 100 mW final)",
-     ["PA Rb1", "PA Cb1", "PA Drvr", "PA Rc1", "PA Rb2", "PA Cb2", "PA By",
-      "PA 100mW", "PA Re", "PA By2"]),
-    ("6-ELEMENT CHEBYSHEV LPF",
-     ["L1 100n", "C1 120p", "L2 180n", "C2 180p", "L3 180n", "C3 120p"]),
-    ("T/R SWITCH, LNA, ANTENNA PORT",
-     ["T/R Sw", "LNA", "LNA By", "ANT CMC", "ANT TVS", "SMA ESD", "ANT RPSMA"]),
-    ("AFSK MODEM (MCP4921 TX DAC, LM393 RX demod, tone filters)",
-     ["TX DAC", "AFSK Cp", "RX Demod", "Th Hi", "Th Lo", "1.2k R", "1.2k C",
-      "2.2k R", "2.2k C", "RSSI Hi", "RSSI Lo", "CMP By", "DAC By"]),
-    ("UART / SBUS DIGITAL (CMC, TVS, beads, inverter, mux)",
-     ["UART CMC", "UART TVS", "TX Bead", "RX Bead", "PTT Bead", "INV1", "MUX1",
-      "S1", "R_MODE", "C_INV", "C_MUX", "SW By"]),
-    ("RSSI CARRIER-DETECT (NEW 2026-07-04 — analog RSSI -> 1-bit RSSI_DCD)",
-     ["RSSI_CMP", "RSSI_RH", "RSSI_RL", "RSSI_CBY"]),
-    ("LoRa 915 MHz (RFM95W, SPI via PB2-P1)",
-     ["LoRa"]),
-    ("ETHERNET 2nd PORT (ADIN1300 PHY + T-ETH isolation xfmr, JST-GH-4P line)",
-     ["ETH-PHY", "T-ETH", "J-ETH"]),
-    ("PB2-I PASSTHROUGH RAILS (PocketBeagle 2 Industrial P1 + P2)",
-     ["PB2-P1", "PB2-P2"]),
+    (
+        "POWER SUPPLY (5V input filter, MCP1703 LDO, bypass cascade)",
+        [
+            "+5V Bead",
+            "+5V 100u",
+            "+5V 100n",
+            "LDO 3V3",
+            "LDO By",
+            "+3V 100u",
+            "+3V 10u",
+            "+3V 100n",
+            "+3V 10n",
+            "GND X2Y",
+            "PGND 10n",
+        ],
+    ),
+    (
+        "DDS / TCXO (Si5351A 49 MHz synthesiser)",
+        ["TCXO 25M", "OSC By", "49M DDS", "U1 ByA", "U1 ByB"],
+    ),
+    (
+        "PA CHAIN (MMBT2222A driver + 2N3866 100 mW final)",
+        [
+            "PA Rb1",
+            "PA Cb1",
+            "PA Drvr",
+            "PA Rc1",
+            "PA Rb2",
+            "PA Cb2",
+            "PA By",
+            "PA 100mW",
+            "PA Re",
+            "PA By2",
+        ],
+    ),
+    (
+        "6-ELEMENT CHEBYSHEV LPF",
+        ["L1 100n", "C1 120p", "L2 180n", "C2 180p", "L3 180n", "C3 120p"],
+    ),
+    (
+        "T/R SWITCH, LNA, ANTENNA PORT",
+        ["T/R Sw", "LNA", "LNA By", "ANT CMC", "ANT TVS", "SMA ESD", "ANT RPSMA"],
+    ),
+    (
+        "AFSK MODEM (MCP4921 TX DAC, LM393 RX demod, tone filters)",
+        [
+            "TX DAC",
+            "AFSK Cp",
+            "RX Demod",
+            "Th Hi",
+            "Th Lo",
+            "1.2k R",
+            "1.2k C",
+            "2.2k R",
+            "2.2k C",
+            "RSSI Hi",
+            "RSSI Lo",
+            "CMP By",
+            "DAC By",
+        ],
+    ),
+    (
+        "UART / SBUS DIGITAL (CMC, TVS, beads, inverter, mux)",
+        [
+            "UART CMC",
+            "UART TVS",
+            "TX Bead",
+            "RX Bead",
+            "PTT Bead",
+            "INV1",
+            "MUX1",
+            "S1",
+            "R_MODE",
+            "C_INV",
+            "C_MUX",
+            "SW By",
+        ],
+    ),
+    (
+        "RSSI CARRIER-DETECT (NEW 2026-07-04 — analog RSSI -> 1-bit RSSI_DCD)",
+        ["RSSI_CMP", "RSSI_RH", "RSSI_RL", "RSSI_CBY"],
+    ),
+    ("LoRa 915 MHz (RFM95W, SPI via PB2-P1)", ["LoRa"]),
+    (
+        "ETHERNET 2nd PORT (ADIN1300 PHY + T-ETH isolation xfmr, JST-GH-4P line)",
+        ["ETH-PHY", "T-ETH", "J-ETH"],
+    ),
+    (
+        "PB2-I PASSTHROUGH RAILS (PocketBeagle 2 Industrial P1 + P2)",
+        ["PB2-P1", "PB2-P2"],
+    ),
 ]
 
 # All layout constants are exact multiples of the 1.27 mm (50 mil) connection
 # grid so every pin endpoint, wire end and label lands on-grid (KiCad ERC
 # flags any off-grid endpoint).
-CELL_W = 95.25          # 75 * 1.27
-CELL_H = 60.96          # 48 * 1.27
+CELL_W = 95.25  # 75 * 1.27
+CELL_H = 60.96  # 48 * 1.27
 COLS = 6
-X0, Y0 = 63.5, 63.5     # 50 * 1.27
+X0, Y0 = 63.5, 63.5  # 50 * 1.27
 
 
 def main():
@@ -338,7 +453,6 @@ def main():
     placed = set()
 
     # net pin-counts drive local-vs-global label choice (see label())
-    from collections import Counter
     NETCOUNT.clear()
     for c in comps:
         for _pn, net in c["pads"]:
@@ -369,9 +483,11 @@ def main():
             slot += COLS - (slot % COLS)
         row = slot // COLS
         ty = Y0 + row * CELL_H - CELL_H / 2 - 4
-        body.append(f'  (text "{esc(title)}" (at {X0-12.7:.2f} {ty:.2f} 0) '
-                    f'(effects (font (size 2.0 2.0) (bold yes)) (justify left)) '
-                    f'(uuid "{uid()}"))')
+        body.append(
+            f'  (text "{esc(title)}" (at {X0-12.7:.2f} {ty:.2f} 0) '
+            f"(effects (font (size 2.0 2.0) (bold yes)) (justify left)) "
+            f'(uuid "{uid()}"))'
+        )
         for ref in refs:
             if ref in by_ref:
                 place(ref)
@@ -385,28 +501,29 @@ def main():
     page_w = max(841, X0 + COLS * CELL_W + 40)
     page_h = max(594, Y0 + total_rows * CELL_H + 40)
     hdr = []
-    hdr.append('(kicad_sch (version 20240101) (generator eeschema)')
+    hdr.append("(kicad_sch (version 20240101) (generator eeschema)")
     hdr.append('  (paper "User" %.2f %.2f)' % (page_w, page_h))
     hdr.append(f'  (uuid "{SHEET_UUID}")')
-    hdr.append('  (title_block')
-    hdr.append('    (title "Emma — 49 MHz AX.25 + LoRa 915 MHz Transceiver Cape (Rev S1)")')
+    hdr.append("  (title_block")
+    hdr.append(
+        '    (title "Emma — 49 MHz AX.25 + LoRa 915 MHz Transceiver Cape (Rev S1)")'
+    )
     hdr.append('    (date "2026-07-04") (rev "S1") (company "Griffing Technology LLC")')
-    hdr.append('    (comment 1 "Schematic-first reconciliation: authored to match Emma.kicad_pcb (J1 dropped; UART on PB2 rails; PTT_N + RSSI_DCD on gated payload GPIOs)")')
-    hdr.append('    (comment 2 "Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  |  AI-assist: Claude Opus 4.8 (Anthropic)")')
-    hdr.append('  )')
-    hdr.append('  (lib_symbols')
+    hdr.append(
+        '    (comment 1 "Schematic-first reconciliation: authored to match Emma.kicad_pcb (J1 dropped; UART on PB2 rails; PTT_N + RSSI_DCD on gated payload GPIOs)")'
+    )
+    hdr.append(
+        '    (comment 2 "Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  |  AI-assist: Claude Opus 4.8 (Anthropic)")'
+    )
+    hdr.append("  )")
+    hdr.append("  (lib_symbols")
     hdr.append("\n".join(lib_defs))
-    hdr.append('  )')
+    hdr.append("  )")
     out = "\n".join(hdr) + "\n" + "\n".join(body) + "\n)\n"
     OUT.write_text(out, encoding="utf-8")
 
     # ---- report net pin-counts (flag single-pin nets) ----
-    from collections import Counter
-    cnt = Counter()
-    for c in comps:
-        for pn, net in c["pads"]:
-            if net:
-                cnt[net] += 1
+    cnt = dict(NETCOUNT)
     singles = sorted(n for n, k in cnt.items() if k == 1)
     print(f"components placed: {len(placed)}   nets: {len(cnt)}")
     print(f"single-pin nets ({len(singles)}): {', '.join(singles)}")
