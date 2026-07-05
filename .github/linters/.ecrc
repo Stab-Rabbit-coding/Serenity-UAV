@@ -9,6 +9,9 @@
         "\\.kicad_pro$",
         "\\.kicad_prl$",
         "__pycache__/",
-        "\\.pyc$"
+        "\\.pyc$",
+        "\\.stl$",
+        "(^|/)Makefile$",
+        "\\.mk$"
     ]
 }

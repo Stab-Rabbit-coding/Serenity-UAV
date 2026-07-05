@@ -27,12 +27,3 @@ indent_size = 4
 [*.h]
 indent_style = space
 indent_size = 4
-
-# Makefiles require literal tab indentation for recipe lines (a hard rule of
-# GNU make / POSIX make); spaces are a syntax error.  Declare tab indent so the
-# EDITORCONFIG check does not flag recipe tabs.
-[Makefile]
-indent_style = tab
-
-[*.mk]
-indent_style = tab
