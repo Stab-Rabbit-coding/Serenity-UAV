@@ -2018,7 +2018,11 @@ foot positions are baked).
 
 **Remaining parts needing SCAD source creation then STL export:**
 
-- **BLOCKS Phase 1**
+- [ ] **Reconcile the remaining-parts list** — this list was emptied as components were
+    completed, leaving only a stray status tag. The one known outstanding render is
+    `nacelle_servo_bracket.stl` (SCAD source authored, not yet rendered — awaiting the
+    River's-bay `WING_ROOT_Z_CEN` structural/packaging decision, §1.1.3.3). Confirm no other
+    parts remain un-authored, then repopulate or close this subsection. **BLOCKS Phase 1.**
 
 **Combined airframe model (visual verification):**
 
@@ -3179,25 +3183,25 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
 
 ### 1.5 — Documentation
 
-- [x] **1.4.1 `serenity-rev-p.jsx`** — comprehensive 11-tab standalone Rev P specification created: Overview, Airframe, Propulsion, Avionics, Comms, Cargo, Security, Regulatory, BOM, Files, Build Status. Supersedes serenity-rev-o.jsx as current spec. *(done 2026-06-01)*
+- [x] **1.5.1 `serenity-rev-p.jsx`** — comprehensive 11-tab standalone Rev P specification created: Overview, Airframe, Propulsion, Avionics, Comms, Cargo, Security, Regulatory, BOM, Files, Build Status. Supersedes serenity-rev-o.jsx as current spec. *(done 2026-06-01)*
 
-- [x] **1.4.2 Wash: rename + dual Ethernet PHY** — Board renamed to "Wash"
+- [x] **1.5.2 Wash: rename + dual Ethernet PHY** — Board renamed to "Wash"
     throughout schematic and Markdown. Added 2× EMI-hardened DP83825I PHYs (J_ETH1, J_ETH2):
     HX1188NL magnetics, SRF2012-100Y CMC, PRTR5V0U2X TVS, TPS62933 1.8V supply per PHY.
     RMII0→PHY1 (PHY addr 0x01), RMII1→PHY2 (PHY addr 0x02). MDC/MDIO shared.
     CAPE-A-2.md §1 updated from "PHY removal" to "EMI-hardened dual Ethernet PHY". *(done 2026-06-07)*
 
-- [x] **1.4.3 Zoë: rename + Ethernet PHY** — Board renamed to
+- [x] **1.5.3 Zoë: rename + Ethernet PHY** — Board renamed to
     "Zoë". Added 1× EMI-hardened DP83825I PHY (J_ETH_B): HX1188NL magnetics,
     SRF2012-100Y CMC, PRTR5V0U2X TVS ×2, TPS62933 1.8V supply. RMII0 interface, PHY addr 0x01.
     CAPE-B-2.md §1 updated from "PHY removal" to "EMI-hardened Ethernet PHY". *(done 2026-06-07)*
 
-- [x] **1.4.4 Wash: add missing field connectors** — Connector audit found J_PWR,
+- [x] **1.5.4 Wash: add missing field connectors** — Connector audit found J_PWR,
     J_CAN, J_485, J_1553, J_GPS, J_SERVO, J_ESC absent from schematic despite protection circuits
     being present. All 7 connectors added (JST SM03B/SM04B/SM05B/SM06B-GHS-TB-1MP series). §14
     field connector table added to CAPE-A-2.md. *(done 2026-06-07)*
 
-- [x] **1.4.5 Zoë: add missing field connectors** — J_PWR, J_CAN, J_485,
+- [x] **1.5.5 Zoë: add missing field connectors** — J_PWR, J_CAN, J_485,
     J_1553 added to schematic (JST SM03B/SM04B-GHS-TB-1MP). §14 field connector table added to
     CAPE-B-2.md. *(done 2026-06-07)*
 
@@ -3241,9 +3245,9 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
 
 ---
 
-### 1.5 — Rev Q: Repo-Wide Architecture Propagation (2026-06-07)
+### 1.6 — Rev Q: Repo-Wide Architecture Propagation (2026-06-07)
 
-- [x] **1.5.1 Rev Q documentation propagation** — Updated all project documentation from Rev P
+- [x] **1.6.1 Rev Q documentation propagation** — Updated all project documentation from Rev P
     (v2·v1·v1·v2 mixed placement) to Rev Q (v2·v2·v2·v2 uniform EMI-hardened placement across
     all 8 avionics nodes). Changes include:
 
@@ -3260,15 +3264,15 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
     - **AVIONICS_PB2_REDESIGN.md**: Rev Q node placement already reflected.
     *(done 2026-06-07)*
 
-### 1.6 — Rev R: Component Revision Synchronisation + s_ Prefix Removal (2026-06-11)
+### 1.7 — Rev R: Component Revision Synchronisation + s_ Prefix Removal (2026-06-11)
 
-- [x] **1.6.1 Rev R propagation to all active files** — Updated all project-level revision headers
+- [x] **1.7.1 Rev R propagation to all active files** — Updated all project-level revision headers
     from Rev Q → Rev R (2026-06-11). Changes include: README.md battery spec table, all five
     fuselage SCAD changelog entries, all GCS Malcolm firmware headers (Q1→R1), FreeCAD assembly
     scripts, avionics firmware README, ENC-NACELLE-1.md, and 18 GCS Malcolm source files.
     *(done 2026-06-11)*
 
-- [x] **1.6.2 Component revision synchronisation** — All component-level revision designations
+- [x] **1.7.2 Component revision synchronisation** — All component-level revision designations
     updated to Rev R per CLAUDE.md: "All components are referenced as of the latest revision."
     - Nacelle gear train (Rev O → Rev R): nacelle_nozzle_iris, nacelle_bevel_housing, nacelle_bevel_pair,
         nacelle_pinion, nacelle_sector_gear
@@ -3282,14 +3286,14 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
         Kaylee.kicad_pcb, gen_kaylee.py, gen_kaylee_pcb.py updated.
     *(done 2026-06-11)*
 
-- [x] **1.6.3 Remove `s_` prefix from all SCAD and STL filenames** — Removed leading `s_` from
+- [x] **1.7.3 Remove `s_` prefix from all SCAD and STL filenames** — Removed leading `s_` from
     11 SCAD files and 19 STL files across `airframe/openscad/`, `airframe/stls/`, and
     `deferred/aft-edf/`. Updated all references in 37 active text files (Python, Markdown, JSON,
     SCAD, shell scripts, Makefile, JSX). Archive files and historical BOMs (bom_revP.json,
     bom_revQ.json) intentionally not modified.
     *(done 2026-06-11)*
 
-### 1.5.1. Names
+### 1.8 — Names
 
 - [x] The ground control station is named "Malcolm" aka "CAPT Reynolds" or "CAPT Tight Pants" - "I aim to misbehave" *(implemented throughout all docs)*
 
@@ -3309,7 +3313,7 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
 
 - [x] The aft avionics bay is named "Simon's medbay" (Bay E) - "What did they do to you?" *(implemented 2026-06-07)*
 
-### Avionics Workload Balancing
+### 1.9 — Avionics Workload Balancing
 
 - While all Wash capes are identical and all Zoë capes are also identical, they have different primary tasking.  **All Stacks are capable to communicate and control the UAV safety in a benign environment on their own.***
 

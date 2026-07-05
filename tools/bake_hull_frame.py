@@ -95,26 +95,22 @@ COMPONENTS = {
     # into the single Cargo_Shell below (per the TODO.md mesh-repair log).
     "Head_Shell": (
         "fuselage/head_shell24_2mm_repaired.stl",
-        (-331.9993360, -17.9999640, 60.9998780,
-         0.0, 0.0, 0.0, 1.0),
+        (-331.9993360, -17.9999640, 60.9998780, 0.0, 0.0, 0.0, 1.0),
     ),
     # Cargo: 180 deg about +Z flips the section hull-forward.
     "Cargo_Shell": (
         "fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl",
-        (-274.4000100, -282.8000440, 0.0,
-         0.0, 0.0, 1.0, 0.0),
+        (-274.4000100, -282.8000440, 0.0, 0.0, 0.0, 1.0, 0.0),
     ),
     # Middle / Rear: 90 deg about -X brings the SCAD section axis
     # (modelled along local Z) upright into hull +Z (dorsal).
     "Middle_Shell": (
         "fuselage/middle_shell24_2mm_repaired.stl",
-        (-350.9992980, 130.4001963, 10.0174324,
-         -_SQ2, 0.0, 0.0, _SQ2),
+        (-350.9992980, 130.4001963, 10.0174324, -_SQ2, 0.0, 0.0, _SQ2),
     ),
     "Rear_Shell": (
         "fuselage/rear_shell24_2mm_repaired.stl",
-        (0.0, 203.1999999, -31.9999360,
-         -_SQ2, 0.0, 0.0, _SQ2),
+        (0.0, 203.1999999, -31.9999360, -_SQ2, 0.0, 0.0, _SQ2),
     ),
     # Wings: identity rotation, translation only.
     # Filenames use the no-"s_"-prefix convention (Rev R1, 2026-06-11).
@@ -122,13 +118,11 @@ COMPONENTS = {
     # 2026-06-14; bake translation unchanged (LE root stays at hull Y=-7).
     "Wing_Port": (
         "wings/wing_port_s1223_revo.stl",
-        (-80.9998380, -6.9999860, 57.9998840,
-         0.0, 0.0, 0.0, 1.0),
+        (-80.9998380, -6.9999860, 57.9998840, 0.0, 0.0, 0.0, 1.0),
     ),
     "Wing_Stbd": (
         "wings/wing_stbd_s1223_revo.stl",
-        (-261.9994760, -11.9999760, 57.9998840,
-         0.0, 0.0, 0.0, 1.0),
+        (-261.9994760, -11.9999760, 57.9998840, 0.0, 0.0, 0.0, 1.0),
     ),
     # Nacelles: 270 deg about +X = cruise / forward-flight attitude.
     # This is the canonical stored attitude; hover tilt is applied
@@ -146,13 +140,11 @@ COMPONENTS = {
     # Files were renamed so each filename matches its physical mounting side.
     "Nacelle_Port": (
         "nacelles/nacelle_port_revs.stl",
-        (46.9999060, -63.9998720, 62.9998740,
-         _SQ2, 0.0, 0.0, -_SQ2),
+        (46.9999060, -63.9998720, 62.9998740, _SQ2, 0.0, 0.0, -_SQ2),
     ),
     "Nacelle_Stbd": (
         "nacelles/nacelle_stbd_revs.stl",
-        (-385.0960040, -69.9998600, 64.9719300,
-         _SQ2, 0.0, 0.0, -_SQ2),
+        (-385.0960040, -69.9998600, 64.9719300, _SQ2, 0.0, 0.0, -_SQ2),
     ),
 }
 
@@ -167,17 +159,26 @@ def quat_to_matrix(qx, qy, qz, qw):
     """
     norm = np.sqrt(qx * qx + qy * qy + qz * qz + qw * qw)
     qx, qy, qz, qw = qx / norm, qy / norm, qz / norm, qw / norm
-    return np.array([
-        [1.0 - 2.0 * (qy * qy + qz * qz),
-         2.0 * (qx * qy - qz * qw),
-         2.0 * (qx * qz + qy * qw)],
-        [2.0 * (qx * qy + qz * qw),
-         1.0 - 2.0 * (qx * qx + qz * qz),
-         2.0 * (qy * qz - qx * qw)],
-        [2.0 * (qx * qz - qy * qw),
-         2.0 * (qy * qz + qx * qw),
-         1.0 - 2.0 * (qx * qx + qy * qy)],
-    ], dtype=np.float64)
+    return np.array(
+        [
+            [
+                1.0 - 2.0 * (qy * qy + qz * qz),
+                2.0 * (qx * qy - qz * qw),
+                2.0 * (qx * qz + qy * qw),
+            ],
+            [
+                2.0 * (qx * qy + qz * qw),
+                1.0 - 2.0 * (qx * qx + qz * qz),
+                2.0 * (qy * qz - qx * qw),
+            ],
+            [
+                2.0 * (qx * qz - qy * qw),
+                2.0 * (qy * qz + qx * qw),
+                1.0 - 2.0 * (qx * qx + qy * qy),
+            ],
+        ],
+        dtype=np.float64,
+    )
 
 
 def is_baked(path):
@@ -203,8 +204,7 @@ def read_stl(path):
     if len(data) >= 84:
         count = struct.unpack_from("<I", data, 80)[0]
         if len(data) == 84 + 50 * count:
-            rec = np.frombuffer(
-                data, dtype=np.uint8, offset=84).reshape(count, 50)
+            rec = np.frombuffer(data, dtype=np.uint8, offset=84).reshape(count, 50)
             # First 48 bytes per record: 12 little-endian float32
             # (facet normal + 3 vertices); last 2: attribute count.
             floats = np.ascontiguousarray(rec[:, :48]).view("<f4")
@@ -217,8 +217,7 @@ def read_stl(path):
         line = line.strip()
         if line.startswith("vertex"):
             parts = line.split()
-            verts.append(
-                [float(parts[1]), float(parts[2]), float(parts[3])])
+            verts.append([float(parts[1]), float(parts[2]), float(parts[3])])
     arr = np.asarray(verts, dtype=np.float64)
     if arr.size == 0 or arr.shape[0] % 3 != 0:
         raise ValueError(f"{path}: unable to parse as ASCII STL")
@@ -320,14 +319,19 @@ def bake_component(name, check_only=False):
 def main():
     """CLI entry point — bake all or selected components."""
     parser = argparse.ArgumentParser(
-        description="Bake validated hull-frame placements into STLs.")
+        description="Bake validated hull-frame placements into STLs."
+    )
     parser.add_argument(
-        "components", nargs="*", metavar="COMPONENT",
-        help="component names to bake (default: all); one of: "
-             + ", ".join(COMPONENTS))
+        "components",
+        nargs="*",
+        metavar="COMPONENT",
+        help="component names to bake (default: all); one of: " + ", ".join(COMPONENTS),
+    )
     parser.add_argument(
-        "--check", action="store_true",
-        help="report baked/pending state only; write nothing")
+        "--check",
+        action="store_true",
+        help="report baked/pending state only; write nothing",
+    )
     args = parser.parse_args()
 
     names = args.components or list(COMPONENTS)
@@ -341,8 +345,7 @@ def main():
 
     missing = [n for n, r in results.items() if r == "missing"]
     if missing:
-        print(f"\n{len(missing)} component STL(s) missing: "
-              + ", ".join(missing))
+        print(f"\n{len(missing)} component STL(s) missing: " + ", ".join(missing))
         sys.exit(1)
     print("\nAll requested components processed.")
 

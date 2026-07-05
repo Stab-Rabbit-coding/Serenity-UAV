@@ -623,7 +623,9 @@ def assemble():
             _stl("nacelles/nozzles/nacelle_nozzle_iris.stl"),
             f"Nacelle_{label}_Nozzle_Iris",
         )
-        transform_mesh(nozzle, nacelle_rows(side, _IDENTITY3, (0.0, 0.0, NOZZLE_RING_Z)))
+        transform_mesh(
+            nozzle, nacelle_rows(side, _IDENTITY3, (0.0, 0.0, NOZZLE_RING_Z))
+        )
 
         # ── Crown-Pinion-to-Ring idler gear + bracket ────────────────────
         # nacelle_nozzle_idler.scad.  Angular position (X, Y) RESOLVED

@@ -153,7 +153,7 @@ XCVR-49MHZ-1/ — 14 gerber/drill files: B_Cu, B_Mask, B_Paste, B_Silkscreen, Ed
 
 ---
 
-## archives/ (repo root)
+## archives/ (repository root)
 
 Whole-project snapshots and superseded subsystems.
 

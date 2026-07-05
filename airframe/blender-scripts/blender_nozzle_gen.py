@@ -61,15 +61,16 @@ HULL CROSS-SECTION DATA (from blender_nozzle_gen.py analysis of shell24 files):
 """
 
 try:
-    import bpy
     import bmesh
+    import bpy
+
     running_in_blender = True
 except Exception:
     bpy = None
     bmesh = None
     running_in_blender = False
-import os
 import math
+import os
 
 if not running_in_blender and __name__ == "__main__":
     print("ERROR: 'bpy' is not available. Run this script inside Blender:")
@@ -77,71 +78,84 @@ if not running_in_blender and __name__ == "__main__":
     raise SystemExit(1)
 
 # ── tunables ─────────────────────────────────────────────────────────────────
-N_PETALS         = 8          # iris petals per nozzle (8 replicates the show look)
-OVERLAP_DEG      = 3.0        # each petal spans 360/N + overlap (for sealing)
-N_PROFILE_Z      = 6          # radial profile subdivisions along petal length
-N_ANGLE          = 8          # angular subdivisions per petal
+N_PETALS = 8  # iris petals per nozzle (8 replicates the show look)
+OVERLAP_DEG = 3.0  # each petal spans 360/N + overlap (for sealing)
+N_PROFILE_Z = 6  # radial profile subdivisions along petal length
+N_ANGLE = 8  # angular subdivisions per petal
 
-HINGE_DIA_MM     = 3.0        # hinge pin through-hole diameter
-HINGE_WALL       = 1.5        # wall around hinge pin
-NAC_RING_TEETH   = 32         # inner ring rack teeth count for passive crown pinion actuation
-NAC_RING_RACK_DEPTH = 1.0     # tooth depth on inner ring wall (mm)
-NAC_RING_RACK_WIDTH = 0.36    # tooth width fraction of one pitch
+HINGE_DIA_MM = 3.0  # hinge pin through-hole diameter
+HINGE_WALL = 1.5  # wall around hinge pin
+NAC_RING_TEETH = 32  # inner ring rack teeth count for passive crown pinion actuation
+NAC_RING_RACK_DEPTH = 1.0  # tooth depth on inner ring wall (mm)
+NAC_RING_RACK_WIDTH = 0.36  # tooth width fraction of one pitch
 
 # ── nacelle nozzle parameters (50 mm EDF, Z-axis, Z=0 exit) ─────────────────
 # This nozzle is designed for a 50mm EDF installed between the stator and
 # the petal/hinge assembly; the downstream EDF span occupies the bore
 # upstream of the nozzle ring and the stator begins further upstream.
-NAC_EDF_R    = 25.0       # EDF fan radius (50 mm / 2)
-NAC_HINGE_Z  = 15.0       # z of hinge (where petal meets fixed ring)
-NAC_TIP_Z    = 0.0        # z of petal tip (hull exit face)
+NAC_EDF_R = 25.0  # EDF fan radius (50 mm / 2)
+NAC_HINGE_Z = 15.0  # z of hinge (where petal meets fixed ring)
+NAC_TIP_Z = 0.0  # z of petal tip (hull exit face)
 # outer_r profile: list of (z, r) from tip to hinge — sampled from hull
-NAC_OUTER_PROFILE = [     # (z_mm, outer_r_mm)  — hull cross-section data
-    (0.0,  12.0),         # inner tip (axis-side) at Z=0 — converges toward axis
-    (4.0,  16.0),
-    (8.0,  21.0),
+NAC_OUTER_PROFILE = [  # (z_mm, outer_r_mm)  — hull cross-section data
+    (0.0, 12.0),  # inner tip (axis-side) at Z=0 — converges toward axis
+    (4.0, 16.0),
+    (8.0, 21.0),
     (12.0, 25.5),
-    (15.0, 28.0),         # at hinge: hull OD/2 = 28mm
+    (15.0, 28.0),  # at hinge: hull OD/2 = 28mm
 ]
-NAC_INNER_PROFILE = [     # inner (EDF bore side) profile — converging nozzle path
-    (0.0,  0.0),          # tip: closes to axis
-    (4.0,  8.0),
-    (8.0,  16.0),
+NAC_INNER_PROFILE = [  # inner (EDF bore side) profile — converging nozzle path
+    (0.0, 0.0),  # tip: closes to axis
+    (4.0, 8.0),
+    (8.0, 16.0),
     (12.0, 22.0),
-    (15.0, 25.0),         # at hinge: EDF radius = 25mm
+    (15.0, 25.0),  # at hinge: EDF radius = 25mm
 ]
 
 # ── rear nozzle parameters (120 mm EDF, X-axis, exit at X=−246 in world) ────
 # We work in local nozzle coords: axial = local_z, X=-246 = local_z=0 (tip)
-REAR_EDF_R    = 60.0      # EDF fan radius (120 mm / 2)
-REAR_HINGE_Z  = 14.0      # local_z of hinge (−232 in world = 14mm from tip)
-REAR_TIP_Z    = 0.0       # tip
-REAR_OUTER_PROFILE = [    # (local_z_mm, outer_r_mm) — hull cross-section mean_r
-    (0.0,   22.0),        # aft tip: mean_r = sqrt((54/2)*(66/2)) ≈ 30mm, use 22 for inner
-    (5.0,   32.0),
-    (10.0,  50.0),
-    (14.0,  62.5),        # hinge: mean of 131/2, 119/2 ≈ 62.5mm
+REAR_EDF_R = 60.0  # EDF fan radius (120 mm / 2)
+REAR_HINGE_Z = 14.0  # local_z of hinge (−232 in world = 14mm from tip)
+REAR_TIP_Z = 0.0  # tip
+REAR_OUTER_PROFILE = [  # (local_z_mm, outer_r_mm) — hull cross-section mean_r
+    (0.0, 22.0),  # aft tip: mean_r = sqrt((54/2)*(66/2)) ≈ 30mm, use 22 for inner
+    (5.0, 32.0),
+    (10.0, 50.0),
+    (14.0, 62.5),  # hinge: mean of 131/2, 119/2 ≈ 62.5mm
 ]
-REAR_INNER_PROFILE = [    # EDF bore converging toward tip
-    (0.0,   0.0),
-    (5.0,   18.0),
-    (10.0,  42.0),
-    (14.0,  60.0),        # EDF radius = 60mm at hinge
+REAR_INNER_PROFILE = [  # EDF bore converging toward tip
+    (0.0, 0.0),
+    (5.0, 18.0),
+    (10.0, 42.0),
+    (14.0, 60.0),  # EDF radius = 60mm at hinge
 ]
 
 # ── rear cone frame parameters (structural ribs between petals) ──────────────
 # The rear nozzle has a FIXED rib skeleton that holds the cone shape even when
 # petals are fully open.  8 ribs at 45° intervals; petals fill between them.
-REAR_RIB_SPAN_DEG  = 6.0   # angular width of each rib (degrees)
-REAR_RIB_DEPTH     = 3.5   # radial depth of rib (outer surface - inner surface, mm)
-REAR_RIB_GAP_DEG   = 0.5   # clearance gap between rib edge and petal edge
+REAR_RIB_SPAN_DEG = 6.0  # angular width of each rib (degrees)
+REAR_RIB_DEPTH = 3.5  # radial depth of rib (outer surface - inner surface, mm)
+REAR_RIB_GAP_DEG = 0.5  # clearance gap between rib edge and petal edge
 # Petal span = 45° - rib - 2×gap = 45 - 6 - 1 = 38° (NO sealing overlap needed;
 # ribs handle the inter-petal structure, so petals just need to cover the opening)
 REAR_PETAL_SPAN_DEG = 360.0 / N_PETALS - REAR_RIB_SPAN_DEG - 2 * REAR_RIB_GAP_DEG
 
 BASE = os.path.dirname(os.path.abspath(__file__))
-OUT  = os.path.join(BASE, "files-hollowed-18in")
+OUT = os.path.join(BASE, "files-hollowed-18in")
 # ─────────────────────────────────────────────────────────────────────────────
+
+
+def _finalize_bmesh(bm, mesh, name):
+    """Recalc normals, write the bmesh into ``mesh``, then create and link a
+    new object named ``name``.  Shared tail for the mesh-building functions
+    (extracted to remove the repeated bmesh-finalise boilerplate)."""
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.to_mesh(mesh)
+    bm.free()
+    mesh.update()
+    obj = bpy.data.objects.new(name, mesh)
+    bpy.context.collection.objects.link(obj)
+    return obj
 
 
 def clear_scene():
@@ -173,9 +187,18 @@ def lerp_profile(profile, z):
     return profile[-1][1]
 
 
-def make_petal(name, n_petals, outer_profile, inner_profile,
-               tip_z, hinge_z, edf_r, n_angle_sub=8, n_z_sub=6,
-               span_override_deg=None):
+def make_petal(
+    name,
+    n_petals,
+    outer_profile,
+    inner_profile,
+    tip_z,
+    hinge_z,
+    edf_r,
+    n_angle_sub=8,
+    n_z_sub=6,
+    span_override_deg=None,
+):
     """
     Build one iris petal as a closed solid mesh.
 
@@ -188,16 +211,19 @@ def make_petal(name, n_petals, outer_profile, inner_profile,
 
     Returns the Blender object (not yet linked to scene).
     """
-    span_deg = span_override_deg if span_override_deg is not None \
-               else 360.0 / n_petals + OVERLAP_DEG
+    span_deg = (
+        span_override_deg
+        if span_override_deg is not None
+        else 360.0 / n_petals + OVERLAP_DEG
+    )
     span_rad = math.radians(span_deg)
-    half     = span_rad / 2.0
+    half = span_rad / 2.0
 
     z_values = [tip_z + (hinge_z - tip_z) * i / (n_z_sub - 1) for i in range(n_z_sub)]
     a_values = [-half + span_rad * i / (n_angle_sub - 1) for i in range(n_angle_sub)]
 
     mesh = bpy.data.meshes.new(name + "_mesh")
-    bm   = bmesh.new()
+    bm = bmesh.new()
 
     # ── build vertex grid: outer and inner surfaces ──────────────────────────
     # Index scheme: outer[iz][ia], inner[iz][ia]
@@ -227,28 +253,48 @@ def make_petal(name, n_petals, outer_profile, inner_profile,
     # ── outer surface (hull skin) ────────────────────────────────────────────
     for iz in range(n_z_sub - 1):
         for ia in range(n_angle_sub - 1):
-            face([outer_verts[iz][ia],
-                  outer_verts[iz][ia + 1],
-                  outer_verts[iz + 1][ia + 1],
-                  outer_verts[iz + 1][ia]])
+            face(
+                [
+                    outer_verts[iz][ia],
+                    outer_verts[iz][ia + 1],
+                    outer_verts[iz + 1][ia + 1],
+                    outer_verts[iz + 1][ia],
+                ]
+            )
 
     # ── inner surface (EDF bore / concave bowl) — reversed normal ───────────
     for iz in range(n_z_sub - 1):
         for ia in range(n_angle_sub - 1):
-            face([inner_verts[iz][ia],
-                  inner_verts[iz + 1][ia],
-                  inner_verts[iz + 1][ia + 1],
-                  inner_verts[iz][ia + 1]])
+            face(
+                [
+                    inner_verts[iz][ia],
+                    inner_verts[iz + 1][ia],
+                    inner_verts[iz + 1][ia + 1],
+                    inner_verts[iz][ia + 1],
+                ]
+            )
 
     # ── angular side caps (the two cut edges of the petal) ──────────────────
     for iz in range(n_z_sub - 1):
         # starboard side (ia=0)
-        face([outer_verts[iz][0], outer_verts[iz + 1][0],
-              inner_verts[iz + 1][0], inner_verts[iz][0]])
+        face(
+            [
+                outer_verts[iz][0],
+                outer_verts[iz + 1][0],
+                inner_verts[iz + 1][0],
+                inner_verts[iz][0],
+            ]
+        )
         # port side (ia=-1)
         ia = n_angle_sub - 1
-        face([outer_verts[iz][ia], inner_verts[iz][ia],
-              inner_verts[iz + 1][ia], outer_verts[iz + 1][ia]])
+        face(
+            [
+                outer_verts[iz][ia],
+                inner_verts[iz][ia],
+                inner_verts[iz + 1][ia],
+                outer_verts[iz + 1][ia],
+            ]
+        )
 
     # ── tip cap (z = tip_z, the open/exit face when petal is closed) ─────────
     for ia in range(n_angle_sub - 1):
@@ -259,42 +305,70 @@ def make_petal(name, n_petals, outer_profile, inner_profile,
             apex = bm.verts.new((0.0, 0.0, tip_z))
             face([outer_verts[0][ia], outer_verts[0][ia + 1], apex])
         else:
-            face([outer_verts[0][ia], outer_verts[0][ia + 1],
-                  inner_verts[0][ia + 1], inner_verts[0][ia]])
+            face(
+                [
+                    outer_verts[0][ia],
+                    outer_verts[0][ia + 1],
+                    inner_verts[0][ia + 1],
+                    inner_verts[0][ia],
+                ]
+            )
 
     # ── hinge cap (z = hinge_z, the fixed-ring interface) ───────────────────
     iz = n_z_sub - 1
     for ia in range(n_angle_sub - 1):
-        face([outer_verts[iz][ia], inner_verts[iz][ia],
-              inner_verts[iz][ia + 1], outer_verts[iz][ia + 1]])
+        face(
+            [
+                outer_verts[iz][ia],
+                inner_verts[iz][ia],
+                inner_verts[iz][ia + 1],
+                outer_verts[iz][ia + 1],
+            ]
+        )
 
     # ── hinge lug: a functional tab at hinge_z for a 3 mm pivot pin ───────
     # The lug includes a through-hole so the petal can pivot on a real pin.
-    r_hinge  = lerp_profile(outer_profile, hinge_z)
-    lug_r    = r_hinge + HINGE_WALL * 2
-    lug_h    = HINGE_WALL * 3   # tab axial height above hinge face
-    hole_r   = HINGE_DIA_MM / 2.0
-    hole_cx  = r_hinge + HINGE_WALL
+    r_hinge = lerp_profile(outer_profile, hinge_z)
+    lug_r = r_hinge + HINGE_WALL * 2
+    lug_h = HINGE_WALL * 3  # tab axial height above hinge face
+    hole_r = HINGE_DIA_MM / 2.0
+    hole_cx = r_hinge + HINGE_WALL
     hole_off = hole_r
     lug_half_a = math.radians(span_deg / 4)
 
     # outer lug corners at bottom and top
-    o0 = bm.verts.new((r_hinge * math.cos(-lug_half_a),
-                       r_hinge * math.sin(-lug_half_a), hinge_z))
-    o1 = bm.verts.new((r_hinge * math.cos(+lug_half_a),
-                       r_hinge * math.sin(+lug_half_a), hinge_z))
-    o2 = bm.verts.new((lug_r   * math.cos(+lug_half_a),
-                       lug_r   * math.sin(+lug_half_a), hinge_z))
-    o3 = bm.verts.new((lug_r   * math.cos(-lug_half_a),
-                       lug_r   * math.sin(-lug_half_a), hinge_z))
-    o4 = bm.verts.new((r_hinge * math.cos(-lug_half_a),
-                       r_hinge * math.sin(-lug_half_a), hinge_z + lug_h))
-    o5 = bm.verts.new((r_hinge * math.cos(+lug_half_a),
-                       r_hinge * math.sin(+lug_half_a), hinge_z + lug_h))
-    o6 = bm.verts.new((lug_r   * math.cos(+lug_half_a),
-                       lug_r   * math.sin(+lug_half_a), hinge_z + lug_h))
-    o7 = bm.verts.new((lug_r   * math.cos(-lug_half_a),
-                       lug_r   * math.sin(-lug_half_a), hinge_z + lug_h))
+    o0 = bm.verts.new(
+        (r_hinge * math.cos(-lug_half_a), r_hinge * math.sin(-lug_half_a), hinge_z)
+    )
+    o1 = bm.verts.new(
+        (r_hinge * math.cos(+lug_half_a), r_hinge * math.sin(+lug_half_a), hinge_z)
+    )
+    o2 = bm.verts.new(
+        (lug_r * math.cos(+lug_half_a), lug_r * math.sin(+lug_half_a), hinge_z)
+    )
+    o3 = bm.verts.new(
+        (lug_r * math.cos(-lug_half_a), lug_r * math.sin(-lug_half_a), hinge_z)
+    )
+    o4 = bm.verts.new(
+        (
+            r_hinge * math.cos(-lug_half_a),
+            r_hinge * math.sin(-lug_half_a),
+            hinge_z + lug_h,
+        )
+    )
+    o5 = bm.verts.new(
+        (
+            r_hinge * math.cos(+lug_half_a),
+            r_hinge * math.sin(+lug_half_a),
+            hinge_z + lug_h,
+        )
+    )
+    o6 = bm.verts.new(
+        (lug_r * math.cos(+lug_half_a), lug_r * math.sin(+lug_half_a), hinge_z + lug_h)
+    )
+    o7 = bm.verts.new(
+        (lug_r * math.cos(-lug_half_a), lug_r * math.sin(-lug_half_a), hinge_z + lug_h)
+    )
 
     # square through-hole corners around the hinge pin center
     ih0 = bm.verts.new((hole_cx - hole_off, -hole_off, hinge_z))
@@ -326,19 +400,20 @@ def make_petal(name, n_petals, outer_profile, inner_profile,
     face([ih2, ih3, ih7, ih6])  # hole side 3
     face([ih3, ih0, ih4, ih7])  # hole side 4
 
-    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
-    bm.to_mesh(mesh)
-    bm.free()
-    mesh.update()
-
-    obj = bpy.data.objects.new(name, mesh)
-    bpy.context.collection.objects.link(obj)
-    return obj
+    return _finalize_bmesh(bm, mesh, name)
 
 
-def make_base_ring(name, outer_r, inner_r, axial_h, n_seg=64,
-                   hinge_lugs=8, rack_teeth=0, rack_depth=0.0,
-                   rack_width=0.4):
+def make_base_ring(
+    name,
+    outer_r,
+    inner_r,
+    axial_h,
+    n_seg=64,
+    hinge_lugs=8,
+    rack_teeth=0,
+    rack_depth=0.0,
+    rack_width=0.4,
+):
     """
     Fixed base ring that the petals hinge from.
     outer_r / inner_r: ring radii, axial_h: ring height.
@@ -350,7 +425,7 @@ def make_base_ring(name, outer_r, inner_r, axial_h, n_seg=64,
         n_seg = max(n_seg, rack_teeth * 8)
 
     mesh = bpy.data.meshes.new(name + "_mesh")
-    bm   = bmesh.new()
+    bm = bmesh.new()
 
     def inner_radius(angle):
         if rack_teeth <= 0:
@@ -364,16 +439,26 @@ def make_base_ring(name, outer_r, inner_r, axial_h, n_seg=64,
 
     angles = [2 * math.pi * i / n_seg for i in range(n_seg)]
 
-    bot_o = [bm.verts.new((outer_r * math.cos(a), outer_r * math.sin(a), 0.0))
-             for a in angles]
-    top_o = [bm.verts.new((outer_r * math.cos(a), outer_r * math.sin(a), axial_h))
-             for a in angles]
-    bot_i = [bm.verts.new((inner_radius(a) * math.cos(a),
-                          inner_radius(a) * math.sin(a), 0.0))
-             for a in angles]
-    top_i = [bm.verts.new((inner_radius(a) * math.cos(a),
-                          inner_radius(a) * math.sin(a), axial_h))
-             for a in angles]
+    bot_o = [
+        bm.verts.new((outer_r * math.cos(a), outer_r * math.sin(a), 0.0))
+        for a in angles
+    ]
+    top_o = [
+        bm.verts.new((outer_r * math.cos(a), outer_r * math.sin(a), axial_h))
+        for a in angles
+    ]
+    bot_i = [
+        bm.verts.new(
+            (inner_radius(a) * math.cos(a), inner_radius(a) * math.sin(a), 0.0)
+        )
+        for a in angles
+    ]
+    top_i = [
+        bm.verts.new(
+            (inner_radius(a) * math.cos(a), inner_radius(a) * math.sin(a), axial_h)
+        )
+        for a in angles
+    ]
 
     def face(vlist):
         try:
@@ -383,22 +468,25 @@ def make_base_ring(name, outer_r, inner_r, axial_h, n_seg=64,
 
     for i in range(n_seg):
         j = (i + 1) % n_seg
-        face([bot_o[i], bot_o[j], top_o[j], top_o[i]])     # outer wall
-        face([bot_i[i], top_i[i], top_i[j], bot_i[j]])     # inner wall
-        face([bot_o[i], bot_i[i], bot_i[j], bot_o[j]])     # bottom annulus
-        face([top_o[i], top_o[j], top_i[j], top_i[i]])     # top annulus
+        face([bot_o[i], bot_o[j], top_o[j], top_o[i]])  # outer wall
+        face([bot_i[i], top_i[i], top_i[j], bot_i[j]])  # inner wall
+        face([bot_o[i], bot_i[i], bot_i[j], bot_o[j]])  # bottom annulus
+        face([top_o[i], top_o[j], top_i[j], top_i[i]])  # top annulus
 
-    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
-    bm.to_mesh(mesh)
-    bm.free()
-    mesh.update()
-    obj = bpy.data.objects.new(name, mesh)
-    bpy.context.collection.objects.link(obj)
-    return obj
+    return _finalize_bmesh(bm, mesh, name)
 
 
-def make_cone_rib(bm_target, phi_center, outer_profile, tip_z, hinge_z,
-                  rib_span_deg=6.0, rib_depth=3.5, n_angle_sub=4, n_z_sub=6):
+def make_cone_rib(
+    bm_target,
+    phi_center,
+    outer_profile,
+    tip_z,
+    hinge_z,
+    rib_span_deg=6.0,
+    rib_depth=3.5,
+    n_angle_sub=4,
+    n_z_sub=6,
+):
     """
     Add one structural cone rib into an existing BMesh (bm_target).
 
@@ -411,11 +499,12 @@ def make_cone_rib(bm_target, phi_center, outer_profile, tip_z, hinge_z,
     rib_depth: radial thickness (outer surface minus inner surface, mm)
     """
     span_rad = math.radians(rib_span_deg)
-    half     = span_rad / 2.0
+    half = span_rad / 2.0
 
     z_vals = [tip_z + (hinge_z - tip_z) * i / (n_z_sub - 1) for i in range(n_z_sub)]
-    a_vals = [phi_center - half + span_rad * i / (n_angle_sub - 1)
-              for i in range(n_angle_sub)]
+    a_vals = [
+        phi_center - half + span_rad * i / (n_angle_sub - 1) for i in range(n_angle_sub)
+    ]
 
     def bv(r, a, z):
         return bm_target.verts.new((r * math.cos(a), r * math.sin(a), z))
@@ -437,38 +526,57 @@ def make_cone_rib(bm_target, phi_center, outer_profile, tip_z, hinge_z,
     # outer surface
     for iz in range(n_z_sub - 1):
         for ia in range(n_angle_sub - 1):
-            bf([outer_v[iz][ia], outer_v[iz][ia+1],
-                outer_v[iz+1][ia+1], outer_v[iz+1][ia]])
+            bf(
+                [
+                    outer_v[iz][ia],
+                    outer_v[iz][ia + 1],
+                    outer_v[iz + 1][ia + 1],
+                    outer_v[iz + 1][ia],
+                ]
+            )
     # inner surface
     for iz in range(n_z_sub - 1):
         for ia in range(n_angle_sub - 1):
-            bf([inner_v[iz][ia], inner_v[iz+1][ia],
-                inner_v[iz+1][ia+1], inner_v[iz][ia+1]])
+            bf(
+                [
+                    inner_v[iz][ia],
+                    inner_v[iz + 1][ia],
+                    inner_v[iz + 1][ia + 1],
+                    inner_v[iz][ia + 1],
+                ]
+            )
     # angular side caps
     for iz in range(n_z_sub - 1):
-        bf([outer_v[iz][0], outer_v[iz+1][0], inner_v[iz+1][0], inner_v[iz][0]])
+        bf([outer_v[iz][0], outer_v[iz + 1][0], inner_v[iz + 1][0], inner_v[iz][0]])
         ia = n_angle_sub - 1
-        bf([outer_v[iz][ia], inner_v[iz][ia], inner_v[iz+1][ia], outer_v[iz+1][ia]])
+        bf([outer_v[iz][ia], inner_v[iz][ia], inner_v[iz + 1][ia], outer_v[iz + 1][ia]])
     # tip cap (z = tip_z)
     for ia in range(n_angle_sub - 1):
         ro0 = lerp_profile(outer_profile, tip_z)
         ri0 = max(0.5, ro0 - rib_depth)
         if ri0 < 1.0:
             apex = bm_target.verts.new((0.0, 0.0, tip_z))
-            bf([outer_v[0][ia], outer_v[0][ia+1], apex])
+            bf([outer_v[0][ia], outer_v[0][ia + 1], apex])
         else:
-            bf([outer_v[0][ia], outer_v[0][ia+1],
-                inner_v[0][ia+1], inner_v[0][ia]])
+            bf([outer_v[0][ia], outer_v[0][ia + 1], inner_v[0][ia + 1], inner_v[0][ia]])
     # hinge cap (z = hinge_z)
     iz = n_z_sub - 1
     for ia in range(n_angle_sub - 1):
-        bf([outer_v[iz][ia], inner_v[iz][ia],
-            inner_v[iz][ia+1], outer_v[iz][ia+1]])
+        bf([outer_v[iz][ia], inner_v[iz][ia], inner_v[iz][ia + 1], outer_v[iz][ia + 1]])
 
 
-def make_rear_frame(name, outer_profile, tip_z, hinge_z,
-                    n_ribs, rib_span_deg, rib_depth,
-                    ring_outer_r, ring_inner_r, ring_h):
+def make_rear_frame(
+    name,
+    outer_profile,
+    tip_z,
+    hinge_z,
+    n_ribs,
+    rib_span_deg,
+    rib_depth,
+    ring_outer_r,
+    ring_inner_r,
+    ring_h,
+):
     """
     One-piece base ring + N structural cone ribs for the rear nozzle frame.
 
@@ -478,22 +586,30 @@ def make_rear_frame(name, outer_profile, tip_z, hinge_z,
     so the frame skeleton is visible through the petal gaps when open.
     """
     mesh = bpy.data.meshes.new(name + "_mesh")
-    bm   = bmesh.new()
+    bm = bmesh.new()
 
     # Base ring at hinge_z (aft face, into the fuselage hull)
-    n_seg  = 64
+    n_seg = 64
     angles = [2 * math.pi * i / n_seg for i in range(n_seg)]
-    z_rb   = hinge_z           # aft face of ring (faces aft, mates with petals)
-    z_rt   = hinge_z + ring_h  # forward face (into fuselage interior)
+    z_rb = hinge_z  # aft face of ring (faces aft, mates with petals)
+    z_rt = hinge_z + ring_h  # forward face (into fuselage interior)
 
-    bot_o = [bm.verts.new((ring_outer_r*math.cos(a), ring_outer_r*math.sin(a), z_rb))
-             for a in angles]
-    top_o = [bm.verts.new((ring_outer_r*math.cos(a), ring_outer_r*math.sin(a), z_rt))
-             for a in angles]
-    bot_i = [bm.verts.new((ring_inner_r*math.cos(a), ring_inner_r*math.sin(a), z_rb))
-             for a in angles]
-    top_i = [bm.verts.new((ring_inner_r*math.cos(a), ring_inner_r*math.sin(a), z_rt))
-             for a in angles]
+    bot_o = [
+        bm.verts.new((ring_outer_r * math.cos(a), ring_outer_r * math.sin(a), z_rb))
+        for a in angles
+    ]
+    top_o = [
+        bm.verts.new((ring_outer_r * math.cos(a), ring_outer_r * math.sin(a), z_rt))
+        for a in angles
+    ]
+    bot_i = [
+        bm.verts.new((ring_inner_r * math.cos(a), ring_inner_r * math.sin(a), z_rb))
+        for a in angles
+    ]
+    top_i = [
+        bm.verts.new((ring_inner_r * math.cos(a), ring_inner_r * math.sin(a), z_rt))
+        for a in angles
+    ]
 
     def rf(vl):
         try:
@@ -503,29 +619,27 @@ def make_rear_frame(name, outer_profile, tip_z, hinge_z,
 
     for i in range(n_seg):
         j = (i + 1) % n_seg
-        rf([bot_o[i], bot_o[j], top_o[j], top_o[i]])   # outer wall
-        rf([bot_i[i], top_i[i], top_i[j], bot_i[j]])   # inner wall
-        rf([bot_o[i], bot_i[i], bot_i[j], bot_o[j]])   # aft annulus
-        rf([top_o[i], top_o[j], top_i[j], top_i[i]])   # forward annulus
+        rf([bot_o[i], bot_o[j], top_o[j], top_o[i]])  # outer wall
+        rf([bot_i[i], top_i[i], top_i[j], bot_i[j]])  # inner wall
+        rf([bot_o[i], bot_i[i], bot_i[j], bot_o[j]])  # aft annulus
+        rf([top_o[i], top_o[j], top_i[j], top_i[i]])  # forward annulus
 
     # 8 ribs: sit between petal positions at +22.5° offsets from petals.
     # Petals sit at 0°, 45°, 90°… so ribs at 22.5°, 67.5°, 112.5°…
     rib_offset = math.pi / n_ribs
     for i in range(n_ribs):
         phi = 2 * math.pi * i / n_ribs + rib_offset
-        make_cone_rib(bm, phi, outer_profile,
-                      tip_z   = tip_z,    # z=0 — cone apex (aft-most point)
-                      hinge_z = hinge_z,  # z=14mm — base ring attachment face
-                      rib_span_deg = rib_span_deg,
-                      rib_depth    = rib_depth)
+        make_cone_rib(
+            bm,
+            phi,
+            outer_profile,
+            tip_z=tip_z,  # z=0 — cone apex (aft-most point)
+            hinge_z=hinge_z,  # z=14mm — base ring attachment face
+            rib_span_deg=rib_span_deg,
+            rib_depth=rib_depth,
+        )
 
-    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
-    bm.to_mesh(mesh)
-    bm.free()
-    mesh.update()
-    obj = bpy.data.objects.new(name, mesh)
-    bpy.context.collection.objects.link(obj)
-    return obj
+    return _finalize_bmesh(bm, mesh, name)
 
 
 def assemble_closed(petal_obj, n_petals, out_path):
@@ -558,7 +672,9 @@ def assemble_closed(petal_obj, n_petals, out_path):
     bpy.context.view_layer.objects.active = joined
     bpy.ops.wm.stl_export(filepath=out_path, export_selected_objects=True)
     sz = os.path.getsize(out_path) // 1024
-    print(f"  → {os.path.basename(out_path)}  ({sz} KB)  [closed assembly, verification]")
+    print(
+        f"  → {os.path.basename(out_path)}  ({sz} KB)  [closed assembly, verification]"
+    )
 
     # Remove joined copy; keep original petal
     bpy.ops.object.delete()
@@ -575,37 +691,41 @@ print("\n=== Nacelle nozzle (50 mm ID) ===")
 clear_scene()
 
 nac_petal = make_petal(
-    name          = "nacelle_petal",
-    n_petals      = N_PETALS,
-    outer_profile = NAC_OUTER_PROFILE,
-    inner_profile = NAC_INNER_PROFILE,
-    tip_z         = NAC_TIP_Z,
-    hinge_z       = NAC_HINGE_Z,
-    edf_r         = NAC_EDF_R,
-    n_angle_sub   = N_ANGLE,
-    n_z_sub       = N_PROFILE_Z,
+    name="nacelle_petal",
+    n_petals=N_PETALS,
+    outer_profile=NAC_OUTER_PROFILE,
+    inner_profile=NAC_INNER_PROFILE,
+    tip_z=NAC_TIP_Z,
+    hinge_z=NAC_HINGE_Z,
+    edf_r=NAC_EDF_R,
+    n_angle_sub=N_ANGLE,
+    n_z_sub=N_PROFILE_Z,
 )
 
 nac_ring = make_base_ring(
-    name      = "nacelle_ring",
-    outer_r   = lerp_profile(NAC_OUTER_PROFILE, NAC_HINGE_Z) + HINGE_WALL * 2,
-    inner_r   = lerp_profile(NAC_INNER_PROFILE, NAC_HINGE_Z) - 0.5,
-    axial_h   = HINGE_WALL * 4,
-    rack_teeth = NAC_RING_TEETH,
-    rack_depth = NAC_RING_RACK_DEPTH,
-    rack_width = NAC_RING_RACK_WIDTH,
+    name="nacelle_ring",
+    outer_r=lerp_profile(NAC_OUTER_PROFILE, NAC_HINGE_Z) + HINGE_WALL * 2,
+    inner_r=lerp_profile(NAC_INNER_PROFILE, NAC_HINGE_Z) - 0.5,
+    axial_h=HINGE_WALL * 4,
+    rack_teeth=NAC_RING_TEETH,
+    rack_depth=NAC_RING_RACK_DEPTH,
+    rack_width=NAC_RING_RACK_WIDTH,
 )
 
 petal_path = os.path.join(OUT, "nacelle_nozzle_petal.stl")
-ring_path  = os.path.join(OUT, "nacelle_nozzle_ring.stl")
-asm_path   = os.path.join(OUT, "nacelle_nozzle_closed_asm.stl")
+ring_path = os.path.join(OUT, "nacelle_nozzle_ring.stl")
+asm_path = os.path.join(OUT, "nacelle_nozzle_closed_asm.stl")
 
 export_stl(nac_petal, petal_path)
-print(f"  → nacelle_nozzle_petal.stl  ({os.path.getsize(petal_path)//1024} KB)"
-      f"  print × {N_PETALS} per nacelle × 4 nacelles = {N_PETALS*4} total")
+print(
+    f"  → nacelle_nozzle_petal.stl  ({os.path.getsize(petal_path)//1024} KB)"
+    f"  print × {N_PETALS} per nacelle × 4 nacelles = {N_PETALS*4} total"
+)
 export_stl(nac_ring, ring_path)
-print(f"  → nacelle_nozzle_ring.stl   ({os.path.getsize(ring_path)//1024} KB)"
-      f"  print × 4 (one per nacelle, inner rack teeth {NAC_RING_TEETH} × {NAC_RING_RACK_DEPTH:.1f}mm) ")
+print(
+    f"  → nacelle_nozzle_ring.stl   ({os.path.getsize(ring_path)//1024} KB)"
+    f"  print × 4 (one per nacelle, inner rack teeth {NAC_RING_TEETH} × {NAC_RING_RACK_DEPTH:.1f}mm) "
+)
 
 assemble_closed(nac_petal, N_PETALS, asm_path)
 
@@ -633,44 +753,48 @@ clear_scene()
 
 _rear_ring_outer = lerp_profile(REAR_OUTER_PROFILE, REAR_HINGE_Z) + HINGE_WALL * 2
 _rear_ring_inner = lerp_profile(REAR_INNER_PROFILE, REAR_HINGE_Z) - 0.5
-_rear_ring_h     = HINGE_WALL * 4
+_rear_ring_h = HINGE_WALL * 4
 
 rear_frame = make_rear_frame(
-    name         = "rear_frame",
-    outer_profile = REAR_OUTER_PROFILE,
-    tip_z        = REAR_TIP_Z,
-    hinge_z      = REAR_HINGE_Z,
-    n_ribs       = N_PETALS,
-    rib_span_deg = REAR_RIB_SPAN_DEG,
-    rib_depth    = REAR_RIB_DEPTH,
-    ring_outer_r = _rear_ring_outer,
-    ring_inner_r = _rear_ring_inner,
-    ring_h       = _rear_ring_h,
+    name="rear_frame",
+    outer_profile=REAR_OUTER_PROFILE,
+    tip_z=REAR_TIP_Z,
+    hinge_z=REAR_HINGE_Z,
+    n_ribs=N_PETALS,
+    rib_span_deg=REAR_RIB_SPAN_DEG,
+    rib_depth=REAR_RIB_DEPTH,
+    ring_outer_r=_rear_ring_outer,
+    ring_inner_r=_rear_ring_inner,
+    ring_h=_rear_ring_h,
 )
 
 rear_petal = make_petal(
-    name             = "rear_petal",
-    n_petals         = N_PETALS,
-    outer_profile    = REAR_OUTER_PROFILE,
-    inner_profile    = REAR_INNER_PROFILE,
-    tip_z            = REAR_TIP_Z,
-    hinge_z          = REAR_HINGE_Z,
-    edf_r            = REAR_EDF_R,
-    n_angle_sub      = N_ANGLE,
-    n_z_sub          = N_PROFILE_Z,
-    span_override_deg = REAR_PETAL_SPAN_DEG,   # 38° — fits between ribs
+    name="rear_petal",
+    n_petals=N_PETALS,
+    outer_profile=REAR_OUTER_PROFILE,
+    inner_profile=REAR_INNER_PROFILE,
+    tip_z=REAR_TIP_Z,
+    hinge_z=REAR_HINGE_Z,
+    edf_r=REAR_EDF_R,
+    n_angle_sub=N_ANGLE,
+    n_z_sub=N_PROFILE_Z,
+    span_override_deg=REAR_PETAL_SPAN_DEG,  # 38° — fits between ribs
 )
 
 frame_path = os.path.join(OUT, "rear_nozzle_frame.stl")
 petal_path = os.path.join(OUT, "rear_nozzle_petal.stl")
-asm_path   = os.path.join(OUT, "rear_nozzle_closed_asm.stl")
+asm_path = os.path.join(OUT, "rear_nozzle_closed_asm.stl")
 
 export_stl(rear_frame, frame_path)
-print(f"  → rear_nozzle_frame.stl   ({os.path.getsize(frame_path)//1024} KB)"
-      f"  — base ring + {N_PETALS} ribs, print × 1")
+print(
+    f"  → rear_nozzle_frame.stl   ({os.path.getsize(frame_path)//1024} KB)"
+    f"  — base ring + {N_PETALS} ribs, print × 1"
+)
 export_stl(rear_petal, petal_path)
-print(f"  → rear_nozzle_petal.stl   ({os.path.getsize(petal_path)//1024} KB)"
-      f"  — {REAR_PETAL_SPAN_DEG:.1f}° span, print × {N_PETALS}")
+print(
+    f"  → rear_nozzle_petal.stl   ({os.path.getsize(petal_path)//1024} KB)"
+    f"  — {REAR_PETAL_SPAN_DEG:.1f}° span, print × {N_PETALS}"
+)
 
 # Closed assembly verification: frame + petals
 asm_copies = [rear_frame]
@@ -697,11 +821,13 @@ bpy.context.view_layer.objects.active = joined
 bpy.ops.wm.stl_export(filepath=asm_path, export_selected_objects=True)
 sz = os.path.getsize(asm_path) // 1024
 print(f"  → rear_nozzle_closed_asm.stl  ({sz} KB)  [frame+petals, verify only]")
-bpy.ops.object.delete()   # remove joined assembly copy
+bpy.ops.object.delete()  # remove joined assembly copy
 
-print(f"\n  Rib angular span: {REAR_RIB_SPAN_DEG}°  "
-      f"Petal span: {REAR_PETAL_SPAN_DEG:.1f}°  "
-      f"Gap each side: {REAR_RIB_GAP_DEG}°")
+print(
+    f"\n  Rib angular span: {REAR_RIB_SPAN_DEG}°  "
+    f"Petal span: {REAR_PETAL_SPAN_DEG:.1f}°  "
+    f"Gap each side: {REAR_RIB_GAP_DEG}°"
+)
 
 print("""
 ─────────────────────────────────────────────────────────────────────────────

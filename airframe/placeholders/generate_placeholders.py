@@ -2027,8 +2027,8 @@ def main():
     )
     if errors:
         print(f"ERRORS ({len(errors)}):")
-        for name, exc in errors:
-            print(f"  {name}: {exc}")
+        for name, err in errors:
+            print(f"  {name}: {err}")
         return 1
     print("All placeholder STLs written successfully.")
     return 0
