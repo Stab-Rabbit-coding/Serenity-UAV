@@ -2234,10 +2234,25 @@ All are on the `avionics/kicad/` branch; run DRC to zero errors before generatin
             - Remaining DRC findings are all SOFT/accepted-class (silk, via/track-dangling,
                 lib-footprint) — the pre-existing routing/silk backlog documented above; the CI
                 validator does not gate on them.
-        - [ ] **Final placement + routing of the 4 new RSSI parts — REFERRED TO USER.**
+        - [x] **Final placement + routing of the 4 new RSSI parts — REFERRED TO USER.**
             They are parked in an off-board holding area (x≈161 mm, right of the board edge)
             with correct nets but unrouted; drag into final position and route (project rule:
-            refer footprint positioning to the user).
+            refer footprint positioning to the user). **parts placed by user on back of board within RF board section. 5-Jul-2026**
+        - [x] **NET validation & DRC — DONE 2026-07-05.** After the user's placement:
+            sch↔pcb parity exact (refs + net sets match); DRC **0 hard violations** (0
+            shorting/clearance/courtyard/solder-mask). Placement introduced no hard errors.
+        - [x] **RSSI sub-circuit routed — DONE 2026-07-05** via `avionics/kicad/route_emma_rssi.py`
+            (pcbnew, 0.15 mm B.Cu traces threading the 0.5 mm mid-channel, 0.3 mm-drill vias,
+            zones refilled). Routed: GND (3 pads → In1.Cu/F.Cu GND pour via one via at RL.2),
+            RSSI_REF (RH.2/RL.1/CMP.3, weaved around the wide CMP.4 GND pad), +3V3 internal
+            (RH.1/CBY.1/CMP.2) **and its board tie to LNA By**, and RSSI_ANA (CMP.1 → RSSI Lo
+            divider). Unconnected 104 → 95. All 0-hard, 0 drill-out-of-range.
+        - [ ] **RSSI_DCD still to route (1 net).** RSSI_CMP.5 → PB2-P2 pad 2 (105.4,130.2) is a
+            ~28 mm cross-board run through the ETH-PHY/LoRa (B.Cu) and the PB2 header (bottom
+            edge) congestion; a naive route shorts/mask-bridges heavily. Route interactively
+            (GUI push-shove) or with a real autorouter — `route_emma_rssi.py dcd` holds a
+            starting attempt. This is the RSSI carrier-detect **output** to the host, so the
+            feature is incomplete until it lands.
         - [ ] **`RSSI_CMP` part/pinout PROVISIONAL — pending datasheet vetting.** Value is a
             placeholder "LMV331-class"; pad→net is by FUNCTION and matches the schematic
             symbol, but the real comparator's part number + SOT-23-5 pin order MUST be

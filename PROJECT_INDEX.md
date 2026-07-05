@@ -592,6 +592,7 @@ gen_cape_b2_pcb.py              — PCB layout generator (Cape-B-2)
 complete_xcvr_49mhz2.py         — Emma completion script
 gen_emma_sch.py                 — Emma schematic-first generator (authors Emma.kicad_sch from the as-placed PCB; 2026-07-04 reconciliation)
 mod_emma_pcb.py                 — Emma PCB transform (pcbnew: drop J1, UART→PB2 rails, PTT_N/RSSI_DCD reassign, add RSSI comparator; 2026-07-04)
+route_emma_rssi.py               — Emma RSSI sub-circuit router (pcbnew: GND/REF/+3V3/RSSI_ANA traces + vias; 2026-07-05)
 cleanup_emma_drc.py             — Emma DRC debt cleanup (pcbnew: mask expansion 0.1→0.05mm, delete redundant close GND tracks; 2026-07-04)
 add_eth_phy.py                  — Ethernet PHY addition script
 add_sensors_sbus.py             — SBUS sensor addition script
