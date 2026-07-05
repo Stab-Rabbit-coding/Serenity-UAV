@@ -129,13 +129,13 @@ silicon (Vera.md "Verified vs. Placeholder").
 | TFmini-S ToF (140 mA typ / 200 mA peak @5 V) | 0.14 | 0.20 | REF-SENSOR-002 |
 | Ethernet magnetics + passives + LDO overhead | 0.04 | 0.07 | |
 | **Core subtotal (no laser)** | **1.20** | **2.06** | |
-| Laser — cargo (Class 2/3R green, ≤5 mW optical) | +0.02 | +0.02 | negligible |
-| Laser — nose (Class 3B green, up to 500 mW optical, when firing) | +0.20 | +0.66 | ≈15 % wall-plug efficiency; intermittent |
+| Laser — both sites (Class 2 green, ≤ 1 mW optical) | +0.02 | +0.02 | negligible; see `docs/VERA_LASER_ANALYSIS.md` (nose is Class 2, not 3B) |
 
-**Per board:** cargo ≈ **1.22 A** typ / **2.08 A** peak; nose ≈ **1.40 A** typ (laser idle) /
-**2.72 A** peak (lasing).
-**Both boards (2×):** ≈ **2.4 A** typ / **~4.8 A** worst-case peak at 5 V →
-≈ **0.6 A** typ / **~1.2 A** peak at VBAT (5 V ÷ 22.2 V ÷ 0.92 BEC eff).
+**Per board:** ≈ **1.22 A** typ / **2.08 A** peak (both boards are now Class 2 laser — the nose
+is a concentrated dot + camera strobe-difference detection, ~0.45 mW, not a 500 mW Class 3B
+module, so its laser draw is negligible like the cargo unit).
+**Both boards (2×):** ≈ **2.4 A** typ / **~4.2 A** peak at 5 V →
+≈ **0.6 A** typ / **~1.0 A** peak at VBAT (5 V ÷ 22.2 V ÷ 0.92 BEC eff).
 
 **Feed decision — dedicated Kaylee 5 V payload rail (recommended over sharing the avionics
 bus).** The shared 5 V avionics rail is already tight: realistic sustained load ≈ 10 A (§3.2)

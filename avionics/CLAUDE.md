@@ -250,16 +250,17 @@ optical power / IEC 60825-1 class:
 - **Spread (terminal optic, 15× difference):** nose 2"×2" @ 50 ft ⇒ ≈0.19° (3.3 mrad),
   custom near-collimated; cargo 3"×3" @ 5 ft ⇒ ≈2.86° (50 mrad), stock DOE or diverging-lens
   dot. Same collimated green source both places.
-- **Nose — Class 3B** (≤500 mW): daylight visibility at 50 ft still requires 3B radiant power
-  even in green. Needs the key-controlled interlock, emission indicator, **mechanical
-  beam-stop/shutter** (still not on the board), and warning labeling — the GPIO-default-off
-  pull-down is necessary but not sufficient. **Do not source until REFERENCES.md carries a
-  verified datasheet citation** (REF-IEC-002 pending item; TODO.md §1.2c.4).
-- **Cargo — Class 2** (≤1 mW green): green is 6.64× more luminous-efficient than the retired
-  650 nm red, so the same 5 ft visibility needs ≤1 mW → Class 2 (blink-reflex safe, *safer*
-  than the old red, no interlock). **The Class 2 cap MUST be hardware-enforced** (fixed current
-  limit), not firmware-only, since the shared diode is 3B-capable — a fault must not fire 3B
-  power into the cargo bay above ground crew.
+- **Both sites — Class 2** (≤1 mW green). The nose is **not** inherently Class 3B: 3B was the
+  worst-case corner (a power-diluted 2" *spread* crosshair judged by a *naked eye* in *full
+  sun* = ~82 mW). Vera's actual requirement is *camera* visibility, and a **concentrated ~12 mm
+  green dot detected by Vera's own strobed camera + frame-difference needs only ~0.45 mW →
+  Class 2** (see `docs/VERA_LASER_ANALYSIS.md`). Cargo is likewise Class 2 (green's 6.64×
+  photopic advantage over the retired 650 nm red). **Class 2 at both sites eliminates the
+  Class 3B key-interlock and mechanical shutter** — the `LASER_KEY_IN`/`LASER_IND` lines become
+  optional defense-in-depth. Keep the ≤1 mW cap **hardware-enforced** (fixed current limit),
+  not firmware-only. 3B would only return if a *human at the 50 ft target* must see a *spread
+  reticle* in full sun — not Vera's use case. **Do not source** until REFERENCES.md carries a
+  verified datasheet citation (REF-IEC-002 pending; TODO.md §1.2c.4).
 
 **Status:** Design exploration only — no `.kicad_sch`/`.kicad_pcb` exists yet. See TODO.md
 §1.2c (hardware) and §4.6 (firmware) for the WBS breakdown.

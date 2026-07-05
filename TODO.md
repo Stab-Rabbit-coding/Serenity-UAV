@@ -2637,19 +2637,22 @@ Power-budget and laser analyses completed 2026-07-05 (`docs/POWER_DISTRIBUTION.m
 - [ ] **Vera 5 V harness:** 18 AWG shielded TP per drop (Kaylee → nose bow pod, Kaylee → cargo
     nadir mount); 3 A resettable polyfuse per drop; route with each Vera's Ethernet-ring/CAN
     harness. Confirm final run lengths once ring-insertion bays are fixed (§1.2c.3).
-- [ ] **Laser — unify to a single 520 nm green source** (retires the separate 650 nm red cargo
-    module). Per-location terminal optic sets spread (nose ≈ 0.19°/3.3 mrad custom
-    near-collimated; cargo ≈ 2.86°/50 mrad stock DOE or diverging-lens dot). Per-location
-    HARDWARE current limit sets class (nose Class 3B; cargo Class 2, ≤ 1 mW — green's 6.64×
-    photopic advantage over the retired red). See `docs/VERA_LASER_ANALYSIS.md`.
-- [ ] **Cargo Class 2 cap must be hardware-enforced** (fixed current limit), not firmware-only,
-    so no software fault can drive the shared diode to Class 3B near ground crew during loading.
-- [ ] **Nose Class 3B mechanical beam-stop/shutter** — Vera implements only the electronic
-    interlock (LASER_KEY_IN/LASER_IND) today; IEC 60825-1 [REF-IEC-002] Class 3B also requires a
-    mechanical shutter. Add to the nose optical-mechanical design.
+- [ ] **Laser — unify to a single 520 nm green source, Class 2 both sites** (retires the
+    separate 650 nm red cargo module AND the Rev-A nose Class 3B module). Per-location terminal
+    optic sets spread; per-location HARDWARE current limit sets power. **The nose is Class 2
+    (≤ 1 mW), NOT Class 3B** — a concentrated ~12 mm dot detected by Vera's camera (strobe +
+    frame-difference) needs only ~0.45 mW (`docs/VERA_LASER_ANALYSIS.md` Rev A1). This drops the
+    Class 3B key-interlock and mechanical shutter entirely.
+- [ ] **Both Class 2 caps must be hardware-enforced** (fixed current limit), not firmware-only.
+- [ ] **Nose camera strobe + frame-difference detection** (firmware/ISP, TODO.md §4.6) — this
+    is what holds the nose at Class 2 in bright sun; laser-sync GPIO/PWM + differencing in the
+    AM62A7 ISP. Without it the nose spot is not reliably detected in full daylight.
+- [ ] *(No longer required — the Rev-A "nose Class 3B mechanical beam-stop/shutter" task is
+    retired now that the nose is Class 2.)* Re-open only if a human-at-target-in-full-sun
+    visibility requirement is later added (would push the nose back toward 3R/3B).
 - [ ] **Do not source** the green diode or either terminal optic until a real datasheet with a
     verified mW rating + IEC 60825-1 class is added to REFERENCES.md (extends the REF-IEC-002
-    pending item; the nose-laser row in "Open Standards Verification Items").
+    pending item; the Vera-laser row in "Open Standards Verification Items").
 
 **BLOCKS:** Vera fabrication order; bow sensor pod avionics integration (§1.1.1.1a).
 

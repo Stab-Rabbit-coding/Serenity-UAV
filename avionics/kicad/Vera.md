@@ -125,18 +125,22 @@ laser BOM to a single green diode family. Rationale in full: `docs/VERA_LASER_AN
 - **Spread angle is set by the terminal optic, not the source** (15× difference between sites):
   nose ≈ 0.19° (3.3 mrad) custom near-collimated crosshair/dot; cargo ≈ 2.86° (50 mrad) stock
   DOE crosshair or diverging-lens dot. Same collimated green source both places.
-- **Cargo bay** (3"×3" @ 5 ft): green at 520 nm is 6.64× more luminous-efficient than the
-  retired 650 nm red, so the same 5 ft visibility needs ≤ 1 mW → **Class 2** (blink-reflex
-  safe; *safer* than the old red). GPIO-default-off pull-down suffices, **but the Class 2 cap
-  must be HARDWARE-enforced** (fixed current limit) so no firmware fault can drive the shared
-  diode to Class 3B near ground crew.
-- **Nose** (2"×2" @ 50 ft): daylight visibility at 50 ft still requires **IEC 60825-1 Class
-  3B** (5–500 mW) radiant power even in green. Requires the key-controlled interlock
-  (LASER_KEY_IN → U3), emission indicator (LASER_IND → U3), **and a mechanical beam-stop/shutter
-  (still not on the board — electronics-only interlock so far)**.
+- **Both sites are Class 2 (≤ 1 mW green)** — the nose is **not** inherently Class 3B. A
+  concentrated ~12 mm green dot detected by Vera's own *strobed camera + frame-difference*
+  (not a naked eye) needs only **~0.45 mW at 50 ft → Class 2**; the earlier "nose = Class 3B"
+  was the worst-case spread-crosshair + naked-eye-in-full-sun corner (~82 mW). Cargo is
+  likewise Class 2 (green's 6.64× photopic advantage over the retired 650 nm red). Full
+  derivation: `docs/VERA_LASER_ANALYSIS.md`.
+- **Class 2 at both sites drops the Class 3B key-interlock and mechanical shutter.** The
+  `LASER_KEY_IN`/`LASER_IND` lines already on Vera become optional defense-in-depth. Keep each
+  ≤ 1 mW cap **HARDWARE-enforced** (fixed current limit), not firmware-only.
+- **Firmware dependency:** the nose Class 2 margin depends on strobe + frame-difference
+  detection in the AM62A7 ISP (laser-sync GPIO/PWM) — budget it in the Vera firmware WBS
+  (TODO.md §4.6). 3B would only return if a *human at the 50 ft target* must see a *spread
+  reticle* in full sun (not Vera's requirement).
 - **Do not source the green diode or either terminal optic** until a real datasheet with a
   verified mW rating and IEC 60825-1 class replaces the placeholder citation in REFERENCES.md
-  (REF-IEC-002 pending item; tracked TODO.md §1.2c).
+  (REF-IEC-002 pending item; tracked TODO.md §1.2c.4).
 
 ---
 
