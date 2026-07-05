@@ -107,10 +107,8 @@ _PLACEHOLDERS = [
     ("INSERT-M25-BRASS",   "hardware/Insert_M25_brass_L5.stl",              "Insert_M25_brass"),
     ("INSERT-M3-WING",     "hardware/Insert_M3_brass_L5.stl",               "Insert_M3_brass"),
     ("SCREW-M3-8-BTN",     "hardware/Screw_M3x8mm_button_ISO7380.stl",      "Screw_M3x8_btn"),
-    ("PIANO-WIRE-0.8",     "hardware/Piano_wire_0p8mm_iris_ring.stl",       "Piano_wire_ring"),
     ("BATT-STRAP-CAM",     "hardware/Batt_strap_silicone_16mm_CAM.stl",     "Batt_strap_16mm"),
-    # Lighting
-    ("LED-WS2812B",        "lighting/WS2812B_ring_50mm.stl",               "WS2812B_ring_50mm"),
+    # Lighting (WS2812B nozzle-backlight rings removed from the design — TODO §1.1.3.5)
     ("LED-WS2812C-NAC",    "lighting/WS2812C_2020_SMD.stl",                "WS2812C_2020"),
     # Wiring
     ("CONDUIT-PTFE",       "wiring/PTFE_conduit_4mm_OD_3mm_ID_700mm.stl",  "PTFE_conduit_700mm"),

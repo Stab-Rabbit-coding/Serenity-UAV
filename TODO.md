@@ -1586,7 +1586,31 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     selector changed from comment-toggle to a `RENDER_PART` `-D` string
     param ("gear" | "bracket"), matching the wings' `RENDER_SIDE` convention,
     and wired into the Makefile.
-- [ ] rebuild petals using the bamj variable nozzle [REF xxx] as a guide, using the gear train already developed.  **The nozzle shall provide a smooth conical exit for the thrust tube, no matter its final diameter** exit diameter will be 75% of bore at 0 deg (forward) and 105% of bore at or above 90 deg (virtical or backing)
+- [x] **Rebuild petals using the BamJr variable nozzle [REF-CAD-001] as a guide,
+    using the gear train already developed** *(done 2026-07-04)* — the Rev R2
+    redesign in `nacelle_nozzle_iris.scad` already implements the smooth conical
+    exit (8 overlapping tangential-hinge flaps driven by the 72T unison ring gear
+    via a spiral face-cam, reusing the Crown-Pinion→idler→ring train unchanged).
+    This pass: (1) cited the BamJr "Variable-area EDF nozzle" reference
+    (Thingiverse Thing 2991269, CC BY 4.0) — added to `REFERENCES.md` as
+    **REF-CAD-001** and cited in the iris SCAD header, replacing the placeholder
+    `[REF xxx]`; (2) numerically verified the 75 %/105 % kinematics
+    (exit_r = R_HINGE − FLAP_LENGTH·sin φ → φ_closed = 25.94° at 18.75 mm = 75 %
+    bore, φ_open = 3.58° at 26.25 mm = 105 % bore); (3) added a `RENDER_PART`
+    (`throat` | `ring` | `flap` | `asm`) selector and Makefile rules, and rendered
+    the print-ready **`nacelle_nozzle_throat.stl`**, **`nacelle_nozzle_ring.stl`**,
+    **`nacelle_nozzle_flap.stl`** — all mesh-verified fully watertight (1 body
+    each); (4) archived the superseded flat blender petal
+    `nacelle_nozzle_petal.stl`.  *(Piano-wire loose end RECONCILED to Rev S
+    2026-07-04: removed the retired 0.8 mm iris link-ring everywhere active —
+    `bom_revS.csv` `PIANO-WIRE-0.8` dropped and replaced by `PIN-3X18` (3×18 mm
+    tangential hinge, ×16) + new `PIN-2X4` (2×4 mm spiral-cam follower, ×16);
+    `PRINT-NACELLE-PETAL`→`PRINT-NACELLE-FLAP`, `PRINT-NACELLE-RING` updated to the
+    72T unison ring gear, and `PRINT-NACELLE-THROAT` / `-IDLER` / `-IDLER-BKT` added;
+    Crown-Pinion note updated; `gen_piano_wire_ring` + its placeholder STL +
+    `serenity_placeholders_assembly.py` entry + `PROJECT_INDEX` line + the
+    `components_overview.svg` / `build_guide_08_nozzle_gear.svg` / `serenity-rev-r.jsx`
+    strings all updated to the Rev S spiral-cam drive.)*
 
 ##### 1.1.3.2 *Tilt Gear Train*
 
@@ -1601,10 +1625,16 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     was comment-only (Stage 3 ratio/mating-interface text); re-rendered to a
     scratch file and diffed vertex-for-vertex against the published STL —
     confirmed byte-identical geometry, so the published STL was left as-is.
-- [ ] **nacelle_bevel_pair.stl** — `openscad -o ... serenity/stl/nacelle_bevel_pair.scad`
-    - Spec: N=14T, 45° pitch cone, 1:1, 90° axis redirect. No spec change this pass.
-- [ ] **nacelle_bevel_housing.stl** — `openscad -o ... serenity/stl/nacelle_bevel_housing.scad`
-    - Spec: CF-PETG, 24×14×20 mm housing block. No spec change this pass.
+- [x] **nacelle_bevel_pair.stl** — `openscad -o airframe/stls/nacelles/nozzles/nacelle_bevel_pair.stl airframe/openscad/nacelles/nacelle_bevel_pair.scad`
+    *(re-rendered 2026-07-04)* — Spec: N=14T, 45° pitch cone, 1:1, 90° axis
+    redirect. No spec change; the published STL (2026-06-09) predated the
+    2026-06-11 SCAD edit, so it was re-rendered from current source. Mesh-verified
+    fully watertight (1 body, winding-consistent).
+- [x] **nacelle_bevel_housing.stl** — `openscad -o airframe/stls/nacelles/nozzles/nacelle_bevel_housing.stl airframe/openscad/nacelles/nacelle_bevel_housing.scad`
+    *(re-rendered 2026-07-04)* — Spec: CF-PETG, 24×14×20 mm housing block. No spec
+    change; re-rendered from current source (same stale-STL reason as the pair).
+    Mesh-verified watertight (4 separate solids — housing block + bearing bosses —
+    all winding-consistent).
 
 ##### 1.1.3.3 *FreeCAD Hull-Frame Placement (gear train, nozzle, sleeves)*
 
@@ -1664,22 +1694,23 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     else occupies that sector at this Z station). `IDLER_SLOT_ANG` in
     `nacelle_nozzle_iris.scad` updated to match; idler + bracket placed in
     `serenity_assembly.py` at this (X, Y).
-- [ ] **NEW — idler axial mesh-band mismatch (open, found 2026-06-22)**:
-    the idler's two gear sections are 10 mm apart axially
-    (`GEAR_H_IN + GEAR_GAP`, `nacelle_nozzle_idler.scad`) — Idler-In's band
-    starts at local Z=2, Idler-Out's at local Z=12. But Crown Pinion
-    (`CROWN_Z` = 166.25 mm) and the Nozzle Ring (`NOZZLE_RING_Z` = `CROWN_Z`,
-    i.e. the *same* station) currently sit at the identical 166.25–174.25 mm
-    Z band — zero mm apart. A single idler shaft cannot present two gear
-    sections 10 mm apart and mesh two targets that are 0 mm apart as
-    currently speced. **Needs a design decision**: either move Crown
-    Pinion's Z to create the needed 10 mm (or matching) axial offset from
-    the Ring, or change the idler's own `GEAR_GAP`/section order to match
-    the existing (zero) Crown-Pinion/Ring spacing. Until resolved, the
-    idler + bracket are placed in `serenity_assembly.py` at a centred
-    placeholder Z (`CROWN_Z - 11.0`) — VERIFY tier, explicitly flagged
-    pending this decision. See `nacelle_nozzle_idler.scad` header for the
-    full derivation.
+- [x] **idler axial mesh-band mismatch — RESOLVED 2026-07-04** (user decision:
+    offset the Crown Pinion, accounting for CG).  The idler's two gear sections
+    are 10 mm apart axially (Idler-In band centre at local Z=6, Idler-Out at
+    Z=16), but Crown Pinion and the Nozzle Ring both sat at the same station
+    (`CROWN_Z = NOZZLE_RING_Z = 166.25`), 0 mm apart — unmeshable by one idler
+    shaft.  **Fix:** decoupled the two and moved the Crown Pinion 10 mm toward the
+    intake — `CROWN_Z = NOZZLE_RING_Z − 10 = 156.25` (`nacelle_pod_50mm_tandem.scad`)
+    — so the targets are now 10 mm apart, matching the idler band spacing.  The
+    idler + bracket are placed in `serenity_assembly.py` at `Z = CROWN_Z − 6` (real
+    Z, no longer a placeholder), so Idler-In meshes the Crown plane and Idler-Out
+    the Ring plane; the nozzle placement now uses `NOZZLE_RING_Z` (unchanged).
+    **CG re-derived** for the FULL rotating assembly (gear train + nozzle
+    ring/petals/idler included, WS2812B LED rings removed, aft cowl not
+    double-counted): CG_Z = 104.5 mm, so `PIVOT_Z` moved 103.75 → 104.5 mm (a
+    negligible +0.75 mm) — the nacelle still pivots about its CG, per the user
+    requirement.  See the pod header mass breakdown and `nacelle_nozzle_idler.scad`
+    header.
 - [x] **Confirm Sector Gear standoff distance from the nacelle face**
     *(resolved 2026-06-22)* — a tilt-bracket SCAD source DOES exist
     (`airframe/openscad/wings/wing_nacelle_pylon_revo.scad`, not found in
@@ -1758,15 +1789,48 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     above is resolved.
 ##### 1.1.3.4 *Nacelle Intake*
 
-- [ ] Trim the intake bell to the canonical leading nacelle dome.  The leading edge of the nacelle should be at the intersection of the canonical dome and the cosine intake.
+- [x] **Trim the intake bell to the canonical leading nacelle dome** *(done
+    2026-07-04)* — the additive `inlet_bell` protruded well past the slender
+    canonical dome (bell outer r ≈ 30.5 mm at Z=0 vs the ogive nose r ≈ 21 mm at
+    the tip). Because the imported nacelle shell is a SOLID body (54 % bbox fill,
+    airflow carved by subtraction), it was replaced with a SUBTRACTIVE cosine
+    `inlet_bellmouth()` carved into the dome: r_cut(z) flares from 25 mm (aft) to
+    28 mm (front) and, since it decreases monotonically in z while the dome radius
+    increases, crosses the dome exactly once — so the nose forward of that crossover
+    (the thin tip, thinner than the 50 mm EDF anyway) is removed and the LEADING
+    EDGE = the canonical dome ∩ cosine intake, exactly as specified. Re-rendered +
+    baked both nacelles; the trimmed nose shifted the baked Y extent by ≈5.8 mm
+    (Port −64→−58.2, Stbd −70→−64.2 — CLAUDE.md extent tables updated). Both
+    watertight. **VERIFY the exact crossover station in FreeCAD** against the
+    canonical mould line.
 
 ##### 1.1.3.5 *Nacelle Lighting*
 
-- [ ] Move the port (red) and starboard (green) navigation lights from the inward face of the nacelle to the outward face, so that they provide the specified range of visibility.  Verify against [REF-FAA-003].
-
-- [ ] Route navigation light wires through a cableway *within, not protruding from* the canonical nacelle skin.  Use existing EDF cableways to the greatest extent practicable to simplify building and maintenance.
-
-- [ ] Remove the exhaust LED rings with their wire-harnesses from the design completely.
+- [x] **Move the port (red) / stbd (green) nav lights INWARD→OUTWARD face** *(done
+    2026-07-04)* — a red (port) / green (starboard) position light must radiate to
+    its own side [REF-FAA-003 §91.209(a)]; on the inboard face the pylon/fuselage
+    occludes the required outboard arc. Added `nav_light_pocket()` — a flush
+    WS2812C-2020 recess cut INTO the OUTBOARD nacelle face (interior modification,
+    does not protrude) + a short through-wall wire bore. Header/usage comments and
+    REF-FAA-003's citation index updated. Both nacelles re-rendered + baked,
+    watertight. `NAV_LIGHT_Z = 70 mm` is a VERIFY/fine-tune-in-FreeCAD station.
+- [x] **Route nav-light wires through an internal cableway (not protruding)** *(done
+    2026-07-04)* — removed the old EXTERNAL protruding D-section `nav_wire_conduit`;
+    added `nav_wire_channel()`, an INTERNAL rib bonded to the inside of the outboard
+    skin with an OPEN snap-in U-groove (no trapped/enclosed void — prints cleanly and
+    is field-serviceable), running from the emitter down to the existing
+    `harness_exit_port()` where the wire joins the ESC/harness bundle to the pylon
+    (reuses the EDF cableway). Never breaks the exterior mould line.
+- [x] **Remove the exhaust WS2812B LED rings + harnesses from the design completely**
+    *(done 2026-07-04)* — all 3 (2 nacelle + 1 rear) removed across every ACTIVE
+    file: `current-specification/bom_revS.csv`, `README.md`, `docs/POWER_DISTRIBUTION.md`
+    (5 V subtotal 13 650→13 410 mA nom / 27 310→26 710 peak; load-shed table
+    renumbered), `serenity-rev-r.jsx`, the placeholder generator + assembly + the
+    `WS2812B_ring_50mm.stl` asset (deleted), both blender generators, `PROJECT_INDEX.md`,
+    `components_overview.svg`, `deferred/aft-edf/README.md`, and the TODO BOM/build
+    rows above. Historical revision snapshots (`bom_revP/Q/R.json`, `REVN_BUILD_GUIDE`)
+    left intact per the revision-snapshot policy. The WS2812C nav lights (distinct
+    part) are retained.
 
 #### 1.1.4 **Landing Gear**
 
@@ -1996,7 +2060,7 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
 | Cargo (N20, HX711, DRV8833, Dyneema) | 4 | `airframe/placeholders/cargo/` |
 | Gears M=1.0 (sector, pinion, bevel, housing) | 4 | `airframe/placeholders/gears/` |
 | Hardware (pins, inserts, screws, straps, wire ring) | 6 | `airframe/placeholders/hardware/` |
-| Lighting (WS2812B ring, WS2812C SMD) | 2 | `airframe/placeholders/lighting/` |
+| Lighting (WS2812C SMD nav LED) | 1 | `airframe/placeholders/lighting/` |
 | Wiring (conduit, harnesses, antenna wire, posts) | 6 | `airframe/placeholders/wiring/` |
 | GCS / Malcolm (enclosure, BECs, antennas, tripod, encoders) | 15 | `airframe/placeholders/gcs/` |
 | Foam fill + interior voids (head/cargo/middle/rear fill; avbay, cargo bay, wiring trunk, power bus, ventilation, pylon pockets; Faraday cage pockets + vent duct spurs) | 13 | `airframe/placeholders/foam/` |
@@ -3325,9 +3389,8 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 | Steel pushrod 2mm OD × ~60mm | 2× | ~$3 total | Longitudinal nozzle shaft per nacelle |
 | Steel pushrod 2mm, Z-bend ends | 2× | ~$4 total | Tilt servo pushrod |
 | M2 clevis links | 4× | ~$3 total | Servo-to-pushrod |
-| 0.8mm piano wire | ~600 mm | ~$3 | Nozzle iris petal link rings |
-| 3mm SS hinge pins | 16× | ~$4 total | 8 per nacelle iris nozzle |
-| WS2812B LED ring (50mm) | 2× | ~$6 total | Nacelle duct exit |
+| 3mm×18mm SS dowel pins (PIN-3X18) | 16× | ~$10 total | 8 per nacelle; Rev S nozzle flap tangential hinges |
+| 2mm×4mm SS dowel pins (PIN-2X4) | 16× | ~$6 total | 8 per nacelle; Rev S flap cam followers (replace the retired piano-wire link ring) |
 | WS2812C-2020 addressable LED | 6× | ~$6 total | Nav lights |
 | XT90 PDB, 4× XT30 outputs | 1× | ~$12 | Power distribution |
 | XT90 battery pigtail | 1× | ~$5 | Battery lead |
@@ -3501,7 +3564,7 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 - [ ] Sector gear ↔ pinion dry-mesh: 0.1–0.2 mm backlash
 
-- [ ] Iris nozzle ring fits flush on nacelle exit; petals hinge freely on 3mm pins
+- [ ] Unison ring gear seats flush in the throat housing; the 8 flaps hinge freely on their 3mm×18mm tangential pins and each follower pin rides its spiral cam slot smoothly (no binding across the full 0°→90° sweep)
 
 - [ ] 4mm CF pivot rod slides through pivot housing with MF104ZZ bearings seated
 
@@ -3593,13 +3656,11 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 - [ ] Install nozzle inner ring (rack, R=28mm) inside base ring.
 
-- [ ] Bend 0.8mm piano wire link ring through all 8 petal link holes.
+- [ ] Press a 2mm×4mm follower pin (PIN-2X4) into each of the 8 flaps' cam-follower lugs.
 
-- [ ] Install 8 petals on 3mm hinge pins in base ring lugs.
+- [ ] Hinge the 8 flaps to the throat housing on 3mm×18mm tangential pins (PIN-3X18); seat each follower pin in its spiral cam slot on the unison ring.
 
-- [ ] Dry-test: manually rotate inner ring — petals open smoothly 0°→75°, no binding.
-
-- [ ] Install WS2812B LED ring at duct exit lip; route 3-wire lead through hub bore.
+- [ ] Dry-test: manually rotate the unison ring — flaps sweep smoothly 0°→90° (75%→105% bore), no binding, follower pins stay captured in the cam slots.
 
 **2C — Gear linkage (per nacelle):**
 
@@ -3635,8 +3696,6 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 - [ ] Nozzle iris opens/closes smoothly through full nacelle sweep
 
 - [ ] Petal closed: hull-match at 0°; petal open: all 8 even at 90°
-
-- [ ] LED ring installed and wired
 
 ---
 
@@ -4131,7 +4190,6 @@ before Phase 11 fabrication (see §11C). Old iris files (`rear_nozzle_frame.stl`
 | 55mm 6S EDF (~1,500 gf) | 1× | ~$35–55 |
 | 50A 6S BLHeli32 ESC | 1× | ~$18–28 |
 | SG90-class proportional valve servo (RCS) | 4× | ~$12 |
-| WS2812B LED ring (55mm duct) | 1× | ~$3 |
 
 **11B — Rear neck shell swap (if printed without windows):**
 
@@ -4192,8 +4250,6 @@ before Phase 11 fabrication (see §11C). Old iris files (`rear_nozzle_frame.stl`
 - [ ] Install 4× SG90-class proportional valves on `rcs_valve_bracket.stl`; link each valve to its RCS bleed duct.
 
 - [ ] Calibrate RCS valves: 0% = closed (no bleed); 100% = full bleed jet. Map 2 jets to pitch, 2 to yaw.
-
-- [ ] Install WS2812B LED ring at canonical nozzle exit lip.
 
 **11H — 49MHz antenna upgrade:**
 

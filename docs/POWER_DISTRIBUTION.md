@@ -93,12 +93,13 @@ over-current threshold in governor_config.h: `EDF_ESC_OVERCURRENT_A = 80 A`).
 | Wash (sensor suite + CAN/RS-485) | 4 | 700 | 1 400 | 2 800 | 5 600 |
 | Zoë (radios TX simultaneous) | 4 | 1 500 | 2 500 | 6 000 | 10 000 |
 | Emma sub-modules | 4 | 100 | 250 | 400 | 1 000 |
-| WS2812B LED rings (3×) | 3 | 80 | 200 | 240 | 600 |
 | HX711 + load cell | 1 | 10 | 10 | 10 | 10 |
 | N20 winch motor (via DRV8833) | 1 | 200 | 500 | 200 | 500 |
-| **5 V subtotal** | — | — | — | **13 650** | **27 310** |
+| **5 V subtotal** | — | — | — | **13 410** | **26 710** |
 
-At 5 V / 22.2 V conversion: 27.3 A × 5 V / 22.2 V ≈ **6.2 A from VBAT** at peak.
+At 5 V / 22.2 V conversion: 26.7 A × 5 V / 22.2 V ≈ **6.0 A from VBAT** at peak.
+(The WS2812B exhaust LED rings — formerly 240 mA nom / 600 mA peak — were removed
+from the design; see TODO §1.1.3.5.)
 
 > **Note:** Simultaneous TX on all four Cape-B radios is an upper bound; in practice
 > the four boards stagger TX by frequency and election priority. Sustained 5 V peak
@@ -411,10 +412,9 @@ Shedding is additive: each higher level includes all lower-level sheds.
 | Priority | Shed target | VBAT saving (A) | 5 V saving (A) |
 |----------|------------|-----------------|----------------|
 | 1 (CRITICAL) | Cargo winch N20 motor | 0.1 | 0.5 |
-| 2 (CRITICAL) | WS2812B LED rings (all 3) | 0.1 | 0.6 |
-| 3 (CRITICAL) | LoRa RFM95W TX reduced power | ~0.0 | 0.1 |
-| 4 (CRITICAL) | WiFi WL1837MOD TX off | ~0.0 | 0.5 |
-| 5 (EMERGENCY) | All non-propulsion 5 V loads off | ~0.3 | — |
+| 2 (CRITICAL) | LoRa RFM95W TX reduced power | ~0.0 | 0.1 |
+| 3 (CRITICAL) | WiFi WL1837MOD TX off | ~0.0 | 0.5 |
+| 4 (EMERGENCY) | All non-propulsion 5 V loads off | ~0.3 | — |
 | 6 (EMERGENCY) | EDF throttle cap at 70 % | ~22 A | 0 |
 
 At 70 % throttle cap: thrust ≈ 49 % (thrust ∝ RPM² ∝ throttle²) — T/W drops from

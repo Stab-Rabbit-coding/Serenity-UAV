@@ -725,7 +725,7 @@ Actuation:  one SG90-class servo per nozzle via 1 mm piano-wire pushrod
 Filament:
   • Nacelle petal outer / Rear cone rib+petal outer — hull filament (brown PLA+)
   • Petal inner concave face — translucent blue PETG, or paint Testors Blue.
-    Place WS2812B LED ring inside the duct; backlight gives full-burn glow.
+    (WS2812B exhaust LED duct-backlight removed from the design — TODO §1.1.3.5.)
   • Frame base ring — black PLA+ (structural, inside fuselage, hidden)
 
 Nacelle nozzles: plain 8-petal iris, no frame (frame is rear-only).

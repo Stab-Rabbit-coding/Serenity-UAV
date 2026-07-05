@@ -202,8 +202,8 @@ Never bake a mesh *derived from* an already-baked file (e.g. a Blender repair ou
 | Rear_Shell | −246.1..−105.5 | +203.2..+384.3 | +3.3..+161.1 |
 | Wing_Port | −93.0..+4.7 | −7.0..+122.0 | +48.0..+77.0 |
 | Wing_Stbd | −347.7..−250.0 | −12.0..+117.0 | +48.0..+77.0 |
-| Nacelle_Port | +4.0..+86.0 | −64.0..+108.3 | +21.4..+104.7 |
-| Nacelle_Stbd | −428.1..−346.1 | −70.0..+102.3 | +23.3..+106.6 |
+| Nacelle_Port | +4.0..+86.0 | −58.2..+108.3 | +21.4..+104.7 |
+| Nacelle_Stbd | −428.1..−346.1 | −64.2..+102.3 | +23.3..+106.6 |
 
 The historical bake transforms (position + quaternion per component) live solely in `tools/bake_hull_frame.py` `COMPONENTS` — do not duplicate them elsewhere. Nacelle STLs are stored in **cruise / forward-flight attitude**; hover is a downstream rotation about the tilt pivot (duct station 83 mm), never a stored orientation. Minor joint fine-tuning (fractions of mm / degree) is still pending.
 

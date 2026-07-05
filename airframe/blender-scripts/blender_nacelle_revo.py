@@ -47,14 +47,15 @@ Rev O CG analysis (1× reference coords, Z=0=intake):
   Stator hub+fins (Z=75..95)      8      85.0         680
   Nozzle iris + hardware          22     140.0       3,080
   Gear train (M1.0 gears/shafts) 18      90.0       1,620
-  LED ring                         8     143.0       1,144
   Inlet bell                      10      11.0         110
   Wiring (motor leads, ESC)       12      80.0         960
   Motor mount struts (×2)          6      82.5         495
   Clevis / pivot boss              8      74.0         592
   Fasteners / misc                 8     100.0         800
-  TOTAL                          434               36,055
-  CG_Z = 36,055 / 434 = 83.1 mm → PIVOT set to 83.0 mm
+  TOTAL                          426               34,911
+  CG_Z = 34,911 / 426 = 81.9 mm → PIVOT set to 82.0 mm
+  (WS2812B exhaust LED ring removed from the design — TODO §1.1.3.5; this
+   legacy 18 in-scale table is superseded by nacelle_pod_50mm_tandem.scad.)
 
 Design layout (bore runs along Z; Z=0 is the intake face, Z≈185 is exhaust):
 All positions shown at 1× reference scale; runtime axial_scale ≈ 1.25 for 50mm shells.

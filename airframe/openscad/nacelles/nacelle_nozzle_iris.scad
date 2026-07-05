@@ -167,6 +167,15 @@
 //     verify they clear the idler-access slot and all 8 flap hinge/cam
 //     paths in the slicer.
 //
+// Upstream attribution (REFERENCES.md REF-CAD-001):
+//   The variable-area duct-exit nozzle concept is informed by BamJr's
+//   "Variable-area EDF nozzle" (Thingiverse Thing 2991269, CC BY 4.0,
+//   <https://www.thingiverse.com/thing:2991269>).  Used as a mechanism /
+//   kinematics reference ONLY — all geometry in this file (throat liner,
+//   tangential-hinge overlapping conical flaps, 72T unison ring gear, spiral
+//   cam actuation) is original work authored for this project; no BamJr
+//   geometry, mesh, or source is copied.  See REFERENCES.md [REF-CAD-001].
+//
 // Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 // Date:    2026-05-24
@@ -607,36 +616,35 @@ module nozzle_flap() {
 
 // ── Render Instructions ───────────────────────────────────────────────────────
 //
-// Export each part individually (uncomment one section at a time):
+// Part selection is via the RENDER_PART -D string parameter (matching the
+// nacelle_nozzle_idler.scad / wings RENDER_SIDE convention), so the Makefile
+// can pull each print-ready part from this one file:
+//   RENDER_PART = "throat"  -> nozzle_throat_and_housing()  (fixed liner+shell)
+//   RENDER_PART = "ring"    -> unison_ring()                (72T gear + cam)
+//   RENDER_PART = "flap"    -> nozzle_flap()                (print × 8)
+//   RENDER_PART = "asm"     -> full assembly preview        (DEFAULT; the
+//        combined body serenity_assembly.py imports as nacelle_nozzle_iris.stl
+//        for spatial/clearance checks, not as a print-ready single part).
 //
-// Render throat-and-housing:
-// nozzle_throat_and_housing();
-//
-// Render unison ring:
-// unison_ring();
-//
-// Render one flap (print × 8):
-// nozzle_flap();
-//
-// Assembly preview — all 8 flaps at the closed (cruise) reference position +
-// throat/housing + ring.  This is the DEFAULT render: serenity_assembly.py
-// imports nacelle_nozzle_iris.stl as the combined assembly for spatial/
-// clearance purposes, not as a print-ready single part — the throat-and-
-// housing/ring/flaps are still printed as three separate parts pulled from
-// this same file (uncomment one block at a time above).
-//
-// Each flap's own local origin is its hinge point, already centred on its
-// wedge's angular span (annular_wedge() built symmetric about local angle
-// 0 — see nozzle_flap()).  Assembly per flap (applied right-to-left):
-// rotate by PHI_CLOSED about the hinge's own tangential (local Y) axis,
-// THEN translate the (now-tilted) flap so its hinge lands at hull position
-// (R_HINGE, 0, HINGE_Z), THEN sweep that whole placement around Z by the
-// flap's circumferential index.
-nozzle_throat_and_housing();
-unison_ring();
-for (i = [0 : N_FLAPS - 1]) {
-    rotate([0, 0, i * 360 / N_FLAPS])
-        translate([R_HINGE, 0, HINGE_Z])
-            rotate([0, PHI_CLOSED, 0])
-                nozzle_flap();
+// Assembly-per-flap (applied right-to-left): rotate by PHI_CLOSED about the
+// hinge's own tangential (local Y) axis, THEN translate the tilted flap so its
+// hinge lands at (R_HINGE, 0, HINGE_Z), THEN sweep around Z by the flap index.
+RENDER_PART = "asm";   // "throat" | "ring" | "flap" | "asm"
+
+if (RENDER_PART == "throat") {
+    nozzle_throat_and_housing();
+} else if (RENDER_PART == "ring") {
+    unison_ring();
+} else if (RENDER_PART == "flap") {
+    nozzle_flap();
+} else {
+    // asm — full closed-position assembly preview
+    nozzle_throat_and_housing();
+    unison_ring();
+    for (i = [0 : N_FLAPS - 1]) {
+        rotate([0, 0, i * 360 / N_FLAPS])
+            translate([R_HINGE, 0, HINGE_Z])
+                rotate([0, PHI_CLOSED, 0])
+                    nozzle_flap();
+    }
 }

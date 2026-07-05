@@ -160,7 +160,7 @@ def transform_mesh(obj, rows):
 # ---------------------------------------------------------------------------
 # Nacelle-internal sub-component placement (Rev R1.1, 2026-06-21)
 #
-# The nacelle pods (nacelle_port_revq.stl / nacelle_stbd_revq.stl) are
+# The nacelle pods (nacelle_port_revs.stl / nacelle_stbd_revs.stl) are
 # generated from airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad in
 # a part-local frame: local +Z is the duct/bore axis (intake at Z = 0,
 # nozzle exit at Z = NACELLE_L = 185.2 mm), local X is the spanwise/pylon
@@ -433,19 +433,19 @@ def assemble():
     # R1: baked hull-frame STLs — identity placement; stored attitude is
     # cruise.  Hover is a downstream rotation about the tilt pivot.
     #
-    # nacelle_port_revq.stl: hull +X (port side), SWIRL_DIR=-1 (CCW),
+    # nacelle_port_revs.stl: hull +X (port side), SWIRL_DIR=-1 (CCW),
     #   harness conduit exits -X (inboard) face.
-    # nacelle_stbd_revq.stl: hull -X (starboard side), SWIRL_DIR=+1 (CW),
+    # nacelle_stbd_revs.stl: hull -X (starboard side), SWIRL_DIR=+1 (CW),
     #   harness conduit exits +X (inboard) face.
     # Labels corrected Rev R1/nacelle-swap (2026-06-11) after FreeCAD
     # layout inspection confirmed the original naming was inverted.
     # -------------------------------------------------------------------
     print("[assembly] Nacelle pods ...", flush=True)
 
-    port_nac = add_mesh(doc, _stl("nacelles/nacelle_port_revq.stl"), "Nacelle_Port")
+    port_nac = add_mesh(doc, _stl("nacelles/nacelle_port_revs.stl"), "Nacelle_Port")
     place_mesh(port_nac, PL_IDENTITY)
 
-    stbd_nac = add_mesh(doc, _stl("nacelles/nacelle_stbd_revq.stl"), "Nacelle_Stbd")
+    stbd_nac = add_mesh(doc, _stl("nacelles/nacelle_stbd_revs.stl"), "Nacelle_Stbd")
     place_mesh(stbd_nac, PL_IDENTITY)
 
     # -------------------------------------------------------------------
@@ -471,9 +471,16 @@ def assemble():
     #   PIVOT_Z is the gear-train station, inside the sleeve span.
     STATOR_SLV_Z_START = 90.0
     AFT_SLV_Z_START = 122.5
-    PIVOT_Z = 103.75  # gear-train station = nacelle CG
+    # PIVOT_Z re-derived 2026-07-04 for the FULL rotating assembly (gear train +
+    # nozzle ring/petals/idler; WS2812B exhaust LED rings removed): CG_Z = 104.5
+    # mm.  See nacelle_pod_50mm_tandem.scad header mass breakdown.
+    PIVOT_Z = 104.5  # gear-train station = full-assembly nacelle CG
     PINION_A_Y = 28.0  # = sector R(22) + pinion R(6), mm
-    CROWN_Z = 166.25  # = NOZZLE_RING_Z
+    NOZZLE_RING_Z = 166.25  # nozzle ring gear-band station (nozzle placement)
+    # Crown Pinion offset 10 mm toward intake of the ring so the compound idler's
+    # two gear bands (10 mm apart) mesh both — resolves the §1.1.3.3 axial
+    # mesh-band mismatch (2026-07-04).  Decoupled from the nozzle station.
+    CROWN_Z = NOZZLE_RING_Z - 10.0  # = 156.25
     NACELLE_FACE_X_PYLON = 34.0  # mm, inboard (pylon-side) X face
 
     for side in ("port", "stbd"):
@@ -597,7 +604,8 @@ def assemble():
         # outer housing + 8 petals at the closed position) from
         # nacelle_nozzle_iris.scad; rotationally symmetric about the bore
         # axis, so identity rotation is a low-risk assumption.  Translate
-        # to NOZZLE_RING_Z (= CROWN_Z).
+        # to NOZZLE_RING_Z (now decoupled from CROWN_Z — the Crown Pinion is
+        # 10 mm forward for the idler mesh band; the nozzle stays put).
         # RESOLVED 2026-06-22 (TODO.md §1.1.3): nacelle_nozzle_iris.scad's
         # own comments (~lines 118-125) used to contain an unresolved
         # author scratch-pad computing three different candidate mesh
@@ -615,7 +623,7 @@ def assemble():
             _stl("nacelles/nozzles/nacelle_nozzle_iris.stl"),
             f"Nacelle_{label}_Nozzle_Iris",
         )
-        transform_mesh(nozzle, nacelle_rows(side, _IDENTITY3, (0.0, 0.0, CROWN_Z)))
+        transform_mesh(nozzle, nacelle_rows(side, _IDENTITY3, (0.0, 0.0, NOZZLE_RING_Z)))
 
         # ── Crown-Pinion-to-Ring idler gear + bracket ────────────────────
         # nacelle_nozzle_idler.scad.  Angular position (X, Y) RESOLVED
@@ -625,22 +633,25 @@ def assemble():
         # position (X=+27.485, Y=33.846) — matches IDLER_SLOT_ANG = 50.9°
         # in nacelle_nozzle_iris.scad (one of two valid mirror solutions;
         # +X chosen arbitrarily, nothing else occupies that sector here).
-        # Z is STILL A PLACEHOLDER (VERIFY tier, not place_mesh()): this
-        # resolution surfaced a NEW, separate open issue — the idler's own
-        # two gear sections are 10 mm apart axially (GEAR_H_IN + GEAR_GAP),
-        # but Crown Pinion and the Nozzle Ring currently sit at the exact
-        # same Z station (CROWN_Z = NOZZLE_RING_Z), so a single idler shaft
-        # cannot mesh both as currently speced.  Placed here centred on
-        # CROWN_Z pending that design decision — see nacelle_nozzle_idler.
-        # scad header and TODO.md §1.1.3.3 "idler axial mesh-band mismatch".
+        # Z RESOLVED 2026-07-04 (TODO.md §1.1.3.3 "idler axial mesh-band
+        # mismatch"): the Crown Pinion was offset 10 mm toward the intake of
+        # the Nozzle Ring (CROWN_Z = NOZZLE_RING_Z - 10) so the two targets are
+        # now 10 mm apart axially — matching the idler's own Idler-In / Idler-Out
+        # band-centre spacing (HUB_EXTENSION 2 + GEAR_H_IN/2 4 = local Z 6 for
+        # Idler-In; +10 mm = local Z 16 for Idler-Out; nacelle_nozzle_idler.scad).
+        # Seat the idler so Idler-In's band centre (local Z 6) lands on the Crown
+        # Pinion gear plane (CROWN_Z); Idler-Out's band (local Z 16) then lands on
+        # the Ring plane (CROWN_Z + 10 = NOZZLE_RING_Z) by construction.
+        # (Intra-STL centroid offsets are a sub-mm first-fit fine-tune.)
         idler_x, idler_y = 27.485, 33.846
+        idler_z = CROWN_Z - 6.0
         idler = add_mesh(
             doc,
             _stl("nacelles/nozzles/nacelle_nozzle_idler.stl"),
             f"Nacelle_{label}_Nozzle_Idler",
         )
         transform_mesh(
-            idler, nacelle_rows(side, _IDENTITY3, (idler_x, idler_y, CROWN_Z - 11.0))
+            idler, nacelle_rows(side, _IDENTITY3, (idler_x, idler_y, idler_z))
         )
 
         idler_bracket = add_mesh(
@@ -650,7 +661,7 @@ def assemble():
         )
         transform_mesh(
             idler_bracket,
-            nacelle_rows(side, _IDENTITY3, (idler_x, idler_y, CROWN_Z - 11.0)),
+            nacelle_rows(side, _IDENTITY3, (idler_x, idler_y, idler_z)),
         )
 
         # Tip cap (outboard X-face end cap) — ARCHIVED 2026-06-22, legacy

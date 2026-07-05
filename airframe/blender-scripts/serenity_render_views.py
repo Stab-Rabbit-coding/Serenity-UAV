@@ -84,8 +84,8 @@ COMPONENTS = [
     ("fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl", "Cargo", FUSELAGE_COLOR),
     ("fuselage/middle_shell24_2mm_repaired.stl", "Middle", FUSELAGE_COLOR),
     ("fuselage/rear_shell24_2mm_repaired.stl", "Rear", FUSELAGE_COLOR),
-    ("nacelles/nacelle_port_revq.stl", "Nacelle_Port", NACELLE_COLOR),
-    ("nacelles/nacelle_stbd_revq.stl", "Nacelle_Stbd", NACELLE_COLOR),
+    ("nacelles/nacelle_port_revs.stl", "Nacelle_Port", NACELLE_COLOR),
+    ("nacelles/nacelle_stbd_revs.stl", "Nacelle_Stbd", NACELLE_COLOR),
     ("wings/wing_port_s1223_revo.stl", "Wing_Port", WING_COLOR),
     ("wings/wing_stbd_s1223_revo.stl", "Wing_Stbd", WING_COLOR),
     # --- Landing gear: STALE pre-R1.4 single-leg render, orphaned by the Rev

@@ -132,11 +132,12 @@ COMPONENTS = {
     ),
     # Nacelles: 270 deg about +X = cruise / forward-flight attitude.
     # This is the canonical stored attitude; hover tilt is applied
-    # about the pivot (Z = 83 mm from intake) downstream, not here.
+    # about the pivot (Z = PIVOT_Z = 104.5 mm from intake, the full-assembly
+    # CG station — see nacelle_pod_50mm_tandem.scad) downstream, not here.
     #
-    # nacelle_port_revq.stl — port side (hull +X, Px ≈ +47 mm).
+    # nacelle_port_revs.stl — port side (hull +X, Px ≈ +47 mm).
     #   SWIRL_DIR=−1 (CCW from intake); harness exit on −X (inboard) face.
-    # nacelle_stbd_revq.stl — starboard side (hull −X, Px ≈ −385 mm).
+    # nacelle_stbd_revs.stl — starboard side (hull −X, Px ≈ −385 mm).
     #   SWIRL_DIR=+1 (CW from intake); harness exit on +X (inboard) face.
     #
     # NOTE: filenames were corrected 2026-06-11 (Rev R1 nacelle-swap).
@@ -144,12 +145,12 @@ COMPONENTS = {
     # outer shell, harness on +X face) part, which physically fits starboard.
     # Files were renamed so each filename matches its physical mounting side.
     "Nacelle_Port": (
-        "nacelles/nacelle_port_revq.stl",
+        "nacelles/nacelle_port_revs.stl",
         (46.9999060, -63.9998720, 62.9998740,
          _SQ2, 0.0, 0.0, -_SQ2),
     ),
     "Nacelle_Stbd": (
-        "nacelles/nacelle_stbd_revq.stl",
+        "nacelles/nacelle_stbd_revs.stl",
         (-385.0960040, -69.9998600, 64.9719300,
          _SQ2, 0.0, 0.0, -_SQ2),
     ),

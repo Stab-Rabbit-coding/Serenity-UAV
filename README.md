@@ -181,8 +181,11 @@ nacelle EDF exits. The rear fuselage EDF uses the **fixed canonical Serenity tai
 - Nacelle nozzles (2×): gear-linked passively to the tilt pivot — no dedicated servo.
   0° nacelle tilt = nozzle fully closed; 90° tilt = nozzle fully open (full burn).
   Gear train: sector R = 0.87 in (22 mm) → pinion N = 12T → bevel pair N = 14T 45°
-  → crown N = 12T → ring rack R = 1.10 in (28 mm) → ~70.7° ring travel per 90° nacelle sweep.
-- Inner petal face: translucent-blue PETG, backlit by WS2812B LED ring inside each duct.
+  → crown N = 12T → compound idler (44T in / 15T out) → full-circle unison ring gear
+  N = 72T, R = 1.42 in (36 mm), whose spiral face-cam drives the 8 overlapping
+  tangential-hinge flaps (Rev R2 — smooth conical exit, replaces the Rev R1 rack).
+- Inner flap face: translucent-blue PETG (visual airflow reference only — the WS2812B
+  exhaust LED backlight has been removed from the design).
 
 Iris mechanism concept:
 [Variable-area EDF nozzle by BamJr](https://www.thingiverse.com/thing:2991269)

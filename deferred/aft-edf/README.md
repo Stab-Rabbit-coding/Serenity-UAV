@@ -99,7 +99,6 @@ See the full Phase 11 build instructions in:
 | SG90 micro servo (rear nozzle) | 1× | ~$3 |
 | 3 mm × 5 mm SS hinge pins | 8× | ~$2 total |
 | 0.8 mm piano wire | ~200 mm | ~$1 |
-| WS2812B LED ring (120 mm duct size) | 1× | ~$4 |
 
 ---
 
