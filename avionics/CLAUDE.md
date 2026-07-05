@@ -251,16 +251,20 @@ optical power / IEC 60825-1 class:
   custom near-collimated; cargo 3"×3" @ 5 ft ⇒ ≈2.86° (50 mrad), stock DOE or diverging-lens
   dot. Same collimated green source both places.
 - **Both sites — Class 2** (≤1 mW green). The nose is **not** inherently Class 3B: 3B was the
-  worst-case corner (a power-diluted 2" *spread* crosshair judged by a *naked eye* in *full
-  sun* = ~82 mW). Vera's actual requirement is *camera* visibility, and a **concentrated ~12 mm
-  green dot detected by Vera's own strobed camera + frame-difference needs only ~0.45 mW →
-  Class 2** (see `docs/VERA_LASER_ANALYSIS.md`). Cargo is likewise Class 2 (green's 6.64×
-  photopic advantage over the retired 650 nm red). **Class 2 at both sites eliminates the
-  Class 3B key-interlock and mechanical shutter** — the `LASER_KEY_IN`/`LASER_IND` lines become
-  optional defense-in-depth. Keep the ≤1 mW cap **hardware-enforced** (fixed current limit),
-  not firmware-only. 3B would only return if a *human at the 50 ft target* must see a *spread
-  reticle* in full sun — not Vera's use case. **Do not source** until REFERENCES.md carries a
-  verified datasheet citation (REF-IEC-002 pending; TODO.md §1.2c.4).
+  worst-case corner (a power-diluted *spread* crosshair judged by a *naked eye* in *full sun*
+  = ~82 mW). Vera's actual requirement is *camera* visibility, detected by Vera's own strobed
+  camera + frame-difference, so a **thin-line green crosshair needs only ~0.2–0.8 mW → Class 2**
+  (see `docs/VERA_LASER_ANALYSIS.md`). Cargo is likewise Class 2. **Class 2 at both sites
+  eliminates the Class 3B key-interlock and mechanical shutter** — `LASER_KEY_IN`/`LASER_IND`
+  become optional defense-in-depth. Keep the ≤1 mW cap **hardware-enforced**. 3B only returns
+  if a *human at the 50 ft target* must see the pattern in full sun — not Vera's use case.
+- **Pattern is a thin-line CROSSHAIR (not a bare dot) — it is a projected metrology reference.**
+  A PB2-I computes a detected object's **size and relative orientation** from ToF range + the
+  crosshair's known projected angle + trigonometry (size = (obj_px/cross_px)·2R·tan(θ/2); tilt
+  from arm foreshortening — `docs/VERA_LASER_ANALYSIS.md §4.4`). The binding constraint is
+  camera pixel coverage, so the fan angle must be sized for it (the nominal 2" @ 50 ft is too
+  small — target ≈4–8" for ~24–48 px). Thin lines keep it Class 2. **Do not source** until
+  REFERENCES.md carries a verified datasheet citation (REF-IEC-002 pending; TODO.md §1.2c.4).
 
 **Status:** Design exploration only — no `.kicad_sch`/`.kicad_pcb` exists yet. See TODO.md
 §1.2c (hardware) and §4.6 (firmware) for the WBS breakdown.

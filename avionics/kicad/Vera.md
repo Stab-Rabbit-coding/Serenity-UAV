@@ -122,15 +122,22 @@ per-location hardware current limit that sets the optical power / IEC 60825-1 cl
 retires the previous split (green nose + separate 650 nm red cargo module) and unifies the
 laser BOM to a single green diode family. Rationale in full: `docs/VERA_LASER_ANALYSIS.md`.
 
-- **Spread angle is set by the terminal optic, not the source** (15× difference between sites):
-  nose ≈ 0.19° (3.3 mrad) custom near-collimated crosshair/dot; cargo ≈ 2.86° (50 mrad) stock
-  DOE crosshair or diverging-lens dot. Same collimated green source both places.
+- **Pattern is a thin-line CROSSHAIR (not a bare dot) — a projected metrology reference.** A
+  PB2-I computes a detected object's **size and relative orientation** from ToF range + the
+  crosshair's known projected angle + trigonometry (size = (obj_px/cross_px)·2R·tan(θ/2); tilt
+  from arm foreshortening — `docs/VERA_LASER_ANALYSIS.md §4.4`). The binding constraint is
+  camera pixel coverage: the nominal 2" @ 50 ft crosshair is too small (≈6 px on a wide lens);
+  size the fan angle for **N ≈ 24–48 px** (nose ≈ 4–8" at 50 ft, or a narrower FOV). Cargo's
+  3" @ 5 ft is already ample.
+- **Spread angle is set by the terminal optic, not the source:** nose near-collimated crosshair
+  (fan angle sized for pixel coverage, above); cargo ≈ 2.86° stock DOE crosshair. Same
+  collimated green source both places.
 - **Both sites are Class 2 (≤ 1 mW green)** — the nose is **not** inherently Class 3B. A
-  concentrated ~12 mm green dot detected by Vera's own *strobed camera + frame-difference*
-  (not a naked eye) needs only **~0.45 mW at 50 ft → Class 2**; the earlier "nose = Class 3B"
-  was the worst-case spread-crosshair + naked-eye-in-full-sun corner (~82 mW). Cargo is
-  likewise Class 2 (green's 6.64× photopic advantage over the retired 650 nm red). Full
-  derivation: `docs/VERA_LASER_ANALYSIS.md`.
+  thin-line green crosshair detected by Vera's own *strobed camera + frame-difference* (not a
+  naked eye) needs only **~0.2–0.8 mW → Class 2**; the earlier "nose = Class 3B" was the
+  worst-case spread-crosshair + naked-eye-in-full-sun corner (~82 mW). Cargo is likewise
+  Class 2 (green's 6.64× photopic advantage over the retired 650 nm red). Full derivation:
+  `docs/VERA_LASER_ANALYSIS.md`.
 - **Class 2 at both sites drops the Class 3B key-interlock and mechanical shutter.** The
   `LASER_KEY_IN`/`LASER_IND` lines already on Vera become optional defense-in-depth. Keep each
   ≤ 1 mW cap **HARDWARE-enforced** (fixed current limit), not firmware-only.

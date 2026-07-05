@@ -1,7 +1,7 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: 2026-07-05 — Vera power feed (dedicated Kaylee 5V rail, POWER_DISTRIBUTION §3.2.1) + single-green-laser analysis (VERA_LASER_ANALYSIS.md) -->
+<!-- Last updated: 2026-07-05 — Vera laser crosshair-metrology (size+orientation via ToF+spread, VERA_LASER_ANALYSIS §4.4); Emma RSSI sub-circuit routed (route_emma_rssi.py) -->
 
 ## Repository Root
 

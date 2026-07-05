@@ -4728,11 +4728,17 @@ direction (2026-07-03).
 - [ ] **KSZ9477 Ethernet switch management driver** [REF-SENSOR-005] — confirm HSR/PRP hardware
     redundancy is correctly configured (verify against AN3474) so ring failover requires no
     software topology management on the PocketBeagle 2 nodes.
-- [ ] **Laser GPIO driver with location-aware safety logic:**
-    - Cargo bay (Class 3R): existing simple GPIO-enable-with-pull-down-default-off logic.
-    - Nose (Class 3B): additional key-interlock read, emission-indicator drive, and
-        heartbeat-loss safety interlock (drop GPIO low if Ethernet ring AND CAN-FD both lose
-        heartbeat from the master flight controllers) [REF-IEC-002 §5.4].
+- [ ] **Laser GPIO driver (both sites Class 2 — `docs/VERA_LASER_ANALYSIS.md` Rev A2):**
+    GPIO-enable with pull-down-default-off + heartbeat-loss interlock (drop GPIO low if
+    Ethernet ring AND CAN-FD both lose master-FC heartbeat) [REF-IEC-002 §5.4]. The Class 2 cap
+    is hardware-enforced, so no key-interlock/shutter is required; `LASER_KEY_IN`/`LASER_IND`
+    are optional defense-in-depth. (Supersedes the earlier Cargo-3R / Nose-3B split.)
+- [ ] **Laser strobe + crosshair-metrology routine (AM62A7 ISP):** strobe the laser via a
+    laser-sync GPIO/PWM and temporally difference (laser-on − laser-off) to extract the
+    crosshair in daylight; sub-pixel-fit the crosshair lines and compute detected-object
+    **size** = (obj_px/cross_px)·2R·tan(θ/2) and **tilt** from arm foreshortening, using the
+    boresighted TFmini-S range R (`docs/VERA_LASER_ANALYSIS.md §4.4`). Publish size/orientation
+    with the signed telemetry below.
 - [ ] **SPI driver to Infineon SLB9670 TPM** — reuse the existing TPM driver approach already
     used fleet-wide on Wash/Zoë nodes rather than writing a new one from scratch.
 - [ ] **Signed telemetry:** TPM-signed HMAC or ECDSA signature on all ToF/laser-state packets

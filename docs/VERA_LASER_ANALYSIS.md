@@ -3,12 +3,16 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **AI-assist:** Claude Opus 4.8 (Anthropic) — analysis authoring, 2026-07-05
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**Revision:** Rev A1 (2026-07-05)
+**Revision:** Rev A2 (2026-07-05)
 **Status:** Analysis — feeds Vera laser BOM decision (TODO.md §1.2c); no part sourced yet.
 **Rev A1 correction:** the Rev A conclusion that the nose is inherently Class 3B was
 over-conservative (worst-case spread-pattern + naked-eye-in-full-sun). For Vera's actual
-camera-visibility requirement with a concentrated dot + camera strobe-difference detection,
-**both installs are Class 2 (≤ 1 mW)** — no Class 3B apparatus. See §3.2.
+camera-visibility requirement with camera strobe-difference detection, **both installs are
+Class 2 (≤ 1 mW)** — no Class 3B apparatus. See §3.2.
+**Rev A2 addition:** the pattern is a **thin-line crosshair** (not a bare dot) serving as a
+projected metrology reference — a PB2-I computes object **size and orientation** from ToF
+range + known crosshair angle + trigonometry (§4.4). The crosshair must be sized (fan angle)
+for enough camera-pixel coverage; a thin-line crosshair stays Class 2.
 
 ---
 
@@ -176,14 +180,85 @@ The 15× spread ratio is spanned by two different terminal optics on the *same* 
 green source — exactly the "different lens configuration per location" the question proposes.
 The optic sets **geometry only**; it does **not** address the power/class difference (§4.1).
 
-### 4.3 Dot vs. crosshair trade (informational)
+### 4.3 Dot vs. crosshair trade
 
-A **dot** is simpler and cheaper (no DOE; the cargo just adds a diverging lens) but conveys
-only *position*. A **crosshair** additionally conveys *orientation and scale* (a sized reticle
-reads as a measurement). For the nose *aim-point*, a dot is adequate. For the cargo *drop
-footprint* (a 3 in × 3 in zone), a dot sized to 3 in reads as the footprint, but a crosshair or
-a 4-corner box reads the zone edges more clearly. Pattern choice is independent of the
-source/optic/current split above and can be made per install.
+A **dot** conveys only *position*. A **crosshair** of *known projected angle* also conveys
+*scale and orientation* — and §4.4 shows Vera needs exactly that, so **the crosshair (not a
+bare dot) is the specified pattern** at both installs. (Rev A/A1 leaned toward a bare dot to
+minimize power; §4.4 supersedes that — a *thin*-line crosshair keeps Class 2 anyway, §4.4.4.)
+
+### 4.4 Crosshair as a projected metrology reference (object size + orientation)
+
+**Requirement (added 2026-07-05):** the crosshair must have enough measurable spread for a
+PocketBeagle-2-I to compute a detected object's **size** and **relative orientation** from
+**ToF range + known laser spread + trigonometry**. The laser+ToF+camera are boresighted
+(~7 mm apart on Vera), so all three look at the same patch.
+
+**4.4.1 Size — the crosshair is a self-calibrating scale bar.** The crosshair leaves the laser
+at a fixed fan angle θ (a design constant of the DOE/optic). At the ToF-measured range R its
+projected physical size is
+
+```text
+S = 2 · R · tan(θ/2)          (on a surface normal to the axis)
+```
+
+Because the crosshair subtends ~θ at the near-colocated camera *independent of R*, its apparent
+angular size alone is not a range cue — **ToF supplies R**, and S = 2R·tan(θ/2) turns the
+crosshair into a metric ruler laid on the object. An object spanning `obj_px` against a
+crosshair spanning `cross_px` in the same frame then has real size
+
+```text
+object_size = (obj_px / cross_px) · S
+```
+
+**4.4.2 Orientation — crosshair foreshortening.** On a surface tilted by φ from normal, the
+projection stretches by 1/cos φ along the tilt azimuth: the two arms image to different lengths
+and a square reticle skews. Measuring the arm-length ratio (= cos φ) recovers the tilt
+magnitude; the skew azimuth gives its direction → the surface normal, hence the object's pose
+relative to the camera. Caveats: sensitivity is poor near normal incidence (cos φ ≈ 1 is flat),
+and the tilt **sign** is ambiguous from a colocated crosshair (the 7 mm baseline gives
+negligible parallax at 15 m) — an asymmetric pattern (crosshair + one offset tick, or a 3×3
+grid) resolves the sign and improves accuracy if needed.
+
+**4.4.3 The binding constraint is camera angular resolution, not power.** Accuracy scales with
+the pixel count `N` across the crosshair, so the crosshair must be sized (fan angle) large
+enough — co-designed with the camera lens FOV. At R = 50 ft with a 1920-px-wide sensor:
+
+| Crosshair | 60° FOV | 40° FOV | 30° FOV | 15° FOV |
+|---|---|---|---|---|
+| 2 in (51 mm) | 5.6 px | 8.8 px | 12 px | 24 px |
+| 4 in (102 mm) | 11 px | 18 px | 24 px | 49 px |
+| 8 in (203 mm) | 22 px | 35 px | 48 px | 97 px |
+
+Accuracy vs. N (line-endpoint location σ ≈ 0.3 px):
+
+| N (px across) | size error | tilt err @30° | tilt err @10° |
+|---|---|---|---|
+| 12 | ~3.5 % | ~4° | ~12° |
+| 24 | ~1.8 % | ~2° | ~6° |
+| 48 | ~0.9 % | ~1° | ~3° |
+
+So the nominal **2 in @ 50 ft crosshair is too small (≈6 px on a wide lens)** for useful
+orientation — **the user's instinct for "enough detectable spread" is correct.** For ~1–2 %
+size and ~1–2° tilt at moderate angles, target **N ≈ 24–48 px**, i.e. a **larger fan angle
+(≈4–8 in at 50 ft, 0.38–0.76°)** on a wide FOV, or a narrower FOV, or a higher-res sensor.
+(Size accuracy also inherits the TFmini-S range error, ≈ ±1 % — REF-SENSOR-002.) The cargo
+install at 5 ft has ~10× the pixel density, so its 3 in crosshair is already ample.
+
+**4.4.4 Power — a metrology crosshair is still Class 2.** A crosshair concentrates power in
+*thin lines*, whose illuminated area is small even when the pattern spans inches, so it is as
+power-efficient as a dot. Line power for camera strobe-difference detection (C = 0.01,
+E_bg = 400 W/m²), two 51 mm arms:
+
+| Line width | Power | Class |
+|---|---|---|
+| 0.5 mm | ~0.20 mW | Class 2 |
+| 1.0 mm | ~0.41 mW | Class 2 |
+| 2.0 mm | ~0.82 mW | Class 2 |
+
+So the metrology crosshair **stays Class 2** provided the lines are thin (≤ ~1 mm at the
+target) — no conflict with §4.1. Keep the lines thin and let the *spread* (fan angle), not the
+line width, carry the pixel budget.
 
 ---
 
@@ -193,21 +268,28 @@ source/optic/current split above and can be made per install.
    existing Vera shared driver (Q1 AO3400 logic-level N-FET, R1 100 Ω gate, R2 10 kΩ
    pulldown, J_LASER). This retires the separate 650 nm red cargo module (unifies BOM to a
    single diode family).
-2. **Pattern:** a **concentrated dot** at both sites (nose ~12 mm at 50 ft, cargo ~76 mm at
-   5 ft), *not* a spread crosshair — concentration is what keeps the nose in Class 2 (§3.2).
-   If a crosshair reticle is later wanted for aiming precision, re-check the power budget: a
-   spread pattern raises the required power and can push the nose back toward Class 3R/3B.
-3. **Terminal optic (per location):** nose ~3 mrad near-collimated (12 mm dot @ 50 ft); cargo
-   ~50 mrad diverging-lens (76 mm dot @ 5 ft). Same collimated green source both places.
+2. **Pattern:** a **thin-line crosshair** at both sites (NOT a bare dot) — the crosshair's
+   known projected angle is the metrology scale/orientation reference (§4.4). Keep the lines
+   thin (≤ ~1 mm at the target) so power stays Class 2 (§4.4.4); let the *fan angle* carry the
+   pixel budget.
+3. **Terminal optic + fan angle (per location, co-designed with the camera FOV):** size the
+   fan angle so the crosshair spans **N ≈ 24–48 px** at the design range for ~1–2 % size /
+   ~1–2° tilt accuracy (§4.4.3). Nose: **larger than the nominal 2 in — target ≈ 4–8 in at
+   50 ft (≈0.38–0.76°)** on a wide lens, or a narrower FOV; a DOE/crossed-cylindrical crosshair
+   generator. Cargo: 3 in at 5 ft (≈2.86°) is already ample. Same collimated green source both
+   places; the optic sets geometry only.
 4. **Optical power / class (per location, HARDWARE-limited):** **Class 2 (≤ 1 mW) at BOTH
-   sites.** Nose reaches Class 2 via the concentrated dot + Vera camera strobe-difference
-   detection (~0.45 mW). Cargo ≤ 1 mW green. No Class 3B → no key interlock or mechanical
-   shutter obligation; the `LASER_KEY_IN`/`LASER_IND` lines on Vera become optional
+   sites.** Nose reaches Class 2 via the thin-line crosshair + Vera camera strobe-difference
+   detection (~0.2–0.8 mW, §4.4.4). Cargo ≤ 1 mW green. No Class 3B → no key interlock or
+   mechanical shutter obligation; the `LASER_KEY_IN`/`LASER_IND` lines on Vera become optional
    defense-in-depth. Keep each cap hardware-enforced (fixed sense resistor / current-limited
    driver), not firmware-only.
-5. **Firmware:** strobe the GPIO-controlled laser and temporally difference (laser-on −
-   laser-off) in the AM62A7 ISP for daylight spot detection — this is what buys the nose its
-   Class 2 margin; budget a laser-sync GPIO/PWM in the Vera firmware WBS (TODO.md §4.6).
+5. **Firmware:** (a) strobe the GPIO-controlled laser and temporally difference (laser-on −
+   laser-off) in the AM62A7 ISP for daylight crosshair extraction — this buys the nose its
+   Class 2 margin; (b) sub-pixel-fit the extracted crosshair lines and compute object size =
+   (obj_px/cross_px)·2R·tan(θ/2) and tilt from arm foreshortening (§4.4), using the boresighted
+   TFmini-S range R. Budget a laser-sync GPIO/PWM and the crosshair-metrology routine in the
+   Vera firmware WBS (TODO.md §4.6).
 6. **Do not source the green diode or either terminal optic** until a real datasheet with a
    manufacturer-stated (or independently computed) mW rating and IEC 60825-1 class is added
    to REFERENCES.md — this extends the existing pending item under REF-IEC-002 and the
