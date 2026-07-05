@@ -241,21 +241,25 @@ after U4. All parts/pinouts reused verbatim from this project's own verified
 pod design — read by the MSPM0G3507 over UART, republished signed over both the Ethernet
 ring and CAN-FD.
 
-**Laser (crosshair pointer) — location-specific, do not use one part for both sites:**
+**Laser — single 520 nm green source, per-location optic + hardware current limit**
+(revised 2026-07-05, `docs/VERA_LASER_ANALYSIS.md`; supersedes the earlier "do not use one
+part for both sites" split). Both installs share ONE green diode + driver; they differ only in
+(1) a terminal optic that sets the spread angle and (2) a hardware current limit that sets the
+optical power / IEC 60825-1 class:
 
-- **Nose:** 2"×2" (51×51 mm) crosshair at 50 ft (15.2 m) requires ≈0.19° fan angle — a
-  near-collimated, high-power 520 nm green module. No off-the-shelf catalog part publishes
-  this tight a divergence; a custom-collimated module is required, and at the optical power
-  needed to be camera-visible in daylight it falls in **IEC 60825-1 Class 3B** (5–500 mW CW),
-  not the Class 3R (≤5 mW) used elsewhere in this design. Class 3B requires a key-controlled
-  interlock, an emission indicator, a beam-stop/shutter, and warning labeling — the existing
-  GPIO-default-off pull-down is necessary but not sufficient on its own. **Do not source or
-  wire this module until REFERENCES.md carries a verified Class 3B datasheet citation with a
-  real part number** (tracked in TODO.md §1.2c).
-- **Cargo bay:** 3"×3" (76×76 mm) at 5 ft (1.5 m) requires only ≈2.86° fan angle — well within
-  the existing 5 mW 650 nm Class 3R crosshair module already vetted (REF-IEC-002, REF-FDA-001)
-  for the bow sensor pod. No safety-class escalation needed at this location; reuse the
-  existing Class 3R module and driver circuit (2N7002 MOSFET, 10 kΩ pull-down, GPIO enable).
+- **Spread (terminal optic, 15× difference):** nose 2"×2" @ 50 ft ⇒ ≈0.19° (3.3 mrad),
+  custom near-collimated; cargo 3"×3" @ 5 ft ⇒ ≈2.86° (50 mrad), stock DOE or diverging-lens
+  dot. Same collimated green source both places.
+- **Nose — Class 3B** (≤500 mW): daylight visibility at 50 ft still requires 3B radiant power
+  even in green. Needs the key-controlled interlock, emission indicator, **mechanical
+  beam-stop/shutter** (still not on the board), and warning labeling — the GPIO-default-off
+  pull-down is necessary but not sufficient. **Do not source until REFERENCES.md carries a
+  verified datasheet citation** (REF-IEC-002 pending item; TODO.md §1.2c.4).
+- **Cargo — Class 2** (≤1 mW green): green is 6.64× more luminous-efficient than the retired
+  650 nm red, so the same 5 ft visibility needs ≤1 mW → Class 2 (blink-reflex safe, *safer*
+  than the old red, no interlock). **The Class 2 cap MUST be hardware-enforced** (fixed current
+  limit), not firmware-only, since the shared diode is 3B-capable — a fault must not fire 3B
+  power into the cargo bay above ground crew.
 
 **Status:** Design exploration only — no `.kicad_sch`/`.kicad_pcb` exists yet. See TODO.md
 §1.2c (hardware) and §4.6 (firmware) for the WBS breakdown.

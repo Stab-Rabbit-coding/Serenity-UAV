@@ -2623,6 +2623,36 @@ centroid placement (`airframe/CLAUDE.md` "Assembly and Placement").
 
 **BLOCKS:** Vera fabrication order; bow sensor pod avionics integration (§1.1.1.1a).
 
+#### 1.2c.4 — Vera Power Feed and Laser Unification (2026-07-05)
+
+Power-budget and laser analyses completed 2026-07-05 (`docs/POWER_DISTRIBUTION.md §3.2.1`,
+`docs/VERA_LASER_ANALYSIS.md`). Resulting hardware tasks:
+
+- [ ] **Kaylee dedicated Vera 5 V rail (U_BEC_VERA + J_VERA).** Add a third TPS54620RGYT (6 A,
+    same family as the avionics BECs), VDIS → 5.0 V, feeding a new J_VERA payload output to both
+    Vera boards (≈ 2.4 A typ / ~4.8 A peak). Keeps the switching video-SoC load off the shared
+    5 V avionics bus, which is already near its dual-BEC single-fault capacity (§3.2.1). No
+    diode-OR redundancy (Vera outage degrades vision only, not flight). Number alongside the
+    Rev S1 servo-rail change when Kaylee is next revised. **Not yet in KiCad.**
+- [ ] **Vera 5 V harness:** 18 AWG shielded TP per drop (Kaylee → nose bow pod, Kaylee → cargo
+    nadir mount); 3 A resettable polyfuse per drop; route with each Vera's Ethernet-ring/CAN
+    harness. Confirm final run lengths once ring-insertion bays are fixed (§1.2c.3).
+- [ ] **Laser — unify to a single 520 nm green source** (retires the separate 650 nm red cargo
+    module). Per-location terminal optic sets spread (nose ≈ 0.19°/3.3 mrad custom
+    near-collimated; cargo ≈ 2.86°/50 mrad stock DOE or diverging-lens dot). Per-location
+    HARDWARE current limit sets class (nose Class 3B; cargo Class 2, ≤ 1 mW — green's 6.64×
+    photopic advantage over the retired red). See `docs/VERA_LASER_ANALYSIS.md`.
+- [ ] **Cargo Class 2 cap must be hardware-enforced** (fixed current limit), not firmware-only,
+    so no software fault can drive the shared diode to Class 3B near ground crew during loading.
+- [ ] **Nose Class 3B mechanical beam-stop/shutter** — Vera implements only the electronic
+    interlock (LASER_KEY_IN/LASER_IND) today; IEC 60825-1 [REF-IEC-002] Class 3B also requires a
+    mechanical shutter. Add to the nose optical-mechanical design.
+- [ ] **Do not source** the green diode or either terminal optic until a real datasheet with a
+    verified mW rating + IEC 60825-1 class is added to REFERENCES.md (extends the REF-IEC-002
+    pending item; the nose-laser row in "Open Standards Verification Items").
+
+**BLOCKS:** Vera fabrication order; bow sensor pod avionics integration (§1.1.1.1a).
+
 ---
 
 ### 1.2a — PCB Design: Wash, Zoë, and Emma (EMI-Hardened Variants)

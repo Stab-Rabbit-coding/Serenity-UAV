@@ -105,6 +105,65 @@ from the design; see TODO §1.1.3.5.)
 > the four boards stagger TX by frequency and election priority. Sustained 5 V peak
 > current ≈ 14–18 A in nominal flight.
 
+The §3.2 table does **not** include the two **Vera** vision boards (nose + cargo). Vera is
+a standalone board (not a PB2-I cape) with its own 5 V input (`J_PWR`); its load is budgeted
+separately in §3.2.1 below and is fed from a **dedicated Kaylee 5 V payload rail**, not the
+shared avionics bus.
+
+### 3.2.1 Vera Vision-Board Loads (dedicated 5 V payload rail)
+
+Two Vera boards are installed (bow sensor pod + cargo-bay nadir mount). Each carries a TI
+AM62A7 vision SoC (via TPS65219 PMIC), a KSZ9477 Ethernet switch, an MSPM0G3507 MCU, an
+SLB9670 TPM, an ISOW1044 isolated CAN-FD, plus the camera module, TFmini-S ToF, and a laser.
+Figures are **datasheet-typical** at the 5 V board input (PMIC/buck-fed items divided by
+0.88 efficiency); refine when the placeholder SoC/switch footprints are replaced with sourced
+silicon (Vera.md "Verified vs. Placeholder").
+
+| Load (per board) | Typ (A @5 V) | Peak (A @5 V) | Notes |
+|---|---|---|---|
+| AM62A7 SoC (quad-A53 + VPAC/ISP + H.264/H.265 encode) | 0.57 | 1.02 | via TPS65219 PMIC |
+| KSZ9477 7-port Ethernet switch (3 ports active) | 0.27 | 0.46 | |
+| MSPM0G3507 MCU + SLB9670 TPM | 0.02 | 0.03 | |
+| ISOW1044 isolated CAN-FD (integrated iso DC-DC) | 0.05 | 0.10 | |
+| Camera module (MIPI CSI-2, via J_CAM) | 0.11 | 0.18 | |
+| TFmini-S ToF (140 mA typ / 200 mA peak @5 V) | 0.14 | 0.20 | REF-SENSOR-002 |
+| Ethernet magnetics + passives + LDO overhead | 0.04 | 0.07 | |
+| **Core subtotal (no laser)** | **1.20** | **2.06** | |
+| Laser — cargo (Class 2/3R green, ≤5 mW optical) | +0.02 | +0.02 | negligible |
+| Laser — nose (Class 3B green, up to 500 mW optical, when firing) | +0.20 | +0.66 | ≈15 % wall-plug efficiency; intermittent |
+
+**Per board:** cargo ≈ **1.22 A** typ / **2.08 A** peak; nose ≈ **1.40 A** typ (laser idle) /
+**2.72 A** peak (lasing).
+**Both boards (2×):** ≈ **2.4 A** typ / **~4.8 A** worst-case peak at 5 V →
+≈ **0.6 A** typ / **~1.2 A** peak at VBAT (5 V ÷ 22.2 V ÷ 0.92 BEC eff).
+
+**Feed decision — dedicated Kaylee 5 V payload rail (recommended over sharing the avionics
+bus).** The shared 5 V avionics rail is already tight: realistic sustained load ≈ 10 A (§3.2)
+against a dual-TPS54620 BEC whose **single-fault** capacity is only 6 A (both healthy ≈ 12 A;
+§11). Adding Vera's ~2.4 A nom to that rail pushes nominal to ≈ 12.4 A — at/over the healthy
+BEC ceiling and well past the 6 A single-fault floor, worsening the existing brown-out
+exposure. Vera is also a switching video-SoC load whose noise should not sit on the shared
+avionics bus. Therefore Vera is powered from its **own** Kaylee rail:
+
+- **U_BEC_VERA:** a third TPS54620RGYT (6 A, same family as the avionics BECs), VDIS input →
+  5.0 V output. 6 A rating vs 2.4 A nom / 4.8 A peak = comfortable margin (covers the nose
+  laser burst). No diode-OR redundancy needed — a Vera outage degrades vision/ranging only,
+  not flight (Vera is a peer sensor node, not a flight-control path).
+- **J_VERA:** new Molex Nano-Fit 4-pin (or 2× JST-GH-2P) 5 V payload output on Kaylee,
+  harnessed to both Vera `J_PWR` inputs.
+- **Fuse/limit:** the TPS54620 internal current limit plus a 3 A resettable polyfuse per Vera
+  drop (each board ≤ 2.72 A peak).
+- **Wire gauge:** 18 AWG shielded twisted pair (7 A rated) per drop — ≫ the ≤ 2.7 A per-board
+  load; consistent with §4 "Avionics bay intra-bay".
+- **Runs:** Kaylee (middle-section inner neck) → nose (bow pod) and → cargo nadir mount;
+  comparable length to the existing avionics 5 V bay runs. Route with the Ethernet-ring / CAN
+  harness Vera already shares to each bay.
+
+Implementing U_BEC_VERA + J_VERA on Kaylee is a Kaylee revision change (sibling to the planned
+Rev S1 servo-rail change); tracked in TODO.md. Until implemented, a Vera board may be bench-fed
+from the shared 5 V bus **only** with active load-management (accept that it consumes the
+remaining avionics margin and worsens single-fault brown-out) — not the flight configuration.
+
 ### 3.3 Servo Loads (6 V rail)
 
 | Load | Qty | Stall (mA) | Running (mA) | Total run (mA) |
@@ -133,6 +192,11 @@ At 6 V / 22.2 V: 5.3 A × 6 V / 22.2 V ≈ **1.4 A from VBAT** at stall.
 
 All figures are well within the 60 C (240 A) continuous rating of the 4 000 mAh pack
 and the 150 A main fuse rating under sustained load.
+
+The two **Vera** vision boards add ≈ **0.6 A typ / ~1.2 A peak at VBAT** (2.4 A / 4.8 A at
+5 V through the dedicated U_BEC_VERA rail, §3.2.1) — negligible against the propulsion-dominated
+totals above, but material to the 5 V-side budget, which is why Vera gets its own rail rather
+than loading the already-tight shared avionics BEC.
 
 ---
 

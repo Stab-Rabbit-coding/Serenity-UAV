@@ -90,6 +90,14 @@ requirements.
 | J_6V | Molex Nano-Fit 4-pin (pitch 2.50 mm) | 6 V / 5 A | Servo bus (tilt servos + nozzle servos) |
 | J_SHLD_5V | PGND via-pad 1.2 mm hole (adjacent to J_5V) | 5 V avionics cable shield drain → PGND plane |
 | J_SHLD_6V | PGND via-pad 1.2 mm hole (adjacent to J_6V) | 6 V servo cable shield drain → PGND plane |
+| **J_VERA** (planned, not yet in KiCad) | Molex Nano-Fit 4-pin (or 2× JST-GH-2P) | **Dedicated 5 V payload rail** to the two Vera vision boards (nose + cargo), ≈ 2.4 A typ / ~4.8 A peak — kept off the shared avionics bus; see `docs/POWER_DISTRIBUTION.md §3.2.1` |
+
+> **Planned Vera 5 V rail (not yet implemented in KiCad):** add **U_BEC_VERA** — a third
+> TPS54620RGYT (6 A, same family as the avionics BECs), VDIS input → 5.0 V — feeding a new
+> **J_VERA** payload output to both Vera boards. Rationale, load budget, and wire/fuse sizing:
+> `docs/POWER_DISTRIBUTION.md §3.2.1`. Number this change alongside the Rev S1 servo-rail change
+> when Kaylee is next revised. No diode-OR redundancy is required — a Vera outage degrades
+> vision/ranging only, not flight.
 
 ### Monitoring / Comms
 

@@ -30,6 +30,14 @@ Vera connects to the rest of the airframe **only** via three shielded JST-GH con
 Ethernet ring in, Ethernet ring out, CAN-FD trunk — plus its own 5V power input. It has no
 other physical or electrical dependency on any other avionics board.
 
+**Power (added 2026-07-05):** each Vera board draws ≈ **1.2 A typ / ~2.1–2.7 A peak at 5 V**
+(AM62A7 SoC + KSZ9477 switch + camera + ToF + laser; full budget in
+`docs/POWER_DISTRIBUTION.md §3.2.1`). The two boards (≈ 2.4 A typ / ~4.8 A peak combined) are
+fed from a **dedicated Kaylee 5 V payload rail (U_BEC_VERA → J_VERA)** — NOT the shared 5 V
+avionics bus, which is already near its dual-BEC capacity — keeping the switching video-SoC
+load off the avionics rail and preserving its margin. Vera's own TPS65219 PMIC regulates this
+5 V input to the SoC core rails. `J_PWR` is the board-side 5 V/GND entry.
+
 ---
 
 ## Design Origin and Fact-Check
@@ -104,24 +112,31 @@ parts and footprints from this project's own `gen_cape_a2.py`/`gen_cape_a2_pcb.p
   design. Read by U3 over its dedicated UART1 instance; range data republished signed over
   both the Ethernet ring and CAN-FD.
 
-### Laser driver — location-specific population
+### Laser driver — single green source, location-specific optic + current limit
 
 One shared driver circuit (Q1 AO3400 logic-level N-MOSFET, R1 100Ω gate resistor, R2 10kΩ
-pulldown, J_LASER JST-SH 2P) serves both install locations, populated with a different laser
-module per site:
+pulldown, J_LASER JST-SH 2P) serves both install locations. **Per `docs/VERA_LASER_ANALYSIS.md`
+(Rev A, 2026-07-05), both installs now use ONE shared 520 nm green laser diode + driver**; the
+two sites differ only in (1) a per-location terminal optic that sets the spread angle and (2) a
+per-location hardware current limit that sets the optical power / IEC 60825-1 class. This
+retires the previous split (green nose + separate 650 nm red cargo module) and unifies the
+laser BOM to a single green diode family. Rationale in full: `docs/VERA_LASER_ANALYSIS.md`.
 
-- **Cargo bay** (3"×3" @ 5 ft, ≈2.86° fan angle): populate with the existing, already-vetted
-  5 mW 650 nm Class 3R module (REF-IEC-002, REF-FDA-001) — no change from the bow sensor
-  pod's original laser spec, just relocated. GPIO-default-off pull-down is sufficient.
-- **Nose** (2"×2" @ 50 ft, ≈0.19° fan angle): requires a custom-collimated 520 nm module —
-  no off-the-shelf catalog part was found at this divergence during design research. At the
-  optical power needed for daylight camera visibility this falls in **IEC 60825-1 Class
-  3B** (5–500 mW), not Class 3R. Class 3B requires a key-controlled interlock (LASER_KEY_IN,
-  wired to U3), an emission indicator (LASER_IND, wired to U3), and a mechanical
-  beam-stop/shutter (not yet represented on this board — electronics-only interlock so far).
-  **Do not source or populate this module until a real datasheet with a verified mW rating
-  and IEC 60825-1 class replaces the placeholder citation in REFERENCES.md** (tracked
-  TODO.md §1.2c).
+- **Spread angle is set by the terminal optic, not the source** (15× difference between sites):
+  nose ≈ 0.19° (3.3 mrad) custom near-collimated crosshair/dot; cargo ≈ 2.86° (50 mrad) stock
+  DOE crosshair or diverging-lens dot. Same collimated green source both places.
+- **Cargo bay** (3"×3" @ 5 ft): green at 520 nm is 6.64× more luminous-efficient than the
+  retired 650 nm red, so the same 5 ft visibility needs ≤ 1 mW → **Class 2** (blink-reflex
+  safe; *safer* than the old red). GPIO-default-off pull-down suffices, **but the Class 2 cap
+  must be HARDWARE-enforced** (fixed current limit) so no firmware fault can drive the shared
+  diode to Class 3B near ground crew.
+- **Nose** (2"×2" @ 50 ft): daylight visibility at 50 ft still requires **IEC 60825-1 Class
+  3B** (5–500 mW) radiant power even in green. Requires the key-controlled interlock
+  (LASER_KEY_IN → U3), emission indicator (LASER_IND → U3), **and a mechanical beam-stop/shutter
+  (still not on the board — electronics-only interlock so far)**.
+- **Do not source the green diode or either terminal optic** until a real datasheet with a
+  verified mW rating and IEC 60825-1 class replaces the placeholder citation in REFERENCES.md
+  (REF-IEC-002 pending item; tracked TODO.md §1.2c).
 
 ---
 

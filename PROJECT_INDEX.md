@@ -1,7 +1,7 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: 2026-07-04 — Emma schematic-first reconciliation (gen_emma_sch.py, mod_emma_pcb.py; Emma.kicad_sch authored to match PCB, ERC 0 errors, exact parity); Zoë.kicad_sch load-blocking comment bug fixed -->
+<!-- Last updated: 2026-07-05 — Vera power feed (dedicated Kaylee 5V rail, POWER_DISTRIBUTION §3.2.1) + single-green-laser analysis (VERA_LASER_ANALYSIS.md) -->
 
 ## Repository Root
 
@@ -634,7 +634,8 @@ structural_analysis.md            — First-principles structural analysis (Rev 
 AVIONICS_PB2_REDESIGN.md          — 8× PocketBeagle 2 Industrial avionics redesign spec (Rev R)
 BATTERY_MOUNT.md                  — Battery CG analysis, retention load case, belly panel spec (Rev R)
 LANDING_GEAR_ANALYSIS.md          — Landing gear structural analysis: 6 ft drop, fuse sizing, lateral loads (Rev R1)
-POWER_DISTRIBUTION.md             — Power architecture: Kaylee PDB rails, fuse map, cable spec (Rev R)
+POWER_DISTRIBUTION.md             — Power architecture: Kaylee PDB rails, fuse map, cable spec (Rev R; §3.2.1 Vera 5V rail added 2026-07-05)
+VERA_LASER_ANALYSIS.md            — Vera laser: single 520nm green source feasibility, power/class vs spread-angle split, lens/DOE options (Rev A)
 REVN_BUILD_GUIDE_24IN.md          — Revision N+ 24-inch hull build guide (active, Rev R baseline)
 PHASED_BUILD_GUIDE.md             — Rev M 18-inch phased build guide (SUPERSEDED for 24-inch builds)
 PROTO_PRINT_DAVINCI_JR.md         — DaVinci Jr. PLA prototype print guide (Rev P, historical)
