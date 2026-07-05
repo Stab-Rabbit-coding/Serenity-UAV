@@ -8,6 +8,7 @@
         "**/*.kicad_sch",
         "**/*.dxf",
         "**/*.stl",
-        "**/__pycache__/**"
+        "**/__pycache__/**",
+        "**/blender-scripts/*.py"
     ]
 }
