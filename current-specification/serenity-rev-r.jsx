@@ -817,7 +817,7 @@ function TabBOM() {
         { cat: "Printed parts (filament)",     items: 3,  mass_g: 2000, cost: 106,  notes: "PETG ~1,400 g + CF-PETG ~650 g + TPU ~100 g" },
         { cat: "Structural (CF stock + foam)", items: 5,  mass_g: 980,  cost: 77,   notes: "Keel + spars + ring frames + PU foam + epoxy" },
         { cat: "Wiring + conduit",             items: 4,  mass_g: 165,  cost: 48,   notes: "10/16/28 AWG silicone + PTFE conduit" },
-        { cat: "Lighting",                     items: 2,  mass_g: 25,   cost: 30,   notes: "3× WS2812B nozzle rings + 4× WS2812C nav lights" },
+        { cat: "Lighting",                     items: 1,  mass_g: 1,    cost: 1,    notes: "4× WS2812C nav lights (port RED / stbd GREEN); WS2812B nozzle rings removed" },
         { cat: "Cargo hardware",               items: 4,  mass_g: 16,   cost: 13,   notes: "N20 motor + HX711 + DRV8833 + Dyneema + gasket" },
         { cat: "Hardware / fasteners",         items: 10, mass_g: 80,   cost: 80,   notes: "Bearings, pins, inserts, antenna hardware, misc" },
     ];
@@ -1056,7 +1056,7 @@ function TabBuildStatus() {
             items: [
                 ["EDF bench-test (rotation direction)", "○ BLOCKED by Phase 0"],
                 ["EDF1 + EDF2 installation in nacelle bore", "○ OPEN"],
-                ["Iris nozzle assembly (8 petals + link ring)", "○ OPEN"],
+                ["Nozzle assembly (8 conical flaps + 72T unison ring + spiral cam)", "○ OPEN"],
                 ["Gear linkage (sector → pinion → bevel → crown)", "○ OPEN"],
                 ["Full sweep test: 0°→90°, nozzle open/close verified", "○ OPEN"],
             ],

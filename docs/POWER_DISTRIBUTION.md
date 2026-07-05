@@ -9,7 +9,7 @@
 
 ## 1. Architecture Overview
 
-```
+```text
                          ┌───────────────────────────────────────────┐
   6S 4000 mAh LiPo       │                 Kaylee                     │
   (22.2 V nominal)        │                                           │
@@ -58,7 +58,7 @@ Each ESC feeds one 50 mm EDF (Phases 5–10). Phase 11 adds ESC5 for the 55 mm f
 
 At sustained 115 A draw (four 50 mm EDFs at full thrust) with 30 mΩ pack IR:
 
-```
+```text
 V_sag = 115 A × 0.030 Ω = 3.45 V
 V_pack_min_load = 22.2 V − 3.45 V ≈ 18.75 V  (nominal state-of-charge)
 ```
@@ -93,12 +93,13 @@ over-current threshold in governor_config.h: `EDF_ESC_OVERCURRENT_A = 80 A`).
 | Wash (sensor suite + CAN/RS-485) | 4 | 700 | 1 400 | 2 800 | 5 600 |
 | Zoë (radios TX simultaneous) | 4 | 1 500 | 2 500 | 6 000 | 10 000 |
 | Emma sub-modules | 4 | 100 | 250 | 400 | 1 000 |
-| WS2812B LED rings (3×) | 3 | 80 | 200 | 240 | 600 |
 | HX711 + load cell | 1 | 10 | 10 | 10 | 10 |
 | N20 winch motor (via DRV8833) | 1 | 200 | 500 | 200 | 500 |
-| **5 V subtotal** | — | — | — | **13 650** | **27 310** |
+| **5 V subtotal** | — | — | — | **13 410** | **26 710** |
 
-At 5 V / 22.2 V conversion: 27.3 A × 5 V / 22.2 V ≈ **6.2 A from VBAT** at peak.
+At 5 V / 22.2 V conversion: 26.7 A × 5 V / 22.2 V ≈ **6.0 A from VBAT** at peak.
+(The WS2812B exhaust LED rings — formerly 240 mA nom / 600 mA peak — were removed
+from the design; see TODO §1.1.3.5.)
 
 > **Note:** Simultaneous TX on all four Cape-B radios is an upper bound; in practice
 > the four boards stagger TX by frequency and election priority. Sustained 5 V peak
@@ -160,7 +161,7 @@ conductor. The 40 A fuse per ESC output provides coordinated protection.
 Fuse coordination ensures that a downstream fault clears the nearest upstream fuse
 without propagating to the main bus or battery.
 
-```
+```text
 Battery ─────────────────────────────────────────────────────────
                 │
           F1: 150 A MAXI blade (Littelfuse 0297150.ZXNV)
@@ -221,7 +222,7 @@ derating should prevent sustained draws above 28 A in the nacelle environment.
 The Serenity UAV design envelope includes operation near commercial broadcast and
 cellular antenna installations where ambient RF power density reaches **500 W/m²**.
 
-```
+```text
 E = √(P_density × Z₀) = √(500 W/m² × 377 Ω) ≈ 434 V/m
 ```
 
@@ -290,7 +291,7 @@ Avionics EMI coupling from motor noise is a serious concern.
 
 **Star ground:** All power grounds return to a single point at the Kaylee PGND bar.
 
-```
+```text
 Kaylee PGND bar (star point)
 ├── Battery negative (XT60 GND)
 ├── ESC GND returns (each ESC GND to PGND via 10 AWG return wire)
@@ -353,7 +354,7 @@ at 10 Hz. Driver: `bmon_ina2xx` extended current-sensing mode.
 
 ### 7.3 Cell-Level Monitoring (BQ76930 on Kaylee)
 
-The Texas Instruments BQ76930 is a 6–10 series cell front-end monitor IC mounted on
+The Texas Instruments BQ76930 is a 6–10 series cell frontend monitor IC mounted on
 Kaylee and connected to the JST-XH-7P balance lead.
 
 | Parameter | Value |
@@ -411,10 +412,9 @@ Shedding is additive: each higher level includes all lower-level sheds.
 | Priority | Shed target | VBAT saving (A) | 5 V saving (A) |
 |----------|------------|-----------------|----------------|
 | 1 (CRITICAL) | Cargo winch N20 motor | 0.1 | 0.5 |
-| 2 (CRITICAL) | WS2812B LED rings (all 3) | 0.1 | 0.6 |
-| 3 (CRITICAL) | LoRa RFM95W TX reduced power | ~0.0 | 0.1 |
-| 4 (CRITICAL) | WiFi WL1837MOD TX off | ~0.0 | 0.5 |
-| 5 (EMERGENCY) | All non-propulsion 5 V loads off | ~0.3 | — |
+| 2 (CRITICAL) | LoRa RFM95W TX reduced power | ~0.0 | 0.1 |
+| 3 (CRITICAL) | Wi-Fi WL1837MOD TX off | ~0.0 | 0.5 |
+| 4 (EMERGENCY) | All non-propulsion 5 V loads off | ~0.3 | — |
 | 6 (EMERGENCY) | EDF throttle cap at 70 % | ~22 A | 0 |
 
 At 70 % throttle cap: thrust ≈ 49 % (thrust ∝ RPM² ∝ throttle²) — T/W drops from
@@ -428,7 +428,7 @@ The BQ76930 enforces hardware-level protection independent of firmware:
 | Protection | Threshold | Response |
 |-----------|-----------|---------|
 | OVP (per cell) | 4.20 V | Opens CHG FET within 1 µs (charge path only) |
-| UVP (per cell) | 3.00 V | Opens DSG FET within OD delay | 
+| UVP (per cell) | 3.00 V | Opens DSG FET within OD delay |
 | OCD (pack) | 50 A / 8 ms | Opens DSG FET |
 | SCD (pack) | 150 A / 100 µs | Opens DSG FET |
 | OTP (pack temp.) | 60 °C | Opens both FETs |
@@ -717,7 +717,7 @@ When the 55 mm fuselage EDF is integrated (Phase 11):
 
 Correction: slide battery aft 8 mm on the rail.
 
-```
+```text
 ΔCGL ≈ (battery_mass / AUW) × Δbatt_position
      = (750 / 2,768) × 8 mm   ← Phase 5–10 AUW from TODO.md
      ≈ 2.2 mm of forward CG shift per 8 mm slide
@@ -742,21 +742,21 @@ hardware. Verify on the physical CG rig before first flight.
 
 Phase 5–10 hover battery sensitivity (750 g, AUW 2,768 g):
 
-```
+```text
 ΔCG ≈ (750 / 2,768) × Δbatt_position
     = 0.271 × Δ mm per mm of battery slide
 ```
 
 Phase 5–10 cargo battery sensitivity (525 g, AUW ~2,543 g):
 
-```
+```text
 ΔCG ≈ (525 / 2,543) × Δbatt_position
     = 0.206 × Δ mm per mm of battery slide
 ```
 
 Phase 11 full build hover battery sensitivity (750 g, AUW 3,130 g):
 
-```
+```text
 ΔCG ≈ (750 / 3,130) × Δbatt_position
     = 0.240 × Δ mm per mm of battery slide
 ```

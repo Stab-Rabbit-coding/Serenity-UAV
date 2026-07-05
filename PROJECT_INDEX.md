@@ -287,13 +287,14 @@ eng_right_shell24_50mm_repaired.stl — Stbd nacelle EDF engine shell, 50 mm, ma
 nacelle_bevel_housing.stl         — Bevel gear housing (also duplicated under nozzles/, see below)
 nacelle_bevel_pair.stl            — 14T 45° bevel pair (also duplicated under nozzles/, see below)
 nacelle_pinion.stl                — M=1.0 12T pinion
-nacelle_port_revq.stl             — Port nacelle pod shell, Rev Q baseline; required by
+nacelle_port_revs.stl             — Port nacelle pod shell, Rev S (renamed from _revq 2026-07-04;
+                                    Rev S1 nozzle/nav/intake mods baked in); required by
                                     tools/bake_hull_frame.py, serenity_assembly.py, and the
                                     FreeCAD-scripts Makefile (active, do not archive)
 nacelle_sector_gear.stl           — M=1.0 58T sector gear, -5°/140° range; re-rendered
                                     2026-06-22, see §1.1.3.2
-nacelle_stbd_revq.stl             — Stbd nacelle pod shell, Rev Q baseline; same active-pipeline
-                                    dependency as nacelle_port_revq.stl (do not archive)
+nacelle_stbd_revs.stl             — Stbd nacelle pod shell, Rev S (renamed from _revq 2026-07-04);
+                                    same active-pipeline dependency as nacelle_port_revs.stl (do not archive)
 nozzles/
 nacelle_bevel_housing.stl       — Bevel gear housing
 nacelle_bevel_pair.stl          — 14T 45° bevel pair
@@ -305,9 +306,15 @@ nacelle_nozzle_idler.stl        — Compound idler gear (44T/15T), Crown-Pinion-
                                     stage; rendered 2026-06-22, see TODO.md §1.1.3.1
 nacelle_nozzle_idler_bracket.stl — Two-boss bracket for the idler gear above; rendered
                                     2026-06-22, see TODO.md §1.1.3.1
-nacelle_nozzle_petal.stl        — Single iris petal (print × 8)
-nacelle_nozzle_ring.stl         — Iris nozzle ring body
-nacelle_nozzle_closed_asm.stl   — Iris assembly (closed position, visual)
+nacelle_nozzle_throat.stl       — Rev R2 fixed throat liner + housing (RENDER_PART="throat"
+                                    of nacelle_nozzle_iris.scad); print part, 2026-07-04
+nacelle_nozzle_ring.stl         — Rev R2 unison ring gear (72T + spiral cams,
+                                    RENDER_PART="ring"); print part, re-rendered 2026-07-04
+nacelle_nozzle_flap.stl         — Rev R2 overlapping tangential-hinge conical flap
+                                    (RENDER_PART="flap", print × 8); NEW 2026-07-04,
+                                    supersedes nacelle_nozzle_petal.stl (archived), see
+                                    TODO.md §1.1.3.1 [REF-CAD-001]
+nacelle_nozzle_closed_asm.stl   — Iris assembly (closed position, visual; legacy blender)
 ```
 
 #### airframe/stls/wings/
@@ -381,10 +388,8 @@ Pin_SS_3x5mm_hinge.stl          — SS roll pin 3×5 mm (BOM: PIN-3X5)
 Insert_M25_brass_L5.stl         — M2.5 brass heat-set insert (BOM: INSERT-M25-BRASS)
 Insert_M3_brass_L5.stl          — M3 brass heat-set insert (BOM: INSERT-M3-WING)
 Screw_M3x8mm_button_ISO7380.stl — M3×8 button-head screw (BOM: SCREW-M3-8-BTN)
-Piano_wire_0p8mm_iris_ring.stl  — 0.8 mm music wire iris ring (BOM: PIANO-WIRE-0.8)
 Batt_strap_silicone_16mm_CAM.stl — 16 mm silicone cam-buckle strap (BOM: BATT-STRAP-CAM)
 lighting/
-WS2812B_ring_50mm.stl           — WS2812B LED ring 50 mm (BOM: LED-WS2812B)
 WS2812C_2020_SMD.stl            — WS2812C-2020 SMD nav light (BOM: LED-WS2812C-NAC)
 wiring/
 PTFE_conduit_4mm_OD_3mm_ID_700mm.stl — PTFE data bus conduit 700 mm (BOM: CONDUIT-PTFE)

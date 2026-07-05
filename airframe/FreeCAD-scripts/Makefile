@@ -56,6 +56,9 @@ NACELLE_STLS := \
     $(STLS)/nacelles/nozzles/nacelle_bevel_housing.stl   \
     $(STLS)/nacelles/nozzles/nacelle_bevel_pair.stl      \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_iris.stl     \
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_throat.stl   \
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_ring.stl     \
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_flap.stl     \
     $(STLS)/nacelles/nacelle_pinion.stl                  \
     $(STLS)/nacelles/nacelle_sector_gear.stl             \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_idler.stl    \
@@ -173,6 +176,35 @@ $(STLS)/nacelles/nozzles/nacelle_nozzle_iris.stl: \
         $(SCAD)/nacelles/nacelle_nozzle_iris.scad
 	@mkdir -p $(dir $@)
 	$(OPENSCAD) $(SCAD_FLAGS) \
+	    $(SCAD)/nacelles/nacelle_nozzle_iris.scad \
+	    -o $@
+	@echo "[stl] $@"
+
+# Nozzle print-ready parts pulled from the same iris file via RENDER_PART
+# (throat-and-housing, unison ring, and one flap — printed × 8).
+$(STLS)/nacelles/nozzles/nacelle_nozzle_throat.stl: \
+        $(SCAD)/nacelles/nacelle_nozzle_iris.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) \
+	    -D 'RENDER_PART="throat"' \
+	    $(SCAD)/nacelles/nacelle_nozzle_iris.scad \
+	    -o $@
+	@echo "[stl] $@"
+
+$(STLS)/nacelles/nozzles/nacelle_nozzle_ring.stl: \
+        $(SCAD)/nacelles/nacelle_nozzle_iris.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) \
+	    -D 'RENDER_PART="ring"' \
+	    $(SCAD)/nacelles/nacelle_nozzle_iris.scad \
+	    -o $@
+	@echo "[stl] $@"
+
+$(STLS)/nacelles/nozzles/nacelle_nozzle_flap.stl: \
+        $(SCAD)/nacelles/nacelle_nozzle_iris.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) \
+	    -D 'RENDER_PART="flap"' \
 	    $(SCAD)/nacelles/nacelle_nozzle_iris.scad \
 	    -o $@
 	@echo "[stl] $@"

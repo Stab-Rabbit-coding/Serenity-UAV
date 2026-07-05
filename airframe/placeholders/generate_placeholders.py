@@ -19,7 +19,7 @@ Output tree (relative to this script):
     cargo/          N20 winch motor, HX711, DRV8833
     gears/          M=1.0 sector, pinion, bevel pair, crown (resin-print or SDP-SI)
     hardware/       hinge pins, heat-set inserts, screws, PTFE sleeve, cam straps
-    lighting/       WS2812B ring, WS2812C-2020 SMD
+    lighting/       WS2812C-2020 SMD nav LED
     wiring/         PTFE conduit, representative wire bundle cross-sections
     gcs/            Malcolm enclosure, GCS LiPo, antenna types, tripod, encoders
 
@@ -657,40 +657,6 @@ def gen_screw_m3x8():
     return _cat(head, shank)
 
 
-def gen_piano_wire_ring():
-    """
-    0.8 mm piano / music wire — bent into iris nozzle link rings.
-    Modelled as a torus-approximated ring: tube R_torus=14 mm, wire r=0.4 mm.
-    BOM: PIANO-WIRE-0.8 (×1 stock; 3 bent rings total).
-    """
-    R = 14.0  # link ring radius (mm)
-    r = 0.4  # wire cross-section radius
-    n_ring = 32  # segments around the ring
-    n_tube = 8  # segments around the wire cross-section
-    tris = []
-    for i in range(n_ring):
-        a0 = 2.0 * math.pi * i / n_ring
-        a1 = 2.0 * math.pi * (i + 1) / n_ring
-        for j in range(n_tube):
-            b0 = 2.0 * math.pi * j / n_tube
-            b1 = 2.0 * math.pi * (j + 1) / n_tube
-            # Four vertices of a quad on the tube surface
-
-            def vtx(a, b):
-                cx = (R + r * math.cos(b)) * math.cos(a)
-                cy = (R + r * math.cos(b)) * math.sin(a)
-                cz = r * math.sin(b)
-                return (cx, cy, cz)
-
-            v00 = vtx(a0, b0)
-            v10 = vtx(a1, b0)
-            v01 = vtx(a0, b1)
-            v11 = vtx(a1, b1)
-            tris.append(_T(v00, v10, v11))
-            tris.append(_T(v00, v11, v01))
-    return tris
-
-
 def gen_batt_strap():
     """
     16 mm silicone cam-buckle strap — battery retention (50 N rated).
@@ -711,15 +677,6 @@ def gen_dyneema():
 
 
 # ---- Lighting ------------------------------------------------------------ #
-
-
-def gen_ws2812b_ring_50mm():
-    """
-    WS2812B addressable RGB LED ring — 50 mm dia nozzle backlight.
-    OD=50 mm, ring width=5 mm (ID=40 mm), PCB thickness=2 mm.
-    BOM: LED-WS2812B (×3: 1 per nacelle nozzle × 2 + 1 rear nozzle).
-    """
-    return _tube(25.0, 20.0, 2.0, n=32)
 
 
 def gen_ws2812c_2020():
@@ -1707,13 +1664,6 @@ _COMPONENTS = [
         "M3×8 stainless button-head cap screw ISO 7380 (×4 belly panel)",
     ),
     (
-        gen_piano_wire_ring,
-        "hardware",
-        "Piano_wire_0p8mm_iris_ring.stl",
-        "PIANO-WIRE-0.8",
-        "0.8 mm music wire link ring — iris nozzle actuation (×3 rings)",
-    ),
-    (
         gen_batt_strap,
         "hardware",
         "Batt_strap_silicone_16mm_CAM.stl",
@@ -1721,13 +1671,6 @@ _COMPONENTS = [
         "16 mm silicone cam-buckle strap 50 N — battery retention (×2)",
     ),
     # Lighting
-    (
-        gen_ws2812b_ring_50mm,
-        "lighting",
-        "WS2812B_ring_50mm.stl",
-        "LED-WS2812B",
-        "WS2812B LED ring 50 mm dia — nozzle backlight (×3)",
-    ),
     (
         gen_ws2812c_2020,
         "lighting",
@@ -2084,8 +2027,8 @@ def main():
     )
     if errors:
         print(f"ERRORS ({len(errors)}):")
-        for name, exc in errors:
-            print(f"  {name}: {exc}")
+        for name, err in errors:
+            print(f"  {name}: {err}")
         return 1
     print("All placeholder STLs written successfully.")
     return 0

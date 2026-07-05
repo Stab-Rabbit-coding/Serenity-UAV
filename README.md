@@ -7,29 +7,29 @@
 - [Authoritative Project Instructions](#authoritative-project-instructions)
 - [Specifications](#specifications)
 - [Airframe](#airframe)
-  - [Coordinate Standard (Rev R1)](#coordinate-standard-rev-r1)
-  - [Fuselage](#fuselage)
-    - [Compartments and Bays](#compartments-and-bays)
-  - [Wings](#wings)
-  - [Nacelles](#nacelles)
-  - [Landing Gear](#landing-gear)
+    - [Coordinate Standard (Rev R1)](#coordinate-standard-rev-r1)
+    - [Fuselage](#fuselage)
+        - [Compartments and Bays](#compartments-and-bays)
+    - [Wings](#wings)
+    - [Nacelles](#nacelles)
+    - [Landing Gear](#landing-gear)
 - [Powerplant](#powerplant)
-  - [Power Distribution](#power-distribution)
-  - [Battery](#battery)
-  - [Propulsion — Rev R baseline](#propulsion--rev-r-baseline)
-    - [DEFERRED — Phase 11: Fuselage EDF + RCS](#deferred--phase-11-fuselage-edf--rcs)
-  - [Servos and Motors](#servos-and-motors)
+    - [Power Distribution](#power-distribution)
+    - [Battery](#battery)
+    - [Propulsion — Rev R baseline](#propulsion--rev-r-baseline)
+        - [DEFERRED — Phase 11: Fuselage EDF + RCS](#deferred--phase-11-fuselage-edf--rcs)
+    - [Servos and Motors](#servos-and-motors)
 - [Avionics](#avionics)
-  - [Ground Control — Mal](#ground-control--mal)
-  - [Onboard — 8-node cooperative architecture](#onboard--8-node-cooperative-architecture)
+    - [Ground Control — Mal](#ground-control--mal)
+    - [Onboard — 8-node cooperative architecture](#onboard--8-node-cooperative-architecture)
 - [Cargo Handling — Jayne](#cargo-handling--jayne)
 - [References](#references)
 - [License](#license)
 - [Attribution](#attribution)
-  - [Component License Map](#component-license-map)
-  - [What This License Covers](#what-this-license-covers)
-  - [Patent Notice](#patent-notice)
-  - [Forensic Evidence Integrity Note](#forensic-evidence-integrity-note)
+    - [Component License Map](#component-license-map)
+    - [What This License Covers](#what-this-license-covers)
+    - [Patent Notice](#patent-notice)
+    - [Forensic Evidence Integrity Note](#forensic-evidence-integrity-note)
 
 ---
 
@@ -119,13 +119,13 @@ Seven named compartments are specified:
 
 **Shepherd's room** — Forward avionics bay (Bay A), head section near the bridge.
 Primary tasking: watchdog, fault detection, failover, and authentication.
-Wash + Zoë stack. SiK primary / WiFi secondary comms.
+Wash + Zoë stack. SiK primary / Wi-Fi secondary comms.
 Ventilation ducting, cable conduits, and low-impedance bonding to other avionics bays.
 External access via a removable hull panel on the head section.
 
 **Inara's shuttle** — Avionics bay (Bay B), port side of the cargo section.
 Primary tasking: camera, external sensors, and high-bandwidth ground communications.
-Wash + Zoë stack. WiFi primary / LoRa secondary comms.
+Wash + Zoë stack. Wi-Fi primary / LoRa secondary comms.
 Ventilation ducting, cable conduits, and low-impedance bonding to other avionics bays.
 External access via a removable hull panel above the port wing (resembles the shuttle
 fairing in the canonical model). Also accessible via Jayne's cargo bay.
@@ -181,8 +181,11 @@ nacelle EDF exits. The rear fuselage EDF uses the **fixed canonical Serenity tai
 - Nacelle nozzles (2×): gear-linked passively to the tilt pivot — no dedicated servo.
   0° nacelle tilt = nozzle fully closed; 90° tilt = nozzle fully open (full burn).
   Gear train: sector R = 0.87 in (22 mm) → pinion N = 12T → bevel pair N = 14T 45°
-  → crown N = 12T → ring rack R = 1.10 in (28 mm) → ~70.7° ring travel per 90° nacelle sweep.
-- Inner petal face: translucent-blue PETG, backlit by WS2812B LED ring inside each duct.
+  → crown N = 12T → compound idler (44T in / 15T out) → full-circle unison ring gear
+  N = 72T, R = 1.42 in (36 mm), whose spiral face-cam drives the 8 overlapping
+  tangential-hinge flaps (Rev R2 — smooth conical exit, replaces the Rev R1 rack).
+- Inner flap face: translucent-blue PETG (visual airflow reference only — the WS2812B
+  exhaust LED backlight has been removed from the design).
 
 Iris mechanism concept:
 [Variable-area EDF nozzle by BamJr](https://www.thingiverse.com/thing:2991269)
@@ -265,9 +268,9 @@ attitude authority, **not** hover lift.
   Net forward thrust after bleed: ~2.81 lbf (1,275 g).
 - Deferred EDF system mass: ~0.79 lbm (360 g) total
   (EDF ~3.4 oz / 95 g + ESC ~1.2 oz / 35 g + CF-PETG intake frame ~0.7 oz / 20 g
-  + CF-PETG plenum + RCS manifold ~1.8 oz / 50 g + fixed canonical nozzle ~1.1 oz / 30 g
-  + 4× RCS jets/ducts ~1.1 oz / 32 g + 4× RCS proportional valves ~1.3 oz / 36 g
-  + motor mount + thrust tube ~1.6 oz / 45 g + wiring ~0.5 oz / 15 g)
+    + CF-PETG plenum + RCS manifold ~1.8 oz / 50 g + fixed canonical nozzle ~1.1 oz / 30 g
+    + 4× RCS jets/ducts ~1.1 oz / 32 g + 4× RCS proportional valves ~1.3 oz / 36 g
+    + motor mount + thrust tube ~1.6 oz / 45 g + wiring ~0.5 oz / 15 g)
 - **Phase 11 full-system:** AUW ~6.90 lbm (3,130 g) | Rear forward thrust ~2.81 lbf (1,275 g) |
   Hover T/W ≈ **1.43** (nacelles only; above the 1.0 hover floor, below the 1.5 comfort target —
   keep hover payload light, or treat the rear EDF as a cruise-only device).
@@ -335,7 +338,7 @@ Gerbers for v2 capes pending DRC sign-off.
 | Link | Frequency | Node (primary) |
 |------|-----------|---------------|
 | SiK / MAVLink | 915 MHz | Shepherd (primary), Inara (secondary) |
-| WiFi | 5 GHz | Inara (primary), Shepherd (secondary) |
+| Wi-Fi | 5 GHz | Inara (primary), Shepherd (secondary) |
 | LoRa | 915 MHz | River (primary), Simon (secondary) |
 | AX.25 / 49 MHz | 49 MHz | River + Simon (47 CFR Part 15 §15.235 [REF-FCC-003] / AX.25 framing [REF-PROTO-001]) |
 | Zigbee | 2.4 GHz | Zoë nodes (secondary mesh) |

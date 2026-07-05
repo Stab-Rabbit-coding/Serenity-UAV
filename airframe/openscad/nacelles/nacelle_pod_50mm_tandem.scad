@@ -8,10 +8,10 @@
 //   NEVER re-bake a mesh derived from an already-baked file.
 //   This file:
 //     Nacelle duct axis along local +Z with the intake at Z = 0.  The
-//     published nacelle STLs (nacelle_port/stbd_revq.stl) are baked to
+//     published nacelle STLs (nacelle_port/stbd_revs.stl) are baked to
 //     hull frame in CRUISE attitude (270 deg about +X + translation;
 //     COMPONENTS['Nacelle_Port'] / ['Nacelle_Stbd']).  Hover is a
-//     downstream rotation about the tilt pivot (duct Z = 83 mm), never a
+//     downstream rotation about the tilt pivot (duct Z = PIVOT_Z = 104.5 mm), never a
 //     stored orientation.  After regeneration, re-run:
 //         python3 tools/bake_hull_frame.py Nacelle_Port Nacelle_Stbd
 //   Nacelle label correction (Rev R1/nacelle-swap, 2026-06-11):
@@ -135,20 +135,38 @@
 // All Z-axis parameters in this file are at 1.25× reference scale.
 // Bore-radius (EDF_BORE_R=25mm) and all radial dimensions are physical sizes.
 //
-// Nacelle mass breakdown (at 1.25× scale, CF-PETG shell + stator + bosses)
+// Nacelle mass breakdown — FULL rotating assembly (at 1.25× scale)
 // -------------------------------------------------------------------------
+//   Every component that tilts WITH the nacelle is included (updated
+//   2026-07-04).  Pylon/ground-fixed parts — the fixed sector gear and the
+//   servo bracket — do NOT tilt about the pivot and are excluded.  The WS2812B
+//   exhaust LED rings were REMOVED from the design (TODO §1.1.3.5) and no longer
+//   appear.  Printed-part masses (gears, idler, ring, petals) are from STL
+//   volume × effective printed CF-PETG density; the shell line already carries
+//   the canonical aft cowl outer skin (so the iris "housing" is NOT counted
+//   again).
+//
 //   Item               Mass (g / lbm)   CG_Z mm (in)   Moment (g·mm)
 //   ─────────────────────────────────────────────────────────────────────
 //   EDF1 (upstream)    70 g (0.154 lbm)    59.4 (2.34)     4158
 //   EDF2 (downstream)  70 g (0.154 lbm)   150.6 (5.93)    10542
 //   ESC1 (in hub bore) 25 g (0.055 lbm)    59.4 (2.34)     1485
 //   ESC2 (in hub bore) 25 g (0.055 lbm)   150.6 (5.93)     3765
-//   Shell+stator CF-PETG 130 g (0.287 lbm) 92.8 (3.65)    12064
-//   Total             320 g (0.706 lbm)    99.6 (3.92)    32014
+//   Shell+stator+cowl  130 g (0.287 lbm)   92.8 (3.65)    12064
+//   Drive Pinion A     0.14 g               104.0            15
+//   Bevel pair         0.03 g               104.0             3
+//   Bevel housing      0.72 g               104.0            75
+//   Crown Pinion       0.14 g               156.25           22
+//   Nozzle idler gear  3.30 g               161.25          532
+//   Idler bracket      0.90 g               161.25          145
+//   Nozzle ring gear   7.00 g               169.25         1185
+//   8× nozzle petals   10.2 g               176.0          1795
+//   Total             342.4 g (0.755 lbm)  104.5 (4.11)    35786
 //
-//   CG_Z ≈ 32014 / 320 ≈ 100.0 mm (3.94 in) → refined to PIVOT_Z = 103.75 mm
-//   (4.08 in); verified by hand with printer-sliced mass at 1.25× scale;
-//   accepted for first article.
+//   CG_Z = 35786 / 342.4 ≈ 104.5 mm (4.11 in) → PIVOT_Z = 104.5 mm.  Only
+//   +0.75 mm aft of the previous 103.75 mm pivot, so the pivot boss and gear
+//   stations move negligibly.  First-article verification against printer-
+//   sliced masses still applies (per the original acceptance note).
 //
 // Nacelle key dimensions — imperial primary, mm in parentheses
 //   (OpenSCAD variable assignments remain in mm):
@@ -158,7 +176,7 @@
 //   Nacelle OD (X)  : 2.97 in (75.4 mm)  spanwise bounding box
 //   Nacelle OD (Y)  : 3.28 in (83.3 mm)  fore-aft bounding box
 //   Wall minimum    : 0.098 in (2.5 mm)  CF-PETG
-//   Pivot station   : 4.08 in (103.75 mm) from intake face
+//   Pivot station   : 4.11 in (104.5 mm) from intake face (= full-assembly CG)
 //   Stator zone     : 3.69–4.68 in (93.75–118.75 mm) from intake
 //   Nozzle pocket   : starts at 6.55 in (166.25 mm) from intake
 //   Per-nacelle thrust (static, 2× EDF × 90% stator eff):
@@ -177,12 +195,14 @@
 //
 // Usage
 // -----
-//   Port nacelle (RED nav light, pylon inboard on -X face, CCW from intake):
-//     openscad -o nacelle_port_revr.stl nacelle_pod_50mm_tandem.scad \
+//   Port nacelle (pylon inboard on -X face; RED nav light on the OUTBOARD +X
+//     face per REF-FAA-003; CCW from intake):
+//     openscad -o nacelle_port_revs.stl nacelle_pod_50mm_tandem.scad \
 //              -D SWIRL_DIR=-1 -D PYLON_SIDE=-1 -D NACELLE_SIDE=-1
 //
-//   Starboard nacelle (GREEN nav light, pylon inboard on +X face, CW from intake):
-//     openscad -o nacelle_stbd_revr.stl nacelle_pod_50mm_tandem.scad \
+//   Starboard nacelle (pylon inboard on +X face; GREEN nav light on the
+//     OUTBOARD -X face per REF-FAA-003; CW from intake):
+//     openscad -o nacelle_stbd_revs.stl nacelle_pod_50mm_tandem.scad \
 //              -D SWIRL_DIR=1 -D PYLON_SIDE=1 -D NACELLE_SIDE=1
 //
 // =============================================================================
@@ -209,7 +229,7 @@ NACELLE_OD_X    =  75.4;  // [mm] nacelle bounding-box width, spanwise (X)  = 2.
 NACELLE_OD_Y    =  83.3;  // [mm] nacelle bounding-box depth, fore-aft  (Y) = 3.28 in
 
 // ── X-face positions at the pivot station (Z ≈ PIVOT_Z, Y ≈ 0) ───────────────
-// Measured from the centered-bore repaired STL at Z=103.75mm, Y<5mm.
+// Measured from the centered-bore repaired STL near the pivot (Z≈104.5mm, Y<5mm).
 // The Serenity nacelle is NOT a symmetric ellipse — pylon-attachment features
 // make the pylon-side face narrower (+34mm) than the far side (-38mm).
 // Used to guarantee the boss root is inside the nacelle wall.
@@ -329,9 +349,15 @@ SWIRL_DIR       =  +1;    // [+1 / -1] default port nacelle CW from intake
 
 // ── CG-derived tilt pivot (1.25× scale) ──────────────────────────────────────
 // Pivot at nacelle CG eliminates gravity-induced servo torque.
-// CG_Z = 103.75 mm from intake face at 1.25× scale (was 83.0 × 1.25).
-// Y = 0 (bore axis) = Y_cg for bore-symmetric assembly.
-PIVOT_Z         = 103.75;  // [mm] pivot axial centre = nacelle CG station
+// CG_Z re-derived 2026-07-04 for the FULL rotating assembly — the earlier
+// 103.75 mm figure omitted the tilt gear train and the nozzle ring/petal/idler
+// mechanism and still carried the (now-removed) WS2812B exhaust LED ring.  With
+// every component that tilts with the nacelle included (see the mass breakdown
+// in the header) and the exhaust LED rings deleted per TODO §1.1.3.5, the
+// rotating CG lands at Z = 104.5 mm (4.11 in).  Pylon-fixed parts (sector gear,
+// servo bracket) do NOT tilt and are excluded.  Y = 0 (bore axis) = Y_cg for the
+// bore-symmetric assembly.
+PIVOT_Z         = 104.5;   // [mm] pivot axial centre = full-assembly CG station
 
 // MF104ZZ flanged bearing: ID=4mm, OD=10mm, width=4mm.
 PIVOT_BORE_D    =   4.2;   // [mm] pivot rod clearance bore (4mm CF rod + 0.2mm)
@@ -343,12 +369,19 @@ CLEVIS_EAR_OD   =  16.0;   // [mm] boss cylinder OD
 
 // ── Gear mount features ───────────────────────────────────────────────────────
 // Module M=1.0, pressure angle 20°.
-PINION_A_Z      = 103.75;  // [mm] Pinion A shaft Z (= PIVOT_Z)
+PINION_A_Z      = PIVOT_Z;  // [mm] Pinion A shaft Z (tracks PIVOT_Z = 104.5)
 PINION_A_Y      =  28.0;   // [mm] Pinion A fore-aft offset = R_sector+R_pinion=22+6=28mm
 PINION_A_BOSS_OD=   7.0;   // [mm] MR63ZZ press-fit boss OD (6mm OD + 0.5mm wall)
 PINION_A_BOSS_L =  10.0;   // [mm] boss length (2× MR63ZZ stacked + gap)
 PINION_A_SHAFT_D=   3.2;   // [mm] shaft clearance bore
-CROWN_Z         = 166.25;  // [mm] Crown Pinion Z (was 133.0 × 1.25)
+// Crown Pinion is offset 10 mm toward the intake of the Nozzle Ring so the
+// compound idler's two gear bands (Idler-In and Idler-Out, 10 mm apart
+// centre-to-centre — see nacelle_nozzle_idler.scad) mesh both targets: Idler-In
+// on the Crown Pinion, Idler-Out on the Nozzle Ring.  Resolves the §1.1.3.3
+// axial mesh-band mismatch (was CROWN_Z = NOZZLE_RING_Z = 166.25, i.e. 0 mm
+// apart, which a single idler shaft cannot mesh).  Decoupled from NOZZLE_RING_Z
+// (which still governs nozzle placement) 2026-07-04.
+CROWN_Z         = NOZZLE_RING_Z - 10.0;  // [mm] = 156.25; -10 mm for idler mesh band
 CROWN_BOSS_OD   =   7.0;   // [mm] same spec as Pinion A
 CROWN_BOSS_L    =  10.0;   // [mm] boss length
 SHAFT_CONDUIT_OD=   5.5;   // [mm] conduit outer diameter
@@ -358,14 +391,32 @@ SHAFT_CONDUIT_ID=   3.5;   // [mm] conduit inner bore
 INLET_BELL_L    =  27.5;   // [mm] inlet bell axial length (was 22.0 × 1.25)
 INLET_BELL_FLARE=   3.0;   // [mm] extra flare radius at intake lip
 
-// ── Navigation light wiring and harness exit (1.25× scale Z values) ──────────
-PYLON_SIDE      = +1;      // [+1 / -1] inboard face: +1=port, -1=stbd
-NAV_CONDUIT_BORE =  4.0;   // [mm] inner bore ID
-NAV_CONDUIT_W    =  8.0;   // [mm] conduit outer width in Y
-NAV_CONDUIT_D    =  5.0;   // [mm] conduit depth in X
-NAV_CONDUIT_Z_LO =  2.5;   // [mm] conduit start Z (was 2.0 × 1.25)
-NAV_CONDUIT_Z_HI = PIVOT_Z - PIVOT_BOSS_DEPTH - 1.0;
-                            // [mm] conduit end Z: stops 1 mm below pivot boss root
+// ── Navigation light + harness exit (1.25× scale Z values) ───────────────────
+// Rev S1 (2026-07-04, TODO §1.1.3.5): the WS2812C position light was moved from
+// the INBOARD (pylon) face to the OUTBOARD (far) face, and its signal wire was
+// re-routed from an EXTERNAL protruding D-section conduit to an INTERNAL cableway
+// buried in the skin.
+//   • Item 6 — a red (port) / green (starboard) position light must radiate to
+//     its own side of the aircraft [REF-FAA-003 §91.209(a)]; on the inboard face
+//     the pylon/fuselage occludes the required outboard arc.  It now sits in a
+//     flush recess on the outboard face so nothing protrudes past the mould line.
+//   • Item 7 — the wire runs in an internal covered channel bonded to the inside
+//     of the outboard skin (never breaks the exterior surface) down to the
+//     existing harness exit, reusing the EDF harness path to the pylon.
+PYLON_SIDE      = +1;      // [+1 / -1] inboard (pylon) face: +1=port, -1=stbd;
+                            //   outboard (light) face is the opposite sign
+NAV_WIRE_BORE   =  2.4;    // [mm] WS2812C 3-core 28AWG signal-wire bore ID
+// Outboard-face emitter recess (flush WS2812C-2020 seat; does NOT protrude):
+NAV_LIGHT_Z     = 70.0;    // [mm] emitter Z station (forward third, wide side arc;
+                            //   VERIFY/fine-tune against the canonical skin in FreeCAD)
+NAV_LIGHT_POCKET_D     = 7.0;  // [mm] recess diameter (2×2 mm LED + lens + potting)
+NAV_LIGHT_POCKET_DEPTH = 2.5;  // [mm] recess depth into the outboard face (≤ wall + lens)
+// Internal wire channel (covered rib on the inside of the outboard skin):
+NAV_CHAN_W      =  5.0;    // [mm] channel outer width (Y)
+NAV_CHAN_D      =  4.5;    // [mm] channel outer depth (radially inward from skin)
+NAV_CHAN_Z_LO   = NAV_LIGHT_Z;                    // [mm] channel start (at emitter)
+NAV_CHAN_Z_HI   = PIVOT_Z - PIVOT_BOSS_DEPTH - 1.0;  // [mm] end below pivot boss root
+NAV_CHAN_INSET  =  3.0;    // [mm] channel wall sits this far inboard of the outer face
 
 HARNESS_PORT_W   = 14.0;   // [mm] slot width in Y
 HARNESS_PORT_H   =   8.0;  // [mm] slot height in Z
@@ -426,41 +477,47 @@ module thrust_tube() {
 
 
 // =============================================================================
-// ── Module: inlet_bell ───────────────────────────────────────────────────────
+// ── Module: inlet_bellmouth ──────────────────────────────────────────────────
 // =============================================================================
-// Cosine-tapered bell mouth from Z=0 to Z=EDF1_Z_ENTRY.
-// r_inner(z) = EDF_BORE_R + INLET_BELL_FLARE × 0.5 × (1 + cos(180° × z / L))
-module inlet_bell() {
+// SUBTRACTIVE cosine bell-mouth intake, carved into the SOLID canonical nacelle
+// dome (TODO §1.1.3.4).  Rev S1 (2026-07-04): the previous inlet_bell() was an
+// ADDITIVE flared tube whose lip (r ≈ 30.5 mm at Z = 0) protruded well past the
+// canonical leading dome, whose ogive nose is only r ≈ 21 mm at the tip growing
+// to ≈ 38.7 mm by Z = 27.5 mm.  Because the imported nacelle shell is a SOLID
+// body (the airflow path is carved by subtraction), the correct intake is a
+// subtractive cosine bell-mouth: a filled plug of revolution whose outer wall
+// follows r_cut(z) = EDF_BORE_R + INLET_BELL_FLARE·0.5·(1+cos(180°·z/L)),
+// flaring from r = EDF_BORE_R (aft, Z = L) to EDF_BORE_R+FLARE (front).  Since
+// r_cut(z) is monotonically DECREASING in z and the dome radius is monotonically
+// INCREASING, the two surfaces cross exactly once: everything forward of that
+// crossover (the thin nose tip, thinner than the 50 mm EDF anyway) is removed and
+// the LEADING EDGE of the nacelle becomes precisely that dome∩cosine crossover
+// rim — exactly the §1.1.3.4 requirement — while the dome aft of it is untouched
+// (r_cut < dome there).  A 0.5 mm forward overshoot guarantees a clean cut of the
+// voxel-capped front face.  VERIFY the exact crossover station in FreeCAD against
+// the canonical mould line.
+module inlet_bellmouth() {
     N_STATIONS = 32;
 
-    rotate_extrude(angle = 360, convexity = 4)
-        polygon(
-            points = concat(
-                [
-                    for (i = [0 : N_STATIONS])
-                    let(
-                        z_frac = i / N_STATIONS,
-                        z_abs  = z_frac * INLET_BELL_L,
-                        r_in   = EDF_BORE_R
-                                + INLET_BELL_FLARE * 0.5
-                                    * (1 + cos(180 * z_frac))
-                    )
-                    [r_in, z_abs]
-                ],
-                [
-                    for (i = [N_STATIONS : -1 : 0])
-                    let(
-                        z_frac = i / N_STATIONS,
-                        z_abs  = z_frac * INLET_BELL_L,
-                        r_in   = EDF_BORE_R
-                                + INLET_BELL_FLARE * 0.5
-                                    * (1 + cos(180 * z_frac)),
-                        r_out  = r_in + WALL_T
-                    )
-                    [r_out, z_abs]
-                ]
-            )
-        );
+    translate([0, 0, -0.5])   // overshoot the front cap for a clean cut
+        rotate_extrude(angle = 360, convexity = 4)
+            polygon(
+                points = concat(
+                    [[0, 0]],   // axis point at the (overshot) front face
+                    [
+                        for (i = [0 : N_STATIONS])
+                        let(
+                            z_frac = i / N_STATIONS,
+                            z_abs  = z_frac * INLET_BELL_L,
+                            r_cut  = EDF_BORE_R
+                                    + INLET_BELL_FLARE * 0.5
+                                        * (1 + cos(180 * z_frac))
+                        )
+                        [r_cut, z_abs]
+                    ],
+                    [[0, INLET_BELL_L]]   // back to axis at the aft end
+                )
+            );
 }
 
 
@@ -726,35 +783,71 @@ module nozzle_ring_pocket() {
 
 
 // =============================================================================
-// ── Module: nav_wire_conduit ─────────────────────────────────────────────────
+// ── Module: nav_light_pocket ─────────────────────────────────────────────────
 // =============================================================================
-// External D-section conduit on the inboard (pylon-side) X-face.
-// Routes the WS2812C nav-light 28AWG 3-core signal wire from the tip cap to
-// the pylon harness zone.
-//
-// The face_dist for each pylon_side is taken from the actual nacelle STL
-// measurements rather than from the synthetic-ellipse NACELLE_OD_X/2.
-module nav_wire_conduit(pylon_side = PYLON_SIDE) {
-    face_dist = (pylon_side > 0) ? NACELLE_FACE_X_PYLON : NACELLE_FACE_X_FAR;
-    face_x    = pylon_side * face_dist;
-    cond_len  = NAV_CONDUIT_Z_HI - NAV_CONDUIT_Z_LO;
-    embed     = 4.0;  // 4 mm root into nacelle shell to prevent touching face
+// SUBTRACTIVE.  Flush WS2812C-2020 position-light recess in the OUTBOARD (far)
+// X-face + a short through-wall wire bore reaching the internal wire channel.
+// Port = RED, Stbd = GREEN [REF-FAA-003 §91.209(a)].  The recess is cut INTO the
+// canonical mould line (interior modification per CLAUDE.md) — the LED + lens sit
+// flush, nothing protrudes.  Built on the +X (stbd-outboard / port-inboard) side
+// then mirrored: the OUTBOARD face is opposite the pylon side.
+module nav_light_pocket(pylon_side = PYLON_SIDE) {
+    // out_sign = -pylon_side: outboard is opposite the pylon.  Build on +X,
+    // mirror to -X when the outboard face is on -X.
+    if (-pylon_side > 0) _nav_light_pocket_posX();
+    else mirror([1, 0, 0]) _nav_light_pocket_posX();
+}
+module _nav_light_pocket_posX() {
+    // Emitter recess: short cylinder bored inward (−X) from the +X outer face.
+    translate([NACELLE_FACE_X_FAR + 0.01, 0, NAV_LIGHT_Z])
+        rotate([0, -90, 0])
+            cylinder(r = NAV_LIGHT_POCKET_D / 2,
+                    h = NAV_LIGHT_POCKET_DEPTH + 0.01,
+                    center = false);
+    // Through-wall wire bore: from the outer face inward just far enough to reach
+    // the internal channel groove (INSET + channel depth + margin), NOT all the
+    // way to the bore axis.
+    translate([NACELLE_FACE_X_FAR + 0.01, 0, NAV_LIGHT_Z])
+        rotate([0, -90, 0])
+            cylinder(r = NAV_WIRE_BORE / 2,
+                    h = NAV_CHAN_INSET + NAV_CHAN_D + 1.0,
+                    center = false);
+}
 
-    x_offset = (pylon_side > 0)
-                ? face_x - embed
-                : face_x - NAV_CONDUIT_D;
 
-    bore_cx = (pylon_side > 0)
-                ? NAV_CONDUIT_D / 2 + embed
-                : NAV_CONDUIT_D / 2;
+// =============================================================================
+// ── Module: nav_wire_channel ─────────────────────────────────────────────────
+// =============================================================================
+// ADDITIVE.  An INTERNAL cableway rib bonded to the inside of the OUTBOARD skin,
+// running longitudinally from the emitter (NAV_CHAN_Z_LO) to just below the pivot
+// boss (NAV_CHAN_Z_HI), where the wire joins the existing ESC/harness bundle and
+// exits via harness_exit_port() to the pylon (reuses the EDF cableway — TODO
+// §1.1.3.5 item 7).  The wire groove is OPEN toward the interior (a snap-in
+// U-channel, not a sealed tunnel — so it prints without a trapped void and the
+// wire is field-serviceable), and open at both Z ends (wire enters from the
+// pocket bore at the top, drops into the interior at the bottom).  The rib sits
+// NAV_CHAN_INSET inboard of the outer face, never breaking the exterior mould
+// line, and at |X| ≈ FAR − INSET it is well outside the 50 mm airflow bore
+// (r = 25 mm), so the Zone-B bore subtraction never reaches it.  Built on +X
+// then mirrored to the outboard side.
+module nav_wire_channel(pylon_side = PYLON_SIDE) {
+    if (-pylon_side > 0) _nav_wire_channel_posX();
+    else mirror([1, 0, 0]) _nav_wire_channel_posX();
+}
+module _nav_wire_channel_posX() {
+    chan_out = NACELLE_FACE_X_FAR - NAV_CHAN_INSET;   // outer edge of rib (≈35)
+    chan_in  = chan_out - NAV_CHAN_D;                 // inboard edge (≈30.5)
+    chan_len = NAV_CHAN_Z_HI - NAV_CHAN_Z_LO;
 
-    translate([x_offset, -NAV_CONDUIT_W / 2, NAV_CONDUIT_Z_LO])
-        difference() {
-            cube([NAV_CONDUIT_D + embed, NAV_CONDUIT_W, cond_len]);
-            translate([bore_cx, NAV_CONDUIT_W / 2, -0.01])
-                cylinder(r = NAV_CONDUIT_BORE / 2,
-                        h = cond_len + 0.02);
-        }
+    difference() {
+        translate([chan_in, -NAV_CHAN_W / 2, NAV_CHAN_Z_LO])
+            cube([NAV_CHAN_D, NAV_CHAN_W, chan_len]);
+        // Groove open on the INBOARD face (bore centred at chan_in): half the
+        // cylinder lies outside the rib → open U-channel, no enclosed void.
+        // Overruns both Z ends so the wire path is open top and bottom.
+        translate([chan_in, 0, NAV_CHAN_Z_LO - 0.1])
+            cylinder(r = NAV_WIRE_BORE / 2, h = chan_len + 0.2);
+    }
 }
 
 
@@ -786,21 +879,23 @@ module harness_exit_port(pylon_side = PYLON_SIDE) {
 // Zone A — inside difference() additive union (survive bore subtraction, r > 25):
 //   • nacelle_shell_imported() — canonical Serenity nacelle exterior hull
 //   • thrust_tube()            — forward bore wall, Z = 27.5 … 90 mm (Rev T restored)
-//   • inlet_bell()             — cosine-tapered intake lip
 //   • pivot_x_face_boss()      — CG-pivot MF104ZZ bearing bosses
 //   • pinion_a_boss()          — Drive Pinion A MR63ZZ boss
 //   • crown_pinion_boss()      — Crown Pinion MR63ZZ boss
 //   • shaft_conduit()          — longitudinal CF gear shaft conduit
-//   • nav_wire_conduit()       — external WS2812C signal wire channel
+//   • nav_wire_channel()       — internal WS2812C wire cableway (outboard skin)
 //
 // Zone B — subtracted by difference():
 //   • Full-length 50 mm ID bore (opens intake and exhaust end caps)
+//   • inlet_bellmouth()        — cosine intake flare; trims dome tip so the
+//                                 leading edge = canonical dome ∩ cosine intake
 //   • Sleeve zone bore: r = SLEEVE_BORE_R (27.7 mm) from STATOR_SLV_Z_START (90 mm)
 //     to AFT_SLV_Z_END (166.25 mm) — accepts OD 55 mm sleeves
 //   • bore_key_slots()         — 3× longitudinal anti-rotation key slots, sleeve zone
 //   • esc_wire_exit_slot()     — EDF1 ESC wire exit at Z ≈ 86 mm
 //   • nozzle_ring_pocket()     — iris ring seat at exhaust end
 //   • harness_exit_port()      — ESC / nav-light wiring slot
+//   • nav_light_pocket()       — outboard flush WS2812C recess + wire bore
 //   • Tilt spar clearance bore (4.2 mm dia along X through both X-faces)
 //
 // Zone C — outer union() AFTER difference():
@@ -826,8 +921,8 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
                 // Stator / aft spider sleeves begin where this tube ends.
                 thrust_tube();
 
-                // ── Cosine-tapered intake bell (Z=0 → EDF1 seat) ─────────
-                inlet_bell();
+                // (Intake bell-mouth is now SUBTRACTIVE — see Zone B,
+                //  inlet_bellmouth(); TODO §1.1.3.4.)
 
                 // ── CG-pivot X-face bosses (MF104ZZ, at PIVOT_Z, Y=0) ────
                 pivot_x_face_boss();
@@ -841,8 +936,8 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
                 // ── Longitudinal CF gear-shaft conduit ────────────────────
                 shaft_conduit();
 
-                // ── External nav-light wire conduit (inboard X-face) ─────
-                nav_wire_conduit(pylon_side = PYLON_SIDE);
+                // ── Internal nav-light wire channel (inside outboard skin) ─
+                nav_wire_channel(pylon_side = PYLON_SIDE);
 
             } // end union (Zone A additive)
 
@@ -856,6 +951,10 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
                 cylinder(r = EDF_BORE_R,
                         h = NACELLE_L + 0.02,
                         center = false);
+
+            // ── Cosine intake bell-mouth (front flare, trims dome tip) ────
+            // Leading edge = canonical dome ∩ cosine intake (TODO §1.1.3.4).
+            inlet_bellmouth();
 
             // ── Enlarged bore for sleeve zone (Rev T) ─────────────────────
             // STATOR_SLV_Z_START (90 mm) to AFT_SLV_Z_END (166.25 mm).
@@ -878,6 +977,9 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
 
             // ── Harness exit port (ESC / nav-light wiring slot) ───────────
             harness_exit_port(pylon_side = PYLON_SIDE);
+
+            // ── Nav-light emitter recess + through-wall wire bore (outboard)
+            nav_light_pocket(pylon_side = PYLON_SIDE);
 
             // ── Tilt spar clearance bore (4.2 mm dia, along X) ────────────
             // Spans from −FAR_FACE to +PYLON_FACE plus both boss protrusions
@@ -944,9 +1046,9 @@ nacelle_pod(swirl_dir = SWIRL_DIR);
 //   5. Retention boss bores = 3.5 mm ± 0.05 mm (M3 × 6 mm OLF heat-set insert).
 //
 // Render commands (Rev R1 nacelle-swap corrected):
-//   Port nacelle (RED nav light, pylon inboard on -X face, CCW from intake):
-//     openscad -o nacelle_port_revr.stl nacelle_pod_50mm_tandem.scad \
+//   Port nacelle (pylon inboard -X; RED nav light OUTBOARD +X; CCW from intake):
+//     openscad -o nacelle_port_revs.stl nacelle_pod_50mm_tandem.scad \
 //              -D SWIRL_DIR=-1 -D PYLON_SIDE=-1 -D NACELLE_SIDE=-1
-//   Starboard nacelle (GREEN nav light, pylon inboard on +X face, CW from intake):
-//     openscad -o nacelle_stbd_revr.stl nacelle_pod_50mm_tandem.scad \
+//   Starboard nacelle (pylon inboard +X; GREEN nav light OUTBOARD -X; CW from intake):
+//     openscad -o nacelle_stbd_revs.stl nacelle_pod_50mm_tandem.scad \
 //              -D SWIRL_DIR=1 -D PYLON_SIDE=1 -D NACELLE_SIDE=1

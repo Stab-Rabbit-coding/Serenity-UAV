@@ -1232,6 +1232,38 @@ transceivers on Wash (Cape-A-2) and Zoë (Cape-B-2); 120 Ω termination resistor
 
 ---
 
+## Part XIV — Upstream CAD / Derivative-Source Attributions
+
+References in this part are upstream 3D-model works whose mechanism or geometry
+concept informed a derivative design in this project.  Per CLAUDE.md, derivative
+files must carry the full attribution chain back to upstream sources, meeting or
+exceeding CC-BY-4.0 requirements.
+
+### REF-CAD-001: BamJr — "Variable-area EDF nozzle" (Thingiverse Thing 2991269)
+
+| Field | Value |
+|---|---|
+| **Author** | BamJr (Thingiverse user) |
+| **Work** | Variable-area EDF nozzle (parametric iris / variable-area duct exit) |
+| **Designation** | Thingiverse Thing 2991269 |
+| **Official URL** | <https://www.thingiverse.com/thing:2991269> |
+| **License** | Creative Commons Attribution 4.0 International (CC BY 4.0) — <https://creativecommons.org/licenses/by/4.0/> |
+| **Note** | Used only as a *mechanism/kinematics reference* for a variable-area duct-exit nozzle.  Serenity-UAV's nozzle geometry (throat liner, tangential-hinge overlapping conical flaps, 72T unison ring gear, spiral cam actuation, and the entire tilt gear train) is original work authored for this project; no BamJr geometry, mesh, or source file is copied or redistributed.  Attribution recorded here to satisfy CC-BY-4.0 even though no BamJr asset is included in the repository. |
+
+**Concept applied in this project:** the variable-area duct-exit nozzle (iris
+family) concept informed the Rev R2 overlapping-flap conical variable nozzle,
+which sweeps 75 %→105 % of the 50 mm EDF bore radius across the −5°/140° nacelle
+tilt range.
+
+**Applied to:** the passively gear-linked variable nozzle on each nacelle
+(nozzle exit follows nacelle tilt: 75 % bore radius at 0°/cruise, 105 % at
+≥90°/hover-and-back).
+
+**Used in:** `airframe/openscad/nacelles/nacelle_nozzle_iris.scad`,
+`README.md` (Iris mechanism concept), `TODO.md` §1.1.3.1
+
+---
+
 ## Removed / Superseded Citations
 
 The following references appeared in earlier versions of project files but have been removed

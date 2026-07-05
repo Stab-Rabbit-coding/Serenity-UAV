@@ -110,7 +110,10 @@ stls/nacelles/                       — Pre-Rev Q nacelle STLs (pre-tandem-EDF 
                                         placeholder; see TODO.md §1.1.3 history)
   nozzles/                            — nacelle_nozzle_closed_asm_repaired.stl,
                                         nacelle_nozzle_petal_repaired.stl,
-                                        rear_nozzle_petal_repaired.stl
+                                        rear_nozzle_petal_repaired.stl,
+                                        nacelle_nozzle_petal.stl (Rev R1 flat blender petal,
+                                        superseded 2026-07-04 by the Rev R2 tangential-hinge
+                                        conical flap nacelle_nozzle_flap.stl; TODO §1.1.3.1)
 ```
 
 ---
@@ -150,7 +153,7 @@ XCVR-49MHZ-1/ — 14 gerber/drill files: B_Cu, B_Mask, B_Paste, B_Silkscreen, Ed
 
 ---
 
-## archives/ (repo root)
+## archives/ (repository root)
 
 Whole-project snapshots and superseded subsystems.
 

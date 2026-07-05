@@ -66,20 +66,20 @@
 //   local +X axis (the other mirror solution is 129.08° at X=-27.485; +X
 //   chosen arbitrarily, see nacelle_nozzle_iris.scad IDLER_SLOT_ANG = 50.9°).
 //
-//   OPEN ISSUE found during this resolution, NOT yet fixed (TODO.md §1.1.3.3
-//   "idler axial mesh-band mismatch"): this idler's two gear sections are
-//   axially separated by GEAR_H_IN + GEAR_GAP = 10 mm (Idler-In's band starts
-//   at local Z = HUB_EXTENSION = 2; Idler-Out's band starts 10 mm later, at
-//   local Z = 12).  But Crown Pinion (nacelle_pinion.scad, placed at global Z
-//   = CROWN_Z = 166.25 mm) and the Nozzle Ring (nacelle_nozzle_iris.scad,
-//   placed at global Z = NOZZLE_RING_Z = CROWN_Z, i.e. THE SAME STATION) both
-//   occupy the identical 166.25-174.25 mm Z band.  A single idler shaft
-//   cannot present two gear sections 10 mm apart and mesh two targets that
-//   are 0 mm apart.  Either Crown Pinion's Z must move to create the needed
-//   axial offset from the Ring, or the idler's own GEAR_GAP / section order
-//   must change to match the existing Crown-Pinion/Ring spacing (currently
-//   zero).  Needs a design decision before this idler can be placed in
-//   serenity_assembly.py with a verified (not placeholder) Z.
+//   Axial mesh-band alignment — RESOLVED 2026-07-04 (TODO.md §1.1.3.3 "idler
+//   axial mesh-band mismatch"): this idler's two gear sections are axially
+//   separated by GEAR_H_IN + GEAR_GAP = 10 mm (Idler-In's band centre at local
+//   Z = HUB_EXTENSION + GEAR_H_IN/2 = 6; Idler-Out's band centre 10 mm later at
+//   local Z = 16).  Previously Crown Pinion and the Nozzle Ring both sat at the
+//   same station (CROWN_Z = NOZZLE_RING_Z = 166.25 mm), 0 mm apart, which a
+//   single idler shaft cannot mesh.  FIX (user decision): the Crown Pinion was
+//   offset 10 mm toward the intake of the ring — CROWN_Z = NOZZLE_RING_Z - 10 =
+//   156.25 mm (nacelle_pod_50mm_tandem.scad) — so the two targets are now 10 mm
+//   apart, matching the idler band spacing.  The idler is seated in
+//   serenity_assembly.py at Z = CROWN_Z - 6 so Idler-In meshes the Crown Pinion
+//   plane and Idler-Out meshes the Ring plane (CROWN_Z + 10 = NOZZLE_RING_Z).
+//   The pivot (nacelle CG) was re-derived for the full rotating assembly after
+//   this move: 104.5 mm (a +0.75 mm shift; see the pod header mass breakdown).
 //
 //   Compound ratio:
 //     omega_idler / omega_crownPinion = R_crownPinion / R_idlerIn = 6 / 22 = 0.27273
