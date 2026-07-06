@@ -8,3 +8,4 @@ report.txt
 # migration backups (originals recoverable from git history)
 *.premod-bak
 *.stub-bak
+*.preroute-bak

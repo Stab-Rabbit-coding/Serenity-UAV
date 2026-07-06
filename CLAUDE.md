@@ -319,9 +319,13 @@ only via the shielded JST-GH Ethernet ring and CAN-FD trunk connectors, with its
 input. One shared board design (TI AM62A vision SoC + TI MSPM0G3507 CAN-FD coprocessor +
 Infineon SLB9670 TPM + Microchip KSZ9477 HSR/PRP-capable Ethernet switch) is installed at two
 locations: the bow sensor pod (nose, `airframe/openscad/fuselage/bow_sensor_pod.scad`) and the
-cargo bay nadir FPV mount (`cargo_fpv_bezel`).  Each location's crosshair laser module differs
-to match its optical throw requirement (nose: 2"×2" (51×51 mm) at 50 ft (15.2 m); cargo bay:
-3"×3" (76×76 mm) at 5 ft (1.5 m)) — see `avionics/CLAUDE.md` for the full architecture and
+cargo bay nadir FPV mount (`cargo_fpv_bezel`).  Both locations share a **single 520 nm green
+laser source + driver**, both **Class 2** (≤1 mW; a thin-line green crosshair detected by
+Vera's camera via strobe + frame-difference — *not* an inherently Class 3B module). The
+crosshair doubles as a **projected metrology reference** — a PB2-I derives detected-object size
+and orientation from ToF range + the crosshair's known angle + trigonometry, so its fan angle
+is sized for camera pixel coverage (cargo 3"×3" @ 5 ft; nose sized larger than the nominal
+2"×2" @ 50 ft) — see `docs/VERA_LASER_ANALYSIS.md`, `avionics/CLAUDE.md` for the full architecture and
 `REFERENCES.md` Part XII for component citations.  Vera **supersedes** the RunCam Nano 4 analog
 camera (REF-SENSOR-001, retained in REFERENCES.md as a superseded citation) originally
 specified for the bow sensor pod.

@@ -2234,10 +2234,25 @@ All are on the `avionics/kicad/` branch; run DRC to zero errors before generatin
             - Remaining DRC findings are all SOFT/accepted-class (silk, via/track-dangling,
                 lib-footprint) — the pre-existing routing/silk backlog documented above; the CI
                 validator does not gate on them.
-        - [ ] **Final placement + routing of the 4 new RSSI parts — REFERRED TO USER.**
+        - [x] **Final placement + routing of the 4 new RSSI parts — REFERRED TO USER.**
             They are parked in an off-board holding area (x≈161 mm, right of the board edge)
             with correct nets but unrouted; drag into final position and route (project rule:
-            refer footprint positioning to the user).
+            refer footprint positioning to the user). **parts placed by user on back of board within RF board section. 5-Jul-2026**
+        - [x] **NET validation & DRC — DONE 2026-07-05.** After the user's placement:
+            sch↔pcb parity exact (refs + net sets match); DRC **0 hard violations** (0
+            shorting/clearance/courtyard/solder-mask). Placement introduced no hard errors.
+        - [x] **RSSI sub-circuit routed — DONE 2026-07-05** via `avionics/kicad/route_emma_rssi.py`
+            (pcbnew, 0.15 mm B.Cu traces threading the 0.5 mm mid-channel, 0.3 mm-drill vias,
+            zones refilled). Routed: GND (3 pads → In1.Cu/F.Cu GND pour via one via at RL.2),
+            RSSI_REF (RH.2/RL.1/CMP.3, weaved around the wide CMP.4 GND pad), +3V3 internal
+            (RH.1/CBY.1/CMP.2) **and its board tie to LNA By**, and RSSI_ANA (CMP.1 → RSSI Lo
+            divider). Unconnected 104 → 95. All 0-hard, 0 drill-out-of-range.
+        - [ ] **RSSI_DCD still to route (1 net).** RSSI_CMP.5 → PB2-P2 pad 2 (105.4,130.2) is a
+            ~28 mm cross-board run through the ETH-PHY/LoRa (B.Cu) and the PB2 header (bottom
+            edge) congestion; a naive route shorts/mask-bridges heavily. Route interactively
+            (GUI push-shove) or with a real autorouter — `route_emma_rssi.py dcd` holds a
+            starting attempt. This is the RSSI carrier-detect **output** to the host, so the
+            feature is incomplete until it lands.
         - [ ] **`RSSI_CMP` part/pinout PROVISIONAL — pending datasheet vetting.** Value is a
             placeholder "LMV331-class"; pad→net is by FUNCTION and matches the schematic
             symbol, but the real comparator's part number + SOT-23-5 pin order MUST be
@@ -2620,6 +2635,46 @@ centroid placement (`airframe/CLAUDE.md` "Assembly and Placement").
     cargo section's open mating faces to the nearest bay. Open: decide **River's Room** vs.
     **Simon's Medbay** as the shorter/more appropriate ring-insertion point (both carry Emma
     boards per the Node Variant Placement table, root `CLAUDE.md`).
+
+**BLOCKS:** Vera fabrication order; bow sensor pod avionics integration (§1.1.1.1a).
+
+#### 1.2c.4 — Vera Power Feed and Laser Unification (2026-07-05)
+
+Power-budget and laser analyses completed 2026-07-05 (`docs/POWER_DISTRIBUTION.md §3.2.1`,
+`docs/VERA_LASER_ANALYSIS.md`). Resulting hardware tasks:
+
+- [ ] **Kaylee second 5 V rail — cross-tied, mutually fault-tolerant (PLAN, `docs/POWER_
+    DISTRIBUTION.md §11.1`).** Add a **third identical TPS54620 BEC channel** (`U_BEC_5V_3` +
+    `L_5V3` + `R_FB3` + `C_BEC3_IN/OUT` + `FB_5V3` + `D_OR3` — copy of `U_BEC_5V_1`) feeding
+    **RAIL-2 (5V_VERA) → `J_VERA`** (both Vera boards, ≈ 2.4 A typ / ~4.2 A peak). Existing
+    dual-BEC pair = **RAIL-1 (5V_AVIONICS) → `J_5V`**. **Diode-OR cross-tie** the two rails
+    (`D_X1`/`D_X2` = 2× MBRD1045CT, same part) via cross-tie fuse `F_X`, plus per-rail fuses
+    `F_5V`/`F_VERA`, so each rail is fault-tolerant of the other (regulator-failure backup +
+    short isolation). **Same part chain (interchangeable channels); no new part numbers.**
+    **Bump set-point 5.3 V → 5.4 V** (re-value the `R_FB` dividers) so a backed-up rail (two
+    Schottky drops) stays > 4.75 V PB2-I min. Do schematic-first, then PCB (place `U_BEC_5V_3`
+    by the existing pair; SW node in a GND-pour keepout). Number alongside the Rev S1 servo-rail
+    change. **Not yet in KiCad.** (Symmetric 2+2 four-channel option in §11.1 if RAIL-2 later
+    needs its own internal redundancy.)
+- [ ] **Vera 5 V harness:** 18 AWG shielded TP per drop (Kaylee → nose bow pod, Kaylee → cargo
+    nadir mount); 3 A resettable polyfuse per drop; route with each Vera's Ethernet-ring/CAN
+    harness. Confirm final run lengths once ring-insertion bays are fixed (§1.2c.3).
+- [ ] **Laser — unify to a single 520 nm green source, Class 2 both sites** (retires the
+    separate 650 nm red cargo module AND the Rev-A nose Class 3B module). Per-location terminal
+    optic sets spread; per-location HARDWARE current limit sets power. **The nose is Class 2
+    (≤ 1 mW), NOT Class 3B** — a concentrated ~12 mm dot detected by Vera's camera (strobe +
+    frame-difference) needs only ~0.45 mW (`docs/VERA_LASER_ANALYSIS.md` Rev A1). This drops the
+    Class 3B key-interlock and mechanical shutter entirely.
+- [ ] **Both Class 2 caps must be hardware-enforced** (fixed current limit), not firmware-only.
+- [ ] **Nose camera strobe + frame-difference detection** (firmware/ISP, TODO.md §4.6) — this
+    is what holds the nose at Class 2 in bright sun; laser-sync GPIO/PWM + differencing in the
+    AM62A7 ISP. Without it the nose spot is not reliably detected in full daylight.
+- [ ] *(No longer required — the Rev-A "nose Class 3B mechanical beam-stop/shutter" task is
+    retired now that the nose is Class 2.)* Re-open only if a human-at-target-in-full-sun
+    visibility requirement is later added (would push the nose back toward 3R/3B).
+- [ ] **Do not source** the green diode or either terminal optic until a real datasheet with a
+    verified mW rating + IEC 60825-1 class is added to REFERENCES.md (extends the REF-IEC-002
+    pending item; the Vera-laser row in "Open Standards Verification Items").
 
 **BLOCKS:** Vera fabrication order; bow sensor pod avionics integration (§1.1.1.1a).
 
@@ -4299,6 +4354,36 @@ before Phase 11 fabrication (see §11C). Old iris files (`rear_nozzle_frame.stl`
 
 ---
 
+### Phase 12 — Cargo-bay Range-Extender Battery Module (Deferred)
+
+**Goal:** let the cargo bay carry **either** the standard payload **or** a swappable second 6S
+pack (Range-Extender Battery Module, RBM) for extended-range missions. Full design + range/
+endurance/CG analysis: `docs/POWER_DISTRIBUTION.md §11.2`. Cruise range ~1.4–1.8× (matched
+4000 mAh pack ≈ 1.57×); hover T-W drops to 1.18–1.36 (below the 1.5 comfort target, above the
+1.0 floor) — a **cruise-range**, not hover, enhancement.
+
+**Dependency:** Phases 0–10 complete; realizes the dual-battery architecture deferred at
+`POWER_DISTRIBUTION.md §11`.
+
+- [ ] **RBM module:** 6S LiPo (matched 4000 mAh recommended) + BQ76930-class BMS + ideal-diode
+    ORing output, in a tray retained by the same Jayne cargo hooks/release (jettisonable),
+    with a keyed XT60 pigtail.
+- [ ] **Kaylee input:** add `J_BATT2` (XT60) + `F_BATT2` + an ideal-diode / current-share
+    combiner (LTC4359- or LTC4370-class — a NEW part family) OR-combining `J_BATT`/`J_BATT2`
+    into VBAT: hot-swap-safe across SoC mismatch, reverse-blocking so a faulted/absent RBM
+    can't drain or back-feed the main pack. (Kaylee board revision — not yet in KiCad.)
+- [ ] **Current sharing:** same pack model + matched-SoC at takeoff (or LTC4370 to force
+    balanced sharing); simple diode-ORing alone lets the higher-SoC pack hog.
+- [ ] **Firmware (`pwr_fault`):** add a second-pack context (V/I/SoC over the existing
+    telemetry) + combiner PGOOD/fault logging; on RBM fault, isolate and continue on the main
+    pack (RTH).
+- [ ] **W&B:** add the RBM to the §14 moment table; re-balance on the keel rail and verify on
+    the physical CG rig before flight (a second ~750 g mass in the cargo bay shifts CG).
+- [ ] **CAD:** RBM tray + retention on the cargo-bay payload envelope; verify cargo-door and
+    Jayne clearances.
+
+---
+
 ## 4.0 — Firmware and Software
 
 **Dependency for Phase 6:** serenity-fc Phase 7 items can be developed concurrently with physical Phases 0–5 and must be integrated by Phase 6 first flight.
@@ -4680,11 +4765,17 @@ direction (2026-07-03).
 - [ ] **KSZ9477 Ethernet switch management driver** [REF-SENSOR-005] — confirm HSR/PRP hardware
     redundancy is correctly configured (verify against AN3474) so ring failover requires no
     software topology management on the PocketBeagle 2 nodes.
-- [ ] **Laser GPIO driver with location-aware safety logic:**
-    - Cargo bay (Class 3R): existing simple GPIO-enable-with-pull-down-default-off logic.
-    - Nose (Class 3B): additional key-interlock read, emission-indicator drive, and
-        heartbeat-loss safety interlock (drop GPIO low if Ethernet ring AND CAN-FD both lose
-        heartbeat from the master flight controllers) [REF-IEC-002 §5.4].
+- [ ] **Laser GPIO driver (both sites Class 2 — `docs/VERA_LASER_ANALYSIS.md` Rev A2):**
+    GPIO-enable with pull-down-default-off + heartbeat-loss interlock (drop GPIO low if
+    Ethernet ring AND CAN-FD both lose master-FC heartbeat) [REF-IEC-002 §5.4]. The Class 2 cap
+    is hardware-enforced, so no key-interlock/shutter is required; `LASER_KEY_IN`/`LASER_IND`
+    are optional defense-in-depth. (Supersedes the earlier Cargo-3R / Nose-3B split.)
+- [ ] **Laser strobe + crosshair-metrology routine (AM62A7 ISP):** strobe the laser via a
+    laser-sync GPIO/PWM and temporally difference (laser-on − laser-off) to extract the
+    crosshair in daylight; sub-pixel-fit the crosshair lines and compute detected-object
+    **size** = (obj_px/cross_px)·2R·tan(θ/2) and **tilt** from arm foreshortening, using the
+    boresighted TFmini-S range R (`docs/VERA_LASER_ANALYSIS.md §4.4`). Publish size/orientation
+    with the signed telemetry below.
 - [ ] **SPI driver to Infineon SLB9670 TPM** — reuse the existing TPM driver approach already
     used fleet-wide on Wash/Zoë nodes rather than writing a new one from scratch.
 - [ ] **Signed telemetry:** TPM-signed HMAC or ECDSA signature on all ToF/laser-state packets

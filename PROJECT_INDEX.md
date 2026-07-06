@@ -1,7 +1,7 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: 2026-07-04 — Emma schematic-first reconciliation (gen_emma_sch.py, mod_emma_pcb.py; Emma.kicad_sch authored to match PCB, ERC 0 errors, exact parity); Zoë.kicad_sch load-blocking comment bug fixed -->
+<!-- Last updated: 2026-07-05 — Vera laser crosshair-metrology (size+orientation via ToF+spread, VERA_LASER_ANALYSIS §4.4); Emma RSSI sub-circuit routed (route_emma_rssi.py) -->
 
 ## Repository Root
 
@@ -592,6 +592,7 @@ gen_cape_b2_pcb.py              — PCB layout generator (Cape-B-2)
 complete_xcvr_49mhz2.py         — Emma completion script
 gen_emma_sch.py                 — Emma schematic-first generator (authors Emma.kicad_sch from the as-placed PCB; 2026-07-04 reconciliation)
 mod_emma_pcb.py                 — Emma PCB transform (pcbnew: drop J1, UART→PB2 rails, PTT_N/RSSI_DCD reassign, add RSSI comparator; 2026-07-04)
+route_emma_rssi.py               — Emma RSSI sub-circuit router (pcbnew: GND/REF/+3V3/RSSI_ANA traces + vias; 2026-07-05)
 cleanup_emma_drc.py             — Emma DRC debt cleanup (pcbnew: mask expansion 0.1→0.05mm, delete redundant close GND tracks; 2026-07-04)
 add_eth_phy.py                  — Ethernet PHY addition script
 add_sensors_sbus.py             — SBUS sensor addition script
@@ -634,7 +635,8 @@ structural_analysis.md            — First-principles structural analysis (Rev 
 AVIONICS_PB2_REDESIGN.md          — 8× PocketBeagle 2 Industrial avionics redesign spec (Rev R)
 BATTERY_MOUNT.md                  — Battery CG analysis, retention load case, belly panel spec (Rev R)
 LANDING_GEAR_ANALYSIS.md          — Landing gear structural analysis: 6 ft drop, fuse sizing, lateral loads (Rev R1)
-POWER_DISTRIBUTION.md             — Power architecture: Kaylee PDB rails, fuse map, cable spec (Rev R)
+POWER_DISTRIBUTION.md             — Power architecture: Kaylee PDB rails, fuse map, cable spec (Rev R; §3.2.1 Vera 5V rail added 2026-07-05)
+VERA_LASER_ANALYSIS.md            — Vera laser: single 520nm green source feasibility, power/class vs spread-angle split, lens/DOE options (Rev A)
 REVN_BUILD_GUIDE_24IN.md          — Revision N+ 24-inch hull build guide (active, Rev R baseline)
 PHASED_BUILD_GUIDE.md             — Rev M 18-inch phased build guide (SUPERSEDED for 24-inch builds)
 PROTO_PRINT_DAVINCI_JR.md         — DaVinci Jr. PLA prototype print guide (Rev P, historical)

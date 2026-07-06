@@ -241,21 +241,30 @@ after U4. All parts/pinouts reused verbatim from this project's own verified
 pod design — read by the MSPM0G3507 over UART, republished signed over both the Ethernet
 ring and CAN-FD.
 
-**Laser (crosshair pointer) — location-specific, do not use one part for both sites:**
+**Laser — single 520 nm green source, per-location optic + hardware current limit**
+(revised 2026-07-05, `docs/VERA_LASER_ANALYSIS.md`; supersedes the earlier "do not use one
+part for both sites" split). Both installs share ONE green diode + driver; they differ only in
+(1) a terminal optic that sets the spread angle and (2) a hardware current limit that sets the
+optical power / IEC 60825-1 class:
 
-- **Nose:** 2"×2" (51×51 mm) crosshair at 50 ft (15.2 m) requires ≈0.19° fan angle — a
-  near-collimated, high-power 520 nm green module. No off-the-shelf catalog part publishes
-  this tight a divergence; a custom-collimated module is required, and at the optical power
-  needed to be camera-visible in daylight it falls in **IEC 60825-1 Class 3B** (5–500 mW CW),
-  not the Class 3R (≤5 mW) used elsewhere in this design. Class 3B requires a key-controlled
-  interlock, an emission indicator, a beam-stop/shutter, and warning labeling — the existing
-  GPIO-default-off pull-down is necessary but not sufficient on its own. **Do not source or
-  wire this module until REFERENCES.md carries a verified Class 3B datasheet citation with a
-  real part number** (tracked in TODO.md §1.2c).
-- **Cargo bay:** 3"×3" (76×76 mm) at 5 ft (1.5 m) requires only ≈2.86° fan angle — well within
-  the existing 5 mW 650 nm Class 3R crosshair module already vetted (REF-IEC-002, REF-FDA-001)
-  for the bow sensor pod. No safety-class escalation needed at this location; reuse the
-  existing Class 3R module and driver circuit (2N7002 MOSFET, 10 kΩ pull-down, GPIO enable).
+- **Spread (terminal optic, 15× difference):** nose 2"×2" @ 50 ft ⇒ ≈0.19° (3.3 mrad),
+  custom near-collimated; cargo 3"×3" @ 5 ft ⇒ ≈2.86° (50 mrad), stock DOE or diverging-lens
+  dot. Same collimated green source both places.
+- **Both sites — Class 2** (≤1 mW green). The nose is **not** inherently Class 3B: 3B was the
+  worst-case corner (a power-diluted *spread* crosshair judged by a *naked eye* in *full sun*
+  = ~82 mW). Vera's actual requirement is *camera* visibility, detected by Vera's own strobed
+  camera + frame-difference, so a **thin-line green crosshair needs only ~0.2–0.8 mW → Class 2**
+  (see `docs/VERA_LASER_ANALYSIS.md`). Cargo is likewise Class 2. **Class 2 at both sites
+  eliminates the Class 3B key-interlock and mechanical shutter** — `LASER_KEY_IN`/`LASER_IND`
+  become optional defense-in-depth. Keep the ≤1 mW cap **hardware-enforced**. 3B only returns
+  if a *human at the 50 ft target* must see the pattern in full sun — not Vera's use case.
+- **Pattern is a thin-line CROSSHAIR (not a bare dot) — it is a projected metrology reference.**
+  A PB2-I computes a detected object's **size and relative orientation** from ToF range + the
+  crosshair's known projected angle + trigonometry (size = (obj_px/cross_px)·2R·tan(θ/2); tilt
+  from arm foreshortening — `docs/VERA_LASER_ANALYSIS.md §4.4`). The binding constraint is
+  camera pixel coverage, so the fan angle must be sized for it (the nominal 2" @ 50 ft is too
+  small — target ≈4–8" for ~24–48 px). Thin lines keep it Class 2. **Do not source** until
+  REFERENCES.md carries a verified datasheet citation (REF-IEC-002 pending; TODO.md §1.2c.4).
 
 **Status:** Design exploration only — no `.kicad_sch`/`.kicad_pcb` exists yet. See TODO.md
 §1.2c (hardware) and §4.6 (firmware) for the WBS breakdown.

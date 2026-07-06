@@ -105,6 +105,67 @@ from the design; see TODO §1.1.3.5.)
 > the four boards stagger TX by frequency and election priority. Sustained 5 V peak
 > current ≈ 14–18 A in nominal flight.
 
+The §3.2 table does **not** include the two **Vera** vision boards (nose + cargo). Vera is
+a standalone board (not a PB2-I cape) with its own 5 V input (`J_PWR`); its load is budgeted
+separately in §3.2.1 below and is fed from a **dedicated Kaylee 5 V payload rail**, not the
+shared avionics bus.
+
+### 3.2.1 Vera Vision-Board Loads (dedicated 5 V payload rail)
+
+Two Vera boards are installed (bow sensor pod + cargo-bay nadir mount). Each carries a TI
+AM62A7 vision SoC (via TPS65219 PMIC), a KSZ9477 Ethernet switch, an MSPM0G3507 MCU, an
+SLB9670 TPM, an ISOW1044 isolated CAN-FD, plus the camera module, TFmini-S ToF, and a laser.
+Figures are **datasheet-typical** at the 5 V board input (PMIC/buck-fed items divided by
+0.88 efficiency); refine when the placeholder SoC/switch footprints are replaced with sourced
+silicon (Vera.md "Verified vs. Placeholder").
+
+| Load (per board) | Typ (A @5 V) | Peak (A @5 V) | Notes |
+|---|---|---|---|
+| AM62A7 SoC (quad-A53 + VPAC/ISP + H.264/H.265 encode) | 0.57 | 1.02 | via TPS65219 PMIC |
+| KSZ9477 7-port Ethernet switch (3 ports active) | 0.27 | 0.46 | |
+| MSPM0G3507 MCU + SLB9670 TPM | 0.02 | 0.03 | |
+| ISOW1044 isolated CAN-FD (integrated iso DC-DC) | 0.05 | 0.10 | |
+| Camera module (MIPI CSI-2, via J_CAM) | 0.11 | 0.18 | |
+| TFmini-S ToF (140 mA typ / 200 mA peak @5 V) | 0.14 | 0.20 | REF-SENSOR-002 |
+| Ethernet magnetics + passives + LDO overhead | 0.04 | 0.07 | |
+| **Core subtotal (no laser)** | **1.20** | **2.06** | |
+| Laser — both sites (Class 2 green, ≤ 1 mW optical) | +0.02 | +0.02 | negligible; see `docs/VERA_LASER_ANALYSIS.md` (nose is Class 2, not 3B) |
+
+**Per board:** ≈ **1.22 A** typ / **2.08 A** peak (both boards are now Class 2 laser — the nose
+is a concentrated dot + camera strobe-difference detection, ~0.45 mW, not a 500 mW Class 3B
+module, so its laser draw is negligible like the cargo unit).
+**Both boards (2×):** ≈ **2.4 A** typ / **~4.2 A** peak at 5 V →
+≈ **0.6 A** typ / **~1.0 A** peak at VBAT (5 V ÷ 22.2 V ÷ 0.92 BEC eff).
+
+**Feed decision — dedicated Kaylee 5 V payload rail (recommended over sharing the avionics
+bus).** The shared 5 V avionics rail is already tight: realistic sustained load ≈ 10 A (§3.2)
+against a dual-TPS54620 BEC whose **single-fault** capacity is only 6 A (both healthy ≈ 12 A;
+§11). Adding Vera's ~2.4 A nom to that rail pushes nominal to ≈ 12.4 A — at/over the healthy
+BEC ceiling and well past the 6 A single-fault floor, worsening the existing brown-out
+exposure. Vera is also a switching video-SoC load whose noise should not sit on the shared
+avionics bus. Therefore Vera is powered from its **own** Kaylee rail:
+
+- **U_BEC_5V_3 (RAIL-2):** a third identical TPS54620RGYT (6 A) BEC channel, VDIS input →
+  5.4 V set-point. 6 A rating vs 2.4 A nom / 4.2 A peak = comfortable margin. Rather than a
+  standalone rail, RAIL-2 is **diode-OR cross-tied to the avionics RAIL-1** so the two rails
+  back each other up while staying fault-isolated — full topology, drop budget, and fault-mode
+  table in **§11.1**.
+- **J_VERA:** new Molex Nano-Fit 4-pin (matches `J_5V`) 5 V payload output on Kaylee, harnessed
+  to both Vera `J_PWR` inputs.
+- **Fuse/limit:** the TPS54620 internal current limit plus a 3 A resettable polyfuse per Vera
+  drop (each board ≤ 2.72 A peak).
+- **Wire gauge:** 18 AWG shielded twisted pair (7 A rated) per drop — ≫ the ≤ 2.7 A per-board
+  load; consistent with §4 "Avionics bay intra-bay".
+- **Runs:** Kaylee (middle-section inner neck) → nose (bow pod) and → cargo nadir mount;
+  comparable length to the existing avionics 5 V bay runs. Route with the Ethernet-ring / CAN
+  harness Vera already shares to each bay.
+
+Implementing the RAIL-2 channel (`U_BEC_5V_3`) + cross-tie + `J_VERA` on Kaylee is a Kaylee
+revision change (sibling to the planned Rev S1 servo-rail change); full design in **§11.1**,
+tracked in TODO.md §1.2c.4. Until implemented, a Vera board may be bench-fed from the shared
+5 V bus **only** with active load-management (accept that it consumes the remaining avionics
+margin and worsens single-fault brown-out) — not the flight configuration.
+
 ### 3.3 Servo Loads (6 V rail)
 
 | Load | Qty | Stall (mA) | Running (mA) | Total run (mA) |
@@ -133,6 +194,11 @@ At 6 V / 22.2 V: 5.3 A × 6 V / 22.2 V ≈ **1.4 A from VBAT** at stall.
 
 All figures are well within the 60 C (240 A) continuous rating of the 4 000 mAh pack
 and the 150 A main fuse rating under sustained load.
+
+The two **Vera** vision boards add ≈ **0.6 A typ / ~1.2 A peak at VBAT** (2.4 A / 4.8 A at
+5 V through the dedicated U_BEC_VERA rail, §3.2.1) — negligible against the propulsion-dominated
+totals above, but material to the 5 V-side budget, which is why Vera gets its own rail rather
+than loading the already-tight shared avionics BEC.
 
 ---
 
@@ -527,7 +593,152 @@ redundant in the hardware-failure sense. Redundancy provisions:
 - **No dual-battery architecture in Phases 5–10.** A second battery for avionics-only
   power would add 525 g (2800 mAh) and reduce T/W from 1.61 to 1.42. Decision:
   rely on BQ76930 hardware cell-protection and the SMPS redundancy above. Dual-battery
-  architecture is a Phase 12 enhancement candidate if AUW budget permits.
+  architecture is a Phase 12 enhancement — now specified as a **swappable cargo-bay
+  Range-Extender Battery Module (§11.2)**, so its AUW/T-W cost is paid only on range missions.
+
+### 11.1 Second 5 V Rail (Vera / payload) — cross-tied, mutually fault-tolerant (PLAN)
+
+**Objective.** Give Vera its own 5 V rail (§3.2.1) using the **same BEC part chain** as the
+avionics rail, so the two rails are **interchangeable** (identical channels) and **fault
+tolerant of each other** (a fault on one rail cannot collapse the other, and either rail's
+supply can back up the other). Minimal delta — no new part numbers.
+
+**BEC channel (the reused "part chain," identical for every channel).** One channel =
+TPS54620RGYT (6 A sync buck) + 10 µH inductor (Würth 744314100) + `R_FB` divider + 100 µF/50 V
+input cap + 220 µF ∥ 100 nF output cap + 742792612 input ferrite + MBRD1045CT output OR-diode.
+Each new channel is a copy-paste of `U_BEC_5V_1`.
+
+**Topology (N+1, cross-tied).** The avionics rail keeps its existing **two** channels (it needs
+~10 A, > one 6 A channel); the Vera rail adds **one** identical channel; the two rails are
+diode-OR cross-tied for mutual backup:
+
+```text
+BEC-1 ─D_OR1─┐
+             ├── RAIL-1  (5V_AVIONICS) ── F_5V (6 A) ──── J_5V     [2 channels, 12 A]
+BEC-2 ─D_OR2─┘        │
+                 D_X1 ▼  ▲ D_X2   ── F_X (3 A, cross-tie)          [mutual backup path]
+                      │  │
+BEC-3 ─D_OR3──────────┴──┴──────── RAIL-2 (5V_VERA) ── F_VERA (3 A) ── J_VERA   [1 channel, 6 A]
+```
+
+- **`D_X1` (RAIL-1→RAIL-2)** and **`D_X2` (RAIL-2→RAIL-1)** are two more MBRD1045CT (reused
+  part), in series with cross-tie fuse **`F_X`**. Normally both rails sit at the same voltage
+  so neither `D_X` conducts; a `D_X` conducts only when the *other* rail droops.
+
+**Set-point / drop budget (important).** Backup current crosses **two** Schottky drops
+(source channel's `D_OR` + the cross-tie `D_X` ≈ 0.6 V total). To keep a backed-up rail above
+the PocketBeagle-2-I 4.75 V minimum (§9.2), raise the TPS54620 set-point from the present
+**5.3 V to 5.4 V**:
+
+| Mode | Path | Rail voltage |
+|---|---|---|
+| Normal | BEC → `D_OR` → rail | 5.4 − 0.3 = **5.1 V** (within 5 V +2 %) |
+| Cross-tie backup | BEC → `D_OR` → other rail → `D_X` → rail | 5.4 − 0.6 = **4.8 V** (> 4.75 V min, +0.05 V) |
+
+(If more backup margin is wanted, a 5.5 V set-point gives 5.2 V normal / 4.9 V backup; or an
+ideal-diode-OR controller cuts the drop to ~0.02 V — but that adds a new part, against the
+minimal-parts goal, so plain Schottky + a modest set-point bump is the recommendation.)
+
+**Fault modes — each rail is tolerant of the other:**
+
+| Fault | Response |
+|---|---|
+| BEC-3 (Vera) regulator fails | RAIL-2 droops → `D_X1` feeds Vera from the RAIL-1 pair (2.4 A ≪ 12 A spare); avionics unaffected |
+| One avionics BEC fails | survivor (6 A) + BEC-3 via `D_X2` back up RAIL-1; §8.3 load-shed trims to fit |
+| Short on the RAIL-2 node (upstream of `F_VERA`) | `F_X` blows → RAIL-2 isolated from RAIL-1; BEC-3 OCP limits; **RAIL-1 keeps running** |
+| Short at J_VERA (downstream) | `F_VERA` clears; RAIL-1 unaffected |
+| Short at J_5V (downstream) | `F_5V` clears; RAIL-2 unaffected |
+| A BEC output fails *short* | its `D_OR` reverse-blocks, keeping the shorted channel off its rail so the cross-tie can carry the rail |
+
+**Delta vs. today (no new part numbers):** +1 TPS54620 channel (`U_BEC_5V_3` + `L_5V3` +
+`R_FB3` + `C_BEC3_IN` + `C_BEC3_OUT` + `FB_5V3` + `D_OR3`); +2 MBRD1045CT (`D_X1`/`D_X2`);
++2 fuses (`F_X`, `F_VERA`) and re-use/add `F_5V`; +1 output connector (`J_VERA`, Molex
+Nano-Fit 4-pin, matching `J_5V`); the two existing `R_FB` dividers re-valued for 5.4 V. Mass
+≈ +5 g. Interchangeability is at the **channel** level: all three BEC channels are the identical
+block, and any channel can be built or swapped identically.
+
+**Symmetric alternative (fully interchangeable *rails*, +1 more channel).** If both rails should
+be equal-capacity and each internally redundant, make RAIL-2 a **pair** too (4 channels total,
+2 + 2, both 12 A, both diode-OR internally, cross-tied). This is the maximally-fault-tolerant
+option but adds a 4th channel — recommended only if the payload rail later grows past ~5 A or
+needs its own single-fault redundancy. The N+1 (2 + 1) plan above is the minimal choice that
+still makes the two rails fault-tolerant of each other.
+
+**Status: PLAN.** Not yet in KiCad — this is a **Kaylee board revision** (schematic-first, then
+PCB placement/routing; place `U_BEC_5V_3` near the existing BEC pair, keep its SW node in a
+GND-pour keepout per §PCB Layout Constraints). Sibling to the planned Rev S1 servo-rail change.
+Tracked in `avionics/kicad/Kaylee.md` and `TODO.md §1.2c.4`.
+
+### 11.2 Cargo-bay Range-Extender Battery Module (swappable payload) — PLAN
+
+**Objective.** Make the cargo bay accept **either** the standard cargo payload **or** a drop-in
+**Range-Extender Battery Module (RBM)** — a second 6S pack — for extended-range missions. This
+realizes the "dual-battery architecture" previously deferred to Phase 12 (§11, last bullet),
+now as an *interchangeable payload* rather than a permanent fixture, so the AUW/T-W penalty is
+paid only on range missions. The two uses are **mutually exclusive** (cargo *or* RBM, not both).
+
+**Electrical — self-contained module, OR-combined into VBAT (hot-swap-safe, fault-isolated).**
+The intelligence lives on the RBM so the cargo payload path stays a dumb mechanical swap and
+Kaylee gains only one input:
+
+```text
+RBM (in cargo bay):
+   6S LiPo ─ JST-XH bal ─ BQ76930-class BMS (OVP/UVP/OCD/SCD, own FET) ─┐
+                                                                        ├─ ideal-diode ORing
+   (on-module protection + reverse-blocking)                           │   (LTC4359-class)
+                                                                        ▼
+                                            RBM XT60 out ───────────────┘
+                                                    │
+Kaylee:  J_BATT2 (new XT60 in) ── F_BATT2 ── ideal-diode / current-share combiner ── VBAT rail
+                                              (with the main pack's J_BATT path)
+```
+
+- The **ideal-diode ORing combiner** (e.g., LTC4359 per pack, or an LTC4370 dual current-share
+  controller across `J_BATT`/`J_BATT2`) lets the RBM parallel the main pack **without
+  cross-charging surge** if the packs' state-of-charge differ, and **reverse-blocks** so a
+  faulted or absent RBM cannot drain or back-feed the main pack — each pack is fault-tolerant
+  of the other (same philosophy as the §11.1 5 V cross-tie, applied at VBAT).
+- **Current sharing:** for the two packs to share hover current, use the *same pack model* and
+  start both **matched-SoC at takeoff** (or an LTC4370 to force balanced sharing). Simple
+  diode-ORing alone lets the higher-voltage pack hog — acceptable if matched, otherwise use the
+  current-share controller.
+- **Monitoring:** the RBM carries its own BMS; the `pwr_fault` firmware adds a second pack
+  context (voltage/current/SoC) over the existing I²C/telemetry, and the combiner's fault/PGOOD
+  status is logged. On RBM fault the combiner isolates it and the aircraft continues on the
+  main pack (RTH).
+
+**Battery options and the range/endurance trade** (baseline AUW 2 768 g / T-W 1.61, hover
+≈ 76 A, usable hover ≈ 2.5 min; hover current scales ≈ AUW¹·⁵, cruise range ≈ energy⁄weight):
+
+| RBM pack | Added mass | AUW | Hover T/W | Hover endurance | Cruise range |
+|---|---|---|---|---|---|
+| none (cargo) | — | 2 768 g (6.10 lbm) | 1.61 | 2.5 min (1.0×) | 1.0× |
+| 6S 2 800 mAh | +525 g (1.16 lbm) | 3 293 g (7.26 lbm) | 1.36 | 3.3 min (1.31×) | ~1.43× |
+| **6S 4 000 mAh** (matched) | +750 g (1.65 lbm) | 3 518 g (7.76 lbm) | **1.27** | 3.5 min (1.40×) | **~1.57×** |
+| 6S 6 000 mAh (hi-cap) | +1 000 g (2.20 lbm) | 3 768 g (8.31 lbm) | 1.18 | 4.0 min (1.57×) | ~1.84× |
+
+**Key finding — this is a *cruise-range* enhancement, not a hover one.** Every RBM option drops
+hover T-W below the 1.5 comfort target (to 1.18–1.36), though all stay above the 1.0 hover
+floor. So the RBM is for **extended-range forward flight** (wings carrying lift), where range
+gains ~1.4–1.8×; hover is still possible but with reduced attitude-control margin, so hover
+should be brief (takeoff/transition/landing) on a range mission. **Recommended pack: the matched
+6S 4 000 mAh** (identical to the main pack → simplest current-sharing and interchangeability,
+~1.57× range at T-W 1.27).
+
+**Mechanical (Jayne cargo mounts).** The RBM is a tray sized to the cargo-bay payload envelope,
+retained by the **same cargo hooks / release mechanism** the standard payload uses (so a fault
+can still jettison it if required), with a captive **XT60 pigtail to `J_BATT2`** and a keyed
+polarity guard. Mass budget above; verify the cargo-bay door and Jayne clearances against the
+tray. **CG:** the RBM sits at/near the cargo-bay station, close to the main battery rail (CG
+target 190 mm, §14) — a second ~750 g mass in the bay shifts CG and must be re-balanced on the
+keel rail; check on the physical CG rig per §14.1 before flight (a full moment-table entry is a
+follow-on to this plan).
+
+**Delta parts (Kaylee):** +1 `J_BATT2` (XT60) input, +`F_BATT2` fuse, + the ideal-diode/
+current-share combiner (LTC4359- or LTC4370-class — a *new* part family, unlike the §11.1 rail
+which reused existing parts) + its FETs/passives. Plus the RBM assembly (pack + BMS + ORing +
+tray). **Status: PLAN, Phase 12 enhancement** — supersedes the §11 "dual-battery Phase 12
+candidate" note; tracked in `TODO.md`. Not yet in KiCad/CAD.
 
 ---
 
