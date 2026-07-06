@@ -85,7 +85,7 @@ at 520 nm), and detection-contrast thresholds C ≈ 0.10 (human eye), 0.05 (came
 
 **The nose is NOT inherently Class 3B.** Class 3B only appears in the worst-case corner — a
 power-*diluted* 2 in spread pattern judged by a *naked human eye* in full direct sun. Vera's
-actual requirement is **camera visibility** (Vera is a vision board; the co-located camera is
+actual requirement is **camera visibility** (Vera is a vision board; the colocated camera is
 the observer, and the laser is GPIO-controlled hence strobable). Under that requirement, a
 **concentrated ~12 mm green dot detected by strobe + frame-difference needs only ~0.45 mW →
 Class 2** (Class 1 with a narrowband detector). Two levers get there:
@@ -165,12 +165,12 @@ practice.
 **Yes.** The spread angle is a property of the *terminal optic*, decoupled from the source:
 
 - **Crosshair (reticle) — matches the current design intent:**
-  - *Diffractive optical element (DOE):* the crosshair fan angle is a fixed DOE parameter.
+    - *Diffractive optical element (DOE):* the crosshair fan angle is a fixed DOE parameter.
     Catalog DOE crosshair/line generators span roughly 1°–110°; the **cargo 2.86°** is a
     standard off-the-shelf DOE. The **nose 0.19°** is *below* the usual DOE range — it is
     essentially a near-collimated cross, which is why the nose optic is a **custom
     near-collimated element**, not a stock DOE.
-  - *Refractive:* crossed cylindrical lenses (or a Powell lens per line) set the fan angle by
+    - *Refractive:* crossed cylindrical lenses (or a Powell lens per line) set the fan angle by
     lens geometry; a longer effective focal length gives the tighter nose fan.
 - **Dot indicator:** the spot size is set by the collimator focus. The nose runs at the
   collimation/diffraction limit (~3 mrad); the cargo adds a weak **diverging lens** to open
@@ -322,7 +322,7 @@ line width, carry the pixel budget.
   requirements for interlock, emission indicator, beam stop, and labeling.
 - **[REF-FDA-001]** 21 CFR Part 1040 — Performance Standards for Light-Emitting Products;
   harmonized with IEC 60825-1 for US emission limits.
-- **[REF-SENSOR-002]** Benewake TFmini-S (ToF sensor co-located with the laser; unchanged).
+- **[REF-SENSOR-002]** Benewake TFmini-S (ToF sensor colocated with the laser; unchanged).
 
 ---
 
