@@ -90,14 +90,20 @@ requirements.
 | J_6V | Molex Nano-Fit 4-pin (pitch 2.50 mm) | 6 V / 5 A | Servo bus (tilt servos + nozzle servos) |
 | J_SHLD_5V | PGND via-pad 1.2 mm hole (adjacent to J_5V) | 5 V avionics cable shield drain → PGND plane |
 | J_SHLD_6V | PGND via-pad 1.2 mm hole (adjacent to J_6V) | 6 V servo cable shield drain → PGND plane |
-| **J_VERA** (planned, not yet in KiCad) | Molex Nano-Fit 4-pin (or 2× JST-GH-2P) | **Dedicated 5 V payload rail** to the two Vera vision boards (nose + cargo), ≈ 2.4 A typ / ~4.8 A peak — kept off the shared avionics bus; see `docs/POWER_DISTRIBUTION.md §3.2.1` |
+| **J_VERA** (planned, not yet in KiCad) | Molex Nano-Fit 4-pin (matches J_5V) | 5 V / 6 A (RAIL-2, own BEC) | **Vera/payload** (nose + cargo), ≈ 2.4 A typ / ~4.2 A peak; cross-tied to the avionics rail for mutual backup — see `docs/POWER_DISTRIBUTION.md §11.1` |
 
-> **Planned Vera 5 V rail (not yet implemented in KiCad):** add **U_BEC_VERA** — a third
-> TPS54620RGYT (6 A, same family as the avionics BECs), VDIS input → 5.0 V — feeding a new
-> **J_VERA** payload output to both Vera boards. Rationale, load budget, and wire/fuse sizing:
-> `docs/POWER_DISTRIBUTION.md §3.2.1`. Number this change alongside the Rev S1 servo-rail change
-> when Kaylee is next revised. No diode-OR redundancy is required — a Vera outage degrades
-> vision/ranging only, not flight.
+> **Planned second 5 V rail — cross-tied, mutually fault-tolerant (not yet in KiCad):** add a
+> **third identical TPS54620 BEC channel** (`U_BEC_5V_3` + `L_5V3` + `R_FB3` + `C_BEC3_IN/OUT` +
+> `FB_5V3` + `D_OR3`, a copy of `U_BEC_5V_1`) feeding **RAIL-2 (5V_VERA) → `J_VERA`**. The
+> existing dual-BEC avionics pair stays as **RAIL-1 (5V_AVIONICS) → `J_5V`**. The two rails are
+> **diode-OR cross-tied** (`D_X1`/`D_X2`, two more MBRD1045CT — same part) through a cross-tie
+> fuse `F_X`, with per-rail fuses `F_5V`/`F_VERA`, so each rail is **fault-tolerant of the
+> other** (regulator-failure backup + short-isolation). All three BEC channels are the identical
+> part chain → **interchangeable**; no new part numbers. **Set-point rises 5.3 V → 5.4 V** so a
+> backed-up rail (two Schottky drops) stays > the 4.75 V PB2-I minimum. Full topology, drop
+> budget, and fault-mode table: `docs/POWER_DISTRIBUTION.md §11.1`. Number this alongside the
+> Rev S1 servo-rail change when Kaylee is next revised. (A fully-symmetric 2+2 four-channel
+> option is noted in §11.1 if RAIL-2 later needs its own internal redundancy.)
 
 ### Monitoring / Comms
 

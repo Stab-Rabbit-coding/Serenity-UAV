@@ -145,12 +145,13 @@ BEC ceiling and well past the 6 A single-fault floor, worsening the existing bro
 exposure. Vera is also a switching video-SoC load whose noise should not sit on the shared
 avionics bus. Therefore Vera is powered from its **own** Kaylee rail:
 
-- **U_BEC_VERA:** a third TPS54620RGYT (6 A, same family as the avionics BECs), VDIS input →
-  5.0 V output. 6 A rating vs 2.4 A nom / 4.8 A peak = comfortable margin (covers the nose
-  laser burst). No diode-OR redundancy needed — a Vera outage degrades vision/ranging only,
-  not flight (Vera is a peer sensor node, not a flight-control path).
-- **J_VERA:** new Molex Nano-Fit 4-pin (or 2× JST-GH-2P) 5 V payload output on Kaylee,
-  harnessed to both Vera `J_PWR` inputs.
+- **U_BEC_5V_3 (RAIL-2):** a third identical TPS54620RGYT (6 A) BEC channel, VDIS input →
+  5.4 V set-point. 6 A rating vs 2.4 A nom / 4.2 A peak = comfortable margin. Rather than a
+  standalone rail, RAIL-2 is **diode-OR cross-tied to the avionics RAIL-1** so the two rails
+  back each other up while staying fault-isolated — full topology, drop budget, and fault-mode
+  table in **§11.1**.
+- **J_VERA:** new Molex Nano-Fit 4-pin (matches `J_5V`) 5 V payload output on Kaylee, harnessed
+  to both Vera `J_PWR` inputs.
 - **Fuse/limit:** the TPS54620 internal current limit plus a 3 A resettable polyfuse per Vera
   drop (each board ≤ 2.72 A peak).
 - **Wire gauge:** 18 AWG shielded twisted pair (7 A rated) per drop — ≫ the ≤ 2.7 A per-board
@@ -159,10 +160,11 @@ avionics bus. Therefore Vera is powered from its **own** Kaylee rail:
   comparable length to the existing avionics 5 V bay runs. Route with the Ethernet-ring / CAN
   harness Vera already shares to each bay.
 
-Implementing U_BEC_VERA + J_VERA on Kaylee is a Kaylee revision change (sibling to the planned
-Rev S1 servo-rail change); tracked in TODO.md. Until implemented, a Vera board may be bench-fed
-from the shared 5 V bus **only** with active load-management (accept that it consumes the
-remaining avionics margin and worsens single-fault brown-out) — not the flight configuration.
+Implementing the RAIL-2 channel (`U_BEC_5V_3`) + cross-tie + `J_VERA` on Kaylee is a Kaylee
+revision change (sibling to the planned Rev S1 servo-rail change); full design in **§11.1**,
+tracked in TODO.md §1.2c.4. Until implemented, a Vera board may be bench-fed from the shared
+5 V bus **only** with active load-management (accept that it consumes the remaining avionics
+margin and worsens single-fault brown-out) — not the flight configuration.
 
 ### 3.3 Servo Loads (6 V rail)
 
@@ -592,6 +594,79 @@ redundant in the hardware-failure sense. Redundancy provisions:
   power would add 525 g (2800 mAh) and reduce T/W from 1.61 to 1.42. Decision:
   rely on BQ76930 hardware cell-protection and the SMPS redundancy above. Dual-battery
   architecture is a Phase 12 enhancement candidate if AUW budget permits.
+
+### 11.1 Second 5 V Rail (Vera / payload) — cross-tied, mutually fault-tolerant (PLAN)
+
+**Objective.** Give Vera its own 5 V rail (§3.2.1) using the **same BEC part chain** as the
+avionics rail, so the two rails are **interchangeable** (identical channels) and **fault
+tolerant of each other** (a fault on one rail cannot collapse the other, and either rail's
+supply can back up the other). Minimal delta — no new part numbers.
+
+**BEC channel (the reused "part chain," identical for every channel).** One channel =
+TPS54620RGYT (6 A sync buck) + 10 µH inductor (Würth 744314100) + `R_FB` divider + 100 µF/50 V
+input cap + 220 µF ∥ 100 nF output cap + 742792612 input ferrite + MBRD1045CT output OR-diode.
+Each new channel is a copy-paste of `U_BEC_5V_1`.
+
+**Topology (N+1, cross-tied).** The avionics rail keeps its existing **two** channels (it needs
+~10 A, > one 6 A channel); the Vera rail adds **one** identical channel; the two rails are
+diode-OR cross-tied for mutual backup:
+
+```text
+BEC-1 ─D_OR1─┐
+             ├── RAIL-1  (5V_AVIONICS) ── F_5V (6 A) ──── J_5V     [2 channels, 12 A]
+BEC-2 ─D_OR2─┘        │
+                 D_X1 ▼  ▲ D_X2   ── F_X (3 A, cross-tie)          [mutual backup path]
+                      │  │
+BEC-3 ─D_OR3──────────┴──┴──────── RAIL-2 (5V_VERA) ── F_VERA (3 A) ── J_VERA   [1 channel, 6 A]
+```
+
+- **`D_X1` (RAIL-1→RAIL-2)** and **`D_X2` (RAIL-2→RAIL-1)** are two more MBRD1045CT (reused
+  part), in series with cross-tie fuse **`F_X`**. Normally both rails sit at the same voltage
+  so neither `D_X` conducts; a `D_X` conducts only when the *other* rail droops.
+
+**Set-point / drop budget (important).** Backup current crosses **two** Schottky drops
+(source channel's `D_OR` + the cross-tie `D_X` ≈ 0.6 V total). To keep a backed-up rail above
+the PocketBeagle-2-I 4.75 V minimum (§9.2), raise the TPS54620 set-point from the present
+**5.3 V to 5.4 V**:
+
+| Mode | Path | Rail voltage |
+|---|---|---|
+| Normal | BEC → `D_OR` → rail | 5.4 − 0.3 = **5.1 V** (within 5 V +2 %) |
+| Cross-tie backup | BEC → `D_OR` → other rail → `D_X` → rail | 5.4 − 0.6 = **4.8 V** (> 4.75 V min, +0.05 V) |
+
+(If more backup margin is wanted, a 5.5 V set-point gives 5.2 V normal / 4.9 V backup; or an
+ideal-diode-OR controller cuts the drop to ~0.02 V — but that adds a new part, against the
+minimal-parts goal, so plain Schottky + a modest set-point bump is the recommendation.)
+
+**Fault modes — each rail is tolerant of the other:**
+
+| Fault | Response |
+|---|---|
+| BEC-3 (Vera) regulator fails | RAIL-2 droops → `D_X1` feeds Vera from the RAIL-1 pair (2.4 A ≪ 12 A spare); avionics unaffected |
+| One avionics BEC fails | survivor (6 A) + BEC-3 via `D_X2` back up RAIL-1; §8.3 load-shed trims to fit |
+| Short on the RAIL-2 node (upstream of `F_VERA`) | `F_X` blows → RAIL-2 isolated from RAIL-1; BEC-3 OCP limits; **RAIL-1 keeps running** |
+| Short at J_VERA (downstream) | `F_VERA` clears; RAIL-1 unaffected |
+| Short at J_5V (downstream) | `F_5V` clears; RAIL-2 unaffected |
+| A BEC output fails *short* | its `D_OR` reverse-blocks, keeping the shorted channel off its rail so the cross-tie can carry the rail |
+
+**Delta vs. today (no new part numbers):** +1 TPS54620 channel (`U_BEC_5V_3` + `L_5V3` +
+`R_FB3` + `C_BEC3_IN` + `C_BEC3_OUT` + `FB_5V3` + `D_OR3`); +2 MBRD1045CT (`D_X1`/`D_X2`);
++2 fuses (`F_X`, `F_VERA`) and re-use/add `F_5V`; +1 output connector (`J_VERA`, Molex
+Nano-Fit 4-pin, matching `J_5V`); the two existing `R_FB` dividers re-valued for 5.4 V. Mass
+≈ +5 g. Interchangeability is at the **channel** level: all three BEC channels are the identical
+block, and any channel can be built or swapped identically.
+
+**Symmetric alternative (fully interchangeable *rails*, +1 more channel).** If both rails should
+be equal-capacity and each internally redundant, make RAIL-2 a **pair** too (4 channels total,
+2 + 2, both 12 A, both diode-OR internally, cross-tied). This is the maximally-fault-tolerant
+option but adds a 4th channel — recommended only if the payload rail later grows past ~5 A or
+needs its own single-fault redundancy. The N+1 (2 + 1) plan above is the minimal choice that
+still makes the two rails fault-tolerant of each other.
+
+**Status: PLAN.** Not yet in KiCad — this is a **Kaylee board revision** (schematic-first, then
+PCB placement/routing; place `U_BEC_5V_3` near the existing BEC pair, keep its SW node in a
+GND-pour keepout per §PCB Layout Constraints). Sibling to the planned Rev S1 servo-rail change.
+Tracked in `avionics/kicad/Kaylee.md` and `TODO.md §1.2c.4`.
 
 ---
 

@@ -2643,12 +2643,19 @@ centroid placement (`airframe/CLAUDE.md` "Assembly and Placement").
 Power-budget and laser analyses completed 2026-07-05 (`docs/POWER_DISTRIBUTION.md §3.2.1`,
 `docs/VERA_LASER_ANALYSIS.md`). Resulting hardware tasks:
 
-- [ ] **Kaylee dedicated Vera 5 V rail (U_BEC_VERA + J_VERA).** Add a third TPS54620RGYT (6 A,
-    same family as the avionics BECs), VDIS → 5.0 V, feeding a new J_VERA payload output to both
-    Vera boards (≈ 2.4 A typ / ~4.8 A peak). Keeps the switching video-SoC load off the shared
-    5 V avionics bus, which is already near its dual-BEC single-fault capacity (§3.2.1). No
-    diode-OR redundancy (Vera outage degrades vision only, not flight). Number alongside the
-    Rev S1 servo-rail change when Kaylee is next revised. **Not yet in KiCad.**
+- [ ] **Kaylee second 5 V rail — cross-tied, mutually fault-tolerant (PLAN, `docs/POWER_
+    DISTRIBUTION.md §11.1`).** Add a **third identical TPS54620 BEC channel** (`U_BEC_5V_3` +
+    `L_5V3` + `R_FB3` + `C_BEC3_IN/OUT` + `FB_5V3` + `D_OR3` — copy of `U_BEC_5V_1`) feeding
+    **RAIL-2 (5V_VERA) → `J_VERA`** (both Vera boards, ≈ 2.4 A typ / ~4.2 A peak). Existing
+    dual-BEC pair = **RAIL-1 (5V_AVIONICS) → `J_5V`**. **Diode-OR cross-tie** the two rails
+    (`D_X1`/`D_X2` = 2× MBRD1045CT, same part) via cross-tie fuse `F_X`, plus per-rail fuses
+    `F_5V`/`F_VERA`, so each rail is fault-tolerant of the other (regulator-failure backup +
+    short isolation). **Same part chain (interchangeable channels); no new part numbers.**
+    **Bump set-point 5.3 V → 5.4 V** (re-value the `R_FB` dividers) so a backed-up rail (two
+    Schottky drops) stays > 4.75 V PB2-I min. Do schematic-first, then PCB (place `U_BEC_5V_3`
+    by the existing pair; SW node in a GND-pour keepout). Number alongside the Rev S1 servo-rail
+    change. **Not yet in KiCad.** (Symmetric 2+2 four-channel option in §11.1 if RAIL-2 later
+    needs its own internal redundancy.)
 - [ ] **Vera 5 V harness:** 18 AWG shielded TP per drop (Kaylee → nose bow pod, Kaylee → cargo
     nadir mount); 3 A resettable polyfuse per drop; route with each Vera's Ethernet-ring/CAN
     harness. Confirm final run lengths once ring-insertion bays are fixed (§1.2c.3).
