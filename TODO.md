@@ -972,8 +972,8 @@ Joint faces in hull-frame Y (confirmed from baked extents):
     = 2-loop tube). Watertight, single body, 0 boundary (vol 336 k mm³ — up from the old 273 k
     because the old cutter was OVER-removing via the bite plus a deep −55 notch). Assembly
     re-runs 0 WARN/MISSING/error. **Head/middle already used `_bore_open_cutter`** (their joints
-    use the clean method too); **rear** is still blocked on its own Blender-source repair
-    (MESH-01). *The original finding, for the record:* A starboard-side
+    use the clean method too); **rear is now clean too** — regenerated 2026-07-06 via
+    `regen_rear_interior.py` with the same lofted bore-open cutter (MESH-01 rear RESOLVED). *The original finding, for the record:* A starboard-side
     silhouette of the published cargo fab mesh shows **uneven fwd (Y=−71.5) and aft (Y=+132)
     joint rims** and a **notched "cutout" in the dorsal skin just aft of the fwd joint
     (Y≈−60..−50, Z≈140..160)**. Confirmed these are **cutter artifacts, NOT intentional**, by
@@ -997,8 +997,9 @@ Joint faces in hull-frame Y (confirmed from baked extents):
 - [ ] **MESH-01 `add_structural_features.py` boolean cuts left non-watertight / fragmented
     shells on cargo, middle, and rear** *(found 2026-06-16, reviewing 03_top.png render)* —
     **ROOT CAUSE FIXED IN CODE. RESOLVED FOR CARGO 2026-06-30. RESOLVED FOR MIDDLE
-    2026-07-03. REAR STILL BROKEN — new, distinct root cause found (not the same defect
-    as cargo/middle), see below.**
+    2026-07-03. REAR RESOLVED 2026-07-06 (new `regen_rear_interior.py`; see the
+    "Rear" note below — its root cause was the bake's float32 STL round-trip
+    damaging the delicate 3-body rear source, not a source-mesh defect).**
     - **2026-07-06 REGEN + HULL AUDIT (this session).** Head, cargo, and middle
         regenerated from the clean Blender sources with the joint boss-pins REMOVED
         (splice collars supersede — see §1.1.0 note above) and independently
@@ -1013,8 +1014,9 @@ Joint faces in hull-frame Y (confirmed from baked extents):
         edges on all four shells** (no unintended skin openings). **Hollow audit: ≥2
         concentric wall loops at every mid-station** (outer + inner 2 mm wall present).
         All three carry the HULL-FRAME R1 marker; `serenity_assembly.py` re-run clean
-        (0 WARN/MISSING/error) with all 3 splice collars present. **REAR unchanged
-        (still blocked, below).**
+        (0 WARN/MISSING/error) with all 3 splice collars present. **REAR now also
+        regenerated + clean (2026-07-06, `regen_rear_interior.py`): watertight, single
+        body, 0 boundary, 246 769 mm³, clean fwd mating rim — see the Rear note below.**
     Original root cause was NOT (only) the cutter-vs-wall
     epsilon grazing but the fragile `_subtract_all` loop: it subtracted cutters one at a
     time via `trimesh.boolean.difference(engine="manifold")` with a per-step repair on a
@@ -1039,7 +1041,29 @@ Joint faces in hull-frame Y (confirmed from baked extents):
     the `HULL-FRAME R1` marker (the export path stamps it directly; no re-bake needed
     since only booleans, not a placement transform, were applied).
 
-    **Rear — NOT RESOLVED. Different root cause than originally diagnosed, found
+    **Rear — RESOLVED 2026-07-06 (`airframe/blender-scripts/regen_rear_interior.py`).**
+    The 2026-07-03 diagnosis below (a "pre-damaged source" with 380 slivers / 550
+    non-manifold edges / volume-inflating internal lobes) was itself an artifact:
+    the canonical rear source, loaded `process=False` then `merge_vertices()`, is
+    actually **watertight at the correct 247 239 mm³** — three connected bodies
+    (main wall shell +302 k, plus two symmetric inside-out internal cavity shells
+    −27.5 k each, netting to 247 k). manifold3d handles that merged mesh correctly
+    (volume 247 239). The real culprit was the **bake step's float32 STL write at
+    the rear's large hull-frame Y (≈+203..+384)**: it splits coincident vertices
+    just enough that the reloaded published STL no longer welds watertight, and
+    manifold3d then mis-resolves it to ~357 k — so every subsequent cut was built
+    on a wrong base. `regen_rear_interior.py` (rear analogue of
+    `merge_cargo_interior.py`) fixes it by baking the clean source **in memory
+    (float64)** and cutting before any float32 round-trip, then doing a single
+    manifold3d boolean of the rear features (lofted bore-open fwd joint, keel
+    channel, Y=+290 ring pocket, 2× skid-rod bores). Result: **watertight (0
+    boundary edges), single body, 246 769 mm³ (~259 g)**, HULL-FRAME R1 marker,
+    clean fwd mating rim (JOINT-01 lofted cutter — verified by starboard
+    silhouette `scratchpad/rear_side.png`), assembly re-runs 0 WARN/MISSING/error.
+    (~3 non-manifold edges remain on reload — a benign float32 artifact, 0
+    boundary, same accepted state as cargo; slicers weld them.) *Superseded
+    2026-07-03 diagnosis retained below for the record:*
+    Different root cause than originally diagnosed, found
     2026-07-03: the canonical Blender-source rear shell itself
     (`airframe/blender-scripts/files-hollowed-24in/rear_shell24_2mm_repaired.stl`) is
     pre-damaged, independent of any cutting.**  Splitting the raw, un-cut, freshly-baked

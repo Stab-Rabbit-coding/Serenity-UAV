@@ -828,12 +828,17 @@ def main():
     # joint cuts here as well would double-process the cargo joints, so cargo is
     # skipped.  Middle and rear still need a clean-source regeneration pass with
     # the MESH-01-fixed _subtract_all above (TODO.md MESH-01 / §1.1.1.0a).
-    # Rear is SKIPPED until its Blender-source mesh is repaired: the canonical
-    # rear hollowed source carries ~380 degenerate slivers / 550 non-manifold
-    # edges plus internal lobe surfaces that inflate the manifold3d volume
-    # (247k→357k mm³) — feature-cutting on it produces a broken result, so the
-    # published rear is left at git HEAD rather than clobbered (TODO.md MESH-01,
-    # "Rear — NOT RESOLVED").  Re-enable once the source is repaired in Blender.
+    # Rear is handled by airframe/blender-scripts/regen_rear_interior.py (like
+    # cargo → merge_cargo_interior.py), NOT by this "cut the already-baked
+    # published STL" flow.  The rear source is a delicate 3-body solid (main
+    # shell + 2 disconnected inside-out cavity shells netting to 247 239 mm³);
+    # the bake step's float32 STL write at the rear's large hull-frame Y
+    # (≈+203..+384) splits coincident vertices so a reload no longer welds
+    # watertight and manifold3d then inflates the volume to ~357 k — the old
+    # "REAR STILL BROKEN" symptom (TODO.md MESH-01).  regen_rear_interior.py
+    # avoids that by baking IN MEMORY (float64) and cutting before any float32
+    # round-trip; it produces a clean watertight rear (0 boundary, single body,
+    # 246 769 mm³).  RESOLVED 2026-07-06.
     SKIP = {"cargo", "rear"}
 
     results = {}

@@ -231,8 +231,9 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
     fragments); ends stay open (fwd @Y=−69 = 2-loop tube). Watertight, single body, 0 boundary
     (vol 336 k mm³ — up from the old 273 k because the old cutter was OVER-removing via the bite
     plus a deep −55 notch). Assembly re-runs 0 WARN/MISSING/error. **Head/middle already used
-    `_bore_open_cutter`** (so their joints use the clean method too); **rear** is still blocked
-    on its own Blender-source repair (MESH-01). *The original finding, for the record:*
+    `_bore_open_cutter`** (so their joints use the clean method too); **rear is now clean too**
+    — regenerated 2026-07-06 via `regen_rear_interior.py` with the same lofted bore-open cutter
+    (MESH-01 rear RESOLVED). *The original finding, for the record:*
     A starboard-side
     silhouette of the published cargo fab mesh shows **uneven fwd (Y=−71.5) and aft (Y=+132)
     joint rims** and a **notched "cutout" in the dorsal skin just aft of the fwd joint
@@ -260,8 +261,9 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 - [ ] **MESH-01 `add_structural_features.py` boolean cuts left non-watertight / fragmented
     shells on cargo, middle, and rear** *(found 2026-06-16, reviewing 03_top.png render)* —
     **ROOT CAUSE FIXED IN CODE. RESOLVED FOR CARGO 2026-06-30. RESOLVED FOR MIDDLE
-    2026-07-03. REAR STILL BROKEN — new, distinct root cause found (not the same defect
-    as cargo/middle), see below.**
+    2026-07-03. REAR RESOLVED 2026-07-06 (new `regen_rear_interior.py`; see the
+    "Rear" note below — its root cause was the bake's float32 STL round-trip
+    damaging the delicate 3-body rear source, not a source-mesh defect).**
     - **2026-07-06 REGEN + HULL AUDIT (this session).** Head, cargo, and middle
         regenerated from the clean Blender sources with the joint boss-pins REMOVED
         (splice collars supersede — see §1.1.0 note above) and independently
@@ -276,8 +278,9 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
         edges on all four shells** (no unintended skin openings). **Hollow audit: ≥2
         concentric wall loops at every mid-station** (outer + inner 2 mm wall present).
         All three carry the HULL-FRAME R1 marker; `serenity_assembly.py` re-run clean
-        (0 WARN/MISSING/error) with all 3 splice collars present. **REAR unchanged
-        (still blocked, below).**
+        (0 WARN/MISSING/error) with all 3 splice collars present. **REAR now also
+        regenerated + clean (2026-07-06, `regen_rear_interior.py`): watertight, single
+        body, 0 boundary, 246 769 mm³, clean fwd mating rim — see the Rear note below.**
     Original root cause was NOT (only) the cutter-vs-wall
     epsilon grazing but the fragile `_subtract_all` loop: it subtracted cutters one at a
     time via `trimesh.boolean.difference(engine="manifold")` with a per-step repair on a
