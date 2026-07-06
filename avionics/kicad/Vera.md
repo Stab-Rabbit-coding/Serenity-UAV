@@ -148,6 +148,17 @@ laser BOM to a single green diode family. Rationale in full: `docs/VERA_LASER_AN
 - **Do not source the green diode or either terminal optic** until a real datasheet with a
   verified mW rating and IEC 60825-1 class replaces the placeholder citation in REFERENCES.md
   (REF-IEC-002 pending item; tracked TODO.md §1.2c.4).
+- **Laser Diode Selection**
+  
+    - Sharp GH0521AC2G or ams-OSRAM USA INC. PLT5 520EB_P
+
+- **Laser Driver IC Selection**
+
+    - **iC-Haus iC-WKN**
+
+- **Nose Laser DOE Selection**
+
+    - holo/or laserland or thorlabs
 
 ---
 

@@ -8,17 +8,29 @@ All four input STLs must already be baked (header carries "SerenityUAV HULL-FRAM
 
 Features added per shell:
 
-    Head:   bore-open aft face; 3× boss-pin bores (Joint 1)
+    Head:   bore-open aft face
     Cargo:  DELEGATED to merge_cargo_interior.py (Rev R1, 2026-06-30) — that
             script starts from the clean Blender source and merges the joint
             features AND every cargo interior feature (clamshell doors, wing
             spar/mortises, bosses, interior-wall removal) in one robust
             manifold3d pass.  Cargo is SKIPPED here (see main()).
-    Middle: bore-open fwd + aft faces; 6× boss-pin bores (Joints 2+3);
+    Middle: bore-open fwd + aft faces;
             2× CF skid-rod channels (port + stbd)
-    Rear:   bore-open fwd face; 3× boss-pin bores (Joint 3);
+    Rear:   bore-open fwd face;
             keel locating channel; ring-frame pocket at Y = +290 mm;
             2× CF skid-rod channels (port + stbd)
+
+    JOINT BOSS-PINS REMOVED (2026-07-06, user directive): the three
+    inter-section joints (Joint 1 head/cargo, Joint 2 cargo/middle,
+    Joint 3 middle/rear) are each now secured AND aligned by a bonded
+    internal splice collar (head_cargo / cargo_middle / middle_rear
+    _splice_collar.stl, integrated in serenity_assembly.py).  The collar
+    provides the 2-wall annulus + positive-stop + alignment the boss-pin
+    dowels previously provided (they had already been re-roled from
+    load-bearing pins to alignment dowels when the collars were added —
+    docs/structural_analysis.md §7.3), so the Ø3.2 mm boss-pin bores are
+    no longer cut into any shell.  The BOSS_PIN_BORES dict below is retained
+    only as a historical record of the (now-removed) dowel positions.
 
 MESH-01 root-cause fix (2026-06-30): _subtract_all now unions all cutters and
 does a single manifold3d difference instead of fragile sequential per-cut
@@ -129,6 +141,10 @@ FACE_BORE_MARGIN = 1.5  # mm — inset from the measured inner-cavity wall
 FACE_BORE_SAMPLES = 7  # Y stations sampled across each joint's span
 
 # ---------- boss-pin bores (Ø 3.2 mm cylinders, Y-axis, 8 mm each section) ----------
+# RETIRED 2026-07-06 (user directive): no longer cut into any shell — the three
+# splice collars secure and align the joints (see module docstring).  Kept only
+# as a historical record of the (now-removed) dowel positions; not referenced by
+# any process_*() function.
 # Positions on r = 35 mm circle at 0° / 120° / 240° from cross-section centroid.
 # Y range spans both mating sections (≈ 8–10 mm depth each).
 # Basis: structural_analysis.md §7.2
@@ -602,7 +618,8 @@ def process_head(mesh):
     """
     Head section structural features:
       - bore-open aft face (Joint 1, hull Y ≈ -71 mm)
-      - 3× boss-pin bores (Joint 1)
+      (Joint 1 boss-pin bores removed 2026-07-06 — head/cargo splice collar
+       now provides alignment; see module docstring.)
     """
     mesh = _to_manifold_volume(mesh)
     print("  [head] building cutters …")
@@ -611,11 +628,8 @@ def process_head(mesh):
     # Bore-open aft face
     cutters.extend(_bore_open_cutter(mesh, FACE_BORE_Y_RANGES["head_aft"]))
 
-    # Boss-pin bores (Joint 1)
-    j = BOSS_PIN_BORES["joint1"]
-    y0, y1 = j["y_range"]
-    for x_pin, z_pin in j["pins"]:
-        cutters.append(_y_cylinder(x_pin, z_pin, y0, y1, BOSS_PIN_RADIUS))
+    # Joint 1 boss-pin bores REMOVED (2026-07-06) — the head/cargo splice
+    # collar secures and aligns the joint; no dowel bores are cut.
 
     print(f"  [head] subtracting {len(cutters)} cutters …")
     return _subtract_all(mesh, cutters)
@@ -627,10 +641,9 @@ def process_cargo(mesh):
       (pre-repair: manifold3d round-trip to remove degenerate float32 edges)
       - bore-open fwd face (Joint 1)
       - bore-open aft face (Joint 2)
-      - 3× boss-pin bores (Joint 1) — shared bore with head
-      - 3× boss-pin bores (Joint 2) — shared bore with middle
       - keel locating channel
       - ring-frame pocket at Y = +30 mm
+      (Joint 1/2 boss-pin bores removed 2026-07-06 — splice collars align.)
     """
     mesh = _to_manifold_volume(mesh)
     print("  [cargo] building cutters …")
@@ -640,12 +653,9 @@ def process_cargo(mesh):
     for key in ("cargo_fwd", "cargo_aft"):
         cutters.extend(_bore_open_cutter(mesh, FACE_BORE_Y_RANGES[key]))
 
-    # Boss-pin bores (Joints 1 and 2)
-    for jname in ("joint1", "joint2"):
-        j = BOSS_PIN_BORES[jname]
-        y0, y1 = j["y_range"]
-        for x_pin, z_pin in j["pins"]:
-            cutters.append(_y_cylinder(x_pin, z_pin, y0, y1, BOSS_PIN_RADIUS))
+    # Joint 1/2 boss-pin bores REMOVED (2026-07-06) — splice collars align.
+    # (Cargo is DELEGATED to merge_cargo_interior.py; this path is retained
+    #  for completeness only.)
 
     # Keel locating channel
     cutters.append(_keel_channel_cutter("cargo"))
@@ -663,9 +673,8 @@ def process_middle(mesh):
     Middle section structural features:
       - bore-open fwd face (Joint 2)
       - bore-open aft face (Joint 3)
-      - 3× boss-pin bores (Joint 2)
-      - 3× boss-pin bores (Joint 3)
       - 2× CF skid-rod bores (port + stbd)
+      (Joint 2/3 boss-pin bores removed 2026-07-06 — splice collars align.)
     """
     mesh = _to_manifold_volume(mesh)
     print("  [middle] building cutters …")
@@ -675,12 +684,7 @@ def process_middle(mesh):
     for key in ("middle_fwd", "middle_aft"):
         cutters.extend(_bore_open_cutter(mesh, FACE_BORE_Y_RANGES[key]))
 
-    # Boss-pin bores (Joints 2 and 3)
-    for jname in ("joint2", "joint3"):
-        j = BOSS_PIN_BORES[jname]
-        y0, y1 = j["y_range"]
-        for x_pin, z_pin in j["pins"]:
-            cutters.append(_y_cylinder(x_pin, z_pin, y0, y1, BOSS_PIN_RADIUS))
+    # Joint 2/3 boss-pin bores REMOVED (2026-07-06) — splice collars align.
 
     # CF skid-rod bores
     for x_cen, z_cen, y0, y1 in SKID_ROD_BORES:
@@ -694,10 +698,10 @@ def process_rear(mesh):
     """
     Rear section structural features:
       - bore-open fwd face (Joint 3)
-      - 3× boss-pin bores (Joint 3)
       - keel locating channel
       - ring-frame pocket at Y = +290 mm
       - 2× CF skid-rod bores (port + stbd)
+      (Joint 3 boss-pin bores removed 2026-07-06 — splice collars align.)
     """
     mesh = _to_manifold_volume(mesh)
     print("  [rear] building cutters …")
@@ -706,11 +710,7 @@ def process_rear(mesh):
     # Bore-open fwd face
     cutters.extend(_bore_open_cutter(mesh, FACE_BORE_Y_RANGES["rear_fwd"]))
 
-    # Boss-pin bores (Joint 3)
-    j = BOSS_PIN_BORES["joint3"]
-    y0, y1 = j["y_range"]
-    for x_pin, z_pin in j["pins"]:
-        cutters.append(_y_cylinder(x_pin, z_pin, y0, y1, BOSS_PIN_RADIUS))
+    # Joint 3 boss-pin bores REMOVED (2026-07-06) — splice collars align.
 
     # Keel locating channel
     cutters.append(_keel_channel_cutter("rear"))
@@ -828,7 +828,13 @@ def main():
     # joint cuts here as well would double-process the cargo joints, so cargo is
     # skipped.  Middle and rear still need a clean-source regeneration pass with
     # the MESH-01-fixed _subtract_all above (TODO.md MESH-01 / §1.1.1.0a).
-    SKIP = {"cargo"}
+    # Rear is SKIPPED until its Blender-source mesh is repaired: the canonical
+    # rear hollowed source carries ~380 degenerate slivers / 550 non-manifold
+    # edges plus internal lobe surfaces that inflate the manifold3d volume
+    # (247k→357k mm³) — feature-cutting on it produces a broken result, so the
+    # published rear is left at git HEAD rather than clobbered (TODO.md MESH-01,
+    # "Rear — NOT RESOLVED").  Re-enable once the source is repaired in Blender.
+    SKIP = {"cargo", "rear"}
 
     results = {}
     for name, path in SHELLS.items():

@@ -214,39 +214,16 @@ def extract_envelope(shell_tm):
 
 
 # ---------------------------------------------------------------------------
-# Joint-face opening (cavity-plug cap removal)
+# Joint-face opening
 # ---------------------------------------------------------------------------
-OPEN_STATION_OFF = 8.0   # mm inboard of the face where the cavity is fully open
-OPEN_OUTSET = 0.5        # mm the plug is grown past the inner wall (clean cut)
-OPEN_PAST = 3.0          # mm the plug pokes past the face (outside the section)
-OPEN_DEPTH = 16.0        # mm the plug reaches inboard (into the open cavity)
-
-
-def open_face_plug(shell, face_y, inboard_sign):
-    """Cavity-shaped plug that removes the end cap at hull Y=face_y, leaving a
-    watertight OPEN pipe end (2 mm wall rim retained).  inboard_sign=+1 for the
-    fwd face (cavity is at greater Y), −1 for the aft face."""
-    station = face_y + inboard_sign * OPEN_STATION_OFF
-    # asf._inner_cavity_polygon(mesh, y, margin) returns poly.buffer(-margin);
-    # negative margin => OUTSET so the plug fully clears the cap's inner edge.
-    poly = asf._inner_cavity_polygon(shell, station, -OPEN_OUTSET)
-    if poly is None:
-        raise RuntimeError(f"open_face_plug: no cavity section at Y={station}")
-    if poly.geom_type == "MultiPolygon":
-        poly = max(poly.geoms, key=lambda g: g.area)
-    y_a = face_y - inboard_sign * OPEN_PAST
-    y_b = station + inboard_sign * OPEN_DEPTH
-    y_lo, y_hi = min(y_a, y_b), max(y_a, y_b)
-    ex = trimesh.creation.extrude_polygon(poly, height=y_hi - y_lo)
-    # extrude_polygon builds (x, y, z=[0,h]); remap to hull: X=x, Z=y, Y=z+y_lo
-    remap = np.array([
-        [1.0, 0.0, 0.0, 0.0],
-        [0.0, 0.0, 1.0, y_lo],
-        [0.0, 1.0, 0.0, 0.0],
-        [0.0, 0.0, 0.0, 1.0],
-    ])
-    ex.apply_transform(remap)
-    return ex
+# The fwd (head/cargo, Y=-71.5) and aft (cargo/middle, Y=+132) mating faces are
+# opened by asf._bore_open_cutter() using asf.FACE_BORE_Y_RANGES["cargo_fwd"] /
+# ["cargo_aft"] — the SAME lofted per-station cavity cutter head/middle/rear use
+# (called in build_negatives()).  The former local single-station open_face_plug()
+# was removed 2026-07-06 (JOINT-01): its constant cross-section overhung the
+# descending forward dorsal skin (biting a notch) and left ragged rim fragments;
+# the lofted cutter follows the tapering wall and never exceeds the local outer
+# skin, giving clean flat-rimmed open tubes.
 
 
 # ---------------------------------------------------------------------------
@@ -262,10 +239,6 @@ DUCT_CUT = (-201.0, -137.0, -20.0, 107.0, 8.0, 48.0)   # x0,x1,y0,y1,z0,z1
 # Clamshell belly aperture — between the two door hinge lines (stbd −222.5,
 # port −117.6), bay Y +2..+108, Z −3..+9 removes only the belly skin.
 APERTURE = (-222.5, -117.6, 2.0, 108.0, -3.0, 9.0)
-
-# Section-joint faces (open) — hull Y of the fwd (head/cargo) + aft (cargo/mid).
-FWD_FACE_Y = -71.5
-AFT_FACE_Y = 132.0
 
 # Wing subsystem — RE-DERIVED chordwise stations (hull frame).
 WING_LE_ROOT_Y = -7.0
@@ -333,19 +306,28 @@ def build_negatives(shell_tm):
     cutters.append(box(*APERTURE))
     notes.append("clamshell belly aperture")
 
-    # Open the fwd + aft joint faces (cavity-plug cap removal).
-    cutters.append(open_face_plug(shell_tm, FWD_FACE_Y, +1.0))
-    notes.append("open fwd joint face (head/cargo)")
-    cutters.append(open_face_plug(shell_tm, AFT_FACE_Y, -1.0))
-    notes.append("open aft joint face (cargo/middle)")
+    # Open the fwd + aft joint faces using the SAME lofted per-station cavity
+    # cutter as head/middle/rear (asf._bore_open_cutter).  It measures the inner
+    # cavity at several stations across the joint span and lofts the pairwise
+    # intersections, so the cut follows the tapering wall and NEVER exceeds the
+    # local outer skin.  This replaces the old single-station open_face_plug(),
+    # whose constant cross-section (taken 8 mm inboard) overhung the descending
+    # forward dorsal skin — biting a notch in it — and left ragged rim fragments
+    # where it mismatched the taper (JOINT-01, 2026-07-06; verified against the
+    # clean source by starboard-silhouette comparison).
+    fwd_segs = asf._bore_open_cutter(shell_tm, asf.FACE_BORE_Y_RANGES["cargo_fwd"])
+    cutters.extend(fwd_segs)
+    notes.append(f"open fwd joint face (head/cargo) — {len(fwd_segs)} lofted segs")
+    aft_segs = asf._bore_open_cutter(shell_tm, asf.FACE_BORE_Y_RANGES["cargo_aft"])
+    cutters.extend(aft_segs)
+    notes.append(f"open aft joint face (cargo/middle) — {len(aft_segs)} lofted segs")
 
-    # Boss-pin bores (collar alignment dowels): Joint 1 + Joint 2.
-    for jname in ("joint1", "joint2"):
-        j = asf.BOSS_PIN_BORES[jname]
-        y0, y1 = j["y_range"]
-        for x_pin, z_pin in j["pins"]:
-            cutters.append(y_pin(x_pin, z_pin, y0, y1, asf.BOSS_PIN_RADIUS))
-        notes.append(f"boss pins {jname}")
+    # Joint 1 + Joint 2 boss-pin bores REMOVED 2026-07-06 (user directive):
+    # the head/cargo and cargo/middle splice collars now secure AND align these
+    # joints, so no dowel bores are cut into the cargo shell (see
+    # add_structural_features.py module docstring, and docs/structural_analysis.md
+    # §7.3 — the pins had already been re-roled from load-bearing to alignment-only
+    # when the collars were introduced).
 
     # Keel locating channel + Y=+30 ring-frame pocket.
     kc = asf.KEEL_CHANNEL["cargo"]
@@ -534,6 +516,16 @@ def main():
         result = result - neg_man
     out = from_man(result)
     out = drop_slivers(out)
+
+    # NOTE: unlike add_structural_features._subtract_all, we do NOT strip
+    # near-degenerate faces here.  Cargo's cutter set (positives ∩ envelope +
+    # 20 negatives) produces a few SHARED T-junction slivers rather than isolated
+    # zero-area ones, so nondegenerate_faces() would delete faces that border real
+    # geometry and open ~120 boundary holes (verified 2026-07-06).  The in-memory
+    # result is watertight (single body, 0 boundary, 0 non-manifold); the ~57
+    # non-manifold edges seen when the exported STL is RELOADED are a benign
+    # float32-quantization artifact (0 boundary edges — the surface stays closed;
+    # slicers weld the coincident vertices on import).
 
     ok = verify(out)
     check_leg_clearance(out)
