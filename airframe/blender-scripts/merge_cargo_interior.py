@@ -306,21 +306,17 @@ def build_negatives(shell_tm):
     cutters.append(box(*APERTURE))
     notes.append("clamshell belly aperture")
 
-    # Open the fwd + aft joint faces using the SAME lofted per-station cavity
-    # cutter as head/middle/rear (asf._bore_open_cutter).  It measures the inner
-    # cavity at several stations across the joint span and lofts the pairwise
-    # intersections, so the cut follows the tapering wall and NEVER exceeds the
-    # local outer skin.  This replaces the old single-station open_face_plug(),
-    # whose constant cross-section (taken 8 mm inboard) overhung the descending
-    # forward dorsal skin — biting a notch in it — and left ragged rim fragments
-    # where it mismatched the taper (JOINT-01, 2026-07-06; verified against the
-    # clean source by starboard-silhouette comparison).
-    fwd_segs = asf._bore_open_cutter(shell_tm, asf.FACE_BORE_Y_RANGES["cargo_fwd"])
-    cutters.extend(fwd_segs)
-    notes.append(f"open fwd joint face (head/cargo) — {len(fwd_segs)} lofted segs")
-    aft_segs = asf._bore_open_cutter(shell_tm, asf.FACE_BORE_Y_RANGES["cargo_aft"])
-    cutters.extend(aft_segs)
-    notes.append(f"open aft joint face (cargo/middle) — {len(aft_segs)} lofted segs")
+    # Open the fwd + aft mating faces with a FLAT half-space cut at each mating
+    # plane (asf._flat_face_cutter): it removes the rounded closure cap the
+    # hollowing left, leaving a clean flat OPEN tube the splice collar slips into
+    # — no ragged fragments and no dorsal bite (a plane can't make them), and the
+    # bore stays genuinely open (JOINT-01 fix superseded 2026-07-06: the lofted
+    # bore-open cutter cleaned the rim but never removed the cap, so the collar
+    # still passed through solid plastic — see TODO.md).
+    cutters.append(asf._flat_face_cutter(shell_tm, "cargo_fwd"))
+    notes.append("flat OPEN fwd mating face (head/cargo)")
+    cutters.append(asf._flat_face_cutter(shell_tm, "cargo_aft"))
+    notes.append("flat OPEN aft mating face (cargo/middle)")
 
     # Joint 1 + Joint 2 boss-pin bores REMOVED 2026-07-06 (user directive):
     # the head/cargo and cargo/middle splice collars now secure AND align these

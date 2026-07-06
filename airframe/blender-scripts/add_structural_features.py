@@ -316,6 +316,53 @@ def _box(x0, x1, z0, z1, y0, y1):
     return box
 
 
+# ---------- flat OPEN mating-face cut (replaces the bore-open cutters) ----------
+# Each section's mating end is cut FLAT at the plane below, removing the rounded
+# closure cap the Blender hollowing left, so the end becomes a clean flat OPEN
+# tube (2 mm wall rim, open bore) into which the splice collar slips.  A planar
+# half-space cut cannot leave jagged fragments or bite the dorsal skin (the
+# JOINT-01 failure modes), and — verified 2026-07-06 — the manifold3d difference
+# of the (closed, watertight) shell with a half-space box yields a watertight
+# result whose bore is genuinely open (volume = wall only), because the cut caps
+# the 2 mm wall cross-section as a flat annular rim while leaving the interior
+# cavity open to the face.
+#
+# Each plane is that section's last near-full cross-section station toward the
+# joint (mapped 2026-07-06 from the baked meshes).  Adjacent sections' planes do
+# not coincide (each shell rounds off over its own last ~2-5 mm), so a small
+# inter-section gap remains at every joint — this is the DESIGNED collar
+# slip-fit / bond line, bridged by the conforming lofted collar + West System
+# 105/206 thickened with 406 (see generate_*_splice_collar.py).  (keep_sign: +1
+# keeps Y > plane, -1 keeps Y < plane; the cutter removes the other side.)
+MATING_PLANES = {
+    # (plane_Y, keep_sign).  Planes chosen so every joint's inter-section gap is
+    # ~2 mm (the collar slip-fit / bond line): head↔cargo 1.7 mm, cargo↔middle
+    # 2.0 mm, middle↔rear 2.0 mm.  Where a section's rounded aft cap is deep
+    # (cargo aft, rear fwd) the plane is pulled toward the tip so the gap stays
+    # ~2 mm — the face is then a slightly-reduced (still open) section, which the
+    # conforming collar bonds to regardless.
+    "head_aft":   (-71.2, -1),
+    "cargo_fwd":  (-69.5, +1),
+    "cargo_aft":  (129.0, -1),
+    "middle_fwd": (131.0, +1),
+    "middle_aft": (202.3, -1),
+    "rear_fwd":   (204.3, +1),
+}
+
+
+def _flat_face_cutter(mesh, key):
+    """Half-space box that removes the rounded closure cap beyond MATING_PLANES[key],
+    leaving a clean flat OPEN tube mating face.  Returns one trimesh box cutter."""
+    cut_y, keep_sign = MATING_PLANES[key]
+    b = mesh.bounds
+    pad = 25.0
+    if keep_sign > 0:            # keep Y > cut_y  → remove Y below the plane
+        y0, y1 = b[0][1] - pad, cut_y
+    else:                       # keep Y < cut_y  → remove Y above the plane
+        y0, y1 = cut_y, b[1][1] + pad
+    return _box(b[0][0] - pad, b[1][0] + pad, b[0][2] - pad, b[1][2] + pad, y0, y1)
+
+
 def _keel_channel_cutter(section_key):
     """Return the keel-locating-channel box cutter for KEEL_CHANNEL[section_key]
     (shared by process_cargo and process_rear — same geometry construction)."""
@@ -625,8 +672,9 @@ def process_head(mesh):
     print("  [head] building cutters …")
     cutters = []
 
-    # Bore-open aft face
-    cutters.extend(_bore_open_cutter(mesh, FACE_BORE_Y_RANGES["head_aft"]))
+    # Flat OPEN aft mating face (Joint 1) — removes the rounded closure cap,
+    # leaving a clean flat open tube the head/cargo splice collar slips into.
+    cutters.append(_flat_face_cutter(mesh, "head_aft"))
 
     # Joint 1 boss-pin bores REMOVED (2026-07-06) — the head/cargo splice
     # collar secures and aligns the joint; no dowel bores are cut.
@@ -649,9 +697,9 @@ def process_cargo(mesh):
     print("  [cargo] building cutters …")
     cutters = []
 
-    # Bore-open faces
+    # Flat OPEN fwd + aft mating faces (Joints 1 + 2).
     for key in ("cargo_fwd", "cargo_aft"):
-        cutters.extend(_bore_open_cutter(mesh, FACE_BORE_Y_RANGES[key]))
+        cutters.append(_flat_face_cutter(mesh, key))
 
     # Joint 1/2 boss-pin bores REMOVED (2026-07-06) — splice collars align.
     # (Cargo is DELEGATED to merge_cargo_interior.py; this path is retained
@@ -680,9 +728,10 @@ def process_middle(mesh):
     print("  [middle] building cutters …")
     cutters = []
 
-    # Bore-open faces
+    # Flat OPEN fwd + aft mating faces (Joints 2 + 3) — clean flat open tubes
+    # for the cargo/middle and middle/rear splice collars.
     for key in ("middle_fwd", "middle_aft"):
-        cutters.extend(_bore_open_cutter(mesh, FACE_BORE_Y_RANGES[key]))
+        cutters.append(_flat_face_cutter(mesh, key))
 
     # Joint 2/3 boss-pin bores REMOVED (2026-07-06) — splice collars align.
 
@@ -707,8 +756,8 @@ def process_rear(mesh):
     print("  [rear] building cutters …")
     cutters = []
 
-    # Bore-open fwd face
-    cutters.extend(_bore_open_cutter(mesh, FACE_BORE_Y_RANGES["rear_fwd"]))
+    # Flat OPEN fwd mating face (Joint 3).
+    cutters.append(_flat_face_cutter(mesh, "rear_fwd"))
 
     # Joint 3 boss-pin bores REMOVED (2026-07-06) — splice collars align.
 

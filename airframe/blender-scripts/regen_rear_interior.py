@@ -110,9 +110,8 @@ def bake_in_memory(mesh):
 def build_cutters(shell):
     """The same feature cutters add_structural_features.process_rear uses."""
     cutters, notes = [], []
-    fwd = ASF._bore_open_cutter(shell, ASF.FACE_BORE_Y_RANGES["rear_fwd"])
-    cutters.extend(fwd)
-    notes.append(f"bore-open fwd joint face (middle/rear) — {len(fwd)} lofted segs")
+    cutters.append(ASF._flat_face_cutter(shell, "rear_fwd"))
+    notes.append("flat OPEN fwd mating face (middle/rear)")
     cutters.append(ASF._keel_channel_cutter("rear"))
     notes.append("keel locating channel")
     for xm, xx, zm, zx, ym, yx in ASF.RING_POCKETS["rear_Y290"]:
