@@ -85,7 +85,7 @@ at 520 nm), and detection-contrast thresholds C ≈ 0.10 (human eye), 0.05 (came
 
 **The nose is NOT inherently Class 3B.** Class 3B only appears in the worst-case corner — a
 power-*diluted* 2 in spread pattern judged by a *naked human eye* in full direct sun. Vera's
-actual requirement is **camera visibility** (Vera is a vision board; the co-located camera is
+actual requirement is **camera visibility** (Vera is a vision board; the colocated camera is
 the observer, and the laser is GPIO-controlled hence strobable). Under that requirement, a
 **concentrated ~12 mm green dot detected by strobe + frame-difference needs only ~0.45 mW →
 Class 2** (Class 1 with a narrowband detector). Two levers get there:
@@ -322,7 +322,7 @@ line width, carry the pixel budget.
   requirements for interlock, emission indicator, beam stop, and labeling.
 - **[REF-FDA-001]** 21 CFR Part 1040 — Performance Standards for Light-Emitting Products;
   harmonized with IEC 60825-1 for US emission limits.
-- **[REF-SENSOR-002]** Benewake TFmini-S (ToF sensor co-located with the laser; unchanged).
+- **[REF-SENSOR-002]** Benewake TFmini-S (ToF sensor colocated with the laser; unchanged).
 
 ---
 
