@@ -165,12 +165,12 @@ practice.
 **Yes.** The spread angle is a property of the *terminal optic*, decoupled from the source:
 
 - **Crosshair (reticle) — matches the current design intent:**
-  - *Diffractive optical element (DOE):* the crosshair fan angle is a fixed DOE parameter.
+    - *Diffractive optical element (DOE):* the crosshair fan angle is a fixed DOE parameter.
     Catalog DOE crosshair/line generators span roughly 1°–110°; the **cargo 2.86°** is a
     standard off-the-shelf DOE. The **nose 0.19°** is *below* the usual DOE range — it is
     essentially a near-collimated cross, which is why the nose optic is a **custom
     near-collimated element**, not a stock DOE.
-  - *Refractive:* crossed cylindrical lenses (or a Powell lens per line) set the fan angle by
+    - *Refractive:* crossed cylindrical lenses (or a Powell lens per line) set the fan angle by
     lens geometry; a longer effective focal length gives the tighter nose fan.
 - **Dot indicator:** the spot size is set by the collimator focus. The nose runs at the
   collimation/diffraction limit (~3 mrad); the cargo adds a weak **diverging lens** to open
