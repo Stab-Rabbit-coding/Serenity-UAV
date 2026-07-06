@@ -593,7 +593,8 @@ redundant in the hardware-failure sense. Redundancy provisions:
 - **No dual-battery architecture in Phases 5–10.** A second battery for avionics-only
   power would add 525 g (2800 mAh) and reduce T/W from 1.61 to 1.42. Decision:
   rely on BQ76930 hardware cell-protection and the SMPS redundancy above. Dual-battery
-  architecture is a Phase 12 enhancement candidate if AUW budget permits.
+  architecture is a Phase 12 enhancement — now specified as a **swappable cargo-bay
+  Range-Extender Battery Module (§11.2)**, so its AUW/T-W cost is paid only on range missions.
 
 ### 11.1 Second 5 V Rail (Vera / payload) — cross-tied, mutually fault-tolerant (PLAN)
 
@@ -667,6 +668,77 @@ still makes the two rails fault-tolerant of each other.
 PCB placement/routing; place `U_BEC_5V_3` near the existing BEC pair, keep its SW node in a
 GND-pour keepout per §PCB Layout Constraints). Sibling to the planned Rev S1 servo-rail change.
 Tracked in `avionics/kicad/Kaylee.md` and `TODO.md §1.2c.4`.
+
+### 11.2 Cargo-bay Range-Extender Battery Module (swappable payload) — PLAN
+
+**Objective.** Make the cargo bay accept **either** the standard cargo payload **or** a drop-in
+**Range-Extender Battery Module (RBM)** — a second 6S pack — for extended-range missions. This
+realizes the "dual-battery architecture" previously deferred to Phase 12 (§11, last bullet),
+now as an *interchangeable payload* rather than a permanent fixture, so the AUW/T-W penalty is
+paid only on range missions. The two uses are **mutually exclusive** (cargo *or* RBM, not both).
+
+**Electrical — self-contained module, OR-combined into VBAT (hot-swap-safe, fault-isolated).**
+The intelligence lives on the RBM so the cargo payload path stays a dumb mechanical swap and
+Kaylee gains only one input:
+
+```text
+RBM (in cargo bay):
+   6S LiPo ─ JST-XH bal ─ BQ76930-class BMS (OVP/UVP/OCD/SCD, own FET) ─┐
+                                                                        ├─ ideal-diode ORing
+   (on-module protection + reverse-blocking)                           │   (LTC4359-class)
+                                                                        ▼
+                                            RBM XT60 out ───────────────┘
+                                                    │
+Kaylee:  J_BATT2 (new XT60 in) ── F_BATT2 ── ideal-diode / current-share combiner ── VBAT rail
+                                              (with the main pack's J_BATT path)
+```
+
+- The **ideal-diode ORing combiner** (e.g., LTC4359 per pack, or an LTC4370 dual current-share
+  controller across `J_BATT`/`J_BATT2`) lets the RBM parallel the main pack **without
+  cross-charging surge** if the packs' state-of-charge differ, and **reverse-blocks** so a
+  faulted or absent RBM cannot drain or back-feed the main pack — each pack is fault-tolerant
+  of the other (same philosophy as the §11.1 5 V cross-tie, applied at VBAT).
+- **Current sharing:** for the two packs to share hover current, use the *same pack model* and
+  start both **matched-SoC at takeoff** (or an LTC4370 to force balanced sharing). Simple
+  diode-ORing alone lets the higher-voltage pack hog — acceptable if matched, otherwise use the
+  current-share controller.
+- **Monitoring:** the RBM carries its own BMS; the `pwr_fault` firmware adds a second pack
+  context (voltage/current/SoC) over the existing I²C/telemetry, and the combiner's fault/PGOOD
+  status is logged. On RBM fault the combiner isolates it and the aircraft continues on the
+  main pack (RTH).
+
+**Battery options and the range/endurance trade** (baseline AUW 2 768 g / T-W 1.61, hover
+≈ 76 A, usable hover ≈ 2.5 min; hover current scales ≈ AUW¹·⁵, cruise range ≈ energy⁄weight):
+
+| RBM pack | Added mass | AUW | Hover T/W | Hover endurance | Cruise range |
+|---|---|---|---|---|---|
+| none (cargo) | — | 2 768 g (6.10 lbm) | 1.61 | 2.5 min (1.0×) | 1.0× |
+| 6S 2 800 mAh | +525 g (1.16 lbm) | 3 293 g (7.26 lbm) | 1.36 | 3.3 min (1.31×) | ~1.43× |
+| **6S 4 000 mAh** (matched) | +750 g (1.65 lbm) | 3 518 g (7.76 lbm) | **1.27** | 3.5 min (1.40×) | **~1.57×** |
+| 6S 6 000 mAh (hi-cap) | +1 000 g (2.20 lbm) | 3 768 g (8.31 lbm) | 1.18 | 4.0 min (1.57×) | ~1.84× |
+
+**Key finding — this is a *cruise-range* enhancement, not a hover one.** Every RBM option drops
+hover T-W below the 1.5 comfort target (to 1.18–1.36), though all stay above the 1.0 hover
+floor. So the RBM is for **extended-range forward flight** (wings carrying lift), where range
+gains ~1.4–1.8×; hover is still possible but with reduced attitude-control margin, so hover
+should be brief (takeoff/transition/landing) on a range mission. **Recommended pack: the matched
+6S 4 000 mAh** (identical to the main pack → simplest current-sharing and interchangeability,
+~1.57× range at T-W 1.27).
+
+**Mechanical (Jayne cargo mounts).** The RBM is a tray sized to the cargo-bay payload envelope,
+retained by the **same cargo hooks / release mechanism** the standard payload uses (so a fault
+can still jettison it if required), with a captive **XT60 pigtail to `J_BATT2`** and a keyed
+polarity guard. Mass budget above; verify the cargo-bay door and Jayne clearances against the
+tray. **CG:** the RBM sits at/near the cargo-bay station, close to the main battery rail (CG
+target 190 mm, §14) — a second ~750 g mass in the bay shifts CG and must be re-balanced on the
+keel rail; check on the physical CG rig per §14.1 before flight (a full moment-table entry is a
+follow-on to this plan).
+
+**Delta parts (Kaylee):** +1 `J_BATT2` (XT60) input, +`F_BATT2` fuse, + the ideal-diode/
+current-share combiner (LTC4359- or LTC4370-class — a *new* part family, unlike the §11.1 rail
+which reused existing parts) + its FETs/passives. Plus the RBM assembly (pack + BMS + ORing +
+tray). **Status: PLAN, Phase 12 enhancement** — supersedes the §11 "dual-battery Phase 12
+candidate" note; tracked in `TODO.md`. Not yet in KiCad/CAD.
 
 ---
 

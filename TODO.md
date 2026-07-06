@@ -4354,6 +4354,36 @@ before Phase 11 fabrication (see §11C). Old iris files (`rear_nozzle_frame.stl`
 
 ---
 
+### Phase 12 — Cargo-bay Range-Extender Battery Module (Deferred)
+
+**Goal:** let the cargo bay carry **either** the standard payload **or** a swappable second 6S
+pack (Range-Extender Battery Module, RBM) for extended-range missions. Full design + range/
+endurance/CG analysis: `docs/POWER_DISTRIBUTION.md §11.2`. Cruise range ~1.4–1.8× (matched
+4000 mAh pack ≈ 1.57×); hover T-W drops to 1.18–1.36 (below the 1.5 comfort target, above the
+1.0 floor) — a **cruise-range**, not hover, enhancement.
+
+**Dependency:** Phases 0–10 complete; realizes the dual-battery architecture deferred at
+`POWER_DISTRIBUTION.md §11`.
+
+- [ ] **RBM module:** 6S LiPo (matched 4000 mAh recommended) + BQ76930-class BMS + ideal-diode
+    ORing output, in a tray retained by the same Jayne cargo hooks/release (jettisonable),
+    with a keyed XT60 pigtail.
+- [ ] **Kaylee input:** add `J_BATT2` (XT60) + `F_BATT2` + an ideal-diode / current-share
+    combiner (LTC4359- or LTC4370-class — a NEW part family) OR-combining `J_BATT`/`J_BATT2`
+    into VBAT: hot-swap-safe across SoC mismatch, reverse-blocking so a faulted/absent RBM
+    can't drain or back-feed the main pack. (Kaylee board revision — not yet in KiCad.)
+- [ ] **Current sharing:** same pack model + matched-SoC at takeoff (or LTC4370 to force
+    balanced sharing); simple diode-ORing alone lets the higher-SoC pack hog.
+- [ ] **Firmware (`pwr_fault`):** add a second-pack context (V/I/SoC over the existing
+    telemetry) + combiner PGOOD/fault logging; on RBM fault, isolate and continue on the main
+    pack (RTH).
+- [ ] **W&B:** add the RBM to the §14 moment table; re-balance on the keel rail and verify on
+    the physical CG rig before flight (a second ~750 g mass in the cargo bay shifts CG).
+- [ ] **CAD:** RBM tray + retention on the cargo-bay payload envelope; verify cargo-door and
+    Jayne clearances.
+
+---
+
 ## 4.0 — Firmware and Software
 
 **Dependency for Phase 6:** serenity-fc Phase 7 items can be developed concurrently with physical Phases 0–5 and must be integrated by Phase 6 first flight.
