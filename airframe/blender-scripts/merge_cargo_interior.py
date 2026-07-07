@@ -216,14 +216,17 @@ def extract_envelope(shell_tm):
 # ---------------------------------------------------------------------------
 # Joint-face opening
 # ---------------------------------------------------------------------------
-# The fwd (head/cargo, Y=-71.5) and aft (cargo/middle, Y=+132) mating faces are
-# opened by asf._bore_open_cutter() using asf.FACE_BORE_Y_RANGES["cargo_fwd"] /
-# ["cargo_aft"] — the SAME lofted per-station cavity cutter head/middle/rear use
-# (called in build_negatives()).  The former local single-station open_face_plug()
-# was removed 2026-07-06 (JOINT-01): its constant cross-section overhung the
-# descending forward dorsal skin (biting a notch) and left ragged rim fragments;
-# the lofted cutter follows the tapering wall and never exceeds the local outer
-# skin, giving clean flat-rimmed open tubes.
+# The fwd (head/cargo) and aft (cargo/middle) mating faces are cut FLAT at their
+# mating planes (asf._flat_face_cutter with asf.MATING_PLANES["cargo_fwd"] /
+# ["cargo_aft"]) in build_negatives(), removing the rounded closure caps and
+# leaving clean flat OPEN tubes the conforming splice collars slip into.
+# History (JOINT-01/JOINT-02, 2026-07-06): the original single-station
+# open_face_plug() bit the fwd dorsal skin and left ragged rim fragments; the
+# lofted _bore_open_cutter() that replaced it cleaned the rim but never removed
+# the closure cap, so the collar still passed through solid plastic — the flat
+# half-space cut here fixes both (a plane leaves no jaggies and does remove the
+# cap).  The section end profiles no longer taper into a rounded cap, so the
+# splice collar is now a CONFORMING lofted sleeve (generate_conforming_collars.py).
 
 
 # ---------------------------------------------------------------------------

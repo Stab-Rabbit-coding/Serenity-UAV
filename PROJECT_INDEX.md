@@ -1,7 +1,7 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: 2026-07-05 — Vera laser crosshair-metrology (size+orientation via ToF+spread, VERA_LASER_ANALYSIS §4.4); Emma RSSI sub-circuit routed (route_emma_rssi.py) -->
+<!-- Last updated: 2026-07-07 — Wing Rev R1a (spar de-skewed/camber-centred + EDF cableway); nozzle-drive trade study (NOZZLE_DRIVE_TRADE.md) -->
 
 ## Repository Root
 
@@ -643,6 +643,9 @@ structural_analysis.md            — First-principles structural analysis (Rev 
 AVIONICS_PB2_REDESIGN.md          — 8× PocketBeagle 2 Industrial avionics redesign spec (Rev R)
 BATTERY_MOUNT.md                  — Battery CG analysis, retention load case, belly panel spec (Rev R)
 LANDING_GEAR_ANALYSIS.md          — Landing gear structural analysis: 6 ft drop, fuse sizing, lateral loads (Rev R1)
+NOZZLE_DRIVE_TRADE.md             — Nozzle-drive redesign trade study: internal ring gear (A) vs pushrod linkage (B) to kill the protruding idler (Rev R1a)
+img/nozzle_drive_trade.png        — Nozzle-drive trade schematics + tilt→ring-angle curves (A vs B)
+img/wing_rev_r1a_sections.png     — Wing Rev R1a root/tip sections: camber-centred spar + EDF cableway
 POWER_DISTRIBUTION.md             — Power architecture: Kaylee PDB rails, fuse map, cable spec (Rev R; §3.2.1 Vera 5V rail added 2026-07-05)
 VERA_LASER_ANALYSIS.md            — Vera laser: single 520nm green source feasibility, power/class vs spread-angle split, lens/DOE options (Rev A)
 REVN_BUILD_GUIDE_24IN.md          — Revision N+ 24-inch hull build guide (active, Rev R baseline)

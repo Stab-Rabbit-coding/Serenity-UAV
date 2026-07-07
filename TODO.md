@@ -1649,6 +1649,36 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     - **[OPEN]** Re-check root-tab centre position: with 129 mm chord the tab centres at hull Y ≈ +57.5 mm (was +73.5 mm); confirm mortise centre in cargo SCAD matches
     - **[OPEN]** Verify wing TE position (hull Y≈+122 mm port, +117 mm stbd) clears cargo-section aft interior features; cargo aft boundary is hull Y≈+132 mm — 10 mm clearance
 
+##### 1.1.2.1 *Rev R1a — spar straightened + camber-centred + EDF cableway (2026-07-07)*
+
+- [x] **Spar bore de-skewed** — `wings_s1223_revo.scad`: replaced the constant-30%-
+    chord-fraction bore (which walked 10.8 mm / 7.2° forward over span under the
+    straight LE — the "swept" cutout) with a bore at a **constant chordwise station
+    (`SPAR_BORE_STATION` = 22 mm)** → parallel to the LE. Bore centre height now
+    reads the **actual S1223 camber midline at each station** (`midline_frac()`),
+    fixing the Rev R1 chord-line centring that broke out the lower surface AND the
+    single-constant estimate that clipped the upper surface at the root.
+- [x] **Tip thickened for spar fit** — `THICKNESS_SCALE_TIP` = 1.25 (root unchanged);
+    tip t/c 12.14 % → ≈ 15.2 %. Needed because the tip section (11.3 mm max) is
+    thinner than the Ø12.3 bore. Both wings re-rendered, baked, watertight ✓
+    (vol 103 096 mm³, Z max +76.99 mm — within documented envelope). Min walls
+    (mesh-measured): spar **1.16 mm** (root) → 1.44 mm; cableway 1.7–4.3 mm.
+- [x] **EDF cableway added** — two Ø7 mm spanwise conduits at 40 % chord
+    (`cableway_bore()`): 40 A EDF ESC power + ESC signal split across the two;
+    nav-light 3-core routes through the hollow spar (Ø9 mm tube ID). Section
+    figure: `docs/img/wing_rev_r1a_sections.png`.
+- [ ] **[OPEN — BLOCKER] Fuselage spar-interface now mismatched.** §1.1.1.3 cuts the
+    cargo-shell mating Ø12.3 spar bore + Ø22 bearing bosses at the **old** 30 %-chord
+    line (hull **Y ≈ +31.7, Z ≈ 62.5**). The Rev R1a wing spar now sits at the 22 mm
+    station on the camber midline → root ≈ hull **Y ≈ +15, Z ≈ +71** (~16 mm fwd,
+    ~8 mm up). The spar can no longer pass through both parts. **User decision
+    required:** (a) relocate the cargo-shell bore + bosses to the new spar line
+    (cargo-shell / Blender-canonical change + re-merge + re-bake), or (b) keep the
+    fuselage bore and instead thicken the tip further (~1.6×) so a straight spar at
+    the 38.7 mm station fits — fatter wingtip OML. **Do not print either wing or
+    cargo shell until reconciled.** Consider whether `THICKNESS_SCALE_TIP` /
+    `SPAR_BORE_STATION` should be canon-checked against the Serenity wing silhouette.
+
 #### 1.1.3 **Nacelles**
 
 **Nacelle shells (Blender, Rev S geometry; carried fwd from Rev O — must run on host machine):**
@@ -1898,6 +1928,27 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     `nacelle_servo_bracket.stl` still does not exist in `airframe/stls/`
     (only the SCAD source has been authored); render it once the Z-conflict
     above is resolved.
+
+- [ ] **[OPEN — DESIGN] Nozzle drive protrudes ~10 mm past the nacelle OD**
+    *(flagged 2026-07-07, design review)* — the compound idler shaft sits at R43.6 mm
+    and its Idler-Out teeth reach R≈51 mm, ~10 mm proud of the Ø82 nozzle housing /
+    nacelle OD (the "steampunk accessory"). Root cause: the external 72T ring gear
+    forces the idler *outside* it, and the 17.6:1 reduction is inflated because the
+    front sector/pinion stage first multiplies tilt ×4.67 then divides ×17.6.
+    **Trade study authored** (`docs/NOZZLE_DRIVE_TRADE.md`,
+    `docs/img/nozzle_drive_trade.png`) comparing two zero-protrusion redesigns:
+    - **A — internal ring gear, re-architected reduction**: teeth on the ring bore,
+        single ~13T drive pinion inside Ø82, idler deleted, front stage re-ratioed
+        ~1.5×. Keeps positive gears + linear tilt→dia map. ~6 parts.
+    - **B — pushrod/bellcrank linkage**: deletes the entire aft train (sector, bevel,
+        shaft, crown, idler, ring gear); fixed pivot crank → pushrod → ring lever.
+        ~4 parts, nonlinear map, FDM-friendly; departs from the canonical "gear
+        train" wording (would need a `CLAUDE.md` spec edit).
+    **User chose (2026-07-07): prototype BOTH and compare** — kinematic prototypes +
+    trade table done. **AWAITING production-CAD decision** (A or B) before rebuilding
+    `nacelle_nozzle_iris.scad`, `nacelle_sector_gear.scad`, removing
+    `nacelle_nozzle_idler*`, and updating `serenity_assembly.py` + the ratio/BOM.
+
 ##### 1.1.3.4 *Nacelle Intake*
 
 - [x] **Trim the intake bell to the canonical leading nacelle dome** *(done

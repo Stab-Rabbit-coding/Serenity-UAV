@@ -185,10 +185,23 @@ SPAR_BORE_OD      =  12.3;  // [mm] bore ID = tube OD (12) + 0.3 mm slip fit
 SPAR_BORE_STATION =  22.0;  // [mm] chordwise station aft of LE — CONSTANT over the
                             //      span (≈ tip 23.7% / root 17.1% chord; near tip
                             //      max-thickness).  Constant ⇒ bore ∥ leading edge.
-SPAR_MIDLINE_FRAC =  0.078; // [t/c] S1223 camber-midline height at the spar
-                            //      station.  Bore centre Y = FRAC × local chord ×
-                            //      local thickness-scale (keeps the bore centred in
-                            //      the section at both root and tip stations).
+                            // The bore-centre thickness height is taken from the
+                            // ACTUAL S1223 camber midline at each station's own
+                            // chord fraction (midline_frac(), below) — NOT a single
+                            // constant — so it stays centred (root breakout fixed).
+
+// ── Harness cableway (Rev R1a) ───────────────────────────────────────────────
+// A 12 mm CF spar tube has only ≈ 9 mm ID (12 − 2×1.5 mm wall) — enough for the
+// nav-light 3-core (Ø 2.5 mm), which routes THROUGH the hollow spar to the
+// nacelle, but NOT for the 40 A EDF ESC feeds.  This adds a dedicated wing
+// conduit: TWO parallel Ø CABLE_BORE_D bores forming a flat "double-D" (overall
+// ≈ 15 × 7 mm), tracking a constant chord FRACTION (sweep is immaterial for a
+// flexible harness) and camber-centred at each station.  Splitting into two
+// bores keeps the EDF power pair separate from ESC signal/telemetry (noise).
+CABLE_BORE_D    =   7.0;  // [mm] each conduit bore diameter (Ø7 ≈ 38 mm² each)
+CABLE_BORE_SEP  =   8.0;  // [mm] chordwise centre-to-centre (overall ≈ 15 mm wide)
+CABLE_BORE_XFR  =   0.40; // [chord fraction] cableway chordwise centre (aft of spar,
+                          //      clear of the Ø12.3 spar which ends at ≈ 21.8% chord)
 
 // ── Pylon mount pocket (must match wing_nacelle_pylon_revo.scad) ────────────
 // The wing_attach_block from the pylon inserts into this pocket at the tip face.
@@ -311,6 +324,32 @@ S1223_POLY = concat(S1223_UPPER, S1223_LOWER);
 
 
 // =============================================================================
+// ── Surface / camber-midline interpolation helpers (Rev R1a) ─────────────────
+// =============================================================================
+// surf_y(pts, xq): linear-interpolate the surface y (t/c) at chord fraction xq
+//   from a surface point list (handles both ascending S1223_UPPER and
+//   descending S1223_LOWER x-ordering by testing each segment either way).
+// midline_frac(xq): camber-midline height (t/c) at chord fraction xq =
+//   mean of upper and lower surface y.  Used to keep bores centred in the
+//   (strongly cambered) section at each span station rather than on the
+//   chord line — the S1223 lower surface sits ABOVE the chord line aft of
+//   ~8% chord, so a chord-line-centred bore would break out the lower skin,
+//   and a midline estimated at the wrong chord fraction rides into the upper
+//   skin at the root (fixed here by evaluating at each station's own fraction).
+function surf_y(pts, xq) =
+    let (seg = [ for (k = [0 : len(pts) - 2])
+                 let (a = pts[k], b = pts[k + 1])
+                 if ((xq >= a[0] && xq <= b[0]) || (xq <= a[0] && xq >= b[0]))
+                     [a, b] ])
+    len(seg) == 0 ? 0
+        : let (a = seg[0][0], b = seg[0][1])
+          a[1] + (xq - a[0]) / (b[0] - a[0]) * (b[1] - a[1]);
+
+function midline_frac(xq) =
+    (surf_y(S1223_UPPER, xq) + surf_y(S1223_LOWER, xq)) / 2;
+
+
+// =============================================================================
 // ── Module: s1223_section ─────────────────────────────────────────────────────
 // =============================================================================
 // 2D airfoil cross-section polygon at a given chord length.
@@ -384,8 +423,15 @@ module wing_solid() {
 // does NOT reintroduce plan-view (spanwise) sweep.
 module spar_bore() {
     // Camber-midline bore-centre height (internal Y) at each end station.
-    root_y_ctr = SPAR_MIDLINE_FRAC * WING_CHORD_ROOT * THICKNESS_SCALE;
-    tip_y_ctr  = SPAR_MIDLINE_FRAC * WING_CHORD_TIP  * THICKNESS_SCALE_TIP;
+    // The spar station is a FIXED chord distance, so it is a DIFFERENT chord
+    // fraction at root (22/129 = 17.1%) vs tip (22/93 = 23.7%); the midline
+    // height is evaluated at each station's own fraction so the bore stays
+    // centred in both sections (root-camber breakout of the single-constant
+    // version fixed).  y = midline(t/c) × local chord × local thickness-scale.
+    root_y_ctr = midline_frac(SPAR_BORE_STATION / WING_CHORD_ROOT)
+                 * WING_CHORD_ROOT * THICKNESS_SCALE;
+    tip_y_ctr  = midline_frac(SPAR_BORE_STATION / WING_CHORD_TIP)
+                 * WING_CHORD_TIP  * THICKNESS_SCALE_TIP;
 
     hull() {
         translate([SPAR_BORE_STATION, root_y_ctr, -1.0])       // root disc (1 mm below root face)
@@ -393,6 +439,33 @@ module spar_bore() {
 
         translate([SPAR_BORE_STATION, tip_y_ctr + WING_DIHEDRAL, WING_SEMI_SPAN + 1.0])
             cylinder(r = SPAR_BORE_OD / 2, h = 0.01);          // tip disc (1 mm past tip)
+    }
+}
+
+
+// =============================================================================
+// ── Module: cableway_bore ────────────────────────────────────────────────────
+// =============================================================================
+// Two parallel spanwise conduits (a flat "double-D") for the nacelle harness —
+// the 40 A EDF power feeds cannot fit the spar-tube ID (see parameter block).
+// Each conduit tracks a constant chord FRACTION (CABLE_BORE_XFR) and is
+// camber-centred at each station via midline_frac().  The two bores are offset
+// ±CABLE_BORE_SEP/2 chordwise about that fraction.  Runs full span (root face
+// into the fuselage, tip face into the pylon harness channel).
+module cableway_bore() {
+    // Chordwise conduit centres at root and tip (constant fraction → tapered).
+    root_xc = WING_CHORD_ROOT * CABLE_BORE_XFR;
+    tip_xc  = WING_CHORD_TIP  * CABLE_BORE_XFR;
+    root_yc = midline_frac(CABLE_BORE_XFR) * WING_CHORD_ROOT * THICKNESS_SCALE;
+    tip_yc  = midline_frac(CABLE_BORE_XFR) * WING_CHORD_TIP  * THICKNESS_SCALE_TIP;
+
+    for (dx = [-CABLE_BORE_SEP / 2, CABLE_BORE_SEP / 2]) {
+        hull() {
+            translate([root_xc + dx, root_yc, -1.0])
+                cylinder(r = CABLE_BORE_D / 2, h = 0.01);
+            translate([tip_xc + dx, tip_yc + WING_DIHEDRAL, WING_SEMI_SPAN + 1.0])
+                cylinder(r = CABLE_BORE_D / 2, h = 0.01);
+        }
     }
 }
 
@@ -463,6 +536,9 @@ module wing_one_side() {
 
         // ── CF spar bore (spanwise, 12 mm OD) ────────────────────────────
         spar_bore();
+
+        // ── Harness cableway (2× Ø7 conduits for EDF power + signal) ──────
+        cableway_bore();
     }
 }
 
