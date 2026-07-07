@@ -166,7 +166,7 @@ laser BOM to a single green diode family. Rationale in full: `docs/VERA_LASER_AN
 
 **46 × 48 mm, double-sided, 4-layer FR4, rounded corners (3 mm radius, matching Wash/Kaylee
 convention).** - **Changed 7-7-2026** updated Vera dimentions to 1.0in by 2.75in to allow it to sit flush against the camera/tof/laser faceplate within the nose.  camera tof and laser connectors are moved to forward end of board and ethernet, pwr, and can-fd connectors are at the other end.  4 mounting holes are still present.  design should work in both nose and cargo bay.
-- Allows for direct pcb soldering of sensors in nose or via jst connectors in cargo bay. (needs feasibilty review)
+    - This allows for direct pcb soldering of sensors in nose or via jst connectors in cargo bay. (needs feasibilty review)
 
 Board-size history: the original single-sided draft was 110×190 mm — the two big placeholder
 ICs (U1's BGA footprint, U2's TQFP footprint) forced that size using rough first-guess body
