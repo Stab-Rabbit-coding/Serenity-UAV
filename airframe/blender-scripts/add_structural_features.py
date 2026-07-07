@@ -341,12 +341,12 @@ MATING_PLANES = {
     # (cargo aft, rear fwd) the plane is pulled toward the tip so the gap stays
     # ~2 mm — the face is then a slightly-reduced (still open) section, which the
     # conforming collar bonds to regardless.
-    "head_aft":   (-71.2, -1),
-    "cargo_fwd":  (-69.5, +1),
-    "cargo_aft":  (129.0, -1),
+    "head_aft": (-71.2, -1),
+    "cargo_fwd": (-69.5, +1),
+    "cargo_aft": (129.0, -1),
     "middle_fwd": (131.0, +1),
     "middle_aft": (202.3, -1),
-    "rear_fwd":   (204.3, +1),
+    "rear_fwd": (204.3, +1),
 }
 
 
@@ -356,9 +356,9 @@ def _flat_face_cutter(mesh, key):
     cut_y, keep_sign = MATING_PLANES[key]
     b = mesh.bounds
     pad = 25.0
-    if keep_sign > 0:            # keep Y > cut_y  → remove Y below the plane
+    if keep_sign > 0:  # keep Y > cut_y  → remove Y below the plane
         y0, y1 = b[0][1] - pad, cut_y
-    else:                       # keep Y < cut_y  → remove Y above the plane
+    else:  # keep Y < cut_y  → remove Y above the plane
         y0, y1 = cut_y, b[1][1] + pad
     return _box(b[0][0] - pad, b[1][0] + pad, b[0][2] - pad, b[1][2] + pad, y0, y1)
 

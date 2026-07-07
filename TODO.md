@@ -1064,9 +1064,9 @@ Joint faces in hull-frame Y (confirmed from baked extents):
     boundary, same accepted state as cargo; slicers weld them.) *Superseded
     2026-07-03 diagnosis retained below for the record:*
     Different root cause than originally diagnosed, found
-    2026-07-03: the canonical Blender-source rear shell itself
+    2026-07-03: **the canonical Blender-source rear shell itself
     (`airframe/blender-scripts/files-hollowed-24in/rear_shell24_2mm_repaired.stl`) is
-    pre-damaged, independent of any cutting.**  Splitting the raw, un-cut, freshly-baked
+    pre-damaged, independent of any cutting.** Splitting the raw, un-cut, freshly-baked
     rear mesh into connected components gives 383 bodies: the real outer skin
     (999 938 faces), 2 real cavity/lobe surfaces (47 702 and 47 572 faces), and **380
     two-face zero-area degenerate slivers (760 faces total) that carry 550 non-manifold

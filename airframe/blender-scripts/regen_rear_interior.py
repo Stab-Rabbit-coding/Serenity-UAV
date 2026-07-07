@@ -53,16 +53,14 @@ from manifold3d import Manifold, Mesh
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(SCRIPT_DIR))
-SRC = os.path.join(
-    SCRIPT_DIR, "files-hollowed-24in", "rear_shell24_2mm_repaired.stl"
-)
+SRC = os.path.join(SCRIPT_DIR, "files-hollowed-24in", "rear_shell24_2mm_repaired.stl")
 OUT = os.environ.get("REAR_REGEN_OUT") or os.path.join(
     REPO, "airframe", "stls", "fuselage", "rear_shell24_2mm_repaired.stl"
 )
 MARKER = b"SerenityUAV HULL-FRAME R1"
-RHO_PRINT = 1.05e-3   # g/mm^3 as-printed CF-PETG (≈40 % infill)
-RHO_SOLID = 1.28e-3   # g/mm^3 solid CF-PETG
-JUNK_FACES = 64       # connected components below this are dropped
+RHO_PRINT = 1.05e-3  # g/mm^3 as-printed CF-PETG (≈40 % infill)
+RHO_SOLID = 1.28e-3  # g/mm^3 solid CF-PETG
+JUNK_FACES = 64  # connected components below this are dropped
 
 
 def _load(name, path):
@@ -132,8 +130,10 @@ def drop_junk(mesh):
     if dropped:
         mesh = mesh.submesh([np.concatenate(keep)], append=True)
         mesh.merge_vertices()
-        print(f"  dropped {dropped} junk fragment(s) < {JUNK_FACES} faces "
-              f"→ {len(keep)} body/bodies")
+        print(
+            f"  dropped {dropped} junk fragment(s) < {JUNK_FACES} faces "
+            f"→ {len(keep)} body/bodies"
+        )
     return mesh
 
 
@@ -145,7 +145,9 @@ def stamp_export(mesh, out_path):
     e2 = tris[:, 2, :] - tris[:, 0, :]
     normals = np.cross(e1, e2)
     lengths = np.linalg.norm(normals, axis=1, keepdims=True)
-    normals = np.where(lengths > 0.0, normals / np.where(lengths > 0.0, lengths, 1.0), 0.0)
+    normals = np.where(
+        lengths > 0.0, normals / np.where(lengths > 0.0, lengths, 1.0), 0.0
+    )
     rec = np.zeros(count, dtype=np.dtype([("data", "<f4", (12,)), ("attr", "<u2")]))
     rec["data"][:, 0:3] = normals.astype("<f4")
     rec["data"][:, 3:12] = tris.reshape(count, 9).astype("<f4")
@@ -160,14 +162,21 @@ def verify(mesh, tag):
     ec = np.bincount(mesh.edges_unique_inverse, minlength=len(mesh.edges_unique))
     boundary = int((ec == 1).sum())
     nonman = int((ec > 2).sum())
-    bodies = len(trimesh.graph.connected_components(
-        mesh.face_adjacency, nodes=np.arange(len(mesh.faces))))
+    bodies = len(
+        trimesh.graph.connected_components(
+            mesh.face_adjacency, nodes=np.arange(len(mesh.faces))
+        )
+    )
     vol = mesh.volume
     print(f"\n=== verify ({tag}) ===")
-    print(f"  faces={len(mesh.faces):,}  bodies={bodies}  boundary_edges={boundary}  "
-          f"nonmanifold_edges={nonman}")
-    print(f"  volume={vol:.0f} mm^3  mass={vol * RHO_PRINT:.1f} g (as-printed) .. "
-          f"{vol * RHO_SOLID:.1f} g (solid CF-PETG)")
+    print(
+        f"  faces={len(mesh.faces):,}  bodies={bodies}  boundary_edges={boundary}  "
+        f"nonmanifold_edges={nonman}"
+    )
+    print(
+        f"  volume={vol:.0f} mm^3  mass={vol * RHO_PRINT:.1f} g (as-printed) .. "
+        f"{vol * RHO_SOLID:.1f} g (solid CF-PETG)"
+    )
     # Manufacturing gate: no OPEN boundary (holes) and a plausible net volume.
     # A few non-manifold edges from the float32 export are benign (surface
     # stays closed; slicers weld) — matches the accepted cargo shell state.
@@ -181,15 +190,19 @@ def main():
     print(f"source: {SRC}")
     src = trimesh.load(SRC, process=False)
     src.merge_vertices()
-    print(f"  loaded {len(src.faces):,} faces  watertight={src.is_watertight}  "
-          f"vol={src.volume:.0f} mm^3 (part-local)")
+    print(
+        f"  loaded {len(src.faces):,} faces  watertight={src.is_watertight}  "
+        f"vol={src.volume:.0f} mm^3 (part-local)"
+    )
 
     baked = bake_in_memory(src)
     baked.merge_vertices()
     b = baked.bounds
-    print(f"  baked hull frame: X {b[0][0]:.1f}..{b[1][0]:.1f}  "
-          f"Y {b[0][1]:.1f}..{b[1][1]:.1f}  Z {b[0][2]:.1f}..{b[1][2]:.1f}  "
-          f"watertight={baked.is_watertight}")
+    print(
+        f"  baked hull frame: X {b[0][0]:.1f}..{b[1][0]:.1f}  "
+        f"Y {b[0][1]:.1f}..{b[1][1]:.1f}  Z {b[0][2]:.1f}..{b[1][2]:.1f}  "
+        f"watertight={baked.is_watertight}"
+    )
 
     shell = ASF._to_manifold_volume(baked)
     cutters, notes = build_cutters(shell)
