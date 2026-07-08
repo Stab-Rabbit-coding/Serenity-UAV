@@ -1262,6 +1262,8 @@ tilt range.
 **Used in:** `airframe/openscad/nacelles/nacelle_nozzle_iris.scad`,
 `README.md` (Iris mechanism concept), `TODO.md` §1.1.3.1
 
+### REF-CAD-002: Nick Henning — Firefly Class Wing and Landing gear high fidelity images <https://www.nickhenning3d.com/>
+
 ---
 
 ## Removed / Superseded Citations
