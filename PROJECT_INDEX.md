@@ -1,7 +1,7 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: 2026-07-05 — Vera laser crosshair-metrology (size+orientation via ToF+spread, VERA_LASER_ANALYSIS §4.4); Emma RSSI sub-circuit routed (route_emma_rssi.py) -->
+<!-- Last updated: 2026-07-07 — Wing Rev R1a (spar de-skewed/camber-centred + EDF cableway); nozzle-drive trade study (NOZZLE_DRIVE_TRADE.md) -->
 
 ## Repository Root
 
@@ -40,6 +40,7 @@ requirements-dev.txt               — Python development dependencies
 Repository-level engineering tools and build automation.
 
 ```text
+TODO.md                           — Build-tools & automation WBS (reference index into master TODO.md §1.1/Phase 0)
 CLAUDE.md                         — Build tools and automation standards (hull-frame bake tool,
                                     Blender pipeline, SCAD generation, mesh validation)
 validate_stls.py                  — CI STL watertight validator (trimesh)
@@ -59,6 +60,7 @@ bake_hull_frame.py                — R1: bakes validated FreeCAD placements int
 Structural design, fabrication, 3D modeling, and CAD assembly.
 
 ```text
+TODO.md                           — Airframe WBS view — master §1.1 geometry (STL exports); §2.x procurement refs
 CLAUDE.md                         — Airframe design standards (coordinate system, CAD/3D
                                     modeling, hull-frame bake, fabrication specs, STL
                                     validation, structural joints, landing gear)
@@ -88,8 +90,9 @@ airframe/archive/FreeCAD-scripts/; see ARCHIVE_INDEX.md.)
 Headless Blender Python scripts for shell hollowing and STL generation.
 
 ```text
-add_structural_features.py        — Structural joint-feature booleans on head/middle/rear baked shells (Rev R1; MESH-01 root-cause fix 2026-06-30 = single batched manifold3d difference; cargo now DELEGATED to merge_cargo_interior.py): joint face bores, boss-pin bores, keel channel, ring-frame pockets, skid-rod bores; exports inner-profile CSVs
-merge_cargo_interior.py           — DEFINITIVE cargo-shell processor (Rev R1 2026-06-30): clean-source bake + one robust manifold3d pass merging interior-wall (duct) removal, clamshell door aperture + hinge retention blocks, head/cargo + cargo/middle joint features, wing spar/mortises/bosses (re-derived chord), nacelle-servo pads, Inara avionics bosses; watertight single body
+add_structural_features.py        — Structural joint-feature booleans on head + middle baked shells (Rev R1; MESH-01 root-cause fix 2026-06-30 = single batched manifold3d difference; joint boss-pins removed 2026-07-06 — splice collars supersede; cargo DELEGATED to merge_cargo_interior.py, rear DELEGATED to regen_rear_interior.py): lofted bore-open joint faces, keel channel, ring-frame pockets, skid-rod bores; exports inner-profile CSVs
+merge_cargo_interior.py           — DEFINITIVE cargo-shell processor (Rev R1 2026-06-30): clean-source bake + one robust manifold3d pass merging interior-wall (duct) removal, clamshell door aperture + hinge retention blocks, head/cargo + cargo/middle joint features (lofted bore-open cutter, JOINT-01 fix 2026-07-06), wing spar/mortises/bosses (re-derived chord), nacelle-servo pads, Inara avionics bosses; watertight single body
+regen_rear_interior.py            — DEFINITIVE rear-shell processor (2026-07-06, MESH-01 fix): clean-source IN-MEMORY bake (float64, avoids the float32-STL-round-trip that split the delicate 3-body rear source and inflated manifold3d to ~357k) + single manifold3d boolean of the rear features (lofted bore-open fwd joint, keel channel, Y=+290 ring pocket, 2× skid-rod bores); watertight single body, 246,769 mm³; stamps HULL-FRAME R1 (do not re-bake)
 merge_head_interior.py            — Bow sensor pod merge (Rev R1d 2026-07-03, TODO.md §1.1.1.1a): merges bow_sensor_pod.scad's camera/ToF/laser/faceplate-seat cuts into the published, already boss-featured head_shell24_2mm_repaired.stl via one manifold3d boolean; watertight single body, 183,192 mm³; Vera nose bosses and Shepherd's Book-bay bosses deliberately excluded (unverified/buggy placements, not yet certified)
 blender_edf_bore_and_petals.py    — EDF bore + nozzle petal geometry
 blender_hollow_shells.py          — Centroid-inset 2mm shell hollowing (all 4 sections)
@@ -224,6 +227,8 @@ middle_shell24_2mm_repaired.stl — Middle section 2mm hollow, manifold
 rear_shell24_2mm_repaired.stl   — Rear section 2mm hollow, manifold
 battery_tray.stl                — 6S LiPo battery tray (part-local, VERIFY placement)
 belly_panel.stl                 — Battery-bay belly access panel (part-local, VERIFY)
+inara_access_cover.stl          — Inara Faraday-bay dorsal cover (cargo, GPS_PORT Ø38 clearance; access_panels_24in.scad Rev R2)
+river_access_cover.stl          — River Faraday-bay dorsal cover (cargo, GPS_STBD Ø38 clearance; access_panels_24in.scad Rev R2)
 head_cargo_splice_collar.stl    — Internal head/cargo joint splice collar (hull-frame, Rev R1, ~13g)
 generate_head_cargo_splice_collar.py — Splice-collar generator (hull frame, from head inner contour)
 cargo_middle_splice_collar.stl  — Internal cargo/middle joint splice collar (hull-frame, Rev R1, ~17g)
@@ -472,6 +477,7 @@ serenity_fuselage_asm4.py archived 2026-06-29 — see ARCHIVE_INDEX.md.)
 KiCad PCB schematics and layouts, electronics design, firmware, and communications stack.
 
 ```text
+TODO.md                           — Avionics WBS view — PCBs §1.2*/§1.4/§0.6, node firmware §4.1–4.4/§4.6
 CLAUDE.md                         — Avionics design standards (cape naming, KiCad DRC
                                     workflow, security/cryptography, communications
                                     protocols, external radio regulations, avionics
@@ -627,6 +633,8 @@ archive/                          — Pre-Rev Q gerber snapshots
 Project documentation, design specifications, analysis reports, and standards references.
 
 ```text
+TODO.md                           — Docs/standards/regulatory WBS view — §0.x, §1.5–1.7, §5.x, §6.x
+FIRST_FLIGHT_READINESS.md         — Open-item rollup on the Phase-5 first-flight critical path
 CLAUDE.md                         — Documentation standards (standards vetting policy,
                                     references management, measurements and units,
                                     version control, traceability matrix)
@@ -635,6 +643,9 @@ structural_analysis.md            — First-principles structural analysis (Rev 
 AVIONICS_PB2_REDESIGN.md          — 8× PocketBeagle 2 Industrial avionics redesign spec (Rev R)
 BATTERY_MOUNT.md                  — Battery CG analysis, retention load case, belly panel spec (Rev R)
 LANDING_GEAR_ANALYSIS.md          — Landing gear structural analysis: 6 ft drop, fuse sizing, lateral loads (Rev R1)
+NOZZLE_DRIVE_TRADE.md             — Nozzle-drive redesign trade study: internal ring gear (A) vs pushrod linkage (B) to kill the protruding idler (Rev R1a)
+img/nozzle_drive_trade.png        — Nozzle-drive trade schematics + tilt→ring-angle curves (A vs B)
+img/wing_rev_r1a_sections.png     — Wing Rev R1a root/tip sections: camber-centred spar + EDF cableway
 POWER_DISTRIBUTION.md             — Power architecture: Kaylee PDB rails, fuse map, cable spec (Rev R; §3.2.1 Vera 5V rail added 2026-07-05)
 VERA_LASER_ANALYSIS.md            — Vera laser: single 520nm green source feasibility, power/class vs spread-angle split, lens/DOE options (Rev A)
 REVN_BUILD_GUIDE_24IN.md          — Revision N+ 24-inch hull build guide (active, Rev R baseline)
@@ -656,6 +667,7 @@ Thing-4677565-Serenity.stl      — Low-detail Thingiverse reference hull (geome
 Active design specifications, requirements, and version-controlled design baselines.
 
 ```text
+TODO.md                           — Specification-sync WBS (reference index into master §1.6/§1.7/§6.3)
 CLAUDE.md                         — Specification standards (revision policy, document
                                     structure, standards citations, traceability matrix,
                                     specification approval workflow)
@@ -684,6 +696,7 @@ Zigbee 2.4 GHz.  Servo-driven two-axis antenna gimbal with AS5600 magnetic encod
 No external PAs (FCC-compliant with directional antennas).  IP65 field enclosure.
 
 ```text
+TODO.md                           — Malcolm GCS WBS view — master §4.5 (ground control, gimbal, comms)
 CLAUDE.md                         — GCS design standards (operator interface, command
                                     authentication, telemetry display, communications
                                     protocols, security/compliance, hardware requirements)
@@ -770,6 +783,7 @@ Design work deferred beyond the current build phase (Phases 5–10). Includes pl
 for future build phases.
 
 ```text
+TODO.md                           — Deferred-work WBS view — master Phase 11 (aft EDF + RCS)
 CLAUDE.md                         — Deferred work standards (status categories, planned
                                     upgrades, Phase 11+ scope, design decision history,
                                     phase numbering convention)
@@ -826,6 +840,7 @@ SVG visual build guide cards and hull outline diagrams generated by `gen_hull_ou
 from blender-rendered views.
 
 ```text
+TODO.md                           — Phased physical-build WBS view — master §3.0 Phases 0–10
 CLAUDE.md                         — Build guide standards (phased approach, guide structure,
                                     illustrations/graphics, troubleshooting, phase
                                     completion sign-off)

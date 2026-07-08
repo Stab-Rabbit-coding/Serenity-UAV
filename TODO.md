@@ -419,9 +419,18 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
             105/206 + 406 filler → shear-loaded double-lap, FOS > 100 on the bond.  The 3
             boss pins are **re-roled to alignment dowels only.**  Added to
             `serenity_assembly.py`, BOM (`bom_revR.csv`), `docs/structural_analysis.md` §7.3,
-            `PROJECT_INDEX.md`.  **Remaining:** boss-pin bores get re-cut by
-            `add_structural_features.py` when MESH-01 is fixed (pin positions unchanged,
-            now dowels); the collar bonds to the printed shells at assembly.
+            `PROJECT_INDEX.md`.  ~~**Remaining:** boss-pin bores get re-cut by
+            `add_structural_features.py`...~~ **SUPERSEDED 2026-07-06 (user directive):
+            the joint boss-pins are now REMOVED entirely, not re-cut as dowels — the
+            splice collar provides both securing and alignment.**  `add_structural_features.py`
+            (head/middle/rear) and `merge_cargo_interior.py` (cargo) no longer cut ANY
+            joint boss-pin bore; `BOSS_PIN_BORES` retired to a historical record.  Head,
+            cargo, and middle regenerated 2026-07-06 from the clean Blender source and
+            re-verified watertight (in-memory PASS, 0 boundary edges, single/expected body
+            count) with the pins absent — confirmed geometrically (pin-axis bore-ring vertex
+            count dropped ~80→~24 = plain wall).  The collar bonds to the printed shells at
+            assembly.  (Rear pin removal is coded but rear cannot be regenerated until its
+            Blender-source mesh is repaired — see MESH-01 below.)
 - [x] **Regenerate cargo doors from the baked shell.** `cargo_door_port/stbd.stl`
     (2026-06-01) predate both the repaired-shell re-orientation and the bake; regenerate
     via `generate_cargo_doors.py` against the baked
@@ -675,21 +684,32 @@ SCAD: `airframe/openscad/fuselage/bow_sensor_pod.scad` (cuts) +
     digital vision SoC replacing the RunCam Nano 4 analog camera. One board design, installed
     at both the bow sensor pod (nose) and the cargo bay nadir FPV mount.
 
-- [ ] **Wire TFmini-S UART to bow sensor MCU.**
-    Run 28 AWG 4-conductor (TX, RX, 5 V, GND) loom from bow pod area to Shepherd's Room bay.
-    Route inside head section interior; secure with cable saddles bonded to inner hull wall.
-    Shield pair twisted, overall braid shield grounded at Cape end only.
-    Firmware: add TFmini-S UART driver to Shepherd `serenity-fc` Phase 7 task list.
-- [ ] **Wire bow camera video output to bow sensor MCU** per camera/payload PACE priority assignment (CLAUDE.md).  Use RG178 coax; keep run ≤ 300 mm to bow tip.
-- [ ] **Wire laser GPIO enable bow sensor MCU** via 2N7002 N-channel MOSFET:
-    - Gate → Wash GPIO (via 10 kΩ series resistor)
-    - 10 kΩ pull-down to GND (default state: laser disabled)
-    - Source → GND
-    - Drain → laser anode via 10 Ω current-limit resistor (confirms ≤ 5 mW at rated voltage)
-    - Physical safety key-switch in series with enable GPIO per [REF-FDA-001 §1040.10(f)(1)]
-        before operating near persons.
-- [ ] **Add laser enable command to MAVLink C2 interface** [REF-PROTO-002] with explicit
-    operator acknowledgement required before energising (prevents accidental enable).
+- [x] **Wire TFmini-S UART to bow sensor MCU.** — **SUPERSEDED by Vera (2026-07-06).**
+    The pre-Vera plan ran a 28 AWG loom from the bow pod all the way to Shepherd's Room and
+    read the TFmini-S on the Shepherd (Wash) node. Vera is now the board *at* the bow pod, so
+    the TFmini-S is a short local run (<75 mm) on Vera's dedicated `J_TOF`/UART1, read by Vera's
+    MSPM0G3507 — no head-section loom to Shepherd's, no Shepherd `serenity-fc` UART driver.
+    Replaced by the Vera local sensor harness (§1.2c) and Vera node firmware (§4.6).
+- [x] **Wire bow camera video output to bow sensor MCU** — **SUPERSEDED by Vera (2026-07-06).**
+    The RG178 analog-coax run was for the RunCam Nano 4 analog camera, which Vera supersedes
+    (REF-SENSOR-001, superseded). Vera's camera is a digital MIPI CSI-2 module on `J_CAM1/J_CAM2`
+    (flex/FPC, ~20–30 mm), encoded on-board by the AM62A7 and published over the Ethernet ring —
+    no analog coax to a separate MCU. Tracked as the Vera local sensor harness (§1.2c).
+- [x] **Wire laser GPIO enable bow sensor MCU** — **SUPERSEDED by Vera (2026-07-06).**
+    This discrete 2N7002-from-Wash-GPIO driver plus a Class-3B-style physical key-switch
+    ([REF-FDA-001 §1040.10(f)(1)]) is replaced by Vera's own on-board laser driver (Q1 AO3400
+    logic-level N-FET, R1 100 Ω gate, R2 10 kΩ pulldown-default-off, `J_LASER`), enabled by
+    Vera's MSPM0G3507 — not a Wash GPIO. Per `docs/VERA_LASER_ANALYSIS.md` Rev A2 the nose is
+    **Class 2 (≤ 1 mW green), NOT Class 3B**, so the mandatory key-interlock/shutter is dropped
+    and the ≤ 1 mW cap is hardware-enforced (fixed current limit). Tracked at §1.2c (driver) and
+    §4.6 (GPIO firmware + interlock).
+- [x] **Add laser enable command to MAVLink C2 interface** [REF-PROTO-002] — **SUPERSEDED /
+    RELOCATED to Vera (2026-07-06).** The laser is now Vera-owned (commanded by Vera's
+    MSPM0G3507, published/gated over the CAN-FD + Ethernet ring), not the Wash MAVLink path. The
+    surviving C2-enable requirement is folded into the Vera "Laser GPIO driver" firmware task
+    (§4.6). Because the nose is now Class 2 (`docs/VERA_LASER_ANALYSIS.md` Rev A2), the previously
+    **mandatory** operator acknowledgement is downgraded to **optional** defense-in-depth rather
+    than a Class-3B requirement.
 - [ ] **Add standards REF-IDs to bow_sensor_pod.scad firmware integration notes** once driver
     code is in place.  Ref: [REF-SENSOR-002] TFmini-S UART protocol, [REF-NIST-001 §2.1] ZTA.
 
@@ -940,11 +960,64 @@ Joint faces in hull-frame Y (confirmed from baked extents):
         serenity_assembly.py, bom_revR.csv (PRINT-MIDDLE-REAR-COLLAR),
         docs/structural_analysis.md §7.5, PROJECT_INDEX.md.
 
+- [x] **JOINT-01 — cargo mating-face rims ragged + dorsal bite — RESOLVED 2026-07-06.**
+    **FIX APPLIED:** `merge_cargo_interior.py` now opens the fwd + aft cargo joints with the
+    SAME lofted per-station cavity cutter head/middle/rear already use
+    (`asf._bore_open_cutter` with `asf.FACE_BORE_Y_RANGES["cargo_fwd"]`/`["cargo_aft"]`); the
+    crude single-station `open_face_plug()` (and its `OPEN_*`/`FWD_FACE_Y`/`AFT_FACE_Y`
+    constants) was deleted. The lofted cutter measures the inner cavity at several stations and
+    lofts pairwise intersections, so it follows the tapering wall and never exceeds the local
+    outer skin. Regenerated + verified by starboard-silhouette comparison: **the dorsal "top
+    cutout" is gone and both rims are clean** (no ragged fragments); ends stay open (fwd @Y=−69
+    = 2-loop tube). Watertight, single body, 0 boundary (vol 336 k mm³ — up from the old 273 k
+    because the old cutter was OVER-removing via the bite plus a deep −55 notch). Assembly
+    re-runs 0 WARN/MISSING/error. **Head/middle already used `_bore_open_cutter`** (their joints
+    use the clean method too); **rear is now clean too** — regenerated 2026-07-06 via
+    `regen_rear_interior.py` with the same lofted bore-open cutter (MESH-01 rear RESOLVED). *The original finding, for the record:* A starboard-side
+    silhouette of the published cargo fab mesh shows **uneven fwd (Y=−71.5) and aft (Y=+132)
+    joint rims** and a **notched "cutout" in the dorsal skin just aft of the fwd joint
+    (Y≈−60..−50, Z≈140..160)**. Confirmed these are **cutter artifacts, NOT intentional**, by
+    ray-cast silhouette comparison against the clean baked Blender source (which has smooth,
+    clean joint edges and no dorsal notch). Root cause: `merge_cargo_interior.py`
+    `open_face_plug()` opens each mating face by extruding a SINGLE inner-cavity cross-section
+    (8 mm inboard, `OPEN_STATION_OFF`) over a 27 mm Y span (`OPEN_PAST`=3 → `OPEN_DEPTH`=16)
+    with a +0.5 mm outset — the constant section does not track the tapering/curving fwd hull,
+    so it leaves ragged wall fragments at the rim and clips through the dorsal skin at the fwd
+    end (the "top cutout"). The mesh stays watertight (the boolean re-closes around the
+    over-cut), so it passed the watertight gate. **The OPENING is intended** (CLAUDE.md: mating
+    faces left open for assembly + cable routing; splice collars bond across them) — only the
+    ragged EXECUTION is wrong. **Intentional features in the same view (do NOT touch):** wing
+    spar bore (Ø12.3 @ Y≈+32,Z≈62), wing root mortise (Y≈42..73,Z≈52..73), belly clamshell
+    aperture (Z≈0..9). **FIX (needs design input):** replace the constant-section extrude with
+    a clean planar cut at each mating station (flat-rimmed open tube); requires confirming the
+    exact mating-plane Y per joint given the source shells' rounded end-closures (fwd section
+    near-closes by Y≈−71.5; a clean full-perimeter rim wants the cut ~Y=−64 ≈ 7 mm shorter, OR
+    an accepted tapered rim at −71.5). Same fix applies to `add_structural_features.py`
+    `_bore_open_cutter` (head/middle/rear). **Refer mating-plane choice to user before rework.**
 - [ ] **MESH-01 `add_structural_features.py` boolean cuts left non-watertight / fragmented
     shells on cargo, middle, and rear** *(found 2026-06-16, reviewing 03_top.png render)* —
     **ROOT CAUSE FIXED IN CODE. RESOLVED FOR CARGO 2026-06-30. RESOLVED FOR MIDDLE
-    2026-07-03. REAR STILL BROKEN — new, distinct root cause found (not the same defect
-    as cargo/middle), see below.**  Original root cause was NOT (only) the cutter-vs-wall
+    2026-07-03. REAR RESOLVED 2026-07-06 (new `regen_rear_interior.py`; see the
+    "Rear" note below — its root cause was the bake's float32 STL round-trip
+    damaging the delicate 3-body rear source, not a source-mesh defect).**
+    - **2026-07-06 REGEN + HULL AUDIT (this session).** Head, cargo, and middle
+        regenerated from the clean Blender sources with the joint boss-pins REMOVED
+        (splice collars supersede — see §1.1.0 note above) and independently
+        re-verified with trimesh: **HEAD** watertight, 0 boundary, 0 non-manifold, 1
+        body, vol 186 757 mm³; **MIDDLE** watertight, 0 boundary, 0 non-manifold, 2
+        bodies (outer horseshoe + inner neck, both closed — expected), vol 232 327
+        mm³; **CARGO** in-memory PASS (watertight, 0 boundary, 0 non-manifold, 1 body,
+        vol 273 170 mm³) — on reload the exported STL shows ~57 non-manifold edges but
+        **0 boundary edges** (closed surface; benign float32-quantization artifact that
+        slicers weld; a nondegenerate-strip was tried and REVERTED because it opens ~120
+        real holes on cargo's shared T-junction slivers). **Hull-breach audit: 0 boundary
+        edges on all four shells** (no unintended skin openings). **Hollow audit: ≥2
+        concentric wall loops at every mid-station** (outer + inner 2 mm wall present).
+        All three carry the HULL-FRAME R1 marker; `serenity_assembly.py` re-run clean
+        (0 WARN/MISSING/error) with all 3 splice collars present. **REAR now also
+        regenerated + clean (2026-07-06, `regen_rear_interior.py`): watertight, single
+        body, 0 boundary, 246 769 mm³, clean fwd mating rim — see the Rear note below.**
+    Original root cause was NOT (only) the cutter-vs-wall
     epsilon grazing but the fragile `_subtract_all` loop: it subtracted cutters one at a
     time via `trimesh.boolean.difference(engine="manifold")` with a per-step repair on a
     1.4 M-face shell, compounding degenerate slivers into 10⁴+ disconnected bodies.
@@ -968,10 +1041,32 @@ Joint faces in hull-frame Y (confirmed from baked extents):
     the `HULL-FRAME R1` marker (the export path stamps it directly; no re-bake needed
     since only booleans, not a placement transform, were applied).
 
-    **Rear — NOT RESOLVED. Different root cause than originally diagnosed, found
-    2026-07-03: the canonical Blender-source rear shell itself
+    **Rear — RESOLVED 2026-07-06 (`airframe/blender-scripts/regen_rear_interior.py`).**
+    The 2026-07-03 diagnosis below (a "pre-damaged source" with 380 slivers / 550
+    non-manifold edges / volume-inflating internal lobes) was itself an artifact:
+    the canonical rear source, loaded `process=False` then `merge_vertices()`, is
+    actually **watertight at the correct 247 239 mm³** — three connected bodies
+    (main wall shell +302 k, plus two symmetric inside-out internal cavity shells
+    −27.5 k each, netting to 247 k). manifold3d handles that merged mesh correctly
+    (volume 247 239). The real culprit was the **bake step's float32 STL write at
+    the rear's large hull-frame Y (≈+203..+384)**: it splits coincident vertices
+    just enough that the reloaded published STL no longer welds watertight, and
+    manifold3d then mis-resolves it to ~357 k — so every subsequent cut was built
+    on a wrong base. `regen_rear_interior.py` (rear analogue of
+    `merge_cargo_interior.py`) fixes it by baking the clean source **in memory
+    (float64)** and cutting before any float32 round-trip, then doing a single
+    manifold3d boolean of the rear features (lofted bore-open fwd joint, keel
+    channel, Y=+290 ring pocket, 2× skid-rod bores). Result: **watertight (0
+    boundary edges), single body, 246 769 mm³ (~259 g)**, HULL-FRAME R1 marker,
+    clean fwd mating rim (JOINT-01 lofted cutter — verified by starboard
+    silhouette `scratchpad/rear_side.png`), assembly re-runs 0 WARN/MISSING/error.
+    (~3 non-manifold edges remain on reload — a benign float32 artifact, 0
+    boundary, same accepted state as cargo; slicers weld them.) *Superseded
+    2026-07-03 diagnosis retained below for the record:*
+    Different root cause than originally diagnosed, found
+    2026-07-03: **the canonical Blender-source rear shell itself
     (`airframe/blender-scripts/files-hollowed-24in/rear_shell24_2mm_repaired.stl`) is
-    pre-damaged, independent of any cutting.**  Splitting the raw, un-cut, freshly-baked
+    pre-damaged, independent of any cutting.** Splitting the raw, un-cut, freshly-baked
     rear mesh into connected components gives 383 bodies: the real outer skin
     (999 938 faces), 2 real cavity/lobe surfaces (47 702 and 47 572 faces), and **380
     two-face zero-area degenerate slivers (760 faces total) that carry 550 non-manifold
@@ -1245,18 +1340,34 @@ Joint faces in hull-frame Y (confirmed from baked extents):
             session.
         - [ ] Verify cover shoulder fit in slicer cross-section (confirm 1.5 mm step seats on hull
             face) — blocked on STL export above.
-        - [ ] **Verify GPS recess depth clears GPS retention ring — FOUND STALE 2026-07-03.** The
-            file's GPS bore logic (Inara dZ=−14.3, River dZ=+0.7, side-wall Z=104.7/44.7) predates
-            this session's cargo-shell GPS axis-bug fix (§1.1.1.0a Rev R2, 2026-07-03):
-            GPS_PORT/GPS_STBD are now both on the **dorsal face** (hull Z=163.2 max, hull Y≈45.8,
-            X≈−142.2/−202.2 — verified via cargo bake transform, matches Cargo_Shell's validated
-            Z-max exactly). `access_panels_24in.scad` needs its GPS clearance geometry re-derived
-            to the dorsal frame before this check has any meaning.
-        - [ ] **Confirm M3 bore positions match shell boss pattern — FOUND STALE 2026-07-03.**
-            `access_panels_24in.scad` AV_SCREW_DX/DZ = 25/15 mm (X-Z in-plane, side-wall frame) do
-            not match current `cargo_sect_shell24.scad` AVINICS_BOSS_DX/DY = 15/25 mm (X-Y
-            in-plane, dorsal frame, Rev S4 relabel). Both magnitude and axis differ. File needs
-            re-derivation before export.
+        - [x] **GPS clearance geometry re-derived to the dorsal frame — RESOLVED 2026-07-06.**
+            `access_panels_24in.scad` Rev R2: Inara/River covers rebuilt with a new
+            `av_cover_dorsalZ()` module in the corrected DORSAL (+Z-normal) frame, sourcing
+            every constant from `cargo_sect_shell24.scad` (INARA_X/RIVER_X = CX∓37.5,
+            AVIONICS_STATION_Y = CY, dorsal face Z=163.2, GPS_PORT/STBD_X = CX∓30 at the
+            shared Y station). **GPS clearance bore corrected 42 → Ø38 mm** to match the
+            shell's own `avinics_dorsal_panel_cut` note ("access cover designed with Ø38 mm
+            clearance bore"; clears the Ø36 GPS body). Rendered + verified watertight, single
+            body. **ANTENNAS MOVED OUTBOARD 2026-07-06 (user directive):** `GPS_SEP` 30 → 37.5
+            mm in both `cargo_sect_shell24.scad` and `access_panels_24in.scad`, co-locating
+            each GPS with its bay/cover centre (= `BAY_SEP_X`/2). The ~46 mm-wide (OML-trimmed)
+            cover only keeps a Ø38 bore fully enclosed if the antenna is within ~±4 mm of the
+            cover centre; at the old 30 mm it sat 7.5 mm inboard and the bore broke the cover's
+            inboard edge (scallop). Re-rendered + verified: GPS bore is now a **fully-enclosed
+            interior hole** (6 section loops = outer + 4 M3 + 1 GPS; single watertight body;
+            `inara_access_cover.stl` 4604 mm³, `river_access_cover.stl` 4456 mm³; 26 mm to each
+            cover edge, 7 mm bore margin). New GPS centre-to-centre = 75 mm; Ø44 retention rings
+            still clear (31 mm gap). VERIFY-in-slicer: confirm each antenna still lands on flat
+            enough dorsal skin at the outboard station and the SMA pocket clears the Faraday
+            tray below.
+        - [x] **M3 bore positions now match the shell boss pattern — RESOLVED 2026-07-06.**
+            The dorsal-Z covers cut their 4× M3 bores at ±`AVZ_SCREW_DX`(15, X) ×
+            `AVZ_SCREW_DY`(25, Y) = `cargo_sect_shell24.scad` `AVINICS_BOSS_DX/DY` exactly
+            (was mismatched 25/15 in the wrong X-Z axes). Verified geometrically from the
+            rendered STL: bore centres at (±15, ±25) mm, Ø3.3 M3 clearance. (Shepherd/Simon
+            covers stay on the legacy Y-normal `av_cover_dorsal` until the head/middle
+            avionics bays get the same dorsal-axis fix — the still-open head/middle
+            axis-bug items in this section.)
 
 - [x] **49 MHz (Part 15 §15.235) wire posts** — `airframe/openscad/fuselage/rcrs49_wire_post.scad` created 2026-06-11.
     Single `wire_post()` module: 12×12×2 mm PETG base, 8×8×7 mm mast, Ø1.5 mm athwartships wire-retention bore at 2 mm from top.
@@ -1538,6 +1649,36 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     - **[OPEN]** Re-check root-tab centre position: with 129 mm chord the tab centres at hull Y ≈ +57.5 mm (was +73.5 mm); confirm mortise centre in cargo SCAD matches
     - **[OPEN]** Verify wing TE position (hull Y≈+122 mm port, +117 mm stbd) clears cargo-section aft interior features; cargo aft boundary is hull Y≈+132 mm — 10 mm clearance
 
+##### 1.1.2.1 *Rev R1a — spar straightened + camber-centred + EDF cableway (2026-07-07)*
+
+- [x] **Spar bore de-skewed** — `wings_s1223_revo.scad`: replaced the constant-30%-
+    chord-fraction bore (which walked 10.8 mm / 7.2° forward over span under the
+    straight LE — the "swept" cutout) with a bore at a **constant chordwise station
+    (`SPAR_BORE_STATION` = 22 mm)** → parallel to the LE. Bore centre height now
+    reads the **actual S1223 camber midline at each station** (`midline_frac()`),
+    fixing the Rev R1 chord-line centring that broke out the lower surface AND the
+    single-constant estimate that clipped the upper surface at the root.
+- [x] **Tip thickened for spar fit** — `THICKNESS_SCALE_TIP` = 1.25 (root unchanged);
+    tip t/c 12.14 % → ≈ 15.2 %. Needed because the tip section (11.3 mm max) is
+    thinner than the Ø12.3 bore. Both wings re-rendered, baked, watertight ✓
+    (vol 103 096 mm³, Z max +76.99 mm — within documented envelope). Min walls
+    (mesh-measured): spar **1.16 mm** (root) → 1.44 mm; cableway 1.7–4.3 mm.
+- [x] **EDF cableway added** — two Ø7 mm spanwise conduits at 40 % chord
+    (`cableway_bore()`): 40 A EDF ESC power + ESC signal split across the two;
+    nav-light 3-core routes through the hollow spar (Ø9 mm tube ID). Section
+    figure: `docs/img/wing_rev_r1a_sections.png`.
+- [ ] **[OPEN — BLOCKER] Fuselage spar-interface now mismatched.** §1.1.1.3 cuts the
+    cargo-shell mating Ø12.3 spar bore + Ø22 bearing bosses at the **old** 30 %-chord
+    line (hull **Y ≈ +31.7, Z ≈ 62.5**). The Rev R1a wing spar now sits at the 22 mm
+    station on the camber midline → root ≈ hull **Y ≈ +15, Z ≈ +71** (~16 mm fwd,
+    ~8 mm up). The spar can no longer pass through both parts. **User decision
+    required:** (a) relocate the cargo-shell bore + bosses to the new spar line
+    (cargo-shell / Blender-canonical change + re-merge + re-bake), or (b) keep the
+    fuselage bore and instead thicken the tip further (~1.6×) so a straight spar at
+    the 38.7 mm station fits — fatter wingtip OML. **Do not print either wing or
+    cargo shell until reconciled.** Consider whether `THICKNESS_SCALE_TIP` /
+    `SPAR_BORE_STATION` should be canon-checked against the Serenity wing silhouette.
+
 #### 1.1.3 **Nacelles**
 
 **Nacelle shells (Blender, Rev S geometry; carried fwd from Rev O — must run on host machine):**
@@ -1787,6 +1928,27 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     `nacelle_servo_bracket.stl` still does not exist in `airframe/stls/`
     (only the SCAD source has been authored); render it once the Z-conflict
     above is resolved.
+
+- [ ] **[OPEN — DESIGN] Nozzle drive protrudes ~10 mm past the nacelle OD**
+    *(flagged 2026-07-07, design review)* — the compound idler shaft sits at R43.6 mm
+    and its Idler-Out teeth reach R≈51 mm, ~10 mm proud of the Ø82 nozzle housing /
+    nacelle OD (the "steampunk accessory"). Root cause: the external 72T ring gear
+    forces the idler *outside* it, and the 17.6:1 reduction is inflated because the
+    front sector/pinion stage first multiplies tilt ×4.67 then divides ×17.6.
+    **Trade study authored** (`docs/NOZZLE_DRIVE_TRADE.md`,
+    `docs/img/nozzle_drive_trade.png`) comparing two zero-protrusion redesigns:
+    - **A — internal ring gear, re-architected reduction**: teeth on the ring bore,
+        single ~13T drive pinion inside Ø82, idler deleted, front stage re-ratioed
+        ~1.5×. Keeps positive gears + linear tilt→dia map. ~6 parts.
+    - **B — pushrod/bellcrank linkage**: deletes the entire aft train (sector, bevel,
+        shaft, crown, idler, ring gear); fixed pivot crank → pushrod → ring lever.
+        ~4 parts, nonlinear map, FDM-friendly; departs from the canonical "gear
+        train" wording (would need a `CLAUDE.md` spec edit).
+    **User chose (2026-07-07): prototype BOTH and compare** — kinematic prototypes +
+    trade table done. **AWAITING production-CAD decision** (A or B) before rebuilding
+    `nacelle_nozzle_iris.scad`, `nacelle_sector_gear.scad`, removing
+    `nacelle_nozzle_idler*`, and updating `serenity_assembly.py` + the ratio/BOM.
+
 ##### 1.1.3.4 *Nacelle Intake*
 
 - [x] **Trim the intake bell to the canonical leading nacelle dome** *(done
@@ -2493,13 +2655,14 @@ list below before treating anything here as final.
     SoC decision before proceeding with layout. **Still open — the placeholder footprint in
     `gen_vera_pcb.py` does not commit to a real ball-out, so this decision is not yet blocking,
     but must be resolved before the real BGA footprint is authored.**
-- [ ] **Source and cite a real Class 3B nose crosshair laser module** — 520 nm, near-collimated
-    (~0.19° divergence for a 2"×2" (51×51 mm) crosshair at 50 ft (15.2 m)); no off-the-shelf
-    catalog part was found with this divergence during design research (2026-07-03) — likely
-    requires a custom-collimated module from a laser optics supplier. **Do not procure until**
-    a manufacturer-stated (or independently measured) IEC 60825-1 class and mW rating is
-    obtained and `REFERENCES.md` REF-IEC-002's placeholder Class 3B entry is replaced with the
-    real citation.
+- [x] **Source and cite a real Class 3B nose crosshair laser module** — **SUPERSEDED by the
+    Class 2 laser unification (§1.2c.4, 2026-07-06; `docs/VERA_LASER_ANALYSIS.md` Rev A2).** The
+    nose is **not** Class 3B: a thin-line green crosshair detected by Vera's own strobed camera +
+    frame-difference needs only ~0.2–0.8 mW → **Class 2**. There is no separate Class 3B nose
+    module to source; both sites now share ONE 520 nm green Class 2 source (per-location terminal
+    optic + hardware current limit). The surviving sourcing action — "**Do not source** the green
+    diode or either terminal optic until a real IEC 60825-1 datasheet is in REFERENCES.md
+    (REF-IEC-002 pending)" — lives in §1.2c.4 below, no longer scoped to a Class 3B part.
 - [x] **Design Class 3B interlock circuit for the nose laser** per IEC 60825-1 §5.4
     [REF-IEC-002] — key-interlock input (LASER_KEY_IN) and emission-indicator output
     (LASER_IND) are wired to U3 (MSPM0G3507) in the schematic; **still open:** no physical
@@ -2669,7 +2832,7 @@ Power-budget and laser analyses completed 2026-07-05 (`docs/POWER_DISTRIBUTION.m
 - [ ] **Nose camera strobe + frame-difference detection** (firmware/ISP, TODO.md §4.6) — this
     is what holds the nose at Class 2 in bright sun; laser-sync GPIO/PWM + differencing in the
     AM62A7 ISP. Without it the nose spot is not reliably detected in full daylight.
-- [ ] *(No longer required — the Rev-A "nose Class 3B mechanical beam-stop/shutter" task is
+- [x] *(No longer required — the Rev-A "nose Class 3B mechanical beam-stop/shutter" task is
     retired now that the nose is Class 2.)* Re-open only if a human-at-target-in-full-sun
     visibility requirement is later added (would push the nose back toward 3R/3B).
 - [ ] **Do not source** the green diode or either terminal optic until a real datasheet with a

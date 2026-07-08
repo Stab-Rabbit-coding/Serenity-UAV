@@ -2,24 +2,45 @@
 # Makefile — Serenity UAV airframe build pipeline
 # airframe/FreeCAD-scripts/Makefile
 #
-# Compiles all OpenSCAD source files to STL, then runs the
-# FreeCAD assembly script to produce the assembled .FCStd file.
+# Runs the headless FreeCAD assembly, and (optionally) compiles the
+# SCAD-sourced nacelle-mechanism / wing / accessory parts to STL.
 #
 # Usage (run from airframe/FreeCAD-scripts/):
-#   make stls        — compile all SCAD files to STL
-#   make assembly    — build STLs then run FreeCAD assembly
-#   make clean-stls  — remove compiled STLs (NOT archived or existing STLs)
+#   make assembly    — run the FreeCAD assembly on the existing STLs (default)
+#   make stls        — compile the SCAD-sourced parts to STL
+#   make all         — build those STLs, then run the assembly
+#   make clean-stls  — remove the SCAD-compiled STLs (see WARNING below)
 #   make help        — show this message
 #
-# Dependencies: openscad (2021.01+), /usr/bin/freecad (0.20+)
+# IMPORTANT — what this Makefile does and does NOT build:
+#   The four PRIMARY fuselage shells (head/cargo/middle/rear
+#   *_2mm_repaired.stl), the baked nacelle pods (nacelle_*_revs.stl) and
+#   the baked wings are NOT produced here — they come from the Blender
+#   hollowing pipeline + interior-merge scripts + the hull-frame bake:
+#     - airframe/blender-scripts/  (hollowing sources)
+#     - airframe/blender-scripts/merge_cargo_interior.py   (cargo)
+#     - airframe/blender-scripts/regen_rear_interior.py    (rear)
+#     - airframe/blender-scripts/add_structural_features.py (head/middle)
+#     - tools/bake_hull_frame.py   (bake to hull frame)
+#   The `assembly` target therefore CONSUMES the STLs already present in
+#   airframe/stls/ and does NOT depend on `stls`; run those pipelines first
+#   if a primary shell needs regenerating.  The `stls` target here only
+#   (re)builds the SCAD-sourced nacelle-mechanism, wing and accessory parts
+#   the assembly also imports.
+#
+# Dependencies: openscad (2021.01+), freecadcmd (FreeCAD 1.0+)
+#   Run the assembly with the freecadcmd CONSOLE binary — not
+#   `freecad --background --python`, whose GUI event loop may not exit
+#   cleanly in a headless/CI context.  (The GUI "Execute macro" path works
+#   too; freecadcmd is the scriptable equivalent.)
 #
 # Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 # License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
 # ============================================================
 
 # ---- Tool paths -----------------------------------------------
-OPENSCAD := openscad
-FREECAD  := /usr/bin/freecad
+OPENSCAD  := openscad
+FREECADCMD := freecadcmd
 
 # ---- Directory layout (relative to this Makefile) -------------
 ROOT     := $(patsubst %/,%,$(dir $(lastword $(MAKEFILE_LIST))))
@@ -31,26 +52,22 @@ OUTPUT   := $(AIRFRAME)/Serenity-Assembled.FCStd
 
 # ---- OpenSCAD flags -------------------------------------------
 # --hardwarnings: treat parameter warnings as errors
-# --quiet: suppress progress spam on slow renders
 SCAD_FLAGS := --hardwarnings
 
 # ============================================================
-# STL build targets
-# Each SCAD source maps to one output STL in the stls/ tree.
-# Wings use the RENDER_SIDE parameter to produce separate
-# port (+1) and stbd (-1) halves.
+# STL build targets — SCAD-sourced parts the assembly imports.
+# (Primary shells / baked nacelles / baked wings are built by the
+# Blender + bake pipeline, not here — see header.)
 # ============================================================
 
-# -- Fuselage --------------------------------------------------
+# -- Fuselage accessories (SCAD-sourced) -----------------------
 FUSELAGE_STLS := \
-    $(STLS)/fuselage/rear_shell24.stl \
-    $(STLS)/fuselage/battery_tray.stl   \
+    $(STLS)/fuselage/battery_tray.stl \
     $(STLS)/fuselage/belly_panel.stl
 
-# -- Nacelles --------------------------------------------------
+# -- Nacelle mechanism parts (SCAD-sourced; imported by the
+#    assembly's nacelle_rows() sub-component placements) --------
 NACELLE_STLS := \
-    $(STLS)/nacelles/nacelle_pod_50mm_tandem_simple.stl \
-    $(STLS)/nacelles/nacelle_nozzle_straight.stl         \
     $(STLS)/nacelles/edf_stator_sleeve.stl               \
     $(STLS)/nacelles/edf_aft_spider_sleeve.stl           \
     $(STLS)/nacelles/nozzles/nacelle_bevel_housing.stl   \
@@ -64,45 +81,41 @@ NACELLE_STLS := \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_idler.stl    \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_idler_bracket.stl
 
-# -- Wings -----------------------------------------------------
+# -- Wings (SCAD-sourced part-local prints; the port/stbd wing
+#    shells the ASSEMBLY uses are baked elsewhere) --------------
 WING_STLS := \
-    $(STLS)/wings/wing_port_s1223_revo.stl  \
-    $(STLS)/wings/wing_stbd_s1223_revo.stl  \
     $(STLS)/wings/wing_nacelle_pylon_revo.stl
 
 ALL_STLS := $(FUSELAGE_STLS) $(NACELLE_STLS) $(WING_STLS)
 
 # ============================================================
-# Default target
+# Phony targets
 # ============================================================
 .PHONY: all stls assembly clean-stls help
+
+# Default: run the assembly on the existing STLs.
 all: stls assembly
 
 # ============================================================
-# STL target — compile all SCAD files
+# STL target — compile the SCAD-sourced parts above
 # ============================================================
 stls: $(ALL_STLS)
 
 # ============================================================
-# Assembly target — run FreeCAD headlessly
+# Assembly target — run FreeCAD headlessly on the existing STLs.
+# Intentionally does NOT depend on `stls`: the primary shells the
+# assembly needs are produced by the Blender + bake pipeline, not
+# this Makefile (see header).  Run `make stls` first if you want the
+# SCAD-sourced mechanism parts rebuilt beforehand, or `make all`.
 # ============================================================
-assembly: stls
-	@echo "[assembly] Building $(OUTPUT) ..."
-	$(FREECAD) --background --python $(SCRIPT)
+assembly:
+	@echo "[assembly] Building $(OUTPUT) with freecadcmd ..."
+	$(FREECADCMD) $(SCRIPT)
 	@echo "[assembly] Done: $(OUTPUT)"
 
 # ============================================================
-# Fuselage rules
+# Fuselage accessory rules
 # ============================================================
-$(STLS)/fuselage/rear_shell24.stl: \
-        $(SCAD)/fuselage/rear_shell24.scad \
-        $(AIRFRAME)/archive/stls/fuselage/rear_shell24_repaired.stl
-	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    $(SCAD)/fuselage/rear_shell24.scad \
-	    -o $@
-	@echo "[stl] $@"
-
 $(STLS)/fuselage/battery_tray.stl: \
         $(SCAD)/fuselage/battery_tray.scad
 	@mkdir -p $(dir $@)
@@ -120,26 +133,8 @@ $(STLS)/fuselage/belly_panel.stl: \
 	@echo "[stl] $@"
 
 # ============================================================
-# Nacelle rules
+# Nacelle mechanism rules
 # ============================================================
-$(STLS)/nacelles/nacelle_pod_50mm_tandem_simple.stl: \
-        $(SCAD)/nacelles/nacelle_pod_50mm_tandem_simple.scad \
-        $(AIRFRAME)/archive/stls/nacelles/s_eng_left_shell24_50mm_repaired.stl \
-        $(AIRFRAME)/archive/stls/nacelles/s_eng_right_shell24_50mm_repaired.stl
-	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    $(SCAD)/nacelles/nacelle_pod_50mm_tandem_simple.scad \
-	    -o $@
-	@echo "[stl] $@"
-
-$(STLS)/nacelles/nacelle_nozzle_straight.stl: \
-        $(SCAD)/nacelles/nacelle_nozzle_straight.scad
-	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    $(SCAD)/nacelles/nacelle_nozzle_straight.scad \
-	    -o $@
-	@echo "[stl] $@"
-
 $(STLS)/nacelles/edf_stator_sleeve.stl: \
         $(SCAD)/nacelles/edf_stator_sleeve.scad
 	@mkdir -p $(dir $@)
@@ -245,27 +240,7 @@ $(STLS)/nacelles/nozzles/nacelle_nozzle_idler_bracket.stl: \
 
 # ============================================================
 # Wing rules
-# Wings use the RENDER_SIDE parameter (-D flag):
-#   +1 = port wing, -1 = stbd wing, 0 = both (preview only)
 # ============================================================
-$(STLS)/wings/wing_port_s1223_revo.stl: \
-        $(SCAD)/wings/wings_s1223_revo.scad
-	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    -D 'RENDER_SIDE=1' \
-	    $(SCAD)/wings/wings_s1223_revo.scad \
-	    -o $@
-	@echo "[stl] $@"
-
-$(STLS)/wings/wing_stbd_s1223_revo.stl: \
-        $(SCAD)/wings/wings_s1223_revo.scad
-	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    -D 'RENDER_SIDE=-1' \
-	    $(SCAD)/wings/wings_s1223_revo.scad \
-	    -o $@
-	@echo "[stl] $@"
-
 $(STLS)/wings/wing_nacelle_pylon_revo.stl: \
         $(SCAD)/wings/wing_nacelle_pylon_revo.scad
 	@mkdir -p $(dir $@)
@@ -277,8 +252,11 @@ $(STLS)/wings/wing_nacelle_pylon_revo.stl: \
 # ============================================================
 # Utility targets
 # ============================================================
+# WARNING: clean-stls removes ONLY the SCAD-compiled parts listed in
+# ALL_STLS.  It does NOT touch the Blender/bake-pipeline primary shells,
+# baked nacelles or baked wings (those are not in ALL_STLS).
 clean-stls:
-	@echo "[clean] Removing compiled STLs ..."
+	@echo "[clean] Removing SCAD-compiled STLs ..."
 	rm -f $(ALL_STLS)
 	@echo "[clean] Done."
 
@@ -286,12 +264,15 @@ help:
 	@echo "Serenity UAV airframe build pipeline"
 	@echo ""
 	@echo "Targets:"
-	@echo "  all         Build STLs then run FreeCAD assembly (default)"
-	@echo "  stls        Compile all SCAD files to STL"
-	@echo "  assembly    Run FreeCAD headless assembly (requires stls)"
-	@echo "  clean-stls  Remove compiled STLs"
+	@echo "  assembly    Run FreeCAD headless assembly on existing STLs (freecadcmd)"
+	@echo "  stls        Compile the SCAD-sourced mechanism/wing/accessory parts"
+	@echo "  all         Build those STLs, then run the assembly"
+	@echo "  clean-stls  Remove the SCAD-compiled STLs (not the baked shells)"
 	@echo "  help        Show this message"
+	@echo ""
+	@echo "Primary fuselage shells + baked nacelles/wings come from the"
+	@echo "Blender + bake pipeline (see the header of this Makefile), not here."
 	@echo ""
 	@echo "Tools required:"
 	@echo "  openscad (2021.01+)"
-	@echo "  $(FREECAD)  (FreeCAD 0.20+ with Assembly4)"
+	@echo "  freecadcmd (FreeCAD 1.0+)"

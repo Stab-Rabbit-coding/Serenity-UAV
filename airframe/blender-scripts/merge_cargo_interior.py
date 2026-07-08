@@ -100,15 +100,22 @@ from manifold3d import Manifold, Mesh
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 BLENDER_SRC = os.path.join(
-    SCRIPT_DIR, "files-hollowed-24in", "cargo_sect_shell24_2mm_repaired.stl")
+    SCRIPT_DIR, "files-hollowed-24in", "cargo_sect_shell24_2mm_repaired.stl"
+)
 OUT_PATH = os.environ.get("CARGO_MERGE_OUT") or os.path.join(
-    REPO_ROOT, "airframe", "stls", "fuselage", "cargo",
-    "cargo_sect_shell24_2mm_repaired.stl")
+    REPO_ROOT,
+    "airframe",
+    "stls",
+    "fuselage",
+    "cargo",
+    "cargo_sect_shell24_2mm_repaired.stl",
+)
 CARGO_DIR = os.path.join(REPO_ROOT, "airframe", "stls", "fuselage", "cargo")
 
 # Reuse the single-sourced joint-feature design from add_structural_features.py
 sys.path.insert(0, SCRIPT_DIR)
-import add_structural_features as asf          # noqa: E402
+import add_structural_features as asf  # noqa: E402
+
 # Reuse the Rev R1c hull-frame hinge retention blocks verbatim
 sys.path.insert(0, CARGO_DIR)
 import generate_cargo_hinge_retention as hinge  # noqa: E402
@@ -119,22 +126,27 @@ MARKER = b"SerenityUAV HULL-FRAME R1"
 #   180 deg about +Z → (x,y,z)→(−x,−y,z);  T = (−274.4, −282.8, 0)
 BAKE_T = np.array([-274.4000100, -282.8000440, 0.0])
 
-WALL_MM = 2.0            # 2 mm foam-fill wall (Blender hollowing pitch / SCAD)
+WALL_MM = 2.0  # 2 mm foam-fill wall (Blender hollowing pitch / SCAD)
 
 # CF-PETG mass reporting: as-printed (4 perimeters + ≥40% infill) ~1.05 g/cm^3;
 # fully dense CF-PETG ~1.28 g/cm^3.  These bracket the true printed mass.
-RHO_PRINT = 1.05e-3     # g/mm^3
-RHO_SOLID = 1.28e-3     # g/mm^3
+RHO_PRINT = 1.05e-3  # g/mm^3
+RHO_SOLID = 1.28e-3  # g/mm^3
 
 
 # ---------------------------------------------------------------------------
 # manifold3d helpers
 # ---------------------------------------------------------------------------
 
+
 def to_man(tm):
     """trimesh.Trimesh -> manifold3d.Manifold (float32, as manifold3d uses)."""
-    return Manifold(Mesh(vert_properties=tm.vertices.astype(np.float32),
-                         tri_verts=tm.faces.astype(np.uint32)))
+    return Manifold(
+        Mesh(
+            vert_properties=tm.vertices.astype(np.float32),
+            tri_verts=tm.faces.astype(np.uint32),
+        )
+    )
 
 
 def from_man(man):
@@ -143,7 +155,8 @@ def from_man(man):
     return trimesh.Trimesh(
         vertices=np.asarray(msh.vert_properties, dtype=np.float64)[:, :3],
         faces=np.asarray(msh.tri_verts, dtype=np.int64),
-        process=False)
+        process=False,
+    )
 
 
 def union_all(meshes):
@@ -164,28 +177,23 @@ def box(x0, x1, y0, y1, z0, z1):
 
 def x_cylinder(y_cen, z_cen, x0, x1, radius, sections=48):
     """Cylinder whose axis is hull X (lateral), spanning x0..x1."""
-    cyl = trimesh.creation.cylinder(radius=radius, height=(x1 - x0),
-                                    sections=sections)
-    cyl.apply_transform(
-        trimesh.transformations.rotation_matrix(np.pi / 2.0, [0, 1, 0]))
+    cyl = trimesh.creation.cylinder(radius=radius, height=(x1 - x0), sections=sections)
+    cyl.apply_transform(trimesh.transformations.rotation_matrix(np.pi / 2.0, [0, 1, 0]))
     cyl.apply_translation([(x0 + x1) / 2.0, y_cen, z_cen])
     return cyl
 
 
 def z_cylinder(x_cen, y_cen, z0, z1, radius, sections=48):
     """Cylinder whose axis is hull Z (dorsal), spanning z0..z1."""
-    cyl = trimesh.creation.cylinder(radius=radius, height=(z1 - z0),
-                                    sections=sections)
+    cyl = trimesh.creation.cylinder(radius=radius, height=(z1 - z0), sections=sections)
     cyl.apply_translation([x_cen, y_cen, (z0 + z1) / 2.0])
     return cyl
 
 
 def y_pin(x_cen, z_cen, y0, y1, radius, sections=32):
     """Y-axis boss-pin bore (matches asf._y_cylinder geometry)."""
-    cyl = trimesh.creation.cylinder(radius=radius, height=(y1 - y0),
-                                    sections=sections)
-    cyl.apply_transform(
-        trimesh.transformations.rotation_matrix(np.pi / 2.0, [1, 0, 0]))
+    cyl = trimesh.creation.cylinder(radius=radius, height=(y1 - y0), sections=sections)
+    cyl.apply_transform(trimesh.transformations.rotation_matrix(np.pi / 2.0, [1, 0, 0]))
     cyl.apply_translation([x_cen, (y0 + y1) / 2.0, z_cen])
     return cyl
 
@@ -193,6 +201,7 @@ def y_pin(x_cen, z_cen, y0, y1, radius, sections=32):
 # ---------------------------------------------------------------------------
 # Outer-skin envelope (for wall-conforming feature clipping)
 # ---------------------------------------------------------------------------
+
 
 def extract_envelope(shell_tm):
     """Return the section's OUTER-skin closed solid (the exterior envelope).
@@ -202,7 +211,8 @@ def extract_envelope(shell_tm):
     Intersecting a deep feature with this trims its outboard end exactly to the
     curved skin, so bosses/pads seat flush against the real wall."""
     comps = trimesh.graph.connected_components(
-        shell_tm.face_adjacency, nodes=np.arange(len(shell_tm.faces)))
+        shell_tm.face_adjacency, nodes=np.arange(len(shell_tm.faces))
+    )
     best, best_v = None, -1.0
     for c in comps:
         sub = shell_tm.submesh([c], append=True)
@@ -214,39 +224,19 @@ def extract_envelope(shell_tm):
 
 
 # ---------------------------------------------------------------------------
-# Joint-face opening (cavity-plug cap removal)
+# Joint-face opening
 # ---------------------------------------------------------------------------
-OPEN_STATION_OFF = 8.0   # mm inboard of the face where the cavity is fully open
-OPEN_OUTSET = 0.5        # mm the plug is grown past the inner wall (clean cut)
-OPEN_PAST = 3.0          # mm the plug pokes past the face (outside the section)
-OPEN_DEPTH = 16.0        # mm the plug reaches inboard (into the open cavity)
-
-
-def open_face_plug(shell, face_y, inboard_sign):
-    """Cavity-shaped plug that removes the end cap at hull Y=face_y, leaving a
-    watertight OPEN pipe end (2 mm wall rim retained).  inboard_sign=+1 for the
-    fwd face (cavity is at greater Y), −1 for the aft face."""
-    station = face_y + inboard_sign * OPEN_STATION_OFF
-    # asf._inner_cavity_polygon(mesh, y, margin) returns poly.buffer(-margin);
-    # negative margin => OUTSET so the plug fully clears the cap's inner edge.
-    poly = asf._inner_cavity_polygon(shell, station, -OPEN_OUTSET)
-    if poly is None:
-        raise RuntimeError(f"open_face_plug: no cavity section at Y={station}")
-    if poly.geom_type == "MultiPolygon":
-        poly = max(poly.geoms, key=lambda g: g.area)
-    y_a = face_y - inboard_sign * OPEN_PAST
-    y_b = station + inboard_sign * OPEN_DEPTH
-    y_lo, y_hi = min(y_a, y_b), max(y_a, y_b)
-    ex = trimesh.creation.extrude_polygon(poly, height=y_hi - y_lo)
-    # extrude_polygon builds (x, y, z=[0,h]); remap to hull: X=x, Z=y, Y=z+y_lo
-    remap = np.array([
-        [1.0, 0.0, 0.0, 0.0],
-        [0.0, 0.0, 1.0, y_lo],
-        [0.0, 1.0, 0.0, 0.0],
-        [0.0, 0.0, 0.0, 1.0],
-    ])
-    ex.apply_transform(remap)
-    return ex
+# The fwd (head/cargo) and aft (cargo/middle) mating faces are cut FLAT at their
+# mating planes (asf._flat_face_cutter with asf.MATING_PLANES["cargo_fwd"] /
+# ["cargo_aft"]) in build_negatives(), removing the rounded closure caps and
+# leaving clean flat OPEN tubes the conforming splice collars slip into.
+# History (JOINT-01/JOINT-02, 2026-07-06): the original single-station
+# open_face_plug() bit the fwd dorsal skin and left ragged rim fragments; the
+# lofted _bore_open_cutter() that replaced it cleaned the rim but never removed
+# the closure cap, so the collar still passed through solid plastic — the flat
+# half-space cut here fixes both (a plane leaves no jaggies and does remove the
+# cap).  The section end profiles no longer taper into a rounded cap, so the
+# splice collar is now a CONFORMING lofted sleeve (generate_conforming_collars.py).
 
 
 # ---------------------------------------------------------------------------
@@ -257,37 +247,33 @@ def open_face_plug(shell, face_y, inboard_sign):
 # above the belly skin; the door aperture below clears the rest.  Bottom held
 # at Z=8 so belly skin FWD of the bay is untouched (a <=2 mm foam-filled curb
 # is left where the duct met the floor).
-DUCT_CUT = (-201.0, -137.0, -20.0, 107.0, 8.0, 48.0)   # x0,x1,y0,y1,z0,z1
+DUCT_CUT = (-201.0, -137.0, -20.0, 107.0, 8.0, 48.0)  # x0,x1,y0,y1,z0,z1
 
 # Clamshell belly aperture — between the two door hinge lines (stbd −222.5,
 # port −117.6), bay Y +2..+108, Z −3..+9 removes only the belly skin.
 APERTURE = (-222.5, -117.6, 2.0, 108.0, -3.0, 9.0)
 
-# Section-joint faces (open) — hull Y of the fwd (head/cargo) + aft (cargo/mid).
-FWD_FACE_Y = -71.5
-AFT_FACE_Y = 132.0
-
 # Wing subsystem — RE-DERIVED chordwise stations (hull frame).
 WING_LE_ROOT_Y = -7.0
 WING_ROOT_CHORD = 129.0
-WING_SPAR_Y = WING_LE_ROOT_Y + 0.30 * WING_ROOT_CHORD    # = +31.7
-WING_MORT_Y = WING_LE_ROOT_Y + 0.50 * WING_ROOT_CHORD    # = +57.5
+WING_SPAR_Y = WING_LE_ROOT_Y + 0.30 * WING_ROOT_CHORD  # = +31.7
+WING_MORT_Y = WING_LE_ROOT_Y + 0.50 * WING_ROOT_CHORD  # = +57.5
 WING_ROOT_Z = 62.5
 WING_SPAR_BORE_D = 12.3
 WING_SPAR_BOSS_OD = 22.0
-MORT_W = 30.8            # mortise Y span
-MORT_H = 20.8           # mortise Z span
+MORT_W = 30.8  # mortise Y span
+MORT_H = 20.8  # mortise Z span
 
 # Lateral-wall X reference bands (deep-embed spans; the outboard end is clipped
 # to the real skin by the envelope, so only rough bracketing is needed).
-PORT_OUTB, PORT_INB = -60.0, -100.0     # port wall bracket (skin ≈ −83..−90)
-STBD_OUTB, STBD_INB = -278.0, -240.0    # stbd wall bracket (skin ≈ −250..−255)
+PORT_OUTB, PORT_INB = -60.0, -100.0  # port wall bracket (skin ≈ −83..−90)
+STBD_OUTB, STBD_INB = -278.0, -240.0  # stbd wall bracket (skin ≈ −250..−255)
 
 # Nacelle-servo mount pads.
 NSVMT_Y = 45.0
-NSVMT_PAD_W = 52.0      # Y span
-NSVMT_PAD_H = 30.0      # Z span
-NSVMT_Z = WING_ROOT_Z + 30.5   # = 93.0 (clears spar boss Z 51.5..73.5 by ~4 mm)
+NSVMT_PAD_W = 52.0  # Y span
+NSVMT_PAD_H = 30.0  # Z span
+NSVMT_Z = WING_ROOT_Z + 30.5  # = 93.0 (clears spar boss Z 51.5..73.5 by ~4 mm)
 NSVMT_HOLE_S_Y = 17.5
 NSVMT_HOLE_S_Z = 8.0
 NSVMT_M3_D = 4.1
@@ -299,8 +285,8 @@ INARA_BOSS_DX = 25.0
 INARA_BOSS_DY = 15.0
 BOSS_OD = 8.0
 BOSS_BORE_D = 4.1
-DORSAL_Z_TOP = 172.0    # above the dorsal skin (Z_max ≈ 163); clipped by envelope
-DORSAL_Z_INB = 145.0    # boss reaches this far into the cavity
+DORSAL_Z_TOP = 172.0  # above the dorsal skin (Z_max ≈ 163); clipped by envelope
+DORSAL_Z_INB = 145.0  # boss reaches this far into the cavity
 
 # Landing-gear leg-mount keep-out zones (DEFERRED; clearance check only).
 LEG_ZONES = [
@@ -314,6 +300,7 @@ LEG_ZONES = [
 # ---------------------------------------------------------------------------
 # Build
 # ---------------------------------------------------------------------------
+
 
 def bake(mesh):
     """Apply the Cargo_Shell hull-frame bake transform (180° about Z + T)."""
@@ -333,49 +320,82 @@ def build_negatives(shell_tm):
     cutters.append(box(*APERTURE))
     notes.append("clamshell belly aperture")
 
-    # Open the fwd + aft joint faces (cavity-plug cap removal).
-    cutters.append(open_face_plug(shell_tm, FWD_FACE_Y, +1.0))
-    notes.append("open fwd joint face (head/cargo)")
-    cutters.append(open_face_plug(shell_tm, AFT_FACE_Y, -1.0))
-    notes.append("open aft joint face (cargo/middle)")
+    # Open the fwd + aft mating faces with a FLAT half-space cut at each mating
+    # plane (asf._flat_face_cutter): it removes the rounded closure cap the
+    # hollowing left, leaving a clean flat OPEN tube the splice collar slips into
+    # — no ragged fragments and no dorsal bite (a plane can't make them), and the
+    # bore stays genuinely open (JOINT-01 fix superseded 2026-07-06: the lofted
+    # bore-open cutter cleaned the rim but never removed the cap, so the collar
+    # still passed through solid plastic — see TODO.md).
+    cutters.append(asf._flat_face_cutter(shell_tm, "cargo_fwd"))
+    notes.append("flat OPEN fwd mating face (head/cargo)")
+    cutters.append(asf._flat_face_cutter(shell_tm, "cargo_aft"))
+    notes.append("flat OPEN aft mating face (cargo/middle)")
 
-    # Boss-pin bores (collar alignment dowels): Joint 1 + Joint 2.
-    for jname in ("joint1", "joint2"):
-        j = asf.BOSS_PIN_BORES[jname]
-        y0, y1 = j["y_range"]
-        for x_pin, z_pin in j["pins"]:
-            cutters.append(y_pin(x_pin, z_pin, y0, y1, asf.BOSS_PIN_RADIUS))
-        notes.append(f"boss pins {jname}")
+    # Joint 1 + Joint 2 boss-pin bores REMOVED 2026-07-06 (user directive):
+    # the head/cargo and cargo/middle splice collars now secure AND align these
+    # joints, so no dowel bores are cut into the cargo shell (see
+    # add_structural_features.py module docstring, and docs/structural_analysis.md
+    # §7.3 — the pins had already been re-roled from load-bearing to alignment-only
+    # when the collars were introduced).
 
     # Keel locating channel + Y=+30 ring-frame pocket.
     kc = asf.KEEL_CHANNEL["cargo"]
-    cutters.append(box(kc["x_range"][0], kc["x_range"][1],
-                       kc["y_range"][0], kc["y_range"][1],
-                       kc["z_range"][0], kc["z_range"][1]))
+    cutters.append(
+        box(
+            kc["x_range"][0],
+            kc["x_range"][1],
+            kc["y_range"][0],
+            kc["y_range"][1],
+            kc["z_range"][0],
+            kc["z_range"][1],
+        )
+    )
     notes.append("keel channel")
     for xm, xx, zm, zx, ym, yx in asf.RING_POCKETS["cargo_Y30"]:
         cutters.append(box(xm, xx, ym, yx, zm, zx))
     notes.append("ring pocket Y=30")
 
     # Wing spar bore (full lateral span) + 2 root mortises (through each wall).
-    cutters.append(x_cylinder(WING_SPAR_Y, WING_ROOT_Z, -270.0, -70.0,
-                              WING_SPAR_BORE_D / 2.0))
+    cutters.append(
+        x_cylinder(WING_SPAR_Y, WING_ROOT_Z, -270.0, -70.0, WING_SPAR_BORE_D / 2.0)
+    )
     notes.append("wing spar bore")
-    cutters.append(box(PORT_INB + 1.0, PORT_OUTB - 10.0,
-                       WING_MORT_Y - MORT_W / 2, WING_MORT_Y + MORT_W / 2,
-                       WING_ROOT_Z - MORT_H / 2, WING_ROOT_Z + MORT_H / 2))
-    cutters.append(box(STBD_OUTB + 8.0, STBD_INB - 1.0,
-                       WING_MORT_Y - MORT_W / 2, WING_MORT_Y + MORT_W / 2,
-                       WING_ROOT_Z - MORT_H / 2, WING_ROOT_Z + MORT_H / 2))
+    cutters.append(
+        box(
+            PORT_INB + 1.0,
+            PORT_OUTB - 10.0,
+            WING_MORT_Y - MORT_W / 2,
+            WING_MORT_Y + MORT_W / 2,
+            WING_ROOT_Z - MORT_H / 2,
+            WING_ROOT_Z + MORT_H / 2,
+        )
+    )
+    cutters.append(
+        box(
+            STBD_OUTB + 8.0,
+            STBD_INB - 1.0,
+            WING_MORT_Y - MORT_W / 2,
+            WING_MORT_Y + MORT_W / 2,
+            WING_ROOT_Z - MORT_H / 2,
+            WING_ROOT_Z + MORT_H / 2,
+        )
+    )
     notes.append("wing mortises (port + stbd)")
 
     # Nacelle-servo M3 heat-set pilot bores (into the cavity face of each pad).
     for x_in, x_out in ((PORT_INB, PORT_INB + 8.0), (STBD_INB, STBD_INB - 8.0)):
         for dy in (-NSVMT_HOLE_S_Y, NSVMT_HOLE_S_Y):
             for dz in (-NSVMT_HOLE_S_Z, NSVMT_HOLE_S_Z):
-                cutters.append(x_cylinder(NSVMT_Y + dy, NSVMT_Z + dz,
-                                          min(x_in, x_out), max(x_in, x_out),
-                                          NSVMT_M3_D / 2.0))
+                cutters.append(
+                    x_cylinder(
+                        NSVMT_Y + dy,
+                        NSVMT_Z + dz,
+                        min(x_in, x_out),
+                        max(x_in, x_out),
+                        NSVMT_M3_D / 2.0,
+                    )
+                )
     notes.append("servo M3 pilot bores")
 
     return cutters, notes
@@ -391,30 +411,55 @@ def build_positives():
     notes.append("4 hinge retention blocks")
 
     # Wing-spar bearing bosses (Ø22, coaxial with the spar; deep, clipped).
-    feats.append(x_cylinder(WING_SPAR_Y, WING_ROOT_Z, PORT_INB, PORT_OUTB,
-                            WING_SPAR_BOSS_OD / 2.0))
-    feats.append(x_cylinder(WING_SPAR_Y, WING_ROOT_Z, STBD_OUTB, STBD_INB,
-                            WING_SPAR_BOSS_OD / 2.0))
+    feats.append(
+        x_cylinder(
+            WING_SPAR_Y, WING_ROOT_Z, PORT_INB, PORT_OUTB, WING_SPAR_BOSS_OD / 2.0
+        )
+    )
+    feats.append(
+        x_cylinder(
+            WING_SPAR_Y, WING_ROOT_Z, STBD_OUTB, STBD_INB, WING_SPAR_BOSS_OD / 2.0
+        )
+    )
     notes.append("2 wing-spar bearing bosses")
 
     # Nacelle-servo mount pads (deep box, clipped).
-    feats.append(box(PORT_INB, PORT_OUTB,
-                     NSVMT_Y - NSVMT_PAD_W / 2, NSVMT_Y + NSVMT_PAD_W / 2,
-                     NSVMT_Z - NSVMT_PAD_H / 2, NSVMT_Z + NSVMT_PAD_H / 2))
-    feats.append(box(STBD_OUTB, STBD_INB,
-                     NSVMT_Y - NSVMT_PAD_W / 2, NSVMT_Y + NSVMT_PAD_W / 2,
-                     NSVMT_Z - NSVMT_PAD_H / 2, NSVMT_Z + NSVMT_PAD_H / 2))
+    feats.append(
+        box(
+            PORT_INB,
+            PORT_OUTB,
+            NSVMT_Y - NSVMT_PAD_W / 2,
+            NSVMT_Y + NSVMT_PAD_W / 2,
+            NSVMT_Z - NSVMT_PAD_H / 2,
+            NSVMT_Z + NSVMT_PAD_H / 2,
+        )
+    )
+    feats.append(
+        box(
+            STBD_OUTB,
+            STBD_INB,
+            NSVMT_Y - NSVMT_PAD_W / 2,
+            NSVMT_Y + NSVMT_PAD_W / 2,
+            NSVMT_Z - NSVMT_PAD_H / 2,
+            NSVMT_Z + NSVMT_PAD_H / 2,
+        )
+    )
     notes.append("2 nacelle-servo mount pads")
 
     # Inara avionics-bay standoff bosses (dorsal port, deep Z-cyl, clipped).
     n = 0
     for dx in (-INARA_BOSS_DX, INARA_BOSS_DX):
         for dy in (-INARA_BOSS_DY, INARA_BOSS_DY):
-            body = z_cylinder(INARA_X + dx, INARA_Y + dy,
-                              DORSAL_Z_INB, DORSAL_Z_TOP, BOSS_OD / 2.0)
-            bore = z_cylinder(INARA_X + dx, INARA_Y + dy,
-                              DORSAL_Z_INB - 0.1, DORSAL_Z_TOP + 0.1,
-                              BOSS_BORE_D / 2.0)
+            body = z_cylinder(
+                INARA_X + dx, INARA_Y + dy, DORSAL_Z_INB, DORSAL_Z_TOP, BOSS_OD / 2.0
+            )
+            bore = z_cylinder(
+                INARA_X + dx,
+                INARA_Y + dy,
+                DORSAL_Z_INB - 0.1,
+                DORSAL_Z_TOP + 0.1,
+                BOSS_BORE_D / 2.0,
+            )
             feats.append(from_man(to_man(body) - to_man(bore)))
             n += 1
     notes.append(f"Inara avionics bosses ({n})")
@@ -449,27 +494,37 @@ def check_leg_clearance(mesh):
     print("\n--- landing-gear leg-mount clearance (deferred; keep-out check) ---")
     v = mesh.vertices
     for name, (x0, x1, y0, y1, z0, z1) in LEG_ZONES:
-        inside = ((v[:, 0] >= x0) & (v[:, 0] <= x1) &
-                  (v[:, 1] >= y0) & (v[:, 1] <= y1) &
-                  (v[:, 2] >= z0) & (v[:, 2] <= z1))
+        inside = (
+            (v[:, 0] >= x0)
+            & (v[:, 0] <= x1)
+            & (v[:, 1] >= y0)
+            & (v[:, 1] <= y1)
+            & (v[:, 2] >= z0)
+            & (v[:, 2] <= z1)
+        )
         n = int(inside.sum())
         tag = "clear (skin only)" if n < 4000 else "REVIEW: dense geometry"
-        print(f"  {name:9s} X[{x0:.0f},{x1:.0f}] Y[{y0:.0f},{y1:.0f}] "
-              f"Z[{z0:.0f},{z1:.0f}]: {n} shell verts — {tag}")
+        print(
+            f"  {name:9s} X[{x0:.0f},{x1:.0f}] Y[{y0:.0f},{y1:.0f}] "
+            f"Z[{z0:.0f},{z1:.0f}]: {n} shell verts — {tag}"
+        )
 
 
 def drop_slivers(mesh, min_faces=64):
     """Drop the tiny (1–2 face, zero-area) degenerate components manifold3d can
     leave at cut intersections, so the result is a single clean solid body."""
     comps = trimesh.graph.connected_components(
-        mesh.face_adjacency, nodes=np.arange(len(mesh.faces)))
+        mesh.face_adjacency, nodes=np.arange(len(mesh.faces))
+    )
     keep = [c for c in comps if len(c) >= min_faces]
     dropped = len(comps) - len(keep)
     if dropped:
         idx = np.concatenate(keep)
         mesh = mesh.submesh([idx], append=True)
-        print(f"  dropped {dropped} zero-area sliver fragment(s) "
-              f"→ {len(keep)} body/bodies")
+        print(
+            f"  dropped {dropped} zero-area sliver fragment(s) "
+            f"→ {len(keep)} body/bodies"
+        )
     return mesh
 
 
@@ -480,15 +535,22 @@ def verify(mesh):
     wt = mesh.is_watertight
     wind = mesh.is_winding_consistent
     vol = mesh.volume
-    bodies = len(trimesh.graph.connected_components(
-        mesh.face_adjacency, nodes=np.arange(len(mesh.faces))))
+    bodies = len(
+        trimesh.graph.connected_components(
+            mesh.face_adjacency, nodes=np.arange(len(mesh.faces))
+        )
+    )
     print("\n=== verify (final cargo shell) ===")
-    print(f"  faces={len(mesh.faces):,}  bodies={bodies}  "
-          f"watertight={wt}  winding={wind}")
+    print(
+        f"  faces={len(mesh.faces):,}  bodies={bodies}  "
+        f"watertight={wt}  winding={wind}"
+    )
     print(f"  boundary_edges={boundary}  nonmanifold_edges={nonman}")
-    print(f"  volume={vol:.0f} mm^3  "
-          f"mass={vol * RHO_PRINT:.1f} g (as-printed) .. "
-          f"{vol * RHO_SOLID:.1f} g (solid CF-PETG)")
+    print(
+        f"  volume={vol:.0f} mm^3  "
+        f"mass={vol * RHO_PRINT:.1f} g (as-printed) .. "
+        f"{vol * RHO_SOLID:.1f} g (solid CF-PETG)"
+    )
     ok = wt and wind and boundary == 0 and nonman == 0 and vol > 0
     print(f"  RESULT: {'PASS' if ok else 'FAIL'}")
     return ok
@@ -499,19 +561,25 @@ def main():
     print(f"source: {BLENDER_SRC}")
     src = trimesh.load(BLENDER_SRC, process=False)
     src.merge_vertices()
-    print(f"  loaded {len(src.faces):,} faces  watertight={src.is_watertight}  "
-          f"vol={src.volume:.0f} mm^3 (part-local)")
+    print(
+        f"  loaded {len(src.faces):,} faces  watertight={src.is_watertight}  "
+        f"vol={src.volume:.0f} mm^3 (part-local)"
+    )
 
     shell_tm = bake(src)
     b = shell_tm.bounds
-    print(f"  baked hull frame: X {b[0][0]:.1f}..{b[1][0]:.1f}  "
-          f"Y {b[0][1]:.1f}..{b[1][1]:.1f}  Z {b[0][2]:.1f}..{b[1][2]:.1f}")
+    print(
+        f"  baked hull frame: X {b[0][0]:.1f}..{b[1][0]:.1f}  "
+        f"Y {b[0][1]:.1f}..{b[1][1]:.1f}  Z {b[0][2]:.1f}..{b[1][2]:.1f}"
+    )
 
     envelope_tm = extract_envelope(shell_tm)
     eb = envelope_tm.bounds
-    print(f"  outer-skin envelope: {len(envelope_tm.faces):,} faces  "
-          f"watertight={envelope_tm.is_watertight}  "
-          f"X {eb[0][0]:.1f}..{eb[1][0]:.1f}")
+    print(
+        f"  outer-skin envelope: {len(envelope_tm.faces):,} faces  "
+        f"watertight={envelope_tm.is_watertight}  "
+        f"X {eb[0][0]:.1f}..{eb[1][0]:.1f}"
+    )
 
     negs, nnotes = build_negatives(shell_tm)
     poss, pnotes = build_positives()
@@ -529,11 +597,21 @@ def main():
     neg_man = union_all(negs)
     result = shell_man
     if pos_man is not None:
-        result = result + (pos_man ^ env_man)      # ^ = intersection in manifold3d
+        result = result + (pos_man ^ env_man)  # ^ = intersection in manifold3d
     if neg_man is not None:
         result = result - neg_man
     out = from_man(result)
     out = drop_slivers(out)
+
+    # NOTE: unlike add_structural_features._subtract_all, we do NOT strip
+    # near-degenerate faces here.  Cargo's cutter set (positives ∩ envelope +
+    # 20 negatives) produces a few SHARED T-junction slivers rather than isolated
+    # zero-area ones, so nondegenerate_faces() would delete faces that border real
+    # geometry and open ~120 boundary holes (verified 2026-07-06).  The in-memory
+    # result is watertight (single body, 0 boundary, 0 non-manifold); the ~57
+    # non-manifold edges seen when the exported STL is RELOADED are a benign
+    # float32-quantization artifact (0 boundary edges — the surface stays closed;
+    # slicers weld the coincident vertices on import).
 
     ok = verify(out)
     check_leg_clearance(out)

@@ -148,13 +148,25 @@ laser BOM to a single green diode family. Rationale in full: `docs/VERA_LASER_AN
 - **Do not source the green diode or either terminal optic** until a real datasheet with a
   verified mW rating and IEC 60825-1 class replaces the placeholder citation in REFERENCES.md
   (REF-IEC-002 pending item; tracked TODO.md §1.2c.4).
+- **Laser Diode Selection**
+  
+    - Sharp GH0521AC2G or ams-OSRAM USA INC. PLT5 520EB_P
+
+- **Laser Driver IC Selection**
+
+    - **iC-Haus iC-WKN**
+
+- **Nose Laser DOE Selection**
+
+    - holo/or laserland or thorlabs
 
 ---
 
 ## PCB
 
 **46 × 48 mm, double-sided, 4-layer FR4, rounded corners (3 mm radius, matching Wash/Kaylee
-convention).**
+convention).** - **Changed 7-7-2026** updated Vera dimentions to 1.0in by 2.75in to allow it to sit flush against the camera/tof/laser faceplate within the nose.  camera tof and laser connectors are moved to forward end of board and ethernet, pwr, and can-fd connectors are at the other end.  4 mounting holes are still present.  design should work in both nose and cargo bay.
+    - This allows for direct pcb soldering of sensors in nose or via jst connectors in cargo bay. (needs feasibilty review)
 
 Board-size history: the original single-sided draft was 110×190 mm — the two big placeholder
 ICs (U1's BGA footprint, U2's TQFP footprint) forced that size using rough first-guess body

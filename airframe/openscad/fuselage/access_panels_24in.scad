@@ -74,6 +74,16 @@
 // Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 // Date:    2026-06-11
+// Rev:     R2 (2026-07-06): Corrected Inara/River covers to the cargo shell's
+//   Rev R2 DORSAL (+Z-normal) frame.  The cargo shell now opens Inara/River on
+//   the dorsal face as a lateral X-pair at one shared Y-station; the old covers
+//   were built +Y-normal in a stale Z-stacked layout with mismatched M3 axes
+//   (25/15 vs the shell's AVINICS_BOSS_DX/DY = 15/25) and an oversized GPS bore
+//   (42 vs the shell's Ø38).  Added av_cover_dorsalZ(); re-derived all Inara/
+//   River + GPS constants from cargo_sect_shell24.scad.  Shepherd/Simon left on
+//   the legacy av_cover_dorsal until the head/middle bays get the same fix
+//   (TODO.md §1.1.1 head/middle axis-bug items).  Resolves the two stale
+//   GPS-clearance / M3-bore TODO items.
 // Rev:     R1 (2026-06-11): Rewrite — hull-conforming exterior faces via STL
 //   intersection; corrected M3 screw bore positions (was DX/2, now full ±DX);
 //   GPS clearance bore extended to full shoulder depth (3 mm) to clear GPS body;
@@ -113,22 +123,50 @@ AV_STEP_D      =  1.5;   // [mm] shoulder step rebate width (positive-stop)
 AV_STEP_H      =  3.0;   // [mm] shoulder insertion depth into hull opening
 AV_SLAB_T      = 10.0;   // [mm] intersection slab height — covers max hull curvature
 
-// M3 fastener bores (positions match shell SCAD boss BC constants exactly)
-AV_SCREW_DX    = 25.0;   // [mm] full ±X offset from bay centre (matches BOOK/AVINICS/SIMON _BOSS_DX)
-AV_SCREW_DZ    = 15.0;   // [mm] full ±Z offset from bay centre (matches _BOSS_DZ)
+// M3 fastener bores — Shepherd (head) + Simon (middle) covers ONLY.
+// These two bays are still built in the legacy Y-as-dorsal-normal frame because
+// their shells (head_shell24.scad BOOK_*, middle_canonical_shell24.scad SIMON_*)
+// have NOT yet had the dorsal-axis correction the cargo shell received in Rev R2
+// (TODO.md §1.1.1 head/middle axis-bug items — still open).  Inara/River (cargo)
+// now use the corrected dorsal-Z constants + av_cover_dorsalZ() below instead.
+AV_SCREW_DX    = 25.0;   // [mm] ±X offset (legacy Y-normal covers: BOOK/SIMON _BOSS_DX)
+AV_SCREW_DZ    = 15.0;   // [mm] ±Z offset (legacy Y-normal covers: _BOSS_DZ)
 AV_SCREW_D     =  3.3;   // [mm] M3 clearance bore diameter
 AV_SCREW_CS    =  6.0;   // [mm] pan-head seat diameter (shallow pocket at exterior face)
 AV_CS_DEPTH_Y  =  1.0;   // [mm] Y above interior face where wide bore begins (see note below)
                           //   Intersection with hull solid limits actual CS depth ≈ wall−1 mm.
 
-// ── GPS Retention-Ring Clearance ─────────────────────────────────────────────
+// ── Cargo dorsal (Inara/River) — CORRECTED to Rev R2 dorsal (+Z) frame ────────
+//   Re-derived 2026-07-06 from cargo_sect_shell24.scad current constants
+//   (resolves the two stale GPS/M3 TODO items under MESH-01).  The corrected
+//   cargo shell opens Inara/River on the DORSAL (+Z) face as a lateral X-pair at
+//   ONE shared longitudinal (Y) station — not the pre-Rev-R2 Z-stacked, Y-normal
+//   layout the legacy constants assumed.  Every value below equals the like-named
+//   constant in cargo_sect_shell24.scad (single source of truth).
+CARGO_WALL      =   2.0;      // = WALL_MM
+CARGO_DORSAL_Z  = 163.2;      // = DORSAL_Z_EXT (exterior dorsal skin)
+CARGO_CX        = -102.19;    // = CX (lateral centreline)
+CARGO_STATION_Y = -328.63;    // = AVIONICS_STATION_Y = GPS_STATION_Y = CY
+CARGO_BAY_SEP_X =  75.0;      // = BAY_SEP_X (Inara↔River centre-to-centre, X)
+INARA_X         = CARGO_CX - CARGO_BAY_SEP_X / 2;  // = -139.69 (port half)
+RIVER_X         = CARGO_CX + CARGO_BAY_SEP_X / 2;  // =  -64.69 (stbd half)
+AVZ_OPEN_X      =  42.0;      // = AVINICS_PANEL_X (lateral opening; note X↔Y vs legacy)
+AVZ_OPEN_Y      =  62.0;      // = AVINICS_PANEL_Y (longitudinal opening)
+AVZ_SCREW_DX    =  15.0;      // = AVINICS_BOSS_DX (±X lateral M3 boss offset)
+AVZ_SCREW_DY    =  25.0;      // = AVINICS_BOSS_DY (±Y longitudinal M3 boss offset)
+AV_INSERT_CLR   =   0.5;      // [mm] shoulder slip-fit clearance per side into opening
 
-GPS_CLEAR_OD   = 42.0;   // [mm] clearance bore OD — clears GPS body Ø36 + retention ring flange
-                          //   GPS body in cargo STL: GPS_RECESS_D = 36 mm OD, 6 mm deep
-// GPS centre offsets from bay Z centre (cargo STL space):
-GPS_INARA_DZ   = -14.3;  // [mm] Inara: GPS_PORT Z(104.70) − Inara Z_CEN(119.00)
-GPS_RIVER_DZ   =  +0.7;  // [mm] River: GPS_STBD Z(44.70)  − River Z_CEN(44.00)
-GPS_ANT_X      = -102.19; // [mm] both GPS antennas at cargo CX (= AVINICS_X_CEN)
+// ── GPS Retention-Ring Clearance (cargo dorsal covers) ───────────────────────
+GPS_CLEAR_OD   = 38.0;   // [mm] cover GPS clearance bore Ø — per the cargo shell's own
+                          //   avinics_dorsal_panel_cut note ("access cover designed with
+                          //   Ø38 mm clearance bore"); clears GPS body Ø36 (GPS_RECESS_D)
+                          //   + fit.  (Was 42 mm in the stale side-wall frame.)
+GPS_SEP        = CARGO_BAY_SEP_X / 2;  // [mm] = 37.5 = cargo_sect_shell24.scad GPS_SEP
+                          //   (moved outboard 2026-07-06 to bay-centre so the Ø38 GPS
+                          //   clearance bore stays fully enclosed in the ~46 mm-wide cover).
+GPS_PORT_X     = CARGO_CX - GPS_SEP;   // = -139.69 (Inara GPS, centred under Inara cover)
+GPS_STBD_X     = CARGO_CX + GPS_SEP;   // =  -64.69 (River GPS, centred under River cover)
+GPS_XY_Y       = CARGO_STATION_Y;      // GPS shares the avionics Y station (Rev R2)
 
 // ── Hull-Space Position Constants — Avionics Bays ─────────────────────────────
 //
@@ -278,6 +316,82 @@ module av_cover_dorsal(stl, x_cen, y_int, z_cen, gps_z = 0, gps_x = 0) {
     }
 }
 
+// ── Module: av_cover_dorsalZ ──────────────────────────────────────────────────
+//
+// Hull-conforming avionics-bay cover for a TRUE dorsal (+Z-normal) bay — the
+// corrected cargo Inara/River geometry (Rev R2, 2026-07-03).  Distinct from
+// av_cover_dorsal above, which extrudes along +Y (the legacy head/middle
+// "Y-as-dorsal" frame that the cargo shell no longer uses).
+//
+// All geometry constructed in cargo-STL local space (X lateral, Y longitudinal,
+// Z dorsal/up).  The face plate's top follows the dorsal OML; the shoulder plugs
+// the AVINICS_PANEL_X × AVINICS_PANEL_Y opening downward (−Z).
+//
+// Parameters:
+//   stl   — cargo solid STL path (OML intersection)
+//   x_cen — bay centre X (lateral)                 [mm]
+//   y_cen — bay centre Y (longitudinal)            [mm]
+//   z_ext — dorsal exterior skin Z (= CARGO_DORSAL_Z) [mm]
+//   gps_x — GPS clearance-bore centre X            [mm]  (0 ⇒ no bore)
+//   gps_y — GPS clearance-bore centre Y            [mm]
+//
+// Screw bores: 4× M3 clearance (Ø AV_SCREW_D) along Z at ±AVZ_SCREW_DX (X) ×
+//   ±AVZ_SCREW_DY (Y) — matching the shell's AVINICS_BOSS_DX/DY exactly.
+// GPS bore: full-depth Ø GPS_CLEAR_OD along Z at (gps_x, gps_y) so the cover
+//   clears the recessed GPS antenna + retention ring it overlaps.
+//
+module av_cover_dorsalZ(stl, x_cen, y_cen, z_ext, gps_x = 0, gps_y = 0) {
+    cover_x = AVZ_OPEN_X + 2 * AV_SHOULDER;         // 52 mm (lateral)
+    cover_y = AVZ_OPEN_Y + 2 * AV_SHOULDER;         // 72 mm (longitudinal)
+    z_int   = z_ext - CARGO_WALL;                   // interior dorsal skin face
+    // Shoulder is undersized by AV_INSERT_CLR per side for slip-fit into the
+    // AVINICS_PANEL opening; the face-plate overhang (AV_SHOULDER = 5 mm all
+    // round) is itself the positive stop — it seats on the hull exterior around
+    // the opening.  (No full-width rebate groove — that would sever the plate
+    // from the shoulder, since the shoulder is narrower than such a groove.)
+    sh_x = AVZ_OPEN_X - 2 * AV_INSERT_CLR;
+    sh_y = AVZ_OPEN_Y - 2 * AV_INSERT_CLR;
+
+    difference() {
+        union() {
+            // ── Exterior face plate — hull-conforming (dorsal OML top) ─────
+            // Slab from interior face (z_int) outward (+Z) by AV_SLAB_T;
+            // intersection trims the top to the hull outer-mold line.
+            intersection() {
+                translate([x_cen - cover_x / 2, y_cen - cover_y / 2, z_int])
+                    cube([cover_x, cover_y, AV_SLAB_T]);
+                import(stl, convexity = 10);
+            }
+
+            // ── Shoulder insertion lip — plugs opening downward (−Z) ───────
+            // Overlaps the plate by 0.2 mm in Z (z_int+0.2) so the union is a
+            // single solid; slip-fit clearance AV_INSERT_CLR per side.
+            translate([x_cen - sh_x / 2,
+                       y_cen - sh_y / 2,
+                       z_int - AV_STEP_H])
+                cube([sh_x, sh_y, AV_STEP_H + 0.2]);
+        }
+
+        // ── M3 screw clearance bores (4×), along +Z ────────────────────────
+        // Positions ±AVZ_SCREW_DX (X) × ±AVZ_SCREW_DY (Y) — match shell bosses.
+        for (dx = [-AVZ_SCREW_DX, AVZ_SCREW_DX])
+        for (dy = [-AVZ_SCREW_DY, AVZ_SCREW_DY]) {
+            translate([x_cen + dx, y_cen + dy, z_int - AV_STEP_H - 0.1])
+                cylinder(h = AV_STEP_H + AV_SLAB_T + 0.2, d = AV_SCREW_D);
+            translate([x_cen + dx, y_cen + dy, z_int + AV_CS_DEPTH_Y])
+                cylinder(h = AV_SLAB_T, d = AV_SCREW_CS);
+        }
+
+        // ── GPS retention-ring clearance bore (full depth along Z) ─────────
+        // The GPS antenna sits under the cover offset from centre; a full-depth
+        // Ø GPS_CLEAR_OD bore lets the recessed antenna + ring pass through.
+        if (gps_x != 0) {
+            translate([gps_x, gps_y, z_int - AV_STEP_H - 0.1])
+                cylinder(h = AV_STEP_H + AV_SLAB_T + 0.2, d = GPS_CLEAR_OD);
+        }
+    }
+}
+
 // ── Module: av_cover_ventral ──────────────────────────────────────────────────
 //
 // Hull-conforming ventral hatch cover for a VENTRAL-face (−Y normal) bay.
@@ -412,28 +526,37 @@ module hatch_frame(open_x, open_z) {
 
 // ── Named Part Modules (print-oriented) ───────────────────────────────────────
 
-// Shepherd cover — head section, dorsal face, no GPS bore
+// Shepherd cover — head section, dorsal face, no GPS bore.
+// NOTE: Shepherd (head) + Simon (middle) still use the legacy Y-normal
+// av_cover_dorsal because their shells' avionics bays have NOT yet had the
+// dorsal-axis correction the cargo shell got in Rev R2 (TODO.md §1.1.1
+// head/middle axis-bug items — still open).  Re-derive these to av_cover_dorsalZ
+// once head_shell24.scad BOOK_* / middle SIMON_* are moved to the dorsal frame.
 module shepherd_cover() {
     rotate([-90, 0, 0])
     translate([-SHEP_X_CEN, -(SHEP_Y_INT - AV_STEP_H), -SHEP_Z_CEN])
         av_cover_dorsal(HEAD_SOLID_STL, SHEP_X_CEN, SHEP_Y_INT, SHEP_Z_CEN);
 }
 
-// Inara cover — cargo section, dorsal face, GPS_PORT clearance bore
-// GPS bore centre at (GPS_ANT_X, INARA_Y_INT, INARA_Z_CEN + GPS_INARA_DZ)
+// Inara cover — cargo section, DORSAL (+Z) face, GPS_PORT clearance bore.
+// Corrected 2026-07-06 to the Rev R2 dorsal-Z frame (av_cover_dorsalZ): bay at
+// (INARA_X, CARGO_STATION_Y) opening on the dorsal skin (Z = CARGO_DORSAL_Z);
+// GPS_PORT sits under the cover at (GPS_PORT_X, GPS_XY_Y).  Print orientation:
+// exterior (+Z) face up, shoulder bottom on the build plate.
 module inara_cover() {
-    rotate([-90, 0, 0])
-    translate([-INARA_X_CEN, -(INARA_Y_INT - AV_STEP_H), -INARA_Z_CEN])
-        av_cover_dorsal(CARGO_SOLID_STL, INARA_X_CEN, INARA_Y_INT, INARA_Z_CEN,
-                        gps_z = GPS_INARA_DZ, gps_x = GPS_ANT_X);
+    translate([-INARA_X, -CARGO_STATION_Y,
+               -(CARGO_DORSAL_Z - CARGO_WALL - AV_STEP_H)])
+        av_cover_dorsalZ(CARGO_SOLID_STL, INARA_X, CARGO_STATION_Y, CARGO_DORSAL_Z,
+                         gps_x = GPS_PORT_X, gps_y = GPS_XY_Y);
 }
 
-// River cover — cargo section, dorsal face, GPS_STBD clearance bore
+// River cover — cargo section, DORSAL (+Z) face, GPS_STBD clearance bore.
+// Corrected 2026-07-06 to the Rev R2 dorsal-Z frame (see inara_cover).
 module river_cover() {
-    rotate([-90, 0, 0])
-    translate([-RIVER_X_CEN, -(RIVER_Y_INT - AV_STEP_H), -RIVER_Z_CEN])
-        av_cover_dorsal(CARGO_SOLID_STL, RIVER_X_CEN, RIVER_Y_INT, RIVER_Z_CEN,
-                        gps_z = GPS_RIVER_DZ, gps_x = GPS_ANT_X);
+    translate([-RIVER_X, -CARGO_STATION_Y,
+               -(CARGO_DORSAL_Z - CARGO_WALL - AV_STEP_H)])
+        av_cover_dorsalZ(CARGO_SOLID_STL, RIVER_X, CARGO_STATION_Y, CARGO_DORSAL_Z,
+                         gps_x = GPS_STBD_X, gps_y = GPS_XY_Y);
 }
 
 // Simon cover — middle section, dorsal face, no GPS bore

@@ -5,11 +5,19 @@ Revision: R1 (2026-06-11)
 Imports all printed airframe STL components and saves a single
 Serenity-Assembled.FCStd for review in FreeCAD.
 
-Run headlessly (no GUI required):
+Run headlessly (no GUI required) with the FreeCAD CONSOLE binary:
     freecadcmd airframe/FreeCAD-scripts/serenity_assembly.py
 
-Or from the Makefile:
-    make assembly   (from airframe/FreeCAD-scripts/)
+Or from the Makefile (from airframe/FreeCAD-scripts/):
+    make assembly
+
+Or in the FreeCAD GUI: open this file and run it as a macro.
+
+Do NOT run it with plain `python3` (the FreeCAD / Mesh modules are only
+importable inside FreeCAD's own interpreter — you'll get a clear error if
+you try), and prefer `freecadcmd` over `freecad --background --python`:
+the latter starts the GUI event loop, which on some platforms does not exit
+cleanly after the script finishes, so the command appears to hang.
 
 Output: <repo>/airframe/Serenity-Assembled.FCStd
         (overwrites any existing file)
@@ -57,8 +65,19 @@ References:
 import math
 import os
 
-import FreeCAD as App
-import Mesh
+try:
+    import FreeCAD as App
+    import Mesh
+except ModuleNotFoundError as exc:  # not inside FreeCAD's interpreter
+    raise SystemExit(
+        "serenity_assembly.py must run inside FreeCAD's Python "
+        f"(failed to import {exc.name!r}).\n"
+        "  headless CLI:  freecadcmd airframe/FreeCAD-scripts/serenity_assembly.py\n"
+        "  or:            make assembly   (from airframe/FreeCAD-scripts/)\n"
+        "  GUI:           open this file in FreeCAD and run it as a macro\n"
+        "Plain `python3` has no FreeCAD/Mesh module; `freecad --background "
+        "--python` may not exit cleanly headless — use freecadcmd."
+    )
 
 # ---------------------------------------------------------------------------
 # Path setup — resolved relative to this script file so the script works

@@ -406,9 +406,18 @@ GPS_STATION_Y = CY;   // mm, shared longitudinal (Y) station -- mid-gondola,
 // GPS lateral (X) separation from the gondola centreline (CX = -102.19 mm).
 //   Port:  CX - GPS_SEP  (more-negative local X, toward CARGO_X_WALL_PORT).
 //   Stbd:  CX + GPS_SEP  (less-negative local X, toward CARGO_X_WALL_STBD).
-//   Centre-to-centre: 60 mm -- adequate lateral RF isolation; retention rings
-//   clear each other (22 mm bolt radius leaves 16 mm gap between rings).
-GPS_SEP = 30.0;  // mm -- each antenna's X offset from the lateral centreline (unchanged from legacy value)
+//   MOVED OUTBOARD 2026-07-06 (user directive): GPS_SEP 30 -> 37.5 mm so each
+//   antenna is CO-LOCATED with its Inara/River bay centre (= BAY_SEP_X/2, defined
+//   below).  Rationale: the dorsal access cover is only ~46 mm wide after OML
+//   trimming, so the Ø38 mm GPS clearance bore in the cover
+//   (access_panels_24in.scad) only stays fully ENCLOSED if the antenna is within
+//   ~±4 mm of the cover/bay centre.  At the old 30 mm the antenna sat 7.5 mm
+//   inboard of the bay centre and the Ø38 bore broke the cover's inboard edge
+//   (opened to a scallop).  Co-locating on the bay centre gives 26 mm to each
+//   cover edge (7 mm bore margin).  Centre-to-centre now 75 mm (= BAY_SEP_X);
+//   retention rings (Ø44 bolt circle) still clear (31 mm gap).  MUST equal
+//   BAY_SEP_X / 2 — keep in sync if BAY_SEP_X changes.
+GPS_SEP = 37.5;  // mm -- each antenna's X offset from centreline (= BAY_SEP_X/2, bay-centred)
 
 // GPS-PORT: port-side antenna, connected to FC/Sensor Cape 1 (primary GPS).
 //   VERIFY all coordinates in slicer -- position must sit on dorsal skin face.
