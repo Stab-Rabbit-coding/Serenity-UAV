@@ -178,22 +178,31 @@ def conforming_collar(fwd, aft, fwd_face, aft_face):
 def main():
     print("=== generate_conforming_collars.py  Rev R2  2026-07-06 ===")
     for name, fwd_rel, aft_rel, fwd_face, aft_face, out_rel in JOINTS:
-        fwd = trimesh.load(os.path.join(HERE, fwd_rel), process=False); fwd.merge_vertices()
-        aft = trimesh.load(os.path.join(HERE, aft_rel), process=False); aft.merge_vertices()
+        fwd = trimesh.load(os.path.join(HERE, fwd_rel), process=False)
+        fwd.merge_vertices()
+        aft = trimesh.load(os.path.join(HERE, aft_rel), process=False)
+        aft.merge_vertices()
         collar = conforming_collar(fwd, aft, fwd_face, aft_face)
         out = os.path.join(HERE, out_rel)
         collar.export(out)
-        ec = np.bincount(collar.edges_unique_inverse, minlength=len(collar.edges_unique))
+        ec = np.bincount(
+            collar.edges_unique_inverse,
+            minlength=len(collar.edges_unique),
+        )
         ihf = from_man(to_man(collar) ^ to_man(fwd)).volume
         iaf = from_man(to_man(collar) ^ to_man(aft)).volume
         b = collar.bounds
         print(f"\n[{name}] -> {out_rel}")
-        print(f"  vol={collar.volume:.0f} mm^3  mass={collar.volume*1.27e-3:.1f} g  "
-              f"faces={len(collar.faces)}  boundary={int((ec==1).sum())}  "
-              f"nonman={int((ec>2).sum())}")
-        print(f"  Y[{b[0][1]:.1f},{b[1][1]:.1f}]  "
-              f"collar∩fwd={ihf:.0f}  collar∩aft={iaf:.0f} mm^3  "
-              f"({'FITS' if max(ihf,iaf)<50 else 'INTERFERENCE'})")
+        print(
+            f"  vol={collar.volume:.0f} mm^3  mass={collar.volume * 1.27e-3:.1f} g  "
+            f"faces={len(collar.faces)}  boundary={int((ec == 1).sum())}  "
+            f"nonman={int((ec > 2).sum())}"
+        )
+        print(
+            f"  Y[{b[0][1]:.1f},{b[1][1]:.1f}]  "
+            f"collar∩fwd={ihf:.0f}  collar∩aft={iaf:.0f} mm^3  "
+            f"({'FITS' if max(ihf, iaf) < 50 else 'INTERFERENCE'})"
+        )
 
 
 if __name__ == "__main__":
