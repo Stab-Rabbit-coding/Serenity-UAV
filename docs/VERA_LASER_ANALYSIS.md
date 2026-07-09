@@ -15,10 +15,9 @@ Note: automated fetch attempts hit Cloudflare "Just a moment..." interstitials; 
 over-conservative (worst-case spread-pattern + naked-eye-in-full-sun). For Vera's actual
 camera-visibility requirement with camera strobe-difference detection, **both installs are
 Class 2 (≤ 1 mW)** — no Class 3B apparatus. See §3.2.
-**Rev A2 addition:** the pattern is a **thin-line crosshair** (not a bare dot) serving as a
-projected metrology reference — a PB2-I computes object **size and orientation** from ToF
-range + known crosshair angle + trigonometry (§4.4). The crosshair must be sized (fan angle)
-for enough camera-pixel coverage; a thin-line crosshair stays Class 2.
+**Rev A2 addition:** the pattern is **a thin-line crosshair, a grid, or a matrix of dots** (not a bare dot) serving as a projected metrology reference.
+— A PB2-I computes object **size and orientation** from ToF range + known crosshair angle + trigonometry (§4.4).
+The metrology pattern must be sized (fan angle) for enough camera-pixel coverage; a thin-line crosshair or 5x5 dot matrix stays Class 2.
 
 ---
 
