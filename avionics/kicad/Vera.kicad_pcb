@@ -13,7 +13,7 @@
 		(rev "-")
 		(comment 1 "Serenity UAV — STANDALONE board, NOT a PocketBeagle 2 Industrial cape")
 		(comment 2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
-		(comment 3 "46x48mm 4-layer FR4, DOUBLE-SIDED, EMI-hardened — see gen_vera_pcb.py docstring")
+		(comment 3 "1.0 × 2.75 in (25.4 × 69.85 mm) 4-layer FR4, DOUBLE-SIDED, EMI-hardened — see gen_vera_pcb.py docstring")
 		(comment 4 "U1/U2/U3/U5/U_PMIC use PLACEHOLDER footprints — not real packages, see docstring")
 	)
 	(layers

@@ -370,7 +370,7 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
         [0,90,0] only if facing into the joint (−Y direction → [−90,0,0]).  See §1.1.0
         open item and §1.1.1 for the full correction plan — this is a pre-existing blocker.
     - [ ] create mounting bracket for camera/tof/laser control pcb — this is the **Vera**
-        board (46×48 mm, 4× M3 at (4,4)/(42,4)/(4,44)/(42,44); `avionics/kicad/Vera.md`).
+        board (1.0 × 2.75 in (25.4 × 69.85 mm), 4× M3 at (4,4)/(42,4)/(4,44)/(42,44); `avionics/kicad/Vera.md`).
         Coordinate with the FreeCAD pose + pocket-wall clearance verification tracked in
         avionics §1.2c (do not hand-derive the bow pod's non-hull-frame local transform).
     - Verify Faraday tray cutout and all other non-boss geometry unchanged after SCAD re-render.

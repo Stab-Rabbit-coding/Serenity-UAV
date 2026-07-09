@@ -6,7 +6,7 @@
 **Revision:** — (design exploration; EMI-hardened, user-compacted pass)
 **Date:** 2026-07-03
 **Status:** Schematic net-correct and EMI-hardened (ERC clean of shorts); PCB footprints
-placed, double-sided, corners rounded, **46×48 mm** (manually compacted in the KiCad GUI,
+placed, double-sided, corners rounded, **1.0 × 2.75 in (25.4 × 69.85 mm)** (manually compacted in the KiCad GUI,
 re-verified DRC-clean after); **traces not yet routed; NOT fabrication-ready.**
 
 ---
@@ -150,7 +150,7 @@ laser BOM to a single green diode family. Rationale in full: `docs/VERA_LASER_AN
   (REF-IEC-002 pending item; tracked TODO.md §1.2c.4).
 - **Laser Diode Selection**
   
-    - Sharp GH0521AC2G or ams-OSRAM USA INC. PLT5 520EB_P
+    - ams-OSRAM USA INC. PLT5 520EB_P
 
 - **Laser Driver IC Selection**
 
@@ -164,13 +164,13 @@ laser BOM to a single green diode family. Rationale in full: `docs/VERA_LASER_AN
 
 ## PCB
 
-**46 × 48 mm, double-sided, 4-layer FR4, rounded corners (3 mm radius, matching Wash/Kaylee
-convention).** - **Changed 7-7-2026** updated Vera dimentions to 1.0in by 2.75in to allow it to sit flush against the camera/tof/laser faceplate within the nose.  camera tof and laser connectors are moved to forward end of board and ethernet, pwr, and can-fd connectors are at the other end.  4 mounting holes are still present.  design should work in both nose and cargo bay.
+**1.0 × 2.75 in (25.4 × 69.85 mm), double-sided, 4-layer FR4, rounded corners (3 mm radius, matching Wash/Kaylee
+convention).** - **Changed 7-7-2026** updated Vera dimensions to 1.0 × 2.75 in (25.4 × 69.85 mm) to allow it to sit flush against the camera/ToF/laser faceplate within the nose. Camera, ToF, and laser connectors are moved to the board's forward end and Ethernet, power, and CAN-FD connectors are at the other end. Four mounting holes are still present. Design should work in both nose and cargo bay.
     - This allows for direct pcb soldering of sensors in nose or via jst connectors in cargo bay. (needs feasibilty review)
 
 Board-size history: the original single-sided draft was 110×190 mm — the two big placeholder
 ICs (U1's BGA footprint, U2's TQFP footprint) forced that size using rough first-guess body
-dimensions. Several things brought it down to the current 46×48mm:
+dimensions. Several things brought it down to the current 1.0 × 2.75 in (25.4 × 69.85 mm):
 
 1. **Double-siding**: U1 (AM62A7) on the front; U_PMIC/U5/U3/U2 on the back of the *same*
    board area (legal — opposite copper faces don't collide).
@@ -184,7 +184,7 @@ dimensions. Several things brought it down to the current 46×48mm:
    from an intermediate 68.5×63.5mm to 78×80mm — expanding only as required for the
    hardening components.
 4. **Further manual compaction in the KiCad GUI** (component repacking, tighter spacing)
-   brought it down to the current **46×48mm** — the tightest pass yet, packing all parts
+   brought it down to the current **1.0 × 2.75 in (25.4 × 69.85 mm)** — the tightest pass yet, packing all parts
    (front + back) right up against the courtyard-clearance limit.
 
 Two rounds of manual GUI editing each introduced the same class of file corruption, both
@@ -195,7 +195,7 @@ as ID 2 / type "power" instead of the fixed KiCad enum value 31 / type "signal",
 self-intersecting shape after corner-dragging in the GUI (one arc's start point even landed
 outside the board, at negative Y). Both were corrected in place — the layer table restored to
 the standard values, the outline rebuilt as a clean rounded-rectangle at the compacted
-46×48mm size with squared, properly-closed corners — and mounting holes were re-symmetrized
+1.0 × 2.75 in (25.4 × 69.85 mm) size with squared, properly-closed corners — and mounting holes were re-symmetrized
 to an exact 4mm margin (4,4)/(42,4)/(4,44)/(42,44). A handful of components (J_TOF, U4) also
 needed small repositioning after the resize to clear new courtyard/pad collisions.
 
@@ -208,7 +208,7 @@ component footprint positions will be done manually, after PCBs are populated an
 built by script.") — the script (`gen_vera_pcb.py`) placed footprints and built nets;
 subsequent manual compaction in the KiCad GUI is the "final positions done manually" step
 this project's workflow anticipates. **Note:** `gen_vera_pcb.py` itself still generates the
-pre-compaction 78×80mm layout — it has not been updated to match the hand-compacted 46×48mm
+pre-compaction 78×80mm layout — it has not been updated to match the hand-compacted 1.0 × 2.75 in (25.4 × 69.85 mm)
 result, so re-running it will not reproduce the current file (see "Generator Scripts" below).
 
 Mounting holes: 4× M3, symmetric 4 mm margin from each edge — (4,4), (42,4), (4,44), (42,44).
@@ -290,7 +290,7 @@ pin count/pitch. Verify before fabrication.
 
 ## Mechanical Mounting and Wiring — Nose and Cargo Installs (added 2026-07-03)
 
-Vera is a single 46×48mm double-sided board design installed at two physical locations.
+Vera is a single 1.0 × 2.75 in (25.4 × 69.85 mm) double-sided board design installed at two physical locations.
 Both installs share the same mounting-hole pattern — 4× M3, (4,4)/(42,4)/(4,44)/(42,44) mm
 from the board's own corner — and the same connector set (J_PWR, J_ETH_IN, J_ETH_OUT,
 J_CANFD, J_CAM1/J_CAM2, J_TOF, J_LASER). Only the local sensor harness and the board's
@@ -413,8 +413,8 @@ avionics-bay-to-bay ring cable run planning, not fabricated here.
 **Note on regeneration:** `gen_vera_pcb.py` generates a net-correct 78×80mm layout (with
 `rounded_board_outline()` for the corner rounding/mounting holes) — this was the state as of
 the EMI-hardening pass. `Vera.kicad_pcb` has since been **manually compacted further to
-46×48mm in the KiCad GUI** (see "PCB" section above); the generator script was not updated to
-match. **Re-running `gen_vera_pcb.py` will overwrite the 46×48mm hand-compaction back to the
+1.0 × 2.75 in (25.4 × 69.85 mm) in the KiCad GUI** (see "PCB" section above); the generator script was not updated to
+match. **Re-running `gen_vera_pcb.py` will overwrite the 1.0 × 2.75 in (25.4 × 69.85 mm) hand-compaction back to the
 78×80mm script layout** — do not run it without confirming that's intended, per this
 project's established Kaylee/Wash script-then-manual-placement convention. If the
 hand-compacted layout is to remain the baseline going forward, the positions in this section

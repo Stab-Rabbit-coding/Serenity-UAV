@@ -1262,7 +1262,20 @@ tilt range.
 **Used in:** `airframe/openscad/nacelles/nacelle_nozzle_iris.scad`,
 `README.md` (Iris mechanism concept), `TODO.md` §1.1.3.1
 
-### REF-CAD-002: Nick Henning — Firefly Class Wing and Landing gear high fidelity images <https://www.nickhenning3d.com/>
+### REF-CAD-002: Nick Henning — Firefly Class Serenity wing and landing gear reference renders
+
+| Field | Value |
+|---|---|
+| **Author** | Nick Henning |
+| **Work** | Serenity / Firefly Class wing and landing gear reference renders |
+| **Designation** | Public reference render collection |
+| **Official URL** | <https://www.nickhenning3d.com/> |
+| **License / Permission** | Public-space reference imagery; direct permission granted by email from Nick Henning (`nickhenning3d@gmail.com`) on 2026-07-06. Used only as design reference imagery and attribution is recorded here to satisfy CC BY-style attribution requirements. |
+| **Note** | Used as high-fidelity visual reference for wing surface detail, landing gear arrangement, and UV-display styling. The repository stores only derivative reference files; no original CAD model or proprietary 3D geometry from the author is redistributed. |
+
+**Applied to:** wing and landing gear detail reference in the Serenity UAV hull design, including landing gear canopy/brace styling and wing surface treatment.
+
+**Used in:** `airframe/diagrams/nick-henning-close-gear-combine.jpg`, `airframe/diagrams/nick-henning-final-backside-combine.jpg`, `airframe/diagrams/nick-henning-final-front-combine.jpg`, `airframe/diagrams/nick-henning-uvdisplay-gear.jpg`, `airframe/diagrams/nick-henning-uvdisplay-wing.jpg`.
 
 ---
 

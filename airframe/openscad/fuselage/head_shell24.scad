@@ -345,7 +345,7 @@ module book_dorsal_boss(x_pos, z_pos) {
 // ----------------------------------------------------------------------------
 // Module: vera_board_bosses (added Rev R2, 2026-07-03)
 //   4x M3 heat-set insert boss posts for the Vera vision/ToF/laser PCB
-//   (avionics/kicad/Vera.kicad_pcb, 46x48 mm double-sided board, mounting
+//   (avionics/kicad/Vera.kicad_pcb, 1.0 × 2.75 in (25.4 × 69.85 mm) double-sided board, mounting
 //   holes at board-local (4,4)/(42,4)/(4,44)/(42,44), i.e. +/-19 mm x
 //   +/-20 mm from board centre), nose install.
 //   PROPOSED placement, NOT FreeCAD-verified: standoff ~20 mm aft (local +Y,

@@ -564,7 +564,7 @@ Vera — Nose/Cargo-Bay Vision, ToF & Laser Board (STANDALONE, not a PB2-I cape)
 Vera.kicad_pro                  — KiCad project file (design exploration, 2026-07-03)
 Vera.kicad_sch                  — Schematic (net-correct, EMI-hardened; U1/U2/U3/U5/U_PMIC
                                    use placeholder pin numbers/footprints, see gen_vera.py)
-Vera.kicad_pcb                  — PCB layout (46×48 mm, double-sided F.Cu+B.Cu, 4-layer,
+Vera.kicad_pcb                  — PCB layout (1.0 × 2.75 in (25.4 × 69.85 mm), double-sided F.Cu+B.Cu, 4-layer,
                                    rounded corners, EMI-hardened; manually compacted in KiCad
                                    GUI past gen_vera_pcb.py's 78x80mm script output — footprint
                                    placement only, traces not routed)
@@ -572,7 +572,7 @@ Vera.md                         — Design specification, BOM, EMI-hardening sta
                                    Wash/Zoe Rev R baseline)
 gen_vera.py                     — Python generator script (kicad_pro + kicad_sch)
 gen_vera_pcb.py                 — Python generator script (kicad_pcb, 78x80mm layout; NOT in
-                                   sync with the hand-compacted 46x48mm Vera.kicad_pcb —
+                                   sync with the hand-compacted 1.0 × 2.75 in (25.4 × 69.85 mm) Vera.kicad_pcb —
                                    re-running it overwrites the compaction, see Vera.md)
 [see TODO.md §1.2c and avionics/CLAUDE.md "Vera" for full status/open items]
 

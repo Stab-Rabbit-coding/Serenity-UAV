@@ -34,6 +34,11 @@ IMPORTANT — footprint honesty policy for this file:
     per-component to roughly match real proportions (see comp_2row_placeholder docstring) —
     it is still not a real ball-out/lead-frame, just less absurdly oversized.
 
+    NOTE: as of 2026-07-07 the hand-edited KiCad output in `avionics/kicad/Vera.kicad_pcb`
+    was further compacted to the current 1.0 × 2.75 in (25.4 × 69.85 mm) baseline in the GUI.
+    This script still generates the 78×80 mm pre-compaction layout. Do not re-run it unless you intend to
+    overwrite the manual compaction, or update the generator to match the new baseline.
+
     U4 (ISOW1044BDFMR, SOIC-16W), T1/T2 (Wurth 749010012A magnetics), CMC1-5 (SRF2012-100Y),
     D1-5 (PRTR5V0U2X), and all connectors use REAL KiCad footprint geometry.
 
@@ -881,7 +886,7 @@ def gen_pcb() -> str:
         '\t\t(rev "-")',
         '\t\t(comment 1 "Serenity UAV — STANDALONE board, NOT a PocketBeagle 2 Industrial cape")',
         '\t\t(comment 2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")',
-        '\t\t(comment 3 "78x92mm 4-layer FR4, DOUBLE-SIDED, EMI-hardened — see gen_vera_pcb.py docstring")',
+        '\t\t(comment 3 "78×80 mm pre-compaction layout, 4-layer FR4, DOUBLE-SIDED, EMI-hardened — actual hand-compacted board is 1.0 × 2.75 in (25.4 × 69.85 mm) in avionics/kicad/Vera.kicad_pcb")',
         '\t\t(comment 4 "U1/U2/U3/U5/U_PMIC use PLACEHOLDER footprints — not real packages, see docstring")',
         "\t)",
     ]

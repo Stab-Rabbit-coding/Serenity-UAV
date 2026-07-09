@@ -1,3 +1,9 @@
+Edmund Optics short-note (Powell + cylindrical):
+
+- Powell lenses: Edmund Optics maintains a Powell/line-generator family (see https://www.edmundoptics.com/f/powell-lenses/12245). Powell lenses provide a highly uniform line but catalog minimum fan angles are typically around ~1°; 0.5° is usually a custom-order item.
+- Cylindrical lenses: Edmund's catalog includes small-format cylindrical/plano-concave elements; specific SKUs and pricing require a manual site visit because automated scraping is blocked by Cloudflare challenge pages. If needed I can manually capture SKUs and prices by interactively opening Edmund product pages.
+
+Note: automated fetch attempts hit Cloudflare "Just a moment..." interstitials; I recommend manual verification for Edmund Optics SKUs/prices (or I can collect them interactively if you want me to continue). The search link above is a direct starting point.
 # Vera Laser Indicator — Single-Source Feasibility & Spread-Angle Analysis
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
@@ -336,3 +342,38 @@ line width, carry the pixel budget.
 ---
 
 *© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY 4.0*
+
+---
+
+## Appendix A — Supplier Shortlist & Parts Families (0.5 in / 12.7 mm max mount)
+
+Notes: the Vera installations cannot accept optics with a mounting diameter larger than 0.5 in (12.7 mm). Prefer unmounted or small-height cylindrical lenses (H ≤ 12 mm) or small-form Powell/line-generator optics. The following vendors and part families are vetted starting points; I will fetch product pages and populate SKUs/URLs/pricing below.
+
+- **Thorlabs** — Plano-concave cylindrical lenses (LK series, various f), mounted round cylindrical lenses (e.g. LK1419RM etc. — *note many mounted parts are 1" and therefore too large; prefer unmounted LK items with H ≤ 12 mm*). Thorlabs also supports custom optics requests. Product pages: https://www.thorlabs.com/cylindrical-lenses and https://www.thorlabs.com/item/LK4326-C
+- **Thorlabs** — Plano-concave cylindrical lenses (LK series, various f), mounted round cylindrical lenses (e.g. LK1419RM etc. — *note many mounted parts are 1" and therefore too large; prefer unmounted LK items with H ≤ 12 mm*). Thorlabs also supports custom optics requests. Product pages: https://www.thorlabs.com/cylindrical-lenses and https://www.thorlabs.com/item/LK4326-C
+
+Thorlabs short-list (catalog candidates fitting ≤ 12.7 mm height where noted):
+
+- `LK1395L1-B` — f = -3.91 mm, H = 4.0 mm, L = 6.0 mm, Price ≈ $71.17, Available (Thorlabs)
+- `LK1597L2-B` — f = -4.01 mm, H = 4.0 mm, L = 8.0 mm, Price ≈ $79.77
+- `LK1523L1-B` — f = -5.79 mm, H = 4.0 mm, L = 6.0 mm, Price ≈ $71.17
+- `LK1426L1-B` — f = -24.88 mm, H = 12.0 mm, L = 12.0 mm, Price ≈ $[see site]
+- `LK4326-C` — f = -25.0 mm, UV fused silica, H = 15.0 mm (exceeds 12.7 mm — too tall for our mount)
+
+Notes: many Thorlabs focal lengths near the requested ranges (f ≈ 115 mm or 229 mm) are available only in taller heights or mounted 1" variants; for those focal lengths a custom order or unmounted large-diameter lens with a custom small cell is likely required. I'll continue to Edmund Optics next to find Powell and small cylindrical options.
+- **Edmund Optics** — Cylindrical lenses and Powell (line-generator) optics; broad focal-length ranges and small-format parts suitable for compact mounts. Start at https://www.edmundoptics.com and search "cylindrical lens" / "Powell lens".
+- **OptoSigma** — Cylindrical lenses and custom optics (small-form factors available). https://www.optosigma.com/en
+- **Newport (MKS/Thorlabs/Exoptic resellers)** — cylindrical/line optics catalog; good for alternate sourcing.
+- **Resellers / stock optics** — MeetOptics, StockLens, Edmund/Thorlabs distributors — useful when a small, off-the-shelf SKU is needed quickly.
+
+### DOE / Diffractive Suppliers (initial findings)
+
+- **HOLO/OR (Holo-Or)** — Manufacturer of DOEs and diffractive beam shapers. Site: https://www.holoor.co.il/ (international pages at https://holoor.co.il/). Catalogs a wide family of standard DOEs (beam splitters, line generators, multispot, homogenizers) and offers custom DOE design + fabrication. Their website documents application notes and example product families; small-aperture DOEs (sub-12.7 mm) are possible but typically quoted as custom parts — request a quote and specification sheet for clear aperture, substrate (fused silica), and diffraction efficiency. Contact/phone found on site: +972-89-409687. Lead time and pricing: quote-required.
+
+- **Holo/Or notes:** standard product pages emphasize custom capability for multispot and line-shaping DOEs. For our 0.5 in (12.7 mm) mounting constraint request a "mini" DOE or an unmounted element specified for 520 nm with a CA ≤ 12.7 mm and AR coating for green. Expect commercial quotes rather than catalog SKU pricing.
+
+- **Other DOE houses to query (next):** Holoeye (Germany), RPC Photonics (US), Jenoptik (DE), Edmund Optics (DOE catalog), and small custom houses (e.g., SUSS MicroOptics partners). Many DOE suppliers run quote-based sales for apertures below common catalog sizes; include a request for blank substrate + pattern vs. mounted cell pricing.
+
+I will now query each vendor (Thorlabs, Edmund Optics, OptoSigma, Newport/stock resellers) and record candidate SKUs for both plano-concave cylindrical lenses and Powell/line-generator optics that meet the 0.5 in mounting constraint.
+
+Also include in search: dot-matrix grids / diffractive dot-array elements (DOE) and small microlens arrays as alternate line/point-generation approaches. Search terms: "dot matrix grid", "diffractive dot array", "DOE dot array", "microlens array", "dot-matrix grating". Filter results for clear aperture ≤ 12.7 mm when possible.
