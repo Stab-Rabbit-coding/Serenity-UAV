@@ -1,0 +1,5 @@
+#!/bin/sh
+# Serenity-UAV pre-commit guard: block corrupt/unloadable KiCad files before they
+# get committed (the recurring In2.Cu / Edge.Cuts GUI-save corruption).
+# Enable once per clone:  git config core.hooksPath .githooks
+exec python3 "$(git rev-parse --show-toplevel)/tools/precommit_kicad_load.py"
