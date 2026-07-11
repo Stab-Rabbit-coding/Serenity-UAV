@@ -185,85 +185,100 @@ The 15× spread ratio is spanned by two different terminal optics on the *same* 
 green source — exactly the "different lens configuration per location" the question proposes.
 The optic sets **geometry only**; it does **not** address the power/class difference (§4.1).
 
-### 4.3 Dot vs. crosshair trade
+### 4.3 Pattern selection — dot grid (Rev B, supersedes the crosshair)
 
-A **dot** conveys only *position*. A **crosshair** of *known projected angle* also conveys
-*scale and orientation* — and §4.4 shows Vera needs exactly that, so **the crosshair (not a
-bare dot) is the specified pattern** at both installs. (Rev A/A1 leaned toward a bare dot to
-minimize power; §4.4 supersedes that — a *thin*-line crosshair keeps Class 2 anyway, §4.4.4.)
+The chosen pattern is a **regular dot grid** (an N×N dot-matrix DOE), superseding the Rev-A/A1
+bare dot and the Rev-A2 crosshair. Three reasons:
 
-### 4.4 Crosshair as a projected metrology reference (object size + orientation)
+- **Higher size+orientation fidelity** — a grid supports a **homography fit** (§4.4.2) that
+  recovers the *full* planar pose (tilt magnitude AND azimuth, **no sign ambiguity** — the
+  crosshair's weakness) plus scale, least-squares-averaged over N² dots; dot centroids localise
+  to ~0.1 px (better than a line fit).
+- **Lower cost** — dot-matrix DOEs are commodity parts (mass-produced for 3D-sensing modules),
+  whereas a *custom small-angle crosshair* was the expensive/hard optic.
+- **Better detection SNR *and* still Class 2** — dots concentrate power into bright points
+  (easier for the strobed camera to detect than a diluted line) yet the total splits across N²
+  dots, so no single dot exceeds the 1 mW/7 mm-aperture limit — provided the DOE has **low
+  zero-order** (the one spec to insist on; the undiffracted central spot is the class-limiting
+  point).
 
-**Requirement (added 2026-07-05):** the crosshair must have enough measurable spread for a
-PocketBeagle-2-I to compute a detected object's **size** and **relative orientation** from
-**ToF range + known laser spread + trigonometry**. The laser+ToF+camera are boresighted
-(~7 mm apart on Vera), so all three look at the same patch.
+### 4.4 Dot grid as a projected metrology reference (size + orientation)
 
-**4.4.1 Size — the crosshair is a self-calibrating scale bar.** The crosshair leaves the laser
-at a fixed fan angle θ (a design constant of the DOE/optic). At the ToF-measured range R its
-projected physical size is
+**Requirement:** the grid must have enough measurable spread + resolvable dots for a PB2-I to
+compute a detected object's **size** and **relative orientation** from **ToF range + known grid
+angle + trigonometry**. At the **nose** the laser/ToF/camera stay boresighted (~7 mm apart) —
+the target at 50 ft is effectively at infinity for a small baseline, so pose comes from pattern
+geometry, not stereo. (The **cargo** install instead uses a real stereo baseline for true 3D —
+§4.5.)
 
-```text
-S = 2 · R · tan(θ/2)          (on a surface normal to the axis)
-```
+**4.4.1 Size — the grid is a self-calibrating scale bar.** The grid leaves the projector at a
+fixed *total* fan angle θ. At the ToF-measured range R its projected size is `S = 2·R·tan(θ/2)`
+(surface normal to axis). ToF supplies R, so an object spanning `obj_px` against a grid spanning
+`grid_px` has real size `object_size = (obj_px / grid_px) · S`, averaged over all grid rows/cols.
 
-Because the crosshair subtends ~θ at the near-colocated camera *independent of R*, its apparent
-angular size alone is not a range cue — **ToF supplies R**, and S = 2R·tan(θ/2) turns the
-crosshair into a metric ruler laid on the object. An object spanning `obj_px` against a
-crosshair spanning `cross_px` in the same frame then has real size
+**4.4.2 Orientation — homography (not foreshortening).** A regular grid imaged on a plane tilted
+by φ appears as a **perspective-distorted grid**; fitting a homography **H** to the detected dot
+centroids and decomposing it yields the plane normal — **tilt magnitude and azimuth together,
+with no sign ambiguity** (the grid's keystone convergence is directional). This is an
+over-determined, well-posed CV problem (N² dots) and is far more robust than the crosshair
+arm-ratio method it replaces.
 
-```text
-object_size = (obj_px / cross_px) · S
-```
+**4.4.3 Binding constraint = camera pixel coverage.** The grid must span enough pixels *and*
+resolve its dots. At R = 50 ft (15.24 m), 1920-px sensor:
 
-**4.4.2 Orientation — crosshair foreshortening.** On a surface tilted by φ from normal, the
-projection stretches by 1/cos φ along the tilt azimuth: the two arms image to different lengths
-and a square reticle skews. Measuring the arm-length ratio (= cos φ) recovers the tilt
-magnitude; the skew azimuth gives its direction → the surface normal, hence the object's pose
-relative to the camera. Caveats: sensitivity is poor near normal incidence (cos φ ≈ 1 is flat),
-and the tilt **sign** is ambiguous from a colocated crosshair (the 7 mm baseline gives
-negligible parallax at 15 m) — an asymmetric pattern (crosshair + one offset tick, or a 3×3
-grid) resolves the sign and improves accuracy if needed.
-
-**4.4.3 The binding constraint is camera angular resolution, not power.** Accuracy scales with
-the pixel count `N` across the crosshair, so the crosshair must be sized (fan angle) large
-enough — co-designed with the camera lens FOV. At R = 50 ft with a 1920-px-wide sensor:
-
-| Crosshair | 60° FOV | 40° FOV | 30° FOV | 15° FOV |
-|---|---|---|---|---|
-| 2 in (51 mm) | 5.6 px | 8.8 px | 12 px | 24 px |
-| 4 in (102 mm) | 11 px | 18 px | 24 px | 49 px |
-| 8 in (203 mm) | 22 px | 35 px | 48 px | 97 px |
-
-Accuracy vs. N (line-endpoint location σ ≈ 0.3 px):
-
-| N (px across) | size error | tilt err @30° | tilt err @10° |
+| Nose grid (total fan) | array at 50 ft | dot pitch | pitch (px @40° FOV) |
 |---|---|---|---|
-| 12 | ~3.5 % | ~4° | ~12° |
-| 24 | ~1.8 % | ~2° | ~6° |
-| 48 | ~0.9 % | ~1° | ~3° |
+| 1.0°, 9×9 | 266 mm (10.5 in) | 33 mm (0.125°) | ~6 px |
+| 1.0°, 11×11 | 266 mm (10.5 in) | 27 mm (0.100°) | ~5 px |
+| 0.7°, 9×9 | 186 mm (7.3 in) | 23 mm | ~4 px |
 
-So the nominal **2 in @ 50 ft crosshair is too small (≈6 px on a wide lens)** for useful
-orientation — **the user's instinct for "enough detectable spread" is correct.** For ~1–2 %
-size and ~1–2° tilt at moderate angles, target **N ≈ 24–48 px**, i.e. a **larger fan angle
-(≈4–8 in at 50 ft, 0.38–0.76°)** on a wide FOV, or a narrower FOV, or a higher-res sensor.
-(Size accuracy also inherits the TFmini-S range error, ≈ ±1 % — REF-SENSOR-002.) The cargo
-install at 5 ft has ~10× the pixel density, so its 3 in crosshair is already ample.
+**Recommended nose optic: ≈1.0° total-fan, 9×9–11×11 dot grid** (still a low/custom angle, but
+dot-matrix DOEs flex more easily on angle than a crosshair). Dots ~30 mm apart at 50 ft resolve
+to several px, and 81–121 dots give a strongly over-determined homography → ~1 % size, ~1° tilt
+(plus the ±1 % TFmini-S range term, REF-SENSOR-002). Cargo grid: 3° 15×15–20×20 (79 mm array,
+4–6 mm pitch) — dense, and see §4.5.
 
-**4.4.4 Power — a metrology crosshair is still Class 2.** A crosshair concentrates power in
-*thin lines*, whose illuminated area is small even when the pattern spans inches, so it is as
-power-efficient as a dot. Line power for camera strobe-difference detection (C = 0.01,
-E_bg = 400 W/m²), two 51 mm arms:
+**4.4.4 Power — a dot grid is Class 2 with better SNR.** The total splits across N² bright dots
+(each ≈ P/N²), so for camera strobe-difference detection the diode runs at its stable
+low-power point (~5–15 mW, §4.1) and **no dot exceeds the 1 mW aperture AEL** — *provided the
+DOE zero-order is low* (a good-quality DOE keeps zero-order ≤ ~1–2 %; specify it). Concentrated
+dots detect at *higher* SNR than the earlier diluted line, so this is strictly better than the
+crosshair on both class margin and detectability. The hardware current limit (iC-WKN APC
+set-resistor) still caps the total so a fault cannot reach Class 3B.
 
-| Line width | Power | Class |
+### 4.5 Cargo install — TRUE 3D imager (stereo baseline, Rev B)
+
+**Upgrade (user, 2026-07-06):** because the cargo camera and the dot-projector are *remote
+heads* off Vera (via `J_CAM`/`J_LASER`), their placement in the cargo bay is free — so
+**separate them by a real baseline `b`** and make the cargo unit a genuine structured-light 3D
+imager (not just 2.5D profiling).
+
+Depth by triangulation: `Z = f·b/d` (d = disparity, px); depth resolution `ΔZ = Z²·δd/(f·b)`.
+At Z = 5 ft (1.5 m), f ≈ 3200 px (a ~33° FOV covering ~3 ft), disparity precision δd ≈ 0.2 px:
+
+| Baseline b | Depth resolution ΔZ @ 5 ft | Nominal disparity |
 |---|---|---|
-| 0.5 mm | ~0.20 mW | Class 2 |
-| 1.0 mm | ~0.41 mW | Class 2 |
-| 2.0 mm | ~0.82 mW | Class 2 |
+| 25 mm (1.0 in) | 5.6 mm | 53 px |
+| 50 mm (2.0 in) | 2.8 mm | 107 px |
+| **75 mm (3.0 in)** | **1.9 mm** | 160 px |
+| 100 mm (3.9 in) | 1.4 mm | 213 px |
 
-So the metrology crosshair **stays Class 2** provided the lines are thin (≤ ~1 mm at the
-target) — no conflict with §4.1. Keep the lines thin and let the *spread* (fan angle), not the
-line width, carry the pixel budget.
+**Recommended: b ≈ 75 mm (3 in)** → **~1.9 mm depth resolution at 5 ft** — a real depth camera
+(Kinect-class principle). Design points:
+
+- **Pattern: pseudo-random dot field** at the cargo projector (HOLO/OR pseudo-random or Osela
+  RPP), **not** a regular grid — random local neighborhoods make the stereo correspondence
+  unambiguous for dense block-matching. (The regular grid of §4.4 is for the nose's single-plane
+  pose; dense 3D needs the random field.)
+- **ToF** anchors absolute scale and bounds the disparity search.
+- **One-time camera↔projector calibration** (relative pose) is required and stored on Vera.
+- **Why the *nose* stays boresighted (no baseline):** at 50 ft a practical 75 mm baseline gives
+  only ~16 px disparity and ~190 mm depth resolution — useless — so the nose keeps the boresighted
+  grid-pose method of §4.4; only the close-range cargo install benefits from a baseline.
+
+Mechanical consequence: the cargo `cargo_fpv_bezel` install must provide **two apertures ~75 mm
+apart** (camera head + dot-projector head) rather than a co-located cluster — see
+`avionics/kicad/Vera.md` "Cargo install".
 
 ---
 
@@ -367,7 +382,12 @@ Notes: many Thorlabs focal lengths near the requested ranges (f ≈ 115 mm or 22
 
 ### DOE / Diffractive Suppliers (initial findings)
 
-- **HOLO/OR (Holo-Or)** — Manufacturer of DOEs and diffractive beam shapers. Site: https://www.holoor.co.il/ (international pages at https://holoor.co.il/). Catalogs a wide family of standard DOEs (beam splitters, line generators, multispot, homogenizers) and offers custom DOE design + fabrication. Their website documents application notes and example product families; small-aperture DOEs (sub-12.7 mm) are possible but typically quoted as custom parts — request a quote and specification sheet for clear aperture, substrate (fused silica), and diffraction efficiency. Contact/phone found on site: +972-89-409687. Lead time and pricing: quote-required.
+- **HOLO/OR (Holo-Or)** — Manufacturer of DOEs and diffractive beam shapers.
+  Site: <https://www.holoor.co.il/>. Catalogs a wide family of standard DOEs (beam splitters,
+  line generators, multispot, homogenizers) and offers custom DOE design + fabrication.
+  Small-aperture DOEs (sub-12.7 mm) are possible but typically quoted as custom parts — request
+  a quote and spec sheet for clear aperture, substrate (fused silica), and diffraction
+  efficiency. Contact/phone on site: +972-89-409687. Lead time and pricing: quote-required.
 
 - **Holo/Or notes:** standard product pages emphasize custom capability for multispot and line-shaping DOEs. For our 0.5 in (12.7 mm) mounting constraint request a "mini" DOE or an unmounted element specified for 520 nm with a CA ≤ 12.7 mm and AR coating for green. Expect commercial quotes rather than catalog SKU pricing.
 

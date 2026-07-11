@@ -196,7 +196,7 @@ self-intersecting shape after corner-dragging in the GUI (one arc's start point 
 outside the board, at negative Y). Both were corrected in place — the layer table restored to
 the standard values, the outline rebuilt as a clean rounded-rectangle at the compacted
 1.0 × 2.75 in (25.4 × 69.85 mm) size with squared, properly-closed corners — and mounting holes were re-symmetrized
-to an exact 4mm margin (4,4)/(42,4)/(4,44)/(42,44). A handful of components (J_TOF, U4) also
+to an exact 4mm margin (4,4)/(65.85,4)/(4,21.4)/(65.85,21.4). A handful of components (J_TOF, U4) also
 needed small repositioning after the resize to clear new courtyard/pad collisions.
 
 Component placement is net-correct and DRC-clean (0 shorting_items, 0 net_conflict, 0
@@ -211,7 +211,7 @@ this project's workflow anticipates. **Note:** `gen_vera_pcb.py` itself still ge
 pre-compaction 78×80mm layout — it has not been updated to match the hand-compacted 1.0 × 2.75 in (25.4 × 69.85 mm)
 result, so re-running it will not reproduce the current file (see "Generator Scripts" below).
 
-Mounting holes: 4× M3, symmetric 4 mm margin from each edge — (4,4), (42,4), (4,44), (42,44).
+Mounting holes: 4× M3, symmetric 4 mm margin from each edge — (4,4), (65.85,4), (4,21.4), (65.85,21.4).
 
 ---
 
@@ -291,7 +291,7 @@ pin count/pitch. Verify before fabrication.
 ## Mechanical Mounting and Wiring — Nose and Cargo Installs (added 2026-07-03)
 
 Vera is a single 1.0 × 2.75 in (25.4 × 69.85 mm) double-sided board design installed at two physical locations.
-Both installs share the same mounting-hole pattern — 4× M3, (4,4)/(42,4)/(4,44)/(42,44) mm
+Both installs share the same mounting-hole pattern — 4× M3, (4,4)/(65.85,4)/(4,21.4)/(65.85,21.4) mm
 from the board's own corner — and the same connector set (J_PWR, J_ETH_IN, J_ETH_OUT,
 J_CANFD, J_CAM1/J_CAM2, J_TOF, J_LASER). Only the local sensor harness and the board's
 orientation/standoff depth differ per site.
