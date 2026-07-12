@@ -211,6 +211,16 @@ this project's workflow anticipates. **Note:** `gen_vera_pcb.py` itself still ge
 pre-compaction 78×80mm layout — it has not been updated to match the hand-compacted 1.0 × 2.75 in (25.4 × 69.85 mm)
 result, so re-running it will not reproduce the current file (see "Generator Scripts" below).
 
+**DRC regression fixed 2026-07-12:** the 2026-07-11 U4 repositioning (line 199-200 above) left
+each of U4's 16 pads carrying its own local 90° `at` rotation, duplicating the footprint's
+own 90° placement rotation. Composed (90+90=180°), that put the pad's *long* (2 mm) dimension
+along the 1.27 mm pitch axis instead of the *short* (0.6 mm) one — verified against the real
+upstream `Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm` library footprint, which carries no per-pad
+rotation at all — causing ~0.6–0.7 mm copper overlap between adjacent different-net pads (CI:
+1 `clearance` + 1 `solder_mask_bridge` hard violation). Fixed by dropping the redundant
+per-pad rotation on all 16 U4 pads (footprint position/placement rotation unchanged); no
+component was repositioned. Re-verify DRC before fabrication.
+
 Mounting holes: 4× M3, symmetric 4 mm margin from each edge — (4,4), (65.85,4), (4,21.4), (65.85,21.4).
 
 ---
