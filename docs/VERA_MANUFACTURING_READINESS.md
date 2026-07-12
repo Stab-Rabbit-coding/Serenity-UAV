@@ -3,8 +3,17 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **AI-assist:** Claude Opus 4.8 (Anthropic) — gap analysis, 2026-07-06
 **License:** CC BY 4.0
-**Revision:** Rev A (2026-07-06)
-**Status:** Analysis — what stands between the current Vera design and a fabricable board.
+**Revision:** Rev B (2026-07-06)
+**Status:** Analysis + recommended resolution — the raw-SoC gap, and the SoM-carrier path
+that closes most of it.
+
+**Changelog:**
+
+- **Rev B (2026-07-06):** Added the recommended resolution — mount the AM62A on a vendor
+  **system-on-module (SoM)** and rebuild Vera as a **carrier board**, which eliminates the
+  LPDDR4/boot-flash/power-sequencing/DDR-BGA gaps (G1/G2/G4 and most of G6). Re-scoped the
+  staged plan around the SoM-carrier path with the raw-SoC design retained as the alternative.
+- **Rev A (2026-07-06):** Initial gap analysis (raw-SoC design).
 
 ---
 
@@ -28,7 +37,36 @@ automated placeholder-swap because:
 
 So "get it ready for manufacturing" is a **multi-stage hardware effort gated on the SoC+memory
 subsystem**, not a one-shot automation. What *can* be automated (the pre-commit corruption
-guard, `tools/precommit_kicad_load.py`) is done. The rest is itemized below with a staged plan.
+guard, `tools/precommit_kicad_load.py`) is done.
+
+## 1.1 Recommended resolution — put the AM62A on a SoM; make Vera a carrier
+
+The root of every blocker is that Vera tries to host a **raw Linux applications SoC** (AM62A7)
+and therefore *owns* the LPDDR4, boot flash, power sequencing, and impedance-controlled DDR/BGA
+routing. **The simplest, most reliable fix is not to own any of that:** mount the AM62A on a
+vendor **system-on-module (SoM)** where the SoC + LPDDR4 + boot flash + PMIC are already
+integrated **and validated by the vendor**, and rebuild Vera as a **carrier board** carrying
+only the parts it already has as real footprints (KSZ9477 switch, ISOW1044 CAN, SLB9670 TPM,
+Ethernet magnetics/EMI, laser driver, camera/ToF connectors) plus the SoM's board-to-board
+connector.
+
+This **eliminates G1, G2, G4 and most of G6** — they move onto the module — and drops Vera from
+a 6-layer impedance-controlled DDR/BGA design to an **ordinary ~4-layer carrier**. It also
+matches the project's existing pattern: the whole fleet already runs on **PocketBeagle 2
+Industrial** compute modules on capes; raw-SoC Vera was the outlier.
+
+**Verified this session (2026-07-06):** TI's own SK-AM62A-LP EVM confirms the AM62A7 (AM62A74,
+quad-A53) pairs with **external 4 GB LPDDR4** and provides **4-lane MIPI CSI-2** + **dual
+gigabit Ethernet** — i.e. the memory really is external (the gap is real) and the camera/Ethernet
+Vera needs are native to the part. SoM vendors for the AM62 family are real and shipping
+(Variscite VAR-SOM-AM62 / -AM62P confirmed live; PHYTEC phyCORE-AM62Ax and a Variscite AM62A
+variant are known product lines but **their datasheets could not be pulled this session** —
+PHYTEC's domain is blocked by a local permission hook, Variscite's AM62A page URLs 404'd, and
+WebSearch was rate-limited). **Module selection is therefore the one open datasheet-gated
+decision** (§3A) — no specific SoM P/N or connector is committed here.
+
+The raw-SoC gap analysis (§2–§6) is retained below because it defines what the SoM buys us and
+remains the fallback if no suitable AM62A SoM qualifies on size/CSI-lane/connector-height.
 
 ---
 
@@ -42,7 +80,11 @@ guard, `tools/precommit_kicad_load.py`) is done. The rest is itemized below with
 
 ---
 
-## 3. Critical gaps (in priority order)
+## 3. Critical gaps (in priority order) — under the raw-SoC path
+
+*(G1, G2, G4 and most of G6 are **eliminated** by the §1.1 / §3A SoM-carrier path — they move
+onto the module. They are documented here as what the SoM buys us, and as the fallback scope if
+no AM62A SoM qualifies.)*
 
 **G1 — LPDDR4 memory (blocker).** AM62A7 needs external LPDDR4. Add a **1–2 GB LPDDR4** device
 (single x16/x32 package, ~200-ball FBGA — e.g. a Micron/Nanya part *to be selected against a
@@ -68,6 +110,45 @@ enable/PGOOD nets and sequencing so the rails come up in the required order.
 **G6 — Routing.** After G1–G5: BGA escape, DDR byte-lane matching, RGMII/MDIO to KSZ9477,
 CSI-2 pairs, Ethernet magnetics pairs — all impedance-controlled on a defined stack-up, then
 gerbers + fab notes. **Expert manual layout; not auto-routable to fab quality.**
+
+---
+
+## 3A. SoM-carrier architecture (recommended)
+
+Vera becomes a **carrier** for an AM62A SoM. What lives where:
+
+**On the module (bought, pre-validated — deletes G1/G2/G4 + DDR/BGA routing):**
+
+- AM62A7 (AM62A74) SoC, LPDDR4 (target ≥ 2 GB; TI EVM ships 4 GB), boot flash (eMMC/OSPI),
+  PMIC + full power sequencing, SoC decoupling, main oscillator.
+
+**On the Vera carrier (mostly parts already footprinted — ordinary ~4-layer routing):**
+
+- **SoM board-to-board connector(s)** — the one new footprint; its exact P/N + pitch + pin count
+  come from the selected module's carrier-design guide (datasheet-gated, §3A selection below).
+- **KSZ9477** Ethernet switch (HSR/PRP ring) — RGMII/MDIO from the SoM.
+- **ISOW1044** isolated CAN-FD, **SLB9670** TPM (SPI from SoM), **MSPM0G3507** CAN-FD
+  coprocessor (as today).
+- Ethernet magnetics + SRF2012 CMC + PRTR5V0U2X TVS (EMI, as today).
+- Camera **MIPI CSI-2** route from the SoM to the camera connector / direct-solder land (§4);
+  ToF UART; laser driver (Q1 + current limit).
+- 5 V input; the SoM's own rails feed the SoC — the carrier only supplies what the module's
+  design guide requires (typically a single 5 V or 3.3 V in).
+
+**§3A selection criteria (the one datasheet-gated decision):**
+
+1. **AM62A** vision variant (VPAC/ISP + H.264/H.265 encode) — *not* plain AM62/AM62P.
+2. Breaks out **≥ 1 MIPI CSI-2 (4-lane)**, **RGMII** (for KSZ9477), and enough **SPI/UART/CAN**.
+3. **Connector stack height + module footprint** fit the nose pod's Z-budget and Vera's
+   1.0 in width (verify against `airframe/openscad/fuselage/bow_sensor_pod.scad`).
+4. Documented **carrier design guide + reference schematic** and current production status.
+
+Candidate families to evaluate against the above (verify each P/N's datasheet before BOM entry —
+none committed here): **PHYTEC phyCORE-AM62Ax**, **Variscite VAR-SOM-AM62A / DART-AM62A**.
+
+**Trade to accept:** a SoM adds some **Z-height** (module + connector stack) and per-unit cost,
+in exchange for deleting the LPDDR4/flash/sequencing design and the single largest fabrication
+risk. For a low-volume flight build this trade strongly favors the SoM.
 
 ---
 
@@ -109,25 +190,38 @@ recurring GUI-corruption risk now guarded by `tools/precommit_kicad_load.py`.)
 
 ## 6. Staged plan to fabricable
 
-1. **Select + datasheet** the LPDDR4 (G1), boot media (G2), and confirm the AM62A7 package/ball
-   map, KSZ9477, TPS65219, SLB9670, MSPM0G3507 (G3). *(Requires fetching/attaching real
-   datasheets — the no-fabrication gate.)*
-2. **Schematic-first:** add the LPDDR4 + boot-flash + power-sequencing subsystems; correct all
-   pin maps (schematic is the source of truth — cf. the Emma reconciliation).
-3. **Footprints:** real land patterns for all ICs + memory; apply the §5 fixes.
-4. **Stack-up:** define the impedance-controlled layer stack (likely 6-layer for DDR + BGA
-   escape, not the current 4).
-5. **Place + route:** BGA escape, DDR byte-lane match, CSI-2/RGMII/Ethernet pairs; add the §4
-   dual camera/ToF/laser interface.
-6. **Verify:** ERC + DRC to 0 hard (CI validator), impedance/length reports, then gerbers + fab
-   notes.
+### 6.1 Recommended — SoM-carrier path
 
-**Honest scope note:** steps 1–3 I can do incrementally *with verified datasheets* (one
-subsystem at a time, schematic-first, as with Emma). Steps 4–5 (impedance-controlled DDR/BGA
-layout) realistically need interactive layout with a length-tuning tool, not blind scripting —
-I can set up the constraints and do the non-critical routing, but the DDR/BGA critical nets
-should be laid out and reviewed by hand. This document is the checklist so nothing above is
-forgotten.
+1. **Select the AM62A SoM** against §3A criteria; obtain its datasheet, carrier design guide,
+   reference schematic, and **board-to-board connector P/N** *(datasheet gate — refer the final
+   pick to the user; requires reaching PHYTEC/Variscite datasheets, blocked this session)*.
+2. **Confirm Z/width fit** of the module + connector against the nose pod
+   (`bow_sensor_pod.scad`) and the 1.0 in carrier width.
+3. **Schematic-first (carrier):** replace the raw AM62A + placeholder DRAM/flash/PMIC nets with
+   the SoM connector symbol; wire SoM↔KSZ9477 (RGMII/MDIO), SoM↔camera (CSI-2), SoM↔TPM (SPI),
+   SoM↔MSPM0G3507, power-in per the design guide. Keep KSZ9477/ISOW1044/SLB9670/MSPM0G3507
+   pin maps datasheet-correct (still §G3 for *these* parts — but no 484-ball SoC map needed).
+4. **Footprints:** SoM connector land + real land patterns for the remaining ICs; apply §5 fixes.
+5. **Place + route (ordinary ~4-layer):** SoM connector, KSZ9477 RGMII pairs, CSI-2 pairs,
+   Ethernet magnetics pairs, CAN; add the §4 dual camera/ToF/laser interface.
+6. **Verify:** ERC + DRC to 0 hard (CI validator), then gerbers + fab notes.
+
+**Why this is tractable:** no LPDDR4 fly-by routing, no 484-ball BGA escape, no power
+sequencing — those ship on the module. Steps 3–6 are ordinary carrier work I can do
+schematic-first (as with Emma) once the module + connector P/N are chosen.
+
+### 6.2 Fallback — raw-SoC path (only if no AM62A SoM qualifies)
+
+1. **Select + datasheet** the LPDDR4 (G1), boot media (G2), AM62A7 ball map, and the other ICs
+   (G3). 2. **Schematic-first:** add LPDDR4 + boot-flash + power-sequencing; correct all pin
+   maps. 3. **Footprints:** real land patterns + §5 fixes. 4. **Stack-up:** 6-layer for DDR +
+   BGA escape. 5. **Place + route:** BGA escape, DDR byte-lane match, CSI-2/RGMII/Ethernet pairs,
+   plus the §4 interface. 6. **Verify:** ERC/DRC, impedance/length reports, gerbers.
+
+**Honest scope note:** in 6.2, steps 4–5 (impedance-controlled DDR/BGA layout) realistically
+need interactive layout with a length-tuning tool and hand review of the critical nets — not
+blind scripting. That risk is precisely what 6.1 eliminates. This document is the checklist so
+nothing above is forgotten.
 
 ---
 
