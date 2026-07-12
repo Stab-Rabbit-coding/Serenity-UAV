@@ -67,7 +67,6 @@ TARGET = (CX, CY, CZ)  # look-at point for all cameras
 FUSELAGE_COLOR = (0.72, 0.60, 0.44, 1.0)  # warm sandy tan
 NACELLE_COLOR = (0.55, 0.46, 0.34, 1.0)  # slightly darker tan
 WING_COLOR = (0.70, 0.58, 0.42, 1.0)  # near fuselage
-GEAR_COLOR = (0.30, 0.28, 0.25, 1.0)  # dark charcoal for landing gear
 DETAIL_COLOR = (0.40, 0.36, 0.28, 1.0)  # medium brown for accessories
 PROP_COLOR = (0.18, 0.16, 0.14, 1.0)  # near-black for propulsion units
 SERVO_COLOR = (0.35, 0.30, 0.20, 1.0)  # dark tan for servos
@@ -88,10 +87,12 @@ COMPONENTS = [
     ("nacelles/nacelle_stbd_revs.stl", "Nacelle_Stbd", NACELLE_COLOR),
     ("wings/wing_port_s1223_revo.stl", "Wing_Port", WING_COLOR),
     ("wings/wing_stbd_s1223_revo.stl", "Wing_Stbd", WING_COLOR),
-    # --- Landing gear: STALE pre-R1.4 single-leg render, orphaned by the Rev
-    # R1.4 corner V-brace frame redesign; see TODO.md 1.1.4.1. Re-render via
-    # landing_leg_assy.scad PART="assy" before relying on this view.
-    ("fuselage/landing-gear/landing_legs_hull_r1.stl", "Landing_Legs", GEAR_COLOR),
+    # Landing gear: pre-R1.4 single-leg render `landing_legs_hull_r1.stl`
+    # ARCHIVED 2026-07-12 (TODO.md 1.1.4.1/1.1.4.6) — orphaned by the Rev
+    # R1.4 corner V-brace redesign, itself since superseded by the Rev R5
+    # vertical-post + wire-brace design (`wire_brace_leg.scad`); no
+    # hull-frame-positioned, multi-corner Rev R5 render exists yet to
+    # replace it. See ARCHIVE_INDEX.md.
     # Pylon (wing-to-nacelle tilt pivot): placement unverified in FreeCAD.
     ("wings/wing_nacelle_pylon_revo.stl", "Pylon", DETAIL_COLOR),
     # Nacelle tip caps ARCHIVED 2026-06-22 (legacy part, no longer needed) —

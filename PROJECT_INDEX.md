@@ -246,9 +246,6 @@ foot_1_scaled24.stl           — Individual foot 1 (Thingiverse reference)
 foot_2_scaled24.stl           — Individual foot 2 (Thingiverse reference)
 foot_3_scaled24.stl           — Individual foot 3 (Thingiverse reference)
 foot_4_scaled24.stl           — Individual foot 4 (Thingiverse reference)
-landing_legs_hull_r1.stl      — ORPHANED: rendered from a pre-R1.4 single-leg design (PART="hull_legs") that
-                                    no longer exists in landing_leg_assy.scad; superseded by the Rev R1.4 corner
-                                    V-brace frame below.  Re-render or delete (TODO.md LG-04/LG-09).
 [arm_upper_r1.stl]            — PENDING: Rev R1.4 upper corner V-arm CF-PETG (PART="arm_upper"; 4 per aircraft; struts ≈77.6 mm)
 [arm_lower_r1.stl]            — PENDING: Rev R1.4 lower corner V-arm CF-PETG (PART="arm_lower"; 4 per aircraft; struts ≈53.9 mm)
 [main_strut_r1.stl]           — PENDING: Rev R1.4 main vertical strut CF-PETG OD18 mm × 143 mm (PART="main_strut"; 4 per aircraft)

@@ -2147,10 +2147,17 @@ foot positions are baked).
     3 mm bore channel (CF rod, ~140 mm per skid) per `docs/LANDING_GEAR_ANALYSIS.md §10`.
     Re-export STL, re-bake, verify watertight.  **BLOCKS taxi test.**
 
-- [ ] **`landing_legs_hull_r1.stl` is orphaned** — rendered from an even earlier
-    pre-R1.4 single-leg SCAD mode that no longer exists in `landing_leg_assy.scad` (now
-    itself retired, §1.1.4.5 above). Delete the stale STL or update
-    `airframe/blender-scripts/serenity_render_views.py` line 97, which still references it.
+- [x] **`landing_legs_hull_r1.stl` is orphaned** *(resolved 2026-07-12)* — rendered
+    from an even earlier pre-R1.4 single-leg SCAD mode that no longer exists in
+    `landing_leg_assy.scad` (now itself retired, §1.1.4.5 above). Moved to
+    `airframe/archive/stls/fuselage/landing-gear/` and logged in `ARCHIVE_INDEX.md`;
+    the stale reference and its dead `GEAR_COLOR` constant were removed from
+    `airframe/blender-scripts/serenity_render_views.py`, and the `PROJECT_INDEX.md`
+    entry was dropped. No Rev R5 hull-frame-positioned, multi-corner landing-gear
+    render exists yet to take its place in the render suite — that remains open
+    (the Rev R5 illustrative STLs in `airframe/stls/fuselage/landing-gear/` are
+    single-corner, part-local schematics per `tools/build_landing_gear_views.py`,
+    not a hull-frame assembly render).
 
 ##### 1.1.4.7 *Qualification Testing (BLOCKS first flight)*
 

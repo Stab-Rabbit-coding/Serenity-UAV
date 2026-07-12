@@ -41,7 +41,7 @@ These are **owned** as checkboxes under airframe §1.1 (geometry) and the physic
 - (airframe/TODO.md §1.1) **wing_nacelle_pylon_revo.stl** — `openscad -o ... serenity/stl/wing_nacelle_pylon_revo.scad`
 - (airframe/TODO.md §1.1) **wings_s1223_revo.stl** — Rev R1 planform (2026-06-14): root 129 mm, tip 93 mm, zero LE sweep; STLs regenerated and baked ✓
 - (airframe/TODO.md §1.1) **LG-10 Finalize the 4 corner post placements** in `SerenityAssembly.FCStd`; bake
-- (airframe/TODO.md §1.1) **`landing_legs_hull_r1.stl` is orphaned** — rendered from an even earlier
+- (airframe/TODO.md §1.1) **`landing_legs_hull_r1.stl` is orphaned** *(resolved 2026-07-12)* — was rendered from an even earlier
 - (airframe/TODO.md §1.1) **Render overview SVGs using FreeCAD TechDraw** — 6 cardinal directions (top, bottom, front, rear, port, stbd) and all 8 isometric views (8 corners). Headless script creates a TechDraw page per view and exports SVG via `TechDraw.writeSVGPage()`. Save to `airframe/diagrams/overview/`.
 - (airframe/TODO.md §1.1) **Run FreeCAD catalog** — execute `serenity_placeholders_assembly.py` once
 - (airframe/TODO.md §1.1) **Add Phase-11 (deferred) items to catalog** — regenerate placeholders for the
