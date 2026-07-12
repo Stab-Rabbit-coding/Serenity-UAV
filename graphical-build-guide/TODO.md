@@ -47,24 +47,9 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 
 *Master:* [`TODO.md` §Phase0](../TODO.md) — 30 open, 0 done at snapshot.
 
-- [ ] **Flight Envelope Document** — create `docs/flight_envelope.md` covering:
-    - [ ] V_min (minimum control airspeed) vs. nacelle tilt angle — computed from wing area, CL_max, and nacelle thrust fraction
-    - [ ] V_max (never-exceed speed) vs. structural load limit and EDF rpm ceiling
-    - [ ] Altitude operating limits (AGL and MSL) per FAA Part 107 and battery performance
-    - [ ] Maximum demonstrated crosswind per nacelle angle increment (0°, 30°, 60°, 90°)
-    - [ ] Transition corridor: altitude AGL floor for nacelle 90°→0° sweep (minimum safe altitude to initiate transition)
-- [ ] **Failsafe Threshold Document** — create `docs/failsafe_thresholds.md` covering:
-    - [ ] Battery low-voltage alert threshold per cell (default 3.7V/cell) and RTL cutoff (3.5V/cell)
-    - [ ] Node heartbeat timeout for master re-election (default 100ms on CAN FD)
-    - [ ] Radio loss timer before automatic RTL (default 5s for SiK/LoRa; 10s for 49 MHz (Part 15 §15.235) as backup)
-    - [ ] ESC thermal cutback threshold (default 85°C) and shutdown threshold (95°C)
-    - [ ] ToF obstacle avoidance halt clearance (default 1.0m) and resume clearance (default 1.5m)
-    - [ ] All thresholds must be defined as compile-time constants in `firmware/common/failsafe_config.h`
-- [ ] **Electrical Fault Margin Validation** — create `docs/electrical_fault_margins.md` covering:
-    - [ ] Maximum ESC short-circuit current at 6S and required fuse break time; verify XT30 + 100A poly fuse coordinates with ESC MOSFET safe operating area
-    - [ ] BEC brown-out threshold: minimum input voltage at which 5V BEC output stays in regulation (≥4.90V); verify with actual 14AWG wire resistance at peak current
-    - [ ] Main bus fuse sizing: peak current = 4× EDF ESCs (4× 40A) = 160A nacelle peak; verify main XT90 connector rating and main fuse break curve do not nuisance-trip on motor surge
-    - [ ] Balance of plant: verify that loss of any single PWR conduit tap does not collapse the 5V avionics rail (BEC must tolerate single-segment loss)
+- [x] **Flight Envelope Document** *(resolved 2026-07-12 — see master TODO.md §3.0 Phase 0)* — created `docs/flight_envelope.md` (V_min/V_max/altitude/crosswind/transition-corridor).
+- [x] **Failsafe Threshold Document** *(resolved 2026-07-12 — see master TODO.md §3.0 Phase 0)* — created `docs/failsafe_thresholds.md` and `avionics/firmware/common/include/failsafe_config.h`. 2 new follow-up items opened (Wi-Fi/Zigbee RTL timer gap; ESC thermal reconciliation with `governor_config.h`) — see master.
+- [x] **Electrical Fault Margin Validation** *(resolved 2026-07-12 — see master TODO.md §3.0 Phase 0)* — created `docs/electrical_fault_margins.md`; 3 of 4 checks were already done in `docs/POWER_DISTRIBUTION.md` §9/§11, only cross-referenced here; single-PWR-conduit-loss check newly written.
 - [ ] Install hardened-steel nozzle (CF-PETG abrades brass)
 - [ ] Calibrate E-steps and Pressure Advance for each filament
 - [ ] Dry all filament 6 h at 65°C before printing

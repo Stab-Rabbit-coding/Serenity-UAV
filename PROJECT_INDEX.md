@@ -492,6 +492,7 @@ common/
 CMakeLists.txt
 include/
     ax25_types.h                  — AX.25 frame types
+    failsafe_config.h              — Cross-node failsafe thresholds: CAN FD heartbeat, radio-loss RTL, ESC thermal cutback/shutdown, ToF obstacle avoidance (see docs/failsafe_thresholds.md)
     kiss_types.h                  — KISS framing types
     sbus_input.h                  — SBUS input driver API
 src/
@@ -644,6 +645,9 @@ NOZZLE_DRIVE_TRADE.md             — Nozzle-drive redesign trade study: interna
 img/nozzle_drive_trade.png        — Nozzle-drive trade schematics + tilt→ring-angle curves (A vs B)
 img/wing_rev_r1a_sections.png     — Wing Rev R1a root/tip sections: camber-centred spar + EDF cableway
 POWER_DISTRIBUTION.md             — Power architecture: Kaylee PDB rails, fuse map, cable spec (Rev R; §3.2.1 Vera 5V rail added 2026-07-05)
+flight_envelope.md                — Flight envelope: V_min vs. nacelle tilt, V_max, altitude limits, crosswind, transition corridor (Rev S, 2026-07-12)
+failsafe_thresholds.md            — Failsafe thresholds: battery/RTL, CAN FD heartbeat, radio-loss RTL, ESC thermal, ToF obstacle avoidance (Rev S, 2026-07-12)
+electrical_fault_margins.md       — Electrical fault margin validation pointer doc (cites POWER_DISTRIBUTION.md §9/§11; single-PWR-conduit-loss analysis) (Rev S, 2026-07-12)
 VERA_LASER_ANALYSIS.md            — Vera laser: single 520nm green source feasibility, power/class vs spread-angle split, lens/DOE options (Rev A)
 REVN_BUILD_GUIDE_24IN.md          — Revision N+ 24-inch hull build guide (active, Rev R baseline)
 PHASED_BUILD_GUIDE.md             — Rev M 18-inch phased build guide (SUPERSEDED for 24-inch builds)
