@@ -9,7 +9,11 @@
 BasedOnStyle: Google
 IndentWidth: 4
 ColumnLimit: 80
-SortIncludes: Never
+# Boolean form (not the newer Never/CaseSensitive/CaseInsensitive enum) --
+# the clang-format bundled in the CI super-linter container predates the
+# enum syntax and fails to parse this file with "invalid boolean" if the
+# enum form is used.  false is the exact behavioral equivalent of Never.
+SortIncludes: false
 AlignConsecutiveMacros: AcrossEmptyLinesAndComments
 AlignConsecutiveDeclarations: true
 AlignTrailingComments: true

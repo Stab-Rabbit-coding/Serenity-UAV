@@ -516,10 +516,10 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 - [ ] **LG-03 CF rod channel in `middle_canonical_shell24.scad` rear skid arms** — add
     3 mm bore channel (CF rod, ~140 mm per skid) per `docs/LANDING_GEAR_ANALYSIS.md §10`.
     Re-export STL, re-bake, verify watertight.  **BLOCKS taxi test.**
-- [ ] **`landing_legs_hull_r1.stl` is orphaned** — rendered from an even earlier
-    pre-R1.4 single-leg SCAD mode that no longer exists in `landing_leg_assy.scad` (now
-    itself retired, §1.1.4.5 above). Delete the stale STL or update
-    `airframe/blender-scripts/serenity_render_views.py` line 97, which still references it.
+- [x] **`landing_legs_hull_r1.stl` is orphaned** *(resolved 2026-07-12 — see master
+    TODO.md §1.1.4.6)* — moved to `airframe/archive/stls/fuselage/landing-gear/`
+    (logged in `ARCHIVE_INDEX.md`); stale reference removed from
+    `airframe/blender-scripts/serenity_render_views.py`.
 - [ ] **LG-06 Drop test prototype leg assembly** — mount one complete assembly to a
     6.90 lbm (3,130 g) fixture. Drop from 1.5 ft (elastic check — confirm zero permanent
     set on the post and both wire types). **BLOCKS first flight.**

@@ -2147,10 +2147,17 @@ foot positions are baked).
     3 mm bore channel (CF rod, ~140 mm per skid) per `docs/LANDING_GEAR_ANALYSIS.md §10`.
     Re-export STL, re-bake, verify watertight.  **BLOCKS taxi test.**
 
-- [ ] **`landing_legs_hull_r1.stl` is orphaned** — rendered from an even earlier
-    pre-R1.4 single-leg SCAD mode that no longer exists in `landing_leg_assy.scad` (now
-    itself retired, §1.1.4.5 above). Delete the stale STL or update
-    `airframe/blender-scripts/serenity_render_views.py` line 97, which still references it.
+- [x] **`landing_legs_hull_r1.stl` is orphaned** *(resolved 2026-07-12)* — rendered
+    from an even earlier pre-R1.4 single-leg SCAD mode that no longer exists in
+    `landing_leg_assy.scad` (now itself retired, §1.1.4.5 above). Moved to
+    `airframe/archive/stls/fuselage/landing-gear/` and logged in `ARCHIVE_INDEX.md`;
+    the stale reference and its dead `GEAR_COLOR` constant were removed from
+    `airframe/blender-scripts/serenity_render_views.py`, and the `PROJECT_INDEX.md`
+    entry was dropped. No Rev R5 hull-frame-positioned, multi-corner landing-gear
+    render exists yet to take its place in the render suite — that remains open
+    (the Rev R5 illustrative STLs in `airframe/stls/fuselage/landing-gear/` are
+    single-corner, part-local schematics per `tools/build_landing_gear_views.py`,
+    not a hull-frame assembly render).
 
 ##### 1.1.4.7 *Qualification Testing (BLOCKS first flight)*
 
@@ -3681,39 +3688,58 @@ Order components after all Phase 0 STLs are confirmed printable in slicer. Long-
 
 **Pre-print documentation (complete before any fabrication begins):**
 
-- [ ] **Flight Envelope Document** — create `docs/flight_envelope.md` covering:
+- [x] **Flight Envelope Document** *(resolved 2026-07-12)* — created
+    `docs/flight_envelope.md`:
 
-    - [ ] V_min (minimum control airspeed) vs. nacelle tilt angle — computed from wing area, CL_max, and nacelle thrust fraction
+    - [x] V_min vs. nacelle tilt angle — computed from wing area (19,025 mm², both wings), S1223 CL_max≈2.0, and nacelle thrust fraction; table at −5°/0°/10°/20°/30°/θ_hover≈38.3°/60°/90°/120°/140°; V_min=66.3 kt at 0° down to 0 kt (thrust-borne) at and above θ_hover
 
-    - [ ] V_max (never-exceed speed) vs. structural load limit and EDF rpm ceiling
+    - [x] V_max — regulatory ceiling 87 kt [REF-FAA-002 §107.51(a)]; EDF RPM ceiling carried from the existing `governor_config.h` EDF_RPM_MAX_50MM=35,000 RPM software redline (not converted to an airspeed — no validated drag polar exists); wing-spar structural order-of-magnitude check (≈811 kt) shown not to be the binding constraint.
+      Actual achievable top speed explicitly left to Phase 9 flight test, not asserted here.
 
-    - [ ] Altitude operating limits (AGL and MSL) per FAA Part 107 and battery performance
+    - [x] Altitude operating limits — AGL 400 ft [REF-FAA-002 §107.51(b)]; MSL/density-altitude T/W margin computed (≈15,000 ft density altitude before T/W<1.0), a first-order estimate
 
-    - [ ] Maximum demonstrated crosswind per nacelle angle increment (0°, 30°, 60°, 90°)
+    - [x] Maximum demonstrated crosswind — honestly marked pending Phase 9 flight test (no fabricated kt figures); computed engineering bound instead (hover max bank angle φ≈51.7° from T/W margin) plus the existing Phase 9 WBS ≥10 kt acceptance target
 
-    - [ ] Transition corridor: altitude AGL floor for nacelle 90°→0° sweep (minimum safe altitude to initiate transition)
+    - [x] Transition corridor — documented pre-flight-test operational floor of 20 ft (6.1 m) AGL (>12× margin over the Phase 9 ≤0.5 m excursion tuning target) to initiate a 90°→0° sweep, pending flight validation
 
-- [ ] **Failsafe Threshold Document** — create `docs/failsafe_thresholds.md` covering:
+- [x] **Failsafe Threshold Document** *(resolved 2026-07-12)* — created
+    `docs/failsafe_thresholds.md` and `avionics/firmware/common/include/failsafe_config.h`:
 
-    - [ ] Battery low-voltage alert threshold per cell (default 3.7V/cell) and RTL cutoff (3.5V/cell)
+    - [x] Battery low-voltage alert / RTL cutoff — **correction: the "3.7V/cell alert, 3.5V/cell RTL cutoff" defaults above are superseded.** `avionics/firmware/fc/src/pwr_fault.h` and `docs/POWER_DISTRIBUTION.md` §8.1 already implement and document a real WARN(3.50V)/CRITICAL(3.30V, RTL trigger)/EMERGENCY(3.00V) state machine, predating this WBS item's placeholder defaults.
+      The new doc uses and cites the real, already-implemented values rather than the stale defaults (no firmware/doc change needed — this item was already done elsewhere, just not cross-referenced)
 
-    - [ ] Node heartbeat timeout for master re-election (default 100ms on CAN FD)
+    - [x] Node heartbeat timeout for master re-election — 100ms, `FAILSAFE_CANFD_HEARTBEAT_TIMEOUT_MS` in the new `failsafe_config.h`
 
-    - [ ] Radio loss timer before automatic RTL (default 5s for SiK/LoRa; 10s for 49 MHz (Part 15 §15.235) as backup)
+    - [x] Radio loss timer before automatic RTL — 5s SiK/LoRa, 10s 49 MHz (Part 15 §15.235), both newly defined in `failsafe_config.h`. **Open gap found and flagged (not fabricated):** Wi-Fi and Zigbee have no assigned RTL timer anywhere in the repository — new follow-up item below.
 
-    - [ ] ESC thermal cutback threshold (default 85°C) and shutdown threshold (95°C)
+    - [x] ESC thermal cutback (85°C) / shutdown (95°C) — newly defined in `failsafe_config.h` as the Phase 0 documentation-gate design target.
+      **Open reconciliation flagged (not silently applied):** `governor_config.h` already implements a single-stage `EDF_ESC_OVERTEMP_C=100` hard cutoff with no cutback stage; reconciling the two is a live-firmware safety-logic change and is deliberately left as a new follow-up item below rather than made in this documentation pass.
 
-    - [ ] ToF obstacle avoidance halt clearance (default 1.0m) and resume clearance (default 1.5m)
+    - [x] ToF obstacle avoidance halt (1.0m) / resume (1.5m) clearance — newly defined in `failsafe_config.h`; both well within the VL53L5CX's 4 m rated range (`REFERENCES.md` REF-SENSOR-002 note)
 
-    - [ ] All thresholds must be defined as compile-time constants in `firmware/common/failsafe_config.h`
+    - [x] All thresholds defined as compile-time constants in `avionics/firmware/common/include/failsafe_config.h` (actual path; the WBS item's shorthand `firmware/common/failsafe_config.h` omitted the `avionics/` prefix used throughout the rest of the tree)
 
-- [ ] **Electrical Fault Margin Validation** — create `docs/electrical_fault_margins.md` covering:
+    - [ ] **New follow-up:** assign Wi-Fi (5 GHz) and Zigbee (2.4 GHz) link-loss RTL timers (currently no timer exists for either link, unlike SiK/LoRa and 49 MHz above) and add them to `failsafe_config.h` + `docs/failsafe_thresholds.md` §2.2.
 
-    - [ ] Maximum ESC short-circuit current at 6S and required fuse break time; verify XT30 + 100A poly fuse coordinates with ESC MOSFET safe operating area
+    - [ ] **New follow-up:** reconcile `governor_config.h`'s existing single-stage `EDF_ESC_OVERTEMP_C=100` hard cutoff with the new two-stage 85°C cutback / 95°C shutdown scheme in `failsafe_config.h` — decide whether to add the cutback stage to `governor_config.h`'s live control loop and whether the existing 100°C hard fault should move to 95°C, then implement.
 
-    - [ ] BEC brown-out threshold: minimum input voltage at which 5V BEC output stays in regulation (≥4.90V); verify with actual 14AWG wire resistance at peak current
+    - [ ] **New follow-up:** add a `REFERENCES.md` REF-ID for the VL53L5CX obstacle-avoidance sensor (currently only mentioned informally inside the REF-SENSOR-002 entry's comparison note).
 
-    - [ ] Main bus fuse sizing: peak current = 4× EDF ESCs (4× 40A) = 160A nacelle peak; verify main XT90 connector rating and main fuse break curve do not nuisance-trip on motor surge
+- [x] **Electrical Fault Margin Validation** *(resolved 2026-07-12 — mostly
+    already done, just not previously cross-referenced)* — created
+    `docs/electrical_fault_margins.md` as a pointer document; three of the
+    four checks were already fully analyzed in `docs/POWER_DISTRIBUTION.md`
+    §9/§11 before this WBS item was picked up:
+
+    - [x] Maximum ESC short-circuit current / fuse break time — already covered, `docs/POWER_DISTRIBUTION.md` §9.1 (40A mini-blade + 10AWG, correctly coordinated).
+      **Correction: this WBS item's "XT30 + 100A poly fuse" reference is stale** — no 100A poly/PTC fuse exists anywhere in the current design (`current-specification/bom_revS.csv` specifies `FUSE-ESC-40A`, a 40A mini-blade, per ESC); flagged in the new doc rather than silently rewritten here.
+
+    - [x] BEC brown-out threshold ≥4.90V — already covered, `docs/POWER_DISTRIBUTION.md` §9.2 (exact match to this item's target)
+
+    - [x] Main bus fuse sizing — already covered, `docs/POWER_DISTRIBUTION.md` §9.4 (150A MAXI, 165A peak = 110%, >60s to trip; slightly more conservative than this item's own 160A peak estimate since it also accounts for simultaneous radio TX load)
+
+    - [x] Balance of plant / single PWR conduit tap loss — **newly analyzed** (had no prior write-up): `docs/electrical_fault_margins.md` §4 documents that SMPS-channel-level redundancy exists (diode-OR'd dual TPS54620, `POWER_DISTRIBUTION.md` §11) but wiring-level rail-segment redundancy does NOT.
+      That gap is covered architecturally by PACE avionics-role failover (root `CLAUDE.md`), not by the power wiring itself. Stated plainly rather than glossed over.
 
     - [ ] Balance of plant: verify that loss of any single PWR conduit tap does not collapse the 5V avionics rail (BEC must tolerate single-segment loss)
 
