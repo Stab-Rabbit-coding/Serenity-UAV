@@ -9,12 +9,14 @@ Adds J_CAM_DS (DS_Camera_9P), J_TOF_DS (DS_ToF_4P), J_LASER_DS (DS_Laser_2P) fro
 the Vera.pretty library, assigning each pad the SAME net as its JST counterpart so
 the lands are true populate-one-or-the-other alternates (no net change).
 
-PLACEMENT: the three lands are seeded in a row at the aperture-relative X spacing
-from bow_sensor_pod.scad (camera CAM_POS X=170.80, ToF TOF_POS X=154.33, laser CL
-~162.5 -> ToF..laser 8.2mm, ToF..camera 16.5mm) near one board edge.  This is a
-STARTING position only: the final XY/rotation and which board edge faces the pod
-(and the port/stbd sense) are a MANUAL mechanical fit to the nose sensor mounting
-plate -- refer to user (project rule: final footprint placement is manual).
+Board frame (user-confirmed 2026-07-12): +X fore->aft, +Y starboard->port,
++Z ventral->dorsal.  The sensor connectors (and these lands) are at the HIGH-X end
+(~62-67mm); the network connectors are at the low-X end -- correct as-built.  The
+three apertures differ in the PORT-STARBOARD (Y) axis (camera=port/high-Y,
+ToF=starboard/low-Y, laser=centreline), so the lands are spread along Y with the
+aperture spacing from bow_sensor_pod.scad (ToF..laser 8.2mm, ToF..camera 16.5mm).
+The Y positions here are a STARTING alignment; final XY/rotation to the sensor
+mounting plate is a MANUAL mechanical fit (project rule: final placement is manual).
 
 Author : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  (Griffing Technology LLC)
 AI-assist: Claude Opus 4.8 (Anthropic) -- pcbnew transform, 2026-07-12.
@@ -35,8 +37,8 @@ PRETTY = str(HERE / "Vera.pretty")
 # differ in the PORT-STARBOARD (Y) axis: camera=PORT (high Y), ToF=STARBOARD
 # (low Y), laser=centreline (mid Y); Y spacing is aperture-derived
 # (bow_sensor_pod.scad: ToF..laser 8.2mm, ToF..camera 16.5mm).  The lands are
-# co-located with their JST counterparts at the SENSOR end of the board (which is
-# currently high-X on this board -- see the fore/aft note in the commit message).
+# co-located with their JST counterparts at the SENSOR end of the board (high-X,
+# correct as-built).
 #
 # ref -> (footprint name, {pad_number: net_name}, (x_mm, y_mm))
 SENSOR_X = 62.0  # co-located just inboard of the sensor JST cluster (X~65-67)

@@ -170,6 +170,17 @@ laser BOM to a single green diode family. Rationale in full: `docs/VERA_LASER_AN
 convention).** - **Changed 7-7-2026** updated Vera dimensions to 1.0 × 2.75 in (25.4 × 69.85 mm) to allow it to sit flush against the camera/ToF/laser faceplate within the nose. Camera, ToF, and laser connectors are moved to the board's forward end and Ethernet, power, and CAN-FD connectors are at the other end. Four mounting holes are still present. Design should work in both nose and cargo bay.
     - This allows for direct pcb soldering of sensors in nose or via jst connectors in cargo bay. (needs feasibilty review)
 
+**Board coordinate frame (KiCad; user-confirmed 2026-07-12):** **+X = fore→aft, +Y =
+starboard→port, +Z = ventral→dorsal.** On the as-built board the camera/ToF/laser JST
+connectors **and** their direct-solder lands (`J_CAM_DS`/`J_TOF_DS`/`J_LASER_DS`) are at the
+**high-X end (~62–67 mm)**; the Ethernet-ring, CAN-FD, and power connectors are at the
+**low-X end (~6–11 mm)**. The three sensor apertures differ in the **port-starboard (Y)** axis
+— **camera = port (high Y), ToF = starboard (low Y), laser = centreline** — so the DS lands are
+spread along **Y** to match `airframe/openscad/fuselage/bow_sensor_pod.scad`
+(`CAM_POS`/`TOF_POS`, ToF··laser 8.2 mm, ToF··camera 16.5 mm). Board and DS-land placement are
+correct as-built; an earlier "fore/aft mismatch" note was a high-vs-low-X mix-up, now resolved.
+Final XY/rotation of the lands to the sensor mounting plate is a manual mechanical fit.
+
 Board-size history: the original single-sided draft was 110×190 mm — the two big placeholder
 ICs (U1's BGA footprint, U2's TQFP footprint) forced that size using rough first-guess body
 dimensions. Several things brought it down to the current 1.0 × 2.75 in (25.4 × 69.85 mm):
