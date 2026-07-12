@@ -3,8 +3,18 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **AI-assist:** Claude Opus 4.8 (Anthropic) — geometry derivation, 2026-07-12
 **License:** CC BY 4.0
-**Revision:** Rev B (2026-07-12)
+**Revision:** Rev C (2026-07-12)
 
+> **Rev C — SoM variant switched to connectorized PCM-071** (user, 2026-07-12). The
+> module is now **32 × 43 mm** (was 40×40 DSC) via 2× Samtec BTH-060 board-to-board
+> connectors, **+5 mm stacking Z-height** (the flush DSC advantage is gone). Two
+> effects: (1) the **32 mm width fits the trapezoid comfortably** — the "SoM barely
+> fits" tension of §4 is **gone** (a 32 mm part is within the board over the aft
+> ~55 mm, and the wide end can shrink toward ~40 mm); (2) a new **nose-pod Z-budget
+> check** for the 5 mm connector stack (head interior is ~140 mm tall so likely fine,
+> but confirm the stack direction vs the skin). Sections 4/4.1 (40×40 fit) are
+> retained as history; the width conclusion only relaxes.
+>
 > **Rev B update — measured, not estimated.** Slicing the baked head STL
 > (`airframe/stls/fuselage/head_shell24_2mm_repaired.stl`, hull frame) at the board
 > Z-band shows the **blunt** nose widens fast, so the §4 pessimism (based on a linear
