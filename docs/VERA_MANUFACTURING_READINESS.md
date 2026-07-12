@@ -9,6 +9,11 @@ that closes most of it.
 
 **Changelog:**
 
+- **Rev C (2026-07-11):** Module + form factor **locked** (user): **PHYTEC phyCORE-AM62A**
+  (40×40 mm, 270-pin 0.8 mm direct-solder) on a **trapezoidal carrier** — narrow end (≤ 1.0 in)
+  toward the sensor pod, widening aft to seat the 40 mm module, conforming to the nose cone.
+  Added the verified module spec, the carrier interface/net map (§3B, the schematic plan), and
+  the pinout datasheet gate. See §1.1, §3A, §3B.
 - **Rev B (2026-07-06):** Added the recommended resolution — mount the AM62A on a vendor
   **system-on-module (SoM)** and rebuild Vera as a **carrier board**, which eliminates the
   LPDDR4/boot-flash/power-sequencing/DDR-BGA gaps (G1/G2/G4 and most of G6). Re-scoped the
@@ -58,15 +63,19 @@ Industrial** compute modules on capes; raw-SoC Vera was the outlier.
 **Verified this session (2026-07-06):** TI's own SK-AM62A-LP EVM confirms the AM62A7 (AM62A74,
 quad-A53) pairs with **external 4 GB LPDDR4** and provides **4-lane MIPI CSI-2** + **dual
 gigabit Ethernet** — i.e. the memory really is external (the gap is real) and the camera/Ethernet
-Vera needs are native to the part. SoM vendors for the AM62 family are real and shipping
-(Variscite VAR-SOM-AM62 / -AM62P confirmed live; PHYTEC phyCORE-AM62Ax and a Variscite AM62A
-variant are known product lines but **their datasheets could not be pulled this session** —
-PHYTEC's domain is blocked by a local permission hook, Variscite's AM62A page URLs 404'd, and
-WebSearch was rate-limited). **Module selection is therefore the one open datasheet-gated
-decision** (§3A) — no specific SoM P/N or connector is committed here.
+Vera needs are native to the part. **Module + form factor LOCKED (2026-07-11, user):** no AM62A SoM fits a 1.0 in-wide board
+(narrowest ~30 mm OSM; mainstream 40 mm), so Vera becomes a **trapezoidal carrier** conforming
+to the nose cone — **narrow end ≤ 1.0 in toward the sensor pod** (camera/ToF/laser), **widening
+aft to seat the module**. Selected module: **PHYTEC phyCORE-AM62A** (see §3A for verified spec).
+
+**The one remaining datasheet gate is the module PIN MAP:** the phyCORE-AM62A 270-pad
+assignment lives only in the PHYTEC Hardware Manual PDF, which is **blocked in this build
+environment** (phytec.com + snapeda.com denied by a PermissionRequest hook; phytec.eu exposes
+the interface list but not the pad table). The SoM schematic **symbol cannot be authored without
+it** — fabricating 270 pad numbers is barred by the no-fabrication rule. Unblock path in §3B.
 
 The raw-SoC gap analysis (§2–§6) is retained below because it defines what the SoM buys us and
-remains the fallback if no suitable AM62A SoM qualifies on size/CSI-lane/connector-height.
+remains the fallback if the phyCORE-AM62A is disqualified on fit.
 
 ---
 
@@ -143,12 +152,67 @@ Vera becomes a **carrier** for an AM62A SoM. What lives where:
    1.0 in width (verify against `airframe/openscad/fuselage/bow_sensor_pod.scad`).
 4. Documented **carrier design guide + reference schematic** and current production status.
 
-Candidate families to evaluate against the above (verify each P/N's datasheet before BOM entry —
-none committed here): **PHYTEC phyCORE-AM62Ax**, **Variscite VAR-SOM-AM62A / DART-AM62A**.
+**Selected module (2026-07-11): PHYTEC phyCORE-AM62A.** Verified spec (TI partner page +
+phytec.eu, 2026-07-11):
 
-**Trade to accept:** a SoM adds some **Z-height** (module + connector stack) and per-unit cost,
-in exchange for deleting the LPDDR4/flash/sequencing design and the single largest fabrication
-risk. For a low-volume flight build this trade strongly favors the SoM.
+- **SoC:** AM62A7 (AM62A74, quad-A53) + 2 TOPS C7x DSP; H.264/H.265 encode/decode to 4K30.
+- **On-module memory:** 4 GB LPDDR4, 128 GB eMMC, 256 MB OSPI NOR, 4 KB EEPROM — **boot media
+  is on the module (G2 closed).**
+- **Interconnect:** 270-pad, 0.8 mm-pitch **direct-solder** edge (half-hole) — **no connector,
+  no added Z-height** (ideal for the pod), solders flat to the carrier.
+- **Interfaces to carrier:** 2× GbE (1× via on-module DP83867IR PHY, 1× RGMII pins to
+  carrier), up to 9 UART, 3× CAN-FD, 6 I²C, 4 SPI, 1× 4-lane MIPI CSI-2 v1.3.
+- **Size:** 40 × 40 mm (drives the trapezoid wide end).
+
+**Chosen over** Variscite VAR-SOM-AM62 (67.8×33 mm, and plain AM62 = no ISP) and Critical Link
+MitySOM-AM62A (~43×39 mm) on footprint + direct-solder (no connector height). The 38×28 mm
+Beacon AM62**L** was rejected — the L variant has **no ISP/VPAC/encode**.
+
+**Trade to accept:** a SoM adds some **Z-height** (module thickness + its tallest part; no
+connector, since this module is direct-solder) and per-unit cost, in exchange for deleting the
+LPDDR4/flash/sequencing design and the single largest fabrication risk. For a low-volume flight
+build this trade strongly favors the SoM.
+
+---
+
+## 3B. Carrier interface / net map (the schematic plan)
+
+This is the wiring the carrier schematic implements. Every carrier-side part below has a
+**verified pinout already in this repo** (reused from `gen_cape_a2*.py` / existing Vera files) —
+only the **SoM-side pad numbers** are datasheet-gated. The generator (a `gen_vera_sch.py`, in
+the Emma pattern) can wire all of this the moment the phyCORE-AM62A pad map is available.
+
+**Interface map (SoM function → carrier net → destination):**
+
+| SoM function | Carrier net(s) | Destination on carrier |
+| --- | --- | --- |
+| RGMII (1×, to-connector) + MDIO | RGMII_TXD[0:3]/RXD[0:3]/TXC/RXC/TXCTL/RXCTL, MDC/MDIO | KSZ9477 switch (HSR/PRP ring) |
+| MIPI CSI-2 (4-lane + CLK) | CSI_D[0:3]±, CSI_CLK± | Camera connector / direct-solder land (§4) |
+| SPI (1×) | SPI_TPM_SCLK/MOSI/MISO/CS_N | SLB9670 TPM |
+| CAN-FD (1×) | MCU_CANL/CANH domain | MSPM0G3507 → ISOW1044 isolated CAN → J_CANFD |
+| UART (1–2×) | ToF_UART_TX/RX; console UART | MSPM0G3507 / TFmini-S ToF; debug header |
+| GPIO/PWM | LASER_EN, LASER_PWM, LASER_KEY (opt.) | Laser driver (Q1 + hardware current limit) |
+| Reset / boot-mode | POR_N, BOOTMODE straps | pull-net resistors per HW manual |
+| Power in | +5V, GND, PGND | 5 V feed (POWER_DISTRIBUTION.md §3.2.1); SoM makes its own rails |
+
+**Power tree:** 5 V in → phyCORE-AM62A VIN (module hosts its own PMIC/sequencing). Carrier-only
+loads (KSZ9477, SLB9670, MSPM0G3507, magnetics) draw from either the SoM's exposed 3V3/1V8 rails
+*or* a small carrier LDO — **which, is datasheet-gated** on what rails the module brings out to
+the 270 pads (HW manual). Ethernet EMI chain unchanged: Wurth 749010012A + 2× SRF2012 CMC + 2×
+PRTR5V0U2X TVS per port; same CMC+TVS on the CAN bus after ISOW1044.
+
+**Trapezoidal outline spec (KiCad Edge.Cuts):** narrow end **≤ 25.4 mm (1.0 in)** at the pod;
+wide end **≈ 42 mm** (40 mm module + 1 mm/side); length set by nose interior aft of the pod
+(FreeCAD check against `airframe/openscad/fuselage/bow_sensor_pod.scad` — **refer final length
+to user**, per the placement rule). Narrow end carries the camera + ToF + laser (toward the
+pod); wide end carries the SoM + KSZ9477. Sidewalls follow the cone half-angle.
+
+**Unblock path (the one gate to a real symbol):** obtain the phyCORE-AM62A **270-pad pin map**,
+by either — (a) downloading the **SnapMagic "PHYCORE-AM62AX-DSC" KiCad symbol + footprint**
+(snapeda.com) and dropping it in `avionics/kicad/`, or (b) attaching the **PHYTEC phyCORE-AM62A
+Hardware Manual** PDF (pad-assignment table) to the repo. Both hosts are blocked by this
+environment's PermissionRequest hook, so this is a **user action** (allowlist the domain, or
+download + commit the file). Then `gen_vera_sch.py` wires §3B and ERC-checks it.
 
 ---
 
