@@ -211,15 +211,21 @@ this project's workflow anticipates. **Note:** `gen_vera_pcb.py` itself still ge
 pre-compaction 78×80mm layout — it has not been updated to match the hand-compacted 1.0 × 2.75 in (25.4 × 69.85 mm)
 result, so re-running it will not reproduce the current file (see "Generator Scripts" below).
 
-**DRC regression fixed 2026-07-12:** the 2026-07-11 U4 repositioning (line 199-200 above) left
-each of U4's 16 pads carrying its own local 90° `at` rotation, duplicating the footprint's
-own 90° placement rotation. Composed (90+90=180°), that put the pad's *long* (2 mm) dimension
-along the 1.27 mm pitch axis instead of the *short* (0.6 mm) one — verified against the real
-upstream `Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm` library footprint, which carries no per-pad
-rotation at all — causing ~0.6–0.7 mm copper overlap between adjacent different-net pads (CI:
-1 `clearance` + 1 `solder_mask_bridge` hard violation). Fixed by dropping the redundant
-per-pad rotation on all 16 U4 pads (footprint position/placement rotation unchanged); no
-component was repositioned. Re-verify DRC before fabrication.
+**Open DRC finding, REFERRED TO USER 2026-07-12:** CI (`kicad-cli` 9.0.9, not available in the
+assistant sandbox — the KiCad PPA host is blocked by this environment's egress policy) reports
+U4 (TI ISOW1044BDFMR, SOIC-16W) with 1 `clearance` + 1 `solder_mask_bridge` hard DRC violation
+(`actual 0.0000 mm` — copper touching). A same-day fix attempt that dropped each U4 pad's
+explicit 90° local `at` rotation (reasoning: it looked redundant against the footprint's own
+90° placement rotation, and the unplaced upstream `Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm`
+library footprint carries no per-pad rotation) was **reverted** after CI showed it made things
+far worse — 32 hard violations, including genuine `shorting_items` between adjacent U4 pads
+(GND/CANFD_TX, CANFD_TX/CANFD_STBY_N, CANFD_ISOGND/+5V, CANFD_ISO_L/CANFD_ISO_H, etc.). That
+result shows the pad's stored `at` angle is *not* simply additive with the footprint's
+placement rotation the way a naive rigid-body composition would suggest — the real semantics
+kicad-cli applies here couldn't be confirmed without live DRC. **Do not re-attempt this fix
+blind;** re-verify any candidate change against `kicad-cli pcb drc` (KiCad 9.0.x) before
+committing. File is back at the pre-2026-07-12 state (1 clearance + 1 solder_mask_bridge on
+U4, same as the rest of this section describes).
 
 Mounting holes: 4× M3, symmetric 4 mm margin from each edge — (4,4), (65.85,4), (4,21.4), (65.85,21.4).
 
