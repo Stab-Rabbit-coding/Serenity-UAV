@@ -88,11 +88,11 @@ COMPONENTS = [
     ("wings/wing_port_s1223_revo.stl", "Wing_Port", WING_COLOR),
     ("wings/wing_stbd_s1223_revo.stl", "Wing_Stbd", WING_COLOR),
     # Landing gear: pre-R1.4 single-leg render `landing_legs_hull_r1.stl`
-    # ARCHIVED 2026-07-12 (TODO.md 1.1.4.1/1.1.4.6) — orphaned by the Rev
-    # R1.4 corner V-brace redesign, itself since superseded by the Rev R5
-    # vertical-post + wire-brace design (`wire_brace_leg.scad`); no
-    # hull-frame-positioned, multi-corner Rev R5 render exists yet to
-    # replace it. See ARCHIVE_INDEX.md.
+    # ARCHIVED 2026-07-12 — orphaned by the Rev R1.4 corner V-brace
+    # redesign, itself since superseded by the Rev R5 vertical-post +
+    # wire-brace design (`wire_brace_leg.scad`); no hull-frame-positioned,
+    # multi-corner Rev R5 render exists yet to replace it. See
+    # ARCHIVE_INDEX.md.
     # Pylon (wing-to-nacelle tilt pivot): placement unverified in FreeCAD.
     ("wings/wing_nacelle_pylon_revo.stl", "Pylon", DETAIL_COLOR),
     # Nacelle tip caps ARCHIVED 2026-06-22 (legacy part, no longer needed) —
