@@ -1,9 +1,3 @@
-Edmund Optics short-note (Powell + cylindrical):
-
-- Powell lenses: Edmund Optics maintains a Powell/line-generator family (see https://www.edmundoptics.com/f/powell-lenses/12245). Powell lenses provide a highly uniform line but catalog minimum fan angles are typically around ~1°; 0.5° is usually a custom-order item.
-- Cylindrical lenses: Edmund's catalog includes small-format cylindrical/plano-concave elements; specific SKUs and pricing require a manual site visit because automated scraping is blocked by Cloudflare challenge pages. If needed I can manually capture SKUs and prices by interactively opening Edmund product pages.
-
-Note: automated fetch attempts hit Cloudflare "Just a moment..." interstitials; I recommend manual verification for Edmund Optics SKUs/prices (or I can collect them interactively if you want me to continue). The search link above is a direct starting point.
 # Vera Laser Indicator — Single-Source Feasibility & Spread-Angle Analysis
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
@@ -277,7 +271,7 @@ At Z = 5 ft (1.5 m), f ≈ 3200 px (a ~33° FOV covering ~3 ft), disparity preci
   grid-pose method of §4.4; only the close-range cargo install benefits from a baseline.
 
 Mechanical consequence: the cargo `cargo_fpv_bezel` install must provide **two apertures ~75 mm
-apart** (camera head + dot-projector head) rather than a co-located cluster — see
+apart** (camera head + dot-projector head) rather than a colocated cluster — see
 `avionics/kicad/Vera.md` "Cargo install".
 
 ---
@@ -363,8 +357,7 @@ apart** (camera head + dot-projector head) rather than a co-located cluster — 
 
 Notes: the Vera installations cannot accept optics with a mounting diameter larger than 0.5 in (12.7 mm). Prefer unmounted or small-height cylindrical lenses (H ≤ 12 mm) or small-form Powell/line-generator optics. The following vendors and part families are vetted starting points; I will fetch product pages and populate SKUs/URLs/pricing below.
 
-- **Thorlabs** — Plano-concave cylindrical lenses (LK series, various f), mounted round cylindrical lenses (e.g. LK1419RM etc. — *note many mounted parts are 1" and therefore too large; prefer unmounted LK items with H ≤ 12 mm*). Thorlabs also supports custom optics requests. Product pages: https://www.thorlabs.com/cylindrical-lenses and https://www.thorlabs.com/item/LK4326-C
-- **Thorlabs** — Plano-concave cylindrical lenses (LK series, various f), mounted round cylindrical lenses (e.g. LK1419RM etc. — *note many mounted parts are 1" and therefore too large; prefer unmounted LK items with H ≤ 12 mm*). Thorlabs also supports custom optics requests. Product pages: https://www.thorlabs.com/cylindrical-lenses and https://www.thorlabs.com/item/LK4326-C
+- **Thorlabs** — Plano-concave cylindrical lenses (LK series, various f), mounted round cylindrical lenses (e.g. LK1419RM etc. — *note many mounted parts are 1" and therefore too large; prefer unmounted LK items with H ≤ 12 mm*). Thorlabs also supports custom optics requests. Product pages: <https://www.thorlabs.com/cylindrical-lenses> and <https://www.thorlabs.com/item/LK4326-C>
 
 Thorlabs short-list (catalog candidates fitting ≤ 12.7 mm height where noted):
 
@@ -375,8 +368,8 @@ Thorlabs short-list (catalog candidates fitting ≤ 12.7 mm height where noted):
 - `LK4326-C` — f = -25.0 mm, UV fused silica, H = 15.0 mm (exceeds 12.7 mm — too tall for our mount)
 
 Notes: many Thorlabs focal lengths near the requested ranges (f ≈ 115 mm or 229 mm) are available only in taller heights or mounted 1" variants; for those focal lengths a custom order or unmounted large-diameter lens with a custom small cell is likely required. I'll continue to Edmund Optics next to find Powell and small cylindrical options.
-- **Edmund Optics** — Cylindrical lenses and Powell (line-generator) optics; broad focal-length ranges and small-format parts suitable for compact mounts. Start at https://www.edmundoptics.com and search "cylindrical lens" / "Powell lens".
-- **OptoSigma** — Cylindrical lenses and custom optics (small-form factors available). https://www.optosigma.com/en
+- **Edmund Optics** — Cylindrical lenses and Powell (line-generator) optics; broad focal-length ranges and small-format parts suitable for compact mounts. Start at <https://www.edmundoptics.com> and search "cylindrical lens" / "Powell lens".
+- **OptoSigma** — Cylindrical lenses and custom optics (small-form factors available). <https://www.optosigma.com/en>
 - **Newport (MKS/Thorlabs/Exoptic resellers)** — cylindrical/line optics catalog; good for alternate sourcing.
 - **Resellers / stock optics** — MeetOptics, StockLens, Edmund/Thorlabs distributors — useful when a small, off-the-shelf SKU is needed quickly.
 
