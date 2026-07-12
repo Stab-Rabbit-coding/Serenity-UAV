@@ -40,7 +40,7 @@ This is a tilt-rotor, not a fixed-wing aircraft: weight is supported by a
 combination of wing lift and the vertical component of nacelle thrust. At
 tilt angle θ (0° = horizontal/cruise, 90° = vertical/hover):
 
-```
+```text
 T_vertical(θ) = T_total × sin(θ)
 L_required(θ) = W − T_vertical(θ)          [wing lift needed, if any]
 V_min(θ)      = sqrt( 2 × L_required(θ) / (ρ × S × CL_max) )   if L_required(θ) > 0
@@ -82,7 +82,7 @@ above as a design estimate pending flight test, not a flight-tested limit.
 
 **Design implication:** at 0° tilt (pure fixed-wing cruise), V_min (66 kt)
 exceeds the 40 kt reference speed used for the wing's Reynolds-number
-citation elsewhere in this repo — this airframe's tiny high-wing-loading
+citation elsewhere in this repository — this airframe's tiny high-wing-loading
 planform cannot sustain level flight at 40 kt on wing lift alone. This is
 expected and consistent with the design intent: Serenity UAV is a
 hover-centric VTOL platform (root `CLAUDE.md` design mission profile) where
@@ -108,14 +108,14 @@ is a hard legal ceiling independent of the aircraft's actual capability.
 `avionics/firmware/fc/src/governor_config.h` already defines the software
 redline for the 50 mm nacelle EDFs:
 
-```
+```text
 EDF_RPM_MAX_50MM = 35,000 RPM   (software redline; ESC over-speed protection is the hardware backstop above this)
 ```
 
 This bounds the propulsion system's operating point but does not, by
 itself, convert to an airspeed without a validated thrust/drag model at
 that RPM — no drag polar exists yet for this airframe (parasite drag
-estimate is not in-repo). The RPM ceiling is therefore carried forward as a
+estimate is not in the repository). The RPM ceiling is therefore carried forward as a
 **propulsion-system constraint**, not converted into a fabricated top-speed
 number here. Actual achievable top speed is a Phase 9 WBS output ("Thrust
 stand calibration," "T/W measured" pass criteria, `TODO.md` §3.0 Phase 9).
@@ -129,7 +129,7 @@ and the conservative allowable stress methodology already established in
 CF estimate, FOS 4.0 design-team judgment value pending supplier test
 certificates):
 
-```
+```text
 Section modulus, tube:  Z = π(D_o⁴ − D_i⁴) / (32·D_o) = 116.0 mm³
 Allowable moment:        M_allow = Z · σ_u / FOS = 43.5 N·m
 Moment arm (conservative, per-wing lift at spar mid-semi-span):  0.5 × 85.7 mm = 42.85 mm
@@ -140,7 +140,7 @@ Solving V from L_total = 0.5·ρ·V²·S·CL (CL = 1.0, a maneuvering condition,
 
 This is a rough-order-of-magnitude strength check only — it does not
 account for spar deflection/flutter, the wing shell's own load-sharing
-contribution, or a validated CF-tube modulus (none is in-repo; this uses
+contribution, or a validated CF-tube modulus (none is in the repository; this uses
 strength, not stiffness). **Conclusion: the spar is not the binding
 constraint by a wide margin** at any speed this airframe's propulsion
 system could plausibly reach — 811 kt is roughly 9× the regulatory ceiling
@@ -180,7 +180,7 @@ linear with density at fixed RPM for a static/low-speed ducted fan — a
 standard first-order simplification, not a validated fan performance
 curve).
 
-```
+```text
 T/W(σ) ≈ T/W(sea level) × σ            where σ = ρ/ρ0 (density ratio)
 T/W = 1.0 (bare hover floor) when σ = 1/1.61 = 0.621
 ```
@@ -217,7 +217,7 @@ In full hover, lateral station-keeping against a crosswind is achieved by
 banking to vector part of the nacelle thrust laterally, at the cost of
 vertical thrust margin:
 
-```
+```text
 T·cos(φ) ≥ W  →  φ_max = arccos(W/T) = arccos(1/1.61) ≈ 51.7°
 ```
 

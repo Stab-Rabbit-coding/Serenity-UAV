@@ -60,7 +60,7 @@ extern "C" {
  */
 
 /** CAN FD node heartbeat re-election timeout (ms). */
-#define FAILSAFE_CANFD_HEARTBEAT_TIMEOUT_MS   (100U)
+#define FAILSAFE_CANFD_HEARTBEAT_TIMEOUT_MS       (100U)
 
 /* ============================================================================
  * External Radio Loss -> Automatic RTL
@@ -76,8 +76,9 @@ extern "C" {
  * of link loss."
  */
 
-/** SiK (915 MHz) / LoRa (915 MHz) link-loss timer before autonomous RTL (ms). */
-#define FAILSAFE_RADIO_LOSS_RTL_SIK_LORA_MS    (5000U)
+/** SiK (915 MHz) / LoRa (915 MHz) link-loss timer before autonomous RTL (ms).
+ */
+#define FAILSAFE_RADIO_LOSS_RTL_SIK_LORA_MS       (5000U)
 
 /**
  * 49 MHz (Emma, 47 CFR Part 15 S15.235) link-loss timer before autonomous
@@ -86,7 +87,7 @@ extern "C" {
  * CLAUDE.md) — a slower AFSK/KISS link legitimately has more inter-frame
  * gap, so the timer must not nuisance-trigger RTL during normal operation.
  */
-#define FAILSAFE_RADIO_LOSS_RTL_49MHZ_MS       (10000U)
+#define FAILSAFE_RADIO_LOSS_RTL_49MHZ_MS          (10000U)
 
 /* ============================================================================
  * ESC Thermal — Two-Stage Cutback / Shutdown
@@ -104,14 +105,14 @@ extern "C" {
  * affected EDF (deg C).  Below FAILSAFE_ESC_THERMAL_SHUTDOWN_C — the EDF
  * stays armed at reduced throttle rather than latching a hard fault.
  */
-#define FAILSAFE_ESC_THERMAL_CUTBACK_C         (85)
+#define FAILSAFE_ESC_THERMAL_CUTBACK_C            (85)
 
 /**
  * ESC temperature at which the governor latches a hard shutdown fault on
  * the affected EDF (deg C).  Mirrors the PWR_STATE_EMERGENCY / GCS-ack
  * no-auto-recovery semantics already used by pwr_fault.h.
  */
-#define FAILSAFE_ESC_THERMAL_SHUTDOWN_C        (95)
+#define FAILSAFE_ESC_THERMAL_SHUTDOWN_C           (95)
 
 /**
  * Throttle percentage commanded on an EDF in thermal cutback (%).  Reuses
@@ -119,7 +120,7 @@ extern "C" {
  * consistency across the codebase's fault-response vocabulary rather than
  * introducing a new unrelated percentage.
  */
-#define FAILSAFE_ESC_THERMAL_CUTBACK_THROTTLE_PCT  (70U)
+#define FAILSAFE_ESC_THERMAL_CUTBACK_THROTTLE_PCT (70U)
 
 /* ============================================================================
  * ToF Obstacle Avoidance — Halt / Resume Clearance
@@ -136,10 +137,10 @@ extern "C" {
  */
 
 /** Obstacle range below which forward/lateral motion is halted (m). */
-#define FAILSAFE_TOF_HALT_CLEARANCE_M          (1.0f)
+#define FAILSAFE_TOF_HALT_CLEARANCE_M             (1.0f)
 
 /** Obstacle range above which halted motion may resume (m). */
-#define FAILSAFE_TOF_RESUME_CLEARANCE_M        (1.5f)
+#define FAILSAFE_TOF_RESUME_CLEARANCE_M           (1.5f)
 
 #ifdef __cplusplus
 }

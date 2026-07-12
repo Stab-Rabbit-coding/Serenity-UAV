@@ -10,7 +10,7 @@ the substantive analysis for three of the four required checks was already
 performed and documented in `docs/POWER_DISTRIBUTION.md` §9 ("Electrical
 Fault Margin Validation") and §11 ("Redundant Power Rail Strategy") before
 this file existed. Per the DRY convention already used elsewhere in this
-repo (e.g. `Zoë.md`'s creepage/clearance rule inheriting Wash's by explicit
+repository (e.g. `Zoë.md`'s creepage/clearance rule inheriting Wash's by explicit
 reference rather than restating it), this document cites that analysis
 instead of re-deriving it, and performs the one check that had no existing
 home.
