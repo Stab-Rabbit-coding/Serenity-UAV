@@ -111,6 +111,81 @@ SLB9670 = {
 }
 
 
+# MSPM0G3507 -- TI SLASEX6C Figure 6-4 "48-Pin RGZ (VQFN) Top View".  Pin names
+# are the physical port-pin identities (PAx/PBx); mux functions are firmware-set.
+# Pin 49 = thermal pad (VSS).  Side: pins 1-24 left, 25-49 right (our arrangement).
+_MSPM0_NAMES = [
+    (1, "PA0"),
+    (2, "PA1"),
+    (3, "PA28"),
+    (4, "NRST"),
+    (5, "PA31"),
+    (6, "VDD"),
+    (7, "VSS"),
+    (8, "PA2"),
+    (9, "PA3"),
+    (10, "PA4"),
+    (11, "PA5"),
+    (12, "PA6"),
+    (13, "PA7"),
+    (14, "PB2"),
+    (15, "PB3"),
+    (16, "PA8"),
+    (17, "PA9"),
+    (18, "PA10"),
+    (19, "PA11"),
+    (20, "PB6"),
+    (21, "PB7"),
+    (22, "PB8"),
+    (23, "PB9"),
+    (24, "PB14"),
+    (25, "PB15"),
+    (26, "PB16"),
+    (27, "PA12"),
+    (28, "PA13"),
+    (29, "PA14"),
+    (30, "PA15"),
+    (31, "PA16"),
+    (32, "PA17"),
+    (33, "PA18"),
+    (34, "PA19/SWDIO"),
+    (35, "PA20/SWCLK"),
+    (36, "PB17"),
+    (37, "PB18"),
+    (38, "PB19"),
+    (39, "PA21"),
+    (40, "PA22"),
+    (41, "PB20"),
+    (42, "PB24"),
+    (43, "PA23"),
+    (44, "PA24"),
+    (45, "PA25"),
+    (46, "PA26"),
+    (47, "PA27"),
+    (48, "VCORE"),
+    (49, "VSS"),
+]
+
+
+def _mspm0_pins():
+    pw = {"VDD": "power_in", "VSS": "power_in", "VCORE": "passive"}
+    out = []
+    for num, name in _MSPM0_NAMES:
+        et = "input" if name == "NRST" else pw.get(name, "bidirectional")
+        out.append((num, name, et, "L" if num <= 24 else "R"))
+    return out
+
+
+MSPM0 = {
+    "name": "Vera_MSPM0G3507_RGZ",
+    "value": "MSPM0G3507SRGZR",
+    "footprint": "Vera:VQFN48_MSPM0G3507_RGZ",  # 48-pin 0.5mm VQFN 7x7 + EP
+    "desc": "TI MSPM0G3507 Arm Cortex-M0+ MCU (CAN-FD), 48-pin RGZ VQFN "
+    "(clean-room from TI SLASEX6C Fig 6-4)",
+    "pins": _mspm0_pins(),
+}
+
+
 def emit_pin(num, name, etype, x, y, ang, length=3.81):
     return (
         f"      (pin {etype} line (at {x:.2f} {y:.2f} {ang}) (length {length:.2f})\n"
@@ -175,7 +250,7 @@ def write_part(part):
 
 
 def main():
-    for part in (ISOW1044, SLB9670):
+    for part in (ISOW1044, SLB9670, MSPM0):
         write_part(part)
 
 
