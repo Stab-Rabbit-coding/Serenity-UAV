@@ -2,7 +2,7 @@
 
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
-<!-- Last updated: 2026-06-29 — archived deprecated FreeCAD prototype scripts -->
+<!-- Last updated: 2026-07-12 — archived orphaned landing_legs_hull_r1.stl -->
 
 ---
 
@@ -99,6 +99,14 @@ stls/fuselage/                       — Pre-Rev Q fuselage STLs (18" scale and 
                                         s_rear_shell24_2mm.stl,
                                         s_rear_shell24_2mm_repaired.stl,
                                         s_rear_shell24_repaired.stl
+stls/fuselage/landing-gear/          — Archived 2026-07-12 (TODO.md §1.1.4.6):
+                                        landing_legs_hull_r1.stl — pre-R1.4 single-leg
+                                        render, orphaned by the Rev R1.4 corner V-brace
+                                        redesign (itself since superseded by the Rev R5
+                                        vertical-post + wire-brace design,
+                                        wire_brace_leg.scad); had no surviving SCAD
+                                        source. Reference removed from
+                                        serenity_render_views.py.
 stls/nacelles/                       — Pre-Rev Q nacelle STLs (pre-tandem-EDF design):
                                         edf_bore_sleeve.stl, nacelle_port_revt.stl,
                                         nacelle_stbd_revt.stl, sector_gear_22mm_fixed.obj,
