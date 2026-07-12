@@ -33,10 +33,10 @@
 // tangential hinge sweeps its trailing edge through a small range of cone
 // half-angles, so the assembled ring of 8 flaps presents a continuous,
 // gently-tapering CONICAL surface at every position — never a flat faceted
-// diaphragm.  The existing Rev R1 gear train (Crown Pinion -> Idler ->
-// Ring gear, nacelle_nozzle_idler.scad / nacelle_pinion.scad) is reused
-// UNCHANGED — only how the ring's rotation couples to the flaps changes
-// (a spiral cam slot replaces the old radial piano-wire drive posts).
+// diaphragm.  Rev S1 (2026-07-07) replaces the Rev R1 gear train's idler
+// stage with a direct INTERNAL-ring mesh (Nozzle Drive Pinion 14T M0.5 ->
+// internal 136T ring gear — see docs/NOZZLE_DRIVE_TRADE.md); the ring's
+// spiral-cam coupling to the flaps is unchanged.
 //
 // ── Why a tangential hinge, not the old axial hinge ──────────────────────
 //   Old (Rev R1): hinge pins parallel to the duct axis (local Z) -> each
@@ -94,16 +94,16 @@
 //   throat tube while its face-cam slot still reaches the follower pins.
 //
 //   The ring's spiral cam slot maps ring rotation angle theta_ring (the
-//   SAME theta_ring already derived for the Rev R1 gear train: Stage 1
-//   sector/Pinion-A epicyclic x4.667, Stage 2 Crown-Pinion-to-ring-gear
-//   x0.056818 via the idler — see nacelle_nozzle_idler.scad) linearly to
-//   pin_r:
+//   theta_ring derived from the Rev S1 chain: Stage 1 sector/Pinion-A
+//   epicyclic x3.5882, Stage 2 bevel x10/14, Stage 3 drive-pinion-to-
+//   internal-ring x3.5/34 — see the Ring Rotation mapping block) linearly
+//   to pin_r:
 //     pin_r(theta_ring) = PIN_R_REF_CLOSED
 //                        + (PIN_R_REF_OPEN - PIN_R_REF_CLOSED)
 //                          * theta_ring / THETA_RING_REF_OPEN
 //   calibrated at the two REFERENCE points (theta_ring = 0 at 0 deg/cruise
-//   tilt -> closed; theta_ring = 23.86 deg at 90 deg/hover tilt -> open —
-//   both unchanged from the Rev R1 gear-ratio derivation).  The slot is cut
+//   tilt -> closed; theta_ring = 23.75 deg at 90 deg/hover tilt -> open —
+//   Rev S1 chain, within 0.5 % of the Rev R1 figure).  The slot is cut
 //   slightly beyond the full -5 deg/140 deg hard-stop range
 //   (SPIRAL_ANG_LO/HI below) so the follower pin never rides off either end.
 //
@@ -118,19 +118,19 @@
 //   open up, unlike the old iris where opening the petals opened gaps.
 //
 // Three separately-printable parts, each in its own module:
-//   1. nozzle_throat_and_housing() — fixed: throat tube (flow liner) +
-//      outer shell (carries the ring + idler-access slot) + 8 tangential
+//   1. nozzle_throat_and_housing() — fixed: throat tube (flow liner, with
+//      the Rev S1 drive-pinion relief patch) + outer shell + 8 tangential
 //      hinge bosses + connecting ribs.
-//   2. unison_ring()               — rotating: same 72T M=1.0 gear as
-//      Rev R1 (meshes nacelle_nozzle_idler.scad Idler-Out, UNCHANGED), plus
+//   2. unison_ring()               — rotating: Rev S1 INTERNAL 136T M=0.5
+//      ring gear (meshed from inside by the Nozzle Drive Pinion), plus
 //      8 spiral cam slots on its downstream face.
 //   3. nozzle_flap()                — one flap (print x 8): tangential
 //      hinge knuckle (clevis) + compound lever tab + follower pin.
 //
-// Mating interfaces (gear train, unchanged from Rev R1):
-//   Idler-Out gear (nacelle_nozzle_idler.scad): module M = 1.0, meshes this
-//   ring's 72-tooth gear at pitch R = 36 mm, through IDLER_SLOT in the
-//   outer housing wall.
+// Mating interfaces (gear train, Rev S1):
+//   Nozzle Drive Pinion (nacelle_pinion.scad, PINION_VARIANT="DRIVE"):
+//   M = 0.5, 14T R3.5 at local (0, +30.5), meshes this ring's INTERNAL
+//   136-tooth gear at pitch R = 34 mm, wholly inside the housing bore.
 //   Nacelle exit face (hull): housing lip bonds to EDF exit duct face.
 //   Hinge pins: 3 mm x 18 mm stainless steel dowel pins (x8), TANGENTIAL
 //     orientation (Rev R2 change from axial).
@@ -164,7 +164,7 @@
 //     clearance against printed parts before relying on this geometry.
 //   - The 3 connecting ribs between throat tube and outer shell (in
 //     nozzle_throat_and_housing()) are a first-pass structural bridge —
-//     verify they clear the idler-access slot and all 8 flap hinge/cam
+//     verify they clear the drive-pinion sweep and all 8 flap hinge/cam
 //     paths in the slicer.
 //
 // Upstream attribution (REFERENCES.md REF-CAD-001):
@@ -172,7 +172,7 @@
 //   "Variable-area EDF nozzle" (Thingiverse Thing 2991269, CC BY 4.0,
 //   <https://www.thingiverse.com/thing:2991269>).  Used as a mechanism /
 //   kinematics reference ONLY — all geometry in this file (throat liner,
-//   tangential-hinge overlapping conical flaps, 72T unison ring gear, spiral
+//   tangential-hinge overlapping conical flaps, unison ring gear, spiral
 //   cam actuation) is original work authored for this project; no BamJr
 //   geometry, mesh, or source is copied.  See REFERENCES.md [REF-CAD-001].
 //
@@ -191,6 +191,17 @@
 //          flaps forming a smooth conical exit, per explicit user direction
 //          (see header above).  Gear train (72T ring gear, idler mesh)
 //          carried forward UNCHANGED from Rev R1.
+// Rev:     S1 (2026-07-07): INTERNAL ring gear conversion — flipped the
+//          ring's teeth from the outer rim (72T M1.0 external) to the bore
+//          (136T M0.5 internal, L-shaped section w/ separate gear band and
+//          cam flange), deleting the compound idler + its housing slot
+//          (the idler's teeth protruded ~10 mm past the nacelle OD — trade
+//          study: docs/NOZZLE_DRIVE_TRADE.md; user decision 2026-07-07).
+//          Added the drive-pinion throat relief patch (wall 2.5 -> 1.1 mm
+//          over a 30 deg sector, gear-band heights only).  theta_ring
+//          sweep 23.86 -> 23.75 deg (Rev S1 chain).  Flap/cam kinematics
+//          unchanged.  AI contribution: Claude (Fable 5, Anthropic),
+//          directed by Steve Griffing.
 
 // ── Resolution ────────────────────────────────────────────────────────────────
 
@@ -282,16 +293,29 @@ function flap_pin_z(phi) = HINGE_Z - TAB_X * sin(phi) - TAB_Z * cos(phi);
 
 // ── Ring Rotation <-> Pin Radius Mapping ──────────────────────────────────────
 //
-// theta_ring reference points carried forward UNCHANGED from the Rev R1
-// gear-train derivation (Stage 1 sector/Pinion-A epicyclic x4.667, Stage 2
-// Crown-Pinion-to-idler-to-ring x0.056818 — see nacelle_nozzle_idler.scad):
+// theta_ring reference points — Rev S1 internal-ring drive chain
+// (docs/NOZZLE_DRIVE_TRADE.md; the Rev R1 idler stage is DELETED):
+//   Stage 1  sector 44T R22 / Pinion A 17T R8.5, sun-fixed epicyclic:
+//            ×(1 + 22/8.5) = ×3.5882  →  90° tilt → 322.94°
+//   Stage 2  bevel pair 10T:14T (nacelle_bevel_pair.scad): ×10/14
+//            →  230.67°
+//   Stage 3  Nozzle Drive Pinion 14T M0.5 R3.5 meshing THIS ring's
+//            INTERNAL gear 136T M0.5 R34: ×3.5/34  →  23.75°
 //   0 deg nacelle tilt (cruise)  -> theta_ring =  0.00 deg -> closed
-//   90 deg nacelle tilt (hover)  -> theta_ring = 23.86 deg -> open
-//   -5 deg / 140 deg hard stops  -> theta_ring = -1.33 / 38.45 deg
-THETA_RING_REF_OPEN = 23.86;   // [deg]
+//   90 deg nacelle tilt (hover)  -> theta_ring = 23.75 deg -> open
+//   -5 deg / 140 deg hard stops  -> theta_ring = -1.32 / 36.94 deg
+// (Internal mesh preserves rotation sense, exactly as the old
+// double-external crown→idler→ring chain did — spiral handedness below is
+// UNCHANGED.)  COTS note: if a commodity 2:1 bevel set replaces the 10:14
+// pair, set THETA_RING_REF_OPEN = 16.61 and re-render the ring — nothing
+// else in this file moves.
+THETA_RING_REF_OPEN = 23.75;   // [deg]
 SPIRAL_MARGIN_DEG   =  5.0;    // [deg] extra arc past each hard stop, both ends
-SPIRAL_ANG_LO = -1.33 - SPIRAL_MARGIN_DEG;   // [deg] =  -6.33
-SPIRAL_ANG_HI = 38.45 + SPIRAL_MARGIN_DEG;   // [deg] =  43.45
+SPIRAL_ANG_LO = -1.32 - SPIRAL_MARGIN_DEG;   // [deg] =  -6.32
+SPIRAL_ANG_HI = 36.94 + SPIRAL_MARGIN_DEG;   // [deg] =  41.94
+                            //   (48.3° total slot arc, LESS than the Rev R1
+                            //   49.8° — adjacent 45°-spaced slots coexist by
+                            //   RADIAL separation where their arcs overlap)
 
 function pin_r_at_theta(theta_ring) =
     PIN_R_REF_CLOSED + (PIN_R_REF_OPEN - PIN_R_REF_CLOSED) * theta_ring / THETA_RING_REF_OPEN;
@@ -310,22 +334,57 @@ HINGE_PIN_D     =  3.0;     // [mm] stainless steel hinge pin OD (tangential)
 HINGE_BORE_D    =  3.2;     // [mm] clearance bore for 3 mm hinge pin (0.2 mm clr)
 HINGE_KNUCKLE_W =  6.0;     // [mm] width (tangential) of each hinge knuckle half
 
-// ── Ring (Unison Disc) Dimensions — gear spec UNCHANGED from Rev R1 ──────────
+// ── Ring (Unison Disc) Dimensions — Rev S1 INTERNAL ring gear ────────────────
+//
+// Rev S1 (2026-07-07): the gear teeth flip from the ring's OUTER rim to its
+// BORE (internal gear), so the drive pinion meshes from INSIDE the housing —
+// eliminating the Rev R1 compound idler whose teeth reached R≈51 mm, ~10 mm
+// proud of the nacelle OD (docs/NOZZLE_DRIVE_TRADE.md).  Packaging forces
+// M0.5: the annulus between throat OD (27.5) and housing bore (37.5) is only
+// ~9 mm wide, so an M1 pinion (OD ≥ 14) cannot fit — SLA print required.
+//
+// The ring is now L-SHAPED in cross-section:
+//   • Gear band  (Z 0..RING_GEAR_BAND_H): internal teeth, tip R33.5/root
+//     R34.625; the drive pinion's 4 mm face seats here.
+//   • Cam flange (Z RING_GEAR_BAND_H..RING_H): solid annulus from
+//     CAM_FLANGE_INNER_R out to the rim, carrying the 8 spiral cam slots
+//     (pin_r spans 31..35 — radially INSIDE the gear band's tooth zone,
+//     which is why the two live at different Z).
+//   • Rim (root..RING_OUTER_R, full height): pilots in the housing bore
+//     exactly as Rev R1 (37.0 in 37.5, 0.5 mm running clearance).
 
-RING_INNER_R  = THROAT_OUTER_R + 1.0;   // [mm] = 28.5, clears the throat tube OD
-RING_GEAR_PITCH_R = 36.0;   // [mm] pitch radius of the full-circle gear (UNCHANGED —
-                            //   meshes Idler-Out R=7.5mm, nacelle_nozzle_idler.scad)
-RING_H        =  8.0;       // [mm] axial height — matches GEAR_H_OUT in
-                            //   nacelle_nozzle_idler.scad
+RING_GEAR_MODULE   = 0.5;    // [mm] Module — matches the Nozzle Drive Pinion
+                             //   (nacelle_pinion.scad PINION_VARIANT="DRIVE")
+RING_GEAR_PITCH_R  = 34.0;   // [mm] pitch radius of the INTERNAL full-circle
+                             //   gear; centre distance to the drive pinion
+                             //   (R3.5) = 34 − 3.5 = 30.5 mm = PINION_A_Y
+RING_H        =  8.0;        // [mm] total axial height (unchanged)
+RING_GEAR_BAND_H = 4.5;      // [mm] internal-tooth band height (Z 0..4.5)
 
-RING_GEAR_MODULE   = 1.0;    // [mm] Module — matches Idler-Out and Crown Pinion (UNCHANGED)
-RING_GEAR_ADDENDUM = RING_GEAR_MODULE;          // [mm] = 1.0
-RING_GEAR_DEDENDUM = 1.25 * RING_GEAR_MODULE;   // [mm] = 1.25
-RING_OUTER_R  = RING_GEAR_PITCH_R + RING_GEAR_ADDENDUM;     // [mm] = 37.0 (tip)
-RING_GEAR_ROOT_R = RING_GEAR_PITCH_R - RING_GEAR_DEDENDUM;  // [mm] = 34.75
+RING_GEAR_ADDENDUM = RING_GEAR_MODULE;          // [mm] = 0.5
+RING_GEAR_DEDENDUM = 1.25 * RING_GEAR_MODULE;   // [mm] = 0.625
+// INTERNAL gear: teeth point inward — tip is the SMALLER radius:
+RING_GEAR_TIP_R  = RING_GEAR_PITCH_R - RING_GEAR_ADDENDUM;  // [mm] = 33.5
+RING_GEAR_ROOT_R = RING_GEAR_PITCH_R + RING_GEAR_DEDENDUM;  // [mm] = 34.625
 
-N_RING_TEETH = round(2 * RING_GEAR_PITCH_R / RING_GEAR_MODULE);  // [count] = 72
-RING_GEAR_ANGULAR_PITCH = 360.0 / N_RING_TEETH;   // [deg] = 5.0 deg per tooth
+RING_OUTER_R  = 37.0;        // [mm] rim OD — UNCHANGED (pilots housing bore)
+CAM_FLANGE_INNER_R = 29.0;   // [mm] cam-flange inner radius (clears throat OD
+                             //   27.5 by 1.5; supports slots down to pin_r
+                             //   31 − slot half-width 1.2 = 29.8)
+
+N_RING_TEETH = round(2 * RING_GEAR_PITCH_R / RING_GEAR_MODULE);  // [count] = 136
+RING_GEAR_ANGULAR_PITCH = 360.0 / N_RING_TEETH;   // [deg] ≈ 2.647 deg per tooth
+
+// ── Nozzle Drive Pinion interface (replaces the idler; Rev S1) ───────────────
+DRIVE_PINION_Y      = RING_GEAR_PITCH_R - 3.5;  // [mm] = 30.5, shaft at local
+                                                //   (0, +30.5) — azimuth 90°
+DRIVE_PINION_TIP_R  = 4.0;   // [mm] pinion tip radius (14T M0.5 + addendum)
+// The pinion's inward sweep reaches 30.5 − 4.0 = 26.5 mm — INSIDE the throat
+// tube OD (27.5).  A local relief pocket in the throat wall (below) provides
+// running clearance; wall thins 2.5 → 1.1 mm over the patch only.
+RELIEF_R      = 26.1;   // [mm] relieved throat outer radius over the patch
+RELIEF_ANG    = 30.0;   // [deg] patch angular width (pinion needs ~11°)
+RELIEF_AZ     = 90.0;   // [deg] patch azimuth = drive pinion azimuth (+Y)
 
 // ── Outer Housing Dimensions ──────────────────────────────────────────────────
 
@@ -335,25 +394,9 @@ HOUSING_INNER_R =  37.5;   // [mm] housing inner bore radius (ring fits inside;
 HOUSING_LIP_H   =   3.0;   // [mm] forward bonding lip depth (bonds to nacelle
                             //   exit face; lip OD matches EDF duct exit OD)
 
-// Idler-access slot in housing wall (UNCHANGED position/sizing from Rev R1 —
-// the idler still meshes this ring's gear exactly as before):
-IDLER_SLOT_W    =  10.0;   // [mm] slot width (circumferential)
-IDLER_SLOT_H    =   6.0;   // [mm] slot radial depth, added to wall thickness
-IDLER_SLOT_ANG  =  50.9;   // [deg] angular position of slot, measured from this
-                            //   part's local +X axis (TODO.md §1.1.3.3, resolved
-                            //   2026-06-22).  Solved from the two simultaneous
-                            //   centre-distance constraints in
-                            //   nacelle_nozzle_idler.scad — Crown Pinion sits at
-                            //   local (X=0, Y=28) (PINION_A_Y, nacelle_pod_50mm_
-                            //   tandem.scad), and the idler shaft must be 28.1 mm
-                            //   from that point AND 43.6 mm from this ring's axis
-                            //   (0,0).  Solving the two circle equations gives
-                            //   shaft position (X=+27.485, Y=33.846), i.e. 50.92°
-                            //   from +X (rounded to 50.9°).  This is one of the
-                            //   two valid mirror-image solutions (the other is
-                            //   129.08° at X=-27.485); +X was chosen arbitrarily
-                            //   — no other component occupies this angular sector
-                            //   at this Z station.
+// (Rev S1: the Rev R1 idler-access slot through the housing wall is DELETED
+// along with the idler itself — the internal-mesh drive pinion lives wholly
+// inside the housing bore; see DRIVE_PINION_* / RELIEF_* above.)
 
 // Connecting ribs (throat tube <-> outer shell, structural bridge — VERIFY,
 // first-pass concept, see header):
@@ -445,13 +488,19 @@ module nozzle_throat_and_housing() {
             translate([0, 0, -HOUSING_LIP_H - 0.1])
                 cylinder(h = RING_CAVITY_Z_HI + HOUSING_LIP_H + 0.1, r = HOUSING_INNER_R);
 
-            // ── Idler-access slot ────────────────────────────────────────────────
-            rotate([0, 0, IDLER_SLOT_ANG]) {
-                translate([HOUSING_INNER_R, -IDLER_SLOT_W / 2, THROAT_LEN * 0.2])
-                    cube([IDLER_SLOT_H + (HOUSING_OUTER_R - HOUSING_INNER_R) + 0.1,
-                            IDLER_SLOT_W,
-                            THROAT_LEN * 0.6]);
-            }
+            // ── Drive-pinion throat relief pocket (Rev S1) ──────────────────────
+            // The Nozzle Drive Pinion (tip R4 at local (0, +30.5)) sweeps to
+            // radius 26.5 — 1.0 mm inside the throat tube OD (27.5).  Relieve
+            // the throat OUTER wall to RELIEF_R (26.1) over a RELIEF_ANG
+            // patch at the pinion azimuth, gear-band heights only.  The
+            // liner bore (R25) is untouched; local wall = 1.1 mm (flagged in
+            // TODO.md §1.1.3.3 — non-structural liner patch, below the
+            // 2.5 mm nominal but acceptable for a non-mating surface).
+            rotate([0, 0, RELIEF_AZ - RELIEF_ANG / 2])
+                rotate_extrude(angle = RELIEF_ANG)
+                    translate([RELIEF_R, -0.1])
+                        square([THROAT_OUTER_R - RELIEF_R + 0.2,
+                                RING_GEAR_BAND_H + 0.7]);
 
             // ── Hinge pin through-bores (tangential, ×8) ─────────────────────────
             for (i = [0 : N_FLAPS - 1]) {
@@ -467,26 +516,36 @@ module nozzle_throat_and_housing() {
 
 // ── Module: unison_ring() ─────────────────────────────────────────────────────
 //
-// Rotating unison disc — SAME 72-tooth M=1.0 gear as Rev R1 (meshes
-// Idler-Out, nacelle_nozzle_idler.scad, UNCHANGED ratio/positioning), plus
-// N_FLAPS spiral cam slots cut into its downstream (outboard) face.  Each
-// flap's follower pin rides in one slot; ring rotation (driven by the gear
-// train exactly as Rev R1) sweeps the slot's local radius under the pin,
-// which (via the flap's lever tab) rotates the flap about its tangential
-// hinge — see header for the full kinematic derivation.
+// Rotating unison disc — Rev S1 INTERNAL 136-tooth M=0.5 ring gear (meshes
+// the Nozzle Drive Pinion from inside; the Rev R1 external gear + idler are
+// deleted — see header), plus N_FLAPS spiral cam slots cut into its
+// downstream (outboard) face.  Each flap's follower pin rides in one slot;
+// ring rotation sweeps the slot's local radius under the pin, which (via
+// the flap's lever tab) rotates the flap about its tangential hinge — see
+// header for the full kinematic derivation.
+//
+//   L-shaped section (see Ring Dimensions block):
+//     Z 0..RING_GEAR_BAND_H          — internal-tooth gear band
+//     Z RING_GEAR_BAND_H..RING_H     — cam flange (inner R = CAM_FLANGE_INNER_R)
+//     rim RING_GEAR_ROOT_R..RING_OUTER_R — full height (pilots housing bore)
 //
 //   Origin: centre of inboard face, Z = 0; outboard (slotted) face at
 //   Z = RING_H.
 module unison_ring() {
     difference() {
-        // ── Base ring body (gear blank, tip radius OD) ──────────────────────
+        // ── Base ring body (full blank at rim OD) ───────────────────────────
         cylinder(h = RING_H, r = RING_OUTER_R);
 
-        // Inner bore — clears the throat tube
+        // Cam-flange through-bore — clears the throat tube full height
         translate([0, 0, -0.1])
-            cylinder(h = RING_H + 0.2, r = RING_INNER_R);
+            cylinder(h = RING_H + 0.2, r = CAM_FLANGE_INNER_R);
 
-        // ── Ring gear tooth spaces, full circle (UNCHANGED from Rev R1) ──────
+        // Gear-band bore — opens the tooth band down to the tooth TIP circle
+        // (internal teeth are then formed by the space subtractions below)
+        translate([0, 0, -0.1])
+            cylinder(h = RING_GEAR_BAND_H + 0.1, r = RING_GEAR_TIP_R);
+
+        // ── INTERNAL ring gear tooth spaces, full circle (Rev S1) ────────────
         for (i = [0 : N_RING_TEETH - 1]) {
             _ring_gear_tooth_space(i);
         }
@@ -504,11 +563,12 @@ module unison_ring() {
     }
 }
 
-// _ring_gear_tooth_space(i) — one tooth-space void on the ring's outer rim.
-//   Standard external spur gear tooth-space subtraction, full circle.
-//   Built as a polygon (annular_wedge) — avoids nested 2D CSG that caused
-//   CGAL to time out at high tooth counts (see header).  UNCHANGED from
-//   Rev R1.
+// _ring_gear_tooth_space(i) — one tooth-space void on the ring's BORE
+//   (Rev S1 internal gear: spaces span radially from just inside the tooth
+//   tip circle out to the root circle; teeth are left standing pointing
+//   inward).  Cut over the gear band height only — the cam flange above is
+//   untouched.  Built as a polygon (annular_wedge) — avoids nested 2D CSG
+//   that caused CGAL to time out at high tooth counts (see header).
 //
 //   Arguments:
 //     i — tooth-space index (0-based, 0 through N_RING_TEETH - 1)
@@ -516,11 +576,11 @@ module _ring_gear_tooth_space(i) {
     space_centre = i * RING_GEAR_ANGULAR_PITCH + RING_GEAR_ANGULAR_PITCH / 2;
     half_ang     = RING_GEAR_ANGULAR_PITCH / 4;   // quarter pitch = half tooth space
 
-    linear_extrude(height = RING_H + 0.2) {
+    linear_extrude(height = RING_GEAR_BAND_H + 0.1) {
         polygon(annular_wedge(
-            RING_GEAR_ROOT_R - 0.1, RING_OUTER_R + 0.1,
+            RING_GEAR_TIP_R - 0.1, RING_GEAR_ROOT_R + 0.1,
             space_centre - half_ang, space_centre + half_ang,
-            2   // 2 segments per arc edge (5 deg pitch — arc =~ straight line)
+            2   // 2 segments per arc edge (2.65 deg pitch — arc =~ straight)
         ));
     }
 }
@@ -599,9 +659,11 @@ module nozzle_flap() {
 //   ─────────────────────────  ────────────────────────────  ──────────────────
 //   RING_OUTER_R 37 mm OD      Housing HOUSING_INNER_R 37.5  0.5 mm radial clr
 //   (unison ring)              (outer shell bore)             (ring rotates freely)
-//   RING_INNER_R 28.5 mm       Throat tube OD 27.5 mm        1.0 mm radial clr
-//   Ring gear pitch R 36 mm    Idler-Out pitch R 7.5 mm      0.1 mm backlash
-//   (full-circle, 72 T)        nacelle_nozzle_idler.scad      (centre dist 43.6 mm)
+//   CAM_FLANGE_INNER_R 29 mm   Throat tube OD 27.5 mm        1.5 mm radial clr
+//   Ring gear pitch R 34 mm    Drive Pinion pitch R 3.5 mm   internal mesh,
+//   (INTERNAL, 136 T, M0.5)    nacelle_pinion.scad "DRIVE"    centre dist 30.5 mm
+//   Drive pinion tip sweep     Throat relief patch R 26.1    0.4 mm radial clr
+//   (inward reach R 26.5)      (RELIEF_* params, 30 deg arc)  (gear band Z only)
 //   HINGE_BORE_D 3.2 mm        3 mm SS hinge pin             0.2 mm diametral clr
 //   (×8 tangential hinges)     (×8, 3 mm × 18 mm dowels)      (flaps pivot freely)
 //   Follower pin 2.0 mm        Spiral slot width 2.4 mm      0.2 mm/side clr
@@ -620,7 +682,7 @@ module nozzle_flap() {
 // nacelle_nozzle_idler.scad / wings RENDER_SIDE convention), so the Makefile
 // can pull each print-ready part from this one file:
 //   RENDER_PART = "throat"  -> nozzle_throat_and_housing()  (fixed liner+shell)
-//   RENDER_PART = "ring"    -> unison_ring()                (72T gear + cam)
+//   RENDER_PART = "ring"    -> unison_ring()                (136T int. gear + cam)
 //   RENDER_PART = "flap"    -> nozzle_flap()                (print × 8)
 //   RENDER_PART = "asm"     -> full assembly preview        (DEFAULT; the
 //        combined body serenity_assembly.py imports as nacelle_nozzle_iris.stl

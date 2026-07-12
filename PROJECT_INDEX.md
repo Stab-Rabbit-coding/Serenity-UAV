@@ -43,6 +43,7 @@ Repository-level engineering tools and build automation.
 TODO.md                           — Build-tools & automation WBS (reference index into master TODO.md §1.1/Phase 0)
 CLAUDE.md                         — Build tools and automation standards (hull-frame bake tool,
                                     Blender pipeline, SCAD generation, mesh validation)
+precommit_kicad_load.py             — Pre-commit guard: blocks unloadable/corrupt-stackup KiCad files (In2.Cu/Edge.Cuts corruption); enable via .githooks (git config core.hooksPath .githooks)
 validate_stls.py                  — CI STL watertight validator (trimesh)
 verify_bow_pod.py                 — Bow sensor pod geometry verifier: ray-casts the camera/ToF/laser bores
                                     against the baked head shell on the 40° flat (replaces manual slicer checks)
@@ -642,6 +643,7 @@ AVIONICS_PB2_REDESIGN.md          — 8× PocketBeagle 2 Industrial avionics red
 BATTERY_MOUNT.md                  — Battery CG analysis, retention load case, belly panel spec (Rev R)
 LANDING_GEAR_ANALYSIS.md          — Landing gear structural analysis: 6 ft drop, fuse sizing, lateral loads (Rev R1)
 NOZZLE_DRIVE_TRADE.md             — Nozzle-drive redesign trade study: internal ring gear (A) vs pushrod linkage (B) to kill the protruding idler (Rev R1a)
+ETHERNET_PHY_TRADE.md             — Onboard Ethernet interface trade: native MAC+PHY / KSZ9477 ring (kept) vs USB-Ethernet bridge (rejected — no HSR/PRP, non-deterministic) (Rev S)
 img/nozzle_drive_trade.png        — Nozzle-drive trade schematics + tilt→ring-angle curves (A vs B)
 img/wing_rev_r1a_sections.png     — Wing Rev R1a root/tip sections: camber-centred spar + EDF cableway
 POWER_DISTRIBUTION.md             — Power architecture: Kaylee PDB rails, fuse map, cable spec (Rev R; §3.2.1 Vera 5V rail added 2026-07-05)

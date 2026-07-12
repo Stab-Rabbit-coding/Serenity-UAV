@@ -17,7 +17,8 @@
 // Serenity UAV Rev R — Nacelle Tilt Linkage, Drive Pinion A & Crown Pinion
 //
 // Purpose:
-//   Two identical M = 1.0 spur pinions used at different positions in the
+//   Two spur pinions (one SCAD, two PINION_VARIANT builds — no longer
+//   dimensionally identical as of Rev S1) used at different positions in the
 //   nacelle tilt-to-nozzle gear train:
 //
 //     Drive Pinion A — mounted on the nacelle tilt shaft; meshes with the
@@ -139,12 +140,35 @@
 
 $fn = 72;   // standard circle resolution
 
+// ── Variant Selection (Rev S1, 2026-07-07) ────────────────────────────────────
+// The two pinions are no longer dimensionally identical (Rev S1 internal-ring
+// nozzle drive — see docs/NOZZLE_DRIVE_TRADE.md):
+//   "A"     — Drive Pinion A: M1.0, 17T, R = 8.5 mm.  Meshes the fixed sector
+//             gear (R = 22) at centre distance 30.5 mm (= PINION_A_Y).
+//   "DRIVE" — Nozzle Drive Pinion (replaces the "Crown Pinion"): M0.5, 14T,
+//             R = 3.5 mm.  Meshes the INTERNAL nozzle ring gear (136T M0.5,
+//             pitch R = 34, nacelle_nozzle_iris.scad) at centre distance
+//             34 − 3.5 = 30.5 mm — the SAME shaft station as Pinion A,
+//             preserving the straight pinion-A → bevel → longitudinal-shaft
+//             conduit through the nacelle.
+// Override at CLI:  openscad -D 'PINION_VARIANT="DRIVE"' ...
+PINION_VARIANT  = "A";    // "A" | "DRIVE"
+
 // ── Gear Parameters ───────────────────────────────────────────────────────────
 
-MODULE          =  1.0;   // [mm] AGMA Module
+MODULE          = (PINION_VARIANT == "DRIVE") ? 0.5 : 1.0;
+                          // [mm] AGMA Module.  M0.5 on the DRIVE pinion is
+                          //   forced by packaging: the nozzle annulus between
+                          //   throat OD (R27.5) and housing bore (R37.5) is
+                          //   only ~9 mm wide, so an M1 pinion (OD ≥ 14 mm)
+                          //   cannot fit.  SLA print (already the preferred
+                          //   process for these gears) is REQUIRED for M0.5.
 PRESSURE_ANGLE  = 20.0;   // [deg] standard involute pressure angle
-N_TEETH         = 12;     // [count] 12-tooth pinion (minimum practical for M=1
-                        //   PETG/resin without undercut at 20° PA)
+N_TEETH         = (PINION_VARIANT == "DRIVE") ? 14 : 17;
+                          // [count] A: 17T (R8.5, no undercut at 20° PA);
+                          //   DRIVE: 14T (R3.5 — mild undercut at 20° PA is
+                          //   tolerated by the trapezoidal tooth-space
+                          //   approximation used here; drive torque is small)
 
 // ── Derived Gear Geometry ─────────────────────────────────────────────────────
 
@@ -161,8 +185,17 @@ SPACE_HALF_ANG = ANGULAR_PITCH / 4;  // [deg] = 7.5° (quarter of angular pitch)
 
 // ── Shaft and Bearing Parameters ──────────────────────────────────────────────
 
-PINION_H        =  8.0;   // [mm] tooth face width
-                        //   = 2 × MR63ZZ axial width (2.5 mm each) + 3 mm gap
+PINION_H        = (PINION_VARIANT == "DRIVE") ? 4.0 : 8.0;
+                        // [mm] tooth face width.  A: 8.0 (= 2 × MR63ZZ axial
+                        //   width + 3 mm gap).  DRIVE: 4.0 — matches the
+                        //   internal ring's gear-band height (RING_GEAR_BAND_H
+                        //   = 4.5 in nacelle_nozzle_iris.scad, 0.5 axial clr).
+HAS_BEARING_SEATS = (PINION_VARIANT != "DRIVE");
+                        // The DRIVE pinion's root circle (Ø 5.75) is smaller
+                        //   than the MR63ZZ seat bore (Ø 6.05), so it cannot
+                        //   host bearings — it is keyed directly to the 3 mm
+                        //   shaft, whose bearings live in the pod's
+                        //   crown_pinion_boss (nacelle_pod_50mm_tandem.scad).
 SHAFT_BORE      =  3.2;   // [mm] MR63ZZ inner bore ID 3 mm + 0.2 mm clearance
 SHAFT_KEY_W     =  1.0;   // [mm] flat key chord width (D-profile anti-rotation)
 HUB_OD          =  5.5;   // [mm] hub outer diameter (seats between bearings)
@@ -246,13 +279,17 @@ module hub_body() {
         // Outer hub cylinder
         cylinder(h = total_h, d = HUB_OD, center = true);
 
-        // Bearing seat — bottom end (Z = -total_h/2)
-        translate([0, 0, -total_h / 2 - 0.1])
-            cylinder(h = BEARING_W + 0.1, d = BEARING_SEAT_D);
+        // Bearing seats (variant "A" only — the DRIVE pinion's hub is too
+        // small for MR63ZZ seats; see HAS_BEARING_SEATS above):
+        if (HAS_BEARING_SEATS) {
+            // Bearing seat — bottom end (Z = -total_h/2)
+            translate([0, 0, -total_h / 2 - 0.1])
+                cylinder(h = BEARING_W + 0.1, d = BEARING_SEAT_D);
 
-        // Bearing seat — top end (Z = +total_h/2)
-        translate([0, 0, total_h / 2 - BEARING_W])
-            cylinder(h = BEARING_W + 0.1, d = BEARING_SEAT_D);
+            // Bearing seat — top end (Z = +total_h/2)
+            translate([0, 0, total_h / 2 - BEARING_W])
+                cylinder(h = BEARING_W + 0.1, d = BEARING_SEAT_D);
+        }
 
         // Shaft bore with D-key (centred on hub)
         shaft_bore_with_key();
@@ -292,13 +329,15 @@ module drive_pinion_a() {
     }
 }
 
-// crown_pinion() — Crown Pinion: meshes with Idler-In (nacelle_nozzle_idler.scad).
+// nozzle_drive_pinion() — Nozzle Drive Pinion (Rev S1; replaces "Crown
+//   Pinion").  Renders correctly only with PINION_VARIANT = "DRIVE".
 //   Installation axis: longitudinal (nacelle Z-axis), at nozzle end of shaft.
-//   Mesh centre distance to Idler-In = 28.1 mm (Idler-In R = 22 mm).
-//   Geometry identical to drive_pinion_a(); orientation is set by assembler.
+//   Meshes the INTERNAL nozzle ring gear (136T M0.5 pitch R=34,
+//   nacelle_nozzle_iris.scad) at 30.5 mm centre distance, gear band seated
+//   in the ring's gear band (iris local Z 0..4.5).
 //   Origin: same as drive_pinion_a().
-module crown_pinion() {
-    // Identical geometry — orientation handled by installation
+module nozzle_drive_pinion() {
+    // Same construction; dimensions switch on PINION_VARIANT
     drive_pinion_a();
 }
 
@@ -316,7 +355,12 @@ module crown_pinion() {
 //   HUB_EXTENSION 2.0 mm    Bevel housing bore shoulder    face contact stop
 
 // ── Render ────────────────────────────────────────────────────────────────────
-
-// Uncomment one at a time to export individual STLs:
+//
+// Export each variant via the CLI define (Rev S1):
+//   Pinion A (M1 17T):
+//     openscad -o airframe/stls/nacelles/nacelle_pinion_a.stl \
+//              nacelle_pinion.scad -D 'PINION_VARIANT="A"'
+//   Nozzle Drive Pinion (M0.5 14T):
+//     openscad -o airframe/stls/nacelles/nacelle_drive_pinion.stl \
+//              nacelle_pinion.scad -D 'PINION_VARIANT="DRIVE"'
 drive_pinion_a();
-// translate([20, 0, 0]) crown_pinion();

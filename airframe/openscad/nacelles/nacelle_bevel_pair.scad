@@ -14,55 +14,79 @@
 //     (serenity_assembly.py).
 // ===========================================================================
 // nacelle_bevel_pair.scad
-// Serenity UAV Rev R — Nacelle Tilt Linkage, 1:1 Straight Bevel Gear Pair
+// Serenity UAV Rev S1 — Nacelle Tilt Linkage, 10:14 Reducing Bevel Gear Pair
 //
 // Purpose:
-//   A matched pair of M = 1.0 straight bevel gears providing a 90° shaft-angle
-//   redirection in the nacelle gear train.  The pair is 1:1 ratio; input on the
-//   transverse axis (from Drive Pinion A) is redirected to the longitudinal axis
-//   (to the Crown Pinion and nozzle ring) without speed change.
+//   A matched pair of M = 0.8 straight bevel gears providing BOTH the 90°
+//   shaft-angle redirection AND a 10:14 speed reduction in the nacelle
+//   tilt-to-nozzle gear train (Rev S1 internal-ring drive — see
+//   docs/NOZZLE_DRIVE_TRADE.md).  Input on the transverse axis (from Drive
+//   Pinion A, 322.94° per 90° tilt) is redirected to the longitudinal axis
+//   and reduced ×10/14 (→ 230.67° per 90° tilt at the Nozzle Drive Pinion).
 //
-//   Gear A (Bevel A) — transverse axis; driven by Pinion A shaft.
-//   Gear B (Bevel B) — longitudinal axis; drives longitudinal CF shaft to
-//     Crown Pinion at the nozzle end.
+//   Gear A (Bevel A, 10T) — transverse axis; driven by the Pinion A shaft.
+//   Gear B (Bevel B, 14T) — longitudinal axis; drives the longitudinal 3 mm
+//     CF shaft to the Nozzle Drive Pinion (M0.5 14T, nacelle_pinion.scad
+//     PINION_VARIANT="DRIVE") at the nozzle ring.
+//
+// COTS substitution note (Rev S1, 2026-07-07):
+//   Commodity metal/POM bevel SETS are commonly sold in 1:1 and 2:1 ratios
+//   (mod 0.5–1.0); the exact 10:14 ratio here is NOT a common catalog item.
+//   If procurement sources a verified 2:1 set instead, the only design
+//   change required is the ring-sweep constant THETA_RING_REF_OPEN in
+//   nacelle_nozzle_iris.scad (23.74° → 16.61°; the spiral cam recuts
+//   parametrically).  Record the substitution in the BOM and TODO.md
+//   §1.1.3.3 before printing the unison ring.
 //
 // Bevel gear geometry basis:
-//   1:1 ratio + 90° shaft angle → pitch cone half-angle = 45° for both gears.
-//   AGMA 2005: straight bevel, Module at large end M = 1.0 mm.
-//   Pitch radius at large end: R = N × M / 2 = 14 × 1.0 / 2 = 7.0 mm.
-//   Back-cone (pitch cone slant) distance: L = R / sin(45°) = 9.899 mm.
-//   Face width rule: F ≤ L/3 = 3.3 mm; use F = 4.0 mm for printability.
-//   Tooth proportions at large end:
-//     Addendum  a = M = 1.0 mm
-//     Dedendum  b = 1.25 × M = 1.25 mm
-//     Tooth taper: both addendum and dedendum taper to zero at apex.
+//   90° shaft angle, ratio 10:14 → per-gear pitch cone half-angles:
+//     GAMMA_A = atan(N_A / N_B) = atan(10/14) = 35.54°
+//     GAMMA_B = 90° − GAMMA_A            = 54.46°
+//   AGMA 2005: straight bevel, Module at large end M = 0.8 mm.
+//   Pitch radii at large end: R_A = 4.0 mm, R_B = 5.6 mm.
+//   Shared pitch-cone slant distance: L = R_A/sin(GAMMA_A)
+//                                       = R_B/sin(GAMMA_B) = 6.882 mm.
+//   Face width rule: F ≤ L/3 = 2.29 mm; F = 2.2 mm used.
+//   Tooth proportions at large end (back-cone plane approximation):
+//     Addendum  a = M = 0.8 mm;  Dedendum  b = 1.25 × M = 1.0 mm.
+//     Addendum and dedendum taper toward the apex over the face width.
 //
 // Mating interfaces:
-//   Bevel A:
-//     • Drive Pinion A shaft (nacelle_pinion.scad): 3 mm CF shaft, D-key bore.
-//     • Bevel housing transverse bore (nacelle_bevel_housing.scad):
-//         gear OD + 0.5 mm clearance = 14.0 + 1.0 = 15.0 mm chamber bore.
-//     • Mesh with Bevel B: pitch cones tangent at large end; shaft axes
-//         intersect at virtual apex (17.0 mm from each large-end face).
-//   Bevel B:
+//   Bevel A (10T):
+//     • Drive Pinion A shaft (nacelle_pinion.scad, PINION_VARIANT="A"):
+//         3 mm CF shaft, D-key bore.
+//     • Bevel housing transverse bore (nacelle_bevel_housing.scad).
+//     • Mesh with Bevel B: pitch cones tangent; shaft axes intersect at the
+//         shared virtual apex (5.6 mm above A's large-end face on A's axis;
+//         4.0 mm above B's large-end face on B's axis).
+//   Bevel B (14T):
 //     • Longitudinal shaft: 3 mm CF shaft, D-key bore.
 //     • Bevel housing longitudinal bore (nacelle_bevel_housing.scad).
+//   Shaft support: MR63ZZ bearings live in the HOUSING bores
+//     (nacelle_bevel_housing.scad), NOT in these gears — the Rev R gears
+//     carried a 6.05 mm bearing seat inside a 6.0 mm hub (zero wall — a
+//     latent defect); Rev S1 deletes the in-gear seats entirely.
 //
 // Gear standard: AGMA 2005 / ISO 10300 straight bevel, involute equivalent.
-// Tooth profile: simplified trapezoidal approximation — tooth-space subtraction
-//   on conical face.  Adequate for M = 1.0 resin/PETG prototype.
+// Tooth profile: simplified trapezoidal approximation — tooth-space
+//   subtraction on the conical face.  Adequate at M = 0.8 in SLA resin.
 //
 // Print specification:
-//   Preferred:  SLA resin, ≤ 0.05 mm layer height.
-//   Backup:     CF-PETG FDM, 0.10 mm layers, 4 perimeters, 60 % infill.
-//   Orientation: Print with large-end face down (cone apex upward) for best
-//     tooth-face layer adhesion.
-//   Nozzle:     Hardened steel (CF-PETG abrasive).
+//   Required:   SLA resin, ≤ 0.05 mm layer height (M0.8 teeth are too fine
+//               for reliable 0.4 mm-nozzle FDM).
+//   Orientation: Print with large-end face down (cone apex upward).
 //
 // Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 // Date:    2026-05-24
-// Rev:     R (2026-06-11): Rev R baseline — no geometry changes (carried forward from Rev O initial release).
+// Rev:     R  (2026-06-11): Rev R baseline — 1:1 M1.0 14T:14T pair.
+// Rev:     S1 (2026-07-07): Re-ratioed 1:1 → 10:14 (M1.0 → M0.8) for the
+//          internal-ring nozzle drive (idler stage deleted — see
+//          docs/NOZZLE_DRIVE_TRADE.md and nacelle_nozzle_iris.scad).
+//          Per-gear cone geometry parametrized; in-gear MR63ZZ bearing
+//          seats deleted (they had zero wall — bearings are in the housing).
+//          AI contribution: Claude (Fable 5, Anthropic), 2026-07-07,
+//          directed by Steve Griffing.
 
 // ── Resolution ────────────────────────────────────────────────────────────────
 
@@ -70,122 +94,98 @@ $fn = 72;   // standard circle resolution
 
 // ── Gear Parameters ───────────────────────────────────────────────────────────
 
-MODULE           =  1.0;   // [mm] AGMA Module at large end of bevel
-N_TEETH          = 14;     // [count] teeth per gear (1:1 pair, same count)
+MODULE           =  0.8;   // [mm] AGMA Module at large end of bevel
+N_TEETH_A        = 10;     // [count] Bevel A (input, transverse axis)
+N_TEETH_B        = 14;     // [count] Bevel B (output, longitudinal axis)
 PRESSURE_ANGLE   = 20.0;   // [deg] standard involute pressure angle
-PITCH_CONE_ANGLE = 45.0;   // [deg] half-angle of pitch cone
-                           //   = arctan(1) = 45° for 1:1 ratio, 90° shaft angle
 
-// ── Derived Bevel Geometry ────────────────────────────────────────────────────
+// Pitch cone half-angles (90° shaft angle):
+GAMMA_A = atan(N_TEETH_A / N_TEETH_B);   // [deg] = 35.54° (Bevel A)
+GAMMA_B = 90 - GAMMA_A;                  // [deg] = 54.46° (Bevel B)
 
-PITCH_R_LARGE  = N_TEETH * MODULE / 2;           // [mm] = 7.0  pitch R, large end
-ADDENDUM_LARGE = MODULE;                          // [mm] = 1.0  at large end
-DEDENDUM_LARGE = 1.25 * MODULE;                  // [mm] = 1.25 at large end
-TIP_R_LARGE    = PITCH_R_LARGE + ADDENDUM_LARGE; // [mm] = 8.0  tip R, large end
-ROOT_R_LARGE   = PITCH_R_LARGE - DEDENDUM_LARGE; // [mm] = 5.75 root R, large end
+// ── Derived Bevel Geometry (shared) ───────────────────────────────────────────
 
-// Back-cone (slant) distance — distance from virtual apex to large-end pitch circle:
-//   L = R_large / sin(pitch_cone_angle) = 7.0 / sin(45°) = 9.899 mm
-BACK_CONE_DIST = PITCH_R_LARGE / sin(PITCH_CONE_ANGLE);  // [mm] ≈ 9.899
+PITCH_R_A = N_TEETH_A * MODULE / 2;      // [mm] = 4.0  large-end pitch R, A
+PITCH_R_B = N_TEETH_B * MODULE / 2;      // [mm] = 5.6  large-end pitch R, B
 
-FACE_WIDTH   =  4.0;   // [mm] face width along slant (slightly > L/3 = 3.3 for
-                        //   printability; does not violate AGMA 2005 §8.4 max
-                        //   face width of L/3 by more than 20 %)
+ADDENDUM  = MODULE;                       // [mm] = 0.8  at large end
+DEDENDUM  = 1.25 * MODULE;               // [mm] = 1.0  at large end
 
-// Small-end pitch radius (proportional taper):
-//   R_small = R_large × (L - F) / L
-PITCH_R_SMALL = PITCH_R_LARGE * (BACK_CONE_DIST - FACE_WIDTH) / BACK_CONE_DIST;
-                                                 // [mm] ≈ 4.171
+// Shared pitch-cone slant distance (identical for both gears by construction):
+CONE_DIST = PITCH_R_A / sin(GAMMA_A);    // [mm] ≈ 6.882
 
-// Small-end tip and root radii (same taper proportion):
-TIP_R_SMALL  = TIP_R_LARGE  * (BACK_CONE_DIST - FACE_WIDTH) / BACK_CONE_DIST;
-ROOT_R_SMALL = ROOT_R_LARGE * (BACK_CONE_DIST - FACE_WIDTH) / BACK_CONE_DIST;
+FACE_WIDTH = 2.2;   // [mm] face width along the slant (≤ CONE_DIST/3 = 2.29,
+                     //   AGMA 2005 §8.4 maximum honoured — Rev S1 fix; the
+                     //   Rev R value exceeded the rule by 20 %)
 
-// Cone frustum axial height (projection of slant along axis):
-//   H_cone = FACE_WIDTH × cos(PITCH_CONE_ANGLE)
-CONE_H = FACE_WIDTH * cos(PITCH_CONE_ANGLE);    // [mm] ≈ 2.828
-
-// Angular pitch on large-end base circle:
-ANGULAR_PITCH = 360.0 / N_TEETH;               // [deg] = 25.714° per tooth
-SPACE_HALF_ANG = ANGULAR_PITCH / 4;            // [deg] ≈ 6.429° (half tooth space)
+// Small-end taper factor (proportional taper toward the apex):
+TAPER = (CONE_DIST - FACE_WIDTH) / CONE_DIST;   // ≈ 0.680
 
 // ── Shaft and Hub Parameters ──────────────────────────────────────────────────
 
 SHAFT_BORE   =  3.2;   // [mm] 3 mm CF shaft + 0.2 mm clearance
 SHAFT_KEY_W  =  1.0;   // [mm] flat key chord width (D-profile bore)
-BEVEL_H      =  7.0;   // [mm] total axial height incl. hub extension behind cone
-HUB_OD       =  6.0;   // [mm] hub outer diameter (behind the conical tooth face)
-HUB_H        = BEVEL_H - CONE_H;  // [mm] hub backing height ≈ 4.17 mm
-
-// Bearing seat (MR63ZZ: 3 mm ID, 6 mm OD, 2.5 mm):
-BEARING_SEAT_D = 6.05;   // [mm] press-fit bore for MR63ZZ
-BEARING_W      =  2.5;   // [mm] MR63ZZ axial width
+BEVEL_H      =  6.0;   // [mm] total axial height incl. hub behind the cone
+HUB_OD       =  6.0;   // [mm] hub outer diameter (registers in housing bore)
 
 // ── Module Definitions ────────────────────────────────────────────────────────
+//
+// All geometry modules take the gear's tooth count and pitch-cone half-angle
+// so one construction serves both gears (Rev S1 — the pair is no longer 1:1).
 
-// cone_frustum() — base conical body for the bevel gear (solid, no teeth yet).
-//   The frustum spans axially from Z = 0 (large end) to Z = CONE_H (small end).
-//   Large-end radius = TIP_R_LARGE; small-end radius = TIP_R_SMALL.
-module cone_frustum() {
-    // cylinder() with r1 ≠ r2 produces a frustum (truncated cone)
-    cylinder(h  = CONE_H,
-             r1 = TIP_R_LARGE,    // large end at Z = 0
-             r2 = TIP_R_SMALL);   // small end at Z = CONE_H
+// bevel_cone_frustum(n, gamma) — solid conical blank, large end at Z = 0.
+module bevel_cone_frustum(n, gamma) {
+    pitch_r = n * MODULE / 2;
+    tip_r   = pitch_r + ADDENDUM;           // back-cone plane approximation
+    cone_h  = FACE_WIDTH * cos(gamma);      // axial projection of face width
+    cylinder(h  = cone_h,
+             r1 = tip_r,                    // large end at Z = 0
+             r2 = tip_r * TAPER);           // small end toward apex
 }
 
-// hub_backing() — cylindrical hub behind the large-end face (Z = -HUB_H to Z = 0).
-//   Provides bearing seat and shaft registration behind the gear cone.
-module hub_backing() {
-    translate([0, 0, -HUB_H]) {
-        difference() {
-            cylinder(h = HUB_H, d = HUB_OD);
-
-            // Bearing seat at base of hub (Z = -HUB_H):
-            translate([0, 0, -0.1])
-                cylinder(h = BEARING_W + 0.1, d = BEARING_SEAT_D);
-        }
-    }
+// bevel_hub(gamma) — cylindrical hub behind the large-end face
+//   (Z = -(BEVEL_H - cone_h) .. 0).  Plain hub: NO bearing seat (Rev S1 —
+//   the shaft's MR63ZZ bearings are housed in nacelle_bevel_housing.scad).
+module bevel_hub(gamma) {
+    cone_h = FACE_WIDTH * cos(gamma);
+    hub_h  = BEVEL_H - cone_h;
+    translate([0, 0, -hub_h])
+        cylinder(h = hub_h, d = HUB_OD);
 }
 
-// bevel_tooth_space(i) — one tooth-space void cut from the conical face.
-//
-//   Approximation method:
-//     The tooth space is a tapered wedge subtracted from the frustum.
-//     At the large end the wedge has angular half-width SPACE_HALF_ANG and
-//     radial depth from ROOT_R_LARGE to TIP_R_LARGE.
-//     At the small end the wedge tapers proportionally.
-//     Implemented as hull() of two thin cylinder subtraction wedges at each end,
-//     then intersected with the frustum face.
-//
-//   Arguments:
-//     i — tooth-space index (0-based)
-module bevel_tooth_space(i) {
-    space_centre = i * ANGULAR_PITCH + ANGULAR_PITCH / 2;  // [deg]
-    half_ang     = SPACE_HALF_ANG;                          // [deg]
+// bevel_tooth_space(i, n, gamma) — one tooth-space void on the conical face,
+//   a hull between matching thin wedge slices at the large and small ends
+//   (same trapezoidal approximation as Rev R, now per-gear parametric).
+module bevel_tooth_space(i, n, gamma) {
+    pitch_r  = n * MODULE / 2;
+    tip_r    = pitch_r + ADDENDUM;
+    root_r   = pitch_r - DEDENDUM;
+    cone_h   = FACE_WIDTH * cos(gamma);
+    ang_pitch = 360.0 / n;
+    half_ang  = ang_pitch / 4;   // quarter pitch = half tooth-space width
 
-    // Create the tooth-space wedge as a hull between two thin wedge disks:
-    //   - Large-end wedge disk at Z = -0.05 (just forward of large end)
-    //   - Small-end wedge disk at Z = CONE_H + 0.05 (just past small end)
+    space_centre = i * ang_pitch + ang_pitch / 2;
+
     hull() {
-        // Large-end wedge slice (thin disk in XY plane at Z ≈ 0):
+        // Large-end wedge slice (thin disk at Z ≈ 0):
         linear_extrude(height = 0.1) {
             rotate([0, 0, space_centre - half_ang]) {
                 difference() {
-                    circle(r = TIP_R_LARGE + 0.1);
-                    circle(r = ROOT_R_LARGE - 0.1);
+                    circle(r = tip_r + 0.1);
+                    circle(r = root_r - 0.1);
                     rotate([0, 0, 2 * half_ang]) square([50, 50]);
                     rotate([0, 0, 180])           square([50, 50]);
                 }
             }
         }
 
-        // Small-end wedge slice (thin disk at Z = CONE_H):
-        translate([0, 0, CONE_H - 0.1]) {
+        // Small-end wedge slice (thin disk at Z = cone_h, tapered radii):
+        translate([0, 0, cone_h - 0.1]) {
             linear_extrude(height = 0.1) {
                 rotate([0, 0, space_centre - half_ang]) {
                     difference() {
-                        circle(r = TIP_R_SMALL + 0.1);
-                        circle(r = ROOT_R_SMALL - 0.1);
+                        circle(r = tip_r * TAPER + 0.1);
+                        circle(r = max(root_r * TAPER - 0.1, 0.5));
                         rotate([0, 0, 2 * half_ang]) square([50, 50]);
                         rotate([0, 0, 180])           square([50, 50]);
                     }
@@ -195,78 +195,73 @@ module bevel_tooth_space(i) {
     }
 }
 
-// shaft_bore_bevel() — D-profile shaft bore through the full gear height.
-//   Bore runs from bottom of hub (Z = -HUB_H) to top of cone (Z = CONE_H).
-module shaft_bore_bevel() {
-    total_length = HUB_H + CONE_H + 0.2;
-    translate([0, 0, -HUB_H - 0.1]) {
+// bevel_shaft_bore(gamma) — D-profile shaft bore through hub + cone.
+module bevel_shaft_bore(gamma) {
+    cone_h = FACE_WIDTH * cos(gamma);
+    hub_h  = BEVEL_H - cone_h;
+    total  = BEVEL_H + 0.2;
+    translate([0, 0, -hub_h - 0.1]) {
         union() {
-            // Main circular bore
-            cylinder(h = total_length, d = SHAFT_BORE);
-            // D-key flat: thin box cutting the chord from bore interior
-            translate([0, SHAFT_BORE / 2 - SHAFT_KEY_W / 2, total_length / 2 - 0.1])
-                cube([SHAFT_BORE + 0.2, SHAFT_KEY_W, total_length], center = true);
+            cylinder(h = total, d = SHAFT_BORE);
+            // D-key flat: thin box removing the chord segment of the bore
+            translate([0, SHAFT_BORE / 2 - SHAFT_KEY_W / 2, total / 2 - 0.1])
+                cube([SHAFT_BORE + 0.2, SHAFT_KEY_W, total], center = true);
         }
     }
 }
 
-// bevel_gear_a() — Bevel Gear A: transverse axis, driven by Pinion A shaft.
-//
-//   Installation: transverse (nacelle Y-axis).
-//   Meshes with Bevel Gear B at 90°; pitch cones tangent at large-end face (Z=0).
-//   Origin: centre of large-end face; Z+ is toward small end (into the housing).
-module bevel_gear_a() {
+// bevel_gear(n, gamma) — complete straight bevel gear, large end at Z = 0,
+//   small end toward +Z (apex direction), hub behind (−Z).
+module bevel_gear(n, gamma) {
     difference() {
         union() {
-            // Conical tooth body
-            cone_frustum();
-            // Hub backing cylinder
-            hub_backing();
+            bevel_cone_frustum(n, gamma);
+            bevel_hub(gamma);
         }
-
-        // Subtract tooth spaces (N_TEETH spaces for N_TEETH teeth)
-        for (i = [0 : N_TEETH - 1]) {
-            bevel_tooth_space(i);
+        for (i = [0 : n - 1]) {
+            bevel_tooth_space(i, n, gamma);
         }
-
-        // Shaft bore (D-profile)
-        shaft_bore_bevel();
+        bevel_shaft_bore(gamma);
     }
 }
 
-// bevel_gear_b() — Bevel Gear B: longitudinal axis, drives longitudinal shaft.
-//
-//   Geometry: identical to Bevel Gear A (1:1 pair, same tooth count).
-//   Installation: rotated 90° about X-axis relative to Gear A to achieve the
-//     90° shaft-angle redirection.  The installer rotates as needed.
-//   Meshes with Bevel Gear A; pitch cones tangent at large-end face (Z=0).
-//   Origin: same convention as bevel_gear_a().
-module bevel_gear_b() {
-    // Identical geometry — orientation handled by installation / assembly file
-    bevel_gear_a();
-}
+// bevel_gear_a() — 10T input gear (transverse / Pinion-A shaft axis).
+module bevel_gear_a() { bevel_gear(N_TEETH_A, GAMMA_A); }
+
+// bevel_gear_b() — 14T output gear (longitudinal shaft axis).
+module bevel_gear_b() { bevel_gear(N_TEETH_B, GAMMA_B); }
 
 // ── Fit Confirmation ──────────────────────────────────────────────────────────
 //
 //   Interface                 Mating part                Clearance / fit
 //   ────────────────────────  ─────────────────────────  ────────────────────
-//   Large-end pitch R = 7 mm  Bevel B large-end R = 7    Pitch cones tangent;
-//   (Bevel A)                 (nacelle_bevel_pair.scad)   0.1 mm axial backlash
+//   A large-end pitch R 4.0   B large-end pitch R 5.6    pitch cones tangent;
+//   (10T, GAMMA 35.54°)       (14T, GAMMA 54.46°)         0.1 mm backlash via
+//                                                          housing bore offset
 //   SHAFT_BORE 3.2 mm         3 mm CF shaft              0.2 mm diametral clr
-//   BEARING_SEAT_D 6.05 mm    MR63ZZ OD 6.0 mm           0.05 mm interference
-//   Cone large face (Z=0)     Housing chamber floor       axial face contact
-//   HUB_OD 6.0 mm            Housing bore (8.5 mm)        1.25 mm radial clr
-//                             nacelle_bevel_housing.scad  (gear clears housing)
+//   HUB_OD 6.0 mm             Housing bore (8.5 mm)      1.25 mm radial clr
+//   Apex coincidence          both axes                  apex 5.6 mm above A
+//                                                          face / 4.0 above B
+//   Bearings                  MR63ZZ in HOUSING bores    none in-gear (Rev S1)
 
 // ── Render ────────────────────────────────────────────────────────────────────
+//
+// RENDER_GEAR = "pair" (default) renders the meshed-pair assembly preview —
+// the single STL serenity_assembly.py imports for spatial checks.  Export
+// print-ready singles with -D 'RENDER_GEAR="a"' / -D 'RENDER_GEAR="b"'.
+RENDER_GEAR = "pair";   // "a" | "b" | "pair"
 
-// Uncomment one at a time to export individual STLs:
-bevel_gear_a();
-// Bevel B is identical; export separately by uncommenting:
-// translate([20, 0, 0]) bevel_gear_b();
-
-// Assembly preview — both gears at 90° shaft angle (comment out singles above):
-// bevel_gear_a();
-// translate([0, PITCH_R_LARGE + PITCH_R_LARGE, CONE_H])
-//     rotate([90, 0, 0])
-//         bevel_gear_b();
+if (RENDER_GEAR == "a") {
+    bevel_gear_a();
+} else if (RENDER_GEAR == "b") {
+    bevel_gear_b();
+} else {
+    // Meshed pair preview: shared apex at (0, 0, 5.6).
+    //   A: axis +Z, large face at Z=0, apex at Z = R_A/tan(GAMMA_A) = 5.6.
+    //   B: axis +Y after rotate([-90,0,0]); its local apex (0,0,4.0) maps to
+    //      origin+(0,4,0), so origin (0,-4,5.6) puts B's apex at (0,0,5.6).
+    bevel_gear_a();
+    translate([0, -PITCH_R_A, PITCH_R_B])
+        rotate([-90, 0, 0])
+            bevel_gear_b();
+}

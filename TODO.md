@@ -2880,6 +2880,16 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 **Open tasks:**
 
+- [x] **USB-to-Ethernet bridge (LAN9500A class) evaluated as an alternative Ethernet
+    front end and REJECTED (not deferred), 2026-07-11.** Rationale captured in
+    `docs/ETHERNET_PHY_TRADE.md`: a single-port USB bridge cannot offload HSR/PRP
+    (IEC 62439-3), so the redundant ring collapses; USB adds non-deterministic
+    latency/jitter unfit for the flight-control bus, a fragile 480 Mbps EMI ingress
+    path in the 200 V/m environment, and hard/costly galvanic isolation — while
+    wasting the AM6254/AM62A7 native MAC. Native DP83825I / ADIN1300 / KSZ9477 path
+    retained. If "reduce per-PHY glue on Wash" resurfaces, the on-architecture answer
+    is a managed KSZ9477/KSZ9567 switch, tracked as a separate trade — NOT USB.
+
 ##### 1.2a.1 *Cape DRC / routing / ETH2 status (2026-06-12)* — see `avionics/kicad/README.md`
 
 - [x] **Wire second Ethernet (ETH2) on Wash.** `ETH2` / `ETH2-PHY` (ADIN1300) /
