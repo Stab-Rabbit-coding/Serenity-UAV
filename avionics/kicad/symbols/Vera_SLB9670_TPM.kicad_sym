@@ -2,7 +2,7 @@
   (symbol "Vera_SLB9670_TPM" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
     (property "Reference" "U" (id 0) (at -22.86 34.29 0) (effects (font (size 1.27 1.27)) (justify left)))
     (property "Value" "SLB9670VQ2.0" (at -22.86 -35.56 0) (effects (font (size 1.27 1.27)) (justify left)))
-    (property "Footprint" "Vera:VQFN32_SLB9670" (id 2) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Footprint" "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm" (id 2) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
     (property "Datasheet" "" (id 3) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
     (property "ki_description" "Infineon OPTIGA TPM SLB9670 (SPI TPM 2.0), PG-VQFN-32-13 (clean-room from Infineon DS Rev1.4 Tables 3/4/5)" (id 4) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
     (symbol "Vera_SLB9670_TPM_1_1"

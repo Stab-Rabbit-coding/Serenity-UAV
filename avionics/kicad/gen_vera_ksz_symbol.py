@@ -31,7 +31,7 @@ SYMDIR = HERE / "symbols"
 SYM = SYMDIR / "Vera_KSZ9477.kicad_sym"
 CSVOUT = SYMDIR / "KSZ9477STXI_pinmap.csv"
 SYMNAME = "Vera_KSZ9477"
-FOOTPRINT = "Vera:TQFP128_KSZ9477_14x14"  # 128-TQFP-EP 14x14, 0.4mm pitch
+FOOTPRINT = "Package_QFP:TQFP-128_14x14mm_P0.4mm"  # KiCad std land pattern
 
 # Microchip DS00002392C TABLE 3-1 (all 128 pins), + pad 129 = exposed pad (GND).
 KSZ_MAP = [

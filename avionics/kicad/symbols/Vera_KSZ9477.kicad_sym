@@ -2,7 +2,7 @@
   (symbol "Vera_KSZ9477" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
     (property "Reference" "U" (id 0) (at -30.48 6.0 0) (effects (font (size 1.27 1.27)) (justify left)))
     (property "Value" "KSZ9477STXI" (id 1) (at -30.48 3.0 0) (effects (font (size 1.27 1.27)) (justify left)))
-    (property "Footprint" "Vera:TQFP128_KSZ9477_14x14" (id 2) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Footprint" "Package_QFP:TQFP-128_14x14mm_P0.4mm" (id 2) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
     (property "Datasheet" "" (id 3) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
     (property "ki_description" "Microchip KSZ9477S 7-port GbE switch (HSR/PRP), 128-TQFP-EP -- clean-room from DS00002392C Table 3-1" (id 4) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
     (symbol "Vera_KSZ9477_1_1"

@@ -37,7 +37,8 @@ SYMDIR = HERE / "symbols"
 ISOW1044 = {
     "name": "Vera_ISOW1044BDFMR",
     "value": "ISOW1044BDFMR",
-    "footprint": "Vera:SOP65P960X350-20N_DFM20",  # 20-pin DFM (see docstring)
+    "footprint": "Vera:ISOW1044_DFM20_TBD",  # DFM-20: author from TI SLLSFF7A pkg
+    # drawing -- isolation-critical (5kV clearance), do NOT substitute a generic land
     "desc": "TI ISOW1044BDFMR 5kVrms isolated CAN-FD + iso DC/DC, 20-pin DFM "
     "(clean-room from TI SLLSFF7A Table 7-1)",
     "pins": [
@@ -69,7 +70,8 @@ ISOW1044 = {
 SLB9670 = {
     "name": "Vera_SLB9670_TPM",
     "value": "SLB9670VQ2.0",
-    "footprint": "Vera:VQFN32_SLB9670",  # PG-VQFN-32-13
+    "footprint": "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm",
+    # PG-VQFN-32-13; confirm EP size vs Infineon pkg drawing before layout
     "desc": "Infineon OPTIGA TPM SLB9670 (SPI TPM 2.0), PG-VQFN-32-13 "
     "(clean-room from Infineon DS Rev1.4 Tables 3/4/5)",
     "pins": [
@@ -179,7 +181,8 @@ def _mspm0_pins():
 MSPM0 = {
     "name": "Vera_MSPM0G3507_RGZ",
     "value": "MSPM0G3507SRGZR",
-    "footprint": "Vera:VQFN48_MSPM0G3507_RGZ",  # 48-pin 0.5mm VQFN 7x7 + EP
+    "footprint": "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm",
+    # RGZ 48-pin; confirm EP size vs TI pkg drawing before layout
     "desc": "TI MSPM0G3507 Arm Cortex-M0+ MCU (CAN-FD), 48-pin RGZ VQFN "
     "(clean-room from TI SLASEX6C Fig 6-4)",
     "pins": _mspm0_pins(),

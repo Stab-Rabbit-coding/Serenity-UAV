@@ -2,7 +2,7 @@
   (symbol "Vera_ISOW1044BDFMR" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
     (property "Reference" "U" (id 0) (at -22.86 16.51 0) (effects (font (size 1.27 1.27)) (justify left)))
     (property "Value" "ISOW1044BDFMR" (at -22.86 -17.78 0) (effects (font (size 1.27 1.27)) (justify left)))
-    (property "Footprint" "Vera:SOP65P960X350-20N_DFM20" (id 2) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Footprint" "Vera:ISOW1044_DFM20_TBD" (id 2) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
     (property "Datasheet" "" (id 3) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
     (property "ki_description" "TI ISOW1044BDFMR 5kVrms isolated CAN-FD + iso DC/DC, 20-pin DFM (clean-room from TI SLLSFF7A Table 7-1)" (id 4) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
     (symbol "Vera_ISOW1044BDFMR_1_1"
