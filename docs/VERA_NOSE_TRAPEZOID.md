@@ -3,7 +3,12 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **AI-assist:** Claude Opus 4.8 (Anthropic) — geometry derivation, 2026-07-12
 **License:** CC BY 4.0
-**Revision:** Rev A (2026-07-12)
+**Revision:** Rev B (2026-07-12)
+
+> **Rev B update — measured, not estimated.** Slicing the baked head STL
+> (`airframe/stls/fuselage/head_shell24_2mm_repaired.stl`, hull frame) at the board
+> Z-band shows the **blunt** nose widens fast, so the §4 pessimism (based on a linear
+> taper) is **resolved in the SoM's favour** — see §4.1. The SoM fits the nose.
 
 Derives the Vera nose-carrier trapezoid from the airframe SCAD geometry
 (`airframe/openscad/fuselage/head_shell24.scad`, `bow_sensor_faceplate.scad`,
@@ -16,8 +21,8 @@ Derives the Vera nose-carrier trapezoid from the airframe SCAD geometry
 - **`FACEPLATE_CTR` = [162.15, −282.53, 55.59]** (aperture-row centroid);
   **`BOW_CX` = 161.33** (aircraft CL). Nose tip ≈ Y −287.7; head aft (cargo mate)
   ≈ Y −53; head lateral extent X 99..228 (129 mm at the widest, aft).
-- **Vera mount** (`head_shell24.scad vera_board_bosses`): station ≈ `FACEPLATE_CTR
-  + 20 mm` aft (into the hull), level with the sensor cluster. *(That module still
+- **Vera mount** (`head_shell24.scad vera_board_bosses`): station ≈ 20 mm aft of
+  `FACEPLATE_CTR` (into the hull), level with the sensor cluster. *(That module still
   carries the stale 46×48 hole pattern — see §5.)*
 
 ## 2. Board frame ↔ hull mapping
@@ -65,6 +70,33 @@ FreeCAD/user.**
 4. **Rotate/relocate the SoM** — a 40 mm square cannot be made to fit a 25.4→42 taper
    by rotation; this does not resolve it.
 
+## 4.1 Measured nose interior width (resolves §4)
+
+Slicing the baked head STL at constant hull Y over the board's extent (board width axis
+= hull X lateral; the bow tilt `BOW_ROT` is a rotation about X, so board width maps to
+hull X), lateral outer width and the width within the board Z-band [95..125]:
+
+| hull Y (mm) | board station | lateral X width (mm) | X width in Z[95..125] (mm) |
+| --- | --- | --- | --- |
+| −300 | fwd / faceplate (narrow) | 41.4 | 41.4 |
+| −290 | +10 | 68.6 | 51.0 |
+| −280 | +20 | 76.4 | 70.6 |
+| −270 | SoM fwd edge (+30) | 72.7 | 59.1 |
+| −260 | +40 | 78.5 | 62.6 |
+| −250 | +50 | 91.6 | 61.0 |
+| −240 | +60 | 97.1 | 57.8 |
+| −230 | aft / SoM aft edge (+70) | 101.9 | 64.5 |
+
+**Conclusion — the SoM fits the nose.** The nose is blunt: the Z-band lateral width is
+already **59–64 mm over the entire SoM region (Y −270..−230)**. Minus 2×2 mm wall +
+~1 mm/side clearance (~6 mm) that is **~53–58 mm of usable interior width** where the
+SoM sits — enough for the 40 mm SoM plus routing. The forward/sensor end (Y −300) has
+41 mm (≥ the 25.4 mm needed). So a carrier that **widens fast near the front** (matching
+the blunt nose: 25.4 mm at the flat → ~48 mm by 20 mm aft → ~54–56 mm at the aft end)
+holds the SoM. A *gentle linear* taper does not (§4); a **fast-widening** trapezoid,
+roughly following the nose profile, does. Exact outline still wants a FreeCAD trace of
+the inner wall on the tilted board plane, but feasibility is confirmed.
+
 ## 5. Initial two-sided fit (valid footprints)
 
 Board area on a 25.4→60 mm × 69.85 mm trapezoid ≈ (25.4+60)/2 × 69.85 ≈ **2983 mm²
@@ -80,8 +112,8 @@ per side** — ample by area for a 2-sided layout. Fit by *shape*:
 | EMI (magnetics/CMC/TVS), JST conns, DS lands, passives | real KiCad fps | ✅ |
 
 **Placement intent (2-sided):** front = SoM at the aft/wide end + the sensor
-direct-solder lands / JSTs at the forward/narrow end; back = KSZ9477 + MSPM0 + SLB9670
-+ ISOW1044 + EMI + network connectors at the aft end. Every part except the SoM is
+direct-solder lands / JSTs at the forward/narrow end; back = KSZ9477, MSPM0, SLB9670,
+ISOW1044, EMI, and network connectors at the aft end. Every part except the SoM is
 size-compatible with the taper; **the SoM is the sole fit driver** and gates the
 wide-end width.
 
@@ -92,8 +124,19 @@ exist, the fit is by keep-out only.
 
 ## 6. Recommendation
 
-Resolve the **wide-end width vs. nose interior** first (FreeCAD cross-section of
-`head_shell24` at the Vera aft station), because it decides whether the SoM lives on
-the nose board at all (§4 options). The 25.4 mm narrow end is fixed regardless.
+**Resolved (§4.1): the SoM lives on the nose board.** The concrete trapezoid:
+
+- **Narrow (fwd/sensor) end: 25.4 mm** at hull Y −300 (fixed by the flat + aperture span).
+- **Wide (aft) end: ~54 mm** at hull Y −230 (fits the ~58 mm usable interior with margin).
+- **Widen fast near the front** to reach ~40 mm width by the SoM forward edge (Y −270),
+  matching the blunt nose — a straight 25.4→54 taper leaves the SoM's forward corners
+  ~1–3 mm proud, so either bump the aft end toward ~58 mm (interior allows it) or use a
+  two-segment / nose-following edge that widens faster in the first ~20 mm.
+- **Length: 69.85 mm** (unchanged) works; the board need not grow.
+
+Remaining gates for a *physical* placement (not geometry): the **SoM 270-pad DSC
+footprint** (PHYTEC mechanical drawing) and the **ISOW1044 DFM-20 footprint** (TI
+drawing). With those, the two-sided layout in §5 is straightforward; the outline's exact
+inner-wall follow is a FreeCAD refinement.
 
 *© 2026 Steve Griffing — CC BY 4.0.*
