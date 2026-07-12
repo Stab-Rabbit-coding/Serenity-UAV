@@ -913,6 +913,11 @@ def gen_sch() -> str:
         lib_symbol_conn_np("Conn_JST_GH_04P", 4, ["1", "2", "3", "4"]),
         lib_symbol_conn_np("Conn_JST_GH_05P", 5, ["1", "2", "3", "4", "5"]),
         lib_symbol_conn_np("Conn_JST_SH_02P", 2, ["1", "2"]),
+        # Direct-solder land alternatives to the sensor JST connectors (nose
+        # install): same nets, populate one per build. See gen_vera_ds_footprints.py.
+        lib_symbol_conn_np("SolderLand_09P", 9),
+        lib_symbol_conn_np("SolderLand_04P", 4),
+        lib_symbol_conn_np("SolderLand_02P", 2),
         lib_symbol_generic_ic(
             "TI_AM62A7",
             "Vera:BGA484_23x23mm_P1mm_PLACEHOLDER",
@@ -1201,6 +1206,29 @@ def gen_sch() -> str:
             0.9,
         )
     )
+
+    # J_CAM_DS — direct-solder land ALTERNATIVE to J_CAM1+J_CAM2 (nose install).
+    # Same nets; populate the JST pair OR this land, never both. Pad order matches
+    # DS_Camera_9P: CSI clk/D0 (4) + I2C/reset/+3V3 (4) + GND. Aligned to the
+    # camera aperture (bow_sensor_pod.scad CAM_POS) on the nose sensor plate.
+    dsx, dsy = 165.10, 95.25  # 1.27mm-grid-aligned
+    parts.append(
+        sym_inst(
+            "SolderLand_09P",
+            "J_CAM_DS",
+            "Direct-solder camera land (nose; DNP if J_CAM* populated)",
+            dsx,
+            dsy,
+            footprint="Vera:DS_Camera_9P",
+        )
+    )
+    for i, net in enumerate(
+        [
+            "CSI_CLK_P", "CSI_CLK_N", "CSI_D0_P", "CSI_D0_N", "CAM_SDA",
+            "CAM_SCL", "CAM_RESET_N", "+3V3", "GND",
+        ]
+    ):
+        parts.append(glabel_conn(net, dsx, dsy, 9, i))
 
     # =====================================================================
     # Section C — Control half: MSPM0G3507 + TPM + KSZ9477 + CAN-FD
@@ -1702,6 +1730,23 @@ def gen_sch() -> str:
         )
     )
 
+    # J_TOF_DS — direct-solder land ALTERNATIVE to J_TOF (nose install). Same
+    # nets; populate the JST OR this land. Aligned to the ToF aperture
+    # (bow_sensor_pod.scad TOF_POS) on the nose sensor plate.
+    tdx, tdy = 40.64, 264.16  # 1.27mm-grid-aligned
+    parts.append(
+        sym_inst(
+            "SolderLand_04P",
+            "J_TOF_DS",
+            "Direct-solder ToF land (nose; DNP if J_TOF populated)",
+            tdx,
+            tdy,
+            footprint="Vera:DS_ToF_4P",
+        )
+    )
+    for i, net in enumerate(["+5V", "GND", "UART_TOF_TX", "UART_TOF_RX"]):
+        parts.append(glabel_conn(net, tdx, tdy, 4, i))
+
     # Laser driver — Q1 AO3400, R1 gate, R2 pulldown
     # AO3400 local pin offsets (from lib_symbol_nmos): G=(-7.62,0), D=(2.54,7.62), S=(2.54,-7.62).
     # Sheet position negates local Y (see _ic_pin_xy docstring), so on the sheet
@@ -1735,6 +1780,39 @@ def gen_sch() -> str:
     )
     parts.append(glabel_conn("+5V", cx2, cy2, 2, 0))
     parts.append(glabel_conn("LASER_CATHODE", cx2, cy2, 2, 1))
+
+    # J_LASER_DS — direct-solder land ALTERNATIVE to J_LASER (nose install). Same
+    # nets; populate the JST OR this land. Aligned to the laser aperture
+    # (bow_sensor_pod.scad, aircraft centreline) on the nose sensor plate.
+    ldx, ldy = 129.54, 264.16  # 1.27mm-grid-aligned
+    parts.append(
+        sym_inst(
+            "SolderLand_02P",
+            "J_LASER_DS",
+            "Direct-solder laser land (nose; DNP if J_LASER populated)",
+            ldx,
+            ldy,
+            footprint="Vera:DS_Laser_2P",
+        )
+    )
+    parts.append(glabel_conn("+5V", ldx, ldy, 2, 0))
+    parts.append(glabel_conn("LASER_CATHODE", ldx, ldy, 2, 1))
+
+    parts.append(
+        text_note(
+            "DUAL SENSOR INTERFACE (camera / ToF / laser) — populate ONE per build:\n"
+            "  Cargo install: populate the JST connectors (J_CAM1/J_CAM2, J_TOF,\n"
+            "    J_LASER); leave the *_DS solder lands unpopulated (DNP).\n"
+            "  Nose install: populate the direct-solder lands (J_CAM_DS, J_TOF_DS,\n"
+            "    J_LASER_DS) so the module leads/flex solder flush, ALIGNED to the\n"
+            "    nose sensor mounting plate (bow_sensor_pod.scad CAM_POS/TOF_POS/\n"
+            "    laser CL); leave the JST connectors DNP. Each *_DS land shares the\n"
+            "    exact nets of its JST counterpart (no schematic net change).",
+            ldx - 20,
+            ldy + 8,
+            0.9,
+        )
+    )
 
     parts.append(
         text_note(
