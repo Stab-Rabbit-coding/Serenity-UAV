@@ -172,7 +172,7 @@
 	(footprint "DS_Camera_9P"
 		(layer "F.Cu")
 		(uuid "1490713e-69eb-4123-97b4-4d6fff578fe7")
-		(at 21 6)
+		(at 62 21.5)
 		(property "Reference" "J_CAM_DS"
 			(at 0 -2.2 0)
 			(layer "F.SilkS")
@@ -2633,7 +2633,7 @@
 	(footprint "DS_Laser_2P"
 		(layer "F.Cu")
 		(uuid "976e9b98-58cf-4f85-8f1f-2c1df26186e5")
-		(at 12.7 6)
+		(at 62 13.2)
 		(property "Reference" "J_LASER_DS"
 			(at 0 -2.2 0)
 			(layer "F.SilkS")
@@ -2736,7 +2736,7 @@
 	(footprint "DS_ToF_4P"
 		(layer "F.Cu")
 		(uuid "db6997e0-f6af-40d2-b953-10ee2874b7cb")
-		(at 4.5 6)
+		(at 62 5)
 		(property "Reference" "J_TOF_DS"
 			(at 0 -2.2 0)
 			(layer "F.SilkS")

@@ -30,18 +30,28 @@ HERE = Path(__file__).resolve().parent
 BOARD = HERE / "Vera.kicad_pcb"
 PRETTY = str(HERE / "Vera.pretty")
 
-# ref -> (footprint name, {pad_number: net_name}, seed X mm)
-# X seeds keep the ToF..laser..camera relative spacing (aperture-derived).
+# Vera board frame (user, 2026-07-12): +X fore->aft, +Y starboard->port,
+# +Z ventral->dorsal.  Sensors FORWARD, network AFT.  The three nose apertures
+# differ in the PORT-STARBOARD (Y) axis: camera=PORT (high Y), ToF=STARBOARD
+# (low Y), laser=centreline (mid Y); Y spacing is aperture-derived
+# (bow_sensor_pod.scad: ToF..laser 8.2mm, ToF..camera 16.5mm).  The lands are
+# co-located with their JST counterparts at the SENSOR end of the board (which is
+# currently high-X on this board -- see the fore/aft note in the commit message).
+#
+# ref -> (footprint name, {pad_number: net_name}, (x_mm, y_mm))
+SENSOR_X = 62.0  # co-located just inboard of the sensor JST cluster (X~65-67)
 LANDS = {
     "J_TOF_DS": ("DS_ToF_4P",
-                 {1: "+5V", 2: "GND", 3: "UART_TOF_TX", 4: "UART_TOF_RX"}, 4.5),
-    "J_LASER_DS": ("DS_Laser_2P", {1: "+5V", 2: "LASER_CATHODE"}, 12.7),
+                 {1: "+5V", 2: "GND", 3: "UART_TOF_TX", 4: "UART_TOF_RX"},
+                 (SENSOR_X, 5.0)),   # starboard (low Y)
+    "J_LASER_DS": ("DS_Laser_2P", {1: "+5V", 2: "LASER_CATHODE"},
+                   (SENSOR_X, 13.2)),  # centreline (mid Y) = +8.2 mm from ToF
     "J_CAM_DS": ("DS_Camera_9P",
                  {1: "CSI_CLK_P", 2: "CSI_CLK_N", 3: "CSI_D0_P", 4: "CSI_D0_N",
                   5: "CAM_SDA", 6: "CAM_SCL", 7: "CAM_RESET_N", 8: "+3V3",
-                  9: "GND"}, 21.0),
+                  9: "GND"},
+                 (SENSOR_X, 21.5)),  # port (high Y) = +16.5 mm from ToF
 }
-SEED_Y = 6.0  # mm from the (current rectangular) board's top edge
 
 
 def mm(v):
@@ -59,26 +69,28 @@ def get_net(board, name):
 
 def main():
     board = pcbnew.LoadBoard(str(BOARD))
-    existing = {f.GetReference() for f in board.GetFootprints()}
-    for ref, (fpname, padnets, seedx) in LANDS.items():
-        if ref in existing:
-            print(f"  {ref} already present -- skipping")
-            continue
-        fp = pcbnew.FootprintLoad(PRETTY, fpname)
-        if fp is None:
-            print(f"ERROR: could not load {fpname} from {PRETTY}")
-            return 1
-        fp.SetReference(ref)
-        fp.SetPosition(mm((seedx, SEED_Y)))
-        board.Add(fp)
+    existing = {f.GetReference(): f for f in board.GetFootprints()}
+    for ref, (fpname, padnets, pos) in LANDS.items():
+        if ref in existing:  # reposition an already-placed land (idempotent)
+            fp = existing[ref]
+            fp.SetPosition(mm(pos))
+            print(f"  repositioned {ref} -> {pos}")
+        else:
+            fp = pcbnew.FootprintLoad(PRETTY, fpname)
+            if fp is None:
+                print(f"ERROR: could not load {fpname} from {PRETTY}")
+                return 1
+            fp.SetReference(ref)
+            fp.SetPosition(mm(pos))
+            board.Add(fp)
+            print(f"  placed {ref} ({fpname}) at {pos}")
         for padnum, netname in padnets.items():
             pad = fp.FindPadByNumber(str(padnum))
             if pad is None:
                 print(f"ERROR: {ref} has no pad {padnum}")
                 return 1
             pad.SetNet(get_net(board, netname))
-        print(f"  placed {ref} ({fpname}) at x={seedx} y={SEED_Y}, "
-              f"{len(padnets)} pads netted")
+        print(f"    {ref}: {len(padnets)} pads netted")
     board.BuildListOfNets()
     pcbnew.SaveBoard(str(BOARD), board)
     print("saved", BOARD.name)
