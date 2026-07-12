@@ -224,7 +224,9 @@ real, currently-produced silicon vendors, not a fictional single-chip "port":
 - **Microchip KSZ9477** Ethernet switch — the only part in this family confirmed (via AN3474)
   to hardware-offload HSR/PRP ring redundancy per IEC 62439-3; LAN9355/KSZ9563 do **not**
   implement this and must not be substituted for the ring-redundancy role.
-- **TI ISOW1044BDFMR** galvanically isolated CAN-FD transceiver (SOIC-16W, 5 kV reinforced
+- **TI ISOW1044BDFMR** galvanically isolated CAN-FD transceiver (**20-pin DFM package** —
+  verified against TI datasheet SLLSFF7A Fig 7-1 / §8.4 "DFM/20 PINS"; earlier docs wrongly
+  said "SOIC-16W", a fleet-wide footprint error flagged in TODO.md, 5 kV reinforced
   insulation) — matches the Wash/Zoë Rev R EMI-hardening standard (TODO.md §1.2a); an earlier
   pass of this board used the non-isolated TCAN1042HG-Q1, corrected 2026-07-03.
 - Shielded JST-GH connectors for the Ethernet ring (in/out, 5-pin: GND + TX±/RX±) and the

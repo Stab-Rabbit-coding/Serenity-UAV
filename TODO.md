@@ -2655,6 +2655,23 @@ list below before treating anything here as final.
     `avionics/kicad/gen_vera.py`. Vision half, control half, ToF interface, and laser driver
     circuit all present with correct net-level architecture; see "Verified vs. placeholder"
     above for what's still not real (pin numbers, BGA/QFN footprints).
+- [ ] **SoM re-scope (2026-07-11/12) — Vera = PHYTEC phyCORE-AM62A SoM on a trapezoidal
+    carrier** (narrow ≤1.0 in at the sensor pod, widening aft for the 40 mm module). Deletes the
+    raw-AM62A BGA + LPDDR4 + boot-flash + PMIC (all on-module). See
+    `docs/VERA_MANUFACTURING_READINESS.md` Rev C + `avionics/kicad/VERA_SOM_NETMAP.md`. Progress:
+    clean-room symbols authored from primary sources — SoM (`Vera_SoM.kicad_sym`, 270-pin),
+    ISOW1044 (`Vera_ISOW1044BDFMR.kicad_sym`, 20-pin), SLB9670 (`Vera_SLB9670_TPM.kicad_sym`,
+    32-pin). Remaining: MSPM0G3507 + KSZ9477 clean-room symbols, footprints, then swap into
+    `gen_vera.py` and wire per the net map (ERC to 0). SnapEDA source files stay gitignored
+    (CC BY-SA + §5.1 redistribution limit — verified against SnapMagic ToS 2026-07-12).
+- [ ] **FLEET-WIDE ISOW1044BDFMR footprint audit (flight-hardware error, 2026-07-12).** TI
+    datasheet SLLSFF7A confirms ISOW1044BDFMR is a **20-pin DFM** package (Fig 7-1, §8.4
+    "DFM/20 PINS"), NOT the **"SOIC-16W"** that Wash.md, Zoë.md, Vera.md, README.md, and prior
+    TODO text all state. Any KiCad footprint using a 16-pad `SOIC-16W` land for U4 (Wash, Zoë,
+    Vera) is WRONG and will not match the 20-pad part. **Action:** verify the actual footprint
+    on each board's `.kicad_pcb` and correct to a 20-pad DFM land; update all the SOIC-16
+    doc references. Vera's is handled by the carrier rebuild; Wash/Zoë need checking on the
+    as-built PCBs. (avionics/CLAUDE.md + Vera.md package text corrected 2026-07-12.)
 - [ ] **Confirm PCB fab/assembly house can handle the AM62Ax 484-ball FCBGA/FCCSP package**
     [REF-SENSOR-003] before committing to this SoC in layout — this is a significant assembly
     escalation versus the QFN/SOIC parts used elsewhere in this design. If no viable

@@ -86,8 +86,10 @@ or wrong and were caught before being committed to any citation-tracked file —
   Ports 2/3 (integrated PHY, full TX+/TX-/RX+/RX- differential pairs each) feed the
   EMI-hardening chain below; SPI host interface to U3 for ToF/laser-state telemetry and
   control-plane access.
-- **U4 — TI ISOW1044BDFMR** galvanically-isolated CAN-FD transceiver (SOIC-16W, 5 kV
-  reinforced insulation) — replaces an earlier non-isolated TCAN1042HG-Q1 to match the
+- **U4 — TI ISOW1044BDFMR** galvanically-isolated CAN-FD transceiver (**20-pin DFM package**,
+  5 kV reinforced insulation — the part is 20-pin DFM per TI SLLSFF7A, NOT the "SOIC-16W" earlier
+  docs claimed; the Vera U4 footprint must be 20-pad DFM) — replaces an earlier non-isolated
+  TCAN1042HG-Q1 to match the
   Wash/Zoë Rev R EMI-hardening standard (see below).
 - **Y1** — 25 MHz crystal for U2's reference clock.
 
