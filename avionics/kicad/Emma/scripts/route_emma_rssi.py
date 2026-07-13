@@ -28,7 +28,7 @@ import sys
 
 import pcbnew
 
-PCB = "Emma.kicad_pcb"
+PCB = "kicads/Emma.kicad_pcb"
 
 
 def mm(v):

@@ -37,7 +37,7 @@ License: CC BY 4.0
 
 import pcbnew
 
-PCB_FILE = "Emma.kicad_pcb"
+PCB_FILE = "kicads/Emma.kicad_pcb"
 FPLIB = "/usr/share/kicad/footprints"
 
 NET_MERGE = {"UART_TX": "UART_RCRS_RX", "UART_RX": "UART_RCRS_TX"}

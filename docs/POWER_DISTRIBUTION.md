@@ -105,19 +105,19 @@ from the design; see TODO §1.1.3.5.)
 > the four boards stagger TX by frequency and election priority. Sustained 5 V peak
 > current ≈ 14–18 A in nominal flight.
 
-The §3.2 table does **not** include the two **Vera** vision boards (nose + cargo). Vera is
+The §3.2 table does **not** include the two **Jayne** vision boards (nose + cargo). Jayne is
 a standalone board (not a PB2-I cape) with its own 5 V input (`J_PWR`); its load is budgeted
 separately in §3.2.1 below and is fed from a **dedicated Kaylee 5 V payload rail**, not the
 shared avionics bus.
 
-### 3.2.1 Vera Vision-Board Loads (dedicated 5 V payload rail)
+### 3.2.1 Jayne Vision-Board Loads (dedicated 5 V payload rail)
 
-Two Vera boards are installed (bow sensor pod + cargo-bay nadir mount). Each carries a TI
+Two Jayne boards are installed (bow sensor pod + cargo-bay nadir mount). Each carries a TI
 AM62A7 vision SoC (via TPS65219 PMIC), a KSZ9477 Ethernet switch, an MSPM0G3507 MCU, an
 SLB9670 TPM, an ISOW1044 isolated CAN-FD, plus the camera module, TFmini-S ToF, and a laser.
 Figures are **datasheet-typical** at the 5 V board input (PMIC/buck-fed items divided by
 0.88 efficiency); refine when the placeholder SoC/switch footprints are replaced with sourced
-silicon (Vera.md "Verified vs. Placeholder").
+silicon (Jayne.md "Verified vs. Placeholder").
 
 | Load (per board) | Typ (A @5 V) | Peak (A @5 V) | Notes |
 |---|---|---|---|
@@ -129,7 +129,7 @@ silicon (Vera.md "Verified vs. Placeholder").
 | TFmini-S ToF (140 mA typ / 200 mA peak @5 V) | 0.14 | 0.20 | REF-SENSOR-002 |
 | Ethernet magnetics + passives + LDO overhead | 0.04 | 0.07 | |
 | **Core subtotal (no laser)** | **1.20** | **2.06** | |
-| Laser — both sites (Class 2 green, ≤ 1 mW optical) | +0.02 | +0.02 | negligible; see `docs/VERA_LASER_ANALYSIS.md` (nose is Class 2, not 3B) |
+| Laser — both sites (Class 2 green, ≤ 1 mW optical) | +0.02 | +0.02 | negligible; see `docs/JAYNE_LASER_ANALYSIS.md` (nose is Class 2, not 3B) |
 
 **Per board:** ≈ **1.22 A** typ / **2.08 A** peak (both boards are now Class 2 laser — the nose
 is a concentrated dot + camera strobe-difference detection, ~0.45 mW, not a 500 mW Class 3B
@@ -140,29 +140,29 @@ module, so its laser draw is negligible like the cargo unit).
 **Feed decision — dedicated Kaylee 5 V payload rail (recommended over sharing the avionics
 bus).** The shared 5 V avionics rail is already tight: realistic sustained load ≈ 10 A (§3.2)
 against a dual-TPS54620 BEC whose **single-fault** capacity is only 6 A (both healthy ≈ 12 A;
-§11). Adding Vera's ~2.4 A nom to that rail pushes nominal to ≈ 12.4 A — at/over the healthy
+§11). Adding Jayne's ~2.4 A nom to that rail pushes nominal to ≈ 12.4 A — at/over the healthy
 BEC ceiling and well past the 6 A single-fault floor, worsening the existing brown-out
-exposure. Vera is also a switching video-SoC load whose noise should not sit on the shared
-avionics bus. Therefore Vera is powered from its **own** Kaylee rail:
+exposure. Jayne is also a switching video-SoC load whose noise should not sit on the shared
+avionics bus. Therefore Jayne is powered from its **own** Kaylee rail:
 
 - **U_BEC_5V_3 (RAIL-2):** a third identical TPS54620RGYT (6 A) BEC channel, VDIS input →
   5.4 V set-point. 6 A rating vs 2.4 A nom / 4.2 A peak = comfortable margin. Rather than a
   standalone rail, RAIL-2 is **diode-OR cross-tied to the avionics RAIL-1** so the two rails
   back each other up while staying fault-isolated — full topology, drop budget, and fault-mode
   table in **§11.1**.
-- **J_VERA:** new Molex Nano-Fit 4-pin (matches `J_5V`) 5 V payload output on Kaylee, harnessed
-  to both Vera `J_PWR` inputs.
-- **Fuse/limit:** the TPS54620 internal current limit plus a 3 A resettable polyfuse per Vera
+- **J_JAYNE:** new Molex Nano-Fit 4-pin (matches `J_5V`) 5 V payload output on Kaylee, harnessed
+  to both Jayne `J_PWR` inputs.
+- **Fuse/limit:** the TPS54620 internal current limit plus a 3 A resettable polyfuse per Jayne
   drop (each board ≤ 2.72 A peak).
 - **Wire gauge:** 18 AWG shielded twisted pair (7 A rated) per drop — ≫ the ≤ 2.7 A per-board
   load; consistent with §4 "Avionics bay intra-bay".
 - **Runs:** Kaylee (middle-section inner neck) → nose (bow pod) and → cargo nadir mount;
   comparable length to the existing avionics 5 V bay runs. Route with the Ethernet-ring / CAN
-  harness Vera already shares to each bay.
+  harness Jayne already shares to each bay.
 
-Implementing the RAIL-2 channel (`U_BEC_5V_3`) + cross-tie + `J_VERA` on Kaylee is a Kaylee
+Implementing the RAIL-2 channel (`U_BEC_5V_3`) + cross-tie + `J_JAYNE` on Kaylee is a Kaylee
 revision change (sibling to the planned Rev S1 servo-rail change); full design in **§11.1**,
-tracked in TODO.md §1.2c.4. Until implemented, a Vera board may be bench-fed from the shared
+tracked in TODO.md §1.2c.4. Until implemented, a Jayne board may be bench-fed from the shared
 5 V bus **only** with active load-management (accept that it consumes the remaining avionics
 margin and worsens single-fault brown-out) — not the flight configuration.
 
@@ -195,9 +195,9 @@ At 6 V / 22.2 V: 5.3 A × 6 V / 22.2 V ≈ **1.4 A from VBAT** at stall.
 All figures are well within the 60 C (240 A) continuous rating of the 4 000 mAh pack
 and the 150 A main fuse rating under sustained load.
 
-The two **Vera** vision boards add ≈ **0.6 A typ / ~1.2 A peak at VBAT** (2.4 A / 4.8 A at
+The two **Jayne** vision boards add ≈ **0.6 A typ / ~1.2 A peak at VBAT** (2.4 A / 4.8 A at
 5 V through the dedicated U_BEC_VERA rail, §3.2.1) — negligible against the propulsion-dominated
-totals above, but material to the 5 V-side budget, which is why Vera gets its own rail rather
+totals above, but material to the 5 V-side budget, which is why Jayne gets its own rail rather
 than loading the already-tight shared avionics BEC.
 
 ---
@@ -596,9 +596,9 @@ redundant in the hardware-failure sense. Redundancy provisions:
   architecture is a Phase 12 enhancement — now specified as a **swappable cargo-bay
   Range-Extender Battery Module (§11.2)**, so its AUW/T-W cost is paid only on range missions.
 
-### 11.1 Second 5 V Rail (Vera / payload) — cross-tied, mutually fault-tolerant (PLAN)
+### 11.1 Second 5 V Rail (Jayne / payload) — cross-tied, mutually fault-tolerant (PLAN)
 
-**Objective.** Give Vera its own 5 V rail (§3.2.1) using the **same BEC part chain** as the
+**Objective.** Give Jayne its own 5 V rail (§3.2.1) using the **same BEC part chain** as the
 avionics rail, so the two rails are **interchangeable** (identical channels) and **fault
 tolerant of each other** (a fault on one rail cannot collapse the other, and either rail's
 supply can back up the other). Minimal delta — no new part numbers.
@@ -609,7 +609,7 @@ input cap + 220 µF ∥ 100 nF output cap + 742792612 input ferrite + MBRD1045CT
 Each new channel is a copy-paste of `U_BEC_5V_1`.
 
 **Topology (N+1, cross-tied).** The avionics rail keeps its existing **two** channels (it needs
-~10 A, > one 6 A channel); the Vera rail adds **one** identical channel; the two rails are
+~10 A, > one 6 A channel); the Jayne rail adds **one** identical channel; the two rails are
 diode-OR cross-tied for mutual backup:
 
 ```text
@@ -618,7 +618,7 @@ BEC-1 ─D_OR1─┐
 BEC-2 ─D_OR2─┘        │
                  D_X1 ▼  ▲ D_X2   ── F_X (3 A, cross-tie)          [mutual backup path]
                       │  │
-BEC-3 ─D_OR3──────────┴──┴──────── RAIL-2 (5V_VERA) ── F_VERA (3 A) ── J_VERA   [1 channel, 6 A]
+BEC-3 ─D_OR3──────────┴──┴──────── RAIL-2 (5V_JAYNE) ── F_VERA (3 A) ── J_JAYNE   [1 channel, 6 A]
 ```
 
 - **`D_X1` (RAIL-1→RAIL-2)** and **`D_X2` (RAIL-2→RAIL-1)** are two more MBRD1045CT (reused
@@ -643,16 +643,16 @@ minimal-parts goal, so plain Schottky + a modest set-point bump is the recommend
 
 | Fault | Response |
 |---|---|
-| BEC-3 (Vera) regulator fails | RAIL-2 droops → `D_X1` feeds Vera from the RAIL-1 pair (2.4 A ≪ 12 A spare); avionics unaffected |
+| BEC-3 (Jayne) regulator fails | RAIL-2 droops → `D_X1` feeds Jayne from the RAIL-1 pair (2.4 A ≪ 12 A spare); avionics unaffected |
 | One avionics BEC fails | survivor (6 A) + BEC-3 via `D_X2` back up RAIL-1; §8.3 load-shed trims to fit |
 | Short on the RAIL-2 node (upstream of `F_VERA`) | `F_X` blows → RAIL-2 isolated from RAIL-1; BEC-3 OCP limits; **RAIL-1 keeps running** |
-| Short at J_VERA (downstream) | `F_VERA` clears; RAIL-1 unaffected |
+| Short at J_JAYNE (downstream) | `F_VERA` clears; RAIL-1 unaffected |
 | Short at J_5V (downstream) | `F_5V` clears; RAIL-2 unaffected |
 | A BEC output fails *short* | its `D_OR` reverse-blocks, keeping the shorted channel off its rail so the cross-tie can carry the rail |
 
 **Delta vs. today (no new part numbers):** +1 TPS54620 channel (`U_BEC_5V_3` + `L_5V3` +
 `R_FB3` + `C_BEC3_IN` + `C_BEC3_OUT` + `FB_5V3` + `D_OR3`); +2 MBRD1045CT (`D_X1`/`D_X2`);
-+2 fuses (`F_X`, `F_VERA`) and re-use/add `F_5V`; +1 output connector (`J_VERA`, Molex
++2 fuses (`F_X`, `F_VERA`) and re-use/add `F_5V`; +1 output connector (`J_JAYNE`, Molex
 Nano-Fit 4-pin, matching `J_5V`); the two existing `R_FB` dividers re-valued for 5.4 V. Mass
 ≈ +5 g. Interchangeability is at the **channel** level: all three BEC channels are the identical
 block, and any channel can be built or swapped identically.

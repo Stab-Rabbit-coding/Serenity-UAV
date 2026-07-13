@@ -315,10 +315,11 @@ EMI-hardened v2 design (CAPE-A-2).
 
 **Zoë** (comms/logging cape — 4 nodes):
 MAVLink/SiK 915 MHz, LoRa RFM95W 915 MHz, TI WL1837MOD WiFi/BT, 49 MHz (Part 15 §15.235) transceiver
-(Emma sub-module), CAN FD, MIL-STD-1553B, RS-485, Ethernet RSTP ring, TPM 2.0,
+**Emma** (daughter board to Zoë), CAN FD, MIL-STD-1553B, RS-485, Ethernet RSTP ring, TPM 2.0,
 ATF16V8BQL CPLD hardware write-blocker, non-executable log microSD.
 EMI-hardened v2 design (CAPE-B-2).
 
+**Jayne** Camera, TimeOfFlight, and Laser module.  The two Jayne boards provide external sensing.  they are mcu nodes on the can-fd and ethernet ring with vision processing.  one is mounted in the nose, with forward view, and one in the cargo bay with a downward view.  the one in the cargo bay is capable of 3d imaging of objects within close proximity to the belly of the uav.  the forward looking one can do rough size and orientation detection.
 **Rev R — EMI-hardened v2 capes at ALL 8 positions.**
 All nodes use 5 kV galvanic isolation:
 - CAN FD: ISOW1044BDFMR (TI)

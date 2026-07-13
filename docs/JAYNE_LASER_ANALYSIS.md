@@ -1,12 +1,12 @@
-# Vera Laser Indicator — Single-Source Feasibility & Spread-Angle Analysis
+# Jayne Laser Indicator — Single-Source Feasibility & Spread-Angle Analysis
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **AI-assist:** Claude Opus 4.8 (Anthropic) — analysis authoring, 2026-07-05
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
 **Revision:** Rev A2 (2026-07-05)
-**Status:** Analysis — feeds Vera laser BOM decision (TODO.md §1.2c); no part sourced yet.
+**Status:** Analysis — feeds Jayne laser BOM decision (TODO.md §1.2c); no part sourced yet.
 **Rev A1 correction:** the Rev A conclusion that the nose is inherently Class 3B was
-over-conservative (worst-case spread-pattern + naked-eye-in-full-sun). For Vera's actual
+over-conservative (worst-case spread-pattern + naked-eye-in-full-sun). For Jayne's actual
 camera-visibility requirement with camera strobe-difference detection, **both installs are
 Class 2 (≤ 1 mW)** — no Class 3B apparatus. See §3.2.
 **Rev A2 addition:** the pattern is **a thin-line crosshair, a grid, or a matrix of dots** (not a bare dot) serving as a projected metrology reference.
@@ -17,8 +17,8 @@ The metrology pattern must be sized (fan angle) for enough camera-pixel coverage
 
 ## 1. Problem Statement
 
-The Vera board is installed at two locations that each project a laser aiming/marking
-pattern of a different size at a different range (Vera.md "Laser driver"):
+The Jayne board is installed at two locations that each project a laser aiming/marking
+pattern of a different size at a different range (Jayne.md "Laser driver"):
 
 | Install | Pattern | Range | As-designed today |
 |---|---|---|---|
@@ -83,8 +83,8 @@ at 520 nm), and detection-contrast thresholds C ≈ 0.10 (human eye), 0.05 (came
 | 12 mm dot | camera + 10 nm 520 nm filter | ~0.08 | Class 1 |
 
 **The nose is NOT inherently Class 3B.** Class 3B only appears in the worst-case corner — a
-power-*diluted* 2 in spread pattern judged by a *naked human eye* in full direct sun. Vera's
-actual requirement is **camera visibility** (Vera is a vision board; the colocated camera is
+power-*diluted* 2 in spread pattern judged by a *naked human eye* in full direct sun. Jayne's
+actual requirement is **camera visibility** (Jayne is a vision board; the colocated camera is
 the observer, and the laser is GPIO-controlled hence strobable). Under that requirement, a
 **concentrated ~12 mm green dot detected by strobe + frame-difference needs only ~0.45 mW →
 Class 2** (Class 1 with a narrowband detector). Two levers get there:
@@ -92,7 +92,7 @@ Class 2** (Class 1 with a narrowband detector). Two levers get there:
 1. **Concentrate the beam** into a small dot rather than a 2 in spread pattern — the spread
    pattern dilutes the power over ~18× the area (this is the same "different collimation optic"
    of §4.2, now doing double duty).
-2. **Let Vera's own camera detect it** (strobe the GPIO-controlled laser, temporally difference
+2. **Let Jayne's own camera detect it** (strobe the GPIO-controlled laser, temporally difference
    laser-on − laser-off): pulls the detection threshold from ~10 % (eye) to ~1 %, another order
    of magnitude.
 
@@ -133,13 +133,13 @@ inherently Class 3B. The two sites differ in only two parameters, and neither fo
 | Class 3B apparatus (key interlock, beam shutter, labeling) | **Not required** at Class 2 | Not required | IEC 60825-1 / 21 CFR 1040 | Neither site |
 
 So the **shared** design is: one 520 nm green laser **diode + collimator + driver board +
-MOSFET switch** (Vera already carries exactly one shared driver — Q1 AO3400, R1, R2, J_LASER).
+MOSFET switch** (Jayne already carries exactly one shared driver — Q1 AO3400, R1, R2, J_LASER).
 The **per-location** differences are just (1) a terminal optic (spread) and (2) a hardware
 current limit (power) — and both current limits sit at **Class 2**.
 
 Class 3B is required **only** in the demanding corner of §3.2 — a power-diluted 2 in *spread
 crosshair* that a *human eye* must see in *full direct sun* at 50 ft (~82 mW). That is not
-Vera's requirement (camera visibility), so the recommended design does not enter Class 3B and
+Jayne's requirement (camera visibility), so the recommended design does not enter Class 3B and
 carries no 3B interlock/shutter obligation.
 
 ### 4.1 Answer to Q1 — single green-dot indicator for both?
@@ -147,9 +147,9 @@ carries no 3B interlock/shutter obligation.
 **Yes — one green-diode design, Class 2 at both sites.** Each site is commissioned with its own
 terminal optic (spread) and its own hardware current limit (power), but both limits are ≤ 1 mW
 (Class 2). The nose reaches Class 2 by (i) concentrating into a ~12 mm dot instead of a 2 in
-spread pattern and (ii) detecting with Vera's own strobed camera + frame-difference (§3.2), not
+spread pattern and (ii) detecting with Jayne's own strobed camera + frame-difference (§3.2), not
 a naked eye — needing only ~0.45 mW. This **eliminates the Class 3B key-interlock and mechanical
-beam shutter entirely**; the `LASER_KEY_IN`/`LASER_IND` lines already on Vera become optional
+beam shutter entirely**; the `LASER_KEY_IN`/`LASER_IND` lines already on Jayne become optional
 defense-in-depth rather than a mandatory Class 3B requirement. Class 2 is blink-reflex safe at
 both sites — including a Class 2 diode over ground crew in the cargo bay.
 
@@ -243,7 +243,7 @@ set-resistor) still caps the total so a fault cannot reach Class 3B.
 ### 4.5 Cargo install — TRUE 3D imager (stereo baseline, Rev B)
 
 **Upgrade (user, 2026-07-06):** because the cargo camera and the dot-projector are *remote
-heads* off Vera (via `J_CAM`/`J_LASER`), their placement in the cargo bay is free — so
+heads* off Jayne (via `J_CAM`/`J_LASER`), their placement in the cargo bay is free — so
 **separate them by a real baseline `b`** and make the cargo unit a genuine structured-light 3D
 imager (not just 2.5D profiling).
 
@@ -265,21 +265,21 @@ At Z = 5 ft (1.5 m), f ≈ 3200 px (a ~33° FOV covering ~3 ft), disparity preci
   unambiguous for dense block-matching. (The regular grid of §4.4 is for the nose's single-plane
   pose; dense 3D needs the random field.)
 - **ToF** anchors absolute scale and bounds the disparity search.
-- **One-time camera↔projector calibration** (relative pose) is required and stored on Vera.
+- **One-time camera↔projector calibration** (relative pose) is required and stored on Jayne.
 - **Why the *nose* stays boresighted (no baseline):** at 50 ft a practical 75 mm baseline gives
   only ~16 px disparity and ~190 mm depth resolution — useless — so the nose keeps the boresighted
   grid-pose method of §4.4; only the close-range cargo install benefits from a baseline.
 
 Mechanical consequence: the cargo `cargo_fpv_bezel` install must provide **two apertures ~75 mm
 apart** (camera head + dot-projector head) rather than a colocated cluster — see
-`avionics/kicad/Vera.md` "Cargo install".
+`avionics/kicad/Jayne/Jayne.md` "Cargo install".
 
 ---
 
 ## 5. Recommended Design
 
 1. **Source (shared):** one 520 nm green laser diode + integrated collimator, driven by the
-   existing Vera shared driver (Q1 AO3400 logic-level N-FET, R1 100 Ω gate, R2 10 kΩ
+   existing Jayne shared driver (Q1 AO3400 logic-level N-FET, R1 100 Ω gate, R2 10 kΩ
    pulldown, J_LASER). This retires the separate 650 nm red cargo module (unifies BOM to a
    single diode family).
 2. **Pattern:** a **thin-line crosshair** at both sites (NOT a bare dot) — the crosshair's
@@ -293,9 +293,9 @@ apart** (camera head + dot-projector head) rather than a colocated cluster — s
    generator. Cargo: 3 in at 5 ft (≈2.86°) is already ample. Same collimated green source both
    places; the optic sets geometry only.
 4. **Optical power / class (per location, HARDWARE-limited):** **Class 2 (≤ 1 mW) at BOTH
-   sites.** Nose reaches Class 2 via the thin-line crosshair + Vera camera strobe-difference
+   sites.** Nose reaches Class 2 via the thin-line crosshair + Jayne camera strobe-difference
    detection (~0.2–0.8 mW, §4.4.4). Cargo ≤ 1 mW green. No Class 3B → no key interlock or
-   mechanical shutter obligation; the `LASER_KEY_IN`/`LASER_IND` lines on Vera become optional
+   mechanical shutter obligation; the `LASER_KEY_IN`/`LASER_IND` lines on Jayne become optional
    defense-in-depth. Keep each cap hardware-enforced (fixed sense resistor / current-limited
    driver), not firmware-only.
 5. **Firmware:** (a) strobe the GPIO-controlled laser and temporally difference (laser-on −
@@ -303,7 +303,7 @@ apart** (camera head + dot-projector head) rather than a colocated cluster — s
    Class 2 margin; (b) sub-pixel-fit the extracted crosshair lines and compute object size =
    (obj_px/cross_px)·2R·tan(θ/2) and tilt from arm foreshortening (§4.4), using the boresighted
    TFmini-S range R. Budget a laser-sync GPIO/PWM and the crosshair-metrology routine in the
-   Vera firmware WBS (TODO.md §4.6).
+   Jayne firmware WBS (TODO.md §4.6).
 6. **Do not source the green diode or either terminal optic** until a real datasheet with a
    manufacturer-stated (or independently computed) mW rating and IEC 60825-1 class is added
    to REFERENCES.md — this extends the existing pending item under REF-IEC-002 and the
@@ -314,7 +314,7 @@ apart** (camera head + dot-projector head) rather than a colocated cluster — s
 ## 6. Open Items / Follow-on
 
 - **Confirm the requirement is camera visibility, not human-at-target visibility.** The Class 2
-  result rests on Vera's own camera being the observer (strobe + frame-difference). If a person
+  result rests on Jayne's own camera being the observer (strobe + frame-difference). If a person
   standing at the 50 ft target must see the spot in full direct sun, re-open the class decision
   (that corner needs Class 3R for a dot, up to Class 3B for a spread reticle — §3.2).
 - **Camera strobe-difference detection** must be implemented for the nose to hold Class 2 in
@@ -324,7 +324,7 @@ apart** (camera head + dot-projector head) rather than a colocated cluster — s
 - **Part sourcing:** 520 nm green diode + per-site collimation/diverging optic; each needs a
   verified datasheet + REFERENCES.md entry before procurement.
 - **Nose bore reuse flag:** `bow_sensor_pod.scad` `LASER_BORE_D = 12.5 mm` is sized for the old
-  12 mm red module — re-verify against the sourced green module's real dimensions (Vera.md
+  12 mm red module — re-verify against the sourced green module's real dimensions (Jayne.md
   "Open — stale bore flag").
 
 ---
@@ -343,9 +343,9 @@ apart** (camera head + dot-projector head) rather than a colocated cluster — s
 ## 8. References
 
 - CIE 1931 photopic luminous-efficiency function V(λ) — standard tabulated values.
-- `avionics/kicad/Vera.md` — "Laser driver — location-specific population", "Open — stale bore
+- `avionics/kicad/Jayne/Jayne.md` — "Laser driver — location-specific population", "Open — stale bore
   flag".
-- `docs/POWER_DISTRIBUTION.md` §3.2.1 — Vera laser electrical load (nose Class 3B burst).
+- `docs/POWER_DISTRIBUTION.md` §3.2.1 — Jayne laser electrical load (nose Class 3B burst).
 
 ---
 
@@ -355,7 +355,7 @@ apart** (camera head + dot-projector head) rather than a colocated cluster — s
 
 ## Appendix A — Supplier Shortlist & Parts Families (0.5 in / 12.7 mm max mount)
 
-Notes: the Vera installations cannot accept optics with a mounting diameter larger than 0.5 in (12.7 mm). Prefer unmounted or small-height cylindrical lenses (H ≤ 12 mm) or small-form Powell/line-generator optics. The following vendors and part families are vetted starting points; I will fetch product pages and populate SKUs/URLs/pricing below.
+Notes: the Jayne installations cannot accept optics with a mounting diameter larger than 0.5 in (12.7 mm). Prefer unmounted or small-height cylindrical lenses (H ≤ 12 mm) or small-form Powell/line-generator optics. The following vendors and part families are vetted starting points; I will fetch product pages and populate SKUs/URLs/pricing below.
 
 - **Thorlabs** — Plano-concave cylindrical lenses (LK series, various f), mounted round cylindrical lenses (e.g. LK1419RM etc. — *note many mounted parts are 1" and therefore too large; prefer unmounted LK items with H ≤ 12 mm*). Thorlabs also supports custom optics requests. Product pages: <https://www.thorlabs.com/cylindrical-lenses> and <https://www.thorlabs.com/item/LK4326-C>
 

@@ -310,24 +310,30 @@ The Power Distribution Board is named "Kaylee" - "Everything is shiny."  Kaylee'
 
 The 49 MHz (Part 15 §15.235) + LoRa 915 MHz Transceiver Cape (XCVR-49MHZ-2 Rev R1) is named "Emma".  Emma connects to the stack via P1+P2 socket rails (replaces JST GH 6P as of Rev R1).  Only 2 Emma boards are installed: River's Room and Simon's Medbay.
 
-The Cargo handling system is named "Jayne" - "I was aiming for his head."
+The Cargo handling system, and the nose/cargo-bay Vision, ToF & Laser board that gives it its
+eyes, are both named "Jayne" - "I was aiming for his head" / Jayne's rifle, "she's a good gun."
+These were previously documented as two separate identities (the cargo-handling mechanism as
+"Jayne," the sensing board under the working name "Vera"); they are now treated as one
+integrated subsystem under a single name. Historical references to "Vera" in commit history
+or older revisions of project documents refer to this same board.
 
-The nose/cargo-bay Vision, ToF & Laser board is named "Vera" - Jayne's rifle, "she's a good gun."
-Vera is a **standalone, compact PCB — not a PocketBeagle 2 Industrial cape** (it does not use
-the P1+P2 header stack or plug onto a Wash/Zoë node); it connects to the rest of the airframe
-only via the shielded JST-GH Ethernet ring and CAN-FD trunk connectors, with its own 5V power
-input. One shared board design (TI AM62A vision SoC + TI MSPM0G3507 CAN-FD coprocessor +
-Infineon SLB9670 TPM + Microchip KSZ9477 HSR/PRP-capable Ethernet switch) is installed at two
-locations: the bow sensor pod (nose, `airframe/openscad/fuselage/bow_sensor_pod.scad`) and the
-cargo bay nadir FPV mount (`cargo_fpv_bezel`).  Both locations share a **single 520 nm green
-laser source + driver**, both **Class 2** (≤1 mW; a thin-line green crosshair detected by
-Vera's camera via strobe + frame-difference — *not* an inherently Class 3B module). The
-crosshair doubles as a **projected metrology reference** — a PB2-I derives detected-object size
-and orientation from ToF range + the crosshair's known angle + trigonometry, so its fan angle
-is sized for camera pixel coverage (cargo 3"×3" @ 5 ft; nose sized larger than the nominal
-2"×2" @ 50 ft) — see `docs/VERA_LASER_ANALYSIS.md`, `avionics/CLAUDE.md` for the full architecture and
-`REFERENCES.md` Part XII for component citations.  Vera **supersedes** the RunCam Nano 4 analog
-camera (REF-SENSOR-001, retained in REFERENCES.md as a superseded citation) originally
+The Jayne board is a **standalone, compact PCB — not a PocketBeagle 2 Industrial cape** (it
+does not use the P1+P2 header stack or plug onto a Wash/Zoë node); it connects to the rest of
+the airframe only via the shielded JST-GH Ethernet ring and CAN-FD trunk connectors, with its
+own 5V power input. One shared board design (TI AM62A vision SoC + TI MSPM0G3507 CAN-FD
+coprocessor + Infineon SLB9670 TPM + Microchip KSZ9477 HSR/PRP-capable Ethernet switch) is
+installed at two locations: the bow sensor pod (nose,
+`airframe/openscad/fuselage/bow_sensor_pod.scad`) and the cargo bay nadir FPV mount
+(`cargo_fpv_bezel`), the latter co-located with the mechanical cargo-handling hardware (winch,
+latch, cargo bay door) it supervises. Both locations share a **single 520 nm green laser
+source + driver**, both **Class 2** (≤1 mW; a thin-line green crosshair detected by Jayne's
+camera via strobe + frame-difference — *not* an inherently Class 3B module). The crosshair
+doubles as a **projected metrology reference** — a PB2-I derives detected-object size and
+orientation from ToF range + the crosshair's known angle + trigonometry, so its fan angle is
+sized for camera pixel coverage (cargo 3"×3" @ 5 ft; nose sized larger than the nominal 2"×2"
+@ 50 ft) — see `docs/JAYNE_LASER_ANALYSIS.md`, `avionics/CLAUDE.md` for the full architecture
+and `REFERENCES.md` Part XII for component citations.  Jayne **supersedes** the RunCam Nano 4
+analog camera (REF-SENSOR-001, retained in REFERENCES.md as a superseded citation) originally
 specified for the bow sensor pod.
 
 The forward avionics bay is named "Shepherd's room" - "I have heathens enough right here."

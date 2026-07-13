@@ -34,7 +34,7 @@ License: CC BY 4.0
 
 import pcbnew
 
-PCB_FILE = "Emma.kicad_pcb"
+PCB_FILE = "kicads/Emma.kicad_pcb"
 
 # GND F.Cu track segments (matched by length in mm) that DRC flagged running too
 # close to a non-GND pad; redundant with the GND plane.

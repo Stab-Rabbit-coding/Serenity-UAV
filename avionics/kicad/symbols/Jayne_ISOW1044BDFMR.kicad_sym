@@ -1,11 +1,11 @@
 (kicad_symbol_lib (version 20211014) (generator serenity_vera_cleanroom)
-  (symbol "Vera_ISOW1044BDFMR" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+  (symbol "Jayne_ISOW1044BDFMR" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
     (property "Reference" "U" (id 0) (at -22.86 16.51 0) (effects (font (size 1.27 1.27)) (justify left)))
     (property "Value" "ISOW1044BDFMR" (at -22.86 -17.78 0) (effects (font (size 1.27 1.27)) (justify left)))
-    (property "Footprint" "Vera:ISOW1044_DFM20_TBD" (id 2) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Footprint" "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm" (id 2) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
     (property "Datasheet" "" (id 3) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
     (property "ki_description" "TI ISOW1044BDFMR 5kVrms isolated CAN-FD + iso DC/DC, 20-pin DFM (clean-room from TI SLLSFF7A Table 7-1)" (id 4) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-    (symbol "Vera_ISOW1044BDFMR_1_1"
+    (symbol "Jayne_ISOW1044BDFMR_1_1"
       (rectangle (start -22.86 -15.24) (end 22.86 15.24)
         (stroke (width 0.254)) (fill (type background)))
       (pin power_in line (at -26.67 12.70 0) (length 3.81)

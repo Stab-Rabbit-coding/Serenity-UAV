@@ -343,9 +343,9 @@ module book_dorsal_boss(x_pos, z_pos) {
 }
 
 // ----------------------------------------------------------------------------
-// Module: vera_board_bosses (added Rev R2, 2026-07-03)
-//   4x M3 heat-set insert boss posts for the Vera vision/ToF/laser PCB
-//   (avionics/kicad/Vera.kicad_pcb, 1.0 × 2.75 in (25.4 × 69.85 mm) double-sided board, mounting
+// Module: jayne_board_bosses (added Rev R2, 2026-07-03)
+//   4x M3 heat-set insert boss posts for the Jayne vision/ToF/laser PCB
+//   (avionics/kicad/Jayne.kicad_pcb, 1.0 × 2.75 in (25.4 × 69.85 mm) double-sided board, mounting
 //   holes at board-local (4,4)/(42,4)/(4,44)/(42,44), i.e. +/-19 mm x
 //   +/-20 mm from board centre), nose install.
 //   PROPOSED placement, NOT FreeCAD-verified: standoff ~20 mm aft (local +Y,
@@ -358,17 +358,17 @@ module book_dorsal_boss(x_pos, z_pos) {
 //   for this hull's geometry) this position and the interior wall/pocket
 //   clearance against bow_camera_cut/bow_tof_cut MUST be verified in
 //   FreeCAD before printing -- do not treat as final.
-//   Ref: avionics/kicad/Vera.md "Mechanical Mounting and Wiring"; TODO.md
+//   Ref: avionics/kicad/Jayne.md "Mechanical Mounting and Wiring"; TODO.md
 //   §1.2c.3; bow_sensor_pod.scad FACEPLATE_CTR/BOW_CX.
 // ----------------------------------------------------------------------------
-VERA_NOSE_HOLE_DX = 19.0;   // mm, +/-X half-spacing of Vera's mounting-hole pattern
-VERA_NOSE_HOLE_DZ = 20.0;   // mm, +/-Z half-spacing of Vera's mounting-hole pattern
-VERA_NOSE_STATION_Y = FACEPLATE_CTR[1] + 20.0;   // mm, ~20 mm aft (into hull) of the faceplate
-VERA_NOSE_STATION_Z = FACEPLATE_CTR[2];          // mm, level with the sensor cluster
-module vera_board_bosses() {
-    for (dx = [-VERA_NOSE_HOLE_DX, VERA_NOSE_HOLE_DX])
-    for (dz = [-VERA_NOSE_HOLE_DZ, VERA_NOSE_HOLE_DZ])
-        m3_boss([BOW_CX + dx, VERA_NOSE_STATION_Y, VERA_NOSE_STATION_Z + dz], [0, 0, 0]);
+JAYNE_NOSE_HOLE_DX = 19.0;   // mm, +/-X half-spacing of Jayne's mounting-hole pattern
+JAYNE_NOSE_HOLE_DZ = 20.0;   // mm, +/-Z half-spacing of Jayne's mounting-hole pattern
+JAYNE_NOSE_STATION_Y = FACEPLATE_CTR[1] + 20.0;   // mm, ~20 mm aft (into hull) of the faceplate
+JAYNE_NOSE_STATION_Z = FACEPLATE_CTR[2];          // mm, level with the sensor cluster
+module jayne_board_bosses() {
+    for (dx = [-JAYNE_NOSE_HOLE_DX, JAYNE_NOSE_HOLE_DX])
+    for (dz = [-JAYNE_NOSE_HOLE_DZ, JAYNE_NOSE_HOLE_DZ])
+        m3_boss([BOW_CX + dx, JAYNE_NOSE_STATION_Y, JAYNE_NOSE_STATION_Z + dz], [0, 0, 0]);
 }
 
 // ----------------------------------------------------------------------------
@@ -531,10 +531,10 @@ difference() {
         for (dz = [-BOOK_BOSS_DZ, BOOK_BOSS_DZ])
             book_dorsal_boss(BOOK_X_CEN + dx, BOOK_Z_CEN + dz);
 
-        // Vera vision/ToF/laser PCB mounting bosses, nose install (Rev R2,
-        // 2026-07-03).  PROPOSED placement -- see vera_board_bosses() header;
+        // Jayne vision/ToF/laser PCB mounting bosses, nose install (Rev R2,
+        // 2026-07-03).  PROPOSED placement -- see jayne_board_bosses() header;
         // needs FreeCAD verification before printing.
-        vera_board_bosses();
+        jayne_board_bosses();
 
         // 6x M3 boss posts at aft joint face (head → cargo section interface).
         //   Bosses extend into interior (+X) from joint face at X = 99 mm.

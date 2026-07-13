@@ -40,8 +40,8 @@ import uuid as _uuid
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-PCB = HERE / "Emma.kicad_pcb"
-OUT = HERE / "Emma.kicad_sch"
+PCB = HERE.parent / "kicads" / "Emma.kicad_pcb"
+OUT = HERE.parent / "kicads" / "Emma.kicad_sch"
 
 UPREFIX = "49030000-0000-0000-0000-"  # Rev S1 schematic UUID band
 SHEET_UUID = UPREFIX + "000000000001"

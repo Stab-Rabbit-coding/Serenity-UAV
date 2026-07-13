@@ -1,11 +1,11 @@
 (kicad_symbol_lib (version 20211014) (generator serenity_vera_som_cleanroom)
-  (symbol "Vera_SoM_phyCORE_AM62A" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+  (symbol "Jayne_SoM_phyCORE_AM62A" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
     (property "Reference" "U" (id 0) (at -33.02 6.0 0) (effects (font (size 1.27 1.27)) (justify left)))
     (property "Value" "phyCORE-AM62A" (id 1) (at -33.02 3.0 0) (effects (font (size 1.27 1.27)) (justify left)))
-    (property "Footprint" "Vera:phyCORE-AM62A-DSC-270" (id 2) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Footprint" "Jayne:phyCORE-AM62A-DSC-270" (id 2) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
     (property "Datasheet" "" (id 3) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
     (property "ki_description" "PHYTEC phyCORE-AM62A SoM (270-pad DSC) -- clean-room symbol from published pinout facts" (id 4) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-    (symbol "Vera_SoM_phyCORE_AM62A_1_1"
+    (symbol "Jayne_SoM_phyCORE_AM62A_1_1"
       (text "A_Power" (at -30.48 102.64 0) (effects (font (size 1.27 1.27)) (justify left)))
       (rectangle (start -33.02 -104.14) (end 33.02 104.14)
         (stroke (width 0.254)) (fill (type background)))
@@ -330,7 +330,7 @@
         (number "270" (effects (font (size 1.27 1.27))))
       )
     )
-    (symbol "Vera_SoM_phyCORE_AM62A_2_1"
+    (symbol "Jayne_SoM_phyCORE_AM62A_2_1"
       (text "B_Camera_Display" (at -30.48 39.14 0) (effects (font (size 1.27 1.27)) (justify left)))
       (rectangle (start -33.02 -40.64) (end 33.02 40.64)
         (stroke (width 0.254)) (fill (type background)))
@@ -455,7 +455,7 @@
         (number "90" (effects (font (size 1.27 1.27))))
       )
     )
-    (symbol "Vera_SoM_phyCORE_AM62A_3_1"
+    (symbol "Jayne_SoM_phyCORE_AM62A_3_1"
       (text "C_Ethernet" (at -30.48 34.06 0) (effects (font (size 1.27 1.27)) (justify left)))
       (rectangle (start -33.02 -35.56) (end 33.02 35.56)
         (stroke (width 0.254)) (fill (type background)))
@@ -564,7 +564,7 @@
         (number "72" (effects (font (size 1.27 1.27))))
       )
     )
-    (symbol "Vera_SoM_phyCORE_AM62A_4_1"
+    (symbol "Jayne_SoM_phyCORE_AM62A_4_1"
       (text "D_Serial_Ctrl" (at -30.48 48.03 0) (effects (font (size 1.27 1.27)) (justify left)))
       (rectangle (start -33.02 -49.53) (end 33.02 49.53)
         (stroke (width 0.254)) (fill (type background)))
@@ -717,7 +717,7 @@
         (number "147" (effects (font (size 1.27 1.27))))
       )
     )
-    (symbol "Vera_SoM_phyCORE_AM62A_5_1"
+    (symbol "Jayne_SoM_phyCORE_AM62A_5_1"
       (text "E_System" (at -30.48 41.68 0) (effects (font (size 1.27 1.27)) (justify left)))
       (rectangle (start -33.02 -43.18) (end 33.02 43.18)
         (stroke (width 0.254)) (fill (type background)))
@@ -850,7 +850,7 @@
         (number "171" (effects (font (size 1.27 1.27))))
       )
     )
-    (symbol "Vera_SoM_phyCORE_AM62A_6_1"
+    (symbol "Jayne_SoM_phyCORE_AM62A_6_1"
       (text "F_Debug_Boot" (at -30.48 63.27 0) (effects (font (size 1.27 1.27)) (justify left)))
       (rectangle (start -33.02 -64.77) (end 33.02 64.77)
         (stroke (width 0.254)) (fill (type background)))
@@ -1051,7 +1051,7 @@
         (number "246" (effects (font (size 1.27 1.27))))
       )
     )
-    (symbol "Vera_SoM_phyCORE_AM62A_7_1"
+    (symbol "Jayne_SoM_phyCORE_AM62A_7_1"
       (text "G_NoConnect" (at -30.48 21.36 0) (effects (font (size 1.27 1.27)) (justify left)))
       (rectangle (start -33.02 -22.86) (end 33.02 22.86)
         (stroke (width 0.254)) (fill (type background)))

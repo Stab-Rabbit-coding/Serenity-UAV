@@ -1,4 +1,4 @@
-# Vera — Manufacturing-Readiness Gap Analysis
+# Jayne — Manufacturing-Readiness Gap Analysis
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **AI-assist:** Claude Opus 4.8 (Anthropic) — gap analysis, 2026-07-06
@@ -15,7 +15,7 @@ that closes most of it.
   Added the verified module spec, the carrier interface/net map (§3B, the schematic plan), and
   the pinout datasheet gate. See §1.1, §3A, §3B.
 - **Rev B (2026-07-06):** Added the recommended resolution — mount the AM62A on a vendor
-  **system-on-module (SoM)** and rebuild Vera as a **carrier board**, which eliminates the
+  **system-on-module (SoM)** and rebuild Jayne as a **carrier board**, which eliminates the
   LPDDR4/boot-flash/power-sequencing/DDR-BGA gaps (G1/G2/G4 and most of G6). Re-scoped the
   staged plan around the SoM-carrier path with the raw-SoC design retained as the alternative.
 - **Rev A (2026-07-06):** Initial gap analysis (raw-SoC design).
@@ -24,7 +24,7 @@ that closes most of it.
 
 ## 1. Bottom line
 
-Vera is a **partial architectural sketch, not a fabricable board.** The peripheral/glue
+Jayne is a **partial architectural sketch, not a fabricable board.** The peripheral/glue
 circuitry (connectors, Ethernet magnetics, EMI, isolated CAN, crystal, laser driver, passives)
 uses **real, verifiable footprints**, but the design cannot be brought to manufacturing by an
 automated placeholder-swap because:
@@ -44,27 +44,27 @@ So "get it ready for manufacturing" is a **multi-stage hardware effort gated on 
 subsystem**, not a one-shot automation. What *can* be automated (the pre-commit corruption
 guard, `tools/precommit_kicad_load.py`) is done.
 
-## 1.1 Recommended resolution — put the AM62A on a SoM; make Vera a carrier
+## 1.1 Recommended resolution — put the AM62A on a SoM; make Jayne a carrier
 
-The root of every blocker is that Vera tries to host a **raw Linux applications SoC** (AM62A7)
+The root of every blocker is that Jayne tries to host a **raw Linux applications SoC** (AM62A7)
 and therefore *owns* the LPDDR4, boot flash, power sequencing, and impedance-controlled DDR/BGA
 routing. **The simplest, most reliable fix is not to own any of that:** mount the AM62A on a
 vendor **system-on-module (SoM)** where the SoC + LPDDR4 + boot flash + PMIC are already
-integrated **and validated by the vendor**, and rebuild Vera as a **carrier board** carrying
+integrated **and validated by the vendor**, and rebuild Jayne as a **carrier board** carrying
 only the parts it already has as real footprints (KSZ9477 switch, ISOW1044 CAN, SLB9670 TPM,
 Ethernet magnetics/EMI, laser driver, camera/ToF connectors) plus the SoM's board-to-board
 connector.
 
-This **eliminates G1, G2, G4 and most of G6** — they move onto the module — and drops Vera from
+This **eliminates G1, G2, G4 and most of G6** — they move onto the module — and drops Jayne from
 a 6-layer impedance-controlled DDR/BGA design to an **ordinary ~4-layer carrier**. It also
 matches the project's existing pattern: the whole fleet already runs on **PocketBeagle 2
-Industrial** compute modules on capes; raw-SoC Vera was the outlier.
+Industrial** compute modules on capes; raw-SoC Jayne was the outlier.
 
 **Verified this session (2026-07-06):** TI's own SK-AM62A-LP EVM confirms the AM62A7 (AM62A74,
 quad-A53) pairs with **external 4 GB LPDDR4** and provides **4-lane MIPI CSI-2** + **dual
 gigabit Ethernet** — i.e. the memory really is external (the gap is real) and the camera/Ethernet
-Vera needs are native to the part. **Module + form factor LOCKED (2026-07-11, user):** no AM62A SoM fits a 1.0 in-wide board
-(narrowest ~30 mm OSM; mainstream 40 mm), so Vera becomes a **trapezoidal carrier** conforming
+Jayne needs are native to the part. **Module + form factor LOCKED (2026-07-11, user):** no AM62A SoM fits a 1.0 in-wide board
+(narrowest ~30 mm OSM; mainstream 40 mm), so Jayne becomes a **trapezoidal carrier** conforming
 to the nose cone — **narrow end ≤ 1.0 in toward the sensor pod** (camera/ToF/laser), **widening
 aft to seat the module**. Selected module: **PHYTEC phyCORE-AM62A** (see §3A for verified spec).
 
@@ -124,14 +124,14 @@ gerbers + fab notes. **Expert manual layout; not auto-routable to fab quality.**
 
 ## 3A. SoM-carrier architecture (recommended)
 
-Vera becomes a **carrier** for an AM62A SoM. What lives where:
+Jayne becomes a **carrier** for an AM62A SoM. What lives where:
 
 **On the module (bought, pre-validated — deletes G1/G2/G4 + DDR/BGA routing):**
 
 - AM62A7 (AM62A74) SoC, LPDDR4 (target ≥ 2 GB; TI EVM ships 4 GB), boot flash (eMMC/OSPI),
   PMIC + full power sequencing, SoC decoupling, main oscillator.
 
-**On the Vera carrier (mostly parts already footprinted — ordinary ~4-layer routing):**
+**On the Jayne carrier (mostly parts already footprinted — ordinary ~4-layer routing):**
 
 - **SoM board-to-board connector(s)** — the one new footprint; its exact P/N + pitch + pin count
   come from the selected module's carrier-design guide (datasheet-gated, §3A selection below).
@@ -148,7 +148,7 @@ Vera becomes a **carrier** for an AM62A SoM. What lives where:
 
 1. **AM62A** vision variant (VPAC/ISP + H.264/H.265 encode) — *not* plain AM62/AM62P.
 2. Breaks out **≥ 1 MIPI CSI-2 (4-lane)**, **RGMII** (for KSZ9477), and enough **SPI/UART/CAN**.
-3. **Connector stack height + module footprint** fit the nose pod's Z-budget and Vera's
+3. **Connector stack height + module footprint** fit the nose pod's Z-budget and Jayne's
    1.0 in width (verify against `airframe/openscad/fuselage/bow_sensor_pod.scad`).
 4. Documented **carrier design guide + reference schematic** and current production status.
 
@@ -178,7 +178,7 @@ build this trade strongly favors the SoM.
 ## 3B. Carrier interface / net map (the schematic plan)
 
 This is the wiring the carrier schematic implements. Every carrier-side part below has a
-**verified pinout already in this repo** (reused from `gen_cape_a2*.py` / existing Vera files) —
+**verified pinout already in this repo** (reused from `gen_cape_a2*.py` / existing Jayne files) —
 only the **SoM-side pad numbers** are datasheet-gated. The generator (a `gen_vera_sch.py`, in
 the Emma pattern) can wire all of this the moment the phyCORE-AM62A pad map is available.
 
@@ -231,7 +231,7 @@ the pod). Recommended implementation — **co-located dual footprint, populate o
 - **Populate exactly one per install** (the other is DNP). Both share identical nets, so the
   schematic carries them as alternate-footprint options; DRC treats the unpopulated one as a
   no-load.
-- This keeps **one board design** for both installs (per the standing Vera principle) and needs
+- This keeps **one board design** for both installs (per the standing Jayne principle) and needs
   no schematic net change — only added footprints. It is a clean, verifiable task that does
   **not** depend on the SoC datasheets, so it can be done independently of G1–G6 — **but** do it
   *after* the real SoC/DDR placement so the direct-solder lands don't collide with BGA escape.
@@ -242,7 +242,7 @@ the pod). Recommended implementation — **co-located dual footprint, populate o
 
 - **CMC1–5 (SRF2012-100Y)** currently use `Inductor_SMD:L_Taiyo-Yuden_NR-20xx` — a 2-pin power
   inductor land, **not** the 4-pin 2012-metric common-mode-choke land the SRF2012 needs. Swap to
-  the `Bourns_SRF2012` (4-pad) footprint used on Wash/Zoë/Vera elsewhere.
+  the `Bourns_SRF2012` (4-pad) footprint used on Wash/Zoë/Jayne elsewhere.
 - **C_ISO (100 nF / 500 V)** is on an `R_0402` land — a 500 V cap will not fit an 0402. Use a
   proper HV MLCC footprint (≥ 1206/1210 for 500 V) or drop the voltage rating to what the
   isolation actually needs.
