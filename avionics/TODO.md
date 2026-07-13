@@ -322,7 +322,24 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
     SoC decision before proceeding with layout. **Still open — the placeholder footprint in
     `gen_vera_pcb.py` does not commit to a real ball-out, so this decision is not yet blocking,
     but must be resolved before the real BGA footprint is authored.
-- [ ] Shape the Vera PCB to fit in the nose directly behind the faceplate, allowing PCB mounting of laser, camera, and TOF, with EMI hardening.  PCB oriented horizontal with sensors on forward end and network connections on aft end.
+- [x] **Shape the Vera PCB to fit in the nose behind the faceplate — DONE 2026-07-12 (Rev S1).**
+    Trapezoidal carrier (25.4 mm narrow at the sensor pod → 58 mm wide aft × 69.85 mm long),
+    sensors forward / network aft, EMI-hardened; corner M2.5 mounting holes + concentric rounded
+    corners + 1/16 in (1.5875 mm) port/stbd install-rail keep-out strips. Camera/ToF/laser have a
+    DUAL interface: direct-solder lands (nose) OR JST connectors (cargo), populate one. See
+    `docs/VERA_NOSE_TRAPEZOID.md` Rev C (measured nose width confirms the SoM fits) and
+    `avionics/kicad/VERA_SOM_NETMAP.md`.
+- [ ] **Vera SoM = PHYTEC phyCORE-AM62x CONNECTORIZED (PCM-071), not the direct-solder DSC**
+    (user decision 2026-07-12; supersedes the AM62A7-BGA/DSC assumptions above — the "484-ball
+    FCBGA" item is moot). DONE: clean-room 240-pin symbol (`Vera_SoM_PCM071.kicad_sym`) + real
+    2× Samtec BTH-060 footprint (`phyCORE-AM62x_PCM071_2xBTH-060.kicad_mod`, 240 pads A1..D60)
+    from the PHYTEC HW manual + Samtec land drawing; SoM placed, fit confirmed; carrier
+    clean-room symbols done (KSZ9477 128-pin, MSPM0G3507, SLB9670, ISOW1044). PENDING:
+    (a) verify BTH-060 row↔column (A/B/C/D) + pin-1 vs the Samtec product print + PHYTEC Fig 6;
+    (b) **full connector-variant re-layout** — drop the raw-SoC placeholders (U1 AM62A7, U_PMIC),
+    wire per `VERA_SOM_NETMAP.md`, ERC to 0; (c) +5 mm connector-stack nose-pod Z-budget check
+    (FreeCAD); (d) ISOW1044 confirmed 20-pin DFM (fleet-wide "SOIC-16W" doc error fixed;
+    footprint = KiCad std `QFN-32`/`QFP-128`/`QFN-48` for the carrier ICs).
 - [x] **Source and cite a real Class 3B nose crosshair laser module** — **SUPERSEDED by the
     Class 2 laser unification (§1.2c.4 below, 2026-07-06; `docs/VERA_LASER_ANALYSIS.md` Rev A2).**
     The nose is **not** Class 3B: a thin-line green crosshair detected by Vera's own strobed
