@@ -361,6 +361,8 @@ When modifying or creating cape designs:
 4. If planning a new cape revision, record it in `TODO.md` and cite this file
 5. Keep `PROJECT_INDEX.md` up to date with new KiCad files
 6. Archive old cape revisions in `archives/` with a note in `ARCHIVE_INDEX.md`
+7. Check for component datasheets in the `avionics/datasheets` folder, kicad symbols in the `avionics/kicad/symbols` folder, and footprints in the `avionics/kicad/symbols/footprints` folder before searching online.
+8. Use OEM Datasheets as authitative component references.
 
 ---
 
