@@ -49,6 +49,20 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 
 *Master:* [`TODO.md` §1.1](../TODO.md) — 88 open, 94 done at snapshot.
 
+- [ ] **Vera PCB mounting + Faraday (2026-07-12, Rev S1).** DONE:
+    `cargo/cargo_sect_shell24.scad` `vera_board_bosses()` updated to the NEW Vera trapezoid
+    outline's 4 corner **M2.5** holes (was the old 46×48 / ±19×±20 M3 grid); CARGO variant —
+    camera/ToF/laser are JST-jumpered so the board mounts FLAT (no sensor-aperture alignment),
+    short harness to the JST connectors. New `cargo/cargo_vera_faraday.scad` EMI enclosure
+    (73.85 × 62 × 17.6 mm internal tray + 4 M2.5 standoffs matching the board holes +
+    waveguide-below-cutoff honeycomb vents + EMI-lip lid + JST harness slot; renders
+    **watertight**, trimesh-verified; shield → PGND). PENDING: (a) **full cargo-shell render +
+    watertight mesh check + re-bake** after the boss edit (bosses are SCAD-only, still EXCLUDED
+    from the baked fabrication mesh — root TODO §1.1); (b) Faraday tray FreeCAD fit vs
+    `door_bay_cut`/GPS/ribs; (c) **NOSE install** — add `head_shell24.scad` interior slots for
+    the 1/16 in port/stbd install rails + a foam **void form** around the board, then
+    render / mesh-validate / re-bake `Head_Shell`.
+
 - [ ] **Re-verify head↔cargo joint in hull Y.** The 2026-06-10 joint analysis
     used hull X as the longitudinal mating axis; in the validated frame the longitudinal
     axis is Y (sections mate at hull Y ≈ −71 mm; X is lateral). Re-check

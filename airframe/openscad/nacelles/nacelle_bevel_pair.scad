@@ -153,9 +153,23 @@ module bevel_hub(gamma) {
         cylinder(h = hub_h, d = HUB_OD);
 }
 
+// arc_pts / annular_wedge — closed annular-sector polygon helpers (same
+//   proven construction as nacelle_sector_gear.scad / the nozzle ring).
+//   Rev S1 BUG-FIX NOTE: the Rev R bevel (like the Rev R pinion) built its
+//   tooth-space wedges by masking an annulus with two rotated first-quadrant
+//   squares — that construction leaves ~155° of extra arc in every cut, so
+//   the cuts consumed ALL teeth: previously published bevel STLs were
+//   toothless cones.  The polygon method below cuts exactly one wedge.
+function arc_pts(r, a1, a2, n) =
+    [for (i = [0 : n]) let(a = a1 + i * (a2 - a1) / n) [r * cos(a), r * sin(a)]];
+
+function annular_wedge(r_in, r_out, a1, a2, n) =
+    concat(arc_pts(r_in,  a1, a2, n),
+            arc_pts(r_out, a2, a1, n));
+
 // bevel_tooth_space(i, n, gamma) — one tooth-space void on the conical face,
 //   a hull between matching thin wedge slices at the large and small ends
-//   (same trapezoidal approximation as Rev R, now per-gear parametric).
+//   (trapezoidal approximation, per-gear parametric).
 module bevel_tooth_space(i, n, gamma) {
     pitch_r  = n * MODULE / 2;
     tip_r    = pitch_r + ADDENDUM;
@@ -168,30 +182,17 @@ module bevel_tooth_space(i, n, gamma) {
 
     hull() {
         // Large-end wedge slice (thin disk at Z ≈ 0):
-        linear_extrude(height = 0.1) {
-            rotate([0, 0, space_centre - half_ang]) {
-                difference() {
-                    circle(r = tip_r + 0.1);
-                    circle(r = root_r - 0.1);
-                    rotate([0, 0, 2 * half_ang]) square([50, 50]);
-                    rotate([0, 0, 180])           square([50, 50]);
-                }
-            }
-        }
+        linear_extrude(height = 0.1)
+            polygon(annular_wedge(
+                root_r - 0.1, tip_r + 0.1,
+                space_centre - half_ang, space_centre + half_ang, 2));
 
         // Small-end wedge slice (thin disk at Z = cone_h, tapered radii):
-        translate([0, 0, cone_h - 0.1]) {
-            linear_extrude(height = 0.1) {
-                rotate([0, 0, space_centre - half_ang]) {
-                    difference() {
-                        circle(r = tip_r * TAPER + 0.1);
-                        circle(r = max(root_r * TAPER - 0.1, 0.5));
-                        rotate([0, 0, 2 * half_ang]) square([50, 50]);
-                        rotate([0, 0, 180])           square([50, 50]);
-                    }
-                }
-            }
-        }
+        translate([0, 0, cone_h - 0.1])
+            linear_extrude(height = 0.1)
+                polygon(annular_wedge(
+                    max(root_r * TAPER - 0.1, 0.5), tip_r * TAPER + 0.1,
+                    space_centre - half_ang, space_centre + half_ang, 2));
     }
 }
 

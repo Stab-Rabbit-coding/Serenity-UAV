@@ -1,0 +1,171 @@
+(footprint "phyCORE-AM62x_PCM071_placement"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "PHYTEC phyCORE-AM62x PCM-071 connectorized SoM -- PLACEMENT footprint (outline + 2x M2.5 mounting holes + 2 Samtec BTH-060 connector reference zones) from PHYTEC HW manual L-1038e.A5 Figs 3/6/7. For fit/placement only; the 240 BTH-060 solder pads (A1..D60, 0.5mm pitch 2x60 x2) require the Samtec BTH-060-01-L-D-A-K-TR land pattern -- author before routing. 32x43mm, 5mm connector stacking height.")
+	(property "Reference" "U**"
+		(at 0 -23 0)
+		(layer "F.SilkS")
+		(uuid "a0000000-0000-0000-0000-000000000001")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "phyCORE-AM62x_PCM071"
+		(at 0 23 0)
+		(layer "F.Fab")
+		(uuid "a0000000-0000-0000-0000-000000000002")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "feccb635-2640-4c4e-9da9-06e9053af17c")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "366603f2-eb37-4387-bd42-e7d3a35187b9")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr exclude_from_pos_files exclude_from_bom allow_missing_courtyard)
+	(fp_rect
+		(start -16 -21.5)
+		(end 16 21.5)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "a0000000-0000-0000-0000-000000000012")
+	)
+	(fp_poly
+		(pts
+			(xy 11 15) (xy 12 15) (xy 11.5 16)
+		)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.SilkS")
+		(uuid "a0000000-0000-0000-0000-000000000040")
+	)
+	(fp_rect
+		(start -16.25 -21.75)
+		(end 16.25 21.75)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "a0000000-0000-0000-0000-000000000011")
+	)
+	(fp_rect
+		(start -16 -21.5)
+		(end 16 21.5)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "a0000000-0000-0000-0000-000000000010")
+	)
+	(fp_rect
+		(start -12 -15)
+		(end -10.4 15)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "a0000000-0000-0000-0000-000000000020")
+	)
+	(fp_rect
+		(start 10.4 -15)
+		(end 12 15)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "a0000000-0000-0000-0000-000000000022")
+	)
+	(fp_text user "BTH-060 pads TBD: Samtec land"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "a0000000-0000-0000-0000-000000000003")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(fp_text user "X1 C/D"
+		(at -11.2 -16.5 0)
+		(layer "F.Fab")
+		(uuid "a0000000-0000-0000-0000-000000000021")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(fp_text user "X1 A/B"
+		(at 11.2 -16.5 0)
+		(layer "F.Fab")
+		(uuid "a0000000-0000-0000-0000-000000000023")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(pad "MH1" thru_hole circle
+		(at -13.2 -18.7)
+		(size 4 4)
+		(drill 2.6)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "a0000000-0000-0000-0000-000000000030")
+	)
+	(pad "MH2" thru_hole circle
+		(at 13.2 18.7)
+		(size 4 4)
+		(drill 2.6)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "a0000000-0000-0000-0000-000000000031")
+	)
+	(embedded_fonts no)
+)

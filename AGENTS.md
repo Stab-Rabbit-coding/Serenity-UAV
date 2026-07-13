@@ -17,6 +17,7 @@ The **canonical project instructions and standards are in [`CLAUDE.md`](CLAUDE.m
 - Each AI system and model will be cited for its own contribution (i.e. Gemini must be distinguished from Grok, from Claude, and Haiku 4.5 needs a separate citation from Opus 4.8)
 - **Every design decision, algorithm, or geometry technique that draws on an external reference must be cited in the relevant source file docstring and commit message.**
 - **Derivative files must carry the full attribution chain back to upstream sources.**
+- **Intelectual property claims must be addressed for all components** models, images, kicad symbols, scad files, stls, code snipits, or any other item before it is committed.  Only Items with a compatable property licence can be integrated.
 
 ## Scope-Specific Guidance
 
