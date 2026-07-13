@@ -32,14 +32,14 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 
 ## Cross-cutting system: Jayne (cargo handling)
 
-> **Jayne is a ship-level integrating system, not a single WBS branch.** It comprises the cargo-bay doors, the N20 winch / Dyneema hoist, the auto-latch, the gondola, **and the Vera vision/ToF/laser PCB as its sensing subsystem**. Its work is distributed across subsystem WBS files:
+> **Jayne is a ship-level integrating system, not a single WBS branch.** It comprises the cargo-bay doors, the N20 winch / Dyneema hoist, the auto-latch, the gondola, **and the Jayne vision/ToF/laser PCB as its sensing subsystem**. Its work is distributed across subsystem WBS files:
 >
 > | Jayne subsystem | Where tracked |
 > |---|---|
 > | Doors, winch, latch, gondola — geometry/STLs | [airframe/TODO.md](../airframe/TODO.md) §1.1 |
 > | Cargo procurement (BOM) | master [`TODO.md` §2.6](../TODO.md) |
-> | **Vera** vision/ToF/laser board | [avionics/TODO.md](../avionics/TODO.md) §1.2c |
-> | **Vera** node firmware | [avionics/TODO.md](../avionics/TODO.md) §4.6 |
+> | **Jayne** vision/ToF/laser board | [avionics/TODO.md](../avionics/TODO.md) §1.2c |
+> | **Jayne** node firmware | [avionics/TODO.md](../avionics/TODO.md) §4.6 |
 > | Payload/winch control firmware (Simon = payload-primary) | [avionics/TODO.md](../avionics/TODO.md) §4.2 / §4.3 |
 > | Physical assembly & install | [graphical-build-guide/TODO.md](../graphical-build-guide/TODO.md) Phase 7 |
 > | Range-extender battery in the cargo bay (deferred) | [deferred/TODO.md](../deferred/TODO.md) Phase 12 |
@@ -150,28 +150,28 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 - [ ] **PMMA window spec finalised** (sourcing remains a procurement action):
     - [ ] Laser: 3 mm dia × 2 mm PMMA exit window (optional; sealed modules may omit)
 - [ ] **Procure PMMA discs** (ToF 8 mm, laser 2 mm) — physical purchase. *(external)*
-- [x] **Wire TFmini-S UART to bow sensor MCU.** — **SUPERSEDED by Vera (2026-07-06).**
-    The pre-Vera loom from the bow pod to Shepherd's Room (read on the Wash node) is retired:
-    Vera *is* the board at the bow pod, so the TFmini-S is a short local run (<75 mm) on Vera's
-    `J_TOF`/UART1, read by Vera's MSPM0G3507. Replaced by the Vera local sensor harness
-    ([avionics/TODO.md](../avionics/TODO.md) §1.2c) + Vera firmware (§4.6). Closed in master
+- [x] **Wire TFmini-S UART to bow sensor MCU.** — **SUPERSEDED by Jayne (2026-07-06).**
+    The pre-Jayne loom from the bow pod to Shepherd's Room (read on the Wash node) is retired:
+    Jayne *is* the board at the bow pod, so the TFmini-S is a short local run (<75 mm) on Jayne's
+    `J_TOF`/UART1, read by Jayne's MSPM0G3507. Replaced by the Jayne local sensor harness
+    ([avionics/TODO.md](../avionics/TODO.md) §1.2c) + Jayne firmware (§4.6). Closed in master
     [`TODO.md`](../TODO.md).
-- [x] **Wire bow camera video output to bow sensor MCU** — **SUPERSEDED by Vera (2026-07-06).**
-    RG178 analog coax was for the RunCam Nano 4 analog camera, which Vera supersedes
-    (REF-SENSOR-001, superseded). Vera's camera is digital MIPI CSI-2 on `J_CAM1/J_CAM2`
+- [x] **Wire bow camera video output to bow sensor MCU** — **SUPERSEDED by Jayne (2026-07-06).**
+    RG178 analog coax was for the RunCam Nano 4 analog camera, which Jayne supersedes
+    (REF-SENSOR-001, superseded). Jayne's camera is digital MIPI CSI-2 on `J_CAM1/J_CAM2`
     (flex/FPC), encoded on-board and published over the Ethernet ring — no analog coax. Tracked
-    as the Vera local sensor harness (avionics §1.2c). Closed in master.
-- [x] **Wire laser GPIO enable bow sensor MCU** — **SUPERSEDED by Vera (2026-07-06).**
+    as the Jayne local sensor harness (avionics §1.2c). Closed in master.
+- [x] **Wire laser GPIO enable bow sensor MCU** — **SUPERSEDED by Jayne (2026-07-06).**
     The discrete 2N7002-from-Wash-GPIO driver + Class-3B physical key-switch
-    ([REF-FDA-001 §1040.10(f)(1)]) is replaced by Vera's on-board driver (Q1 AO3400, R1 100 Ω
-    gate, R2 10 kΩ pulldown-default-off, `J_LASER`), enabled by Vera's MSPM0G3507. Per
-    `docs/VERA_LASER_ANALYSIS.md` Rev A2 the nose is **Class 2 (≤ 1 mW green), NOT Class 3B** —
+    ([REF-FDA-001 §1040.10(f)(1)]) is replaced by Jayne's on-board driver (Q1 AO3400, R1 100 Ω
+    gate, R2 10 kΩ pulldown-default-off, `J_LASER`), enabled by Jayne's MSPM0G3507. Per
+    `docs/JAYNE_LASER_ANALYSIS.md` Rev A2 the nose is **Class 2 (≤ 1 mW green), NOT Class 3B** —
     key-interlock/shutter dropped, ≤ 1 mW cap hardware-enforced. Tracked at avionics §1.2c / §4.6.
     Closed in master.
 - [x] **Add laser enable command to MAVLink C2 interface** [REF-PROTO-002] — **SUPERSEDED /
-    RELOCATED to Vera (2026-07-06).** Laser is now Vera-owned (commanded by Vera's MSPM0G3507
+    RELOCATED to Jayne (2026-07-06).** Laser is now Jayne-owned (commanded by Jayne's MSPM0G3507
     over CAN-FD + Ethernet ring), not the Wash MAVLink path; the C2-enable requirement folds into
-    Vera firmware (avionics §4.6). Class 2 downgrades the previously mandatory operator ack to
+    Jayne firmware (avionics §4.6). Class 2 downgrades the previously mandatory operator ack to
     optional defense-in-depth. Closed in master.
 - [ ] **Add standards REF-IDs to bow_sensor_pod.scad firmware integration notes** once driver
     code is in place.  Ref: [REF-SENSOR-002] TFmini-S UART protocol, [REF-NIST-001 §2.1] ZTA.
@@ -360,8 +360,8 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
         colocated with S1A/S1B (green highlight, port side nose face), but no separate
         aperture is cut.  Once laser hardware is selected, add a laser_cut()
         module with the appropriate bore size adjacent to or integrated with S1A aperture.
-        (Reconciled 2026-07-06: the laser is now Vera's shared **520 nm green, Class 2**
-        source — `docs/VERA_LASER_ANALYSIS.md` Rev A2, avionics §1.2c — NOT a generic "pointer";
+        (Reconciled 2026-07-06: the laser is now Jayne's shared **520 nm green, Class 2**
+        source — `docs/JAYNE_LASER_ANALYSIS.md` Rev A2, avionics §1.2c — NOT a generic "pointer";
         bore size is blocked on the sourced module's datasheet, see the stale-bore flag in
         avionics §1.2c.)
     - [ ] **Correct BOSS_AFT positions** — BOSS_AFT_* in `head_shell24.scad` use X=99 as
@@ -369,8 +369,8 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
         correction).  Hull-frame aft joint face is at Y ≈ −53 mm; BOSS_AFT_ROT should be
         [0,90,0] only if facing into the joint (−Y direction → [−90,0,0]).  See §1.1.0
         open item and §1.1.1 for the full correction plan — this is a pre-existing blocker.
-    - [ ] create mounting bracket for camera/tof/laser control pcb — this is the **Vera**
-        board (1.0 × 2.75 in (25.4 × 69.85 mm), 4× M3 at (4,4)/(42,4)/(4,44)/(42,44); `avionics/kicad/Vera.md`).
+    - [ ] create mounting bracket for camera/tof/laser control pcb — this is the **Jayne**
+        board (1.0 × 2.75 in (25.4 × 69.85 mm), 4× M3 at (4,4)/(42,4)/(4,44)/(42,44); `avionics/kicad/Jayne/Jayne.md`).
         Coordinate with the FreeCAD pose + pocket-wall clearance verification tracked in
         avionics §1.2c (do not hand-derive the bow pod's non-hull-frame local transform).
     - Verify Faraday tray cutout and all other non-boss geometry unchanged after SCAD re-render.
