@@ -639,6 +639,14 @@ SCAD: `airframe/openscad/fuselage/bow_sensor_pod.scad` (cuts) +
     DELIBERATELY EXCLUDED from this merge — both remain SCAD-only proposals, not baked into
     the fabrication mesh, per their own open-item flags (merging an unverified/buggy
     placement would falsely certify it).
+    - **2026-07-12 (Rev S1):** `cargo_sect_shell24.scad` `vera_board_bosses()` was updated to the
+        NEW Vera trapezoid outline's 4 corner **M2.5** holes (cargo JST-jumper variant), and a
+        `cargo/cargo_vera_faraday.scad` EMI enclosure was added (renders watertight). These stay
+        **SCAD-only / excluded from the baked mesh** for the same reason — pending a full
+        cargo-shell render + watertight mesh check + re-bake, and a FreeCAD fit check. The Vera
+        SoM is now the connectorized PHYTEC PCM-071 (240-pin, 2× Samtec BTH-060) — see avionics
+        §1.2c; the nose install still needs head-shell rail slots + a foam void form (airframe
+        §1.1).
 - [x] **Re-run mesh validation after head shell regen — DONE 2026-07-03** (see above,
     `validate_stls.py` all-pass). Also re-ran `tools/verify_bow_pod.py` post-cut and found
     (and fixed) the SAME unwelded-STL loading bug there (`mesh.merge_vertices()` was missing

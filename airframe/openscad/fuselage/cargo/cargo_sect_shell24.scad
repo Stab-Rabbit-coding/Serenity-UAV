@@ -576,10 +576,15 @@ module gps_mount_cut(pos, rot) {
 
 // ----------------------------------------------------------------------------
 // Module: vera_board_bosses (added Rev R2, 2026-07-03)
-//   4x M3 heat-set insert boss posts for the Vera vision/ToF/laser PCB
-//   (avionics/kicad/Vera.kicad_pcb, 1.0 × 2.75 in (25.4 × 69.85 mm) double-sided board, mounting
-//   holes at board-local (4,4)/(42,4)/(4,44)/(42,44) -- i.e. +/-19 mm x
-//   +/-20 mm from board centre).  Mounted on the belly interior floor,
+//   4x M2.5 heat-set standoff bosses for the Vera vision/ToF/laser PCB
+//   (avionics/kicad/Vera.kicad_pcb -- trapezoidal carrier, 25.4 mm narrow -> 58 mm
+//   wide x 69.85 mm long, docs/VERA_NOSE_TRAPEZOID.md).  Mounted by its 4 CORNER
+//   M2.5 holes (KiCad board-local mm: (66.8,2.4)/(66.8,23.0)/(3.0,37.9)/
+//   (3.0,-12.5); Rev S1 2026-07-12 -- replaces the old 46x48/+-19x+-20 M3 pattern).
+//   CARGO install: camera/ToF/laser are JST-jumpered (populated JST connectors;
+//   direct-solder lands DNP) so the board mounts FLAT on standoffs with a short
+//   harness to J_CAM1/J_CAM2/J_TOF/J_LASER -- no sensor-aperture alignment needed.
+//   Mounted on the belly interior floor,
 //   standing up (+Z) from just above the nadir exterior skin, centred on
 //   CARGO_CAM_POS's (X,Y) station so the board sits directly above/behind
 //   the camera aperture -- short local harness runs to J_CAM1/J_CAM2/
@@ -592,14 +597,24 @@ module gps_mount_cut(pos, rot) {
 //   CLAUDE.md "Assembly and Placement").
 //   Ref: avionics/kicad/Vera.md; TODO.md §1.2c.3.
 // ----------------------------------------------------------------------------
-VERA_HOLE_DX = 19.0;   // mm, +/-X half-spacing of Vera's mounting-hole pattern
-VERA_HOLE_DY = 20.0;   // mm, +/-Y half-spacing of Vera's mounting-hole pattern
-VERA_STATION_X = CX;         // mm, lateral centreline, same as CARGO_CAM_POS
-VERA_STATION_Y = CY;         // mm, longitudinal station, same as CARGO_CAM_POS
+VERA_BOSS_OD   = 7.0;   // mm, M2.5 heat-set boss OD (>= 2-wall annulus around insert)
+VERA_BOSS_H    = 8.0;   // mm, standoff height (clears bottom-side components; VERIFY)
+VERA_BOSS_BORE = 3.4;   // mm, M2.5 heat-set insert bore (Ruthex RX-M2.5x5.7 or equiv)
+VERA_STATION_X = CX;    // mm, lateral centreline, same as CARGO_CAM_POS
+VERA_STATION_Y = CY;    // mm, longitudinal station, same as CARGO_CAM_POS
+//   4 corner holes as [cargo dX (lateral), cargo dY (longitudinal)] offsets from the
+//   station.  Board X (fore-aft, 69.85) -> cargo Y; board Y (port-stbd) -> cargo X.
+VERA_HOLES = [ [-10.3, 31.9], [10.3, 31.9], [25.2, -31.9], [-25.2, -31.9] ];
+module vera_m2p5_boss(pos) {
+    translate(pos)
+    difference() {
+        cylinder(h = VERA_BOSS_H, d = VERA_BOSS_OD);
+        cylinder(h = VERA_BOSS_H + 0.1, d = VERA_BOSS_BORE);
+    }
+}
 module vera_board_bosses() {
-    for (dx = [-VERA_HOLE_DX, VERA_HOLE_DX])
-    for (dy = [-VERA_HOLE_DY, VERA_HOLE_DY])
-        m3_boss([VERA_STATION_X + dx, VERA_STATION_Y + dy, WALL_MM], [0, 0, 0]);
+    for (h = VERA_HOLES)
+        vera_m2p5_boss([VERA_STATION_X + h[0], VERA_STATION_Y + h[1], WALL_MM]);
 }
 
 // ----------------------------------------------------------------------------

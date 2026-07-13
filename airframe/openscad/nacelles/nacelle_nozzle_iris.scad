@@ -485,8 +485,20 @@ module nozzle_throat_and_housing() {
             // bosses came out as disconnected floating bodies, severed at
             // exactly this cut's Z end).  1 mm margin past the ring height.
             RING_CAVITY_Z_HI = RING_H + 1.0;   // [mm] = 9.0
+            // Rev S1 BUG FIX: this cut used to be a FULL cylinder of radius
+            // HOUSING_INNER_R — which also swallowed the throat tube (r
+            // 25..27.5) over the whole cavity height, deleting the flow
+            // liner's first 9 mm in every previously published throat STL
+            // (verified by cross-section: no material at r < 37.5, Z 0..9).
+            // The cavity is now ANNULAR: from just outside the throat tube
+            // OD out to the housing bore, so the liner survives and the
+            // unison ring (cam-flange inner R 29.0) rides around it.
             translate([0, 0, -HOUSING_LIP_H - 0.1])
-                cylinder(h = RING_CAVITY_Z_HI + HOUSING_LIP_H + 0.1, r = HOUSING_INNER_R);
+                linear_extrude(height = RING_CAVITY_Z_HI + HOUSING_LIP_H + 0.1)
+                    difference() {
+                        circle(r = HOUSING_INNER_R);
+                        circle(r = THROAT_OUTER_R);
+                    }
 
             // ── Drive-pinion throat relief pocket (Rev S1) ──────────────────────
             // The Nozzle Drive Pinion (tip R4 at local (0, +30.5)) sweeps to
