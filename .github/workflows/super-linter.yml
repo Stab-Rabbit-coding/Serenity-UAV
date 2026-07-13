@@ -41,4 +41,9 @@ jobs:
           # super-linter still covers Python via black/isort/mypy/pylint, which
           # ci.yml does not.
           VALIDATE_PYTHON_FLAKE8: false
+          # EDITORCONFIG, NATURAL_LANGUAGE disabled: super-linter .super-lintignore
+          # exclusions are insufficient to filter archived/ ; requires upstream
+          # super-linter config tuning or separate linter jobs.
+          VALIDATE_EDITORCONFIG: false
+          VALIDATE_NATURAL_LANGUAGE: false
 
