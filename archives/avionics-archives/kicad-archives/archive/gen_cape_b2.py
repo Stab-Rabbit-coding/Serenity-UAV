@@ -1225,9 +1225,7 @@ def transform(src: str) -> str:
     # lib_symbols block.  The closing tag in CAPE-B-1 is '  )\n' on its
     # own line immediately before the first symbol instance.
     # ------------------------------------------------------------------
-    new_libs = (
-        LIB_SRF2012 + LIB_PRTR5V0U2X + LIB_SMAJ33CA + LIB_FERRITE_BEAD + LIB_X2Y_4N7
-    )
+    new_libs = LIB_SRF2012 + LIB_PRTR5V0U2X + LIB_SMAJ33CA + LIB_FERRITE_BEAD + LIB_X2Y_4N7
     # The lib_symbols block ends with exactly '  )\n' on its own line.
     text = text.replace(
         '  )\n  (symbol (lib_id "Conn_36")',

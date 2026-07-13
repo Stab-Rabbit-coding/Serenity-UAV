@@ -86,6 +86,7 @@ def next_uuid() -> str:
 # Helper: find matching closing paren for an S-expression block
 # ---------------------------------------------------------------------------
 
+
 def find_balanced_sexp(text: str, start: int) -> int:
     """Return the index ONE PAST the closing ')' that balances the '(' at *start*.
 
@@ -109,16 +110,16 @@ def find_balanced_sexp(text: str, start: int) -> int:
             # Previous character was a backslash inside a quoted string.
             escape_next = False
         elif in_string:
-            if ch == '\\':
+            if ch == "\\":
                 escape_next = True
             elif ch == '"':
                 in_string = False
         else:
             if ch == '"':
                 in_string = True
-            elif ch == '(':
+            elif ch == "(":
                 depth += 1
-            elif ch == ')':
+            elif ch == ")":
                 depth -= 1
                 if depth == 0:
                     return i + 1
@@ -144,7 +145,7 @@ def find_sexp_block(text: str, tag: str) -> tuple[int, int]:
         ValueError: if the tag is not found.
     """
     # Build a pattern that matches '(' then optional whitespace then the tag.
-    pattern = r'\(' + re.escape(tag)
+    pattern = r"\(" + re.escape(tag)
     match = re.search(pattern, text)
     if match is None:
         raise ValueError(f"Tag not found: ({tag}")
@@ -163,7 +164,7 @@ def find_all_sexp_blocks(text: str, tag: str) -> list[tuple[int, int]]:
     Returns:
         List of (start, end) tuples; may be empty.
     """
-    pattern = r'\(' + re.escape(tag)
+    pattern = r"\(" + re.escape(tag)
     results = []
     for match in re.finditer(pattern, text):
         start = match.start()
@@ -175,6 +176,7 @@ def find_all_sexp_blocks(text: str, tag: str) -> list[tuple[int, int]]:
 # ===========================================================================
 # Replacement lib_symbol definitions
 # ===========================================================================
+
 
 def lib_sym_isow1044() -> str:
     """Return the KiCad lib_symbol S-expression for ISOW1044BDFMR.
@@ -199,7 +201,7 @@ def lib_sym_isow1044() -> str:
 
     Reference: TI ISOW1044BDFMR datasheet, SLLSEO9 (2023).
     """
-    return '''\
+    return """\
   (symbol "ISOW1044BDFMR" (in_bom yes) (on_board yes)
     (property "Reference" "U" (at 0 -10.16 0) (effects (font (size 1.27 1.27))))
     (property "Value" "ISOW1044BDFMR" (at 0 10.16 0) (effects (font (size 1.27 1.27))))
@@ -242,7 +244,7 @@ def lib_sym_isow1044() -> str:
         (name "ISOGND" (effects (font (size 1.016 1.016))))
         (number "10" (effects (font (size 1.016 1.016)))))
     )
-  )'''
+  )"""
 
 
 def lib_sym_adm2795() -> str:
@@ -269,7 +271,7 @@ def lib_sym_adm2795() -> str:
 
     Reference: Analog Devices ADM2795EBRWZ datasheet, Rev. C (2022).
     """
-    return '''\
+    return """\
   (symbol "ADM2795EBRWZ" (in_bom yes) (on_board yes)
     (property "Reference" "U" (at 0 -11.43 0) (effects (font (size 1.27 1.27))))
     (property "Value" "ADM2795EBRWZ" (at 0 11.43 0) (effects (font (size 1.27 1.27))))
@@ -315,7 +317,7 @@ def lib_sym_adm2795() -> str:
         (name "GND2" (effects (font (size 1.016 1.016))))
         (number "20" (effects (font (size 1.016 1.016)))))
     )
-  )'''
+  )"""
 
 
 def lib_sym_srf2012() -> str:
@@ -327,7 +329,7 @@ def lib_sym_srf2012() -> str:
 
     Reference: Coilcraft SRF2012-100Y datasheet (2020).
     """
-    return '''\
+    return """\
   (symbol "SRF2012-100Y" (in_bom yes) (on_board yes)
     (property "Reference" "CMC" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
     (property "Value" "SRF2012-100Y" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
@@ -355,7 +357,7 @@ def lib_sym_srf2012() -> str:
         (name "L2B" (effects (font (size 1.016 1.016))))
         (number "4" (effects (font (size 1.016 1.016)))))
     )
-  )'''
+  )"""
 
 
 def lib_sym_prtr5v0u2x() -> str:
@@ -368,7 +370,7 @@ def lib_sym_prtr5v0u2x() -> str:
 
     Reference: Nexperia PRTR5V0U2X datasheet, Rev. 5 (2021).
     """
-    return '''\
+    return """\
   (symbol "PRTR5V0U2X" (in_bom yes) (on_board yes)
     (property "Reference" "D" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
     (property "Value" "PRTR5V0U2X" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
@@ -388,7 +390,7 @@ def lib_sym_prtr5v0u2x() -> str:
         (name "K" (effects (font (size 1.016 1.016))))
         (number "3" (effects (font (size 1.016 1.016)))))
     )
-  )'''
+  )"""
 
 
 def lib_sym_smaj33ca() -> str:
@@ -401,7 +403,7 @@ def lib_sym_smaj33ca() -> str:
 
     Reference: Littelfuse SMAJ33CA datasheet, Rev. 2019.
     """
-    return '''\
+    return """\
   (symbol "SMAJ33CA" (in_bom yes) (on_board yes)
     (property "Reference" "D" (at 0 -4.45 0) (effects (font (size 1.27 1.27))))
     (property "Value" "SMAJ33CA" (at 0 4.45 0) (effects (font (size 1.27 1.27))))
@@ -418,7 +420,7 @@ def lib_sym_smaj33ca() -> str:
         (name "K" (effects (font (size 1.016 1.016))))
         (number "2" (effects (font (size 1.016 1.016)))))
     )
-  )'''
+  )"""
 
 
 def lib_sym_ferrite_742792512() -> str:
@@ -430,7 +432,7 @@ def lib_sym_ferrite_742792512() -> str:
 
     Reference: Würth Elektronik 742792512 datasheet (2021).
     """
-    return '''\
+    return """\
   (symbol "742792512" (in_bom yes) (on_board yes)
     (property "Reference" "FB" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
     (property "Value" "742792512" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
@@ -447,7 +449,7 @@ def lib_sym_ferrite_742792512() -> str:
         (name "P2" (effects (font (size 1.016 1.016))))
         (number "2" (effects (font (size 1.016 1.016)))))
     )
-  )'''
+  )"""
 
 
 def lib_sym_x2y_cap() -> str:
@@ -461,7 +463,7 @@ def lib_sym_x2y_cap() -> str:
 
     Reference: X2Y Attenuators LLC, Application Note AN-0003 (2015).
     """
-    return '''\
+    return """\
   (symbol "X2Y_CAP_4N7" (in_bom yes) (on_board yes)
     (property "Reference" "C" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
     (property "Value" "4.7nF X2Y" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
@@ -478,12 +480,13 @@ def lib_sym_x2y_cap() -> str:
         (name "G2" (effects (font (size 1.016 1.016))))
         (number "2" (effects (font (size 1.016 1.016)))))
     )
-  )'''
+  )"""
 
 
 # ===========================================================================
 # v2 EMI-hardened lib_symbol replacements (Changes I, J)
 # ===========================================================================
+
 
 def lib_sym_mmc5983ma() -> str:
     """Return the KiCad lib_symbol S-expression for the MMC5983MA magnetometer.
@@ -504,7 +507,7 @@ def lib_sym_mmc5983ma() -> str:
 
     Reference: MEMSIC MMC5983MA datasheet (Rev. C, 2022).
     """
-    return '''\
+    return """\
   (symbol "MMC5983MA" (in_bom yes) (on_board yes)
     (property "Reference" "U" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
     (property "Value" "MMC5983MA" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
@@ -531,7 +534,7 @@ def lib_sym_mmc5983ma() -> str:
         (name "DRDY" (effects (font (size 1.016 1.016))))
         (number "5" (effects (font (size 1.016 1.016)))))
     )
-  )'''
+  )"""
 
 
 def lib_sym_ina226() -> str:
@@ -562,7 +565,7 @@ def lib_sym_ina226() -> str:
 
     Reference: TI INA226 datasheet SBOS547 (Rev. A, 2011).
     """
-    return '''\
+    return """\
   (symbol "INA226AIDGSR" (in_bom yes) (on_board yes)
     (property "Reference" "U" (at 0 -7.62 0) (effects (font (size 1.27 1.27))))
     (property "Value" "INA226AIDGSR" (at 0 7.62 0) (effects (font (size 1.27 1.27))))
@@ -598,12 +601,13 @@ def lib_sym_ina226() -> str:
         (name "A0" (effects (font (size 1.016 1.016))))
         (number "8" (effects (font (size 1.016 1.016)))))
     )
-  )'''
+  )"""
 
 
 # ===========================================================================
 # v2 component instance generators (Changes I, J, K)
 # ===========================================================================
+
 
 def inst_mag_v2(cx: float, cy: float) -> str:
     """Return the symbol instance block for the MMC5983MA magnetometer (v2).
@@ -623,13 +627,13 @@ def inst_mag_v2(cx: float, cy: float) -> str:
         cx: Component centre X coordinate in mm  (155).
         cy: Component centre Y coordinate in mm  (560).
     """
-    left_x = cx - 10.16     # 144.84
-    right_x = cx + 10.16    # 165.16
-    y_scl = cy - 2.54       # 557.46
-    y_sda = cy              # 560.00
-    y_gnd = cy + 2.54       # 562.54
-    y_vdd = cy - 2.54       # 557.46
-    y_drdy = cy + 2.54      # 562.54
+    left_x = cx - 10.16  # 144.84
+    right_x = cx + 10.16  # 165.16
+    y_scl = cy - 2.54  # 557.46
+    y_sda = cy  # 560.00
+    y_gnd = cy + 2.54  # 562.54
+    y_vdd = cy - 2.54  # 557.46
+    y_drdy = cy + 2.54  # 562.54
 
     uid_inst = next_uuid()
     uid_p1 = next_uuid()
@@ -638,7 +642,7 @@ def inst_mag_v2(cx: float, cy: float) -> str:
     uid_p4 = next_uuid()
     uid_p5 = next_uuid()
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "MMC5983MA") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{uid_inst}")
@@ -680,7 +684,7 @@ def inst_mag_v2(cx: float, cy: float) -> str:
     (effects (font (size 1.016 1.016)))
     (uuid "{next_uuid()}")
     (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {right_x:.2f} {y_drdy:.2f} 0)
-      (effects (font (size 1.016 1.016)) (hide yes))))'''
+      (effects (font (size 1.016 1.016)) (hide yes))))"""
 
 
 def inst_batt_mon_v2(cx: float, cy: float) -> str:
@@ -705,18 +709,18 @@ def inst_batt_mon_v2(cx: float, cy: float) -> str:
         cx: Component centre X coordinate in mm  (290).
         cy: Component centre Y coordinate in mm  (560).
     """
-    left_x = cx - 10.16     # 279.84
-    right_x = cx + 10.16    # 300.16
+    left_x = cx - 10.16  # 279.84
+    right_x = cx + 10.16  # 300.16
 
-    y_in_plus = cy - 3.81   # 556.19
+    y_in_plus = cy - 3.81  # 556.19
     y_in_minus = cy - 1.27  # 558.73
-    y_gnd_pin = cy + 1.27   # 561.27
-    y_vs = cy + 3.81        # 563.81
+    y_gnd_pin = cy + 1.27  # 561.27
+    y_vs = cy + 3.81  # 563.81
 
-    y_sda = cy - 3.81       # 556.19  (INA226 pin 5 = SDA)
-    y_scl = cy - 1.27       # 558.73  (INA226 pin 6 = SCL)
-    y_a1 = cy + 1.27        # 561.27  (INA226 pin 7 = A1)
-    y_a0 = cy + 3.81        # 563.81  (INA226 pin 8 = A0)
+    y_sda = cy - 3.81  # 556.19  (INA226 pin 5 = SDA)
+    y_scl = cy - 1.27  # 558.73  (INA226 pin 6 = SCL)
+    y_a1 = cy + 1.27  # 561.27  (INA226 pin 7 = A1)
+    y_a0 = cy + 3.81  # 563.81  (INA226 pin 8 = A0)
 
     uid_inst = next_uuid()
     uid_p1 = next_uuid()
@@ -728,7 +732,7 @@ def inst_batt_mon_v2(cx: float, cy: float) -> str:
     uid_p7 = next_uuid()
     uid_p8 = next_uuid()
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "INA226AIDGSR") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{uid_inst}")
@@ -792,7 +796,7 @@ def inst_batt_mon_v2(cx: float, cy: float) -> str:
     (property "Reference" "#PWR0A926" (at {right_x:.2f} {y_a0:.2f} 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Value" "GND" (at {right_x:.2f} {y_a0 + 2.54:.2f} 0) (effects (font (size 1.27 1.27))))
     (pin "1" (uuid "{next_uuid()}"))
-  )'''
+  )"""
 
 
 def inst_sbus_tvs(cx: float, cy: float) -> str:
@@ -814,18 +818,18 @@ def inst_sbus_tvs(cx: float, cy: float) -> str:
         cx: Component centre X coordinate in mm  (125).
         cy: Component centre Y coordinate in mm  (627.54).
     """
-    left_x = cx - 7.62      # 117.38
-    right_x = cx + 7.62     # 132.62
-    y_a1 = cy - 2.54        # 625.00
-    y_a2 = cy + 2.54        # 630.08
-    y_k = cy                # 627.54
+    left_x = cx - 7.62  # 117.38
+    right_x = cx + 7.62  # 132.62
+    y_a1 = cy - 2.54  # 625.00
+    y_a2 = cy + 2.54  # 630.08
+    y_k = cy  # 627.54
 
     uid_inst = next_uuid()
     uid_p1 = next_uuid()
     uid_p2 = next_uuid()
     uid_p3 = next_uuid()
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "PRTR5V0U2X") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{uid_inst}")
@@ -849,7 +853,7 @@ def inst_sbus_tvs(cx: float, cy: float) -> str:
     (property "Reference" "#PWR0A927" (at {right_x:.2f} {y_k:.2f} 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Value" "GND" (at {right_x + 2.54:.2f} {y_k:.2f} 0) (effects (font (size 1.27 1.27))))
     (pin "1" (uuid "{next_uuid()}"))
-  )'''
+  )"""
 
 
 # ===========================================================================
@@ -857,6 +861,7 @@ def inst_sbus_tvs(cx: float, cy: float) -> str:
 # ===========================================================================
 # Each function returns a multi-line string ready to be inserted verbatim
 # into the schematic body (outside lib_symbols, before the closing ')').
+
 
 def inst_isow1044(cx: float, cy: float) -> str:
     """Return the symbol instance block for the ISOW1044BDFMR.
@@ -879,16 +884,16 @@ def inst_isow1044(cx: float, cy: float) -> str:
     right_x = cx + 12.70  # = 322.70 for cx=310
 
     # Left-side pin Y absolute coordinates
-    y_vcc1 = cy - 5.08    # 164.92
-    y_txd = cy - 1.27     # 168.73
-    y_stb_n = cy + 1.27   # 171.27
-    y_rxd = cy + 3.81     # 173.81
-    y_gnd1 = cy + 6.35    # 176.35
+    y_vcc1 = cy - 5.08  # 164.92
+    y_txd = cy - 1.27  # 168.73
+    y_stb_n = cy + 1.27  # 171.27
+    y_rxd = cy + 3.81  # 173.81
+    y_gnd1 = cy + 6.35  # 176.35
 
     # Right-side pin Y absolute coordinates
-    y_vcc2 = cy - 5.08    # 164.92
-    y_canh = cy - 2.54    # 167.46
-    y_canl = cy           # 170.00
+    y_vcc2 = cy - 5.08  # 164.92
+    y_canh = cy - 2.54  # 167.46
+    y_canl = cy  # 170.00
     y_isognd = cy + 2.54  # 172.54
 
     uid_inst = next_uuid()
@@ -902,7 +907,7 @@ def inst_isow1044(cx: float, cy: float) -> str:
     uid_p14 = next_uuid()
     uid_p15 = next_uuid()
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "ISOW1044BDFMR") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{uid_inst}")
@@ -960,7 +965,7 @@ def inst_isow1044(cx: float, cy: float) -> str:
     (property "Reference" "#PWR0A203" (at {right_x:.2f} {y_vcc2:.2f} 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Value" "+3V3" (at {right_x:.2f} {y_vcc2 - 2.54:.2f} 0) (effects (font (size 1.27 1.27))))
     (pin "1" (uuid "{next_uuid()}"))
-  )'''
+  )"""
 
 
 def inst_adm2795(cx: float, cy: float) -> str:
@@ -981,22 +986,22 @@ def inst_adm2795(cx: float, cy: float) -> str:
         cx: Component centre X coordinate (mm).
         cy: Component centre Y coordinate (mm).
     """
-    left_x = cx - 12.70   # 197.30
+    left_x = cx - 12.70  # 197.30
     right_x = cx + 12.70  # 222.70
 
     # Left-side pin Y values
-    y_vcc1 = cy - 5.08   # 254.92
-    y_di = cy - 2.54     # 257.46
-    y_de = cy            # 260.00
-    y_ren = cy + 2.54    # 262.54
-    y_ro = cy + 5.08     # 265.08
-    y_gnd1 = cy + 7.62   # 267.62
+    y_vcc1 = cy - 5.08  # 254.92
+    y_di = cy - 2.54  # 257.46
+    y_de = cy  # 260.00
+    y_ren = cy + 2.54  # 262.54
+    y_ro = cy + 5.08  # 265.08
+    y_gnd1 = cy + 7.62  # 267.62
 
     # Right-side pin Y values
-    y_vcc2 = cy - 5.08   # 254.92
-    y_a = cy - 2.54      # 257.46
-    y_b = cy             # 260.00
-    y_gnd2 = cy + 2.54   # 262.54
+    y_vcc2 = cy - 5.08  # 254.92
+    y_a = cy - 2.54  # 257.46
+    y_b = cy  # 260.00
+    y_gnd2 = cy + 2.54  # 262.54
 
     uid_inst = next_uuid()
     uid_p1 = next_uuid()
@@ -1009,7 +1014,7 @@ def inst_adm2795(cx: float, cy: float) -> str:
     uid_p17 = next_uuid()
     uid_p20 = next_uuid()
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "ADM2795EBRWZ") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{uid_inst}")
@@ -1079,7 +1084,7 @@ def inst_adm2795(cx: float, cy: float) -> str:
     (effects (font (size 1.016 1.016)))
     (uuid "{next_uuid()}")
     (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {right_x:.2f} {y_b:.2f} 0)
-      (effects (font (size 1.016 1.016)) (hide yes))))'''
+      (effects (font (size 1.016 1.016)) (hide yes))))"""
 
 
 def inst_cmc_can(cx: float, cy: float) -> str:
@@ -1096,12 +1101,12 @@ def inst_cmc_can(cx: float, cy: float) -> str:
     """
     # Absolute pin tip positions for this component orientation.
     # Pin length in lib_sym is 2.54; component half-width from centre to pin = 7.62.
-    left_x = cx - 7.62   # 327.38 — L1A and L2A tips
+    left_x = cx - 7.62  # 327.38 — L1A and L2A tips
     right_x = cx + 7.62  # 342.62 — L1B and L2B tips
-    y_l1 = cy - 2.54     # 167.46 — upper winding (CAN_H line)
-    y_l2 = cy            # 170.00 — lower winding (CAN_L line)
+    y_l1 = cy - 2.54  # 167.46 — upper winding (CAN_H line)
+    y_l2 = cy  # 170.00 — lower winding (CAN_L line)
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "SRF2012-100Y") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{next_uuid()}")
@@ -1127,7 +1132,7 @@ def inst_cmc_can(cx: float, cy: float) -> str:
     (effects (font (size 1.016 1.016)))
     (uuid "{next_uuid()}")
     (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {right_x:.2f} {y_l2:.2f} 0)
-      (effects (font (size 1.016 1.016)) (hide yes))))'''
+      (effects (font (size 1.016 1.016)) (hide yes))))"""
 
 
 def inst_tvs_can(cx: float, cy: float) -> str:
@@ -1141,12 +1146,12 @@ def inst_tvs_can(cx: float, cy: float) -> str:
         cx: Component centre X (355).
         cy: Component centre Y (175).
     """
-    left_x = cx - 7.62   # 347.38
+    left_x = cx - 7.62  # 347.38
     right_x = cx + 7.62  # 362.62
-    y_a1 = cy - 2.54     # 172.46
-    y_a2 = cy + 2.54     # 177.54
+    y_a1 = cy - 2.54  # 172.46
+    y_a2 = cy + 2.54  # 177.54
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "PRTR5V0U2X") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{next_uuid()}")
@@ -1172,7 +1177,7 @@ def inst_tvs_can(cx: float, cy: float) -> str:
     (effects (font (size 1.016 1.016)))
     (uuid "{next_uuid()}")
     (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {right_x:.2f} {cy:.2f} 0)
-      (effects (font (size 1.016 1.016)) (hide yes))))'''
+      (effects (font (size 1.016 1.016)) (hide yes))))"""
 
 
 def inst_cmc_rs485(cx: float, cy: float) -> str:
@@ -1190,7 +1195,7 @@ def inst_cmc_rs485(cx: float, cy: float) -> str:
     y_l1 = cy - 2.54
     y_l2 = cy
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "SRF2012-100Y") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{next_uuid()}")
@@ -1216,7 +1221,7 @@ def inst_cmc_rs485(cx: float, cy: float) -> str:
     (effects (font (size 1.016 1.016)))
     (uuid "{next_uuid()}")
     (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {right_x:.2f} {y_l2:.2f} 0)
-      (effects (font (size 1.016 1.016)) (hide yes))))'''
+      (effects (font (size 1.016 1.016)) (hide yes))))"""
 
 
 def inst_tvs_rs485(cx: float, cy: float) -> str:
@@ -1233,7 +1238,7 @@ def inst_tvs_rs485(cx: float, cy: float) -> str:
     y_a1 = cy - 2.54
     y_a2 = cy + 2.54
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "PRTR5V0U2X") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{next_uuid()}")
@@ -1259,7 +1264,7 @@ def inst_tvs_rs485(cx: float, cy: float) -> str:
     (effects (font (size 1.016 1.016)))
     (uuid "{next_uuid()}")
     (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {right_x:.2f} {cy:.2f} 0)
-      (effects (font (size 1.016 1.016)) (hide yes))))'''
+      (effects (font (size 1.016 1.016)) (hide yes))))"""
 
 
 def inst_tvs_1553(cx: float, cy: float) -> str:
@@ -1287,7 +1292,7 @@ def inst_tvs_1553(cx: float, cy: float) -> str:
     left_b = cx_b - 6.35
     right_b = cx_b + 6.35
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "SMAJ33CA") (at {cx_a:.2f} {cy_a:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{next_uuid()}")
@@ -1331,7 +1336,7 @@ def inst_tvs_1553(cx: float, cy: float) -> str:
     (property "Reference" "#PWR0A208" (at {right_b:.2f} {cy_b:.2f} 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Value" "GND" (at {right_b + 2.54:.2f} {cy_b:.2f} 0) (effects (font (size 1.27 1.27))))
     (pin "1" (uuid "{next_uuid()}"))
-  )'''
+  )"""
 
 
 def inst_fb_pwr(cx: float, cy: float) -> str:
@@ -1353,7 +1358,7 @@ def inst_fb_pwr(cx: float, cy: float) -> str:
     left_x = cx - 6.35
     right_x = cx + 6.35
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "742792512") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{next_uuid()}")
@@ -1377,7 +1382,7 @@ def inst_fb_pwr(cx: float, cy: float) -> str:
     (property "Reference" "#PWR0A210" (at {right_x:.2f} {cy:.2f} 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Value" "+5V" (at {right_x + 2.54:.2f} {cy:.2f} 0) (effects (font (size 1.27 1.27))))
     (pin "1" (uuid "{next_uuid()}"))
-  )'''
+  )"""
 
 
 def inst_x2y_can(cx: float, cy: float) -> str:
@@ -1393,7 +1398,7 @@ def inst_x2y_can(cx: float, cy: float) -> str:
     left_x = cx - 5.08
     right_x = cx + 5.08
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "X2Y_CAP_4N7") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{next_uuid()}")
@@ -1415,7 +1420,7 @@ def inst_x2y_can(cx: float, cy: float) -> str:
     (effects (font (size 1.016 1.016)))
     (uuid "{next_uuid()}")
     (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {right_x:.2f} {cy:.2f} 0)
-      (effects (font (size 1.016 1.016)) (hide yes))))'''
+      (effects (font (size 1.016 1.016)) (hide yes))))"""
 
 
 def inst_x2y_rs485(cx: float, cy: float) -> str:
@@ -1431,7 +1436,7 @@ def inst_x2y_rs485(cx: float, cy: float) -> str:
     left_x = cx - 5.08
     right_x = cx + 5.08
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "X2Y_CAP_4N7") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{next_uuid()}")
@@ -1453,12 +1458,13 @@ def inst_x2y_rs485(cx: float, cy: float) -> str:
     (effects (font (size 1.016 1.016)))
     (uuid "{next_uuid()}")
     (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {right_x:.2f} {cy:.2f} 0)
-      (effects (font (size 1.016 1.016)) (hide yes))))'''
+      (effects (font (size 1.016 1.016)) (hide yes))))"""
 
 
 # ===========================================================================
 # No-connect markers for former PHY connector pins
 # ===========================================================================
+
 
 def phy_no_connects() -> str:
     """Return no_connect markers for the PB2-P2 connector pins that formerly
@@ -1501,15 +1507,14 @@ def phy_no_connects() -> str:
     blocks = []
     for y in phy_ys:
         uid = next_uuid()
-        blocks.append(
-            f'  (no_connect (at 67.54 {y:.2f}) (uuid "{uid}"))'
-        )
+        blocks.append(f'  (no_connect (at 67.54 {y:.2f}) (uuid "{uid}"))')
     return "\n".join(blocks)
 
 
 # ===========================================================================
 # Main transformation function
 # ===========================================================================
+
 
 def transform(src: str) -> str:
     """Apply all EMI-hardening transformations to the CAPE-A-1 schematic text.
@@ -1533,8 +1538,7 @@ def transform(src: str) -> str:
     # The original title_block is a single-line compound expression.
     # We replace only the three fields that change; all others are kept.
     text = text.replace(
-        '(title "CAPE-A-1")',
-        '(title "Wash EMI-Hardened Flight Control & Sensor Cape")'
+        '(title "CAPE-A-1")', '(title "Wash EMI-Hardened Flight Control & Sensor Cape")'
     )
     text = text.replace('(rev "M")', '(rev "2")')
     text = text.replace('(date "2026-05-21")', '(date "2026-06-03")')
@@ -1576,15 +1580,20 @@ def transform(src: str) -> str:
     # ------------------------------------------------------------------
     # Find '(lib_symbols' and then its closing ')'.
     try:
-        ls_start, ls_end = find_sexp_block(text, 'lib_symbols')
+        ls_start, ls_end = find_sexp_block(text, "lib_symbols")
         # Insert new lib_symbol definitions just before the closing ')'.
         new_syms = (
-            "\n" +
-            lib_sym_srf2012() + "\n" +
-            lib_sym_prtr5v0u2x() + "\n" +
-            lib_sym_smaj33ca() + "\n" +
-            lib_sym_ferrite_742792512() + "\n" +
-            lib_sym_x2y_cap() + "\n"
+            "\n"
+            + lib_sym_srf2012()
+            + "\n"
+            + lib_sym_prtr5v0u2x()
+            + "\n"
+            + lib_sym_smaj33ca()
+            + "\n"
+            + lib_sym_ferrite_742792512()
+            + "\n"
+            + lib_sym_x2y_cap()
+            + "\n"
         )
         # ls_end points one past the closing ')' of lib_symbols block.
         # The closing ')' itself is at ls_end - 1.
@@ -1610,13 +1619,13 @@ def transform(src: str) -> str:
     # positions within the CAN transceiver area (y = 165–175).
     def remove_global_labels_by_pattern(txt: str, pattern: str) -> str:
         """Remove all global_label blocks whose text matches *pattern*."""
-        regex = re.compile(r'  \(global_label[^\n]*' + re.escape(pattern))
+        regex = re.compile(r"  \(global_label[^\n]*" + re.escape(pattern))
         for match in regex.finditer(txt):
             start = match.start()
             try:
                 end = find_balanced_sexp(txt, start)
                 # Remove leading newline if present.
-                if start > 0 and txt[start - 1] == '\n':
+                if start > 0 and txt[start - 1] == "\n":
                     start -= 1
                 return txt[:start] + txt[end:]
             except ValueError:
@@ -1632,15 +1641,16 @@ def transform(src: str) -> str:
         for label_name in ("MCAN0_TX", "CAN_STB", "MCAN0_RX", "CAN_H", "CAN_L"):
             # Find all occurrences; remove those that sit in the ATA6561 area.
             pattern = re.compile(
-                r'\n  \(global_label "' + re.escape(label_name) +
-                r'" \(shape bidirectional\) \(at (?:297\.30|322\.70) 1[67]\d\.\d+ '
-                r'(?:180|0)\)'
+                r'\n  \(global_label "'
+                + re.escape(label_name)
+                + r'" \(shape bidirectional\) \(at (?:297\.30|322\.70) 1[67]\d\.\d+ '
+                r"(?:180|0)\)"
             )
             for m in list(pattern.finditer(txt)):
                 blk_start = m.start() + 1  # skip leading \n
                 try:
                     blk_end = find_balanced_sexp(txt, blk_start)
-                    txt = txt[:m.start()] + txt[blk_end:]
+                    txt = txt[: m.start()] + txt[blk_end:]
                     break  # re-search from top after mutation
                 except ValueError:
                     pass
@@ -1663,15 +1673,16 @@ def transform(src: str) -> str:
         """Remove RS-485 labels at the MAX3485E instance position range."""
         for label_name in ("RS485_TX", "RS485_DE", "RS485_RX", "RS485_A", "RS485_B"):
             pattern = re.compile(
-                r'\n  \(global_label "' + re.escape(label_name) +
-                r'" \(shape bidirectional\) \(at (?:197\.30|222\.70) 2[5-7]\d\.\d+ '
-                r'(?:180|0)\)'
+                r'\n  \(global_label "'
+                + re.escape(label_name)
+                + r'" \(shape bidirectional\) \(at (?:197\.30|222\.70) 2[5-7]\d\.\d+ '
+                r"(?:180|0)\)"
             )
             for m in list(pattern.finditer(txt)):
                 blk_start = m.start() + 1
                 try:
                     blk_end = find_balanced_sexp(txt, blk_start)
-                    txt = txt[:m.start()] + txt[blk_end:]
+                    txt = txt[: m.start()] + txt[blk_end:]
                     break
                 except ValueError:
                     pass
@@ -1685,10 +1696,10 @@ def transform(src: str) -> str:
     # final targeted pass for the RE_N-tied one.
     text = re.sub(
         r'\n  \(global_label "RS485_DE" \(shape bidirectional\)'
-        r' \(at 197\.30 262\.54 180\)[^\)]*\)[^\)]*\)',
-        '',
+        r" \(at 197\.30 262\.54 180\)[^\)]*\)[^\)]*\)",
+        "",
         text,
-        flags=re.DOTALL
+        flags=re.DOTALL,
     )
 
     # ------------------------------------------------------------------
@@ -1706,11 +1717,11 @@ def transform(src: str) -> str:
     # These labels appear both on PB2-P2 (left side) and near the PHY ICs.
     phy_label_pattern = re.compile(
         r'\n  \(global_label "('
-        r'RMII[01]_TXD[01]|RMII[01]_TX_EN|RMII[01]_RXD[01]|'
-        r'RMII[01]_CRS_DV|RMII[01]_RX_ER|RMII[01]_REF_CLK|'
-        r'MDC|MDIO|'
-        r'PHY[12]_INTRN|PHY[12]_RSTN|'
-        r'ETH[12]_TX_[PN]|ETH[12]_RX_[PN]'
+        r"RMII[01]_TXD[01]|RMII[01]_TX_EN|RMII[01]_RXD[01]|"
+        r"RMII[01]_CRS_DV|RMII[01]_RX_ER|RMII[01]_REF_CLK|"
+        r"MDC|MDIO|"
+        r"PHY[12]_INTRN|PHY[12]_RSTN|"
+        r"ETH[12]_TX_[PN]|ETH[12]_RX_[PN]"
         r')" \(shape'
     )
 
@@ -1724,7 +1735,7 @@ def transform(src: str) -> str:
                 blk_start = m.start() + 1  # skip leading \n
                 try:
                     blk_end = find_balanced_sexp(txt, blk_start)
-                    txt = txt[:m.start()] + txt[blk_end:]
+                    txt = txt[: m.start()] + txt[blk_end:]
                     found = True
                 except ValueError:
                     pass
@@ -1739,11 +1750,11 @@ def transform(src: str) -> str:
     # exact coordinate strings present in the source.
     # The power symbols (GND @ 385.55, +5V @ 388.09) in the PHY supply area.
     phy_power_patterns = [
-        r'\n  \(wire \(pts \(xy 67\.54 385\.55\) \(xy 72\.62 385\.55\)\)[^\)]*\)',
-        r'\n  \(wire \(pts \(xy 67\.54 388\.09\) \(xy 72\.62 388\.09\)\)[^\)]*\)',
+        r"\n  \(wire \(pts \(xy 67\.54 385\.55\) \(xy 72\.62 385\.55\)\)[^\)]*\)",
+        r"\n  \(wire \(pts \(xy 67\.54 388\.09\) \(xy 72\.62 388\.09\)\)[^\)]*\)",
     ]
     for pat in phy_power_patterns:
-        text = re.sub(pat, '', text, flags=re.DOTALL)
+        text = re.sub(pat, "", text, flags=re.DOTALL)
 
     # Remove power symbol blocks at PHY supply positions:
     # (symbol (lib_id "GND") (at 72.62 385.55 ...) and
@@ -1762,7 +1773,7 @@ def transform(src: str) -> str:
                 blk_start = m.start() + 1
                 try:
                     blk_end = find_balanced_sexp(txt, blk_start)
-                    txt = txt[:m.start()] + txt[blk_end:]
+                    txt = txt[: m.start()] + txt[blk_end:]
                     found = True
                 except ValueError:
                     pass
@@ -1777,7 +1788,7 @@ def transform(src: str) -> str:
     # the entire schematic.
     no_conn_text = "\n" + phy_no_connects() + "\n"
     # Find the very last ')' in the file (the file-level closing paren).
-    last_close = text.rfind('\n)')
+    last_close = text.rfind("\n)")
     if last_close != -1:
         text = text[:last_close] + no_conn_text + text[last_close:]
 
@@ -1785,17 +1796,25 @@ def transform(src: str) -> str:
     # E/F. Add all new EMI component instances before the final ')'.
     # ------------------------------------------------------------------
     new_instances = (
-        "\n" +
-        inst_cmc_can(335.0, 170.0) + "\n" +
-        inst_tvs_can(355.0, 175.0) + "\n" +
-        inst_cmc_rs485(235.0, 260.0) + "\n" +
-        inst_tvs_rs485(255.0, 265.0) + "\n" +
-        inst_tvs_1553(330.0, 365.0) + "\n" +
-        inst_fb_pwr(85.0, 123.09) + "\n" +
-        inst_x2y_can(320.0, 180.0) + "\n" +
-        inst_x2y_rs485(220.0, 270.0) + "\n"
+        "\n"
+        + inst_cmc_can(335.0, 170.0)
+        + "\n"
+        + inst_tvs_can(355.0, 175.0)
+        + "\n"
+        + inst_cmc_rs485(235.0, 260.0)
+        + "\n"
+        + inst_tvs_rs485(255.0, 265.0)
+        + "\n"
+        + inst_tvs_1553(330.0, 365.0)
+        + "\n"
+        + inst_fb_pwr(85.0, 123.09)
+        + "\n"
+        + inst_x2y_can(320.0, 180.0)
+        + "\n"
+        + inst_x2y_rs485(220.0, 270.0)
+        + "\n"
     )
-    last_close2 = text.rfind('\n)')
+    last_close2 = text.rfind("\n)")
     if last_close2 != -1:
         text = text[:last_close2] + new_instances + text[last_close2:]
 
@@ -1847,7 +1866,7 @@ def transform(src: str) -> str:
     #    We simply append a new instance.
     # ------------------------------------------------------------------
     sbus_tvs_block = "\n" + inst_sbus_tvs(125.0, 627.54) + "\n"
-    last_close_k = text.rfind('\n)')
+    last_close_k = text.rfind("\n)")
     if last_close_k != -1:
         text = text[:last_close_k] + sbus_tvs_block + text[last_close_k:]
         print("  Added D_SBUS_TVS (PRTR5V0U2X) on SBUS_RAW at (125, 627.54)")
@@ -1867,12 +1886,8 @@ def transform(src: str) -> str:
         pass  # KiCad inlines page info without a uuid attribute in this version.
     else:
         # Inject a minimal sheet_instances block.
-        sheet_inst_block = (
-            '\n  (sheet_instances\n'
-            '    (path "/" (page "1"))\n'
-            '  )\n'
-        )
-        last_close3 = text.rfind('\n)')
+        sheet_inst_block = "\n  (sheet_instances\n" '    (path "/" (page "1"))\n' "  )\n"
+        last_close3 = text.rfind("\n)")
         if last_close3 != -1:
             text = text[:last_close3] + sheet_inst_block + text[last_close3:]
 
@@ -1887,6 +1902,7 @@ def transform(src: str) -> str:
 # ===========================================================================
 # Entry point
 # ===========================================================================
+
 
 def main() -> None:
     """Read CAPE-A-1.kicad_sch, transform it, and write Wash.kicad_sch."""
@@ -1907,7 +1923,7 @@ def main() -> None:
     with open(DST_PATH, "w", encoding="utf-8") as fh:
         fh.write(result_text)
 
-    line_count = result_text.count('\n') + 1
+    line_count = result_text.count("\n") + 1
     print(f"Wrote {line_count:,} lines ({len(result_text):,} characters) to {DST_PATH}")
 
 
