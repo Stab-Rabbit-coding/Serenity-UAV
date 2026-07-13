@@ -46,7 +46,6 @@ References
   Nexperia PRTR5V0U2X  : https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf
 """
 
-import re
 import sys
 
 # ---------------------------------------------------------------------------

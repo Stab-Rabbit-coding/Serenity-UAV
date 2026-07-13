@@ -1868,9 +1868,9 @@ def transform(src: str) -> str:
     else:
         # Inject a minimal sheet_instances block.
         sheet_inst_block = (
-            f'\n  (sheet_instances\n'
-            f'    (path "/" (page "1"))\n'
-            f'  )\n'
+            '\n  (sheet_instances\n'
+            '    (path "/" (page "1"))\n'
+            '  )\n'
         )
         last_close3 = text.rfind('\n)')
         if last_close3 != -1:
