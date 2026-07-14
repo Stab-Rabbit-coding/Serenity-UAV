@@ -23,6 +23,7 @@ Author: Claude (Opus 4.8), 2026-07-14.  CC BY 4.0.
 from __future__ import annotations
 import itertools
 from pathlib import Path
+from typing import List, Tuple, Any
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE.parent / "kicads" / "Wash_rebuild.kicad_sch"
@@ -243,8 +244,22 @@ ICS += [
     eth_xfmr("T-ETH2", "ETH2"),
 ]
 
-
-def lib_symbol(ic) -> str:
+def lib_symbol(
+    ic,
+) -> Tuple[str, List[Tuple[str, str, Any, str]], List[Tuple[str, str, Any, str]], float, float]:
+    """
+    Build the KiCad symbol definition for a single IC.
+       
+    Returns
+    -------
+    tuple
+        * **symbol_str** – the KiCad S‑expression for the symbol (a single
+        multi‑line string);
+        * **left** – list of left‑side pins (each a 4‑tuple);
+        * **right** – list of right‑side pins (each a 4‑tuple);
+        * **half_w** – half‑width of the symbol box (float);
+        * **half_h** – half‑height of the symbol box (float).
+    """
     ref, pins = ic["ref"], ic["pins"]
     left = [p for p in pins if p[3] == "L"]
     right = [p for p in pins if p[3] == "R"]
@@ -255,15 +270,13 @@ def lib_symbol(ic) -> str:
     s = [
         f'    (symbol "{libid}" (pin_names (offset 1.016)) '
         f"(exclude_from_sim no) (in_bom yes) (on_board yes)",
-        f'      (property "Reference" "U" (at 0 {half_h + 1.27:.2f} 0) '
-        f"(effects (font (size {SIZE} {SIZE}))))",
+        f'      (property "Reference" "U" (at 0 {half_h + 1.27:.2f} 0) '        f"(effects (font (size {SIZE} {SIZE}))))",
         f'      (property "Value" "{esc(ic["value"])}" (at 0 {-half_h - 1.27:.2f} 0) '
         f"(effects (font (size {SIZE} {SIZE}))))",
         f'      (symbol "{libid}_0_1"',
         f"        (rectangle (start {-half_w:.2f} {half_h:.2f}) "
         f"(end {half_w:.2f} {-half_h:.2f}) "
-        f"(stroke (width 0.2540) (type default)) (fill (type background)))",
-        "      )",
+        f"(stroke (width 0.2540) (type default)) (fill (type background)))",        "      )",
         f'      (symbol "{libid}_1_1"',
     ]
     for i, (pn, fn, net, _) in enumerate(left):
@@ -272,10 +285,9 @@ def lib_symbol(ic) -> str:
     for i, (pn, fn, net, _) in enumerate(right):
         y = half_h - PIN_PITCH * (i + 1)
         s.append(pin_def(half_w + PIN_PITCH, y, 180, pn, fn))
-    s += ["      )", "    )"]
+    s += ["      )", "    )"]    # The function returns a tuple; the first element is the multi‑line KiCad    # symbol definition, the remaining elements are used later for placement.
     return "\n".join(s), left, right, half_w, half_h
-
-
+    
 def pin_def(x, y, ang, pn, fn):
     """
     Create a KiCad pin definition.
