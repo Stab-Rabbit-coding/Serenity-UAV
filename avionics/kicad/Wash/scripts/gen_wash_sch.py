@@ -277,13 +277,38 @@ def lib_symbol(ic) -> str:
 
 
 def pin_def(x, y, ang, pn, fn):
-    etype = "power_in" if fn in ("GND", "EP") else "passive"
-    return (
-        f"        (pin {etype} line (at {x:.2f} {y:.2f} {ang}) (length {PIN_PITCH}) "
-        f'(name "{esc(fn)}" (effects (font (size {SIZE} {SIZE})))) '
-        f'(number "{esc(pn)}" (effects (font (size {SIZE} {SIZE})))))'
-    )
+    """
+    Create a KiCad pin definition.
 
+    Parameters
+    ----------
+    x, y : float
+        Pin coordinates.
+    ang : int
+        Rotation angle (0, 90, 180, 270).
+    pn : str
+        Pin number (as it appears on the component).
+    fn : str | None
+        Pin function name. May be ``None`` for pins that carry no signal.
+
+    Returns
+    -------
+    str
+        The KiCad‑compatible pin description.
+    """
+    # Pins that are power‑in (GND or EP) are drawn with a different style.
+    # If *fn* is ``None`` (or any other string) we fall back to a normal
+    # passive pin.
+    etype = "power_in" if isinstance(fn, str) and fn in ("GND", "EP") else "passive"
+
+    return (
+        f"        (pin {etype} line (at {x:.2f} {y:.2f} {ang}) "
+        f'(length {PIN_PITCH}) '
+        f'(name "{esc(fn) if fn is not None else ""}" '
+        f'(effects (font (size {SIZE} {SIZE})))) '
+        f'(number "{esc(pn)}" '
+        f'(effects (font (size {SIZE} {SIZE})))))'
+    )
 
 def wire(x1, y1, x2, y2):
     return (

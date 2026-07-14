@@ -386,7 +386,7 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
     SoC decision before proceeding with layout. **Still open — the placeholder footprint in
     `gen_vera_pcb.py` does not commit to a real ball-out, so this decision is not yet blocking,
     but must be resolved before the real BGA footprint is authored.
-- [ ] Shape the Jayne PCB to fit in the nose directly behind the faceplate, allowing PCB mounting of laser, camera, and TOF, with EMI hardening.  PCB oriented horizontal with sensors on forward end and network connections on aft end.
+- [x] Shape the Jayne PCB to fit in the nose directly behind the faceplate, allowing PCB mounting of laser, camera, and TOF, with EMI hardening.  PCB oriented horizontal with sensors on forward end and network connections on aft end.
 - [x] **Source and cite a real Class 3B nose crosshair laser module** — **SUPERSEDED by the
     Class 2 laser unification (§1.2c.4 below, 2026-07-06; `docs/JAYNE_LASER_ANALYSIS.md` Rev A2).**
     The nose is **not** Class 3B: a thin-line green crosshair detected by Jayne's own strobed
