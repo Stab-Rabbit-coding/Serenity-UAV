@@ -98,6 +98,70 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
     error+warning): Wash 465 / 121 unconnected, Zoë 554 / 146, Emma 421 /
     160, Kaylee 221 / 181. Remaining types after the mesh fix are mostly
     silk-over-copper, text-height, courtyard-overlap, and lib-footprint mismatch.
+- [ ] **Wash footprint-vs-datasheet verification — DONE 2026-07-13 (Claude Opus 4.8);
+    7 footprints are NOT manufacturable, must be rebuilt before fab.** Full report:
+    `avionics/kicad/Wash/WASH_FOOTPRINT_VERIFICATION.md`. Fixing any of these remaps
+    pin→net on flight hardware, so each needs the confirmed schematic pinout first (ERC
+    is not clean — see below) and MUST NOT be guessed.
+    - [ ] **CAN-TR (ISOW1044BDFMR): wrong land — has 16-pad `SOIC-16W`, part is a
+        20-pin DFM (SOIC-20 land).** Datasheet `isow1044.pdf` §7 / Fig 7-1. (This is the
+        fleet-wide ISOW1044 footprint error; confirmed present on Wash.)
+    - [ ] **TPM (SLB9670): wrong land — has `QFN-32 4×4 P0.4mm EP2.65`, part is VQFN-32
+        0.5 mm pitch, ~5×5 body, EP 3.6×3.6.** Datasheet `SLB_9670VQ20_Infineon.pdf` p.15.
+    - [ ] **ETH1-PHY / ETH2-PHY (ADIN1300BCPZ): wrong land — has `QFN-48 7×7`, part is
+        40-lead LFCSP 6×6 mm (CP-40-26) w/ EP.** Datasheet `adin1300.pdf`.
+    - [ ] **RS485 (ADM2795EBRWZ): wrong land — has 20-pad `SOIC-20W`, part is 16-lead
+        SOIC_W (RW-16).** Datasheet `adm2795e.pdf` Tables 3/4/7. (Also fix `Wash.md` §3.)
+    - [ ] **BARO (BMP388): wrong land — has 8-pad `LGA-8 2.0×2.5`, part is 10-pin metal-lid
+        LGA 2.0×2.0 mm.** Datasheet `bst-bmp388-ds001.pdf`.
+    - [ ] **GPS (SAM-M10Q-00B): placeholder `Package` (2-pad blob) — author real u-blox
+        SAM-M10Q LGA module footprint.** Datasheet `SAM-M10Q_DataSheet_UBX-22013293.pdf` §3.1.
+    - [ ] **1553-XFM (SM-1553-11): placeholder `Package` (2-pad blob) — author real SM1553
+        transformer footprint. NOTE: SM1553 series is THROUGH-HOLE** (adds THT pads/drills
+        vs current SMD stub). Datasheet `SM1553-Series...RevD.pdf`.
+    - [ ] **U-ISO-RX / U-ISO-TX net mapping is non-functional (ISO6442) — land pattern is
+        FINE, the wiring is not.** Part resolved 2026-07-13: ISO7642FDWRR is EOL, TI
+        replacement is **ISO6442** (drop-in: DW-16 / SOIC-16W, 2-forward/2-reverse,
+        pin-compatible — `iso6442.pdf`), so the `SOIC-16W` land is correct. BUT checked
+        against ISO6442 Table 5-1: (a) power/gnd pins carry signals (pin 2 `GND1`=RMII0_RXD0;
+        U-ISO-TX pin 2 `GND1`=RMII0_REF_CLK) — won't power up; (b) every channel is shorted
+        across the barrier (same net on side-1 input AND side-2 output pin) — no isolation;
+        (c) 50 MHz RMII `REF_CLK` through a general-purpose digital isolator is unworkable.
+        The ETH-isolation subcircuit must be re-architected + re-netted (schematic-first),
+        and the BOM/`Wash.md`/`REFERENCES.md` strings changed ISO7642FDWRR → ISO6442.
+    - [ ] **Remaining part-number gaps (land OK, part unconfirmed):** (a) X2Y 4.7 nF caps
+        (`X2Y_Cap_4T_0402`) — no mfr P/N supplied; (b) Molex Nano-Fit 4P (PWR-IN) — no
+        datasheet supplied. *(JST GH 4P/3P connectors VERIFIED CORRECT vs `eGH.pdf` — GH
+        1.25 mm pitch, SM0xB-GHS-TB — no action.)*
+    - [ ] **Rewrite `Wash.md` §§1–3 to the as-built architecture** — board uses ADIN1300 +
+        Würth 749010012A + ISO7642 + ADM2795E(RW-16); `Wash.md` still documents a stale
+        DP83825I + HX1188NL + TPS62933 design that is not on the PCB.
+    - [ ] **Verified CORRECT (no action):** DS26LV31, DS26LV32, ICM-42688-P, PCA9555DB,
+        SMAJ33CA, PRTR5V0U2X, SRF2012-100Y, 742792512, PB2 P1/P2 sockets, SERVO-PWM header.
+- [ ] **Wash SCHEMATIC-FIRST REBUILD — decided + started 2026-07-14 (user).**
+    Verification proved the schematic (`Wash.kicad_sch`) and PCB are *different designs*
+    (schematic = DP83825I + HX1188NL + TPS62933; PCB = ADIN1300 + 749010012A + ISO6442),
+    and that net→pin maps are wrong on multiple parts (TPM signals on NC/VDD/GND pins;
+    ISO6442 channels shorted). Fixing the PCB alone would re-create the Emma/Zoë sch↔pcb
+    divergence, so the rebuild is **schematic-first** (user choice). **Ethernet PHY =
+    ADIN1300** (the EMI-hardening rework moved to ADI's industrial PHY; it's on the PCB and
+    is the datasheet on hand) — `Wash.md`/schematic DP83825I baseline is superseded.
+    Auditable generator: `avionics/kicad/Wash/scripts/gen_wash_sch.py`, datasheet-accurate
+    full-pinout symbols → `kicads/Wash_rebuild.kicad_sch` (loads in kicad-cli 9.0.2; ERC
+    only expected off-sheet-global warnings).
+    - [x] Core isolated-bus + security + GPS ICs authored with full datasheet pinouts:
+        **CAN-TR (ISOW1044, 20-pin), RS485 (ADM2795E, 16-pin RW-16), TPM (SLB9670, 32-pin
+        correct 17–24 SPI map), GPS (SAM-M10Q, 16-pin).**
+    - [ ] Author ETH section on **ADIN1300** (40-LFCSP) + Würth 749010012A magnetics +
+        ISO6442 — redesign the RMII isolation (current scheme shorts the barrier / 50 MHz
+        REF_CLK through a digital isolator is unworkable).
+    - [ ] Add remaining ICs: 1553 (DS26LV31/32 + SM1553 xfmr), IMU (ICM-42688-P), baro
+        (BMP388, 10-pin), compass (MMC5983MA/QMC5883L), INA226, PCA9555, 74LVC1G14.
+    - [ ] Add PB2-P1/P2 (2×36) SoC headers + connectors + passives (TVS/CMC/X2Y-Syfer-0805/
+        Nano-Fit); tie the off-sheet global labels; drive GND/power (PWR_FLAG) to clear ERC.
+    - [ ] Associate corrected footprints (per WASH_FOOTPRINT_VERIFICATION.md) to each symbol;
+        regenerate/re-sync the PCB; ERC + DRC --schematic-parity to zero.
+    - [ ] Once approved, promote `Wash_rebuild.kicad_sch` → `Wash.kicad_sch` (archive old).
 - [ ] **Finish Wash PCB (CAPE-A-2) close-out pass:**
     - [ ] Verify every external-facing connector (SERVO-PWM, ESC-PWM, MIL-1553, CAN-FD,
         RS-485, ETH) is a shielded-shell part with shell tied to PGND — audit against
