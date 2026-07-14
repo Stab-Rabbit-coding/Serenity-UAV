@@ -255,6 +255,8 @@ The historical bake transforms (position + quaternion per component) live solely
 
 - Commenting in KiCad files using ; or # is strictly prohibited. All comments for kiCad files must be either in a Markdown file or comment blocks such as: ( comment 1 "hello world" )
 
+- **Bug reporting for exploitable failures:** Any time a script, tool, or build process crashes due to an exploitable type of failure (race condition, memory corruption, buffer overflow, use-after-free, privilege escalation, etc.), a **sanitized bug report shall be generated immediately** with sufficient technical information to correct the issue, but with **filenames, directory paths, and all personally identifiable information (PII) removed or obfuscated**. Bug reports must include: (1) generalized failure type, (2) affected subsystem, (3) reproduction steps (without paths/PII), (4) observed vs. expected behavior. Do not commit exploitable failure patterns to the repository — flag via bug report first, discuss remediation plan in issues/TODO, then proceed. See `.githooks/pre-commit` (via `tools/precommit_sanitize.py`) for automated detection.
+
 ## Licensing and Attribution
 
 - All work is **published under CC BY 4.0**.
