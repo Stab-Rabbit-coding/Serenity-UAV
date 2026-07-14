@@ -76,10 +76,9 @@ NACELLE_STLS := \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_throat.stl   \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_ring.stl     \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_flap.stl     \
-    $(STLS)/nacelles/nacelle_pinion.stl                  \
-    $(STLS)/nacelles/nacelle_sector_gear.stl             \
-    $(STLS)/nacelles/nozzles/nacelle_nozzle_idler.stl    \
-    $(STLS)/nacelles/nozzles/nacelle_nozzle_idler_bracket.stl
+    $(STLS)/nacelles/nacelle_pinion_a.stl                \
+    $(STLS)/nacelles/nacelle_drive_pinion.stl            \
+    $(STLS)/nacelles/nacelle_sector_gear.stl
 
 # -- Wings (SCAD-sourced part-local prints; the port/stbd wing
 #    shells the ASSEMBLY uses are baked elsewhere) --------------
@@ -204,10 +203,23 @@ $(STLS)/nacelles/nozzles/nacelle_nozzle_flap.stl: \
 	    -o $@
 	@echo "[stl] $@"
 
-$(STLS)/nacelles/nacelle_pinion.stl: \
+# Rev S1 (2026-07-07): the two pinions are variant builds of one SCAD
+# (PINION_VARIANT) — Pinion A (M1 17T) and the Nozzle Drive Pinion (M0.5
+# 14T, replaces the Crown Pinion; the compound idler is deleted/archived).
+$(STLS)/nacelles/nacelle_pinion_a.stl: \
         $(SCAD)/nacelles/nacelle_pinion.scad
 	@mkdir -p $(dir $@)
 	$(OPENSCAD) $(SCAD_FLAGS) \
+	    -D 'PINION_VARIANT="A"' \
+	    $(SCAD)/nacelles/nacelle_pinion.scad \
+	    -o $@
+	@echo "[stl] $@"
+
+$(STLS)/nacelles/nacelle_drive_pinion.stl: \
+        $(SCAD)/nacelles/nacelle_pinion.scad
+	@mkdir -p $(dir $@)
+	$(OPENSCAD) $(SCAD_FLAGS) \
+	    -D 'PINION_VARIANT="DRIVE"' \
 	    $(SCAD)/nacelles/nacelle_pinion.scad \
 	    -o $@
 	@echo "[stl] $@"
@@ -217,24 +229,6 @@ $(STLS)/nacelles/nacelle_sector_gear.stl: \
 	@mkdir -p $(dir $@)
 	$(OPENSCAD) $(SCAD_FLAGS) \
 	    $(SCAD)/nacelles/nacelle_sector_gear.scad \
-	    -o $@
-	@echo "[stl] $@"
-
-$(STLS)/nacelles/nozzles/nacelle_nozzle_idler.stl: \
-        $(SCAD)/nacelles/nacelle_nozzle_idler.scad
-	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    -D 'RENDER_PART="gear"' \
-	    $(SCAD)/nacelles/nacelle_nozzle_idler.scad \
-	    -o $@
-	@echo "[stl] $@"
-
-$(STLS)/nacelles/nozzles/nacelle_nozzle_idler_bracket.stl: \
-        $(SCAD)/nacelles/nacelle_nozzle_idler.scad
-	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    -D 'RENDER_PART="bracket"' \
-	    $(SCAD)/nacelles/nacelle_nozzle_idler.scad \
 	    -o $@
 	@echo "[stl] $@"
 

@@ -1,15 +1,22 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: 2026-07-07 — Wing Rev R1a (spar de-skewed/camber-centred + EDF cableway); nozzle-drive trade study (NOZZLE_DRIVE_TRADE.md) -->
+<!-- Last updated: 2026-07-13 — full reconciliation pass: Vera→Jayne rename + avionics/kicad
+     per-board folder reorg (Wash/Zoë/Emma/Kaylee/Jayne), avionics-archives/ consolidation,
+     Rev R5 landing gear files, generate_conforming_collars.py, misc drift fixes -->
 
 ## Repository Root
 
 ```text
+.clang-format                     — C/C++ formatting rules (firmware)
 .editorconfig                     — Editor whitespace/indent rules (4-space, per coding standard)
 .flake8                           — Python lint configuration
 .gitignore                        — Repository-wide VCS ignore rules
+.jscpd.json                       — Copy-paste-detector configuration
 .liveui.json                      — Live UI preview configuration
+.super-lintignore                 — Super-linter path exclusions (archives, generated output)
+.githooks/pre-commit              — KiCad-load-corruption guard (enable via git config
+                                    core.hooksPath .githooks); calls tools/precommit_kicad_load.py
 .github/workflows/ci.yml          — CI pipeline (lint, STL validation, build checks)
 .github/workflows/ossar.yml       — OSSAR static-analysis security workflow
 .github/workflows/stale-branches.yml — Stale branch cleanup workflow
@@ -43,6 +50,10 @@ Repository-level engineering tools and build automation.
 TODO.md                           — Build-tools & automation WBS (reference index into master TODO.md §1.1/Phase 0)
 CLAUDE.md                         — Build tools and automation standards (hull-frame bake tool,
                                     Blender pipeline, SCAD generation, mesh validation)
+precommit_kicad_load.py             — Pre-commit guard: blocks unloadable/corrupt-stackup KiCad files (In2.Cu/Edge.Cuts corruption); enable via .githooks (git config core.hooksPath .githooks)
+validate_kicad.py                 — CI KiCad ERC/DRC validator (kicad-cli sch erc / pcb drc
+                                    --schematic-parity); HARD/SOFT severity policy, --changed-since
+                                    scoping for pre-existing per-board DRC debt
 validate_stls.py                  — CI STL watertight validator (trimesh)
 verify_bow_pod.py                 — Bow sensor pod geometry verifier: ray-casts the camera/ToF/laser bores
                                     against the baked head shell on the 40° flat (replaces manual slicer checks)
@@ -51,6 +62,12 @@ bake_hull_frame.py                — R1: bakes validated FreeCAD placements int
                                     idempotent via 'SerenityUAV HULL-FRAME R1' STL
                                     header marker; single source of the historical
                                     placement constants (COMPONENTS)
+build_head_shell.py               — Head shell build helper
+build_landing_gear_views.py        — Generates the Rev R5 wire-brace landing-gear view STLs
+                                    (post/spring/ductile wires, assembled/exploded/deformed)
+                                    into airframe/stls/fuselage/landing-gear/; see
+                                    docs/LANDING_GEAR_ANALYSIS.md §16
+add_landing_gear_bosses.py        — Adds Rev R5 landing-gear hull bosses to fuselage shells
 ```
 
 ---
@@ -93,7 +110,7 @@ Headless Blender Python scripts for shell hollowing and STL generation.
 add_structural_features.py        — Structural joint-feature booleans on head + middle baked shells (Rev R1; MESH-01 root-cause fix 2026-06-30 = single batched manifold3d difference; joint boss-pins removed 2026-07-06 — splice collars supersede; cargo DELEGATED to merge_cargo_interior.py, rear DELEGATED to regen_rear_interior.py): lofted bore-open joint faces, keel channel, ring-frame pockets, skid-rod bores; exports inner-profile CSVs
 merge_cargo_interior.py           — DEFINITIVE cargo-shell processor (Rev R1 2026-06-30): clean-source bake + one robust manifold3d pass merging interior-wall (duct) removal, clamshell door aperture + hinge retention blocks, head/cargo + cargo/middle joint features (lofted bore-open cutter, JOINT-01 fix 2026-07-06), wing spar/mortises/bosses (re-derived chord), nacelle-servo pads, Inara avionics bosses; watertight single body
 regen_rear_interior.py            — DEFINITIVE rear-shell processor (2026-07-06, MESH-01 fix): clean-source IN-MEMORY bake (float64, avoids the float32-STL-round-trip that split the delicate 3-body rear source and inflated manifold3d to ~357k) + single manifold3d boolean of the rear features (lofted bore-open fwd joint, keel channel, Y=+290 ring pocket, 2× skid-rod bores); watertight single body, 246,769 mm³; stamps HULL-FRAME R1 (do not re-bake)
-merge_head_interior.py            — Bow sensor pod merge (Rev R1d 2026-07-03, TODO.md §1.1.1.1a): merges bow_sensor_pod.scad's camera/ToF/laser/faceplate-seat cuts into the published, already boss-featured head_shell24_2mm_repaired.stl via one manifold3d boolean; watertight single body, 183,192 mm³; Vera nose bosses and Shepherd's Book-bay bosses deliberately excluded (unverified/buggy placements, not yet certified)
+merge_head_interior.py            — Bow sensor pod merge (Rev R1d 2026-07-03, TODO.md §1.1.1.1a): merges bow_sensor_pod.scad's camera/ToF/laser/faceplate-seat cuts into the published, already boss-featured head_shell24_2mm_repaired.stl via one manifold3d boolean; watertight single body, 183,192 mm³; Jayne nose bosses and Shepherd's Book-bay bosses deliberately excluded (unverified/buggy placements, not yet certified)
 blender_edf_bore_and_petals.py    — EDF bore + nozzle petal geometry
 blender_hollow_shells.py          — Centroid-inset 2mm shell hollowing (all 4 sections)
 blender_intake_cut.py             — Fuselage EDF intake cut
@@ -117,6 +134,9 @@ make_shuttle_text.py              — Generates shuttle/section label text meshe
 morph_open_voxel.py                — Voxel-remesh based mesh morph/open-surface repair
 repair_shells_for_scad.py         — Mesh repair pipeline (voxel-remesh → manifold)
 verify_shells.py                  — Post-hollow shell mesh verification (watertight/manifold check)
+serenity_render_views.py          — Multi-view render suite (Rev R1): imports all baked
+                                    hull-frame STLs, renders 17 PNGs (6 principal + 8 iso +
+                                    3 close-up) to graphical-build-guide/pngs/
 files-hollowed-24in/              — Canonical Rev R1 24" hollowed shell source STLs (pre-bake; see
                                     CLAUDE.md Hull-Frame Coordinate Standard) + operands/ boolean
                                     operand meshes (inner/outer split surfaces, engraved text meshes)
@@ -145,6 +165,8 @@ canonical `SerenityAssembly.FCStd` referenced by CLAUDE.md's Hull-Frame Coordina
 SerenityAssembly.FCStd            — FreeCAD assembly document (canonical per CLAUDE.md
                                     Hull-Frame Coordinate Standard)
 SerenityAssembly.FCStd.bak2       — FreeCAD assembly backup
+SerenityAssembly.<timestamp>.FCBak — FreeCAD autosave backup (gitignored)
+leg_2_scaled-oriented.stl         — Landing-leg reference STL, re-oriented for assembly placement
 ```
 
 (serenity_fuselage_asm4.py archived 2026-06-29 to airframe/archive/FreeCAD-scripts/;
@@ -170,9 +192,15 @@ belly_panel.scad                — Battery bay belly access panel (Rev R)
 access_panels_24in.scad         — All hull access panels: 4× Faraday-bay covers (Shepherd/Inara/River/Simon),
                                     2× ventral hatch covers (battery/Kaylee), 2× ventral hatch frames (Rev R)
 rcrs49_wire_post.scad           — 49 MHz (Part 15 §15.235) top-wire antenna post, 12×12 mm PETG mast (Rev R)
-landing_leg_assy.scad           — Rev R1 4× field-replaceable landing legs (CF-PETG flat spring,
-                                    22×10mm, 185mm) + hull boss + 3×M3 nylon shear-bolt fuse;
-                                    see docs/LANDING_GEAR_ANALYSIS.md for structural analysis
+landing_leg_assy.scad           — [RETIRED] Rev R1.4 parametric corner V-brace concept, never
+                                    rendered/printed; superseded by wire_brace_leg.scad (Rev R5);
+                                    see CLAUDE.md "Canonical landing leg model (Rev R5)"
+wire_brace_leg.scad             — Rev R5 CURRENT landing leg: CF-PETG vertical post + 4-wire
+                                    brace (2 spring apex wires, 2 ductile 1/3-down wires); see
+                                    docs/LANDING_GEAR_ANALYSIS.md Rev R5
+wire_loop_fuse.scad             — [RETIRED 2026-06-20] Rev R4 Strong-Leg closed-ring wire-loop
+                                    crash fuse; kept for reference only, superseded by
+                                    wire_brace_leg.scad's single-bend bowed-wire strut
 cargo/
 cargo_sect_shell24.scad       — Rev R cargo section shell with clamshell doors, avionics bays, GPS mounts
 ```
@@ -211,6 +239,15 @@ Reference diagrams and machine-readable profiles generated from hull analysis.
 ring_frames/
 ring_cargo_Y30_inner.csv    — Inner cross-section boundary at hull Y=+30 mm (9 paths, 4314 vertices); input for CF ring DXF
 ring_rear_Y290_inner.csv    — Inner cross-section boundary at hull Y=+290 mm (14 paths, 2813 vertices); input for CF ring DXF
+nick-henning-close-gear-combine.jpg     — REF-CAD-002 landing-gear reference render (Nick Henning,
+nick-henning-final-backside-combine.jpg   nickhenning3d.com; permission granted by email 2026-07-06;
+nick-henning-final-front-combine.jpg      used only as design reference imagery)
+nick-henning-uvdisplay-gear.jpg
+nick-henning-uvdisplay-wing.jpg
+"Re: Contact got a new submission - Nick Henning ... .txt" — raw email export recording the
+                                    2026-07-06 permission grant for the 5 images above (see
+                                    REFERENCES.md REF-CAD-002); contains full mail-transport
+                                    headers — flagged to user, not scrubbed/removed here
 ```
 
 ### airframe/stls/
@@ -227,14 +264,22 @@ middle_shell24_2mm_repaired.stl — Middle section 2mm hollow, manifold
 rear_shell24_2mm_repaired.stl   — Rear section 2mm hollow, manifold
 battery_tray.stl                — 6S LiPo battery tray (part-local, VERIFY placement)
 belly_panel.stl                 — Battery-bay belly access panel (part-local, VERIFY)
+bow_sensor_faceplate.stl        — Combined bow sensor faceplate (compiled from
+                                    bow_sensor_faceplate.scad, see fuselage/ section above)
 inara_access_cover.stl          — Inara Faraday-bay dorsal cover (cargo, GPS_PORT Ø38 clearance; access_panels_24in.scad Rev R2)
 river_access_cover.stl          — River Faraday-bay dorsal cover (cargo, GPS_STBD Ø38 clearance; access_panels_24in.scad Rev R2)
-head_cargo_splice_collar.stl    — Internal head/cargo joint splice collar (hull-frame, Rev R1, ~13g)
-generate_head_cargo_splice_collar.py — Splice-collar generator (hull frame, from head inner contour)
-cargo_middle_splice_collar.stl  — Internal cargo/middle joint splice collar (hull-frame, Rev R1, ~17g)
-generate_cargo_middle_splice_collar.py — Splice-collar generator (hull frame, from middle inner contour)
-middle_rear_splice_collar.stl   — Internal middle/rear joint splice collar (hull-frame, Rev R1, ~16g)
-generate_middle_rear_splice_collar.py — Splice-collar generator (hull frame, from middle inner contour)
+head_cargo_splice_collar.stl    — Internal head/cargo joint splice collar (hull-frame, Rev R2 conforming loft)
+cargo_middle_splice_collar.stl  — Internal cargo/middle joint splice collar (hull-frame, Rev R2 conforming loft)
+middle_rear_splice_collar.stl   — Internal middle/rear joint splice collar (hull-frame, Rev R2 conforming loft)
+generate_conforming_collars.py  — CURRENT generator for all 3 collars above (Rev R2, 2026-07-06):
+                                    lofted, per-station conforming sleeve (samples actual inner-cavity
+                                    cross-section at each Y, insets by bond gap, lofts via pairwise
+                                    intersection) — collar∩shell ≈ 0
+generate_head_cargo_splice_collar.py, generate_cargo_middle_splice_collar.py,
+generate_middle_rear_splice_collar.py — SUPERSEDED by generate_conforming_collars.py (2026-07-06):
+                                    each extruded ONE constant inner contour straight across the
+                                    joint, which passed through solid plastic (collar∩shell ≈
+                                    1600-2000 mm³/side); still on disk, not yet archived
 landing-gear/
 legs_scaled24.stl             — Original Thingiverse landing legs × 4 (24" scale, cosmetic reference)
 leg_1_scaled24.stl            — Individual leg 1 (Thingiverse reference)
@@ -246,12 +291,25 @@ foot_1_scaled24.stl           — Individual foot 1 (Thingiverse reference)
 foot_2_scaled24.stl           — Individual foot 2 (Thingiverse reference)
 foot_3_scaled24.stl           — Individual foot 3 (Thingiverse reference)
 foot_4_scaled24.stl           — Individual foot 4 (Thingiverse reference)
-[arm_upper_r1.stl]            — PENDING: Rev R1.4 upper corner V-arm CF-PETG (PART="arm_upper"; 4 per aircraft; struts ≈77.6 mm)
-[arm_lower_r1.stl]            — PENDING: Rev R1.4 lower corner V-arm CF-PETG (PART="arm_lower"; 4 per aircraft; struts ≈53.9 mm)
-[main_strut_r1.stl]           — PENDING: Rev R1.4 main vertical strut CF-PETG OD18 mm × 143 mm (PART="main_strut"; 4 per aircraft)
-[junct_node_r1.stl]           — PENDING: Rev R1.4 arm-to-strut junction node PETG crush zone R9 mm (PART="node"; 8 per aircraft)
-[hull_boss_r1.stl]            — PENDING: Rev R1.4 generic hull boss cylinder CF-PETG OD22 mm (PART="boss"; 16 per aircraft; 4 per corner)
-[foot_pad_r1.stl]             — PENDING: Rev R1.4 TPU 95A foot pad 55×55×12 mm (PART="foot"; 4 per aircraft)
+[Rev R1.4 parametric corner V-brace concept (arm_upper_r1/arm_lower_r1/main_strut_r1/
+junct_node_r1/hull_boss_r1/foot_pad_r1) — RETIRED, never rendered; see CLAUDE.md "Canonical
+landing leg model (Rev R5)". Superseded by the Rev R5 wire-brace files below.]
+post.stl                      — Rev R5: CF-PETG vertical post alone (generated by
+                                    tools/build_landing_gear_views.py + wire_brace_leg.scad)
+spring_wire_nominal.stl        — Rev R5: one apex (spring) wire, undeformed
+spring_wire_deformed.stl       — Rev R5: one apex (spring) wire, illustratively bowed
+ductile_wire_nominal.stl       — Rev R5: one 1/3-down (ductile) wire, undeformed
+ductile_wire_deformed.stl      — Rev R5: one 1/3-down (ductile) wire, fired/flattened —
+                                    the field-inspection reference shape
+landing_gear_assembled.stl     — Rev R5: post + foot + 2 spring + 2 ductile wires + 4 boss
+                                    placeholders, correct relative position
+landing_gear_exploded.stl      — Rev R5: same parts, separated along local insertion axes
+landing_gear_deformed.stl      — Rev R5: assembled, but both ductile wires swapped for the
+                                    fired/flattened variant — post-overload state
+strong-leg.stl                 — [ORPHANED] intermediate "Strong-Leg" forked-CF-PETG-arm
+                                    concept (Rev R2–R4), retired per CLAUDE.md in favor of
+                                    Rev R5; not generated by build_landing_gear_views.py —
+                                    flagged, not yet archived
 dorsal_antenna_fin.stl            — Dorsal antenna fin fairing
 middle_canonical_edf_intake.stl — Middle section EDF intake opening
 cargo/
@@ -461,10 +519,15 @@ serenity_fuselage_asm4.py archived 2026-06-29 — see ARCHIVE_INDEX.md.)
 ### airframe/ (root-level files)
 
 ```text
-[Serenity-Assembled.FCStd]        — [PENDING] FreeCAD full-airframe assembly; not yet generated
-                                    on disk. See airframe/freecad/assembly/ for in-progress
-                                    working files and serenity_assembly.py for the headless
-                                    generation script.
+Serenity-Assembled.FCStd          — Full-airframe FreeCAD assembly, generated on disk (2026-07-06);
+                                    gitignored (*.FCStd) like all FreeCAD documents, so it carries
+                                    no git history — regenerate via serenity_assembly.py if missing.
+                                    Distinct from the canonical
+                                    airframe/freecad/assembly/SerenityAssembly.FCStd (CLAUDE.md
+                                    Hull-Frame Coordinate Standard) — reconcile which is current
+                                    before treating either as authoritative; flagged, not resolved
+                                    here.
+Serenity-Assembled.<timestamp>.FCBak — FreeCAD autosave backup (gitignored)
 ```
 
 ---
@@ -502,8 +565,10 @@ Makefile                        — DTS compile rules
 README.md
 cape-a/
     k3-am6254-pocketbeagle2-serenity-cape-a2.dts   — Wash cape-a2 device tree
+    archive/k3-am6254-pocketbeagle2-serenity-cape-a.dts — Pre-R1 Wash device tree (superseded by -a2)
 cape-b/
     k3-am6254-pocketbeagle2-serenity-cape-b2.dts   — Zoë cape-b2 device tree
+    archive/k3-am6254-pocketbeagle2-serenity-cape-b.dts — Pre-R1 Zoë device tree (superseded by -b2)
 fc/
 CMakeLists.txt
 src/
@@ -534,70 +599,127 @@ KiCad 7/9 PCB design files.  All active designs are Rev R (EMI-hardened -2 varia
 README.md                         — KiCad directory overview, generation workflow, DRC notes
 .gitignore                        — VCS ignore rules for KiCad backups/autosave/fp-info-cache
 
-Wash — Flight Control & Sensor Cape (Cape-A-2):
-Wash.kicad_pro                  — KiCad project file
-Wash.kicad_sch                  — Schematic
-Wash.kicad_pcb                  — PCB layout
-Wash.kicad_prl                  — Layout rules
-Wash.md                         — Design specification
+Board designs are organized one folder per board, each following the same internal layout
+(established as the Kaylee folder, replicated to Wash/Zoë/Emma/Jayne):
+  <Board>.md            — design specification
+  kicads/                — .kicad_pro/.kicad_sch/.kicad_pcb/.kicad_prl
+  scripts/                — Python generator/modifier scripts (where the board has any)
+  gerbers/                — production gerbers + drill files (once fabricated)
+  <Board>-backups/        — KiCad autosave zip backups (gitignored, *-backups/)
+
+Wash/ — Flight Control & Sensor Cape (Cape-A-2):
+Wash.md                          — Design specification
+kicads/Wash.kicad_pro            — KiCad project file
+kicads/Wash.kicad_sch            — Schematic
+kicads/Wash.kicad_pcb            — PCB layout
+kicads/Wash.kicad_prl            — Layout rules
+gerbers/                         — Production gerbers + drill file
 [generated by gen_cape_a2.py + gen_cape_a2_pcb.py]
 
-Zoë — Comms/Logging/Payload Cape (Cape-B-2):
-Zoë.kicad_pro                   — KiCad project file
-Zoë.kicad_sch                   — Schematic
-Zoë.kicad_pcb                   — PCB layout
-Zoë.kicad_prl                   — Layout rules
-Zoë.md                          — Design specification
+Zoë/ — Comms/Logging/Payload Cape (Cape-B-2):
+Zoë.md                           — Design specification
+kicads/Zoë.kicad_pro             — KiCad project file
+kicads/Zoë.kicad_sch             — Schematic
+kicads/Zoë.kicad_pcb             — PCB layout
+kicads/Zoë.kicad_prl             — Layout rules
+gerbers/                         — Production gerbers + drill file
+Zoë-backups/                    — KiCad autosave zip backups (gitignored)
 [generated by gen_cape_b2.py + gen_cape_b2_pcb.py]
 
-Kaylee — Power Distribution Board (PDB):
-Kaylee.kicad_pro                — KiCad project file (Rev A, 2026-06-10)
-Kaylee.kicad_sch                — Schematic (Rev A, 90×65 mm 4-layer)
-Kaylee.kicad_pcb                — PCB outline + stackup (Rev A)
-Kaylee.kicad_prl                — Layout rules
-Kaylee.md                       — Design specification
-gen_kaylee.py                   — Python generator script (all 3 KiCad files)
+Kaylee/ — Power Distribution Board (PDB):
+Kaylee.md                        — Design specification
+kicads/Kaylee.kicad_pro          — KiCad project file (Rev A, 2026-06-10)
+kicads/Kaylee.kicad_sch          — Schematic (Rev A, 90×65 mm 4-layer)
+kicads/Kaylee.kicad_pcb          — PCB outline + stackup (Rev A)
+kicads/Kaylee.kicad_prl          — Layout rules
+gerbers/                         — Production gerbers + drill file
+Kaylee-backups/                  — KiCad autosave zip backups (gitignored)
+scripts/gen_kaylee.py            — Python generator script (all 3 KiCad files)
+scripts/gen_kaylee_pcb.py        — PCB layout generator (standalone)
 
-Vera — Nose/Cargo-Bay Vision, ToF & Laser Board (STANDALONE, not a PB2-I cape):
-Vera.kicad_pro                  — KiCad project file (design exploration, 2026-07-03)
-Vera.kicad_sch                  — Schematic (net-correct, EMI-hardened; U1/U2/U3/U5/U_PMIC
-                                   use placeholder pin numbers/footprints, see gen_vera.py)
-Vera.kicad_pcb                  — PCB layout (46×48 mm, double-sided F.Cu+B.Cu, 4-layer,
-                                   rounded corners, EMI-hardened; manually compacted in KiCad
-                                   GUI past gen_vera_pcb.py's 78x80mm script output — footprint
-                                   placement only, traces not routed)
-Vera.md                         — Design specification, BOM, EMI-hardening status (matches
-                                   Wash/Zoe Rev R baseline)
-gen_vera.py                     — Python generator script (kicad_pro + kicad_sch)
-gen_vera_pcb.py                 — Python generator script (kicad_pcb, 78x80mm layout; NOT in
-                                   sync with the hand-compacted 46x48mm Vera.kicad_pcb —
-                                   re-running it overwrites the compaction, see Vera.md)
-[see TODO.md §1.2c and avionics/CLAUDE.md "Vera" for full status/open items]
+Emma/ — 49 MHz + LoRa Transceiver Cape (XCVR-49MHZ-2 Rev R1):
+Emma.md                           — Design specification
+kicads/Emma.kicad_pro             — KiCad project file
+kicads/Emma.kicad_sch             — Schematic (authored from as-placed PCB, 2026-07-04)
+kicads/Emma.kicad_pcb             — PCB layout
+kicads/Emma.kicad_prl             — Layout rules
+gerbers/                          — Production gerbers + drill file (as XCVR-49MHZ-2-*)
+scripts/gen_emma_sch.py           — Emma schematic-first generator (authors Emma.kicad_sch from the as-placed PCB; 2026-07-04 reconciliation)
+scripts/mod_emma_pcb.py           — Emma PCB transform (pcbnew: drop J1, UART→PB2 rails, PTT_N/RSSI_DCD reassign, add RSSI comparator; 2026-07-04)
+scripts/route_emma_rssi.py        — Emma RSSI sub-circuit router (pcbnew: GND/REF/+3V3/RSSI_ANA traces + vias; 2026-07-05)
+scripts/cleanup_emma_drc.py       — Emma DRC debt cleanup (pcbnew: mask expansion 0.1→0.05mm, delete redundant close GND tracks; 2026-07-04)
 
-Emma (49 MHz transceiver sub-module):
-Emma.kicad_pro
-Emma.kicad_sch
-Emma.kicad_pcb
-Emma.kicad_prl
-Emma.md
-[generated by complete_xcvr_49mhz2.py]
+Jayne/ — Cargo-Handling System and Nose/Cargo-Bay Vision, ToF & Laser Board (board itself is
+STANDALONE, not a PB2-I cape; merges the former separately-documented "Vera" board identity
+into the Jayne cargo-handling system, see avionics/CLAUDE.md "Jayne"):
+Jayne.md                          — Design specification, BOM, EMI-hardening status (matches
+                                    Wash/Zoe Rev R baseline)
+JAYNE_SOM_NETMAP.md               — phyCORE-AM62A SoM pad↔net map
+Jayne_som_pinmap.csv              — Factual pad↔signal CSV (PHYTEC-published pinout)
+Jayne.pretty/                     — Custom footprint library (DS_Camera_9P, DS_ToF_4P,
+                                    DS_Laser_2P, phyCORE-AM62x_PCM071_2xBTH-060 SoM land,
+                                    TQFP-128-1EP_KSZ9477…EP10x10 = generic TQFP-128 + datasheet
+                                    10×10 GND EP, Wurth_749010012A_10-100BASE-TX extracted from
+                                    the old board)
+kicads/Jayne.kicad_pro            — KiCad project file (design exploration, 2026-07-03)
+kicads/Jayne.kicad_sch            — Schematic, SoM end-state (Rev S1, 2026-07-13): REAL
+                                    clean-room symbols (PCM-071 SoM + KSZ9477 + MSPM0G3507 +
+                                    ISOW1044 + SLB9670) + discrete carrier rails; ERC 0 errors.
+                                    Built by scripts/gen_Jayne_carrier_sch.py
+kicads/Jayne.kicad_pcb            — PCB layout, SoM end-state (Rev S1): REAL footprints, 0
+                                    placeholders, SoM on B.Cu; nose-carrier trapezoid outline;
+                                    initial shelf-pack placement (no shorts), traces not routed.
+                                    Built by scripts/gen_Jayne_carrier_pcb.py
+kicads/fp-lib-table               — Project-local footprint library table (Jayne.pretty)
+PCBNEW_SWIG_BUG.md                — Repro/analysis of the pcbnew 9.0.2 Python-binding defects
+                                    (FootprintLoad-after-Remove segfault; unwrapped PAD objects)
+                                    worked around by gen_Jayne_carrier_pcb.py
+scripts/gen_Jayne.py              — LEGACY generator (placeholder-era kicad_pro + kicad_sch);
+                                    superseded by gen_Jayne_carrier_sch.py for the schematic
+scripts/gen_Jayne_pcb.py          — LEGACY placeholder PCB generator; superseded by
+                                    gen_Jayne_carrier_pcb.py
+scripts/gen_Jayne_carrier_sch.py  — SoM end-state schematic generator (real symbols, wired by
+                                    signal name; adds carrier regulators + PWR_FLAGs)
+scripts/gen_Jayne_carrier_pcb.py  — SoM end-state PCB generator (real footprints, netlist-driven
+                                    pad nets via text pass, shelf-pack placement)
+scripts/gen_Jayne_som_symbol.py, gen_Jayne_som_pcm071.py, gen_Jayne_ic_symbols.py,
+scripts/gen_Jayne_ksz_symbol.py, gen_Jayne_ds_footprints.py, gen_Jayne_bth060_footprint.py
+                                  — Clean-room symbol/footprint authoring scripts (see each
+                                    docstring for provenance; SoM pinout is PHYTEC-published
+                                    fact, not SnapEDA geometry)
+scripts/mod_Jayne_corners.py, mod_Jayne_trapezoid.py, mod_Jayne_ds_pcb.py,
+scripts/mod_Jayne_som_place.py    — PCB post-processing scripts (pcbnew: corner rounding,
+                                    trapezoid outline, direct-solder pad nets, SoM placement)
+[see TODO.md §1.2c and avionics/CLAUDE.md "Jayne" for full status/open items]
 
 ENC-NACELLE-1 (nacelle encoder breakout):
 ENC-NACELLE-1.kicad_sch
 ENC-NACELLE-1.md
 
-Python generation scripts:
-gen_kaylee.py                   — Kaylee PDB generator (pro + sch + pcb)
-gen_kaylee_pcb.py               — Kaylee PDB PCB layout generator (standalone)
-gen_cape_a2.py                  — Schematic generator (Cape-A-2)
-gen_cape_a2_pcb.py              — PCB layout generator (Cape-A-2)
-gen_cape_b2.py                  — Schematic generator (Cape-B-2)
-gen_cape_b2_pcb.py              — PCB layout generator (Cape-B-2)
-complete_xcvr_49mhz2.py         — Emma completion script
-gen_emma_sch.py                 — Emma schematic-first generator (authors Emma.kicad_sch from the as-placed PCB; 2026-07-04 reconciliation)
-mod_emma_pcb.py                 — Emma PCB transform (pcbnew: drop J1, UART→PB2 rails, PTT_N/RSSI_DCD reassign, add RSSI comparator; 2026-07-04)
-route_emma_rssi.py               — Emma RSSI sub-circuit router (pcbnew: GND/REF/+3V3/RSSI_ANA traces + vias; 2026-07-05)
-cleanup_emma_drc.py             — Emma DRC debt cleanup (pcbnew: mask expansion 0.1→0.05mm, delete redundant close GND tracks; 2026-07-04)
+Shared symbols/footprints (avionics/kicad/symbols/):
+Jayne_ISOW1044BDFMR.kicad_sym, Jayne_KSZ9477.kicad_sym, Jayne_MSPM0G3507_RGZ.kicad_sym,
+Jayne_SLB9670_TPM.kicad_sym, Jayne_SoM.kicad_sym, Jayne_SoM_PCM071.kicad_sym
+                                  — Clean-room symbols authored for the Jayne board's control
+                                    half and SoM (see each script's docstring for sourcing)
+ISOW1044BDFMR_pinmap.csv, KSZ9477STXI_pinmap.csv, MSPM0G3507SRGZR_pinmap.csv,
+SLB9670VQ2_0_pinmap.csv           — Factual pad↔signal CSVs backing the clean-room symbols
+                                    above (primary-datasheet-derived, not SnapEDA geometry)
+isow1044.pdf, mspm0g3507.pdf, KSZ9477S-Data-Sheet-DS00002392C.pdf, SLB_9670VQ20_Infineon.pdf
+                                  — Primary OEM datasheets for the 4 clean-room control-half
+                                    parts (owner's call to keep in-repo as authoritative refs)
+footprints/                      — (empty as of this pass)
+
+Not committed (gitignored — SnapEDA Design Files are CC BY-SA 4.0 with redistribution limits,
+incompatible with this repo's CC BY 4.0): ISOW1044BDFMR.kicad_sym, KSZ9477STXI.kicad_sym,
+*.step, *.kicad_mod, SLB 9670VQ2.0.lbr.
+
+Shared Python generation scripts (avionics/kicad/, not board-specific):
+gen_cape_a2.py                  — Schematic generator (Cape-A-2 / Wash)
+gen_cape_a2_pcb.py              — PCB layout generator (Cape-A-2 / Wash)
+gen_cape_b2.py                  — Schematic generator (Cape-B-2 / Zoë)
+gen_cape_b2_pcb.py              — PCB layout generator (Cape-B-2 / Zoë)
+complete_xcvr_49mhz2.py         — Emma completion script (superseded by scripts/gen_emma_sch.py
+                                   + scripts/mod_emma_pcb.py schematic-first migration)
 add_eth_phy.py                  — Ethernet PHY addition script
 add_sensors_sbus.py             — SBUS sensor addition script
 apply_netlist.py                — Netlist application script
@@ -609,20 +731,13 @@ Serenity-Custom.pretty/         — Custom KiCad component footprint library
 drc_report.txt                  — Latest KiCad DRC report (Wash/Zoë/XCVR)
 xcrv-DRC.rpt                    — Emma DRC report
 
-gerbers/
-CAPE-A-1/                       — Cape-A-1 gerbers (ARCHIVED design)
-CAPE-B-1/                       — Cape-B-1 gerbers (ARCHIVED design)
-Wash/                           — Wash (Cape-A-2) gerbers
-Zoë/                            — Zoë (Cape-B-2) gerbers
-XCVR-49MHZ-2/                   — Emma gerbers
-Kaylee/                         — Kaylee PDB gerbers (Rev A, 2026-06-10)
+gerbers/                        — empty (unused since the per-board gerbers/ subfolders were adopted)
 ```
 
-### avionics/gerbers/
-
-```text
-archive/                          — Pre-Rev Q gerber snapshots
-```
+Note: the Rev-Q-and-earlier archived CAPE-A-1/CAPE-B-1/XCVR-49MHZ-1 gerber sets and the
+avionics/kicad/archive/ KiCad archive have both been consolidated under
+`archives/avionics-archives/` (gerber-archive/ and kicad-archives/ respectively) — see
+ARCHIVE_INDEX.md. `avionics/gerbers/` no longer exists on disk at all.
 
 ---
 
@@ -642,13 +757,17 @@ AVIONICS_PB2_REDESIGN.md          — 8× PocketBeagle 2 Industrial avionics red
 BATTERY_MOUNT.md                  — Battery CG analysis, retention load case, belly panel spec (Rev R)
 LANDING_GEAR_ANALYSIS.md          — Landing gear structural analysis: 6 ft drop, fuse sizing, lateral loads (Rev R1)
 NOZZLE_DRIVE_TRADE.md             — Nozzle-drive redesign trade study: internal ring gear (A) vs pushrod linkage (B) to kill the protruding idler (Rev R1a)
+ETHERNET_PHY_TRADE.md             — Onboard Ethernet interface trade: native MAC+PHY / KSZ9477 ring (kept) vs USB-Ethernet bridge (rejected — no HSR/PRP, non-deterministic) (Rev S)
 img/nozzle_drive_trade.png        — Nozzle-drive trade schematics + tilt→ring-angle curves (A vs B)
 img/wing_rev_r1a_sections.png     — Wing Rev R1a root/tip sections: camber-centred spar + EDF cableway
-POWER_DISTRIBUTION.md             — Power architecture: Kaylee PDB rails, fuse map, cable spec (Rev R; §3.2.1 Vera 5V rail added 2026-07-05)
+POWER_DISTRIBUTION.md             — Power architecture: Kaylee PDB rails, fuse map, cable spec (Rev R; §3.2.1 Jayne 5V rail added 2026-07-05)
 flight_envelope.md                — Flight envelope: V_min vs. nacelle tilt, V_max, altitude limits, crosswind, transition corridor (Rev S, 2026-07-12)
 failsafe_thresholds.md            — Failsafe thresholds: battery/RTL, CAN FD heartbeat, radio-loss RTL, ESC thermal, ToF obstacle avoidance (Rev S, 2026-07-12)
 electrical_fault_margins.md       — Electrical fault margin validation pointer doc (cites POWER_DISTRIBUTION.md §9/§11; single-PWR-conduit-loss analysis) (Rev S, 2026-07-12)
-VERA_LASER_ANALYSIS.md            — Vera laser: single 520nm green source feasibility, power/class vs spread-angle split, lens/DOE options (Rev A)
+JAYNE_LASER_ANALYSIS.md            — Jayne laser: single 520nm green source feasibility, power/class vs spread-angle split, lens/DOE options (Rev A)
+JAYNE_MANUFACTURING_READINESS.md  — Jayne board fabrication-readiness gap analysis (Rev C):
+                                    phyCORE-AM62A SoM + trapezoidal carrier re-scope, locked
+                                    2026-07-11; honest scope of what's clean-room vs placeholder
 REVN_BUILD_GUIDE_24IN.md          — Revision N+ 24-inch hull build guide (active, Rev R baseline)
 PHASED_BUILD_GUIDE.md             — Rev M 18-inch phased build guide (SUPERSEDED for 24-inch builds)
 PROTO_PRINT_DAVINCI_JR.md         — DaVinci Jr. PLA prototype print guide (Rev P, historical)
@@ -903,6 +1022,9 @@ shellview/                        — Blender shell-inspection render dump: ~70 
                                     comparisons, axis-labeled views, cross-sections, engrave
                                     previews) generated while iterating the hollowing pipeline,
                                     plus port_wall.stl (single-wall reference geometry probe)
+pngs/                              — 17 PNG multi-view assembly renders (6 principal + 8 iso +
+                                    3 close-up), generated by
+                                    airframe/blender-scripts/serenity_render_views.py
 ```
 
 ---
@@ -914,6 +1036,10 @@ See ARCHIVE_INDEX.md for full contents.
 
 ```text
 18in-scale-scad/                  — 18" (SCALE=2.1974) OpenSCAD sources
+avionics-archives/                 — Consolidated avionics KiCad/gerber archive (2026-07-13):
+                                    gerber-archive/, kicad-archives/ — see ARCHIVE_INDEX.md
+airframe-archives/                 — Empty staging dir for a future airframe/archive/
+                                    consolidation (2026-07-13, not yet moved) — see ARCHIVE_INDEX.md
 ```
 
 ---

@@ -17,7 +17,7 @@ changelog since Rev R) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.m
 | Nacelle EDFs | XFly Galaxy X5 50mm 12-blade 6S 3200KV, 1240g each; 2232g/nacelle (90% additive via stator); 4464g total | Baseline EDF selected (xfly-model.eu); nacelle T/W ≈ 1.61 at Phase 5–10 AUW — VTOL hover capable |
 | Rear propulsion | 55mm 6S EDF, reduced-area neck intake, **fixed canonical elliptical tail nozzle** (2.06×1.76 in / 52.3×44.7 mm) + **4 RCS bleed-air thrusters** | **DEFERRED — Phase 11.** Files in `deferred/aft-edf/` — SCAD/STLs need regeneration for 55mm + nozzle + RCS. Adds ~1275g forward thrust; rear EDF not counted in hover T/W; Phase 11 hover T/W ≈ 1.43. |
 | Cargo bay | Clamshell doors + SG90 servos + DRV8833 + N20 winch + Dyneema + auto-latch + GPS ring + FPV bezel | ✓ All 13 cargo STLs generated (PR #21 + PR #22 2026-06-01); BOM updated bom_revP.json/csv; gondola shell open |
-| PCBs | **Rev Q:** all 8 nodes use EM-hardened Wash/Zoë capes. **Kaylee** is the PDB. Two **Emma** boards give 49 MHz connectivity (Part 15 §15.235). Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived 2026-06-05. **Rev S adds Vera** (standalone vision/ToF/laser board, nose + cargo install). | Rev S schematics complete (Wash: 2× EMI-hardened Ethernet PHY; Zoë: 1×; Vera: EMI-hardened to the same standard, DRC/ERC clean). Kaylee PCB DRC clean (0 shorts); gerbers generated 2026-06-10; manual placement and trace routing remain (Wash/Kaylee/Emma carry a pre-existing DRC backlog, see §1.2a). |
+| PCBs | **Rev Q:** all 8 nodes use EM-hardened Wash/Zoë capes. **Kaylee** is the PDB. Two **Emma** boards give 49 MHz connectivity (Part 15 §15.235). Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived 2026-06-05. **Rev S adds Jayne** (standalone vision/ToF/laser board, nose + cargo install). | Rev S schematics complete (Wash: 2× EMI-hardened Ethernet PHY; Zoë: 1×; Jayne: EMI-hardened to the same standard, DRC/ERC clean). Kaylee PCB DRC clean (0 shorts); gerbers generated 2026-06-10; manual placement and trace routing remain (Wash/Kaylee/Emma carry a pre-existing DRC backlog, see §1.2a). |
 | Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 ✓; serenity-fc Phase 6 stub only; all Phase 7 items open |
 | Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
 | Regulatory | FAA Part 107 [REF-FAA-002], Part 48 §48.205 [REF-FAA-001], §91.209 [REF-FAA-003], FCC Part 15 [REF-FCC-001, REF-FCC-002, REF-FCC-003 §15.235] | FAA registration placeholder; XCVR-49MHZ-2 pre-compliance pending; §15.235 power budget gap open, §15.203 antenna-connector gap resolved in design (§0.1) |
@@ -634,11 +634,19 @@ SCAD: `airframe/openscad/fuselage/bow_sensor_pod.scad` (cuts) +
     re-bake needed — only booleans were applied, matching the identity-rotation head bake).
     `python3 tools/validate_stls.py` — **all 69 STL files pass watertight, including this
     one.**
-    Vera's nose-mount bosses (`vera_board_bosses()`, added earlier this session) and
+    Jayne's nose-mount bosses (`jayne_board_bosses()`, added earlier this session) and
     Shepherd's Book-bay bosses (`book_dorsal_boss()`, known unfixed legacy-axis bug) were
     DELIBERATELY EXCLUDED from this merge — both remain SCAD-only proposals, not baked into
     the fabrication mesh, per their own open-item flags (merging an unverified/buggy
     placement would falsely certify it).
+    - **2026-07-12 (Rev S1):** `cargo_sect_shell24.scad` `vera_board_bosses()` was updated to the
+        NEW Vera trapezoid outline's 4 corner **M2.5** holes (cargo JST-jumper variant), and a
+        `cargo/cargo_vera_faraday.scad` EMI enclosure was added (renders watertight). These stay
+        **SCAD-only / excluded from the baked mesh** for the same reason — pending a full
+        cargo-shell render + watertight mesh check + re-bake, and a FreeCAD fit check. The Vera
+        SoM is now the connectorized PHYTEC PCM-071 (240-pin, 2× Samtec BTH-060) — see avionics
+        §1.2c; the nose install still needs head-shell rail slots + a foam void form (airframe
+        §1.1).
 - [x] **Re-run mesh validation after head shell regen — DONE 2026-07-03** (see above,
     `validate_stls.py` all-pass). Also re-ran `tools/verify_bow_pod.py` post-cut and found
     (and fixed) the SAME unwelded-STL loading bug there (`mesh.merge_vertices()` was missing
@@ -674,40 +682,40 @@ SCAD: `airframe/openscad/fuselage/bow_sensor_pod.scad` (cuts) +
 
 ###### Avionics Integration *(physical wiring + firmware — external to this CAD task)*
 
-- [x] **Superseded 2026-07-03 — see §1.2c "Vera" below.** ~~Create RP2350 (or similar) based
+- [x] **Superseded 2026-07-03 — see §1.2c "Jayne" below.** ~~Create RP2350 (or similar) based
     Camera/TOF/laser mcu board~~ Scope expanded during design exploration (imported AI-assisted
     brainstorm, fact-checked and corrected against real datasheets — see REFERENCES.md
     "Removed / Superseded Citations" for what was fabricated in the original brainstorm) into
-    the **Vera** standalone board (not a PB2-I cape — its own board, peer network node via
+    the **Jayne** standalone board (not a PB2-I cape — its own board, peer network node via
     Ethernet ring/CAN-FD only): TI MSPM0G3507 (native CAN-FD) + Infineon SLB9670 TPM
     (fleet-standard part, not a new one) + Microchip KSZ9477 Ethernet switch, plus a TI AM62Ax
     digital vision SoC replacing the RunCam Nano 4 analog camera. One board design, installed
     at both the bow sensor pod (nose) and the cargo bay nadir FPV mount.
 
-- [x] **Wire TFmini-S UART to bow sensor MCU.** — **SUPERSEDED by Vera (2026-07-06).**
-    The pre-Vera plan ran a 28 AWG loom from the bow pod all the way to Shepherd's Room and
-    read the TFmini-S on the Shepherd (Wash) node. Vera is now the board *at* the bow pod, so
-    the TFmini-S is a short local run (<75 mm) on Vera's dedicated `J_TOF`/UART1, read by Vera's
+- [x] **Wire TFmini-S UART to bow sensor MCU.** — **SUPERSEDED by Jayne (2026-07-06).**
+    The pre-Jayne plan ran a 28 AWG loom from the bow pod all the way to Shepherd's Room and
+    read the TFmini-S on the Shepherd (Wash) node. Jayne is now the board *at* the bow pod, so
+    the TFmini-S is a short local run (<75 mm) on Jayne's dedicated `J_TOF`/UART1, read by Jayne's
     MSPM0G3507 — no head-section loom to Shepherd's, no Shepherd `serenity-fc` UART driver.
-    Replaced by the Vera local sensor harness (§1.2c) and Vera node firmware (§4.6).
-- [x] **Wire bow camera video output to bow sensor MCU** — **SUPERSEDED by Vera (2026-07-06).**
-    The RG178 analog-coax run was for the RunCam Nano 4 analog camera, which Vera supersedes
-    (REF-SENSOR-001, superseded). Vera's camera is a digital MIPI CSI-2 module on `J_CAM1/J_CAM2`
+    Replaced by the Jayne local sensor harness (§1.2c) and Jayne node firmware (§4.6).
+- [x] **Wire bow camera video output to bow sensor MCU** — **SUPERSEDED by Jayne (2026-07-06).**
+    The RG178 analog-coax run was for the RunCam Nano 4 analog camera, which Jayne supersedes
+    (REF-SENSOR-001, superseded). Jayne's camera is a digital MIPI CSI-2 module on `J_CAM1/J_CAM2`
     (flex/FPC, ~20–30 mm), encoded on-board by the AM62A7 and published over the Ethernet ring —
-    no analog coax to a separate MCU. Tracked as the Vera local sensor harness (§1.2c).
-- [x] **Wire laser GPIO enable bow sensor MCU** — **SUPERSEDED by Vera (2026-07-06).**
+    no analog coax to a separate MCU. Tracked as the Jayne local sensor harness (§1.2c).
+- [x] **Wire laser GPIO enable bow sensor MCU** — **SUPERSEDED by Jayne (2026-07-06).**
     This discrete 2N7002-from-Wash-GPIO driver plus a Class-3B-style physical key-switch
-    ([REF-FDA-001 §1040.10(f)(1)]) is replaced by Vera's own on-board laser driver (Q1 AO3400
+    ([REF-FDA-001 §1040.10(f)(1)]) is replaced by Jayne's own on-board laser driver (Q1 AO3400
     logic-level N-FET, R1 100 Ω gate, R2 10 kΩ pulldown-default-off, `J_LASER`), enabled by
-    Vera's MSPM0G3507 — not a Wash GPIO. Per `docs/VERA_LASER_ANALYSIS.md` Rev A2 the nose is
+    Jayne's MSPM0G3507 — not a Wash GPIO. Per `docs/JAYNE_LASER_ANALYSIS.md` Rev A2 the nose is
     **Class 2 (≤ 1 mW green), NOT Class 3B**, so the mandatory key-interlock/shutter is dropped
     and the ≤ 1 mW cap is hardware-enforced (fixed current limit). Tracked at §1.2c (driver) and
     §4.6 (GPIO firmware + interlock).
 - [x] **Add laser enable command to MAVLink C2 interface** [REF-PROTO-002] — **SUPERSEDED /
-    RELOCATED to Vera (2026-07-06).** The laser is now Vera-owned (commanded by Vera's
+    RELOCATED to Jayne (2026-07-06).** The laser is now Jayne-owned (commanded by Jayne's
     MSPM0G3507, published/gated over the CAN-FD + Ethernet ring), not the Wash MAVLink path. The
-    surviving C2-enable requirement is folded into the Vera "Laser GPIO driver" firmware task
-    (§4.6). Because the nose is now Class 2 (`docs/VERA_LASER_ANALYSIS.md` Rev A2), the previously
+    surviving C2-enable requirement is folded into the Jayne "Laser GPIO driver" firmware task
+    (§4.6). Because the nose is now Class 2 (`docs/JAYNE_LASER_ANALYSIS.md` Rev A2), the previously
     **mandatory** operator acknowledgement is downgraded to **optional** defense-in-depth rather
     than a Class-3B requirement.
 - [ ] **Add standards REF-IDs to bow_sensor_pod.scad firmware integration notes** once driver
@@ -810,7 +818,7 @@ and baked to hull frame.  SCAD fuselage shell files are secondary references onl
             reading that script — only Inara's boss/standoff geometry was merged, using
             its own independently-correct hardcoded hull-frame (X,Y)=(-135,90) values,
             unaffected by the SCAD bug).  Extending `merge_cargo_interior.py` to merge
-            the now-fixed GPS/FPV/River-bay cuts (and the new Vera bosses below) into the
+            the now-fixed GPS/FPV/River-bay cuts (and the new Jayne bosses below) into the
             real printed mesh is a follow-on task, not yet started.
         - [ ] **Door-servo pads, latch-catch lips, belly ribs, hinge-pin blocks — SAME
             axis bug found (2026-07-03), NOT yet fixed.**  `BELLY_INT_Y = -413` is used
@@ -2574,11 +2582,11 @@ All are on the `avionics/kicad/` branch; run DRC to zero errors before generatin
 
 ---
 
-### 1.2c — PCB Design: Vera (New Standalone Board — Nose/Cargo-Bay Vision, ToF & Laser)
+### 1.2c — PCB Design: Jayne (New Standalone Board — Nose/Cargo-Bay Vision, ToF & Laser)
 
-> "She's a good gun." — Jayne, of Vera.
+> "She's a good gun." — Jayne Cobb, of his rifle (the board's namesake).
 
-Vera is a **new, standalone PCB — not a PocketBeagle 2 Industrial cape.** It does not use the
+Jayne is a **new, standalone PCB — not a PocketBeagle 2 Industrial cape.** It does not use the
 P1+P2 header stack and does not mount onto a Wash/Zoë node; it is its own independent board
 with its own power input, connecting to the rest of the airframe only via the shielded JST-GH
 Ethernet ring and CAN-FD trunk connectors as a peer network node. It replaces the informal
@@ -2590,8 +2598,8 @@ of the brainstorm's part numbers and capability claims were fabricated or wrong 
 infeasibility, LAN9355/KSZ9563 lacking HSR/PRP, a nonexistent "ST33GTPMISPI" TPM part).
 
 **Status (2026-07-03): first-pass `.kicad_pro`/`.kicad_sch`/`.kicad_pcb` DO exist now,**
-generated by `avionics/kicad/gen_vera.py` (schematic + project) and
-`avionics/kicad/gen_vera_pcb.py` (PCB), following the same script-then-manual-placement
+generated by `avionics/kicad/Jayne/scripts/gen_Jayne.py` (schematic + project) and
+`avionics/kicad/Jayne/scripts/gen_Jayne_pcb.py` (PCB), following the same script-then-manual-placement
 pattern already used for Kaylee/Wash/Zoë (`gen_kaylee.py`/`gen_kaylee_pcb.py` etc.). This is a
 **design-exploration pass, not a fabrication-ready board** — see the "Verified vs. placeholder"
 list below before treating anything here as final.
@@ -2638,7 +2646,7 @@ list below before treating anything here as final.
     data lanes on the camera interface; PMIC power-sequencing/enable logic (SLVAFD0 app note
     sequencing not modeled).
 
-**Architecture (see `avionics/CLAUDE.md` "Vera" for full rationale):**
+**Architecture (see `avionics/CLAUDE.md` "Jayne" for full rationale):**
 
 - **Vision half:** TI AM62A3 or AM62A7 [REF-SENSOR-003] — MIPI CSI-2 camera in, VPAC/ISP,
     H.264/H.265 encode. Runs TI's own open-source Linux BSP (V4L2/GStreamer), not OpenIPC.
@@ -2651,20 +2659,56 @@ list below before treating anything here as final.
 
 #### 1.2c.1 — Schematic and Component Selection
 
-- [x] **Create `avionics/kicad/Vera.kicad_sch`** — DONE 2026-07-03 via
-    `avionics/kicad/gen_vera.py`. Vision half, control half, ToF interface, and laser driver
+- [x] **Create `avionics/kicad/Jayne/kicads/Jayne.kicad_sch`** — DONE 2026-07-03 via
+    `avionics/kicad/Jayne/scripts/gen_Jayne.py`. Vision half, control half, ToF interface, and laser driver
     circuit all present with correct net-level architecture; see "Verified vs. placeholder"
     above for what's still not real (pin numbers, BGA/QFN footprints).
-- [ ] **Confirm PCB fab/assembly house can handle the AM62Ax 484-ball FCBGA/FCCSP package**
-    [REF-SENSOR-003] before committing to this SoC in layout — this is a significant assembly
-    escalation versus the QFN/SOIC parts used elsewhere in this design. If no viable
-    fab/assembly path exists at acceptable cost, escalate to user for an alternative vision
-    SoC decision before proceeding with layout. **Still open — the placeholder footprint in
-    `gen_vera_pcb.py` does not commit to a real ball-out, so this decision is not yet blocking,
-    but must be resolved before the real BGA footprint is authored.**
+- [x] **SoM re-scope — Jayne = PHYTEC phyCORE PCM-071 SoM on a trapezoidal carrier —
+    DONE 2026-07-13** (schematic + PCB rebuilt into the SoM end-state). Both halves authored
+    by new generators: `avionics/kicad/Jayne/scripts/gen_Jayne_carrier_sch.py` (schematic) and
+    `gen_Jayne_carrier_pcb.py` (PCB). The raw-AM62A7 BGA placeholder + TPS65219 PMIC + on-SoC
+    rails (VDD_CORE/VDDR/VDDSHV) are **removed**; `U_SOM` = `Jayne_SoM_PCM071` (240-pad,
+    `Jayne:phyCORE-AM62x_PCM071_2xBTH-060` footprint) takes over the old AM62A7 nets. All five
+    ICs use REAL clean-room symbols + real footprints: U2 KSZ9477 (custom
+    `Jayne:TQFP-128-1EP_KSZ9477…EP10x10`, generic TQFP-128 + datasheet 10×10 GND EP), U3
+    MSPM0G3507 (QFN-48-1EP), U4 ISOW1044BDFMR (**SOIC-20W / 20-pin DFM**, corrects the SOIC-16W
+    error), U5 SLB9670 (QFN-32-1EP). Wiring is by signal name from each symbol's real pin table
+    (no hand-entered pin numbers). **ERC = 0 errors.** sch↔pcb parity clean except 4
+    mounting-holes (`extra_footprint`, expected) + 1 TPM thermal-EP tie (`net_conflict`,
+    intentional GND). Netlist spot-checked: RGMII MAC↔switch crossover, CAN path, SPI to
+    TPM+switch, UART, CSI, power rails all correct.
+    - **User decisions locked 2026-07-13:** (a) the PCM-071 connector takes 5 V in only and
+      exposes NO 3V3/2V5/1V2 rail to the carrier (PHYTEC HW manual L-1038e.A5 §5.1), so the
+      carrier now generates its own rails — `U_REG_3V3`/`U_REG_1V2` (TI TLV62569 bucks) +
+      `U_REG_2V5` (TI TLV75725 LDO); (b) TPM + KSZ management stay on the MSPM0 SPI (carrier
+      control-plane unchanged).
+    - **§0.x OPEN (verify before fab):** regulator feedback-divider/inductor values + 2V5 LDO
+      current margin are first-pass (verify per each TI datasheet); RGMII KSZ port-6 MAC/PHY
+      strap + delay config needs firmware/HW sign-off; MSPM0 GPIO→peripheral pinmux is a
+      defensible datasheet assignment to confirm against final firmware; SnapEDA source files
+      stay gitignored (CC BY-SA §5.1). `docs/JAYNE_MANUFACTURING_READINESS.md` Rev C +
+      `avionics/kicad/Jayne/JAYNE_SOM_NETMAP.md` are the references.
+    - **Tooling defect worked around:** the system pcbnew 9.0.2 Python binding segfaults on
+      `FootprintLoad` after `board.Remove()` and returns unwrapped `SwigPyObject`s from
+      `Pads()`/`FindPadByNumber()`; pad nets are injected by a text post-pass. Full repro in
+      `avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md`.
+- [ ] **FLEET-WIDE ISOW1044BDFMR footprint audit (flight-hardware error, 2026-07-12).** TI
+    datasheet SLLSFF7A confirms ISOW1044BDFMR is a **20-pin DFM** package (Fig 7-1, §8.4
+    "DFM/20 PINS"), NOT the **"SOIC-16W"** that Wash.md, Zoë.md, Jayne.md, README.md, and prior
+    TODO text all state. Any KiCad footprint using a 16-pad `SOIC-16W` land for U4 (Wash, Zoë,
+    Jayne) is WRONG and will not match the 20-pad part. **Action:** verify the actual footprint
+    on each board's `.kicad_pcb` and correct to a 20-pad DFM land; update all the SOIC-16
+    doc references. Jayne's is handled by the carrier rebuild; Wash/Zoë need checking on the
+    as-built PCBs. (avionics/CLAUDE.md + Jayne.md package text corrected 2026-07-12.)
+- [x] **Confirm PCB fab/assembly house can handle the AM62Ax 484-ball FCBGA/FCCSP package**
+    [REF-SENSOR-003] — **RESOLVED 2026-07-13 by the SoM re-scope.** Jayne no longer places a
+    raw AM62A7 BGA: the AM62Ax + LPDDR4 + PMIC are all on the PHYTEC PCM-071 module, which
+    mounts via 2× Samtec BTH-060 board-to-board connectors (0.5 mm). The carrier itself is now
+    QFN/SOIC/SOT/0402 only, so the BGA-assembly escalation no longer applies to the Jayne PCB.
+    The module-vendor's own BGA assembly is PHYTEC's concern, not the carrier fab's.
 - [x] **Source and cite a real Class 3B nose crosshair laser module** — **SUPERSEDED by the
-    Class 2 laser unification (§1.2c.4, 2026-07-06; `docs/VERA_LASER_ANALYSIS.md` Rev A2).** The
-    nose is **not** Class 3B: a thin-line green crosshair detected by Vera's own strobed camera +
+    Class 2 laser unification (§1.2c.4, 2026-07-06; `docs/JAYNE_LASER_ANALYSIS.md` Rev A2).** The
+    nose is **not** Class 3B: a thin-line green crosshair detected by Jayne's own strobed camera +
     frame-difference needs only ~0.2–0.8 mW → **Class 2**. There is no separate Class 3B nose
     module to source; both sites now share ONE 520 nm green Class 2 source (per-location terminal
     optic + hardware current limit). The surviving sourcing action — "**Do not source** the green
@@ -2690,7 +2734,7 @@ list below before treating anything here as final.
     (100 nF/500 V, parallel RC bridge) implemented exactly as planned, verified as the ONLY
     connection between GND and PGND nets (confirmed via netlist export — no other coincidental
     short between the two nets after fixing a symbol-placement bug during generation).
-- [x] **EMI hardening gap — RESOLVED 2026-07-03.** Vera now matches the Wash/Zoë Rev R
+- [x] **EMI hardening gap — RESOLVED 2026-07-03.** Jayne now matches the Wash/Zoë Rev R
     baseline (TODO.md §1.2a): each Ethernet port (ring in, ring out) carries Wurth 749010012A
     magnetics + 2× Bourns SRF2012-100Y CMC + 2× Nexperia PRTR5V0U2X TVS; the CAN-FD
     transceiver (U4) was swapped from the non-isolated TCAN1042HG-Q1 to the galvanically
@@ -2702,14 +2746,14 @@ list below before treating anything here as final.
     instead of the two (TX±/RX±) a real 10/100BASE-TX port needs; (2) hand-wired CMC/TVS
     glabels initially used un-flipped local coordinates and landed on the wrong physical pin
     (same class of bug as the earlier U1/U3 pin mixups — fixed by routing through the
-    existing `glabel_pin`/`pwr_pin` helpers instead of manual coordinates). See `Vera.md`
+    existing `glabel_pin`/`pwr_pin` helpers instead of manual coordinates). See `Jayne.md`
     "EMI Hardening Status" for the full comparison table and remaining open items (JST-GH 5P
     connector footprint geometry not independently re-verified).
 
 #### 1.2c.2 — Layout and Verification
 
-- [x] **Create `avionics/kicad/Vera.kicad_pcb`** — DONE 2026-07-03 via
-    `avionics/kicad/gen_vera_pcb.py`, through several passes: first-pass double-sided
+- [x] **Create `avionics/kicad/Jayne/kicads/Jayne.kicad_pcb`** — DONE 2026-07-03 via
+    `avionics/kicad/Jayne/scripts/gen_Jayne_pcb.py`, through several passes: first-pass double-sided
     110×190 mm draft; manually fine-tuned in the KiCad GUI (row/column alignment,
     mounting-hole symmetry, rounded corners, reduced to 68.5×63.5 mm); real component body
     sizes substituted for rough first-guesses (AM62A7 18×18mm, KSZ9477 14×14mm, MSPM0G3507
@@ -2735,20 +2779,34 @@ list below before treating anything here as final.
     edit re-verification, 0 shorting_items/net_conflict/courtyards_overlap, 28 accepted-class
     warnings (see above). Confirms the manual placement pass and board-size reduction
     introduced no electrical regressions.
-- [ ] Generate production-ready Gerber files to `avionics/kicad/gerbers/Vera/` — **blocked on
-    trace routing above; not meaningful to generate gerbers for an unrouted board.**
+- [x] **SoM-end-state rebuild re-verification — DONE 2026-07-13.** After the SoM re-scope
+    (§1.2c.1) the PCB was rebuilt by `gen_Jayne_carrier_pcb.py` from the schematic netlist:
+    63 footprints (59 real components + 4 M2.5 holes), **0 placeholder footprints**, all pad
+    nets injected (454 netted pads), shelf-packed initial placement (SoM on B.Cu, carrier on
+    F.Cu). `kicad-cli pcb drc --schematic-parity`: **0 shorting_items**, 2 courtyards_overlap,
+    parity clean except 4 mounting-holes + 1 TPM-EP GND tie. The remaining ~279
+    `unconnected_items` are the intentionally-unrouted ratsnest, and the residual
+    clearance/silk/hole-clearance items are tight-placement artifacts on this dense trapezoid —
+    **both belong to the user-reserved final-placement + routing step below.**
+- [ ] **Final component placement (user-reserved) + impedance-controlled routing.** The
+    shelf-pack is an initial non-overlapping pass only; per `avionics/CLAUDE.md` the user places
+    tightly-packed flight boards by hand. Then route (100 Ω diff Ethernet, 120 Ω diff CAN-FD)
+    and pour GND — this clears the remaining `unconnected_items`/clearance DRC. **Still open.**
+- [ ] Generate production-ready Gerber files to `avionics/kicad/Jayne/gerbers/` — **blocked on
+    final placement + trace routing above; not meaningful to generate gerbers for an unrouted
+    board.**
 - [x] Update `PROJECT_INDEX.md` — done in the same session (see PROJECT_INDEX.md entry for
-    `avionics/kicad/gen_vera.py`, `gen_vera_pcb.py`, `Vera.kicad_pro/sch/pcb`).
+    `avionics/kicad/Jayne/scripts/gen_Jayne.py`, `gen_vera_pcb.py`, `Jayne.kicad_pro/sch/pcb`).
 
 #### 1.2c.3 — Mechanical Integration
 
-Mounting/wiring design pass done 2026-07-03 (see `avionics/kicad/Vera.md` "Mechanical
+Mounting/wiring design pass done 2026-07-03 (see `avionics/kicad/Jayne/Jayne.md` "Mechanical
 Mounting and Wiring — Nose and Cargo Installs" for full detail); proposed poses only, **not**
 FreeCAD-verified — this hull's geometry is documented as too complex for bounding-box/
 centroid placement (`airframe/CLAUDE.md` "Assembly and Placement").
 
-- [x] **Vera mounting bosses added to `head_shell24.scad`** — **DONE 2026-07-03.** New
-    `vera_board_bosses()` module (4× M3 heat-set bosses, Vera's real (4,4)/(42,4)/(4,44)/
+- [x] **Jayne mounting bosses added to `head_shell24.scad`** — **DONE 2026-07-03.** New
+    `jayne_board_bosses()` module (4× M3 heat-set bosses, Jayne's real (4,4)/(42,4)/(4,44)/
     (42,44) hole pattern, ±19mm×±20mm about a station 20mm aft of `bow_sensor_pod.scad`'s
     `FACEPLATE_CTR`, centred on `BOW_CX`), wired into the shell's main boss union alongside
     `book_dorsal_boss`. **Explicitly marked PROPOSED in the SCAD comments — not FreeCAD-
@@ -2772,9 +2830,9 @@ centroid placement (`airframe/CLAUDE.md` "Assembly and Placement").
     custom-collimated 520nm Class 3B module's real mechanical dimensions are undetermined —
     do not reuse these bore numbers without re-measuring against the new module's actual
     datasheet/mechanical drawing.
-- [x] **Vera mounting bosses added to `cargo_sect_shell24.scad`** — **DONE 2026-07-03**,
+- [x] **Jayne mounting bosses added to `cargo_sect_shell24.scad`** — **DONE 2026-07-03**,
     alongside the GPS/avionics/nadir-camera axis-bug fix above (which this depended on —
-    frame reconciliation done first, per plan). New `vera_board_bosses()` module (4× M3
+    frame reconciliation done first, per plan). New `jayne_board_bosses()` module (4× M3
     heat-set bosses, ±19mm×±20mm about `(CX, CY, WALL_MM)`, standing up from the belly
     interior floor near `CARGO_CAM_POS`'s station), wired into the shell's main boss union.
     Could not render/mesh-check this session (OpenSCAD CGAL render was blocked by a
@@ -2794,29 +2852,29 @@ centroid placement (`airframe/CLAUDE.md` "Assembly and Placement").
     `airframe/CLAUDE.md` after adding.
 - [ ] **Local sensor harness (both sites):** J_CAM1/J_CAM2 (MIPI CSI-2, flex/FPC preferred),
     J_TOF (dedicated UART1, twisted pair/ribbon), J_LASER (Q1 gate drive + laser V+, twisted
-    pair) — all short point-to-point runs (<75mm) since Vera co-locates with the sensor
-    cluster at both sites, unlike the pre-Vera plan of running TFmini-S's UART to Shepherd's
+    pair) — all short point-to-point runs (<75mm) since Jayne co-locates with the sensor
+    cluster at both sites, unlike the pre-Jayne plan of running TFmini-S's UART to Shepherd's
     Room.
 - [ ] **External ring harness — nose:** route J_PWR/J_ETH_IN/J_ETH_OUT/J_CANFD aft through the
     open head/cargo mating face to **Shepherd's Room** (nearest bay, PACE-primary Watchdog).
     Open: confirm which existing Ethernet-ring segment Shepherd's stack currently closes, so
-    Vera's ring-insertion point and new cable lengths can be fixed.
+    Jayne's ring-insertion point and new cable lengths can be fixed.
 - [ ] **External ring harness — cargo:** route J_PWR/J_ETH_IN/J_ETH_OUT/J_CANFD through the
     cargo section's open mating faces to the nearest bay. Open: decide **River's Room** vs.
     **Simon's Medbay** as the shorter/more appropriate ring-insertion point (both carry Emma
     boards per the Node Variant Placement table, root `CLAUDE.md`).
 
-**BLOCKS:** Vera fabrication order; bow sensor pod avionics integration (§1.1.1.1a).
+**BLOCKS:** Jayne fabrication order; bow sensor pod avionics integration (§1.1.1.1a).
 
-#### 1.2c.4 — Vera Power Feed and Laser Unification (2026-07-05)
+#### 1.2c.4 — Jayne Power Feed and Laser Unification (2026-07-05)
 
 Power-budget and laser analyses completed 2026-07-05 (`docs/POWER_DISTRIBUTION.md §3.2.1`,
-`docs/VERA_LASER_ANALYSIS.md`). Resulting hardware tasks:
+`docs/JAYNE_LASER_ANALYSIS.md`). Resulting hardware tasks:
 
 - [ ] **Kaylee second 5 V rail — cross-tied, mutually fault-tolerant (PLAN, `docs/POWER_
     DISTRIBUTION.md §11.1`).** Add a **third identical TPS54620 BEC channel** (`U_BEC_5V_3` +
     `L_5V3` + `R_FB3` + `C_BEC3_IN/OUT` + `FB_5V3` + `D_OR3` — copy of `U_BEC_5V_1`) feeding
-    **RAIL-2 (5V_VERA) → `J_VERA`** (both Vera boards, ≈ 2.4 A typ / ~4.2 A peak). Existing
+    **RAIL-2 (5V_JAYNE) → `J_JAYNE`** (both Jayne boards, ≈ 2.4 A typ / ~4.2 A peak). Existing
     dual-BEC pair = **RAIL-1 (5V_AVIONICS) → `J_5V`**. **Diode-OR cross-tie** the two rails
     (`D_X1`/`D_X2` = 2× MBRD1045CT, same part) via cross-tie fuse `F_X`, plus per-rail fuses
     `F_5V`/`F_VERA`, so each rail is fault-tolerant of the other (regulator-failure backup +
@@ -2826,14 +2884,14 @@ Power-budget and laser analyses completed 2026-07-05 (`docs/POWER_DISTRIBUTION.m
     by the existing pair; SW node in a GND-pour keepout). Number alongside the Rev S1 servo-rail
     change. **Not yet in KiCad.** (Symmetric 2+2 four-channel option in §11.1 if RAIL-2 later
     needs its own internal redundancy.)
-- [ ] **Vera 5 V harness:** 18 AWG shielded TP per drop (Kaylee → nose bow pod, Kaylee → cargo
-    nadir mount); 3 A resettable polyfuse per drop; route with each Vera's Ethernet-ring/CAN
+- [ ] **Jayne 5 V harness:** 18 AWG shielded TP per drop (Kaylee → nose bow pod, Kaylee → cargo
+    nadir mount); 3 A resettable polyfuse per drop; route with each Jayne's Ethernet-ring/CAN
     harness. Confirm final run lengths once ring-insertion bays are fixed (§1.2c.3).
 - [ ] **Laser — unify to a single 520 nm green source, Class 2 both sites** (retires the
     separate 650 nm red cargo module AND the Rev-A nose Class 3B module). Per-location terminal
     optic sets spread; per-location HARDWARE current limit sets power. **The nose is Class 2
-    (≤ 1 mW), NOT Class 3B** — a concentrated ~12 mm dot detected by Vera's camera (strobe +
-    frame-difference) needs only ~0.45 mW (`docs/VERA_LASER_ANALYSIS.md` Rev A1). This drops the
+    (≤ 1 mW), NOT Class 3B** — a concentrated ~12 mm dot detected by Jayne's camera (strobe +
+    frame-difference) needs only ~0.45 mW (`docs/JAYNE_LASER_ANALYSIS.md` Rev A1). This drops the
     Class 3B key-interlock and mechanical shutter entirely.
 - [ ] **Both Class 2 caps must be hardware-enforced** (fixed current limit), not firmware-only.
 - [ ] **Nose camera strobe + frame-difference detection** (firmware/ISP, TODO.md §4.6) — this
@@ -2844,9 +2902,9 @@ Power-budget and laser analyses completed 2026-07-05 (`docs/POWER_DISTRIBUTION.m
     visibility requirement is later added (would push the nose back toward 3R/3B).
 - [ ] **Do not source** the green diode or either terminal optic until a real datasheet with a
     verified mW rating + IEC 60825-1 class is added to REFERENCES.md (extends the REF-IEC-002
-    pending item; the Vera-laser row in "Open Standards Verification Items").
+    pending item; the Jayne-laser row in "Open Standards Verification Items").
 
-**BLOCKS:** Vera fabrication order; bow sensor pod avionics integration (§1.1.1.1a).
+**BLOCKS:** Jayne fabrication order; bow sensor pod avionics integration (§1.1.1.1a).
 
 ---
 
@@ -2879,6 +2937,16 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 - `avionics/kicad/gen_cape_b2_pcb.py` → `CAPE-B-2.kicad_pcb`
 
 **Open tasks:**
+
+- [x] **USB-to-Ethernet bridge (LAN9500A class) evaluated as an alternative Ethernet
+    front end and REJECTED (not deferred), 2026-07-11.** Rationale captured in
+    `docs/ETHERNET_PHY_TRADE.md`: a single-port USB bridge cannot offload HSR/PRP
+    (IEC 62439-3), so the redundant ring collapses; USB adds non-deterministic
+    latency/jitter unfit for the flight-control bus, a fragile 480 Mbps EMI ingress
+    path in the 200 V/m environment, and hard/costly galvanic isolation — while
+    wasting the AM6254/AM62A7 native MAC. Native DP83825I / ADIN1300 / KSZ9477 path
+    retained. If "reduce per-PHY glue on Wash" resurfaces, the on-architecture answer
+    is a managed KSZ9477/KSZ9567 switch, tracked as a separate trade — NOT USB.
 
 ##### 1.2a.1 *Cape DRC / routing / ETH2 status (2026-06-12)* — see `avionics/kicad/README.md`
 
@@ -4923,9 +4991,9 @@ host-PC software all created in Rev R.  See `gcs/malcolm/README.md` for layout.
 
 ---
 
-### 4.6 — Vera Node (Nose/Cargo Vision, ToF & Laser) — Firmware
+### 4.6 — Jayne Node (Nose/Cargo Vision, ToF & Laser) — Firmware
 
-**Dependency:** blocked on §1.2c hardware (no `Vera.kicad_sch`/`Vera.kicad_pcb` exist yet).
+**Dependency:** blocked on §1.2c hardware (no `Jayne.kicad_sch`/`Jayne.kicad_pcb` exist yet).
 This is tracked as its own WBS section because it is a genuine multi-phase firmware bring-up
 effort — an ISP/encoder pipeline on a new SoC family, not a configuration change — per user
 direction (2026-07-03).
@@ -4954,7 +5022,7 @@ direction (2026-07-03).
 - [ ] **KSZ9477 Ethernet switch management driver** [REF-SENSOR-005] — confirm HSR/PRP hardware
     redundancy is correctly configured (verify against AN3474) so ring failover requires no
     software topology management on the PocketBeagle 2 nodes.
-- [ ] **Laser GPIO driver (both sites Class 2 — `docs/VERA_LASER_ANALYSIS.md` Rev A2):**
+- [ ] **Laser GPIO driver (both sites Class 2 — `docs/JAYNE_LASER_ANALYSIS.md` Rev A2):**
     GPIO-enable with pull-down-default-off + heartbeat-loss interlock (drop GPIO low if
     Ethernet ring AND CAN-FD both lose master-FC heartbeat) [REF-IEC-002 §5.4]. The Class 2 cap
     is hardware-enforced, so no key-interlock/shutter is required; `LASER_KEY_IN`/`LASER_IND`
@@ -4963,7 +5031,7 @@ direction (2026-07-03).
     laser-sync GPIO/PWM and temporally difference (laser-on − laser-off) to extract the
     crosshair in daylight; sub-pixel-fit the crosshair lines and compute detected-object
     **size** = (obj_px/cross_px)·2R·tan(θ/2) and **tilt** from arm foreshortening, using the
-    boresighted TFmini-S range R (`docs/VERA_LASER_ANALYSIS.md §4.4`). Publish size/orientation
+    boresighted TFmini-S range R (`docs/JAYNE_LASER_ANALYSIS.md §4.4`). Publish size/orientation
     with the signed telemetry below.
 - [ ] **SPI driver to Infineon SLB9670 TPM** — reuse the existing TPM driver approach already
     used fleet-wide on Wash/Zoë nodes rather than writing a new one from scratch.
@@ -4972,12 +5040,12 @@ direction (2026-07-03).
 
 #### 4.6.3 — Integration Testing
 
-- [ ] **Bench test:** verify Vera node publishes signed ToF range + laser-state + video stream
+- [ ] **Bench test:** verify Jayne node publishes signed ToF range + laser-state + video stream
     to at least one PocketBeagle 2 node over both CAN-FD and Ethernet independently.
-- [ ] **Ring failure test:** break the Ethernet ring at a point other than Vera; verify KSZ9477
+- [ ] **Ring failure test:** break the Ethernet ring at a point other than Jayne; verify KSZ9477
     HSR/PRP failover completes with no observable video interruption.
 - [ ] **Laser safety interlock test (nose only):** verify laser GPIO drops low within the
-    heartbeat-loss window when Ethernet ring and CAN-FD are both disconnected from Vera.
+    heartbeat-loss window when Ethernet ring and CAN-FD are both disconnected from Jayne.
 
 ---
 
@@ -5109,9 +5177,9 @@ indexes them.
     processor; fixed the MESH-01 fragmentation defect for cargo (single robust manifold3d
     boolean, not sequential per-cutter subtraction); merged clamshell doors, joint features, wing
     spar/mortises, nacelle-servo pads, Inara avionics bosses.
-- **Vera board (2026-07-03).** New standalone vision/ToF/laser PCB (nose + cargo-bay install,
+- **Jayne board (2026-07-03).** New standalone vision/ToF/laser PCB (nose + cargo-bay install,
     one shared design) — schematic + PCB, EMI-hardened to the Wash/Zoë Rev R standard, DRC/ERC
-    clean of all real electrical checks. See `avionics/kicad/Vera.md`.
+    clean of all real electrical checks. See `avionics/kicad/Jayne/Jayne.md`.
 - **Head/Cargo, Cargo/Middle, Middle/Rear splice collars (2026-06-29 / 2026-07-03).** All three
     fuselage structural joints now have a first-principles load check and a printed internal
     splice collar generator (`generate_head_cargo_splice_collar.py`,

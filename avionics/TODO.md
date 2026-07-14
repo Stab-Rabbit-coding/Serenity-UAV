@@ -26,7 +26,7 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 |----------|--------|-----:|:------------:|
 | §1.2a | 1.2a — PCB Design: Wash, Zoe, Emma (EMI-hardened) | 37 | &#9733; |
 | §1.2b | 1.2b — PCB Redesigns: Emma / Zoe / Kaylee Rev S1 | 26 | &#9733; |
-| §1.2c | 1.2c — PCB Design: Vera (Jayne vision/ToF/laser subsystem) | 22 | — |
+| §1.2c | 1.2c — PCB Design: Jayne (Jayne vision/ToF/laser subsystem) | 22 | — |
 | §1.4 | 1.4 — EMI Hardening Beyond the PCBs (500 W/m^2) | 43 | &#9733; |
 | §0.6 | 0.6 — IEC 62368-1 PCB Layout Isolation Verification | 0 | &#9733; |
 | §1.3 | 1.3 — PCB Design: XCVR-49MHZ-1 (SUPERSEDED) | 0 | — |
@@ -35,7 +35,7 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 | §4.2 | 4.2 — FC Node (Wash) Firmware | 38 | &#9733; |
 | §4.3 | 4.3 — CN Node (Zoe) Firmware | 36 | &#9733; |
 | §4.4 | 4.4 — Both Nodes (shared firmware) | 22 | &#9733; |
-| §4.6 | 4.6 — Vera Node Firmware (Jayne vision subsystem) | 15 | — |
+| §4.6 | 4.6 — Jayne Node Firmware (Jayne vision subsystem) | 15 | — |
 | §1.8 | 1.8 — Names | 0 | — |
 | §1.9 | 1.9 — Avionics Workload Balancing | 0 | — |
 | | **Total open (this subsystem)** | **239** | |
@@ -45,19 +45,19 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 
 ## Cross-cutting system: Jayne (cargo handling)
 
-> **Jayne is a ship-level integrating system, not a single WBS branch.** It comprises the cargo-bay doors, the N20 winch / Dyneema hoist, the auto-latch, the gondola, **and the Vera vision/ToF/laser PCB as its sensing subsystem**. Its work is distributed across subsystem WBS files:
+> **Jayne is a ship-level integrating system, not a single WBS branch.** It comprises the cargo-bay doors, the N20 winch / Dyneema hoist, the auto-latch, the gondola, **and the Jayne vision/ToF/laser PCB as its sensing subsystem**. Its work is distributed across subsystem WBS files:
 >
 > | Jayne subsystem | Where tracked |
 > |---|---|
 > | Doors, winch, latch, gondola — geometry/STLs | [airframe/TODO.md](../airframe/TODO.md) §1.1 |
 > | Cargo procurement (BOM) | master [`TODO.md` §2.6](../TODO.md) |
-> | **Vera** vision/ToF/laser board | [avionics/TODO.md](../avionics/TODO.md) §1.2c |
-> | **Vera** node firmware | [avionics/TODO.md](../avionics/TODO.md) §4.6 |
+> | **Jayne** vision/ToF/laser board | [avionics/TODO.md](../avionics/TODO.md) §1.2c |
+> | **Jayne** node firmware | [avionics/TODO.md](../avionics/TODO.md) §4.6 |
 > | Payload/winch control firmware (Simon = payload-primary) | [avionics/TODO.md](../avionics/TODO.md) §4.2 / §4.3 |
 > | Physical assembly & install | [graphical-build-guide/TODO.md](../graphical-build-guide/TODO.md) Phase 7 |
 > | Range-extender battery in the cargo bay (deferred) | [deferred/TODO.md](../deferred/TODO.md) Phase 12 |
 >
-> **Note for this file:** §1.2c (Vera board) and §4.6 (Vera firmware) below are the sensing subsystem of Jayne; Kaylee's dedicated Vera 5 V rail lives in §1.2b. The mechanical cargo hardware they serve is in [airframe/TODO.md](../airframe/TODO.md) and Phase 7.
+> **Note for this file:** §1.2c (Jayne board) and §4.6 (Jayne firmware) below are the sensing subsystem of Jayne; Kaylee's dedicated Jayne 5 V rail lives in §1.2b. The mechanical cargo hardware they serve is in [airframe/TODO.md](../airframe/TODO.md) and Phase 7.
 
 
 ## §1.2a — PCB Design: Wash, Zoe, Emma (EMI-hardened) &#9733;
@@ -311,7 +311,7 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
     - **BLOCKS Kaylee fabrication order.**
 
 
-## §1.2c — PCB Design: Vera (Jayne vision/ToF/laser subsystem)
+## §1.2c — PCB Design: Jayne (Jayne vision/ToF/laser subsystem)
 
 *Master:* [`TODO.md` §1.2c](../TODO.md) — 22 open, 13 done at snapshot.
 
@@ -322,17 +322,28 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
     SoC decision before proceeding with layout. **Still open — the placeholder footprint in
     `gen_vera_pcb.py` does not commit to a real ball-out, so this decision is not yet blocking,
     but must be resolved before the real BGA footprint is authored.
-- [ ] Shape the Vera PCB to fit in the nose directly behind the faceplate, allowing PCB mounting of laser, camera, and TOF, with EMI hardening.  PCB oriented horizontal with sensors on forward end and network connections on aft end.
+- [ ] Shape the Jayne PCB to fit in the nose directly behind the faceplate, allowing PCB mounting of laser, camera, and TOF, with EMI hardening.  PCB oriented horizontal with sensors on forward end and network connections on aft end.
 - [x] **Source and cite a real Class 3B nose crosshair laser module** — **SUPERSEDED by the
-    Class 2 laser unification (§1.2c.4 below, 2026-07-06; `docs/VERA_LASER_ANALYSIS.md` Rev A2).**
-    The nose is **not** Class 3B: a thin-line green crosshair detected by Vera's own strobed
+    Class 2 laser unification (§1.2c.4 below, 2026-07-06; `docs/JAYNE_LASER_ANALYSIS.md` Rev A2).**
+    The nose is **not** Class 3B: a thin-line green crosshair detected by Jayne's own strobed
     camera + frame-difference needs only ~0.2–0.8 mW → **Class 2**. No separate Class 3B nose
     module exists to source — both sites share ONE 520 nm green Class 2 source (per-location
     terminal optic + hardware current limit). The surviving "**do not source** until a real
     IEC 60825-1 datasheet is in REFERENCES.md (REF-IEC-002 pending)" action is the Class 2 item
     in §1.2c.4, not a Class 3B part. Closed in master [`TODO.md`](../TODO.md).
-- [ ] Generate production-ready Gerber files to `avionics/kicad/gerbers/Vera/` — **blocked on
-    trace routing above; not meaningful to generate gerbers for an unrouted board.**
+- [ ] Generate production-ready Gerber files to `avionics/kicad/Jayne/gerbers/` — **blocked on
+    trace routing, real footprints, and silk/DRC cleanup; not meaningful to export gerbers for
+    a board that is still using placeholder footprints or is partially routed.**
+    - [ ] Replace placeholder U1/U2/U3/U5/U_PMIC footprints with real datasheet-approved
+        BGA/QFN/VSSOP footprints before fabrication.
+    - [ ] Complete full copper routing for all signal nets and power domains.
+    - [ ] Resolve any `silk_over_copper`, `silk_overlap`, or `silk_edge_clearance` warnings.
+    - [ ] Run KiCad DRC to zero errors after routing and footprint updates.
+    - [ ] Export Gerber and drill files to `avionics/kicad/Jayne/gerbers/` using KiCad or the
+        repository's Gerber workflow once the board is fully routed and verified.
+    - [ ] Confirm the compact 1.0 × 2.75 in (25.4 × 69.85 mm) `Jayne.kicad_pcb` baseline is intentional and, if so,
+        back-port the updated board outline/placement into `gen_vera_pcb.py`; otherwise treat
+        the script output as a pre-compaction template only.
     - [ ] Render + mesh-verify `head_shell24.scad` (blocked this session; re-attempt).
     - [ ] FreeCAD-verify the proposed pose and pocket-wall clearance against
         `bow_camera_cut`/`bow_tof_cut` — do not hand-derive the bow pod's own
@@ -345,7 +356,7 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 - [ ] **Flag stale laser bore dimensions:** `LASER_BORE_D=12.5mm`/`LASER_BORE_L=38.0mm` in
     `bow_sensor_pod.scad` are sized for the old 12mm-OD Class 3R laser module. The new
     custom-collimated 520nm **Class 2** green module's real mechanical dimensions are
-    undetermined (class corrected 2026-07-06 per `docs/VERA_LASER_ANALYSIS.md` Rev A2 — was
+    undetermined (class corrected 2026-07-06 per `docs/JAYNE_LASER_ANALYSIS.md` Rev A2 — was
     mislabeled "Class 3B" here) — do not reuse these bore numbers without re-measuring against
     the new module's actual datasheet/mechanical drawing.
     - [ ] Render + mesh-verify `cargo_sect_shell24.scad` (blocked this session; re-attempt).
@@ -362,13 +373,13 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
     `airframe/CLAUDE.md` after adding.
 - [ ] **Local sensor harness (both sites):** J_CAM1/J_CAM2 (MIPI CSI-2, flex/FPC preferred),
     J_TOF (dedicated UART1, twisted pair/ribbon), J_LASER (Q1 gate drive + laser V+, twisted
-    pair) — all short point-to-point runs (<75mm) since Vera co-locates with the sensor
-    cluster at both sites, unlike the pre-Vera plan of running TFmini-S's UART to Shepherd's
+    pair) — all short point-to-point runs (<75mm) since Jayne co-locates with the sensor
+    cluster at both sites, unlike the pre-Jayne plan of running TFmini-S's UART to Shepherd's
     Room.
 - [ ] **External ring harness — nose:** route J_PWR/J_ETH_IN/J_ETH_OUT/J_CANFD aft through the
     open head/cargo mating face to **Shepherd's Room** (nearest bay, PACE-primary Watchdog).
     Open: confirm which existing Ethernet-ring segment Shepherd's stack currently closes, so
-    Vera's ring-insertion point and new cable lengths can be fixed.
+    Jayne's ring-insertion point and new cable lengths can be fixed.
 - [ ] **External ring harness — cargo:** route J_PWR/J_ETH_IN/J_ETH_OUT/J_CANFD through the
     cargo section's open mating faces to the nearest bay. Open: decide **River's Room** vs.
     **Simon's Medbay** as the shorter/more appropriate ring-insertion point (both carry Emma
@@ -376,7 +387,7 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 - [ ] **Kaylee second 5 V rail — cross-tied, mutually fault-tolerant (PLAN, `docs/POWER_
     DISTRIBUTION.md §11.1`).** Add a **third identical TPS54620 BEC channel** (`U_BEC_5V_3` +
     `L_5V3` + `R_FB3` + `C_BEC3_IN/OUT` + `FB_5V3` + `D_OR3` — copy of `U_BEC_5V_1`) feeding
-    **RAIL-2 (5V_VERA) → `J_VERA`** (both Vera boards, ≈ 2.4 A typ / ~4.2 A peak). Existing
+    **RAIL-2 (5V_JAYNE) → `J_JAYNE`** (both Jayne boards, ≈ 2.4 A typ / ~4.2 A peak). Existing
     dual-BEC pair = **RAIL-1 (5V_AVIONICS) → `J_5V`**. **Diode-OR cross-tie** the two rails
     (`D_X1`/`D_X2` = 2× MBRD1045CT, same part) via cross-tie fuse `F_X`, plus per-rail fuses
     `F_5V`/`F_VERA`, so each rail is fault-tolerant of the other (regulator-failure backup +
@@ -386,14 +397,14 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
     by the existing pair; SW node in a GND-pour keepout). Number alongside the Rev S1 servo-rail
     change. **Not yet in KiCad.** (Symmetric 2+2 four-channel option in §11.1 if RAIL-2 later
     needs its own internal redundancy.)
-- [ ] **Vera 5 V harness:** 18 AWG shielded TP per drop (Kaylee → nose bow pod, Kaylee → cargo
-    nadir mount); 3 A resettable polyfuse per drop; route with each Vera's Ethernet-ring/CAN
+- [ ] **Jayne 5 V harness:** 18 AWG shielded TP per drop (Kaylee → nose bow pod, Kaylee → cargo
+    nadir mount); 3 A resettable polyfuse per drop; route with each Jayne's Ethernet-ring/CAN
     harness. Confirm final run lengths once ring-insertion bays are fixed (§1.2c.3).
 - [ ] **Laser — unify to a single 520 nm green source, Class 2 both sites** (retires the
     separate 650 nm red cargo module AND the Rev-A nose Class 3B module). Per-location terminal
     optic sets spread; per-location HARDWARE current limit sets power. **The nose is Class 2
-    (≤ 1 mW), NOT Class 3B** — a concentrated ~12 mm dot detected by Vera's camera (strobe +
-    frame-difference) needs only ~0.45 mW (`docs/VERA_LASER_ANALYSIS.md` Rev A1). This drops the
+    (≤ 1 mW), NOT Class 3B** — a concentrated ~12 mm dot detected by Jayne's camera (strobe +
+    frame-difference) needs only ~0.45 mW (`docs/JAYNE_LASER_ANALYSIS.md` Rev A1). This drops the
     Class 3B key-interlock and mechanical shutter entirely.
 - [ ] **Both Class 2 caps must be hardware-enforced** (fixed current limit), not firmware-only.
 - [ ] **Nose camera strobe + frame-difference detection** (firmware/ISP, TODO.md §4.6) — this
@@ -404,7 +415,7 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
     visibility requirement is later added (would push the nose back toward 3R/3B).
 - [ ] **Do not source** the green diode or either terminal optic until a real datasheet with a
     verified mW rating + IEC 60825-1 class is added to REFERENCES.md (extends the REF-IEC-002
-    pending item; the Vera-laser row in "Open Standards Verification Items").
+    pending item; the Jayne-laser row in "Open Standards Verification Items").
 
 
 ## §1.4 — EMI Hardening Beyond the PCBs (500 W/m^2) &#9733;
@@ -678,7 +689,7 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
     - [ ] Bench test: inject unsigned/forged frame on the bus, verify it is discarded and logged.
 
 
-## §4.6 — Vera Node Firmware (Jayne vision subsystem)
+## §4.6 — Jayne Node Firmware (Jayne vision subsystem)
 
 *Master:* [`TODO.md` §4.6](../TODO.md) — 15 open, 0 done at snapshot.
 
@@ -701,7 +712,7 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 - [ ] **KSZ9477 Ethernet switch management driver** [REF-SENSOR-005] — confirm HSR/PRP hardware
     redundancy is correctly configured (verify against AN3474) so ring failover requires no
     software topology management on the PocketBeagle 2 nodes.
-- [ ] **Laser GPIO driver (both sites Class 2 — `docs/VERA_LASER_ANALYSIS.md` Rev A2):**
+- [ ] **Laser GPIO driver (both sites Class 2 — `docs/JAYNE_LASER_ANALYSIS.md` Rev A2):**
     GPIO-enable with pull-down-default-off + heartbeat-loss interlock (drop GPIO low if
     Ethernet ring AND CAN-FD both lose master-FC heartbeat) [REF-IEC-002 §5.4]. The Class 2 cap
     is hardware-enforced, so no key-interlock/shutter is required; `LASER_KEY_IN`/`LASER_IND`
@@ -710,18 +721,18 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
     laser-sync GPIO/PWM and temporally difference (laser-on − laser-off) to extract the
     crosshair in daylight; sub-pixel-fit the crosshair lines and compute detected-object
     **size** = (obj_px/cross_px)·2R·tan(θ/2) and **tilt** from arm foreshortening, using the
-    boresighted TFmini-S range R (`docs/VERA_LASER_ANALYSIS.md §4.4`). Publish size/orientation
+    boresighted TFmini-S range R (`docs/JAYNE_LASER_ANALYSIS.md §4.4`). Publish size/orientation
     with the signed telemetry below.
 - [ ] **SPI driver to Infineon SLB9670 TPM** — reuse the existing TPM driver approach already
     used fleet-wide on Wash/Zoë nodes rather than writing a new one from scratch.
 - [ ] **Signed telemetry:** TPM-signed HMAC or ECDSA signature on all ToF/laser-state packets
     published over CAN-FD and Ethernet, per Zero Trust policy [REF-NIST-001 §2.1].
-- [ ] **Bench test:** verify Vera node publishes signed ToF range + laser-state + video stream
+- [ ] **Bench test:** verify Jayne node publishes signed ToF range + laser-state + video stream
     to at least one PocketBeagle 2 node over both CAN-FD and Ethernet independently.
-- [ ] **Ring failure test:** break the Ethernet ring at a point other than Vera; verify KSZ9477
+- [ ] **Ring failure test:** break the Ethernet ring at a point other than Jayne; verify KSZ9477
     HSR/PRP failover completes with no observable video interruption.
 - [ ] **Laser safety interlock test (nose only):** verify laser GPIO drops low within the
-    heartbeat-loss window when Ethernet ring and CAN-FD are both disconnected from Vera.
+    heartbeat-loss window when Ethernet ring and CAN-FD are both disconnected from Jayne.
 
 
 ## §1.8 — Names

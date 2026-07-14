@@ -1,0 +1,98 @@
+﻿ Re: Contact got a new submission
+Subject:
+Re: Contact got a new submission
+From:
+Nick Henning <nickhenning3d@gmail.com>
+Date:
+7/6/26, 2:21 PM
+To:
+"steve@griffing.tech" <steve@griffing.tech>
+X-Mozilla-Status:
+0001
+X-Mozilla-Status2:
+00000000
+Return-Path:
+<nickhenning3d@gmail.com>
+Delivered-To:
+steve@griffing.tech
+Received:
+from fast2002.fastdomain.com by fast2002.fastdomain.com with LMTP id KHtVIE/yS2rQ+w0AHMk9rg (envelope-from <nickhenning3d@gmail.com>) for <steve@griffing.tech>; Mon, 06 Jul 2026 12:22:07 -0600
+Return-path:
+<nickhenning3d@gmail.com>
+Envelope-to:
+steve@griffing.tech
+Delivery-date:
+Mon, 06 Jul 2026 12:22:07 -0600
+Received:
+from mail-pl1-f176.google.com ([209.85.214.176]:46443) by fast2002.fastdomain.com with esmtps (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.99.4) (envelope-from <nickhenning3d@gmail.com>) id 1wgnxH-00000003qcM-1O9C for steve@griffing.tech; Mon, 06 Jul 2026 12:22:07 -0600
+Received:
+by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2cca24023edso17832835ad.1 for <steve@griffing.tech>; Mon, 06 Jul 2026 11:22:07 -0700 (PDT)
+ARC-Seal:
+i=1; a=rsa-sha256; t=1783362126; cv=none; d=google.com; s=arc-20260327; b=hZnhs07taz7fK2WIkjc5vDev5g4lqsWA0iEU9tiNeypmpjVRV7QjOO4avvYvlYtJoi bkPoHthq17XSf7CcH94n9mo3V4GNTMmLbuS84r5MXkgLzcjviezrrlg58vVlSmluZ7NG 2yhtNzTXGnS4DuEOIb5gBch98D/F3YNEbns3Ae4Te5pPAGuLTs1GPeJXJWzXnJNyD1J0 7ueVh9Efx/YFQvQAP4BRxiHdrTKO4C1MTIidJ7RkSl9MprN8SkH5IEI588v2Wy32rfrC +DciKUgBy9eNmhT6IrFobV++Cfsk9nr8gi9ol5qKAX96vJhYsqw8xiMn8vAfS5GMXcGf kP5w==
+ARC-Message-Signature:
+i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327; h=to:subject:message-id:date:from:in-reply-to:references:mime-version :dkim-signature; bh=zpVS1b2PKvavw0hD0xgnADmm24514TifdxT0uUyeXDU=; fh=6DW16j4O+ADbVYFNZ8R67BToS2b9GA+FwL1wpW+iYmA=; b=AvSnpJAiMTpsvzowrdcozgdN7nv9WISObArtM2Q9kcQSazviROnrnHbLQAJjpBo93C h7I6aCjYSp/I3UeWuAwjNnJsjZyZshCxE06xNtENXk0mAKHKGNAkk1SCuYNYkbvhFW0H b/0sKD8X0FaagHnB6LKSOKkcF9w/1WpMpeamH4wPSNCi0N4Afmt10CGqnncEnaH9h0qG eWiWVywtcbgFy9B54YHtpVyYQ0L7jGfR/pbwtSihz4wf/qfhSwIjLAftvOsVU4tvW1W/ ambHd0DsTOGUinu7p6Hl5x+SIuLI23Of546EBfUrstgBNrIXjyMxyUs2Zyb6n1xDxQWU /z8g==; darn=griffing.tech
+ARC-Authentication-Results:
+i=1; mx.google.com; arc=none
+DKIM-Signature:
+v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20251104; t=1783362126; x=1783966926; darn=griffing.tech; h=to:subject:message-id:date:from:in-reply-to:references:mime-version :from:to:cc:subject:date:message-id:reply-to; bh=zpVS1b2PKvavw0hD0xgnADmm24514TifdxT0uUyeXDU=; b=BAUGC0D7I4SGyaFi5vdqHBiz2hncX0ktl2DY79cLqo9iGab8A0SitRWfdmr4Rslr+u jna/8aqPjKOEAaIMGTOCljo8tN5A0pv7dJGjUkBttucn97naeAG9tMA89Zug7QHUbZPh vVbaZIAYcyfoK+KGxJJNqfnAD3I33mBrmAileS9fNsLzCGCjHtVMVRfN5NpcmChTMqu0 GC75tNmx927RfEUzwJ21BxQLh5s9NUaUCbJxT1KdqqOJf7FddtvuXyxh9ZNDXZD51sN6 93RElltBYC3jnocK/AMZFNxEl2FQxn0fQn+ax45wTHe81Nchvs4QxLaf1WIDgpZtd482 WjEw==
+X-Google-DKIM-Signature:
+v=1; a=rsa-sha256; c=relaxed/relaxed; d=1e100.net; s=20251104; t=1783362126; x=1783966926; h=to:subject:message-id:date:from:in-reply-to:references:mime-version :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id :reply-to; bh=zpVS1b2PKvavw0hD0xgnADmm24514TifdxT0uUyeXDU=; b=tDpnBo/DXa6W6pWAvovab4SM+IUdNBi+U696DTAeKdCt9OQiVfCMtgzlox5GlfbUh4 8G+Vl2kVVx3bcug5qog+tvGw4cJtYUUX+676c1QUm860sy5lawY0Q9AcJMpzVLZ9Ge0y NuDk7MZ2Vi4GRHnLonX52GhOFX7l2obG7xSZxVuLn4fF9eMfjkb0MAtflIuhDkLLivOz Pra3va3Ee3PuStX1fhJnhBihtlQI9bz67ZuIIYg7en5qT0LPJvYmVvoRCjahvJTeHQYI 6KG+As1rVd4DHt+3+p4gVz4sY+ie4787uczhjKD0clbjN7EZ8jkV5wdcq7om+XQKXTwU ObjQ==
+X-Gm-Message-State:
+AOJu0YzFXZlpoGFHSPo3sWyCJ4vGKtAmyZrtIuvwIV/aRQvm8+Zb9stV NyFwprM7BkCpm/I/kJOZrw018nPm/fyhPwNnAgXevvEffL6rAleajaKFqvU03GYi7h6gn0Gii4C ekoPQHSiVu9k7j42hSw/kaykVTmZEiBRaFJo/mzg=
+X-Gm-Gg:
+AfdE7cmfkvXh45Su6M3sQObh+glVGOTBTRqy3D+51+HKdAI7RGB1cjOZK1WUVyroT0Y /QdWoVwxXzrZNIR1JsRcnBvgZ4o9cVKXazVyF/d2QAfLO+Ktr43PDyMqNB5nccTXewkF+FuL+PT leolPreQYDaUfH/B/KqMVfOE60if2oggVZUV+ebQtb6oA+6h8iroANEyhcs+u1Jidf6P/wibirT 5Gw/A6rn9saA1P4a0b0zPeOPnuJcqAaWexquJ0dg9ImbAi9ZF8t5CbNSQFj/5jiUzqMPmZpVRtA qwIAZFTVFKZM1f6cmHWiYmfU9wo=
+X-Received:
+by 2002:a17:903:244e:b0:2cc:9179:335 with SMTP id d9443c01a7336-2ccbe3fc4edmr19994055ad.8.1783362125855; Mon, 06 Jul 2026 11:22:05 -0700 (PDT)
+MIME-Version:
+1.0
+References:
+<cGroj8jHSHyjS6ar_Yz6fg@geopod-ismtpd-12>
+In-Reply-To:
+<cGroj8jHSHyjS6ar_Yz6fg@geopod-ismtpd-12>
+X-Gm-Features:
+AVVi8CcppkHYmbUU5-T_K9_hz88b9K5aT9LQ8O45BUlXEdR2pK9YXDqttROIhxg
+Message-ID:
+<CAKLbpqHj9gOocR+fGR2-4Of1tZks3O7KSrkhJ+eKniu_AM+gzA@mail.gmail.com>
+Content-Type:
+multipart/alternative; boundary="0000000000000488730655f55ade"
+
+Hello Steve,
+
+Thanks for your interest.  The Serenity model was a school project based off of the renders from the show and movie.  I am busy at the moment so have not been able to check out your project completely but it sounds interesting.  It would be something to see a Firefly class ship take flight.  
+
+Feel free to use any renders of it that are in the public space for reference.  
+
+NIck Henning
+
+On Mon, Jun 29, 2026 at 8:57 AM Nick Henning 3D <notifications@wix-forms.com> wrote:
+
+    A site visitor just submitted your form Contact‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ 
+    Can't see this message? View in browser
+     
+
+    A site visitor just submitted your form Contact on Nick Henning 3D
+
+    Submission summary:
+
+    Name:
+
+    Steve Griffing  
+
+    Email:
+
+    steve@griffing.tech  
+
+    Message:
+
+    Nick,
+    I saw your extremely detailed model of Serenity, and would like to reference it in a cc-by licensed functional drone build I'm working on, to get some of the details right that I've been struggling with. I don't know how you've licensed your work, and don't want to impose on your intellectual property My work is on github.com at Stab-Rabbit-coding/Serenity-UAV. I invite you to contribute to it. I'm trying to blend canonical accuracy with mechanical, aerodynamic, electronic, and regulatory reality. I'm a controls engineer, not an artist, so I've been relying on claude to do what i can't. I'd appreciate a human's input.
+
+    Thanks,
+
+    Steve Griffing  
+    View Submissions
+
+    If you think this submission is suspicious, report it as spam.
+     
+    This email was sent as a notification from this site.
+

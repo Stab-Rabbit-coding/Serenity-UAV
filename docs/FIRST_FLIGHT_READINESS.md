@@ -7,7 +7,7 @@
 > **First flight = master WBS Phase 5, "Minimum Viable Flyer."**
 > Goal: CN1+FC1 (Shepherd's room / Bay A) and CN2+FC2 (Inara's shuttle / Bay B)
 > installed and flying — a 4-node VTOL hover (nacelle T/W ~1.61). The aft EDF
-> (Phase 11), the remaining 4 nodes (Phase 6), cargo (Phase 7), and Vera vision
+> (Phase 11), the remaining 4 nodes (Phase 6), cargo (Phase 7), and Jayne vision
 > (Phase 6+) are **not** first-flight gates. This report rolls up every open item
 > on the critical path to that milestone.
 

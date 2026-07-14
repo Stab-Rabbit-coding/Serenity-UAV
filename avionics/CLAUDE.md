@@ -185,18 +185,27 @@ started":
 **Installed in:** River's Room (Bay C) and Simon's Medbay (Bay D) only  
 **Status:** Archived: XCVR-49MHZ-1, Cape-A-1, Cape-B-1
 
-### Vera — Nose/Cargo-Bay Vision, ToF & Laser Board
+### Jayne — Cargo-Handling System and Nose/Cargo-Bay Vision, ToF & Laser Board
 
-**Vera is a standalone, compact PCB — not a PocketBeagle 2 Industrial cape.** Unlike
-Wash/Zoë/Emma, it does not use the P1+P2 header stack and does not mount onto a PB2-I node.
-It is its own independent board with its own power input (5V VCC, GND, PGND) and its own
-processors (AM62A vision SoC + MSPM0G3507 MCU), connecting to the rest of the airframe only
-through the shielded JST-GH Ethernet ring and CAN-FD trunk connectors, as a peer network node
-rather than a stacked daughterboard.
+**Jayne now names one integrated subsystem, not two separate identities.** It covers both
+the mechanical cargo-handling hardware (winch, latch, cargo bay door — "I was aiming for
+his head") and the vision/ToF/laser sensing board formerly documented under the working
+name "Vera." The board gives the mechanical cargo system its eyes: it watches and measures
+what the winch and latch are handling. Historical references to "Vera" in commit history,
+older revisions of this document, and file headers refer to this same board and should be
+read as "Jayne."
+
+**The Jayne board is a standalone, compact PCB — not a PocketBeagle 2 Industrial cape.**
+Unlike Wash/Zoë/Emma, it does not use the P1+P2 header stack and does not mount onto a PB2-I
+node. It is its own independent board with its own power input (5V VCC, GND, PGND) and its
+own processors (AM62A vision SoC + MSPM0G3507 MCU), connecting to the rest of the airframe
+only through the shielded JST-GH Ethernet ring and CAN-FD trunk connectors, as a peer
+network node rather than a stacked daughterboard.
 
 One shared PCB design installed at **two physical locations**: the bow sensor pod (nose) and
-the cargo bay nadir FPV mount (`cargo_fpv_bezel`).  Supersedes the RunCam Nano 4 analog
-camera (REF-SENSOR-001, superseded) originally specified for the bow sensor pod.  Vera is
+the cargo bay nadir FPV mount (`cargo_fpv_bezel`), the latter co-located with the mechanical
+cargo-handling hardware it supervises.  Supersedes the RunCam Nano 4 analog camera
+(REF-SENSOR-001, superseded) originally specified for the bow sensor pod.  The board is
 deliberately split into a **vision half** and a **control half** on the same board — two
 real, currently-produced silicon vendors, not a fictional single-chip "port":
 
@@ -212,19 +221,21 @@ real, currently-produced silicon vendors, not a fictional single-chip "port":
   Recommended for New Designs) — excluded from this design for that reason.
 - Chosen over a SigmaStar/OpenIPC path specifically for toolchain uniformity with the
   PocketBeagle 2 Industrial's TI Sitara AM6254 SoC (shared cross-compiler, kernel driver
-  patterns, and debug tooling across Wash/Zoë and Vera).
+  patterns, and debug tooling across Wash/Zoë and the Jayne board).
 
 **Control half:**
 
 - **TI MSPM0G3507** MCU — native hardware MCAN (CAN-FD) peripheral; shares TI toolchain
   with the vision half and with the AM6254 real-time domain on Wash/Zoë.
 - **Infineon OPTIGA SLB9670** SPI TPM 2.0 — same part already standardized fleet-wide on all
-  8 Wash/Zoë nodes (REFERENCES.md §3.3/§4.2); Vera reuses it rather than introducing a new TPM
+  8 Wash/Zoë nodes (REFERENCES.md §3.3/§4.2); Jayne reuses it rather than introducing a new TPM
   part number.
 - **Microchip KSZ9477** Ethernet switch — the only part in this family confirmed (via AN3474)
   to hardware-offload HSR/PRP ring redundancy per IEC 62439-3; LAN9355/KSZ9563 do **not**
   implement this and must not be substituted for the ring-redundancy role.
-- **TI ISOW1044BDFMR** galvanically isolated CAN-FD transceiver (SOIC-16W, 5 kV reinforced
+- **TI ISOW1044BDFMR** galvanically isolated CAN-FD transceiver (**20-pin DFM package** —
+  verified against TI datasheet SLLSFF7A Fig 7-1 / §8.4 "DFM/20 PINS"; earlier docs wrongly
+  said "SOIC-16W", a fleet-wide footprint error flagged in TODO.md, 5 kV reinforced
   insulation) — matches the Wash/Zoë Rev R EMI-hardening standard (TODO.md §1.2a); an earlier
   pass of this board used the non-isolated TCAN1042HG-Q1, corrected 2026-07-03.
 - Shielded JST-GH connectors for the Ethernet ring (in/out, 5-pin: GND + TX±/RX±) and the
@@ -235,14 +246,14 @@ real, currently-produced silicon vendors, not a fictional single-chip "port":
 port carries Wurth 749010012A magnetics + 2× Bourns SRF2012-100Y CMC + 2× Nexperia
 PRTR5V0U2X TVS before the ring connector; the CAN-FD bus carries the same CMC + TVS pairing
 after U4. All parts/pinouts reused verbatim from this project's own verified
-`gen_cape_a2.py`/`gen_cape_a2_pcb.py` — not fabricated. See `Vera.md` "EMI Hardening Status".
+`gen_cape_a2.py`/`gen_cape_a2_pcb.py` — not fabricated. See `Jayne.md` "EMI Hardening Status".
 
 **ToF sensor:** Benewake TFmini-S (REF-SENSOR-002), unchanged from the existing bow sensor
 pod design — read by the MSPM0G3507 over UART, republished signed over both the Ethernet
 ring and CAN-FD.
 
 **Laser — single 520 nm green source, per-location optic + hardware current limit**
-(revised 2026-07-05, `docs/VERA_LASER_ANALYSIS.md`; supersedes the earlier "do not use one
+(revised 2026-07-05, `docs/JAYNE_LASER_ANALYSIS.md`; supersedes the earlier "do not use one
 part for both sites" split). Both installs share ONE green diode + driver; they differ only in
 (1) a terminal optic that sets the spread angle and (2) a hardware current limit that sets the
 optical power / IEC 60825-1 class:
@@ -252,22 +263,24 @@ optical power / IEC 60825-1 class:
   dot. Same collimated green source both places.
 - **Both sites — Class 2** (≤1 mW green). The nose is **not** inherently Class 3B: 3B was the
   worst-case corner (a power-diluted *spread* crosshair judged by a *naked eye* in *full sun*
-  = ~82 mW). Vera's actual requirement is *camera* visibility, detected by Vera's own strobed
+  = ~82 mW). Jayne's actual requirement is *camera* visibility, detected by Jayne's own strobed
   camera + frame-difference, so a **thin-line green crosshair needs only ~0.2–0.8 mW → Class 2**
-  (see `docs/VERA_LASER_ANALYSIS.md`). Cargo is likewise Class 2. **Class 2 at both sites
+  (see `docs/JAYNE_LASER_ANALYSIS.md`). Cargo is likewise Class 2. **Class 2 at both sites
   eliminates the Class 3B key-interlock and mechanical shutter** — `LASER_KEY_IN`/`LASER_IND`
   become optional defense-in-depth. Keep the ≤1 mW cap **hardware-enforced**. 3B only returns
-  if a *human at the 50 ft target* must see the pattern in full sun — not Vera's use case.
+  if a *human at the 50 ft target* must see the pattern in full sun — not Jayne's use case.
 - **Pattern is a thin-line CROSSHAIR (not a bare dot) — it is a projected metrology reference.**
   A PB2-I computes a detected object's **size and relative orientation** from ToF range + the
   crosshair's known projected angle + trigonometry (size = (obj_px/cross_px)·2R·tan(θ/2); tilt
-  from arm foreshortening — `docs/VERA_LASER_ANALYSIS.md §4.4`). The binding constraint is
+  from arm foreshortening — `docs/JAYNE_LASER_ANALYSIS.md §4.4`). The binding constraint is
   camera pixel coverage, so the fan angle must be sized for it (the nominal 2" @ 50 ft is too
   small — target ≈4–8" for ~24–48 px). Thin lines keep it Class 2. **Do not source** until
   REFERENCES.md carries a verified datasheet citation (REF-IEC-002 pending; TODO.md §1.2c.4).
 
-**Status:** Design exploration only — no `.kicad_sch`/`.kicad_pcb` exists yet. See TODO.md
-§1.2c (hardware) and §4.6 (firmware) for the WBS breakdown.
+**Status:** Schematic net-correct and EMI-hardened (ERC clean of shorts); PCB footprints
+placed, double-sided, corners rounded, 1.0 × 2.75 in (25.4 × 69.85 mm); traces not yet
+routed — NOT fabrication-ready. See TODO.md §1.2c (hardware) and §4.6 (firmware) for the
+WBS breakdown.
 
 ### Kaylee — Power Distribution Board (PDB)
 
@@ -359,6 +372,8 @@ When modifying or creating cape designs:
 4. If planning a new cape revision, record it in `TODO.md` and cite this file
 5. Keep `PROJECT_INDEX.md` up to date with new KiCad files
 6. Archive old cape revisions in `archives/` with a note in `ARCHIVE_INDEX.md`
+7. Check for component datasheets in the `avionics/datasheets` folder, kicad symbols in the `avionics/kicad/symbols` folder, and footprints in the `avionics/kicad/symbols/footprints` folder before searching online.
+8. Use OEM Datasheets as authitative component references.
 
 ---
 

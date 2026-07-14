@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "Jayne")(type "KiCad")(uri "${KIPRJMOD}/../Jayne.pretty")(options "")(descr "Jayne direct-solder sensor lands (camera/ToF/laser) and Jayne-specific footprints"))
+)

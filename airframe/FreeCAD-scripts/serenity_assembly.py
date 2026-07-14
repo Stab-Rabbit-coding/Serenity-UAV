@@ -491,15 +491,20 @@ def assemble():
     STATOR_SLV_Z_START = 90.0
     AFT_SLV_Z_START = 122.5
     # PIVOT_Z re-derived 2026-07-04 for the FULL rotating assembly (gear train +
-    # nozzle ring/petals/idler; WS2812B exhaust LED rings removed): CG_Z = 104.5
+    # nozzle ring/petals; WS2812B exhaust LED rings removed): CG_Z = 104.5
     # mm.  See nacelle_pod_50mm_tandem.scad header mass breakdown.
     PIVOT_Z = 104.5  # gear-train station = full-assembly nacelle CG
-    PINION_A_Y = 28.0  # = sector R(22) + pinion R(6), mm
+    # Rev S1 (2026-07-07, internal-ring nozzle drive — docs/NOZZLE_DRIVE_TRADE.md):
+    # Pinion A regeared 12T R6 -> 17T R8.5, so the sector mesh centre distance
+    # (and the whole shaft-run Y station) moves 28.0 -> 30.5 mm.  30.5 is ALSO
+    # the internal-mesh centre distance drive-pinion-to-ring (34 - 3.5).
+    PINION_A_Y = 30.5  # = sector R(22) + pinion A R(8.5), mm
     NOZZLE_RING_Z = 166.25  # nozzle ring gear-band station (nozzle placement)
-    # Crown Pinion offset 10 mm toward intake of the ring so the compound idler's
-    # two gear bands (10 mm apart) mesh both — resolves the §1.1.3.3 axial
-    # mesh-band mismatch (2026-07-04).  Decoupled from the nozzle station.
-    CROWN_Z = NOZZLE_RING_Z - 10.0  # = 156.25
+    # Rev S1: the compound idler is DELETED.  The Nozzle Drive Pinion (14T
+    # M0.5) meshes the INTERNAL ring gear directly, its 4 mm gear band seated
+    # in the ring's own gear band (iris local Z 0..4.5) — so the pinion is
+    # placed AT the ring station, not 10 mm forward of it as the idler needed.
+    DRIVE_PINION_Z = NOZZLE_RING_Z  # = 166.25 (gear-band start)
     NACELLE_FACE_X_PYLON = 34.0  # mm, inboard (pylon-side) X face
 
     for side in ("port", "stbd"):
@@ -536,32 +541,32 @@ def assemble():
         # nacelle_pod_50mm_tandem.scad pinion_a_boss(): rotate([0,90,0])
         # then translate([0, PINION_A_Y, PIVOT_Z]) — bore axis along
         # local X (parallel to the pivot axis, matching the sector-gear
-        # mesh).  nacelle_pinion.stl is modelled coaxial with its own
-        # local Z by default (standard print orientation for a gear
-        # blank), so the same Y-axis 90 deg rotation aligns it.
+        # mesh).  nacelle_pinion_a.stl (Rev S1: M1 17T variant of
+        # nacelle_pinion.scad) is modelled coaxial with its own local Z,
+        # so the same Y-axis 90 deg rotation aligns it.
         pinion_a = add_mesh(
-            doc, _stl("nacelles/nacelle_pinion.stl"), f"Nacelle_{label}_Drive_Pinion_A"
+            doc,
+            _stl("nacelles/nacelle_pinion_a.stl"),
+            f"Nacelle_{label}_Drive_Pinion_A",
         )
         transform_mesh(
             pinion_a, nacelle_rows(side, _rot_y(90.0), (0.0, PINION_A_Y, PIVOT_Z))
         )
 
-        # ── Crown Pinion (drives the idler gear, which drives the nozzle
-        #    ring gear — nacelle_nozzle_idler.scad) ───────────────────────
-        # FIXED 2026-06-22 (TODO.md §1.1.3.3): nacelle_pod_50mm_tandem.scad's
-        # crown_pinion_boss() used to copy pinion_a_boss()'s rotate([0,90,0])
-        # X-axis-bore pattern verbatim.  Both nacelle_pinion.scad
-        # ("mounted on the longitudinal shaft (nacelle Z-axis)") and
-        # nacelle_bevel_housing.scad ("Longitudinal bore (Z-axis): houses
-        # Bevel Gear B + longitudinal shaft") independently document the
-        # Crown Pinion as Z-axis (no rotation) — the boss code has now been
-        # corrected to match (rotate removed); this placement already used
-        # the documented-correct identity rotation, so no change here.
-        crown_pinion = add_mesh(
-            doc, _stl("nacelles/nacelle_pinion.stl"), f"Nacelle_{label}_Crown_Pinion"
+        # ── Nozzle Drive Pinion (Rev S1 — meshes the INTERNAL nozzle ring
+        #    gear directly; replaces the Rev R1 Crown Pinion + compound
+        #    idler, whose teeth protruded ~10 mm past the nacelle OD —
+        #    docs/NOZZLE_DRIVE_TRADE.md).  M0.5 14T variant of
+        #    nacelle_pinion.scad; Z-axis (identity rotation), gear band
+        #    seated in the ring's gear band at the nozzle ring station.
+        drive_pinion = add_mesh(
+            doc,
+            _stl("nacelles/nacelle_drive_pinion.stl"),
+            f"Nacelle_{label}_Nozzle_Drive_Pinion",
         )
         transform_mesh(
-            crown_pinion, nacelle_rows(side, _IDENTITY3, (0.0, PINION_A_Y, CROWN_Z))
+            drive_pinion,
+            nacelle_rows(side, _IDENTITY3, (0.0, PINION_A_Y, DRIVE_PINION_Z)),
         )
 
         # ── Bevel gear housing ────────────────────────────────────────────
@@ -619,24 +624,19 @@ def assemble():
         )
 
         # ── Nozzle iris assembly ──────────────────────────────────────────
-        # nacelle_nozzle_iris.stl is the combined render (inner ring +
-        # outer housing + 8 petals at the closed position) from
-        # nacelle_nozzle_iris.scad; rotationally symmetric about the bore
-        # axis, so identity rotation is a low-risk assumption.  Translate
-        # to NOZZLE_RING_Z (now decoupled from CROWN_Z — the Crown Pinion is
-        # 10 mm forward for the idler mesh band; the nozzle stays put).
-        # RESOLVED 2026-06-22 (TODO.md §1.1.3): nacelle_nozzle_iris.scad's
-        # own comments (~lines 118-125) used to contain an unresolved
-        # author scratch-pad computing three different candidate mesh
-        # radii (28/37/31/38 mm) for a direct Crown-Pinion-to-rack mesh,
-        # ending mid-thought ("Wait —") with no value ever chosen.  Root
-        # cause: the Crown Pinion's fixed Y = 28 mm offset (shared with
-        # Pinion A for shaft-conduit continuity) is geometrically
-        # incompatible with the nozzle ring's required 36 mm pitch radius.
-        # Fix: a compound idler gear (nacelle_nozzle_idler.scad, new file)
-        # now sits between the Crown Pinion and the nozzle ring, meshing
-        # the former at the fixed 28.1 mm centre distance and the latter
-        # (now a full-circle ring gear, not a partial rack) at 43.6 mm.
+        # nacelle_nozzle_iris.stl is the combined render (unison ring +
+        # outer housing + 8 flaps at the closed position) from
+        # nacelle_nozzle_iris.scad.  Rev S1: the ring gear is INTERNAL and
+        # the drive pinion enters from inside, so the housing is fully
+        # rotationally closed EXCEPT the throat-relief patch at local
+        # azimuth 90 deg — identity rotation keeps that patch aligned with
+        # the drive pinion (both are placed at local +Y).  Translate to
+        # NOZZLE_RING_Z.
+        # History: the Rev R1 fix for the crown-pinion/ring radius mismatch
+        # was a compound idler (2026-06-22); Rev S1 (2026-07-07) supersedes
+        # it — the ring gear is now INTERNAL (136T M0.5, pitch R 34), meshed
+        # directly by the drive pinion at the 30.5 mm shaft station, and the
+        # idler is deleted (it protruded past the nacelle OD).
         nozzle = add_mesh(
             doc,
             _stl("nacelles/nozzles/nacelle_nozzle_iris.stl"),
@@ -646,44 +646,10 @@ def assemble():
             nozzle, nacelle_rows(side, _IDENTITY3, (0.0, 0.0, NOZZLE_RING_Z))
         )
 
-        # ── Crown-Pinion-to-Ring idler gear + bracket ────────────────────
-        # nacelle_nozzle_idler.scad.  Angular position (X, Y) RESOLVED
-        # 2026-06-22 (TODO.md §1.1.3.3): solving the two simultaneous
-        # centre-distance constraints (28.1 mm from Crown Pinion at local
-        # (0, PINION_A_Y); 43.6 mm from the nozzle axis) gives shaft
-        # position (X=+27.485, Y=33.846) — matches IDLER_SLOT_ANG = 50.9°
-        # in nacelle_nozzle_iris.scad (one of two valid mirror solutions;
-        # +X chosen arbitrarily, nothing else occupies that sector here).
-        # Z RESOLVED 2026-07-04 (TODO.md §1.1.3.3 "idler axial mesh-band
-        # mismatch"): the Crown Pinion was offset 10 mm toward the intake of
-        # the Nozzle Ring (CROWN_Z = NOZZLE_RING_Z - 10) so the two targets are
-        # now 10 mm apart axially — matching the idler's own Idler-In / Idler-Out
-        # band-centre spacing (HUB_EXTENSION 2 + GEAR_H_IN/2 4 = local Z 6 for
-        # Idler-In; +10 mm = local Z 16 for Idler-Out; nacelle_nozzle_idler.scad).
-        # Seat the idler so Idler-In's band centre (local Z 6) lands on the Crown
-        # Pinion gear plane (CROWN_Z); Idler-Out's band (local Z 16) then lands on
-        # the Ring plane (CROWN_Z + 10 = NOZZLE_RING_Z) by construction.
-        # (Intra-STL centroid offsets are a sub-mm first-fit fine-tune.)
-        idler_x, idler_y = 27.485, 33.846
-        idler_z = CROWN_Z - 6.0
-        idler = add_mesh(
-            doc,
-            _stl("nacelles/nozzles/nacelle_nozzle_idler.stl"),
-            f"Nacelle_{label}_Nozzle_Idler",
-        )
-        transform_mesh(
-            idler, nacelle_rows(side, _IDENTITY3, (idler_x, idler_y, idler_z))
-        )
-
-        idler_bracket = add_mesh(
-            doc,
-            _stl("nacelles/nozzles/nacelle_nozzle_idler_bracket.stl"),
-            f"Nacelle_{label}_Nozzle_Idler_Bracket",
-        )
-        transform_mesh(
-            idler_bracket,
-            nacelle_rows(side, _IDENTITY3, (idler_x, idler_y, idler_z)),
-        )
+        # (Rev S1: the Rev R1 Crown-Pinion-to-Ring compound idler + bracket
+        # are DELETED — superseded by the direct internal-ring mesh above.
+        # STLs/SCAD archived; see ARCHIVE_INDEX.md and
+        # docs/NOZZLE_DRIVE_TRADE.md.)
 
         # Tip cap (outboard X-face end cap) — ARCHIVED 2026-06-22, legacy
         # part, no longer needed.  STLs moved to airframe/archive/stls/

@@ -1,0 +1,116 @@
+(footprint "Wurth_749010012A_10-100BASE-TX"
+		(layer "F.Cu")
+		(at 188.5 145 90)
+		(property "Reference" "REF**"
+			(at 0 -3.5 90)
+			(layer "F.SilkS")
+			(effects
+				(font
+					(size 0.7 0.7)
+					(thickness 0.05)
+				)
+			)
+		)
+		(property "Value" "Wurth 749010012A"
+			(at 0 3.5 90)
+			(layer "F.Fab")
+			(effects
+				(font
+					(size 0.7 0.7)
+					(thickness 0.05)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 90)
+			(layer "F.Fab")
+			(hide yes)
+			(effects
+				(font
+					(size 0.7 0.7)
+					(thickness 0.05)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 90)
+			(layer "F.Fab")
+			(hide yes)
+			(effects
+				(font
+					(size 0.7 0.7)
+					(thickness 0.05)
+				)
+			)
+		)
+		(attr smd)
+		(fp_rect
+			(start -6 -4.5)
+			(end 6 4.5)
+			(stroke
+				(width 0.05)
+				(type default)
+			)
+			(fill no)
+			(layer "F.CrtYd")
+		)
+		(fp_rect
+			(start -5.5 -4)
+			(end 5.5 4)
+			(stroke
+				(width 0.05)
+				(type default)
+			)
+			(fill no)
+			(layer "F.Fab")
+		)
+		(pad "1" smd roundrect
+			(at -5 -3.81 90)
+			(size 1.8 1)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.25)
+		)
+		(pad "2" smd roundrect
+			(at -5 -1.27 90)
+			(size 1.8 1)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.25)
+		)
+		(pad "3" smd roundrect
+			(at -5 1.27 90)
+			(size 1.8 1)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.25)
+		)
+		(pad "4" smd roundrect
+			(at -5 3.81 90)
+			(size 1.8 1)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.25)
+		)
+		(pad "5" smd roundrect
+			(at 5 3.81 90)
+			(size 1.8 1)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.25)
+		)
+		(pad "6" smd roundrect
+			(at 5 1.27 90)
+			(size 1.8 1)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.25)
+		)
+		(pad "7" smd roundrect
+			(at 5 -1.27 90)
+			(size 1.8 1)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.25)
+		)
+		(pad "8" smd roundrect
+			(at 5 -3.81 90)
+			(size 1.8 1)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.25)
+		)
+		(embedded_fonts no)
+	)

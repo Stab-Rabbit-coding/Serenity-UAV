@@ -2,7 +2,9 @@
 
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
-<!-- Last updated: 2026-07-12 — archived orphaned landing_legs_hull_r1.stl -->
+<!-- Last updated: 2026-07-13 — corrected avionics/kicad/archive/ and avionics/gerbers/archive/
+     paths to their new archives/avionics-archives/ consolidated location; documented
+     archives/ root loose-file snapshots and the (empty) airframe-archives/ staging dir -->
 
 ---
 
@@ -25,38 +27,46 @@ Archived 2026-06-29 (Rev R — superseded by serenity_assembly.py):
 
 ---
 
-## avionics/kicad/archive/
+## archives/avionics-archives/kicad-archives/ (moved from avionics/kicad/archive/)
 
-Superseded KiCad PCB designs. Design notes in `ARCHIVE-REVQ.md` inside this directory.
+Superseded KiCad PCB designs. **Path corrected 2026-07-13:** this content used to live at
+`avionics/kicad/archive/` (that path no longer exists on disk); it has been consolidated
+under `archives/avionics-archives/kicad-archives/`. Design notes in `archive/ARCHIVE-REVQ.md`
+inside this directory.
 
 ```text
-ARCHIVE-REVQ.md                     — Archival log with revision history and reason codes
+archive/ARCHIVE-REVQ.md             — Archival log with revision history and reason codes
 
 Archived 2026-06-10 (renamed to Wash / Zoë within Rev Q):
-  CAPE-A-2.kicad_{pcb,sch,pro,prl}  — EMI-hardened FC cape (superseded by Wash.*)
-  CAPE-A-2.md                        — CAPE-A-2 design notes
+  archive/CAPE-A-2.kicad_{pcb,sch,pro,prl} — EMI-hardened FC cape (superseded by Wash.*)
+  archive/CAPE-A-2.md                — CAPE-A-2 design notes
 
-  CAPE-B-2.kicad_{pcb,sch,pro,prl}  — EMI-hardened CN cape (superseded by Zoë.*)
-  CAPE-B-2.md                        — CAPE-B-2 design notes
+  archive/CAPE-B-2.kicad_{pcb,sch,pro,prl} — EMI-hardened CN cape (superseded by Zoë.*)
+  archive/CAPE-B-2.md                — CAPE-B-2 design notes
 
 Archived 2026-06-05 (Rev Q baseline — superseded by -2 EMI-hardened variants):
-  CAPE-A-1.kicad_{pcb,sch,pro,prl}  — Standard FC cape (pre-EMI-hardening)
-  CAPE-B-1.kicad_{pcb,sch,pro,prl}  — Standard CN cape (pre-EMI-hardening)
-  CAPE-B-1a.kicad_{pcb,prl,pro}     — CAPE-B-1 predecessor
-  XCVR-49MHZ-1.kicad_{pcb,sch,pro,prl} — Standard 49 MHz XCVR
-  XCVR-49MHZ-1.md                   — XCVR-49MHZ-1 design notes
-  PWR-DIST-1.kicad_sch               — Early power distribution schematic (pre-Kaylee)
-  PWR-DIST-1.md                      — PWR-DIST-1 design notes
+  archive/CAPE-A-1.kicad_{pcb,sch,pro,prl}  — Standard FC cape (pre-EMI-hardening)
+  archive/CAPE-B-1.kicad_{pcb,sch,pro,prl}  — Standard CN cape (pre-EMI-hardening)
+  archive/CAPE-B-1a.kicad_{pcb,prl,pro}     — CAPE-B-1 predecessor
+  archive/XCVR-49MHZ-1.kicad_{pcb,sch,pro,prl} — Standard 49 MHz XCVR
+  archive/XCVR-49MHZ-1.md            — XCVR-49MHZ-1 design notes
+  archive/PWR-DIST-1.kicad_sch        — Early power distribution schematic (pre-Kaylee)
+  archive/PWR-DIST-1.md               — PWR-DIST-1 design notes
+  archive/gen_cape_a2.py, gen_cape_a2_pcb.py, gen_cape_b2.py, gen_cape_b2_pcb.py — generator
+                                       scripts archived alongside their boards
 
 Pre-Rev Q (superseded by Cape-A/B architecture at Rev K):
-  CAPE-A-1-no-comment.kicad_{pcb,sch} — Intermediate CAPE-A-1 without comments
-  CM3-CARRIER-1.kicad_{pcb,sch}      — Raspberry Pi CM3 carrier
-  CM4-CARRIER-1.kicad_{pcb,sch}      — Raspberry Pi CM4 carrier v1
-  CM4-CARRIER-2.kicad_{pcb,sch}      — Raspberry Pi CM4 carrier v2
-  COMMS-HAT-1.kicad_{pcb,sch}        — CM4 comms HAT
-  COMMS-HAT-SWITCH.kicad_{pcb,sch}   — CM4 comms HAT with antenna switch
-  SENSORHAT-1.kicad_{pcb,sch}        — CM4 sensor HAT
-  TRIHAT-1.kicad_{pcb,sch}           — Pico2 triple HAT
+  archive/CAPE-A-1-no-comment.kicad_{pcb,sch} — Intermediate CAPE-A-1 without comments
+  archive/CM3-CARRIER-1.kicad_{pcb,sch}      — Raspberry Pi CM3 carrier
+  archive/CM4-CARRIER-1.kicad_{pcb,sch}      — Raspberry Pi CM4 carrier v1
+  archive/CM4-CARRIER-2.kicad_{pcb,sch}      — Raspberry Pi CM4 carrier v2
+  archive/COMMS-HAT-1.kicad_{pcb,sch}        — CM4 comms HAT
+  archive/COMMS-HAT-SWITCH.kicad_{pcb,sch}   — CM4 comms HAT with antenna switch
+  archive/SENSORHAT-1.kicad_{pcb,sch}        — CM4 sensor HAT
+  archive/TRIHAT-1.kicad_{pcb,sch}           — Pico2 triple HAT
+
+CAPE-A-1-backups/, CAPE-B-1-backups/ — KiCad autosave zip backups for the archived Cape-A-1/
+                                       Cape-B-1 boards (16 + 5 zips respectively)
 ```
 
 ---
@@ -142,19 +152,20 @@ cape-b/archive/
 
 ---
 
-## avionics/gerbers/archive/
+## archives/avionics-archives/gerber-archive/ (moved from avionics/gerbers/archive/)
 
 Pre-Rev Q gerber snapshots for boards superseded by the Cape-A-2/Cape-B-2/XCVR-49MHZ-2 (-2
-EMI-hardened) designs. Distinct from the duplicate ARCHIVED-named gerber sets that remain in the
-active `avionics/kicad/gerbers/CAPE-A-1/` and `CAPE-B-1/` paths (see PROJECT_INDEX.md).
+EMI-hardened) designs. **Path corrected 2026-07-13:** `avionics/gerbers/` no longer exists on
+disk at all; this content is consolidated under `archives/avionics-archives/gerber-archive/`.
+There is no longer a duplicate ARCHIVED-named gerber set at `avionics/kicad/gerbers/` either —
+that directory is now empty (see PROJECT_INDEX.md avionics/kicad/ section).
 
 ```text
 CAPE-A-1/    — 17 gerber/drill files: B_Cu, B_Mask, B_Paste, B_Silkscreen, Edge_Cuts, F_Cu,
                F_Mask, F_Paste, F_Silkscreen, In1_Cu, In2_Cu, NPTH-drl_map, NPTH.drl,
-               PTH-drl_map, PTH.drl, job.gbrjob, .net
-CAPE-B-1/    — 17 gerber/drill files: same set as CAPE-A-1/ (B_Cu, B_Mask, B_Paste,
-               B_Silkscreen, Edge_Cuts, F_Cu, F_Mask, F_Paste, F_Silkscreen, In1_Cu, In2_Cu,
-               NPTH-drl_map, NPTH.drl, PTH-drl_map, PTH.drl, job.gbrjob, .net)
+               PTH-drl_map, PTH.drl, job.gbrjob, .net (plus a nested CAPE-A-1/ subfolder
+               duplicating the *_Cu/_Mask/_Paste/_Silkscreen/Edge_Cuts/job/.drl set)
+CAPE-B-1/    — 17 gerber/drill files: same set as CAPE-A-1/ (same nested-subfolder duplication)
 XCVR-49MHZ-1/ — 14 gerber/drill files: B_Cu, B_Mask, B_Paste, B_Silkscreen, Edge_Cuts, F_Cu,
                F_Mask, F_Paste, F_Silkscreen, In1_Cu, In2_Cu, drl_map.pdf, job.gtl, .drl
 ```
@@ -179,6 +190,7 @@ Whole-project snapshots and superseded subsystems.
 
 20260429/                            — Snapshot at 2026-04-29
   serenity-drone/                    — Intermediate source tree
+20260429_files.zip                   — Zip archive of a 2026-04-29 snapshot
 
 stale-20260601/                      — Stale files culled on 2026-06-01
   airframe-stls/                     — STL snapshots prior to Rev Q mesh repairs
@@ -196,4 +208,34 @@ serenity/                            — Early web/UI experiment (Node.js protot
 chat/                                — Session transcript exports (reference only)
 
 docs-superseded/                     — Documentation superseded by current docs/
+
+avionics-archives/                   — NEW (2026-07-13): consolidates avionics KiCad/gerber
+                                       archives previously scattered under avionics/kicad/archive/
+                                       and avionics/gerbers/archive/ (both paths now gone from
+                                       disk) — see the two sections above this one.
+  gerber-archive/                    — (see "archives/avionics-archives/gerber-archive/" above)
+  kicad-archives/                    — (see "archives/avionics-archives/kicad-archives/" above)
+
+airframe-archives/                   — NEW (2026-07-13), currently EMPTY: an equivalent
+                                       consolidation staging directory for airframe/archive/
+                                       content has been created but the move has not happened
+                                       yet — airframe/archive/ itself is still the live location
+                                       (see "airframe/archive/" section below).
+
+Loose files directly at archives/ root (not yet organized into a subfolder — historical
+revision snapshots, superseded before this index existed):
+  serenity-rev-b.jsx, serenity-rev-c.jsx, serenity-rev-d.jsx, serenity-rev-e.jsx,
+  serenity-rev-f.jsx, serenity-rev-f-.jsx, serenity-rev-o.jsx, serenity-rev-p.jsx,
+  serenity-rev-q.jsx, serenity-connectivity-revH.jsx, serenity-esc-telem-revH1.jsx,
+  serenity-drone.jsx, nacelle-nozzle-gear.jsx, tiltrotor-drone.jsx — historical interactive-spec
+  .jsx snapshots (see current-specification/ for the active serenity-rev-r.jsx)
+  bom_revH1.json, bom_revP.csv, bom_revQ.csv, bom_revR.csv — historical BOM snapshots
+  build_guide_00_cover.svg, build_guide_20_node_placement.svg — early build-guide card drafts
+  generate_foam_svgs.py                — early foam-void SVG generator (pre-current pipeline)
+  nacelles.jst                        — 1-byte stub file
+  sensorhat_mounting_tray.stl          — SENSORHAT-1 (archived cape) mounting tray
+  files.zip, more-files.zip, serenity-drone-rev-g.zip, serenity-drone-COMPLETE-revH1.zip,
+  "Serenity Firefly with landing gear and swivel engines - 7330462.zip",
+  "Serenity0Firefly0with0landing0gear0and0swivel0engines0-07330462.zip",
+  "serenity firefly transport ship - 2601098.zip" — whole-tree zip snapshots at various dates
 ```

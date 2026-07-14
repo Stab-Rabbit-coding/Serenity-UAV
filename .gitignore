@@ -17,3 +17,15 @@ __pycache__/
 # VS Code Local History plugin (handled as submodule — do not commit raw files)
 avionics/kicad/.history/
 avionics/kicad/.history
+avionics/kicad/symbols/PHYCORE-AM62AX-DSC-FOOTPRINT.kicad_mod
+avionics/kicad/symbols/PHYCORE-AM62AX-DSC.kicad_sym
+avionics/kicad/symbols/ISOW1044BDFMR.kicad_sym
+avionics/kicad/symbols/ISOW1044BDFMR.step
+avionics/kicad/symbols/KSZ9477STXI.kicad_sym
+avionics/kicad/symbols/KSZ9477STXI.step
+avionics/kicad/symbols/MSPM0G3507SRGZR.step
+avionics/kicad/symbols/QFN50P700X700X90-49N.kicad_mod
+avionics/kicad/symbols/QFP40P1600X1600X120-129N.kicad_mod
+avionics/kicad/symbols/SLB 9670VQ2.0.lbr
+avionics/kicad/symbols/XCVR_ISOW1044BDFMR.kicad_mod
+avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md

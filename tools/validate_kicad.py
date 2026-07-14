@@ -7,7 +7,7 @@ Runs `kicad-cli sch erc` and `kicad-cli pcb drc --schematic-parity` on every
 violation is found.
 
 Severity policy (matches the standard already applied by hand to every KiCad
-board in this project this session -- Wash/Zoe/Kaylee/Emma/Vera):
+board in this project this session -- Wash/Zoe/Kaylee/Emma/Jayne):
 
   HARD (any occurrence fails the build) -- these mean the board is
   electrically wrong: shorts, schematic/PCB net mismatches, overlapping
@@ -16,7 +16,7 @@ board in this project this session -- Wash/Zoe/Kaylee/Emma/Vera):
 
   SOFT (reported, does not fail the build) -- cosmetic / informational only,
   and already an accepted, tracked class of finding across every board in
-  this repo (see e.g. avionics/kicad/Vera.md "EMI Hardening Status", Kaylee's
+  this repo (see e.g. avionics/kicad/Jayne/Jayne.md "EMI Hardening Status", Kaylee's
   701 open ERC/DRC items): footprint-library mismatches on intentionally
   simplified/placeholder footprints, silkscreen overlap/clearance, and the
   schematic-parity "extra footprint" / "footprint symbol mismatch" categories
@@ -33,7 +33,7 @@ items) -- retroactively fixing that backlog is a separate, large hardware
 task, not something a CI script should silently paper over or suddenly
 block on. So in CI, pass --changed-since <base-ref> to scope the HARD check
 to only the KiCad files actually touched by the current push/PR: this
-catches regressions and any new board (like Vera, which is fully clean) at
+catches regressions and any new board (like Jayne, which is fully clean) at
 the moment they're introduced, without failing every future PR on
 pre-existing debt in boards it never touched.
 
@@ -66,8 +66,8 @@ HARD_DRC_TYPES = {
 
 # ERC "error"-severity types treated as SOFT (accepted) rather than
 # build-failing. Confirmed 2026-07-03 that every current instance of these on
-# Vera.kicad_sch traces to the already-documented, self-acknowledged
-# placeholder-footprint gaps in avionics/kicad/Vera.md ("Verified vs
+# Jayne.kicad_sch traces to the already-documented, self-acknowledged
+# placeholder-footprint gaps in avionics/kicad/Jayne/Jayne.md ("Verified vs
 # Placeholder" / "Known Gaps" -- e.g. U_PMIC's EN/sequencing pins, U1's
 # BOOT_MODE0/PORz strap pins, U3's NRST/SWCLK debug pins are all real pins on
 # real parts whose full pinout/power-sequencing isn't modeled yet, not a

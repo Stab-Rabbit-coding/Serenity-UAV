@@ -98,7 +98,7 @@
 //   • EDF2 seat and 4-arm motor-mount strut ring  (aft EDF, downstream)
 //   • Nozzle ring pocket at exhaust exit (iris ring seat)
 //   • CG-aligned pivot X-face boss (two MF104ZZ bearing bosses at PIVOT_Z)
-//   • Drive Pinion A boss (MR63ZZ, at Y=PINION_A_Y=28mm, meshes sector gear)
+//   • Drive Pinion A boss (MR63ZZ, at Y=PINION_A_Y=30.5mm, meshes sector gear)
 //   • Crown Pinion boss (MR63ZZ, near nozzle ring, drives idler gear which
 //       in turn drives the nozzle ring gear — see nacelle_nozzle_idler.scad)
 //   • Longitudinal gear-shaft conduit (3 mm CF rod in PTFE sleeve)
@@ -370,18 +370,24 @@ CLEVIS_EAR_OD   =  16.0;   // [mm] boss cylinder OD
 // ── Gear mount features ───────────────────────────────────────────────────────
 // Module M=1.0, pressure angle 20°.
 PINION_A_Z      = PIVOT_Z;  // [mm] Pinion A shaft Z (tracks PIVOT_Z = 104.5)
-PINION_A_Y      =  28.0;   // [mm] Pinion A fore-aft offset = R_sector+R_pinion=22+6=28mm
+PINION_A_Y      =  30.5;   // [mm] Pinion A fore-aft offset = R_sector + R_pinionA
+                           //   = 22 + 8.5 = 30.5 mm (Rev S1: Pinion A regeared
+                           //   12T R6 -> 17T R8.5 for the internal-ring nozzle
+                           //   drive — docs/NOZZLE_DRIVE_TRADE.md.  30.5 mm is
+                           //   ALSO the internal-mesh centre distance to the
+                           //   nozzle ring, R_ring - R_drive = 34 - 3.5, so the
+                           //   whole shaft run stays on one Y station.)
 PINION_A_BOSS_OD=   7.0;   // [mm] MR63ZZ press-fit boss OD (6mm OD + 0.5mm wall)
 PINION_A_BOSS_L =  10.0;   // [mm] boss length (2× MR63ZZ stacked + gap)
 PINION_A_SHAFT_D=   3.2;   // [mm] shaft clearance bore
-// Crown Pinion is offset 10 mm toward the intake of the Nozzle Ring so the
-// compound idler's two gear bands (Idler-In and Idler-Out, 10 mm apart
-// centre-to-centre — see nacelle_nozzle_idler.scad) mesh both targets: Idler-In
-// on the Crown Pinion, Idler-Out on the Nozzle Ring.  Resolves the §1.1.3.3
-// axial mesh-band mismatch (was CROWN_Z = NOZZLE_RING_Z = 166.25, i.e. 0 mm
-// apart, which a single idler shaft cannot mesh).  Decoupled from NOZZLE_RING_Z
-// (which still governs nozzle placement) 2026-07-04.
-CROWN_Z         = NOZZLE_RING_Z - 10.0;  // [mm] = 156.25; -10 mm for idler mesh band
+// Rev S1 (2026-07-07): the compound idler is DELETED — the Nozzle Drive
+// Pinion (14T M0.5, nacelle_pinion.scad PINION_VARIANT="DRIVE") meshes the
+// INTERNAL nozzle ring gear directly at the ring plane, its 4 mm gear band
+// seated in the ring's gear band (iris local Z 0..4.5 = nacelle Z
+// 166.25..170.75).  This boss is the shaft's MR63ZZ bearing, placed just
+// FORWARD of the nozzle housing so the pinion cantilevers into the ring.
+CROWN_Z         = NOZZLE_RING_Z - 6.0;   // [mm] = 160.25; drive-pinion shaft
+                                         //   bearing boss centre (Rev S1)
 CROWN_BOSS_OD   =   7.0;   // [mm] same spec as Pinion A
 CROWN_BOSS_L    =  10.0;   // [mm] boss length
 SHAFT_CONDUIT_OD=   5.5;   // [mm] conduit outer diameter
@@ -705,8 +711,8 @@ module pivot_x_face_boss() {
 // ── Module: pinion_a_boss ────────────────────────────────────────────────────
 // =============================================================================
 // MR63ZZ bearing boss for Drive Pinion A.  Cylinder along X at
-// (Y=PINION_A_Y=28mm, Z=PIVOT_Z).  Meshes the fixed sector gear (R=22mm)
-// at centre-distance 22+6=28mm from the pivot axis.
+// (Y=PINION_A_Y=30.5mm, Z=PIVOT_Z).  Meshes the fixed sector gear (R=22mm)
+// at centre-distance 22+8.5=30.5mm from the pivot axis (Rev S1).
 module pinion_a_boss() {
     translate([0, PINION_A_Y, PINION_A_Z])
         rotate([0, 90, 0])
@@ -724,10 +730,11 @@ module pinion_a_boss() {
 // =============================================================================
 // ── Module: crown_pinion_boss ────────────────────────────────────────────────
 // =============================================================================
-// MR63ZZ bearing boss for Crown Pinion at CROWN_Z.  Co-planar with Pinion A
-// in Y so the longitudinal CF shaft runs straight.
+// MR63ZZ bearing boss for the Nozzle Drive Pinion shaft at CROWN_Z (Rev S1;
+// the part this supports was called the "Crown Pinion" through Rev R1).
+// Co-planar with Pinion A in Y so the longitudinal CF shaft runs straight.
 //
-// Crown Pinion is documented (nacelle_pinion.scad, nacelle_bevel_housing.scad)
+// The drive pinion is documented (nacelle_pinion.scad, nacelle_bevel_housing.scad)
 // as mounted on the longitudinal shaft (nacelle Z-axis) — unlike Pinion A,
 // which is transverse (X-axis, meshes the fixed sector gear on the tilt
 // pivot) and needs rotate([0, 90, 0]) to lay its bore along X.  This boss
@@ -751,8 +758,8 @@ module crown_pinion_boss() {
 // =============================================================================
 // ── Module: shaft_conduit ────────────────────────────────────────────────────
 // =============================================================================
-// Axial PTFE-sleeve conduit from Pinion A to Crown Pinion.
-// Y = PINION_A_Y = 28 mm (co-linear with both bosses → straight shaft path).
+// Axial PTFE-sleeve conduit from Pinion A to the Nozzle Drive Pinion.
+// Y = PINION_A_Y = 30.5 mm (co-linear with both bosses → straight shaft path).
 module shaft_conduit() {
     conduit_len = CROWN_Z - PINION_A_Z;
 

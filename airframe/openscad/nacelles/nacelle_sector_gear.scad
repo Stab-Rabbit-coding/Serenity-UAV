@@ -28,18 +28,19 @@
 //     pivot axis, while Pinion A (planet) is carried by the nacelle and
 //     orbits the pivot axis as the nacelle tilts.  Contact-point velocity
 //     matching gives omega_pinionA = omega_nacelle × (1 + R_sector/R_pinionA):
-//       Nacelle tilt 0–90° → Pinion A rotates 90° × (1 + 22/6) = 420°
-//     (The naive simple-mesh ratio 22/6 × 90° = 330° omits the orbital "+1"
-//     term and is WRONG for this topology — corrected 2026-06-22; see
+//       Nacelle tilt 0–90° → Pinion A rotates 90° × (1 + 22/8.5) = 322.94°
+//     (Pinion A is 17T M1 R=8.5 as of Rev S1; the orbital "+1" term is
+//     required for this sun-fixed epicyclic topology — see
 //     nacelle_pinion.scad for the full derivation.)
 //   Mechanical range (Rev R1): -5° to 140° hard stops (145° span), widened
 //     from the original 0-90° operating range — see SECTOR_TEETH below.
-//   Full system ratio: downstream stages (bevel pair, crown pinion, idler
-//     gear, nozzle ring) — see nacelle_pinion.scad and
-//     nacelle_nozzle_idler.scad for the full derivation
-//     (omega_ring/omega_crownPinion = 1/17.6; resolved 2026-06-22, TODO.md
-//     §1.1.3 — the crown-pinion/nozzle-ring radius mismatch that was
-//     previously an open issue is now resolved via an idler gear stage).
+//   Full system ratio (Rev S1 internal-ring nozzle drive, 2026-07-07):
+//     tilt 90° → Pinion A 322.94° (this mesh) → bevel pair ×10/14
+//     (nacelle_bevel_pair.scad) → drive pinion 14T M0.5 meshing the
+//     INTERNAL nozzle ring gear 136T M0.5 ×14/136 → ring 23.74°.
+//     The Rev R1 compound idler stage (nacelle_nozzle_idler.scad) is
+//     DELETED — its teeth protruded ~10 mm past the nacelle OD; see
+//     docs/NOZZLE_DRIVE_TRADE.md for the trade study and decision.
 //
 // Mating interfaces:
 //   • Drive Pinion A (nacelle_pinion.scad):
@@ -75,6 +76,19 @@
 //          change to the crown-pinion/nozzle-ring mismatch (TODO.md
 //          §1.1.3) added a new idler gear stage — see
 //          nacelle_nozzle_idler.scad.
+// Rev:     S1 (2026-07-07): TOOTH-MATH BUG FIX + internal-ring drive rebuild.
+//          (a) N_FULL was computed as round(2*PI*R/M) = 138 — that formula
+//          yields circumference/module, NOT teeth.  Correct involute count
+//          is N = 2R/M = 44 for R=22 M=1.  As published, the sector's teeth
+//          were cut at 2.61°/tooth (1.0 mm circular pitch ≈ M0.32 spacing)
+//          while Drive Pinion A (nacelle_pinion.scad) is a true M1 gear at
+//          30°/tooth — THE TWO GEARS COULD NOT MESH.  Fixed: N_FULL = 44,
+//          angular pitch 8.18°, circular pitch π mm.  (b) SECTOR_TEETH
+//          58 -> 19 (19 × 8.18° = 155.5° arc — same physical coverage of
+//          the -5°/140° tilt range + margin as the old 151.3° figure).
+//          (c) Header ratios updated for the Rev S1 internal-ring nozzle
+//          drive (Pinion A now 17T R8.5; idler stage deleted) — see
+//          docs/NOZZLE_DRIVE_TRADE.md.
 
 // ── Resolution ────────────────────────────────────────────────────────────────
 
@@ -85,14 +99,15 @@ $fn = 72;   // standard circle resolution for all rotational solids
 MODULE          =  1.0;   // [mm] AGMA Module — tooth size standard
 PRESSURE_ANGLE  = 20.0;   // [deg] standard involute pressure angle
 PITCH_R         = 22.0;   // [mm] pitch circle radius of sector gear
-SECTOR_TEETH    = 58;     // [count] number of teeth spanning the active arc
-                        //   58 T covers ≈151.3° (see SECTOR_ARC_DEG below) —
+SECTOR_TEETH    = 19;     // [count] number of teeth spanning the active arc
+                        //   19 T covers ≈155.5° (see SECTOR_ARC_DEG below) —
                         //   encompasses the nacelle's Rev R1 operating range
                         //   of -5° to 140° mechanical hard stops (145° span)
-                        //   plus ≈3° entry/exit mesh margin each end
-                        //   (145+3+3 = 151° nominal).  Grown from the Rev O
-                        //   34T/38T figures when the operating range widened
-                        //   from 0-90° to -5°/140° — see TODO.md §1.1.3.
+                        //   plus ≈5° entry/exit mesh margin each end.
+                        //   Rev S1: recount 58 -> 19 as part of the N_FULL
+                        //   tooth-math bug fix (see Rev S1 header note) —
+                        //   the ARC covered is unchanged; only the number of
+                        //   correctly-pitched M1 teeth filling it changed.
 BODY_H          =  3.0;   // [mm] plate (web) thickness behind teeth
 MOUNT_BORE_D    =  4.2;   // [mm] M4 clearance bore at pivot axis
 SLOT_BC_R       = 18.0;   // [mm] bolt-circle radius for M2.5 adjustment slots
@@ -102,9 +117,13 @@ N_SLOTS         =  4;     // [count] number of adjustment slots (evenly spaced)
 
 // ── Derived Gear Geometry ─────────────────────────────────────────────────────
 
-// Full-circle equivalent tooth count for M = 1.0 at PITCH_R = 22 mm:
-//   N_FULL = round( 2π × PITCH_R / MODULE ) = round( 138.23 ) = 138
-N_FULL = round(2 * PI * PITCH_R / MODULE);   // = 138 teeth (full circle)
+// Full-circle equivalent tooth count for M = 1.0 at PITCH_R = 22 mm.
+//   Correct involute relation: pitch diameter D = N × M  =>  N = 2R/M = 44.
+//   (Rev S1 BUG FIX: this was round(2π×R/M) = 138 — that expression is
+//   circumference/module, not a tooth count; it cut 2.61°/tooth "teeth"
+//   with 1.0 mm circular pitch (≈M0.32 spacing) that could never mesh the
+//   true-M1 Drive Pinion A.  Standard M1 circular pitch is π ≈ 3.14 mm.)
+N_FULL = round(2 * PITCH_R / MODULE);   // = 44 teeth (full circle, M=1, R=22)
 
 // Standard tooth proportions per AGMA 201:
 ADDENDUM   = MODULE;              // [mm] tooth height above pitch circle = 1.0

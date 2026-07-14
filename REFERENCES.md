@@ -590,7 +590,7 @@ required before fabrication (see TODO.md §1.4 PCB DRC and isolation verificatio
 
 **Applied to (Class 3R, cargo bay only — 2026-07-03 update):** 12 mm OD crosshair-pattern
 laser module (5 mW, 650 nm) installed in the cargo bay nadir FPV mount (`cargo_fpv_bezel`,
-Vera board); required fan angle for a 3"×3" (76×76 mm) crosshair at 5 ft (1.5 m) is only
+Jayne board); required fan angle for a 3"×3" (76×76 mm) crosshair at 5 ft (1.5 m) is only
 ≈2.86°, well within reach of an off-the-shelf 5 mW Class 3R module — no change from the
 original bow pod laser spec, just relocated. This module is **no longer installed in the bow
 sensor pod** — see the Class 3B entry below for the nose laser, which has a materially
@@ -605,7 +605,7 @@ different optical throw requirement.
 | §5.4 | Engineering controls for Class 3B | Requires: key-controlled interlock, emission indicator (visible when armed), a beam-stop or shutter, and protective housing — beyond the GPIO-default-off pull-down alone used for the Class 3R module |
 | §7 | Labeling | Class 3B warning label and aperture label required on the module housing |
 
-**Applied to:** bow sensor pod (nose, Vera board) crosshair laser. A 2"×2" (51×51 mm) crosshair
+**Applied to:** bow sensor pod (nose, Jayne board) crosshair laser. A 2"×2" (51×51 mm) crosshair
 at 50 ft (15.2 m) requires ≈0.19° fan angle — no catalog 520 nm crosshair module publishes
 this tight a divergence, so a custom-collimated module is required, and the optical power
 needed for daylight camera visibility at that divergence places it in Class 3B rather than
@@ -986,7 +986,7 @@ an environment where persons may be present in the beam path.
 
 ### REF-SENSOR-001: RunCam Nano 4 — 19 mm Nano Format FPV Camera Specification (SUPERSEDED)
 
-**Status: SUPERSEDED 2026-07-03.** Replaced by the Vera board's TI AM62Ax digital vision SoC
+**Status: SUPERSEDED 2026-07-03.** Replaced by the Jayne board's TI AM62Ax digital vision SoC
 (REF-SENSOR-003) at both the bow sensor pod (nose) and the cargo bay nadir FPV mount. This
 entry is retained per project revision policy (components are referenced as of their last
 active revision even after superseding) — do not delete.
@@ -1114,8 +1114,8 @@ redundancy policy [REF-NIST-001 §2.1].
 | Video encode | H.264 Baseline/Main/High Profile up to Level 5.2; HEVC (H.265) Main Profile up to Level 5.1 High-tier; up to 4K UHD (3840×2160) | AM62Ax datasheet Rev. E |
 | Package | 484-ball FCBGA/FCCSP | AM62Ax datasheet Rev. E |
 
-**Applied to:** Vera board vision half (nose bow sensor pod and cargo bay nadir FPV mount) —
-see `avionics/CLAUDE.md` "Vera — Nose/Cargo-Bay Vision, ToF & Laser Cape". **Open item:** the
+**Applied to:** Jayne board vision half (nose bow sensor pod and cargo bay nadir FPV mount) —
+see `avionics/CLAUDE.md` "Jayne — Cargo-Handling System and Nose/Cargo-Bay Vision, ToF & Laser Board". **Open item:** the
 484-ball FCBGA package is a substantial escalation in assembly difficulty versus the discrete
 components elsewhere in this design; PCB fabrication/assembly house capability for this
 package must be confirmed before board layout (tracked in TODO.md §1.2c).
@@ -1142,7 +1142,7 @@ package must be confirmed before board layout (tracked in TODO.md §1.2c).
 | CAN interface | Native hardware MCAN peripheral (CAN-FD capable) | MSPM0G3507 datasheet title: "Mixed-Signal Microcontrollers With CAN-FD Interface" |
 | Package options | 48-pin LQFP (PT), 48-pin VQFN (RGZ), 32-pin VQFN (RHB), 32-/28-pin VSSOP | MSPM0G3507 datasheet |
 
-**Applied to:** Vera board control half — reads Benewake TFmini-S (REF-SENSOR-002) over UART,
+**Applied to:** Jayne board control half — reads Benewake TFmini-S (REF-SENSOR-002) over UART,
 drives the location-specific crosshair laser GPIO, and republishes signed sensor data over
 both the Ethernet ring (via REF-SENSOR-005) and the CAN-FD trunk (via REF-SENSOR-006).
 Selected specifically for its native MCAN peripheral and shared TI toolchain with the
@@ -1163,7 +1163,7 @@ synthesis that a non-TI MCU (e.g. RP2350) would require.
 | **Application note** | AN3474 — "KSZ9477 High-Availability Seamless Redundancy" |
 | **Note** | Selected specifically because it is confirmed (per AN3474) to hardware-offload HSR (High-availability Seamless Redundancy) and PRP (Parallel Redundancy Protocol) per IEC 62439-3 — HSR tag insertion, TX frame duplication, RX duplicate-frame discard. Two other Microchip switch parts (LAN9355, KSZ9563) were considered and **rejected** for this role: neither datasheet documents HSR/PRP/MRP hardware support; substituting either would leave the Ethernet ring without hardware-level redundancy and is not permitted for the ring-node role. |
 
-**Applied to:** Vera board control half — Ethernet ring pass-through node (in/out via shielded
+**Applied to:** Jayne board control half — Ethernet ring pass-through node (in/out via shielded
 JST-GH connectors), with hardware-level HSR/PRP failover so a link break elsewhere in the ring
 does not require software topology management on the PocketBeagle 2 nodes.
 
@@ -1193,7 +1193,7 @@ tracked in TODO.md §1.2c and in "Open Standards Verification Items" below.
 | Data rate | Up to 5 Mbps (CAN-FD data phase) | TCAN1042HG-Q1 datasheet |
 | Package | SOIC-8 or VSON-8 (3×3 mm) | TCAN1042HG-Q1 datasheet |
 
-**Applied to:** Vera board control half — CAN-FD trunk transceiver, MSPM0G3507 MCAN peripheral
+**Applied to:** Jayne board control half — CAN-FD trunk transceiver, MSPM0G3507 MCAN peripheral
 to shielded JST-GH CAN-FD connector.
 
 **Used in:** `avionics/CLAUDE.md`, `TODO.md`
@@ -1262,7 +1262,20 @@ tilt range.
 **Used in:** `airframe/openscad/nacelles/nacelle_nozzle_iris.scad`,
 `README.md` (Iris mechanism concept), `TODO.md` §1.1.3.1
 
-### REF-CAD-002: Nick Henning — Firefly Class Wing and Landing gear high fidelity images <https://www.nickhenning3d.com/>
+### REF-CAD-002: Nick Henning — Firefly Class Serenity wing and landing gear reference renders
+
+| Field | Value |
+|---|---|
+| **Author** | Nick Henning |
+| **Work** | Serenity / Firefly Class wing and landing gear reference renders |
+| **Designation** | Public reference render collection |
+| **Official URL** | <https://www.nickhenning3d.com/> |
+| **License / Permission** | Public-space reference imagery; direct permission granted by email from Nick Henning (`nickhenning3d@gmail.com`) on 2026-07-06. Used only as design reference imagery and attribution is recorded here to satisfy CC BY-style attribution requirements. |
+| **Note** | Used as high-fidelity visual reference for wing surface detail, landing gear arrangement, and UV-display styling. The repository stores only derivative reference files; no original CAD model or proprietary 3D geometry from the author is redistributed. |
+
+**Applied to:** wing and landing gear detail reference in the Serenity UAV hull design, including landing gear canopy/brace styling and wing surface treatment.
+
+**Used in:** `airframe/diagrams/nick-henning-close-gear-combine.jpg`, `airframe/diagrams/nick-henning-final-backside-combine.jpg`, `airframe/diagrams/nick-henning-final-front-combine.jpg`, `airframe/diagrams/nick-henning-uvdisplay-gear.jpg`, `airframe/diagrams/nick-henning-uvdisplay-wing.jpg`.
 
 ---
 
@@ -1277,8 +1290,8 @@ because they were incorrectly attributed, unverifiable, or inapplicable.
 | 47 CFR Part 95 RCRS (§95.635/§95.655/§95.639, "TDDS"/"LERS"/"27 channels") | REF-FCC-003, `malcolm_antenna_spec.md`, `CLAUDE.md`, `README.md`, `TODO.md`, `AVIONICS_PB2_REDESIGN.md` | **Wrong band.** RCRS covers only 26–28/72/75 MHz, not 49 MHz; "TDDS"/"LERS"/27-channel terms untraceable. Emma's 49.82–49.90 MHz band is Part 15 §15.235, unlicensed. | REF-FCC-003 (Part 15 §15.235) |
 | "ASTM F3322 — sUAS Battery Safety" | TODO.md §0.4 (candidate list, not yet cited in active docs) | **Incorrect attribution.** F3322 is the *Standard Specification for Small Unmanned Aircraft System (sUAS) Parachutes* — unrelated to batteries, and not applicable to Serenity (no deployable recovery parachute). | REF-ASTM-002 (ASTM F3005-22, sUAS battery specification) |
 | "ASTM F3003 — Quality Assurance of a Small Unmanned Aircraft System" | TODO.md §0.4 (candidate list, not yet cited in active docs) | **Withdrawn standard.** F3003-14 was withdrawn by ASTM in January 2023 with no replacement. | None — see REF-ASTM-001 (F2910) for design/construction/test coverage |
-| RunCam Nano 4 analog camera (REF-SENSOR-001) at bow sensor pod | `avionics/CLAUDE.md`, `TODO.md` §1.1.1.1a | **Superseded by design decision (2026-07-03), not an error.** Replaced by the Vera board's TI AM62Ax digital vision SoC (REF-SENSOR-003) at both the nose and cargo bay locations. | REF-SENSOR-003 (TI AM62Ax) |
-| "TI DM38x + remixed OpenIPC firmware" (early Vera design concept from an external AI-assisted brainstorm, never committed) | Not committed to any file — caught during REFERENCES.md drafting 2026-07-03 | **Infeasible as proposed.** TI DM385/DM388 (DaVinci DM38x) are NRND; OpenIPC's supported-hardware list contains no TI part, not even at R&D stage — porting would mean a from-scratch ISP/encoder bring-up on a chip TI is discontinuing, not a firmware port. Also: the same source proposed LAN9355/KSZ9563 for "MRP" ring redundancy (neither chip implements it) and an "ST33GTPMISPI" TPM part number that does not exist. | REF-SENSOR-003 (TI AM62Ax, in-production, TI's own open BSP), REF-SENSOR-005 (KSZ9477, real HSR/PRP support), Infineon SLB9670 (fleet-standard TPM, REFERENCES.md §3.3/§4.2) |
+| RunCam Nano 4 analog camera (REF-SENSOR-001) at bow sensor pod | `avionics/CLAUDE.md`, `TODO.md` §1.1.1.1a | **Superseded by design decision (2026-07-03), not an error.** Replaced by the Jayne board's TI AM62Ax digital vision SoC (REF-SENSOR-003) at both the nose and cargo bay locations. | REF-SENSOR-003 (TI AM62Ax) |
+| "TI DM38x + remixed OpenIPC firmware" (early Jayne design concept from an external AI-assisted brainstorm, never committed) | Not committed to any file — caught during REFERENCES.md drafting 2026-07-03 | **Infeasible as proposed.** TI DM385/DM388 (DaVinci DM38x) are NRND; OpenIPC's supported-hardware list contains no TI part, not even at R&D stage — porting would mean a from-scratch ISP/encoder bring-up on a chip TI is discontinuing, not a firmware port. Also: the same source proposed LAN9355/KSZ9563 for "MRP" ring redundancy (neither chip implements it) and an "ST33GTPMISPI" TPM part number that does not exist. | REF-SENSOR-003 (TI AM62Ax, in-production, TI's own open BSP), REF-SENSOR-005 (KSZ9477, real HSR/PRP support), Infineon SLB9670 (fleet-standard TPM, REFERENCES.md §3.3/§4.2) |
 
 ---
 
@@ -1299,6 +1312,6 @@ Add verified section numbers to the relevant files and update this table.
 | REF-TIA-001 (ANSI/TIA-485-A) exact product URL | `REFERENCES.md` REF-TIA-001 | TIA standards portal URL not confirmed via WebFetch 2026-06-29 (domain blocked by permission hook) | Confirm product page via <https://www.tiaonline.org/standards/> or <https://webstore.ansi.org/> search "TIA-485-A" |
 | Anti-collision flash rate "60 FPM" | `build_guide_13_nav_lights.svg`, `decal_sheet.svg` | **Resolved 2026-06-29.** Researched 14 CFR Part 107 §107.29(b) (anti-collision light visible 3 statute miles — no flash rate specified), old Part 23 §23.1401 (reorganized 2017, prescriptive flash-rate text no longer exists in current eCFR), and Part 25 §25.1401(f) (transport category, 40–100 FPM — not directly applicable to this sUAS). No currently-enforceable regulatory standard applicable to Part 107 UAS mandates a specific flash rate. "60 FPM" in the build guide is a design convention within the conventional aviation anti-collision light range (40–100 FPM). No regulatory citation is required or appropriate; the figure is a design target, not a compliance claim. | No citation required — design convention documented here. |
 | REF-SENSOR-005 (KSZ9477 HSR/PRP) IEC 62439-3 clause numbers | `REFERENCES.md` REF-SENSOR-005 | AN3474 confirms HSR/PRP hardware support but exact IEC 62439-3 Clause 4 (HSR)/Clause 5 (PRP) sub-clause numbers applied have not been cross-checked against the standard text itself | Obtain IEC 62439-3 and confirm clause numbers before final PCB layout citation (TODO.md §1.2c) |
-| Vera laser — single 520 nm green source, **Class 2 both sites**, part/optic ratings | `REFERENCES.md` REF-IEC-002, `avionics/kicad/Vera.md`, `docs/VERA_LASER_ANALYSIS.md` | Per `docs/VERA_LASER_ANALYSIS.md` Rev A1 (2026-07-05) both installs share ONE 520 nm green diode + driver and are **both Class 2 (≤1 mW)** — the nose is a concentrated dot detected by Vera's camera (strobe + frame-difference), ~0.45 mW, NOT the inherently Class 3B module of Rev A. Differ only by per-location terminal optic (spread) + hardware current limit. No real, sourced part exists yet. | Source a real datasheet with manufacturer-stated mW output and IEC 60825-1 class for the green diode + both optics before procurement; update REF-IEC-002 with the verified citation (TODO.md §1.2c.4). Do not fabricate or procure against the placeholder. Both Class 2 caps must be hardware-enforced; no Class 3B interlock/shutter required unless a human-at-target-in-full-sun requirement is later added. |
+| Jayne laser — single 520 nm green source, **Class 2 both sites**, part/optic ratings | `REFERENCES.md` REF-IEC-002, `avionics/kicad/Jayne/Jayne.md`, `docs/JAYNE_LASER_ANALYSIS.md` | Per `docs/JAYNE_LASER_ANALYSIS.md` Rev A1 (2026-07-05) both installs share ONE 520 nm green diode + driver and are **both Class 2 (≤1 mW)** — the nose is a concentrated dot detected by Jayne's camera (strobe + frame-difference), ~0.45 mW, NOT the inherently Class 3B module of Rev A. Differ only by per-location terminal optic (spread) + hardware current limit. No real, sourced part exists yet. | Source a real datasheet with manufacturer-stated mW output and IEC 60825-1 class for the green diode + both optics before procurement; update REF-IEC-002 with the verified citation (TODO.md §1.2c.4). Do not fabricate or procure against the placeholder. Both Class 2 caps must be hardware-enforced; no Class 3B interlock/shutter required unless a human-at-target-in-full-sun requirement is later added. |
 | Emma `RSSI_CMP` carrier-detect comparator part number and pinout | `avionics/kicad/Emma.kicad_sch` / `Emma.kicad_pcb`, `avionics/kicad/mod_emma_pcb.py` | The RSSI→`RSSI_DCD` conversion (2026-07-04 reconciliation) adds an on-board comparator, value placeholder "LMV331-class". No specific part is vetted; the PCB pad→net map is by function only and the SOT-23-5 pin order is unconfirmed. | Select a real comparator, confirm its SOT-23-5 datasheet pinout (and push-pull vs open-drain — add a `RSSI_DCD` pull-up if open-drain), add a `REF-*` catalog entry with a validated URL, and correct the footprint pad map before layout is final (TODO.md §1.2b). Do not fabricate or procure against the placeholder. |
 | VL53L5CX obstacle-avoidance ToF sensor — no REF-ID | `docs/failsafe_thresholds.md`, `avionics/firmware/common/include/failsafe_config.h`, `docs/PHASED_BUILD_GUIDE.md` | Found 2026-07-12 while writing the Failsafe Threshold Document: the 12× VL53L5CX obstacle-avoidance array is cited throughout the repository (4 m range noted informally inside the REF-SENSOR-002 entry above) but has no `REFERENCES.md` catalog entry of its own, unlike the project's other core sensor ICs (REF-SENSOR-002 through -006). | Add a `REF-SENSOR-007` entry for ST Microelectronics VL53L5CX (validated datasheet URL, ranging accuracy, and the 4 m operating range cited in `docs/failsafe_thresholds.md` §3) before final PCB layout citation sign-off (TODO.md §3.0 Phase 0). |

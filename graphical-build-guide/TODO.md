@@ -40,7 +40,7 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 ---
 
 
-> **Phase 7 assembles Jayne** (cargo doors, winch, latch, gondola, and the Vera vision boards). See the cross-cutting Jayne map in [airframe/TODO.md](../airframe/TODO.md). Deferred Phases 11–12 are in [deferred/TODO.md](../deferred/TODO.md).
+> **Phase 7 assembles Jayne** (cargo doors, winch, latch, gondola, and the Jayne vision boards). See the cross-cutting Jayne map in [airframe/TODO.md](../airframe/TODO.md). Deferred Phases 11–12 are in [deferred/TODO.md](../deferred/TODO.md).
 
 
 ## §Phase0 — Print All Parts + CF Cuts &#9733;

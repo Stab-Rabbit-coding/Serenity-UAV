@@ -575,31 +575,31 @@ module gps_mount_cut(pos, rot) {
 }
 
 // ----------------------------------------------------------------------------
-// Module: vera_board_bosses (added Rev R2, 2026-07-03)
-//   4x M3 heat-set insert boss posts for the Vera vision/ToF/laser PCB
-//   (avionics/kicad/Vera.kicad_pcb, 46x48 mm double-sided board, mounting
+// Module: jayne_board_bosses (added Rev R2, 2026-07-03)
+//   4x M3 heat-set insert boss posts for the Jayne vision/ToF/laser PCB
+//   (avionics/kicad/Jayne.kicad_pcb, 1.0 × 2.75 in (25.4 × 69.85 mm) double-sided board, mounting
 //   holes at board-local (4,4)/(42,4)/(4,44)/(42,44) -- i.e. +/-19 mm x
 //   +/-20 mm from board centre).  Mounted on the belly interior floor,
 //   standing up (+Z) from just above the nadir exterior skin, centred on
 //   CARGO_CAM_POS's (X,Y) station so the board sits directly above/behind
 //   the camera aperture -- short local harness runs to J_CAM1/J_CAM2/
-//   J_TOF/J_LASER (see Vera.md "Mechanical Mounting and Wiring").
+//   J_TOF/J_LASER (see Jayne.md "Mechanical Mounting and Wiring").
 //   Boss base at Z = WALL_MM (interior nadir face); extends to
 //   Z = WALL_MM + BOSS_H (= 8 mm) -- an 8 mm standoff starting allowance,
 //   pending real (non-placeholder) component-height verification per
-//   Vera.md.  PROPOSED placement -- verify in FreeCAD before printing
+//   Jayne.md.  PROPOSED placement -- verify in FreeCAD before printing
 //   (this hull's geometry is too complex for bounding-box placement per
 //   CLAUDE.md "Assembly and Placement").
-//   Ref: avionics/kicad/Vera.md; TODO.md §1.2c.3.
+//   Ref: avionics/kicad/Jayne.md; TODO.md §1.2c.3.
 // ----------------------------------------------------------------------------
-VERA_HOLE_DX = 19.0;   // mm, +/-X half-spacing of Vera's mounting-hole pattern
-VERA_HOLE_DY = 20.0;   // mm, +/-Y half-spacing of Vera's mounting-hole pattern
-VERA_STATION_X = CX;         // mm, lateral centreline, same as CARGO_CAM_POS
-VERA_STATION_Y = CY;         // mm, longitudinal station, same as CARGO_CAM_POS
-module vera_board_bosses() {
-    for (dx = [-VERA_HOLE_DX, VERA_HOLE_DX])
-    for (dy = [-VERA_HOLE_DY, VERA_HOLE_DY])
-        m3_boss([VERA_STATION_X + dx, VERA_STATION_Y + dy, WALL_MM], [0, 0, 0]);
+JAYNE_HOLE_DX = 19.0;   // mm, +/-X half-spacing of Jayne's mounting-hole pattern
+JAYNE_HOLE_DY = 20.0;   // mm, +/-Y half-spacing of Jayne's mounting-hole pattern
+JAYNE_STATION_X = CX;         // mm, lateral centreline, same as CARGO_CAM_POS
+JAYNE_STATION_Y = CY;         // mm, longitudinal station, same as CARGO_CAM_POS
+module jayne_board_bosses() {
+    for (dx = [-JAYNE_HOLE_DX, JAYNE_HOLE_DX])
+    for (dy = [-JAYNE_HOLE_DY, JAYNE_HOLE_DY])
+        m3_boss([JAYNE_STATION_X + dx, JAYNE_STATION_Y + dy, WALL_MM], [0, 0, 0]);
 }
 
 // ----------------------------------------------------------------------------
@@ -1394,10 +1394,10 @@ union() {
             nacelle_servo_mount_block(+1);  // port wall
             nacelle_servo_mount_block(-1);  // stbd wall
 
-            // A8b. Vera vision/ToF/laser PCB mounting bosses (Rev R2, 2026-07-03).
+            // A8b. Jayne vision/ToF/laser PCB mounting bosses (Rev R2, 2026-07-03).
             //      4x M3 bosses on the belly interior floor, centred on
-            //      CARGO_CAM_POS's (X,Y) station.  See vera_board_bosses() header.
-            vera_board_bosses();
+            //      CARGO_CAM_POS's (X,Y) station.  See jayne_board_bosses() header.
+            jayne_board_bosses();
 
             // A9. Inara's avionics bay — port half (Rev R2: X centre = CX-37.5 mm,
             //     shared longitudinal station with River and GPS).
