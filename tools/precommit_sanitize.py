@@ -199,8 +199,13 @@ def main() -> int:
                 file=sys.stderr,
             )
             print("   1. Failure type (race, overflow, etc.)", file=sys.stderr)
-            print("   2. Affected subsystem (generalized, no paths)", file=sys.stderr)
-            print("   3. Reproduction steps (without PII or full paths)", file=sys.stderr)
+            print(
+                "   2. Affected subsystem (generalized, no paths)", file=sys.stderr
+            )
+            print(
+                "   3. Reproduction steps (without PII or full paths)",
+                file=sys.stderr,
+            )
             print(
                 "   See CLAUDE.md §[X] for full bug reporting procedure.",
                 file=sys.stderr,
