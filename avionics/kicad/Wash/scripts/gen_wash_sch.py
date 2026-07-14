@@ -249,7 +249,7 @@ def lib_symbol(
 ) -> Tuple[str, List[Tuple[str, str, Any, str]], List[Tuple[str, str, Any, str]], float, float]:
     """
     Build the KiCad symbol definition for a single IC.
-       
+
     Returns
     -------
     tuple
@@ -287,7 +287,7 @@ def lib_symbol(
         s.append(pin_def(half_w + PIN_PITCH, y, 180, pn, fn))
     s += ["      )", "    )"]    # The function returns a tuple; the first element is the multi‑line KiCad    # symbol definition, the remaining elements are used later for placement.
     return "\n".join(s), left, right, half_w, half_h
-    
+
 def pin_def(x, y, ang, pn, fn):
     """
     Create a KiCad pin definition.
