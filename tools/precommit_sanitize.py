@@ -88,7 +88,7 @@ def should_check_file(filepath: Path) -> bool:
 
 def check_delint(content: str, filepath: Path) -> List[Tuple[int, str]]:
     """Check for TODO/BUG/FIXME that should be in TODO.md."""
-    issues = []
+    issues: List[Tuple[int, str]] = []
     # Skip archive and third-party code
     if "archive" in str(filepath):
         return issues
@@ -103,7 +103,7 @@ def check_delint(content: str, filepath: Path) -> List[Tuple[int, str]]:
 
 def check_sanitization(content: str, filepath: Path) -> List[Tuple[int, str]]:
     """Check for PII and full paths that should be sanitized."""
-    issues = []
+    issues: List[Tuple[int, str]] = []
     # Skip archive
     if "archive" in str(filepath):
         return issues
@@ -118,7 +118,7 @@ def check_sanitization(content: str, filepath: Path) -> List[Tuple[int, str]]:
 
 def check_exploitable_patterns(content: str, filepath: Path) -> List[Tuple[int, str]]:
     """Detect patterns indicating exploitable failures in implementation code."""
-    issues = []
+    issues: List[Tuple[int, str]] = []
     # Skip documentation, test files, design specs, and tools that detect these patterns
     skip_dirs = {"test", "docs", "tools", "scripts", ".github"}
     if any(skip_dir in str(filepath) for skip_dir in skip_dirs):
