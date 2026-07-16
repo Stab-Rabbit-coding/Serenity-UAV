@@ -252,14 +252,12 @@ def insert_hull_path(svg, new_hull, pattern, search_rect=True):
     new_svg, replaced = replace_element(svg, pattern, new_hull)
     if replaced:
         return new_svg, True
-    
     # Otherwise, try inserting after the grid rect
     if search_rect:
         match = re.search(r'<rect[^>]+fill="url\(#grid\)"[^/]*/>', svg)
         if match:
             # Insert after the found element
-            return (svg[:match.end()] + "\n" + new_hull + svg[match.end():]), True
-    
+            return (svg[:match.end()] + "\n" + new_hull + svg[match.end():]), True  
     return svg, False
 
 def update_side_view():
@@ -423,7 +421,7 @@ def update_top_view():
 
 def update_front_view():
     # ... (all setup code remains the same until new_hull definition) ...
-    
+
     new_hull = (
         f'<path id="hull-front-stl" d="{hull_path}" '
         f'fill="#0e2030" fill-opacity="0.85" stroke="#00e5ff" stroke-width="2"/>'
@@ -432,7 +430,7 @@ def update_front_view():
     # Use the new helper
     old_pattern = r'<path[^>]+id="hull-front[^>]*/>'
     svg, replaced = insert_hull_path(svg, new_hull, old_pattern)
-    
+
     if not replaced:
         print("  WARNING: Could not find insertion point or pattern")
         return
