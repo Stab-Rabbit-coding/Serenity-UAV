@@ -258,7 +258,7 @@ def insert_hull_path(svg, new_hull, pattern, search_rect=True):
         if match:
             # Insert after the found element
             return (svg[:match.end()] + "\n" + new_hull + svg[match.end():]), True
-    return svg, False
+        return svg, False
 
 def update_side_view():
     """
@@ -420,14 +420,39 @@ def update_top_view():
 # ---------------------------------------------------------------------------
 
 def update_front_view():
-    # ... (all setup code remains the same until new_hull definition) ...
+    """Replace/add hull outline in overview_front.svg (YZ plane)."""
+    print("\nUpdating overview_front.svg…")
+    fname = os.path.join(SVG_DIR, "overview_front.svg")
+    svg = read_svg(fname)
+
+    # STL extents for YZ plane (Front view)
+    # Y = beam, Z = height
+    STL_Y_MIN, STL_Y_MAX = -200.0, 20.0
+    STL_Z_MIN, STL_Z_MAX = 0.0, 200.0
+
+    # SVG mapping (adjust these if your diagram uses different coordinates)
+    SVG_Y_LEFT, SVG_Y_RIGHT = 100.0, 700.0
+    SVG_Z_TOP, SVG_Z_BOT = 100.0, 350.0
+
+    hull_verts = load_group(HULL_PARTS)
+    h_vals, z_top, z_bot = silhouette(hull_verts, "y", "z", n_bins=600)
+
+    hull_path = to_svg_path(
+        h_vals, z_top, z_bot,
+        stl_h_range=(STL_Y_MIN, STL_Y_MAX),
+        stl_v_range=(STL_Z_MIN, STL_Z_MAX),
+        svg_h_range=(SVG_Y_LEFT, SVG_Y_RIGHT),
+        svg_v_range=(SVG_Z_TOP, SVG_Z_BOT),
+        flip_h=False,
+        flip_v=True,
+        simplify_dp=0.5,
+    )
 
     new_hull = (
         f'<path id="hull-front-stl" d="{hull_path}" '
         f'fill="#0e2030" fill-opacity="0.85" stroke="#00e5ff" stroke-width="2"/>'
     )
 
-    # Use the new helper
     old_pattern = r'<path[^>]+id="hull-front[^>]*/>'
     svg, replaced = insert_hull_path(svg, new_hull, old_pattern)
 
