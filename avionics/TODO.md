@@ -398,14 +398,14 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 - [ ] Generate production-ready Gerber files to `avionics/kicad/Jayne/gerbers/` — **blocked on
     trace routing, real footprints, and silk/DRC cleanup; not meaningful to export gerbers for
     a board that is still using placeholder footprints or is partially routed.**
-    - [ ] Replace placeholder U1/U2/U3/U5/U_PMIC footprints with real datasheet-approved
+    - [x] Replace placeholder U1/U2/U3/U5/U_PMIC footprints with real datasheet-approved
         BGA/QFN/VSSOP footprints before fabrication.
     - [ ] Complete full copper routing for all signal nets and power domains.
     - [ ] Resolve any `silk_over_copper`, `silk_overlap`, or `silk_edge_clearance` warnings.
     - [ ] Run KiCad DRC to zero errors after routing and footprint updates.
     - [ ] Export Gerber and drill files to `avionics/kicad/Jayne/gerbers/` using KiCad or the
         repository's Gerber workflow once the board is fully routed and verified.
-    - [ ] Confirm the compact 1.0 × 2.75 in (25.4 × 69.85 mm) `Jayne.kicad_pcb` baseline is intentional and, if so,
+    - [x] Confirm the compact 1.0 × 2.75 in (25.4 × 69.85 mm) `Jayne.kicad_pcb` baseline is intentional and, if so,
         back-port the updated board outline/placement into `gen_vera_pcb.py`; otherwise treat
         the script output as a pre-compaction template only.
     - [ ] Render + mesh-verify `head_shell24.scad` (blocked this session; re-attempt).

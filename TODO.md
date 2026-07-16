@@ -2817,7 +2817,7 @@ centroid placement (`airframe/CLAUDE.md` "Assembly and Placement").
     - [ ] FreeCAD-verify the proposed pose and pocket-wall clearance against
         `bow_camera_cut`/`bow_tof_cut` — do not hand-derive the bow pod's own
         non-hull-frame local-coordinate transform (documented exception).
-    - [ ] Verify against real, non-placeholder U1/U2/U3/U5/U_PMIC footprints once sourced
+    - [x] Verify against real, non-placeholder U1/U2/U3/U5/U_PMIC footprints once sourced
         (8mm standoff is a starting allowance).
     - [ ] `head_shell24.scad` is a secondary reference (Rev R1) — the Blender-canonical
         pipeline has no head-interior merge script analogous to `merge_cargo_interior.py`
@@ -3501,10 +3501,10 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
 - [ ] **Update PHASED_BUILD_GUIDE.md** from Rev M 18-inch to Rev S 24-inch specifications
     (hull 609.6 mm, 50mm EDFs, v2·v2·v2·v2 node placement, Rev S power system, cargo system).
 
-- [ ] **Rebuild `graphical-build-guide/` (38 SVGs) from Blender/FreeCAD-derived platform
-    graphics, replacing the pre-Rev-N hand-drawn line art.** Two stale-geometry problems,
-    not one:
-    - The 26 numbered `build_guide_XX_*.svg` step cards (antenna placement, node install,
+- [ ] **1.5.6 Rebuild Graphical Buiild Guide**
+
+    - Create updated `graphical-build-guide/` (38 SVGs) from Blender/FreeCAD-derived platform   graphics, replacing the pre-Rev-N hand-drawn line art.** Two stale-geometry problems,
+    not one:    - The 26 numbered `build_guide_XX_*.svg` step cards (antenna placement, node install,
     inter-board wiring, first flight, etc.) are hand-drawn schematic line art — the
     airframe silhouettes in them were never derived from actual model geometry at all,
     and (per the §0.5 audit above) several depict the **archived** Cape-A-1/Cape-B-1
