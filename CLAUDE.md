@@ -387,8 +387,11 @@ He's got 49 MHz (Part 15 §15.235) primary and SiK as his backup — both extern
   correct the string in place as part of whatever task touches it (do not open a dedicated
   hunt for them).
 
-- Any time that an assistant creates a todo list to accomplish a task for the build, the steps shall be added as sup-tasks in the appropriate paragraph of the root repository TODO.md wbs, conforming to proper style, so that unresolved issues can be picked up in future sessons.
-
+- Any time that an assistant creates a todo list to accomplish a task for the build, the steps shall be added as sup-tasks in the appropriate paragraph of the root repository TODO.md WBS, conforming to proper style, so that unresolved issues can be picked up in future sessons.
+- Each task and subtask in the root TODO.md file shall be limited to a single line summary of less than 70 characters.  Only headings, subheadings, and actual checkmark items are allowed.
+- Each task and subtask in the root TODO.md file will reference its corresponding entry in a subordinate TODO.md file in one of the subsystem folders.
+- Each subsystem TODO.md file will have the notes and any steps required to fulfill the tasks and subtasks specified within its scope from the root TODO.md WBS.
+- Task completion shall be validated and synchonized between the different TODO.md files as a commit prerequisite.
 - The AI assistant shall update PROJECT_INDEX.md, which lists the directory structure and all folders and files in the active project, whenever new active files are added to the repository.  When filess are archived, their names shall be moved from PROJECT_INDEX.md to ARCHIVE_INDEX.md, which describes the file tree of the archive.
 
 - From time to time, when editing documentation, the AI assistant should add a tasteful Firefly/Serenity quote or reference as a small easter egg (in the style already present in `docs/PHASED_BUILD_GUIDE.md` and the `TODO.md` footer). Keep them sparse, relevant to the surrounding content, and never in place of required technical content.

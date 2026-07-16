@@ -7,7 +7,8 @@ This directory holds the KiCad projects for the four cape/board types:
 | `Wash.kicad_*` | **Wash** | Flight-control & sensor cape (FC) |
 | `Zoë.kicad_*` | **Zoë** | Comms / logging / payload cape (CN) |
 | `Kaylee.kicad_*` | **Kaylee** | Power-distribution board (PDB) |
-| `XCVR-49MHZ-2.kicad_*` | **Emma** | 49 MHz (Part 15 §15.235) transceiver |
+| `Emma.kicad_*` | **Emma** | 49 MHz (Part 15 §15.235) transceiver |
+| `Jayne.kicad_*` | **Jayne** | Nose/Cargo vision, ToF, & laser board (standalone) |
 
 Per-board net/pin documentation lives in the matching `*.md` files
 (`Wash.md`, `Zoë.md`, `Kaylee.md`, `XCVR-49MHZ-2.md`). KiCad files keep

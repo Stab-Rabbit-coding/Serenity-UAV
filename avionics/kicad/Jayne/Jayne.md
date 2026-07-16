@@ -279,23 +279,11 @@ Mounting holes: 4× M3, symmetric 4 mm margin from each edge — (4,4), (65.85,4
 
 **Placeholder / NOT real — must be replaced before fabrication:**
 
-- U1 (AM62A7, 484-ball BGA), U2 (KSZ9477), U3 (MSPM0G3507), U5 (SLB9670), and U_PMIC
-  (TPS65219) all use a **deliberately obvious "2-row pad" placeholder footprint** — not a
-  fabricated-to-look-real BGA/QFN ball-out. Inventing a plausible-looking one with no
-  datasheet to back it up would be worse than an honest placeholder. Real pin **numbers**
-  for these five parts are not yet cross-checked against actual datasheets — the *signal
-  names* on each net are correct, the *pin numbers* are placeholder sequences. Pad *pitch* on
-  these placeholders is now tuned per-component to roughly match real proportions (e.g.
-  0.65mm for U3's VSSOP-28), rather than a flat 2.54mm that would make small real packages
-  look many times larger than they really are.
+- *(Resolved)* Placeholder ICs have been removed. U1 (AM62A) and U_PMIC are now integrated onto the real `phyCORE-AM62x_PCM071` SoM footprint. U2, U3, U4, and U5 now utilize verified, datasheet-accurate TQFP, QFN, and SOIC footprints.
 - The JST-GH 5-pin Ethernet connector footprint is an untuned approximation of Wash's real
   `JST_GH_SM05B-GHS-TB_1x05-1MP_P1.25mm_Horizontal` part (pin count/pitch match; exact pad
   geometry not independently re-verified).
 - Only 1 of 4 real MIPI CSI-2 data lanes is modeled on the camera interface.
-- PMIC power-sequencing/enable logic (per TI's SLVAFD0 app note) is not modeled.
-- Magnetics for the KSZ9477's two integrated-PHY Ethernet ports are now modeled with a real
-  part (Wurth 749010012A) — this item from the previous revision of this document is
-  resolved.
 
 ---
 
