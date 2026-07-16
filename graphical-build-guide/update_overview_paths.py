@@ -257,7 +257,7 @@ def insert_hull_path(svg, new_hull, pattern, search_rect=True):
         match = re.search(r'<rect[^>]+fill="url\(#grid\)"[^/]*/>', svg)
         if match:
             # Insert after the found element
-            return (svg[:match.end()] + "\n" + new_hull + svg[match.end():]), True  
+            return (svg[:match.end()] + "\n" + new_hull + svg[match.end():]), True
     return svg, False
 
 def update_side_view():
