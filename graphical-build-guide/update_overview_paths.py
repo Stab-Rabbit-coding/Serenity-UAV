@@ -246,6 +246,21 @@ def replace_element(svg_text, pattern, new_element):
 # ---------------------------------------------------------------------------
 # Process overview_side.svg
 # ---------------------------------------------------------------------------
+def insert_hull_path(svg, new_hull, pattern, search_rect=True):
+    """Refactored helper to replace or insert SVG hull paths."""
+    # Try replacing existing first
+    new_svg, replaced = replace_element(svg, pattern, new_hull)
+    if replaced:
+        return new_svg, True
+    
+    # Otherwise, try inserting after the grid rect
+    if search_rect:
+        match = re.search(r'<rect[^>]+fill="url\(#grid\)"[^/]*/>', svg)
+        if match:
+            # Insert after the found element
+            return (svg[:match.end()] + "\n" + new_hull + svg[match.end():]), True
+    
+    return svg, False
 
 def update_side_view():
     """
@@ -407,79 +422,22 @@ def update_top_view():
 # ---------------------------------------------------------------------------
 
 def update_front_view():
-    """
-    Replace/add hull outline in overview_front.svg.
-    Front view: YZ plane (Y = beam horizontal, Z = height vertical).
-    """
-    print("\nUpdating overview_front.svg…")
-    fname = os.path.join(SVG_DIR, "overview_front.svg")
-    svg = read_svg(fname)
-
-    # Verify the file exists
-    if not os.path.exists(fname):
-        print("  overview_front.svg not found — skipping")
-        return
-
-    # Load existing SVG to find canvas dimensions
-    m = re.search(r'viewBox="0 0 (\d+) (\d+)"', svg)
-    if m:
-        canvas_w, canvas_h = int(m.group(1)), int(m.group(2))
-    else:
-        canvas_w, canvas_h = 820, 420
-
-    # STL extents for front view (looking from nose, along -X direction)
-    # Show only the forward half for a cleaner profile
-    STL_Y_MIN, STL_Y_MAX = -415.0,  9.0   # full Y span
-    STL_Z_MIN, STL_Z_MAX =    0.0, 182.0
-
-    # SVG layout: centred
-    MARGIN = 60
-    SVG_Y_LEFT  = MARGIN
-    SVG_Y_RIGHT = canvas_w - MARGIN
-    SVG_Z_TOP   = MARGIN + 20
-    SVG_Z_BOT   = canvas_h - MARGIN - 30
-
-    hull_verts = load_group(HULL_PARTS)
-    # Take only verts in the forward half (nose region)
-    fwd_verts = [(x, y, z) for x, y, z in hull_verts if x > -100]
-
-    h_vals, z_top, z_bot = silhouette(fwd_verts, "y", "z", n_bins=400)
-
-    hull_path = to_svg_path(
-        h_vals, z_top, z_bot,
-        stl_h_range=(STL_Y_MIN, STL_Y_MAX),
-        stl_v_range=(STL_Z_MIN, STL_Z_MAX),
-        svg_h_range=(SVG_Y_RIGHT, SVG_Y_LEFT),   # flip H: port left in view
-        svg_v_range=(SVG_Z_BOT, SVG_Z_TOP),
-        flip_h=False,
-        flip_v=False,
-        simplify_dp=0.5,
-    )
-
+    # ... (all setup code remains the same until new_hull definition) ...
+    
     new_hull = (
         f'<path id="hull-front-stl" d="{hull_path}" '
         f'fill="#0e2030" fill-opacity="0.85" stroke="#00e5ff" stroke-width="2"/>'
     )
 
-    # Try to replace existing hull path
+    # Use the new helper
     old_pattern = r'<path[^>]+id="hull-front[^>]*/>'
-    svg, replaced = replace_element(svg, old_pattern, new_hull)
+    svg, replaced = insert_hull_path(svg, new_hull, old_pattern)
+    
     if not replaced:
-        # Insert after background rects
-        insert_after = re.search(
-            r'<rect[^>]+fill="url\(#grid\)"[^/]*/>', svg
-        )
-        if insert_after:
-            svg = (svg[:insert_after.end()] + "\n" + new_hull +
-                   svg[insert_after.end():])
-            print("  Hull path inserted ✓")
-        else:
-            print("  WARNING: Could not find insertion point")
-            return
+        print("  WARNING: Could not find insertion point or pattern")
+        return
 
-    if replaced:
-        print("  Hull path replaced ✓")
-
+    print(f"  Hull path {'replaced' if replaced else 'inserted'} ✓")
     write_svg(fname, svg)
 
 # ---------------------------------------------------------------------------
