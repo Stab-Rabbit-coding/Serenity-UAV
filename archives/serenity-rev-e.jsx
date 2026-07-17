@@ -779,7 +779,7 @@ const SBOM=[
   {sys:"CM4",   layer:"Driver",   comp:"CC2652P7 Z-Stack / BLE / Thread", ver:"TI SDK",lic:"TI TSPA",role:"2.4GHz protocol images — one active at a time"},
   {sys:"CM4",   layer:"Comms",    comp:"SiK firmware (air unit)",  ver:"2.x",   lic:"GPL-3",   role:"915MHz MAVLink radio"},
   {sys:"CPLD",  layer:"RTL",      comp:"Write-blocker Verilog",    ver:"v1.0",  lic:"MIT",     role:"MachXO2-256 SDIO CMD filter · WP_VIOLATION response injection"},
-  {sys:"STM32", layer:"Firmware", comp:"NX proxy firmware",        ver:"v1.0",  lic:"MIT",     role:"SPI proxy · SHA-256 audit log · CMD24/25/32-38 block · WP OTP fuses"},
+
   {sys:"GCS",   layer:"App",      comp:"QGroundControl",           ver:"≥4.3",  lic:"GPL-3",   role:"Flight planning · telemetry · params"},
 ];
 const SBOM_SYS=[...new Set(SBOM.map(s=>s.sys))];
