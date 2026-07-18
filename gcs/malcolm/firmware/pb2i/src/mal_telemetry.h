@@ -36,22 +36,23 @@
 
 /** Aircraft global position (from GLOBAL_POSITION_INT). */
 typedef struct {
-    int32_t  lat_degE7;    /**< Latitude  × 10^7 (WGS-84 degrees × 1e7). */
-    int32_t  lon_degE7;    /**< Longitude × 10^7.                          */
-    int32_t  alt_mm;       /**< Altitude MSL (millimetres).                */
-    int32_t  relative_alt_mm; /**< Altitude above home (millimetres).      */
-    int16_t  vx_cms;       /**< Ground speed N component (cm/s).           */
-    int16_t  vy_cms;       /**< Ground speed E component (cm/s).           */
-    int16_t  vz_cms;       /**< Ground speed D component (cm/s, +down).    */
-    uint16_t hdg_cdeg;     /**< Heading (centidegrees, 0–36000, UINT16_MAX = unknown). */
+    int32_t lat_degE7;       /**< Latitude  × 10^7 (WGS-84 degrees × 1e7). */
+    int32_t lon_degE7;       /**< Longitude × 10^7.                          */
+    int32_t alt_mm;          /**< Altitude MSL (millimetres).                */
+    int32_t relative_alt_mm; /**< Altitude above home (millimetres).      */
+    int16_t vx_cms;          /**< Ground speed N component (cm/s).           */
+    int16_t vy_cms;          /**< Ground speed E component (cm/s).           */
+    int16_t vz_cms;          /**< Ground speed D component (cm/s, +down).    */
+    uint16_t
+        hdg_cdeg; /**< Heading (centidegrees, 0–36000, UINT16_MAX = unknown). */
 } mal_aircraft_pos_t;
 
 /** Telemetry link status. */
 typedef struct {
-    int         link_ok;           /**< Non-zero if link is alive.           */
+    int             link_ok;        /**< Non-zero if link is alive.           */
     struct timespec last_heartbeat; /**< Monotonic time of last heartbeat.   */
-    uint32_t    msgs_received;     /**< Total MAVLink frames received.       */
-    uint32_t    msgs_forwarded;    /**< Total frames forwarded to host PC.   */
+    uint32_t        msgs_received;  /**< Total MAVLink frames received.       */
+    uint32_t        msgs_forwarded; /**< Total frames forwarded to host PC.   */
 } mal_telemetry_status_t;
 
 /* ---------------------------------------------------------------------------

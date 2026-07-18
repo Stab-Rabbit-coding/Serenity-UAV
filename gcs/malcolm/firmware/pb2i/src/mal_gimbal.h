@@ -30,17 +30,17 @@
 
 /** Gimbal position in degrees. */
 typedef struct {
-    float pan_deg;   /**< Azimuth   — 0° = North, +CW, range ±170°.   */
-    float tilt_deg;  /**< Elevation — 0° = horizon, + = up, max +90°. */
+    float pan_deg;  /**< Azimuth   — 0° = North, +CW, range ±170°.   */
+    float tilt_deg; /**< Elevation — 0° = horizon, + = up, max +90°. */
 } mal_gimbal_pos_t;
 
 /** Return codes for gimbal functions. */
 typedef enum {
-    MAL_GIMBAL_OK          =  0, /**< Operation successful.               */
-    MAL_GIMBAL_ERR_INIT    = -1, /**< Initialisation failure.             */
+    MAL_GIMBAL_OK = 0,           /**< Operation successful.               */
+    MAL_GIMBAL_ERR_INIT = -1,    /**< Initialisation failure.             */
     MAL_GIMBAL_ERR_ENCODER = -2, /**< I²C encoder read failure.           */
-    MAL_GIMBAL_ERR_SERVO   = -3, /**< PWM servo write failure.            */
-    MAL_GIMBAL_ERR_LIMIT   = -4, /**< Requested position exceeds travel.  */
+    MAL_GIMBAL_ERR_SERVO = -3,   /**< PWM servo write failure.            */
+    MAL_GIMBAL_ERR_LIMIT = -4,   /**< Requested position exceeds travel.  */
 } mal_gimbal_err_t;
 
 /* ---------------------------------------------------------------------------
@@ -111,7 +111,8 @@ mal_gimbal_err_t mal_gimbal_get_position(mal_gimbal_pos_t *pos);
 void mal_gimbal_get_target(mal_gimbal_pos_t *target);
 
 /**
- * @brief  Return non-zero if the gimbal is within 1° of its target on both axes.
+ * @brief  Return non-zero if the gimbal is within 1° of its target on both
+ * axes.
  *
  * @return 1 if on-target; 0 if still slewing.
  */

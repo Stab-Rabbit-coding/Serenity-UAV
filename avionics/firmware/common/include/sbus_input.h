@@ -90,57 +90,57 @@ extern "C" {
  * ---------------------------------------------------------------------------*/
 
 /** UART baud rate for SBUS (not a standard POSIX B-constant; use BOTHER). */
-#define SBUS_UART_BAUD      (100000U)
+#define SBUS_UART_BAUD       (100000U)
 
 /** Total number of bytes in one SBUS frame (start + data + flags + end). */
-#define SBUS_FRAME_LEN      (25U)
+#define SBUS_FRAME_LEN       (25U)
 
 /** SBUS frame start byte — first byte of every valid frame. */
-#define SBUS_START_BYTE     (0x0FU)
+#define SBUS_START_BYTE      (0x0FU)
 
 /** SBUS frame end byte — last byte of every valid frame. */
-#define SBUS_END_BYTE       (0x00U)
+#define SBUS_END_BYTE        (0x00U)
 
 /** Number of proportional RC channels encoded in each SBUS frame. */
-#define SBUS_NUM_CHANNELS   (16U)
+#define SBUS_NUM_CHANNELS    (16U)
 
 /**
  * Minimum 11-bit channel value (corresponds to ≈ 988 µs pulse width).
  * Futaba standard; may vary slightly by transmitter calibration.
  */
-#define SBUS_CHANNEL_MIN    (172U)
+#define SBUS_CHANNEL_MIN     (172U)
 
 /**
  * Centre / neutral 11-bit channel value (corresponds to ≈ 1500 µs).
  * Used as the default failsafe value for non-critical channels.
  */
-#define SBUS_CHANNEL_MID    (992U)
+#define SBUS_CHANNEL_MID     (992U)
 
 /**
  * Maximum 11-bit channel value (corresponds to ≈ 2012 µs pulse width).
  * Futaba standard; may vary slightly by transmitter calibration.
  */
-#define SBUS_CHANNEL_MAX    (1811U)
+#define SBUS_CHANNEL_MAX     (1811U)
 
 /** Flags byte (byte 23) bitmask: digital channel 17 state. */
-#define SBUS_CH17_MASK          (0x01U)
+#define SBUS_CH17_MASK       (0x01U)
 
 /** Flags byte (byte 23) bitmask: digital channel 18 state. */
-#define SBUS_CH18_MASK          (0x02U)
+#define SBUS_CH18_MASK       (0x02U)
 
 /**
  * Flags byte (byte 23) bitmask: frame-lost flag.
  * Set by the receiver when one or more consecutive frames were not received
  * from the transmitter.  Does NOT imply failsafe (see SBUS_FAILSAFE_MASK).
  */
-#define SBUS_FRAME_LOST_MASK    (0x04U)
+#define SBUS_FRAME_LOST_MASK (0x04U)
 
 /**
  * Flags byte (byte 23) bitmask: receiver failsafe active.
  * Set when the receiver has not received valid signal for its configured
  * failsafe timeout and has applied failsafe channel positions.
  */
-#define SBUS_FAILSAFE_MASK      (0x08U)
+#define SBUS_FAILSAFE_MASK   (0x08U)
 
 /* ---------------------------------------------------------------------------
  * Data types
@@ -160,23 +160,23 @@ typedef struct {
     uint16_t channels[SBUS_NUM_CHANNELS];
 
     /** Digital channel 17 state (true = active/high). */
-    bool     ch17;
+    bool ch17;
 
     /** Digital channel 18 state (true = active/high). */
-    bool     ch18;
+    bool ch18;
 
     /**
      * Frame-lost flag (true = receiver did not receive this frame from TX).
      * The channel values in this frame are the last valid values received.
      */
-    bool     frame_lost;
+    bool frame_lost;
 
     /**
      * Failsafe active flag (true = receiver failsafe has engaged).
      * Channel values reflect the failsafe positions programmed into the
      * receiver, not the current transmitter stick positions.
      */
-    bool     failsafe;
+    bool failsafe;
 } sbus_frame_t;
 
 /**
@@ -201,18 +201,18 @@ typedef struct {
      * Path to the UART device, e.g. "/dev/ttyS2" (Cape-A) or "/dev/ttyS5"
      * (Cape-B).  Must not be NULL.
      */
-    const char          *uart_dev;
+    const char *uart_dev;
 
     /**
      * Callback invoked for each decoded SBUS frame.  Must not be NULL.
      * The callback is called from the internal RX thread.
      */
-    sbus_rx_callback_t   rx_callback;
+    sbus_rx_callback_t rx_callback;
 
     /**
      * Opaque pointer forwarded unchanged to rx_callback.  May be NULL.
      */
-    void                *rx_userdata;
+    void *rx_userdata;
 } sbus_config_t;
 
 /**

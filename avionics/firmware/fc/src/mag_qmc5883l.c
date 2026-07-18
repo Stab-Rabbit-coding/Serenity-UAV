@@ -37,7 +37,7 @@
  * ---------------------------------------------------------------------------*/
 
 struct qmc5883l_ctx {
-    int fd;   /**< Open file descriptor for /dev/i2c-N. */
+    int fd; /**< Open file descriptor for /dev/i2c-N. */
 };
 
 /* ---------------------------------------------------------------------------
@@ -52,8 +52,7 @@ struct qmc5883l_ctx {
  * @param val  Value to write.
  * @return 0 on success, -EIO on write error.
  */
-static int reg_write(int fd, uint8_t reg, uint8_t val)
-{
+static int reg_write(int fd, uint8_t reg, uint8_t val) {
     uint8_t buf[2];
 
     buf[0] = reg;
@@ -77,8 +76,7 @@ static int reg_write(int fd, uint8_t reg, uint8_t val)
  * @param len  Number of bytes to read.
  * @return 0 on success, -EIO on error.
  */
-static int reg_read(int fd, uint8_t reg, uint8_t *buf, size_t len)
-{
+static int reg_read(int fd, uint8_t reg, uint8_t *buf, size_t len) {
     if (write(fd, &reg, 1U) != 1) {
         return -EIO;
     }
@@ -95,8 +93,7 @@ static int reg_read(int fd, uint8_t reg, uint8_t *buf, size_t len)
  * @param status  Destination for the STATUS register value.
  * @return 0 on success, -EIO on error.
  */
-static int read_status(int fd, uint8_t *status)
-{
+static int read_status(int fd, uint8_t *status) {
     return reg_read(fd, QMC5883L_REG_STATUS, status, 1U);
 }
 
@@ -111,16 +108,14 @@ static int read_status(int fd, uint8_t *status)
  * @return 0 when DRDY is set, -ETIMEDOUT if not set within timeout,
  *         -EIO on read error.
  */
-static int wait_drdy(int fd, unsigned int timeout_ms)
-{
+static int wait_drdy(int fd, unsigned int timeout_ms) {
     /* 2 ms poll interval — well within 10 ms ODR minimum period. */
     static const struct timespec poll_interval = {
-        .tv_sec  = 0,
-        .tv_nsec = 2000000L  /* 2 ms */
+        .tv_sec = 0, .tv_nsec = 2000000L /* 2 ms */
     };
 
     unsigned int elapsed_ms = 0U;
-    uint8_t      status     = 0U;
+    uint8_t      status = 0U;
     int          rc;
 
     if (timeout_ms == 0U) {
@@ -147,8 +142,7 @@ static int wait_drdy(int fd, unsigned int timeout_ms)
  * Public API
  * ---------------------------------------------------------------------------*/
 
-int mag_qmc5883l_open(const char *i2c_dev, qmc5883l_ctx_t **ctx_out)
-{
+int mag_qmc5883l_open(const char *i2c_dev, qmc5883l_ctx_t **ctx_out) {
     qmc5883l_ctx_t *ctx;
     uint8_t         chip_id;
     int             rc;
@@ -216,8 +210,7 @@ int mag_qmc5883l_open(const char *i2c_dev, qmc5883l_ctx_t **ctx_out)
     return 0;
 }
 
-void mag_qmc5883l_close(qmc5883l_ctx_t *ctx)
-{
+void mag_qmc5883l_close(qmc5883l_ctx_t *ctx) {
     if (ctx == NULL) {
         return;
     }
@@ -225,11 +218,9 @@ void mag_qmc5883l_close(qmc5883l_ctx_t *ctx)
     free(ctx);
 }
 
-int mag_qmc5883l_read_raw(qmc5883l_ctx_t *ctx,
-                           qmc5883l_raw_t *raw,
-                           unsigned int timeout_ms)
-{
-    uint8_t buf[7];  /* XOUT_L … STATUS (regs 0x00–0x06, 7 bytes) */
+int mag_qmc5883l_read_raw(qmc5883l_ctx_t *ctx, qmc5883l_raw_t *raw,
+                          unsigned int timeout_ms) {
+    uint8_t buf[7]; /* XOUT_L … STATUS (regs 0x00–0x06, 7 bytes) */
     int     rc;
 
     if (ctx == NULL || raw == NULL) {
@@ -264,14 +255,12 @@ int mag_qmc5883l_read_raw(qmc5883l_ctx_t *ctx,
     return 0;
 }
 
-int mag_qmc5883l_read(qmc5883l_ctx_t *ctx,
-                      qmc5883l_sample_t *sample,
-                      unsigned int timeout_ms)
-{
-    uint8_t         buf[7];
-    int             rc;
-    uint8_t         status;
-    qmc5883l_raw_t  raw;
+int mag_qmc5883l_read(qmc5883l_ctx_t *ctx, qmc5883l_sample_t *sample,
+                      unsigned int timeout_ms) {
+    uint8_t        buf[7];
+    int            rc;
+    uint8_t        status;
+    qmc5883l_raw_t raw;
 
     if (ctx == NULL || sample == NULL) {
         return -EINVAL;

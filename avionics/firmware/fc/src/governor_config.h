@@ -69,22 +69,22 @@
  */
 
 /** Port-nacelle forward EDF (50 mm, 6S).  Primary FC node: FC1. */
-#define EDF_ID_PORT_FWD     (0U)
+#define EDF_ID_PORT_FWD           (0U)
 
 /** Port-nacelle aft EDF (50 mm, 6S).  Primary FC node: FC2. */
-#define EDF_ID_PORT_AFT     (1U)
+#define EDF_ID_PORT_AFT           (1U)
 
 /** Stbd-nacelle forward EDF (50 mm, 6S).  Primary FC node: FC2. */
-#define EDF_ID_STBD_FWD     (2U)
+#define EDF_ID_STBD_FWD           (2U)
 
 /** Stbd-nacelle aft EDF (50 mm, 6S).  Primary FC node: FC3. */
-#define EDF_ID_STBD_AFT     (3U)
+#define EDF_ID_STBD_AFT           (3U)
 
 /** Fuselage rear EDF (55 mm, 6S).  Primary FC node: FC3. */
-#define EDF_ID_FUSE         (4U)
+#define EDF_ID_FUSE               (4U)
 
 /** Total number of distinct EDF channels in the propulsion system. */
-#define EDF_COUNT           (5U)
+#define EDF_COUNT                 (5U)
 
 /** @} */
 
@@ -110,19 +110,19 @@
  */
 
 /** Thrust coefficient — port-nacelle forward EDF.  [UNCALIBRATED] */
-#define EDF_THRUST_K_PORT_FWD   (1.00e-8)   /* CAL:PORT_FWD */
+#define EDF_THRUST_K_PORT_FWD     (1.00e-8) /* CAL:PORT_FWD */
 
 /** Thrust coefficient — port-nacelle aft EDF.  [UNCALIBRATED] */
-#define EDF_THRUST_K_PORT_AFT   (1.00e-8)   /* CAL:PORT_AFT */
+#define EDF_THRUST_K_PORT_AFT     (1.00e-8) /* CAL:PORT_AFT */
 
 /** Thrust coefficient — stbd-nacelle forward EDF.  [UNCALIBRATED] */
-#define EDF_THRUST_K_STBD_FWD   (1.00e-8)   /* CAL:STBD_FWD */
+#define EDF_THRUST_K_STBD_FWD     (1.00e-8) /* CAL:STBD_FWD */
 
 /** Thrust coefficient — stbd-nacelle aft EDF.  [UNCALIBRATED] */
-#define EDF_THRUST_K_STBD_AFT   (1.00e-8)   /* CAL:STBD_AFT */
+#define EDF_THRUST_K_STBD_AFT     (1.00e-8) /* CAL:STBD_AFT */
 
 /** Thrust coefficient — fuselage rear EDF.  [UNCALIBRATED] */
-#define EDF_THRUST_K_FUSE       (1.15e-7)   /* CAL:FUSE */
+#define EDF_THRUST_K_FUSE         (1.15e-7) /* CAL:FUSE */
 
 /** @} */
 
@@ -142,16 +142,16 @@
  */
 
 /** 50 mm EDF — minimum armed idle RPM. */
-#define EDF_RPM_IDLE_50MM       (8000U)
+#define EDF_RPM_IDLE_50MM         (8000U)
 
 /** 50 mm EDF — software redline.  Do not command above this. */
-#define EDF_RPM_MAX_50MM        (35000U)
+#define EDF_RPM_MAX_50MM          (35000U)
 
 /** 55 mm EDF — minimum armed idle RPM. */
-#define EDF_RPM_IDLE_55MM      (4000U)
+#define EDF_RPM_IDLE_55MM         (4000U)
 
 /** 55 mm EDF — software redline.  Do not command above this. */
-#define EDF_RPM_MAX_55MM       (18000U)
+#define EDF_RPM_MAX_55MM          (18000U)
 
 /** @} */
 
@@ -172,7 +172,7 @@
 /**
  * Maximum permissible RPM difference within one nacelle's tandem pair (RPM).
  */
-#define EDF_RPM_PAIR_MISMATCH_MAX   (100U)
+#define EDF_RPM_PAIR_MISMATCH_MAX (100U)
 
 /* ============================================================================
  * PID Controller Tuning Constants
@@ -197,22 +197,22 @@
  */
 
 /** Proportional gain — 50 mm EDF class. */
-#define EDF_GOV_KP_50MM     (0.000180)
+#define EDF_GOV_KP_50MM           (0.000180)
 
 /** Integral gain — 50 mm EDF class (per controller tick at 1 kHz). */
-#define EDF_GOV_KI_50MM     (4.500e-6)
+#define EDF_GOV_KI_50MM           (4.500e-6)
 
 /** Derivative gain — 50 mm EDF class. */
-#define EDF_GOV_KD_50MM     (9.000e-6)
+#define EDF_GOV_KD_50MM           (9.000e-6)
 
 /** Proportional gain — 55 mm EDF class. */
-#define EDF_GOV_KP_55MM    (0.000120)
+#define EDF_GOV_KP_55MM           (0.000120)
 
 /** Integral gain — 55 mm EDF class. */
-#define EDF_GOV_KI_55MM    (3.000e-6)
+#define EDF_GOV_KI_55MM           (3.000e-6)
 
 /** Derivative gain — 55 mm EDF class. */
-#define EDF_GOV_KD_55MM    (6.000e-6)
+#define EDF_GOV_KD_55MM           (6.000e-6)
 
 /** @} */
 
@@ -238,46 +238,47 @@
  * Over-temperature limit (°C).
  * Exceeding this value triggers FAULT_ESC_OVERTEMP on the responsible EDF.
  */
-#define EDF_ESC_OVERTEMP_C          (100)
+#define EDF_ESC_OVERTEMP_C        (100)
 
 /**
  * Peak phase-current limit (A).
  * Exceeding this value triggers FAULT_ESC_OVERCURRENT on the responsible EDF.
  */
-#define EDF_ESC_OVERCURRENT_A       (80)
+#define EDF_ESC_OVERCURRENT_A     (80)
 
 /** @} */
 
 /* ============================================================================
  * Governor Loop Timing
- * ============================================================================ */
+ * ============================================================================
+ */
 
 /**
  * Governor control loop execution rate (Hz).
  * Matches the BDSHOT600 telemetry packet rate so every telemetry sample
  * produces exactly one control output update.
  */
-#define EDF_GOV_LOOP_HZ             (1000U)
+#define EDF_GOV_LOOP_HZ           (1000U)
 
 /**
  * Maximum RPM setpoint change per governor tick (RPM/tick = RPM/ms).
  * Limits slew rate to reduce mechanical shock on the nacelle gear train
  * and avoid large EHRPWM duty-cycle transients.
  */
-#define EDF_GOV_RPM_RAMP_RATE       (50U)
+#define EDF_GOV_RPM_RAMP_RATE     (50U)
 
 /**
  * Delay after a setpoint step before fault monitors are re-armed (ms).
  * Allows the RPM to settle before FAULT_EDF_MISMATCH and overshoot checks
  * become active.  Per CLAUDE.md target: settle < 200 ms.
  */
-#define EDF_GOV_SETTLE_MS           (200U)
+#define EDF_GOV_SETTLE_MS         (200U)
 
 /**
  * Maximum permissible RPM overshoot during a setpoint transition, expressed
  * as a percentage of the step magnitude.
  * Per CLAUDE.md target: overshoot < 5 %.
  */
-#define EDF_GOV_OVERSHOOT_MAX_PCT   (5U)
+#define EDF_GOV_OVERSHOOT_MAX_PCT (5U)
 
 #endif /* GOVERNOR_CONFIG_H */

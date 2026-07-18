@@ -43,7 +43,7 @@ extern "C" {
  * ---------------------------------------------------------------------------*/
 
 /** Default I²C 7-bit address of the Si5351A (ADDR pin tied low). */
-#define SI5351_I2C_ADDR  ((uint8_t)0x60U)
+#define SI5351_I2C_ADDR                ((uint8_t)0x60U)
 
 /* ---------------------------------------------------------------------------
  * 49 MHz channel definitions (47 CFR Part 15 §15.235; not 47 CFR 95.623 —
@@ -51,22 +51,22 @@ extern "C" {
  * ---------------------------------------------------------------------------*/
 
 /** Number of legal 49 MHz channels. */
-#define SI5351_49MHZ_XCVR_NUM_CHANNELS  (5U)
+#define SI5351_49MHZ_XCVR_NUM_CHANNELS (5U)
 
 /** 49 MHz channel 0 — 49.830 MHz. */
-#define SI5351_49MHZ_XCVR_CH0_HZ  (49830000UL)
+#define SI5351_49MHZ_XCVR_CH0_HZ       (49830000UL)
 
 /** 49 MHz channel 1 — 49.845 MHz. */
-#define SI5351_49MHZ_XCVR_CH1_HZ  (49845000UL)
+#define SI5351_49MHZ_XCVR_CH1_HZ       (49845000UL)
 
 /** 49 MHz channel 2 — 49.860 MHz. */
-#define SI5351_49MHZ_XCVR_CH2_HZ  (49860000UL)
+#define SI5351_49MHZ_XCVR_CH2_HZ       (49860000UL)
 
 /** 49 MHz channel 3 — 49.875 MHz. */
-#define SI5351_49MHZ_XCVR_CH3_HZ  (49875000UL)
+#define SI5351_49MHZ_XCVR_CH3_HZ       (49875000UL)
 
 /** 49 MHz channel 4 — 49.890 MHz. */
-#define SI5351_49MHZ_XCVR_CH4_HZ  (49890000UL)
+#define SI5351_49MHZ_XCVR_CH4_HZ       (49890000UL)
 
 /* ---------------------------------------------------------------------------
  * Driver handle

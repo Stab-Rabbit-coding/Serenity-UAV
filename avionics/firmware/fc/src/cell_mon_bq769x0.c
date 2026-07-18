@@ -1,6 +1,7 @@
 /**
  * @file    cell_mon_bq769x0.c
- * @brief   BQ76920 / BQ76930 / BQ76940 Li-ion cell monitor driver — implementation.
+ * @brief   BQ76920 / BQ76930 / BQ76940 Li-ion cell monitor driver —
+ * implementation.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
@@ -15,8 +16,8 @@
  *   V_cell_uV = adc_result × GAIN_uV_LSB + OFFSET_mV × 1000
  *
  * GAIN_uV_LSB is assembled from two registers:
- *   GAIN[4:0] = ADCGAIN1[3] | ADCGAIN1[2] | ADCGAIN2[7] | ADCGAIN2[6] | ADCGAIN2[5]
- *   GAIN_uV_LSB = 365 + GAIN[4:0]   (result is in µV/LSB)
+ *   GAIN[4:0] = ADCGAIN1[3] | ADCGAIN1[2] | ADCGAIN2[7] | ADCGAIN2[6] |
+ * ADCGAIN2[5] GAIN_uV_LSB = 365 + GAIN[4:0]   (result is in µV/LSB)
  *
  * References:
  *   [1] BQ76930 Datasheet SLUSBB2C, Texas Instruments.
@@ -41,9 +42,9 @@
  * ---------------------------------------------------------------------------*/
 
 struct cell_mon_ctx {
-    int      fd;                /**< Open /dev/i2c-N file descriptor. */
-    uint32_t gain_uv_lsb;      /**< ADC gain in µV per LSB (365–395). */
-    int32_t  offset_mv;        /**< ADC offset in mV (signed, typically 0). */
+    int      fd;          /**< Open /dev/i2c-N file descriptor. */
+    uint32_t gain_uv_lsb; /**< ADC gain in µV per LSB (365–395). */
+    int32_t  offset_mv;   /**< ADC offset in mV (signed, typically 0). */
 };
 
 /* ---------------------------------------------------------------------------
@@ -57,8 +58,7 @@ struct cell_mon_ctx {
  * @param len   Number of bytes.
  * @return CRC-8 value.
  */
-static uint8_t crc8(const uint8_t *data, size_t len)
-{
+static uint8_t crc8(const uint8_t *data, size_t len) {
     uint8_t crc = 0x00U;
     size_t  i;
     uint8_t j;
@@ -86,8 +86,7 @@ static uint8_t crc8(const uint8_t *data, size_t len)
  * Sends: [ADDR_W (7-bit left-shifted | 0)][REG][DATA][CRC].
  * CRC covers all three preceding bytes.
  */
-static int reg_write(int fd, uint8_t reg, uint8_t data)
-{
+static int reg_write(int fd, uint8_t reg, uint8_t data) {
     /*
      * The CRC covers the I2C address byte (with the W bit) as the first byte.
      * We reconstruct it as (CELL_MON_I2C_ADDR << 1) | 0x00.
@@ -115,8 +114,7 @@ static int reg_write(int fd, uint8_t reg, uint8_t data)
  * Sends: write phase [ADDR_W][REG], then read phase [ADDR_R][DATA][CRC].
  * CRC covers: [ADDR_W][REG][ADDR_R][DATA].
  */
-static int reg_read(int fd, uint8_t reg, uint8_t *val)
-{
+static int reg_read(int fd, uint8_t reg, uint8_t *val) {
     uint8_t write_buf[1];
     uint8_t read_buf[2];
     uint8_t crc_input[4];
@@ -132,9 +130,11 @@ static int reg_read(int fd, uint8_t reg, uint8_t *val)
     }
 
     /* Verify CRC. */
-    crc_input[0] = (uint8_t)((CELL_MON_I2C_ADDR << 1U) | 0x00U);  /* Write address. */
+    crc_input[0] =
+        (uint8_t)((CELL_MON_I2C_ADDR << 1U) | 0x00U); /* Write address. */
     crc_input[1] = reg;
-    crc_input[2] = (uint8_t)((CELL_MON_I2C_ADDR << 1U) | 0x01U);  /* Read address. */
+    crc_input[2] =
+        (uint8_t)((CELL_MON_I2C_ADDR << 1U) | 0x01U); /* Read address. */
     crc_input[3] = read_buf[0];
     expected_crc = crc8(crc_input, 4U);
 
@@ -152,8 +152,7 @@ static int reg_read(int fd, uint8_t reg, uint8_t *val)
  * Performs two separate single-byte reads with individual CRC checks,
  * as the BQ769x0 does not support block reads in CRC mode.
  */
-static int reg_read16(int fd, uint8_t reg_hi, uint16_t *val)
-{
+static int reg_read16(int fd, uint8_t reg_hi, uint16_t *val) {
     uint8_t hi;
     uint8_t lo;
     int     rc;
@@ -186,11 +185,10 @@ static int reg_read16(int fd, uint8_t reg_hi, uint16_t *val)
  * OFFSET is stored in ADCOFFSET (0x51) as a signed two's-complement byte
  * representing the offset in millivolts.
  */
-static int read_calibration(int fd, uint32_t *gain_uv_lsb, int32_t *offset_mv)
-{
-    uint8_t gain1;
-    uint8_t gain2;
-    uint8_t offset_raw;
+static int read_calibration(int fd, uint32_t *gain_uv_lsb, int32_t *offset_mv) {
+    uint8_t  gain1;
+    uint8_t  gain2;
+    uint8_t  offset_raw;
     uint32_t gain_bits;
     int      rc;
 
@@ -207,7 +205,8 @@ static int read_calibration(int fd, uint32_t *gain_uv_lsb, int32_t *offset_mv)
         return rc;
     }
 
-    /* GAIN[4:3] from ADCGAIN1 bits [3:2]; GAIN[2:0] from ADCGAIN2 bits [7:5]. */
+    /* GAIN[4:3] from ADCGAIN1 bits [3:2]; GAIN[2:0] from ADCGAIN2 bits [7:5].
+     */
     gain_bits = (uint32_t)((gain1 >> 2U) & 0x03U) << 3U;
     gain_bits |= (uint32_t)((gain2 >> 5U) & 0x07U);
     *gain_uv_lsb = 365U + gain_bits;
@@ -230,8 +229,8 @@ static int read_calibration(int fd, uint32_t *gain_uv_lsb, int32_t *offset_mv)
  *
  * The result is an 8-bit value written to OV_TRIP or UV_TRIP.
  */
-static int write_voltage_thresholds(int fd, uint32_t gain_uv_lsb, int32_t offset_mv)
-{
+static int write_voltage_thresholds(int fd, uint32_t gain_uv_lsb,
+                                    int32_t offset_mv) {
     uint32_t ov_raw;
     uint32_t uv_raw;
     int32_t  ov_numerator;
@@ -280,8 +279,7 @@ static int write_voltage_thresholds(int fd, uint32_t gain_uv_lsb, int32_t offset
  * Public API
  * ---------------------------------------------------------------------------*/
 
-int cell_mon_open(const char *i2c_dev, cell_mon_ctx_t **ctx_out)
-{
+int cell_mon_open(const char *i2c_dev, cell_mon_ctx_t **ctx_out) {
     cell_mon_ctx_t *ctx;
     int             rc;
 
@@ -332,7 +330,8 @@ int cell_mon_open(const char *i2c_dev, cell_mon_ctx_t **ctx_out)
         return rc;
     }
 
-    /* SYS_CTRL2: CC_EN=1, CHG_ON=1, DSG_ON=1 — enable coulomb counter + FETs. */
+    /* SYS_CTRL2: CC_EN=1, CHG_ON=1, DSG_ON=1 — enable coulomb counter + FETs.
+     */
     rc = reg_write(ctx->fd, BQ769X0_REG_SYS_CTRL2, 0x43U);
     if (rc != 0) {
         close(ctx->fd);
@@ -341,9 +340,10 @@ int cell_mon_open(const char *i2c_dev, cell_mon_ctx_t **ctx_out)
     }
 
     /*
-     * PROTECT1: RSNS=1 (18 mΩ shunt reference), SCD delay = 200 µs, SCD threshold.
-     * PROTECT1 = [RSNS(1)][SCD_D(10)][SCD_T(001)] = 0b1_10_001_xx → 0xA9 (approx).
-     * See BQ76930 datasheet Table 20 for threshold code mappings.
+     * PROTECT1: RSNS=1 (18 mΩ shunt reference), SCD delay = 200 µs, SCD
+     * threshold. PROTECT1 = [RSNS(1)][SCD_D(10)][SCD_T(001)] = 0b1_10_001_xx →
+     * 0xA9 (approx). See BQ76930 datasheet Table 20 for threshold code
+     * mappings.
      */
     rc = reg_write(ctx->fd, BQ769X0_REG_PROTECT1, 0xA9U);
     if (rc != 0) {
@@ -394,8 +394,7 @@ int cell_mon_open(const char *i2c_dev, cell_mon_ctx_t **ctx_out)
     return 0;
 }
 
-void cell_mon_close(cell_mon_ctx_t *ctx)
-{
+void cell_mon_close(cell_mon_ctx_t *ctx) {
     if (ctx == NULL) {
         return;
     }
@@ -403,8 +402,7 @@ void cell_mon_close(cell_mon_ctx_t *ctx)
     free(ctx);
 }
 
-int cell_mon_read(cell_mon_ctx_t *ctx, cell_mon_data_t *data)
-{
+int cell_mon_read(cell_mon_ctx_t *ctx, cell_mon_data_t *data) {
     uint16_t raw;
     uint32_t cell_uv;
     uint32_t i;
@@ -455,9 +453,9 @@ int cell_mon_read(cell_mon_ctx_t *ctx, cell_mon_data_t *data)
     }
     {
         /*
-         * The TS1 register stores a 14-bit ADC result of the thermistor ratiometric
-         * measurement.  The conversion to °C uses:
-         *   V_ts = (raw & 0x3FFF) × gain_uv_lsb µV
+         * The TS1 register stores a 14-bit ADC result of the thermistor
+         * ratiometric measurement.  The conversion to °C uses: V_ts = (raw &
+         * 0x3FFF) × gain_uv_lsb µV
          *
          * For a 10 kΩ NTC with beta=3435 K at a 5.1 kΩ reference resistor and
          * 3.3 V excitation (BQ76930 internal reference):
@@ -484,24 +482,21 @@ int cell_mon_read(cell_mon_ctx_t *ctx, cell_mon_data_t *data)
     return rc;
 }
 
-int cell_mon_read_status(cell_mon_ctx_t *ctx, uint8_t *stat_out)
-{
+int cell_mon_read_status(cell_mon_ctx_t *ctx, uint8_t *stat_out) {
     if (ctx == NULL || stat_out == NULL) {
         return -EINVAL;
     }
     return reg_read(ctx->fd, BQ769X0_REG_SYS_STAT, stat_out);
 }
 
-int cell_mon_clear_faults(cell_mon_ctx_t *ctx, uint8_t clr_mask)
-{
+int cell_mon_clear_faults(cell_mon_ctx_t *ctx, uint8_t clr_mask) {
     if (ctx == NULL) {
         return -EINVAL;
     }
     return reg_write(ctx->fd, BQ769X0_REG_SYS_STAT, clr_mask);
 }
 
-int cell_mon_set_dsg(cell_mon_ctx_t *ctx, int enable)
-{
+int cell_mon_set_dsg(cell_mon_ctx_t *ctx, int enable) {
     uint8_t ctrl2;
     int     rc;
 
@@ -515,16 +510,15 @@ int cell_mon_set_dsg(cell_mon_ctx_t *ctx, int enable)
     }
 
     if (enable) {
-        ctrl2 |= 0x02U;   /* Set DSG_ON bit. */
+        ctrl2 |= 0x02U; /* Set DSG_ON bit. */
     } else {
-        ctrl2 &= (uint8_t)~0x02U;  /* Clear DSG_ON bit. */
+        ctrl2 &= (uint8_t)~0x02U; /* Clear DSG_ON bit. */
     }
 
     return reg_write(ctx->fd, BQ769X0_REG_SYS_CTRL2, ctrl2);
 }
 
-uint32_t cell_mon_min_cell_mv(const cell_mon_data_t *data)
-{
+uint32_t cell_mon_min_cell_mv(const cell_mon_data_t *data) {
     uint32_t min_mv;
     uint32_t i;
 
@@ -541,8 +535,7 @@ uint32_t cell_mon_min_cell_mv(const cell_mon_data_t *data)
     return min_mv;
 }
 
-uint32_t cell_mon_max_cell_mv(const cell_mon_data_t *data)
-{
+uint32_t cell_mon_max_cell_mv(const cell_mon_data_t *data) {
     uint32_t max_mv;
     uint32_t i;
 

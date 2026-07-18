@@ -59,7 +59,7 @@ UDEV_RULE='/etc/udev/rules.d/99-gnss-gcs.rules'
 
 if [ ! -f "${UDEV_RULE}" ]; then
     echo "[install_deps] Installing udev rule for GCS GNSS receiver..."
-    cat > "${UDEV_RULE}" << 'EOF'
+    cat >"${UDEV_RULE}" <<'EOF'
 # Malcolm GCS — u-blox GNSS receiver symlink
 # u-blox USB Vendor ID: 0x1546
 SUBSYSTEM=="tty", ATTRS{idVendor}=="1546", SYMLINK+="gnss_gcs", MODE="0666"

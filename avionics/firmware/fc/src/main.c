@@ -38,20 +38,18 @@
 /** Set by signal handler to trigger clean shutdown. */
 static volatile sig_atomic_t g_shutdown = 0;
 
-static void sig_handler(int sig)
-{
+static void sig_handler(int sig) {
     (void)sig;
     g_shutdown = 1;
 }
 
-int main(void)
-{
+int main(void) {
     struct sigaction sa;
     (void)memset(&sa, 0, sizeof(sa));
     sa.sa_handler = sig_handler;
     (void)sigemptyset(&sa.sa_mask);
     (void)sigaction(SIGTERM, &sa, NULL);
-    (void)sigaction(SIGINT,  &sa, NULL);
+    (void)sigaction(SIGINT, &sa, NULL);
 
     (void)fprintf(stderr, "serenity-fc: Phase 6 stub running.\n");
 

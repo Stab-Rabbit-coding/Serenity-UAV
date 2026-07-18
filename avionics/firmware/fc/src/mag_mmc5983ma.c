@@ -36,7 +36,7 @@
  * ---------------------------------------------------------------------------*/
 
 struct mmc5983ma_ctx {
-    int fd;   /**< Open /dev/i2c-N file descriptor. */
+    int fd; /**< Open /dev/i2c-N file descriptor. */
 };
 
 /* ---------------------------------------------------------------------------
@@ -46,8 +46,7 @@ struct mmc5983ma_ctx {
 /**
  * @brief Write a single byte to a device register.
  */
-static int reg_write(int fd, uint8_t reg, uint8_t val)
-{
+static int reg_write(int fd, uint8_t reg, uint8_t val) {
     uint8_t buf[2];
 
     buf[0] = reg;
@@ -62,8 +61,7 @@ static int reg_write(int fd, uint8_t reg, uint8_t val)
 /**
  * @brief Burst-read @p len bytes starting at register @p reg.
  */
-static int reg_read(int fd, uint8_t reg, uint8_t *buf, size_t len)
-{
+static int reg_read(int fd, uint8_t reg, uint8_t *buf, size_t len) {
     if (write(fd, &reg, 1U) != 1) {
         return -EIO;
     }
@@ -79,15 +77,13 @@ static int reg_read(int fd, uint8_t reg, uint8_t *buf, size_t len)
  * Polls every 2 ms.  The device issues a new measurement every 10 ms at
  * 100 Hz ODR, so 2 ms granularity is adequate.
  */
-static int wait_meas_done(int fd, unsigned int timeout_ms)
-{
+static int wait_meas_done(int fd, unsigned int timeout_ms) {
     static const struct timespec poll_interval = {
-        .tv_sec  = 0,
-        .tv_nsec = 2000000L  /* 2 ms */
+        .tv_sec = 0, .tv_nsec = 2000000L /* 2 ms */
     };
 
     unsigned int elapsed_ms = 0U;
-    uint8_t      status     = 0U;
+    uint8_t      status = 0U;
     int          rc;
 
     if (timeout_ms == 0U) {
@@ -114,8 +110,7 @@ static int wait_meas_done(int fd, unsigned int timeout_ms)
  * Public API
  * ---------------------------------------------------------------------------*/
 
-int mag_mmc5983ma_open(const char *i2c_dev, mmc5983ma_ctx_t **ctx_out)
-{
+int mag_mmc5983ma_open(const char *i2c_dev, mmc5983ma_ctx_t **ctx_out) {
     mmc5983ma_ctx_t *ctx;
     uint8_t          prod_id;
     int              rc;
@@ -169,10 +164,8 @@ int mag_mmc5983ma_open(const char *i2c_dev, mmc5983ma_ctx_t **ctx_out)
      * completes within 500 µs; wait 2 ms to be safe.
      */
     {
-        static const struct timespec set_wait = {
-            .tv_sec  = 0,
-            .tv_nsec = 2000000L
-        };
+        static const struct timespec set_wait = {.tv_sec = 0,
+                                                 .tv_nsec = 2000000L};
         nanosleep(&set_wait, NULL);
     }
 
@@ -196,8 +189,7 @@ int mag_mmc5983ma_open(const char *i2c_dev, mmc5983ma_ctx_t **ctx_out)
     return 0;
 }
 
-void mag_mmc5983ma_close(mmc5983ma_ctx_t *ctx)
-{
+void mag_mmc5983ma_close(mmc5983ma_ctx_t *ctx) {
     if (ctx == NULL) {
         return;
     }
@@ -205,13 +197,9 @@ void mag_mmc5983ma_close(mmc5983ma_ctx_t *ctx)
     free(ctx);
 }
 
-int mag_mmc5983ma_set(mmc5983ma_ctx_t *ctx)
-{
-    static const struct timespec set_wait = {
-        .tv_sec  = 0,
-        .tv_nsec = 2000000L
-    };
-    int rc;
+int mag_mmc5983ma_set(mmc5983ma_ctx_t *ctx) {
+    static const struct timespec set_wait = {.tv_sec = 0, .tv_nsec = 2000000L};
+    int                          rc;
 
     if (ctx == NULL) {
         return -EINVAL;
@@ -225,10 +213,8 @@ int mag_mmc5983ma_set(mmc5983ma_ctx_t *ctx)
     return 0;
 }
 
-int mag_mmc5983ma_read_raw(mmc5983ma_ctx_t *ctx,
-                            mmc5983ma_raw_t *raw,
-                            unsigned int timeout_ms)
-{
+int mag_mmc5983ma_read_raw(mmc5983ma_ctx_t *ctx, mmc5983ma_raw_t *raw,
+                           unsigned int timeout_ms) {
     /*
      * 7 bytes: XOUT_MSB (0x00) through XYZ_LSB2 (0x06).
      * Burst-read from register 0x00.
@@ -259,25 +245,20 @@ int mag_mmc5983ma_read_raw(mmc5983ma_ctx_t *ctx,
      * Y: buf[2] << 10, buf[3] << 2, (buf[6] >> 4) & 0x03
      * Z: buf[4] << 10, buf[5] << 2, (buf[6] >> 2) & 0x03
      */
-    raw->x = ((uint32_t)buf[0] << 10U)
-           | ((uint32_t)buf[1] <<  2U)
-           | (((uint32_t)buf[6] >> 6U) & 0x03U);
+    raw->x = ((uint32_t)buf[0] << 10U) | ((uint32_t)buf[1] << 2U) |
+             (((uint32_t)buf[6] >> 6U) & 0x03U);
 
-    raw->y = ((uint32_t)buf[2] << 10U)
-           | ((uint32_t)buf[3] <<  2U)
-           | (((uint32_t)buf[6] >> 4U) & 0x03U);
+    raw->y = ((uint32_t)buf[2] << 10U) | ((uint32_t)buf[3] << 2U) |
+             (((uint32_t)buf[6] >> 4U) & 0x03U);
 
-    raw->z = ((uint32_t)buf[4] << 10U)
-           | ((uint32_t)buf[5] <<  2U)
-           | (((uint32_t)buf[6] >> 2U) & 0x03U);
+    raw->z = ((uint32_t)buf[4] << 10U) | ((uint32_t)buf[5] << 2U) |
+             (((uint32_t)buf[6] >> 2U) & 0x03U);
 
     return 0;
 }
 
-int mag_mmc5983ma_read(mmc5983ma_ctx_t *ctx,
-                       mmc5983ma_sample_t *sample,
-                       unsigned int timeout_ms)
-{
+int mag_mmc5983ma_read(mmc5983ma_ctx_t *ctx, mmc5983ma_sample_t *sample,
+                       unsigned int timeout_ms) {
     mmc5983ma_raw_t raw;
     int             rc;
 
@@ -303,14 +284,14 @@ int mag_mmc5983ma_read(mmc5983ma_ctx_t *ctx,
      * Intermediate: ((int32_t)raw - 131072) is at most ±131071.
      * After × 10000: ±1 310 710 000 — within int32_t range (±2 147 483 647).
      */
-    sample->x_nt100 = ((int32_t)raw.x - (int32_t)MMC5983MA_ZERO_OFFSET)
-                      * 10000 / (int32_t)MMC5983MA_SENS_LSB_PER_G;
+    sample->x_nt100 = ((int32_t)raw.x - (int32_t)MMC5983MA_ZERO_OFFSET) *
+                      10000 / (int32_t)MMC5983MA_SENS_LSB_PER_G;
 
-    sample->y_nt100 = ((int32_t)raw.y - (int32_t)MMC5983MA_ZERO_OFFSET)
-                      * 10000 / (int32_t)MMC5983MA_SENS_LSB_PER_G;
+    sample->y_nt100 = ((int32_t)raw.y - (int32_t)MMC5983MA_ZERO_OFFSET) *
+                      10000 / (int32_t)MMC5983MA_SENS_LSB_PER_G;
 
-    sample->z_nt100 = ((int32_t)raw.z - (int32_t)MMC5983MA_ZERO_OFFSET)
-                      * 10000 / (int32_t)MMC5983MA_SENS_LSB_PER_G;
+    sample->z_nt100 = ((int32_t)raw.z - (int32_t)MMC5983MA_ZERO_OFFSET) *
+                      10000 / (int32_t)MMC5983MA_SENS_LSB_PER_G;
 
     return 0;
 }

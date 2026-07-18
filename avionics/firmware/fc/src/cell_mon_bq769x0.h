@@ -17,14 +17,16 @@
  *
  * The BQ76930 supports I2C with optional CRC-8 error checking.  CRC mode is
  * selected by the hardware CHEM / DFSEL pin configuration at power-on.
- * On Kaylee, CRC mode IS enabled (DFSEL tied appropriately during board layout).
+ * On Kaylee, CRC mode IS enabled (DFSEL tied appropriately during board
+ * layout).
  *
  * In CRC mode every I2C transaction includes an 8-bit CRC byte:
  *   Write: [ADDR_W][REG][DATA][CRC]
  *   Read:  [ADDR_W][REG] then [ADDR_R][DATA][CRC]
  *
  * CRC polynomial: x^8 + x^2 + x + 1 (0x07 representation).
- * CRC is calculated over all bytes in the transaction including the address byte.
+ * CRC is calculated over all bytes in the transaction including the address
+ * byte.
  *
  * ── Cell voltage calculation ───────────────────────────────────────────────
  *
@@ -77,39 +79,39 @@ extern "C" {
  * BQ76930 I2C address (7-bit) when CRC mode is enabled and CHEM pin selects
  * the default address.  On Kaylee this is 0x08.
  */
-#define CELL_MON_I2C_ADDR           (0x08U)
+#define CELL_MON_I2C_ADDR          (0x08U)
 
 /* ---------------------------------------------------------------------------
  * Application constants — adjust for cell count variant
  * ---------------------------------------------------------------------------*/
 
 /** Number of series cells in the Serenity UAV battery pack. */
-#define CELL_MON_CELL_COUNT         (6U)
+#define CELL_MON_CELL_COUNT        (6U)
 
 /** Overvoltage protection threshold per cell (millivolts). */
-#define CELL_MON_OVP_MV             (4200U)
+#define CELL_MON_OVP_MV            (4200U)
 
 /** Undervoltage protection threshold per cell (millivolts). */
-#define CELL_MON_UVP_MV             (3000U)
+#define CELL_MON_UVP_MV            (3000U)
 
 /** Overcurrent detection threshold (milliamps). */
-#define CELL_MON_OCD_MA             (50000U)
+#define CELL_MON_OCD_MA            (50000U)
 
 /** Short-circuit detection threshold (milliamps). */
-#define CELL_MON_SCD_MA             (150000U)
+#define CELL_MON_SCD_MA            (150000U)
 
 /** Over-temperature threshold (°C × 10, for integer arithmetic). */
-#define CELL_MON_OTP_DECIDEGC       (600)   /* 60.0 °C */
+#define CELL_MON_OTP_DECIDEGC      (600) /* 60.0 °C */
 
 /* ---------------------------------------------------------------------------
  * Register addresses
  * ---------------------------------------------------------------------------*/
 
 /** Status register — OCD, SCD, OV, UV, OVRD_ALERT, DEVICE_XREADY. */
-#define BQ769X0_REG_SYS_STAT        (0x00U)
+#define BQ769X0_REG_SYS_STAT       (0x00U)
 
 /** Cell balancing 1 register — balance switches for cells 1–5. */
-#define BQ769X0_REG_CELLBAL1        (0x01U)
+#define BQ769X0_REG_CELLBAL1       (0x01U)
 
 /** System control 1 — TEMP_SEL, ADC_EN, SHUT_A, SHUT_B. */
 #define BQ769X0_REG_SYS_CTRL1      (0x04U)
@@ -118,84 +120,85 @@ extern "C" {
 #define BQ769X0_REG_SYS_CTRL2      (0x05U)
 
 /** Overcurrent and short-circuit protection 1. */
-#define BQ769X0_REG_PROTECT1        (0x06U)
+#define BQ769X0_REG_PROTECT1       (0x06U)
 
 /** Overcurrent protection 2. */
-#define BQ769X0_REG_PROTECT2        (0x07U)
+#define BQ769X0_REG_PROTECT2       (0x07U)
 
 /** Overvoltage / undervoltage protection delays. */
-#define BQ769X0_REG_PROTECT3        (0x08U)
+#define BQ769X0_REG_PROTECT3       (0x08U)
 
 /** Overvoltage trip threshold register. */
-#define BQ769X0_REG_OV_TRIP         (0x09U)
+#define BQ769X0_REG_OV_TRIP        (0x09U)
 
 /** Undervoltage trip threshold register. */
-#define BQ769X0_REG_UV_TRIP         (0x0AU)
+#define BQ769X0_REG_UV_TRIP        (0x0AU)
 
 /** Coulomb counter configuration (always write 0x19). */
-#define BQ769X0_REG_CC_CFG          (0x0BU)
+#define BQ769X0_REG_CC_CFG         (0x0BU)
 
 /** Cell voltage registers: VC1_HI=0x0C, VC1_LO=0x0D, ... VC6_LO=0x1A. */
-#define BQ769X0_REG_VC1_HI          (0x0CU)
+#define BQ769X0_REG_VC1_HI         (0x0CU)
 
 /** Pack voltage high byte. */
-#define BQ769X0_REG_BAT_HI          (0x2AU)
+#define BQ769X0_REG_BAT_HI         (0x2AU)
 
 /** Pack voltage low byte. */
-#define BQ769X0_REG_BAT_LO          (0x2BU)
+#define BQ769X0_REG_BAT_LO         (0x2BU)
 
 /** Temperature sensor 1 high byte. */
-#define BQ769X0_REG_TS1_HI          (0x2CU)
+#define BQ769X0_REG_TS1_HI         (0x2CU)
 
 /** Temperature sensor 1 low byte. */
-#define BQ769X0_REG_TS1_LO          (0x2DU)
+#define BQ769X0_REG_TS1_LO         (0x2DU)
 
 /** Coulomb counter high byte. */
-#define BQ769X0_REG_CC_HI           (0x32U)
+#define BQ769X0_REG_CC_HI          (0x32U)
 
 /** Coulomb counter low byte. */
-#define BQ769X0_REG_CC_LO           (0x33U)
+#define BQ769X0_REG_CC_LO          (0x33U)
 
 /** ADC gain trim register (µV/LSB offset from 365 µV). */
-#define BQ769X0_REG_ADCGAIN1        (0x50U)
+#define BQ769X0_REG_ADCGAIN1       (0x50U)
 
 /** ADC gain trim register 2. */
-#define BQ769X0_REG_ADCGAIN2        (0x59U)
+#define BQ769X0_REG_ADCGAIN2       (0x59U)
 
 /** ADC offset trim register (signed mV). */
-#define BQ769X0_REG_ADCOFFSET       (0x51U)
+#define BQ769X0_REG_ADCOFFSET      (0x51U)
 
 /* ---------------------------------------------------------------------------
  * SYS_STAT bit masks
  * ---------------------------------------------------------------------------*/
 
 /** SYS_STAT: overcurrent-in-discharge detected. */
-#define BQ769X0_STAT_OCD            (0x01U)
+#define BQ769X0_STAT_OCD           (0x01U)
 
 /** SYS_STAT: short-circuit-in-discharge detected. */
-#define BQ769X0_STAT_SCD            (0x02U)
+#define BQ769X0_STAT_SCD           (0x02U)
 
 /** SYS_STAT: overvoltage detected on at least one cell. */
-#define BQ769X0_STAT_OV             (0x04U)
+#define BQ769X0_STAT_OV            (0x04U)
 
 /** SYS_STAT: undervoltage detected on at least one cell. */
-#define BQ769X0_STAT_UV             (0x08U)
+#define BQ769X0_STAT_UV            (0x08U)
 
 /** SYS_STAT: OVRD_ALERT (externally triggered alert). */
-#define BQ769X0_STAT_OVRD_ALERT     (0x10U)
+#define BQ769X0_STAT_OVRD_ALERT    (0x10U)
 
 /** SYS_STAT: DEVICE_XREADY (internal fault, should not occur). */
-#define BQ769X0_STAT_DEVICE_XREADY  (0x20U)
+#define BQ769X0_STAT_DEVICE_XREADY (0x20U)
 
 /** SYS_STAT: CC_READY (coulomb counter data is ready). */
-#define BQ769X0_STAT_CC_READY       (0x80U)
+#define BQ769X0_STAT_CC_READY      (0x80U)
 
 /* ---------------------------------------------------------------------------
  * Data types
  * ---------------------------------------------------------------------------*/
 
 /**
- * @brief Driver context.  Initialise with cell_mon_open(); release with cell_mon_close().
+ * @brief Driver context.  Initialise with cell_mon_open(); release with
+ * cell_mon_close().
  */
 typedef struct cell_mon_ctx cell_mon_ctx_t;
 
@@ -203,10 +206,11 @@ typedef struct cell_mon_ctx cell_mon_ctx_t;
  * @brief Cell voltage measurement set for all cells in the pack.
  */
 typedef struct {
-    uint32_t cell_mv[CELL_MON_CELL_COUNT]; /**< Per-cell voltage in millivolts. */
-    uint32_t pack_mv;                      /**< Pack total voltage in millivolts. */
-    int32_t  temp_decidegc;                /**< Battery temperature in °C × 10. */
-    uint8_t  sys_stat;                     /**< Last SYS_STAT register snapshot. */
+    uint32_t
+        cell_mv[CELL_MON_CELL_COUNT]; /**< Per-cell voltage in millivolts. */
+    uint32_t pack_mv;                 /**< Pack total voltage in millivolts. */
+    int32_t  temp_decidegc;           /**< Battery temperature in °C × 10. */
+    uint8_t  sys_stat;                /**< Last SYS_STAT register snapshot. */
 } cell_mon_data_t;
 
 /* ---------------------------------------------------------------------------
