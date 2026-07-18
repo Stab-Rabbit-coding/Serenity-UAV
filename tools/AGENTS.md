@@ -1,6 +1,6 @@
-# Tools and Build Automation — Claude Code Project Instructions
+# Tools and Build Automation — Agent Instructions
 
-> *See the root `CLAUDE.md` for project-wide policies. This file provides specific guidance for build scripts, automation tools, and code generation.*
+> *See the root `AGENTS.md` for project-wide policies. This file provides specific guidance for build scripts, automation tools, and code generation.*
 
 ## Scope
 
@@ -178,4 +178,4 @@ When creating or modifying build tools:
 
 ---
 
-For project-wide standards, see the root `CLAUDE.md`.
+For project-wide standards, see the root `AGENTS.md`.

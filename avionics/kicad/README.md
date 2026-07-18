@@ -13,7 +13,7 @@ This directory holds the KiCad projects for the four cape/board types:
 Per-board net/pin documentation lives in the matching `*.md` files
 (`Wash.md`, `Zoë.md`, `Kaylee.md`, `XCVR-49MHZ-2.md`). KiCad files keep
 KiCad board coordinates (documented exception to the hull-frame standard,
-see root `CLAUDE.md`).
+see root `AGENTS.md`).
 
 ---
 

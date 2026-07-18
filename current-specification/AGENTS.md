@@ -1,6 +1,6 @@
-# Current Specification — Claude Code Project Instructions
+# Current Specification — Agent Instructions
 
-> *See the root `CLAUDE.md` for project-wide policies. This file provides specific guidance for active design specifications and version control.*
+> *See the root `AGENTS.md` for project-wide policies. This file provides specific guidance for active design specifications and version control.*
 
 ## Scope
 
@@ -75,7 +75,7 @@ Include a "Changes from Rev [X]" section that lists:
 
 **Do NOT use this folder for:**
 - Drafting new ideas or experimental designs (use a separate draft folder)
-- Tracking day-to-day modifications to individual components (use subdirectory CLAUDE.md files and git history)
+- Tracking day-to-day modifications to individual components (use subdirectory AGENTS.md files and git history)
 
 ### Specification Approval Workflow
 
@@ -130,4 +130,4 @@ Deferred items should reference `TODO.md` for the specific work items.
 
 ---
 
-For project-wide standards, see the root `CLAUDE.md`.
+For project-wide standards, see the root `AGENTS.md`.

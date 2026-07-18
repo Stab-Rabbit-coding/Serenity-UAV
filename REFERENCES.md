@@ -134,7 +134,7 @@ When a standard has multiple applicable clauses, list them all:
 | §48.205(b)(1) | Legibility of identifier | Minimum 3-inch (76 mm) characters clearly visible |
 
 **Used in:** `docs/REVN_BUILD_GUIDE_24IN.md`, `graphical-build-guide/decal_sheet.svg`,
-`README.md`, `TODO.md`, `CLAUDE.md`, `avionics/firmware/common/include/ax25_types.h`
+`README.md`, `TODO.md`, `AGENTS.md`, `avionics/firmware/common/include/ax25_types.h`
 
 ---
 
@@ -159,7 +159,7 @@ When a standard has multiple applicable clauses, list them all:
 | §107.51(d) | Minimum distance from clouds | 500 ft below, 2,000 ft horizontal |
 
 **Used in:** `docs/REVN_BUILD_GUIDE_24IN.md`, `graphical-build-guide/build_guide_18_first_flight.svg`,
-`README.md`, `TODO.md`, `CLAUDE.md`, `airframe/openscad/fuselage/bow_sensor_pod.scad`
+`README.md`, `TODO.md`, `AGENTS.md`, `airframe/openscad/fuselage/bow_sensor_pod.scad`
 
 ---
 
@@ -182,7 +182,7 @@ When a standard has multiple applicable clauses, list them all:
 aft white); controlled by FC4 node (Simon's medbay, Bay E).
 
 **Used in:** `graphical-build-guide/build_guide_13_nav_lights.svg`, `docs/REVN_BUILD_GUIDE_24IN.md`,
-`README.md`, `TODO.md`, `CLAUDE.md`
+`README.md`, `TODO.md`, `AGENTS.md`
 
 ---
 
@@ -209,7 +209,7 @@ aft white); controlled by FC4 node (Simon's medbay, Bay E).
 
 **Applied to:** SiK 915 MHz MAVLink (RFD900x), LoRa 915 MHz (RFM95W), Zigbee 2.4 GHz (CC2652R7)
 
-**Used in:** `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`, `TODO.md`, `CLAUDE.md`,
+**Used in:** `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`, `TODO.md`, `AGENTS.md`,
 `avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`
 
 ---
@@ -231,7 +231,7 @@ aft white); controlled by FC4 node (Simon's medbay, Bay E).
 **Applied to:** TI WL1837MOD Wi-Fi 5 GHz link (UNII-3 band); Tx power must be reduced to
 17 dBm conducted when a 14 dBi directional antenna is connected to maintain EIRP ≤ 30 dBm.
 
-**Used in:** `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`, `TODO.md`, `CLAUDE.md`
+**Used in:** `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`, `TODO.md`, `AGENTS.md`
 
 ---
 
@@ -296,7 +296,7 @@ fix is complete.
 
 **Used in:** `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`,
 `avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`,
-`README.md`, `TODO.md`, `CLAUDE.md`, `docs/AVIONICS_PB2_REDESIGN.md`
+`README.md`, `TODO.md`, `AGENTS.md`, `docs/AVIONICS_PB2_REDESIGN.md`
 
 ---
 
@@ -363,7 +363,7 @@ fix is complete.
 carries a TPM-bound SHA-256 HMAC; TPM 2.0 (SLB9670) on all 8 nodes provides boot measurement
 and key storage.
 
-**Used in:** `CLAUDE.md`, `README.md`, `docs/AVIONICS_PB2_REDESIGN.md`, `TODO.md`,
+**Used in:** `AGENTS.md`, `README.md`, `docs/AVIONICS_PB2_REDESIGN.md`, `TODO.md`,
 `airframe/openscad/fuselage/bow_sensor_pod.scad`
 
 ---
@@ -392,7 +392,7 @@ to "Operational Technology (OT) Security."
 **Applied to:** 5 kV galvanic isolation on all inter-node buses; Faraday enclosure for Kaylee PDB;
 PACE redundancy design; hostile RF environment design objective.
 
-**Used in:** `CLAUDE.md`, `README.md`, `docs/AVIONICS_PB2_REDESIGN.md`
+**Used in:** `AGENTS.md`, `README.md`, `docs/AVIONICS_PB2_REDESIGN.md`
 
 ---
 
@@ -413,7 +413,7 @@ PACE redundancy design; hostile RF environment design objective.
 | §3.3 | Stakeholder Needs and Requirements | Security requirements derived from mission profile (§ Mission profile items 1–3: rogue command detection, unsafe node detection, failover) |
 | Appendix C | System Lifecycle Processes | Security considerations applied at every design phase |
 
-**Used in:** `CLAUDE.md`
+**Used in:** `AGENTS.md`
 
 ---
 
@@ -528,7 +528,7 @@ MIL-STD-461G qualification testing is deferred pending airframe integration.
 ATA6561 CAN FD transceivers; 120 Ω bus termination at CN1 (Bay A) and FC4 (Bay E).
 
 **Used in:** `docs/AVIONICS_PB2_REDESIGN.md`,
-`avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`, `CLAUDE.md`
+`avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`, `AGENTS.md`
 
 ---
 
@@ -564,7 +564,7 @@ required before fabrication (see TODO.md §1.4 PCB DRC and isolation verificatio
 **Used in:** `README.md`, `docs/AVIONICS_PB2_REDESIGN.md`,
 `avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
 `avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`,
-`TODO.md`, `CLAUDE.md`, `airframe/openscad/fuselage/bow_sensor_pod.scad`
+`TODO.md`, `AGENTS.md`, `airframe/openscad/fuselage/bow_sensor_pod.scad`
 
 ---
 
@@ -641,7 +641,7 @@ placeholder text. Tracked in TODO.md §1.2c.
 **Applied to:** Same isolation devices as REF-IEC-001.  VDE V 0884-11 compliance is verified
 per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ datasheets.
 
-**Used in:** `README.md`, `docs/AVIONICS_PB2_REDESIGN.md`, `CLAUDE.md`,
+**Used in:** `README.md`, `docs/AVIONICS_PB2_REDESIGN.md`, `AGENTS.md`,
 `avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
 `avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`
 
@@ -736,7 +736,7 @@ arrays at field connectors on Wash and Zoë.
 
 **Applied to:** Ethernet RSTP ring connecting all 8 nodes; CPSW3G hardware switch mode in AM6254.
 
-**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `CLAUDE.md`,
+**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `AGENTS.md`,
 `avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
 `avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`
 
@@ -759,7 +759,7 @@ arrays at field connectors on Wash and Zoë.
 
 **Applied to:** TI WL1837MOD 802.11 a/b/g/n via SDIO interface; 5 GHz primary, 2.4 GHz fallback.
 
-**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `CLAUDE.md`
+**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `AGENTS.md`
 
 ---
 
@@ -777,7 +777,7 @@ arrays at field connectors on Wash and Zoë.
 |---|---|---|
 | Clause 10 | 2.4 GHz O-QPSK PHY | Zigbee radio layer (CC2652R7 optional backup mesh) |
 
-**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `README.md`, `CLAUDE.md`
+**Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `README.md`, `AGENTS.md`
 
 ---
 
@@ -801,7 +801,7 @@ arrays at field connectors on Wash and Zoë.
 | SR 4.2 | Use of Cryptography | TPM 2.0 (SLB9670) per node for key storage, attestation, and HMAC computation |
 | SR 7.6 | Network and Security Configuration Settings | 5 kV galvanic isolation as physical network security hardening against EMI/RF injection |
 
-**Used in:** `CLAUDE.md`, `docs/AVIONICS_PB2_REDESIGN.md`
+**Used in:** `AGENTS.md`, `docs/AVIONICS_PB2_REDESIGN.md`
 
 ---
 
@@ -824,7 +824,7 @@ arrays at field connectors on Wash and Zoë.
 | Chapter 3, §3.1.9 | Lights to be displayed by unmanned aircraft | Port red, starboard green, aft white position lights |
 
 **Used in:** `graphical-build-guide/build_guide_13_nav_lights.svg`,
-`graphical-build-guide/decal_sheet.svg`, `CLAUDE.md`, `docs/REVN_BUILD_GUIDE_24IN.md`
+`graphical-build-guide/decal_sheet.svg`, `AGENTS.md`, `docs/REVN_BUILD_GUIDE_24IN.md`
 
 ---
 
@@ -874,9 +874,9 @@ arrays at field connectors on Wash and Zoë.
 |---|---|
 | **Issuing authority** | Association for Unmanned Vehicle Systems International (AUVSI) |
 | **Official URL** | <https://www.auvsi.org/trusted-operator-program> |
-| **Note** | AUVSI does not publish numbered design standards (e.g., "AUVSI-XYZ"). References to "AUVSI standards" in `CLAUDE.md`/`README.md` mean AUVSI's published safety frameworks and guidelines. For numbered airframe standards, see the verified ASTM F38 Committee entries below. |
+| **Note** | AUVSI does not publish numbered design standards (e.g., "AUVSI-XYZ"). References to "AUVSI standards" in `AGENTS.md`/`README.md` mean AUVSI's published safety frameworks and guidelines. For numbered airframe standards, see the verified ASTM F38 Committee entries below. |
 
-**Used in:** `CLAUDE.md`, `README.md`
+**Used in:** `AGENTS.md`, `README.md`
 
 ---
 
@@ -890,12 +890,12 @@ arrays at field connectors on Wash and Zoë.
 | **Scope** | Design, construction, and test requirements for a small unmanned aircraft system (sUAS), max takeoff gross weight ≤ 55 lbm (25 kg) — covers general requirements, structure, propulsion, propellers, fuel/oil systems (not applicable, all-electric), cooling, and documentation. |
 
 **Applied to:** Serenity airframe structural design (skin hollowing, mating-surface annulus/shoulder
-requirements, fastener/wall sizing per CLAUDE.md Engineering Requirements) and EDF propulsion
+requirements, fastener/wall sizing per AGENTS.md Engineering Requirements) and EDF propulsion
 system design (printed EDF housings as structural components).  AUW well under the 55 lbm
 (25 kg) sUAS weight class (current estimate ≈ 8 lbm / 3.6 kg, see `docs/bom_revR.json`), so the
 standard's scope applies without a GAA weight exemption.
 
-**Used in:** `CLAUDE.md`, `README.md`
+**Used in:** `AGENTS.md`, `README.md`
 
 ---
 
@@ -912,7 +912,7 @@ standard's scope applies without a GAA weight exemption.
 **Applied to:** LiPo 6S 4000 mAh main battery pack (cell specification, mechanical mounting, pack
 documentation).
 
-**Used in:** `CLAUDE.md`, `README.md`
+**Used in:** `AGENTS.md`, `README.md`
 
 ---
 
@@ -927,11 +927,11 @@ documentation).
 
 **Applied to:** The PACE-prioritized failover architecture across Wash/Zoë avionics stacks
 (Watchdog, Comms, Flight Control, Payload Control primary/alternate/contingency/emergency
-assignments — see CLAUDE.md "Avionics Workload Balancing"): each PACE tier acts as an
+assignments — see AGENTS.md "Avionics Workload Balancing"): each PACE tier acts as an
 independent runtime monitor/take-over path bounding the behavior of the primary controller,
 consistent with F3269's RTA framework.
 
-**Used in:** `CLAUDE.md`, `README.md`
+**Used in:** `AGENTS.md`, `README.md`
 
 ---
 
@@ -1115,12 +1115,12 @@ redundancy policy [REF-NIST-001 §2.1].
 | Package | 484-ball FCBGA/FCCSP | AM62Ax datasheet Rev. E |
 
 **Applied to:** Jayne board vision half (nose bow sensor pod and cargo bay nadir FPV mount) —
-see `avionics/CLAUDE.md` "Jayne — Cargo-Handling System and Nose/Cargo-Bay Vision, ToF & Laser Board". **Open item:** the
+see `avionics/AGENTS.md` "Jayne — Cargo-Handling System and Nose/Cargo-Bay Vision, ToF & Laser Board". **Open item:** the
 484-ball FCBGA package is a substantial escalation in assembly difficulty versus the discrete
 components elsewhere in this design; PCB fabrication/assembly house capability for this
 package must be confirmed before board layout (tracked in TODO.md §1.2c).
 
-**Used in:** `avionics/CLAUDE.md`, `TODO.md`
+**Used in:** `avionics/AGENTS.md`, `TODO.md`
 
 ---
 
@@ -1149,7 +1149,7 @@ Selected specifically for its native MCAN peripheral and shared TI toolchain wit
 PocketBeagle 2 Industrial's AM6254 real-time domain — avoids the software-PIO CAN-FD
 synthesis that a non-TI MCU (e.g. RP2350) would require.
 
-**Used in:** `avionics/CLAUDE.md`, `TODO.md`
+**Used in:** `avionics/AGENTS.md`, `TODO.md`
 
 ---
 
@@ -1171,7 +1171,7 @@ does not require software topology management on the PocketBeagle 2 nodes.
 design require verification against the current IEC 62439-3 edition before final citation —
 tracked in TODO.md §1.2c and in "Open Standards Verification Items" below.
 
-**Used in:** `avionics/CLAUDE.md`, `TODO.md`
+**Used in:** `avionics/AGENTS.md`, `TODO.md`
 
 ---
 
@@ -1196,7 +1196,7 @@ tracked in TODO.md §1.2c and in "Open Standards Verification Items" below.
 **Applied to:** Jayne board control half — CAN-FD trunk transceiver, MSPM0G3507 MCAN peripheral
 to shielded JST-GH CAN-FD connector.
 
-**Used in:** `avionics/CLAUDE.md`, `TODO.md`
+**Used in:** `avionics/AGENTS.md`, `TODO.md`
 
 ---
 
@@ -1235,7 +1235,7 @@ transceivers on Wash (Cape-A-2) and Zoë (Cape-B-2); 120 Ω termination resistor
 ## Part XIV — Upstream CAD / Derivative-Source Attributions
 
 References in this part are upstream 3D-model works whose mechanism or geometry
-concept informed a derivative design in this project.  Per CLAUDE.md, derivative
+concept informed a derivative design in this project.  Per AGENTS.md, derivative
 files must carry the full attribution chain back to upstream sources, meeting or
 exceeding CC-BY-4.0 requirements.
 
@@ -1287,10 +1287,10 @@ because they were incorrectly attributed, unverifiable, or inapplicable.
 | Old Citation | Where Found | Reason Removed | Replacement |
 |---|---|---|---|
 | "NIST SP 800-72 principles" (write-blocker design) | `README.md` §Patent Notice, line 382 | **Incorrect attribution.** NIST SP 800-72 (2004) is "Guidelines on PDA Forensics" — unrelated to write-blocker design. The closest applicable standard is NIST SP 800-92 §4.4.2 (log data protection principles). | REF-NIST-004 (NIST SP 800-92 §4.4.2) |
-| 47 CFR Part 95 RCRS (§95.635/§95.655/§95.639, "TDDS"/"LERS"/"27 channels") | REF-FCC-003, `malcolm_antenna_spec.md`, `CLAUDE.md`, `README.md`, `TODO.md`, `AVIONICS_PB2_REDESIGN.md` | **Wrong band.** RCRS covers only 26–28/72/75 MHz, not 49 MHz; "TDDS"/"LERS"/27-channel terms untraceable. Emma's 49.82–49.90 MHz band is Part 15 §15.235, unlicensed. | REF-FCC-003 (Part 15 §15.235) |
+| 47 CFR Part 95 RCRS (§95.635/§95.655/§95.639, "TDDS"/"LERS"/"27 channels") | REF-FCC-003, `malcolm_antenna_spec.md`, `AGENTS.md`, `README.md`, `TODO.md`, `AVIONICS_PB2_REDESIGN.md` | **Wrong band.** RCRS covers only 26–28/72/75 MHz, not 49 MHz; "TDDS"/"LERS"/27-channel terms untraceable. Emma's 49.82–49.90 MHz band is Part 15 §15.235, unlicensed. | REF-FCC-003 (Part 15 §15.235) |
 | "ASTM F3322 — sUAS Battery Safety" | TODO.md §0.4 (candidate list, not yet cited in active docs) | **Incorrect attribution.** F3322 is the *Standard Specification for Small Unmanned Aircraft System (sUAS) Parachutes* — unrelated to batteries, and not applicable to Serenity (no deployable recovery parachute). | REF-ASTM-002 (ASTM F3005-22, sUAS battery specification) |
 | "ASTM F3003 — Quality Assurance of a Small Unmanned Aircraft System" | TODO.md §0.4 (candidate list, not yet cited in active docs) | **Withdrawn standard.** F3003-14 was withdrawn by ASTM in January 2023 with no replacement. | None — see REF-ASTM-001 (F2910) for design/construction/test coverage |
-| RunCam Nano 4 analog camera (REF-SENSOR-001) at bow sensor pod | `avionics/CLAUDE.md`, `TODO.md` §1.1.1.1a | **Superseded by design decision (2026-07-03), not an error.** Replaced by the Jayne board's TI AM62Ax digital vision SoC (REF-SENSOR-003) at both the nose and cargo bay locations. | REF-SENSOR-003 (TI AM62Ax) |
+| RunCam Nano 4 analog camera (REF-SENSOR-001) at bow sensor pod | `avionics/AGENTS.md`, `TODO.md` §1.1.1.1a | **Superseded by design decision (2026-07-03), not an error.** Replaced by the Jayne board's TI AM62Ax digital vision SoC (REF-SENSOR-003) at both the nose and cargo bay locations. | REF-SENSOR-003 (TI AM62Ax) |
 | "TI DM38x + remixed OpenIPC firmware" (early Jayne design concept from an external AI-assisted brainstorm, never committed) | Not committed to any file — caught during REFERENCES.md drafting 2026-07-03 | **Infeasible as proposed.** TI DM385/DM388 (DaVinci DM38x) are NRND; OpenIPC's supported-hardware list contains no TI part, not even at R&D stage — porting would mean a from-scratch ISP/encoder bring-up on a chip TI is discontinuing, not a firmware port. Also: the same source proposed LAN9355/KSZ9563 for "MRP" ring redundancy (neither chip implements it) and an "ST33GTPMISPI" TPM part number that does not exist. | REF-SENSOR-003 (TI AM62Ax, in-production, TI's own open BSP), REF-SENSOR-005 (KSZ9477, real HSR/PRP support), Infineon SLB9670 (fleet-standard TPM, REFERENCES.md §3.3/§4.2) |
 
 ---
@@ -1304,7 +1304,7 @@ Add verified section numbers to the relevant files and update this table.
 |---|---|---|---|
 | §15.203 antenna restriction (Emma RF connector) | Emma board files, `malcolm_wiring.md` | **Confirmed, resolved 2026-06-20.** §15.203 binds the manufacturer directly. J2 used a generic SMA edge connector (Amphenol 132289), a standard jack; no exception applies. | **Resolved:** J2 changed to 132289RP (RP-SMA, same footprint), satisfying §15.203. Board re-spin tracked in TODO.md §0.1 |
 | 14 CFR Part 47 (aircraft registration marks) | `ax25_types.h` | **Resolved 2026-06-21.** README/build guide had no erroneous citation; the miscitation was in `ax25_types.h`, which stated Part 47 governs registration and AX.25 needs an amateur license (Part 97) | Corrected to cite Part 48 §48.205 [REF-FAA-001]; link is license-exempt under Part 15 §15.235 [REF-FCC-003], per REF-PROTO-001 |
-| AUVSI "standards" (unnamed) | `CLAUDE.md`, `README.md` | **Resolved 2026-06-22.** No specific numbered AUVSI standard exists (AUVSI publishes frameworks, not numbered design standards). Identified and verified three applicable ASTM F38 standards. | Added REF-ASTM-001 (F2910-22, design/construction/test), REF-ASTM-002 (F3005-22, batteries), REF-ASTM-003 (F3269-21, runtime assurance/failover). `CLAUDE.md`/`README.md` AUVSI text is accurate as-is (AUVSI frameworks, not numbered standards) — no doc text change needed there. |
+| AUVSI "standards" (unnamed) | `AGENTS.md`, `README.md` | **Resolved 2026-06-22.** No specific numbered AUVSI standard exists (AUVSI publishes frameworks, not numbered design standards). Identified and verified three applicable ASTM F38 standards. | Added REF-ASTM-001 (F2910-22, design/construction/test), REF-ASTM-002 (F3005-22, batteries), REF-ASTM-003 (F3269-21, runtime assurance/failover). `AGENTS.md`/`README.md` AUVSI text is accurate as-is (AUVSI frameworks, not numbered standards) — no doc text change needed there. |
 | IEC 62368-1 clause numbers | PCB layout (not yet complete) | PCB layout must verify creepage/clearance distances meet IEC 62368-1 Clause 5.5.2 requirements for 5 kV reinforced insulation; this cannot be verified until PCB layout is complete | Verify during Wash and Zoë PCB layout review (see TODO.md §1.4) |
 | REF-IEC-003 (IEC 61000-4-2) exact product URL | `REFERENCES.md` REF-IEC-003 | Exact webstore.iec.ch product-page URL not confirmed during catalog entry (WebFetch redirected to homepage during verification attempt 2026-06-29); standard designation and content are correct | Confirm product page URL via <https://webstore.iec.ch/> search for "IEC 61000-4-2" and update REF-IEC-003 |
 | REF-IEC-004 (IEC 61000-4-4) exact product URL | `REFERENCES.md` REF-IEC-004 | Same as REF-IEC-003 — webstore URL not confirmed 2026-06-29 | Confirm via <https://webstore.iec.ch/> search "IEC 61000-4-4" |

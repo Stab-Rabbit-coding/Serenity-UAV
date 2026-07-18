@@ -6,7 +6,7 @@
 
 > **STALE DESIGN — requires regeneration before Phase 11.** The files in this folder describe a
 > superseded 120 mm EDF + 8-petal iris nozzle design. The current canonical fuselage EDF
-> (per CLAUDE.md) is a **55 mm 6S unit** feeding a **fixed** elliptical exit nozzle
+> (per AGENTS.md) is a **55 mm 6S unit** feeding a **fixed** elliptical exit nozzle
 > (2.06 in × 1.76 in / 52.3 mm × 44.7 mm — explicitly NOT an iris) plus 4 RCS bleed-air thrusters
 > tapping ~15% of EDF mass flow. The OpenSCAD/STL files below have not yet been regenerated for
 > this spec; see TODO.md §Phase 11 (`rear_nozzle_canonical.stl`, `rcs_thruster_nozzle.stl`,
@@ -20,7 +20,7 @@ This folder holds all design files for the large fuselage (aft/rear) EDF system:
 at neck station ~310 mm via a CF-PETG intake frame ring and a PETG cross-shaped plenum manifold,
 exhausting through an 8-petal iris variable-area nozzle at the aft end of the hull.
 
-Per the project design philosophy (see CLAUDE.md):
+Per the project design philosophy (see AGENTS.md):
 > "The large fuselage EDF … is now an optional addition once everything else works."
 
 The nacelle EDFs (2× 50 mm tandem per nacelle) provide the primary propulsion.  The aft EDF adds

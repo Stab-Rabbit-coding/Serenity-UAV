@@ -68,8 +68,8 @@ requirements).
 |---|---|
 | Timeout | **100 ms** |
 
-The PACE-prioritized failover architecture (root `CLAUDE.md` "Avionics
-Workload Balancing"; each tier's Primary/Alternative/Contingency/Emergency
+The PACE-prioritized failover architecture (`avionics/AGENTS.md` "Node Workload
+Balancing and PACE Failover"; each tier's Primary/Alternative/Contingency/Emergency
 assignment) is a runtime-assurance monitor structure consistent with
 [REF-ASTM-003] (ASTM F3269-21): each tier bounds and can take over from the
 tier above it. The CAN FD heartbeat is the underlying liveness signal for
@@ -98,7 +98,7 @@ Matches the Phase 10 WBS pass criterion (`TODO.md` SS3.0 Phase 10):
 link loss" — that criterion is the SiK/LoRa case above.
 
 **Open gap (not yet assigned a timer):** Wi-Fi (5 GHz) and Zigbee (2.4 GHz)
-are both listed as usable C2 links in root `CLAUDE.md`, but neither has an
+are both listed as usable C2 links in root `AGENTS.md`, but neither has an
 assigned link-loss RTL timer in the originating WBS item or anywhere else
 in the repository. Tracked as a follow-up in `TODO.md` (see closing note)
 rather than inventing an unreviewed value here.

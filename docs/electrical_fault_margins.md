@@ -92,7 +92,7 @@ Loss of a single **rail wiring segment/tap** downstream of the Kaylee PDB
 the wiring level — it isolates that bay's power feed with no alternate
 path, mitigated only by that bay's PACE tier having its watchdog/comms/
 flight-control/payload role picked up by another bay per the PACE failover
-table (root `CLAUDE.md`), not by the electrical design itself. This is an
+table (root `AGENTS.md`), not by the electrical design itself. This is an
 architectural choice (avionics-role redundancy substituting for power-wiring
 redundancy) rather than an unaddressed gap, but it should be stated plainly
 rather than implied — this document states it plainly.

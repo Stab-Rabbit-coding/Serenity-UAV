@@ -155,7 +155,7 @@ watertight CF-PETG shell, CF skeleton and foam fill added. CC BY 4.0.
 | ------- | -------- |
 | **Title** | (untitled low-poly Serenity reference) |
 | **Source** | [thingiverse.com/thing:4677565](https://www.thingiverse.com/thing:4677565) |
-| **Use** | Used only as a qualitative geometry guide for orienting the head, cargo, middle, and rear fuselage sections relative to each other (per CLAUDE.md "Aircraft Geometry"). Not a source of hull surface geometry — no STL or mesh data is derived from this model. |
+| **Use** | Used only as a qualitative geometry guide for orienting the head, cargo, middle, and rear fuselage sections relative to each other (per `airframe/AGENTS.md` "Geometry Reference Points"). Not a source of hull surface geometry — no STL or mesh data is derived from this model. |
 
 ---
 
@@ -168,7 +168,7 @@ watertight CF-PETG shell, CF skeleton and foam fill added. CC BY 4.0.
 | **Source** | [thingiverse.com/thing:2991269](https://www.thingiverse.com/thing:2991269) |
 | **License** | CC BY 4.0 |
 | **Use (nacelle)** | Scaled to 70 mm (2.76") ID. Servo removed. M0.5 rack teeth added to inner ring OD. Outer housing integrated with Serenity bell geometry. Gear-coupled to nacelle tilt pivot via sector/bevel/crown chain — fully passive, no servo. **Current — active design.** |
-| **Use (fuselage)** | **Superseded — deferred Phase 11 legacy design only.** Scaled to 40 mm (1.57") ID, SG90 servo actuated, 8-petal iris integrated with a 120 mm fuselage EDF (`deferred/aft-edf/`). Per CLAUDE.md, the canonical fuselage EDF is now a 55 mm 6S unit with a **fixed** elliptical exit nozzle (2.06 in × 1.76 in / 52.3 mm × 44.7 mm) feeding 4 RCS bleed-air thrusters — it is explicitly NOT an iris. The `deferred/aft-edf/` files predate this change and require regeneration for the 55 mm + canonical-nozzle + RCS spec before Phase 11 (tracked in TODO.md §Phase 11). |
+| **Use (fuselage)** | **Superseded — deferred Phase 11 legacy design only.** Scaled to 40 mm (1.57") ID, SG90 servo actuated, 8-petal iris integrated with a 120 mm fuselage EDF (`deferred/aft-edf/`). Per root `AGENTS.md`, the canonical fuselage EDF is now a 55 mm 6S unit with a **fixed** elliptical exit nozzle (2.06 in × 1.76 in / 52.3 mm × 44.7 mm) feeding 4 RCS bleed-air thrusters — it is explicitly NOT an iris. The `deferred/aft-edf/` files predate this change and require regeneration for the 55 mm + canonical-nozzle + RCS spec before Phase 11 (tracked in TODO.md §Phase 11). |
 
 ## Remix attribution template
 
@@ -217,7 +217,7 @@ CC BY 4.0.
 | **Type** | Third-party commercial hardware product — no design files redistributed |
 | **Source** | xfly-model.eu — commercial EDF unit datasheet |
 | **License** | N/A — proprietary commercial product; cited here only as the dimensional/performance basis for the nacelle thrust specification, not as a remixed design asset |
-| **Use** | Manufacturer-rated thrust (1,240 g per EDF) is the baseline for all nacelle static-thrust calculations in this project. Two units in series per nacelle, 90% additive efficiency assumed for the 11-fin custom stator: 1,240 g × 2 × 0.90 = 2,232 g per nacelle. See CLAUDE.md "Project Objective" and `deferred/aft-edf/README.md`. |
+| **Use** | Manufacturer-rated thrust (1,240 g per EDF) is the baseline for all nacelle static-thrust calculations in this project. Two units in series per nacelle, 90% additive efficiency assumed for the 11-fin custom stator: 1,240 g × 2 × 0.90 = 2,232 g per nacelle. See root `AGENTS.md` §1 "Project" and `deferred/aft-edf/README.md`. |
 
 ---
 

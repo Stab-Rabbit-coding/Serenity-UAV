@@ -195,7 +195,7 @@ value cannot address.
   > `ISOLATION` netclass DRC minimum and the ≥ 8 mm physical creepage target above.
   > Root cause and full violation count are already tracked in `TODO.md` §1.2a (tamper
   > mesh routed through the isolated `GND2_*` domains; ≈335 of Wash's then-465 DRC
-  > errors). This verification did not change layout — per `CLAUDE.md`, footprint/route
+  > errors). This verification did not change layout — per `AGENTS.md`, footprint/route
   > rework to close this gap is referred to the user, not performed automatically.
 
 - **CMC placement:** CM1 and CM2 must be placed on the board side of the field

@@ -58,7 +58,7 @@ length-matched RMII/RGMII routing.
    duplication/forwarding IEC 62439-3 requires. A ring node would need *two* bridges
    and still could not offload HSR. Jayne's KSZ9477 (a 7-port managed switch) has no
    USB-bridge equivalent at all. This alone fails the project's first-class failover
-   requirement (root `CLAUDE.md`, "redundancy and failover in all systems possible").
+   requirement (root `AGENTS.md`, "redundancy and failover in all systems possible").
 2. **Non-deterministic latency/jitter.** USB is host-polled on 125 µs microframes
    with variable queuing/interrupt latency. This is a real-time flight-control bus
    (River/Simon EDF + nacelle sync); native CPSW + RMII gives bounded DMA-driven
@@ -73,7 +73,7 @@ length-matched RMII/RGMII routing.
    essentially for free from the LAN magnetics. Isolating USB requires a Hi-Speed
    digital isolator (ADuM4165/4166 class — expensive, scarce) or a drop to Full-Speed
    (12 Mbps), which throttles the link below 100 Mbps. The project mandates uniform
-   5 kV galvanic isolation on Ethernet at every node (root `CLAUDE.md`).
+   5 kV galvanic isolation on Ethernet at every node (root `AGENTS.md`).
 5. **Wastes the SoC's integrated Ethernet.** The AM6254 CPSW and AM62A7 RGMII are
    already paid for in silicon; USB bridges consume USB ports (needed elsewhere) to
    re-implement, worse, what the SoC does natively.
@@ -112,10 +112,10 @@ discrete parts. That is a separate trade, not a reason to adopt USB.
 
 ## References
 
-- Root `CLAUDE.md` — redundancy/failover requirement; uniform 5 kV galvanic
+- Root `AGENTS.md` — redundancy/failover requirement; uniform 5 kV galvanic
   isolation on CAN FD, RS-485, and Ethernet at every node; 500 W/m² operating
   objective.
-- `avionics/CLAUDE.md` — Ethernet ring topology; KSZ9477 selected over LAN9355/
+- `avionics/AGENTS.md` — Ethernet ring topology; KSZ9477 selected over LAN9355/
   KSZ9563 for HSR/PRP hardware offload (AN3474); Wash 2× PHY, Zoë PHY-on-stack, Emma
   ADIN1300, Jayne KSZ9477.
 - `avionics/kicad/Wash.md` §1 — EMI-hardened dual DP83825I PHY (RMII0/RMII1).

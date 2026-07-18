@@ -44,7 +44,7 @@ Each of these is a hard fabrication defect: wrong pad count and/or wrong pitch
 means the pads do not land on the part's leads. **Correcting them remaps
 which net lands on which pin** — a flight-hardware footprint↔symbol change that
 must be done against the confirmed schematic pinout, not guessed (root
-`CLAUDE.md`, avionics `CLAUDE.md`).
+`AGENTS.md`, avionics `AGENTS.md`).
 
 ## ❌ Placeholder footprints (2-pad stubs, not real)
 

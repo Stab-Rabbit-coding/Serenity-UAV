@@ -19,7 +19,7 @@
 
 ## Tooling governance
 
-Build-automation conventions (hull-frame bake, Blender hollowing pipeline, mesh verification, SCAD/STL generation) are governed by [`tools/CLAUDE.md`](CLAUDE.md) and the root `CLAUDE.md` pipeline rules.
+Build-automation conventions (hull-frame bake, Blender hollowing pipeline, mesh verification, SCAD/STL generation) are governed by [`tools/AGENTS.md`](AGENTS.md) and the root `AGENTS.md` pipeline rules.
 
 
 ## Automation tasks embedded in other branches (20 open, tracked there)

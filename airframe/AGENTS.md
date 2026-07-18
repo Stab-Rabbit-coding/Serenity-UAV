@@ -1,6 +1,6 @@
-# Airframe Design — Claude Code Project Instructions
+# Airframe Design — Agent Instructions
 
-> *See the root `CLAUDE.md` for project-wide policies. This file provides specific guidance for airframe design, fabrication, and 3D modeling.*
+> *See the root `AGENTS.md` for project-wide policies. This file provides specific guidance for airframe design, fabrication, and 3D modeling.*
 
 ## Scope
 
@@ -40,7 +40,7 @@ The fuselage has four canonical sections, each with specific spatial properties:
 - Wings attach to the cargo section lateral walls
 - Nacelles are at the pylon tips, outboard of the wings; stored in forward-flight attitude; in hover they tilt to vertical thrust
 
-See CLAUDE.md "Aircraft Geometry" and "Validated baked extents" for full spatial bounds and qualitative relationships.
+See "Validated baked extents" and "Geometry Integrity" below for full spatial bounds and qualitative relationships.
 
 ## Fabrication Standards
 
@@ -167,18 +167,27 @@ The headless assembly script is `airframe/FreeCAD-scripts/serenity_assembly.py` 
 - When a script regenerates STLs, verify Z-range and bore-diameter in console output **before committing**
 - Keep `PROJECT_INDEX.md` up to date: add new active files, move archived files to `ARCHIVE_INDEX.md`
 
-## Landing Gear — Rev R5 Canonical Design
+## Landing Gear
 
-Canonical landing leg model (Rev R5): vertical post + 4-wire brace.
+The landing-leg design (post/wire geometry, materials, energy sizing) changes as testing
+matures — do not restate its specifics here or in any other file; they will go stale. Read
+the current revision directly:
 
-- **Vertical post:** CF-PETG, 100% infill, not expected to yield, extends from foot to 1/3-down branch height
-- **Spring wires (×2) at apex:** elastic, fully recoverable for ordinary hard landings
-- **Ductile wires (×2) at 1/3-down:** each independently sized to absorb the entire 6 ft full-AUW worst-case impact energy on its own via progressive deepening of a single pre-formed bow (visible, field-replaceable "fired" indicator)
-- **Wire stock:** single piece with one shallow pre-bend, chosen for manufacturability and field replacement
+- **Canonical design and structural analysis:** `docs/LANDING_GEAR_ANALYSIS.md`
+- **SCAD source:** `airframe/openscad/fuselage/wire_brace_leg.scad`
+- **Open work:** `TODO.md` §1.1.4
 
-SCAD source: `airframe/openscad/fuselage/wire_brace_leg.scad`  
-Full structural analysis and joint-fitting specs: `docs/LANDING_GEAR_ANALYSIS.md` (Rev R5)
+## Nacelle Nozzle Drive
+
+Each nacelle nozzle is variable-diameter, driven by nacelle tilt, sized 75% of bore at 0°
+(forward) to 105% of bore at ≥90° (vertical/backing) — a fixed functional requirement. The
+mechanism that achieves it (gear train vs. linkage alternatives) is an **active trade study**;
+do not assume a specific mechanism here. Read the current state directly:
+
+- **Trade study and current recommendation:** `docs/NOZZLE_DRIVE_TRADE.md`
+- **SCAD source:** `nacelle_nozzle_iris.scad`
+- **Open work:** `TODO.md` §1.1.3.1
 
 ---
 
-For project-wide standards, see the root `CLAUDE.md`.
+For project-wide standards, see the root `AGENTS.md`.

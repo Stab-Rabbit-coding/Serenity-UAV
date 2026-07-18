@@ -1,6 +1,6 @@
-# Ground Control Station (Malcolm) — Claude Code Project Instructions
+# Ground Control Station (Malcolm) — Agent Instructions
 
-> *See the root `CLAUDE.md` for project-wide policies. This file provides specific guidance for the ground control station (GCS) software, hardware, and operator interface.*
+> *See the root `AGENTS.md` for project-wide policies. This file provides specific guidance for the ground control station (GCS) software, hardware, and operator interface.*
 
 ## Scope
 
@@ -187,4 +187,4 @@ When developing Malcolm features:
 
 ---
 
-For project-wide standards, see the root `CLAUDE.md`.
+For project-wide standards, see the root `AGENTS.md`.

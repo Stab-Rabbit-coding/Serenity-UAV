@@ -11,7 +11,7 @@
 > and the owning subsystem `WBS.md`/`TODO.md` files. **&#9733; = on the critical path to
 > first flight (Phase 5).**
 
-*"Number 2, make it so! — the naming convention, root CLAUDE.md"*
+*"Number 2, make it so! — the naming convention, root AGENTS.md"*
 
 ---
 
@@ -29,6 +29,6 @@ history in [`docs/WBS.md`](../docs/WBS.md); none currently appear in `docs/TODO.
 
 ## Pointers
 
-- Revision numbering, traceability matrix, and standards citations: [`current-specification/CLAUDE.md`](CLAUDE.md)
+- Revision numbering, traceability matrix, and standards citations: [`current-specification/AGENTS.md`](AGENTS.md)
 - Standards catalog: [`../REFERENCES.md`](../REFERENCES.md)
 - Regulatory gates for first flight: [`docs/FIRST_FLIGHT_READINESS.md`](../docs/FIRST_FLIGHT_READINESS.md)

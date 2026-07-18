@@ -396,6 +396,7 @@
 - [ ] 1.5.6 Rebuild Graphical Buiild Guide
 - [ ] Sync bom_revO.json ↔ bom_revO.csv
 - [x] Create bom_revQ.json + bom_revQ.csv
+- [x] 1.5.7 Consolidate CLAUDE.md/AGENTS.md into one AGENTS.md
 
 ### 1.6 — Rev Q: Repo-Wide Architecture Propagation
 → detail: `docs/WBS.md` §1.6

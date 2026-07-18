@@ -66,7 +66,7 @@ board must fan out to **≥60 mm** at the aft end (25.4→60 over 69.85 = ~14°/
 40 mm-square SoM if it fans to ~60 mm within ~70 mm — i.e. the **hull interior must be
 ≥60 mm wide (lateral) at the SoM station**, ~50 mm aft of the flat. Whether the (blunt)
 nose provides that is a **FreeCAD cross-section question** — it CANNOT be derived from
-the SCAD bounding box (CLAUDE.md: bounding-box/centroid placement is inadequate for
+the SCAD bounding box (AGENTS.md: bounding-box/centroid placement is inadequate for
 this hull; a linear taper estimate is invalid near the blunt nose). **Referred to
 FreeCAD/user.**
 

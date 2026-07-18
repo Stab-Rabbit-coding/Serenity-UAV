@@ -31,7 +31,7 @@ automated placeholder-swap because:
 
 1. **All five main ICs are placeholder footprints** with **placeholder pin/ball numbering** — a
    real board needs datasheet-verified land patterns *and* pin↔net maps. Per the project
-   no-fabrication rule (`CLAUDE.md`), these **cannot be invented**; they must come from the
+   no-fabrication rule (`AGENTS.md`), these **cannot be invented**; they must come from the
    vendor datasheets.
 2. **The entire memory subsystem is missing.** The **TI AM62A7 has no usable internal RAM for
    Linux — it requires external LPDDR4** — and the schematic contains **no LPDDR4 and no boot

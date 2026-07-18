@@ -659,7 +659,7 @@ Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_s
 > (`s_head_shell24.scad`, `s_middle_canonical_shell24.scad`,
 > `s_rear_neck_intake_shell24.scad`, `cargo_sect_shell24.scad`) are **secondary
 > references only** (cargo SCAD still sources interior boss geometry pending the
-> §1.1.1.0a merge).  See CLAUDE.md "Canonical fuselage source — Blender pipeline" and
+> §1.1.1.0a merge).  See `airframe/AGENTS.md` "Blender Pipeline" and
 > TODO.md §1.1.1.0a.
 
 | Script / File | Tool | Purpose | Output |
@@ -749,7 +749,7 @@ attitude authority. The rear EDF exhausts aft and contributes no hover lift.
 geometry must be regenerated for the 55mm fan, the canonical nozzle, and the RCS system before fabrication.
 
 > This phase was deferred per the project design philosophy: *"The large fuselage EDF is now an
-> optional addition once everything else works."* (CLAUDE.md)
+> optional addition once everything else works."* (root AGENTS.md)
 
 ### 11A — Procurement
 
@@ -822,4 +822,4 @@ geometry must be regenerated for the 55mm fan, the canonical nozzle, and the RCS
 
 *Rev N — first documented 24-inch Serenity-class build — May 2026*  
 *Supersedes Rev M (18-inch, 80mm EDF, AM6254 upgrade)*  
-*Phase 11 (Aft EDF) deferred per CLAUDE.md — 2026-06-07*
+*Phase 11 (Aft EDF) deferred per root AGENTS.md — 2026-06-07*

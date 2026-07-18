@@ -6,9 +6,9 @@
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../../TODO.md)
 > is a compact index — headings, subheadings, and short (<=70-char) checkbox items
-> only, per root `CLAUDE.md`. This file carries the full task detail for the WBS
+> only, per root `AGENTS.md`. This file carries the full task detail for the WBS
 > branches the root indexes below. Close an item here first, then check it off in
-> the root index as a commit prerequisite (root `CLAUDE.md` "Revisions and Version
+> the root index as a commit prerequisite (root `AGENTS.md` "Revisions and Version
 > Control").
 
 *"Everything is shiny, Cap'n. Not to fret. — Kaylee"*

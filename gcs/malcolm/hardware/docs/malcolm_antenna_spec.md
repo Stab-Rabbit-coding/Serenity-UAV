@@ -142,7 +142,7 @@ an aircraft whose onboard receivers may be desensed by proximity to commercial R
 > assumption to likely well under a quarter mile (exact figure depends on receiver
 > sensitivity and ground-wave propagation at 49 MHz; not yet analyzed).  This
 > contradicts the link's design role as River's resilient long-range backup comms path
-> (see `CLAUDE.md` Avionics Workload Balancing).  Re-architecting this link — e.g. a
+> (see `avionics/AGENTS.md` "Node Workload Balancing and PACE Failover").  Re-architecting this link — e.g. a
 > different frequency or a licensed service that permits higher power near 49 MHz — is
 > tracked as an open item in `TODO.md` §0.1 and is **not resolved by this revision**;
 > the PA power ceiling above reflects what §15.235 actually permits today, not a

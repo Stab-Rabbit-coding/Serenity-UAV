@@ -21,9 +21,10 @@
 .github/workflows/ossar.yml       — OSSAR static-analysis security workflow
 .github/workflows/stale-branches.yml — Stale branch cleanup workflow
 .vscode/extensions.json           — Recommended VS Code extensions
-AGENTS.md                         — Instructions for AI agents (authoritative source: CLAUDE.md;
-                                    federated guidance in subordinate folders)
-CLAUDE.md                         — Project instructions and standards (includes Standards Vetting Policy)
+AGENTS.md                         — Authoritative instructions for AI agents (project-wide
+                                    standards, including Standards Vetting Policy; federated
+                                    guidance in subordinate folders' AGENTS.md files)
+CLAUDE.md                         — One-line pointer to AGENTS.md
 LICENSE                           — Repository license (CC BY 4.0)
 PROJECT_INDEX.md                  — This file
 ARCHIVE_INDEX.md                  — Archive file tree (see below)
@@ -53,7 +54,7 @@ Repository-level engineering tools and build automation.
 TODO.md                           — Build-tools & automation reference index (pointer view;
                                     owns no branch — see airframe/*/WBS.md and
                                     graphical-build-guide/WBS.md for the owned detail)
-CLAUDE.md                         — Build tools and automation standards (hull-frame bake tool,
+AGENTS.md                         — Build tools and automation standards (hull-frame bake tool,
                                     Blender pipeline, SCAD generation, mesh validation)
 precommit_kicad_load.py             — Pre-commit guard: blocks unloadable/corrupt-stackup KiCad files (In2.Cu/Edge.Cuts corruption); enable via .githooks (git config core.hooksPath .githooks)
 validate_kicad.py                 — CI KiCad ERC/DRC validator (kicad-cli sch erc / pcb drc
@@ -86,7 +87,7 @@ WBS.md                            — Airframe WBS detail (full record): §1.1.0
                                     standard, §1.1.5 non-printable placeholders, §2.1/§2.2/
                                     §2.3/§2.6 procurement BOMs
 TODO.md                           — Open-work-only subset of WBS.md
-CLAUDE.md                         — Airframe design standards (coordinate system, CAD/3D
+AGENTS.md                         — Airframe design standards (coordinate system, CAD/3D
                                     modeling, hull-frame bake, fabrication specs, STL
                                     validation, structural joints, landing gear)
 fuselage-joints/WBS.md             — Fuselage §1.1.1 (1/3): joints, bow sensor pod,
@@ -155,7 +156,7 @@ serenity_render_views.py          — Multi-view render suite (Rev R1): imports 
                                     hull-frame STLs, renders 17 PNGs (6 principal + 8 iso +
                                     3 close-up) to graphical-build-guide/pngs/
 files-hollowed-24in/              — Canonical Rev R1 24" hollowed shell source STLs (pre-bake; see
-                                    CLAUDE.md Hull-Frame Coordinate Standard) + operands/ boolean
+                                    airframe/AGENTS.md Hull-Frame Coordinate Standard) + operands/ boolean
                                     operand meshes (inner/outer split surfaces, engraved text meshes)
 ```
 
@@ -176,10 +177,10 @@ batch_VISUAL/                     — Visual-only prototype parts
 ### airframe/freecad/assembly/
 
 Working FreeCAD assembly directory (in-progress / backup state; not yet the published
-canonical `SerenityAssembly.FCStd` referenced by CLAUDE.md's Hull-Frame Coordinate Standard).
+canonical `SerenityAssembly.FCStd` referenced by airframe/AGENTS.md's Hull-Frame Coordinate Standard).
 
 ```text
-SerenityAssembly.FCStd            — FreeCAD assembly document (canonical per CLAUDE.md
+SerenityAssembly.FCStd            — FreeCAD assembly document (canonical per airframe/AGENTS.md
                                     Hull-Frame Coordinate Standard)
 SerenityAssembly.FCStd.bak2       — FreeCAD assembly backup
 SerenityAssembly.<timestamp>.FCBak — FreeCAD autosave backup (gitignored)
@@ -211,7 +212,7 @@ access_panels_24in.scad         — All hull access panels: 4× Faraday-bay cove
 rcrs49_wire_post.scad           — 49 MHz (Part 15 §15.235) top-wire antenna post, 12×12 mm PETG mast (Rev R)
 landing_leg_assy.scad           — [RETIRED] Rev R1.4 parametric corner V-brace concept, never
                                     rendered/printed; superseded by wire_brace_leg.scad (Rev R5);
-                                    see CLAUDE.md "Canonical landing leg model (Rev R5)"
+                                    see docs/LANDING_GEAR_ANALYSIS.md (Rev R5)
 wire_brace_leg.scad             — Rev R5 CURRENT landing leg: CF-PETG vertical post + 4-wire
                                     brace (2 spring apex wires, 2 ductile 1/3-down wires); see
                                     docs/LANDING_GEAR_ANALYSIS.md Rev R5
@@ -309,8 +310,8 @@ foot_2_scaled24.stl           — Individual foot 2 (Thingiverse reference)
 foot_3_scaled24.stl           — Individual foot 3 (Thingiverse reference)
 foot_4_scaled24.stl           — Individual foot 4 (Thingiverse reference)
 [Rev R1.4 parametric corner V-brace concept (arm_upper_r1/arm_lower_r1/main_strut_r1/
-junct_node_r1/hull_boss_r1/foot_pad_r1) — RETIRED, never rendered; see CLAUDE.md "Canonical
-landing leg model (Rev R5)". Superseded by the Rev R5 wire-brace files below.]
+junct_node_r1/hull_boss_r1/foot_pad_r1) — RETIRED, never rendered; see
+docs/LANDING_GEAR_ANALYSIS.md (Rev R5). Superseded by the Rev R5 wire-brace files below.]
 post.stl                      — Rev R5: CF-PETG vertical post alone (generated by
                                     tools/build_landing_gear_views.py + wire_brace_leg.scad)
 spring_wire_nominal.stl        — Rev R5: one apex (spring) wire, undeformed
@@ -324,9 +325,10 @@ landing_gear_exploded.stl      — Rev R5: same parts, separated along local ins
 landing_gear_deformed.stl      — Rev R5: assembled, but both ductile wires swapped for the
                                     fired/flattened variant — post-overload state
 strong-leg.stl                 — [ORPHANED] intermediate "Strong-Leg" forked-CF-PETG-arm
-                                    concept (Rev R2–R4), retired per CLAUDE.md in favor of
-                                    Rev R5; not generated by build_landing_gear_views.py —
-                                    flagged, not yet archived
+                                    concept (Rev R2–R4), retired per
+                                    docs/LANDING_GEAR_ANALYSIS.md in favor of Rev R5; not
+                                    generated by build_landing_gear_views.py — flagged, not
+                                    yet archived
 dorsal_antenna_fin.stl            — Dorsal antenna fin fairing
 middle_canonical_edf_intake.stl — Middle section EDF intake opening
 cargo/
@@ -334,7 +336,7 @@ cargo_sect_shell24_2mm_repaired.stl    — Cargo section 2mm hollow, manifold
 cargo_sect_shell24_repaired.stl        — Cargo solid shell, manifold-repaired (used for intersection in access_panels_24in.scad)
 cargo_door_port.stl                   — Port clamshell cargo door, hinges outboard at X≈-117.6mm (hull-frame, Rev R1b 2026-06-22)
 cargo_door_stbd.stl                   — Stbd clamshell cargo door, hinges outboard at X≈-222.5mm (hull-frame, Rev R1b 2026-06-22)
-generate_cargo_doors.py               — Door STL generator (Rev R1b, hull frame; see CLAUDE.md)
+generate_cargo_doors.py               — Door STL generator (Rev R1b, hull frame; see airframe/AGENTS.md)
 cargo_hinge_retention.stl             — Shell-side hinge-pin retention blocks (4: 2/door; hull-frame, Rev R1c 2026-06-29)
 generate_cargo_hinge_retention.py     — Retention-block generator (Rev R1c, hull frame; merged into cargo shell)
 cargo_cradle_autolatch.stl            — Auto-latch payload cradle
@@ -416,7 +418,7 @@ propulsion/
 EDF_50mm_6S.stl                 — 50 mm 6S EDF (BOM: EDF-50-6S, ×4)
 EDF_120mm_6S_deferred.stl       — [STALE NAME] 120 mm 6S rear EDF placeholder; on-disk filename
                                     still reflects the pre-Rev-R1 120 mm rear EDF (superseded
-                                    spec is 55 mm, see CLAUDE.md); pending regeneration to
+                                    spec is 55 mm, see root AGENTS.md); pending regeneration to
                                     EDF_55mm_6S_deferred.stl for Phase 11
 ESC_40A_6S_BLHeli32.stl         — 40 A BLHeli32 ESC (BOM: ESC-40A-6S, ×4)
 ESC_80A_6S_BLHeli32_deferred.stl — [STALE NAME] 80 A ESC placeholder; on-disk filename still
@@ -540,7 +542,7 @@ Serenity-Assembled.FCStd          — Full-airframe FreeCAD assembly, generated 
                                     gitignored (*.FCStd) like all FreeCAD documents, so it carries
                                     no git history — regenerate via serenity_assembly.py if missing.
                                     Distinct from the canonical
-                                    airframe/freecad/assembly/SerenityAssembly.FCStd (CLAUDE.md
+                                    airframe/freecad/assembly/SerenityAssembly.FCStd (airframe/AGENTS.md
                                     Hull-Frame Coordinate Standard) — reconcile which is current
                                     before treating either as authoritative; flagged, not resolved
                                     here.
@@ -565,7 +567,7 @@ emi-hardening/WBS.md               — §0.6 IEC 62368-1 isolation verification;
 jayne/WBS.md                       — §1.2c Jayne PCB (vision/ToF/laser); §4.6 Jayne firmware
 firmware/WBS.md                    — §4.1-§4.4 Wash/Zoe node firmware
 (each avionics/*/ folder also has a TODO.md — open items only)
-CLAUDE.md                         — Avionics design standards (cape naming, KiCad DRC
+AGENTS.md                         — Avionics design standards (cape naming, KiCad DRC
                                     workflow, security/cryptography, communications
                                     protocols, external radio regulations, avionics
                                     architecture)
@@ -678,7 +680,7 @@ scripts/cleanup_emma_drc.py       — Emma DRC debt cleanup (pcbnew: mask expans
 
 Jayne/ — Cargo-Handling System and Nose/Cargo-Bay Vision, ToF & Laser Board (board itself is
 STANDALONE, not a PB2-I cape; merges the former separately-documented "Vera" board identity
-into the Jayne cargo-handling system, see avionics/CLAUDE.md "Jayne"):
+into the Jayne cargo-handling system, see Jayne.md below):
 Jayne.md                          — Design specification, BOM, EMI-hardening status (matches
                                     Wash/Zoe Rev R baseline)
 JAYNE_SOM_NETMAP.md               — phyCORE-AM62A SoM pad↔net map
@@ -717,7 +719,7 @@ scripts/gen_Jayne_ksz_symbol.py, gen_Jayne_ds_footprints.py, gen_Jayne_bth060_fo
 scripts/mod_Jayne_corners.py, mod_Jayne_trapezoid.py, mod_Jayne_ds_pcb.py,
 scripts/mod_Jayne_som_place.py    — PCB post-processing scripts (pcbnew: corner rounding,
                                     trapezoid outline, direct-solder pad nets, SoM placement)
-[see avionics/jayne/WBS.md §1.2c and avionics/CLAUDE.md "Jayne" for full status/open items]
+[see avionics/jayne/WBS.md §1.2c and Jayne.md above for full status/open items]
 
 ENC-NACELLE-1 (nacelle encoder breakout):
 ENC-NACELLE-1.kicad_sch
@@ -777,7 +779,7 @@ WBS.md                            — Docs/standards/regulatory WBS detail (full
                                     §0.x, §1.5-1.7, §5.x, §6.x
 TODO.md                           — Open-work-only subset of WBS.md
 FIRST_FLIGHT_READINESS.md         — Open-item rollup on the Phase-5 first-flight critical path
-CLAUDE.md                         — Documentation standards (standards vetting policy,
+AGENTS.md                         — Documentation standards (standards vetting policy,
                                     references management, measurements and units,
                                     version control, traceability matrix)
 PROJECT_INDEX.md                  — This file: active project directory tree
@@ -818,7 +820,7 @@ Active design specifications, requirements, and version-controlled design baseli
 ```text
 TODO.md                           — Specification-sync reference index (pointer view into
                                     docs/WBS.md §1.6/§1.7/§6.3)
-CLAUDE.md                         — Specification standards (revision policy, document
+AGENTS.md                         — Specification standards (revision policy, document
                                     structure, standards citations, traceability matrix,
                                     specification approval workflow)
 serenity-rev-r.jsx                — Rev R interactive specification (SUPERSEDED by Rev S per
@@ -849,7 +851,7 @@ No external PAs (FCC-compliant with directional antennas).  IP65 field enclosure
 WBS.md                            — Malcolm GCS WBS detail (full record) — §4.5 (ground
                                     control, gimbal, comms)
 TODO.md                           — Open-work-only subset of WBS.md
-CLAUDE.md                         — GCS design standards (operator interface, command
+AGENTS.md                         — GCS design standards (operator interface, command
                                     authentication, telemetry display, communications
                                     protocols, security/compliance, hardware requirements)
 gcs/malcolm/
@@ -938,7 +940,7 @@ for future build phases.
 WBS.md                            — Deferred-work WBS detail (full record) — Phase 11
                                     (aft EDF + RCS), Phase 12 (range-extender battery)
 TODO.md                           — Open-work-only subset of WBS.md
-CLAUDE.md                         — Deferred work standards (status categories, planned
+AGENTS.md                         — Deferred work standards (status categories, planned
                                     upgrades, Phase 11+ scope, design decision history,
                                     phase numbering convention)
 ```
@@ -974,7 +976,7 @@ rear_nozzle_petal_hull_0.stl … rear_nozzle_petal_hull_7.stl — [PRE-R1] Iris 
 ```
 
 > **Rev R1 (2026-06-13) — REGEN PENDING:** the rear EDF spec changed from 120 mm (iris nozzle) to
-> 55 mm with a fixed canonical elliptical tail nozzle + 4 RCS bleed-air thrusters (per CLAUDE.md).
+> 55 mm with a fixed canonical elliptical tail nozzle + 4 RCS bleed-air thrusters (per root AGENTS.md).
 > The on-disk SCAD/STL files in this directory **still reflect the pre-Rev-R1 120 mm / iris-nozzle
 > geometry** — `edf_120_motor_mount.scad`, `edf_120_thrust_tube.scad`, `rear_nozzle_frame/petal*`
 > have not yet been regenerated as `edf_55_motor_mount.scad`, `edf_55_thrust_tube.scad`,
@@ -999,7 +1001,7 @@ WBS.md                            — Phased physical-build WBS detail (full rec
 TODO.md                           — Open-work-only subset of WBS.md
 flight-phases/WBS.md               — Phases 5-10 detail (Phase 5 = FIRST FLIGHT)
 flight-phases/TODO.md              — Open-work-only subset of flight-phases/WBS.md
-CLAUDE.md                         — Build guide standards (phased approach, guide structure,
+AGENTS.md                         — Build guide standards (phased approach, guide structure,
                                     illustrations/graphics, troubleshooting, phase
                                     completion sign-off)
 gen_hull_outlines.py              — SVG generation script (runs headless Blender)
