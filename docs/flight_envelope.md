@@ -6,11 +6,11 @@
 
 Resolves `TODO.md` Phase 0 pre-print documentation gate item "Flight Envelope
 Document." All measurements are imperial-primary with metric in parentheses
-per `CLAUDE.md`. Airspeed in knots (kt) with m/s in parentheses.
+per `AGENTS.md`. Airspeed in knots (kt) with m/s in parentheses.
 
 **Baseline used:** Phase 5–10 configuration (nacelles only, no rear fuselage
 EDF) — the active build target, since the rear EDF is "an optional addition
-once everything else works" per root `CLAUDE.md`. Phase 11 (full system,
+once everything else works" per root `AGENTS.md`. Phase 11 (full system,
 heavier AUW) figures are given alongside for reference where they change the
 result materially.
 
@@ -21,7 +21,7 @@ result materially.
 | AUW, Phase 5–10 | 6.10 lbm (2,768 g) → 27.15 N weight | `README.md` Specifications |
 | AUW, Phase 11 | 6.90 lbm (3,130 g) → 30.71 N weight | `README.md` Specifications |
 | Nacelle count / layout | 2 (port + starboard), each 2× 50 mm 6S EDF in tandem | `README.md` "Nacelles" |
-| Static thrust per nacelle | 2,232 gf (2× 1,240 gf EDF × 90% stacking efficiency) | root `CLAUDE.md` "Design Mission / Powerplant" |
+| Static thrust per nacelle | 2,232 gf (2× 1,240 gf EDF × 90% stacking efficiency) | root `AGENTS.md` "Design Mission / Powerplant" |
 | Total nacelle static thrust | 9.84 lbf (4,464 g) → 43.79 N | `README.md` Specifications (= 2 × 2,232 gf, confirms T/W below) |
 | T/W, Phase 5–10 (hover) | 1.61 | `README.md` |
 | T/W, Phase 11 (hover, nacelles only) | 1.43 | `README.md` |
@@ -85,7 +85,7 @@ exceeds the 40 kt reference speed used for the wing's Reynolds-number
 citation elsewhere in this repository — this airframe's tiny high-wing-loading
 planform cannot sustain level flight at 40 kt on wing lift alone. This is
 expected and consistent with the design intent: Serenity UAV is a
-hover-centric VTOL platform (root `CLAUDE.md` design mission profile) where
+hover-centric VTOL platform (root `AGENTS.md` design mission profile) where
 wings are a lift *assist* during transition, not the primary lift source.
 Sustained forward flight below θ_hover ≈ 38° therefore requires either
 airspeed at or above the table value for that angle, or a higher tilt angle.
@@ -197,7 +197,7 @@ operation.
 **MSL ceiling for this document: governed by the AGL floor at the intended
 operating site plus the 400 ft AGL regulatory ceiling (§3.1)** — no separate
 absolute MSL limit is imposed by aircraft performance within any elevation
-range this project's mission profile (root `CLAUDE.md`) contemplates.
+range this project's mission profile (root `AGENTS.md`) contemplates.
 
 ---
 
@@ -207,7 +207,7 @@ range this project's mission profile (root `CLAUDE.md`) contemplates.
 originating WBS item means flight-test data, which does not exist for an
 airframe that has not flown. Fabricating specific crosswind-kt figures for
 0°/30°/60°/90° without wind-tunnel, CFD, or flight data would violate
-`CLAUDE.md`'s prohibition on unverifiable values. What follows is the
+`AGENTS.md`'s prohibition on unverifiable values. What follows is the
 computable engineering bound available today, plus the existing WBS
 acceptance target.
 

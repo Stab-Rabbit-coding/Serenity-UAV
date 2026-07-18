@@ -12,7 +12,7 @@ now-obsolete `J_XCVR` Emma-cable connector, and an SBUS block, and uses a **diff
 reference-designator convention** from the PCB (only ~10 of ~50 refs match). A load-blocking
 stray-`(comment)` bug in `Zoë.kicad_sch` was fixed 2026-07-04 (it now opens in kicad-cli).
 The remaining schematic reconciliation needs a **user-confirmed sch↔pcb reference-designator
-remap** before edits — see TODO.md §1.2b and `avionics/CLAUDE.md`.
+remap** before edits — see TODO.md §1.2b and `avionics/AGENTS.md`.
 
 ---
 
@@ -176,7 +176,7 @@ ADM2795EBRWZ [REF-IEC-001 §5.5.2] [REF-VDE-001 Cl.4.3] — see Wash.md "Isolati
 > `GND2_CAN`/`GND2_RS485` domains, with actual measured spacing as low as **0.0 mm**
 > (direct contact) — short of the 0.5 mm `ISOLATION` netclass DRC minimum and the
 > ≥ 8 mm physical creepage target. Tracked in `TODO.md` §1.2a alongside Wash's
-> equivalent finding. Not fixed here — referred to the user per `CLAUDE.md`'s
+> equivalent finding. Not fixed here — referred to the user per `AGENTS.md`'s
 > manual-footprint-placement policy.
 
 Additional Zoë specifics:

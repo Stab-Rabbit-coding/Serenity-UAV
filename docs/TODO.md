@@ -133,6 +133,32 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 - [ ] **Sync `bom_revO.json` ↔ `bom_revO.csv`** — verify all XCVR-49MHZ-1 BOM items (Phase 5
     above) are reflected in both files once XCVR-49MHZ-1 Phase 5 is complete.
 
+- [x] **1.5.7 Consolidate CLAUDE.md/AGENTS.md into a single, model-agnostic `AGENTS.md`**
+    *(done 2026-07-18)*. Root `AGENTS.md` now merges the former root `AGENTS.md` +
+    `CLAUDE.md` into one authoritative, token-lean policy file usable by any AI agent
+    (Claude, GPT, Gemini, Grok, local models). Root `CLAUDE.md` is now a one-line pointer
+    to `AGENTS.md`, kept only for tooling that looks for that filename. Every federated
+    `<subsystem>/CLAUDE.md` was renamed to `<subsystem>/AGENTS.md` (airframe, avionics,
+    current-specification, deferred, docs, gcs, graphical-build-guide, tools).
+    - **Volatile single-subsystem detail replaced with pointers**, since it goes stale
+      faster than the policy file gets edited: Jayne's laser-indicator class/spread specs
+      (→ `docs/JAYNE_LASER_ANALYSIS.md`), the landing-gear post/wire design
+      (→ `docs/LANDING_GEAR_ANALYSIS.md`), the nacelle nozzle-drive mechanism
+      (→ `docs/NOZZLE_DRIVE_TRADE.md` — newly cross-referenced from
+      `airframe/AGENTS.md`, previously undocumented there), and Emma/Zoë/Kaylee/Jayne
+      sch↔pcb reconciliation narratives (→ each board's own `.md` under
+      `avionics/kicad/<board>/`, which is already updated more often than the policy file).
+    - **Confirmed a real staleness case while auditing:** `avionics/CLAUDE.md`'s Jayne
+      section described a raw TI AM62A3/AM62A7 chip-level design; `avionics/kicad/Jayne/
+      Jayne.md` (Rev S1, 2026-07-13) had already moved to a PCM-071 SoM carrier design —
+      the policy file was out of date relative to the as-built board doc. Root cause of
+      this class of drift: subsystem status belongs in the board's own `.md`/analysis doc,
+      not duplicated into the instructions file.
+    - Repo-wide `CLAUDE.md` → `AGENTS.md` reference sweep across `README.md`,
+      `PROJECT_INDEX.md`, `REFERENCES.md`, `REPO_ENFORCEMENT.md`, and design docs that
+      cited the old filename; historical dated entries inside `TODO.md`/subsystem
+      `TODO.md` files were left as-is (work log, not live links).
+
 
 ## §1.6 — Rev Q: Repo-Wide Architecture Propagation
 

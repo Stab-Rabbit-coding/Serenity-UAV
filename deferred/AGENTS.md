@@ -1,6 +1,6 @@
-# Deferred Work — Claude Code Project Instructions
+# Deferred Work — Agent Instructions
 
-> *See the root `CLAUDE.md` for project-wide policies. This file provides specific guidance for deferred (Phase 11+) design work, planned upgrades, and items awaiting future implementation.*
+> *See the root `AGENTS.md` for project-wide policies. This file provides specific guidance for deferred (Phase 11+) design work, planned upgrades, and items awaiting future implementation.*
 
 ## Scope
 
@@ -19,19 +19,12 @@ Deferred work is organized by:
 **Planned for the next major revision (Rev R1 detailed changes, target integration date: Phase 6–7):**
 
 - **Emma Rev R1:** Add LoRa, replace JST GH 6P with P1+P2 socket rails
-    - Status: Schematic/PCB design in progress
-    - Dependencies: None (Emma is optional, not critical path)
-    - Effort: 1–2 weeks design + prototyping
-
 - **Zoë Rev R1:** Remove LoRa (migrated to Emma), add P1+P2 passthrough rails matching Emma pinout on River and Simon stacks
-    - Status: Schematic/PCB design in progress
-    - Dependencies: Emma Rev R1 completion (for pinout validation)
-    - Effort: 1–2 weeks design
-
 - **Kaylee Rev A1:** Remove 6V servo BEC; tilt servos to run on 5V rail (~21 kg·cm capacity vs ~16 kg·cm tilt load requirement)
-    - Status: Power budget analysis complete, schematic redesign pending
-    - Dependencies: Tilt servo load testing (completed)
-    - Effort: 1–2 weeks design + validation
+
+Per-item status changes often and is not tracked here — read the current state directly from
+each board's own `.md` (`avionics/kicad/Emma/Emma.md`, `avionics/kicad/Zoë/Zoë.md`,
+`avionics/kicad/Kaylee/Kaylee.md`) and `TODO.md` §1.2b before starting work.
 
 ### Phase 11 (Medium Priority — Cruise and RCS)
 
@@ -140,4 +133,4 @@ All deferred work is covered under the same CC BY 4.0 license as active work. De
 
 ---
 
-For project-wide standards, see the root `CLAUDE.md`.
+For project-wide standards, see the root `AGENTS.md`.

@@ -1,6 +1,6 @@
-# Documentation — Claude Code Project Instructions
+# Documentation — Agent Instructions
 
-> *See the root `CLAUDE.md` for project-wide policies. This file provides specific guidance for documentation standards, references vetting, and compliance tracking.*
+> *See the root `AGENTS.md` for project-wide policies. This file provides specific guidance for documentation standards, references vetting, and compliance tracking.*
 
 ## Scope
 
@@ -187,4 +187,4 @@ When creating or updating documentation:
 
 ---
 
-For project-wide standards, see the root `CLAUDE.md`.
+For project-wide standards, see the root `AGENTS.md`.

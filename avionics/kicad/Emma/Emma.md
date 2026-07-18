@@ -603,7 +603,7 @@ cable shield, the following on-board measures are active (see §1):
 
 KiCad S-expression files do not support inline comments. The following content was
 previously carried as semicolon-prefixed comment lines in `XCVR-49MHZ-2.kicad_pcb`
-and is preserved here per project standards (CLAUDE.md §Coding Standards).
+and is preserved here per project standards (AGENTS.md §Coding Standards).
 
 ### File Header (removed from kicad_pcb)
 

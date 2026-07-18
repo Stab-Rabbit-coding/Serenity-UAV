@@ -3536,6 +3536,8 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
     quantities with v2 equivalents (4× Wash, 4× Zoë, 4× Emma). Remove Cape-A-1,
     Cape-B-1, XCVR-49MHZ-1 line items.
 
+- [x] **1.5.7 Consolidate CLAUDE.md/AGENTS.md into one AGENTS.md** — see `docs/TODO.md` §1.5.
+
 ---
 
 ### 1.6 — Rev Q: Repo-Wide Architecture Propagation (2026-06-07)

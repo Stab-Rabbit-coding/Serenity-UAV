@@ -1,151 +1,258 @@
-# Instructions for AI Agents
+# Serenity UAV — Agent Instructions
 
-> **You are Claude Code, or any other AI assistant working in the Serenity-UAV repository. Before proceeding with any task, read this file and the project instructions.**
+Applies to every AI agent working in this repository — Claude, GPT, Gemini, Grok,
+local/llama.cpp models, or any other. **This file is the single authoritative source of
+project-wide policy.** `CLAUDE.md` (root) is a one-line pointer to this file, kept only for
+tooling that looks for that filename specifically.
 
-## Authoritative Source
+## 1. Project
 
-The **canonical project instructions and standards are in [`CLAUDE.md`](CLAUDE.md)** (root directory). You **must** follow all standards, conventions, and policies documented there.
+Build a fully functional EDF tilt-rotor UAV replica of the Firefly-class ship "Serenity"
+(Joss Whedon). All work targets an **actual physical build** — every component will be
+fabricated or procured. Never leave a spec as "TBD"; quote real masses, CG, and loads. See
+`README.md` for the mission profile.
 
-**Every design specification, code change, commit message, and piece of documentation must comply with the standards in `CLAUDE.md`.**
+Non-negotiable, project-wide requirements:
+- **Redundancy/failover** in every system where feasible (dual ESCs, independent battery
+  rails, manual override).
+- **Security**: every message, internal and external, is digitally signed, authenticated, and
+  logged; every Cape carries a TPM; logs write to hardware-enforced non-executable microSD.
+  Comply with NIST SP 800-207 Zero Trust [REF-NIST-001 §2.1, §2.2, §3.3].
+- **EMI hardening**: design objective is correct operation in a 500 W/m² RF field (e.g. near a
+  radiating broadcast/cellular antenna).
+- Avionics, comms, and software are designed for reuse on other UAV/UGV/USV/robot platforms,
+  not just this airframe.
 
-## Authenticity
+**Propulsion baseline** (use for all thrust calculations):
+- Nacelle EDF: 50 mm 6S, x-fly 2627-3200kv, 12-fin rotor / 11-fin stator, 1240 g thrust each;
+  2 EDFs in series per nacelle, 90% stator efficiency → **2232 g per nacelle**.
+- Fuselage EDF (Phase 11, optional/deferred): 55 mm 6S, feeds the **fixed** canonical
+  elliptical tail nozzle — 2.06 in (52.3 mm) × 1.76 in (44.7 mm) — **never** an iris — plus 4
+  RCS bleed-air thrusters (~15% mass flow) for pitch/yaw. Remainder is longitudinal forward
+  thrust only, excluded from hover T/W. Details: `deferred/AGENTS.md`,
+  `deferred/aft-edf/README.md`.
 
-- **No Reference, citation, standard, or other resource will ever be fabricated.**
-- Every resource will be properly cited, whether or not it's required by copyright or license
-- All work done by AI will be distinguished from that done by a human user
-- Human contributers will be referenced by their GitHub usernames, unless otherwise specified in a the project's governing documents.
-- Each AI system and model will be cited for its own contribution (i.e. Gemini must be distinguished from Grok, from Claude, and Haiku 4.5 needs a separate citation from Opus 4.8)
-- **Every design decision, algorithm, or geometry technique that draws on an external reference must be cited in the relevant source file docstring and commit message.**
-- **Derivative files must carry the full attribution chain back to upstream sources.**
-- **Intelectual property claims must be addressed for all components** models, images, kicad symbols, scad files, stls, code snipits, or any other item before it is committed.  Only Items with a compatable property licence can be integrated.
+**Avionics architecture** (8-node, PACE failover — stable facts only; for current
+implementation/PCB status see `avionics/AGENTS.md` and each board's own `.md` under
+`avionics/kicad/<board>/`, which is updated more often than this file and is authoritative for
+as-built state):
+- 8× PocketBeagle2 Industrial SBC nodes, each carrying **Wash** (flight control/sensor cape) +
+  **Zoë** (comms/logging/payload cape), 5 kV galvanic isolation on CAN FD/RS-485/Ethernet.
+- **Emma** (49 MHz + LoRa transceiver cape) is installed only in River's Room and Simon's
+  Medbay.
+- Onboard bus: CAN FD, MIL-STD 1553, RS-485, Ethernet — all 8 nodes interconnected.
+- External C2, all 4 usable for command and control: Wi-Fi 5 GHz, Zigbee 2.4 GHz, MAVLink/SiK
+  915 MHz, AX.25 49 MHz (47 CFR Part 15 §15.235 — unlicensed, **not** Part 95 RCRS
+  [REF-FCC-003]). S-Bus is supported by the capes but unused.
+- Each nacelle has 2 EDFs in series, independently PID-controlled by two different SBCs. Any
+  of the 4 flight-control nodes can take over any EDF.
 
-## Scope-Specific Guidance
+## 2. Subsystem Files
 
-For work within a specific subsystem, also consult the **federated `CLAUDE.md` file in that folder**. These provide additional detail and workflows tailored to that subsystem:
+Read this file plus the one matching your task's scope:
 
-- **[`airframe/CLAUDE.md`](airframe/CLAUDE.md)** — Structural design, CAD/3D modeling, hull-frame coordinate system, fabrication standards, STL validation
-- **[`avionics/CLAUDE.md`](avionics/CLAUDE.md)** — KiCad PCB design, capes, avionics stacks, security, communications protocols
-- **[`docs/CLAUDE.md`](docs/CLAUDE.md)** — Documentation standards, standards vetting policy, references management
-- **[`gcs/CLAUDE.md`](gcs/CLAUDE.md)** — Ground Control Station (Malcolm), command and control, telemetry
-- **[`tools/CLAUDE.md`](tools/CLAUDE.md)** — Build automation, bake tool, Blender pipeline, SCAD generation
-- **[`current-specification/CLAUDE.md`](current-specification/CLAUDE.md)** — Active design specifications, revision numbering, traceability
-- **[`graphical-build-guide/CLAUDE.md`](graphical-build-guide/CLAUDE.md)** — Phased build instructions, fabrication checklists, troubleshooting
-- **[`deferred/CLAUDE.md`](deferred/CLAUDE.md)** — Phase 11+ work, planned upgrades, design decision history
+| File | Scope |
+|---|---|
+| `airframe/AGENTS.md` | Structural/CAD/3D design, hull-frame coordinates, fabrication, STL/SCAD, FreeCAD |
+| `avionics/AGENTS.md` | KiCad PCB design, capes, security/crypto, comms protocols |
+| `docs/AGENTS.md` | Documentation standards, standards vetting, references |
+| `gcs/AGENTS.md` | Ground Control Station (Malcolm) |
+| `tools/AGENTS.md` | Build automation, bake tool, Blender pipeline |
+| `current-specification/AGENTS.md` | Active specs, revision numbering, traceability |
+| `graphical-build-guide/AGENTS.md` | Build guide, fabrication checklists |
+| `deferred/AGENTS.md` | Phase 11+ work, planned upgrades, rejected-design history |
 
-**Subordinate files are authoritative for their scope.** If a subordinate file contradicts the root file, follow the subordinate.
+A subsystem file is authoritative within its own scope. If it contradicts this file, do not
+pick one silently — see §11.
 
-## Critical Standards You Must Follow
+## 3. Attribution and Licensing
 
-### Code and Commit Quality
+All work is published under **CC BY 4.0**. Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+(personal copyright retained; avionics boards are marked with his personally owned LLC name).
 
-- All code shall be clean and syntactically correct
-- 4-space indenting throughout
-- Verbose comments in strict conformity to each language
-- Use secure coding practices — avoid command injection, XSS, SQL injection, OWASP top 10 vulnerabilities
-- All code must pass strict linting rules
+- **Never fabricate a reference, citation, standard, or other resource.**
+- Cite every resource used, whether or not the license requires it.
+- Distinguish AI-generated work from human work; credit human contributors by GitHub username
+  unless a governing project document says otherwise.
+- Cite each AI system/model separately for its own contribution — e.g. Opus 4.8, Sonnet,
+  Haiku 4.5, Gemini, and Grok are never lumped together.
+- Every design decision, algorithm, or geometry technique drawn from an external reference
+  **must** be cited in the source file's docstring/comment block and in the commit message.
+- Derivative files carry the **full attribution chain** back to upstream sources.
+- **Before committing any model, image, KiCad symbol, SCAD file, STL, or code snippet**,
+  confirm its license is compatible with CC BY 4.0. Only license-compatible items are
+  integrated.
 
-### Documentation
+## 4. Standards Vetting
 
-- Every design specification with any effect beyond cosmetic appearance must be vetted against applicable industry standards
-- All standards citations use `[REF-ID §section.subsection.paragraph]` format from `REFERENCES.md`
-- No fabricated, unverifiable, or incorrectly attributed references are permitted
-- All measurements: **imperial-primary with metric in parentheses** (e.g., 10 in (254 mm))
-    - Use **lbm** for mass, **lbf** for force, **kt** for airspeed
+Every design decision with any effect beyond cosmetic appearance must be vetted against
+applicable standards/regulations before implementation.
 
-### Design Philosophy
+- Catalog every citation in `REFERENCES.md`: designation + full title, a validated URL,
+  the exact chapter/section/paragraph applied, and every file that cites it.
+- Cite in code and docs as `[REF-ID §section.subsection.paragraph]`.
+- **Never guess or invent a section number.** If a citation can't be verified, mark it
+  "requires verification" in `REFERENCES.md` and add a `TODO.md §0.x` item.
+- Applicable bodies: FAA, FCC, NIST, DoD/DLA, ISO, IEC, VDE, IEEE, ISA/IEC 62443,
+  AUVSI/ASTM F38, ICAO. All legal/regulatory matters are US jurisdiction.
 
-- All designs are for **actual physical builds**, not hypothetical work
-- Every component will be fabricated or procured
-- Account for real weights, balance, power, space, and component capabilities
-- Do not leave values as "TBD"
-- Failover capability is a first-class requirement
+## 5. Engineering Requirements
 
-### Fabrication Standards
+- Account for real weight, balance, power, space, and component capability on every change;
+  quote actual masses/CG shifts — never leave them "TBD."
+- **Units — imperial-primary, metric in parentheses**: `10 in (254 mm)`, `2.5 lbm (1.13 kg)`,
+  `4.8 lbf (21.4 N)`. Use **lbm** for mass, **lbf** for force — never bare "lb." Thrust/lift/
+  aerodynamic loads are forces (lbf/N); component weight and payload capacity are masses
+  (lbm/kg). Airspeed and wind speed are always **kt** (never mph/km/h).
+- Failover: every system needs a fallback or redundant path where feasible.
+- EDF housings are structural, printed as part of the build — specify wall thickness, infill,
+  and material for each.
+- PCBs are packed tight; final footprint positions are placed manually by the user after
+  script-driven population and net-building. If a DRC violation requires moving a footprint,
+  **refer it to the user**; other DRC fixes may be made directly.
 
-- **Material:** CF-PETG (0.15 mm layer height, 4 perimeters, ≥40% infill for load-bearing)
-- **Shell walls:** hollowed to 2.0 mm while maintaining a **watertight mesh** with no voids or holes
-- All load-bearing mating surfaces: minimum 2-wall contact annulus + positive-stop shoulder
-- **Mesh validation:** Run after every 3D model modification; report all findings to `TODO.md`
+### Airframe geometry
 
-### PCB Design
+Serenity's hull is complex — bounding-box/centroid math is inadequate for part placement. Use
+the validated hull-frame positions in `airframe/AGENTS.md`, or request manual FreeCAD
+placement from the user when uncertain. Keep the canonical outer mold line intact; interior
+modifications must blend into it and never alter the exterior unless structurally required.
+Four fuselage sections (head, cargo, middle-neck/horseshoe ring, rear) plus wings and tilting
+nacelles — see `airframe/AGENTS.md` for the qualitative layout, the hull-frame coordinate
+standard, and the validated extents table (do not duplicate that table here).
 
-- Every schematic and PCB must run through KiCad's DRC (Design Rules Checker)
-- Resolve all DRC violations or document them in `TODO.md` with the reason
-- Production-ready Gerber files required for fabrication
-- If a DRC violation requires repositioning a component footprint, **refer the action to the user** — other modifications are allowed
+Landing-gear and nacelle-nozzle-drive implementation details change as the design matures —
+do not restate their specifics in this file. Canonical sources: `docs/LANDING_GEAR_ANALYSIS.md`
+(landing gear, current revision) and `docs/NOZZLE_DRIVE_TRADE.md` (nozzle drive mechanism,
+current revision); see `airframe/AGENTS.md` for both. Each nacelle nozzle is variable-diameter,
+driven by nacelle tilt, sized 75% of bore at 0° (forward) to 105% of bore at ≥90° (vertical/
+backing) — that ratio is a fixed functional requirement; the drive mechanism that achieves it
+is under active trade study and must not be assumed.
 
-### STL and SCAD
+## 6. Coding Standards
 
-- All models must be clean and watertight; ready to slice for printing
-- Any regenerated primary-component STL must be re-baked before publishing
-- After SCAD changes, verify Z-range and bore-diameter in console output before committing
+- Clean, syntactically correct, secure code — avoid OWASP Top 10 classes (injection, XSS,
+  etc.). Pass all linting.
+- **4-space indent, every language, always.**
+- Verbose comments in each language's native style. If a format has no comment syntax (e.g.
+  KiCad), put comments in an accompanying Markdown file instead. **KiCad files: never use `;`
+  or `#`** — use `( comment 1 "text" )` blocks only.
+- Security engineering complies with NIST SP 800-82 Rev 3 [REF-NIST-002 §5.3, §5.4, §6.2.5],
+  SP 800-160 Vol 1 Rev 1 [REF-NIST-003 Ch.3], SP 800-207 [REF-NIST-001 §2.1].
+- **On an exploitable failure** (race condition, memory corruption, buffer overflow,
+  use-after-free, privilege escalation, etc.): stop, immediately generate a sanitized bug
+  report (generalized failure type, affected subsystem, repro steps, observed-vs-expected —
+  no filenames/paths/PII), and do not commit the failure pattern until it's been discussed.
+  See `.githooks/pre-commit` / `tools/precommit_sanitize.py`.
 
-### File Management
+## 7. Fabrication Standards
 
-- Prefer editing existing files over creating new ones
-- Do not add features, refactor, or introduce abstractions beyond what the task requires
-- Keep `PROJECT_INDEX.md` up to date when adding active files
-- Move archived files to `archives/` and update `ARCHIVE_INDEX.md`
-- When adding a standards citation, update `REFERENCES.md` with a validated URL and specific section/paragraph
+- **Material: CF-PETG** — 0.15 mm layer height, ≥4 perimeters, ≥40% infill load-bearing /
+  25% non-structural. Replace any stray "PETG" reference with CF-PETG when found; verify any
+  other material mentioned in the repo. (The DaVinci Jr prototype is exempt — not expected to
+  meet full-build spec.)
+- Exterior shell: hollow to 2.0 mm, watertight, no voids; fill with 2 lb/ft³ low-density foam;
+  inter-section mating faces stay open for build access.
+- Integrate mounting brackets/bosses/ribs into the shell print wherever feasible.
+- Load-bearing mating joints require a minimum 2-wall contact annulus **and** a positive-stop
+  shoulder — friction fit alone is never acceptable for a flight-critical joint.
+- Design every field-serviceable part for **common hand-tool disassembly**.
+- **Mesh validation is mandatory after every 3D-model edit** — watertight, no
+  self-intersection, correct normals, manifold topology. Report findings to `TODO.md`; resolve
+  before commit.
+- **Every schematic/PCB edit requires a KiCad ERC + DRC pass.** Resolve violations, or
+  document them (rule + reason) in `TODO.md`. Production requires a complete schematic + PCB +
+  copper traces + correct IC footprints + production-ready Gerbers.
 
-### Git Commits
+## 8. Revisions
 
-- **Create NEW commits** rather than amending existing ones (unless explicitly requested)
-- Never skip hooks (`--no-verify`) or bypass signing (`--no-gpg-sign`)
-- Never force-push to main/master
-- Use HEREDOC syntax for commit messages with multi-line bodies:
+- **Letter revision** (Rev R, Rev S, …): a comprehensive checkpoint. Every component is
+  current, integrated, tested, and documented as of that letter — whether or not it changed
+  since an earlier letter.
+- **Numbered modification** after a letter (R1, R2, … — resets at each new letter): an
+  incremental change. Components carried forward unchanged are part of the next letter's
+  baseline.
+- An archived item keeps the revision label it held at archival and drops out of future
+  revisions.
 
-  ```sh
-  git commit -m "$(cat <<'EOF'
-  Commit message here.
+## 9. Naming and Roles
 
-  Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>
-  EOF
-  )"
-  ```
+| Name | Role | Firefly line |
+|---|---|---|
+| Malcolm | Ground control station | "I aim to misbehave." |
+| Wash | Flight Control + Sensor cape | "I'm a leaf on the wind." |
+| Zoë | Comms/Logging/Payload cape | "Big Damn Heroes, sir." |
+| Kaylee | Power Distribution Board | "Everything is shiny." |
+| Emma | 49 MHz + LoRa transceiver cape | — |
+| Jayne | Cargo-handling + nose/cargo-bay vision/ToF/laser board | "She's a good gun." |
+| Shepherd's Room | Bay A — forward avionics | "I have heathens enough right here." |
+| Inara's Shuttle | Bay B — port avionics | "Mal, I will never understand you." |
+| River's Room | Bay C — starboard avionics | "I can kill you with my mind." |
+| Simon's Medbay | Bay D — aft avionics | "What did they do to you?" |
 
-### Coordinate System (Hull Frame)
+Kaylee's room sits in the middle-section inner neck (open ventral face of the horseshoe ring),
+minimizing power-run length to all four nacelles/stacks/battery. Jayne is a standalone board
+(not a PB2-I cape) installed at two locations — bow sensor pod and cargo nadir FPV mount —
+connected only via the shielded Ethernet ring + CAN-FD trunk. **Jayne's laser-indicator specs
+(class, spread angle, per-site optics) change as the design matures — do not restate them
+here; canonical source is `docs/JAYNE_LASER_ANALYSIS.md` (current revision) and
+`avionics/kicad/Jayne/Jayne.md`.**
 
-**All design artifacts use the single validated hull frame:**
+**PACE per stack** (Primary / Alternative / Contingency / Emergency):
 
-- **X** = positive port (left)
-- **Y** = positive aft (back)  
-- **Z** = positive dorsal (up)
-- **Origin** = the SerenityAssembly.FCStd world origin
+| Stack | Watchdog | Comms | Flight Control | Payload |
+|---|---|---|---|---|
+| Shepherd | P | A | C | E |
+| Inara | A | P | E | C |
+| River | C | E | P | A |
+| Simon | A | C | A | P |
 
-As of R1 (2026-06-11), placements are **baked into primary STL vertex data** via `tools/bake_hull_frame.py`. Primary components import with identity placement.
+Shepherd: watchdog/fault-detect/failover/auth; SiK primary, Wi-Fi secondary.
+Inara: camera/external sensors/high-bandwidth ground link; Wi-Fi primary, SiK-MAVLink
+secondary.
+River: forward EDF + nacelle tilt sync + most resilient comms; 49 MHz primary, LoRa secondary,
+both via Emma.
+Simon: aft EDF + alternate watchdog + Jayne/cargo oversight; 49 MHz primary, SiK secondary,
+both via Emma.
 
-## Before You Act
+## 10. Workflow
 
-1. **Read `CLAUDE.md`** in full before starting any task
-2. **Check for subordinate CLAUDE.md** in the target folder
-3. **Verify all standards citations** against `REFERENCES.md` before using them
-4. **Check `TODO.md`** for context on ongoing work
-5. **Review git history** for recent commits and patterns
+- Read this file and the matching subsystem `AGENTS.md` before starting a task; check
+  `TODO.md` and recent git history for context; verify any citation you use against
+  `REFERENCES.md`.
+- New standards citation: look it up by REF-ID first; if absent, add it to `REFERENCES.md`
+  with a validated URL and exact section, then cite the REF-ID. Never guess a section number.
+- New work: add a subtask to the correct `TODO.md` WBS section (root **and** the matching
+  subsystem `TODO.md`), one line, under 70 characters. Sync completion status between them
+  before committing.
+- Keep `PROJECT_INDEX.md` current for active files; when a file is archived, move its entry to
+  `ARCHIVE_INDEX.md`.
+- Prefer editing existing files. No speculative abstractions, feature flags, or unused
+  scaffolding — build only what the task needs.
+- Blender: run headless — `blender --background --python <script>.py`. FreeCAD:
+  `freecadcmd <script>.py`. STL output goes to `airframe/stls/{fuselage,nacelles,wings}/`;
+  verify Z-range/bore-diameter in console output before committing.
+- File naming: the legacy `s_` prefix is dropped (Rev R1). Fix a stale `s_`-prefixed
+  reference opportunistically when you touch that code/doc — not as a dedicated sweep.
+- Git: create new commits, don't amend (unless asked); never skip hooks or bypass signing;
+  never force-push `main`. Use a HEREDOC for multi-line commit messages, and credit the
+  authoring model, e.g. `Co-Authored-By: <Model Name> <noreply@anthropic.com>`.
+- Occasionally add a sparse, on-topic Firefly/Serenity quote to documentation (style:
+  `docs/PHASED_BUILD_GUIDE.md`, `TODO.md` footer) — never in place of required technical
+  content.
 
-## When Adding New Work
+## 11. Conflicts and Unknowns
 
-1. Add tracking items to `TODO.md` as subtasks in the appropriate section
-2. Update `PROJECT_INDEX.md` when adding new active files
-3. Update `REFERENCES.md` when adding standards citations
-4. Cite applicable standards using REF-IDs
-5. Include commit messages explaining the **why**, not just the **what**
-
-## Conflict Resolution
-
-**If you encounter conflicting guidance:**
-
-1. Root CLAUDE.md (project-wide) > Subordinate CLAUDE.md (scope-specific)
-1.1. The subordinate CLAUDE.md guidance is authoritative unless excluded by the root CLAUDE.md.
-1.2 All conflicts between Root and Subordinate CLAUDE.md **shall** be immediately be brought to the user's attention for adjudication.  No work will procede until adjudication is received.  
-2. REFERENCES.md (verified standards) > comments or assumptions
-3. Actual code/model state > documentation (if they diverge, update the docs to match reality and investigate why they diverged)
-
-## Questions?
-
-If the task is unclear or you lack required information, **ask the user explicitly** before proceeding. Do not guess or invent details.
+1. This file (project-wide) vs. a subsystem `AGENTS.md` (scope-specific): the subsystem file
+   governs within its own scope unless this file explicitly excludes that topic.
+2. Any conflict between this file and a subsystem file: **stop and get user adjudication
+   before proceeding** — do not guess, do not pick a side unilaterally.
+3. `REFERENCES.md` (verified standards) outranks comments or assumptions.
+4. Actual code/model state outranks stale documentation — if they diverge, fix the doc to
+   match reality and note why they diverged.
+5. Task unclear, or information you need is missing: **ask the user.** Never guess or invent
+   details.
 
 ---
-
-**Last updated:** 2026-06-30  
-**Authoritative file:** [`CLAUDE.md`](CLAUDE.md)
+**Authoritative file.** `CLAUDE.md` (root) points here for tooling that expects that
+filename.

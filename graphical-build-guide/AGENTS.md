@@ -1,6 +1,6 @@
-# Graphical Build Guide — Claude Code Project Instructions
+# Graphical Build Guide — Agent Instructions
 
-> *See the root `CLAUDE.md` for project-wide policies. This file provides specific guidance for the phased build process and fabrication documentation.*
+> *See the root `AGENTS.md` for project-wide policies. This file provides specific guidance for the phased build process and fabrication documentation.*
 
 ## Scope
 
@@ -67,7 +67,7 @@ For each phase, provide a comprehensive bill of materials (BOM):
 
 ### Fabrication Standards Reference
 
-Reference the fabrication standards from the root `CLAUDE.md`:
+Reference the fabrication standards from the root `AGENTS.md`:
 - **CF-PETG print parameters:** 0.15 mm layers, 4 perimeters, ≥40% infill (load-bearing)
 - **Shell wall thickness:** 2.0 mm hollow with 2 lb/ft³ foam fill
 - **Fastener standards:** Grade specifications, torque values
@@ -165,4 +165,4 @@ When creating or updating a build guide phase:
 
 ---
 
-For project-wide standards, see the root `CLAUDE.md`.
+For project-wide standards, see the root `AGENTS.md`.

@@ -749,8 +749,8 @@ candidate" note; tracked in `TODO.md`. Not yet in KiCad/CAD.
      Authoritative EDF specification: XFly Galaxy X5 50 mm
        12-blade 6S 3200 KV, 1,240 g static thrust per unit.
      AUW figures from §2 of this document (Rev Q baseline).
-     All imperial primary, metric parenthetical per CLAUDE.md.
-     Reference: CLAUDE.md §"Powerplant" and §2 Battery Selection.
+     All imperial primary, metric parenthetical per AGENTS.md.
+     Reference: AGENTS.md §"Powerplant" and §2 Battery Selection.
      ============================================================ -->
 
 ### 12.1 Nacelle-Only Vertical Lift (Nacelles at 90°)
@@ -759,7 +759,7 @@ In VTOL hover the nacelles are tilted to 90° (vertical). The rear fuselage EDF
 exhausts longitudinally and contributes **zero vertical thrust** in its fixed
 installation regardless of throttle setting.
 
-<!-- Thrust summation per CLAUDE.md: "Use 2232g per nacelle for static thrust."
+<!-- Thrust summation per AGENTS.md: "Use 2232g per nacelle for static thrust."
      Each nacelle = 2 EDFs × 1,240 g × 90 % stator efficiency = 2,232 g.
      2 nacelles × 2,232 g = 4,464 g total nacelle VTOL lift.
      Phase 5–10 AUW = ~2,768 g (minimum viable 4-node build, per TODO.md). -->
@@ -774,7 +774,7 @@ installation regardless of throttle setting.
 <!-- AUW figures from TODO.md (authoritative build guide):
        Phase 5–10 AUW = ~2,768 g (4-node minimum viable flyer; from TODO.md §Phase 5).
        Phase 11 AUW   = ~3,130 g (Phase 5–10 + ~360 g 55 mm rear-EDF + RCS system).
-     CLAUDE.md spec: "Use 2232g per nacelle for static thrust."
+     AGENTS.md spec: "Use 2232g per nacelle for static thrust."
      The rear EDF fires aft through the fixed canonical nozzle → horizontal (cruise) thrust only;
        it is NOT counted in hover T/W. Hover T/W is set by the 4 nacelle EDFs alone.
      T/W at Phase 5–10: 4,464 / 2,768 = 1.61 — VTOL hover is achievable from Phase 5.
@@ -874,7 +874,7 @@ When the 55 mm fuselage EDF is integrated (Phase 11):
    in the corresponding MIDI fuse holder on Kaylee (see §5.2).
 3. Route the ESC5 DSHOT600 signal cable to **Simon's medbay (Bay E, FC4 node),
    UART1-TX** — Simon is the primary EDF5 controller per the PACE task matrix
-   in CLAUDE.md.
+   in AGENTS.md.
 4. Connect the 4 RCS proportional-valve servos to the 6 V servo bus; map to the
    FC attitude mixer (2 pitch + 2 yaw).
 5. Re-run Kaylee DRC and verify no connector spacing violations after population.
@@ -892,7 +892,7 @@ When the 55 mm fuselage EDF is integrated (Phase 11):
        Phase 11 full build = ~3,130 g (Phase 5–10 + ~360 g 55 mm rear-EDF + RCS system).
      All stations measured from nose tip (Serenity bow) along
        the longitudinal (X) axis, positive aft.
-     Imperial primary, metric parenthetical per CLAUDE.md.
+     Imperial primary, metric parenthetical per AGENTS.md.
      ============================================================ -->
 
 ### 14.1 CG Target and Battery Adjustability

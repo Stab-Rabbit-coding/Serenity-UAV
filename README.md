@@ -35,9 +35,10 @@
 
 ## Authoritative Project Instructions
 
-The canonical workspace instructions and design policy are maintained in `CLAUDE.md`. All
-contributors and automated tools (including assistants) must follow the requirements and
+The canonical workspace instructions and design policy are maintained in `AGENTS.md`. All
+contributors and automated tools (including AI assistants) must follow the requirements and
 standards documented there (coding style, fabrication specs, licensing, and attribution).
+`CLAUDE.md` is a one-line pointer to the same file, kept for tooling that looks for that name.
 
 A functional, security-conscious Unmanned Aerial Vehicle based on the Firefly-class spacecraft
 Serenity from the 2002 show. Designed using Claude AI.
@@ -96,7 +97,7 @@ STL vertex data** by `tools/bake_hull_frame.py` (header marker
 `SerenityUAV HULL-FRAME R1`); the FreeCAD assembly imports every primary
 component at identity. Re-run the bake tool after regenerating any primary STL.
 Documented exceptions: avionics KiCad files (board coordinates), Malcolm GCS
-hardware (part-local), and G-code (printer bed). See CLAUDE.md
+hardware (part-local), and G-code (printer bed). See `airframe/AGENTS.md`
 "Hull-Frame Coordinate Standard" for the full rule set and baked extents.
 
 ### Fuselage

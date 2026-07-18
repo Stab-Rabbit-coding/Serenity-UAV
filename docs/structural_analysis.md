@@ -25,7 +25,7 @@ Serenity UAV fuselage, sizing the hull keel bar, CF ring frames, section joint b
 and CF skid rod reinforcement.  It resolves the five-step re-evaluation tasks recorded in
 `TODO.md §1.1.1.0b` for both the keel (CF-BAR-6X3) and ring plates (CF-PLATE-2MM).
 
-All measurements are imperial-primary with metric in parentheses per CLAUDE.md convention.
+All measurements are imperial-primary with metric in parentheses per AGENTS.md convention.
 
 ---
 
@@ -98,7 +98,7 @@ The middle section's outer *horseshoe ring* is open at −Z (ventral) for 73 mm 
 Y +130 → +203 mm), so there is no belly floor at the keel's low-Z level to bond to.
 **Note (2026-06-29):** the middle is NOT only the open horseshoe — it also carries the
 **closed inner-neck tube** running the full length along the centreline (X ≈ −170 mm),
-connecting the cargo-bay interior to the rear engine-room interior (see §7.3 and CLAUDE.md).
+connecting the cargo-bay interior to the rear engine-room interior (see §7.3 and AGENTS.md).
 The keel passes *through* this closed neck, so "held by foam alone" is a worst-case
 assumption: **bonding the keel to the inner-neck wall is an available hard load path**
 and should be evaluated in the keel re-evaluation and the cargo/middle + middle/rear joint
@@ -459,7 +459,7 @@ The joint ring (perimeter ≈ 350 mm, t = 2 mm) has S_x ≈ 7 000–10 000 mm³,
 9 g crash moment gives a peak fibre stress **M/S ≈ 0.7 MPa** — far below the CF-PETG and
 epoxy allowables (≈ 5 MPa for the PETG-bond-limited case).  **The joint is not
 strength-limited.**  What is actually required is peel resistance, alignment, and
-anti-ovalisation of the thin section, plus the CLAUDE.md fabrication standard's
+anti-ovalisation of the thin section, plus the AGENTS.md fabrication standard's
 "minimum 2-wall contact annulus and positive-stop shoulder."
 
 **Design — internal bonded splice collar (`PRINT-HEAD-CARGO-COLLAR`).**  A printed

@@ -6,7 +6,7 @@
 ## Purpose
 
 The variable-diameter exhaust nozzle on each tilt nacelle is driven **passively
-by nacelle tilt** (canonical requirement, root `CLAUDE.md`): as a nacelle tilts
+by nacelle tilt** (canonical requirement, `airframe/AGENTS.md` "Nacelle Nozzle Drive"): as a nacelle tilts
 0 → 90°, the nozzle exit opens from 75 % → 105 % of bore (radius 18.75 →
 26.25 mm). The Rev R1 mechanism does this with a spur-gear train, but the
 **compound idler protrudes ~10 mm past the Ø82 mm nozzle housing / nacelle OD**
@@ -64,7 +64,7 @@ ring. Spatial (RSSR-class) linkage — tilt axis (X) ⟂ ring axis (Z).
   nacelles are no longer rigidly geared to a common ratio.
 - **Sync:** depends on rod stiffness / individual linkage matching.
 - **Risk:** transmission angle over the full 90° input must be kept away from
-  dead points; departs from the canonical "**gear train**" wording in `CLAUDE.md`
+  dead points; departs from the canonical "**gear train**" wording previously in root `AGENTS.md`
   (spec text would need updating).
 - **Effort:** moderate — linkage synthesis (crank/rod/lever lengths for 90°→23.86°
   with good transmission angle), new brackets, delete 5+ gear parts.
@@ -90,7 +90,7 @@ map — at the cost of an internal ring gear (SLA) and re-ratioing the front sta
 
 **Option B** if minimum part count, FDM-friendliness, and guaranteed
 zero-protrusion with the least mechanism are paramount — accepting linkage slop,
-a nonlinear map, and a `CLAUDE.md` spec-wording update.
+a nonlinear map. (Root and airframe AGENTS.md now describe the mechanism as an open trade study rather than fixing "gear train," so this concern is resolved regardless of which option is chosen.)
 
 Kinematic prototypes and the tilt→ring map are in
 `docs/img/nozzle_drive_trade.png` (schematics + curves). Full production CAD of
@@ -104,5 +104,5 @@ the selected option is pending user decision — see TODO.md §1.1.3.3.
   derivation, 44T/15T tooth counts.
 - `airframe/openscad/nacelles/nacelle_sector_gear.scad` — sector R22, 420° Pinion A.
 - `airframe/openscad/nacelles/nacelle_bevel_pair.scad` — 1:1 90° redirect.
-- Root `CLAUDE.md` — "variable diameter exhaust nozzle, driven passively by gear
+- `airframe/AGENTS.md` "Nacelle Nozzle Drive" — variable diameter exhaust nozzle, driven passively by gear
   train, based on nacelle tilt."

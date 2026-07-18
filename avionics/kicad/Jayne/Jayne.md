@@ -229,7 +229,7 @@ Component placement is net-correct and DRC-clean (0 shorting_items, 0 net_confli
 courtyards_overlap, 0 clearance violations, 0 solder_mask_bridge, 0 invalid_outline as of
 2026-07-03, post-compaction re-verification) but **no copper traces are routed yet** — only a
 GND pour zone on In1.Cu (bounds updated to 44×46mm to match). This is intentional per this
-project's established PCB workflow (`avionics/CLAUDE.md`: "PCBs are tightly packed. All final
+project's established PCB workflow (`avionics/AGENTS.md`: "PCBs are tightly packed. All final
 component footprint positions will be done manually, after PCBs are populated and nets are
 built by script.") — the script (`gen_jayne_pcb.py`) placed footprints and built nets;
 subsequent manual compaction in the KiCad GUI is the "final positions done manually" step
@@ -326,7 +326,7 @@ from the board's own corner — and the same connector set (J_PWR, J_ETH_IN, J_E
 J_CANFD, J_CAM1/J_CAM2, J_TOF, J_LASER). Only the local sensor harness and the board's
 orientation/standoff depth differ per site.
 
-**Per this project's own stated placement policy** (`airframe/CLAUDE.md` "Assembly and
+**Per this project's own stated placement policy** (`airframe/AGENTS.md` "Assembly and
 Placement": *"Serenity's geometry is complex — bounding boxes and centroid calculations are
 inadequate... if there is uncertainty about placement, request manual placement in FreeCAD"*),
 the exact board pose below is a **proposed placement to verify in FreeCAD**, not a baked
@@ -376,7 +376,7 @@ Shepherd's Room):
 | J_LASER | Laser MOSFET drive (Q1 gate net) + laser V+ | Jayne → laser diode module, ~15-25mm | Keep short — this is a switched high-current path; twisted pair recommended |
 
 **Nose external (ring) harness:** J_PWR/J_ETH_IN/J_ETH_OUT/J_CANFD route aft through the open
-head/cargo mating face (per `airframe/CLAUDE.md`: *"mating faces are left open between the
+head/cargo mating face (per `airframe/AGENTS.md`: *"mating faces are left open between the
 four fuselage sections to allow construction access and inter-compartment cable routing"*) to
 **Shepherd's Room** (forward avionics bay, PACE-primary Watchdog stack) — the nearest bay to
 the nose. Jayne joins the Ethernet ring as a new node between Shepherd's stack and whichever
@@ -429,7 +429,7 @@ avionics bay through the cargo section's own open mating faces (to the head sect
 or the middle section's inner-neck aft) — **open item:** determine whether **River's Room**
 or **Simon's Medbay** is the shorter/more appropriate ring-insertion point for the cargo
 install (both carry Emma boards and sit along the cargo/middle boundary per the Node Variant
-Placement table in the root `CLAUDE.md`); this should be decided alongside the general
+Placement table in the root `AGENTS.md`); this should be decided alongside the general
 avionics-bay-to-bay ring cable run planning, not fabricated here.
 
 ---
@@ -483,6 +483,6 @@ should be back-ported into `gen_jayne_pcb.py` so the script and file stay in syn
 
 ---
 
-For project-wide standards see the root `CLAUDE.md`; for avionics-specific conventions see
-`avionics/CLAUDE.md` "Jayne" section; for the full task breakdown see `TODO.md` §1.2c
+For project-wide standards see the root `AGENTS.md`; for avionics-specific conventions see
+`avionics/AGENTS.md` "Jayne" section; for the full task breakdown see `TODO.md` §1.2c
 (hardware) and §4.6 (firmware).
