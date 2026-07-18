@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Compiled by:** Claude (Opus 4.8), 2026-07-05, from master `TODO.md` (md5 `829246af291844cd6b557230e8430a12`).
+**Compiled by:** Claude (Opus 4.8), 2026-07-05, from master `WBS.md` (md5 `829246af291844cd6b557230e8430a12`).
 
 > **First flight = master WBS Phase 5, "Minimum Viable Flyer."**
 > Goal: CN1+FC1 (Shepherd's room / Bay A) and CN2+FC2 (Inara's shuttle / Bay B)
@@ -21,18 +21,18 @@
 
 | Master § | Branch | Open | Owning WBS file | Notes |
 |----------|--------|-----:|-----------------|-------|
-| §1.1 | 3D Models: SCAD -> STL Exports (Rev S baseline) | 88 | [airframe](../airframe/TODO.md) + fuselage-joints/-covers/-mid, wings-nacelles, landing-gear | Only the Phase-0/5 parts gate flight; §1.1 also carries Phase 6-11 geometry. |
-| §1.2a | PCB Design: Wash, Zoe, Emma (EMI-hardened) | 37 | [avionics](../avionics/TODO.md) | Wash + Zoe EMI-hardened capes for the 4 MVP nodes (2 bays x 2). |
-| §1.2b | PCB Redesigns: Emma / Zoe / Kaylee Rev S1 | 26 | [avionics/rev-s1](../avionics/rev-s1/TODO.md) | **Kaylee PDB** completion gates flight; Emma/Zoe-Rev-S1 items do not. |
-| §0.6 | IEC 62368-1 PCB Layout Isolation Verification | 0 | [avionics/emi-hardening](../avionics/emi-hardening/TODO.md) | IEC 62368-1 isolation sign-off before any board is fabbed. |
-| §1.4 | EMI Hardening Beyond the PCBs (500 W/m^2) | 43 | [avionics/emi-hardening](../avionics/emi-hardening/TODO.md) | 500 W/m^2 hardening is a design objective; a benign-environment maiden hover can precede full §1.4 close-out (annotate risk). |
-| §4.2 | FC Node (Wash) Firmware | 38 | [avionics/firmware](../avionics/firmware/TODO.md) | FC (Wash) node firmware — PID governor, tilt, failover. |
-| §4.3 | CN Node (Zoe) Firmware | 36 | [avionics/firmware](../avionics/firmware/TODO.md) | CN (Zoe) node firmware — comms, logging. |
-| §4.4 | Both Nodes (shared firmware) | 22 | [avionics/firmware](../avionics/firmware/TODO.md) | Shared node firmware (TPM, signing, CAN/1553). |
-| §4.5 | Ground Control (Malcolm / CAPT Reynolds) | 34 | [gcs](../gcs/TODO.md) | Malcolm GCS — needed to command/monitor the maiden flight. |
-| §5.2 | FAA (airworthiness and operations) | 6 | [docs](../docs/TODO.md) | FAA registration + Part 107 remote-pilot currency — legal gate to fly. |
-| §6.1 | Branch Reconciliation / Pre-Flight Compliance | 1 | [docs](../docs/TODO.md) | Pre-flight compliance: nav lights, data plate, structural validation. |
-| §3.0 | **Physical build Phases 0-5** | **160** | [graphical-build-guide](../graphical-build-guide/TODO.md) (Phases 0-4) + [flight-phases](../graphical-build-guide/flight-phases/TODO.md) (Phase 5 = FIRST FLIGHT) | The literal build-to-flight sequence (enumerated below). |
+| §1.1 | 3D Models: SCAD -> STL Exports (Rev S baseline) | 88 | [airframe](../airframe/WBS.md) + fuselage-joints/-covers/-mid, wings-nacelles, landing-gear | Only the Phase-0/5 parts gate flight; §1.1 also carries Phase 6-11 geometry. |
+| §1.2a | PCB Design: Wash, Zoe, Emma (EMI-hardened) | 37 | [avionics](../avionics/WBS.md) | Wash + Zoe EMI-hardened capes for the 4 MVP nodes (2 bays x 2). |
+| §1.2b | PCB Redesigns: Emma / Zoe / Kaylee Rev S1 | 26 | [avionics/rev-s1](../avionics/rev-s1/WBS.md) | **Kaylee PDB** completion gates flight; Emma/Zoe-Rev-S1 items do not. |
+| §0.6 | IEC 62368-1 PCB Layout Isolation Verification | 0 | [avionics/emi-hardening](../avionics/emi-hardening/WBS.md) | IEC 62368-1 isolation sign-off before any board is fabbed. |
+| §1.4 | EMI Hardening Beyond the PCBs (500 W/m^2) | 43 | [avionics/emi-hardening](../avionics/emi-hardening/WBS.md) | 500 W/m^2 hardening is a design objective; a benign-environment maiden hover can precede full §1.4 close-out (annotate risk). |
+| §4.2 | FC Node (Wash) Firmware | 38 | [avionics/firmware](../avionics/firmware/WBS.md) | FC (Wash) node firmware — PID governor, tilt, failover. |
+| §4.3 | CN Node (Zoe) Firmware | 36 | [avionics/firmware](../avionics/firmware/WBS.md) | CN (Zoe) node firmware — comms, logging. |
+| §4.4 | Both Nodes (shared firmware) | 22 | [avionics/firmware](../avionics/firmware/WBS.md) | Shared node firmware (TPM, signing, CAN/1553). |
+| §4.5 | Ground Control (Malcolm / CAPT Reynolds) | 34 | [gcs](../gcs/WBS.md) | Malcolm GCS — needed to command/monitor the maiden flight. |
+| §5.2 | FAA (airworthiness and operations) | 6 | [docs](../docs/WBS.md) | FAA registration + Part 107 remote-pilot currency — legal gate to fly. |
+| §6.1 | Branch Reconciliation / Pre-Flight Compliance | 1 | [docs](../docs/WBS.md) | Pre-flight compliance: nav lights, data plate, structural validation. |
+| §3.0 | **Physical build Phases 0-5** | **160** | [graphical-build-guide](../graphical-build-guide/WBS.md) (Phases 0-4) + [flight-phases](../graphical-build-guide/flight-phases/WBS.md) (Phase 5 = FIRST FLIGHT) | The literal build-to-flight sequence (enumerated below). |
 
 **Prerequisite branches (design / PCB / firmware / GCS / regulatory): 331 open.**  
 **Physical build Phases 0-5: 160 open.**  
@@ -46,9 +46,9 @@ Not every prerequisite item is strictly Phase-5 scoped (e.g. §1.1 and §4.5 car
 
 ### Phase 0 — Print All Parts + CF Cuts  (30 open)
 
-- [x] **Flight Envelope Document** *(resolved 2026-07-12 — see master TODO.md §3.0 Phase 0)* — created `docs/flight_envelope.md`.
-- [x] **Failsafe Threshold Document** *(resolved 2026-07-12 — see master TODO.md §3.0 Phase 0)* — created `docs/failsafe_thresholds.md` and `avionics/firmware/common/include/failsafe_config.h`. 2 new follow-ups opened (Wi-Fi/Zigbee RTL timer gap; ESC thermal reconciliation with `governor_config.h`) — see master.
-- [x] **Electrical Fault Margin Validation** *(resolved 2026-07-12 — see master TODO.md §3.0 Phase 0)* — created `docs/electrical_fault_margins.md`; 3 of 4 checks were already done in `docs/POWER_DISTRIBUTION.md` §9/§11, only cross-referenced here.
+- [x] **Flight Envelope Document** *(resolved 2026-07-12 — see master WBS.md §3.0 Phase 0)* — created `docs/flight_envelope.md`.
+- [x] **Failsafe Threshold Document** *(resolved 2026-07-12 — see master WBS.md §3.0 Phase 0)* — created `docs/failsafe_thresholds.md` and `avionics/firmware/common/include/failsafe_config.h`. 2 new follow-ups opened (Wi-Fi/Zigbee RTL timer gap; ESC thermal reconciliation with `governor_config.h`) — see master.
+- [x] **Electrical Fault Margin Validation** *(resolved 2026-07-12 — see master WBS.md §3.0 Phase 0)* — created `docs/electrical_fault_margins.md`; 3 of 4 checks were already done in `docs/POWER_DISTRIBUTION.md` §9/§11, only cross-referenced here.
 - [ ] Install hardened-steel nozzle (CF-PETG abrades brass)
 - [ ] Calibrate E-steps and Pressure Advance for each filament
 - [ ] Dry all filament 6 h at 65°C before printing
@@ -221,7 +221,7 @@ Not every prerequisite item is strictly Phase-5 scoped (e.g. §1.1 and §4.5 car
 
 1. Clear the **prerequisite branches** (design, PCB fab, firmware, GCS, regulatory) in their owning WBS files — these unblock the build.
 2. Work the **Phase 0-5 checklist** top-to-bottom; each phase gates the next.
-3. Phase 5 completion = first flight. Re-baseline into Rev T and pick up Phase 6+ from the master `TODO.md`.
+3. Phase 5 completion = first flight. Re-baseline into Rev T and pick up Phase 6+ from the master `WBS.md`.
 
 
-*Regenerate after master edits; this is a point-in-time rollup, not a live mirror. The master `TODO.md` is always authoritative.*
+*Regenerate after master edits; this is a point-in-time rollup, not a live mirror. The master `WBS.md` is always authoritative.*

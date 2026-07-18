@@ -1,63 +1,180 @@
-# Serenity UAV — TODO (Open Work Only)
+# Serenity UAV — Work Breakdown Structure (Master Index)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-07-18
+**Last updated:** 2026-07-18  
+**Current design revision:** Rev S (2026-07-04, see `docs/WBS.md` §6.3 for changelog) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
-> **This file lists only currently-open (unchecked) tasks — one line each,
-> <=70 chars, no prose — for a fast "what's actually left" view.** Every
-> item here also appears in [`WBS.md`](WBS.md), which is the full historical
-> record (done + open, for project-progression tracking) and the index into
-> each subsystem's own `WBS.md` for full task detail. When an item is
-> completed: check it off in the subsystem `WBS.md` first, then delete the
-> line here (it stays checked, in context, over in `WBS.md`).
+> **This is the full historical record — every task ever defined, done or open,**
+> for clear project-progression tracking. It is a compact *index* (one line per
+> task, <=70 chars, headings/subheadings/checkboxes only, no prose) — full notes,
+> rationale, and code references live in the subordinate `WBS.md` referenced under
+> each heading ("→ detail: ..."). Close an item in its detail file first, then
+> check the matching one-line item here as a commit prerequisite.
+>
+> **For a short list of what's actually left to do, see [`TODO.md`](TODO.md)** —
+> it carries only the still-open items from this file, one line each, with a
+> pointer back here for full context. Every subsystem folder follows the same
+> `WBS.md` (full record) / `TODO.md` (open work only) pairing.
+>
+> **★ = critical path to first flight (Phase 5).**
 
 ---
+
+## Quick-Reference: End State vs. Current State
+
+| Domain | End State | Current Status |
+|--------|-------------------|----------------|
+| Hull   | 609.6 mm CF-PETG / PU foam / CF skeleton | SCAD sources complete; all four fuselage SCAD shells at Rev S; STLs pending regeneration where noted |
+| Nacelles | 2x 50mm tandem EDF, CG pivot Z=83mm, M=1.0 gear, iris nozzle | `nacelle_pod_50mm_tandem.scad` complete; Rev S stator shells pending render |
+| Nacelle EDFs | XFly Galaxy X5 50mm 12-blade 6S 3200KV, 1240g each; 2232g/nacelle (90% additive via stator); 4464g total | Baseline EDF selected; nacelle T/W ~1.61 at Phase 5-10 AUW — VTOL hover capable |
+| Rear propulsion | 55mm 6S EDF, reduced-area neck intake, fixed canonical elliptical tail nozzle (2.06x1.76 in / 52.3x44.7 mm) + 4 RCS bleed-air thrusters | DEFERRED — Phase 11. Adds ~1275g forward thrust; not counted in hover T/W; Phase 11 hover T/W ~1.43 |
+| Cargo bay | Clamshell doors + SG90 servos + DRV8833 + N20 winch + Dyneema + auto-latch + GPS ring + FPV bezel | All 13 cargo STLs generated; BOM updated; gondola shell open |
+| PCBs | Rev Q: all 8 nodes use EM-hardened Wash/Zoe capes. Kaylee is the PDB. Two Emma boards give 49 MHz connectivity. Rev S adds Jayne (standalone vision/ToF/laser board). | Rev S schematics complete; Kaylee PCB DRC clean, gerbers generated; manual placement/routing remain (see avionics detail files) |
+| Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 done; serenity-fc Phase 6 stub only; all Phase 7 items open |
+| Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
+| Regulatory | FAA Part 107 [REF-FAA-002], Part 48 §48.205 [REF-FAA-001], §91.209 [REF-FAA-003], FCC Part 15 [REF-FCC-001, REF-FCC-002, REF-FCC-003 §15.235] | FAA registration placeholder; XCVR-49MHZ-2 pre-compliance pending |
+
+---
+
+## 0.0 — Standards Vetting and Regulatory Compliance
 
 ### 0.1 — FCC Part 95 Section Number Verification
 → detail: `docs/WBS.md` §0.1
 
+- [x] Correct REF-FCC-003 in REFERENCES.md
+- [x] Rework malcolm_antenna_spec.md Link 4 compliance math
+- [x] Update CLAUDE.md, TODO.md status lines, and other docs
+- [x] Re-architect the 49 MHz link's power/range budget — RCRS rese…
+- [x] §15.203 antenna/connector non-compliance, confirmed violation…
+- [x] Remaining TODO.md references to "RCRS"/old Part 95 section numb…
+- [x] Remaining non-TODO.md references to "RCRS"
 - [ ] Code-identifier "RCRS" naming left unchanged — separate tracked…
+
+### 0.2 — Incorrect Reference Correction
+→ detail: `docs/WBS.md` §0.2
+
+- [x] Remove NIST SP 800-72 write-blocker citation
+
+### 0.3 — 14 CFR Part 47 vs Part 48 Clarification
+→ detail: `docs/WBS.md` §0.3
+
+- [x] Replace 14 CFR Part 47 references with Part 48 §48.205 where ap…
+
+### 0.4 — AUVSI/ASTM Standards Identification
+→ detail: `docs/WBS.md` §0.4
+
+- [x] Identify specific ASTM F38 Committee standards applicable to ai…
+
+### 0.5 — Citation Completeness Audit (All Source Files)
+→ detail: `docs/WBS.md` §0.5
+
+- [x] Audit SVG build guide files for standards citations — priority…
+- [x] Audit remaining firmware source files for standards citations —…
+- [x] Audit KiCad companion Markdown files — done 2026-06-22.
+
+### 0.6 — IEC 62368-1 PCB Layout Isolation Verification
+→ detail: `avionics/WBS.md` §0.6
+
+- [x] Verify creepage and clearance distances in Wash PCB layout
+- [x] Verify creepage and clearance distances in Zoë PCB layout
+- [x] Document verified creepage/clearance values
 
 ### 0.7 — CI Lint Scope and Repo-Wide Lint Debt
 → detail: `docs/WBS.md` §0.7
 
+- [x] Resolved (confirmed 2026-06-29). run-lint (github/super-linter@…
 - [ ] Repo-wide lint debt
+
+---
+
+## 1.0 — Design Artifacts (Pre-Fabrication)
+
+### 1.1 — 3D Models: SCAD → STL Exports (Rev S baseline)
 
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
 → detail: `airframe/WBS.md` §1.1.0
 
+- [x] tools/bake_hull_frame.py created
+- [x] 9 STLs baked to hull frame
+- [x] serenity_assembly.py Rev R1
+- [x] 48 generator/analysis scripts stamped
+- [x] Docs updated
+- [x] Resolve nacelle port/stbd label swap.
 - [ ] Re-verify head↔cargo joint bosses in hull Y.
+- [x] Regenerate cargo doors from the baked shell.
+- [x] Correct hinge location: outboard flank, not centreline.
+- [x] Consolidate duplicate cargo shell copies.
 - [ ] Hull-frame placements for VERIFY parts
+- [x] Generate battery_tray.stl and belly_panel.stl
+- [x] Archive deprecated FreeCAD prototypes
 
 #### 1.1.1 — Fuselage
 → detail: `airframe/fuselage-joints/WBS.md` §1.1.1 (1/3)
 
+- [x] Built tools/verify_bow_pod.py
+- [x] Located the canonical bow mounting flat
+- [x] Placed + skin-verified all three apertures on the flat (3/3 PAS…
+- [x] Confirmed fit:
 - [ ] User FreeCAD fine-tune (fractional mm):
+- [x] Merge bow_pod_cuts() into the canonical Blender head shell — DO…
+- [x] Re-run mesh validation after head shell regen — DONE 2026-07-03
+- [x] Designed bow_sensor_faceplate.scad
+- [x] Superseded bow_camera_bezel.scad + bow_tof_laser_bezel.scad
 - [ ] PMMA window spec finalised
 - [ ] Procure PMMA discs
+- [x] Laser down-angle review
+- [x] Superseded 2026-07-03 — see §1.2c "Jayne" below.
+- [x] Wire TFmini-S UART to bow sensor MCU.
+- [x] Wire bow camera video output to bow sensor MCU
+- [x] Wire laser GPIO enable bow sensor MCU
+- [x] Add laser enable command to MAVLink C2 interface
 - [ ] Add standards REF-IDs to bow_sensor_pod.scad firmware integrati…
+- [x] BOM updated
+- [x] head_shell24_2mm_repaired.stl — 790 036 tri; X −232.9..−103.5 /…
+- [x] cargo_sect_shell24_2mm_repaired.stl — 1 414 068 tri; X −267.0..…
+- [x] middle_shell24_2mm_repaired.stl — 855 328 tri; X −258.5..−81.6…
+- [x] rear_shell24_2mm_repaired.stl — 1 095 972 tri; X −246.1..−105.5…
+- [x] Cargo section interior boss features
 - [ ] Middle section inner neck — Phase 5-10 print guidance
 - [ ] Deprecate SCAD fuselage shell files
+- [x] Update REVN_BUILD_GUIDE_24IN.md fuselage shell source references
+- [x] Head/Cargo joint boss design (hull Y ≈ −71 mm)
+- [x] Cargo/Middle joint boss design (hull Y ≈ +131 mm)
+- [x] Middle/Rear joint boss design (hull Y ≈ +203 mm)
+- [x] JOINT-01 — cargo mating-face rims ragged + dorsal bite — RESOLV…
 
 #### 1.1.1 — Fuselage (continued)
 → detail: `airframe/fuselage-covers/WBS.md` §1.1.1 (2/3)
 
 - [ ] MESH-01 add_structural_features.py boolean cuts left non-wate…
+- [x] CF ring plate (CF-PLATE-2MM) — complete first-principles re-eva…
+- [x] Hull keel (CF-BAR-6X3) — complete first-principles re-evaluatio…
 
 #### 1.1.1 — Fuselage (continued)
 → detail: `airframe/fuselage-mid/WBS.md` §1.1.1 (3/3)
 
+- [x] Access panel frames + covers (24" Rev R)
+- [x] 49 MHz (Part 15 §15.235) wire posts
+- [x] Verify head-cargo mating boss positions in slicer — SUPERSEDED,…
 - [ ] head_shell24.stl
 - [ ] cargo_sect_shell24.stl
+- [x] Mounting hardware — 8 STLs
 - [ ] Cargo gondola shell
 - [ ] Clamshell door halves
+- [x] cargo_sect_shell24.scad Rev S
+- [x] cargo_sect_shell24.scad Rev S1
+- [x] cargo_sect_shell24.scad Rev S2
+- [x] cargo_sect_shell24.scad Rev S3
+- [x] nacelle_servo_bracket.scad
+- [x] REVN_BUILD_GUIDE_24IN.md Phase 3 anti-rework
 - [ ] cargo_sect_shell24.scad — shuttle exterior fairing profiles on…
 - [ ] Avionics dorsal access covers / Faraday tray lids for Inara and…
 - [ ] Update REVN_BUILD_GUIDE_24IN.md bay layout table
 - [ ] Regenerate cargo_sect_shell24.stl
 - [ ] Add motor-mount and DRV8833-tray boss locations to cargo_sect_s…
 - [ ] Add SG90 bell-crank boss to inner face of each door panel for p…
+- [x] Blender canonical source baked
 - [ ] Slicer verification
 - [ ] Kaylee's room — PDB mounting in inner neck
 - [ ] CF skid rod channels
@@ -67,6 +184,7 @@
 - [ ] Phase 11 — aft EDF intake scoop cuts
 - [ ] neck_intake_frame.stl (Phase 11)
 - [ ] aft_edf_plenum.stl
+- [x] middle_canonical_shell24.stl
 - [ ] Mount ant-collision strobe on belly of middle section in accord…
 - [ ] Mount ant-collision steady white tail light on upper pod of rea…
 
@@ -75,16 +193,43 @@
 
 - [ ] wing_nacelle_pylon_revo.stl
 - [ ] wings_s1223_revo.stl
+- [x] Spar bore de-skewed
+- [x] Tip thickened for spar fit
+- [x] EDF cableway added
 - [ ] [OPEN — BLOCKER] Fuselage spar-interface now mismatched.
 
 #### 1.1.3 — Nacelles
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.3
 
+- [x] Rev R1 nacelle stator shells
+- [x] nacelle_nozzle_iris.stl
+- [x] nacelle_nozzle_idler.stl
+- [x] Rebuild petals using the BamJr variable nozzle [REF-CAD-001]…
+- [x] nacelle_sector_gear.stl
+- [x] nacelle_pinion.stl
+- [x] nacelle_bevel_pair.stl
+- [x] nacelle_bevel_housing.stl
+- [x] Map all nacelle-internal mechanism components to hull frame f…
+- [x] Fix crown_pinion_boss() in nacelle_pod_50mm_tandem.scad
+- [x] Resolve the unresolved Crown-Pinion-to-rack mesh radius in
+- [x] Render updated/new gear-train STLs
+- [x] Mesh-verify the regenerated nacelle gear-train STLs
+- [x] Idler angular position about the nozzle axis
+- [x] idler axial mesh-band mismatch — RESOLVED 2026-07-04
+- [x] Confirm Sector Gear standoff distance from the nacelle face
+- [x] nacelle_tip_cap_port/stbd.stl — ARCHIVED 2026-06-22
+- [x] cargo_sect_shell24.scad's port/stbd mirroring used the wrong…
 - [ ] [OPEN — DESIGN] Nozzle drive protrudes ~10 mm past the nacelle…
+- [x] Trim the intake bell to the canonical leading nacelle dome
+- [x] Move the port (red) / stbd (green) nav lights INWARD→OUTWARD fa…
+- [x] Route nav-light wires through an internal cableway (not protrud…
+- [x] Remove the exhaust WS2812B LED rings + harnesses from the desig…
 
 #### 1.1.4 — Landing Gear
 → detail: `airframe/landing-gear/WBS.md` §1.1.4
 
+- [x] Build and render the Rev R5 post + wire SCAD/STL *(done —
+- [x] Build assembled / exploded / deformed demonstration compound ST…
 - [ ] LG-12 Model the post per the §4.6 dimensions
 - [ ] LG-10 Finalize the 4 corner post placements
 - [ ] Ground clearance check carried forward from Rev R1
@@ -92,9 +237,13 @@
 - [ ] LG-16 Confirm the ductile wire temper survives forming
 - [ ] LG-13 Define the wire-to-socket retention detail
 - [ ] LG-02 Design and integrate 16 hull boss sockets
+- [x] Feet separated into individual STLs (foot_1 through foot_4 in l…
 - [ ] Add top-face socket to canonical foot
 - [ ] Assess foot grip on concrete/asphalt
+- [x] Rev R1.4 corner V-brace (landing_leg_assy.scad) is retired
+- [x] Rev R4 closed-ring wire fuse (wire_loop_fuse.scad) is retired
 - [ ] LG-03 CF rod channel in middle_canonical_shell24.scad rear skid…
+- [x] landing_legs_hull_r1.stl is orphaned
 - [ ] LG-06 Drop test prototype leg assembly
 - [ ] LG-07 Confirm avionics enclosure shock rating
 - [ ] LG-11 Coupon-test CF-PETG
@@ -107,13 +256,25 @@
 #### 1.1.5 — Non-Printable Component Placeholders
 → detail: `airframe/WBS.md` §1.1.5
 
+- [x] Generate all 65 component placeholder STLs
+- [x] FreeCAD catalog assembly script
+- [x] Faraday shielding hardware
+- [x] Faraday cage foam voids
+- [x] Foam-fill and void visualization STLs
 - [ ] Rear skid reinforcement — SCAD update (TWO files)
 - [ ] Run FreeCAD catalog
 - [ ] Hull-frame placement pass
 - [ ] Add Phase-11 (deferred) items to catalog
 - [ ] Mesh watertightness audit
 - [ ] FAR-FT-PANEL PCB design
+- [x] Faraday mass budget review
 - [ ] Link placeholders to BOM entries
+
+### 1.2 — PCB Design: Cape-A-1 and Cape-B-1 (archived)
+→ detail: `avionics/WBS.md` §1.2
+
+- [x] Regenerate Cape-A-1 gerbers
+- [x] Regenerate Cape-B-1 gerbers
 
 ### 1.2b — PCB Redesigns: Emma Rev S1 / Zoe Rev S1 / Kaylee Rev S1
 → detail: `avionics/rev-s1/WBS.md` §1.2b
@@ -125,10 +286,27 @@
 ### 1.2c — PCB Design: Jayne (Nose/Cargo-Bay Vision, ToF & Laser)
 → detail: `avionics/jayne/WBS.md` §1.2c
 
+- [x] Create avionics/kicad/Jayne/kicads/Jayne.kicad_sch
+- [x] SoM re-scope — Jayne = PHYTEC phyCORE PCM-071 SoM on a trapez…
 - [ ] FLEET-WIDE ISOW1044BDFMR footprint audit (flight-hardware error…
+- [x] Confirm PCB fab/assembly house can handle the AM62Ax 484-ball F…
+- [x] Source and cite a real Class 3B nose crosshair laser module
+- [x] Design Class 3B interlock circuit for the nose laser
+- [x] Reuse the existing 5 mW 650 nm Class 3R crosshair module and dr…
+- [x] Shielded JST-GH connector selection
+- [x] PGND/GND isolation barrier
+- [x] EMI hardening gap — RESOLVED 2026-07-03.
+- [x] Create avionics/kicad/Jayne/kicads/Jayne.kicad_pcb
+- [x] Run ERC on the schematic — DONE, 0 shorts/net-conflicts, 116 ac…
+- [x] Run DRC on the PCB layout (kicad-cli pcb drc --schematic-parity…
+- [x] SoM-end-state rebuild re-verification — DONE 2026-07-13.
 - [ ] Final component placement (user-reserved) + impedance-controlle…
 - [ ] Generate production-ready Gerber files to avionics/kicad/Jayne/…
+- [x] Update PROJECT_INDEX.md — done in the same session (see PROJECT…
+- [x] Jayne mounting bosses added to head_shell24.scad
+- [x] Flag: same legacy Y-as-dorsal axis bug found in head_shell24.sc…
 - [ ] Flag stale laser bore dimensions:
+- [x] Jayne mounting bosses added to cargo_sect_shell24.scad
 - [ ] Add cargo_tof_cut() and cargo_laser_cut() cutter modules
 - [ ] Local sensor harness (both sites):
 - [ ] External ring harness — nose:
@@ -138,11 +316,18 @@
 - [ ] Laser — unify to a single 520 nm green source, Class 2 both sit…
 - [ ] Both Class 2 caps must be hardware-enforced
 - [ ] Nose camera strobe + frame-difference detection
+- [x] *(No longer required — the Rev-A "nose Class 3B mechanical beam…
 - [ ] Do not source
 
 ### 1.2a — PCB Design: Wash, Zoe, and Emma (EMI-Hardened Variants)
 → detail: `avionics/WBS.md` §1.2a
 
+- [x] USB-to-Ethernet bridge (LAN9500A class) evaluated as an alter…
+- [x] Wire second Ethernet (ETH2) on Wash.
+- [x] Separate the two Wash PHYs onto independent MDIO buses
+- [x] Wire the field-connector pins to their signals on Wash
+- [x] Source the 6 GPIO_EXP_A…F signals via an I2C GPIO expander.
+- [x] Add an ESC-PWM output connector for DSHOT0–3.
 - [ ] Reconcile Wash.md §14 field-connector table with the actual P…
 - [ ] Wire the MIL-1553 connector + transformer.
 - [ ] Redesign the tamper mesh as a per-domain anti-tamper mesh (all…
@@ -153,6 +338,8 @@
 - [ ] Add SBUS/UART DIP switch to Wash
 - [ ] Generate Wash gerbers
 - [ ] Generate Zoë gerbers
+- [x] remove Wi-Fi, sik, and loRa antennas from Zoë. Use filtered cho…
+- [x] Re-evaluate space / restore Ethernet to Zoë
 - [ ] Zigbee RF chain was never actually added to Zoë — PCB scope g…
 - [ ] Generate Emma gerbers
 - [ ] FCC Part 15 §15.235 pre-compliance checklist for Emma
@@ -161,11 +348,26 @@
 - [ ] Design Faraday cages / boxes to protect all PCBs
 - [ ] Specify / implement tightly twisted pair bonded shielded wiring…
 
+### 1.3 — PCB Design: XCVR-49MHZ-1 (SUPERSEDED)
+→ detail: `avionics/rev-s1/WBS.md` §1.3
+
+- [x] Resolve DDS choice
+- [x] Evaluate PA options
+- [x] Confirm TCM3105 availability
+- [x] 50 Ω trace impedance check
+- [x] Update PROJECT_INDEX.md
+
 ### 1.4 — EMI Hardening Beyond the PCBs (500 W/m^2 environment)
 → detail: `avionics/emi-hardening/WBS.md` §1.4
 
 - [ ] PB2-I + Wash Enclosure
 - [ ] PB2-I + Zoë Enclosure
+- [x] Resolve total antenna count per stack against the PACE radio ta…
+- [x] Antenna mounts
+- [x] Feedlines
+- [x] Chokes
+- [x] Second 49 MHz antenna for Simon's Medbay
+- [x] Ensure all transceivers have antenna placement and wiring fro…
 - [ ] CAN FD
 - [ ] RS-485
 - [ ] MIL-STD-1553B
@@ -178,18 +380,73 @@
 - [ ] Add ventral battery-swap hatch cut to middle_canonical_shell24.…
 - [ ] Create kaylee_battery_tray.scad.
 - [ ] Create kaylee_pdb_tray.scad.
+- [x] Kaylee PCB KiCad files generated (Rev A, 2026-06-10):
+- [x] Kaylee PCB — DRC run and gerbers generated (Rev A, 2026-06-10):
 - [ ] Update REVN_BUILD_GUIDE_24IN.md Phase 1
 
 ### 1.5 — Documentation
 → detail: `docs/WBS.md` §1.5
 
+- [x] 1.5.1 serenity-rev-p.jsx
+- [x] 1.5.2 Wash: rename + dual Ethernet PHY
+- [x] 1.5.3 Zoë: rename + Ethernet PHY
+- [x] 1.5.4 Wash: add missing field connectors
+- [x] 1.5.5 Zoë: add missing field connectors
 - [ ] Update PHASED_BUILD_GUIDE.md
 - [ ] 1.5.6 Rebuild Graphical Buiild Guide
 - [ ] Sync bom_revO.json ↔ bom_revO.csv
+- [x] Create bom_revQ.json + bom_revQ.csv
+
+### 1.6 — Rev Q: Repo-Wide Architecture Propagation
+→ detail: `docs/WBS.md` §1.6
+
+- [x] 1.6.1 Rev Q documentation propagation
+
+### 1.7 — Rev R: Component Revision Synchronisation + s_ Prefix Removal
+→ detail: `docs/WBS.md` §1.7
+
+- [x] 1.7.1 Rev R propagation to all active files
+- [x] 1.7.2 Component revision synchronisation
+- [x] 1.7.3 Remove s_ prefix from all SCAD and STL filenames
+
+### 1.8 — Names
+→ detail: `avionics/WBS.md` §1.8
+
+- [x] The ground control station is named "Malcolm" aka "CAPT Reynold…
+- [x] The Flight Control Avionics Cape is named "Wash" - "I'm a leaf…
+- [x] The Comms/Logging/Payload Cape is named "Zoë" - "Big Damn Heros…
+- [x] The Power Distribution Board is named "Kaylee" - "Everything is…
+- [x] The Cargo handling system is named "Jayne" - "I was aiming for…
+- [x] The forward avionics bay is named "Shepherd's room" (Bay A) - "…
+- [x] The second avionics bay is named "Inara's shuttle" (Bay B) - "M…
+- [x] The third avionics bay is named "River's room" (Bay D) - "Also,…
+- [x] The aft avionics bay is named "Simon's medbay" (Bay E) - "What…
+
+### 1.9 — Avionics Workload Balancing
+→ detail: `avionics/WBS.md` §1.9
+
+---
+
+## 2.0 — Procurement (Before Physical Build)
+
+BOM tables (not checkbox tasks) — referenced, not duplicated here:
+- §2.1 Filament and CF Stock → `airframe/TODO.md`
+- §2.2 Structural Hardware → `airframe/TODO.md`
+- §2.3 Propulsion System → `airframe/TODO.md`
+- §2.4 Avionics (Phase 6, 4-node minimum viable) → `avionics/TODO.md`
+- §2.5 Avionics (Phase 7, remaining 4 nodes + ToF arrays) → `avionics/TODO.md`
+- §2.6 Cargo System → `airframe/TODO.md`
+
+---
+
+## 3.0 — Physical Build
 
 ### Phase0 — Print All Parts + CF Cuts
 → detail: `graphical-build-guide/WBS.md` §Phase0
 
+- [x] Flight Envelope Document
+- [x] Failsafe Threshold Document
+- [x] Electrical Fault Margin Validation
 - [ ] Install hardened-steel nozzle (CF-PETG abrades brass)
 - [ ] Calibrate E-steps and Pressure Advance for each filament
 - [ ] Dry all filament 6 h at 65°C before printing
@@ -507,6 +764,20 @@
 - [ ] W&B:
 - [ ] CAD:
 
+---
+
+## 4.0 — Firmware and Software
+
+### 4.1 — Completed
+→ detail: `avionics/firmware/WBS.md` §4.1
+
+- [x] Firmware directory structure (serenity/firmware/) *(done 2026-0…
+- [x] KISS/AX.25 UART driver for XCVR-49MHZ-1 — serenity/firmware/cn/…
+- [x] Si5351A I²C driver — serenity/firmware/cn/src/si5351.c/.h *(don…
+- [x] AM6254 device tree overlays — Cape-A and Cape-B DTSs *(done 202…
+- [x] serenity-cn Phase 6 daemon (XCVR KISS driver + argparse + SIGTE…
+- [x] serenity-fc Phase 6 stub (signal handling, idle loop placeholde…
+
 ### 4.2 — FC Node (Wash) - Phase 7 Firmware
 → detail: `avionics/firmware/WBS.md` §4.2
 
@@ -517,6 +788,8 @@
 - [ ] u-blox M10Q GNSS integration
 - [ ] MIL-STD-1553B RT implementation
 - [ ] TPM-bound attestation
+- [x] governor_cal.py
+- [x] governor_config.h
 
 ### 4.3 — CN Node (Zoe) - Phase 7 Firmware
 → detail: `avionics/firmware/WBS.md` §4.3
@@ -538,6 +811,8 @@
 - [ ] OA integration
 - [ ] GPS cross-check
 - [ ] Security message signing
+
+### 4.5 — Ground Control (Malcolm / "CAPT Reynolds")
 
 #### 4.5.1 — Malcolm Hardware Design
 → detail: `gcs/WBS.md` §4.5.1
@@ -593,6 +868,8 @@
 - [ ] MAVLink authentication test:
 - [ ] Node loss with Malcolm active:
 
+### 4.6 — Jayne Node (Nose/Cargo Vision, ToF & Laser) — Firmware
+
 #### 4.6.1 — TI AM62Ax Vision Pipeline Bring-Up
 → detail: `avionics/jayne/WBS.md` §4.6.1
 
@@ -620,10 +897,18 @@
 - [ ] Ring failure test:
 - [ ] Laser safety interlock test (nose only):
 
+---
+
+## 5.0 — Regulatory Compliance
+
 ### 5.1 — FCC (external radio systems)
 → detail: `docs/WBS.md` §5.1
 
 - [ ] XCVR-49MHZ-1/2 FCC Part 15 §15.235 compliance
+- [x] SiK 915MHz
+- [x] LoRa RFM95W 915MHz
+- [x] Wi-Fi (WL1837MOD)
+- [x] ZigBee 2.4GHz (if used)
 
 ### 5.2 — FAA (airworthiness and operations)
 → detail: `docs/WBS.md` §5.2
@@ -642,11 +927,51 @@
 - [ ] IEEE/ISA/AUVSI best practices
 - [ ] Tamper-evident logging
 
+---
+
+## 6.0 — Version Control and Repository Maintenance
+
 ### 6.1 — Branch Reconciliation (2026-06-09)
 → detail: `docs/WBS.md` §6.1
 
+- [x] claude/aft-edf-phase-11-CMM8b
+- [x] claude/cape-em-harsh-variants-9Yfr1
+- [x] claude/cargo-equipment-mounts-70I3i
+- [x] claude/docs-scrub-revision-p-Y7pja
+- [x] claude/kicad-silk-labels-HnUIe
+- [x] claude/revision-q-avionics-archive-BXwZI
+- [x] claude/revt-nacelle-simplified-3Ri7A
+- [x] claude/todo-implementation-2LV2X
+- [x] claude/todo-implementation-8bRee
+- [x] claude/todo-implementation-AY2pY
+- [x] claude/todo-implementation-by1W7
+- [x] claude/wing-root-nacelle-mounts-5bSEA
 - [ ] Delete stale feature branches
+
+### 6.2 — STL Mesh Repair (2026-06-09)
+→ detail: `docs/WBS.md` §6.2
+
+- [x] Removed duplicate SEARCH_PATHS (airframe/stls/fuselage, nacelle…
+- [x] Added per-body watertightness check: a mesh passes CI if mesh.i…
+- [x] nacelle_nozzle_closed_asm.stl — repaired: 1704 → 1648 faces, wt…
+- [x] nacelle_nozzle_petal.stl — repaired: 213 → 206 faces, wt=True
+- [x] head_shell24_2mm_repaired.stl — repaired: 227428 → 226812 faces…
+- [x] cargo_sect_shell24_2mm_repaired.stl — repaired: 368352 → 367506…
+- [x] cargo_sect_shell24_2mm_repaired_largest.stl — repaired: 367514…
+- [x] regenerated
+- [x] feet_x_4_scaled24.stl — 4 feet (4 bodies, each wt=True)
+- [x] rear_shell24_2mm_repaired.stl — 15 bodies, all wt=True
+- [x] middle_shell24_2mm_repaired.stl — 10 bodies, all wt=True
+- [x] dorsal_antenna_fin.stl — 3 bodies, all wt=True
+- [x] cargo_sect_shell24.stl — 190 bodies, all wt=True
+
+### 6.3 — Rev S Checkpoint (2026-07-04)
+→ detail: `docs/WBS.md` §6.3
 
 ---
 
-*"Get on with it, Wash." — Capt. Malcolm Reynolds*
+*"Love. You can learn all the math in the 
+'verse, but you take a boat in the air that you don't love, she'll shake you
+off just as sure as the turning of the worlds. Love keeps her in the air when
+she oughta fall down, tells you she's hurtin' 'fore she keels. Makes her
+a home." — Capt. Malcolm Reynolds*
