@@ -24,31 +24,34 @@ Build-automation conventions (hull-frame bake, Blender hollowing pipeline, mesh 
 
 ## Automation tasks embedded in other branches (20 open, tracked there)
 
-These are **owned** as checkboxes under airframe §1.1 (geometry) and the physical-build Phase 0 (master §3.0). Close them there; this list is a read-only convenience view for the toolsmith.
+These are **owned** as checkboxes under airframe §1.1 (geometry, now split across several
+detail files — see below) and the physical-build Phase 0 (`graphical-build-guide/TODO.md`).
+Close them there; this list is a read-only convenience view for the toolsmith.
 
-- (airframe/TODO.md §1.1) **Verify cargo door fit in slicer** — open `cargo_door_port.stl` and
-- (airframe/TODO.md §1.1) **Middle section inner neck — Phase 5-10 print guidance** — the Blender middle mesh includes
-- (airframe/TODO.md §1.1) **MESH-01 `add_structural_features.py` boolean cuts left non-watertight / fragmented
-- (airframe/TODO.md §1.1) Export individual STLs (set RENDER variable in SCAD): shepherd, inara, river, simon,
-- (airframe/TODO.md §1.1) Verify cover shoulder fit in slicer cross-section (confirm 1.5 mm step seats on hull
-- (airframe/TODO.md §1.1) **head_shell24.stl** — regenerate from `airframe/openscad/fuselage/head_shell24.scad` Rev S2.
-- (airframe/TODO.md §1.1) **Verify S1A, S1B, FPV positions at nose surface in slicer** — load generated STL
-- (airframe/TODO.md §1.1) **cargo_sect_shell24.stl** — regenerate from `serenity/stl/cargo_sect_shell24.scad` (cargo nadir FPV mount added)
-- (airframe/TODO.md §1.1) **Regenerate `cargo_sect_shell24.stl`** from the current Rev S SCAD source (includes the
-- (airframe/TODO.md §1.1) **Slicer verification** — open baked `middle_shell24_2mm_repaired.stl` in slicer and confirm:
-- (airframe/TODO.md §1.1) **neck_intake_frame.stl (Phase 11)** — `openscad -o neck_intake_frame.stl deferred/aft-edf/openscad/neck_intake_frame.scad`
-- (airframe/TODO.md §1.1) **aft_edf_plenum.stl** — `openscad -o aft_edf_plenum.stl deferred/aft-edf/openscad/aft_edf_plenum.scad`
-- (airframe/TODO.md §1.1) **wing_nacelle_pylon_revo.stl** — `openscad -o ... serenity/stl/wing_nacelle_pylon_revo.scad`
-- (airframe/TODO.md §1.1) **wings_s1223_revo.stl** — Rev R1 planform (2026-06-14): root 129 mm, tip 93 mm, zero LE sweep; STLs regenerated and baked ✓
-- (airframe/TODO.md §1.1) **LG-10 Finalize the 4 corner post placements** in `SerenityAssembly.FCStd`; bake
-- (airframe/TODO.md §1.1) **`landing_legs_hull_r1.stl` is orphaned** *(resolved 2026-07-12)* — was rendered from an even earlier
-- (airframe/TODO.md §1.1) **Render overview SVGs using FreeCAD TechDraw** — 6 cardinal directions (top, bottom, front, rear, port, stbd) and all 8 isometric views (8 corners). Headless script creates a TechDraw page per view and exports SVG via `TechDraw.writeSVGPage()`. Save to `airframe/diagrams/overview/`.
-- (airframe/TODO.md §1.1) **Run FreeCAD catalog** — execute `serenity_placeholders_assembly.py` once
-- (airframe/TODO.md §1.1) **Add Phase-11 (deferred) items to catalog** — regenerate placeholders for the
-- (airframe/TODO.md §1.1) **Mesh watertightness audit** — run `python tools/validate_stls.py` across
+- (`airframe/TODO.md` §1.1.0) **Verify cargo door fit in slicer** — open `cargo_door_port.stl` and
+- (`airframe/fuselage-joints/TODO.md` §1.1.1) **Middle section inner neck — Phase 5-10 print guidance**
+- (`airframe/fuselage-covers/TODO.md` §1.1.1) **MESH-01 `add_structural_features.py` boolean cuts**
+- (`airframe/fuselage-mid/TODO.md` §1.1.1) Export individual STLs (set RENDER variable in SCAD): shepherd, inara, river, simon,
+- (`airframe/fuselage-mid/TODO.md` §1.1.1) Verify cover shoulder fit in slicer cross-section
+- (`airframe/fuselage-mid/TODO.md` §1.1.1) **head_shell24.stl** — regenerate from `airframe/openscad/fuselage/head_shell24.scad` Rev S2.
+- (`airframe/fuselage-mid/TODO.md` §1.1.1) **Verify S1A, S1B, FPV positions at nose surface in slicer**
+- (`airframe/fuselage-mid/TODO.md` §1.1.1) **cargo_sect_shell24.stl** — regenerate from `serenity/stl/cargo_sect_shell24.scad`
+- (`airframe/fuselage-mid/TODO.md` §1.1.1) **Regenerate `cargo_sect_shell24.stl`** from the current Rev S SCAD source
+- (`airframe/fuselage-mid/TODO.md` §1.1.1) **Slicer verification** — open baked `middle_shell24_2mm_repaired.stl`
+- (`airframe/fuselage-mid/TODO.md` §1.1.1) **neck_intake_frame.stl (Phase 11)**
+- (`airframe/fuselage-mid/TODO.md` §1.1.1) **aft_edf_plenum.stl**
+- (`airframe/wings-nacelles/TODO.md` §1.1.3) **wing_nacelle_pylon_revo.stl**
+- (`airframe/fuselage-joints/TODO.md` §1.1.1) **wings_s1223_revo.stl** — Rev R1 planform
+- (`airframe/landing-gear/TODO.md` §1.1.4) **LG-10 Finalize the 4 corner post placements**
+- (`airframe/landing-gear/TODO.md` §1.1.4) **`landing_legs_hull_r1.stl` is orphaned** *(resolved 2026-07-12)*
+- (`airframe/landing-gear/TODO.md` §1.1.4) **Render overview SVGs using FreeCAD TechDraw**
+- (`airframe/TODO.md` §1.1.5) **Run FreeCAD catalog** — execute `serenity_placeholders_assembly.py`
+- (`airframe/TODO.md` §1.1.5) **Add Phase-11 (deferred) items to catalog**
+- (`airframe/TODO.md` §1.1.5) **Mesh watertightness audit** — run `python tools/validate_stls.py`
 
 ## Key tools
 
 - `tools/bake_hull_frame.py` — hull-frame bake (idempotent; `--check`, `--report`)
 - `airframe/blender-scripts/` — canonical fuselage hollowing pipeline
-- `airframe/kicad/*.py` (e.g. `gen_emma_sch.py`, `mod_emma_pcb.py`) — avionics schematic/PCB generators (see [`avionics/TODO.md`](../avionics/TODO.md))
+- `airframe/kicad/*.py` (e.g. `gen_emma_sch.py`, `mod_emma_pcb.py`) — avionics schematic/PCB
+  generators (see [`avionics/TODO.md`](../avionics/TODO.md), [`avionics/rev-s1/TODO.md`](../avionics/rev-s1/TODO.md))

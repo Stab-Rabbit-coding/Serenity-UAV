@@ -21,18 +21,18 @@
 
 | Master § | Branch | Open | Owning WBS file | Notes |
 |----------|--------|-----:|-----------------|-------|
-| §1.1 | 3D Models: SCAD -> STL Exports (Rev S baseline) | 88 | [airframe](../airframe/TODO.md) | Only the Phase-0/5 parts gate flight; §1.1 also carries Phase 6-11 geometry. |
+| §1.1 | 3D Models: SCAD -> STL Exports (Rev S baseline) | 88 | [airframe](../airframe/TODO.md) + fuselage-joints/-covers/-mid, wings-nacelles, landing-gear | Only the Phase-0/5 parts gate flight; §1.1 also carries Phase 6-11 geometry. |
 | §1.2a | PCB Design: Wash, Zoe, Emma (EMI-hardened) | 37 | [avionics](../avionics/TODO.md) | Wash + Zoe EMI-hardened capes for the 4 MVP nodes (2 bays x 2). |
-| §1.2b | PCB Redesigns: Emma / Zoe / Kaylee Rev S1 | 26 | [avionics](../avionics/TODO.md) | **Kaylee PDB** completion gates flight; Emma/Zoe-Rev-S1 items do not. |
-| §0.6 | IEC 62368-1 PCB Layout Isolation Verification | 0 | [avionics](../avionics/TODO.md) | IEC 62368-1 isolation sign-off before any board is fabbed. |
-| §1.4 | EMI Hardening Beyond the PCBs (500 W/m^2) | 43 | [avionics](../avionics/TODO.md) | 500 W/m^2 hardening is a design objective; a benign-environment maiden hover can precede full §1.4 close-out (annotate risk). |
-| §4.2 | FC Node (Wash) Firmware | 38 | [avionics](../avionics/TODO.md) | FC (Wash) node firmware — PID governor, tilt, failover. |
-| §4.3 | CN Node (Zoe) Firmware | 36 | [avionics](../avionics/TODO.md) | CN (Zoe) node firmware — comms, logging. |
-| §4.4 | Both Nodes (shared firmware) | 22 | [avionics](../avionics/TODO.md) | Shared node firmware (TPM, signing, CAN/1553). |
+| §1.2b | PCB Redesigns: Emma / Zoe / Kaylee Rev S1 | 26 | [avionics/rev-s1](../avionics/rev-s1/TODO.md) | **Kaylee PDB** completion gates flight; Emma/Zoe-Rev-S1 items do not. |
+| §0.6 | IEC 62368-1 PCB Layout Isolation Verification | 0 | [avionics/emi-hardening](../avionics/emi-hardening/TODO.md) | IEC 62368-1 isolation sign-off before any board is fabbed. |
+| §1.4 | EMI Hardening Beyond the PCBs (500 W/m^2) | 43 | [avionics/emi-hardening](../avionics/emi-hardening/TODO.md) | 500 W/m^2 hardening is a design objective; a benign-environment maiden hover can precede full §1.4 close-out (annotate risk). |
+| §4.2 | FC Node (Wash) Firmware | 38 | [avionics/firmware](../avionics/firmware/TODO.md) | FC (Wash) node firmware — PID governor, tilt, failover. |
+| §4.3 | CN Node (Zoe) Firmware | 36 | [avionics/firmware](../avionics/firmware/TODO.md) | CN (Zoe) node firmware — comms, logging. |
+| §4.4 | Both Nodes (shared firmware) | 22 | [avionics/firmware](../avionics/firmware/TODO.md) | Shared node firmware (TPM, signing, CAN/1553). |
 | §4.5 | Ground Control (Malcolm / CAPT Reynolds) | 34 | [gcs](../gcs/TODO.md) | Malcolm GCS — needed to command/monitor the maiden flight. |
 | §5.2 | FAA (airworthiness and operations) | 6 | [docs](../docs/TODO.md) | FAA registration + Part 107 remote-pilot currency — legal gate to fly. |
 | §6.1 | Branch Reconciliation / Pre-Flight Compliance | 1 | [docs](../docs/TODO.md) | Pre-flight compliance: nav lights, data plate, structural validation. |
-| §3.0 | **Physical build Phases 0-5** | **160** | [graphical-build-guide](../graphical-build-guide/TODO.md) | The literal build-to-flight sequence (enumerated below). |
+| §3.0 | **Physical build Phases 0-5** | **160** | [graphical-build-guide](../graphical-build-guide/TODO.md) (Phases 0-4) + [flight-phases](../graphical-build-guide/flight-phases/TODO.md) (Phase 5 = FIRST FLIGHT) | The literal build-to-flight sequence (enumerated below). |
 
 **Prerequisite branches (design / PCB / firmware / GCS / regulatory): 331 open.**  
 **Physical build Phases 0-5: 160 open.**  

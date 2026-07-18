@@ -32,7 +32,9 @@ REFERENCES.md                     — Standards and regulatory reference catalog
                                     chapter/section/paragraph per citation, repo usage index)
 REPO_ENFORCEMENT.md               — Repository rules
 SECURITY.md                       — Security policy and vulnerability reporting
-TODO.md                           — Work-breakdown structure and open items
+TODO.md                           — Master WBS index (compact: headings/short checkbox
+                                    items only, ≤70 chars each); full detail lives in
+                                    the subordinate TODO.md files listed per-folder below
 freecad-stl2part.py                — Standalone FreeCAD STL→Part conversion utility
 package.json                       — Node.js dependency manifest (tooling/preview support)
 package-lock.json                  — Node.js dependency lockfile
@@ -47,7 +49,9 @@ requirements-dev.txt               — Python development dependencies
 Repository-level engineering tools and build automation.
 
 ```text
-TODO.md                           — Build-tools & automation WBS (reference index into master TODO.md §1.1/Phase 0)
+TODO.md                           — Build-tools & automation reference index (pointer view;
+                                    owns no branch — see airframe/*/TODO.md and
+                                    graphical-build-guide/TODO.md for the owned detail)
 CLAUDE.md                         — Build tools and automation standards (hull-frame bake tool,
                                     Blender pipeline, SCAD generation, mesh validation)
 precommit_kicad_load.py             — Pre-commit guard: blocks unloadable/corrupt-stackup KiCad files (In2.Cu/Edge.Cuts corruption); enable via .githooks (git config core.hooksPath .githooks)
@@ -77,10 +81,20 @@ add_landing_gear_bosses.py        — Adds Rev R5 landing-gear hull bosses to fu
 Structural design, fabrication, 3D modeling, and CAD assembly.
 
 ```text
-TODO.md                           — Airframe WBS view — master §1.1 geometry (STL exports); §2.x procurement refs
+TODO.md                           — Airframe WBS detail: §1.1.0 hull-frame standard,
+                                    §1.1.5 non-printable placeholders, §2.1/§2.2/§2.3/§2.6
+                                    procurement BOMs
 CLAUDE.md                         — Airframe design standards (coordinate system, CAD/3D
                                     modeling, hull-frame bake, fabrication specs, STL
                                     validation, structural joints, landing gear)
+fuselage-joints/TODO.md            — Fuselage §1.1.1 (1/3): joints, bow sensor pod,
+                                    PMMA windows, cargo interior bosses, Jayne mounting
+fuselage-covers/TODO.md            — Fuselage §1.1.1 (2/3): access covers, antenna
+                                    mounts, nacelle servo bracket
+fuselage-mid/TODO.md               — Fuselage §1.1.1 (3/3): head/cargo/middle shell
+                                    regeneration, Kaylee/Simon middle-section bays
+wings-nacelles/TODO.md             — §1.1.2 Wings + §1.1.3 Nacelles detail
+landing-gear/TODO.md               — §1.1.4 Landing Gear detail (Rev R5 wire-brace design)
 ```
 
 ### airframe/FreeCAD-scripts/
@@ -537,7 +551,15 @@ Serenity-Assembled.<timestamp>.FCBak — FreeCAD autosave backup (gitignored)
 KiCad PCB schematics and layouts, electronics design, firmware, and communications stack.
 
 ```text
-TODO.md                           — Avionics WBS view — PCBs §1.2*/§1.4/§0.6, node firmware §4.1–4.4/§4.6
+TODO.md                           — Avionics WBS detail: §1.2 (archived), §1.2a (Wash/Zoe/
+                                    Emma EMI-hardened), §1.8 Names, §1.9 workload, §2.4/§2.5
+                                    procurement
+rev-s1/TODO.md                     — §1.2b Emma/Zoe/Kaylee Rev S1 redesign; §1.3
+                                    XCVR-49MHZ-1 (superseded)
+emi-hardening/TODO.md              — §0.6 IEC 62368-1 isolation verification; §1.4 EMI
+                                    hardening beyond the PCBs (500 W/m^2)
+jayne/TODO.md                      — §1.2c Jayne PCB (vision/ToF/laser); §4.6 Jayne firmware
+firmware/TODO.md                   — §4.1-§4.4 Wash/Zoe node firmware
 CLAUDE.md                         — Avionics design standards (cape naming, KiCad DRC
                                     workflow, security/cryptography, communications
                                     protocols, external radio regulations, avionics
@@ -690,7 +712,7 @@ scripts/gen_Jayne_ksz_symbol.py, gen_Jayne_ds_footprints.py, gen_Jayne_bth060_fo
 scripts/mod_Jayne_corners.py, mod_Jayne_trapezoid.py, mod_Jayne_ds_pcb.py,
 scripts/mod_Jayne_som_place.py    — PCB post-processing scripts (pcbnew: corner rounding,
                                     trapezoid outline, direct-solder pad nets, SoM placement)
-[see TODO.md §1.2c and avionics/CLAUDE.md "Jayne" for full status/open items]
+[see avionics/jayne/TODO.md §1.2c and avionics/CLAUDE.md "Jayne" for full status/open items]
 
 ENC-NACELLE-1 (nacelle encoder breakout):
 ENC-NACELLE-1.kicad_sch
@@ -746,7 +768,7 @@ ARCHIVE_INDEX.md. `avionics/gerbers/` no longer exists on disk at all.
 Project documentation, design specifications, analysis reports, and standards references.
 
 ```text
-TODO.md                           — Docs/standards/regulatory WBS view — §0.x, §1.5–1.7, §5.x, §6.x
+TODO.md                           — Docs/standards/regulatory WBS detail — §0.x, §1.5-1.7, §5.x, §6.x
 FIRST_FLIGHT_READINESS.md         — Open-item rollup on the Phase-5 first-flight critical path
 CLAUDE.md                         — Documentation standards (standards vetting policy,
                                     references management, measurements and units,
@@ -787,7 +809,8 @@ Thing-4677565-Serenity.stl      — Low-detail Thingiverse reference hull (geome
 Active design specifications, requirements, and version-controlled design baselines.
 
 ```text
-TODO.md                           — Specification-sync WBS (reference index into master §1.6/§1.7/§6.3)
+TODO.md                           — Specification-sync reference index (pointer view into
+                                    docs/TODO.md §1.6/§1.7/§6.3)
 CLAUDE.md                         — Specification standards (revision policy, document
                                     structure, standards citations, traceability matrix,
                                     specification approval workflow)
@@ -816,7 +839,7 @@ Zigbee 2.4 GHz.  Servo-driven two-axis antenna gimbal with AS5600 magnetic encod
 No external PAs (FCC-compliant with directional antennas).  IP65 field enclosure.
 
 ```text
-TODO.md                           — Malcolm GCS WBS view — master §4.5 (ground control, gimbal, comms)
+TODO.md                           — Malcolm GCS WBS detail — §4.5 (ground control, gimbal, comms)
 CLAUDE.md                         — GCS design standards (operator interface, command
                                     authentication, telemetry display, communications
                                     protocols, security/compliance, hardware requirements)
@@ -903,7 +926,8 @@ Design work deferred beyond the current build phase (Phases 5–10). Includes pl
 for future build phases.
 
 ```text
-TODO.md                           — Deferred-work WBS view — master Phase 11 (aft EDF + RCS)
+TODO.md                           — Deferred-work WBS detail — Phase 11 (aft EDF + RCS),
+                                    Phase 12 (range-extender battery)
 CLAUDE.md                         — Deferred work standards (status categories, planned
                                     upgrades, Phase 11+ scope, design decision history,
                                     phase numbering convention)
@@ -960,7 +984,9 @@ SVG visual build guide cards and hull outline diagrams generated by `gen_hull_ou
 from blender-rendered views.
 
 ```text
-TODO.md                           — Phased physical-build WBS view — master §3.0 Phases 0–10
+TODO.md                           — Phased physical-build WBS detail — Phases 0-4 + SVG
+                                    rebuild pipeline (§1.5.6)
+flight-phases/TODO.md              — Phases 5-10 detail (Phase 5 = FIRST FLIGHT)
 CLAUDE.md                         — Build guide standards (phased approach, guide structure,
                                     illustrations/graphics, troubleshooting, phase
                                     completion sign-off)

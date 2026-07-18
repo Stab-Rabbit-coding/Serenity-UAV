@@ -77,6 +77,32 @@ This root `CLAUDE.md` provides **project-wide standards** applicable to all fold
 
 Each federated file assumes you have already read this root document. **This root file is authoritative for all project-wide standards.** Subordinate files provide additional detail and scope-specific workflows.
 
+### TODO.md Federation (Rev S1, 2026-07-18)
+
+Root `TODO.md` is a **compact index only** — headings, subheadings, and single-line
+(≤70-char) checkbox items, each pointing to a subordinate `TODO.md` that holds the full
+task detail (notes, rationale, code references). Governance stays with the CLAUDE.md files
+listed above; several subsystems keep detail in more than one `TODO.md` file so that no
+single file exceeds ~500 lines (the threshold at which a subsystem gets a new detail file
+rather than an ever-growing one — root `CLAUDE.md` "Workflow Notes"):
+
+- **avionics/** — `avionics/TODO.md` (Wash/Zoë/Emma cape hardware, names, workload),
+  `avionics/rev-s1/TODO.md` (Emma/Zoë/Kaylee Rev S1 redesign), `avionics/emi-hardening/TODO.md`
+  (§0.6, §1.4 EMI hardening beyond the PCBs), `avionics/jayne/TODO.md` (Jayne board + firmware),
+  `avionics/firmware/TODO.md` (Wash/Zoë node firmware)
+- **airframe/** — `airframe/TODO.md` (hull-frame standard, non-printable placeholders,
+  procurement), `airframe/fuselage-joints/TODO.md`, `airframe/fuselage-covers/TODO.md`,
+  `airframe/fuselage-mid/TODO.md` (fuselage §1.1.1, split 3 ways), `airframe/wings-nacelles/TODO.md`,
+  `airframe/landing-gear/TODO.md`
+- **graphical-build-guide/** — `graphical-build-guide/TODO.md` (Phases 0-4 + SVG rebuild
+  pipeline), `graphical-build-guide/flight-phases/TODO.md` (Phases 5-10)
+- **docs/**, **gcs/**, **deferred/** — a single `TODO.md` each (well under the cap)
+- **tools/**, **current-specification/** — reference-index `TODO.md` files (own no WBS
+  branch; pointer views into the owning subsystem's detail file)
+
+Split detail files are governed by their parent folder's `CLAUDE.md` (no separate
+federated `CLAUDE.md` per split — e.g. `avionics/jayne/` follows `avionics/CLAUDE.md`).
+
 ## Standards Vetting Policy
 
 - **Every design specification with any effect beyond cosmetic appearance must be vetted against applicable industry standards and/or regulations before implementation.**  Standards citations shall be recorded in `REFERENCES.md`, which catalogs every applicable standard with:

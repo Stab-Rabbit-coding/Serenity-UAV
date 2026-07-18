@@ -1,10 +1,17 @@
-# Serenity UAV — Work Breakdown Structure
+# Serenity UAV — Work Breakdown Structure (Master Index)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-07-04  
-**Current design revision:** Rev S (2026-07-04, see §6.3 "Rev S Checkpoint" for the consolidated
-changelog since Rev R) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
+**Last updated:** 2026-07-18  
+**Current design revision:** Rev S (2026-07-04, see `docs/TODO.md` §6.3 for changelog) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
+
+> **This file is a compact index, not the detail.** Per root `CLAUDE.md` "Workflow
+> Notes": each task/subtask here is a single line (<=70 chars) — headings,
+> subheadings, and checkbox items only, no prose. Full notes, rationale, code
+> references, and sub-steps live in the subordinate `TODO.md` referenced under
+> each heading ("→ detail: ..."). Close an item in its detail file first, then
+> check the matching one-line item here as a commit prerequisite. **★ = critical
+> path to first flight (Phase 5).**
 
 ---
 
@@ -12,5234 +19,953 @@ changelog since Rev R) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.m
 
 | Domain | End State | Current Status |
 |--------|-------------------|----------------|
-| Hull   | 609.6 mm CF-PETG / PU foam / CF skeleton | SCAD sources complete; all four fuselage SCAD shells at Rev S; cargo section at Rev S (clamshell, avionics bays, GPS, axis-bug fixed); bow-pod cuts merged into the head shell; STLs pending regeneration where noted in §1.1 |
-| Nacelles | 2× 50mm tandem EDF, CG pivot Z=83mm, M=1.0 gear, iris nozzle | `nacelle_pod_50mm_tandem.scad` complete; Rev S stator shells (`_revo.stl`) pending render |
-| Nacelle EDFs | XFly Galaxy X5 50mm 12-blade 6S 3200KV, 1240g each; 2232g/nacelle (90% additive via stator); 4464g total | Baseline EDF selected (xfly-model.eu); nacelle T/W ≈ 1.61 at Phase 5–10 AUW — VTOL hover capable |
-| Rear propulsion | 55mm 6S EDF, reduced-area neck intake, **fixed canonical elliptical tail nozzle** (2.06×1.76 in / 52.3×44.7 mm) + **4 RCS bleed-air thrusters** | **DEFERRED — Phase 11.** Files in `deferred/aft-edf/` — SCAD/STLs need regeneration for 55mm + nozzle + RCS. Adds ~1275g forward thrust; rear EDF not counted in hover T/W; Phase 11 hover T/W ≈ 1.43. |
-| Cargo bay | Clamshell doors + SG90 servos + DRV8833 + N20 winch + Dyneema + auto-latch + GPS ring + FPV bezel | ✓ All 13 cargo STLs generated (PR #21 + PR #22 2026-06-01); BOM updated bom_revP.json/csv; gondola shell open |
-| PCBs | **Rev Q:** all 8 nodes use EM-hardened Wash/Zoë capes. **Kaylee** is the PDB. Two **Emma** boards give 49 MHz connectivity (Part 15 §15.235). Cape-A-1, Cape-B-1, XCVR-49MHZ-1 archived 2026-06-05. **Rev S adds Jayne** (standalone vision/ToF/laser board, nose + cargo install). | Rev S schematics complete (Wash: 2× EMI-hardened Ethernet PHY; Zoë: 1×; Jayne: EMI-hardened to the same standard, DRC/ERC clean). Kaylee PCB DRC clean (0 shorts); gerbers generated 2026-06-10; manual placement and trace routing remain (Wash/Kaylee/Emma carry a pre-existing DRC backlog, see §1.2a). |
-| Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 ✓; serenity-fc Phase 6 stub only; all Phase 7 items open |
+| Hull   | 609.6 mm CF-PETG / PU foam / CF skeleton | SCAD sources complete; all four fuselage SCAD shells at Rev S; STLs pending regeneration where noted |
+| Nacelles | 2x 50mm tandem EDF, CG pivot Z=83mm, M=1.0 gear, iris nozzle | `nacelle_pod_50mm_tandem.scad` complete; Rev S stator shells pending render |
+| Nacelle EDFs | XFly Galaxy X5 50mm 12-blade 6S 3200KV, 1240g each; 2232g/nacelle (90% additive via stator); 4464g total | Baseline EDF selected; nacelle T/W ~1.61 at Phase 5-10 AUW — VTOL hover capable |
+| Rear propulsion | 55mm 6S EDF, reduced-area neck intake, fixed canonical elliptical tail nozzle (2.06x1.76 in / 52.3x44.7 mm) + 4 RCS bleed-air thrusters | DEFERRED — Phase 11. Adds ~1275g forward thrust; not counted in hover T/W; Phase 11 hover T/W ~1.43 |
+| Cargo bay | Clamshell doors + SG90 servos + DRV8833 + N20 winch + Dyneema + auto-latch + GPS ring + FPV bezel | All 13 cargo STLs generated; BOM updated; gondola shell open |
+| PCBs | Rev Q: all 8 nodes use EM-hardened Wash/Zoe capes. Kaylee is the PDB. Two Emma boards give 49 MHz connectivity. Rev S adds Jayne (standalone vision/ToF/laser board). | Rev S schematics complete; Kaylee PCB DRC clean, gerbers generated; manual placement/routing remain (see avionics detail files) |
+| Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 done; serenity-fc Phase 6 stub only; all Phase 7 items open |
 | Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
-| Regulatory | FAA Part 107 [REF-FAA-002], Part 48 §48.205 [REF-FAA-001], §91.209 [REF-FAA-003], FCC Part 15 [REF-FCC-001, REF-FCC-002, REF-FCC-003 §15.235] | FAA registration placeholder; XCVR-49MHZ-2 pre-compliance pending; §15.235 power budget gap open, §15.203 antenna-connector gap resolved in design (§0.1) |
+| Regulatory | FAA Part 107 [REF-FAA-002], Part 48 §48.205 [REF-FAA-001], §91.209 [REF-FAA-003], FCC Part 15 [REF-FCC-001, REF-FCC-002, REF-FCC-003 §15.235] | FAA registration placeholder; XCVR-49MHZ-2 pre-compliance pending |
 
 ---
 
 ## 0.0 — Standards Vetting and Regulatory Compliance
 
-All items in this section must be resolved before any physical build step.  See `REFERENCES.md`
-for the full standards catalog.  All open verification items from `REFERENCES.md` are
-tracked here.
+### 0.1 — FCC Part 95 Section Number Verification
+→ detail: `docs/TODO.md` §0.1
 
-### 0.1 — FCC Part 95 Section Number Verification — RESOLVED: wrong CFR Part, not just stale section numbers
-
-**Resolved 2026-06-20.** The original premise of this item — that the 49 MHz Emma link's
-§95.635/§95.655/§95.639 citations were merely *pre-2017 section numbers* needing renumbering —
-was incorrect.  47 CFR Part 95 Subpart C (Radio Control Radio Service, RCRS) covers only the
-26–28 MHz, 72 MHz, and 75 MHz bands; it has **no provisions for 49 MHz at all**, under any
-section number, in any year.  The 49.82–49.90 MHz band actually used by Emma is governed by
-**47 CFR Part 15 §15.235**, an unlicensed intentional-radiator rule with a field-strength
-limit, not Part 95 RCRS.  `REFERENCES.md` REF-FCC-003 has been rewritten accordingly, and the
-"TDDS"/"LERS"/"27 channels" terminology in the old entry (unverifiable against any real Part 95
-text) has been removed and logged under "Removed / Superseded Citations."
-
-- [x] **Correct REF-FCC-003 in `REFERENCES.md`** — replaced Part 95 RCRS citation with
-    47 CFR Part 15 §15.235 (plus §15.5, §15.203, §15.209 as applicable); added the old citation
-    to "Removed / Superseded Citations."  *(2026-06-20)*
-- [x] **Rework `malcolm_antenna_spec.md` Link 4 compliance math** — §15.235 is a field-strength
-    limit (≤10,000 µV/m at 3 m), not an EIRP/ERP figure.  Converting via EIRP = E²·4πd²/377Ω gives
-    an EIRP ceiling of **≈ −15.2 dBm (≈ 30 µW)** — about 35 dB below the 100 mW (+20 dBm) the spec
-    previously assumed.  Emma's PA must be firmware-limited to ≈ −13 dBm (≈ 48 µW) conducted to
-    comply, not +20 dBm.  *(2026-06-20)*
-- [x] **Update CLAUDE.md, TODO.md status lines, and other docs** referring to the 49 MHz link as
-    "RCRS" — relabeled as "49 MHz (Part 15 §15.235)" throughout active (non-archived) docs.
-    *(2026-06-20)*
-- [x] **Re-architect the 49 MHz link's power/range budget — RCRS researched and rejected
-    2026-06-20 (REF-FCC-004).**  At the §15.235-compliant ≈ 48 µW conducted power level, this
-    link's realistic range is likely well under a quarter mile, which contradicts its design role
-    as River's resilient long-range backup comms path (see CLAUDE.md Avionics Workload Balancing).
-    47 CFR Part 95 Subpart C RCRS (72/75 MHz) was evaluated as a candidate replacement — it
-    permits 0.75 W mean output (§95.767), ≈42 dB above the §15.235 ceiling — and rejected for three
-    independent reasons: (1) **§95.731 prohibits RCRS transmitters from carrying data at all**
-    ("No person shall use a RCRS transmitter to transmit data"; one-way telecommand/indicator-
-    telemetry only) — disqualifying regardless of band or power, since Emma's actual payload is
-    bidirectional signed/authenticated AX.25 packet data required by the Zero Trust policy
-    (REF-NIST-001 §2.1); (2) Serenity is an aircraft, so §95.763(c) restricts it to the 72 MHz
-    band only — 75 MHz is surface-craft-only by rule, and **78 MHz is not an RCRS allocation at
-    all**; (3) moving to 72 MHz would still require a from-scratch Part 95 equipment certification
-    (§95.735's non-certified-transmitter exception covers only 26–28 MHz), so it does not reduce
-    the certification burden already carried under Part 15.  Full citation trail in
-    `REFERENCES.md` REF-FCC-004.  **Remaining open item:** the underlying range/power-budget
-    problem is still unresolved — candidates not yet researched are Part 90 land mobile (licensed,
-    permits data) or revising the design intent for this link to match what Part 15 §15.235
-    actually permits.  **Architecturally significant — do not resolve without user review.**
-- [x] **§15.203 antenna/connector non-compliance, confirmed violation, resolved in design
-    2026-06-20.** Emma's RF port (J2) previously used a generic SMA edge connector (Amphenol
-    132289) — a standard antenna jack.  §15.203 text: *"the use of a standard antenna
-    jack or electrical connector is prohibited."*  This obligation binds the manufacturer
-    ("responsible party") directly — being the manufacturer does not create a self-authorization
-    exception; if anything it is the manufacturer who bears the §2.803/§15.19 equipment-
-    authorization burden.  §15.203's narrow exceptions (carrier-current devices; professionally
-    installed radiators measured at the install site, e.g. perimeter protection/field disturbance
-    sensors) do not apply to Emma.  **Resolution:** J2 changed to Amphenol **132289RP**
-    (RP-SMA, reverse-polarity counterpart of 132289, identical PCB footprint, reversed mating-pin
-    gender) — satisfies §15.203's "unique coupling" provision since generic standard-SMA
-    antennas/cables cannot mechanically connect.  Updated `avionics/kicad/Emma.kicad_sch`,
-    `avionics/kicad/Emma.kicad_pcb` (footprint Value/Description properties and silkscreen),
-    `avionics/kicad/Emma.md`, `gcs/malcolm/hardware/docs/malcolm_wiring.md`, and
-    `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`.  **Open follow-up:** physical board
-    re-spin/fabrication run to populate 132289RP in place of 132289 on built boards — the
-    design-level fix is complete but no boards have been re-fabricated yet.
-- [x] **Remaining `TODO.md` references to "RCRS"/old Part 95 section numbers** — swept 2026-06-21:
-    all 24 mislabeled instances (§1.5 BOM note, Avionics Workload Balancing, §2.5 procurement
-    table, Phase 5/6/7/9/10/11 build/test steps, §4.3/4.4 firmware tasks) relabeled to
-    "49 MHz (Part 15 §15.235)"; §1.3 (XCVR-49MHZ-1) marked SUPERSEDED — see below. *(One instance
-    resolved 2026-06-21: `avionics/firmware/common/include/ax25_types.h` — see §0.3.)*
-- [x] **Remaining non-`TODO.md` references to "RCRS"** — swept 2026-06-22. Fixed all prose/label
-    mentions in active, non-archived, non-superseded files: `PROJECT_INDEX.md`,
-    `airframe/placeholders/generate_placeholders.py`, `avionics/firmware/cn/src/{si5351.h,xcvr_kiss.h}`
-    (doc comments only), `avionics/firmware/README.md`,
-    `gcs/malcolm/firmware/pb2i/src/{mal_config.h,mal_telemetry.h}` (comments only),
-    `docs/{AVIONICS_PB2_REDESIGN.md,REVN_BUILD_GUIDE_24IN.md,bom_revR.json}` (current-revision BOM
-    only — `bom_revQ.json`/`bom_revP.json` are historical snapshots, left as-is),
-    `current-specification/LICENSE_AND_ATTRIBUTION.md` (also replaced the fabricated "TDDS
-    (Time-Division Dual-Simplex)" protocol claim — same root cause as the removed "TDDS"/"LERS"
-    terminology — with the actual AX.25/KISS implementation), `deferred/aft-edf/README.md`, and
-    `graphical-build-guide/{build_guide_14_antennas,build_guide_17_ground_test,
-    build_guide_21_node_install,build_plan,components_overview,decal_sheet}.svg` (also fixed stale
-    "TDDS"/6-channel/10 mW/547 yd figures in `components_overview.svg` and replaced the
-    unverified "≤547 yd" range claim in `decal_sheet.svg`, a physical-decal artifact, with
-    "range TBD" pending the open power-budget item above).  **Intentionally left unchanged**
-    (correct/explanatory already, or out of scope — see new item below):  `CLAUDE.md`,
-    `REFERENCES.md`, `avionics/firmware/dts/README.md`, `gcs/malcolm/hardware/docs/
-    malcolm_antenna_spec.md` (all already correctly worded); `docs/PHASED_BUILD_GUIDE.md`
-    (explicitly marked SUPERSEDED/historical); `docs/bom_revQ.json`/`bom_revP.json` and
-    `avionics/kicad/archive/*` (historical revision snapshots / archived files per the
-    archival-revision policy).
-- [ ] **Code-identifier "RCRS" naming left unchanged — separate tracked follow-up.** The prose
-    sweep above intentionally did not rename actual KiCad net labels, C macros, or reference
-    designators that use "RCRS" as a naming convention (not a regulatory claim): net names
-    `UART_RCRS_TX`/`UART_RCRS_RX` generated by `avionics/kicad/add_sensors_sbus.py`; C macros
-    `SI5351_RCRS_*`/`si5351_set_rcrs_channel()` in `avionics/firmware/cn/src/si5351.{h,c}` and
-    `MAL_RCRS_*` in `gcs/malcolm/firmware/pb2i/src/mal_config.h`; and connector/component
-    reference designators `RCRS-49` (J1 port name), `TVS-RCRS`, `FB-RCRS` in
-    `avionics/kicad/{Emma.md,Zoë.md}` and the corresponding `.kicad_sch`/`.kicad_pcb` files.
-    Renaming these touches generated schematics/nets and firmware call sites together — a
-    coordinated refactor with build/DRC verification, not a documentation fix.
-    **Architecturally significant — do not rename without user review.**
+- [x] Correct REF-FCC-003 in REFERENCES.md
+- [x] Rework malcolm_antenna_spec.md Link 4 compliance math
+- [x] Update CLAUDE.md, TODO.md status lines, and other docs
+- [x] Re-architect the 49 MHz link's power/range budget — RCRS rese…
+- [x] §15.203 antenna/connector non-compliance, confirmed violation…
+- [x] Remaining TODO.md references to "RCRS"/old Part 95 section numb…
+- [x] Remaining non-TODO.md references to "RCRS"
+- [ ] Code-identifier "RCRS" naming left unchanged — separate tracked…
 
 ### 0.2 — Incorrect Reference Correction
+→ detail: `docs/TODO.md` §0.2
 
-- [x] **Remove NIST SP 800-72 write-blocker citation** *(done 2026-06-14)* — NIST SP 800-72
-    (2004) is "Guidelines on PDA Forensics" and is unrelated to write-blocker design.
-    Replaced with NIST SP 800-92 §4.4.2 [REF-NIST-004] in `README.md` Patent Notice section.
-    See `REFERENCES.md` "Removed / Superseded Citations" table.
+- [x] Remove NIST SP 800-72 write-blocker citation
 
-### 0.3 — 14 CFR Part 47 vs Part 48 Clarification — RESOLVED
+### 0.3 — 14 CFR Part 47 vs Part 48 Clarification
+→ detail: `docs/TODO.md` §0.3
 
-**Resolved 2026-06-21.** `docs/REVN_BUILD_GUIDE_24IN.md` and `graphical-build-guide/decal_sheet.svg`
-were audited and carry no erroneous Part 47 citation (the build guide already includes a
-clarifying note that Part 47 applies to manned aircraft).  The actual miscitation was found
-instead in `avionics/firmware/common/include/ax25_types.h`, which incorrectly cited 14 CFR
-Part 47 for UAS registration and claimed the 49 MHz AX.25 link requires an FCC amateur radio
-license under 47 CFR Part 97 — both wrong, and inconsistent with this project's own
-`REFERENCES.md` REF-PROTO-001 note that the link is license-exempt under 47 CFR Part 15
-§15.235 [REF-FCC-003].
+- [x] Replace 14 CFR Part 47 references with Part 48 §48.205 where ap…
 
-- [x] **Replace 14 CFR Part 47 references with Part 48 §48.205 where applicable** —
-    corrected `ax25_types.h` to cite 14 CFR Part 48 §48.205 [REF-FAA-001] for aircraft
-    registration display (a requirement independent of AX.25 addressing) and to clarify the
-    station identifier fields are not amateur callsigns and require no Part 97 license
-    [REF-PROTO-001].  Also replaced the file's stale "RCRS link" wording (see §0.1) with the
-    correct Part 15 §15.235 citation.  `REFERENCES.md` REF-FAA-001 and REF-PROTO-001 "Used in"
-    lists and the Open Standards Verification Items table updated accordingly.  *(2026-06-21)*
+### 0.4 — AUVSI/ASTM Standards Identification
+→ detail: `docs/TODO.md` §0.4
 
-### 0.4 — AUVSI/ASTM Standards Identification — RESOLVED
-
-**Resolved 2026-06-22.** Verified against ASTM's official store listings.  Two of the three
-original candidates in this item were wrong: **F3322 is not a battery standard** — it is the
-sUAS *Parachutes* specification (Serenity has no deployable recovery parachute, so F3322 does
-not apply at all); the correct battery standard is **F3005**.  **F3003 was withdrawn by ASTM
-in January 2023 with no replacement** and is not cited anywhere.  A fourth standard, **F2910**
-(design/construction/test of a small UAS), was identified as the better general-airframe-
-engineering fit and added in F3003's place.  Full verification trail, scope summaries, and
-store.astm.org URLs are in `REFERENCES.md` Part X (REF-ASTM-001/002/003) and the "Removed /
-Superseded Citations" table.
-
-- [x] **Identify specific ASTM F38 Committee standards applicable to airframe engineering** —
-    added REF-ASTM-001 (F2910-22 — Design and Construction of a Small Unmanned Aircraft
-    System), REF-ASTM-002 (F3005-22 — Batteries for Use in Small Unmanned Aircraft Systems —
-    applies to the LiPo 6S 4000 mAh pack), and REF-ASTM-003 (F3269-21 — Methods to Safely Bound
-    Behavior of Aircraft Systems Containing Complex Functions Using runtime assurance —
-    applies to the PACE failover architecture).  Logged F3322 (misidentified — parachutes, not
-    batteries) and F3003 (withdrawn 2023) in `REFERENCES.md` "Removed / Superseded Citations."
-    *(2026-06-22)*
+- [x] Identify specific ASTM F38 Committee standards applicable to ai…
 
 ### 0.5 — Citation Completeness Audit (All Source Files)
+→ detail: `docs/TODO.md` §0.5
 
-- [x] **Audit SVG build guide files for standards citations — priority files done 2026-06-22.**
-    Full-repository audit confirmed zero `[REF-ID]` citations existed anywhere in
-    `graphical-build-guide/` (38 SVGs, not 26).  Added bracketed `[REF-ID §section]`
-    citations to the four priority files at every location where it was safe to do so
-    without overflowing a fixed-width text box (verified by reading surrounding `<rect>`
-    geometry; not rendered): `decal_sheet.svg` (REF-FAA-001 §48.205 ×2, REF-ICAO-001,
-    REF-FAA-003 §91.209(a)), `build_guide_13_nav_lights.svg` (REF-ICAO-001, REF-FAA-003
-    §91.209(a)), `build_guide_11_inter_board.svg` (REF-MIL-001, REF-ISO-001).
-    `build_guide_18_first_flight.svg`'s two Part 107/VLOS callouts already fill their fixed
-    416 px boxes — adding brackets risks text overflow without a render check; left
-    uncited, see follow-up item below.  Also corrected two factual errors found in
-    `decal_sheet.svg` while auditing: the "AUW MAX" placard field on the sUAS data plate
-    (D1) and operating-limits card (D4) was stale at "1,103 g (2.43 lb)" — does not match
-    any current design figure — corrected to the current Phase 11 full-system AUW, 3,130 g
-    (6.90 lb) per `README.md`; and the unverifiable "FAA regs require number legible from
-    25ft" claim (no such distance figure traces to REF-FAA-001) was replaced with the
-    actual verified §48.205(b)(1) character-height requirement (≥3 in / 76 mm).
-    `decal_sheet.svg`'s "PAYLOAD 250 g maximum" field was checked against a suspected
-    conflation with the FAA §48.25 registration-exemption weight threshold and found to be
-    correct as-is — it is the aircraft's actual Jayne cargo-handling design payload (see
-    `docs/PHASED_BUILD_GUIDE.md` "T/W with 250 g cargo"), not a regulatory citation.
-    **Follow-up items opened from this audit (not yet resolved):**
-    - [ ] `build_guide_18_first_flight.svg`'s Part 107/VLOS warning callouts (lines ~59–60)
-    need citations but their fixed-width boxes are already near-full; requires either a
-    layout change or rendering verification (see `/verify` skill) before editing text length.
-    - [x] **Resolved 2026-06-29.** No standards entry exists yet in `REFERENCES.md` for RS-485 (TIA/EIA-485) —
-    referenced informally in `build_guide_11_inter_board.svg` and elsewhere; needs
-    research before a REF-ID can be cited (do not fabricate).
-    **Resolution:** Added REF-TIA-001 (ANSI/TIA-485-A:1998) to `REFERENCES.md` Part XIII
-    with sections applied (§5 driver output, §6 receiver input, §7 bus loading, §9 cable
-    characteristics).  References 5-6 in `Wash.md` and `Zoë.md` updated with `[REF-TIA-001]`.
-    Exact product-page URL not confirmed (webstore blocked); added to Open Standards
-    Verification Items table in `REFERENCES.md`.
-    - [x] **Resolved 2026-06-29.** The anti-collision/strobe "60 FPM" flash-rate figure in
-    `build_guide_13_nav_lights.svg` and `decal_sheet.svg` has no traceable REF-ID in
-    `REFERENCES.md` under REF-FAA-003; likely traces to 14 CFR §23.1401 or AC 20-30B
-    convention but not yet verified — needs research before citing.
-    **Resolution:** Researched 14 CFR Part 107 §107.29(b) (anti-collision light visible
-    3 statute miles — no flash rate specified), Part 23 §23.1401 (reorganized 2017; the
-    prescriptive flash-rate text no longer exists in current eCFR), and Part 25 §25.1401(f)
-    (transport category 40–100 FPM — not applicable to Part 107 sUAS). No
-    currently-enforceable regulatory standard mandates a specific flash rate for Part 107
-    UAS anti-collision lights. "60 FPM" is a design convention in the conventional
-    aviation range (40–100 FPM). No regulatory citation is appropriate; the figure is a
-    design target. Documented in `REFERENCES.md` Open Standards Verification Items table.
-    No change required in the SVG files.
-    - [ ] Seven additional SVGs (`build_guide_09_avionics.svg`, `build_guide_11_inter_board.svg`,
-    `build_guide_12_security_hw.svg`, `build_guide_20_node_placement.svg`,
-    `build_guide_21_node_install.svg`, `build_plan.svg`, `components_overview.svg`) are
-    built entirely or partly around the **archived** Cape-A-1/Cape-B-1 hardware instead of
-    the Rev R1 baseline (all 8 nodes now carry Wash/Cape-A-2 + Zoë/Cape-B-2 per CLAUDE.md).
-    This is a content-currency problem independent of citations — needs a dedicated pass
-    (likely a content rewrite, not a text-substitution fix) with visual verification.
-    **Superseded by, and folded into, the "Rebuild `graphical-build-guide/`..." item in
-    §1.5 Documentation** — that item replaces these cards' art wholesale rather than
-    patching the hardware depiction in place.
-    - [ ] The remaining ~30 non-priority SVGs were not individually swept for citations in
-    this pass (only spot-checked); a full sweep with rendering verification is still open.
-    **Partial progress 2026-06-29:** `build_guide_17_ground_test.svg` line 45 updated —
-    appended `[REF-FCC-003]` to the "49MHz Part 15 §15.235 ground transmitter" text (text
-    length verified safe vs. containing `<rect>` bounds before editing).
-    `build_guide_18_first_flight.svg` Part 107/VLOS callout boxes remain at overflow; still
-    requires layout change or rendering verification before citation text can be added.
-- [x] **Audit remaining firmware source files for standards citations — done 2026-06-22.**
-    Reviewed all `.c`/`.h` files in `avionics/firmware/`, `gcs/malcolm/firmware/`, and the
-    relevant `avionics/kicad/*.py` generator scripts.  Added bracketed `[REF-ID §section]`
-    citations (all map to existing `REFERENCES.md` entries — none fabricated): FCC power-limit
-    comments in `mal_config.h` (`[REF-FCC-001 §15.247(b)(3)(i)]` for SiK/LoRa,
-    `[REF-FCC-002 §15.407(a)(3)]` for Wi-Fi, `[REF-FCC-003 §15.235]` for the 49 MHz block);
-    `[REF-PROTO-002]` (MAVLink v2) added to `mal_telemetry.h`; `[REF-PROTO-001]`/
-    `[REF-FCC-003 §15.235/§15.5]` added to `avionics/firmware/cn/src/xcvr_kiss.{c,h}`;
-    `[REF-IEC-001 §5.5.2]`/`[REF-VDE-001 Cl.4.3]` (5 kV reinforced isolation) and
-    `[REF-IEEE-001 Clause 22/38]` (RMII / Ethernet isolation transformer) added to
-    `avionics/kicad/{gen_cape_a2_pcb.py,gen_cape_b2_pcb.py,gen_cape_b2.py,add_eth_phy.py}`;
-    `[REF-NIST-002 §6.2.5]` (EMI-hardening design objective) added to the Wash/Zoë/Kaylee
-    generator docstrings; same IEC/VDE citations added to the two DEPRECATED FreeCAD scripts
-    (`airframe/FreeCAD-scripts/Serenity-{Assemble,Subsystem-Assembly}.py`) while they remain
-    in-tree.  Physical product markings (PCB silkscreen text in
-    `avionics/kicad/complete_xcvr_49mhz2.py`, KiCad schematic title-block strings) were
-    deliberately left as human-readable regulatory text, not converted to the internal
-    `[REF-ID]` bracket convention — that convention is for source/doc citations, not
-    end-user-facing physical labels.
-    **Functional security gap found (not a citation gap) — opened as a new item:**
-    `gcs/malcolm/firmware/pb2i/src/mal_telemetry.c` `dispatch_message()` only filters on
-    MAVLink `sysid`; it does **not** verify the MAVLink v2 HMAC-SHA256 message signature,
-    despite `MAL_TPM_KEY_HANDLE` (`mal_config.h`) provisioning a TPM key slot for exactly that
-    purpose, and despite CLAUDE.md's "every message is digitally signed and authenticated"
-    requirement [REF-NIST-001 §2.1, §2.2].  Flagged in a code comment at the dispatch site;
-    implementing the actual verification is a security-critical functional change, not a
-    documentation fix, and needs its own design/implementation pass — **do not implement
-    without dedicated review.**
-- [x] **Audit KiCad companion Markdown files — done 2026-06-22.** Note: the file this item
-    called `XCVR-49MHZ-2.md` does not exist under that name — the board's companion file is
-    `Emma.md` (XCVR-49MHZ-2 is its formal/silkscreen designation; Emma is the callsign used
-    for the file). Findings per file:
-    - `Wash.md`: added `[REF-IEC-001 §5.5.2]`/`[REF-VDE-001 Cl.4.3]` to the existing
-    "≥8 mm creepage / ≥1.5 mm clearance" PCB layout rule (§"Isolation creepage") and to
-    reference item 4; fixed a stale `XCVR-49MHZ-2.md` filename reference (→ `Emma.md`) in
-    "Related Files"; flagged reference items 5–6 (IEC 61000-4-5, MIL-STD-461G) and the EMC
-    Compliance Targets table as citing standards with no REF-ID yet in `REFERENCES.md`
-    (marked with a `†` footnote, not fabricated).
-    - `Zoë.md`: its creepage/clearance rule is inherited by explicit reference to Wash
-    ("The Wash layout constraints apply equally here") — no separate citation needed.
-    Same `†` footnote treatment applied to its reference-list items 5–6.
-    - `Kaylee.md`: added `[REF-NIST-002 §6.2.5]` to the 500 W/m² EMI design-objective
-    statement; same `†` footnote treatment applied to its MIL-STD-461G/IEC 61000-4-x EMC
-    table rows. The BQ76930 cell-tap "≥8 mm creepage" note (line ~594) is a basic-insulation
-    multi-cell-BMS spacing rule, not the project's 5 kV reinforced-insulation topic — left
-    uncited (no applicable REF-ID exists; would need an IPC-2221 catalog entry, not yet
-    researched).
-    - `Emma.md`: already well-cited (REF-FCC-003 referenced throughout, correctly). Converted
-    two informal citations to bracket form, and fixed a dangling reference to the archived
-    `XCVR-49MHZ-1.md` (→ `archive/XCVR-49MHZ-1.md`).
-    - [x] **Resolved 2026-06-29.** MIL-STD-461G (EMI/EMC emissions and susceptibility for
-    aircraft) and IEC 61000-4-2/-4-4/-4-5 (ESD/EFT/surge immunity test methods) are cited
-    by name across `Wash.md`, `Zoë.md`, and `Kaylee.md` but have no `REFERENCES.md` catalog
-    entry — needs the same official-source verification treatment given to REF-ASTM-* in
-    §0.4 before REF-IDs can be assigned.
-    **Resolution:** Added REF-MIL-002 (MIL-STD-461G) to `REFERENCES.md` Part IV and
-    REF-IEC-003/004/005 (IEC 61000-4-2/4-4/4-5) to Part V.  All `†` footnotes in
-    `Wash.md`, `Zoë.md`, and `Kaylee.md` replaced with proper `[REF-MIL-002]` /
-    `[REF-IEC-003]` / `[REF-IEC-004]` / `[REF-IEC-005]` bracketed citations.  Exact
-    IEC webstore product-page URLs not confirmed (site returns JavaScript-rendered homepage
-    to WebFetch); added to Open Standards Verification Items table pending manual lookup.
+- [x] Audit SVG build guide files for standards citations — priority…
+- [x] Audit remaining firmware source files for standards citations —…
+- [x] Audit KiCad companion Markdown files — done 2026-06-22.
 
 ### 0.6 — IEC 62368-1 PCB Layout Isolation Verification
+→ detail: `avionics/TODO.md` §0.6
 
-- [x] **Verify creepage and clearance distances in Wash PCB layout** [REF-IEC-001 §5.5.2]
-    — **verified 2026-06-22 via `kicad-cli pcb drc` (KiCad 9.0.2) against `Wash.kicad_pcb`.
-    Result: NOT MET — still BLOCKS PCB fab.** DRC found 47 violations of the 0.5 mm
-    `ISOLATION` netclass rule; after excluding 34 same-package pin-to-pin false positives
-    (adjacent pins on the secondary side of the same isolator IC), **13 are genuine
-    cross-domain clearance violations** — the `TMESH_P`/`TMESH_N` tamper-detect mesh
-    routed too close to (in some cases inside the netclass minimum of) the isolated
-    `GND2_CAN`/`GND2_ETH` domains, actual spacing as low as 0.125 mm against the 0.5 mm
-    netclass minimum and the ≥ 8 mm physical creepage target documented in `Wash.md`.
-    This confirms and quantifies the tamper-mesh routing problem already tracked in
-    `TODO.md` §1.2a. Verification performed; **layout rework not performed** — per
-    `CLAUDE.md`, repositioning footprints/routes to close this gap is referred to the
-    user, not done automatically.
-- [x] **Verify creepage and clearance distances in Zoë PCB layout** [REF-IEC-001 §5.5.2]
-    — **verified 2026-06-22 via `kicad-cli pcb drc` against `Zoë.kicad_pcb`. Result: NOT
-    MET — still BLOCKS PCB fab.** Same root cause as Wash: 40 `ISOLATION`-netclass
-    violations, 31 same-package false positives excluded, **9 genuine cross-domain
-    violations** between `TMESH_P`/`TMESH_N` (and, in one case, a primary-side Ethernet
-    PHY ground pad) and the isolated `GND2_CAN`/`GND2_RS485` domains, actual spacing as
-    low as **0.0 mm (direct contact)**. Not fixed here, same reason as Wash.
-- [x] **Document verified creepage/clearance values** in `avionics/kicad/Wash.md` and
-    `avionics/kicad/Zoë.md` — added a "Verification status" block to each file's
-    "Isolation creepage" PCB layout constraint with the measured DRC findings above,
-    dated and tool-versioned, distinguishing the design target (≥ 8 mm creepage /
-    ≥ 1.5 mm clearance, IEC 62368-1 Annex G) from the as-laid-out current state (not met).
+- [x] Verify creepage and clearance distances in Wash PCB layout
+- [x] Verify creepage and clearance distances in Zoë PCB layout
+- [x] Document verified creepage/clearance values
 
-### 0.7 — CI Lint Scope and Repo-Wide Lint Debt (open — deferred to separate remediation effort)
+### 0.7 — CI Lint Scope and Repo-Wide Lint Debt
+→ detail: `docs/TODO.md` §0.7
 
-- [x] **Resolved (confirmed 2026-06-29). `run-lint` (`github/super-linter@v4`) scope fix.**
-    Originally described as `VALIDATE_ALL_CODEBASE: true` causing every PR to fail
-    ~17 sub-linter categories against the full repository rather than its diff (PR #107 etc.).
-    Decision (2026-06-21) was to defer the change pending a credential with `workflow`
-    OAuth scope.  **Confirmed in a later session:** `.github/workflows/super-linter.yml`
-    already has `VALIDATE_ALL_CODEBASE: false` (line 35) — the scope fix was applied
-    at some point (the original `true` state is now in git history only).  No further
-    action needed on this specific item.
-- [ ] **Repo-wide lint debt** — observed counts as of the PR #107 full-codebase run:
-    `EDITORCONFIG` 697, `PYTHON_BLACK` 72, `PYTHON_FLAKE8` 56, `PYTHON_ISORT` 47, `JSCPD` 39,
-    `MARKDOWN` 32, `CLANG_FORMAT` 26, `CPP` 25, `PYTHON_MYPY` 7, `NATURAL_LANGUAGE` 17,
-    `JAVASCRIPT_STANDARD` 5, `SHELL_SHFMT` 4, `CSS` 3, `PYTHON_PYLINT` 2, `JSX` 6, `JSON` 1,
-    `GITHUB_ACTIONS` 1. Needs a dedicated remediation pass, file type by file type,
-    separate from feature work, so each touched file is fixed under its own
-    diff-scoped lint pass rather than a single repository-wide sweep.
+- [x] Resolved (confirmed 2026-06-29). run-lint (github/super-linter@…
+- [ ] Repo-wide lint debt
 
 ---
 
 ## 1.0 — Design Artifacts (Pre-Fabrication)
 
-Complete all items in this section before ordering PCBs or starting any physical build step.
-
-### 1.1 — 3D Models: SCAD → STL Exports (Rev S baseline; carried forward from Rev R)
-
-All SCADs run on a host machine with OpenSCAD 2021.01+ or Blender 3.x+ (headless).
-Output STLs go to `thingverse-serenity/files-hollowed-18in/`.
-
-#### 1.1.0 **Hull-Frame Coordinate Standardisation (R1, 2026-06-11)**
-
-All design artifacts standardised on the validated hull frame (X = +port, Y = +aft,
-Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
-"Hull-Frame Coordinate Standard".
-
-- [x] **`tools/bake_hull_frame.py` created** — idempotent STL bake tool; applies the
-    validated 2026-06-10 placements to STL vertex data; stamps binary header marker
-    `SerenityUAV HULL-FRAME R1`; refuses to double-transform. *(done 2026-06-11)*
-- [x] **9 STLs baked to hull frame** — Head, Cargo (both repair copies), Middle, Rear,
-    Wing×2, Nacelle×2. Watertight validation PASS before and after; facet counts
-    unchanged; re-read verification ≤ 1.5e-5 mm. *(done 2026-06-11)*
-- [x] **`serenity_assembly.py` Rev R1** — all 8 primary placements now identity;
-    `doc.saveAs()` fix; `freecadcmd` entry-point fix; `airframe/Serenity-Assembled.FCStd`
-    regenerated and world extents verified identical to the validated assembly.
-    *(done 2026-06-11)*
-- [x] **48 generator/analysis scripts stamped** with the hull-frame standard header
-    (SCAD, Blender, FreeCAD, cargo generators, build-guide tools; GCS and deferred
-    files annotated as documented exceptions). *(done 2026-06-11)*
-- [x] **Docs updated** — CLAUDE.md (baked-extents table + pipeline rule), README.md,
-    REPO_ENFORCEMENT.md, serenity-rev-r.jsx (R1 entry; axis typo fixed),
-    PROJECT_INDEX.md. *(done 2026-06-11)*
-- [x] **Resolve nacelle port/stbd label swap.** Confirmed by user FreeCAD layout
-    inspection (2026-06-11): harness conduit exits inboard face; original SCAD naming
-    was inverted. Fixed: STL files renamed (port↔stbd swap), binary 80-byte headers
-    patched, `bake_hull_frame.py` COMPONENTS corrected, `serenity_assembly.py` audit
-    comment updated, SCAD build commands corrected (port: SWIRL_DIR=−1/PYLON_SIDE=−1,
-    stbd: SWIRL_DIR=+1/PYLON_SIDE=+1), CLAUDE.md extents table corrected.
-    *(done 2026-06-11)*
-- [ ] **Re-verify head↔cargo joint bosses in hull Y.** The 2026-06-10 joint analysis
-    used hull X as the longitudinal mating axis; in the validated frame the longitudinal
-    axis is Y (sections mate at hull Y ≈ −71 mm; X is lateral). Re-check
-    BOSS_FORE/BOSS_AFT positions in `head_shell24.scad` / `cargo_sect_shell24.scad`
-    against the baked meshes. **BLOCKS head/cargo printing.**
-    - **Verification DONE 2026-06-29 (trimesh Y-cross-sections of the baked shells).**
-        The SCAD `BOSS_FORE`/`BOSS_AFT` parameters are **obsolete** — the canonical joint
-        bosses now come from `add_structural_features.py` `BOSS_PIN_BORES["joint1"]`
-        (hull frame), the SCAD shells being secondary references (§1.1.1.0a).  Findings:
-        - Joint faces mate correctly: HEAD aft Y-max = −70.73, CARGO fwd Y-min = −71.54
-            → mate at hull Y ≈ −71. ✓
-        - **The §1.1.1.0b "8 mm depth each side" claim is NOT met as-baked.** Measured
-            Y-engagement of the three Ø3.2 boss pins (cut Y-range −79..−62):
-            Pin A dorsal (−168.3,+143.9) HEAD 2.0 / CARGO 12.5 mm; Pin B (−138.0,+91.4)
-            HEAD 2.0 / CARGO 3.5 mm; Pin C (−198.6,+91.4) HEAD 2.0 / CARGO 4.5 mm.
-        - Root cause: straight Y-axis pins at a single (X,Z) engage a tapering 2 mm wall
-            only over a short span — the head aft wall walks off within ~2 mm, and because
-            the cargo is broader than the head the two **flank** pins (B,C at Z=+91.4)
-            coincide with both shells' walls only right at the joint face.  Only the
-            **dorsal** pin A (tops align) engages deeply.
-        - **RESOLVED 2026-06-29 — internal splice collar designed (`PRINT-HEAD-CARGO-COLLAR`).**
-            First-principles load check: the joint is **not strength-limited** (worst-case
-            9 g crash → M ≈ 6.7 N·m on a ~350 mm-perimeter ring → < 1 MPa peak).  The real
-            need is peel resistance + alignment + anti-ovalisation + the CLAUDE.md
-            "2-wall annulus + positive stop."  Designed an internal bonded **splice collar**
-            (`airframe/stls/fuselage/generate_head_cargo_splice_collar.py` →
-            `head_cargo_splice_collar.stl`, hull frame, ~13.4 g, watertight, verified
-            clearing the head inner wall): 2 mm wall, L = 16 mm (8 mm/side), profile = head
-            inner contour @Y=−79 inset 2 mm, bonded across the joint with West System
-            105/206 + 406 filler → shear-loaded double-lap, FOS > 100 on the bond.  The 3
-            boss pins are **re-roled to alignment dowels only.**  Added to
-            `serenity_assembly.py`, BOM (`bom_revR.csv`), `docs/structural_analysis.md` §7.3,
-            `PROJECT_INDEX.md`.  ~~**Remaining:** boss-pin bores get re-cut by
-            `add_structural_features.py`...~~ **SUPERSEDED 2026-07-06 (user directive):
-            the joint boss-pins are now REMOVED entirely, not re-cut as dowels — the
-            splice collar provides both securing and alignment.**  `add_structural_features.py`
-            (head/middle/rear) and `merge_cargo_interior.py` (cargo) no longer cut ANY
-            joint boss-pin bore; `BOSS_PIN_BORES` retired to a historical record.  Head,
-            cargo, and middle regenerated 2026-07-06 from the clean Blender source and
-            re-verified watertight (in-memory PASS, 0 boundary edges, single/expected body
-            count) with the pins absent — confirmed geometrically (pin-axis bore-ring vertex
-            count dropped ~80→~24 = plain wall).  The collar bonds to the printed shells at
-            assembly.  (Rear pin removal is coded but rear cannot be regenerated until its
-            Blender-source mesh is repaired — see MESH-01 below.)
-- [x] **Regenerate cargo doors from the baked shell.** `cargo_door_port/stbd.stl`
-    (2026-06-01) predate both the repaired-shell re-orientation and the bake; regenerate
-    via `generate_cargo_doors.py` against the baked
-    `s_cargo_sect_shell24_2mm_repaired.stl` and verify the belly faces hull −Z.
-    **DONE 2026-06-16**: `generate_cargo_doors.py` rewritten for hull frame (Rev R1a).
-    Belly faces detected by normal Z < −0.5.  Both doors watertight.
-- [x] **Correct hinge location: outboard flank, not centreline.** Rev R1a (above)
-    placed both doors' piano-hinge knuckles at the ship centreline X_CL (≈ −169.85 mm)
-    with the free edges at the hull sides — backwards from the door behaviour already
-    documented everywhere else in the repository (TODO.md §1.4.2, README.md, `rcrs49_wire_post.scad`),
-    all of which describe the doors hinging at the **outboard flank/belly edge** and
-    swinging **down and out from the aircraft, full 180° range of motion**, to open the
-    bottom of the cargo bay. **DONE 2026-06-22 (Rev R1b, with user)**:
-    `generate_cargo_doors.py` corrected so each door hinges independently at its own
-    outboard belly edge with its free edge at X_CL — see corner-curvature note below
-    for why the hinge X is NOT the cargo-section bounding box (X_SHELL_MIN/MAX). Removed
-    the port/stbd knuckle Y-interleaving (no longer meaningful — each door is now its
-    own independent piano hinge pinned to the fuselage, not a shared centreline hinge
-    joining the two panels). Knuckle Z is now sampled from the belly interpolator at
-    each hinge X rather than a bare literal.
-    - [x] **Fix door-surface discontinuity found during verification.** First Rev R1b
-        pass still produced doors with a visible crease: the door grid extended to the
-        cargo-section bounding-box X (±72.7/−267 mm), but the real ventral belly mesh
-        only exists out to X ≈ −114..−225 mm — beyond that the interpolator silently
-        fell back to a flat plane, producing a sharp step roughly halfway across each
-        door. **DONE 2026-06-22**: hinge lines are now derived at runtime from the
-        actual detected belly-mesh edge (per-Y-row worst-case extent, so every sampled
-        point has real data), AND a row/column despike pass (`despike_grid()`,
-        max 1.0 mm/step) suppresses a second, smaller artifact at the aft-outboard
-        corner where the belly curves toward vertical (into the side wall/aft
-        bulkhead) faster than a single-valued height-field can represent — that corner
-        also overlaps the documented landing-gear HULL_ATTACH_POS Y ≈ 100 mm boss
-        region. The despike is a print-safety net, not a substitute for verifying
-        the aft-outboard corner shape in FreeCAD — see sub-tasks below.
-    - [x] **Fix disconnected knuckles / non-straight hinge axis found during
-        verification.** The despiked-panel fix (above) sampled each knuckle's Z
-        independently from the belly contour, so the 4 knuckles per door landed at
-        4 different Z heights — physically wrong (a single CF rod is rigid and
-        straight) and some knuckles ended up too far from the panel surface to union
-        into the same solid (disconnected, floating geometry). **DONE 2026-06-22**:
-        all 4 knuckles on a door now share one constant (X, Z) hinge axis (Z = mean
-        of the panel's actual contour at the 4 knuckle positions + KNUCKLE_R); each
-        knuckle is bonded to the contoured panel via a small per-knuckle gusset block
-        (`make_knuckle_gusset()`) bridging whatever local Z gap exists between the
-        straight axis and the panel surface at that knuckle's Y. Final doors: port
-        55.2×106.0×9.1 mm (hinge X ≈ −117.6 mm, hinge Z ≈ 5.11 mm), stbd
-        55.7×106.0×9.2 mm (hinge X ≈ −222.5 mm, hinge Z ≈ 5.22 mm); both verified as a
-        single connected watertight body (`trimesh` `split()` → 1 body each).
-    - [ ] **Verify cargo door fit in slicer** — open `cargo_door_port.stl` and
-        `cargo_door_stbd.stl` in slicer; confirm hinge knuckles align at X ≈ −117.6 mm
-        (port) and X ≈ −222.5 mm (stbd), free edges meet at X ≈ −169.85 mm, and panels
-        cover Y = 2..108 mm at Z ≈ 0..5 mm. Pay particular attention to the aft-outboard
-        corner of each door (Y → 108, near the hinge edge) — this is where the despike
-        safety net (above) is masking real but algorithmically-unresolved hull
-        curvature; confirm by eye it isn't flattened in a way that leaves a gap against
-        the real hull. Verify no overlap with hull boss sockets (HULL_ATTACH_POS
-        Y = 25, 100 mm). **BLOCKS cargo door printing.**
-        - **Programmatic cross-check DONE 2026-06-29 (7/7 PASS, trimesh):** port door
-            X −169.85..−114.60 (hinge X=−117.6), stbd X −225.51..−169.85 (hinge X=−222.5),
-            free edges meet at CL X=−169.85, panels span Y 2..108 at Z≈0..8.7 (hinge
-            Z≈5.1), doors do not interpenetrate at CL (Δ < 0.3 mm), both watertight single
-            bodies, and the 4 Rev R1c retention blocks present/watertight with coaxial
-            bores.  **Still open:** the visual aft-outboard-corner despike eyeball and the
-            HULL_ATTACH_POS Y=25/100 boss-overlap check — the latter references the
-            *retired* `landing_leg_assy.scad`; redo against the Rev R5 wire-brace hull
-            bosses once those are finalized in the cargo shell (§1.1.4).
-    - [ ] **Piano-hinge CF rod (×2, independent)** — verify 3 mm CF rod passes through
-        each door's own 4 knuckle bores (3.15 mm bore) — port and stbd are now two
-        separate pins/rods, not one shared centreline pin; test in printed prototype
-        before final assembly.
-        - **Geometry cross-check DONE 2026-06-29:** each door's 4 knuckle bores (Ø3.15)
-            and the two Rev R1c shell-side retention-block bores (Ø3.3,
-            `cargo_hinge_retention.stl`) are coaxial on the door's rod axis (port
-            X=−117.6/Z=5.11, stbd X=−222.5/Z=5.22), rod span Y +2..+108.  Printed-prototype
-            insertion test still required (physical).
-    - [x] **Sync `cargo_sect_shell24.scad` hinge-pin blocks to the Rev R1b hinge lines.**
-        **DONE 2026-06-29 (Rev R1c).**  The legacy `hinge_pin_block()` /
-        `HINGE_Y`/`HINGE_Z` parameters describe a single shared hinge along the legacy
-        part-local LATERAL axis in the pre-bake frame (Y = vertical, Z = lateral) —
-        backwards from the Rev R1b design (two independent piano hinges pinned at the
-        outboard belly edges, axes along hull Y).  Reframing that one module inside the
-        legacy SCAD (whose `door_bay_cut`/servo/latch modules are still legacy-frame and
-        interdependent) would leave the SCAD internally inconsistent, and the published
-        cargo shell is now Blender-canonical (§1.1.1.0a), so the correct realization is a
-        new self-contained hull-frame generator:
-        **`airframe/stls/fuselage/cargo/generate_cargo_hinge_retention.py` (Rev R1c) →
-        `cargo_hinge_retention.stl`** (4 blocks, 2 per door; to be boolean-unioned into
-        the Blender cargo shell during the §1.1.1.0a interior-feature merge).  Verified
-        against the baked door STLs: bore axes coincide with the door rod axes (port
-        X=−117.6/Z=5.11, stbd X=−222.5/Z=5.22; bore Ø3.3 on rod span Y +2..+108), all 4
-        blocks watertight, each bonds to intact belly skin outside the bay aperture
-        (600–800 shell verts inside each block envelope), and all clear the Y 2..108
-        aperture.  Legacy `hinge_pin_block()` marked **SUPERSEDED** in
-        `cargo_sect_shell24.scad` (module header + A5 call site) but retained so the
-        legacy SCAD still renders until the door-bay subsystem is reframed.  Added to
-        `serenity_assembly.py` (identity placement, hull frame) and `PROJECT_INDEX.md`.
-        flake8-clean.
-- [x] **Consolidate duplicate cargo shell copies.** **DONE 2026-06-29.**  The
-    `fuselage/`-level copy no longer exists on disk; a single canonical copy remains at
-    `fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl` (the `s_` prefix was dropped
-    project-wide — see CLAUDE.md "File-naming").  It is baked (header marker
-    `SerenityUAV HULL-FRAME R1 Cargo_Shell` present; extents X −267.0..−72.7,
-    Y −71.5..132.0, Z 0..163.2 mm, matching the CLAUDE.md table).  All active references
-    (`serenity_assembly.py`, `tools/bake_hull_frame.py`, `serenity_render_views.py`,
-    `bom_revR.csv`) use the `fuselage/cargo/` path; the stale `s_cargo…` reference in
-    `serenity_assembly.py` was corrected.  NOTE: the canonical copy still carries the
-    **MESH-01 fragmentation defect** (71,131 disconnected bodies, `is_watertight=False`) —
-    that is the separately-tracked MESH-01 blocker above, not a consolidation issue.
-- [ ] **Hull-frame placements for VERIFY parts** (assembly-load blocker resolved; visual
-    fit-validation remains). Cargo mounts (8), pylons, EDF sleeves,
-    nozzles/gears, battery tray, belly panel, tip caps, dorsal antenna fin, landing
-    legs/feet remain part-local; validate each in FreeCAD against the baked hull and
-    either bake or record explicit placements in `serenity_assembly.py`.
-    - **2026-06-29 — assembly now regenerates cleanly (was broken/stale since Jun 11).**
-        Fixed a latent FreeCAD-1.0 bug in `transform_mesh()`: `obj.Mesh` returns an
-        immutable reference, so the in-place `.transform()` raised "This object is
-        immutable" and aborted every save (the first `transform_mesh` call hit it).
-        Changed to copy → transform → reassign.  This unblocked the VERIFY-tier
-        placements: battery tray, belly panel, and all nacelle-internal components
-        (gears/sleeves/nozzle, §1.1.3.3) now apply their `transform_mesh()` placements,
-        and `airframe/Serenity-Assembled.FCStd` rebuilds with 0 WARN/MISSING/error.
-    - Also resolved all missing-STL refs that were WARN-skipping: stale `s_`-prefixed
-        primary-shell/wing/cargo paths corrected; generated the two missing VERIFY STLs
-        (battery_tray, belly_panel) and `nacelles/nacelle_servo_bracket.stl`; corrected
-        the landing-gear feet/legs paths to the `landing-gear/` subdir (flagged RETIRED —
-        Rev R5 wire-brace supersedes; hull placement is §1.1.4).
-    - **REMAINING (FreeCAD-manual, user step per CLAUDE.md):** visual fit-validation of
-        the part-local items still placed by estimate (cargo mounts ×8, pylons, tip caps,
-        dorsal antenna fin, battery tray/belly panel transforms) against the baked hull,
-        then bake or commit final placements.  The assembly loading cleanly is the
-        prerequisite that was blocking this.
-- [x] **Generate `battery_tray.stl` and `belly_panel.stl`** from their SCAD sources —
-    **DONE 2026-06-29.**  Rendered from `airframe/openscad/fuselage/battery_tray.scad`
-    and `belly_panel.scad` to `airframe/stls/fuselage/`.  Both watertight, single body
-    (battery_tray 252 facets, local 154×47×62 mm; belly_panel 548 facets, 160×3.5×65 mm).
-    Part-local / VERIFY-tier (NOT in `bake_hull_frame.py` COMPONENTS); placed via
-    `transform_mesh()` in `serenity_assembly.py` — the two WARNs are now gone and the
-    assembly regenerates cleanly (see VERIFY-parts item below).
-- [x] **Archive deprecated FreeCAD prototypes** — **DONE 2026-06-29.**  `assembly1.py`,
-    `Serenity-Assemble.py`, `Serenity-Subsystem-Assembly.py`,
-    `serenity_subsystem_assembler.py`, and `serenity_fuselage_asm4.py` (the last from
-    `airframe/freecad/assembly/`) `git mv`-ed to `airframe/archive/FreeCAD-scripts/`
-    (history preserved).  No active references remained.  `PROJECT_INDEX.md` entries
-    removed; `ARCHIVE_INDEX.md` section "airframe/archive/FreeCAD-scripts/" added.
-    The canonical `SerenityAssembly.FCStd` was left in place in `airframe/freecad/assembly/`.
-
-#### 1.1.1 **Fuselage**
-
-##### 1.1.1.1a *Bow Sensor Pod — Head Section (Rev R1c, 2026-06-30)*
-
-Forward-facing sensor assembly on the canonical **40°-tilted bow mounting flat**
-(~26.4 × 15 mm, outward normal 39.8° about +X), replacing the modeller's two convex
-camera bumps.  **Rev R1c redesign (2026-06-30):** geometric verification against the
-baked canonical head shell showed the Rev R1 dorsal/ventral dome estimates were off
-(dorsal camera floated ~10 mm proud of the rounded nose).  Per user direction the three
-apertures are now CLUSTERED on the 40° flat and distributed HORIZONTALLY — **camera on
-the PORT camera-bump, ToF on the STARBOARD camera-bump, crosshair laser on CL between
-them** — all bores normal to the flat, carried by ONE combined faceplate.
-SCAD: `airframe/openscad/fuselage/bow_sensor_pod.scad` (cuts) +
-`airframe/openscad/fuselage/bow_sensor_faceplate.scad` (faceplate); verifier:
-`tools/verify_bow_pod.py`.
-
-###### Geometric Verification — DONE 2026-06-30 (replaces manual slicer cross-sections)
-
-- [x] **Built `tools/verify_bow_pod.py`** — ray-casts each bore against the baked
-    `head_shell24_2mm_repaired.stl` and reports skin-landing, wall thickness, interior-pocket
-    clearance, and aperture-row fit.  Reproducible; supersedes the eyeball-in-slicer checks.
-- [x] **Located the canonical bow mounting flat** — centre hull (−167, −301, 120), normal
-    (0, −0.766, −0.643) = 39.8° about X, ~26.4 × 15 mm (matches the 1.04 × 0.59 in spec).
-- [x] **Placed + skin-verified all three apertures on the flat (3/3 PASS):** camera hull
-    (−161.2, −300.7, 116.0) Ø10; ToF hull (−177.7, −301.0, 116.6) Ø8; laser hull
-    (−170.7, −299.9, 117.1) Ø6 exit.  All land on skin (offset ≤ 0.01 mm), walls ≥ 2.2 mm,
-    interior bores clear ≥ 103 mm into the nose (no pocket breach).
-- [x] **Confirmed fit:** aperture row spans 25.5 mm in the 26.4 mm flat; ToF over-runs the
-    starboard roll-off ~1.3 mm (bridged by the faceplate).
-- [ ] **User FreeCAD fine-tune (fractional mm):** confirm the ToF 1.3 mm over-run and the
-    camera↔laser↔ToF body-pocket packing behind the flat in `SerenityAssembly.FCStd`;
-    re-run `tools/verify_bow_pod.py`.  *(rough fit verified; final alignment per CLAUDE.md
-    complex-geometry policy)*
-- [x] **Merge `bow_pod_cuts()` into the canonical Blender head shell — DONE 2026-07-03.**
-    New `airframe/blender-scripts/merge_head_interior.py` (Rev R1d), mirroring
-    `merge_cargo_interior.py`'s robust single-union/single-boolean pattern: loads the
-    already-published, already-baked, already boss/aft-face-featured
-    `head_shell24_2mm_repaired.stl` (deliberately does NOT redo the joint-boss work already
-    done by `add_structural_features.py`'s `process_head()`), builds the camera/ToF/laser/
-    faceplate-seat cutters exactly as `bow_sensor_pod.scad` defines them (same positions,
-    same `rotate([130,0,0])`, same wall-overshoot), unions them into one cutter solid, and
-    does ONE `shell − cutters` manifold3d boolean. Found and fixed a real bug along the way:
-    the published STL loads with `process=False` (skips vertex welding — each STL triangle
-    stores its own unwelded vertex copies), which made `trimesh` report
-    `is_watertight=False` and made manifold3d reject the mesh outright
-    (`Error.NotManifold`, producing an empty result) until `mesh.merge_vertices()` was added
-    (matching the call `merge_cargo_interior.py` already makes — I'd missed it on the first
-    pass). Also found one real disconnected 158-face/3.16 mm³ boolean-artifact sliver where
-    two cutters graze each other; added a `keep_largest_body()` cleanup (analogous to
-    `merge_cargo_interior.py`'s `drop_slivers()`) to discard it.
-    **Verified (not just claimed):** `is_watertight=True`, `is_winding_consistent=True`,
-    **1 body**, 0 boundary/0 non-manifold edges, volume 183,192 mm³ (down from 186,709 mm³
-    pre-cut — a sane ~3,500 mm³ reduction from the 3 bore/pocket cutters + bump-shave).
-    `tools/bake_hull_frame.py --check` confirms the `HULL-FRAME R1` marker survived (no
-    re-bake needed — only booleans were applied, matching the identity-rotation head bake).
-    `python3 tools/validate_stls.py` — **all 69 STL files pass watertight, including this
-    one.**
-    Jayne's nose-mount bosses (`jayne_board_bosses()`, added earlier this session) and
-    Shepherd's Book-bay bosses (`book_dorsal_boss()`, known unfixed legacy-axis bug) were
-    DELIBERATELY EXCLUDED from this merge — both remain SCAD-only proposals, not baked into
-    the fabrication mesh, per their own open-item flags (merging an unverified/buggy
-    placement would falsely certify it).
-    - **2026-07-12 (Rev S1):** `cargo_sect_shell24.scad` `vera_board_bosses()` was updated to the
-        NEW Vera trapezoid outline's 4 corner **M2.5** holes (cargo JST-jumper variant), and a
-        `cargo/cargo_vera_faraday.scad` EMI enclosure was added (renders watertight). These stay
-        **SCAD-only / excluded from the baked mesh** for the same reason — pending a full
-        cargo-shell render + watertight mesh check + re-bake, and a FreeCAD fit check. The Vera
-        SoM is now the connectorized PHYTEC PCM-071 (240-pin, 2× Samtec BTH-060) — see avionics
-        §1.2c; the nose install still needs head-shell rail slots + a foam void form (airframe
-        §1.1).
-- [x] **Re-run mesh validation after head shell regen — DONE 2026-07-03** (see above,
-    `validate_stls.py` all-pass). Also re-ran `tools/verify_bow_pod.py` post-cut and found
-    (and fixed) the SAME unwelded-STL loading bug there (`mesh.merge_vertices()` was missing
-    — one-line fix). **Note on interpreting that tool post-cut:** `verify_bow_pod.py`
-    ray-casts to find "first skin hit" along each bore axis — that check is only meaningful
-    *before* cutting (confirming a proposed position lands on real skin, which it already
-    did: 3/3 PASS, 2026-06-30). Run *after* the cut, the intended spot is now a hole, so the
-    ray correctly sails through and reports hitting the *far* wall instead — an expected
-    consequence of the tool's pre-cut design, not a regression. The actually meaningful
-    post-cut check — `mesh.contains()` at each of the three aperture-centre hull points —
-    confirms all three are void (outside the solid), i.e. the cuts landed exactly where
-    intended: camera (−161.20,−300.68,+116.01), ToF (−177.67,−300.98,+116.61), laser
-    (−170.67,−299.94,+117.14) — all `contains=False` ✓.
-
-###### Combined Faceplate — DONE 2026-06-30 (supersedes the two separate bezels)
-
-- [x] **Designed `bow_sensor_faceplate.scad`** — single 28 × 16 × 2.5 mm CF-PETG plate on the
-    40° flat carrying camera (Ø10 lens), laser (Ø6 exit) and ToF (Ø8 + rear 8.4 mm PMMA disc
-    counterbore); 4× M2 flathead from exterior into seat heat-set inserts.  Rendered + mesh-
-    validated (watertight, manifold; ~0.83 g).  The shell-side seat (`bow_face_seat()` in
-    bow_sensor_pod.scad) shaves the two camera bumps flat and drills the 4 inserts.
-- [x] **Superseded `bow_camera_bezel.scad` + `bow_tof_laser_bezel.scad`** — three 15–21 mm
-    bezel flanges cannot coexist on the 26.4 mm flat; consolidated into the one faceplate
-    (separate files removed before commit).
-- [ ] **PMMA window spec finalised** (sourcing remains a procurement action):
-    - [x] Camera: open Ø10 lens bore (no window; faceplate shades the lens)
-    - [x] ToF: 8 mm dia × 2 mm PMMA disc (uncoated; transmits 905 nm IR) — rear counterbore
-    - [ ] Laser: 3 mm dia × 2 mm PMMA exit window (optional; sealed modules may omit)
-- [ ] **Procure PMMA discs** (ToF 8 mm, laser 2 mm) — physical purchase. *(external)*
-- [x] **Laser down-angle review** — **APPROVED 2026-06-30 (user).** The laser is mounted normal
-    to the 40° bow flat (40° below horizon, vs the Rev R1 30°); this is the accepted final
-    orientation, no re-aim required.
-
-###### Avionics Integration *(physical wiring + firmware — external to this CAD task)*
-
-- [x] **Superseded 2026-07-03 — see §1.2c "Jayne" below.** ~~Create RP2350 (or similar) based
-    Camera/TOF/laser mcu board~~ Scope expanded during design exploration (imported AI-assisted
-    brainstorm, fact-checked and corrected against real datasheets — see REFERENCES.md
-    "Removed / Superseded Citations" for what was fabricated in the original brainstorm) into
-    the **Jayne** standalone board (not a PB2-I cape — its own board, peer network node via
-    Ethernet ring/CAN-FD only): TI MSPM0G3507 (native CAN-FD) + Infineon SLB9670 TPM
-    (fleet-standard part, not a new one) + Microchip KSZ9477 Ethernet switch, plus a TI AM62Ax
-    digital vision SoC replacing the RunCam Nano 4 analog camera. One board design, installed
-    at both the bow sensor pod (nose) and the cargo bay nadir FPV mount.
-
-- [x] **Wire TFmini-S UART to bow sensor MCU.** — **SUPERSEDED by Jayne (2026-07-06).**
-    The pre-Jayne plan ran a 28 AWG loom from the bow pod all the way to Shepherd's Room and
-    read the TFmini-S on the Shepherd (Wash) node. Jayne is now the board *at* the bow pod, so
-    the TFmini-S is a short local run (<75 mm) on Jayne's dedicated `J_TOF`/UART1, read by Jayne's
-    MSPM0G3507 — no head-section loom to Shepherd's, no Shepherd `serenity-fc` UART driver.
-    Replaced by the Jayne local sensor harness (§1.2c) and Jayne node firmware (§4.6).
-- [x] **Wire bow camera video output to bow sensor MCU** — **SUPERSEDED by Jayne (2026-07-06).**
-    The RG178 analog-coax run was for the RunCam Nano 4 analog camera, which Jayne supersedes
-    (REF-SENSOR-001, superseded). Jayne's camera is a digital MIPI CSI-2 module on `J_CAM1/J_CAM2`
-    (flex/FPC, ~20–30 mm), encoded on-board by the AM62A7 and published over the Ethernet ring —
-    no analog coax to a separate MCU. Tracked as the Jayne local sensor harness (§1.2c).
-- [x] **Wire laser GPIO enable bow sensor MCU** — **SUPERSEDED by Jayne (2026-07-06).**
-    This discrete 2N7002-from-Wash-GPIO driver plus a Class-3B-style physical key-switch
-    ([REF-FDA-001 §1040.10(f)(1)]) is replaced by Jayne's own on-board laser driver (Q1 AO3400
-    logic-level N-FET, R1 100 Ω gate, R2 10 kΩ pulldown-default-off, `J_LASER`), enabled by
-    Jayne's MSPM0G3507 — not a Wash GPIO. Per `docs/JAYNE_LASER_ANALYSIS.md` Rev A2 the nose is
-    **Class 2 (≤ 1 mW green), NOT Class 3B**, so the mandatory key-interlock/shutter is dropped
-    and the ≤ 1 mW cap is hardware-enforced (fixed current limit). Tracked at §1.2c (driver) and
-    §4.6 (GPIO firmware + interlock).
-- [x] **Add laser enable command to MAVLink C2 interface** [REF-PROTO-002] — **SUPERSEDED /
-    RELOCATED to Jayne (2026-07-06).** The laser is now Jayne-owned (commanded by Jayne's
-    MSPM0G3507, published/gated over the CAN-FD + Ethernet ring), not the Wash MAVLink path. The
-    surviving C2-enable requirement is folded into the Jayne "Laser GPIO driver" firmware task
-    (§4.6). Because the nose is now Class 2 (`docs/JAYNE_LASER_ANALYSIS.md` Rev A2), the previously
-    **mandatory** operator acknowledgement is downgraded to **optional** defense-in-depth rather
-    than a Class-3B requirement.
-- [ ] **Add standards REF-IDs to bow_sensor_pod.scad firmware integration notes** once driver
-    code is in place.  Ref: [REF-SENSOR-002] TFmini-S UART protocol, [REF-NIST-001 §2.1] ZTA.
-
-###### Mass Budget Entry — DONE 2026-06-30 (in `docs/bom_revR.json` → `bow_sensor_pod`)
-
-- [x] **BOM updated** — `bow_sensor_faceplate.stl` added to `print_schedule`; dedicated
-    `bow_sensor_pod` mass block added (imperial-primary).  Net AUW change vs the two convex
-    bumps is ≈ nil (bumps removed, ~0.8 g faceplate added).
-- Bow camera (RunCam Nano 4 or equiv.): 0.13 oz (3.6 g) [REF-SENSOR-001]
-- TFmini-S ToF sensor: 0.18 oz (5.0 g) [REF-SENSOR-002]
-- Crosshair laser module: ≈ 0.28 oz (8 g) (estimate; varies by COTS supplier)
-- Printed faceplate (CF-PETG, measured solid vol 0.65 cm³): ≈ 0.03 oz (0.8 g)
-- PMMA windows (2×): ≈ 0.2 g
-- Wiring / connectors: ≈ 0.18 oz (5 g) (estimate)
-- **Total bow pod mass addition: ≈ 0.80 oz (22.6 g)** *(was ~25.6 g with the twin-bezel placeholder)*
-    Update master BOM `docs/bom_revR.json` once bezel masses confirmed in slicer.
-
----
-
-##### 1.1.1.0a *Blender-Canonical Source Adoption (Rev R1, 2026-06-13)*
-
-The four Blender-derived, 2 mm hollow, repaired fuselage shell STLs in
-`airframe/blender-scripts/files-hollowed-24in/` are now the **authoritative canonical
-sources** for all fuselage geometry.  They have been copied to `airframe/stls/fuselage/`
-and baked to hull frame.  SCAD fuselage shell files are secondary references only.
-
-**Baked on 2026-06-13 (all four verified OK, max error < 1.52e-05 mm):**
-- [x] `head_shell24_2mm_repaired.stl` — 790 036 tri; X −232.9..−103.5 / Y −305.7..−70.7 / Z +61.1..+201.5 mm
-- [x] `cargo_sect_shell24_2mm_repaired.stl` — 1 414 068 tri; X −267.0..−72.7 / Y −71.5..+132.0 / Z 0.0..+163.2 mm
-- [x] `middle_shell24_2mm_repaired.stl` — 855 328 tri; X −258.5..−81.6 / Y +130.4..+203.6 / Z +1.3..+166.1 mm *(see §1.1.1.3 — includes horseshoe ring + inner neck as ONE piece)*
-- [x] `rear_shell24_2mm_repaired.stl` — 1 095 972 tri; X −246.1..−105.5 / Y +203.2..+384.3 / Z +3.3..+161.1 mm
-
-**Open tasks:**
-
-- [x] **Cargo section interior boss features** — **DONE 2026-06-30** via new
-    `airframe/blender-scripts/merge_cargo_interior.py` (Rev R1).  Starts from the clean
-    Blender source, bakes to hull frame, and merges every cargo interior feature in ONE
-    robust manifold3d pass (union all cutters / union all positives → single
-    `(shell + positives) − negatives`).  Result: **watertight=True, single connected body,
-    0 boundary/0 non-manifold edges, vol 323 188 mm³ (≈ 339 g as-printed .. 414 g solid
-    CF-PETG)** — this simultaneously fixes MESH-01 for cargo (see MESH-01 item below).
-    Merged this pass:
-    - **Interior-wall removal** — the leftover cargo-bay floor "duct" the Blender hollowing
-        left inside the cavity (a ~54×38 mm closed box blister on the belly floor, hull
-        X −196..−142, Y −15..+102, Z 6..44), confirmed by cross-section + render before cut.
-    - **Clamshell doors** — belly aperture cut hull X[−222.5..−117.6] × Y[+2..+108] between
-        the two hinge lines, + the 4 Rev R1c hinge-pin retention blocks (imported verbatim
-        from `generate_cargo_hinge_retention.py`), fused into the shell.
-    - **Section-joint features** (head/cargo Joint 1 + cargo/middle Joint 2): bore-open
-        fwd/aft faces, 6× Ø3.2 boss-pin bores, keel locating channel, Y=+30 ring-frame
-        pocket — single-sourced from `add_structural_features.py`.
-    - **Wing mortices** — Ø12.3 spar bore (full lateral span, both walls), 2 root mortises,
-        and 2× Ø22 spar-bearing bosses, at the **re-derived** chordwise stations (129 mm Rev
-        R1 root chord, LE root hull Y=−7: spar 30% → Y=+31.7; mortise 50% → Y=+57.5; Z=62.5).
-        Supersedes the SCAD `WING_ROOT_Y_CEN=CY+40` (hull Y≈+6) stale-161mm-chord stand-in
-        (§1.1.2).  All lateral-wall/dorsal features are seated against the wall position
-        **sampled from the real baked mesh** at each feature's (Y,Z) — the walls curve
-        inboard with Z, so a bbox-extremity pin would float off the wall.
-    - **Interior support structures** — 2 nacelle-servo mount pads (Z=93, clears spar boss
-        by ~4 mm) + M3 bores; **Inara** (port) avionics-bay standoff bosses (4, dorsal).
-    - **SUB-TASKS OPEN (VERIFY / deferred — do not block MESH-01 or door/joint printing):**
-        - [x] Verify wing spar/mortise fit in FreeCAD against the baked wing STL root/tab
-            (2026-07-03, trimesh cross-section of `wing_port_s1223_revo.stl`, hull-frame,
-            watertight): measured tab X[-93.0,-81.0] Y[42.5,72.5] (ctr 57.5) Z[48.0,68.0]
-            (ctr 58.0) — matches `wings_s1223_revo.scad` WING_ROOT_TAB_W/H/L (30/20/12) mm
-            exactly. **Y confirmed**: matches this section's re-derived mortise target
-            Y=+57.5 mm above (supersedes stale `WING_ROOT_Y_CEN=CY+40`). **Z open**: planned
-            mortise center Z=62.5 vs measured tab center Z=58.0 — 4.5 mm mismatch (~16/20 mm
-            overlap only); adjust mortise Z_CEN to 58.0 mm or wing tab Z before cutting.
-            **Mortise cavity not yet present** in `cargo_sect_shell24_2mm_repaired.stl` —
-            solid material confirmed at the tab footprint by X-slice scan; cut/merge still
-            TBD (blocks wing installation).
-        - [x] **GPS×2, FPV nadir camera, and Inara/River avionics-bay dorsal mounts —
-            axis bug FIXED at the SCAD reference-design level, Rev R2 (2026-07-03).**
-            Root cause confirmed empirically (not guessed): the real canonical mesh's
-            local Z range (0..163.2 mm) matches the documented bake-invariant hull Z
-            range exactly, and local X range matches `CARGO_X_WALL_PORT/STBD` (fixed
-            Rev R1) — confirming Z=dorsal, X=lateral, Y=longitudinal in this file, same
-            as the rest of the project.  The GPS/avionics/nadir-camera modules were the
-            only ones still using the legacy (Y=dorsal) mental model — same bug class as
-            the Rev R1 wing-root fix.  **User decision (2026-07-03): Inara (port) and
-            River (stbd) avionics bays are a lateral pair at a shared longitudinal
-            station** (not fore/aft sequential) — matches their names and the
-            GPS_PORT/GPS_STBD antenna-diversity co-location.  Fixed in
-            `cargo_sect_shell24.scad`: `DORSAL_ROT`/`NADIR_ROT`, `DORSAL_Z_EXT`/
-            `NADIR_Z_EXT` (measured, 163.2/0.0 mm), `GPS_PORT_POS`/`GPS_STBD_POS`,
-            `CARGO_CAM_POS`, `avinics_dorsal_boss()`/`avinics_dorsal_panel_cut()`,
-            `INARA_X_CEN`/`RIVER_X_CEN` (now real lateral positions, ±37.5 mm about CX).
-            Original numeric intent preserved (GPS_SEP=30mm, 35mm inter-bay gap, 60×40mm
-            tray footprint, 25/15mm boss offsets) — only the axis each number is applied
-            to changed.  **River's avionics bay is restored** (previously dropped per the
-            wing-spar Z conflict, §1.1.3.3 — that conflict was itself a symptom of the
-            same Z-axis misuse; re-verify the wing-spar Z conflict note now that Z is
-            correctly dorsal-only and no longer doubling as a lateral bay-selector).
-            **NOT YET DONE:** these are SCAD reference-design fixes only — the actual
-            fabrication-ready cargo mesh (produced by `merge_cargo_interior.py`) does
-            NOT yet include GPS, FPV camera, or avionics-bay cuts at all (confirmed by
-            reading that script — only Inara's boss/standoff geometry was merged, using
-            its own independently-correct hardcoded hull-frame (X,Y)=(-135,90) values,
-            unaffected by the SCAD bug).  Extending `merge_cargo_interior.py` to merge
-            the now-fixed GPS/FPV/River-bay cuts (and the new Jayne bosses below) into the
-            real printed mesh is a follow-on task, not yet started.
-        - [ ] **Door-servo pads, latch-catch lips, belly ribs, hinge-pin blocks — SAME
-            axis bug found (2026-07-03), NOT yet fixed.**  `BELLY_INT_Y = -413` is used
-            as the position's Y-component in `servo_mount_pad`/`belly_rib`/
-            `latch_catch_lip` exactly like the now-fixed `AVINICS_DORSAL_Y` bug — i.e.
-            these modules also treat Y as the nadir/vertical axis.  (Hinge-pin blocks are
-            separately already marked superseded/legacy per Rev R1c — see
-            `hinge_pin_block()` note — so lower priority.)  Needs the same fresh-design
-            treatment as the GPS/avionics fix above (fix, don't guess-reinterpret) before
-            these are merged into the fabrication mesh.
-        - [ ] **Shepherd's "Book" Faraday-tray dorsal mount in `head_shell24.scad` — SAME
-            axis bug found (2026-07-03) in the head section, NOT yet fixed.**
-            `BOOK_DORSAL_Y = CY + 94` (`book_dorsal_boss`/`book_dorsal_panel_cut`) is the
-            identical bug pattern, independently present in the head shell.  Confirmed
-            the head shell's own local frame does NOT need any permutation fix otherwise
-            (local X/Y/Z extents match the baked hull extents exactly, unlike cargo) —
-            this is an isolated instance in the Book bay code only.
-        - [ ] **Leg-mount clearance (§1.1.4):** the deferred Rev R5 wire-brace corner leg
-            bosses must clear the **aft** door hinge retention blocks — those sit at the
-            hinge X (−117.6 port / −222.5 stbd) over hull Y +109..+121, only ~9 mm aft of
-            the aft leg-attach row (Y≈100). **Verified 2026-07-03** against
-            `generate_cargo_hinge_retention.py` (real block geometry: aft blocks Y 109–121,
-            X −126.6..−116.6 port / −213.5..−223.5 stbd, Z 0.5–9.26) and
-            `docs/LANDING_GEAR_ANALYSIS.md` §11.4 (boss OD≈10 mm). With a ~10 mm boss
-            centered on the Y≈100 row, true clear margin to the block face is **≈4 mm, not
-            9 mm** — tight. **Cannot certify pass/fail**: LG-02/LG-10 (final corner boss
-            X/Y placement) are still open in `LANDING_GEAR_ANALYSIS.md` §13/§14, so no
-            authoritative boss X exists yet to check X-overlap against the block's X range.
-            Recommend: finalize LG-10 boss X clear of block X ranges above, and hold the
-            leg row at Y≤95 mm (≥14 mm clear of block face) rather than Y≈100.
-        - [ ] Door latching: the aperture is a clean opening (no seating rabbet); the
-            deferred latch-catch lips + `cargo_cradle_autolatch` hooks provide closure.
-- [ ] **Middle section inner neck — Phase 5-10 print guidance** — the Blender middle mesh includes
-    the inner neck (closed tube) and the outer horseshoe ring as one piece.  Confirm in slicer that
-    both elements appear correctly and that there are no thin-wall violations in the neck-to-horseshoe
-    web transitions.  The 4× EDF intake scoop openings in the inner neck are NOT cut in the current
-    mesh — confirm before slicing.  See §1.1.1.3 for details.  **BLOCKS middle section printing.**
-- [ ] **Deprecate SCAD fuselage shell files** — `s_head_shell24.scad`, `s_middle_canonical_shell24.scad`,
-    `s_rear_neck_intake_shell24.scad` are now secondary references.  At next revision checkpoint,
-    archive them to `airframe/archive/` and update PROJECT_INDEX.md / ARCHIVE_INDEX.md.
-    `cargo_sect_shell24.scad` (Rev S3) remains active as the source for interior boss geometry
-    until those features are merged into the Blender mesh (task above).
-- [x] **Update `REVN_BUILD_GUIDE_24IN.md` fuselage shell source references** — **DONE 2026-06-30.**
-    Added an authoritative "Fuselage shell source — Rev R1 canonical (Blender pipeline)" callout
-    to the Blender Script Reference (copy from `airframe/blender-scripts/files-hollowed-24in/`
-    → `airframe/stls/fuselage/` → `python3 tools/bake_hull_frame.py`), added the Blender-canonical
-    row to the script table, and flagged the legacy `middle_canonical_shell24.scad` regen note.
-    - [ ] *Remaining:* the legacy print-schedule table still lists pre-Rev-R1 PETG/8%-gyroid
-        settings and old shell basenames; reconcile to CF-PETG 2 mm canonical at the next
-        build-guide pass (out of scope for the source-reference fix).
-
-##### 1.1.1.0b *Section Joint Boss / Alignment Design (Rev R1 — all four fuselage sections)*
-
-All four fuselage section boundaries (head/cargo, cargo/middle, middle/rear) are
-**fabrication splits** introduced for printability — they are not and were not structural
-joints in the Thingiverse reference model (which was designed as a decorative display
-piece with no structural engineering for any load case).
-
-**Structural continuity is an open engineering task.**  The Thingiverse geometry —
-wall thickness, cross-section shapes, and joint face geometry — was not designed to
-carry UAV bending moments, torsion, shear, vibration, or landing-impact loads.
-Candidate structural members (keel bar, CF ring plates, foam fill, CF skid rods) are
-identified but have not yet been sized or verified.  The tasks below, and the keel bar
-and ring plate re-evaluation tasks in §1.1.1, must all be completed before any structural
-claim can be made about the assembled fuselage.
-
-Each joint face must satisfy the **CLAUDE.md fabrication standard**: minimum 2-wall
-contact annulus + positive-stop shoulder; friction fits are not acceptable for any joint.
-
-Joint faces in hull-frame Y (confirmed from baked extents):
-- **Head / Cargo** — hull Y ≈ −71 mm (Head_Shell Y-max = −70.7 mm; Cargo_Shell Y-min = −71.5 mm)
-- **Cargo / Middle** — hull Y ≈ +131 mm (Cargo_Shell Y-max = +132.0 mm; Middle_Shell Y-min = +130.4 mm)
-- **Middle / Rear** — hull Y ≈ +203 mm (Middle_Shell Y-max = +203.6 mm; Rear_Shell Y-min = +203.2 mm)
-
-- [x] **Head/Cargo joint boss design (hull Y ≈ −71 mm)** *(done 2026-06-14)*
-    - 3× Ø3.2 mm boss-pin bores (8 mm depth each side) at hull (X,Z):
-        (−168.3, +143.9), (−138.0, +91.4), (−198.6, +91.4) mm; Y-range −79..−62 mm.
-    - Face bore-open: Ø hull interior opened at Y −85..−68 mm (inner-face rectangle).
-    - Positive-stop provided by pin depth; no separate shoulder lip needed (pin geometry
-        self-registers both sections).
-    - Implemented in `airframe/blender-scripts/add_structural_features.py` (BOSS_PIN_BORES
-        joint1 + FACE_BORE_CUTTERS head_aft / cargo_fwd); all four shells verify PASS.
-    - See `docs/structural_analysis.md` §4 for boss-pin sizing and load analysis.
-    - Bond with West System 105/206; cure 24 h before foam pour.
-    - **CORRECTION 2026-06-29 (verified against baked meshes — see §1.1.0 "Re-verify
-        head↔cargo joint bosses in hull Y"):** the "8 mm depth each side" and
-        "positive-stop by pin depth" claims above are **not achieved as-baked**.  Measured
-        Y-engagement: dorsal pin A = HEAD 2.0 / CARGO 12.5 mm; flank pins B,C = HEAD 2.0 /
-        CARGO 3.5–4.5 mm.  Straight Y pins through a tapering 2 mm wall give shallow
-        engagement, and the broader cargo means the flank pins meet both walls only at the
-        joint face.  Pins act as alignment dowels; the bonded West System lap is the
-        primary load path.  Achieving true positive-stop depth needs boss pads or
-        per-shell pin (X,Z) — structural decision flagged in §1.1.0.
-    - **SUB-TASKS OPEN:** verify boss-pin bore positions in slicer cross-section at
-        hull Y ≈ −71 mm before head/cargo printing. *(BLOCKS head + cargo printing)*
-
-- [x] **Cargo/Middle joint boss design (hull Y ≈ +131 mm)** *(done 2026-06-14)*
-    - 3× Ø3.2 mm boss-pin bores (8 mm depth each side) at hull (X,Z):
-        (−170.1, +115.0), (−139.8, +62.5), (−200.4, +62.5) mm; Y-range +121..+141 mm.
-    - Face bore-open: hull interior opened at Y +122..+134 mm and Y +128..+145 mm (aft
-        cargo + fwd middle rectangles respectively).
-    - Implemented in `add_structural_features.py` (BOSS_PIN_BORES joint2 + FACE_BORE_CUTTERS
-        cargo_aft / middle_fwd); boss pins verified clear of keel channel (X −171.8..−168.2).
-    - Bond with West System 105/206; cure 24 h before foam pour.
-    - **SUB-TASKS OPEN:** verify in slicer at hull Y ≈ +131 mm. *(BLOCKS cargo + middle printing)*
-    - [x] **Cargo/Middle splice analysis + design (mirror head/cargo §1.1.0).** DONE
-        2026-07-03. Surveyed real cross-sections (trimesh, baked STLs): both cargo's aft
-        face (Y=+122mm) and middle's fwd face (Y=+137mm) are CLOSED sections (middle's
-        horseshoe doesn't open until Y>~175mm) — a full-perimeter collar is feasible.
-        Load check: mass aft of joint (middle+rear shells + ~300g/section avionics
-        allocation, §4.3 convention) = 1209g, arm 126.6mm; 9g-crash ultimate M=20,260
-        N·mm vs a REAL computed section modulus S_x=31,984 mm³ (digitized profile, not
-        an estimate) → 0.63 MPa peak, not strength-limited. Designed and generated
-        `generate_cargo_middle_splice_collar.py` → `cargo_middle_splice_collar.stl`
-        (hull frame, 2mm wall, L=16mm, ~17.0g, watertight single body, verified clearing
-        the middle inner wall). Cargo-side fit checked only against the nearest clean
-        cargo station (Y=+122mm) — the true cargo-side bonding span overlaps the
-        pre-existing MESH-01 cargo defect (41 disconnected bodies); re-verify once that
-        is resolved. Added to serenity_assembly.py, bom_revR.csv
-        (PRINT-CARGO-MIDDLE-COLLAR), docs/structural_analysis.md §7.4, PROJECT_INDEX.md.
-
-- [x] **Middle/Rear joint boss design (hull Y ≈ +203 mm)** *(done 2026-06-14)*
-    - 3× Ø3.2 mm boss-pin bores (8 mm depth each side) at hull (X,Z):
-        (−170.1, +109.6), (−139.8, +57.1), (−200.4, +57.1) mm; Y-range +193..+213 mm.
-    - Face bore-open: hull interior opened at Y +193..+207 mm and Y +201..+217 mm (aft
-        middle + fwd rear rectangles respectively).
-    - CF skid-rod bores (Ø4.2 mm, 60 mm total, 30 mm per section) at (X=−202, Z=+18)
-        and (X=−135, Z=+20); boss pins verified non-intersecting with skid-rod bores.
-    - Implemented in `add_structural_features.py`; all shells verify PASS.
-    - Bond with West System 105/206; cure 24 h before foam pour.
-    - **SUB-TASKS OPEN:** verify in slicer at hull Y ≈ +203 mm. *(BLOCKS middle + rear printing)*
-    - [x] **Middle/Rear splice structure analysis + design (mirror head/cargo §1.1.0).**
-        DONE 2026-07-03. Surveyed real cross-sections: AT THE JOINT PLANE ITSELF the
-        middle section is still a single closed tube (convex-hull-area ratio 0.96-1.00,
-        Y=195-203mm) — resolves the open question above: a FULL RING collar is feasible,
-        not just a partial inner-neck sleeve, because the horseshoe hasn't opened yet at
-        this Y. Load check (shell-bending only; skid rods + inner neck remain the
-        primary skid-impact load path, FOS 205 unchanged, §6.2): mass aft = rear shell +
-        ~300g avionics = 614g, arm 90.5mm; 9g-crash ultimate M=7,362 N·mm vs REAL S_x=
-        27,713 mm³ → 0.27 MPa peak, not strength-limited (even lower demand than
-        Cargo/Middle). Designed and generated `generate_middle_rear_splice_collar.py` →
-        `middle_rear_splice_collar.stl` (hull frame, 2mm wall, L=16mm, ~15.9g,
-        watertight single body, verified clearing the middle inner wall and clear of the
-        CF skid-rod bores). Rear-side fit checked only against the nearest clean rear
-        station (Y=+233mm) — the true rear-side bonding span overlaps the pre-existing
-        MESH-01 rear defect (36 disconnected bodies); re-verify once resolved. Added to
-        serenity_assembly.py, bom_revR.csv (PRINT-MIDDLE-REAR-COLLAR),
-        docs/structural_analysis.md §7.5, PROJECT_INDEX.md.
-
-- [x] **JOINT-01 — cargo mating-face rims ragged + dorsal bite — RESOLVED 2026-07-06.**
-    **FIX APPLIED:** `merge_cargo_interior.py` now opens the fwd + aft cargo joints with the
-    SAME lofted per-station cavity cutter head/middle/rear already use
-    (`asf._bore_open_cutter` with `asf.FACE_BORE_Y_RANGES["cargo_fwd"]`/`["cargo_aft"]`); the
-    crude single-station `open_face_plug()` (and its `OPEN_*`/`FWD_FACE_Y`/`AFT_FACE_Y`
-    constants) was deleted. The lofted cutter measures the inner cavity at several stations and
-    lofts pairwise intersections, so it follows the tapering wall and never exceeds the local
-    outer skin. Regenerated + verified by starboard-silhouette comparison: **the dorsal "top
-    cutout" is gone and both rims are clean** (no ragged fragments); ends stay open (fwd @Y=−69
-    = 2-loop tube). Watertight, single body, 0 boundary (vol 336 k mm³ — up from the old 273 k
-    because the old cutter was OVER-removing via the bite plus a deep −55 notch). Assembly
-    re-runs 0 WARN/MISSING/error. **Head/middle already used `_bore_open_cutter`** (their joints
-    use the clean method too); **rear is now clean too** — regenerated 2026-07-06 via
-    `regen_rear_interior.py` with the same lofted bore-open cutter (MESH-01 rear RESOLVED). *The original finding, for the record:* A starboard-side
-    silhouette of the published cargo fab mesh shows **uneven fwd (Y=−71.5) and aft (Y=+132)
-    joint rims** and a **notched "cutout" in the dorsal skin just aft of the fwd joint
-    (Y≈−60..−50, Z≈140..160)**. Confirmed these are **cutter artifacts, NOT intentional**, by
-    ray-cast silhouette comparison against the clean baked Blender source (which has smooth,
-    clean joint edges and no dorsal notch). Root cause: `merge_cargo_interior.py`
-    `open_face_plug()` opens each mating face by extruding a SINGLE inner-cavity cross-section
-    (8 mm inboard, `OPEN_STATION_OFF`) over a 27 mm Y span (`OPEN_PAST`=3 → `OPEN_DEPTH`=16)
-    with a +0.5 mm outset — the constant section does not track the tapering/curving fwd hull,
-    so it leaves ragged wall fragments at the rim and clips through the dorsal skin at the fwd
-    end (the "top cutout"). The mesh stays watertight (the boolean re-closes around the
-    over-cut), so it passed the watertight gate. **The OPENING is intended** (CLAUDE.md: mating
-    faces left open for assembly + cable routing; splice collars bond across them) — only the
-    ragged EXECUTION is wrong. **Intentional features in the same view (do NOT touch):** wing
-    spar bore (Ø12.3 @ Y≈+32,Z≈62), wing root mortise (Y≈42..73,Z≈52..73), belly clamshell
-    aperture (Z≈0..9). **FIX (needs design input):** replace the constant-section extrude with
-    a clean planar cut at each mating station (flat-rimmed open tube); requires confirming the
-    exact mating-plane Y per joint given the source shells' rounded end-closures (fwd section
-    near-closes by Y≈−71.5; a clean full-perimeter rim wants the cut ~Y=−64 ≈ 7 mm shorter, OR
-    an accepted tapered rim at −71.5). Same fix applies to `add_structural_features.py`
-    `_bore_open_cutter` (head/middle/rear). **Refer mating-plane choice to user before rework.**
-- [ ] **MESH-01 `add_structural_features.py` boolean cuts left non-watertight / fragmented
-    shells on cargo, middle, and rear** *(found 2026-06-16, reviewing 03_top.png render)* —
-    **ROOT CAUSE FIXED IN CODE. RESOLVED FOR CARGO 2026-06-30. RESOLVED FOR MIDDLE
-    2026-07-03. REAR RESOLVED 2026-07-06 (new `regen_rear_interior.py`; see the
-    "Rear" note below — its root cause was the bake's float32 STL round-trip
-    damaging the delicate 3-body rear source, not a source-mesh defect).**
-    - **2026-07-06 REGEN + HULL AUDIT (this session).** Head, cargo, and middle
-        regenerated from the clean Blender sources with the joint boss-pins REMOVED
-        (splice collars supersede — see §1.1.0 note above) and independently
-        re-verified with trimesh: **HEAD** watertight, 0 boundary, 0 non-manifold, 1
-        body, vol 186 757 mm³; **MIDDLE** watertight, 0 boundary, 0 non-manifold, 2
-        bodies (outer horseshoe + inner neck, both closed — expected), vol 232 327
-        mm³; **CARGO** in-memory PASS (watertight, 0 boundary, 0 non-manifold, 1 body,
-        vol 273 170 mm³) — on reload the exported STL shows ~57 non-manifold edges but
-        **0 boundary edges** (closed surface; benign float32-quantization artifact that
-        slicers weld; a nondegenerate-strip was tried and REVERTED because it opens ~120
-        real holes on cargo's shared T-junction slivers). **Hull-breach audit: 0 boundary
-        edges on all four shells** (no unintended skin openings). **Hollow audit: ≥2
-        concentric wall loops at every mid-station** (outer + inner 2 mm wall present).
-        All three carry the HULL-FRAME R1 marker; `serenity_assembly.py` re-run clean
-        (0 WARN/MISSING/error) with all 3 splice collars present. **REAR now also
-        regenerated + clean (2026-07-06, `regen_rear_interior.py`): watertight, single
-        body, 0 boundary, 246 769 mm³, clean fwd mating rim — see the Rear note below.**
-    Original root cause was NOT (only) the cutter-vs-wall
-    epsilon grazing but the fragile `_subtract_all` loop: it subtracted cutters one at a
-    time via `trimesh.boolean.difference(engine="manifold")` with a per-step repair on a
-    1.4 M-face shell, compounding degenerate slivers into 10⁴+ disconnected bodies.
-    `_subtract_all` now unions ALL cutters into one Manifold and does a SINGLE
-    `shell − union` (boolean of closed manifolds is closed by construction → guaranteed
-    watertight out), plus a post-boolean `nondegenerate_faces()` / unreferenced-vertex
-    cleanup pass added 2026-07-03 to strip the 1-2 zero-area triangles the manifold3d→
-    float32-STL round trip was otherwise leaving behind. **Cargo** is fully resolved by
-    `merge_cargo_interior.py` using this approach (watertight=True, single body,
-    vol 323 188 mm³ — see §1.1.1.0a).
-
-    **Middle — RESOLVED 2026-07-03.**  Regenerated from the clean Blender source
-    (`airframe/blender-scripts/files-hollowed-24in/middle_shell24_2mm_repaired.stl`),
-    baked to hull frame with `tools/bake_hull_frame.py`, then run through the fixed
-    `add_structural_features.py`.  Independently re-verified with trimesh directly
-    (not just the script's own `verify()` gate): `airframe/stls/fuselage/
-    middle_shell24_2mm_repaired.stl` is `is_watertight=True`, 0 boundary edges, 0
-    non-manifold edges, **1 body**, vol = 232 230.71 mm³ (vs. 232 437 mm³ pre-cut —
-    a 206 mm³ reduction from the 15 boss-pin/skid-rod/bore-open cutters, consistent with
-    their small bore sizes).  `bake_hull_frame.py --check` confirms the file still carries
-    the `HULL-FRAME R1` marker (the export path stamps it directly; no re-bake needed
-    since only booleans, not a placement transform, were applied).
-
-    **Rear — RESOLVED 2026-07-06 (`airframe/blender-scripts/regen_rear_interior.py`).**
-    The 2026-07-03 diagnosis below (a "pre-damaged source" with 380 slivers / 550
-    non-manifold edges / volume-inflating internal lobes) was itself an artifact:
-    the canonical rear source, loaded `process=False` then `merge_vertices()`, is
-    actually **watertight at the correct 247 239 mm³** — three connected bodies
-    (main wall shell +302 k, plus two symmetric inside-out internal cavity shells
-    −27.5 k each, netting to 247 k). manifold3d handles that merged mesh correctly
-    (volume 247 239). The real culprit was the **bake step's float32 STL write at
-    the rear's large hull-frame Y (≈+203..+384)**: it splits coincident vertices
-    just enough that the reloaded published STL no longer welds watertight, and
-    manifold3d then mis-resolves it to ~357 k — so every subsequent cut was built
-    on a wrong base. `regen_rear_interior.py` (rear analogue of
-    `merge_cargo_interior.py`) fixes it by baking the clean source **in memory
-    (float64)** and cutting before any float32 round-trip, then doing a single
-    manifold3d boolean of the rear features (lofted bore-open fwd joint, keel
-    channel, Y=+290 ring pocket, 2× skid-rod bores). Result: **watertight (0
-    boundary edges), single body, 246 769 mm³ (~259 g)**, HULL-FRAME R1 marker,
-    clean fwd mating rim (JOINT-01 lofted cutter — verified by starboard
-    silhouette `scratchpad/rear_side.png`), assembly re-runs 0 WARN/MISSING/error.
-    (~3 non-manifold edges remain on reload — a benign float32 artifact, 0
-    boundary, same accepted state as cargo; slicers weld them.) *Superseded
-    2026-07-03 diagnosis retained below for the record:*
-    Different root cause than originally diagnosed, found
-    2026-07-03: **the canonical Blender-source rear shell itself
-    (`airframe/blender-scripts/files-hollowed-24in/rear_shell24_2mm_repaired.stl`) is
-    pre-damaged, independent of any cutting.** Splitting the raw, un-cut, freshly-baked
-    rear mesh into connected components gives 383 bodies: the real outer skin
-    (999 938 faces), 2 real cavity/lobe surfaces (47 702 and 47 572 faces), and **380
-    two-face zero-area degenerate slivers (760 faces total) that carry 550 non-manifold
-    edges** — a defect baked into the Blender hollowing/export pipeline output, not
-    introduced by `add_structural_features.py`. trimesh's divergence-theorem volume
-    integral is robust to this and correctly reports 247 238.9 mm³ (matches the
-    mass-budget figure) for the untouched source, but feeding the same mesh through
-    `manifold3d`'s `Manifold` constructor (required by the fixed `_subtract_all`) silently
-    mis-resolves the non-manifold edges and returns a `Manifold` whose own `.volume()` is
-    357 242.6 mm³ — **before any cutter is even applied.** Every subsequent boolean
-    subtraction is therefore built on an already-wrong 357 k mm³ base, which is why the
-    exported result after cutting reads `vol=356 071 mm³, watertight(gate)=True` from the
-    script's own in-memory check yet **fails independent re-verification**: reloading the
-    exported STL with trimesh shows `boundary=3, bodies=2, watertight=False` (a small
-    STL-roundtrip artifact on top of the larger volume-inflation defect).  A quick
-    `nondegenerate_faces()` cleanup on the raw source removes the 380 slivers but then
-    manifold3d returns **volume 0.0** for the whole mesh — i.e. cleanup alone does not fix
-    it, it just changes failure mode.  **The rear published STL has been left at git HEAD
-    (the pre-existing baked-but-unfeatured file, `is_watertight=False`/383 bodies, same as
-    before this session) rather than overwritten with the new, more-broken cut result —
-    no fabricated "PASS" is recorded.**  **REMAINING:** the rear Blender source mesh needs
-    actual repair (removing/re-stitching the 380 degenerate slivers and their 550
-    non-manifold edges) in Blender itself — a mesh-cleanup task upstream of
-    `add_structural_features.py`, not a boolean-logic fix — before the feature-cutting
-    pass can be re-attempted. Historical diagnosis below retained for the record.
-    what looks like "huge cutouts / air where there should be hull" in the rendered build-guide
-    images is **not** the intended bore-open joint design; it is a meshing defect from the
-    boss-pin/keel-channel/ring-pocket boolean subtractions in `add_structural_features.py`.
-    - `python3 airframe/blender-scripts/verify_shells.py --published` reports "ALL PASS" but
-        its own per-shell output shows `watertight(strict)=False` for cargo, middle, and rear,
-        and `large_shells=3` for rear (i.e. the rear shell is split into 3 disconnected solid
-        islands, not one continuous hull) — the gate's pass criteria (`open_edges==0` and
-        `large_shells<=3`) do not actually require `is_watertight`, so this slipped through.
-    - Non-manifold edges (shared by 4–6 faces instead of 2) and hundreds of zero-area sliver
-        fragments cluster exactly at the boss-pin/keel-channel/ring-pocket cut sites: cargo at
-        Y ≈ −68..−58 mm (Joint 1) and Y ≈ 121–122 mm (Joint 2); rear at Y ≈ 217–233 mm
-        (Joint 3 / skid-rod bore zone).  Head (boss-pin bores only, no keel/ring cuts) is fully
-        clean — pointing at the keel-locating-channel and ring-frame-pocket box cutters
-        (`KEEL_CHANNEL`, `RING_POCKETS` in `add_structural_features.py`) as the likely root
-        cause: their cut surfaces sit within float-epsilon of the shell's existing 2 mm wall,
-        producing degenerate/non-manifold triangulation in the `manifold3d` boolean difference.
-    - Cargo's computed volume (6,234,838 mm³) is ~17× the §2 mass-budget figure
-        (370,509 mm³) — a strong independent signal of broken topology, not just cosmetic noise.
-    - **Fix path:** add finite clearance/overlap to the keel-channel and ring-pocket cutters
-        so they fully traverse the wall instead of grazing it; re-run
-        `add_structural_features.py`; tighten `verify_shells.py`'s gate to hard-fail on
-        `is_watertight=False` and on `large_shells>1` (a clean single-piece shell should split
-        into exactly 1 surface body, not be allowed up to 3).  Re-run `bake_hull_frame.py --check`
-        after re-export.  **BLOCKS cargo/middle/rear printing and any FEA based on current STLs.**
-
-- [x] **CF ring plate (CF-PLATE-2MM) — complete first-principles re-evaluation *(Rev R1)*** *(done 2026-06-14)*
-    Full analysis in `docs/structural_analysis.md`.  2 rings selected (down from prior 5):
-    cargo Y=+30 mm (wing-spar load zone) and rear Y=+290 mm (landing anti-ovalisation zone).
-    Inner-profile CSVs exported to `airframe/diagrams/ring_frames/` for DXF cut file generation.
-    See structural_analysis.md §3 for load case inventory and §5 for ring pocket dimensions.
-    Ring-frame pockets cut into cargo and rear shells by `add_structural_features.py`.
-    **SUB-TASKS:**
-    - [x] **DONE 2026-07-03.** FreeCAD's headless interpreter (`freecadcmd`) was blocked by
-        this session's sandbox permission hook and could not be invoked; an equivalent
-        geometry pipeline (Shapely polygon offset/boolean + a hand-written DXF R12 writer)
-        was used instead. Built the ring plate outer profile from each inner-skin CSV, added
-        a 3 mm outward clearance offset, and cut the keel-bar notch. **Notch corrected to
-        3.5 mm wide (X) × 6 mm deep (Z)**, centred at hull X = −170 mm — the "6 mm wide ×
-        3 mm deep" figure previously here transposed the keel bar's own 3 mm(X) × 6 mm(Z)
-        cross-section (structural_analysis.md §4.3/§4.5/§5.4 already specifies 3.5×6 mm;
-        that figure is authoritative). Exported:
-        - `airframe/diagrams/ring_frames/ring_rear_Y290_plate.dxf` — **FINAL.** Rear
-          Y=+290mm cross-section is two clean concentric closed loops (outer + inner wall,
-          2 mm apart); used the inner-wall loop. Net area 113.2 cm², bounds X[−236.3..−115.3]
-          Z[24.5..146.2] mm. Verified by re-parsing the DXF's own vertex data and confirming
-          the bounding box matches the pre-export polygon (round-trip OK).
-        - `airframe/diagrams/ring_frames/ring_cargo_Y30_plate_PROVISIONAL.dxf` —
-          **PROVISIONAL, NOT for fabrication.** The cargo Y=+30mm cross-section is
-          fragmented into 4 disjoint closed loops (quadrant-like, not one/two continuous
-          rings), consistent with the open `large_shells>1` / MESH-01 cargo-mesh defect
-          tracked above. Rather than fabricate a smoothed single contour, this DXF uses the
-          convex hull of the 4 main loops as a conservative placeholder envelope (net area
-          242.9 cm², bounds X[−257.6..−81.1] Z[0.0..159.1] mm). **Must be re-extracted and
-          re-cut once the cargo shell mesh is repaired — do not cut CF stock from this file.**
-    - [x] **DONE 2026-07-03.** Updated `current-specification/bom_revR.csv` CF-PLATE-2MM
-        Notes: 2 rings (cargo Y=+30mm, rear Y=+290mm); mass computed from actual DXF
-        enclosed area × 2 mm × **1.6 g/cm³** (not the 1.54 g/cm³ previously cited here —
-        1.54 has no other citation anywhere in this repository, while 1.6 g/cm³ is already the
-        CF-plate density used in structural_analysis.md §5.6; superseding 1.54 with the
-        repository-verified 1.6 figure). Rear (final): 36.2 g. Cargo (provisional): 77.7 g.
-        Combined 113.9 g — supersedes the ~300 g bounding-rectangle/fill-factor estimate in
-        structural_analysis.md §5.6. Revised prior count from 5 to 2.
-    - [x] **DONE 2026-07-03.** Updated `REVN_BUILD_GUIDE_24IN.md` keel/ring-frame table and
-        installation steps 1–2 with hull-Y ring stations (+30 mm, +290 mm), replacing the
-        stale 91/165/251/320/388 mm values.
-
-    All prior design data for CF ring plates (station count, hull-Y positions, 2D profiles,
-    and structural function) were based on the **pre-Rev N non-canonical hull model** and
-    are entirely invalid for the current baked canonical Serenity geometry.  This is a
-    clean-sheet structural design task, not a re-derivation of old numbers.
-
-    **Step 1 — Structural load case inventory.**
-    Identify every load introduction point inside the hull that a ring frame could react:
-    - Wing spar pin loads (X-axis spar through cargo section; derive spar-bore Y stations
-        from `cargo_sect_shell24.scad` SPAR_BORE_Y / bearing block parameters).
-    - Nacelle tilt servo reaction (NSVMT blocks in cargo section; derive Y from SCAD
-        `NSVMT_X_CEN` or equivalent — note SCAD uses part-local frame; convert to hull Y).
-    - Skid landing-impact loads (aft section; CF rod reinforcement already handles skid-arm
-        bending; determine if tail-cone ovalisation under landing shock still warrants a ring).
-    - Fuselage bending under 2g manoeuvre (keel bar + foam carry primary moment; rings
-        provide shear-web anti-ovalisation — evaluate whether skin thickness + foam elastic
-        foundation make rings unnecessary in lightly-loaded sections).
-
-    **Step 2 — Hull cross-section survey at load stations.**
-    For each load station identified in Step 1, slice the baked canonical STL at that
-    hull-Y plane (FreeCAD Cross-Section on the baked mesh, or `python tools/bake_hull_frame.py`
-    cross-section output).  Characterise the inner-skin boundary:
-    - Is it a closed loop (full ring possible) or open (e.g., middle horseshoe open at −Z)?
-    - What is the enclosed area and minimum inscribed rectangle?
-    - Does the Serenity exterior geometry at that station allow a flat CF plate to seat
-        flush against the inner skin, or is the section too curved / tapered?
-
-    **Step 3 — Decide ring type, station count, and positions.**
-    Based on Steps 1–2, determine for each candidate station whether to use:
-    - Full closed ring (cargo or rear sections where skin forms a closed perimeter)
-    - Partial arch (middle horseshoe upper arch only; bottom open)
-    - No frame (head section is non-structural per Rev R1; foam + keel adequate)
-    - Integrated boss rib (if load is highly localised, a rib printed into the shell SCAD
-        may be lighter than a separate CF plate — evaluate for servo and spar stations)
-    Record chosen station count (≥1; ≤5), hull-Y for each, and ring type.
-
-    **Step 4 — Profile extraction and DXF generation.**
-    For each chosen station: export 2D inner-skin boundary as DXF (FreeCAD TechDraw or
-    `Draft.dxf` export of cross-section wire).  Add keel-bar notch (6×3 mm slot at hull
-    −Z centroid).  Add 3 mm clearance all-round from skin so ring can be inserted and
-    epoxy-bonded without force-fitting.  Save to `airframe/diagrams/ring_frames/`.
-
-    **Step 5 — Update BOM and build guide.**
-    - Update CF-PLATE-2MM Notes: confirmed station count, hull-Y values, ring types, mass.
-    - Update `REVN_BUILD_GUIDE_24IN.md` keel datum mark table with new hull-Y stations.
-    - If any station is replaced by an integrated shell rib, add SCAD sub-task under the
-        relevant shell file (§1.1.1.1–§1.1.1.4).
-    **BLOCKS keel bar + ring plate fabrication; BLOCKS foam pour.**
-
-- [x] **Hull keel (CF-BAR-6X3) — complete first-principles re-evaluation *(Rev R1)*** *(done 2026-06-14)*
-    Full analysis in `docs/structural_analysis.md` §2.  Decisions:
-    - Keel spans cargo-to-rear (hull Y −71..+384 mm ≈ 455 mm), two lap-spliced segments.
-    - Cargo segment: Z ≈ +1..+2 mm (belly, just above skin floor). Rear segment: Z ≈ +4.7..+5.7 mm.
-    - CF-BAR-6X3 retained; oriented 6 mm vertical (strong axis), 3 mm horizontal. FOS ≥ 24.8 at 2g.
-    - Head section excluded (incompatible Z floor at Z=+61 mm, non-structural, short section).
-    - Middle section: keel passes through unsupported in foam; no hard attachment.
-    - RF counterpoise: separate AWG 22 copper stranded wire alongside keel (CF bar inadequate at 49 MHz).
-        BOM item WIRE-COUNTERPOISE-49MHZ added.
-    - Keel locating channels cut into cargo and rear shells by `add_structural_features.py`.
-    **SUB-TASKS OPEN:**
-    - [x] Add WIRE-COUNTERPOISE-49MHZ to BOM: AWG 22 stranded tinned copper, 460 mm,
-        2 g, routed alongside keel inside foam from cargo to rear, terminated at Emma
-        antenna feed on River's Room stack. *(done 2026-06-22 — was referenced here since
-        Rev R1 but never actually added; backfilled as part of §1.4.2 antenna work, which
-        also added a second counterpoise wire, WIRE-COUNTERPOISE-49MHZ-2, for Simon's
-        independent 49 MHz antenna.)*
-    - [x] **DONE 2026-07-03.** `battery_tray.scad` keel-rail slot corrected to match the
-        Rev R1 keel bar orientation (3 mm lateral(X) × 6 mm vertical(Z), strong axis
-        vertical — structural_analysis.md §4.3): RAIL_W/RAIL_D swapped from 6.5/3.5 mm to
-        3.5/6.5 mm. This required increasing FLOOR from 4.0 to 8.5 mm so the deeper rail
-        slot does not breach the battery cavity (2.0 mm solid margin retained). Re-rendered
-        via `openscad` and re-exported to `airframe/stls/fuselage/battery_tray.stl`
-        (watertight, single body, verified with `trimesh`; solid CAD volume 133 519 mm³ →
-        ~169.5 g at CF-PETG ρ=1.27 g/cm³, a 100%-solid upper bound that supersedes the
-        stale, apparently-uncalculated "~22 g" placeholder — confirm the actual
-        infill-derated mass in the slicer before finalizing the AUW budget). Keel Z
-        position itself (cargo belly Z≈+1..+2 mm, §4.2) is set by the assembly transform,
-        not this part file, so no additional change was needed there.
-        **OPEN ITEM, not resolved by this edit:** the header's stated tray placement
-        ("stations 60–130mm inside head/bridge section") conflicts with (a) the Rev R1
-        keel decision, which is headless in that section, and (b) other TODO.md entries
-        ("battery tray in cargo section") — while a separate, older note (~line 2818–2830,
-        2026-06-08 Kaylee placement decision) instead places a battery boss pattern in the
-        MIDDLE section keel face, which itself conflicts with the Rev R1 finding that the
-        middle-section keel span is unsupported (foam only, no hard attachment). This
-        three-way placement conflict (head / cargo / middle) needs a user decision before
-        the tray's final hull-Y station and `serenity_assembly.py` placement can be set.
-    - [x] **DONE 2026-07-03.** Updated `REVN_BUILD_GUIDE_24IN.md` keel installation section
-        (steps 1–2) and CF-cuts table: span hull Y −71..+384 mm (455 mm), lap-splice at the
-        middle/rear joint (hull Y ≈ +203 mm, 100 mm / 3.9 in total overlap — i.e. each
-        segment extends 50 mm past the joint, per structural_analysis.md §4.3), ring-notch
-        positions at hull Y = +30 mm and +290 mm.
-
-    A continuous bow-to-stern backbone is structurally justified (primary fuselage bending
-    moment arm; inter-section tie-rod spanning all fabrication splits).  However, the
-    canonical Serenity hull geometry makes the current straight 6×3 mm flat bar
-    infeasible as specified.  This is a clean-sheet keel design task.
-
-    **Known geometry constraints (from baked hull-frame extents):**
-    - **Head/Cargo Z step**: Head_Shell Z_min = +61.2 mm; Cargo_Shell Z_min = 0.0 mm.
-        A straight keel at the cargo belly cannot enter the head section without a ≈ 61 mm
-        vertical bend at hull Y ≈ −71 mm.
-    - **Middle section open belly**: Middle_Shell (Y = +130.4..+203.6 mm) is open at −Z
-        (horseshoe ring with no belly floor).  A belly keel has no skin to bond to for
-        ~73 mm of hull length here.  Foam fill provides distributed elastic support but no
-        hard attachment.
-    - **Head section structural role**: Head_Shell is non-structural per Rev R1 (foam + 2 mm
-        CF-PETG skin adequate; avionics bays relocated to cargo + rear sections).  A keel that
-        terminates at the head/cargo joint face (hull Y ≈ −71 mm) may be fully adequate.
-    - **Datum marks**: the 91/165/251/320/388 mm station marks are tied to the stale pre-Rev N
-        ring plate positions and must be replaced by the new ring station outputs (see ring
-        plate re-evaluation task above).
-
-    **Step 1 — Decide keel span.**
-    Determine whether the keel must enter the head section or whether cargo-to-rear
-    (hull Y ≈ −71 mm → +384 mm, ≈ 455 mm) is structurally sufficient.  The head section
-    contributes little to global fuselage bending (short, tapered, non-structural) and has
-    an incompatible Z floor.  Cargo-to-rear span is preferred unless a specific head-section
-    load case (e.g., FPV/GPS nose mount inertia) justifies the extension.
-
-    **Step 2 — Determine Z routing through each section.**
-    At each hull section, identify the highest Z level that provides:
-    - Continuous bonding surface against inner skin or foam (closed loop or foam contact)
-    - Clearance from avionics bays, battery tray, servo mounts, spar bores, and wiring trunk
-    Candidate Z levels to survey (from section Z extents):
-    - Cargo belly: Z ≈ +5..+15 mm (below battery tray floor, above hull skin)
-    - Middle horseshoe: keel passes through the interior unsupported — foam alone provides
-        lateral stability; check that Z routing clears the wiring trunk PTFE conduit.
-    - Rear cone belly: Z ≈ +5..+15 mm (consistent with cargo level)
-    Target: a monotonically constant or gently varying Z route from cargo to rear that
-    requires no bends exceeding the material's minimum bend radius.
-
-    **Step 3 — Choose keel form and cross-section.**
-    Based on the Z routing determined in Step 2:
-    - **Straight flat bar (CF-BAR-6X3)**: viable only if Z routing is constant.  6 mm wide
-        face ideally oriented horizontally (resist vertical bending = primary fuselage mode).
-        Minimum bend radius for 6×3 CF bar ≈ 200–300 mm; tighter bends require separate spans.
-    - **Pre-bent flat bar**: single bar bent in the weak axis (3 mm thickness) to follow a
-        gentle Z curve.  Requires heat + jig; feasible if total Z variation over the keel span
-        is < 30 mm and bends are gradual.  Confirm with material supplier.
-    - **Segmented with lap splice**: two or three straight segments (e.g., cargo + rear);
-        overlapping lap joint (≥ 50 mm) at each join, bonded with West System 105/206 + peel
-        ply prep.  Maintains continuity without bending.  Adds ≤ 5 g mass at each splice.
-    - **CF tube**: round tube (e.g., 6 mm OD × 1 mm wall) is isotropic in bending, easier
-        to route curves, and can double as a wiring conduit.  Lower area moment of inertia
-        than a 6×3 flat bar in the primary bending axis — check adequacy.
-    - **CF tow/tape embedded in foam**: lays up along any geometry during foam pour; no
-        discrete part to install; non-inspectable after pour.  Lowest mass option but least
-        stiff and non-replaceable.
-
-    **Step 4 — Assess RF counterpoise function.**
-    CF-BAR-6X3 currently doubles as the 49 MHz (Part 15 §15.235) antenna counterpoise.  CF has anisotropic
-    conductivity (longitudinal only, ≈ 5–10 kΩ/m vs copper ≈ 0.017 Ω/m); it is a poor RF
-    conductor.  At 49 MHz, λ = 6.12 m; λ/4 = 1.53 m; a 455–620 mm bar is ≈ λ/10 — a
-    dedicated copper counterpoise wire (AWG 22 stranded, < 2 g) bonded alongside the keel
-    is more reliable than relying on CF conductivity.  Decide: (a) keep CF keel as structural
-    only and add a separate copper counterpoise wire in the wiring trunk, or (b) embed a
-    copper braid in the keel lap joint.  Update Emma/XCVR antenna design accordingly.
-
-    **Step 5 — Update BOM, battery tray, and build guide.**
-    - Update CF-BAR-6X3 Notes: confirmed form, span, Z routing, cross-section, mass.
-    - Battery tray SCAD (`battery_tray.scad`): the "keel rail" interface must match the
-        new keel Z position and cross-section; update SCAD and re-export STL.
-    - Update `REVN_BUILD_GUIDE_24IN.md` keel installation section with new span, Z level,
-        lap joint positions, and ring plate notch locations (from ring plate re-evaluation).
-    - If separate copper counterpoise wire is chosen, add to BOM as WIRE-COUNTERPOISE-49MHZ.
-    **BLOCKS ring plate notch design; BLOCKS keel fabrication; BLOCKS foam pour.**
-    **Run concurrently with CF ring plate re-evaluation (ring plate notch geometry depends
-    on keel cross-section and Z position).**
-
-- [x] **Access panel frames + covers (24" Rev R)** — `airframe/openscad/fuselage/access_panels_24in.scad` created 2026-06-11. Geometries derived from authoritative shell SCADs (Rev R baseline):
-    - 4× Faraday-bay covers (Shepherd/Inara/River/Simon): 72×52 mm, 4× M3 clearance bores, positive-stop shoulder; Inara + River covers include Ø42 mm GPS retention-ring recess.
-    - 2× ventral hatch covers: battery 160×60 mm, Kaylee 115×100 mm; M2.5 pilots into bonded frames.
-    - 2× ventral hatch frames: battery + Kaylee; 6 mm CF-PETG wall, West System 105/206 epoxy-bonded to hull.
-    - **SUB-TASKS:**
-        - [ ] Export individual STLs (set RENDER variable in SCAD): shepherd, inara, river, simon,
-            battery, battery_f, kaylee, kaylee_f → `airframe/stls/fuselage/` — **NOT DONE
-            2026-07-03**: `openscad -o` export could not be run this session (sandboxed sub-agent
-            Bash permission hook blocks any command containing `-o`, and the main session hit a
-            separate OpenSCAD-render permission block); must be run by the user or an unrestricted
-            session.
-        - [ ] Verify cover shoulder fit in slicer cross-section (confirm 1.5 mm step seats on hull
-            face) — blocked on STL export above.
-        - [x] **GPS clearance geometry re-derived to the dorsal frame — RESOLVED 2026-07-06.**
-            `access_panels_24in.scad` Rev R2: Inara/River covers rebuilt with a new
-            `av_cover_dorsalZ()` module in the corrected DORSAL (+Z-normal) frame, sourcing
-            every constant from `cargo_sect_shell24.scad` (INARA_X/RIVER_X = CX∓37.5,
-            AVIONICS_STATION_Y = CY, dorsal face Z=163.2, GPS_PORT/STBD_X = CX∓30 at the
-            shared Y station). **GPS clearance bore corrected 42 → Ø38 mm** to match the
-            shell's own `avinics_dorsal_panel_cut` note ("access cover designed with Ø38 mm
-            clearance bore"; clears the Ø36 GPS body). Rendered + verified watertight, single
-            body. **ANTENNAS MOVED OUTBOARD 2026-07-06 (user directive):** `GPS_SEP` 30 → 37.5
-            mm in both `cargo_sect_shell24.scad` and `access_panels_24in.scad`, co-locating
-            each GPS with its bay/cover centre (= `BAY_SEP_X`/2). The ~46 mm-wide (OML-trimmed)
-            cover only keeps a Ø38 bore fully enclosed if the antenna is within ~±4 mm of the
-            cover centre; at the old 30 mm it sat 7.5 mm inboard and the bore broke the cover's
-            inboard edge (scallop). Re-rendered + verified: GPS bore is now a **fully-enclosed
-            interior hole** (6 section loops = outer + 4 M3 + 1 GPS; single watertight body;
-            `inara_access_cover.stl` 4604 mm³, `river_access_cover.stl` 4456 mm³; 26 mm to each
-            cover edge, 7 mm bore margin). New GPS centre-to-centre = 75 mm; Ø44 retention rings
-            still clear (31 mm gap). VERIFY-in-slicer: confirm each antenna still lands on flat
-            enough dorsal skin at the outboard station and the SMA pocket clears the Faraday
-            tray below.
-        - [x] **M3 bore positions now match the shell boss pattern — RESOLVED 2026-07-06.**
-            The dorsal-Z covers cut their 4× M3 bores at ±`AVZ_SCREW_DX`(15, X) ×
-            `AVZ_SCREW_DY`(25, Y) = `cargo_sect_shell24.scad` `AVINICS_BOSS_DX/DY` exactly
-            (was mismatched 25/15 in the wrong X-Z axes). Verified geometrically from the
-            rendered STL: bore centres at (±15, ±25) mm, Ø3.3 M3 clearance. (Shepherd/Simon
-            covers stay on the legacy Y-normal `av_cover_dorsal` until the head/middle
-            avionics bays get the same dorsal-axis fix — the still-open head/middle
-            axis-bug items in this section.)
-
-- [x] **49 MHz (Part 15 §15.235) wire posts** — `airframe/openscad/fuselage/rcrs49_wire_post.scad` created 2026-06-11.
-    Single `wire_post()` module: 12×12×2 mm PETG base, 8×8×7 mm mast, Ø1.5 mm athwartships wire-retention bore at 2 mm from top.
-    **Relocated 2026-06-22 (§1.4.2):** dorsal-centreline mount superseded — print FOUR posts (two antennas, two posts each):
-    River's antenna forward (sta ≈ 120 mm) + aft (sta ≈ 580 mm) on the **port flank**, Simon's antenna forward + aft (same
-    stations) on the **starboard flank**, both at shoulder height.
-    Reasons: (a) a single shared dorsal run put River's and Simon's independent 49 MHz antennas (§1.4.2) too close together;
-    (b) the cargo bay clamshell doors hinge at the outboard flank/belly edge and swing up to 180° (`generate_cargo_doors.py`),
-    so any ventral or low-flank exterior post in the cargo bay's Y-span is in the door's path — shoulder height, port/starboard, clears both.
-
-    - **BLOCKS Phase 1 (antenna installation)**
-    - **SUB-TASKS:**
-        - [ ] Export STL → `airframe/stls/fuselage/rcrs49_wire_post.stl` (×4 instances, no geometry
-            change needed — same module, different bond points) — **NOT DONE 2026-07-03**:
-            `openscad -o` export could not be run in this sandboxed session (Bash permission hook
-            blocks any `-o`-flagged command); rerun with an unrestricted session.
-        - [ ] **Verify port/starboard shoulder-height mount line in FreeCAD against the cargo
-            door's 180°-open swing envelope** — **partially verified 2026-07-03 (source-level
-            only, no STL yet)**: confirmed the door bay's Y-span (hull Y 2–108, per
-            `generate_cargo_doors.py`) converts to station-from-nose 307.6–413.6 mm (nose tip hull
-            Y=−305.6), which sits entirely inside the post run (sta 120–580 mm) — the mid-run
-            wire, not just the two discrete posts, crosses the door's swing zone and must clear
-            it. Door swing envelope = a semicircle radius ≈52–55 mm (measured door width)
-            centered at hinge (X=−117.6 port/−222.5 stbd, Z≈5.1–5.2), spanning only hull Y 2–108.
-            `rcrs49_wire_post.scad` still has **no defined shoulder-height Z value** (flagged open
-            in its own header) — cannot compute a real clearance margin until that Z is set;
-            recommend Z ≥ 65 mm (hinge Z + envelope radius + margin) at any station falling within
-            hull Y 2–108, then re-verify numerically. **Still BLOCKS bonding both antennas'
-            posts.**
-        - [ ] Bond River's forward post to the port flank at sta 120 mm; dress wire aft to River's Emma J2
-        - [ ] Bond Simon's forward post to the starboard flank at sta 120 mm; dress wire aft to Simon's Emma J2
-        - [ ] Install both temporary aft posts (port + starboard) at sta 580 mm; remove and replace with integrated mounts in Phase 11
-
-##### 1.1.1.1 *Head*
-
-**Geometry verification (hull-frame coordinate analysis, 2026-06-10):**
-
-- [x] **Verify head-cargo mating boss positions in slicer — SUPERSEDED, see RESOLVED note below.**
-    Hull-frame analysis (2026-06-10): `Head_Shell` Identity rotation, Base=[−332, −18, +61];
-    head aft face (head local_X=99) maps to hull_X = 99−332 = **−233 mm**.
-    `Cargo_Shell` 180°-Z rotation, Base=[−274.4, −282.8, 0]; matching cargo local_X =
-    −(−233) − 274.4 = **−41.4 mm** — corrected in `cargo_sect_shell24.scad` BOSS_FORE
-    (was X=−7, now X=−41.4). **VERIFY** both sections simultaneously in an assembly render
-    or slicer that shows both STLs in hull-frame placement.  Confirm 6 head BOSS_AFT bosses
-    (at head local_X=99) align with 6 cargo BOSS_FORE bosses (at cargo local_X=−41.4) in
-    the assembled hull.  All Y/Z offsets remain estimated; also VERIFY those after X is confirmed.
-    Ref: `head_shell24.scad` BOSS_AFT_* comments; `cargo_sect_shell24.scad` hull-frame block.
-    **R1 AUDIT (2026-06-11): this analysis used hull X as the longitudinal mating axis, but
-    in the validated hull frame X is LATERAL (+port) and the longitudinal axis is Y — the
-    baked head and cargo meshes mate at hull Y ≈ −71 mm.  Redo the joint analysis in hull Y
-    (see §1.1.0) before trusting BOSS_FORE = −41.4 mm.**
-    **RESOLVED 2026-06-29 (see §1.1.0 "Re-verify head↔cargo joint bosses in hull Y"):**
-    the hull-Y verification was done against the baked meshes.  `BOSS_FORE = −41.4 mm`
-    (and the whole SCAD `BOSS_FORE`/`BOSS_AFT` scheme) is **obsolete** — the canonical
-    joint-1 bosses are `add_structural_features.py` `BOSS_PIN_BORES["joint1"]` in hull
-    frame.  Faces mate at hull Y ≈ −71 ✓; measured pin engagement is shallow on the two
-    flank pins (the "8 mm each side" target is not met as-baked) — flagged for a
-    structural decision in §1.1.0.
-
-**Rev R shell updates (sensor/antenna mounts; carried fwd from Rev O, 2026-05-24):**
-
-- [ ] **head_shell24.stl** — regenerate from `airframe/openscad/fuselage/head_shell24.scad` Rev S2.
-    - Rev S2 (2026-06-16) corrected FWD_ROT and all three nose-face aperture positions;
-        see Rev S2 note at top of SCAD for root-cause detail.
-    - [ ] **Verify S1A, S1B, FPV positions at nose surface in slicer** — load generated STL
-        and cross-section at Y ≈ −268 to −280 mm (pre-bake frame); confirm apertures cut
-        cleanly through the nose-face hull skin, not the port lateral skin.
-        Adjust S1A_POS / S1B_POS / FPV_POS Y values if nose face is at a different Y
-        at the sensor's (X, Z) coordinates.
-    - [ ] **Specify laser pointer mount** — laser pointer is currently documented as
-        colocated with S1A/S1B (green highlight, port side nose face), but no separate
-        aperture is cut.  Once laser pointer hardware is selected, add a laser_cut()
-        module with the appropriate bore size adjacent to or integrated with S1A aperture.
-    - [ ] **Correct BOSS_AFT positions** — BOSS_AFT_* in `head_shell24.scad` use X=99 as
-        the aft face (legacy X=longitudinal convention, same root cause as Rev S2 sensor
-        correction).  Hull-frame aft joint face is at Y ≈ −53 mm; BOSS_AFT_ROT should be
-        [0,90,0] only if facing into the joint (−Y direction → [−90,0,0]).  See §1.1.0
-        open item and §1.1.1 for the full correction plan — this is a pre-existing blocker.
-    - [ ] create mounting bracket for camera/tof/laser control pcb
-    - Verify Faraday tray cutout and all other non-boss geometry unchanged after SCAD re-render.
-
-##### 1.1.1.2 *Cargo*
-
-**Rev R shell updates (sensor/antenna mounts; carried fwd from Rev O, 2026-05-24):**
-
-- [ ] **cargo_sect_shell24.stl** — regenerate from `serenity/stl/cargo_sect_shell24.scad` (cargo nadir FPV mount added)
-    - Both outputs go to `thingverse-serenity/files-hollowed-18in/`
-
-###### 1.1.1.2.1 *Cargo Handling*
-
-**Cargo handling equipment:**
-
-- [x] **Mounting hardware — 8 STLs** generated by `serenity/stl/generate_cargo_mounts.py` (Python/trimesh/manifold3d). Output: `thingverse-serenity/files-hollowed-18in/cargo_*.stl` *(done 2026-05-30, PR #21)*
-    - [x] cargo_winch_motor_mount (CF-PETG), cargo_winch_spool (PETG), cargo_door_servo_bracket (CF-PETG), cargo_release_servo_bracket (CF-PETG), cargo_drv8833_tray (PETG), cargo_cradle_autolatch (PETG), cargo_gps_retention_ring (PETG), cargo_fpv_bezel (PETG)
-
-- [ ] **Cargo gondola shell** — create `serenity/stl/s_cargo_gondola_shell.scad`: 112×85×22 mm belly pod, 4× M3 hard point pattern, 18 mm protrusion below hull line
-- [ ] **Clamshell door halves** — `cargo_door_port.stl` + `cargo_door_stbd.stl` generated by
-    `serenity/stl/generate_cargo_doors.py` Doors hinge on port and starboard sides and meet at the centerline.  Doors open out to 180 deg, allowing landing over and loading 4"x3"x3" cargo payload, or raising/lowering it in flight via the internal winch. (trimesh/scipy bilinear interpolation from Rev-O shell belly faces). 8-barrel piano hinge, 3 mm CF rod, 3.15 mm bore.
-- [x] **`cargo_sect_shell24.scad` Rev S** — belly opening (100×9×165 mm), 2× hinge-pin blocks
-    (3.3 mm bore + M3 grub-screw tap), 2× SG90 servo mounting pads (4× M2.5 pilots each), 4×
-    latch-catch lips (Z=42/122 mm at each X frame edge). *(done 2026-06-01)*
-- [x] **`cargo_sect_shell24.scad` Rev S1** — wing root mortises (30.8×20.8×15 mm), spar bearing
-    blocks (22 mm OD × 10 mm boss, M3 grub-screw), full-Z spar bore (Ø12.3 mm), and nacelle tilt
-    servo mount blocks (52×30×8 mm, 4× RX-M3×5.7 inserts) at port + stbd interior Z walls.
-    All 4 spatial conflicts resolved (NSVMT_X_CEN moved AFT to −147.6 mm). Load FOS ≥ 11 vs 4.0
-    AUVSI target. *(done 2026-06-08, PR #42)*
-- [x] **`cargo_sect_shell24.scad` Rev S2** — Inara and River avionics bay dorsal standoffs
-    (8× M3 boss posts, ±40×±25 mm pattern) + dorsal access panel cuts (62×42 mm each) for Cape-B
-    (55×35 mm) at port half (Z_CEN=118 mm, Inara) and stbd half (Z_CEN=45 mm, River). GPS_PORT/STBD
-    colocated for minimal SMA routing. *(done 2026-06-08, PR #42)*
-- [x] **`cargo_sect_shell24.scad` Rev S3** — Faraday enclosure space allocation.
-    Panel cuts enlarged 55×35 → 62×42 mm; boss offsets updated ±40×±25 → [TBD pending PCB layout — hole pattern must be derived from Wash.kicad_pcb / Zoë.kicad_pcb once layout is complete] to match
-    Faraday tray corner mounts; bay Z centres adjusted ±1 mm (Inara 118→119, River 45→44) for 10 mm
-    inter-bay gap; FARADAY_* envelope parameters (95×65×65 mm, 1.5 mm Al wall, 25 mm fan) added.
-    *(done 2026-06-08, PR #42)*
-- [x] **`nacelle_servo_bracket.scad`** — U-channel saddle clamp for DS3218MG nacelle tilt servo;
-    4× M3×10 SHCS flanges at ±17.5×±8 mm; 10×6 mm lead notch; FOS_shear=85.7. *(done 2026-06-08)*
-- [x] **`REVN_BUILD_GUIDE_24IN.md` Phase 3 anti-rework** — spar grub-screw torque sequence
-    (0.5 N·m each, before foam pour) with consequence documentation. *(done 2026-06-08)*
-
-- [ ] **`cargo_sect_shell24.scad` — shuttle exterior fairing profiles on Z walls.**
-    Canonical Serenity shuttles (Shuttle 1 = Inara's, Shuttle 2) sit just above the wing roots on
-    the exterior Z faces of the cargo section. Their outline profiles need to be added as raised
-    exterior features at Y≈−273..−213 mm on both Z walls, matching the canonical hull geometry.
-    Interior avionics zone (Inara + River dorsal band) coexists — shuttles are exterior, avionics
-    interior. Reference the Thingiverse low-detail hull for shuttle fairing geometry.
-    **BLOCKS canonical hull fidelity (CLAUDE.md requirement: keep skin geometry true to reference).**
-
-- [ ] **Avionics dorsal access covers / Faraday tray lids for Inara and River bays (two parts).**
-    Create `inara_access_cover.scad` and `river_access_cover.scad` (or a single parametric SCAD):
-    Cover footprint 105×75 mm with 5 mm shoulder lip seating on hull skin around 95×65 mm opening.
-    Copper-foil-lined PETG or 0.5 mm Al sheet; Ø38 mm GPS clearance bore at GPS offset from cover
-    centre (Inara: offset −13.3 mm in Z from bay centre; River: offset +0.7 mm in Z from bay centre).
-    4× M2 flathead captive screws at ±40 mm (X) × ±25 mm (Z) from cover centre for EMI-seal clamping.
-    Must be removable with common hand tools per CLAUDE.md field disassembly requirement.
-    Ref: FARADAY_* parameters in cargo_sect_shell24.scad Rev S3; CLAUDE.md §1.4.1.
-    Add to Phase 0 print schedule.
-
-- [ ] **Update REVN_BUILD_GUIDE_24IN.md bay layout table** to reflect revised avionics stack
-    positions (Inara + River in cargo section dorsal band; Shepherd Book in head section forward;
-    Simon in rear cone pre-Phase 11, middle ring post-Phase 11). Current guide Bays A–E are from an
-    older layout that does not match the cargo-section dorsal placement in Rev S (formerly
-    Rev R — the axis-bug fix in §1.1.1.0a doesn't change the bay positions this item refers to).
-
-- [ ] **Regenerate `cargo_sect_shell24.stl`** from the current Rev S SCAD source (includes the
-    Rev R2/Rev S GPS/avionics/nadir-camera axis-bug fix, §1.1.1.0a). Run:
-    `openscad -o airframe/stls/fuselage/cargo_sect_shell24.stl
-        airframe/openscad/fuselage/cargo/cargo_sect_shell24.scad`
-    Verify in slicer: wing mortises at both Z walls; spar bore at X=−70 mm; 8 dorsal boss posts;
-    two 62×42 mm dorsal panel openings. Z-range must be 0..163 mm; all features inside hull skin.
-    **BLOCKS Phase 0 cargo section printing.**
-
-- [ ] Add motor-mount and DRV8833-tray boss locations to `cargo_sect_shell24.scad` interior
-    drawing notes (Phase 1 pre-pour checklist reference).
-- [ ] Add SG90 bell-crank boss to inner face of each door panel for pushrod attachment.
-    - Export gondola shell to `thingverse-serenity/files-hollowed-18in/`
-    - **BLOCKS Phase 8**
-
-###### 1.1.1.2.2 *Wing Root*
-
-##### 1.1.1.3 *Middle Neck*
-
-**Canonical geometry (Rev R1, 2026-06-13):**
-The middle section is defined by `airframe/blender-scripts/files-hollowed-24in/middle_shell24_2mm_repaired.stl`
-(canonical Blender source) → baked to `airframe/stls/fuselage/middle_shell24_2mm_repaired.stl`.
-
-It is **ONE printed piece** comprising two distinct structural elements:
-1. **Outer horseshoe ring** — the U-shaped exterior frame surrounding the middle section, open at −Z (ventral).
-    The two lower arms of the horseshoe continue aft as the landing skids into the rear section.
-2. **Inner neck** — a tube-like enclosed passage running through the centre of the horseshoe,
-    connecting the cargo bay interior to the rear engine room interior within the hull skin.
-    Canonically this is a pressurised passage within the ship; in the UAV context it provides
-    structural continuity and a wiring/keel routing path through the narrowest hull section.
-
-**Phase 5–10 print state:** inner neck is a closed, uncut tube.
-Aft EDF intake scoops (reduced-area radial openings into the inner neck for the 55 mm EDF airflow)
-are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phase 11.
-
-- [x] **Blender canonical source baked** — `middle_shell24_2mm_repaired.stl` (855 328 tri) baked
-    2026-06-13; extents X −258.5..−81.6 / Y +130.4..+203.6 / Z +1.3..+166.1 mm. *(done 2026-06-13)*
-
-- [ ] **Slicer verification** — open baked `middle_shell24_2mm_repaired.stl` in slicer and confirm:
-    - Both the outer horseshoe ring and inner neck are present as connected geometry
-    - No thin-wall violations at neck-to-horseshoe web transitions (min 1.6 mm wall at all points)
-    - Inner neck bore is closed (no EDF intake openings)
-    - Skid arm geometry at the lower horseshoe legs correctly transitions into the rear section
-    - Z-range +1.3..+166.1 mm in hull frame; total height ≈ 165 mm — fits build-volume vertical
-    **BLOCKS middle section printing.**
-
-- [ ] **Kaylee's room — PDB mounting in inner neck** — the Kaylee Power Distribution Board
-    (Kaylee Rev A1; 75 g) is housed inside the inner neck of the middle section, accessible
-    through the open ventral face of the horseshoe ring.  The inner neck central location
-    minimises power run lengths to all four nacelles, all four avionics stacks, and the battery.
-    Required additions to the Blender middle mesh (or as bonded inserts):
-    - 4× M3 standoff boss posts for Kaylee PCB (55×35 mm board; ±20×±12.5 mm pattern from bore centre)
-    - Power cable exit notches (6 AWG leads, 4× nacelle ESC runs + avionics BEC tap)
-    - Ventilation opening or clearance to allow heat dissipation from TPS54620 regulators
-    - Access clearance from horseshoe ventral opening (confirm Kaylee can be inserted and removed
-        with hand tools — field disassembly requirement per CLAUDE.md)
-    - Confirm inner neck bore dimensions from baked `middle_shell24_2mm_repaired.stl` cross-section
-        at hull Y ≈ +165 mm (midpoint of middle section) before adding boss features.
-    **BLOCKS middle section Blender mesh update; BLOCKS Kaylee installation.**
-
-- [ ] **CF skid rod channels** — add 4.2 mm bore channel along each horseshoe-to-skid arm (lower
-    legs of the horseshoe) in the Blender mesh, coaxial with the matching channels in the rear shell.
-    Export updated STL, re-bake, verify watertight.  See §1.1.0a skid task.  **BLOCKS taxi test.**
-
-- [ ] **Simon bay — define avionics bay in the MIDDLE section (moved here from §1.1.1.2, 2026-06-13).**
-    Simon's stack (Cape-B-2 + Cape-A-2, 55×35 mm both, 39.2 mm stack height) + Faraday tray (60×40×55 mm)
-    mounts in the **middle inner-neck dorsal** interior. Add boss standoffs + dorsal access panel to the
-    middle Blender/SCAD source. Verify the inner-neck dorsal band has clearance (middle Z ≈ 1.3..166 mm,
-    thin horseshoe section — confirm the inscribed cavity holds the 60×40×55 tray before placing bosses).
-    Ref: CLAUDE.md PACE (Simon = alternate watchdog, aft EDF control); shuttle Faraday-fit method in
-    `engrave_plaques.py`/cavity-profile check. **BLOCKS Phase 6 full 8-node installation.**
-
-- [ ] **Kaylee room — PDB + battery bay, middle VENTRAL (2026-06-13).**
-    The Kaylee power-distribution board and the main battery mount together in the middle section's
-    ventral region (the open −Z side of the horseshoe). Define the mounting bay / strap points there;
-    keep mass low and central for CG. Coordinate with §1.4.5 (power distribution).
-
-- [ ] **Avionics-bay interior name marks (DEFERRED, 2026-06-13).** Engrave/emboss bay identifiers
-    (INARA port shuttle, RIVER stbd shuttle, SHEPHERD head fwd, SIMON middle dorsal, KAYLEE middle
-    ventral) on each bay interior. First attempt (flat recessed plaque via `engrave_plaques.py`) did
-    not read cleanly on the morph-opened organic cavity walls; pending a method decision (raised letters
-    on a flat boss pad, or smooth the bay wall first). Mechanism is watertight and stays inside the 2 mm
-    skin. Scripts: `make_bay_text.py`, `engrave_plaques.py`.
-
-- [ ] **Phase 11 — aft EDF intake scoop cuts** — at Phase 11, cut the reduced-area radial scoop
-    openings (sized for the 55 mm EDF, ~3,090 mm² total capture at 1.3× duct match) into the inner
-    neck to match the resized EDF plenum geometry (`deferred/aft-edf/openscad/neck_intake_frame.scad`).
-    These cuts are Phase 11 ONLY — the Phase 5–10 mesh is the closed-neck version.  **Scoop geometry
-    must be re-derived for the 55 mm fan — the old 4× scoops were sized for the 120 mm EDF.**
-
-- [ ] **neck_intake_frame.stl (Phase 11)** — `openscad -o neck_intake_frame.stl deferred/aft-edf/openscad/neck_intake_frame.scad`
-    - Verify: registration tongues 5 mm depth; intake lips project 6 mm forward
-    - Material: CF-PETG; **DEFERRED — BLOCKS Phase 11 only.** STL at `deferred/aft-edf/stls/`.
-    - **Requires regeneration for 55 mm intake area (Rev R1 rear-EDF redesign).**
-
-    **Rear intake system (OpenSCAD):**
-
-- [ ] **aft_edf_plenum.stl** — `openscad -o aft_edf_plenum.stl deferred/aft-edf/openscad/aft_edf_plenum.scad`
-    - Verify: intake arms feed a 55 mm circular EDF inlet; **add 4 RCS bleed taps (~15% flow split)**
-        on the discharge side to the RCS distribution manifold; no self-intersection
-    - **DEFERRED — BLOCKS Phase 11 only.** **Requires regeneration: outlet 120 mm → 55 mm and RCS
-        bleed taps added (Rev R1 rear-EDF redesign).** Old STL at `deferred/aft-edf/stls/aft_edf_plenum.stl` is superseded.
-
-    **Canonical middle shell (OpenSCAD — belly restored, no belly scoop):**
-
-- [x] **middle_canonical_shell24.stl** — `openscad -o ... serenity/stl/middle_canonical_shell24.scad`
-    - Note: NOT the same as `middle_shell24.stl` (which has the obsolete belly intake cut). This is the Rev N canonical belly.
-
-###### 1.1.1.3.1 *Anti-Collision Strobe*
-
-- [ ] Mount ant-collision strobe on belly of middle section in accordance with [REF-FAA-003]
-
-    - [ ] Create cableways from mount point to avionics bay
-
-    - [ ] Wire strobe to led pwd output on Wash cape in Simon's medbay
-
-##### 1.1.1.4 *Rear Engine Cone*
-
-###### 1.1.1.4.1 *Anti-Collision Tail Light*
-
-- [ ] Mount ant-collision steady white tail light on upper pod of rear section in accordance with [REF-FAA-003]
-
-    - [ ] Create cableways from mount point to avionics bay
-
-    - [ ] Wire strobe to led pwd output on Wash cape in Simon's medbay
-
-#### 1.1.2 **Wings**
-
-**Wing pylon (OpenSCAD — Rev S integrated design; carried fwd from Rev O):**
-
-- [ ] **wing_nacelle_pylon_revo.stl** — `openscad -o ... serenity/stl/wing_nacelle_pylon_revo.scad`
-    - Verify WING_SLOT_W and WING_SLOT_H against tip chord 93 mm (Rev R1 planform) before printing — pocket 50×40 mm uses 54 % of tip chord; confirm pylon block clears airfoil walls
-    - Verify WING_BOLT_R (16 mm) does not exceed S1223 half-thickness at 50 % tip chord (≈ 9.6 mm above chord line at 93 mm chord); reduce to ≤ 12 mm if pylon block geometry requires it
-- [ ] **wings_s1223_revo.stl** — Rev R1 planform (2026-06-14): root 129 mm, tip 93 mm, zero LE sweep; STLs regenerated and baked ✓
-    - **[OPEN]** Verify cargo-section wing-root mortise dimensions against new root chord 129 mm (was 161 mm); `cargo_sect_shell24.scad` mortise slot (currently 30.8×20.8×15 mm) may need resizing and re-centring
-    - **[OPEN]** Re-check root-tab centre position: with 129 mm chord the tab centres at hull Y ≈ +57.5 mm (was +73.5 mm); confirm mortise centre in cargo SCAD matches
-    - **[OPEN]** Verify wing TE position (hull Y≈+122 mm port, +117 mm stbd) clears cargo-section aft interior features; cargo aft boundary is hull Y≈+132 mm — 10 mm clearance
-
-##### 1.1.2.1 *Rev R1a — spar straightened + camber-centred + EDF cableway (2026-07-07)*
-
-- [x] **Spar bore de-skewed** — `wings_s1223_revo.scad`: replaced the constant-30%-
-    chord-fraction bore (which walked 10.8 mm / 7.2° forward over span under the
-    straight LE — the "swept" cutout) with a bore at a **constant chordwise station
-    (`SPAR_BORE_STATION` = 22 mm)** → parallel to the LE. Bore centre height now
-    reads the **actual S1223 camber midline at each station** (`midline_frac()`),
-    fixing the Rev R1 chord-line centring that broke out the lower surface AND the
-    single-constant estimate that clipped the upper surface at the root.
-- [x] **Tip thickened for spar fit** — `THICKNESS_SCALE_TIP` = 1.25 (root unchanged);
-    tip t/c 12.14 % → ≈ 15.2 %. Needed because the tip section (11.3 mm max) is
-    thinner than the Ø12.3 bore. Both wings re-rendered, baked, watertight ✓
-    (vol 103 096 mm³, Z max +76.99 mm — within documented envelope). Min walls
-    (mesh-measured): spar **1.16 mm** (root) → 1.44 mm; cableway 1.7–4.3 mm.
-- [x] **EDF cableway added** — two Ø7 mm spanwise conduits at 40 % chord
-    (`cableway_bore()`): 40 A EDF ESC power + ESC signal split across the two;
-    nav-light 3-core routes through the hollow spar (Ø9 mm tube ID). Section
-    figure: `docs/img/wing_rev_r1a_sections.png`.
-- [ ] **[OPEN — BLOCKER] Fuselage spar-interface now mismatched.** §1.1.1.3 cuts the
-    cargo-shell mating Ø12.3 spar bore + Ø22 bearing bosses at the **old** 30 %-chord
-    line (hull **Y ≈ +31.7, Z ≈ 62.5**). The Rev R1a wing spar now sits at the 22 mm
-    station on the camber midline → root ≈ hull **Y ≈ +15, Z ≈ +71** (~16 mm fwd,
-    ~8 mm up). The spar can no longer pass through both parts. **User decision
-    required:** (a) relocate the cargo-shell bore + bosses to the new spar line
-    (cargo-shell / Blender-canonical change + re-merge + re-bake), or (b) keep the
-    fuselage bore and instead thicken the tip further (~1.6×) so a straight spar at
-    the 38.7 mm station fits — fatter wingtip OML. **Do not print either wing or
-    cargo shell until reconciled.** Consider whether `THICKNESS_SCALE_TIP` /
-    `SPAR_BORE_STATION` should be canon-checked against the Serenity wing silhouette.
-
-#### 1.1.3 **Nacelles**
-
-**Nacelle shells (Blender, Rev S geometry; carried fwd from Rev O — must run on host machine):**
-
-- [x] **Rev R1 nacelle stator shells** — **investigated 2026-06-22: this item is
-    STALE / superseded, not run.** `blender_nacelle_revo.py` (now at
-    `airframe/blender-scripts/`, not `thingverse-serenity/` — that path is
-    archived) targets Rev O 18 in-scale inputs
-    (`files-hollowed-18in/s_eng_{left,right}_shell24_50mm.stl`) that no
-    longer exist at that path (only archived copies remain, at
-    `archives/stl/`). The current Rev R1 design integrates the 11-fin stator
-    as its own separate printed sleeve, `edf_stator_sleeve.scad` →
-    `edf_stator_sleeve.stl` (already in the Makefile's `NACELLE_STLS` list
-    and already published in `airframe/stls/nacelles/`) — confirmed
-    up to date by re-rendering and vertex-diffing against the published
-    file (2592/2592 verts, identical). **Pre-existing finding, not caused by
-    today's changes:** `edf_stator_sleeve.stl` is not 2-manifold (OpenSCAD
-    itself warns "may not be a valid 2-manifold" on render) — logged here
-    per CLAUDE.md's mesh-verification-finding requirement; not fixed in this
-    pass (unrelated to the nozzle/gear-train work above).
-
-##### 1.1.3.1 *Nozzle*
-
-- [x] **nacelle_nozzle_iris.stl** — `openscad -o ... serenity/stl/nacelle_nozzle_iris.scad`
-    *(rendered 2026-06-22)* — Rev R1 50 mm iris: full-circle M=1.0 ring gear
-    (72T, R=36mm pitch, replaces the old partial rack), outer housing,
-    8-petal geometry sized to hit 75%→105% of the 50 mm bore (18.75→26.25 mm
-    tip radius) across the -5°/140° nacelle tilt range. The file's default
-    render was switched from the ring-only single part to the assembly
-    preview (housing + ring + 8 petals at closed position), matching what
-    `serenity_assembly.py` already expected to import. Mesh-verified: 8 of
-    9 split bodies fully watertight; 1 non-manifold edge (of 26,381 total)
-    where adjacent petals' designed 5° angular overlap touches at the
-    closed position — cosmetic/assembly-preview only (this file is not the
-    print source for the ring/housing/petals, which print as separate parts
-    pulled from the same SCAD modules or, for the petal, from
-    `blender_nozzle_gen.py`'s `nacelle_nozzle_petal.stl`); not pursued
-    further here. `IDLER_SLOT_ANG` updated 0° → 50.9° to match the resolved
-    idler shaft position (see §1.1.3.3).
-- [x] **nacelle_nozzle_idler.stl** + **nacelle_nozzle_idler_bracket.stl**
-    *(NEW component, rendered 2026-06-22)* — compound idler gear (Idler-In
-    44T/R=22mm meshes Crown Pinion; Idler-Out 15T/R=7.5mm meshes the nozzle
-    ring gear) plus its two-boss mounting bracket, each now a separate STL.
-    Resolves the Crown-Pinion-to-ring radius mismatch (§1.1.3.3). Both
-    mesh-verified fully watertight. `nacelle_nozzle_idler.scad`'s render
-    selector changed from comment-toggle to a `RENDER_PART` `-D` string
-    param ("gear" | "bracket"), matching the wings' `RENDER_SIDE` convention,
-    and wired into the Makefile.
-- [x] **Rebuild petals using the BamJr variable nozzle [REF-CAD-001] as a guide,
-    using the gear train already developed** *(done 2026-07-04)* — the Rev R2
-    redesign in `nacelle_nozzle_iris.scad` already implements the smooth conical
-    exit (8 overlapping tangential-hinge flaps driven by the 72T unison ring gear
-    via a spiral face-cam, reusing the Crown-Pinion→idler→ring train unchanged).
-    This pass: (1) cited the BamJr "Variable-area EDF nozzle" reference
-    (Thingiverse Thing 2991269, CC BY 4.0) — added to `REFERENCES.md` as
-    **REF-CAD-001** and cited in the iris SCAD header, replacing the placeholder
-    `[REF xxx]`; (2) numerically verified the 75 %/105 % kinematics
-    (exit_r = R_HINGE − FLAP_LENGTH·sin φ → φ_closed = 25.94° at 18.75 mm = 75 %
-    bore, φ_open = 3.58° at 26.25 mm = 105 % bore); (3) added a `RENDER_PART`
-    (`throat` | `ring` | `flap` | `asm`) selector and Makefile rules, and rendered
-    the print-ready **`nacelle_nozzle_throat.stl`**, **`nacelle_nozzle_ring.stl`**,
-    **`nacelle_nozzle_flap.stl`** — all mesh-verified fully watertight (1 body
-    each); (4) archived the superseded flat blender petal
-    `nacelle_nozzle_petal.stl`.  *(Piano-wire loose end RECONCILED to Rev S
-    2026-07-04: removed the retired 0.8 mm iris link-ring everywhere active —
-    `bom_revS.csv` `PIANO-WIRE-0.8` dropped and replaced by `PIN-3X18` (3×18 mm
-    tangential hinge, ×16) + new `PIN-2X4` (2×4 mm spiral-cam follower, ×16);
-    `PRINT-NACELLE-PETAL`→`PRINT-NACELLE-FLAP`, `PRINT-NACELLE-RING` updated to the
-    72T unison ring gear, and `PRINT-NACELLE-THROAT` / `-IDLER` / `-IDLER-BKT` added;
-    Crown-Pinion note updated; `gen_piano_wire_ring` + its placeholder STL +
-    `serenity_placeholders_assembly.py` entry + `PROJECT_INDEX` line + the
-    `components_overview.svg` / `build_guide_08_nozzle_gear.svg` / `serenity-rev-r.jsx`
-    strings all updated to the Rev S spiral-cam drive.)*
-
-##### 1.1.3.2 *Tilt Gear Train*
-
-    **Rev S gear train (OpenSCAD — all 5 parts, M=1.0; carried fwd from Rev O):**
-
-- [x] **nacelle_sector_gear.stl** — `openscad -o ... serenity/stl/nacelle_sector_gear.scad`
-    *(rendered 2026-06-22)* — Rev R1.1: R=22mm, **58T, ≈151.3° arc** (was
-    38T/≈99.1°, grown to cover the widened -5°/140° mechanical tilt range);
-    fixed to tilt bracket. Mesh-verified fully watertight.
-- [x] **nacelle_pinion.stl** — spec: N=12T, D-bore shaft (×4 total: drive
-    pinion + crown pinion per nacelle, identical part). 2026-06-22 change
-    was comment-only (Stage 3 ratio/mating-interface text); re-rendered to a
-    scratch file and diffed vertex-for-vertex against the published STL —
-    confirmed byte-identical geometry, so the published STL was left as-is.
-- [x] **nacelle_bevel_pair.stl** — `openscad -o airframe/stls/nacelles/nozzles/nacelle_bevel_pair.stl airframe/openscad/nacelles/nacelle_bevel_pair.scad`
-    *(re-rendered 2026-07-04)* — Spec: N=14T, 45° pitch cone, 1:1, 90° axis
-    redirect. No spec change; the published STL (2026-06-09) predated the
-    2026-06-11 SCAD edit, so it was re-rendered from current source. Mesh-verified
-    fully watertight (1 body, winding-consistent).
-- [x] **nacelle_bevel_housing.stl** — `openscad -o airframe/stls/nacelles/nozzles/nacelle_bevel_housing.stl airframe/openscad/nacelles/nacelle_bevel_housing.scad`
-    *(re-rendered 2026-07-04)* — Spec: CF-PETG, 24×14×20 mm housing block. No spec
-    change; re-rendered from current source (same stale-STL reason as the pair).
-    Mesh-verified watertight (4 separate solids — housing block + bearing bosses —
-    all winding-consistent).
-
-##### 1.1.3.3 *FreeCAD Hull-Frame Placement (gear train, nozzle, sleeves)*
-
-- [x] **Map all nacelle-internal mechanism components to hull frame for both port
-    and stbd, in `airframe/FreeCAD-scripts/serenity_assembly.py`** *(done, 2026-06-21)*
-    — added `R_BAKE` / `T_BAKE` / `PYLON_SIDE` constants and a `nacelle_rows()`
-    composition helper (`T_hull = T_nacelle_bake ∘ T_subcomponent_local`, derived
-    by hand-expanding the shared nacelle bake quaternion); placed via
-    `transform_mesh()` (VERIFY tier, not `place_mesh()`) for both sides:
-    Stator Sleeve, Aft Spider Sleeve, Drive Pinion A, Crown Pinion, Bevel
-    Housing, Bevel Pair, Sector Gear, Nozzle Iris, and Tip Cap.
-- [x] **Fix `crown_pinion_boss()` in `nacelle_pod_50mm_tandem.scad`** *(fixed
-    2026-06-22)* — it copied `pinion_a_boss()`'s `rotate([0,90,0])` X-axis-bore
-    pattern verbatim, but both `nacelle_pinion.scad` and
-    `nacelle_bevel_housing.scad` independently document the Crown Pinion as
-    Z-axis/longitudinal (no rotation). Removed the rotation; `cylinder()`'s
-    default Z-axis extrusion is now the boss's bore axis, matching the
-    FreeCAD placement (which already used the documented-correct identity
-    rotation) and both other files' documentation.
-- [x] **Resolve the unresolved Crown-Pinion-to-rack mesh radius in
-    `nacelle_nozzle_iris.scad`** *(resolved 2026-06-22)* — an author
-    scratch-pad had computed four candidate radii (28/37/31/38 mm) and ended
-    mid-thought ("Wait —") with none ever chosen. Root cause: the Crown
-    Pinion's hull-frame Y-offset is fixed at 28 mm (shaft-conduit continuity
-    through the bevel pair, shared with Pinion A), but the nozzle ring's
-    required pitch radius (36 mm, sized for the petal/hinge geometry) is
-    incompatible with a direct mesh at that offset. **Fix: added a compound
-    idler gear stage** (`nacelle_nozzle_idler.scad`, new file) between the
-    Crown Pinion and the nozzle ring — Idler-In (44T, R=22mm) meshes the
-    Crown Pinion at the fixed 28.1 mm centre distance; Idler-Out (15T,
-    R=7.5mm) meshes the new full-circle ring gear (72T, R=36mm) at a
-    43.6 mm centre distance. A valid idler-shaft position exists per the
-    triangle inequality (|28.1-43.6|=15.5mm ≤ 28mm ≤ 28.1+43.6=71.7mm).
-    Also replaced the old partial rack with a full-circle ring gear,
-    eliminating the arc-coverage sizing problem entirely. Also fixed a
-    latent bug found during the rework: `LINK_HOLE_R` (28 mm) exceeded
-    `PETAL_LENGTH` (18 mm) — the piano-wire link hole was off the physical
-    end of the petal; corrected to `LINK_HOLE_R=16mm`, `PETAL_LENGTH=20mm`.
-    Updated `nacelle_pinion.scad`'s Stage 3 ratio derivation and mating
-    tables to match.
-- [x] **Render updated/new gear-train STLs** *(done 2026-06-22, openscad +
-    trimesh now available)* — `nacelle_nozzle_iris.scad`, `nacelle_sector_gear.scad`,
-    and the new `nacelle_nozzle_idler.scad` (both parts) all rendered; see
-    §1.1.3.1/§1.1.3.2 above.
-- [x] **Mesh-verify the regenerated nacelle gear-train STLs** *(done
-    2026-06-22)* — `nacelle_nozzle_idler.stl`, `nacelle_nozzle_idler_bracket.stl`,
-    and `nacelle_sector_gear.stl` are all fully watertight (single connected
-    solid each). `nacelle_nozzle_iris.stl` (assembly-preview render) has one
-    non-manifold edge out of 26,381 from the petals' designed overlap —
-    see §1.1.3.1 finding above; not a print-file defect.
-- [x] **Idler angular position about the nozzle axis** *(resolved
-    2026-06-22)* — solved the two simultaneous centre-distance constraints
-    (28.1 mm from Crown Pinion at local (X=0, Y=PINION_A_Y=28); 43.6 mm
-    from the nozzle/ring axis (0,0)): shaft position (X=+27.485, Y=33.846),
-    i.e. 50.92° from the local +X axis (rounded to 50.9°). The other valid
-    mirror solution is 129.08° at X=-27.485 — +X chosen arbitrarily (nothing
-    else occupies that sector at this Z station). `IDLER_SLOT_ANG` in
-    `nacelle_nozzle_iris.scad` updated to match; idler + bracket placed in
-    `serenity_assembly.py` at this (X, Y).
-- [x] **idler axial mesh-band mismatch — RESOLVED 2026-07-04** (user decision:
-    offset the Crown Pinion, accounting for CG).  The idler's two gear sections
-    are 10 mm apart axially (Idler-In band centre at local Z=6, Idler-Out at
-    Z=16), but Crown Pinion and the Nozzle Ring both sat at the same station
-    (`CROWN_Z = NOZZLE_RING_Z = 166.25`), 0 mm apart — unmeshable by one idler
-    shaft.  **Fix:** decoupled the two and moved the Crown Pinion 10 mm toward the
-    intake — `CROWN_Z = NOZZLE_RING_Z − 10 = 156.25` (`nacelle_pod_50mm_tandem.scad`)
-    — so the targets are now 10 mm apart, matching the idler band spacing.  The
-    idler + bracket are placed in `serenity_assembly.py` at `Z = CROWN_Z − 6` (real
-    Z, no longer a placeholder), so Idler-In meshes the Crown plane and Idler-Out
-    the Ring plane; the nozzle placement now uses `NOZZLE_RING_Z` (unchanged).
-    **CG re-derived** for the FULL rotating assembly (gear train + nozzle
-    ring/petals/idler included, WS2812B LED rings removed, aft cowl not
-    double-counted): CG_Z = 104.5 mm, so `PIVOT_Z` moved 103.75 → 104.5 mm (a
-    negligible +0.75 mm) — the nacelle still pivots about its CG, per the user
-    requirement.  See the pod header mass breakdown and `nacelle_nozzle_idler.scad`
-    header.
-- [x] **Confirm Sector Gear standoff distance from the nacelle face**
-    *(resolved 2026-06-22)* — a tilt-bracket SCAD source DOES exist
-    (`airframe/openscad/wings/wing_nacelle_pylon_revo.scad`, not found in
-    the previous search), which bolts the sector gear to the pylon face at
-    `PYLON_X0 = NACELLE_OD_X/2 = 30.25 mm` using that file's own simplified
-    synthetic-ellipse `NACELLE_OD_X = 60.5 mm`. `serenity_assembly.py`'s
-    `NACELLE_FACE_X_PYLON = 34.0 mm` instead matches
-    `nacelle_pod_50mm_tandem.scad`'s own constant of the same name, which
-    that file documents as "taken from the actual nacelle STL measurements
-    rather than the synthetic-ellipse `NACELLE_OD_X`/2" — i.e. 34.0 mm is
-    the validated, measured standoff already in use; it was not a guess.
-    **Follow-up (new, not done here):** reconcile the pylon file's 30.25 mm
-    ellipse approximation to the nacelle's measured 34.0 mm in a future
-    pylon-model pass — out of scope for this nozzle/gear-train fix.
-- [x] **`nacelle_tip_cap_port/stbd.stl` — ARCHIVED 2026-06-22**, per user
-    instruction ("legacy part, no longer needed"). STLs moved to
-    `airframe/archive/stls/nacelles/` (see `ARCHIVE_INDEX.md`); placement
-    code and the now-unused `NACELLE_FACE_X_FAR` constant removed from
-    `serenity_assembly.py`; references removed from
-    `airframe/blender-scripts/serenity_render_views.py`,
-    `docs/PHASED_BUILD_GUIDE.md`, and `PROJECT_INDEX.md`. Note for the
-    record: `PHASED_BUILD_GUIDE.md`'s now-removed rows described this part
-    as housing the RED/GREEN nav-light recess (port/stbd) — if nav-light
-    mounting is still needed, it isn't currently assigned to any other
-    component; flagging in case that function still needs a home.
-    `current-specification/LICENSE_AND_ATTRIBUTION.md` also references this
-    part in an already-stale (pre-Rev-R1 naming) file-tree snapshot — not
-    touched here, pre-existing staleness unrelated to this archival.
-- [x] **`cargo_sect_shell24.scad`'s port/stbd mirroring used the wrong axis
-    — FIXED 2026-06-22** (adjudicated against CLAUDE.md's hull-frame
-    standard, per explicit user direction). Rendered and mesh-verified after
-    the fix: `openscad --hardwarnings cargo_sect_shell24.scad` compiles
-    clean (no warnings), output fully watertight (14 connected solids, 0
-    bad) — bounds X −204.0..−7.4, Y −415.6..−211.3, Z 0.0..163.2 mm, matching
-    the file's own documented STL bounding box. Root cause confirmed: the wing
-    subsystem (`wing_root_mortise()`, `wing_spar_bore()`,
-    `spar_bearing_block()`, `nacelle_servo_mount_block()`) had been modelled
-    using the WING's own internal pre-permutation convention
-    (`wings_s1223_revo.scad`: "X: chordwise, Y: thickness, Z: spanwise")
-    without ever applying that file's own `X<-Z, Y<-X, Z<-Y` permutation to
-    hull-aligned axes before use here — i.e. an un-translated foreign
-    coordinate system, exactly what CLAUDE.md's hull-frame standard exists
-    to prevent. Added `CARGO_X_WALL_PORT`/`CARGO_X_WALL_STBD` (measured
-    lateral wall positions, mapped through this file's own validated bake
-    transform: `local_X=-201.5 -> hull_X=-72.9` PORT, `local_X=-7.4 ->
-    hull_X=-267.0` STBD) and `WING_ROOT_Z_CEN=62.5` (fixed root height for
-    both sides, from CLAUDE.md's validated baked Wing_Port/Wing_Stbd Z
-    extent +48..+77 mm); re-derived all four modules to mirror across X
-    with this fixed Z. Bonus fix: `wing_spar_bore()` now runs the full
-    lateral span through BOTH walls (a real continuous tip-to-tip spar
-    passage) — previously it was a short Z-axis bore that never reached the
-    far wall at all, so the two wings were never actually structurally
-    connected by a shared spar.
-    **Two items deliberately left open by this fix, not resolved:**
-    - The spar/mortise chordwise (Y) offset still uses the pre-existing
-    `WING_ROOT_Y_CEN` value as an interim stand-in; the true offset needs
-    re-deriving against the current 129 mm Rev R1 root chord (already
-    tracked: TODO.md §1.1.2 "Verify cargo-section wing-root mortise
-    dimensions against new root chord 129 mm").
-    - **NEW, more serious — `WING_ROOT_Z_CEN`=62.5 mm overlaps River's
-    avionics bay (Z 24..64 mm)**: the spar bearing boss alone (Z
-    51.5..73.5) already overlaps River's upper 51.5..64 mm band. This is
-    a real structural/packaging conflict, independent of the axis bug —
-    it was masked before only because the old (wrong) code happened to
-    place the wing hardware at the gondola's Z extremes, nowhere near
-    Z=24..64. `nacelle_servo_mount_block()`'s own Z-placement
-    (`NSVMT_Z_OFFSET`, +30.5 mm from `WING_ROOT_Z_CEN`) was chosen only to
-    clear the wing mortise/spar boss with the same 4 mm margin the
-    original code used, and was NOT checked against River's bay — it may
-    also land inside or near it. **Needs a structural/packaging decision
-    (move River's bay? reduce its footprint? confirm the wing spar's
-    actual swept volume doesn't reach the Faraday tray?) before any of
-    this geometry is considered final — not resolved here.**
-    `nacelle_servo_bracket.stl` still does not exist in `airframe/stls/`
-    (only the SCAD source has been authored); render it once the Z-conflict
-    above is resolved.
-
-- [ ] **[OPEN — DESIGN] Nozzle drive protrudes ~10 mm past the nacelle OD**
-    *(flagged 2026-07-07, design review)* — the compound idler shaft sits at R43.6 mm
-    and its Idler-Out teeth reach R≈51 mm, ~10 mm proud of the Ø82 nozzle housing /
-    nacelle OD (the "steampunk accessory"). Root cause: the external 72T ring gear
-    forces the idler *outside* it, and the 17.6:1 reduction is inflated because the
-    front sector/pinion stage first multiplies tilt ×4.67 then divides ×17.6.
-    **Trade study authored** (`docs/NOZZLE_DRIVE_TRADE.md`,
-    `docs/img/nozzle_drive_trade.png`) comparing two zero-protrusion redesigns:
-    - **A — internal ring gear, re-architected reduction**: teeth on the ring bore,
-        single ~13T drive pinion inside Ø82, idler deleted, front stage re-ratioed
-        ~1.5×. Keeps positive gears + linear tilt→dia map. ~6 parts.
-    - **B — pushrod/bellcrank linkage**: deletes the entire aft train (sector, bevel,
-        shaft, crown, idler, ring gear); fixed pivot crank → pushrod → ring lever.
-        ~4 parts, nonlinear map, FDM-friendly; departs from the canonical "gear
-        train" wording (would need a `CLAUDE.md` spec edit).
-    **User chose (2026-07-07): prototype BOTH and compare** — kinematic prototypes +
-    trade table done. **AWAITING production-CAD decision** (A or B) before rebuilding
-    `nacelle_nozzle_iris.scad`, `nacelle_sector_gear.scad`, removing
-    `nacelle_nozzle_idler*`, and updating `serenity_assembly.py` + the ratio/BOM.
-
-##### 1.1.3.4 *Nacelle Intake*
-
-- [x] **Trim the intake bell to the canonical leading nacelle dome** *(done
-    2026-07-04)* — the additive `inlet_bell` protruded well past the slender
-    canonical dome (bell outer r ≈ 30.5 mm at Z=0 vs the ogive nose r ≈ 21 mm at
-    the tip). Because the imported nacelle shell is a SOLID body (54 % bbox fill,
-    airflow carved by subtraction), it was replaced with a SUBTRACTIVE cosine
-    `inlet_bellmouth()` carved into the dome: r_cut(z) flares from 25 mm (aft) to
-    28 mm (front) and, since it decreases monotonically in z while the dome radius
-    increases, crosses the dome exactly once — so the nose forward of that crossover
-    (the thin tip, thinner than the 50 mm EDF anyway) is removed and the LEADING
-    EDGE = the canonical dome ∩ cosine intake, exactly as specified. Re-rendered +
-    baked both nacelles; the trimmed nose shifted the baked Y extent by ≈5.8 mm
-    (Port −64→−58.2, Stbd −70→−64.2 — CLAUDE.md extent tables updated). Both
-    watertight. **VERIFY the exact crossover station in FreeCAD** against the
-    canonical mould line.
-
-##### 1.1.3.5 *Nacelle Lighting*
-
-- [x] **Move the port (red) / stbd (green) nav lights INWARD→OUTWARD face** *(done
-    2026-07-04)* — a red (port) / green (starboard) position light must radiate to
-    its own side [REF-FAA-003 §91.209(a)]; on the inboard face the pylon/fuselage
-    occludes the required outboard arc. Added `nav_light_pocket()` — a flush
-    WS2812C-2020 recess cut INTO the OUTBOARD nacelle face (interior modification,
-    does not protrude) + a short through-wall wire bore. Header/usage comments and
-    REF-FAA-003's citation index updated. Both nacelles re-rendered + baked,
-    watertight. `NAV_LIGHT_Z = 70 mm` is a VERIFY/fine-tune-in-FreeCAD station.
-- [x] **Route nav-light wires through an internal cableway (not protruding)** *(done
-    2026-07-04)* — removed the old EXTERNAL protruding D-section `nav_wire_conduit`;
-    added `nav_wire_channel()`, an INTERNAL rib bonded to the inside of the outboard
-    skin with an OPEN snap-in U-groove (no trapped/enclosed void — prints cleanly and
-    is field-serviceable), running from the emitter down to the existing
-    `harness_exit_port()` where the wire joins the ESC/harness bundle to the pylon
-    (reuses the EDF cableway). Never breaks the exterior mould line.
-- [x] **Remove the exhaust WS2812B LED rings + harnesses from the design completely**
-    *(done 2026-07-04)* — all 3 (2 nacelle + 1 rear) removed across every ACTIVE
-    file: `current-specification/bom_revS.csv`, `README.md`, `docs/POWER_DISTRIBUTION.md`
-    (5 V subtotal 13 650→13 410 mA nom / 27 310→26 710 peak; load-shed table
-    renumbered), `serenity-rev-r.jsx`, the placeholder generator + assembly + the
-    `WS2812B_ring_50mm.stl` asset (deleted), both blender generators, `PROJECT_INDEX.md`,
-    `components_overview.svg`, `deferred/aft-edf/README.md`, and the TODO BOM/build
-    rows above. Historical revision snapshots (`bom_revP/Q/R.json`, `REVN_BUILD_GUIDE`)
-    left intact per the revision-snapshot policy. The WS2812C nav lights (distinct
-    part) are retained.
-
-#### 1.1.4 **Landing Gear**
-
-**Canonical leg model (Rev R5, 2026-06-20): vertical post + 4-wire brace.** The
-original canonical single-blade leg (`leg_1`…`leg_4_scaled24.stl`, misubisu Thingiverse
-hull, CC BY 4.0) is itself a vertical part with **two branch points of its own** — one
-at the **apex** (top) and one about **1/3 of the way down from the apex**. The
-Strong-Leg's duplicate + 30°-rotate + union construction doubles each into a pair, so
-the Strong-Leg actually has **four branch points** (2 at the apex, 2 at the 1/3-down
-point), not the single fork-into-two-arms that Rev R2–R4 approximated. Rev R5 models
-this directly: the CF-PETG is kept only as a short **vertical post** (foot up through
-the 1/3-down branch height), and all four branch attachments are replaced with **four
-simple wires** instead of forked CF-PETG arms or arm-tip fuses. Full structural
-analysis: `docs/LANDING_GEAR_ANALYSIS.md` (Rev R5, 2026-06-20).
-
-**Why the wires, and why this shape:** rigorous re-verification of the Rev R2 (bare
-CF-PETG Strong-Leg) design found a real single-point-of-failure risk — the post/trunk's
-fixed cross-section could not be made stronger than the arms by infill alone, and the
-real system stiffness implied a peak force far above what the structure could survive
-elastically. Rev R3 fixed this with an elastic spring-steel leaf (≈163 g, no clear
-worst-case margin) and Rev R4 with a closed-ring ductile wire fuse (≈73 g, but hard to
-manufacture/field-replace — precision winding + separate tabs). **Rev R5 uses the
-simplest possible wire shape — a single straight piece of wire stock with one shallow
-pre-bend (a shallow "bow," not a closed loop)** — formable with a simple bending jig or
-by hand, easily field-replaced with cut-to-length stock:
-
-| Branch level | Height from foot | Wires | Role |
-|---|---|---|---|
-| Apex | ≈79.8 mm | 2× **spring** wire (Ø3.17 mm, L=45mm) | Elastic, recoverable — sized for the 1.5 ft elastic-check energy |
-| 1/3-down from apex | ≈53.2 mm | 2× **ductile** wire (Ø4.35 mm, L=30mm) | Plastic, sacrificial — **each independently** sized for the full 6 ft worst-case per-leg energy (14.04 J) |
-
-**Result:** total added wire mass ≈50 g (1.6% AUW); CF-PETG post mass ≈130 g (sized
-with 2× margin at the combined worst-case force — the post is not expected to yield at
-all); hull boss bearing margin ≥1.56× at the combined-pair force. This satisfies
-Requirement 3 of `docs/LANDING_GEAR_ANALYSIS.md` §1 with the cleanest margin structure
-of any revision so far. Final certification of the bowed-strut mechanics requires the
-instrumented drop test (LG-14) — hand calculation identifies the design point but
-cannot fully certify post-yield material behavior.
-
-**Demonstration STLs** (schematic — placeholder boss cylinders, standalone unbaked
-post; generated by `tools/build_landing_gear_views.py` + `wire_brace_leg.scad`; see
-`docs/LANDING_GEAR_ANALYSIS.md` §16): `post.stl`, `spring_wire_nominal.stl` /
-`_deformed.stl`, `ductile_wire_nominal.stl` / `_deformed.stl`,
-`landing_gear_assembled.stl`, `landing_gear_exploded.stl`, `landing_gear_deformed.stl`
-— all in `airframe/stls/fuselage/landing-gear/`.
-
-**Superseded prior assessments (retained for history only):** Rev R1 (2026-06-14,
-single-blade leg, 37.5×7.5 mm slab, 30% infill, 218:1 compression margin, 31 mm ground
-clearance — still insufficient for the 3-in payload mission, extension to ≥110 mm strut
-length recommended, carried forward as an open item below). Rev R2 (Strong-Leg, no
-fuse — invalidated by the Rev R3 re-verification). Rev R3 (Strong-Leg + elastic
-spring-steel leaf). Rev R4 (Strong-Leg + per-arm closed-ring ductile fuse — superseded
-by the simpler, manufacturable bowed-wire shape above).
-
-**FreeCAD assembly status (2026-06-20):** Four corner copies of the prior Strong-Leg
-geometry exist in `airframe/freecad/assembly/SerenityAssembly.FCStd` as Boolean-result
-objects `Union`, `Union001`, `Union002`, `Union003` (90°-stepped rotation), confirmed in
-their correct corner locations; the Rev R5 post replaces only the upper portion of that
-geometry (foot-to-1/3-down-branch is unchanged) — see LG-10.
-
-**Foot positions (hull frame, approximate — last validated 2026-06-14 against the Rev R1
-single-leg layout; pending re-confirmation once LG-10 bake is complete, all level at
-ground-contact Z ≈ −31 mm):**
-
-| Foot               | Hull X (mm) | Hull Y (mm) | Ground Z (mm) | Notes                        |
-|--------------------|-------------|-------------|---------------|------------------------------|
-| foot_1 (fwd-port)  | −73.5       | −20.5       | −31           | TPU 95A; 43.9 × 43.9 × 9 mm  |
-| foot_3 (fwd-stbd)  | −264.5      | −20.5       | −31           | same                         |
-| foot_4 (aft-port)  | −73.5       | +129.5      | −31           | same                         |
-| foot_2 (aft-stbd)  | −264.5      | +129.5      | −31           | same                         |
-
-Stance: 191 mm (7.52 in) lateral × 150 mm (5.91 in) fore-aft;
-CG centroid at X ≈ −169 mm (symmetric) ✓ (Rev R1 baseline — re-verify once Rev R5
-foot positions are baked).
-
-##### 1.1.4.1 *Vertical Post — Modeling and Bake*
+### 1.1 — 3D Models: SCAD → STL Exports (Rev S baseline)
+
+#### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
+→ detail: `airframe/TODO.md` §1.1.0
+
+- [x] tools/bake_hull_frame.py created
+- [x] 9 STLs baked to hull frame
+- [x] serenity_assembly.py Rev R1
+- [x] 48 generator/analysis scripts stamped
+- [x] Docs updated
+- [x] Resolve nacelle port/stbd label swap.
+- [ ] Re-verify head↔cargo joint bosses in hull Y.
+- [x] Regenerate cargo doors from the baked shell.
+- [x] Correct hinge location: outboard flank, not centreline.
+- [x] Consolidate duplicate cargo shell copies.
+- [ ] Hull-frame placements for VERIFY parts
+- [x] Generate battery_tray.stl and belly_panel.stl
+- [x] Archive deprecated FreeCAD prototypes
+
+#### 1.1.1 — Fuselage
+→ detail: `airframe/fuselage-joints/TODO.md` §1.1.1 (1/3)
+
+- [x] Built tools/verify_bow_pod.py
+- [x] Located the canonical bow mounting flat
+- [x] Placed + skin-verified all three apertures on the flat (3/3 PAS…
+- [x] Confirmed fit:
+- [ ] User FreeCAD fine-tune (fractional mm):
+- [x] Merge bow_pod_cuts() into the canonical Blender head shell — DO…
+- [x] Re-run mesh validation after head shell regen — DONE 2026-07-03
+- [x] Designed bow_sensor_faceplate.scad
+- [x] Superseded bow_camera_bezel.scad + bow_tof_laser_bezel.scad
+- [ ] PMMA window spec finalised
+- [ ] Procure PMMA discs
+- [x] Laser down-angle review
+- [x] Superseded 2026-07-03 — see §1.2c "Jayne" below.
+- [x] Wire TFmini-S UART to bow sensor MCU.
+- [x] Wire bow camera video output to bow sensor MCU
+- [x] Wire laser GPIO enable bow sensor MCU
+- [x] Add laser enable command to MAVLink C2 interface
+- [ ] Add standards REF-IDs to bow_sensor_pod.scad firmware integrati…
+- [x] BOM updated
+- [x] head_shell24_2mm_repaired.stl — 790 036 tri; X −232.9..−103.5 /…
+- [x] cargo_sect_shell24_2mm_repaired.stl — 1 414 068 tri; X −267.0..…
+- [x] middle_shell24_2mm_repaired.stl — 855 328 tri; X −258.5..−81.6…
+- [x] rear_shell24_2mm_repaired.stl — 1 095 972 tri; X −246.1..−105.5…
+- [x] Cargo section interior boss features
+- [ ] Middle section inner neck — Phase 5-10 print guidance
+- [ ] Deprecate SCAD fuselage shell files
+- [x] Update REVN_BUILD_GUIDE_24IN.md fuselage shell source references
+- [x] Head/Cargo joint boss design (hull Y ≈ −71 mm)
+- [x] Cargo/Middle joint boss design (hull Y ≈ +131 mm)
+- [x] Middle/Rear joint boss design (hull Y ≈ +203 mm)
+- [x] JOINT-01 — cargo mating-face rims ragged + dorsal bite — RESOLV…
+
+#### 1.1.1 — Fuselage (continued)
+→ detail: `airframe/fuselage-covers/TODO.md` §1.1.1 (2/3)
+
+- [ ] MESH-01 add_structural_features.py boolean cuts left non-wate…
+- [x] CF ring plate (CF-PLATE-2MM) — complete first-principles re-eva…
+- [x] Hull keel (CF-BAR-6X3) — complete first-principles re-evaluatio…
+
+#### 1.1.1 — Fuselage (continued)
+→ detail: `airframe/fuselage-mid/TODO.md` §1.1.1 (3/3)
+
+- [x] Access panel frames + covers (24" Rev R)
+- [x] 49 MHz (Part 15 §15.235) wire posts
+- [x] Verify head-cargo mating boss positions in slicer — SUPERSEDED,…
+- [ ] head_shell24.stl
+- [ ] cargo_sect_shell24.stl
+- [x] Mounting hardware — 8 STLs
+- [ ] Cargo gondola shell
+- [ ] Clamshell door halves
+- [x] cargo_sect_shell24.scad Rev S
+- [x] cargo_sect_shell24.scad Rev S1
+- [x] cargo_sect_shell24.scad Rev S2
+- [x] cargo_sect_shell24.scad Rev S3
+- [x] nacelle_servo_bracket.scad
+- [x] REVN_BUILD_GUIDE_24IN.md Phase 3 anti-rework
+- [ ] cargo_sect_shell24.scad — shuttle exterior fairing profiles on…
+- [ ] Avionics dorsal access covers / Faraday tray lids for Inara and…
+- [ ] Update REVN_BUILD_GUIDE_24IN.md bay layout table
+- [ ] Regenerate cargo_sect_shell24.stl
+- [ ] Add motor-mount and DRV8833-tray boss locations to cargo_sect_s…
+- [ ] Add SG90 bell-crank boss to inner face of each door panel for p…
+- [x] Blender canonical source baked
+- [ ] Slicer verification
+- [ ] Kaylee's room — PDB mounting in inner neck
+- [ ] CF skid rod channels
+- [ ] Simon bay — define avionics bay in the MIDDLE section (moved he…
+- [ ] Kaylee room — PDB + battery bay, middle VENTRAL (2026-06-13).
+- [ ] Avionics-bay interior name marks (DEFERRED, 2026-06-13).
+- [ ] Phase 11 — aft EDF intake scoop cuts
+- [ ] neck_intake_frame.stl (Phase 11)
+- [ ] aft_edf_plenum.stl
+- [x] middle_canonical_shell24.stl
+- [ ] Mount ant-collision strobe on belly of middle section in accord…
+- [ ] Mount ant-collision steady white tail light on upper pod of rea…
+
+#### 1.1.2 — Wings
+→ detail: `airframe/wings-nacelles/TODO.md` §1.1.2
+
+- [ ] wing_nacelle_pylon_revo.stl
+- [ ] wings_s1223_revo.stl
+- [x] Spar bore de-skewed
+- [x] Tip thickened for spar fit
+- [x] EDF cableway added
+- [ ] [OPEN — BLOCKER] Fuselage spar-interface now mismatched.
+
+#### 1.1.3 — Nacelles
+→ detail: `airframe/wings-nacelles/TODO.md` §1.1.3
+
+- [x] Rev R1 nacelle stator shells
+- [x] nacelle_nozzle_iris.stl
+- [x] nacelle_nozzle_idler.stl
+- [x] Rebuild petals using the BamJr variable nozzle [REF-CAD-001]…
+- [x] nacelle_sector_gear.stl
+- [x] nacelle_pinion.stl
+- [x] nacelle_bevel_pair.stl
+- [x] nacelle_bevel_housing.stl
+- [x] Map all nacelle-internal mechanism components to hull frame f…
+- [x] Fix crown_pinion_boss() in nacelle_pod_50mm_tandem.scad
+- [x] Resolve the unresolved Crown-Pinion-to-rack mesh radius in
+- [x] Render updated/new gear-train STLs
+- [x] Mesh-verify the regenerated nacelle gear-train STLs
+- [x] Idler angular position about the nozzle axis
+- [x] idler axial mesh-band mismatch — RESOLVED 2026-07-04
+- [x] Confirm Sector Gear standoff distance from the nacelle face
+- [x] nacelle_tip_cap_port/stbd.stl — ARCHIVED 2026-06-22
+- [x] cargo_sect_shell24.scad's port/stbd mirroring used the wrong…
+- [ ] [OPEN — DESIGN] Nozzle drive protrudes ~10 mm past the nacelle…
+- [x] Trim the intake bell to the canonical leading nacelle dome
+- [x] Move the port (red) / stbd (green) nav lights INWARD→OUTWARD fa…
+- [x] Route nav-light wires through an internal cableway (not protrud…
+- [x] Remove the exhaust WS2812B LED rings + harnesses from the desig…
+
+#### 1.1.4 — Landing Gear
+→ detail: `airframe/landing-gear/TODO.md` §1.1.4
 
 - [x] Build and render the Rev R5 post + wire SCAD/STL *(done —
-    `airframe/openscad/fuselage/wire_brace_leg.scad`, `post.stl`,
-    `spring_wire_nominal/_deformed.stl`, `ductile_wire_nominal/_deformed.stl`, all
-    watertight)*.
-
-- [x] Build assembled / exploded / deformed demonstration compound STLs *(done —
-    `tools/build_landing_gear_views.py` → `landing_gear_assembled.stl`,
-    `landing_gear_exploded.stl`, `landing_gear_deformed.stl`; schematic placeholder
-    bosses, unbaked standalone post — see `docs/LANDING_GEAR_ANALYSIS.md` §16)*.
-
-- [ ] **LG-12 Model the post per the §4.6 dimensions** (round column, smooth 8mm
-    conical taper — no stepped ledge — lower section Ø22.9mm foot→taper start, upper
-    section Ø11.96mm taper end→apex, both 100% infill) in the FreeCAD/Blender source,
-    replacing the Rev R2–R4 forked Strong-Leg
-    geometry. **BLOCKS first flight.**
-
-- [ ] **LG-10 Finalize the 4 corner post placements** in `SerenityAssembly.FCStd`; bake
-    to hull frame; export 4 placed STLs. **Z-leveling rule:** if any of the 4 feet
-    deviate in Z, align all 4 to the **most negative (lowest) Z** of the four. **BLOCKS
-    hull boss integration (LG-02) and leg printing (LG-05).**
-
-- [ ] **Ground clearance check carried forward from Rev R1** — overall post envelope
-    (79.8 mm foot-to-apex) matches the original single-blade leg length, so the prior
-    31 mm (1.22 in) ground-clearance finding still applies and is still insufficient for
-    the ≥76 mm (3.0 in) payload-mission requirement. **BLOCKS payload mission.**
-
-##### 1.1.4.2 *Spring and Ductile Wires*
-
-- [ ] **LG-15 Select and procure both wire grades/tempers** — spring (full elastic
-    range, working stress ≈900 MPa) and ductile (plastic-bend ductility, flow stress
-    ≈550 MPa); confirm by coupon test. **BLOCKS leg fabrication.**
-
-- [ ] **LG-16 Confirm the ductile wire temper survives forming** into the bowed-strut
-    shape without premature cracking — coordinate with LG-15. **BLOCKS leg fabrication.**
-
-- [ ] **LG-13 Define the wire-to-socket retention detail** (pin / set screw /
-    adhesive) at both the post end and the hull boss end; verify against the §4.8
-    lateral load (`docs/LANDING_GEAR_ANALYSIS.md` §4.8). The previous M3/M4 nylon
-    shear-bolt fuse concept (Rev R2–R4, sized for a rigid spigot) no longer applies
-    directly to a wire end. **BLOCKS first flight.**
-
-##### 1.1.4.3 *Hull Boss Sockets*
-
-- [ ] **LG-02 Design and integrate 16 hull boss sockets** (4 per corner, one per wire)
-    into `cargo_sect_shell24.scad` / cargo shell Blender source. Boss spec: OD ≈10×9 mm,
-    bore ≈6×5 mm, 2-wall annulus + positive-stop shoulder per `CLAUDE.md`. Run DRC mesh
-    check. **BLOCKS hull print. Depends on LG-10.**
-
-##### 1.1.4.4 *Canonical Foot — Socket Modification*
-
-- [x] Feet separated into individual STLs (`foot_1` through `foot_4` in landing-gear/);
-    canonical Thingiverse geometry, 43.9 × 43.9 × 9.04 mm TPU 95A, unmodified outer form.
-
-- [ ] **Add top-face socket to canonical foot** — 7.6 × 9.0 mm bore × 5.0 mm deep,
-    centred on the top face. Retention: 1× M2.5 × 12 mm SS through-bolt. See
-    `docs/LANDING_GEAR_ANALYSIS.md` §7. New SCAD/Blender modifier needed (stock foot mesh
-    has no socket feature today).
-
-- [ ] **Assess foot grip on concrete/asphalt** — TPU 95A is adequate for smooth surfaces.
-    For field operations (grass, gravel): consider adding a 3 mm textured grip ring or
-    rubber disk insert (Sorbothane 50A, 40 mm OD × 3 mm) bonded to foot bottom face.
-
-##### 1.1.4.5 *Superseded — Rev R1.4 V-Brace and Rev R4 Closed-Ring Fuse*
-
-- [x] **Rev R1.4 corner V-brace (`landing_leg_assy.scad`) is retired**, superseded
-    2026-06-20. The parametric SCAD file is left in the repository for reference only.
-
-- [x] **Rev R4 closed-ring wire fuse (`wire_loop_fuse.scad`) is retired**, superseded
-    2026-06-20 by the simpler bowed-wire shape (§1.1.4 above) for manufacturability. The
-    SCAD file is left in the repository for reference only (retirement note added at its top).
-
-##### 1.1.4.6 *Rear Skid Reinforcement (unrelated subsystem)*
-
-- [ ] **LG-03 CF rod channel in `middle_canonical_shell24.scad` rear skid arms** — add
-    3 mm bore channel (CF rod, ~140 mm per skid) per `docs/LANDING_GEAR_ANALYSIS.md §10`.
-    Re-export STL, re-bake, verify watertight.  **BLOCKS taxi test.**
-
-- [x] **`landing_legs_hull_r1.stl` is orphaned** *(resolved 2026-07-12)* — rendered
-    from an even earlier pre-R1.4 single-leg SCAD mode that no longer exists in
-    `landing_leg_assy.scad` (now itself retired, §1.1.4.5 above). Moved to
-    `airframe/archive/stls/fuselage/landing-gear/` and logged in `ARCHIVE_INDEX.md`;
-    the stale reference and its dead `GEAR_COLOR` constant were removed from
-    `airframe/blender-scripts/serenity_render_views.py`, and the `PROJECT_INDEX.md`
-    entry was dropped. No Rev R5 hull-frame-positioned, multi-corner landing-gear
-    render exists yet to take its place in the render suite — that remains open
-    (the Rev R5 illustrative STLs in `airframe/stls/fuselage/landing-gear/` are
-    single-corner, part-local schematics per `tools/build_landing_gear_views.py`,
-    not a hull-frame assembly render).
-
-##### 1.1.4.7 *Qualification Testing (BLOCKS first flight)*
-
-*"Time for some thrilling heroics." — Mal. Drop tests count.*
-
-- [ ] **LG-06 Drop test prototype leg assembly** — mount one complete assembly to a
-    6.90 lbm (3,130 g) fixture. Drop from 1.5 ft (elastic check — confirm zero permanent
-    set on the post and both wire types). **BLOCKS first flight.**
-
-- [ ] **LG-07 Confirm avionics enclosure shock rating** against the wire-mediated
-    deceleration profile (re-derive peak-g once LG-14 data exists). See PCB fab
-    checklist. **BLOCKS first flight.**
-
-- [ ] **LG-11 Coupon-test CF-PETG** at 4 perimeters / 100% infill (post is now fully
-    solid-infill, §4.6) to confirm the achievable effective modulus/strength.
-    **BLOCKS first flight.**
-
-- [ ] **LG-14 Instrumented drop test (load cell + high-speed video) at 6 ft full-AUW** —
-    confirm the ductile wires collapse at the predicted ≈4,298 N/wire; confirm the
-    bowed-strut mechanics match the idealized 2-hinge model
-    (`docs/LANDING_GEAR_ANALYSIS.md` §4.1); confirm the post and spring wires stay
-    elastic. **This is the test that certifies the Rev R5 design — hand calculation
-    identifies the design point but cannot fully certify post-yield material behavior.**
-    **BLOCKS first flight.**
-
-
-
-**Remaining parts needing SCAD source creation then STL export:**
-
-- [ ] **Reconcile the remaining-parts list** — this list was emptied as components were
-    completed, leaving only a stray status tag. The one known outstanding render is
-    `nacelle_servo_bracket.stl` (SCAD source authored, not yet rendered — awaiting the
-    River's-bay `WING_ROOT_Z_CEN` structural/packaging decision, §1.1.3.3). Confirm no other
-    parts remain un-authored, then repopulate or close this subsection. **BLOCKS Phase 1.**
-
-**Combined airframe model (visual verification):**
-
-- [ ] **Combine all airframe STLs** into a single assembly model including the 1.25× scaled nacelles, all EDF tubes, cargo bay clamshells, antenna bosses, sensor cutouts, access panels, landing legs, and feet.
-    **Canonical assembly script:** `airframe/FreeCAD-scripts/serenity_assembly.py` (8 major components validated 2026-06-10; nacelle internals, pylons, and accessories pending VERIFY).
-    Run headlessly: `freecad --background --python airframe/FreeCAD-scripts/serenity_assembly.py`
-    Output: `airframe/Serenity-Assembled.FCStd`
-    - [ ] **Render overview SVGs using FreeCAD TechDraw** — 6 cardinal directions (top, bottom, front, rear, port, stbd) and all 8 isometric views (8 corners). Headless script creates a TechDraw page per view and exports SVG via `TechDraw.writeSVGPage()`. Save to `airframe/diagrams/overview/`.
-        **BLOCKS** exploded view SVGs below.
-- [ ] **Exploded view SVG — printed parts only** (all printed components labelled and exploded from assembly position). **Generate using FreeCAD:** drive part translations via a headless Python script that offsets each `Mesh::Feature` Placement along its explosion axis, then exports SVG via FreeCAD TechDraw. Save to `airframe/diagrams/exploded/`.
-- [ ] **Exploded view SVG — full build** (all components: PCBs, SBCs, motors, ESCs, wires, sensors, antennas, hardware). Same FreeCAD TechDraw headless approach as printed-parts exploded view. Save to `airframe/diagrams/exploded/`.
-
----
-
-#### 1.1.5 **Non-Printable Component Placeholders** *(Rev R1, 2026-06-12)*
-
-Dimensionally-accurate bounding-geometry STL placeholder files for all non-printable
-Rev S BOM components, for use in FreeCAD exploded-view and build-guide assembly.
-
-**Generator:** `airframe/placeholders/generate_placeholders.py`
-(pure Python, no external dependencies; run with `python3 generate_placeholders.py`)
-
-**FreeCAD catalog script:** `airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
-(loads all 76 placeholder STLs into a grid-layout catalog document;
-run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`)
-
-**Output:** `airframe/Serenity-Placeholders.FCStd` (76 components, 8-column grid)
-
-**Placeholder coverage (76 STLs, 6056 triangles total):**
-
-| Category | Count | Files |
-|---|---|---|
-| Propulsion (EDFs, ESCs) | 4 | `airframe/placeholders/propulsion/` |
-| Servos (DS3218MG, SG90) | 2 | `airframe/placeholders/servos/` |
-| Bearings (MF104ZZ, MR63ZZ, 6804) | 3 | `airframe/placeholders/bearings/` |
-| Structural CF (rods, tube, bar, plate, PTFE) | 6 | `airframe/placeholders/structural/` |
-| Avionics PCBs (PB2-I, Cape-A-2/B-2, Emma, Kaylee, microSD) | 6 | `airframe/placeholders/avionics/` |
-| Power (LiPos, fuses, shunt) | 7 | `airframe/placeholders/power/` |
-| Cargo (N20, HX711, DRV8833, Dyneema) | 4 | `airframe/placeholders/cargo/` |
-| Gears M=1.0 (sector, pinion, bevel, housing) | 4 | `airframe/placeholders/gears/` |
-| Hardware (pins, inserts, screws, straps, wire ring) | 6 | `airframe/placeholders/hardware/` |
-| Lighting (WS2812C SMD nav LED) | 1 | `airframe/placeholders/lighting/` |
-| Wiring (conduit, harnesses, antenna wire, posts) | 6 | `airframe/placeholders/wiring/` |
-| GCS / Malcolm (enclosure, BECs, antennas, tripod, encoders) | 15 | `airframe/placeholders/gcs/` |
-| Foam fill + interior voids (head/cargo/middle/rear fill; avbay, cargo bay, wiring trunk, power bus, ventilation, pylon pockets; Faraday cage pockets + vent duct spurs) | 13 | `airframe/placeholders/foam/` |
-| EMC / Faraday shielding (cage, gasket, fan, EMI vent, bond strap, feed-through panel, ferrite; Malcolm fan + gasket) | 9 (×2 STL files share gen_far_fan_40) | `airframe/placeholders/faraday/` |
-
-**Completed (2026-06-12):**
-- [x] **Generate all 65 component placeholder STLs** — `generate_placeholders.py` created;
-    all files verified `OK`. STL header marker: `SerenityUAV PLACEHOLDER R1`. *(done 2026-06-12)*
-- [x] **FreeCAD catalog assembly script** — `serenity_placeholders_assembly.py` created;
-    component grid layout; run with `freecadcmd`. *(done 2026-06-12)*
-- [x] **Faraday shielding hardware** — 9 new generators; 11 new STL files in `airframe/placeholders/faraday/`:
-    FAR-CAGE-AV (cage), FAR-GASKET-AV, FAR-FAN-40, FAR-EMI-VENT-40, FAR-BOND-STRAP,
-    FAR-FT-PANEL, FAR-FERRITE-4MM; MAL-FAR-FAN, MAL-FAR-GASKET (GCS).
-    BOM entries added to `current-specification/bom_revR.csv`.
-    **⚠ MASS NOTICE: Faraday aircraft system now 364 g (0.80 lbm) after
-    ferrite reduction to 4/cage and 1 bond strap/cage. Full Rev R1 weight
-    reduction pass (Phase 11 deferrals, wiring gauge, PCB consolidation,
-    head infill, CF plates) brings cumulative T/W to ~1.19 without battery
-    swap; T/W ~1.25 with BATT-6S-2800. See §1.1.5 mass budget.**
-    *(done 2026-06-13)*
-- [x] **Faraday cage foam voids** — VOID-FAR-CAGE (76×56×88 mm cage pocket) and
-    VOID-FAR-FAN-SPUR (44×44×50 mm vent duct spur) added to `airframe/placeholders/foam/`.
-    Use ×4 and ×8 copies respectively in FreeCAD to plan all 4 bays. *(done 2026-06-13)*
-- [x] **Foam-fill and void visualization STLs** — 11 new STLs in `airframe/placeholders/foam/`:
-    4× FOAM-FILL-\* (head/cargo/middle/rear hull sections) and 7× VOID-\* (avionics bays,
-    cargo bay, wiring trunk, power bus, ventilation intake/exhaust, nacelle pylon pockets).
-    Total 76 components, 6056 triangles. Use tan/ochre for FOAM-FILL, translucent cyan for
-    VOID objects in FreeCAD. *(done 2026-06-12)*
-
-**Open sub-tasks:**
-- [ ] **Rear skid reinforcement — SCAD update (TWO files)**
-    The skids are the aft extensions of the middle-section horseshoe ring; the
-    middle/rear section cut was made purely for printability and carries no load.
-    The CF rod must therefore span BOTH sections continuously to reinforce the
-    full skid bending span and to tie the print joint together.
-    Changes required:
-    - `s_middle_canonical_shell24.scad`: add 4.2 mm bore channel along each
-        horseshoe-bent-aft skid arm from the horseshoe origin to the aft face
-        (middle/rear joint face at hull Y ≈ +203 mm).
-    - `s_rear_neck_intake_shell24.scad`: add matching coaxial 4.2 mm bore
-        channel through the skid extension from the joint face to the skid tip.
-    - Channels must be coaxially aligned across the joint face to accept a
-        single continuous rod. Nominal channel axis = hull Z-face centroid of
-        each skid cross-section.
-    - Rod: 4 mm OD solid CF from CF-ROD-4MM stock, ~250 mm per skid × 2
-        skids = ~500 mm total; insert from aft, epoxy (West System 105/206).
-    - Rod serves triple purpose: skid bending stiffness, middle/rear joint
-        tie-together, assembly alignment pin.
-    - Re-slice both parts after SCAD update; update masses in BOM.
-    **BLOCKS first taxi/landing test.**
-- [ ] **Run FreeCAD catalog** — execute `serenity_placeholders_assembly.py` once
-    FreeCAD is available to verify grid layout and produce
-    `airframe/Serenity-Placeholders.FCStd`. Commit the FCStd to the repository.
-- [ ] **Hull-frame placement pass** — for the full-build exploded view (§1.1.4 task),
-    derive the hull-frame position and orientation of each placeholder (e.g., EDF
-    inside nacelle bore, battery tray in cargo section, avionics PCBs in bays)
-    and add `place_mesh()` calls to `serenity_placeholders_assembly.py`.
-- [ ] **Add Phase-11 (deferred) items to catalog** — regenerate placeholders for the
-    Rev R1 rear-EDF redesign: `EDF_55mm_6S_deferred.stl`, `ESC_50A_6S_BLHeli32_deferred.stl`,
-    `rear_nozzle_canonical_deferred.stl`, and `rcs_thruster_x4_deferred.stl`; confirm they
-    appear in the `deferred/aft-edf/` sub-assembly once that phase resumes. (Old 120mm/80A
-    placeholders are superseded.)
-- [ ] **Mesh watertightness audit** — run `python tools/validate_stls.py` across
-    `airframe/placeholders/**/*.stl` after first CI run; resolve any non-manifold
-    findings (complex compound meshes: piano-wire torus ring, RF splitter ports, etc.).
-    **Known finding:** `Foam_fill_middle_horseshoe_173x69x161mm.stl` has coplanar
-    T-junction faces at Z=121 mm between left/right pillar tops and the arch bottom
-    (all three pieces share a common plane but are separate box meshes joined via `_cat()`).
-    Acceptable for visualisation; fix by replacing with a proper extruded U-shape when
-    trimesh/CSG support is available.
-- [ ] **FAR-FT-PANEL PCB design** — design the EMI-filtered feed-through panel
-    KiCad schematic + layout (55×35 mm, LP π-filter + TVS on CAN FD ×2,
-    RS-485, Ethernet RJ45, power JST-GH 2P). Run DRC; generate gerbers; add
-    to `avionics/kicad/`. **BLOCKS Faraday cage final assembly.**
-- [x] **Faraday mass budget review** — Faraday aircraft system 364 g (0.80 lbm)
-    after Rev R1 ferrite (4/cage) + strap (1/cage) reduction. Full weight
-    reduction pass (2026-06-13) brings estimated T/W to ~1.19; BATT-6S-2800
-    swap yields ~1.25 — above the 1.2 minimum. *(resolved 2026-06-13)*
-- [ ] **Link placeholders to BOM entries** — add `Placeholder_STL` field to
-    `docs/bom_revR.json` for each non-printable row pointing to its STL path.
-
----
-
-### 1.2 — PCB Design: Cape-A-1 and Cape-B-1
-
-- [x] **Regenerate Cape-A-1 gerbers** — `.kicad_pcb` modified 2026-05-23 (tamper-mesh commit); gerbers in `serenity/kicad/gerbers/CAPE-A-1/` are from 2026-05-22.
-    - Open in KiCad → Plot → Gerbers; overwrite files in `serenity/kicad/gerbers/CAPE-A-1/`; re-export drill files.
-    - Run DRC to zero errors before plotting.
-    - **BLOCKS Phase 6 fab order**
-
-- [x] **Regenerate Cape-B-1 gerbers** — same timestamp issue. `serenity/kicad/gerbers/CAPE-B-1/` files are from 2026-05-22.
-    - **BLOCKS Phase 6 fab order**
-
----
-
-### 1.2b — PCB Redesigns: Emma Rev S1 / Zoë Rev S1 / Kaylee Rev S1
-
-These three boards require schematic + layout changes before the next fabrication order.
-All are on the `avionics/kicad/` branch; run DRC to zero errors before generating gerbers.
-
-- [ ] **Emma Rev S1 — add LoRa, replace JST with P1+P2 socket rails**
-    - Add RFM95W 915 MHz LoRa module (SPI interface to PB2-I via P1 header pins).
-    - Replace JST GH 6P connector with 2× 20-pin 2.54 mm socket rails (P1 + P2),
-        matching Zoë passthrough rail pinout so Emma stacks cleanly on top.
-    - Update SRF2012-100Y CMC + TVS guard to cover LoRa SPI and antenna lines.
-    - Update silk/fab layer: "Emma Rev S1 — 49 MHz AX.25 + LoRa 915 MHz".
-    - Fitted in: River's Room, Simon's Medbay only (2 boards total).
-    - Run DRC → zero errors; generate gerbers to `avionics/kicad/gerbers/Emma-S1/`.
-    - **BLOCKS Emma fabrication order.**
-    - [ ] **Schematic-first reconciliation — DECISIONS LOCKED 2026-07-04 (user).**
-        Resolves the PCB-ahead-of-schematic gap by authoring `Emma.kicad_sch` to be the
-        source of truth, matching the as-placed PCB except for the topology changes below.
-        Migration is driven by an auditable generator (`gen_emma_sch.py`, repository script
-        convention) and gated on `kicad-cli sch erc` / `pcb drc`.
-        - **DROP J1 (JST-GH-6P "CAPE-B IF").** The modem host UART moves onto the PB2
-            passthrough rails: modem TX → `UART_RCRS_RX` (PB2-P1 pin 15), modem RX →
-            `UART_RCRS_TX` (PB2-P1 pin 16). This honors the root-`CLAUDE.md` "replace JST
-            GH 6P with P1+P2 socket rails" intent (chosen over the lower-rework "keep J1"
-            option). Was: J1 kept live alongside the rails.
-        - **PTT_N → repurposed PB2-P2 payload GPIO,** presence-gated by a cape-detect
-            device-tree overlay (cape-ID EEPROM / GPIO strap → DT overlay muxes the pad to
-            GPIO only when Emma is detected; otherwise it keeps its `SERVO*`/payload
-            function). Emma has no on-board MCU, so the host must key the T/R switch; the
-            fixed PB2 pinout has no spare GPIO, hence the repurpose. **Firmware/pinmux
-            sign-off still required**, and note **Simon is payload-primary** (drives Jayne
-            cargo/WINCH/LOAD_CELL) so his payload pads contend — River (flight-primary) has
-            slack. Provisional pad: PB2-P2 pin 1 (`SERVO7` ball).
-        - **RSSI → 1-bit `RSSI_DCD`.** Analog `RSSI_ANA` cannot ride the rail (AM62x GPADC
-            inputs are dedicated analog balls, not muxable onto a digital header pad). Add an
-            on-board comparator (`RSSI_CMP`, LMV331-class) thresholding `RSSI_ANA`; its digital
-            output `RSSI_DCD` rides a second presence-gated payload GPIO (provisional PB2-P2
-            pin 2, `SERVO6` ball). Analog `RSSI_ANA` retained as a board test point.
-        - [x] **Author `Emma.kicad_sch` — DONE 2026-07-04.** Generated by
-            `avionics/kicad/gen_emma_sch.py` from the as-placed PCB (one black-box symbol
-            per component with wire-stub + net-label per pin; every pin named for tracing).
-            Loads in `kicad-cli` 9.0.2; **ERC 0 errors**. 120 warnings remain, all two
-            benign classes: 74 `lib_symbol_issues` (embedded generated symbols carry no
-            external library — same class the old stub emitted) and 46
-            `global_label_dangling` (single-ended off-board nets: 43 PB2 passthrough SoC
-            signals Emma does not tap + 3 pre-existing in-circuit stubs — see below).
-            Old EMI-stub schematic saved as `Emma.kicad_sch.stub-bak`.
-        - [x] **PCB rework — DONE 2026-07-04** via `avionics/kicad/mod_emma_pcb.py`
-            (pcbnew): J1 removed + its 9 dangling stub segments dropped; `UART_TX`/`UART_RX`
-            merged into `UART_RCRS_RX`/`UART_RCRS_TX`; PB2-P2 pad 1→`PTT_N`, pad 2→`RSSI_DCD`;
-            `RSSI_CMP` + `RSSI_RH`/`RSSI_RL` divider + `RSSI_CBY` added.
-        - [x] **sch↔pcb net parity CONFIRMED exact 2026-07-04:** 74 refs match, 104 nets
-            identical, 0 per-net pin-count mismatches.
-        - [x] **DRC hard-violation debt CLEARED 2026-07-04 — CI validator PASSES.**
-            `tools/validate_kicad.py --changed-since origin/main` now reports **0 hard** for
-            both `Emma.kicad_sch` (ERC) and `Emma.kicad_pcb` (DRC). Editing the PCB pulled it
-            into the CI `--changed-since` scope, which surfaced 35 pre-existing hard
-            violations + 26 new schematic-parity conflicts; all fixed at root cause via
-            `avionics/kicad/cleanup_emma_drc.py` and the schematic/PCB net work:
-            - **26 net_conflict** (schematic-parity): schematic now uses **global labels**
-                (bare net names match the PCB; local labels were named `/GND` etc.), and
-                `mod_emma_pcb.py` assigns net-less pads the canonical `unconnected-(REF-PadN)`
-                nets KiCad's no-connects generate.
-            - **20 solder_mask_bridge**: the board solder-mask **expansion was 0.10 mm**
-                (~2× normal); at 0.5 mm pitch this overlapped adjacent mask openings.
-                Set to the standard **0.05 mm** → positive mask web, bridges gone.
-            - **15 clearance**: POWER netclass clearance **0.20 → 0.10 mm** in `Emma.kicad_pro`
-                (0.20 mm was over-conservative for a 5 V/3.3 V board — IPC-2221 needs ~0.1 mm —
-                and impossible for standard fine-pitch IC pad geometry); fixed 11. The other 4
-                were real auto-routed GND tracks 0.025–0.077 mm from non-GND pads — deleted as
-                redundant with the In1.Cu GND plane (GND unconnected count did **not** rise:
-                23 → 22).
-            - Remaining DRC findings are all SOFT/accepted-class (silk, via/track-dangling,
-                lib-footprint) — the pre-existing routing/silk backlog documented above; the CI
-                validator does not gate on them.
-        - [x] **Final placement + routing of the 4 new RSSI parts — REFERRED TO USER.**
-            They are parked in an off-board holding area (x≈161 mm, right of the board edge)
-            with correct nets but unrouted; drag into final position and route (project rule:
-            refer footprint positioning to the user). **parts placed by user on back of board within RF board section. 5-Jul-2026**
-        - [x] **NET validation & DRC — DONE 2026-07-05.** After the user's placement:
-            sch↔pcb parity exact (refs + net sets match); DRC **0 hard violations** (0
-            shorting/clearance/courtyard/solder-mask). Placement introduced no hard errors.
-        - [x] **RSSI sub-circuit routed — DONE 2026-07-05** via `avionics/kicad/route_emma_rssi.py`
-            (pcbnew, 0.15 mm B.Cu traces threading the 0.5 mm mid-channel, 0.3 mm-drill vias,
-            zones refilled). Routed: GND (3 pads → In1.Cu/F.Cu GND pour via one via at RL.2),
-            RSSI_REF (RH.2/RL.1/CMP.3, weaved around the wide CMP.4 GND pad), +3V3 internal
-            (RH.1/CBY.1/CMP.2) **and its board tie to LNA By**, and RSSI_ANA (CMP.1 → RSSI Lo
-            divider). Unconnected 104 → 95. All 0-hard, 0 drill-out-of-range.
-        - [ ] **RSSI_DCD still to route (1 net).** RSSI_CMP.5 → PB2-P2 pad 2 (105.4,130.2) is a
-            ~28 mm cross-board run through the ETH-PHY/LoRa (B.Cu) and the PB2 header (bottom
-            edge) congestion; a naive route shorts/mask-bridges heavily. Route interactively
-            (GUI push-shove) or with a real autorouter — `route_emma_rssi.py dcd` holds a
-            starting attempt. This is the RSSI carrier-detect **output** to the host, so the
-            feature is incomplete until it lands.
-        - [ ] **`RSSI_CMP` part/pinout PROVISIONAL — pending datasheet vetting.** Value is a
-            placeholder "LMV331-class"; pad→net is by FUNCTION and matches the schematic
-            symbol, but the real comparator's part number + SOT-23-5 pin order MUST be
-            confirmed and a `REFERENCES.md` entry added before layout is final (same
-            discipline as the Class 3B laser, §1.2c). Also confirm push-pull vs open-drain
-            (a pull-up on `RSSI_DCD` is needed if open-drain).
-        - [ ] **PTT_N / RSSI_DCD presence-gated pinmux — firmware sign-off owed.** PB2-P2
-            pin 1 (SERVO7 ball) / pin 2 (SERVO6 ball) are repurposed only when an Emma
-            cape-ID is detected (DT overlay). **Simon is payload-primary (Jayne/WINCH/
-            LOAD_CELL) → his payload pads contend;** River (flight-primary) has slack. The
-            AM6254 GPADC has no analog rail pin, which is why RSSI is an on-board comparator
-            DCD bit, not analog telemetry.
-        - [ ] **3 pre-existing in-circuit single-pin stubs (faithfully reproduced, real
-            PCB gaps):** `RF_ANT_SW` (T/R-switch antenna common, unconnected), `PA_EMIT`
-            (PA emitter-degeneration return), `DDS_FSYNC` (MCP4921 ~LDAC/CS). These are
-            missing connections on the as-placed PCB, surfaced now by the schematic — fix on
-            the PCB in a routing pass.
-    - [x] Components added to Emma board.
-    - [x] Emma Kicad files renamed from XCVR to Emma
-    - [x] Footprints arranged so that all components fit
-    - [x] **LoRa (RFM95W) pin mapping corrected (2026-06-20)** — as-placed, SPI1_MISO/MOSI/CLK/
-        SPI1_CS_LORA were wired to pads 10–13 (real pins GND/DIO3/DIO4/3.3V per
-        [REF-RFMOD-001]) and LORA_RESETN to pad 2 (real pin MISO): a wrong-pin-number error
-        that would have driven the SPI clock onto the module's 3.3V pin if fabricated as-is,
-        not merely a missing connection. Corrected to pads 2–6 (MISO/MOSI/SCK/NSS/RESET) and
-        1/8/10 (GND) per the verified HopeRF datasheet. **Still open, blocks fabrication:**
-        - [ ] Pad 9 (ANT) and pad 13 (3.3V) carry no net — module has no antenna or power path
-        - [ ] DIO0–DIO5 (pads 7, 11, 12, 14–16) unassigned pending P1-header GPIO budget decision
-        - [ ] Footprint pad size (2.95×1.27 mm) is oversized vs. real RFM95W castellated pads
-        - [ ] Footprint physically overlaps CAPE-B IF (JST GH 6P) — needs repositioning
-        - [ ] CAPE-B IF (JST GH 6P) connector is still present and fully wired — "replace JST
-            with P1+P2 socket rails" has NOT happened; verify whether PB2-P1/P2 sockets already
-            carry all 6 of its signals before removing it
-    - [ ] EMI spacing verified
-    - [ ] Labels and silk arranged for readability
-    - [x] **Traces and nets regenerated and DRC issues resolved — partial (2026-06-20).**
-        Schematic ERC: file-load crash (stray `;;` comment) + J1 SHIELD/MP pin mirroring fixed,
-        0 errors. PCB DRC: all 12 shorting_items, 1 tracks_crossing, 1 courtyards_overlap, 2
-        hole_clearance resolved to 0 (was non-zero at session start). GND zone (In1.Cu) and +5V
-        zone (In2.Cu) were declared but never actually filled/saved — filled via pcbnew's
-        ZONE_FILLER, resolving 24 connections at no design risk. 65 GND pads stitched with new
-        vias; +3V3 (31 pads, no plane exists on this 4-layer stackup) and 14 more nets (+5V,
-        +5V_FILT, ANT, COMP_IN, DDS_RF, MODE_SEL, PA_INT, PTT_N, RF_LPF_N1, RSSI_ANA, UART_TX/RX,
-        UART_TX_F/RX_F) routed via MST + obstacle-aware A* pathfinding, each verified by a
-        DRC re-run before moving on. Remaining `clearance` errors (15) are pre-existing,
-        inherent to 0.5mm-pitch IC footprints (49M DDS, TX DAC) — not fixable without a
-        footprint change.
-        - [ ] **Still unrouted — 13 nets** (`RF_TX`, `RF_FILT`, `RF_LPF_N2`, `RX_LNA`,
-            `TCXO_OUT`, `AFSK_IN`, `AFSK_OUT`, `DDS_CLK`, `DDS_DAT`, `SBUS_OUT`, `RF_RX`,
-            `RSSI_RAW`, `UART_RX_MUX`) plus scattered edges within partially-routed nets — sit
-            in pockets too tight for a 0.2mm-trace/0.25mm-clearance model to route automatically
-            without risking a marginal connection. Needs thinner trace width, B.Cu fallback
-            routing, or manual GUI placement.
-        - [ ] **Ethernet differential pairs deferred** (`RMII1_*`, `MDIO`, `MDC`, `PHY2_RSTN`,
-            `PHY2_INTRN`, `EMMA_ETH_TXP/TXN/RXP/RXN`, `EMMA_ETH_LINE_TXP/TXN/RXP/RXN`) — these are
-            differential pairs through the T-ETH isolation transformer; need length/impedance-
-            matched routing, not generic pathfinding.
-        - [ ] **LoRa SPI bus deferred** (`LORA_RESETN`, `SPI1_MISO/MOSI/CLK/CS_LORA`) — same
-            reasoning, lower risk than the Ethernet pairs but not yet attempted.
-        - [ ] **`GND2_ETH`/`VCC2_ETH` deferred — confirmed isolated domain (2026-06-20).**
-            Per user: ETH-PHY/T-ETH/PB2-P1/P2 were intentionally added to Emma so it can provide
-            a second Ethernet port for the Zoë stack (matching Wash's 2-PHY config) and so Emma
-            can connect to Ethernet standalone, outside Serenity. `GND2_ETH` is the isolated
-            secondary side of the T-ETH transformer — must NOT be bridged to the main GND plane
-            (would defeat the isolation). Needs a small isolated copper island/plane, not via-
-            stitching to In1.Cu.
-    - [x] **Silk text height standardized (2026-06-20).** All 78 silk labels used 0.65mm
-        text against the project's declared 0.8mm `min_text_height` rule (pre-existing since
-        before this session, not caused by it). Standardized the rule to 0.6mm min — matches
-        what's actually achievable on this 55×35mm/75-component board without forcing a
-        resize-everything pass that risks new overlaps. Labels may go up to 0.8mm where
-        clearly clear space allows it (no specific labels bumped yet).
-    - [ ] **Silk overlap/over-copper cleanup — NOT done, 174 pre-existing warnings.**
-        119 `silk_over_copper` + 53 `silk_overlap` + 2 `silk_edge_clearance`, all present
-        since before this session and unchanged by it. Emma.md §10 documents a prior partial
-        pass (13 pairs) that did not cover this remainder. Each fix needs the same kind of
-        spatial verification as the net routing above — comparable scope of effort. Deferred
-        to a dedicated session.
-    - [x] **FCC ID silkscreen placeholder added (2026-06-20).** Board-level silk text now
-        includes "FCC ID: PENDING CERTIFICATION" and the required §15.19(a)(3) two-condition
-        compliance statement. No real FCC ID exists yet — equipment authorization (§2.803/
-        §15.19) requires TCB testing/grant, which has not happened. Replace the placeholder
-        with the granted ID once certified.
-    - [ ] Gerbers exported — **not done this session; board has 94 unconnected items and
-        174 silk warnings, not yet production-ready. Do not export gerbers for fabrication
-        until routing and silk cleanup are complete — see items above.**
-
-- [ ] **Zoë (Cape-B-2) Rev S1 — remove LoRa, add P1+P2 passthrough rails**
-    - [x] **Schematic load-blocking bug FIXED 2026-07-04.** `Zoë.kicad_sch` would not open
-        in `kicad-cli` 9.0.2 at all (`Failed to load schematic`) — three `(comment …)`
-        elements sat at the schematic **top level**, but `(comment …)` is only valid inside
-        `title_block`; the interactive editor tolerated it, the CLI parser rejected the whole
-        file. Converted them to a single valid `(text …)` annotation. Zoë now loads and ERC
-        runs (564 pre-existing violations — the separate Zoë ERC backlog, not caused by this).
-    - [x] **Real sch↔pcb divergence characterized 2026-07-04 — deeper than "still has
-        LoRa".** `Zoë.kicad_pcb` is already at the intended end-state: **LoRa (RFM95W)
-        removed** and `2x18_P1/P2_Socket` + `PB2-P1/P2-TOP` passthrough rails placed. The
-        **schematic lags** and, worse, **schematic and PCB use different reference-designator
-        conventions for the same parts** (`CMC_CAN` vs `CMC-CAN`, `X2Y_RS485` vs `X2Y-RS485`,
-        `WINCH-DRV` vs `WINCH DRV`, `RS485` vs `RS-485`, `WIFI-BT` vs `WIFI & BT`, …) — only
-        ~10 of ~50 refs match exactly. The schematic ALSO still carries: the **LoRa block**
-        (`LORA`/RFM95W, `FL_LORA`, `D_ANT_LORA`, `J_SMA_LORA`, `BPF_915`×2), the now-obsolete
-        **`J_XCVR`** JST-GH Emma-cable connector (must disappear for the same reason Emma's J1
-        did — Emma stacks via P1/P2 now), and an **SBUS block** (`U_SBUS_B`, `R_SBUS_RX`,
-        `SW1`) the PCB does not have.
-    - [ ] **Full sch↔pcb reference-designator remap — REFERRED TO USER (flight-hardware
-        risk).** Reconciling to true parity means confirming which schematic symbol maps to
-        which PCB footprint across the naming mismatch; guessing that automatically could
-        mis-associate footprints on a flight-critical board. Do this as a focused follow-up
-        (ideally interactively in KiCad, or with a user-confirmed name-map table), then:
-        remove the LoRa block + `J_XCVR` from the schematic to match the PCB, add the P1/P2
-        passthrough (TOP) sockets to the schematic, and re-run ERC. Emma's reconciliation
-        (above) is the template; Zoë differs only in that its schematic was hand-authored and
-        its refs don't already match the PCB the way Emma's did.
-    - [x] Components arranged so that no footprint collisions are present
-    - [x] **P1/P2 socket-rail footprints already placed (verified 2026-07-04).**
-        `Zoë.kicad_pcb` already has real `2x18_P1_Socket`/`2x18_P2_Socket` footprints —
-        placed via the same `complete_xcvr_49mhz2.py`-style direct-PCB-edit approach used
-        on Emma, not via the schematic. `Zoë.kicad_sch` still has a real `RFM95W` (LoRa)
-        symbol and the JST-GH connectors — schematic has NOT been updated to either add
-        the P1/P2 headers or remove LoRa. Same PCB-ahead-of-schematic gap as Emma; see
-        `avionics/CLAUDE.md` "Cape Naming and Revision History" for the full finding.
-    - [ ] EMI spacing verified
-    - [ ] Nets and vias fixed
-    - [ ] DRC rules checked.
-    - [ ] **Verify the already-placed P1/P2 sockets actually carry the same signals the
-        schematic's RFM95W/JST-GH nets expect** before removing anything — don't assume the
-        PCB-side work is correct just because footprints exist; it was never ERC-checked.
-    - Remove RFM95W footprint and all associated SPI routing + LDO supply.
-    - Add 2× 20-pin 2.54 mm pass-through socket rails on upper face (upper sockets
-        match Emma P1+P2 pinout; lower pins pass through to Cape-A-2 / PB2-I stack).
-    - Carry all PB2 P1+P2 signals from lower pins to upper sockets; add 0 Ω options
-        on signals consumed by Zoë (Wi-Fi, SiK, I²C, UART) so they are both used and
-        passed through.
-    - Update silk/fab: "Cape-B-2 Rev S1 — Zoë CN cape"; note Emma header on upper face.
-    - Run DRC → zero errors; generate gerbers to `avionics/kicad/gerbers/CAPE-B-2-S1/`.
-    - **BLOCKS Zoë + Emma fabrication order.**
-
-- [ ] **Kaylee Rev S1 — remove 6 V BEC, add 5 V servo output**
-    - Remove TPS54540 6 V/5 A BEC circuit (IC, inductor, output caps, feedback divider,
-        Molex Nano-Fit 6 V output connector).
-    - Add third TPS54620 5 V/3 A instance for dedicated servo rail (shares 5 V feedback
-        reference with avionics BECs; separate output capacitor bank; Molex Nano-Fit
-        connector labelled SERVO-5V).
-    - Verify 5 V servo current budget: 2× DS3218MG = 2× 500 mA stall = 1.0 A peak;
-        3 A rated output provides 3× headroom — adequate.
-    - Update silk/fab: "Kaylee Rev S1"; update schematic title block.
-    - Run DRC → zero errors; generate gerbers to `avionics/kicad/gerbers/Kaylee-S1/`.
-    - **BLOCKS Kaylee fabrication order.**
-
----
-
-### 1.2c — PCB Design: Jayne (New Standalone Board — Nose/Cargo-Bay Vision, ToF & Laser)
-
-> "She's a good gun." — Jayne Cobb, of his rifle (the board's namesake).
-
-Jayne is a **new, standalone PCB — not a PocketBeagle 2 Industrial cape.** It does not use the
-P1+P2 header stack and does not mount onto a Wash/Zoë node; it is its own independent board
-with its own power input, connecting to the rest of the airframe only via the shielded JST-GH
-Ethernet ring and CAN-FD trunk connectors as a peer network node. It replaces the informal
-"RP2350-based Camera/TOF/laser MCU board" placeholder task that was previously tracked at
-§1.1.1.1a. Design origin: an AI-assisted (Gemini) brainstorm conversation was imported into
-this project, fact-checked against real datasheets, and substantially corrected — several
-of the brainstorm's part numbers and capability claims were fabricated or wrong (see
-`REFERENCES.md` "Removed / Superseded Citations" for the full list: TI DM38x/OpenIPC
-infeasibility, LAN9355/KSZ9563 lacking HSR/PRP, a nonexistent "ST33GTPMISPI" TPM part).
-
-**Status (2026-07-03): first-pass `.kicad_pro`/`.kicad_sch`/`.kicad_pcb` DO exist now,**
-generated by `avionics/kicad/Jayne/scripts/gen_Jayne.py` (schematic + project) and
-`avionics/kicad/Jayne/scripts/gen_Jayne_pcb.py` (PCB), following the same script-then-manual-placement
-pattern already used for Kaylee/Wash/Zoë (`gen_kaylee.py`/`gen_kaylee_pcb.py` etc.). This is a
-**design-exploration pass, not a fabrication-ready board** — see the "Verified vs. placeholder"
-list below before treating anything here as final.
-
-**ERC/DRC results (2026-07-03):** `kicad-cli sch erc` and `kicad-cli pcb drc
---schematic-parity` both run clean of shorts / net conflicts / courtyard overlaps:
-
-- Schematic: 0 pin-to-pin conflicts, 0 multiple-net-name shorts (after fixing 3 real bugs
-    found during generation — a UART wired TX-to-TX between U1/U3, a MOSFET D/S swap, and a
-    KiCad lib_symbol Y-up/Y-down coordinate convention bug that silently misplaced several
-    glabels). 116 remaining ERC items are the same class already accepted elsewhere in this
-    project (Kaylee has 701 open ERC/DRC items) — dangling labels on intentionally-simplified
-    interfaces (e.g. only 1 of 4 real MIPI CSI-2 lanes modeled), missing library associations
-    for the placeholder footprints, off-grid endpoints. None are electrical shorts.
-- PCB: 0 shorting_items, 0 net_conflict, 0 courtyards_overlap, 0 clearance violations
-    (re-verified after the EMI-hardening pass, 2026-07-03). Remaining DRC items are
-    lib-footprint-association warnings (placeholder footprint names aren't in a real KiCad
-    library table) plus minor silk-clearance/overlap warnings.
-- **Board is double-sided (F.Cu + B.Cu), EMI-hardened, and compact: 78×80 mm, 4-layer FR4,
-    rounded corners.** U1 (AM62A7) populates the front of the board's upper area; U_PMIC/U5
-    (SLB9670)/U3 (MSPM0G3507)/U2 (KSZ9477) populate the BACK of that same area (legal —
-    opposite copper faces don't collide). Real component body sizes (verified via datasheet
-    research, not rough guesses) plus double-siding shrank the board from an initial
-    single-sided 110×190 mm draft; adding the full EMI-hardening chain (12 new parts) grew it
-    back up somewhat from an intermediate 68.5×63.5 mm, landing at 78×80 mm — expansion only
-    where the new hardening components required it. Connectors, U4 (ISOW1044BDFMR, SOIC-16W),
-    and the EMI-hardening chain (2× magnetics, 4× CMC, 4× TVS for Ethernet; 1× CMC + 1× TVS
-    for CAN-FD) stay front-side for edge accessibility / routing simplicity.
-
-**Verified vs. placeholder — do not treat this file as fabrication-ready without resolving:**
-
-- **Real, verified:** all net-level architecture/interconnect (which pin talks to which pin,
-    UART crossing, CAN-FD, SPI buses, PGND/GND single-point isolation); TCAN1042HG-Q1's SOIC-8
-    pinout (standard, well-documented part); AO3400 SOT-23 N-FET pinout.
-- **Placeholder / NOT real, must be replaced before fab (see `gen_vera_pcb.py` docstring):**
-    U1 (AM62A7, 484-ball BGA), U2 (KSZ9477), U3 (MSPM0G3507), U5 (SLB9670), and U_PMIC
-    (TPS65219) all use a deliberately-obvious "2-row pad" placeholder footprint — NOT a
-    fabricated-to-look-real BGA/QFN ball-out, since inventing a plausible-looking one with no
-    datasheet to back it up would be worse than an honest placeholder. Real pin NUMBERS for
-    these five parts are also not yet cross-checked against actual datasheets (schematic
-    SIGNAL/net names are correct; exact pin numbers are not).
-- **Not modeled at all:** magnetics for the KSZ9477's two integrated-PHY Ethernet ports (P2/P3
-    are wired straight to the ring connectors as a placeholder); only 1 of 4 real MIPI CSI-2
-    data lanes on the camera interface; PMIC power-sequencing/enable logic (SLVAFD0 app note
-    sequencing not modeled).
-
-**Architecture (see `avionics/CLAUDE.md` "Jayne" for full rationale):**
-
-- **Vision half:** TI AM62A3 or AM62A7 [REF-SENSOR-003] — MIPI CSI-2 camera in, VPAC/ISP,
-    H.264/H.265 encode. Runs TI's own open-source Linux BSP (V4L2/GStreamer), not OpenIPC.
-- **Control half:** TI MSPM0G3507 [REF-SENSOR-004] (native CAN-FD) + Infineon SLB9670 TPM
-    (fleet-standard part, already used on all 8 Wash/Zoë nodes — do not introduce a different
-    TPM part number) + Microchip KSZ9477 [REF-SENSOR-005] Ethernet switch (HSR/PRP hardware
-    redundancy) + TI TCAN1042HG-Q1 [REF-SENSOR-006] CAN-FD transceiver.
-- **ToF:** Benewake TFmini-S [REF-SENSOR-002] — unchanged from the existing bow sensor pod design.
-- **Laser:** location-specific — see below. Do not use one laser part for both locations.
-
-#### 1.2c.1 — Schematic and Component Selection
-
-- [x] **Create `avionics/kicad/Jayne/kicads/Jayne.kicad_sch`** — DONE 2026-07-03 via
-    `avionics/kicad/Jayne/scripts/gen_Jayne.py`. Vision half, control half, ToF interface, and laser driver
-    circuit all present with correct net-level architecture; see "Verified vs. placeholder"
-    above for what's still not real (pin numbers, BGA/QFN footprints).
-- [x] **SoM re-scope — Jayne = PHYTEC phyCORE PCM-071 SoM on a trapezoidal carrier —
-    DONE 2026-07-13** (schematic + PCB rebuilt into the SoM end-state). Both halves authored
-    by new generators: `avionics/kicad/Jayne/scripts/gen_Jayne_carrier_sch.py` (schematic) and
-    `gen_Jayne_carrier_pcb.py` (PCB). The raw-AM62A7 BGA placeholder + TPS65219 PMIC + on-SoC
-    rails (VDD_CORE/VDDR/VDDSHV) are **removed**; `U_SOM` = `Jayne_SoM_PCM071` (240-pad,
-    `Jayne:phyCORE-AM62x_PCM071_2xBTH-060` footprint) takes over the old AM62A7 nets. All five
-    ICs use REAL clean-room symbols + real footprints: U2 KSZ9477 (custom
-    `Jayne:TQFP-128-1EP_KSZ9477…EP10x10`, generic TQFP-128 + datasheet 10×10 GND EP), U3
-    MSPM0G3507 (QFN-48-1EP), U4 ISOW1044BDFMR (**SOIC-20W / 20-pin DFM**, corrects the SOIC-16W
-    error), U5 SLB9670 (QFN-32-1EP). Wiring is by signal name from each symbol's real pin table
-    (no hand-entered pin numbers). **ERC = 0 errors.** sch↔pcb parity clean except 4
-    mounting-holes (`extra_footprint`, expected) + 1 TPM thermal-EP tie (`net_conflict`,
-    intentional GND). Netlist spot-checked: RGMII MAC↔switch crossover, CAN path, SPI to
-    TPM+switch, UART, CSI, power rails all correct.
-    - **User decisions locked 2026-07-13:** (a) the PCM-071 connector takes 5 V in only and
-      exposes NO 3V3/2V5/1V2 rail to the carrier (PHYTEC HW manual L-1038e.A5 §5.1), so the
-      carrier now generates its own rails — `U_REG_3V3`/`U_REG_1V2` (TI TLV62569 bucks) +
-      `U_REG_2V5` (TI TLV75725 LDO); (b) TPM + KSZ management stay on the MSPM0 SPI (carrier
-      control-plane unchanged).
-    - **§0.x OPEN (verify before fab):** regulator feedback-divider/inductor values + 2V5 LDO
-      current margin are first-pass (verify per each TI datasheet); RGMII KSZ port-6 MAC/PHY
-      strap + delay config needs firmware/HW sign-off; MSPM0 GPIO→peripheral pinmux is a
-      defensible datasheet assignment to confirm against final firmware; SnapEDA source files
-      stay gitignored (CC BY-SA §5.1). `docs/JAYNE_MANUFACTURING_READINESS.md` Rev C +
-      `avionics/kicad/Jayne/JAYNE_SOM_NETMAP.md` are the references.
-    - **Tooling defect worked around:** the system pcbnew 9.0.2 Python binding segfaults on
-      `FootprintLoad` after `board.Remove()` and returns unwrapped `SwigPyObject`s from
-      `Pads()`/`FindPadByNumber()`; pad nets are injected by a text post-pass. Full repro in
-      `avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md`.
-- [ ] **FLEET-WIDE ISOW1044BDFMR footprint audit (flight-hardware error, 2026-07-12).** TI
-    datasheet SLLSFF7A confirms ISOW1044BDFMR is a **20-pin DFM** package (Fig 7-1, §8.4
-    "DFM/20 PINS"), NOT the **"SOIC-16W"** that Wash.md, Zoë.md, Jayne.md, README.md, and prior
-    TODO text all state. Any KiCad footprint using a 16-pad `SOIC-16W` land for U4 (Wash, Zoë,
-    Jayne) is WRONG and will not match the 20-pad part. **Action:** verify the actual footprint
-    on each board's `.kicad_pcb` and correct to a 20-pad DFM land; update all the SOIC-16
-    doc references. Jayne's is handled by the carrier rebuild; Wash/Zoë need checking on the
-    as-built PCBs. (avionics/CLAUDE.md + Jayne.md package text corrected 2026-07-12.)
-- [x] **Confirm PCB fab/assembly house can handle the AM62Ax 484-ball FCBGA/FCCSP package**
-    [REF-SENSOR-003] — **RESOLVED 2026-07-13 by the SoM re-scope.** Jayne no longer places a
-    raw AM62A7 BGA: the AM62Ax + LPDDR4 + PMIC are all on the PHYTEC PCM-071 module, which
-    mounts via 2× Samtec BTH-060 board-to-board connectors (0.5 mm). The carrier itself is now
-    QFN/SOIC/SOT/0402 only, so the BGA-assembly escalation no longer applies to the Jayne PCB.
-    The module-vendor's own BGA assembly is PHYTEC's concern, not the carrier fab's.
-- [x] **Source and cite a real Class 3B nose crosshair laser module** — **SUPERSEDED by the
-    Class 2 laser unification (§1.2c.4, 2026-07-06; `docs/JAYNE_LASER_ANALYSIS.md` Rev A2).** The
-    nose is **not** Class 3B: a thin-line green crosshair detected by Jayne's own strobed camera +
-    frame-difference needs only ~0.2–0.8 mW → **Class 2**. There is no separate Class 3B nose
-    module to source; both sites now share ONE 520 nm green Class 2 source (per-location terminal
-    optic + hardware current limit). The surviving sourcing action — "**Do not source** the green
-    diode or either terminal optic until a real IEC 60825-1 datasheet is in REFERENCES.md
-    (REF-IEC-002 pending)" — lives in §1.2c.4 below, no longer scoped to a Class 3B part.
-- [x] **Design Class 3B interlock circuit for the nose laser** per IEC 60825-1 §5.4
-    [REF-IEC-002] — key-interlock input (LASER_KEY_IN) and emission-indicator output
-    (LASER_IND) are wired to U3 (MSPM0G3507) in the schematic; **still open:** no physical
-    key-switch/indicator-LED footprint is populated yet, and a mechanical beam-stop/shutter is
-    not represented at all (electronics-only interlock so far). Firmware-side interlock logic
-    tracked at TODO.md §4.6.2.
-- [x] **Reuse the existing 5 mW 650 nm Class 3R crosshair module and driver** — DONE: the
-    schematic's laser driver (Q1 AO3400, R1 100Ω gate, R2 10kΩ pulldown, J_LASER JST-SH 2P) is
-    shared hardware for both locations; cargo bay (3"×3" @ 5ft, ≈2.86° fan angle) populates the
-    existing Class 3R module here as-is, no schematic change needed for that location.
-- [x] **Shielded JST-GH connector selection** — DONE: J_ETH_IN/J_ETH_OUT (Ethernet ring),
-    J_CANFD (CAN-FD trunk), J_CAM1/J_CAM2 (camera), J_TOF (TFmini-S), J_PWR all use real KiCad
-    standard JST-GH/JST-SH footprint geometry (`Connector_JST:JST_GH_BM04B-GHS-TBT_1x04-1MP_
-    P1.25mm_Vertical` etc.) in `gen_vera_pcb.py` — not the unverified pin-number table from the
-    original AI brainstorm. **Still open:** confirm these are genuinely the *shielded* JST-GH
-    variant (same footprint geometry, different manufacturer part suffix) before ordering BOM.
-- [x] **PGND/GND isolation barrier** — DONE: J_CHASSIS_R (0Ω, single-point bond) + C_ISO
-    (100 nF/500 V, parallel RC bridge) implemented exactly as planned, verified as the ONLY
-    connection between GND and PGND nets (confirmed via netlist export — no other coincidental
-    short between the two nets after fixing a symbol-placement bug during generation).
-- [x] **EMI hardening gap — RESOLVED 2026-07-03.** Jayne now matches the Wash/Zoë Rev R
-    baseline (TODO.md §1.2a): each Ethernet port (ring in, ring out) carries Wurth 749010012A
-    magnetics + 2× Bourns SRF2012-100Y CMC + 2× Nexperia PRTR5V0U2X TVS; the CAN-FD
-    transceiver (U4) was swapped from the non-isolated TCAN1042HG-Q1 to the galvanically
-    isolated TI ISOW1044BDFMR (5 kV reinforced insulation) + its own CMC + TVS. All parts and
-    pinouts reused verbatim from this project's own verified `gen_cape_a2.py`/
-    `gen_cape_a2_pcb.py` (note: the earlier "HX1188NL" magnetics reference in this document
-    was stale — the real, working generator uses Wurth 749010012A). Caught and fixed two real
-    bugs while wiring this in: (1) each Ethernet port had only modeled one differential pair
-    instead of the two (TX±/RX±) a real 10/100BASE-TX port needs; (2) hand-wired CMC/TVS
-    glabels initially used un-flipped local coordinates and landed on the wrong physical pin
-    (same class of bug as the earlier U1/U3 pin mixups — fixed by routing through the
-    existing `glabel_pin`/`pwr_pin` helpers instead of manual coordinates). See `Jayne.md`
-    "EMI Hardening Status" for the full comparison table and remaining open items (JST-GH 5P
-    connector footprint geometry not independently re-verified).
-
-#### 1.2c.2 — Layout and Verification
-
-- [x] **Create `avionics/kicad/Jayne/kicads/Jayne.kicad_pcb`** — DONE 2026-07-03 via
-    `avionics/kicad/Jayne/scripts/gen_Jayne_pcb.py`, through several passes: first-pass double-sided
-    110×190 mm draft; manually fine-tuned in the KiCad GUI (row/column alignment,
-    mounting-hole symmetry, rounded corners, reduced to 68.5×63.5 mm); real component body
-    sizes substituted for rough first-guesses (AM62A7 18×18mm, KSZ9477 14×14mm, MSPM0G3507
-    VSSOP-28 7.1×4.9mm, SLB9670/TPS65219 5×5mm each); full EMI-hardening chain added (see
-    above), which — combined with rebuilding the rounded-corner outline and mounting-hole
-    placement directly into the generator script (`rounded_board_outline()`) rather than as a
-    manual GUI post-pass — landed the board at **78×80 mm**. U1 (AM62A7) on the front;
-    U_PMIC/U5 (SLB9670)/U3 (MSPM0G3507)/U2 (KSZ9477) stacked on the back of the same board
-    area (legal, opposite copper faces); connectors, U4 (ISOW1044BDFMR), and the EMI chain
-    stay front-side. Component placement only — **no copper traces are routed yet** (only a
-    GND pour zone on In1.Cu); this is net-correct footprint placement per this project's
-    established Kaylee/Wash pattern (script places footprints + nets, final routing and
-    impedance-controlled trace work is a separate, later step). **Impedance-controlled trace
-    work (100 Ω differential Ethernet, 120 Ω differential CAN-FD) is NOT done — still open.**
-    A manual edit of the file at one point introduced a corrupted layer table (B.Cu declared
-    as layer ID 2 / type "power" instead of the fixed KiCad enum value 31 / type "signal",
-    In2.Cu missing entirely) that made the board fail to load in `kicad-cli` — found via
-    chunk-removal bisection and corrected; the generator has since regained full ownership of
-    the file so this class of drift shouldn't recur.
-- [x] Run ERC on the schematic — DONE, 0 shorts/net-conflicts, 116 accepted-class warnings
-    (see "ERC/DRC results" above).
-- [x] Run DRC on the PCB layout (`kicad-cli pcb drc --schematic-parity`) — DONE post-manual-
-    edit re-verification, 0 shorting_items/net_conflict/courtyards_overlap, 28 accepted-class
-    warnings (see above). Confirms the manual placement pass and board-size reduction
-    introduced no electrical regressions.
-- [x] **SoM-end-state rebuild re-verification — DONE 2026-07-13.** After the SoM re-scope
-    (§1.2c.1) the PCB was rebuilt by `gen_Jayne_carrier_pcb.py` from the schematic netlist:
-    63 footprints (59 real components + 4 M2.5 holes), **0 placeholder footprints**, all pad
-    nets injected (454 netted pads), shelf-packed initial placement (SoM on B.Cu, carrier on
-    F.Cu). `kicad-cli pcb drc --schematic-parity`: **0 shorting_items**, 2 courtyards_overlap,
-    parity clean except 4 mounting-holes + 1 TPM-EP GND tie. The remaining ~279
-    `unconnected_items` are the intentionally-unrouted ratsnest, and the residual
-    clearance/silk/hole-clearance items are tight-placement artifacts on this dense trapezoid —
-    **both belong to the user-reserved final-placement + routing step below.**
-- [ ] **Final component placement (user-reserved) + impedance-controlled routing.** The
-    shelf-pack is an initial non-overlapping pass only; per `avionics/CLAUDE.md` the user places
-    tightly-packed flight boards by hand. Then route (100 Ω diff Ethernet, 120 Ω diff CAN-FD)
-    and pour GND — this clears the remaining `unconnected_items`/clearance DRC. **Still open.**
-- [ ] Generate production-ready Gerber files to `avionics/kicad/Jayne/gerbers/` — **blocked on
-    final placement + trace routing above; not meaningful to generate gerbers for an unrouted
-    board.**
-- [x] Update `PROJECT_INDEX.md` — done in the same session (see PROJECT_INDEX.md entry for
-    `avionics/kicad/Jayne/scripts/gen_Jayne.py`, `gen_vera_pcb.py`, `Jayne.kicad_pro/sch/pcb`).
-
-#### 1.2c.3 — Mechanical Integration
-
-Mounting/wiring design pass done 2026-07-03 (see `avionics/kicad/Jayne/Jayne.md` "Mechanical
-Mounting and Wiring — Nose and Cargo Installs" for full detail); proposed poses only, **not**
-FreeCAD-verified — this hull's geometry is documented as too complex for bounding-box/
-centroid placement (`airframe/CLAUDE.md` "Assembly and Placement").
-
-- [x] **Jayne mounting bosses added to `head_shell24.scad`** — **DONE 2026-07-03.** New
-    `jayne_board_bosses()` module (4× M3 heat-set bosses, Jayne's real (4,4)/(42,4)/(4,44)/
-    (42,44) hole pattern, ±19mm×±20mm about a station 20mm aft of `bow_sensor_pod.scad`'s
-    `FACEPLATE_CTR`, centred on `BOW_CX`), wired into the shell's main boss union alongside
-    `book_dorsal_boss`. **Explicitly marked PROPOSED in the SCAD comments — not FreeCAD-
-    verified.** Could not render/mesh-check this session (OpenSCAD CGAL render was blocked
-    by a permission gate partway through this task; verified only by static review —
-    balanced braces, no dangling variable references). **Remaining:**
-    - [ ] Render + mesh-verify `head_shell24.scad` (blocked this session; re-attempt).
-    - [ ] FreeCAD-verify the proposed pose and pocket-wall clearance against
-        `bow_camera_cut`/`bow_tof_cut` — do not hand-derive the bow pod's own
-        non-hull-frame local-coordinate transform (documented exception).
-    - [x] Verify against real, non-placeholder U1/U2/U3/U5/U_PMIC footprints once sourced
-        (8mm standoff is a starting allowance).
-    - [ ] `head_shell24.scad` is a secondary reference (Rev R1) — the Blender-canonical
-        pipeline has no head-interior merge script analogous to `merge_cargo_interior.py`
-        yet, so these bosses are NOT in the fabrication-ready mesh until one is written.
-- [x] **Flag: same legacy Y-as-dorsal axis bug found in `head_shell24.scad`'s Book bay**
-    (Shepherd's Faraday tray, `BOOK_DORSAL_Y`/`book_dorsal_boss`) — newly discovered
-    2026-07-03, NOT yet fixed; see §1.1.1.0a sub-tasks above.
-- [ ] **Flag stale laser bore dimensions:** `LASER_BORE_D=12.5mm`/`LASER_BORE_L=38.0mm` in
-    `bow_sensor_pod.scad` are sized for the old 12mm-OD Class 3R laser module. The new
-    custom-collimated 520nm Class 3B module's real mechanical dimensions are undetermined —
-    do not reuse these bore numbers without re-measuring against the new module's actual
-    datasheet/mechanical drawing.
-- [x] **Jayne mounting bosses added to `cargo_sect_shell24.scad`** — **DONE 2026-07-03**,
-    alongside the GPS/avionics/nadir-camera axis-bug fix above (which this depended on —
-    frame reconciliation done first, per plan). New `jayne_board_bosses()` module (4× M3
-    heat-set bosses, ±19mm×±20mm about `(CX, CY, WALL_MM)`, standing up from the belly
-    interior floor near `CARGO_CAM_POS`'s station), wired into the shell's main boss union.
-    Could not render/mesh-check this session (OpenSCAD CGAL render was blocked by a
-    permission gate; verified only by static review — balanced braces, no dangling
-    variable references). **Remaining:**
-    - [ ] Render + mesh-verify `cargo_sect_shell24.scad` (blocked this session; re-attempt).
-    - [ ] Must also clear the cargo bay door mechanism and Jayne (cargo handling) hardware
-        — not checked this session.
-    - [ ] `cargo_sect_shell24.scad` is a secondary reference — these bosses (and the fixed
-        GPS/FPV/River-bay cuts) are NOT in the fabrication-ready mesh until
-        `merge_cargo_interior.py` is extended to merge them (see §1.1.1.0a above).
-- [ ] **Add `cargo_tof_cut()` and `cargo_laser_cut()` cutter modules** to
-    `cargo_sect_shell24.scad`, adjacent to the existing `fpv_cut`/`CARGO_CAM_POS`, nadir-facing
-    via `NADIR_ROT` — **no cargo ToF or laser aperture exists today, only the camera cut.**
-    Laser spread angle must be re-derived for the cargo spec (3"×3" (76×76mm) at 5 ft (1.5m))
-    — do not reuse the nose's 2"×2"-at-50ft optics/bore assumptions. Render + mesh-verify per
-    `airframe/CLAUDE.md` after adding.
-- [ ] **Local sensor harness (both sites):** J_CAM1/J_CAM2 (MIPI CSI-2, flex/FPC preferred),
-    J_TOF (dedicated UART1, twisted pair/ribbon), J_LASER (Q1 gate drive + laser V+, twisted
-    pair) — all short point-to-point runs (<75mm) since Jayne co-locates with the sensor
-    cluster at both sites, unlike the pre-Jayne plan of running TFmini-S's UART to Shepherd's
-    Room.
-- [ ] **External ring harness — nose:** route J_PWR/J_ETH_IN/J_ETH_OUT/J_CANFD aft through the
-    open head/cargo mating face to **Shepherd's Room** (nearest bay, PACE-primary Watchdog).
-    Open: confirm which existing Ethernet-ring segment Shepherd's stack currently closes, so
-    Jayne's ring-insertion point and new cable lengths can be fixed.
-- [ ] **External ring harness — cargo:** route J_PWR/J_ETH_IN/J_ETH_OUT/J_CANFD through the
-    cargo section's open mating faces to the nearest bay. Open: decide **River's Room** vs.
-    **Simon's Medbay** as the shorter/more appropriate ring-insertion point (both carry Emma
-    boards per the Node Variant Placement table, root `CLAUDE.md`).
-
-**BLOCKS:** Jayne fabrication order; bow sensor pod avionics integration (§1.1.1.1a).
-
-#### 1.2c.4 — Jayne Power Feed and Laser Unification (2026-07-05)
-
-Power-budget and laser analyses completed 2026-07-05 (`docs/POWER_DISTRIBUTION.md §3.2.1`,
-`docs/JAYNE_LASER_ANALYSIS.md`). Resulting hardware tasks:
-
-- [ ] **Kaylee second 5 V rail — cross-tied, mutually fault-tolerant (PLAN, `docs/POWER_
-    DISTRIBUTION.md §11.1`).** Add a **third identical TPS54620 BEC channel** (`U_BEC_5V_3` +
-    `L_5V3` + `R_FB3` + `C_BEC3_IN/OUT` + `FB_5V3` + `D_OR3` — copy of `U_BEC_5V_1`) feeding
-    **RAIL-2 (5V_JAYNE) → `J_JAYNE`** (both Jayne boards, ≈ 2.4 A typ / ~4.2 A peak). Existing
-    dual-BEC pair = **RAIL-1 (5V_AVIONICS) → `J_5V`**. **Diode-OR cross-tie** the two rails
-    (`D_X1`/`D_X2` = 2× MBRD1045CT, same part) via cross-tie fuse `F_X`, plus per-rail fuses
-    `F_5V`/`F_VERA`, so each rail is fault-tolerant of the other (regulator-failure backup +
-    short isolation). **Same part chain (interchangeable channels); no new part numbers.**
-    **Bump set-point 5.3 V → 5.4 V** (re-value the `R_FB` dividers) so a backed-up rail (two
-    Schottky drops) stays > 4.75 V PB2-I min. Do schematic-first, then PCB (place `U_BEC_5V_3`
-    by the existing pair; SW node in a GND-pour keepout). Number alongside the Rev S1 servo-rail
-    change. **Not yet in KiCad.** (Symmetric 2+2 four-channel option in §11.1 if RAIL-2 later
-    needs its own internal redundancy.)
-- [ ] **Jayne 5 V harness:** 18 AWG shielded TP per drop (Kaylee → nose bow pod, Kaylee → cargo
-    nadir mount); 3 A resettable polyfuse per drop; route with each Jayne's Ethernet-ring/CAN
-    harness. Confirm final run lengths once ring-insertion bays are fixed (§1.2c.3).
-- [ ] **Laser — unify to a single 520 nm green source, Class 2 both sites** (retires the
-    separate 650 nm red cargo module AND the Rev-A nose Class 3B module). Per-location terminal
-    optic sets spread; per-location HARDWARE current limit sets power. **The nose is Class 2
-    (≤ 1 mW), NOT Class 3B** — a concentrated ~12 mm dot detected by Jayne's camera (strobe +
-    frame-difference) needs only ~0.45 mW (`docs/JAYNE_LASER_ANALYSIS.md` Rev A1). This drops the
-    Class 3B key-interlock and mechanical shutter entirely.
-- [ ] **Both Class 2 caps must be hardware-enforced** (fixed current limit), not firmware-only.
-- [ ] **Nose camera strobe + frame-difference detection** (firmware/ISP, TODO.md §4.6) — this
-    is what holds the nose at Class 2 in bright sun; laser-sync GPIO/PWM + differencing in the
-    AM62A7 ISP. Without it the nose spot is not reliably detected in full daylight.
-- [x] *(No longer required — the Rev-A "nose Class 3B mechanical beam-stop/shutter" task is
-    retired now that the nose is Class 2.)* Re-open only if a human-at-target-in-full-sun
-    visibility requirement is later added (would push the nose back toward 3R/3B).
-- [ ] **Do not source** the green diode or either terminal optic until a real datasheet with a
-    verified mW rating + IEC 60825-1 class is added to REFERENCES.md (extends the REF-IEC-002
-    pending item; the Jayne-laser row in "Open Standards Verification Items").
-
-**BLOCKS:** Jayne fabrication order; bow sensor pod avionics integration (§1.1.1.1a).
-
----
-
-### 1.2a — PCB Design: Wash, Zoë, and Emma (EMI-Hardened Variants)
-
-#### ***EM hardening Objective is to ensure safe and controlled operations in hostile em/rf environments such as the vicinity of radiating commercial broadcast, amateur radio and cellular towers.***
-
-Design files on branch `claude/cape-em-harsh-variants-9Yfr1`. Schematics (`*.kicad_sch`) and PCB
-layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been generated or DRC-verified.
-
-**Key changes from -1 variants:**
-
-- **CAN FD**: ATA6561 (non-isolated) → ISOW1044BDFMR (TI, SOIC-16W, 5 kV reinforced isolation +
-    integrated DC/DC converter, IEC 62368-1 / VDE 0884-11)
-- **RS-485**: MAX3485E (non-isolated) → ADM2795EBRWZ (ADI, SOIC-20W, 5 kV reinforced isolation +
-    integrated DC/DC converter)
-- **Ethernet PHY (Rev S baseline; introduced Rev Q)**: DP83825I (TI, LQFP-32, 10/100BASE-TX RMII) with EMI hardening:
-    HX1188NL LAN magnetics (1500 V isolation), SRF2012-100Y CMC, PRTR5V0U2X TVS, TPS62933 1.8V
-    supply. JST SM06B-GHS-TB-1MP connector (no RJ45). Wash: 2× PHY (RMII0+RMII1);
-    Zoë: 1× PHY (RMII0).
-- **Emma**: SRF2012-100Y CMC on antenna coax shield, PRTR5V0U2X TVS on PTT/RX lines,
-    X2Y bridging capacitor on RF ground plane, Würth 742792512 ferrite bead on +5V rail
-
-**Transform scripts** (generate -2 files from -1 originals):
-
-- `avionics/kicad/gen_cape_a2.py` → `CAPE-A-2.kicad_sch`
-- `avionics/kicad/gen_cape_b2.py` → `CAPE-B-2.kicad_sch`
-- `avionics/kicad/add_eth_phy.py` — ETH PHY isolation sub-circuit generator (called by above)
-- `avionics/kicad/gen_cape_a2_pcb.py` → `CAPE-A-2.kicad_pcb`
-- `avionics/kicad/gen_cape_b2_pcb.py` → `CAPE-B-2.kicad_pcb`
-
-**Open tasks:**
-
-- [x] **USB-to-Ethernet bridge (LAN9500A class) evaluated as an alternative Ethernet
-    front end and REJECTED (not deferred), 2026-07-11.** Rationale captured in
-    `docs/ETHERNET_PHY_TRADE.md`: a single-port USB bridge cannot offload HSR/PRP
-    (IEC 62439-3), so the redundant ring collapses; USB adds non-deterministic
-    latency/jitter unfit for the flight-control bus, a fragile 480 Mbps EMI ingress
-    path in the 200 V/m environment, and hard/costly galvanic isolation — while
-    wasting the AM6254/AM62A7 native MAC. Native DP83825I / ADIN1300 / KSZ9477 path
-    retained. If "reduce per-PHY glue on Wash" resurfaces, the on-architecture answer
-    is a managed KSZ9477/KSZ9567 switch, tracked as a separate trade — NOT USB.
-
-##### 1.2a.1 *Cape DRC / routing / ETH2 status (2026-06-12)* — see `avionics/kicad/README.md`
-
-- [x] **Wire second Ethernet (ETH2) on Wash.** `ETH2` / `ETH2-PHY` (ADIN1300) /
-    `T-ETH2` (749010012A) were placed but unconnected; nets now mirror ETH1
-    (`ETH2_LINE_*` → `T-ETH2` → `ETH2_*` → PHY), reusing the host-side `RMII1_*`,
-    `MDIO`/`MDC`, `PHY2_INTRN`/`PHY2_RSTN`, `VCC2_ETH`/`GND`/`GND2_ETH` nets on
-    PB2-P2. 44 pads assigned; diff pairs verified. *(PR #59, 2026-06-12)*
-- [x] **Separate the two Wash PHYs onto independent MDIO buses** (instead of an
-    address strap). PHY1/ETH1-PHY → `MDIO0`/`MDC0` (CPSW MDIO, PB2-P2 pins 17/18);
-    PHY2/ETH2-PHY → `MDIO1`/`MDC1` (2nd bus, PB2-P2 pins 1/2 = the two spare servo
-    channels SERVO6/7). Each PB2-I NIC manages its own PHY; no shared-address
-    conflict. PCB + schematic global labels updated. *(2026-06-12)*
-    - **Firmware/DT:** PHY2's bus must be brought up as `mdio-gpio` (bit-banged) on
-        the two repurposed balls; verify they are GPIO-capable in the PB2-I pinmux.
-- [x] **Wire the field-connector pins to their signals on Wash** (connectors were
-    all floating). Done per each footprint's Description pinout: SERVO-PWM pads 1–6
-    → SERVO0–5 (PWM); ESC-TLM → UART_ESC_TX/RX; GPIO-A…F → GND/+3V3 (+ `GPIO_EXP_*`
-    signal pin labelled); CAN-FD → CAN_H/CAN_L; RS-485 → RS485_A/B; PWR-IN → +5V/GND.
-    *(2026-06-12)*
-- [x] **Source the 6 `GPIO_EXP_A…F` signals via an I2C GPIO expander.** Added
-    `U-GPIO` (PCA9555DB, SSOP-24, addr 0x20) on the existing I2C1 bus with a
-    `C-GPIO` 100 nF decoupling cap; P0_0–P0_5 → GPIO_EXP_A–F. *(2026-06-12)*
-    - [ ] Verify/add I2C1 pull-ups (≈4.7 kΩ to +3V3 on SDA/SCL) — none on cape;
-        confirm whether the PB2-I provides them.
-    - [ ] Finalise placement of U-GPIO/C-GPIO (added at a tentative location).
-- [x] **Add an ESC-PWM output connector for DSHOT0–3.** Added `ESC-PWM`
-    (JST-GH 5-pin SM05B): pins 1–4 → DSHOT0–3, pin 5 → GND. *(2026-06-12)*
-    - [ ] Finalise ESC-PWM placement (added at a tentative location).
-- [ ] **Reconcile Wash.md §14 field-connector table with the actual PCB
-    connectors** (PCB has SERVO-PWM 1×8 + GPIO-A…F + ESC-TLM; §14 lists J_SERVO/
-    J_ESC/J_GPS/J_ENC/J_SBUS/J_VBAT/J_FAN). Bring the doc and board into agreement.
-- [ ] **Wire the MIL-1553 connector + transformer.** `MIL-1553` connector and the
-    `1553-XFM` transformer coupling to the bus are unwired at the IC level; the
-    driver/receiver (DS26LV31/32) are only partially netted.
-- [ ] **Redesign the tamper mesh as a per-domain anti-tamper mesh (all 4 capes).**
-    The current `TMESH_P`/`TMESH_N` cross-hatch grid on F.Cu/B.Cu shorts across SMD
-    pads and across the isolated `GND2_*` domains (≈335 of Wash's 465 DRC errors;
-    similar on Zoë). Rework as one monitored mesh net per isolation region
-    (secure/`GND` + per-`GND2_CAN`/`GND2_ETH`/`GND2_RS485` field side), keeping the
-    0.5 mm `ISOLATION` creepage moat clear between domains. **BLOCKS DRC-clean.**
-    Quantified against the IEC 62368-1 reinforced-insulation requirement in §0.6
-    (2026-06-22): 13 genuine cross-domain `TMESH`-vs-`GND2_*` violations on Wash
-    (min 0.125 mm), 9 on Zoë (min 0.0 mm/direct contact) — both far short of the
-    0.5 mm netclass minimum and the ≥ 8 mm physical creepage target in `Wash.md`.
-- [ ] **Carry the tamper signal over the link for the TPM-less boards.** Kaylee
-    and Emma have no local TPM: route Kaylee's mesh signal to Wash and
-    Emma's to Zoë over the inter-board link.
-- [ ] **Route the rearranged capes.** The manual component reseat left ~60 signal
-    nets per cape unrouted (7 power/ground nets are planes). Headless freerouting
-    was **not** usable (see toolchain findings in `avionics/kicad/README.md`):
-    KiCad 9.0.2 `ExportSpecctraDSN` is broken in standalone Python, and freerouting
-    2.1 headless never self-exits and emits incomplete SES. **Finish routing in the
-    KiCad GUI**; route the impedance-controlled Ethernet pairs interactively
-    (length-matched, 100 Ω ±10% MDI). **BLOCKS gerbers / fab.**
-- [ ] **Clear residual DRC after mesh + routing** (counts measured 2026-06-12,
-    error+warning): Wash 465 / 121 unconnected, Zoë 554 / 146, Emma 421 /
-    160, Kaylee 221 / 181. Remaining types after the mesh fix are mostly
-    silk-over-copper, text-height, courtyard-overlap, and lib-footprint mismatch.
-
-- [ ] **Finish Wash PCB (CAPE-A-2) close-out pass:**
-    - [ ] Verify every external-facing connector (SERVO-PWM, ESC-PWM, MIL-1553, CAN-FD,
-        RS-485, ETH) is a shielded-shell part with shell tied to PGND — audit against
-        the footprint Description pinout already documented at §1.2 line ~1340.
-    - [ ] Run ERC/DRC net-validity pass — confirm zero unconnected nets outside the
-        13-net Emma-style residual list; cross-check against the 465/121 DRC count
-        already logged for Wash at §1.2.
-    - [ ] Verify all ferrite beads are placed at each digital/RF section boundary and
-        on +5V/+3V3 entering from off-board connectors (pattern already used on
-        Emma's +5V boundary, §1.2/§1.3 Phase 3).
-    - [ ] Verify isolation caps/creepage moat (0.5 mm `ISOLATION`) are intact after the
-        per-domain tamper-mesh rework (§1.2, "Redesign the tamper mesh").
-- [ ] **Add SBUS/UART DIP switch to Wash** — add a 2-position DIP (or solder-jumper
-    pair) to select SBUS vs. plain UART framing on the existing J_SBUS-equivalent
-    pad, matching the J_SBUS line item already in Wash.md §14's field-connector
-    table (§1.2, "Reconcile Wash.md §14...").
-- [ ] **Generate Wash gerbers** — `CAPE-A-2.kicad_pcb` complete; run DRC to zero errors in
-    KiCad; export to `avionics/kicad/gerbers/CAPE-A-2/`; re-export drill files.
-    - **BLOCKS Wash fab order**
-- [ ] **Generate Zoë gerbers** — `CAPE-B-2.kicad_pcb` complete; same DRC + export procedure;
-    export to `avionics/kicad/gerbers/CAPE-B-2/`.
-    - **BLOCKS Zoë fab order**
-
-- [x] remove Wi-Fi, sik, and loRa antennas from Zoë. Use filtered chokes on rf lines to route all
-    RF signals from antennas to Wi-Fi, lora, zigbee,and sik xcvr circuits on Zoë, and/or use uart
-    or i2c with filtering to connect isolated xcvrs to the cape. **Done (2026-06-05):** Added §13
-    antenna filter chains to CAPE-B-2.kicad_sch — each radio ANT pin now routes through a Johanson
-    BPF (FL_LORA/FL_SIK: 0915LP15B0100E; FL_WIFI: 2450BP15B050E) and RCLAMP0502B ESD shunt to a
-    dedicated SMA connector (J_SMA_LORA, J_SMA_WIFI, J_SMA_SIK). SiK uses Hirose U.FL J_SIK_ANT for
-    module pigtail. All connector shells PGND. See CAPE-B-2.md §13.
-- [x] **Re-evaluate space / restore Ethernet to Zoë** — One DP83825I EMI-hardened PHY
-    added to Zoë at Rev R (introduced Rev Q); J_ETH_B connector populated. Board has adequate
-    space; RF SMA connectors remain. *(done 2026-06-07)*
-- [ ] **Zigbee RF chain was never actually added to Zoë — PCB scope gap (flagged 2026-06-22,
-    cross-ref §1.4.2).** The "remove Wi-Fi, sik, and loRa antennas" item above (2026-06-05)
-    names Zigbee as a target XCVR circuit, but only LoRa/SiK/Wi-Fi filter chains were built;
-    `Zoë.kicad_sch` has no CC2652R7 (or equivalent Zigbee SoC), no Zigbee antenna filter, and
-    no SMA/diplexer pad. `CLAUDE.md` lists Zigbee 2.4 GHz as one of the 4 required external
-    C2 links — this is a real hardware gap, not yet scheduled to a revision. **Antenna
-    strategy already decided (§1.4.2, 2026-06-22):** restrict WL1837MOD Wi-Fi to 5 GHz only
-    and feed CC2652R7's 2.4 GHz path through a passive 2.4/5 GHz diplexer onto the existing
-    shared Wi-Fi antenna (no separate Zigbee antenna/SMA pad needed). Still open: add
-    CC2652R7 + diplexer to a Cape-B-2 schematic revision; decide which bay(s) carry it.
-
-- [ ] **Generate Emma gerbers** — `XCVR-49MHZ-2.kicad_pcb` complete; export to
-    `avionics/kicad/gerbers/XCVR-49MHZ-2/`.
-    - **BLOCKS Emma fab order**
-- [ ] **FCC Part 15 §15.235 pre-compliance checklist for Emma** — document field strength
-    (≤10,000 µV/m at 3 m per §15.235(a), ≈30 µW / −15.2 dBm EIRP-equivalent — requires firmware
-    PA limit, not the ≤100 mW previously assumed), harmonic suppression ≥40 dBc at 2nd/3rd
-    harmonics (§15.235(b)/§15.209), FCC ID silkscreen labeling block (§2.803/§15.19).  Not
-    Part 95 — see §0.1.
-- [ ] **EMI isolation validation checklist** — verify isolation barrier clearance: ISOW1044BDFMR
-    5 kV working voltage; ADM2795EBRWZ 5 kV working voltage; measure CMRR at 1 MHz on CAN and
-    RS-485 channels; verify differential impedance 100 Ω ±10% on ETH MDI traces.
-
-- [ ] **Merge `claude/cape-em-harsh-variants-9Yfr1` → master** after gerbers pass DRC and
-    pre-compliance checklist is signed off.
-
-- [ ] **Design Faraday cages / boxes to protect all PCBs** — minimize weight/space while meeting
-    the 500 W/m² design objective. Placeholder geometry (FAR-CAGE-AV 76×56×88 mm, FAR-GASKET-AV,
-    FAR-FAN-40, FAR-EMI-VENT-40, FAR-BOND-STRAP, FAR-FT-PANEL, FAR-FERRITE-4MM) already exists at
-    §1.1.5 (364 g / 0.80 lbm system total) — these sub-tasks convert the placeholders into
-    real, build-ready enclosures:
-    - [ ] **Shepherd's Room cage** (Cape-A-2 + Cape-B-2 stack, no Emma) — final wall thickness,
-        seam/gasket detail, FAR-FAN-40 mount, FAR-EMI-VENT-40 vent location.
-    - [ ] **Inara's Shuttle cage** (Cape-A-2 + Cape-B-2 stack, no Emma) — same scope as Shepherd's.
-    - [ ] **River's Room cage** (Cape-A-2 + Cape-B-2 + Emma stack) — add Emma board clearance and
-        LoRa/49 MHz feedthrough ports to the FAR-FT-PANEL design.
-    - [ ] **Simon's Medbay cage** (Cape-A-2 + Cape-B-2 + Emma stack) — same scope as River's Room.
-    - [ ] **Kaylee (PDB) enclosure** — verify whether the PDB needs a full Faraday cage or only a
-        bond strap to the keel ground plane (no TPM/RF on Kaylee; see §1.2 "Carry the tamper
-        signal over the link for the TPM-less boards").
-    - [ ] Bond each cage to the airframe ground reference via FAR-BOND-STRAP with no second
-        return path (avoid ground loops per §1.4.1 prose constraint).
-    - [ ] Re-run the §1.1.5 mass budget after all 5 enclosures are finalized — confirm cumulative
-        T/W stays ≥1.2 (currently estimated ~1.19–1.25, §1.1.5).
-
-- [ ] **Specify / implement tightly twisted pair bonded shielded wiring throughout the aircraft** —
-    per-bus-type wiring spec (duplicates the per-bus breakdown tracked at §1.4.3/§1.4.4; this
-    item is the airframe-wide harness/cable-selection pass, those are the connector/pinout pass):
-    - [ ] CAN FD trunk (inter-node ring) — shielded twisted pair, 120 Ω characteristic impedance,
-        drain wire bonded at each node chassis, not floating mid-run.
-    - [ ] RS-485 trunk — shielded twisted pair, 120 Ω, daisy-chain topology, end termination at
-        the two physical bus ends only.
-    - [ ] MIL-STD-1553B bus — twinax/twisted-shielded-pair per the existing 1553-XFM transformer
-        coupling spec (§1.2), stub length ≤1 ft from coupler to RT.
-    - [ ] Ethernet (CPSW3G ring) — shielded Cat5e/Cat6, 100 Ω ±10% MDI pairs matching the
-        impedance-controlled PCB traces already specified at §1.2.
-    - [ ] Servo/PWM and ESC telemetry leads — twisted pair, routed ≥5 mm from RF/antenna runs.
-    - [ ] Power harness (14 AWG nacelle feeds, battery-to-Kaylee) — twisted where co-routed with
-        signal wiring; ferrite bead at each digital/RF section boundary crossing.
-
----
-
-### 1.3 — PCB Design: XCVR-49MHZ-1 (49 MHz AX.25 Transceiver) — SUPERSEDED
-
-**Superseded 2026-06-21.** XCVR-49MHZ-1 was archived as of Rev Q (2026-06-05) per `CLAUDE.md`
-(`Cape-A-1, Cape-B-1, and XCVR-49MHZ-1 are archived as of Rev Q`) and replaced by **Emma**
-(XCVR-49MHZ-2 Rev R1), whose schematic, layout, and production-file tasks are tracked under
-§1.2b and §1.2a, not here. The remaining unchecked Phase 2–5 items below were never started and
-will not be pursued on this stub design — Emma's circuit topology (Si5351A DDS + discrete BJT PA
-+ software Bell 202 AFSK, per the Phase 1 decisions retained below for historical record)
-carried forward, but layout, ERC/DRC, and production-file work happen on the Emma KiCad project
-(`avionics/kicad/Emma.kicad_sch`/`.kicad_pcb`), now archived at `avionics/kicad/archive/`
-and `avionics/gerbers/archive/XCVR-49MHZ-1/`. No further action item remains open here.
-
-Stub KiCad project (archived) at `avionics/kicad/archive/XCVR-49MHZ-1.*`.
-All Phase 1–3 items must be sequentially complete. Phase 4 verification runs in parallel with Phase 3.
-
-**Phase 1 — IC Selection (gates all downstream work):**
-
-- [x] **Resolve DDS choice** — **Si5351A-B-GT selected** (Silicon Labs, MSOP-10) + EPSON
-    TG2520SMN 25 MHz ±0.5 ppm TCXO. I²C direct to 49 MHz; firmware driver already written
-    (`si5351.c`); < ±1 ppm system stability, well within any plausible frequency-tolerance
-    requirement (the ±0.005% figure cited at the time of this decision was a Part 95 RCRS value
-    that does not apply to this band — see §0.1; no Part 15 §15.235 frequency-tolerance
-    requirement is at issue here). AD9833 eliminated (max 12.5 MHz; required ×4 external PLL).
-    *(decided 2026-05-31)*
-
-- [x] **Evaluate PA options** — **Two-stage discrete BJT selected**: MMBT2222A (SOT-23, driver) + 2N3866 (SOT-39, final). Class-A/AB; +5 V supply direct; ≈ 100 mW ERP; ≈ $1.60 BOM; ≥ 40 dBc harmonic suppression via FL1 LPF (SPICE verify Phase 4). RA07H4047M eliminated (requires 7.2–13.6 V; needs boost converter). *(decided 2026-05-31)*
-
-- [x] **Confirm TCM3105 availability** — TCM3105 confirmed discontinued (TI); no in-production drop-in. **Software Bell 202 AFSK selected**: AM6254 Cape-B MCU generates/decodes audio; TX via MCP4921 SPI 12-bit DAC; RX via LM393 comparator + passive RC bandpass filter. *(decided 2026-05-31)*
-
-**Phases 2–5 (Schematic, PCB Layout, Verification, Production Files) — not pursued.**
-Superseded before schematic capture began; U1–U6 sub-circuit design, layout, DRC/ERC, and
-gerber/BOM export for this stub were never started and carry forward instead as the Emma
-Rev R1 tasks already tracked in §1.2b and §1.2a. The two items below are the only Phase 4/5
-work that was actually completed against this stub before it was retired:
-
-- [x] **50 Ω trace impedance check** — Z₀ = 52.26 Ω for W=2.75 mm, H=1.6 mm, εr=4.5, T=35 µm → **PASS** [45–55 Ω]. *(done 2026-05-30 — serenity/kicad/check_impedance.py)*
-
-- [x] **Update `PROJECT_INDEX.md`** to list XCVR-49MHZ-1. *(done 2026-05-25; entry since moved to `ARCHIVE_INDEX.md` per the archival above)*
-
----
-
-### 1.4 - EMI Hardening Beyond the PCBs to provide protection for 500 W/m^2 environment
-
-#### 1.4.1 Faraday Enclosures
-
-**Design constraints (apply to every enclosure below):**
-
-- Must have proper bonding/grounding without loops.
-
-- Must have a fan and appropriate cooling
-
-- Must minimize weight, size, and cost
-
-- Must account for all sensor inputs and flight control and comms outputs.
-
-- Must account for RF routing from external antennas to internal transceivers
-
-- Must protect the log uSD
-
-- [ ] **PB2-I + Wash Enclosure** (Shepherd's Room / Inara's Shuttle — no Emma board):
-    - [ ] Confirm internal clearance for PB2-Industrial + Cape-A-2 stack height against
-        the FAR-CAGE-AV placeholder envelope (76×56×88 mm, §1.1.5).
-    - [ ] Cut-outs for GPS/IMU/barometer sensor leads, ToF array cabling, servo/ESC
-        connectors, and the microSD log slot — each cut-out gets its own FAR-FT-PANEL
-        feedthrough or grommet, not an open hole.
-    - [ ] Mount FAR-FAN-40 + FAR-EMI-VENT-40 on the low-pressure side of the enclosure;
-        verify intake/exhaust path does not create a direct RF leakage slot.
-    - [ ] Bond enclosure to chassis ground via FAR-BOND-STRAP (single point, no loop).
-- [ ] **PB2-I + Zoë Enclosure** (all 4 bays — Cape-B-2, plus Emma in River's Room /
-    Simon's Medbay only):
-    - [ ] Confirm internal clearance for PB2-Industrial + Cape-B-2 (+ Emma where fitted)
-        stack height against the FAR-CAGE-AV placeholder envelope.
-    - [ ] Cut-outs for CAN FD/RS-485/Ethernet/MIL-1553 connectors, SMA antenna feeds
-        (WiFi/SiK/LoRa per §1.4.2), and the microSD log slot — feedthrough or grommet
-        per cut-out.
-    - [ ] River's Room / Simon's Medbay variant: add the LoRa + 49 MHz SMA feedthrough
-        pair for Emma; Shepherd's Room / Inara's Shuttle variant omits these.
-    - [ ] Mount FAR-FAN-40 + FAR-EMI-VENT-40; bond via FAR-BOND-STRAP.
-
-#### 1.4.2. Antenna Placement and feedlines
-
-- [x] **Resolve total antenna count per stack against the PACE radio table** *(done
-    2026-06-22)* — the prior "2 antennas per comm link × 4 links + 2 GPS = 10" count basis
-    was wrong on two counts: (a) no stack actually mounts an antenna for all 4 external
-    links — each of the 4 bays carries exactly 2 external-link antennas (its PACE
-    primary + secondary, per `CLAUDE.md`), not one-per-link-globally; (b) GPS/GNSS is
-    one patch **per FC node (Wash, Cape-A-2)**, and there are 4 FC nodes (one per bay),
-    not 2. Resolved count, reconciled against current (pre-Rev-R1) hardware fit:
-
-    | Bay | Radios fitted | External antennas | GPS |
-    | --- | --- | --- | --- |
-    | Shepherd's Room (Bay A) | Zoë: Wi-Fi, SiK, LoRa chain present on PCB | SiK whip (primary) + Wi-Fi patch (secondary) = 2 | 1 |
-    | Inara's Shuttle (Bay B) | Zoë: Wi-Fi, SiK, LoRa chain present on PCB | Wi-Fi patch (primary) + SiK whip (secondary) = 2 | 1 |
-    | River's Room (Bay D) | Zoë + Emma (49 MHz) | 49 MHz whip (primary) + LoRa whip (secondary, fed from Zoë's `J_SMA_LORA`) = 2 | 1 |
-    | Simon's Medbay (Bay E) | Zoë + Emma (49 MHz) | 49 MHz whip (primary, **independent antenna — see new sub-task below**) + SiK whip (secondary) = 2 | 1 |
-
-    **Total: 8 external C2/payload-link antennas + 4 GPS patches = 12 physical antennas.**
-    Every Zoë (Cape-B-2) carries identical Wi-Fi/SiK/LoRa RF frontends per board (all
-    4 Zoë boards are the same PCB), but only the antenna feeding that bay's PACE-assigned
-    primary/secondary link is populated — the unused chain's SMA pad is left unpopulated
-    (no antenna, no feedline) rather than wasting mass/hull penetrations on a link that
-    bay never uses. **Zigbee 2.4 GHz has no antenna mount** — see flagged gap below; it is
-    excluded from the 12-antenna count until the hardware gap is resolved.
-
-- [x] **Antenna mounts** *(types and stations resolved 2026-06-22; physical hull
-    placement still needs FreeCAD/slicer verification — see sub-tasks)*:
-    - [x] **Shepherd's Room** (Bay A, nose, sta ≈ 59 mm) — SiK 915 MHz ¼-wave RP-SMA whip
-        (primary) + Wi-Fi 5 GHz RP-SMA whip (secondary). Mount both on the dorsal hull
-        skin near the bay, ≥ 30 mm apart (reduce 915/5800 MHz frontend desense).
-    - [x] **Inara's Shuttle** (Bay B, dorsal fwd, sta ≈ 130 mm) — Wi-Fi 5 GHz RP-SMA whip
-        (primary) + SiK 915 MHz RP-SMA whip (secondary). Same dorsal mount style and
-        spacing as Shepherd's.
-    - [x] **River's Room** (Bay D, dorsal aft, sta ≈ 275 mm) — 49 MHz top-wire antenna
-        (existing `WIRE-49MHZ`/`POST-FWD-49`/`POST-AFT-49`, §1.1.1.0b; primary) + LoRa
-        915 MHz RP-SMA whip (secondary, fed from Zoë `J_SMA_LORA`). **Relocated
-        2026-06-22 (with user): the 49 MHz top wire moves from the dorsal centreline to
-        the PORT flank, shoulder height** — see the port/starboard sub-task below;
-        LoRa whip stays dorsal.
-    - [x] **Simon's Medbay** (Bay E, aft service, sta ≈ 350 mm) — **independent** 49 MHz
-        top-wire antenna, new, on the **STARBOARD flank, shoulder height** (primary; see
-        dedicated sub-task below — do not share River's antenna) + SiK 915 MHz RP-SMA
-        whip (secondary, stays dorsal).
-    - [x] **4× GPS/GNSS patch antenna mounts** — one per FC node (Wash, Cape-A-2), all
-        dorsal hull, face up, per existing routing tasks (Phase 5/6 install steps,
-        TODO.md lines ~2645/2666/2773/2794): FC1 sta ≈ 59 mm, FC2 sta ≈ 130 mm,
-        FC3 sta ≈ 275 mm, FC4 sta ≈ 350 mm. ≥ 3 mm clearance from the 49 MHz wire posts
-        (already a documented constraint on `POST-FWD-49`) — now a flank-to-dorsal
-        clearance check rather than a same-surface one, since the 49 MHz posts moved
-        off the dorsal centreline (below); re-verify the 3 mm figure still applies once
-        the shoulder-height mount line is fixed.
-    - [ ] **Zigbee 2.4 GHz antenna mount — BLOCKED, hardware gap confirmed; antenna
-        strategy decided 2026-06-22 (with user).** Zoë (Cape-B-2) Rev S has no Zigbee
-        transceiver, antenna filter chain, or SMA pad (the CC2652R7 Zigbee radio exists
-        only in the archived COMMS-HAT-1 design, not in the current Rev S Cape-B-2
-        schematic) — **no antenna can be mounted for hardware that does not exist on
-        the board**, so this remains a genuine PCB scope gap, not just a placement
-        question. **Decision:** rather than a time-shared coexistence switch, split
-        the existing dual-band Wi-Fi antenna by frequency instead of by time —
-        **restrict WL1837MOD Wi-Fi to 5 GHz only** (already the spec for the Wi-Fi
-        whip mounts above) and feed the freed 2.4 GHz path to the future CC2652R7
-        Zigbee module through a passive **2.4/5 GHz diplexer** ahead of one shared
-        broadband antenna. Because Wi-Fi and Zigbee no longer overlap in frequency,
-        this needs no `RF_NCOEX` coexistence arbitration and no switching — both
-        radios can transmit/receive simultaneously through the diplexer, unlike a
-        switched-antenna approach. The diplexer (and the antenna it feeds) remains a
-        single passive point of failure shared between the two radios, but a passive
-        component is materially more reliable than an active coexistence switch, and
-        Wi-Fi/Zigbee are not PACE failover partners of each other (unlike River/Simon's
-        49 MHz link, sharing here doesn't undermine the redundancy mandate).
-        Still open: which bay carries the Zigbee module once added, diplexer part
-        selection, and Cape-B-2 schematic work to add the CC2652R7 RF chain.
-        **Cross-reference added to §1.2a as a tracked PCB scope gap.**
-    - [ ] **Verify the 6 dorsal mount stations (Shepherd ×2, Inara ×2, River's LoRa whip,
-        Simon's SiK whip) in FreeCAD against the baked hull** — confirm ≥ 30 mm
-        antenna-to-antenna spacing is actually achievable on the as-built dorsal skin at
-        each bay's station, and that no mount collides with an access-panel cover
-        (§1.1.1.0a), the bow sensor pod (§1.1.1.1a), or the dorsal antenna fin
-        (`dorsal_antenna_fin.stl`). **BLOCKS dorsal antenna mount printing.**
-    - [ ] **Verify the 2 flank mount lines (River's 49 MHz, port; Simon's 49 MHz,
-        starboard) in FreeCAD against the cargo clamshell door swing envelope** — see
-        the dedicated sub-task under "Second 49 MHz antenna" below.
-        **BLOCKS flank antenna mount printing.**
-
-- [x] **Feedlines** *(cable spec and run-length budget resolved 2026-06-22)*:
-    - Cable: **RG-316** (50 Ω, PTFE dielectric, silver-plated copper braid) for every
-        aircraft-side antenna-to-SMA-bulkhead run. RG-316 is already the spec used for
-        Emma's own 49 MHz feed (`Emma.md` lines 553–554); standardizing on one cable type
-        for all 8 runs simplifies stock and crimping tooling.
-    - Run-length budget: **≤ 300 mm per run** for Wi-Fi/SiK/LoRa whip-to-bulkhead runs
-        (antenna is mounted directly over its bay); **≤ 500 mm** for the 49 MHz runs
-        (River's existing run and Simon's new run both route from the bay's Emma J2 to
-        the forward wire-post loading coil, matching the existing 500 mm ceiling already
-        set in `Emma.md`). RG-316 loss at 915 MHz/2.4 GHz over these lengths is
-        ≈ 0.3–0.5 dB — negligible against the link budgets in `malcolm_antenna_spec.md`.
-    - Routing: each run exits its bay's Faraday enclosure through an SMA bulkhead
-        feedthrough in the FAR-FT-PANEL (§1.1.5, still in design) and is dressed along
-        the hull skin to its mount, kept ≥ 5 mm clear of the digital-section keep-out
-        zones (CAN FD/RS-485/Ethernet/1553 trunk, per §1.4.4 wiring keep-outs).
-        **BLOCKS final feedline length confirmation until FAR-FT-PANEL mechanical
-        design (§1.1.5) is complete.**
-
-- [x] **Chokes** *(part and placement resolved 2026-06-22)* — one **Würth 74271222**
-    snap-on ferrite clamp per antenna feedline, placed within 25 mm of the Faraday
-    enclosure boundary crossing on the *inside* (cage) end of the run. This mirrors the
-    treatment Emma already applies to its own 49 MHz feedline (`Emma.md` lines 553–557)
-    and is consistent with the 500 W/m² EMI design objective (`CLAUDE.md`). 8 feedlines
-    (Shepherd ×2, Inara ×2, River's LoRa run, Simon's SiK run, plus River's and Simon's
-    49 MHz runs) → **8× Würth 74271222 required**, added to BOM.
-
-- [x] **Second 49 MHz antenna for Simon's Medbay** *(decision made 2026-06-22, with
-    user; routing corrected 2026-06-22, with user)* — Simon's Emma board currently has
-    no antenna feed at all; only River's J2 is wired to the single existing
-    `WIRE-49MHZ` top-wire antenna. **Decision: build a second, fully independent 49 MHz
-    antenna for Simon rather than sharing River's antenna through a mux/switch or
-    passive splitter.** A shared antenna (switched or split) makes the antenna/switch a
-    single point of failure for *both* stacks' 49 MHz link, which directly contradicts
-    the first-class redundancy requirement in `CLAUDE.md` — and the mass cost of a
-    second antenna is trivial (≈ 9–11 g, see BOM) against that benefit. *(Moved here
-    from former §1.1.1.0.1, 2026-06-22.)*
-    - [x] **Design mirrors the existing River system, full length**: PETG forward wire
-        post + 38 µH base-loading coil, ~470 mm stainless-steel top wire (same length as
-        `WIRE-49MHZ`, not shortened), aft wire post with ceramic insulator, AWG 22
-        stranded copper counterpoise (routed inside the foam alongside the structural
-        keel — the keel itself is interior/embedded and not affected by the exterior
-        clamshell door swing discussed below, so this counterpoise routing is unchanged),
-        RG-316 feed to Simon's Emma J2 (≤ 500 mm), Würth 74271222 choke at the Faraday
-        crossing — same component set as `POST-FWD-49`/`WIRE-49MHZ`/`POST-AFT-49`/
-        `WIRE-COUNTERPOISE-49MHZ`, new reference IDs (see BOM).
-    - [x] **Route on the STARBOARD flank, shoulder height — not ventral, not dorsal
-        centreline** *(corrected 2026-06-22, with user)* — two routings were rejected:
-        (1) a second full-length wire parallel to River's on the same dorsal ridge would
-        sit well under one wavelength (λ = 6.12 m at 49 MHz) from the first, risking
-        mutual coupling/detuning of both antennas; (2) a ventral/keel-line run (the
-        original proposal here) was rejected outright once `generate_cargo_doors.py`
-        was checked — the cargo bay clamshell doors hinge at the **outboard flank/belly
-        edge** and swing up to **180°**, sweeping the lower flank and belly through the
-        door's full Y-span; any exterior wire post mounted there is in the door's path.
-        **Resolution: both antennas move off the dorsal centreline entirely.** River's
-        existing antenna relocates to the **port** flank, shoulder height; Simon's new
-        antenna goes on the **starboard** flank, shoulder height, same sta ≈ 120–580 mm
-        span and full ~470 mm length as River's. Shoulder height is chosen specifically
-        because it is above the door's swing reach (door hinges at the bottom-outboard
-        edge) and laterally separated from its mirror-image counterpart by the full
-        fuselage width (port vs. starboard), solving both the coupling and the door
-        problems at once — see updated `rcrs49_wire_post.scad` header and §1.1.1.0b.
-        **SUB-TASKS OPEN:**
-    - [ ] **Verify the exact shoulder-height Z offset in FreeCAD against the cargo
-        door's 180°-open envelope** (door panel width from the hinge line) at every
-        station along sta 120–580 mm, not just within the door bay's own Y-span —
-        confirm port and starboard mount lines clear the door on both sides.
-        **BLOCKS bonding either antenna's posts.**
-    - [ ] **Confirm the port/starboard mount line also clears the wing roots** (wings
-        attach at the cargo section's lateral walls, `CLAUDE.md`) — the flank line
-        passes close to this area within the cargo section.
-        **BLOCKS Simon's 49 MHz antenna fabrication; BLOCKS River's antenna relocation.**
-    - [ ] **Bench-verify isolation between the two 49 MHz antennas** (River's port,
-        Simon's starboard) before first flight — confirm neither antenna's feedpoint
-        impedance shifts unacceptably with the other antenna present, and that
-        simultaneous Emma TX on one does not desense the other's receiver beyond an
-        acceptable margin. Use the same HDOP-with-TX-active bench test already specified
-        for `POST-FWD-49` as a model.
-
-- [x] **Ensure all transceivers have antenna placement and wiring from Zoë and/or Emma
-    boards to mounted antennas** *(moved here from former §1.1.1.0.1, 2026-06-22)* —
-    satisfied by the mount/feedline/choke specs above for all populated radio chains;
-    remaining open items are the Zigbee hardware gap (flagged above) and the FreeCAD/
-    bench verification sub-tasks, which are tracked individually rather than left as one
-    generic catch-all.
-
-**Mass/cost added to `docs/bom_revR.json` `avionics.antenna_system` (2026-06-22, updated
-after the port/starboard routing correction):** 11 new line items — ANT-WIFI-5G ×2,
-ANT-SIK-915 ×3, ANT-LORA-915 ×1, ANT-GPS-PATCH ×4, WIRE-COUNTERPOISE-49MHZ ×1
-(backfilled, was referenced but never added), WIRE-49MHZ-2/POST-FWD-49-2/POST-AFT-49-2/
-WIRE-COUNTERPOISE-49MHZ-2 (Simon's independent 49 MHz antenna, full-length starboard
-design, not the earlier shortened ventral proposal), COAX-RG316-AIRFRAME ×1,
-CHOKE-FERRITE-ANT ×8 — **+96 g / +$93** beyond the pre-existing 3-item 49 MHz antenna
-entry (9 g / $16, itself relocated port-flank, mass unchanged). New `antenna_system`
-total: **105 g / $109.** This is a small fraction of the ~3,590 g AUW noted in
-`totals.note`; no AUW/T-W recheck needed at this magnitude.
-
-#### 1.4.3 internode communication wiring
-
-Per-bus signal wiring specification for the 4 internode buses (CAN FD, MIL-STD-1553B, RS-485,
-Ethernet) connecting all 8 nodes — see CLAUDE.md "Onboard Communications."
-
-- [ ] **CAN FD** — specify bus topology (linear trunk vs. star), termination (120 Ω at each
-    physical end), node tap spacing, and connector pinout per node; cross-reference the
-    CAN_H/CAN_L footprint pinout already fixed on Wash (§1.2).
-- [ ] **RS-485** — specify daisy-chain topology, termination, and connector pinout per node;
-    cross-reference the RS485_A/B footprint pinout already fixed on Wash (§1.2).
-- [ ] **MIL-STD-1553B** — specify bus controller / remote terminal wiring per node role
-    (§4.2 "MIL-STD-1553B RT implementation," §4.3 "MIL-STD-1553B BC/RT tasks"); stub length
-    and transformer-coupling placement per node, matching the 1553-XFM coupling already
-    partially netted on Wash (§1.2).
-- [ ] **Ethernet** — specify CPSW3G ring topology (node-to-node order), cable category, and
-    connector pinout; cross-reference the 100 Ω ±10% MDI impedance-controlled traces already
-    specified on Wash/Zoë (§1.2) and the RSTP ring management firmware task (§4.3).
-
-#### 1.4.4 flight control signal wiring
-
-Per-signal-type wiring specification for sensor/actuator signals local to each FC node.
-
-- [ ] **UART** — specify wiring for GPS (u-blox M10Q NMEA/UBX, §4.2), SBUS-equivalent
-    (§1.2 "Add SBUS/UART DIP switch to Wash"), and any inter-cape UART links.
-- [ ] **I2C** — specify wiring for IMU/barometer (ICM-42688-P, BMP388/390 — note these are
-    SPI per §4.2, verify bus assignment), ToF array mux (TCA9548A) and XSHUT GPIO expander
-    (MCP23008), and the `U-GPIO` PCA9555DB expander already added to Wash (§1.2).
-- [ ] **BDSHOT/DSHOT (ESC telemetry)** — specify wiring for the ESC-PWM connector (DSHOT0–3,
-    JST-GH 5-pin, already defined on Wash §1.2) and BDSHOT600 telemetry return path on PRU-ICSS
-    (§4.2 "EDF ESC PID governor").
-- [ ] **PWM** — specify wiring for nacelle tilt servo control (EHRPWM/PRU, §4.2 "Nacelle tilt
-    servo PWM generation") and the SERVO-PWM 1×8 connector pinout already defined on Wash
-    (§1.2).
-
-#### 1.4.5 power distribution — Kaylee (PDB) and battery
-
-**Battery placement decision (2026-06-08):**
-The 6S 4000 mAh LiPo (~450–520 g, ~155×52×36 mm) must be located near the aircraft CG.
-Phase 5 ground-test requirement: static CG at 190 mm from nose (REVN_BUILD_GUIDE_24IN.md §Phase 5).
-The keel datum at 190 mm from nose falls within the **middle ring section** (between keel stations
-165 mm and 251 mm), which is the main fuselage body above the cargo gondola.
-Battery is placed on the keel floor of the middle section, oriented longitudinally, secured by:
-- Two M3 boss standoffs at X≈−190 mm (CG station) on the keel face
-- Velcro retention strap through keel slot (safety tether, not sole retention)
-- Slide-in rail guides on keel face prevent lateral shift at 3g manoeuvre
-
-**Kaylee (PDB) placement decision (2026-06-08):**
-Kaylee (XT90 PDB, 4× XT30 outputs, ~80×60 mm) mounts adjacent to the battery in the middle
-section keel area (X≈−165..−245 mm station range) to minimise high-current 14 AWG wire length
-to the four nacelle ESC feeds (fed through PTFE conduits in the wing spar channel and to the
-cargo gondola lateral walls).
-Battery swap access via a **ventral hatch** in the middle section belly skin (hatch centred at
-X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
-
-**Open items — BLOCKS Phase 1 foam pour:**
-- [ ] **Add Kaylee/battery boss pattern to `middle_canonical_shell24.scad`.**
-    Boss posts: 4× M3 at (±55 mm X) × (±25 mm Z) from X=−190 mm keel centre for battery tray.
-    Kaylee PDB: 4× M3 boss posts at X≈−205 mm, Z=CZ±25 mm. Both on keel interior face (+Y rail).
-    Verify boss positions clear keel CF flat bar (6×3 mm) and ring frame station notches in slicer.
-
-- [ ] **Add ventral battery-swap hatch cut to `middle_canonical_shell24.scad`.**
-    120×60 mm belly cut centred at X=−190 mm; 2 mm shoulder lip; same pattern as avionics panels.
-    **BLOCKS Phase 1 foam pour** (void former must clear hatch zone before foam pour).
-
-- [ ] **Create `kaylee_battery_tray.scad`.**
-    CF-PETG slide-in rail guide tray for 6S LiPo 155×52×36 mm; M3 attachment to boss posts;
-    two captive Velcro strap slots; XT90 connector exit cutout on AFT face.
-    **Add to Phase 0 print schedule.**
-
-- [ ] **Create `kaylee_pdb_tray.scad`.**
-    CF-PETG mounting tray for Kaylee PDB (80×60 mm footprint); M3 boss attachment;
-    XT90 input pigtail route-through; 4× XT30 output ports facing AFT (toward ESC conduits).
-    **Add to Phase 0 print schedule.**
-
-- [x] **Kaylee PCB KiCad files generated (Rev A, 2026-06-10):**
-
-    - [x] `avionics/kicad/Kaylee.kicad_pro` — project file; net classes VBAT/PGND/POWER_5V/Default; DRC rules
-
-    - [x] `avionics/kicad/Kaylee.kicad_sch` — full schematic; 90×65 mm 4-layer; BQ76930 6S cell monitor;
-                dual TPS54620 5V BEC; TPS54540 6V BEC; 5× INA226 monitors; 4× ESC branches with 40A fuses +
-                470µF caps + CMC + 1 mΩ shunts; SMBJ33CA TVS; AON6556 discharge FET; dual Würth 7440640500 CM filter
-
-    - [x] `avionics/kicad/Kaylee.kicad_pcb` — PCB outline + 4-layer stackup (F.Cu signal, In1.Cu GND,
-                In2.Cu VBAT 4oz, B.Cu signal); 4× M3 NPTH mounting holes; all 19 nets declared
-    - [x] `avionics/kicad/gen_kaylee.py` — Python generator producing all three KiCad files
-- [x] **Kaylee PCB — DRC run and gerbers generated (Rev A, 2026-06-10):**
-    - [x] Run KiCad DRC; resolved all shorting and 0.0 mm clearance violations
-    - [x] Generate gerbers to `avionics/kicad/gerbers/Kaylee/` (17 Gerber layers + Kaylee.drl)
-    - [ ] **DRC accepted violations (document only — not fixable without PCB re-architecture):**
-        - [ ] 16 clearance violations at 0.15 mm: INA226 MSOP-10 adjacent pads (pins 3/4) at 0.5 mm pitch
-        inherently violate 0.2 mm PGND/POWER_5V class rule; IPC-2221B allows ≥ 0.1 mm for ≤ 31 V
-        - [ ] 77 courtyard overlaps: dense 90×65 mm layout; 3D bodies do not conflict; no manufacturing impact
-        - [ ] 59 lib_footprint_mismatch: all footprints are inline in .kicad_pcb (not library copies); expected
-        - [ ] 33 silk_over_copper / 26 silk_overlap / 2 silk_edge_clearance: cosmetic; board is fab-ready
-        - [ ] 8 lib_footprint_issues: inline footprints; not KiCad library-linked; expected
-        - [ ] 181 unconnected_items: traces not yet routed (power planes on In1/In2.Cu are correct)
-    - [ ] **Kaylee PCB — remaining layout tasks (BLOCKS fabrication):**
-        - [ ] Manually place in KiCad: CM_ESC1–4 (INA226 shunt caps), C_DEC1–4 (ESC decoupling), Section F
-                    (BQ76930, J_BAL, R_BAL1–6, C_CAP, J_NTC, C_NTC) — area x=62–88, y=50–65 recommended
-        - [ ] Manually place: J_SHLD_5V, J_SHLD_6V, J_SHLD_I2C, J_SHLD_ALERT chassis shield lugs
-
-        - [ ] Route all traces; verify 4 oz Cu pour on VBAT/PGND power planes (In2.Cu / In1.Cu)
-        - [ ] Add BQ76930 thermal pad (TSSOP-30 PowerPAD) to footprint — currently missing from gen_kaylee_pcb.py
-        - [ ] Verify XT30 connectors (J_ESC1–4) courtyard clears board edge on left side
-        - [ ] Verify size and weight: PCB target ≤ 90×65 mm, ≤ 0.110 lbm (≤ 50 g)
-
-- [ ] **Update REVN_BUILD_GUIDE_24IN.md Phase 1** to include Kaylee + battery tray installation
-    in the pre-foam-pour checklist. Battery tray and hatch must be installed and hatch zone
-    masked before the foam pour step.
-
----
+- [x] Build assembled / exploded / deformed demonstration compound ST…
+- [ ] LG-12 Model the post per the §4.6 dimensions
+- [ ] LG-10 Finalize the 4 corner post placements
+- [ ] Ground clearance check carried forward from Rev R1
+- [ ] LG-15 Select and procure both wire grades/tempers
+- [ ] LG-16 Confirm the ductile wire temper survives forming
+- [ ] LG-13 Define the wire-to-socket retention detail
+- [ ] LG-02 Design and integrate 16 hull boss sockets
+- [x] Feet separated into individual STLs (foot_1 through foot_4 in l…
+- [ ] Add top-face socket to canonical foot
+- [ ] Assess foot grip on concrete/asphalt
+- [x] Rev R1.4 corner V-brace (landing_leg_assy.scad) is retired
+- [x] Rev R4 closed-ring wire fuse (wire_loop_fuse.scad) is retired
+- [ ] LG-03 CF rod channel in middle_canonical_shell24.scad rear skid…
+- [x] landing_legs_hull_r1.stl is orphaned
+- [ ] LG-06 Drop test prototype leg assembly
+- [ ] LG-07 Confirm avionics enclosure shock rating
+- [ ] LG-11 Coupon-test CF-PETG
+- [ ] LG-14 Instrumented drop test (load cell + high-speed video) at…
+- [ ] Reconcile the remaining-parts list
+- [ ] Combine all airframe STLs
+- [ ] Exploded view SVG — printed parts only
+- [ ] Exploded view SVG — full build
+
+#### 1.1.5 — Non-Printable Component Placeholders
+→ detail: `airframe/TODO.md` §1.1.5
+
+- [x] Generate all 65 component placeholder STLs
+- [x] FreeCAD catalog assembly script
+- [x] Faraday shielding hardware
+- [x] Faraday cage foam voids
+- [x] Foam-fill and void visualization STLs
+- [ ] Rear skid reinforcement — SCAD update (TWO files)
+- [ ] Run FreeCAD catalog
+- [ ] Hull-frame placement pass
+- [ ] Add Phase-11 (deferred) items to catalog
+- [ ] Mesh watertightness audit
+- [ ] FAR-FT-PANEL PCB design
+- [x] Faraday mass budget review
+- [ ] Link placeholders to BOM entries
+
+### 1.2 — PCB Design: Cape-A-1 and Cape-B-1 (archived)
+→ detail: `avionics/TODO.md` §1.2
+
+- [x] Regenerate Cape-A-1 gerbers
+- [x] Regenerate Cape-B-1 gerbers
+
+### 1.2b — PCB Redesigns: Emma Rev S1 / Zoe Rev S1 / Kaylee Rev S1
+→ detail: `avionics/rev-s1/TODO.md` §1.2b
+
+- [ ] Emma Rev S1 — add LoRa, replace JST with P1+P2 socket rails
+- [ ] Zoë (Cape-B-2) Rev S1 — remove LoRa, add P1+P2 passthrough rails
+- [ ] Kaylee Rev S1 — remove 6 V BEC, add 5 V servo output
+
+### 1.2c — PCB Design: Jayne (Nose/Cargo-Bay Vision, ToF & Laser)
+→ detail: `avionics/jayne/TODO.md` §1.2c
+
+- [x] Create avionics/kicad/Jayne/kicads/Jayne.kicad_sch
+- [x] SoM re-scope — Jayne = PHYTEC phyCORE PCM-071 SoM on a trapez…
+- [ ] FLEET-WIDE ISOW1044BDFMR footprint audit (flight-hardware error…
+- [x] Confirm PCB fab/assembly house can handle the AM62Ax 484-ball F…
+- [x] Source and cite a real Class 3B nose crosshair laser module
+- [x] Design Class 3B interlock circuit for the nose laser
+- [x] Reuse the existing 5 mW 650 nm Class 3R crosshair module and dr…
+- [x] Shielded JST-GH connector selection
+- [x] PGND/GND isolation barrier
+- [x] EMI hardening gap — RESOLVED 2026-07-03.
+- [x] Create avionics/kicad/Jayne/kicads/Jayne.kicad_pcb
+- [x] Run ERC on the schematic — DONE, 0 shorts/net-conflicts, 116 ac…
+- [x] Run DRC on the PCB layout (kicad-cli pcb drc --schematic-parity…
+- [x] SoM-end-state rebuild re-verification — DONE 2026-07-13.
+- [ ] Final component placement (user-reserved) + impedance-controlle…
+- [ ] Generate production-ready Gerber files to avionics/kicad/Jayne/…
+- [x] Update PROJECT_INDEX.md — done in the same session (see PROJECT…
+- [x] Jayne mounting bosses added to head_shell24.scad
+- [x] Flag: same legacy Y-as-dorsal axis bug found in head_shell24.sc…
+- [ ] Flag stale laser bore dimensions:
+- [x] Jayne mounting bosses added to cargo_sect_shell24.scad
+- [ ] Add cargo_tof_cut() and cargo_laser_cut() cutter modules
+- [ ] Local sensor harness (both sites):
+- [ ] External ring harness — nose:
+- [ ] External ring harness — cargo:
+- [ ] Kaylee second 5 V rail — cross-tied, mutually fault-tolerant…
+- [ ] Jayne 5 V harness:
+- [ ] Laser — unify to a single 520 nm green source, Class 2 both sit…
+- [ ] Both Class 2 caps must be hardware-enforced
+- [ ] Nose camera strobe + frame-difference detection
+- [x] *(No longer required — the Rev-A "nose Class 3B mechanical beam…
+- [ ] Do not source
+
+### 1.2a — PCB Design: Wash, Zoe, and Emma (EMI-Hardened Variants)
+→ detail: `avionics/TODO.md` §1.2a
+
+- [x] USB-to-Ethernet bridge (LAN9500A class) evaluated as an alter…
+- [x] Wire second Ethernet (ETH2) on Wash.
+- [x] Separate the two Wash PHYs onto independent MDIO buses
+- [x] Wire the field-connector pins to their signals on Wash
+- [x] Source the 6 GPIO_EXP_A…F signals via an I2C GPIO expander.
+- [x] Add an ESC-PWM output connector for DSHOT0–3.
+- [ ] Reconcile Wash.md §14 field-connector table with the actual P…
+- [ ] Wire the MIL-1553 connector + transformer.
+- [ ] Redesign the tamper mesh as a per-domain anti-tamper mesh (all…
+- [ ] Carry the tamper signal over the link for the TPM-less boards.
+- [ ] Route the rearranged capes.
+- [ ] Clear residual DRC after mesh + routing
+- [ ] Finish Wash PCB (CAPE-A-2) close-out pass:
+- [ ] Add SBUS/UART DIP switch to Wash
+- [ ] Generate Wash gerbers
+- [ ] Generate Zoë gerbers
+- [x] remove Wi-Fi, sik, and loRa antennas from Zoë. Use filtered cho…
+- [x] Re-evaluate space / restore Ethernet to Zoë
+- [ ] Zigbee RF chain was never actually added to Zoë — PCB scope g…
+- [ ] Generate Emma gerbers
+- [ ] FCC Part 15 §15.235 pre-compliance checklist for Emma
+- [ ] EMI isolation validation checklist
+- [ ] Merge claude/cape-em-harsh-variants-9Yfr1 → master
+- [ ] Design Faraday cages / boxes to protect all PCBs
+- [ ] Specify / implement tightly twisted pair bonded shielded wiring…
+
+### 1.3 — PCB Design: XCVR-49MHZ-1 (SUPERSEDED)
+→ detail: `avionics/rev-s1/TODO.md` §1.3
+
+- [x] Resolve DDS choice
+- [x] Evaluate PA options
+- [x] Confirm TCM3105 availability
+- [x] 50 Ω trace impedance check
+- [x] Update PROJECT_INDEX.md
+
+### 1.4 — EMI Hardening Beyond the PCBs (500 W/m^2 environment)
+→ detail: `avionics/emi-hardening/TODO.md` §1.4
+
+- [ ] PB2-I + Wash Enclosure
+- [ ] PB2-I + Zoë Enclosure
+- [x] Resolve total antenna count per stack against the PACE radio ta…
+- [x] Antenna mounts
+- [x] Feedlines
+- [x] Chokes
+- [x] Second 49 MHz antenna for Simon's Medbay
+- [x] Ensure all transceivers have antenna placement and wiring fro…
+- [ ] CAN FD
+- [ ] RS-485
+- [ ] MIL-STD-1553B
+- [ ] Ethernet
+- [ ] UART
+- [ ] I2C
+- [ ] BDSHOT/DSHOT (ESC telemetry)
+- [ ] PWM
+- [ ] Add Kaylee/battery boss pattern to middle_canonical_shell24.sca…
+- [ ] Add ventral battery-swap hatch cut to middle_canonical_shell24.…
+- [ ] Create kaylee_battery_tray.scad.
+- [ ] Create kaylee_pdb_tray.scad.
+- [x] Kaylee PCB KiCad files generated (Rev A, 2026-06-10):
+- [x] Kaylee PCB — DRC run and gerbers generated (Rev A, 2026-06-10):
+- [ ] Update REVN_BUILD_GUIDE_24IN.md Phase 1
 
 ### 1.5 — Documentation
+→ detail: `docs/TODO.md` §1.5
 
-- [x] **1.5.1 `serenity-rev-p.jsx`** — comprehensive 11-tab standalone Rev P specification created: Overview, Airframe, Propulsion, Avionics, Comms, Cargo, Security, Regulatory, BOM, Files, Build Status. Supersedes serenity-rev-o.jsx as current spec. *(done 2026-06-01)*
+- [x] 1.5.1 serenity-rev-p.jsx
+- [x] 1.5.2 Wash: rename + dual Ethernet PHY
+- [x] 1.5.3 Zoë: rename + Ethernet PHY
+- [x] 1.5.4 Wash: add missing field connectors
+- [x] 1.5.5 Zoë: add missing field connectors
+- [ ] Update PHASED_BUILD_GUIDE.md
+- [ ] 1.5.6 Rebuild Graphical Buiild Guide
+- [ ] Sync bom_revO.json ↔ bom_revO.csv
+- [x] Create bom_revQ.json + bom_revQ.csv
 
-- [x] **1.5.2 Wash: rename + dual Ethernet PHY** — Board renamed to "Wash"
-    throughout schematic and Markdown. Added 2× EMI-hardened DP83825I PHYs (J_ETH1, J_ETH2):
-    HX1188NL magnetics, SRF2012-100Y CMC, PRTR5V0U2X TVS, TPS62933 1.8V supply per PHY.
-    RMII0→PHY1 (PHY addr 0x01), RMII1→PHY2 (PHY addr 0x02). MDC/MDIO shared.
-    CAPE-A-2.md §1 updated from "PHY removal" to "EMI-hardened dual Ethernet PHY". *(done 2026-06-07)*
+### 1.6 — Rev Q: Repo-Wide Architecture Propagation
+→ detail: `docs/TODO.md` §1.6
 
-- [x] **1.5.3 Zoë: rename + Ethernet PHY** — Board renamed to
-    "Zoë". Added 1× EMI-hardened DP83825I PHY (J_ETH_B): HX1188NL magnetics,
-    SRF2012-100Y CMC, PRTR5V0U2X TVS ×2, TPS62933 1.8V supply. RMII0 interface, PHY addr 0x01.
-    CAPE-B-2.md §1 updated from "PHY removal" to "EMI-hardened Ethernet PHY". *(done 2026-06-07)*
+- [x] 1.6.1 Rev Q documentation propagation
 
-- [x] **1.5.4 Wash: add missing field connectors** — Connector audit found J_PWR,
-    J_CAN, J_485, J_1553, J_GPS, J_SERVO, J_ESC absent from schematic despite protection circuits
-    being present. All 7 connectors added (JST SM03B/SM04B/SM05B/SM06B-GHS-TB-1MP series). §14
-    field connector table added to CAPE-A-2.md. *(done 2026-06-07)*
+### 1.7 — Rev R: Component Revision Synchronisation + s_ Prefix Removal
+→ detail: `docs/TODO.md` §1.7
 
-- [x] **1.5.5 Zoë: add missing field connectors** — J_PWR, J_CAN, J_485,
-    J_1553 added to schematic (JST SM03B/SM04B-GHS-TB-1MP). §14 field connector table added to
-    CAPE-B-2.md. *(done 2026-06-07)*
-
-- [ ] **Update PHASED_BUILD_GUIDE.md** from Rev M 18-inch to Rev S 24-inch specifications
-    (hull 609.6 mm, 50mm EDFs, v2·v2·v2·v2 node placement, Rev S power system, cargo system).
-
-- [ ] **1.5.6 Rebuild Graphical Buiild Guide**
-
-    - Create updated `graphical-build-guide/` (38 SVGs) from Blender/FreeCAD-derived platform   graphics, replacing the pre-Rev-N hand-drawn line art.** Two stale-geometry problems,
-    not one:    - The 26 numbered `build_guide_XX_*.svg` step cards (antenna placement, node install,
-    inter-board wiring, first flight, etc.) are hand-drawn schematic line art — the
-    airframe silhouettes in them were never derived from actual model geometry at all,
-    and (per the §0.5 audit above) several depict the **archived** Cape-A-1/Cape-B-1
-    hardware instead of the Rev R1 Wash/Zoë baseline
-    (`build_guide_09_avionics.svg`, `build_guide_11_inter_board.svg`,
-    `build_guide_12_security_hw.svg`, `build_guide_20_node_placement.svg`,
-    `build_guide_21_node_install.svg`, `build_plan.svg`, `components_overview.svg`) —
-    this item supersedes that follow-up.
-    - The existing partial outline-derivation pipeline
-    (`graphical-build-guide/gen_hull_outlines.py`, `update_overview_paths.py`) only
-    covers the 4 `overview_*.svg` files, and sources from
-    `thingverse-serenity/files-hollowed-18in/` — pre-Rev-N 18-inch geometry, not the
-    current Rev R1 24-inch baked hull-frame STLs in `airframe/stls/`.
-    - **Approach:** render the current canonical geometry (baked `airframe/stls/` per
-    CLAUDE.md's Hull-Frame Coordinate Standard, or directly from
-    `airframe/freecad/assembly/SerenityAssembly.FCStd` / `serenity_assembly.py`) using
-    Blender (`airframe/blender-scripts/serenity_render_views.py` already does isometric/
-    cardinal renders and is the natural starting point) or FreeCAD TechDraw, and use
-    those renders/silhouettes as the new base art for every card, in place of hand-drawn
-    shapes. Re-verify all standards citations and hardware depictions added in §0.5
-    survive the rebuild (don't lose the `[REF-ID]` work doing this).
-    - Large, multi-file effort — scope into phases (e.g. overview cards first, then
-    per-system build-guide cards) before starting; do not attempt as one pass.
-
-- [ ] **Sync `bom_revO.json` ↔ `bom_revO.csv`** — verify all XCVR-49MHZ-1 BOM items (Phase 5
-    above) are reflected in both files once XCVR-49MHZ-1 Phase 5 is complete.
-
-- [x] **Create `bom_revQ.json` + `bom_revQ.csv`** — Rev Q BOM: replace all v1 cape procurement
-    quantities with v2 equivalents (4× Wash, 4× Zoë, 4× Emma). Remove Cape-A-1,
-    Cape-B-1, XCVR-49MHZ-1 line items.
-
----
-
-### 1.6 — Rev Q: Repo-Wide Architecture Propagation (2026-06-07)
-
-- [x] **1.6.1 Rev Q documentation propagation** — Updated all project documentation from Rev P
-    (v2·v1·v1·v2 mixed placement) to Rev Q (v2·v2·v2·v2 uniform EMI-hardened placement across
-    all 8 avionics nodes). Changes include:
-
-    - **TODO.md**: Rev P → Rev Q; node placement updated; §1.2a procurement updated to 4× Wash,
-        4× Zoë, 4× Emma; Phase 6 / Phase 7 installation steps updated to v2 capes;
-        procurement tables updated; Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 retired from active BOM.
-
-    - **CLAUDE.md**: Rev Q already reflected (v2·v2·v2·v2, archive notes).
-
-    - **README.md**: Rev Q already reflected (updated prior to this commit).
-
-    - **POWER_SYSTEM_Q.md** (`docs/`): written at Rev Q baseline.
-
-    - **AVIONICS_PB2_REDESIGN.md**: Rev Q node placement already reflected.
-    *(done 2026-06-07)*
-
-### 1.7 — Rev R: Component Revision Synchronisation + s_ Prefix Removal (2026-06-11)
-
-- [x] **1.7.1 Rev R propagation to all active files** — Updated all project-level revision headers
-    from Rev Q → Rev R (2026-06-11). Changes include: README.md battery spec table, all five
-    fuselage SCAD changelog entries, all GCS Malcolm firmware headers (Q1→R1), FreeCAD assembly
-    scripts, avionics firmware README, ENC-NACELLE-1.md, and 18 GCS Malcolm source files.
-    *(done 2026-06-11)*
-
-- [x] **1.7.2 Component revision synchronisation** — All component-level revision designations
-    updated to Rev R per CLAUDE.md: "All components are referenced as of the latest revision."
-    - Nacelle gear train (Rev O → Rev R): nacelle_nozzle_iris, nacelle_bevel_housing, nacelle_bevel_pair,
-        nacelle_pinion, nacelle_sector_gear
-    - EDF sleeves (Rev A → Rev R): edf_stator_sleeve, edf_aft_spider_sleeve
-    - Nacelle pod/nozzle (Rev T/T2 → Rev R): nacelle_pod_50mm_tandem, nacelle_pod_50mm_tandem_simple,
-        nacelle_nozzle_straight
-    - Wings/pylon (Rev O → Rev R): wings_s1223_revo, wing_nacelle_pylon_revo
-    - Cargo shell: Rev R baseline entry prepended to S4 changelog
-    - Servo bracket: Rev R baseline entry prepended to S1 entry
-    - Avionics: Wash.md, Kaylee.md, XCVR-49MHZ-2.md Rev A → Rev R; Zoë.md, Zoë.kicad_sch,
-        Kaylee.kicad_pcb, gen_kaylee.py, gen_kaylee_pcb.py updated.
-    *(done 2026-06-11)*
-
-- [x] **1.7.3 Remove `s_` prefix from all SCAD and STL filenames** — Removed leading `s_` from
-    11 SCAD files and 19 STL files across `airframe/openscad/`, `airframe/stls/`, and
-    `deferred/aft-edf/`. Updated all references in 37 active text files (Python, Markdown, JSON,
-    SCAD, shell scripts, Makefile, JSX). Archive files and historical BOMs (bom_revP.json,
-    bom_revQ.json) intentionally not modified.
-    *(done 2026-06-11)*
+- [x] 1.7.1 Rev R propagation to all active files
+- [x] 1.7.2 Component revision synchronisation
+- [x] 1.7.3 Remove s_ prefix from all SCAD and STL filenames
 
 ### 1.8 — Names
+→ detail: `avionics/TODO.md` §1.8
 
-- [x] The ground control station is named "Malcolm" aka "CAPT Reynolds" or "CAPT Tight Pants" - "I aim to misbehave" *(implemented throughout all docs)*
-
-- [x] The Flight Control Avionics Cape is named "Wash" - "I'm a leaf on the wind" *(implemented: CAPE-A-2.kicad_sch, CAPE-A-2.md, all docs)*
-
-- [x] The Comms/Logging/Payload Cape is named "Zoë" - "Big Damn Heros, sir." *(implemented: CAPE-B-2.kicad_sch, CAPE-B-2.md, all docs)*
-
-- [x] The Power Distribution Board is named "Kaylee" - "Everything is shiny." *(implemented: Kaylee.md, PWR-DIST-1.kicad_sch)*
-
-- [x] The Cargo handling system is named "Jayne" - "I was aiming for his head." *(implemented: README.md §Cargo Handling — Jayne, CLAUDE.md, generate_placeholders.py, middle_canonical_shell24.scad)*
-
-- [x] The forward avionics bay is named "Shepherd's room" (Bay A) - "I have heathens enough right here." *(implemented 2026-06-07)*
-
-- [x] The second avionics bay is named "Inara's shuttle" (Bay B) - "Mal, I will never understand you." *(implemented 2026-06-07)*
-
-- [x] The third avionics bay is named "River's room" (Bay D) - "Also, I can kill you with my mind." *(implemented 2026-06-07)*
-
-- [x] The aft avionics bay is named "Simon's medbay" (Bay E) - "What did they do to you?" *(implemented 2026-06-07)*
+- [x] The ground control station is named "Malcolm" aka "CAPT Reynold…
+- [x] The Flight Control Avionics Cape is named "Wash" - "I'm a leaf…
+- [x] The Comms/Logging/Payload Cape is named "Zoë" - "Big Damn Heros…
+- [x] The Power Distribution Board is named "Kaylee" - "Everything is…
+- [x] The Cargo handling system is named "Jayne" - "I was aiming for…
+- [x] The forward avionics bay is named "Shepherd's room" (Bay A) - "…
+- [x] The second avionics bay is named "Inara's shuttle" (Bay B) - "M…
+- [x] The third avionics bay is named "River's room" (Bay D) - "Also,…
+- [x] The aft avionics bay is named "Simon's medbay" (Bay E) - "What…
 
 ### 1.9 — Avionics Workload Balancing
-
-- While all Wash capes are identical and all Zoë capes are also identical, they have different primary tasking.  **All Stacks are capable to communicate and control the UAV safety in a benign environment on their own.***
-
-- UAV Tasks with PACE prioritization and failover per stack (primary, alternative, contingency, emergency)
-
--- Watchdog: P - Shepherd; A - Inara; C - Simon, E - River
-
--- Comms: P - Inara; A - Shepherd; C - River; E - Simon
-
--- Flight Control: P - River; A - Simon; C - Shepherd; E - Inara
-
--- Payload Control: P - Simon; A - River; C - Inara; E - Shepherd
-
----
-
-- Mal is the ground control station - He's the boss.
-
-- Shepherd is the crew's conscience and therefore takes care of primarily watchdog, fault detection, failover, and authentication. His stack has SiK primary and Wi-Fi secondary.
-
-- Inara has primarily camera, external sensors, and high bandwidth ground communication.  Her stack is connected to  Wi-Fi primarily and LoRa secondary.
-
-- River provides primary control of the forward EDFs, and provides EDF and nacelle control command and syncing, and the most resilient comms.  She may be crazy, but she comes through when no one else can.  She has 49 MHz (Part 15 §15.235) primary and LoRa secondary.
-
-- Simon is the alternate watchdog for the ship, but most of his attention is on River.  He's got aft EDF control and alternate nacelle control. He follows River's lead but makes sure she doesn't crash the ship. Simon also controls Jayne, and ensures that the cargo isn't jettisoned or the crew abandoned. He's got 49MHz as his primary antenna and SiK as his backup.
+→ detail: `avionics/TODO.md` §1.9
 
 ---
 
 ## 2.0 — Procurement (Before Physical Build)
 
-Order components after all Phase 0 STLs are confirmed printable in slicer. Long-lead items should be ordered concurrently with PCB fabrication.
-
-### 2.1 — Filament and CF Stock (needed for Phase 0)
-
-| Item | Qty | Notes |
-|------|-----|-------|
-| PETG filament | ~1,200 g | Access panels, nozzle parts, cargo gondola — **TODO: recompute split, hull sections moved to CF-PETG row below per CLAUDE.md Fabrication Standards** |
-| CF-PETG filament | ~500 g | Hull sections (head, middle, cargo, rear neck, wings), nacelle pods, tilt brackets, pylon, intake frame — hardened-steel nozzle required |
-| TPU 95A filament | ~200 g | Landing skid feet — direct-drive extruder required |
-| CF flat bar 6×3mm | ~700 mm | Keel 620 mm + 80 mm ring frame offcuts |
-| CF tube 12mm OD / 1.5mm wall | ~850 mm | Wing spars 2×380 mm + 90 mm scrap |
-| CF solid rod 4mm OD | ~300 mm | Pivot rods (2× nacelle) per pivot housing drawing |
-| CF plate 2mm | 250×150 mm | Ring frames (5 stations per drawing) |
-
-### 2.2 — Structural Hardware (Phase 1)
-
-| Item | Qty | Notes |
-|------|-----|-------|
-| West System 105/206 epoxy | 1 kit | Keel + spar bonding; structural joints |
-| 5-minute epoxy syringe 25mL | 3× | Access frames, sensor mounts |
-| X-30 PU foam 2-part | ~600 mL | 2 lb/ft³, 4× expansion, 2-min pot life |
-| EPS blue foam board 25mm | 500×250 mm | Void formers A–E; Owens Corning Foamular 150 |
-| Johnson's Paste Wax | 1 tin | Void former release agent (2 coats) |
-| 3M 4016 closed-cell gasket tape | 1 roll | Access panel frame lips |
-| PTFE tube 5mm OD × 3mm ID | 6 m | 8 conduits (CAN FD, RS-485, 1553A, 1553B, ETH×2, SERVO-PWR, MAIN-PWR) |
-| M2.5 nylon hex standoff 6mm | 16× | Cape-B floor mounts (4 per bay × 4 bays) |
-| M2.5 nylon hex standoff 20mm | 16× | Cape-A inter-cape spacing |
-| M2.5 × 8mm SS button screws | 64× | Standoff attachment + panel B/E fasteners |
-| M3 heat-set threaded inserts | 4× | Cargo gondola belly hard points |
-| N42 neodymium disc magnet 6×2mm | 8× | Panel D (4 in frame + 4 in lid) |
-| SMA panel-mount bulkhead | 3× | SiK 915MHz (belly) + LoRa 915MHz (belly) + Wi-Fi (dorsal fwd) |
-| 0.3mm stainless wire or 22AWG enamelled Cu | ~500 mm | 49 MHz (Part 15 §15.235) top wire |
-| Ceramic bead insulator 3mm ID | 1× | Aft end of 49MHz wire (insulated/open end) |
-
-### 2.3 — Propulsion System (Phases 2–4)
-
-| Item | Qty | Approx. Cost | Notes |
-|------|-----|-------------|-------|
-| 50mm EDF @ 6S (budget tier) | 4× | ~$25–40ea | 2 per nacelle, tandem; verify OD fits 55–56mm ID bore |
-| 40A 6S BLHeli32 BDSHOT ESC | 4× | ~$18–25ea | 1 per nacelle EDF |
-| 55mm 6S EDF (~1,500 gf) | 1× | ~$35–55 | Fuselage rear; canonical tail nozzle; **Phase 11 deferred** |
-| 50A 6S BLHeli32 ESC | 1× | ~$18–28 | Fuselage EDF; **Phase 11 deferred** |
-| Digital tilt servo ≥25 kg·cm @ 6V, metal gear | 2× | ~$20–30ea | Nacelle tilt; prefer 30+ kg·cm |
-| SG90 micro servo | 2× | ~$3ea | Nacelle nozzle ×2 (redundant) |
-| SG90-class proportional valve servo | 4× | ~$3ea | RCS bleed jets; **Phase 11 deferred** |
-| MF104ZZ flanged bearing 4×10×4mm | 4× | ~$8 total | 2 per nacelle pivot |
-| 4mm OD CF rod (pivot) | 2× cut lengths | — | From 2.3 CF stock above |
-| Steel pushrod 2mm OD × ~60mm | 2× | ~$3 total | Longitudinal nozzle shaft per nacelle |
-| Steel pushrod 2mm, Z-bend ends | 2× | ~$4 total | Tilt servo pushrod |
-| M2 clevis links | 4× | ~$3 total | Servo-to-pushrod |
-| 3mm×18mm SS dowel pins (PIN-3X18) | 16× | ~$10 total | 8 per nacelle; Rev S nozzle flap tangential hinges |
-| 2mm×4mm SS dowel pins (PIN-2X4) | 16× | ~$6 total | 8 per nacelle; Rev S flap cam followers (replace the retired piano-wire link ring) |
-| WS2812C-2020 addressable LED | 6× | ~$6 total | Nav lights |
-| XT90 PDB, 4× XT30 outputs | 1× | ~$12 | Power distribution |
-| XT90 battery pigtail | 1× | ~$5 | Battery lead |
-| 5V 5A switching BEC | 1× | ~$8 | Avionics power rail |
-| 14AWG silicone wire | 1 m | ~$6 | Main bus |
-| 16AWG silicone wire | 0.5 m | ~$4 | ESC signal + fuselage taps |
-| 6S 4000mAh LiPo battery | 1× | ~$55–70 | Phase 6 first flight |
-
-### 2.4 — Avionics (Phase 6 — 4-node minimum viable)
-
-*Rev R: all nodes use v2 EMI-hardened capes. Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 are retired.*
-
-| Item | Qty | Unit Cost | Total | Notes |
-|------|-----|----------|-------|-------|
-| PocketBeagle 2 Industrial (AM6254) | 4× | $51.03 | ~$204 | DK 2820-100003007-ND |
-| Wash (Wash) PCB (JLCPCB assembled) | 2× | ~$55 | ~$110 | FC1/Shepherd's room (Bay A) + FC2/Inara's shuttle (Bay B) (v2, EMI-hardened) |
-| Zoë (Zoë) PCB (JLCPCB assembled) | 2× | ~$95 | ~$190 | CN1/Shepherd's room (Bay A) + CN2/Inara's shuttle (Bay B) (v2, EMI-hardened) |
-| Emma PCB (JLCPCB assembled) | 2× | ~$25 | ~$50 | 49 MHz (Part 15 §15.235) sub-module for CN1, CN2 (v2 EMI-hardened) |
-| SiK 915MHz ground station radio | 1× | ~$15 | ~$15 | MAVLink GCS link |
-| microSD 64GB (log, write-blocked) | 2× | ~$10 | ~$20 | CN1-LOG, CN2-LOG |
-| JST-GH cables: CAN 3-pin, RS-485 3-pin, ETH 6-pin, 1553 4-pin, GPS 5-pin | assorted | — | ~$20 | Per §14 connector table |
-| USB-UART adapter (CP2102) | 1× | ~$8 | ~$8 | Debug console (one-time tool) |
-| 3M double-sided foam tape | 1× | ~$5 | ~$5 | ESC and node mounting |
-| Zip ties 100mm + 200mm | 1 bag | ~$4 | ~$4 | Wire management |
-
-### 2.5 — Avionics (Phase 7 — remaining 4 nodes + ToF arrays)
-
-*Rev Q: all Phase 7 nodes also use v2 EMI-hardened capes.*
-
-| Item | Qty | Approx. Cost | Notes |
-|------|-----|-------------|-------|
-| PocketBeagle 2 Industrial (AM6254) | 4× | ~$204 | CN3, FC3, CN4, FC4 |
-| Wash (Wash) PCB (JLCPCB assembled) | 2× | ~$110 | FC3/River's room (Bay D) + FC4/Simon's medbay (Bay E) (v2) |
-| Zoë (Zoë) PCB (JLCPCB assembled) | 2× | ~$190 | CN3/River's room (Bay D) + CN4/Simon's medbay (Bay E) (v2) |
-| Emma PCB (assembled) | 2× | ~$50 | CN3, CN4 (v2 EMI-hardened) |
-| microSD 64GB (log) | 2× | ~$20 | CN3-LOG, CN4-LOG |
-| VL53L5CX 8×8 ToF sensor | 12× | ~$84 | Dual OA arrays |
-| TCA9548A 8-ch I²C multiplexer | 2× | ~$3 | One per array host |
-| MCP23008 8-port I²C GPIO expander | 2× | ~$2.40 | XSHUT control |
-| JST-SH1.0 4-wire sensor cable 300mm | 12× | ~$12 | ToF sensor leads |
-| 5mm PMMA disc 0.5mm thick | 12× | ~$6 | ToF aperture covers |
-| UV adhesive | 1× | ~$6 | ToF aperture seal |
-| JST-GH cables (remaining bus segments) | assorted | ~$20 | Ring completion |
-
-### 2.6 — Cargo System (Phase 8)
-
-| Item | Qty | Approx. Cost | Notes |
-|------|-----|-------------|-------|
-| N20 DC motor 6V 300:1 | 1× | ~$8 | Winch drive |
-| DRV8833 dual H-bridge driver | 1× | ~$2 | |
-| SG90 servo | 2× | ~$6 | Door actuator + payload release |
-| Dyneema SK75 0.5mm braid | 2 m | ~$4 | Winch line |
-| 3mm CF rod | ~60 mm | — | Clamshell door hinge pin |
-| Closed-cell foam gasket tape | — | — | Gondola-to-hull perimeter seal |
+BOM tables (not checkbox tasks) — referenced, not duplicated here:
+- §2.1 Filament and CF Stock → `airframe/TODO.md`
+- §2.2 Structural Hardware → `airframe/TODO.md`
+- §2.3 Propulsion System → `airframe/TODO.md`
+- §2.4 Avionics (Phase 6, 4-node minimum viable) → `avionics/TODO.md`
+- §2.5 Avionics (Phase 7, remaining 4 nodes + ToF arrays) → `avionics/TODO.md`
+- §2.6 Cargo System → `airframe/TODO.md`
 
 ---
 
 ## 3.0 — Physical Build
 
-**Dependency:** All items in Section 1.0 (STL exports) must be complete before Phase 0.  
-**PCB fab lead time:** ~7–14 days for JLCPCB assembled boards — order after 1.2 gerber regen and 1.3 Phase 5 are complete; boards arrive during physical Phases 0–5.
+### Phase0 — Print All Parts + CF Cuts
+→ detail: `graphical-build-guide/TODO.md` §Phase0
 
-### Phase 0 — Print All Parts + CF Cuts
-
-**Goal:** Every printed part complete and dry-fitted before first epoxy joint.
-
-**Pre-print documentation (complete before any fabrication begins):**
-
-- [x] **Flight Envelope Document** *(resolved 2026-07-12)* — created
-    `docs/flight_envelope.md`:
-
-    - [x] V_min vs. nacelle tilt angle — computed from wing area (19,025 mm², both wings), S1223 CL_max≈2.0, and nacelle thrust fraction; table at −5°/0°/10°/20°/30°/θ_hover≈38.3°/60°/90°/120°/140°; V_min=66.3 kt at 0° down to 0 kt (thrust-borne) at and above θ_hover
-
-    - [x] V_max — regulatory ceiling 87 kt [REF-FAA-002 §107.51(a)]; EDF RPM ceiling carried from the existing `governor_config.h` EDF_RPM_MAX_50MM=35,000 RPM software redline (not converted to an airspeed — no validated drag polar exists); wing-spar structural order-of-magnitude check (≈811 kt) shown not to be the binding constraint.
-      Actual achievable top speed explicitly left to Phase 9 flight test, not asserted here.
-
-    - [x] Altitude operating limits — AGL 400 ft [REF-FAA-002 §107.51(b)]; MSL/density-altitude T/W margin computed (≈15,000 ft density altitude before T/W<1.0), a first-order estimate
-
-    - [x] Maximum demonstrated crosswind — honestly marked pending Phase 9 flight test (no fabricated kt figures); computed engineering bound instead (hover max bank angle φ≈51.7° from T/W margin) plus the existing Phase 9 WBS ≥10 kt acceptance target
-
-    - [x] Transition corridor — documented pre-flight-test operational floor of 20 ft (6.1 m) AGL (>12× margin over the Phase 9 ≤0.5 m excursion tuning target) to initiate a 90°→0° sweep, pending flight validation
-
-- [x] **Failsafe Threshold Document** *(resolved 2026-07-12)* — created
-    `docs/failsafe_thresholds.md` and `avionics/firmware/common/include/failsafe_config.h`:
-
-    - [x] Battery low-voltage alert / RTL cutoff — **correction: the "3.7V/cell alert, 3.5V/cell RTL cutoff" defaults above are superseded.** `avionics/firmware/fc/src/pwr_fault.h` and `docs/POWER_DISTRIBUTION.md` §8.1 already implement and document a real WARN(3.50V)/CRITICAL(3.30V, RTL trigger)/EMERGENCY(3.00V) state machine, predating this WBS item's placeholder defaults.
-      The new doc uses and cites the real, already-implemented values rather than the stale defaults (no firmware/doc change needed — this item was already done elsewhere, just not cross-referenced)
-
-    - [x] Node heartbeat timeout for master re-election — 100ms, `FAILSAFE_CANFD_HEARTBEAT_TIMEOUT_MS` in the new `failsafe_config.h`
-
-    - [x] Radio loss timer before automatic RTL — 5s SiK/LoRa, 10s 49 MHz (Part 15 §15.235), both newly defined in `failsafe_config.h`. **Open gap found and flagged (not fabricated):** Wi-Fi and Zigbee have no assigned RTL timer anywhere in the repository — new follow-up item below.
-
-    - [x] ESC thermal cutback (85°C) / shutdown (95°C) — newly defined in `failsafe_config.h` as the Phase 0 documentation-gate design target.
-      **Open reconciliation flagged (not silently applied):** `governor_config.h` already implements a single-stage `EDF_ESC_OVERTEMP_C=100` hard cutoff with no cutback stage; reconciling the two is a live-firmware safety-logic change and is deliberately left as a new follow-up item below rather than made in this documentation pass.
-
-    - [x] ToF obstacle avoidance halt (1.0m) / resume (1.5m) clearance — newly defined in `failsafe_config.h`; both well within the VL53L5CX's 4 m rated range (`REFERENCES.md` REF-SENSOR-002 note)
-
-    - [x] All thresholds defined as compile-time constants in `avionics/firmware/common/include/failsafe_config.h` (actual path; the WBS item's shorthand `firmware/common/failsafe_config.h` omitted the `avionics/` prefix used throughout the rest of the tree)
-
-    - [ ] **New follow-up:** assign Wi-Fi (5 GHz) and Zigbee (2.4 GHz) link-loss RTL timers (currently no timer exists for either link, unlike SiK/LoRa and 49 MHz above) and add them to `failsafe_config.h` + `docs/failsafe_thresholds.md` §2.2.
-
-    - [ ] **New follow-up:** reconcile `governor_config.h`'s existing single-stage `EDF_ESC_OVERTEMP_C=100` hard cutoff with the new two-stage 85°C cutback / 95°C shutdown scheme in `failsafe_config.h` — decide whether to add the cutback stage to `governor_config.h`'s live control loop and whether the existing 100°C hard fault should move to 95°C, then implement.
-
-    - [ ] **New follow-up:** add a `REFERENCES.md` REF-ID for the VL53L5CX obstacle-avoidance sensor (currently only mentioned informally inside the REF-SENSOR-002 entry's comparison note).
-
-- [x] **Electrical Fault Margin Validation** *(resolved 2026-07-12 — mostly
-    already done, just not previously cross-referenced)* — created
-    `docs/electrical_fault_margins.md` as a pointer document; three of the
-    four checks were already fully analyzed in `docs/POWER_DISTRIBUTION.md`
-    §9/§11 before this WBS item was picked up:
-
-    - [x] Maximum ESC short-circuit current / fuse break time — already covered, `docs/POWER_DISTRIBUTION.md` §9.1 (40A mini-blade + 10AWG, correctly coordinated).
-      **Correction: this WBS item's "XT30 + 100A poly fuse" reference is stale** — no 100A poly/PTC fuse exists anywhere in the current design (`current-specification/bom_revS.csv` specifies `FUSE-ESC-40A`, a 40A mini-blade, per ESC); flagged in the new doc rather than silently rewritten here.
-
-    - [x] BEC brown-out threshold ≥4.90V — already covered, `docs/POWER_DISTRIBUTION.md` §9.2 (exact match to this item's target)
-
-    - [x] Main bus fuse sizing — already covered, `docs/POWER_DISTRIBUTION.md` §9.4 (150A MAXI, 165A peak = 110%, >60s to trip; slightly more conservative than this item's own 160A peak estimate since it also accounts for simultaneous radio TX load)
-
-    - [x] Balance of plant / single PWR conduit tap loss — **newly analyzed** (had no prior write-up): `docs/electrical_fault_margins.md` §4 documents that SMPS-channel-level redundancy exists (diode-OR'd dual TPS54620, `POWER_DISTRIBUTION.md` §11) but wiring-level rail-segment redundancy does NOT.
-      That gap is covered architecturally by PACE avionics-role failover (root `CLAUDE.md`), not by the power wiring itself. Stated plainly rather than glossed over.
-
-    - [ ] Balance of plant: verify that loss of any single PWR conduit tap does not collapse the 5V avionics rail (BEC must tolerate single-segment loss)
-
-**Printer setup:**
-
+- [x] Flight Envelope Document
+- [x] Failsafe Threshold Document
+- [x] Electrical Fault Margin Validation
 - [ ] Install hardened-steel nozzle (CF-PETG abrades brass)
-
 - [ ] Calibrate E-steps and Pressure Advance for each filament
-
 - [ ] Dry all filament 6 h at 65°C before printing
-
-**Print schedule (ordered to minimize reprints):**
-
-| Part | Material | Layer | Infill | Qty | Notes |
-|------|----------|-------|--------|-----| ------ |
-| feet_x_4_scaled24.stl | TPU 95A | 0.25mm | 40% | 1 set | |
-| legs_scaled24.stl | CF-PETG | 0.15mm | 30% | 1 | |
-| head_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | |
-| middle_canonical_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | |
-| cargo_sect_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | |
-| rear_neck_intake_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | Print now; cover reduced-area scoop windows (sized for 55mm EDF) with removable 3mm PETG blanks until Phase 11 |
-| wings_s1223_revo.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | |
-| eng_left_stator_shell24_revo.stl | CF-PETG | 0.15mm | 25% gyroid, 4 walls | 1 | |
-| eng_right_stator_shell24_revo.stl | CF-PETG | 0.15mm | 25% gyroid, 4 walls | 1 | |
-| s_eng_piv_outer_scaled24.stl | CF-PETG | 0.15mm | 40%, 4 walls | 2 | |
-| s_eng_piv_pins_scaled24.stl | CF-PETG | 0.15mm | 40% solid, 4 walls | 2 | |
-| s_pivot_arm_a_scaled24.stl | CF-PETG | 0.15mm | 40%, 4 walls | 2 | |
-| s_eng_pistons_scaled24.stl | PETG | 0.20mm | 20% gyroid | 2 | |
-| wing_nacelle_pylon_revo.stl | CF-PETG | 0.15mm | 40%, 4 walls | 2 | |
-| nacelle_nozzle_petal.stl | PETG + translucent-blue inner | 0.20mm | 20% gyroid | 16 | |
-| nacelle_nozzle_ring.stl | CF-PETG | 0.15mm | 40% | 2 | |
-| nacelle_nozzle_iris.stl | PETG | 0.12mm | 40% | 2 | |
-| rear_nozzle_canonical.stl | CF-PETG | 0.15mm | 30%, 4 walls | 1 | **DEFERRED — Phase 11.** Fixed canonical elliptical tail nozzle (2.06×1.76 in / 52.3×44.7 mm exit); replaces the old iris rear_nozzle_frame/petal. Requires regeneration for 55mm + canonical geometry — see §Phase 11. |
-| rcs_thruster_nozzle.stl | CF-PETG | 0.15mm | 40%, 4 walls | 4 | **DEFERRED — Phase 11.** RCS bleed-air jet nozzle; fed from aft EDF plenum. Requires generation — see §Phase 11. |
-| rcs_distribution_manifold.stl | PETG | 0.20mm | 30% | 1 | **DEFERRED — Phase 11.** Splits ~15% EDF mass flow to the 4 RCS proportional valves. Requires generation — see §Phase 11. |
-| rcs_valve_bracket.stl | CF-PETG | 0.15mm | 40% | 4 | **DEFERRED — Phase 11.** SG90-class proportional valve mount, one per RCS jet. Requires generation — see §Phase 11. |
-| nacelle_sector_gear.stl | CF-PETG | 0.12mm | 40%, 4 walls | 2 | |
-| nacelle_pinion.stl | PETG or resin | 0.12mm | 40% | 4 | |
-| nacelle_bevel_pair.stl | PETG or resin | 0.12mm | 40% | 2 sets | |
-| nacelle_bevel_housing.stl | CF-PETG | 0.15mm | 40% | 2 | |
-| rcrs49_wire_post.stl | PETG | 0.15mm | 40% | 2 | |
-| Access panel frames A–F + lids | PETG | 0.20mm | 100% | 1 set | |
-| s_cargo_gondola_shell.stl | PETG | 0.20mm | 15% gyroid | 1 | |
-| cargo_door_port.stl | CF-PETG | 0.15mm | 40%, 4 walls | 1 | Generated (PR #22) — reprint if hinge changes |
-| cargo_door_stbd.stl | CF-PETG | 0.15mm | 40%, 4 walls | 1 | Generated (PR #22) — reprint if hinge changes |
-| cargo_cradle_autolatch.stl | PETG | 0.20mm | 30% | 1 | Already generated (PR #21) — reprint if dimensions change |
-| cargo_winch_spool.stl | PETG | 0.20mm | 40% | 1 | Already generated (PR #21) — reprint if dimensions change |
-| nacelle_servo_bracket.stl | CF-PETG | 0.15mm | 40%, 4 walls | 2 | One per nacelle; from `airframe/openscad/nacelles/nacelle_servo_bracket.scad` (Rev R). Print with channel mouth up; no supports needed. VERIFY M3 hole ±17.5×±8 mm pattern matches NSVMT inserts in slicer before printing. |
-| inara_access_cover.stl | PETG (Cu-foil lined) | 0.20mm | 40% | 1 | Faraday tray lid for Inara bay; 105×75 mm footprint, 5 mm shoulder, Ø38 mm GPS bore offset −13.3 mm Z from cover centre. SCAD not yet created — **BLOCKS printing.** |
-| river_access_cover.stl | PETG (Cu-foil lined) | 0.20mm | 40% | 1 | Faraday tray lid for River bay; 105×75 mm footprint, 5 mm shoulder, Ø38 mm GPS bore at +0.7 mm Z from cover centre. SCAD not yet created — **BLOCKS printing.** |
-| kaylee_battery_tray.stl | CF-PETG | 0.15mm | 40%, 4 walls | 1 | Battery slide-in rail tray for 6S 4000 mAh LiPo; keel mount at 190 mm station. SCAD not yet created — **BLOCKS Phase 1.** |
-| kaylee_pdb_tray.stl | CF-PETG | 0.15mm | 40%, 4 walls | 1 | Kaylee PDB mount tray; keel area, middle section. SCAD not yet created — **BLOCKS Phase 1.** |
-
-**CF cuts:**
-
-| Part | Material | Dimension | Notes |
-|------|----------|-----------|-------|
-| Keel | CF flat bar 6×3mm | 620 mm | Mark datums at 91, 165, 251, 320, 388mm from nose |
-| Wing spars | CF tube 12mm OD / 1.5mm wall | 2× 380 mm | Sand spar ends to fit wing-root pockets |
-| Pivot rods | CF solid rod 4mm OD | 2× cut per pivot housing drawing | Deburr; press-fit into MF104ZZ bearings |
-| Ring frames | CF plate 2mm | 5 profiles per station drawing | Fit to keel slot-notches |
-
-**Phase 0 checks:**
-
 - [ ] Nacelle bore caliper: 55.0–56.0 mm ID at Z=10 mm and Z=80 mm
-
-- [ ] Stator fins visible in Z=53–95 mm gap (between the two EDF seats)
-
+- [ ] Stator fins visible in Z=53–95 mm gap (between the two EDF seat…
 - [ ] Hub bore clear at stator: 16 mm ID minimum (motor leads)
-
 - [ ] Sector gear ↔ pinion dry-mesh: 0.1–0.2 mm backlash
-
-- [ ] Unison ring gear seats flush in the throat housing; the 8 flaps hinge freely on their 3mm×18mm tangential pins and each follower pin rides its spiral cam slot smoothly (no binding across the full 0°→90° sweep)
-
-- [ ] 4mm CF pivot rod slides through pivot housing with MF104ZZ bearings seated
-
+- [ ] Unison ring gear seats flush in the throat housing; the 8 flaps…
+- [ ] 4mm CF pivot rod slides through pivot housing with MF104ZZ bear…
 - [ ] All access panel lids flush ±0.2 mm in frames
-
 - [ ] Keel dry-fits through all hull sections without force
+- [ ] Rear neck shell scoop windows covered with removable 3mm PETG b…
 
-- [ ] Rear neck shell scoop windows covered with removable 3mm PETG blanks (4 blanks, silicone-sealed)
+### Phase1 — Hull Structure + All Future Provisions
+→ detail: `graphical-build-guide/TODO.md` §Phase1
 
----
-
-### Phase 1 — Hull Structure + All Future Provisions
-
-**Goal:** Structurally complete hull, every conduit/standoff/void former/sensor mount installed — ready for foam pour.
-
-> ⚠ **Point of no return.** Complete all sub-steps before mixing foam (Step 13). Nothing can be added after foam cures.
-
-- [ ] Epoxy keel through all hull sections; cure 2h. Datum marks at 91, 165, 251, 320, 388mm.
-
+- [ ] Epoxy keel through all hull sections; cure 2h. Datum marks at 9…
 - [ ] Bond ring frames at all 5 station notches; cure 1h.
-
-- [ ] Bond access panel frames A–F into hull sections (5-min epoxy, 30 min cure per phase guide table).
-
-- [ ] Install M2.5 nylon standoffs in bays A, B, D, E (floor 6mm + inter-cape 20mm per bay).
-
+- [ ] Bond access panel frames A–F into hull sections (5-min epoxy, 3…
+- [ ] Install M2.5 nylon standoffs in bays A, B, D, E (floor 6mm + in…
 - [ ] Bond wing spar pocket inserts at wing root stations, both sides.
-
-- [ ] Bond tilt servo mount brackets at wing root bay interior (one per nacelle tilt servo).
-
-- [ ] Install M3 heat-set inserts ×4 at belly cargo hard-point locations.
-
-- [ ] Install SMA bulkheads: belly port (SiK 915MHz, X≈260mm), belly stbd (LoRa, X≈260mm), dorsal (Wi-Fi, X≈140mm).
-
-- [ ] Install 49 MHz (Part 15 §15.235) forward wire post (dorsal, X≈120mm, bonded with 5-min epoxy).
-
-- [ ] Install 49 MHz (Part 15 §15.235) **temporary** aft wire post: PETG hook bonded to aft dorsal hull skin near station ~580mm (NOT on rear nozzle frame — that post is Phase 11). This temporary post reduces antenna length slightly; field-strength compliance with 47 CFR §15.235 is firmware power-limited (see §0.1), not antenna-length dependent.
-
-- [ ] String 49MHz top wire (0.3mm SS wire or 22AWG enamelled Cu) from forward post to temporary aft post with ~20g tension; CF keel connected to the 49 MHz (Part 15 §15.235) GND as counterpoise.
-
-- [ ] Install 12× VL53L5CX flush-mount PETG frames (6.5mm hull cutouts); apply 0.5mm PMMA disc over each aperture with UV adhesive.
-
-- [ ] Feed 8× PTFE conduits nose-to-tail; thread pull strings through each immediately; label both ends.
-
-- [ ] Install EPS void formers (waxed 2×) in bays A–E; verify pull strings clear voids.
-
-- [ ] Full dry-fit: all 8 pull strings accessible, standoffs clear, void formers sealed, SMA bulkheads installed.
-
-- [ ] Foam pour: X-30 PU foam, 3 shots aft→fwd, ≤60 mL per batch; cure 24h per zone. **Do NOT foam nacelle bays, pivot housing, or access panel bays.**
-
-- [ ] Remove EPS void formers; IPA wipe bay walls; verify foam not in conduit runs.
-
-- [ ] Bond cockpit cap (verify cockpit bay wires and GPS coax accessible first).
-
-**Phase 1 checks:**
-
+- [ ] Bond tilt servo mount brackets at wing root bay interior (one p…
+- [ ] Install M3 heat-set inserts ×4 at belly cargo hard-point locati…
+- [ ] Install SMA bulkheads: belly port (SiK 915MHz, X≈260mm), belly…
+- [ ] Install 49 MHz (Part 15 §15.235) forward wire post (dorsal, X≈1…
+- [ ] temporary
+- [ ] String 49MHz top wire (0.3mm SS wire or 22AWG enamelled Cu) fro…
+- [ ] Install 12× VL53L5CX flush-mount PETG frames (6.5mm hull cutout…
+- [ ] Feed 8× PTFE conduits nose-to-tail; thread pull strings through…
+- [ ] Install EPS void formers (waxed 2×) in bays A–E; verify pull st…
+- [ ] Full dry-fit: all 8 pull strings accessible, standoffs clear, v…
+- [ ] Do NOT foam nacelle bays, pivot housing, or access panel bays.
+- [ ] Remove EPS void formers; IPA wipe bay walls; verify foam not in…
+- [ ] Bond cockpit cap (verify cockpit bay wires and GPS coax accessi…
 - [ ] Hull rigid — no flex when held at nose and tail
-
 - [ ] All 8 pull strings accessible at both ends
-
 - [ ] All standoffs in place; screws start freely
-
 - [ ] Foam not in nacelle mounting bay, pivot housing, or panel bays
-
 - [ ] All 6 access panel lids flush ±0.2 mm; latches/magnets engage
 
----
+### Phase2 — Nacelle Assembly
+→ detail: `graphical-build-guide/TODO.md` §Phase2
 
-### Phase 2 — Nacelle Assembly
-
-**Goal:** Both nacelles fully assembled — EDFs installed, stator integral, iris nozzle fitted, gear linkage dry-meshed.
-
-**2A — EDF installation (port first, then starboard):**
-
-- [ ] Test EDF rotation direction on bench before installation: port = CW from intake; stbd = CCW from intake. Swap any two motor phase wires to reverse.
-
-- [ ] Install EDF2 (aft/downstream) from nozzle end; seat at Z=5mm shoulder; epoxy 3 dabs at Z=50mm stator shoulder; route leads through hub bore.
-
-- [ ] Install EDF1 (fore/upstream) from intake end; seat at Z=76mm; verify stator fins clear in Z=53–73mm gap; epoxy 3 dabs at Z=76mm shoulder.
-
-- [ ] ESC pair: route to fuselage bay via spar conduit (ESC heat must NOT be trapped in nacelle bore).
-
+- [ ] Test EDF rotation direction on bench before installation: port…
+- [ ] Install EDF2 (aft/downstream) from nozzle end; seat at Z=5mm sh…
+- [ ] Install EDF1 (fore/upstream) from intake end; seat at Z=76mm; v…
+- [ ] ESC pair: route to fuselage bay via spar conduit (ESC heat must…
 - [ ] Cure 2h before proceeding.
-
 - [ ] Repeat for stbd nacelle (opposite rotation direction).
-
-**2B — Nozzle iris assembly (per nacelle):**
-
-- [ ] Press nacelle_nozzle_ring.stl onto nozzle exit face; confirm flush.
-
+- [ ] Press nacelle_nozzle_ring.stl onto nozzle exit face; confirm fl…
 - [ ] Install nozzle inner ring (rack, R=28mm) inside base ring.
-
-- [ ] Press a 2mm×4mm follower pin (PIN-2X4) into each of the 8 flaps' cam-follower lugs.
-
-- [ ] Hinge the 8 flaps to the throat housing on 3mm×18mm tangential pins (PIN-3X18); seat each follower pin in its spiral cam slot on the unison ring.
-
-- [ ] Dry-test: manually rotate the unison ring — flaps sweep smoothly 0°→90° (75%→105% bore), no binding, follower pins stay captured in the cam slots.
-
-**2C — Gear linkage (per nacelle):**
-
-- [ ] Mount sector gear to tilt bracket (FIXED — does not rotate with nacelle).
-
-- [ ] Mount drive pinion on nacelle outer shell at pivot axis; mesh with sector gear; set backlash 0.1–0.2mm.
-
-- [ ] Install bevel gear pair in nacelle body (nacelle-axis → longitudinal axis redirect).
-
-- [ ] Thread 2mm steel longitudinal shaft through nacelle wall channel toward nozzle end.
-
-- [ ] Mount crown pinion on shaft at nozzle end; mesh with Idler-In on the
-    compound idler gear (`nacelle_nozzle_idler.scad`); set backlash 0.1–0.2mm.
-
-- [ ] Mount idler gear on its bracket to the nozzle outer housing; mesh
-    Idler-Out with the full-circle nozzle ring gear; set backlash 0.1–0.2mm.
-
-- [ ] **Full sweep test (Rev R1, 2026-06-22):** rotate nacelle -5°→140°;
-    verify nozzle ring gear rotates from ≈-1.33° to ≈38.45° (≈23.86° at the
-    90° hover reference point), and petals swing from ≈18.76 mm to
-    ≈34.42 mm tip radius (75%→105% of the 50 mm bore at the 0°/90°
-    reference points) without binding against `HOUSING_INNER_R`=37.5 mm.
-    Verify nozzle ring hard stop prevents over-drive beyond -5°/140°.
-
-- [ ] Confirm petal closed position matches nacelle hull profile at 0°.
-
-**Phase 2 checks:**
-
+- [ ] Press a 2mm×4mm follower pin (PIN-2X4) into each of the 8 flaps…
+- [ ] Hinge the 8 flaps to the throat housing on 3mm×18mm tangential…
+- [ ] Dry-test: manually rotate the unison ring — flaps sweep smoothl…
+- [ ] Mount sector gear to tilt bracket (FIXED — does not rotate with…
+- [ ] Mount drive pinion on nacelle outer shell at pivot axis; mesh w…
+- [ ] Install bevel gear pair in nacelle body (nacelle-axis → longitu…
+- [ ] Thread 2mm steel longitudinal shaft through nacelle wall channe…
+- [ ] Mount crown pinion on shaft at nozzle end; mesh with Idler-In o…
+- [ ] Mount idler gear on its bracket to the nozzle outer housing; me…
+- [ ] Full sweep test (Rev R1, 2026-06-22):
+- [ ] Confirm petal closed position matches nacelle hull profile at 0…
 - [ ] Port nacelle EDF rotation: CW from intake; stbd: CCW from intake
-
 - [ ] Stator fins visible and clear in Z=53–73mm gap on each nacelle
-
 - [ ] Nozzle iris opens/closes smoothly through full nacelle sweep
-
 - [ ] Petal closed: hull-match at 0°; petal open: all 8 even at 90°
 
----
+### Phase3 — Tilt Mechanism
+→ detail: `graphical-build-guide/TODO.md` §Phase3
 
-### Phase 3 — Tilt Mechanism
-
-**Goal:** Both nacelles mounted on fuselage, pivot freely on MF104ZZ bearings, tilt driven by fuselage-mounted servos with hard stops.
-
-- [ ] Press MF104ZZ bearings into pivot housing bores (both ends); flush ±0.2mm.
-
-- [ ] Insert 4mm CF pivot rod through wing spar pocket + pivot housing bearings (rod is FIXED to fuselage; nacelle rotates on it).
-
-- [ ] Slide nacelle pivot housing onto pivot rod; verify <0.5mm axial play.
-
-- [ ] Install tilt servos in fuselage servo mount bracket at wing root bay.
-
-- [ ] Connect pushrods (servo arm → pivot arm): servo 0° = nacelle 0° (cruise), servo ~125° = nacelle 90° (hover), servo ~170° = nacelle 120° (backing).
-
-- [ ] Install CF-PETG hard stop blocks; bond at −5° stop and 140° stop positions.
-
-- [ ] Servo calibration: set FC software travel limits at −5° and 140°; verify both nacelles reach 90° simultaneously.
-
-**Phase 3 checks:**
-
+- [ ] Press MF104ZZ bearings into pivot housing bores (both ends); fl…
+- [ ] Insert 4mm CF pivot rod through wing spar pocket + pivot housin…
+- [ ] Slide nacelle pivot housing onto pivot rod; verify <0.5mm axial…
+- [ ] Install tilt servos in fuselage servo mount bracket at wing roo…
+- [ ] Connect pushrods (servo arm → pivot arm): servo 0° = nacelle 0°…
+- [ ] Install CF-PETG hard stop blocks; bond at −5° stop and 140° sto…
+- [ ] Servo calibration: set FC software travel limits at −5° and 140…
 - [ ] Both nacelles rotate freely on bearings — no grinding, no wobble
-
 - [ ] Hard stops engage at −5° and 140° (servo stalls, does not strip)
-
-- [ ] Nozzle opens/closes correctly via gear linkage through sweep (from Phase 2)
-
+- [ ] Nozzle opens/closes correctly via gear linkage through sweep (f…
 - [ ] Sector gear does NOT rotate with nacelle
-
 - [ ] Both nacelles synchronise to within 2° at 0° and 90°
 
----
-
-### Phase 4 — Hull Foam Pour + Close-up
-
-**Goal:** Structural foam cured; all void formers removed; hull rigid.
-
-**Pre-pour final checklist:**
+### Phase4 — Hull Foam Pour + Close-up
+→ detail: `graphical-build-guide/TODO.md` §Phase4
 
 - [ ] All PTFE conduits routed — pull strings accessible at both ends
-
 - [ ] All bay standoffs installed
-
 - [ ] Cargo hard points installed
-
 - [ ] SMA bulkheads installed and dusted
-
 - [ ] EPS void formers waxed (2 coats) and seated
-
 - [ ] Nacelle bays and pivot housings masked OFF
-
 - [ ] Servo mount brackets clear of foam path
-
-**Pour sequence:**
-
-- [ ] Mix X-30 per manufacturer (2:1 ratio by volume, 2-min pot life, 4× expansion). Pour in 3 shots: aft bay → mid bays (D+C) → forward bays (B+A). Allow 24h full cure before next shot.
-
-- [ ] After full cure: remove EPS void formers; IPA wipe bay walls; verify foam did not intrude into panel bays, cargo bay, or conduit runs.
-
+- [ ] Mix X-30 per manufacturer (2:1 ratio by volume, 2-min pot life,…
+- [ ] After full cure: remove EPS void formers; IPA wipe bay walls; v…
 - [ ] Pull all 8 pull strings — verify still move freely.
-
 - [ ] Install all 6 access panel lids; verify flush fit.
 
----
+### Phase5 — Minimum Viable Flyer ★ FIRST FLIGHT
+→ detail: `graphical-build-guide/flight-phases/TODO.md` §Phase5
 
-### Phase 5 — Minimum Viable Flyer ★ FIRST FLIGHT
-
-**Goal:** CN1+FC1 (Shepherd's room / Bay A) and CN2+FC2 (Inara's shuttle / Bay B) installed and operational — first flight achieved.
-
-> **Aft EDF not installed** (Phase 11). The 4 nacelle XFly Galaxy X5 EDFs (1240g each, 90%
-> additive via stator = 2232g/nacelle × 2 = 4464g total) deliver T/W ≈ **1.61** at the
-> Phase 5–10 AUW of ~2,768g — **full VTOL hover is achievable from Phase 5**. Phase 11
-> adds the 55mm rear EDF for **forward-flight (cruise) thrust and RCS attitude authority** — it
-> exhausts aft through the canonical nozzle and is not counted in hover (Phase 11 hover T/W ≈ 1.43).
-
-**Dependency:** Cape-A (×2) and Cape-B (×2) PCB assemblies received from JLCPCB.
-
-**Power system:**
-
-- [ ] Mount XT90 PDB at keel sta 130mm; solder 14AWG main leads to ESCs.
-
-- [ ] Install 2× 40A BLHeli32 ESCs in bay C (port + stbd nacelle fore EDF = FC1; aft EDF = FC2).
-
-- [ ] **Phase 11 only:** Install 50A ESC in Panel F for 55mm rear EDF (FC2 PRU Ch.2) — skip for Phase 5.
-
+- [ ] Mount XT90 PDB at keel sta 130mm; solder 14AWG main leads to ES…
+- [ ] Install 2× 40A BLHeli32 ESCs in bay C (port + stbd nacelle fore…
+- [ ] Phase 11 only:
 - [ ] Install 5V/5A BEC; verify 5.00V ±0.05V under 1A bench load.
-
-- [ ] Pull motor phase leads through conduit to ESCs; solder (verify rotation marking first).
-
-- [ ] CAN FD termination: 120Ω SOLDERED to CN1 Cape-B at Shepherd's room (Bay A, bus start); temporary 120Ω at FC2 Cape-A in Inara's shuttle (Bay B, Phase 3 far-end; remove in Phase 7).
-
-**ESC assignment (cross-nacelle redundancy — any FC failure retains 50% thrust both nacelles):**
-
-| ESC | EDF | Nacelle | Controlled by |
-|-----|-----|---------|---------------|
-| ESC1 | EDF1 (fore) | Port | FC1 Cape-A PRU Ch.0 |
-| ESC2 | EDF2 (aft) | Port | FC2 Cape-A PRU Ch.0 |
-| ESC3 | EDF1 (fore) | Stbd | FC1 Cape-A PRU Ch.1 |
-| ESC4 | EDF2 (aft) | Stbd | FC2 Cape-A PRU Ch.1 |
-| ESC5 | 55mm rear | Fuselage | **DEFERRED — Phase 11** |
-
-**CN1+FC1 installation — Shepherd's room (Bay A, nose) — Zoë / Wash (v2 EM-hardened):**
-> Shepherd's room (Bay A) is the CAN FD / RS-485 / 1553B bus start termination node.  Use Zoë (ADM2795E
-> RS-485, ISOW1044 CAN FD, ADIN1300 Ethernet) and Wash for 5 kV isolated transceivers at
-> this end of the bus.  v2 placement is mandatory here (see TODO §1.2a node placement note).
-
-- [ ] Mount CN1 Zoë on Shepherd's room (Bay A) floor standoffs (M2.5 nylon 6mm). Insert PB2-I. Secure.
-
-- [ ] Mount FC1 Wash on inter-cape standoffs (M2.5 nylon 20mm) above CN1. Insert second PB2-I.
-
+- [ ] Pull motor phase leads through conduit to ESCs; solder (verify…
+- [ ] CAN FD termination: 120Ω SOLDERED to CN1 Cape-B at Shepherd's r…
+- [ ] Mount CN1 Zoë on Shepherd's room (Bay A) floor standoffs (M2.5…
+- [ ] Mount FC1 Wash on inter-cape standoffs (M2.5 nylon 20mm) above…
 - [ ] Flash OS to eMMC on CN1 and FC1 via USB-C before installation.
-
-- [ ] Install log μSD (64GB) in CN1 Cape-B log slot. Label: **CN1-LOG**.
-
-- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN1 Cape-B header; connect its coax to forward 49 MHz wire post.
-
-- [ ] Connect CN1 radio pigtails: SiK 915MHz → belly port SMA; LoRa → belly stbd SMA; Wi-Fi → dorsal fwd SMA.
-
-- [ ] Route FC1 GPS U.FL coax through cockpit-roof PTFE sleeve (sta ~59mm); mount GPS patch on hull dorsal, face UP.
-
-- [ ] Daisy-chain CAN FD: 120Ω (soldered) → CN1 → FC1 → exit Shepherd's room (Bay A) toward Inara's shuttle (Bay B).
-
-- [ ] Daisy-chain RS-485: CN1 → FC1 → exit toward Inara's shuttle (Bay B).
-
-- [ ] Connect MIL-STD-1553: FC1 = Bus Controller (primary); CN1 = RT 0x01.
-
-- [ ] Cap Simon's medbay (Bay E) end of ETH-EA conduit (will connect to FC4 in Phase 7); connect Shepherd's room (Bay A) end to CN1 Cape-B ETH-2.
-
-**CN2+FC2 installation — Inara's shuttle (Bay B, dorsal fwd) — Zoë / Wash (Rev R):**
-> Rev R: Inara's shuttle (Bay B) also uses v2 EMI-hardened capes (same as Shepherd's room). All four bays use Wash + Zoë.
-
-- [ ] Mount CN2 Zoë on Inara's shuttle (Bay B) floor standoffs; insert PB2-I; mount FC2 Wash above.
-
+- [ ] CN1-LOG
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN1 Cape-B head…
+- [ ] Connect CN1 radio pigtails: SiK 915MHz → belly port SMA; LoRa →…
+- [ ] Route FC1 GPS U.FL coax through cockpit-roof PTFE sleeve (sta ~…
+- [ ] Daisy-chain CAN FD: 120Ω (soldered) → CN1 → FC1 → exit Shepherd…
+- [ ] Daisy-chain RS-485: CN1 → FC1 → exit toward Inara's shuttle (Ba…
+- [ ] Connect MIL-STD-1553: FC1 = Bus Controller (primary); CN1 = RT…
+- [ ] Cap Simon's medbay (Bay E) end of ETH-EA conduit (will connect…
+- [ ] Mount CN2 Zoë on Inara's shuttle (Bay B) floor standoffs; inser…
 - [ ] Flash OS to eMMC on CN2 and FC2 before installation.
-
-- [ ] Install log μSD (64GB) in CN2 Cape-B log slot. Label: **CN2-LOG**.
-
-- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN2 Zoë J_XCVR header.
-
-- [ ] Route FC2 GPS coax through dorsal PTFE sleeve (sta ~130mm); mount GPS patch on dorsal hull, face UP.
-
-- [ ] Continue CAN FD daisy-chain Shepherd's room→Inara's shuttle: CN2 → FC2 + temporary 120Ω at FC2 (remove Phase 7).
-
-- [ ] Continue RS-485 daisy-chain Shepherd's room (Bay A) → Inara's shuttle (Bay B).
-
-- [ ] Connect ETH-AB (Shepherd's room → Inara's shuttle): FC1 Wash ETH-1 → CN2 Zoë ETH-B (FC1↔CN2 Ethernet ring link).
-
-- [ ] Cap River's room (Bay D) end of ETH-BD (will connect to CN3 in Phase 7).
-
-- [ ] Power taps: connect CN1, FC1, CN2, FC2 power leads from PWR conduit; verify 5V ±0.05V at each header.
-
-**Security provisioning (before first flight):**
-
-- [ ] Provision TPM 2.0 (SLB9670) on CN1, FC1, CN2, FC2 — unique key material per node.
-
-- [ ] Verify CPLD write-blocker on CN1 and CN2: `echo test > /mnt/flightlog/test.txt` must return read-only error.
-
-- [ ] Configure forensic log mount in `/etc/fstab` (noexec, nodev, nosuid, ro) on CN1 and CN2.
-
-**Software configuration:**
-
+- [ ] CN2-LOG
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN2 Zoë J_XCVR…
+- [ ] Route FC2 GPS coax through dorsal PTFE sleeve (sta ~130mm); mou…
+- [ ] Continue CAN FD daisy-chain Shepherd's room→Inara's shuttle: CN…
+- [ ] Continue RS-485 daisy-chain Shepherd's room (Bay A) → Inara's s…
+- [ ] Connect ETH-AB (Shepherd's room → Inara's shuttle): FC1 Wash ET…
+- [ ] Cap River's room (Bay D) end of ETH-BD (will connect to CN3 in…
+- [ ] Power taps: connect CN1, FC1, CN2, FC2 power leads from PWR con…
+- [ ] Provision TPM 2.0 (SLB9670) on CN1, FC1, CN2, FC2 — unique key…
+- [ ] Verify CPLD write-blocker on CN1 and CN2: echo test > /mnt/flig…
+- [ ] Configure forensic log mount in /etc/fstab (noexec, nodev, nosu…
 - [ ] Flash serenity-cn Phase 6 daemon to CN1 and CN2.
-
 - [ ] Flash serenity-fc Phase 6 stub to FC1 and FC2.
-
 - [ ] Enable CAN FD interfaces at 1 Mbps / 8 Mbps on all 4 nodes.
-
-- [ ] Verify 4-node CAN FD heartbeat ring: `candump can0` shows frames 0x001–0x004 within 100ms.
-
-- [ ] Configure MAVLink routing (mavlink-router) on elected FC master → SiK 915MHz on CN master.
-
-- [ ] Install the 49 MHz (Part 15 §15.235) daemon on CN1 and CN2 (select channel per 47 CFR §15.235; not §95.623, which does not apply to this band).
-
-**Ground tests:**
-
+- [ ] Verify 4-node CAN FD heartbeat ring: candump can0 shows frames…
+- [ ] Configure MAVLink routing (mavlink-router) on elected FC master…
+- [ ] Install the 49 MHz (Part 15 §15.235) daemon on CN1 and CN2 (sel…
 - [ ] ESC calibration (full throttle power-on → drop to zero).
-
-- [ ] Motor spin test (5% throttle 2s): all 5 motors spin in correct directions.
-
-- [ ] Tilt servo calibration: 0° = nacelle vertical ±0.5°, 90° = horizontal ±0.5°.
-
+- [ ] Motor spin test (5% throttle 2s): all 5 motors spin in correct…
+- [ ] Tilt servo calibration: 0° = nacelle vertical ±0.5°, 90° = hori…
 - [ ] Rear nozzle servo endpoints verified.
-
-- [ ] Static CG: **190mm from nose** (adjust battery position on rail).
-
+- [ ] 190mm from nose
 - [ ] GPS lock: HDOP ≤1.5 on both FC nodes; positions agree within 2m.
-
-- [ ] Radio checks: MAVLink heartbeat in QGC (SiK + LoRa backup); 49 MHz (Part 15 §15.235) RC channels correct; Wi-Fi GCS telemetry.
-
-- [ ] Node failover: kill FC master power → standby assumes authority within 100ms on tether.
-
-- [ ] Tethered thrust test: 60% throttle 10s → lift exceeds AUW; ESC temps ≤60°C.
-
-- [ ] Nav lights: 6-position ICAO cycle (RED port, GREEN stbd, WHITE tail, WHITE belly strobe).
-
-- [ ] **Apply FAA registration number** (14 CFR Part 48 — replaces N00000 placeholder on airframe).
-
-**First flight sequence (per REVN_BUILD_GUIDE_24IN.md §Phase 5):**
-
+- [ ] Radio checks: MAVLink heartbeat in QGC (SiK + LoRa backup); 49…
+- [ ] Node failover: kill FC master power → standby assumes authority…
+- [ ] Tethered thrust test: 60% throttle 10s → lift exceeds AUW; ESC…
+- [ ] Nav lights: 6-position ICAO cycle (RED port, GREEN stbd, WHITE…
+- [ ] Apply FAA registration number
 - [ ] Pre-flight ABCD checklist (Airframe, Battery, Comms, Docs)
-
-- [ ] Tethered hover 1m AGL × 3 successful passes before free flight (nacelles at 90°, ~60% throttle)
-
-- [ ] Free hover 1m AGL (stability, ±10° authority, altitude hold ±0.3m)
-
+- [ ] Tethered hover 1m AGL × 3 successful passes before free flight…
+- [ ] Free hover 1m AGL (stability, ±10° authority, altitude hold ±0.…
 - [ ] Free hover 3m AGL (yaw 360° both directions)
-
-- [ ] Nacelle transition: ≥8m AGL, gradual sweep 90°→0° — altitude hold ±1.5m during transition
-
-- [ ] Forward flight circuit: one lap ≤10m AGL, transition back to hover, land
-
+- [ ] Nacelle transition: ≥8m AGL, gradual sweep 90°→0° — altitude ho…
+- [ ] Forward flight circuit: one lap ≤10m AGL, transition back to ho…
 - [ ] Verify flight log written to CN1-LOG and CN2-LOG
-
-**Phase 5 pass criteria:**
-
 - [ ] Stable hover 1m AGL in ≤15° headwind
-
 - [ ] Nacelle transition without altitude excursion >1.5m
-
 - [ ] All 4 nacelle ESCs ≤70°C at full hover power
-
 - [ ] MAVLink telemetry live to QGC during all segments
-
 - [ ] All 4-node CAN FD heartbeats confirmed
-
 - [ ] Node failover: standby assumes within 100ms of master power-kill
-
 - [ ] Flight log on both CN μSDs; CPLD write-block verified
 
----
+### Phase6 — Full 8-Node Architecture + ToF Obstacle Avoidance
+→ detail: `graphical-build-guide/flight-phases/TODO.md` §Phase6
 
-### Phase 6 — Full 8-Node Architecture + ToF Obstacle Avoidance
-
-**Goal:** All 8 nodes installed, full ring redundancy, 12× VL53L5CX dual-redundant obstacle avoidance operational.
-
-**CN3+FC3 installation — River's room (Bay D, dorsal aft) — Zoë / Wash (Rev R):**
-> Rev R: River's room (Bay D) also uses v2 EMI-hardened capes. All four bays uniform.
-
-- [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Wash in Inara's shuttle (Bay B).
-
-- [ ] Mount CN3 Zoë on River's room (Bay D) floor standoffs; insert PB2-I; mount FC3 Wash above.
-
-- [ ] Flash OS to eMMC; install log μSD. Label: **CN3-LOG**.
-
-- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN3 Zoë J_XCVR header.
-
-- [ ] Route FC3 GPS coax through dorsal PTFE sleeve (sta ~275mm); mount GPS patch, face UP.
-
-- [ ] Continue CAN FD chain: Inara's shuttle (Bay B) FC2 → River's room (Bay D) CN3 → FC3 → exit toward Simon's medbay (Bay E).
-
-- [ ] Continue RS-485 chain Inara's shuttle (Bay B) → River's room (Bay D) → Simon's medbay (Bay E).
-
-- [ ] Connect ETH-BD (Inara's shuttle → River's room): FC2 Wash ETH-1 → CN3 Zoë ETH-B.
-
+- [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Wash in Inara's s…
+- [ ] Mount CN3 Zoë on River's room (Bay D) floor standoffs; insert P…
+- [ ] CN3-LOG
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN3 Zoë J_XCVR…
+- [ ] Route FC3 GPS coax through dorsal PTFE sleeve (sta ~275mm); mou…
+- [ ] Continue CAN FD chain: Inara's shuttle (Bay B) FC2 → River's ro…
+- [ ] Continue RS-485 chain Inara's shuttle (Bay B) → River's room (B…
+- [ ] Connect ETH-BD (Inara's shuttle → River's room): FC2 Wash ETH-1…
 - [ ] Power tap River's room (Bay D); verify 5V ±0.05V.
-
-**CN4+FC4 installation — Simon's medbay (Bay E, aft service) — Zoë / Wash (v2 EM-hardened):**
-> Simon's medbay (Bay E) is the CAN FD / RS-485 / 1553B bus end termination node and is physically closest to the
-> nacelle motor wiring and rear 55mm EDF.  Use Zoë / Wash for 5 kV isolated
-> transceivers at this end of the bus.  v2 placement is mandatory here.
-
-- [ ] Mount CN4 Zoë on Simon's medbay (Bay E) standoffs; insert PB2-I; mount FC4 Wash above.
-
-- [ ] Flash OS to eMMC; install log μSD. Label: **CN4-LOG**.
-
+- [ ] Mount CN4 Zoë on Simon's medbay (Bay E) standoffs; insert PB2-I…
+- [ ] CN4-LOG
 - [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN4 header.
-
-- [ ] Route FC4 GPS coax through dorsal PTFE sleeve (sta ~350mm); mount GPS patch, face UP.
-
-- [ ] Terminate CAN FD bus end: CN4 → FC4 + **120Ω PERMANENT** soldered to FC4 Cape-A.
-
-- [ ] Connect ETH-DE (River's room → Simon's medbay): FC3 Cape-A ETH-1 → CN4 Cape-B ETH-2.
-
-- [ ] Connect ETH-EA ring-close (Simon's medbay → Shepherd's room): FC4 Cape-A ETH-1 → [Shepherd's room CN1 Cape-B ETH-2 already connected]. Closes the 8-node RSTP ring.
-
+- [ ] Route FC4 GPS coax through dorsal PTFE sleeve (sta ~350mm); mou…
+- [ ] 120Ω PERMANENT
+- [ ] Connect ETH-DE (River's room → Simon's medbay): FC3 Cape-A ETH-…
+- [ ] Connect ETH-EA ring-close (Simon's medbay → Shepherd's room): F…
 - [ ] Power tap Simon's medbay (Bay E); verify 5V ±0.05V.
-
-**Security provisioning — remaining 4 nodes:**
-
 - [ ] TPM 2.0 on CN3, FC3, CN4, FC4 — unique key material per node.
-
 - [ ] CPLD write-blocker verification on CN3 and CN4.
-
-**Full ring integration:**
-
-- [ ] Verify RSTP ring: `bridge vlan show`; disconnect one ETH cable → traffic re-routes within 1s.
-
-- [ ] Verify full 8-node CAN FD ring: `candump can0` shows frames 0x001–0x008 within 100ms.
-
-- [ ] MIL-STD-1553 final config: FC1=BC, FC2=standby BC, FC3/FC4/CN1–CN4=RT; all 8 RT addresses respond within 9μs.
-
-**ToF sensor installation:**
-
-Array B (hosted by FC1, Shepherd's room / Bay A):
-
-| Sensor | Station | Position |
-|--------|---------|----------|
-| S1B | 50mm | Nose ring |
-| S2B | 510mm | Rear bell rim |
-| S3B | 180mm | Port hull |
-| S4B | 180mm | Stbd hull |
-| S5B | 315mm | Dorsal keel |
-| S6B | 265mm | Belly blister |
-
-- [ ] Install 6× VL53L5CX in Array B flush-mount frames; wire to TCA9548A ch.0–5 in Shepherd's room (Bay A); MCP23008 GP0–GP5 → XSHUT; I²C to FC1 Cape-A.
-
-Array A (hosted by FC3, River's room / Bay D):
-
-| Sensor | Station | Position |
-|--------|---------|----------|
-| S1A | 30mm | Nose ring |
-| S2A | 525mm | Rear bell rim |
-| S3A | 240mm | Port hull |
-| S4A | 240mm | Stbd hull |
-| S5A | 215mm | Dorsal keel |
-| S6A | 195mm | Belly blister |
-
-- [ ] Install 6× VL53L5CX in Array A flush-mount frames; wire to TCA9548A ch.0–5 in River's room (Bay D); separate I²C bus (electrically isolated from Array B).
-- [ ] Apply 0.5mm PMMA disc over each sensor aperture with UV adhesive.
-- [ ] Configure OA fusion in firmware: halt at 1.0m obstacle clearance; either array independent on single-FC failure.
-- [ ] GPS clearance check for 49MHz wire post proximity: bench-verify HDOP ≤1.5 with the 49 MHz (Part 15 §15.235) link transmitting; if GPS degrades, move GPS patch to ≥165mm from forward post.
-
-**Phase 6 pass criteria:**
-
+- [ ] Verify RSTP ring: bridge vlan show; disconnect one ETH cable →…
+- [ ] Verify full 8-node CAN FD ring: candump can0 shows frames 0x001…
+- [ ] MIL-STD-1553 final config: FC1=BC, FC2=standby BC, FC3/FC4/CN1–…
+- [ ] Install 6× VL53L5CX in Array B flush-mount frames; wire to TCA9…
+- [ ] Install 6× VL53L5CX in Array A flush-mount frames; wire to TCA9…
+- [ ] Apply 0.5mm PMMA disc over each sensor aperture with UV adhesiv…
+- [ ] Configure OA fusion in firmware: halt at 1.0m obstacle clearanc…
+- [ ] GPS clearance check for 49MHz wire post proximity: bench-verify…
 - [ ] All 8 CAN FD heartbeats (0x001–0x008) confirmed
-
 - [ ] Ethernet RSTP ring heals on single-link disconnect within 1s
-
 - [ ] MIL-STD-1553: all 8 RTs respond within 9μs
-
 - [ ] CN3 and CN4 log μSD write-block verified
-
 - [ ] All 12 ToF sensors return valid range at ≤4m
-
 - [ ] OA halt test: approach wall at 0.5m/s → stops at 1.0m clearance
+- [ ] Array failure mode: either FC1 or FC3 loss → remaining array pr…
+- [ ] 3-waypoint autonomous mission with GPS, altitude hold, RTL on s…
 
-- [ ] Array failure mode: either FC1 or FC3 loss → remaining array provides full OA coverage
+### Phase7 — Cargo System
+→ detail: `graphical-build-guide/flight-phases/TODO.md` §Phase7
 
-- [ ] 3-waypoint autonomous mission with GPS, altitude hold, RTL on simulated link loss
-
----
-
-### Phase 7 — Cargo System
-
-**Goal:** 250g payload delivery via autonomous winch deploy with auto-latch cradle.
-
-- [ ] Bond cargo gondola shell into belly void at 4× M3 hard points (installed Phase 1). Cure 24h.
-
-- [ ] Install 3mm CF door hinge pins; attach clamshell door halves (spring-loaded to open).
-
-- [ ] Install DRV8833 + N20 winch motor + drum; wind 1.5m Dyneema; attach auto-latch cradle via double-bowline.
-
-- [ ] Install SG90 door-actuator servo (spring-assist open, servo pull-close via bell-crank).
-
-- [ ] Install SG90 payload-release servo; connect to DRV8833 IN1/IN2 via PWM→resistor divider→GPIO.
-
-- [ ] Route control leads through PWR conduit belly tap to CN master (CN1 or CN2 — winner of CN master election).
-
+- [ ] Bond cargo gondola shell into belly void at 4× M3 hard points (…
+- [ ] Install 3mm CF door hinge pins; attach clamshell door halves (s…
+- [ ] Install DRV8833 + N20 winch motor + drum; wind 1.5m Dyneema; at…
+- [ ] Install SG90 door-actuator servo (spring-assist open, servo pul…
+- [ ] Install SG90 payload-release servo; connect to DRV8833 IN1/IN2…
+- [ ] Route control leads through PWR conduit belly tap to CN master…
 - [ ] Seal gondola-hull perimeter with 3M foam gasket tape.
-
-- [ ] Configure CN master GPIO: door open/close, winch deploy/retract, payload latch status (microswitched).
-
-**Phase 7 pass criteria:**
-
+- [ ] Configure CN master GPIO: door open/close, winch deploy/retract…
 - [ ] Door open/close × 10: no binding
-
 - [ ] Winch deploy 1.5m: straight descent, line clear
-
 - [ ] Winch retract: auto-latch clicks and holds at top
-
 - [ ] 250g load test: winch deploy + retract × 5; latch holds
-
 - [ ] Hover with 250g payload: altitude-hold degradation ≤10%
+- [ ] Autonomous delivery: 3-waypoint mission, deploy at waypoint 2,…
 
-- [ ] Autonomous delivery: 3-waypoint mission, deploy at waypoint 2, retract empty, complete mission
+### Phase8 — Finishing
+→ detail: `graphical-build-guide/flight-phases/TODO.md` §Phase8
 
----
+- [ ] Replace FAA N00000 placeholder in serenity/diagrams/decal_sheet…
+- [ ] Print decal sheet on waterslide decal paper; seal with clear co…
+- [ ] Apply decals per build_guide_19_decal_placement.svg: Serenity l…
+- [ ] Final airworthiness inspection: all fasteners, propulsion, elec…
+- [ ] Documentation archive: build log (photos + test results), Cape-…
+- [ ] FAA compliance final check: registration visible without moving…
 
-### Phase 8 — Finishing
+### Phase9 — Performance Tuning and Flight Envelope Expansion
+→ detail: `graphical-build-guide/flight-phases/TODO.md` §Phase9
 
-**Goal:** Aircraft legally compliant, aesthetically complete, and fully documented.
-
-- [ ] Replace FAA N00000 placeholder in `serenity/diagrams/decal_sheet.svg` with issued FAA registration number (via FAA DroneZone, 14 CFR Part 48).
-
-- [ ] Print decal sheet on waterslide decal paper; seal with clear coat; dry 24h.
-
-- [ ] Apply decals per `build_guide_19_decal_placement.svg`: Serenity lettering, FAA blocks, universe markings (宁静 Chinese name, Alliance registry), safety labels, weathering.
-
-- [ ] Final airworthiness inspection: all fasteners, propulsion, electronics, battery, CG.
-
-- [ ] Documentation archive: build log (photos + test results), Cape-B CPLD bitstream, TPM endorsement key fingerprints, final AUW + CG measurements.
-
-- [ ] FAA compliance final check: registration visible without moving any part; remote pilot certificate current; AUW <55 lbs; LAANC authorization for any controlled airspace.
-
----
-
-### Phase 9 — Performance Tuning and Flight Envelope Expansion
-
-**Goal:** Optimise PID governor coefficients, measure actual thrust and efficiency, and expand the
-safe flight envelope beyond the minimum parameters established in Phase 5.
-
-**Dependency:** Phase 6 (all 8 nodes + ToF OA) and Phase 7 (cargo system) complete.
-
-- [ ] **Thrust stand calibration** — run `airframe/scripts/governor_cal.py` on bench against all 4 nacelle EDFs (tandem pairs); measure actual thrust vs. RPM; update `EDF_THRUST_K` in `governor_config.h`.
-
-- [ ] **PID governor tuning** — in-flight hover trim: adjust attitude PID gains until hover hold ±0.15 m altitude, ±2° attitude; log CAN FD governor data for analysis.
-
-- [ ] **Nacelle transition tuning** — refine tilt servo rate and cross-axis coupling compensation; target altitude excursion ≤0.5 m during 90°→0° nacelle sweep.
-
-- [ ] **Endurance test** — full charge 6S 4000mAh, hover 1m AGL until 3.7V/cell cutoff; measure hover time and battery health.
-
-- [ ] **Cross-wind hover** — verify stable hover in ≥10 kt headwind; document max demonstrated crosswind.
-
-- [ ] **Extended autonomous mission** — 5-waypoint GPS mission, altitude hold, RTL on link loss; verify log integrity on all 4 CN μSDs.
-
-**Phase 9 pass criteria:**
-
+- [ ] Thrust stand calibration
+- [ ] PID governor tuning
+- [ ] Nacelle transition tuning
+- [ ] Endurance test
+- [ ] Cross-wind hover
+- [ ] Extended autonomous mission
 - [ ] T/W measured ≥1.10 (nacelles only) on thrust stand
-
 - [ ] Hover altitude hold ±0.15 m for 60 s
-
 - [ ] Nacelle transition altitude excursion ≤0.5 m
-
 - [ ] Endurance ≥8 min at hover (6S 4000mAh baseline)
-
 - [ ] Logs on all 4 CN nodes; write-block verified
 
----
+### Phase10 — Advanced Autonomy and Long-Range Operations
+→ detail: `graphical-build-guide/flight-phases/TODO.md` §Phase10
 
-### Phase 10 — Advanced Autonomy and Long-Range Operations
-
-**Goal:** Validate extended autonomous mission capability, BVLOS readiness, and multi-link
-communication redundancy sufficient for real-world deployment.
-
-**Dependency:** Phase 9 complete.
-
-- [ ] **BVLOS communication validation** — verify handover between all 4 radio links (SiK, LoRa, Wi-Fi, 49 MHz (Part 15 §15.235)) in a degraded RF environment; mission continues on any single surviving link.
-
-- [ ] **Extended waypoint missions** — ≥10-waypoint autonomous mission at ≤400 ft AGL; verify all obstacle avoidance halts function through the full mission.
-
-- [ ] **Payload delivery mission** — fully autonomous: takeoff → 3-waypoint transit → cargo deploy → return → land; pass criteria: payload delivered within 2 m of target, cradle auto-latched on return.
-
-- [ ] **Simulated node failure during flight** — kill one FC node mid-hover; verify remaining 3 FC nodes maintain flight for 30 s; RTL executed correctly.
-
-- [ ] **Emergency RTL validation** — disable all control links; verify automatic RTL initiates within 5 s of link loss; lands within 3 m of takeoff point.
-
-- [ ] **Regulatory readiness review** — FAA Part 107 waiver pre-application checklist; confirm LAANC authorization for planned operational area; update flight log and maintenance record.
-
-**Phase 10 pass criteria:**
-
+- [ ] BVLOS communication validation
+- [ ] Extended waypoint missions
+- [ ] Payload delivery mission
+- [ ] Simulated node failure during flight
+- [ ] Emergency RTL validation
+- [ ] Regulatory readiness review
 - [ ] Mission continues on any single surviving radio link
-
 - [ ] 10-waypoint autonomous mission completed without intervention
-
 - [ ] Autonomous cargo delivery within 2 m of target
-
 - [ ] Node failure: remaining FCs maintain flight ≥30 s
-
 - [ ] RTL on link loss: lands within 3 m of takeoff point
-
 - [ ] All regulatory documentation current and on file
 
----
+### Phase11 — Aft EDF Integration (Deferred)
+→ detail: `deferred/TODO.md` §Phase11
 
-### Phase 11 — Aft EDF Integration (Deferred)
-
-**Goal:** Install the 55mm 6S fuselage EDF, its reduced-area intake, the fixed canonical
-elliptical tail nozzle, and the 4 EDF-fed RCS bleed-air thrusters — adding forward-flight
-(cruise) thrust and pitch/yaw attitude authority. The rear EDF exhausts straight aft through
-the canonical nozzle and contributes **no** hover lift; VTOL hover remains nacelle-driven.
-
-**Dependency:** Phases 0–10 complete and proven in flight.
-
-**Design files:** `deferred/aft-edf/` — see `deferred/aft-edf/README.md` for full details.
-**NOTE (Rev R1 redesign):** the 120 mm SCAD/STLs in `deferred/aft-edf/` are SUPERSEDED. All
-rear-EDF geometry must be regenerated for the 55 mm fan, the canonical nozzle, and the RCS system
-before Phase 11 fabrication (see §11C). Old iris files (`rear_nozzle_frame.stl`,
-`rear_nozzle_petal.stl`) and 120 mm files are archived.
-
-> **Thrust note:** Phases 5–10 nacelle-only thrust is 4,464 g against ~2,768 g AUW → hover
-> T/W ≈ 1.61. Phase 11 adds the 55 mm rear EDF (~1,500 g fan thrust → ~1,275 g net forward
-> after ~15% RCS bleed). Because the canonical nozzle fires aft, this thrust is **horizontal
-> (cruise/range) only** and is not counted in hover. Phase 11 full AUW ~3,130 g → hover
-> T/W ≈ 1.43 (above the 1.0 hover floor, below the 1.5 comfort target — keep hover payload light).
-
-**11A — Procurement (if not yet in stock):**
-
-| Item | Qty | Approx. Cost |
-|------|-----|-------------|
-| 55mm 6S EDF (~1,500 gf) | 1× | ~$35–55 |
-| 50A 6S BLHeli32 ESC | 1× | ~$18–28 |
-| SG90-class proportional valve servo (RCS) | 4× | ~$12 |
-
-**11B — Rear neck shell swap (if printed without windows):**
-
-- [ ] Print `rear_neck_intake_shell24.stl` from `deferred/aft-edf/openscad/rear_neck_intake_shell24.scad`. Verify NECK_X ≈ 310mm alignment in slicer. **Scoop windows must be re-sized for the 55 mm EDF (reduced area).**
-
-- [ ] Remove temporary window covers from existing neck shell, or swap in the new windowed shell if a plain shell was used for Phases 0–10.
-
-**11C — Geometry regeneration and printing (Rev R1 rear-EDF redesign):**
-
-- [ ] **Regenerate** `neck_intake_frame.scad` for the 55 mm intake area; print `neck_intake_frame.stl` (CF-PETG, 0.15mm, 40% gyroid, 4 walls).
-
-- [ ] **Regenerate** `aft_edf_plenum.scad`: 55 mm circular EDF inlet + 4 RCS bleed taps (~15% flow); print `aft_edf_plenum.stl` (CF-PETG, 0.20mm, 20% gyroid) — EDF housing, treated as structural per CLAUDE.md Fabrication Standards.
-
-- [ ] **Generate** `rear_nozzle_canonical.scad`: fixed canonical elliptical tail nozzle, exit 2.06×1.76 in (52.3×44.7 mm, ~1,836 mm²), hull-matched outer surface; print `rear_nozzle_canonical.stl` (CF-PETG, 0.15mm, 30%, 4 walls). **No iris, no servo.**
-
-- [ ] **Generate** `rcs_distribution_manifold.scad` + `rcs_thruster_nozzle.scad` + `rcs_valve_bracket.scad`; print `rcs_distribution_manifold.stl` (×1, PETG), `rcs_thruster_nozzle.stl` (×4, CF-PETG), `rcs_valve_bracket.stl` (×4, CF-PETG).
-
-- [ ] Run mesh watertightness verification on all regenerated STLs; report findings here and resolve.
-
-**11D — Intake frame installation:**
-
-- [ ] Dry-fit `neck_intake_frame.stl` into the resized scoop windows; registration tongues insert with ~0.2mm clearance (sand if tight).
-
-- [ ] Verify aerodynamic orientation: intake lips face forward (−Y / nose-ward).
-
-- [ ] Apply structural epoxy to tongues + shoulder flanges; press frame into position; clamp; cure 24h.
-
+- [ ] Scoop windows must be re-sized for the 55 mm EDF (reduced area).
+- [ ] Remove temporary window covers from existing neck shell, or swa…
+- [ ] Regenerate
+- [ ] Regenerate
+- [ ] Generate
+- [ ] Generate
+- [ ] Run mesh watertightness verification on all regenerated STLs; r…
+- [ ] Dry-fit neck_intake_frame.stl into the resized scoop windows; r…
+- [ ] Verify aerodynamic orientation: intake lips face forward (−Y /…
+- [ ] Apply structural epoxy to tongues + shoulder flanges; press fra…
 - [ ] Fillet all gaps between flange and hull; cure 2h.
-
-**11E — Plenum + RCS manifold installation:**
-
-- [ ] Dry-fit `aft_edf_plenum.stl`; verify intake arm alignment and 55mm EDF inlet centred.
-
-- [ ] Bond plenum forward arms to intake frame exits; fillet joints; cure 2h.
-
-- [ ] Bond `rcs_distribution_manifold.stl` to the 4 plenum bleed taps; route 4 bleed ducts to the RCS jet locations.
-
-- [ ] Pressure-test: seal EDF face with tape; cover all but one scoop; shop-vac — confirm draft at EDF inlet and at all 4 RCS jets, no joint leakage.
-
-**11F — 55mm EDF installation:**
-
+- [ ] Dry-fit aft_edf_plenum.stl; verify intake arm alignment and 55m…
+- [ ] Bond plenum forward arms to intake frame exits; fillet joints;…
+- [ ] Bond rcs_distribution_manifold.stl to the 4 plenum bleed taps;…
+- [ ] Pressure-test: seal EDF face with tape; cover all but one scoop…
 - [ ] Bench-test 55mm EDF (correct rotation, no vibration).
-
-- [ ] Install EDF retaining ring at station ~430mm inside Panel F; bond; cure 1h.
-
-- [ ] Seat EDF in plenum 55mm inlet; press forward to retaining lip; bond with 4 dabs slow-cure epoxy.
-
-- [ ] Route motor leads through Panel F to 50A ESC; route signal lead forward via MAIN-PWR conduit to Inara's shuttle (Bay B, FC2 PRU Ch.2).
-
-- [ ] Install 50A ESC in Panel F bay; foam tape + cable tie. Cure 2h before applying thrust.
-
-**11G — Canonical nozzle + RCS installation:**
-
-- [ ] Bond `rear_nozzle_canonical.stl` to the tail-cone exit (Panel F aft end), blending into the canonical hull outer mold line. **Fixed — no moving petals.**
-
-- [ ] Install 4× `rcs_thruster_nozzle.stl` at their RCS stations; connect each to its bleed duct.
-
-- [ ] Install 4× SG90-class proportional valves on `rcs_valve_bracket.stl`; link each valve to its RCS bleed duct.
-
-- [ ] Calibrate RCS valves: 0% = closed (no bleed); 100% = full bleed jet. Map 2 jets to pitch, 2 to yaw.
-
-**11H — 49MHz antenna upgrade:**
-
-- [ ] Bond permanent aft 49 MHz (Part 15 §15.235) wire post to top of the canonical tail nozzle (5-min epoxy).
-
+- [ ] Install EDF retaining ring at station ~430mm inside Panel F; bo…
+- [ ] Seat EDF in plenum 55mm inlet; press forward to retaining lip;…
+- [ ] Route motor leads through Panel F to 50A ESC; route signal lead…
+- [ ] Install 50A ESC in Panel F bay; foam tape + cable tie. Cure 2h…
+- [ ] Fixed — no moving petals.
+- [ ] Install 4× rcs_thruster_nozzle.stl at their RCS stations; conne…
+- [ ] Install 4× SG90-class proportional valves on rcs_valve_bracket.…
+- [ ] Calibrate RCS valves: 0% = closed (no bleed); 100% = full bleed…
+- [ ] Bond permanent aft 49 MHz (Part 15 §15.235) wire post to top of…
 - [ ] Remove temporary aft post from station ~580mm.
-
-- [ ] Restring 49MHz top wire (~470mm) from forward post to nozzle aft post with ~20g tension.
-
-**11I — Software:**
-
-- [ ] Enable ESC5 in FC2 firmware (PRU Ch.2); configure BDSHOT governor for the 55mm EDF.
-
-- [ ] Add the 4 RCS proportional-valve channels to the attitude-control mixer; calibrate pitch/yaw authority via `governor_cal.py`.
-
-- [ ] Add rear EDF to the forward-thrust (cruise) schedule — NOT the hover lift mixer.
-
-- [ ] Verify all 5 ESC heartbeats on CAN FD; confirm FC2 cross-drive capability for ESC5.
-
-- [ ] Bench-test RCS attitude authority; then forward-flight thrust test with the rear EDF at 60% throttle.
-
-**Phase 11 checks:**
-
-- [ ] All regenerated rear-EDF STLs pass mesh watertightness verification
-
+- [ ] Restring 49MHz top wire (~470mm) from forward post to nozzle af…
+- [ ] Enable ESC5 in FC2 firmware (PRU Ch.2); configure BDSHOT govern…
+- [ ] Add the 4 RCS proportional-valve channels to the attitude-contr…
+- [ ] Add rear EDF to the forward-thrust (cruise) schedule — NOT the…
+- [ ] Verify all 5 ESC heartbeats on CAN FD; confirm FC2 cross-drive…
+- [ ] Bench-test RCS attitude authority; then forward-flight thrust t…
+- [ ] All regenerated rear-EDF STLs pass mesh watertightness verifica…
 - [ ] Intake frame tongues fully seated in the resized scoop windows
-
-- [ ] Plenum + RCS manifold pressure-test passed (draft at EDF inlet and all 4 RCS jets; no leakage)
-
-- [ ] EDF seated at station ~430mm, centreline ±2mm; rotation verified before sealing
-
+- [ ] Plenum + RCS manifold pressure-test passed (draft at EDF inlet…
+- [ ] EDF seated at station ~430mm, centreline ±2mm; rotation verifie…
 - [ ] 50A ESC installed; ESC5 signal routed to FC2 PRU Ch.2
+- [ ] Canonical nozzle bonded flush to hull outer mold line; exit 2.0…
+- [ ] All 4 RCS valves calibrated; pitch/yaw authority confirmed on b…
+- [ ] 49MHz aft wire post on canonical nozzle; top wire re-strung at…
+- [ ] Forward-thrust test passed; rear EDF NOT used for hover lift; E…
+- [ ] All 5 ESC telemetry visible on CAN FD; ESC temps ≤70°C at cruis…
 
-- [ ] Canonical nozzle bonded flush to hull outer mold line; exit 2.06×1.76 in verified
+### Phase12 — Cargo-bay Range-Extender Battery Module (Deferred)
+→ detail: `deferred/TODO.md` §Phase12
 
-- [ ] All 4 RCS valves calibrated; pitch/yaw authority confirmed on bench
-
-- [ ] 49MHz aft wire post on canonical nozzle; top wire re-strung at full ~470mm span
-
-- [ ] Forward-thrust test passed; rear EDF NOT used for hover lift; ESC temps ≤70°C
-
-- [ ] All 5 ESC telemetry visible on CAN FD; ESC temps ≤70°C at cruise power
-
----
-
-### Phase 12 — Cargo-bay Range-Extender Battery Module (Deferred)
-
-**Goal:** let the cargo bay carry **either** the standard payload **or** a swappable second 6S
-pack (Range-Extender Battery Module, RBM) for extended-range missions. Full design + range/
-endurance/CG analysis: `docs/POWER_DISTRIBUTION.md §11.2`. Cruise range ~1.4–1.8× (matched
-4000 mAh pack ≈ 1.57×); hover T-W drops to 1.18–1.36 (below the 1.5 comfort target, above the
-1.0 floor) — a **cruise-range**, not hover, enhancement.
-
-**Dependency:** Phases 0–10 complete; realizes the dual-battery architecture deferred at
-`POWER_DISTRIBUTION.md §11`.
-
-- [ ] **RBM module:** 6S LiPo (matched 4000 mAh recommended) + BQ76930-class BMS + ideal-diode
-    ORing output, in a tray retained by the same Jayne cargo hooks/release (jettisonable),
-    with a keyed XT60 pigtail.
-- [ ] **Kaylee input:** add `J_BATT2` (XT60) + `F_BATT2` + an ideal-diode / current-share
-    combiner (LTC4359- or LTC4370-class — a NEW part family) OR-combining `J_BATT`/`J_BATT2`
-    into VBAT: hot-swap-safe across SoC mismatch, reverse-blocking so a faulted/absent RBM
-    can't drain or back-feed the main pack. (Kaylee board revision — not yet in KiCad.)
-- [ ] **Current sharing:** same pack model + matched-SoC at takeoff (or LTC4370 to force
-    balanced sharing); simple diode-ORing alone lets the higher-SoC pack hog.
-- [ ] **Firmware (`pwr_fault`):** add a second-pack context (V/I/SoC over the existing
-    telemetry) + combiner PGOOD/fault logging; on RBM fault, isolate and continue on the main
-    pack (RTH).
-- [ ] **W&B:** add the RBM to the §14 moment table; re-balance on the keel rail and verify on
-    the physical CG rig before flight (a second ~750 g mass in the cargo bay shifts CG).
-- [ ] **CAD:** RBM tray + retention on the cargo-bay payload envelope; verify cargo-door and
-    Jayne clearances.
+- [ ] RBM module:
+- [ ] Kaylee input:
+- [ ] Current sharing:
+- [ ] Firmware (pwr_fault):
+- [ ] W&B:
+- [ ] CAD:
 
 ---
 
 ## 4.0 — Firmware and Software
 
-**Dependency for Phase 6:** serenity-fc Phase 7 items can be developed concurrently with physical Phases 0–5 and must be integrated by Phase 6 first flight.
-
 ### 4.1 — Completed
+→ detail: `avionics/firmware/TODO.md` §4.1
 
-- [x] Firmware directory structure (`serenity/firmware/`) *(done 2026-05-25)*
+- [x] Firmware directory structure (serenity/firmware/) *(done 2026-0…
+- [x] KISS/AX.25 UART driver for XCVR-49MHZ-1 — serenity/firmware/cn/…
+- [x] Si5351A I²C driver — serenity/firmware/cn/src/si5351.c/.h *(don…
+- [x] AM6254 device tree overlays — Cape-A and Cape-B DTSs *(done 202…
+- [x] serenity-cn Phase 6 daemon (XCVR KISS driver + argparse + SIGTE…
+- [x] serenity-fc Phase 6 stub (signal handling, idle loop placeholde…
 
-- [x] KISS/AX.25 UART driver for XCVR-49MHZ-1 — `serenity/firmware/cn/src/xcvr_kiss.c/.h` *(done 2026-05-25)*
+### 4.2 — FC Node (Wash) - Phase 7 Firmware
+→ detail: `avionics/firmware/TODO.md` §4.2
 
-- [x] Si5351A I²C driver — `serenity/firmware/cn/src/si5351.c/.h` *(done 2026-05-25)*
+- [ ] EDF ESC PID governor
+- [ ] Nacelle tilt servo PWM generation
+- [ ] IMU / barometer sensor fusion
+- [ ] ToF sensor array management
+- [ ] u-blox M10Q GNSS integration
+- [ ] MIL-STD-1553B RT implementation
+- [ ] TPM-bound attestation
+- [x] governor_cal.py
+- [x] governor_config.h
 
-- [x] AM6254 device tree overlays — Cape-A and Cape-B DTSs *(done 2026-05-25)*
+### 4.3 — CN Node (Zoe) - Phase 7 Firmware
+→ detail: `avionics/firmware/TODO.md` §4.3
 
-- [x] serenity-cn Phase 6 daemon (XCVR KISS driver + argparse + SIGTERM) *(done 2026-05-25)*
-
-- [x] serenity-fc Phase 6 stub (signal handling, idle loop placeholder) *(done 2026-05-25)*
-
-### 4.2 — FC Node (Wash) — Phase 7 Firmware
-
-- [ ] **EDF ESC PID governor** — BDSHOT600 telemetry input on PRU-ICSS, EHRPWM output to ESCs, CAN FD cross-node synchronisation. Targets: settle <200ms, overshoot <5%; equalization |RPM_FWD − RPM_AFT| <100 RPM; fault latch on overtemp/overcurrent (no auto-recovery, GCS ack required).
-    - [ ] PRU-ICSS BDSHOT600 telemetry decoder (RPM, voltage, current, temp frames).
-    - [ ] EHRPWM throttle output driver with `governor_config.h` k-coefficient (§4.1, already calibrated).
-    - [ ] CAN FD cross-node RPM sync message (fwd/aft pairing across River/Simon).
-    - [ ] PID tuning bench test against `governor_cal.py` thrust-stand data; verify settle/overshoot/equalization targets above.
-    - [ ] Overtemp/overcurrent fault-latch unit test (no auto-recovery path).
-
-- [ ] **Nacelle tilt servo PWM generation** — EHRPWM or PRU; travel limits −5°/140° enforced in firmware; symmetric 2° tracking both nacelles.
-    - [ ] EHRPWM/PRU servo output driver with firmware-enforced travel limits (−5°/140°).
-    - [ ] Symmetric tracking control loop (port/stbd nacelle ≤2° divergence).
-    - [ ] Bench test: command full sweep, verify limit clamping and tracking error budget.
-
-- [ ] **IMU / barometer sensor fusion** — ICM-42688-P (SPI), BMP388/BMP390 (SPI); complementary or Kalman filter for attitude; altitude hold PID using barometric altitude + GPS.
-    - [ ] ICM-42688-P SPI driver (accel/gyro read, calibration/bias removal).
-    - [ ] BMP388/BMP390 SPI driver (pressure/altitude read).
-    - [ ] Attitude filter (complementary or Kalman) fusing IMU + barometer.
-    - [ ] Altitude-hold PID using fused barometric + GPS altitude.
-    - [ ] Bench test: static and bench-rotation attitude accuracy check.
-
-- [ ] **ToF sensor array management** — VL53L5CX ×6 per node via TCA9548A I²C mux; XSHUT sequencing via MCP23008; OA fusion (Array A + Array B cross-check); halt at 1.0m clearance.
-    - [ ] TCA9548A I²C mux driver (channel select for 6× VL53L5CX per node).
-    - [ ] MCP23008 XSHUT sequencing driver (sensor power-up ordering, address conflict avoidance).
-    - [ ] VL53L5CX 8×8 ranging driver and per-sensor data aggregation.
-    - [ ] Array A / Array B cross-check fusion logic; halt-at-1.0m / resume-at-1.5m hysteresis (matches §4.4 "OA integration").
-    - [ ] Bench test: known-distance target sweep, verify halt/resume thresholds.
-
-- [ ] **u-blox M10Q GNSS integration** — UART NMEA/UBX parse; position fix broadcast on CAN FD; HDOP gating (≤1.5 for valid position); multi-node position cross-check (≤2m disagreement threshold).
-    - [ ] UART NMEA/UBX parser (position, velocity, HDOP, fix-type fields).
-    - [ ] HDOP gating logic (reject fix if HDOP >1.5).
-    - [ ] CAN FD position-fix broadcast frame.
-    - [ ] Multi-node cross-check consumer (flag/exclude outliers >2m, feeds §4.4 "GPS cross-check").
-    - [ ] Bench/field test: static fix HDOP and 4-node position agreement.
-
-- [ ] **MIL-STD-1553B RT implementation** — PRU-ICSS Manchester II encoder/decoder; RT address assignment per node role; BC arbitration on FC1 and FC2.
-    - [ ] PRU-ICSS Manchester II encode/decode driver.
-    - [ ] RT address assignment table per node role (FC1–FC4).
-    - [ ] BC arbitration logic for FC1 (primary) / FC2 (standby).
-    - [ ] Bench test against the 1553-XFM transformer coupling hardware (§1.2 "Wire the MIL-1553 connector + transformer").
-
-- [ ] **TPM-bound attestation** — SLB9670 TPM 2.0 HMAC on all outbound flight-critical CAN FD messages; pcrs extend on each boot; boot measurement chain.
-    - [ ] SLB9670 TPM 2.0 driver (HMAC key derivation, PCR extend calls).
-    - [ ] Boot measurement chain (PCR extend at each boot stage).
-    - [ ] Outbound CAN FD HMAC signing hook for flight-critical message classes.
-    - [ ] Bench test: tamper/replay rejection unit test against signed vs. unsigned frames.
-
-- [x] **governor_cal.py** — thrust stand calibration script: sweeps 0%→100%→0% throttle, fits k coefficient (T = k × RPM²), outputs `EDF_THRUST_K` for `governor_config.h`. *(done 2026-06-04)*
-
-- [x] **governor_config.h** — template with calibrated k values per EDF; compile-time constants. *(done 2026-06-04)*
-
-### 4.3 — CN Node (Zoë) — Phase 7 Firmware
-
-- [ ] **CAN FD heartbeat and telemetry forwarding** — broadcast 0x001–0x008 node health frames; relay MAVLink telemetry from elected FC master to SiK GCS link.
-    - [ ] 0x001–0x008 node health frame broadcaster (per-node heartbeat content/period).
-    - [ ] MAVLink telemetry relay path: FC master CAN FD → CN master → SiK GCS link.
-    - [ ] Bench test: heartbeat timeout detection feeding §4.4 "Node role election protocol."
-
-- [ ] **MIL-STD-1553B BC/RT tasks** — BC on CN1 (standby), RT on CN2–CN4; mirror FC bus controller arbitration.
-    - [ ] BC standby logic on CN1 (mirrors FC1/FC2 arbitration, §4.2).
-    - [ ] RT implementation on CN2–CN4 (shares PRU-ICSS Manchester II driver with §4.2).
-    - [ ] Bench test against 1553-XFM transformer coupling hardware (§1.2).
-
-- [ ] **RS-485 inter-board messaging** — structured message format (header/payload/CRC); inter-node command and status relay.
-    - [ ] Define structured frame format (header/payload/CRC) shared across all 8 nodes.
-    - [ ] Driver for the RS485_A/B footprint pinout already fixed on Wash/Zoë (§1.2).
-    - [ ] Bench test: CRC-reject malformed frame, command/status round-trip between two nodes.
-
-- [ ] **Ethernet RSTP ring management** — CPSW3G bridge configuration; RSTP fast-failover (<1s) verification; ring segment health monitoring.
-    - [ ] CPSW3G bridge configuration for the 8-node ring topology (§1.4.3).
-    - [ ] RSTP fast-failover implementation and timer tuning.
-    - [ ] Ring segment health monitoring/reporting hook (feeds CAN FD heartbeat above).
-    - [ ] Bench test: physically break one ring segment, verify <1s failover.
-
-- [ ] **Signed-log write via CPLD write-blocker** — log records written as read-only-append through ATF16V8BQL latch interface; NOR flash (W25Q128JV) circular buffer for overflow.
-    - [ ] ATF16V8BQL CPLD write-blocker interface driver (enforces append-only).
-    - [ ] microSD log writer (primary store) per node's write-blocked card.
-    - [ ] W25Q128JV NOR flash circular buffer driver for overflow when microSD is full/unavailable.
-    - [ ] Bench test: attempt out-of-order/overwrite write, verify CPLD blocks it.
-
-- [ ] **TPM-bound HMAC on all outbound AX.25 payloads** — each 49 MHz (Part 15 §15.235) packet includes HMAC-SHA256 computed from SLB9670 stored key; receiver nodes verify before acting.
-    - [ ] SLB9670 stored-key HMAC-SHA256 signer for outbound AX.25/49 MHz frames (Emma boards, River/Simon).
-    - [ ] Receiver-side verification gate (discard unsigned/invalid before acting, mirrors §4.4 "Security message signing").
-    - [ ] Bench test: signed/unsigned/corrupted-signature frame acceptance matrix.
-
-- [ ] **Cargo control** — DRV8833 winch H-bridge, HX711 load cell (payload weight sensing), SG90 door and release servos; state machine: IDLE → DEPLOY → DELIVERED → RETRACT → LATCHED.
-    - [ ] DRV8833 H-bridge winch driver.
-    - [ ] HX711 load-cell driver (payload weight sensing, overload cutoff).
-    - [ ] SG90 door + release servo driver.
-    - [ ] State machine implementation: IDLE → DEPLOY → DELIVERED → RETRACT → LATCHED, with fault states.
-    - [ ] Bench test: full cycle with simulated payload load, verify HX711 cutoff and state transitions.
-
-- [ ] **MAVLink routing configuration** — mavlink-router config: elected CN master routes FC master telemetry to all 4 radio links (SiK, LoRa, Wi-Fi, 49 MHz (Part 15 §15.235) backup).
-    - [ ] mavlink-router config file per CN role (master vs. standby).
-    - [ ] Per-link output adapter: SiK, LoRa (Emma), Wi-Fi, 49 MHz (Part 15 §15.235) (Emma, backup).
-    - [ ] Bench test: verify telemetry reaches Malcolm GCS over each of the 4 links independently.
+- [ ] CAN FD heartbeat and telemetry forwarding
+- [ ] MIL-STD-1553B BC/RT tasks
+- [ ] RS-485 inter-board messaging
+- [ ] Ethernet RSTP ring management
+- [ ] Signed-log write via CPLD write-blocker
+- [ ] TPM-bound HMAC on all outbound AX.25 payloads
+- [ ] Cargo control
+- [ ] MAVLink routing configuration
 
 ### 4.4 — Both Nodes
+→ detail: `avionics/firmware/TODO.md` §4.4
 
-- [ ] **Node role election protocol** — CAN FD priority arbitration at boot; lowest node-ID wins master role; automatic failover on heartbeat timeout (100ms); FC master and CN master elected independently.
-    - [ ] Boot-time CAN FD priority arbitration (lowest node-ID wins, per PACE table in CLAUDE.md).
-    - [ ] Independent FC-master / CN-master election state machines.
-    - [ ] Failover trigger on 100ms heartbeat timeout (consumes §4.3 heartbeat broadcast).
-    - [ ] Bench test: kill the current master, verify failover to next PACE tier within timeout.
-
-- [ ] **Autonomous navigation** — 3-waypoint GPS mission execution; altitude hold ±0.3m; waypoint radius 2m; RTL on any link loss >5s.
-    - [ ] Waypoint mission sequencer (3-waypoint minimum viable mission).
-    - [ ] Altitude-hold integration with §4.2 barometric/GPS altitude PID.
-    - [ ] Waypoint-radius capture logic (2m) and RTL trigger on link loss >5s.
-    - [ ] Field test: full 3-waypoint mission with deliberate link-loss RTL trigger.
-
-- [ ] **OA integration** — ToF halt trigger feeds into navigation; velocity command zeroed within 1.0m of obstacle; resumes when clear.
-    - [ ] Navigation-layer consumer for §4.2 ToF array halt/resume signal.
-    - [ ] Velocity command zeroing at 1.0m clearance; resume logic at 1.5m clearance.
-    - [ ] Bench/field test: approach a target obstacle, verify halt/resume hysteresis in flight.
-
-- [ ] **GPS cross-check** — 4 GPS receivers (one per FC node); positions averaged; outlier >2m flagged and excluded from blend.
-    - [ ] Multi-node position collection (4× u-blox M10Q via §4.2 CAN FD broadcast).
-    - [ ] Averaging/blend algorithm with outlier exclusion (>2m disagreement).
-    - [ ] Bench test: inject a synthetic outlier fix, verify exclusion from blend.
-
-- [ ] **Security message signing** — every inter-node CAN FD message signed; unauthenticated messages discarded; signing key material bound to node TPM endorsement key.
-    - [ ] CAN FD message signing hook bound to each node's TPM endorsement key (SLB9670, §4.2).
-    - [ ] Receiver-side verification gate; discard unauthenticated frames before acting.
-    - [ ] Bench test: inject unsigned/forged frame on the bus, verify it is discarded and logged.
+- [ ] Node role election protocol
+- [ ] Autonomous navigation
+- [ ] OA integration
+- [ ] GPS cross-check
+- [ ] Security message signing
 
 ### 4.5 — Ground Control (Malcolm / "CAPT Reynolds")
 
-> "I aim to misbehave."
-
-**Architecture summary:** Malcolm stays at a safe operator distance.  The link budget
-(directional antennas + gain) is sized to maintain reliable uplink/downlink with an
-aircraft whose receivers may be desensed by proximity to high-power RF sources.
-No additional transmit power amplifiers are FCC-compliant for any link in the standard
-configuration with directional antennas.  See `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`.
-
-**File tree:** `gcs/malcolm/` — hardware docs, SCAD gimbal designs, PB2-I firmware, and
-host-PC software all created in Rev R.  See `gcs/malcolm/README.md` for layout.
-
 #### 4.5.1 — Malcolm Hardware Design
+→ detail: `gcs/TODO.md` §4.5.1
 
-- [ ] **Create Malcolm host computer specification** (`gcs/malcolm/hardware/docs/malcolm_host_spec.md`):
-    minimum x86\_64 Debian Linux, 8 GB RAM, 256 GB SSD, USB 3.0+; ruggedized laptop
-    (IP54 or better) for field use.  Document recommended models and any BIOS/driver notes.
-
-- [ ] **Malcolm field enclosure — print and fit-check** `gcs/malcolm/hardware/enclosure/openscad/malcolm_field_enclosure.scad`:
-    export STL (`openscad -o malcolm_field_enclosure_body.stl ... -D RENDER_MODE=0`);
-    verify PCB standoff spacing matches Cape-B-2 55×35 mm mounting hole pattern in slicer;
-    run mesh validation; print body + lid in PETG (IP65 gasket groove accepts 3 mm EPDM cord).
-    **Add to Phase Malcolm-1 print schedule.**
-
-- [ ] **Gimbal STL generation and mesh verification** — for each of the three SCAD files:
-    - `malcolm_gimbal_pan.scad` → `malcolm_gimbal_pan_base.stl` + `malcolm_gimbal_pan_turret.stl`
-    - `malcolm_gimbal_tilt.scad` → `malcolm_gimbal_tilt_yoke.stl`
-    - `malcolm_gimbal_mount.scad` → `malcolm_gimbal_mount.stl`
-    Print in CF-PETG (0.15 mm, 40% infill, 4 walls).  Verify bearing pocket diameters
-    (6804: 32 mm OD housing; MF104ZZ: 10 mm OD housing) against bearing datasheets before printing.
-
-- [ ] **Gimbal servo wind-load torque check** — compute worst-case wind torque on a 9 dBi Yagi
-    (~1.2 m boom, ~0.04 m² front area) at 30 kt crosswind.  Verify DS3218MG (25 kg·cm @ 6 V)
-    provides ≥2× safety factor.  Document in `gcs/malcolm/hardware/docs/malcolm_power_budget.md`.
-
-- [ ] **Procure Malcolm comms node hardware:**
-    - 1× PocketBeagle 2 Industrial (AM6254) — same DigiKey PN 2820-100003007-ND
-    - 1× Cape-B-2 (Zoë) PCB — order 1 additional unit when placing aircraft PCB order at JLCPCB
-    - 1× Emma sub-module — order 1 additional unit with aircraft Emma order
-    - 1× 64 GB microSD (Samsung or equiv, same as aircraft CN nodes)
-    - 1× 5 V / 5 A switching BEC (Pololu D24V50F5 or equiv)
-    - 1× 6 V / 2 A servo BEC (Pololu D24V22F6 or equiv)
-
-- [ ] **Procure antenna hardware** per `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`:
-    - 2× 5 dBi 915 MHz omni rubber duck (RP-SMA) — one SiK, one LoRa
-    - 1× 9 dBi 915 MHz Yagi directional (RP-SMA) — shared SiK+LoRa via RF splitter
-    - 1× 14 dBi 5 GHz flat panel (RP-SMA) — Wi-Fi, gimbal-mounted
-    - 1× 49 MHz base-loaded whip 1/4-wave (~0.94 m physical) with 4 ground radials
-    - 1× 3 dBi 2.4 GHz rubber duck dipole (Zigbee, optional)
-    - 1× u-blox ANN-MB-00 or equiv active GNSS patch (GCS position fix)
-    - 1× 2-way 915 MHz RF splitter ≥20 dB isolation (Minicircuits ZFSC-2-1W-S+ or equiv)
-    - Coax cables per `malcolm_wiring.md` cable table (LMR-195, RG-58, RG-316)
-
-- [ ] **Procure gimbal hardware:**
-    - 2× DS3218MG digital servo (same as aircraft nacelle servos — reduces spare parts inventory)
-    - 2× AS5600 magnetic encoder PCB breakout module (I²C, 0x36)
-    - 2× N42 diametrically magnetised disc magnet 6×2 mm (encoder rotor)
-    - 1× 6804 thin-section bearing (20×32×7 mm) — pan stage
-    - 2× MF104ZZ flanged bearing (4×10×4 mm) — tilt pivot (same as nacelle pivot)
-    - 1× TCA9548A I²C mux PCB breakout (encoder bus isolation)
-    - 1× M6 camera tripod (heavy-duty) or 3 m telescoping mast for outdoor use
+- [ ] Create Malcolm host computer specification
+- [ ] Malcolm field enclosure — print and fit-check
+- [ ] Gimbal STL generation and mesh verification
+- [ ] Gimbal servo wind-load torque check
+- [ ] Procure Malcolm comms node hardware:
+- [ ] Procure antenna hardware
+- [ ] Procure gimbal hardware:
 
 #### 4.5.2 — Malcolm Comms Node Setup (Phase Malcolm-2)
+→ detail: `gcs/TODO.md` §4.5.2
 
-**Dependency:** Cape-B-2 and Emma PCBs received from JLCPCB.
-
-- [ ] **Flash Debian Linux to Malcolm PB2-I eMMC** — same OS image as aircraft nodes.
-    USB-C boot procedure per BeagleBone Debian documentation.
-
-- [ ] **Apply Cape-B-2 device tree overlay for Malcolm** — compile and install
-    `gcs/malcolm/firmware/pb2i/dts/k3-am6254-pocketbeagle2-malcolm-cape-b2.dtbo`.
-    Verify EHRPWM0 appears as `/sys/class/pwm/pwmchip0/` with 2 channels.
-    Verify I²C2 appears as `/dev/i2c-2`.
-
-- [ ] **Provision TPM 2.0 (SLB9670) on Malcolm's PB2-I** — unique key material; persistent
-    handle `MAL_TPM_KEY_HANDLE` (0x81000001) per `mal_config.h`.
-    Follow the same provisioning procedure as aircraft nodes (PROVISIONING.md, TBD).
-
-- [ ] **Verify CPLD write-blocker on Malcolm's log μSD** (Cape-B-2 ATF16V8BQL):
-    `echo test > /mnt/flightlog/test.txt` must return read-only error.
-    Configure `/etc/fstab` noexec/nodev/nosuid/ro mount for log partition.
-
-- [ ] **Build and install Malcolm PB2-I firmware:**
-
-        cd gcs/malcolm/firmware/pb2i
-        mkdir build && cd build
-        cmake -DCMAKE_TOOLCHAIN_FILE=../toolchain-aarch64.cmake ..
-        make -j$(nproc)
-        sudo make install
-
-    Verify `mal_gimbal` binary installed at `/usr/local/bin/mal_gimbal`.
-
-- [ ] **Install and configure mavlink-router on Malcolm's PB2-I** — same binary as for
-    aircraft CN nodes; configure for GCS role (forward all radio links → USB CDC-ECM → host PC).
-    Test: QGC on host PC should receive heartbeat on UDP :14550 with aircraft bench-powered.
-
-- [ ] **Enable all 5 radio interfaces on Malcolm's PB2-I** and verify each link at bench:
-    - SiK UART2: `screen /dev/ttyS2 57600` — observe MAVLink framing bytes
-    - LoRa SPI1: Python test: `python3 -c "import spidev; ..."` — read RFM95W version register (expected 0x12)
-    - Wi-Fi wlan0: `iw dev wlan0 scan` — observe available networks
-    - 49 MHz UART5: `screen /dev/ttyS5 1200` — verify Emma responds to KISS init
-    - I²C2 (encoders): `i2cdetect -y 2` — verify TCA9548A at 0x70 and AS5600 at 0x36
-
-- [ ] **Configure Wi-Fi transmit power** per FCC EIRP compliance:
-    When 14 dBi panel is in use, set `iw dev wlan0 set txpower fixed 1700` (17 dBm = 1700 mBm).
-    Create persistent udev hook or network config to apply on boot.
+- [ ] Flash Debian Linux to Malcolm PB2-I eMMC
+- [ ] Apply Cape-B-2 device tree overlay for Malcolm
+- [ ] Provision TPM 2.0 (SLB9670) on Malcolm's PB2-I
+- [ ] Verify CPLD write-blocker on Malcolm's log μSD
+- [ ] Build and install Malcolm PB2-I firmware:
+- [ ] Install and configure mavlink-router on Malcolm's PB2-I
+- [ ] Enable all 5 radio interfaces on Malcolm's PB2-I
+- [ ] Configure Wi-Fi transmit power
 
 #### 4.5.3 — Malcolm Host PC Software Setup (Phase Malcolm-3)
+→ detail: `gcs/TODO.md` §4.5.3
 
-- [ ] **Install Debian Linux on GCS host PC** (bookworm or later).
-
-- [ ] **Run installation scripts in order:**
-
-        sudo bash gcs/malcolm/software/install/install_deps.sh
-        sudo bash gcs/malcolm/software/install/install_mavlink_router.sh
-        bash gcs/malcolm/software/install/install_qgc.sh
-
-    Verify: `mavlink-routerd --version`; `~/Applications/QGroundControl.AppImage --version` (launches GUI).
-
-- [ ] **Configure QGroundControl:**
-    Application Settings → Comm Links → Add → UDP → localhost:14550 (mavlink-router output).
-    Set vehicle type to ArduPilot.  Import parameter file from `gcs/malcolm/software/config/qgc_params.params`
-    (create this file in Phase Malcolm-3 after first aircraft connection).
-
-- [ ] **Configure Wi-Fi Tx power on host PC** — if host PC has Wi-Fi and 14 dBi panel connected,
-    reduce to 17 dBm before use: `iw dev wlan0 set txpower fixed 1700`.
-
-- [ ] **Run tracking software tests:**
-
-        cd gcs/malcolm/software/tracking
-        pip install -r requirements.txt
-        pytest tests/test_tracker.py -v
-
-    All 9 bearing/elevation tests must pass.
-
-- [ ] **Implement `gcs/malcolm/firmware/pb2i/src/mal_comms.c` and `mal_comms.h`** — GCS-side
-    comms daemon: USB CDC-ECM bridge, MAVLink authentication (TPM HMAC), 49 MHz (Part 15 §15.235) KISS relay,
-    LoRa relay, Wi-Fi UDP relay, mavlink-router integration.  Structure parallel to aircraft
-    `avionics/firmware/cn/src/main.c`.  Add `mal_comms` target to `CMakeLists.txt`.
-    **BLOCKS Phase Malcolm-2 full multi-link operation.**
+- [ ] Install Debian Linux on GCS host PC
+- [ ] Run installation scripts in order:
+- [ ] Configure QGroundControl:
+- [ ] Configure Wi-Fi Tx power on host PC
+- [ ] Run tracking software tests:
+- [ ] Implement gcs/malcolm/firmware/pb2i/src/mal_comms.c and mal_com…
 
 #### 4.5.4 — Tracking and Gimbal Integration (Phase Malcolm-3)
+→ detail: `gcs/TODO.md` §4.5.4
 
-- [ ] **Bench test gimbal hardware** — connect two AS5600 encoders via TCA9548A to Malcolm
-    PB2-I I²C2 bus.  Run `i2cdetect` to confirm encoder presence.  Run mal_gimbal daemon;
-    verify it reads encoder angles and drives servo PWM on EHRPWM0.
-
-- [ ] **Gimbal calibration:**
-    - Home position: set `s_pan_zero_counts` and `s_tilt_zero_counts` to encoder readings when
-        gimbal physically points North at 0° elevation (calibration step in mal_gimbal.c init).
-    - Travel limit verification: command pan to ±170°; verify hard stops engage at ±175°.
-    - Tilt limit: command −10° and +90°; verify hard stops engage at −15° and +95°.
-
-- [ ] **Run telemetry_feed.py bench test** — power aircraft (Phase 5 minimum: 2-node),
-    run `python3 src/telemetry_feed.py`; verify GLOBAL\_POSITION\_INT JSON datagrams appear
-    on UDP :14560 within 2 s of aircraft GPS lock (HDOP ≤1.5).
-
-- [ ] **Run tracker.py bench test** — with telemetry_feed.py running and GCS GNSS connected,
-    run `python3 src/tracker.py`; verify gimbal target JSON appears on UDP :14570 at ≥5 Hz.
-    Confirm azimuth and elevation values change correctly as aircraft position is varied.
-
-- [ ] **Run gimbal_ctrl.py bench test** — with tracker.py running, run `python3 src/gimbal_ctrl.py`;
-    verify `GIMBAL_TARGET` commands appear on PB2-I UDP :14571; verify gimbal physically slews
-    to commanded position and encoder confirms on-target within 3 s.
-
-- [ ] **End-to-end tracking test (outdoor):**
-    - GCS GNSS acquires fix (HDOP ≤1.5); operator records GCS position.
-    - Walk aircraft (powered, GPS locked) 30–50 m in cardinal directions.
-    - Verify gimbal pan tracks aircraft azimuth within 5°.
-    - Verify gimbal tilt tracks aircraft elevation within 3° (at low aircraft altitude, elevation ≈ 0°).
+- [ ] Bench test gimbal hardware
+- [ ] Gimbal calibration:
+- [ ] Run telemetry_feed.py bench test
+- [ ] Run tracker.py bench test
+- [ ] Run gimbal_ctrl.py bench test
+- [ ] End-to-end tracking test (outdoor):
 
 #### 4.5.5 — Malcolm Integration Testing (Phase Malcolm-4)
+→ detail: `gcs/TODO.md` §4.5.5
 
-- [ ] **Multi-link communication bench test:** connect aircraft (Phase 5 minimum) to Malcolm;
-    verify QGC heartbeat on each link independently (disable 3, test 1, rotate):
-    SiK 915 MHz → LoRa 915 MHz → Wi-Fi 5 GHz → 49 MHz (Part 15 §15.235).
-    All 4 links must deliver ≥1 MAVLink heartbeat per 5 s with aircraft at 1 m range.
-
-- [ ] **915 MHz link margin test (open field, 1 km):**
-    Aircraft powered (no flight) at 1 km. Observe QGC RSSI on SiK link.
-    Required: RSSI ≥ −90 dBm (SiK sensitivity ≈ −112 dBm → ≥22 dB link margin;
-    adequate to absorb ~20 dB receiver desense at aircraft in 500 W/m² environment).
-
-- [ ] **Wi-Fi link margin test (open field, 200 m):**
-    Aircraft at 200 m. Observe Wi-Fi telemetry rate in QGC.
-    Required: ≥100 kbps sustained (adequate for video + MAVLink telemetry at 200 m).
-
-- [ ] **49 MHz (Part 15 §15.235) link test (1 km):**
-    Aircraft at 1 km. Verify AX.25 KISS frames received on the 49 MHz (Part 15 §15.235) link.
-    Log RSSI from Emma STATUS register.
-
-- [ ] **Gimbal pointing accuracy test (outdoor, aircraft at 200–500 m):**
-    With aircraft carrying a known position-fix (GPS HDOP ≤1.0), compare gimbal-pointed
-    azimuth to independently measured true bearing.  Required: pointing error ≤5°.
-
-- [ ] **MAVLink authentication test:** verify aircraft nodes reject unsigned commands from
-    Malcolm if TPM provisioning is incomplete (remove TPM key, attempt arm command →
-    should be rejected; re-provision TPM → arm command accepted).
-
-- [ ] **Node loss with Malcolm active:** kill one aircraft FC node during bench hover test;
-    verify Malcolm (QGC) shows failover in status panel within 200 ms; remaining nodes
-    maintain MAVLink heartbeat to Malcolm on all links.
-
----
+- [ ] Multi-link communication bench test:
+- [ ] 915 MHz link margin test (open field, 1 km):
+- [ ] Wi-Fi link margin test (open field, 200 m):
+- [ ] 49 MHz (Part 15 §15.235) link test (1 km):
+- [ ] Gimbal pointing accuracy test (outdoor, aircraft at 200–500 m):
+- [ ] MAVLink authentication test:
+- [ ] Node loss with Malcolm active:
 
 ### 4.6 — Jayne Node (Nose/Cargo Vision, ToF & Laser) — Firmware
 
-**Dependency:** blocked on §1.2c hardware (no `Jayne.kicad_sch`/`Jayne.kicad_pcb` exist yet).
-This is tracked as its own WBS section because it is a genuine multi-phase firmware bring-up
-effort — an ISP/encoder pipeline on a new SoC family, not a configuration change — per user
-direction (2026-07-03).
-
 #### 4.6.1 — TI AM62Ax Vision Pipeline Bring-Up
+→ detail: `avionics/jayne/TODO.md` §4.6.1
 
-- [ ] **MIPI CSI-2 camera sensor bring-up** — select an actual camera sensor module compatible
-    with AM62Ax's MIPI CSI-2 v1.3 / D-PHY 1.2 input [REF-SENSOR-003]; port or write the V4L2
-    sensor driver (device tree camera node, I²C control interface, sensor-specific register init).
-- [ ] **VPAC/ISP pipeline configuration** — tune the 7th-gen ISP (exposure, white balance, lens
-    shading, noise reduction) for outdoor daylight FPV use via TI's open-source ISP tuning tools.
-- [ ] **H.264/H.265 hardware encoder pipeline** — GStreamer pipeline using the AM62Ax hardware
-    encoder; target bitrate/latency suitable for real-time FPV over the Ethernet ring.
-- [ ] **Kernel/BSP integration** — confirm TI's open-source Linux BSP version target, document
-    kernel version and any patches required; this is explicitly **not** an OpenIPC port (TI
-    silicon is not OpenIPC-supported — see REFERENCES.md "Removed / Superseded Citations").
-- [ ] **Bench test:** verify stable H.264/H.265 stream from a live camera sensor to a
-    development-host GStreamer receiver before integrating with the Ethernet ring.
+- [ ] MIPI CSI-2 camera sensor bring-up
+- [ ] VPAC/ISP pipeline configuration
+- [ ] H.264/H.265 hardware encoder pipeline
+- [ ] Kernel/BSP integration
+- [ ] Bench test:
 
 #### 4.6.2 — TI MSPM0G3507 Control Firmware
+→ detail: `avionics/jayne/TODO.md` §4.6.2
 
-- [ ] **MCAN (CAN-FD) driver bring-up** — native hardware peripheral [REF-SENSOR-004]; no
-    software PIO synthesis required (unlike an RP2350-based design).
-- [ ] **TFmini-S UART driver** — reuse driver approach already planned for Shepherd `serenity-fc`
-    (see §1.1.1.1a); republish ToF range data over both CAN-FD and the Ethernet ring.
-- [ ] **KSZ9477 Ethernet switch management driver** [REF-SENSOR-005] — confirm HSR/PRP hardware
-    redundancy is correctly configured (verify against AN3474) so ring failover requires no
-    software topology management on the PocketBeagle 2 nodes.
-- [ ] **Laser GPIO driver (both sites Class 2 — `docs/JAYNE_LASER_ANALYSIS.md` Rev A2):**
-    GPIO-enable with pull-down-default-off + heartbeat-loss interlock (drop GPIO low if
-    Ethernet ring AND CAN-FD both lose master-FC heartbeat) [REF-IEC-002 §5.4]. The Class 2 cap
-    is hardware-enforced, so no key-interlock/shutter is required; `LASER_KEY_IN`/`LASER_IND`
-    are optional defense-in-depth. (Supersedes the earlier Cargo-3R / Nose-3B split.)
-- [ ] **Laser strobe + crosshair-metrology routine (AM62A7 ISP):** strobe the laser via a
-    laser-sync GPIO/PWM and temporally difference (laser-on − laser-off) to extract the
-    crosshair in daylight; sub-pixel-fit the crosshair lines and compute detected-object
-    **size** = (obj_px/cross_px)·2R·tan(θ/2) and **tilt** from arm foreshortening, using the
-    boresighted TFmini-S range R (`docs/JAYNE_LASER_ANALYSIS.md §4.4`). Publish size/orientation
-    with the signed telemetry below.
-- [ ] **SPI driver to Infineon SLB9670 TPM** — reuse the existing TPM driver approach already
-    used fleet-wide on Wash/Zoë nodes rather than writing a new one from scratch.
-- [ ] **Signed telemetry:** TPM-signed HMAC or ECDSA signature on all ToF/laser-state packets
-    published over CAN-FD and Ethernet, per Zero Trust policy [REF-NIST-001 §2.1].
+- [ ] MCAN (CAN-FD) driver bring-up
+- [ ] TFmini-S UART driver
+- [ ] KSZ9477 Ethernet switch management driver
+- [ ] Laser GPIO driver (both sites Class 2 — docs/JAYNE_LASER_ANALYS…
+- [ ] Laser strobe + crosshair-metrology routine (AM62A7 ISP):
+- [ ] SPI driver to Infineon SLB9670 TPM
+- [ ] Signed telemetry:
 
 #### 4.6.3 — Integration Testing
+→ detail: `avionics/jayne/TODO.md` §4.6.3
 
-- [ ] **Bench test:** verify Jayne node publishes signed ToF range + laser-state + video stream
-    to at least one PocketBeagle 2 node over both CAN-FD and Ethernet independently.
-- [ ] **Ring failure test:** break the Ethernet ring at a point other than Jayne; verify KSZ9477
-    HSR/PRP failover completes with no observable video interruption.
-- [ ] **Laser safety interlock test (nose only):** verify laser GPIO drops low within the
-    heartbeat-loss window when Ethernet ring and CAN-FD are both disconnected from Jayne.
+- [ ] Bench test:
+- [ ] Ring failure test:
+- [ ] Laser safety interlock test (nose only):
 
 ---
 
 ## 5.0 — Regulatory Compliance
 
 ### 5.1 — FCC (external radio systems)
+→ detail: `docs/TODO.md` §5.1
 
-- [ ] **XCVR-49MHZ-1/2 FCC Part 15 §15.235 compliance** — field strength ≤10,000 µV/m at 3 m
-    (≈30 µW / −15.2 dBm EIRP-equivalent, requiring a firmware PA limit from the as-designed
-    +20 dBm down to ≈ −13 dBm — see §0.1), harmonic suppression per §15.235(b)/§15.209. Document
-    via pre-compliance checklist (1.3 Phase 4). Formal FCC equipment authorization (FCC ID grant
-    via TCB) required before airborne transmission on 49MHz channels (47 CFR §2.803/§15.19, not
-    Part 95 §95.603). **§15.203 antenna-connector gap resolved in design (RP-SMA, see §0.1);
-    board re-spin pending.**
-
-- [x] **SiK 915MHz** — operates under FCC Part 15 / ISM band (no license required for operation). Verify SiK radio module carries FCC ID marking.
-
-- [x] **LoRa RFM95W 915MHz** — same Part 15 / ISM band. Verify module carries FCC ID.
-
-- [x] **Wi-Fi (WL1837MOD)** — Part 15 / ISM. Module must carry FCC ID; verify.
-
-- [x] **ZigBee 2.4GHz (if used)** — Part 15 / ISM. Verify FCC ID on any ZigBee module installed.
+- [ ] XCVR-49MHZ-1/2 FCC Part 15 §15.235 compliance
+- [x] SiK 915MHz
+- [x] LoRa RFM95W 915MHz
+- [x] Wi-Fi (WL1837MOD)
+- [x] ZigBee 2.4GHz (if used)
 
 ### 5.2 — FAA (airworthiness and operations)
+→ detail: `docs/TODO.md` §5.2
 
-- [ ] **Aircraft registration** — register under 14 CFR Part 48 (sUAS, AUW <55 lbs) at FAA DroneZone. Replace N00000 placeholder in `decal_sheet.svg`. Mark on airframe per 14 CFR 47 — visible without moving any part. **Complete before first untethered flight.**
-
-- [ ] **Remote Pilot Certificate** — verify FAA Part 107 Remote Pilot Certificate is current (24-month knowledge test recurrency).
-
-- [ ] **Navigation lights compliance** — verify 6-position WS2812C nav light implementation: port RED (≥3 SM visibility), stbd GREEN, tail WHITE steady, belly WHITE strobe. Compliant with ICAO Annex 2 and 14 CFR 91.209.
-
-- [ ] **sUAS data plate** — attach to airframe: operator name, contact info, registration number. See `decal_sheet.svg` "D — safety labels" zone.
-
-- [ ] **Pre-flight area check** — LAANC authorization for any Class B/C/D/E airspace. Verify no TFRs, NOTAM conflicts. File NOTAM if operating in uncontrolled airspace with public nearby.
-
-- [ ] **Airspace waiver (if applicable)** — if operating above 400ft AGL or in controlled airspace without LAANC, apply for FAA Part 107 waiver (approval time 90 days typical).
+- [ ] Aircraft registration
+- [ ] Remote Pilot Certificate
+- [ ] Navigation lights compliance
+- [ ] sUAS data plate
+- [ ] Pre-flight area check
+- [ ] Airspace waiver (if applicable)
 
 ### 5.3 — Industry Standards Compliance
+→ detail: `docs/TODO.md` §5.3
 
-- [ ] **Structural validation** — wing spar, keel, pivot rod, and tilt servo torque analysis documented per REVN_BUILD_GUIDE_24IN.md structural summary. Verify at actual build dimensions (24" hull).
-
-- [ ] **IEEE/ISA/AUVSI best practices** — validate all design decisions against AUVSI UAS best practices; document in build record.
-
-- [ ] **Tamper-evident logging** — verify CPLD write-blocker (ATF16V8BQL) on all 4 CN nodes prevents post-flight log modification; function as hardware-enforced non-executable microSD per CLAUDE.md requirement.
+- [ ] Structural validation
+- [ ] IEEE/ISA/AUVSI best practices
+- [ ] Tamper-evident logging
 
 ---
 
 ## 6.0 — Version Control and Repository Maintenance
 
 ### 6.1 — Branch Reconciliation (2026-06-09)
+→ detail: `docs/TODO.md` §6.1
 
-**Context:** A `git merge --allow-unrelated-histories` at commit `406c53f` joined two divergent
-history trees. This created a topology where 11 feature branches appeared to have 44–168 commits
-"not in main," but no file content was actually lost.
-
-**Reconciliation findings (verified 2026-06-09):**
-
-- [x] **`claude/aft-edf-phase-11-CMM8b`** — PRs #37, #39 merged. 0 files missing from main. Branch is a pre-merge snapshot; content fully absorbed. ✅
-- [x] **`claude/cape-em-harsh-variants-9Yfr1`** — PRs #28–#35 merged. 0 files missing from main. ✅
-- [x] **`claude/cargo-equipment-mounts-70I3i`** — PRs #21, #23 merged. Old `serenity/` paths reorganized to `airframe/` and `archives/` in main. ✅
-- [x] **`claude/docs-scrub-revision-p-Y7pja`** — PRs #24, #25 merged; PR #27 closed. 0 files missing from main. ✅
-- [x] **`claude/kicad-silk-labels-HnUIe`** — PRs #7, #9, #10 merged. Old `serenity/diagrams/` SVGs now in `graphical-build-guide/`; 18in STLs archived in `archives/thingverse-serenity/`. ✅
-- [x] **`claude/revision-q-avionics-archive-BXwZI`** — PRs #35, #36, #41 merged. 0 files missing from main. ✅
-- [x] **`claude/revt-nacelle-simplified-3Ri7A`** — PRs #38, #40 merged. 0 files missing from main. ✅
-- [x] **`claude/todo-implementation-2LV2X`** — PRs #15, #18 merged. Old paths reorganized to current structure. ✅
-- [x] **`claude/todo-implementation-8bRee`** — PRs #11–#14, #16, #19 merged. Hull SVGs (hull_bottom/front/side/top) present in `graphical-build-guide/`. ✅
-- [x] **`claude/todo-implementation-AY2pY`** — PR #31 merged. 0 files missing from main. ✅
-- [x] **`claude/todo-implementation-by1W7`** — PRs #20, #22, #26 merged. KiCad backup ZIPs and lockfiles not design artifacts. ✅
-- [x] **`claude/wing-root-nacelle-mounts-5bSEA`** — PRs #42, #43 merged. 0 commits not in main. ✅
-
-**Result:** Main is a superset of all 12 feature branches. All 43 PRs (42 merged, 1 closed) are
-fully integrated. The stale branches are safe to delete via GitHub once this PR is merged.
-
-- [ ] **Delete stale feature branches** on GitHub after confirming this reconciliation PR merges
-    cleanly. Branches to delete: all `claude/*` branches except `claude/pr-reconciliation-forced-merge-4yefsw`.
+- [x] claude/aft-edf-phase-11-CMM8b
+- [x] claude/cape-em-harsh-variants-9Yfr1
+- [x] claude/cargo-equipment-mounts-70I3i
+- [x] claude/docs-scrub-revision-p-Y7pja
+- [x] claude/kicad-silk-labels-HnUIe
+- [x] claude/revision-q-avionics-archive-BXwZI
+- [x] claude/revt-nacelle-simplified-3Ri7A
+- [x] claude/todo-implementation-2LV2X
+- [x] claude/todo-implementation-8bRee
+- [x] claude/todo-implementation-AY2pY
+- [x] claude/todo-implementation-by1W7
+- [x] claude/wing-root-nacelle-mounts-5bSEA
+- [ ] Delete stale feature branches
 
 ### 6.2 — STL Mesh Repair (2026-06-09)
+→ detail: `docs/TODO.md` §6.2
 
-**Context:** CI STL Validation job was failing on 11 files (22 reported — each scanned twice due
-to duplicate search paths in the validator). Root causes and resolutions:
-
-**Validator fix:**
-- [x] Removed duplicate SEARCH_PATHS (`airframe/stls/fuselage`, `nacelles`, `wings` are subsets
-    of `airframe/stls` rglob — each file was reported twice). Fixed by reducing to
-    `["airframe/stls", "stls"]` plus a `seen` deduplication set.
-- [x] Added per-body watertightness check: a mesh passes CI if `mesh.is_watertight` OR every
-    `mesh.split()` body is individually watertight. This correctly handles multi-body assembly
-    STLs (4 landing feet, nacelle assembly, shell + insert bodies) where the combined mesh fails
-    trimesh's global winding check but every solid sub-body is closed.
-
-**STL repairs (manifold3d 3.5.1):**
-- [x] `nacelle_nozzle_closed_asm.stl` — repaired: 1704 → 1648 faces, wt=True (16 bodies)
-- [x] `nacelle_nozzle_petal.stl` — repaired: 213 → 206 faces, wt=True
-- [x] `head_shell24_2mm_repaired.stl` — repaired: 227428 → 226812 faces, wt=True (6 bodies)
-- [x] `cargo_sect_shell24_2mm_repaired.stl` — repaired: 368352 → 367506 faces, wt=True
-- [x] `cargo_sect_shell24_2mm_repaired_largest.stl` — repaired: 367514 → 367474 faces, wt=True
-- [x] `middle_canonical_edf_intake.stl` — **regenerated** from `middle_canonical_shell24.stl`
-    via manifold3d Boolean difference (4 radial intake scoops). Original was non-manifold (3
-    connected components, all non-manifold). New mesh: 20734 faces, wt=True. Parameters from
-    `airframe/blender-scripts/blender_middle_intake_cut.py` Rev C.
-
-**STLs passing via per-body check (no geometry change needed):**
-- [x] `feet_x_4_scaled24.stl` — 4 feet (4 bodies, each wt=True)
-- [x] `rear_shell24_2mm_repaired.stl` — 15 bodies, all wt=True
-- [x] `middle_shell24_2mm_repaired.stl` — 10 bodies, all wt=True
-- [x] `dorsal_antenna_fin.stl` — 3 bodies, all wt=True
-- [x] `cargo_sect_shell24.stl` — 190 bodies, all wt=True
-
-**Result:** All 37 STL files pass `python tools/validate_stls.py` (0 failures).
+- [x] Removed duplicate SEARCH_PATHS (airframe/stls/fuselage, nacelle…
+- [x] Added per-body watertightness check: a mesh passes CI if mesh.i…
+- [x] nacelle_nozzle_closed_asm.stl — repaired: 1704 → 1648 faces, wt…
+- [x] nacelle_nozzle_petal.stl — repaired: 213 → 206 faces, wt=True
+- [x] head_shell24_2mm_repaired.stl — repaired: 227428 → 226812 faces…
+- [x] cargo_sect_shell24_2mm_repaired.stl — repaired: 368352 → 367506…
+- [x] cargo_sect_shell24_2mm_repaired_largest.stl — repaired: 367514…
+- [x] regenerated
+- [x] feet_x_4_scaled24.stl — 4 feet (4 bodies, each wt=True)
+- [x] rear_shell24_2mm_repaired.stl — 15 bodies, all wt=True
+- [x] middle_shell24_2mm_repaired.stl — 10 bodies, all wt=True
+- [x] dorsal_antenna_fin.stl — 3 bodies, all wt=True
+- [x] cargo_sect_shell24.stl — 190 bodies, all wt=True
 
 ### 6.3 — Rev S Checkpoint (2026-07-04)
-
-**Per the revision policy (root `CLAUDE.md` / `current-specification/CLAUDE.md`):** Rev S is a
-comprehensive checkpoint that integrates every Rev R1/R1c/R1d/R2 modification below as the new
-baseline. All active components are now referenced as of Rev S; modification numbering resets
-(the next incremental change is S1). This section is the audit trail — it does not restate the
-detailed rationale already recorded at each item's own dated entry elsewhere in this file, it
-indexes them.
-
-**Integrated since Rev R (2026-06-10):**
-
-- **Rev R1 (2026-06-11) — Hull-frame coordinate standardisation.** All 8 primary components
-    baked into STL vertex data (`tools/bake_hull_frame.py`); nacelle port/stbd label swap fixed;
-    identity-placement FreeCAD assembly.
-- **Rev R1c (2026-06-30) — Bow sensor pod redesign.** Camera/ToF/laser clustered on the 40° bow
-    flat, one combined faceplate (`bow_sensor_faceplate.scad`), geometric verification tool
-    (`tools/verify_bow_pod.py`).
-- **Cargo interior merge pipeline (2026-06-30).** `merge_cargo_interior.py` — definitive cargo
-    processor; fixed the MESH-01 fragmentation defect for cargo (single robust manifold3d
-    boolean, not sequential per-cutter subtraction); merged clamshell doors, joint features, wing
-    spar/mortises, nacelle-servo pads, Inara avionics bosses.
-- **Jayne board (2026-07-03).** New standalone vision/ToF/laser PCB (nose + cargo-bay install,
-    one shared design) — schematic + PCB, EMI-hardened to the Wash/Zoë Rev R standard, DRC/ERC
-    clean of all real electrical checks. See `avionics/kicad/Jayne/Jayne.md`.
-- **Head/Cargo, Cargo/Middle, Middle/Rear splice collars (2026-06-29 / 2026-07-03).** All three
-    fuselage structural joints now have a first-principles load check and a printed internal
-    splice collar generator (`generate_head_cargo_splice_collar.py`,
-    `generate_cargo_middle_splice_collar.py`, `generate_middle_rear_splice_collar.py`);
-    watertight, verified against real cross-sections, not estimated.
-- **MESH-01 — middle shell resolved (2026-07-03).** Watertight, single body, verified volume.
-    **Rear shell NOT resolved** — root cause is a pre-damaged Blender-canonical source
-    (independent of the cutting logic); still open, tracked at §1.1.1.0b.
-- **Ring-frame DXF export + keel/battery-tray fix (2026-07-03).** Rear ring plate final; cargo
-    ring plate PROVISIONAL (blocked on the still-open rear-shell MESH-01 item above — do not cut
-    stock from it). Battery tray keel-rail orientation bug found and fixed.
-- **Cargo GPS/avionics/nadir-camera axis-bug fix — Rev R2 (2026-07-03).** GPS, Inara/River
-    avionics-bay mounts, and the nadir camera in `cargo_sect_shell24.scad` were using the
-    longitudinal (Y) axis as if it were dorsal — same bug class as the Rev R1 wing-root fix.
-    Fixed; Inara/River confirmed as a port/stbd lateral pair. Same bug found (not yet fixed) in
-    the door-servo/latch modules and in `head_shell24.scad`'s Shepherd's-Book mount — carried
-    forward as open Rev S work, see §1.1.1.0a.
-- **Bow-pod cuts merged into the head shell (2026-07-03).** `merge_head_interior.py` — camera/
-    ToF/laser apertures and faceplate seat now actually cut into the published head shell
-    (previously SCAD-only); watertight, single body, all 69 project STLs pass validation.
-- **CI overhaul (2026-07-04).** Added `tools/validate_kicad.py` + a `kicad-validate` job (real
-    `kicad-cli` ERC/DRC, changed-files-scoped so it doesn't fail on Wash/Kaylee's pre-existing
-    backlog); removed all tracked `.pyc`/`__pycache__` files and added them to `.gitignore`;
-    fixed real lint/CI failures (duplicate code, markdownlint, textlint terminology, DevSkim
-    false positives on "CMC"); removed `ossar.yml` (redundant with the repo's native CodeQL
-    default setup) and disabled super-linter's duplicate `PYTHON_FLAKE8` check.
-
-**Open items carried into Rev S (not resolved by this checkpoint — see their own WBS entries):**
-rear-shell MESH-01 mesh repair; cargo ring-plate re-cut once that's fixed; door-servo/latch/
-belly-rib and Shepherd's-Book axis-bug fixes; leg-boss final X/Y (LG-10); access-panel dorsal-
-frame rewrite; wire-post shoulder-height Z; a 3-way battery-tray placement conflict (head/cargo/
-middle).
-
-**Not updated by this checkpoint:** `current-specification/serenity-rev-r.jsx` (the full,
-non-delta interactive spec document) still describes the Rev R state — this project's own
-convention calls for a `serenity-rev-s.jsx` at each letter revision, but authoring a complete
-1200+ line non-delta replacement is a separate, large documentation task, not done as part of
-this checkpoint. Flagged here rather than silently left inconsistent. Also not updated:
-`docs/bom_revR.json` (the larger, hand-structured JSON BOM — `current-specification/bom_revR.csv`
-was superseded to `bom_revS.csv`, but a matching `docs/bom_revS.json` was not authored this pass).
-
-**Pre-existing documentation inconsistency — INVESTIGATED AND RESOLVED 2026-07-04.** The
-Zoë/Emma LoRa-migration status (flagged above as an unresolved self-contradiction) was checked
-directly against the real KiCad files rather than guessed. Ground truth: neither board is
-cleanly "done" or "not started" — both PCB layouts (`Emma.kicad_pcb`, `Zoë.kicad_pcb`) already
-have real `2x18_P1_Socket`/`2x18_P2_Socket` footprints placed (and Emma's PCB additionally has
-a real, routed RFM95W LoRa footprint), all added directly via `avionics/kicad/
-complete_xcvr_49mhz2.py`'s `pcbnew`-API scripting — but NEITHER schematic (`Emma.kicad_sch`,
-`Zoë.kicad_sch`) was updated to match: Emma's schematic has zero LoRa/P1P2 content at all
-(just an EMI-hardening stub), and Zoë's schematic still has its original RFM95W symbol and
-JST-GH connectors untouched. Both boards' legacy JST-GH connectors remain physically present
-and live on the PCB alongside the new hardware. `avionics/CLAUDE.md` and root `CLAUDE.md` have
-been corrected to describe this accurately (PCB-ahead-of-schematic, not "planned" or "done");
-TODO.md §1.2b's Emma/Zoë items renumbered Rev R1 → Rev S1 and given the same finding. Still
-needs a **user decision**: author the missing schematic content to match the PCB work, or
-treat it as provisional/unverified and redo the migration schematic-first.
+→ detail: `docs/TODO.md` §6.3
 
 ---
 
-*"We're still flying. That's not nothing." — Mal.*
-
-*© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY 4.0*  
-*Hull: misubisu CC BY 4.0 · Nozzles: BamJr CC BY 4.0 · Inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy / Universal — Not an officially licensed product.*
+*"Love. You can learn all the math in the 
+'verse, but you take a boat in the air that you don't love, she'll shake you
+off just as sure as the turning of the worlds. Love keeps her in the air when
+she oughta fall down, tells you she's hurtin' 'fore she keels. Makes her
+a home." — Capt. Malcolm Reynolds*
