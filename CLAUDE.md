@@ -77,6 +77,44 @@ This root `CLAUDE.md` provides **project-wide standards** applicable to all fold
 
 Each federated file assumes you have already read this root document. **This root file is authoritative for all project-wide standards.** Subordinate files provide additional detail and scope-specific workflows.
 
+### WBS.md / TODO.md Federation (Rev S2, 2026-07-18)
+
+Every subsystem that owns WBS branches keeps **two files, not one**:
+
+- **`WBS.md`** — the full historical record: every task ever defined, done or open, with
+  full notes/rationale/nested sub-steps for project-progression tracking. Root `WBS.md` is
+  itself a compact index (headings, subheadings, single-line ≤70-char items, done + open)
+  that points into each subsystem's own `WBS.md` for the real narrative detail.
+- **`TODO.md`** — a lean, generated-from-`WBS.md` list of **only currently-open (unchecked)
+  top-level items**, one line each (≤70 chars), each pointing back to its entry in the
+  local `WBS.md`. This is the "what's actually left" view. Close an item in `WBS.md` first;
+  `TODO.md` is regenerated/pruned from there, never edited as the source of truth.
+
+Governance stays with the CLAUDE.md files listed above; several subsystems keep `WBS.md`
+detail split across more than one file so none exceeds ~500 lines (the threshold at which
+a subsystem gets a new detail file rather than an ever-growing one — see "Workflow Notes"
+below):
+
+- **avionics/** — `avionics/{TODO,WBS}.md` (Wash/Zoë/Emma cape hardware, names, workload),
+  `avionics/rev-s1/{TODO,WBS}.md` (Emma/Zoë/Kaylee Rev S1 redesign),
+  `avionics/emi-hardening/{TODO,WBS}.md` (§0.6, §1.4 EMI hardening beyond the PCBs),
+  `avionics/jayne/{TODO,WBS}.md` (Jayne board + firmware), `avionics/firmware/{TODO,WBS}.md`
+  (Wash/Zoë node firmware)
+- **airframe/** — `airframe/{TODO,WBS}.md` (hull-frame standard, non-printable
+  placeholders, procurement), `airframe/fuselage-joints/{TODO,WBS}.md`,
+  `airframe/fuselage-covers/{TODO,WBS}.md`, `airframe/fuselage-mid/{TODO,WBS}.md`
+  (fuselage §1.1.1, split 3 ways), `airframe/wings-nacelles/{TODO,WBS}.md`,
+  `airframe/landing-gear/{TODO,WBS}.md`
+- **graphical-build-guide/** — `graphical-build-guide/{TODO,WBS}.md` (Phases 0-4 + SVG
+  rebuild pipeline), `graphical-build-guide/flight-phases/{TODO,WBS}.md` (Phases 5-10)
+- **docs/**, **gcs/**, **deferred/** — a single `{TODO,WBS}.md` pair each (well under the cap)
+- **tools/**, **current-specification/** — reference-index `TODO.md` files only, no `WBS.md`
+  (own no WBS branch and no checkboxes of their own; pointer views into the owning
+  subsystem's `WBS.md`/`TODO.md`)
+
+Split detail files are governed by their parent folder's `CLAUDE.md` (no separate
+federated `CLAUDE.md` per split — e.g. `avionics/jayne/` follows `avionics/CLAUDE.md`).
+
 ## Standards Vetting Policy
 
 - **Every design specification with any effect beyond cosmetic appearance must be vetted against applicable industry standards and/or regulations before implementation.**  Standards citations shall be recorded in `REFERENCES.md`, which catalogs every applicable standard with:
