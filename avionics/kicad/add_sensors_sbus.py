@@ -36,9 +36,9 @@ References:
   - KiCad S-expression format  : KiCad EDA schematic format version 20240101
 """
 
+import os
 import re
 import sys
-import os
 
 # ---------------------------------------------------------------------------
 # File paths (absolute, per project convention)
@@ -55,8 +55,8 @@ CAPE_B1_PATH = os.path.join(SCRIPT_DIR, "CAPE-B-1.kicad_sch")
 # Prefix matches the existing CAPE-A-1 / CAPE-B-1 convention.
 UUID_PREFIX = "00000000-0000-0000-0000-"
 
-_uuid_counter_a = 400   # Cape-A-1 counter
-_uuid_counter_b = 500   # Cape-B-1 counter
+_uuid_counter_a = 400  # Cape-A-1 counter
+_uuid_counter_b = 500  # Cape-B-1 counter
 
 
 def next_uuid_a() -> str:
@@ -94,6 +94,7 @@ def next_uuid_b() -> str:
 # Helper: S-expression parser utilities (copied from gen_cape_a2.py)
 # ---------------------------------------------------------------------------
 
+
 def find_balanced_sexp(text: str, start: int) -> int:
     """Return the index ONE PAST the closing ')' that balances the '(' at *start*.
 
@@ -118,16 +119,16 @@ def find_balanced_sexp(text: str, start: int) -> int:
             # Previous character was a backslash inside a quoted string.
             escape_next = False
         elif in_string:
-            if ch == '\\':
+            if ch == "\\":
                 escape_next = True
             elif ch == '"':
                 in_string = False
         else:
             if ch == '"':
                 in_string = True
-            elif ch == '(':
+            elif ch == "(":
                 depth += 1
-            elif ch == ')':
+            elif ch == ")":
                 depth -= 1
                 if depth == 0:
                     return i + 1
@@ -152,7 +153,7 @@ def find_sexp_block(text: str, tag: str) -> tuple:
     Raises:
         ValueError: if the tag is not found.
     """
-    pattern = r'\(' + re.escape(tag)
+    pattern = r"\(" + re.escape(tag)
     match = re.search(pattern, text)
     if match is None:
         raise ValueError(f"Tag not found: ({tag}")
@@ -164,6 +165,7 @@ def find_sexp_block(text: str, tag: str) -> tuple:
 # ===========================================================================
 # lib_symbol definitions — Cape-A-1 components
 # ===========================================================================
+
 
 def lib_sym_qmc5883l() -> str:
     """Return the KiCad lib_symbol S-expression for the QMC5883L magnetometer.
@@ -183,7 +185,7 @@ def lib_sym_qmc5883l() -> str:
 
     Reference: QST QMC5883L datasheet, LCSC C192585.
     """
-    return '''\
+    return """\
   (symbol "QMC5883L" (in_bom yes) (on_board yes)
     (property "Reference" "U" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
     (property "Value" "QMC5883L" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
@@ -210,7 +212,7 @@ def lib_sym_qmc5883l() -> str:
         (name "DRDY" (effects (font (size 1.016 1.016))))
         (number "5" (effects (font (size 1.016 1.016)))))
     )
-  )'''
+  )"""
 
 
 def lib_sym_ina219() -> str:
@@ -236,7 +238,7 @@ def lib_sym_ina219() -> str:
 
     Reference: TI INA219 datasheet SBOS137I (Rev. I, 2015).
     """
-    return '''\
+    return """\
   (symbol "INA219AIDR" (in_bom yes) (on_board yes)
     (property "Reference" "U" (at 0 -7.62 0) (effects (font (size 1.27 1.27))))
     (property "Value" "INA219AIDR" (at 0 7.62 0) (effects (font (size 1.27 1.27))))
@@ -272,7 +274,7 @@ def lib_sym_ina219() -> str:
         (name "SCL" (effects (font (size 1.016 1.016))))
         (number "8" (effects (font (size 1.016 1.016)))))
     )
-  )'''
+  )"""
 
 
 def lib_sym_conn_jst_gh_02p() -> str:
@@ -289,7 +291,7 @@ def lib_sym_conn_jst_gh_02p() -> str:
 
     Reference: JST SM02B-GHS-TB product page.
     """
-    return '''\
+    return """\
   (symbol "Conn_JST_GH_02P" (in_bom yes) (on_board yes)
     (property "Reference" "J" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
     (property "Value" "Conn_JST_GH_02P" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
@@ -307,7 +309,7 @@ def lib_sym_conn_jst_gh_02p() -> str:
         (name "Pin_2" (effects (font (size 1.016 1.016))))
         (number "2" (effects (font (size 1.016 1.016)))))
     )
-  )'''
+  )"""
 
 
 def lib_sym_conn_jst_gh_03p() -> str:
@@ -324,7 +326,7 @@ def lib_sym_conn_jst_gh_03p() -> str:
 
     Reference: JST SM03B-GHS-TB product page.
     """
-    return '''\
+    return """\
   (symbol "Conn_JST_GH_03P" (in_bom yes) (on_board yes)
     (property "Reference" "J" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
     (property "Value" "Conn_JST_GH_03P" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
@@ -345,7 +347,7 @@ def lib_sym_conn_jst_gh_03p() -> str:
         (name "Pin_3" (effects (font (size 1.016 1.016))))
         (number "3" (effects (font (size 1.016 1.016)))))
     )
-  )'''
+  )"""
 
 
 def lib_sym_resistor() -> str:
@@ -361,7 +363,7 @@ def lib_sym_resistor() -> str:
 
     Reference: Generic SMD resistor.
     """
-    return '''\
+    return """\
   (symbol "R_SMD" (in_bom yes) (on_board yes)
     (property "Reference" "R" (at 0 -1.778 0) (effects (font (size 1.27 1.27))))
     (property "Value" "R" (at 0 1.778 0) (effects (font (size 1.27 1.27))))
@@ -379,7 +381,7 @@ def lib_sym_resistor() -> str:
         (name "~" (effects (font (size 1.016 1.016))))
         (number "2" (effects (font (size 1.016 1.016)))))
     )
-  )'''
+  )"""
 
 
 def lib_sym_74lvc1g14() -> str:
@@ -398,7 +400,7 @@ def lib_sym_74lvc1g14() -> str:
 
     Reference: Nexperia 74LVC1G14 datasheet (Rev. 11, 2021).
     """
-    return '''\
+    return """\
   (symbol "74LVC1G14" (in_bom yes) (on_board yes)
     (property "Reference" "U" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
     (property "Value" "74LVC1G14GW" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
@@ -422,12 +424,13 @@ def lib_sym_74lvc1g14() -> str:
         (name "VCC" (effects (font (size 1.016 1.016))))
         (number "5" (effects (font (size 1.016 1.016)))))
     )
-  )'''
+  )"""
 
 
 # ===========================================================================
 # lib_symbol definitions — Cape-B-1 additional components
 # ===========================================================================
+
 
 def lib_sym_conn_jst_gh_06p() -> str:
     """Return the KiCad lib_symbol S-expression for a 6-pin JST GH connector.
@@ -446,7 +449,7 @@ def lib_sym_conn_jst_gh_06p() -> str:
 
     Reference: JST SM06B-GHS-TB product page.
     """
-    return '''\
+    return """\
   (symbol "Conn_JST_GH_06P" (in_bom yes) (on_board yes)
     (property "Reference" "J" (at 0 -8.89 0) (effects (font (size 1.27 1.27))))
     (property "Value" "Conn_JST_GH_06P" (at 0 8.89 0) (effects (font (size 1.27 1.27))))
@@ -476,7 +479,7 @@ def lib_sym_conn_jst_gh_06p() -> str:
         (name "Pin_6" (effects (font (size 1.016 1.016))))
         (number "6" (effects (font (size 1.016 1.016)))))
     )
-  )'''
+  )"""
 
 
 def lib_sym_sw_dip_x02() -> str:
@@ -494,7 +497,7 @@ def lib_sym_sw_dip_x02() -> str:
 
     Reference: Generic DIP switch symbol.
     """
-    return '''\
+    return """\
   (symbol "SW_DIP_x02" (in_bom yes) (on_board yes)
     (property "Reference" "SW" (at 0 -6.35 0) (effects (font (size 1.27 1.27))))
     (property "Value" "SW_DIP_x02" (at 0 6.35 0) (effects (font (size 1.27 1.27))))
@@ -518,12 +521,13 @@ def lib_sym_sw_dip_x02() -> str:
         (name "NO2" (effects (font (size 1.016 1.016))))
         (number "4" (effects (font (size 1.016 1.016)))))
     )
-  )'''
+  )"""
 
 
 # ===========================================================================
 # Component instance generators — Cape-A-1
 # ===========================================================================
+
 
 def inst_qmc5883l(cx: float, cy: float) -> str:
     """Return the symbol instance block for the QMC5883L magnetometer.
@@ -541,15 +545,15 @@ def inst_qmc5883l(cx: float, cy: float) -> str:
         cy: Component centre Y coordinate in mm.
     """
     # Pin tip X coordinates
-    left_x = cx - 10.16     # 144.84 for cx=155
-    right_x = cx + 10.16    # 165.16 for cx=155
+    left_x = cx - 10.16  # 144.84 for cx=155
+    right_x = cx + 10.16  # 165.16 for cx=155
 
     # Pin tip Y coordinates
-    y_scl = cy - 2.54       # 557.46
-    y_sda = cy              # 560.00
-    y_gnd = cy + 2.54       # 562.54
-    y_vdd = cy - 2.54       # 557.46
-    y_drdy = cy + 2.54      # 562.54
+    y_scl = cy - 2.54  # 557.46
+    y_sda = cy  # 560.00
+    y_gnd = cy + 2.54  # 562.54
+    y_vdd = cy - 2.54  # 557.46
+    y_drdy = cy + 2.54  # 562.54
 
     uid_inst = next_uuid_a()
     uid_p1 = next_uuid_a()
@@ -558,7 +562,7 @@ def inst_qmc5883l(cx: float, cy: float) -> str:
     uid_p4 = next_uuid_a()
     uid_p5 = next_uuid_a()
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "QMC5883L") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{uid_inst}")
@@ -600,7 +604,7 @@ def inst_qmc5883l(cx: float, cy: float) -> str:
     (effects (font (size 1.016 1.016)))
     (uuid "{next_uuid_a()}")
     (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {right_x:.2f} {y_drdy:.2f} 0)
-      (effects (font (size 1.016 1.016)) (hide yes))))'''
+      (effects (font (size 1.016 1.016)) (hide yes))))"""
 
 
 def inst_ina219(cx: float, cy: float) -> str:
@@ -629,18 +633,18 @@ def inst_ina219(cx: float, cy: float) -> str:
         cx: Component centre X coordinate in mm.
         cy: Component centre Y coordinate in mm.
     """
-    left_x = cx - 10.16     # 279.84
-    right_x = cx + 10.16    # 300.16
+    left_x = cx - 10.16  # 279.84
+    right_x = cx + 10.16  # 300.16
 
-    y_in_plus = cy - 3.81   # 556.19
+    y_in_plus = cy - 3.81  # 556.19
     y_in_minus = cy - 1.27  # 558.73
-    y_gnd_pin = cy + 1.27   # 561.27
-    y_vplus = cy + 3.81     # 563.81
+    y_gnd_pin = cy + 1.27  # 561.27
+    y_vplus = cy + 3.81  # 563.81
 
-    y_a1 = cy - 3.81        # 556.19
-    y_a0 = cy - 1.27        # 558.73
-    y_sda = cy + 1.27       # 561.27
-    y_scl = cy + 3.81       # 563.81
+    y_a1 = cy - 3.81  # 556.19
+    y_a0 = cy - 1.27  # 558.73
+    y_sda = cy + 1.27  # 561.27
+    y_scl = cy + 3.81  # 563.81
 
     uid_inst = next_uuid_a()
     uid_p1 = next_uuid_a()
@@ -652,7 +656,7 @@ def inst_ina219(cx: float, cy: float) -> str:
     uid_p7 = next_uuid_a()
     uid_p8 = next_uuid_a()
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "INA219AIDR") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{uid_inst}")
@@ -718,7 +722,7 @@ def inst_ina219(cx: float, cy: float) -> str:
     (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {right_x:.2f} {y_scl:.2f} 0)
       (effects (font (size 1.016 1.016)) (hide yes))))
   (text "NOTE: IN+ and IN- tied to VBAT_MON_P = voltage monitoring only.\\nFor current monitoring: insert 10 mO shunt between J_VBAT pin 1 and IN+ with IN- on shunt low side."
-    (at {cx:.2f} {cy + 10.16:.2f} 0) (effects (font (size 1.016 1.016))))'''
+    (at {cx:.2f} {cy + 10.16:.2f} 0) (effects (font (size 1.016 1.016))))"""
 
 
 def inst_j_vbat(cx: float, cy: float) -> str:
@@ -734,15 +738,15 @@ def inst_j_vbat(cx: float, cy: float) -> str:
         cx: Component centre X coordinate in mm.
         cy: Component centre Y coordinate in mm.
     """
-    tip_x = cx + 2.54        # 372.54 — right side pin tips
-    y_pin1 = cy - 1.27       # 555.73
-    y_pin2 = cy + 1.27       # 558.27
+    tip_x = cx + 2.54  # 372.54 — right side pin tips
+    y_pin1 = cy - 1.27  # 555.73
+    y_pin2 = cy + 1.27  # 558.27
 
     uid_inst = next_uuid_a()
     uid_p1 = next_uuid_a()
     uid_p2 = next_uuid_a()
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "Conn_JST_GH_02P") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{uid_inst}")
@@ -764,7 +768,7 @@ def inst_j_vbat(cx: float, cy: float) -> str:
     (property "Reference" "#PWR0A407" (at {tip_x:.2f} {y_pin2:.2f} 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Value" "GND" (at {tip_x:.2f} {y_pin2 + 2.54:.2f} 0) (effects (font (size 1.27 1.27))))
     (pin "1" (uuid "{next_uuid_a()}"))
-  )'''
+  )"""
 
 
 def inst_j_sbus(cx: float, cy: float) -> str:
@@ -781,17 +785,17 @@ def inst_j_sbus(cx: float, cy: float) -> str:
         cx: Component centre X in mm.
         cy: Component centre Y in mm.
     """
-    tip_x = cx + 2.54        # 102.54
-    y_p1 = cy - 2.54         # 622.46 — GND
-    y_p2 = cy                # 625.00 — +5V
-    y_p3 = cy + 2.54         # 627.54 — SBUS_RAW
+    tip_x = cx + 2.54  # 102.54
+    y_p1 = cy - 2.54  # 622.46 — GND
+    y_p2 = cy  # 625.00 — +5V
+    y_p3 = cy + 2.54  # 627.54 — SBUS_RAW
 
     uid_inst = next_uuid_a()
     uid_p1 = next_uuid_a()
     uid_p2 = next_uuid_a()
     uid_p3 = next_uuid_a()
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "Conn_JST_GH_03P") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{uid_inst}")
@@ -821,7 +825,7 @@ def inst_j_sbus(cx: float, cy: float) -> str:
     (effects (font (size 1.016 1.016)))
     (uuid "{next_uuid_a()}")
     (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {tip_x:.2f} {y_p3:.2f} 0)
-      (effects (font (size 1.016 1.016)) (hide yes))))'''
+      (effects (font (size 1.016 1.016)) (hide yes))))"""
 
 
 def inst_r_sbus(cx: float, cy: float) -> str:
@@ -835,14 +839,14 @@ def inst_r_sbus(cx: float, cy: float) -> str:
         cx: Component centre X in mm.
         cy: Component centre Y in mm.
     """
-    left_tip_x = cx - 3.81   # 141.19
+    left_tip_x = cx - 3.81  # 141.19
     right_tip_x = cx + 3.81  # 148.81
 
     uid_inst = next_uuid_a()
     uid_p1 = next_uuid_a()
     uid_p2 = next_uuid_a()
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "R_SMD") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{uid_inst}")
@@ -857,7 +861,7 @@ def inst_r_sbus(cx: float, cy: float) -> str:
     (effects (font (size 1.016 1.016)))
     (uuid "{next_uuid_a()}")
     (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {left_tip_x:.2f} {cy:.2f} 0)
-      (effects (font (size 1.016 1.016)) (hide yes))))'''
+      (effects (font (size 1.016 1.016)) (hide yes))))"""
 
 
 def inst_u_sbus(cx: float, cy: float, r_sbus_right_tip_x: float) -> str:
@@ -879,10 +883,10 @@ def inst_u_sbus(cx: float, cy: float, r_sbus_right_tip_x: float) -> str:
         cy: Component centre Y in mm.
         r_sbus_right_tip_x: X coordinate of R_SBUS pin 2 tip (wire start).
     """
-    a_tip_x = cx - 7.62      # 172.38
-    y_tip_x = cx + 7.62      # 187.62
-    vcc_tip_y = cy - 5.08    # 622.46
-    gnd_tip_y = cy + 5.08    # 632.62
+    a_tip_x = cx - 7.62  # 172.38
+    y_tip_x = cx + 7.62  # 187.62
+    vcc_tip_y = cy - 5.08  # 622.46
+    gnd_tip_y = cy + 5.08  # 632.62
 
     uid_inst = next_uuid_a()
     uid_p1 = next_uuid_a()
@@ -890,7 +894,7 @@ def inst_u_sbus(cx: float, cy: float, r_sbus_right_tip_x: float) -> str:
     uid_p4 = next_uuid_a()
     uid_p5 = next_uuid_a()
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "74LVC1G14") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{uid_inst}")
@@ -924,12 +928,13 @@ def inst_u_sbus(cx: float, cy: float, r_sbus_right_tip_x: float) -> str:
     (property "Reference" "#PWR0A411" (at {cx:.2f} {gnd_tip_y:.2f} 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Value" "GND" (at {cx:.2f} {gnd_tip_y + 2.54:.2f} 0) (effects (font (size 1.27 1.27))))
     (pin "1" (uuid "{next_uuid_a()}"))
-  )'''
+  )"""
 
 
 # ===========================================================================
 # Component instance generators — Cape-B-1
 # ===========================================================================
+
 
 def inst_j_xcvr(cx: float, cy: float) -> str:
     """Return the symbol instance block for J_XCVR (JST GH 6-pin).
@@ -949,13 +954,13 @@ def inst_j_xcvr(cx: float, cy: float) -> str:
         cx: Component centre X in mm.
         cy: Component centre Y in mm.
     """
-    tip_x = cx + 2.54         # 102.54
-    y_p1 = cy - 6.35          # 553.65 — GND
-    y_p2 = cy - 3.81          # 556.19 — +5V
-    y_p3 = cy - 1.27          # 558.73 — UART_49MHZ_XCVR_TX
-    y_p4 = cy + 1.27          # 561.27 — XCVR_RX_RAW
-    y_p5 = cy + 3.81          # 563.81 — XCVR_PTT_N
-    y_p6 = cy + 6.35          # 566.35 — +3V3
+    tip_x = cx + 2.54  # 102.54
+    y_p1 = cy - 6.35  # 553.65 — GND
+    y_p2 = cy - 3.81  # 556.19 — +5V
+    y_p3 = cy - 1.27  # 558.73 — UART_49MHZ_XCVR_TX
+    y_p4 = cy + 1.27  # 561.27 — XCVR_RX_RAW
+    y_p5 = cy + 3.81  # 563.81 — XCVR_PTT_N
+    y_p6 = cy + 6.35  # 566.35 — +3V3
 
     uid_inst = next_uuid_b()
     uid_p1 = next_uuid_b()
@@ -965,7 +970,7 @@ def inst_j_xcvr(cx: float, cy: float) -> str:
     uid_p5 = next_uuid_b()
     uid_p6 = next_uuid_b()
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "Conn_JST_GH_06P") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{uid_inst}")
@@ -1017,7 +1022,7 @@ def inst_j_xcvr(cx: float, cy: float) -> str:
     (pin "1" (uuid "{next_uuid_b()}"))
   )
   (text "J_XCVR pin 4: XCVR serial RX (SW1-1) OR SBUS signal (SW1-2)\\nSet SW1: pos 1 = XCVR-49MHz mode, pos 2 = SBUS RC mode"
-    (at {cx:.2f} {cy + 12.70:.2f} 0) (effects (font (size 1.016 1.016))))'''
+    (at {cx:.2f} {cy + 12.70:.2f} 0) (effects (font (size 1.016 1.016))))"""
 
 
 def inst_u_sbus_b(cx: float, cy: float) -> str:
@@ -1036,10 +1041,10 @@ def inst_u_sbus_b(cx: float, cy: float) -> str:
         cx: Component centre X in mm.
         cy: Component centre Y in mm.
     """
-    a_tip_x = cx - 7.62      # 157.38
-    y_tip_x = cx + 7.62      # 172.62
-    vcc_tip_y = cy - 5.08    # 562.92
-    gnd_tip_y = cy + 5.08    # 573.08
+    a_tip_x = cx - 7.62  # 157.38
+    y_tip_x = cx + 7.62  # 172.62
+    vcc_tip_y = cy - 5.08  # 562.92
+    gnd_tip_y = cy + 5.08  # 573.08
 
     uid_inst = next_uuid_b()
     uid_p1 = next_uuid_b()
@@ -1047,7 +1052,7 @@ def inst_u_sbus_b(cx: float, cy: float) -> str:
     uid_p4 = next_uuid_b()
     uid_p5 = next_uuid_b()
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "74LVC1G14") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{uid_inst}")
@@ -1083,7 +1088,7 @@ def inst_u_sbus_b(cx: float, cy: float) -> str:
     (property "Reference" "#PWR0B505" (at {cx:.2f} {gnd_tip_y:.2f} 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Value" "GND" (at {cx:.2f} {gnd_tip_y + 2.54:.2f} 0) (effects (font (size 1.27 1.27))))
     (pin "1" (uuid "{next_uuid_b()}"))
-  )'''
+  )"""
 
 
 def inst_sw1(cx: float, cy: float) -> str:
@@ -1102,12 +1107,12 @@ def inst_sw1(cx: float, cy: float) -> str:
         cx: Component centre X in mm.
         cy: Component centre Y in mm.
     """
-    com1_x = cx - 7.62       # 227.38
-    no1_x = cx + 7.62        # 242.62
-    com2_x = cx - 7.62       # 227.38
-    no2_x = cx + 7.62        # 242.62
-    y_sw1 = cy - 2.54        # 559.46  (upper switch)
-    y_sw2 = cy + 2.54        # 564.54  (lower switch)
+    com1_x = cx - 7.62  # 227.38
+    no1_x = cx + 7.62  # 242.62
+    com2_x = cx - 7.62  # 227.38
+    no2_x = cx + 7.62  # 242.62
+    y_sw1 = cy - 2.54  # 559.46  (upper switch)
+    y_sw2 = cy + 2.54  # 564.54  (lower switch)
 
     uid_inst = next_uuid_b()
     uid_p1 = next_uuid_b()
@@ -1115,7 +1120,7 @@ def inst_sw1(cx: float, cy: float) -> str:
     uid_p3 = next_uuid_b()
     uid_p4 = next_uuid_b()
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "SW_DIP_x02") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{uid_inst}")
@@ -1139,7 +1144,7 @@ def inst_sw1(cx: float, cy: float) -> str:
     (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {com2_x:.2f} {y_sw2:.2f} 0)
       (effects (font (size 1.016 1.016)) (hide yes))))
   (text "SW1-1=XCVR, SW1-2=SBUS"
-    (at {cx:.2f} {cy - 9.0:.2f} 0) (effects (font (size 1.016 1.016))))'''
+    (at {cx:.2f} {cy - 9.0:.2f} 0) (effects (font (size 1.016 1.016))))"""
 
 
 def inst_r_xcvr_rx(cx: float, cy: float, sw_no1_x: float) -> str:
@@ -1156,14 +1161,14 @@ def inst_r_xcvr_rx(cx: float, cy: float, sw_no1_x: float) -> str:
         cy: Component centre Y in mm.
         sw_no1_x: X coordinate of SW1 NO1 tip (wire start).
     """
-    left_tip_x = cx - 3.81   # 264.19
+    left_tip_x = cx - 3.81  # 264.19
     right_tip_x = cx + 3.81  # 271.81
 
     uid_inst = next_uuid_b()
     uid_p1 = next_uuid_b()
     uid_p2 = next_uuid_b()
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "R_SMD") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{uid_inst}")
@@ -1181,7 +1186,7 @@ def inst_r_xcvr_rx(cx: float, cy: float, sw_no1_x: float) -> str:
     (effects (font (size 1.016 1.016)))
     (uuid "{next_uuid_b()}")
     (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {right_tip_x:.2f} {cy:.2f} 0)
-      (effects (font (size 1.016 1.016)) (hide yes))))'''
+      (effects (font (size 1.016 1.016)) (hide yes))))"""
 
 
 def inst_r_sbus_rx(cx: float, cy: float, sw_no2_x: float) -> str:
@@ -1198,14 +1203,14 @@ def inst_r_sbus_rx(cx: float, cy: float, sw_no2_x: float) -> str:
         cy: Component centre Y in mm.
         sw_no2_x: X coordinate of SW1 NO2 tip (wire start).
     """
-    left_tip_x = cx - 3.81   # 264.19
+    left_tip_x = cx - 3.81  # 264.19
     right_tip_x = cx + 3.81  # 271.81
 
     uid_inst = next_uuid_b()
     uid_p1 = next_uuid_b()
     uid_p2 = next_uuid_b()
 
-    return f'''\
+    return f"""\
   (symbol (lib_id "R_SMD") (at {cx:.2f} {cy:.2f} 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "{uid_inst}")
@@ -1223,12 +1228,13 @@ def inst_r_sbus_rx(cx: float, cy: float, sw_no2_x: float) -> str:
     (effects (font (size 1.016 1.016)))
     (uuid "{next_uuid_b()}")
     (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {right_tip_x:.2f} {cy:.2f} 0)
-      (effects (font (size 1.016 1.016)) (hide yes))))'''
+      (effects (font (size 1.016 1.016)) (hide yes))))"""
 
 
 # ===========================================================================
 # Schematic modification helpers
 # ===========================================================================
+
 
 def insert_lib_symbols(text: str, new_sym_defs: str) -> str:
     """Insert *new_sym_defs* at the end of the (lib_symbols ...) block.
@@ -1244,7 +1250,7 @@ def insert_lib_symbols(text: str, new_sym_defs: str) -> str:
         Modified schematic text.
     """
     try:
-        ls_start, ls_end = find_sexp_block(text, 'lib_symbols')
+        ls_start, ls_end = find_sexp_block(text, "lib_symbols")
     except ValueError as exc:
         raise RuntimeError(f"lib_symbols block not found: {exc}") from exc
 
@@ -1267,7 +1273,7 @@ def append_instances(text: str, new_instances: str) -> str:
     Returns:
         Modified schematic text.
     """
-    last_close = text.rfind('\n)')
+    last_close = text.rfind("\n)")
     if last_close == -1:
         raise RuntimeError("Could not find final closing ')' in schematic")
     text = text[:last_close] + "\n" + new_instances + "\n" + text[last_close:]
@@ -1277,6 +1283,7 @@ def append_instances(text: str, new_instances: str) -> str:
 # ===========================================================================
 # Main modification routines — Cape-A-1
 # ===========================================================================
+
 
 def modify_cape_a1(src_text: str) -> str:
     """Apply all Cape-A-1 additions to the schematic text.
@@ -1302,16 +1309,23 @@ def modify_cape_a1(src_text: str) -> str:
     # Order must not matter for KiCad; we insert them in component order.
     # ------------------------------------------------------------------
     new_lib_syms = (
-        lib_sym_qmc5883l() + "\n" +
-        lib_sym_ina219() + "\n" +
-        lib_sym_conn_jst_gh_02p() + "\n" +
-        lib_sym_conn_jst_gh_03p() + "\n" +
-        lib_sym_resistor() + "\n" +
-        lib_sym_74lvc1g14()
+        lib_sym_qmc5883l()
+        + "\n"
+        + lib_sym_ina219()
+        + "\n"
+        + lib_sym_conn_jst_gh_02p()
+        + "\n"
+        + lib_sym_conn_jst_gh_03p()
+        + "\n"
+        + lib_sym_resistor()
+        + "\n"
+        + lib_sym_74lvc1g14()
     )
     text = insert_lib_symbols(text, new_lib_syms)
-    print("  [A] Inserted 6 new lib_symbols (QMC5883L, INA219AIDR, "
-          "Conn_JST_GH_02P, Conn_JST_GH_03P, R_SMD, 74LVC1G14)")
+    print(
+        "  [A] Inserted 6 new lib_symbols (QMC5883L, INA219AIDR, "
+        "Conn_JST_GH_02P, Conn_JST_GH_03P, R_SMD, 74LVC1G14)"
+    )
 
     # ------------------------------------------------------------------
     # Step 2: Build component instances.
@@ -1345,12 +1359,17 @@ def modify_cape_a1(src_text: str) -> str:
     # Step 3: Append all instance blocks before the final ')'.
     # ------------------------------------------------------------------
     all_instances = (
-        mag_block + "\n" +
-        bmon_block + "\n" +
-        jvbat_block + "\n" +
-        jsbus_block + "\n" +
-        rsbus_block + "\n" +
-        usbus_block
+        mag_block
+        + "\n"
+        + bmon_block
+        + "\n"
+        + jvbat_block
+        + "\n"
+        + jsbus_block
+        + "\n"
+        + rsbus_block
+        + "\n"
+        + usbus_block
     )
     text = append_instances(text, all_instances)
     print("  [A] Appended all Cape-A-1 instance blocks to schematic")
@@ -1361,6 +1380,7 @@ def modify_cape_a1(src_text: str) -> str:
 # ===========================================================================
 # Main modification routines — Cape-B-1
 # ===========================================================================
+
 
 def modify_cape_b1(src_text: str) -> str:
     """Apply all Cape-B-1 additions to the schematic text.
@@ -1386,14 +1406,19 @@ def modify_cape_b1(src_text: str) -> str:
     # Conn_JST_GH_06P are new to Cape-B.
     # ------------------------------------------------------------------
     new_lib_syms = (
-        lib_sym_conn_jst_gh_06p() + "\n" +
-        lib_sym_74lvc1g14() + "\n" +
-        lib_sym_sw_dip_x02() + "\n" +
-        lib_sym_resistor()
+        lib_sym_conn_jst_gh_06p()
+        + "\n"
+        + lib_sym_74lvc1g14()
+        + "\n"
+        + lib_sym_sw_dip_x02()
+        + "\n"
+        + lib_sym_resistor()
     )
     text = insert_lib_symbols(text, new_lib_syms)
-    print("  [B] Inserted 4 new lib_symbols (Conn_JST_GH_06P, 74LVC1G14, "
-          "SW_DIP_x02, R_SMD)")
+    print(
+        "  [B] Inserted 4 new lib_symbols (Conn_JST_GH_06P, 74LVC1G14, "
+        "SW_DIP_x02, R_SMD)"
+    )
 
     # ------------------------------------------------------------------
     # Step 2: Build component instances.
@@ -1425,11 +1450,15 @@ def modify_cape_b1(src_text: str) -> str:
     # Step 3: Append all instance blocks before the final ')'.
     # ------------------------------------------------------------------
     all_instances = (
-        jxcvr_block + "\n" +
-        usbus_b_block + "\n" +
-        sw1_block + "\n" +
-        rxcvr_block + "\n" +
-        rsbus_rx_block
+        jxcvr_block
+        + "\n"
+        + usbus_b_block
+        + "\n"
+        + sw1_block
+        + "\n"
+        + rxcvr_block
+        + "\n"
+        + rsbus_rx_block
     )
     text = append_instances(text, all_instances)
     print("  [B] Appended all Cape-B-1 instance blocks to schematic")
@@ -1440,6 +1469,7 @@ def modify_cape_b1(src_text: str) -> str:
 # ===========================================================================
 # Entry point
 # ===========================================================================
+
 
 def main() -> None:
     """Read both Cape-A-1 and Cape-B-1 schematics, add hardware, write back.
@@ -1470,9 +1500,11 @@ def main() -> None:
 
     with open(CAPE_A1_PATH, "w", encoding="utf-8") as fh:
         fh.write(cape_a1_result)
-    line_count_a = cape_a1_result.count('\n') + 1
-    print(f"  Wrote {line_count_a:,} lines ({len(cape_a1_result):,} chars) "
-          f"back to {CAPE_A1_PATH}")
+    line_count_a = cape_a1_result.count("\n") + 1
+    print(
+        f"  Wrote {line_count_a:,} lines ({len(cape_a1_result):,} chars) "
+        f"back to {CAPE_A1_PATH}"
+    )
 
     # Quick sanity checks for Cape-A-1
     checks_a = [
@@ -1521,9 +1553,11 @@ def main() -> None:
 
     with open(CAPE_B1_PATH, "w", encoding="utf-8") as fh:
         fh.write(cape_b1_result)
-    line_count_b = cape_b1_result.count('\n') + 1
-    print(f"  Wrote {line_count_b:,} lines ({len(cape_b1_result):,} chars) "
-          f"back to {CAPE_B1_PATH}")
+    line_count_b = cape_b1_result.count("\n") + 1
+    print(
+        f"  Wrote {line_count_b:,} lines ({len(cape_b1_result):,} chars) "
+        f"back to {CAPE_B1_PATH}"
+    )
 
     # Quick sanity checks for Cape-B-1
     checks_b = [

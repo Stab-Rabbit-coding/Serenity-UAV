@@ -70,6 +70,7 @@ OUT_DIR = os.path.join(PROJECT_ROOT, "thingverse-serenity", "files-hollowed-18in
 # Transform helpers
 # ---------------------------------------------------------------------------
 
+
 def _T(dx=0.0, dy=0.0, dz=0.0):
     """4x4 translation matrix."""
     m = np.eye(4)
@@ -105,6 +106,7 @@ def moved(mesh, *transforms):
 # ---------------------------------------------------------------------------
 # Geometry primitives (all centered at origin unless otherwise noted)
 # ---------------------------------------------------------------------------
+
 
 def box(lx, ly, lz):
     """Axis-aligned box, centered at origin."""
@@ -153,6 +155,7 @@ def intersect(a, b):
 # Output helper
 # ---------------------------------------------------------------------------
 
+
 def save(mesh, filename):
     """Export mesh to OUT_DIR and print verification data."""
     path = os.path.join(OUT_DIR, filename)
@@ -171,6 +174,7 @@ def save(mesh, filename):
 # ===========================================================================
 # Part generators
 # ===========================================================================
+
 
 def make_motor_mount():
     """
@@ -192,20 +196,20 @@ def make_motor_mount():
     External dims: 36 x 28 x 15 mm.
     Material: CF-PETG.  Print: 0.15 mm layers, 4 perimeters, 40 % infill.
     """
-    BW = 36.0     # bracket width (X), perpendicular to motor axis
-    BL = 28.0     # bracket length (Y), along motor axis; must exceed motor OAL 24 mm
+    BW = 36.0  # bracket width (X), perpendicular to motor axis
+    BL = 28.0  # bracket length (Y), along motor axis; must exceed motor OAL 24 mm
     BASE_H = 3.0  # base plate thickness (Z = 0 .. BASE_H)
-    CW = 16.0     # channel interior width (X): motor 10 mm + 3 mm clearance each side
-    CH = 12.0     # channel wall height above base plate (Z = BASE_H .. BASE_H+CH)
+    CW = 16.0  # channel interior width (X): motor 10 mm + 3 mm clearance each side
+    CH = 12.0  # channel wall height above base plate (Z = BASE_H .. BASE_H+CH)
     TH = BASE_H + CH  # total bracket height = 15 mm
 
-    M2_R = 1.1    # M2 self-tap pilot hole radius (2.2 mm dia)
-    CX = BW / 2 - 5.0   # M2 hole X offset from centre (5 mm from outer edge)
-    CY = BL / 2 - 5.0   # M2 hole Y offset from centre (5 mm from end)
+    M2_R = 1.1  # M2 self-tap pilot hole radius (2.2 mm dia)
+    CX = BW / 2 - 5.0  # M2 hole X offset from centre (5 mm from outer edge)
+    CY = BL / 2 - 5.0  # M2 hole Y offset from centre (5 mm from end)
 
-    ZT_R = 1.75   # zip-tie hole radius (3.5 mm dia; passes 2.5 mm zip-tie)
-    ZT_X = 4.0    # zip-tie holes at +/-4 mm from channel centre (within 16 mm channel)
-    ZT_Y = 7.0    # zip-tie holes at +/-7 mm along motor axis
+    ZT_R = 1.75  # zip-tie hole radius (3.5 mm dia; passes 2.5 mm zip-tie)
+    ZT_X = 4.0  # zip-tie holes at +/-4 mm from channel centre (within 16 mm channel)
+    ZT_Y = 7.0  # zip-tie holes at +/-7 mm along motor axis
 
     # Full solid block
     solid = moved(box(BW, BL, TH), _T(0, 0, TH / 2))
@@ -248,24 +252,24 @@ def make_winch_spool():
     Material: PETG.  Print: 0.15 mm layers, 4 perimeters, 25 % infill.
     Reference: Lankhorst Euronete Dyneema SK75 0.5 mm spec sheet.
     """
-    CORE_R = 10.0    # spool core radius (OD 20 mm)
-    CORE_W = 18.0    # usable drum width (between flanges)
-    FL_R = 13.0      # flange radius (OD 26 mm)
-    FL_T = 2.0       # flange thickness
-    TOT_W = CORE_W + 2 * FL_T   # 22 mm total
+    CORE_R = 10.0  # spool core radius (OD 20 mm)
+    CORE_W = 18.0  # usable drum width (between flanges)
+    FL_R = 13.0  # flange radius (OD 26 mm)
+    FL_T = 2.0  # flange thickness
+    TOT_W = CORE_W + 2 * FL_T  # 22 mm total
 
     # N20 D-shaft bore parameters
     SHAFT_D = 3.0
-    SHAFT_CL = 0.15   # diametric clearance (press-fit)
-    SHAFT_R = SHAFT_D / 2 + SHAFT_CL / 2   # = 1.575 mm bore radius
+    SHAFT_CL = 0.15  # diametric clearance (press-fit)
+    SHAFT_R = SHAFT_D / 2 + SHAFT_CL / 2  # = 1.575 mm bore radius
     FLAT_DEPTH = 0.5  # shaft flat depth from OD
-    FLAT_X = SHAFT_D / 2 - FLAT_DEPTH      # = 1.0 mm (flat face x from centre)
+    FLAT_X = SHAFT_D / 2 - FLAT_DEPTH  # = 1.0 mm (flat face x from centre)
 
-    SET_R = 1.7 / 2   # M2 tap drill radius (1.7 mm dia)
-    SET_L = 6.0       # set-screw hole depth (from spool OD inward)
+    SET_R = 1.7 / 2  # M2 tap drill radius (1.7 mm dia)
+    SET_L = 6.0  # set-screw hole depth (from spool OD inward)
 
-    ANCHOR_W = 2.0    # Dyneema anchor slot width (mm)
-    ANCHOR_D = 4.0    # Dyneema anchor slot depth (mm, radially inward from flange OD)
+    ANCHOR_W = 2.0  # Dyneema anchor slot width (mm)
+    ANCHOR_D = 4.0  # Dyneema anchor slot depth (mm, radially inward from flange OD)
 
     # --- Solid core and flanges ---
     core = cyl(CORE_R, CORE_W)
@@ -278,7 +282,7 @@ def make_winch_spool():
     bore_cyl = cyl(SHAFT_R, TOT_W + 0.2)
     # Half-space: box from x = -(SHAFT_R+eps) to x = FLAT_X+eps
     eps = 0.01
-    hs_w = SHAFT_R + eps + FLAT_X + eps   # spans left edge to flat line
+    hs_w = SHAFT_R + eps + FLAT_X + eps  # spans left edge to flat line
     hs_cx = (-SHAFT_R - eps + FLAT_X + eps) / 2
     half_space = moved(box(hs_w, (SHAFT_R + 0.1) * 2, TOT_W + 0.4), _T(hs_cx, 0, 0))
     d_bore = intersect(bore_cyl, half_space)
@@ -292,7 +296,7 @@ def make_winch_spool():
     # Slot centre: x=0, y=-(FL_R - ANCHOR_D/2), z=-(CORE_W/2 + FL_T/2)
     anchor = moved(
         box(ANCHOR_W + 0.1, ANCHOR_D + 0.1, FL_T + 0.1),
-        _T(0, -(FL_R - ANCHOR_D / 2), -(CORE_W / 2 + FL_T / 2))
+        _T(0, -(FL_R - ANCHOR_D / 2), -(CORE_W / 2 + FL_T / 2)),
     )
 
     return bsub(solid, d_bore, set_screw, anchor)
@@ -316,28 +320,32 @@ def make_servo_bracket():
     Material: CF-PETG.  Print: 0.15 mm layers, 4 perimeters, 40 % infill.
     Reference: SG90 servo data sheet (Tower Pro or compatible).
     """
-    PL = 44.0    # plate length (X)
-    PW = 28.0    # plate width (Y)
-    PT = 5.0     # plate thickness (Z)
+    PL = 44.0  # plate length (X)
+    PW = 28.0  # plate width (Y)
+    PT = 5.0  # plate thickness (Z)
 
     SK_L = 23.2  # SG90 body pocket length (X): 22.8 mm + 0.4 mm clearance
     SK_W = 12.6  # SG90 body pocket width (Y): 12.2 mm + 0.4 mm clearance
-    SK_D = 4.0   # SG90 body pocket depth (Z): servo seated half-depth in plate
+    SK_D = 4.0  # SG90 body pocket depth (Z): servo seated half-depth in plate
 
-    M2_SPAN = 27.9   # SG90 mount hole centre-to-centre (X)
-    M2_R = 2.2 / 2   # M2 clearance hole radius
+    M2_SPAN = 27.9  # SG90 mount hole centre-to-centre (X)
+    M2_R = 2.2 / 2  # M2 clearance hole radius
     M25_R = 2.8 / 2  # M2.5 self-tap pilot hole radius
-    M25_X = PL / 2 - 5.0   # 5 mm from plate edge
-    M25_Y = PW / 2 - 5.0   # 5 mm from plate end
+    M25_X = PL / 2 - 5.0  # 5 mm from plate edge
+    M25_Y = PW / 2 - 5.0  # 5 mm from plate end
 
     # Main plate (base at Z=0)
     plate = moved(box(PL, PW, PT), _T(0, 0, PT / 2))
 
     # SG90 body pocket in top face (Z = PT - SK_D .. PT)
-    pocket = moved(box(SK_L + 0.1, SK_W + 0.1, SK_D + 0.1), _T(0, 0, PT - SK_D / 2 + 0.05))
+    pocket = moved(
+        box(SK_L + 0.1, SK_W + 0.1, SK_D + 0.1), _T(0, 0, PT - SK_D / 2 + 0.05)
+    )
 
     # 2x M2 servo tab holes (through full plate Z)
-    m2s = [moved(cyl(M2_R, PT + 0.2), _T(sx * M2_SPAN / 2, 0, PT / 2)) for sx in (-1, 1)]
+    m2s = [
+        moved(cyl(M2_R, PT + 0.2), _T(sx * M2_SPAN / 2, 0, PT / 2)) for sx in (-1, 1)
+    ]
 
     # 4x M2.5 self-tap pilot holes at corners (through full plate Z)
     m25s = [
@@ -366,17 +374,17 @@ def make_drv8833_tray():
     Material: PETG.  Print: 0.15 mm layers, 4 perimeters, 25 % infill.
     Reference: SparkFun ROB-14450 DRV8833 carrier PCB mechanical drawing.
     """
-    TRAY_L = 36.0    # tray length (X): PCB 26 mm + 5 mm margin each side
-    TRAY_W = 33.0    # tray width  (Y): PCB 23 mm + 5 mm margin each side
-    BASE_T = 2.0     # base plate thickness (Z = 0 .. 2)
+    TRAY_L = 36.0  # tray length (X): PCB 26 mm + 5 mm margin each side
+    TRAY_W = 33.0  # tray width  (Y): PCB 23 mm + 5 mm margin each side
+    BASE_T = 2.0  # base plate thickness (Z = 0 .. 2)
 
-    POST_OD = 4.0    # standoff post outer diameter
-    POST_H = 4.0     # standoff post height (PCB stands 4 mm above tray base)
+    POST_OD = 4.0  # standoff post outer diameter
+    POST_H = 4.0  # standoff post height (PCB stands 4 mm above tray base)
     POST_R = POST_OD / 2
-    POST_BORE_R = 2.2 / 2   # M2 clearance bore in post top
+    POST_BORE_R = 2.2 / 2  # M2 clearance bore in post top
 
-    PCB_HX = 10.5    # PCB hole X offset from tray centre
-    PCB_HY = 9.0     # PCB hole Y offset from tray centre
+    PCB_HX = 10.5  # PCB hole X offset from tray centre
+    PCB_HY = 9.0  # PCB hole Y offset from tray centre
 
     M25_R = 2.8 / 2  # M2.5 self-tap pilot hole radius
     M25_X = TRAY_L / 2 - 4.0
@@ -389,8 +397,13 @@ def make_drv8833_tray():
     posts = []
     for sx in (-1, 1):
         for sy in (-1, 1):
-            post_solid = moved(cyl(POST_R, POST_H), _T(sx * PCB_HX, sy * PCB_HY, BASE_T + POST_H / 2))
-            post_bore = moved(cyl(POST_BORE_R, POST_H + 0.2), _T(sx * PCB_HX, sy * PCB_HY, BASE_T + POST_H / 2))
+            post_solid = moved(
+                cyl(POST_R, POST_H), _T(sx * PCB_HX, sy * PCB_HY, BASE_T + POST_H / 2)
+            )
+            post_bore = moved(
+                cyl(POST_BORE_R, POST_H + 0.2),
+                _T(sx * PCB_HX, sy * PCB_HY, BASE_T + POST_H / 2),
+            )
             posts.append(bsub(post_solid, post_bore))
 
     # Four M2.5 self-tap holes in base plate
@@ -423,28 +436,28 @@ def make_autolatch_cradle():
     Material: PETG.  Print: 0.15 mm layers, 4 perimeters, 25 % infill.
     Reference: Serenity UAV PHASED_BUILD_GUIDE.md Phase 6 cargo system.
     """
-    OL = 110.0    # outer frame length (X)
-    OW = 80.0     # outer frame width  (Y)
-    OH = 60.0     # outer frame height (Z, floor to top rim)
-    WT = 2.5      # wall and base thickness
+    OL = 110.0  # outer frame length (X)
+    OW = 80.0  # outer frame width  (Y)
+    OH = 60.0  # outer frame height (Z, floor to top rim)
+    WT = 2.5  # wall and base thickness
 
-    TAB_W = 5.0   # latch tab plan width (square, X and Y)
-    TAB_T = 2.0   # latch tab wall thickness (flex element)
-    TAB_H = 8.0   # latch tab height above frame top rim
+    TAB_W = 5.0  # latch tab plan width (square, X and Y)
+    TAB_T = 2.0  # latch tab wall thickness (flex element)
+    TAB_H = 8.0  # latch tab height above frame top rim
     HOOK_D = 2.0  # hook notch depth (inward from tab outer face)
     HOOK_H = 3.0  # hook notch height (at tab tip)
 
-    BOSS_R = 6.0    # Dyneema boss radius (OD 12 mm)
-    BOSS_H = 12.0   # Dyneema boss height above frame top
-    BOSS_SL = 2.0   # Dyneema line slot width
-    BOSS_BR = 2.5   # central bore radius for knot seating (5 mm dia)
+    BOSS_R = 6.0  # Dyneema boss radius (OD 12 mm)
+    BOSS_H = 12.0  # Dyneema boss height above frame top
+    BOSS_SL = 2.0  # Dyneema line slot width
+    BOSS_BR = 2.5  # central bore radius for knot seating (5 mm dia)
 
     # --- Hollow frame (solid outer - solid inner) ---
     outer = moved(box(OL, OW, OH), _T(0, 0, OH / 2))
     # Inner void: walls WT, open top, solid base WT thick
     inner = moved(
         box(OL - 2 * WT, OW - 2 * WT, OH - WT + 0.1),
-        _T(0, 0, WT + (OH - WT) / 2 + 0.05)
+        _T(0, 0, WT + (OH - WT) / 2 + 0.05),
     )
     frame = bsub(outer, inner)
 
@@ -459,19 +472,29 @@ def make_autolatch_cradle():
             # Hook notch on outer X face of tab
             hx_cut = moved(
                 box(HOOK_D + 0.1, TAB_W + 0.2, HOOK_H + 0.1),
-                _T(tcx + sx * (TAB_W / 2 - HOOK_D / 2 + 0.05), tcy, OH + TAB_H - HOOK_H / 2 + 0.05)
+                _T(
+                    tcx + sx * (TAB_W / 2 - HOOK_D / 2 + 0.05),
+                    tcy,
+                    OH + TAB_H - HOOK_H / 2 + 0.05,
+                ),
             )
             # Hook notch on outer Y face of tab
             hy_cut = moved(
                 box(TAB_W + 0.2, HOOK_D + 0.1, HOOK_H + 0.1),
-                _T(tcx, tcy + sy * (TAB_W / 2 - HOOK_D / 2 + 0.05), OH + TAB_H - HOOK_H / 2 + 0.05)
+                _T(
+                    tcx,
+                    tcy + sy * (TAB_W / 2 - HOOK_D / 2 + 0.05),
+                    OH + TAB_H - HOOK_H / 2 + 0.05,
+                ),
             )
             tabs.append(bsub(tab_solid, hx_cut, hy_cut))
 
     # --- Dyneema tie-off boss at top centre ---
     boss_solid = moved(cyl(BOSS_R, BOSS_H), _T(0, 0, OH + BOSS_H / 2))
     # 2 mm line slot (X direction, full boss height) for Dyneema passage
-    boss_slot = moved(box(BOSS_SL + 0.1, BOSS_R * 2 + 0.2, BOSS_H + 0.2), _T(0, 0, OH + BOSS_H / 2))
+    boss_slot = moved(
+        box(BOSS_SL + 0.1, BOSS_R * 2 + 0.2, BOSS_H + 0.2), _T(0, 0, OH + BOSS_H / 2)
+    )
     # 5 mm central bore for double-bowline knot seating (lower half of boss)
     boss_bore = moved(cyl(BOSS_BR, BOSS_H / 2 + 0.1), _T(0, 0, OH + BOSS_H / 4 - 0.05))
     boss = bsub(boss_solid, boss_slot, boss_bore)
@@ -500,14 +523,14 @@ def make_gps_retention_ring():
     Material: PETG.  Print: 0.15 mm layers, 4 perimeters, 25 % infill.
     Reference: u-blox ANN-MB-00 data sheet rev 1.0; cargo_sect_shell24.scad.
     """
-    RING_OD = 50.0    # outer diameter: bolt circle 44 mm + 3 mm margin each side
-    RING_ID = 35.0    # inner diameter: matches 35 mm GPS antenna OD exactly
-    RING_T = 2.5      # ring thickness
+    RING_OD = 50.0  # outer diameter: bolt circle 44 mm + 3 mm margin each side
+    RING_ID = 35.0  # inner diameter: matches 35 mm GPS antenna OD exactly
+    RING_T = 2.5  # ring thickness
 
-    BC_R = 22.0       # bolt circle radius (GPS_M2_BC_R from shell SCAD)
-    M2_R = 2.4 / 2    # M2 clearance hole radius (GPS_M2_D from shell SCAD)
-    CSK_R = 4.5 / 2   # DIN 7991 M2 flathead countersink radius (90 deg)
-    CSK_D = 1.2       # countersink depth
+    BC_R = 22.0  # bolt circle radius (GPS_M2_BC_R from shell SCAD)
+    M2_R = 2.4 / 2  # M2 clearance hole radius (GPS_M2_D from shell SCAD)
+    CSK_R = 4.5 / 2  # DIN 7991 M2 flathead countersink radius (90 deg)
+    CSK_D = 1.2  # countersink depth
 
     # Annular ring body
     outer_disk = cyl(RING_OD / 2, RING_T)
@@ -524,7 +547,9 @@ def make_gps_retention_ring():
         # Through bore
         cutters.append(moved(cyl(M2_R, RING_T + 0.2), _T(cx, cy, 0)))
         # Flat-bottomed countersink pocket on top face (screw head seats here)
-        cutters.append(moved(cyl(CSK_R, CSK_D + 0.1), _T(cx, cy, RING_T / 2 - CSK_D / 2 + 0.05)))
+        cutters.append(
+            moved(cyl(CSK_R, CSK_D + 0.1), _T(cx, cy, RING_T / 2 - CSK_D / 2 + 0.05))
+        )
 
     return bsub(ring, *cutters)
 
@@ -548,13 +573,13 @@ def make_fpv_bezel():
     Material: PETG.  Print: 0.15 mm layers, 4 perimeters, 25 % infill.
     Reference: cargo_sect_shell24.scad fpv_cut() module.
     """
-    BEZ_W = 29.0    # outer square side (FPV_BEZ_W from shell SCAD)
-    APER_R = 8.0    # lens aperture radius (FPV_APER_D / 2 = 8 mm)
-    BEZ_T = 2.5     # bezel thickness
-    GRID = 14.0     # M2 hole grid spacing (FPV_M2_S from shell SCAD)
+    BEZ_W = 29.0  # outer square side (FPV_BEZ_W from shell SCAD)
+    APER_R = 8.0  # lens aperture radius (FPV_APER_D / 2 = 8 mm)
+    BEZ_T = 2.5  # bezel thickness
+    GRID = 14.0  # M2 hole grid spacing (FPV_M2_S from shell SCAD)
     M2_R = 2.2 / 2  # M2 clearance radius (FPV_M2_D from shell SCAD)
-    CSK_R = 4.5 / 2 # DIN 7991 M2 flathead CSK radius (90 deg)
-    CSK_D = 1.2     # countersink depth
+    CSK_R = 4.5 / 2  # DIN 7991 M2 flathead CSK radius (90 deg)
+    CSK_D = 1.2  # countersink depth
 
     # Square bezel body
     bezel = moved(box(BEZ_W, BEZ_W, BEZ_T), _T(0, 0, BEZ_T / 2))
@@ -567,7 +592,9 @@ def make_fpv_bezel():
     for dx in (-GRID / 2, GRID / 2):
         for dy in (-GRID / 2, GRID / 2):
             cutters.append(moved(cyl(M2_R, BEZ_T + 0.2), _T(dx, dy, BEZ_T / 2)))
-            cutters.append(moved(cyl(CSK_R, CSK_D + 0.1), _T(dx, dy, BEZ_T - CSK_D / 2 + 0.05)))
+            cutters.append(
+                moved(cyl(CSK_R, CSK_D + 0.1), _T(dx, dy, BEZ_T - CSK_D / 2 + 0.05))
+            )
 
     return bsub(bezel, *cutters)
 
@@ -576,6 +603,7 @@ def make_fpv_bezel():
 # Main
 # ===========================================================================
 
+
 def main():
     print("=" * 60)
     print("Serenity UAV -- Cargo Equipment Mount STL Generator")
@@ -583,14 +611,14 @@ def main():
     print("=" * 60)
 
     parts = [
-        ("cargo_winch_motor_mount.stl",     make_motor_mount),
-        ("cargo_winch_spool.stl",           make_winch_spool),
-        ("cargo_door_servo_bracket.stl",    make_servo_bracket),
+        ("cargo_winch_motor_mount.stl", make_motor_mount),
+        ("cargo_winch_spool.stl", make_winch_spool),
+        ("cargo_door_servo_bracket.stl", make_servo_bracket),
         ("cargo_release_servo_bracket.stl", make_servo_bracket),
-        ("cargo_drv8833_tray.stl",          make_drv8833_tray),
-        ("cargo_cradle_autolatch.stl",      make_autolatch_cradle),
-        ("cargo_gps_retention_ring.stl",    make_gps_retention_ring),
-        ("cargo_fpv_bezel.stl",             make_fpv_bezel),
+        ("cargo_drv8833_tray.stl", make_drv8833_tray),
+        ("cargo_cradle_autolatch.stl", make_autolatch_cradle),
+        ("cargo_gps_retention_ring.stl", make_gps_retention_ring),
+        ("cargo_fpv_bezel.stl", make_fpv_bezel),
     ]
 
     errors = []
@@ -606,8 +634,8 @@ def main():
     print()
     if errors:
         print(f"FAILED ({len(errors)} errors):")
-        for name, exc in errors:
-            print(f"  {name}: {exc}")
+        for name, err in errors:
+            print(f"  {name}: {err}")
         sys.exit(1)
     else:
         print("All cargo mount STLs generated successfully.")

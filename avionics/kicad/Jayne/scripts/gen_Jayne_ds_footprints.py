@@ -70,15 +70,15 @@ def make(name, npads):
     # pad-1 triangle marker on silk (left of pad 1)
     m = x0 - PAD_W / 2.0 - 0.35
     lines += [
-        f'  (fp_poly (pts (xy {m:.2f} -0.4) (xy {m:.2f} 0.4) (xy {m + 0.5:.2f} 0))'
+        f"  (fp_poly (pts (xy {m:.2f} -0.4) (xy {m:.2f} 0.4) (xy {m + 0.5:.2f} 0))"
         ' (stroke (width 0.12) (type solid)) (fill solid) (layer "F.SilkS")'
         f' (uuid "{_u()}"))',
         # courtyard
-        f'  (fp_rect (start {-hw:.2f} {-hh:.2f}) (end {hw:.2f} {hh:.2f})'
+        f"  (fp_rect (start {-hw:.2f} {-hh:.2f}) (end {hw:.2f} {hh:.2f})"
         ' (stroke (width 0.05) (type solid)) (fill none) (layer "F.CrtYd")'
         f' (uuid "{_u()}"))',
         # fab outline
-        f'  (fp_rect (start {-hw + 0.3:.2f} {-hh + 0.3:.2f}) '
+        f"  (fp_rect (start {-hw + 0.3:.2f} {-hh + 0.3:.2f}) "
         f"(end {hw - 0.3:.2f} {hh - 0.3:.2f})"
         ' (stroke (width 0.1) (type solid)) (fill none) (layer "F.Fab")'
         f' (uuid "{_u()}"))',

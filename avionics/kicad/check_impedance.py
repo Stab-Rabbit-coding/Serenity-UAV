@@ -32,17 +32,17 @@ import argparse
 import math
 import sys
 
-
 # ---------------------------------------------------------------------------
 # Physical constants
 # ---------------------------------------------------------------------------
 
-_FREE_SPACE_IMPEDANCE_OHM: float = 120.0 * math.pi   # η₀ ≈ 376.73 Ω
+_FREE_SPACE_IMPEDANCE_OHM: float = 120.0 * math.pi  # η₀ ≈ 376.73 Ω
 
 
 # ---------------------------------------------------------------------------
 # Core formula functions
 # ---------------------------------------------------------------------------
+
 
 def effective_width(
     w_mm: float,
@@ -109,7 +109,7 @@ def effective_permittivity(
     Returns:
         Effective relative permittivity ε_eff (dimensionless).
     """
-    ratio = w_eff_mm / h_mm   # W_eff / H
+    ratio = w_eff_mm / h_mm  # W_eff / H
 
     base = (er + 1.0) / 2.0
     delta = (er - 1.0) / 2.0
@@ -174,6 +174,7 @@ def microstrip_impedance(
 # Report generation
 # ---------------------------------------------------------------------------
 
+
 def run_check(
     w_mm: float,
     h_mm: float,
@@ -218,8 +219,10 @@ def run_check(
     print(f"    W_eff / H                 = {w_eff / h_mm:.4f}")
     print(f"\n  Result")
     print(f"    Z₀ = {z0:.2f} Ω")
-    print(f"\n  Specification: {z0_target:.0f} Ω ± {tolerance_ohm:.0f} Ω "
-          f"  [{low:.0f} – {high:.0f} Ω]")
+    print(
+        f"\n  Specification: {z0_target:.0f} Ω ± {tolerance_ohm:.0f} Ω "
+        f"  [{low:.0f} – {high:.0f} Ω]"
+    )
     print(f"\n  Status: {status}")
 
     if not in_spec:
@@ -255,7 +258,7 @@ def _find_width_for_impedance(
         Width in mm, or None if the search fails to converge.
     """
     # Z₀ decreases as W increases; bracket accordingly.
-    w_lo, w_hi = 0.01, 50.0   # mm — wide enough for any practical trace
+    w_lo, w_hi = 0.01, 50.0  # mm — wide enough for any practical trace
 
     for _ in range(iterations):
         w_mid = (w_lo + w_hi) / 2.0
@@ -272,12 +275,13 @@ def _find_width_for_impedance(
             # Impedance too low → trace too wide → narrow it.
             w_hi = w_mid
 
-    return None   # Did not converge (should not occur with sane inputs).
+    return None  # Did not converge (should not occur with sane inputs).
 
 
 # ---------------------------------------------------------------------------
 # CLI entry point
 # ---------------------------------------------------------------------------
+
 
 def _build_arg_parser() -> argparse.ArgumentParser:
     """Return a configured ArgumentParser for the CLI."""

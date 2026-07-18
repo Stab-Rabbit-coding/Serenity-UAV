@@ -24,22 +24,21 @@ import os
 import bpy
 import mathutils
 
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                   "files-hollowed-24in", "operands")
+OUT = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "files-hollowed-24in", "operands"
+)
 
-LETTER_H = 15.0     # mm, font em size (cap height ~10.5 mm)
-SLAB = 8.0          # mm, extrusion thickness straddling the wall (+/-4 mm)
-REMESH = 0.3        # mm, voxel pitch to weld the per-letter shells into one volume
+LETTER_H = 15.0  # mm, font em size (cap height ~10.5 mm)
+SLAB = 8.0  # mm, extrusion thickness straddling the wall (+/-4 mm)
+REMESH = 0.3  # mm, voxel pitch to weld the per-letter shells into one volume
 
 # (text, world centre, 3x3 local->world basis rows)
 #   local +X = reading direction, +Y = up, +Z = face normal (toward viewer).
 LABELS = [
     # PORT (+X wall): read along -Y, up +Z, face -X (viewer inboard at -X).
-    ("INARA", (-11.0, -362.0, 103.0),
-     ((0, 0, -1), (-1, 0, 0), (0, 1, 0)), "inara"),
+    ("INARA", (-11.0, -362.0, 103.0), ((0, 0, -1), (-1, 0, 0), (0, 1, 0)), "inara"),
     # STBD (-X wall): read along +Y, up +Z, face +X.
-    ("RIVER", (-197.0, -363.0, 102.0),
-     ((0, 0, 1), (1, 0, 0), (0, 1, 0)), "river"),
+    ("RIVER", (-197.0, -363.0, 102.0), ((0, 0, 1), (1, 0, 0), (0, 1, 0)), "river"),
 ]
 
 

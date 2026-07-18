@@ -53,12 +53,20 @@ def build(part, opened_name, out_name):
     shell = drop_islands(shell)
     out = os.path.join(OUT, out_name)
     shell.export(out)
-    print(f"{part}: facets={len(shell.faces)} watertight={shell.is_watertight} "
-          f"vol={shell.volume:.0f} -> {out}")
+    print(
+        f"{part}: facets={len(shell.faces)} watertight={shell.is_watertight} "
+        f"vol={shell.volume:.0f} -> {out}"
+    )
 
 
 if __name__ == "__main__":
-    build("cargo_sect_shell24_2mm_repaired", "cargo_inner_opened.stl",
-          "cargo_sect_shell24_2mm_repaired.stl")
-    build("middle_shell24_2mm_repaired", "middle_inner_opened.stl",
-          "middle_shell24_2mm_repaired.stl")
+    build(
+        "cargo_sect_shell24_2mm_repaired",
+        "cargo_inner_opened.stl",
+        "cargo_sect_shell24_2mm_repaired.stl",
+    )
+    build(
+        "middle_shell24_2mm_repaired",
+        "middle_inner_opened.stl",
+        "middle_shell24_2mm_repaired.stl",
+    )

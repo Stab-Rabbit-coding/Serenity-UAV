@@ -66,7 +66,8 @@ def inter(a, b):
 def rod(p0, p1, radius, sections=48):
     """Solid cylinder spanning two 3-D points."""
     return trimesh.creation.cylinder(
-        radius=radius, segment=np.array([p0, p1]), sections=sections)
+        radius=radius, segment=np.array([p0, p1]), sections=sections
+    )
 
 
 def load(name):
@@ -82,18 +83,18 @@ def drop_islands(mesh, min_faces=100):
 
 
 # ── Head dish geometry (part-local mm) ───────────────────────────────────────
-T = np.array([117.5, -265.4, 67.8])          # spike tip (exterior)
-C = np.array([130.5, -256.8, 72.4])          # dish base centre
-A = (T - C) / np.linalg.norm(T - C)          # outward axis (base -> tip)
+T = np.array([117.5, -265.4, 67.8])  # spike tip (exterior)
+C = np.array([130.5, -256.8, 72.4])  # dish base centre
+A = (T - C) / np.linalg.norm(T - C)  # outward axis (base -> tip)
 
-DISH_R = 13.0          # mm, solid-fill cylinder radius (~dish disc radius)
-DISH_BACK = 30.0       # mm, fill depth into the hull from the spike tip
-PITOT_D = 1.5          # mm, pitot air bore through the spike tip
-BARB_OD = 4.0          # mm, interior barb boss outer diameter
-BARB_ID = 2.5          # mm, barb through-bore (silicone line)
-BARB_RIDGE_OD = 5.0    # mm, retention ridge OD
-BARB_LEN = 14.0        # mm, barb protrusion into the cavity
-WIDE_LEN = DISH_BACK + BARB_LEN   # 2.5 mm channel from cavity up toward the tip
+DISH_R = 13.0  # mm, solid-fill cylinder radius (~dish disc radius)
+DISH_BACK = 30.0  # mm, fill depth into the hull from the spike tip
+PITOT_D = 1.5  # mm, pitot air bore through the spike tip
+BARB_OD = 4.0  # mm, interior barb boss outer diameter
+BARB_ID = 2.5  # mm, barb through-bore (silicone line)
+BARB_RIDGE_OD = 5.0  # mm, retention ridge OD
+BARB_LEN = 14.0  # mm, barb protrusion into the cavity
+WIDE_LEN = DISH_BACK + BARB_LEN  # 2.5 mm channel from cavity up toward the tip
 
 
 def build_head():
@@ -101,7 +102,7 @@ def build_head():
     inner = load("head_shell24_2mm_repaired__inner.stl")
     opened = load("head_inner_opened.stl")
 
-    inner_used = inter(opened, inner)         # clamp opened to <= original
+    inner_used = inter(opened, inner)  # clamp opened to <= original
 
     # Force the dish + spike solid: remove a cylinder of inner along the axis.
     dish_fill = rod(T + A * 2.0, T - A * DISH_BACK, DISH_R)
@@ -110,8 +111,8 @@ def build_head():
     shell = diff(Outr, inner_used)
 
     # Interior barb boss (coaxial), anchored in the solid fill, into the cavity.
-    p_anchor = T - A * (DISH_BACK - 4.0)      # 4 mm inside the fill's inner end
-    p_cav = p_anchor - A * BARB_LEN           # barb tip, in the cavity
+    p_anchor = T - A * (DISH_BACK - 4.0)  # 4 mm inside the fill's inner end
+    p_cav = p_anchor - A * BARB_LEN  # barb tip, in the cavity
     boss = rod(p_anchor, p_cav, BARB_OD / 2.0)
     ridge = rod(p_cav + A * 3.0, p_cav + A * 0.5, BARB_RIDGE_OD / 2.0)
     shell = union(shell, union(boss, ridge))
@@ -126,8 +127,10 @@ def build_head():
     shell = drop_islands(shell)
     out = os.path.join(OUT, "head_shell24_2mm_repaired.stl")
     shell.export(out)
-    print(f"head: facets={len(shell.faces)} watertight={shell.is_watertight} "
-          f"vol={shell.volume:.0f} -> {out}")
+    print(
+        f"head: facets={len(shell.faces)} watertight={shell.is_watertight} "
+        f"vol={shell.volume:.0f} -> {out}"
+    )
 
 
 def build_rear():
@@ -139,8 +142,10 @@ def build_rear():
     shell = drop_islands(shell)
     out = os.path.join(OUT, "rear_shell24_2mm_repaired.stl")
     shell.export(out)
-    print(f"rear: facets={len(shell.faces)} watertight={shell.is_watertight} "
-          f"vol={shell.volume:.0f} -> {out}")
+    print(
+        f"rear: facets={len(shell.faces)} watertight={shell.is_watertight} "
+        f"vol={shell.volume:.0f} -> {out}"
+    )
 
 
 if __name__ == "__main__":

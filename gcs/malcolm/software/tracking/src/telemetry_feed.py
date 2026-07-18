@@ -30,7 +30,6 @@ from pathlib import Path
 import yaml
 from pymavlink import mavutil  # type: ignore[import]
 
-
 DEFAULT_CONFIG_PATH = (
     Path(__file__).parent.parent.parent / "config" / "malcolm_config.yaml"
 )
@@ -46,7 +45,7 @@ def run(config: dict) -> None:
     Args:
         config: Loaded malcolm_config.yaml content.
     """
-    mav_cfg    = config.get("mavlink", {})
+    mav_cfg = config.get("mavlink", {})
     listen_str = mav_cfg.get("source", "udpin:localhost:14550")
     tracker_port = int(config.get("tracker", {}).get("telemetry_port", 14560))
 
@@ -73,8 +72,7 @@ def run(config: dict) -> None:
 
         if msg is None:
             log.warning(
-                "No GLOBAL_POSITION_INT received within 5 s"
-                " — link may be degraded"
+                "No GLOBAL_POSITION_INT received within 5 s" " — link may be degraded"
             )
             continue
 
@@ -83,19 +81,21 @@ def run(config: dict) -> None:
             continue
 
         payload = {
-            "lat_degE7":   msg.lat,
-            "lon_degE7":   msg.lon,
-            "alt_mm":      msg.alt,
-            "vx_cms":      msg.vx,
-            "vy_cms":      msg.vy,
-            "hdg_cdeg":    msg.hdg,
+            "lat_degE7": msg.lat,
+            "lon_degE7": msg.lon,
+            "alt_mm": msg.alt,
+            "vx_cms": msg.vx,
+            "vy_cms": msg.vy,
+            "hdg_cdeg": msg.hdg,
             "timestamp_s": time.time(),
         }
         data = json.dumps(payload).encode("utf-8")
         tx_sock.sendto(data, tracker_addr)
         log.debug(
             "Position: lat=%.6f lon=%.6f alt=%.1f m",
-            msg.lat / 1e7, msg.lon / 1e7, msg.alt / 1000.0,
+            msg.lat / 1e7,
+            msg.lon / 1e7,
+            msg.alt / 1000.0,
         )
 
 
@@ -103,13 +103,15 @@ def _parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description="Malcolm GCS MAVLink telemetry feed")
     parser.add_argument(
-        "--config", "-c",
+        "--config",
+        "-c",
         type=Path,
         default=DEFAULT_CONFIG_PATH,
         help="Path to malcolm_config.yaml (default: %(default)s)",
     )
     parser.add_argument(
-        "--log-level", "-l",
+        "--log-level",
+        "-l",
         default="INFO",
         choices=["DEBUG", "INFO", "WARNING", "ERROR"],
     )

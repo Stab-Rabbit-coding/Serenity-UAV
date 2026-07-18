@@ -70,61 +70,63 @@ References:
   Axis determination: face-normal + Z-slice analysis, 2026-06-02.
 """
 
-import bpy
-import bmesh
-import os
 import math
+import os
+
+import bmesh
+import bpy
 
 # ── Tunables ──────────────────────────────────────────────────────────────────
 
 # EDF axis in the XY cross-sectional plane
-EDF_X           = -175.8    # [mm]
-EDF_Y           = -117.0    # [mm]
+EDF_X = -175.8  # [mm]
+EDF_Y = -117.0  # [mm]
 
 # Z extents with margin
-Z_FWD_MARGIN    =   -1.0    # [mm]  1 mm past forward face at Z=0
+Z_FWD_MARGIN = -1.0  # [mm]  1 mm past forward face at Z=0
 
 # Nozzle geometry (from blender_nozzle_gen.py)
-HINGE_DEPTH     =   14.0    # [mm]  REAR_HINGE_Z
-RING_H          =    6.0    # [mm]  ring_h = HINGE_WALL * 4 = 6 mm
+HINGE_DEPTH = 14.0  # [mm]  REAR_HINGE_Z
+RING_H = 6.0  # [mm]  ring_h = HINGE_WALL * 4 = 6 mm
 
 # Actual cone tip is at Z ≈ 172 mm — determined from Z-slice analysis:
 # between Z=170 and Z=175 the hull Y-span collapses from 115 mm to 17 mm,
 # indicating the cone body ends at Z ≈ 172 mm.  The material at Z > 172 mm
 # is only the pod extension (and skid rail tips), NOT the EDF cone.
-Z_CONE_TIP      =  172.0    # [mm]  measured cone-tip exit position
-Z_AFT_MARGIN    = Z_CONE_TIP + 2.0  # = 174 mm  (2 mm past cone tip)
+Z_CONE_TIP = 172.0  # [mm]  measured cone-tip exit position
+Z_AFT_MARGIN = Z_CONE_TIP + 2.0  # = 174 mm  (2 mm past cone tip)
 
-Z_HINGE         = Z_CONE_TIP - HINGE_DEPTH   # = 158 mm
-Z_SEAT_FWD      = Z_HINGE    - RING_H         # = 152 mm (shoulder stop)
-Z_BORE_START    = Z_SEAT_FWD
+Z_HINGE = Z_CONE_TIP - HINGE_DEPTH  # = 158 mm
+Z_SEAT_FWD = Z_HINGE - RING_H  # = 152 mm (shoulder stop)
+Z_BORE_START = Z_SEAT_FWD
 
 # Petal zone: last HINGE_DEPTH mm of cone + tip margin
-Z_PETAL_AFT     = Z_AFT_MARGIN   # = 174 mm
-Z_PETAL_FWD     = Z_HINGE        # = 158 mm
+Z_PETAL_AFT = Z_AFT_MARGIN  # = 174 mm
+Z_PETAL_FWD = Z_HINGE  # = 158 mm
 
 # Bore diameters
-EDF_BORE_D      =  128.0    # [mm]  thrust-tube clearance (OD 126 + 1 mm each side)
-SEAT_D          =  134.0    # [mm]  nozzle frame seat (OD 131 + 1.5 mm clearance)
+EDF_BORE_D = 128.0  # [mm]  thrust-tube clearance (OD 126 + 1 mm each side)
+SEAT_D = 134.0  # [mm]  nozzle frame seat (OD 131 + 1.5 mm clearance)
 
 # Nozzle petal geometry
-N_PETALS        = 8
-PETAL_SPAN_DEG  =  38.0     # [°]
+N_PETALS = 8
+PETAL_SPAN_DEG = 38.0  # [°]
 # Outer radius for wedge cutter (must exceed max hull radius from EDF axis)
-WEDGE_OUTER_R   = 200.0     # [mm]
+WEDGE_OUTER_R = 200.0  # [mm]
 
-BORE_FN         = 128
-SEAT_FN         = 128
-WEDGE_ARC_N     =  24
+BORE_FN = 128
+SEAT_FN = 128
+WEDGE_ARC_N = 24
 
 # File paths
-BASE     = os.path.dirname(os.path.abspath(__file__))
-STLS     = os.path.join(BASE, "..", "stls", "fuselage", "aft-edf")
-IN_STL   = os.path.join(STLS, "rear_shell24_2mm_repaired.stl")
+BASE = os.path.dirname(os.path.abspath(__file__))
+STLS = os.path.join(BASE, "..", "stls", "fuselage", "aft-edf")
+IN_STL = os.path.join(STLS, "rear_shell24_2mm_repaired.stl")
 OUT_BODY = os.path.join(STLS, "rear_shell24_2mm_edf_bored.stl")
 OUT_PETAL_FMT = os.path.join(STLS, "rear_nozzle_petal_hull_{n}.stl")
 
 # ── Utilities ─────────────────────────────────────────────────────────────────
+
 
 def clear_scene():
     bpy.ops.object.select_all(action="SELECT")
@@ -152,17 +154,23 @@ def make_bore_cylinder_Z(name, z_lo, z_hi, cx, cy, diameter, fn):
     """
     radius = diameter / 2.0
     angles = [2 * math.pi * i / fn for i in range(fn)]
-    bm     = bmesh.new()
-    mesh   = bpy.data.meshes.new(name + "_mesh")
+    bm = bmesh.new()
+    mesh = bpy.data.meshes.new(name + "_mesh")
 
-    bot = [bm.verts.new((cx + radius * math.sin(a), cy + radius * math.cos(a), z_lo))
-           for a in angles]
-    top = [bm.verts.new((cx + radius * math.sin(a), cy + radius * math.cos(a), z_hi))
-           for a in angles]
+    bot = [
+        bm.verts.new((cx + radius * math.sin(a), cy + radius * math.cos(a), z_lo))
+        for a in angles
+    ]
+    top = [
+        bm.verts.new((cx + radius * math.sin(a), cy + radius * math.cos(a), z_hi))
+        for a in angles
+    ]
 
     def face(vl):
-        try: bm.faces.new(vl)
-        except ValueError: pass
+        try:
+            bm.faces.new(vl)
+        except ValueError:
+            pass
 
     for i in range(fn):
         j = (i + 1) % fn
@@ -176,30 +184,31 @@ def make_bore_cylinder_Z(name, z_lo, z_hi, cx, cy, diameter, fn):
         face([tc, top[i], top[j]])
 
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
-    bm.to_mesh(mesh); bm.free(); mesh.update()
+    bm.to_mesh(mesh)
+    bm.free()
+    mesh.update()
     obj = bpy.data.objects.new(name, mesh)
     bpy.context.collection.objects.link(obj)
     return obj
 
 
-def make_petal_wedge_Z(name, z_aft, z_fwd,
-                        cx, cy,
-                        angle_center_deg, span_deg,
-                        outer_r, n_arc):
+def make_petal_wedge_Z(
+    name, z_aft, z_fwd, cx, cy, angle_center_deg, span_deg, outer_r, n_arc
+):
     """
     Angular-sector wedge extruded along Z.
     Centred at (cx, cy) in the XY plane.
     Angle 0 = +Y (dorsal), increasing CCW when viewed from aft (+Z direction).
     """
     half = math.radians(span_deg / 2.0)
-    ctr  = math.radians(angle_center_deg)
+    ctr = math.radians(angle_center_deg)
     arcs = [ctr - half + (2 * half * i / n_arc) for i in range(n_arc + 1)]
 
     def xy(a):
         # angle 0 = +Y; sin → X, cos → Y
         return (cx + outer_r * math.sin(a), cy + outer_r * math.cos(a))
 
-    bm   = bmesh.new()
+    bm = bmesh.new()
     mesh = bpy.data.meshes.new(name + "_mesh")
 
     o_aft = bm.verts.new((cx, cy, z_aft))
@@ -215,19 +224,23 @@ def make_petal_wedge_Z(name, z_aft, z_fwd,
     bm.verts.ensure_lookup_table()
 
     def face(vl):
-        try: bm.faces.new(vl)
-        except ValueError: pass
+        try:
+            bm.faces.new(vl)
+        except ValueError:
+            pass
 
     for i in range(n_arc):
-        face([o_aft, arc_aft[i + 1], arc_aft[i]])      # aft cap (−Z normal)
-        face([o_fwd, arc_fwd[i], arc_fwd[i + 1]])       # fwd cap (+Z normal)
+        face([o_aft, arc_aft[i + 1], arc_aft[i]])  # aft cap (−Z normal)
+        face([o_fwd, arc_fwd[i], arc_fwd[i + 1]])  # fwd cap (+Z normal)
         face([arc_aft[i], arc_aft[i + 1], arc_fwd[i + 1], arc_fwd[i]])  # outer wall
 
-    face([o_aft, arc_aft[0], arc_fwd[0], o_fwd])        # side wall A
+    face([o_aft, arc_aft[0], arc_fwd[0], o_fwd])  # side wall A
     face([o_aft, o_fwd, arc_fwd[n_arc], arc_aft[n_arc]])  # side wall B
 
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
-    bm.to_mesh(mesh); bm.free(); mesh.update()
+    bm.to_mesh(mesh)
+    bm.free()
+    mesh.update()
     obj = bpy.data.objects.new(name, mesh)
     bpy.context.collection.objects.link(obj)
     return obj
@@ -236,7 +249,9 @@ def make_petal_wedge_Z(name, z_aft, z_fwd,
 def boolean_op(target, cutter, operation):
     bpy.context.view_layer.objects.active = target
     mod = target.modifiers.new("bool", "BOOLEAN")
-    mod.operation = operation; mod.object = cutter; mod.solver = "EXACT"
+    mod.operation = operation
+    mod.object = cutter
+    mod.solver = "EXACT"
     bpy.ops.object.modifier_apply(modifier="bool")
     bpy.data.objects.remove(cutter, do_unlink=True)
 
@@ -246,7 +261,9 @@ def duplicate_object(obj, name):
     obj.select_set(True)
     bpy.context.view_layer.objects.active = obj
     bpy.ops.object.duplicate()
-    dup = bpy.context.active_object; dup.name = name; return dup
+    dup = bpy.context.active_object
+    dup.name = name
+    return dup
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
@@ -268,31 +285,49 @@ print(f"  Extracting {N_PETALS} petals (Z = {Z_PETAL_FWD} .. {Z_PETAL_AFT}) …"
 for n, ca in enumerate(petal_centers):
     print(f"    Petal {n}: {ca:.1f}°")
     pc = duplicate_object(hull, f"p{n}")
-    wi = make_petal_wedge_Z(f"wi{n}", Z_PETAL_AFT, Z_PETAL_FWD,
-                             EDF_X, EDF_Y, ca, PETAL_SPAN_DEG,
-                             WEDGE_OUTER_R, WEDGE_ARC_N)
+    wi = make_petal_wedge_Z(
+        f"wi{n}",
+        Z_PETAL_AFT,
+        Z_PETAL_FWD,
+        EDF_X,
+        EDF_Y,
+        ca,
+        PETAL_SPAN_DEG,
+        WEDGE_OUTER_R,
+        WEDGE_ARC_N,
+    )
     boolean_op(pc, wi, "INTERSECT")
     path = OUT_PETAL_FMT.format(n=n)
     sz = export_stl(pc, path)
     print(f"      → {os.path.basename(path)}  ({sz} KB)")
     bpy.data.objects.remove(pc, do_unlink=True)
 
-    wd = make_petal_wedge_Z(f"wd{n}", Z_PETAL_AFT, Z_PETAL_FWD,
-                             EDF_X, EDF_Y, ca, PETAL_SPAN_DEG,
-                             WEDGE_OUTER_R, WEDGE_ARC_N)
+    wd = make_petal_wedge_Z(
+        f"wd{n}",
+        Z_PETAL_AFT,
+        Z_PETAL_FWD,
+        EDF_X,
+        EDF_Y,
+        ca,
+        PETAL_SPAN_DEG,
+        WEDGE_OUTER_R,
+        WEDGE_ARC_N,
+    )
     boolean_op(hull, wd, "DIFFERENCE")
 
 # ── Step 2: seat bore (Ø134, aft zone Z=161..183) ────────────────────────────
 print("  Cutting seat bore …")
-seat = make_bore_cylinder_Z("seat", Z_BORE_START, Z_AFT_MARGIN,
-                             EDF_X, EDF_Y, SEAT_D, SEAT_FN)
+seat = make_bore_cylinder_Z(
+    "seat", Z_BORE_START, Z_AFT_MARGIN, EDF_X, EDF_Y, SEAT_D, SEAT_FN
+)
 boolean_op(hull, seat, "DIFFERENCE")
 print(f"    Ø{SEAT_D} mm  Z = {Z_BORE_START} .. {Z_AFT_MARGIN}")
 
 # ── Step 3: thrust-tube bore (Ø128, body zone Z=-1..161) ─────────────────────
 print("  Cutting thrust-tube bore …")
-bore = make_bore_cylinder_Z("bore", Z_FWD_MARGIN, Z_BORE_START,
-                             EDF_X, EDF_Y, EDF_BORE_D, BORE_FN)
+bore = make_bore_cylinder_Z(
+    "bore", Z_FWD_MARGIN, Z_BORE_START, EDF_X, EDF_Y, EDF_BORE_D, BORE_FN
+)
 boolean_op(hull, bore, "DIFFERENCE")
 print(f"    Ø{EDF_BORE_D} mm  Z = {Z_FWD_MARGIN} .. {Z_BORE_START}")
 

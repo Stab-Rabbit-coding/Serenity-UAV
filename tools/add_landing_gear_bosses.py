@@ -47,9 +47,9 @@ BOSS_OD = 10.0
 # deeper than structurally necessary; refine once LG-10 placement is
 # finalized and the real local curvature is known.
 BOSS_LEN = 24.0
-BOSS_EMBED = 14.0        # mm pushed into the shell (along the surface normal)
-BORE_D = 5.5             # mm, wire-end clearance bore
-BORE_DEPTH = 10.0        # mm
+BOSS_EMBED = 14.0  # mm pushed into the shell (along the surface normal)
+BORE_D = 5.5  # mm, wire-end clearance bore
+BORE_DEPTH = 10.0  # mm
 
 # (label, X, Y, corner Z-rotation deg) -- see module docstring
 CORNERS = [
@@ -66,21 +66,25 @@ def branch_direction(az_deg):
     lean = np.radians(LEAN_ANG)
     az = np.radians(az_deg)
     v = np.array([np.sin(lean), 0, np.cos(lean)])
-    rot_z = np.array([
-        [np.cos(az), -np.sin(az), 0],
-        [np.sin(az), np.cos(az), 0],
-        [0, 0, 1],
-    ])
+    rot_z = np.array(
+        [
+            [np.cos(az), -np.sin(az), 0],
+            [np.sin(az), np.cos(az), 0],
+            [0, 0, 1],
+        ]
+    )
     return rot_z @ v
 
 
 def corner_transform(x, y, zrot_deg):
     zrot = np.radians(zrot_deg)
-    rot = np.array([
-        [np.cos(zrot), -np.sin(zrot), 0],
-        [np.sin(zrot), np.cos(zrot), 0],
-        [0, 0, 1],
-    ])
+    rot = np.array(
+        [
+            [np.cos(zrot), -np.sin(zrot), 0],
+            [np.sin(zrot), np.cos(zrot), 0],
+            [0, 0, 1],
+        ]
+    )
     return rot, np.array([x, y, POST_ORIGIN_Z])
 
 
