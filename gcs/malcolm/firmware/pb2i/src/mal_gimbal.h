@@ -3,6 +3,7 @@
  * @brief   Malcolm GCS — antenna tracking gimbal controller API.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  * Revision: R (2026-06-11)
  *

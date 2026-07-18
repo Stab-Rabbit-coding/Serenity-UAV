@@ -3,6 +3,7 @@
  * @brief   Serenity UAV FC node daemon — entry point stub (Phase 7).
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * The FC node (Flight Control) daemon runs on each of the four Cape-A /

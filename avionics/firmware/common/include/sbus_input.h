@@ -3,6 +3,7 @@
  * @brief   SBUS RC protocol decoder — public API.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * This module implements a background receive thread that reads and decodes

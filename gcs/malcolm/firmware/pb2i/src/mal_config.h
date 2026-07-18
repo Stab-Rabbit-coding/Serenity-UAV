@@ -3,6 +3,7 @@
  * @brief   Malcolm GCS PB2-I firmware — compile-time configuration constants.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  * Revision: R (2026-06-11)
  *

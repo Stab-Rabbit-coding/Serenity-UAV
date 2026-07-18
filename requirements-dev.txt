@@ -1,3 +1,4 @@
 flake8
 trimesh
 networkx
+clang-format==22.1.8

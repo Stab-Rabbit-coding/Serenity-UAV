@@ -3,6 +3,7 @@
  * @brief   SBUS RC protocol decoder — implementation.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * See sbus_input.h for design overview, protocol description, and

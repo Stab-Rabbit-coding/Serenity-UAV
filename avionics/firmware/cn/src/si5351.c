@@ -3,6 +3,7 @@
  * @brief   Si5351A DDS frequency synthesiser driver — implementation.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * Register calculation method (Silicon Labs AN619, §4):
@@ -122,17 +123,17 @@ typedef struct {
  * Parameters P1, P2, P3 are laid out as described in AN619 §4.1.
  * This macro is evaluated at compile time via designated initialiser.
  */
-#define MSNA_REGS(p1, p2, p3)                                      \
-    {                                                              \
-        (uint8_t)(((p3) >> 8U) & 0xFFU),      /* R26 P3[15:8] */   \
-            (uint8_t)((p3) & 0xFFU),          /* R27 P3[7:0]  */   \
-            (uint8_t)(((p1) >> 16U) & 0x03U), /* R28 P1[17:16]*/   \
-            (uint8_t)(((p1) >> 8U) & 0xFFU),  /* R29 P1[15:8] */   \
-            (uint8_t)((p1) & 0xFFU),          /* R30 P1[7:0]  */   \
-            (uint8_t)((((p3) >> 12U) & 0xF0U) |                    \
-                      (((p2) >> 16U) & 0x0FU)), /* R31 */          \
-            (uint8_t)(((p2) >> 8U) & 0xFFU),    /* R32 P2[15:8] */ \
-            (uint8_t)((p2) & 0xFFU)             /* R33 P2[7:0]  */ \
+#define MSNA_REGS(p1, p2, p3)                                  \
+    {                                                          \
+        (uint8_t)(((p3) >> 8U) & 0xFFU),  /* R26 P3[15:8] */   \
+        (uint8_t)((p3) & 0xFFU),          /* R27 P3[7:0]  */   \
+        (uint8_t)(((p1) >> 16U) & 0x03U), /* R28 P1[17:16]*/   \
+        (uint8_t)(((p1) >> 8U) & 0xFFU),  /* R29 P1[15:8] */   \
+        (uint8_t)((p1) & 0xFFU),          /* R30 P1[7:0]  */   \
+        (uint8_t)((((p3) >> 12U) & 0xF0U) |                    \
+                  (((p2) >> 16U) & 0x0FU)), /* R31 */          \
+        (uint8_t)(((p2) >> 8U) & 0xFFU),    /* R32 P2[15:8] */ \
+        (uint8_t)((p2) & 0xFFU)             /* R33 P2[7:0]  */ \
     }
 
 static const xcvr_49mhz_channel_reg_t

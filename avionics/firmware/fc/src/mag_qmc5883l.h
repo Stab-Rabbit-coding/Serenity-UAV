@@ -3,6 +3,7 @@
  * @brief   QMC5883L 3-axis magnetometer driver — public API.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * Drives the QMC5883L 3-axis magnetometer via Linux userspace i2c-dev

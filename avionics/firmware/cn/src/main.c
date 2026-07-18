@@ -3,6 +3,7 @@
  * @brief   Serenity UAV CN node daemon — entry point.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * The CN node (Communications/Payload) daemon runs on each of the four

@@ -318,6 +318,13 @@ def load_group(file_list):
     return verts
 
 
+def top_bottom_view_geometry():
+    """Shared X/Y ranges and canvas dims for the top and bottom views."""
+    h_range = (HULL_X_MIN, HULL_X_MAX)
+    v_range = (HULL_Y_MIN, HULL_Y_MAX)
+    return h_range, v_range, SVG_TOP_W, SVG_TOP_H, MARGIN
+
+
 # ---------------------------------------------------------------------------
 # Side view (XZ): nose right, keel at bottom
 # ---------------------------------------------------------------------------
@@ -518,10 +525,7 @@ def build_top_view():
     all_hull = fuse_verts + wing_verts
 
     # For top view: Y is the beam axis; nose to right (X), port to top
-    h_range = (HULL_X_MIN, HULL_X_MAX)
-    v_range = (HULL_Y_MIN, HULL_Y_MAX)
-
-    W, H, M = SVG_TOP_W, SVG_TOP_H, MARGIN
+    h_range, v_range, W, H, M = top_bottom_view_geometry()
 
     def px(x_mm, y_mm):
         px_ = M + (x_mm - HULL_X_MIN) / (HULL_X_MAX - HULL_X_MIN) * (W - 2 * M)
@@ -709,10 +713,7 @@ def build_bottom_view():
 
     all_hull = fuse_verts + wing_verts + nacelle_verts
 
-    h_range = (HULL_X_MIN, HULL_X_MAX)
-    v_range = (HULL_Y_MIN, HULL_Y_MAX)
-
-    W, H, M = SVG_TOP_W, SVG_TOP_H, MARGIN
+    h_range, v_range, W, H, M = top_bottom_view_geometry()
 
     def px(x_mm, y_mm):
         px_ = M + (x_mm - HULL_X_MIN) / (HULL_X_MAX - HULL_X_MIN) * (W - 2 * M)

@@ -151,11 +151,45 @@
         correct for the real target. One further pylint tuple-unpacking false positive
         (`mod_vera_ds_pcb.py`/`mod_Jayne_ds_pcb.py`, `padnets.items()` mis-inferred as
         `float`/`str`) got the same treatment.
-      - `CLANG_FORMAT` — `clang-format -i` (repo's own `.clang-format`: 4-space,
-        80-col, aligned macros/comments) across all 27 active firmware `.c`/`.h` files.
-        Pure whitespace; syntax-verified with `gcc -fsyntax-only` wherever the
-        environment's dependencies allow (libgpiod ≥2.0 and the mavlink SDK aren't
-        installable in this sandbox — pre-existing gaps, unrelated to this change).
+      - `CLANG_FORMAT` — root-caused via the PR #140 CI run: `clang-format -i` (repo's
+        own `.clang-format`) locally against clang-format 18.1.3 left 7 lines across 7
+        files still flagged by CI's actual gate. Root cause was **not** a stray edge
+        case — the `github/super-linter@v4` image bundles some old, uncontrolled
+        clang-format build, and cross-checking clang-format 9 through 22 (via `pip
+        install clang-format==<ver>`) found `PointerAlignment: Left` changed meaning
+        between clang-format 18 and 22 (star-attached-to-identifier vs.
+        star-attached-to-type) — silently disagreeing with whatever CI actually runs.
+        Fixed at the root: `.clang-format` now pins `PointerAlignment: Right` (verified
+        byte-identical output across clang-format 18 and 22, and matches this codebase's
+        actual established style everywhere — `char *foo`, not `char* foo`), **and**
+        `ci.yml` gained a dedicated "C/C++ format" job that installs
+        `clang-format==22.1.8` (pinned in `requirements-dev.txt`, the current latest
+        stable LLVM release) and runs the authoritative check directly — the same
+        version a local dev installs from `requirements-dev.txt`. `VALIDATE_CLANG_FORMAT`
+        is now `false` in `super-linter.yml` (duplicate check against an uncontrolled,
+        disagreeing version) with the rationale recorded there and in `.clang-format`.
+        Re-ran `clang-format -i` under the pinned 22.1.8 across all 27 active files;
+        `gcc -fsyntax-only` and the existing test suites re-verified clean.
+      - `CPP` (cpplint) — root-caused via the same CI run: **all 25 findings were
+        `legal/copyright`** ("No copyright message found"), not the header-guard/
+        include-subdir/Google-style findings a bare local `cpplint` run also surfaces
+        (those aren't part of CI's actual enabled rule set, so were out of scope).
+        Added a `Copyright 2026 Steve Griffing` line to each of the 25 files' existing
+        `Author:`/`License:` header block — additive, doesn't remove or contradict the
+        project's CC BY 4.0 attribution convention. `cpplint` confirms 0
+        `legal/copyright` findings on the same file set now.
+      - `JSCPD` — root-caused via the same CI run: super-linter runs jscpd **per file**
+        (self-comparison within one file), not the repo-wide cross-file scan used to
+        produce the earlier 142-clone estimate below. Only 3 files had real *internal*
+        duplication: `blender_edf_bore_and_petals.py` (two mesh-builder functions ending
+        in the same 6-line "bake bmesh → new object" sequence — extracted into
+        `finalize_bmesh_to_object()`), `tracker.py` (the haversine horizontal-distance
+        calculation duplicated between `_slant_range_m()` and `_elevation_deg()` —
+        extracted into `_haversine_horizontal_m()`, `pytest tests/test_tracker.py`
+        still 11/11 passing), and `gen_hull_outlines.py` (`build_top_view()` /
+        `build_bottom_view()` sharing the same range/canvas-size boilerplate —
+        extracted into `top_bottom_view_geometry()`). All three verified 0 clones after
+        the fix.
       - `GITHUB_ACTIONS` — `actionlint` flagged `actions/setup-python@v4` as outdated in
         `ci.yml`; bumped to `@v5`.
       - `SHELL_SHFMT` — `shfmt -i 4` on the 4 active `.sh` scripts; `bash -n` verified.
@@ -189,32 +223,31 @@
       - `NATURAL_LANGUAGE` — super-linter's prose linter (textlint-based) has no readily
         available standalone equivalent in this environment; also already `false` in
         `super-linter.yml` for the same reason.
-      - `CPP` (cpplint, distinct from `CLANG_FORMAT`) — 113 findings on the current
-        ruleset (vs. historical 25 — again a different filtered config), but the majority
-        are cpplint enforcing Google C++ style conventions this project has *never*
-        followed and explicitly overrides elsewhere: short symbol-only header guards
-        (`SI5351_H`, not `AVIONICS_FIRMWARE_CN_SRC_SI5351_H_`) used consistently
-        repo-wide; CC BY 4.0 `Author:`/`License:` header blocks instead of a Google-style
-        `Copyright` banner (`AGENTS.md` §3); `.clang-format` itself already documents a
-        deliberate Google-style deviation (4-space indent, "CLAUDE.md mandates 4-space
-        indentation ... overrides clang-format's Google-style default of 2"). A few
-        residual "extra space before (" hits are cpplint's own column-counting getting
-        confused by non-ASCII characters (µ) in comments, not real formatting bugs.
-        Rewriting 25+ files' header guards and adding Copyright banners to match a style
-        guide this project doesn't use would be pure churn against its own convention.
-      - `JSCPD` — 142 clones at a 10-line/50-token threshold (vs. historical 39 at
-        whatever threshold produced that count). The overwhelming majority are either
-        intentional structural repetition — SVG build-guide diagram templates sharing
-        icon/shape markup by design, and BOM revision snapshots (`bom_revP/Q/R.json`)
-        that are supposed to largely restate the prior revision plus incremental changes
-        per the Rev-letter archival policy (`AGENTS.md` §8) — or independent per-board
-        KiCad automation scripts (e.g. `mod_vera_ds_pcb.py` / `mod_Jayne_ds_pcb.py`) that
-        are deliberately self-contained so one board's generator can be modified without
+      - Beyond the CI-scoped `legal/copyright` fix above, a bare local `cpplint` run
+        (no filter — broader than CI's actual enabled rule set) also surfaces ~113
+        findings that are cpplint enforcing Google C++ style conventions this project
+        has *never* followed and explicitly overrides elsewhere: short symbol-only
+        header guards (`SI5351_H`, not `AVIONICS_FIRMWARE_CN_SRC_SI5351_H_`) used
+        consistently repo-wide; `.clang-format` itself already documents a deliberate
+        Google-style deviation (4-space indent, "AGENTS.md mandates 4-space
+        indentation ... overrides clang-format's Google-style default of 2"). Not
+        applied — would be pure churn against the project's own established
+        convention, and isn't part of CI's actual gate.
+      - Beyond the 3 real per-file duplicates fixed above, a repo-wide cross-file jscpd
+        scan (not what CI actually runs) also surfaces ~142 clones at a 10-line/
+        50-token threshold. The overwhelming majority are either intentional structural
+        repetition — SVG build-guide diagram templates sharing icon/shape markup by
+        design, and BOM revision snapshots (`bom_revP/Q/R.json`) that are supposed to
+        largely restate the prior revision plus incremental changes per the Rev-letter
+        archival policy (`AGENTS.md` §8) — or independent per-board KiCad automation
+        scripts (e.g. `mod_vera_ds_pcb.py` / `mod_Jayne_ds_pcb.py`) that are
+        deliberately self-contained so one board's generator can be modified without
         risking another's already-validated PCB. Real de-duplication candidates exist
-        (that Vera/Jayne script pair is the clearest one) but extracting shared code from
-        working, physically-validated PCB-generation scripts is an architectural decision
-        with real hardware consequences — needs explicit user review, not a mechanical
-        lint fix, matching the same caution applied to the RCRS rename in §0.1 above.
+        (that Vera/Jayne script pair is the clearest one) but extracting shared code
+        from working, physically-validated PCB-generation scripts is an architectural
+        decision with real hardware consequences — needs explicit user review, not a
+        mechanical lint fix, matching the same caution applied to the RCRS rename in
+        §0.1 above.
       - `JAVASCRIPT_STANDARD` / `JSX` — the sole active file
         (`current-specification/serenity-rev-r.jsx`) would need 2-space indent and no
         semicolons under JavaScript Standard Style, which directly contradicts

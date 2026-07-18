@@ -3,6 +3,7 @@
  * @brief   Si5351A DDS frequency synthesiser driver — public API.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * The Si5351A (Skyworks / Silicon Labs) is an I²C-programmable clock

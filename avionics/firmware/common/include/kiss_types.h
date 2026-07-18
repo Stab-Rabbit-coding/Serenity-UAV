@@ -3,6 +3,7 @@
  * @brief   KISS TNC protocol constants and frame types.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * KISS (Keep It Simple, Stupid) is the host-to-TNC protocol used between

@@ -3,6 +3,7 @@
  * @brief   BQ76920 / BQ76930 / BQ76940 Li-ion cell monitor driver — public API.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * Drives the Texas Instruments BQ76930PWRQ1 on the Kaylee power distribution

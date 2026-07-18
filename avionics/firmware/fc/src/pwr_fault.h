@@ -3,6 +3,7 @@
  * @brief   Power fault monitor and load-shedding manager — public API.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * Integrates the INA226 current monitors on Kaylee and the BQ76930 cell

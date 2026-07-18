@@ -4,6 +4,7 @@
  * implementation.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * Implements the BQ76930 driver described in cell_mon_bq769x0.h.

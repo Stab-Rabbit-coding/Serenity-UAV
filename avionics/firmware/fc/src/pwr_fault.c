@@ -3,6 +3,7 @@
  * @brief   Power fault monitor and load-shedding manager — implementation.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * Implements the power fault state machine described in pwr_fault.h.

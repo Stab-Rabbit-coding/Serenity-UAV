@@ -146,6 +146,17 @@ def export_stl(obj, path):
     return os.path.getsize(path) // 1024
 
 
+def finalize_bmesh_to_object(bm, mesh, name):
+    """Recalc normals, bake bm into mesh, free bm, and link a new object."""
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.to_mesh(mesh)
+    bm.free()
+    mesh.update()
+    obj = bpy.data.objects.new(name, mesh)
+    bpy.context.collection.objects.link(obj)
+    return obj
+
+
 def make_bore_cylinder_Z(name, z_lo, z_hi, cx, cy, diameter, fn):
     """
     Cylinder along the Z axis, centred at (cx, cy) in the XY plane.
@@ -183,13 +194,7 @@ def make_bore_cylinder_Z(name, z_lo, z_hi, cx, cy, diameter, fn):
         face([bc, bot[j], bot[i]])
         face([tc, top[i], top[j]])
 
-    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
-    bm.to_mesh(mesh)
-    bm.free()
-    mesh.update()
-    obj = bpy.data.objects.new(name, mesh)
-    bpy.context.collection.objects.link(obj)
-    return obj
+    return finalize_bmesh_to_object(bm, mesh, name)
 
 
 def make_petal_wedge_Z(
@@ -237,13 +242,7 @@ def make_petal_wedge_Z(
     face([o_aft, arc_aft[0], arc_fwd[0], o_fwd])  # side wall A
     face([o_aft, o_fwd, arc_fwd[n_arc], arc_aft[n_arc]])  # side wall B
 
-    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
-    bm.to_mesh(mesh)
-    bm.free()
-    mesh.update()
-    obj = bpy.data.objects.new(name, mesh)
-    bpy.context.collection.objects.link(obj)
-    return obj
+    return finalize_bmesh_to_object(bm, mesh, name)
 
 
 def boolean_op(target, cutter, operation):

@@ -3,6 +3,7 @@
  * @brief   XCVR-49MHZ-1 KISS/AX.25 UART driver — public API.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * This driver manages the UART link between the CN node (AM6254) and the

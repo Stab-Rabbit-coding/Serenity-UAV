@@ -3,6 +3,7 @@
  * @brief   MMC5983MA 3-axis magnetometer driver — implementation.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * Implements the MMC5983MA driver described in mag_mmc5983ma.h.

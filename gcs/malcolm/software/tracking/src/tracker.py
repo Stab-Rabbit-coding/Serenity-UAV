@@ -106,12 +106,10 @@ def _bearing_vincenty(gcs: GeoPosition, aircraft: GeoPosition) -> float:
     return (math.degrees(bearing_rad) + 360.0) % 360.0
 
 
-def _slant_range_m(gcs: GeoPosition, aircraft: GeoPosition) -> float:
+def _haversine_horizontal_m(gcs: GeoPosition, aircraft: GeoPosition) -> float:
     """
-    Approximate 3-D slant range in metres using the haversine formula for
-    horizontal range and Pythagoras for the altitude component.
-
-    Accurate to <0.5% for ranges <100 km — sufficient for antenna pointing.
+    Great-circle horizontal distance in metres between *gcs* and *aircraft*
+    using the haversine formula. Accurate to <0.5% for ranges <100 km.
     """
     lat1 = math.radians(gcs.lat_deg)
     lat2 = math.radians(aircraft.lat_deg)
@@ -122,8 +120,18 @@ def _slant_range_m(gcs: GeoPosition, aircraft: GeoPosition) -> float:
         math.sin(dlat / 2.0) ** 2
         + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2.0) ** 2
     )
-    horizontal_m = 2.0 * WGS84_A * math.asin(math.sqrt(a))
+    # Clamp against tiny floating-point rounding producing a < 0.
+    return 2.0 * WGS84_A * math.asin(math.sqrt(max(a, 0.0)))
 
+
+def _slant_range_m(gcs: GeoPosition, aircraft: GeoPosition) -> float:
+    """
+    Approximate 3-D slant range in metres using the haversine formula for
+    horizontal range and Pythagoras for the altitude component.
+
+    Accurate to <0.5% for ranges <100 km — sufficient for antenna pointing.
+    """
+    horizontal_m = _haversine_horizontal_m(gcs, aircraft)
     dalt_m = aircraft.alt_m - gcs.alt_m
     return math.sqrt(horizontal_m**2 + dalt_m**2)
 
@@ -139,17 +147,7 @@ def _elevation_deg(gcs: GeoPosition, aircraft: GeoPosition) -> float:
         Bennett, G.G. (1982). "The Calculation of Astronomical Refraction in
         Marine Navigation". J. Nav. 35(2): 255-259.
     """
-    lat1 = math.radians(gcs.lat_deg)
-    lat2 = math.radians(aircraft.lat_deg)
-    dlat = lat2 - lat1
-    dlon = math.radians(aircraft.lon_deg - gcs.lon_deg)
-
-    a = (
-        math.sin(dlat / 2.0) ** 2
-        + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2.0) ** 2
-    )
-    horizontal_m = 2.0 * WGS84_A * math.asin(math.sqrt(max(a, 0.0)))
-
+    horizontal_m = _haversine_horizontal_m(gcs, aircraft)
     dalt_m = aircraft.alt_m - gcs.alt_m
 
     if horizontal_m < 1.0:

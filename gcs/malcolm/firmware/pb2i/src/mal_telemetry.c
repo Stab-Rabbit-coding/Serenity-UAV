@@ -3,6 +3,7 @@
  * @brief   Malcolm GCS — MAVLink telemetry parser and forwarder implementation.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  * Revision: R (2026-06-11)
  *
@@ -85,7 +86,7 @@ static void handle_global_position(const mavlink_message_t *msg) {
     char json[256];
     int  len = snprintf(json, sizeof(json),
                         "{\"lat_degE7\":%d,\"lon_degE7\":%d,\"alt_mm\":%d,"
-                         "\"vx_cms\":%d,\"vy_cms\":%d,\"hdg_cdeg\":%u}",
+                        "\"vx_cms\":%d,\"vy_cms\":%d,\"hdg_cdeg\":%u}",
                         gpi.lat, gpi.lon, gpi.alt, gpi.vx, gpi.vy, gpi.hdg);
 
     if (s_udp_fd >= 0 && len > 0) {

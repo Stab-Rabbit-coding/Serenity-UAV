@@ -28,6 +28,27 @@ jobs:
           flake8 --version
           flake8 .
 
+  clang-format:
+    name: C/C++ format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned clang-format
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+          clang-format --version
+      - name: Run clang-format (dry-run, authoritative pinned version)
+        run: |
+          find . \( -name '*.c' -o -name '*.h' -o -name '*.cpp' -o -name '*.hpp' -o -name '*.cc' \) \
+            -not -path './archives/*' -not -path './airframe/archive/*' \
+            -not -path './airframe/FreeCAD-scripts/*' -print0 \
+            | xargs -0 clang-format --dry-run --Werror
+
   stl-validate:
     name: STL Validation
     runs-on: ubuntu-latest

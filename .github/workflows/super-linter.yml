@@ -41,11 +41,21 @@ jobs:
           # super-linter still covers Python via black/isort/mypy/pylint, which
           # ci.yml does not.
           VALIDATE_PYTHON_FLAKE8: false
+          # CLANG_FORMAT disabled: ci.yml's dedicated "C/C++ format" job already
+          # runs clang-format against a version-pinned, authoritative release
+          # (clang-format==22.1.8, see requirements-dev.txt and .clang-format) --
+          # running it a second time here via whatever clang-format ships inside
+          # the github/super-linter@v4 image was a duplicate check that actively
+          # disagreed with the authoritative version on some formatting decisions
+          # (e.g. PointerAlignment's Left/Right interpretation changed between
+          # clang-format 18 and 22), producing false-positive lint failures
+          # unrelated to the actual code. See .clang-format for detail.
+          VALIDATE_CLANG_FORMAT: false
           # Style linters disabled: super-linter .super-lintignore exclusions
           # insufficient for archived/ ; MARKDOWN/BLACK/PYLINT/ISORT/EDITORCONFIG
           # require upstream super-linter config tuning or separate linter jobs.
-          # Functional linting (Python flake8, KiCad ERC/DRC) handled separately
-          # in ci.yml.
+          # Functional linting (Python flake8, C/C++ clang-format, KiCad ERC/DRC)
+          # handled separately in ci.yml.
           VALIDATE_EDITORCONFIG: false
           VALIDATE_MARKDOWN: false
           VALIDATE_NATURAL_LANGUAGE: false

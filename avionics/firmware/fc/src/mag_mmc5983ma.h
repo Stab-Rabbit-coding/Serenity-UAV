@@ -3,6 +3,7 @@
  * @brief   MMC5983MA 3-axis magnetometer driver — public API.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * Drives the MEMSIC MMC5983MA 3-axis magnetometer via Linux userspace
@@ -94,41 +95,41 @@ extern "C" {
  * ---------------------------------------------------------------------------*/
 
 /** I2C bus address with SA0 = 0 (Wash hardware strapping). */
-#define MMC5983MA_I2C_ADDR           (0x30U)
+#define MMC5983MA_I2C_ADDR       (0x30U)
 
 /** Product ID register value that confirms MMC5983MA identity. */
-#define MMC5983MA_PRODUCT_ID         (0x30U)
+#define MMC5983MA_PRODUCT_ID     (0x30U)
 
 /**
  * 18-bit zero-field output code (2^17).
  * Subtract this from raw unsigned readings before scaling to get a
  * signed magnetic field value.
  */
-#define MMC5983MA_ZERO_OFFSET        (131072U)
+#define MMC5983MA_ZERO_OFFSET    (131072U)
 
 /**
  * Sensitivity for ±8 G full-scale range.
  * Units: LSB per Gauss.  16384 LSB = 1 G = 100 µT.
  */
-#define MMC5983MA_SENS_LSB_PER_G     (16384)
+#define MMC5983MA_SENS_LSB_PER_G (16384)
 
 /* ---------------------------------------------------------------------------
  * Register addresses
  * ---------------------------------------------------------------------------*/
 
-#define MMC5983MA_REG_XOUT_MSB       (0x00U) /**< X[17:10] output MSB.          */
-#define MMC5983MA_REG_XOUT_LSB       (0x01U) /**< X[9:2] output LSB.            */
-#define MMC5983MA_REG_YOUT_MSB       (0x02U) /**< Y[17:10] output MSB.          */
-#define MMC5983MA_REG_YOUT_LSB       (0x03U) /**< Y[9:2] output LSB.            */
-#define MMC5983MA_REG_ZOUT_MSB       (0x04U) /**< Z[17:10] output MSB.          */
-#define MMC5983MA_REG_ZOUT_LSB       (0x05U) /**< Z[9:2] output LSB.            */
-#define MMC5983MA_REG_XYZ_LSB2       (0x06U) /**< X[1:0], Y[1:0], Z[1:0] bits.  */
-#define MMC5983MA_REG_STATUS         (0x08U) /**< Status register.               */
-#define MMC5983MA_REG_CTRL0          (0x09U) /**< Control register 0.            */
-#define MMC5983MA_REG_CTRL1          (0x0AU) /**< Control register 1 (BW, ST).   */
-#define MMC5983MA_REG_CTRL2          (0x0BU) /**< Control register 2 (ODR, CMM). */
-#define MMC5983MA_REG_CTRL3          (0x0CU) /**< Control register 3 (SPI mode). */
-#define MMC5983MA_REG_PROD_ID        (0x2FU) /**< Product ID (reads 0x30).       */
+#define MMC5983MA_REG_XOUT_MSB   (0x00U) /**< X[17:10] output MSB.          */
+#define MMC5983MA_REG_XOUT_LSB   (0x01U) /**< X[9:2] output LSB.            */
+#define MMC5983MA_REG_YOUT_MSB   (0x02U) /**< Y[17:10] output MSB.          */
+#define MMC5983MA_REG_YOUT_LSB   (0x03U) /**< Y[9:2] output LSB.            */
+#define MMC5983MA_REG_ZOUT_MSB   (0x04U) /**< Z[17:10] output MSB.          */
+#define MMC5983MA_REG_ZOUT_LSB   (0x05U) /**< Z[9:2] output LSB.            */
+#define MMC5983MA_REG_XYZ_LSB2   (0x06U) /**< X[1:0], Y[1:0], Z[1:0] bits.  */
+#define MMC5983MA_REG_STATUS     (0x08U) /**< Status register.               */
+#define MMC5983MA_REG_CTRL0      (0x09U) /**< Control register 0.            */
+#define MMC5983MA_REG_CTRL1      (0x0AU) /**< Control register 1 (BW, ST).   */
+#define MMC5983MA_REG_CTRL2      (0x0BU) /**< Control register 2 (ODR, CMM). */
+#define MMC5983MA_REG_CTRL3      (0x0CU) /**< Control register 3 (SPI mode). */
+#define MMC5983MA_REG_PROD_ID    (0x2FU) /**< Product ID (reads 0x30).       */
 
 /* ---------------------------------------------------------------------------
  * Register field bitmasks and values
