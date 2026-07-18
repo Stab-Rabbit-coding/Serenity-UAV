@@ -139,11 +139,27 @@ existing shell, no OML change.
 
 ---
 
-## 6. Fixed Wingtip Gear — Shrink to R14 + Embed in Nacelle Inboard Face
+## 6. Fixed Wingtip Gear — DECISION: keep R22 (no shrink, no idler, no embed)
 
-**User direction (2026-07-18):** shrink the fixed gear to R ≈ 14 mm **and embed
-the pinion/sector into the nacelle's inboard surface** as far as possible without
-new mechanical issues, to preserve the canonical outboard silhouette.
+**FINAL (2026-07-18):** the fixed sector is kept at **R22** and the nacelle gear
+housing is **unchanged**; the sector simply relocates from the retired pylon to
+the fixed wingtip (coaxial with the spar), and Pinion A meshes it as before.
+Reason: shrinking to R14 breaks the one-shaft nozzle drive (`PINION_A_Y = 30.5`
+does double duty as the sector-mesh AND internal-ring-mesh centre distance), so
+it would need a reintroduced idler for marginal gain. The shell-overlay study
+(`airframe/openscad/nacelles/gear_option_compare.scad`) confirmed R22's Pinion A
+stays within the existing nacelle housing blister, while R14 only fits by adding
+the idler. The wing tip therefore just carries the bearing seat + a bolt circle
+for the R22 sector (`wings_s1223_revo.scad`).
+
+> The R14-shrink/embed analysis below is **SUPERSEDED** by the decision above,
+> retained as the design record for why it was not adopted.
+
+### ~~6.x (SUPERSEDED) Shrink to R14 + Embed in Nacelle Inboard Face~~
+
+**Intermediate direction (later reversed):** shrink the fixed gear to R ≈ 14 mm
+**and embed the pinion/sector into the nacelle's inboard surface** to preserve
+the canonical outboard silhouette.
 
 ### 6.1 Regear (Module 1.0, PA 20°)
 

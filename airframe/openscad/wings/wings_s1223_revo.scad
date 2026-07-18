@@ -226,12 +226,16 @@ WING_SLOT_X_CTR =   0.50; // [chord fraction] pocket centre chordwise at tip —
 //     (root bearing in the cargo bay + this wingtip bearing).
 //   • The wing tip therefore provides: (a) a rotating-clearance through-bore for
 //     the spar, (b) a wingtip BEARING SEAT (F688ZZ 8×16×5) that carries the
-//     wing/nacelle loads and lets the spar rotate, and (c) a FIXED R14 sector
-//     gear bolted coaxial with the spar. The nacelle's Pinion A orbits this
-//     fixed sector as the nacelle tilts → nozzle iris tracks tilt angle.
-//   • The fixed gear stands only minimally proud (TIP_PAD_PROUD); it NESTS into
-//     a shallow recess in the nacelle inboard face (docs §6.2), so the canonical
-//     nacelle silhouette is preserved and no separate pylon/block is needed.
+//     wing/nacelle loads and lets the spar rotate, and (c) a FIXED R22 sector
+//     gear bolted coaxial with the spar (the SAME sector previously carried by
+//     the retired pylon — relocated to the fixed wingtip; nacelle gear housing
+//     unchanged).  The nacelle's Pinion A orbits this fixed sector as the
+//     nacelle tilts → nozzle iris tracks tilt angle.  (Gear-size study
+//     2026-07-18: R22 kept over an R14+idler shrink — docs/TILT_SPAR_ANALYSIS.md
+//     §6; airframe/openscad/nacelles/gear_shell_compare.scad.)
+//   • The fixed gear stands only minimally proud (TIP_PAD_PROUD) and butts
+//     against the nacelle inboard face; the nacelle housing already clears
+//     Pinion A, so no pylon/block is needed.
 //   • NO nacelle boss socket (the nacelle is keyed to the spar, not pinned to a
 //     socket) — that feature is deleted vs Rev R1b.
 //
@@ -246,16 +250,16 @@ TIP_BRG_W             =   5.0;   // [mm] bearing width (seat depth)
 TIP_BRG_FLANGE_OD     =  18.0;   // [mm] flange OD → shallow counterbore, seats flush
 TIP_BRG_FLANGE_T      =   1.0;   // [mm] flange counterbore depth
 
-// Fixed R14 sector gear mount (coaxial with spar, on nacelle-facing tip face):
-FIX_GEAR_BC_R         =  11.0;   // [mm] M2.5 insert bolt circle (outside 18 mm flange, inside 13 mm gear root)
+// Fixed R22 sector gear mount (coaxial with spar, on nacelle-facing tip face):
+FIX_GEAR_BC_R         =  11.0;   // [mm] M2.5 insert bolt circle (outside 18 mm flange, inside 21 mm R22 gear root)
 FIX_GEAR_N_BOLTS      =   3;     // [count] 120° spacing
 FIX_GEAR_INSERT_OD    =   3.7;   // [mm] M2.5 heat-set insert bore
 FIX_GEAR_INSERT_L     =   5.5;   // [mm] insert pocket depth
 FIX_GEAR_PLATE_H      =   3.0;   // [mm] sector gear plate thickness (reference)
 
 // Wingtip mount pad — minimal boss around the spar at the tip face that houses
-// the bearing seat + gear-bolt inserts. Kept low so the gear nests in the
-// nacelle recess rather than standing on a tall block.
+// the bearing seat + gear-bolt inserts. Kept low (butts against the nacelle
+// inboard face) rather than standing on a tall block.
 TIP_PAD_OD            =  26.0;   // [mm] pad OD (clears 18 mm flange + r=11 bolt circle)
 TIP_PAD_PROUD         =   2.0;   // [mm] proud height beyond wing tip face (minimal)
 
