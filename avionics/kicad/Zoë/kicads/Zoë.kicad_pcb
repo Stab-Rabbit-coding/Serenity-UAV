@@ -88,7 +88,7 @@
 	(net 6 "RMII0_TX_EN")
 	(net 7 "MDC")
 	(net 8 "WINCH_IN1")
-	(net 9 "UART_RCRS_TX")
+	(net 9 "UART_49MHZ_XCVR_TX")
 	(net 10 "I2C0_SDA")
 	(net 11 "SPI1_CS_LORA")
 	(net 12 "WINCH_IN2")
@@ -110,7 +110,7 @@
 	(net 28 "TPM_RSTN")
 	(net 29 "SPI1_CS_TPM")
 	(net 30 "RMII1_TX_EN")
-	(net 31 "UART_RCRS_RX")
+	(net 31 "UART_49MHZ_XCVR_RX")
 	(net 32 "RMII1_REF_CLK")
 	(net 33 "RMII1_CRS_DV")
 	(net 34 "RS485_DE")
@@ -757,7 +757,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 31 "UART_RCRS_RX")
+			(net 31 "UART_49MHZ_XCVR_RX")
 			(uuid "1429c985-0fbc-4338-9b19-84af68615aa0")
 		)
 		(pad "16" thru_hole circle
@@ -766,7 +766,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 9 "UART_RCRS_TX")
+			(net 9 "UART_49MHZ_XCVR_TX")
 			(uuid "3ae3f067-850d-4987-abcf-562aa87f2207")
 		)
 		(pad "17" thru_hole circle
@@ -4397,7 +4397,7 @@
 				)
 			)
 		)
-		(property "Value" "JST-GH-3P-RCRS"
+		(property "Value" "JST-GH-3P-XCVR-49MHZ"
 			(at -13.25 0.5 0)
 			(layer "F.Fab")
 			(uuid "d6580ece-c9b1-457f-a73e-c253ec4b1111")
@@ -4420,7 +4420,7 @@
 				)
 			)
 		)
-		(property "Description" "RC Transceiver UART — GND UART_RCRS_TX UART_RCRS_RX"
+		(property "Description" "RC Transceiver UART — GND UART_49MHZ_XCVR_TX UART_49MHZ_XCVR_RX"
 			(at -5.5 -11.5 0)
 			(layer "F.Fab")
 			(uuid "a0c02aec-f0aa-445c-b061-ccfad0fd90be")
@@ -8393,7 +8393,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 31 "UART_RCRS_RX")
+			(net 31 "UART_49MHZ_XCVR_RX")
 			(uuid "b2000000-0000-0000-0000-200000001026")
 		)
 		(pad "16" thru_hole circle
@@ -8402,7 +8402,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 9 "UART_RCRS_TX")
+			(net 9 "UART_49MHZ_XCVR_TX")
 			(uuid "b2000000-0000-0000-0000-200000001027")
 		)
 		(pad "17" thru_hole circle

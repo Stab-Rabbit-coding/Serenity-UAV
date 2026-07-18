@@ -20,8 +20,8 @@ Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 License: CC BY 4.0
 """
 
-import struct
 import os
+import struct
 
 STL_DIR = "/home/user/Serenity-UAV/thingverse-serenity/files-hollowed-18in"
 
@@ -38,6 +38,7 @@ FILES = [
     "rear_nozzle_frame.stl",
 ]
 
+
 def read_stl_verts(path):
     """Read all triangle vertices from a binary STL file."""
     verts = []
@@ -51,6 +52,7 @@ def read_stl_verts(path):
                 verts.append((x, y, z))
             f.read(2)  # attrib
     return verts
+
 
 for fname in FILES:
     path = os.path.join(STL_DIR, fname)

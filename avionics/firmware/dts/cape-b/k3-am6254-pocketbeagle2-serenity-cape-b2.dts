@@ -45,7 +45,7 @@
  *               microSD (SPI mode, logging-only non-executable card)
  *   UART2     — RFD900x SiK 915 MHz (hardware CTS/RTS flow control)
  *   UART4     — ADM2795EBRWZ RS-485 half-duplex (DE / RE# GPIOs)
- *   UART5     — XCVR-49MHZ-1 RCRS 49 MHz AX.25 (SW1-1) OR SBUS RC input (SW1-2)
+ *   UART5     — XCVR-49MHZ-1 49 MHz AX.25 (SW1-1) OR SBUS RC input (SW1-2)
  *               J_XCVR JST-GH 6P shared connector; SW1 2-position DIP selects mode
  *   MCAN0     — CAN FD 1/8 Mbps via ISOW1044BDFMR (isolated, STB# GPIO)
  *   CPSW3G    — 2× ADIN1300BCPZ 100BASE-TX PHY (isolated via ISO7642FDWRR + Würth 749010012A)
@@ -55,7 +55,7 @@
  *   PRU-ICSS0/PRU1 — Cargo servo PWM ch 2-3 + XCVR TDDS timing
  *
  * External comms links on this node:
- *   Link A: AX.25 49 MHz RCRS or SBUS RC input (XCVR-49MHZ-1/J_XCVR, UART5, SW1 DIP)
+ *   Link A: AX.25 49 MHz XCVR or SBUS RC input (XCVR-49MHZ-1/J_XCVR, UART5, SW1 DIP)
  *   Link B: SiK MAVLink 915 MHz  (RFD900x, UART2, CTS/RTS)
  *   Link C: LoRa 915 MHz (OOB)   (RFM95W, SPI1, DIO0-DIO3 IRQs)
  *   Link D: 5 GHz 802.11ac       (WL1837MOD, SDIO)
@@ -69,11 +69,9 @@
  *   [2]  PocketBeagle 2 Industrial schematic, BeagleBoard.org hardware repo
  *   [3]  AX.25 Link Access Protocol for Amateur Packet Radio v2.2, TAPR/ARRL, July 1998
  *        [REF-PROTO-001 §6.2 I Frame, §6.3 S Frames] — AX.25 framing on 49 MHz link
- *   [4]  47 CFR Part 95, Personal Radio Services — RCRS 49 MHz channel plan
- *        [REF-FCC-003] — ERP ≤ 100 mW (20 dBm), ±0.005% freq accuracy
- *        NOTE: Part 95 reorganized July 3, 2018 (FCC 17-24); specific section numbers
- *        for ERP limit, frequency accuracy, and PTT timing require verification
- *        against current eCFR: https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-95
+ *   [4]  47 CFR Part 15 §15.235 — Operation Within the Band 49.82–49.90 MHz
+ *        [REF-FCC-003] — field strength ≤ 10,000 µV/m at 3 m (not Part 95 RCRS,
+ *        which does not cover 49 MHz — see REFERENCES.md REF-FCC-003, REF-FCC-004)
  *   [5]  47 CFR §15.247, Operation in 902-928 MHz ISM band (LoRa 915 MHz, unlicensed)
  *        [REF-FCC-001 §15.247(a)(1), §15.247(b)(3)(i)] — 30 dBm EIRP limit
  *   [6]  Si5351A/B/C-B Datasheet, Skyworks, Rev 1.4
@@ -126,7 +124,7 @@
 #define CAPE_B_GPIO_LORA_DIO3       19  /* RFM95W DIO3 — CAD done           [ESTIMATE] */
 #define CAPE_B_GPIO_LORA_RESET      20  /* RFM95W RESET (active-low)         [ESTIMATE] */
 
-/* XCVR-49MHZ-1 RCRS 49 MHz control lines. */
+/* XCVR-49MHZ-1 49 MHz control lines. */
 #define CAPE_B_GPIO_PTT_N           21  /* PTT_N — TX key (active-low)       [ESTIMATE] */
 #define CAPE_B_GPIO_TDDS_SYNC       22  /* Si5351A DDS freq sync strobe      [ESTIMATE] */
 
@@ -465,7 +463,7 @@
     rs485-rx-during-tx;
 };
 
-/* UART5: XCVR-49MHZ-1 RCRS 49 MHz AX.25 link (SW1-1) OR SBUS RC input (SW1-2).
+/* UART5: XCVR-49MHZ-1 49 MHz AX.25 link (SW1-1) OR SBUS RC input (SW1-2).
  *
  * SW1 is a 2-position DIP switch on Cape-B-2 that shares the J_XCVR JST-GH 6P
  * connector between the external 49 MHz transceiver and an RC SBUS receiver.

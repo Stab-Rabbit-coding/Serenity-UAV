@@ -1,8 +1,10 @@
 /**
  * @file    bmon_ina2xx.h
- * @brief   INA219 / INA226 battery voltage / current monitor driver — public API.
+ * @brief   INA219 / INA226 battery voltage / current monitor driver — public
+ * API.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * Drives the Texas Instruments INA219AIDR (Cape-A-1) and INA226AIDGSR
@@ -66,7 +68,8 @@
  *
  * ── Thread Safety ─────────────────────────────────────────────────────────
  *
- * None of the public functions are thread-safe; ensure exclusive context access.
+ * None of the public functions are thread-safe; ensure exclusive context
+ * access.
  *
  * References:
  *   [1] INA219 Datasheet SBOS448G, Texas Instruments.
@@ -93,91 +96,91 @@ extern "C" {
  * ---------------------------------------------------------------------------*/
 
 /** I2C address with A0 = A1 = GND (both INA219 and INA226 on Cape-A). */
-#define INA2XX_I2C_ADDR         (0x40U)
+#define INA2XX_I2C_ADDR        (0x40U)
 
 /** INA219 bus voltage register address. */
-#define INA219_REG_BUS_VOLT     (0x02U)
+#define INA219_REG_BUS_VOLT    (0x02U)
 
 /**
  * INA219 bus voltage LSB value in millivolts.
  * Bits [15:3] of register 0x02; each LSB = 4 mV.
  * Bit 1 (CNVR) and bit 0 (OVF) are status flags, not voltage data.
  */
-#define INA219_LSB_MV           (4U)
+#define INA219_LSB_MV          (4U)
 
 /* ---------------------------------------------------------------------------
  * Device constants — INA226
  * ---------------------------------------------------------------------------*/
 
 /** INA226 configuration register address. */
-#define INA226_REG_CONFIG       (0x00U)
+#define INA226_REG_CONFIG      (0x00U)
 
 /** INA226 shunt voltage register address (signed 16-bit, 2.5 µV/LSB). */
-#define INA226_REG_SHUNT_VOLT   (0x01U)
+#define INA226_REG_SHUNT_VOLT  (0x01U)
 
 /** INA226 bus voltage register address. */
-#define INA226_REG_BUS_VOLT     (0x02U)
+#define INA226_REG_BUS_VOLT    (0x02U)
 
 /** INA226 power register address (unsigned, LSB = 25 × CURRENT_LSB). */
-#define INA226_REG_POWER        (0x03U)
+#define INA226_REG_POWER       (0x03U)
 
 /** INA226 current register address (signed 16-bit, LSB = CURRENT_LSB). */
-#define INA226_REG_CURRENT      (0x04U)
+#define INA226_REG_CURRENT     (0x04U)
 
 /** INA226 calibration register address. */
-#define INA226_REG_CALIBRATION  (0x05U)
+#define INA226_REG_CALIBRATION (0x05U)
 
 /** INA226 mask/enable register address (alert configuration). */
-#define INA226_REG_MASK_ENABLE  (0x06U)
+#define INA226_REG_MASK_ENABLE (0x06U)
 
 /** INA226 alert limit register address. */
-#define INA226_REG_ALERT_LIMIT  (0x07U)
+#define INA226_REG_ALERT_LIMIT (0x07U)
 
 /** INA226 die-ID register address. */
-#define INA226_REG_DIE_ID       (0xFFU)
+#define INA226_REG_DIE_ID      (0xFFU)
 
 /** INA226 manufacturer ID register address. */
-#define INA226_REG_MFR_ID       (0xFEU)
+#define INA226_REG_MFR_ID      (0xFEU)
 
 /** Expected value in INA226 die-ID register; used for auto-detection. */
-#define INA226_DIE_ID           (0x2260U)
+#define INA226_DIE_ID          (0x2260U)
 
 /**
  * INA226 bus voltage LSB value in microvolts × 1000 (i.e. 1250 µV = 1.25 mV).
  * Register 0x02 is a 16-bit unsigned count; voltage_mv = count × 1250 / 1000.
  */
-#define INA226_LSB_UV           (1250U)  /* µV per LSB */
+#define INA226_LSB_UV          (1250U) /* µV per LSB */
 
 /**
  * INA226 shunt voltage LSB in nanovolts (2500 nV = 2.5 µV).
  * Register 0x01 is signed 16-bit; shunt_uv = (int16_t)reg × 2500 / 1000.
  */
-#define INA226_SHUNT_LSB_NV     (2500U)  /* nV per LSB */
+#define INA226_SHUNT_LSB_NV    (2500U) /* nV per LSB */
 
 /**
  * INA226 mask/enable bit: over-current alert on shunt-over-limit (SOL).
  * Set this bit in MASK_ENABLE to trigger ALERT when shunt voltage exceeds
  * ALERT_LIMIT register value.
  */
-#define INA226_MASK_SOL         (0x8000U)
+#define INA226_MASK_SOL        (0x8000U)
 
 /**
  * INA226 mask/enable bit: bus-over-voltage alert (BOV).
  * Triggers ALERT when bus voltage exceeds ALERT_LIMIT register value.
  */
-#define INA226_MASK_BOV         (0x4000U)
+#define INA226_MASK_BOV        (0x4000U)
 
 /**
  * INA226 mask/enable bit: bus-under-voltage alert (BUV).
  * Triggers ALERT when bus voltage falls below ALERT_LIMIT register value.
  */
-#define INA226_MASK_BUV         (0x2000U)
+#define INA226_MASK_BUV        (0x2000U)
 
 /** INA226 mask/enable bit: alert polarity (active-high if set). */
-#define INA226_MASK_APOL        (0x0002U)
+#define INA226_MASK_APOL       (0x0002U)
 
 /** INA226 mask/enable bit: alert latch enable. */
-#define INA226_MASK_LEN         (0x0001U)
+#define INA226_MASK_LEN        (0x0001U)
 
 /* ---------------------------------------------------------------------------
  * Data types
@@ -190,13 +193,13 @@ extern "C" {
  */
 typedef enum {
     /** Automatically detect device type from die-ID register. */
-    BMON_INA_AUTO    = 0,
+    BMON_INA_AUTO = 0,
 
     /** Texas Instruments INA219 (Cape-A-1). */
-    BMON_INA_INA219  = 1,
+    BMON_INA_INA219 = 1,
 
     /** Texas Instruments INA226 (Wash). */
-    BMON_INA_INA226  = 2,
+    BMON_INA_INA226 = 2,
 } bmon_ina_type_t;
 
 /**
@@ -237,10 +240,8 @@ typedef struct bmon_ina2xx_ctx bmon_ina2xx_ctx_t;
  *         -ENOMEM : memory allocation failed.
  *         -errno  : open/ioctl failure.
  */
-int bmon_ina2xx_open(const char        *i2c_dev,
-                     uint8_t            i2c_addr,
-                     bmon_ina_type_t    type,
-                     bmon_ina2xx_ctx_t **ctx_out);
+int bmon_ina2xx_open(const char *i2c_dev, uint8_t i2c_addr,
+                     bmon_ina_type_t type, bmon_ina2xx_ctx_t **ctx_out);
 
 /**
  * @brief Close the driver and release resources.
@@ -294,17 +295,15 @@ bmon_ina_type_t bmon_ina2xx_get_type(const bmon_ina2xx_ctx_t *ctx);
  *
  * @param[in] ctx           Driver context (must be INA226).
  * @param[in] shunt_mohm    Shunt resistance in milli-ohms (e.g. 1 for 1 mΩ).
- * @param[in] imax_ma       Maximum expected current in milliamps (e.g. 60000 for 60 A).
- *                          Sets the current LSB to imax_ma / 32768 mA.
+ * @param[in] imax_ma       Maximum expected current in milliamps (e.g. 60000
+ * for 60 A). Sets the current LSB to imax_ma / 32768 mA.
  * @param[out] current_lsb_ua_out  If non-NULL, receives the programmed
  *                          current LSB in microamps.
  * @return 0 on success, -ENOTSUP if ctx is INA219, -EINVAL if arguments are
  *         invalid (shunt_mohm == 0 or imax_ma == 0), -EIO on I2C error.
  */
-int bmon_ina226_configure_shunt(bmon_ina2xx_ctx_t *ctx,
-                                uint32_t           shunt_mohm,
-                                uint32_t           imax_ma,
-                                uint32_t          *current_lsb_ua_out);
+int bmon_ina226_configure_shunt(bmon_ina2xx_ctx_t *ctx, uint32_t shunt_mohm,
+                                uint32_t imax_ma, uint32_t *current_lsb_ua_out);
 
 /**
  * @brief Read the current register from an INA226 in current-sense mode.
@@ -363,9 +362,8 @@ int bmon_ina226_read_power_mw(bmon_ina2xx_ctx_t *ctx, uint32_t *power_mw);
  * @return 0 on success, -ENOTSUP if ctx is INA219, -EINVAL on NULL ctx,
  *         -EIO on I2C error.
  */
-int bmon_ina226_configure_alert(bmon_ina2xx_ctx_t *ctx,
-                                uint16_t           alert_mask,
-                                uint16_t           alert_limit);
+int bmon_ina226_configure_alert(bmon_ina2xx_ctx_t *ctx, uint16_t alert_mask,
+                                uint16_t alert_limit);
 
 #ifdef __cplusplus
 }

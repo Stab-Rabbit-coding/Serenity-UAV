@@ -104,8 +104,8 @@ import os
 import bmesh
 import bpy
 
-WALL_MM = 2.0       # [mm] nominal foam-fill skin wall thickness
-SCALE = 2.9294      # uniform 24" scale from native Thingiverse model
+WALL_MM = 2.0  # [mm] nominal foam-fill skin wall thickness
+SCALE = 2.9294  # uniform 24" scale from native Thingiverse model
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(BASE, "..", ".."))
@@ -120,14 +120,15 @@ os.makedirs(PARTS, exist_ok=True)
 # promote step in the plan is a straight copy.  Pitch 0.8 mm is "fine" per the
 # user decision: keeps shuttle blisters / projections / cut-outs crisp at 24".
 HOLLOW_PARTS = [
-    ("s_head.stl",       "head_shell24_2mm_repaired.stl",       0.8),
+    ("s_head.stl", "head_shell24_2mm_repaired.stl", 0.8),
     ("s_cargo_sect.stl", "cargo_sect_shell24_2mm_repaired.stl", 0.8),
-    ("s_middle.stl",     "middle_shell24_2mm_repaired.stl",     0.8),
-    ("s_rear.stl",       "rear_shell24_2mm_repaired.stl",       0.8),
+    ("s_middle.stl", "middle_shell24_2mm_repaired.stl", 0.8),
+    ("s_rear.stl", "rear_shell24_2mm_repaired.stl", 0.8),
 ]
 
 
 # -- Utility functions --------------------------------------------------------
+
 
 def clear_scene():
     """Remove all objects from the scene."""
@@ -216,6 +217,7 @@ def count_non_manifold(obj):
 
 # -- Main per-part processing -------------------------------------------------
 
+
 def process_hollow(src_name, out_name, remesh_mm):
     """Generate one watertight 2.0 mm hollow shell via the Solidify pipeline."""
     src = os.path.join(SRC, src_name)
@@ -259,13 +261,15 @@ def process_hollow(src_name, out_name, remesh_mm):
     export_stl(inner, inner_path)
     if nm_o or nm_i:
         print(f"  WARNING: operand non-manifold (outer={nm_o} inner={nm_i})")
-    print(f"  -> operands: {os.path.basename(outer_path)} + "
-          f"{os.path.basename(inner_path)}")
+    print(
+        f"  -> operands: {os.path.basename(outer_path)} + "
+        f"{os.path.basename(inner_path)}"
+    )
 
 
 # -- Entry point --------------------------------------------------------------
 
-print(f"\nScale: {SCALE:.4f}x   Wall: {WALL_MM} mm   Target: 24\"")
+print(f'\nScale: {SCALE:.4f}x   Wall: {WALL_MM} mm   Target: 24"')
 print("=== Serenity UAV -- watertight 2 mm hollow shells (Solidify method) ===")
 print(f"Source: {SRC}")
 print(f"Output: {OUT}")
@@ -274,5 +278,7 @@ for src_name, out_name, pitch in HOLLOW_PARTS:
     process_hollow(src_name, out_name, pitch)
 
 print(f"\nDone.  Operands written to {PARTS}.")
-print("Next: python3 airframe/blender-scripts/hollow_manifold.py  (manifold3d "
-      "boolean -> final shells), then verify_shells.py, then promote + re-bake.")
+print(
+    "Next: python3 airframe/blender-scripts/hollow_manifold.py  (manifold3d "
+    "boolean -> final shells), then verify_shells.py, then promote + re-bake."
+)

@@ -100,7 +100,7 @@
 //   BOW-LASER -- 12 mm crosshair laser bore, 30° below horizon, aircraft CL
 //               [REF-IEC-002, REF-FDA-001]
 //
-// GPS patch antenna and 49 MHz RCRS post are on the broad, flat dorsal surface
+// GPS patch antenna and 49 MHz XCVR post are on the broad, flat dorsal surface
 // of the mid-fuselage section (middle_canonical_shell24.scad) where the
 // ground plane is larger and the sky view is unobstructed.
 //

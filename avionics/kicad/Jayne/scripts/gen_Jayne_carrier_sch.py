@@ -57,16 +57,20 @@ import gen_Jayne as gj  # helper library (glabel, pwr_sym, lib symbols, etc.)
 
 HERE = Path(__file__).resolve().parent
 KICADS = HERE.parent / "kicads"
-SYMDIR = HERE.parent.parent / "symbols"   # avionics/kicad/symbols
+SYMDIR = HERE.parent.parent / "symbols"  # avionics/kicad/symbols
 
 REAL_SYMS = {
     "SOM": ("Jayne_SoM_PCM071", "Jayne:phyCORE-AM62x_PCM071_2xBTH-060"),
     "KSZ": ("Jayne_KSZ9477", "Jayne:TQFP-128-1EP_KSZ9477_14x14mm_P0.4mm_EP10x10"),
-    "MSP": ("Jayne_MSPM0G3507_RGZ",
-            "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm"),
+    "MSP": (
+        "Jayne_MSPM0G3507_RGZ",
+        "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm",
+    ),
     "ISO": ("Jayne_ISOW1044BDFMR", "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm"),
-    "TPM": ("Jayne_SLB9670_TPM",
-            "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm"),
+    "TPM": (
+        "Jayne_SLB9670_TPM",
+        "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm",
+    ),
 }
 
 
@@ -195,7 +199,7 @@ def place_real(key, ref, value, unit_pos, netmap, pins):
         if unit not in unit_pos:
             continue
         cx, cy = unit_pos[unit]
-        sx, sy = cx + x, cy - y          # symbol Y-up -> sheet Y-down
+        sx, sy = cx + x, cy - y  # symbol Y-up -> sheet Y-down
         net = netmap.get(pnum)
         if net is None:
             out.append(no_connect(sx, sy))
@@ -217,9 +221,9 @@ def build_som_netmap(pins):
         if n == "VIN":
             net = "+5V"
         elif n == "VBAT":
-            net = "+3V3"                       # RTC/backup domain (verify)
+            net = "+3V3"  # RTC/backup domain (verify)
         elif n == "SoC_VDDSHV5_SDIO":
-            net = "+3V3"                       # SDIO I/O domain supply
+            net = "+3V3"  # SDIO I/O domain supply
         elif n.upper().startswith("GND"):
             net = "GND"
         # --- Camera MIPI CSI-2 (lane 0 modeled; clk + D0) ---
@@ -236,7 +240,7 @@ def build_som_netmap(pins):
         elif n == "X_I2C1_SDA":
             net = "CAM_SDA"
         elif n == "X_WKUP_UART0_CTSN":
-            net = "CAM_RESET_N"                # WKUP GPIO (pinmux, verify)
+            net = "CAM_RESET_N"  # WKUP GPIO (pinmux, verify)
         # --- RGMII2 (SoM MAC) -> KSZ port6 (MAC-to-MAC crossover) ---
         elif n == "X_CPSW_RGMII2_TD0":
             net = "RGMII_S2K_D0"
@@ -264,9 +268,9 @@ def build_som_netmap(pins):
             net = "RGMII_K2S_CTL"
         # --- App UART0 <-> MSPM0 ---
         elif n == "X_UART0_TXD":
-            net = "UART_A2M"                    # SoC TX -> MCU RX
+            net = "UART_A2M"  # SoC TX -> MCU RX
         elif n == "X_UART0_RXD":
-            net = "UART_M2A"                    # MCU TX -> SoC RX
+            net = "UART_M2A"  # MCU TX -> SoC RX
         # --- Reset ---
         elif n == "X_nRESET_IN":
             net = "SOC_PORZ"
@@ -291,9 +295,9 @@ def build_ksz_netmap(pins):
         elif n == "GND":
             net = "GND"
         elif n == "ISET":
-            net = "KSZ_ISET"                    # 6.04k to GND
+            net = "KSZ_ISET"  # 6.04k to GND
         elif n == "S_REXT":
-            net = "KSZ_SREXT"                   # 191R to GND (SGMII ref)
+            net = "KSZ_SREXT"  # 191R to GND (SGMII ref)
         elif n == "XI":
             net = "KSZ_XI"
         elif n == "XO":
@@ -364,7 +368,7 @@ def build_msp_netmap(pins):
     GPIO_NET = {
         "VDD": "+3V3",
         "VSS": "GND",
-        "VCORE": "MCU_VCORE",       # 1.1V internal LDO out -> decoupling cap only
+        "VCORE": "MCU_VCORE",  # 1.1V internal LDO out -> decoupling cap only
         "NRST": "MCU_NRST",
         "PA19/SWDIO": "MCU_SWDIO",
         "PA20/SWCLK": "MCU_SWCLK",
@@ -425,7 +429,7 @@ def build_tpm_netmap(pins):
         elif n == "PIRQ#":
             net = "TPM_PIRQ"
         elif n == "PP":
-            net = "+3V3"                        # platform-present tie high
+            net = "+3V3"  # platform-present tie high
         nm[pnum] = net
     return nm
 
@@ -447,13 +451,13 @@ def build_iso_netmap(pins):
         elif n == "RXD":
             net = "CANFD_RX"
         elif n == "STB":
-            net = "GND"                          # normal mode
+            net = "GND"  # normal mode
         elif n == "GNDIO" or n == "GND1":
             net = "GND"
         elif n in ("GND2",) or n.startswith("GISOIN"):
             net = "CANFD_ISOGND"
         elif n in ("VISOOUT", "VSIN", "VISOIN"):
-            net = "CANFD_VISO"                   # shorted on-PCB isolated 5V
+            net = "CANFD_VISO"  # shorted on-PCB isolated 5V
         elif n == "CANL":
             net = "CANFD_ISO_L"
         elif n == "CANH":
@@ -569,18 +573,36 @@ def gen_sch():
     lib.append(gj.lib_symbol_conn_np("SolderLand_04P", 4))
     lib.append(gj.lib_symbol_conn_np("SolderLand_02P", 2))
     # EMI-chain parts (real, from gen_Jayne generic-ic table)
-    lib.append(gj.lib_symbol_generic_ic(
-        "WURTH_ETH_XFMR", "Transformer_SMD:Wurth_749010012A_10-100BASE-TX",
-        "https://www.we-online.com/catalog/datasheet/749010012A.pdf",
-        left=gj.XFMR_L, right=gj.XFMR_R, size=gj.XFMR_SIZE))
-    lib.append(gj.lib_symbol_generic_ic(
-        "BOURNS_SRF2012_100Y", "Inductor_SMD:L_CommonModeChoke_Coilcraft_0805USB",
-        "https://www.coilcraft.com/getmedia/3a436de1-46ad-49b9-b3a8-9a3faa3ecf61/srf2012.pdf",
-        left=gj.CMC_L, right=gj.CMC_R, size=gj.CMC_SIZE))
-    lib.append(gj.lib_symbol_generic_ic(
-        "NEXPERIA_PRTR5V0U2X", "Package_TO_SOT_SMD:SOT-363_SC-70-6",
-        "https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf",
-        left=gj.TVS_L, right=gj.TVS_R, size=gj.TVS_SIZE))
+    lib.append(
+        gj.lib_symbol_generic_ic(
+            "WURTH_ETH_XFMR",
+            "Transformer_SMD:Wurth_749010012A_10-100BASE-TX",
+            "https://www.we-online.com/catalog/datasheet/749010012A.pdf",
+            left=gj.XFMR_L,
+            right=gj.XFMR_R,
+            size=gj.XFMR_SIZE,
+        )
+    )
+    lib.append(
+        gj.lib_symbol_generic_ic(
+            "BOURNS_SRF2012_100Y",
+            "Inductor_SMD:L_CommonModeChoke_Coilcraft_0805USB",
+            "https://www.coilcraft.com/getmedia/3a436de1-46ad-49b9-b3a8-9a3faa3ecf61/srf2012.pdf",
+            left=gj.CMC_L,
+            right=gj.CMC_R,
+            size=gj.CMC_SIZE,
+        )
+    )
+    lib.append(
+        gj.lib_symbol_generic_ic(
+            "NEXPERIA_PRTR5V0U2X",
+            "Package_TO_SOT_SMD:SOT-363_SC-70-6",
+            "https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf",
+            left=gj.TVS_L,
+            right=gj.TVS_R,
+            size=gj.TVS_SIZE,
+        )
+    )
     # discrete regulators + crystal
     lib.append(lib_symbol_buck_sot23_6())
     lib.append(lib_symbol_ldo_sot23_5())
@@ -597,10 +619,15 @@ def gen_sch():
     lib.append("  )")
     parts.extend(lib)
 
-    parts.append(gj.text_note(
-        "JAYNE — Nose/Cargo Vision/ToF/Laser  |  STANDALONE board (NOT a PB2-I cape)  |  "
-        "SoM end-state: PHYTEC PCM-071 + carrier (KSZ9477 / MSPM0G3507 / SLB9670 / ISOW1044)",
-        10, 8, 2.0))
+    parts.append(
+        gj.text_note(
+            "JAYNE — Nose/Cargo Vision/ToF/Laser  |  STANDALONE board (NOT a PB2-I cape)  |  "
+            "SoM end-state: PHYTEC PCM-071 + carrier (KSZ9477 / MSPM0G3507 / SLB9670 / ISOW1044)",
+            10,
+            8,
+            2.0,
+        )
+    )
 
     # ==================================================================
     # Section A — Power: 5V in + carrier rails (3V3 buck, 1V2 buck, 2V5 LDO)
@@ -614,11 +641,11 @@ def gen_sch():
     # +3V3 buck
     def buck(ref, value, cx, cy, vout_net, fb_top, fb_bot):
         o = [gj.sym_inst("TLV62569_DBV", ref, value, cx, cy)]
-        o.append(gj.glabel("+5V", cx - 7.62, cy - 2.54, rot=180))    # VIN
-        o.append(gj.glabel("GND", cx - 7.62, cy, rot=180))           # GND
-        o.append(gj.glabel("+5V", cx - 7.62, cy + 2.54, rot=180))    # EN tie-high
+        o.append(gj.glabel("+5V", cx - 7.62, cy - 2.54, rot=180))  # VIN
+        o.append(gj.glabel("GND", cx - 7.62, cy, rot=180))  # GND
+        o.append(gj.glabel("+5V", cx - 7.62, cy + 2.54, rot=180))  # EN tie-high
         o.append(gj.glabel(ref + "_SW", cx + 7.62, cy - 2.54, rot=0))  # SW
-        o.append(gj.glabel(ref + "_FB", cx + 7.62, cy, rot=0))       # FB
+        o.append(gj.glabel(ref + "_FB", cx + 7.62, cy, rot=0))  # FB
         o.append(gj.glabel(vout_net + "_PG", cx + 7.62, cy + 2.54, rot=0))  # PG
         # inductor SW -> VOUT
         o.append(gj.sym_inst("R_Generic", ref + "_L", "2.2uH", cx + 20, cy - 2.54))
@@ -641,18 +668,20 @@ def gen_sch():
         o.append(gj.glabel("GND", cx - 16 + 3.81, cy, rot=0))
         return o
 
-    parts.extend(buck("U_REG_3V3", "TLV62569 -> +3V3", 25, 48, "+3V3",
-                      "R_FB3T", "R_FB3B"))
-    parts.extend(buck("U_REG_1V2", "TLV62569 -> +1V2", 25, 70, "+1V2",
-                      "R_FB1T", "R_FB1B"))
+    parts.extend(
+        buck("U_REG_3V3", "TLV62569 -> +3V3", 25, 48, "+3V3", "R_FB3T", "R_FB3B")
+    )
+    parts.extend(
+        buck("U_REG_1V2", "TLV62569 -> +1V2", 25, 70, "+1V2", "R_FB1T", "R_FB1B")
+    )
 
     # +2V5 LDO (from +3V3)
     lx, ly = 90, 48
     parts.append(gj.sym_inst("TLV75725_DBV", "U_REG_2V5", "TLV75725 -> +2V5", lx, ly))
     parts.append(gj.glabel("+3V3", lx - 7.62, ly - 2.54, rot=180))  # IN
-    parts.append(gj.glabel("GND", lx - 7.62, ly, rot=180))          # GND
+    parts.append(gj.glabel("GND", lx - 7.62, ly, rot=180))  # GND
     parts.append(gj.glabel("+3V3", lx - 7.62, ly + 2.54, rot=180))  # EN
-    parts.append(gj.glabel("+2V5", lx + 7.62, ly, rot=0))           # OUT
+    parts.append(gj.glabel("+2V5", lx + 7.62, ly, rot=0))  # OUT
     parts.append(gj.sym_inst("C_Generic", "C_2V5I", "1uF", lx - 16, ly + 6))
     parts.append(gj.glabel("+3V3", lx - 16 - 3.81, ly + 6, rot=180))
     parts.append(gj.glabel("GND", lx - 16 + 3.81, ly + 6, rot=0))
@@ -664,29 +693,35 @@ def gen_sch():
     # power-driven).  Placed in a tidy column clear of other geometry.
     # (+2V5 driven by the LDO OUT power_out pin; CANFD_VISO by U4 VISOOUT —
     #  no flag on those two or ERC flags a power_out/power_out conflict.)
-    for i, rail in enumerate(["+5V", "+3V3", "+1V2", "GND", "PGND",
-                              "CANFD_ISOGND"]):
+    for i, rail in enumerate(["+5V", "+3V3", "+1V2", "GND", "PGND", "CANFD_ISOGND"]):
         parts.extend(pwr_flag(rail, 130, 30 + i * 5))
     # Power-good pull-ups (open-drain PG -> its own rail) so PG nets aren't dangling
     parts.extend(two_pin("R_Generic", "R_PG3", "100k", 45, 40, "+3V3", "+3V3_PG"))
     parts.extend(two_pin("R_Generic", "R_PG1", "100k", 45, 62, "+1V2", "+1V2_PG"))
 
-    parts.append(gj.text_note(
-        "Carrier rails (design decision 2026-07-13): PCM-071 provides NO rail to "
-        "the carrier; all generated here from +5V. Feedback dividers / inductor / "
-        "LDO margin are first-pass — verify per TI datasheet design procedures.",
-        60, 78, 0.9))
+    parts.append(
+        gj.text_note(
+            "Carrier rails (design decision 2026-07-13): PCM-071 provides NO rail to "
+            "the carrier; all generated here from +5V. Feedback dividers / inductor / "
+            "LDO margin are first-pass — verify per TI datasheet design procedures.",
+            60,
+            78,
+            0.9,
+        )
+    )
 
     # ==================================================================
     # Section B — SoM (U_SOM), 4 units
     # ==================================================================
-    parts.append(gj.text_note("=== Section B: PHYTEC phyCORE PCM-071 SoM (U_SOM) ===",
-                              160, 20))
+    parts.append(
+        gj.text_note("=== Section B: PHYTEC phyCORE PCM-071 SoM (U_SOM) ===", 160, 20)
+    )
     som_pins = real["SOM"][1]
     som_nm = build_som_netmap(som_pins)
     som_pos = {1: (185, 90), 2: (255, 90), 3: (325, 90), 4: (395, 90)}
-    parts.extend(place_real("SOM", "U_SOM", "phyCORE-AM62x PCM-071",
-                            som_pos, som_nm, som_pins))
+    parts.extend(
+        place_real("SOM", "U_SOM", "phyCORE-AM62x PCM-071", som_pos, som_nm, som_pins)
+    )
 
     # ==================================================================
     # Section C — KSZ9477 (U2), 6 units
@@ -694,10 +729,17 @@ def gen_sch():
     parts.append(gj.text_note("=== Section C: Microchip KSZ9477 (U2) ===", 160, 175))
     ksz_pins = real["KSZ"][1]
     ksz_nm = build_ksz_netmap(ksz_pins)
-    ksz_pos = {1: (180, 250), 2: (240, 250), 3: (300, 250),
-               4: (360, 250), 5: (430, 250), 6: (485, 250)}
-    parts.extend(place_real("KSZ", "U2", "Microchip KSZ9477",
-                            ksz_pos, ksz_nm, ksz_pins))
+    ksz_pos = {
+        1: (180, 250),
+        2: (240, 250),
+        3: (300, 250),
+        4: (360, 250),
+        5: (430, 250),
+        6: (485, 250),
+    }
+    parts.extend(
+        place_real("KSZ", "U2", "Microchip KSZ9477", ksz_pos, ksz_nm, ksz_pins)
+    )
     # 25 MHz crystal for KSZ XI/XO
     parts.append(gj.sym_inst("Crystal_2P", "Y1", "25MHz", 150, 245))
     parts.append(gj.glabel("KSZ_XI", 150 - 3.81, 245, rot=180))
@@ -709,12 +751,14 @@ def gen_sch():
     # ==================================================================
     # Section D — MSPM0G3507 (U3) + TPM (U5)
     # ==================================================================
-    parts.append(gj.text_note("=== Section D: MSPM0G3507 (U3) + SLB9670 TPM (U5) ===",
-                              10, 110))
+    parts.append(
+        gj.text_note("=== Section D: MSPM0G3507 (U3) + SLB9670 TPM (U5) ===", 10, 110)
+    )
     msp_pins = real["MSP"][1]
     msp_nm = build_msp_netmap(msp_pins)
-    parts.extend(place_real("MSP", "U3", "TI MSPM0G3507",
-                            {1: (55, 165)}, msp_nm, msp_pins))
+    parts.extend(
+        place_real("MSP", "U3", "TI MSPM0G3507", {1: (55, 165)}, msp_nm, msp_pins)
+    )
     # VCORE decoupling cap
     parts.extend(two_pin("C_Generic", "C_VCORE", "1uF", 20, 200, "MCU_VCORE", "GND"))
     # NRST pull-up + SoM PORz pull-up
@@ -723,7 +767,9 @@ def gen_sch():
     # SWD debug header (SWDIO/SWCLK/NRST/GND) — resolves debug-pin dangling and
     # provides real programming access to U3.
     sx, sy = 130, 165
-    parts.append(gj.sym_inst("Conn_JST_GH_04P", "J_SWD", "SWD: DIO/CLK/NRST/GND", sx, sy))
+    parts.append(
+        gj.sym_inst("Conn_JST_GH_04P", "J_SWD", "SWD: DIO/CLK/NRST/GND", sx, sy)
+    )
     parts.append(gj.glabel_conn("MCU_SWDIO", sx, sy, 4, 0))
     parts.append(gj.glabel_conn("MCU_SWCLK", sx, sy, 4, 1))
     parts.append(gj.glabel_conn("MCU_NRST", sx, sy, 4, 2))
@@ -731,44 +777,66 @@ def gen_sch():
 
     tpm_pins = real["TPM"][1]
     tpm_nm = build_tpm_netmap(tpm_pins)
-    parts.extend(place_real("TPM", "U5", "Infineon SLB9670",
-                            {1: (110, 165)}, tpm_nm, tpm_pins))
+    parts.extend(
+        place_real("TPM", "U5", "Infineon SLB9670", {1: (110, 165)}, tpm_nm, tpm_pins)
+    )
 
     # ==================================================================
     # Section E — ISOW1044 isolated CAN-FD (U4) + CAN EMI chain
     # ==================================================================
-    parts.append(gj.text_note("=== Section E: ISOW1044 Isolated CAN-FD (U4) ===",
-                              10, 305))
+    parts.append(
+        gj.text_note("=== Section E: ISOW1044 Isolated CAN-FD (U4) ===", 10, 305)
+    )
     iso_pins = real["ISO"][1]
     iso_nm = build_iso_netmap(iso_pins)
-    parts.extend(place_real("ISO", "U4", "TI ISOW1044BDFMR",
-                            {1: (55, 360)}, iso_nm, iso_pins))
+    parts.extend(
+        place_real("ISO", "U4", "TI ISOW1044BDFMR", {1: (55, 360)}, iso_nm, iso_pins)
+    )
     # CAN CMC (isolated H/L -> bus) + TVS + connector
     cx, cy = 110, 355
-    parts.append(gj.sym_inst("BOURNS_SRF2012_100Y", "CMC5", "SRF2012-100Y (CAN)", cx, cy))
-    parts.append(gj.glabel_pin("CANFD_ISO_H", cx, cy, gj.CMC_L, gj.CMC_R, "L1A", gj.CMC_SIZE))
-    parts.append(gj.glabel_pin("CANFD_H", cx, cy, gj.CMC_L, gj.CMC_R, "L1B", gj.CMC_SIZE))
-    parts.append(gj.glabel_pin("CANFD_ISO_L", cx, cy, gj.CMC_L, gj.CMC_R, "L2A", gj.CMC_SIZE))
-    parts.append(gj.glabel_pin("CANFD_L", cx, cy, gj.CMC_L, gj.CMC_R, "L2B", gj.CMC_SIZE))
+    parts.append(
+        gj.sym_inst("BOURNS_SRF2012_100Y", "CMC5", "SRF2012-100Y (CAN)", cx, cy)
+    )
+    parts.append(
+        gj.glabel_pin("CANFD_ISO_H", cx, cy, gj.CMC_L, gj.CMC_R, "L1A", gj.CMC_SIZE)
+    )
+    parts.append(
+        gj.glabel_pin("CANFD_H", cx, cy, gj.CMC_L, gj.CMC_R, "L1B", gj.CMC_SIZE)
+    )
+    parts.append(
+        gj.glabel_pin("CANFD_ISO_L", cx, cy, gj.CMC_L, gj.CMC_R, "L2A", gj.CMC_SIZE)
+    )
+    parts.append(
+        gj.glabel_pin("CANFD_L", cx, cy, gj.CMC_L, gj.CMC_R, "L2B", gj.CMC_SIZE)
+    )
     cx2, cy2 = 145, 355
     parts.append(gj.sym_inst("NEXPERIA_PRTR5V0U2X", "D5", "PRTR5V0U2X (CAN)", cx2, cy2))
-    parts.append(gj.glabel_pin("CANFD_H", cx2, cy2, gj.TVS_L, gj.TVS_R, "A1", gj.TVS_SIZE))
-    parts.append(gj.glabel_pin("CANFD_L", cx2, cy2, gj.TVS_L, gj.TVS_R, "A2", gj.TVS_SIZE))
+    parts.append(
+        gj.glabel_pin("CANFD_H", cx2, cy2, gj.TVS_L, gj.TVS_R, "A1", gj.TVS_SIZE)
+    )
+    parts.append(
+        gj.glabel_pin("CANFD_L", cx2, cy2, gj.TVS_L, gj.TVS_R, "A2", gj.TVS_SIZE)
+    )
     parts.append(gj.pwr_pin("PGND", cx2, cy2, gj.TVS_L, gj.TVS_R, "K", gj.TVS_SIZE))
     cx3, cy3 = 180, 355
-    parts.append(gj.sym_inst("Conn_JST_GH_04P", "J_CANFD", "5V/CANH/CANL/GND", cx3, cy3))
+    parts.append(
+        gj.sym_inst("Conn_JST_GH_04P", "J_CANFD", "5V/CANH/CANL/GND", cx3, cy3)
+    )
     parts.append(gj.glabel_conn("+5V", cx3, cy3, 4, 0))
     parts.append(gj.glabel_conn("CANFD_H", cx3, cy3, 4, 1))
     parts.append(gj.glabel_conn("CANFD_L", cx3, cy3, 4, 2))
     parts.append(gj.glabel_conn("GND", cx3, cy3, 4, 3))
     # ISOW isolated-side power short: VISO decoupling cap to CANFD_ISOGND
-    parts.extend(two_pin("C_Generic", "C_VISO", "1uF", 20, 400, "CANFD_VISO", "CANFD_ISOGND"))
+    parts.extend(
+        two_pin("C_Generic", "C_VISO", "1uF", 20, 400, "CANFD_VISO", "CANFD_ISOGND")
+    )
 
     # ==================================================================
     # Section F — Ethernet ring EMI chain (per port: XFMR -> CMC -> TVS -> J)
     # ==================================================================
-    parts.append(gj.text_note("=== Section F: Ethernet Ring EMI Chain (in / out) ===",
-                              250, 305))
+    parts.append(
+        gj.text_note("=== Section F: Ethernet Ring EMI Chain (in / out) ===", 250, 305)
+    )
 
     def eth_port(label, cx, cy, jref, tref):
         o = []
@@ -778,45 +846,127 @@ def gen_sch():
         lrxp, lrxn = f"{label}_L_RXP", f"{label}_L_RXN"
         # transformer
         o.append(gj.sym_inst("WURTH_ETH_XFMR", tref, "Wurth 749010012A", cx, cy))
-        o.append(gj.glabel_pin(txp, cx, cy, gj.XFMR_L, gj.XFMR_R, "PHY_TXP", gj.XFMR_SIZE))
-        o.append(gj.glabel_pin(txn, cx, cy, gj.XFMR_L, gj.XFMR_R, "PHY_TXN", gj.XFMR_SIZE))
-        o.append(gj.glabel_pin(rxp, cx, cy, gj.XFMR_L, gj.XFMR_R, "PHY_RXP", gj.XFMR_SIZE))
-        o.append(gj.glabel_pin(rxn, cx, cy, gj.XFMR_L, gj.XFMR_R, "PHY_RXN", gj.XFMR_SIZE))
-        o.append(gj.glabel_pin(f"{label}_LTXP", cx, cy, gj.XFMR_L, gj.XFMR_R, "LINE_TXP", gj.XFMR_SIZE))
-        o.append(gj.glabel_pin(f"{label}_LTXN", cx, cy, gj.XFMR_L, gj.XFMR_R, "LINE_TXN", gj.XFMR_SIZE))
-        o.append(gj.glabel_pin(f"{label}_LRXP", cx, cy, gj.XFMR_L, gj.XFMR_R, "LINE_RXP", gj.XFMR_SIZE))
-        o.append(gj.glabel_pin(f"{label}_LRXN", cx, cy, gj.XFMR_L, gj.XFMR_R, "LINE_RXN", gj.XFMR_SIZE))
+        o.append(
+            gj.glabel_pin(txp, cx, cy, gj.XFMR_L, gj.XFMR_R, "PHY_TXP", gj.XFMR_SIZE)
+        )
+        o.append(
+            gj.glabel_pin(txn, cx, cy, gj.XFMR_L, gj.XFMR_R, "PHY_TXN", gj.XFMR_SIZE)
+        )
+        o.append(
+            gj.glabel_pin(rxp, cx, cy, gj.XFMR_L, gj.XFMR_R, "PHY_RXP", gj.XFMR_SIZE)
+        )
+        o.append(
+            gj.glabel_pin(rxn, cx, cy, gj.XFMR_L, gj.XFMR_R, "PHY_RXN", gj.XFMR_SIZE)
+        )
+        o.append(
+            gj.glabel_pin(
+                f"{label}_LTXP", cx, cy, gj.XFMR_L, gj.XFMR_R, "LINE_TXP", gj.XFMR_SIZE
+            )
+        )
+        o.append(
+            gj.glabel_pin(
+                f"{label}_LTXN", cx, cy, gj.XFMR_L, gj.XFMR_R, "LINE_TXN", gj.XFMR_SIZE
+            )
+        )
+        o.append(
+            gj.glabel_pin(
+                f"{label}_LRXP", cx, cy, gj.XFMR_L, gj.XFMR_R, "LINE_RXP", gj.XFMR_SIZE
+            )
+        )
+        o.append(
+            gj.glabel_pin(
+                f"{label}_LRXN", cx, cy, gj.XFMR_L, gj.XFMR_R, "LINE_RXN", gj.XFMR_SIZE
+            )
+        )
         # CMC on line TX pair
         cx1 = cx + 35
-        o.append(gj.sym_inst("BOURNS_SRF2012_100Y", tref + "_CMC1", "SRF2012-100Y", cx1, cy))
-        o.append(gj.glabel_pin(f"{label}_LTXP", cx1, cy, gj.CMC_L, gj.CMC_R, "L1A", gj.CMC_SIZE))
-        o.append(gj.glabel_pin(f"{label}_TXP", cx1, cy, gj.CMC_L, gj.CMC_R, "L1B", gj.CMC_SIZE))
-        o.append(gj.glabel_pin(f"{label}_LTXN", cx1, cy, gj.CMC_L, gj.CMC_R, "L2A", gj.CMC_SIZE))
-        o.append(gj.glabel_pin(f"{label}_TXN", cx1, cy, gj.CMC_L, gj.CMC_R, "L2B", gj.CMC_SIZE))
+        o.append(
+            gj.sym_inst("BOURNS_SRF2012_100Y", tref + "_CMC1", "SRF2012-100Y", cx1, cy)
+        )
+        o.append(
+            gj.glabel_pin(
+                f"{label}_LTXP", cx1, cy, gj.CMC_L, gj.CMC_R, "L1A", gj.CMC_SIZE
+            )
+        )
+        o.append(
+            gj.glabel_pin(
+                f"{label}_TXP", cx1, cy, gj.CMC_L, gj.CMC_R, "L1B", gj.CMC_SIZE
+            )
+        )
+        o.append(
+            gj.glabel_pin(
+                f"{label}_LTXN", cx1, cy, gj.CMC_L, gj.CMC_R, "L2A", gj.CMC_SIZE
+            )
+        )
+        o.append(
+            gj.glabel_pin(
+                f"{label}_TXN", cx1, cy, gj.CMC_L, gj.CMC_R, "L2B", gj.CMC_SIZE
+            )
+        )
         # CMC on line RX pair
         cx2 = cx + 35
         cy2 = cy + 12
-        o.append(gj.sym_inst("BOURNS_SRF2012_100Y", tref + "_CMC2", "SRF2012-100Y", cx2, cy2))
-        o.append(gj.glabel_pin(f"{label}_LRXP", cx2, cy2, gj.CMC_L, gj.CMC_R, "L1A", gj.CMC_SIZE))
-        o.append(gj.glabel_pin(f"{label}_RXP", cx2, cy2, gj.CMC_L, gj.CMC_R, "L1B", gj.CMC_SIZE))
-        o.append(gj.glabel_pin(f"{label}_LRXN", cx2, cy2, gj.CMC_L, gj.CMC_R, "L2A", gj.CMC_SIZE))
-        o.append(gj.glabel_pin(f"{label}_RXN", cx2, cy2, gj.CMC_L, gj.CMC_R, "L2B", gj.CMC_SIZE))
+        o.append(
+            gj.sym_inst("BOURNS_SRF2012_100Y", tref + "_CMC2", "SRF2012-100Y", cx2, cy2)
+        )
+        o.append(
+            gj.glabel_pin(
+                f"{label}_LRXP", cx2, cy2, gj.CMC_L, gj.CMC_R, "L1A", gj.CMC_SIZE
+            )
+        )
+        o.append(
+            gj.glabel_pin(
+                f"{label}_RXP", cx2, cy2, gj.CMC_L, gj.CMC_R, "L1B", gj.CMC_SIZE
+            )
+        )
+        o.append(
+            gj.glabel_pin(
+                f"{label}_LRXN", cx2, cy2, gj.CMC_L, gj.CMC_R, "L2A", gj.CMC_SIZE
+            )
+        )
+        o.append(
+            gj.glabel_pin(
+                f"{label}_RXN", cx2, cy2, gj.CMC_L, gj.CMC_R, "L2B", gj.CMC_SIZE
+            )
+        )
         # TVS on TX pair
         cx3 = cx + 70
-        o.append(gj.sym_inst("NEXPERIA_PRTR5V0U2X", tref + "_D1", "PRTR5V0U2X", cx3, cy))
-        o.append(gj.glabel_pin(f"{label}_TXP", cx3, cy, gj.TVS_L, gj.TVS_R, "A1", gj.TVS_SIZE))
-        o.append(gj.glabel_pin(f"{label}_TXN", cx3, cy, gj.TVS_L, gj.TVS_R, "A2", gj.TVS_SIZE))
+        o.append(
+            gj.sym_inst("NEXPERIA_PRTR5V0U2X", tref + "_D1", "PRTR5V0U2X", cx3, cy)
+        )
+        o.append(
+            gj.glabel_pin(
+                f"{label}_TXP", cx3, cy, gj.TVS_L, gj.TVS_R, "A1", gj.TVS_SIZE
+            )
+        )
+        o.append(
+            gj.glabel_pin(
+                f"{label}_TXN", cx3, cy, gj.TVS_L, gj.TVS_R, "A2", gj.TVS_SIZE
+            )
+        )
         o.append(gj.pwr_pin("GND", cx3, cy, gj.TVS_L, gj.TVS_R, "K", gj.TVS_SIZE))
         # TVS on RX pair
         cx4 = cx + 70
         cy4 = cy + 12
-        o.append(gj.sym_inst("NEXPERIA_PRTR5V0U2X", tref + "_D2", "PRTR5V0U2X", cx4, cy4))
-        o.append(gj.glabel_pin(f"{label}_RXP", cx4, cy4, gj.TVS_L, gj.TVS_R, "A1", gj.TVS_SIZE))
-        o.append(gj.glabel_pin(f"{label}_RXN", cx4, cy4, gj.TVS_L, gj.TVS_R, "A2", gj.TVS_SIZE))
+        o.append(
+            gj.sym_inst("NEXPERIA_PRTR5V0U2X", tref + "_D2", "PRTR5V0U2X", cx4, cy4)
+        )
+        o.append(
+            gj.glabel_pin(
+                f"{label}_RXP", cx4, cy4, gj.TVS_L, gj.TVS_R, "A1", gj.TVS_SIZE
+            )
+        )
+        o.append(
+            gj.glabel_pin(
+                f"{label}_RXN", cx4, cy4, gj.TVS_L, gj.TVS_R, "A2", gj.TVS_SIZE
+            )
+        )
         o.append(gj.pwr_pin("GND", cx4, cy4, gj.TVS_L, gj.TVS_R, "K", gj.TVS_SIZE))
         # connector (5P: GND + TX+/TX-/RX+/RX-)
         cx5 = cx + 95
-        o.append(gj.sym_inst("Conn_JST_GH_05P", jref, "JST-GH 5P shielded Eth ring", cx5, cy))
+        o.append(
+            gj.sym_inst("Conn_JST_GH_05P", jref, "JST-GH 5P shielded Eth ring", cx5, cy)
+        )
         o.append(gj.glabel_conn("PGND_SHIELD", cx5, cy, 5, 0))
         o.append(gj.glabel_conn(f"{label}_TXP", cx5, cy, 5, 1))
         o.append(gj.glabel_conn(f"{label}_TXN", cx5, cy, 5, 2))
@@ -848,30 +998,59 @@ def gen_sch():
     parts.append(gj.glabel_conn("CSI_D0_P", cx, cy, 4, 2))
     parts.append(gj.glabel_conn("CSI_D0_N", cx, cy, 4, 3))
     cx, cy = 285, 445
-    parts.append(gj.sym_inst("Conn_JST_GH_04P", "J_CAM2", "CAM SDA/SCL/RST/3V3", cx, cy))
+    parts.append(
+        gj.sym_inst("Conn_JST_GH_04P", "J_CAM2", "CAM SDA/SCL/RST/3V3", cx, cy)
+    )
     parts.append(gj.glabel_conn("CAM_SDA", cx, cy, 4, 0))
     parts.append(gj.glabel_conn("CAM_SCL", cx, cy, 4, 1))
     parts.append(gj.glabel_conn("CAM_RESET_N", cx, cy, 4, 2))
     parts.append(gj.glabel_conn("+3V3", cx, cy, 4, 3))
     # Camera direct-solder land (9P)
     dsx, dsy = 320, 445
-    parts.append(gj.sym_inst("SolderLand_09P", "J_CAM_DS",
-                             "Direct-solder camera land (nose; DNP if J_CAM* used)",
-                             dsx, dsy, footprint="Jayne:DS_Camera_9P"))
-    for i, net in enumerate(["CSI_CLK_P", "CSI_CLK_N", "CSI_D0_P", "CSI_D0_N",
-                             "CAM_SDA", "CAM_SCL", "CAM_RESET_N", "+3V3", "GND"]):
+    parts.append(
+        gj.sym_inst(
+            "SolderLand_09P",
+            "J_CAM_DS",
+            "Direct-solder camera land (nose; DNP if J_CAM* used)",
+            dsx,
+            dsy,
+            footprint="Jayne:DS_Camera_9P",
+        )
+    )
+    for i, net in enumerate(
+        [
+            "CSI_CLK_P",
+            "CSI_CLK_N",
+            "CSI_D0_P",
+            "CSI_D0_N",
+            "CAM_SDA",
+            "CAM_SCL",
+            "CAM_RESET_N",
+            "+3V3",
+            "GND",
+        ]
+    ):
         parts.append(gj.glabel_conn(net, dsx, dsy, 9, i))
     # ToF JST + DS land
     cx, cy = 250, 480
-    parts.append(gj.sym_inst("Conn_JST_GH_04P", "J_TOF", "TFmini-S 5V/GND/TX/RX", cx, cy))
+    parts.append(
+        gj.sym_inst("Conn_JST_GH_04P", "J_TOF", "TFmini-S 5V/GND/TX/RX", cx, cy)
+    )
     parts.append(gj.glabel_conn("+5V", cx, cy, 4, 0))
     parts.append(gj.glabel_conn("GND", cx, cy, 4, 1))
     parts.append(gj.glabel_conn("UART_TOF_TX", cx, cy, 4, 2))
     parts.append(gj.glabel_conn("UART_TOF_RX", cx, cy, 4, 3))
     tdx, tdy = 285, 480
-    parts.append(gj.sym_inst("SolderLand_04P", "J_TOF_DS",
-                             "Direct-solder ToF land (nose; DNP if J_TOF used)",
-                             tdx, tdy, footprint="Jayne:DS_ToF_4P"))
+    parts.append(
+        gj.sym_inst(
+            "SolderLand_04P",
+            "J_TOF_DS",
+            "Direct-solder ToF land (nose; DNP if J_TOF used)",
+            tdx,
+            tdy,
+            footprint="Jayne:DS_ToF_4P",
+        )
+    )
     for i, net in enumerate(["+5V", "GND", "UART_TOF_TX", "UART_TOF_RX"]):
         parts.append(gj.glabel_conn(net, tdx, tdy, 4, i))
     # Laser driver Q1 + R1 + R2 + JST + DS land
@@ -887,13 +1066,22 @@ def gen_sch():
     parts.append(gj.glabel("LASER_GATE", cx - 25 - 3.81, cy + 10, rot=180))
     parts.append(gj.pwr_sym("GND", cx - 25 + 3.81, cy + 10, rot=0))
     cx2, cy2 = 375, 480
-    parts.append(gj.sym_inst("Conn_JST_SH_02P", "J_LASER", "laser +5V/cathode", cx2, cy2))
+    parts.append(
+        gj.sym_inst("Conn_JST_SH_02P", "J_LASER", "laser +5V/cathode", cx2, cy2)
+    )
     parts.append(gj.glabel_conn("+5V", cx2, cy2, 2, 0))
     parts.append(gj.glabel_conn("LASER_CATHODE", cx2, cy2, 2, 1))
     ldx, ldy = 410, 480
-    parts.append(gj.sym_inst("SolderLand_02P", "J_LASER_DS",
-                             "Direct-solder laser land (nose; DNP if J_LASER used)",
-                             ldx, ldy, footprint="Jayne:DS_Laser_2P"))
+    parts.append(
+        gj.sym_inst(
+            "SolderLand_02P",
+            "J_LASER_DS",
+            "Direct-solder laser land (nose; DNP if J_LASER used)",
+            ldx,
+            ldy,
+            footprint="Jayne:DS_Laser_2P",
+        )
+    )
     parts.append(gj.glabel_conn("+5V", ldx, ldy, 2, 0))
     parts.append(gj.glabel_conn("LASER_CATHODE", ldx, ldy, 2, 1))
 
@@ -959,6 +1147,7 @@ def footprint_for(ref):
 
 def fill_footprints(content):
     """Fill empty Footprint properties on placed symbols with the PCB footprint."""
+
     def repl(m):
         block = m.group(0)
         rm = re.search(r'\(property "Reference" "([^"]+)"', block)
@@ -968,8 +1157,13 @@ def fill_footprints(content):
         fpn = footprint_for(ref)
         if not fpn:
             return block
-        return re.sub(r'\(property "Footprint" ""',
-                      f'(property "Footprint" "{fpn}"', block, count=1)
+        return re.sub(
+            r'\(property "Footprint" ""',
+            f'(property "Footprint" "{fpn}"',
+            block,
+            count=1,
+        )
+
     # each placed symbol instance is a top-level (symbol (lib_id ...) ...) block
     return re.sub(r'\(symbol \(lib_id "[^"]+"\).*?\n  \)', repl, content, flags=re.S)
 

@@ -76,7 +76,7 @@ fi
 
 SYSTEMD_SERVICE='/etc/systemd/system/mavlink-router.service'
 
-cat > "${SYSTEMD_SERVICE}" << 'EOF'
+cat >"${SYSTEMD_SERVICE}" <<'EOF'
 [Unit]
 Description=Malcolm GCS mavlink-router
 Documentation=https://github.com/mavlink-router/mavlink-router

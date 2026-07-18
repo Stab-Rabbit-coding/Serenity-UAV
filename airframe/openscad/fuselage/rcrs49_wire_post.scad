@@ -1,9 +1,9 @@
 // rcrs49_wire_post.scad
-// Serenity UAV Rev R — 49 MHz RCRS Top-Wire Antenna Post (24" build)
+// Serenity UAV Rev R — 49 MHz XCVR Top-Wire Antenna Post (24" build)
 //
 // Purpose:
 //   Simple insulated PETG mast posts for the top-wire element of the AX.25 /
-//   49 MHz RCRS antenna(s).  TWO independent antennas are built from this
+//   49 MHz XCVR antenna(s).  TWO independent antennas are built from this
 //   same post (River's Room and Simon's Medbay each need their own — see
 //   TODO.md §1.4.2, 2026-06-22) — print FOUR posts total, two per antenna:
 //
@@ -55,7 +55,7 @@
 //     port/starboard relocation, 2026-06-22 — update build guide to match):
 //     "Print from rcrs49_wire_post.scad: forward post (~120 mm from nose) +
 //      aft post (~580 mm from nose)" — now ×2 sets (port + starboard).
-//   CLAUDE.md §Component Naming: River = 49 MHz RCRS primary antenna;
+//   AGENTS.md §Component Naming: River = 49 MHz XCVR primary antenna;
 //     Simon also carries 49 MHz primary (independent antenna, starboard).
 //   TODO.md §1.4.2 (2026-06-22): port/starboard relocation rationale.
 //

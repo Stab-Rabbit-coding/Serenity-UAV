@@ -66,9 +66,10 @@ License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 Date:    2026-05-26 (Rev Q: 2026-05-27 — removed _2mm hull entries)
 """
 
-import bpy
-import bmesh
 import os
+
+import bmesh
+import bpy
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SHELL_DIR = os.path.join(BASE_DIR, "files-hollowed-18in")
@@ -80,36 +81,39 @@ SHELL_DIR = os.path.join(BASE_DIR, "files-hollowed-18in")
 SHELLS_TO_REPAIR = [
     # ── Hull shells (used by serenity/stl/*.scad CGAL boolean operations) ──
     # Original 2.5 mm wall shells — repaired at 1.5 mm voxel pitch.
-    ("head_shell24.stl",           1.5),   # → head_shell24_repaired.stl
-    ("cargo_sect_shell24.stl",     1.5),   # → cargo_sect_shell24_repaired.stl
-    ("rear_shell24.stl",           1.5),   # → rear_shell24_repaired.stl
+    ("head_shell24.stl", 1.5),  # → head_shell24_repaired.stl
+    ("cargo_sect_shell24.stl", 1.5),  # → cargo_sect_shell24_repaired.stl
+    ("rear_shell24.stl", 1.5),  # → rear_shell24_repaired.stl
     # NOTE (Rev Q): _shell24_2mm_repaired.stl files are produced directly by
     # blender_shells_v3_2mm.py (Boolean DIFFERENCE method) and do NOT belong
     # here.  Voxel remesh fills their hollow interior — those entries removed.
     # ── Nacelle shells ──
     # 1.25× scale, 50 mm EDF bore — used by nacelle_pod_50mm_tandem.scad.
-    ("s_eng_left_shell24_50mm.stl",  1.5),   # → s_eng_left_shell24_50mm_repaired.stl
-    ("s_eng_right_shell24_50mm.stl", 1.5),   # → s_eng_right_shell24_50mm_repaired.stl
+    ("s_eng_left_shell24_50mm.stl", 1.5),  # → s_eng_left_shell24_50mm_repaired.stl
+    ("s_eng_right_shell24_50mm.stl", 1.5),  # → s_eng_right_shell24_50mm_repaired.stl
     # ── Integrated stator shells ──
     # Output of blender_nacelle_integrated_v2.py; thin fins require finer pitch.
     # NOTE: These are superseded by Rev P SCAD-parametric stators in
     # nacelle_pod_50mm_tandem.scad.  Repaired here to keep directory consistent.
-    ("s_eng_left_stator_shell24_50mm.stl",  1.0),
+    ("s_eng_left_stator_shell24_50mm.stl", 1.0),
     ("s_eng_right_stator_shell24_50mm.stl", 1.0),
     # ── Wing shell ──
     # 19.4 mm min_dim, 112 NM edges — hull skin, used for wing section assembly.
-    ("s_wings_both_shell24.stl",     0.8),   # → s_wings_both_shell24_repaired.stl
+    ("s_wings_both_shell24.stl", 0.8),  # → s_wings_both_shell24_repaired.stl
     # ── Landing gear (CRITICAL — 99 NM edges, load-bearing) ──
     # 9.0 mm minimum dimension (very flat): 0.5 mm pitch gives 18 voxels/thickness.
-    ("feet_x_4_scaled24.stl",      0.5),   # → feet_x_4_scaled24_repaired.stl
+    ("feet_x_4_scaled24.stl", 0.5),  # → feet_x_4_scaled24_repaired.stl
     # ── Nozzle mechanism ──
     # Petals: 18-19 mm thin, 8 NM edges; closed assembly 57 NM edges.
-    ("nacelle_nozzle_petal.stl",     0.8),   # → nacelle_nozzle_petal_repaired.stl
-    ("rear_nozzle_petal.stl",        0.8),   # → rear_nozzle_petal_repaired.stl
-    ("nacelle_nozzle_closed_asm.stl",0.8),   # → nacelle_nozzle_closed_asm_repaired.stl
+    ("nacelle_nozzle_petal.stl", 0.8),  # → nacelle_nozzle_petal_repaired.stl
+    ("rear_nozzle_petal.stl", 0.8),  # → rear_nozzle_petal_repaired.stl
+    ("nacelle_nozzle_closed_asm.stl", 0.8),  # → nacelle_nozzle_closed_asm_repaired.stl
     # ── Pivot arm ──
     # 17.9 mm min_dim, 3 NM edges — boundary artifact; repaired for consistency.
-    ("s_pivot_arm_a_scaled24_50mm.stl", 0.8), # → s_pivot_arm_a_scaled24_50mm_repaired.stl
+    (
+        "s_pivot_arm_a_scaled24_50mm.stl",
+        0.8,
+    ),  # → s_pivot_arm_a_scaled24_50mm_repaired.stl
 ]
 
 
@@ -137,7 +141,7 @@ def repair_shell(filename, voxel_pitch_mm):
         dimension spans at least 12 voxels.
     """
     in_path = os.path.join(SHELL_DIR, filename)
-    stem    = filename.replace(".stl", "")
+    stem = filename.replace(".stl", "")
     out_path = os.path.join(SHELL_DIR, stem + "_repaired.stl")
 
     if not os.path.isfile(in_path):
@@ -161,8 +165,10 @@ def repair_shell(filename, voxel_pitch_mm):
     ys = [v[1] for v in bb]
     zs = [v[2] for v in bb]
     print(f"  Before: non-manifold edges={nm_before}")
-    print(f"  Bounds: X={min(xs):.0f}..{max(xs):.0f}  "
-          f"Y={min(ys):.0f}..{max(ys):.0f}  Z={min(zs):.0f}..{max(zs):.0f}")
+    print(
+        f"  Bounds: X={min(xs):.0f}..{max(xs):.0f}  "
+        f"Y={min(ys):.0f}..{max(ys):.0f}  Z={min(zs):.0f}..{max(zs):.0f}"
+    )
 
     # Apply voxel remesh — reconstructs a clean watertight mesh from the volume
     mod = obj.modifiers.new("remesh", "REMESH")

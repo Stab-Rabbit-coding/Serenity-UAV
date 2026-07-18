@@ -3,6 +3,7 @@
  * @brief   Malcolm GCS — MAVLink telemetry parser and forwarder implementation.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  * Revision: R (2026-06-11)
  *
@@ -45,18 +46,19 @@
  * ---------------------------------------------------------------------------*/
 
 /** MAVLink parser state machine (one per GCS node). */
-static mavlink_message_t   s_msg;
-static mavlink_status_t    s_mav_status;
+static mavlink_message_t s_msg;
+static mavlink_status_t  s_mav_status;
 
-/** Latest aircraft position (protected by calling convention — single thread). */
-static mal_aircraft_pos_t  s_aircraft_pos;
-static int                 s_has_position = 0;
+/** Latest aircraft position (protected by calling convention — single thread).
+ */
+static mal_aircraft_pos_t s_aircraft_pos;
+static int                s_has_position = 0;
 
 /** Link status. */
 static mal_telemetry_status_t s_status;
 
 /** UDP socket to tracking software. */
-static int s_udp_fd = -1;
+static int                s_udp_fd = -1;
 static struct sockaddr_in s_tracker_addr;
 
 /* ---------------------------------------------------------------------------
@@ -66,28 +68,26 @@ static struct sockaddr_in s_tracker_addr;
 /**
  * @brief  Handle a fully-parsed MAVLink GLOBAL_POSITION_INT message.
  */
-static void handle_global_position(const mavlink_message_t *msg)
-{
+static void handle_global_position(const mavlink_message_t *msg) {
     mavlink_global_position_int_t gpi;
     mavlink_msg_global_position_int_decode(msg, &gpi);
 
-    s_aircraft_pos.lat_degE7       = gpi.lat;
-    s_aircraft_pos.lon_degE7       = gpi.lon;
-    s_aircraft_pos.alt_mm          = gpi.alt;
+    s_aircraft_pos.lat_degE7 = gpi.lat;
+    s_aircraft_pos.lon_degE7 = gpi.lon;
+    s_aircraft_pos.alt_mm = gpi.alt;
     s_aircraft_pos.relative_alt_mm = gpi.relative_alt;
-    s_aircraft_pos.vx_cms          = gpi.vx;
-    s_aircraft_pos.vy_cms          = gpi.vy;
-    s_aircraft_pos.vz_cms          = gpi.vz;
-    s_aircraft_pos.hdg_cdeg        = gpi.hdg;
+    s_aircraft_pos.vx_cms = gpi.vx;
+    s_aircraft_pos.vy_cms = gpi.vy;
+    s_aircraft_pos.vz_cms = gpi.vz;
+    s_aircraft_pos.hdg_cdeg = gpi.hdg;
     s_has_position = 1;
 
     /* Publish position to tracker.py via UDP JSON datagram. */
     char json[256];
     int  len = snprintf(json, sizeof(json),
-        "{\"lat_degE7\":%d,\"lon_degE7\":%d,\"alt_mm\":%d,"
-        "\"vx_cms\":%d,\"vy_cms\":%d,\"hdg_cdeg\":%u}",
-        gpi.lat, gpi.lon, gpi.alt,
-        gpi.vx, gpi.vy, gpi.hdg);
+                        "{\"lat_degE7\":%d,\"lon_degE7\":%d,\"alt_mm\":%d,"
+                        "\"vx_cms\":%d,\"vy_cms\":%d,\"hdg_cdeg\":%u}",
+                        gpi.lat, gpi.lon, gpi.alt, gpi.vx, gpi.vy, gpi.hdg);
 
     if (s_udp_fd >= 0 && len > 0) {
         sendto(s_udp_fd, json, (size_t)len, 0,
@@ -99,8 +99,7 @@ static void handle_global_position(const mavlink_message_t *msg)
 /**
  * @brief  Handle a fully-parsed HEARTBEAT message.
  */
-static void handle_heartbeat(const mavlink_message_t *msg)
-{
+static void handle_heartbeat(const mavlink_message_t *msg) {
     (void)msg; /* Source sysid already checked before dispatch. */
     clock_gettime(CLOCK_MONOTONIC, &s_status.last_heartbeat);
     s_status.link_ok = 1;
@@ -117,8 +116,7 @@ static void handle_heartbeat(const mavlink_message_t *msg)
  *         [REF-NIST-001 §2.1, §2.2].  Tracked as an open functional gap in
  *         TODO.md §0.5 — do not treat sysid filtering as authentication.
  */
-static void dispatch_message(const mavlink_message_t *msg)
-{
+static void dispatch_message(const mavlink_message_t *msg) {
     /* Only process messages from the aircraft system. */
     if (msg->sysid != MAL_AIRCRAFT_SYS_ID) {
         return;
@@ -127,17 +125,18 @@ static void dispatch_message(const mavlink_message_t *msg)
     s_status.msgs_received++;
 
     switch (msg->msgid) {
-    case MAVLINK_MSG_ID_HEARTBEAT:
-        handle_heartbeat(msg);
-        break;
+        case MAVLINK_MSG_ID_HEARTBEAT:
+            handle_heartbeat(msg);
+            break;
 
-    case MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
-        handle_global_position(msg);
-        break;
+        case MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
+            handle_global_position(msg);
+            break;
 
-    default:
-        /* Forward unhandled messages silently — mavlink-router relays them. */
-        break;
+        default:
+            /* Forward unhandled messages silently — mavlink-router relays them.
+             */
+            break;
     }
 }
 
@@ -145,11 +144,10 @@ static void dispatch_message(const mavlink_message_t *msg)
  * Public API
  * ---------------------------------------------------------------------------*/
 
-int mal_telemetry_init(void)
-{
+int mal_telemetry_init(void) {
     memset(&s_aircraft_pos, 0, sizeof(s_aircraft_pos));
-    memset(&s_status,       0, sizeof(s_status));
-    memset(&s_mav_status,   0, sizeof(s_mav_status));
+    memset(&s_status, 0, sizeof(s_status));
+    memset(&s_mav_status, 0, sizeof(s_mav_status));
 
     /* Open UDP socket for publishing to tracker.py. */
     s_udp_fd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -159,54 +157,52 @@ int mal_telemetry_init(void)
     }
 
     memset(&s_tracker_addr, 0, sizeof(s_tracker_addr));
-    s_tracker_addr.sin_family      = AF_INET;
-    s_tracker_addr.sin_port        = htons((uint16_t)MAL_TRACKER_UDP_PORT);
+    s_tracker_addr.sin_family = AF_INET;
+    s_tracker_addr.sin_port = htons((uint16_t)MAL_TRACKER_UDP_PORT);
     s_tracker_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
     return 0;
 }
 
-void mal_telemetry_deinit(void)
-{
+void mal_telemetry_deinit(void) {
     if (s_udp_fd >= 0) {
         close(s_udp_fd);
         s_udp_fd = -1;
     }
 }
 
-void mal_telemetry_feed(const uint8_t *buf, size_t len)
-{
+void mal_telemetry_feed(const uint8_t *buf, size_t len) {
     for (size_t i = 0U; i < len; i++) {
-        if (mavlink_parse_char(MAVLINK_COMM_0, buf[i], &s_msg, &s_mav_status) == 1) {
+        if (mavlink_parse_char(MAVLINK_COMM_0, buf[i], &s_msg, &s_mav_status) ==
+            1) {
             dispatch_message(&s_msg);
         }
     }
-    s_status.msgs_forwarded += (uint32_t)len; /* Approximate; mavlink-router does actual fwd. */
+    s_status.msgs_forwarded +=
+        (uint32_t)len; /* Approximate; mavlink-router does actual fwd. */
 }
 
-int mal_telemetry_get_position(mal_aircraft_pos_t *pos)
-{
+int mal_telemetry_get_position(mal_aircraft_pos_t *pos) {
     if (pos != NULL) {
         *pos = s_aircraft_pos;
     }
     return s_has_position;
 }
 
-void mal_telemetry_get_status(mal_telemetry_status_t *status)
-{
+void mal_telemetry_get_status(mal_telemetry_status_t *status) {
     if (status != NULL) {
         *status = s_status;
     }
 }
 
-int mal_telemetry_is_link_lost(void)
-{
+int mal_telemetry_is_link_lost(void) {
     if (!s_status.link_ok || s_status.last_heartbeat.tv_sec == 0) {
         return 1;
     }
     struct timespec now;
     clock_gettime(CLOCK_MONOTONIC, &now);
-    long elapsed_ms = (now.tv_sec  - s_status.last_heartbeat.tv_sec)  * 1000L
-                    + (now.tv_nsec - s_status.last_heartbeat.tv_nsec) / 1000000L;
+    long elapsed_ms =
+        (now.tv_sec - s_status.last_heartbeat.tv_sec) * 1000L +
+        (now.tv_nsec - s_status.last_heartbeat.tv_nsec) / 1000000L;
     return (elapsed_ms > (long)MAL_HEARTBEAT_TIMEOUT_MS) ? 1 : 0;
 }

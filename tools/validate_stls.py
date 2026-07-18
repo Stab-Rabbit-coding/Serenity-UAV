@@ -17,8 +17,8 @@ fuselage/, nacelles/, and wings/ subdirectories.
 Usage: python tools/validate_stls.py
 """
 
-from pathlib import Path
 import sys
+from pathlib import Path
 
 try:
     import trimesh
@@ -71,7 +71,7 @@ for base in SEARCH_PATHS:
         seen.add(resolved)
         found += 1
         try:
-            mesh = trimesh.load_mesh(p, force='mesh')
+            mesh = trimesh.load_mesh(p, force="mesh")
             if mesh.is_empty:
                 print(f"ERROR: {p} loaded but is empty")
                 failures.append((p, "empty"))

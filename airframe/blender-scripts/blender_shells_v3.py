@@ -44,10 +44,11 @@ EDF sizing at canonical 24":
 Parts thinner than 4×WALL on any axis are scaled only.
 """
 
-import bpy
 import os
 
-WALL_MM   = 2.5
+import bpy
+
+WALL_MM = 2.5
 TARGET_IN = 24.0
 
 # Uniform scale: longest assembled axis (208.1 mm) → 24.0" (609.6 mm).
@@ -59,8 +60,8 @@ SCALE_Y = 2.9294
 SCALE_Z = 2.9294
 
 BASE = os.path.dirname(os.path.abspath(__file__))
-SRC  = os.path.join(BASE, "files")
-OUT  = os.path.join(BASE, "files-hollowed-18in")
+SRC = os.path.join(BASE, "files")
+OUT = os.path.join(BASE, "files-hollowed-18in")
 os.makedirs(OUT, exist_ok=True)
 
 HOLLOW_PARTS = [
@@ -103,9 +104,9 @@ def export_stl(obj, path):
 
 
 def process_hollow(fname):
-    src  = os.path.join(SRC, fname)
+    src = os.path.join(SRC, fname)
     stem = fname.replace(".stl", "")
-    out  = os.path.join(OUT, stem + "_shell24.stl")
+    out = os.path.join(OUT, stem + "_shell24.stl")
 
     clear_scene()
     outer = import_stl(src)
@@ -126,8 +127,8 @@ def process_hollow(fname):
         return
 
     # Centroid-inset scale factors (uniform wall thickness per axis)
-    sx  = max(0.001, (dx - 2 * WALL_MM) / dx)
-    sy  = max(0.001, (dy - 2 * WALL_MM) / dy)
+    sx = max(0.001, (dx - 2 * WALL_MM) / dx)
+    sy = max(0.001, (dy - 2 * WALL_MM) / dy)
     sz_ = max(0.001, (dz - 2 * WALL_MM) / dz)
 
     # Bounding box centroid
@@ -146,9 +147,11 @@ def process_hollow(fname):
     inner.name = "inner"
 
     # Translate to centroid → scale inward → translate back
-    inner.location = (inner.location.x - cx,
-                      inner.location.y - cy,
-                      inner.location.z - cz)
+    inner.location = (
+        inner.location.x - cx,
+        inner.location.y - cy,
+        inner.location.z - cz,
+    )
     bpy.ops.object.transform_apply(location=True)
     inner.scale = (sx, sy, sz_)
     bpy.ops.object.transform_apply(scale=True)
@@ -175,9 +178,9 @@ def process_hollow(fname):
 
 
 def process_scale_only(fname):
-    src  = os.path.join(SRC, fname)
+    src = os.path.join(SRC, fname)
     stem = fname.replace(".stl", "")
-    out  = os.path.join(OUT, stem + "_scaled24.stl")
+    out = os.path.join(OUT, stem + "_scaled24.stl")
 
     clear_scene()
     obj = import_stl(src)
@@ -188,7 +191,7 @@ def process_scale_only(fname):
     print(f"  → {stem}_scaled24.stl  ({sz:.0f} KB)")
 
 
-print(f"\nScale: {SCALE_X:.4f}× (uniform)  Target: {TARGET_IN}\"  Wall: {WALL_MM} mm\n")
+print(f'\nScale: {SCALE_X:.4f}× (uniform)  Target: {TARGET_IN}"  Wall: {WALL_MM} mm\n')
 
 print("=== Hollow hull parts ===")
 for f in HOLLOW_PARTS:

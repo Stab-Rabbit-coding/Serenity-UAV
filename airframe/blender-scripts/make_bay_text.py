@@ -16,12 +16,13 @@ import os
 
 import bpy
 
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                   "files-hollowed-24in", "operands")
+OUT = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "files-hollowed-24in", "operands"
+)
 
-SIZE = 13.0      # mm font em size (cap height ~9 mm)
-SLAB = 10.0      # mm slab thickness (straddles the wall, centred on origin)
-REMESH = 0.3     # mm voxel pitch to weld per-letter shells into one volume
+SIZE = 13.0  # mm font em size (cap height ~9 mm)
+SLAB = 10.0  # mm slab thickness (straddles the wall, centred on origin)
+REMESH = 0.3  # mm voxel pitch to weld per-letter shells into one volume
 
 LABELS = ["INARA", "RIVER", "KAYLEE", "SHEPHERD", "SIMON"]
 

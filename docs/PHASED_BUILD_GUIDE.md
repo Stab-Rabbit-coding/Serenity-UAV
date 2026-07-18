@@ -42,7 +42,7 @@
 | Hover thrust | **24.80 lbf (11,250 gf)** (23.37 lbf / 10,600 gf nacelles + 1.43 lbf / 650 gf fuselage) |
 | ESCs | **4× Hobbywing Platinum PRO V4 120A** (nacelles, one per EDF) + 1× BLHeli32 40A (fuselage) |
 | Governor (Rev L new) | **PID closed-loop RPM per EDF · 500 Hz M4F · BDSHOT 1 kHz feedback** |
-| Avionics dry mass | **0.926 lbm (420 g)** (8× PocketBeagle 2 Industrial + 4× Cape-A + 4× Cape-B + 4× RCRS-49 sub-modules + GPS ×4 + radios) |
+| Avionics dry mass | **0.926 lbm (420 g)** (8× PocketBeagle 2 Industrial + 4× Cape-A + 4× Cape-B + 4× XCVR-49MHZ sub-modules + GPS ×4 + radios) |
 | Airframe dry mass | **7.08 lbm (3,213 g)** (Rev L 7.05 lbm / 3,197 g + 0.035 lbm / 16 g PB2-I net delta) |
 | T/W empty | **3.11:1** (6S 4000mAh, 7.99 lbm / 3,623 g AUW) |
 | T/W with 250 g cargo | **2.99:1** (6S 2800mAh, 8.29 lbm / 3,758 g AUW) |
@@ -51,12 +51,12 @@
 | Max payload | **3.07 lbm (1,392 g)** at T/W = 2.0 |
 | Compute nodes | **8 nodes:** FC1–FC4 (Cape-A, sensor/flight) + CN1–CN4 (Cape-B, comms/payload) |
 | FC node hardware | **PocketBeagle 2 Industrial (AM6254)** + Wash 55×35mm — ICM-42688-P IMU, BMP388 baro, u-blox M10Q GPS, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0** · DK 2820-100003007-ND |
-| CN node hardware | **PocketBeagle 2 Industrial (AM6254)** + Zoë 55×35mm — SiK 915MHz, LoRa RFM95W 915MHz, TI WL1837MOD WiFi/BT, RCRS-49 sub-module, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0**; ATF16V8BQL CPLD write-blocker (log μSD) · DK 2820-100003007-ND |
+| CN node hardware | **PocketBeagle 2 Industrial (AM6254)** + Zoë 55×35mm — SiK 915MHz, LoRa RFM95W 915MHz, TI WL1837MOD WiFi/BT, XCVR-49MHZ sub-module, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0**; ATF16V8BQL CPLD write-blocker (log μSD) · DK 2820-100003007-ND |
 | Bay assignments | Shepherd's room (Bay A): CN1+FC1 · Inara's shuttle (Bay B): CN2+FC2 · River's room (Bay D): CN3+FC3 · Simon's medbay (Bay E): CN4+FC4 (CN lower, FC upper per bay) |
 | Cape variant layout | **v2 · v2 · v2 · v2 (nose → tail, Rev Q):** All 8 positions use Wash / Zoë (EMI-hardened, 5 kV isolated CAN FD / RS-485 / Ethernet transceivers). Single-SKU procurement; Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 archived as of Rev Q. |
 | Bus order | CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4 — CN and FC interleaved on all data buses (CAN FD, RS-485, 1553) and power distribution; any single segment or bay power failure leaves ≥2 FC + ≥2 CN on both sides of the break |
 | Node role election | CAN FD heartbeat priority arbitration at boot — all 8 nodes identical hardware; master elected dynamically with automatic failover |
-| Radios | SiK 915MHz MAVLink + LoRa RFM95W 915MHz backup + TI WL1837MOD WiFi/BT GCS + 49MHz RCRS-49 RC; all 4 on every CN node; software-elected master per link |
+| Radios | SiK 915MHz MAVLink + LoRa RFM95W 915MHz backup + TI WL1837MOD WiFi/BT GCS + 49MHz XCVR-49MHZ RC; all 4 on every CN node; software-elected master per link |
 | Obstacle avoidance | 12× VL53L5CX 8×8 ToF sensors, dual redundant arrays (A on FC3 River's room / Bay D, B on FC1 Shepherd's room / Bay A) |
 | Cargo | 101.6 × 76.2 × 76.2 mm bay, clamshell doors, N20 winch + auto-latch cradle |
 | Security | ATF16V8BQL CPLD write-blocker (log μSD, all Cape-B nodes) + **SLB9670 TPM 2.0 on all 8 nodes** (Cape-A and Cape-B) + W25Q128JV NOR flash circular log buffer |
@@ -199,7 +199,7 @@ These rules eliminate costly structural rework. Read before you start Phase 1.
 | M2.5 × 8mm SS button screws     | 64×        | Panel B and E (4 each) + 8× per bay × 4 bays standoff attachment                            |
 | M3 heat-set threaded inserts    | 4×         | Cargo gondola belly hard points                                                             |
 | N42 neodymium disc magnet 6×2mm | 8×         | Panel D (4 in frame + 4 in lid)                                                             |
-| SMA panel-mount bulkhead        | 4×         | Belly: SiK 915MHz + LoRa 915MHz · Dorsal: RCRS-49MHz · Dorsal fwd: WiFi; 50Ω, RG174 pigtail |
+| SMA panel-mount bulkhead        | 4×         | Belly: SiK 915MHz + LoRa 915MHz · Dorsal: XCVR-49MHZMHz · Dorsal fwd: WiFi; 50Ω, RG174 pigtail |
 | Pull strings                    | 8× ~600mm  | Thread through each PTFE conduit immediately                                                |
 | Toothpicks                      | 20×        | Temporary void former pins into hull ribs                                                   |
 
@@ -260,7 +260,7 @@ Bond each PETG flush-mount frame with 5-min epoxy — flush ±0.2mm. Apply 0.5mm
 
 - Belly port at sta 253.7mm: SiK 915MHz antenna
 - Belly stbd at sta 253.7mm: LoRa RFM95W 915MHz antenna
-- Dorsal fin at sta 365.8mm: 49MHz RCRS-49 antenna
+- Dorsal fin at sta 365.8mm: 49MHz XCVR-49MHZ antenna
 - Dorsal fwd at sta 120mm: TI WL1837MOD WiFi antenna (2.4/5GHz)
 
 **7. Drill 3mm GPS coax routing holes** — one per FC node, at the nearest dorsal hull surface to each bay:
@@ -443,7 +443,7 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 | PocketBeagle 2 Industrial (AM6254)                                    | 4×       | $51.03 ea (DK 2820-100003007-ND) |
 | Cape-A PCB 55×35mm 4L (JLCPCB assembled) — FC nodes                   | 2×       | ~$42ea                           |
 | Cape-B PCB 55×35mm 4L (JLCPCB assembled) — CN nodes                   | 2×       | ~$80ea                           |
-| RCRS-49 sub-module PCB (49MHz TDDS RC transceiver)                    | 2×       | ~$20ea                           |
+| XCVR-49MHZ sub-module PCB (49MHz TDDS RC transceiver)                    | 2×       | ~$20ea                           |
 | SiK 915MHz ground station radio                                       | 1×       | ~$15                             |
 | microSD 32GB (log — 1 per CN node, write-blocked)                     | 2×       | ~$8ea                            |
 | WS2812C nav light chain, diffusers, mounts                            | 6×       | ~$8                              |
@@ -481,13 +481,13 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 
 - Step 11: PB2-I boots from 64GB eMMC —**no OS microSD required.**Flash OS to eMMC on CN1 and FC1 via USB-C before installation.**Install log μSD (64GB) in CN1 Cape-B log slot.** Label: CN1-LOG. ⚠ Log μSD is write-blocked hardware flight recorder — do not use as OS card.
 
-- Step 12: Seat RCRS-49 sub-module onto CN1 Cape-B sub-module header. Connect RCRS-49 coaxial lead through dorsal fin SMA bulkhead. Install 49MHz helical coil antenna in dorsal fin enclosure.
+- Step 12: Seat XCVR-49MHZ sub-module onto CN1 Cape-B sub-module header. Connect XCVR-49MHZ coaxial lead through dorsal fin SMA bulkhead. Install 49MHz helical coil antenna in dorsal fin enclosure.
 
 - Step 13: Connect CN1 radio antenna pigtails:
 - SiK 915MHz → belly port SMA bulkhead (sta 253.7mm)
 - LoRa RFM95W → belly stbd SMA bulkhead (sta 253.7mm)
 - WL1837MOD WiFi → dorsal fwd SMA bulkhead (sta 120mm)
-- RCRS-49 → dorsal fin SMA (sta 365.8mm, connected above)
+- XCVR-49MHZ → dorsal fin SMA (sta 365.8mm, connected above)
 
 - Step 14: Route FC1 GPS U.FL coax through the PTFE-sleeved cockpit-roof hole (sta ~59mm). Mount GPS patch antenna flush on cockpit roof, antenna face UP.
 
@@ -507,7 +507,7 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 
 - Step 21: PB2-I boots from eMMC — no OS μSD required. Flash OS to eMMC on CN2 and FC2 before installation.**Install log μSD (64GB) in CN2 Cape-B log slot.** Label: CN2-LOG.
 
-- Step 22: Seat RCRS-49 sub-module onto CN2 Cape-B header.
+- Step 22: Seat XCVR-49MHZ sub-module onto CN2 Cape-B header.
 
 - Step 23: Route FC2 GPS U.FL coax through the PTFE-sleeved dorsal hole at sta ~130mm. Mount GPS patch antenna on dorsal hull exterior, antenna face UP.
 
@@ -618,7 +618,7 @@ apt install mavlink-router
 - Step 42: Radio checks:
 - MAVLink heartbeat visible in QGroundControl over SiK 915MHz link
 - LoRa backup link: verify heartbeat in QGC when SiK is disabled
-- RCRS-49 RC channels show correct direction and travel in QGC RC calibration screen
+- XCVR-49MHZ RC channels show correct direction and travel in QGC RC calibration screen
 - WiFi GCS: connect QGC over WL1837MOD access point, verify telemetry
 
 - Step 43: Motor spin test (5% throttle, 2 seconds): all 3 motors spin in correct directions:
@@ -645,7 +645,7 @@ apt install mavlink-router
 
 - **A**irframe: all fasteners torqued, no visible damage, CG at 190mm, battery secured on rail
 - **B**attery: 6S 4000mAh at ≥80% charge, connectors clean, no puffing
-- **C**omms: MAVLink heartbeat in QGC, RCRS-49 RC stick response verified, failsafe tested (link loss → Hover Hold), all 4 node CAN FD heartbeats visible
+- **C**omms: MAVLink heartbeat in QGC, XCVR-49MHZ RC stick response verified, failsafe tested (link loss → Hover Hold), all 4 node CAN FD heartbeats visible
 - **D**ocs: FAA Part 107 remote pilot certificate current, registration number on airframe, site NOTAM checked
 
 ## Flight sequence
@@ -673,7 +673,7 @@ apt install mavlink-router
 - [ ] Flight log written to both CN node log μSDs; CPLD write-block verified (write attempt returns read-only error)
 - [ ] FC1 and FC2 GPS HDOP ≤1.5, positions agree within 2m
 
-**Phase 3 cost estimate:**ESCs ~$68 + PDB/BEC/wiring ~$38 + 4× PB2-I ~$204 + 2× Cape-A ~$84 + 2× Cape-B ~$160 + 2× RCRS-49 ~$40 + SiK GS radio ~$15 + log μSD ×2 ~$24 + battery ~$60 + nav lights ~$8 + tools ~$8 + misc ~$23 =**~$732** (log μSD only — no OS microSD; eMMC handles OS)
+**Phase 3 cost estimate:**ESCs ~$68 + PDB/BEC/wiring ~$38 + 4× PB2-I ~$204 + 2× Cape-A ~$84 + 2× Cape-B ~$160 + 2× XCVR-49MHZ ~$40 + SiK GS radio ~$15 + log μSD ×2 ~$24 + battery ~$60 + nav lights ~$8 + tools ~$8 + misc ~$23 =**~$732** (log μSD only — no OS microSD; eMMC handles OS)
 
 ## Cumulative cost at first flight: ~$1,030
 
@@ -690,7 +690,7 @@ apt install mavlink-router
 | PocketBeagle 2 Industrial (AM6254)                 | 4×       | $51.03 ea (DK 2820-100003007-ND) |
 | Cape-A PCB 55×35mm 4L (JLCPCB assembled) — FC3+FC4 | 2×       | ~$42ea                           |
 | Cape-B PCB 55×35mm 4L (JLCPCB assembled) — CN3+CN4 | 2×       | ~$80ea                           |
-| RCRS-49 sub-module PCB                             | 2×       | ~$20ea                           |
+| XCVR-49MHZ sub-module PCB                             | 2×       | ~$20ea                           |
 | microSD 32GB log (CN3+CN4 only, write-blocked)     | 2×       | ~$8ea                            |
 | JST-GH CAN/RS-485/1553/ETH cables 150mm            | assorted | ~$20                             |
 
@@ -702,7 +702,7 @@ apt install mavlink-router
 
 - Step 2: PB2-I boots from eMMC — no OS μSD required. Flash OS to eMMC on CN3 and FC3 before installation.**Install log μSD (64GB) in CN3 Cape-B log slot.** Label: CN3-LOG.
 
-- Step 3: Seat RCRS-49 sub-module onto CN3 Cape-B sub-module header.
+- Step 3: Seat XCVR-49MHZ sub-module onto CN3 Cape-B sub-module header.
 
 - Step 4: Route FC3 GPS U.FL coax through the PTFE-sleeved dorsal hole at sta ~275mm. Mount GPS patch antenna on dorsal hull exterior, antenna face UP.
 
@@ -722,7 +722,7 @@ apt install mavlink-router
 
 - Step 11: PB2-I boots from eMMC — no OS μSD required. Flash OS to eMMC on CN4 and FC4 before installation.**Install log μSD (64GB) in CN4 Cape-B log slot.** Label: CN4-LOG.
 
-- Step 12: Seat RCRS-49 sub-module onto CN4 Cape-B sub-module header.
+- Step 12: Seat XCVR-49MHZ sub-module onto CN4 Cape-B sub-module header.
 
 - Step 13: Route FC4 GPS U.FL coax through the PTFE-sleeved dorsal hole at sta ~350mm. Mount GPS patch antenna on dorsal hull exterior, antenna face UP.
 
@@ -769,7 +769,7 @@ echo test > /mnt/flightlog/test.txt   # must return "Read-only file system"
 - [ ] Full hover with all 8 nodes: no interference or command jitter
 - [ ] Any single node power-kill: remaining nodes maintain flight control within 100ms
 
-**Phase 4 cost estimate:**4× PB2-I ~$204 + 2× Cape-A ~$84 + 2× Cape-B ~$160 + 2× RCRS-49 ~$40 + log μSD ×2 ~$24 + cables ~$20 =**~$532** (no OS microSD; eMMC handles OS)
+**Phase 4 cost estimate:**4× PB2-I ~$204 + 2× Cape-A ~$84 + 2× Cape-B ~$160 + 2× XCVR-49MHZ ~$40 + log μSD ×2 ~$24 + cables ~$20 =**~$532** (no OS microSD; eMMC handles OS)
 
 ---
 
@@ -1132,11 +1132,11 @@ The phased approach reaches first flight at **~$1,030** and defers the $590 moto
 
 | Panel | Location    | Station   | Closure        | What's Inside                                                                                                                                                   |
 | ----- | ----------- | --------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| A     | Nose, top   | 0–91mm    | Bayonet        | CN1 Cape-B (lower) + FC1 Cape-A (upper); CN1 radios (SiK/LoRa/WiFi/RCRS-49); FC1 GPS coax (~59mm); ETH-AB/ETH-EA conduit ends; CAN FD 120Ω at CN1; Array B mux  |
-| B     | Dorsal fwd  | 91–165mm  | 4× M2.5        | CN2 Cape-B (lower) + FC2 Cape-A (upper); CN2 RCRS-49; FC2 GPS coax (~130mm); ETH-AB/ETH-BD conduit ends                                                         |
+| A     | Nose, top   | 0–91mm    | Bayonet        | CN1 Cape-B (lower) + FC1 Cape-A (upper); CN1 radios (SiK/LoRa/WiFi/XCVR-49MHZ); FC1 GPS coax (~59mm); ETH-AB/ETH-EA conduit ends; CAN FD 120Ω at CN1; Array B mux  |
+| B     | Dorsal fwd  | 91–165mm  | 4× M2.5        | CN2 Cape-B (lower) + FC2 Cape-A (upper); CN2 XCVR-49MHZ; FC2 GPS coax (~130mm); ETH-AB/ETH-BD conduit ends                                                         |
 | C     | Cargo belly | 160–251mm | Hinge          | Cargo gondola, clamshell doors, winch motor                                                                                                                     |
-| D     | Dorsal aft  | 251–320mm | 4× N42 magnets | CN3 Cape-B (lower) + FC3 Cape-A (upper); CN3 RCRS-49; FC3 GPS coax (~275mm); ETH-BD/ETH-DE conduit ends; CN3 log μSD; Array A mux                               |
-| E     | Aft service | 320–388mm | 4× M2.5        | CN4 Cape-B (lower) + FC4 Cape-A (upper); CN4 RCRS-49; FC4 GPS coax (~350mm); ETH-DE/ETH-EA conduit ends; CAN FD 120Ω at FC4; CN4 log μSD; budget→Hobbywing ESCs |
+| D     | Dorsal aft  | 251–320mm | 4× N42 magnets | CN3 Cape-B (lower) + FC3 Cape-A (upper); CN3 XCVR-49MHZ; FC3 GPS coax (~275mm); ETH-BD/ETH-DE conduit ends; CN3 log μSD; Array A mux                               |
+| E     | Aft service | 320–388mm | 4× M2.5        | CN4 Cape-B (lower) + FC4 Cape-A (upper); CN4 XCVR-49MHZ; FC4 GPS coax (~350mm); ETH-DE/ETH-EA conduit ends; CAN FD 120Ω at FC4; CN4 log μSD; budget→Hobbywing ESCs |
 | F     | Engine bell | 388–457mm | Bayonet        | 55mm fuselage EDF, fixed canonical elliptical nozzle, 4× RCS bleed-jet valves (Phase 11)                                                                        |
 
 ---
@@ -1158,7 +1158,7 @@ Bus order: **CN1 → FC1 → CN2 → FC2 → CN3 → FC3 → CN4 → FC4** (inte
 
 **All FC nodes (Cape-A):** ICM-42688-P IMU · BMP388 baro · u-blox M10Q GPS · ATA6561 CAN FD · MAX3485E RS-485 · DS26LV31/32 + PE-68515 1553 · DP83825I ×2 Ethernet · SLB9670 TPM 2.0 · 8× servo PWM rail
 
-**All CN nodes (Cape-B):** SiK 915MHz · LoRa RFM95W 915MHz · TI WL1837MOD WiFi/BT · RCRS-49 sub-module · ATA6561 CAN FD · MAX3485E RS-485 · DS26LV31/32 + PE-68515 1553 · DP83825I ×2 Ethernet · SLB9670 TPM 2.0 · ATF16V8BQL CPLD write-blocker · W25Q128JV NOR flash log · DRV8833 winch · HX711 load cell · 2× cargo servo PWM
+**All CN nodes (Cape-B):** SiK 915MHz · LoRa RFM95W 915MHz · TI WL1837MOD WiFi/BT · XCVR-49MHZ sub-module · ATA6561 CAN FD · MAX3485E RS-485 · DS26LV31/32 + PE-68515 1553 · DP83825I ×2 Ethernet · SLB9670 TPM 2.0 · ATF16V8BQL CPLD write-blocker · W25Q128JV NOR flash log · DRV8833 winch · HX711 load cell · 2× cargo servo PWM
 
 ---
 

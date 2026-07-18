@@ -47,8 +47,10 @@ SANITIZE_PATTERNS = [
 # Patterns indicating exploitable failures that require immediate bug reporting
 EXPLOITABLE_PATTERNS = [
     (r"race\s*condition", "race condition detected"),
-    (r"memory\s*corruption|heap.*overflow|stack.*overflow|buffer.*overflow",
-        "memory corruption pattern detected"),
+    (
+        r"memory\s*corruption|heap.*overflow|stack.*overflow|buffer.*overflow",
+        "memory corruption pattern detected",
+    ),
     (r"use.*after.*free|double.*free", "use-after-free or double-free detected"),
     (r"null.*pointer.*dereference", "null pointer dereference pattern detected"),
     (r"privilege\s*escalation|jailbreak", "privilege escalation pattern detected"),
@@ -132,7 +134,7 @@ def check_exploitable_patterns(content: str, filepath: Path) -> List[Tuple[int, 
         # Skip comments and documentation strings that discuss these patterns
         if any(
             marker in line
-            for marker in ["#", "//", "\"\"\"", "'''", "<!--", "bug report", "Bug"]
+            for marker in ["#", "//", '"""', "'''", "<!--", "bug report", "Bug"]
         ):
             continue
 
@@ -199,9 +201,7 @@ def main() -> int:
                 file=sys.stderr,
             )
             print("   1. Failure type (race, overflow, etc.)", file=sys.stderr)
-            print(
-                "   2. Affected subsystem (generalized, no paths)", file=sys.stderr
-            )
+            print("   2. Affected subsystem (generalized, no paths)", file=sys.stderr)
             print(
                 "   3. Reproduction steps (without PII or full paths)",
                 file=sys.stderr,

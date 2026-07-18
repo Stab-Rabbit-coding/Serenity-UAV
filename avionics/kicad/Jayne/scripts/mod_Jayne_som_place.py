@@ -28,7 +28,7 @@ import pcbnew
 HERE = Path(__file__).resolve().parent
 BOARD = HERE / "Jayne.kicad_pcb"
 PRETTY = str(HERE.parent / "Jayne.pretty")
-POS = (24.0, 12.7)   # aft/wide end, board centreline
+POS = (24.0, 12.7)  # aft/wide end, board centreline
 ROT = 90
 
 

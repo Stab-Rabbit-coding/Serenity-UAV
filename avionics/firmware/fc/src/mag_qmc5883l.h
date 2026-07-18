@@ -3,6 +3,7 @@
  * @brief   QMC5883L 3-axis magnetometer driver — public API.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * Drives the QMC5883L 3-axis magnetometer via Linux userspace i2c-dev
@@ -107,17 +108,17 @@ extern "C" {
  * Register addresses
  * ---------------------------------------------------------------------------*/
 
-#define QMC5883L_REG_XOUT_L     (0x00U)  /**< X output — low byte.          */
-#define QMC5883L_REG_XOUT_H     (0x01U)  /**< X output — high byte.         */
-#define QMC5883L_REG_YOUT_L     (0x02U)  /**< Y output — low byte.          */
-#define QMC5883L_REG_YOUT_H     (0x03U)  /**< Y output — high byte.         */
-#define QMC5883L_REG_ZOUT_L     (0x04U)  /**< Z output — low byte.          */
-#define QMC5883L_REG_ZOUT_H     (0x05U)  /**< Z output — high byte.         */
-#define QMC5883L_REG_STATUS     (0x06U)  /**< Status register.               */
-#define QMC5883L_REG_CTRL1      (0x09U)  /**< Control register 1.            */
-#define QMC5883L_REG_CTRL2      (0x0AU)  /**< Control register 2.            */
-#define QMC5883L_REG_SET_RESET  (0x0BU)  /**< Set/Reset period (write 0x01). */
-#define QMC5883L_REG_CHIP_ID    (0x0DU)  /**< Chip identification register.  */
+#define QMC5883L_REG_XOUT_L     (0x00U) /**< X output — low byte.          */
+#define QMC5883L_REG_XOUT_H     (0x01U) /**< X output — high byte.         */
+#define QMC5883L_REG_YOUT_L     (0x02U) /**< Y output — low byte.          */
+#define QMC5883L_REG_YOUT_H     (0x03U) /**< Y output — high byte.         */
+#define QMC5883L_REG_ZOUT_L     (0x04U) /**< Z output — low byte.          */
+#define QMC5883L_REG_ZOUT_H     (0x05U) /**< Z output — high byte.         */
+#define QMC5883L_REG_STATUS     (0x06U) /**< Status register.               */
+#define QMC5883L_REG_CTRL1      (0x09U) /**< Control register 1.            */
+#define QMC5883L_REG_CTRL2      (0x0AU) /**< Control register 2.            */
+#define QMC5883L_REG_SET_RESET  (0x0BU) /**< Set/Reset period (write 0x01). */
+#define QMC5883L_REG_CHIP_ID    (0x0DU) /**< Chip identification register.  */
 
 /* ---------------------------------------------------------------------------
  * Register field bitmasks
@@ -142,7 +143,8 @@ extern "C" {
 /** CTRL2 value used by this driver: interrupts disabled, no soft-reset. */
 #define QMC5883L_CTRL2_INIT     (0x00U)
 
-/** SET_RESET period register: must be written 0x01 on startup (per datasheet). */
+/** SET_RESET period register: must be written 0x01 on startup (per datasheet).
+ */
 #define QMC5883L_SET_RESET_VAL  (0x01U)
 
 /* ---------------------------------------------------------------------------
@@ -157,9 +159,9 @@ extern "C" {
  * Normally applications should use the scaled fields in qmc5883l_sample_t.
  */
 typedef struct {
-    int16_t x;   /**< Raw X-axis ADC count (signed, ±2G range = ±12000 LSB). */
-    int16_t y;   /**< Raw Y-axis ADC count. */
-    int16_t z;   /**< Raw Z-axis ADC count. */
+    int16_t x; /**< Raw X-axis ADC count (signed, ±2G range = ±12000 LSB). */
+    int16_t y; /**< Raw Y-axis ADC count. */
+    int16_t z; /**< Raw Z-axis ADC count. */
 } qmc5883l_raw_t;
 
 /**
@@ -173,12 +175,12 @@ typedef struct {
  *   1 mG  = 100 nt100
  */
 typedef struct {
-    int32_t x_nt100;   /**< X-axis magnetic field in units of 100 nT. */
-    int32_t y_nt100;   /**< Y-axis magnetic field in units of 100 nT. */
-    int32_t z_nt100;   /**< Z-axis magnetic field in units of 100 nT. */
+    int32_t x_nt100; /**< X-axis magnetic field in units of 100 nT. */
+    int32_t y_nt100; /**< Y-axis magnetic field in units of 100 nT. */
+    int32_t z_nt100; /**< Z-axis magnetic field in units of 100 nT. */
 
     /** True if STATUS.OVL was set — at least one axis is saturated. */
-    bool    overflow;
+    bool overflow;
 } qmc5883l_sample_t;
 
 /**
@@ -239,8 +241,7 @@ void mag_qmc5883l_close(qmc5883l_ctx_t *ctx);
  *         -ETIMEDOUT : DRDY not asserted within timeout_ms.
  *         -EIO    : I2C read error.
  */
-int mag_qmc5883l_read(qmc5883l_ctx_t *ctx,
-                      qmc5883l_sample_t *sample,
+int mag_qmc5883l_read(qmc5883l_ctx_t *ctx, qmc5883l_sample_t *sample,
                       unsigned int timeout_ms);
 
 /**
@@ -255,8 +256,7 @@ int mag_qmc5883l_read(qmc5883l_ctx_t *ctx,
  * @param[in]  timeout_ms Maximum wait for DRDY (0 = no wait).
  * @return 0 on success, negative errno on error.
  */
-int mag_qmc5883l_read_raw(qmc5883l_ctx_t *ctx,
-                          qmc5883l_raw_t *raw,
+int mag_qmc5883l_read_raw(qmc5883l_ctx_t *ctx, qmc5883l_raw_t *raw,
                           unsigned int timeout_ms);
 
 #ifdef __cplusplus

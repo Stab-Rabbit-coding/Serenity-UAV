@@ -1224,8 +1224,15 @@ def gen_sch() -> str:
     )
     for i, net in enumerate(
         [
-            "CSI_CLK_P", "CSI_CLK_N", "CSI_D0_P", "CSI_D0_N", "CAM_SDA",
-            "CAM_SCL", "CAM_RESET_N", "+3V3", "GND",
+            "CSI_CLK_P",
+            "CSI_CLK_N",
+            "CSI_D0_P",
+            "CSI_D0_N",
+            "CAM_SDA",
+            "CAM_SCL",
+            "CAM_RESET_N",
+            "+3V3",
+            "GND",
         ]
     ):
         parts.append(glabel_conn(net, dsx, dsy, 9, i))

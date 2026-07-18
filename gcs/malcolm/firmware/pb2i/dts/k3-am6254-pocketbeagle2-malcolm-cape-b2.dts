@@ -86,10 +86,10 @@
     };
 
     /*
-     * UART5 — XCVR-49MHZ-2 AX.25 RCRS
+     * UART5 — XCVR-49MHZ-2 AX.25
      * [ESTIMATE] Offsets follow AM62x pad-table pattern.
      */
-    malcolm_rcrs_uart_pins: malcolm-rcrs-uart-pins {
+    malcolm_xcvr_49mhz_uart_pins: malcolm-xcvr-49mhz-uart-pins {
         pinctrl-single,pins = <
             AM62X_IOPAD(0x006C, PIN_INPUT,  3)   /* UART5_RXD */
             AM62X_IOPAD(0x0068, PIN_OUTPUT, 3)   /* UART5_TXD */
@@ -168,5 +168,5 @@
 &main_uart5 {
     status = "okay";
     pinctrl-names = "default";
-    pinctrl-0 = <&malcolm_rcrs_uart_pins>;
+    pinctrl-0 = <&malcolm_xcvr_49mhz_uart_pins>;
 };
