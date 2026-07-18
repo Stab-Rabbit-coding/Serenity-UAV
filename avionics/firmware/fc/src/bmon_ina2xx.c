@@ -45,8 +45,7 @@
 struct bmon_ina2xx_ctx {
     int             fd;      /**< Open /dev/i2c-N file descriptor. */
     bmon_ina_type_t type;    /**< INA219 or INA226. */
-    uint32_t current_lsb_ua; /**< INA226 current LSB in µA (0 = voltage-only
-                                mode). */
+    uint32_t current_lsb_ua; /**< INA226 current LSB µA (0=voltage-only). */
 };
 
 /* ---------------------------------------------------------------------------

@@ -170,14 +170,36 @@
         disagreeing version) with the rationale recorded there and in `.clang-format`.
         Re-ran `clang-format -i` under the pinned 22.1.8 across all 27 active files;
         `gcc -fsyntax-only` and the existing test suites re-verified clean.
-      - `CPP` (cpplint) — root-caused via the same CI run: **all 25 findings were
-        `legal/copyright`** ("No copyright message found"), not the header-guard/
-        include-subdir/Google-style findings a bare local `cpplint` run also surfaces
-        (those aren't part of CI's actual enabled rule set, so were out of scope).
-        Added a `Copyright 2026 Steve Griffing` line to each of the 25 files' existing
-        `Author:`/`License:` header block — additive, doesn't remove or contradict the
-        project's CC BY 4.0 attribution convention. `cpplint` confirms 0
-        `legal/copyright` findings on the same file set now.
+      - `CPP` (cpplint) — root-caused via two successive CI runs (the first fix pass
+        only addressed `legal/copyright`, having mis-scoped the CI log grep; the
+        re-run's failure revealed the rest). Full breakdown across the 27 active
+        firmware files: `legal/copyright` 25, `build/header_guard` 26,
+        `build/include_subdir` 18, `runtime/int` 17, `build/include_order` 12,
+        `whitespace/parens` 1, `readability/multiline_comment` 1.
+        - `legal/copyright` — added a `Copyright 2026 Steve Griffing` line to each
+          affected file's existing `Author:`/`License:` header block — additive,
+          doesn't remove or contradict the project's CC BY 4.0 attribution convention.
+        - `whitespace/parens` + `readability/multiline_comment` (both on the same line,
+          `bmon_ina2xx.c`) — a Doxygen comment wrapped across 2 lines because the
+          single-line form was 86 columns; cpplint's parens check misfired on the
+          wrapped, non-ASCII (µ) continuation. Reflowed the comment text to fit under
+          80 columns on one line, resolving both.
+        - `build/header_guard`, `build/include_subdir`, `build/include_order`,
+          `runtime/int` — added `CPPLINT.cfg` (cpplint's own, auto-discovered config
+          mechanism) filtering these 4 categories, each because cpplint is enforcing
+          Google **C++** Style Guide conventions this **C** codebase never followed and
+          in some cases structurally cannot follow: short symbol-only header guards
+          (`SI5351_H`) used consistently repo-wide; peer headers included by bare
+          filename (matches the CMake include-path setup, not a subdirectory layout);
+          `main.c` files that are leaf entry points with no matching `main.h`, which
+          cpplint's "primary header" heuristic doesn't account for; and `long` used
+          exclusively as `strtol()`/`strtoul()`'s own standard C return type. Full
+          rationale recorded in `CPPLINT.cfg` itself. `readability/casting` (20 hits on
+          the first-ever cpplint pass, for this codebase's C-style casts) turned out to
+          no longer fire after the `clang-format 22` reformatting pass — verified
+          empirically, not filtered, since the exact mechanism is cpplint's own
+          cast-detection heuristic rather than a code change on this project's part.
+        `cpplint` confirms 0 findings across the full 27-file set now.
       - `JSCPD` — root-caused via the same CI run: super-linter runs jscpd **per file**
         (self-comparison within one file), not the repo-wide cross-file scan used to
         produce the earlier 142-clone estimate below. Only 3 files had real *internal*
@@ -223,16 +245,6 @@
       - `NATURAL_LANGUAGE` — super-linter's prose linter (textlint-based) has no readily
         available standalone equivalent in this environment; also already `false` in
         `super-linter.yml` for the same reason.
-      - Beyond the CI-scoped `legal/copyright` fix above, a bare local `cpplint` run
-        (no filter — broader than CI's actual enabled rule set) also surfaces ~113
-        findings that are cpplint enforcing Google C++ style conventions this project
-        has *never* followed and explicitly overrides elsewhere: short symbol-only
-        header guards (`SI5351_H`, not `AVIONICS_FIRMWARE_CN_SRC_SI5351_H_`) used
-        consistently repo-wide; `.clang-format` itself already documents a deliberate
-        Google-style deviation (4-space indent, "AGENTS.md mandates 4-space
-        indentation ... overrides clang-format's Google-style default of 2"). Not
-        applied — would be pure churn against the project's own established
-        convention, and isn't part of CI's actual gate.
       - Beyond the 3 real per-file duplicates fixed above, a repo-wide cross-file jscpd
         scan (not what CI actually runs) also surfaces ~142 clones at a 10-line/
         50-token threshold. The overwhelming majority are either intentional structural
