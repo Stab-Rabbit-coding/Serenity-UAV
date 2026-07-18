@@ -272,15 +272,33 @@ PHI_OPEN   = asin((R_HINGE - NOZZLE_OPEN_R)   / FLAP_LENGTH);   // =  3.58 deg
 // throat tube while the spiral slot still reaches the pin) while spanning
 // a PIN_R_REF_OPEN - PIN_R_REF_CLOSED range usable by the cam:
 //   pin_r(phi) = R_HINGE + TAB_X*cos(phi) - TAB_Z*sin(phi)
-// Solved for pin_r(PHI_OPEN) = PIN_R_REF_OPEN, pin_r(PHI_CLOSED) = PIN_R_REF_CLOSED:
+// Solved for pin_r(PHI_OPEN) = PIN_R_REF_OPEN, pin_r(PHI_CLOSED) = PIN_R_REF_CLOSED.
+// Rearranging pin_r(phi) = R_HINGE + TAB_X*cos(phi) - TAB_Z*sin(phi) gives, at
+// each reference angle,  TAB_X*cos - TAB_Z*sin = (PIN_R_REF - R_HINGE)  — the
+// RHS is (target radius MINUS hinge radius), a POSITIVE number here (the pin
+// sits OUTBOARD of the hinge, at the ring).  The two-equation solution below
+// carries that (PIN_R_REF - R_HINGE) sign.
+//
+// SIGN-BUG FIX (Rev S2, 2026-07-18): the prior form wrote the RHS as
+// (R_HINGE - PIN_R_REF), i.e. negated — which flipped TAB_X/TAB_Z to ≈ −8,
+// driving the follower pin INWARD to R≈20–24 mm and AFT to Z≈20–26 mm: into
+// the core exhaust jet (bore R25) and 12–18 mm downstream of the ring, so it
+// both disrupted the airflow AND never reached the ring's spiral cam slots
+// (which are cut at pin_r 30–38 mm — see pin_r_at_theta / SPIRAL_R_LO/HI).
+// The nozzle therefore could not actuate as drawn.  Correcting the RHS sign
+// restores the header/trade-doc intent: follower at pin_r 31→35 mm, upstream
+// in the housing wall, fully clear of the smooth inner bore.  (Found while
+// investigating a user report of "a hook in the middle of the airflow" on
+// each flap's interior face, 2026-07-18.)  AI contribution: Claude (Opus 4.8,
+// Anthropic), directed by Steve Griffing.
 PIN_R_REF_CLOSED = 31.0;   // [mm] follower-pin radius at theta_ring = 0 (closed)
 PIN_R_REF_OPEN   = 35.0;   // [mm] follower-pin radius at theta_ring = 23.86 deg (open)
 
-TAB_Z = ((R_HINGE - PIN_R_REF_OPEN) - (R_HINGE - PIN_R_REF_CLOSED) * cos(PHI_OPEN) / cos(PHI_CLOSED))
+TAB_Z = ((PIN_R_REF_OPEN - R_HINGE) - (PIN_R_REF_CLOSED - R_HINGE) * cos(PHI_OPEN) / cos(PHI_CLOSED))
         / (sin(PHI_CLOSED) * cos(PHI_OPEN) / cos(PHI_CLOSED) - sin(PHI_OPEN));
-                            // [mm] =~ 8.5, axial (upstream) component of the lever tab
-TAB_X = (R_HINGE - PIN_R_REF_CLOSED + TAB_Z * sin(PHI_CLOSED)) / cos(PHI_CLOSED);
-                            // [mm] =~ 8.1, radial (outward) component of the lever tab
+                            // [mm] =~ +8.5, axial (upstream) component of the lever tab
+TAB_X = ((PIN_R_REF_CLOSED - R_HINGE) + TAB_Z * sin(PHI_CLOSED)) / cos(PHI_CLOSED);
+                            // [mm] =~ +8.1, radial (outward) component of the lever tab
 
 FOLLOWER_PIN_D   = 2.0;    // [mm] follower pin OD (SS dowel)
 FOLLOWER_PIN_L   = 4.0;    // [mm] follower pin length (engages the ring's slot pocket)
