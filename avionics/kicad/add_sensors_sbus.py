@@ -940,7 +940,7 @@ def inst_j_xcvr(cx: float, cy: float) -> str:
     Pin tip positions (tip_x = cx + 2.54 = 102.54):
       Pin 1 (102.54, 553.65)  →  GND power
       Pin 2 (102.54, 556.19)  →  +5V power
-      Pin 3 (102.54, 558.73)  →  global UART_RCRS_TX (angle=0)
+      Pin 3 (102.54, 558.73)  →  global UART_49MHZ_XCVR_TX (angle=0)
       Pin 4 (102.54, 561.27)  →  global XCVR_RX_RAW  (angle=0)
       Pin 5 (102.54, 563.81)  →  global XCVR_PTT_N   (angle=0)
       Pin 6 (102.54, 566.35)  →  +3V3 power
@@ -952,7 +952,7 @@ def inst_j_xcvr(cx: float, cy: float) -> str:
     tip_x = cx + 2.54         # 102.54
     y_p1 = cy - 6.35          # 553.65 — GND
     y_p2 = cy - 3.81          # 556.19 — +5V
-    y_p3 = cy - 1.27          # 558.73 — UART_RCRS_TX
+    y_p3 = cy - 1.27          # 558.73 — UART_49MHZ_XCVR_TX
     y_p4 = cy + 1.27          # 561.27 — XCVR_RX_RAW
     y_p5 = cy + 3.81          # 563.81 — XCVR_PTT_N
     y_p6 = cy + 6.35          # 566.35 — +3V3
@@ -994,7 +994,7 @@ def inst_j_xcvr(cx: float, cy: float) -> str:
     (property "Value" "+5V" (at {tip_x:.2f} {y_p2 - 2.54:.2f} 0) (effects (font (size 1.27 1.27))))
     (pin "1" (uuid "{next_uuid_b()}"))
   )
-  (global_label "UART_RCRS_TX" (shape bidirectional) (at {tip_x:.2f} {y_p3:.2f} 0)
+  (global_label "UART_49MHZ_XCVR_TX" (shape bidirectional) (at {tip_x:.2f} {y_p3:.2f} 0)
     (effects (font (size 1.016 1.016)))
     (uuid "{next_uuid_b()}")
     (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {tip_x:.2f} {y_p3:.2f} 0)
@@ -1149,7 +1149,7 @@ def inst_r_xcvr_rx(cx: float, cy: float, sw_no1_x: float) -> str:
 
     Pin tip positions:
       Pin 1 tip at (cx − 3.81, cy) = (264.19, 559.46)  →  wire from SW1 NO1
-      Pin 2 tip at (cx + 3.81, cy) = (271.81, 559.46)  →  global UART_RCRS_RX (angle=0)
+      Pin 2 tip at (cx + 3.81, cy) = (271.81, 559.46)  →  global UART_49MHZ_XCVR_RX (angle=0)
 
     Args:
         cx: Component centre X in mm.
@@ -1177,7 +1177,7 @@ def inst_r_xcvr_rx(cx: float, cy: float, sw_no1_x: float) -> str:
   (wire (pts (xy {sw_no1_x:.2f} {cy:.2f}) (xy {left_tip_x:.2f} {cy:.2f}))
     (stroke (width 0) (type default))
     (uuid "{next_uuid_b()}"))
-  (global_label "UART_RCRS_RX" (shape bidirectional) (at {right_tip_x:.2f} {cy:.2f} 0)
+  (global_label "UART_49MHZ_XCVR_RX" (shape bidirectional) (at {right_tip_x:.2f} {cy:.2f} 0)
     (effects (font (size 1.016 1.016)))
     (uuid "{next_uuid_b()}")
     (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {right_tip_x:.2f} {cy:.2f} 0)
@@ -1191,7 +1191,7 @@ def inst_r_sbus_rx(cx: float, cy: float, sw_no2_x: float) -> str:
 
     Pin tip positions:
       Pin 1 tip at (cx − 3.81, cy) = (264.19, 564.54)  →  wire from SW1 NO2
-      Pin 2 tip at (cx + 3.81, cy) = (271.81, 564.54)  →  global UART_RCRS_RX (angle=0)
+      Pin 2 tip at (cx + 3.81, cy) = (271.81, 564.54)  →  global UART_49MHZ_XCVR_RX (angle=0)
 
     Args:
         cx: Component centre X in mm.
@@ -1219,7 +1219,7 @@ def inst_r_sbus_rx(cx: float, cy: float, sw_no2_x: float) -> str:
   (wire (pts (xy {sw_no2_x:.2f} {cy:.2f}) (xy {left_tip_x:.2f} {cy:.2f}))
     (stroke (width 0) (type default))
     (uuid "{next_uuid_b()}"))
-  (global_label "UART_RCRS_RX" (shape bidirectional) (at {right_tip_x:.2f} {cy:.2f} 0)
+  (global_label "UART_49MHZ_XCVR_RX" (shape bidirectional) (at {right_tip_x:.2f} {cy:.2f} 0)
     (effects (font (size 1.016 1.016)))
     (uuid "{next_uuid_b()}")
     (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {right_tip_x:.2f} {cy:.2f} 0)
@@ -1538,8 +1538,8 @@ def main() -> None:
         ("R_SBUS_RX", True),
         ("XCVR_RX_RAW", True),
         ("SBUS_INV_RX", True),
-        ("UART_RCRS_TX", True),
-        ("UART_RCRS_RX", True),
+        ("UART_49MHZ_XCVR_TX", True),
+        ("UART_49MHZ_XCVR_RX", True),
         ("XCVR_PTT_N", True),
     ]
     print("  Sanity checks (Cape-B-1):")

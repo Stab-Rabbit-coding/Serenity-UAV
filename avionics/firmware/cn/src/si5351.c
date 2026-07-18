@@ -97,7 +97,7 @@
 #define XTAL_LOAD_10PF ((uint8_t)0xD2U)
 
 /* ---------------------------------------------------------------------------
- * Precomputed PLLA register sets for each RCRS channel
+ * Precomputed PLLA register sets for each 49 MHz XCVR channel
  *
  * Each entry encodes the 8 bytes written to registers 26–33.
  * Calculation verified against AN619 Table 1 formulas.
@@ -114,7 +114,7 @@
 typedef struct {
     uint32_t freq_hz;     /**< Output frequency in Hz */
     uint8_t  msna[8];     /**< Bytes for PLLA registers 26–33 */
-} rcrs_channel_reg_t;
+} xcvr_49mhz_channel_reg_t;
 
 /**
  * @brief Pack PLLA parameters into the 8-byte register block.
@@ -134,14 +134,14 @@ typedef struct {
     (uint8_t)((p2) & 0xFFU)             /* R33 P2[7:0]  */ \
 }
 
-static const rcrs_channel_reg_t s_rcrs_channels[SI5351_RCRS_NUM_CHANNELS] = {
+static const xcvr_49mhz_channel_reg_t s_xcvr_49mhz_channels[SI5351_49MHZ_XCVR_NUM_CHANNELS] = {
     /*
      * CH0: 49.830 MHz — VCO=697.620 MHz — mult=27+1131/1250
      *   P1 = 128*27 + floor(128*1131/1250) - 512 = 3456 + 115 - 512 = 3059
      *   P2 = 128*1131 - 1250*115 = 144768 - 143750 = 1018
      *   P3 = 1250
      */
-    { SI5351_RCRS_CH0_HZ, MSNA_REGS(3059U, 1018U, 1250U) },
+    { SI5351_49MHZ_XCVR_CH0_HZ, MSNA_REGS(3059U, 1018U, 1250U) },
 
     /*
      * CH1: 49.845 MHz — VCO=697.830 MHz — mult=27+2283/2500
@@ -149,7 +149,7 @@ static const rcrs_channel_reg_t s_rcrs_channels[SI5351_RCRS_NUM_CHANNELS] = {
      *   P2 = 128*2283 - 2500*116 = 292224 - 290000 = 2224
      *   P3 = 2500
      */
-    { SI5351_RCRS_CH1_HZ, MSNA_REGS(3060U, 2224U, 2500U) },
+    { SI5351_49MHZ_XCVR_CH1_HZ, MSNA_REGS(3060U, 2224U, 2500U) },
 
     /*
      * CH2: 49.860 MHz — VCO=698.040 MHz — mult=27+576/625
@@ -157,7 +157,7 @@ static const rcrs_channel_reg_t s_rcrs_channels[SI5351_RCRS_NUM_CHANNELS] = {
      *   P2 = 128*576 - 625*117 = 73728 - 73125 = 603
      *   P3 = 625
      */
-    { SI5351_RCRS_CH2_HZ, MSNA_REGS(3061U, 603U, 625U) },
+    { SI5351_49MHZ_XCVR_CH2_HZ, MSNA_REGS(3061U, 603U, 625U) },
 
     /*
      * CH3: 49.875 MHz — VCO=698.250 MHz — mult=27+93/100
@@ -165,7 +165,7 @@ static const rcrs_channel_reg_t s_rcrs_channels[SI5351_RCRS_NUM_CHANNELS] = {
      *   P2 = 128*93 - 100*119 = 11904 - 11900 = 4
      *   P3 = 100
      */
-    { SI5351_RCRS_CH3_HZ, MSNA_REGS(3063U, 4U, 100U) },
+    { SI5351_49MHZ_XCVR_CH3_HZ, MSNA_REGS(3063U, 4U, 100U) },
 
     /*
      * CH4: 49.890 MHz — VCO=698.460 MHz — mult=27+1173/1250
@@ -173,7 +173,7 @@ static const rcrs_channel_reg_t s_rcrs_channels[SI5351_RCRS_NUM_CHANNELS] = {
      *   P2 = 128*1173 - 1250*120 = 150144 - 150000 = 144
      *   P3 = 1250
      */
-    { SI5351_RCRS_CH4_HZ, MSNA_REGS(3064U, 144U, 1250U) },
+    { SI5351_49MHZ_XCVR_CH4_HZ, MSNA_REGS(3064U, 144U, 1250U) },
 };
 
 /*
@@ -302,13 +302,13 @@ err_close:
     return rc;
 }
 
-int si5351_set_rcrs_channel(si5351_ctx_t *ctx, unsigned int channel)
+int si5351_set_49mhz_xcvr_channel(si5351_ctx_t *ctx, unsigned int channel)
 {
-    if (ctx == NULL || channel >= SI5351_RCRS_NUM_CHANNELS) {
+    if (ctx == NULL || channel >= SI5351_49MHZ_XCVR_NUM_CHANNELS) {
         return -EINVAL;
     }
 
-    const rcrs_channel_reg_t *ch = &s_rcrs_channels[channel];
+    const xcvr_49mhz_channel_reg_t *ch = &s_xcvr_49mhz_channels[channel];
     int rc;
 
     /* Disable CLK0 output while reprogramming the PLL. */

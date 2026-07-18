@@ -7,7 +7,7 @@
 **Status:** Schematic-first reconciliation COMPLETE — `Emma.kicad_sch` authored from the
 as-placed PCB (`gen_emma_sch.py`), PCB transformed to match (`mod_emma_pcb.py`); sch↔pcb
 parity exact (74 refs / 104 nets / 0 pin-count mismatches), ERC 0 errors. J1 (JST-GH-6P)
-DROPPED — modem UART now rides the PB2-P1 rails (`UART_RCRS_RX`/`_TX`); PTT_N and a new
+DROPPED — modem UART now rides the PB2-P1 rails (`UART_49MHZ_XCVR_RX`/`_TX`); PTT_N and a new
 on-board `RSSI_DCD` carrier-detect ride presence-gated PB2-P2 payload GPIOs. Open (TODO.md
 §1.2b): manual placement/routing of the 4 new RSSI parts (parked off-board), `RSSI_CMP`
 part/pinout datasheet vetting, PTT/RSSI pinmux firmware sign-off, and 3 pre-existing
@@ -37,7 +37,7 @@ constraints from XCVR-49MHZ-1 apply unchanged.
 
 ### 1. J1 host interface — EMI filter and protection
 
-The 6-pin 2.54 mm pitch header J1 that connects to Zoë's RCRS-49 port is the
+The 6-pin 2.54 mm pitch header J1 that connects to Zoë's XCVR-49MHZ port is the
 primary EMI ingress path. Any high-frequency conducted noise arriving on the UART and
 PTT lines from the CAPE-B harness routes directly to the Si5351A logic interface
 and MCP4921 SPI port. Emma adds a three-tier protection network:

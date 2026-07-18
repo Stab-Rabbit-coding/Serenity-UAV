@@ -60,7 +60,7 @@ struct xcvr_kiss_ctx {
     pthread_t                  rx_thread;       /**< Background receive thread */
     pthread_mutex_t            tx_mutex;        /**< Serialises transmit calls */
     volatile bool              rx_running;      /**< Set false to stop rx_thread */
-    unsigned int               current_channel; /**< Currently selected RCRS channel */
+    unsigned int               current_channel; /**< Currently selected 49 MHz XCVR channel */
     xcvr_rx_callback_t         rx_callback;     /**< RX frame callback */
     void                      *rx_userdata;     /**< Caller context for rx_callback */
 };
@@ -353,7 +353,7 @@ int xcvr_kiss_open(const xcvr_kiss_config_t *config,
     if (config->uart_dev == NULL || config->gpio_chip == NULL) {
         return -EINVAL;
     }
-    if (config->default_channel >= SI5351_RCRS_NUM_CHANNELS) {
+    if (config->default_channel >= SI5351_49MHZ_XCVR_NUM_CHANNELS) {
         return -EINVAL;
     }
 
@@ -377,7 +377,7 @@ int xcvr_kiss_open(const xcvr_kiss_config_t *config,
         goto err_close_uart;
     }
 
-    rc = si5351_set_rcrs_channel(ctx->si5351, config->default_channel);
+    rc = si5351_set_49mhz_xcvr_channel(ctx->si5351, config->default_channel);
     if (rc != 0) {
         goto err_close_si5351;
     }
@@ -504,7 +504,7 @@ int xcvr_kiss_transmit(xcvr_kiss_ctx_t *ctx,
     if (ctx == NULL || ax25_payload == NULL) {
         return -EINVAL;
     }
-    if (channel >= SI5351_RCRS_NUM_CHANNELS) {
+    if (channel >= SI5351_49MHZ_XCVR_NUM_CHANNELS) {
         return -EINVAL;
     }
     if (payload_len == 0U || payload_len > KISS_MAX_AX25_LEN) {
@@ -523,9 +523,9 @@ int xcvr_kiss_transmit(xcvr_kiss_ctx_t *ctx,
 
     (void)pthread_mutex_lock(&ctx->tx_mutex);
 
-    /* 1. Select RCRS channel on the Si5351A DDS. */
+    /* 1. Select 49 MHz XCVR channel on the Si5351A DDS. */
     if (channel != ctx->current_channel) {
-        rc = si5351_set_rcrs_channel(ctx->si5351, channel);
+        rc = si5351_set_49mhz_xcvr_channel(ctx->si5351, channel);
         if (rc != 0) {
             goto tx_done;
         }

@@ -48,7 +48,7 @@
 //   S6A  -- VL53L5CX nadir ToF,      Array A (FC3), sta 213 mm
 //   S6B  -- VL53L5CX nadir ToF,      Array B (FC2), sta 293 mm
 //   GPS  -- 25x25 mm GPS patch antenna, dorsal centreline, sta 209 mm
-//   ANT  -- 49 MHz RCRS whip post boss (1.5 mm protrusion), dorsal, sta 234 mm
+//   ANT  -- 49 MHz XCVR whip post boss (1.5 mm protrusion), dorsal, sta 234 mm
 //   SiK  -- SMA bulkhead, 915 MHz SiK telemetry,  port side,  sta 224 mm
 //   ZBE  -- SMA bulkhead, 2.4 GHz ZigBee,         stbd side,  sta 224 mm
 //   WIFI -- SMA bulkhead, 5 GHz WiFi,              port side,  sta 264 mm
@@ -159,7 +159,7 @@ GPS_M2_S     = 24.0;   // mm -- M2 bolt spacing (4 corners)
 GPS_CSK2_OD  =  4.5;   // mm -- M2 flathead c/s OD (DIN 7991, 90 deg)
 GPS_CSK2_D   =  1.2;   // mm -- M2 c/s depth
 
-// 49 MHz RCRS antenna post boss
+// 49 MHz XCVR antenna post boss
 //   Minimum 1.5 mm protrusion to register antenna base above hull waterline.
 //   M4 threaded insert (pressed from interior) retains antenna base flange.
 ANT49_BOSS_OD    = 12.0;   // mm -- post boss OD (reduced to minimum functional)
@@ -209,7 +209,7 @@ S6B_POS = [  -9, VENTRAL_Y, MID_Z ]; // VERIFY: ventral hull, sta 293 mm
 //   Broad, flat dorsal surface provides optimal GPS ground plane and sky view.
 GPS_POS  = [  75, DORSAL_Y, MID_Z ]; // VERIFY: dorsal centreline, sta 209 mm
 
-// 49 MHz RCRS post -- dorsal centreline, station 234 mm (X_stl = 50), aft of GPS
+// 49 MHz XCVR post -- dorsal centreline, station 234 mm (X_stl = 50), aft of GPS
 ANT49_POS = [ 50, DORSAL_Y, MID_Z ]; // VERIFY: dorsal centreline, sta 234 mm
 
 // SiK 915 MHz SMA -- port side, station 224 mm (X_stl = 60)
@@ -296,7 +296,7 @@ module gps_cut(pos, rot) {
 
 // ----------------------------------------------------------------------------
 // Module: ant49_boss
-//   Minimal 1.5 mm post boss for 49 MHz RCRS antenna base registration.
+//   Minimal 1.5 mm post boss for 49 MHz XCVR antenna base registration.
 //   This is the only external protrusion; required to keep the antenna base
 //   above the hull waterline.
 // ----------------------------------------------------------------------------

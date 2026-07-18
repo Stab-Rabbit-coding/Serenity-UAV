@@ -21,7 +21,7 @@
  *   -i <bus>      I²C bus number for Si5351A DDS (default: 1)
  *   -g <chip>     GPIO chip for PTT_N (default: /dev/gpiochip0)
  *   -l <line>     GPIO line offset for PTT_N (default: 10)
- *   -c <channel>  Initial RCRS channel 0–4 (default: 0 = 49.830 MHz)
+ *   -c <channel>  Initial 49 MHz XCVR channel 0–4 (default: 0 = 49.830 MHz)
  *   -h            Print this help and exit
  *
  * Exit codes:
@@ -51,7 +51,7 @@
 #define DEFAULT_I2C_BUS       (1)
 #define DEFAULT_GPIO_CHIP     "/dev/gpiochip0"
 #define DEFAULT_PTT_LINE      (10U)
-#define DEFAULT_RCRS_CHANNEL  (0U)
+#define DEFAULT_49MHZ_XCVR_CHANNEL  (0U)
 
 /* ---------------------------------------------------------------------------
  * Shutdown flag — set by signal handler
@@ -72,7 +72,7 @@ static void sig_handler(int sig)
 
 /**
  * @brief Receive callback: called for every decoded AX.25 frame from the
- *        49 MHz RCRS link.
+ *        49 MHz XCVR link.
  *
  * In Phase 7 this function will forward the frame to the AX.25 stack,
  * authenticate the HMAC, and log it via the CN node log subsystem.
@@ -101,14 +101,14 @@ static void print_usage(const char *prog)
         "  -i <bus>      I2C bus number for Si5351A   (default: %d)\n"
         "  -g <chip>     GPIO chip path for PTT_N     (default: %s)\n"
         "  -l <line>     GPIO line offset for PTT_N   (default: %u)\n"
-        "  -c <channel>  Initial RCRS channel 0-4     (default: %u = 49.830 MHz)\n"
+        "  -c <channel>  Initial 49 MHz XCVR channel 0-4 (default: %u = 49.830 MHz)\n"
         "  -h            Print this help and exit\n",
         prog,
         DEFAULT_UART_DEV,
         DEFAULT_I2C_BUS,
         DEFAULT_GPIO_CHIP,
         DEFAULT_PTT_LINE,
-        DEFAULT_RCRS_CHANNEL);
+        DEFAULT_49MHZ_XCVR_CHANNEL);
 }
 
 /**
@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
     int           i2c_bus       = DEFAULT_I2C_BUS;
     const char   *gpio_chip     = DEFAULT_GPIO_CHIP;
     unsigned int  ptt_line      = DEFAULT_PTT_LINE;
-    unsigned int  rcrs_channel  = DEFAULT_RCRS_CHANNEL;
+    unsigned int  xcvr_49mhz_channel  = DEFAULT_49MHZ_XCVR_CHANNEL;
 
     /* --- Argument parsing --- */
     int opt;
@@ -169,14 +169,14 @@ int main(int argc, char *argv[])
             }
             case 'c': {
                 long v = parse_int(optarg);
-                if (v < 0 || (unsigned long)v >= SI5351_RCRS_NUM_CHANNELS) {
+                if (v < 0 || (unsigned long)v >= SI5351_49MHZ_XCVR_NUM_CHANNELS) {
                     (void)fprintf(stderr,
-                                  "Invalid RCRS channel: %s (must be 0-%u)\n",
+                                  "Invalid 49 MHz XCVR channel: %s (must be 0-%u)\n",
                                   optarg,
-                                  SI5351_RCRS_NUM_CHANNELS - 1U);
+                                  SI5351_49MHZ_XCVR_NUM_CHANNELS - 1U);
                     return 1;
                 }
-                rcrs_channel = (unsigned int)v;
+                xcvr_49mhz_channel = (unsigned int)v;
                 break;
             }
             case 'h':
@@ -202,7 +202,7 @@ int main(int argc, char *argv[])
         .gpio_chip       = gpio_chip,
         .ptt_gpio_line   = ptt_line,
         .si5351_i2c_bus  = i2c_bus,
-        .default_channel = rcrs_channel,
+        .default_channel = xcvr_49mhz_channel,
         .rx_callback     = on_rx_frame,
         .rx_userdata     = NULL,
     };
@@ -220,8 +220,8 @@ int main(int argc, char *argv[])
                   "serenity-cn: XCVR-49MHZ-1 ready — UART %s, channel %u"
                   " (%.3f MHz)\n",
                   uart_dev,
-                  rcrs_channel,
-                  (double)(49830U + rcrs_channel * 15U) / 1000.0);
+                  xcvr_49mhz_channel,
+                  (double)(49830U + xcvr_49mhz_channel * 15U) / 1000.0);
 
     /*
      * Phase 6 main loop — minimal: runs until SIGTERM/SIGINT.

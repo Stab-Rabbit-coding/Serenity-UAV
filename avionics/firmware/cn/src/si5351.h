@@ -51,22 +51,22 @@ extern "C" {
  * ---------------------------------------------------------------------------*/
 
 /** Number of legal 49 MHz channels. */
-#define SI5351_RCRS_NUM_CHANNELS  (5U)
+#define SI5351_49MHZ_XCVR_NUM_CHANNELS  (5U)
 
 /** 49 MHz channel 0 — 49.830 MHz. */
-#define SI5351_RCRS_CH0_HZ  (49830000UL)
+#define SI5351_49MHZ_XCVR_CH0_HZ  (49830000UL)
 
 /** 49 MHz channel 1 — 49.845 MHz. */
-#define SI5351_RCRS_CH1_HZ  (49845000UL)
+#define SI5351_49MHZ_XCVR_CH1_HZ  (49845000UL)
 
 /** 49 MHz channel 2 — 49.860 MHz. */
-#define SI5351_RCRS_CH2_HZ  (49860000UL)
+#define SI5351_49MHZ_XCVR_CH2_HZ  (49860000UL)
 
 /** 49 MHz channel 3 — 49.875 MHz. */
-#define SI5351_RCRS_CH3_HZ  (49875000UL)
+#define SI5351_49MHZ_XCVR_CH3_HZ  (49875000UL)
 
 /** 49 MHz channel 4 — 49.890 MHz. */
-#define SI5351_RCRS_CH4_HZ  (49890000UL)
+#define SI5351_49MHZ_XCVR_CH4_HZ  (49890000UL)
 
 /* ---------------------------------------------------------------------------
  * Driver handle
@@ -107,16 +107,16 @@ int si5351_open(int bus_num, uint8_t i2c_addr, si5351_ctx_t **ctx_out);
  *
  * @param[in] ctx          Driver context from si5351_open().
  * @param[in] channel      49 MHz channel index 0–4 (maps to 49.830–49.890 MHz).
- * @return 0 on success, -EINVAL if channel ≥ SI5351_RCRS_NUM_CHANNELS,
+ * @return 0 on success, -EINVAL if channel ≥ SI5351_49MHZ_XCVR_NUM_CHANNELS,
  *         negative errno on I²C error.
  */
-int si5351_set_rcrs_channel(si5351_ctx_t *ctx, unsigned int channel);
+int si5351_set_49mhz_xcvr_channel(si5351_ctx_t *ctx, unsigned int channel);
 
 /**
  * @brief Disable CLK0 output (mute the carrier).
  *
- * Powers down the CLK0 output driver.  Call si5351_set_rcrs_channel() again
- * to re-enable.
+ * Powers down the CLK0 output driver.  Call si5351_set_49mhz_xcvr_channel()
+ * again to re-enable.
  *
  * @param[in] ctx  Driver context.
  * @return 0 on success, negative errno on I²C error.

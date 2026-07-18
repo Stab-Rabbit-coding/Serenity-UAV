@@ -103,22 +103,22 @@
  * ---------------------------------------------------------------------------*/
 
 /** UART device for XCVR-49MHZ-2. */
-#define MAL_RCRS_UART_DEV           "/dev/ttyS5"
+#define MAL_49MHZ_XCVR_UART_DEV           "/dev/ttyS5"
 
 /** XCVR-49MHZ-2 UART baud rate (1200 Bd Bell 202 AFSK). */
-#define MAL_RCRS_BAUD               (1200U)
+#define MAL_49MHZ_XCVR_BAUD               (1200U)
 
 /**
  * Default 49 MHz channel index (0–4 → 49.830, 49.845, 49.860, 49.875, 49.890 MHz).
  * Must match aircraft node channel assignment.  River = Channel 0; Simon = Channel 1.
  */
-#define MAL_RCRS_DEFAULT_CHANNEL    (0U)
+#define MAL_49MHZ_XCVR_DEFAULT_CHANNEL    (0U)
 
 /** GPIO chip for XCVR-49MHZ-2 PTT_N line. */
-#define MAL_RCRS_GPIO_CHIP          "/dev/gpiochip0"
+#define MAL_49MHZ_XCVR_GPIO_CHIP          "/dev/gpiochip0"
 
 /** GPIO line offset for XCVR-49MHZ-2 PTT_N (active low). */
-#define MAL_RCRS_PTT_LINE           (11U)
+#define MAL_49MHZ_XCVR_PTT_LINE           (11U)
 
 /* ---------------------------------------------------------------------------
  * Gimbal servo outputs (via Cape-B-2 J_SERVO, EHRPWM outputs)

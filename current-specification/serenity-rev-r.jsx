@@ -199,7 +199,7 @@ function TabOverview() {
                         ["Avionics",           "8× PocketBeagle 2 Industrial (AM6254)", "4× FC (Wash) + 4× CN (Zoë) — ALL v2"],
                         ["Cape variant",       "EMI-hardened v2 at ALL 8 positions",   "v2·v2·v2·v2 (Rev R baseline — Wash/Zoë naming finalised)"],
                         ["Data buses",         "Ethernet RSTP · CAN FD · RS-485 · MIL-STD-1553B", "All 4 on every node"],
-                        ["Radio links",        "SiK 915 MHz + LoRa 915 MHz + WiFi + RCRS 49 MHz", "All 4 on every CN node"],
+                        ["Radio links",        "SiK 915 MHz + LoRa 915 MHz + WiFi + XCVR 49 MHz", "All 4 on every CN node"],
                         ["Security",           "SLB9670 TPM 2.0 on all 8 nodes + ATF16V8BQL CPLD write-blocker", "Message signing + forensic log"],
                         ["Cargo bay",          "101.6 × 76.2 × 76.2 mm",  "Clamshell doors + N20 winch + auto-latch cradle"],
                         ["EMI protection",     "5 kV isolated transceivers on ALL 8 nodes", "IEC 62368-1 / VDE 0884-11 at every position"],
@@ -525,7 +525,7 @@ function TabAvionics() {
                         ["SiK radio",      "SiK 915 MHz MAVLink — belly port SMA bulkhead"],
                         ["LoRa radio",     "RFM95W 915 MHz backup — belly stbd SMA bulkhead"],
                         ["WiFi/BT",        "TI WL1837MOD 2.4/5 GHz — dorsal fwd SMA bulkhead"],
-                        ["RCRS-49",        "Emma sub-module — 49 MHz AX.25 RC (EMI-hardened)"],
+                        ["XCVR-49MHZ",     "Emma sub-module — 49 MHz AX.25 RC (EMI-hardened)"],
                         ["Log μSD",        "Zoë microSD slot — hardware write-blocked via CPLD"],
                         ["CPLD",           "ATF16V8BQL — hardware-enforced non-executable log storage"],
                         ["NOR flash",      "W25Q128JV 128 Mb — circular log overflow buffer"],
@@ -538,7 +538,7 @@ function TabAvionics() {
                 />
             </Card>
 
-            <Card title="Emma — EMI-Hardened 49 MHz RCRS Transceiver" accent={C.orange}>
+            <Card title="Emma — EMI-Hardened 49 MHz AX.25 Transceiver" accent={C.orange}>
                 <div style={{ fontFamily: M, fontSize: 11, color: C.green, marginBottom: 8 }}>
                     Rev R: Active design. XCVR-49MHZ-1 archived. All 4 CN positions use XCVR-49MHZ-2.
                 </div>
@@ -626,12 +626,12 @@ function TabComms() {
                         ["SiK 915 MHz",  "SiK v2 MAVLink",           "915 MHz ISM", "Primary GCS telemetry (MAVLink)", "FCC Part 15 / module FCC ID required"],
                         ["LoRa 915 MHz", "RFM95W / LoRa",             "915 MHz ISM", "Backup GCS telemetry + long-range", "FCC Part 15 / module FCC ID required"],
                         ["WiFi 2.4/5GHz","TI WL1837MOD 802.11b/g/n/ac","ISM", "GCS app link; firmware update; video stream", "FCC Part 15 / WL1837MOD certified"],
-                        ["RCRS 49 MHz",  "Emma AX.25 AFSK",  "49.830–49.890 MHz RCRS", "RC command link (backup)", "FCC Part 95 (RCRS); FCC equipment authorization required before airborne TX"],
+                        ["XCVR 49 MHz",  "Emma AX.25 AFSK",  "49.830–49.890 MHz", "RC command link (backup)", "FCC Part 15 §15.235 (not Part 95 RCRS — REF-FCC-003); FCC equipment authorization required before airborne TX"],
                     ]}
                 />
             </Card>
 
-            <Card title="RCRS-49 Antenna System" accent={C.purple}>
+            <Card title="XCVR-49MHZ Antenna System" accent={C.purple}>
                 <Table
                     cols={["Element", "Spec", "Notes"]}
                     accent={C.purple}
@@ -707,7 +707,7 @@ function TabSecurity() {
                         ["TPM 2.0",              "SLB9670 on every Wash and Zoë (8 chips total)", "Unique key material per node; HMAC-SHA256 on all flight-critical CAN FD messages; PCR extend on each boot"],
                         ["CPLD write-blocker",   "ATF16V8BQL on every Zoë (4 chips total)", "Hardware-enforced read-only append to log μSD; NX enforcement; cannot be bypassed in firmware"],
                         ["Message signing",      "TPM-bound HMAC on all outbound inter-node CAN FD frames", "Unauthenticated messages discarded by all nodes"],
-                        ["AX.25 HMAC",           "TPM-bound HMAC-SHA256 on every RCRS-49 AX.25 packet", "Receiver nodes verify before acting on RC commands"],
+                        ["AX.25 HMAC",           "TPM-bound HMAC-SHA256 on every XCVR-49MHZ AX.25 packet", "Receiver nodes verify before acting on RC commands"],
                         ["5 kV isolation",       "ISOW1044BDFMR + ADM2795EBRWZ + ADIN1300BCPZ at all 8 nodes", "Galvanic isolation prevents conducted EMI/transient propagation across bus boundaries"],
                         ["NOR flash log",        "W25Q128JV 128 Mb circular log on Zoë", "Overflow buffer for log μSD; also write-blocked; NX enforced"],
                         ["Tamper mesh",          "F.Cu/B.Cu TMESH_P/N copper nets on Wash + Zoë", "Physical intrusion detection routed to SLB9670 TPM GPIO"],
@@ -779,9 +779,9 @@ function TabRegulatory() {
                         ["SiK 915 MHz",         "FCC Part 15 ISM",     "✓ PASS", "Module must carry FCC ID marking; verify before installation"],
                         ["LoRa RFM95W 915 MHz", "FCC Part 15 ISM",     "✓ PASS", "Module FCC ID required; verify"],
                         ["WiFi WL1837MOD",       "FCC Part 15 ISM",     "✓ PASS", "TI WL1837MOD certified; verify FCC ID on module"],
-                        ["Emma",         "FCC Part 95 (RCRS)", "○ OPEN", "Equipment authorization (FCC ID grant) required before airborne TX; pre-compliance checklist in WBS §1.3 Phase 4"],
-                        ["49 MHz channels",      "47 CFR 95.623",       "○ OPEN", "Channel selection (49.830–49.890 MHz) set in CN firmware; verify FCC channel table"],
-                        ["49 MHz ERP",           "47 CFR 95.655",       "○ OPEN", "≤100 mW ERP; harmonic suppression ≥40 dBc at 98 MHz; verify with QUCS-S simulation"],
+                        ["Emma",         "47 CFR Part 15 §15.235 (REF-FCC-003)", "○ OPEN", "Equipment authorization (FCC ID grant) required before airborne TX; pre-compliance checklist in WBS §1.3 Phase 4"],
+                        ["49 MHz channels",      "47 CFR §15.235",       "○ OPEN", "Channel selection (49.830–49.890 MHz) set in CN firmware; verify FCC channel table"],
+                        ["49 MHz field strength", "47 CFR §15.235(a)",   "○ OPEN", "≤10,000 µV/m at 3 m (≈30 µW / −15.2 dBm EIRP-equivalent); firmware PA limit required — see REF-FCC-003"],
                     ]}
                 />
             </Card>
