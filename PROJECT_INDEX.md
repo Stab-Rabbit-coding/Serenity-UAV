@@ -221,6 +221,8 @@ wire_loop_fuse.scad             — [RETIRED 2026-06-20] Rev R4 Strong-Leg close
                                     wire_brace_leg.scad's single-bend bowed-wire strut
 cargo/
 cargo_sect_shell24.scad       — Rev R cargo section shell with clamshell doors, avionics bays, GPS mounts
+cargo_spar_drive.scad         — Rev R2 (2026-07-18) cargo-bay tilt-spar drive: F688ZZ root bearing seats, DS3218 servo mounts, wing-root cableway ends (both sides; self-contained hull-frame generator, merged into cargo shell)
+_export_cargo_port_root_chunk.scad — work-section cache helper (crops the port wing-root region of the cargo shell for fast feature dev)
 ```
 
 #### airframe/openscad/nacelles/
