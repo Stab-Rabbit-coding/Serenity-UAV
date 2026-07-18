@@ -104,11 +104,13 @@ In source code comments, documentation, and schematics, cite standards as follow
 ```
 
 Examples:
+
 - `[REF-MIL-001 §4.1] Manchester II encoding at 1 Mbps, 78 Ω characteristic impedance`
 - `[REF-FCC-001 §15.247(b)(3)(ii)] directional antenna gain > 6 dBi: reduce Tx 1 dB per 3 dB above 6 dBi`
 - `[REF-NIST-001 §2.1] all messages digitally signed and authenticated`
 
 When a standard has multiple applicable clauses, list them all:
+
 ```text
 [REF-IEC-001 Cl.5.5.2] and [REF-VDE-001 Cl.4.3] — 5 kV reinforced insulation barrier
 ```
@@ -552,6 +554,7 @@ ATA6561 CAN FD transceivers; 120 Ω bus termination at CN1 (Bay A) and FC4 (Bay 
 
 **Applied to:** 5 kV reinforced insulation barriers on all inter-node signal buses.  Compliance
 verified per component datasheet certifications:
+
 - CAN FD: ISOW1044BDFMR (TI) — certified IEC 62368-1 reinforced insulation at 5000 Vrms
 - RS-485: ADM2795EBRWZ (Analog Devices) — certified IEC 62368-1 reinforced insulation at 5000 Vrms
 - Ethernet: ADIN1300BCPZ PHY + ISO7642FDWRR (TI) isolator + Würth 749010012A transformer

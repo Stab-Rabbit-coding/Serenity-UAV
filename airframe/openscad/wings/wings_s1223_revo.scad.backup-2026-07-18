@@ -168,20 +168,20 @@ THICKNESS_SCALE =   1.0;  // [1.0 = full S1223 t/c; 0.85–1.0 recommended range
 // print (see TODO.md §1.1.2).  Lower the value only if the bore stays skinned.
 THICKNESS_SCALE_TIP = 1.25; // [tip thickness multiplier; root stays THICKNESS_SCALE]
 
-// ── Rotating tilt-spar bore (Rev R2 — unified 8 mm rotating spar) ────────────
-// UNIFIED ROTATING SPAR (2026-07-18): the wing's single spar is now the 8 mm
-// rotating tilt-spar (AISI 4130, hollow 5 mm ID) — it is BOTH the wing
-// structural spar AND the nacelle tilt axis, and it ROTATES (servo-driven from
-// the cargo bay, keyed to the nacelle).  The 12 mm fixed CF tube is retired.
-// This bore is therefore a rotating CLEARANCE bore (not a press-fit): the wing
-// is located by its fuselage root tab and rides on the spar at the wingtip
-// bearing (§ wing_tip_bearing_seat); the second bearing lives in the cargo bay.
-// The bore stays a SINGLE STRAIGHT cylinder at a fixed chordwise station
-// (parallel to the straight LE → no plan-view skew) centred on the airfoil
-// CAMBER MIDLINE so it stays skin-enclosed as the section tapers.  See
-// docs/TILT_SPAR_ANALYSIS.md.  (The nav-light 3-core routes INSIDE the hollow
-// spar's 5 mm ID; the EDF power/signal keep the separate double-D cableway.)
-SPAR_BORE_OD      =   8.3;  // [mm] rotating-spar clearance bore = 8 mm OD + 0.15 mm/side
+// ── Structural spar bore (Rev R1a — straight, LE-parallel, camber-centred) ──
+// CF-TUBE-12MM (12 mm OD × 1.5 mm wall) spar per bom_revO.csv.
+// The spar is a SINGLE STRAIGHT bore running spanwise at a FIXED chordwise
+// station (constant distance aft of the straight LE → NO plan-view skew) and
+// centred on the airfoil CAMBER MIDLINE (not the chord line), so it stays
+// enclosed by the skin at every station.
+//
+// Rev R1 (superseded) pinned the bore to a constant chord FRACTION (30%);
+// because the chord tapers 129→93 mm under a straight LE, that walked the bore
+// 10.8 mm forward over the 85.7 mm semi-span (7.2° plan-view skew — the "swept"
+// cutout) and, being centred on the chord line (SPAR_BORE_Y_CTR = 0), broke out
+// through the strongly-cambered S1223 lower surface (whose lower skin sits ABOVE
+// the chord line aft of ~8% chord).  Both defects are corrected here.
+SPAR_BORE_OD      =  12.3;  // [mm] bore ID = tube OD (12) + 0.3 mm slip fit
 SPAR_BORE_STATION =  22.0;  // [mm] chordwise station aft of LE — CONSTANT over the
                             //      span (≈ tip 23.7% / root 17.1% chord; near tip
                             //      max-thickness).  Constant ⇒ bore ∥ leading edge.
@@ -190,23 +190,18 @@ SPAR_BORE_STATION =  22.0;  // [mm] chordwise station aft of LE — CONSTANT ove
                             // chord fraction (midline_frac(), below) — NOT a single
                             // constant — so it stays centred (root breakout fixed).
 
-// ── Harness cableway (Rev R2) ────────────────────────────────────────────────
-// The 8 mm rotating spar is hollow (≈ 5 mm ID) — enough for the nav-light 3-core
-// (Ø 2.5 mm), which routes THROUGH the hollow spar to the outboard nacelle nav
-// light (95° tilt twist is benign — docs/TILT_SPAR_ANALYSIS.md §5), but NOT for
-// the 40 A EDF ESC feeds.  This dedicated wing conduit carries those: TWO
-// parallel Ø CABLE_BORE_D bores forming a flat "double-D" (overall ≈ 15 × 7 mm),
-// tracking a constant chord FRACTION (sweep is immaterial for a flexible
-// harness) and camber-centred at each station.  Splitting into two bores keeps
-// the EDF power pair separate from ESC signal/telemetry (noise).
+// ── Harness cableway (Rev R1a) ───────────────────────────────────────────────
+// A 12 mm CF spar tube has only ≈ 9 mm ID (12 − 2×1.5 mm wall) — enough for the
+// nav-light 3-core (Ø 2.5 mm), which routes THROUGH the hollow spar to the
+// nacelle, but NOT for the 40 A EDF ESC feeds.  This adds a dedicated wing
+// conduit: TWO parallel Ø CABLE_BORE_D bores forming a flat "double-D" (overall
+// ≈ 15 × 7 mm), tracking a constant chord FRACTION (sweep is immaterial for a
+// flexible harness) and camber-centred at each station.  Splitting into two
+// bores keeps the EDF power pair separate from ESC signal/telemetry (noise).
 CABLE_BORE_D    =   7.0;  // [mm] each conduit bore diameter (Ø7 ≈ 38 mm² each)
 CABLE_BORE_SEP  =   8.0;  // [mm] chordwise centre-to-centre (overall ≈ 15 mm wide)
-CABLE_BORE_XFR  =   0.48; // [chord fraction] cableway chordwise centre.  Moved aft
-                          //      0.40 → 0.48 (Rev R2) so the forward conduit (tip
-                          //      chordX ≈ 40.6 mm) clears the Ø26 wingtip mount pad
-                          //      (reaches chordX ≈ 35 mm); still well aft of the
-                          //      8 mm spar (ends ≈ 26% chord).  The nacelle harness
-                          //      entry port must match this station.
+CABLE_BORE_XFR  =   0.40; // [chord fraction] cableway chordwise centre (aft of spar,
+                          //      clear of the Ø12.3 spar which ends at ≈ 21.8% chord)
 
 // ── Pylon mount pocket (must match wing_nacelle_pylon_revo.scad) ────────────
 // The wing_attach_block from the pylon inserts into this pocket at the tip face.
@@ -218,55 +213,6 @@ WING_BOLT_R     =  16.0;  // [mm] M3 bolt pitch circle radius (from pocket centr
 WING_BOLT_D     =   3.4;  // [mm] M3 clearance bore (nominal 3.0 mm + 0.4 clearance)
 WING_BOLT_N     =   4;    // [count] bolt holes (45°/135°/225°/315°)
 WING_SLOT_X_CTR =   0.50; // [chord fraction] pocket centre chordwise at tip — VERIFY
-
-// ── Wing-tip rotating-spar interface (Rev R2, 2026-07-18) ─────────────────────
-// ROTATING TILT-SPAR mechanism — see docs/TILT_SPAR_ANALYSIS.md.
-//   • The 8 mm spar ROTATES (servo-driven from the cargo bay) and is FIXED to
-//     the nacelle. The wing is fixed; the spar spins inside it on two bearings
-//     (root bearing in the cargo bay + this wingtip bearing).
-//   • The wing tip therefore provides: (a) a rotating-clearance through-bore for
-//     the spar, (b) a wingtip BEARING SEAT (F688ZZ 8×16×5) that carries the
-//     wing/nacelle loads and lets the spar rotate, and (c) a FIXED R14 sector
-//     gear bolted coaxial with the spar. The nacelle's Pinion A orbits this
-//     fixed sector as the nacelle tilts → nozzle iris tracks tilt angle.
-//   • The fixed gear stands only minimally proud (TIP_PAD_PROUD); it NESTS into
-//     a shallow recess in the nacelle inboard face (docs §6.2), so the canonical
-//     nacelle silhouette is preserved and no separate pylon/block is needed.
-//   • NO nacelle boss socket (the nacelle is keyed to the spar, not pinned to a
-//     socket) — that feature is deleted vs Rev R1b.
-//
-// Rotating tilt spar (8 mm OD × 1.5 mm wall, 5 mm ID, AISI 4130 — docs §3):
-TILT_SPAR_OD          =   8.0;   // [mm] rotating spar outer diameter
-TILT_SPAR_BORE_CLEAR  =   8.3;   // [mm] rotating clearance bore through wing (0.15 mm/side)
-
-// Wingtip bearing seat (F688ZZ flanged, 8 ID × 16 OD × 5 W):
-TIP_BRG_OD            =  16.0;   // [mm] bearing outer diameter
-TIP_BRG_SEAT_D        =  15.95;  // [mm] press-fit seat bore (0.025 mm/side interference)
-TIP_BRG_W             =   5.0;   // [mm] bearing width (seat depth)
-TIP_BRG_FLANGE_OD     =  18.0;   // [mm] flange OD → shallow counterbore, seats flush
-TIP_BRG_FLANGE_T      =   1.0;   // [mm] flange counterbore depth
-
-// Fixed R14 sector gear mount (coaxial with spar, on nacelle-facing tip face):
-FIX_GEAR_BC_R         =  11.0;   // [mm] M2.5 insert bolt circle (outside 18 mm flange, inside 13 mm gear root)
-FIX_GEAR_N_BOLTS      =   3;     // [count] 120° spacing
-FIX_GEAR_INSERT_OD    =   3.7;   // [mm] M2.5 heat-set insert bore
-FIX_GEAR_INSERT_L     =   5.5;   // [mm] insert pocket depth
-FIX_GEAR_PLATE_H      =   3.0;   // [mm] sector gear plate thickness (reference)
-
-// Wingtip mount pad — minimal boss around the spar at the tip face that houses
-// the bearing seat + gear-bolt inserts. Kept low so the gear nests in the
-// nacelle recess rather than standing on a tall block.
-TIP_PAD_OD            =  26.0;   // [mm] pad OD (clears 18 mm flange + r=11 bolt circle)
-TIP_PAD_PROUD         =   2.0;   // [mm] proud height beyond wing tip face (minimal)
-
-// Spar-axis thickness (internal Y) height at the TIP station — the spar exits on
-// the camber midline, NOT the chord line, so all wingtip spar features (pad,
-// bearing seat, gear inserts) must share this Y to stay concentric with the
-// spar_bore().  Defined as a FUNCTION (not a top-level variable) so it is
-// evaluated at module-instantiation time, after the S1223_UPPER/LOWER point
-// lists exist — same expression spar_bore() uses for its tip disc.
-function spar_tip_y() = midline_frac(SPAR_BORE_STATION / WING_CHORD_TIP)
-                        * WING_CHORD_TIP * THICKNESS_SCALE_TIP;
 
 // ── Wing root fuselage tab ────────────────────────────────────────────────────
 // The root face (Z=0) must interface with the fuselage wing slot.
@@ -554,93 +500,6 @@ module pylon_mount_pocket() {
 
 
 // =============================================================================
-// ── Module: wing_tip_nacelle_mount_pad ────────────────────────────────────────
-// =============================================================================
-// Minimal boss at the wing tip face, centered on the tilt spar, that houses the
-// wingtip bearing seat and the fixed-gear bolt inserts. Kept LOW (TIP_PAD_PROUD)
-// so the fixed R14 sector gear nests into the nacelle inboard recess rather than
-// standing on a tall block — preserves the canonical nacelle silhouette.
-// Additive only; the bearing seat / bore / insert pockets are cut separately.
-module wing_tip_nacelle_mount_pad() {
-    spar_x = WING_SWEEP_LE + SPAR_BORE_STATION;  // spar chordwise position
-    spar_y = spar_tip_y();                          // spar on the camber midline (not chord line)
-    spar_z = WING_SEMI_SPAN;                      // wing tip spanwise station
-
-    // Low cylindrical pad, proud of the tip face by TIP_PAD_PROUD only.
-    translate([spar_x, spar_y, spar_z])
-        cylinder(r = TIP_PAD_OD / 2,
-                 h = TIP_PAD_PROUD,
-                 $fn = 48);
-}
-
-
-// =============================================================================
-// ── Module: wing_tip_spar_through_bore ────────────────────────────────────────
-// =============================================================================
-// Rotating-clearance bore for the 8 mm spar, spanwise through the wing tip and
-// pad. The spar ROTATES, so this is a clearance bore (TILT_SPAR_BORE_CLEAR),
-// NOT a press-fit. Centered at SPAR_BORE_STATION chordwise, Y = 0.
-module wing_tip_spar_through_bore() {
-    spar_x = WING_SWEEP_LE + SPAR_BORE_STATION;
-    spar_y = spar_tip_y();
-    bore_z_start = WING_SEMI_SPAN - 20.0;                    // well inside the wing
-    bore_z_end   = WING_SEMI_SPAN + TIP_PAD_PROUD + 2.0;     // through the pad
-
-    translate([spar_x, spar_y, bore_z_start])
-        rotate([0, 90, 0])
-            cylinder(r = TILT_SPAR_BORE_CLEAR / 2,
-                     h = bore_z_end - bore_z_start,
-                     $fn = 32);
-}
-
-
-// =============================================================================
-// ── Module: wing_tip_bearing_seat ─────────────────────────────────────────────
-// =============================================================================
-// Press-fit seat for the wingtip bearing (F688ZZ 8×16×5), bored into the pad
-// face at the tip. Outer race fixed here; inner race rotates on the spar. A
-// shallow counterbore seats the F688ZZ flange flush with the pad face.
-// The seat opens toward the nacelle (+Z spanwise), the flange facing outboard.
-module wing_tip_bearing_seat() {
-    spar_x = WING_SWEEP_LE + SPAR_BORE_STATION;
-    spar_y = spar_tip_y();
-    face_z = WING_SEMI_SPAN + TIP_PAD_PROUD;  // pad outer face (nacelle side)
-
-    // Spanwise axis is Z, so plain Z-axis cylinders are already correct.
-    // Bearing bore (OD seat), cut inward (−Z) from the pad face.
-    translate([spar_x, spar_y, face_z - TIP_BRG_W])
-        cylinder(r = TIP_BRG_SEAT_D / 2, h = TIP_BRG_W + 0.1, $fn = 48);
-
-    // Flange counterbore at the very face (flush seat for the F688ZZ flange).
-    translate([spar_x, spar_y, face_z - TIP_BRG_FLANGE_T])
-        cylinder(r = TIP_BRG_FLANGE_OD / 2, h = TIP_BRG_FLANGE_T + 0.1, $fn = 48);
-}
-
-
-// =============================================================================
-// ── Module: wing_tip_fixed_gear_inserts ───────────────────────────────────────
-// =============================================================================
-// Three M2.5 heat-set insert pockets on the pad face for bolting the FIXED R14
-// sector gear coaxial with the spar. 120° spacing on FIX_GEAR_BC_R (outside the
-// 18 mm bearing flange, inside the 13 mm gear root). Pockets are bored spanwise
-// (−Z) into the pad from the nacelle-facing face.
-module wing_tip_fixed_gear_inserts() {
-    spar_x = WING_SWEEP_LE + SPAR_BORE_STATION;
-    spar_y = spar_tip_y();
-    face_z = WING_SEMI_SPAN + TIP_PAD_PROUD;
-
-    for (angle = [0, 120, 240]) {
-        y_off = FIX_GEAR_BC_R * cos(angle);
-        x_off = FIX_GEAR_BC_R * sin(angle);
-        translate([spar_x + x_off, spar_y + y_off, face_z - FIX_GEAR_INSERT_L])
-            cylinder(r = FIX_GEAR_INSERT_OD / 2,
-                     h = FIX_GEAR_INSERT_L + 0.1,
-                     $fn = 18);
-    }
-}
-
-
-// =============================================================================
 // ── Module: fuselage_root_tab ─────────────────────────────────────────────────
 // =============================================================================
 // A positive protrusion at the root face (Z = 0) that inserts into the fuselage
@@ -664,10 +523,7 @@ module fuselage_root_tab() {
 // One wing panel (port or starboard before mirror).
 // Builds the solid, then subtracts the spar bore.
 // The fuselage root tab is additive (−Z from root face, inboard direction).
-// INTEGRATION (Rev R2, 2026-07-18): Rotating 8 mm tilt-spar mechanism. The wing
-// tip carries a bearing seat + rotating through-bore + fixed R14 gear mount pad;
-// the separate wing_nacelle_pylon_revo.scad component is superseded and archived.
-// See docs/TILT_SPAR_ANALYSIS.md.
+// Note: pylon mount pocket omitted — folding capability not used on this build.
 module wing_one_side() {
     difference() {
         union() {
@@ -676,24 +532,10 @@ module wing_one_side() {
 
             // ── Fuselage root insertion tab ────────────────────────────────
             fuselage_root_tab();
-
-            // ── Wing-tip nacelle mount pad (Rev R2) ─────────────────────────
-            // Low boss at the tip housing the bearing seat + fixed-gear inserts.
-            // Stays low so the fixed R14 gear nests into the nacelle recess.
-            wing_tip_nacelle_mount_pad();
         }
 
-        // ── CF spar bore (spanwise, 12 mm OD wing structural spar) ────────
+        // ── CF spar bore (spanwise, 12 mm OD) ────────────────────────────
         spar_bore();
-
-        // ── Rotating tilt-spar clearance bore (8 mm spar, through wing tip)
-        wing_tip_spar_through_bore();
-
-        // ── Wingtip bearing seat (F688ZZ 8×16×5, press-fit) ──────────────
-        wing_tip_bearing_seat();
-
-        // ── Fixed R14 sector-gear insert pockets (3× M2.5, at tip face) ──
-        wing_tip_fixed_gear_inserts();
 
         // ── Harness cableway (2× Ø7 conduits for EDF power + signal) ──────
         cableway_bore();
