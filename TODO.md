@@ -14,11 +14,6 @@
 
 ---
 
-### 0.7 — CI Lint Scope and Repo-Wide Lint Debt
-→ detail: `docs/WBS.md` §0.7
-
-- [ ] Repo-wide lint debt
-
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
 → detail: `airframe/WBS.md` §1.1.0
 

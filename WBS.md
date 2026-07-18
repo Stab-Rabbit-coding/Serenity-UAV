@@ -84,7 +84,7 @@
 → detail: `docs/WBS.md` §0.7
 
 - [x] Resolved (confirmed 2026-06-29). run-lint (github/super-linter@…
-- [ ] Repo-wide lint debt
+- [x] Repo-wide lint debt — remediation pass complete 2026-07-18, see `docs/WBS.md` §0.7
 
 ---
 

@@ -21,7 +21,7 @@
 |----------|--------|-----:|:------------:|
 | §0.5 | 0.5 — Citation Completeness Audit (All Source Files) | 3 | — |
 | §0.1 | 0.1 — FCC Part 95 Section-Number Verification | 0 | — |
-| §0.7 | 0.7 — CI Lint Scope and Repo-Wide Lint Debt | 1 | — |
+| §0.7 | 0.7 — CI Lint Scope and Repo-Wide Lint Debt | 0 | — |
 | §1.5 | 1.5 — Documentation | 3 | — |
 | §1.6 | 1.6 — Rev Q: Repo-Wide Architecture Propagation | 0 | — |
 | §1.7 | 1.7 — Rev R: Component Rev Sync + s_ Prefix Removal | 0 | — |
@@ -31,7 +31,7 @@
 | §6.1 | 6.1 — Branch Reconciliation / Pre-Flight Compliance | 1 | &#9733; |
 | §6.2 | 6.2 — STL Mesh Repair | 0 | — |
 | §6.3 | 6.3 — Rev S Checkpoint | 0 | — |
-| | **Total open (this subsystem)** | **19** | |
+| | **Total open (this subsystem)** | **17** | |
 
 ---
 
@@ -123,13 +123,103 @@
 
 *(root `WBS.md` §0.7)*
 
-- [ ] **Repo-wide lint debt** — observed counts as of the PR #107 full-codebase run:
-    `EDITORCONFIG` 697, `PYTHON_BLACK` 72, `PYTHON_FLAKE8` 56, `PYTHON_ISORT` 47, `JSCPD` 39,
-    `MARKDOWN` 32, `CLANG_FORMAT` 26, `CPP` 25, `PYTHON_MYPY` 7, `NATURAL_LANGUAGE` 17,
-    `JAVASCRIPT_STANDARD` 5, `SHELL_SHFMT` 4, `CSS` 3, `PYTHON_PYLINT` 2, `JSX` 6, `JSON` 1,
-    `GITHUB_ACTIONS` 1. Needs a dedicated remediation pass, file type by file type,
-    separate from feature work, so each touched file is fixed under its own
-    diff-scoped lint pass rather than a single repository-wide sweep.
+- [x] **Repo-wide lint debt — remediation pass complete 2026-07-18** (file type by file
+    type, per this item's own guidance, against the counts observed as of the PR #107
+    full-codebase run: `EDITORCONFIG` 697, `PYTHON_BLACK` 72, `PYTHON_FLAKE8` 56,
+    `PYTHON_ISORT` 47, `JSCPD` 39, `MARKDOWN` 32, `CLANG_FORMAT` 26, `CPP` 25,
+    `PYTHON_MYPY` 7, `NATURAL_LANGUAGE` 17, `JAVASCRIPT_STANDARD` 5, `SHELL_SHFMT` 4,
+    `CSS` 3, `PYTHON_PYLINT` 2, `JSX` 6, `JSON` 1, `GITHUB_ACTIONS` 1). Scope throughout:
+    active files only, excluding `archives/`, `airframe/archive/`,
+    `airframe/FreeCAD-scripts/` (already excluded from lint scope by `.super-lintignore`)
+    and the vendored `node_modules/autopreview/` package.
+    - **Fixed outright:**
+      - `PYTHON_BLACK` — `black` reformatted 63 active files; `PYTHON_FLAKE8` was already
+        0 (separately gated by `ci.yml`) and stayed 0 throughout.
+      - `PYTHON_ISORT` — `isort --profile black` reordered imports in 11 files.
+      - `PYTHON_MYPY` — 2 real findings fixed: a same-name function redefinition in
+        `airframe/stls/fuselage/cargo/generate_cargo_doors.py` (renamed the early-return
+        fallback closure `belly_z` → `belly_z_fallback`) and a confusing except-variable
+        reuse in `generate_cargo_mounts.py` (renamed the loop variable `exc` → `err`). The
+        3 remaining "missing yaml stubs" findings on the Malcolm tracking scripts were a
+        missing dev-tool dependency, not a code issue — installed `types-PyYAML`.
+      - `PYTHON_PYLINT` (E/F classes only) — 5 real findings, all the same root cause:
+        this dev sandbox's KiCad 7.0.11 `pcbnew` Python bindings don't have the KiCad 9
+        per-layer `PCB_VIA.SetWidth(layer, width)` / enum-based `FOOTPRINT.Flip()` APIs
+        the code is deliberately written against (project's actual target is KiCad 9, per
+        `ci.yml`/`tools/validate_kicad.py`) — scoped `# pylint: disable=...` comments
+        added with the version-mismatch explanation, not code rewrites, since the code is
+        correct for the real target. One further pylint tuple-unpacking false positive
+        (`mod_vera_ds_pcb.py`/`mod_Jayne_ds_pcb.py`, `padnets.items()` mis-inferred as
+        `float`/`str`) got the same treatment.
+      - `CLANG_FORMAT` — `clang-format -i` (repo's own `.clang-format`: 4-space,
+        80-col, aligned macros/comments) across all 27 active firmware `.c`/`.h` files.
+        Pure whitespace; syntax-verified with `gcc -fsyntax-only` wherever the
+        environment's dependencies allow (libgpiod ≥2.0 and the mavlink SDK aren't
+        installable in this sandbox — pre-existing gaps, unrelated to this change).
+      - `GITHUB_ACTIONS` — `actionlint` flagged `actions/setup-python@v4` as outdated in
+        `ci.yml`; bumped to `@v5`.
+      - `SHELL_SHFMT` — `shfmt -i 4` on the 4 active `.sh` scripts; `bash -n` verified.
+      - `JSON` — `previewConfig.json` was a committed 0-byte (invalid-JSON) file; no
+        schema for it is documented anywhere in the repo, so rather than invent one, set
+        it to `{}` — the minimal valid, behavior-neutral fix.
+    - **Investigated, not applicable:**
+      - `CSS` — the only `*.css` files in the repo are under `archives/` (frozen) or the
+        vendored `node_modules/autopreview/` package; nothing in active scope.
+    - **Investigated, intentionally not changed (documented per this item's own "resolve
+      or document" standard) — each would either destroy real content, fight an explicit
+      project-wide rule, or require an architectural judgment call outside a lint pass:**
+      - `EDITORCONFIG` — `editorconfig-checker` (installed fresh, no config existed) fires
+        697+ (in fact 1.47M once the tracked `node_modules/` is included) hits dominated by
+        false positives: it does naive line-by-line indentation checking with no
+        understanding of Python triple-quoted docstrings, so any docstring using a 2-space
+        nested-list convention for prose (this project's own established comment style,
+        `AGENTS.md` §6 "verbose comments in each language's native style") reads as an
+        indentation violation. `flake8`, which *does* understand Python syntax, already
+        confirms 0 real code-indentation issues. This matches `super-linter.yml`'s own
+        existing comment that `EDITORCONFIG` "require[s] upstream super-linter config
+        tuning" before it can be safely re-enabled — confirmed, not fixed here.
+      - `MARKDOWN` — no `.markdownlint.yml` exists in the repo; the default ruleset fires
+        8,489 hits across 88 active `.md` files (vs. the historical 32), almost entirely
+        `MD013`/`MD022`/`MD009`-class house-style opinions with no config filtering them
+        down to whatever subset super-linter's own run used. `VALIDATE_MARKDOWN` is
+        already `false` in `super-linter.yml` with the same "requires upstream config
+        tuning" note. Needs a committed `.markdownlint.yml` (or equivalent) authored and
+        reviewed before re-enabling — guessing at one to hit a specific historical count
+        isn't a real fix.
+      - `NATURAL_LANGUAGE` — super-linter's prose linter (textlint-based) has no readily
+        available standalone equivalent in this environment; also already `false` in
+        `super-linter.yml` for the same reason.
+      - `CPP` (cpplint, distinct from `CLANG_FORMAT`) — 113 findings on the current
+        ruleset (vs. historical 25 — again a different filtered config), but the majority
+        are cpplint enforcing Google C++ style conventions this project has *never*
+        followed and explicitly overrides elsewhere: short symbol-only header guards
+        (`SI5351_H`, not `AVIONICS_FIRMWARE_CN_SRC_SI5351_H_`) used consistently
+        repo-wide; CC BY 4.0 `Author:`/`License:` header blocks instead of a Google-style
+        `Copyright` banner (`AGENTS.md` §3); `.clang-format` itself already documents a
+        deliberate Google-style deviation (4-space indent, "CLAUDE.md mandates 4-space
+        indentation ... overrides clang-format's Google-style default of 2"). A few
+        residual "extra space before (" hits are cpplint's own column-counting getting
+        confused by non-ASCII characters (µ) in comments, not real formatting bugs.
+        Rewriting 25+ files' header guards and adding Copyright banners to match a style
+        guide this project doesn't use would be pure churn against its own convention.
+      - `JSCPD` — 142 clones at a 10-line/50-token threshold (vs. historical 39 at
+        whatever threshold produced that count). The overwhelming majority are either
+        intentional structural repetition — SVG build-guide diagram templates sharing
+        icon/shape markup by design, and BOM revision snapshots (`bom_revP/Q/R.json`)
+        that are supposed to largely restate the prior revision plus incremental changes
+        per the Rev-letter archival policy (`AGENTS.md` §8) — or independent per-board
+        KiCad automation scripts (e.g. `mod_vera_ds_pcb.py` / `mod_Jayne_ds_pcb.py`) that
+        are deliberately self-contained so one board's generator can be modified without
+        risking another's already-validated PCB. Real de-duplication candidates exist
+        (that Vera/Jayne script pair is the clearest one) but extracting shared code from
+        working, physically-validated PCB-generation scripts is an architectural decision
+        with real hardware consequences — needs explicit user review, not a mechanical
+        lint fix, matching the same caution applied to the RCRS rename in §0.1 above.
+      - `JAVASCRIPT_STANDARD` / `JSX` — the sole active file
+        (`current-specification/serenity-rev-r.jsx`) would need 2-space indent and no
+        semicolons under JavaScript Standard Style, which directly contradicts
+        `AGENTS.md` §6's explicit, project-wide "4-space indent, every language, always"
+        override. Not applying a linter's default style over an explicit project rule.
 
 
 ## §1.5 — Documentation
