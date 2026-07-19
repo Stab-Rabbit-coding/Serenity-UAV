@@ -59,7 +59,7 @@ def offset(obj, dist):
 
 
 def main():
-    a = sys.argv[sys.argv.index("--") + 1 :]
+    a = sys.argv[sys.argv.index("--") + 1:]
     in_stl, out_stl, radius, pitch = a[0], a[1], float(a[2]), float(a[3])
 
     clear()

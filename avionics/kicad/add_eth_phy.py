@@ -351,7 +351,7 @@ def insert_lib_symbols(content: str, new_syms: str) -> str:
         idx = content.find("(lib_symbols")
     end = find_balanced(content, idx)
     # Insert before the final closing paren of lib_symbols.
-    return content[: end - 1] + new_syms + content[end - 1 :]
+    return content[:end - 1] + new_syms + content[end - 1:]
 
 
 def insert_before_sheet_instances(content: str, new_text: str) -> str:
