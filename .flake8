@@ -5,3 +5,4 @@ exclude =
     __pycache__,
     build,
     dist,
+max-line-length = 100

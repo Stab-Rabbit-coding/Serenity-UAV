@@ -22,8 +22,9 @@ import sys
 
 try:
     import trimesh
-except Exception as e:
-    print("Missing dependency 'trimesh'. Install requirements-dev.txt before running.")
+except Exception:
+    msg = "Missing dependency 'trimesh'. Install requirements-dev.txt before running."
+    print(msg)
     raise
 
 SEARCH_PATHS = [
