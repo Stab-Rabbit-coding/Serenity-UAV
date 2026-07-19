@@ -26,7 +26,7 @@ jobs:
       - name: Run flake8
         run: |
           flake8 --version
-          flake8 --exclude=archives,graphical-build-guide,avionics/kicad .
+          flake8 --exclude=archives,graphical-build-guide,avionics/kicad,airframe/FreeCAD-scripts,airframe/blender-scripts .
 
   clang-format:
     name: C/C++ format
