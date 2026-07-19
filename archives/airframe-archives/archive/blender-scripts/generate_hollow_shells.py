@@ -146,8 +146,8 @@ for fname in HOLLOW_PARTS:
     scad_path = os.path.join(OUT, stem + "_shell18.scad")
     out_path  = os.path.join(OUT, stem + "_shell18.stl")
 
-    with open(scad_path, "w") as f:
-        f.write(scad_code)
+    with open(scad_path, "w") as f:  # type: ignore[assignment]
+        f.write(scad_code)  # type: ignore[attr-defined]
 
     print(f"Rendering {fname} ...")
     run_openscad(scad_path, out_path)
@@ -167,8 +167,8 @@ for fname in SCALE_ONLY_PARTS:
     scad_path = os.path.join(OUT, stem + "_scaled18.scad")
     out_path  = os.path.join(OUT, stem + "_scaled18.stl")
 
-    with open(scad_path, "w") as f:
-        f.write(scad_code)
+    with open(scad_path, "w") as f:  # type: ignore[assignment]
+        f.write(scad_code)  # type: ignore[attr-defined]
 
     print(f"Scaling {fname} ...")
     run_openscad(scad_path, out_path)
