@@ -1,4 +1,4 @@
 airframe/archive/
 airframe/FreeCAD-scripts/
-archives/**
+archives/
 .github/linters/
