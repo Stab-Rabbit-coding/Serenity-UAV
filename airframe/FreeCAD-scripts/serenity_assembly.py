@@ -77,8 +77,8 @@ import math
 import os
 
 try:
-    import FreeCAD as App
-    import Mesh
+    import FreeCAD as App  # type: ignore[import-not-found]
+    import Mesh  # type: ignore[import-not-found]
 except ModuleNotFoundError as exc:  # not inside FreeCAD's interpreter
     raise SystemExit(
         "serenity_assembly.py must run inside FreeCAD's Python "
