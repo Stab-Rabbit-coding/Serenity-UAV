@@ -73,6 +73,11 @@
 - [ ] [OPEN — BLOCKER] Fuselage spar-interface now mismatched.
 
 #### 1.1.3 — Nacelles
+- [ ] Rotating 8mm tilt-spar: full nacelle bake (port+stbd) post gear-rework
+- [ ] Merge cargo_spar_drive into cargo shell (bearing/servo/mortise/cableway)
+- [ ] Verify stbd cargo-chunk placement of spar-drive features
+- [ ] Tune servo→spar horn/pushrod linkage throw (−5°..140°)
+- [ ] Repair pre-existing stator sleeve non-manifold (edf_stator_sleeve)
 
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.3
 
