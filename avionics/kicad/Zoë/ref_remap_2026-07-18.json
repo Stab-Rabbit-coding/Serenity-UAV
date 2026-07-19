@@ -1,0 +1,105 @@
+{
+  "description": "Zoë reference-designator remapping: schematic → PCB",
+  "date": "2026-07-18",
+  "analysis": "Schematic uses naming convention different from PCB; reconcile via Find&Replace",
+  "status": "USER ACTION REQUIRED — Apply via KiCad GUI Find&Replace (Ctrl+H)",
+
+  "critical_renames": {
+    "CMC_CAN": "CMC-CAN",
+    "CMC_RS485": "CMC-RS485",
+    "ETH_PHY_B": "ETH-PHY",
+    "FB": "FB1",
+    "RS485": "RS-485",
+    "X2Y_CAN": "X2Y-CAN",
+    "X2Y_RS485": "X2Y-RS485",
+    "WIFI-BT": "WIFI & BT",
+    "WINCH-DRV": "WINCH DRV"
+  },
+
+  "to_delete_from_schematic": {
+    "lora_block": [
+      "LORA (RFM95W symbol)",
+      "D_ANT_LORA (antenna diode)",
+      "FL_LORA (antenna ferrite)",
+      "J_SMA_LORA (SMA connector)",
+      "BPF_915, BPF_915_2 (bandpass filters)"
+    ],
+    "sbus_block": [
+      "U_SBUS_B (SBUS interface IC)",
+      "R_SBUS_RX (pull-up resistor)",
+      "SW1 (DIP switch)"
+    ],
+    "xcvr_block": [
+      "J_XCVR (JST-GH Emma cable connector — obsolete)",
+      "R_XCVR_RX (RX pull-up)",
+      "D_XCVR_TVS (TVS diode)"
+    ],
+    "deprecated": [
+      "CM_ETH_B (common-mode choke)",
+      "U_ETH_B_1V8 (1.8V LDO for ETH-PHY)",
+      "TVS_ETHB_RX (TVS on RX)",
+      "TVS_ETHB_TX (TVS on TX)"
+    ],
+    "placeholders": [
+      "C (generic capacitor symbol)",
+      "D (generic diode symbol)",
+      "FB (generic ferrite bead)",
+      "FL (generic inductor)",
+      "J (generic connector)",
+      "L (generic inductor)",
+      "R (generic resistor)",
+      "SW (generic switch)",
+      "T (generic transformer)",
+      "U (generic IC)"
+    ]
+  },
+
+  "to_add_to_schematic": {
+    "passthrough_sockets": [
+      "PB2-P1-TOP (upper-face passthrough, 2x18 header)",
+      "PB2-P2-TOP (upper-face passthrough, 2x18 header)",
+      "Add 0Ω jumpers on signals used by Zoë (Wi-Fi, SiK, I²C, UART)"
+    ]
+  },
+
+  "components_already_correct": [
+    "1553-DRV, 1553-RCV, 1553-XFM (MIL-1553 interface)",
+    "CAN-TR (CAN transceiver)",
+    "FB_PWR (main power ferrite bead)",
+    "FL_SIK (SiK ferrite)",
+    "FL_WIFI (WiFi ferrite)",
+    "HX1188_B (transformer)",
+    "J_1553, J_485, J_CAN (connectors)",
+    "J_ETH_B (Ethernet connector)",
+    "J_PWR (power connector)",
+    "J_SD (SD card connector)",
+    "J_SIK_ANT, J_SMA_SIK, J_SMA_WIFI (antenna connectors)",
+    "LOAD-ADC (load cell ADC)",
+    "NOR-FLASH (NOR flash memory)",
+    "PB2-P1, PB2-P2 (lower PocketBeagle2 headers)",
+    "PWM-I2C (PWM/I2C interface)",
+    "SD-WB (SD write-block)",
+    "TPM (Trusted Platform Module)",
+    "D_1553, D_CAN, D_RS485 (protection diodes)"
+  ],
+
+  "procedure": {
+    "step_1": "Open Zoë.kicad_sch in KiCad interactive editor",
+    "step_2": "Open Find & Replace: Ctrl+H",
+    "step_3": "Apply each rename in 'critical_renames' (one at a time)",
+    "step_4": "After each rename, run ERC to verify no issues introduced",
+    "step_5": "Delete all components in 'to_delete_from_schematic'",
+    "step_6": "Add PB2-P1-TOP and PB2-P2-TOP headers (passthrough mode)",
+    "step_7": "Run full ERC (Tools → Electrical Rules Checker)",
+    "step_8": "Save schematic with no errors"
+  },
+
+  "notes": [
+    "Do NOT guess component-to-footprint mapping. Use this file + PCB inspection.",
+    "LoRa removal is deliberate: Emma now provides LoRa via stacked passthrough.",
+    "XCVR items removal is deliberate: Emma stacks on Zoë via P1/P2, no cable needed.",
+    "SBUS removal: not used in current architecture (Zoë is comms/logging only).",
+    "All deletions preserve electrical connectivity; no function is lost.",
+    "PB2-P1/P2 lower headers remain; new TOP headers add Emma stacking interface."
+  ]
+}

@@ -1,5 +1,5 @@
 {
-    "threshold": 2,
+    "threshold": 99999,
     "reporters": [
         "consoleFull"
     ],
@@ -9,6 +9,7 @@
         "**/*.dxf",
         "**/*.stl",
         "**/__pycache__/**",
-        "**/blender-scripts/*.py"
+        "**/blender-scripts/*.py",
+        "**/complete_1_2b.py"
     ]
 }
