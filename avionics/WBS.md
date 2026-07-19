@@ -354,6 +354,33 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 - Simon is the alternate watchdog for the ship, but most of his attention is on River.  He's got aft EDF control and alternate nacelle control. He follows River's lead but makes sure she doesn't crash the ship. Simon also controls Jayne, and ensures that the cargo isn't jettisoned or the crew abandoned. He's got 49MHz as his primary antenna and SiK as his backup.
 
+### §1.9.1 — Nacelle Tilt-Angle Feedback (Hall encoder)
+
+Each nacelle carries a magnetic angle encoder (`HALL-TILT-ENC`, MT6701 / MA732)
+at the wing/nacelle joint reading a diametric ring magnet on the rotating spar
+hub (airframe: `wings-nacelles/WBS.md` §1.1.3.6). It closes the tilt-servo loop
+on the **true nacelle angle**, making tilt positioning independent of tilt-spar
+torsional wind-up (docs/TILT_SPAR_ANALYSIS.md §1, §3.5) — the spar/servo shaft
+may wind up, but the controller drives to the measured output angle. Since the
+sensor sits on the fixed wing, its lead does **not** twist with tilt (no slip
+ring).
+
+- [ ] **Assign the two encoders to nacelle-control nodes** — port + stbd read by
+    **River (primary nacelle control/sync)** with **Simon (alternate nacelle
+    control)** as failover (per node roles above). Put port and stbd on
+    **separate I²C buses** (or a TCA9548A mux, cf. the antenna-gimbal AS5600
+    pattern) — MT6701 has a fixed I²C address, so two on one bus collide.
+- [ ] **Select the real part + confirm pinout/protocol** (MT6701 I²C vs MA732
+    SPI/PWM) — must be **off-axis capable** (through-shaft; the on-axis AS5600
+    used on the gimbal will not work here). Add a `REF-SENSOR-*` catalog entry
+    (TODO §0.8) before PCB/harness sign-off.
+- [ ] **Firmware: zero-calibration over the −5..90° sweep** to absorb residual
+    ferrous-spar field distortion; range-check for monotonic angle; use the
+    encoded tilt as the servo feedback and cross-check against commanded PWM.
+- [ ] **Wiring per EMI spec** — shielded 4-wire, routed clear of the 40 A EDF
+    feeds; see `avionics/emi-hardening/WBS.md` §1.4.4 (I²C) and §1.4.6
+    (ferromagnetic spar / magnetic-sensor siting).
+
 ---
 
 ## Procurement — §2.4, §2.5 (Avionics BOM tables)

@@ -23,10 +23,21 @@ SCAD is reworked.
 - **Two bearings** carry wing/spar loads and allow rotation:
     - **Root bearing** — inside the cargo bay (spar ↔ fuselage).
     - **Wingtip bearing** — at the wingtip/nacelle joint (spar ↔ fixed wing).
-- **Nozzle sync gear** is fixed to the **non-rotating wingtip**, coaxial with the
-  spar. The nacelle's nozzle-drive pinion orbits this fixed gear as the nacelle
-  tilts → nozzle iris tracks tilt angle. (Fixed gear shrunk to pitch R ≈ 14 mm
-  per user direction — see §6.)
+- **Nozzle drive** tracks tilt angle. *Two variants exist:* the fixed-wingtip
+  **sync gear** (Pinion A orbits a gear fixed to the non-rotating wingtip — §6,
+  kept at **R22**) and the now-adopted **Option B pushrod** (a crank clamped to
+  the rotating spar strokes the nozzle unison ring — `nacelle_nozzle_pushrod.scad`,
+  BOM Rev T). **Either way the nozzle datum is taken at the nacelle/tip** — the
+  gear meshes the fixed wingtip; the crank shares the nacelle-keyed spar end — so
+  nozzle position tracks *true nacelle tilt* and is **not** corrupted by spar
+  torsional wind-up, which lives upstream between the cargo-bay servo and the tip.
+- **Tilt feedback — Hall/magnetic angle sensor at the wing/nacelle joint**
+  (added per user direction, 2026-07-19): a diametric magnet on the rotating
+  nacelle stub, read by a magnetic encoder fixed to the wingtip, closes the tilt
+  loop on **true nacelle angle at the output**. Servo positioning therefore does
+  **not** depend on spar torsional stiffness (see §3.5). Because the spar is
+  ferromagnetic (4130/17-4 PH), the bias magnet must sit on a **non-ferrous stub**
+  clear of the steel spar's field — see §3.5 and EMI-hardening WBS §1.4.6.
 
 ---
 
@@ -91,6 +102,79 @@ bending but leaves a thin keyway wall — **5 mm ID (1.5 mm wall) recommended.**
 | **4 mm solid CF** (original) | Z=6.3 mm³ → **243 MPa**, FOS ≈ 3, brittle | none | poor keying | **Inadequate** |
 | **8 mm × 1.5 steel** (this) | 35.9 MPa, FOS ≈ 13 | 5 mm ID ✓ | FOS ≈ 9 | **Recommended** |
 | 12 mm unified (structural) | ~9 MPa, FOS ≈ 50 | 9 mm ID ✓ | best | Overbuilt; heavier, bigger duct crossing |
+
+### 3.5 Material Trade Study (8 mm OD × 1.5 mm wall, 5 mm ID)
+
+The bore (nav wires, §5) and the keyway wall (§3, §8) are **functional
+requirements**, so the *section* is held fixed and only the material is traded.
+With geometry fixed, bending σ = 35.9 MPa and torsion τ = 28.8 MPa are identical
+for every candidate (§3.1–3.2); only the allowables, moduli, and fatigue/joint
+behaviour move.
+
+> Allowables below are **typical handbook values — require MMPDS-2023 / AMS /
+> mill-cert verification before release** (REFERENCES.md requires-verification
+> table; TODO §0.8). Bending FOS is on yield at the 1.53 N·m design moment;
+> torsion FOS on shear yield (0.577·σ_y) at 2.45 N·m; wind-up θ is over the
+> ~200 mm captive length at 2.45 N·m.
+
+| Metric | 4 mm CF | 8×5 CF tube | 6061-T6 | 7075-T6 | **4130 (sel.)** | 17-4 PH H1075 | 316 SS | Ti-6Al-4V |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Density (g/cc) | 1.60 | 1.60 | 2.70 | 2.70 | **7.85** | 7.75 | 8.00 | 4.43 |
+| Mass /pair (0.21 lbm ref) | ~8 g | 20 g | 33 g | 33 g | **96 g** | 95 g | 98 g | 54 g |
+| Yield allow. (MPa) | — | ~600* | 276 | 503 | **460** | 860 | ~250 | 880 |
+| Bending FOS @1.53 N·m | ~3 | ~8* | 7.7 | 14.0 | **12.8** | 24 | 7.0 | 24.5 |
+| E (GPa) | ~120* | ~120* | 68.9 | 71.7 | **200** | 197 | 193 | 114 |
+| Tip deflection (mm) | — | 0.015 | 0.026 | 0.025 | **0.009** | 0.009 | 0.009 | 0.016 |
+| Torsion FOS @2.45 N·m | poor | poor | 5.5 | 10.1 | **9.2** | 17 | 5.0 | 17.6 |
+| Drive wind-up θ | — | ~4.6° | 3.2° | 3.1° | **1.0°** | 1.05° | 1.05° | 1.9° |
+| Endurance limit | tension | tension | **none** | **none** | **yes** | **yes** | **none** | **yes** |
+| Keyed torque joint | delam. | delam. | galls | fair | **excellent** | good | poor | good |
+| Bearing journal (F688ZZ) | abrades | abrades | soft | marginal | **ideal** | **ideal** | soft | good |
+| Corrosion / finish | inert | inert | good | good | **rusts—plate** | good, bare | best, bare | best, bare |
+| Magnetic | no | no | no | no | **yes** | yes | no | no |
+| Rel. cost / 8×5 sourcing | low | med | low/good | low-med | **low/good** | med-hi/poor | low/good | high/poor |
+
+\* CF is layup-dependent — a torsion-capable ±45° wrap trades away the axial
+bending numbers, and none of it survives a keyway.
+
+**Wind-up is de-rated by the joint Hall sensor (§1).** The magnetic angle sensor
+at the wing/nacelle joint closes the tilt loop on true nacelle angle, so shaft
+torsional compliance no longer appears as tilt error; and the nozzle drive is
+referenced at the nacelle/tip, so wind-up is not a sync error either (§1). A
+dynamic check confirms this is safe for **every** candidate: the torsional
+spar+nacelle mode (nacelle inertia ≈ 0.0013 kg·m² about the spar axis, k = GJ/L)
+is ≈ 52 Hz (steel/SS), ≈ 38 Hz (Ti), ≈ 29 Hz (Al) — all an order of magnitude
+above servo bandwidth (~2–5 Hz) and gust content (<10 Hz). Wind-up therefore
+drops out as a selection driver; **fatigue endurance limit and keyability become
+the discriminators.**
+
+**Findings:**
+
+- **CF (either form)** — fails the functional gate: cannot take a keyed torque
+  joint (delaminates) and abrades the bearing journals. Out regardless of its
+  mass advantage. Confirms §3.4.
+- **6061 / 7075 aluminium & 316 SS** — **no fatigue endurance limit** → a
+  rotating, gust-cycled, keyed shaft in these is a finite-life, inspection-
+  interval part. **7075-T6** is the honest lightweight fallback (−63 g/pair,
+  static FOS 14/10) now that the Hall sensor removes the wind-up penalty; 6061
+  and 316 are too soft at the keyway and bearing journal.
+- **4130 (selected)** — best keyability, hardness-matches the F688ZZ steel races,
+  true endurance limit, lowest wind-up, cheap and well-stocked in 8×5. Only real
+  penalties: heaviest, and **it rusts — a corrosion finish (zinc/cadmium plate,
+  journals ground) is mandatory** and must be carried on the BOM finish spec.
+- **17-4 PH (H1075) stainless** — essentially "4130 that doesn't rust": same
+  E / mass / keyability / bearing match, higher FOS (24 / 17), true endurance
+  limit, and **no plating step**. The strongest alternative to plated 4130;
+  penalties are higher cost and poor 8×5 seamless-tube stock (likely gun-drilled
+  from bar). Ferromagnetic, like 4130 (§1, EMI §1.4.6).
+- **Ti-6Al-4V** — superior on every axis except cost and machinability; −42 g/pair,
+  non-magnetic, corrosion-immune, endurance limit. The premium pick if budget and
+  keyway machining allow.
+
+**Selection:** retain **4130 + corrosion finish** as the baseline; carry **17-4 PH
+H1075** as the qualified plating-free alternative and **7075-T6** as the mass-
+critical (life-limited) fallback. All allowables pending MMPDS/AMS verification
+(§7, TODO §0.8).
 
 ---
 
@@ -245,6 +329,16 @@ It clears all three gates:
   net added blockage ~2–4% after fin/hub fairing.
 - **Nav wires:** 5 mm ID carries the 3-core with margin; 95° twist needs no slip
   ring; reaches the outboard nav light.
+
+**Material (§3.5):** 4130 is the baseline but **requires a corrosion finish**
+(zinc/cadmium plate, journals ground) — the bare tube rusts at the bearing
+journals; add it to the BOM finish spec. **17-4 PH H1075 stainless is the
+qualified plating-free alternative** (same section/mass/stiffness, higher FOS, no
+plating; higher cost + make-from-bar). **7075-T6 aluminium** is the mass-critical
+fallback (−63 g/pair) now that the joint Hall sensor (§1, §3.5) removes the
+torsional-wind-up penalty — but with no fatigue endurance limit it is a
+life-limited, inspected part. All allowables pending MMPDS/AMS verification (§7,
+TODO §0.8).
 
 **Open the go-ahead decision** on §8 rework + §6 regear before I edit geometry.
 

@@ -22,6 +22,7 @@
 | §0.5 | 0.5 — Citation Completeness Audit (All Source Files) | 3 | — |
 | §0.1 | 0.1 — FCC Part 95 Section-Number Verification | 1 | — |
 | §0.7 | 0.7 — CI Lint Scope and Repo-Wide Lint Debt | 1 | — |
+| §0.8 | 0.8 — Tilt-Spar Material Allowables + Hall Encoder | 3 | — |
 | §1.5 | 1.5 — Documentation | 3 | — |
 | §1.6 | 1.6 — Rev Q: Repo-Wide Architecture Propagation | 0 | — |
 | §1.7 | 1.7 — Rev R: Component Rev Sync + s_ Prefix Removal | 0 | — |
@@ -90,6 +91,31 @@
     `GITHUB_ACTIONS` 1. Needs a dedicated remediation pass, file type by file type,
     separate from feature work, so each touched file is fixed under its own
     diff-scoped lint pass rather than a single repository-wide sweep.
+
+
+## §0.8 — Tilt-Spar Material Allowables + Hall Encoder Verification
+
+*(root `WBS.md` §0.8)*
+
+Opened 2026-07-19 alongside the docs/TILT_SPAR_ANALYSIS.md §3.5 material trade
+study and the wing/nacelle Hall tilt-feedback sensor. Both carry
+"requires-verification" entries in `REFERENCES.md`.
+
+- [ ] **Verify spar material allowables vs MMPDS-2023 / AMS.** §3.5 uses typical
+    handbook values for the selected **AISI 4130** and the two carried alternates
+    **17-4 PH H1075** and **7075-T6** (plus 6061/316/Ti reference points). Confirm
+    the procured temper's design allowable against MMPDS/AMS or a mill cert and
+    add `REF-MAT-*` catalog entries with validated URLs before spar procurement.
+- [ ] **Add the 4130 corrosion-finish spec.** The bare 4130 tube rusts at the
+    bearing journals — specify zinc/cadmium plate (journals ground) on
+    `SPAR-TILT-4130` in the BOM and the build guide, or adopt the plating-free
+    17-4 PH alternative. (docs §3.5 / §9.)
+- [ ] **Select the off-axis Hall tilt encoder + confirm pinout.** `HALL-TILT-ENC`
+    is specified by function only (MT6701 / MA732 class, off-axis capable — the
+    spar is a through-shaft). Confirm datasheet pinout/protocol, off-axis magnet
+    spec, and ferrous-through-shaft behaviour; add a `REF-SENSOR-*` entry with a
+    validated URL before PCB/harness sign-off. Bench-cal tracked in
+    `avionics/emi-hardening/WBS.md` §1.4.6 and `avionics/WBS.md` §1.9.1.
 
 
 ## §1.5 — Documentation

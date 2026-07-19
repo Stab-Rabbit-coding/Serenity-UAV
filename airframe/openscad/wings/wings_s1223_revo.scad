@@ -263,6 +263,47 @@ FIX_GEAR_PLATE_H      =   3.0;   // [mm] sector gear plate thickness (reference)
 TIP_PAD_OD            =  26.0;   // [mm] pad OD (clears 18 mm flange + r=11 bolt circle)
 TIP_PAD_PROUD         =   2.0;   // [mm] proud height beyond wing tip face (minimal)
 
+// ── Wing/nacelle tilt-angle Hall sensor (Rev R2c, 2026-07-19) ─────────────────
+// TRUE-NACELLE-TILT FEEDBACK.  A magnetic angle encoder at the wing/nacelle
+// joint closes the tilt-servo loop on the ACTUAL nacelle angle (output side), so
+// the loop is independent of tilt-spar torsional wind-up
+// (docs/TILT_SPAR_ANALYSIS.md §1, §3.5).  This is the FIXED (sensor) half; the
+// rotating diametric RING magnet is carried on the nacelle spar hub (see
+// airframe/openscad/nacelles/_export_pivot_slab.scad).
+//
+// OFF-AXIS read: the spar is a THROUGH-shaft here (it continues into the nacelle
+// — there is no free shaft end), so an on-axis end-of-shaft encoder cannot be
+// used.  A diametric RING magnet rides the spar on the nacelle and the sensor IC
+// sits OFF-AXIS on this pad, under the ring annulus, facing it across a small
+// axial air gap.  Use an off-axis-capable IC (MPS MA732 / Magntek MT6701) — the
+// on-axis AS5600 used on the antenna gimbal will NOT work through a shaft.
+//
+// STEEL-SPAR ISSUE (docs §3.5 / EMI-hardening WBS §1.4.6): the 4130/17-4 PH spar
+// is ferromagnetic and runs through the ring centre, distorting the bias field.
+// Geometry mitigations: (a) the ring is stood off the steel by a non-ferrous
+// collar on the nacelle side (magnet ID 10 mm over the 8 mm spar); (b) the PCB
+// seat and every fastener within HALL_KEEPOUT_R of the IC are NON-FERROUS
+// (brass / 316 / Al / nylon — NOT the F688ZZ steel bearing screws); (c) a
+// factory zero-cal over the full −5..90° sweep absorbs residual distortion
+// (firmware — avionics).  A ferrous shaft through a ring magnet is a supported
+// commercial arrangement, but MUST be calibrated in situ.
+HALL_RING_OD    =  13.0;  // [mm] diametric ring-magnet OD (matches nacelle seat)
+HALL_RING_ID    =  10.0;  // [mm] ring-magnet ID (rides non-ferrous collar on spar)
+HALL_SENS_R     =   6.0;  // [mm] sensor-IC offset from spar axis ≈ ring mean radius
+HALL_AIR_GAP    =   1.5;  // [mm] axial magnet-face → IC-face gap (set by nacelle standoff)
+HALL_PCB_W      =  12.0;  // [mm] sensor PCB seat width (chordwise, X)
+HALL_PCB_H      =   8.0;  // [mm] sensor PCB seat height (thickness, Y) — VERIFY vs tip
+                          //      section half-thickness; locally thicken pad if thin
+HALL_PCB_SEAT_T =   2.0;  // [mm] PCB + solder recess depth into the pad face
+HALL_PCB_SCR_D  =   1.7;  // [mm] M2 self-tap pilot (2×, chordwise ±HALL_PCB_SCR_S)
+HALL_PCB_SCR_S  =   5.0;  // [mm] screw pilot half-spacing (chordwise)
+HALL_KEEPOUT_R  =  10.0;  // [mm] NON-FERROUS keep-out radius around the IC
+HALL_CABLE_D    =   3.5;  // [mm] 4-wire I²C sensor conduit (VCC/GND/SDA/SCL, shielded)
+HALL_CABLE_XFR  =   0.30; // [chord fraction] conduit chordwise centre — FWD of the
+                          //      0.48c EDF double-D cableway so the low-level
+                          //      sensor lines stay separated from the 40 A EDF
+                          //      feeds (EMI — EMI-hardening WBS §1.4.4/§1.4.6).
+
 // Spar-axis thickness (internal Y) height at the TIP station — the spar exits on
 // the camber midline, NOT the chord line, so all wingtip spar features (pad,
 // bearing seat, gear inserts) must share this Y to stay concentric with the
@@ -622,6 +663,71 @@ module wing_tip_bearing_seat() {
 
 
 // =============================================================================
+// ── Module: wing_tip_hall_sensor_pocket — tilt-feedback encoder seat ─────────
+// =============================================================================
+// FIXED half of the wing/nacelle tilt-angle Hall sensor (Rev R2c).  Cuts a
+// shallow PCB recess + 2× M2 pilots into the tip pad face, with the sensor IC
+// seated OFF-AXIS at radius HALL_SENS_R from the spar (under the ring-magnet
+// annulus carried on the nacelle — _export_pivot_slab.scad).  The IC face sits
+// flush with / just below the pad face so the axial gap to the ring is
+// HALL_AIR_GAP once the nacelle butts up.  Offset is CHORDWISE (X) so the pocket
+// stays in the wide part of the section (Y half-thickness is limited at the tip;
+// see HALL_PCB_H VERIFY note).  Fasteners here MUST be non-ferrous (steel screws
+// inside HALL_KEEPOUT_R corrupt the read — docs §3.5 / EMI WBS §1.4.6).
+module wing_tip_hall_sensor_pocket() {
+    spar_x = WING_SWEEP_LE + SPAR_BORE_STATION;
+    spar_y = spar_tip_y();
+    face_z = WING_SEMI_SPAN + TIP_PAD_PROUD;   // pad outer (nacelle) face
+    ic_x   = spar_x + HALL_SENS_R;             // IC sits chordwise-offset under the ring
+
+    // PCB + solder recess (cut inward −Z from the pad face).
+    translate([ic_x - HALL_PCB_W / 2, spar_y - HALL_PCB_H / 2, face_z - HALL_PCB_SEAT_T])
+        cube([HALL_PCB_W, HALL_PCB_H, HALL_PCB_SEAT_T + 0.1]);
+
+    // 2× M2 self-tap pilots, chordwise either side of the IC.
+    for (dx = [-HALL_PCB_SCR_S, HALL_PCB_SCR_S])
+        translate([ic_x + dx, spar_y, face_z - 4.0])
+            cylinder(r = HALL_PCB_SCR_D / 2, h = 4.0 + 0.1, $fn = 24);
+}
+
+
+// =============================================================================
+// ── Module: hall_sensor_cableway — fixed sensor-lead conduit to the root ─────
+// =============================================================================
+// Dedicated spanwise conduit for the Hall sensor's 4-wire I²C lead (VCC/GND/
+// SDA/SCL, shielded).  Because the SENSOR is on the FIXED wing (only the magnet
+// rotates), this lead does NOT twist with tilt — no slip ring.  It runs a
+// separate chord fraction (HALL_CABLE_XFR = 0.30c) FORWARD of the 0.48c EDF
+// double-D so the low-level sensor lines stay clear of the 40 A EDF feeds
+// (EMI — EMI-hardening WBS §1.4.4/§1.4.6), camber-centred at each station.  A
+// short chordwise jog links the tip end of the conduit to the sensor pocket.
+module hall_sensor_cableway() {
+    root_xc = WING_CHORD_ROOT * HALL_CABLE_XFR;
+    tip_xc  = WING_CHORD_TIP  * HALL_CABLE_XFR;
+    root_yc = midline_frac(HALL_CABLE_XFR) * WING_CHORD_ROOT * THICKNESS_SCALE;
+    tip_yc  = midline_frac(HALL_CABLE_XFR) * WING_CHORD_TIP  * THICKNESS_SCALE_TIP;
+
+    // Spanwise run: root face (into fuselage) → wing tip.
+    hull() {
+        translate([root_xc, root_yc, -1.0])
+            cylinder(r = HALL_CABLE_D / 2, h = 0.01);
+        translate([tip_xc, tip_yc + WING_DIHEDRAL, WING_SEMI_SPAN])
+            cylinder(r = HALL_CABLE_D / 2, h = 0.01);
+    }
+
+    // Chordwise jog at the tip linking the conduit to the sensor pocket.
+    spar_x = WING_SWEEP_LE + SPAR_BORE_STATION;
+    ic_x   = spar_x + HALL_SENS_R;
+    hull() {
+        translate([tip_xc, tip_yc + WING_DIHEDRAL, WING_SEMI_SPAN - 2.0])
+            cylinder(r = HALL_CABLE_D / 2, h = 0.01);
+        translate([ic_x, spar_tip_y(), WING_SEMI_SPAN - 2.0])
+            cylinder(r = HALL_CABLE_D / 2, h = 0.01);
+    }
+}
+
+
+// =============================================================================
 // ── Module: wing_tip_fixed_gear_inserts — SUPERSEDED (Rev R2b, 2026-07-19) ─────
 // =============================================================================
 // SUPERSEDED and NO LONGER CALLED.  The tilt→nozzle GEAR train (fixed sector +
@@ -687,6 +793,10 @@ module wing_one_side() {
 
         // (Fixed sector-gear inserts removed Rev R2b — gear train archived;
         //  nozzle now pushrod-driven from the rotating spar.  No wing gear.)
+
+        // ── Tilt-feedback Hall sensor seat + its dedicated cableway (Rev R2c)
+        wing_tip_hall_sensor_pocket();
+        hall_sensor_cableway();
 
         // ── Harness cableway (2× Ø7 conduits for EDF power + signal) ──────
         cableway_bore();

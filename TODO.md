@@ -26,6 +26,14 @@
 
 - [ ] Repo-wide lint debt
 
+### 0.8 — Tilt-Spar Material Allowables + Hall Encoder Verification
+
+→ detail: `docs/WBS.md` §0.8
+
+- [ ] Verify 4130 / 17-4 PH / 7075 allowables vs MMPDS/AMS (REF-MAT-*)
+- [ ] Add 4130 corrosion-finish spec (zinc/cad plate) to BOM/build guide
+- [ ] Select off-axis Hall tilt encoder + confirm pinout (REF-SENSOR-*)
+
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
 
 → detail: `airframe/WBS.md` §1.1.0
@@ -90,6 +98,9 @@
 - [ ] Verify stbd cargo-chunk placement of spar-drive features
 - [ ] Tune servo→spar horn/pushrod linkage throw (−5°..140°)
 - [ ] Repair pre-existing stator sleeve non-manifold (edf_stator_sleeve)
+- [ ] Hall tilt sensor: VERIFY HALL_PCB_H vs tip thickness + INBOARD_FACE_X sign
+- [ ] Migrate nacelle_hall_ring_hub into nacelle_pod_50mm_tandem.scad + re-bake
+- [ ] Bench-cal Hall encoder with steel spar/F688ZZ (ferrous-field check)
 
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.3
 

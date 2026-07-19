@@ -413,3 +413,34 @@
     left intact per the revision-snapshot policy. The WS2812C nav lights (distinct
     part) are retained.
 
+##### 1.1.3.6 *Tilt-Angle Feedback — Hall Sensor at the Wing/Nacelle Joint*
+
+Closes the tilt-servo loop on the **true nacelle angle** (output side) so it is
+independent of tilt-spar torsional wind-up (docs/TILT_SPAR_ANALYSIS.md §1, §3.5).
+Off-axis topology (the spar is a through-shaft — no free end): a diametric ring
+magnet on the rotating nacelle hub read by an off-axis IC (MT6701 / MA732) on the
+fixed wing-tip pad. Avionics/firmware side is tracked in `avionics/WBS.md` §1.9
+and `avionics/emi-hardening/WBS.md` §1.4.6.
+
+- [x] **Wing (fixed sensor) mount modelled** *(2026-07-19)* — added
+    `wing_tip_hall_sensor_pocket()` (PCB recess + 2× M2 non-ferrous pilots, IC
+    off-axis at HALL_SENS_R = 6 mm under the ring annulus) and
+    `hall_sensor_cableway()` (dedicated Ø3.5 mm 4-wire I²C conduit at 0.30c,
+    forward of the EDF double-D for EMI separation; fixed lead — no slip ring) in
+    `airframe/openscad/wings/wings_s1223_revo.scad`; both wired into
+    `wing_one_side()`. Evaluates clean to CSG.
+- [x] **Nacelle (rotating magnet) hub modelled** *(2026-07-19)* — added
+    `nacelle_hall_ring_hub()` (non-ferrous CF-PETG ring-magnet carrier, keyed to
+    the spar at the inboard face, ring ID stood ≥1 mm off the ferrous spar) in
+    `airframe/openscad/nacelles/_export_pivot_slab.scad` (dev sandbox).
+- [ ] **VERIFY `HALL_PCB_H` (8 mm, Y) vs the tip section half-thickness** — locally
+    thicken the tip pad if the airfoil is too thin to enclose the pocket.
+- [ ] **VERIFY `INBOARD_FACE_X` sign** in `_export_pivot_slab.scad` (which X face
+    of the port nacelle is the wing side).
+- [ ] **Migrate `nacelle_hall_ring_hub()` into `nacelle_pod_50mm_tandem.scad`** with
+    the keyed spar hub (retire the sandbox preview); re-bake port/stbd shells.
+- [ ] **Confirm the ferrous-spar field mitigation empirically** — bench-cal the
+    encoder with the steel spar + F688ZZ installed; confirm zero-cal + non-ferrous
+    keep-out (HALL_KEEPOUT_R) hold monotonic angle over the −5..90° sweep. See
+    `avionics/emi-hardening/WBS.md` §1.4.6.
+
