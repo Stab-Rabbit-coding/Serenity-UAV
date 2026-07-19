@@ -3,6 +3,7 @@
  * @brief   XCVR-49MHZ-1 KISS/AX.25 UART driver — public API.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * This driver manages the UART link between the CN node (AM6254) and the
@@ -59,7 +60,7 @@ extern "C" {
  * ---------------------------------------------------------------------------*/
 
 /** UART baud rate to/from XCVR-49MHZ-1 (Cape-B J1 pins 3/4). */
-#define XCVR_UART_BAUD          (57600U)
+#define XCVR_UART_BAUD           (57600U)
 
 /**
  * Minimum PTT_N assert-to-transmit delay in microseconds.
@@ -72,13 +73,13 @@ extern "C" {
  * Air-interface bit rate for the Bell 202 AFSK modem (bps).
  * Used to calculate the PTT hold time after the last byte is sent.
  */
-#define XCVR_RF_BAUD            (1200U)
+#define XCVR_RF_BAUD             (1200U)
 
 /**
  * Extra PTT hold time after the last expected RF bit (microseconds).
  * Provides margin for UART FIFO latency and TX tail timing.
  */
-#define XCVR_PTT_TAIL_US        (50000U)
+#define XCVR_PTT_TAIL_US         (50000U)
 
 /* ---------------------------------------------------------------------------
  * Callback type
@@ -115,25 +116,25 @@ typedef struct xcvr_kiss_ctx xcvr_kiss_ctx_t;
  */
 typedef struct {
     /** UART device path, e.g. "/dev/ttyS2". */
-    const char     *uart_dev;
+    const char *uart_dev;
 
     /** libgpiod chip path for PTT_N GPIO, e.g. "/dev/gpiochip0". */
-    const char     *gpio_chip;
+    const char *gpio_chip;
 
     /** GPIO line offset for PTT_N on the chip specified by @c gpio_chip. */
-    unsigned int    ptt_gpio_line;
+    unsigned int ptt_gpio_line;
 
     /** I²C bus number for Si5351A, e.g. 1 for /dev/i2c-1. */
-    int             si5351_i2c_bus;
+    int si5351_i2c_bus;
 
     /** Default 49 MHz channel (0–4) at startup. */
-    unsigned int    default_channel;
+    unsigned int default_channel;
 
     /** RX callback — invoked for every received AX.25 frame. */
     xcvr_rx_callback_t rx_callback;
 
     /** Opaque pointer forwarded to @c rx_callback unchanged. */
-    void           *rx_userdata;
+    void *rx_userdata;
 } xcvr_kiss_config_t;
 
 /* ---------------------------------------------------------------------------
@@ -151,11 +152,11 @@ typedef struct {
  * @param[out] ctx_out  Set to the driver context on success.
  * @return 0 on success, negative errno on error.
  */
-int xcvr_kiss_open(const xcvr_kiss_config_t *config,
-                   xcvr_kiss_ctx_t          **ctx_out);
+int xcvr_kiss_open(const xcvr_kiss_config_t *config, xcvr_kiss_ctx_t **ctx_out);
 
 /**
- * @brief Transmit an AX.25 [REF-PROTO-001] frame over the 49 MHz [REF-FCC-003 §15.235] link.
+ * @brief Transmit an AX.25 [REF-PROTO-001] frame over the 49 MHz [REF-FCC-003
+ * §15.235] link.
  *
  * Sequence:
  *   1. Select @c channel on the Si5351A DDS.
@@ -172,13 +173,12 @@ int xcvr_kiss_open(const xcvr_kiss_config_t *config,
  * @param[in] ctx          Driver context.
  * @param[in] channel      49 MHz channel index 0–4.
  * @param[in] ax25_payload Raw AX.25 frame bytes (no HDLC flags / FCS).
- * @param[in] payload_len  Length of @c ax25_payload in bytes (≤ KISS_MAX_AX25_LEN).
+ * @param[in] payload_len  Length of @c ax25_payload in bytes (≤
+ * KISS_MAX_AX25_LEN).
  * @return 0 on success, negative errno on error.
  */
-int xcvr_kiss_transmit(xcvr_kiss_ctx_t *ctx,
-                       unsigned int     channel,
-                       const uint8_t   *ax25_payload,
-                       size_t           payload_len);
+int xcvr_kiss_transmit(xcvr_kiss_ctx_t *ctx, unsigned int channel,
+                       const uint8_t *ax25_payload, size_t payload_len);
 
 /**
  * @brief Query the currently selected 49 MHz channel.
@@ -210,14 +210,15 @@ void xcvr_kiss_close(xcvr_kiss_ctx_t *ctx);
  *
  * @param[in]  payload      AX.25 frame bytes.
  * @param[in]  payload_len  Byte count of @c payload.
- * @param[out] out_buf      Output buffer, must be ≥ (payload_len × 2 + 4) bytes.
+ * @param[out] out_buf      Output buffer, must be ≥ (payload_len × 2 + 4)
+ * bytes.
  * @param[in]  out_buf_len  Size of @c out_buf.
  * @param[out] out_len      Number of bytes written to @c out_buf.
- * @return 0 on success, -ENOSPC if @c out_buf is too small, -EINVAL on bad args.
+ * @return 0 on success, -ENOSPC if @c out_buf is too small, -EINVAL on bad
+ * args.
  */
-int kiss_encode(const uint8_t *payload,  size_t payload_len,
-                uint8_t       *out_buf,  size_t out_buf_len,
-                size_t        *out_len);
+int kiss_encode(const uint8_t *payload, size_t payload_len, uint8_t *out_buf,
+                size_t out_buf_len, size_t *out_len);
 
 /**
  * @brief Feed one byte into the KISS decoder state machine.
@@ -229,21 +230,20 @@ int kiss_encode(const uint8_t *payload,  size_t payload_len,
  *
  * @param[in,out] frame_out  Output frame (must be pre-allocated by caller).
  * @param[in]     byte       Next byte from the UART.
- * @param[in,out] state      Decoder state (caller allocates and zero-initialises
- *                           before the first call; do NOT modify externally).
+ * @param[in,out] state      Decoder state (caller allocates and
+ * zero-initialises before the first call; do NOT modify externally).
  * @return 1 if frame complete, 0 if frame in progress, negative errno on error.
  */
 
 /** Opaque decoder state — zero-initialise before first call. */
 typedef struct {
-    bool    in_frame;    /**< True once the opening FEND has been seen. */
-    bool    escaped;     /**< True if the previous byte was FESC. */
-    size_t  idx;         /**< Write index into @c frame_out.data. */
+    bool   in_frame; /**< True once the opening FEND has been seen. */
+    bool   escaped;  /**< True if the previous byte was FESC. */
+    size_t idx;      /**< Write index into @c frame_out.data. */
 } kiss_decoder_state_t;
 
-int kiss_decode_byte(kiss_frame_t         *frame_out,
-                     kiss_decoder_state_t *state,
-                     uint8_t               byte);
+int kiss_decode_byte(kiss_frame_t *frame_out, kiss_decoder_state_t *state,
+                     uint8_t byte);
 
 #ifdef __cplusplus
 }

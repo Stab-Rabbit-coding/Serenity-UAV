@@ -36,24 +36,29 @@ OUT = os.path.join(BASE, "files-hollowed-24in")
 PARTS = os.path.join(OUT, "operands")
 ENG = "manifold"
 
-POCKET_D = 0.7        # mm flat pocket depth
-LETTER_D = 0.6        # mm extra letter recess below the pocket floor
-PLAQUE_MARGIN = 7.0   # mm border around the text inside the pocket
+POCKET_D = 0.7  # mm flat pocket depth
+LETTER_D = 0.6  # mm extra letter recess below the pocket floor
+PLAQUE_MARGIN = 7.0  # mm border around the text inside the pocket
 
 # part -> list of (label, anchor(inside cavity), wall_dir(anchor->wall), read_dir)
 #   wall_dir  : unit vector from the anchor toward the wall to engrave.
 #   read_dir  : in-plane left->right reading direction of the text.
 PLAQUES = {
     "cargo_sect_shell24_2mm_repaired": [
-        ("inara", (-40.0, -362.0, 103.0), (1, 0, 0), (0, -1, 0)),   # port +X wall
+        ("inara", (-40.0, -362.0, 103.0), (1, 0, 0), (0, -1, 0)),  # port +X wall
         ("river", (-168.0, -363.0, 102.0), (-1, 0, 0), (0, 1, 0)),  # stbd -X wall
     ],
     "head_shell24_2mm_repaired": [
-        ("shepherd", (165.0, -235.0, 90.0), (0, 0, 1), (0, -1, 0)),  # fwd dorsal ceiling
+        (
+            "shepherd",
+            (165.0, -235.0, 90.0),
+            (0, 0, 1),
+            (0, -1, 0),
+        ),  # fwd dorsal ceiling
     ],
     "middle_shell24_2mm_repaired": [
-        ("simon", (180.0, -70.0, 55.0), (0, 0, 1), (1, 0, 0)),       # dorsal ceiling
-        ("kaylee", (180.0, -70.0, 18.0), (0, 0, -1), (1, 0, 0)),     # ventral floor
+        ("simon", (180.0, -70.0, 55.0), (0, 0, 1), (1, 0, 0)),  # dorsal ceiling
+        ("kaylee", (180.0, -70.0, 18.0), (0, 0, -1), (1, 0, 0)),  # ventral floor
     ],
 }
 
@@ -71,7 +76,7 @@ def surface_hit(mesh, anchor, direction):
     d = np.linalg.norm(locs - np.asarray(anchor), axis=1)
     k = int(np.argmin(d))
     n = mesh.face_normals[tri[k]]
-    if n @ unit(direction) > 0:       # want the normal pointing back toward the cavity
+    if n @ unit(direction) > 0:  # want the normal pointing back toward the cavity
         n = -n
     return locs[k], unit(n)
 
@@ -98,10 +103,10 @@ def place_text(slab, ex, ey, ez, centre):
 
 def engrave(shell, label, anchor, wall_dir, read_dir):
     S, n = surface_hit(shell, anchor, wall_dir)
-    ez = -n                       # depth axis: into the wall (away from cavity)
+    ez = -n  # depth axis: into the wall (away from cavity)
     ex = unit(np.asarray(read_dir) - (np.asarray(read_dir) @ (-ez)) * (-ez))
     ey = unit(np.cross(-ez, ex))  # up, with -ez facing the viewer
-    cav = -ez                     # toward the cavity/viewer
+    cav = -ez  # toward the cavity/viewer
 
     slab = trimesh.load(os.path.join(PARTS, f"text_{label}.stl"), process=True)
     tw = slab.bounds[1][0] - slab.bounds[0][0]
@@ -138,9 +143,11 @@ def drop_islands(mesh, min_faces=100):
 
 def main():
     sel = sys.argv[1:] or ["cargo", "head", "middle"]
-    name = {"cargo": "cargo_sect_shell24_2mm_repaired",
-            "head": "head_shell24_2mm_repaired",
-            "middle": "middle_shell24_2mm_repaired"}
+    name = {
+        "cargo": "cargo_sect_shell24_2mm_repaired",
+        "head": "head_shell24_2mm_repaired",
+        "middle": "middle_shell24_2mm_repaired",
+    }
     for s in sel:
         part = name[s]
         path = os.path.join(OUT, part + ".stl")
@@ -150,7 +157,9 @@ def main():
             shell = engrave(shell, label, anchor, wd, rd)
         shell = drop_islands(shell)
         shell.export(path)
-        print(f"  -> {path}  watertight={shell.is_watertight} facets={len(shell.faces)}")
+        print(
+            f"  -> {path}  watertight={shell.is_watertight} facets={len(shell.faces)}"
+        )
 
 
 if __name__ == "__main__":

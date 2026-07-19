@@ -43,16 +43,31 @@ PRETTY = str(HERE / "Vera.pretty")
 # ref -> (footprint name, {pad_number: net_name}, (x_mm, y_mm))
 SENSOR_X = 62.0  # co-located just inboard of the sensor JST cluster (X~65-67)
 LANDS = {
-    "J_TOF_DS": ("DS_ToF_4P",
-                 {1: "+5V", 2: "GND", 3: "UART_TOF_TX", 4: "UART_TOF_RX"},
-                 (SENSOR_X, 5.0)),   # starboard (low Y)
-    "J_LASER_DS": ("DS_Laser_2P", {1: "+5V", 2: "LASER_CATHODE"},
-                   (SENSOR_X, 13.2)),  # centreline (mid Y) = +8.2 mm from ToF
-    "J_CAM_DS": ("DS_Camera_9P",
-                 {1: "CSI_CLK_P", 2: "CSI_CLK_N", 3: "CSI_D0_P", 4: "CSI_D0_N",
-                  5: "CAM_SDA", 6: "CAM_SCL", 7: "CAM_RESET_N", 8: "+3V3",
-                  9: "GND"},
-                 (SENSOR_X, 21.5)),  # port (high Y) = +16.5 mm from ToF
+    "J_TOF_DS": (
+        "DS_ToF_4P",
+        {1: "+5V", 2: "GND", 3: "UART_TOF_TX", 4: "UART_TOF_RX"},
+        (SENSOR_X, 5.0),
+    ),  # starboard (low Y)
+    "J_LASER_DS": (
+        "DS_Laser_2P",
+        {1: "+5V", 2: "LASER_CATHODE"},
+        (SENSOR_X, 13.2),
+    ),  # centreline (mid Y) = +8.2 mm from ToF
+    "J_CAM_DS": (
+        "DS_Camera_9P",
+        {
+            1: "CSI_CLK_P",
+            2: "CSI_CLK_N",
+            3: "CSI_D0_P",
+            4: "CSI_D0_N",
+            5: "CAM_SDA",
+            6: "CAM_SCL",
+            7: "CAM_RESET_N",
+            8: "+3V3",
+            9: "GND",
+        },
+        (SENSOR_X, 21.5),
+    ),  # port (high Y) = +16.5 mm from ToF
 }
 
 
@@ -86,7 +101,7 @@ def main():
             fp.SetPosition(mm(pos))
             board.Add(fp)
             print(f"  placed {ref} ({fpname}) at {pos}")
-        for padnum, netname in padnets.items():
+        for padnum, netname in padnets.items():  # pylint: disable=no-member
             pad = fp.FindPadByNumber(str(padnum))
             if pad is None:
                 print(f"ERROR: {ref} has no pad {padnum}")

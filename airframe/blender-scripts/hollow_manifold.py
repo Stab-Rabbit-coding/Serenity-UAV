@@ -90,9 +90,11 @@ def process(name):
         shell = trimesh.util.concatenate(keep)
 
     shell.export(out_p)  # trimesh writes binary STL for .stl
-    print(f"  {name}: facets={len(shell.faces):>8d}  watertight={shell.is_watertight}"
-          f"  winding={shell.is_winding_consistent}  bubbles(o/i/result)={d_o}/{d_i}/{d_r}"
-          f"  vol={shell.volume:.0f} mm^3  ({os.path.getsize(out_p)//1024} KB)")
+    print(
+        f"  {name}: facets={len(shell.faces):>8d}  watertight={shell.is_watertight}"
+        f"  winding={shell.is_winding_consistent}  bubbles(o/i/result)={d_o}/{d_i}/{d_r}"
+        f"  vol={shell.volume:.0f} mm^3  ({os.path.getsize(out_p)//1024} KB)"
+    )
 
 
 def main():

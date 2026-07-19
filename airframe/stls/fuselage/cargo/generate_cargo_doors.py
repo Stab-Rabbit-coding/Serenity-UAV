@@ -223,10 +223,10 @@ def build_belly_interpolator(shell_stl: str, y_min: float, y_max: float):
     if mask.sum() == 0:
         print("[belly] WARNING: no belly faces found — using flat fallback")
 
-        def belly_z(x2d, y2d):
+        def belly_z_fallback(x2d, y2d):
             return np.full_like(x2d, Z_BELLY_FALLBACK, dtype=float)
 
-        return belly_z, X_CL - 50.0, X_CL + 50.0
+        return belly_z_fallback, X_CL - 50.0, X_CL + 50.0
 
     bx = belly[:, 0]  # X positions of belly face centroids
     by = belly[:, 1]  # Y positions

@@ -29,10 +29,10 @@ import trimesh
 
 GEAR_DIR = "airframe/stls/fuselage/landing-gear"
 
-LEAN_ANG = 24.0   # deg from vertical
-AZ_SPLIT = 15.0   # deg, +/- within each pair
-POST_MID_Z = 79.8 * 2.0 / 3.0   # 1/3-down branch height (ductile pair)
-POST_TOP_Z = 79.8                # apex branch height (spring pair)
+LEAN_ANG = 24.0  # deg from vertical
+AZ_SPLIT = 15.0  # deg, +/- within each pair
+POST_MID_Z = 79.8 * 2.0 / 3.0  # 1/3-down branch height (ductile pair)
+POST_TOP_Z = 79.8  # apex branch height (spring pair)
 SPRING_L = 45.0
 DUCTILE_L = 30.0
 
@@ -50,11 +50,13 @@ def branch_direction(az_deg):
     az = np.radians(az_deg)
     # Equivalent to rotating +Z by LEAN_ANG about Y then by az about Z.
     v = np.array([np.sin(lean), 0, np.cos(lean)])
-    rot_z = np.array([
-        [np.cos(az), -np.sin(az), 0],
-        [np.sin(az), np.cos(az), 0],
-        [0, 0, 1],
-    ])
+    rot_z = np.array(
+        [
+            [np.cos(az), -np.sin(az), 0],
+            [np.sin(az), np.cos(az), 0],
+            [0, 0, 1],
+        ]
+    )
     return rot_z @ v
 
 

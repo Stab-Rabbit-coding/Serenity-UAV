@@ -29,18 +29,18 @@ import pcbnew
 
 BOARD = Path(__file__).resolve().parent.parent / "kicads" / "Jayne.kicad_pcb"
 
-NARROW_X = 69.85   # forward/sensor edge (high X)
-WIDE_X = 0.0       # aft edge (low X)
-Y_C = 12.7         # board Y centreline
+NARROW_X = 69.85  # forward/sensor edge (high X)
+WIDE_X = 0.0  # aft edge (low X)
+Y_C = 12.7  # board Y centreline
 NARROW_W = 25.4
 WIDE_W = 58.0
 
 # trapezoid corners (mm), CCW
 CORNERS = [
-    (NARROW_X, Y_C - NARROW_W / 2),   # fwd starboard
-    (NARROW_X, Y_C + NARROW_W / 2),   # fwd port
-    (WIDE_X, Y_C + WIDE_W / 2),       # aft port
-    (WIDE_X, Y_C - WIDE_W / 2),       # aft starboard
+    (NARROW_X, Y_C - NARROW_W / 2),  # fwd starboard
+    (NARROW_X, Y_C + NARROW_W / 2),  # fwd port
+    (WIDE_X, Y_C + WIDE_W / 2),  # aft port
+    (WIDE_X, Y_C - WIDE_W / 2),  # aft starboard
 ]
 
 
@@ -69,8 +69,10 @@ def main():
         seg.SetLayer(edge)
         seg.SetWidth(pcbnew.FromMM(0.1))
         board.Add(seg)
-    print(f"  drew trapezoid narrow={NARROW_W}mm (X={NARROW_X}) -> "
-          f"wide={WIDE_W}mm (X={WIDE_X}), len={NARROW_X - WIDE_X}mm")
+    print(
+        f"  drew trapezoid narrow={NARROW_W}mm (X={NARROW_X}) -> "
+        f"wide={WIDE_W}mm (X={WIDE_X}), len={NARROW_X - WIDE_X}mm"
+    )
     pcbnew.SaveBoard(str(BOARD), board)
     print("saved", BOARD.name)
     return 0

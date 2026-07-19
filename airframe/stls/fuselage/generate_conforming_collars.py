@@ -43,43 +43,64 @@ import os
 
 import numpy as np
 import trimesh
-from shapely.geometry import Polygon
 from manifold3d import Manifold, Mesh
+from shapely.geometry import Polygon
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-CAVITY_FLOOR = 5.0     # mm^2 — ignore section loops smaller than this (noise)
-BOND_GAP = 0.6         # mm — collar outer inset from the section inner wall
-WALL_T = 2.0           # mm — collar radial wall
-INSERT = 8.0           # mm — collar insertion depth into EACH section
-SAMPLES = 41           # stations sampled across the collar span
-SIMPLIFY = 0.4         # mm — contour simplification tolerance
+CAVITY_FLOOR = 5.0  # mm^2 — ignore section loops smaller than this (noise)
+BOND_GAP = 0.6  # mm — collar outer inset from the section inner wall
+WALL_T = 2.0  # mm — collar radial wall
+INSERT = 8.0  # mm — collar insertion depth into EACH section
+SAMPLES = 41  # stations sampled across the collar span
+SIMPLIFY = 0.4  # mm — contour simplification tolerance
 JUNK_FACES = 64
 
 # joint: (name, fwd_stl, aft_stl, fwd_face_Y, aft_face_Y, out_stl)
 #   fwd section occupies Y <= fwd_face_Y ; aft section occupies Y >= aft_face_Y.
 JOINTS = [
-    ("head/cargo",
-     "head_shell24_2mm_repaired.stl", "cargo/cargo_sect_shell24_2mm_repaired.stl",
-     -71.2, -69.5, "head_cargo_splice_collar.stl"),
-    ("cargo/middle",
-     "cargo/cargo_sect_shell24_2mm_repaired.stl", "middle_shell24_2mm_repaired.stl",
-     129.0, 131.0, "cargo_middle_splice_collar.stl"),
-    ("middle/rear",
-     "middle_shell24_2mm_repaired.stl", "rear_shell24_2mm_repaired.stl",
-     202.3, 204.3, "middle_rear_splice_collar.stl"),
+    (
+        "head/cargo",
+        "head_shell24_2mm_repaired.stl",
+        "cargo/cargo_sect_shell24_2mm_repaired.stl",
+        -71.2,
+        -69.5,
+        "head_cargo_splice_collar.stl",
+    ),
+    (
+        "cargo/middle",
+        "cargo/cargo_sect_shell24_2mm_repaired.stl",
+        "middle_shell24_2mm_repaired.stl",
+        129.0,
+        131.0,
+        "cargo_middle_splice_collar.stl",
+    ),
+    (
+        "middle/rear",
+        "middle_shell24_2mm_repaired.stl",
+        "rear_shell24_2mm_repaired.stl",
+        202.3,
+        204.3,
+        "middle_rear_splice_collar.stl",
+    ),
 ]
 
 
 def to_man(tm):
-    return Manifold(Mesh(vert_properties=tm.vertices.astype(np.float32),
-                         tri_verts=tm.faces.astype(np.uint32)))
+    return Manifold(
+        Mesh(
+            vert_properties=tm.vertices.astype(np.float32),
+            tri_verts=tm.faces.astype(np.uint32),
+        )
+    )
 
 
 def from_man(m):
     mm = m.to_mesh()
     out = trimesh.Trimesh(
         vertices=np.asarray(mm.vert_properties)[:, :3].astype(np.float64),
-        faces=np.asarray(mm.tri_verts), process=False)
+        faces=np.asarray(mm.tri_verts),
+        process=False,
+    )
     out.merge_vertices()
     return out
 
@@ -111,8 +132,9 @@ def _clean(p):
 def _extrude(poly, y0, y1):
     ex = trimesh.creation.extrude_polygon(poly, height=y1 - y0)
     # (x, y_poly, z_extrude) -> hull (X, Y=extrude+y0, Z)
-    ex.apply_transform(np.array([[1, 0, 0, 0], [0, 0, 1, y0],
-                                 [0, 1, 0, 0], [0, 0, 0, 1.0]]))
+    ex.apply_transform(
+        np.array([[1, 0, 0, 0], [0, 0, 1, y0], [0, 1, 0, 0], [0, 0, 0, 1.0]])
+    )
     return ex
 
 
@@ -163,7 +185,8 @@ def conforming_collar(fwd, aft, fwd_face, aft_face):
     collar = from_man(collar_man)
     # drop tiny junk fragments
     comps = trimesh.graph.connected_components(
-        collar.face_adjacency, nodes=np.arange(len(collar.faces)))
+        collar.face_adjacency, nodes=np.arange(len(collar.faces))
+    )
     keep = [c for c in comps if len(c) >= JUNK_FACES]
     if len(keep) < len(comps):
         collar = collar.submesh([np.concatenate(keep)], append=True)

@@ -3,6 +3,7 @@
  * @brief   XCVR-49MHZ-1 KISS/AX.25 UART driver — implementation.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * See xcvr_kiss.h for design overview and interface description.
@@ -15,15 +16,17 @@
  *   - The RX thread blocks on read(); no busy-wait or polling.
  *   - TX is serialised by a mutex; the PTT window is held for the minimum
  *     required duration and no longer, as good engineering practice for a
- *     [REF-FCC-003 §15.235] unlicensed device sharing the band [REF-FCC-003 §15.5].
+ *     [REF-FCC-003 §15.235] unlicensed device sharing the band [REF-FCC-003
+ * §15.5].
  *   - All error paths close resources in reverse acquisition order to avoid
  *     resource leaks.
  *
  * References:
  *   [1] POSIX.1-2017 termios specification.
  *   [2] libgpiod 2.2.1 API — libgpiod.readthedocs.io/en/latest
- *       Target: Debian Trixie (libgpiod 2.2.1-2+deb13u1) on PocketBeagle 2 Industrial.
- *   [3] Chepponis & Karn, "KISS TNC," ARRL 6th Computer Networking Conf., 1987.
+ *       Target: Debian Trixie (libgpiod 2.2.1-2+deb13u1) on PocketBeagle 2
+ * Industrial. [3] Chepponis & Karn, "KISS TNC," ARRL 6th Computer Networking
+ * Conf., 1987.
  */
 
 /*
@@ -52,17 +55,17 @@
  * ---------------------------------------------------------------------------*/
 
 struct xcvr_kiss_ctx {
-    int                        uart_fd;         /**< UART file descriptor */
-    si5351_ctx_t              *si5351;          /**< DDS driver context */
-    struct gpiod_chip         *gpio_chip;       /**< libgpiod 2.x chip handle */
-    struct gpiod_line_request *ptt_req;         /**< libgpiod 2.x line request */
-    unsigned int               ptt_offset;      /**< GPIO line offset for PTT_N */
-    pthread_t                  rx_thread;       /**< Background receive thread */
-    pthread_mutex_t            tx_mutex;        /**< Serialises transmit calls */
-    volatile bool              rx_running;      /**< Set false to stop rx_thread */
-    unsigned int               current_channel; /**< Currently selected RCRS channel */
-    xcvr_rx_callback_t         rx_callback;     /**< RX frame callback */
-    void                      *rx_userdata;     /**< Caller context for rx_callback */
+    int                        uart_fd;    /**< UART file descriptor */
+    si5351_ctx_t              *si5351;     /**< DDS driver context */
+    struct gpiod_chip         *gpio_chip;  /**< libgpiod 2.x chip handle */
+    struct gpiod_line_request *ptt_req;    /**< libgpiod 2.x line request */
+    unsigned int               ptt_offset; /**< GPIO line offset for PTT_N */
+    pthread_t                  rx_thread;  /**< Background receive thread */
+    pthread_mutex_t            tx_mutex;   /**< Serialises transmit calls */
+    volatile bool              rx_running; /**< Set false to stop rx_thread */
+    unsigned int current_channel; /**< Currently selected 49 MHz XCVR channel */
+    xcvr_rx_callback_t rx_callback; /**< RX frame callback */
+    void              *rx_userdata; /**< Caller context for rx_callback */
 };
 
 /* ---------------------------------------------------------------------------
@@ -74,8 +77,7 @@ struct xcvr_kiss_ctx {
  *
  * @return Open file descriptor, or -errno on failure.
  */
-static int uart_open(const char *dev)
-{
+static int uart_open(const char *dev) {
     int fd = open(dev, O_RDWR | O_NOCTTY | O_NDELAY);
     if (fd < 0) {
         return -errno;
@@ -101,12 +103,12 @@ static int uart_open(const char *dev)
     /* 57600 baud, 8N1. */
     (void)cfsetispeed(&tty, B57600);
     (void)cfsetospeed(&tty, B57600);
-    tty.c_cflag  = (tty.c_cflag & ~(tcflag_t)CSIZE) | CS8;
+    tty.c_cflag = (tty.c_cflag & ~(tcflag_t)CSIZE) | CS8;
     tty.c_cflag &= ~(tcflag_t)(PARENB | CSTOPB);
     tty.c_cflag |= (tcflag_t)CLOCAL | (tcflag_t)CREAD;
 
     /* Blocking read with 100 ms timeout (VTIME in tenths of a second). */
-    tty.c_cc[VMIN]  = 0;
+    tty.c_cc[VMIN] = 0;
     tty.c_cc[VTIME] = 1;
 
     if (tcsetattr(fd, TCSANOW, &tty) != 0) {
@@ -129,10 +131,8 @@ static int uart_open(const char *dev)
 /**
  * @brief Assert PTT_N (drive line LOW — active-low, TX keyed).
  */
-static int ptt_assert(xcvr_kiss_ctx_t *ctx)
-{
-    int rc = gpiod_line_request_set_value(ctx->ptt_req,
-                                          ctx->ptt_offset,
+static int ptt_assert(xcvr_kiss_ctx_t *ctx) {
+    int rc = gpiod_line_request_set_value(ctx->ptt_req, ctx->ptt_offset,
                                           GPIOD_LINE_VALUE_INACTIVE);
     return (rc == 0) ? 0 : -EIO;
 }
@@ -140,10 +140,8 @@ static int ptt_assert(xcvr_kiss_ctx_t *ctx)
 /**
  * @brief Release PTT_N (drive line HIGH — TX unkeyed).
  */
-static int ptt_release(xcvr_kiss_ctx_t *ctx)
-{
-    int rc = gpiod_line_request_set_value(ctx->ptt_req,
-                                          ctx->ptt_offset,
+static int ptt_release(xcvr_kiss_ctx_t *ctx) {
+    int rc = gpiod_line_request_set_value(ctx->ptt_req, ctx->ptt_offset,
                                           GPIOD_LINE_VALUE_ACTIVE);
     return (rc == 0) ? 0 : -EIO;
 }
@@ -152,24 +150,20 @@ static int ptt_release(xcvr_kiss_ctx_t *ctx)
  * Internal: microsecond sleep (POSIX)
  * ---------------------------------------------------------------------------*/
 
-static void sleep_us(unsigned long us)
-{
-    struct timespec ts = {
-        .tv_sec  = (time_t)(us / 1000000UL),
-        .tv_nsec = (long)((us % 1000000UL) * 1000UL)
-    };
+static void sleep_us(unsigned long us) {
+    struct timespec ts = {.tv_sec = (time_t)(us / 1000000UL),
+                          .tv_nsec = (long)((us % 1000000UL) * 1000UL)};
     /* Retry on signal interruption. */
-    while (nanosleep(&ts, &ts) != 0 && errno == EINTR) { /* retry */ }
+    while (nanosleep(&ts, &ts) != 0 && errno == EINTR) { /* retry */
+    }
 }
 
 /* ---------------------------------------------------------------------------
  * KISS frame encoder
  * ---------------------------------------------------------------------------*/
 
-int kiss_encode(const uint8_t *payload,  size_t payload_len,
-                uint8_t       *out_buf,  size_t out_buf_len,
-                size_t        *out_len)
-{
+int kiss_encode(const uint8_t *payload, size_t payload_len, uint8_t *out_buf,
+                size_t out_buf_len, size_t *out_len) {
     if (payload == NULL || out_buf == NULL || out_len == NULL) {
         return -EINVAL;
     }
@@ -213,10 +207,8 @@ int kiss_encode(const uint8_t *payload,  size_t payload_len,
  * KISS frame decoder (byte-at-a-time state machine)
  * ---------------------------------------------------------------------------*/
 
-int kiss_decode_byte(kiss_frame_t         *frame_out,
-                     kiss_decoder_state_t *state,
-                     uint8_t               byte)
-{
+int kiss_decode_byte(kiss_frame_t *frame_out, kiss_decoder_state_t *state,
+                     uint8_t byte) {
     if (frame_out == NULL || state == NULL) {
         return -EINVAL;
     }
@@ -225,13 +217,14 @@ int kiss_decode_byte(kiss_frame_t         *frame_out,
         if (!state->in_frame) {
             /* Opening FEND — start a new frame. */
             state->in_frame = true;
-            state->escaped  = false;
-            state->idx      = 0U;
+            state->escaped = false;
+            state->idx = 0U;
             frame_out->data_len = 0U;
             return 0;
         }
 
-        /* Closing FEND — frame complete (idx > 0 means we got the type byte). */
+        /* Closing FEND — frame complete (idx > 0 means we got the type byte).
+         */
         if (state->idx > 0U) {
             frame_out->data_len = state->idx - 1U; /* exclude type byte slot */
             state->in_frame = false;
@@ -292,26 +285,24 @@ int kiss_decode_byte(kiss_frame_t         *frame_out,
  * Background RX thread
  * ---------------------------------------------------------------------------*/
 
-static void *rx_thread_func(void *arg)
-{
-    xcvr_kiss_ctx_t      *ctx   = (xcvr_kiss_ctx_t *)arg;
-    kiss_frame_t          frame;
-    kiss_decoder_state_t  state;
+static void *rx_thread_func(void *arg) {
+    xcvr_kiss_ctx_t     *ctx = (xcvr_kiss_ctx_t *)arg;
+    kiss_frame_t         frame;
+    kiss_decoder_state_t state;
 
     (void)memset(&frame, 0, sizeof(frame));
     (void)memset(&state, 0, sizeof(state));
 
     while (ctx->rx_running) {
-        uint8_t  byte;
-        ssize_t  n = read(ctx->uart_fd, &byte, 1U);
+        uint8_t byte;
+        ssize_t n = read(ctx->uart_fd, &byte, 1U);
 
         if (n < 0) {
             if (errno == EINTR || errno == EAGAIN) {
                 continue; /* signal or timeout — retry */
             }
             /* Unrecoverable UART error — log and exit thread. */
-            (void)fprintf(stderr,
-                          "xcvr_kiss: RX UART read error: %s\n",
+            (void)fprintf(stderr, "xcvr_kiss: RX UART read error: %s\n",
                           strerror(errno));
             break;
         }
@@ -331,8 +322,8 @@ static void *rx_thread_func(void *arg)
             (void)memset(&state, 0, sizeof(state));
         } else if (rc < 0) {
             /* Protocol error — reset and continue. */
-            (void)fprintf(stderr,
-                          "xcvr_kiss: RX decode error %d, resetting\n", rc);
+            (void)fprintf(stderr, "xcvr_kiss: RX decode error %d, resetting\n",
+                          rc);
             (void)memset(&state, 0, sizeof(state));
         }
     }
@@ -345,15 +336,14 @@ static void *rx_thread_func(void *arg)
  * ---------------------------------------------------------------------------*/
 
 int xcvr_kiss_open(const xcvr_kiss_config_t *config,
-                   xcvr_kiss_ctx_t          **ctx_out)
-{
+                   xcvr_kiss_ctx_t         **ctx_out) {
     if (config == NULL || ctx_out == NULL) {
         return -EINVAL;
     }
     if (config->uart_dev == NULL || config->gpio_chip == NULL) {
         return -EINVAL;
     }
-    if (config->default_channel >= SI5351_RCRS_NUM_CHANNELS) {
+    if (config->default_channel >= SI5351_49MHZ_XCVR_NUM_CHANNELS) {
         return -EINVAL;
     }
 
@@ -377,7 +367,7 @@ int xcvr_kiss_open(const xcvr_kiss_config_t *config,
         goto err_close_uart;
     }
 
-    rc = si5351_set_rcrs_channel(ctx->si5351, config->default_channel);
+    rc = si5351_set_49mhz_xcvr_channel(ctx->si5351, config->default_channel);
     if (rc != 0) {
         goto err_close_si5351;
     }
@@ -448,7 +438,7 @@ int xcvr_kiss_open(const xcvr_kiss_config_t *config,
     /* --- RX thread --- */
     ctx->rx_callback = config->rx_callback;
     ctx->rx_userdata = config->rx_userdata;
-    ctx->rx_running  = true;
+    ctx->rx_running = true;
 
     if (pthread_create(&ctx->rx_thread, NULL, rx_thread_func, ctx) != 0) {
         rc = -errno;
@@ -472,9 +462,10 @@ err_free_ctx:
     return rc;
 }
 
-void xcvr_kiss_close(xcvr_kiss_ctx_t *ctx)
-{
-    if (ctx == NULL) { return; }
+void xcvr_kiss_close(xcvr_kiss_ctx_t *ctx) {
+    if (ctx == NULL) {
+        return;
+    }
 
     /* Signal and join the RX thread. */
     ctx->rx_running = false;
@@ -496,15 +487,12 @@ void xcvr_kiss_close(xcvr_kiss_ctx_t *ctx)
  * Public API — transmit
  * ---------------------------------------------------------------------------*/
 
-int xcvr_kiss_transmit(xcvr_kiss_ctx_t *ctx,
-                       unsigned int     channel,
-                       const uint8_t   *ax25_payload,
-                       size_t           payload_len)
-{
+int xcvr_kiss_transmit(xcvr_kiss_ctx_t *ctx, unsigned int channel,
+                       const uint8_t *ax25_payload, size_t payload_len) {
     if (ctx == NULL || ax25_payload == NULL) {
         return -EINVAL;
     }
-    if (channel >= SI5351_RCRS_NUM_CHANNELS) {
+    if (channel >= SI5351_49MHZ_XCVR_NUM_CHANNELS) {
         return -EINVAL;
     }
     if (payload_len == 0U || payload_len > KISS_MAX_AX25_LEN) {
@@ -515,17 +503,17 @@ int xcvr_kiss_transmit(xcvr_kiss_ctx_t *ctx,
     uint8_t kiss_buf[KISS_MAX_AX25_LEN * 2U + 4U];
     size_t  kiss_len = 0U;
 
-    int rc = kiss_encode(ax25_payload, payload_len,
-                         kiss_buf, sizeof(kiss_buf), &kiss_len);
+    int rc = kiss_encode(ax25_payload, payload_len, kiss_buf, sizeof(kiss_buf),
+                         &kiss_len);
     if (rc != 0) {
         return rc;
     }
 
     (void)pthread_mutex_lock(&ctx->tx_mutex);
 
-    /* 1. Select RCRS channel on the Si5351A DDS. */
+    /* 1. Select 49 MHz XCVR channel on the Si5351A DDS. */
     if (channel != ctx->current_channel) {
-        rc = si5351_set_rcrs_channel(ctx->si5351, channel);
+        rc = si5351_set_49mhz_xcvr_channel(ctx->si5351, channel);
         if (rc != 0) {
             goto tx_done;
         }
@@ -545,11 +533,11 @@ int xcvr_kiss_transmit(xcvr_kiss_ctx_t *ctx,
     /* 4. Write KISS frame to UART. */
     size_t written = 0U;
     while (written < kiss_len) {
-        ssize_t n = write(ctx->uart_fd,
-                          &kiss_buf[written],
-                          kiss_len - written);
+        ssize_t n = write(ctx->uart_fd, &kiss_buf[written], kiss_len - written);
         if (n < 0) {
-            if (errno == EINTR) { continue; }
+            if (errno == EINTR) {
+                continue;
+            }
             rc = -errno;
             (void)ptt_release(ctx);
             goto tx_done;
@@ -574,7 +562,7 @@ int xcvr_kiss_transmit(xcvr_kiss_ctx_t *ctx,
      * calculated delay and wait on the hardware signal instead.
      */
     unsigned long air_bits = (unsigned long)(payload_len + 10U) * 8UL;
-    unsigned long air_us   = (air_bits * 1000000UL) / (unsigned long)XCVR_RF_BAUD;
+    unsigned long air_us = (air_bits * 1000000UL) / (unsigned long)XCVR_RF_BAUD;
     sleep_us(air_us + XCVR_PTT_TAIL_US);
 
     /* 6. Release PTT_N. */
@@ -585,7 +573,6 @@ tx_done:
     return rc;
 }
 
-unsigned int xcvr_kiss_get_channel(const xcvr_kiss_ctx_t *ctx)
-{
+unsigned int xcvr_kiss_get_channel(const xcvr_kiss_ctx_t *ctx) {
     return (ctx != NULL) ? ctx->current_channel : UINT_MAX;
 }

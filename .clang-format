@@ -1,20 +1,31 @@
 ---
 # clang-format configuration for the Serenity UAV firmware sources.
 #
-# CLAUDE.md mandates 4-space indentation for all code "whether or not
+# AGENTS.md mandates 4-space indentation for all code "whether or not
 # required by the language" — this overrides clang-format's Google-style
 # default of 2.  Macro-value and struct-member alignment are enabled to
 # match the column-aligned commenting style already hand-applied across
 # avionics/firmware/common/include/*.h.
+#
+# Authoritative clang-format version: pinned to the latest stable LLVM
+# release (clang-format==22.1.8, see requirements-dev.txt) in both local
+# dev and CI (.github/workflows/ci.yml "C/C++ format" job). Do not rely on
+# whatever clang-format ships inside the github/super-linter@v4 image
+# (VALIDATE_CLANG_FORMAT is disabled in super-linter.yml for exactly this
+# reason) -- historically-bundled clang-format binaries lag by many major
+# versions and disagree with current releases on some formatting
+# decisions (e.g. PointerAlignment's Left/Right interpretation shifted
+# between clang-format 18 and 22), producing false-positive lint failures
+# unrelated to the actual code.
 BasedOnStyle: Google
 IndentWidth: 4
 ColumnLimit: 80
-# Boolean form (not the newer Never/CaseSensitive/CaseInsensitive enum) --
-# the clang-format bundled in the CI super-linter container predates the
-# enum syntax and fails to parse this file with "invalid boolean" if the
-# enum form is used.  false is the exact behavioral equivalent of Never.
 SortIncludes: false
 AlignConsecutiveMacros: AcrossEmptyLinesAndComments
 AlignConsecutiveDeclarations: true
 AlignTrailingComments: true
-PointerAlignment: Left
+# Right (not Left): keeps the `*`/`&` attached to the identifier
+# ("char *foo"), matching this codebase's actual established style
+# everywhere. Confirmed stable/identical output across clang-format 18
+# and 22 (unlike Left, which changed meaning between those versions).
+PointerAlignment: Right

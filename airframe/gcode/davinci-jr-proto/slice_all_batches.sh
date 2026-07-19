@@ -64,10 +64,10 @@ log() { printf "[%s] %s\n" "$(date +%H:%M:%S)" "$*"; }
 # Usage: slice <outdir> <scale> <infill%> <raft_layers> <support> <stl_path> [extra_slicer_args...]
 slice() {
     local outdir="$1"
-    local scale="$2"       # e.g. 1 or 0.86
-    local infill="$3"      # e.g. 20%
-    local raft="$4"        # integer: 0=none 1=raft
-    local support="$5"     # "yes" or "no"
+    local scale="$2"   # e.g. 1 or 0.86
+    local infill="$3"  # e.g. 20%
+    local raft="$4"    # integer: 0=none 1=raft
+    local support="$5" # "yes" or "no"
     local stl="$6"
     shift 6
     local extras=("$@")
@@ -125,13 +125,13 @@ run_batch() {
     # -----------------------------------------------------------------------
     A)
         batch_header A "Small Cargo Hardware (7 parts)"
-        slice "$OUT" 1    "20%" 1 "no" "${STL_CARGO_BAY}/cargo_door_servo_bracket.stl"
-        slice "$OUT" 1    "20%" 1 "no" "${STL_CARGO_BAY}/cargo_release_servo_bracket.stl"
-        slice "$OUT" 1    "20%" 1 "no" "${STL_CARGO_BAY}/cargo_drv8833_tray.stl"
-        slice "$OUT" 1    "20%" 0 "no" "${STL_CARGO_BAY}/cargo_winch_motor_mount.stl"
-        slice "$OUT" 1    "20%" 0 "no" "${STL_CARGO_BAY}/cargo_winch_spool.stl"
-        slice "$OUT" 1    "20%" 1 "no" "${STL_CARGO_BAY}/cargo_gps_retention_ring.stl"
-        slice "$OUT" 1    "20%" 1 "no" "${STL_CARGO_BAY}/cargo_fpv_bezel.stl"
+        slice "$OUT" 1 "20%" 1 "no" "${STL_CARGO_BAY}/cargo_door_servo_bracket.stl"
+        slice "$OUT" 1 "20%" 1 "no" "${STL_CARGO_BAY}/cargo_release_servo_bracket.stl"
+        slice "$OUT" 1 "20%" 1 "no" "${STL_CARGO_BAY}/cargo_drv8833_tray.stl"
+        slice "$OUT" 1 "20%" 0 "no" "${STL_CARGO_BAY}/cargo_winch_motor_mount.stl"
+        slice "$OUT" 1 "20%" 0 "no" "${STL_CARGO_BAY}/cargo_winch_spool.stl"
+        slice "$OUT" 1 "20%" 1 "no" "${STL_CARGO_BAY}/cargo_gps_retention_ring.stl"
+        slice "$OUT" 1 "20%" 1 "no" "${STL_CARGO_BAY}/cargo_fpv_bezel.stl"
         ;;
 
     # -----------------------------------------------------------------------
@@ -262,7 +262,7 @@ run_batch() {
     # -----------------------------------------------------------------------
     L)
         batch_header L "Landing Gear: Feet + Legs + Wings"
-        slice "$OUT" 1    "15%" 0 "no" "${STL_FUSELAGE}/feet_x_4_scaled24.stl"
+        slice "$OUT" 1 "15%" 0 "no" "${STL_FUSELAGE}/feet_x_4_scaled24.stl"
         slice "$OUT" 0.99 "15%" 0 "no" "${STL_FUSELAGE}/legs_scaled24.stl"
         slice "$OUT" 0.93 "15%" 0 "no" "${STL_WINGS}/wing_port_s1223_revo.stl"
         slice "$OUT" 0.93 "15%" 0 "no" "${STL_WINGS}/wing_stbd_s1223_revo.stl"

@@ -3,6 +3,7 @@
  * @brief   Serenity UAV FC node daemon — entry point stub (Phase 7).
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * The FC node (Flight Control) daemon runs on each of the four Cape-A /
@@ -38,20 +39,18 @@
 /** Set by signal handler to trigger clean shutdown. */
 static volatile sig_atomic_t g_shutdown = 0;
 
-static void sig_handler(int sig)
-{
+static void sig_handler(int sig) {
     (void)sig;
     g_shutdown = 1;
 }
 
-int main(void)
-{
+int main(void) {
     struct sigaction sa;
     (void)memset(&sa, 0, sizeof(sa));
     sa.sa_handler = sig_handler;
     (void)sigemptyset(&sa.sa_mask);
     (void)sigaction(SIGTERM, &sa, NULL);
-    (void)sigaction(SIGINT,  &sa, NULL);
+    (void)sigaction(SIGINT, &sa, NULL);
 
     (void)fprintf(stderr, "serenity-fc: Phase 6 stub running.\n");
 

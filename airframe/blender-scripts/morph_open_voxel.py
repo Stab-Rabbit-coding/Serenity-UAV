@@ -52,7 +52,7 @@ def main():
     # Filled occupancy grid (solid interior, not just the surface shell).
     vg = mesh.voxelized(pitch=pitch).fill()
     grid = np.asarray(vg.matrix, dtype=bool)
-    origin = vg.transform[:3, 3]              # world coord of voxel (0,0,0) centre
+    origin = vg.transform[:3, 3]  # world coord of voxel (0,0,0) centre
     # Pad so dilation cannot clip at the array border.
     pad = rvox + 2
     grid = np.pad(grid, pad, mode="constant", constant_values=False)
@@ -63,15 +63,16 @@ def main():
     opened = ndimage.binary_dilation(opened, structure=se, border_value=0)
 
     # Marching cubes -> surface; verts are in voxel index space -> world.
-    verts, faces, _, _ = measure.marching_cubes(
-        opened.astype(np.float32), level=0.5)
+    verts, faces, _, _ = measure.marching_cubes(opened.astype(np.float32), level=0.5)
     verts = verts * pitch + origin
     out = trimesh.Trimesh(vertices=verts, faces=faces, process=True)
-    out.fix_normals()                          # outward winding (positive volume)
+    out.fix_normals()  # outward winding (positive volume)
     out.export(out_stl)
-    print(f"opened r={radius} pitch={pitch} rvox={rvox}: "
-          f"faces={len(out.faces)} vol={out.volume:.0f} "
-          f"(orig vol={mesh.volume:.0f}) -> {out_stl}")
+    print(
+        f"opened r={radius} pitch={pitch} rvox={rvox}: "
+        f"faces={len(out.faces)} vol={out.volume:.0f} "
+        f"(orig vol={mesh.volume:.0f}) -> {out_stl}"
+    )
 
 
 if __name__ == "__main__":

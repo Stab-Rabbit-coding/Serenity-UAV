@@ -29,21 +29,22 @@ necked-down section of s_middle just aft of the cargo bay, centred on the
 underside, for a 40mm EDF at 18" final scale (~88mm ID at final scale).
 """
 
-import bpy
+import math
 import os
 import sys
-import math
+
+import bpy
 
 # ── tunables ──────────────────────────────────────────────────────────────────
-WALL_MM    = 2.5
-TARGET_IN  = 18.0
-TARGET_MM  = TARGET_IN * 25.4
-SCALE      = 2.1974   # pre-computed: 208.1 mm assembled → 457.2 mm
+WALL_MM = 2.5
+TARGET_IN = 18.0
+TARGET_MM = TARGET_IN * 25.4
+SCALE = 2.1974  # pre-computed: 208.1 mm assembled → 457.2 mm
 # ─────────────────────────────────────────────────────────────────────────────
 
-BASE  = os.path.dirname(os.path.abspath(__file__))
-SRC   = os.path.join(BASE, "files")
-OUT   = os.path.join(BASE, "files-hollowed-18in")
+BASE = os.path.dirname(os.path.abspath(__file__))
+SRC = os.path.join(BASE, "files")
+OUT = os.path.join(BASE, "files-hollowed-18in")
 os.makedirs(OUT, exist_ok=True)
 
 HOLLOW_PARTS = [
@@ -117,8 +118,9 @@ def open_joint_faces(obj, fname, tolerance_mm=0.5):
         return
 
     import bmesh
-    bpy.ops.object.mode_set(mode='OBJECT')
-    bpy.ops.object.select_all(action='DESELECT')
+
+    bpy.ops.object.mode_set(mode="OBJECT")
+    bpy.ops.object.select_all(action="DESELECT")
     obj.select_set(True)
     bpy.context.view_layer.objects.active = obj
 
@@ -131,7 +133,7 @@ def open_joint_faces(obj, fname, tolerance_mm=0.5):
     z_max = max(verts)
 
     for _, bound, normal_z, _ in planes:
-        plane_z = z_min if bound == 'min' else z_max
+        plane_z = z_min if bound == "min" else z_max
         marked = []
         for face in bm.faces:
             if abs(face.normal.z - normal_z) > 0.05:
@@ -144,7 +146,7 @@ def open_joint_faces(obj, fname, tolerance_mm=0.5):
             marked.append(face)
 
         if marked:
-            bmesh.ops.delete(bm, geom=marked, context='FACES')
+            bmesh.ops.delete(bm, geom=marked, context="FACES")
             print(f"  Opened joint face at {fname}: {bound} Z={plane_z:.2f}")
 
     bm.to_mesh(obj.data)
@@ -158,8 +160,8 @@ def add_joint_bosses(obj, fname):
     if not planes:
         return
 
-    bpy.ops.object.mode_set(mode='OBJECT')
-    bpy.ops.object.select_all(action='DESELECT')
+    bpy.ops.object.mode_set(mode="OBJECT")
+    bpy.ops.object.select_all(action="DESELECT")
     obj.select_set(True)
     bpy.context.view_layer.objects.active = obj
 
@@ -174,17 +176,21 @@ def add_joint_bosses(obj, fname):
     features = []
     boss_hole_centers = []
     for _, bound, normal_z, feature_type in planes:
-        z = min(v.co.z for v in bounds) if bound == 'min' else max(v.co.z for v in bounds)
+        z = (
+            min(v.co.z for v in bounds)
+            if bound == "min"
+            else max(v.co.z for v in bounds)
+        )
         direction = -normal_z
-        if feature_type == 'boss':
+        if feature_type == "boss":
             depth = BOSS_HEIGHT_MM
             radius = BOSS_OD_MM / 2.0
-            name_prefix = 'boss'
+            name_prefix = "boss"
             offset = BOSS_HEIGHT_MM / 2.0 + 0.5
         else:
             depth = SOCKET_DEPTH_MM
             radius = BOSS_OD_MM / 2.0 + BOSS_CLEARANCE_MM
-            name_prefix = 'socket'
+            name_prefix = "socket"
             offset = SOCKET_DEPTH_MM / 2.0 + 0.5
 
         feature_z = z + direction * offset
@@ -202,59 +208,61 @@ def add_joint_bosses(obj, fname):
                 feature_obj = bpy.context.active_object
                 feature_obj.name = feat_name
                 features.append((feature_obj, feature_type))
-                if feature_type == 'boss':
+                if feature_type == "boss":
                     boss_hole_centers.append((fx, fy, feature_z))
 
     if not features:
         return
 
     # Separate boss solids and socket cutters.
-    boss_objs = [obj for obj, t in features if t == 'boss']
-    socket_objs = [obj for obj, t in features if t == 'socket']
+    boss_objs = [obj for obj, t in features if t == "boss"]
+    socket_objs = [obj for obj, t in features if t == "socket"]
 
     if boss_objs:
-        bpy.ops.object.select_all(action='DESELECT')
+        bpy.ops.object.select_all(action="DESELECT")
         for boss in boss_objs:
             boss.select_set(True)
         bpy.context.view_layer.objects.active = boss_objs[0]
         bpy.ops.object.join()
         boss_group = bpy.context.active_object
-        boss_group.name = 'joint_bosses'
+        boss_group.name = "joint_bosses"
 
-        bpy.ops.object.select_all(action='DESELECT')
+        bpy.ops.object.select_all(action="DESELECT")
         obj.select_set(True)
         boss_group.select_set(True)
         bpy.context.view_layer.objects.active = obj
-        mod = obj.modifiers.new(name='boss_union', type='BOOLEAN')
-        mod.operation = 'UNION'
+        mod = obj.modifiers.new(name="boss_union", type="BOOLEAN")
+        mod.operation = "UNION"
         mod.object = boss_group
-        mod.solver = 'EXACT'
-        bpy.ops.object.modifier_apply(modifier='boss_union')
+        mod.solver = "EXACT"
+        bpy.ops.object.modifier_apply(modifier="boss_union")
         bpy.data.objects.remove(boss_group, do_unlink=True)
 
         cut_m3_clearance_holes(obj, boss_hole_centers)
 
     if socket_objs:
-        bpy.ops.object.select_all(action='DESELECT')
+        bpy.ops.object.select_all(action="DESELECT")
         for socket in socket_objs:
             socket.select_set(True)
         bpy.context.view_layer.objects.active = socket_objs[0]
         bpy.ops.object.join()
         socket_group = bpy.context.active_object
-        socket_group.name = 'joint_sockets'
+        socket_group.name = "joint_sockets"
 
-        bpy.ops.object.select_all(action='DESELECT')
+        bpy.ops.object.select_all(action="DESELECT")
         obj.select_set(True)
         socket_group.select_set(True)
         bpy.context.view_layer.objects.active = obj
-        mod = obj.modifiers.new(name='socket_cut', type='BOOLEAN')
-        mod.operation = 'DIFFERENCE'
+        mod = obj.modifiers.new(name="socket_cut", type="BOOLEAN")
+        mod.operation = "DIFFERENCE"
         mod.object = socket_group
-        mod.solver = 'EXACT'
-        bpy.ops.object.modifier_apply(modifier='socket_cut')
+        mod.solver = "EXACT"
+        bpy.ops.object.modifier_apply(modifier="socket_cut")
         bpy.data.objects.remove(socket_group, do_unlink=True)
 
-    print(f"  Added {len(boss_objs)} boss(es) and {len(socket_objs)} socket(s) for {fname}")
+    print(
+        f"  Added {len(boss_objs)} boss(es) and {len(socket_objs)} socket(s) for {fname}"
+    )
 
 
 def cut_m3_clearance_holes(obj, hole_centers):
@@ -262,7 +270,7 @@ def cut_m3_clearance_holes(obj, hole_centers):
     if not hole_centers:
         return
 
-    bpy.ops.object.select_all(action='DESELECT')
+    bpy.ops.object.select_all(action="DESELECT")
     hole_objs = []
     for idx, (hx, hy, hz) in enumerate(hole_centers, start=1):
         bpy.ops.mesh.primitive_cylinder_add(
@@ -279,17 +287,17 @@ def cut_m3_clearance_holes(obj, hole_centers):
     bpy.context.view_layer.objects.active = hole_objs[0]
     bpy.ops.object.join()
     hole_group = bpy.context.active_object
-    hole_group.name = 'm3_clearance_holes'
+    hole_group.name = "m3_clearance_holes"
 
-    bpy.ops.object.select_all(action='DESELECT')
+    bpy.ops.object.select_all(action="DESELECT")
     obj.select_set(True)
     hole_group.select_set(True)
     bpy.context.view_layer.objects.active = obj
-    mod = obj.modifiers.new(name='m3_clearance_cut', type='BOOLEAN')
-    mod.operation = 'DIFFERENCE'
+    mod = obj.modifiers.new(name="m3_clearance_cut", type="BOOLEAN")
+    mod.operation = "DIFFERENCE"
     mod.object = hole_group
-    mod.solver = 'EXACT'
-    bpy.ops.object.modifier_apply(modifier='m3_clearance_cut')
+    mod.solver = "EXACT"
+    bpy.ops.object.modifier_apply(modifier="m3_clearance_cut")
     bpy.data.objects.remove(hole_group, do_unlink=True)
 
 
@@ -302,20 +310,20 @@ def make_watertight_and_shell(obj, wall_mm, voxel_mm=1.0, fname=None):
 
     # Step 1: voxel remesh to guarantee a watertight manifold.
     # Call the operator with explicit parameters to ensure correct voxel size.
-    bpy.ops.object.mode_set(mode='OBJECT')
-    bpy.ops.object.select_all(action='DESELECT')
+    bpy.ops.object.mode_set(mode="OBJECT")
+    bpy.ops.object.select_all(action="DESELECT")
     obj.select_set(True)
     bpy.context.view_layer.objects.active = obj
     bpy.ops.object.voxel_remesh(voxel_size=voxel_mm, adaptivity=0.0)
 
     # Clean up: merge very-close vertices and make normals consistent (outside).
-    bpy.ops.object.mode_set(mode='EDIT')
-    bpy.ops.mesh.select_all(action='SELECT')
+    bpy.ops.object.mode_set(mode="EDIT")
+    bpy.ops.mesh.select_all(action="SELECT")
     # Merge by distance to remove tiny duplicate verts created by remesh
     bpy.ops.mesh.merge_by_distance()
     # Ensure normals point outward so Solidify applies inward correctly
     bpy.ops.mesh.normals_make_consistent(inside=False)
-    bpy.ops.object.mode_set(mode='OBJECT')
+    bpy.ops.object.mode_set(mode="OBJECT")
 
     # Step 1b: open any section joint faces before shelling.
     if fname is not None:
@@ -373,7 +381,7 @@ def process_scale_only(fname):
     print(f"  {fname}  →  {stem}_scaled18.stl  ({sz:.0f} KB)")
 
 
-print(f"\nScale factor: {SCALE:.4f}×  (18.0\" / 208.1 mm assembled)")
+print(f'\nScale factor: {SCALE:.4f}×  (18.0" / 208.1 mm assembled)')
 print(f"Wall thickness: {WALL_MM} mm\n")
 
 print("=== Hollow hull parts ===")

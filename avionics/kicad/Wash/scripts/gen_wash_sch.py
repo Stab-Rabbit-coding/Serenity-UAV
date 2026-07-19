@@ -20,10 +20,12 @@ architecture decision; the 1553, IMU, baro, compass, GPIO and PB2 headers follow
 
 Author: Claude (Opus 4.8), 2026-07-14.  CC BY 4.0.
 """
+
 from __future__ import annotations
+
 import itertools
 from pathlib import Path
-from typing import List, Tuple, Any
+from typing import Any, List, Tuple
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE.parent / "kicads" / "Wash_rebuild.kicad_sch"
@@ -44,6 +46,7 @@ def esc(s: str) -> str:
 
 def sanitize(ref: str) -> str:
     import re
+
     return re.sub(r"[^A-Za-z0-9_+.-]", "_", ref)
 
 
@@ -54,7 +57,8 @@ def sanitize(ref: str) -> str:
 # ---------------------------------------------------------------------------
 ICS = [
     {
-        "ref": "CAN-TR", "value": "ISOW1044BDFMR",
+        "ref": "CAN-TR",
+        "value": "ISOW1044BDFMR",
         "ds": "isow1044.pdf Fig 7-1 / Table 7-1 (20-pin DFM)",
         # side 1 (logic) on left, side 2 (isolated CAN bus) on right
         "pins": [
@@ -81,7 +85,8 @@ ICS = [
         ],
     },
     {
-        "ref": "RS485", "value": "ADM2795EBRWZ",
+        "ref": "RS485",
+        "value": "ADM2795EBRWZ",
         "ds": "adm2795e.pdf Table 10 (16-lead RW-16)",
         "pins": [
             ("1", "VDD1", "+3V3", "L"),
@@ -103,7 +108,8 @@ ICS = [
         ],
     },
     {
-        "ref": "TPM", "value": "SLB9670",
+        "ref": "TPM",
+        "value": "SLB9670",
         "ds": "SLB_9670VQ20_Infineon.pdf Fig 1 (PG-VQFN-32-13)",
         "pins": [
             # left column = SPI / control (side toward SoC)
@@ -129,7 +135,8 @@ ICS = [
         # the readable sheet (all not-connected-internally); documented here.
     },
     {
-        "ref": "GPS", "value": "SAM-M10Q-00B",
+        "ref": "GPS",
+        "value": "SAM-M10Q-00B",
         "ds": "SAM-M10Q_DataSheet_UBX-22013293.pdf §3.1 (LGA module)",
         "pins": [
             ("2", "V_IO", "+3V3", "L"),
@@ -163,7 +170,8 @@ def adin1300(ref, rmii, rstn, intn, eth):
     dvdd = f"DVDD_0P9_{ref}"
     rext = f"REXT_{ref}"
     return {
-        "ref": ref, "value": "ADIN1300BCPZ",
+        "ref": ref,
+        "value": "ADIN1300BCPZ",
         "ds": "adin1300.pdf Pin Function Descriptions (40-LFCSP, CP-40-26)",
         "pins": [
             # left: MAC/RMII + management
@@ -218,7 +226,8 @@ def eth_xfmr(ref, eth):
     PHY-side TD±/RD± (1-3,6-8) <-> line-side TX±/RX± (9-11,14-16); 1:1, 1500 V
     isolation — this is the Ethernet galvanic barrier."""
     return {
-        "ref": ref, "value": "749010012A",
+        "ref": ref,
+        "value": "749010012A",
         "ds": "749010012A.pdf mechanical/schematic (WE-LAN 10/100 SMT)",
         "pins": [
             ("1", "TD+", f"{eth}_TXP", "L"),
@@ -244,9 +253,12 @@ ICS += [
     eth_xfmr("T-ETH2", "ETH2"),
 ]
 
+
 def lib_symbol(
     ic,
-) -> Tuple[str, List[Tuple[str, str, Any, str]], List[Tuple[str, str, Any, str]], float, float]:
+) -> Tuple[
+    str, List[Tuple[str, str, Any, str]], List[Tuple[str, str, Any, str]], float, float
+]:
     """
     Build the KiCad symbol definition for a single IC.
 
@@ -270,13 +282,15 @@ def lib_symbol(
     s = [
         f'    (symbol "{libid}" (pin_names (offset 1.016)) '
         f"(exclude_from_sim no) (in_bom yes) (on_board yes)",
-        f'      (property "Reference" "U" (at 0 {half_h + 1.27:.2f} 0) '        f"(effects (font (size {SIZE} {SIZE}))))",
+        f'      (property "Reference" "U" (at 0 {half_h + 1.27:.2f} 0) '
+        f"(effects (font (size {SIZE} {SIZE}))))",
         f'      (property "Value" "{esc(ic["value"])}" (at 0 {-half_h - 1.27:.2f} 0) '
         f"(effects (font (size {SIZE} {SIZE}))))",
         f'      (symbol "{libid}_0_1"',
         f"        (rectangle (start {-half_w:.2f} {half_h:.2f}) "
         f"(end {half_w:.2f} {-half_h:.2f}) "
-        f"(stroke (width 0.2540) (type default)) (fill (type background)))",        "      )",
+        f"(stroke (width 0.2540) (type default)) (fill (type background)))",
+        "      )",
         f'      (symbol "{libid}_1_1"',
     ]
     for i, (pn, fn, net, _) in enumerate(left):
@@ -285,8 +299,12 @@ def lib_symbol(
     for i, (pn, fn, net, _) in enumerate(right):
         y = half_h - PIN_PITCH * (i + 1)
         s.append(pin_def(half_w + PIN_PITCH, y, 180, pn, fn))
-    s += ["      )", "    )"]    # The function returns a tuple; the first element is the multi‑line KiCad    # symbol definition, the remaining elements are used later for placement.
+    s += [
+        "      )",
+        "    )",
+    ]  # The function returns a tuple; the first element is the multi‑line KiCad    # symbol definition, the remaining elements are used later for placement.
     return "\n".join(s), left, right, half_w, half_h
+
 
 def pin_def(x, y, ang, pn, fn):
     """
@@ -315,12 +333,13 @@ def pin_def(x, y, ang, pn, fn):
 
     return (
         f"        (pin {etype} line (at {x:.2f} {y:.2f} {ang}) "
-        f'(length {PIN_PITCH}) '
+        f"(length {PIN_PITCH}) "
         f'(name "{esc(fn) if fn is not None else ""}" '
-        f'(effects (font (size {SIZE} {SIZE})))) '
+        f"(effects (font (size {SIZE} {SIZE})))) "
         f'(number "{esc(pn)}" '
-        f'(effects (font (size {SIZE} {SIZE})))))'
+        f"(effects (font (size {SIZE} {SIZE})))))"
     )
+
 
 def wire(x1, y1, x2, y2):
     return (

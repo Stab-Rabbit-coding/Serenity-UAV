@@ -9,8 +9,8 @@ gen_emma_sch.py:
 
   1. DROP J1 ("CAPE-B IF", JST-GH-6P).  Its host-UART role moves onto the PB2
      rails, so the two modem UART nets are MERGED into the existing rail nets:
-        UART_TX -> UART_RCRS_RX   (modem TX  = host RX,  PB2-P1 pin 15)
-        UART_RX -> UART_RCRS_TX   (modem RX  = host TX,  PB2-P1 pin 16)
+        UART_TX -> UART_49MHZ_XCVR_RX   (modem TX  = host RX,  PB2-P1 pin 15)
+        UART_RX -> UART_49MHZ_XCVR_TX   (modem RX  = host TX,  PB2-P1 pin 16)
   2. Repurpose two PB2-P2 payload pads (presence-gated by a cape-detect DT
      overlay — a firmware concern, documented, no copper change beyond the net):
         PB2-P2 pad 1 (SERVO7 ball) -> PTT_N
@@ -40,7 +40,7 @@ import pcbnew
 PCB_FILE = "kicads/Emma.kicad_pcb"
 FPLIB = "/usr/share/kicad/footprints"
 
-NET_MERGE = {"UART_TX": "UART_RCRS_RX", "UART_RX": "UART_RCRS_TX"}
+NET_MERGE = {"UART_TX": "UART_49MHZ_XCVR_RX", "UART_RX": "UART_49MHZ_XCVR_TX"}
 PB2P2_REASSIGN = {"1": "PTT_N", "2": "RSSI_DCD"}  # SERVO7->PTT_N, SERVO6->RSSI_DCD
 
 
@@ -208,7 +208,7 @@ def main():
         print(f"removed J1 (CAPE-B IF) at ({jx:.1f}, {jy:.1f})")
 
     # delete track/via segments that terminated on a removed J1 pad (now
-    # dangling stubs in the vacated strip).  Surviving nets (UART_RCRS_*,
+    # dangling stubs in the vacated strip).  Surviving nets (UART_49MHZ_XCVR_*,
     # PTT_N, RSSI_ANA, +3V3, GND) keep their other routing; only the J1-facing
     # stub is dropped, to be re-routed to the PB2 rail manually.
     TOL = pcbnew.FromMM(0.4)

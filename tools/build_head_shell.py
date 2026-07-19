@@ -56,10 +56,13 @@ import trimesh
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
 SHELL_SRC = os.path.join(
-    REPO_ROOT, "airframe", "blender-scripts", "files-hollowed-24in",
-    "head_shell24_2mm_repaired.stl")
-OUT_PATH = os.path.join(
-    REPO_ROOT, "airframe", "stls", "fuselage", "head_shell24.stl")
+    REPO_ROOT,
+    "airframe",
+    "blender-scripts",
+    "files-hollowed-24in",
+    "head_shell24_2mm_repaired.stl",
+)
+OUT_PATH = os.path.join(REPO_ROOT, "airframe", "stls", "fuselage", "head_shell24.stl")
 
 FN = 64  # circular_segments, matches SCAD $fn = 64
 
@@ -133,6 +136,7 @@ WALL_MM = 2.0
 # manifold3d helpers — small wrappers matching SCAD primitive semantics
 # ---------------------------------------------------------------------------
 
+
 def cyl(hght, d, fn=FN):
     """Cylinder along +Z from z=0, matching SCAD cylinder(h, d)."""
     return m3d.Manifold.cylinder(hght=hght, radius_low=d / 2.0, circular_segments=fn)
@@ -162,6 +166,7 @@ def apply_trs(manifold, local_offset=None, rot=None, pos=None):
 # Feature builders — transcribed from head_shell24.scad modules
 # ---------------------------------------------------------------------------
 
+
 def m3_boss(pos, rot):
     """SCAD module m3_boss: 8mm OD x 6mm boss post with M3 insert bore."""
     outer = cyl(BOSS_H, BOSS_OD)
@@ -181,11 +186,13 @@ def book_dorsal_boss(x_pos, z_pos):
 def book_dorsal_panel_cut():
     """SCAD module book_dorsal_panel_cut."""
     box = cube_corner([BOOK_PANEL_X, WALL_MM + 2.0, BOOK_PANEL_Z])
-    return box.translate([
-        BOOK_X_CEN - BOOK_PANEL_X / 2,
-        BOOK_DORSAL_Y - 1.0,
-        BOOK_Z_CEN - BOOK_PANEL_Z / 2,
-    ])
+    return box.translate(
+        [
+            BOOK_X_CEN - BOOK_PANEL_X / 2,
+            BOOK_DORSAL_Y - 1.0,
+            BOOK_Z_CEN - BOOK_PANEL_Z / 2,
+        ]
+    )
 
 
 def vlsensor_cut(pos, rot):
@@ -207,14 +214,17 @@ def vlsensor_cut(pos, rot):
         shaft = cyl(WALL_T + 2, VM16_D).translate([dx, dy, 0])
         parts.append(shaft)
         csk = m3d.Manifold.cylinder(
-            height=VCSK16_D + 1, radius_low=VM16_D / 2.0,
-            radius_high=VCSK16_OD / 2.0, circular_segments=FN
+            height=VCSK16_D + 1,
+            radius_low=VM16_D / 2.0,
+            radius_high=VCSK16_OD / 2.0,
+            circular_segments=FN,
         ).translate([dx, dy, WALL_T + 1 - VCSK16_D])
         parts.append(csk)
 
     # Carrier board recess on interior face
     recess = cube_corner([VRECESS_W, VRECESS_W, VRECESS_D + 1]).translate(
-        [-VRECESS_W / 2, -VRECESS_W / 2, 0])
+        [-VRECESS_W / 2, -VRECESS_W / 2, 0]
+    )
     parts.append(recess)
 
     cutter = parts[0]
@@ -233,7 +243,8 @@ def fpv_cut(pos, rot):
 
     # Bezel seating recess: 1mm deep at exterior, 29x29mm
     bezel = cube_corner([FPV_BEZ_W, FPV_BEZ_W, FPV_BEZ_DEP + 1]).translate(
-        [-FPV_BEZ_W / 2, -FPV_BEZ_W / 2, WALL_T + 1 - FPV_BEZ_DEP])
+        [-FPV_BEZ_W / 2, -FPV_BEZ_W / 2, WALL_T + 1 - FPV_BEZ_DEP]
+    )
     parts.append(bezel)
 
     # 4x M2 countersunk mount holes (14x14mm grid)
@@ -242,14 +253,17 @@ def fpv_cut(pos, rot):
             shaft = cyl(WALL_T + 2, FPV_M2_D).translate([dx, dy, 0])
             parts.append(shaft)
             csk = m3d.Manifold.cylinder(
-                height=FPV_CSK2_D + 1, radius_low=FPV_M2_D / 2.0,
-                radius_high=FPV_CSK2_OD / 2.0, circular_segments=FN
+                height=FPV_CSK2_D + 1,
+                radius_low=FPV_M2_D / 2.0,
+                radius_high=FPV_CSK2_OD / 2.0,
+                circular_segments=FN,
             ).translate([dx, dy, WALL_T + 1 - FPV_CSK2_D])
             parts.append(csk)
 
     # Camera body pocket on interior face
     pocket = cube_corner([FPV_BOARD_W, FPV_BOARD_W, FPV_BOARD_D + 1]).translate(
-        [-FPV_BOARD_W / 2, -FPV_BOARD_W / 2, 0])
+        [-FPV_BOARD_W / 2, -FPV_BOARD_W / 2, 0]
+    )
     parts.append(pocket)
 
     cutter = parts[0]
@@ -263,14 +277,17 @@ def fpv_cut(pos, rot):
 # Main build
 # ---------------------------------------------------------------------------
 
+
 def manifold_from_stl(path):
     mesh = trimesh.load_mesh(path, force="mesh")
     if not mesh.is_watertight:
         raise RuntimeError(f"{path}: not watertight after force='mesh' load")
-    return m3d.Manifold(m3d.Mesh(
-        vert_properties=np.array(mesh.vertices, dtype=np.float32),
-        tri_verts=np.array(mesh.faces, dtype=np.uint32),
-    ))
+    return m3d.Manifold(
+        m3d.Mesh(
+            vert_properties=np.array(mesh.vertices, dtype=np.float32),
+            tri_verts=np.array(mesh.faces, dtype=np.uint32),
+        )
+    )
 
 
 def manifold_to_stl(manifold, path):
@@ -285,8 +302,10 @@ def main():
     t0 = time.time()
     print(f"Loading shell source: {SHELL_SRC}")
     shell = manifold_from_stl(SHELL_SRC)
-    print(f"  loaded + converted in {time.time() - t0:.1f}s, "
-          f"status={shell.status()}, volume={shell.volume():.1f} mm^3")
+    print(
+        f"  loaded + converted in {time.time() - t0:.1f}s, "
+        f"status={shell.status()}, volume={shell.volume():.1f} mm^3"
+    )
 
     # ---- Positive material: bosses ----
     t0 = time.time()
@@ -300,8 +319,10 @@ def main():
     built = shell
     for a in additions:
         built = built + a
-    print(f"  added {len(additions)} bosses in {time.time() - t0:.1f}s, "
-          f"status={built.status()}")
+    print(
+        f"  added {len(additions)} bosses in {time.time() - t0:.1f}s, "
+        f"status={built.status()}"
+    )
 
     # ---- Negative material: aperture cuts ----
     t0 = time.time()
@@ -313,24 +334,30 @@ def main():
     ]
     for c in cutters:
         built = built - c
-    print(f"  applied {len(cutters)} cuts in {time.time() - t0:.1f}s, "
-          f"status={built.status()}, volume={built.volume():.1f} mm^3")
+    print(
+        f"  applied {len(cutters)} cuts in {time.time() - t0:.1f}s, "
+        f"status={built.status()}, volume={built.volume():.1f} mm^3"
+    )
 
     if built.status() != m3d.Error.NoError:
         raise RuntimeError(f"final manifold status: {built.status()}")
 
     bb = built.bounding_box()
-    print(f"  final bounds: X[{bb[0]:.2f}..{bb[3]:.2f}] "
-          f"Y[{bb[1]:.2f}..{bb[4]:.2f}] Z[{bb[2]:.2f}..{bb[5]:.2f}]")
+    print(
+        f"  final bounds: X[{bb[0]:.2f}..{bb[3]:.2f}] "
+        f"Y[{bb[1]:.2f}..{bb[4]:.2f}] Z[{bb[2]:.2f}..{bb[5]:.2f}]"
+    )
 
     manifold_to_stl(built, OUT_PATH)
     print(f"Wrote {OUT_PATH}")
-    print("This is the printable head_shell24.stl (bosses + aperture cuts "
-          "applied); it is a separate artifact from "
-          "airframe/stls/fuselage/head_shell24_2mm_repaired.stl, which is "
-          "the bare shell baked into hull frame by tools/bake_hull_frame.py "
-          "for the FreeCAD assembly.  Do not run bake_hull_frame.py on this "
-          "output -- it is not in the COMPONENTS table.")
+    print(
+        "This is the printable head_shell24.stl (bosses + aperture cuts "
+        "applied); it is a separate artifact from "
+        "airframe/stls/fuselage/head_shell24_2mm_repaired.stl, which is "
+        "the bare shell baked into hull frame by tools/bake_hull_frame.py "
+        "for the FreeCAD assembly.  Do not run bake_hull_frame.py on this "
+        "output -- it is not in the COMPONENTS table."
+    )
 
 
 if __name__ == "__main__":

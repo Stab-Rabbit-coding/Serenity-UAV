@@ -57,33 +57,35 @@ References:
   Z-slice analysis: Serenity UAV project log 2026-06-02.
 """
 
-import bpy
-import bmesh
 import os
+
+import bmesh
+import bpy
 
 # ── Tunables ──────────────────────────────────────────────────────────────────
 
 # Hull XY centreline (constant X centre; Y centre at Z_INTAKE)
-HULL_CX       = 180.9    # [mm]
-HULL_CY       = -77.8    # [mm]
+HULL_CX = 180.9  # [mm]
+HULL_CY = -77.8  # [mm]
 
 # Intake axial station and slot extent (Z direction)
-Z_INTAKE      =  30.0    # [mm]  Z centre of scoop windows
-SCOOP_AX      =  38.0    # [mm]  axial slot length (Z), ± 19 mm from Z_INTAKE
+Z_INTAKE = 30.0  # [mm]  Z centre of scoop windows
+SCOOP_AX = 38.0  # [mm]  axial slot length (Z), ± 19 mm from Z_INTAKE
 
 # Scoop window dimensions
-SCOOP_W       =  75.0    # [mm]  circumferential (perpendicular to radial)
-SCOOP_H       =  38.0    # [mm]  radial depth into hull
-OVERDEPTH     =  10.0    # [mm]  extra depth past centroid to ensure clean cut
+SCOOP_W = 75.0  # [mm]  circumferential (perpendicular to radial)
+SCOOP_H = 38.0  # [mm]  radial depth into hull
+OVERDEPTH = 10.0  # [mm]  extra depth past centroid to ensure clean cut
 
 # File paths
-BASE    = os.path.dirname(os.path.abspath(__file__))
-IN_STL  = os.path.join(BASE, "..", "stls", "fuselage",
-                        "middle_canonical_shell24.stl")
-OUT_STL = os.path.join(BASE, "..", "stls", "fuselage",
-                        "middle_canonical_edf_intake.stl")
+BASE = os.path.dirname(os.path.abspath(__file__))
+IN_STL = os.path.join(BASE, "..", "stls", "fuselage", "middle_canonical_shell24.stl")
+OUT_STL = os.path.join(
+    BASE, "..", "stls", "fuselage", "middle_canonical_edf_intake.stl"
+)
 
 # ── Utilities ─────────────────────────────────────────────────────────────────
+
 
 def clear_scene():
     bpy.ops.object.select_all(action="SELECT")
@@ -103,9 +105,7 @@ def export_stl(obj, path):
     return os.path.getsize(path) // 1024
 
 
-def make_scoop_cutter(name, z_ctr, ax_len,
-                      cx, cy, dx, dy,
-                      win_w, win_h, overdepth):
+def make_scoop_cutter(name, z_ctr, ax_len, cx, cy, dx, dy, win_w, win_h, overdepth):
     """
     Rectangular box cutter for one radial intake scoop (Z-longitudinal).
 
@@ -117,13 +117,13 @@ def make_scoop_cutter(name, z_ctr, ax_len,
     win_h      — radial depth of window
     overdepth  — extra radial depth past centreline to ensure cut-through
     """
-    half_az      = ax_len  / 2.0
-    half_w       = win_w   / 2.0
+    half_az = ax_len / 2.0
+    half_w = win_w / 2.0
     total_radial = win_h + overdepth
 
     # Perpendicular direction in XY: rotate (dx, dy) 90°
     pdx = -dy
-    pdy =  dx
+    pdy = dx
 
     # 8 corners: sz ∈ {-1,+1} → Z extents,
     #            sp ∈ {-1,+1} → circumferential extents,
@@ -137,24 +137,28 @@ def make_scoop_cutter(name, z_ctr, ax_len,
                 z = z_ctr + sz * half_az
                 corners.append((x, y, z))
 
-    bm   = bmesh.new()
+    bm = bmesh.new()
     mesh = bpy.data.meshes.new(name + "_mesh")
     verts = [bm.verts.new(c) for c in corners]
     c = verts
 
     def face(vl):
-        try: bm.faces.new(vl)
-        except ValueError: pass
+        try:
+            bm.faces.new(vl)
+        except ValueError:
+            pass
 
-    face([c[0], c[2], c[3], c[1]])   # z_lo face
-    face([c[4], c[5], c[7], c[6]])   # z_hi face
-    face([c[0], c[4], c[6], c[2]])   # inboard (sr=0)
-    face([c[1], c[3], c[7], c[5]])   # outboard (sr=h)
-    face([c[0], c[1], c[5], c[4]])   # circumferential sp=-1
-    face([c[2], c[6], c[7], c[3]])   # circumferential sp=+1
+    face([c[0], c[2], c[3], c[1]])  # z_lo face
+    face([c[4], c[5], c[7], c[6]])  # z_hi face
+    face([c[0], c[4], c[6], c[2]])  # inboard (sr=0)
+    face([c[1], c[3], c[7], c[5]])  # outboard (sr=h)
+    face([c[0], c[1], c[5], c[4]])  # circumferential sp=-1
+    face([c[2], c[6], c[7], c[3]])  # circumferential sp=+1
 
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
-    bm.to_mesh(mesh); bm.free(); mesh.update()
+    bm.to_mesh(mesh)
+    bm.free()
+    mesh.update()
     obj = bpy.data.objects.new(name, mesh)
     bpy.context.collection.objects.link(obj)
     return obj
@@ -163,7 +167,9 @@ def make_scoop_cutter(name, z_ctr, ax_len,
 def apply_diff(target, cutter):
     bpy.context.view_layer.objects.active = target
     mod = target.modifiers.new("bd", "BOOLEAN")
-    mod.operation = "DIFFERENCE"; mod.object = cutter; mod.solver = "EXACT"
+    mod.operation = "DIFFERENCE"
+    mod.object = cutter
+    mod.solver = "EXACT"
     bpy.ops.object.modifier_apply(modifier="bd")
     bpy.data.objects.remove(cutter, do_unlink=True)
 
@@ -184,25 +190,25 @@ hull.name = "neck_shell"
 #   -Y = ventral (belly)
 #   +X = starboard
 SCOOPS = [
-    ("dorsal",     0.0,  1.0),
-    ("port",      -1.0,  0.0),
-    ("ventral",    0.0, -1.0),
-    ("starboard",  1.0,  0.0),
+    ("dorsal", 0.0, 1.0),
+    ("port", -1.0, 0.0),
+    ("ventral", 0.0, -1.0),
+    ("starboard", 1.0, 0.0),
 ]
 
 for label, dx, dy in SCOOPS:
     print(f"  Cutting {label} scoop (dx={dx:+.0f}, dy={dy:+.0f}) …")
     cutter = make_scoop_cutter(
-        name      = f"scoop_{label}",
-        z_ctr     = Z_INTAKE,
-        ax_len    = SCOOP_AX,
-        cx        = HULL_CX,
-        cy        = HULL_CY,
-        dx        = dx,
-        dy        = dy,
-        win_w     = SCOOP_W,
-        win_h     = SCOOP_H,
-        overdepth = OVERDEPTH,
+        name=f"scoop_{label}",
+        z_ctr=Z_INTAKE,
+        ax_len=SCOOP_AX,
+        cx=HULL_CX,
+        cy=HULL_CY,
+        dx=dx,
+        dy=dy,
+        win_w=SCOOP_W,
+        win_h=SCOOP_H,
+        overdepth=OVERDEPTH,
     )
     apply_diff(hull, cutter)
 

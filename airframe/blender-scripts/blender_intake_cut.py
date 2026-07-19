@@ -33,15 +33,16 @@ removed, leaving a clean circular opening that the slicer prints as an open
 hole.  A separate blender_nozzle_gen.py script adds the variable nozzle.
 """
 
-import bpy
-import bmesh
-import os
 import math
+import os
+
+import bmesh
+import bpy
 
 # ── tunables ─────────────────────────────────────────────────────────────────
-INTAKE_DIA_MM  = 120.0       # EDF duct inner diameter at 24" scale
-INTAKE_R       = INTAKE_DIA_MM / 2
-Z_THRESHOLD    = 4.0         # faces with centroid Z < this are "bottom face"
+INTAKE_DIA_MM = 120.0  # EDF duct inner diameter at 24" scale
+INTAKE_R = INTAKE_DIA_MM / 2
+Z_THRESHOLD = 4.0  # faces with centroid Z < this are "bottom face"
 
 # Intake centre in XY (the Z=0 bottom face plane).
 # X=130 is in the necked transition just aft of the full-beam cargo-bay region.
@@ -49,8 +50,8 @@ Z_THRESHOLD    = 4.0         # faces with centroid Z < this are "bottom face"
 INTAKE_X = 130.0
 INTAKE_Y = -67.0
 
-BASE    = os.path.dirname(os.path.abspath(__file__))
-IN_STL  = os.path.join(BASE, "files-hollowed-18in", "middle_shell24.stl")
+BASE = os.path.dirname(os.path.abspath(__file__))
+IN_STL = os.path.join(BASE, "files-hollowed-18in", "middle_shell24.stl")
 OUT_STL = os.path.join(BASE, "files-hollowed-18in", "s_middle_intake_shell24.stl")
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -110,10 +111,16 @@ hull = import_stl(IN_STL)
 hull.name = "s_middle"
 
 bb = hull.bound_box
-xs = [v[0] for v in bb]; ys = [v[1] for v in bb]; zs = [v[2] for v in bb]
-print(f"\ns_middle bounds: X {min(xs):.1f}..{max(xs):.1f}  "
-      f"Y {min(ys):.1f}..{max(ys):.1f}  Z {min(zs):.1f}..{max(zs):.1f}")
-print(f"Cutting {INTAKE_DIA_MM:.0f} mm intake at X={INTAKE_X}, Y={INTAKE_Y}, Z=0 face\n")
+xs = [v[0] for v in bb]
+ys = [v[1] for v in bb]
+zs = [v[2] for v in bb]
+print(
+    f"\ns_middle bounds: X {min(xs):.1f}..{max(xs):.1f}  "
+    f"Y {min(ys):.1f}..{max(ys):.1f}  Z {min(zs):.1f}..{max(zs):.1f}"
+)
+print(
+    f"Cutting {INTAKE_DIA_MM:.0f} mm intake at X={INTAKE_X}, Y={INTAKE_Y}, Z=0 face\n"
+)
 
 n = cut_intake_bmesh(hull, INTAKE_X, INTAKE_Y, INTAKE_R, Z_THRESHOLD)
 print(f"  Removed {n} faces for intake opening")

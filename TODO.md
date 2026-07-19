@@ -14,18 +14,6 @@
 
 ---
 
-### 0.1 — FCC Part 95 Section Number Verification
-
-→ detail: `docs/WBS.md` §0.1
-
-- [ ] Code-identifier "RCRS" naming left unchanged — separate tracked…
-
-### 0.7 — CI Lint Scope and Repo-Wide Lint Debt
-
-→ detail: `docs/WBS.md` §0.7
-
-- [ ] Repo-wide lint debt
-
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
 
 → detail: `airframe/WBS.md` §1.1.0
