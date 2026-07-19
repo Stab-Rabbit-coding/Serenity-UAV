@@ -132,6 +132,23 @@ stls/nacelles/                       — Pre-Rev Q nacelle STLs (pre-tandem-EDF 
                                         nacelle_nozzle_petal.stl (Rev R1 flat blender petal,
                                         superseded 2026-07-04 by the Rev R2 tangential-hinge
                                         conical flap nacelle_nozzle_flap.stl; TODO §1.1.3.1)
+                                      Archived 2026-07-18 (Rev T, Option B pushrod drive —
+                                        docs/NOZZLE_DRIVE_TRADE.md; the entire tilt-to-nozzle
+                                        GEAR train is deleted, replaced by the spar-crank
+                                        pushrod nacelle_nozzle_pushrod.scad):
+                                        stls/nacelles/   nacelle_pinion_a.stl,
+                                          nacelle_drive_pinion.stl, nacelle_sector_gear.stl
+                                        stls/nacelles/nozzles/  nacelle_bevel_housing.stl,
+                                          nacelle_bevel_pair.stl
+
+openscad/nacelles/                   — Archived 2026-07-18 (Rev T, Option B pushrod drive):
+                                        nacelle_sector_gear.scad, nacelle_pinion.scad
+                                        (Pinion A + Nozzle Drive Pinion variants),
+                                        nacelle_bevel_pair.scad, nacelle_bevel_housing.scad,
+                                        and the earlier nacelle_nozzle_idler.scad — the
+                                        tilt-to-nozzle gear train, superseded by the pushrod/
+                                        cam-only-ring drive (nacelle_nozzle_pushrod.scad +
+                                        Rev T unison_ring() in nacelle_nozzle_iris.scad).
 ```
 
 ---

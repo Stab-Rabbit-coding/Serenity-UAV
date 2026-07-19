@@ -489,22 +489,13 @@ def assemble():
     #   PIVOT_Z is the gear-train station, inside the sleeve span.
     STATOR_SLV_Z_START = 90.0
     AFT_SLV_Z_START = 122.5
-    # PIVOT_Z re-derived 2026-07-04 for the FULL rotating assembly (gear train +
-    # nozzle ring/petals; WS2812B exhaust LED rings removed): CG_Z = 104.5
-    # mm.  See nacelle_pod_50mm_tandem.scad header mass breakdown.
-    PIVOT_Z = 104.5  # gear-train station = full-assembly nacelle CG
-    # Rev S1 (2026-07-07, internal-ring nozzle drive — docs/NOZZLE_DRIVE_TRADE.md):
-    # Pinion A regeared 12T R6 -> 17T R8.5, so the sector mesh centre distance
-    # (and the whole shaft-run Y station) moves 28.0 -> 30.5 mm.  30.5 is ALSO
-    # the internal-mesh centre distance drive-pinion-to-ring (34 - 3.5).
-    PINION_A_Y = 30.5  # = sector R(22) + pinion A R(8.5), mm
-    NOZZLE_RING_Z = 166.25  # nozzle ring gear-band station (nozzle placement)
-    # Rev S1: the compound idler is DELETED.  The Nozzle Drive Pinion (14T
-    # M0.5) meshes the INTERNAL ring gear directly, its 4 mm gear band seated
-    # in the ring's own gear band (iris local Z 0..4.5) — so the pinion is
-    # placed AT the ring station, not 10 mm forward of it as the idler needed.
-    DRIVE_PINION_Z = NOZZLE_RING_Z  # = 166.25 (gear-band start)
-    NACELLE_FACE_X_PYLON = 34.0  # mm, inboard (pylon-side) X face
+    # PIVOT_Z re-derived 2026-07-04 for the FULL rotating assembly (nozzle
+    # ring/petals; WS2812B exhaust LED rings removed): CG_Z = 104.5 mm.  See
+    # nacelle_pod_50mm_tandem.scad header mass breakdown.  Rev T (2026-07-18)
+    # deleted the gear train (Option B pushrod drive) — its small gear masses
+    # left the pivot CG effectively unchanged; the spar crank clamps here.
+    PIVOT_Z = 104.5  # pivot / spar-crank station = full-assembly nacelle CG
+    NOZZLE_RING_Z = 166.25  # nozzle ring station (nozzle placement)
 
     for side in ("port", "stbd"):
         label = "Port" if side == "port" else "Stbd"
@@ -536,106 +527,46 @@ def assemble():
             aft_sleeve, nacelle_rows(side, _IDENTITY3, (0.0, 0.0, AFT_SLV_Z_START))
         )
 
-        # ── Drive Pinion A (meshes the fixed sector gear) ────────────────
-        # nacelle_pod_50mm_tandem.scad pinion_a_boss(): rotate([0,90,0])
-        # then translate([0, PINION_A_Y, PIVOT_Z]) — bore axis along
-        # local X (parallel to the pivot axis, matching the sector-gear
-        # mesh).  nacelle_pinion_a.stl (Rev S1: M1 17T variant of
-        # nacelle_pinion.scad) is modelled coaxial with its own local Z,
-        # so the same Y-axis 90 deg rotation aligns it.
-        pinion_a = add_mesh(
+        # ── Nozzle pushrod drive — Rev T (Option B) ───────────────────────
+        # Rev T (2026-07-18, docs/NOZZLE_DRIVE_TRADE.md Option B; user
+        # decision 2026-07-18): the ENTIRE tilt-to-nozzle GEAR train is
+        # DELETED — Drive Pinion A, the Nozzle Drive Pinion, the bevel
+        # housing, the bevel pair, and the fixed sector gear (and, earlier,
+        # the compound idler).  Those five STL placements are removed; the
+        # parts are archived under airframe/archive/.  The nozzle is now
+        # driven by a PUSHROD/BELLCRANK: a spar crank clamps the rotating
+        # tilt spar and a ball-link pushrod strokes the unison-ring lever
+        # ear (nacelle_nozzle_pushrod.scad + the ring lever in
+        # nacelle_nozzle_iris.scad).
+        #
+        # FIRST-PASS PLACEMENT — VERIFY (spatial RSSR linkage, WBS §1.1.3):
+        # the spar crank sits on the pivot axis (Y=0, Z=PIVOT_Z), clamp bore
+        # along local X (the spar/tilt axis) — hence the 90 deg Y-rotation,
+        # as the old Pinion A used.  The exact crank clock angle, pushrod
+        # length, and ring-lever pose that give a monotonic 0..90 deg tilt ->
+        # 0..23.75 deg ring map are NOT yet solved; the pushrod link itself
+        # (COTS ball-link rod) is intentionally not placed here until that
+        # synthesis is closed.
+        spar_crank = add_mesh(
             doc,
-            _stl("nacelles/nacelle_pinion_a.stl"),
-            f"Nacelle_{label}_Drive_Pinion_A",
+            _stl("nacelles/nacelle_pushrod_crank.stl"),
+            f"Nacelle_{label}_Nozzle_Spar_Crank",
         )
         transform_mesh(
-            pinion_a, nacelle_rows(side, _rot_y(90.0), (0.0, PINION_A_Y, PIVOT_Z))
-        )
-
-        # ── Nozzle Drive Pinion (Rev S1 — meshes the INTERNAL nozzle ring
-        #    gear directly; replaces the Rev R1 Crown Pinion + compound
-        #    idler, whose teeth protruded ~10 mm past the nacelle OD —
-        #    docs/NOZZLE_DRIVE_TRADE.md).  M0.5 14T variant of
-        #    nacelle_pinion.scad; Z-axis (identity rotation), gear band
-        #    seated in the ring's gear band at the nozzle ring station.
-        drive_pinion = add_mesh(
-            doc,
-            _stl("nacelles/nacelle_drive_pinion.stl"),
-            f"Nacelle_{label}_Nozzle_Drive_Pinion",
-        )
-        transform_mesh(
-            drive_pinion,
-            nacelle_rows(side, _IDENTITY3, (0.0, PINION_A_Y, DRIVE_PINION_Z)),
-        )
-
-        # ── Bevel gear housing ────────────────────────────────────────────
-        # nacelle_bevel_housing.scad: origin = block centroid = the point
-        # where the transverse (X) and longitudinal (Z) bores intersect —
-        # the same point as the Drive Pinion A shaft / sector-gear mesh
-        # centre.  Housing header states its own axes already align with
-        # the nacelle frame ("+Z = toward nozzle, +X = toward sector gear
-        # / pinion A mesh side, +Y = outboard face") — identity rotation.
-        housing = add_mesh(
-            doc,
-            _stl("nacelles/nacelle_bevel_housing.stl"),
-            f"Nacelle_{label}_Bevel_Housing",
-        )
-        transform_mesh(
-            housing, nacelle_rows(side, _IDENTITY3, (0.0, PINION_A_Y, PIVOT_Z))
-        )
-
-        # ── Bevel gear pair (A + B, pre-meshed single STL) ───────────────
-        # Seats inside the housing at the same bore-intersection point.
-        bevel_pair = add_mesh(
-            doc, _stl("nacelles/nacelle_bevel_pair.stl"), f"Nacelle_{label}_Bevel_Pair"
-        )
-        transform_mesh(
-            bevel_pair, nacelle_rows(side, _IDENTITY3, (0.0, PINION_A_Y, PIVOT_Z))
-        )
-
-        # ── Fixed sector gear ─────────────────────────────────────────────
-        # Mounted to the fuselage/pylon tilt bracket, NOT the nacelle —
-        # coaxial with the pivot axis, so it does not rotate with nacelle
-        # tilt.  Placed here at the pylon-side X face, on the pivot axis
-        # (Y=0, Z=PIVOT_Z).  Same rotation as Drive Pinion A (axis parallel
-        # to local X) since the two gears mesh together.
-        # CONFIRMED 2026-06-22 (TODO.md §1.1.3.3): the tilt bracket DOES have
-        # a SCAD source — airframe/openscad/wings/wing_nacelle_pylon_revo.scad
-        # — which bolts the sector gear to its pylon face at PYLON_X0 =
-        # NACELLE_OD_X/2 = 30.25 mm (using that file's own simplified
-        # synthetic-ellipse NACELLE_OD_X = 60.5 mm).  NACELLE_FACE_X_PYLON =
-        # 34.0 mm (below) instead matches nacelle_pod_50mm_tandem.scad's own
-        # constant of the same name, which that file's header states is
-        # "taken from the actual nacelle STL measurements rather than the
-        # synthetic-ellipse NACELLE_OD_X/2" — i.e. 34.0 mm is the validated,
-        # measured standoff, not a guess; the pylon file's 30.25 mm ellipse
-        # approximation is the less accurate of the two and should be
-        # reconciled to 34.0 mm in a future pylon-model pass (not done here;
-        # out of scope for this nacelle/nozzle assembly fix).
-        sector_x = pylon * NACELLE_FACE_X_PYLON
-        sector_gear = add_mesh(
-            doc,
-            _stl("nacelles/nacelle_sector_gear.stl"),
-            f"Nacelle_{label}_Sector_Gear",
-        )
-        transform_mesh(
-            sector_gear, nacelle_rows(side, _rot_y(90.0), (sector_x, 0.0, PIVOT_Z))
+            spar_crank, nacelle_rows(side, _rot_y(90.0), (0.0, 0.0, PIVOT_Z))
         )
 
         # ── Nozzle iris assembly ──────────────────────────────────────────
-        # nacelle_nozzle_iris.stl is the combined render (unison ring +
-        # outer housing + 8 flaps at the closed position) from
-        # nacelle_nozzle_iris.scad.  Rev S1: the ring gear is INTERNAL and
-        # the drive pinion enters from inside, so the housing is fully
-        # rotationally closed EXCEPT the throat-relief patch at local
-        # azimuth 90 deg — identity rotation keeps that patch aligned with
-        # the drive pinion (both are placed at local +Y).  Translate to
-        # NOZZLE_RING_Z.
-        # History: the Rev R1 fix for the crown-pinion/ring radius mismatch
-        # was a compound idler (2026-06-22); Rev S1 (2026-07-07) supersedes
-        # it — the ring gear is now INTERNAL (136T M0.5, pitch R 34), meshed
-        # directly by the drive pinion at the 30.5 mm shaft station, and the
-        # idler is deleted (it protruded past the nacelle OD).
+        # nacelle_nozzle_iris.stl is the combined render (cam-only unison ring
+        # + outer housing + 8 flaps at the closed position) from
+        # nacelle_nozzle_iris.scad.  Rev T: the ring is a plain CAM disc (no
+        # gear teeth) driven by the spar-crank pushrod above; the housing has
+        # no drive-pinion relief and is rotationally symmetric, so identity
+        # rotation is fine.  Translate to NOZZLE_RING_Z.
+        # History: Rev R1 compound idler (2026-06-22) -> Rev S1 internal ring
+        # gear (2026-07-07) -> Rev T pushrod/cam-only drive (2026-07-18,
+        # Option B); the entire gear train is deleted and archived — see
+        # ARCHIVE_INDEX.md and docs/NOZZLE_DRIVE_TRADE.md.
         nozzle = add_mesh(
             doc,
             _stl("nacelles/nozzles/nacelle_nozzle_iris.stl"),
@@ -644,11 +575,6 @@ def assemble():
         transform_mesh(
             nozzle, nacelle_rows(side, _IDENTITY3, (0.0, 0.0, NOZZLE_RING_Z))
         )
-
-        # (Rev S1: the Rev R1 Crown-Pinion-to-Ring compound idler + bracket
-        # are DELETED — superseded by the direct internal-ring mesh above.
-        # STLs/SCAD archived; see ARCHIVE_INDEX.md and
-        # docs/NOZZLE_DRIVE_TRADE.md.)
 
         # Tip cap (outboard X-face end cap) — ARCHIVED 2026-06-22, legacy
         # part, no longer needed.  STLs moved to airframe/archive/stls/

@@ -234,13 +234,12 @@ edf_stator_sleeve.scad              — Rev R 11-fin inter-stage stator sleeve (
 edf_aft_spider_sleeve.scad          — Rev R aft spider/motor-mount sleeve (carried fwd from Rev A)
 edf_bore_sleeve.scad                — DEPRECATED (superseded by stator+spider)
 nacelle_nozzle_straight.scad        — Rev R push-on straight nozzle (carried fwd from Rev T2)
-nacelle_nozzle_iris.scad            — Rev R1 8-petal iris nozzle, full-circle M=1.0 72T ring gear (carried fwd from Rev O; idler-gear rework 2026-06-22)
-nacelle_nozzle_idler.scad           — Rev R1 compound idler gear (44T/15T), Crown-Pinion-to-ring-gear stage (NEW 2026-06-22)
-nacelle_bevel_housing.scad          — Rev R bevel-gear housing (carried fwd from Rev O)
-nacelle_bevel_pair.scad             — Rev R M=1.0 14T 45° bevel pair (carried fwd from Rev O)
-nacelle_pinion.scad                 — Rev R M=1.0 12T pinion (carried fwd from Rev O)
-nacelle_sector_gear.scad            — Rev R1 M=1.0 58T sector gear, -5°/140° range (carried fwd from Rev O; grown from 38T 2026-06-22)
+nacelle_nozzle_iris.scad            — Rev T 8-flap variable nozzle, CAM-ONLY unison ring (pushrod-driven), Ø66 ring/Ø71 housing; 40 mm flaps (Rev T2)
+nacelle_nozzle_pushrod.scad         — Rev T nozzle pushrod drive (Option B): spar crank + COTS ball-link pushrod (replaces the gear train)
 nacelle_servo_bracket.scad          — Rev R DS3218MG tilt servo bracket with M3 bosses
+(Rev T 2026-07-18: the tilt-to-nozzle GEAR train — nacelle_nozzle_idler,
+ nacelle_bevel_housing, nacelle_bevel_pair, nacelle_pinion, nacelle_sector_gear
+ — is DELETED and moved to airframe/archive/; see ARCHIVE_INDEX.md.)
 ```
 
 #### airframe/openscad/wings/
@@ -365,36 +364,24 @@ eng_left_shell24_50mm_repaired.stl  — Port nacelle EDF engine shell, 50 mm, ma
                                     FreeCAD-scripts Makefile (do not archive)
 eng_right_shell24_50mm_repaired.stl — Stbd nacelle EDF engine shell, 50 mm, manifold-repaired;
                                     same active-pipeline dependency as eng_left_* (do not archive)
-nacelle_bevel_housing.stl         — Bevel gear housing (also duplicated under nozzles/, see below)
-nacelle_bevel_pair.stl            — 14T 45° bevel pair (also duplicated under nozzles/, see below)
-nacelle_pinion.stl                — M=1.0 12T pinion
+nacelle_pushrod_crank.stl         — Rev T nozzle spar crank (RENDER_PART="crank" of
+                                    nacelle_nozzle_pushrod.scad); Option B pushrod drive
 nacelle_port_revs.stl             — Port nacelle pod shell, Rev S (renamed from _revq 2026-07-04;
                                     Rev S1 nozzle/nav/intake mods baked in); required by
                                     tools/bake_hull_frame.py, serenity_assembly.py, and the
                                     FreeCAD-scripts Makefile (active, do not archive)
-nacelle_sector_gear.stl           — M=1.0 58T sector gear, -5°/140° range; re-rendered
-                                    2026-06-22, see §1.1.3.2
-nacelle_stbd_revs.stl             — Stbd nacelle pod shell, Rev S (renamed from _revq 2026-07-04);
+nacelle_stbd_revs.stl             — Stbd nacelle pod shell, Rev S (renamed from _revq 2026-07-04;
                                     same active-pipeline dependency as nacelle_port_revs.stl (do not archive)
 nozzles/
-nacelle_bevel_housing.stl       — Bevel gear housing
-nacelle_bevel_pair.stl          — 14T 45° bevel pair
-nacelle_nozzle_iris.stl         — Combined assembly-preview render (housing + ring + 8
-                                    petals, closed position) of the Rev R1 full-circle
-                                    ring gear + idler-gear stage; re-rendered 2026-06-22,
-                                    see TODO.md §1.1.3.1
-nacelle_nozzle_idler.stl        — Compound idler gear (44T/15T), Crown-Pinion-to-ring
-                                    stage; rendered 2026-06-22, see TODO.md §1.1.3.1
-nacelle_nozzle_idler_bracket.stl — Two-boss bracket for the idler gear above; rendered
-                                    2026-06-22, see TODO.md §1.1.3.1
-nacelle_nozzle_throat.stl       — Rev R2 fixed throat liner + housing (RENDER_PART="throat"
-                                    of nacelle_nozzle_iris.scad); print part, 2026-07-04
-nacelle_nozzle_ring.stl         — Rev R2 unison ring gear (72T + spiral cams,
-                                    RENDER_PART="ring"); print part, re-rendered 2026-07-04
-nacelle_nozzle_flap.stl         — Rev R2 overlapping tangential-hinge conical flap
-                                    (RENDER_PART="flap", print × 8); NEW 2026-07-04,
-                                    supersedes nacelle_nozzle_petal.stl (archived), see
-                                    TODO.md §1.1.3.1 [REF-CAD-001]
+nacelle_nozzle_iris.stl         — Combined assembly-preview render (cam-only unison ring +
+                                    Ø71 housing + 8 flaps, closed) of the Rev T pushrod-
+                                    driven nozzle; re-rendered 2026-07-18
+nacelle_nozzle_throat.stl       — Rev T fixed throat liner + housing (RENDER_PART="throat"
+                                    of nacelle_nozzle_iris.scad); print part, 2026-07-18
+nacelle_nozzle_ring.stl         — Rev T CAM-ONLY unison ring (spiral cams + pushrod lever,
+                                    no gear teeth; RENDER_PART="ring"); 2026-07-18
+nacelle_nozzle_flap.stl         — Rev T2 40 mm tangential-hinge conical flap
+                                    (RENDER_PART="flap", print × 8); 2026-07-18 [REF-CAD-001]
 nacelle_nozzle_closed_asm.stl   — Iris assembly (closed position, visual; legacy blender)
 ```
 

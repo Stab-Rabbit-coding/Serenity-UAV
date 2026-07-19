@@ -299,8 +299,16 @@ EDF2_SPIDER_Z   = 148.0;   // [mm] EDF2 spider centre, nacelle-local Z
 // NOZZLE_RING_Z.  OpenSCAD 2021.01 does not resolve forward variable references
 // reliably in initializer expressions.
 NOZZLE_RING_Z   = 166.25;  // [mm] start Z of nozzle ring pocket (= CROWN_Z)
-NOZZLE_RING_OD  =  65.0;   // [mm] pocket bore OD (rotating ring outer OD;
-                            //      extended to 65 mm to cleanly cut fixed petals)
+NOZZLE_RING_OD  =  72.0;   // [mm] pocket bore OD — Rev T (2026-07-18, Option B):
+                            //      grown 65 -> 72 to seat the pushrod-drive
+                            //      nozzle housing (nacelle_nozzle_iris.scad Rev T
+                            //      HOUSING_OUTER_R = 35.6, OD ≈ 71.2) inside the
+                            //      canonical cowl (measured inner ≈ Ø72 at the
+                            //      pocket start).  VERIFY: the baked pod shells
+                            //      (nacelle_port_revs.stl / nacelle_stbd_revs.stl)
+                            //      MUST be re-rendered/re-baked to cut this larger
+                            //      pocket — tracked in WBS §1.1.3 (not re-baked in
+                            //      this pass; the canonical-shell bake needs review).
 NOZZLE_RING_H   =  40.0;   // [mm] pocket axial depth
 
 // ── Two-sleeve bore zone (Rev T) ─────────────────────────────────────────────

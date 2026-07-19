@@ -67,18 +67,18 @@ FUSELAGE_STLS := \
 
 # -- Nacelle mechanism parts (SCAD-sourced; imported by the
 #    assembly's nacelle_rows() sub-component placements) --------
+# Rev T (2026-07-18, Option B pushrod drive): the tilt-to-nozzle GEAR train
+# (bevel housing, bevel pair, Pinion A, Nozzle Drive Pinion, sector gear) is
+# DELETED and archived (airframe/archive/); replaced by the spar-crank pushrod
+# (nacelle_pushrod_crank.stl).  See docs/NOZZLE_DRIVE_TRADE.md.
 NACELLE_STLS := \
     $(STLS)/nacelles/edf_stator_sleeve.stl               \
     $(STLS)/nacelles/edf_aft_spider_sleeve.stl           \
-    $(STLS)/nacelles/nozzles/nacelle_bevel_housing.stl   \
-    $(STLS)/nacelles/nozzles/nacelle_bevel_pair.stl      \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_iris.stl     \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_throat.stl   \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_ring.stl     \
     $(STLS)/nacelles/nozzles/nacelle_nozzle_flap.stl     \
-    $(STLS)/nacelles/nacelle_pinion_a.stl                \
-    $(STLS)/nacelles/nacelle_drive_pinion.stl            \
-    $(STLS)/nacelles/nacelle_sector_gear.stl
+    $(STLS)/nacelles/nacelle_pushrod_crank.stl
 
 # -- Wings (SCAD-sourced part-local prints; the port/stbd wing
 #    shells the ASSEMBLY uses are baked elsewhere) --------------
@@ -150,22 +150,6 @@ $(STLS)/nacelles/edf_aft_spider_sleeve.stl: \
 	    -o $@
 	@echo "[stl] $@"
 
-$(STLS)/nacelles/nozzles/nacelle_bevel_housing.stl: \
-        $(SCAD)/nacelles/nacelle_bevel_housing.scad
-	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    $(SCAD)/nacelles/nacelle_bevel_housing.scad \
-	    -o $@
-	@echo "[stl] $@"
-
-$(STLS)/nacelles/nozzles/nacelle_bevel_pair.stl: \
-        $(SCAD)/nacelles/nacelle_bevel_pair.scad
-	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    $(SCAD)/nacelles/nacelle_bevel_pair.scad \
-	    -o $@
-	@echo "[stl] $@"
-
 $(STLS)/nacelles/nozzles/nacelle_nozzle_iris.stl: \
         $(SCAD)/nacelles/nacelle_nozzle_iris.scad
 	@mkdir -p $(dir $@)
@@ -203,32 +187,17 @@ $(STLS)/nacelles/nozzles/nacelle_nozzle_flap.stl: \
 	    -o $@
 	@echo "[stl] $@"
 
-# Rev S1 (2026-07-07): the two pinions are variant builds of one SCAD
-# (PINION_VARIANT) — Pinion A (M1 17T) and the Nozzle Drive Pinion (M0.5
-# 14T, replaces the Crown Pinion; the compound idler is deleted/archived).
-$(STLS)/nacelles/nacelle_pinion_a.stl: \
-        $(SCAD)/nacelles/nacelle_pinion.scad
+# Rev T (2026-07-18, Option B): the tilt-to-nozzle gear train (Pinion A,
+# Nozzle Drive Pinion, sector gear, bevel pair, bevel housing) is DELETED and
+# archived; the nozzle spar-crank pushrod replaces it (RENDER_PART="crank"
+# from nacelle_nozzle_pushrod.scad).  The COTS pushrod ball-link rod is not a
+# printed target.
+$(STLS)/nacelles/nacelle_pushrod_crank.stl: \
+        $(SCAD)/nacelles/nacelle_nozzle_pushrod.scad
 	@mkdir -p $(dir $@)
 	$(OPENSCAD) $(SCAD_FLAGS) \
-	    -D 'PINION_VARIANT="A"' \
-	    $(SCAD)/nacelles/nacelle_pinion.scad \
-	    -o $@
-	@echo "[stl] $@"
-
-$(STLS)/nacelles/nacelle_drive_pinion.stl: \
-        $(SCAD)/nacelles/nacelle_pinion.scad
-	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    -D 'PINION_VARIANT="DRIVE"' \
-	    $(SCAD)/nacelles/nacelle_pinion.scad \
-	    -o $@
-	@echo "[stl] $@"
-
-$(STLS)/nacelles/nacelle_sector_gear.stl: \
-        $(SCAD)/nacelles/nacelle_sector_gear.scad
-	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    $(SCAD)/nacelles/nacelle_sector_gear.scad \
+	    -D 'RENDER_PART="crank"' \
+	    $(SCAD)/nacelles/nacelle_nozzle_pushrod.scad \
 	    -o $@
 	@echo "[stl] $@"
 
