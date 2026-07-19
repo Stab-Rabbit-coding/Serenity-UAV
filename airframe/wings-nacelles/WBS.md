@@ -417,30 +417,37 @@
 
 Closes the tilt-servo loop on the **true nacelle angle** (output side) so it is
 independent of tilt-spar torsional wind-up (docs/TILT_SPAR_ANALYSIS.md §1, §3.5).
-Off-axis topology (the spar is a through-shaft — no free end): a diametric ring
-magnet on the rotating nacelle hub read by an off-axis IC (MT6701 / MA732) on the
-fixed wing-tip pad. Avionics/firmware side is tracked in `avionics/WBS.md` §1.9
-and `avionics/emi-hardening/WBS.md` §1.4.6.
+Off-axis topology (the spar is a through-shaft — no free end): a Ø22 diametric
+ring magnet on the rotating nacelle hub read by an off-axis IC (**Magntek MT6701**,
+I²C; **MA732**/SPI fallback) on the fixed wing-tip pad. Avionics/firmware side is
+tracked in `avionics/WBS.md` §1.9.1 and `avionics/emi-hardening/WBS.md` §1.4.6.
 
-- [x] **Wing (fixed sensor) mount modelled** *(2026-07-19)* — added
-    `wing_tip_hall_sensor_pocket()` (PCB recess + 2× M2 non-ferrous pilots, IC
-    off-axis at HALL_SENS_R = 6 mm under the ring annulus) and
-    `hall_sensor_cableway()` (dedicated Ø3.5 mm 4-wire I²C conduit at 0.30c,
-    forward of the EDF double-D for EMI separation; fixed lead — no slip ring) in
-    `airframe/openscad/wings/wings_s1223_revo.scad`; both wired into
-    `wing_one_side()`. Evaluates clean to CSG.
-- [x] **Nacelle (rotating magnet) hub modelled** *(2026-07-19)* — added
-    `nacelle_hall_ring_hub()` (non-ferrous CF-PETG ring-magnet carrier, keyed to
-    the spar at the inboard face, ring ID stood ≥1 mm off the ferrous spar) in
-    `airframe/openscad/nacelles/_export_pivot_slab.scad` (dev sandbox).
-- [ ] **VERIFY `HALL_PCB_H` (8 mm, Y) vs the tip section half-thickness** — locally
-    thicken the tip pad if the airfoil is too thin to enclose the pocket.
+- [x] **Wingtip bearing downsized F688ZZ → MF128ZZ** *(Rev R2d, 2026-07-19)* — the
+    Ø16 F688ZZ seat radius (7.975 mm) exceeded the S1223 tip half-thickness
+    (7.80 mm) and cut ~0.21 mm through **both** airfoil skins. `TIP_BRG_*` now
+    MF128ZZ (Ø12, flange Ø13.5): seat clears with **+1.79 mm** margin (echo-verified).
+    Reaction ≈19 N (dyn) ≪ MF128 capacity. Root bearing stays F688ZZ. BOM split.
+- [x] **Wing (fixed sensor) mount modelled + relocated** *(Rev R2d)* — added
+    `wing_tip_hall_sensor_pocket()` (MT6701 9×7 PCB recess + 2× M2 non-ferrous
+    pilots) with the IC **relocated to HALL_SENS_R = 12 mm** (chordwise-aft, clear
+    of the Ø13.5 flange keep-out — the initial R = 6 mm pocket collided with the
+    bearing seat/flange). Pad OD 26→**36** to host it. Echo: clears flange 0.75 mm,
+    3.79 mm under top skin. Plus `hall_sensor_cableway()` (Ø3.5 I²C conduit at
+    0.30c, forward of the EDF double-D; fixed lead — no slip ring). Wired into
+    `wing_one_side()`; compiles clean.
+- [x] **EDF double-D drilled through the root tenon** *(Rev R2d)* — `cableway_bore()`
+    root end extended Z −1 → −13 so the Ø7 EDF feeds pass through the
+    `fuselage_root_tab` (was dead-ended 1 mm in). Soundness echo-verified: bores
+    groove only the tenon crown; solid **15.4 mm lower spine** retained.
+- [x] **Nacelle (rotating magnet) hub modelled** *(Rev R2d)* — `nacelle_hall_ring_hub()`
+    (non-ferrous CF-PETG carrier, OD 26 for the Ø24 ring, keyed to the spar, ring
+    ID ≥1 mm off the ferrous spar) in `_export_pivot_slab.scad` (dev sandbox).
 - [ ] **VERIFY `INBOARD_FACE_X` sign** in `_export_pivot_slab.scad` (which X face
     of the port nacelle is the wing side).
 - [ ] **Migrate `nacelle_hall_ring_hub()` into `nacelle_pod_50mm_tandem.scad`** with
     the keyed spar hub (retire the sandbox preview); re-bake port/stbd shells.
-- [ ] **Confirm the ferrous-spar field mitigation empirically** — bench-cal the
-    encoder with the steel spar + F688ZZ installed; confirm zero-cal + non-ferrous
-    keep-out (HALL_KEEPOUT_R) hold monotonic angle over the −5..90° sweep. See
-    `avionics/emi-hardening/WBS.md` §1.4.6.
+- [ ] **Confirm MT6701 off-axis geometry vs datasheet** (air-gap, ring OD/ID, IC
+    radial offset) and the ferrous-spar mitigation empirically — bench-cal with the
+    steel spar + bearing installed; monotonic angle over −5..90° after zero-cal.
+    REFERENCES.md requires-verification / TODO §0.8; EMI WBS §1.4.6.
 

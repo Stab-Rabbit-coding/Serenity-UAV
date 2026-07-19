@@ -32,7 +32,7 @@
 
 - [ ] Verify 4130 / 17-4 PH / 7075 allowables vs MMPDS/AMS (REF-MAT-*)
 - [ ] Add 4130 corrosion-finish spec (zinc/cad plate) to BOM/build guide
-- [ ] Select off-axis Hall tilt encoder + confirm pinout (REF-SENSOR-*)
+- [ ] Verify MT6701 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
 
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
 
@@ -98,9 +98,9 @@
 - [ ] Verify stbd cargo-chunk placement of spar-drive features
 - [ ] Tune servo→spar horn/pushrod linkage throw (−5°..140°)
 - [ ] Repair pre-existing stator sleeve non-manifold (edf_stator_sleeve)
-- [ ] Hall tilt sensor: VERIFY HALL_PCB_H vs tip thickness + INBOARD_FACE_X sign
+- [ ] Hall tilt sensor: VERIFY INBOARD_FACE_X sign in _export_pivot_slab.scad
 - [ ] Migrate nacelle_hall_ring_hub into nacelle_pod_50mm_tandem.scad + re-bake
-- [ ] Bench-cal Hall encoder with steel spar/F688ZZ (ferrous-field check)
+- [ ] Bench-cal MT6701 with steel spar/MF128 bearing (ferrous-field check)
 
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.3
 

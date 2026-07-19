@@ -34,10 +34,11 @@ SPAR_AX_Z       = 104.5;    // [mm] spar axis = pivot/CG station
 INBOARD_FACE_X  = -30.0;    // [mm] VERIFY SIGN — nacelle inboard (wing-side) X face
 HALL_SPAR_OD    =   8.0;    // [mm] rotating spar OD (keyway hub bore)
 HALL_COLLAR_ID  =   8.1;    // [mm] hub bore over spar (slip/bond, keyed)
-HALL_RING_OD    =  13.0;    // [mm] diametric ring-magnet OD (matches wing HALL_RING_OD)
+HALL_RING_OD    =  22.0;    // [mm] diametric ring-magnet OD (matches wing HALL_RING_OD;
+                            //      Rev R2e — sized for the MT6701 off-axis IC at R=11)
 HALL_RING_ID    =  10.0;    // [mm] ring-magnet ID (≥1 mm non-ferrous wall over 8 mm spar)
 HALL_RING_T     =   2.5;    // [mm] ring-magnet thickness
-HALL_HUB_OD     =  16.0;    // [mm] non-ferrous printed hub OD (ring carrier)
+HALL_HUB_OD     =  24.0;    // [mm] non-ferrous printed hub OD (ring carrier, clears OD22)
 HALL_HUB_LEN    =   8.0;    // [mm] hub length along spar (into nacelle from face)
 HALL_AIR_GAP    =   1.5;    // [mm] ring-face → wing IC-face axial gap (matches wing)
 

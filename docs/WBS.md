@@ -110,12 +110,13 @@ study and the wing/nacelle Hall tilt-feedback sensor. Both carry
     bearing journals — specify zinc/cadmium plate (journals ground) on
     `SPAR-TILT-4130` in the BOM and the build guide, or adopt the plating-free
     17-4 PH alternative. (docs §3.5 / §9.)
-- [ ] **Select the off-axis Hall tilt encoder + confirm pinout.** `HALL-TILT-ENC`
-    is specified by function only (MT6701 / MA732 class, off-axis capable — the
-    spar is a through-shaft). Confirm datasheet pinout/protocol, off-axis magnet
-    spec, and ferrous-through-shaft behaviour; add a `REF-SENSOR-*` entry with a
-    validated URL before PCB/harness sign-off. Bench-cal tracked in
-    `avionics/emi-hardening/WBS.md` §1.4.6 and `avionics/WBS.md` §1.9.1.
+- [ ] **Verify the MT6701 off-axis geometry + pinout.** Encoder selected =
+    `MAL-TILT-ENC-PCB` (Magntek MT6701, I²C, off-axis; MA732/SPI fallback). Confirm
+    against the MT6701 datasheet: pinout/protocol, off-axis air-gap (assumed
+    1.5 mm), ring OD/ID, IC radial offset (R = 12 mm), and ferrous-through-shaft
+    behaviour; add a `REF-SENSOR-*` entry with a validated URL before PCB/harness
+    sign-off. Bench-cal tracked in `avionics/emi-hardening/WBS.md` §1.4.6 and
+    `avionics/WBS.md` §1.9.1.
 
 
 ## §1.5 — Documentation

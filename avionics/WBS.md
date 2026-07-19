@@ -356,8 +356,9 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 ### §1.9.1 — Nacelle Tilt-Angle Feedback (Hall encoder)
 
-Each nacelle carries a magnetic angle encoder (`HALL-TILT-ENC`, MT6701 / MA732)
-at the wing/nacelle joint reading a diametric ring magnet on the rotating spar
+Each nacelle carries a magnetic angle encoder (`MAL-TILT-ENC-PCB` — **Magntek
+MT6701**, I²C, off-axis, on a compact 7×7 mm in-house PCB; **MA732/SPI** is the
+fallback) at the wing/nacelle joint reading a Ø22 diametric ring magnet on the rotating spar
 hub (airframe: `wings-nacelles/WBS.md` §1.1.3.6). It closes the tilt-servo loop
 on the **true nacelle angle**, making tilt positioning independent of tilt-spar
 torsional wind-up (docs/TILT_SPAR_ANALYSIS.md §1, §3.5) — the spar/servo shaft

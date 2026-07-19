@@ -302,7 +302,7 @@ Current `wings_s1223_revo.scad` wingtip block is wrong for this mechanism:
 
 | Current feature | Problem | Replace with |
 |---|---|---|
-| `wing_tip_nacelle_boss_socket()` | No boss exists (nacelle fixed to spar) | **Wingtip bearing seat** (F688ZZ, 8×16×5) coaxial with spar |
+| `wing_tip_nacelle_boss_socket()` | No boss exists (nacelle fixed to spar) | **Wingtip bearing seat** (MF128ZZ, 8×12×3.5 — Rev R2d downsize; the F688ZZ Ø16 seat broke both tip skins, §8 note) coaxial with spar |
 | `wing_tip_tilt_spar_bore()` 3.98 mm press-fit | Spar rotates; must clear | **8.1 mm rotating clearance** + bearing pockets |
 | Protruding mount block for gear | Gear must be fixed & coaxial | **Fixed R14 gear boss** coaxial w/ spar, standing proud for pinion mesh |
 | — | Spar must pass fully through | **Through-bore** wing→tip; spar continues into nacelle |
@@ -314,8 +314,32 @@ Dependencies opened by adopting 8 mm:
    inboard/outboard duct-wall spar bosses; nacelle keyed to spar at CG.
 2. `nacelle_pod…scad` — Drive-Pinion-A regear to R14 sector; nozzle ratio re-verify.
 3. Cargo bay — root bearing seat + servo-to-spar horn (servo stays in bay).
-4. BOM — 8 mm 4130 tube ×2, F688ZZ bearings ×4 (2/side), R14 fixed gears ×2;
-   retire 4 mm CF pivot rod + MF104ZZ.
+4. BOM — 8 mm 4130 tube ×2, **F688ZZ root bearings ×2 + MF128ZZ wingtip bearings
+   ×2** (Rev R2d — see note), R14 fixed gears ×2; retire 4 mm CF pivot rod + MF104ZZ.
+
+### 8.1 Rev R2d implementation notes (2026-07-19)
+
+The wingtip interface has since been modelled in `wings_s1223_revo.scad`, and three
+geometry issues were found and fixed **using the parametric numbers** (no STL guesswork):
+
+- **Wingtip bearing downsized F688ZZ → MF128ZZ (Ø16 → Ø12).** The Ø16 seat radius
+  (7.975 mm) exceeded the S1223 tip half-thickness (7.80 mm at the spar station,
+  even at `THICKNESS_SCALE_TIP` = 1.25) and cut a ~0.21 mm crescent through **both**
+  airfoil skins. MF128ZZ seats with **+1.79 mm** margin. Wingtip radial reaction
+  ≈ 19 N (dyn) ≪ MF128 capacity (~700 N) — load-safe. Root bearing stays F688ZZ.
+- **Tilt-feedback Hall sensor = Magntek MT6701** (I²C, off-axis) on a compact
+  **7×7 mm** in-house PCB, seated off-axis at **R = 11 mm**, reading a **Ø22**
+  diametric ring on the nacelle hub. The tip is congested — the pocket threads the
+  ~8.4 mm chordwise gap between the Ø13.5 bearing flange (X≈28.75) and the forward
+  EDF double-D bore (X≈37.1): echo-verified clearances 0.75 mm (flange) / 0.64 mm
+  (EDF) / **4.01 mm** (top skin); pad OD 26→**29.5** (kept clear of the EDF bore).
+  Off-axis geometry pending MT6701-datasheet verification.
+- **EDF double-D drilled through the root tenon — STRAIGHT.** The `fuselage_root_tab`
+  blocked the Ø7 double-D 1 mm in. The pass-through is a **separate straight axial
+  bore** (constant X,Y) continuing each conduit through the tenon's inboard face —
+  *not* an extension of the slanted spanwise hull, which had skewed the root-face
+  hole ~2.3 mm sideways (hard to thread). Root-face and tenon-exit openings are now
+  coaxial. Solid **15.4 mm lower spine** retained (bores groove only the crown) — sound.
 
 ---
 
