@@ -442,7 +442,6 @@ def make_autolatch_cradle():
     WT = 2.5  # wall and base thickness
 
     TAB_W = 5.0  # latch tab plan width (square, X and Y)
-    TAB_T = 2.0  # latch tab wall thickness (flex element)
     TAB_H = 8.0  # latch tab height above frame top rim
     HOOK_D = 2.0  # hook notch depth (inward from tab outer face)
     HOOK_H = 3.0  # hook notch height (at tab tip)
