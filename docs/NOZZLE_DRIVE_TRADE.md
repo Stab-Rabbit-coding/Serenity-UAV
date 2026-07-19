@@ -82,7 +82,29 @@ ring. Spatial (RSSR-class) linkage — tilt axis (X) ⟂ ring axis (Z).
 | Canon spec fidelity | "gear train" ✔ | "gear train" ✔ | departs (needs spec edit) |
 | Dominant failure mode | tooth strip / idler jam | tooth strip | rod buckle / ball pop-out |
 
-## Recommendation
+## DECISION — Option B ADOPTED (2026-07-18)
+
+> **User decision 2026-07-18: Option B (pushrod / bellcrank) is adopted.**
+> Driver: even the Rev S1 internal ring gear (Option A) floored the ring at
+> ≈Ø73 (Ø50 bore + Ø55 throat + M0.5 pinion clearance) and the housing at ≈Ø79,
+> so it could not seat inside the canonical nozzle pocket — it stood proud of
+> the aft cowl.  Option B deletes the ring gear, freeing the now cam-only ring
+> to shrink to Ø66 (housing Ø71), which tucks under the cowl.
+>
+> Implementation (Rev T, 2026-07-18): the entire tilt-to-nozzle gear train
+> (sector gear, Pinion A, bevel pair, bevel housing, Nozzle Drive Pinion) is
+> archived; the ring becomes cam-only with a single pushrod lever ear
+> (`nacelle_nozzle_iris.scad` Rev T); a spar crank + COTS ball-link pushrod is
+> added (`nacelle_nozzle_pushrod.scad`).  The current pod spar ROTATES with
+> tilt, so the crank is a direct tilt-angle input (a simplification over this
+> study's "fixed crank on a non-rotating spar" assumption).
+>
+> OPEN / VERIFY: the spatial RSSR linkage synthesis (crank radius, ball
+> positions, rod length for a monotonic 0→90° tilt → 0→23.75° ring map) is
+> first-pass only — must be solved before flight hardware (WBS §1.1.3).  The
+> baked pod shells need re-baking for the grown Ø72 nozzle pocket.
+
+## Recommendation (historical — see DECISION above)
 
 **Option A** if the priorities are canon fidelity ("passive **gear train**"),
 positive/repeatable sync between the tandem EDFs and both nacelles, and a linear

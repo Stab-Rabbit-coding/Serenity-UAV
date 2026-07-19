@@ -16,8 +16,8 @@
 ---
 
 ## §1.2 — PCB Design: Cape-A-1 and Cape-B-1 (archived)
-*(root `WBS.md` §1.2)*
 
+*(root `WBS.md` §1.2)*
 
 - [x] **Regenerate Cape-A-1 gerbers** — `.kicad_pcb` modified 2026-05-23 (tamper-mesh commit); gerbers in `serenity/kicad/gerbers/CAPE-A-1/` are from 2026-05-22.
     - Open in KiCad → Plot → Gerbers; overwrite files in `serenity/kicad/gerbers/CAPE-A-1/`; re-export drill files.
@@ -29,12 +29,11 @@
 
 ---
 
-
 ## §1.2a — PCB Design: Wash, Zoe, Emma (EMI-Hardened Variants)
+
 *(root `WBS.md` §1.2a)*
 
-
-#### ***EM hardening Objective is to ensure safe and controlled operations in hostile em/rf environments such as the vicinity of radiating commercial broadcast, amateur radio and cellular towers.***
+### ***EM hardening Objective is to ensure safe and controlled operations in hostile em/rf environments such as the vicinity of radiating commercial broadcast, amateur radio and cellular towers.***
 
 Design files on branch `claude/cape-em-harsh-variants-9Yfr1`. Schematics (`*.kicad_sch`) and PCB
 layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been generated or DRC-verified.
@@ -226,8 +225,8 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 ---
 
-
 ### Wash footprint verification and schematic-first rebuild (2026-07-13/14)
+
 - [ ] **Wash footprint-vs-datasheet verification — DONE 2026-07-13 (Claude Opus 4.8);
     7 footprints are NOT manufacturable, must be rebuilt before fab.** Full report:
     `avionics/kicad/Wash/WASH_FOOTPRINT_VERIFICATION.md`. Fixing any of these remaps
@@ -306,8 +305,8 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
         per-domain tamper-mesh rework (§1.2, "Redesign the tamper mesh").
 
 ## §1.8 — Names
-*(root `WBS.md` §1.8)*
 
+*(root `WBS.md` §1.8)*
 
 - [x] The ground control station is named "Malcolm" aka "CAPT Reynolds" or "CAPT Tight Pants" - "I aim to misbehave" *(implemented throughout all docs)*
 
@@ -327,10 +326,9 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 - [x] The aft avionics bay is named "Simon's medbay" (Bay E) - "What did they do to you?" *(implemented 2026-06-07)*
 
-
 ## §1.9 — Avionics Workload Balancing
-*(root `WBS.md` §1.9)*
 
+*(root `WBS.md` §1.9)*
 
 - While all Wash capes are identical and all Zoë capes are also identical, they have different primary tasking.  **All Stacks are capable to communicate and control the UAV safety in a benign environment on their own.***
 
@@ -356,12 +354,39 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 - Simon is the alternate watchdog for the ship, but most of his attention is on River.  He's got aft EDF control and alternate nacelle control. He follows River's lead but makes sure she doesn't crash the ship. Simon also controls Jayne, and ensures that the cargo isn't jettisoned or the crew abandoned. He's got 49MHz as his primary antenna and SiK as his backup.
 
+### §1.9.1 — Nacelle Tilt-Angle Feedback (Hall encoder)
+
+Each nacelle carries a magnetic angle encoder (`MAL-TILT-ENC-PCB` — **Magntek
+MT6701**, I²C, off-axis, on a compact 7×7 mm in-house PCB; **MA732/SPI** is the
+fallback) at the wing/nacelle joint reading a Ø22 diametric ring magnet on the rotating spar
+hub (airframe: `wings-nacelles/WBS.md` §1.1.3.6). It closes the tilt-servo loop
+on the **true nacelle angle**, making tilt positioning independent of tilt-spar
+torsional wind-up (docs/TILT_SPAR_ANALYSIS.md §1, §3.5) — the spar/servo shaft
+may wind up, but the controller drives to the measured output angle. Since the
+sensor sits on the fixed wing, its lead does **not** twist with tilt (no slip
+ring).
+
+- [ ] **Assign the two encoders to nacelle-control nodes** — port + stbd read by
+    **River (primary nacelle control/sync)** with **Simon (alternate nacelle
+    control)** as failover (per node roles above). Put port and stbd on
+    **separate I²C buses** (or a TCA9548A mux, cf. the antenna-gimbal AS5600
+    pattern) — MT6701 has a fixed I²C address, so two on one bus collide.
+- [ ] **Select the real part + confirm pinout/protocol** (MT6701 I²C vs MA732
+    SPI/PWM) — must be **off-axis capable** (through-shaft; the on-axis AS5600
+    used on the gimbal will not work here). Add a `REF-SENSOR-*` catalog entry
+    (TODO §0.8) before PCB/harness sign-off.
+- [ ] **Firmware: zero-calibration over the −5..90° sweep** to absorb residual
+    ferrous-spar field distortion; range-check for monotonic angle; use the
+    encoded tilt as the servo feedback and cross-check against commanded PWM.
+- [ ] **Wiring per EMI spec** — shielded 4-wire, routed clear of the 40 A EDF
+    feeds; see `avionics/emi-hardening/WBS.md` §1.4.4 (I²C) and §1.4.6
+    (ferromagnetic spar / magnetic-sensor siting).
+
 ---
 
-
 ## Procurement — §2.4, §2.5 (Avionics BOM tables)
-*(root `TODO.md` §2.4-§2.5)*
 
+*(root `TODO.md` §2.4-§2.5)*
 
 *Rev R: all nodes use v2 EMI-hardened capes. Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 are retired.*
 
@@ -377,8 +402,6 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 | USB-UART adapter (CP2102) | 1× | ~$8 | ~$8 | Debug console (one-time tool) |
 | 3M double-sided foam tape | 1× | ~$5 | ~$5 | ESC and node mounting |
 | Zip ties 100mm + 200mm | 1 bag | ~$4 | ~$4 | Wire management |
-
-
 
 *Rev Q: all Phase 7 nodes also use v2 EMI-hardened capes.*
 
@@ -396,4 +419,3 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 | 5mm PMMA disc 0.5mm thick | 12× | ~$6 | ToF aperture covers |
 | UV adhesive | 1× | ~$6 | ToF aperture seal |
 | JST-GH cables (remaining bus segments) | assorted | ~$20 | Ring completion |
-

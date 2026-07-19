@@ -53,7 +53,7 @@
 // ── Flap pivot kinematics ──────────────────────────────────────────────────
 //   Flap hinge circle radius R_HINGE = THROAT_OUTER_R = 27.5 mm (right at
 //   the throat tube's OD — see THROAT geometry below).  Flap axial length
-//   FLAP_LENGTH = 20 mm, hinge to trailing edge.  Trailing-edge exit radius
+//   FLAP_LENGTH = 40 mm, hinge to trailing edge.  Trailing-edge exit radius
 //   as a function of flap swing angle phi (phi = 0 -> flap parallel to duct
 //   axis, flush extension of the throat tube; phi > 0 -> flap swings
 //   inward/downstream, converging):
@@ -61,14 +61,15 @@
 //   Solving for the two bore-percentage targets (CLAUDE.md: 75 % of the
 //   25 mm bore radius at 0 deg/cruise tilt, 105 % at 90 deg/hover tilt):
 //     phi_closed = asin((R_HINGE - NOZZLE_CLOSED_R) / FLAP_LENGTH)
-//                = asin((27.5 - 18.75) / 20) = asin(0.4375)  = 25.94 deg
+//                = asin((27.5 - 18.75) / 40) = asin(0.21875) = 12.64 deg
 //     phi_open   = asin((R_HINGE - NOZZLE_OPEN_R)   / FLAP_LENGTH)
-//                = asin((27.5 - 26.25) / 20) = asin(0.0625)  =  3.58 deg
+//                = asin((27.5 - 26.25) / 40) = asin(0.03125) =  1.79 deg
 //   Both angles are POSITIVE (always at least slightly converging from the
 //   throat) — there is no sign change to handle, unlike an earlier draft of
 //   this derivation that put the hinge at the bore radius itself.  Both
-//   angles are gentle (< 26 deg) — the flap is never more than ~26 deg off
-//   the local flow direction, the actual "smooth, low-turbulence" goal.
+//   angles are gentle (< 13 deg with the Rev T2 40 mm flap) — the flap is
+//   never more than ~13 deg off the local flow direction, the actual
+//   "smooth, low-turbulence" goal (halved from the old 20 mm flap's ~26 deg).
 //
 // ── Actuation: spiral-cam unison disc (replaces piano-wire drive posts) ───
 //   A tangential-hinge flap needs an AXIAL force at a RADIALLY-offset point
@@ -279,12 +280,18 @@ THROAT_LEN       = 15.0;   // [mm] axial length, inboard face (Z=0) to hinge lin
 // ── Flap Pivot Geometry ────────────────────────────────────────────────────────
 
 R_HINGE      = THROAT_OUTER_R;   // [mm] = 27.5, tangential hinge circle radius
-FLAP_LENGTH  = 20.0;             // [mm] hinge to trailing edge, axial-ish length
+FLAP_LENGTH  = 40.0;             // [mm] hinge to trailing edge, axial-ish length
+                                 //   Rev T2 (2026-07-18): doubled 20 -> 40 per
+                                 //   user direction — a longer flap sweeps the
+                                 //   same exit-radius range over HALF the swing
+                                 //   arc (PHI 1.79..12.64 deg vs the old
+                                 //   3.58..25.94), a gentler cone / lower
+                                 //   turbulence and less follower travel demand.
 HINGE_Z      = THROAT_LEN;       // [mm] = 15.0, hinge line Z station
 
 // phi(exit_r) = asin((R_HINGE - exit_r) / FLAP_LENGTH) — see header derivation.
-PHI_CLOSED = asin((R_HINGE - NOZZLE_CLOSED_R) / FLAP_LENGTH);   // = 25.94 deg
-PHI_OPEN   = asin((R_HINGE - NOZZLE_OPEN_R)   / FLAP_LENGTH);   // =  3.58 deg
+PHI_CLOSED = asin((R_HINGE - NOZZLE_CLOSED_R) / FLAP_LENGTH);   // = 12.64 deg (L=40)
+PHI_OPEN   = asin((R_HINGE - NOZZLE_OPEN_R)   / FLAP_LENGTH);   // =  1.79 deg (L=40)
 
 // ── Lever Tab / Follower Pin (drives the flap from the ring's spiral cam) ────
 //
@@ -420,7 +427,14 @@ RING_BALL_D     =  3.0;   // [mm] pushrod ball-end nominal (socket = +clearance)
 // shell, non-primary) → Ø≈70, recessed into the Ø72 pocket.  Stage 2 will
 // taper/ovalise the outer wall to follow the canonical cowl mould line.
 HOUSING_INNER_R =  33.6;   // [mm] bore radius (ring Ø66.2 + 0.5 mm/side clr)
-HOUSING_OUTER_R =  35.6;   // [mm] outer radius (OD ≈ 71.2 mm; was 41.0/Ø82)
+HOUSING_OUTER_R =  35.6;   // [mm] outer radius (OD ≈ 71.2 mm; was 41.0/Ø82) —
+                            //   set by the hinge-boss envelope (≈R34.7), the
+                            //   binding hard point (see module note)
+HOUSING_AFT_R   =  33.5;   // [mm] outer radius at the aft face (Z=THROAT_LEN):
+                            //   the shell tapers HOUSING_OUTER_R→HOUSING_AFT_R
+                            //   aft of the ring to follow the cowl's aft
+                            //   narrowing; hinge bosses may stand slightly proud
+                            //   of this at the exit lip (they carry the flaps)
 HOUSING_LIP_H   =   3.0;   // [mm] forward bonding lip depth (bonds to nacelle
                             //   exit face; lip OD matches EDF duct exit OD)
 
@@ -442,19 +456,32 @@ RIB_ANG_OFFSET = 22.5;   // [deg] angular offset from flap centrelines (avoids
 //   - 8 tangential hinge bosses at Z = HINGE_Z, radius R_HINGE, spaced
 //     360/N_FLAPS apart — each a central lug with a tangential through-bore
 //     for the 3 mm hinge pin (flap clevis straddles it, see nozzle_flap()).
-//   - Outer shell: OD = 2*HOUSING_OUTER_R = 82 mm, bore = 2*HOUSING_INNER_R
-//     = 75 mm (unison ring rides inside), Z = 0..THROAT_LEN, with the
-//     Rev R1 bonding lip at the inboard face and the idler-access slot.
+//   - Outer shell (Rev T): OD = 2*HOUSING_OUTER_R ≈ 71 mm, bore =
+//     2*HOUSING_INNER_R ≈ 67 mm (cam-only unison ring rides inside),
+//     Z = 0..THROAT_LEN, bonding lip at the inboard face.  Aft of the ring
+//     (Z > RING_H) the outer wall tapers to HOUSING_AFT_R to follow the
+//     canonical cowl's aft narrowing (Stage 2, Rev T).
 //   - RIB_N ribs bridging throat-tube OD to outer-shell bore at a single
 //     axial station, offset from the flap centrelines.
+//
+//   BINDING ENVELOPE (Rev T): the tangential hinge bosses reach ≈R34.7
+//     (Ø69.4) at the hinge station Z=HINGE_Z — wider than the cam ring
+//     (Ø66) or the shell bore, so they, not the ring, now set the minimum
+//     nozzle OD.  Fully ovalising the housing to the cowl mould line (and
+//     resolving the hinge-boss vs aft-cowl clearance) needs the assembly
+//     part-local→hull transform — deferred VERIFY (serenity_assembly.py).
 //
 //   Origin: centre of inboard (nacelle-side) face, Z = 0.
 module nozzle_throat_and_housing() {
     union() {
         difference() {
             union() {
-                // ── Outer shell main body ────────────────────────────────────────
-                cylinder(h = THROAT_LEN, r = HOUSING_OUTER_R);
+                // ── Outer shell main body (Rev T: ring-region cylinder + aft
+                //    taper toward the cowl mould line) ─────────────────────────
+                cylinder(h = RING_H, r = HOUSING_OUTER_R);
+                translate([0, 0, RING_H])
+                    cylinder(h = THROAT_LEN - RING_H,
+                             r1 = HOUSING_OUTER_R, r2 = HOUSING_AFT_R);
 
                 // Inboard bonding lip: shoulder against nacelle exit face
                 translate([0, 0, -HOUSING_LIP_H])
@@ -667,28 +694,28 @@ module nozzle_flap() {
         cylinder(h = FOLLOWER_PIN_L, d = FOLLOWER_PIN_D, center = false);
 }
 
-// ── Fit Confirmation ──────────────────────────────────────────────────────────
+// ── Fit Confirmation (Rev T cam-only / pushrod drive) ───────────────────────────
 //
 //   Interface                  Mating part                   Clearance / fit
 //   ─────────────────────────  ────────────────────────────  ──────────────────
-//   RING_OUTER_R 37 mm OD      Housing HOUSING_INNER_R 37.5  0.5 mm radial clr
-//   (unison ring)              (outer shell bore)             (ring rotates freely)
-//   CAM_FLANGE_INNER_R 29 mm   Throat tube OD 27.5 mm        1.5 mm radial clr
-//   Ring gear pitch R 34 mm    Drive Pinion pitch R 3.5 mm   internal mesh,
-//   (INTERNAL, 136 T, M0.5)    nacelle_pinion.scad "DRIVE"    centre dist 30.5 mm
-//   Drive pinion tip sweep     Throat relief patch R 26.1    0.4 mm radial clr
-//   (inward reach R 26.5)      (RELIEF_* params, 30 deg arc)  (gear band Z only)
+//   RING_OUTER_R 33.1 mm OD    Housing HOUSING_INNER_R 33.6  0.5 mm radial clr
+//   (cam-only unison ring)     (outer shell bore)             (ring rotates freely)
+//   CAM_FLANGE_INNER_R 28.5    Throat tube OD 27.5 mm        1.0 mm radial clr
+//   Ring lever ear (RING_      Pushrod ball end (RING_BALL_   ball-in-socket,
+//     LEVER_R 32, socket)        D 3.0), Stage-3 pushrod SCAD  0.2 mm/side seat
 //   HINGE_BORE_D 3.2 mm        3 mm SS hinge pin             0.2 mm diametral clr
 //   (×8 tangential hinges)     (×8, 3 mm × 18 mm dowels)      (flaps pivot freely)
 //   Follower pin 2.0 mm        Spiral slot width 2.4 mm      0.2 mm/side clr
 //   (×8, on flap lever tab)    (unison_ring(), ×8 slots)      (slides along spiral)
 //   Housing bonding lip        Nacelle exit face duct         epoxy bond,
-//   OD = HOUSING_OUTER_R 41mm  (hull exit aperture 82 mm ID)  positive shoulder stop
+//   OD = HOUSING_OUTER_R 35.6  (nozzle pocket, Ø≈72)          positive shoulder stop
 //
-//   phi range achieved: PHI_OPEN..PHI_CLOSED =~ 3.58..25.94 deg (reference
-//   points); hard stops extrapolate to roughly -14..+27 deg — VERIFY against
-//   a printed prototype before final tolerancing (first-pass concept, see
-//   header).
+//   phi range achieved: PHI_OPEN..PHI_CLOSED =~ 1.79..12.64 deg (Rev T2 40 mm
+//   flap reference points; half the old 20 mm flap's 3.58..25.94 range).  The
+//   ring lever stroke and its mechanical stops are set by the Stage-3 pushrod
+//   linkage — VERIFY follower travel, ring-bore clearance, and the lever-ear
+//   housing exit slot against a printed prototype before final tolerancing
+//   (first-pass concept, see header).
 
 // ── Render Instructions ───────────────────────────────────────────────────────
 //

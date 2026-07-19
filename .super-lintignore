@@ -1,5 +1,5 @@
 airframe/archive/
 airframe/FreeCAD-scripts/
-archives/**
+archives/
 .github/linters/
 avionics/kicad/complete_1_2b.py

@@ -14,6 +14,26 @@
 
 ---
 
+### 0.1 — FCC Part 95 Section Number Verification
+
+→ detail: `docs/WBS.md` §0.1
+
+- [ ] Code-identifier "RCRS" naming left unchanged — separate tracked…
+
+### 0.7 — CI Lint Scope and Repo-Wide Lint Debt
+
+→ detail: `docs/WBS.md` §0.7
+
+- [ ] Repo-wide lint debt
+
+### 0.8 — Tilt-Spar Material Allowables + Hall Encoder Verification
+
+→ detail: `docs/WBS.md` §0.8
+
+- [ ] Verify 4130 / 17-4 PH / 7075 allowables vs MMPDS/AMS (REF-MAT-*)
+- [ ] Add 4130 corrosion-finish spec (zinc/cad plate) to BOM/build guide
+- [ ] Verify MT6701 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
+
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
 
 → detail: `airframe/WBS.md` §1.1.0
@@ -73,6 +93,14 @@
 - [ ] [OPEN — BLOCKER] Fuselage spar-interface now mismatched.
 
 #### 1.1.3 — Nacelles
+- [ ] Reconcile crazy-ivan/PR#141 as SUPERSEDED by fix/nozzle branch
+- [ ] Merge cargo_spar_drive into cargo shell (bearing/servo/mortise/cableway)
+- [ ] Verify stbd cargo-chunk placement of spar-drive features
+- [ ] Tune servo→spar horn/pushrod linkage throw (−5°..140°)
+- [ ] Repair pre-existing stator sleeve non-manifold (edf_stator_sleeve)
+- [ ] Hall tilt sensor: VERIFY INBOARD_FACE_X sign in _export_pivot_slab.scad
+- [ ] Migrate nacelle_hall_ring_hub into nacelle_pod_50mm_tandem.scad + re-bake
+- [ ] Bench-cal MT6701 with steel spar/MF128 bearing (ferrous-field check)
 
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.3
 

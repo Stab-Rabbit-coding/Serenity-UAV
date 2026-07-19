@@ -377,5 +377,36 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
     in the pre-foam-pour checklist. Battery tray and hatch must be installed and hatch zone
     masked before the foam pour step.
 
+#### 1.4.6 ferromagnetic structural elements — magnetic-sensor siting
+
+The rotating tilt-spar (`SPAR-TILT-4130`, and its `17-4 PH` alternative) is
+**ferromagnetic steel** — a departure from the otherwise non-ferrous airframe
+(CF-PETG / PETG / carbon-fibre / aluminium). Two magnetic-interference concerns
+follow from putting a magnetic material into a rotating, servo-driven joint, plus
+the servo's own motor and the F688ZZ steel bearings. Captured here so it is not
+re-discovered at bring-up. Material selection rationale: docs/TILT_SPAR_ANALYSIS.md
+§3.5 (a non-magnetic **Ti-6Al-4V** or **316** spar would remove this entirely but
+loses on keyability/fatigue — see the trade study).
+
+- [ ] **Hall tilt-encoder ↔ ferrous spar (`HALL-TILT-ENC`).** The joint angle
+    encoder's bias magnet (`HALL-RING-MAG`) is a diametric ring **around the steel
+    spar**, which distorts/short-circuits its field. Mitigations already in the
+    geometry (docs §3.5; airframe §1.1.3.6): (a) ring ID stood ≥1 mm off the steel
+    on the non-ferrous `PRINT-HALL-HUB`; (b) **non-ferrous fasteners only**
+    (`HALL-SCR-M2-BRASS`, brass/316/nylon) within the ~10 mm IC keep-out — **NOT**
+    the steel bearing screws; (c) keep the ring ≥3 mm clear of the F688ZZ shield.
+    **VERIFY by bench-cal** with the real steel spar + bearing installed:
+    monotonic, repeatable angle over the −5..90° sweep after firmware zero-cal.
+- [ ] **Flight magnetometer / compass siting.** A rotating ferromagnetic shaft +
+    its tilt-servo motor is a **variable hard/soft-iron disturbance** whose signature
+    changes with tilt angle — the worst case for a compass. **Site the flight
+    magnetometer as far as practical from both nacelle joints and the cargo-bay
+    tilt servo/root bearing**, and record the tilt-dependent offset for
+    compensation if a magnetometer is in the nav solution. (Confirm whether the
+    Rev S1 IMU stack even includes a magnetometer — if heading is GPS/RTK-derived,
+    this reduces to the encoder concern above only.)
+- [ ] **Add the ferrous-spar note to the build guide** so the non-ferrous-fastener
+    keep-out and magnetometer-siting rules survive into assembly.
+
 ---
 

@@ -202,8 +202,8 @@ def is_power(net):
 def lib_symbol(ref, pads):
     """Generic rectangle symbol; pins split left/right, all electrical 'passive'."""
     n = len(pads)
-    left = pads[: (n + 1) // 2]
-    right = pads[(n + 1) // 2 :]
+    left = pads[:(n + 1) // 2]
+    right = pads[(n + 1) // 2:]
     rows = max(len(left), len(right), 1)
     half_h = (rows * PIN_PITCH) / 2 + PIN_PITCH
     half_w = 12.7

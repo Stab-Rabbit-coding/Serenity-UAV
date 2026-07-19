@@ -592,8 +592,8 @@ for cfg in NACELLES:
     print(f"\n=== Processing {cfg['label']} ===")
     clear_scene()
 
-    in_path  = os.path.join(IN_DIR,  cfg["in_stl"])
-    out_path = os.path.join(OUT_DIR, cfg["out_stl"])
+    in_path  = os.path.join(IN_DIR,  cfg["in_stl"])  # type: ignore[call-overload]
+    out_path = os.path.join(OUT_DIR, cfg["out_stl"])  # type: ignore[call-overload]
 
     # Import nacelle shell
     nacelle = import_stl(in_path)
@@ -727,7 +727,7 @@ for cfg in NACELLES:
                              wire_guide_front_1, wire_guide_front_2,
                              wire_guide_aft_1, wire_guide_aft_2,
                              pivot_boss, nozzle_ring])
-    combined.name = cfg["out_stl"].replace(".stl", "")
+    combined.name = cfg["out_stl"].replace(".stl", "")  # type: ignore[attr-defined]
 
     export_stl(combined, out_path)
     sz = os.path.getsize(out_path) // 1024
