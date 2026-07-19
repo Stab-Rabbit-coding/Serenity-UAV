@@ -9,6 +9,7 @@
         "**/*.dxf",
         "**/*.stl",
         "**/__pycache__/**",
-        "**/blender-scripts/*.py"
+        "**/blender-scripts/*.py",
+        "avionics/kicad/complete_1_2b.py"
     ]
 }
