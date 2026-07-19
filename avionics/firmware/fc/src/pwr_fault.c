@@ -3,6 +3,7 @@
  * @brief   Power fault monitor and load-shedding manager — implementation.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * Implements the power fault state machine described in pwr_fault.h.
@@ -38,53 +39,53 @@
  * ---------------------------------------------------------------------------*/
 
 /** I2C addresses for ESC current monitors on Kaylee. */
-static const uint8_t ESC_I2C_ADDR[PWR_FAULT_ESC_COUNT] = {
-    0x40U, 0x41U, 0x42U, 0x43U
-};
+static const uint8_t ESC_I2C_ADDR[PWR_FAULT_ESC_COUNT] = {0x40U, 0x41U, 0x42U,
+                                                          0x43U};
 
 /** I2C address for main bus current monitor. */
-#define MAIN_BUS_I2C_ADDR   (0x44U)
+#define MAIN_BUS_I2C_ADDR (0x44U)
 
 /** Shunt resistance for ESC monitors (mΩ). */
-#define ESC_SHUNT_MOHM      (1U)
+#define ESC_SHUNT_MOHM    (1U)
 
 /** Maximum current for ESC monitors (mA). */
-#define ESC_IMAX_MA         (60000U)
+#define ESC_IMAX_MA       (60000U)
 
 /** Shunt resistance for main bus monitor (mΩ). */
-#define MAIN_SHUNT_MOHM     (1U)
+#define MAIN_SHUNT_MOHM   (1U)
 
 /** Maximum current for main bus monitor (mA). */
-#define MAIN_IMAX_MA        (75000U)
+#define MAIN_IMAX_MA      (75000U)
 
 /* ---------------------------------------------------------------------------
  * Poll divisor for cell monitor
  * Evaluated every CELL_DIVISOR calls to pwr_fault_poll().
  * ---------------------------------------------------------------------------*/
-#define CELL_POLL_DIVISOR   (PWR_FAULT_POLL_HZ / PWR_FAULT_CELL_POLL_HZ)
+#define CELL_POLL_DIVISOR (PWR_FAULT_POLL_HZ / PWR_FAULT_CELL_POLL_HZ)
 
 /* ---------------------------------------------------------------------------
  * Internal context
  * ---------------------------------------------------------------------------*/
 
 struct pwr_fault_ctx {
-    /* INA226 driver contexts: [0..PWR_FAULT_ESC_COUNT-1] = ESC, [PWR_FAULT_ESC_COUNT] = main. */
-    bmon_ina2xx_ctx_t  *ina[PWR_FAULT_ESC_COUNT + 1U];
+    /* INA226 driver contexts: [0..PWR_FAULT_ESC_COUNT-1] = ESC,
+     * [PWR_FAULT_ESC_COUNT] = main. */
+    bmon_ina2xx_ctx_t *ina[PWR_FAULT_ESC_COUNT + 1U];
 
     /* BQ76930 cell monitor. */
-    cell_mon_ctx_t     *cell;
+    cell_mon_ctx_t *cell;
 
     /* Snapshot of most recent measurement. */
     pwr_fault_snapshot_t snap;
 
     /* Current fault state. */
-    pwr_fault_state_t   state;
+    pwr_fault_state_t state;
 
     /* Per-ESC sustained-overcurrent timer (ms-equivalent poll count). */
-    uint32_t            esc_overcurrent_ticks[PWR_FAULT_ESC_COUNT];
+    uint32_t esc_overcurrent_ticks[PWR_FAULT_ESC_COUNT];
 
     /* Poll counter for cell-monitor decimation. */
-    uint32_t            poll_count;
+    uint32_t poll_count;
 
     /* Load-shedding callback. */
     void (*shed_fn)(pwr_fault_state_t, void *);
@@ -101,15 +102,15 @@ struct pwr_fault_ctx {
  * Returns the severity level implied by the current pack/cell voltages,
  * WITHOUT applying hysteresis (hysteresis is applied at the transition site).
  */
-static pwr_fault_state_t voltage_state(const pwr_fault_snapshot_t *snap)
-{
+static pwr_fault_state_t voltage_state(const pwr_fault_snapshot_t *snap) {
     uint32_t min_cell = snap->min_cell_mv;
-    uint32_t pack     = snap->pack_mv;
+    uint32_t pack = snap->pack_mv;
 
     if (min_cell < PWR_FAULT_CELL_EMERG_MV || pack < PWR_FAULT_PACK_EMERG_MV) {
         return PWR_STATE_EMERGENCY;
     }
-    if (min_cell < PWR_FAULT_CELL_CRITICAL_MV || pack < PWR_FAULT_PACK_CRITICAL_MV) {
+    if (min_cell < PWR_FAULT_CELL_CRITICAL_MV ||
+        pack < PWR_FAULT_PACK_CRITICAL_MV) {
         return PWR_STATE_CRITICAL;
     }
     if (min_cell < PWR_FAULT_CELL_WARN_MV || pack < PWR_FAULT_PACK_WARN_MV) {
@@ -121,8 +122,7 @@ static pwr_fault_state_t voltage_state(const pwr_fault_snapshot_t *snap)
 /**
  * @brief Evaluate current-based fault state from snapshot values.
  */
-static pwr_fault_state_t current_state(const pwr_fault_snapshot_t *snap)
-{
+static pwr_fault_state_t current_state(const pwr_fault_snapshot_t *snap) {
     uint32_t i;
 
     if (snap->main_current_ma > (int32_t)PWR_FAULT_MAIN_CRITICAL_MA) {
@@ -158,8 +158,7 @@ static pwr_fault_state_t current_state(const pwr_fault_snapshot_t *snap)
  */
 static pwr_fault_state_t apply_hysteresis(pwr_fault_state_t current,
                                           pwr_fault_state_t computed,
-                                          uint32_t          min_cell_mv)
-{
+                                          uint32_t          min_cell_mv) {
     uint32_t hyst_threshold_mv;
 
     if (computed >= current) {
@@ -167,7 +166,8 @@ static pwr_fault_state_t apply_hysteresis(pwr_fault_state_t current,
         return computed;
     }
 
-    /* Determine the voltage that would exit the current state with hysteresis. */
+    /* Determine the voltage that would exit the current state with hysteresis.
+     */
     switch (current) {
         case PWR_STATE_EMERGENCY:
             hyst_threshold_mv = PWR_FAULT_CELL_EMERG_MV + PWR_FAULT_HYST_MV;
@@ -193,8 +193,7 @@ static pwr_fault_state_t apply_hysteresis(pwr_fault_state_t current,
  * Public API
  * ---------------------------------------------------------------------------*/
 
-int pwr_fault_open(const char *i2c_dev_pdb, pwr_fault_ctx_t **ctx_out)
-{
+int pwr_fault_open(const char *i2c_dev_pdb, pwr_fault_ctx_t **ctx_out) {
     pwr_fault_ctx_t *ctx;
     uint32_t         i;
     int              rc;
@@ -222,10 +221,8 @@ int pwr_fault_open(const char *i2c_dev_pdb, pwr_fault_ctx_t **ctx_out)
             goto fail;
         }
 
-        rc = bmon_ina226_configure_shunt(ctx->ina[i],
-                                         ESC_SHUNT_MOHM,
-                                         ESC_IMAX_MA,
-                                         NULL);
+        rc = bmon_ina226_configure_shunt(ctx->ina[i], ESC_SHUNT_MOHM,
+                                         ESC_IMAX_MA, NULL);
         if (rc != 0) {
             goto fail;
         }
@@ -239,9 +236,8 @@ int pwr_fault_open(const char *i2c_dev_pdb, pwr_fault_ctx_t **ctx_out)
              *   I_limit = 55000 mA; raw = 55000 / 1.831 ≈ 30038
              */
             uint16_t alert_raw = (uint16_t)((55000UL * 32768UL) / ESC_IMAX_MA);
-            rc = bmon_ina226_configure_alert(ctx->ina[i],
-                                             INA226_MASK_SOL | INA226_MASK_LEN,
-                                             alert_raw);
+            rc = bmon_ina226_configure_alert(
+                ctx->ina[i], INA226_MASK_SOL | INA226_MASK_LEN, alert_raw);
             if (rc != 0) {
                 goto fail;
             }
@@ -255,9 +251,7 @@ int pwr_fault_open(const char *i2c_dev_pdb, pwr_fault_ctx_t **ctx_out)
         goto fail;
     }
     rc = bmon_ina226_configure_shunt(ctx->ina[PWR_FAULT_ESC_COUNT],
-                                     MAIN_SHUNT_MOHM,
-                                     MAIN_IMAX_MA,
-                                     NULL);
+                                     MAIN_SHUNT_MOHM, MAIN_IMAX_MA, NULL);
     if (rc != 0) {
         goto fail;
     }
@@ -269,7 +263,7 @@ int pwr_fault_open(const char *i2c_dev_pdb, pwr_fault_ctx_t **ctx_out)
     }
 
     /* Initialise state. */
-    ctx->state      = PWR_STATE_NORMAL;
+    ctx->state = PWR_STATE_NORMAL;
     ctx->poll_count = 0U;
     memset(&ctx->snap, 0, sizeof(ctx->snap));
     ctx->snap.state = PWR_STATE_NORMAL;
@@ -282,8 +276,7 @@ fail:
     return rc;
 }
 
-void pwr_fault_close(pwr_fault_ctx_t *ctx)
-{
+void pwr_fault_close(pwr_fault_ctx_t *ctx) {
     uint32_t i;
 
     if (ctx == NULL) {
@@ -305,8 +298,7 @@ void pwr_fault_close(pwr_fault_ctx_t *ctx)
     free(ctx);
 }
 
-int pwr_fault_poll(pwr_fault_ctx_t *ctx)
-{
+int pwr_fault_poll(pwr_fault_ctx_t *ctx) {
     uint32_t          i;
     pwr_fault_state_t new_state;
     pwr_fault_state_t v_state;
@@ -322,12 +314,12 @@ int pwr_fault_poll(pwr_fault_ctx_t *ctx)
     /* ── INA226 reads ─────────────────────────────────────────────────── */
 
     for (i = 0U; i < PWR_FAULT_ESC_COUNT; i++) {
-        int32_t  cur_ma  = 0;
+        int32_t  cur_ma = 0;
         uint32_t volt_mv = 0U;
 
         rc = bmon_ina2xx_read_mv(ctx->ina[i], &volt_mv);
         if (rc != 0) {
-            cur_ma = -1;  /* Sentinel for I2C error. */
+            cur_ma = -1; /* Sentinel for I2C error. */
         } else {
             rc = bmon_ina226_read_current_ma(ctx->ina[i], &cur_ma);
             if (rc != 0) {
@@ -342,20 +334,21 @@ int pwr_fault_poll(pwr_fault_ctx_t *ctx)
             /* I2C error — preserve existing fault state. */
         } else if ((uint32_t)cur_ma >= PWR_FAULT_ESC_BURST_MA) {
             /* Instantaneous burst: disarm immediately. */
-            ctx->snap.esc_fault[i]        = ESC_DISARMED;
+            ctx->snap.esc_fault[i] = ESC_DISARMED;
             ctx->esc_overcurrent_ticks[i] = 0U;
             /* Caller must send DSHOT disarm command. */
         } else if ((uint32_t)cur_ma >= PWR_FAULT_ESC_CRITICAL_MA) {
             ctx->esc_overcurrent_ticks[i]++;
             if (ctx->esc_overcurrent_ticks[i] >=
-                (PWR_FAULT_ESC_CRITICAL_DURATION_MS / (1000U / PWR_FAULT_POLL_HZ))) {
+                (PWR_FAULT_ESC_CRITICAL_DURATION_MS /
+                 (1000U / PWR_FAULT_POLL_HZ))) {
                 ctx->snap.esc_fault[i] = ESC_CRIT;
             } else {
                 ctx->snap.esc_fault[i] = ESC_WARN;
             }
         } else if ((uint32_t)cur_ma >= PWR_FAULT_ESC_WARN_MA) {
             ctx->esc_overcurrent_ticks[i] = 0U;
-            ctx->snap.esc_fault[i]        = ESC_WARN;
+            ctx->snap.esc_fault[i] = ESC_WARN;
         } else {
             ctx->esc_overcurrent_ticks[i] = 0U;
             if (ctx->snap.esc_fault[i] != ESC_DISARMED) {
@@ -367,13 +360,15 @@ int pwr_fault_poll(pwr_fault_ctx_t *ctx)
 
     /* Main bus current. */
     {
-        int32_t  main_ma  = 0;
-        uint32_t volt_mv  = 0U;
+        int32_t  main_ma = 0;
+        uint32_t volt_mv = 0U;
 
         rc = bmon_ina2xx_read_mv(ctx->ina[PWR_FAULT_ESC_COUNT], &volt_mv);
         if (rc == 0) {
-            ctx->snap.pack_mv = volt_mv;  /* Main bus voltage approximates pack voltage. */
-            (void)bmon_ina226_read_current_ma(ctx->ina[PWR_FAULT_ESC_COUNT], &main_ma);
+            ctx->snap.pack_mv =
+                volt_mv; /* Main bus voltage approximates pack voltage. */
+            (void)bmon_ina226_read_current_ma(ctx->ina[PWR_FAULT_ESC_COUNT],
+                                              &main_ma);
         }
         ctx->snap.main_current_ma = main_ma;
     }
@@ -386,26 +381,26 @@ int pwr_fault_poll(pwr_fault_ctx_t *ctx)
 
         rc = cell_mon_read(ctx->cell, &cell_data);
         if (rc == 0) {
-            ctx->snap.pack_mv      = cell_data.pack_mv;
-            ctx->snap.min_cell_mv  = cell_mon_min_cell_mv(&cell_data);
-            ctx->snap.max_cell_mv  = cell_mon_max_cell_mv(&cell_data);
+            ctx->snap.pack_mv = cell_data.pack_mv;
+            ctx->snap.min_cell_mv = cell_mon_min_cell_mv(&cell_data);
+            ctx->snap.max_cell_mv = cell_mon_max_cell_mv(&cell_data);
             ctx->snap.temp_decidegc = cell_data.temp_decidegc;
-            ctx->snap.bq769x0_stat  = cell_data.sys_stat;
+            ctx->snap.bq769x0_stat = cell_data.sys_stat;
         }
 
         /* If BQ76930 reports any hardware protection event, force EMERGENCY. */
         if ((ctx->snap.bq769x0_stat &
              (BQ769X0_STAT_OCD | BQ769X0_STAT_SCD | BQ769X0_STAT_UV)) != 0U) {
             /* Hardware protection has already tripped a FET. */
-            ctx->state      = PWR_STATE_EMERGENCY;
+            ctx->state = PWR_STATE_EMERGENCY;
             ctx->snap.state = PWR_STATE_EMERGENCY;
         }
     }
 
     /* ── State evaluation ─────────────────────────────────────────────── */
 
-    v_state   = voltage_state(&ctx->snap);
-    c_state   = current_state(&ctx->snap);
+    v_state = voltage_state(&ctx->snap);
+    c_state = current_state(&ctx->snap);
     new_state = (v_state > c_state) ? v_state : c_state;
 
     /* Apply hysteresis on voltage when transitioning downward. */
@@ -422,8 +417,8 @@ int pwr_fault_poll(pwr_fault_ctx_t *ctx)
 
     if (new_state != ctx->state) {
         pwr_fault_state_t old_state = ctx->state;
-        ctx->state                  = new_state;
-        ctx->snap.state             = new_state;
+        ctx->state = new_state;
+        ctx->snap.state = new_state;
 
         /* Invoke load-shedding callback on severity increase. */
         if (new_state > old_state && ctx->shed_fn != NULL) {
@@ -436,8 +431,8 @@ int pwr_fault_poll(pwr_fault_ctx_t *ctx)
     return 0;
 }
 
-int pwr_fault_get_snapshot(const pwr_fault_ctx_t *ctx, pwr_fault_snapshot_t *snap)
-{
+int pwr_fault_get_snapshot(const pwr_fault_ctx_t *ctx,
+                           pwr_fault_snapshot_t  *snap) {
     if (ctx == NULL || snap == NULL) {
         return -EINVAL;
     }
@@ -445,14 +440,13 @@ int pwr_fault_get_snapshot(const pwr_fault_ctx_t *ctx, pwr_fault_snapshot_t *sna
     return 0;
 }
 
-int pwr_fault_encode_canfd(const pwr_fault_ctx_t *ctx, uint8_t buf[8])
-{
-    uint32_t         i;
-    uint16_t         pack_mv_16;
-    uint8_t          min_cell_10mv;
-    uint8_t          main_a;
-    uint8_t          esc_bits_hi;
-    uint8_t          esc_bits_lo;
+int pwr_fault_encode_canfd(const pwr_fault_ctx_t *ctx, uint8_t buf[8]) {
+    uint32_t i;
+    uint16_t pack_mv_16;
+    uint8_t  min_cell_10mv;
+    uint8_t  main_a;
+    uint8_t  esc_bits_hi;
+    uint8_t  esc_bits_lo;
 
     if (ctx == NULL || buf == NULL) {
         return -EINVAL;
@@ -461,25 +455,24 @@ int pwr_fault_encode_canfd(const pwr_fault_ctx_t *ctx, uint8_t buf[8])
     /* Byte 0: power state. */
     buf[0] = (uint8_t)ctx->snap.state;
 
-    /* Bytes 1–2: pack voltage in mV (uint16_t big-endian, saturated at 65535). */
-    pack_mv_16 = (ctx->snap.pack_mv > 65535U) ?
-                 (uint16_t)65535U :
-                 (uint16_t)ctx->snap.pack_mv;
+    /* Bytes 1–2: pack voltage in mV (uint16_t big-endian, saturated at 65535).
+     */
+    pack_mv_16 = (ctx->snap.pack_mv > 65535U) ? (uint16_t)65535U
+                                              : (uint16_t)ctx->snap.pack_mv;
     buf[1] = (uint8_t)(pack_mv_16 >> 8U);
     buf[2] = (uint8_t)(pack_mv_16 & 0xFFU);
 
     /* Byte 3: min cell voltage / 10 mV (0–255 represents 0–2550 mV). */
-    min_cell_10mv = (ctx->snap.min_cell_mv > 2550U) ?
-                    (uint8_t)255U :
-                    (uint8_t)(ctx->snap.min_cell_mv / 10U);
+    min_cell_10mv = (ctx->snap.min_cell_mv > 2550U)
+                        ? (uint8_t)255U
+                        : (uint8_t)(ctx->snap.min_cell_mv / 10U);
     buf[3] = min_cell_10mv;
 
     /* Byte 4: main bus current in A (saturated at 255 A). */
-    main_a = (ctx->snap.main_current_ma > 255000) ?
-             (uint8_t)255U :
-             (ctx->snap.main_current_ma < 0) ?
-             (uint8_t)0U :
-             (uint8_t)(ctx->snap.main_current_ma / 1000);
+    main_a = (ctx->snap.main_current_ma > 255000) ? (uint8_t)255U
+             : (ctx->snap.main_current_ma < 0)
+                 ? (uint8_t)0U
+                 : (uint8_t)(ctx->snap.main_current_ma / 1000);
     buf[4] = main_a;
 
     /*
@@ -506,13 +499,12 @@ int pwr_fault_encode_canfd(const pwr_fault_ctx_t *ctx, uint8_t buf[8])
     return 0;
 }
 
-void pwr_fault_set_shed_callback(pwr_fault_ctx_t   *ctx,
+void pwr_fault_set_shed_callback(pwr_fault_ctx_t *ctx,
                                  void (*shed_fn)(pwr_fault_state_t, void *),
-                                 void              *user_data)
-{
+                                 void *user_data) {
     if (ctx == NULL) {
         return;
     }
-    ctx->shed_fn        = shed_fn;
+    ctx->shed_fn = shed_fn;
     ctx->shed_user_data = user_data;
 }

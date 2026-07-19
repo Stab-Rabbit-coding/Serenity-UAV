@@ -27,10 +27,9 @@ Date   : 2026-06-01
 
 import argparse
 import struct
-import zlib
 import sys
+import zlib
 from pathlib import Path
-
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -45,6 +44,7 @@ HEADER_SIZE = 16  # bytes
 # ---------------------------------------------------------------------------
 # Core conversion
 # ---------------------------------------------------------------------------
+
 
 def wrap_gcode(gcode_bytes: bytes) -> bytes:
     """
@@ -68,9 +68,9 @@ def wrap_gcode(gcode_bytes: bytes) -> bytes:
         + RESERVED
     )
 
-    assert len(header) == HEADER_SIZE, (
-        f"Header assembly error: expected {HEADER_SIZE} bytes, got {len(header)}"
-    )
+    assert (
+        len(header) == HEADER_SIZE
+    ), f"Header assembly error: expected {HEADER_SIZE} bytes, got {len(header)}"
 
     return header + gcode_bytes
 
@@ -115,6 +115,7 @@ def convert_file(gcode_path: Path, out_path: Path) -> None:
 # Batch helper: convert an entire batch directory
 # ---------------------------------------------------------------------------
 
+
 def convert_directory(batch_dir: Path) -> int:
     """
     Convert all .gcode files in a directory to .3w files alongside them.
@@ -145,6 +146,7 @@ def convert_directory(batch_dir: Path) -> int:
 # ---------------------------------------------------------------------------
 # CLI entry-point
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     """Parse arguments and run the conversion."""

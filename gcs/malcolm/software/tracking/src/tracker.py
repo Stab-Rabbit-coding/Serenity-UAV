@@ -40,12 +40,11 @@ from typing import Optional
 
 import yaml
 
-
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
 
-WGS84_A: float = 6_378_137.0          # Semi-major axis (m)
+WGS84_A: float = 6_378_137.0  # Semi-major axis (m)
 WGS84_F: float = 1.0 / 298.257_223_563  # Flattening
 WGS84_B: float = WGS84_A * (1.0 - WGS84_F)  # Semi-minor axis (m)
 
@@ -60,24 +59,28 @@ log = logging.getLogger(__name__)
 # Data types
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class GeoPosition:
     """WGS-84 geodetic position."""
-    lat_deg: float    # Latitude  (degrees, +N)
-    lon_deg: float    # Longitude (degrees, +E)
-    alt_m: float      # Altitude  MSL (metres)
+
+    lat_deg: float  # Latitude  (degrees, +N)
+    lon_deg: float  # Longitude (degrees, +E)
+    alt_m: float  # Altitude  MSL (metres)
 
 
 @dataclass
 class GimbalTarget:
     """Target angles for the antenna gimbal."""
-    azimuth_deg: float    # 0° = North, +CW
+
+    azimuth_deg: float  # 0° = North, +CW
     elevation_deg: float  # 0° = horizon, + = up
 
 
 # ---------------------------------------------------------------------------
 # Geodetic calculations
 # ---------------------------------------------------------------------------
+
 
 def _bearing_vincenty(gcs: GeoPosition, aircraft: GeoPosition) -> float:
     """
@@ -95,13 +98,30 @@ def _bearing_vincenty(gcs: GeoPosition, aircraft: GeoPosition) -> float:
     dlon = math.radians(aircraft.lon_deg - gcs.lon_deg)
 
     x = math.cos(lat2) * math.sin(dlon)
-    y = (
-        math.cos(lat1) * math.sin(lat2)
-        - math.sin(lat1) * math.cos(lat2) * math.cos(dlon)
+    y = math.cos(lat1) * math.sin(lat2) - math.sin(lat1) * math.cos(lat2) * math.cos(
+        dlon
     )
 
     bearing_rad = math.atan2(x, y)
     return (math.degrees(bearing_rad) + 360.0) % 360.0
+
+
+def _haversine_horizontal_m(gcs: GeoPosition, aircraft: GeoPosition) -> float:
+    """
+    Great-circle horizontal distance in metres between *gcs* and *aircraft*
+    using the haversine formula. Accurate to <0.5% for ranges <100 km.
+    """
+    lat1 = math.radians(gcs.lat_deg)
+    lat2 = math.radians(aircraft.lat_deg)
+    dlat = lat2 - lat1
+    dlon = math.radians(aircraft.lon_deg - gcs.lon_deg)
+
+    a = (
+        math.sin(dlat / 2.0) ** 2
+        + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2.0) ** 2
+    )
+    # Clamp against tiny floating-point rounding producing a < 0.
+    return 2.0 * WGS84_A * math.asin(math.sqrt(max(a, 0.0)))
 
 
 def _slant_range_m(gcs: GeoPosition, aircraft: GeoPosition) -> float:
@@ -111,17 +131,9 @@ def _slant_range_m(gcs: GeoPosition, aircraft: GeoPosition) -> float:
 
     Accurate to <0.5% for ranges <100 km — sufficient for antenna pointing.
     """
-    lat1 = math.radians(gcs.lat_deg)
-    lat2 = math.radians(aircraft.lat_deg)
-    dlat = lat2 - lat1
-    dlon = math.radians(aircraft.lon_deg - gcs.lon_deg)
-
-    a = (math.sin(dlat / 2.0) ** 2
-         + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2.0) ** 2)
-    horizontal_m = 2.0 * WGS84_A * math.asin(math.sqrt(a))
-
+    horizontal_m = _haversine_horizontal_m(gcs, aircraft)
     dalt_m = aircraft.alt_m - gcs.alt_m
-    return math.sqrt(horizontal_m ** 2 + dalt_m ** 2)
+    return math.sqrt(horizontal_m**2 + dalt_m**2)
 
 
 def _elevation_deg(gcs: GeoPosition, aircraft: GeoPosition) -> float:
@@ -135,15 +147,7 @@ def _elevation_deg(gcs: GeoPosition, aircraft: GeoPosition) -> float:
         Bennett, G.G. (1982). "The Calculation of Astronomical Refraction in
         Marine Navigation". J. Nav. 35(2): 255-259.
     """
-    lat1 = math.radians(gcs.lat_deg)
-    lat2 = math.radians(aircraft.lat_deg)
-    dlat = lat2 - lat1
-    dlon = math.radians(aircraft.lon_deg - gcs.lon_deg)
-
-    a = (math.sin(dlat / 2.0) ** 2
-         + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2.0) ** 2)
-    horizontal_m = 2.0 * WGS84_A * math.asin(math.sqrt(max(a, 0.0)))
-
+    horizontal_m = _haversine_horizontal_m(gcs, aircraft)
     dalt_m = aircraft.alt_m - gcs.alt_m
 
     if horizontal_m < 1.0:
@@ -154,11 +158,11 @@ def _elevation_deg(gcs: GeoPosition, aircraft: GeoPosition) -> float:
 
     # Atmospheric refraction correction (Bennet 1982).
     # Applies only when aircraft is near or below the geometric horizon.
-    _angle_rad = math.radians(
-        geometric_el_deg + 10.3 / (geometric_el_deg + 5.11)
-    )
-    el_deg_corr = geometric_el_deg + 0.0 if geometric_el_deg > 15.0 else (
-        1.02 / math.tan(_angle_rad) / 60.0  # arcminutes → degrees
+    _angle_rad = math.radians(geometric_el_deg + 10.3 / (geometric_el_deg + 5.11))
+    el_deg_corr = (
+        geometric_el_deg + 0.0
+        if geometric_el_deg > 15.0
+        else (1.02 / math.tan(_angle_rad) / 60.0)  # arcminutes → degrees
     )
 
     return el_deg_corr
@@ -183,6 +187,7 @@ def compute_gimbal_target(gcs: GeoPosition, aircraft: GeoPosition) -> GimbalTarg
 # ---------------------------------------------------------------------------
 # GNSS reader (reads GCS position from a local u-blox GNSS over serial)
 # ---------------------------------------------------------------------------
+
 
 class GnssReader(threading.Thread):
     """
@@ -235,11 +240,11 @@ class GnssReader(threading.Thread):
             if fix_quality == 0:
                 return  # No fix
 
-            lat_raw  = float(parts[2])
-            lat_hem  = parts[3]
-            lon_raw  = float(parts[4])
-            lon_hem  = parts[5]
-            alt_m    = float(parts[9])
+            lat_raw = float(parts[2])
+            lat_hem = parts[3]
+            lon_raw = float(parts[4])
+            lon_hem = parts[5]
+            alt_m = float(parts[9])
 
             lat_deg = int(lat_raw / 100) + (lat_raw % 100) / 60.0
             if lat_hem == "S":
@@ -259,6 +264,7 @@ class GnssReader(threading.Thread):
 # Main tracker loop
 # ---------------------------------------------------------------------------
 
+
 class Tracker:
     """
     Main tracking loop: receives aircraft position from telemetry_feed.py
@@ -274,13 +280,13 @@ class Tracker:
         """
         tracker_cfg = config.get("tracker", {})
         self._listen_port: int = int(tracker_cfg.get("telemetry_port", 14560))
-        self._gimbal_port: int = int(tracker_cfg.get("gimbal_port",    14570))
-        self._update_hz:   float = float(tracker_cfg.get("update_hz",   5.0))
+        self._gimbal_port: int = int(tracker_cfg.get("gimbal_port", 14570))
+        self._update_hz: float = float(tracker_cfg.get("update_hz", 5.0))
 
         gnss_cfg = config.get("gnss", {})
         self._gnss = GnssReader(
             device=gnss_cfg.get("device", "/dev/gnss_gcs"),
-            baud=int(gnss_cfg.get("baud",  115200)),
+            baud=int(gnss_cfg.get("baud", 115200)),
         )
 
         self._aircraft_pos: Optional[GeoPosition] = None
@@ -297,8 +303,12 @@ class Tracker:
         # UDP socket to publish gimbal targets to gimbal_ctrl.py.
         tx_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-        log.info("Tracker listening on UDP :%d, publishing to :%d at %.1f Hz",
-                 self._listen_port, self._gimbal_port, self._update_hz)
+        log.info(
+            "Tracker listening on UDP :%d, publishing to :%d at %.1f Hz",
+            self._listen_port,
+            self._gimbal_port,
+            self._update_hz,
+        )
 
         while True:
             # Receive latest aircraft position datagram (non-blocking with timeout).
@@ -320,26 +330,33 @@ class Tracker:
             gcs_pos = self._gnss.get_position()
             if gcs_pos is not None and self._aircraft_pos is not None:
                 target = compute_gimbal_target(gcs_pos, self._aircraft_pos)
-                target_json = json.dumps({
-                    "azimuth_deg":   round(target.azimuth_deg,   2),
-                    "elevation_deg": round(target.elevation_deg, 2),
-                }).encode("utf-8")
+                target_json = json.dumps(
+                    {
+                        "azimuth_deg": round(target.azimuth_deg, 2),
+                        "elevation_deg": round(target.elevation_deg, 2),
+                    }
+                ).encode("utf-8")
                 tx_sock.sendto(target_json, ("127.0.0.1", self._gimbal_port))
-                log.debug("Gimbal target: az=%.1f° el=%.1f°",
-                          target.azimuth_deg, target.elevation_deg)
+                log.debug(
+                    "Gimbal target: az=%.1f° el=%.1f°",
+                    target.azimuth_deg,
+                    target.elevation_deg,
+                )
 
 
 def _parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description="Malcolm GCS antenna tracker")
     parser.add_argument(
-        "--config", "-c",
+        "--config",
+        "-c",
         type=Path,
         default=DEFAULT_CONFIG_PATH,
         help="Path to malcolm_config.yaml (default: %(default)s)",
     )
     parser.add_argument(
-        "--log-level", "-l",
+        "--log-level",
+        "-l",
         default="INFO",
         choices=["DEBUG", "INFO", "WARNING", "ERROR"],
         help="Logging level (default: %(default)s)",

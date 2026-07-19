@@ -52,7 +52,7 @@ UDEV_RULE='/etc/udev/rules.d/99-mavlink-usb.rules'
 
 if [ "$(id -u)" -eq 0 ]; then
     if [ ! -f "${UDEV_RULE}" ]; then
-        cat > "${UDEV_RULE}" << 'EOF'
+        cat >"${UDEV_RULE}" <<'EOF'
 # Malcolm GCS — MAVLink USB serial device access rules
 # Allows non-root access to common USB serial adapters used with SiK radios.
 SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", MODE="0666"   # Silicon Labs CP2102
@@ -76,7 +76,7 @@ DESKTOP_DIR="${HOME}/.local/share/applications"
 DESKTOP_FILE="${DESKTOP_DIR}/qgroundcontrol.desktop"
 
 mkdir -p "${DESKTOP_DIR}"
-cat > "${DESKTOP_FILE}" << EOF
+cat >"${DESKTOP_FILE}" <<EOF
 [Desktop Entry]
 Name=QGroundControl
 Comment=UAV Ground Control Station

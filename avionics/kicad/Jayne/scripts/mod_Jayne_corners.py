@@ -119,9 +119,12 @@ def main():
         mid = ((pa[0] + pb[0]) / 2, (pa[1] + pb[1]) / 2)
         if (cen[0] - mid[0]) * nrm[0] + (cen[1] - mid[1]) * nrm[1] < 0:
             nrm = (-nrm[0], -nrm[1])
-        q = [pa, pb,
-             (pb[0] + nrm[0] * STRIP, pb[1] + nrm[1] * STRIP),
-             (pa[0] + nrm[0] * STRIP, pa[1] + nrm[1] * STRIP)]
+        q = [
+            pa,
+            pb,
+            (pb[0] + nrm[0] * STRIP, pb[1] + nrm[1] * STRIP),
+            (pa[0] + nrm[0] * STRIP, pa[1] + nrm[1] * STRIP),
+        ]
         z = pcbnew.ZONE(b)
         z.SetIsRuleArea(True)
         z.SetDoNotAllowFootprints(True)
@@ -138,8 +141,8 @@ def main():
         b.Add(z)
         seg(q[3], q[2], silk, 0.15)
 
-    strip(CORNERS[1], CORNERS[2])   # port
-    strip(CORNERS[3], CORNERS[0])   # starboard
+    strip(CORNERS[1], CORNERS[2])  # port
+    strip(CORNERS[3], CORNERS[0])  # starboard
     pcbnew.SaveBoard(str(BOARD), b)
     print("done: 4 corner M2.5 holes + concentric fillets + 2 keep-out strips")
     return 0

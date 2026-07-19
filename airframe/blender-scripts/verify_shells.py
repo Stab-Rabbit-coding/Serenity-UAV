@@ -61,10 +61,10 @@ JUNK_FACE_LIMIT = 64
 
 # basename -> published relative path (under airframe/stls/fuselage)
 SECTIONS = {
-    "head_shell24_2mm_repaired.stl":       "head_shell24_2mm_repaired.stl",
+    "head_shell24_2mm_repaired.stl": "head_shell24_2mm_repaired.stl",
     "cargo_sect_shell24_2mm_repaired.stl": "cargo/cargo_sect_shell24_2mm_repaired.stl",
-    "middle_shell24_2mm_repaired.stl":     "middle_shell24_2mm_repaired.stl",
-    "rear_shell24_2mm_repaired.stl":       "rear_shell24_2mm_repaired.stl",
+    "middle_shell24_2mm_repaired.stl": "middle_shell24_2mm_repaired.stl",
+    "rear_shell24_2mm_repaired.stl": "rear_shell24_2mm_repaired.stl",
 }
 
 
@@ -102,8 +102,13 @@ def check(path):
     # zero-area degenerate faces (float32 slivers) — cosmetic
     degen = int((mesh.area_faces < 1e-9).sum())
 
-    real_breach = (open_edges > 0 or nonmanifold_edges > 0 or len(fragments) > 0
-                   or not mesh.is_winding_consistent or not mesh.is_watertight)
+    real_breach = (
+        open_edges > 0
+        or nonmanifold_edges > 0
+        or len(fragments) > 0
+        or not mesh.is_winding_consistent
+        or not mesh.is_watertight
+    )
     passed = not real_breach
 
     status = "PASS" if passed else "FAIL"
@@ -131,8 +136,11 @@ def main():
     all_pass = True
     print(f"=== verify_shells.py  ({'published' if use_published else 'staging'}) ===")
     for staging_name, pub_rel in SECTIONS.items():
-        path = (os.path.join(PUBLISHED, pub_rel) if use_published
-                else os.path.join(STAGING, staging_name))
+        path = (
+            os.path.join(PUBLISHED, pub_rel)
+            if use_published
+            else os.path.join(STAGING, staging_name)
+        )
         if not os.path.exists(path):
             print(f"[MISS] {path}")
             all_pass = False

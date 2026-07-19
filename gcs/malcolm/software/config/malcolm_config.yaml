@@ -69,9 +69,9 @@ wifi:
   iface: "wlan0"
 
 # ---------------------------------------------------------------------------
-# 49 MHz RCRS configuration (mirrors mal_config.h values)
+# 49 MHz XCVR configuration (mirrors mal_config.h values)
 # ---------------------------------------------------------------------------
-rcrs:
-  # RCRS channel (0–4 → 49.830, 49.845, 49.860, 49.875, 49.890 MHz)
+xcvr_49mhz:
+  # XCVR channel (0–4 → 49.830, 49.845, 49.860, 49.875, 49.890 MHz)
   # Must match aircraft River/Simon channel assignments.
   default_channel: 0

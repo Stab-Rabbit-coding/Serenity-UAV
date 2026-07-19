@@ -57,8 +57,11 @@ def via(board, netname, x, y, drill=0.30, size=0.55):
     v = pcbnew.PCB_VIA(board)
     v.SetPosition(pcbnew.VECTOR2I(mm(x), mm(y)))
     v.SetDrill(mm(drill))
+    # pcbnew 9: set annular-ring width per copper layer. pylint (introspecting
+    # whatever pcbnew is installed locally) may only see the older
+    # single-argument SetWidth(width) signature.
     for lyr in (pcbnew.F_Cu, pcbnew.B_Cu):
-        v.SetWidth(lyr, mm(size))
+        v.SetWidth(lyr, mm(size))  # pylint: disable=too-many-function-args
     v.SetNet(net(board, netname))
     board.Add(v)
 

@@ -2,17 +2,20 @@
 """Apply KiCad netlist (.net) to PCB file, assigning nets to footprint pads."""
 
 import sys
+
 import pcbnew
+
 
 def parse_netlist(net_path):
     """Return dict: {(ref, pin): netname} from KiCad S-expression netlist."""
     import re
-    with open(net_path, 'r') as f:
+
+    with open(net_path, "r") as f:
         content = f.read()
 
     pad_to_net = {}
     # Split into net blocks: everything from one (net ... to the next
-    net_blocks = re.split(r'\n    \(net ', content)
+    net_blocks = re.split(r"\n    \(net ", content)
     for block in net_blocks[1:]:  # skip header
         name_m = re.search(r'\(name "([^"]+)"\)', block)
         if not name_m:
@@ -22,6 +25,7 @@ def parse_netlist(net_path):
             ref, pin = node_m.group(1), node_m.group(2)
             pad_to_net[(ref, pin)] = netname
     return pad_to_net
+
 
 def apply_netlist(pcb_path, net_path, out_path=None):
     if out_path is None:
@@ -79,8 +83,11 @@ def apply_netlist(pcb_path, net_path, out_path=None):
     board.Save(out_path)
     print(f"Saved: {out_path}")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     if len(sys.argv) < 3:
-        print("Usage: apply_netlist.py <board.kicad_pcb> <board.net> [output.kicad_pcb]")
+        print(
+            "Usage: apply_netlist.py <board.kicad_pcb> <board.net> [output.kicad_pcb]"
+        )
         sys.exit(1)
     apply_netlist(sys.argv[1], sys.argv[2], sys.argv[3] if len(sys.argv) > 3 else None)

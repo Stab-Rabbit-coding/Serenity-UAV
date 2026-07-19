@@ -14,8 +14,8 @@ is provably at parity with the board.
 
 Design decisions applied here (user-locked 2026-07-04, TODO.md §1.2b):
   * DROP J1 (JST-GH-6P "CAPE-B IF").  The modem host UART moves onto the PB2
-    rails: modem TX net UART_TX -> UART_RCRS_RX (PB2-P1 pin 15); modem RX net
-    UART_RX -> UART_RCRS_TX (PB2-P1 pin 16).
+    rails: modem TX net UART_TX -> UART_49MHZ_XCVR_RX (PB2-P1 pin 15); modem RX net
+    UART_RX -> UART_49MHZ_XCVR_TX (PB2-P1 pin 16).
   * PTT_N -> repurposed PB2-P2 pin 1 (SERVO7 ball), presence-gated by a
     cape-detect device-tree overlay (documented, not a hardware change here).
   * RSSI -> 1-bit RSSI_DCD.  A new on-board comparator RSSI_CMP (LMV331-class)
@@ -126,8 +126,8 @@ def read_pcb():
 # 3. Apply the locked topology transform to the pad-net model
 # ---------------------------------------------------------------------------
 NET_RENAME = {  # J1 removal: modem UART -> PB2 rails
-    "UART_TX": "UART_RCRS_RX",  # modem transmits -> host receives
-    "UART_RX": "UART_RCRS_TX",  # modem receives  <- host transmits
+    "UART_TX": "UART_49MHZ_XCVR_RX",  # modem transmits -> host receives
+    "UART_RX": "UART_49MHZ_XCVR_TX",  # modem receives  <- host transmits
 }
 DROP_REFS = {"CAPE-B IF"}  # J1 JST-GH-6P removed
 

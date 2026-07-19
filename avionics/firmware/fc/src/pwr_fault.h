@@ -3,6 +3,7 @@
  * @brief   Power fault monitor and load-shedding manager — public API.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * Integrates the INA226 current monitors on Kaylee and the BQ76930 cell
@@ -40,8 +41,8 @@
  *   Bytes 1–2 : pack voltage mV (uint16_t, big-endian)
  *   Byte 3    : minimum cell voltage / 10 mV (uint8_t, 0–255 = 0–2550 mV)
  *   Byte 4    : main bus current A (uint8_t, saturated at 255)
- *   Bytes 5–6 : per-ESC current bitmap × 4 (2 bits per ESC: 0=OK 1=WARN 2=CRIT 3=FAULT)
- *   Byte 7    : BQ76930 SYS_STAT register snapshot
+ *   Bytes 5–6 : per-ESC current bitmap × 4 (2 bits per ESC: 0=OK 1=WARN 2=CRIT
+ * 3=FAULT) Byte 7    : BQ76930 SYS_STAT register snapshot
  *
  * References:
  *   [1] docs/POWER_DISTRIBUTION.md — Serenity UAV power design document.
@@ -67,20 +68,20 @@ extern "C" {
  * ---------------------------------------------------------------------------*/
 
 /** Number of ESC current channels on Kaylee (Phases 5–10; ESC5 is Phase 11). */
-#define PWR_FAULT_ESC_COUNT         (4U)
+#define PWR_FAULT_ESC_COUNT                (4U)
 
 /* ---------------------------------------------------------------------------
  * Poll rates
  * ---------------------------------------------------------------------------*/
 
 /** INA226 poll frequency (Hz). */
-#define PWR_FAULT_POLL_HZ           (10U)
+#define PWR_FAULT_POLL_HZ                  (10U)
 
 /** BQ76930 cell-level poll frequency (Hz). */
-#define PWR_FAULT_CELL_POLL_HZ      (1U)
+#define PWR_FAULT_CELL_POLL_HZ             (1U)
 
 /** CAN FD power-state broadcast frequency (Hz). */
-#define PWR_FAULT_BCAST_HZ          (2U)
+#define PWR_FAULT_BCAST_HZ                 (2U)
 
 /* ---------------------------------------------------------------------------
  * Voltage thresholds (per cell, millivolts)
@@ -88,29 +89,29 @@ extern "C" {
  * ---------------------------------------------------------------------------*/
 
 /** Cell voltage below which WARN state is entered (mV). */
-#define PWR_FAULT_CELL_WARN_MV      (3500U)
+#define PWR_FAULT_CELL_WARN_MV             (3500U)
 
 /** Cell voltage below which CRITICAL state is entered (mV). */
-#define PWR_FAULT_CELL_CRITICAL_MV  (3300U)
+#define PWR_FAULT_CELL_CRITICAL_MV         (3300U)
 
 /** Cell voltage below which EMERGENCY state is entered (mV). */
-#define PWR_FAULT_CELL_EMERG_MV     (3000U)
+#define PWR_FAULT_CELL_EMERG_MV            (3000U)
 
 /** Hysteresis for downward state transition (mV). */
-#define PWR_FAULT_HYST_MV           (100U)
+#define PWR_FAULT_HYST_MV                  (100U)
 
 /* ---------------------------------------------------------------------------
  * Pack-level voltage thresholds (millivolts)
  * ---------------------------------------------------------------------------*/
 
 /** Pack voltage below which WARN state is entered (mV). */
-#define PWR_FAULT_PACK_WARN_MV      (21000U)
+#define PWR_FAULT_PACK_WARN_MV             (21000U)
 
 /** Pack voltage below which CRITICAL state is entered (mV). */
-#define PWR_FAULT_PACK_CRITICAL_MV  (19800U)
+#define PWR_FAULT_PACK_CRITICAL_MV         (19800U)
 
 /** Pack voltage below which EMERGENCY state is entered (mV). */
-#define PWR_FAULT_PACK_EMERG_MV     (18000U)
+#define PWR_FAULT_PACK_EMERG_MV            (18000U)
 
 /* ---------------------------------------------------------------------------
  * Current thresholds (milliamps)
@@ -118,25 +119,26 @@ extern "C" {
  * ---------------------------------------------------------------------------*/
 
 /** Per-ESC current threshold for WARN (mA). */
-#define PWR_FAULT_ESC_WARN_MA       (35000U)
+#define PWR_FAULT_ESC_WARN_MA              (35000U)
 
 /**
  * Per-ESC sustained current threshold for CRITICAL (mA).
  * Fault latches after PWR_FAULT_ESC_CRITICAL_DURATION_MS continuous exceedance.
  */
-#define PWR_FAULT_ESC_CRITICAL_MA   (40000U)
+#define PWR_FAULT_ESC_CRITICAL_MA          (40000U)
 
-/** Duration ESC current must exceed PWR_FAULT_ESC_CRITICAL_MA before latching (ms). */
+/** Duration ESC current must exceed PWR_FAULT_ESC_CRITICAL_MA before latching
+ * (ms). */
 #define PWR_FAULT_ESC_CRITICAL_DURATION_MS (5000U)
 
 /** Per-ESC instantaneous burst threshold — immediate DSHOT disarm (mA). */
-#define PWR_FAULT_ESC_BURST_MA      (55000U)
+#define PWR_FAULT_ESC_BURST_MA             (55000U)
 
 /** Main bus WARN threshold (mA). */
-#define PWR_FAULT_MAIN_WARN_MA      (65000U)
+#define PWR_FAULT_MAIN_WARN_MA             (65000U)
 
 /** Main bus CRITICAL threshold (mA, sustained). */
-#define PWR_FAULT_MAIN_CRITICAL_MA  (75000U)
+#define PWR_FAULT_MAIN_CRITICAL_MA         (75000U)
 
 /* ---------------------------------------------------------------------------
  * Emergency throttle cap
@@ -147,14 +149,14 @@ extern "C" {
  * Thrust at 70% throttle ≈ 49% of max (T ∝ throttle²); results in
  * T/W < 1.0 requiring transition to fixed-wing descent / RTH profile.
  */
-#define PWR_FAULT_EMERGENCY_THROTTLE_PCT (70U)
+#define PWR_FAULT_EMERGENCY_THROTTLE_PCT   (70U)
 
 /* ---------------------------------------------------------------------------
  * CAN FD frame parameters
  * ---------------------------------------------------------------------------*/
 
 /** CAN FD frame ID for power-state broadcast (11-bit standard ID). */
-#define PWR_FAULT_CANFD_ID          (0x020U)
+#define PWR_FAULT_CANFD_ID                 (0x020U)
 
 /* ---------------------------------------------------------------------------
  * Data types
@@ -167,9 +169,9 @@ extern "C" {
  * the higher-severity state.
  */
 typedef enum {
-    PWR_STATE_NORMAL    = 0, /**< All parameters within normal limits. */
-    PWR_STATE_WARN      = 1, /**< One or more parameters approaching limits. */
-    PWR_STATE_CRITICAL  = 2, /**< Limit exceeded; load shedding initiated. */
+    PWR_STATE_NORMAL = 0,    /**< All parameters within normal limits. */
+    PWR_STATE_WARN = 1,      /**< One or more parameters approaching limits. */
+    PWR_STATE_CRITICAL = 2,  /**< Limit exceeded; load shedding initiated. */
     PWR_STATE_EMERGENCY = 3, /**< Emergency: throttle capped; RTH active. */
 } pwr_fault_state_t;
 
@@ -177,9 +179,10 @@ typedef enum {
  * @brief Per-ESC fault sub-state.
  */
 typedef enum {
-    ESC_OK      = 0, /**< Current within normal range. */
-    ESC_WARN    = 1, /**< Current above PWR_FAULT_ESC_WARN_MA. */
-    ESC_CRIT    = 2, /**< Current above PWR_FAULT_ESC_CRITICAL_MA for > duration. */
+    ESC_OK = 0,   /**< Current within normal range. */
+    ESC_WARN = 1, /**< Current above PWR_FAULT_ESC_WARN_MA. */
+    ESC_CRIT =
+        2, /**< Current above PWR_FAULT_ESC_CRITICAL_MA for > duration. */
     ESC_DISARMED = 3, /**< ESC disarmed by fault manager. */
 } pwr_esc_fault_t;
 
@@ -187,19 +190,21 @@ typedef enum {
  * @brief Snapshot of the full power system state.
  */
 typedef struct {
-    pwr_fault_state_t state;                        /**< System-level power state. */
-    uint32_t          pack_mv;                      /**< Pack voltage (mV). */
-    uint32_t          min_cell_mv;                  /**< Minimum cell voltage (mV). */
-    uint32_t          max_cell_mv;                  /**< Maximum cell voltage (mV). */
-    int32_t           esc_current_ma[PWR_FAULT_ESC_COUNT]; /**< Per-ESC current (mA). */
-    int32_t           main_current_ma;              /**< Main bus current (mA). */
-    pwr_esc_fault_t   esc_fault[PWR_FAULT_ESC_COUNT];      /**< Per-ESC fault sub-state. */
-    uint8_t           bq769x0_stat;                 /**< BQ76930 SYS_STAT snapshot. */
-    int32_t           temp_decidegc;                /**< Battery temperature (°C × 10). */
+    pwr_fault_state_t state;       /**< System-level power state. */
+    uint32_t          pack_mv;     /**< Pack voltage (mV). */
+    uint32_t          min_cell_mv; /**< Minimum cell voltage (mV). */
+    uint32_t          max_cell_mv; /**< Maximum cell voltage (mV). */
+    int32_t esc_current_ma[PWR_FAULT_ESC_COUNT]; /**< Per-ESC current (mA). */
+    int32_t main_current_ma;                     /**< Main bus current (mA). */
+    pwr_esc_fault_t
+            esc_fault[PWR_FAULT_ESC_COUNT]; /**< Per-ESC fault sub-state. */
+    uint8_t bq769x0_stat;                   /**< BQ76930 SYS_STAT snapshot. */
+    int32_t temp_decidegc; /**< Battery temperature (°C × 10). */
 } pwr_fault_snapshot_t;
 
 /**
- * @brief Manager context.  Initialise with pwr_fault_open(); release with pwr_fault_close().
+ * @brief Manager context.  Initialise with pwr_fault_open(); release with
+ * pwr_fault_close().
  */
 typedef struct pwr_fault_ctx pwr_fault_ctx_t;
 
@@ -218,7 +223,8 @@ typedef struct pwr_fault_ctx pwr_fault_ctx_t;
  * Main bus INA226 is at 0x44.  BQ76930 is at 0x08.
  *
  * @param[in]  i2c_dev_pdb  Path to the I2C bus connected to Kaylee monitors
- *                          (e.g. "/dev/i2c-2"; Wash Shepherd's room / Bay A J_EXT_I2C).
+ *                          (e.g. "/dev/i2c-2"; Wash Shepherd's room / Bay A
+ * J_EXT_I2C).
  * @param[out] ctx_out      Set to the manager context on success.
  * @return 0 on success, negative errno on error.
  */
@@ -261,7 +267,8 @@ int pwr_fault_poll(pwr_fault_ctx_t *ctx);
  * @param[out] snap  Destination for snapshot copy.
  * @return 0 on success, -EINVAL on NULL args.
  */
-int pwr_fault_get_snapshot(const pwr_fault_ctx_t *ctx, pwr_fault_snapshot_t *snap);
+int pwr_fault_get_snapshot(const pwr_fault_ctx_t *ctx,
+                           pwr_fault_snapshot_t  *snap);
 
 /**
  * @brief Encode the current snapshot into the 8-byte CAN FD frame payload.
@@ -287,10 +294,10 @@ int pwr_fault_encode_canfd(const pwr_fault_ctx_t *ctx, uint8_t buf[8]);
  *                     deregister.
  * @param[in] user_data  Opaque pointer passed through to shed_fn.
  */
-void pwr_fault_set_shed_callback(pwr_fault_ctx_t   *ctx,
+void pwr_fault_set_shed_callback(pwr_fault_ctx_t *ctx,
                                  void (*shed_fn)(pwr_fault_state_t new_state,
                                                  void             *user_data),
-                                 void              *user_data);
+                                 void *user_data);
 
 #ifdef __cplusplus
 }

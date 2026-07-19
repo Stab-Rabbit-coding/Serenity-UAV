@@ -310,7 +310,7 @@ def main():
         return 0
 
     print("=" * 70)
-    print("TODO 1.2B COMPLETION ORCHESTRATOR")
+    print("1.2B COMPLETION ORCHESTRATOR")
     print("=" * 70)
     print()
 

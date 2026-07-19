@@ -27,7 +27,7 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(BASE, "files-hollowed-24in")
 PARTS = os.path.join(OUT, "operands")
 ENG = "manifold"
-LAYER_MM = 1.0        # max engrave depth (must stay < 2 mm wall)
+LAYER_MM = 1.0  # max engrave depth (must stay < 2 mm wall)
 PITCH = 1.0
 
 
@@ -76,8 +76,10 @@ def main():
 
     out = os.path.join(OUT, "cargo_sect_shell24_2mm_repaired.stl")
     shell.export(out)
-    print(f"engraved cargo: facets={len(shell.faces)} "
-          f"watertight={shell.is_watertight} vol={shell.volume:.0f} -> {out}")
+    print(
+        f"engraved cargo: facets={len(shell.faces)} "
+        f"watertight={shell.is_watertight} vol={shell.volume:.0f} -> {out}"
+    )
 
 
 if __name__ == "__main__":

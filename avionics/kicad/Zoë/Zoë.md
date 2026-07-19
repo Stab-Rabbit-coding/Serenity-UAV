@@ -65,9 +65,9 @@ via RS485_DE (tied to both DE and RE_N) is preserved.
 | TVS-CAN | CAN-A JST-GH | PRTR5V0U2X | 5.5 V, bidirectional |
 | TVS-485 | RS485-A JST-GH | PRTR5V0U2X | 5.5 V, bidirectional |
 | TVS-1553 | 1553-A JST-GH | SMAJ33CA × 2 | 33 V, bidirectional, 400 W |
-| TVS-RCRS | RCRS-49 J1 header | PRTR5V0U2X | 5.5 V — on UART_TX/RX and PTT_N |
+| TVS-XCVR-49MHZ | XCVR-49MHZ J1 header | PRTR5V0U2X | 5.5 V — on UART_TX/RX and PTT_N |
 
-The RCRS-49 6-pin JST-GH header J1 adds TVS protection because the 49 MHz sub-module
+The XCVR-49MHZ 6-pin JST-GH header J1 adds TVS protection because the 49 MHz sub-module
 cable run may be several cm long inside the bay, acting as a short antenna for
 RF ingress into the UART lines.
 
@@ -114,13 +114,13 @@ WiFi TX switching noise from coupling into the digital SPI and UART lines:
   existing SMPS output, followed by 47 µF MLCC, to reduce RF ripple on the +3V3_RF
   WiFi supply from the TPS63031 switch-mode regulator.
 
-### 9. RCRS-49 sub-module header (J1) EMI filter
+### 9. XCVR-49MHZ sub-module header (J1) EMI filter
 
 The J1 6-pin JST-GH header connecting to the Emma sub-module has the following
 protection:
 
-- TVS-RCRS (PRTR5V0U2X): protects UART_RCRS_TX, UART_RCRS_RX, and PTT_N lines
-- Ferrite beads (FB-RCRS, Würth 742792510) in series with the UART lines before J1:
+- TVS-XCVR-49MHZ (PRTR5V0U2X): protects UART_49MHZ_XCVR_TX, UART_49MHZ_XCVR_RX, and PTT_N lines
+- Ferrite beads (FB-XCVR-49MHZ, Würth 742792510) in series with the UART lines before J1:
 
   prevents 49 MHz RF energy from entering the SoC UART interface via the cable stub
 
@@ -158,7 +158,7 @@ upgrades to:
 | SiK RFD900x | 10 µH inductance + 47 µF (before module VCC) | 100 nF + 10 nF at module pin |
 | RFM95W | 100 Ω ferrite + 10 µF + 100 nF | 100 nF + 10 nF at module pin |
 | WL1837MOD | TPS63031 output + 1 µH + 47 µF (Zoë added) | 10 µF + 100 nF at module pin |
-| RCRS-49 J1 | 10 µF + 100 nF at J1 pin | (on Emma board) |
+| XCVR-49MHZ J1 | 10 µF + 100 nF at J1 pin | (on Emma board) |
 
 ---
 
@@ -197,7 +197,7 @@ Additional Zoë specifics:
 
   axis perpendicular to the associated RF trace runs (per Würth EMC design guide).
 
-- **RCRS-49 header J1:** Place within 5 mm of the board edge so the cable run to the
+- **XCVR-49MHZ header J1:** Place within 5 mm of the board edge so the cable run to the
 
   Emma module is minimised. Apply a PGND guard pour around J1.
 
@@ -309,10 +309,10 @@ copper pour, consistent with §11.
 | TVS-CAN | PRTR5V0U2X | CAN connector TVS |
 | TVS-485 | PRTR5V0U2X | RS-485 connector TVS |
 | TVS-1553 | SMAJ33CA × 2 | 1553 connector TVS |
-| TVS-RCRS | PRTR5V0U2X | RCRS-49 header TVS |
+| TVS-XCVR-49MHZ | PRTR5V0U2X | XCVR-49MHZ header TVS |
 | FB1 | Würth 742792512 | 5V power entry bead |
 | FB-SIK × 4 | Würth 742792510 | SiK UART + CTS/RTS beads |
-| FB-RCRS × 3 | Würth 742792510 | RCRS UART + PTT beads |
+| FB-XCVR-49MHZ × 3 | Würth 742792510 | XCVR UART + PTT beads |
 | FB-SDIO × 6 | Würth 742792510 | SDIO bus beads |
 | L1 | 1 µH / 1 A | WiFi supply added inductor |
 | C11–C15 | Various MLCC | Power filter capacitors |
@@ -368,7 +368,7 @@ All field connectors are shielded JST-GH (or SMA/U.FL for RF). SHIELD pins conne
 | J_485 | SM03B-GHS-TB-1MP | 1=RS485_B_P, 2=RS485_B_N, 3=GND, MP=PGND | RS-485 |
 | J_1553 | SM04B-GHS-TB-1MP | 1=BUS_1553_B_P, 2=BUS_1553_B_N, 3=GND, 4=PGND, MP=PGND | MIL-STD-1553B |
 | J_ETH_B | SM06B-GHS-TB-1MP | 1=GND, 2=ETHB_TX+, 3=ETHB_TX-, 4=ETHB_RX+, 5=ETHB_RX-, 6=GND, MP=PGND | Ethernet PHY |
-| J_XCVR | SM06B-GHS-TB-1MP | 1=GND, 2=+5V, 3=UART_RCRS_TX, 4=XCVR_RX_RAW, 5=XCVR_PTT_N, 6=+3V3, MP=PGND | Emma header |
+| J_XCVR | SM06B-GHS-TB-1MP | 1=GND, 2=+5V, 3=UART_49MHZ_XCVR_TX, 4=XCVR_RX_RAW, 5=XCVR_PTT_N, 6=+3V3, MP=PGND | Emma header |
 | J_FAN | SM03B-GHS-TB-1MP | 1=GND, 2=+5V, 3=FAN_PWM_B, MP=PGND | Bay ventilation fan |
 | J_SD | MicroSD (Molex 503182-1852) | SDIO: CLK/CMD/D0-D3/CD/WP | Logging microSD |
 | J_SMA_LORA | SMA (50 Ω) | RF center conductor = LORA_ANT; shell = PGND | LoRa 915 MHz antenna |

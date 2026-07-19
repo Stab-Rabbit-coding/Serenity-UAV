@@ -16,6 +16,7 @@ Date:    2026-05-31
 
 import os
 import sys
+
 import pcbnew
 
 # ---------------------------------------------------------------------------
@@ -25,19 +26,19 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 BOARDS = [
     {
-        "pcb":  os.path.join(SCRIPT_DIR, "CAPE-A-1.kicad_pcb"),
+        "pcb": os.path.join(SCRIPT_DIR, "CAPE-A-1.kicad_pcb"),
         "name": "CAPE-A-1",
-        "out":  os.path.join(SCRIPT_DIR, "gerbers", "CAPE-A-1"),
+        "out": os.path.join(SCRIPT_DIR, "gerbers", "CAPE-A-1"),
     },
     {
-        "pcb":  os.path.join(SCRIPT_DIR, "CAPE-B-1.kicad_pcb"),
+        "pcb": os.path.join(SCRIPT_DIR, "CAPE-B-1.kicad_pcb"),
         "name": "CAPE-B-1",
-        "out":  os.path.join(SCRIPT_DIR, "gerbers", "CAPE-B-1"),
+        "out": os.path.join(SCRIPT_DIR, "gerbers", "CAPE-B-1"),
     },
     {
-        "pcb":  os.path.join(SCRIPT_DIR, "XCVR-49MHZ-1.kicad_pcb"),
+        "pcb": os.path.join(SCRIPT_DIR, "XCVR-49MHZ-1.kicad_pcb"),
         "name": "XCVR-49MHZ-1",
-        "out":  os.path.join(SCRIPT_DIR, "gerbers", "XCVR-49MHZ-1"),
+        "out": os.path.join(SCRIPT_DIR, "gerbers", "XCVR-49MHZ-1"),
     },
 ]
 
@@ -81,7 +82,7 @@ def export_gerbers(board_path, out_dir, board_name):
     opt.SetAutoScale(False)
     opt.SetScale(1)
     opt.SetMirror(False)
-    opt.SetUseGerberAttributes(True)        # X2 format
+    opt.SetUseGerberAttributes(True)  # X2 format
     opt.SetUseGerberProtelExtensions(True)
     opt.SetGerberPrecision(6)
     opt.SetSubtractMaskFromSilk(True)
@@ -117,12 +118,12 @@ def export_gerbers(board_path, out_dir, board_name):
     # Export drill files
     drill = pcbnew.EXCELLON_WRITER(board)
     drill.SetOptions(
-        False,              # aMirror
-        True,               # aMinimalHeader
+        False,  # aMirror
+        True,  # aMinimalHeader
         pcbnew.VECTOR2I(0, 0),  # aOffset
-        True,               # aMergePTHandNPTH
+        True,  # aMergePTHandNPTH
     )
-    drill.SetFormat(True)   # True = metric
+    drill.SetFormat(True)  # True = metric
     drill.CreateDrillandMapFilesSet(out_dir, True, True)
     print(f"  Drill files written to {out_dir}/")
 

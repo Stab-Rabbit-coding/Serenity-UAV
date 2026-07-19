@@ -139,8 +139,7 @@ try:
     from scipy.optimize import curve_fit
 except ImportError as _exc:
     print(
-        f"Missing dependency: {_exc}\n"
-        "Install with:  pip install numpy scipy",
+        f"Missing dependency: {_exc}\n" "Install with:  pip install numpy scipy",
         file=sys.stderr,
     )
     sys.exit(1)
@@ -149,8 +148,7 @@ try:
     import serial
 except ImportError:
     print(
-        "Missing dependency: pyserial\n"
-        "Install with:  pip install pyserial",
+        "Missing dependency: pyserial\n" "Install with:  pip install pyserial",
         file=sys.stderr,
     )
     sys.exit(1)
@@ -259,11 +257,10 @@ class CalibrationResult:
     rms_residual_n: float
     n_points: int
     calibrated_at: str = field(
-        default_factory=lambda: datetime.datetime.utcnow().isoformat(
-            timespec="seconds"
-        )
+        default_factory=lambda: datetime.datetime.utcnow().isoformat(timespec="seconds")
         + "Z"
     )
+
 
 # ---------------------------------------------------------------------------
 # Serial helpers
@@ -422,9 +419,7 @@ def cmd_throttle(ser: serial.Serial, pct: float) -> None:
             CAL_MAX_RETRIES,
             line,
         )
-    raise RuntimeError(
-        f"No ACK for THR {pct:.1f} after {CAL_MAX_RETRIES} attempts."
-    )
+    raise RuntimeError(f"No ACK for THR {pct:.1f} after {CAL_MAX_RETRIES} attempts.")
 
 
 def collect_samples(
@@ -461,9 +456,7 @@ def collect_samples(
     for idx in range(n_samples):
         line = read_line(ser)
         if line is None:
-            raise RuntimeError(
-                f"Timeout waiting for SAM line {idx + 1}/{n_samples}."
-            )
+            raise RuntimeError(f"Timeout waiting for SAM line {idx + 1}/{n_samples}.")
         if line.startswith("ERR"):
             raise RuntimeError(f"FC error during SAM collection: {line}")
         parts = line.split()
@@ -474,9 +467,7 @@ def collect_samples(
             hx711_raw = int(parts[2])
             esc_temp_c = int(parts[3])
         except ValueError as exc:
-            raise RuntimeError(
-                f"Non-integer field in SAM line: {line!r}"
-            ) from exc
+            raise RuntimeError(f"Non-integer field in SAM line: {line!r}") from exc
         samples.append(RawSample(rpm=rpm, hx711_raw=hx711_raw, esc_temp_c=esc_temp_c))
 
     # Consume trailing ACK.
@@ -525,6 +516,7 @@ def _average_samples(
         float(np.std(thrust_n)),
         float(np.mean(temps)),
     )
+
 
 # ---------------------------------------------------------------------------
 # Sweep logic
@@ -583,8 +575,7 @@ def run_sweep(
     edf_name = EDF_NAMES.get(edf_id, str(edf_id))
 
     log.info(
-        "Starting sweep: EDF %d (%s), %d steps × %.1f s dwell, "
-        "%d samples/step.",
+        "Starting sweep: EDF %d (%s), %d steps × %.1f s dwell, " "%d samples/step.",
         edf_id,
         edf_name,
         len(profile),
@@ -595,9 +586,7 @@ def run_sweep(
     try:
         for thr_pct in profile:
             cmd_throttle(ser, thr_pct)
-            log.info(
-                "  Throttle %.1f %% — dwelling %.1f s…", thr_pct, dwell_s
-            )
+            log.info("  Throttle %.1f %% — dwelling %.1f s…", thr_pct, dwell_s)
             time.sleep(dwell_s)
 
             raw_samples = collect_samples(ser, n_samples, hx711_scale, hx711_offset)
@@ -633,6 +622,7 @@ def run_sweep(
     cmd_throttle(ser, 0.0)
     log.info("Sweep complete.  Collected %d points.", len(points))
     return points
+
 
 # ---------------------------------------------------------------------------
 # Tare / weigh utilities
@@ -681,6 +671,7 @@ def weigh_only(ser: serial.Serial, n_samples: int, tare_count: int) -> None:
     print("To compute scale factor, divide net count by the known mass in grams:")
     print(f"  scale  =  {net_count:.1f}  /  <known_mass_g>")
 
+
 # ---------------------------------------------------------------------------
 # Thrust-model fitting
 # ---------------------------------------------------------------------------
@@ -699,9 +690,7 @@ def _thrust_model(rpm: np.ndarray, k: float) -> np.ndarray:
     return k * np.square(rpm)
 
 
-def fit_thrust_model(
-    points: List[SweepPoint], edf_id: int
-) -> CalibrationResult:
+def fit_thrust_model(points: List[SweepPoint], edf_id: int) -> CalibrationResult:
     """
     Fit T = k × RPM² to the swept data and return the calibration result.
 
@@ -717,8 +706,7 @@ def fit_thrust_model(
     """
     # Filter out idle / noise points.
     usable = [
-        p for p in points
-        if p.rpm_mean >= EDF_RPM_FLOOR_FOR_FIT and p.thrust_n > 0.0
+        p for p in points if p.rpm_mean >= EDF_RPM_FLOOR_FOR_FIT and p.thrust_n > 0.0
     ]
     if len(usable) < 3:
         raise ValueError(
@@ -766,6 +754,7 @@ def fit_thrust_model(
         n_points=len(usable),
     )
 
+
 # ---------------------------------------------------------------------------
 # Header update
 # ---------------------------------------------------------------------------
@@ -774,14 +763,10 @@ def fit_thrust_model(
 #: Group 1: everything before the value.
 #: Group 2: the value in parentheses.
 #: Group 3: the trailing comment (includes CAL:<NAME> tag).
-_THRUST_K_PATTERN = re.compile(
-    r"(#define\s+EDF_THRUST_K_{name}\s+)(\([^)]+\))(.*)"
-)
+_THRUST_K_PATTERN = re.compile(r"(#define\s+EDF_THRUST_K_{name}\s+)(\([^)]+\))(.*)")
 
 
-def update_governor_config(
-    config_path: Path, results: List[CalibrationResult]
-) -> None:
+def update_governor_config(config_path: Path, results: List[CalibrationResult]) -> None:
     """
     Regex-replace the EDF_THRUST_K_* constant values in governor_config.h
     with the calibrated k values from ``results``.
@@ -849,14 +834,13 @@ def update_governor_config(
 
     log.info("governor_config.h updated at %s.", config_path)
 
+
 # ---------------------------------------------------------------------------
 # CSV output
 # ---------------------------------------------------------------------------
 
 
-def write_csv(
-    csv_path: Path, edf_id: int, points: List[SweepPoint]
-) -> None:
+def write_csv(csv_path: Path, edf_id: int, points: List[SweepPoint]) -> None:
     """
     Write sweep data to a CSV file for post-analysis.
 
@@ -900,6 +884,7 @@ def write_csv(
             )
     log.info("Sweep data saved to %s.", csv_path)
 
+
 # ---------------------------------------------------------------------------
 # Summary reporting
 # ---------------------------------------------------------------------------
@@ -934,6 +919,7 @@ def print_summary(result: CalibrationResult) -> None:
         print("  Good fit.  k is suitable for ground tests; re-run before flight.")
     print("=" * 60)
     print()
+
 
 # ---------------------------------------------------------------------------
 # Argument parser
@@ -982,13 +968,15 @@ def build_parser() -> argparse.ArgumentParser:
     # Connection.
     conn = parser.add_argument_group("Serial connection")
     conn.add_argument(
-        "-p", "--port",
+        "-p",
+        "--port",
         default="/dev/ttyUSB0",
         metavar="DEVICE",
         help="Serial device for FC node (default: /dev/ttyUSB0).",
     )
     conn.add_argument(
-        "-b", "--baud",
+        "-b",
+        "--baud",
         type=int,
         default=CAL_BAUD_DEFAULT,
         metavar="RATE",
@@ -999,7 +987,8 @@ def build_parser() -> argparse.ArgumentParser:
     edf_grp = parser.add_argument_group("EDF selection")
     names_str = ", ".join(f"{k}={v}" for k, v in EDF_NAMES.items())
     edf_grp.add_argument(
-        "-e", "--edf-id",
+        "-e",
+        "--edf-id",
         type=_edf_id_type,
         default=None,
         metavar="ID",
@@ -1029,21 +1018,24 @@ def build_parser() -> argparse.ArgumentParser:
     # Sweep parameters.
     sweep = parser.add_argument_group("Sweep parameters")
     sweep.add_argument(
-        "-s", "--steps",
+        "-s",
+        "--steps",
         type=int,
         default=20,
         metavar="N",
         help="Throttle sweep steps from 0%% to 100%% (default: 20).",
     )
     sweep.add_argument(
-        "-d", "--dwell",
+        "-d",
+        "--dwell",
         type=float,
         default=3.0,
         metavar="SEC",
         help="Dwell time per throttle step in seconds (default: 3.0).",
     )
     sweep.add_argument(
-        "-n", "--samples",
+        "-n",
+        "--samples",
         type=int,
         default=60,
         metavar="N",
@@ -1053,7 +1045,8 @@ def build_parser() -> argparse.ArgumentParser:
     # Output.
     out = parser.add_argument_group("Output")
     out.add_argument(
-        "-o", "--output",
+        "-o",
+        "--output",
         default=None,
         metavar="PATH",
         help=(
@@ -1097,12 +1090,14 @@ def build_parser() -> argparse.ArgumentParser:
 
     # Verbosity.
     parser.add_argument(
-        "-v", "--verbose",
+        "-v",
+        "--verbose",
         action="store_true",
         help="Enable DEBUG-level logging.",
     )
 
     return parser
+
 
 # ---------------------------------------------------------------------------
 # Default output path resolution
@@ -1119,6 +1114,7 @@ def _default_config_path() -> Path:
     :returns: Resolved Path to governor_config.h.
     """
     return (Path(__file__).parent / ".." / "src" / "governor_config.h").resolve()
+
 
 # ---------------------------------------------------------------------------
 # Main entry point

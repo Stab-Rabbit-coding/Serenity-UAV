@@ -58,19 +58,29 @@ SYS = {
     "CMC": fp(f"{SYS_FP}/Inductor_SMD.pretty", "L_CommonModeChoke_Coilcraft_0805USB"),
     "XTAL": fp(f"{SYS_FP}/Crystal.pretty", "Crystal_SMD_2012-2Pin_2.0x1.2mm"),
     "XFMR": fp(f"{SYS_FP}/Transformer_SMD.pretty", "Wurth_749010012A_10-100BASE-TX"),
-    "QFN48": fp(f"{SYS_FP}/Package_DFN_QFN.pretty",
-                "QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm"),
-    "QFN32": fp(f"{SYS_FP}/Package_DFN_QFN.pretty",
-                "QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm"),
+    "QFN48": fp(
+        f"{SYS_FP}/Package_DFN_QFN.pretty", "QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm"
+    ),
+    "QFN32": fp(
+        f"{SYS_FP}/Package_DFN_QFN.pretty", "QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm"
+    ),
     "SOIC20": fp(f"{SYS_FP}/Package_SO.pretty", "SOIC-20W_7.5x12.8mm_P1.27mm"),
-    "JST_GH2": fp(f"{SYS_FP}/Connector_JST.pretty",
-                  "JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical"),
-    "JST_GH4": fp(f"{SYS_FP}/Connector_JST.pretty",
-                  "JST_GH_BM04B-GHS-TBT_1x04-1MP_P1.25mm_Vertical"),
-    "JST_GH5": fp(f"{SYS_FP}/Connector_JST.pretty",
-                  "JST_GH_SM05B-GHS-TB_1x05-1MP_P1.25mm_Horizontal"),
-    "JST_SH2": fp(f"{SYS_FP}/Connector_JST.pretty",
-                  "JST_SH_BM02B-SRSS-TB_1x02-1MP_P1.00mm_Vertical"),
+    "JST_GH2": fp(
+        f"{SYS_FP}/Connector_JST.pretty",
+        "JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical",
+    ),
+    "JST_GH4": fp(
+        f"{SYS_FP}/Connector_JST.pretty",
+        "JST_GH_BM04B-GHS-TBT_1x04-1MP_P1.25mm_Vertical",
+    ),
+    "JST_GH5": fp(
+        f"{SYS_FP}/Connector_JST.pretty",
+        "JST_GH_SM05B-GHS-TB_1x05-1MP_P1.25mm_Horizontal",
+    ),
+    "JST_SH2": fp(
+        f"{SYS_FP}/Connector_JST.pretty",
+        "JST_SH_BM02B-SRSS-TB_1x02-1MP_P1.00mm_Vertical",
+    ),
 }
 JAYNE = {
     "SOM": fp(PRETTY, "phyCORE-AM62x_PCM071_2xBTH-060"),
@@ -85,44 +95,44 @@ JAYNE = {
 # layer 'B' = back (SoM); everything else front.  Positions are inside the
 # trapezoid: wide/aft end low-X (~176), narrow/fore end high-X (~242).
 PLACE = {
-    "U_SOM":  (JAYNE, "SOM", "B", (200, 151), 90),
-    "U2":     (JAYNE, "KSZ", "F", (198, 150), 0),
-    "U3":     (SYS, "QFN48", "F", (216, 138), 0),
-    "U5":     (SYS, "QFN32", "F", (216, 163), 0),
-    "U4":     (SYS, "SOIC20", "F", (231, 150), 90),
+    "U_SOM": (JAYNE, "SOM", "B", (200, 151), 90),
+    "U2": (JAYNE, "KSZ", "F", (198, 150), 0),
+    "U3": (SYS, "QFN48", "F", (216, 138), 0),
+    "U5": (SYS, "QFN32", "F", (216, 163), 0),
+    "U4": (SYS, "SOIC20", "F", (231, 150), 90),
     "U_REG_3V3": (SYS, "SOT23-6", "F", (182, 132), 0),
     "U_REG_1V2": (SYS, "SOT23-6", "F", (182, 140), 0),
     "U_REG_2V5": (SYS, "SOT23-5", "F", (182, 148), 0),
     "U_REG_3V3_L": (SYS, "IND", "F", (188, 132), 0),
     "U_REG_1V2_L": (SYS, "IND", "F", (188, 140), 0),
-    "Y1":     (SYS, "XTAL", "F", (192, 163), 0),
-    "Q1":     (SYS, "SOT23", "F", (236, 168), 0),
-    "T1":     (JAYNE, "XFMR", "F", (180, 160), 0),
-    "T2":     (JAYNE, "XFMR", "F", (180, 170), 0),
-    "CMC5":   (SYS, "CMC", "F", (224, 138), 0),
-    "D5":     (SYS, "SOT363", "F", (224, 143), 0),
+    "Y1": (SYS, "XTAL", "F", (192, 163), 0),
+    "Q1": (SYS, "SOT23", "F", (236, 168), 0),
+    "T1": (JAYNE, "XFMR", "F", (180, 160), 0),
+    "T2": (JAYNE, "XFMR", "F", (180, 170), 0),
+    "CMC5": (SYS, "CMC", "F", (224, 138), 0),
+    "D5": (SYS, "SOT363", "F", (224, 143), 0),
     "T1_CMC1": (SYS, "CMC", "F", (188, 158), 0),
     "T1_CMC2": (SYS, "CMC", "F", (188, 162), 0),
-    "T1_D1":  (SYS, "SOT363", "F", (192, 158), 0),
-    "T1_D2":  (SYS, "SOT363", "F", (192, 172), 0),
+    "T1_D1": (SYS, "SOT363", "F", (192, 158), 0),
+    "T1_D2": (SYS, "SOT363", "F", (192, 172), 0),
     "T2_CMC1": (SYS, "CMC", "F", (188, 168), 0),
     "T2_CMC2": (SYS, "CMC", "F", (188, 172), 0),
-    "T2_D1":  (SYS, "SOT363", "F", (192, 168), 0),
-    "T2_D2":  (SYS, "SOT363", "F", (196, 172), 0),
+    "T2_D1": (SYS, "SOT363", "F", (192, 168), 0),
+    "T2_D2": (SYS, "SOT363", "F", (196, 172), 0),
     # connectors: ring/power/CAN at wide/aft (low X); sensors at fore (high X)
-    "J_PWR":  (SYS, "JST_GH2", "F", (178, 130), 0),
+    "J_PWR": (SYS, "JST_GH2", "F", (178, 130), 0),
     "J_CANFD": (SYS, "JST_GH4", "F", (178, 136), 0),
     "J_ETH_IN": (SYS, "JST_GH5", "F", (176, 150), 90),
     "J_ETH_OUT": (SYS, "JST_GH5", "F", (176, 165), 90),
-    "J_SWD":  (SYS, "JST_GH4", "F", (206, 165), 0),
+    "J_SWD": (SYS, "JST_GH4", "F", (206, 165), 0),
     "J_CAM1": (SYS, "JST_GH4", "F", (240, 145), 0),
     "J_CAM2": (SYS, "JST_GH4", "F", (240, 150), 0),
-    "J_TOF":  (SYS, "JST_GH4", "F", (240, 156), 0),
+    "J_TOF": (SYS, "JST_GH4", "F", (240, 156), 0),
     "J_LASER": (SYS, "JST_SH2", "F", (240, 161), 0),
     "J_CAM_DS": (JAYNE, "DS9", "F", (233, 138), 0),
     "J_TOF_DS": (JAYNE, "DS4", "F", (233, 162), 0),
     "J_LASER_DS": (JAYNE, "DS2", "F", (236, 165), 0),
-    "J_CHASSIS_R": (SYS, "R0402", "F", (204, 172), 0),   # 0R GND/PGND bond
+    "J_CHASSIS_R": (SYS, "R0402", "F", (204, 172), 0),  # 0R GND/PGND bond
 }
 
 # Fallback footprint by reference prefix for passives (auto-placed in rows).
@@ -208,14 +218,14 @@ def main():
     # instance FIRST (before any board mutation), then remove + add.
     auto_x, auto_y = 206, 128
     placed_auto = 0
-    plan = []   # (ref, fpobj, layer, x, y, rot)
-    fpid_map = {}   # ref -> "nickname:footprint" for schematic-parity
+    plan = []  # (ref, fpobj, layer, x, y, rot)
+    fpid_map = {}  # ref -> "nickname:footprint" for schematic-parity
     for ref in sorted(comps):
         if ref in PLACE:
             libd, key, layer, (x, y), rot = PLACE[ref]
             lib, fpname = libd[key]
         elif ref.endswith(("_CI", "_CO", "_CV")):
-            lib, fpname = SYS["C0402"]          # regulator in/out decoupling caps
+            lib, fpname = SYS["C0402"]  # regulator in/out decoupling caps
             layer, rot = "F", 0
             x, y = auto_x, auto_y
             auto_x += 4
@@ -239,17 +249,24 @@ def main():
             print(f"  ERROR: could not load {lib}:{fpname} for {ref}")
             continue
         # library nickname = basename of the .pretty dir (or "Jayne" for PRETTY)
-        nick = "Jayne" if lib == PRETTY else Path(lib).name[:-len(".pretty")]
+        nick = "Jayne" if lib == PRETTY else Path(lib).name[: -len(".pretty")]
         fpid_map[ref] = f"{nick}:{fpname}"
         plan.append((ref, fpobj, layer, x, y, rot, fpname))
 
     # Shelf-pack all FRONT parts so nothing overlaps (SoM stays on the back at
     # its hand-set position).  Rotation is normalised to 0 for the packed parts.
-    front_pos = shelf_pack([(r, fn) for (r, _f, ly, _x, _y, _rt, fn) in plan
-                            if ly != "B"])
+    front_pos = shelf_pack(
+        [(r, fn) for (r, _f, ly, _x, _y, _rt, fn) in plan if ly != "B"]
+    )
     plan = [
-        (r, f, ly, front_pos.get(r, (x, y))[0], front_pos.get(r, (x, y))[1],
-         0 if ly != "B" else rt)
+        (
+            r,
+            f,
+            ly,
+            front_pos.get(r, (x, y))[0],
+            front_pos.get(r, (x, y))[1],
+            0 if ly != "B" else rt,
+        )
         for (r, f, ly, x, y, rt, fn) in plan
     ]
 
@@ -280,8 +297,10 @@ def main():
             fpobj.SetOrientationDegrees(rot)
 
     pcbnew.SaveBoard(str(BOARD), board)
-    print(f"  Placed {len(board.GetFootprints())} footprints, "
-          f"{board.GetNetCount()} nets, {placed_auto} auto-placed passives")
+    print(
+        f"  Placed {len(board.GetFootprints())} footprints, "
+        f"{board.GetNetCount()} nets, {placed_auto} auto-placed passives"
+    )
     inject_pad_nets(padnet, fpid_map)
     return 0
 
@@ -303,7 +322,7 @@ def inject_pad_nets(padnet, fpid_map):
 
     # Replace the board's top-level (net ...) declaration block.
     decl = "\n".join(f'\t(net {code[n]} "{n}")' for n in [""] + names)
-    src = re.sub(r'(?m)^\t\(net \d+ "[^"]*"\)\n', "", src)      # drop old decls
+    src = re.sub(r'(?m)^\t\(net \d+ "[^"]*"\)\n', "", src)  # drop old decls
     # re-insert the fresh block right before the first footprint
     fp0 = src.find("\t(footprint ")
     src = src[:fp0] + decl + "\n" + src[fp0:]
@@ -332,8 +351,9 @@ def inject_pad_nets(padnet, fpid_map):
         # Qualify the footprint identity with its library nickname so
         # schematic-parity matches (FootprintLoad-by-path drops the nickname).
         if ref in fpid_map:
-            block = re.sub(r'\(footprint "[^"]*"',
-                           f'(footprint "{fpid_map[ref]}"', block, count=1)
+            block = re.sub(
+                r'\(footprint "[^"]*"', f'(footprint "{fpid_map[ref]}"', block, count=1
+            )
         assign = {p: n for (r, p), n in padnet.items() if r == ref}
         for ep in EP_GND.get(ref, []):
             assign.setdefault(ep, "GND")
@@ -342,15 +362,16 @@ def inject_pad_nets(padnet, fpid_map):
         def rewrite_pad(padtxt):
             num = re.match(r'\(pad "([^"]*)"', padtxt).group(1)
             net = assign.get(num)
-            padtxt = re.sub(r'\s*\(net \d+ "[^"]*"\)', '', padtxt)  # clear old
+            padtxt = re.sub(r'\s*\(net \d+ "[^"]*"\)', "", padtxt)  # clear old
             if net is None or net not in code:
                 return padtxt
             netexpr = f'\n\t\t(net {code[net]} "{net}")'
-            lm = re.search(r'\(layers[^)]*\)', padtxt)
+            lm = re.search(r"\(layers[^)]*\)", padtxt)
             if lm:
                 p = lm.end()
                 return padtxt[:p] + netexpr + padtxt[p:]
             return padtxt
+
         # match a full pad (...) block by brace balance
         newblock = []
         p = 0
@@ -381,7 +402,7 @@ def inject_pad_nets(padnet, fpid_map):
         zone = m.group(0)
         nm = re.search(r'\(net_name "([^"]*)"\)', zone)
         if nm and nm.group(1) in code:
-            zone = re.sub(r'\(net \d+\)', f'(net {code[nm.group(1)]})', zone, count=1)
+            zone = re.sub(r"\(net \d+\)", f"(net {code[nm.group(1)]})", zone, count=1)
         return zone
 
     result = re.sub(r'\(zone.*?\(net_name "[^"]*"\)', fix_zone, result, flags=re.S)

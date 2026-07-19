@@ -3,6 +3,7 @@
  * @brief   MMC5983MA 3-axis magnetometer driver — public API.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * Drives the MEMSIC MMC5983MA 3-axis magnetometer via Linux userspace
@@ -94,17 +95,17 @@ extern "C" {
  * ---------------------------------------------------------------------------*/
 
 /** I2C bus address with SA0 = 0 (Wash hardware strapping). */
-#define MMC5983MA_I2C_ADDR      (0x30U)
+#define MMC5983MA_I2C_ADDR       (0x30U)
 
 /** Product ID register value that confirms MMC5983MA identity. */
-#define MMC5983MA_PRODUCT_ID    (0x30U)
+#define MMC5983MA_PRODUCT_ID     (0x30U)
 
 /**
  * 18-bit zero-field output code (2^17).
  * Subtract this from raw unsigned readings before scaling to get a
  * signed magnetic field value.
  */
-#define MMC5983MA_ZERO_OFFSET   (131072U)
+#define MMC5983MA_ZERO_OFFSET    (131072U)
 
 /**
  * Sensitivity for ±8 G full-scale range.
@@ -116,38 +117,38 @@ extern "C" {
  * Register addresses
  * ---------------------------------------------------------------------------*/
 
-#define MMC5983MA_REG_XOUT_MSB  (0x00U)  /**< X[17:10] output MSB.          */
-#define MMC5983MA_REG_XOUT_LSB  (0x01U)  /**< X[9:2] output LSB.            */
-#define MMC5983MA_REG_YOUT_MSB  (0x02U)  /**< Y[17:10] output MSB.          */
-#define MMC5983MA_REG_YOUT_LSB  (0x03U)  /**< Y[9:2] output LSB.            */
-#define MMC5983MA_REG_ZOUT_MSB  (0x04U)  /**< Z[17:10] output MSB.          */
-#define MMC5983MA_REG_ZOUT_LSB  (0x05U)  /**< Z[9:2] output LSB.            */
-#define MMC5983MA_REG_XYZ_LSB2  (0x06U)  /**< X[1:0], Y[1:0], Z[1:0] bits.  */
-#define MMC5983MA_REG_STATUS    (0x08U)  /**< Status register.               */
-#define MMC5983MA_REG_CTRL0     (0x09U)  /**< Control register 0.            */
-#define MMC5983MA_REG_CTRL1     (0x0AU)  /**< Control register 1 (BW, ST).   */
-#define MMC5983MA_REG_CTRL2     (0x0BU)  /**< Control register 2 (ODR, CMM). */
-#define MMC5983MA_REG_CTRL3     (0x0CU)  /**< Control register 3 (SPI mode). */
-#define MMC5983MA_REG_PROD_ID   (0x2FU)  /**< Product ID (reads 0x30).       */
+#define MMC5983MA_REG_XOUT_MSB   (0x00U) /**< X[17:10] output MSB.          */
+#define MMC5983MA_REG_XOUT_LSB   (0x01U) /**< X[9:2] output LSB.            */
+#define MMC5983MA_REG_YOUT_MSB   (0x02U) /**< Y[17:10] output MSB.          */
+#define MMC5983MA_REG_YOUT_LSB   (0x03U) /**< Y[9:2] output LSB.            */
+#define MMC5983MA_REG_ZOUT_MSB   (0x04U) /**< Z[17:10] output MSB.          */
+#define MMC5983MA_REG_ZOUT_LSB   (0x05U) /**< Z[9:2] output LSB.            */
+#define MMC5983MA_REG_XYZ_LSB2   (0x06U) /**< X[1:0], Y[1:0], Z[1:0] bits.  */
+#define MMC5983MA_REG_STATUS     (0x08U) /**< Status register.               */
+#define MMC5983MA_REG_CTRL0      (0x09U) /**< Control register 0.            */
+#define MMC5983MA_REG_CTRL1      (0x0AU) /**< Control register 1 (BW, ST).   */
+#define MMC5983MA_REG_CTRL2      (0x0BU) /**< Control register 2 (ODR, CMM). */
+#define MMC5983MA_REG_CTRL3      (0x0CU) /**< Control register 3 (SPI mode). */
+#define MMC5983MA_REG_PROD_ID    (0x2FU) /**< Product ID (reads 0x30).       */
 
 /* ---------------------------------------------------------------------------
  * Register field bitmasks and values
  * ---------------------------------------------------------------------------*/
 
 /** STATUS register: measurement done flag (Meas_M_Done). */
-#define MMC5983MA_STATUS_MEAS_M_DONE    (0x01U)
+#define MMC5983MA_STATUS_MEAS_M_DONE (0x01U)
 
 /** STATUS register: SET/RESET done flag (Meas_T_Done). */
-#define MMC5983MA_STATUS_MEAS_T_DONE    (0x02U)
+#define MMC5983MA_STATUS_MEAS_T_DONE (0x02U)
 
 /** CTRL0: trigger a single magnetic measurement (Take_meas_M). */
-#define MMC5983MA_CTRL0_TAKE_MEAS_M     (0x01U)
+#define MMC5983MA_CTRL0_TAKE_MEAS_M  (0x01U)
 
 /** CTRL0: initiate a SET operation (restore sensitivity after saturation). */
-#define MMC5983MA_CTRL0_SET             (0x08U)
+#define MMC5983MA_CTRL0_SET          (0x08U)
 
 /** CTRL0: enable continuous measurement mode (CMM_freq_en). */
-#define MMC5983MA_CTRL0_CMM_FREQ_EN     (0x80U)
+#define MMC5983MA_CTRL0_CMM_FREQ_EN  (0x80U)
 
 /**
  * CTRL1 bandwidth value: 100 Hz (BW[1:0] = 0b10).
@@ -157,7 +158,7 @@ extern "C" {
  *   0b10 = 2.0 ms settling (100 Hz BW)
  *   0b11 = 1.2 ms settling (200 Hz BW)
  */
-#define MMC5983MA_CTRL1_BW_100HZ        (0x02U)
+#define MMC5983MA_CTRL1_BW_100HZ     (0x02U)
 
 /**
  * CTRL2 ODR value for 100 Hz continuous mode (ODR[3:0] = 0b0110).
@@ -167,7 +168,7 @@ extern "C" {
  *   CTRL2[3:0] = ODR     (0110 = 100 Hz)
  *   Combined:  0b0001_0110 = 0x16
  */
-#define MMC5983MA_CTRL2_INIT            (0x16U)
+#define MMC5983MA_CTRL2_INIT         (0x16U)
 
 /* ---------------------------------------------------------------------------
  * Data types
@@ -180,9 +181,9 @@ extern "C" {
  * These are provided for diagnostics and calibration use.
  */
 typedef struct {
-    uint32_t x;   /**< Raw 18-bit X-axis reading (0–262143; zero = 131072). */
-    uint32_t y;   /**< Raw 18-bit Y-axis reading. */
-    uint32_t z;   /**< Raw 18-bit Z-axis reading. */
+    uint32_t x; /**< Raw 18-bit X-axis reading (0–262143; zero = 131072). */
+    uint32_t y; /**< Raw 18-bit Y-axis reading. */
+    uint32_t z; /**< Raw 18-bit Z-axis reading. */
 } mmc5983ma_raw_t;
 
 /**
@@ -192,9 +193,9 @@ typedef struct {
  * Signed; positive values indicate field along the positive axis direction.
  */
 typedef struct {
-    int32_t x_nt100;   /**< X-axis magnetic field in units of 100 nT. */
-    int32_t y_nt100;   /**< Y-axis magnetic field in units of 100 nT. */
-    int32_t z_nt100;   /**< Z-axis magnetic field in units of 100 nT. */
+    int32_t x_nt100; /**< X-axis magnetic field in units of 100 nT. */
+    int32_t y_nt100; /**< Y-axis magnetic field in units of 100 nT. */
+    int32_t z_nt100; /**< Z-axis magnetic field in units of 100 nT. */
 } mmc5983ma_sample_t;
 
 /**
@@ -248,8 +249,7 @@ void mag_mmc5983ma_close(mmc5983ma_ctx_t *ctx);
  *         -ETIMEDOUT : Meas_M_Done not set within timeout_ms.
  *         -EIO       : I2C error.
  */
-int mag_mmc5983ma_read(mmc5983ma_ctx_t *ctx,
-                       mmc5983ma_sample_t *sample,
+int mag_mmc5983ma_read(mmc5983ma_ctx_t *ctx, mmc5983ma_sample_t *sample,
                        unsigned int timeout_ms);
 
 /**
@@ -260,9 +260,8 @@ int mag_mmc5983ma_read(mmc5983ma_ctx_t *ctx,
  * @param[in]  timeout_ms Maximum wait for Meas_M_Done (0 = no wait).
  * @return 0 on success, negative errno on error.
  */
-int mag_mmc5983ma_read_raw(mmc5983ma_ctx_t *ctx,
-                            mmc5983ma_raw_t *raw,
-                            unsigned int timeout_ms);
+int mag_mmc5983ma_read_raw(mmc5983ma_ctx_t *ctx, mmc5983ma_raw_t *raw,
+                           unsigned int timeout_ms);
 
 /**
  * @brief Issue a SET pulse to restore AMR bridge sensitivity.

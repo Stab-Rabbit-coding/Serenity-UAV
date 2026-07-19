@@ -33,9 +33,9 @@ Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 License: CC BY 4.0
 """
 
-import struct
 import os
 import re
+import struct
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -63,6 +63,7 @@ NACELLE_PARTS = [
 # STL reader
 # ---------------------------------------------------------------------------
 
+
 def read_stl_verts(fname):
     """Return list of (x,y,z) tuples for all triangle vertices in fname."""
     path = os.path.join(STL_DIR, fname)
@@ -81,15 +82,18 @@ def read_stl_verts(fname):
             fh.read(2)
     return verts
 
+
 def load_group(file_list):
     verts = []
     for f in file_list:
         verts.extend(read_stl_verts(f))
     return verts
 
+
 # ---------------------------------------------------------------------------
 # 2D silhouette computation
 # ---------------------------------------------------------------------------
+
 
 def silhouette(verts, h_axis, v_axis, n_bins=600):
     """
@@ -122,31 +126,50 @@ def silhouette(verts, h_axis, v_axis, n_bins=600):
             bot[b] = v
 
     # Fill gaps: forward then backward propagation
-    last_t = vv[0]; last_b = vv[0]
+    last_t = vv[0]
+    last_b = vv[0]
     for i in range(n_bins):
-        if top[i] is None: top[i] = last_t
-        else: last_t = top[i]
-        if bot[i] is None: bot[i] = last_b
-        else: last_b = bot[i]
-    last_t = vv[-1]; last_b = vv[-1]
+        if top[i] is None:
+            top[i] = last_t
+        else:
+            last_t = top[i]
+        if bot[i] is None:
+            bot[i] = last_b
+        else:
+            last_b = bot[i]
+    last_t = vv[-1]
+    last_b = vv[-1]
     for i in range(n_bins - 1, -1, -1):
-        if top[i] is not None: last_t = top[i]
-        else: top[i] = last_t
-        if bot[i] is not None: last_b = bot[i]
-        else: bot[i] = last_b
+        if top[i] is not None:
+            last_t = top[i]
+        else:
+            top[i] = last_t
+        if bot[i] is not None:
+            last_b = bot[i]
+        else:
+            bot[i] = last_b
 
     h_vals = [h0 + i / (n_bins - 1) * (h1 - h0) for i in range(n_bins)]
     return h_vals, top, bot
+
 
 # ---------------------------------------------------------------------------
 # SVG path builder
 # ---------------------------------------------------------------------------
 
-def to_svg_path(h_vals, v_top, v_bot,
-                stl_h_range, stl_v_range,
-                svg_h_range, svg_v_range,
-                flip_h=False, flip_v=True,
-                simplify_dp=1.5):
+
+def to_svg_path(
+    h_vals,
+    v_top,
+    v_bot,
+    stl_h_range,
+    stl_v_range,
+    svg_h_range,
+    svg_v_range,
+    flip_h=False,
+    flip_v=True,
+    simplify_dp=1.5,
+):
     """
     Convert silhouette arrays to a closed SVG <path d="…"> string.
 
@@ -166,8 +189,8 @@ def to_svg_path(h_vals, v_top, v_bot,
 
     def conv(h_phys, v_phys):
         """Physical STL coords → SVG pixel coords."""
-        th = (h_phys - sh0) / dh_stl   # 0..1 along h axis
-        tv = (v_phys - sv0) / dv_stl   # 0..1 along v axis
+        th = (h_phys - sh0) / dh_stl  # 0..1 along h axis
+        tv = (v_phys - sv0) / dv_stl  # 0..1 along v axis
         if flip_h:
             th = 1.0 - th
         if flip_v:
@@ -190,17 +213,20 @@ def to_svg_path(h_vals, v_top, v_bot,
     d += " Z"
     return d
 
+
 def _dp_simplify(pts, eps):
     """Douglas-Peucker polyline simplification."""
     if len(pts) <= 2:
         return pts
 
     def perp_dist(p, a, b):
-        ax, ay = a; bx, by = b; px, py = p
+        ax, ay = a
+        bx, by = b
+        px, py = p
         dx, dy = bx - ax, by - ay
         denom = (dx * dx + dy * dy) ** 0.5
         if denom == 0:
-            return ((px - ax)**2 + (py - ay)**2) ** 0.5
+            return ((px - ax) ** 2 + (py - ay) ** 2) ** 0.5
         return abs(dy * px - dx * py + bx * ay - by * ax) / denom
 
     def rdp(pts, eps):
@@ -211,27 +237,32 @@ def _dp_simplify(pts, eps):
         for i in range(1, len(pts) - 1):
             d = perp_dist(pts[i], pts[0], pts[-1])
             if d > dmax:
-                dmax = d; idx = i
+                dmax = d
+                idx = i
         if dmax >= eps:
-            left  = rdp(pts[:idx + 1], eps)
+            left = rdp(pts[: idx + 1], eps)
             right = rdp(pts[idx:], eps)
             return left[:-1] + right
         return [pts[0], pts[-1]]
 
     return rdp(pts, eps)
 
+
 # ---------------------------------------------------------------------------
 # SVG file update helpers
 # ---------------------------------------------------------------------------
+
 
 def read_svg(fname):
     with open(fname, "r", encoding="utf-8") as f:
         return f.read()
 
+
 def write_svg(fname, content):
     with open(fname, "w", encoding="utf-8") as f:
         f.write(content)
     print(f"  → {os.path.basename(fname)}  ({os.path.getsize(fname)//1024} KB)")
+
 
 def replace_element(svg_text, pattern, new_element):
     """
@@ -240,8 +271,9 @@ def replace_element(svg_text, pattern, new_element):
     """
     m = re.search(pattern, svg_text, re.DOTALL)
     if m:
-        return svg_text[:m.start()] + new_element + svg_text[m.end():], True
+        return svg_text[: m.start()] + new_element + svg_text[m.end() :], True
     return svg_text, False
+
 
 # ---------------------------------------------------------------------------
 # Process overview_side.svg
@@ -257,8 +289,9 @@ def insert_hull_path(svg, new_hull, pattern, search_rect=True):
         match = re.search(r'<rect[^>]+fill="url\(#grid\)"[^/]*/>', svg)
         if match:
             # Insert after the found element
-            return (svg[:match.end()] + "\n" + new_hull + svg[match.end():]), True
+            return (svg[: match.end()] + "\n" + new_hull + svg[match.end() :]), True
         return svg, False
+
 
 def update_side_view():
     """
@@ -275,14 +308,14 @@ def update_side_view():
     svg = read_svg(fname)
 
     # STL physical extents for the side view
-    STL_X_MIN, STL_X_MAX = -311.0, 299.0   # fore–aft
-    STL_Z_MIN, STL_Z_MAX =    0.0, 182.0   # height
+    STL_X_MIN, STL_X_MAX = -311.0, 299.0  # fore–aft
+    STL_Z_MIN, STL_Z_MAX = 0.0, 182.0  # height
 
     # SVG pixel extents (from polygon analysis of existing file)
-    SVG_X_NOSE  =  72.0    # nose at LEFT
-    SVG_X_TAIL  = 666.0    # tail at RIGHT
-    SVG_Y_KEEL  = 302.0    # keel at BOTTOM
-    SVG_Y_TOP   = 110.0    # bridge top at TOP
+    SVG_X_NOSE = 72.0  # nose at LEFT
+    SVG_X_TAIL = 666.0  # tail at RIGHT
+    SVG_Y_KEEL = 302.0  # keel at BOTTOM
+    SVG_Y_TOP = 110.0  # bridge top at TOP
 
     hull_verts = load_group(HULL_PARTS)
     print(f"  Hull verts: {len(hull_verts):,}")
@@ -291,13 +324,15 @@ def update_side_view():
     h_vals, z_top, z_bot = silhouette(hull_verts, "x", "z", n_bins=600)
 
     hull_path = to_svg_path(
-        h_vals, z_top, z_bot,
+        h_vals,
+        z_top,
+        z_bot,
         stl_h_range=(STL_X_MIN, STL_X_MAX),
         stl_v_range=(STL_Z_MIN, STL_Z_MAX),
         svg_h_range=(SVG_X_NOSE, SVG_X_TAIL),
-        svg_v_range=(SVG_Y_TOP,  SVG_Y_KEEL),
-        flip_h=True,    # STL +X = nose; flip so nose stays at SVG LEFT (x=72)
-        flip_v=True,    # STL Z=0=keel must map to SVG y=302 (bottom); flip needed
+        svg_v_range=(SVG_Y_TOP, SVG_Y_KEEL),
+        flip_h=True,  # STL +X = nose; flip so nose stays at SVG LEFT (x=72)
+        flip_v=True,  # STL Z=0=keel must map to SVG y=302 (bottom); flip needed
         simplify_dp=0.5,
     )
 
@@ -309,15 +344,11 @@ def update_side_view():
 
     # The existing polygon starts with: M 72.0,205.5 L ...
     # Match the path/polygon that forms the main hull outline
-    old_pattern = (
-        r'<path d="M 72\.0,205\.5.*?Z"[^/]*/>'
-    )
+    old_pattern = r'<path d="M 72\.0,205\.5.*?Z"[^/]*/>'
     svg, replaced = replace_element(svg, old_pattern, new_hull)
     if not replaced:
         # Try polygon fallback
-        old_poly = (
-            r'<path[^>]+d="M [0-9].*?fill="#0e2030" stroke="#00e5ff"[^/]*/>'
-        )
+        old_poly = r'<path[^>]+d="M [0-9].*?fill="#0e2030" stroke="#00e5ff"[^/]*/>'
         svg, replaced = replace_element(svg, old_poly, new_hull)
 
     if replaced:
@@ -333,9 +364,11 @@ def update_side_view():
 
     write_svg(fname, svg)
 
+
 # ---------------------------------------------------------------------------
 # Process overview_top.svg
 # ---------------------------------------------------------------------------
+
 
 def update_top_view():
     """
@@ -361,14 +394,14 @@ def update_top_view():
     # The fuselage top-view Y extent:
     # Middle section spans Y: –156 … +9 (centroid ≈ –73.6)
     # Use a slightly wider range to capture head and rear sections:
-    STL_Y_MIN  = -160.0   # port-most fuselage edge visible from above
-    STL_Y_MAX  =   15.0   # starboard-most
+    STL_Y_MIN = -160.0  # port-most fuselage edge visible from above
+    STL_Y_MAX = 15.0  # starboard-most
 
     # SVG extents
-    SVG_X_NOSE  = 110.0
-    SVG_X_TAIL  = 681.5
-    SVG_Y_PORT  = 178.6   # top of polygon (port side at top of diagram)
-    SVG_Y_STBD  = 281.4   # bottom of polygon (starboard side at bottom)
+    SVG_X_NOSE = 110.0
+    SVG_X_TAIL = 681.5
+    SVG_Y_PORT = 178.6  # top of polygon (port side at top of diagram)
+    SVG_Y_STBD = 281.4  # bottom of polygon (starboard side at bottom)
 
     hull_verts = load_group(HULL_PARTS)
 
@@ -383,13 +416,15 @@ def update_top_view():
     # SVG_Y_PORT is the visual top → maps to STL_Y_MIN (most negative Y)
     # SVG_Y_STBD is the visual bottom → maps to STL_Y_MAX (most positive Y)
     hull_path = to_svg_path(
-        h_vals, y_top, y_bot,
+        h_vals,
+        y_top,
+        y_bot,
         stl_h_range=(STL_X_MIN, STL_X_MAX),
         stl_v_range=(STL_Y_MIN, STL_Y_MAX),
         svg_h_range=(SVG_X_NOSE, SVG_X_TAIL),
-        svg_v_range=(SVG_Y_PORT,  SVG_Y_STBD),
-        flip_h=True,    # +X = nose = SVG LEFT
-        flip_v=False,   # STL Y: more positive → SVG bottom → no flip needed when using top/bot
+        svg_v_range=(SVG_Y_PORT, SVG_Y_STBD),
+        flip_h=True,  # +X = nose = SVG LEFT
+        flip_v=False,  # STL Y: more positive → SVG bottom → no flip needed when using top/bot
         simplify_dp=0.5,
     )
 
@@ -415,9 +450,11 @@ def update_top_view():
 
     write_svg(fname, svg)
 
+
 # ---------------------------------------------------------------------------
 # Process overview_front.svg
 # ---------------------------------------------------------------------------
+
 
 def update_front_view():
     """Replace/add hull outline in overview_front.svg (YZ plane)."""
@@ -438,7 +475,9 @@ def update_front_view():
     h_vals, z_top, z_bot = silhouette(hull_verts, "y", "z", n_bins=600)
 
     hull_path = to_svg_path(
-        h_vals, z_top, z_bot,
+        h_vals,
+        z_top,
+        z_bot,
         stl_h_range=(STL_Y_MIN, STL_Y_MAX),
         stl_v_range=(STL_Z_MIN, STL_Z_MAX),
         svg_h_range=(SVG_Y_LEFT, SVG_Y_RIGHT),
@@ -463,9 +502,11 @@ def update_front_view():
     print(f"  Hull path {'replaced' if replaced else 'inserted'} ✓")
     write_svg(fname, svg)
 
+
 # ---------------------------------------------------------------------------
 # Process overview_bottom.svg
 # ---------------------------------------------------------------------------
+
 
 def update_bottom_view():
     """
@@ -487,25 +528,26 @@ def update_bottom_view():
         canvas_w, canvas_h = 820, 460
 
     STL_X_MIN, STL_X_MAX = -311.0, 299.0
-    STL_Y_MIN, STL_Y_MAX = -160.0,  15.0   # fuselage Y band
+    STL_Y_MIN, STL_Y_MAX = -160.0, 15.0  # fuselage Y band
 
     MARGIN = 60
-    SVG_X_LEFT  = MARGIN
+    SVG_X_LEFT = MARGIN
     SVG_X_RIGHT = canvas_w - MARGIN - 20
-    SVG_Y_TOP   = MARGIN + 20
-    SVG_Y_BOT   = canvas_h - MARGIN - 30
+    SVG_Y_TOP = MARGIN + 20
+    SVG_Y_BOT = canvas_h - MARGIN - 30
 
     hull_verts = load_group(HULL_PARTS)
-    fuse_verts = [(x, y, z) for x, y, z in hull_verts
-                  if STL_Y_MIN <= y <= STL_Y_MAX]
+    fuse_verts = [(x, y, z) for x, y, z in hull_verts if STL_Y_MIN <= y <= STL_Y_MAX]
 
     h_vals, y_top, y_bot = silhouette(fuse_verts, "x", "y", n_bins=600)
 
     hull_path = to_svg_path(
-        h_vals, y_top, y_bot,
+        h_vals,
+        y_top,
+        y_bot,
         stl_h_range=(STL_X_MIN, STL_X_MAX),
         stl_v_range=(STL_Y_MIN, STL_Y_MAX),
-        svg_h_range=(SVG_X_RIGHT, SVG_X_LEFT),   # flip H: nose at right
+        svg_h_range=(SVG_X_RIGHT, SVG_X_LEFT),  # flip H: nose at right
         svg_v_range=(SVG_Y_TOP, SVG_Y_BOT),
         flip_h=False,
         flip_v=False,
@@ -520,12 +562,11 @@ def update_bottom_view():
     old_pattern = r'<path[^>]+id="hull-bottom[^>]*/>'
     svg, replaced = replace_element(svg, old_pattern, new_hull)
     if not replaced:
-        insert_after = re.search(
-            r'<rect[^>]+fill="url\(#grid\)"[^/]*/>', svg
-        )
+        insert_after = re.search(r'<rect[^>]+fill="url\(#grid\)"[^/]*/>', svg)
         if insert_after:
-            svg = (svg[:insert_after.end()] + "\n" + new_hull +
-                   svg[insert_after.end():])
+            svg = (
+                svg[: insert_after.end()] + "\n" + new_hull + svg[insert_after.end() :]
+            )
             print("  Hull path inserted ✓")
         else:
             print("  WARNING: Could not find insertion point")
@@ -535,6 +576,7 @@ def update_bottom_view():
         print("  Hull path replaced ✓")
 
     write_svg(fname, svg)
+
 
 # ---------------------------------------------------------------------------
 # Main

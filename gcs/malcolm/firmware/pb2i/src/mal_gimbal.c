@@ -3,6 +3,7 @@
  * @brief   Malcolm GCS — antenna tracking gimbal controller implementation.
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  * Revision: R (2026-06-11)
  *
@@ -38,18 +39,19 @@
  * Constants
  * ---------------------------------------------------------------------------*/
 
-/** Path template for sysfs PWM period file.  %u = pwmchip index, %u = channel. */
-#define PWM_PATH_FMT        "/sys/class/pwm/pwmchip%u/pwm%u"
+/** Path template for sysfs PWM period file.  %u = pwmchip index, %u = channel.
+ */
+#define PWM_PATH_FMT       "/sys/class/pwm/pwmchip%u/pwm%u"
 
 /** AS5600 ANGLE register high byte (0x0E–0x0F, 12-bit result). */
-#define AS5600_REG_ANGLE_H  (0x0EU)
+#define AS5600_REG_ANGLE_H (0x0EU)
 
 /** AS5600 STATUS register — bit 5 = MD (magnet detected). */
-#define AS5600_REG_STATUS   (0x1AU)
-#define AS5600_STATUS_MD    (0x20U)
+#define AS5600_REG_STATUS  (0x1AU)
+#define AS5600_STATUS_MD   (0x20U)
 
 /** On-target threshold (degrees) — both axes must be within this. */
-#define ON_TARGET_DEG       (1.0f)
+#define ON_TARGET_DEG      (1.0f)
 
 /* ---------------------------------------------------------------------------
  * Internal state
@@ -63,17 +65,17 @@ static char s_tilt_pwm_path[128];
 static int s_i2c_fd = -1;
 
 /** Current servo PWM duty cycle (ns) — cached to avoid redundant writes. */
-static uint32_t s_pan_duty_ns  = MAL_SERVO_NEUTRAL_NS;
+static uint32_t s_pan_duty_ns = MAL_SERVO_NEUTRAL_NS;
 static uint32_t s_tilt_duty_ns = MAL_SERVO_NEUTRAL_NS;
 
 /** Last known encoder positions (degrees). */
 static mal_gimbal_pos_t s_current_pos = {0.0f, 0.0f};
 
 /** Commanded target position. */
-static mal_gimbal_pos_t s_target_pos  = {0.0f, 0.0f};
+static mal_gimbal_pos_t s_target_pos = {0.0f, 0.0f};
 
 /** Encoder zero offsets calibrated at init (raw counts). */
-static uint16_t s_pan_zero_counts  = 0U;
+static uint16_t s_pan_zero_counts = 0U;
 static uint16_t s_tilt_zero_counts = 0U;
 
 /* ---------------------------------------------------------------------------
@@ -88,8 +90,7 @@ static uint16_t s_tilt_zero_counts = 0U;
  * @param[in] val    Value to write.
  * @return 0 on success; -1 on failure (errno set).
  */
-static int pwm_write(const char *base, const char *attr, uint32_t val)
-{
+static int pwm_write(const char *base, const char *attr, uint32_t val) {
     char path[200];
     snprintf(path, sizeof(path), "%s/%s", base, attr);
 
@@ -99,8 +100,8 @@ static int pwm_write(const char *base, const char *attr, uint32_t val)
     }
 
     char buf[32];
-    int len = snprintf(buf, sizeof(buf), "%u", val);
-    int rc = (write(fd, buf, (size_t)len) == len) ? 0 : -1;
+    int  len = snprintf(buf, sizeof(buf), "%u", val);
+    int  rc = (write(fd, buf, (size_t)len) == len) ? 0 : -1;
     close(fd);
     return rc;
 }
@@ -110,12 +111,13 @@ static int pwm_write(const char *base, const char *attr, uint32_t val)
  *
  * @param[in] chip    pwmchip index.
  * @param[in] chan    Channel index.
- * @param[out] path   Populated with the channel base path (caller-supplied buf).
+ * @param[out] path   Populated with the channel base path (caller-supplied
+ * buf).
  * @param[in]  path_sz Size of path buffer.
  * @return 0 on success; -1 on failure.
  */
-static int pwm_export(uint32_t chip, uint32_t chan, char *path, size_t path_sz)
-{
+static int pwm_export(uint32_t chip, uint32_t chan, char *path,
+                      size_t path_sz) {
     char export_path[64];
     snprintf(export_path, sizeof(export_path),
              "/sys/class/pwm/pwmchip%u/export", chip);
@@ -124,8 +126,8 @@ static int pwm_export(uint32_t chip, uint32_t chan, char *path, size_t path_sz)
     int fd = open(export_path, O_WRONLY);
     if (fd >= 0) {
         char buf[8];
-        int len = snprintf(buf, sizeof(buf), "%u", chan);
-        write(fd, buf, (size_t)len);   /* ignore return — EBUSY is OK */
+        int  len = snprintf(buf, sizeof(buf), "%u", chan);
+        write(fd, buf, (size_t)len); /* ignore return — EBUSY is OK */
         close(fd);
     }
 
@@ -153,8 +155,7 @@ static int pwm_export(uint32_t chip, uint32_t chan, char *path, size_t path_sz)
  * @param[in] chan  Channel index 0–7.
  * @return 0 on success; -1 on failure.
  */
-static int tca9548a_select(uint8_t chan)
-{
+static int tca9548a_select(uint8_t chan) {
     if (ioctl(s_i2c_fd, I2C_SLAVE, MAL_TCA9548A_ADDR) < 0) {
         return -1;
     }
@@ -163,13 +164,13 @@ static int tca9548a_select(uint8_t chan)
 }
 
 /**
- * @brief  Read 12-bit angle from an AS5600 on the currently selected mux channel.
+ * @brief  Read 12-bit angle from an AS5600 on the currently selected mux
+ * channel.
  *
  * @param[out] angle_counts  Raw 12-bit angle (0–4095 → 0–360°).
  * @return 0 on success; −1 if magnet not detected or I²C error.
  */
-static int as5600_read_angle(uint16_t *angle_counts)
-{
+static int as5600_read_angle(uint16_t *angle_counts) {
     /* Switch to AS5600 I²C address. */
     if (ioctl(s_i2c_fd, I2C_SLAVE, MAL_AS5600_ADDR) < 0) {
         return -1;
@@ -213,12 +214,11 @@ static int as5600_read_angle(uint16_t *angle_counts)
  * @param[in] zero_counts  Zero-reference raw count captured at init.
  * @return Angle in degrees, unwrapped to [−180, +180).
  */
-static float counts_to_deg(uint16_t raw_counts, uint16_t zero_counts)
-{
+static float counts_to_deg(uint16_t raw_counts, uint16_t zero_counts) {
     int32_t delta = (int32_t)raw_counts - (int32_t)zero_counts;
 
     /* Unwrap modular arithmetic around 4096 boundary. */
-    if (delta >  (int32_t)(MAL_AS5600_COUNTS_PER_REV / 2U)) {
+    if (delta > (int32_t)(MAL_AS5600_COUNTS_PER_REV / 2U)) {
         delta -= (int32_t)MAL_AS5600_COUNTS_PER_REV;
     } else if (delta < -(int32_t)(MAL_AS5600_COUNTS_PER_REV / 2U)) {
         delta += (int32_t)MAL_AS5600_COUNTS_PER_REV;
@@ -230,14 +230,14 @@ static float counts_to_deg(uint16_t raw_counts, uint16_t zero_counts)
 /**
  * @brief  Map a servo angle in degrees to a PWM duty cycle in nanoseconds.
  *
- * @param[in] angle_deg  Desired servo angle (0° = 1000 µs; 90° = 1500 µs; 180° = 2000 µs).
+ * @param[in] angle_deg  Desired servo angle (0° = 1000 µs; 90° = 1500 µs; 180°
+ * = 2000 µs).
  * @return PWM duty cycle in nanoseconds, clamped to [MIN, MAX].
  */
-static uint32_t angle_to_duty_ns(float angle_deg)
-{
+static uint32_t angle_to_duty_ns(float angle_deg) {
     float frac = angle_deg / 180.0f;
-    float duty = (float)MAL_SERVO_MIN_NS
-                 + frac * (float)(MAL_SERVO_MAX_NS - MAL_SERVO_MIN_NS);
+    float duty = (float)MAL_SERVO_MIN_NS +
+                 frac * (float)(MAL_SERVO_MAX_NS - MAL_SERVO_MIN_NS);
 
     if (duty < (float)MAL_SERVO_MIN_NS) {
         duty = (float)MAL_SERVO_MIN_NS;
@@ -250,8 +250,7 @@ static uint32_t angle_to_duty_ns(float angle_deg)
 /**
  * @brief  Clamp a value to [lo, hi].
  */
-static float clampf(float v, float lo, float hi)
-{
+static float clampf(float v, float lo, float hi) {
     return (v < lo) ? lo : ((v > hi) ? hi : v);
 }
 
@@ -259,8 +258,7 @@ static float clampf(float v, float lo, float hi)
  * Public API
  * ---------------------------------------------------------------------------*/
 
-mal_gimbal_err_t mal_gimbal_init(void)
-{
+mal_gimbal_err_t mal_gimbal_init(void) {
     /* Open I²C bus for TCA9548A and AS5600. */
     s_i2c_fd = open("/dev/i2c-" __STRING(MAL_I2C_BUS), O_RDWR);
     if (s_i2c_fd < 0) {
@@ -284,30 +282,31 @@ mal_gimbal_err_t mal_gimbal_init(void)
 
     /* Capture zero-reference encoder readings. */
     uint16_t raw = 0U;
-    if (tca9548a_select(MAL_ENC_PAN_MUX_CHAN) != 0 || as5600_read_angle(&raw) != 0) {
+    if (tca9548a_select(MAL_ENC_PAN_MUX_CHAN) != 0 ||
+        as5600_read_angle(&raw) != 0) {
         fprintf(stderr, "mal_gimbal_init: pan encoder read failed\n");
         return MAL_GIMBAL_ERR_ENCODER;
     }
     s_pan_zero_counts = raw;
 
-    if (tca9548a_select(MAL_ENC_TILT_MUX_CHAN) != 0 || as5600_read_angle(&raw) != 0) {
+    if (tca9548a_select(MAL_ENC_TILT_MUX_CHAN) != 0 ||
+        as5600_read_angle(&raw) != 0) {
         fprintf(stderr, "mal_gimbal_init: tilt encoder read failed\n");
         return MAL_GIMBAL_ERR_ENCODER;
     }
     s_tilt_zero_counts = raw;
 
-    s_current_pos.pan_deg  = 0.0f;
+    s_current_pos.pan_deg = 0.0f;
     s_current_pos.tilt_deg = 0.0f;
-    s_target_pos           = s_current_pos;
+    s_target_pos = s_current_pos;
 
     return MAL_GIMBAL_OK;
 }
 
-void mal_gimbal_deinit(void)
-{
+void mal_gimbal_deinit(void) {
     /* Disable servo outputs. */
     if (s_pan_pwm_path[0] != '\0') {
-        pwm_write(s_pan_pwm_path,  "enable", 0U);
+        pwm_write(s_pan_pwm_path, "enable", 0U);
     }
     if (s_tilt_pwm_path[0] != '\0') {
         pwm_write(s_tilt_pwm_path, "enable", 0U);
@@ -319,8 +318,7 @@ void mal_gimbal_deinit(void)
     }
 }
 
-mal_gimbal_err_t mal_gimbal_set_target(const mal_gimbal_pos_t *target)
-{
+mal_gimbal_err_t mal_gimbal_set_target(const mal_gimbal_pos_t *target) {
     if (target == NULL) {
         return MAL_GIMBAL_ERR_LIMIT;
     }
@@ -329,8 +327,8 @@ mal_gimbal_err_t mal_gimbal_set_target(const mal_gimbal_pos_t *target)
     if (fabsf(target->pan_deg) > MAL_GIMBAL_PAN_MAX_DEG) {
         return MAL_GIMBAL_ERR_LIMIT;
     }
-    if (target->tilt_deg < -MAL_GIMBAL_TILT_DOWN_DEG
-        || target->tilt_deg > MAL_GIMBAL_TILT_UP_DEG) {
+    if (target->tilt_deg < -MAL_GIMBAL_TILT_DOWN_DEG ||
+        target->tilt_deg > MAL_GIMBAL_TILT_UP_DEG) {
         return MAL_GIMBAL_ERR_LIMIT;
     }
 
@@ -338,17 +336,18 @@ mal_gimbal_err_t mal_gimbal_set_target(const mal_gimbal_pos_t *target)
     return MAL_GIMBAL_OK;
 }
 
-mal_gimbal_err_t mal_gimbal_update(float dt_s)
-{
+mal_gimbal_err_t mal_gimbal_update(float dt_s) {
     /* Read current encoder positions. */
     uint16_t raw = 0U;
 
-    if (tca9548a_select(MAL_ENC_PAN_MUX_CHAN) != 0 || as5600_read_angle(&raw) != 0) {
+    if (tca9548a_select(MAL_ENC_PAN_MUX_CHAN) != 0 ||
+        as5600_read_angle(&raw) != 0) {
         return MAL_GIMBAL_ERR_ENCODER;
     }
     s_current_pos.pan_deg = counts_to_deg(raw, s_pan_zero_counts);
 
-    if (tca9548a_select(MAL_ENC_TILT_MUX_CHAN) != 0 || as5600_read_angle(&raw) != 0) {
+    if (tca9548a_select(MAL_ENC_TILT_MUX_CHAN) != 0 ||
+        as5600_read_angle(&raw) != 0) {
         return MAL_GIMBAL_ERR_ENCODER;
     }
     s_current_pos.tilt_deg = counts_to_deg(raw, s_tilt_zero_counts);
@@ -356,21 +355,21 @@ mal_gimbal_err_t mal_gimbal_update(float dt_s)
     /* Apply rate-limited step toward target. */
     float max_step = MAL_GIMBAL_MAX_SLEW_DPS * dt_s;
 
-    float pan_err  = s_target_pos.pan_deg  - s_current_pos.pan_deg;
+    float pan_err = s_target_pos.pan_deg - s_current_pos.pan_deg;
     float tilt_err = s_target_pos.tilt_deg - s_current_pos.tilt_deg;
 
-    float pan_step  = clampf(pan_err,  -max_step, max_step);
+    float pan_step = clampf(pan_err, -max_step, max_step);
     float tilt_step = clampf(tilt_err, -max_step, max_step);
 
-    float new_pan  = s_current_pos.pan_deg  + pan_step;
+    float new_pan = s_current_pos.pan_deg + pan_step;
     float new_tilt = s_current_pos.tilt_deg + tilt_step;
 
     /* Convert commanded angles to servo duty cycles and write PWM. */
     /* Pan: map [-170, +170] degrees → [1000, 2000] µs via mid = 1500 µs. */
-    float pan_servo_deg  = 90.0f + (new_pan  / MAL_GIMBAL_PAN_MAX_DEG  * 85.0f);
-    float tilt_servo_deg = 90.0f - (new_tilt / MAL_GIMBAL_TILT_UP_DEG  * 85.0f);
+    float pan_servo_deg = 90.0f + (new_pan / MAL_GIMBAL_PAN_MAX_DEG * 85.0f);
+    float tilt_servo_deg = 90.0f - (new_tilt / MAL_GIMBAL_TILT_UP_DEG * 85.0f);
 
-    uint32_t pan_duty  = angle_to_duty_ns(pan_servo_deg);
+    uint32_t pan_duty = angle_to_duty_ns(pan_servo_deg);
     uint32_t tilt_duty = angle_to_duty_ns(tilt_servo_deg);
 
     if (pan_duty != s_pan_duty_ns) {
@@ -390,8 +389,7 @@ mal_gimbal_err_t mal_gimbal_update(float dt_s)
     return MAL_GIMBAL_OK;
 }
 
-mal_gimbal_err_t mal_gimbal_get_position(mal_gimbal_pos_t *pos)
-{
+mal_gimbal_err_t mal_gimbal_get_position(mal_gimbal_pos_t *pos) {
     if (pos == NULL) {
         return MAL_GIMBAL_ERR_ENCODER;
     }
@@ -399,15 +397,17 @@ mal_gimbal_err_t mal_gimbal_get_position(mal_gimbal_pos_t *pos)
     return MAL_GIMBAL_OK;
 }
 
-void mal_gimbal_get_target(mal_gimbal_pos_t *target)
-{
+void mal_gimbal_get_target(mal_gimbal_pos_t *target) {
     if (target != NULL) {
         *target = s_target_pos;
     }
 }
 
-int mal_gimbal_is_on_target(void)
-{
-    return (fabsf(s_target_pos.pan_deg  - s_current_pos.pan_deg)  < ON_TARGET_DEG
-         && fabsf(s_target_pos.tilt_deg - s_current_pos.tilt_deg) < ON_TARGET_DEG) ? 1 : 0;
+int mal_gimbal_is_on_target(void) {
+    return (fabsf(s_target_pos.pan_deg - s_current_pos.pan_deg) <
+                ON_TARGET_DEG &&
+            fabsf(s_target_pos.tilt_deg - s_current_pos.tilt_deg) <
+                ON_TARGET_DEG)
+               ? 1
+               : 0;
 }
