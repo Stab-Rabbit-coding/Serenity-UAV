@@ -499,7 +499,6 @@ def assemble():
 
     for side in ("port", "stbd"):
         label = "Port" if side == "port" else "Stbd"
-        pylon = PYLON_SIDE[side]
 
         # ── EDF1/EDF2 inter-stage stator sleeve ──────────────────────────
         # edf_stator_sleeve.scad: part-local frame is coaxial with the
