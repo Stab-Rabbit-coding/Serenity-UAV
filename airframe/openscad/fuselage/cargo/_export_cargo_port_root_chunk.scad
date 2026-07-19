@@ -6,5 +6,5 @@
 // build artifact.  Cargo STL is already hull-frame baked → import directly.
 intersection() {
     import("../../../stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl", convexity = 6);
-    translate([-150, -20, 35]) cube([90, 70, 65]);   // X −150..−60, Y −20..50, Z 35..100
+    translate([-150, 0, 35]) cube([90, 100, 65]);   // X −150..−60, Y 0..100, Z 20..100
 }

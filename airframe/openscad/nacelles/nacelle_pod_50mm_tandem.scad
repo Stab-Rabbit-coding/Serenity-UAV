@@ -724,6 +724,35 @@ module spar_duct_wall_bosses() {
 
 
 // =============================================================================
+// ── Inboard-face boss cleanup (Rev R2, 2026-07-18) ────────────────────────────
+// =============================================================================
+// The canonical (Thingiverse-derived) shell carries a vestigial rectangular
+// boss + socket on the PYLON (inboard) X-face just below the pivot — an artifact
+// of no functional use.  Smooth it into the surrounding nacelle OML: the FILL
+// closes the socket up to the natural face contour, the SHAVE removes the proud
+// boss beyond it.  Boss measured at X-sign = PYLON_SIDE, Y +6..+30, Z +87..+101,
+// ~7 mm proud (docs/TILT_SPAR_ANALYSIS boss note; verified on the pivot slab).
+// BOSS_CONTOUR = measured natural |X|-face height vs Y, from clean Z rows.
+BOSS_CONTOUR = [[37, 6], [36.5, 8], [36, 10], [35, 13], [33.4, 15], [32, 18],
+                [30.2, 20], [28, 23], [26.2, 25], [24, 27], [22, 29], [20.5, 30]];
+BOSS_Z_LO = 83.0;   // [mm] cutter lower Z
+BOSS_Z_H  = 24.0;   // [mm] cutter Z span (covers Z 83..107)
+
+module smooth_boss_fill() {   // union: solid 25..contour (Y6..25) — closes the socket
+    fc = [[25, 6], [37, 6], [36.5, 8], [36, 10], [35, 13], [33.4, 15], [32, 18],
+          [30.2, 20], [28, 23], [26.2, 25], [25, 25]];
+    scale([PYLON_SIDE, 1, 1])
+        translate([0, 0, BOSS_Z_LO]) linear_extrude(BOSS_Z_H) polygon(fc);
+}
+
+module smooth_boss_shave() {  // difference: remove material beyond the contour
+    scale([PYLON_SIDE, 1, 1])
+        translate([0, 0, BOSS_Z_LO]) linear_extrude(BOSS_Z_H)
+            polygon(concat(BOSS_CONTOUR, [[50, 30], [50, 6]]));
+}
+
+
+// =============================================================================
 // ── Module: pinion_a_boss ────────────────────────────────────────────────────
 // =============================================================================
 // MR63ZZ bearing boss for Drive Pinion A.  Cylinder along X at
@@ -953,6 +982,9 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
                 // ── Duct-wall reinforcing collars at the spar breach ─────
                 spar_duct_wall_bosses();
 
+                // ── Fill the vestigial inboard-face socket (Rev R2) ──────
+                smooth_boss_fill();
+
                 // ── Drive Pinion A bearing boss (MR63ZZ, at PIVOT_Z) ─────
                 pinion_a_boss();
 
@@ -1006,6 +1038,9 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
 
             // ── Nav-light emitter recess + through-wall wire bore (outboard)
             nav_light_pocket(pylon_side = PYLON_SIDE);
+
+            // ── Shave the vestigial inboard-face boss (Rev R2) ───────────
+            smooth_boss_shave();
 
             // ── Rotating 8 mm spar through-bore (along X, Rev R2) ─────────
             // Spans both X faces + hub protrusions + margin for clean exits.

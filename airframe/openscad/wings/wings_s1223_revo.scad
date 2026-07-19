@@ -622,26 +622,15 @@ module wing_tip_bearing_seat() {
 
 
 // =============================================================================
-// ── Module: wing_tip_fixed_gear_inserts ───────────────────────────────────────
+// ── Module: wing_tip_fixed_gear_inserts — SUPERSEDED (Rev R2b, 2026-07-19) ─────
 // =============================================================================
-// Three M2.5 heat-set insert pockets on the pad face for bolting the FIXED R14
-// sector gear coaxial with the spar. 120° spacing on FIX_GEAR_BC_R (outside the
-// 18 mm bearing flange, inside the 13 mm gear root). Pockets are bored spanwise
-// (−Z) into the pad from the nacelle-facing face.
-module wing_tip_fixed_gear_inserts() {
-    spar_x = WING_SWEEP_LE + SPAR_BORE_STATION;
-    spar_y = spar_tip_y();
-    face_z = WING_SEMI_SPAN + TIP_PAD_PROUD;
-
-    for (angle = [0, 120, 240]) {
-        y_off = FIX_GEAR_BC_R * cos(angle);
-        x_off = FIX_GEAR_BC_R * sin(angle);
-        translate([spar_x + x_off, spar_y + y_off, face_z - FIX_GEAR_INSERT_L])
-            cylinder(r = FIX_GEAR_INSERT_OD / 2,
-                     h = FIX_GEAR_INSERT_L + 0.1,
-                     $fn = 18);
-    }
-}
+// SUPERSEDED and NO LONGER CALLED.  The tilt→nozzle GEAR train (fixed sector +
+// nacelle Pinion A) was archived when the nozzle drive became Option B pushrod /
+// bellcrank (nacelle_nozzle_pushrod.scad, pod Rev T/T2): the nozzle is now
+// stroked by a crank on the ROTATING spar inside the nacelle, so there is no
+// fixed gear on the wing tip.  The wing tip keeps only the bearing seat (the
+// spar rotates in it).  Body emptied; retained as a marker for traceability.
+module wing_tip_fixed_gear_inserts() { }
 
 
 // =============================================================================
@@ -696,8 +685,8 @@ module wing_one_side() {
         // ── Wingtip bearing seat (F688ZZ 8×16×5, press-fit) ──────────────
         wing_tip_bearing_seat();
 
-        // ── Fixed R14 sector-gear insert pockets (3× M2.5, at tip face) ──
-        wing_tip_fixed_gear_inserts();
+        // (Fixed sector-gear inserts removed Rev R2b — gear train archived;
+        //  nozzle now pushrod-driven from the rotating spar.  No wing gear.)
 
         // ── Harness cableway (2× Ø7 conduits for EDF power + signal) ──────
         cableway_bore();
