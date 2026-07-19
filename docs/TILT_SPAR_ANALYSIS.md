@@ -21,8 +21,8 @@ SCAD is reworked.
 - **Servo in the cargo bay** rotates the spar → tilts the nacelle. The spar *is*
   the drive shaft (no external pushrod/lever).
 - **Two bearings** carry wing/spar loads and allow rotation:
-  - **Root bearing** — inside the cargo bay (spar ↔ fuselage).
-  - **Wingtip bearing** — at the wingtip/nacelle joint (spar ↔ fixed wing).
+    - **Root bearing** — inside the cargo bay (spar ↔ fuselage).
+    - **Wingtip bearing** — at the wingtip/nacelle joint (spar ↔ fixed wing).
 - **Nozzle sync gear** is fixed to the **non-rotating wingtip**, coaxial with the
   spar. The nacelle's nozzle-drive pinion orbits this fixed gear as the nacelle
   tilts → nozzle iris tracks tilt angle. (Fixed gear shrunk to pitch R ≈ 14 mm
@@ -56,6 +56,7 @@ through a keyed joint — steel keys/pins reliably (CF pultrusion delaminates at
 keyway); the 5 mm bore carries the nav-light harness (§5).
 
 **Section properties (8 mm OD, 5 mm ID):**
+
 - I = π(D⁴−d⁴)/64 = π(8⁴−5⁴)/64 = **170 mm⁴**
 - Bending modulus Z = I/c = 170/4 = **42.6 mm³**
 - Polar J = 2I = 341 mm⁴; torsion modulus Zp = J/c = **85.2 mm³**
@@ -224,6 +225,7 @@ Current `wings_s1223_revo.scad` wingtip block is wrong for this mechanism:
 | Root end | Not modeled | **Root bearing seat** in cargo-bay wall + servo horn coupling |
 
 Dependencies opened by adopting 8 mm:
+
 1. `nacelle_pod_50mm_tandem.scad` — stator re-index (2 fins on spar axis + tunnel);
    inboard/outboard duct-wall spar bosses; nacelle keyed to spar at CG.
 2. `nacelle_pod…scad` — Drive-Pinion-A regear to R14 sector; nozzle ratio re-verify.

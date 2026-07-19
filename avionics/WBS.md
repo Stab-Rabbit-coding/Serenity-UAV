@@ -16,8 +16,8 @@
 ---
 
 ## §1.2 — PCB Design: Cape-A-1 and Cape-B-1 (archived)
-*(root `WBS.md` §1.2)*
 
+*(root `WBS.md` §1.2)*
 
 - [x] **Regenerate Cape-A-1 gerbers** — `.kicad_pcb` modified 2026-05-23 (tamper-mesh commit); gerbers in `serenity/kicad/gerbers/CAPE-A-1/` are from 2026-05-22.
     - Open in KiCad → Plot → Gerbers; overwrite files in `serenity/kicad/gerbers/CAPE-A-1/`; re-export drill files.
@@ -29,12 +29,11 @@
 
 ---
 
-
 ## §1.2a — PCB Design: Wash, Zoe, Emma (EMI-Hardened Variants)
+
 *(root `WBS.md` §1.2a)*
 
-
-#### ***EM hardening Objective is to ensure safe and controlled operations in hostile em/rf environments such as the vicinity of radiating commercial broadcast, amateur radio and cellular towers.***
+### ***EM hardening Objective is to ensure safe and controlled operations in hostile em/rf environments such as the vicinity of radiating commercial broadcast, amateur radio and cellular towers.***
 
 Design files on branch `claude/cape-em-harsh-variants-9Yfr1`. Schematics (`*.kicad_sch`) and PCB
 layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been generated or DRC-verified.
@@ -226,8 +225,8 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 ---
 
-
 ### Wash footprint verification and schematic-first rebuild (2026-07-13/14)
+
 - [ ] **Wash footprint-vs-datasheet verification — DONE 2026-07-13 (Claude Opus 4.8);
     7 footprints are NOT manufacturable, must be rebuilt before fab.** Full report:
     `avionics/kicad/Wash/WASH_FOOTPRINT_VERIFICATION.md`. Fixing any of these remaps
@@ -306,8 +305,8 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
         per-domain tamper-mesh rework (§1.2, "Redesign the tamper mesh").
 
 ## §1.8 — Names
-*(root `WBS.md` §1.8)*
 
+*(root `WBS.md` §1.8)*
 
 - [x] The ground control station is named "Malcolm" aka "CAPT Reynolds" or "CAPT Tight Pants" - "I aim to misbehave" *(implemented throughout all docs)*
 
@@ -327,10 +326,9 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 - [x] The aft avionics bay is named "Simon's medbay" (Bay E) - "What did they do to you?" *(implemented 2026-06-07)*
 
-
 ## §1.9 — Avionics Workload Balancing
-*(root `WBS.md` §1.9)*
 
+*(root `WBS.md` §1.9)*
 
 - While all Wash capes are identical and all Zoë capes are also identical, they have different primary tasking.  **All Stacks are capable to communicate and control the UAV safety in a benign environment on their own.***
 
@@ -358,10 +356,9 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 ---
 
-
 ## Procurement — §2.4, §2.5 (Avionics BOM tables)
-*(root `TODO.md` §2.4-§2.5)*
 
+*(root `TODO.md` §2.4-§2.5)*
 
 *Rev R: all nodes use v2 EMI-hardened capes. Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 are retired.*
 
@@ -377,8 +374,6 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 | USB-UART adapter (CP2102) | 1× | ~$8 | ~$8 | Debug console (one-time tool) |
 | 3M double-sided foam tape | 1× | ~$5 | ~$5 | ESC and node mounting |
 | Zip ties 100mm + 200mm | 1 bag | ~$4 | ~$4 | Wire management |
-
-
 
 *Rev Q: all Phase 7 nodes also use v2 EMI-hardened capes.*
 
@@ -396,4 +391,3 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 | 5mm PMMA disc 0.5mm thick | 12× | ~$6 | ToF aperture covers |
 | UV adhesive | 1× | ~$6 | ToF aperture seal |
 | JST-GH cables (remaining bus segments) | assorted | ~$20 | Ring completion |
-
