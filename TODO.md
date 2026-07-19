@@ -15,12 +15,14 @@
 ---
 
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
+
 → detail: `airframe/WBS.md` §1.1.0
 
 - [ ] Re-verify head↔cargo joint bosses in hull Y.
 - [ ] Hull-frame placements for VERIFY parts
 
 #### 1.1.1 — Fuselage
+
 → detail: `airframe/fuselage-joints/WBS.md` §1.1.1 (1/3)
 
 - [ ] User FreeCAD fine-tune (fractional mm):
@@ -31,11 +33,13 @@
 - [ ] Deprecate SCAD fuselage shell files
 
 #### 1.1.1 — Fuselage (continued)
+
 → detail: `airframe/fuselage-covers/WBS.md` §1.1.1 (2/3)
 
 - [ ] MESH-01 add_structural_features.py boolean cuts left non-wate…
 
 #### 1.1.1 — Fuselage (continued)
+
 → detail: `airframe/fuselage-mid/WBS.md` §1.1.1 (3/3)
 
 - [ ] head_shell24.stl
@@ -61,6 +65,7 @@
 - [ ] Mount ant-collision steady white tail light on upper pod of rea…
 
 #### 1.1.2 — Wings
+
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.2
 
 - [ ] wing_nacelle_pylon_revo.stl
@@ -68,11 +73,13 @@
 - [ ] [OPEN — BLOCKER] Fuselage spar-interface now mismatched.
 
 #### 1.1.3 — Nacelles
+
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.3
 
 - [ ] [OPEN — DESIGN] Nozzle drive protrudes ~10 mm past the nacelle…
 
 #### 1.1.4 — Landing Gear
+
 → detail: `airframe/landing-gear/WBS.md` §1.1.4
 
 - [ ] LG-12 Model the post per the §4.6 dimensions
@@ -95,6 +102,7 @@
 - [ ] Exploded view SVG — full build
 
 #### 1.1.5 — Non-Printable Component Placeholders
+
 → detail: `airframe/WBS.md` §1.1.5
 
 - [ ] Rear skid reinforcement — SCAD update (TWO files)
@@ -106,6 +114,7 @@
 - [ ] Link placeholders to BOM entries
 
 ### 1.2b — PCB Redesigns: Emma Rev S1 / Zoe Rev S1 / Kaylee Rev S1
+
 → detail: `avionics/rev-s1/WBS.md` §1.2b
 
 - [ ] Emma Rev S1 — add LoRa, replace JST with P1+P2 socket rails
@@ -113,6 +122,7 @@
 - [ ] Kaylee Rev S1 — remove 6 V BEC, add 5 V servo output
 
 ### 1.2c — PCB Design: Jayne (Nose/Cargo-Bay Vision, ToF & Laser)
+
 → detail: `avionics/jayne/WBS.md` §1.2c
 
 - [ ] FLEET-WIDE ISOW1044BDFMR footprint audit (flight-hardware error…
@@ -131,6 +141,7 @@
 - [ ] Do not source
 
 ### 1.2a — PCB Design: Wash, Zoe, and Emma (EMI-Hardened Variants)
+
 → detail: `avionics/WBS.md` §1.2a
 
 - [ ] Reconcile Wash.md §14 field-connector table with the actual P…
@@ -152,6 +163,7 @@
 - [ ] Specify / implement tightly twisted pair bonded shielded wiring…
 
 ### 1.4 — EMI Hardening Beyond the PCBs (500 W/m^2 environment)
+
 → detail: `avionics/emi-hardening/WBS.md` §1.4
 
 - [ ] PB2-I + Wash Enclosure
@@ -171,6 +183,7 @@
 - [ ] Update REVN_BUILD_GUIDE_24IN.md Phase 1
 
 ### 1.5 — Documentation
+
 → detail: `docs/WBS.md` §1.5
 
 - [ ] Update PHASED_BUILD_GUIDE.md
@@ -178,6 +191,7 @@
 - [ ] Sync bom_revO.json ↔ bom_revO.csv
 
 ### Phase0 — Print All Parts + CF Cuts
+
 → detail: `graphical-build-guide/WBS.md` §Phase0
 
 - [ ] Install hardened-steel nozzle (CF-PETG abrades brass)
@@ -194,6 +208,7 @@
 - [ ] Rear neck shell scoop windows covered with removable 3mm PETG b…
 
 ### Phase1 — Hull Structure + All Future Provisions
+
 → detail: `graphical-build-guide/WBS.md` §Phase1
 
 - [ ] Epoxy keel through all hull sections; cure 2h. Datum marks at 9…
@@ -221,6 +236,7 @@
 - [ ] All 6 access panel lids flush ±0.2 mm; latches/magnets engage
 
 ### Phase2 — Nacelle Assembly
+
 → detail: `graphical-build-guide/WBS.md` §Phase2
 
 - [ ] Test EDF rotation direction on bench before installation: port…
@@ -248,6 +264,7 @@
 - [ ] Petal closed: hull-match at 0°; petal open: all 8 even at 90°
 
 ### Phase3 — Tilt Mechanism
+
 → detail: `graphical-build-guide/WBS.md` §Phase3
 
 - [ ] Press MF104ZZ bearings into pivot housing bores (both ends); fl…
@@ -264,6 +281,7 @@
 - [ ] Both nacelles synchronise to within 2° at 0° and 90°
 
 ### Phase4 — Hull Foam Pour + Close-up
+
 → detail: `graphical-build-guide/WBS.md` §Phase4
 
 - [ ] All PTFE conduits routed — pull strings accessible at both ends
@@ -279,6 +297,7 @@
 - [ ] Install all 6 access panel lids; verify flush fit.
 
 ### Phase5 — Minimum Viable Flyer ★ FIRST FLIGHT
+
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase5
 
 - [ ] Mount XT90 PDB at keel sta 130mm; solder 14AWG main leads to ES…
@@ -344,6 +363,7 @@
 - [ ] Flight log on both CN μSDs; CPLD write-block verified
 
 ### Phase6 — Full 8-Node Architecture + ToF Obstacle Avoidance
+
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase6
 
 - [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Wash in Inara's s…
@@ -383,6 +403,7 @@
 - [ ] 3-waypoint autonomous mission with GPS, altitude hold, RTL on s…
 
 ### Phase7 — Cargo System
+
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase7
 
 - [ ] Bond cargo gondola shell into belly void at 4× M3 hard points (…
@@ -401,6 +422,7 @@
 - [ ] Autonomous delivery: 3-waypoint mission, deploy at waypoint 2,…
 
 ### Phase8 — Finishing
+
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase8
 
 - [ ] Replace FAA N00000 placeholder in serenity/diagrams/decal_sheet…
@@ -411,6 +433,7 @@
 - [ ] FAA compliance final check: registration visible without moving…
 
 ### Phase9 — Performance Tuning and Flight Envelope Expansion
+
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase9
 
 - [ ] Thrust stand calibration
@@ -426,6 +449,7 @@
 - [ ] Logs on all 4 CN nodes; write-block verified
 
 ### Phase10 — Advanced Autonomy and Long-Range Operations
+
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase10
 
 - [ ] BVLOS communication validation
@@ -442,6 +466,7 @@
 - [ ] All regulatory documentation current and on file
 
 ### Phase11 — Aft EDF Integration (Deferred)
+
 → detail: `deferred/WBS.md` §Phase11
 
 - [ ] Scoop windows must be re-sized for the 55 mm EDF (reduced area).
@@ -488,6 +513,7 @@
 - [ ] All 5 ESC telemetry visible on CAN FD; ESC temps ≤70°C at cruis…
 
 ### Phase12 — Cargo-bay Range-Extender Battery Module (Deferred)
+
 → detail: `deferred/WBS.md` §Phase12
 
 - [ ] RBM module:
@@ -498,6 +524,7 @@
 - [ ] CAD:
 
 ### 4.2 — FC Node (Wash) - Phase 7 Firmware
+
 → detail: `avionics/firmware/WBS.md` §4.2
 
 - [ ] EDF ESC PID governor
@@ -509,6 +536,7 @@
 - [ ] TPM-bound attestation
 
 ### 4.3 — CN Node (Zoe) - Phase 7 Firmware
+
 → detail: `avionics/firmware/WBS.md` §4.3
 
 - [ ] CAN FD heartbeat and telemetry forwarding
@@ -521,6 +549,7 @@
 - [ ] MAVLink routing configuration
 
 ### 4.4 — Both Nodes
+
 → detail: `avionics/firmware/WBS.md` §4.4
 
 - [ ] Node role election protocol
@@ -530,6 +559,7 @@
 - [ ] Security message signing
 
 #### 4.5.1 — Malcolm Hardware Design
+
 → detail: `gcs/WBS.md` §4.5.1
 
 - [ ] Create Malcolm host computer specification
@@ -541,6 +571,7 @@
 - [ ] Procure gimbal hardware:
 
 #### 4.5.2 — Malcolm Comms Node Setup (Phase Malcolm-2)
+
 → detail: `gcs/WBS.md` §4.5.2
 
 - [ ] Flash Debian Linux to Malcolm PB2-I eMMC
@@ -553,6 +584,7 @@
 - [ ] Configure Wi-Fi transmit power
 
 #### 4.5.3 — Malcolm Host PC Software Setup (Phase Malcolm-3)
+
 → detail: `gcs/WBS.md` §4.5.3
 
 - [ ] Install Debian Linux on GCS host PC
@@ -563,6 +595,7 @@
 - [ ] Implement gcs/malcolm/firmware/pb2i/src/mal_comms.c and mal_com…
 
 #### 4.5.4 — Tracking and Gimbal Integration (Phase Malcolm-3)
+
 → detail: `gcs/WBS.md` §4.5.4
 
 - [ ] Bench test gimbal hardware
@@ -573,6 +606,7 @@
 - [ ] End-to-end tracking test (outdoor):
 
 #### 4.5.5 — Malcolm Integration Testing (Phase Malcolm-4)
+
 → detail: `gcs/WBS.md` §4.5.5
 
 - [ ] Multi-link communication bench test:
@@ -584,6 +618,7 @@
 - [ ] Node loss with Malcolm active:
 
 #### 4.6.1 — TI AM62Ax Vision Pipeline Bring-Up
+
 → detail: `avionics/jayne/WBS.md` §4.6.1
 
 - [ ] MIPI CSI-2 camera sensor bring-up
@@ -593,6 +628,7 @@
 - [ ] Bench test:
 
 #### 4.6.2 — TI MSPM0G3507 Control Firmware
+
 → detail: `avionics/jayne/WBS.md` §4.6.2
 
 - [ ] MCAN (CAN-FD) driver bring-up
@@ -604,6 +640,7 @@
 - [ ] Signed telemetry:
 
 #### 4.6.3 — Integration Testing
+
 → detail: `avionics/jayne/WBS.md` §4.6.3
 
 - [ ] Bench test:
@@ -611,11 +648,13 @@
 - [ ] Laser safety interlock test (nose only):
 
 ### 5.1 — FCC (external radio systems)
+
 → detail: `docs/WBS.md` §5.1
 
 - [ ] XCVR-49MHZ-1/2 FCC Part 15 §15.235 compliance
 
 ### 5.2 — FAA (airworthiness and operations)
+
 → detail: `docs/WBS.md` §5.2
 
 - [ ] Aircraft registration
@@ -626,6 +665,7 @@
 - [ ] Airspace waiver (if applicable)
 
 ### 5.3 — Industry Standards Compliance
+
 → detail: `docs/WBS.md` §5.3
 
 - [ ] Structural validation
@@ -633,6 +673,7 @@
 - [ ] Tamper-evident logging
 
 ### 6.1 — Branch Reconciliation (2026-06-09)
+
 → detail: `docs/WBS.md` §6.1
 
 - [ ] Delete stale feature branches

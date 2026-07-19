@@ -359,13 +359,26 @@ SWIRL_DIR       =  +1;    // [+1 / -1] default port nacelle CW from intake
 // bore-symmetric assembly.
 PIVOT_Z         = 104.5;   // [mm] pivot axial centre = full-assembly CG station
 
-// MF104ZZ flanged bearing: ID=4mm, OD=10mm, width=4mm.
-PIVOT_BORE_D    =   4.2;   // [mm] pivot rod clearance bore (4mm CF rod + 0.2mm)
-PIVOT_BEAR_OD   =  10.0;   // [mm] MF104ZZ bearing OD (press-fit)
-PIVOT_BOSS_DEPTH =   5.0;  // [mm] boss protrusion depth beyond nacelle X-face
-CLEVIS_EAR_T    =   5.0;   // [mm] retained for compatibility
-CLEVIS_SLOT_W   =  16.0;   // [mm] gap between nacelle X faces
-CLEVIS_EAR_OD   =  16.0;   // [mm] boss cylinder OD
+// ── Rotating 8 mm tilt-spar interface (Rev R2, 2026-07-18) ─────────────────────
+// SUPERSEDES the MF104ZZ 4 mm fixed-rod pivot.  The 8 mm spar (AISI 4130,
+// hollow 5 mm ID) is FIXED (keyed) to the nacelle at the CG and ROTATES with it,
+// driven by the cargo-bay servo; the tilt bearings live at the wing root (cargo
+// bay) and the wingtip, NOT in the nacelle.  So the nacelle needs a KEYED hub
+// (inboard) + a plain support hub (outboard) + reinforcing collars where the
+// bore breaches the two duct walls, and a full-width through-bore.  The nav
+// 3-core routes through the hollow spar to the outboard nav light.
+// See docs/TILT_SPAR_ANALYSIS.md.
+SPAR_OD         =   8.0;   // [mm] rotating spar OD
+SPAR_BORE_D     =   8.15;  // [mm] through-bore (clearance; spar fixed only at keyed hub)
+SPAR_HUB_OD     =  16.0;   // [mm] keyed/support hub OD (matches old boss OD)
+SPAR_HUB_PROUD  =   4.0;   // [mm] hub protrusion beyond the X-face skin
+SPAR_HUB_EMBED  =   4.0;   // [mm] hub root buried inside shell wall (overlap margin)
+SPAR_KEY_FLAT   =   0.8;   // [mm] D-flat depth at the inboard keyed hub (rotational lock)
+SPAR_WALLBOSS_OD =  15.0;  // [mm] duct-wall reinforcing collar OD
+SPAR_WALLBOSS_L  =   6.0;  // [mm] duct-wall collar length (straddles the bore breach)
+// Legacy names retained where still referenced downstream (nav channel etc.):
+PIVOT_BOSS_DEPTH =  SPAR_HUB_PROUD; // [mm] kept for nav_channel Z reference
+CLEVIS_EAR_OD   =  16.0;   // [mm] retained for compatibility (nav rib sizing)
 
 // ── Gear mount features ───────────────────────────────────────────────────────
 // Module M=1.0, pressure angle 20°.
@@ -648,62 +661,57 @@ module bore_key_slots() {
 
 
 // =============================================================================
-// ── Module: pivot_x_face_boss ────────────────────────────────────────────────
+// ── Module: pivot_x_face_boss  (Rev R2 — keyed 8 mm spar hubs) ────────────────
 // =============================================================================
-// Two MF104ZZ bearing boss cylinders on the nacelle X-faces at PIVOT_Z, Y=0.
+// SOLID (bored separately) keyed hubs on the nacelle X-faces at PIVOT_Z, Y=0,
+// for the rotating 8 mm spar that is FIXED to the nacelle (replaces the two
+// MF104ZZ bearing bosses).  Inboard (+X, pylon side) is the KEYED hub (the spar
+// D-flat locks rotation here); outboard (−X, far side) is a plain support hub
+// the spar/nav-wire exits through.  The 8 mm through-bore and the inboard D-flat
+// are SUBTRACTED in the main assembly (Zone B), so these are additive solids.
 //
-// The Serenity nacelle is not a symmetric ellipse; the two X-face positions
-// differ:
-//   +X (pylon side)  ≈ NACELLE_FACE_X_PYLON = 34 mm from bore centre
-//   -X (far side)    ≈ NACELLE_FACE_X_FAR   = 38 mm from bore centre
-// An embed=3mm root inset guarantees the boss cylinder root overlaps with the
-// nacelle shell wall (2.5 mm thick) on both sides, ensuring a solid boolean
-// union regardless of the asymmetry.
-//
-// boss_wall + embed is the total cylinder length; the external protrusion is
-// PIVOT_BOSS_DEPTH = 5 mm beyond the nacelle outer face.
+// Face asymmetry (measured from the true shell slab, 2026-07-18):
+//   +X pylon face ≈ 37.1 mm, −X far face ≈ 37.7 mm.  SPAR_HUB_EMBED (4 mm) buries
+// the hub root well inside the wall on both sides, so the union is solid despite
+// the pod's approximate NACELLE_FACE_X_* constants (34/38).
 module pivot_x_face_boss() {
-    boss_od   = PIVOT_BEAR_OD + 6.0;  // 16 mm OD: 10 mm bearing + 2 × 3 mm wall
-    boss_wall = PIVOT_BOSS_DEPTH;      // 5 mm external protrusion
-    embed     = 3.0;                   // 3 mm root buried inside nacelle shell wall
-
     for (sign = [-1, +1]) {
-        // Actual shell face distance from bore centre for this side.
-        // sign > 0: pylon face (narrower); sign < 0: far face (wider).
         face_dist = (sign > 0) ? NACELLE_FACE_X_PYLON : NACELLE_FACE_X_FAR;
 
-        // ── Boss cylinder ─────────────────────────────────────────────────────
-        translate([sign * (face_dist - embed), 0, PIVOT_Z])
+        // ── Solid keyed/support hub cylinder (bored later in Zone B) ─────────
+        translate([sign * (face_dist - SPAR_HUB_EMBED), 0, PIVOT_Z])
         rotate([0, sign * 90, 0])
-            difference() {
-                cylinder(r = boss_od / 2,
-                        h = boss_wall + embed,
-                        center = false);
-                cylinder(r = PIVOT_BEAR_OD / 2,
-                        h = boss_wall + embed + 0.02,
-                        center = false);
-            }
+            cylinder(r = SPAR_HUB_OD / 2,
+                    h = SPAR_HUB_EMBED + SPAR_HUB_PROUD,
+                    center = false);
 
-        // ── Load-spreading web (hull() avoids coplanar face issues) ───────────
+        // ── Load-spreading web onto the shell (hull avoids coplanar faces) ──
         hull() {
-            // Ring at boss root (shell-flush plane)
-            translate([sign * (face_dist - embed), 0, PIVOT_Z])
+            translate([sign * (face_dist - SPAR_HUB_EMBED), 0, PIVOT_Z])
             rotate([0, sign * 90, 0])
                 difference() {
-                    cylinder(r = boss_od / 2,
-                            h = 0.4,
-                            center = false);
-                    cylinder(r = boss_od / 2 - WALL_T,
-                            h = 0.41,
-                            center = false);
+                    cylinder(r = SPAR_HUB_OD / 2, h = 0.4, center = false);
+                    cylinder(r = SPAR_HUB_OD / 2 - WALL_T, h = 0.41, center = false);
                 }
-
-            // Flat disc anchoring web to nacelle outer face
-            translate([sign * (face_dist + embed), 0, PIVOT_Z])
+            translate([sign * (face_dist + SPAR_HUB_PROUD), 0, PIVOT_Z])
             rotate([0, sign * 90, 0])
-                cylinder(r = boss_od / 2, h = 0.4, center = false);
+                cylinder(r = SPAR_HUB_OD / 2, h = 0.4, center = false);
         }
     }
+}
+
+
+// =============================================================================
+// ── Module: spar_duct_wall_bosses  (Rev R2) ──────────────────────────────────
+// =============================================================================
+// Reinforcing collars where the 8 mm spar bore breaches the two duct walls
+// (bore inner radius EDF_BORE_R = 25 mm) at Y=0, PIVOT_Z.  Straddle the wall so
+// the airflow-duct penetration stays sealed and stiff.  Additive; bored in Zone B.
+module spar_duct_wall_bosses() {
+    for (sign = [-1, +1])
+        translate([sign * (EDF_BORE_R - SPAR_WALLBOSS_L / 2), 0, PIVOT_Z])
+        rotate([0, sign * 90, 0])
+            cylinder(r = SPAR_WALLBOSS_OD / 2, h = SPAR_WALLBOSS_L, center = false);
 }
 
 
@@ -931,8 +939,11 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
                 // (Intake bell-mouth is now SUBTRACTIVE — see Zone B,
                 //  inlet_bellmouth(); TODO §1.1.3.4.)
 
-                // ── CG-pivot X-face bosses (MF104ZZ, at PIVOT_Z, Y=0) ────
+                // ── CG-pivot keyed 8 mm spar hubs (at PIVOT_Z, Y=0) ──────
                 pivot_x_face_boss();
+
+                // ── Duct-wall reinforcing collars at the spar breach ─────
+                spar_duct_wall_bosses();
 
                 // ── Drive Pinion A bearing boss (MR63ZZ, at PIVOT_Z) ─────
                 pinion_a_boss();
@@ -988,17 +999,26 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
             // ── Nav-light emitter recess + through-wall wire bore (outboard)
             nav_light_pocket(pylon_side = PYLON_SIDE);
 
-            // ── Tilt spar clearance bore (4.2 mm dia, along X) ────────────
-            // Spans from −FAR_FACE to +PYLON_FACE plus both boss protrusions
-            // and a 4 mm margin to guarantee clean exit on both X faces.
+            // ── Rotating 8 mm spar through-bore (along X, Rev R2) ─────────
+            // Spans both X faces + hub protrusions + margin for clean exits.
             translate([0, 0, PIVOT_Z])
                 rotate([0, 90, 0])
                     cylinder(
-                        r      = PIVOT_BORE_D / 2,
+                        r      = SPAR_BORE_D / 2,
                         h      = NACELLE_FACE_X_PYLON + NACELLE_FACE_X_FAR
-                                + 2 * PIVOT_BOSS_DEPTH + 4,
+                                + 2 * SPAR_HUB_PROUD + 8,
                         center = true
                     );
+
+            // ── Inboard keyed D-flat (locks the fixed spar rotationally) ──
+            // Axis-aligned chord slab across the top of the bore, only over the
+            // inboard (+X pylon) keyed hub, so the spar's matching D-flat seats
+            // and the nacelle cannot rotate on the spar (they turn as one).
+            //   X: over the keyed-hub length; Y: full bore width; Z: top KEY_FLAT.
+            translate([NACELLE_FACE_X_PYLON - SPAR_HUB_EMBED,
+                       -6,
+                       PIVOT_Z + SPAR_BORE_D / 2 - SPAR_KEY_FLAT])
+                cube([SPAR_HUB_EMBED + SPAR_HUB_PROUD + 0.1, 12, SPAR_KEY_FLAT + 3]);
 
         } // end difference (Zone A + Zone B)
 

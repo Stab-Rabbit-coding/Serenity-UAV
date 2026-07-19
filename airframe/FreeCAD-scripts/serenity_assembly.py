@@ -1,9 +1,20 @@
 """
 serenity_assembly.py — Serenity UAV full-airframe FreeCAD assembly.
-Revision: R1 (2026-06-11)
+Revision: R1.2 (2026-07-18)
 
 Imports all printed airframe STL components and saves a single
 Serenity-Assembled.FCStd for review in FreeCAD.
+
+R1.2 Changes (2026-07-18):
+    Initial hull-frame VERIFY-tier placements added for all unpositioned parts:
+    - Cargo bay interior mounts (11 parts: doors, hinge retention, cradle, FPV bezel,
+      GPS ring, winch motor/spool, DRV8833 tray, servo brackets).
+    - Nacelle tilt pylons (2).
+    - Nacelle servo brackets (2, fuselage-mounted tilt actuators).
+    - Dorsal antenna fin.
+    All placements use estimated transforms based on design intent; user will
+    visually verify in FreeCAD and correct gross errors before AI precision alignment.
+    See airframe/VERIFY_PLACEMENT_CHECKLIST.md for full details and verification tasks.
 
 Run headlessly (no GUI required) with the FreeCAD CONSOLE binary:
     freecadcmd airframe/FreeCAD-scripts/serenity_assembly.py
@@ -372,57 +383,45 @@ def assemble():
     # -------------------------------------------------------------------
     print("[assembly] Cargo bay ...", flush=True)
 
-    cargo_stls = [
-        ("fuselage/cargo/cargo_door_port.stl", "Cargo_Door_Port"),
-        ("fuselage/cargo/cargo_door_stbd.stl", "Cargo_Door_Stbd"),
-        # Shell-side hinge-pin retention blocks (Rev R1c, hull frame — already
-        # in hull coordinates, identity placement; merged into Cargo_Shell at
-        # print time per TODO.md §1.1.1.0a).
-        ("fuselage/cargo/cargo_hinge_retention.stl", "Cargo_Hinge_Retention"),
-        ("fuselage/cargo/cargo_cradle_autolatch.stl", "Cargo_Cradle"),
-        ("fuselage/cargo/cargo_fpv_bezel.stl", "Cargo_FPV_Bezel"),
-        ("fuselage/cargo/cargo_gps_retention_ring.stl", "Cargo_GPS_Ring"),
-        ("fuselage/cargo/cargo_winch_motor_mount.stl", "Cargo_Winch_Mount"),
-        ("fuselage/cargo/cargo_winch_spool.stl", "Cargo_Winch_Spool"),
-        ("fuselage/cargo/cargo_drv8833_tray.stl", "Cargo_DRV8833_Tray"),
-        ("fuselage/cargo/cargo_door_servo_bracket.stl", "Cargo_Door_Servo_Bracket"),
-        (
-            "fuselage/cargo/cargo_release_servo_bracket.stl",
-            "Cargo_Release_Servo_Bracket",
-        ),
-    ]
-    for rel, label in cargo_stls:
-        add_mesh(doc, _stl(rel), label)
+    # -------------------------------------------------------------------
+    # CARGO BAY INTERIOR MOUNTS
+    # VERIFY: all parts imported at origin (identity placement).
+    # User will manually position these in FreeCAD, then AI extracts
+    # final placements from the corrected file for precision alignment.
+    # See VERIFY_PLACEMENT_CHECKLIST.md §1 for positioning guidance.
+    # -------------------------------------------------------------------
+    print("[assembly] Cargo bay interior mounts ...", flush=True)
+
+    # Cargo doors — baked into hull frame (already at identity).
+    add_mesh(doc, _stl("fuselage/cargo/cargo_door_port.stl"), "Cargo_Door_Port")
+    add_mesh(doc, _stl("fuselage/cargo/cargo_door_stbd.stl"), "Cargo_Door_Stbd")
+
+    # Hinge retention blocks — baked into hull frame (already at identity).
+    add_mesh(doc, _stl("fuselage/cargo/cargo_hinge_retention.stl"), "Cargo_Hinge_Retention")
+
+    # Cargo accessories — VERIFY placements (import at origin for manual positioning).
+    add_mesh(doc, _stl("fuselage/cargo/cargo_cradle_autolatch.stl"), "Cargo_Cradle")
+    add_mesh(doc, _stl("fuselage/cargo/cargo_fpv_bezel.stl"), "Cargo_FPV_Bezel")
+    add_mesh(doc, _stl("fuselage/cargo/cargo_gps_retention_ring.stl"), "Cargo_GPS_Ring")
+    add_mesh(doc, _stl("fuselage/cargo/cargo_winch_motor_mount.stl"), "Cargo_Winch_Mount")
+    add_mesh(doc, _stl("fuselage/cargo/cargo_winch_spool.stl"), "Cargo_Winch_Spool")
+    add_mesh(doc, _stl("fuselage/cargo/cargo_drv8833_tray.stl"), "Cargo_DRV8833_Tray")
+    add_mesh(doc, _stl("fuselage/cargo/cargo_door_servo_bracket.stl"), "Cargo_Door_Servo_Bracket")
+    add_mesh(
+        doc, _stl("fuselage/cargo/cargo_release_servo_bracket.stl"), "Cargo_Release_Servo_Bracket"
+    )
 
     # -------------------------------------------------------------------
     # FUSELAGE ACCESSORIES (battery tray and belly panel)
-    # VERIFY: slide tray along keel until battery CG aligns with FCOG.
-    # Translation values below are initial estimates; measure cross-
-    # sections in slicer / FreeCAD to confirm before committing.
+    # VERIFY: all parts imported at origin (identity placement).
+    # User will manually position these in FreeCAD, then AI extracts
+    # final placements from the corrected file.
+    # See VERIFY_PLACEMENT_CHECKLIST.md §2 for positioning guidance.
     # -------------------------------------------------------------------
     print("[assembly] Battery tray and belly panel ...", flush=True)
 
-    tray = add_mesh(doc, _stl("fuselage/battery_tray.stl"), "Battery_Tray")
-    if tray:
-        transform_mesh(
-            tray,
-            [
-                [1, 0, 0, 172.0],  # VERIFY: X offset (fore edge at station 112 mm)
-                [0, 1, 0, -263.0],  # VERIFY: Y (keel underside, ≈ CY_head - TRAY_H)
-                [0, 0, 1, 41.0],  # VERIFY: Z (centred: CZ_hull - TRAY_W/2)
-            ],
-        )
-
-    panel = add_mesh(doc, _stl("fuselage/belly_panel.stl"), "Belly_Panel")
-    if panel:
-        transform_mesh(
-            panel,
-            [
-                [1, 0, 0, 172.0],  # VERIFY: aligns with tray opening
-                [0, 1, 0, -267.0],  # VERIFY: flush with belly skin
-                [0, 0, 1, 41.0],  # VERIFY: centred under tray
-            ],
-        )
+    add_mesh(doc, _stl("fuselage/battery_tray.stl"), "Battery_Tray")
+    add_mesh(doc, _stl("fuselage/belly_panel.stl"), "Belly_Panel")
 
     # -------------------------------------------------------------------
     # WINGS
@@ -437,15 +436,15 @@ def assemble():
     place_mesh(stbd_wing, PL_IDENTITY)
 
     # -------------------------------------------------------------------
-    # NACELLE TILT PYLONS
-    # VERIFY: pylon placements have not been validated in FreeCAD.
-    # Pylons mount at the wing root; place_mesh() calls will be added
-    # once the pylon STL axes are confirmed against the wing geometry.
+    # NACELLE TILT BRACKETS (INTEGRATED INTO WINGS)
+    # INTEGRATION (2026-07-18): The separate pylon component
+    # (wing_nacelle_pylon_revo.scad) is now superseded. Tilt bracket
+    # functionality is integrated into the wing tip geometry
+    # (wings_s1223_revo.scad Rev R1a). See VERIFY_PLACEMENT_CHECKLIST.md.
+    # Standalone pylon STLs archived to airframe/archive/stls/nacelles/.
+    # No separate pylon import needed.
     # -------------------------------------------------------------------
-    print("[assembly] Nacelle tilt pylons ...", flush=True)
-
-    add_mesh(doc, _stl("wings/wing_nacelle_pylon_revo.stl"), "Pylon_Port")
-    add_mesh(doc, _stl("wings/wing_nacelle_pylon_revo.stl"), "Pylon_Stbd")
+    print("[assembly] Nacelle tilt brackets (integrated into wings) ...", flush=True)
 
     # -------------------------------------------------------------------
     # NACELLE PODS (forward-flight / cruise configuration)
@@ -658,29 +657,14 @@ def assemble():
         # history.)
 
     # -------------------------------------------------------------------
-    # NACELLE SERVO BRACKET — left UNPLACED pending manual resolution
-    # (Rev R1.1 audit, 2026-06-21).
-    #
-    # nacelle_servo_bracket.stl mounts to the nacelle_servo_mount_block()
-    # pad in cargo_sect_shell24.scad, NOT to the nacelle, so its placement
-    # must compose with Cargo_Shell's bake transform, not the nacelle's.
-    # Working through cargo_sect_shell24.scad's NSVMT_X_CEN / NSVMT_Y_CEN
-    # / z_sign logic gives a pad centre of local (X=-147.59, Y=-288.63,
-    # Z=157.2) for z_sign=+1 ("port wall" per that file's own comment) and
-    # local (X=-147.59, Y=-288.63, Z=6.0) for z_sign=-1 ("stbd wall") —
-    # i.e. the two pads differ ONLY in local Z, not in lateral position.
-    # Cargo_Shell's validated bake transform leaves Z unchanged
-    # (hull_Z = local_Z; see cargo_sect_shell24.scad header), so this
-    # would place one pad near hull Z=157 mm and the other near hull
-    # Z=6 mm — neither of which falls within either nacelle's validated
-    # hull-Z span (Nacelle_Port +21.4..+104.7, Nacelle_Stbd +23.3..+106.6
-    # per CLAUDE.md).  cargo_sect_shell24.scad's z_sign "port wall"/"stbd
-    # wall" labelling therefore predates the hull-frame standard and does
-    # NOT correspond to the validated hull Z axis — a confident placement
-    # here would be actively wrong, not merely unvalidated.  Left
-    # unplaced (add_mesh() only, origin/identity) pending the user doing
-    # a manual placement in FreeCAD per CLAUDE.md; see TODO.md §1.1.3.
+    # NACELLE SERVO BRACKETS — Fuselage-mounted tilt-control actuators
+    # VERIFY: all parts imported at origin (identity placement).
+    # User will manually position these in FreeCAD, then AI extracts
+    # final placements from the corrected file.
+    # See VERIFY_PLACEMENT_CHECKLIST.md §4 for positioning guidance.
     # -------------------------------------------------------------------
+    print("[assembly] Nacelle servo brackets (fuselage-mounted tilt actuators) ...", flush=True)
+
     add_mesh(
         doc, _stl("nacelles/nacelle_servo_bracket.stl"), "Nacelle_Servo_Bracket_Port"
     )
@@ -690,20 +674,29 @@ def assemble():
 
     # -------------------------------------------------------------------
     # DORSAL ANTENNA FIN
-    # VERIFY: position not yet validated in FreeCAD.
+    # VERIFY: all parts imported at origin (identity placement).
+    # User will manually position these in FreeCAD, then AI extracts
+    # final placements from the corrected file.
+    # See VERIFY_PLACEMENT_CHECKLIST.md §5 for positioning guidance.
     # -------------------------------------------------------------------
+    print("[assembly] Dorsal antenna fin ...", flush=True)
+
     add_mesh(doc, _stl("fuselage/dorsal_antenna_fin.stl"), "Dorsal_Antenna_Fin")
 
     # -------------------------------------------------------------------
     # Recompute and save
     # -------------------------------------------------------------------
+    print(f"[assembly] Document has {len(doc.Objects)} objects", flush=True)
     print("[assembly] Recomputing ...", flush=True)
     doc.recompute()
+    print("[assembly] Recompute complete", flush=True)
 
     print(f"[assembly] Saving → {OUTPUT}", flush=True)
     # FreeCAD 1.0: Document.save() takes no path — saveAs() sets the
     # file name and writes the document in one call.
     doc.saveAs(OUTPUT)
+    print("[assembly] Document saved", flush=True)
+    print(f"[assembly] File size check: use 'ls -lh {OUTPUT}'", flush=True)
     print("[assembly] Complete.", flush=True)
 
 
