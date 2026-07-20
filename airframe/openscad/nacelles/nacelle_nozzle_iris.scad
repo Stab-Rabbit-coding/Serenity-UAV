@@ -747,7 +747,12 @@ if (RENDER_PART == "throat") {
     for (i = [0 : N_FLAPS - 1]) {
         rotate([0, 0, i * 360 / N_FLAPS])
             translate([R_HINGE, 0, HINGE_Z])
-                rotate([0, PHI_CLOSED, 0])
+                // −PHI_CLOSED: the flap body extrudes +Z just inside R_HINGE, so a
+                // POSITIVE tilt throws the tips radially OUTWARD (diverging).  The
+                // closed nozzle must CONVERGE (exit_r = R_HINGE − FLAP_LENGTH·sin φ
+                // = 18.75 < 27.5), so the assembly tilt is −PHI_CLOSED.  (Sign-bug
+                // fix 2026-07-20; preview only — print parts are unaffected.)
+                rotate([0, -PHI_CLOSED, 0])
                     nozzle_flap();
     }
 }

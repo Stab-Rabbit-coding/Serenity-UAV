@@ -1,245 +1,226 @@
-# ENC-NACELLE-1 — Nacelle Tilt-Angle Encoder Board (MT6701, off-axis)
+# ENC-NACELLE-1 — Nacelle Tilt-Angle Encoder Board (AKM AK7455, off-axis)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**Rev R2e reconciliation drafted by:** Claude Opus 4.8 (2026-07-19)
+**Rev S reconciliation drafted by:** Claude Opus 4.8 (2026-07-19)
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
 **BOM designator:** `MAL-TILT-ENC-PCB` (`current-specification/bom_revS.csv`)
-**Revision:** R2e (2026-07-19) — reconciled to the rotating 8 mm tilt-spar mechanism
-**Status:** Design intent frozen; **schematic held at the verification gate** — MT6701
-pinout / I²C address / off-axis magnet geometry REQUIRE datasheet verification
-(REFERENCES.md pending-verification table; root `TODO.md` §0.8). **Do not fabricate
-the PCB or procure the sensor against the placeholder.**
+**Revision:** S (2026-07-19) — AKM **AK7455** off-axis sensor selected; pinout verified
+against the AK7455 datasheet (doc 200800064-E-00, `avionics/datasheets/ak7455-en-datasheet-myakm.pdf`)
+**Status:** Schematic complete + `kicad-cli` ERC 0-error. Open items are mechanical/firmware
+(off-axis flux validation + INL calibration) — see the verification section.
 
 ---
 
-## Supersession Notice — AS5600 → MT6701 (why this board was re-architected)
+## Sensor history — why AK7455 (AS5600 → MT6701 → AK7455)
 
-The Rev Q design of this board used an **AMS AS5600** on-axis, end-of-shaft magnetic
-encoder mounted on the wing-spar end cap, reading a small diametric magnet press-fit
-into the pivot-shaft end cap. That topology is **no longer valid** under the Rev R2
-tilt-spar mechanism (commit #144, `feat: rotating 8mm tilt-spar mechanism`):
+The tilt-feedback sensor must read the **rotating 8 mm tilt-spar** at the wing/nacelle
+joint. The spar is a **through-shaft** there (it continues into the nacelle — no free
+shaft end), so the sensor IC must sit **off-axis** beside a ring magnet on the spar hub.
 
-- The single wing spar is now the **rotating 8 mm tilt-spar** (AISI 4130, hollow
-  5 mm ID — `SPAR-TILT-4130`). It is *both* the wing structural spar *and* the
-  nacelle tilt axis, servo-driven from the cargo bay and **keyed to the nacelle**
-  (`airframe/openscad/fuselage/cargo/cargo_spar_drive.scad`;
-  `airframe/openscad/wings/wings_s1223_revo.scad`; `docs/TILT_SPAR_ANALYSIS.md`).
-- Because the spar continues **through** the wing tip into the nacelle, there is
-  **no free shaft end** at the joint. An on-axis end-of-shaft encoder (AS5600)
-  cannot be used — it needs the magnet on a shaft *tip* facing the IC on-axis.
-- The tilt loop must close on the **true nacelle angle** (output side) so the
-  controller is immune to tilt-spar torsional wind-up between the cargo-bay servo
-  and the nacelle (`docs/TILT_SPAR_ANALYSIS.md` §1, §3.5). That mandates a sensor
-  at the wing/nacelle joint, not at the servo end.
+1. **Rev Q — AMS AS5600 (retired):** on-axis, end-of-shaft. Invalid — no free shaft end.
+2. **Rev R2f — Magntek MT6701 (rejected):** its datasheet (Rev 1.9 §6) confirms it is
+   **on-axis only** — Ø6 mm cylinder magnet, air gap 0.5–2.0 mm, off-axis misalignment
+   **≤ 0.3 mm**. It cannot read an off-axis ring at R = 11 mm (~37× the misalignment
+   limit). Same failure mode as the AS5600.
+3. **Rev S — AKM AK7455 (selected):** explicitly supports the **Off-Axis (side-of-shaft)
+   configuration** and adds **anomaly-magnetic-field detection + dynamic error reduction**
+   and EEPROM **INL calibration** — purpose-built for exactly this off-axis, stray-field
+   (ferromagnetic through-shaft) situation.
 
-**Resolution:** an **off-axis** magnetic angle IC on the *fixed* wing-tip pad reads
-a diametric **ring** magnet carried on the *rotating* nacelle spar hub. Selected IC:
-**Magntek MT6701** (I²C/SSI, off-axis capable). Fallback: **Magntek MA732** (SPI).
-
-> The **AS5600 is retained elsewhere** — the Malcolm GCS antenna gimbal
-> (`MAL-GIMBAL-ENC`) still uses AS5600 on-axis with a TCA9548A mux; that design is
-> valid because the gimbal shafts have free ends. This board is the only place the
-> AS5600 was invalid, and it is the only board changed.
+> The **AS5600 is retained elsewhere** (Malcolm GCS antenna gimbal, `MAL-GIMBAL-ENC`,
+> on-axis with a free shaft end). Only this board changed.
 
 ---
 
 ## Purpose
 
-`MAL-TILT-ENC-PCB` is a compact in-house magnetic rotary-encoder board that measures
-the **true tilt angle of each nacelle** at the wing/nacelle joint. One board is
-installed per nacelle (port and starboard) in the **fixed wing-tip pad pocket**
-(`wing_tip_hall_sensor_pocket()` in `wings_s1223_revo.scad`).
+`MAL-TILT-ENC-PCB` is a compact in-house magnetic rotary-encoder board that measures the
+**true tilt angle of each nacelle** at the wing/nacelle joint (`wing_tip_hall_sensor_pocket()`
+in `airframe/openscad/wings/wings_s1223_revo.scad`). One board per nacelle (port + stbd).
 
-The board reports absolute angle data over I²C to the **nacelle-control node —
-River (primary nacelle control/sync), Simon (alternate)** — so the tilt-servo PID
-closes on the measured nacelle output angle rather than on commanded servo PWM.
-Because the sensor sits on the fixed wing (only the magnet rotates), its lead does
-**not** twist with tilt — **no slip ring** is required.
+It reports 14-bit absolute angle over **SPI** to the **nacelle-control node — River
+(primary), Simon (alternate)** — closing the tilt-servo loop on the measured output
+angle, independent of tilt-spar torsional wind-up. The sensor is on the fixed wing, so
+the lead does not twist with tilt (no slip ring).
 
 ---
 
-## Design Rationale — Off-Axis Topology & Sensor Selection
+## Why AK7455 — verified capabilities (datasheet 200800064-E-00)
 
-Optical encoders remain rejected (carbon-fibre dust, moisture, and EDF-stream debris
-at the joint). A magnetic angle IC is contactless and sealed. The change from Rev Q
-is the **read geometry**, forced by the through-shaft spar:
-
-| Aspect | Rev Q (AS5600) — retired | Rev R2e (MT6701) — current |
+| Requirement | AK7455 | Source |
 | --- | --- | --- |
-| Read geometry | On-axis, end-of-shaft | **Off-axis**, IC beside the shaft |
-| Magnet | Ø6 × 2.5 mm cylinder, on shaft tip | **Ø22 × Ø10 × 2.5 mm diametric ring** around the spar |
-| Sensor IC | AMS AS5600, SOIC-8 | **Magntek MT6701**, 3×3 QFN (MA732/SPI fallback) |
-| Board | 15 × 15 mm, JST-GH connector | **7 × 7 mm**, direct-solder 4-wire pigtail (no connector) |
-| Mount | 4× M2 corner standoffs on spar end cap | **2× M2 brass** self-tap into the wing-tip pad |
-| Host | Wash flight-control cape | **River / Simon** nacelle-control nodes |
+| Off-axis / side-of-shaft read | **Yes** (Shaft-End and Off-Axis configs available) | §1, §3 Features |
+| Absolute angle | **14-bit** (0.022°/LSB) | §3, §10 |
+| Supply | **3.0–5.5 V** (board uses 3.3 V) | §3 |
+| Ferrous-shaft tolerance | **Anomaly-magnetic-field detection + dynamic error reduction**; EEPROM INL cal | §1, Features |
+| Off-axis field window | **10–70 mT** at the IC (low-flux alarm < ~15 mT) | §10, §17 |
+| Sense-plane freedom | X-Y / X-Z / Y-Z selectable (`R_FIELDSEL`) | §1, Features |
+| Interface | **4-wire SPI** (absolute + programming), ABZ, UVW, ERROR | §3, §6 |
+| Package | **QFN24, 4.0 × 4.0 × 0.85 mm** | §3, §22 |
+| Temp | −40 to +125 °C | §3 |
 
-MT6701 selection drivers: off-axis (side-shaft) reading capability; I²C interface
-(SSI alternate); 3×3 QFN fits the congested wing-tip; single fixed I²C address
-(drives the two-bus / mux requirement below).
-
----
-
-## Bill of Materials (cross-referenced to `bom_revS.csv`)
-
-| Ref | BOM ID | Value / MPN | Description | Package |
-| --- | --- | --- | --- | --- |
-| U1 | `MAL-TILT-ENC-PCB` | Magntek **MT6701QT-STD** | Off-axis magnetic rotary encoder IC (I²C/SSI) | 3×3 QFN |
-| C1, C2 | (on-board) | 2× decoupling (values per MT6701 datasheet — **verify**) | VDD decoupling | 0402 |
-| P1 | (on-board) | 4-wire direct-solder pigtail | GND / +3V3 / SDA / SCL — **no connector** | wire pads |
-| — | `HALL-RING-MAG` | Ø22 OD × Ø10 ID × 2.5 mm NdFeB, **diametric** | Rotating rotor ring (nacelle side) | ring magnet |
-| — | `PRINT-HALL-HUB` | `nacelle_hall_ring_hub.stl`, CF-PETG, OD 24 mm | Non-ferrous ring carrier keyed to spar | printed |
-| — | `HALL-SCR-M2-BRASS` | M2 × 6 mm **brass** pan-head (×2/board) | Non-ferrous PCB fasteners | hardware |
-
-**Board:** 7 × 7 mm, 2-layer FR4. Contents per `bom_revS.csv` `MAL-TILT-ENC-PCB`:
-MT6701 (3×3 QFN) + 2 decoupling caps + direct-solder 4-wire pigtail. No connector
-and no separate ESD array — the 7 × 7 mm outline threads the ~8.4 mm chordwise gap
-between the Ø13.5 bearing flange and the forward EDF double-D bore at the wing tip
-(`wings_s1223_revo.scad` `HALL_*` block). The shielded pigtail + firmware zero-cal
-carry the EMI budget in place of the retired connector-mounted ESD diode array.
+The anomaly-field detection + error-reduction functions are the decisive feature: the
+tilt-spar is ferromagnetic (AISI 4130 / 17-4 PH) and runs through the ring-magnet centre,
+so a stray-field-hardened sensor with in-situ INL calibration is exactly what the joint
+needs.
 
 ---
 
-## Magnet & Rotating Hub (nacelle side)
+## Interface change — SPI, not I²C (and why that is fine)
 
-The rotor is a **diametrically magnetised NdFeB ring** (`HALL-RING-MAG`,
-Ø22 OD × Ø10 ID × 2.5 mm) carried on a **non-ferrous CF-PETG hub**
-(`PRINT-HALL-HUB` = `nacelle_hall_ring_hub()` in
-`airframe/openscad/nacelles/_export_pivot_slab.scad`, OD 24 mm) keyed/bonded to the
-rotating 8 mm spar at the nacelle inboard face. The ring face points at the wing-tip
-sensor pocket across an axial air gap of **`HALL_AIR_GAP` = 1.5 mm**; the MT6701 sits
-off-axis at **R = 11 mm** and reads mid-annulus (ring mean radius ≈ 11 mm).
+**No off-axis absolute angle IC offers I²C** — the on-axis parts (AS5600, MT6701,
+AS5200L, A1335) do, but none can read a through-shaft. So the harness moves from
+2-wire I²C to **4-wire SPI**. This is actually cleaner for two nacelles: on SPI both
+boards share SCLK/MOSI/MISO and are selected by **separate CSN** lines — **no address
+collision** at all (the I²C fixed-address problem disappears).
 
-- Magnetisation **must be diametric** (across the diameter), **not axial** — an axial
-  ring gives no in-plane angle signal to the off-axis IC.
-- Ring **ID 10 mm** over the **8 mm** spar keeps a ≥ 1 mm non-ferrous wall between the
-  magnet and the ferromagnetic steel (see mitigation below).
+### Cable / pigtail (7-wire, direct-solder, no connector)
+
+| Wire | Signal | Note |
+| --- | --- | --- |
+| 1 | GND | Power / signal return |
+| 2 | +3V3 | 3.3 V from the node |
+| 3 | SCLK | SPI clock (node → sensor) |
+| 4 | MOSI | SPI data (node → sensor) |
+| 5 | MISO | SPI data (sensor → node) |
+| 6 | CSN | SPI chip select (per nacelle) |
+| 7 | ERROR | Anomaly-field / low-flux alarm (open on the board if unused) |
+
+Shielded 7-conductor bundle, routed via `hall_sensor_cableway()` forward of the 0.48c
+EDF double-D (EMI — `avionics/emi-hardening/WBS.md` §1.4.4/§1.4.6). **ERROR** may be
+push-pull or open-drain — verify in the datasheet and add a node-side pull-up if
+open-drain. If the node cannot spare the line, ERROR can be dropped to a 6-wire pigtail.
 
 ---
 
-## Ferromagnetic-Spar Mitigation (mandatory)
+## AK7455 pin map (QFN24) — verified
 
-Unlike Rev Q (which *required* a non-magnetic pivot shaft), the current spar **is**
-ferromagnetic — AISI 4130 (or the 17-4 PH H1075 alternate), running through the ring
-centre and distorting the bias field. This is a supported commercial arrangement
-**only with mitigation and in-situ calibration** (`docs/TILT_SPAR_ANALYSIS.md` §1,
-§3.5; `avionics/emi-hardening/WBS.md` §1.4.6):
+| Pin | Name | Board net / handling |
+| --- | --- | --- |
+| 4 | MISO | ENC_MISO |
+| 5 | MOSI | ENC_MOSI |
+| 6 | SCLK | ENC_SCLK |
+| 7 | CSN | ENC_CSN |
+| 11 | VDD | +3V3 (0.1 µF + 1 µF decoupling) |
+| 12 | TEST1 | **OPEN** (Note3) |
+| 13 | TEST2 | **→ VSS/GND** (Note4) |
+| 14 | VSS | GND |
+| 15 | ERROR | ENC_ERROR |
+| 1,2,3 | W,V,U | UVW commutation — unused (open) |
+| 16,17,18 | Z,B,A | ABZ incremental — unused (open) |
+| 8,9,10,19–24 | NC | **OPEN** (Note2) |
+| TAB | Back tab / EP | **OPEN — do NOT ground** (Note5) |
 
-1. **Non-ferrous stand-off** — the CF-PETG hub holds the ring ID off the steel spar
-   (≥ 1 mm wall) and stands the ring proud of the steel F688ZZ root bearing.
-2. **Non-ferrous fasteners in the keep-out** — every fastener within
-   `HALL_KEEPOUT_R` = 10 mm of the IC must be brass / 316 / aluminium / nylon
-   (`HALL-SCR-M2-BRASS`), **never** the steel bearing screws.
-3. **Firmware zero-calibration** over the full **−5°…+90°** tilt sweep absorbs
-   residual distortion; range-check for a **monotonic** angle after cal.
+**Decoupling:** 0.1 µF + 1 µF on VDD→VSS (standard practice; confirm final values
+against the AK7455 application/test circuit). **Back-tab/EP:** the exposed pad must be
+left electrically floating — the schematic symbol deliberately has no EP pin so the
+footprint EP stays netless.
+
+---
+
+## Off-axis magnet & rotating hub (nacelle side)
+
+The rotor is a ring magnet (`HALL-RING-MAG`) on a **non-ferrous CF-PETG hub**
+(`PRINT-HALL-HUB` = `nacelle_hall_ring_hub()` in `_export_pivot_slab.scad`) keyed to the
+rotating 8 mm spar at the nacelle inboard face. The AK7455 sits off-axis on the fixed
+wing-tip pad, reading the ring across a small gap.
+
+- **Field at the IC must be 10–70 mT** (Off-Axis window); the AK7455 raises a low-flux
+  alarm below ~15 mT. The existing Ø22 × Ø10 × 2.5 mm ring must be **re-validated** to
+  present ≥ ~20 mT at the chosen offset/gap — magnetisation (diametric vs radial) and
+  the exact geometry are a **bench item** (AK7455 off-axis does not fix a single magnet
+  shape; set the sense plane via `R_FIELDSEL`).
+- Ring **ID 10 mm** over the **8 mm** spar keeps ≥ 1 mm non-ferrous wall to the steel.
+
+---
+
+## Ferromagnetic-spar handling
+
+The spar is ferromagnetic (AISI 4130 / 17-4 PH) through the ring centre. Mitigation:
+
+1. **Non-ferrous stand-off** — CF-PETG hub holds the ring off the steel and proud of the
+   steel F688ZZ bearing.
+2. **Non-ferrous fasteners** in the keep-out — brass M2 (`HALL-SCR-M2-BRASS`), never steel.
+3. **AK7455 anomaly-field detection + dynamic error reduction** actively flag/compensate
+   stray fields (ERROR pin + register).
+4. **EEPROM INL calibration** over the −5…+90° sweep absorbs residual distortion +
+   mounting misalignment. The datasheet does not document the cal procedure ("contact
+   AKM") — treat setup as an **AKM-app-support** item.
 
 ---
 
 ## Mounting (fixed wing-tip pad)
 
-The board seats in `wing_tip_hall_sensor_pocket()` on the wing-tip mount pad
-(`wings_s1223_revo.scad`):
-
-- **PCB recess** `HALL_PCB_SEAT_T` = 2.0 mm into the pad face; the IC face sits flush
-  with / just below the pad face so the axial gap to the ring is `HALL_AIR_GAP` once
-  the nacelle butts up.
-- **2× M2 self-tap pilots** (`HALL_PCB_SCR_D` = 1.7 mm), chordwise ±2.5 mm either side
-  of the IC — **brass screws only** (keep-out rule above).
-- IC offset **chordwise-aft** of the spar at R = 11 mm, clear of the Ø13.5 wing-tip
-  bearing-flange keep-out (the wing-tip bearing is **MF128ZZ** 8×12×3.5, Rev R2d
-  downsize from F688ZZ; the root bearing stays **F688ZZ** in the cargo bay).
-
-Wing-tip radial reaction at the joint ≈ **19 N (4.3 lbf)** dynamic — trivial for both
-the bearing and the pad; the pocket is geometry-/clearance-limited, not load-limited.
+Seats in `wing_tip_hall_sensor_pocket()` on the wing-tip mount pad, 2× M2 brass self-tap
+pilots. **Footprint note:** the AK7455 is a **QFN24 4 × 4 mm** — larger than the earlier
+MT6701 3 × 3 QFN. It fits the 7 × 7 mm board, but the wing SCAD `HALL_*` pocket comments
+(sized for the 3 × 3 part) and the 7-wire pigtail exit must be re-checked — see WBS §1.1.3.6.
+Wing-tip radial reaction ≈ 19 N (4.3 lbf) dynamic — geometry-limited, not load-limited.
 
 ---
 
-## Interface & Host Assignment
+## Bill of Materials (cross-referenced to `bom_revS.csv`)
 
-| Pin (pigtail P1) | Signal | Description |
-| --- | --- | --- |
-| 1 | GND | Power / signal return |
-| 2 | +3V3 | 3.3 V supply from the nacelle-control node |
-| 3 | ENC_SDA | I²C SDA (to/from node) |
-| 4 | ENC_SCL | I²C SCL (from node) |
-
-- **Nodes:** port + stbd read by **River** (primary nacelle control/sync), with
-  **Simon** (alternate nacelle control) as failover (`avionics/WBS.md` §1.9.1).
-- **Fixed I²C address → two-bus rule:** MT6701 has a **fixed** I²C address, so the two
-  nacelle encoders collide on one bus. Put port and stbd on **separate I²C buses**, or
-  behind a **TCA9548A** mux (the antenna-gimbal AS5600 pattern). Confirm the actual
-  address on datasheet verification.
-- **No slip ring:** the sensor is on the fixed wing; only the magnet rotates.
-
-> **Cross-subsystem reconciliation (avionics, out of scope here):**
-> `avionics/kicad/Wash/Wash.md` §13 still lists `J_ENC` as *"AS5600 nacelle tilt angle
-> encoder (I2C)"* on the **Wash** cape. The host moved to **River/Simon** and the
-> sensor to **MT6701**; Wash's `J_ENC` row needs the same reconciliation on the
-> avionics side (tracked in `avionics/WBS.md` §1.9.1). Not edited by this pass.
+| Ref | BOM ID | Value / MPN | Package |
+| --- | --- | --- | --- |
+| U1 | `MAL-TILT-ENC-PCB` | AKM **AK7455** | QFN24 4×4 |
+| C1 | (on-board) | 0.1 µF (VDD decouple) | 0402 |
+| C2 | (on-board) | 1 µF (VDD bulk) | 0402 |
+| P1 | (on-board) | 7-wire direct-solder pigtail (no connector) | wire pads |
+| — | `HALL-RING-MAG` | Ring magnet (re-validate mag./flux for AK7455 off-axis) | ring magnet |
+| — | `PRINT-HALL-HUB` | `nacelle_hall_ring_hub.stl`, CF-PETG, OD 24 mm | printed |
+| — | `HALL-SCR-M2-BRASS` | M2 × 6 mm brass (×2/board) | hardware |
 
 ---
 
-## EMI / Wiring
+## Host assignment
 
-- **Shielded 4-wire** sensor lead (VCC/GND/SDA/SCL) routed through the dedicated
-  fixed-wing conduit `hall_sensor_cableway()` (chord fraction ≈ 0.30–0.33c),
-  **forward of** the 0.48c EDF double-D so the low-level I²C lines stay clear of the
-  40 A EDF feeds (`avionics/emi-hardening/WBS.md` §1.4.4 (I²C) / §1.4.6 (ferromagnetic
-  spar / magnetic-sensor siting)).
-- On-board 2× VDD decoupling close to the MT6701 (values per datasheet — verify).
-- The board is a clean signal ground; the shield drain is single-point-grounded at the
-  node end only (no ground loop).
+- Port + stbd read by **River** (primary nacelle control/sync), **Simon** (alternate).
+- **SPI, shared bus, per-nacelle CSN** — no address programming, no mux needed.
+- **Cross-subsystem (avionics, out of scope here):** `Wash/Wash.md` §13 still lists a
+  legacy AS5600 `J_ENC` (I²C). The host moved to River/Simon and the interface to SPI;
+  reconcile Wash + `avionics/WBS.md` §1.9.1 on the avionics side.
 
 ---
 
-## ⚠ REQUIRES VERIFICATION — do not fabricate / do not procure
+## ⚠ Open verification items (mechanical / firmware — not schematic)
 
-Per `REFERENCES.md` (pending-verification table, entry *"Wing/nacelle Hall tilt
-encoder — MT6701 off-axis spec"*) and root `TODO.md` §0.8, the following are
-**placeholders** and must be confirmed against the MT6701 datasheet before the
-schematic pinout is finalised, a `REF-SENSOR-*` catalog entry (with validated URL) is
-added, and any PCB/harness sign-off occurs:
-
-- **MT6701 QFN pinout and I²C address** (the schematic IC placement is held at the
-  gate for exactly this reason — see `ENC-NACELLE-1.kicad_sch`).
-- **Off-axis air-gap** (assumed 1.5 mm), **ring OD/ID** (Ø22/Ø10), **IC radial offset**
-  (R = 11 mm) vs the datasheet's off-axis operating window.
-- **Ferrous-through-shaft behaviour** — bench-cal with the steel spar + F688ZZ bearing
-  installed; confirm monotonic angle over −5…90° after zero-cal, or switch to **MA732**.
-
-Decoupling-cap values are likewise datasheet-dependent (shown provisional).
+1. **Off-axis flux** — confirm the ring presents 10–70 mT (target ≥ ~20 mT) at the IC
+   offset/gap; pick magnetisation (diametric vs radial) accordingly. Bench.
+2. **INL calibration** setup over −5…+90° (AKM app support); confirm monotonic angle.
+3. **ERROR pin** push-pull vs open-drain — add a node pull-up if open-drain.
+4. **Footprint** — confirm QFN24 4×4 EP dimensions vs datasheet §22.1; EP left floating.
+5. **Airframe** — update wing `HALL_*` pocket/pigtail (3×3→4×4 QFN, 7-wire) and re-bake.
+6. Add a `REF-SENSOR-*` catalog entry for the AK7455 with a validated AKM URL
+   (`REFERENCES.md`; root `TODO.md` §0.8) — the datasheet PDF is in the repo.
 
 ---
 
 ## Related Files
 
-- `airframe/openscad/wings/wings_s1223_revo.scad` — fixed sensor half:
-  `wing_tip_hall_sensor_pocket()`, `hall_sensor_cableway()`, `HALL_*` parameters.
-- `airframe/openscad/nacelles/_export_pivot_slab.scad` — rotating half:
-  `nacelle_hall_ring_hub()` (ring + non-ferrous hub). `INBOARD_FACE_X` sign VERIFY.
-- `airframe/openscad/fuselage/cargo/cargo_spar_drive.scad` — cargo-bay spar drive
-  (DS3218MG servo + F688ZZ root bearing): the actuator whose wind-up this board's
-  true-tilt feedback rejects.
-- `docs/TILT_SPAR_ANALYSIS.md` §1 / §3.5 / §8 — tilt-feedback rationale, ferrous-spar
-  mitigation, wingtip-bearing downsize.
-- `avionics/WBS.md` §1.9.1 — node assignment, part selection, calibration, wiring.
-- `avionics/emi-hardening/WBS.md` §1.4.4 / §1.4.6 — I²C EMI and ferromagnetic-spar
-  siting.
+- `airframe/openscad/wings/wings_s1223_revo.scad` — `wing_tip_hall_sensor_pocket()`,
+  `hall_sensor_cableway()`, `HALL_*` (comments still name MT6701 — to update).
+- `airframe/openscad/nacelles/_export_pivot_slab.scad` — `nacelle_hall_ring_hub()` (ring + hub).
+- `airframe/openscad/fuselage/cargo/cargo_spar_drive.scad` — cargo-bay spar drive (the
+  DS3218MG actuator whose wind-up this true-tilt feedback rejects).
+- `docs/TILT_SPAR_ANALYSIS.md` §1 / §3.5 — tilt-feedback rationale, ferrous-spar mitigation.
+- `avionics/WBS.md` §1.9.1 ; `avionics/emi-hardening/WBS.md` §1.4.4 / §1.4.6.
 - `airframe/wings-nacelles/WBS.md` §1.1.3.6 — airframe-side task detail.
+- `avionics/datasheets/ak7455-en-datasheet-myakm.pdf` — AK7455 datasheet (in repo).
 
 ---
 
 ## References
 
-1. Magntek **MT6701** magnetic angle-sensor IC — datasheet **URL PENDING** (add as
-   `REF-SENSOR-*` with a validated URL on verification; `REFERENCES.md` / `TODO.md`
-   §0.8). Selected part; off-axis I²C/SSI.
-2. Magntek **MA732** magnetic angle-sensor IC (SPI) — **fallback**; datasheet URL to
-   be cataloged if adopted.
-3. AISI 4130 / 17-4 PH tilt-spar material — `current-specification/bom_revS.csv`
-   `SPAR-TILT-4130`; allowables require MMPDS/AMS verification (`TODO.md` §0.8).
-4. IEC 61000-4-2:2008 — ESD immunity (retained EMI context).
-5. MIL-STD-461G:2015 — EM emissions/susceptibility (retained EMI context).
+1. AKM **AK7455** Zero-Latency Angle Sensor IC — datasheet **200800064-E-00** (2020/09),
+   `avionics/datasheets/ak7455-en-datasheet-myakm.pdf`. Add a `REF-SENSOR-*` entry with a
+   validated AKM product URL (`REFERENCES.md` / `TODO.md` §0.8).
+2. AISI 4130 / 17-4 PH tilt-spar — `bom_revS.csv` `SPAR-TILT-4130`; allowables require
+   MMPDS/AMS verification (`TODO.md` §0.8).
+3. IEC 61000-4-2:2008 — ESD immunity (EMI context).
+4. MIL-STD-461G:2015 — EM emissions/susceptibility (EMI context).
 
-> The AS5600, PRTR5V0U2X, JST GH, and Belden 9367 citations from the Rev Q design have
-> been removed here — none of those parts appear on the Rev R2e MT6701 board. They
-> remain valid for the boards that still use them (AS5600 on `MAL-GIMBAL-ENC`).
+> Rejected alternatives on record: **MT6701** (Magntek, Rev 1.9 — on-axis only) and
+> **AS5600** (AMS — on-axis; retained for the gimbal). **MagAlpha MA732** (MPS — off-axis
+> SPI) was a viable alternate; AK7455 was chosen for its stray-field detection/reduction
+> and INL calibration, which better suit the ferromagnetic through-shaft.

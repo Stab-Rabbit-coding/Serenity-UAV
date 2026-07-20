@@ -104,6 +104,44 @@ ring. Spatial (RSSR-class) linkage — tilt axis (X) ⟂ ring axis (Z).
 > first-pass only — must be solved before flight hardware (WBS §1.1.3).  The
 > baked pod shells need re-baking for the grown Ø72 nozzle pocket.
 
+## DECISION AMENDMENT — hybrid A+B adopted (2026-07-19)
+
+> **The pure Option-B "spar crank" is kinematically INVALID and is superseded by
+> a hybrid.**  Flaw (user-caught, 2026-07-19): the tilt spar is **keyed to the
+> nacelle**, so a crank clamped to the spar shares the nacelle's rotating frame
+> with the unison ring — they swing together through the whole 0→90° tilt with
+> **zero relative motion**, so the pushrod never strokes the ring.  A passive,
+> tilt-driven nozzle **must take its datum from the non-tilting WING**; the Rev T
+> header's "rotating-spar pod makes the crank a plain driven link" was the error.
+>
+> **Adopted (user 2026-07-19): "a gear at the wingtip that engages a bellcrank in
+> the nacelle cowl — best of both."**  Keep Option A's positive **wing-fixed
+> datum** and Option B's compact **cam-only ring** (no internal ring gear):
+>
+> + A gear **fixed coaxial with the spar at the wing tip** (already stubbed in
+>   `wings_s1223_revo.scad` Rev R2d as the relocated fixed R22 sector).
+> + A nacelle **pinion** (Pinion A) meshes it; as the nacelle tilts θ about the
+>   spar, the fixed-sun / planet-pinion pair spins the pinion by
+>   θ·(N_sun/N_pinion) **relative to the nacelle** — restoring the relative motion
+>   the spar-crank lacked.  A **1:1 mesh** makes the pinion track tilt 1:1, so the
+>   Option-B crank (8.5 mm) → pushrod → cam-ring lever (32 mm) geometry is reused
+>   UNCHANGED (90° tilt → ≈23.9° ring).
+> + The pinion's arm is the **geared bellcrank**; the cam-only ring keeps the
+>   nozzle under the cowl (Option B's win).
+>
+> **Joint coordination (required):** the ~8 mm wing-tip↔nacelle gap houses a
+> coaxial-spar stack — wing-tip **MF128ZZ bearing** → wing-fixed **sun gear** →
+> **Hall ring magnet** (nacelle non-ferrous stub) / **MT6701** (wing, off-axis
+> R11).  The pinion sits OFF the spar axis (≈26 mm aft) so it clears the on-axis
+> Hall stack; the MT6701 is off-axis chord-aft.
+>
+> Illustrated in `airframe/openscad/port_tilt_spar_assembly.scad` §6 (pitch
+> cylinders).  OPEN (WBS §1.1.3): module + tooth counts + exact pitch radius,
+> crank/pushrod lengths + transmission angle over 0..90°, ring-lever azimuth
+> (relocate iris 22.5°→157.5°, inboard flap gap), gap width vs. the stack.
+> SOURCE follow-ups: reconcile the wing R22 sector to the chosen 1:1 sun; move the
+> `nacelle_nozzle_pushrod.scad` crank from the spar onto the pinion.
+
 ## Recommendation (historical — see DECISION above)
 
 **Option A** if the priorities are canon fidelity ("passive **gear train**"),

@@ -112,7 +112,28 @@
     In the hull-frame bake the spar line slides ~7 mm aft in Y; re-derive the
     nacelle bake translation (or the cargo/wing spar Y-station) so one straight
     spar still passes through the CG pivot. `port_tilt_spar_assembly.scad` NAC_D
-    is left at its 104.5-era value pending this.
+    is now DERIVED from `PIVOT_ZLOC` (slide-fwd-to-Y15, user 2026-07-19) so the
+    overlay stays consistent; the baked nacelle STL still needs re-baking to the
+    Rev T CG pivot (its old boss is ~7 mm fwd of the new pivot).
+- [ ] **Nozzle drive: replace the invalid spar-crank with a wing-referenced sync
+    gear + geared bellcrank (2026-07-19).** The Rev T crank clamps the spar, which
+    is KEYED to the nacelle → shares the ring's rotating frame → zero relative
+    motion → no actuation. Adopted hybrid (user; docs/NOZZLE_DRIVE_TRADE.md
+    "DECISION AMENDMENT"): wing-fixed sun gear coaxial with the spar + nacelle
+    pinion (1:1) → geared bellcrank → Rev T cam-only-ring pushrod. Modelled in
+    `port_tilt_spar_assembly.scad` §6. SUB-TASKS:
+    - [ ] Reconcile the wing fixed R22 sector (`wings_s1223_revo.scad`) to the
+        chosen 1:1 sun (module, teeth, pitch radius; keep bolt circle vs bearing).
+    - [ ] Rework `nacelle_nozzle_pushrod.scad`: seat the crank on the pinion, add
+        the pinion + bellcrank; delete the spar-crank clamp.
+    - [ ] Relocate the iris unison-ring lever ear 22.5°→157.5° (inboard flap gap)
+        so the pushrod hugs the inboard cheek instead of crossing the duct.
+    - [ ] Motion study: 1:1-mesh + crank/pushrod transmission angle, monotonic
+        0..90° tilt → 0..23.9° ring; verify joint-gap width vs. the coaxial
+        bearing + sun-gear + Hall-magnet/MT6701 stack.
+- [ ] **Fix iris `asm` flap sign (`nacelle_nozzle_iris.scad`):** the 8-flap loop
+    uses `rotate([0, PHI_CLOSED, 0])` → petals DIVERGE at "closed"; must be
+    `−PHI_CLOSED` to converge to 75 % bore. Preview-only (print parts unaffected).
 - [ ] **Stator spar crossing (Rev T2):** kept 11 vanes (coprime w/ 12-blade
     rotor — Tyler–Sofrin); spar carried in a streamlined teardrop strut (tail
     aft, TE ≈ vane TE) + 0° anti-rotation key drilled through. VERIFY strut

@@ -64,6 +64,7 @@ see TODO.md "Rev S Checkpoint" for the full consolidated changelog)
     - [REF-SENSOR-004: TI MSPM0G3507 — Mixed-Signal MCU with CAN-FD Interface](#ref-sensor-004-ti-mspm0g3507--mixed-signal-mcu-with-can-fd-interface)
     - [REF-SENSOR-005: Microchip KSZ9477 — Ethernet Switch with HSR/PRP Hardware Redundancy](#ref-sensor-005-microchip-ksz9477--ethernet-switch-with-hsrprp-hardware-redundancy)
     - [REF-SENSOR-006: TI TCAN1042HG-Q1 — CAN-FD Transceiver](#ref-sensor-006-ti-tcan1042hg-q1--can-fd-transceiver)
+    - [REF-SENSOR-008: AKM AK7455 — 14-bit Off-Axis Magnetic Rotation Angle Sensor](#ref-sensor-008-akm-ak7455--14-bit-off-axis-magnetic-rotation-angle-sensor)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Removed / Superseded Citations](#removed--superseded-citations)
@@ -1203,6 +1204,42 @@ to shielded JST-GH CAN-FD connector.
 
 ---
 
+### REF-SENSOR-008: AKM AK7455 — 14-bit Off-Axis Magnetic Rotation Angle Sensor
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Asahi Kasei Microdevices (AKM) |
+| **Product** | AK7455 Zero-Latency Angle Sensor IC |
+| **Official product page** | <https://www.akm.com/global/en/products/rotation-angle-sensor/ak7455/> |
+| **Announcement** | <https://www.akm.com/us/en/about-us/news/2022/20220509-ak7455/> ("14-bit magnetic rotation angle sensor … that supports off-axis configuration") |
+| **Datasheet** | Doc **200800064-E-00** (2020/09), 68 pp — archived in repo at `avionics/datasheets/ak7455-en-datasheet-myakm.pdf` (AKM gates the web download behind a form) |
+| **Note** | Selected for the wing/nacelle tilt-angle encoder (`MAL-TILT-ENC-PCB`) because it explicitly supports the **Off-Axis (side-of-shaft)** configuration required by the through-shaft tilt-spar, and adds anomaly-magnetic-field detection + dynamic error reduction + EEPROM INL calibration — suited to the ferromagnetic (4130/17-4 PH) spar. Supersedes the on-axis MT6701 (rejected) and AS5600 (Rev Q). |
+
+**Specifications applied in this design:**
+
+| Parameter | Value | Source (datasheet section) |
+|---|---|---|
+| Configuration | Shaft-End **and Off-Axis (side-of-shaft)** | §1, §3 |
+| Angle resolution | 14-bit (0.022°/LSB) | §3, §10 |
+| Angle INL | ±0.5° (shaft-end, no cal); ±0.1° after calibration | §3, §10 |
+| Magnetic flux window | 30–70 mT (shaft-end); **10–70 mT (off-axis)**; low-flux alarm < ~15 mT | §10, §17 |
+| Sense-plane select | X-Y / X-Z / Y-Z (`R_FIELDSEL`) | §1, §3 |
+| Interface | 4-wire SPI (absolute + programming), ABZ, UVW, ERROR | §3, §6 |
+| Supply / temp | 3.0–5.5 V ; −40 to +125 °C | §3 |
+| Package | QFN24, 4.0 × 4.0 × 0.85 mm (EP/back-tab must be OPEN, Note5) | §3, §22 |
+| Pin handling | TEST1 open (Note3); TEST2 → VSS (Note4); NC pins open (Note2) | §6 |
+
+**Applied to:** wing-tip tilt-angle encoder board `MAL-TILT-ENC-PCB` — off-axis read of the
+rotating ring magnet (`HALL-RING-MAG`) on the tilt-spar hub. Off-axis flux (10–70 mT) at
+the IC and the EEPROM INL calibration are **bench-verification** items (AKM app support);
+ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verification items.
+
+**Used in:** `avionics/kicad/ENC-NACELLE-1.kicad_sch`, `avionics/kicad/ENC-NACELLE-1.md`,
+`current-specification/bom_revS.csv` (`MAL-TILT-ENC-PCB`),
+`airframe/wings-nacelles/WBS.md` §1.1.3.6, `avionics/WBS.md` §1.9.1
+
+---
+
 ## Part XIII — Telecommunications Standards
 
 ### REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)
@@ -1319,4 +1356,4 @@ Add verified section numbers to the relevant files and update this table.
 | Emma `RSSI_CMP` carrier-detect comparator part number and pinout | `avionics/kicad/Emma.kicad_sch` / `Emma.kicad_pcb`, `avionics/kicad/mod_emma_pcb.py` | The RSSI→`RSSI_DCD` conversion (2026-07-04 reconciliation) adds an on-board comparator, value placeholder "LMV331-class". No specific part is vetted; the PCB pad→net map is by function only and the SOT-23-5 pin order is unconfirmed. | Select a real comparator, confirm its SOT-23-5 datasheet pinout (and push-pull vs open-drain — add a `RSSI_DCD` pull-up if open-drain), add a `REF-*` catalog entry with a validated URL, and correct the footprint pad map before layout is final (TODO.md §1.2b). Do not fabricate or procure against the placeholder. |
 | VL53L5CX obstacle-avoidance ToF sensor — no REF-ID | `docs/failsafe_thresholds.md`, `avionics/firmware/common/include/failsafe_config.h`, `docs/PHASED_BUILD_GUIDE.md` | Found 2026-07-12 while writing the Failsafe Threshold Document: the 12× VL53L5CX obstacle-avoidance array is cited throughout the repository (4 m range noted informally inside the REF-SENSOR-002 entry above) but has no `REFERENCES.md` catalog entry of its own, unlike the project's other core sensor ICs (REF-SENSOR-002 through -006). | Add a `REF-SENSOR-007` entry for ST Microelectronics VL53L5CX (validated datasheet URL, ranging accuracy, and the 4 m operating range cited in `docs/failsafe_thresholds.md` §3) before final PCB layout citation sign-off (TODO.md §3.0 Phase 0). |
 | Tilt-spar material allowables (4130 + trade-study alternates) | `docs/TILT_SPAR_ANALYSIS.md` §3.1–3.2/§3.5, `current-specification/bom_revS.csv` SPAR-TILT-4130 | The §3.5 material trade study uses **typical handbook allowables** for AISI 4130 (~460 MPa yield), 17-4 PH H1075 (~860 MPa), 7075-T6 (~503 MPa), 6061-T6 (~276 MPa), 316 SS, and Ti-6Al-4V (~880 MPa); none are yet tied to a validated MMPDS/AMS product page. Moduli/densities are nominal. | Confirm the **selected** material's design allowable and the two carried alternates (17-4 PH, 7075-T6) vs MMPDS-2023 / AMS (or mill cert) and add `REF-MAT-*` catalog entries with validated URLs before spar procurement (TODO §0.8). |
-| Wing/nacelle Hall tilt encoder — MT6701 off-axis spec | `current-specification/bom_revS.csv` MAL-TILT-ENC-PCB, `docs/TILT_SPAR_ANALYSIS.md` §1/§3.5/§8.1, `avionics/WBS.md` §1.9.1 | Part selected = **Magntek MT6701** (I²C) on a compact 7×7 mm in-house PCB, off-axis over a Ø22 diametric ring (MA732/SPI fallback). Not yet vetted against the MT6701 datasheet: the off-axis air-gap (assumed 1.5 mm), ring OD/ID, IC radial offset (R = 11 mm), I²C address, and pinout, nor the confirmed behaviour with a ferrous through-shaft. Geometry (`HALL_*` in `wings_s1223_revo.scad` / `_export_pivot_slab.scad`) is provisional. | Confirm the MT6701 datasheet pinout/protocol, off-axis magnet spec, and ferrous-through-shaft behaviour (or switch to MA732), and add a `REF-SENSOR-*` entry with a validated URL before PCB/harness sign-off (TODO §0.8). Do not procure against the placeholder. |
+| Wing/nacelle Hall tilt encoder — sensor selection | `current-specification/bom_revS.csv` MAL-TILT-ENC-PCB, `avionics/kicad/ENC-NACELLE-1.*`, `docs/TILT_SPAR_ANALYSIS.md` §1/§3.5/§8.1, `avionics/WBS.md` §1.9.1 | **RESOLVED 2026-07-19 (datasheets in repo).** MT6701 (Rev 1.9) was **rejected** — its datasheet §6 confirms it is **on-axis only** (Ø6 mm cyl magnet, off-axis misalignment ≤ 0.3 mm), so it cannot read the through-shaft off-axis; AS5600 has the same limit. Part selected = **AKM AK7455** (REF-SENSOR-008), which explicitly supports the Off-Axis (side-of-shaft) configuration; pinout/interface **verified** vs datasheet 200800064-E-00 and the schematic rebuilt (`kicad-cli` ERC 0-error). Interface is **SPI** (no off-axis absolute IC offers I²C). | **Electrical spec resolved.** Remaining, now scoped as bench/layout items (not "unverified part"): (1) off-axis flux 10–70 mT at the IC with the chosen ring/gap; (2) EEPROM INL calibration over −5..90° (AKM app support); (3) ERROR-pin push-pull vs open-drain; (4) QFN24 4×4 EP dims (EP left floating) + wing-pocket resize 3×3→4×4 (`HALL_*` in `wings_s1223_revo.scad`); (5) confirm the AKM product URL if the datasheet is re-hosted. TODO §0.8 / `airframe/wings-nacelles/WBS.md` §1.1.3.6. |
