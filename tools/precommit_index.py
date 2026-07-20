@@ -71,11 +71,14 @@ def sync_and_format():
             if new_items:
                 # Append new items before existing auto-discovered headers if possible,
                 # or just append to end
-                clean_lines.append(f"\n## --- AUTO-DISCOVERED ({datetime.now().strftime('%Y-%m-%d')}) ---\n")
+                clean_lines.append(f"\n## --- AUTO-DISCOVERED (
+                    {datetime.now().strftime('%Y-%m-%d')}) ---\n")
                 clean_lines.extend(new_items)
 
             if len(clean_lines) > date_line_idx:
-                clean_lines[date_line_idx] = f"<!-- Last updated: {datetime.now().strftime('%Y-%m-%d')} — Automated reconciliation pass -->\n"
+                clean_lines[date_line_idx] =
+                    f"<!-- Last updated: {datetime.now().strftime('%Y-%m-%d')}
+                    — Automated reconciliation pass -->\n"
 
             with open(index_path, 'w') as f:
                 f.writelines(clean_lines)
