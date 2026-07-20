@@ -2,8 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-07-20 — Automated reconciliation pass -->
-## Repository Root
-
 ```text
 .clang-format                     — C/C++ formatting rules (firmware)
 .editorconfig                     — Editor whitespace/indent rules (4-space, per coding standard)

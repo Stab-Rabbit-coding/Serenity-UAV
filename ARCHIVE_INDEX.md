@@ -3,8 +3,6 @@
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
 <!-- Last updated: 2026-07-20 — Automated reconciliation pass -->
----
-
 ## airframe/archive/FreeCAD-scripts/
 
 Deprecated FreeCAD prototype assembly scripts.  All predate the Rev R1 hull-frame

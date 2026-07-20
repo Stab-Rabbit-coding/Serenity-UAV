@@ -8,12 +8,15 @@ ROOT_DIR = "."
 # Directories to always ignore (system, git metadata, and internal caches)
 IGNORE_DIRS = {'.git', '__pycache__', 'venv', 'env', '.ipynb_checkpoints'}
 # Directories requiring index tracking (including hidden ones)
-TRACKED_DIRS = {'.github', '.githooks', 'airframe', 'archives', 'avionics', 'current-specification', 'deferred', 'docs', 'gcs', 'graphical-build-guide', 'node_modules', 'tools'}
+TRACKED_DIRS = {'.github', '.githooks', 'airframe',
+                'archives', 'avionics', 'current-specification', 'deferred', 'docs', 'gcs', 'graphical-build-guide',
+                'node_modules', 'tools'}
 
 INDEX_CONFIG = {
     "PROJECT_INDEX.md": 3,
     "ARCHIVE_INDEX.md": 4
 }
+
 
 def get_ignored_files():
     try:
@@ -21,6 +24,7 @@ def get_ignored_files():
         return set(subprocess.check_output(cmd).decode("utf-8").splitlines())
     except subprocess.CalledProcessError:
         return set()
+
 
 def sync_and_format():
     # Discover all files in TRACKED_DIRS recursively
@@ -33,13 +37,14 @@ def sync_and_format():
                 for f in files:
                     if not f.endswith(('.FCBak', '.rpt')):
                         current_files.add(os.path.join(root, f))
-    
+
     ignored_files = get_ignored_files()
 
     for index_name, date_line_idx in INDEX_CONFIG.items():
         index_path = Path(index_name)
-        if not index_path.exists(): continue
-        
+        if not index_path.exists():
+            continue
+
         with open(index_path, 'r') as f:
             lines = f.readlines()
 
