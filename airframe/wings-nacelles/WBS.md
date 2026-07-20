@@ -271,6 +271,28 @@
     negligible +0.75 mm) — the nacelle still pivots about its CG, per the user
     requirement.  See the pod header mass breakdown and `nacelle_nozzle_idler.scad`
     header.
+- [x] **CG RE-DERIVED for Rev T (pushrod/cam drive + rotating 8 mm spar),
+    2026-07-19 — SUPERSEDES the 104.5 mm figure above.** Deleting the gear train
+    alone left the pivot ~unchanged, but the Rev T2 40 mm flaps (CG ~198 mm), the
+    discrete Ø71 throat+housing (~175 mm), the cam-only ring, and the ~19 g steel
+    spar (on the pivot) net-move the rotating CG to **CG_Z = 111.5 mm** (mass
+    393.4 g / 0.867 lbm).  `PIVOT_Z` propagated 104.5 → 111.5 across the pod SCAD
+    (header mass table + value), `edf_stator_sleeve.scad` (`SPAR_TUNNEL_Z_L`
+    14.5 → 21.5), `serenity_assembly.py`, `_export_pivot_slab.scad`,
+    `port_tilt_spar_assembly.scad`, `tools/bake_hull_frame.py`, and
+    `docs/TILT_SPAR_ANALYSIS.md`.  Nacelle shells + stator sleeve re-rendered and
+    re-baked (66 STLs pass `validate_stls.py`); spar hub/bore verified at Z=111.5.
+    FIRST-PASS (band ≈109–112 mm) — see root `TODO.md` §1.1.3 for the open VERIFY
+    items (sliced-mass density check, single-straight-spar re-solve for the +7 mm
+    move, stator teardrop-strut aero, and the Ø72-pocket aft-cowl-tail decision).
+- [x] **Stator spar-crossing rework (Rev T2, 2026-07-19).** Pivot at 111.5 lands
+    mid-stator; kept **11 vanes** (coprime with the 12-blade EDF rotor — Tyler–
+    Sofrin resonance cut-off; 12 would resonate, 13 changes thrust) and carried
+    the spar across in a **streamlined teardrop strut** (round nose over the bore,
+    boat-tail swept aft, TE ≈ vane-TE plane so the vanes keep the last straightening
+    word into EDF2) replacing the blunt Ø13 tube.  Drilled the spar bore through
+    the 0° anti-rotation key that was plugging the hole.  Aero is first-pass —
+    VERIFY strut chord/tail + residual EDF2 swirl by CFD/bench.
 - [x] **Confirm Sector Gear standoff distance from the nacelle face**
     *(resolved 2026-06-22)* — a tilt-bracket SCAD source DOES exist
     (`airframe/openscad/wings/wing_nacelle_pylon_revo.scad`, not found in
@@ -440,8 +462,33 @@ tracked in `avionics/WBS.md` §1.9.1 and `avionics/emi-hardening/WBS.md` §1.4.6
     `fuselage_root_tab` (was dead-ended 1 mm in). Soundness echo-verified: bores
     groove only the tenon crown; solid **15.4 mm lower spine** retained.
 - [x] **Nacelle (rotating magnet) hub modelled** *(Rev R2d)* — `nacelle_hall_ring_hub()`
-    (non-ferrous CF-PETG carrier, OD 26 for the Ø24 ring, keyed to the spar, ring
-    ID ≥1 mm off the ferrous spar) in `_export_pivot_slab.scad` (dev sandbox).
+    (non-ferrous CF-PETG carrier, OD 24 for the Ø22 ring — Rev R2e ring downsize, keyed
+    to the spar, ring ID ≥1 mm off the ferrous spar) in `_export_pivot_slab.scad`
+    (dev sandbox).
+- [x] **ENC-NACELLE-1 KiCad reconciled to the MT6701 off-axis board** *(Rev R2e,
+    2026-07-19; drafted by Claude Opus 4.8)* — `avionics/kicad/ENC-NACELLE-1.md` +
+    `ENC-NACELLE-1.kicad_sch` were still the Rev Q **AS5600 on-axis** design (magnet on
+    a shaft tip, 15×15 mm board, JST-GH connector), invalid under the rotating spar:
+    the spar is a **through-shaft** (no free end), so an on-axis end-of-shaft encoder
+    cannot be used. Reconciled both files to the current spec — **Magntek MT6701**
+    off-axis IC (`MAL-TILT-ENC-PCB`, 7×7 mm, direct-solder 4-wire pigtail + 2
+    decoupling caps, no connector; **MA732**/SPI fallback) reading the **Ø22×Ø10×2.5**
+    diametric ring (`HALL-RING-MAG`) on the non-ferrous CF-PETG hub (`PRINT-HALL-HUB`,
+    OD 24) across a 1.5 mm axial gap, IC off-axis at **R = 11 mm** in
+    `wing_tip_hall_sensor_pocket()`; steel-spar mitigations (non-ferrous hub stand-off,
+    brass `HALL-SCR-M2-BRASS` fasteners in the 10 mm keep-out, firmware zero-cal
+    over −5..90°) documented; host moved Wash → **River (primary) / Simon (alt)**,
+    port+stbd on **separate I²C buses** (fixed MT6701 address). The schematic is
+    **held at the MT6701 verification gate** — no fabricated QFN pinout/address per
+    `REFERENCES.md` pending-verification + root `TODO.md` §0.8 ("do not procure against
+    the placeholder"). `kicad-cli` (9.0.2) loads it; ERC now **0 errors / 34 warnings**
+    (was 12 errors) — nets +3V3/GND/ENC_SDA/ENC_SCL, `PWR_FLAG`s added; the dangling
+    ENC_SDA/ENC_SCL are the intended gate. The MT6701 datasheet gate is the open item
+    below.
+- [ ] **[OPEN — cross-subsystem] `Wash.md` §13 still lists `J_ENC` as the AS5600
+    encoder** — the host moved to River/Simon and the sensor to MT6701. Reconcile the
+    Wash cape's `J_ENC` row on the avionics side (`avionics/WBS.md` §1.9.1); this is an
+    avionics edit, not an airframe one — flagged here for traceability.
 - [ ] **VERIFY `INBOARD_FACE_X` sign** in `_export_pivot_slab.scad` (which X face
     of the port nacelle is the wing side).
 - [ ] **Migrate `nacelle_hall_ring_hub()` into `nacelle_pod_50mm_tandem.scad`** with

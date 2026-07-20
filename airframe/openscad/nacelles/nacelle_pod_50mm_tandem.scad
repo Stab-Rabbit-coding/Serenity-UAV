@@ -11,7 +11,7 @@
 //     published nacelle STLs (nacelle_port/stbd_revs.stl) are baked to
 //     hull frame in CRUISE attitude (270 deg about +X + translation;
 //     COMPONENTS['Nacelle_Port'] / ['Nacelle_Stbd']).  Hover is a
-//     downstream rotation about the tilt pivot (duct Z = PIVOT_Z = 104.5 mm), never a
+//     downstream rotation about the tilt pivot (duct Z = PIVOT_Z = 111.5 mm), never a
 //     stored orientation.  After regeneration, re-run:
 //         python3 tools/bake_hull_frame.py Nacelle_Port Nacelle_Stbd
 //   Nacelle label correction (Rev R1/nacelle-swap, 2026-06-11):
@@ -135,37 +135,47 @@
 // All Z-axis parameters in this file are at 1.25× reference scale.
 // Bore-radius (EDF_BORE_R=25mm) and all radial dimensions are physical sizes.
 //
-// Nacelle mass breakdown — FULL rotating assembly (at 1.25× scale)
+// Nacelle mass breakdown — FULL rotating assembly (Rev T, at 1.25× scale)
 // -------------------------------------------------------------------------
-//   Every component that tilts WITH the nacelle is included (updated
-//   2026-07-04).  Pylon/ground-fixed parts — the fixed sector gear and the
-//   servo bracket — do NOT tilt about the pivot and are excluded.  The WS2812B
-//   exhaust LED rings were REMOVED from the design (TODO §1.1.3.5) and no longer
-//   appear.  Printed-part masses (gears, idler, ring, petals) are from STL
-//   volume × effective printed CF-PETG density; the shell line already carries
-//   the canonical aft cowl outer skin (so the iris "housing" is NOT counted
-//   again).
+//   Re-derived 2026-07-19 for the Rev T pushrod / cam-only nozzle drive plus
+//   the rotating Ø8 mm tilt-spar (supersedes the 2026-07-04 gear-train table of
+//   342.4 g @ 104.5 mm).  Every component that tilts WITH the nacelle is
+//   included; pylon/ground-fixed parts (wingtip sync gear, servo bracket) do
+//   NOT tilt about the pivot and are excluded.  Changes from the gear-train
+//   table: the ENTIRE tilt→nozzle gear train (Drive Pinion A, bevel pair +
+//   housing, Crown/Nozzle Drive Pinion, idler + bracket, internal ring gear) is
+//   DELETED (Option B, docs/NOZZLE_DRIVE_TRADE.md); the unison ring becomes a
+//   cam-only disc; the flaps doubled 20→40 mm (Rev T2), moving their CG aft to
+//   ~198 mm; a discrete Ø71 throat+housing now seats in the nozzle pocket; and
+//   the rotating Ø8×1.5 mm 4130 spar (in-nacelle span), spar crank, and pushrod
+//   are added on/near the pivot.  Printed-part masses = STL volume × effective
+//   printed density (CF-PETG 1.05 g/cm³, calibrated from the documented
+//   bevel-housing 0.72 g / 0.683 cm³; PETG flaps 1.00 g/cm³); steel 7.85 g/cm³.
 //
-//   Item               Mass (g / lbm)   CG_Z mm (in)   Moment (g·mm)
+//   Item                     Mass (g / lbm)   CG_Z mm (in)   Moment (g·mm)
 //   ─────────────────────────────────────────────────────────────────────
-//   EDF1 (upstream)    70 g (0.154 lbm)    59.4 (2.34)     4158
-//   EDF2 (downstream)  70 g (0.154 lbm)   150.6 (5.93)    10542
-//   ESC1 (in hub bore) 25 g (0.055 lbm)    59.4 (2.34)     1485
-//   ESC2 (in hub bore) 25 g (0.055 lbm)   150.6 (5.93)     3765
-//   Shell+stator+cowl  130 g (0.287 lbm)   92.8 (3.65)    12064
-//   Drive Pinion A     0.14 g               104.0            15
-//   Bevel pair         0.03 g               104.0             3
-//   Bevel housing      0.72 g               104.0            75
-//   Crown Pinion       0.14 g               156.25           22
-//   Nozzle idler gear  3.30 g               161.25          532
-//   Idler bracket      0.90 g               161.25          145
-//   Nozzle ring gear   7.00 g               169.25         1185
-//   8× nozzle petals   10.2 g               176.0          1795
-//   Total             342.4 g (0.755 lbm)  104.5 (4.11)    35786
+//   EDF1 (upstream)          70 g (0.154 lbm)    59.4 (2.34)     4158
+//   EDF2 (downstream)        70 g (0.154 lbm)   150.6 (5.93)    10542
+//   ESC1 (in hub bore)       25 g (0.055 lbm)    59.4 (2.34)     1485
+//   ESC2 (in hub bore)       25 g (0.055 lbm)   150.6 (5.93)     3765
+//   Shell+stator+aft sleeve
+//     +cowl skin            130 g (0.287 lbm)    92.8 (3.65)    12064
+//   Nozzle throat+housing   21.4 g (0.047 lbm)  174.8 (6.88)     3741
+//   Unison ring (cam-only)   6.7 g (0.015 lbm)  169.9 (6.69)     1138
+//   8× nozzle flaps (40 mm) 21.1 g (0.047 lbm)  198.2 (7.80)     4182
+//   Spar crank               1.4 g              111.5 (4.39)      156
+//   Pushrod (COTS + links)   3.6 g              140.8 (5.54)      507
+//   Rotating tilt-spar span 19.2 g (0.042 lbm)  111.5 (4.39)     2141
+//   Total                   393.4 g (0.867 lbm) 111.5 (4.39)    43879
 //
-//   CG_Z = 35786 / 342.4 ≈ 104.5 mm (4.11 in) → PIVOT_Z = 104.5 mm.  Only
-//   +0.75 mm aft of the previous 103.75 mm pivot, so the pivot boss and gear
-//   stations move negligibly.  First-article verification against printer-
+//   CG_Z = 43879 / 393.4 ≈ 111.5 mm (4.39 in) → PIVOT_Z = 111.5 mm, a +7.0 mm
+//   aft move from the 104.5 mm gear-train pivot.  Drivers: the 40 mm flaps and
+//   the discrete Ø71 housing at the far aft, only partly offset by the 19 g
+//   steel spar sitting on the pivot; the deleted gear train and the ring-gear→
+//   cam swap are ~a wash.  FIRST-PASS estimate (credible band ≈109–112 mm):
+//   effective printed densities pending printer-sliced masses, and the discrete
+//   housing vs. cowl-skin overlap pending the Ø72 nozzle-pocket shell re-bake
+//   (see NOZZLE_RING_OD note + WBS §1.1.3).  First-article verification against
 //   sliced masses still applies (per the original acceptance note).
 //
 // Nacelle key dimensions — imperial primary, mm in parentheses
@@ -176,7 +186,8 @@
 //   Nacelle OD (X)  : 2.97 in (75.4 mm)  spanwise bounding box
 //   Nacelle OD (Y)  : 3.28 in (83.3 mm)  fore-aft bounding box
 //   Wall minimum    : 0.098 in (2.5 mm)  CF-PETG
-//   Pivot station   : 4.11 in (104.5 mm) from intake face (= full-assembly CG)
+//   Pivot station   : 4.39 in (111.5 mm) from intake face (= full-assembly CG,
+//                     Rev T; was 4.11 in / 104.5 mm under the gear-train drive)
 //   Stator zone     : 3.69–4.68 in (93.75–118.75 mm) from intake
 //   Nozzle pocket   : starts at 6.55 in (166.25 mm) from intake
 //   Per-nacelle thrust (static, 2× EDF × 90% stator eff):
@@ -229,7 +240,9 @@ NACELLE_OD_X    =  75.4;  // [mm] nacelle bounding-box width, spanwise (X)  = 2.
 NACELLE_OD_Y    =  83.3;  // [mm] nacelle bounding-box depth, fore-aft  (Y) = 3.28 in
 
 // ── X-face positions at the pivot station (Z ≈ PIVOT_Z, Y ≈ 0) ───────────────
-// Measured from the centered-bore repaired STL near the pivot (Z≈104.5mm, Y<5mm).
+// Measured from the centered-bore repaired STL near Z≈104.5 mm, Y<5mm (the old
+// gear-train pivot).  Rev T moves the pivot to Z=111.5 mm — VERIFY the 34/38 mm
+// face heights at the new station (they change little over +7 mm; WBS §1.1.3).
 // The Serenity nacelle is NOT a symmetric ellipse — pylon-attachment features
 // make the pylon-side face narrower (+34mm) than the far side (-38mm).
 // Used to guarantee the boss root is inside the nacelle wall.
@@ -357,15 +370,17 @@ SWIRL_DIR       =  +1;    // [+1 / -1] default port nacelle CW from intake
 
 // ── CG-derived tilt pivot (1.25× scale) ──────────────────────────────────────
 // Pivot at nacelle CG eliminates gravity-induced servo torque.
-// CG_Z re-derived 2026-07-04 for the FULL rotating assembly — the earlier
-// 103.75 mm figure omitted the tilt gear train and the nozzle ring/petal/idler
-// mechanism and still carried the (now-removed) WS2812B exhaust LED ring.  With
-// every component that tilts with the nacelle included (see the mass breakdown
-// in the header) and the exhaust LED rings deleted per TODO §1.1.3.5, the
-// rotating CG lands at Z = 104.5 mm (4.11 in).  Pylon-fixed parts (sector gear,
-// servo bracket) do NOT tilt and are excluded.  Y = 0 (bore axis) = Y_cg for the
-// bore-symmetric assembly.
-PIVOT_Z         = 104.5;   // [mm] pivot axial centre = full-assembly CG station
+// CG_Z re-derived 2026-07-19 for the Rev T pushrod / cam-only nozzle drive plus
+// the rotating Ø8 mm tilt-spar (see the mass breakdown in the header).
+// Superseding history: 103.75 mm (pre-gear-train) → 104.5 mm (2026-07-04 gear
+// train) → 111.5 mm (Rev T).  The Rev T changes — 40 mm flaps at ~198 mm, the
+// discrete Ø71 throat+housing at ~175 mm, the cam-only ring, the deleted gear
+// train, and the ~19 g steel spar sitting on the pivot — move the rotating CG
+// to Z = 111.5 mm (4.39 in), a +7.0 mm aft shift.  Pylon-fixed parts (wingtip
+// sync gear, servo bracket) do NOT tilt and are excluded.  Y = 0 (bore axis) =
+// Y_cg for the bore-symmetric assembly.  FIRST-PASS (credible band ≈109–112 mm);
+// see the header for the density / nozzle-pocket caveats.
+PIVOT_Z         = 111.5;   // [mm] pivot axial centre = full-assembly CG station
 
 // ── Rotating 8 mm tilt-spar interface (Rev R2, 2026-07-18) ─────────────────────
 // SUPERSEDES the MF104ZZ 4 mm fixed-rod pivot.  The 8 mm spar (AISI 4130,
@@ -390,7 +405,7 @@ CLEVIS_EAR_OD   =  16.0;   // [mm] retained for compatibility (nav rib sizing)
 
 // ── Gear mount features ───────────────────────────────────────────────────────
 // Module M=1.0, pressure angle 20°.
-PINION_A_Z      = PIVOT_Z;  // [mm] Pinion A shaft Z (tracks PIVOT_Z = 104.5)
+PINION_A_Z      = PIVOT_Z;  // [mm] Pinion A shaft Z (tracks PIVOT_Z = 111.5)
 PINION_A_Y      =  30.5;   // [mm] Pinion A fore-aft offset = R_sector + R_pinionA
                            //   = 22 + 8.5 = 30.5 mm (Rev S1: Pinion A regeared
                            //   12T R6 -> 17T R8.5 for the internal-ring nozzle

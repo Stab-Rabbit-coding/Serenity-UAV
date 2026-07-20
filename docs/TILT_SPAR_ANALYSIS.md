@@ -17,7 +17,8 @@ SCAD is reworked.
 
 - The **wing is fixed** to the fuselage and does **not** tilt.
 - A **single rotating spar** runs: cargo bay → wing → **nacelle CG pivot**
-  (duct Z = 104.5 mm), and is **fixed (keyed) to the nacelle**.
+  (duct Z = 111.5 mm; Rev T CG re-derive 2026-07-19, was 104.5 mm), and is
+  **fixed (keyed) to the nacelle**.
 - **Servo in the cargo bay** rotates the spar → tilts the nacelle. The spar *is*
   the drive shaft (no external pushrod/lever).
 - **Two bearings** carry wing/spar loads and allow rotation:
@@ -46,8 +47,8 @@ SCAD is reworked.
 | Quantity | Value | Source |
 |---|---|---|
 | Thrust per nacelle (hover) | 2,232 gf = **21.9 N (4.92 lbf)** | `serenity-rev-r.jsx` L346 |
-| Nacelle mass (rotating assy) | 342.4 g = **0.755 lbm** | `nacelle_pod_50mm_tandem.scad` L166 |
-| Nacelle CG (duct axis) | Z = 104.5 mm (4.11 in) | ibid — pivot at CG |
+| Nacelle mass (rotating assy) | 393.4 g = **0.867 lbm** (Rev T) | `nacelle_pod_50mm_tandem.scad` header mass breakdown |
+| Nacelle CG (duct axis) | Z = 111.5 mm (4.39 in) (Rev T; was 104.5) | ibid — pivot at CG |
 | Wing lift per side (40 kt) | ≈ **3.8 N (0.85 lbf)** | `wings_s1223_revo.scad` L35 (7.6 N ÷ 2) |
 | Servo torque (tilt drive) | ≥ 25 kg·cm = **2.45 N·m (21.7 lbf·in)** | `serenity-rev-r.jsx` L383 |
 | EDF bore ID | 50 mm (1.97 in), r = 25 mm | `nacelle_pod…scad` L221 |
@@ -181,8 +182,9 @@ critical (life-limited) fallback. All allowables pending MMPDS/AMS verification
 ## 4. Airflow — Spar Crossing the Thrust Duct
 
 The spar crosses the 50 mm duct **spanwise (X), perpendicular to flow (Z)**, at
-**Z = 104.5 mm — the inter-EDF stator station** (stator spans 90–122.5 mm). This
-is the key finding: **the duct core is already obstructed there.**
+**Z = 111.5 mm — the inter-EDF stator station** (stator spans 90–122.5 mm; Rev T
+CG re-derive, was 104.5 mm — still well inside the stator span). This is the key
+finding: **the duct core is already obstructed there.**
 
 - Existing blockage at that station: 16 mm-OD stator hub + 11 radial fins
   (r = 16–25 mm). The core is a structural spider, **not** a fan.
@@ -193,7 +195,7 @@ is the key finding: **the duct core is already obstructed there.**
   behind blockage that already exists. **Net added blockage → ~2–4%**, at the
   lowest-velocity (post-EDF1, pre-EDF2) station.
 - **No motor conflict:** EDF1 (Z=59.4) and EDF2 (Z=150.6) shafts run along Z; the
-  pivot at Z=104.5 is the *gap* between them. The spar owns the core only where
+  pivot at Z=111.5 is in the *gap* between them. The spar owns the core only where
   the stator spider already does.
 
 **Required stator change:** re-index the 11 fins so **2 opposing fins lie on the
@@ -269,7 +271,7 @@ X < 25 mm to intrude) — so embedding the gears in the inboard face adds **zero
 airflow blockage** and is independent of the §4 stator-crossing of the spar.
 
 - **Recess in nacelle inboard face:** Ø ≈ 52 mm × **4 mm deep** (X 34→30),
-  centered on the spar axis (Y = 0, Z = 104.5). Sized so Pinion A can orbit the
+  centered on the spar axis (Y = 0, Z = 111.5). Sized so Pinion A can orbit the
   fixed sector through the full 95° (orbit radius 19.5 + pinion tip 6.5 = 26 mm).
 - The fixed sector (on the non-rotating wingtip) sits **inside** this recess; the
   recess + Pinion A rotate around it with the nacelle.

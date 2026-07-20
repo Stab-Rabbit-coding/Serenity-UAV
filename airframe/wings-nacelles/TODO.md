@@ -24,5 +24,6 @@
 → full detail: `WBS.md` §1.1.3
 
 - [ ] [OPEN — DESIGN] Nozzle drive protrudes ~10 mm past the nacelle…
+- [ ] [OPEN — VERIFY] MT6701 pinout/addr gate §1.1.3.6 (ENC-NACELLE-1 sch)
 
 ---

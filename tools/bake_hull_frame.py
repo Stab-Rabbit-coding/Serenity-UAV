@@ -126,7 +126,7 @@ COMPONENTS = {
     ),
     # Nacelles: 270 deg about +X = cruise / forward-flight attitude.
     # This is the canonical stored attitude; hover tilt is applied
-    # about the pivot (Z = PIVOT_Z = 104.5 mm from intake, the full-assembly
+    # about the pivot (Z = PIVOT_Z = 111.5 mm from intake, the full-assembly
     # CG station — see nacelle_pod_50mm_tandem.scad) downstream, not here.
     #
     # nacelle_port_revs.stl — port side (hull +X, Px ≈ +47 mm).

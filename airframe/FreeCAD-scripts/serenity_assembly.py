@@ -486,15 +486,17 @@ def assemble():
     # Nacelle local-frame Z stations, mm (nacelle_pod_50mm_tandem.scad):
     #   intake Z=0 .. STATOR_SLV_Z_START=90.0 .. AFT_SLV_Z_START=122.5 ..
     #   NOZZLE_RING_Z(=CROWN_Z)=166.25 .. NACELLE_L=185.2 (nozzle exit).
-    #   PIVOT_Z is the gear-train station, inside the sleeve span.
+    #   PIVOT_Z is the spar-crank / CG station, inside the sleeve span.
     STATOR_SLV_Z_START = 90.0
     AFT_SLV_Z_START = 122.5
-    # PIVOT_Z re-derived 2026-07-04 for the FULL rotating assembly (nozzle
-    # ring/petals; WS2812B exhaust LED rings removed): CG_Z = 104.5 mm.  See
-    # nacelle_pod_50mm_tandem.scad header mass breakdown.  Rev T (2026-07-18)
-    # deleted the gear train (Option B pushrod drive) — its small gear masses
-    # left the pivot CG effectively unchanged; the spar crank clamps here.
-    PIVOT_Z = 104.5  # pivot / spar-crank station = full-assembly nacelle CG
+    # PIVOT_Z re-derived 2026-07-19 for the Rev T rotating assembly: CG_Z =
+    # 111.5 mm.  See nacelle_pod_50mm_tandem.scad header mass breakdown.  The
+    # earlier 104.5 mm figure predates the Rev T nozzle changes: deleting the
+    # gear train alone left the pivot CG ~unchanged, but doubling the flaps
+    # 20→40 mm (CG ~198 mm), making the Ø71 throat+housing a discrete pocket
+    # part (~175 mm), and adding the ~19 g steel spar (on the pivot) net-move
+    # the CG +7.0 mm aft to 111.5 mm.  The spar crank clamps at this station.
+    PIVOT_Z = 111.5  # pivot / spar-crank station = full-assembly nacelle CG
     NOZZLE_RING_Z = 166.25  # nozzle ring station (nozzle placement)
 
     for side in ("port", "stbd"):

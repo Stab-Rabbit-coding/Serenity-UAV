@@ -80,11 +80,16 @@ CABLE_SEP    = 8.0;      // [mm] chord (Y) centre-to-centre
 CABLE_TUBE_OD = 10.0;    // [mm] guide-tube OD
 CABLE_TUBE_L  = 28.0;    // [mm] guide-tube length inward from the wall
 
-OUTBOARD_WALL_X = -72.7; // [mm] cargo outboard (wing-side) wall
-
-// Per-side data: [spar_Y, cable_Y, spar_Z, x_root, inboard_sign, tenon_Y, tenon_Z]
-PORT = [15, 55, 66, -81,  -1, 57.5, 58];
-STBD = [10, 50, 66, -250, +1, 52.5, 58];
+// Per-side data: [spar_Y, cable_Y, spar_Z, x_root, inboard_sign, tenon_Y, tenon_Z,
+//                 wall_x]
+//   wall_x = hull X of the outboard (wing-side) bulkhead INNER face at the spar
+//   station, measured from cargo_sect_shell24_2mm_repaired.stl (Z≈66, Y≈15):
+//   port ≈ −86, stbd ≈ −251.  (Rev R2a fix, 2026-07-19: the old single
+//   OUTBOARD_WALL_X = −72.7 was the belly's widest point at another Z, ~13 mm
+//   outboard of the wall here; combined with a sign error in servo_mount it put
+//   the port tilt-servo cradle OUT ON THE WING instead of inside the cargo bay.)
+PORT = [15, 55, 66, -81,  -1, 57.5, 58, -86];
+STBD = [10, 50, 66, -250, +1, 52.5, 58, -251];
 
 // =============================================================================
 // ── Module: root_bearing_seat ──────────────────────────────────────────────
@@ -116,25 +121,29 @@ module root_bearing_seat(spar_y, spar_z, x_root, inb) {
 // projects into the cargo bay, so the servo does not intrude on the payload
 // volume.  The servo sits just inboard of the wing-root structure, its output
 // end toward the spar; the arm→pushrod→spar-horn linkage is assembly hardware.
-module servo_mount(spar_y, spar_z, x_root, inb) {
-    wall_in = OUTBOARD_WALL_X - inb * 2.5;   // inner face of the outboard bulkhead
-    // cradle occupies X: 20 mm (W) into the bay from the wall; Y: 40 (L) along
-    // the wall; Z: 40 (H) vertical, centred a little below the spar.
-    cx = wall_in - inb * (SRV_W/2 + 1);      // 1 mm off the wall
-    cy = spar_y - 6;                         // nudge fwd of the spar horn plane
-    cz = spar_z - 6;                         // roughly centred on the spar height
+module servo_mount(spar_y, spar_z, x_root, inb, wall_x) {
+    // Cradle mounted FLAT against the outboard bulkhead INNER face (wall_x): its
+    // wall-side face sits on wall_x and only the SRV_W (20 mm) width projects
+    // into the bay along the INBOARD (+inb·X) direction, so the servo does not
+    // intrude on the payload volume.  Inboard is +inb·X for BOTH sides
+    // (port inb=−1 → −X toward CL; stbd inb=+1 → +X toward CL); the earlier
+    // −inb signs drove the cradle OUTBOARD onto the wing (Rev R2a fix).
+    hw = (SRV_W + 2*SRV_WALL) / 2;           // cradle half-width in X (= 12.5 mm)
+    cx = wall_x + inb * hw;                   // wall-side cradle face lands on wall_x
+    cy = spar_y - 6;                          // nudge fwd of the spar horn plane
+    cz = spar_z - 6;                          // roughly centred on the spar height
     translate([cx, cy, cz])
         difference() {
             cube([SRV_W + 2*SRV_WALL, SRV_L + 2*SRV_WALL, SRV_H + 2*SRV_WALL],
                  center = true);
-            // servo pocket (open toward the bay, −inb·X)
-            translate([-inb * SRV_WALL, 0, 0])
+            // servo pocket, opening toward the bay (inboard, +inb·X) for insertion
+            translate([inb * SRV_WALL, 0, 0])
                 cube([SRV_W + 0.4, SRV_L + 0.4, SRV_H + 0.4], center = true);
         }
     // gusset tying the cradle back to the bulkhead + down toward the floor
     hull() {
         translate([cx, cy, cz]) cube([1, SRV_L, SRV_H], center = true);
-        translate([wall_in - inb * 0.5, cy - SRV_L/2, 20]) cube([1, SRV_L, 1]);
+        translate([wall_x, cy - SRV_L/2, 20]) cube([1, SRV_L, 1]);
     }
 }
 
@@ -177,9 +186,9 @@ module wing_root_receiver(spar_y, spar_z, x_root, inb, tenon_y, tenon_z) {
 // ── Module: cableway_ends ───────────────────────────────────────────────────
 // Two Ø7 guide tubes continuing the wing double-D conduits from the outboard
 // wall inward into the cargo bay (EDF power/signal to the ESC/PDB bays).
-module cableway_ends(cable_y, spar_z, inb) {
+module cableway_ends(cable_y, spar_z, inb, wall_x) {
     for (dy = [-CABLE_SEP/2, CABLE_SEP/2])
-        translate([OUTBOARD_WALL_X, cable_y + dy, spar_z])
+        translate([wall_x, cable_y + dy, spar_z])
             rotate([0, inb * 90, 0])
                 difference() {
                     cylinder(d = CABLE_TUBE_OD, h = CABLE_TUBE_L);
@@ -189,11 +198,11 @@ module cableway_ends(cable_y, spar_z, inb) {
 
 // =============================================================================
 // ── Assembly ─────────────────────────────────────────────────────────────────
-module side(d) { // [spar_Y, cable_Y, spar_Z, x_root, inb, tenon_Y, tenon_Z]
+module side(d) { // [spar_Y, cable_Y, spar_Z, x_root, inb, tenon_Y, tenon_Z, wall_x]
     wing_root_receiver(d[0], d[2], d[3], d[4], d[5], d[6]);
     root_bearing_seat(d[0], d[2], d[3], d[4]);
-    servo_mount(d[0], d[2], d[3], d[4]);
-    cableway_ends(d[1], d[2], d[4]);
+    servo_mount(d[0], d[2], d[3], d[4], d[7]);
+    cableway_ends(d[1], d[2], d[4], d[7]);
 }
 
 side(PORT);
