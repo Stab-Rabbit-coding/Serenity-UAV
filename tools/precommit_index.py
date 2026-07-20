@@ -19,21 +19,22 @@ INDEX_CONFIG = {
 
 
 def get_ignored_files():
+    """Retrieve git-ignored files."""
     try:
         cmd = ["git", "ls-files", "--others", "--ignored", "--exclude-standard"]
-        return set(subprocess.check_output(cmd).decode("utf-8").splitlines())
+        output = subprocess.check_output(cmd).decode("utf-8")
+        return set(output.splitlines())
     except subprocess.CalledProcessError:
         return set()
 
 
 def sync_and_format():
-    # Discover all files in TRACKED_DIRS recursively
+    """Recursively sync filetree with indexes."""
     current_files = set()
     for d in TRACKED_DIRS:
         if os.path.exists(d):
             for root, dirs, files in os.walk(d):
-                # Modify dirs in-place to prevent walking into ignored directories
-                dirs[:] = [d for d in dirs if d not in IGNORE_DIRS]
+                dirs[:] = [di for di in dirs if di not in IGNORE_DIRS]
                 for f in files:
                     if not f.endswith(('.FCBak', '.rpt')):
                         current_files.add(os.path.join(root, f))
@@ -48,6 +49,7 @@ def sync_and_format():
         with open(index_path, 'r') as f:
             lines = f.readlines()
 
+        # Prune missing entries
         clean_lines = []
         indexed_paths = set()
         for line in lines:
@@ -59,26 +61,29 @@ def sync_and_format():
             else:
                 clean_lines.append(line)
 
+        # Discover new items
         new_items = []
         for f in sorted(current_files):
             if f not in indexed_paths:
                 new_items.append(f"{f} — [PENDING AI CLASSIFICATION]\n")
         for f in sorted(ignored_files):
-            if f not in indexed_paths and any(f.startswith(d) for d in TRACKED_DIRS):
+            if f not in indexed_paths and any(f.startswith(d) for d in
+                                              TRACKED_DIRS):
                 new_items.append(f"{f} — [IGNORED/VCS-EXCLUDED]\n")
 
+        # Update file if changes detected
         if new_items or len(clean_lines) != len(lines):
             if new_items:
-                # Append new items before existing auto-discovered headers if possible,
-                # or just append to end
-                clean_lines.append(f"\n## --- AUTO-DISCOVERED (
-                    {datetime.now().strftime('%Y-%m-%d')}) ---\n")
+                header = f"\n## --- AUTO-DISCOVERED ({datetime.now().date()})"
+                clean_lines.append(f"{header} ---\n")
                 clean_lines.extend(new_items)
 
             if len(clean_lines) > date_line_idx:
-                clean_lines[date_line_idx] =
-                    f"<!-- Last updated: {datetime.now().strftime('%Y-%m-%d')}
-                    — Automated reconciliation pass -->\n"
+                date_str = datetime.now().strftime("%Y-%m-%d")
+                clean_lines[date_line_idx] = (
+                    f"<!-- Last updated: {date_str} — "
+                    "Automated reconciliation pass -->\n"
+                )
 
             with open(index_path, 'w') as f:
                 f.writelines(clean_lines)
