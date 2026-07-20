@@ -87,7 +87,13 @@ SLEEVE_KEY_H    =   3.0;    // [mm] key radial height above sleeve OD
 // Sleeve-local Z = nacelle Z − SLEEVE_Z_START
 STATOR_Z_BOT_L  =   3.75;  // [mm] stator bottom (nacelle 93.75 − 90.0)
 STATOR_Z_TOP_L  =  28.75;  // [mm] stator top    (nacelle 118.75 − 90.0)
-N_FINS          =  11;     // [count] inter-stage stator fins
+// N_FINS MUST stay COPRIME with the 12-blade EDF rotor (Xfly Galaxy X5) so the
+// rotor↔stator interaction tones stay cut off (Tyler–Sofrin rotor-stator mode
+// selection): use 11 (chosen — preserves the vetted thrust/solidity budget) or
+// 13 ONLY.  NEVER 12 (1:1 resonance) and avoid even counts sharing factors with
+// 12.  Because 11 is odd there is no diametric fin pair on the spar (±X) axis —
+// the spar is carried by its own streamlined strut instead (see spar_fairing()).
+N_FINS          =  11;     // [count] inter-stage stator fins (coprime w/ 12-blade rotor)
 FIN_THICKNESS   =   2.0;   // [mm] fin tangential thickness
 VANE_ANGLE_DEG  =  33.0;   // [deg] fin angle from axial (tuned to 50 mm 6S tip swirl)
 
@@ -96,16 +102,33 @@ VANE_ANGLE_DEG  =  33.0;   // [deg] fin angle from axial (tuned to 50 mm 6S tip 
 S_HUB_R         =   8.0;   // [mm] hub outer radius (16 mm OD)
 S_HUB_BORE_R    =   2.0;   // [mm] hub bore radius   ( 4 mm ID)
 
-// ── Rotating 8 mm tilt-spar tunnel (Rev R2, 2026-07-18) ──────────────────────
-// The 8 mm rotating tilt-spar crosses the duct spanwise (X) through the stator
-// station.  A faired tube (SPAR_TUNNEL_OD) carries the spar bore across the
-// annulus, merging with the hub and the two ±X fin positions — this is the
-// airflow fairing from docs/TILT_SPAR_ANALYSIS.md §4 (crossing at the already-
-// blocked stator core keeps added blockage small).  Sleeve-local Z of the spar
-// = nacelle PIVOT_Z 104.5 − STATOR_SLV_Z_START 90 = 14.5 mm.
-SPAR_TUNNEL_Z_L =  14.5;   // [mm] sleeve-local Z of the spar axis
+// ── Rotating 8 mm tilt-spar fairing (Rev T2, 2026-07-19) ─────────────────────
+// The 8 mm rotating tilt-spar crosses the duct spanwise (X) at the CG pivot,
+// which lands inside the stator: sleeve-local Z = nacelle PIVOT_Z 111.5 −
+// STATOR_SLV_Z_START 90 = 21.5 mm (Rev T2 CG re-derive 2026-07-19: the pivot
+// moved 104.5 → 111.5 mm with the pushrod/cam nozzle drive — see
+// nacelle_pod_50mm_tandem.scad header mass breakdown).
+//
+// STATOR REWORK (2026-07-19, user directive "maximum straightened airflow to the
+// second EDF past the pivot"):  the CG pivot is fixed and the EDF2 rotor face
+// (nacelle 122.5) sets a rotor–stator gap that must stay open, so the ~7 mm of
+// vane downstream of the spar is the only straightening length available.  The
+// spar is therefore carried across the annulus in a STREAMLINED TEARDROP STRUT
+// (replacing the old blunt Ø13 round tube): a round nose over the spar bore with
+// the TAIL swept AFT (+Z, toward EDF2) — a boat-tail that closes the wake and
+// hands EDF2 straightened, axial flow past the pivot.  The strut runs along X
+// hub→bore, so it doubles as the ±X faired member the 11 odd twisted swirl vanes
+// cannot provide.  See docs/TILT_SPAR_ANALYSIS.md §4.  FIRST-PASS aero (strut
+// chord/tail, residual swirl into EDF2): VERIFY by CFD / bench before flight.
+SPAR_TUNNEL_Z_L =  21.5;   // [mm] sleeve-local Z of the spar axis (= CG pivot)
 SPAR_BORE_D_S   =   8.15;  // [mm] spar clearance bore (spar rotates fixed to nacelle)
-SPAR_TUNNEL_OD  =  13.0;   // [mm] faired tube OD around the spar across the duct
+SPAR_FAIR_THK   =  13.0;   // [mm] strut max thickness (round nose Ø, over the spar)
+SPAR_FAIR_TAIL  =   7.0;   // [mm] boat-tail sweep AFT of the spar axis — lands the
+                           //   TE at sleeve-local Z 28.5 ≈ the vane TE plane (28.75),
+                           //   so the 11 swirl vanes keep the LAST word before EDF2.
+                           //   NOTE: bore Ø8.15 ≈ chord means the strut is inherently
+                           //   bluff (t/c high); the tail trims base drag but the
+                           //   dominant mitigation is hiding in the blocked core.
 
 // ── Swirl direction ─────────────────────────────────────────────────────────────
 SWIRL_DIR       =  +1;     // [+1 / -1] port nacelle CW; override: -D SWIRL_DIR=-1
@@ -190,20 +213,39 @@ module stator_fin(phi_center, swirl_dir) {
 // Union of sleeve body, stator hub, and 11 stator fins.
 // Fin arms extend +1 mm past the bore wall (EDF_BORE_R + 1 = 26 mm) to overlap
 // the sleeve tube inner wall, providing CGAL volumetric contact.
-// ── Module: spar_tunnel ───────────────────────────────────────────────────────
-// Faired tube carrying the 8 mm spar across the duct at the stator station.
-// Runs along X at (Y=0, sleeve-local Z = SPAR_TUNNEL_Z_L), spanning the full
-// annulus (±(EDF_BORE_R+1)) so it overlaps the hub and both bore walls.
-module spar_tunnel() {
+// ── Module: spar_fairing ──────────────────────────────────────────────────────
+// Streamlined teardrop strut carrying the 8 mm spar across the duct at the stator
+// station.  Cross-section (in the flow Z–Y plane): a round nose of diameter
+// SPAR_FAIR_THK centred on the spar axis, hulled to a near-point tail swept
+// SPAR_FAIR_TAIL downstream (+Z, toward EDF2) — a boat-tail that closes the wake
+// for straightened EDF2 inflow.  Extruded along X across the full annulus
+// (±(EDF_BORE_R+1)) so it overlaps the hub and both bore walls.
+//
+// Transform note: translate(Zc)·rotate([0,90,0]) maps the 2D profile's local +X
+// to global −Z, so the tail (local −X = −SPAR_FAIR_TAIL) lands at global
+// Z = Zc + SPAR_FAIR_TAIL, i.e. AFT toward EDF2, as intended.
+module spar_fairing() {
     translate([0, 0, SPAR_TUNNEL_Z_L]) rotate([0, 90, 0])
         translate([0, 0, -(EDF_BORE_R + 1)])
-            cylinder(r = SPAR_TUNNEL_OD / 2, h = 2 * (EDF_BORE_R + 1));
+            linear_extrude(height = 2 * (EDF_BORE_R + 1))
+                hull() {
+                    circle(d = SPAR_FAIR_THK);                    // nose over spar
+                    translate([-SPAR_FAIR_TAIL, 0]) circle(d = 1.0);  // boat-tail (aft)
+                }
 }
 
+// ── Module: spar_bore_cut ─────────────────────────────────────────────────────
+// Spar clearance bore along X, full sleeve width.  Rev T2 (2026-07-19): the cut
+// now reaches BEYOND the sleeve OD *and* the 3 mm anti-rotation key at 0° (whose
+// outer edge is at SLEEVE_OD/2 + SLEEVE_KEY_H = 30.5 mm) — the old ±(EDF_BORE_R+3)
+// = ±28 mm bore stopped short of the 0° key, leaving 2.5 mm of key material
+// plugging the spar hole where the spar exits the +X face.  Drill through it so
+// the rotating spar is not blocked by its own anti-rotation key.
 module spar_bore_cut() {
+    cut_h = 2 * (SLEEVE_OD / 2 + SLEEVE_KEY_H + 3);   // = 67 mm: clears OD + 0° key
     translate([0, 0, SPAR_TUNNEL_Z_L]) rotate([0, 90, 0])
-        translate([0, 0, -(EDF_BORE_R + 3)])
-            cylinder(r = SPAR_BORE_D_S / 2, h = 2 * (EDF_BORE_R + 3));
+        translate([0, 0, -cut_h / 2])
+            cylinder(r = SPAR_BORE_D_S / 2, h = cut_h);
 }
 
 module edf_stator_sleeve(swirl_dir = SWIRL_DIR) {
@@ -221,8 +263,8 @@ module edf_stator_sleeve(swirl_dir = SWIRL_DIR) {
                 stator_fin(i * (360 / N_FINS), swirl_dir);
             }
 
-            // ── Rotating-spar faired tunnel across the duct ───────────────────
-            spar_tunnel();
+            // ── Rotating-spar streamlined fairing across the duct ─────────────
+            spar_fairing();
 
         }
 

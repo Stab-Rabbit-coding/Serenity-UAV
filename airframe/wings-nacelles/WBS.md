@@ -21,13 +21,13 @@
 
 **Wing pylon (OpenSCAD — Rev S integrated design; carried fwd from Rev O):**
 
-- [ ] **wing_nacelle_pylon_revo.stl** — `openscad -o ... serenity/stl/wing_nacelle_pylon_revo.scad`
+- [x] **wing_nacelle_pylon_revo.stl** — `openscad -o ... serenity/stl/wing_nacelle_pylon_revo.scad` [SUPERSEDED]
     - Verify WING_SLOT_W and WING_SLOT_H against tip chord 93 mm (Rev R1 planform) before printing — pocket 50×40 mm uses 54 % of tip chord; confirm pylon block clears airfoil walls
     - Verify WING_BOLT_R (16 mm) does not exceed S1223 half-thickness at 50 % tip chord (≈ 9.6 mm above chord line at 93 mm chord); reduce to ≤ 12 mm if pylon block geometry requires it
-- [ ] **wings_s1223_revo.stl** — Rev R1 planform (2026-06-14): root 129 mm, tip 93 mm, zero LE sweep; STLs regenerated and baked ✓
-    - **[OPEN]** Verify cargo-section wing-root mortise dimensions against new root chord 129 mm (was 161 mm); `cargo_sect_shell24.scad` mortise slot (currently 30.8×20.8×15 mm) may need resizing and re-centring
-    - **[OPEN]** Re-check root-tab centre position: with 129 mm chord the tab centres at hull Y ≈ +57.5 mm (was +73.5 mm); confirm mortise centre in cargo SCAD matches
-    - **[OPEN]** Verify wing TE position (hull Y≈+122 mm port, +117 mm stbd) clears cargo-section aft interior features; cargo aft boundary is hull Y≈+132 mm — 10 mm clearance
+- [x] **wings_s1223_revo.stl** — Rev R1 planform (2026-06-14): root 129 mm, tip 93 mm, zero LE sweep; STLs regenerated and baked ✓
+    - **[x]** Verify cargo-section wing-root mortise dimensions against new root chord 129 mm (was 161 mm); `cargo_sect_shell24.scad` mortise slot (currently 30.8×20.8×15 mm) may need resizing and re-centring
+    - **[x]** Re-check root-tab centre position: with 129 mm chord the tab centres at hull Y ≈ +57.5 mm (was +73.5 mm); confirm mortise centre in cargo SCAD matches
+    - **[x]** Verify wing TE position (hull Y≈+122 mm port, +117 mm stbd) clears cargo-section aft interior features; cargo aft boundary is hull Y≈+132 mm — 10 mm clearance
 
 ##### 1.1.2.1 *Rev R1a — spar straightened + camber-centred + EDF cableway (2026-07-07)*
 
@@ -271,6 +271,28 @@
     negligible +0.75 mm) — the nacelle still pivots about its CG, per the user
     requirement.  See the pod header mass breakdown and `nacelle_nozzle_idler.scad`
     header.
+- [x] **CG RE-DERIVED for Rev T (pushrod/cam drive + rotating 8 mm spar),
+    2026-07-19 — SUPERSEDES the 104.5 mm figure above.** Deleting the gear train
+    alone left the pivot ~unchanged, but the Rev T2 40 mm flaps (CG ~198 mm), the
+    discrete Ø71 throat+housing (~175 mm), the cam-only ring, and the ~19 g steel
+    spar (on the pivot) net-move the rotating CG to **CG_Z = 111.5 mm** (mass
+    393.4 g / 0.867 lbm).  `PIVOT_Z` propagated 104.5 → 111.5 across the pod SCAD
+    (header mass table + value), `edf_stator_sleeve.scad` (`SPAR_TUNNEL_Z_L`
+    14.5 → 21.5), `serenity_assembly.py`, `_export_pivot_slab.scad`,
+    `port_tilt_spar_assembly.scad`, `tools/bake_hull_frame.py`, and
+    `docs/TILT_SPAR_ANALYSIS.md`.  Nacelle shells + stator sleeve re-rendered and
+    re-baked (66 STLs pass `validate_stls.py`); spar hub/bore verified at Z=111.5.
+    FIRST-PASS (band ≈109–112 mm) — see root `TODO.md` §1.1.3 for the open VERIFY
+    items (sliced-mass density check, single-straight-spar re-solve for the +7 mm
+    move, stator teardrop-strut aero, and the Ø72-pocket aft-cowl-tail decision).
+- [x] **Stator spar-crossing rework (Rev T2, 2026-07-19).** Pivot at 111.5 lands
+    mid-stator; kept **11 vanes** (coprime with the 12-blade EDF rotor — Tyler–
+    Sofrin resonance cut-off; 12 would resonate, 13 changes thrust) and carried
+    the spar across in a **streamlined teardrop strut** (round nose over the bore,
+    boat-tail swept aft, TE ≈ vane-TE plane so the vanes keep the last straightening
+    word into EDF2) replacing the blunt Ø13 tube.  Drilled the spar bore through
+    the 0° anti-rotation key that was plugging the hole.  Aero is first-pass —
+    VERIFY strut chord/tail + residual EDF2 swirl by CFD/bench.
 - [x] **Confirm Sector Gear standoff distance from the nacelle face**
     *(resolved 2026-06-22)* — a tilt-bracket SCAD source DOES exist
     (`airframe/openscad/wings/wing_nacelle_pylon_revo.scad`, not found in
@@ -440,14 +462,43 @@ tracked in `avionics/WBS.md` §1.9.1 and `avionics/emi-hardening/WBS.md` §1.4.6
     `fuselage_root_tab` (was dead-ended 1 mm in). Soundness echo-verified: bores
     groove only the tenon crown; solid **15.4 mm lower spine** retained.
 - [x] **Nacelle (rotating magnet) hub modelled** *(Rev R2d)* — `nacelle_hall_ring_hub()`
-    (non-ferrous CF-PETG carrier, OD 26 for the Ø24 ring, keyed to the spar, ring
-    ID ≥1 mm off the ferrous spar) in `_export_pivot_slab.scad` (dev sandbox).
+    (non-ferrous CF-PETG carrier, OD 24 for the Ø22 ring — Rev R2e ring downsize, keyed
+    to the spar, ring ID ≥1 mm off the ferrous spar) in `_export_pivot_slab.scad`
+    (dev sandbox).
+- [x] **Tilt-encoder sensor SELECTED (AKM AK7455) + ENC-NACELLE-1 KiCad rebuilt**
+    *(Rev S, 2026-07-19; drafted by Claude Opus 4.8)* — `avionics/kicad/ENC-NACELLE-1.md`
+    and `.kicad_sch` were the Rev Q **AS5600 on-axis** design (magnet on a shaft tip,
+    15×15 mm, JST-GH), invalid under the through-shaft spar. Datasheet-driven sensor
+    down-select (user-supplied datasheets): **MT6701 REJECTED** — its datasheet (Rev 1.9
+    §6) confirms **on-axis only** (Ø6 mm cyl magnet, off-axis misalignment ≤ 0.3 mm), so
+    it cannot read the off-axis ring at R ≈ 11 mm — the same failure as the AS5600;
+    **AS5200L** (on-axis I²C) likewise rejected. **SELECTED = AKM AK7455**
+    (REF-SENSOR-008): datasheet 200800064-E-00 explicitly supports the **Off-Axis
+    (side-of-shaft)** configuration and adds **anomaly-magnetic-field detection + dynamic
+    error reduction + EEPROM INL calibration** — purpose-built for the ferromagnetic
+    (4130/17-4) through-shaft. Both KiCad files rebuilt around the AK7455
+    (`MAL-TILT-ENC-PCB`, **QFN24 4×4**, **SPI** 4-wire + ERROR on a **7-wire** direct-
+    solder pigtail; both nacelles share the SPI bus via separate **CSN** → the I²C
+    fixed-address problem is gone). Pinout **verified** vs the datasheet (TEST2→VSS,
+    TEST1 open, NC pins + back-tab/EP open); `kicad-cli` (9.0.2) ERC **0 errors**.
+    `bom_revS.csv` (`MAL-TILT-ENC-PCB` + `HALL-RING-MAG`) and `REFERENCES.md`
+    (REF-SENSOR-008 + pending row) updated. (A KiCad symbol Y-inversion wiring bug —
+    library Y-up vs sheet Y-down — was found and fixed during the rebuild.)
+- [ ] **[OPEN — cross-subsystem] `Wash.md` §13 still lists `J_ENC` as the AS5600 I²C
+    encoder** — the host moved to River/Simon and the interface to AK7455 **SPI**.
+    Reconcile the Wash cape / `avionics/WBS.md` §1.9.1 on the avionics side (SPI +
+    per-nacelle CSN + ERROR line); an avionics edit, flagged here for traceability.
+- [ ] **[OPEN — airframe] Resize the wing sensor pocket for the AK7455 QFN24 4×4**
+    (was sized for the MT6701 3×3) and route the **7-wire SPI** pigtail — update the
+    `HALL_*` block + comments in `wings_s1223_revo.scad` (they still name MT6701) and
+    `_export_pivot_slab.scad`, then re-bake.
 - [ ] **VERIFY `INBOARD_FACE_X` sign** in `_export_pivot_slab.scad` (which X face
     of the port nacelle is the wing side).
 - [ ] **Migrate `nacelle_hall_ring_hub()` into `nacelle_pod_50mm_tandem.scad`** with
     the keyed spar hub (retire the sandbox preview); re-bake port/stbd shells.
-- [ ] **Confirm MT6701 off-axis geometry vs datasheet** (air-gap, ring OD/ID, IC
-    radial offset) and the ferrous-spar mitigation empirically — bench-cal with the
-    steel spar + bearing installed; monotonic angle over −5..90° after zero-cal.
-    REFERENCES.md requires-verification / TODO §0.8; EMI WBS §1.4.6.
+- [ ] **AK7455 off-axis bench validation** — confirm the ring presents **10–70 mT** at
+    the IC (magnetisation diametric vs radial + gap/offset), run the **EEPROM INL
+    calibration** over −5..90° (AKM app support; monotonic angle), set the sense plane
+    (`R_FIELDSEL`), and confirm the **ERROR** pin drive (push-pull vs open-drain, add a
+    node pull-up if open-drain). REFERENCES.md REF-SENSOR-008 / TODO §0.8; EMI WBS §1.4.6.
 

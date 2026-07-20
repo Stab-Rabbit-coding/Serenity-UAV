@@ -14,3 +14,9 @@ python3 "$TOPDIR/tools/precommit_kicad_load.py" || exit 1
 
 # Sanitization and delinting
 python3 "$TOPDIR/tools/precommit_sanitize.py" || exit 1
+
+# Update indexes
+python3 "$TOPDIR/tools/precommit_index.py" || exit 1
+
+# Automatically stage the updated index files
+git add "$TOPDIR/PROJECT_INDEX.md" "$TOPDIR/ARCHIVE_INDEX.md"

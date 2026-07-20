@@ -486,15 +486,17 @@ def assemble():
     # Nacelle local-frame Z stations, mm (nacelle_pod_50mm_tandem.scad):
     #   intake Z=0 .. STATOR_SLV_Z_START=90.0 .. AFT_SLV_Z_START=122.5 ..
     #   NOZZLE_RING_Z(=CROWN_Z)=166.25 .. NACELLE_L=185.2 (nozzle exit).
-    #   PIVOT_Z is the gear-train station, inside the sleeve span.
+    #   PIVOT_Z is the spar-crank / CG station, inside the sleeve span.
     STATOR_SLV_Z_START = 90.0
     AFT_SLV_Z_START = 122.5
-    # PIVOT_Z re-derived 2026-07-04 for the FULL rotating assembly (nozzle
-    # ring/petals; WS2812B exhaust LED rings removed): CG_Z = 104.5 mm.  See
-    # nacelle_pod_50mm_tandem.scad header mass breakdown.  Rev T (2026-07-18)
-    # deleted the gear train (Option B pushrod drive) — its small gear masses
-    # left the pivot CG effectively unchanged; the spar crank clamps here.
-    PIVOT_Z = 104.5  # pivot / spar-crank station = full-assembly nacelle CG
+    # PIVOT_Z re-derived 2026-07-19 for the Rev T rotating assembly: CG_Z =
+    # 111.5 mm.  See nacelle_pod_50mm_tandem.scad header mass breakdown.  The
+    # earlier 104.5 mm figure predates the Rev T nozzle changes: deleting the
+    # gear train alone left the pivot CG ~unchanged, but doubling the flaps
+    # 20→40 mm (CG ~198 mm), making the Ø71 throat+housing a discrete pocket
+    # part (~175 mm), and adding the ~19 g steel spar (on the pivot) net-move
+    # the CG +7.0 mm aft to 111.5 mm.  The spar crank clamps at this station.
+    PIVOT_Z = 111.5  # pivot / spar-crank station = full-assembly nacelle CG
     NOZZLE_RING_Z = 166.25  # nozzle ring station (nozzle placement)
 
     for side in ("port", "stbd"):
@@ -546,14 +548,13 @@ def assemble():
         # 0..23.75 deg ring map are NOT yet solved; the pushrod link itself
         # (COTS ball-link rod) is intentionally not placed here until that
         # synthesis is closed.
-        spar_crank = add_mesh(
-            doc,
-            _stl("nacelles/nacelle_pushrod_crank.stl"),
-            f"Nacelle_{label}_Nozzle_Spar_Crank",
-        )
-        transform_mesh(
-            spar_crank, nacelle_rows(side, _rot_y(90.0), (0.0, 0.0, PIVOT_Z))
-        )
+        # SUPERSEDED 2026-07-20 + ARCHIVED (ARCHIVE_INDEX.md): the spar-CLAMP
+        # crank cannot actuate the nozzle — the spar is keyed to the nacelle, so
+        # a crank on it shares the ring's rotating frame (zero relative motion).
+        # Replaced by a WING-REFERENCED sync gear + geared bellcrank (hybrid A+B,
+        # docs/NOZZLE_DRIVE_TRADE.md "DECISION AMENDMENT"; overlay
+        # port_tilt_spar_assembly.scad §6).  The new pinion-mounted crank is not
+        # placed here until nacelle_nozzle_pushrod.scad is reworked (TODO §1.1.3).
 
         # ── Nozzle iris assembly ──────────────────────────────────────────
         # nacelle_nozzle_iris.stl is the combined render (cam-only unison ring

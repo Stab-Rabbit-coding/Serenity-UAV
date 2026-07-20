@@ -1,14 +1,15 @@
 // _export_pivot_slab.scad — one-shot cache export (work section, 2026-07-18).
 // Full-radius Z-slab of the true (imported) port nacelle shell around the pivot
-// station (Z = 104.5), so the rotating-spar features (keyed hub, duct-wall
-// bosses, stator tunnel) can be developed against real canonical geometry
-// without re-CSG-ing the whole nacelle each render.  NOT a build artifact.
+// station (Z = 111.5, Rev T CG re-derive 2026-07-19; was 104.5), so the
+// rotating-spar features (keyed hub, duct-wall bosses, stator tunnel) can be
+// developed against real canonical geometry without re-CSG-ing the whole
+// nacelle each render.  NOT a build artifact.
 //
 // In THIS slab frame the spar/tilt axis runs along X (spanwise) at Y = 0,
-// Z = 104.5 (the pivot/CG), piercing both X duct walls.  The Z-slab imports at
-// the duct-axis origin, so the spar axis is the local X-axis through (0, 0, 104.5).
+// Z = 111.5 (the pivot/CG), piercing both X duct walls.  The Z-slab imports at
+// the duct-axis origin, so the spar axis is the local X-axis through (0, 0, 111.5).
 BORE_CX_L = 42.72; BORE_CY = 190.79;
-Z_LO = 85; Z_HI = 125;                         // ±~20 mm around pivot Z=104.5
+Z_LO = 92; Z_HI = 132;                         // ±~20 mm around pivot Z=111.5
 intersection() {
     translate([-BORE_CX_L, BORE_CY, 0])
         import("../../stls/nacelles/eng_left_shell24_50mm_repaired.stl", convexity = 4);
@@ -30,7 +31,7 @@ intersection() {
 // Residual shaft-through distortion is removed by firmware zero-cal (avionics).
 // PROVISIONAL — migrate into nacelle_pod_50mm_tandem.scad with the keyed hub.
 SPAR_AX_Y       =   0.0;    // [mm] spar axis, slab frame
-SPAR_AX_Z       = 104.5;    // [mm] spar axis = pivot/CG station
+SPAR_AX_Z       = 111.5;    // [mm] spar axis = pivot/CG station (Rev T; was 104.5)
 INBOARD_FACE_X  = -30.0;    // [mm] VERIFY SIGN — nacelle inboard (wing-side) X face
 HALL_SPAR_OD    =   8.0;    // [mm] rotating spar OD (keyway hub bore)
 HALL_COLLAR_ID  =   8.1;    // [mm] hub bore over spar (slip/bond, keyed)

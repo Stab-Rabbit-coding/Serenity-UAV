@@ -116,7 +116,11 @@ applicable standards/regulations before implementation.
 Serenity's hull is complex — bounding-box/centroid math is inadequate for part placement. Use
 the validated hull-frame positions in `airframe/AGENTS.md`, or request manual FreeCAD
 placement from the user when uncertain. Keep the canonical outer mold line intact; interior
-modifications must blend into it and never alter the exterior unless structurally required.
+modifications must blend into it and never alter the exterior unless structurally required. The
+`docs/references/` library is the ground truth for what "canonical" shape means — authority order
+QMx 2007 blueprints (most authoritative) → Nick Henning renders → misubisu Thingiverse model
+(the `s_*.stl` origin; verify against the two above). See `airframe/AGENTS.md` "Canonical Accuracy
+References" and `REFERENCES.md` REF-CAD-002/003/004.
 Four fuselage sections (head, cargo, middle-neck/horseshoe ring, rear) plus wings and tilting
 nacelles — see `airframe/AGENTS.md` for the qualitative layout, the hull-frame coordinate
 standard, and the validated extents table (do not duplicate that table here).

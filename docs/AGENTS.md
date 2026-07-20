@@ -57,6 +57,26 @@ When auditing a citation:
 2. Document the removal in the "Removed / Superseded Citations" section of `REFERENCES.md`
 3. Explain why it was removed or superseded (e.g., "Superseded by REF-FCC-002 Rev 2020", "Misattributed — the rule was from Part 97, not Part 95")
 
+### Canonical / Reference Ground-Truth Sources
+
+Beyond standards, `docs/references/` holds the project's **canonical-accuracy** reference library
+for the ship's shape and proportion, cataloged in `REFERENCES.md` Part XIV (REF-CAD-002/003/004).
+Use these as ground truth in this authority order (highest first):
+
+1. **QMx *Official Serenity Blueprints Reference Pack* (2007)** — REF-CAD-003. Most authoritative;
+   officially licensed canon. Where it disagrees with any other reference, it wins. A **copyrighted
+   commercial product retained for internal reference only — NOT relicensed under CC BY.**
+2. **Nick Henning render collection** — REF-CAD-002. Derived from show/QMx canon; more mechanical
+   detail than the blueprints; used by email permission (2026-07-06).
+3. **misubisu Thingiverse model, Thing 7330462** — REF-CAD-004 (CC BY 4.0). The `s_*.stl` origin;
+   still usable but **verify against the two above** before treating any detail as canonical.
+
+The creative-universe attribution and fan-engineering terms (Joss Whedon, cast/crew, Universal /
+Fox-Disney, QMx) are summarized in `REFERENCES.md` ("Creative-Universe Attribution and
+Fan-Engineering Terms") and given in full in
+`current-specification/LICENSE_AND_ATTRIBUTION.md`. Geometry-usage detail lives in
+`airframe/AGENTS.md` "Canonical Accuracy References."
+
 ## Applicable Standards Bodies
 
 Design specifications in Serenity-UAV shall be vetted against standards from these bodies:

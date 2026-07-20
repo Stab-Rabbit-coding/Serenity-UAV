@@ -14,6 +14,8 @@
 
 ---
 
+## 0.0 — Standards Vetting and Regulatory Compliance
+
 ### 0.1 — FCC Part 95 Section Number Verification
 
 → detail: `docs/WBS.md` §0.1
@@ -32,7 +34,7 @@
 
 - [ ] Verify 4130 / 17-4 PH / 7075 allowables vs MMPDS/AMS (REF-MAT-*)
 - [ ] Add 4130 corrosion-finish spec (zinc/cad plate) to BOM/build guide
-- [ ] Verify MT6701 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
+- [ ] Verify AK7455 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
 
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
 
@@ -93,6 +95,7 @@
 - [ ] [OPEN — BLOCKER] Fuselage spar-interface now mismatched.
 
 #### 1.1.3 — Nacelles
+
 - [ ] Reconcile crazy-ivan/PR#141 as SUPERSEDED by fix/nozzle branch
 - [ ] Merge cargo_spar_drive into cargo shell (bearing/servo/mortise/cableway)
 - [ ] Verify stbd cargo-chunk placement of spar-drive features
@@ -100,7 +103,50 @@
 - [ ] Repair pre-existing stator sleeve non-manifold (edf_stator_sleeve)
 - [ ] Hall tilt sensor: VERIFY INBOARD_FACE_X sign in _export_pivot_slab.scad
 - [ ] Migrate nacelle_hall_ring_hub into nacelle_pod_50mm_tandem.scad + re-bake
-- [ ] Bench-cal MT6701 with steel spar/MF128 bearing (ferrous-field check)
+- [ ] Bench-cal AK7455 with steel spar/MF128 bearing (ferrous-field check)
+- [x] **Re-derive rotating-assembly CG for Rev T pushrod/cam drive + 8 mm spar
+    (2026-07-19).** CG_Z = 111.5 mm (was 104.5); `PIVOT_Z` propagated to all
+    SCAD/assembly/docs; nacelle shells + stator sleeve re-rendered/re-baked (66
+    STLs pass validate_stls). Drivers: 40 mm flaps + discrete Ø71 housing aft.
+- [ ] **VERIFY Rev T CG (first-pass, band ≈109–112 mm):** confirm effective
+    printed densities (CF-PETG 1.05 / PETG 1.00 g/cm³) against printer-sliced
+    masses, and the discrete-housing vs cowl-skin overlap. → pod header table.
+- [ ] **Re-solve the single-straight-spar alignment for the +7 mm pivot move.**
+    In the hull-frame bake the spar line slides ~7 mm aft in Y; re-derive the
+    nacelle bake translation (or the cargo/wing spar Y-station) so one straight
+    spar still passes through the CG pivot. `port_tilt_spar_assembly.scad` NAC_D
+    is now DERIVED from `PIVOT_ZLOC` (slide-fwd-to-Y15, user 2026-07-19) so the
+    overlay stays consistent; the baked nacelle STL still needs re-baking to the
+    Rev T CG pivot (its old boss is ~7 mm fwd of the new pivot).
+- [ ] **Nozzle drive: replace the invalid spar-crank with a wing-referenced sync
+    gear + geared bellcrank (2026-07-19).** The Rev T crank clamps the spar, which
+    is KEYED to the nacelle → shares the ring's rotating frame → zero relative
+    motion → no actuation. Adopted hybrid (user; docs/NOZZLE_DRIVE_TRADE.md
+    "DECISION AMENDMENT"): wing-fixed sun gear coaxial with the spar + nacelle
+    pinion (1:1) → geared bellcrank → Rev T cam-only-ring pushrod. Modelled in
+    `port_tilt_spar_assembly.scad` §6. SUB-TASKS:
+    - [ ] Reconcile the wing fixed R22 sector (`wings_s1223_revo.scad`) to the
+        chosen 1:1 sun (module, teeth, pitch radius; keep bolt circle vs bearing).
+    - [ ] Rework `nacelle_nozzle_pushrod.scad`: seat the crank on the pinion, add
+        the pinion + bellcrank; delete the spar-crank clamp.
+    - [ ] Relocate the iris unison-ring lever ear 22.5°→157.5° (inboard flap gap)
+        so the pushrod hugs the inboard cheek instead of crossing the duct.
+    - [ ] Motion study: 1:1-mesh + crank/pushrod transmission angle, monotonic
+        0..90° tilt → 0..23.9° ring; verify joint-gap width vs. the coaxial
+        bearing + sun-gear + Hall-magnet/AK7455 stack.
+- [ ] **Fix iris `asm` flap sign (`nacelle_nozzle_iris.scad`):** the 8-flap loop
+    uses `rotate([0, PHI_CLOSED, 0])` → petals DIVERGE at "closed"; must be
+    `−PHI_CLOSED` to converge to 75 % bore. Preview-only (print parts unaffected).
+- [ ] **Stator spar crossing (Rev T2):** kept 11 vanes (coprime w/ 12-blade
+    rotor — Tyler–Sofrin); spar carried in a streamlined teardrop strut (tail
+    aft, TE ≈ vane TE) + 0° anti-rotation key drilled through. VERIFY strut
+    chord/tail + residual swirl into EDF2 by CFD/bench before flight.
+- [ ] **Ø72 nozzle-pocket eats the aft cowl tail.** The re-rendered shells now
+    end at duct Z≈172.2 mm (was 185.2) — the straight Ø72 pocket over-cuts the
+    tapering dome tail (172–185), so the nozzle housing becomes the aft surface.
+    Decide: taper/shorten the pocket to preserve the silhouette, or accept the
+    housing as the aft OML. (`NOZZLE_RING_OD`; the long-standing "shell bake
+    needs review" note.)
 
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.3
 

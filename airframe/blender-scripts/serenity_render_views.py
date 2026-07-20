@@ -103,7 +103,9 @@ COMPONENTS = [
     # at identity — approximate visual position only, not hull-frame verified)
     ("nacelles/edf_stator_sleeve.stl", "Stator_Sleeve", DETAIL_COLOR),
     ("nacelles/edf_aft_spider_sleeve.stl", "Spider_Sleeve", DETAIL_COLOR),
-    ("nacelles/nozzles/nacelle_nozzle_closed_asm.stl", "Nozzle_Asm", DETAIL_COLOR),
+    # nacelle_nozzle_closed_asm.stl (old Rev R1 axial-hinge nozzle) archived
+    # 2026-07-20; use the current Rev T iris assembly.  See ARCHIVE_INDEX.md.
+    ("nacelles/nozzles/nacelle_nozzle_iris.stl", "Nozzle_Asm", DETAIL_COLOR),
     # Cargo bay doors (printed; positioned in cargo-section local frame)
     ("fuselage/cargo/cargo_door_port.stl", "Cargo_Door_Port", FUSELAGE_COLOR),
     ("fuselage/cargo/cargo_door_stbd.stl", "Cargo_Door_Stbd", FUSELAGE_COLOR),
