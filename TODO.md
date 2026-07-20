@@ -32,7 +32,7 @@
 
 - [ ] Verify 4130 / 17-4 PH / 7075 allowables vs MMPDS/AMS (REF-MAT-*)
 - [ ] Add 4130 corrosion-finish spec (zinc/cad plate) to BOM/build guide
-- [ ] Verify MT6701 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
+- [ ] Verify AK7455 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
 
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
 
@@ -100,7 +100,7 @@
 - [ ] Repair pre-existing stator sleeve non-manifold (edf_stator_sleeve)
 - [ ] Hall tilt sensor: VERIFY INBOARD_FACE_X sign in _export_pivot_slab.scad
 - [ ] Migrate nacelle_hall_ring_hub into nacelle_pod_50mm_tandem.scad + re-bake
-- [ ] Bench-cal MT6701 with steel spar/MF128 bearing (ferrous-field check)
+- [ ] Bench-cal AK7455 with steel spar/MF128 bearing (ferrous-field check)
 - [x] **Re-derive rotating-assembly CG for Rev T pushrod/cam drive + 8 mm spar
     (2026-07-19).** CG_Z = 111.5 mm (was 104.5); `PIVOT_Z` propagated to all
     SCAD/assembly/docs; nacelle shells + stator sleeve re-rendered/re-baked (66
@@ -130,7 +130,7 @@
         so the pushrod hugs the inboard cheek instead of crossing the duct.
     - [ ] Motion study: 1:1-mesh + crank/pushrod transmission angle, monotonic
         0..90° tilt → 0..23.9° ring; verify joint-gap width vs. the coaxial
-        bearing + sun-gear + Hall-magnet/MT6701 stack.
+        bearing + sun-gear + Hall-magnet/AK7455 stack.
 - [ ] **Fix iris `asm` flap sign (`nacelle_nozzle_iris.scad`):** the 8-flap loop
     uses `rotate([0, PHI_CLOSED, 0])` → petals DIVERGE at "closed"; must be
     `−PHI_CLOSED` to converge to 75 % bore. Preview-only (print parts unaffected).

@@ -88,8 +88,13 @@ CABLE_TUBE_L  = 28.0;    // [mm] guide-tube length inward from the wall
 //   OUTBOARD_WALL_X = −72.7 was the belly's widest point at another Z, ~13 mm
 //   outboard of the wall here; combined with a sign error in servo_mount it put
 //   the port tilt-servo cradle OUT ON THE WING instead of inside the cargo bay.)
-PORT = [15, 55, 66, -81,  -1, 57.5, 58, -86];
-STBD = [10, 50, 66, -250, +1, 52.5, 58, -251];
+// cable_y moved FORWARD of the pivot (Rev R2b, 2026-07-20): the EDF double-D
+// cableway was at 0.48c (Y≈55), which crosses the wing/nacelle joint right where
+// the tilt→nozzle sync PINION + bellcrank now sit (~Y41, aft of the spar).  The
+// crossing is re-routed forward of the pivot (Y<15) to deconflict; the wing
+// CABLE_BORE_XFR (0.48c) + wingtip-pad forward channel must follow (TODO §1.1.3).
+PORT = [15, 5, 66, -81,  -1, 57.5, 58, -86];
+STBD = [10, 5, 66, -250, +1, 52.5, 58, -251];
 
 // =============================================================================
 // ── Module: root_bearing_seat ──────────────────────────────────────────────

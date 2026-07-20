@@ -18,8 +18,8 @@
 //     (geared bellcrank) + pushrod to the cam-only unison ring — the tilt datum
 //     comes off the NON-tilting wing, not the nacelle-keyed spar (see §6).
 //   • PLACEHOLDER 8 mm spar + the two bearings (F688ZZ root / MF128ZZ wingtip),
-//     the Ø22 tilt-feedback ring magnet + non-ferrous hub, and the MT6701
-//     sensor PCB — the Rev R2e tilt-feedback hardware.
+//     the Ø22 tilt-feedback ring magnet + non-ferrous hub, and the AK7455
+//     off-axis SPI encoder PCB — the Rev R2e tilt-feedback hardware.
 //
 // NACELLE ALIGNMENT (2026-07-19):
 //   The baked nacelle pose (tools/bake_hull_frame.py Nacelle_Port) predates the
@@ -43,7 +43,7 @@
 //   stale boss — the nacelle STL still needs re-baking to the Rev T CG (WBS §1.1.3).
 //
 // NOTE: the baked wing/nacelle STLs predate the Rev R2e wingtip changes (MF128
-// bearing, MT6701 pocket, straight tenon drill); the placeholder spar/bearings/
+// bearing, AK7455 pocket, straight tenon drill); the placeholder spar/bearings/
 // sensor here reflect the CURRENT design and show intended fit.  This file is a
 // VISUAL OVERLAY, not a build artifact.
 //
@@ -65,7 +65,7 @@ SPAR_OD  = 8.0;
 X_ROOT_BRG = -90;   // F688ZZ root bearing (cargo)          [x_root −81 + inb·9]
 X_TIP_BRG  =   4;   // MF128ZZ wingtip bearing (wing tip pad)
 X_RING     =   9;   // Ø22 ring magnet at nacelle inboard face
-X_SENSOR   =   3;   // MT6701 PCB on the wing pad, chord-aft of the spar
+X_SENSOR   =   3;   // AK7455 PCB on the wing pad, chord-aft of the spar
 
 // ── Nacelle pose (bake) + spar-alignment shift ───────────────────────────────
 // Baked pose (tools/bake_hull_frame.py Nacelle_Port): 270° about +X then
@@ -79,11 +79,24 @@ PIVOT_ZLOC = 111.5;           // nacelle-local duct Z of the CG pivot / spar axi
 //   • Y: slide fwd so the CG pivot (baked hull Y = PIVOT_ZLOC + NAC_BAKE.y)
 //        reaches the spar line SPAR_Y.
 //   • Z: drop onto the spar height (bore-centre baked hull Z ≈ 63.2 → SPAR_Z).
-//   • X: +JOINT_GAP_X OUTBOARD to OPEN a functional wing-tip↔nacelle gap — the
-//        joint is NOT a butt joint: it houses the coaxial stack (wing-tip MF128ZZ
-//        bearing + wing-fixed sync sun gear + Hall ring magnet / MT6701).  (Was a
-//        −3 "close the gap" nudge, before the wing-referenced drive was added.)
-JOINT_GAP_X   = 5;                                    // [mm] opens ~8 mm joint gap
+//   • X: +JOINT_GAP_X OUTBOARD sets the wing-tip↔nacelle clearance.  Now that the
+//        sync gearbox is EMBEDDED in the nacelle inboard wall (pinion/bellcrank/
+//        pushrod recessed, cover-plated), the joint no longer has to bay the bulky
+//        gears, so the gap is MINIMISED to ~4 mm — the mechanical floor set by:
+//        the Hall air gap (1.5 mm) + wing-fixed sun ↔ nacelle pinion tooth
+//        engagement at the skin plane + MF128 flange + a tilt-rotation safety
+//        margin.  The nacelle rotates IN-PLANE about the spar, so tilting needs no
+//        extra axial gap (the faces stay parallel through the sweep).
+//   AERO (user-requested check): the gap is a spanwise slot between the wing tip
+//   and the pod side; its only flow effect is a weak through-gap jet driven by the
+//   wing's light 40-kt loading (≈3.8 lbf/side) + the wing-body horseshoe vortex.
+//   SHRINKING the gap monotonically WEAKENS the through-flow and the gap vortex —
+//   it removes an eddy source, it does not add one (no new sharp edge / slot / knife
+//   edge is introduced; the junction vortex exists at any gap).  At ~4 mm on a
+//   ~75 mm pod it is a few-percent clearance, well inside Serenity's existing
+//   blocky-junction character.  Cannot go to 0: the nacelle must clear the fixed
+//   wing through the full tilt, and the bearing/sensor/mesh live here.
+JOINT_GAP_X   = 1;                                    // [mm] → ~4 mm joint gap (min)
 PIVOT_Y_BAKED = PIVOT_ZLOC + NAC_BAKE[1];             // pre-shift pivot hull Y (= 47.5)
 NAC_D = [JOINT_GAP_X, SPAR_Y - PIVOT_Y_BAKED, SPAR_Z - 63.2];  // = [+5, -32.5, +2.8]
 
@@ -117,6 +130,11 @@ module rod(p1, p2, d) {
     if (L > 1e-3)
         translate(p1) rotate(acos(v[2] / L), [-v[1], v[0], 0]) cylinder(d = d, h = L);
 }
+// Torus arc (loop_r loop of tube_r cable) for the cableway service loop.
+module torus(loop_r, tube_r, ang = 360) {
+    rotate_extrude(angle = ang, $fn = 40)
+        translate([loop_r, 0, 0]) circle(r = tube_r, $fn = 14);
+}
 
 // =============================================================================
 // 1) PORT CARGO-BAY WING ROOT (baked cargo shell, clipped to the root region)
@@ -133,7 +151,7 @@ intersection() {
 color([0.90, 0.55, 0.25, 0.85]) wing_root_receiver(15, 66, -81, -1, 57.5, 58); // orange
 color([0.95, 0.80, 0.20])       root_bearing_seat(15, 66, -81, -1);            // gold boss
 color([0.65, 0.35, 0.80, 0.9])  servo_mount(15, 66, -81, -1, -86);             // purple
-color([0.20, 0.70, 0.75])       cableway_ends(55, 66, -1, -86);                // teal tubes
+color([0.20, 0.70, 0.75])       cableway_ends(5, 66, -1, -86);                 // teal tubes (fwd)
 
 // =============================================================================
 // 2) PORT WING (baked hull-frame STL)
@@ -171,7 +189,7 @@ color([0.88, 0.20, 0.20])
 color([0.30, 0.30, 0.34, 0.9])
     translate([X_RING - 3, SPAR_Y, SPAR_Z]) ring(24, SPAR_OD + 2, 8);
 
-// MT6701 sensor PCB (7×7) on the wing pad, chord-aft (+Y) of the spar — dark green
+// AK7455 sensor PCB (7×7) on the wing pad, chord-aft (+Y) of the spar — dark green
 color([0.10, 0.38, 0.16])
     translate([X_SENSOR - 1.6, SPAR_Y + 11 - 3.5, SPAR_Z - 3.5]) cube([1.6, 7, 7]);
 
@@ -255,9 +273,9 @@ color([0.95, 0.55, 0.45, 0.90])              // coral petals
 //
 // JOINT AXIAL STACK (coaxial with the spar, wing→nacelle, in the ~8 mm gap):
 //   wing-tip MF128ZZ bearing → wing-fixed SUN gear → Hall RING magnet (on the
-//   nacelle non-ferrous stub) / MT6701 (on the wing, off-axis R11).  The PINION
+//   nacelle non-ferrous stub) / AK7455 (on the wing, off-axis R11).  The PINION
 //   is OFF the spar axis (SYNC_CD aft), so it clears the on-axis Hall stack; the
-//   MT6701 is off-axis chord-aft, clear of both.  This is the coordination the
+//   AK7455 is off-axis chord-aft, clear of both.  This is the coordination the
 //   build needs — bearing, sync gear and tilt sensor share the joint gap.
 //
 // FIRST-PASS / VERIFY (WBS §1.1.3): module, tooth counts, the exact 1:1 pitch
@@ -296,3 +314,32 @@ color([0.85, 0.82, 0.20])
 // relocated ring-lever ear ball (inboard flap gap) — red marker
 color([0.90, 0.20, 0.20])
     in_nacelle() translate(ring_ball) sphere(d = 4);
+
+// =============================================================================
+// 7) EDF CABLEWAY — routed FORWARD of the pivot + rotation-tolerant connection
+// =============================================================================
+// The double-D EDF power/signal cableway (2× Ø7, cargo → wing, drawn as the teal
+// tubes in §1) is re-routed to cross the joint FORWARD of the pivot (hull Y≈5,
+// ahead of the spar at Y=15) so it clears the tilt→nozzle sync pinion/bellcrank
+// (which live aft of the spar).  The wing→nacelle crossing is a SERVICE LOOP: the
+// harness anchors on the FIXED wing (cableway exit) and on a nacelle grommet near
+// the spar axis, with a slack coil that winds/unwinds over the −5..90° (≈95°)
+// tilt.  Anchoring the nacelle end NEAR the spar (small radius) keeps the loop
+// excursion small (arc ≈ r·1.66 rad ≈ 12 mm at r≈7) — no slip-ring needed; the
+// EDF power is too thick for the Ø5 hollow-spar bore (that carries only the
+// nav-light 3-core).  SOURCE follow-up: move wing CABLE_BORE_XFR 0.48c → ~0.10c
+// with a forward channel through the Ø29.5 wingtip pad, keeping the off-axis
+// AK7455 Hall pocket (chord-aft of the spar) clear.
+CW_GROMMET = [10, 8, 66];   // nacelle harness grommet (hull), fwd of the pivot boss
+
+// service-loop slack coil (Ø14 loop of Ø4 harness), axis ≈ spar so nacelle tilt
+// winds/unwinds it — teal
+color([0.20, 0.62, 0.68])
+    translate([6, 2, 66]) rotate([0, 90, 0]) torus(7, 2, 300);
+// nacelle harness grommet — cable pass-through boss on the inboard face — teal
+color([0.15, 0.52, 0.58])
+    translate(CW_GROMMET) rotate([0, 90, 0])
+        difference() {
+            cylinder(d = 9, h = 4, center = true);
+            cylinder(d = 5, h = 4.2, center = true);
+        }

@@ -131,9 +131,9 @@ ring. Spatial (RSSR-class) linkage — tilt axis (X) ⟂ ring axis (Z).
 >
 > **Joint coordination (required):** the ~8 mm wing-tip↔nacelle gap houses a
 > coaxial-spar stack — wing-tip **MF128ZZ bearing** → wing-fixed **sun gear** →
-> **Hall ring magnet** (nacelle non-ferrous stub) / **MT6701** (wing, off-axis
+> **Hall ring magnet** (nacelle non-ferrous stub) / **AK7455** (wing, off-axis
 > R11).  The pinion sits OFF the spar axis (≈26 mm aft) so it clears the on-axis
-> Hall stack; the MT6701 is off-axis chord-aft.
+> Hall stack; the AK7455 is off-axis chord-aft.
 >
 > Illustrated in `airframe/openscad/port_tilt_spar_assembly.scad` §6 (pitch
 > cylinders).  OPEN (WBS §1.1.3): module + tooth counts + exact pitch radius,

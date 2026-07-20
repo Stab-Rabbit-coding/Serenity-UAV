@@ -118,6 +118,19 @@ rights holders before using the Serenity name or likeness in trade.
 
 ---
 
+### 1a. QMx *Official Serenity Blueprints Reference Pack* (Canonical-Accuracy Reference)
+
+| Field | Detail |
+| ------- | -------- |
+| **Title** | The Official Serenity Blueprints Reference Pack (2007) |
+| **Publisher** | Quantum Mechanix Inc. (QMx) |
+| **Creators** | Geoffrey Mandel (graphic designer) · Timothy Earls (illustrator / set designer) |
+| **Source** | [quantummechanix.com](https://www.quantummechanix.com/) · repo copy `docs/references/The_Official_Serenity_Blueprints_Reference_Pack.pdf` |
+| **License** | **Copyrighted, officially licensed commercial product — NOT CC BY.** © Quantum Mechanix Inc. under license from the *Firefly*/*Serenity* rights holders (Universal Pictures / Twentieth Century Fox → The Walt Disney Company). |
+| **Use** | **Reference only — no redistribution or relicensing.** Most-authoritative canonical-accuracy ground truth for hull proportion and layout; no page or image is reproduced in any published project artifact. See REFERENCES.md REF-CAD-003 and `airframe/AGENTS.md` "Canonical Accuracy References." |
+
+---
+
 ### 2. Serenity Firefly-Class 3D Model (Hull Geometry Basis — current, Rev P–R1)
 
 | Field | Detail |
@@ -156,6 +169,16 @@ watertight CF-PETG shell, CF skeleton and foam fill added. CC BY 4.0.
 | **Title** | (untitled low-poly Serenity reference) |
 | **Source** | [thingiverse.com/thing:4677565](https://www.thingiverse.com/thing:4677565) |
 | **Use** | Used only as a qualitative geometry guide for orienting the head, cargo, middle, and rear fuselage sections relative to each other (per `airframe/AGENTS.md` "Geometry Reference Points"). Not a source of hull surface geometry — no STL or mesh data is derived from this model. |
+
+### 2c. Nick Henning Render Collection (Canonical-Accuracy Reference)
+
+| Field | Detail |
+| ------- | -------- |
+| **Title** | Serenity / Firefly-class reference renders (school project derived from the show/movie renders) |
+| **Author** | Nick Henning |
+| **Source** | [nickhenning3d.com](https://www.nickhenning3d.com/) · repo copy `docs/references/nick-henning/` |
+| **License / Permission** | Public-space reference imagery; **direct email permission** granted by Nick Henning (`nickhenning3d@gmail.com`) on 2026-07-06 to use any public renders for reference (email archived in the folder). Not redistributed as CC BY; used as design reference only. |
+| **Use** | Higher-detail canonical cross-check — **below** the QMx blueprints and **above** the misubisu model in authority — for wing surface, landing-gear, and engine/UV detail. See REFERENCES.md REF-CAD-002. |
 
 ---
 
@@ -376,4 +399,6 @@ Incorporates:
 ---
 
 *This document is itself released under CC BY 4.0.*
-*Last updated: 2025*
+*Last updated: 2026-07-20 — added §1a (QMx Official Serenity Blueprints Reference Pack) and §2c
+(Nick Henning render collection) as canonical-accuracy reference sources; both mirror REFERENCES.md
+REF-CAD-003 / REF-CAD-002.*

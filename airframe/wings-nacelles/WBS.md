@@ -465,36 +465,40 @@ tracked in `avionics/WBS.md` §1.9.1 and `avionics/emi-hardening/WBS.md` §1.4.6
     (non-ferrous CF-PETG carrier, OD 24 for the Ø22 ring — Rev R2e ring downsize, keyed
     to the spar, ring ID ≥1 mm off the ferrous spar) in `_export_pivot_slab.scad`
     (dev sandbox).
-- [x] **ENC-NACELLE-1 KiCad reconciled to the MT6701 off-axis board** *(Rev R2e,
-    2026-07-19; drafted by Claude Opus 4.8)* — `avionics/kicad/ENC-NACELLE-1.md` +
-    `ENC-NACELLE-1.kicad_sch` were still the Rev Q **AS5600 on-axis** design (magnet on
-    a shaft tip, 15×15 mm board, JST-GH connector), invalid under the rotating spar:
-    the spar is a **through-shaft** (no free end), so an on-axis end-of-shaft encoder
-    cannot be used. Reconciled both files to the current spec — **Magntek MT6701**
-    off-axis IC (`MAL-TILT-ENC-PCB`, 7×7 mm, direct-solder 4-wire pigtail + 2
-    decoupling caps, no connector; **MA732**/SPI fallback) reading the **Ø22×Ø10×2.5**
-    diametric ring (`HALL-RING-MAG`) on the non-ferrous CF-PETG hub (`PRINT-HALL-HUB`,
-    OD 24) across a 1.5 mm axial gap, IC off-axis at **R = 11 mm** in
-    `wing_tip_hall_sensor_pocket()`; steel-spar mitigations (non-ferrous hub stand-off,
-    brass `HALL-SCR-M2-BRASS` fasteners in the 10 mm keep-out, firmware zero-cal
-    over −5..90°) documented; host moved Wash → **River (primary) / Simon (alt)**,
-    port+stbd on **separate I²C buses** (fixed MT6701 address). The schematic is
-    **held at the MT6701 verification gate** — no fabricated QFN pinout/address per
-    `REFERENCES.md` pending-verification + root `TODO.md` §0.8 ("do not procure against
-    the placeholder"). `kicad-cli` (9.0.2) loads it; ERC now **0 errors / 34 warnings**
-    (was 12 errors) — nets +3V3/GND/ENC_SDA/ENC_SCL, `PWR_FLAG`s added; the dangling
-    ENC_SDA/ENC_SCL are the intended gate. The MT6701 datasheet gate is the open item
-    below.
-- [ ] **[OPEN — cross-subsystem] `Wash.md` §13 still lists `J_ENC` as the AS5600
-    encoder** — the host moved to River/Simon and the sensor to MT6701. Reconcile the
-    Wash cape's `J_ENC` row on the avionics side (`avionics/WBS.md` §1.9.1); this is an
-    avionics edit, not an airframe one — flagged here for traceability.
+- [x] **Tilt-encoder sensor SELECTED (AKM AK7455) + ENC-NACELLE-1 KiCad rebuilt**
+    *(Rev S, 2026-07-19; drafted by Claude Opus 4.8)* — `avionics/kicad/ENC-NACELLE-1.md`
+    and `.kicad_sch` were the Rev Q **AS5600 on-axis** design (magnet on a shaft tip,
+    15×15 mm, JST-GH), invalid under the through-shaft spar. Datasheet-driven sensor
+    down-select (user-supplied datasheets): **MT6701 REJECTED** — its datasheet (Rev 1.9
+    §6) confirms **on-axis only** (Ø6 mm cyl magnet, off-axis misalignment ≤ 0.3 mm), so
+    it cannot read the off-axis ring at R ≈ 11 mm — the same failure as the AS5600;
+    **AS5200L** (on-axis I²C) likewise rejected. **SELECTED = AKM AK7455**
+    (REF-SENSOR-008): datasheet 200800064-E-00 explicitly supports the **Off-Axis
+    (side-of-shaft)** configuration and adds **anomaly-magnetic-field detection + dynamic
+    error reduction + EEPROM INL calibration** — purpose-built for the ferromagnetic
+    (4130/17-4) through-shaft. Both KiCad files rebuilt around the AK7455
+    (`MAL-TILT-ENC-PCB`, **QFN24 4×4**, **SPI** 4-wire + ERROR on a **7-wire** direct-
+    solder pigtail; both nacelles share the SPI bus via separate **CSN** → the I²C
+    fixed-address problem is gone). Pinout **verified** vs the datasheet (TEST2→VSS,
+    TEST1 open, NC pins + back-tab/EP open); `kicad-cli` (9.0.2) ERC **0 errors**.
+    `bom_revS.csv` (`MAL-TILT-ENC-PCB` + `HALL-RING-MAG`) and `REFERENCES.md`
+    (REF-SENSOR-008 + pending row) updated. (A KiCad symbol Y-inversion wiring bug —
+    library Y-up vs sheet Y-down — was found and fixed during the rebuild.)
+- [ ] **[OPEN — cross-subsystem] `Wash.md` §13 still lists `J_ENC` as the AS5600 I²C
+    encoder** — the host moved to River/Simon and the interface to AK7455 **SPI**.
+    Reconcile the Wash cape / `avionics/WBS.md` §1.9.1 on the avionics side (SPI +
+    per-nacelle CSN + ERROR line); an avionics edit, flagged here for traceability.
+- [ ] **[OPEN — airframe] Resize the wing sensor pocket for the AK7455 QFN24 4×4**
+    (was sized for the MT6701 3×3) and route the **7-wire SPI** pigtail — update the
+    `HALL_*` block + comments in `wings_s1223_revo.scad` (they still name MT6701) and
+    `_export_pivot_slab.scad`, then re-bake.
 - [ ] **VERIFY `INBOARD_FACE_X` sign** in `_export_pivot_slab.scad` (which X face
     of the port nacelle is the wing side).
 - [ ] **Migrate `nacelle_hall_ring_hub()` into `nacelle_pod_50mm_tandem.scad`** with
     the keyed spar hub (retire the sandbox preview); re-bake port/stbd shells.
-- [ ] **Confirm MT6701 off-axis geometry vs datasheet** (air-gap, ring OD/ID, IC
-    radial offset) and the ferrous-spar mitigation empirically — bench-cal with the
-    steel spar + bearing installed; monotonic angle over −5..90° after zero-cal.
-    REFERENCES.md requires-verification / TODO §0.8; EMI WBS §1.4.6.
+- [ ] **AK7455 off-axis bench validation** — confirm the ring presents **10–70 mT** at
+    the IC (magnetisation diametric vs radial + gap/offset), run the **EEPROM INL
+    calibration** over −5..90° (AKM app support; monotonic angle), set the sense plane
+    (`R_FIELDSEL`), and confirm the **ERROR** pin drive (push-pull vs open-drain, add a
+    node pull-up if open-drain). REFERENCES.md REF-SENSOR-008 / TODO §0.8; EMI WBS §1.4.6.
 

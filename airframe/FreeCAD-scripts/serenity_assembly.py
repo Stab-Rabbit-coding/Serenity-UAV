@@ -548,14 +548,13 @@ def assemble():
         # 0..23.75 deg ring map are NOT yet solved; the pushrod link itself
         # (COTS ball-link rod) is intentionally not placed here until that
         # synthesis is closed.
-        spar_crank = add_mesh(
-            doc,
-            _stl("nacelles/nacelle_pushrod_crank.stl"),
-            f"Nacelle_{label}_Nozzle_Spar_Crank",
-        )
-        transform_mesh(
-            spar_crank, nacelle_rows(side, _rot_y(90.0), (0.0, 0.0, PIVOT_Z))
-        )
+        # SUPERSEDED 2026-07-20 + ARCHIVED (ARCHIVE_INDEX.md): the spar-CLAMP
+        # crank cannot actuate the nozzle — the spar is keyed to the nacelle, so
+        # a crank on it shares the ring's rotating frame (zero relative motion).
+        # Replaced by a WING-REFERENCED sync gear + geared bellcrank (hybrid A+B,
+        # docs/NOZZLE_DRIVE_TRADE.md "DECISION AMENDMENT"; overlay
+        # port_tilt_spar_assembly.scad §6).  The new pinion-mounted crank is not
+        # placed here until nacelle_nozzle_pushrod.scad is reworked (TODO §1.1.3).
 
         # ── Nozzle iris assembly ──────────────────────────────────────────
         # nacelle_nozzle_iris.stl is the combined render (cam-only unison ring

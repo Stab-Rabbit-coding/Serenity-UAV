@@ -42,6 +42,30 @@ The fuselage has four canonical sections, each with specific spatial properties:
 
 See "Validated baked extents" and "Geometry Integrity" below for full spatial bounds and qualitative relationships.
 
+## Canonical Accuracy References (Ground Truth)
+
+When judging whether hull/exterior geometry is faithful to the real ship, treat the
+`docs/references/` library as ground truth, in this authority order (highest first):
+
+1. **QMx *Official Serenity Blueprints Reference Pack* (2007)** —
+   `docs/references/The_Official_Serenity_Blueprints_Reference_Pack.pdf` (REFERENCES.md
+   REF-CAD-003). **Most authoritative** — officially licensed, production-derived canon. Where it
+   disagrees with any other reference on canonical shape/proportion, **it wins.** Drawn at line-art
+   fidelity, so it lacks fine mechanical detail. Copyrighted commercial product — reference only;
+   never redistribute or relicense it.
+2. **Nick Henning render collection** — `docs/references/nick-henning/` (REF-CAD-002). Derived from
+   the show/QMx canon; carries **more mechanical/surface detail** than the blueprints. Use it where
+   the blueprints are ambiguous. Used by email permission (2026-07-06).
+3. **misubisu Thingiverse model, Thing 7330462** — `docs/references/thingverse-serenity/`
+   (REF-CAD-004, CC BY 4.0). The **origin of the `s_*.stl` geometry** in `airframe/stls/`. It is the
+   working starting point, but **verify any detail against the two sources above before treating it
+   as canonical** — it is the lowest-authority of the three.
+
+This ranking is mirrored in `REFERENCES.md` ("Creative-Universe Attribution and Fan-Engineering
+Terms" → "Canonical-Accuracy Reference Hierarchy") and `docs/AGENTS.md`. These references are the
+arbiter of what "canonical" means; keep the canonical outer mold line intact per "Geometry
+Integrity" below.
+
 ## Fabrication Standards
 
 ### Material and Print Parameters

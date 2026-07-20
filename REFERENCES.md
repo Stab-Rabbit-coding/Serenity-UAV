@@ -3,15 +3,19 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
 **Revision:** S
-**Last updated:** 2026-07-04
+**Last updated:** 2026-07-20
 **Revision history:** Rev R (2026-06-10) → Rev R1 (2026-06-11, hull-frame bake) → Rev S
 (2026-07-04, comprehensive checkpoint — integrates all Rev R1/R1c/R1d/R2 modifications;
-see TODO.md "Rev S Checkpoint" for the full consolidated changelog)
+see TODO.md "Rev S Checkpoint" for the full consolidated changelog) → 2026-07-20 (added the
+Creative-Universe Attribution section and the `docs/references/` canonical-reference library:
+REF-CAD-003 QMx 2007 Blueprints pack, REF-CAD-004 misubisu Thingiverse origin model; expanded
+REF-CAD-002 Nick Henning after consolidation)
 
 ---
 
 ## Table of Contents
 
+- [Creative-Universe Attribution and Fan-Engineering Terms](#creative-universe-attribution-and-fan-engineering-terms)
 - [Standards Vetting Policy](#standards-vetting-policy)
 - [Citation Format](#citation-format)
 - [Part I — United States Federal Aviation Regulations](#part-i--united-states-federal-aviation-regulations)
@@ -67,8 +71,74 @@ see TODO.md "Rev S Checkpoint" for the full consolidated changelog)
     - [REF-SENSOR-008: AKM AK7455 — 14-bit Off-Axis Magnetic Rotation Angle Sensor](#ref-sensor-008-akm-ak7455--14-bit-off-axis-magnetic-rotation-angle-sensor)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
+- [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
 - [Removed / Superseded Citations](#removed--superseded-citations)
 - [Open Standards Verification Items](#open-standards-verification-items)
+
+---
+
+## Creative-Universe Attribution and Fan-Engineering Terms
+
+This catalog is the standards/regulatory index; it is **not** the project's licensing document.
+The authoritative, full attribution chain — original creators, cast/crew, upstream CAD authors,
+and third-party software licenses — is
+[`current-specification/LICENSE_AND_ATTRIBUTION.md`](current-specification/LICENSE_AND_ATTRIBUTION.md),
+and the project's own license text is the root [`LICENSE`](LICENSE) (CC BY 4.0). This section is a
+**summary with cross-references**, recorded here so that the creative-universe rights holders — never
+previously named in this file — are acknowledged wherever this catalog is read.
+
+### Project license (this work)
+
+All original work in this repository is © 2025 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP, released
+under **Creative Commons Attribution 4.0 International (CC BY 4.0)** —
+<https://creativecommons.org/licenses/by/4.0/>. You may share and adapt it, including commercially,
+with appropriate credit, a link to the license, and an indication of changes; attribution must not
+imply endorsement by the licensor or by any rights holder named below. Full terms: root
+[`LICENSE`](LICENSE).
+
+### *Firefly* / *Serenity* creative universe (underlying IP)
+
+The hull form and visual identity of this UAV draw **visual inspiration** from the Firefly-class
+transport ship *Serenity*, and the avionics/role naming scheme (Malcolm, Wash, Zoë, Kaylee, Jayne,
+Emma, Shepherd's Room, Inara's Shuttle, River's Room, Simon's Medbay) is drawn from the same
+characters. The names, ship design, characters, and all associated intellectual property are the
+trademarks and copyrights of their respective rights holders:
+
+| Role / Rights | Party |
+|---|---|
+| Creator / Executive Producer / Writer | Joss Whedon |
+| Co-Executive Producer / Writer | Tim Minear |
+| Production company (series) | Mutant Enemy Productions |
+| *Firefly* TV series (2002) | 20th Century Fox Television; broadcast on Fox Broadcasting Company — Fox film/TV assets now held by **The Walt Disney Company** (20th Television) |
+| *Serenity* feature film (2005) | **Universal Pictures**; producer Barry Mendel |
+| Principal cast | Nathan Fillion · Gina Torres · Alan Tudyk · Morena Baccarin · Adam Baldwin · Jewel Staite · Sean Maher · Summer Glau · Ron Glass |
+| Official licensed blueprints | Quantum Mechanix Inc. (QMx), under license — see [REF-CAD-003](#ref-cad-003-qmx--the-official-serenity-blueprints-reference-pack-2007) |
+
+### Fan-engineering terms
+
+This project is a **non-commercial fan-engineering work**. It draws visual inspiration from
+Serenity's silhouette and reuses character names for subsystem identifiers only. It does **not**:
+
+- reproduce, redistribute, or commercially exploit any copyrighted *Firefly* / *Serenity* artwork,
+  script, footage, soundtrack, model mesh, or character likeness;
+- claim any trademark right in the name "Serenity," "Firefly," or any character name;
+- imply endorsement by, affiliation with, or official status granted by any rights holder
+  (consistent with CC BY 4.0 §2(a)(6) "No endorsement").
+
+Any commercial product derived from this design must obtain appropriate licensing from the rights
+holders before using the Serenity/Firefly name or likeness in trade. Reference materials that are
+themselves copyrighted commercial products (e.g. the QMx blueprint pack, REF-CAD-003) are retained
+**for internal design reference only** and are **not** relicensed under CC BY 4.0.
+
+### Canonical-accuracy reference hierarchy
+
+For questions of shape/proportion fidelity to the canonical ship, consult the
+`docs/references/` library in this authority order (highest first). This ranking is restated for
+agents in `airframe/AGENTS.md` and `docs/AGENTS.md`:
+
+1. **QMx *Official Serenity Blueprints Reference Pack* (2007)** — [REF-CAD-003](#ref-cad-003-qmx--the-official-serenity-blueprints-reference-pack-2007). Most authoritative; officially licensed canon, but line-art level — lacks fine mechanical detail.
+2. **Nick Henning render collection** — [REF-CAD-002](#ref-cad-002-nick-henning--firefly-class-serenity-wing-and-landing-gear-reference-renders). Higher mesh/surface detail, derived from the show/QMx canon; used where the blueprints are ambiguous.
+3. **misubisu Thingiverse model, Thing 7330462** — [REF-CAD-004](#ref-cad-004-misubisu--serenity-firefly-with-landing-gear-and-swivel-engines-thingiverse-thing-7330462). The origin of the project's `s_*.stl` geometry; still used, but **verify against the two more-authoritative sources above** before treating any detail as canonical.
 
 ---
 
@@ -1274,10 +1344,17 @@ transceivers on Wash (Cape-A-2) and Zoë (Cape-B-2); 120 Ω termination resistor
 
 ## Part XIV — Upstream CAD / Derivative-Source Attributions
 
-References in this part are upstream 3D-model works whose mechanism or geometry
-concept informed a derivative design in this project.  Per AGENTS.md, derivative
-files must carry the full attribution chain back to upstream sources, meeting or
-exceeding CC-BY-4.0 requirements.
+References in this part are upstream works — 3D models, officially licensed blueprints, and
+reference renders — that either (a) had a mechanism or geometry concept adapted into a derivative
+design, or (b) serve as a **canonical-accuracy ground-truth** reference for shape/proportion
+fidelity to the real ship.  Per AGENTS.md, derivative files must carry the full attribution chain
+back to upstream sources, meeting or exceeding CC-BY-4.0 requirements; reference-only sources are
+cataloged so their provenance and license status are auditable even though no asset is redistributed.
+
+**Canonical-accuracy authority ranking** (see the "Canonical-Accuracy Reference Hierarchy" above,
+and `airframe/AGENTS.md`): REF-CAD-003 (QMx 2007 blueprints, most authoritative) → REF-CAD-002
+(Nick Henning renders, derived detail) → REF-CAD-004 (misubisu Thingiverse model, the `s_*.stl`
+origin — verify against the two above).  These live in `docs/references/`.
 
 ### REF-CAD-001: BamJr — "Variable-area EDF nozzle" (Thingiverse Thing 2991269)
 
@@ -1310,12 +1387,59 @@ tilt range.
 | **Work** | Serenity / Firefly Class wing and landing gear reference renders |
 | **Designation** | Public reference render collection |
 | **Official URL** | <https://www.nickhenning3d.com/> |
-| **License / Permission** | Public-space reference imagery; direct permission granted by email from Nick Henning (`nickhenning3d@gmail.com`) on 2026-07-06. Used only as design reference imagery and attribution is recorded here to satisfy CC BY-style attribution requirements. |
-| **Note** | Used as high-fidelity visual reference for wing surface detail, landing gear arrangement, and UV-display styling. The repository stores only derivative reference files; no original CAD model or proprietary 3D geometry from the author is redistributed. |
+| **License / Permission** | Public-space reference imagery; direct permission granted by email from Nick Henning (`nickhenning3d@gmail.com`) on 2026-07-06 (email export archived at `docs/references/nick-henning/`). Used only as design reference imagery and attribution is recorded here to satisfy CC BY-style attribution requirements. |
+| **Note** | Used as high-fidelity visual reference for wing surface detail, landing gear arrangement, and UV-display styling. Per Nick Henning's email, this model was a school project **derived from the show/movie renders** — so it sits **below** the QMx blueprints (REF-CAD-003) in the canonical-accuracy ranking but carries **more mechanical/surface detail**; use it where the blueprints are ambiguous. The repository stores only derivative reference imagery; no original CAD model or proprietary 3D geometry from the author is redistributed. |
 
-**Applied to:** wing and landing gear detail reference in the Serenity UAV hull design, including landing gear canopy/brace styling and wing surface treatment.
+**Applied to:** wing and landing gear detail reference in the Serenity UAV hull design, including landing gear canopy/brace styling and wing surface treatment; canonical-accuracy cross-check for exterior detail.
 
-**Used in:** `airframe/diagrams/nick-henning-close-gear-combine.jpg`, `airframe/diagrams/nick-henning-final-backside-combine.jpg`, `airframe/diagrams/nick-henning-final-front-combine.jpg`, `airframe/diagrams/nick-henning-uvdisplay-gear.jpg`, `airframe/diagrams/nick-henning-uvdisplay-wing.jpg`.
+**Consolidated 2026-07-20:** all Nick Henning material was moved from `airframe/diagrams/` into a
+single `docs/references/nick-henning/` folder alongside the other canonical references.
+
+**Used in:** `docs/references/nick-henning/` — 14 renders plus the permission email:
+
+- `b1cf1d_*.jpg` (×5) — high-resolution site-export source renders
+- `nick-henning-close-back-combine.jpg`, `nick-henning-close-bridge-combine.jpg`, `nick-henning-close-gear-combine.jpg` — close composite renders
+- `nick-henning-final-backside-combine.jpg`, `nick-henning-final-front-combine.jpg`, `nick-henning-final-top-combine.jpg` — full-ship composite renders
+- `nick-henning-uvdisplay-engine.jpg`, `nick-henning-uvdisplay-gear.jpg`, `nick-henning-uvdisplay-wing.jpg` — UV-display renders
+- `Re: Contact got a new submission - Nick Henning <nickhenning3d@gmail.com> - 2026-07-06 1421.txt` — raw permission-grant email export (retains full mail-transport headers — flagged to the user, not scrubbed)
+
+### REF-CAD-003: QMx — The Official Serenity Blueprints Reference Pack (2007)
+
+| Field | Value |
+|---|---|
+| **Publisher** | Quantum Mechanix Inc. (QMx) — <https://www.quantummechanix.com/> (the pack styles the publisher in-universe as "Quantum Mechanix Inc., Earth That Was") |
+| **Creators** | Geoffrey Mandel (Serenity graphic designer) and Timothy (Tim) Earls (Firefly illustrator / Serenity set designer) — both original *Serenity* production designers |
+| **Work** | *The Official Serenity Blueprints Reference Pack* — 33 pages of full-color blueprints, systems, and layout documentation for the Firefly-class transport *Serenity* (sequel to the 2007 limited-edition *Serenity Blueprints* set) |
+| **Repository copy** | `docs/references/The_Official_Serenity_Blueprints_Reference_Pack.pdf` (20-page reference tablet extract, 3.7 MB) |
+| **License** | **Copyrighted, officially licensed commercial product — NOT CC BY.** © Quantum Mechanix Inc., produced under license from the *Firefly*/*Serenity* rights holders (Universal Pictures / Twentieth Century Fox, now The Walt Disney Company). Retained in-repo **for internal design reference only**; no page, image, or derivative is redistributed under CC BY 4.0. Used under the same non-commercial fan-engineering basis described in "Creative-Universe Attribution and Fan-Engineering Terms" above. |
+| **Note** | **MOST AUTHORITATIVE canonical geometry reference in this project.** These blueprints are the officially licensed, production-derived documentation of Serenity's design; they define canonical proportion and layout but are drawn at line-art fidelity and lack fine mechanical/CAD detail. Where this pack and any other reference disagree on canonical shape, **this pack wins.** |
+
+**Concept/reference applied in this project:** ground-truth for exterior mold-line proportion, section
+layout (head/cargo/middle/rear), and canonical feature placement. No QMx geometry is copied; it is a
+visual/dimensional accuracy check only.
+
+**Used in:** canonical-accuracy reference for `airframe/` hull/exterior work (see
+`airframe/AGENTS.md` "Canonical Accuracy References"); cross-referenced by REF-CAD-002 and
+REF-CAD-004 and by `current-specification/LICENSE_AND_ATTRIBUTION.md`.
+
+### REF-CAD-004: misubisu — "Serenity Firefly with landing gear and swivel engines" (Thingiverse Thing 7330462)
+
+| Field | Value |
+|---|---|
+| **Author** | misubisu (Thingiverse user) |
+| **Work** | Serenity Firefly with landing gear and swivel engines (multi-part printable model — head, cargo, middle, rear, wings, engines, landing gear) |
+| **Designation** | Thingiverse Thing 7330462 |
+| **Official URL** | <https://www.thingiverse.com/thing:7330462> |
+| **License** | Creative Commons Attribution 4.0 International (CC BY 4.0) — <https://creativecommons.org/licenses/by/4.0/> |
+| **Repository copy** | `docs/references/thingverse-serenity/` (source STLs in `files/`, renders in `images/`, upstream `LICENSE.txt` + `README.txt`) |
+| **Note** | This is the **origin of the project's `s_*.stl` geometry** — every hull/nacelle/wing/gear STL in the build traces back to this model (adapted: scaled to 24 in (609 mm), hollowed to 2.0 mm CF-PETG, CF skeleton + foam fill added). It is the **lowest** of the three canonical references in authority: **verify its detail against REF-CAD-003 (QMx) and REF-CAD-002 (Nick Henning) before treating any feature as canonical** — but it remains a usable, license-clean geometry starting point. Do not confuse Thing 7330462 with the separate low-poly orientation guide Thing 4677565 (`current-specification/LICENSE_AND_ATTRIBUTION.md` §2b). |
+
+**Applied to:** base hull/section geometry for the entire fuselage and nacelle build; the four
+canonical sections and the swivel-engine/tilt concept originate here.
+
+**Used in:** `airframe/stls/` (all `s_`-lineage fuselage/nacelle/wing/landing-gear STLs, `s_` prefix
+dropped Rev R1); full remix attribution in
+[`current-specification/LICENSE_AND_ATTRIBUTION.md`](current-specification/LICENSE_AND_ATTRIBUTION.md) §2.
 
 ---
 
