@@ -2,7 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-07-22 — Automated reconciliation pass -->
-.github/workflows/ci.yml          — CI pipeline (lint, STL validation, build checks)
 .github/workflows/stale-branches.yml — Stale branch cleanup workflow
 .vscode/extensions.json           — Recommended VS Code extensions
 AGENTS.md                         — Authoritative instructions for AI agents (project-wide
@@ -78105,3 +78104,9 @@ avionics/kicad/Wash/kicads/Wash-backups/Wash-2026-07-21_110101.zip — [IGNORED/
 ## --- AUTO-DISCOVERED (2026-07-22) ---
 .githooks/pre-commit — [PENDING AI CLASSIFICATION]
 airframe/freecad/assembly/SerenityAssembly.20260616-122239.FCBak — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-07-22) ---
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_173538.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-22_172905.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_173538.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-22_172905.zip — [IGNORED/VCS-EXCLUDED]
