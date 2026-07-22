@@ -3,7 +3,6 @@
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
 <!-- Last updated: 2026-07-22 — Automated reconciliation pass -->
-STLs and MUST NOT be applied.  The canonical assembly script is
 `airframe/FreeCAD-scripts/serenity_assembly.py`.
 
 ```text

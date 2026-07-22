@@ -30,3 +30,4 @@ avionics/kicad/symbols/SLB 9670VQ2.0.lbr
 avionics/kicad/symbols/XCVR_ISOW1044BDFMR.kicad_mod
 avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md
 docs/references/The_Official_Serenity_Blueprints_Reference_Pack.pdf
+.continue/agents/new-config.yaml
