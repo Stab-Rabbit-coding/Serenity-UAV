@@ -3,7 +3,6 @@
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
 <!-- Last updated: 2026-07-22 — Automated reconciliation pass -->
-`airframe/FreeCAD-scripts/serenity_assembly.py`.
 
 ```text
                                        (was airframe/freecad/assembly/)

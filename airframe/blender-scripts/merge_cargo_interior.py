@@ -601,8 +601,7 @@ def repair_exported(out_path):
     """Reload the exported cargo STL, weld+clean it to a watertight single body,
     and re-stamp the HULL-FRAME marker.  Runs WITHOUT Blender, so it serves both
     as the tail of the full merge (guaranteeing the ON-DISK file is clean, not
-    just the in-memory float64 result) and as a standalone ``--repair-only`` pass
-    on an already-published cargo STL (MESH-01 finalization, TODO.md §1.1.1.0a)."""
+    just the in-memory float64 result) and as a standalone ``--repair-only`` pass on an already-published cargo STL."""
     print(f"\n=== repair_exported (float32 round-trip finalize): {out_path} ===")
     m = trimesh.load(out_path, process=False)
     m.merge_vertices()
