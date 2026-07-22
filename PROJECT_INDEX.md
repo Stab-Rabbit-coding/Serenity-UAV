@@ -1,9 +1,7 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: 2026-07-21 — Automated reconciliation pass -->
-.editorconfig                     — Editor whitespace/indent rules (4-space, per coding standard)
-.flake8                           — Python lint configuration
+<!-- Last updated: 2026-07-22 — Automated reconciliation pass -->
 .gitignore                        — Repository-wide VCS ignore rules
 .jscpd.json                       — Copy-paste-detector configuration
 .liveui.json                      — Live UI preview configuration

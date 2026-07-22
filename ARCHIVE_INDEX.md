@@ -2,9 +2,7 @@
 
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
-<!-- Last updated: 2026-07-21 — Automated reconciliation pass -->
-Deprecated FreeCAD prototype assembly scripts.  All predate the Rev R1 hull-frame
-bake; their placement/transform values would double-transform the baked hull-frame
+<!-- Last updated: 2026-07-22 — Automated reconciliation pass -->
 STLs and MUST NOT be applied.  The canonical assembly script is
 `airframe/FreeCAD-scripts/serenity_assembly.py`.
 

@@ -9,6 +9,19 @@
 // Serenity UAV -- Rev R5 -- Strong-Leg vertical post + 4-wire brace
 // ===========================================================================
 //
+// *** RETIRED 2026-07-21 -- superseded by Rev R6 ***
+// The Rev R5 post geometry descended from the misubisu Thingiverse leg,
+// which does not resemble the canonical Serenity landing gear.  Rev R6
+// (airframe/openscad/fuselage/canonical_leg_r6.scad) rebuilds the leg to
+// the canonical articulated form at the canonical bay stations while
+// keeping this file's spring + ductile bowed-wire mechanism (the
+// bowed_wire sweep is carried forward there with its face winding
+// corrected).  This file is kept for reference only; its rendered STLs
+// were moved to archives/airframe-archives/archive/stls/fuselage/
+// landing-gear/ (see ARCHIVE_INDEX.md).  Analysis history:
+// docs/LANDING_GEAR_ANALYSIS.md Rev R6 header.
+// ===========================================================================
+//
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // Project : Serenity-class Tilt-Rotor UAV (24-inch scale, Firefly TV ship)
 // License : CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>

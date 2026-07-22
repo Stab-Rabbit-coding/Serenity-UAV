@@ -1,5 +1,18 @@
 #!/usr/bin/env python3
-"""Build assembled / exploded / deformed demonstration STLs for the Rev R5
+"""RETIRED 2026-07-21 -- Rev R5 tool, superseded by Rev R6.
+
+The Rev R6 canonical articulated leg builds its assembled / deformed /
+hull-stance views directly as PARTs of
+airframe/openscad/fuselage/canonical_leg_r6.scad ("leg_assembled",
+"leg_deformed", "hull_legs", "hull_stance"), so this script has no
+successor role.  Kept for reference only; do not run -- its inputs
+(wire_brace_leg.scad renders) are archived and its outputs were moved to
+archives/airframe-archives/archive/stls/fuselage/landing-gear/
+(ARCHIVE_INDEX.md).  See docs/LANDING_GEAR_ANALYSIS.md Rev R6.
+
+Original description follows.
+
+Build assembled / exploded / deformed demonstration STLs for the Rev R5
 vertical-post + 4-wire-brace landing gear (2 spring wires at the apex branch,
 2 ductile wires at the 1/3-down branch).
 

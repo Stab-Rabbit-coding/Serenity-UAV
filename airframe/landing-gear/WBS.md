@@ -1,8 +1,10 @@
-# Serenity UAV — Airframe Landing Gear (Rev R5 Wire-Brace Design) Work Breakdown Structure (Detail)
+# Serenity UAV — Airframe Landing Gear (Rev R6 Canonical Articulated Leg) Work Breakdown Structure (Detail)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+**AI note:** Rev R6 redesign authored by Claude (model: Claude Fable 5,
+Anthropic) under the author's direction, 2026-07-21, per `AGENTS.md`.
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**Current design revision:** Rev S (2026-07-04)
+**Current design revision:** Rev R6 (2026-07-21)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../../TODO.md)
 > is a compact index — headings, subheadings, and short (<=70-char) checkbox items
@@ -16,216 +18,215 @@
 ---
 
 ## §1.1.4 — Landing Gear
+
 *(root `WBS.md` §1.1.4)*
 
+**Canonical leg model (Rev R6, 2026-07-21): articulated hip-pivot leg, spring +
+ductile bowed wires retained.** Every prior revision (R1–R5) descended from the
+misubisu Thingiverse single-blade leg, which does not resemble the canonical
+Serenity gear. Rev R6 rebuilds the leg to the canonical articulated form —
+cylinder-cluster thigh (~53°), disc knee and ankle joints, slotted shin, tri-pad
+arrowhead foot — and mounts it in the **four canonical bay stations** measured
+from the QMx blueprints ventral view (fore feet 39.2% / aft feet 63.9% of hull
+length, ~1.45× hull half-width off centreline; REF-CAD-003 Sheet 5, cross-checked
+against the Nick Henning renders, REF-CAD-002).
 
-**Canonical leg model (Rev R5, 2026-06-20): vertical post + 4-wire brace.** The
-original canonical single-blade leg (`leg_1`…`leg_4_scaled24.stl`, misubisu Thingiverse
-hull, CC BY 4.0) is itself a vertical part with **two branch points of its own** — one
-at the **apex** (top) and one about **1/3 of the way down from the apex**. The
-Strong-Leg's duplicate + 30°-rotate + union construction doubles each into a pair, so
-the Strong-Leg actually has **four branch points** (2 at the apex, 2 at the 1/3-down
-point), not the single fork-into-two-arms that Rev R2–R4 approximated. Rev R5 models
-this directly: the CF-PETG is kept only as a short **vertical post** (foot up through
-the 1/3-down branch height), and all four branch attachments are replaced with **four
-simple wires** instead of forked CF-PETG arms or arm-tip fuses. Full structural
-analysis: `docs/LANDING_GEAR_ANALYSIS.md` (Rev R5, 2026-06-20).
+**The Rev R5 energy mechanism is kept intact:** 2 **spring** bowed wires
+(elastic, recoverable) + 2 **ductile** bowed wires (plastic, sacrificial fuse)
+per corner, each a straight wire with one shallow mid-span bow that deepens
+under chord compression. What changed is the load path: the one-piece printed
+leg frame pivots about an M3 stainless **hip pin** in a hull-flank bay, and the
+wires span the hip at a 6 mm bellcrank radius — a **65:6 lever** that converts
+millimetre wire strokes into ~35 mm of hull settle. Peak deceleration falls from
+the R5 rigid-post ~1,000 g to **52 g** (6 ft tail-down; 104 g level). Ground
+clearance rises from the failed 31 mm to **80 mm (3.15 in)** — the ≥76 mm
+(3.0 in) payload-mission requirement is finally met by design. An extension-stop
+cross-pin carries the hanging/in-flight rotation; landing loads never touch it.
 
-**Why the wires, and why this shape:** rigorous re-verification of the Rev R2 (bare
-CF-PETG Strong-Leg) design found a real single-point-of-failure risk — the post/trunk's
-fixed cross-section could not be made stronger than the arms by infill alone, and the
-real system stiffness implied a peak force far above what the structure could survive
-elastically. Rev R3 fixed this with an elastic spring-steel leaf (≈163 g, no clear
-worst-case margin) and Rev R4 with a closed-ring ductile wire fuse (≈73 g, but hard to
-manufacture/field-replace — precision winding + separate tabs). **Rev R5 uses the
-simplest possible wire shape — a single straight piece of wire stock with one shallow
-pre-bend (a shallow "bow," not a closed loop)** — formable with a simple bending jig or
-by hand, easily field-replaced with cut-to-length stock:
+**Load-share correction:** the build CG (hull-frame Y +111.5 mm) sits at 86% of
+the canonical wheelbase — the **aft leg pair carries ~86% of static load** and
+drives wire sizing (R5's even ¼-split was optimistic). Canon agrees: the ship
+also deploys a "Cargo Bay Landing Pad" (Sheet 5); our middle-section rear skids
+are that backstop (~12° tip-back margin).
 
-| Branch level | Height from foot | Wires | Role |
-|---|---|---|---|
-| Apex | ≈79.8 mm | 2× **spring** wire (Ø3.17 mm, L=45mm) | Elastic, recoverable — sized for the 1.5 ft elastic-check energy |
-| 1/3-down from apex | ≈53.2 mm | 2× **ductile** wire (Ø4.35 mm, L=30mm) | Plastic, sacrificial — **each independently** sized for the full 6 ft worst-case per-leg energy (14.04 J) |
+**Drop-test decision (LG-17, open):** requirement stays 6 ft baseline with a
+4 ft reduction under consideration. Both schedules share every printed part and
+wire length — **only the ductile wire stock diameter differs**: Ø4.36 mm (6 ft,
+52 g peak) vs Ø3.81 mm (4 ft, 35 g peak); the 6 ft schedule tested at 4 ft shows
+a 1.5× margin. Full matrix: `docs/LANDING_GEAR_ANALYSIS.md` §4.4.
 
-**Result:** total added wire mass ≈50 g (1.6% AUW); CF-PETG post mass ≈130 g (sized
-with 2× margin at the combined worst-case force — the post is not expected to yield at
-all); hull boss bearing margin ≥1.56× at the combined-pair force. This satisfies
-Requirement 3 of `docs/LANDING_GEAR_ANALYSIS.md` §1 with the cleanest margin structure
-of any revision so far. Final certification of the bowed-strut mechanics requires the
-instrumented drop test (LG-14) — hand calculation identifies the design point but
-cannot fully certify post-yield material behavior.
+**Sources:** analysis `docs/LANDING_GEAR_ANALYSIS.md` (Rev R6); all numbers
+generated by `tools/landing_gear_r6_sizing.py`; geometry
+`airframe/openscad/fuselage/canonical_leg_r6.scad`; STLs (all watertight)
+`airframe/stls/fuselage/landing-gear/lg_r6_*.stl` incl. `lg_r6_hull_legs.stl`
+(4 corners in hull frame, now consumed by `serenity_assembly.py`) and
+`lg_r6_hull_stance.stl` (review view with ground plane).
 
-**Demonstration STLs** (schematic — placeholder boss cylinders, standalone unbaked
-post; generated by `tools/build_landing_gear_views.py` + `wire_brace_leg.scad`; see
-`docs/LANDING_GEAR_ANALYSIS.md` §16): `post.stl`, `spring_wire_nominal.stl` /
-`_deformed.stl`, `ductile_wire_nominal.stl` / `_deformed.stl`,
-`landing_gear_assembled.stl`, `landing_gear_exploded.stl`, `landing_gear_deformed.stl`
-— all in `airframe/stls/fuselage/landing-gear/`.
+**Mass accounting (open, LG-18):** system ≈503 g = 16% AUW (leg frames 211 g +
+bays 128 g + feet 39 g + wires 91 g + hardware ~34 g) vs ≈230 g for R5 —
+**+273 g growth**; gear centroid Y≈53 shifts aircraft CG ≈4.7 mm forward
+(helpful). Mass-reduction pass targeted to ≤350 g; wire Ø re-checked at LG-15
+against as-weighed AUW.
 
-**Superseded prior assessments (retained for history only):** Rev R1 (2026-06-14,
-single-blade leg, 37.5×7.5 mm slab, 30% infill, 218:1 compression margin, 31 mm ground
-clearance — still insufficient for the 3-in payload mission, extension to ≥110 mm strut
-length recommended, carried forward as an open item below). Rev R2 (Strong-Leg, no
-fuse — invalidated by the Rev R3 re-verification). Rev R3 (Strong-Leg + elastic
-spring-steel leaf). Rev R4 (Strong-Leg + per-arm closed-ring ductile fuse — superseded
-by the simpler, manufacturable bowed-wire shape above).
+**Superseded prior assessments (retained for history only):** Rev R1
+(2026-06-14, single-blade slab leg; 31 mm clearance failure). Rev R1.4 (corner
+V-brace, retired §1.1.4.5). Rev R2 (Strong-Leg, invalidated). Rev R3
+(spring-steel leaf). Rev R4 (closed-ring wire fuse). Rev R5 (2026-06-20,
+vertical post + 4-wire brace — geometry retired 2026-07-21; its wire mechanism,
+2-hinge bow model, and material stresses carry forward into R6; its LG-06 bench
+protocol was defective — full-AUW 1.5 ft on one leg = 14 J would fire the
+ductile fuses — corrected in R6 LG-06 below). R5 SCAD `wire_brace_leg.scad` and
+tool `tools/build_landing_gear_views.py` retired in place with notes; R5 demo
+STLs and ALL Thingiverse-derived leg/feet STLs (`leg_1..4_`, `legs_`,
+`strong-leg`, `foot_1..4_`, `feet_x_4_scaled24`) moved to
+`archives/airframe-archives/archive/stls/fuselage/landing-gear/`
+(`ARCHIVE_INDEX.md`).
 
-**FreeCAD assembly status (2026-06-20):** Four corner copies of the prior Strong-Leg
-geometry exist in `airframe/freecad/assembly/SerenityAssembly.FCStd` as Boolean-result
-objects `Union`, `Union001`, `Union002`, `Union003` (90°-stepped rotation), confirmed in
-their correct corner locations; the Rev R5 post replaces only the upper portion of that
-geometry (foot-to-1/3-down-branch is unchanged) — see LG-10.
+**Corner stations (hull frame; feet within 5 mm of exact canonical stations;
+one common leg part, R_h = 65 mm all corners; ground Z −80):**
 
-**Foot positions (hull frame, approximate — last validated 2026-06-14 against the Rev R1
-single-leg layout; pending re-confirmation once LG-10 bake is complete, all level at
-ground-contact Z ≈ −31 mm):**
+| Corner | Hip X, Y, Z | Swing az | Foot X, Y |
+| --- | --- | --- | --- |
+| fore-port | −90.0, −7.0, +38 | −22.4° | −30.4, −31.8 |
+| fore-stbd | −249.8, −7.0, +38 | −157.6° | −309.4, −31.8 |
+| aft-port | −79.0, +107.0, +38 | +28.0° | −21.6, +137.5 |
+| aft-stbd | −260.8, +107.0, +38 | +152.0° | −318.2, +137.5 |
 
-| Foot               | Hull X (mm) | Hull Y (mm) | Ground Z (mm) | Notes                        |
-|--------------------|-------------|-------------|---------------|------------------------------|
-| foot_1 (fwd-port)  | −73.5       | −20.5       | −31           | TPU 95A; 43.9 × 43.9 × 9 mm  |
-| foot_3 (fwd-stbd)  | −264.5      | −20.5       | −31           | same                         |
-| foot_4 (aft-port)  | −73.5       | +129.5      | −31           | same                         |
-| foot_2 (aft-stbd)  | −264.5      | +129.5      | −31           | same                         |
+Stance: track 288 mm (11.3 in) × wheelbase 169 mm (6.7 in); CG centroid X
+✓ symmetric; Z-leveling rule at bake (LG-10): align all 4 feet to the lowest.
 
-Stance: 191 mm (7.52 in) lateral × 150 mm (5.91 in) fore-aft;
-CG centroid at X ≈ −169 mm (symmetric) ✓ (Rev R1 baseline — re-verify once Rev R5
-foot positions are baked).
+##### 1.1.4.1 *Leg Modeling and Bake*
 
-##### 1.1.4.1 *Vertical Post — Modeling and Bake*
+- [x] **LG-12 (closed 2026-07-21, superseded + delivered as Rev R6)** — the
+    R5 "§4.6 post" was replaced wholesale: one-piece canonical leg frame
+    (thigh cluster 2×Ø14 @ 18 ctrs + web, knee/ankle styling discs, slotted
+    shin, foot spigot) authored in `canonical_leg_r6.scad`, rendered
+    watertight (`lg_r6_leg_frame.stl`), print lying on side, 100% infill.
 
-- [x] Build and render the Rev R5 post + wire SCAD/STL *(done —
-    `airframe/openscad/fuselage/wire_brace_leg.scad`, `post.stl`,
-    `spring_wire_nominal/_deformed.stl`, `ductile_wire_nominal/_deformed.stl`, all
-    watertight)*.
+- [x] **Ground clearance (closed 2026-07-21)** — carried as a failure since
+    Rev R1 (31 mm vs ≥76 mm required); Rev R6 legs give 80 mm (3.15 in) by
+    design. Re-verify the as-built number at the LG-10 bake.
 
-- [x] Build assembled / exploded / deformed demonstration compound STLs *(done —
-    `tools/build_landing_gear_views.py` → `landing_gear_assembled.stl`,
-    `landing_gear_exploded.stl`, `landing_gear_deformed.stl`; schematic placeholder
-    bosses, unbaked standalone post — see `docs/LANDING_GEAR_ANALYSIS.md` §16)*.
+- [ ] **LG-10 Finalize the 4 bay placements** in `SerenityAssembly.FCStd`:
+    conform each bay plate's back face to the true flank curvature at its
+    station (§ table above; flank slope ≈22° approximated flat today), remove
+    the retired Strong-Leg Boolean objects `Union`…`Union003`, bake, re-export.
+    Z-leveling rule: align all 4 feet to the most negative Z. Interim: the
+    identity-placed `lg_r6_hull_legs.stl` stands in inside
+    `serenity_assembly.py`. **BLOCKS LG-02 and leg printing.**
 
-- [ ] **LG-12 Model the post per the §4.6 dimensions** (round column, smooth 8mm
-    conical taper — no stepped ledge — lower section Ø22.9mm foot→taper start, upper
-    section Ø11.96mm taper end→apex, both 100% infill) in the FreeCAD/Blender source,
-    replacing the Rev R2–R4 forked Strong-Leg
-    geometry. **BLOCKS first flight.**
-
-- [ ] **LG-10 Finalize the 4 corner post placements** in `SerenityAssembly.FCStd`; bake
-    to hull frame; export 4 placed STLs. **Z-leveling rule:** if any of the 4 feet
-    deviate in Z, align all 4 to the **most negative (lowest) Z** of the four. **BLOCKS
-    hull boss integration (LG-02) and leg printing (LG-05).**
-
-- [ ] **Ground clearance check carried forward from Rev R1** — overall post envelope
-    (79.8 mm foot-to-apex) matches the original single-blade leg length, so the prior
-    31 mm (1.22 in) ground-clearance finding still applies and is still insufficient for
-    the ≥76 mm (3.0 in) payload-mission requirement. **BLOCKS payload mission.**
+- [ ] **LG-17 Drop-height decision: 6 ft vs 4 ft schedule** — numbers ready in
+    `docs/LANDING_GEAR_ANALYSIS.md` §4.4; changes ductile wire stock Ø only
+    (4.36 vs 3.81 mm). Owner decision. **BLOCKS LG-15 procurement.**
 
 ##### 1.1.4.2 *Spring and Ductile Wires*
 
-- [ ] **LG-15 Select and procure both wire grades/tempers** — spring (full elastic
-    range, working stress ≈900 MPa) and ductile (plastic-bend ductility, flow stress
-    ≈550 MPa); confirm by coupon test. **BLOCKS leg fabrication.**
+- [ ] **LG-15 Procure both wire grades/tempers** to the Rev R6 schedule —
+    spring Ø3.35 × 37 mm (900 MPa working); ductile Ø per LG-17 × 75 mm
+    (≈550 MPa flow) — re-check Ø against as-weighed AUW (d ∝ AUW^⅓); coupon
+    test. **BLOCKS leg fabrication.**
 
-- [ ] **LG-16 Confirm the ductile wire temper survives forming** into the bowed-strut
-    shape without premature cracking — coordinate with LG-15. **BLOCKS leg fabrication.**
+- [ ] **LG-16 Confirm the ductile temper survives jig-forming** (straight seat
+    ends + 55 mm span bow, h₀ 3.5 mm) without cracking. **BLOCKS leg fab.**
 
-- [ ] **LG-13 Define the wire-to-socket retention detail** (pin / set screw /
-    adhesive) at both the post end and the hull boss end; verify against the §4.8
-    lateral load (`docs/LANDING_GEAR_ANALYSIS.md` §4.8). The previous M3/M4 nylon
-    shear-bolt fuse concept (Rev R2–R4, sized for a rigid spigot) no longer applies
-    directly to a wire end. **BLOCKS first flight.**
+- [ ] **LG-13 Wire-end retention detail** (pin / set screw / adhesive) at the
+    bay bosses; verify vs the ±15° lateral case (214 N/leg,
+    `docs/LANDING_GEAR_ANALYSIS.md` §4.6). **BLOCKS first flight.**
 
-##### 1.1.4.3 *Hull Boss Sockets*
+##### 1.1.4.3 *Bay Integration (replaces the R5 "16 hull boss sockets")*
 
-- [ ] **LG-02 Design and integrate 16 hull boss sockets** (4 per corner, one per wire)
-    into `cargo_sect_shell24.scad` / cargo shell Blender source. Boss spec: OD ≈10×9 mm,
-    bore ≈6×5 mm, 2-wall annulus + positive-stop shoulder per `CLAUDE.md`. Run DRC mesh
-    check. **BLOCKS hull print. Depends on LG-10.**
+- [ ] **LG-02 Bay mounting integration** — 4 bay plates (2 fore + 2 aft,
+    mirrored cant) onto the cargo-shell flanks: 4× M3 through-bolts + printed
+    internal backing plates on the 2 mm wall, flank-conforming spacer or
+    recess into the shell (canonical bays are recessed; plate is surface-mount
+    today). DRC mesh check after any shell edit. **BLOCKS hull print.
+    Depends on LG-10.**
 
-##### 1.1.4.4 *Canonical Foot — Socket Modification*
+##### 1.1.4.4 *Canonical Foot*
 
-- [x] Feet separated into individual STLs (`foot_1` through `foot_4` in landing-gear/);
-    canonical Thingiverse geometry, 43.9 × 43.9 × 9.04 mm TPU 95A, unmodified outer form.
+- [x] **Canonical tri-pad foot modeled (2026-07-21)** — `lg_r6_foot.stl`, TPU
+    95A: Ø24 hub, 34 mm toe + 2×26 mm heels @ ±130°, ribbed treads (QMx
+    Sheet 5 bottom view), square spigot socket + M2.5 cross-bolt, 90°-indexable
+    ("Feet Pivot 90°"). Replaces the Thingiverse square pads (archived); the
+    old "add top-face socket" item is superseded — the socket is integral.
 
-- [ ] **Add top-face socket to canonical foot** — 7.6 × 9.0 mm bore × 5.0 mm deep,
-    centred on the top face. Retention: 1× M2.5 × 12 mm SS through-bolt. See
-    `docs/LANDING_GEAR_ANALYSIS.md` §7. New SCAD/Blender modifier needed (stock foot mesh
-    has no socket feature today).
+- [ ] **Assess foot grip on concrete/asphalt** — TPU treads now modeled; note
+    the foot intentionally skids ~45 mm outboard during a full-stroke arrest.
+    For field ops (grass/gravel) evaluate a Sorbothane 50A disk insert.
 
-- [ ] **Assess foot grip on concrete/asphalt** — TPU 95A is adequate for smooth surfaces.
-    For field operations (grass, gravel): consider adding a 3 mm textured grip ring or
-    rubber disk insert (Sorbothane 50A, 40 mm OD × 3 mm) bonded to foot bottom face.
+##### 1.1.4.5 *Superseded — Rev R1.4 V-Brace, Rev R4 Ring Fuse, Rev R5 Post*
 
-##### 1.1.4.5 *Superseded — Rev R1.4 V-Brace and Rev R4 Closed-Ring Fuse*
+- [x] **Rev R1.4 corner V-brace (`landing_leg_assy.scad`) retired** (2026-06-20).
+- [x] **Rev R4 closed-ring fuse (`wire_loop_fuse.scad`) retired** (2026-06-20).
+- [x] **Rev R5 post + 4-wire brace retired (2026-07-21)** — `wire_brace_leg.scad`
+    and `tools/build_landing_gear_views.py` carry retirement notes in place;
+    demo STLs archived. Wire mechanism carried forward into Rev R6.
 
-- [x] **Rev R1.4 corner V-brace (`landing_leg_assy.scad`) is retired**, superseded
-    2026-06-20. The parametric SCAD file is left in the repository for reference only.
+##### 1.1.4.6 *Rear Skid Reinforcement (related: tip-back backstop)*
 
-- [x] **Rev R4 closed-ring wire fuse (`wire_loop_fuse.scad`) is retired**, superseded
-    2026-06-20 by the simpler bowed-wire shape (§1.1.4 above) for manufacturability. The
-    SCAD file is left in the repository for reference only (retirement note added at its top).
+- [ ] **LG-03 CF rod channel in `middle_canonical_shell24.scad` rear skid
+    arms** — 3 mm bore, ~140 mm per skid, per `docs/LANDING_GEAR_ANALYSIS.md`
+    §10. The skids now also serve as the aft-heavy stance tip-back backstop
+    (§2.3 of the analysis). Re-export, re-bake, verify watertight.
+    **BLOCKS taxi test.**
 
-##### 1.1.4.6 *Rear Skid Reinforcement (unrelated subsystem)*
-
-- [ ] **LG-03 CF rod channel in `middle_canonical_shell24.scad` rear skid arms** — add
-    3 mm bore channel (CF rod, ~140 mm per skid) per `docs/LANDING_GEAR_ANALYSIS.md §10`.
-    Re-export STL, re-bake, verify watertight.  **BLOCKS taxi test.**
-
-- [x] **`landing_legs_hull_r1.stl` is orphaned** *(resolved 2026-07-12)* — rendered
-    from an even earlier pre-R1.4 single-leg SCAD mode that no longer exists in
-    `landing_leg_assy.scad` (now itself retired, §1.1.4.5 above). Moved to
-    `airframe/archive/stls/fuselage/landing-gear/` and logged in `ARCHIVE_INDEX.md`;
-    the stale reference and its dead `GEAR_COLOR` constant were removed from
-    `airframe/blender-scripts/serenity_render_views.py`, and the `PROJECT_INDEX.md`
-    entry was dropped. No Rev R5 hull-frame-positioned, multi-corner landing-gear
-    render exists yet to take its place in the render suite — that remains open
-    (the Rev R5 illustrative STLs in `airframe/stls/fuselage/landing-gear/` are
-    single-corner, part-local schematics per `tools/build_landing_gear_views.py`,
-    not a hull-frame assembly render).
+- [x] **`landing_legs_hull_r1.stl` orphan** *(resolved 2026-07-12; archived)*.
+    The Rev R5-era gap ("no hull-frame multi-corner gear render") is now
+    closed by `lg_r6_hull_legs.stl` / `lg_r6_hull_stance.stl`.
 
 ##### 1.1.4.7 *Qualification Testing (BLOCKS first flight)*
 
 *"Time for some thrilling heroics." — Mal. Drop tests count.*
 
-- [ ] **LG-06 Drop test prototype leg assembly** — mount one complete assembly to a
-    6.90 lbm (3,130 g) fixture. Drop from 1.5 ft (elastic check — confirm zero permanent
-    set on the post and both wire types). **BLOCKS first flight.**
+- [ ] **LG-06 Elastic bench check (protocol revised 2026-07-21)** — mount one
+    complete corner (bay + leg + wires) to a **quarter-AUW 1.73 lbm (783 g)**
+    fixture; drop 1.5 ft (0.457 m) = 3.51 J; confirm zero permanent set on
+    frame and both wire types and full return to the extension stop. (The R5
+    protocol used the full 6.90 lbm fixture = 14 J — that fires the ductile
+    fuses; defect noted and corrected.) **BLOCKS first flight.**
 
-- [ ] **LG-07 Confirm avionics enclosure shock rating** against the wire-mediated
-    deceleration profile (re-derive peak-g once LG-14 data exists). See PCB fab
-    checklist. **BLOCKS first flight.**
+- [ ] **LG-07 Confirm avionics enclosure shock rating** — Rev R6 profile is
+    52–104 g (was ~1,000 g); re-derive peak-g from LG-14 data. **BLOCKS
+    first flight.**
 
-- [ ] **LG-11 Coupon-test CF-PETG** at 4 perimeters / 100% infill (post is now fully
-    solid-infill, §4.6) to confirm the achievable effective modulus/strength.
-    **BLOCKS first flight.**
+- [ ] **LG-11 Coupon-test CF-PETG** at 4 perimeters / 100% infill, printed in
+    the leg-frame side-lying orientation, to confirm effective
+    modulus/strength. **BLOCKS first flight.**
 
-- [ ] **LG-14 Instrumented drop test (load cell + high-speed video) at 6 ft full-AUW** —
-    confirm the ductile wires collapse at the predicted ≈4,298 N/wire; confirm the
-    bowed-strut mechanics match the idealized 2-hinge model
-    (`docs/LANDING_GEAR_ANALYSIS.md` §4.1); confirm the post and spring wires stay
-    elastic. **This is the test that certifies the Rev R5 design — hand calculation
-    identifies the design point but cannot fully certify post-yield material behavior.**
-    **BLOCKS first flight.**
+- [ ] **LG-14 Instrumented drop test (load cell + high-speed video) at the
+    LG-17 height, full AUW** — confirm ≈800 N/leg plateau (6 ft schedule),
+    ~30.9° hip rotation, spring-pair full recovery, ductile fired-bow shape
+    (~19 mm rise). **This certifies Rev R6.** **BLOCKS first flight.**
 
+##### 1.1.4.8 *Mass and Styling (new, Rev R6)*
 
+- [ ] **LG-18 Mass-reduction pass** — 503 g (16% AUW) → ≤350 g target: bay
+    plate lightening, shin/collar slimming, hollow thigh + CF tube insert
+    study. Until closed, AUW ledger carries +273 g vs R5.
+
+- [ ] **LG-19 Styling refinement vs REF-CAD-002** (slimmer telescope collars,
+    piston detail, bay recess depth) — cosmetic only, no structural change.
 
 **Remaining parts needing SCAD source creation then STL export:**
 
-- [ ] **Reconcile the remaining-parts list** — this list was emptied as components were
-    completed, leaving only a stray status tag. The one known outstanding render is
-    `nacelle_servo_bracket.stl` (SCAD source authored, not yet rendered — awaiting the
-    River's-bay `WING_ROOT_Z_CEN` structural/packaging decision, §1.1.3.3). Confirm no other
-    parts remain un-authored, then repopulate or close this subsection. **BLOCKS Phase 1.**
+- [ ] **Reconcile the remaining-parts list** — one known outstanding render:
+    `nacelle_servo_bracket.stl` (awaiting `WING_ROOT_Z_CEN`, §1.1.3.3).
+    Confirm nothing else is un-authored, then close this subsection.
+    **BLOCKS Phase 1.**
 
 **Combined airframe model (visual verification):**
 
-- [ ] **Combine all airframe STLs** into a single assembly model including the 1.25× scaled nacelles, all EDF tubes, cargo bay clamshells, antenna bosses, sensor cutouts, access panels, landing legs, and feet.
-    **Canonical assembly script:** `airframe/FreeCAD-scripts/serenity_assembly.py` (8 major components validated 2026-06-10; nacelle internals, pylons, and accessories pending VERIFY).
+- [ ] **Combine all airframe STLs** into a single assembly model including the
+    1.25× scaled nacelles, all EDF tubes, cargo bay clamshells, antenna bosses,
+    sensor cutouts, access panels, and the Rev R6 landing gear
+    (`lg_r6_hull_legs.stl`, wired into `serenity_assembly.py` 2026-07-21).
+    **Canonical assembly script:** `airframe/FreeCAD-scripts/serenity_assembly.py`
     Run headlessly: `freecad --background --python airframe/FreeCAD-scripts/serenity_assembly.py`
     Output: `airframe/Serenity-Assembled.FCStd`
-    - [ ] **Render overview SVGs using FreeCAD TechDraw** — 6 cardinal directions (top, bottom, front, rear, port, stbd) and all 8 isometric views (8 corners). Headless script creates a TechDraw page per view and exports SVG via `TechDraw.writeSVGPage()`. Save to `airframe/diagrams/overview/`.
-        **BLOCKS** exploded view SVGs below.
-- [ ] **Exploded view SVG — printed parts only** (all printed components labelled and exploded from assembly position). **Generate using FreeCAD:** drive part translations via a headless Python script that offsets each `Mesh::Feature` Placement along its explosion axis, then exports SVG via FreeCAD TechDraw. Save to `airframe/diagrams/exploded/`.
-- [ ] **Exploded view SVG — full build** (all components: PCBs, SBCs, motors, ESCs, wires, sensors, antennas, hardware). Same FreeCAD TechDraw headless approach as printed-parts exploded view. Save to `airframe/diagrams/exploded/`.
+    - [ ] **Render overview SVGs using FreeCAD TechDraw** — 6 cardinal + 8
+        isometric views → `airframe/diagrams/overview/`. **BLOCKS** exploded views.
+- [ ] **Exploded view SVG — printed parts only** → `airframe/diagrams/exploded/`.
+- [ ] **Exploded view SVG — full build** (PCBs, SBCs, motors, ESCs, wires,
+    sensors, antennas, hardware) → `airframe/diagrams/exploded/`.
 
 ---
-

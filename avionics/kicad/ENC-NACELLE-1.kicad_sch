@@ -242,7 +242,7 @@
     (uuid "e2000000-0000-0000-0000-000000000001")
     (property "Reference" "P1" (at 95.00 78.00 0) (effects (font (size 1.27 1.27))))
     (property "Value" "PIGTAIL_7W" (at 95.00 101.43 0) (effects (font (size 1.27 1.27))))
-    (property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Footprint" "Serenity-Custom:Pigtail_7W_DirectSolder" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (pin "1" (uuid "e2000000-0000-0000-0000-000000000002"))
     (pin "2" (uuid "e2000000-0000-0000-0000-000000000003"))

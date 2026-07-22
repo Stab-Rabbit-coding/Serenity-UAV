@@ -16,6 +16,7 @@
 ## §1.1.4 — Landing Gear
 → full detail: `WBS.md` §1.1.4
 
+- [ ] **REDESIGN FOR CANONICAL HIGHT + flight safety only.**  The cargo loading does not require 3" ground cleanance.  (Aircraft lands over cargo with doors open.)
 - [ ] LG-12 Model the post per the §4.6 dimensions
 - [ ] LG-10 Finalize the 4 corner post placements
 - [ ] Ground clearance check carried forward from Rev R1
