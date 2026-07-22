@@ -104,17 +104,17 @@ def wire_stroke_available(b_mm: float) -> float:
 
 def solve_ductile_wire(u_per_wire_j: float, f_leg_target_n: float):
     """Given per-wire energy demand and target per-leg plateau force,
-    return (d, B, L, P, stroke) for the ductile wire at bellcrank R_WIRE."""
+    return (demand, bow, length, p_wire, stroke) for the ductile wire at bellcrank R_WIRE."""
     p_wire = f_leg_target_n * R_H / (2.0 * R_WIRE)       # N, per wire
     # invert P = 2*(sigma*d^3/6)/h0  ->  d = (3*P*h0/sigma)^(1/3)
-    d = (3.0 * p_wire * H0 / SIGMA_FLOW_DUCTILE) ** (1.0 / 3.0)
+    demand = (3.0 * p_wire * H0 / SIGMA_FLOW_DUCTILE) ** (1.0 / 3.0)
     stroke = u_per_wire_j * 1000.0 / p_wire              # mm (U = P*s plateau)
-    # shortest bow span B whose available stroke covers the demand
-    b = 20.0
-    while wire_stroke_available(b) < stroke and b < 120.0:
-        b += 1.0
-    l = b + 2.0 * (SEAT_DUCTILE + END_RUN_IN)            # full stock length
-    return d, b, l, p_wire, stroke
+    # shortest bow span bow whose available stroke covers the demand
+    bow = 20.0
+    while wire_stroke_available(bow) < stroke and bow < 120.0:
+        bow += 1.0
+    length = bow + 2.0 * (SEAT_DUCTILE + END_RUN_IN)            # full stock length
+    return demand, bow, length, p_wire, stroke
 
 
 def wire_mass_g(d_mm: float, l_mm: float) -> float:
