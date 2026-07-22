@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 """Kaylee PCB Rev S1: remove the 6 V servo BEC, add the 5 V servo BEC.
 
-Implements TODO-1.2b-CHECKLIST.md Task 3.B on Kaylee.kicad_pcb, in the
-PCB's own net dialect (the PCB is an older, independent generation from the
-schematic — BEC1_VIN_F/+6V/MAIN_SNS_P style vs the schematic's
-FB5V1_OUT/6V_SERVO/RS_MAIN_SP style; full dialect unification is tracked
-separately).  The board carries no routed tracks (verified: 0 segments,
-0 vias, VBAT+PGND pours only), so net renames are safe.
+
 
 Steps:
 1. Reference renames: FB_6V->FB_SERVO, R_FB6_1/2->R_FBSV_1/2,

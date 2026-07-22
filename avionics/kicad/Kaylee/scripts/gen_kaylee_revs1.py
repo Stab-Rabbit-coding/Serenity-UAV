@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 """Kaylee Rev S1 schematic conversion: 6 V servo BEC -> 5 V servo BEC.
 
-Implements avionics/kicad/TODO-1.2b-CHECKLIST.md Task 3.A on
-Kaylee.kicad_sch (run AFTER fix_kaylee_yinv.py + fix_kaylee_pin_snap.py):
-
 1. Section E replaced: TPS54540 6 V BEC (U_BEC_6V, FB_6V, L3, C_BEC_SV_IN,
    R_FB6_*, C_BEC_SV_OUT, J_6V, J_SHLD_6V and the 6V_SERVO/SW6V/BOOT6V/...
    nets) is deleted; a TPS54620 5 V servo BEC (U_BEC_SERVO_5V, FB_SERVO,

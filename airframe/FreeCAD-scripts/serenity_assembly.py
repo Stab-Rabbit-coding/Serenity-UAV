@@ -363,8 +363,7 @@ def assemble():
     # lg_r6_hull_legs.stl compound is ALREADY in hull frame (all 4 corners
     # at the canonical QMx Sheet 5 bay stations, identity placement); see
     # airframe/openscad/fuselage/canonical_leg_r6.scad "hull_legs" PART and
-    # docs/LANDING_GEAR_ANALYSIS.md Rev R6 §2.2.  Final flank-conformed
-    # placement/bake remains TODO.md §1.1.4 LG-10.  The prior Thingiverse-
+    # docs/LANDING_GEAR_ANALYSIS.md Rev R6 §2.2.  The prior Thingiverse-
     # derived feet_x_4/legs parts are archived (ARCHIVE_INDEX.md).
     gear = add_mesh(
         doc,
