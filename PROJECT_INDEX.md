@@ -2,7 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-07-22 — Automated reconciliation pass -->
-                                    core.hooksPath .githooks); calls tools/precommit_kicad_load.py
 .github/workflows/ci.yml          — CI pipeline (lint, STL validation, build checks)
 .github/workflows/stale-branches.yml — Stale branch cleanup workflow
 .vscode/extensions.json           — Recommended VS Code extensions
@@ -39943,7 +39942,6 @@ airframe/blender-scripts/__pycache__/blender_nacelle_revo.cpython-313.pyc — [I
 airframe/blender-scripts/__pycache__/blender_nozzle_gen.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
 airframe/blender-scripts/__pycache__/merge_cargo_interior.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
 airframe/blender-scripts/__pycache__/serenity_render_views.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
-airframe/freecad/assembly/SerenityAssembly.20260616-121110.FCBak — [IGNORED/VCS-EXCLUDED]
 airframe/freecad/assembly/SerenityAssembly.FCStd — [IGNORED/VCS-EXCLUDED]
 airframe/gcode/davinci-jr-proto/batch_A/cargo_door_servo_bracket.gcode — [IGNORED/VCS-EXCLUDED]
 airframe/gcode/davinci-jr-proto/batch_A/cargo_drv8833_tray.gcode — [IGNORED/VCS-EXCLUDED]
@@ -78103,3 +78101,7 @@ avionics/kicad/Wash/kicads/Wash-backups/Wash-2026-07-21_103114.zip — [IGNORED/
 avionics/kicad/Wash/kicads/Wash-backups/Wash-2026-07-21_104301.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Wash/kicads/Wash-backups/Wash-2026-07-21_105317.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Wash/kicads/Wash-backups/Wash-2026-07-21_110101.zip — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-07-22) ---
+.githooks/pre-commit — [PENDING AI CLASSIFICATION]
+airframe/freecad/assembly/SerenityAssembly.20260616-122239.FCBak — [IGNORED/VCS-EXCLUDED]

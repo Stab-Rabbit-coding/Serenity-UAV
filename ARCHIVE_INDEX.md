@@ -3,7 +3,6 @@
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
 <!-- Last updated: 2026-07-22 — Automated reconciliation pass -->
-```
 
 ---
 
@@ -39544,7 +39543,6 @@ airframe/blender-scripts/__pycache__/blender_nacelle_revo.cpython-313.pyc — [I
 airframe/blender-scripts/__pycache__/blender_nozzle_gen.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
 airframe/blender-scripts/__pycache__/merge_cargo_interior.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
 airframe/blender-scripts/__pycache__/serenity_render_views.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
-airframe/freecad/assembly/SerenityAssembly.20260616-121110.FCBak — [IGNORED/VCS-EXCLUDED]
 airframe/freecad/assembly/SerenityAssembly.FCStd — [IGNORED/VCS-EXCLUDED]
 airframe/gcode/davinci-jr-proto/batch_A/cargo_door_servo_bracket.gcode — [IGNORED/VCS-EXCLUDED]
 airframe/gcode/davinci-jr-proto/batch_A/cargo_drv8833_tray.gcode — [IGNORED/VCS-EXCLUDED]
@@ -77704,3 +77702,6 @@ avionics/kicad/Wash/kicads/Wash-backups/Wash-2026-07-21_103114.zip — [IGNORED/
 avionics/kicad/Wash/kicads/Wash-backups/Wash-2026-07-21_104301.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Wash/kicads/Wash-backups/Wash-2026-07-21_105317.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Wash/kicads/Wash-backups/Wash-2026-07-21_110101.zip — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-07-22) ---
+airframe/freecad/assembly/SerenityAssembly.20260616-122239.FCBak — [IGNORED/VCS-EXCLUDED]
