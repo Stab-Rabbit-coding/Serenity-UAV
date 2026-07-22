@@ -67,7 +67,7 @@ SIGMA_WORK_SPRING = 900.0     # MPa, spring temper elastic working stress
 RHO_STEEL = 7.85e-3           # g/mm^3
 H0 = 3.5                      # mm, pre-bend rise (both wire types)
 HMAX_FRAC = 0.35              # deepest usable bow rise as fraction of chord L
-                              # (2-hinge plateau model validity limit)
+# (2-hinge plateau model validity limit)
 
 # CF-PETG structure allowable (Rev R5 SS4.6 convention: yield/2)
 SIGMA_ALLOW_PETG = 27.5       # MPa
