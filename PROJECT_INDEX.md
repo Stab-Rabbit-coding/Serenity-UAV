@@ -2,7 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-07-22 — Automated reconciliation pass -->
-.githooks/pre-commit              — KiCad-load-corruption guard (enable via git config
                                     core.hooksPath .githooks); calls tools/precommit_kicad_load.py
 .github/workflows/ci.yml          — CI pipeline (lint, STL validation, build checks)
 .github/workflows/stale-branches.yml — Stale branch cleanup workflow

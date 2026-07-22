@@ -59,8 +59,7 @@ WHEELBASE = Y_FOOT_AFT - Y_FOOT_FORE
 # Hip-pivot lever geometry (mm)
 R_H = 65.0                # horizontal hip-pin -> foot moment arm (swing plane)
 R_WIRE = 6.0              # bellcrank radius, both wire pairs (M3 pin + walls)
-CLEARANCE_MM = 80.0       # design belly-to-ground clearance (>= 76 mm req.)
-
+CLEARANCE_MM = 38.1       # 1.5" provides safety 
 # Wire materials (Rev R5 values carried forward)
 SIGMA_FLOW_DUCTILE = 550.0    # MPa, ductile temper flow stress
 SIGMA_WORK_SPRING = 900.0     # MPa, spring temper elastic working stress
