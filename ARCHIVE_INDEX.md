@@ -2,8 +2,7 @@
 
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
-<!-- Last updated: 2026-07-22 — Automated reconciliation pass -->
----
+<!-- Last updated: 2026-07-23 — Automated reconciliation pass -->
 
 ## archives/avionics-archives/kicad-archives/ (moved from avionics/kicad/archive/)
 
@@ -77710,3 +77709,11 @@ avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_173538.zip — [PE
 avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-22_172905.zip — [PENDING AI CLASSIFICATION]
 avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_173538.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-22_172905.zip — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-07-23) ---
+airframe/openscad/fuselage/canonical_leg_r6_1_5in.scad — [PENDING AI CLASSIFICATION]
+airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad — [PENDING AI CLASSIFICATION]
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_201104.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_202404.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_201104.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_202404.zip — [IGNORED/VCS-EXCLUDED]

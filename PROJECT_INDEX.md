@@ -1,8 +1,7 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: 2026-07-22 — Automated reconciliation pass -->
-.github/workflows/stale-branches.yml — Stale branch cleanup workflow
+<!-- Last updated: 2026-07-23 — Automated reconciliation pass -->
 .vscode/extensions.json           — Recommended VS Code extensions
 AGENTS.md                         — Authoritative instructions for AI agents (project-wide
                                     standards, including Standards Vetting Policy; federated
@@ -78110,3 +78109,12 @@ avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_173538.zip — [PE
 avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-22_172905.zip — [PENDING AI CLASSIFICATION]
 avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_173538.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-22_172905.zip — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-07-23) ---
+.github/workflows/ci.yml — [PENDING AI CLASSIFICATION]
+airframe/openscad/fuselage/canonical_leg_r6_1_5in.scad — [PENDING AI CLASSIFICATION]
+airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad — [PENDING AI CLASSIFICATION]
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_201104.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_202404.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_201104.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_202404.zip — [IGNORED/VCS-EXCLUDED]
