@@ -1,4 +1,4 @@
-# Serenity UAV — Avionics (Wash / Zoe / Emma Cape Hardware) TODO (Open Work Only)
+7# Serenity UAV — Avionics (Wash / Zoe / Emma Cape Hardware) TODO (Open Work Only)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
@@ -40,5 +40,9 @@
 - [ ] Wash footprint-vs-datasheet verification — DONE 2026-07-13 (Cla…
 - [ ] Wash SCHEMATIC-FIRST REBUILD — decided + started 2026-07-14 (us…
 - [ ] Finish Wash PCB (CAPE-A-2) close-out pass:
+
+- [ ] use vimdrone s50 50A dronecan ESCs 
+- [ ] use vimdrone ap periph pico to connect nacelle hall effect sensor and servos to can and rs485
+- [ ] use waveshare sts3215 servos for nacelles
 
 ---
