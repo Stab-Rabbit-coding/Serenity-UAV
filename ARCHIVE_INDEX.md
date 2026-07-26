@@ -3,7 +3,6 @@
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
 <!-- Last updated: 2026-07-26 — Automated reconciliation pass -->
-Superseded KiCad PCB designs. **Path corrected 2026-07-13:** this content used to live at
 `avionics/kicad/archive/` (that path no longer exists on disk); it has been consolidated
 under `archives/avionics-archives/kicad-archives/`. Design notes in `archive/ARCHIVE-REVQ.md`
 inside this directory.

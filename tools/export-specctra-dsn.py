@@ -2,6 +2,7 @@
 import sys
 import pcbnew
 
+
 def export_dsn(pcb_path, dsn_path):
     board = pcbnew.LoadBoard(pcb_path)
     # Real API name (verified against this pcbnew build): ExportSpecctraDSN,
@@ -11,6 +12,7 @@ def export_dsn(pcb_path, dsn_path):
     if not success:
         sys.exit('Export failed')
     print(f'Exported {dsn_path}')
+
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:

@@ -2,7 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-07-26 — Automated reconciliation pass -->
-                                    guidance in subordinate folders' AGENTS.md files)
 CLAUDE.md                         — One-line pointer to AGENTS.md
 LICENSE                           — Repository license (CC BY 4.0)
 PROJECT_INDEX.md                  — This file

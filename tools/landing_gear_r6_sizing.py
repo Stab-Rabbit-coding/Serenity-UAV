@@ -92,8 +92,8 @@ LEG_VARIANTS = {
     "3.0in": (65.0, 80.0),
 }
 DESIGN_VARIANT = "3.0in"   # variant the wire schedule is SOLVED against
-                           # (historical design point); the other variant
-                           # reuses the resulting hardware -- see header.
+# (historical design point); the other variant reuses the resulting
+# hardware -- see header.
 
 # Wire materials (Rev R5 values carried forward)
 SIGMA_FLOW_DUCTILE = 550.0    # MPa, ductile temper flow stress
@@ -101,7 +101,7 @@ SIGMA_WORK_SPRING = 900.0     # MPa, spring temper elastic working stress
 RHO_STEEL = 7.85e-3            # g/mm^3
 H0 = 3.5                       # mm, pre-bend rise (both wire types)
 HMAX_FRAC = 0.35               # deepest usable bow rise as fraction of chord L
-                                # (2-hinge plateau model validity limit)
+# (2-hinge plateau model validity limit)
 
 # CF-PETG structure allowable (Rev R5 SS4.6 convention: yield/2)
 SIGMA_ALLOW_PETG = 27.5        # MPa

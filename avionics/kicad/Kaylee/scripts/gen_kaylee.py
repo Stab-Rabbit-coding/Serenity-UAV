@@ -2148,11 +2148,11 @@ def gen_sch() -> str:
                  footprint=ADM_FOOTPRINT_T, datasheet=ADM_DATASHEET_T)
     )
     for pname, pnum, ptype in ADM_L_T + ADM_R_T:
-        net = adm_nm.get(pnum)
-        if net is None:
+        rs_net = adm_nm.get(pnum)
+        if rs_net is None:
             parts.append(no_connect_pin_bynum_trust(adm_cx, adm_cy, ADM_L_T, ADM_R_T, pnum, ADM_SIZE_T))
         else:
-            parts.append(glabel_pin_bynum_trust(net, adm_cx, adm_cy, ADM_L_T, ADM_R_T, pnum, ADM_SIZE_T))
+            parts.append(glabel_pin_bynum_trust(rs_net, adm_cx, adm_cy, ADM_L_T, ADM_R_T, pnum, ADM_SIZE_T))
     parts.append(sym_inst("C_Generic", "C_H_ADM1", "100nF", 690, 205))
     parts.append(glabel("+3V3", 686.19, 205, rot=180))
     parts.append(glabel("PGND", 693.81, 205, rot=0))

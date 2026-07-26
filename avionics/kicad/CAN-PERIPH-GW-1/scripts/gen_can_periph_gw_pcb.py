@@ -87,7 +87,7 @@ JUMPER = f"{SYS_FP}/Jumper.pretty"
 
 STACK_LANE_X = 90.0  # PCB mm per stack lane (independent of the schematic's own mm scale)
 
-PLACE = {
+PLACE: dict[str, tuple[str, str, tuple[float, float], float]] = {
     # Shared Section A: power (once, feeds every stack)
     "J_PWR": (JST, "JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical", (10, 10), 0),
     "U_REG_3V3": (SOT, "SOT-23-6", (25, 10), 0),
