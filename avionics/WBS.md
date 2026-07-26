@@ -356,31 +356,96 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 ### §1.9.1 — Nacelle Tilt-Angle Feedback (Hall encoder)
 
-Each nacelle carries a magnetic angle encoder (`MAL-TILT-ENC-PCB` — **Magntek
-MT6701**, I²C, off-axis, on a compact 7×7 mm in-house PCB; **MA732/SPI** is the
-fallback) at the wing/nacelle joint reading a Ø22 diametric ring magnet on the rotating spar
-hub (airframe: `wings-nacelles/WBS.md` §1.1.3.6). It closes the tilt-servo loop
-on the **true nacelle angle**, making tilt positioning independent of tilt-spar
+Each nacelle carries a magnetic angle encoder (`MAL-TILT-ENC-PCB` — **AKM
+AK7455**, SPI, off-axis, REF-SENSOR-008) at the wing/nacelle joint reading a
+Ø22 diametric ring magnet on the rotating spar hub (airframe:
+`wings-nacelles/WBS.md` §1.1.3.6). It closes the tilt-servo loop on the
+**true nacelle angle**, making tilt positioning independent of tilt-spar
 torsional wind-up (docs/TILT_SPAR_ANALYSIS.md §1, §3.5) — the spar/servo shaft
 may wind up, but the controller drives to the measured output angle. Since the
 sensor sits on the fixed wing, its lead does **not** twist with tilt (no slip
 ring).
 
-- [ ] **Assign the two encoders to nacelle-control nodes** — port + stbd read by
-    **River (primary nacelle control/sync)** with **Simon (alternate nacelle
-    control)** as failover (per node roles above). Put port and stbd on
-    **separate I²C buses** (or a TCA9548A mux, cf. the antenna-gimbal AS5600
-    pattern) — MT6701 has a fixed I²C address, so two on one bus collide.
-- [ ] **Select the real part + confirm pinout/protocol** (MT6701 I²C vs MA732
-    SPI/PWM) — must be **off-axis capable** (through-shaft; the on-axis AS5600
-    used on the gimbal will not work here). Add a `REF-SENSOR-*` catalog entry
-    (TODO §0.8) before PCB/harness sign-off.
+- [x] **Select the real part + confirm pinout/protocol** — **RESOLVED
+    2026-07-19**: AKM AK7455 (SPI, off-axis-capable; MT6701/AS5600 rejected,
+    on-axis only). Pinout verified vs datasheet 200800064-E-00, schematic
+    ERC 0-error. See REF-SENSOR-008.
+- [x] **Assign the two encoders to nacelle-control nodes** — **RESOLVED
+    2026-07-26, architecture changed from direct read to bus-published.**
+    River/Simon no longer read AK7455 SPI directly. Each nacelle's AK7455
+    is read by a `CAN-PERIPH-GW-1` trust-module gateway (own MSPM0G3507 +
+    SLB9670 TPM) mounted in the nacelle, which publishes the angle as a
+    signed message on both isolated CAN-FD and isolated RS-485 (ISOW1044BDFMR
+    / ISOW1412, REF-SENSOR-009/010). River (primary) and Simon (failover)
+    subscribe to the published bus message instead of owning a dedicated I²C
+    bus per side — removes the two-encoders-one-bus-address collision problem
+    entirely, and adds TPM-signed provenance to the tilt feedback. See
+    `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` "Deployment" mode 1.
 - [ ] **Firmware: zero-calibration over the −5..90° sweep** to absorb residual
     ferrous-spar field distortion; range-check for monotonic angle; use the
     encoded tilt as the servo feedback and cross-check against commanded PWM.
-- [ ] **Wiring per EMI spec** — shielded 4-wire, routed clear of the 40 A EDF
-    feeds; see `avionics/emi-hardening/WBS.md` §1.4.4 (I²C) and §1.4.6
-    (ferromagnetic spar / magnetic-sensor siting).
+- [ ] **Wiring per EMI spec** — shielded encoder-to-gateway leads, routed
+    clear of the 40 A EDF feeds; see `avionics/emi-hardening/WBS.md` §1.4.4
+    and §1.4.6 (ferromagnetic spar / magnetic-sensor siting). Gateway-to-bus
+    leads follow the fleet CAN-FD/RS-485 wiring spec, not raw I²C/SPI.
+
+---
+
+### §1.9.2 — Fleet Trust Module (MCU + TPM + isolated CAN-FD + isolated RS-485)
+
+Added 2026-07-26: a reusable "trust module" block (TI MSPM0G3507 + Infineon
+SLB9670 TPM + TI ISOW1044BDFMR isolated CAN-FD + TI ISOW1412 isolated RS-485,
+REF-SENSOR-004/009/010/011) — every fleet node now carries a TPM and at least
+CAN-FD + RS-485 bus access. Concept remixes the publicly documented VimDrones
+`ap_periph_pico` / ESC S50 product concept (informational reference only;
+VimDrones' own KiCad source is GPL-3.0, incompatible with this repo's CC BY
+4.0 baseline — no VimDrones file/symbol/geometry was copied, see
+REFERENCES.md Removed/Superseded Citations).
+
+- [x] **New board: `CAN-PERIPH-GW-1`** — stackable (`N_STACKS` header
+    constant) flexible peripheral gateway; accepts UART/TTL/BSHOT/PWM servo
+    I/O; publishes AK7455 nacelle-tilt data; also serves as the per-ESC
+    (S50) CAN/RS-485 gateway (one stack per EDF). ERC 0 at N_STACKS=1 and
+    N_STACKS=3. See `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`.
+- [x] **Kaylee** — full trust module added (had none before). ERC 0, added
+    via non-destructive schematic injection (`inject_kaylee_trust_module.py`)
+    rather than full regeneration — `gen_kaylee.py` itself has drifted from
+    the checked-in working file (247 ERC errors if run fresh vs. 0 in the
+    working file); this pre-existing drift is unresolved, tracked below.
+- [x] **Jayne** — RS-485 (ISOW1412) added; already had MCU + TPM + CAN-FD.
+    ERC 0.
+- [x] **Emma** — TPM only (SLB9670 via a dedicated `J_TPM_EMMA` header); no
+    separate CAN-FD/RS-485 needed, Emma reaches the bus via Zoë's P1/P2
+    PocketBeagle2 link. ERC 0, added via `inject_emma_tpm.py`.
+- [x] **Wash, Zoë** — pre-existing (unrelated, predates this session)
+    defects fixed while swapping to ISOW1412: broken ADM2795EBRWZ pin
+    numbering and wrong ISOW1044BDFMR footprint (16-pin footprint on a
+    20-pin part). `avionics/kicad/fix_wash_zoe_isolators.py`. Verified zero
+    ERC regression against baseline (Wash 48 / Zoë 234 violations, unchanged
+    — both counts are pre-existing and out of scope for this item).
+- [x] **Fleet-wide ADM2795E → ISOW1412** — ISOW1412 integrates its own
+    isolated DC-DC (ADM2795E is signal-only, needed an external isolated
+    supply); simplifies every RS-485 node. See REFERENCES.md Removed/
+    Superseded Citations.
+- [ ] **`gen_kaylee.py` generator drift** — running the script fresh from git
+    HEAD does not reproduce the checked-in `Kaylee.kicad_sch` (247 ERC errors
+    vs. 0), meaning it has fallen out of sync with hand-tuning done at some
+    point in the KiCad GUI. Needs reconciliation before it can be trusted for
+    future regeneration; until then, changes to Kaylee's schematic must use
+    the injection pattern (see `inject_kaylee_trust_module.py`).
+- [ ] **Wash's own inline "SLB9670" TPM symbol** has incorrect pin numbers
+    vs. datasheet Rev 1.4 (found while building Emma's TPM, which used the
+    separately-verified `Jayne_SLB9670_TPM` symbol instead specifically to
+    avoid this defect). Not fixed — out of scope for this item. See
+    REFERENCES.md Open Standards Verification Items.
+- [ ] **`CAN-PERIPH-GW-1` PCB routing** — freerouted via the Specctra DSN/SES
+    bridge (`tools/export-specctra-dsn.py` / `tools/import-specctra-ses.py` +
+    freerouting 2.2.4); 9 of 89 nets remain unrouted after a 20-pass run, and
+    DRC shows 28 unconnected items + 8 `starved_thermal` errors (same
+    accepted class as ENC-NACELLE-1). Footprint placement is the user's own
+    manual packing and must not be touched by `gen_can_periph_gw_pcb.py`
+    again without explicit permission. Further freerouting passes or manual
+    cleanup still possible.
 
 ---
 

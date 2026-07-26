@@ -3,8 +3,6 @@
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
 <!-- Last updated: 2026-07-26 — Automated reconciliation pass -->
-## archives/avionics-archives/kicad-archives/ (moved from avionics/kicad/archive/)
-
 Superseded KiCad PCB designs. **Path corrected 2026-07-13:** this content used to live at
 `avionics/kicad/archive/` (that path no longer exists on disk); it has been consolidated
 under `archives/avionics-archives/kicad-archives/`. Design notes in `archive/ARCHIVE-REVQ.md`
@@ -77733,7 +77731,6 @@ avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch — [PENDING AI 
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.net — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.ses — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1_v2.ses — [PENDING AI CLASSIFICATION]
-avionics/kicad/CAN-PERIPH-GW-1/kicads/_autosave-CAN-PERIPH-GW-1.kicad_pcb — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/fp-info-cache — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/~_autosave-CAN-PERIPH-GW-1.kicad_pcb.lck — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_pcb.py — [PENDING AI CLASSIFICATION]

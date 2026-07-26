@@ -484,10 +484,17 @@ tracked in `avionics/WBS.md` §1.9.1 and `avionics/emi-hardening/WBS.md` §1.4.6
     `bom_revS.csv` (`MAL-TILT-ENC-PCB` + `HALL-RING-MAG`) and `REFERENCES.md`
     (REF-SENSOR-008 + pending row) updated. (A KiCad symbol Y-inversion wiring bug —
     library Y-up vs sheet Y-down — was found and fixed during the rebuild.)
-- [ ] **[OPEN — cross-subsystem] `Wash.md` §13 still lists `J_ENC` as the AS5600 I²C
-    encoder** — the host moved to River/Simon and the interface to AK7455 **SPI**.
-    Reconcile the Wash cape / `avionics/WBS.md` §1.9.1 on the avionics side (SPI +
-    per-nacelle CSN + ERROR line); an avionics edit, flagged here for traceability.
+- [ ] **[OPEN — cross-subsystem, rescoped 2026-07-26] `Wash.md` §13 / `Wash.kicad_sch` still
+    have a `J_ENC` connector row (SM04B-GHS-TB, `ENC_SDA`/`ENC_SCL`, "AS5600 nacelle tilt angle
+    encoder (I2C)")** — this is now **obsolete, not merely stale**: the architecture moved to
+    AK7455 read locally in-nacelle by a `CAN-PERIPH-GW-1` trust-module gateway (own
+    MSPM0G3507, SPI 4-wire + ERROR direct to the gateway MCU), published as a signed message on
+    isolated CAN-FD + isolated RS-485. River (primary) and Simon (failover) subscribe to the
+    bus message rather than Wash owning a dedicated I²C/SPI bus to each nacelle. **Action:**
+    remove the `J_ENC` connector + `ENC_SDA`/`ENC_SCL` net from `Wash.kicad_sch` and the §13
+    table row (not a SPI reconciliation — the connector's function no longer belongs on Wash at
+    all). See `avionics/WBS.md` §1.9.1/§1.9.2 and
+    `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` deployment mode 1.
 - [ ] **[OPEN — airframe] Resize the wing sensor pocket for the AK7455 QFN24 4×4**
     (was sized for the MT6701 3×3) and route the **7-wire SPI** pigtail — update the
     `HALL_*` block + comments in `wings_s1223_revo.scad` (they still name MT6701) and

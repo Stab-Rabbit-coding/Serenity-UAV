@@ -285,12 +285,12 @@ Located in the middle section's ventral interior (inner-neck/Kaylee's room).
 
 ## §6 — LANDING GEAR (Fuselage-Mounted Shock Absorption)
 
-### 6.1 Landing Leg Vertical Posts (Deferred to §1.1.4)
-- **Parts:** `feet_x_4_scaled24.stl`, `legs_scaled24.stl`
-- **Design intent:** Rev R5 wire-brace landing gear (vertical CF-PETG posts + spring/ductile wire braces). Mounts to the four cargo-section corner boss sockets.
-- **Current state:** Imported but **unplaced** — placement is explicitly deferred to TODO.md §1.1.4 (§1.1.5 in the full airframe/WBS.md).
-- **Notes:** Hull-frame placement of Rev R5 gear assembly is a separate work item (deferred). The wire brace design and boss locations are documented in `docs/LANDING_GEAR_ANALYSIS.md` Rev R5. Placement verification pending user work on boss socket integration.
-- **Status:** [ ] Deferred to §1.1.4
+### 6.1 Landing Leg — Canonical Articulated Hip-Pivot Leg (Rev R6)
+- **Parts:** `lg_r6_1_5in_hull_legs.stl` (default, 1.5 in / 38.1 mm belly clearance) or `lg_r6_3_0in_hull_legs.stl` (extended, 3.0 in / 80 mm, kept for rough-field use) — both are 4-corner compounds already in hull frame; shared `lg_r6_common_bay.stl` / `lg_r6_common_foot.stl` / wire STLs are geometrically identical between variants.
+- **Design intent:** Rev R6 canonical articulated leg — cylinder-cluster thigh, disc knee/ankle, slotted shin, tri-pad arrowhead foot — pivoting about an M3 hip pin in a hull-flank bay, with spring + ductile bowed wires (carried forward from the retired Rev R5 vertical-post design) spanning the hip at a bellcrank radius. Mounts to the four canonical QMx Sheet 5 bay stations on the cargo-section flanks (not the old corner boss sockets — those were Rev R1.4/R5 geometry, both retired).
+- **Current state:** `lg_r6_1_5in_hull_legs.stl` is **placed** (identity transform, already baked to the hull-frame stations) and wired into `serenity_assembly.py` as of 2026-07-23. Final flank-conforming bay placement is tracked as **LG-10** (TODO.md §1.1.4).
+- **Notes:** Full mechanism, wire sizing, and the two-variant comparison are documented in `docs/LANDING_GEAR_ANALYSIS.md` Rev R6 (see §4.7 for the 1.5in-vs-3.0in trade). Ground clearance is an aircraft-safety spec, not a cargo-clearance spec (corrected 2026-07-23) — the aircraft lands over a staged cargo box with the doors open and winches it in.
+- **Status:** [ ] Verify placement against `docs/LANDING_GEAR_ANALYSIS.md` §2.2 stations; LG-10 flank-conforming bake still open
 
 ---
 

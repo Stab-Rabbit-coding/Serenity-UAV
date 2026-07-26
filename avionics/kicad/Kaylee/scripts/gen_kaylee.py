@@ -906,6 +906,235 @@ def text_note(txt, x, y):
 # ---------------------------------------------------------------------------
 
 
+# ---------------------------------------------------------------------------
+# Section H additions (2026-07-26): TPM-secured trust module (MSPM0G3507 MCU
+# + SLB9670 TPM + isolated CAN-FD + isolated RS-485). Kaylee previously had
+# no MCU/TPM/CAN/RS-485 at all -- it exposed its INA226/BQ76930 telemetry
+# only over a raw external I2C bus (J_I2C, to Wash/Shepherd's Room). This
+# adds the same trust-module recipe used on CAN-PERIPH-GW-1 and Jayne, so
+# Kaylee's battery/current telemetry is also TPM-signed and republished on
+# both isolated buses, per "bake the trusted can+rs485 interface into kaylee
+# as well... so that all nodes have at least those two busses, and everyone
+# gets a tpm". New MCU reads the EXISTING PDB_SDA/PDB_SCL I2C bus (no new
+# sensors added) -- see Kaylee.md for details.
+# ---------------------------------------------------------------------------
+SYMDIR_TRUST = Path(__file__).resolve().parent.parent.parent / "symbols"
+REAL_SYMS_TRUST = {
+    "MCU": (
+        "Jayne_MSPM0G3507_RGZ",
+        "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm",
+    ),
+    "TPM": (
+        "Jayne_SLB9670_TPM",
+        "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm",
+    ),
+    "ISO": ("Jayne_ISOW1044BDFMR", "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm"),
+}
+
+
+def parse_real_symbol_trust(name):
+    import re as _re
+
+    src = (SYMDIR_TRUST / f"{name}.kicad_sym").read_text()
+    start = src.index(f'(symbol "{name}"')
+    depth = 0
+    end = None
+    for i in range(start, len(src)):
+        if src[i] == "(":
+            depth += 1
+        elif src[i] == ")":
+            depth -= 1
+            if depth == 0:
+                end = i + 1
+                break
+    lib_block = src[start:end]
+    pins = []
+    unit = None
+    lines = src.splitlines()
+    i = 0
+    while i < len(lines):
+        mu = _re.search(r'\(symbol "[^"]+_(\d+)_\d+"', lines[i])
+        if mu:
+            unit = int(mu.group(1))
+        mp = _re.match(
+            r"\s*\(pin\s+(\w+)\s+\w+\s+\(at\s+([-\d.]+)\s+([-\d.]+)\s+(\d+)\)",
+            lines[i],
+        )
+        if mp:
+            etype = mp.group(1)
+            x, y, ang = float(mp.group(2)), float(mp.group(3)), int(mp.group(4))
+            pname = _re.search(r'\(name "([^"]+)"', lines[i + 1]).group(1)
+            pnum = _re.search(r'\(number "([^"]+)"', lines[i + 2]).group(1)
+            pins.append((pnum, pname, x, y, ang, etype, unit))
+            i += 3
+            continue
+        i += 1
+    return lib_block, pins
+
+
+def _snap_trust(v):
+    return round(v / 1.27) * 1.27
+
+
+def place_real_trust(key, ref, value, unit_pos, netmap, pins):
+    lib_id, footprint = REAL_SYMS_TRUST[key]
+    unit_pos = {u: (_snap_trust(cx), _snap_trust(cy)) for u, (cx, cy) in unit_pos.items()}
+    out = []
+    for unit, (cx, cy) in unit_pos.items():
+        out.append(
+            sym_inst(lib_id, ref, value, cx, cy, extra_props=None, footprint=footprint)
+        )
+    for pnum, pname, x, y, ang, etype, unit in pins:
+        if unit not in unit_pos:
+            continue
+        cx, cy = unit_pos[unit]
+        sx, sy = cx + x, cy - y
+        net = netmap.get(pnum)
+        if net is None:
+            out.append(nc(sx, sy))
+        else:
+            rot = 180 if ang == 0 else 0
+            out.append(glabel(net, sx, sy, rot=rot))
+    return out
+
+
+def lib_symbol_generic_ic_trust(name, footprint, datasheet, left, right, size=(15.24, 15.24)):
+    hx, hy = size
+    lines = [
+        f'  (symbol "{name}" (in_bom yes) (on_board yes)',
+        f'    (property "Reference" "U" (at 0 {-(hy + 3.81):.2f} 0) (effects (font (size 1.27 1.27))))',
+        f'    (property "Value" "{name}" (at 0 {(hy + 3.81):.2f} 0) (effects (font (size 1.27 1.27))))',
+        f'    (property "Footprint" "{footprint}" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))',
+        f'    (property "Datasheet" "{datasheet}" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))',
+        f'    (symbol "{name}_0_1"',
+        f"      (rectangle (start {-hx:.2f} {-hy:.2f}) (end {hx:.2f} {hy:.2f})))",
+        f'    (symbol "{name}_1_1"',
+    ]
+    n = len(left)
+    start_y = -((n - 1) * 2.54) / 2.0
+    for i, (pname, pnum, ptype) in enumerate(left):
+        py = start_y + i * 2.54
+        lines.append(_pin_def(ptype, "line", -(hx + 2.54), py, 0, 2.54, pname, pnum))
+    n = len(right)
+    start_y = -((n - 1) * 2.54) / 2.0
+    for i, (pname, pnum, ptype) in enumerate(right):
+        py = start_y + i * 2.54
+        lines.append(_pin_def(ptype, "line", hx + 2.54, py, 180, 2.54, pname, pnum))
+    lines.append("    )")
+    lines.append("  )")
+    return "\n".join(lines)
+
+
+def lib_symbol_conn_3p(name):
+    return f"""  (symbol "{name}" (in_bom yes) (on_board yes)
+    (property "Reference" "J" (at 0 -5.08 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "{name}" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (symbol "{name}_0_1"
+      (rectangle (start -3.81 -3.81) (end 0 3.81)
+        (stroke (width 0.254) (type default)) (fill (type background))))
+    (symbol "{name}_1_1"
+{_pin_def("passive", "line", 2.54, -2.54, 180, 2.54, "1", "1")}
+{_pin_def("passive", "line", 2.54,  0.00, 180, 2.54, "2", "2")}
+{_pin_def("passive", "line", 2.54,  2.54, 180, 2.54, "3", "3")})
+  )"""
+
+
+# SUPERSEDED 2026-07-26: originally ADI ADM2795E (signal-only isolator).
+# Replaced with TI ISOW1412 (user request: "switch all adm2795e rs485 chips
+# on all nodes with ISOW1412 ... to provide both power and signal
+# isolation") -- pin table from TI ISOW1412/ISOW1432 datasheet (SLLSF86C)
+# Table 7-1, read directly. Integrated isolated DC-DC removes the need for
+# an external iso-DC-DC placeholder (like ISOW1044 already provides for
+# CAN-FD). Y/Z (driver out) / A/B (receiver in) modeled "bidirectional" and
+# wired shorted (Y-A, Z-B) to run this full-duplex part in half-duplex mode
+# on the 2-wire RS485_A/RS485_B bus.
+ADM_SIZE_T = (15.24, 12.7)
+ADM_L_T = [
+    ("VIO", "1", "power_in"), ("D", "2", "input"), ("DE", "3", "input"),
+    ("R", "4", "output"), ("RE_N", "5", "input"), ("GNDIO", "6", "power_in"),
+    ("OUT", "7", "output"), ("EN_FLT", "8", "bidirectional"),
+    ("VDD", "9", "power_in"), ("GND1", "10", "power_in"),
+]
+ADM_R_T = [
+    ("GND2", "11", "power_in"), ("VISOOUT", "12", "power_out"), ("MODE", "13", "input"),
+    ("IN", "14", "input"), ("GISOIN", "15", "power_in"), ("VISOIN", "16", "power_in"),
+    ("Y", "17", "bidirectional"), ("Z", "18", "bidirectional"),
+    ("B", "19", "bidirectional"), ("A", "20", "bidirectional"),
+]
+ADM_DATASHEET_T = "https://www.ti.com/lit/ds/symlink/isow1412.pdf"
+ADM_FOOTPRINT_T = "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm"
+
+
+def _ic_pin_xy_bynum_trust(left, right, pin_num, size):
+    hx, hy = size
+    for lst, side in ((left, "L"), (right, "R")):
+        n = len(lst)
+        start_y = -((n - 1) * 2.54) / 2.0
+        for i, (pname, pnum, ptype) in enumerate(lst):
+            if pnum == pin_num:
+                local_py = start_y + i * 2.54
+                dx = -(hx + 2.54) if side == "L" else (hx + 2.54)
+                return (dx, -local_py, side)
+    raise KeyError(f"pin #{pin_num!r} not found")
+
+
+def glabel_pin_bynum_trust(net_name, cx, cy, left, right, pin_num, size):
+    dx, dy, side = _ic_pin_xy_bynum_trust(left, right, pin_num, size)
+    rot = 180 if side == "L" else 0
+    return glabel(net_name, cx + dx, cy + dy, rot=rot)
+
+
+def no_connect_pin_bynum_trust(cx, cy, left, right, pin_num, size):
+    dx, dy, _ = _ic_pin_xy_bynum_trust(left, right, pin_num, size)
+    return nc(cx + dx, cy + dy)
+
+
+def lib_symbol_pwr_flag_trust():
+    return (
+        '  (symbol "PWR_FLAG" (power) (in_bom no) (on_board no)\n'
+        '    (property "Reference" "#FLG" (at 0 1.905 0) (effects (font (size 1.27 1.27)) (hide yes)))\n'
+        '    (property "Value" "PWR_FLAG" (at 0 3.556 0) (effects (font (size 1.27 1.27))))\n'
+        '    (property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))\n'
+        '    (property "Datasheet" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))\n'
+        '    (symbol "PWR_FLAG_0_1"\n'
+        "      (polyline (pts (xy 0 0) (xy 0 1.016) (xy -1.016 1.524) (xy 0 2.032) (xy 1.016 1.524) (xy 0 1.016))\n"
+        "        (stroke (width 0) (type default)) (fill (type none))))\n"
+        '    (symbol "PWR_FLAG_1_1"\n'
+        + _pin_def("power_out", "line", 0.0, 0.0, 90, 0.0, "~", "1")
+        + "\n    )\n  )"
+    )
+
+
+def pwr_flag_trust(net, x, y):
+    inst = "\n".join(
+        [
+            f'  (symbol (lib_id "PWR_FLAG") (at {x:.2f} {y:.2f} 0)',
+            "    (unit 1) (exclude_from_sim no) (in_bom no) (on_board yes) (dnp no)",
+            f'    (uuid "{_next_uid()}")',
+            f'    (property "Reference" "#FLG" (at {x:.2f} {y - 2.0:.2f} 0)',
+            "      (effects (font (size 1.27 1.27)) (hide yes)))",
+            f'    (property "Value" "PWR_FLAG" (at {x:.2f} {y + 2.0:.2f} 0)',
+            "      (effects (font (size 1.27 1.27))))",
+            f'    (pin "1" (uuid "{_next_uid()}"))',
+            "  )",
+        ]
+    )
+    return [inst, glabel(net, x, y, rot=90)]
+
+
+def lib_symbol_buck_sot23_6_trust(name):
+    return lib_symbol_generic_ic_trust(
+        name,
+        "Package_TO_SOT_SMD:SOT-23-6",
+        "https://www.ti.com/lit/ds/symlink/tlv62569.pdf",
+        left=[("EN", "1", "input"), ("GND", "2", "power_in"), ("VIN", "4", "power_in")],
+        right=[("SW", "3", "output"), ("FB", "5", "input"), ("PG", "6", "output")],
+        size=(7.62, 5.08),
+    )
+
+
 def gen_sch() -> str:
     parts = []
 
@@ -945,8 +1174,20 @@ def gen_sch() -> str:
         lib_sym_power("+6V", bar_top=True),
         lib_sym_power("5V_AVIONICS", bar_top=True),
         lib_sym_power("6V_SERVO", bar_top=True),
-        "  )",
+        # -- Section H additions (trust module, 2026-07-26) --
+        lib_symbol_conn_3p("Conn_JST_GH_03P"),
+        lib_symbol_2pin_h("SJ_Generic"),
+        lib_symbol_buck_sot23_6_trust("TLV62569_DBV_H"),
+        lib_symbol_generic_ic_trust(
+            "GW_ISOW1412", ADM_FOOTPRINT_T, ADM_DATASHEET_T,
+            left=ADM_L_T, right=ADM_R_T, size=ADM_SIZE_T,
+        ),
+        lib_symbol_pwr_flag_trust(),
     ]
+    real_trust = {k: parse_real_symbol_trust(v[0]) for k, v in REAL_SYMS_TRUST.items()}
+    for k in ("MCU", "TPM", "ISO"):
+        lib.append(real_trust[k][0])
+    lib.append("  )")
     parts.extend(lib)
 
     # -----------------------------------------------------------------------
@@ -1777,6 +2018,171 @@ def gen_sch() -> str:
     parts.append(pwr_sym("PGND", 590 - 2.54, 75, rot=0))
 
     # -----------------------------------------------------------------------
+    # Section H: TPM-secured trust module (MSPM0G3507 + SLB9670 + ISOW1044 +
+    # ADM2795E) -- added 2026-07-26, see module docstring above.
+    # -----------------------------------------------------------------------
+    parts.append(
+        text_note("=== Section H: Trust Module (MCU+TPM+isolated CAN-FD+RS-485) ===", 700, 10)
+    )
+    # +3V3 buck fed from Kaylee's existing regulated +5V avionics rail
+    parts.append(sym_inst("TLV62569_DBV_H", "U_REG_3V3_H", "TLV62569DBVR -> +3V3", 710, 30))
+    BL = [("EN", "1", "input"), ("GND", "2", "power_in"), ("VIN", "4", "power_in")]
+    BR = [("SW", "3", "output"), ("FB", "5", "input"), ("PG", "6", "output")]
+    BSZ = (7.62, 5.08)
+    parts.append(glabel_pin_bynum_trust("+5V", 710, 30, BL, BR, "1", BSZ))
+    parts.append(glabel_pin_bynum_trust("PGND", 710, 30, BL, BR, "2", BSZ))
+    parts.append(glabel_pin_bynum_trust("+5V", 710, 30, BL, BR, "4", BSZ))
+    parts.append(glabel_pin_bynum_trust("U_REG_H_SW", 710, 30, BL, BR, "3", BSZ))
+    parts.append(glabel_pin_bynum_trust("U_REG_H_FB", 710, 30, BL, BR, "5", BSZ))
+    parts.append(no_connect_pin_bynum_trust(710, 30, BL, BR, "6", BSZ))
+    parts.append(sym_inst("L_Generic", "L_H1", "2.2uH", 725, 30))
+    parts.append(glabel("U_REG_H_SW", 720.19, 30, rot=180))
+    parts.append(glabel("+3V3", 729.81, 30, rot=0))
+    parts.append(sym_inst("R_Generic", "R_H_FBT", "10k", 725, 38))
+    parts.append(glabel("+3V3", 720.19, 38, rot=180))
+    parts.append(glabel("U_REG_H_FB", 729.81, 38, rot=0))
+    parts.append(sym_inst("R_Generic", "R_H_FBB", "20k", 725, 44))
+    parts.append(glabel("U_REG_H_FB", 720.19, 44, rot=180))
+    parts.append(glabel("PGND", 729.81, 44, rot=0))
+    parts.append(sym_inst("C_Generic", "C_H_IN", "10uF", 700, 40))
+    parts.append(glabel("+5V", 696.19, 40, rot=180))
+    parts.append(glabel("PGND", 703.81, 40, rot=0))
+    parts.append(sym_inst("C_Generic", "C_H_OUT", "22uF", 740, 30))
+    parts.append(glabel("+3V3", 736.19, 30, rot=180))
+    parts.append(glabel("PGND", 743.81, 30, rot=0))
+    parts.extend(pwr_flag_trust("+3V3", 750, 30))
+
+    # MCU (U_MCU) -- reads the EXISTING PDB_SDA/PDB_SCL I2C bus (INA226 +
+    # BQ76930 telemetry already on that bus; no new sensors added)
+    mcu_pins = real_trust["MCU"][1]
+    mcu_nm = {
+        "1": "TPM_SPI_CS", "2": "TPM_SPI_SCK", "3": "TPM_SPI_MOSI", "4": "MCU_NRST",
+        "5": "TPM_SPI_MISO", "6": "+3V3", "7": "PGND", "8": "TPM_PIRQ",
+        "9": "TPM_RESET_N", "10": "PDB_SDA", "11": "PDB_SCL",
+        "12": "CANFD_TX", "13": "CANFD_RX", "14": "CANFD_FLT_N",
+        "15": "RS485_TX", "16": "RS485_RX", "17": "RS485_DE",
+        "34": "MCU_SWDIO", "35": "MCU_SWCLK", "48": "MCU_VCORE", "49": "PGND",
+    }
+    parts.extend(place_real_trust("MCU", "U_MCU", "TI MSPM0G3507", {1: (710, 90)}, mcu_nm, mcu_pins))
+    parts.append(sym_inst("R_Generic", "R_H_NRST", "10k", 690, 90))
+    parts.append(glabel("+3V3", 686.19, 90, rot=180))
+    parts.append(glabel("MCU_NRST", 693.81, 90, rot=0))
+    parts.append(sym_inst("C_Generic", "C_H_VCORE", "1uF", 690, 96))
+    parts.append(glabel("MCU_VCORE", 686.19, 96, rot=180))
+    parts.append(glabel("PGND", 693.81, 96, rot=0))
+    parts.append(
+        sym_inst("Conn_JST_GH_04P", "J_SWD_H", "SWD: DIO/CLK/NRST/GND", 750, 90)
+    )
+    parts.append(glabel("MCU_SWDIO", 750 - 3.81, 90 - 3.81, rot=180))
+    parts.append(glabel("MCU_SWCLK", 750 - 3.81, 90 - 1.27, rot=180))
+    parts.append(glabel("MCU_NRST", 750 - 3.81, 90 + 1.27, rot=180))
+    parts.append(glabel("PGND", 750 - 3.81, 90 + 3.81, rot=180))
+
+    # TPM (U_TPM)
+    tpm_pins = real_trust["TPM"][1]
+    tpm_nm = {
+        "1": "+3V3", "2": "PGND", "8": "+3V3", "9": "PGND", "14": "+3V3",
+        "16": "PGND", "17": "TPM_RESET_N", "18": "TPM_PIRQ", "19": "TPM_SPI_SCK",
+        "20": "TPM_SPI_CS", "21": "TPM_SPI_MOSI", "22": "+3V3", "23": "PGND",
+        "24": "TPM_SPI_MISO", "32": "PGND",
+    }
+    parts.extend(place_real_trust("TPM", "U_TPM", "Infineon SLB9670", {1: (710, 130)}, tpm_nm, tpm_pins))
+    parts.append(sym_inst("C_Generic", "C_H_TPM1", "100nF", 690, 125))
+    parts.append(glabel("+3V3", 686.19, 125, rot=180))
+    parts.append(glabel("PGND", 693.81, 125, rot=0))
+    parts.append(sym_inst("R_Generic", "R_H_TPM_RST", "10k", 690, 131))
+    parts.append(glabel("+3V3", 686.19, 131, rot=180))
+    parts.append(glabel("TPM_RESET_N", 693.81, 131, rot=0))
+
+    # Isolated CAN-FD (U_ISOCAN)
+    iso_pins = real_trust["ISO"][1]
+    iso_nm = {
+        "1": "+3V3", "3": "CANFD_TX", "4": "PGND", "5": "CANFD_RX", "6": "PGND",
+        "8": "CANFD_FLT_N", "9": "+3V3", "10": "PGND", "11": "ISO_GND_CAN",
+        "12": "ISO_5V_CAN", "13": "ISO_5V_CAN", "15": "ISO_GND_CAN",
+        "16": "ISO_GND_CAN", "17": "ISO_GND_CAN", "18": "CAN_L", "19": "CAN_H",
+        "20": "ISO_5V_CAN",
+    }
+    parts.extend(place_real_trust("ISO", "U_ISOCAN", "TI ISOW1044BDFMR", {1: (710, 170)}, iso_nm, iso_pins))
+    parts.append(sym_inst("C_Generic", "C_H_ISO1", "100nF", 690, 165))
+    parts.append(glabel("+3V3", 686.19, 165, rot=180))
+    parts.append(glabel("PGND", 693.81, 165, rot=0))
+    parts.append(sym_inst("C_Generic", "C_H_ISO2", "1uF", 690, 171))
+    parts.append(glabel("ISO_5V_CAN", 686.19, 171, rot=180))
+    parts.append(glabel("ISO_GND_CAN", 693.81, 171, rot=0))
+    parts.extend(pwr_flag_trust("ISO_GND_CAN", 750, 171))
+    parts.append(
+        sym_inst("Conn_JST_GH_03P", "J_CAN_IN_H", "CAN-FD trunk IN (CANH/CANL/GND)", 790, 165)
+    )
+    parts.append(glabel("CAN_H", 786.19, 162.54, rot=180))
+    parts.append(glabel("CAN_L", 786.19, 165, rot=180))
+    parts.append(glabel("ISO_GND_CAN", 786.19, 167.46, rot=180))
+    parts.append(
+        sym_inst("Conn_JST_GH_03P", "J_CAN_OUT_H", "CAN-FD trunk OUT (CANH/CANL/GND)", 820, 165)
+    )
+    parts.append(glabel("CAN_H", 816.19, 162.54, rot=180))
+    parts.append(glabel("CAN_L", 816.19, 165, rot=180))
+    parts.append(glabel("ISO_GND_CAN", 816.19, 167.46, rot=180))
+    parts.append(sym_inst("R_Generic", "R_H_CANTERM", "120R", 790, 185))
+    parts.append(glabel("CAN_H", 786.19, 185, rot=180))
+    parts.append(glabel("CANTERM_MID_H", 793.81, 185, rot=0))
+    parts.append(
+        sym_inst("SJ_Generic", "SJ_H_CAN", "open by default", 805, 185,
+                 footprint="Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm")
+    )
+    parts.append(glabel("CANTERM_MID_H", 801.19, 185, rot=180))
+    parts.append(glabel("CAN_L", 808.81, 185, rot=0))
+
+    # Isolated RS-485 (U_RS485, ISOW1412 -- own integrated isolated DC-DC,
+    # same as ISOW1044 above; superseded ADM2795E, see ADM_L_T comment)
+    adm_cx, adm_cy = 710, 210
+    adm_nm = {
+        "1": "+3V3", "2": "RS485_TX", "3": "RS485_DE", "4": "RS485_RX",
+        "5": "RS485_DE", "6": "PGND", "8": "RS485_FLT_N", "9": "+3V3",
+        "10": "PGND", "11": "ISO_GND_485", "12": "ISO_3V3_485",
+        "13": "ISO_GND_485", "15": "ISO_GND_485", "16": "ISO_3V3_485",
+        "17": "RS485_A", "18": "RS485_B", "19": "RS485_B", "20": "RS485_A",
+    }
+    parts.append(
+        sym_inst("GW_ISOW1412", "U_RS485", "TI ISOW1412", adm_cx, adm_cy,
+                 footprint=ADM_FOOTPRINT_T, datasheet=ADM_DATASHEET_T)
+    )
+    for pname, pnum, ptype in ADM_L_T + ADM_R_T:
+        net = adm_nm.get(pnum)
+        if net is None:
+            parts.append(no_connect_pin_bynum_trust(adm_cx, adm_cy, ADM_L_T, ADM_R_T, pnum, ADM_SIZE_T))
+        else:
+            parts.append(glabel_pin_bynum_trust(net, adm_cx, adm_cy, ADM_L_T, ADM_R_T, pnum, ADM_SIZE_T))
+    parts.append(sym_inst("C_Generic", "C_H_ADM1", "100nF", 690, 205))
+    parts.append(glabel("+3V3", 686.19, 205, rot=180))
+    parts.append(glabel("PGND", 693.81, 205, rot=0))
+    parts.append(sym_inst("C_Generic", "C_H_ADM2", "100nF", 690, 211))
+    parts.append(glabel("ISO_3V3_485", 686.19, 211, rot=180))
+    parts.append(glabel("ISO_GND_485", 693.81, 211, rot=0))
+    parts.extend(pwr_flag_trust("ISO_GND_485", 750, 211))
+    parts.append(
+        sym_inst("Conn_JST_GH_03P", "J_RS485_IN_H", "RS-485 trunk IN (A/B/GND)", 790, 205)
+    )
+    parts.append(glabel("RS485_A", 786.19, 202.54, rot=180))
+    parts.append(glabel("RS485_B", 786.19, 205, rot=180))
+    parts.append(glabel("ISO_GND_485", 786.19, 207.46, rot=180))
+    parts.append(
+        sym_inst("Conn_JST_GH_03P", "J_RS485_OUT_H", "RS-485 trunk OUT (A/B/GND)", 820, 205)
+    )
+    parts.append(glabel("RS485_A", 816.19, 202.54, rot=180))
+    parts.append(glabel("RS485_B", 816.19, 205, rot=180))
+    parts.append(glabel("ISO_GND_485", 816.19, 207.46, rot=180))
+    parts.append(sym_inst("R_Generic", "R_H_485TERM", "120R", 790, 225))
+    parts.append(glabel("RS485_A", 786.19, 225, rot=180))
+    parts.append(glabel("TERM485_MID_H", 793.81, 225, rot=0))
+    parts.append(
+        sym_inst("SJ_Generic", "SJ_H_485", "open by default", 805, 225,
+                 footprint="Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm")
+    )
+    parts.append(glabel("TERM485_MID_H", 801.19, 225, rot=180))
+    parts.append(glabel("RS485_B", 808.81, 225, rot=0))
+
+    # -----------------------------------------------------------------------
     # Compose schematic
     # -----------------------------------------------------------------------
     sch = [
@@ -1919,7 +2325,12 @@ def gen_pcb() -> str:
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    here = Path(__file__).resolve().parent
+    # NOTE: fixed 2026-07-26 -- this script writes to its own scripts/
+    # directory pre-reorg; the project's folder-reorg memory flags this as a
+    # known, not-yet-fixed bug for Kaylee specifically ("HERE-relative script
+    # paths need an extra .parent after the move; Kaylee's own gen scripts
+    # still have this bug"). Fixed opportunistically while touching this file.
+    here = Path(__file__).resolve().parent.parent / "kicads"
     out = {
         "Kaylee.kicad_pro": gen_pro(),
         "Kaylee.kicad_sch": gen_sch(),

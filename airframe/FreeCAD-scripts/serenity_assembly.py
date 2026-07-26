@@ -359,15 +359,21 @@ def assemble():
     )
     place_mesh(splice3, PL_IDENTITY)
 
-    # Landing gear — Rev R6 canonical articulated legs (2026-07-21).  The
-    # lg_r6_hull_legs.stl compound is ALREADY in hull frame (all 4 corners
-    # at the canonical QMx Sheet 5 bay stations, identity placement); see
-    # airframe/openscad/fuselage/canonical_leg_r6.scad "hull_legs" PART and
-    # docs/LANDING_GEAR_ANALYSIS.md Rev R6 §2.2.  The prior Thingiverse-
-    # derived feet_x_4/legs parts are archived (ARCHIVE_INDEX.md).
+    # Landing gear — Rev R6 canonical articulated legs (2026-07-21; split
+    # into 1.5in/3.0in belly-clearance variants 2026-07-23 — see
+    # docs/LANDING_GEAR_ANALYSIS.md Rev R6 §4.7).  The lg_r6_1_5in_hull_legs
+    # compound is the ACTIVE (compact, default) variant and is ALREADY in
+    # hull frame (all 4 corners at the canonical QMx Sheet 5 bay stations,
+    # identity placement); see
+    # airframe/openscad/fuselage/canonical_leg_r6_1_5in.scad "hull_legs"
+    # PART.  The extended 3.0in variant
+    # (canonical_leg_r6_3_0in.scad -> lg_r6_3_0in_hull_legs.stl) is kept for
+    # rough-field missions but is not wired into this default assembly.  The
+    # prior Thingiverse-derived feet_x_4/legs parts are archived
+    # (ARCHIVE_INDEX.md).
     gear = add_mesh(
         doc,
-        _stl("fuselage/landing-gear/lg_r6_hull_legs.stl"),
+        _stl("fuselage/landing-gear/lg_r6_1_5in_hull_legs.stl"),
         "Landing_Gear_R6",
     )
     place_mesh(gear, PL_IDENTITY)

@@ -2,8 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-07-26 — Automated reconciliation pass -->
-AGENTS.md                         — Authoritative instructions for AI agents (project-wide
-                                    standards, including Standards Vetting Policy; federated
                                     guidance in subordinate folders' AGENTS.md files)
 CLAUDE.md                         — One-line pointer to AGENTS.md
 LICENSE                           — Repository license (CC BY 4.0)
@@ -78153,7 +78151,6 @@ avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch — [PENDING AI 
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.net — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.ses — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1_v2.ses — [PENDING AI CLASSIFICATION]
-avionics/kicad/CAN-PERIPH-GW-1/kicads/_autosave-CAN-PERIPH-GW-1.kicad_pcb — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/fp-info-cache — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/~_autosave-CAN-PERIPH-GW-1.kicad_pcb.lck — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_pcb.py — [PENDING AI CLASSIFICATION]

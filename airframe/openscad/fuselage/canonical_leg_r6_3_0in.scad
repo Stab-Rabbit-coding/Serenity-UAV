@@ -7,16 +7,19 @@
 //   "hull_stance" PART below and in docs/LANDING_GEAR_ANALYSIS.md Rev R6.
 // ===========================================================================
 // ===========================================================================
-// canonical_leg_r6.scad
+// canonical_leg_r6_3_0in.scad
 // Serenity UAV -- Rev R6 -- Canonical Articulated Landing Leg (hip-pivot)
+// -- 3.0 in (80 mm) BELLY CLEARANCE VARIANT (extended, rough-field option) --
 // ===========================================================================
 //
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // AI note : Authored by Claude (model: Claude Fable 5, Anthropic) under the
 //           author's direction, 2026-07-21.  Per AGENTS.md AI attribution.
+//           Split into the 1.5in / 3.0in named variants 2026-07-23 (same
+//           attribution).
 // Project : Serenity-class Tilt-Rotor UAV (24-inch scale, Firefly TV ship)
 // License : CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
-// Date    : 2026-07-21
+// Date    : 2026-07-21 (variant split 2026-07-23)
 // Revision: Rev R6 (supersedes Rev R5 wire_brace_leg.scad -- retained for
 //           reference with a retirement note, per the SS1.1.4.5 pattern)
 //
@@ -35,9 +38,16 @@
 //
 // Deliberate deviations from canon (functional build, documented):
 //   1. Leg length -- canonical proportions give only ~11 mm belly clearance
-//      at 24-in scale; the >=76 mm (3.0 in) payload-mission requirement
-//      forces legs ~2.5x longer than scale.  Member SHAPES and joint
-//      styling stay canonical; the length is functional.
+//      at 24-in scale.  Ground clearance is an AIRCRAFT SAFETY spec (avoid
+//      a belly/tail strike and keep the hull clear of ground debris during
+//      the landing/absorption stroke) -- it is NOT sized to pass a cargo
+//      box underneath the parked aircraft.  THIS FILE is the extended
+//      3.0 in (80 mm) variant, kept for rough-field / extra-margin
+//      missions -- it is the original Rev R6 design point (2026-07-21)
+//      and the reference the wire schedule is solved against.  The
+//      compact 1.5 in (38.1 mm) default variant is
+//      `canonical_leg_r6_1_5in.scad`.  Both share the identical
+//      bay/foot/wire BOM; only the printed leg-frame length differs.
 //   2. Knee/ankle articulate on-screen; here the leg frame is ONE printed
 //      piece (thigh+shin) and all articulation is at the HIP -- the knee
 //      and ankle discs are canonical styling.  ("Feet Pivot 90 deg" is
@@ -46,17 +56,21 @@
 //      canonical recessed-bay look on the hull flank.
 //
 // Structural basis: tools/landing_gear_r6_sizing.py (all numbers below
-// trace to its output) and docs/LANDING_GEAR_ANALYSIS.md Rev R6.
-// Mechanism summary: the whole leg pivots about an M3 stainless hip pin in
-// a hull-flank bay.  Two SPRING bowed wires (elastic, recoverable) and two
-// DUCTILE bowed wires (plastic, sacrificial fuse) span the hip at a 6 mm
-// bellcrank radius: leg flexion (foot swinging up-outboard) compresses the
-// wire chords so their pre-formed bows deepen -- identical mechanics to
-// Rev R5, but the 65:6 lever turns millimetres of wire stroke into tens of
-// millimetres of hull settle (peak decel ~52 g at 6 ft tail-down, vs
-// ~1,000 g for the Rev R5 rigid post).  An M3 extension-stop cross-pin
-// through the clevis ears carries the opposite (hanging / in-flight)
-// rotation via a tab on the thigh root; landing loads never touch it.
+// trace to its output) and docs/LANDING_GEAR_ANALYSIS.md Rev R6 SS4.7 (the
+// two-variant comparison).  Mechanism summary: the whole leg pivots about
+// an M3 stainless hip pin in a hull-flank bay.  Two SPRING bowed wires
+// (elastic, recoverable) and two DUCTILE bowed wires (plastic, sacrificial
+// fuse) span the hip at a 6 mm bellcrank radius: leg flexion (foot
+// swinging up-outboard) compresses the wire chords so their pre-formed
+// bows deepen -- identical mechanics to Rev R5, but the 65:6 lever turns
+// millimetres of wire stroke into tens of millimetres of hull settle
+// (peak decel ~52 g tail-down / ~104 g level at the 6 ft schedule, vs
+// ~1,000 g for the Rev R5 rigid post).  This is the gentler of the two
+// variants -- the compact 1.5in leg reuses this same wire hardware over a
+// shorter lever and runs hotter (~81 g / ~162 g).  An M3 extension-stop
+// cross-pin through the clevis ears carries the opposite (hanging /
+// in-flight) rotation via a tab on the thigh root; landing loads never
+// touch it.
 //
 // Usage -- set PART to render:
 //   PART = "leg_frame"    One-piece thigh+shin leg frame (CF-PETG, print
@@ -68,11 +82,12 @@
 //   PART = "ductile_wire_nominal"  / "ductile_wire_deformed"
 //   PART = "leg_assembled"  One complete leg + bay + wires, leg-local frame
 //   PART = "leg_deformed"   Same, flexed to full ductile stroke (post-overload)
-//   PART = "hull_stance"    All 4 corners at hull-frame stations + ground plane
+//   PART = "hull_legs"      All 4 corners at hull-frame stations, gear only
+//   PART = "hull_stance"    Same + ground plane + cargo-belly ghost (review)
 //
-// STL export (from repo root; output names lg_r6_<part>.stl):
-//   openscad -o airframe/stls/fuselage/landing-gear/lg_r6_leg_frame.stl \
-//     -D 'PART="leg_frame"' airframe/openscad/fuselage/canonical_leg_r6.scad
+// STL export (from repo root; output names lg_r6_3_0in_<part>.stl):
+//   openscad -o airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl \
+//     -D 'PART="leg_frame"' airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad
 //   ... (same pattern for every PART above)
 // ===========================================================================
 
@@ -81,8 +96,9 @@ $fn = 48;
 
 // ---------------------------------------------------------------------------
 // Leg-local skeleton (mm) -- hip pin at origin, +X outboard, +Z up.
-// Hip sits 118 mm above ground; belly clearance 80 mm (hip is at hull-frame
-// Z +38 on the cargo-flank bay).  See sizing script for the lever numbers.
+// Hip sits 118 mm above ground; belly clearance 80 mm / 3.15 in (hip is at
+// hull-frame Z +38 on the cargo-flank bay).  See the sizing script for the
+// lever numbers.
 // ---------------------------------------------------------------------------
 KNEE   = [50, 0, -66];      // knee disc centre (thigh 82.8 mm @ 53 deg from horiz)
 ANKLE  = [65, 0, -100];     // ankle disc centre (shin 37.2 mm @ 23.8 deg lean)

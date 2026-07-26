@@ -11,6 +11,21 @@
 // Serenity UAV -- Rev R6 -- Canonical Articulated Landing Leg (hip-pivot)
 // ===========================================================================
 //
+// *** RETIRED 2026-07-23 ***
+// This was the original undifferentiated Rev R6 leg (2026-07-21), sized to
+// the 3.0 in (80 mm) belly clearance point (its content is byte-identical
+// to the 3.0in variant below).  Superseded the same day by an explicit
+// two-variant split once the ground-clearance requirement was corrected
+// (it is an aircraft-safety spec, not a cargo-pass-through spec): a
+// compact 1.5 in default and this same 3.0 in extended option, each named
+// explicitly so both can be built from without ambiguity.  See:
+//   airframe/openscad/fuselage/canonical_leg_r6_1_5in.scad  (new default)
+//   airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad  (this design,
+//     renamed -- kept, not scrapped)
+//   docs/LANDING_GEAR_ANALYSIS.md Rev R6 SS4.7 (two-variant comparison)
+// Kept here for reference/history only; do not build from this copy.
+// ===========================================================================
+//
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // AI note : Authored by Claude (model: Claude Fable 5, Anthropic) under the
 //           author's direction, 2026-07-21.  Per AGENTS.md AI attribution.
