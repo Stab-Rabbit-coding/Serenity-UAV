@@ -2,21 +2,7 @@
 
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
-<!-- Last updated: 2026-07-21 — Automated reconciliation pass -->
-Deprecated FreeCAD prototype assembly scripts.  All predate the Rev R1 hull-frame
-bake; their placement/transform values would double-transform the baked hull-frame
-STLs and MUST NOT be applied.  The canonical assembly script is
-`airframe/FreeCAD-scripts/serenity_assembly.py`.
-
-```text
-                                       (was airframe/freecad/assembly/)
-```
-
----
-
-## archives/avionics-archives/kicad-archives/ (moved from avionics/kicad/archive/)
-
-Superseded KiCad PCB designs. **Path corrected 2026-07-13:** this content used to live at
+<!-- Last updated: 2026-07-26 — Automated reconciliation pass -->
 `avionics/kicad/archive/` (that path no longer exists on disk); it has been consolidated
 under `archives/avionics-archives/kicad-archives/`. Design notes in `archive/ARCHIVE-REVQ.md`
 inside this directory.
@@ -39544,14 +39530,12 @@ tools/validate_stls.py — [PENDING AI CLASSIFICATION]
 tools/verify_bow_pod.py — [PENDING AI CLASSIFICATION]
 airframe/FreeCAD-scripts/__pycache__/serenity_assembly.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
 airframe/FreeCAD-scripts/__pycache__/serenity_placeholders_assembly.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
-airframe/Serenity-Assembled.20260706-232102.FCBak — [IGNORED/VCS-EXCLUDED]
 airframe/Serenity-Assembled.FCStd — [IGNORED/VCS-EXCLUDED]
 airframe/blender-scripts/__pycache__/add_structural_features.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
 airframe/blender-scripts/__pycache__/blender_nacelle_revo.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
 airframe/blender-scripts/__pycache__/blender_nozzle_gen.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
 airframe/blender-scripts/__pycache__/merge_cargo_interior.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
 airframe/blender-scripts/__pycache__/serenity_render_views.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
-airframe/freecad/assembly/SerenityAssembly.20260616-121110.FCBak — [IGNORED/VCS-EXCLUDED]
 airframe/freecad/assembly/SerenityAssembly.FCStd — [IGNORED/VCS-EXCLUDED]
 airframe/gcode/davinci-jr-proto/batch_A/cargo_door_servo_bracket.gcode — [IGNORED/VCS-EXCLUDED]
 airframe/gcode/davinci-jr-proto/batch_A/cargo_drv8833_tray.gcode — [IGNORED/VCS-EXCLUDED]
@@ -77634,18 +77618,7 @@ tools/__pycache__/bake_hull_frame.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
 tools/__pycache__/validate_kicad.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
 
 ## --- AUTO-DISCOVERED (2026-07-21) ---
-airframe/openscad/fuselage/canonical_leg_r6.scad — [PENDING AI CLASSIFICATION]
-airframe/stls/fuselage/landing-gear/lg_r6_bay.stl — [PENDING AI CLASSIFICATION]
-airframe/stls/fuselage/landing-gear/lg_r6_ductile_wire_deformed.stl — [PENDING AI CLASSIFICATION]
-airframe/stls/fuselage/landing-gear/lg_r6_ductile_wire_nominal.stl — [PENDING AI CLASSIFICATION]
-airframe/stls/fuselage/landing-gear/lg_r6_foot.stl — [PENDING AI CLASSIFICATION]
-airframe/stls/fuselage/landing-gear/lg_r6_hull_legs.stl — [PENDING AI CLASSIFICATION]
-airframe/stls/fuselage/landing-gear/lg_r6_hull_stance.stl — [PENDING AI CLASSIFICATION]
-airframe/stls/fuselage/landing-gear/lg_r6_leg_assembled.stl — [PENDING AI CLASSIFICATION]
-airframe/stls/fuselage/landing-gear/lg_r6_leg_deformed.stl — [PENDING AI CLASSIFICATION]
-airframe/stls/fuselage/landing-gear/lg_r6_leg_frame.stl — [PENDING AI CLASSIFICATION]
-airframe/stls/fuselage/landing-gear/lg_r6_spring_wire_deformed.stl — [PENDING AI CLASSIFICATION]
-airframe/stls/fuselage/landing-gear/lg_r6_spring_wire_nominal.stl — [PENDING AI CLASSIFICATION]
+archives/airframe-archives/archive/openscad/fuselage/canonical_leg_r6.scad — retired 2026-07-21 undifferentiated Rev R6 leg (byte-identical to the 3.0in variant); archived 2026-07-23 when the 1.5in/3.0in variant split was made explicit
 archives/airframe-archives/archive/stls/fuselage/landing-gear/ductile_wire_deformed.stl — [PENDING AI CLASSIFICATION]
 archives/airframe-archives/archive/stls/fuselage/landing-gear/ductile_wire_nominal.stl — [PENDING AI CLASSIFICATION]
 archives/airframe-archives/archive/stls/fuselage/landing-gear/feet_x_4_scaled24.stl — [PENDING AI CLASSIFICATION]
@@ -77711,3 +77684,81 @@ avionics/kicad/Wash/kicads/Wash-backups/Wash-2026-07-21_103114.zip — [IGNORED/
 avionics/kicad/Wash/kicads/Wash-backups/Wash-2026-07-21_104301.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Wash/kicads/Wash-backups/Wash-2026-07-21_105317.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Wash/kicads/Wash-backups/Wash-2026-07-21_110101.zip — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-07-22) ---
+
+## --- AUTO-DISCOVERED (2026-07-22) ---
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_173538.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-22_172905.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_173538.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-22_172905.zip — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-07-23) ---
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_201104.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_202404.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_201104.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_202404.zip — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-07-26) ---
+airframe/openscad/fuselage/canonical_leg_r6_1_5in.scad — [PENDING AI CLASSIFICATION]
+airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad — [PENDING AI CLASSIFICATION]
+airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_legs.stl — [PENDING AI CLASSIFICATION]
+airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_stance.stl — [PENDING AI CLASSIFICATION]
+airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_assembled.stl — [PENDING AI CLASSIFICATION]
+airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_deformed.stl — [PENDING AI CLASSIFICATION]
+airframe/stls/fuselage/landing-gear/lg_r6_1_5in_leg_frame.stl — [PENDING AI CLASSIFICATION]
+airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_legs.stl — [PENDING AI CLASSIFICATION]
+airframe/stls/fuselage/landing-gear/lg_r6_3_0in_hull_stance.stl — [PENDING AI CLASSIFICATION]
+airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_assembled.stl — [PENDING AI CLASSIFICATION]
+airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_deformed.stl — [PENDING AI CLASSIFICATION]
+airframe/stls/fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl — [PENDING AI CLASSIFICATION]
+airframe/stls/fuselage/landing-gear/lg_r6_common_bay.stl — [PENDING AI CLASSIFICATION]
+airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_deformed.stl — [PENDING AI CLASSIFICATION]
+airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_nominal.stl — [PENDING AI CLASSIFICATION]
+airframe/stls/fuselage/landing-gear/lg_r6_common_foot.stl — [PENDING AI CLASSIFICATION]
+airframe/stls/fuselage/landing-gear/lg_r6_common_spring_wire_deformed.stl — [PENDING AI CLASSIFICATION]
+airframe/stls/fuselage/landing-gear/lg_r6_common_spring_wire_nominal.stl — [PENDING AI CLASSIFICATION]
+avionics/datasheets/6391731564544371956530548.pdf — [PENDING AI CLASSIFICATION]
+avionics/datasheets/FOCSineESCCANCommunicationProtocolV30.pdf — [PENDING AI CLASSIFICATION]
+avionics/datasheets/isow1412.pdf — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.dsn — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_prl — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pro — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.net — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.ses — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1_v2.ses — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/kicads/fp-info-cache — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/kicads/~_autosave-CAN-PERIPH-GW-1.kicad_pcb.lck — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_pcb.py — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_sch.py — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/scripts/route_can_periph_gw_pcb.py — [PENDING AI CLASSIFICATION]
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_155528.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_174345.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Emma/scripts/inject_emma_tpm.py — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/scripts/inject_kaylee_trust_module.py — [PENDING AI CLASSIFICATION]
+avionics/kicad/fix_wash_zoe_isolators.py — [PENDING AI CLASSIFICATION]
+docs/references/108090023_STS3215-C001_Datasheet.pdf — [PENDING AI CLASSIFICATION]
+docs/references/Bus_servo_control_circuit.pdf — [PENDING AI CLASSIFICATION]
+docs/references/ST3215 memory register map-EN.xls — [PENDING AI CLASSIFICATION]
+docs/references/ST3215-2D.zip — [PENDING AI CLASSIFICATION]
+docs/references/ST3215-3D.zip — [PENDING AI CLASSIFICATION]
+docs/references/Servo_Driver_with_ESP32_3D.zip — [PENDING AI CLASSIFICATION]
+docs/references/scservo.zip.zip — [PENDING AI CLASSIFICATION]
+docs/references/vimdrones_can_periph_pico_v1.0.stl — [PENDING AI CLASSIFICATION]
+docs/references/vimdrones_esc_s50_v1.0.step — [PENDING AI CLASSIFICATION]
+docs/references/vimdrones_esc_s50_v1.0.stl — [PENDING AI CLASSIFICATION]
+docs/references/vimdrones_esc_s50_wiring.png — [PENDING AI CLASSIFICATION]
+tools/export-specctra-dsn.py — [PENDING AI CLASSIFICATION]
+tools/import-specctra-ses.py — [PENDING AI CLASSIFICATION]
+airframe/Serenity-Assembled.20260718-101616.FCBak — [IGNORED/VCS-EXCLUDED]
+airframe/freecad/assembly/SerenityAssembly.20260722-133959.FCBak — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/CAN-PERIPH-GW-1/kicads/fp-info-cache — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/CAN-PERIPH-GW-1/kicads/~_autosave-CAN-PERIPH-GW-1.kicad_pcb.lck — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/CAN-PERIPH-GW-1/scripts/__pycache__/gen_can_periph_gw_sch.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_155528.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_174345.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Kaylee/scripts/__pycache__/gen_kaylee.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Kaylee/scripts/__pycache__/inject_kaylee_trust_module.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]

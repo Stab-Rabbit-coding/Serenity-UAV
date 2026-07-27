@@ -359,14 +359,24 @@ def assemble():
     )
     place_mesh(splice3, PL_IDENTITY)
 
-    # Landing gear — RETIRED single-blade parts (part-local print frame; NOT
-    # hull-placed).  Superseded by the Rev R5 vertical-post + 4-wire-brace
-    # design (post.stl + spring/ductile wires); hull-frame placement of the
-    # Rev R5 gear is tracked under TODO.md §1.1.4, not §1.1.0.  Paths corrected
-    # to the landing-gear/ subdirectory so the refs resolve; these remain
-    # VERIFY/part-local until the §1.1.4 wire-brace placement lands.
-    add_mesh(doc, _stl("fuselage/landing-gear/feet_x_4_scaled24.stl"), "Landing_Feet")
-    add_mesh(doc, _stl("fuselage/landing-gear/legs_scaled24.stl"), "Landing_Legs")
+    # Landing gear — Rev R6 canonical articulated legs (2026-07-21; split
+    # into 1.5in/3.0in belly-clearance variants 2026-07-23 — see
+    # docs/LANDING_GEAR_ANALYSIS.md Rev R6 §4.7).  The lg_r6_1_5in_hull_legs
+    # compound is the ACTIVE (compact, default) variant and is ALREADY in
+    # hull frame (all 4 corners at the canonical QMx Sheet 5 bay stations,
+    # identity placement); see
+    # airframe/openscad/fuselage/canonical_leg_r6_1_5in.scad "hull_legs"
+    # PART.  The extended 3.0in variant
+    # (canonical_leg_r6_3_0in.scad -> lg_r6_3_0in_hull_legs.stl) is kept for
+    # rough-field missions but is not wired into this default assembly.  The
+    # prior Thingiverse-derived feet_x_4/legs parts are archived
+    # (ARCHIVE_INDEX.md).
+    gear = add_mesh(
+        doc,
+        _stl("fuselage/landing-gear/lg_r6_1_5in_hull_legs.stl"),
+        "Landing_Gear_R6",
+    )
+    place_mesh(gear, PL_IDENTITY)
 
     # -------------------------------------------------------------------
     # CARGO BAY SUB-ASSEMBLY

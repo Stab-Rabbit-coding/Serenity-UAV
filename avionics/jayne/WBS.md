@@ -146,14 +146,17 @@ list below before treating anything here as final.
       `FootprintLoad` after `board.Remove()` and returns unwrapped `SwigPyObject`s from
       `Pads()`/`FindPadByNumber()`; pad nets are injected by a text post-pass. Full repro in
       `avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md`.
-- [ ] **FLEET-WIDE ISOW1044BDFMR footprint audit (flight-hardware error, 2026-07-12).** TI
+- [x] **FLEET-WIDE ISOW1044BDFMR footprint audit (flight-hardware error, 2026-07-12).** TI
     datasheet SLLSFF7A confirms ISOW1044BDFMR is a **20-pin DFM** package (Fig 7-1, §8.4
     "DFM/20 PINS"), NOT the **"SOIC-16W"** that Wash.md, Zoë.md, Jayne.md, README.md, and prior
     TODO text all state. Any KiCad footprint using a 16-pad `SOIC-16W` land for U4 (Wash, Zoë,
-    Jayne) is WRONG and will not match the 20-pad part. **Action:** verify the actual footprint
-    on each board's `.kicad_pcb` and correct to a 20-pad DFM land; update all the SOIC-16
-    doc references. Jayne's is handled by the carrier rebuild; Wash/Zoë need checking on the
-    as-built PCBs. (avionics/CLAUDE.md + Jayne.md package text corrected 2026-07-12.)
+    Jayne) is WRONG and will not match the 20-pad part. **RESOLVED 2026-07-26.** Jayne's was
+    already correct (handled by the carrier rebuild). Wash and Zoë's `.kicad_sch` symbols were
+    found with the wrong `SOIC-16W_7.5x10.3mm_P1.27mm` footprint and corrected to
+    `SOIC-20W_7.5x12.8mm_P1.27mm` via `avionics/kicad/fix_wash_zoe_isolators.py`, in the same
+    pass that swapped ADM2795E→ISOW1412 fleet-wide (REFERENCES.md REF-SENSOR-009/010); verified
+    zero ERC regression (Wash 48 / Zoë 234 violations, unchanged from baseline). Doc text in
+    Wash.md/Zoë.md/README.md corrected 2026-07-12; Jayne.md corrected same date.
 - [x] **Confirm PCB fab/assembly house can handle the AM62Ax 484-ball FCBGA/FCCSP package**
     [REF-SENSOR-003] — **RESOLVED 2026-07-13 by the SoM re-scope.** Jayne no longer places a
     raw AM62A7 BGA: the AM62Ax + LPDDR4 + PMIC are all on the PHYTEC PCM-071 module, which

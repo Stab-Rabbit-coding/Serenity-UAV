@@ -16,22 +16,23 @@
 ## §1.1.4 — Landing Gear
 → full detail: `WBS.md` §1.1.4
 
-- [ ] LG-12 Model the post per the §4.6 dimensions
-- [ ] LG-10 Finalize the 4 corner post placements
-- [ ] Ground clearance check carried forward from Rev R1
-- [ ] LG-15 Select and procure both wire grades/tempers
-- [ ] LG-16 Confirm the ductile wire temper survives forming
-- [ ] LG-13 Define the wire-to-socket retention detail
-- [ ] LG-02 Design and integrate 16 hull boss sockets
-- [ ] Add top-face socket to canonical foot
+- [ ] LG-10 Finalize the 4 bay placements in SerenityAssembly.FCStd
+- [ ] LG-17 Drop-height decision: 6 ft vs 4 ft ductile wire schedule
+- [ ] LG-15 Procure both wire grades/tempers; coupon test
+- [ ] LG-16 Confirm ductile wire temper survives jig-forming
+- [ ] LG-13 Define wire-end retention detail at bay bosses
+- [ ] LG-02 Bay mounting integration: backing plates, flank conform…
 - [ ] Assess foot grip on concrete/asphalt
 - [ ] LG-03 CF rod channel in `middle_canonical_shell24.scad` rear sk…
-- [ ] LG-06 Drop test prototype leg assembly
+- [ ] LG-06 Elastic bench check: quarter-AUW fixture, 1.5 ft drop
 - [ ] LG-07 Confirm avionics enclosure shock rating
 - [ ] LG-11 Coupon-test CF-PETG
 - [ ] LG-14 Instrumented drop test (load cell + high-speed video) at…
+- [ ] LG-18 Mass-reduction pass (leg frame / bay / thigh)
+- [ ] LG-19 Styling refinement pass vs REF-CAD-002 (cosmetic)
 - [ ] Reconcile the remaining-parts list
 - [ ] Combine all airframe STLs
+- [ ] Render overview SVGs using FreeCAD TechDraw
 - [ ] Exploded view SVG — printed parts only
 - [ ] Exploded view SVG — full build
 

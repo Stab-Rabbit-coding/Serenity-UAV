@@ -73,6 +73,81 @@ REAL_SYMS = {
     ),
 }
 
+# ---------------------------------------------------------------------------
+# ADM2795E -- NEW clean-room symbol (added 2026-07-26, Section H: isolated
+# RS-485). Pin table from the real Analog Devices ADM2795E datasheet (Rev D)
+# Table 10 "Pin Function Descriptions" (avionics/datasheets/adm2795e.pdf),
+# read directly for this design. The "ADM2795EBRWZ" symbol already embedded
+# in Wash.kicad_sch / Zoe.kicad_sch has WRONG pin numbers (a pin 17 on a
+# 16-pin part; a duplicate pin 20 on two different names) -- evidently cloned
+# from the ISOW1044 (20-pin) template and never corrected. NOT reused here;
+# flagged in REFERENCES.md / TODO.md for correction there.
+#
+# SUPERSEDED 2026-07-26: originally ADI ADM2795E (signal-only isolator,
+# needs an external isolated DC-DC for VDD2). Replaced with TI ISOW1412
+# (user request: "switch all adm2795e rs485 chips on all nodes with
+# ISOW1412 ... to provide both power and signal isolation") -- pin table
+# from TI ISOW1412/ISOW1432 datasheet (SLLSF86C) Table 7-1, read directly.
+# ISOW1412 has an INTEGRATED isolated DC-DC (like ISOW1044 already has for
+# CAN-FD), so no external iso-DC-DC placeholder is needed at all -- this
+# also removes Jayne's own "ISO_DCDC_1W_GENERIC ... MPN TBD" open item.
+# Y/Z (driver out) and A/B (receiver in) are modeled "bidirectional" and
+# wired shorted (Y-A, Z-B) to run this full-duplex part in half-duplex mode
+# on the project's 2-wire RS485_A/RS485_B bus -- same modeling choice this
+# project already uses for ISOW1044's CANH/CANL.
+# ---------------------------------------------------------------------------
+ADM_SIZE = (15.24, 12.7)
+ADM_L = [
+    ("VIO", "1", "power_in"),
+    ("D", "2", "input"),
+    ("DE", "3", "input"),
+    ("R", "4", "output"),
+    ("RE_N", "5", "input"),
+    ("GNDIO", "6", "power_in"),
+    ("OUT", "7", "output"),
+    ("EN_FLT", "8", "bidirectional"),
+    ("VDD", "9", "power_in"),
+    ("GND1", "10", "power_in"),
+]
+ADM_R = [
+    ("GND2", "11", "power_in"),
+    ("VISOOUT", "12", "power_out"),
+    ("MODE", "13", "input"),
+    ("IN", "14", "input"),
+    ("GISOIN", "15", "power_in"),
+    ("VISOIN", "16", "power_in"),
+    ("Y", "17", "bidirectional"),
+    ("Z", "18", "bidirectional"),
+    ("B", "19", "bidirectional"),
+    ("A", "20", "bidirectional"),
+]
+ADM_DATASHEET = "https://www.ti.com/lit/ds/symlink/isow1412.pdf"
+ADM_FOOTPRINT = "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm"
+
+
+def _ic_pin_xy_bynum(left, right, pin_num, size):
+    hx, hy = size
+    for lst, side in ((left, "L"), (right, "R")):
+        n = len(lst)
+        start_y = -((n - 1) * 2.54) / 2.0
+        for i, (pname, pnum, ptype) in enumerate(lst):
+            if pnum == pin_num:
+                local_py = start_y + i * 2.54
+                dx = -(hx + 2.54) if side == "L" else (hx + 2.54)
+                return (dx, -local_py, side)
+    raise KeyError(f"pin #{pin_num!r} not found")
+
+
+def glabel_pin_bynum(net_name, cx, cy, left, right, pin_num, size):
+    dx, dy, side = _ic_pin_xy_bynum(left, right, pin_num, size)
+    rot = 180 if side == "L" else 0
+    return gj.glabel(net_name, cx + dx, cy + dy, rot=rot)
+
+
+def no_connect_pin_bynum(cx, cy, left, right, pin_num, size):
+    dx, dy, _ = _ic_pin_xy_bynum(left, right, pin_num, size)
+    return no_connect(cx + dx, cy + dy)
+
 
 # ---------------------------------------------------------------------------
 # Real-symbol parsing (pin table + library block extraction)
@@ -400,6 +475,19 @@ def build_msp_netmap(pins):
         # Laser driver enable (interlock LASER_KEY_IN/IND left NC this pass —
         # Class 2 optic makes them optional defense-in-depth, JAYNE_LASER_ANALYSIS)
         "PA22": "LASER_EN",
+        # UART2 -> ADM2795E isolated RS-485 (added 2026-07-26, see Section H:
+        # "so that all nodes have at least [CAN-FD + RS-485], and everyone
+        # gets a TPM" -- Jayne already had MCU+TPM+CAN-FD, this closes the gap).
+        # PB15/PB16 verified against the real MSPM0G3507 datasheet (SLASEX6C
+        # Table 6-2): PB15 = UART2_TX (AF2), PB16 = UART2_RX (AF2). The
+        # original draft used PA3/PA7, which datasheet Table 6-2 shows have
+        # NO UART function at all on either pin (PA3: SPI0_CS1/UART2_CTS/
+        # TIMA.../COMP1_OUT/I2C1_SDA; PA7: COMP0_OUT/CLK_OUT/TIMG8/TIMA0 --
+        # neither offers a TX/RX signal) -- caught when the user supplied the
+        # MSPM0G3507 datasheet and asked for pinmux verification.
+        "PB15": "RS485_TX",
+        "PB16": "RS485_RX",
+        "PB2": "RS485_DE",
     }
     nm = {}
     for pnum, pname, *_ in pins:
@@ -572,6 +660,19 @@ def gen_sch():
     lib.append(gj.lib_symbol_conn_np("SolderLand_09P", 9))
     lib.append(gj.lib_symbol_conn_np("SolderLand_04P", 4))
     lib.append(gj.lib_symbol_conn_np("SolderLand_02P", 2))
+    # Section H additions (isolated RS-485, added 2026-07-26)
+    lib.append(gj.lib_symbol_conn_np("Conn_JST_GH_03P", 3, ["1", "2", "3"]))
+    lib.append(gj.lib_symbol_2pin_h("SJ_Generic"))
+    lib.append(
+        gj.lib_symbol_generic_ic(
+            "GW_ISOW1412",
+            ADM_FOOTPRINT,
+            ADM_DATASHEET,
+            left=ADM_L,
+            right=ADM_R,
+            size=ADM_SIZE,
+        )
+    )
     # EMI-chain parts (real, from gen_Jayne generic-ic table)
     lib.append(
         gj.lib_symbol_generic_ic(
@@ -1084,6 +1185,87 @@ def gen_sch():
     )
     parts.append(gj.glabel_conn("+5V", ldx, ldy, 2, 0))
     parts.append(gj.glabel_conn("LASER_CATHODE", ldx, ldy, 2, 1))
+
+    # ==================================================================
+    # Section H — ISOW1412 isolated RS-485 (U6, NEW 2026-07-26)
+    # "add rs485 to jayne as well, so that all nodes have at least those
+    # two busses" -- Jayne already had MCU (U3) + TPM (U5) + isolated CAN-FD
+    # (U4); this section closes the RS-485 gap using the same recipe as
+    # CAN-PERIPH-GW-1's Section E (avionics/kicad/CAN-PERIPH-GW-1/). Uses
+    # TI ISOW1412 (integrated isolated DC-DC, like ISOW1044 for CAN-FD) --
+    # superseded ADM2795E, see the ADM_L/ADM_R table comment above.
+    # ==================================================================
+    parts.append(
+        gj.text_note("=== Section H: ISOW1412 Isolated RS-485 (U6) ===", 250, 440)
+    )
+    adm_cx, adm_cy = 300, 480
+    adm_netmap = {
+        "1": "+3V3",
+        "2": "RS485_TX",
+        "3": "RS485_DE",
+        "4": "RS485_RX",
+        "5": "RS485_DE",
+        "6": "GND",
+        "8": "RS485_FLT_N",
+        "9": "+3V3",
+        "10": "GND",
+        "11": "ISO_GND_485",
+        "12": "ISO_3V3_485",
+        "13": "ISO_GND_485",
+        "15": "ISO_GND_485",
+        "16": "ISO_3V3_485",
+        "17": "RS485_A",
+        "18": "RS485_B",
+        "19": "RS485_B",
+        "20": "RS485_A",
+    }
+    parts.append(
+        gj.sym_inst(
+            "GW_ISOW1412", "U6", "TI ISOW1412", adm_cx, adm_cy,
+            footprint=ADM_FOOTPRINT, datasheet=ADM_DATASHEET,
+        )
+    )
+    for pname, pnum, ptype in ADM_L + ADM_R:
+        net = adm_netmap.get(pnum)
+        if net is None:
+            parts.append(no_connect_pin_bynum(adm_cx, adm_cy, ADM_L, ADM_R, pnum, ADM_SIZE))
+        else:
+            parts.append(glabel_pin_bynum(net, adm_cx, adm_cy, ADM_L, ADM_R, pnum, ADM_SIZE))
+
+    parts.extend(two_pin("C_Generic", "C_ADM1", "100nF", 250, 465, "+3V3", "GND"))
+    parts.extend(
+        two_pin("C_Generic", "C_ADM2", "100nF", 250, 471, "ISO_3V3_485", "ISO_GND_485")
+    )
+    parts.extend(pwr_flag("ISO_GND_485", 340, 471))
+    # No external isolated DC-DC needed -- ISOW1412 has its own integrated
+    # isolated DC-DC (VISOOUT/VISOIN, pins 12/16), same as ISOW1044 (U4).
+
+    parts.append(
+        gj.sym_inst(
+            "Conn_JST_GH_03P", "J_RS485_IN", "RS-485 trunk IN (A/B/GND)", 350, 470,
+        )
+    )
+    parts.append(gj.glabel_conn("RS485_A", 350, 470, 3, 0))
+    parts.append(gj.glabel_conn("RS485_B", 350, 470, 3, 1))
+    parts.append(gj.glabel_conn("ISO_GND_485", 350, 470, 3, 2))
+    parts.append(
+        gj.sym_inst(
+            "Conn_JST_GH_03P", "J_RS485_OUT", "RS-485 trunk OUT (A/B/GND)", 380, 470,
+        )
+    )
+    parts.append(gj.glabel_conn("RS485_A", 380, 470, 3, 0))
+    parts.append(gj.glabel_conn("RS485_B", 380, 470, 3, 1))
+    parts.append(gj.glabel_conn("ISO_GND_485", 380, 470, 3, 2))
+
+    parts.extend(two_pin("R_Generic", "R_485TERM", "120R", 350, 495, "RS485_A", "TERM485_MID"))
+    parts.append(
+        gj.sym_inst(
+            "SJ_Generic", "SJ_485", "open by default", 370, 495,
+            footprint="Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm",
+        )
+    )
+    parts.append(gj.glabel("TERM485_MID", 366.19, 495, rot=180))
+    parts.append(gj.glabel("RS485_B", 373.81, 495, rot=0))
 
     # -- compose --------------------------------------------------------
     sch = [

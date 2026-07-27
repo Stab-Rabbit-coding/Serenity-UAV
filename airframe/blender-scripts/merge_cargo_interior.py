@@ -556,8 +556,82 @@ def verify(mesh):
     return ok
 
 
+def finalize_watertight(mesh):
+    """Weld float32-coincident boolean-seam vertices, strip the resulting
+    degenerate/duplicate faces, and keep the single largest body — so the mesh
+    stays a clean watertight 2-manifold AFTER the binary-STL round-trip.
+
+    Ordering matters: WELD (merge_vertices) FIRST, then strip degenerate faces.
+    An earlier revision skipped this and noted that nondegenerate_faces() alone
+    "opens ~120 boundary holes"; that is true only when the coincident
+    boolean-seam vertices have NOT been welded first — the faces bordering them
+    are not yet zero-area, so stripping them tears the surface.  After a weld
+    pass those seam duplicates collapse to true zero-area faces that strip
+    cleanly, closing the ~48 non-manifold seam edges the float32 export
+    otherwise leaves.  Verified 2026-07-21: watertight=True, 1 body, volume and
+    bounds identical to the pre-finalize mesh (only zero-area junk removed)."""
+    mesh.merge_vertices()
+    mesh.update_faces(mesh.nondegenerate_faces())
+    mesh.update_faces(mesh.unique_faces())
+    mesh.remove_unreferenced_vertices()
+    # ALWAYS rebuild from the largest split body — trimesh's submesh() re-welds
+    # coincident vertices, which closes the tiny (≤3-edge) seams the degenerate
+    # strip opens AND drops the zero-area sliver bodies, in one step.  (Returning
+    # the un-split mesh when there is a single body leaves those seams open;
+    # verified 2026-07-21.)  Do NOT add a trailing merge_vertices() — a second
+    # weld pass reopens a seam.
+    bodies = mesh.split(only_watertight=False)
+    if bodies:
+        big = max(bodies, key=lambda b: len(b.faces))
+        if len(bodies) > 1:
+            print(
+                f"  finalize: kept largest of {len(bodies)} bodies "
+                f"({len(big.faces):,} faces); dropped {len(bodies) - 1} "
+                f"zero-area sliver body/bodies"
+            )
+        mesh = big
+    # Insurance: close any residual small holes so the result is a true 2-manifold.
+    if not mesh.is_watertight:
+        trimesh.repair.fill_holes(mesh)
+    trimesh.repair.fix_normals(mesh)
+    return mesh
+
+
+def repair_exported(out_path):
+    """Reload the exported cargo STL, weld+clean it to a watertight single body,
+    and re-stamp the HULL-FRAME marker.  Runs WITHOUT Blender, so it serves both
+    as the tail of the full merge (guaranteeing the ON-DISK file is clean, not
+    just the in-memory float64 result) and as a standalone ``--repair-only`` pass on an already-published cargo STL."""
+    print(f"\n=== repair_exported (float32 round-trip finalize): {out_path} ===")
+    m = trimesh.load(out_path, process=False)
+    m.merge_vertices()
+    print(f"  reloaded+welded: watertight={m.is_watertight} faces={len(m.faces):,}")
+    m = finalize_watertight(m)
+    verify(m)  # in-memory result
+    stamp_export(m, out_path)
+    print(f"  re-stamped -> {out_path}")
+
+    # Definitive check: reload the WRITTEN file exactly the way tools/validate_stls.py
+    # (CI) does — process=True merges coincident float32 vertices on load — and
+    # confirm the on-disk artifact is a valid watertight 2-manifold.
+    chk = trimesh.load(out_path, force="mesh")
+    bodies = chk.split(only_watertight=False)
+    ci_ok = chk.is_watertight or (bodies and all(b.is_watertight for b in bodies))
+    print(
+        f"  on-disk CI-style reload: watertight={chk.is_watertight} "
+        f"bodies={len(bodies)}  CI_valid={bool(ci_ok)}"
+    )
+    return bool(ci_ok)
+
+
 def main():
-    print("=== merge_cargo_interior.py  Rev R1  2026-06-30 ===")
+    # Blender-free finalization: reload the published cargo STL and weld+clean it
+    # to a watertight single body (MESH-01 float32 round-trip fix).  No re-merge.
+    if "--repair-only" in sys.argv:
+        ok = repair_exported(OUT_PATH)
+        sys.exit(0 if ok else 1)
+
+    print("=== merge_cargo_interior.py  Rev R2  2026-07-21 ===")
     print(f"source: {BLENDER_SRC}")
     src = trimesh.load(BLENDER_SRC, process=False)
     src.merge_vertices()
@@ -603,22 +677,23 @@ def main():
     out = from_man(result)
     out = drop_slivers(out)
 
-    # NOTE: unlike add_structural_features._subtract_all, we do NOT strip
-    # near-degenerate faces here.  Cargo's cutter set (positives ∩ envelope +
-    # 20 negatives) produces a few SHARED T-junction slivers rather than isolated
-    # zero-area ones, so nondegenerate_faces() would delete faces that border real
-    # geometry and open ~120 boundary holes (verified 2026-07-06).  The in-memory
-    # result is watertight (single body, 0 boundary, 0 non-manifold); the ~57
-    # non-manifold edges seen when the exported STL is RELOADED are a benign
-    # float32-quantization artifact (0 boundary edges — the surface stays closed;
-    # slicers weld the coincident vertices on import).
-
-    ok = verify(out)
+    # The in-memory float64 result is a clean watertight single body here, but
+    # binary STL stores per-face vertices: the float32 export splits the
+    # coincident boolean-seam vertices apart, so the RELOADED file fragments into
+    # ~36 bodies with ~48 non-manifold seam edges and FAILS tools/validate_stls.py
+    # (the CI watertight check).  This was previously mislabelled a "benign"
+    # artifact; it is a real MESH-01 defect on the published STL.  We therefore
+    # write the file, then reload + weld + clean it (repair_exported below) so the
+    # ON-DISK artifact — not merely the in-memory mesh — is a watertight 2-manifold.
+    verify(out)
     check_leg_clearance(out)
 
     stamp_export(out, OUT_PATH)
     print(f"\n  written -> {OUT_PATH}")
     print("  (already in hull frame + HULL-FRAME R1 marker; do NOT re-bake)")
+
+    # Weld/clean the exported float32 file so the published STL passes CI.
+    ok = repair_exported(OUT_PATH)
     if not ok:
         sys.exit(1)
 

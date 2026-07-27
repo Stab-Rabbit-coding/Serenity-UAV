@@ -41,4 +41,15 @@
 - [ ] Wash SCHEMATIC-FIRST REBUILD — decided + started 2026-07-14 (us…
 - [ ] Finish Wash PCB (CAPE-A-2) close-out pass:
 
+### Fleet Trust Module + Tilt Encoder (2026-07-26)
+
+→ full detail: `WBS.md` §1.9.1, §1.9.2
+
+- [ ] AK7455 firmware zero-calibration over −5..90° sweep
+- [ ] Shielded encoder-to-gateway + gateway-to-bus wiring per EMI spec
+- [ ] Reconcile gen_kaylee.py drift from checked-in Kaylee.kicad_sch
+- [ ] Remove obsolete J_ENC (AS5600 I²C) connector from Wash
+- [ ] Fix Wash's own inline SLB9670 symbol's incorrect pin numbers
+- [ ] Finish routing CAN-PERIPH-GW-1 PCB (9/89 nets still unrouted)
+
 ---

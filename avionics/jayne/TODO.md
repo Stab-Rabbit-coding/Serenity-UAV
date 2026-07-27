@@ -42,6 +42,7 @@
 - [ ] Both Class 2 caps must be hardware-enforced
 - [ ] Nose camera strobe + frame-difference detection
 - [ ] Do not source
+- [ ] Add pitot tube differential pressure transducer
 
 #### 4.6.1 — TI AM62Ax Vision Pipeline Bring-Up
 → full detail: `WBS.md` §4.6
