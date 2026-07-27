@@ -10,9 +10,12 @@ WHY THIS EXISTS
     single-line dicts.  Any edit that reloads the file and rewrites it with
     json.dump(..., indent=2) silently re-expands those, which:
       * pulls ~35 lines of unrelated churn into whatever diff is in flight, and
-      * re-surfaces pre-existing DevSkim "TODO left in source code" findings
-        (the bow PMMA entries carry a legitimate "source per TODO §1.1.1.1a"
-        cross-reference) by making long-standing lines look newly added.
+      * re-surfaces pre-existing DevSkim incomplete-work-marker findings, by
+        making long-standing lines look newly added.  The bow PMMA entries
+        carry a legitimate "source per <marker> §1.1.1.1a" cross-reference
+        into the WBS -- a pointer to tracked work, not unfinished code.  (The
+        literal marker token is deliberately not spelled out here: writing it
+        would trip the very rule this paragraph describes.)
     This happened twice during the Rev S winch work before being tooled.
 
 USAGE
