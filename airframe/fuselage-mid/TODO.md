@@ -27,6 +27,9 @@
 - [ ] Add DRV8833-tray boss locations to `cargo_sect_shell24.scad`
 - [ ] Add SG90 bell-crank boss to inner face of each door panel for p…
 - [ ] ★ STS3215 datasheet gate — envelope/torque/mass/stall
+- [ ] ★ Winch containment: 5 positive fixes (spool = projectile)
+- [ ] Verify Part 107 dropped-object section number
+- [ ] Containment checks on assembly + pre-flight cards
 - [ ] ★ Shed threshold vs manoeuvre envelope (2.0g = 0.98x)
 - [ ] Calibrate T_slip 0.060 N·m at the spool hub collar
 - [ ] Set servo torque ceiling below T_slip (wear protection)

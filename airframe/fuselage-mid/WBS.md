@@ -291,6 +291,38 @@ do not restate its dimensions here.
     (60 g assumed — dominates the +98.6 g delta and T/W 1.613 → 1.557), **(d)** stall current
     (1.2 A budgeted; resize RAIL-2 if > ~2.5 A). **Blocks STL generation and procurement.**
     Do not fabricate these values.
+- [ ] **★ CONTAINMENT — the spool must never leave the cargo bay (spec §3.10).**
+    Designating the spool sacrificial (§3.8) made it a planned-degradation part
+    sitting directly above clamshell doors that open 180° to free air. Rev B
+    retained the axle with a split collar and one M3 pinch screw — **friction
+    retention, which root `AGENTS.md` §7 forbids outright for a flight-critical
+    joint.** Self-inflicted, and corrected by five positive fixes, all required
+    before any flight with a slung load:
+    - **FM1** circlip groove + external circlip immediately outboard of each
+      pedestal; the pinch screw is demoted to locating/anti-rotation only.
+    - **FM2** continuous steel sleeve through the hub bore, bearings pressed into
+      the sleeve rather than into printed plastic — total loss of the printed
+      material still leaves sleeve + bearings captive on the axle.
+    - **FM3** pedestal through-bolts + aluminium backing plates, replacing
+      heat-set inserts in printed shell.
+    - **FM4** keeper bar spanning both pedestals — independent secondary capture
+      that holds even if FM1–FM3 all fail or a retainer is omitted at assembly.
+    - **FM5** slip-adjust collar retained captive by the FM1 circlip.
+    Energy at stake, from the §107.51(b) 400 ft ceiling ignoring drag: spool alone
+    **19.1 J (14.1 ft·lbf)**, full assembly **31.8 J (23.5 ft·lbf)**.
+    **Principle: the sacrificial element must fail by *slipping*, never by
+    *releasing*** — wear degrades torque transmission, never retention. Containment
+    must hold **with the doors open**, which is both the normal cargo-evolution
+    state and the only geometry in which a release reaches free air.
+- [ ] **Verify the Part 107 dropped-object section number.** REF-FAA-002's
+    applied-sections table does not currently include it, so the winch spec
+    asserts **no** section number (root `AGENTS.md` §4). Look it up, add it to
+    REF-FAA-002 with a validated URL, then state explicitly how a *commanded*
+    shed (R5) differs from an *uncommanded* structural release under that text.
+    Tracked in `REFERENCES.md` "Open Standards Verification Items".
+- [ ] **Containment checks on the assembly and pre-flight cards** — circlips
+    seated, keeper bar fitted and torqued, backing plates present, slip-collar
+    witness-mark intact. Doors-open inspection.
 - [ ] **★ Flight-envelope decision — shed threshold vs manoeuvre envelope.** At
     `F_shed` = 8.0 N a **2.0 g** manoeuvre on the slung payload reaches **0.98×**
     the threshold and **2.5 g sheds the load**. Choose: declare a ≈1.5 g slung-load

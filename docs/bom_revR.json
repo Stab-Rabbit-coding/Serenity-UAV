@@ -278,7 +278,7 @@
       "walls": 4,
       "qty": 1,
       "mass_g": 16,
-      "notes": "Rev S (2026-07-27). SUPERSEDES cargo_winch_spool.stl. Core OD 20 mm / usable width 18 mm / flange OD 26 mm carried forward (1500 mm capacity ≈ 24 turns). N20 3.15 mm D-bore and M2 set-screw DELETED; 2× Ø8×3 mm MR84ZZ counterbores ADDED; Ø30 mm × 3 mm sawtooth ratchet ring ADDED to the outboard stbd flange. Dyneema anchor slot DELETED so the line runs off the drum at overload (line-shed requirement). WEAR ITEM / SACRIFICIAL: the hub carries the friction slip interface (T_slip = 0.060 N.m) that protects the servo at overload. Deliberately the cheapest part in the load path — replacing a printed spool beats replacing a digital servo. Keep a spare in the field kit; inspect the slip witness-mark after any shed event. Spec §3.8.",
+      "notes": "Rev S (2026-07-27). SUPERSEDES cargo_winch_spool.stl. Core OD 20 mm / usable width 18 mm / flange OD 26 mm carried forward (1500 mm capacity ≈ 24 turns). N20 3.15 mm D-bore and M2 set-screw DELETED; 2× Ø8×3 mm MR84ZZ counterbores ADDED; Ø30 mm × 3 mm sawtooth ratchet ring ADDED to the outboard stbd flange. Dyneema anchor slot DELETED so the line runs off the drum at overload (line-shed requirement). WEAR ITEM / SACRIFICIAL: the hub carries the friction slip interface (T_slip = 0.060 N.m) that protects the servo at overload. Deliberately the cheapest part in the load path — replacing a printed spool beats replacing a digital servo. Keep a spare in the field kit; inspect the slip witness-mark after any shed event. Spec §3.8. CONTAINMENT: hub is built around SLEEVE-HUB-STEEL; friction face and bearing bores sit on opposite sides of the sleeve so wear cannot compromise retention. Spec §3.10.",
       "consumable": true
     },
     {
@@ -1021,7 +1021,8 @@
       "load_cell": "HX711 24-bit ADC (REF: HX711-LC) — tension monitoring, re-hosted from Cape-B onto the CAN-PERIPH-GW; feeds the sensed (secondary) overload path.",
       "position_sensing": "ENC-AK7455-SPOOL on the spool itself (gateway J_ENC, SPI). Spool angle is reported whenever powered, regardless of coupler type. A powerless shed is un-telemetered by construction (no power, no encoder, no CAN). Spec §3.7.3.",
       "servo_mode": "Encoded continuous-rotation (NOT position/servo: single-turn cannot express 23.2 spool turns; NOT stepper: its open-loop count becomes fiction after a hub slip). Gateway closes the position loop on the AK7455. Servo torque ceiling set BELOW T_slip so routine lifting never wears the sacrificial hub. Mode indices/registers pending the datasheet gate. Spec §3.9.",
-      "maneuver_conflict": "OPEN: at F_shed = 8.0 N a 2.0g manoeuvre on the slung payload reaches 0.98x threshold and 2.5g sheds it. Referred to the flight envelope — declare a ~1.5g slung-load limit, or raise F_shed to ~12 N (72% of excess lift). Spec §4.4."
+      "maneuver_conflict": "OPEN: at F_shed = 8.0 N a 2.0g manoeuvre on the slung payload reaches 0.98x threshold and 2.5g sheds it. Referred to the flight envelope — declare a ~1.5g slung-load limit, or raise F_shed to ~12 N (72% of excess lift). Spec §4.4.",
+      "containment": "R10: the spool is a WEAR ITEM directly above 180-deg clamshell doors, so it must be positively captive. Five fixes: FM1 circlip grooves + external circlips outboard of each pedestal (replaces friction-only pinch collar — an AGENTS.md §7 violation); FM2 steel hub sleeve so bearings press into steel and fragments stay captive; FM3 pedestal through-bolts + backing plates; FM4 keeper bar spanning both pedestals as independent secondary capture; FM5 slip collar retained captive. Released spool = 19.1 J, full assembly = 31.8 J from 400 ft. PRINCIPLE: the sacrificial element must fail by SLIPPING, never by RELEASING. Spec §3.10."
     },
     "payload_retention": {
       "cradle": "cargo_cradle_autolatch.stl — PETG auto-latch: payload presses latch tab to lock, release servo pull-wire unlocks",
@@ -1089,6 +1090,42 @@
         "cost_usd": 3.0,
         "supplier": "Amazon / AliExpress",
         "notes": "Pressed into the spool hub counterbores, one per flange — this is what supports the spool at both ends. 10 N per bearing vs ~130 N static rating (FOS ~13)."
+      },
+      {
+        "ref": "SLEEVE-HUB-STEEL",
+        "desc": "Steel sleeve Ø10 OD x Ø8 ID x 25 mm — winch spool hub liner",
+        "qty": 1,
+        "mass_g": 5.6,
+        "cost_usd": 4.0,
+        "supplier": "McMaster / Amazon",
+        "notes": "CONTAINMENT FM2 (spec §3.10.3). Both MR84ZZ press into the STEEL SLEEVE, not into printed plastic. Total loss of the printed spool material still leaves sleeve + bearings captive on the axle. Also avoids printed press-fit creep. Separates the friction wear face from the bearing bores so consuming the sacrificial face cannot compromise retention."
+      },
+      {
+        "ref": "CLIP-EXT-4MM",
+        "desc": "External circlip, 4 mm shaft — positive axle retention",
+        "qty": 2,
+        "mass_g": 0.1,
+        "cost_usd": 0.5,
+        "supplier": "McMaster / Amazon",
+        "notes": "CONTAINMENT FM1 (spec §3.10.3). Seats in a groove immediately OUTBOARD of each pedestal. Replaces friction-only pinch-collar retention, which violated root AGENTS.md §7 (\"friction fit alone is never acceptable for a flight-critical joint\"). The M3 pinch screw is demoted to locating/anti-rotation only. Also keeps the slip-adjust collar captive (FM5)."
+      },
+      {
+        "ref": "KEEPER-WINCH",
+        "desc": "Keeper bar, 1 mm Al, spans both winch pedestals",
+        "qty": 1,
+        "mass_g": 5.0,
+        "cost_usd": 2.0,
+        "supplier": "McMaster / Amazon",
+        "notes": "CONTAINMENT FM4 (spec §3.10.3). Independent SECONDARY capture bolted to both pedestals over the spool — the assembly cannot fall clear even if FM1-FM3 all fail or a retention item is omitted at assembly. Must function with the cargo doors OPEN."
+      },
+      {
+        "ref": "PLATE-PEDESTAL",
+        "desc": "Aluminium backing plate, winch pedestal through-bolt",
+        "qty": 2,
+        "mass_g": 2.0,
+        "cost_usd": 1.5,
+        "supplier": "McMaster / Amazon",
+        "notes": "CONTAINMENT FM3 (spec §3.10.3). Pedestals through-bolt to a backing plate on the far side of the bay floor instead of relying on M3 heat-set inserts in printed shell. Inspectable without disassembly."
       },
       {
         "ref": "ENC-AK7455-SPOOL",

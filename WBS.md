@@ -186,6 +186,9 @@
 - [x] New winch hardware specified — 6 STLs + 7 BOM refs
 - [ ] ★ STS3215 datasheet gate — envelope/torque/mass/stall
 - [x] Winch coupler trade closed: slip clutch in the spool hub
+- [ ] ★ Winch containment: 5 positive fixes (spool = projectile)
+- [ ] Verify Part 107 dropped-object section number
+- [ ] Containment checks on assembly + pre-flight cards
 - [ ] ★ Shed threshold vs manoeuvre envelope (2.0g = 0.98x)
 - [ ] Calibrate T_slip 0.060 N·m at the spool hub collar
 - [ ] Set servo torque ceiling below T_slip (wear protection)

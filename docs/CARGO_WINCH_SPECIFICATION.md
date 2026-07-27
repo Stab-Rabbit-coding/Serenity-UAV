@@ -19,7 +19,7 @@
 
 ## 1. Scope and Requirements
 
-Nine requirements drive this revision:
+Ten requirements drive this revision:
 
 | # | Requirement | Where satisfied |
 |---|---|---|
@@ -32,6 +32,7 @@ Nine requirements drive this revision:
 | R7 | **Spool position reported to the aircraft throughout pay-out and shed**, until the line departs | §3.7 |
 | R8 | Overload sacrifices a **cheap printed part**, never the servo | §3.8 |
 | R9 | Servo operating mode suits multi-turn travel **and** a slipping spool | §3.9 |
+| R10 | **The spool can never leave the cargo bay.** No failure — including its own designed wear — may release it as a projectile | §3.10 |
 
 *"Everything is shiny." — Kaylee Frye*
 
@@ -460,6 +461,64 @@ aircraft; it simply loses payload-height readout (`encoder_fail`, §5.3).
 > and must be read off the datasheet before firmware is written. No register
 > number is invented in this document.
 
+### 3.10 Containment — the sacrificial spool must never become a projectile (R10)
+
+**§3.8 created this hazard and did not address it.** Designating the spool as the
+sacrificial element means planning for it to degrade in service. A wear item
+directly above clamshell doors that open 180° to free air must therefore be
+*positively captive*, and Rev B's retention was not.
+
+#### 3.10.1 The defect this exposes
+
+§3.2 retains the axle with "a split-collar seat in each pedestal with one M3
+pinch screw." **That is friction retention**, and root `AGENTS.md` §7 is explicit:
+
+> *"Load-bearing mating joints require a minimum 2-wall contact annulus **and** a
+> positive-stop shoulder — friction fit alone is never acceptable for a
+> flight-critical joint."*
+
+A pinch collar carrying the entire spool assembly over an open cargo bay is a
+flight-critical joint by any reading. This is a self-inflicted violation, not an
+inherited one, and it is corrected below.
+
+#### 3.10.2 What is at stake
+
+At the §107.51(b) ceiling of 400 ft AGL [REF-FAA-002], ignoring drag (an upper
+bound — drag reduces it):
+
+| Released | Mass | Impact speed | Kinetic energy |
+|---|---|---|---|
+| Spool alone | 16 g | 48.9 m/s | **19.1 J (14.1 ft·lbf)** |
+| Full assembly (spool + bearings + axle + line) | 26.6 g | 48.9 m/s | **31.8 J (23.5 ft·lbf)** |
+
+These are engineering magnitudes, not a compliance claim — see the verification
+item in §8 for the dropped-object regulation, whose section number is **not**
+asserted here because it is not yet verified in `REFERENCES.md`.
+
+#### 3.10.3 Failure modes and positive fixes
+
+| # | Release path | Rev B state | Fix |
+|---|---|---|---|
+| **FM1** | Axle slides out of a pedestal | **Friction only** (M3 pinch screw) | **Circlip groove + external circlip immediately outboard of each pedestal.** The axle cannot translate more than groove clearance even at zero clamp force. The pinch screw is demoted to locating/anti-rotation — it is no longer the retention. |
+| **FM2** | Printed hub cracks; spool leaves the axle in pieces | Bearings pressed **into printed plastic** | **Continuous steel sleeve through the full hub bore**, bearings pressed into the *sleeve*. Total loss of the printed material still leaves sleeve + bearings captive on the axle. Also better practice regardless: printed press-fits creep. |
+| **FM3** | Pedestal tears out of the hull | M3 heat-set inserts in printed shell | **Through-bolts with an aluminium backing plate** on the far side of the bay floor. Positive, and inspectable without disassembly. |
+| **FM4** | Any single retention omitted at assembly, or a pedestal cracks | *(nothing)* | **Keeper bar** spanning both pedestals over the spool, bolted at both ends. Independent secondary capture — the assembly cannot fall clear even if FM1–FM3 all fail. |
+| **FM5** | Slip-adjust collar backs off and departs | Thread-lock only | Collar **captive on the axle** — retained by the FM1 circlip, so a fully-backed-off collar still cannot leave. |
+
+#### 3.10.4 The governing principle
+
+**The sacrificial element must fail by *slipping*, never by *releasing*.**
+
+Wear at the friction interface degrades torque transmission — the spool free-spins,
+which is the safe direction and is exactly what §3.8 wants. Wear must never
+degrade *retention*. Concretely: the hub's friction face and its bearing bores are
+separate features on opposite sides of the steel sleeve, so consuming the former
+cannot compromise the latter.
+
+**Containment must hold with the cargo doors open**, since that is both the normal
+operating state during a cargo evolution and the only geometry in which a released
+spool has a path to free air. Every fix above is doors-open-independent.
+
 ---
 
 ## 4. Load Analysis
@@ -677,18 +736,22 @@ Per root `AGENTS.md` §5, real masses — no TBD.
 | **+** | 2× MR84ZZ bearings | +3 g |
 | **+** | Spring, M2 dowel, M3 screws/inserts | +4 g |
 | **+** | AK7455 spool encoder + diametric magnet + pigtail | +4 g |
+| **+** | Steel hub sleeve (Ø10 × Ø8 × 25 mm) — FM2 | +5.6 g |
+| **+** | 2× external circlips — FM1 | +0.2 g |
+| **+** | Keeper bar, 1 mm Al — FM4 | +5 g |
+| **+** | 2× pedestal backing plates — FM3 | +4 g |
 | **+** | Pull solenoid | +15 g |
 | **+** | STS3215 *(**⚠ gate §3.1** — 60 g assumed)* | +60 g |
-| | **Added** | **+152.6 g** |
-| | **NET** | **+102.6 g (+0.23 lbm)** |
+| | **Added** | **+167.4 g** |
+| | **NET** | **+117.4 g (+0.26 lbm)** |
 
 Consequence at Phase 5–10:
 
 ```
-AUW  : 2 768 g → 2 871 g  (+3.7 %)
-T/W  : 43.79/27.15 = 1.613 → 43.79/28.16 = 1.555
-Excess lift : 16.64 N → 15.63 N
-Slip threshold as fraction of excess : 48 % → 51 %   (still conservative)
+AUW  : 2 768 g → 2 885 g  (+4.2 %)
+T/W  : 43.79/27.15 = 1.613 → 43.79/28.31 = 1.547
+Excess lift : 16.64 N → 15.48 N
+Slip threshold as fraction of excess : 48 % → 52 %   (still conservative)
 ```
 
 T/W stays above 1.5 and the winch remains a cargo-bay-centred mass, so the
@@ -716,6 +779,10 @@ See §3.3. All six are new STLs from
 | `SPRING-PAWL` | Compression spring, 1.0 N ± 0.2 N installed, stainless | 1 | Set-screw adjustable seat |
 | `DOWEL-M2-10` | M2 × 10 mm A2 dowel | 1 | Pawl pivot |
 | `ENC-AK7455-SPOOL` | AKM AK7455 off-axis angle sensor + diametric magnet | 1 | [REF-SENSOR-008], fleet-standard; mates the gateway's existing `J_ENC` pigtail — **no new part number, no board change** (§3.7.3) |
+| `SLEEVE-HUB-STEEL` | Steel sleeve, Ø10 OD × Ø8 ID × 25 mm | 1 | FM2 — bearings press into steel, not printed plastic; keeps fragments captive |
+| `CLIP-EXT-4MM` | External circlip, 4 mm shaft | 2 | FM1 — **positive** axle retention outboard of each pedestal |
+| `KEEPER-WINCH` | Keeper bar, 1 mm Al, pedestal-to-pedestal | 1 | FM4 — independent secondary capture |
+| `PLATE-PEDESTAL` | Aluminium backing plate, pedestal through-bolt | 2 | FM3 — replaces heat-set-insert-only mounting |
 | `FET-AO3400` | AO3400 N-FET, SOT-23 | 1 | Existing project part |
 | `DIODE-SS34` | SS34 flyback diode | 1 | Across solenoid coil |
 | — | M3 heat-set inserts + M3 × 8 SHCS | 8 + 8 | Pedestals → cargo frame |
@@ -728,51 +795,69 @@ See §3.3. All six are new STLs from
 
 ## 8. Open Items
 
-1. **★ FLIGHT-ENVELOPE DECISION — the shed threshold sits inside the manoeuvre
+1. **★ CONTAINMENT — implement all five FM fixes before any flight with a slung
+   load (§3.10.3).** Circlip grooves + external circlips (FM1, replaces the
+   friction-only pinch collar that violates root `AGENTS.md` §7), steel hub sleeve
+   (FM2), pedestal through-bolts + backing plates (FM3), keeper bar (FM4), captive
+   slip collar (FM5). A released spool carries **19.1 J** and the full assembly
+   **31.8 J** from 400 ft. **This gates flight, not just fabrication.**
+2. **Verify the dropped-object regulation.** 14 CFR Part 107 contains a provision
+   on dropping objects from a small UA in a manner creating an undue hazard; the
+   **exact section number is deliberately not asserted here** because it is not in
+   `REFERENCES.md`. Look it up, add it to REF-FAA-002's applied-sections table with
+   a validated URL, then cite it in §3.10.2. Per root `AGENTS.md` §4 — do not guess
+   a section number. Note the winch *intentionally* releases a payload (R5), so the
+   distinction between a commanded release and an uncommanded structural release
+   needs to be stated explicitly against the real regulatory text.
+3. **Add a containment check to the assembly and pre-flight cards** — circlips
+   seated (visual), keeper bar fitted and torqued, backing plates present, slip
+   collar witness-mark intact. Doors-open inspection, since that is the geometry
+   in which a release escapes.
+4. **★ FLIGHT-ENVELOPE DECISION — the shed threshold sits inside the manoeuvre
    envelope (§4.4).** At 8.0 N, a 2.0 g manoeuvre on the slung payload reaches
    0.98× the threshold and 2.5 g sheds the load. Choose: declare a ≈1.5 g
    slung-load manoeuvre limit (recommended, free), raise the threshold to ~12 N
    (spends lift margin), or reduce payload. **Referred to the flight envelope,
    not decided here.** Blocks the pawl-spring calibration target.
-2. **Calibrate `T_slip` to 0.060 N·m (0.61 kgf·cm)** at the spool hub collar, and
+5. **Calibrate `T_slip` to 0.060 N·m (0.61 kgf·cm)** at the spool hub collar, and
    confirm the one remaining back-drive requirement **`T_slip < T_backdrive`**
    (§3.8.2). Measure `T_backdrive` with the pawl held clear — but note this now
    confirms an inequality rather than gating R5, since §3.8 removed
    `T_backdrive` from `F_shed` entirely.
-3. **Set the servo torque ceiling below `T_slip`** (protection layer 1, §3.8.3)
+6. **Set the servo torque ceiling below `T_slip`** (protection layer 1, §3.8.3)
    so routine lifting never reaches the friction interface and the sacrificial
    hub is consumed only by genuine overloads.
-4. **⚠ STS3215 datasheet gate (§3.1)** — envelope, torque, mass, stall current.
+7. **⚠ STS3215 datasheet gate (§3.1)** — envelope, torque, mass, stall current.
    Blocks STL generation, BOM order, and the §6 mass figures. `TODO §0.x`.
-5. **Half-duplex bus wiring (§5.1.1)** — confirm MSPM0G3507 single-wire UART on
+8. **Half-duplex bus wiring (§5.1.1)** — confirm MSPM0G3507 single-wire UART on
    `FLEX_TTL_GPIO`, or add a steering resistor/buffer at the harness.
-6. **Pawl-spring calibration — distinct from item 2.** This sets `F_shed` (the
-   ratchet cam-out, 8.0 N ± 1.0 N at the line); item 2 sets `T_slip` (the hub
+9. **Pawl-spring calibration — distinct from item 5.** This sets `F_shed` (the
+   ratchet cam-out, 8.0 N ± 1.0 N at the line); item 5 sets `T_slip` (the hub
    friction interface). Two independent thresholds, two separate adjustments.
-   Verify over ≥ 100 lock/release cycles. Target pending item 1.
-7. **Line-shed test** — confirm the line actually runs clear of the drum and
-   fairlead under load; capstan estimate (§3.6) is analytic, not measured.
-8. **Generator rewrite** — delete `make_motor_mount()` / `make_winch_spool()`,
-   add the six parts in §3.3; mesh-validate per root `AGENTS.md` §7.
-9. **Pedestal mounting stations** — the retired mount anchored to the *gondola
-   ceiling* with M2 self-taps; the pedestals need real M3 boss stations in
-   `cargo_sect_shell24.scad`, FreeCAD-verified against the door swing envelope.
-10. **DRV8833 consolidation (optional)** — door/release servos could move to the
+   Verify over ≥ 100 lock/release cycles. Target pending item 4.
+10. **Line-shed test** — confirm the line actually runs clear of the drum and
+    fairlead under load; capstan estimate (§3.6) is analytic, not measured.
+11. **Generator rewrite** — delete `make_motor_mount()` / `make_winch_spool()`,
+    add the six parts in §3.3; mesh-validate per root `AGENTS.md` §7.
+12. **Pedestal mounting stations** — the retired mount anchored to the *gondola
+    ceiling* with M2 self-taps; the pedestals need real M3 boss stations in
+    `cargo_sect_shell24.scad`, FreeCAD-verified against the door swing envelope.
+13. **DRV8833 consolidation (optional)** — door/release servos could move to the
     gateway's spare `FLEX_PWM_IO`, retiring `DRV8833-CARGO` and its tray.
-11. **AK7455 spool-encoder integration (§3.7.3)** — magnet pocket in the port
+14. **AK7455 spool-encoder integration (§3.7.3)** — magnet pocket in the port
     flange hub, off-axis (the fixed axle occupies the centreline); confirm flux
     at the IC for the chosen magnet and gap, the same bench item already open for
     the nacelle encoders; ≥ 1 kHz sampling; firmware turn-accumulation with the
     `turns_invalid` guard rather than a guessed count.
-12. **Spool is a consumable** (§3.8) — mark `cargo_winch_spool_r2.stl` as a wear
+15. **Spool is a consumable** (§3.8) — mark `cargo_winch_spool_r2.stl` as a wear
     item in the build guide, define an inspection interval and a slip-witness
     mark, and keep a spare in the field kit. Hand-tool replacement per
     `AGENTS.md` §7.
-13. **Confirm STS3215 mode semantics** (§3.9) — mode indices, the selecting
+16. **Confirm STS3215 mode semantics** (§3.9) — mode indices, the selecting
     register, and whether the torque ceiling is settable in encoded
     continuous-rotation mode. Part of the §3.1 datasheet gate; no register
     number is invented in this document.
-14. **Accept that a powerless shed is un-telemetered** (§3.7.2) — no power means
+17. **Accept that a powerless shed is un-telemetered** (§3.7.2) — no power means
     no encoder and no CAN frame. If post-event knowledge of a shed is required,
     that needs a separate mechanism (e.g. a latching mechanical indicator), not
     the encoder.
