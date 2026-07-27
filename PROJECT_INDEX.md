@@ -1,8 +1,7 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: 2026-07-26 — Automated reconciliation pass -->
-PROJECT_INDEX.md                  — This file
+<!-- Last updated: 2026-07-27 — Automated reconciliation pass -->
 ARCHIVE_INDEX.md                  — Archive file tree (see below)
 README.md                         — Project overview
 REFERENCES.md                     — Standards and regulatory reference catalog (REF-IDs, verified URLs,
@@ -78230,3 +78229,6 @@ avionics/kicad/Emma/gerbers/Emma-Margin.gbr — [PENDING AI CLASSIFICATION]
 avionics/kicad/Emma/gerbers/Emma-in1-back.drl — [PENDING AI CLASSIFICATION]
 avionics/kicad/Emma/gerbers/Emma-job.gbrjob — [PENDING AI CLASSIFICATION]
 avionics/kicad/Emma/gerbers/Emma.drl — [PENDING AI CLASSIFICATION]
+
+## --- AUTO-DISCOVERED (2026-07-27) ---
+tools/open_mating_faces.py — [PENDING AI CLASSIFICATION]

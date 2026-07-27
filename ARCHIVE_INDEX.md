@@ -2,8 +2,7 @@
 
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
-<!-- Last updated: 2026-07-26 — Automated reconciliation pass -->
-inside this directory.
+<!-- Last updated: 2026-07-27 — Automated reconciliation pass -->
 
 ```text
 
@@ -77810,3 +77809,6 @@ avionics/kicad/Emma/gerbers/Emma-Margin.gbr — [PENDING AI CLASSIFICATION]
 avionics/kicad/Emma/gerbers/Emma-in1-back.drl — [PENDING AI CLASSIFICATION]
 avionics/kicad/Emma/gerbers/Emma-job.gbrjob — [PENDING AI CLASSIFICATION]
 avionics/kicad/Emma/gerbers/Emma.drl — [PENDING AI CLASSIFICATION]
+
+## --- AUTO-DISCOVERED (2026-07-27) ---
+tools/open_mating_faces.py — [PENDING AI CLASSIFICATION]

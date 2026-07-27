@@ -407,6 +407,30 @@ REFERENCES.md Removed/Superseded Citations).
     I/O; publishes AK7455 nacelle-tilt data; also serves as the per-ESC
     (S50) CAN/RS-485 gateway (one stack per EDF). ERC 0 at N_STACKS=1 and
     N_STACKS=3. See `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`.
+    - [x] **Promoted to deployed config, `N_STACKS=4`, 2026-07-26** — one
+        board per nacelle side (GW-PORT/GW-STBD): 2× ESC + 1× tilt servo +
+        1× AK7455 tilt encoder per side. `gen_can_periph_gw_pcb.py` rewritten
+        to use the user's real hand-packed single-stack layout as the
+        per-stack template (captured, not an invented grid) tiled ×4 on a
+        50 mm lane pitch, with the front/back-flip bug fixed (4 ICs are
+        back-side) and back-silkscreen attribution added. Verified
+        DRC-clean placement (0 shorts/clearance/courtyard from placement
+        alone) at both N=1 (exact match to the real board) and N=4 in a
+        sandboxed dry run before touching the live board. Old N=1 board
+        backed up to `CAN-PERIPH-GW-1-backups/`.
+    - [x] **`starved_thermal` DRC class fixed** — `avionics/kicad/
+        fix_starved_thermal_pads.py`, a general DRC-driven fixer (re-derives
+        the offending pad list from a fresh DRC pass each run, not
+        hardcoded refs) that solid-connects GND pads that can't get 2
+        thermal-relief spokes at fine pitch. Verified at N=1 and N=4.
+    - [x] **Freerouted, 2026-07-26** — Specctra DSN/freerouting 2.2.4 bridge,
+        20-pass session, 296 → 47 unrouted nets (~84%). Freerouting 2.2.4
+        self-terminates cleanly (the "never self-exits" finding in
+        `avionics/kicad/README.md` was specific to 2.1.0). DRC after import:
+        1 hard violation (a freerouted via 0.055 mm short of 0.2 mm board-
+        edge clearance; left as-is rather than risk breaking its routed
+        connections with an automated nudge — fix by hand in final GUI
+        review). Gerbers generated reflecting this ~84%-routed state.
 - [x] **Kaylee** — full trust module added (had none before). ERC 0, added
     via non-destructive schematic injection (`inject_kaylee_trust_module.py`)
     rather than full regeneration — `gen_kaylee.py` itself has drifted from
@@ -438,14 +462,77 @@ REFERENCES.md Removed/Superseded Citations).
     separately-verified `Jayne_SLB9670_TPM` symbol instead specifically to
     avoid this defect). Not fixed — out of scope for this item. See
     REFERENCES.md Open Standards Verification Items.
-- [ ] **`CAN-PERIPH-GW-1` PCB routing** — freerouted via the Specctra DSN/SES
-    bridge (`tools/export-specctra-dsn.py` / `tools/import-specctra-ses.py` +
-    freerouting 2.2.4); 9 of 89 nets remain unrouted after a 20-pass run, and
-    DRC shows 28 unconnected items + 8 `starved_thermal` errors (same
-    accepted class as ENC-NACELLE-1). Footprint placement is the user's own
-    manual packing and must not be touched by `gen_can_periph_gw_pcb.py`
-    again without explicit permission. Further freerouting passes or manual
-    cleanup still possible.
+- [ ] **`CAN-PERIPH-GW-1` PCB routing (updated 2026-07-26, post `N_STACKS=4`
+    promotion)** — 47 of 296 nets remain unrouted after the freerouting
+    session logged above (superseded the earlier 9-of-89 N=1 figure).
+    `starved_thermal` class is now fixed board-wide (see above), not just
+    "accepted" as it was for ENC-NACELLE-1. Footprint placement is the
+    user's own manual packing (now captured as the real per-stack template
+    in `gen_can_periph_gw_pcb.py`) and must not be touched by a full
+    regeneration again without explicit permission. Further freerouting
+    passes or manual GUI cleanup still possible for the remaining 47 nets.
+- [x] **`ENC-NACELLE-1` DRC — fixed, 2026-07-26.** Found and fixed a genuine
+    short (+3V3/ENC_CSN via-to-track contact) plus several clearance
+    violations from a congested prior reroute, by moving the conflicting
+    +3V3 copper to B.Cu with a via bridge chosen to clear both the ENC_CSN
+    trace and a nearby GND stitching via. DRC 0 hard (was 11).
+- [x] **Emma RSSI_DCD net — properly routed, 2026-07-26.** The existing
+    "routed" copper was a straight line plowing through +3V3, RF_TX, +5V,
+    and GND (the naive router flagged as unusable in
+    `avionics/kicad/TODO-1.2b-STATUS-REPORT.md` §Emma). Ripped up and
+    re-routed via a grid-based A* pathfinder (avoiding all pad/via/track
+    obstacles with margin) on the previously-empty In1.Cu layer, with one
+    manual clearance fix against a GND stitching via. DRC 0 hard.
+- [x] **Emma TPM footprint — placed, 2026-07-26.** Schematic-only since
+    `inject_emma_tpm.py`; PCB had zero trust-module footprints. Emma's F.Cu
+    is fully saturated — an exhaustive obstacle-aware search (pads + tracks
+    + vias, not just courtyards) found zero clear ≥6×6 mm sites anywhere on
+    the front layer. TPM + its reset pull-up + decoupling cap placed on
+    B.Cu instead (verified clear), nets assigned, DRC 0 hard. **`J_TPM`
+    header not placed** — every candidate site collided with existing
+    copper on one side or the other of its through-hole pads; left as an
+    open item rather than force a bad placement.
+- [ ] **Wash: `PB2-P2` header appears fully unwired in ERC (all 36 pins,
+    2026-07-26 finding) — root cause not found.** WBS history (§1.2a.1)
+    records ETH2/`PB2-P2` wiring as completed work, but current ERC shows
+    every `PB2-P2` pin as `pin_not_connected`, and `kicad-cli sch export
+    netlist` confirms zero nets reference `PB2-P2` at all. The nearby
+    `MDIO1` global label sits at the *exact* computed sheet position of pin
+    1 (verified against this project's own "sheet_y = instance_y − lib_y"
+    rule, cross-checked against `PB2-P1`'s working pins on the same
+    `Conn_36` lib symbol) — genuinely coincident, yet KiCad won't merge the
+    nets. Not resolved before session end; needs either sub-millimeter
+    precision inspection or opening the file in the KiCad GUI to see what's
+    visually happening. **If real, this means Wash's ETH2/MDIO1 wiring has
+    been silently dead** — treat as higher priority than cosmetic ERC noise.
+- [ ] **Wash full DRC/ERC clean-out — not started.** 48 ERC hard (42
+    `pin_not_connected` + 6 `wire_dangling`, all `PB2-P1`/`PB2-P2`, see
+    above) + 76 DRC hard (ISOLATION/POWER/DIFF_PAIR netclass clearance +
+    `net_conflict` — PCB pad nets don't match schematic in many places).
+    PCB still carries the old ADM2795EBRWZ footprint; schematic already
+    swapped to ISOW1412 (`fix_wash_zoe_isolators.py`) — footprint swap +
+    re-route + gerbers still open. **Keep all legacy connectors** (user
+    instruction) even where superseded by the trust module.
+- [ ] **Zoë full DRC/ERC clean-out — not started.** 219 ERC hard (206
+    `pin_not_connected`, mirrors the CAN-TR/ISOW1044 VCC1/GND1/RXD/VCC2 pins
+    genuinely unconnected in the schematic, plus LoRa/other pre-existing
+    gaps) + 154 DRC hard. Same ADM2795E→ISOW1412 PCB footprint swap needed
+    as Wash. A stray `_autosave-Zoë.kicad_pcb` + `.lck` files are
+    git-tracked in `avionics/kicad/Zoë/kicads/` — the autosave file appears
+    to be an accidental commit of a KiCad crash-recovery artifact (578 hard
+    DRC violations on its own, clearly not real design intent) and should
+    be reviewed for removal. **Keep all legacy connectors** (user
+    instruction).
+- [ ] **Kaylee full PCB resync — not started.** 213 DRC hard, almost all
+    `net_conflict` (PCB pad nets don't match the schematic at all — the
+    injected trust module and other schematic changes never propagated to
+    layout; compounds the pre-existing `gen_kaylee.py` drift above). No
+    trust-module footprints exist on the PCB yet. Largest remaining board
+    task — needs a real `Update PCB from Schematic` pass plus manual net
+    cleanup, not just footprint addition.
+- [ ] **Jayne PCB resync — not started.** 124 DRC hard. PCB (`Jayne.kicad_pcb`,
+    dated 2026-07-14) predates the schematic's ISOW1412/Section H addition
+    (2026-07-26) entirely — no RS-485 footprint on the board yet.
 
 ---
 

@@ -339,6 +339,34 @@ routed through the π-filter (FB1/C11/C12) before distribution to the cape rail.
 
 ---
 
+## Known Issues
+
+### `PB2-P2` header appears fully unwired (found 2026-07-26, unresolved)
+
+`kicad-cli sch erc` reports every one of `PB2-P2`'s 36 pins as `pin_not_connected`, and
+`kicad-cli sch export netlist` confirms zero nets reference `PB2-P2` at all — not even a
+single-pin net. This is surprising: `WBS.md` §1.2a.1 records the ETH2/`PB2-P2` wiring
+(RMII1, MDIO1/MDC1 on repurposed servo pins, etc.) as completed work back in 2026-06-12.
+
+Investigation so far: `PB2-P2` uses the same `Conn_36` lib symbol as `PB2-P1`, whose pins
+mostly **do** connect correctly (only 6 of 36 fail, all edge pins) — so the general
+label-to-pin coincidence mechanism works in this file. Reconstructing the coordinate
+transform from a known-good `PB2-P1` pin (`sheet_x = anchor_x + local_x`, `sheet_y =
+anchor_y − local_y`, matching this project's documented KiCad hand-authoring convention)
+and applying it to `PB2-P2` pin 1 predicts sheet position (67.54, 474.45) — and the
+`MDIO1` global label sits at exactly that position. Despite the apparent exact coincidence,
+KiCad does not merge the nets.
+
+**Not resolved before this finding was recorded.** Next step is almost certainly to open
+`Wash.kicad_sch` in the KiCad GUI and look at the `PB2-P2` block directly — something is
+visually different there vs. `PB2-P1` that isn't obvious from the raw S-expression text
+(a duplicate/orphaned object exactly on top of the label, a stray hierarchical sheet pin,
+or a symbol instance issue are all plausible). **If this is a genuine defect, Wash's
+ETH2/MDIO1 wiring has been silently non-functional** — treat as higher priority than the
+rest of the pre-existing ERC/DRC backlog.
+
+---
+
 ## Related Files
 
 - `CAPE-A-1.kicad_sch` — standard (non-EMI-hardened) variant, Rev M baseline

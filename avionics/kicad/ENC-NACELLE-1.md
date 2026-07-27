@@ -6,10 +6,15 @@
 **BOM designator:** `MAL-TILT-ENC-PCB` (`current-specification/bom_revS.csv`)
 **Revision:** S (2026-07-19) — AKM **AK7455** off-axis sensor selected; pinout verified
 against the AK7455 datasheet (doc 200800064-E-00, `avionics/datasheets/ak7455-en-datasheet-myakm.pdf`)
-**Status:** Schematic complete + `kicad-cli` ERC 0-error. **PCB complete (2026-07-21,
-drafted by Claude Fable 5 via `gen_enc_nacelle_pcb.py`): DRC 0 violations / 0 unconnected /
-0 parity issues at `--severity-all`.** Open items are mechanical/firmware
-(off-axis flux validation + INL calibration) — see the verification section.
+**Status:** Schematic complete + `kicad-cli` ERC 0-error. PCB complete (2026-07-21,
+drafted by Claude Fable 5 via `gen_enc_nacelle_pcb.py`). **Re-verified 2026-07-26**
+(swept into the fleet trust-module DRC pass as a touched file): DRC had regressed to
+11 hard violations, including a genuine short between +3V3 and ENC_CSN (a via/track
+overlap) plus several GND-zone clearance violations from a prior congested reroute —
+fixed by moving the conflicting +3V3 copper to B.Cu with a via bridge chosen to clear
+both the ENC_CSN trace and a nearby GND stitching via. **DRC 0 hard violations again.**
+Open items are mechanical/firmware (off-axis flux validation + INL calibration) — see
+the verification section.
 
 ---
 
