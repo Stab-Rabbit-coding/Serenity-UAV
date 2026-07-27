@@ -16,8 +16,12 @@ generate_cargo_mounts.py
 Generate STL files for all Serenity UAV cargo handling equipment mounts.
 
 Components generated (all to thingverse-serenity/files-hollowed-18in/):
-    cargo_winch_motor_mount.stl     -- N20 motor clamp bracket (CF-PETG, print 1)
-    cargo_winch_spool.stl           -- Dyneema SK75 winding drum (PETG, print 1)
+    cargo_winch_pedestal_port.stl   -- Port axle clamp + bearing seat + STS3215 cradle (CF-PETG, 1)
+    cargo_winch_pedestal_stbd.stl   -- Stbd axle clamp + bearing seat + pawl/solenoid (CF-PETG, 1)
+    cargo_winch_spool_r2.stl        -- Dyneema drum, twin bearings + ratchet ring (CF-PETG, 1)
+    cargo_winch_pawl.stl            -- Ratchet pawl lever (CF-PETG, print 1)
+    cargo_winch_dog_coupler.stl     -- Lost-motion servo-to-spool dog (CF-PETG, print 1)
+    cargo_winch_fairlead.stl        -- Line exit fairlead (PETG, print 1)
     cargo_door_servo_bracket.stl    -- SG90 bracket, clamshell door actuator (CF-PETG, print 1)
     cargo_release_servo_bracket.stl -- SG90 bracket, payload release (CF-PETG, print 1)
     cargo_drv8833_tray.stl          -- DRV8833 H-bridge PCB tray (PETG, print 1)
@@ -30,7 +34,15 @@ Print specifications (CLAUDE.md fabrication standards):
     PETG non-structural: 0.15 mm layer height, 4 perimeters, 25 % infill
 
 Design references:
-    N20 300:1 gearmotor: body 10 mm OD x 24 mm OAL, 3 mm D-shaft, 4 mm shaft length
+    STS3215 serial-bus servo: case envelope + mounting-boss pattern PENDING
+        VERIFICATION -- the datasheet in docs/references/ is a scanned/CID-encoded
+        PDF that could not be text-extracted.  make_winch_pedestal_port() must be
+        parameterised on the confirmed envelope before it is implemented.
+        See docs/CARGO_WINCH_SPECIFICATION.md section 3.1 (verification gate).
+    MR84ZZ bearing: 4 mm bore x 8 mm OD x 3 mm width, static rating ~130 N
+    Winch axle: 4 mm A2 stainless x 46 mm, FIXED (does not rotate); the spool
+        rides on two MR84ZZ pressed into its own hub, so it is supported at BOTH
+        ends rather than cantilevered off the motor shaft.
     SG90 servo: 22.8 x 12.2 x 23.0 mm body, 27.9 mm mount hole c/c, M2 mount holes
     DRV8833 carrier PCB: 26 x 23 mm nominal (generic breakout or SparkFun ROB-14450)
     Dyneema SK75 0.5 mm braid: OD 0.5 mm, min break load >= 100 N (Lankhorst Euronete)
@@ -176,130 +188,79 @@ def save(mesh, filename):
 # ===========================================================================
 
 
+def _superseded(part, replacement, reason):
+    """Raise for a Rev P/Q/R winch part retired by the STS3215 conversion."""
+    raise NotImplementedError(
+        f"{part} is SUPERSEDED by {replacement}. {reason} "
+        "See docs/CARGO_WINCH_SPECIFICATION.md Rev B section 2."
+    )
+
+
 def make_motor_mount():
     """
-    N20 winch motor mount bracket.
+    SUPERSEDED (Rev S, 2026-07-27) -- do not regenerate.
 
-    U-channel bracket that holds the N20 gearmotor (10 mm OD x 24 mm OAL)
-    horizontally against the gondola dorsal interior ceiling.  Motor axis
-    runs parallel to gondola Z (lateral / port-stbd direction).  Spool on
-    motor output shaft hangs into gondola interior below the bracket.
+    The Rev P/Q/R bracket clamped an N20 gearmotor to the gondola ceiling and
+    hung the spool off the motor's 3 mm output shaft.  That cantilever put the
+    full line load on the N20's sintered output bushing: 8.0 N at 11 mm =
+    0.088 N.m, and 20 N at the 2.5 g cargo dynamic factor -- far beyond a
+    locating bushing's side-load capacity.  The failure mode is a seized winch
+    with a payload hanging under the aircraft.
 
-    Retention: four 3.5 mm dia zip-tie pass-through holes in the channel
-    floor let two zip-ties loop around the motor body.  Four M2 self-tap
-    pilot holes anchor the bracket to the gondola dorsal interior shell
-    (2 mm PETG skin -- M2 x 6 mm pan-head self-tap).
-
-    Print orientation: channel open face UP (away from build plate).
-    Flip for installation: mounting face against gondola ceiling.
-
-    External dims: 36 x 28 x 15 mm.
-    Material: CF-PETG.  Print: 0.15 mm layers, 4 perimeters, 40 % infill.
+    Replaced by a two-pedestal support (make_winch_pedestal_port/_stbd) that
+    carries the spool on its own bearings at BOTH ends, with the STS3215
+    transmitting torque only through a lost-motion dog coupler.
     """
-    BW = 36.0  # bracket width (X), perpendicular to motor axis
-    BL = 28.0  # bracket length (Y), along motor axis; must exceed motor OAL 24 mm
-    BASE_H = 3.0  # base plate thickness (Z = 0 .. BASE_H)
-    CW = 16.0  # channel interior width (X): motor 10 mm + 3 mm clearance each side
-    CH = 12.0  # channel wall height above base plate (Z = BASE_H .. BASE_H+CH)
-    TH = BASE_H + CH  # total bracket height = 15 mm
-
-    M2_R = 1.1  # M2 self-tap pilot hole radius (2.2 mm dia)
-    CX = BW / 2 - 5.0  # M2 hole X offset from centre (5 mm from outer edge)
-    CY = BL / 2 - 5.0  # M2 hole Y offset from centre (5 mm from end)
-
-    ZT_R = 1.75  # zip-tie hole radius (3.5 mm dia; passes 2.5 mm zip-tie)
-    ZT_X = 4.0  # zip-tie holes at +/-4 mm from channel centre (within 16 mm channel)
-    ZT_Y = 7.0  # zip-tie holes at +/-7 mm along motor axis
-
-    # Full solid block
-    solid = moved(box(BW, BL, TH), _T(0, 0, TH / 2))
-
-    # Channel cut from top (leaves BASE_H base plate, opens both Y ends)
-    chan = moved(box(CW + 0.1, BL + 0.2, CH + 0.1), _T(0, 0, BASE_H + CH / 2 + 0.05))
-
-    # Four M2 self-tap pilot holes (through full bracket height)
-    m2s = [
-        moved(cyl(M2_R, TH + 0.2), _T(sx * CX, sy * CY, TH / 2))
-        for sx in (-1, 1)
-        for sy in (-1, 1)
-    ]
-
-    # Four zip-tie pass-through holes in channel floor (base plate Z = 0 .. BASE_H)
-    zts = [
-        moved(cyl(ZT_R, BASE_H + 0.2), _T(sx * ZT_X, sy * ZT_Y, BASE_H / 2))
-        for sx in (-1, 1)
-        for sy in (-1, 1)
-    ]
-
-    return bsub(solid, chan, *m2s, *zts)
+    _superseded(
+        "cargo_winch_motor_mount.stl",
+        "cargo_winch_pedestal_port.stl + cargo_winch_pedestal_stbd.stl",
+        "The N20 cantilever mount violates the both-ends spool-support requirement.",
+    )
 
 
 def make_winch_spool():
     """
-    Dyneema SK75 winch spool, press-fit on N20 3 mm D-shaft.
+    SUPERSEDED (Rev S, 2026-07-27) -- do not regenerate.
 
-    Core OD 20 mm, usable drum width 18 mm (between flanges), flanges OD 26 mm
-    x 2 mm thick.  Single-layer capacity at core OD:
-        circumference = pi x 20 = 62.8 mm; 1500 mm / 62.8 mm ~= 24 turns;
-        24 turns x 0.55 mm pitch = 13.2 mm -- fits within 18 mm usable width.
+    Two features tie the Rev P/Q/R spool to the retired design:
+      * a 3.15 mm D-bore + M2 set-screw, which exist only to hang the drum on
+        the N20 output shaft; and
+      * a tangential Dyneema anchor slot, which permanently ties the line to
+        the drum and so defeats the overload line-shed requirement.
 
-    D-shaft bore: 3.15 mm dia (0.15 mm diametric clearance), flat at x = 1.0 mm
-    from centre on +X face (N20 standard 0.5 mm flat depth from OD).
-    M2 set-screw tap hole (1.7 mm dia, 6 mm deep) from -Y OD toward shaft.
-    Dyneema anchor slot: 2 mm wide x 4 mm deep, tangential in -Z flange face.
-
-    Spool axis = Z.  Total dims: 26 mm OD x 22 mm wide.
-    Material: PETG.  Print: 0.15 mm layers, 4 perimeters, 25 % infill.
-    Reference: Lankhorst Euronete Dyneema SK75 0.5 mm spec sheet.
+    Replaced by make_winch_spool_r2(): same core OD 20 mm / usable width 18 mm
+    / flange OD 26 mm (line capacity unchanged), but with twin MR84ZZ
+    counterbores, an integral 24-tooth ratchet ring, and NO anchor slot.
     """
-    CORE_R = 10.0  # spool core radius (OD 20 mm)
-    CORE_W = 18.0  # usable drum width (between flanges)
-    FL_R = 13.0  # flange radius (OD 26 mm)
-    FL_T = 2.0  # flange thickness
-    TOT_W = CORE_W + 2 * FL_T  # 22 mm total
-
-    # N20 D-shaft bore parameters
-    SHAFT_D = 3.0
-    SHAFT_CL = 0.15  # diametric clearance (press-fit)
-    SHAFT_R = SHAFT_D / 2 + SHAFT_CL / 2  # = 1.575 mm bore radius
-    FLAT_DEPTH = 0.5  # shaft flat depth from OD
-    FLAT_X = SHAFT_D / 2 - FLAT_DEPTH  # = 1.0 mm (flat face x from centre)
-
-    SET_R = 1.7 / 2  # M2 tap drill radius (1.7 mm dia)
-    SET_L = 6.0  # set-screw hole depth (from spool OD inward)
-
-    ANCHOR_W = 2.0  # Dyneema anchor slot width (mm)
-    ANCHOR_D = 4.0  # Dyneema anchor slot depth (mm, radially inward from flange OD)
-
-    # --- Solid core and flanges ---
-    core = cyl(CORE_R, CORE_W)
-    fl_lo = moved(cyl(FL_R, FL_T), _T(0, 0, -(CORE_W / 2 + FL_T / 2)))
-    fl_hi = moved(cyl(FL_R, FL_T), _T(0, 0, +(CORE_W / 2 + FL_T / 2)))
-    solid = bunion(core, fl_lo, fl_hi)
-
-    # --- D-shaft bore (D-shaped cross-section) ---
-    # Bore cutter = intersection of full cylinder and half-space x <= FLAT_X
-    bore_cyl = cyl(SHAFT_R, TOT_W + 0.2)
-    # Half-space: box from x = -(SHAFT_R+eps) to x = FLAT_X+eps
-    eps = 0.01
-    hs_w = SHAFT_R + eps + FLAT_X + eps  # spans left edge to flat line
-    hs_cx = (-SHAFT_R - eps + FLAT_X + eps) / 2
-    half_space = moved(box(hs_w, (SHAFT_R + 0.1) * 2, TOT_W + 0.4), _T(hs_cx, 0, 0))
-    d_bore = intersect(bore_cyl, half_space)
-
-    # --- M2 set-screw tap hole from -Y OD toward shaft centre ---
-    # Hole centre at y = -(CORE_R - SET_L/2), z = 0
-    set_screw = moved(cyl_y(SET_R, SET_L + 0.1), _T(0, -(CORE_R - SET_L / 2), 0))
-
-    # --- Dyneema anchor slot in low flange (-Z face), at -Y (nadir side) ---
-    # Slot: 2 mm wide (X) x 4 mm deep (radial, into flange from OD) x FL_T thick (Z)
-    # Slot centre: x=0, y=-(FL_R - ANCHOR_D/2), z=-(CORE_W/2 + FL_T/2)
-    anchor = moved(
-        box(ANCHOR_W + 0.1, ANCHOR_D + 0.1, FL_T + 0.1),
-        _T(0, -(FL_R - ANCHOR_D / 2), -(CORE_W / 2 + FL_T / 2)),
+    _superseded(
+        "cargo_winch_spool.stl",
+        "cargo_winch_spool_r2.stl",
+        "The N20 D-bore and the Dyneema anchor slot both belong to the retired design.",
     )
 
-    return bsub(solid, d_bore, set_screw, anchor)
+
+# ---------------------------------------------------------------------------
+# Rev S winch train (STS3215 + both-ends spool support + safety ratchet).
+#
+# NOT YET IMPLEMENTED.  Geometry is fully specified in
+# docs/CARGO_WINCH_SPECIFICATION.md Rev B sections 3.2-3.6, but
+# make_winch_pedestal_port() is blocked on the STS3215 case envelope and
+# mounting-boss pattern (specification section 3.1 verification gate), and the
+# parts are dimensionally interdependent -- the axle span, bearing seats and
+# ratchet-ring clearance are all set off that envelope.  Emitting some of them
+# now would publish meshes that will not assemble.
+#
+# Implement together, then mesh-validate per root AGENTS.md section 7.
+# ---------------------------------------------------------------------------
+
+WINCH_REV_S_PARTS = (
+    "cargo_winch_pedestal_port.stl",
+    "cargo_winch_pedestal_stbd.stl",
+    "cargo_winch_spool_r2.stl",
+    "cargo_winch_pawl.stl",
+    "cargo_winch_dog_coupler.stl",
+    "cargo_winch_fairlead.stl",
+)
 
 
 def make_servo_bracket():
@@ -609,9 +570,13 @@ def main():
     print(f"Output directory: {OUT_DIR}")
     print("=" * 60)
 
+    # Rev S (2026-07-27): the N20 winch train is retired.  make_motor_mount()
+    # and make_winch_spool() are kept only as documented NotImplementedError
+    # stubs so a stale caller fails loudly instead of silently re-emitting
+    # obsolete geometry; they are deliberately NOT in this list.  Their six
+    # replacements (WINCH_REV_S_PARTS) are blocked on the STS3215 envelope --
+    # see docs/CARGO_WINCH_SPECIFICATION.md Rev B section 3.1.
     parts = [
-        ("cargo_winch_motor_mount.stl", make_motor_mount),
-        ("cargo_winch_spool.stl", make_winch_spool),
         ("cargo_door_servo_bracket.stl", make_servo_bracket),
         ("cargo_release_servo_bracket.stl", make_servo_bracket),
         ("cargo_drv8833_tray.stl", make_drv8833_tray),

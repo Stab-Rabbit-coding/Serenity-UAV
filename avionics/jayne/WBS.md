@@ -18,7 +18,7 @@
 ## Cross-cutting system: Jayne (cargo handling)
 
 > **Jayne is a ship-level integrating system, not a single WBS branch.** It comprises the
-> cargo-bay doors, the N20 winch / Dyneema hoist, the auto-latch, the gondola, **and the
+> cargo-bay doors, the STS3215 winch / Dyneema hoist, the auto-latch, the gondola, **and the
 > Jayne vision/ToF/laser PCB as its sensing subsystem**. Its work is distributed across
 > subsystem WBS files:
 >

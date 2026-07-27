@@ -24,8 +24,26 @@
 - [ ] Avionics dorsal access covers / Faraday tray lids for Inara and…
 - [ ] Update REVN_BUILD_GUIDE_24IN.md bay layout table
 - [ ] Regenerate `cargo_sect_shell24.stl`
-- [ ] Add motor-mount and DRV8833-tray boss locations to `cargo_sect_…
+- [ ] Add DRV8833-tray boss locations to `cargo_sect_shell24.scad`
 - [ ] Add SG90 bell-crank boss to inner face of each door panel for p…
+- [ ] ★ STS3215 datasheet gate — envelope/torque/mass/stall
+- [ ] ★ Winch containment: 5 positive fixes (spool = projectile)
+- [ ] Verify Part 107 dropped-object section number
+- [ ] Containment checks on assembly + pre-flight cards
+- [ ] ★ Shed threshold vs manoeuvre envelope (2.0g = 0.98x)
+- [ ] Calibrate T_slip 0.060 N·m at the spool hub collar
+- [ ] Set servo torque ceiling below T_slip (wear protection)
+- [ ] Servo mode: encoded continuous rotation (not stepper)
+- [ ] Mark winch spool a consumable (wear item + spare)
+- [ ] AK7455 spool encoder on gateway J_ENC (spec §3.7.3)
+- [ ] Implement the six Rev S winch STLs
+- [ ] Winch pedestal M3 boss stations in cargo_sect_shell24.scad
+- [ ] Half-duplex TTL bus wiring on FLEX_TTL_GPIO
+- [ ] Catch solenoid drive (AO3400 + pull-down + SS34)
+- [ ] Bench-calibrate ratchet slip to 8.0 N ± 1.0 N
+- [ ] Line-shed test (inboard end must NOT be anchored)
+- [ ] Winch state machine firmware (Simon + gateway)
+- [ ] Re-run winch mass/CG once STS3215 mass is known
 - [ ] Slicer verification
 - [ ] Kaylee's room — PDB mounting in inner neck
 - [ ] CF skid rod channels

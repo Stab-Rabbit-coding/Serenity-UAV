@@ -185,7 +185,7 @@ Each Cape-B board carries all 4 radio types. Software assigns one CN node as pri
 | U9 | microSD socket | SPI | Removable log card — hardware write-block enforced by U10 |
 | U10 | ATF16V8BQL CPLD | GPIO latch → SD-WP pin | Write-block latch: SET at power-on by boot sequence, CLEAR only on hard power cycle; implements non-executable append-only log semantics identical to RevJ CPLD write-blocker |
 | U11 | SLB9670 | SPI | TPM 2.0 — per-node attestation, radio key storage, boot measurement |
-| U12 | DRV8833 | GPIO (H-bridge) | Cargo winch N20 300:1 motor driver, 1.5 A |
+| U12 | DRV8833 | GPIO (H-bridge) | Cargo door + payload-release SG90 servos, 1.5 A. **Winch removed 2026-07-27** — the STS3215 is a bus servo driven by CAN-PERIPH-GW, no H-bridge. |
 | U13 | HX711 | GPIO bit-bang (DOUT/SCK) | 24-bit load cell ADC — payload weight |
 | U14 | TPS63031 (or equiv) | — | 3.3 V/1.5 A SMPS (radio TX peaks up to 800 mA combined) |
 | U15 | AP2112K-3.3 | — | Auxiliary 3.3 V LDO for logic (separated from RF supply) |

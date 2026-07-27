@@ -302,7 +302,12 @@ Array A (hosted by FC3, River's room / Bay D):
 
 - [ ] Install 3mm CF door hinge pins; attach clamshell door halves (spring-loaded to open).
 
-- [ ] Install DRV8833 + N20 winch motor + drum; wind 1.5m Dyneema; attach auto-latch cradle via double-bowline.
+- [ ] Install the STS3215 winch train: both winch pedestals, the Ø4 mm fixed axle,
+    the spool (2× MR84ZZ) and its ratchet ring, the pawl + spring + catch solenoid.
+    Wind 1.5 m Dyneema; attach auto-latch cradle via double-bowline. **Do NOT anchor
+    the inboard end** — it is friction-retained so the line can shed at overload
+    (`docs/CARGO_WINCH_SPECIFICATION.md` §3.6). Bench-calibrate the pawl spring to an
+    8.0 N ± 1.0 N slip threshold before flight. (DRV8833 stays for the door/release servos.)
 
 - [ ] Install SG90 door-actuator servo (spring-assist open, servo pull-close via bell-crank).
 
