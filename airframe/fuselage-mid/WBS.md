@@ -291,16 +291,40 @@ do not restate its dimensions here.
     (60 g assumed — dominates the +98.6 g delta and T/W 1.613 → 1.557), **(d)** stall current
     (1.2 A budgeted; resize RAIL-2 if > ~2.5 A). **Blocks STL generation and procurement.**
     Do not fabricate these values.
-- [ ] **★ Measure servo back-drive torque `T_backdrive` — go/no-go on R5.** With
-    the pawl held clear, apply tangential load at the spool and record the torque
-    at which the spool turns the **unpowered** STS3215. The shed-threshold error
-    budget is **0.105 kgf·cm** total (±1.0 N at r=10.3 mm); a geared bus servo may
-    exceed it 10–100×. If it does, the powerless shed (spec §3.6a) does not work at
-    all and the coupler must change from rigid dog to a torque-limiting slip clutch.
-    Blocks the coupler geometry. Spec §3.7.1.
-- [ ] **Coupler decision — rigid dog (A) vs slip clutch (B).** Blocked on the
-    back-drive measurement. An overrunning one-way clutch (C) is rejected: it would
-    make controlled lowering impossible. Spec §3.7.2.
+- [ ] **★ Flight-envelope decision — shed threshold vs manoeuvre envelope.** At
+    `F_shed` = 8.0 N a **2.0 g** manoeuvre on the slung payload reaches **0.98×**
+    the threshold and **2.5 g sheds the load**. Choose: declare a ≈1.5 g slung-load
+    manoeuvre limit (recommended — free, and matches crewed-rotorcraft practice),
+    raise `F_shed` to ~12 N (3.06× static, still only 72 % of the 16.64 N excess
+    lift), or reduce payload. **A flight-envelope call, not a winch call** — refer
+    to `docs/flight_envelope.md`. Blocks the pawl-spring calibration target.
+    Spec §4.4.
+- [x] **Coupler trade CLOSED — slip clutch, located in the printed spool hub.**
+    Rigid dog (A) was rejected (pollutes the threshold with `T_backdrive`), and
+    the overrunning clutch (C) was rejected outright (no controlled lowering).
+    Putting the friction interface in the **spool hub** rather than in a separate
+    component removes `T_backdrive` from `F_shed` entirely — at overload the spool
+    breaks free of the servo whatever the gearbox does — and makes the **printed
+    spool the sacrificial element**, which is far cheaper to replace than a digital
+    servo. A stiff, non-back-drivable servo is now a *benefit*, not a hazard.
+    Spec §3.8.
+- [ ] **Calibrate `T_slip` = 0.060 N·m (0.61 kgf·cm)** at the spool hub collar —
+    1.49× static payload torque, 73 % of shed torque; window is 0.0404–0.0824 N·m.
+    Belleville washer on a threaded collar, torque-wrench set, thread-locked and
+    witness-marked. Confirm the one surviving back-drive requirement
+    **`T_slip` < `T_backdrive`** (measure with the pawl held clear — an inequality
+    check now, no longer a go/no-go on R5). Spec §3.8.2.
+- [ ] **Set the servo torque ceiling below `T_slip`** — protection layer 1 of 4, so
+    routine lifting never reaches the friction interface and the sacrificial hub is
+    consumed only by genuine overload events. Spec §3.8.3.
+- [ ] **Servo mode: encoded continuous rotation** (position/servo mode cannot
+    express 23.2 turns; stepper mode's open-loop count becomes fiction after a hub
+    slip). Gateway closes position on the AK7455. Confirm mode indices, selecting
+    register, and per-mode torque-ceiling settability against the datasheet — part
+    of the §3.1 gate; **no register number is invented in the spec**. Spec §3.9.
+- [ ] **Mark the spool a consumable** — wear item in the build guide, inspection
+    interval, slip witness-mark, spare in the field kit; hand-tool replacement per
+    root `AGENTS.md` §7.
 - [ ] **AK7455 spool encoder integration (spec §3.7.3).** Diametric-magnet pocket in
     the port flange hub, off-axis (the fixed axle occupies the centreline); mates the
     gateway's existing `J_ENC` pigtail on its dedicated SPI bus — no board change and

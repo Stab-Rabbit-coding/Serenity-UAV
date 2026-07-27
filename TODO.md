@@ -73,8 +73,11 @@
 - [ ] Add DRV8833-tray boss locations to cargo_sect_shell24.scad
 - [ ] Add SG90 bell-crank boss to inner face of each door panel for p…
 - [ ] ★ STS3215 datasheet gate — envelope/torque/mass/stall
-- [ ] ★ Measure servo back-drive torque — go/no-go on line-shed
-- [ ] Winch coupler decision: rigid dog vs slip clutch
+- [ ] ★ Shed threshold vs manoeuvre envelope (2.0g = 0.98x)
+- [ ] Calibrate T_slip 0.060 N·m at the spool hub collar
+- [ ] Set servo torque ceiling below T_slip (wear protection)
+- [ ] Servo mode: encoded continuous rotation (not stepper)
+- [ ] Mark winch spool a consumable (wear item + spare)
 - [ ] AK7455 spool encoder on gateway J_ENC (spec §3.7.3)
 - [ ] Implement the six Rev S winch STLs
 - [ ] Winch pedestal M3 boss stations in cargo_sect_shell24.scad

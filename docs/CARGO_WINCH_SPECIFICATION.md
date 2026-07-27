@@ -19,7 +19,7 @@
 
 ## 1. Scope and Requirements
 
-Seven requirements drive this revision:
+Nine requirements drive this revision:
 
 | # | Requirement | Where satisfied |
 |---|---|---|
@@ -30,6 +30,8 @@ Seven requirements drive this revision:
 | R5 | Line force above max available lift → **slow unwind, line runs off the spool** so the UAV cannot be fouled | §3.6, §4.3 |
 | R6 | One **CAN-PERIPH-GW** (`N_STACKS=1`) drives both the servo and the catch | §5 |
 | R7 | **Spool position reported to the aircraft throughout pay-out and shed**, until the line departs | §3.7 |
+| R8 | Overload sacrifices a **cheap printed part**, never the servo | §3.8 |
+| R9 | Servo operating mode suits multi-turn travel **and** a slipping spool | §3.9 |
 
 *"Everything is shiny." — Kaylee Frye*
 
@@ -301,10 +303,14 @@ one to two orders of magnitude more. If that holds here, then:
   shed does occur the threshold is not repeatable, which is unacceptable for a
   safety function whose whole purpose is a predictable release point.
 
-This is a **more serious finding than the sensing question**, and it is now the
-top open item (§8). It must be measured, not assumed: with the ratchet pawl held
-clear, apply a tangential load at the spool and record the torque at which the
-spool turns the unpowered servo.
+This was the top open item as written. **§3.8 supersedes it:** moving the torque
+limiter into the printed spool hub lets the spool break free of the servo
+entirely at overload, so `T_backdrive` drops out of `F_shed`. What remains is
+the far weaker requirement `T_slip < T_backdrive` — and a *stiffer* servo makes
+that easier to satisfy, not harder. `T_backdrive` should still be measured
+(pawl held clear, tangential load at the spool, record the torque that turns the
+unpowered servo), but to **confirm an inequality**, not to decide whether R5 can
+be met at all.
 
 #### 3.7.2 Three couplings, and why the servo encoder cannot be the answer
 
@@ -314,8 +320,11 @@ spool turns the unpowered servo.
 | **(B) Torque-limiting slip clutch** above working torque, below overload | Servo controls descent ✓ | Clean — `T_backdrive` out of the equation ✓ | **Does not track** ✗ (servo stays put) |
 | **(C) Overrunning one-way clutch** | **Broken** ✗ — servo could never pay out under control | Clean ✓ | Does not track ✗ |
 
-(C) is rejected outright: it would make controlled lowering impossible. The
-choice is (A) or (B), and it cannot be made until `T_backdrive` is measured.
+(C) is rejected outright: it would make controlled lowering impossible.
+**§3.8 selects (B)** and locates the clutch in the printed spool hub, which is
+why the "does not track" column costs nothing — the AK7455 is on the spool
+(§3.7.3) and reads true angle through any slip. The trade is closed; no
+`T_backdrive` measurement is needed to decide it.
 
 Two further defects apply to the servo encoder **even in case (A)**, where it
 does rotate:
@@ -355,6 +364,101 @@ indication that a slip clutch has slipped or a dog has stripped.
 
 *"Takes a mechanic to tell you the wheel's turning. Takes a good one to tell you
 it isn't."*
+
+### 3.8 The slip interface belongs in the printed spool (R8)
+
+Two observations reshape §3.7's trade, and they compound:
+
+> *"If the spool is slipping on the shaft, it's moot."*
+> *"In a failure mode, it's easier to replace a printed spool than a digital servo."*
+
+Both are correct, and together they say the torque limiter should not be a
+separate component at all — **it should be the spool's own hub interface**, with
+the printed spool as the deliberate sacrificial element.
+
+#### 3.8.1 What this fixes
+
+**It removes `T_backdrive` from the shed equation entirely.** §3.7.1 made
+back-drive a go/no-go on R5 because the spool had to turn the servo gearbox to
+pay out. With a slip interface in the hub, once the pawl cams out the spool
+breaks its drive coupling and **spins free of the servo**, whatever the gearbox
+does. The shed threshold becomes:
+
+```
+F_shed = T_pawl / r_line          (T_backdrive no longer appears)
+```
+
+provided only that `T_slip < T_backdrive`. **A stiff, non-back-drivable servo
+stops being a hazard and becomes irrelevant** — arguably a benefit, since it
+holds position without drawing current. This inverts §3.7.1 from a go/no-go into
+a one-line inequality to confirm.
+
+**It puts the wear where it is cheap.** The sacrificial element is a ~16 g
+printed CF-PETG part on a shelf, not a bus servo with a gearbox and electronics.
+A shed event, or a jam that would otherwise strip gear teeth or stall the motor,
+consumes spool life instead. Replacement is a hand-tool operation per root
+`AGENTS.md` §7.
+
+**And it keeps position telemetry honest.** The AK7455 magnet is in the spool
+flange (§3.7.3), so it reads **true spool angle through any amount of slip**.
+Had the magnet been on the drive side, slip would have silently corrupted it.
+
+#### 3.8.2 Design
+
+| Parameter | Value |
+|---|---|
+| Type | Friction slipper — spool hub clamped to the drive plate by a Belleville washer on a threaded collar |
+| Why friction, not shear-pin or detent | **Self-resetting** (a shed event must not ground the aircraft), continuously adjustable, and quiet — a ball-detent would ratchet audibly and pit the printed hub |
+| **`T_slip`** | **0.060 N·m (0.61 kgf·cm)** — 1.49× static payload torque, 73 % of the shed torque |
+| Adjustment | Threaded collar, torque-wrench set, then thread-locked and witness-marked |
+| Required | **`T_slip` < `T_backdrive`** — the one inequality left from §3.7.1 |
+| Wear surface | Printed CF-PETG hub against a steel drive plate; hub is the consumable |
+
+The window is bounded on both sides and is not wide:
+
+```
+must NOT slip in normal lifting : T > 0.0404 N·m (0.41 kgf·cm) at 3.92 N payload
+must     slip at the shed point : T < 0.0824 N·m (0.84 kgf·cm) at 8.0 N
+chosen                          : T_slip = 0.060 N·m, mid-window
+```
+
+#### 3.8.3 Four-layer protection hierarchy
+
+Each layer is cheaper to consume than the one below it:
+
+| # | Layer | Set at | Protects |
+|---|---|---|---|
+| 1 | Servo torque limit (firmware) | below `T_slip` | the printed hub, from routine wear |
+| 2 | **Slip interface (printed spool hub)** | **0.060 N·m** | the servo gearbox |
+| 3 | Pawl cam-out (ratchet) | 0.0824 N·m ⇒ 8.0 N line | the aircraft — this is the shed |
+| 4 | Line break (Dyneema SK75) | ~300 N | nothing; it is the last resort |
+
+Layer 1 matters: with the servo's own torque ceiling set below `T_slip`, ordinary
+operation never reaches the friction interface, so the sacrificial part is
+consumed only by genuine overload events rather than by every lift.
+
+### 3.9 Servo operating mode (R9)
+
+The STS3215 offers three modes — position/servo, stepper, and encoded
+continuous-rotation. **Encoded continuous rotation is the right one**, with the
+gateway closing the position loop on the AK7455.
+
+| Mode | Verdict for this winch |
+|---|---|
+| **Position / servo** | **Rejected outright.** Single-turn absolute over ~360°. A 1500 mm pay-out is **23.2 spool turns** (§3.7.2) — the mode cannot express the travel. |
+| **Stepper** | **Rejected.** It would work for multi-turn travel, but its internal step count is an *open-loop assumption about the spool*, and §3.8 deliberately allows the spool to slip. After any slip the count is fiction while still reading as valid — the worst kind of wrong. |
+| **Encoded continuous rotation** | **Selected.** Gives closed-loop *speed* control and a settable torque ceiling (protection layer 1). Commanded in rate; the gateway closes position on the AK7455, which is the only sensor that survives a slip. |
+
+This yields a conventional cascaded loop — outer position on true spool angle,
+inner speed in the servo — and it degrades sensibly: if the AK7455 fails, the
+winch still has commanded-rate control and the ratchet still protects the
+aircraft; it simply loses payload-height readout (`encoder_fail`, §5.3).
+
+> **⚠ Mode semantics are part of the §3.1 datasheet gate.** The three modes are
+> as described by the user; exact mode indices, the register that selects them,
+> and whether the torque ceiling is settable per-mode are **not** verified here
+> and must be read off the datasheet before firmware is written. No register
+> number is invented in this document.
 
 ---
 
@@ -423,6 +527,43 @@ M = 5.5 N × 2.0 mm = 11.0 N·mm ;  Z = bh²/6 = 3.0 × 2.0² / 6 = 2.0 mm³
 ```
 
 All exceed the AUVSI 4.0 target used elsewhere in this project.
+
+### 4.4 ⚠ Unresolved: the shed threshold sits inside the maneuver envelope
+
+Checking `F_slip` against manoeuvre loads on the suspended payload surfaces a
+conflict this specification does **not** resolve:
+
+| Condition | Line tension | vs. 8.0 N threshold |
+|---|---|---|
+| Static payload | 3.92 N | 0.49× — holds |
+| 1.5 g | 5.88 N | 0.73× — holds |
+| **2.0 g** | **7.84 N** | **0.98× — on the edge** |
+| **2.5 g** | **9.80 N** | **1.23× — sheds** |
+
+The 2.5 g factor is the cargo dynamic factor this document already uses for the
+axle and bearings (§4.3, from `docs/structural_analysis.md` §6). Applied to the
+*line*, it means **a 2.5 g manoeuvre with a slung load drops the payload**, and a
+2 g manoeuvre is within 2 % of doing so.
+
+That may well be the correct behaviour — hard manoeuvring with a slung load is
+poor airmanship, and shedding beats losing the aircraft. But it is currently an
+**accident of where the threshold landed**, not a stated decision, and it needs
+one. Three options:
+
+1. **Accept and document** — declare a manoeuvre limit (≈1.5 g) whenever a
+   payload is slung, and put it in the flight envelope. Costs nothing mechanical.
+2. **Raise the threshold to ~12 N** — 3.06× static payload, still only 72 % of
+   the 16.64 N excess lift, leaving 4.6 N of margin at the moment of shed. Buys
+   manoeuvre headroom; spends lift margin.
+3. **Reduce slung payload mass** — moves both numbers, but 400 g is a
+   requirement input, not a free variable.
+
+The threshold cannot simply be raised without limit: it is bounded above by
+available excess lift (§4.2), and the whole point of R5 is to shed *before* the
+aircraft is dragged down. **Option 1 is recommended** — it is free, it is honest,
+and it matches how slung-load limits are handled on crewed rotorcraft — but this
+is a flight-envelope decision, not a winch decision, so it is referred rather
+than taken. Cross-reference `docs/flight_envelope.md` when resolved.
 
 ---
 
@@ -587,37 +728,51 @@ See §3.3. All six are new STLs from
 
 ## 8. Open Items
 
-1. **★ MEASURE `T_backdrive` (§3.7.1) — now the top open item.** With the pawl
-   held clear, apply tangential load at the spool and record the torque at which
-   the spool turns the **unpowered** servo. The entire shed-threshold error
-   budget is **0.105 kgf·cm**; a geared bus servo may exceed that by 10–100×, in
-   which case the powerless shed (§3.6a) does not function and the coupler must
-   change from rigid (A) to slip-clutch (B) per §3.7.2. **This gates whether
-   R5 is met at all** — it is not a refinement, it is a go/no-go on the safety
-   function. Measure before committing the coupler geometry.
-2. **Coupler decision (A) vs (B)** — blocked on item 1. (C) is rejected: an
-   overrunning clutch would make controlled lowering impossible.
-3. **⚠ STS3215 datasheet gate (§3.1)** — envelope, torque, mass, stall current.
+1. **★ FLIGHT-ENVELOPE DECISION — the shed threshold sits inside the manoeuvre
+   envelope (§4.4).** At 8.0 N, a 2.0 g manoeuvre on the slung payload reaches
+   0.98× the threshold and 2.5 g sheds the load. Choose: declare a ≈1.5 g
+   slung-load manoeuvre limit (recommended, free), raise the threshold to ~12 N
+   (spends lift margin), or reduce payload. **Referred to the flight envelope,
+   not decided here.** Blocks the pawl-spring calibration target.
+2. **Calibrate `T_slip` to 0.060 N·m (0.61 kgf·cm)** at the spool hub collar, and
+   confirm the one remaining back-drive requirement **`T_slip < T_backdrive`**
+   (§3.8.2). Measure `T_backdrive` with the pawl held clear — but note this now
+   confirms an inequality rather than gating R5, since §3.8 removed
+   `T_backdrive` from `F_shed` entirely.
+3. **Set the servo torque ceiling below `T_slip`** (protection layer 1, §3.8.3)
+   so routine lifting never reaches the friction interface and the sacrificial
+   hub is consumed only by genuine overloads.
+4. **⚠ STS3215 datasheet gate (§3.1)** — envelope, torque, mass, stall current.
    Blocks STL generation, BOM order, and the §6 mass figures. `TODO §0.x`.
-4. **Half-duplex bus wiring (§5.1.1)** — confirm MSPM0G3507 single-wire UART on
+5. **Half-duplex bus wiring (§5.1.1)** — confirm MSPM0G3507 single-wire UART on
    `FLEX_TTL_GPIO`, or add a steering resistor/buffer at the harness.
-5. **Slip-threshold bench calibration** — set the spring seat to 8.0 N ± 1.0 N
-   measured at the line, then verify over ≥ 100 lock/release cycles.
-6. **Line-shed test** — confirm the line actually runs clear of the drum and
+6. **Pawl-spring calibration — distinct from item 2.** This sets `F_shed` (the
+   ratchet cam-out, 8.0 N ± 1.0 N at the line); item 2 sets `T_slip` (the hub
+   friction interface). Two independent thresholds, two separate adjustments.
+   Verify over ≥ 100 lock/release cycles. Target pending item 1.
+7. **Line-shed test** — confirm the line actually runs clear of the drum and
    fairlead under load; capstan estimate (§3.6) is analytic, not measured.
-7. **Generator rewrite** — delete `make_motor_mount()` / `make_winch_spool()`,
+8. **Generator rewrite** — delete `make_motor_mount()` / `make_winch_spool()`,
    add the six parts in §3.3; mesh-validate per root `AGENTS.md` §7.
-8. **Pedestal mounting stations** — the retired mount anchored to the *gondola
+9. **Pedestal mounting stations** — the retired mount anchored to the *gondola
    ceiling* with M2 self-taps; the pedestals need real M3 boss stations in
    `cargo_sect_shell24.scad`, FreeCAD-verified against the door swing envelope.
-9. **DRV8833 consolidation (optional)** — door/release servos could move to the
-   gateway's spare `FLEX_PWM_IO`, retiring `DRV8833-CARGO` and its tray.
-10. **AK7455 spool-encoder integration (§3.7.3)** — magnet pocket in the port
+10. **DRV8833 consolidation (optional)** — door/release servos could move to the
+    gateway's spare `FLEX_PWM_IO`, retiring `DRV8833-CARGO` and its tray.
+11. **AK7455 spool-encoder integration (§3.7.3)** — magnet pocket in the port
     flange hub, off-axis (the fixed axle occupies the centreline); confirm flux
     at the IC for the chosen magnet and gap, the same bench item already open for
     the nacelle encoders; ≥ 1 kHz sampling; firmware turn-accumulation with the
     `turns_invalid` guard rather than a guessed count.
-11. **Accept that a powerless shed is un-telemetered** (§3.7.2) — no power means
+12. **Spool is a consumable** (§3.8) — mark `cargo_winch_spool_r2.stl` as a wear
+    item in the build guide, define an inspection interval and a slip-witness
+    mark, and keep a spare in the field kit. Hand-tool replacement per
+    `AGENTS.md` §7.
+13. **Confirm STS3215 mode semantics** (§3.9) — mode indices, the selecting
+    register, and whether the torque ceiling is settable in encoded
+    continuous-rotation mode. Part of the §3.1 datasheet gate; no register
+    number is invented in this document.
+14. **Accept that a powerless shed is un-telemetered** (§3.7.2) — no power means
     no encoder and no CAN frame. If post-event knowledge of a shed is required,
     that needs a separate mechanism (e.g. a latching mechanical indicator), not
     the encoder.
