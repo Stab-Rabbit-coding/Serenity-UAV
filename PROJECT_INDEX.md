@@ -39656,6 +39656,9 @@ deferred/aft-edf/stls/rear_shell24_2mm_edf_bored.stl — [PENDING AI CLASSIFICAT
 docs/AGENTS.md — [PENDING AI CLASSIFICATION]
 docs/AVIONICS_PB2_REDESIGN.md — [PENDING AI CLASSIFICATION]
 docs/BATTERY_MOUNT.md — [PENDING AI CLASSIFICATION]
+docs/CARGO_WINCH_SPECIFICATION.md — [ACTIVE] Cargo winch motor (STS3215), ratchet,
+                                    spool support, fail-safe locking, overload protection, and
+                                    CAN-PERPH-GW control integration. Rev A (2026-07-27).
 docs/ETHERNET_PHY_TRADE.md — [PENDING AI CLASSIFICATION]
 docs/FIRST_FLIGHT_READINESS.md — [PENDING AI CLASSIFICATION]
 docs/JAYNE_LASER_ANALYSIS.md — [PENDING AI CLASSIFICATION]

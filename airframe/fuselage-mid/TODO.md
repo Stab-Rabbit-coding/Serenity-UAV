@@ -26,6 +26,14 @@
 - [ ] Regenerate `cargo_sect_shell24.stl`
 - [ ] Add motor-mount and DRV8833-tray boss locations to `cargo_sect_…
 - [ ] Add SG90 bell-crank boss to inner face of each door panel for p…
+- [ ] STS3215 datasheet review and parameter extraction
+- [ ] Detailed ratchet mechanical design
+- [ ] Spool bearing and support design
+- [ ] Cable routing and strain relief
+- [ ] Servo linkage bench test (lock/unlock cycles)
+- [ ] CAN-FD firmware integration (Simon + CAN-PERPH-GW)
+- [ ] Load cell sensor design (optional, TBD Phase 8)
+- [ ] Phase 8 integration checklist (gondola, harness, test)
 - [ ] Slicer verification
 - [ ] Kaylee's room — PDB mounting in inner neck
 - [ ] CF skid rod channels

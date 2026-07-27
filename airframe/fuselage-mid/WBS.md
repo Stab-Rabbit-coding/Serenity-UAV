@@ -253,6 +253,73 @@
     - Export gondola shell to `thingverse-serenity/files-hollowed-18in/`
     - **BLOCKS Phase 8**
 
+###### 1.1.1.2.1a *Cargo Winch Motor & Ratchet Specification*
+
+**Cargo Winch System Specification (Rev A, 2026-07-27):** comprehensive design specification for the cargo winch mechanical and electrical integration.
+
+- [x] **Create `docs/CARGO_WINCH_SPECIFICATION.md`** — comprehensive specification covering:
+    - Motor selection: STS3215 digital servo, 4.8–6.0 V, PWM control, integrated with CAN-PERPH-GW
+    - Safety ratchet: normal-open spring-locked pawl; fail-safe engaged without power
+    - Spool support: dual bearing mounts at both ends (not shaft-hanging), radial load ≥50 lbf
+    - Cable: Dyneema UHMWPE 0.25 in (6.35 mm) diameter, ≥500 lbf breaking strength
+    - Failsafe behavior: power required to unlock ratchet; overload triggers gradual unwind to shed load
+    - Electrical integration: CAN-PERPH-GW (n=1) controls servo via PWM, monitors ratchet state, publishes signed CAN-FD telemetry
+    - Power budget: ~9 W peak from Kaylee RAIL-2 5V_JAYNE (2.4 A headroom available)
+    - Reference: STS3215 datasheet at `docs/references/108090023_STS3215-C001_Datasheet.pdf` (REF-SENSOR-012)
+    *(done 2026-07-27)*
+
+- [ ] **STS3215 datasheet review and parameter extraction:**
+    - Confirm motor torque (static, dynamic, stall) and speed (no-load RPM)
+    - Verify mass and confirm servo standard pinout
+    - Confirm stall current limit for overload firmware threshold (baseline 1.5 A)
+    - Document all findings in docs/CARGO_WINCH_SPECIFICATION.md §Motor Specifications
+
+- [ ] **Detailed ratchet mechanical design:**
+    - Spool drive gear profile design (conical teeth, tooth pitch, material grade)
+    - Pawl lever geometry and servo linkage ratio (servo torque × arm ≥ spring force + friction)
+    - Spring constant and pre-load FEA (target FOS ≥ 2 under 50 lbf max load)
+    - Stress analysis on spool axle + bearing mounts under dynamic load
+    - Tolerance stack-up analysis for smooth engagement/disengagement
+
+- [ ] **Spool bearing and support design:**
+    - Bearing pocket bosses in `cargo_sect_shell24.scad` (left + right ends)
+    - Bearing selection (flanged, shaft bore sizing, load rating ≥50 lbf radial)
+    - Axle material and threading (CF rod or stainless steel)
+    - Snap-ring or retaining nut design for inner race retention
+
+- [ ] **Cable routing and strain relief:**
+    - Through-hole geometry for cable exit from spool
+    - Smooth radius (~10 mm) to prevent fraying
+    - Strain relief clamp spacing (≤50 mm) along internal run from spool to bay door exit
+    - Cable length calculation based on gondola drop distance (~1500 mm unwind for landing/hover ops)
+
+- [ ] **Servo linkage and mechanical linkage bench test:**
+    - Fabricate servo arm and pawl lever
+    - Confirm servo can retract pawl against spring preload (no stall) at 5.4 V nominal
+    - Test ratchet locking/unlocking cycles (≥100 cycles) for wear
+    - Measure and document actual spring hold force under 50 lbf axial load
+
+- [ ] **CAN-FD firmware integration (Simon + CAN-PERPH-GW):**
+    - `WINCH_STATUS` message definition (0x7B0, 10 Hz): WINCH_STATE enum, servo position, load cell ADC, error flags
+    - `WINCH_COMMAND` message definition (0x7B1, edge-triggered): HOLD/UNLOCK/LOCK/ABORT commands from Simon
+    - CAN-PERPH-GW firmware: PWM control loop, overload detection (load cell ADC threshold or servo stall current >1.5 A for >500 ms)
+    - Simon firmware: WINCH_STATE machine (LOCKED → UNLOCKING → UNLOCKED → OVERLOAD transition logic)
+    - Shepherd watchdog integration: monitor WINCH_STATUS timeout (>1 s → failsafe power cut)
+    - Signed HMAC/ECDSA telemetry per Zero Trust [REF-NIST-001 §2.1]
+
+- [ ] **Load cell sensor (optional, TBD Phase 8):**
+    - Sensor selection: tension load cell, 0–300 lbf range (0–1336 N), ADC-compatible output
+    - CAN-PERPH-GW ADC interface (12-bit, 0–3.3 V mapped to 0–1336 N)
+    - Overload threshold tuning: baseline 50 lbf (222 N); adjust post-bench test
+    - Calibration procedure documentation
+
+- [ ] **Phase 8 integration checklist:**
+    - Cargo gondola shell (`cargo_gondola_shell.scad`): spool axle bore, ratchet chamber, cable exit
+    - Avionics harness: 5V_JAYNE power lines (18 AWG shielded TP × 2 drops), CAN-PERPH-GW wiring to Shepherd's Room
+    - Test sequence: ratchet lock/unlock, payload descent under load, overload protection trigger, failsafe power cut
+
+**BLOCKS:** Phase 8 cargo winch assembly and integration test; Kaylee RAIL-2 5V_JAYNE redundant BEC channel addition (docs/POWER_DISTRIBUTION.md §11.1)
+
 ###### 1.1.1.2.2 *Wing Root*
 
 ##### 1.1.1.3 *Middle Neck*

@@ -72,6 +72,7 @@ REF-CAD-002 Nick Henning after consolidation)
     - [REF-SENSOR-009: TI ISOW1044BDFMR — 5 kVrms Isolated CAN-FD Transceiver with Integrated Isolated DC-DC](#ref-sensor-009-ti-isow1044bdfmr--5-kvrms-isolated-can-fd-transceiver-with-integrated-isolated-dc-dc)
     - [REF-SENSOR-010: TI ISOW1412 — 5 kVrms Isolated RS-485/RS-422 Transceiver with Integrated Isolated DC-DC](#ref-sensor-010-ti-isow1412--5-kvrms-isolated-rs-485rs-422-transceiver-with-integrated-isolated-dc-dc)
     - [REF-SENSOR-011: Infineon OPTIGA™ SLB 9670 — SPI TPM 2.0](#ref-sensor-011-infineon-optiga-slb-9670--spi-tpm-20)
+    - [REF-SENSOR-012: STS3215 Digital Servo Motor — Cargo Winch Control](#ref-sensor-012-sts3215-digital-servo-motor--cargo-winch-control)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
@@ -1352,6 +1353,27 @@ ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verific
 | **Note** | Fleet-standard TPM (root `AGENTS.md` §Security: "every Cape carries a TPM"). Clean-room symbol `Jayne_SLB9670_TPM` built directly from datasheet Tables 3/4/5, first on Jayne, reused verbatim on `CAN-PERIPH-GW-1`, Kaylee, and Emma (2026-07-26). **Not** the same as the inline "SLB9670" symbol already embedded in Wash.kicad_sch/Zoë.kicad_sch, which was found (2026-07-26, not yet corrected) to have incorrect pin numbers relative to this same datasheet — see Removed/Superseded Citations. |
 
 **Used in:** `avionics/kicad/Jayne/kicads/Jayne.kicad_sch` (U5), `avionics/kicad/CAN-PERIPH-GW-1/` (U2 per stack), `avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch` (U_TPM), `avionics/kicad/Emma/kicads/Emma.kicad_sch` (TPM).
+
+---
+
+### REF-SENSOR-012: STS3215 Digital Servo Motor — Cargo Winch Control
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Unknown (awaiting datasheet review) |
+| **Part Number** | STS3215 |
+| **Datasheet** | Revision/date TBD, archived at `docs/references/108090023_STS3215-C001_Datasheet.pdf` |
+| **Operating Voltage** | 4.8 V – 6.0 V (nominal 5.4 V per Kaylee RAIL-2 5V_JAYNE) |
+| **Torque** | [PENDING datasheet verification] |
+| **Speed** | [PENDING datasheet verification] |
+| **Control Interface** | PWM servo standard (1000–2000 µs pulse width) |
+| **Mass** | [PENDING datasheet verification] |
+| **Application** | Cargo winch motor for lift/lower payload via ratcheting spool assembly (docs/CARGO_WINCH_SPECIFICATION.md) |
+| **Note** | Fail-safe mechanical ratchet paired with servo-actuated pawl retract; spool supported at both ends (not shaft-hanging). Integrated with CAN-PERPH-GW for signed CAN-FD telemetry and overload monitoring per NIST SP 800-207 Zero Trust [REF-NIST-001 §2.1]. |
+
+**Used in:** `docs/CARGO_WINCH_SPECIFICATION.md` (motor specification), cargo bay winch assembly (airframe/fuselage-mid/).
+
+**Status:** ACTIVE — specification at docs/CARGO_WINCH_SPECIFICATION.md Rev A (2026-07-27); physical integration TBD Phase 8.
 
 ---
 
