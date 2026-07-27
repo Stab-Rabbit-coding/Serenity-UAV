@@ -90,16 +90,28 @@ JUMPER = f"{SYS_FP}/Jumper.pretty"
 # NOT an invented grid. Per-stack parts carry an explicit layer ("F"/"B";
 # 4 of them -- the MCU/TPM/CAN-FD-iso/RS-485-iso ICs -- are hand-placed on
 # the BACK). For stacks 2..N_STACKS this same per-stack template is
-# replayed shifted by LANE_DX along X (past the shared bus/power section,
-# which is placed once and never duplicated) -- a first-pass mechanical
-# repeat of the user's single-stack layout, same "final compaction is a
-# manual follow-on pass" convention already used by every generator in
-# this project (see module docstring). LANE_DX is sized from the real
-# per-stack footprint cluster's own bounding-box span (~34 mm center-to-
-# center) plus each edge footprint's own body half-width, so adjacent
-# lanes don't collide -- verified via DRC (0 courtyards_overlap/clearance
-# from placement) at N_STACKS=4 in a sandboxed dry run, see commit notes.
+# replayed shifted along one axis (past the shared bus/power section, which
+# is placed once and never duplicated) -- a first-pass mechanical repeat of
+# the user's single-stack layout, same "final compaction is a manual
+# follow-on pass" convention already used by every generator in this
+# project (see module docstring).
+#
+# STACK_ORIENTATION picks which axis stacks repeat along -- the per-stack
+# cluster's own footprint is ~34 mm (long axis, X) x ~16.4 mm (short axis,
+# Y), so the two choices are:
+#   "END_TO_END"  (default) -- tile along X (LANE_DX pitch). Adjacent
+#       stacks meet short-side-to-short-side, like train cars coupling at
+#       their narrow ends: board grows long and thin.
+#   "SIDE_BY_SIDE" -- tile along Y (LANE_DY pitch). Adjacent stacks meet
+#       long-side-to-long-side: board grows wide and short instead.
+# Both LANE_DX and LANE_DY are sized from the real per-stack footprint
+# cluster's own bounding-box span on that axis plus each edge footprint's
+# own body half-width, so adjacent lanes don't collide -- verified via DRC
+# (0 courtyards_overlap/clearance from placement) at N_STACKS=4 in a
+# sandboxed dry run for both orientations, see commit notes.
+STACK_ORIENTATION = "END_TO_END"  # or "SIDE_BY_SIDE"
 LANE_DX = 50.0
+LANE_DY = 30.0
 
 # ref-without-suffix -> (lib dir, footprint name, (x, y), rotation deg, layer)
 _PER_STACK_REAL: dict[str, tuple[str, str, tuple[float, float], float, str]] = {
@@ -125,8 +137,11 @@ _PER_STACK_REAL: dict[str, tuple[str, str, tuple[float, float], float, str]] = {
 PLACE: dict[str, tuple[str, str, tuple[float, float], float, str]] = {}
 for _base, (_lib, _fpname, (_rx, _ry), _rot, _lyr) in _PER_STACK_REAL.items():
     for _i in range(1, N_STACKS + 1):
-        _dx = (_i - 1) * LANE_DX
-        PLACE[f"{_base}_{_i}"] = (_lib, _fpname, (_rx + _dx, _ry), _rot, _lyr)
+        if STACK_ORIENTATION == "SIDE_BY_SIDE":
+            _dx, _dy = 0.0, (_i - 1) * LANE_DY
+        else:
+            _dx, _dy = (_i - 1) * LANE_DX, 0.0
+        PLACE[f"{_base}_{_i}"] = (_lib, _fpname, (_rx + _dx, _ry + _dy), _rot, _lyr)
 
 VALUES = {}
 for _i in range(1, N_STACKS + 1):
@@ -217,14 +232,20 @@ NICK.update({
 })
 
 # Real board outline is 130.91,92.45 - 180.01,118.05 for N_STACKS=1; each
-# additional stack's lane extends the board by LANE_DX to the right.
+# additional stack's lane extends the board along the tiling axis --
+# to the right for END_TO_END, downward for SIDE_BY_SIDE.
 X0, Y0 = 130.0, 91.0
-X1 = 180.5 + max(0, N_STACKS - 1) * LANE_DX
-Y1 = 119.0
+if STACK_ORIENTATION == "SIDE_BY_SIDE":
+    X1 = 180.5
+    Y1 = 119.0 + max(0, N_STACKS - 1) * LANE_DY
+else:
+    X1 = 180.5 + max(0, N_STACKS - 1) * LANE_DX
+    Y1 = 119.0
 
 # Back-silkscreen attribution block (mirrors the block already on Wash.md /
-# Zoe.md boards) -- placed in the open band below the back-side ICs, left
-# of the per-stack cluster so it doesn't move as N_STACKS grows.
+# Zoe.md boards). Position user-corrected 2026-07-26 (the generator's first
+# guess ran off the board corner) -- keep in sync with the live board if
+# moved again by hand.
 ATTRIBUTION_TEXT = (
     "TPM-Secured CAN-FD/RS-485 Gateway\n"
     "For the PocketBeagle2 fleet\n"
@@ -234,7 +255,7 @@ ATTRIBUTION_TEXT = (
     "Griffing Technology LLC\n"
     "github.com/Stab-Rabbit-Coding\n"
 )
-ATTRIBUTION_POS = (135.0, 115.5)
+ATTRIBUTION_POS = (54.0, 96.5)
 
 
 def u():

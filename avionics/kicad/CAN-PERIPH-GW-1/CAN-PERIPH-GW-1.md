@@ -165,6 +165,23 @@ several sensors or actuators live at the same physical location — the
 motivating case is a single nacelle's two EDFs sharing one gateway PCB
 (`N_STACKS=2`) instead of two separate boards.
 
+**Orientation, added 2026-07-27:** `STACK_ORIENTATION` in
+`scripts/gen_can_periph_gw_pcb.py` picks which axis additional stacks tile
+along:
+
+- `"END_TO_END"` (default) — tiles along X (`LANE_DX` pitch, 50 mm).
+  Adjacent stacks meet short-side-to-short-side, like train cars coupling
+  at their narrow ends: the board grows long and thin.
+- `"SIDE_BY_SIDE"` — tiles along Y (`LANE_DY` pitch, 30 mm). Adjacent
+  stacks meet long-side-to-long-side instead: the board grows wide and
+  short. Useful when board outline/enclosure constraints favor width over
+  length.
+
+Both pitches are sized from the real per-stack footprint cluster's own
+bounding-box span on that axis plus each edge footprint's own body
+half-width, verified via DRC (0 shorts/clearance/courtyard from placement)
+at `N_STACKS=4` in a sandboxed dry run for both orientations.
+
 Each stack keeps its **own, independent** MCU, TPM, isolated CAN-FD
 transceiver, isolated RS-485 transceiver, and encoder/flex headers — every
 stack signs its own messages with its own TPM identity. Only the truly shared

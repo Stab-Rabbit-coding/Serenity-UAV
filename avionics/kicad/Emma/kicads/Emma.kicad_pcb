@@ -210,12 +210,6 @@
 	(net 128 "unconnected-(LoRa-Pad14)")
 	(net 129 "unconnected-(LoRa-Pad15)")
 	(net 130 "unconnected-(LoRa-Pad16)")
-	(net 131 "TPM_RSTN_EMMA")
-	(net 132 "TPM_IRQN_EMMA")
-	(net 133 "TPM_SCLK_EMMA")
-	(net 134 "TPM_CS_EMMA")
-	(net 135 "TPM_MOSI_EMMA")
-	(net 136 "TPM_MISO_EMMA")
 	(footprint "C_0402_1005Metric"
 		(layer "F.Cu")
 		(uuid "04b56ca9-423a-432c-9ab1-e1fb499c13d5")
@@ -15167,7 +15161,7 @@
 			(size 0.54 0.64)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
-			(net 131 "TPM_RSTN_EMMA")
+			(net 69 "TPM_RSTN")
 			(uuid "333b7b29-edbe-4d62-930d-61d3d8f3194f")
 		)
 		(embedded_fonts no)
@@ -16863,7 +16857,7 @@
 			(size 0.875 0.25)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
-			(net 131 "TPM_RSTN_EMMA")
+			(net 69 "TPM_RSTN")
 			(uuid "57f28d6c-f64e-4809-9b43-340a7c34e45c")
 		)
 		(pad "18" smd roundrect
@@ -16871,7 +16865,7 @@
 			(size 0.875 0.25)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
-			(net 132 "TPM_IRQN_EMMA")
+			(net 70 "TPM_IRQN")
 			(uuid "3342003a-9686-4bad-848f-989c4a2c6b57")
 		)
 		(pad "19" smd roundrect
@@ -16879,7 +16873,7 @@
 			(size 0.875 0.25)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
-			(net 133 "TPM_SCLK_EMMA")
+			(net 53 "SPI1_CLK")
 			(uuid "c1ad289d-0c73-41be-9497-3722d0676e39")
 		)
 		(pad "20" smd roundrect
@@ -16887,7 +16881,7 @@
 			(size 0.875 0.25)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
-			(net 134 "TPM_CS_EMMA")
+			(net 49 "SPI1_CS_TPM")
 			(uuid "91cb60e5-8b6d-4640-ab6d-9c47bfc2268a")
 		)
 		(pad "21" smd roundrect
@@ -16895,7 +16889,7 @@
 			(size 0.875 0.25)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
-			(net 135 "TPM_MOSI_EMMA")
+			(net 52 "SPI1_MOSI")
 			(uuid "2d4af316-2247-4e8c-9d39-40ddea7ad619")
 		)
 		(pad "22" smd roundrect
@@ -16919,7 +16913,7 @@
 			(size 0.875 0.25)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
-			(net 136 "TPM_MISO_EMMA")
+			(net 51 "SPI1_MISO")
 			(uuid "b100db69-75ff-4a16-bc3a-0a58a68b6cc1")
 		)
 		(pad "25" smd roundrect
