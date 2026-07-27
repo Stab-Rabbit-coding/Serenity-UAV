@@ -248,25 +248,70 @@
       "notes": "Rev P new (PR #22 2026-06-01). Mirror of cargo_door_port.stl. Print in same orientation with supports on hinge tab. Watertight geometry verified."
     },
     {
-      "stl": "cargo_winch_motor_mount.stl",
-      "desc": "N20 winch motor mount — CF-PETG cantilevered bracket on forward cargo bulkhead",
+      "stl": "cargo_winch_pedestal_port.stl",
+      "desc": "Winch port pedestal — CF-PETG axle clamp + MR84ZZ bearing seat + STS3215 case cradle",
       "material": "CF-PETG",
       "layer_mm": 0.15,
       "infill": "40% gyroid",
       "walls": 4,
       "qty": 1,
-      "mass_g": 25,
-      "notes": "Rev P new (PR #21 2026-05-30). Accepts N20 motor body (10×12 mm cross-section); 2× M2.5 SHCS clamp bolts; 4× M3 heat-set inserts for forward cargo frame attachment; aligns spool bore to hull centreline ±1 mm."
+      "mass_g": 18,
+      "notes": "Rev S (2026-07-27). SUPERSEDES cargo_winch_motor_mount.stl. Clamps the fixed Ø4 mm axle in a split collar (M3 pinch screw) and carries the port bearing seat; STS3215 drives through a lost-motion dog coupler so no radial load reaches the servo output. Servo case envelope PARAMETERISED — confirm against the STS3215 datasheet before STL generation (docs/CARGO_WINCH_SPECIFICATION.md §3.1 gate)."
     },
     {
-      "stl": "cargo_winch_spool.stl",
-      "desc": "Dyneema winch spool — PETG, 4-start helical groove OD=26 mm for 0.5 mm Dyneema",
+      "stl": "cargo_winch_pedestal_stbd.stl",
+      "desc": "Winch starboard pedestal — CF-PETG axle clamp + bearing seat + pawl pivot + solenoid mount",
+      "material": "CF-PETG",
+      "layer_mm": 0.15,
+      "infill": "40% gyroid",
+      "walls": 4,
+      "qty": 1,
+      "mass_g": 20,
+      "notes": "Rev S (2026-07-27). Second of the two spool supports (spool is supported at BOTH ends, not cantilevered). Carries the M2 pawl pivot dowel, the set-screw-adjustable pawl spring seat, and the catch solenoid."
+    },
+    {
+      "stl": "cargo_winch_spool_r2.stl",
+      "desc": "Dyneema winch spool Rev 2 — CF-PETG, twin bearing counterbores + integral 24-tooth ratchet ring, NO anchor slot",
+      "material": "CF-PETG",
+      "layer_mm": 0.15,
+      "infill": "40% gyroid",
+      "walls": 4,
+      "qty": 1,
+      "mass_g": 16,
+      "notes": "Rev S (2026-07-27). SUPERSEDES cargo_winch_spool.stl. Core OD 20 mm / usable width 18 mm / flange OD 26 mm carried forward (1500 mm capacity ≈ 24 turns). N20 3.15 mm D-bore and M2 set-screw DELETED; 2× Ø8×3 mm MR84ZZ counterbores ADDED; Ø30 mm × 3 mm sawtooth ratchet ring ADDED to the outboard stbd flange. Dyneema anchor slot DELETED so the line runs off the drum at overload (line-shed requirement)."
+    },
+    {
+      "stl": "cargo_winch_pawl.stl",
+      "desc": "Winch ratchet pawl lever — CF-PETG",
+      "material": "CF-PETG",
+      "layer_mm": 0.15,
+      "infill": "40% gyroid",
+      "walls": 4,
+      "qty": 1,
+      "mass_g": 2,
+      "notes": "Rev S (2026-07-27). 18 mm pivot-to-tooth, spring seat at 15 mm. Normally engaged: retract-free, pay-out-locked. 8° undercut on the locking face cams the pawl out above the 8.0 N slip threshold, giving powerless slow pay-out."
+    },
+    {
+      "stl": "cargo_winch_dog_coupler.stl",
+      "desc": "Winch servo dog coupler — CF-PETG lost-motion drive",
+      "material": "CF-PETG",
+      "layer_mm": 0.15,
+      "infill": "40% gyroid",
+      "walls": 4,
+      "qty": 1,
+      "mass_g": 3,
+      "notes": "Rev S (2026-07-27). Transmits torque only from the STS3215 output spline to the spool port flange; radial clearance keeps line load off the servo output bearing."
+    },
+    {
+      "stl": "cargo_winch_fairlead.stl",
+      "desc": "Winch line fairlead — PETG, 10 mm throat radius",
       "material": "PETG",
       "layer_mm": 0.15,
       "infill": "40% gyroid",
+      "walls": 4,
       "qty": 1,
-      "mass_g": 15,
-      "notes": "Rev P new (PR #21 2026-05-30). 4-start helical groove at 0.6 mm pitch for Dyneema SK75 0.5 mm; hub bore 3 mm for N20 output shaft; OD=26 mm; PETG acceptable (max line tension ~8 N well below PETG yield)."
+      "mass_g": 3,
+      "notes": "Rev S (2026-07-27). Guides the Dyneema off the drum and prevents a shed line from wedging between flange and pedestal."
     },
     {
       "stl": "cargo_door_servo_bracket.stl",
@@ -412,7 +457,11 @@
       "valves": "4× SG90-class proportional valve servos (ref SERVO-RCS-VALVE) on the 6 V servo rail",
       "flow_split": "~15% of EDF mass flow (~225 g equivalent), modulated per jet",
       "mapping": "2 jets pitch + 2 jets yaw via FC attitude mixer",
-      "parts": ["rcs_thruster_nozzle.stl (×4)", "rcs_distribution_manifold.stl (×1)", "rcs_valve_bracket.stl (×4)"]
+      "parts": [
+        "rcs_thruster_nozzle.stl (×4)",
+        "rcs_distribution_manifold.stl (×1)",
+        "rcs_valve_bracket.stl (×4)"
+      ]
     },
     "thrust_summary": {
       "nacelles_hover_g": 4464,
@@ -922,7 +971,7 @@
       "esc_motor": "16AWG silicone — each ESC to EDF motor",
       "signal": "28AWG shielded twisted pair for servo signal + DSHOT leads",
       "data_bus": "PTFE 3 mm ID conduit, full hull length, for CAN FD / RS-485 / 1553 / ETH",
-      "cargo_signal": "28AWG 3-core silicone — Cape-B GPIO to DRV8833 tray (PWM + DIR + GND); ~250 mm run"
+      "cargo_signal": "28AWG 3-core silicone — Cape-B GPIO to DRV8833 tray (PWM + DIR + GND), ~250 mm run (door/release servos). WINCH IS SEPARATE: CAN-PERIPH-GW J_FLEX -> STS3215 TTL bus + catch solenoid FET gate + HX711; gateway reaches the airframe only over its isolated CAN-FD/RS-485 trunks."
     }
   },
   "structure": {
@@ -961,10 +1010,14 @@
       "control_node": "CN node (Cape-B) GPIO PWM + DIR; door-open commanded via CAN FD from elected FC master"
     },
     "winch": {
-      "motor": "N20 300RPM 6V gear motor (REF: N20-WINCH)",
-      "spool": "cargo_winch_spool.stl — PETG, 4-start helical groove, OD=26 mm, accepts 0.5 mm Dyneema SK75",
-      "line": "Dyneema SK75 0.5 mm braid × 2 m (REF: DYNEEMA-SK75); rated break ~300 N; WLL ~60 N (5:1 SF), well above 400 g payload load of ~4 N",
-      "load_cell": "HX711 24-bit ADC (REF: HX711-LC) — tension monitoring; soft-limits via Cape-B firmware"
+      "motor": "STS3215 serial-bus servo (REF: STS3215-WINCH) — TTL half-duplex, ID-addressable; driven from CAN-PERIPH-GW J_FLEX FLEX_TTL_GPIO. SUPERSEDES the Rev P/Q/R N20 300RPM 6V gearmotor (N20-WINCH, deleted). Required torque >= 3.2 kgf.cm; datasheet figures REQUIRE VERIFICATION — docs/CARGO_WINCH_SPECIFICATION.md §3.1.",
+      "spool": "cargo_winch_spool_r2.stl — CF-PETG, core OD 20 mm / usable width 18 mm / flange OD 26 mm; rides on 2x MR84ZZ bearings on a FIXED Ø4 mm stainless axle clamped at BOTH pedestals (supported at both ends, not cantilevered on the motor shaft).",
+      "support": "cargo_winch_pedestal_port.stl + cargo_winch_pedestal_stbd.stl — twin pedestals; SHAFT-SS-4MM axle, FOS 6.8 in bending at the 2.5g / 20 N cargo load case.",
+      "ratchet": "Normally-engaged one-way safety ratchet: 24-tooth sawtooth ring integral with the stbd spool flange (OD 30 mm, 3 mm face) + cargo_winch_pawl.stl on a set-screw-adjustable 1.0 N spring. UNPOWERED = retract permitted, pay-out BLOCKED. Power required to retract the catch and allow unwind.",
+      "catch_actuator": "SOL-CATCH-5V pull solenoid (>= 2.5 N @ 3 mm), driven by the SAME gateway via FLEX_PWM_IO -> AO3400 N-FET + SS34 flyback; 10k gate pull-down so an undriven MCU leaves the catch ENGAGED. De-energised = fail-safe engaged.",
+      "overload_shed": "Slip threshold 8.0 N (2.04x the 3.92 N payload load; 48% of the 16.64 N available excess lift). 8-degree undercut on the locking tooth face cams the pawl out above threshold -> slow pay-out with NO power. Dyneema anchor slot DELETED: the inboard end is friction-retained only (~0.7 N capstan on the last 2 turns) so the line runs off the drum and falls away rather than fouling the UAV.",
+      "line": "Dyneema SK75 0.5 mm braid x 2 m (REF: DYNEEMA-SK75); rated break ~300 N; WLL ~60 N (5:1 SF). Unchanged from Rev R.",
+      "load_cell": "HX711 24-bit ADC (REF: HX711-LC) — tension monitoring, re-hosted from Cape-B onto the CAN-PERIPH-GW; feeds the sensed (secondary) overload path."
     },
     "payload_retention": {
       "cradle": "cargo_cradle_autolatch.stl — PETG auto-latch: payload presses latch tab to lock, release servo pull-wire unlocks",
@@ -1003,6 +1056,73 @@
     ],
     "cargo_hardware": [
       {
+        "ref": "STS3215-WINCH",
+        "desc": "STS3215 serial-bus servo — cargo winch drive",
+        "qty": 1,
+        "mass_g": 60,
+        "voltage": "5.4V (RAIL-2 5V_JAYNE)",
+        "cost_usd": 25.0,
+        "supplier": "Amazon / AliExpress",
+        "notes": "SUPERSEDES N20-WINCH. TTL half-duplex bus servo (not PWM). Mass 60 g ASSUMED and torque/stall current UNVERIFIED — datasheet at docs/references/108090023_STS3215-C001_Datasheet.pdf is a scanned/CID-encoded PDF that could not be extracted; confirm before ordering. Required torque >= 3.2 kgf.cm."
+      },
+      {
+        "ref": "SOL-CATCH-5V",
+        "desc": "Pull-type linear solenoid — ratchet catch retract",
+        "qty": 1,
+        "mass_g": 15,
+        "voltage": "5.4V",
+        "stroke_mm": 3.0,
+        "pull_n": 2.5,
+        "cost_usd": 6.0,
+        "supplier": "Amazon / AliExpress",
+        "notes": "De-energised = pawl spring-engaged (fail-safe). Energised only during pay-out (~1.1 W). Driven by CAN-PERIPH-GW FLEX_PWM_IO via AO3400 N-FET."
+      },
+      {
+        "ref": "BRG-MR84ZZ",
+        "desc": "MR84ZZ shielded ball bearing, 4x8x3 mm",
+        "qty": 2,
+        "mass_g": 1.5,
+        "cost_usd": 3.0,
+        "supplier": "Amazon / AliExpress",
+        "notes": "Pressed into the spool hub counterbores, one per flange — this is what supports the spool at both ends. 10 N per bearing vs ~130 N static rating (FOS ~13)."
+      },
+      {
+        "ref": "SHAFT-SS-4MM",
+        "desc": "Ø4 mm A2 stainless rod x 46 mm — fixed winch axle",
+        "qty": 1,
+        "mass_g": 4.6,
+        "cost_usd": 2.0,
+        "supplier": "Amazon / AliExpress",
+        "notes": "NEW STOCK ITEM. Project stocks 3 mm CF rod (SHAFT-CF-3MM) but CF is unsuitable as a press-fit bearing race. Stationary axle, clamped in both pedestals. FOS 6.8 bending at 20 N."
+      },
+      {
+        "ref": "SPRING-PAWL",
+        "desc": "Compression spring, 1.0 N +/- 0.2 N at installed length, stainless",
+        "qty": 1,
+        "mass_g": 1.0,
+        "cost_usd": 2.0,
+        "supplier": "Amazon / AliExpress",
+        "notes": "Sets the ratchet slip threshold. Seated on a set-screw-adjustable seat in the stbd pedestal; bench-calibrate to 8.0 N +/- 1.0 N measured at the line."
+      },
+      {
+        "ref": "DOWEL-M2-10",
+        "desc": "M2 x 10 mm A2 stainless dowel — pawl pivot",
+        "qty": 1,
+        "mass_g": 0.5,
+        "cost_usd": 1.0,
+        "supplier": "Amazon / AliExpress",
+        "notes": "Pawl pivot in the stbd pedestal."
+      },
+      {
+        "ref": "SS34-CATCH",
+        "desc": "SS34 Schottky flyback diode — solenoid coil",
+        "qty": 1,
+        "mass_g": 0.3,
+        "cost_usd": 0.5,
+        "supplier": "Amazon / AliExpress",
+        "notes": "Across SOL-CATCH-5V; protects the AO3400 on de-energise."
+      },
+      {
         "ref": "DYNEEMA-SK75",
         "desc": "Dyneema SK75 0.5 mm braided line × 2 m — cargo winch spool line",
         "qty": 1,
@@ -1027,18 +1147,71 @@
   },
   "bow_sensor_pod": {
     "desc": "Forward-facing bow sensor pod on the 40-deg nose mounting flat (Rev R1c): camera on the PORT camera-bump, ToF on the STARBOARD camera-bump, crosshair laser on CL between them; all bores normal to the flat, covered by one combined faceplate (bow_sensor_faceplate.stl). Replaces the modeller's two convex camera bumps. SCAD: airframe/openscad/fuselage/bow_sensor_pod.scad. Aperture placement verified against the baked canonical head shell by tools/verify_bow_pod.py (3/3 bores on skin, walls >=2.2 mm; ToF over-runs the flat ~1.3 mm onto the roll-off, bridged by the faceplate).",
-    "standards": ["REF-SENSOR-001", "REF-SENSOR-002", "REF-IEC-002", "REF-FDA-001", "REF-NIST-001", "REF-PROTO-002"],
+    "standards": [
+      "REF-SENSOR-001",
+      "REF-SENSOR-002",
+      "REF-IEC-002",
+      "REF-FDA-001",
+      "REF-NIST-001",
+      "REF-PROTO-002"
+    ],
     "items": [
-      {"ref": "BOW-CAM", "desc": "Bow camera — RunCam Nano 4 (19 mm Nano), forward video to Inara's stack", "qty": 1, "mass_g": 3.6, "mass_oz": 0.13, "std": "REF-SENSOR-001"},
-      {"ref": "BOW-TOF", "desc": "Benewake TFmini-S long-range ToF (12 m indoor / 7 m outdoor, 100 Hz, UART/I2C) to Shepherd Wash UART2", "qty": 1, "mass_g": 5.0, "mass_oz": 0.18, "std": "REF-SENSOR-002"},
-      {"ref": "BOW-LASER", "desc": "12 mm crosshair laser module, <=5 mW 650 nm Class 3R, 30 deg below horizon on CL; GPIO-enabled via 2N7002 with key-switch interlock", "qty": 1, "mass_g": 8.0, "mass_oz": 0.28, "std": "REF-IEC-002, REF-FDA-001", "notes": "Mass is a COTS-supplier estimate; varies by module."},
-      {"ref": "BOW-PMMA-TOF", "desc": "PMMA disc window for ToF aperture — 8 mm dia x 2 mm, uncoated (transmits 905 nm IR)", "qty": 1, "mass_g": 0.1, "supplier": "source per TODO §1.1.1.1a"},
-      {"ref": "BOW-PMMA-LASER", "desc": "PMMA exit window for laser — 5 mm dia x 2 mm (optional; sealed modules may omit)", "qty": 1, "mass_g": 0.1, "supplier": "source per TODO §1.1.1.1a"},
-      {"ref": "bow_sensor_faceplate.stl", "desc": "Printed combined bow faceplate (CF-PETG), camera+laser+ToF in one plate", "qty": 1, "mass_g": 0.8, "mass_oz": 0.03},
-      {"ref": "BOW-WIRING", "desc": "Wiring/connectors — TFmini-S 28 AWG 4-cond loom to Shepherd's Room, RG178 camera coax to Inara, laser GPIO/MOSFET lead", "qty": 1, "mass_g": 5.0, "mass_oz": 0.18}
+      {
+        "ref": "BOW-CAM",
+        "desc": "Bow camera — RunCam Nano 4 (19 mm Nano), forward video to Inara's stack",
+        "qty": 1,
+        "mass_g": 3.6,
+        "mass_oz": 0.13,
+        "std": "REF-SENSOR-001"
+      },
+      {
+        "ref": "BOW-TOF",
+        "desc": "Benewake TFmini-S long-range ToF (12 m indoor / 7 m outdoor, 100 Hz, UART/I2C) to Shepherd Wash UART2",
+        "qty": 1,
+        "mass_g": 5.0,
+        "mass_oz": 0.18,
+        "std": "REF-SENSOR-002"
+      },
+      {
+        "ref": "BOW-LASER",
+        "desc": "12 mm crosshair laser module, <=5 mW 650 nm Class 3R, 30 deg below horizon on CL; GPIO-enabled via 2N7002 with key-switch interlock",
+        "qty": 1,
+        "mass_g": 8.0,
+        "mass_oz": 0.28,
+        "std": "REF-IEC-002, REF-FDA-001",
+        "notes": "Mass is a COTS-supplier estimate; varies by module."
+      },
+      {
+        "ref": "BOW-PMMA-TOF",
+        "desc": "PMMA disc window for ToF aperture — 8 mm dia x 2 mm, uncoated (transmits 905 nm IR)",
+        "qty": 1,
+        "mass_g": 0.1,
+        "supplier": "source per TODO §1.1.1.1a"
+      },
+      {
+        "ref": "BOW-PMMA-LASER",
+        "desc": "PMMA exit window for laser — 5 mm dia x 2 mm (optional; sealed modules may omit)",
+        "qty": 1,
+        "mass_g": 0.1,
+        "supplier": "source per TODO §1.1.1.1a"
+      },
+      {
+        "ref": "bow_sensor_faceplate.stl",
+        "desc": "Printed combined bow faceplate (CF-PETG), camera+laser+ToF in one plate",
+        "qty": 1,
+        "mass_g": 0.8,
+        "mass_oz": 0.03
+      },
+      {
+        "ref": "BOW-WIRING",
+        "desc": "Wiring/connectors — TFmini-S 28 AWG 4-cond loom to Shepherd's Room, RG178 camera coax to Inara, laser GPIO/MOSFET lead",
+        "qty": 1,
+        "mass_g": 5.0,
+        "mass_oz": 0.18
+      }
     ],
     "total_mass_g": 22.6,
-    "total_mass_oz": 0.80,
+    "total_mass_oz": 0.8,
     "notes": "Total bow-pod mass addition ~= 0.80 oz (22.6 g) [imperial-primary]. Faceplate mass is a measured solid-volume estimate at CF-PETG ~1.29 g/cm3 (confirm in slicer); camera/laser sensor masses are COTS-supplier figures. Net AUW change vs the modeller's two convex bumps is essentially nil (bumps removed, ~0.8 g faceplate added). Earlier TODO estimate ~25.6 g used a ~4 g twin-bezel placeholder now superseded by the single faceplate."
   },
   "totals": {
@@ -1060,7 +1233,7 @@
       "power_batteries": "~$120",
       "gear_train": "~$62",
       "hardware_misc": "~$60",
-      "cargo_system_new": "~$9 (DRV8833 $2 + Dyneema SK75 $4 + foam gasket $3)",
+      "cargo_system_new": "~$49 (STS3215 winch servo $25 + catch solenoid $6 + 2x MR84ZZ $3 + 4mm SS axle $2 + pawl spring $2 + M2 dowel $1 + SS34 $0.5 + DRV8833 $2 + Dyneema SK75 $4 + foam gasket $3). Rev S: N20-WINCH deleted, STS3215 winch train added.",
       "total_estimate": "~$1,905",
       "notes": "Rev P adds ~$23 vs Rev O ($1,882). Component prices as of 2026-06-01. Excludes one-time tools. Printed cargo parts ($0 marginal cost for in-house prints) not included in cost delta beyond filament."
     },

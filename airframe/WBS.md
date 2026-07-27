@@ -270,7 +270,7 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
 | Structural CF (rods, tube, bar, plate, PTFE) | 6 | `airframe/placeholders/structural/` |
 | Avionics PCBs (PB2-I, Cape-A-2/B-2, Emma, Kaylee, microSD) | 6 | `airframe/placeholders/avionics/` |
 | Power (LiPos, fuses, shunt) | 7 | `airframe/placeholders/power/` |
-| Cargo (N20, HX711, DRV8833, Dyneema) | 4 | `airframe/placeholders/cargo/` |
+| Cargo (STS3215, HX711, DRV8833, Dyneema) | 4 | `airframe/placeholders/cargo/` — N20 placeholder retired, STS3215 placeholder pending envelope |
 | Gears M=1.0 (sector, pinion, bevel, housing) | 4 | `airframe/placeholders/gears/` |
 | Hardware (pins, inserts, screws, straps, wire ring) | 6 | `airframe/placeholders/hardware/` |
 | Lighting (WS2812C SMD nav LED) | 1 | `airframe/placeholders/lighting/` |
@@ -422,7 +422,7 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
 
 | Item | Qty | Approx. Cost | Notes |
 |------|-----|-------------|-------|
-| N20 DC motor 6V 300:1 | 1× | ~$8 | Winch drive |
+| STS3215 serial-bus servo | 1× | ~$25 | Winch drive (supersedes N20 DC motor) |
 | DRV8833 dual H-bridge driver | 1× | ~$2 | |
 | SG90 servo | 2× | ~$6 | Door actuator + payload release |
 | Dyneema SK75 0.5mm braid | 2 m | ~$4 | Winch line |

@@ -137,7 +137,7 @@ FPV bezel, winch spool and mount geometry.
 - [ ] SG90 servo body drops into bracket pocket without force — pocket 23×12.5×22 mm
 - [ ] DRV8833 breakout PCB (23×19 mm) snaps into tray — 4 snap tabs
 - [ ] GPS ring 25 mm dia opening is round and clean
-- [ ] N20 motor body (10×12 mm cross-section) fits winch mount saddle
+- [ ] STS3215 body fits the port winch-pedestal cradle (envelope pending — §3.1 gate)
 - [ ] Spool bore (3 mm) fits a 3 mm rod cleanly
 
 ---

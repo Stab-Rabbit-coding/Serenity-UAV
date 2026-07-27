@@ -247,78 +247,81 @@
     two 62×42 mm dorsal panel openings. Z-range must be 0..163 mm; all features inside hull skin.
     **BLOCKS Phase 0 cargo section printing.**
 
-- [ ] Add motor-mount and DRV8833-tray boss locations to `cargo_sect_shell24.scad` interior
-    drawing notes (Phase 1 pre-pour checklist reference).
+- [ ] Add DRV8833-tray boss locations to `cargo_sect_shell24.scad` interior drawing notes
+    (Phase 1 pre-pour checklist reference). **The N20 motor-mount boss is dropped** — the
+    winch now mounts on two pedestals, tracked separately in §1.1.1.2.1a.
 - [ ] Add SG90 bell-crank boss to inner face of each door panel for pushrod attachment.
     - Export gondola shell to `thingverse-serenity/files-hollowed-18in/`
     - **BLOCKS Phase 8**
 
-###### 1.1.1.2.1a *Cargo Winch Motor & Ratchet Specification*
+###### 1.1.1.2.1a *Cargo Winch — STS3215 Conversion (Rev B, 2026-07-27)*
 
-**Cargo Winch System Specification (Rev A, 2026-07-27):** comprehensive design specification for the cargo winch mechanical and electrical integration.
+Retires the Rev P/Q/R N20 winch train and replaces it with an STS3215 serial-bus servo
+driving a spool that is **supported at both ends**, behind a **normally-engaged one-way
+safety ratchet** with a powerless overload line-shed. Canonical source:
+[`docs/CARGO_WINCH_SPECIFICATION.md`](../../docs/CARGO_WINCH_SPECIFICATION.md) **Rev B** —
+do not restate its dimensions here.
 
-- [x] **Create `docs/CARGO_WINCH_SPECIFICATION.md`** — comprehensive specification covering:
-    - Motor selection: STS3215 digital servo, 4.8–6.0 V, PWM control, integrated with CAN-PERPH-GW
-    - Safety ratchet: normal-open spring-locked pawl; fail-safe engaged without power
-    - Spool support: dual bearing mounts at both ends (not shaft-hanging), radial load ≥50 lbf
-    - Cable: Dyneema UHMWPE 0.25 in (6.35 mm) diameter, ≥500 lbf breaking strength
-    - Failsafe behavior: power required to unlock ratchet; overload triggers gradual unwind to shed load
-    - Electrical integration: CAN-PERPH-GW (n=1) controls servo via PWM, monitors ratchet state, publishes signed CAN-FD telemetry
-    - Power budget: ~9 W peak from Kaylee RAIL-2 5V_JAYNE (2.4 A headroom available)
-    - Reference: STS3215 datasheet at `docs/references/108090023_STS3215-C001_Datasheet.pdf` (REF-SENSOR-012)
-    *(done 2026-07-27)*
+- [x] **`docs/CARGO_WINCH_SPECIFICATION.md` Rev B authored** *(2026-07-27)*. Rev A (same
+    date, first pass) is **withdrawn** — it specified PWM control (the STS3215 is a TTL
+    serial-bus servo), invented a 50 lbf design load and 0.25 in line against the airframe's
+    real 3.92 N / 0.5 mm figures, described the ratchet as a bidirectional lock rather than
+    one-way, and anchored the line to the spool, contradicting the shed requirement.
+- [x] **Superseded hardware scrubbed from active files** *(2026-07-27)*:
+    `N20-WINCH`, `cargo_winch_motor_mount.stl` (cantilever), `cargo_winch_spool.stl`
+    (N20 D-bore + anchor slot) removed from `docs/bom_revR.json`; `make_motor_mount()` /
+    `make_winch_spool()` in `generate_cargo_mounts.py` converted to documented
+    `NotImplementedError` stubs and dropped from the build list; prose updated in
+    `README.md`, root `WBS.md`/`TODO.md`, `airframe/WBS.md`,
+    `airframe/VERIFY_PLACEMENT_CHECKLIST.md`, `avionics/jayne/WBS.md`,
+    `graphical-build-guide/` (REVN guide + flight-phases + SVG task),
+    `docs/PHASED_BUILD_GUIDE.md`, `docs/PROTO_PRINT_DAVINCI_JR.md`,
+    `docs/AVIONICS_PB2_REDESIGN.md`, `docs/POWER_DISTRIBUTION.md`, `PROJECT_INDEX.md`.
+    **`DRV8833-CARGO` + `cargo_drv8833_tray.stl` deliberately RETAINED** — Rev R assigns both
+    channels to the door and payload-release SG90s, not the winch.
+- [x] **New hardware specified** *(2026-07-27)*: 6 printed parts (2 pedestals, spool r2,
+    pawl, dog coupler, fairlead) + 7 purchased refs (`STS3215-WINCH`, `SOL-CATCH-5V`,
+    `BRG-MR84ZZ` ×2, `SHAFT-SS-4MM`, `SPRING-PAWL`, `DOWEL-M2-10`, `SS34-CATCH`) added to
+    `docs/bom_revR.json` with masses, notes and cost roll-up.
 
-- [ ] **STS3215 datasheet review and parameter extraction:**
-    - Confirm motor torque (static, dynamic, stall) and speed (no-load RPM)
-    - Verify mass and confirm servo standard pinout
-    - Confirm stall current limit for overload firmware threshold (baseline 1.5 A)
-    - Document all findings in docs/CARGO_WINCH_SPECIFICATION.md §Motor Specifications
+- [ ] **★ BLOCKER — STS3215 datasheet verification (REFERENCES.md REF-SENSOR-012, TODO §0.x).**
+    The datasheet is in the repo but is a scanned/CID-encoded PDF that could not be extracted
+    (no OCR toolchain in the build environment). Read off and record: **(a)** case envelope +
+    mounting-boss pattern, **(b)** torque vs. the ≥ 3.2 kgf·cm requirement, **(c)** mass
+    (60 g assumed — dominates the +98.6 g delta and T/W 1.613 → 1.557), **(d)** stall current
+    (1.2 A budgeted; resize RAIL-2 if > ~2.5 A). **Blocks STL generation and procurement.**
+    Do not fabricate these values.
+- [ ] **Implement the six winch STLs** in `generate_cargo_mounts.py` (`WINCH_REV_S_PARTS`).
+    They are dimensionally interdependent — axle span, bearing seats and ratchet clearance all
+    key off the servo envelope — so implement together, then mesh-validate per root
+    `AGENTS.md` §7. Blocked on the gate above.
+- [ ] **Pedestal mounting stations in `cargo_sect_shell24.scad`.** The retired mount used 4× M2
+    self-taps into the gondola *ceiling*; the two pedestals need real M3 heat-set boss stations
+    on the bay floor, FreeCAD-verified against the cargo-door 180° swing envelope
+    (`generate_cargo_doors.py`) and clear of `CARGO_CAM_POS` / the Jayne nadir bosses.
+- [ ] **Half-duplex TTL bus wiring.** Confirm the MSPM0G3507 can drive a single-wire UART on
+    `FLEX_TTL_GPIO`, or add a direction-steering resistor/buffer at the harness. Same pinmux
+    caveat as `CAN-PERIPH-GW-1.md` open item 4. Cross-ref `avionics/WBS.md`.
+- [ ] **Catch solenoid drive circuit.** AO3400 N-FET + 100 Ω gate + **10 kΩ gate pull-down**
+    (undriven/resetting MCU must leave the catch ENGAGED) + SS34 flyback across the coil.
+- [ ] **Bench-calibrate the ratchet slip threshold to 8.0 N ± 1.0 N** measured at the line, via
+    the set-screw spring seat; then verify over ≥ 100 lock/release cycles for wear. The 8.0 N
+    figure is derived (48 % of the 16.64 N available excess lift), not measured.
+- [ ] **Line-shed test.** Confirm the line actually runs clear of drum and fairlead under load.
+    The ~0.7 N capstan retention on the last two turns is analytic, not measured. Verify the
+    inboard end is **not** anchored.
+- [ ] **Firmware — winch state machine** (Simon payload-primary, gateway-side control).
+    `WINCH_STATUS` / `WINCH_COMMAND` frames, TPM-signed per [REF-NIST-001 §2.1]; STS3215 bus
+    driver; HX711 re-hosted from Cape-B to the gateway; Shepherd watchdog cuts RAIL-2 on
+    heartbeat timeout (which *engages* the catch). Bus IDs assigned in firmware, not in the
+    spec. Cross-ref `avionics/firmware/WBS.md`.
+- [ ] **Re-run the §6 mass/CG table** once the real STS3215 mass is known; propagate to
+    `docs/flight_envelope.md` if AUW moves materially.
+- [ ] *(Optional, out of scope for this change)* Move the door/release SG90s onto the
+    gateway's spare `FLEX_PWM_IO` and retire `DRV8833-CARGO` + `cargo_drv8833_tray.stl`.
 
-- [ ] **Detailed ratchet mechanical design:**
-    - Spool drive gear profile design (conical teeth, tooth pitch, material grade)
-    - Pawl lever geometry and servo linkage ratio (servo torque × arm ≥ spring force + friction)
-    - Spring constant and pre-load FEA (target FOS ≥ 2 under 50 lbf max load)
-    - Stress analysis on spool axle + bearing mounts under dynamic load
-    - Tolerance stack-up analysis for smooth engagement/disengagement
-
-- [ ] **Spool bearing and support design:**
-    - Bearing pocket bosses in `cargo_sect_shell24.scad` (left + right ends)
-    - Bearing selection (flanged, shaft bore sizing, load rating ≥50 lbf radial)
-    - Axle material and threading (CF rod or stainless steel)
-    - Snap-ring or retaining nut design for inner race retention
-
-- [ ] **Cable routing and strain relief:**
-    - Through-hole geometry for cable exit from spool
-    - Smooth radius (~10 mm) to prevent fraying
-    - Strain relief clamp spacing (≤50 mm) along internal run from spool to bay door exit
-    - Cable length calculation based on gondola drop distance (~1500 mm unwind for landing/hover ops)
-
-- [ ] **Servo linkage and mechanical linkage bench test:**
-    - Fabricate servo arm and pawl lever
-    - Confirm servo can retract pawl against spring preload (no stall) at 5.4 V nominal
-    - Test ratchet locking/unlocking cycles (≥100 cycles) for wear
-    - Measure and document actual spring hold force under 50 lbf axial load
-
-- [ ] **CAN-FD firmware integration (Simon + CAN-PERPH-GW):**
-    - `WINCH_STATUS` message definition (0x7B0, 10 Hz): WINCH_STATE enum, servo position, load cell ADC, error flags
-    - `WINCH_COMMAND` message definition (0x7B1, edge-triggered): HOLD/UNLOCK/LOCK/ABORT commands from Simon
-    - CAN-PERPH-GW firmware: PWM control loop, overload detection (load cell ADC threshold or servo stall current >1.5 A for >500 ms)
-    - Simon firmware: WINCH_STATE machine (LOCKED → UNLOCKING → UNLOCKED → OVERLOAD transition logic)
-    - Shepherd watchdog integration: monitor WINCH_STATUS timeout (>1 s → failsafe power cut)
-    - Signed HMAC/ECDSA telemetry per Zero Trust [REF-NIST-001 §2.1]
-
-- [ ] **Load cell sensor (optional, TBD Phase 8):**
-    - Sensor selection: tension load cell, 0–300 lbf range (0–1336 N), ADC-compatible output
-    - CAN-PERPH-GW ADC interface (12-bit, 0–3.3 V mapped to 0–1336 N)
-    - Overload threshold tuning: baseline 50 lbf (222 N); adjust post-bench test
-    - Calibration procedure documentation
-
-- [ ] **Phase 8 integration checklist:**
-    - Cargo gondola shell (`cargo_gondola_shell.scad`): spool axle bore, ratchet chamber, cable exit
-    - Avionics harness: 5V_JAYNE power lines (18 AWG shielded TP × 2 drops), CAN-PERPH-GW wiring to Shepherd's Room
-    - Test sequence: ratchet lock/unlock, payload descent under load, overload protection trigger, failsafe power cut
-
-**BLOCKS:** Phase 8 cargo winch assembly and integration test; Kaylee RAIL-2 5V_JAYNE redundant BEC channel addition (docs/POWER_DISTRIBUTION.md §11.1)
+**BLOCKS:** Phase 8 cargo winch assembly; `build_guide_23_winch_latch.svg` rebuild;
+Kaylee RAIL-2 third BEC channel (`docs/POWER_DISTRIBUTION.md` §11.1).
 
 ###### 1.1.1.2.2 *Wing Root*
 

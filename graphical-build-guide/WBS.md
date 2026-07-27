@@ -395,7 +395,9 @@ This section covers the comprehensive rebuild of the graphical build guide's SVG
 - [ ] **Phase D (10/10): Rebuild `build_guide_20_node_placement.svg`** — **STALE Cape-A/B fix:** Update 8-node arch placement showing all 8 nodes carrying active Cape-A-2 (Wash) and Cape-B-2 (Zoë) with uniform 5 kV galvanic isolation. Depict Emma transceivers only in River's Room and Simon's Medbay nodes (per `REF-FCC-003`).
 - [ ] **Phase E (1/6): Rebuild `build_guide_21_node_install.svg`** — **STALE Cape-A/B fix:** Rebuild flight control node mounting card showing Cape-A-2 (Wash) and Cape-B-2 (Zoë) physical mounting, CAN FD terminal access, and isolated port wiring.
 - [ ] **Phase E (2/6): Rebuild `build_guide_22_clamshell_doors.svg`** — Clamshell cargo doors, hinges at X≈-117.6mm, -222.5mm, and hinge retention blocks.
-- [ ] **Phase E (3/6): Rebuild `build_guide_23_winch_latch.svg`** — Winch spool (N20 motor) and autolatch cargo cradle assembly card.
+- [ ] **Phase E (3/6): Rebuild `build_guide_23_winch_latch.svg`** — Winch spool (STS3215 servo,
+    twin pedestals, ratchet ring + pawl) and autolatch cargo cradle assembly card. Must show
+    the spool supported at BOTH ends, not on the motor shaft.
 - [ ] **Phase E (4/6): Rebuild `build_guide_24_gondola.svg`** — Gondola payload containment build and connection points.
 - [ ] **Phase E (5/6): Rebuild `build_guide_25_nacelle_mount.svg`** — 50mm tandem EDF nacelle mounting, iris nozzle gear train, and sector gear.
 - [ ] **Phase E (6/6): Rebuild `build_guide_26_first_flight.svg`** — Pre-flight checklist and initial hover (verify 4-radio link handover).

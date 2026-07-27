@@ -115,7 +115,10 @@ Cargo bay interior mounts:
 
 ### 1.7 Cargo Winch Motor Mount
 - **Part:** `cargo_winch_motor_mount.stl`
-- **Design intent:** N20 6V 300:1 gearmotor base. Bolted to belly interior, provides mechanical advantage for cargo deploy/retract.
+- **Design intent:** STS3215 serial-bus servo, mounted in the port winch pedestal.
+  Bolted to belly interior; drives the spool through a lost-motion dog coupler so no
+  radial load reaches the servo output. Supersedes the N20 6V 300:1 gearmotor base.
+  Envelope pending datasheet verification — `docs/CARGO_WINCH_SPECIFICATION.md` §3.1.
 - **Current state:** Unplaced.
 - **Placement estimate:** Cargo bay floor (belly −Z), port side for balance. Nominal: X ≈ −140 mm (outboard of CL), Y ≈ 40..70 mm, Z ≈ 0..5 mm (floor-mounted).
 - **User action:** Confirm motor orientation (shaft pointing Y or Z); check clearance to cradle and door servo.
