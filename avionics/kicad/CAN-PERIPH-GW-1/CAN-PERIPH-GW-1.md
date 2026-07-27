@@ -14,12 +14,15 @@ captured into `gen_can_periph_gw_pcb.py` as a real per-stack template (not an
 invented grid) and mechanically tiled ×4 along a 50 mm lane pitch — verified via a
 sandboxed dry run that this placement logic is DRC-clean (0 shorts/clearance/
 courtyard from placement) at both N=1 (exact match to the real board) and N=4.
-DRC **0 hard violations** (`fix_starved_thermal_pads.py` clears the class of
-GND-pad thermal-relief errors that appear per stack instance). Back-silkscreen
-attribution block added, matching the Wash/Zoë pattern. **Routing in progress**
-via the Specctra DSN/freerouting 2.2.4 bridge (autorouter converging, unrouted
-count dropping pass-over-pass — see WBS.md for the latest count); gerbers pending
-completion of that pass.
+Back-silkscreen attribution block added, matching the Wash/Zoë pattern.
+**Routing: freerouted via the Specctra DSN/freerouting 2.2.4 bridge**, 20-pass
+autorouter session, 296 → 47 unrouted nets (~84% routed), session self-terminated
+cleanly (this is the fixed 2.2.4 behavior — the earlier "never self-exits" finding
+was specific to 2.1.0 and no longer applies). DRC after import: **1 hard violation**
+(a freerouted via 0.055 mm short of the 0.2 mm board-edge-clearance rule — left
+as-is rather than risk breaking its routed connections with an automated nudge;
+fix by hand in the KiCad GUI at final layout review). Gerbers generated reflecting
+this ~84%-routed state; the remaining 47 nets are open manual/GUI routing work.
 
 ---
 

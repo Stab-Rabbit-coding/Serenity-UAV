@@ -516,10 +516,17 @@ to populate 132289RP in place of 132289 is the remaining fabrication step.
 **Updated 2026-07-26:** Emma now carries its own TPM — Infineon SLB9670 (SPI TPM 2.0,
 same part standardized fleet-wide), added via `avionics/kicad/Emma/scripts/inject_emma_tpm.py`
 (schematic ref `TPM`, dedicated 6-pin SPI+control header `J_TPM`; no local CAN-FD/RS-485
-transceiver is needed — Emma reaches the bus via Zoë's P1/P2 stacking link). PCB footprint
-placement is open work (root `TODO.md` §1.2a). Prior to this addition, cryptographic
-operations for AX.25 payload signing were entirely on the CAPE-B host CPU; that remains
-true for any signing not routed through the new local TPM.
+transceiver is needed — Emma reaches the bus via Zoë's P1/P2 stacking link). TPM + its
+10 kΩ reset pull-up (`R_TPM_RST_EMMA`) + 100 nF decoupling cap (`C_TPM_EMMA1`) are now
+placed on the PCB (B.Cu — Emma's F.Cu is fully saturated, confirmed by an exhaustive
+obstacle-aware search finding zero clear ≥6×6 mm front-side sites anywhere on the
+board), nets assigned, DRC-clean. **`J_TPM` header itself is not yet placed** — every
+candidate site collided with existing front- or back-side copper (its through-hole pads
+span both layers); tracked as open work, root `TODO.md` §1.2a. Routing from TPM/R/C to
+the rest of the board is also open (first-pass footprint population only, per this
+project's established convention). Prior to this addition, cryptographic operations for
+AX.25 payload signing were entirely on the CAPE-B host CPU; that remains true for any
+signing not routed through the new local TPM.
 
 ---
 

@@ -3,7 +3,6 @@
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
 <!-- Last updated: 2026-07-26 — Automated reconciliation pass -->
-under `archives/avionics-archives/kicad-archives/`. Design notes in `archive/ARCHIVE-REVQ.md`
 inside this directory.
 
 ```text
@@ -77790,3 +77789,24 @@ avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1_N1_2026-0
 avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1_N1_2026-07-26.kicad_sch — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/CAN-PERIPH-GW-1/scripts/__pycache__/gen_can_periph_gw_pcb.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_222454.zip — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-07-26) ---
+avionics/kicad/Emma/gerbers/Emma-B_Courtyard.gbr — [PENDING AI CLASSIFICATION]
+avionics/kicad/Emma/gerbers/Emma-B_Cu.gbl — [PENDING AI CLASSIFICATION]
+avionics/kicad/Emma/gerbers/Emma-B_Fab.gbr — [PENDING AI CLASSIFICATION]
+avionics/kicad/Emma/gerbers/Emma-B_Mask.gbs — [PENDING AI CLASSIFICATION]
+avionics/kicad/Emma/gerbers/Emma-B_Paste.gbp — [PENDING AI CLASSIFICATION]
+avionics/kicad/Emma/gerbers/Emma-B_Silkscreen.gbo — [PENDING AI CLASSIFICATION]
+avionics/kicad/Emma/gerbers/Emma-Edge_Cuts.gm1 — [PENDING AI CLASSIFICATION]
+avionics/kicad/Emma/gerbers/Emma-F_Courtyard.gbr — [PENDING AI CLASSIFICATION]
+avionics/kicad/Emma/gerbers/Emma-F_Cu.gtl — [PENDING AI CLASSIFICATION]
+avionics/kicad/Emma/gerbers/Emma-F_Fab.gbr — [PENDING AI CLASSIFICATION]
+avionics/kicad/Emma/gerbers/Emma-F_Mask.gts — [PENDING AI CLASSIFICATION]
+avionics/kicad/Emma/gerbers/Emma-F_Paste.gtp — [PENDING AI CLASSIFICATION]
+avionics/kicad/Emma/gerbers/Emma-F_Silkscreen.gto — [PENDING AI CLASSIFICATION]
+avionics/kicad/Emma/gerbers/Emma-In1_Cu.g1 — [PENDING AI CLASSIFICATION]
+avionics/kicad/Emma/gerbers/Emma-In2_Cu.g2 — [PENDING AI CLASSIFICATION]
+avionics/kicad/Emma/gerbers/Emma-Margin.gbr — [PENDING AI CLASSIFICATION]
+avionics/kicad/Emma/gerbers/Emma-in1-back.drl — [PENDING AI CLASSIFICATION]
+avionics/kicad/Emma/gerbers/Emma-job.gbrjob — [PENDING AI CLASSIFICATION]
+avionics/kicad/Emma/gerbers/Emma.drl — [PENDING AI CLASSIFICATION]

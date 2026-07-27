@@ -5,96 +5,103 @@
       "Application": "Pcbnew",
       "Version": "9.0.2+dfsg-1"
     },
-    "CreationDate": "2026-07-26T23:47:20-04:00"
+    "CreationDate": "2026-07-26T23:39:36-04:00"
   },
   "GeneralSpecs": {
     "ProjectId": {
-      "Name": "CAN-PERIPH-GW-1",
-      "GUID": "43414e2d-5045-4524-9950-482d47572d31",
-      "Revision": "1"
+      "Name": "Emma",
+      "GUID": "456d6d61-2e6b-4696-9361-645f70636258",
+      "Revision": "2"
     },
     "Size": {
-      "X": 200.6,
-      "Y": 28.1
+      "X": 55.1016,
+      "Y": 35.1016
     },
-    "LayerNumber": 2,
+    "LayerNumber": 4,
     "BoardThickness": 1.6,
     "Finish": "None"
   },
   "DesignRules": [
     {
       "Layers": "Outer",
-      "PadToPad": 0.127,
-      "PadToTrack": 0.127,
-      "TrackToTrack": 0.127,
-      "MinLineWidth": 0.2,
-      "TrackToRegion": 0.2,
-      "RegionToRegion": 0.2
+      "PadToPad": 0.1,
+      "PadToTrack": 0.1,
+      "TrackToTrack": 0.1,
+      "MinLineWidth": 0.15
+    },
+    {
+      "Layers": "Inner",
+      "PadToPad": 0.0,
+      "PadToTrack": 0.0,
+      "TrackToTrack": 0.1,
+      "MinLineWidth": 0.15,
+      "TrackToRegion": 0.1,
+      "RegionToRegion": 0.1
     }
   ],
   "FilesAttributes": [
     {
-      "Path": "CAN-PERIPH-GW-1-F_Cu.gtl",
+      "Path": "Emma-F_Cu.gtl",
       "FileFunction": "Copper,L1,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "CAN-PERIPH-GW-1-B_Cu.gbl",
-      "FileFunction": "Copper,L2,Bot",
+      "Path": "Emma-In1_Cu.g1",
+      "FileFunction": "Copper,L5,Inr",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "CAN-PERIPH-GW-1-F_Adhesive.gta",
-      "FileFunction": "Glue,Top",
+      "Path": "Emma-In2_Cu.g2",
+      "FileFunction": "Copper,L7,Inr",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "CAN-PERIPH-GW-1-B_Adhesive.gba",
-      "FileFunction": "Glue,Bot",
+      "Path": "Emma-B_Cu.gbl",
+      "FileFunction": "Copper,L4,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "CAN-PERIPH-GW-1-F_Paste.gtp",
+      "Path": "Emma-F_Paste.gtp",
       "FileFunction": "SolderPaste,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "CAN-PERIPH-GW-1-B_Paste.gbp",
+      "Path": "Emma-B_Paste.gbp",
       "FileFunction": "SolderPaste,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "CAN-PERIPH-GW-1-F_Silkscreen.gto",
+      "Path": "Emma-F_Silkscreen.gto",
       "FileFunction": "Legend,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "CAN-PERIPH-GW-1-B_Silkscreen.gbo",
+      "Path": "Emma-B_Silkscreen.gbo",
       "FileFunction": "Legend,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "CAN-PERIPH-GW-1-F_Mask.gts",
+      "Path": "Emma-F_Mask.gts",
       "FileFunction": "SolderMask,Top",
       "FilePolarity": "Negative"
     },
     {
-      "Path": "CAN-PERIPH-GW-1-B_Mask.gbs",
+      "Path": "Emma-B_Mask.gbs",
       "FileFunction": "SolderMask,Bot",
       "FilePolarity": "Negative"
     },
     {
-      "Path": "CAN-PERIPH-GW-1-Edge_Cuts.gm1",
+      "Path": "Emma-Edge_Cuts.gm1",
       "FileFunction": "Profile",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "CAN-PERIPH-GW-1-F_Fab.gbr",
+      "Path": "Emma-F_Fab.gbr",
       "FileFunction": "AssemblyDrawing,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "CAN-PERIPH-GW-1-B_Fab.gbr",
+      "Path": "Emma-B_Fab.gbr",
       "FileFunction": "AssemblyDrawing,Bot",
       "FilePolarity": "Positive"
     }
@@ -120,10 +127,34 @@
     },
     {
       "Type": "Dielectric",
-      "Thickness": 1.51,
+      "Thickness": 0.48,
       "Material": "FR4",
-      "Name": "F.Cu/B.Cu",
-      "Notes": "Type: dielectric layer 1 (from F.Cu to B.Cu)"
+      "Name": "F.Cu/In1.Cu",
+      "Notes": "Type: dielectric layer 1 (from F.Cu to In1.Cu)"
+    },
+    {
+      "Type": "Copper",
+      "Thickness": 0.035,
+      "Name": "In1.Cu"
+    },
+    {
+      "Type": "Dielectric",
+      "Thickness": 0.48,
+      "Material": "FR4",
+      "Name": "In1.Cu/In2.Cu",
+      "Notes": "Type: dielectric layer 2 (from In1.Cu to In2.Cu)"
+    },
+    {
+      "Type": "Copper",
+      "Thickness": 0.035,
+      "Name": "In2.Cu"
+    },
+    {
+      "Type": "Dielectric",
+      "Thickness": 0.48,
+      "Material": "FR4",
+      "Name": "In2.Cu/B.Cu",
+      "Notes": "Type: dielectric layer 3 (from In2.Cu to B.Cu)"
     },
     {
       "Type": "Copper",
