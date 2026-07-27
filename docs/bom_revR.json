@@ -1015,9 +1015,10 @@
       "support": "cargo_winch_pedestal_port.stl + cargo_winch_pedestal_stbd.stl — twin pedestals; SHAFT-SS-4MM axle, FOS 6.8 in bending at the 2.5g / 20 N cargo load case.",
       "ratchet": "Normally-engaged one-way safety ratchet: 24-tooth sawtooth ring integral with the stbd spool flange (OD 30 mm, 3 mm face) + cargo_winch_pawl.stl on a set-screw-adjustable 1.0 N spring. UNPOWERED = retract permitted, pay-out BLOCKED. Power required to retract the catch and allow unwind.",
       "catch_actuator": "SOL-CATCH-5V pull solenoid (>= 2.5 N @ 3 mm), driven by the SAME gateway via FLEX_PWM_IO -> AO3400 N-FET + SS34 flyback; 10k gate pull-down so an undriven MCU leaves the catch ENGAGED. De-energised = fail-safe engaged.",
-      "overload_shed": "Slip threshold 8.0 N (2.04x the 3.92 N payload load; 48% of the 16.64 N available excess lift). 8-degree undercut on the locking tooth face cams the pawl out above threshold -> slow pay-out with NO power. Dyneema anchor slot DELETED: the inboard end is friction-retained only (~0.7 N capstan on the last 2 turns) so the line runs off the drum and falls away rather than fouling the UAV.",
+      "overload_shed": "Slip threshold 8.0 N (2.04x the 3.92 N payload load; 48% of the 16.64 N available excess lift). 8-degree undercut on the locking tooth face cams the pawl out above threshold -> slow pay-out with NO power. Dyneema anchor slot DELETED: the inboard end is friction-retained only (~0.7 N capstan on the last 2 turns) so the line runs off the drum and falls away rather than fouling the UAV. ** GATE: the servo gearbox sits in series with this threshold. The whole error budget is 0.105 kgf.cm and a geared bus servo may exceed it 10-100x, in which case the powerless shed does NOT function and the coupler must become a torque-limiting slip clutch. Measure T_backdrive before committing coupler geometry — spec §3.7.1.",
       "line": "Dyneema SK75 0.5 mm braid x 2 m (REF: DYNEEMA-SK75); rated break ~300 N; WLL ~60 N (5:1 SF). Unchanged from Rev R.",
-      "load_cell": "HX711 24-bit ADC (REF: HX711-LC) — tension monitoring, re-hosted from Cape-B onto the CAN-PERIPH-GW; feeds the sensed (secondary) overload path."
+      "load_cell": "HX711 24-bit ADC (REF: HX711-LC) — tension monitoring, re-hosted from Cape-B onto the CAN-PERIPH-GW; feeds the sensed (secondary) overload path.",
+      "position_sensing": "ENC-AK7455-SPOOL on the spool itself (gateway J_ENC, SPI). Spool angle is reported whenever powered, regardless of coupler type. A powerless shed is un-telemetered by construction (no power, no encoder, no CAN). Spec §3.7.3."
     },
     "payload_retention": {
       "cradle": "cargo_cradle_autolatch.stl — PETG auto-latch: payload presses latch tab to lock, release servo pull-wire unlocks",
@@ -1085,6 +1086,15 @@
         "cost_usd": 3.0,
         "supplier": "Amazon / AliExpress",
         "notes": "Pressed into the spool hub counterbores, one per flange — this is what supports the spool at both ends. 10 N per bearing vs ~130 N static rating (FOS ~13)."
+      },
+      {
+        "ref": "ENC-AK7455-SPOOL",
+        "desc": "AKM AK7455 off-axis magnetic angle sensor + diametric magnet — winch spool position",
+        "qty": 1,
+        "mass_g": 4,
+        "cost_usd": 9.0,
+        "supplier": "Mouser / DigiKey",
+        "notes": "REF-SENSOR-008, fleet-standard (nacelle tilt). Reads spool angle DIRECTLY, independent of the servo, via the CAN-PERIPH-GW existing J_ENC 7-pad pigtail header on its dedicated SPI bus — no new part number and no board change. Needed because the servo encoder cannot be relied on for spool position: it wraps ~23x over a 1500 mm pay-out, can be outrun above ~840 Hz in a snag release, and does not rotate at all if the coupler ends up a slip clutch. See docs/CARGO_WINCH_SPECIFICATION.md §3.7."
       },
       {
         "ref": "SHAFT-SS-4MM",
@@ -1156,13 +1166,59 @@
       "REF-PROTO-002"
     ],
     "items": [
-      {"ref": "BOW-CAM", "desc": "Bow camera — RunCam Nano 4 (19 mm Nano), forward video to Inara's stack", "qty": 1, "mass_g": 3.6, "mass_oz": 0.13, "std": "REF-SENSOR-001"},
-      {"ref": "BOW-TOF", "desc": "Benewake TFmini-S long-range ToF (12 m indoor / 7 m outdoor, 100 Hz, UART/I2C) to Shepherd Wash UART2", "qty": 1, "mass_g": 5.0, "mass_oz": 0.18, "std": "REF-SENSOR-002"},
-      {"ref": "BOW-LASER", "desc": "12 mm crosshair laser module, <=5 mW 650 nm Class 3R, 30 deg below horizon on CL; GPIO-enabled via 2N7002 with key-switch interlock", "qty": 1, "mass_g": 8.0, "mass_oz": 0.28, "std": "REF-IEC-002, REF-FDA-001", "notes": "Mass is a COTS-supplier estimate; varies by module."},
-      {"ref": "BOW-PMMA-TOF", "desc": "PMMA disc window for ToF aperture — 8 mm dia x 2 mm, uncoated (transmits 905 nm IR)", "qty": 1, "mass_g": 0.1, "supplier": "source per TODO §1.1.1.1a"},
-      {"ref": "BOW-PMMA-LASER", "desc": "PMMA exit window for laser — 5 mm dia x 2 mm (optional; sealed modules may omit)", "qty": 1, "mass_g": 0.1, "supplier": "source per TODO §1.1.1.1a"},
-      {"ref": "bow_sensor_faceplate.stl", "desc": "Printed combined bow faceplate (CF-PETG), camera+laser+ToF in one plate", "qty": 1, "mass_g": 0.8, "mass_oz": 0.03},
-      {"ref": "BOW-WIRING", "desc": "Wiring/connectors — TFmini-S 28 AWG 4-cond loom to Shepherd's Room, RG178 camera coax to Inara, laser GPIO/MOSFET lead", "qty": 1, "mass_g": 5.0, "mass_oz": 0.18}
+      {
+        "ref": "BOW-CAM",
+        "desc": "Bow camera — RunCam Nano 4 (19 mm Nano), forward video to Inara's stack",
+        "qty": 1,
+        "mass_g": 3.6,
+        "mass_oz": 0.13,
+        "std": "REF-SENSOR-001"
+      },
+      {
+        "ref": "BOW-TOF",
+        "desc": "Benewake TFmini-S long-range ToF (12 m indoor / 7 m outdoor, 100 Hz, UART/I2C) to Shepherd Wash UART2",
+        "qty": 1,
+        "mass_g": 5.0,
+        "mass_oz": 0.18,
+        "std": "REF-SENSOR-002"
+      },
+      {
+        "ref": "BOW-LASER",
+        "desc": "12 mm crosshair laser module, <=5 mW 650 nm Class 3R, 30 deg below horizon on CL; GPIO-enabled via 2N7002 with key-switch interlock",
+        "qty": 1,
+        "mass_g": 8.0,
+        "mass_oz": 0.28,
+        "std": "REF-IEC-002, REF-FDA-001",
+        "notes": "Mass is a COTS-supplier estimate; varies by module."
+      },
+      {
+        "ref": "BOW-PMMA-TOF",
+        "desc": "PMMA disc window for ToF aperture — 8 mm dia x 2 mm, uncoated (transmits 905 nm IR)",
+        "qty": 1,
+        "mass_g": 0.1,
+        "supplier": "source per TODO §1.1.1.1a"
+      },
+      {
+        "ref": "BOW-PMMA-LASER",
+        "desc": "PMMA exit window for laser — 5 mm dia x 2 mm (optional; sealed modules may omit)",
+        "qty": 1,
+        "mass_g": 0.1,
+        "supplier": "source per TODO §1.1.1.1a"
+      },
+      {
+        "ref": "bow_sensor_faceplate.stl",
+        "desc": "Printed combined bow faceplate (CF-PETG), camera+laser+ToF in one plate",
+        "qty": 1,
+        "mass_g": 0.8,
+        "mass_oz": 0.03
+      },
+      {
+        "ref": "BOW-WIRING",
+        "desc": "Wiring/connectors — TFmini-S 28 AWG 4-cond loom to Shepherd's Room, RG178 camera coax to Inara, laser GPIO/MOSFET lead",
+        "qty": 1,
+        "mass_g": 5.0,
+        "mass_oz": 0.18
+      }
     ],
     "total_mass_g": 22.6,
     "total_mass_oz": 0.8,

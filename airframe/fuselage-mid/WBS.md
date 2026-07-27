@@ -291,6 +291,25 @@ do not restate its dimensions here.
     (60 g assumed — dominates the +98.6 g delta and T/W 1.613 → 1.557), **(d)** stall current
     (1.2 A budgeted; resize RAIL-2 if > ~2.5 A). **Blocks STL generation and procurement.**
     Do not fabricate these values.
+- [ ] **★ Measure servo back-drive torque `T_backdrive` — go/no-go on R5.** With
+    the pawl held clear, apply tangential load at the spool and record the torque
+    at which the spool turns the **unpowered** STS3215. The shed-threshold error
+    budget is **0.105 kgf·cm** total (±1.0 N at r=10.3 mm); a geared bus servo may
+    exceed it 10–100×. If it does, the powerless shed (spec §3.6a) does not work at
+    all and the coupler must change from rigid dog to a torque-limiting slip clutch.
+    Blocks the coupler geometry. Spec §3.7.1.
+- [ ] **Coupler decision — rigid dog (A) vs slip clutch (B).** Blocked on the
+    back-drive measurement. An overrunning one-way clutch (C) is rejected: it would
+    make controlled lowering impossible. Spec §3.7.2.
+- [ ] **AK7455 spool encoder integration (spec §3.7.3).** Diametric-magnet pocket in
+    the port flange hub, off-axis (the fixed axle occupies the centreline); mates the
+    gateway's existing `J_ENC` pigtail on its dedicated SPI bus — no board change and
+    no new part number [REF-SENSOR-008]. Confirm flux at the IC for the chosen
+    magnet/gap (same bench item already open for the nacelle encoders). Firmware:
+    ≥ 1 kHz sampling, turn-accumulation with a `turns_invalid` guard rather than a
+    guessed count — a snag release reaches ~5,030 rpm at the spool and outruns
+    wrap-tracking below ~840 Hz. The servo's own encoder is a cross-check only:
+    servo-vs-spool divergence indicates a slipped clutch or a stripped dog.
 - [ ] **Implement the six winch STLs** in `generate_cargo_mounts.py` (`WINCH_REV_S_PARTS`).
     They are dimensionally interdependent — axle span, bearing seats and ratchet clearance all
     key off the servo envelope — so implement together, then mesh-validate per root

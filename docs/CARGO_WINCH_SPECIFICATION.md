@@ -19,7 +19,7 @@
 
 ## 1. Scope and Requirements
 
-Five requirements drive this revision:
+Seven requirements drive this revision:
 
 | # | Requirement | Where satisfied |
 |---|---|---|
@@ -29,6 +29,7 @@ Five requirements drive this revision:
 | R4 | No power → spool may **retract**; power required to retract the catch and permit **pay-out** | §3.4, §5.2 |
 | R5 | Line force above max available lift → **slow unwind, line runs off the spool** so the UAV cannot be fouled | §3.6, §4.3 |
 | R6 | One **CAN-PERIPH-GW** (`N_STACKS=1`) drives both the servo and the catch | §5 |
+| R7 | **Spool position reported to the aircraft throughout pay-out and shed**, until the line departs | §3.7 |
 
 *"Everything is shiny." — Kaylee Frye*
 
@@ -149,6 +150,9 @@ clamped at **both** pedestals:
   reacted symmetrically.
 - **Drive:** the STS3215 transmits **torque only** through a lost-motion dog
   coupler (§3.3). No radial or moment load reaches the servo output spline.
+  The coupler isolates the servo from *radial* load but **not** from spool
+  *rotation* — see §3.7, which is the governing constraint on whether the
+  powerless shed works at all.
 
 Choosing a *fixed* axle with bearings inside the spool (rather than a rotating
 axle in pedestal bearings) removes the rotating-shaft-to-pedestal interface
@@ -256,6 +260,102 @@ its last turns the line **pulls free of the drum entirely** and falls away. The
 `cargo_winch_fairlead.stl` throat keeps the freed end from wedging between
 flange and pedestal on its way out.
 
+### 3.7 Spool position sensing, and the servo back-drive problem (R7)
+
+**The question this section answers:** during an overload shed, does the servo
+turn as the line pays out, and can its encoder keep reporting spool position?
+
+**Under the Rev B coupling, yes — but that answer is load-bearing in a way Rev B
+did not acknowledge, and it is conditional on something not yet verified.**
+The dog coupler's lost motion is only a few degrees of dead band; once taken up,
+the spool bears on the servo dog and back-drives it. Servo and spool are rigidly
+coupled for all but that dead band, in both directions. So the spool cannot pay
+out *unless* it can turn the servo's gear train.
+
+#### 3.7.1 Back-drive is in series with the safety threshold
+
+The shed threshold is not set by the pawl alone. The spool must overcome the
+pawl cam-out **and** the servo's back-drive resistance:
+
+```
+F_shed = ( T_pawl + T_backdrive ) / r_line
+```
+
+`T_backdrive` is unknown, and the budget for it is brutally small. §3.6 sets the
+threshold at 8.0 N with a bench-calibration tolerance of ±1.0 N. At
+r_line = 10.3 mm that entire tolerance is:
+
+```
+±1.0 N × 0.0103 m = ±0.0103 N·m = ±0.105 kgf·cm
+```
+
+**0.105 kgf·cm is the whole error budget.** A high-ratio geared serial-bus servo
+of the STS3215's class will typically resist back-drive by *several* kgf·cm —
+one to two orders of magnitude more. If that holds here, then:
+
+- the ratchet cams out at 8.0 N exactly as designed, **and the spool still does
+  not turn**, because the servo gearbox holds it;
+- the powerless mechanical shed (§3.6a) — the path that exists precisely for
+  when power and firmware are gone — **does not function at all**;
+- worse, `T_backdrive` varies with temperature, wear and lubricant, so even if
+  shed does occur the threshold is not repeatable, which is unacceptable for a
+  safety function whose whole purpose is a predictable release point.
+
+This is a **more serious finding than the sensing question**, and it is now the
+top open item (§8). It must be measured, not assumed: with the ratchet pawl held
+clear, apply a tangential load at the spool and record the torque at which the
+spool turns the unpowered servo.
+
+#### 3.7.2 Three couplings, and why the servo encoder cannot be the answer
+
+| Coupling | Normal lowering | Powerless shed | Servo encoder during shed |
+|---|---|---|---|
+| **(A) Rigid dog** (Rev B as written) | Servo controls descent ✓ | **Only if back-drivable** — threshold polluted by `T_backdrive` | Tracks ✓ |
+| **(B) Torque-limiting slip clutch** above working torque, below overload | Servo controls descent ✓ | Clean — `T_backdrive` out of the equation ✓ | **Does not track** ✗ (servo stays put) |
+| **(C) Overrunning one-way clutch** | **Broken** ✗ — servo could never pay out under control | Clean ✓ | Does not track ✗ |
+
+(C) is rejected outright: it would make controlled lowering impossible. The
+choice is (A) or (B), and it cannot be made until `T_backdrive` is measured.
+
+Two further defects apply to the servo encoder **even in case (A)**, where it
+does rotate:
+
+1. **It wraps.** Paying out 1500 mm at r = 10.3 mm is **23.2 spool turns**. A
+   single-turn absolute servo encoder wraps ~23 times, so it reports angle, not
+   position, without firmware turn-accumulation.
+2. **It can be outrun.** If a snag releases, the payload approaches free fall:
+   over 1.5 m that is 5.4 m/s, **527 rad/s ≈ 5,030 rpm** at the spool. Nyquist
+   alone needs > 168 samples/s; reliable wrap-counting needs **≥ 840 Hz**
+   (10 samples/rev). Above that the accumulated turn count is simply wrong.
+
+And the case the mechanical shed exists for — **total power loss — has no
+telemetry at all.** No power, no encoder, no gateway, no CAN frame. Encoder
+coverage applies to the *powered* overload path (§3.6b) only. Nothing reports
+spool position during a powerless shed, by construction.
+
+#### 3.7.3 Resolution — sense the spool, not the servo
+
+Spool position is measured **directly at the spool**, independent of the servo
+and of whichever coupling §3.7.1 resolves to:
+
+| Parameter | Value |
+|---|---|
+| Sensor | **AKM AK7455** off-axis magnetic angle sensor [REF-SENSOR-008] |
+| Why this part | Already fleet-standard for nacelle tilt; clean-room symbol and footprint exist; **no new part number** |
+| Interface | SPI → the gateway's **existing `J_ENC`** 7-pad header, on a dedicated SPI bus separate from the TPM's — **no board change** |
+| Target | Diametric magnet in a pocket in the port spool flange hub, off-axis (the axle is fixed and occupies the centreline) |
+| Sample rate | **≥ 1 kHz** (covers the 840 Hz wrap-tracking floor with margin) |
+| Multi-turn | Accumulated in gateway firmware; `turns` invalidated, not guessed, if `|Δθ|` between samples exceeds half a revolution |
+
+This satisfies R7 in every branch of the §3.7.2 trade: whether the coupler ends
+up rigid (A) or slipping (B), the aircraft is told the true spool angle for as
+long as it has power. The servo's own encoder becomes a cross-check — a
+divergence between servo angle and AK7455 angle is a direct, and useful,
+indication that a slip clutch has slipped or a dog has stripped.
+
+*"Takes a mechanic to tell you the wheel's turning. Takes a good one to tell you
+it isn't."*
+
 ---
 
 ## 4. Load Analysis
@@ -339,6 +439,7 @@ lands on the existing `J_FLEX` header.
 | `FLEX_TTL_GPIO` | bidirectional | STS3215 signal | Half-duplex TTL servo bus (**§5.1.1**) |
 | `FLEX_PWM_IO` | output | AO3400 N-FET gate | Solenoid enable — high = catch retracted |
 | `FLEX_UART_TX/RX` | input | HX711 | Line-tension ADC (clock/data) |
+| `ENC_SPI_*` (`J_ENC`) | input | **AK7455 on the spool** | Spool angle (§3.7.3) — existing header, dedicated SPI bus, no board change |
 | `+5V`, `GND` | power | Servo, solenoid, HX711 | RAIL-2 `5V_JAYNE` |
 
 **Solenoid drive** — AO3400 SOT-23 N-FET (already a project-standard part; see
@@ -383,8 +484,13 @@ WINCH_STATUS   (10 Hz, gateway → bus)
   servo_pos    : STS3215 reported position
   servo_load   : STS3215 reported load
   line_tension : HX711, mN
+  spool_angle  : AK7455, 0-4095 (single-turn absolute)
+  spool_turns  : accumulated in firmware; INVALID if |dtheta| > half a rev
+                 between samples (see §3.7.2 outrun case)
   flags        : bit0 catch_engaged   bit1 slip_detected
                  bit2 servo_comm_fail bit3 loadcell_fail
+                 bit4 encoder_fail    bit5 turns_invalid
+                 bit6 servo_vs_spool_divergence (coupler slipped/stripped)
   signature    : TPM
 
 WINCH_COMMAND  (event, Simon → gateway)
@@ -405,7 +511,8 @@ does not invent bus IDs.
 | Solenoid, hold (pay-out only) | 0.20 A | 1.1 W |
 | Gateway (MSPM0 + TPM + 2 isolators) | 0.10 A | 0.5 W |
 | HX711 | 0.01 A | 0.1 W |
-| **Total, worst case** | **≈ 1.51 A** | **≈ 8.2 W** |
+| AK7455 spool encoder | 0.02 A | 0.1 W |
+| **Total, worst case** | **≈ 1.53 A** | **≈ 8.3 W** |
 
 RAIL-2 is planned at ~2.4 A typical / ~4.2 A peak
 (`docs/POWER_DISTRIBUTION.md` §3.2.1), so the winch fits with margin — **subject
@@ -428,17 +535,18 @@ Per root `AGENTS.md` §5, real masses — no TBD.
 | **+** | Ø4 × 46 mm stainless axle | +4.6 g |
 | **+** | 2× MR84ZZ bearings | +3 g |
 | **+** | Spring, M2 dowel, M3 screws/inserts | +4 g |
+| **+** | AK7455 spool encoder + diametric magnet + pigtail | +4 g |
 | **+** | Pull solenoid | +15 g |
 | **+** | STS3215 *(**⚠ gate §3.1** — 60 g assumed)* | +60 g |
-| | **Added** | **+148.6 g** |
-| | **NET** | **+98.6 g (+0.22 lbm)** |
+| | **Added** | **+152.6 g** |
+| | **NET** | **+102.6 g (+0.23 lbm)** |
 
 Consequence at Phase 5–10:
 
 ```
-AUW  : 2 768 g → 2 867 g  (+3.6 %)
-T/W  : 43.79/27.15 = 1.613 → 43.79/28.12 = 1.557
-Excess lift : 16.64 N → 15.67 N
+AUW  : 2 768 g → 2 871 g  (+3.7 %)
+T/W  : 43.79/27.15 = 1.613 → 43.79/28.16 = 1.555
+Excess lift : 16.64 N → 15.63 N
 Slip threshold as fraction of excess : 48 % → 51 %   (still conservative)
 ```
 
@@ -466,6 +574,7 @@ See §3.3. All six are new STLs from
 | `SHAFT-SS-4MM` | Ø4 mm A2 stainless rod, 46 mm | 1 | **New stock item** (project stocks 3 mm CF; CF is unsuitable in a press-fit race) |
 | `SPRING-PAWL` | Compression spring, 1.0 N ± 0.2 N installed, stainless | 1 | Set-screw adjustable seat |
 | `DOWEL-M2-10` | M2 × 10 mm A2 dowel | 1 | Pawl pivot |
+| `ENC-AK7455-SPOOL` | AKM AK7455 off-axis angle sensor + diametric magnet | 1 | [REF-SENSOR-008], fleet-standard; mates the gateway's existing `J_ENC` pigtail — **no new part number, no board change** (§3.7.3) |
 | `FET-AO3400` | AO3400 N-FET, SOT-23 | 1 | Existing project part |
 | `DIODE-SS34` | SS34 flyback diode | 1 | Across solenoid coil |
 | — | M3 heat-set inserts + M3 × 8 SHCS | 8 + 8 | Pedestals → cargo frame |
@@ -478,21 +587,40 @@ See §3.3. All six are new STLs from
 
 ## 8. Open Items
 
-1. **⚠ STS3215 datasheet gate (§3.1)** — envelope, torque, mass, stall current.
+1. **★ MEASURE `T_backdrive` (§3.7.1) — now the top open item.** With the pawl
+   held clear, apply tangential load at the spool and record the torque at which
+   the spool turns the **unpowered** servo. The entire shed-threshold error
+   budget is **0.105 kgf·cm**; a geared bus servo may exceed that by 10–100×, in
+   which case the powerless shed (§3.6a) does not function and the coupler must
+   change from rigid (A) to slip-clutch (B) per §3.7.2. **This gates whether
+   R5 is met at all** — it is not a refinement, it is a go/no-go on the safety
+   function. Measure before committing the coupler geometry.
+2. **Coupler decision (A) vs (B)** — blocked on item 1. (C) is rejected: an
+   overrunning clutch would make controlled lowering impossible.
+3. **⚠ STS3215 datasheet gate (§3.1)** — envelope, torque, mass, stall current.
    Blocks STL generation, BOM order, and the §6 mass figures. `TODO §0.x`.
-2. **Half-duplex bus wiring (§5.1.1)** — confirm MSPM0G3507 single-wire UART on
+4. **Half-duplex bus wiring (§5.1.1)** — confirm MSPM0G3507 single-wire UART on
    `FLEX_TTL_GPIO`, or add a steering resistor/buffer at the harness.
-3. **Slip-threshold bench calibration** — set the spring seat to 8.0 N ± 1.0 N
+5. **Slip-threshold bench calibration** — set the spring seat to 8.0 N ± 1.0 N
    measured at the line, then verify over ≥ 100 lock/release cycles.
-4. **Line-shed test** — confirm the line actually runs clear of the drum and
+6. **Line-shed test** — confirm the line actually runs clear of the drum and
    fairlead under load; capstan estimate (§3.6) is analytic, not measured.
-5. **Generator rewrite** — delete `make_motor_mount()` / `make_winch_spool()`,
+7. **Generator rewrite** — delete `make_motor_mount()` / `make_winch_spool()`,
    add the six parts in §3.3; mesh-validate per root `AGENTS.md` §7.
-6. **Pedestal mounting stations** — the retired mount anchored to the *gondola
+8. **Pedestal mounting stations** — the retired mount anchored to the *gondola
    ceiling* with M2 self-taps; the pedestals need real M3 boss stations in
    `cargo_sect_shell24.scad`, FreeCAD-verified against the door swing envelope.
-7. **DRV8833 consolidation (optional)** — door/release servos could move to the
+9. **DRV8833 consolidation (optional)** — door/release servos could move to the
    gateway's spare `FLEX_PWM_IO`, retiring `DRV8833-CARGO` and its tray.
+10. **AK7455 spool-encoder integration (§3.7.3)** — magnet pocket in the port
+    flange hub, off-axis (the fixed axle occupies the centreline); confirm flux
+    at the IC for the chosen magnet and gap, the same bench item already open for
+    the nacelle encoders; ≥ 1 kHz sampling; firmware turn-accumulation with the
+    `turns_invalid` guard rather than a guessed count.
+11. **Accept that a powerless shed is un-telemetered** (§3.7.2) — no power means
+    no encoder and no CAN frame. If post-event knowledge of a shed is required,
+    that needs a separate mechanism (e.g. a latching mechanical indicator), not
+    the encoder.
 
 ---
 

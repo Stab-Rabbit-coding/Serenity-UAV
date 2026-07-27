@@ -185,6 +185,9 @@
 - [x] N20 winch train scrubbed from active files (Rev A withdrawn)
 - [x] New winch hardware specified — 6 STLs + 7 BOM refs
 - [ ] ★ STS3215 datasheet gate — envelope/torque/mass/stall
+- [ ] ★ Measure servo back-drive torque — go/no-go on line-shed
+- [ ] Winch coupler decision: rigid dog vs slip clutch
+- [ ] AK7455 spool encoder on gateway J_ENC (spec §3.7.3)
 - [ ] Implement the six Rev S winch STLs
 - [ ] Winch pedestal M3 boss stations in cargo_sect_shell24.scad
 - [ ] Half-duplex TTL bus wiring on FLEX_TTL_GPIO
