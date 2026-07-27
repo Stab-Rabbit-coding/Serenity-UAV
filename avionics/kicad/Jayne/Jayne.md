@@ -104,6 +104,13 @@ or wrong and were caught before being committed to any citation-tracked file —
   docs claimed; the Jayne U4 footprint must be 20-pad DFM) — replaces an earlier non-isolated
   TCAN1042HG-Q1 to match the
   Wash/Zoë Rev R EMI-hardening standard (see below).
+- **U6 — TI ISOW1412** galvanically-isolated RS-485 transceiver (20-pin DFM,
+  `Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm`, REFERENCES.md REF-SENSOR-010), added 2026-07-26
+  as part of the fleet-wide trust-module rollout (schematic "Section H: ISOW1412 Isolated
+  RS-485 (U6)"). Integrates its own isolated DC-DC for the bus-side supply, run half-duplex
+  on RS485_A/RS485_B by shorting Y-to-A and Z-to-B; RS485_DE drives both DE and RE_N.
+  J_RS485_IN/J_RS485_OUT trunk connectors added alongside. **PCB layout not yet synced** —
+  Jayne.kicad_pcb predates this schematic addition (open work, root `TODO.md` §1.2a).
 - **Y1** — 25 MHz crystal for U2's reference clock.
 
 ### EMI hardening (added 2026-07-03 — see "EMI Hardening Status" below)

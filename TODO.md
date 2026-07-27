@@ -236,12 +236,13 @@
 - [ ] Generate Wash gerbers
 - [ ] Generate Zoë gerbers
 - [ ] Zigbee RF chain was never actually added to Zoë — PCB scope g…
-- [ ] Generate Emma gerbers
 - [ ] FCC Part 15 §15.235 pre-compliance checklist for Emma
 - [ ] EMI isolation validation checklist
 - [ ] Merge claude/cape-em-harsh-variants-9Yfr1 → master
 - [ ] Design Faraday cages / boxes to protect all PCBs
 - [ ] Specify / implement tightly twisted pair bonded shielded wiring…
+
+→ Fleet trust module (2026-07-26), see `avionics/TODO.md` "Fleet Trust Module and Tilt Encoder": Wash PB2-P2 unwired-header finding, Wash/Zoë/Kaylee/Jayne DRC clean-out, CAN-PERIPH-GW-1 N=4 routing all still open.
 
 ### 1.4 — EMI Hardening Beyond the PCBs (500 W/m^2 environment)
 

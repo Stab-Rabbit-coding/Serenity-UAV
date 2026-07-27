@@ -253,6 +253,27 @@ BQ76930:
 
 ---
 
+### Section H — Trust Module (MCU + TPM + isolated CAN-FD + RS-485)
+
+Added 2026-07-26 via non-destructive schematic injection
+(`avionics/kicad/Kaylee/scripts/inject_kaylee_trust_module.py`) as part of the fleet-wide
+trust-module rollout, giving Kaylee its own TPM-signed presence on both isolated buses
+like every other node:
+
+| Ref | Part | Function |
+|---|---|---|
+| U_MCU | TI MSPM0G3507 | Local trust-module MCU (pinmux verified against SLASEX6C) |
+| U_TPM | Infineon SLB9670 | SPI TPM 2.0 — same part standardized fleet-wide |
+| U_ISOCAN | TI ISOW1044BDFMR | Isolated CAN-FD transceiver, 20-pin DFM, 5 kV reinforced |
+| U_RS485 | TI ISOW1412 (REFERENCES.md REF-SENSOR-010) | Isolated RS-485 transceiver, own integrated isolated DC-DC (no external isolated supply needed, unlike the superseded ADM2795EBRWZ) |
+
+**PCB not yet synced:** `Kaylee.kicad_pcb` predates this injection and carries none of these
+four footprints — `gen_kaylee.py` itself has drifted from the checked-in generator and is not
+safe to regenerate from (tracked as a separate open item). Bringing the PCB up to date is
+open work (root `TODO.md` §1.2a).
+
+---
+
 ## ESC Control and Telemetry Signal Routing
 
 Each nacelle contains two EDFs in tandem.  Power for both EDFs in a nacelle comes from

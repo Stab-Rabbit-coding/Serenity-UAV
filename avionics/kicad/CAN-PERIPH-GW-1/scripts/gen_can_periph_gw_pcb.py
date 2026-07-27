@@ -85,54 +85,51 @@ JST = f"{SYS_FP}/Connector_JST.pretty"
 PINHDR = f"{SYS_FP}/Connector_PinHeader_2.54mm.pretty"
 JUMPER = f"{SYS_FP}/Jumper.pretty"
 
-STACK_LANE_X = 90.0  # PCB mm per stack lane (independent of the schematic's own mm scale)
+# Real, manually-packed placement captured from the user's built
+# CAN-PERIPH-GW-1.kicad_pcb (Rev 2026-07-26, N_STACKS=1 at capture time) --
+# NOT an invented grid. Per-stack parts carry an explicit layer ("F"/"B";
+# 4 of them -- the MCU/TPM/CAN-FD-iso/RS-485-iso ICs -- are hand-placed on
+# the BACK). For stacks 2..N_STACKS this same per-stack template is
+# replayed shifted by LANE_DX along X (past the shared bus/power section,
+# which is placed once and never duplicated) -- a first-pass mechanical
+# repeat of the user's single-stack layout, same "final compaction is a
+# manual follow-on pass" convention already used by every generator in
+# this project (see module docstring). LANE_DX is sized from the real
+# per-stack footprint cluster's own bounding-box span (~34 mm center-to-
+# center) plus each edge footprint's own body half-width, so adjacent
+# lanes don't collide -- verified via DRC (0 courtyards_overlap/clearance
+# from placement) at N_STACKS=4 in a sandboxed dry run, see commit notes.
+LANE_DX = 50.0
 
-PLACE: dict[str, tuple[str, str, tuple[float, float], float]] = {
-    # Shared Section A: power (once, feeds every stack)
-    "J_PWR": (JST, "JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical", (10, 10), 0),
-    "U_REG_3V3": (SOT, "SOT-23-6", (25, 10), 0),
-    "L1": (LSMD, "L_Taiyo-Yuden_NR-20xx", (40, 10), 0),
-    "R_FBT": (RSMD, "R_0402_1005Metric", (55, 8), 0),
-    "R_FBB": (RSMD, "R_0402_1005Metric", (55, 12), 0),
-    "C_IN": (CSMD, "C_0402_1005Metric", (18, 18), 0),
-    "C_OUT": (CSMD, "C_0402_1005Metric", (40, 18), 0),
-}
-VALUES = {
-    "J_PWR": "+5V/GND", "U_REG_3V3": "TLV62569DBVR", "L1": "2.2uH",
-    "R_FBT": "10k", "R_FBB": "20k", "C_IN": "10uF", "C_OUT": "22uF",
-}
-NICK = {
-    "J_PWR": "Connector_JST:JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical",
-    "U_REG_3V3": "Package_TO_SOT_SMD:SOT-23-6",
-    "L1": "Inductor_SMD:L_Taiyo-Yuden_NR-20xx",
-    "R_FBT": "Resistor_SMD:R_0402_1005Metric",
-    "R_FBB": "Resistor_SMD:R_0402_1005Metric",
-    "C_IN": "Capacitor_SMD:C_0402_1005Metric",
-    "C_OUT": "Capacitor_SMD:C_0402_1005Metric",
+# ref-without-suffix -> (lib dir, footprint name, (x, y), rotation deg, layer)
+_PER_STACK_REAL: dict[str, tuple[str, str, tuple[float, float], float, str]] = {
+    "R_NRST": (RSMD, "R_0402_1005Metric", (143.98, 106.0), 0, "F"),
+    "C_VCORE": (CSMD, "C_0402_1005Metric", (150.48, 107.0), 0, "F"),
+    "C_MCU1": (CSMD, "C_0402_1005Metric", (143.48, 105.0), 0, "F"),
+    "J_SWD": (JST, "JST_GH_BM04B-GHS-TBT_1x04-1MP_P1.25mm_Vertical", (174.46, 113.9), 0, "F"),
+    "C_TPM1": (CSMD, "C_0402_1005Metric", (167.46, 106.48), 90, "F"),
+    "C_TPM2": (CSMD, "C_0402_1005Metric", (168.96, 106.48), 90, "F"),
+    "R_TPM_RST": (RSMD, "R_0402_1005Metric", (170.46, 106.51), 90, "F"),
+    "C_ISO1": (CSMD, "C_0402_1005Metric", (143.96, 110.0), 0, "F"),
+    "C_ISO2": (CSMD, "C_0402_1005Metric", (160.46, 105.0), 0, "F"),
+    "C_RS1": (CSMD, "C_0402_1005Metric", (149.48, 110.5), 0, "F"),
+    "C_RS2": (CSMD, "C_0402_1005Metric", (163.94, 106.0), 0, "F"),
+    "J_ENC": (CUSTOM_FP, "Pigtail_7W_DirectSolder", (140.41, 114.0), 0, "F"),
+    "J_FLEX": (PINHDR, "PinHeader_1x08_P2.54mm_Vertical", (166.54, 114.0), -90, "F"),
+    "U1": (QFN, "QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm", (154.75, 106.5625), 180, "B"),
+    "U2": (QFN, "QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm", (155.25, 97.5625), 180, "B"),
+    "U3": (SO, "SOIC-20W_7.5x12.8mm_P1.27mm", (140.5, 107.0), 90, "B"),
+    "U4": (SO, "SOIC-20W_7.5x12.8mm_P1.27mm", (171.0, 106.5), -90, "B"),
 }
 
-# Per-stack footprints (own MCU/TPM/CAN-FD/RS-485/encoder/flex), i = 1..N_STACKS
+PLACE: dict[str, tuple[str, str, tuple[float, float], float, str]] = {}
+for _base, (_lib, _fpname, (_rx, _ry), _rot, _lyr) in _PER_STACK_REAL.items():
+    for _i in range(1, N_STACKS + 1):
+        _dx = (_i - 1) * LANE_DX
+        PLACE[f"{_base}_{_i}"] = (_lib, _fpname, (_rx + _dx, _ry), _rot, _lyr)
+
+VALUES = {}
 for _i in range(1, N_STACKS + 1):
-    _x = 10 + (_i - 1) * STACK_LANE_X
-    PLACE.update({
-        f"U1_{_i}": (QFN, "QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm", (_x + 20, 35), 0),
-        f"R_NRST_{_i}": (RSMD, "R_0402_1005Metric", (_x, 35), 0),
-        f"C_VCORE_{_i}": (CSMD, "C_0402_1005Metric", (_x, 40), 0),
-        f"C_MCU1_{_i}": (CSMD, "C_0402_1005Metric", (_x, 45), 0),
-        f"J_SWD_{_i}": (JST, "JST_GH_BM04B-GHS-TBT_1x04-1MP_P1.25mm_Vertical", (_x + 45, 35), 0),
-        f"U2_{_i}": (QFN, "QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm", (_x + 20, 55), 0),
-        f"C_TPM1_{_i}": (CSMD, "C_0402_1005Metric", (_x, 55), 0),
-        f"C_TPM2_{_i}": (CSMD, "C_0402_1005Metric", (_x, 60), 0),
-        f"R_TPM_RST_{_i}": (RSMD, "R_0402_1005Metric", (_x, 65), 0),
-        f"U3_{_i}": (SO, "SOIC-20W_7.5x12.8mm_P1.27mm", (_x + 20, 75), 0),
-        f"C_ISO1_{_i}": (CSMD, "C_0402_1005Metric", (_x, 75), 0),
-        f"C_ISO2_{_i}": (CSMD, "C_0402_1005Metric", (_x, 80), 0),
-        f"U4_{_i}": (SO, "SOIC-20W_7.5x12.8mm_P1.27mm", (_x + 20, 95), 0),
-        f"C_RS1_{_i}": (CSMD, "C_0402_1005Metric", (_x, 95), 0),
-        f"C_RS2_{_i}": (CSMD, "C_0402_1005Metric", (_x, 100), 0),
-        f"J_ENC_{_i}": (CUSTOM_FP, "Pigtail_7W_DirectSolder", (_x + 20, 112), 0),
-        f"J_FLEX_{_i}": (PINHDR, "PinHeader_1x08_P2.54mm_Vertical", (_x + 45, 112), 0),
-    })
     VALUES.update({
         f"U1_{_i}": "MSPM0G3507", f"R_NRST_{_i}": "10k", f"C_VCORE_{_i}": "1uF",
         f"C_MCU1_{_i}": "100nF", f"J_SWD_{_i}": "SWD", f"U2_{_i}": "SLB9670",
@@ -141,6 +138,9 @@ for _i in range(1, N_STACKS + 1):
         f"U4_{_i}": "ISOW1412", f"C_RS1_{_i}": "100nF", f"C_RS2_{_i}": "100nF",
         f"J_ENC_{_i}": "AK7455 pigtail", f"J_FLEX_{_i}": "UART/TTL/PWM/BSHOT",
     })
+
+NICK: dict[str, str] = {}
+for _i in range(1, N_STACKS + 1):
     NICK.update({
         f"U1_{_i}": "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm",
         f"R_NRST_{_i}": "Resistor_SMD:R_0402_1005Metric",
@@ -161,21 +161,45 @@ for _i in range(1, N_STACKS + 1):
         f"J_FLEX_{_i}": "Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical",
     })
 
-# Shared Sections D/E: the ONE physical CAN-FD bus + ONE physical RS-485 bus
-# (true multi-drop topology -- every stack's xcvr taps the same two wires),
-# placed to the right of the last stack lane. No shared isolated DC-DC is
-# needed -- each stack's own ISOW1412 (U4_i) has an integrated isolated
-# DC-DC, same as ISOW1044 (U3_i) already does for CAN-FD.
-_BUS_X = 10 + N_STACKS * STACK_LANE_X + 10
+# Shared Section A: power (once, feeds every stack) -- real absolute
+# positions, placed once regardless of N_STACKS.
 PLACE.update({
-    "J_CAN_IN": (JST, "JST_GH_BM03B-GHS-TBT_1x03-1MP_P1.25mm_Vertical", (_BUS_X, 70), 0),
-    "J_CAN_OUT": (JST, "JST_GH_BM03B-GHS-TBT_1x03-1MP_P1.25mm_Vertical", (_BUS_X + 15, 70), 0),
-    "R_CANTERM": (RSMD, "R_0402_1005Metric", (_BUS_X, 82), 0),
-    "SJ1": (JUMPER, "SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm", (_BUS_X + 8, 82), 0),
-    "J_RS485_IN": (JST, "JST_GH_BM03B-GHS-TBT_1x03-1MP_P1.25mm_Vertical", (_BUS_X, 90), 0),
-    "J_RS485_OUT": (JST, "JST_GH_BM03B-GHS-TBT_1x03-1MP_P1.25mm_Vertical", (_BUS_X + 15, 90), 0),
-    "R_485TERM": (RSMD, "R_0402_1005Metric", (_BUS_X, 102), 0),
-    "SJ2": (JUMPER, "SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm", (_BUS_X + 8, 102), 0),
+    "J_PWR": (JST, "JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical", (135.435, 99.4), 0, "F"),
+    "U_REG_3V3": (SOT, "SOT-23-6", (136.3225, 107.0), 0, "F"),
+    "L1": (LSMD, "L_Taiyo-Yuden_NR-20xx", (140.285, 109.5), 0, "F"),
+    "R_FBT": (RSMD, "R_0402_1005Metric", (140.95, 105.5), 0, "F"),
+    "R_FBB": (RSMD, "R_0402_1005Metric", (147.49, 107.5), 0, "F"),
+    "C_IN": (CSMD, "C_0402_1005Metric", (136.98, 110.5), 0, "F"),
+    "C_OUT": (CSMD, "C_0402_1005Metric", (133.96, 110.0), 0, "F"),
+})
+VALUES.update({
+    "J_PWR": "+5V/GND", "U_REG_3V3": "TLV62569DBVR", "L1": "2.2uH",
+    "R_FBT": "10k", "R_FBB": "20k", "C_IN": "10uF", "C_OUT": "22uF",
+})
+NICK.update({
+    "J_PWR": "Connector_JST:JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical",
+    "U_REG_3V3": "Package_TO_SOT_SMD:SOT-23-6",
+    "L1": "Inductor_SMD:L_Taiyo-Yuden_NR-20xx",
+    "R_FBT": "Resistor_SMD:R_0402_1005Metric",
+    "R_FBB": "Resistor_SMD:R_0402_1005Metric",
+    "C_IN": "Capacitor_SMD:C_0402_1005Metric",
+    "C_OUT": "Capacitor_SMD:C_0402_1005Metric",
+})
+
+# Shared Sections D/E: the ONE physical CAN-FD bus + ONE physical RS-485 bus
+# (true multi-drop topology -- every stack's xcvr taps the same two wires).
+# Real absolute positions, placed once regardless of N_STACKS. No shared
+# isolated DC-DC is needed -- each stack's own ISOW1412 (U4_i) has an
+# integrated isolated DC-DC, same as ISOW1044 (U3_i) already does for CAN-FD.
+PLACE.update({
+    "J_CAN_IN": (JST, "JST_GH_BM03B-GHS-TBT_1x03-1MP_P1.25mm_Vertical", (144.96, 100.0), 0, "F"),
+    "J_CAN_OUT": (JST, "JST_GH_BM03B-GHS-TBT_1x03-1MP_P1.25mm_Vertical", (154.56, 100.0), 0, "F"),
+    "R_CANTERM": (RSMD, "R_0402_1005Metric", (153.96, 106.99), 90, "F"),
+    "SJ1": (JUMPER, "SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm", (157.11, 107.0), 0, "F"),
+    "J_RS485_IN": (JST, "JST_GH_BM03B-GHS-TBT_1x03-1MP_P1.25mm_Vertical", (165.46, 100.5), 0, "F"),
+    "J_RS485_OUT": (JST, "JST_GH_BM03B-GHS-TBT_1x03-1MP_P1.25mm_Vertical", (175.21, 100.0), 0, "F"),
+    "R_485TERM": (RSMD, "R_0402_1005Metric", (172.95, 105.5), 0, "F"),
+    "SJ2": (JUMPER, "SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm", (176.46, 106.0), 0, "F"),
 })
 VALUES.update({
     "J_CAN_IN": "CAN-FD IN", "J_CAN_OUT": "CAN-FD OUT", "R_CANTERM": "120R", "SJ1": "open",
@@ -191,9 +215,26 @@ NICK.update({
     "R_485TERM": "Resistor_SMD:R_0402_1005Metric",
     "SJ2": "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm",
 })
-X0, Y0 = 0.0, 0.0
-X1 = _BUS_X + 30
-Y1 = 145.0
+
+# Real board outline is 130.91,92.45 - 180.01,118.05 for N_STACKS=1; each
+# additional stack's lane extends the board by LANE_DX to the right.
+X0, Y0 = 130.0, 91.0
+X1 = 180.5 + max(0, N_STACKS - 1) * LANE_DX
+Y1 = 119.0
+
+# Back-silkscreen attribution block (mirrors the block already on Wash.md /
+# Zoe.md boards) -- placed in the open band below the back-side ICs, left
+# of the per-stack cluster so it doesn't move as N_STACKS grows.
+ATTRIBUTION_TEXT = (
+    "TPM-Secured CAN-FD/RS-485 Gateway\n"
+    "For the PocketBeagle2 fleet\n"
+    "CC BY 4.0 — July 2026\n"
+    "Steve Griffing\n"
+    "PE(CSE), CISSP-ISSEP, CPP\n"
+    "Griffing Technology LLC\n"
+    "github.com/Stab-Rabbit-Coding\n"
+)
+ATTRIBUTION_POS = (135.0, 115.5)
 
 
 def u():
@@ -308,7 +349,7 @@ def place_footprints():
     board = pcbnew.LoadBoard(str(BOARD))
     for name in NETS:
         board.Add(pcbnew.NETINFO_ITEM(board, name))
-    for ref, (lib, fpname, (x, y), rot) in PLACE.items():
+    for ref, (lib, fpname, (x, y), rot, layer) in PLACE.items():
         fp = pcbnew.FootprintLoad(lib, fpname)
         if fp is None:
             raise RuntimeError(f"cannot load {lib}:{fpname} (ref {ref})")
@@ -316,10 +357,34 @@ def place_footprints():
         fp.SetValue(VALUES[ref])
         fp.SetPosition(pcbnew.VECTOR2I(pcbnew.FromMM(x), pcbnew.FromMM(y)))
         board.Add(fp)
+        if layer == "B":
+            # Real board hand-places the MCU/TPM/CAN-FD-iso/RS-485-iso ICs
+            # on the back -- flip (mirrors footprint + moves to B.Cu), then
+            # set the recorded absolute rotation (Flip alone doesn't match
+            # the captured orientation).
+            fp.Flip(fp.GetPosition(), pcbnew.FLIP_DIRECTION_LEFT_RIGHT)
         if rot:
             fp.SetOrientationDegrees(rot)
     pcbnew.SaveBoard(str(BOARD), board)
     print(f"  placed {len(board.GetFootprints())} footprints")
+
+
+def add_attribution():
+    import pcbnew
+
+    board = pcbnew.LoadBoard(str(BOARD))
+    text = pcbnew.PCB_TEXT(board)
+    text.SetText(ATTRIBUTION_TEXT)
+    text.SetLayer(pcbnew.B_SilkS)
+    text.SetPosition(
+        pcbnew.VECTOR2I(pcbnew.FromMM(ATTRIBUTION_POS[0]), pcbnew.FromMM(ATTRIBUTION_POS[1]))
+    )
+    text.SetTextSize(pcbnew.VECTOR2I(pcbnew.FromMM(0.5), pcbnew.FromMM(0.5)))
+    text.SetTextThickness(pcbnew.FromMM(0.08))
+    text.SetMirrored(True)
+    board.Add(text)
+    pcbnew.SaveBoard(str(BOARD), board)
+    print("  attribution block added (B.Silkscreen)")
 
 
 def inject_pad_nets(padnet):
@@ -412,6 +477,7 @@ def main():
     print("  base board written")
     place_footprints()
     inject_pad_nets(padnet)
+    add_attribution()
     fill_zones()
     return 0
 

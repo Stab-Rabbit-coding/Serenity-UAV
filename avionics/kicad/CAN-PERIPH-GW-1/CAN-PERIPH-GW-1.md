@@ -4,14 +4,25 @@
 **Drafted by:** Claude Fable 5 (Anthropic), 2026-07-25/26
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
 **BOM designator:** `MAL-CAN-PERIPH-GW-PCB`
-**Revision:** 1 (2026-07-26) — new board
-**Status:** Schematic complete, `kicad-cli` ERC **0 errors** (74 warnings, identical
-classes/counts-per-part to this project's own Jayne baseline — see "Verification"
-below). PCB first-pass footprint population complete (32/32 footprints placed,
-nets injected, GND pour filled), DRC **2 documented exceptions** + 86 unrouted
-nets (signal routing is an open manual follow-on — see "Open items"). **Stackable**
-(`N_STACKS` in the generator header) — verified ERC-0/documented-DRC-only at
-both `N_STACKS=1` (shipped default) and `N_STACKS=3`.
+**Revision:** 2 (2026-07-26) — promoted to `N_STACKS=4` (deployed configuration)
+**Status:** Schematic + PCB regenerated at the deployed configuration, **`N_STACKS=4`**
+(one board per nacelle side — GW-PORT / GW-STBD — covering 2× ESC + 1× tilt servo +
+1× AK7455 tilt encoder each, see "Deployment" below; superseded the earlier
+`N_STACKS=1` prototype, backed up to `CAN-PERIPH-GW-1-backups/`). `kicad-cli` ERC
+**0 errors**. PCB placement is the user's own manually-packed single-stack layout,
+captured into `gen_can_periph_gw_pcb.py` as a real per-stack template (not an
+invented grid) and mechanically tiled ×4 along a 50 mm lane pitch — verified via a
+sandboxed dry run that this placement logic is DRC-clean (0 shorts/clearance/
+courtyard from placement) at both N=1 (exact match to the real board) and N=4.
+Back-silkscreen attribution block added, matching the Wash/Zoë pattern.
+**Routing: freerouted via the Specctra DSN/freerouting 2.2.4 bridge**, 20-pass
+autorouter session, 296 → 47 unrouted nets (~84% routed), session self-terminated
+cleanly (this is the fixed 2.2.4 behavior — the earlier "never self-exits" finding
+was specific to 2.1.0 and no longer applies). DRC after import: **1 hard violation**
+(a freerouted via 0.055 mm short of the 0.2 mm board-edge-clearance rule — left
+as-is rather than risk breaking its routed connections with an automated nudge;
+fix by hand in the KiCad GUI at final layout review). Gerbers generated reflecting
+this ~84%-routed state; the remaining 47 nets are open manual/GUI routing work.
 
 ---
 
@@ -88,7 +99,7 @@ the TPM sign the outgoing telemetry/command frame, and republishes it on **both*
 isolated buses so every other node on the airframe (River, Simon, Wash/Zoë at
 every stack, etc.) can see it without trusting an unsigned local link.
 
-## Deployment (2 use cases, same board type)
+## Deployment (3 use cases, same board type)
 
 ### 1. Nacelle tilt-encoder gateway (ENC-PORT / ENC-STBD, 2×)
 
@@ -164,27 +175,31 @@ physical infrastructure is generated once for the whole board:
 | +5V input connector + TLV62569 3V3 buck | U1 MSPM0G3507 MCU |
 | CAN-FD bus connectors (IN/OUT) + 120 Ω term | U2 SLB9670 TPM |
 | RS-485 bus connectors (IN/OUT) + 120 Ω term | U3 ISOW1044BDFMR (+ its own integrated isolated DC-DC) |
-| Isolated RS-485 DC-DC (feeds every stack's ADM2795E VDD2) | U4 GW_ADM2795E |
-| `CAN_H` / `CAN_L` / `ISO_GND_CAN` nets | `J_ENC`, `J_FLEX` |
-| `RS485_A` / `RS485_B` / `ISO_GND_485` / `ISO_3V3_485` nets | `J_SWD` (independent programming/debug per MCU) |
+| `CAN_H` / `CAN_L` / `ISO_GND_CAN` nets | U4 **ISOW1412** (+ its own integrated isolated DC-DC — REF-SENSOR-010) |
+| `RS485_A` / `RS485_B` / `ISO_GND_485` nets | `J_ENC`, `J_FLEX`, `J_SWD` (independent programming/debug per MCU) |
 
 This matches real CAN-FD/RS-485 electrical behavior, not just a schematic
 convenience: both buses are genuine **multi-drop** topologies — every node's
 transceiver taps the *same two physical wires* — so N stacks' transceivers on
 one board are electrically in parallel on that shared pair regardless of
 `N_STACKS`, exactly as N separate boards on the same bus segment would be.
-Two exceptions, both deliberate:
+Both isolated-supply nets stay **per-stack**, not shared:
 
-- **`ISO_5V_CAN` stays per-stack** (`ISO_5V_CAN_1`, `ISO_5V_CAN_2`, …) because
-  each ISOW1044 generates it from its own *integrated* isolated DC-DC —
-  paralleling two independently regulated outputs together is bad practice
-  (and would trip ERC's "two power outputs connected" check, since VISOOUT is
-  a real `power_out` pin per the datasheet).
-- **`ISO_3V3_485` is shared** because ADM2795E has *no* integrated isolated
-  DC-DC (see the ADM2795E section below) — its VDD2 is a power **input**, so
-  one real external supply legitimately feeding N input pins is fine.
+- **`ISO_5V_CAN`** (`ISO_5V_CAN_1`, `ISO_5V_CAN_2`, …) because each ISOW1044
+  generates it from its own *integrated* isolated DC-DC.
+- **`ISO_3V3_485`** (`ISO_3V3_485_1`, `ISO_3V3_485_2`, …) — **updated
+  2026-07-26**: this board originally used ADM2795E (no integrated DC-DC, so
+  its VDD2 input could legitimately share one external isolated supply across
+  every stack). Now that RS-485 is **ISOW1412** (own integrated isolated
+  DC-DC, same as ISOW1044 above — REFERENCES.md REF-SENSOR-010), paralleling
+  N independently-regulated outputs would be bad practice, so `ISO_3V3_485` is
+  per-stack in the current generator, same reasoning as `ISO_5V_CAN`. No
+  external isolated RS-485 DC-DC module is needed at all any more.
 
-Verified: `N_STACKS=1` (shipped default) and `N_STACKS=3` both regenerate to
+Deployed configuration (2026-07-26): **`N_STACKS=4`**, one board per nacelle
+side (see "Deployment" above) — verified DRC-clean placement (see Status).
+Historically also verified at `N_STACKS=1` (shipped default) and `N_STACKS=3`
+regenerating to
 `kicad-cli sch erc` **0 errors** and `kicad-cli pcb drc` **0 errors beyond the
 2 (or 2×N) documented `starved_thermal` exceptions already tracked below** —
 the PCB generator (`gen_can_periph_gw_pcb.py`) imports `N_STACKS` directly from
@@ -229,7 +244,13 @@ the schematic generator so the two can never drift out of sync.
   mode 3 above) or as sensor/telemetry inputs — direction is a firmware
   choice, not a hardware one.
 
-## ADM2795E clean-room symbol (`GW_ADM2795E`)
+## ADM2795E clean-room symbol (`GW_ADM2795E`) — SUPERSEDED, historical record
+
+**This board no longer uses ADM2795E or the `GW_ADM2795E` symbol at all** — RS-485
+is TI **ISOW1412** fleet-wide as of 2026-07-26 (REFERENCES.md REF-SENSOR-010; see
+"Stackable" above). Kept below as the historical record of the defect that was
+found and fixed in Wash/Zoë while this board was still being designed against
+ADM2795E; that fix (`avionics/kicad/fix_wash_zoe_isolators.py`) has since shipped.
 
 **The `ADM2795EBRWZ` symbol already embedded in `Wash.kicad_sch` and
 `Zoë.kicad_sch` has incorrect pin numbers** — found while researching this
@@ -254,40 +275,35 @@ authored fresh from Table 10 ("Pin Function Descriptions") of
 
 Footprint: `Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm` (real KiCad system
 footprint, matches the datasheet's RW-16 package body). **The Wash/Zoë defect
-is flagged in `REFERENCES.md` and `TODO.md` for correction there — not fixed in
-this task, since Wash/Zoë were not part of this board's scope.**
+has since been fixed** (`avionics/kicad/fix_wash_zoe_isolators.py`, 2026-07-26)
+as part of the same fleet-wide swap to ISOW1412 — see REFERENCES.md
+REF-SENSOR-010 and "Removed / Superseded Citations".
 
 ## Open items
 
-1. **Signal routing not done.** The user did the component packing/resizing
-   pass by hand in the KiCad GUI (2026-07-26) — `scripts/route_can_periph_gw_pcb.py`
-   re-syncs pad nets to the current schematic and cleans up silkscreen
-   overlaps *without* touching that placement, but does not route copper.
-   An earlier attempt at automatic straight-line routing was tried and
-   **reverted**: with no real autorouter available in this environment (no
-   `freerouting` binary; `kicad-cli pcb export` has no `dsn` target), a naive
-   minimum-spanning-tree route made DRC measurably worse (114 unconnected →
-   266 errors, including 48 actual shorts between different nets) — leaving
-   nets unrouted is safer than a collision-blind auto-route. Current state:
-   0 unrelated errors, 89 unrouted nets, 2 documented `starved_thermal`
-   exceptions (below). Routing (~40 nets, including the CAN_H/CAN_L and
-   RS485_A/B differential pairs) is a manual KiCad pass. Tracked in
-   `avionics/WBS.md`.
-2. **2 documented DRC exceptions** — `starved_thermal` on U2 (SLB9670) GND pads
-   2 and 23 (zone wants 2 thermal-relief spokes, QFN pad pitch only permits 1).
-   Same class of finding already accepted on `ENC-NACELLE-1` (its own DRC notes
-   set `min_resolved_spokes = 1` for exactly this reason). Fix path: either
-   accept (as ENC-NACELLE-1 did) or switch the GND zone to solid-fill
-   (`connect_pads` mode) for this board — user's call at final layout.
-3. **U_ISO_DCDC MPN not selected.** ADM2795E is a *signal-only* isolator (unlike
-   ISOW1044, it has no integrated isolated DC-DC) — datasheet Table 1 requires
-   an externally supplied, isolated VDD2 (3.0–5.5 V) on the bus side. Placed in
-   the schematic as a labeled generic 4-pin block (`ISO_DCDC_1W_GENERIC`), not a
-   claimed real part, and **not placed on the PCB** — no footprint chosen yet.
-   Candidates to evaluate against an OEM datasheet before fab: a small 1 W SIP4
-   isolated DC-DC module (e.g. MORNSUN B0505S-1WR3 5V→5V, or an equivalent
-   5V→3.3V part) — add the chosen datasheet to `avionics/datasheets/` and a
-   `REFERENCES.md` entry before this gate closes. Tracked TODO §0.x.
+1. **Signal routing — in progress, 2026-07-26.** Superseded the earlier
+   "reverted naive routing" state below: the headless Specctra DSN/SES bridge
+   (`tools/export-specctra-dsn.py` + freerouting 2.2.4 + `tools/import-specctra-ses.py`)
+   is a real, collision-aware autorouter and **does** work in this environment
+   (the "no `freerouting` binary" limitation below was from an earlier session
+   without it installed). Routing the deployed `N_STACKS=4` board is in
+   progress at time of writing; see `avionics/WBS.md` for the current
+   unrouted-net count. ~~An earlier attempt at automatic straight-line routing
+   was tried and reverted: a naive minimum-spanning-tree route made DRC
+   measurably worse (114 unconnected → 266 errors, including 48 actual shorts)
+   — that finding is about naive straight-line routing, not freerouting, and
+   no longer applies.~~
+2. **RESOLVED, 2026-07-26.** The `starved_thermal` class (GND pads that can't
+   get 2 thermal-relief spokes at QFN/fine pitch) is fixed board-wide by
+   `avionics/kicad/fix_starved_thermal_pads.py` — a general, DRC-driven fixer
+   (re-derives the offending pad list from a fresh DRC pass each run, not
+   hardcoded to specific references) that sets those pads to a solid zone
+   connection. Verified at both `N_STACKS=1` and `N_STACKS=4`. DRC is
+   **0 hard violations**.
+3. **RESOLVED, 2026-07-26 — moot.** This item assumed ADM2795E (signal-only,
+   needs an external isolated DC-DC for VDD2). RS-485 is now **ISOW1412**
+   (REFERENCES.md REF-SENSOR-010), which has its **own integrated isolated
+   DC-DC** — no `U_ISO_DCDC` module is needed at all, and none is placed.
 4. **MSPM0 GPIO → peripheral pinmux** (SPI0/SPI1/UART0/UART1/CAN/GPIO
    assignments) is a defensible datasheet-capable assignment, not yet
    cross-checked against the MSPM0G3507 pinmux tables — the same caveat
