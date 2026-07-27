@@ -29,7 +29,7 @@
 | Nacelles | 2x 50mm tandem EDF, CG pivot Z=83mm, M=1.0 gear, iris nozzle | `nacelle_pod_50mm_tandem.scad` complete; Rev S stator shells pending render |
 | Nacelle EDFs | XFly Galaxy X5 50mm 12-blade 6S 3200KV, 1240g each; 2232g/nacelle (90% additive via stator); 4464g total | Baseline EDF selected; nacelle T/W ~1.61 at Phase 5-10 AUW — VTOL hover capable |
 | Rear propulsion | 55mm 6S EDF, reduced-area neck intake, fixed canonical elliptical tail nozzle (2.06x1.76 in / 52.3x44.7 mm) + 4 RCS bleed-air thrusters | DEFERRED — Phase 11. Adds ~1275g forward thrust; not counted in hover T/W; Phase 11 hover T/W ~1.43 |
-| Cargo bay | Clamshell doors + SG90 servos + DRV8833 + **STS3215 winch on a both-ends-supported spool with a normally-engaged safety ratchet** + Dyneema + auto-latch + GPS ring + FPV bezel | N20 winch train retired 2026-07-27 (`docs/CARGO_WINCH_SPECIFICATION.md` Rev B); 6 new winch STLs specified, blocked on the STS3215 envelope gate; other cargo STLs generated; gondola shell open |
+| Cargo bay | Clamshell doors + SG90 servos + DRV8833 + STS3215 winch + Dyneema + auto-latch + GPS ring + FPV bezel | N20 winch train retired Rev S; 6 new winch STLs blocked on the STS3215 datasheet gate; other cargo STLs generated; gondola shell open |
 | PCBs | Rev Q: all 8 nodes use EM-hardened Wash/Zoe capes. Kaylee is the PDB. Two Emma boards give 49 MHz connectivity. Rev S adds Jayne (standalone vision/ToF/laser board). | Rev S schematics complete; Kaylee PCB DRC clean, gerbers generated; manual placement/routing remain (see avionics detail files) |
 | Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 done; serenity-fc Phase 6 stub only; all Phase 7 items open |
 | Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
@@ -172,8 +172,20 @@
 - [ ] Avionics dorsal access covers / Faraday tray lids for Inara and…
 - [ ] Update REVN_BUILD_GUIDE_24IN.md bay layout table
 - [ ] Regenerate cargo_sect_shell24.stl
-- [ ] Add motor-mount and DRV8833-tray boss locations to cargo_sect_s…
+- [ ] Add DRV8833-tray boss locations to cargo_sect_shell24.scad
 - [ ] Add SG90 bell-crank boss to inner face of each door panel for p…
+- [x] Cargo winch Rev B spec — STS3215, both-ends spool, ratchet
+- [x] N20 winch train scrubbed from active files (Rev A withdrawn)
+- [x] New winch hardware specified — 6 STLs + 7 BOM refs
+- [ ] ★ STS3215 datasheet gate — envelope/torque/mass/stall
+- [ ] Implement the six Rev S winch STLs
+- [ ] Winch pedestal M3 boss stations in cargo_sect_shell24.scad
+- [ ] Half-duplex TTL bus wiring on FLEX_TTL_GPIO
+- [ ] Catch solenoid drive (AO3400 + pull-down + SS34)
+- [ ] Bench-calibrate ratchet slip to 8.0 N ± 1.0 N
+- [ ] Line-shed test (inboard end must NOT be anchored)
+- [ ] Winch state machine firmware (Simon + gateway)
+- [ ] Re-run winch mass/CG once STS3215 mass is known
 - [x] Blender canonical source baked
 - [ ] Slicer verification
 - [ ] Kaylee's room — PDB mounting in inner neck
