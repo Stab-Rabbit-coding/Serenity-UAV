@@ -1206,59 +1206,13 @@
       "REF-PROTO-002"
     ],
     "items": [
-      {
-        "ref": "BOW-CAM",
-        "desc": "Bow camera — RunCam Nano 4 (19 mm Nano), forward video to Inara's stack",
-        "qty": 1,
-        "mass_g": 3.6,
-        "mass_oz": 0.13,
-        "std": "REF-SENSOR-001"
-      },
-      {
-        "ref": "BOW-TOF",
-        "desc": "Benewake TFmini-S long-range ToF (12 m indoor / 7 m outdoor, 100 Hz, UART/I2C) to Shepherd Wash UART2",
-        "qty": 1,
-        "mass_g": 5.0,
-        "mass_oz": 0.18,
-        "std": "REF-SENSOR-002"
-      },
-      {
-        "ref": "BOW-LASER",
-        "desc": "12 mm crosshair laser module, <=5 mW 650 nm Class 3R, 30 deg below horizon on CL; GPIO-enabled via 2N7002 with key-switch interlock",
-        "qty": 1,
-        "mass_g": 8.0,
-        "mass_oz": 0.28,
-        "std": "REF-IEC-002, REF-FDA-001",
-        "notes": "Mass is a COTS-supplier estimate; varies by module."
-      },
-      {
-        "ref": "BOW-PMMA-TOF",
-        "desc": "PMMA disc window for ToF aperture — 8 mm dia x 2 mm, uncoated (transmits 905 nm IR)",
-        "qty": 1,
-        "mass_g": 0.1,
-        "supplier": "source per TODO §1.1.1.1a"
-      },
-      {
-        "ref": "BOW-PMMA-LASER",
-        "desc": "PMMA exit window for laser — 5 mm dia x 2 mm (optional; sealed modules may omit)",
-        "qty": 1,
-        "mass_g": 0.1,
-        "supplier": "source per TODO §1.1.1.1a"
-      },
-      {
-        "ref": "bow_sensor_faceplate.stl",
-        "desc": "Printed combined bow faceplate (CF-PETG), camera+laser+ToF in one plate",
-        "qty": 1,
-        "mass_g": 0.8,
-        "mass_oz": 0.03
-      },
-      {
-        "ref": "BOW-WIRING",
-        "desc": "Wiring/connectors — TFmini-S 28 AWG 4-cond loom to Shepherd's Room, RG178 camera coax to Inara, laser GPIO/MOSFET lead",
-        "qty": 1,
-        "mass_g": 5.0,
-        "mass_oz": 0.18
-      }
+      {"ref": "BOW-CAM", "desc": "Bow camera — RunCam Nano 4 (19 mm Nano), forward video to Inara's stack", "qty": 1, "mass_g": 3.6, "mass_oz": 0.13, "std": "REF-SENSOR-001"},
+      {"ref": "BOW-TOF", "desc": "Benewake TFmini-S long-range ToF (12 m indoor / 7 m outdoor, 100 Hz, UART/I2C) to Shepherd Wash UART2", "qty": 1, "mass_g": 5.0, "mass_oz": 0.18, "std": "REF-SENSOR-002"},
+      {"ref": "BOW-LASER", "desc": "12 mm crosshair laser module, <=5 mW 650 nm Class 3R, 30 deg below horizon on CL; GPIO-enabled via 2N7002 with key-switch interlock", "qty": 1, "mass_g": 8.0, "mass_oz": 0.28, "std": "REF-IEC-002, REF-FDA-001", "notes": "Mass is a COTS-supplier estimate; varies by module."},
+      {"ref": "BOW-PMMA-TOF", "desc": "PMMA disc window for ToF aperture — 8 mm dia x 2 mm, uncoated (transmits 905 nm IR)", "qty": 1, "mass_g": 0.1, "supplier": "source per TODO §1.1.1.1a"},
+      {"ref": "BOW-PMMA-LASER", "desc": "PMMA exit window for laser — 5 mm dia x 2 mm (optional; sealed modules may omit)", "qty": 1, "mass_g": 0.1, "supplier": "source per TODO §1.1.1.1a"},
+      {"ref": "bow_sensor_faceplate.stl", "desc": "Printed combined bow faceplate (CF-PETG), camera+laser+ToF in one plate", "qty": 1, "mass_g": 0.8, "mass_oz": 0.03},
+      {"ref": "BOW-WIRING", "desc": "Wiring/connectors — TFmini-S 28 AWG 4-cond loom to Shepherd's Room, RG178 camera coax to Inara, laser GPIO/MOSFET lead", "qty": 1, "mass_g": 5.0, "mass_oz": 0.18}
     ],
     "total_mass_g": 22.6,
     "total_mass_oz": 0.8,
