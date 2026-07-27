@@ -48,6 +48,7 @@ PHY1 connects to PocketBeagle 2 RMII0; PHY2 connects to RMII1.
 MDC and MDIO are shared between both PHYs (different PHY addresses: PHY1=0x01, PHY2=0x02).
 
 Ethernet connector assignments:
+
 | Connector | PHY | Port | Signals |
 |---|---|---|---|
 | J_ETH1 | DP83825I PHY1 | RMII0 / ETH0 | ETH1_TX+/TX-/RX+/RX-, GND, SHIELD |
@@ -77,21 +78,30 @@ boundary. A 4.7 nF X2Y capacitor bridges GND1-to-GND2 externally per TI applicat
 SLLA337A, providing a low-impedance CM noise return path at RF frequencies (>1 MHz)
 without compromising DC isolation.
 
-### 3. RS-485 transceiver: MAX3485E → ADM2795EBRWZ
+### 3. RS-485 transceiver: MAX3485E → ADM2795EBRWZ → ISOW1412 (REF-SENSOR-010)
 
-| Parameter | CAPE-A-1 | Wash |
+| Parameter | CAPE-A-1 | Wash (current) |
 |---|---|---|
-| Part | MAX3485E (SOIC-8) | ADM2795EBRWZ (SOIC-20W) |
-| Isolation | None (non-isolated) | 5000 V RMS reinforced (IEC 62368-1) |
-| Surge / bus fault | ±12 V (standard RS-485) | ±42 V (exceeds IEC 61000-4-5 ±2 kV on bus) |
-| Data rate | 32 Mbps | 20 Mbps |
-| Supply | 3.3 V | 3.3 V VDD1; internal DC/DC generates VDD2 |
-| Current | 3.5 mA | 25 mA (includes DC/DC) |
-| DigiKey | — | ADM2795EBRWZ-ND |
+| Part | MAX3485E (SOIC-8) | **ISOW1412** (20-pin DFM, `Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm`) |
+| Isolation | None (non-isolated) | 5000 V RMS reinforced |
+| Data rate | 32 Mbps | 500 kbps (ISOW1412 variant; pin-compatible ISOW1432 is the 12 Mbps part, not used) |
+| Supply / DC-DC | 3.3 V | 3.3 V VIO; **own integrated isolated DC/DC** generates the bus-side supply (no external isolated supply needed) |
+| Current | 3.5 mA | ≤60 mA (VIO 4.5–5.5 V, incl. integrated DC/DC per datasheet §8.9/8.10); 20 mA of the DC/DC's output is available for other bus-side circuits |
+| DigiKey | — | see REFERENCES.md REF-SENSOR-010 |
 
-The ADM2795EBRWZ is pin-logically compatible: DI, DE, RE_N, RO on the logic side have
-the same polarity convention as the MAX3485E. The half-duplex direction-control scheme
-(RS485_DE driving both DE and RE_N) is preserved unchanged.
+**Fleet-wide swap, 2026-07-26** (REFERENCES.md "Removed / Superseded Citations"): ADM2795EBRWZ
+was briefly used here but is signal-isolation-only and needs a *separate* external isolated
+DC-DC for its bus-side VDD2. ISOW1412 integrates its own isolated DC-DC, removing that extra
+supply fleet-wide (same swap applied to Zoë, Jayne, Kaylee, CAN-PERIPH-GW-1). While performing
+this swap, Wash's pre-existing ADM2795EBRWZ symbol was found to have incorrectly numbered pins
+(pre-existing defect, corrected in the same pass — see `avionics/kicad/fix_wash_zoe_isolators.py`).
+Wash's own **PCB footprint has not yet been swapped to ISOW1412** — it currently still carries
+the old ADM2795EBRWZ footprint; this is open work (see root `TODO.md` §1.2a).
+
+ISOW1412 is a full-duplex part (separate Y/Z driver-out, A/B receiver-in); it is run in
+half-duplex mode on this project's 2-wire RS485_A/RS485_B bus by shorting Y-to-A and Z-to-B,
+the standard technique for using a full-duplex transceiver as half-duplex. The half-duplex
+direction-control scheme (RS485_DE driving DE/RE_N) is preserved unchanged.
 
 A 4.7 nF X2Y capacitor bridges GND1-to-GND2 externally for the same RF CM noise return
 path reason described above for the CAN transceiver.
@@ -326,6 +336,34 @@ routed through the π-filter (FB1/C11/C12) before distribution to the cape rail.
   dual-point shield termination compliant with MIL-STD-1553B stub cabling practice.
 - All PGND connections float relative to signal GND except at the single-point star under J_PWR
   (0 Ω / 10 Ω solder-selectable link per §7 above).
+
+---
+
+## Known Issues
+
+### `PB2-P2` header appears fully unwired (found 2026-07-26, unresolved)
+
+`kicad-cli sch erc` reports every one of `PB2-P2`'s 36 pins as `pin_not_connected`, and
+`kicad-cli sch export netlist` confirms zero nets reference `PB2-P2` at all — not even a
+single-pin net. This is surprising: `WBS.md` §1.2a.1 records the ETH2/`PB2-P2` wiring
+(RMII1, MDIO1/MDC1 on repurposed servo pins, etc.) as completed work back in 2026-06-12.
+
+Investigation so far: `PB2-P2` uses the same `Conn_36` lib symbol as `PB2-P1`, whose pins
+mostly **do** connect correctly (only 6 of 36 fail, all edge pins) — so the general
+label-to-pin coincidence mechanism works in this file. Reconstructing the coordinate
+transform from a known-good `PB2-P1` pin (`sheet_x = anchor_x + local_x`, `sheet_y =
+anchor_y − local_y`, matching this project's documented KiCad hand-authoring convention)
+and applying it to `PB2-P2` pin 1 predicts sheet position (67.54, 474.45) — and the
+`MDIO1` global label sits at exactly that position. Despite the apparent exact coincidence,
+KiCad does not merge the nets.
+
+**Not resolved before this finding was recorded.** Next step is almost certainly to open
+`Wash.kicad_sch` in the KiCad GUI and look at the `PB2-P2` block directly — something is
+visually different there vs. `PB2-P1` that isn't obvious from the raw S-expression text
+(a duplicate/orphaned object exactly on top of the label, a stray hierarchical sheet pin,
+or a symbol instance issue are all plausible). **If this is a genuine defect, Wash's
+ETH2/MDIO1 wiring has been silently non-functional** — treat as higher priority than the
+rest of the pre-existing ERC/DRC backlog.
 
 ---
 

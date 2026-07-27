@@ -27,7 +27,6 @@
 - [ ] Generate Wash gerbers
 - [ ] Generate Zoë gerbers
 - [ ] Zigbee RF chain was never actually added to Zoë — PCB scope gap…
-- [ ] Generate Emma gerbers
 - [ ] FCC Part 15 §15.235 pre-compliance checklist for Emma
 - [ ] EMI isolation validation checklist
 - [ ] Merge `claude/cape-em-harsh-variants-9Yfr1` → master
@@ -50,6 +49,13 @@
 - [ ] Reconcile gen_kaylee.py drift from checked-in Kaylee.kicad_sch
 - [ ] Remove obsolete J_ENC (AS5600 I²C) connector from Wash
 - [ ] Fix Wash's own inline SLB9670 symbol's incorrect pin numbers
-- [ ] Finish routing CAN-PERIPH-GW-1 PCB (9/89 nets still unrouted)
+- [ ] Finish routing CAN-PERIPH-GW-1 PCB (47/296 nets still unrouted)
+- [ ] Wash PB2-P2 header appears fully unwired in ERC — root cause TBD
+- [ ] Wash full DRC/ERC clean-out (48 ERC + 76 DRC hard) + ISOW1412 swap
+- [ ] Zoë full DRC/ERC clean-out (219 ERC + 154 DRC hard) + ISOW1412 swap
+- [ ] Review/remove stray tracked _autosave-Zoë.kicad_pcb + .lck files
+- [ ] Kaylee full PCB resync to trust-module schematic (213 DRC hard)
+- [ ] Jayne PCB resync — RS-485/Section H never reached layout (124 DRC)
+- [ ] Emma: place J_TPM header (every site collided; F.Cu fully saturated)
 
 ---

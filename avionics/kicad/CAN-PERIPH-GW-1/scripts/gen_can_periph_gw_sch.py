@@ -74,12 +74,15 @@ Deployment (see CAN-PERIPH-GW-1.md for the full rationale):
       (DSHOT/PWM command in, BDSHOT/EDSHOT telemetry out -- see
       https://dev.vimdrones.com/products/vimdrones_esc_s50/, informational
       reference only) through J_FLEX, so ESC command/telemetry is also
-      TPM-signed and dual-bus. With N_STACKS=2 on one gateway board, both
-      EDFs in a single nacelle can share one PCB/one pair of bus connectors.
+      TPM-signed and dual-bus.
     * Servo actuator gateway (nacelle tilt / nozzle-drive) -- FLEX_PWM_IO and
       FLEX_TTL_GPIO are plain bidirectional/timer-capable MCU GPIOs, so the
       same header also drives a standard servo PWM/TTL command out; direction
       is a firmware choice, not a hardware one.
+    * DEPLOYED CONFIGURATION (2026-07-26): N_STACKS=4, one board per nacelle
+      side (GW-PORT / GW-STBD) -- 2x ESC (fwd+aft EDF), 1x nacelle tilt
+      servo, 1x AK7455 tilt encoder share the one PCB/one pair of bus
+      connectors per side, instead of 4 separate single-stack boards.
 
 Layout convention matches this project's own gen_Jayne_carrier_sch.py: real
 clean-room symbols are pulled from avionics/kicad/symbols/*.kicad_sym by
@@ -112,7 +115,7 @@ from pathlib import Path
 # *** CHANGE THIS to set how many complete trust-module stacks (own MCU +
 # own TPM + own isolated CAN-FD + own isolated RS-485) share one PCB. ***
 # ===========================================================================
-N_STACKS = 1
+N_STACKS = 4
 
 HERE = Path(__file__).resolve().parent
 KICADS = HERE.parent / "kicads"

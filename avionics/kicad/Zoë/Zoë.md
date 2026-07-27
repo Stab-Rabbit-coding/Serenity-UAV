@@ -46,10 +46,15 @@ The isolated transceiver (ISOW1044BDFMR, SOIC-16, DigiKey 296-ISOW1044BDFMRCT-ND
 provides 5 kV reinforced isolation, ±42 V bus fault tolerance, and an integrated DC/DC
 converter that generates the isolated bus-side supply from the 3.3 V logic rail.
 
-### 3. RS-485 transceiver: MAX3485E → ADM2795EBRWZ
+### 3. RS-485 transceiver: MAX3485E → ADM2795EBRWZ → ISOW1412 (REF-SENSOR-010)
 
-Identical substitution to Wash. See Wash.md §3. Half-duplex direction-control
-via RS485_DE (tied to both DE and RE_N) is preserved.
+Identical substitution to Wash. See Wash.md §3 for full rationale (ADM2795EBRWZ
+superseded fleet-wide 2026-07-26 by TI ISOW1412, which integrates its own isolated
+DC-DC — REFERENCES.md REF-SENSOR-010). Half-duplex direction-control via RS485_DE
+(tied to both DE and RE_N) is preserved. Zoë's pre-existing ADM2795EBRWZ symbol had
+the same incorrectly-numbered-pins defect as Wash's, corrected in the same pass
+(`avionics/kicad/fix_wash_zoe_isolators.py`). Zoë's PCB footprint has not yet been
+swapped to ISOW1412 (open work, root `TODO.md` §1.2a).
 
 ### 4. Common-mode chokes on CAN and RS-485 bus lines
 
