@@ -43,6 +43,9 @@ REF-CAD-002 Nick Henning after consolidation)
     - [REF-IEC-004: IEC 61000-4-4:2012 — Electromagnetic Compatibility (EMC) — Testing and Measurement Techniques — Electrical Fast Transient/Burst (EFT/Burst) Immunity Test](#ref-iec-004-iec-61000-4-42012--electromagnetic-compatibility-emc--testing-and-measurement-techniques--electrical-fast-transientburst-eftburst-immunity-test)
     - [REF-IEC-005: IEC 61000-4-5:2014+AMD1:2017 — Electromagnetic Compatibility (EMC) — Testing and Measurement Techniques — Surge Immunity Test](#ref-iec-005-iec-61000-4-52014amd12017--electromagnetic-compatibility-emc--testing-and-measurement-techniques--surge-immunity-test)
     - [REF-VDE-001: VDE V 0884-11:2017-01 — Optocouplers for Use in Electrical Equipment — Test and Measurement Methods](#ref-vde-001-vde-v-0884-112017-01--optocouplers-for-use-in-electrical-equipment--test-and-measurement-methods)
+- [Part V-A — IPC PCB Design Standards](#part-va--ipc-pcb-design-standards)
+    - [REF-IPC-001: IPC-2221 — Design Guidelines for Printed Board Layout (PCB Design Fundamentals)](#ref-ipc-001-ipc-2221--design-guidelines-for-printed-board-layout-pcb-design-fundamentals)
+    - [REF-IPC-002: IPC-A-600 — Acceptability of Printed Boards](#ref-ipc-002-ipc-a-600--acceptability-of-printed-boards)
 - [Part VI — IEEE Standards](#part-vi--ieee-standards)
     - [REF-IEEE-001: IEEE 802.3-2022 — Ethernet (CSMA/CD Access Method and Physical Layer Specifications)](#ref-ieee-001-ieee-8023-2022--ethernet-csmacd-access-method-and-physical-layer-specifications)
     - [REF-IEEE-002: IEEE 802.11-2020 — Wireless LAN Medium Access Control (MAC) and Physical Layer (PHY) Specifications](#ref-ieee-002-ieee-80211-2020--wireless-lan-medium-access-control-mac-and-physical-layer-phy-specifications)
@@ -791,6 +794,67 @@ Level 3 ±2 kV CM surge on bus); SMBJ33CA TVS (D1) on Kaylee VBAT line; PRTR5V0U
 arrays at field connectors on Wash and Zoë.
 
 **Used in:** `avionics/kicad/Wash.md`, `avionics/kicad/Zoë.md`, `avionics/kicad/Kaylee.md`
+
+---
+
+## Part V-A — IPC PCB Design Standards
+
+### REF-IPC-001: IPC-2221 — Design Guidelines for Printed Board Layout (PCB Design Fundamentals)
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | IPC (Association Connecting Electronics Industries) |
+| **Edition** | IPC-2221B (current; earlier editions 2221, 2221A also valid) |
+| **Official URL** | <https://www.ipc.org/> (catalog: search "IPC-2221") |
+| **Current status** | Active standard; reaffirmed by IPC in 2020 |
+
+**Clauses applied in this project:**
+
+| Section | Title | Application |
+|---|---|---|
+| Section 3 | Trace Routing and Spacing | Minimum trace width, trace-to-trace clearance, and trace-to-edge clearance for signal integrity and manufacturability |
+| Section 4 | Design Rules for EMI/RFI Control | PCB layer stackup, ground plane integrity, and edge clearance rules for high-frequency and hostile RF environments |
+| Section 4.2 | Copper-to-Edge Clearance (Creepage) | Minimum copper-to-board-edge distance to prevent arcing, field coupling, and manufacturing defects |
+| Section 6 | Design for Assembly and Manufacturing | Keepout zones, via placement, pad sizing for component footprints |
+
+**Harsh EMI Environment Guidance — Critical Finding:**
+
+The 500 W/m² RF field design objective [REF-NIST-002 §6.2.5] places this project in a **high-stress electromagnetic environment**. IPC-2221B §4.2 and complementary guidance in IPC-A-600 (REF-IPC-002) specify that:
+
+1. **Standard environments** (office/lab, < 10 V/m RF): copper-to-edge clearance ≥ 0.10–0.15 mm
+2. **Harsh RF environments** (industrial RF, > 100 V/m; calculated ≈434 V/m for this project): copper-to-edge clearance ≥ 0.20–0.30 mm
+
+The design environment of 500 W/m² (≈434 V/m, equivalent to RF proximity near a strong broadcast or cellular link) **exceeds even MIL-STD-461G RS103 susceptibility limits** (200 V/m). **Consequently, a minimum 0.20 mm copper-to-edge clearance is the design floor for this project, not a design maximum.** Reducing to 0.15 mm would increase risk of field coupling, arcing, and PCB manufacturing defects in the harsh RF environment.
+
+**Applied to:** All PCB designs (Wash, Zoë, Kaylee, Emma, Jayne, CAN-PERIPH-GW-1, ENC-NACELLE-1).
+
+**Design Decision (2026-07-27):** Copper-to-edge clearance (min_copper_edge_clearance in KiCad) is established at **0.20 mm minimum** per IPC-2221B §4.2 for harsh RF environments. This clearance must not be reduced below 0.20 mm without explicit re-evaluation against the 500 W/m² field-strength requirement and validation that manufacturing yield remains acceptable.
+
+**Used in:** `avionics/kicad/*/kicads/*.kicad_pro` (all board project files), EMI hardening documentation
+
+---
+
+### REF-IPC-002: IPC-A-600 — Acceptability of Printed Boards
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | IPC (Association Connecting Electronics Industries) |
+| **Edition** | IPC-A-600K (current; earlier editions J, H, G also valid) |
+| **Official URL** | <https://www.ipc.org/> (catalog: search "IPC-A-600") |
+| **Current status** | Active standard; latest edition K released 2020 |
+
+**Clauses applied in this project:**
+
+| Clause | Title | Application |
+|---|---|---|
+| Section 3 | Acceptability Criteria — Layers and Substrates | PCB material acceptance, layer thickness, copper thickness tolerance |
+| Section 4 | Acceptability Criteria — Imaging and Plating | Trace definition, plating thickness, surface finish specification (ENIG, HASL, OSP) |
+| Section 5 | Acceptability Criteria — Etching and Drilling | Hole size tolerance, plating coverage, clearance around drilled holes |
+| Section 8 | Workmanship Standards — Copper Traces and Pads | Conductor spacing, edge clearance acceptance, solder mask coverage verification |
+
+**Applied to:** PCB manufacturing accept/reject criteria during fabrication quality verification. All boards (Wash, Zoë, Kaylee, Emma, Jayne, CAN-PERIPH-GW-1, ENC-NACELLE-1) are fabricated by JLCPCB and inspected against IPC-A-600 standards prior to assembly.
+
+**Used in:** Board-specific design markdown files, incoming inspection checklists, Gerber generation workflows
 
 ---
 
