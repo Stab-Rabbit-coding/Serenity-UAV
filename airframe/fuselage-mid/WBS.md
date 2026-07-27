@@ -247,11 +247,156 @@
     two 62×42 mm dorsal panel openings. Z-range must be 0..163 mm; all features inside hull skin.
     **BLOCKS Phase 0 cargo section printing.**
 
-- [ ] Add motor-mount and DRV8833-tray boss locations to `cargo_sect_shell24.scad` interior
-    drawing notes (Phase 1 pre-pour checklist reference).
+- [ ] Add DRV8833-tray boss locations to `cargo_sect_shell24.scad` interior drawing notes
+    (Phase 1 pre-pour checklist reference). **The N20 motor-mount boss is dropped** — the
+    winch now mounts on two pedestals, tracked separately in §1.1.1.2.1a.
 - [ ] Add SG90 bell-crank boss to inner face of each door panel for pushrod attachment.
     - Export gondola shell to `thingverse-serenity/files-hollowed-18in/`
     - **BLOCKS Phase 8**
+
+###### 1.1.1.2.1a *Cargo Winch — STS3215 Conversion (Rev B, 2026-07-27)*
+
+Retires the Rev P/Q/R N20 winch train and replaces it with an STS3215 serial-bus servo
+driving a spool that is **supported at both ends**, behind a **normally-engaged one-way
+safety ratchet** with a powerless overload line-shed. Canonical source:
+[`docs/CARGO_WINCH_SPECIFICATION.md`](../../docs/CARGO_WINCH_SPECIFICATION.md) **Rev B** —
+do not restate its dimensions here.
+
+- [x] **`docs/CARGO_WINCH_SPECIFICATION.md` Rev B authored** *(2026-07-27)*. Rev A (same
+    date, first pass) is **withdrawn** — it specified PWM control (the STS3215 is a TTL
+    serial-bus servo), invented a 50 lbf design load and 0.25 in line against the airframe's
+    real 3.92 N / 0.5 mm figures, described the ratchet as a bidirectional lock rather than
+    one-way, and anchored the line to the spool, contradicting the shed requirement.
+- [x] **Superseded hardware scrubbed from active files** *(2026-07-27)*:
+    `N20-WINCH`, `cargo_winch_motor_mount.stl` (cantilever), `cargo_winch_spool.stl`
+    (N20 D-bore + anchor slot) removed from `docs/bom_revR.json`; `make_motor_mount()` /
+    `make_winch_spool()` in `generate_cargo_mounts.py` converted to documented
+    `NotImplementedError` stubs and dropped from the build list; prose updated in
+    `README.md`, root `WBS.md`/`TODO.md`, `airframe/WBS.md`,
+    `airframe/VERIFY_PLACEMENT_CHECKLIST.md`, `avionics/jayne/WBS.md`,
+    `graphical-build-guide/` (REVN guide + flight-phases + SVG task),
+    `docs/PHASED_BUILD_GUIDE.md`, `docs/PROTO_PRINT_DAVINCI_JR.md`,
+    `docs/AVIONICS_PB2_REDESIGN.md`, `docs/POWER_DISTRIBUTION.md`, `PROJECT_INDEX.md`.
+    **`DRV8833-CARGO` + `cargo_drv8833_tray.stl` deliberately RETAINED** — Rev R assigns both
+    channels to the door and payload-release SG90s, not the winch.
+- [x] **New hardware specified** *(2026-07-27)*: 6 printed parts (2 pedestals, spool r2,
+    pawl, dog coupler, fairlead) + 7 purchased refs (`STS3215-WINCH`, `SOL-CATCH-5V`,
+    `BRG-MR84ZZ` ×2, `SHAFT-SS-4MM`, `SPRING-PAWL`, `DOWEL-M2-10`, `SS34-CATCH`) added to
+    `docs/bom_revR.json` with masses, notes and cost roll-up.
+
+- [ ] **★ BLOCKER — STS3215 datasheet verification (REFERENCES.md REF-SENSOR-012, TODO §0.x).**
+    The datasheet is in the repo but is a scanned/CID-encoded PDF that could not be extracted
+    (no OCR toolchain in the build environment). Read off and record: **(a)** case envelope +
+    mounting-boss pattern, **(b)** torque vs. the ≥ 3.2 kgf·cm requirement, **(c)** mass
+    (60 g assumed — dominates the +98.6 g delta and T/W 1.613 → 1.557), **(d)** stall current
+    (1.2 A budgeted; resize RAIL-2 if > ~2.5 A). **Blocks STL generation and procurement.**
+    Do not fabricate these values.
+- [ ] **★ CONTAINMENT — the spool must never leave the cargo bay (spec §3.10).**
+    Designating the spool sacrificial (§3.8) made it a planned-degradation part
+    sitting directly above clamshell doors that open 180° to free air. Rev B
+    retained the axle with a split collar and one M3 pinch screw — **friction
+    retention, which root `AGENTS.md` §7 forbids outright for a flight-critical
+    joint.** Self-inflicted, and corrected by five positive fixes, all required
+    before any flight with a slung load:
+    - **FM1** circlip groove + external circlip immediately outboard of each
+      pedestal; the pinch screw is demoted to locating/anti-rotation only.
+    - **FM2** continuous steel sleeve through the hub bore, bearings pressed into
+      the sleeve rather than into printed plastic — total loss of the printed
+      material still leaves sleeve + bearings captive on the axle.
+    - **FM3** pedestal through-bolts + aluminium backing plates, replacing
+      heat-set inserts in printed shell.
+    - **FM4** keeper bar spanning both pedestals — independent secondary capture
+      that holds even if FM1–FM3 all fail or a retainer is omitted at assembly.
+    - **FM5** slip-adjust collar retained captive by the FM1 circlip.
+    Energy at stake, from the §107.51(b) 400 ft ceiling ignoring drag: spool alone
+    **19.1 J (14.1 ft·lbf)**, full assembly **31.8 J (23.5 ft·lbf)**.
+    **Principle: the sacrificial element must fail by *slipping*, never by
+    *releasing*** — wear degrades torque transmission, never retention. Containment
+    must hold **with the doors open**, which is both the normal cargo-evolution
+    state and the only geometry in which a release reaches free air.
+- [ ] **Verify the Part 107 dropped-object section number.** REF-FAA-002's
+    applied-sections table does not currently include it, so the winch spec
+    asserts **no** section number (root `AGENTS.md` §4). Look it up, add it to
+    REF-FAA-002 with a validated URL, then state explicitly how a *commanded*
+    shed (R5) differs from an *uncommanded* structural release under that text.
+    Tracked in `REFERENCES.md` "Open Standards Verification Items".
+- [ ] **Containment checks on the assembly and pre-flight cards** — circlips
+    seated, keeper bar fitted and torqued, backing plates present, slip-collar
+    witness-mark intact. Doors-open inspection.
+- [ ] **★ Flight-envelope decision — shed threshold vs manoeuvre envelope.** At
+    `F_shed` = 8.0 N a **2.0 g** manoeuvre on the slung payload reaches **0.98×**
+    the threshold and **2.5 g sheds the load**. Choose: declare a ≈1.5 g slung-load
+    manoeuvre limit (recommended — free, and matches crewed-rotorcraft practice),
+    raise `F_shed` to ~12 N (3.06× static, still only 72 % of the 16.64 N excess
+    lift), or reduce payload. **A flight-envelope call, not a winch call** — refer
+    to `docs/flight_envelope.md`. Blocks the pawl-spring calibration target.
+    Spec §4.4.
+- [x] **Coupler trade CLOSED — slip clutch, located in the printed spool hub.**
+    Rigid dog (A) was rejected (pollutes the threshold with `T_backdrive`), and
+    the overrunning clutch (C) was rejected outright (no controlled lowering).
+    Putting the friction interface in the **spool hub** rather than in a separate
+    component removes `T_backdrive` from `F_shed` entirely — at overload the spool
+    breaks free of the servo whatever the gearbox does — and makes the **printed
+    spool the sacrificial element**, which is far cheaper to replace than a digital
+    servo. A stiff, non-back-drivable servo is now a *benefit*, not a hazard.
+    Spec §3.8.
+- [ ] **Calibrate `T_slip` = 0.060 N·m (0.61 kgf·cm)** at the spool hub collar —
+    1.49× static payload torque, 73 % of shed torque; window is 0.0404–0.0824 N·m.
+    Belleville washer on a threaded collar, torque-wrench set, thread-locked and
+    witness-marked. Confirm the one surviving back-drive requirement
+    **`T_slip` < `T_backdrive`** (measure with the pawl held clear — an inequality
+    check now, no longer a go/no-go on R5). Spec §3.8.2.
+- [ ] **Set the servo torque ceiling below `T_slip`** — protection layer 1 of 4, so
+    routine lifting never reaches the friction interface and the sacrificial hub is
+    consumed only by genuine overload events. Spec §3.8.3.
+- [ ] **Servo mode: encoded continuous rotation** (position/servo mode cannot
+    express 23.2 turns; stepper mode's open-loop count becomes fiction after a hub
+    slip). Gateway closes position on the AK7455. Confirm mode indices, selecting
+    register, and per-mode torque-ceiling settability against the datasheet — part
+    of the §3.1 gate; **no register number is invented in the spec**. Spec §3.9.
+- [ ] **Mark the spool a consumable** — wear item in the build guide, inspection
+    interval, slip witness-mark, spare in the field kit; hand-tool replacement per
+    root `AGENTS.md` §7.
+- [ ] **AK7455 spool encoder integration (spec §3.7.3).** Diametric-magnet pocket in
+    the port flange hub, off-axis (the fixed axle occupies the centreline); mates the
+    gateway's existing `J_ENC` pigtail on its dedicated SPI bus — no board change and
+    no new part number [REF-SENSOR-008]. Confirm flux at the IC for the chosen
+    magnet/gap (same bench item already open for the nacelle encoders). Firmware:
+    ≥ 1 kHz sampling, turn-accumulation with a `turns_invalid` guard rather than a
+    guessed count — a snag release reaches ~5,030 rpm at the spool and outruns
+    wrap-tracking below ~840 Hz. The servo's own encoder is a cross-check only:
+    servo-vs-spool divergence indicates a slipped clutch or a stripped dog.
+- [ ] **Implement the six winch STLs** in `generate_cargo_mounts.py` (`WINCH_REV_S_PARTS`).
+    They are dimensionally interdependent — axle span, bearing seats and ratchet clearance all
+    key off the servo envelope — so implement together, then mesh-validate per root
+    `AGENTS.md` §7. Blocked on the gate above.
+- [ ] **Pedestal mounting stations in `cargo_sect_shell24.scad`.** The retired mount used 4× M2
+    self-taps into the gondola *ceiling*; the two pedestals need real M3 heat-set boss stations
+    on the bay floor, FreeCAD-verified against the cargo-door 180° swing envelope
+    (`generate_cargo_doors.py`) and clear of `CARGO_CAM_POS` / the Jayne nadir bosses.
+- [ ] **Half-duplex TTL bus wiring.** Confirm the MSPM0G3507 can drive a single-wire UART on
+    `FLEX_TTL_GPIO`, or add a direction-steering resistor/buffer at the harness. Same pinmux
+    caveat as `CAN-PERIPH-GW-1.md` open item 4. Cross-ref `avionics/WBS.md`.
+- [ ] **Catch solenoid drive circuit.** AO3400 N-FET + 100 Ω gate + **10 kΩ gate pull-down**
+    (undriven/resetting MCU must leave the catch ENGAGED) + SS34 flyback across the coil.
+- [ ] **Bench-calibrate the ratchet slip threshold to 8.0 N ± 1.0 N** measured at the line, via
+    the set-screw spring seat; then verify over ≥ 100 lock/release cycles for wear. The 8.0 N
+    figure is derived (48 % of the 16.64 N available excess lift), not measured.
+- [ ] **Line-shed test.** Confirm the line actually runs clear of drum and fairlead under load.
+    The ~0.7 N capstan retention on the last two turns is analytic, not measured. Verify the
+    inboard end is **not** anchored.
+- [ ] **Firmware — winch state machine** (Simon payload-primary, gateway-side control).
+    `WINCH_STATUS` / `WINCH_COMMAND` frames, TPM-signed per [REF-NIST-001 §2.1]; STS3215 bus
+    driver; HX711 re-hosted from Cape-B to the gateway; Shepherd watchdog cuts RAIL-2 on
+    heartbeat timeout (which *engages* the catch). Bus IDs assigned in firmware, not in the
+    spec. Cross-ref `avionics/firmware/WBS.md`.
+- [ ] **Re-run the §6 mass/CG table** once the real STS3215 mass is known; propagate to
+    `docs/flight_envelope.md` if AUW moves materially.
+- [ ] *(Optional, out of scope for this change)* Move the door/release SG90s onto the
+    gateway's spare `FLEX_PWM_IO` and retire `DRV8833-CARGO` + `cargo_drv8833_tray.stl`.
+
+**BLOCKS:** Phase 8 cargo winch assembly; `build_guide_23_winch_latch.svg` rebuild;
+Kaylee RAIL-2 third BEC channel (`docs/POWER_DISTRIBUTION.md` §11.1).
 
 ###### 1.1.1.2.2 *Wing Root*
 

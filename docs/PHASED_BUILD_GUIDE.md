@@ -58,7 +58,7 @@
 | Node role election | CAN FD heartbeat priority arbitration at boot — all 8 nodes identical hardware; master elected dynamically with automatic failover |
 | Radios | SiK 915MHz MAVLink + LoRa RFM95W 915MHz backup + TI WL1837MOD WiFi/BT GCS + 49MHz XCVR-49MHZ RC; all 4 on every CN node; software-elected master per link |
 | Obstacle avoidance | 12× VL53L5CX 8×8 ToF sensors, dual redundant arrays (A on FC3 River's room / Bay D, B on FC1 Shepherd's room / Bay A) |
-| Cargo | 101.6 × 76.2 × 76.2 mm bay, clamshell doors, N20 winch + auto-latch cradle |
+| Cargo | 101.6 × 76.2 × 76.2 mm bay, clamshell doors, STS3215 winch + safety ratchet + auto-latch cradle |
 | Security | ATF16V8BQL CPLD write-blocker (log μSD, all Cape-B nodes) + **SLB9670 TPM 2.0 on all 8 nodes** (Cape-A and Cape-B) + W25Q128JV NOR flash circular log buffer |
 | Navigation lights | ICAO Annex 2 / 14 CFR 91.209 (6-position) |
 | Access panels | 6 removable panels A–F (bayonet/screw/hinge/magnet) |
@@ -852,7 +852,7 @@ The cargo gondola hard points (M3 inserts) and panel C hinge (belly) were instal
 
 | Item                                                | Qty   | Approx. Cost       |
 | --------------------------------------------------- | ----- | ------------------ |
-| N20 DC motor 6V 300:1 gear ratio (winch)            | 1×    | ~$8                |
+| STS3215 serial-bus servo (winch)                    | 1×    | ~$25               |
 | DRV8833 dual H-bridge motor driver board            | 1×    | ~$2                |
 | SG90 servo (clamshell door actuator)                | 1×    | ~$3                |
 | SG90 servo (payload release / winch direction)      | 1×    | ~$3                |
@@ -868,7 +868,7 @@ The cargo gondola hard points (M3 inserts) and panel C hinge (belly) were instal
 
 - Step 2: Install 3mm CF door hinge pins at gondola centreline. Attach clamshell door halves (2× mirrored). Doors must open freely (spring-loaded to open) and close to flush fit.
 
-- Step 3: Install DRV8833 board and N20 winch motor + drum in gondola top. Wind 1.5m Dyneema SK75 onto spool; reserve 0.5m slack. Attach cargo cradle (cargo_cradle_autolatch.stl) to Dyneema via double-bowline knot.
+- Step 3: Install the DRV8833 board (door + payload-release servos only) and the STS3215 winch train in the gondola top: both winch pedestals, the Ø4 mm fixed axle, the spool on its two MR84ZZ bearings, the ratchet ring, and the pawl + spring + catch solenoid. The spool is supported at both pedestals — it is never hung off the servo output. Wind 1.5 m Dyneema SK75 onto the spool; reserve 0.5 m slack. **Do not anchor the inboard end** — it is friction-retained so the line sheds at overload. Attach the cargo cradle (cargo_cradle_autolatch.stl) to the Dyneema via a double-bowline knot. Ref: `docs/CARGO_WINCH_SPECIFICATION.md`.
 
 - Step 4: Install SG90 door-actuator servo (spring-assist open, servo pull-close via bell-crank linkage). Adjust pushrod so full servo travel = full door travel; lock clevis.
 
@@ -890,7 +890,7 @@ The cargo gondola hard points (M3 inserts) and panel C hinge (belly) were instal
 - [ ] T/W with 250g + 6S 2800mAh battery: verify ≥2.30:1 (target 2.37:1)
 - [ ] Autonomous delivery: 3-waypoint mission, deploy payload at waypoint 2 on command, retract empty cradle, complete mission
 
-## Phase 6 cost estimate:N20 winch $8 + DRV8833 $2 + 2× SG90 $6 + Dyneema $4 + misc $10 =~$30
+## Phase 6 cost estimate: STS3215 winch servo $25 + catch solenoid $6 + bearings/axle/spring $8 + DRV8833 $2 + 2× SG90 $6 + Dyneema $4 + misc $10 = ~$61
 
 ---
 

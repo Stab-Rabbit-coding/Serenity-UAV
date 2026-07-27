@@ -20,13 +20,11 @@
 
 → detail: `docs/WBS.md` §0.1
 
-- [ ] Code-identifier "RCRS" naming left unchanged — separate tracked…
 
 ### 0.7 — CI Lint Scope and Repo-Wide Lint Debt
 
 → detail: `docs/WBS.md` §0.7
 
-- [ ] Repo-wide lint debt
 
 ### 0.8 — Tilt-Spar Material Allowables + Hall Encoder Verification
 
@@ -72,8 +70,26 @@
 - [ ] Avionics dorsal access covers / Faraday tray lids for Inara and…
 - [ ] Update REVN_BUILD_GUIDE_24IN.md bay layout table
 - [ ] Regenerate cargo_sect_shell24.stl
-- [ ] Add motor-mount and DRV8833-tray boss locations to cargo_sect_s…
+- [ ] Add DRV8833-tray boss locations to cargo_sect_shell24.scad
 - [ ] Add SG90 bell-crank boss to inner face of each door panel for p…
+- [ ] ★ STS3215 datasheet gate — envelope/torque/mass/stall
+- [ ] ★ Winch containment: 5 positive fixes (spool = projectile)
+- [ ] Verify Part 107 dropped-object section number
+- [ ] Containment checks on assembly + pre-flight cards
+- [ ] ★ Shed threshold vs manoeuvre envelope (2.0g = 0.98x)
+- [ ] Calibrate T_slip 0.060 N·m at the spool hub collar
+- [ ] Set servo torque ceiling below T_slip (wear protection)
+- [ ] Servo mode: encoded continuous rotation (not stepper)
+- [ ] Mark winch spool a consumable (wear item + spare)
+- [ ] AK7455 spool encoder on gateway J_ENC (spec §3.7.3)
+- [ ] Implement the six Rev S winch STLs
+- [ ] Winch pedestal M3 boss stations in cargo_sect_shell24.scad
+- [ ] Half-duplex TTL bus wiring on FLEX_TTL_GPIO
+- [ ] Catch solenoid drive (AO3400 + pull-down + SS34)
+- [ ] Bench-calibrate ratchet slip to 8.0 N ± 1.0 N
+- [ ] Line-shed test (inboard end must NOT be anchored)
+- [ ] Winch state machine firmware (Simon + gateway)
+- [ ] Re-run winch mass/CG once STS3215 mass is known
 - [ ] Slicer verification
 - [ ] Kaylee's room — PDB mounting in inner neck
 - [ ] CF skid rod channels
@@ -95,30 +111,30 @@
 - [ ] [OPEN — BLOCKER] Fuselage spar-interface now mismatched.
 
 #### 1.1.3 — Nacelles
+→ detail: `airframe/wings-nacelles/WBS.md` §1.1.3
 
 - [ ] Reconcile crazy-ivan/PR#141 as SUPERSEDED by fix/nozzle branch
-- [ ] Merge cargo_spar_drive into cargo shell (bearing/servo/mortise/cableway)
+- [ ] Merge cargo_spar_drive into cargo shell (bearing/servo/mortise…
 - [ ] Verify stbd cargo-chunk placement of spar-drive features
 - [ ] Tune servo→spar horn/pushrod linkage throw (−5°..140°)
 - [ ] Repair pre-existing stator sleeve non-manifold (edf_stator_sleeve)
-- [ ] Hall tilt sensor: VERIFY INBOARD_FACE_X sign in _export_pivot_slab.scad
-- [ ] Migrate nacelle_hall_ring_hub into nacelle_pod_50mm_tandem.scad + re-bake
+- [ ] VERIFY INBOARD_FACE_X sign in _export_pivot_slab.scad
+- [ ] Migrate nacelle_hall_ring_hub → nacelle_pod_50mm_tandem.scad + re-bake
 - [ ] Bench-cal AK7455 with steel spar/MF128 bearing (ferrous-field check)
-- [x] **Re-derive rotating-assembly CG for Rev T pushrod/cam drive + 8 mm spar
     (2026-07-19).** CG_Z = 111.5 mm (was 104.5); `PIVOT_Z` propagated to all
     SCAD/assembly/docs; nacelle shells + stator sleeve re-rendered/re-baked (66
     STLs pass validate_stls). Drivers: 40 mm flaps + discrete Ø71 housing aft.
-- [ ] **VERIFY Rev T CG (first-pass, band ≈109–112 mm):** confirm effective
+- [ ] VERIFY Rev T CG (first-pass, band ≈109–112 mm)
     printed densities (CF-PETG 1.05 / PETG 1.00 g/cm³) against printer-sliced
     masses, and the discrete-housing vs cowl-skin overlap. → pod header table.
-- [ ] **Re-solve the single-straight-spar alignment for the +7 mm pivot move.**
+- [ ] Re-solve single-straight-spar alignment for +7 mm pivot move
     In the hull-frame bake the spar line slides ~7 mm aft in Y; re-derive the
     nacelle bake translation (or the cargo/wing spar Y-station) so one straight
     spar still passes through the CG pivot. `port_tilt_spar_assembly.scad` NAC_D
     is now DERIVED from `PIVOT_ZLOC` (slide-fwd-to-Y15, user 2026-07-19) so the
     overlay stays consistent; the baked nacelle STL still needs re-baking to the
     Rev T CG pivot (its old boss is ~7 mm fwd of the new pivot).
-- [ ] **Nozzle drive: replace the invalid spar-crank with a wing-referenced sync
+- [ ] Nozzle drive: replace invalid spar-crank w/ wing-referenced sync…
     gear + geared bellcrank (2026-07-19).** The Rev T crank clamps the spar, which
     is KEYED to the nacelle → shares the ring's rotating frame → zero relative
     motion → no actuation. Adopted hybrid (user; docs/NOZZLE_DRIVE_TRADE.md
@@ -134,14 +150,14 @@
     - [ ] Motion study: 1:1-mesh + crank/pushrod transmission angle, monotonic
         0..90° tilt → 0..23.9° ring; verify joint-gap width vs. the coaxial
         bearing + sun-gear + Hall-magnet/AK7455 stack.
-- [ ] **Fix iris `asm` flap sign (`nacelle_nozzle_iris.scad`):** the 8-flap loop
+- [ ] Fix iris asm flap sign (nacelle_nozzle_iris.scad) — 8-flap loop…
     uses `rotate([0, PHI_CLOSED, 0])` → petals DIVERGE at "closed"; must be
     `−PHI_CLOSED` to converge to 75 % bore. Preview-only (print parts unaffected).
-- [ ] **Stator spar crossing (Rev T2):** kept 11 vanes (coprime w/ 12-blade
+- [ ] Stator spar crossing (Rev T2): 11 vanes, coprime w/ 12-blade rotor
     rotor — Tyler–Sofrin); spar carried in a streamlined teardrop strut (tail
     aft, TE ≈ vane TE) + 0° anti-rotation key drilled through. VERIFY strut
     chord/tail + residual swirl into EDF2 by CFD/bench before flight.
-- [ ] **Ø72 nozzle-pocket eats the aft cowl tail.** The re-rendered shells now
+- [ ] Ø72 nozzle-pocket eats the aft cowl tail…
     end at duct Z≈172.2 mm (was 185.2) — the straight Ø72 pocket over-cuts the
     tapering dome tail (172–185), so the nozzle housing becomes the aft surface.
     Decide: taper/shorten the pocket to preserve the silhouette, or accept the
@@ -483,7 +499,7 @@
 
 - [ ] Bond cargo gondola shell into belly void at 4× M3 hard points (…
 - [ ] Install 3mm CF door hinge pins; attach clamshell door halves (s…
-- [ ] Install DRV8833 + N20 winch motor + drum; wind 1.5m Dyneema; at…
+- [ ] Install STS3215 winch + twin-pedestal spool + ratchet; wind Dy…
 - [ ] Install SG90 door-actuator servo (spring-assist open, servo pul…
 - [ ] Install SG90 payload-release servo; connect to DRV8833 IN1/IN2…
 - [ ] Route control leads through PWR conduit belly tap to CN master…
@@ -635,7 +651,7 @@
 
 #### 4.5.1 — Malcolm Hardware Design
 
-→ detail: `gcs/WBS.md` §4.5.1
+→ detail: `gcs/WBS.md` §4.5
 
 - [ ] Create Malcolm host computer specification
 - [ ] Malcolm field enclosure — print and fit-check
@@ -647,7 +663,7 @@
 
 #### 4.5.2 — Malcolm Comms Node Setup (Phase Malcolm-2)
 
-→ detail: `gcs/WBS.md` §4.5.2
+→ detail: `gcs/WBS.md` §4.5
 
 - [ ] Flash Debian Linux to Malcolm PB2-I eMMC
 - [ ] Apply Cape-B-2 device tree overlay for Malcolm
@@ -660,7 +676,7 @@
 
 #### 4.5.3 — Malcolm Host PC Software Setup (Phase Malcolm-3)
 
-→ detail: `gcs/WBS.md` §4.5.3
+→ detail: `gcs/WBS.md` §4.5
 
 - [ ] Install Debian Linux on GCS host PC
 - [ ] Run installation scripts in order:
@@ -671,7 +687,7 @@
 
 #### 4.5.4 — Tracking and Gimbal Integration (Phase Malcolm-3)
 
-→ detail: `gcs/WBS.md` §4.5.4
+→ detail: `gcs/WBS.md` §4.5
 
 - [ ] Bench test gimbal hardware
 - [ ] Gimbal calibration:
@@ -682,7 +698,7 @@
 
 #### 4.5.5 — Malcolm Integration Testing (Phase Malcolm-4)
 
-→ detail: `gcs/WBS.md` §4.5.5
+→ detail: `gcs/WBS.md` §4.5
 
 - [ ] Multi-link communication bench test:
 - [ ] 915 MHz link margin test (open field, 1 km):

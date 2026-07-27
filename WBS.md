@@ -29,7 +29,7 @@
 | Nacelles | 2x 50mm tandem EDF, CG pivot Z=83mm, M=1.0 gear, iris nozzle | `nacelle_pod_50mm_tandem.scad` complete; Rev S stator shells pending render |
 | Nacelle EDFs | XFly Galaxy X5 50mm 12-blade 6S 3200KV, 1240g each; 2232g/nacelle (90% additive via stator); 4464g total | Baseline EDF selected; nacelle T/W ~1.61 at Phase 5-10 AUW — VTOL hover capable |
 | Rear propulsion | 55mm 6S EDF, reduced-area neck intake, fixed canonical elliptical tail nozzle (2.06x1.76 in / 52.3x44.7 mm) + 4 RCS bleed-air thrusters | DEFERRED — Phase 11. Adds ~1275g forward thrust; not counted in hover T/W; Phase 11 hover T/W ~1.43 |
-| Cargo bay | Clamshell doors + SG90 servos + DRV8833 + N20 winch + Dyneema + auto-latch + GPS ring + FPV bezel | All 13 cargo STLs generated; BOM updated; gondola shell open |
+| Cargo bay | Clamshell doors + SG90 servos + DRV8833 + STS3215 winch + Dyneema + auto-latch + GPS ring + FPV bezel | N20 winch train retired Rev S; 6 new winch STLs blocked on the STS3215 datasheet gate; other cargo STLs generated; gondola shell open |
 | PCBs | Rev Q: all 8 nodes use EM-hardened Wash/Zoe capes. Kaylee is the PDB. Two Emma boards give 49 MHz connectivity. Rev S adds Jayne (standalone vision/ToF/laser board). | Rev S schematics complete; Kaylee PCB DRC clean, gerbers generated; manual placement/routing remain (see avionics detail files) |
 | Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 done; serenity-fc Phase 6 stub only; all Phase 7 items open |
 | Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
@@ -52,17 +52,17 @@
 - [x] Code-identifier "RCRS" naming renamed to "49MHZ_XCVR"/"XCVR-49MHZ…
 
 ### 0.2 — Incorrect Reference Correction
-→ detail: `docs/WBS.md` §0.2
+→ detail: `REFERENCES.md` "Removed / Superseded Citations"
 
 - [x] Remove NIST SP 800-72 write-blocker citation
 
 ### 0.3 — 14 CFR Part 47 vs Part 48 Clarification
-→ detail: `docs/WBS.md` §0.3
+→ detail: `REFERENCES.md` "Open Standards Verification Items"
 
 - [x] Replace 14 CFR Part 47 references with Part 48 §48.205 where ap…
 
 ### 0.4 — AUVSI/ASTM Standards Identification
-→ detail: `docs/WBS.md` §0.4
+→ detail: `REFERENCES.md` "Open Standards Verification Items"
 
 - [x] Identify specific ASTM F38 Committee standards applicable to ai…
 
@@ -74,7 +74,7 @@
 - [x] Audit KiCad companion Markdown files — done 2026-06-22.
 
 ### 0.6 — IEC 62368-1 PCB Layout Isolation Verification
-→ detail: `avionics/WBS.md` §0.6
+→ detail: `avionics/emi-hardening/WBS.md` §0.6
 
 - [x] Verify creepage and clearance distances in Wash PCB layout
 - [x] Verify creepage and clearance distances in Zoë PCB layout
@@ -84,7 +84,14 @@
 → detail: `docs/WBS.md` §0.7
 
 - [x] Resolved (confirmed 2026-06-29). run-lint (github/super-linter@…
-- [x] Repo-wide lint debt — remediation pass complete 2026-07-18, see `docs/WBS.md` §0.7
+- [x] Repo-wide lint debt — remediation pass complete 2026-07-18
+
+### 0.8 — Tilt-Spar Material Allowables + Hall Encoder Verification
+→ detail: `docs/WBS.md` §0.8
+
+- [ ] Verify 4130 / 17-4 PH / 7075 allowables vs MMPDS/AMS (REF-MAT-*)
+- [ ] Add 4130 corrosion-finish spec (zinc/cad plate) to BOM/build guide
+- [ ] Verify AK7455 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
 
 ---
 
@@ -172,8 +179,30 @@
 - [ ] Avionics dorsal access covers / Faraday tray lids for Inara and…
 - [ ] Update REVN_BUILD_GUIDE_24IN.md bay layout table
 - [ ] Regenerate cargo_sect_shell24.stl
-- [ ] Add motor-mount and DRV8833-tray boss locations to cargo_sect_s…
+- [ ] Add DRV8833-tray boss locations to cargo_sect_shell24.scad
 - [ ] Add SG90 bell-crank boss to inner face of each door panel for p…
+- [x] Cargo winch Rev B spec — STS3215, both-ends spool, ratchet
+- [x] N20 winch train scrubbed from active files (Rev A withdrawn)
+- [x] New winch hardware specified — 6 STLs + 7 BOM refs
+- [ ] ★ STS3215 datasheet gate — envelope/torque/mass/stall
+- [x] Winch coupler trade closed: slip clutch in the spool hub
+- [ ] ★ Winch containment: 5 positive fixes (spool = projectile)
+- [ ] Verify Part 107 dropped-object section number
+- [ ] Containment checks on assembly + pre-flight cards
+- [ ] ★ Shed threshold vs manoeuvre envelope (2.0g = 0.98x)
+- [ ] Calibrate T_slip 0.060 N·m at the spool hub collar
+- [ ] Set servo torque ceiling below T_slip (wear protection)
+- [ ] Servo mode: encoded continuous rotation (not stepper)
+- [ ] Mark winch spool a consumable (wear item + spare)
+- [ ] AK7455 spool encoder on gateway J_ENC (spec §3.7.3)
+- [ ] Implement the six Rev S winch STLs
+- [ ] Winch pedestal M3 boss stations in cargo_sect_shell24.scad
+- [ ] Half-duplex TTL bus wiring on FLEX_TTL_GPIO
+- [ ] Catch solenoid drive (AO3400 + pull-down + SS34)
+- [ ] Bench-calibrate ratchet slip to 8.0 N ± 1.0 N
+- [ ] Line-shed test (inboard end must NOT be anchored)
+- [ ] Winch state machine firmware (Simon + gateway)
+- [ ] Re-run winch mass/CG once STS3215 mass is known
 - [x] Blender canonical source baked
 - [ ] Slicer verification
 - [ ] Kaylee's room — PDB mounting in inner neck
@@ -224,6 +253,21 @@
 - [x] Move the port (red) / stbd (green) nav lights INWARD→OUTWARD fa…
 - [x] Route nav-light wires through an internal cableway (not protrud…
 - [x] Remove the exhaust WS2812B LED rings + harnesses from the desig…
+- [ ] Reconcile crazy-ivan/PR#141 as SUPERSEDED by fix/nozzle branch
+- [ ] Merge cargo_spar_drive into cargo shell (bearing/servo/mortise…
+- [ ] Verify stbd cargo-chunk placement of spar-drive features
+- [ ] Tune servo→spar horn/pushrod linkage throw (−5°..140°)
+- [ ] Repair pre-existing stator sleeve non-manifold (edf_stator_sleeve)
+- [ ] VERIFY INBOARD_FACE_X sign in _export_pivot_slab.scad
+- [ ] Migrate nacelle_hall_ring_hub → nacelle_pod_50mm_tandem.scad + re-bake
+- [ ] Bench-cal AK7455 with steel spar/MF128 bearing (ferrous-field check)
+- [ ] VERIFY Rev T CG (first-pass, band ≈109–112 mm)
+- [ ] Re-solve single-straight-spar alignment for +7 mm pivot move
+- [ ] Nozzle drive: replace invalid spar-crank w/ wing-referenced sync…
+- [ ] Fix iris asm flap sign (nacelle_nozzle_iris.scad) — 8-flap loop…
+- [ ] Stator spar crossing (Rev T2): 11 vanes, coprime w/ 12-blade rotor
+- [ ] Ø72 nozzle-pocket eats the aft cowl tail…
+- [x] Re-derive rotating-assembly CG for Rev T pushrod/cam drive…
 
 #### 1.1.4 — Landing Gear
 → detail: `airframe/landing-gear/WBS.md` §1.1.4
@@ -231,12 +275,12 @@
 - [x] Build and render the Rev R5 post + wire SCAD/STL *(done —
 - [x] Build assembled / exploded / deformed demonstration compound ST…
 - [ ] LG-12 Model the post per the §4.6 dimensions
-- [ ] LG-10 Finalize the 4 corner post placements
+- [ ] LG-10 Finalize the 4 bay placements in SerenityAssembly.FCStd
 - [ ] Ground clearance check carried forward from Rev R1
-- [ ] LG-15 Select and procure both wire grades/tempers
-- [ ] LG-16 Confirm the ductile wire temper survives forming
-- [ ] LG-13 Define the wire-to-socket retention detail
-- [ ] LG-02 Design and integrate 16 hull boss sockets
+- [ ] LG-15 Procure both wire grades/tempers; coupon test
+- [ ] LG-16 Confirm ductile wire temper survives jig-forming
+- [ ] LG-13 Define wire-end retention detail at bay bosses
+- [ ] LG-02 Bay mounting integration: backing plates, flank conform…
 - [x] Feet separated into individual STLs (foot_1 through foot_4 in l…
 - [ ] Add top-face socket to canonical foot
 - [ ] Assess foot grip on concrete/asphalt
@@ -244,7 +288,7 @@
 - [x] Rev R4 closed-ring wire fuse (wire_loop_fuse.scad) is retired
 - [ ] LG-03 CF rod channel in middle_canonical_shell24.scad rear skid…
 - [x] landing_legs_hull_r1.stl is orphaned
-- [ ] LG-06 Drop test prototype leg assembly
+- [ ] LG-06 Elastic bench check: quarter-AUW fixture, 1.5 ft drop
 - [ ] LG-07 Confirm avionics enclosure shock rating
 - [ ] LG-11 Coupon-test CF-PETG
 - [ ] LG-14 Instrumented drop test (load cell + high-speed video) at…
@@ -252,6 +296,10 @@
 - [ ] Combine all airframe STLs
 - [ ] Exploded view SVG — printed parts only
 - [ ] Exploded view SVG — full build
+- [ ] LG-17 Drop-height decision: 6 ft vs 4 ft ductile wire schedule
+- [ ] LG-18 Mass-reduction pass (leg frame / bay / thigh)
+- [ ] LG-19 Styling refinement pass vs REF-CAD-002 (cosmetic)
+- [ ] Render overview SVGs using FreeCAD TechDraw
 
 #### 1.1.5 — Non-Printable Component Placeholders
 → detail: `airframe/WBS.md` §1.1.5
@@ -655,7 +703,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 
 - [ ] Bond cargo gondola shell into belly void at 4× M3 hard points (…
 - [ ] Install 3mm CF door hinge pins; attach clamshell door halves (s…
-- [ ] Install DRV8833 + N20 winch motor + drum; wind 1.5m Dyneema; at…
+- [ ] Install STS3215 winch + twin-pedestal spool + ratchet; wind Dy…
 - [ ] Install SG90 door-actuator servo (spring-assist open, servo pul…
 - [ ] Install SG90 payload-release servo; connect to DRV8833 IN1/IN2…
 - [ ] Route control leads through PWR conduit belly tap to CN master…
@@ -816,7 +864,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 ### 4.5 — Ground Control (Malcolm / "CAPT Reynolds")
 
 #### 4.5.1 — Malcolm Hardware Design
-→ detail: `gcs/WBS.md` §4.5.1
+→ detail: `gcs/WBS.md` §4.5
 
 - [ ] Create Malcolm host computer specification
 - [ ] Malcolm field enclosure — print and fit-check
@@ -827,7 +875,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [ ] Procure gimbal hardware:
 
 #### 4.5.2 — Malcolm Comms Node Setup (Phase Malcolm-2)
-→ detail: `gcs/WBS.md` §4.5.2
+→ detail: `gcs/WBS.md` §4.5
 
 - [ ] Flash Debian Linux to Malcolm PB2-I eMMC
 - [ ] Apply Cape-B-2 device tree overlay for Malcolm
@@ -839,7 +887,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [ ] Configure Wi-Fi transmit power
 
 #### 4.5.3 — Malcolm Host PC Software Setup (Phase Malcolm-3)
-→ detail: `gcs/WBS.md` §4.5.3
+→ detail: `gcs/WBS.md` §4.5
 
 - [ ] Install Debian Linux on GCS host PC
 - [ ] Run installation scripts in order:
@@ -849,7 +897,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [ ] Implement gcs/malcolm/firmware/pb2i/src/mal_comms.c and mal_com…
 
 #### 4.5.4 — Tracking and Gimbal Integration (Phase Malcolm-3)
-→ detail: `gcs/WBS.md` §4.5.4
+→ detail: `gcs/WBS.md` §4.5
 
 - [ ] Bench test gimbal hardware
 - [ ] Gimbal calibration:
@@ -859,7 +907,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [ ] End-to-end tracking test (outdoor):
 
 #### 4.5.5 — Malcolm Integration Testing (Phase Malcolm-4)
-→ detail: `gcs/WBS.md` §4.5.5
+→ detail: `gcs/WBS.md` §4.5
 
 - [ ] Multi-link communication bench test:
 - [ ] 915 MHz link margin test (open field, 1 km):

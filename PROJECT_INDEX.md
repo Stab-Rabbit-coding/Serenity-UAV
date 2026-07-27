@@ -29,6 +29,14 @@ TODO.md                           — Build-tools & automation reference index (
                                     graphical-build-guide/WBS.md for the owned detail)
 AGENTS.md                         — Build tools and automation standards (hull-frame bake tool,
                                     Blender pipeline, SCAD generation, mesh validation)
+compact_bom_entries.py            — Restores compact single-line BOM entry formatting after a
+                                    json.dump() round-trip. docs/bom_*.json mixes expanded and
+                                    compact styles; rewriting via json.dump silently re-expands
+                                    the compact ones, adding ~35 lines of unrelated diff churn
+                                    and re-surfacing pre-existing DevSkim TODO findings. Run
+                                    after ANY script that rewrites a BOM. --check for a
+                                    pre-commit gate; matches on data equality (not ref/stl,
+                                    which can collide) and verifies before writing.
                                     --schematic-parity); HARD/SOFT severity policy, --changed-since
                                     scoping for pre-existing per-board DRC debt
                                     against the baked head shell on the 40° flat (replaces manual slicer checks)
@@ -757,7 +765,10 @@ airframe/placeholders/bearings/MR63ZZ_3x6x2p5mm.stl — [PENDING AI CLASSIFICATI
 airframe/placeholders/cargo/DRV8833_Hbridge_breakout.stl — [PENDING AI CLASSIFICATION]
 airframe/placeholders/cargo/Dyneema_SK75_0p5mm_coil.stl — [PENDING AI CLASSIFICATION]
 airframe/placeholders/cargo/HX711_loadcell_ADC_breakout.stl — [PENDING AI CLASSIFICATION]
-airframe/placeholders/cargo/N20_motor_300RPM_6V.stl — [PENDING AI CLASSIFICATION]
+airframe/placeholders/cargo/N20_motor_300RPM_6V.stl — [SUPERSEDED 2026-07-27] Retired with the
+                                    N20 winch train; replaced by the STS3215 (placeholder mesh
+                                    pending the envelope gate in docs/CARGO_WINCH_SPECIFICATION.md
+                                    §3.1). Do not place in new assemblies.
 airframe/placeholders/faraday/Far_EMI_vent_40x40x6mm.stl — [PENDING AI CLASSIFICATION]
 airframe/placeholders/faraday/Far_FT_panel_55x35mm.stl — [PENDING AI CLASSIFICATION]
 airframe/placeholders/faraday/Far_bond_strap_100mm.stl — [PENDING AI CLASSIFICATION]
@@ -39653,6 +39664,11 @@ deferred/aft-edf/stls/rear_shell24_2mm_edf_bored.stl — [PENDING AI CLASSIFICAT
 docs/AGENTS.md — [PENDING AI CLASSIFICATION]
 docs/AVIONICS_PB2_REDESIGN.md — [PENDING AI CLASSIFICATION]
 docs/BATTERY_MOUNT.md — [PENDING AI CLASSIFICATION]
+docs/CARGO_WINCH_SPECIFICATION.md — [ACTIVE, Rev B 2026-07-27] Cargo winch: STS3215 serial-bus
+                                    servo, spool supported at both ends on a fixed axle, normally-
+                                    engaged one-way safety ratchet, powerless overload line-shed,
+                                    single CAN-PERIPH-GW driving both servo and catch. Supersedes
+                                    the N20 winch train. Rev A withdrawn (see §-header note).
 docs/ETHERNET_PHY_TRADE.md — [PENDING AI CLASSIFICATION]
 docs/FIRST_FLIGHT_READINESS.md — [PENDING AI CLASSIFICATION]
 docs/JAYNE_LASER_ANALYSIS.md — [PENDING AI CLASSIFICATION]

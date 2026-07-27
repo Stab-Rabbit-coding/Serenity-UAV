@@ -22,7 +22,7 @@ R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 > **Rev P note:** This guide covers the Rev P baseline which adds a complete cargo bay system
 > to the Rev O CG-pivot tiltrotor. Rev P new items: Rev S cargo section shell (clamshell door
 > cutout + hinge-pin blocks + SG90 servo pads), port/stbd CF-PETG clamshell doors, 2× SG90
-> cargo servos via DRV8833 H-bridge, N20 winch + Dyneema SK75 spool, auto-latch cradle, GPS
+> cargo servos via DRV8833 H-bridge, STS3215 winch + Dyneema SK75 spool, auto-latch cradle, GPS
 > retention ring, FPV bezel, 3M foam gasket door seal. All other subsystems identical to Rev O.
 > See `serenity-rev-p.jsx` for the complete Rev P specification and `bom_revP.json`/`bom_revP.csv`
 > for the full Rev P bill of materials.
@@ -69,7 +69,7 @@ R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 | AUW (Phase 11 full system) | **6.90 lbm (3,130 g)** — with 55mm rear EDF + RCS hardware installed |
 | Hover T/W (Phase 11) | **~1.43** — 9.84 lbf / 6.90 lbm; rear EDF is forward-thrust only (cruise/range), not counted in hover. Keep hover payload light to stay ≥1.5. |
 | Avionics | 8× PocketBeagle 2 Industrial (AM6254): FC1–FC4 (Cape-A) + CN1–CN4 (Cape-B) |
-| Cargo | 4.00 × 3.00 × 3.00 in (101.6 × 76.2 × 76.2 mm) bay, clamshell doors, N20 winch |
+| Cargo | 4.00 × 3.00 × 3.00 in (101.6 × 76.2 × 76.2 mm) bay, clamshell doors, STS3215 winch |
 | Build estimate | ~100–120 hours across all phases |
 
 ---
@@ -611,7 +611,7 @@ Verify full obstacle avoidance in firmware (dual-redundant arrays — A and B co
 
 ## Phase 7 — Cargo System
 
-Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_sect_shell24.stl interior). Install N20 winch motor in aft bay, drum, and auto-latch cradle. Wire HX711 load cell to Cape-B CN2. Test release and retrieval with 250 g dummy load.
+Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_sect_shell24.stl interior). Install the STS3215 winch train in the aft bay: both pedestals, the Ø4 mm fixed axle, the spool on its two MR84ZZ bearings, the ratchet ring, and the pawl + spring + catch solenoid. **The spool must be supported at both pedestals — never hung off the servo output.** Fit the auto-latch cradle. Wire the HX711 load cell and the STS3215 TTL bus to the cargo-bay CAN-PERIPH-GW (not Cape-B). Bench-calibrate the pawl spring to an 8.0 N ± 1.0 N slip threshold, then test release and retrieval with a 250 g dummy load. Ref: `docs/CARGO_WINCH_SPECIFICATION.md`.
 
 ---
 

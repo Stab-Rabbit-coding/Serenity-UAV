@@ -94,7 +94,7 @@ over-current threshold in governor_config.h: `EDF_ESC_OVERCURRENT_A = 80 A`).
 | Zoë (radios TX simultaneous) | 4 | 1 500 | 2 500 | 6 000 | 10 000 |
 | Emma sub-modules | 4 | 100 | 250 | 400 | 1 000 |
 | HX711 + load cell | 1 | 10 | 10 | 10 | 10 |
-| N20 winch motor (via DRV8833) | 1 | 200 | 500 | 200 | 500 |
+| STS3215 winch servo (via CAN-PERIPH-GW, RAIL-2) | 1 | 200 | 1200 | 200 | 1200 |
 | **5 V subtotal** | — | — | — | **13 410** | **26 710** |
 
 At 5 V / 22.2 V conversion: 26.7 A × 5 V / 22.2 V ≈ **6.0 A from VBAT** at peak.
@@ -477,7 +477,7 @@ Shedding is additive: each higher level includes all lower-level sheds.
 
 | Priority | Shed target | VBAT saving (A) | 5 V saving (A) |
 |----------|------------|-----------------|----------------|
-| 1 (CRITICAL) | Cargo winch N20 motor | 0.1 | 0.5 |
+| 1 (CRITICAL) | Cargo winch STS3215 servo | 0.2 | 1.2 |
 | 2 (CRITICAL) | LoRa RFM95W TX reduced power | ~0.0 | 0.1 |
 | 3 (CRITICAL) | Wi-Fi WL1837MOD TX off | ~0.0 | 0.5 |
 | 4 (EMERGENCY) | All non-propulsion 5 V loads off | ~0.3 | — |
