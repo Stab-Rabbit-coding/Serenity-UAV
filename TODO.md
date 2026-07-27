@@ -20,13 +20,11 @@
 
 → detail: `docs/WBS.md` §0.1
 
-- [ ] Code-identifier "RCRS" naming left unchanged — separate tracked…
 
 ### 0.7 — CI Lint Scope and Repo-Wide Lint Debt
 
 → detail: `docs/WBS.md` §0.7
 
-- [ ] Repo-wide lint debt
 
 ### 0.8 — Tilt-Spar Material Allowables + Hall Encoder Verification
 
@@ -104,6 +102,7 @@
 - [ ] [OPEN — BLOCKER] Fuselage spar-interface now mismatched.
 
 #### 1.1.3 — Nacelles
+→ detail: `airframe/wings-nacelles/WBS.md` §1.1.3
 
 - [ ] Reconcile crazy-ivan/PR#141 as SUPERSEDED by fix/nozzle branch
 - [ ] Merge cargo_spar_drive into cargo shell (bearing/servo/mortise…
@@ -113,11 +112,10 @@
 - [ ] VERIFY INBOARD_FACE_X sign in _export_pivot_slab.scad
 - [ ] Migrate nacelle_hall_ring_hub → nacelle_pod_50mm_tandem.scad + re-bake
 - [ ] Bench-cal AK7455 with steel spar/MF128 bearing (ferrous-field check)
-- [x] Re-derive rotating-assembly CG for Rev T pushrod/cam drive…
     (2026-07-19).** CG_Z = 111.5 mm (was 104.5); `PIVOT_Z` propagated to all
     SCAD/assembly/docs; nacelle shells + stator sleeve re-rendered/re-baked (66
     STLs pass validate_stls). Drivers: 40 mm flaps + discrete Ø71 housing aft.
-- [ ] **VERIFY Rev T CG (first-pass, band ≈109–112 mm):** confirm effective
+- [ ] VERIFY Rev T CG (first-pass, band ≈109–112 mm)
     printed densities (CF-PETG 1.05 / PETG 1.00 g/cm³) against printer-sliced
     masses, and the discrete-housing vs cowl-skin overlap. → pod header table.
 - [ ] Re-solve single-straight-spar alignment for +7 mm pivot move
@@ -146,7 +144,7 @@
 - [ ] Fix iris asm flap sign (nacelle_nozzle_iris.scad) — 8-flap loop…
     uses `rotate([0, PHI_CLOSED, 0])` → petals DIVERGE at "closed"; must be
     `−PHI_CLOSED` to converge to 75 % bore. Preview-only (print parts unaffected).
-- [ ] **Stator spar crossing (Rev T2):** kept 11 vanes (coprime w/ 12-blade
+- [ ] Stator spar crossing (Rev T2): 11 vanes, coprime w/ 12-blade rotor
     rotor — Tyler–Sofrin); spar carried in a streamlined teardrop strut (tail
     aft, TE ≈ vane TE) + 0° anti-rotation key drilled through. VERIFY strut
     chord/tail + residual swirl into EDF2 by CFD/bench before flight.

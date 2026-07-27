@@ -86,6 +86,13 @@
 - [x] Resolved (confirmed 2026-06-29). run-lint (github/super-linter@…
 - [x] Repo-wide lint debt — remediation pass complete 2026-07-18
 
+### 0.8 — Tilt-Spar Material Allowables + Hall Encoder Verification
+→ detail: `docs/WBS.md` §0.8
+
+- [ ] Verify 4130 / 17-4 PH / 7075 allowables vs MMPDS/AMS (REF-MAT-*)
+- [ ] Add 4130 corrosion-finish spec (zinc/cad plate) to BOM/build guide
+- [ ] Verify AK7455 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
+
 ---
 
 ## 1.0 — Design Artifacts (Pre-Fabrication)
@@ -236,6 +243,21 @@
 - [x] Move the port (red) / stbd (green) nav lights INWARD→OUTWARD fa…
 - [x] Route nav-light wires through an internal cableway (not protrud…
 - [x] Remove the exhaust WS2812B LED rings + harnesses from the desig…
+- [ ] Reconcile crazy-ivan/PR#141 as SUPERSEDED by fix/nozzle branch
+- [ ] Merge cargo_spar_drive into cargo shell (bearing/servo/mortise…
+- [ ] Verify stbd cargo-chunk placement of spar-drive features
+- [ ] Tune servo→spar horn/pushrod linkage throw (−5°..140°)
+- [ ] Repair pre-existing stator sleeve non-manifold (edf_stator_sleeve)
+- [ ] VERIFY INBOARD_FACE_X sign in _export_pivot_slab.scad
+- [ ] Migrate nacelle_hall_ring_hub → nacelle_pod_50mm_tandem.scad + re-bake
+- [ ] Bench-cal AK7455 with steel spar/MF128 bearing (ferrous-field check)
+- [ ] VERIFY Rev T CG (first-pass, band ≈109–112 mm)
+- [ ] Re-solve single-straight-spar alignment for +7 mm pivot move
+- [ ] Nozzle drive: replace invalid spar-crank w/ wing-referenced sync…
+- [ ] Fix iris asm flap sign (nacelle_nozzle_iris.scad) — 8-flap loop…
+- [ ] Stator spar crossing (Rev T2): 11 vanes, coprime w/ 12-blade rotor
+- [ ] Ø72 nozzle-pocket eats the aft cowl tail…
+- [x] Re-derive rotating-assembly CG for Rev T pushrod/cam drive…
 
 #### 1.1.4 — Landing Gear
 → detail: `airframe/landing-gear/WBS.md` §1.1.4
@@ -243,12 +265,12 @@
 - [x] Build and render the Rev R5 post + wire SCAD/STL *(done —
 - [x] Build assembled / exploded / deformed demonstration compound ST…
 - [ ] LG-12 Model the post per the §4.6 dimensions
-- [ ] LG-10 Finalize the 4 corner post placements
+- [ ] LG-10 Finalize the 4 bay placements in SerenityAssembly.FCStd
 - [ ] Ground clearance check carried forward from Rev R1
-- [ ] LG-15 Select and procure both wire grades/tempers
-- [ ] LG-16 Confirm the ductile wire temper survives forming
-- [ ] LG-13 Define the wire-to-socket retention detail
-- [ ] LG-02 Design and integrate 16 hull boss sockets
+- [ ] LG-15 Procure both wire grades/tempers; coupon test
+- [ ] LG-16 Confirm ductile wire temper survives jig-forming
+- [ ] LG-13 Define wire-end retention detail at bay bosses
+- [ ] LG-02 Bay mounting integration: backing plates, flank conform…
 - [x] Feet separated into individual STLs (foot_1 through foot_4 in l…
 - [ ] Add top-face socket to canonical foot
 - [ ] Assess foot grip on concrete/asphalt
@@ -256,7 +278,7 @@
 - [x] Rev R4 closed-ring wire fuse (wire_loop_fuse.scad) is retired
 - [ ] LG-03 CF rod channel in middle_canonical_shell24.scad rear skid…
 - [x] landing_legs_hull_r1.stl is orphaned
-- [ ] LG-06 Drop test prototype leg assembly
+- [ ] LG-06 Elastic bench check: quarter-AUW fixture, 1.5 ft drop
 - [ ] LG-07 Confirm avionics enclosure shock rating
 - [ ] LG-11 Coupon-test CF-PETG
 - [ ] LG-14 Instrumented drop test (load cell + high-speed video) at…
@@ -264,6 +286,10 @@
 - [ ] Combine all airframe STLs
 - [ ] Exploded view SVG — printed parts only
 - [ ] Exploded view SVG — full build
+- [ ] LG-17 Drop-height decision: 6 ft vs 4 ft ductile wire schedule
+- [ ] LG-18 Mass-reduction pass (leg frame / bay / thigh)
+- [ ] LG-19 Styling refinement pass vs REF-CAD-002 (cosmetic)
+- [ ] Render overview SVGs using FreeCAD TechDraw
 
 #### 1.1.5 — Non-Printable Component Placeholders
 → detail: `airframe/WBS.md` §1.1.5
