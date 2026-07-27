@@ -513,8 +513,13 @@ to populate 132289RP in place of 132289 is the remaining fabrication step.
 
 ## Security Notes
 
-Unchanged from XCVR-49MHZ-1. The board carries no TPM. All cryptographic operations
-for AX.25 payload signing remain on the CAPE-B host CPU.
+**Updated 2026-07-26:** Emma now carries its own TPM — Infineon SLB9670 (SPI TPM 2.0,
+same part standardized fleet-wide), added via `avionics/kicad/Emma/scripts/inject_emma_tpm.py`
+(schematic ref `TPM`, dedicated 6-pin SPI+control header `J_TPM`; no local CAN-FD/RS-485
+transceiver is needed — Emma reaches the bus via Zoë's P1/P2 stacking link). PCB footprint
+placement is open work (root `TODO.md` §1.2a). Prior to this addition, cryptographic
+operations for AX.25 payload signing were entirely on the CAPE-B host CPU; that remains
+true for any signing not routed through the new local TPM.
 
 ---
 

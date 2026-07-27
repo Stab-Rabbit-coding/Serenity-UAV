@@ -48,6 +48,7 @@ PHY1 connects to PocketBeagle 2 RMII0; PHY2 connects to RMII1.
 MDC and MDIO are shared between both PHYs (different PHY addresses: PHY1=0x01, PHY2=0x02).
 
 Ethernet connector assignments:
+
 | Connector | PHY | Port | Signals |
 |---|---|---|---|
 | J_ETH1 | DP83825I PHY1 | RMII0 / ETH0 | ETH1_TX+/TX-/RX+/RX-, GND, SHIELD |
@@ -77,21 +78,30 @@ boundary. A 4.7 nF X2Y capacitor bridges GND1-to-GND2 externally per TI applicat
 SLLA337A, providing a low-impedance CM noise return path at RF frequencies (>1 MHz)
 without compromising DC isolation.
 
-### 3. RS-485 transceiver: MAX3485E → ADM2795EBRWZ
+### 3. RS-485 transceiver: MAX3485E → ADM2795EBRWZ → ISOW1412 (REF-SENSOR-010)
 
-| Parameter | CAPE-A-1 | Wash |
+| Parameter | CAPE-A-1 | Wash (current) |
 |---|---|---|
-| Part | MAX3485E (SOIC-8) | ADM2795EBRWZ (SOIC-20W) |
-| Isolation | None (non-isolated) | 5000 V RMS reinforced (IEC 62368-1) |
-| Surge / bus fault | ±12 V (standard RS-485) | ±42 V (exceeds IEC 61000-4-5 ±2 kV on bus) |
-| Data rate | 32 Mbps | 20 Mbps |
-| Supply | 3.3 V | 3.3 V VDD1; internal DC/DC generates VDD2 |
-| Current | 3.5 mA | 25 mA (includes DC/DC) |
-| DigiKey | — | ADM2795EBRWZ-ND |
+| Part | MAX3485E (SOIC-8) | **ISOW1412** (20-pin DFM, `Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm`) |
+| Isolation | None (non-isolated) | 5000 V RMS reinforced |
+| Data rate | 32 Mbps | 500 kbps (ISOW1412 variant; pin-compatible ISOW1432 is the 12 Mbps part, not used) |
+| Supply / DC-DC | 3.3 V | 3.3 V VIO; **own integrated isolated DC/DC** generates the bus-side supply (no external isolated supply needed) |
+| Current | 3.5 mA | ≤60 mA (VIO 4.5–5.5 V, incl. integrated DC/DC per datasheet §8.9/8.10); 20 mA of the DC/DC's output is available for other bus-side circuits |
+| DigiKey | — | see REFERENCES.md REF-SENSOR-010 |
 
-The ADM2795EBRWZ is pin-logically compatible: DI, DE, RE_N, RO on the logic side have
-the same polarity convention as the MAX3485E. The half-duplex direction-control scheme
-(RS485_DE driving both DE and RE_N) is preserved unchanged.
+**Fleet-wide swap, 2026-07-26** (REFERENCES.md "Removed / Superseded Citations"): ADM2795EBRWZ
+was briefly used here but is signal-isolation-only and needs a *separate* external isolated
+DC-DC for its bus-side VDD2. ISOW1412 integrates its own isolated DC-DC, removing that extra
+supply fleet-wide (same swap applied to Zoë, Jayne, Kaylee, CAN-PERIPH-GW-1). While performing
+this swap, Wash's pre-existing ADM2795EBRWZ symbol was found to have incorrectly numbered pins
+(pre-existing defect, corrected in the same pass — see `avionics/kicad/fix_wash_zoe_isolators.py`).
+Wash's own **PCB footprint has not yet been swapped to ISOW1412** — it currently still carries
+the old ADM2795EBRWZ footprint; this is open work (see root `TODO.md` §1.2a).
+
+ISOW1412 is a full-duplex part (separate Y/Z driver-out, A/B receiver-in); it is run in
+half-duplex mode on this project's 2-wire RS485_A/RS485_B bus by shorting Y-to-A and Z-to-B,
+the standard technique for using a full-duplex transceiver as half-duplex. The half-duplex
+direction-control scheme (RS485_DE driving DE/RE_N) is preserved unchanged.
 
 A 4.7 nF X2Y capacitor bridges GND1-to-GND2 externally for the same RF CM noise return
 path reason described above for the CAN transceiver.

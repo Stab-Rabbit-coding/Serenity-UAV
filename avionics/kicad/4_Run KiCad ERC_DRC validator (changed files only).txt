@@ -1,0 +1,403 @@
+﻿2026-07-27T00:05:36.0427171Z ##[group]Run git fetch origin main
+2026-07-27T00:05:36.0427433Z [36;1mgit fetch origin main[0m
+2026-07-27T00:05:36.0427733Z [36;1mpython3 tools/validate_kicad.py --changed-since origin/main --verbose[0m
+2026-07-27T00:05:36.0467593Z shell: /usr/bin/bash -e {0}
+2026-07-27T00:05:36.0467803Z ##[endgroup]
+2026-07-27T00:05:36.3648987Z From https://github.com/Stab-Rabbit-coding/Serenity-UAV
+2026-07-27T00:05:36.3649431Z  * branch            main       -> FETCH_HEAD
+2026-07-27T00:05:40.0703632Z --changed-since origin/main: 6 schematic(s), 5 PCB(s) touched
+2026-07-27T00:05:40.0704762Z [PASS] ERC avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch: 0 hard, 103 soft (accepted-class)
+2026-07-27T00:05:40.0705538Z [PASS] ERC avionics/kicad/ENC-NACELLE-1.kicad_sch: 0 hard, 54 soft (accepted-class)
+2026-07-27T00:05:40.0706216Z [PASS] ERC avionics/kicad/Emma/kicads/Emma.kicad_sch: 0 hard, 136 soft (accepted-class)
+2026-07-27T00:05:40.0706914Z [PASS] ERC avionics/kicad/Jayne/kicads/Jayne.kicad_sch: 0 hard, 214 soft (accepted-class)
+2026-07-27T00:05:40.0707715Z [PASS] ERC avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch: 0 hard, 567 soft (accepted-class)
+2026-07-27T00:05:40.0708283Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0708717Z     HARD (ERC wire_dangling): Wires not connected to anything
+2026-07-27T00:05:40.0709140Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0709470Z     HARD (ERC wire_dangling): Wires not connected to anything
+2026-07-27T00:05:40.0709736Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0709996Z     HARD (ERC wire_dangling): Wires not connected to anything
+2026-07-27T00:05:40.0710430Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0710699Z     HARD (ERC wire_dangling): Wires not connected to anything
+2026-07-27T00:05:40.0710957Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0711213Z     HARD (ERC wire_dangling): Wires not connected to anything
+2026-07-27T00:05:40.0711480Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0711748Z     HARD (ERC wire_dangling): Wires not connected to anything
+2026-07-27T00:05:40.0712023Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0712262Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0712494Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0712725Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0712956Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0713191Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0713421Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0713675Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0713911Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0714153Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0714397Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0714643Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0714880Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0715110Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0715396Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0715627Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0715862Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0716100Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0716331Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0716563Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0716790Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0717037Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0717273Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0717503Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0717955Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0718184Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0718416Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0718648Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0718894Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0719133Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0719466Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0719703Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0719935Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0720308Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0720547Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0720785Z     HARD (ERC pin_not_connected): Pin not connected
+2026-07-27T00:05:40.0721130Z [FAIL] ERC avionics/kicad/Wash/kicads/Wash.kicad_sch: 48 hard, 46 soft (accepted-class)
+2026-07-27T00:05:40.0721631Z     HARD (starved_thermal): Thermal relief connection to zone incomplete (layer B.Cu; zone min spoke count 2; actual 1)
+2026-07-27T00:05:40.0722176Z     HARD (starved_thermal): Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)
+2026-07-27T00:05:40.0722706Z     HARD (starved_thermal): Thermal relief connection to zone incomplete (layer B.Cu; zone min spoke count 2; actual 1)
+2026-07-27T00:05:40.0723241Z     HARD (starved_thermal): Thermal relief connection to zone incomplete (layer B.Cu; zone min spoke count 2; actual 1)
+2026-07-27T00:05:40.0723811Z     HARD (starved_thermal): Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)
+2026-07-27T00:05:40.0724343Z     HARD (starved_thermal): Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)
+2026-07-27T00:05:40.0724877Z     HARD (starved_thermal): Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)
+2026-07-27T00:05:40.0725404Z     HARD (starved_thermal): Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)
+2026-07-27T00:05:40.0725952Z [FAIL] DRC avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb: 8 hard, 51 soft (accepted-class)
+2026-07-27T00:05:40.0726541Z     HARD (copper_edge_clearance): Board edge clearance violation (board setup constraints edge clearance 0.2500 mm; actual 0.1799 mm)
+2026-07-27T00:05:40.0727167Z     HARD (copper_edge_clearance): Board edge clearance violation (board setup constraints edge clearance 0.2500 mm; actual 0.1799 mm)
+2026-07-27T00:05:40.0727780Z     HARD (clearance): Clearance violation ( clearance 0.1500 mm; actual 0.1000 mm)
+2026-07-27T00:05:40.0728151Z     HARD (clearance): Clearance violation ( clearance 0.1500 mm; actual 0.1000 mm)
+2026-07-27T00:05:40.0728512Z     HARD (clearance): Clearance violation ( clearance 0.1500 mm; actual 0.1000 mm)
+2026-07-27T00:05:40.0728872Z     HARD (clearance): Clearance violation ( clearance 0.1500 mm; actual 0.1000 mm)
+2026-07-27T00:05:40.0729231Z     HARD (clearance): Clearance violation ( clearance 0.1500 mm; actual 0.1000 mm)
+2026-07-27T00:05:40.0729590Z     HARD (clearance): Clearance violation ( clearance 0.1500 mm; actual 0.1301 mm)
+2026-07-27T00:05:40.0729944Z     HARD (clearance): Clearance violation ( clearance 0.1500 mm; actual 0.0548 mm)
+2026-07-27T00:05:40.0730584Z     HARD (hole_clearance): Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.2048 mm)
+2026-07-27T00:05:40.0731043Z     HARD (shorting_items): Items shorting two nets (nets +3V3 and ENC_CSN)
+2026-07-27T00:05:40.0731402Z     HARD (clearance): Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)
+2026-07-27T00:05:40.0731764Z     HARD (clearance): Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)
+2026-07-27T00:05:40.0732147Z [FAIL] DRC avionics/kicad/ENC-NACELLE-1.kicad_pcb: 13 hard, 3 soft (accepted-class)
+2026-07-27T00:05:40.0732697Z     HARD (solder_mask_bridge): Front solder mask aperture bridges items with different nets
+2026-07-27T00:05:40.0733112Z     HARD (solder_mask_bridge): Front solder mask aperture bridges items with different nets
+2026-07-27T00:05:40.0733780Z     HARD (solder_mask_bridge): Front solder mask aperture bridges items with different nets
+2026-07-27T00:05:40.0734333Z     HARD (solder_mask_bridge): Front solder mask aperture bridges items with different nets
+2026-07-27T00:05:40.0735030Z     HARD (solder_mask_bridge): Front solder mask aperture bridges items with different nets
+2026-07-27T00:05:40.0735610Z     HARD (solder_mask_bridge): Front solder mask aperture bridges items with different nets
+2026-07-27T00:05:40.0736197Z     HARD (solder_mask_bridge): Front solder mask aperture bridges items with different nets
+2026-07-27T00:05:40.0736649Z     HARD (tracks_crossing): Tracks crossing
+2026-07-27T00:05:40.0737060Z     HARD (clearance): Clearance violation ( clearance 0.1000 mm; actual 0.0227 mm)
+2026-07-27T00:05:40.0737528Z     HARD (shorting_items): Items shorting two nets (nets +3V3 and RSSI_DCD)
+2026-07-27T00:05:40.0737874Z     HARD (shorting_items): Items shorting two nets (nets RSSI_DCD and +3V3)
+2026-07-27T00:05:40.0738214Z     HARD (shorting_items): Items shorting two nets (nets GND and RSSI_DCD)
+2026-07-27T00:05:40.0738498Z     HARD (tracks_crossing): Tracks crossing
+2026-07-27T00:05:40.0738790Z     HARD (clearance): Clearance violation ( clearance 0.1000 mm; actual 0.0000 mm)
+2026-07-27T00:05:40.0739269Z     HARD (hole_clearance): Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.0000 mm)
+2026-07-27T00:05:40.0739734Z     HARD (clearance): Clearance violation ( clearance 0.1000 mm; actual 0.0000 mm)
+2026-07-27T00:05:40.0740364Z     HARD (hole_clearance): Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.0000 mm)
+2026-07-27T00:05:40.0740830Z     HARD (clearance): Clearance violation ( clearance 0.1000 mm; actual 0.0000 mm)
+2026-07-27T00:05:40.0741280Z     HARD (hole_clearance): Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.0000 mm)
+2026-07-27T00:05:40.0741724Z     HARD (clearance): Clearance violation ( clearance 0.1000 mm; actual 0.0000 mm)
+2026-07-27T00:05:40.0742168Z     HARD (hole_clearance): Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.0000 mm)
+2026-07-27T00:05:40.0742602Z     HARD (shorting_items): Items shorting two nets (nets +5V and RSSI_DCD)
+2026-07-27T00:05:40.0742990Z [FAIL] DRC avionics/kicad/Emma/kicads/Emma.kicad_pcb: 22 hard, 229 soft (accepted-class)
+2026-07-27T00:05:40.0743327Z     HARD (courtyards_overlap): Courtyards overlap
+2026-07-27T00:05:40.0743572Z     HARD (courtyards_overlap): Courtyards overlap
+2026-07-27T00:05:40.0743802Z     HARD (courtyards_overlap): Courtyards overlap
+2026-07-27T00:05:40.0744032Z     HARD (courtyards_overlap): Courtyards overlap
+2026-07-27T00:05:40.0744270Z     HARD (courtyards_overlap): Courtyards overlap
+2026-07-27T00:05:40.0744508Z     HARD (courtyards_overlap): Courtyards overlap
+2026-07-27T00:05:40.0744741Z     HARD (courtyards_overlap): Courtyards overlap
+2026-07-27T00:05:40.0744970Z     HARD (courtyards_overlap): Courtyards overlap
+2026-07-27T00:05:40.0745201Z     HARD (courtyards_overlap): Courtyards overlap
+2026-07-27T00:05:40.0745427Z     HARD (courtyards_overlap): Courtyards overlap
+2026-07-27T00:05:40.0745656Z     HARD (courtyards_overlap): Courtyards overlap
+2026-07-27T00:05:40.0745889Z     HARD (courtyards_overlap): Courtyards overlap
+2026-07-27T00:05:40.0746184Z     HARD (clearance): Clearance violation ( clearance 0.2000 mm; actual 0.1500 mm)
+2026-07-27T00:05:40.0746556Z     HARD (clearance): Clearance violation ( clearance 0.2000 mm; actual 0.1500 mm)
+2026-07-27T00:05:40.0746910Z     HARD (clearance): Clearance violation ( clearance 0.2000 mm; actual 0.1500 mm)
+2026-07-27T00:05:40.0747264Z     HARD (clearance): Clearance violation ( clearance 0.2000 mm; actual 0.1500 mm)
+2026-07-27T00:05:40.0747783Z     HARD (clearance): Clearance violation ( clearance 0.2000 mm; actual 0.1500 mm)
+2026-07-27T00:05:40.0748146Z     HARD (clearance): Clearance violation ( clearance 0.2000 mm; actual 0.1500 mm)
+2026-07-27T00:05:40.0748501Z     HARD (clearance): Clearance violation ( clearance 0.2000 mm; actual 0.1500 mm)
+2026-07-27T00:05:40.0748858Z     HARD (clearance): Clearance violation ( clearance 0.2000 mm; actual 0.1500 mm)
+2026-07-27T00:05:40.0749313Z     HARD (clearance): Clearance violation ( clearance 0.2000 mm; actual 0.1500 mm)
+2026-07-27T00:05:40.0749671Z     HARD (clearance): Clearance violation ( clearance 0.2000 mm; actual 0.1500 mm)
+2026-07-27T00:05:40.0750026Z     HARD (clearance): Clearance violation ( clearance 0.2000 mm; actual 0.1500 mm)
+2026-07-27T00:05:40.0750513Z     HARD (clearance): Clearance violation ( clearance 0.2000 mm; actual 0.1500 mm)
+2026-07-27T00:05:40.0750875Z     HARD (clearance): Clearance violation ( clearance 0.2000 mm; actual 0.1500 mm)
+2026-07-27T00:05:40.0751242Z     HARD (clearance): Clearance violation ( clearance 0.2000 mm; actual 0.1500 mm)
+2026-07-27T00:05:40.0751604Z     HARD (clearance): Clearance violation ( clearance 0.2000 mm; actual 0.1500 mm)
+2026-07-27T00:05:40.0751959Z     HARD (clearance): Clearance violation ( clearance 0.2000 mm; actual 0.1500 mm)
+2026-07-27T00:05:40.0752332Z     HARD (net_conflict): Pad net (VDIS) doesn't match net given by schematic (VBAT).
+2026-07-27T00:05:40.0752720Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0753092Z     HARD (net_conflict): Pad net (VDIS) doesn't match net given by schematic (VBAT).
+2026-07-27T00:05:40.0753459Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0753823Z     HARD (net_conflict): Pad net (VDIS) doesn't match net given by schematic (VBAT).
+2026-07-27T00:05:40.0754186Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0754565Z     HARD (net_conflict): Pad net (VDIS) doesn't match net given by schematic (VBAT_IN_P).
+2026-07-27T00:05:40.0754938Z     HARD (net_conflict): Pad net (VDIS) doesn't match net given by schematic (VBAT_IN_N).
+2026-07-27T00:05:40.0755319Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM1_OUT_P).
+2026-07-27T00:05:40.0755692Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM1_OUT_N).
+2026-07-27T00:05:40.0756063Z     HARD (net_conflict): Pad net (VDIS) doesn't match net given by schematic (CM1_OUT_P).
+2026-07-27T00:05:40.0756429Z     HARD (net_conflict): Pad net (VDIS) doesn't match net given by schematic (CM1_OUT_N).
+2026-07-27T00:05:40.0756799Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_P).
+2026-07-27T00:05:40.0757169Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0757572Z     HARD (net_conflict): Pad net (BEC1_VIN_F) doesn't match net given by schematic (FB5V1_OUT).
+2026-07-27T00:05:40.0757965Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0758366Z     HARD (net_conflict): Pad net (BEC1_PRE_OR) doesn't match net given by schematic (BEC5V1_RAW).
+2026-07-27T00:05:40.0758777Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0759167Z     HARD (net_conflict): Pad net (BEC2_VIN_F) doesn't match net given by schematic (FB5V2_OUT).
+2026-07-27T00:05:40.0759555Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0759946Z     HARD (net_conflict): Pad net (BEC2_PRE_OR) doesn't match net given by schematic (BEC5V2_RAW).
+2026-07-27T00:05:40.0760570Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0761124Z     HARD (net_conflict): Pad net (BECSV_VIN_F) doesn't match net given by schematic (FBSV_OUT).
+2026-07-27T00:05:40.0761648Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0762020Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0762386Z     HARD (net_conflict): Pad net (VDIS) doesn't match net given by schematic (VBAT).
+2026-07-27T00:05:40.0762751Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0763276Z     HARD (net_conflict): Pad net (VDIS) doesn't match net given by schematic (VBAT).
+2026-07-27T00:05:40.0763665Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0764045Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (VBAT).
+2026-07-27T00:05:40.0764411Z     HARD (net_conflict): Pad net (VDIS) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0764793Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0765193Z     HARD (net_conflict): Pad net (PDB_SDA_RAW) doesn't match net given by schematic (PDB_SDA).
+2026-07-27T00:05:40.0765565Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0765916Z     HARD (net_conflict): Pad net (PDB_SCL) doesn't match net given by schematic (+5V).
+2026-07-27T00:05:40.0766254Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0766584Z     HARD (net_conflict): Pad net (+5V) doesn't match net given by schematic (PDB_SCL).
+2026-07-27T00:05:40.0766971Z     HARD (net_conflict): Pad net (BEC1_PRE_OR) doesn't match net given by schematic (BEC5V1_RAW).
+2026-07-27T00:05:40.0767326Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0783301Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0783906Z     HARD (net_conflict): Pad net (BEC2_PRE_OR) doesn't match net given by schematic (5V_AVIONICS).
+2026-07-27T00:05:40.0784430Z     HARD (net_conflict): Pad net (BEC2_PRE_OR) doesn't match net given by schematic (BEC5V2_RAW).
+2026-07-27T00:05:40.0784824Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0785120Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0785476Z     HARD (net_conflict): Pad net (BEC2_PRE_OR) doesn't match net given by schematic (5V_AVIONICS).
+2026-07-27T00:05:40.0785890Z     HARD (net_conflict): Pad net (VDIS) doesn't match net given by schematic (CM2_OUT_P).
+2026-07-27T00:05:40.0786271Z     HARD (net_conflict): Pad net (VDIS) doesn't match net given by schematic (VBAT).
+2026-07-27T00:05:40.0786669Z     HARD (net_conflict): Pad net (BEC1_VIN_F) doesn't match net given by schematic (FB5V1_OUT).
+2026-07-27T00:05:40.0787086Z     HARD (net_conflict): Pad net (BEC2_VIN_F) doesn't match net given by schematic (FB5V2_OUT).
+2026-07-27T00:05:40.0787497Z     HARD (net_conflict): Pad net (BECSV_VIN_F) doesn't match net given by schematic (FBSV_OUT).
+2026-07-27T00:05:40.0787901Z     HARD (net_conflict): Pad net (VBAT) doesn't match net given by schematic (VDIS).
+2026-07-27T00:05:40.0788264Z     HARD (net_conflict): Pad net (VBAT) doesn't match net given by schematic (VDIS).
+2026-07-27T00:05:40.0788621Z     HARD (net_conflict): Pad net (VBAT) doesn't match net given by schematic (VDIS).
+2026-07-27T00:05:40.0788973Z     HARD (net_conflict): Pad net (VBAT) doesn't match net given by schematic (VDIS).
+2026-07-27T00:05:40.0789328Z     HARD (net_conflict): Pad net (VBAT) doesn't match net given by schematic (VDIS).
+2026-07-27T00:05:40.0789683Z     HARD (net_conflict): Pad net (VBAT) doesn't match net given by schematic (VDIS).
+2026-07-27T00:05:40.0790038Z     HARD (net_conflict): Pad net (VBAT) doesn't match net given by schematic (VDIS).
+2026-07-27T00:05:40.0790562Z     HARD (net_conflict): Pad net (VBAT) doesn't match net given by schematic (VDIS).
+2026-07-27T00:05:40.0791124Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (5V_AVIONICS).
+2026-07-27T00:05:40.0791518Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (5V_AVIONICS).
+2026-07-27T00:05:40.0791902Z     HARD (net_conflict): Pad net (+5V) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0792276Z     HARD (net_conflict): Pad net (+5V) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0792650Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0793130Z     HARD (net_conflict): Pad net (VDIS) doesn't match net given by schematic (VBAT_IN_P).
+2026-07-27T00:05:40.0793534Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (VBAT_IN_N).
+2026-07-27T00:05:40.0793878Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0794196Z     HARD (net_conflict): No pad found for pin 1 (CHASSIS) in schematic.
+2026-07-27T00:05:40.0794553Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0794924Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0795295Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0795666Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0796040Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0796381Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0796691Z     HARD (net_conflict): No pad found for pin 1 (CM2_OUT_N) in schematic.
+2026-07-27T00:05:40.0797058Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0797448Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0797833Z     HARD (net_conflict): Pad net (VBAT) doesn't match net given by schematic (DSG_GATE).
+2026-07-27T00:05:40.0798211Z     HARD (net_conflict): Pad net (VBAT) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0798550Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0798846Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0799131Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0799423Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0799703Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0800056Z     HARD (net_conflict): Pad net (MAIN_SNS_P) doesn't match net given by schematic (RS_MAIN_SP).
+2026-07-27T00:05:40.0800610Z     HARD (net_conflict): Pad net (MAIN_SNS_N) doesn't match net given by schematic (RS_MAIN_SN).
+2026-07-27T00:05:40.0801005Z     HARD (net_conflict): Pad net (VBAT) doesn't match net given by schematic (VDIS).
+2026-07-27T00:05:40.0801385Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CHASSIS).
+2026-07-27T00:05:40.0801782Z     HARD (net_conflict): Pad net (CHASSIS) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0802185Z     HARD (net_conflict): Pad net (DSG_GATE) doesn't match net given by schematic (BQ_DSG_OUT).
+2026-07-27T00:05:40.0802602Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (DSG_GATE).
+2026-07-27T00:05:40.0803010Z     HARD (net_conflict): Pad net (BEC1_PRE_OR) doesn't match net given by schematic (BEC5V1_RAW).
+2026-07-27T00:05:40.0803421Z     HARD (net_conflict): Pad net (BEC1_FB) doesn't match net given by schematic (FB5V1_FBK).
+2026-07-27T00:05:40.0803808Z     HARD (net_conflict): Pad net (BEC1_FB) doesn't match net given by schematic (FB5V1_FBK).
+2026-07-27T00:05:40.0804189Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0804699Z     HARD (net_conflict): Pad net (BEC2_PRE_OR) doesn't match net given by schematic (BEC5V2_RAW).
+2026-07-27T00:05:40.0805099Z     HARD (net_conflict): Pad net (BEC2_FB) doesn't match net given by schematic (FB5V2_FBK).
+2026-07-27T00:05:40.0805483Z     HARD (net_conflict): Pad net (BEC2_FB) doesn't match net given by schematic (FB5V2_FBK).
+2026-07-27T00:05:40.0805862Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0806245Z     HARD (net_conflict): Pad net (BECSV_FB) doesn't match net given by schematic (FBSV_FBK).
+2026-07-27T00:05:40.0806737Z     HARD (net_conflict): Pad net (BECSV_FB) doesn't match net given by schematic (FBSV_FBK).
+2026-07-27T00:05:40.0807117Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0807514Z     HARD (net_conflict): Pad net (BEC1_VIN_F) doesn't match net given by schematic (FB5V1_OUT).
+2026-07-27T00:05:40.0807890Z     HARD (net_conflict): Pad missing net given by schematic (FB5V1_OUT).
+2026-07-27T00:05:40.0808211Z     HARD (net_conflict): Pad missing net given by schematic (SS5V1).
+2026-07-27T00:05:40.0808528Z     HARD (net_conflict): Pad missing net given by schematic (COMP5V1).
+2026-07-27T00:05:40.0808887Z     HARD (net_conflict): Pad net (BEC1_SW) doesn't match net given by schematic (FB5V1_FBK).
+2026-07-27T00:05:40.0809280Z     HARD (net_conflict): Pad net (BEC1_SW) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0809679Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (BOOT5V1).
+2026-07-27T00:05:40.0810058Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (SW5V1).
+2026-07-27T00:05:40.0810625Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0810977Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0811268Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0811558Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0811840Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0812123Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0812406Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0812688Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0812976Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0813261Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0813606Z     HARD (net_conflict): Pad net (BEC2_VIN_F) doesn't match net given by schematic (FB5V2_OUT).
+2026-07-27T00:05:40.0813979Z     HARD (net_conflict): Pad missing net given by schematic (FB5V2_OUT).
+2026-07-27T00:05:40.0814295Z     HARD (net_conflict): Pad missing net given by schematic (SS5V2).
+2026-07-27T00:05:40.0814611Z     HARD (net_conflict): Pad missing net given by schematic (COMP5V2).
+2026-07-27T00:05:40.0814966Z     HARD (net_conflict): Pad net (BEC2_SW) doesn't match net given by schematic (FB5V2_FBK).
+2026-07-27T00:05:40.0815356Z     HARD (net_conflict): Pad net (BEC2_SW) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0815733Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (BOOT5V2).
+2026-07-27T00:05:40.0816104Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (SW5V2).
+2026-07-27T00:05:40.0816479Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0816826Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0817115Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0817400Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0817681Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0818082Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0818365Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0818650Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0818929Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0819211Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0819664Z     HARD (net_conflict): Pad net (BECSV_VIN_F) doesn't match net given by schematic (FBSV_OUT).
+2026-07-27T00:05:40.0820044Z     HARD (net_conflict): Pad missing net given by schematic (FBSV_OUT).
+2026-07-27T00:05:40.0820526Z     HARD (net_conflict): Pad missing net given by schematic (SS_SV).
+2026-07-27T00:05:40.0820846Z     HARD (net_conflict): Pad missing net given by schematic (COMP_SV).
+2026-07-27T00:05:40.0821216Z     HARD (net_conflict): Pad net (BECSV_SW) doesn't match net given by schematic (FBSV_FBK).
+2026-07-27T00:05:40.0821623Z     HARD (net_conflict): Pad net (BECSV_SW) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0822016Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (BOOT_SV).
+2026-07-27T00:05:40.0822391Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (SW_SV).
+2026-07-27T00:05:40.0822763Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0823136Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0823432Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0823720Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0824004Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0824287Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0824567Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0824858Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0825142Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0825427Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.0825787Z     HARD (net_conflict): Pad net (ESC1_SNS_P) doesn't match net given by schematic (ESC1_RS_SP).
+2026-07-27T00:05:40.0826212Z     HARD (net_conflict): Pad net (ESC1_SNS_N) doesn't match net given by schematic (ESC1_RS_SN).
+2026-07-27T00:05:40.0826613Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0826966Z     HARD (net_conflict): Pad missing net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0827290Z     HARD (net_conflict): Pad missing net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0827657Z     HARD (net_conflict): Pad net (ESC1_FUSED) doesn't match net given by schematic (ESC1_RS_OUT).
+2026-07-27T00:05:40.0828077Z     HARD (net_conflict): Pad net (ESC2_SNS_P) doesn't match net given by schematic (ESC2_RS_SP).
+2026-07-27T00:05:40.0828479Z     HARD (net_conflict): Pad net (ESC2_SNS_N) doesn't match net given by schematic (ESC2_RS_SN).
+2026-07-27T00:05:40.0828869Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0829218Z     HARD (net_conflict): Pad missing net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0829530Z     HARD (net_conflict): Pad missing net given by schematic (+5V).
+2026-07-27T00:05:40.0829883Z     HARD (net_conflict): Pad net (ESC2_FUSED) doesn't match net given by schematic (ESC2_RS_OUT).
+2026-07-27T00:05:40.0830376Z     HARD (net_conflict): Pad net (ESC3_SNS_P) doesn't match net given by schematic (ESC3_RS_SP).
+2026-07-27T00:05:40.0830770Z     HARD (net_conflict): Pad net (ESC3_SNS_N) doesn't match net given by schematic (ESC3_RS_SN).
+2026-07-27T00:05:40.0831163Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0831629Z     HARD (net_conflict): Pad missing net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0831951Z     HARD (net_conflict): Pad missing net given by schematic (PDB_SDA).
+2026-07-27T00:05:40.0832311Z     HARD (net_conflict): Pad net (ESC3_FUSED) doesn't match net given by schematic (ESC3_RS_OUT).
+2026-07-27T00:05:40.0832718Z     HARD (net_conflict): Pad net (ESC4_SNS_P) doesn't match net given by schematic (ESC4_RS_SP).
+2026-07-27T00:05:40.0833226Z     HARD (net_conflict): Pad net (ESC4_SNS_N) doesn't match net given by schematic (ESC4_RS_SN).
+2026-07-27T00:05:40.0833610Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0833957Z     HARD (net_conflict): Pad missing net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.0834262Z     HARD (net_conflict): Pad missing net given by schematic (PDB_SCL).
+2026-07-27T00:05:40.0834618Z     HARD (net_conflict): Pad net (ESC4_FUSED) doesn't match net given by schematic (ESC4_RS_OUT).
+2026-07-27T00:05:40.0835036Z     HARD (net_conflict): Pad net (MAIN_SNS_P) doesn't match net given by schematic (RS_MAIN_SP).
+2026-07-27T00:05:40.0835439Z     HARD (net_conflict): Pad net (MAIN_SNS_N) doesn't match net given by schematic (RS_MAIN_SN).
+2026-07-27T00:05:40.4265628Z     HARD (net_conflict): Pad net (PGND) doesn't match net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.4266256Z     HARD (net_conflict): Pad missing net given by schematic (+5V).
+2026-07-27T00:05:40.4266627Z     HARD (net_conflict): Pad missing net given by schematic (CM2_OUT_N).
+2026-07-27T00:05:40.4266999Z     HARD (net_conflict): Pad net (VBAT) doesn't match net given by schematic (VDIS_SENSE).
+2026-07-27T00:05:40.4267455Z [FAIL] DRC avionics/kicad/Kaylee/kicads/Kaylee.kicad_pcb: 213 hard, 315 soft (accepted-class)
+2026-07-27T00:05:40.4267901Z     HARD (solder_mask_bridge): Front solder mask aperture bridges items with different nets
+2026-07-27T00:05:40.4268323Z     HARD (solder_mask_bridge): Front solder mask aperture bridges items with different nets
+2026-07-27T00:05:40.4268753Z     HARD (solder_mask_bridge): Front solder mask aperture bridges items with different nets
+2026-07-27T00:05:40.4269157Z     HARD (solder_mask_bridge): Front solder mask aperture bridges items with different nets
+2026-07-27T00:05:40.4269555Z     HARD (solder_mask_bridge): Front solder mask aperture bridges items with different nets
+2026-07-27T00:05:40.4269952Z     HARD (solder_mask_bridge): Front solder mask aperture bridges items with different nets
+2026-07-27T00:05:40.4270480Z     HARD (solder_mask_bridge): Front solder mask aperture bridges items with different nets
+2026-07-27T00:05:40.4270879Z     HARD (solder_mask_bridge): Front solder mask aperture bridges items with different nets
+2026-07-27T00:05:40.4271279Z     HARD (solder_mask_bridge): Front solder mask aperture bridges items with different nets
+2026-07-27T00:05:40.4271722Z     HARD (clearance): Clearance violation (netclass 'Default' clearance 0.1000 mm; actual 0.0000 mm)
+2026-07-27T00:05:40.4272199Z     HARD (clearance): Clearance violation (netclass 'ISOLATION' clearance 0.5000 mm; actual 0.1000 mm)
+2026-07-27T00:05:40.4272661Z     HARD (clearance): Clearance violation (netclass 'ISOLATION' clearance 0.5000 mm; actual 0.1000 mm)
+2026-07-27T00:05:40.4273110Z     HARD (clearance): Clearance violation (netclass 'ISOLATION' clearance 0.5000 mm; actual 0.1500 mm)
+2026-07-27T00:05:40.4273561Z     HARD (clearance): Clearance violation (netclass 'Default' clearance 0.1000 mm; actual 0.0000 mm)
+2026-07-27T00:05:40.4274015Z     HARD (clearance): Clearance violation (netclass 'ISOLATION' clearance 0.5000 mm; actual 0.1000 mm)
+2026-07-27T00:05:40.4274462Z     HARD (clearance): Clearance violation (netclass 'ISOLATION' clearance 0.5000 mm; actual 0.1000 mm)
+2026-07-27T00:05:40.4274911Z     HARD (clearance): Clearance violation (netclass 'ISOLATION' clearance 0.5000 mm; actual 0.1000 mm)
+2026-07-27T00:05:40.4275358Z     HARD (clearance): Clearance violation (netclass 'ISOLATION' clearance 0.5000 mm; actual 0.1000 mm)
+2026-07-27T00:05:40.4276094Z     HARD (clearance): Clearance violation (netclass 'ISOLATION' clearance 0.5000 mm; actual 0.1000 mm)
+2026-07-27T00:05:40.4276545Z     HARD (clearance): Clearance violation (netclass 'ISOLATION' clearance 0.5000 mm; actual 0.1000 mm)
+2026-07-27T00:05:40.4276986Z     HARD (clearance): Clearance violation (netclass 'Default' clearance 0.1000 mm; actual 0.0000 mm)
+2026-07-27T00:05:40.4277458Z     HARD (clearance): Clearance violation (netclass 'ISOLATION' clearance 0.5000 mm; actual 0.2527 mm)
+2026-07-27T00:05:40.4278058Z     HARD (clearance): Clearance violation (netclass 'POWER' clearance 0.2000 mm; actual 0.0000 mm)
+2026-07-27T00:05:40.4278514Z     HARD (clearance): Clearance violation (netclass 'ISOLATION' clearance 0.5000 mm; actual 0.2527 mm)
+2026-07-27T00:05:40.4278963Z     HARD (clearance): Clearance violation (netclass 'ISOLATION' clearance 0.5000 mm; actual 0.4000 mm)
+2026-07-27T00:05:40.4279410Z     HARD (clearance): Clearance violation (netclass 'POWER' clearance 0.2000 mm; actual 0.0000 mm)
+2026-07-27T00:05:40.4279883Z     HARD (clearance): Clearance violation (netclass 'ISOLATION' clearance 0.5000 mm; actual 0.0000 mm)
+2026-07-27T00:05:40.4280455Z     HARD (clearance): Clearance violation (netclass 'ISOLATION' clearance 0.5000 mm; actual 0.2527 mm)
+2026-07-27T00:05:40.4280910Z     HARD (clearance): Clearance violation (netclass 'ISOLATION' clearance 0.5000 mm; actual 0.2527 mm)
+2026-07-27T00:05:40.4281359Z     HARD (clearance): Clearance violation (netclass 'ISOLATION' clearance 0.5000 mm; actual 0.4000 mm)
+2026-07-27T00:05:40.4281806Z     HARD (clearance): Clearance violation (netclass 'POWER' clearance 0.2000 mm; actual 0.1250 mm)
+2026-07-27T00:05:40.4282250Z     HARD (clearance): Clearance violation (netclass 'DIFF_PAIR' clearance 0.1500 mm; actual 0.0000 mm)
+2026-07-27T00:05:40.4282698Z     HARD (clearance): Clearance violation (netclass 'DIFF_PAIR' clearance 0.1500 mm; actual 0.0000 mm)
+2026-07-27T00:05:40.4283138Z     HARD (clearance): Clearance violation (netclass 'POWER' clearance 0.2000 mm; actual 0.0000 mm)
+2026-07-27T00:05:40.4283519Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4283827Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4284110Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4284395Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4284683Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4284963Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4285241Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4285518Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4285799Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4286111Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4286395Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4286677Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4286959Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4287237Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4287518Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4287802Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4288086Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4288366Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4288650Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4288934Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4289217Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4289637Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4289920Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4290417Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4290712Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4290997Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4291399Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4291688Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4291967Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4292250Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4292533Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4292816Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4293095Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4293376Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4293656Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4293934Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4294213Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4294498Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4294774Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4295056Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4295339Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4295622Z     HARD (net_conflict): No corresponding pin found in schematic.
+2026-07-27T00:05:40.4295985Z [FAIL] DRC avionics/kicad/Wash/kicads/Wash.kicad_pcb: 76 hard, 105 soft (accepted-class)
+2026-07-27T00:05:40.4296239Z 
+2026-07-27T00:05:40.4296420Z 6 schematic(s), 5 PCB(s) checked. 380 hard violation(s), 1823 accepted-class finding(s).
+2026-07-27T00:05:40.4296776Z FAIL: at least one hard (real electrical) violation found.
+2026-07-27T00:05:40.4328375Z ##[error]Process completed with exit code 1.

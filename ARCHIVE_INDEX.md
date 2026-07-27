@@ -3,7 +3,6 @@
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
 <!-- Last updated: 2026-07-26 — Automated reconciliation pass -->
-`avionics/kicad/archive/` (that path no longer exists on disk); it has been consolidated
 under `archives/avionics-archives/kicad-archives/`. Design notes in `archive/ARCHIVE-REVQ.md`
 inside this directory.
 
@@ -77762,3 +77761,32 @@ avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_155528.zip — [IG
 avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_174345.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Kaylee/scripts/__pycache__/gen_kaylee.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Kaylee/scripts/__pycache__/inject_kaylee_trust_module.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-07-26) ---
+avionics/kicad/4_Run KiCad ERC_DRC validator (changed files only).txt — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1_N1_2026-07-26.kicad_pcb — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1_N1_2026-07-26.kicad_sch — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Adhesive.gba — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Courtyard.gbr — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Cu.gbl — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Fab.gbr — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Mask.gbs — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Paste.gbp — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-B_Silkscreen.gbo — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-Edge_Cuts.gm1 — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Adhesive.gta — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Courtyard.gbr — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Cu.gtl — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Fab.gbr — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Mask.gts — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Paste.gtp — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Silkscreen.gto — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-Margin.gbr — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-job.gbrjob — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1.drl — [PENDING AI CLASSIFICATION]
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_222454.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/fix_starved_thermal_pads.py — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1_N1_2026-07-26.kicad_pcb — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1_N1_2026-07-26.kicad_sch — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/CAN-PERIPH-GW-1/scripts/__pycache__/gen_can_periph_gw_pcb.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_222454.zip — [IGNORED/VCS-EXCLUDED]
