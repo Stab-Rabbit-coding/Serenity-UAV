@@ -642,7 +642,7 @@
 
 #### 4.5.1 — Malcolm Hardware Design
 
-→ detail: `gcs/WBS.md` §4.5.1
+→ detail: `gcs/WBS.md` §4.5
 
 - [ ] Create Malcolm host computer specification
 - [ ] Malcolm field enclosure — print and fit-check
@@ -654,7 +654,7 @@
 
 #### 4.5.2 — Malcolm Comms Node Setup (Phase Malcolm-2)
 
-→ detail: `gcs/WBS.md` §4.5.2
+→ detail: `gcs/WBS.md` §4.5
 
 - [ ] Flash Debian Linux to Malcolm PB2-I eMMC
 - [ ] Apply Cape-B-2 device tree overlay for Malcolm
@@ -667,7 +667,7 @@
 
 #### 4.5.3 — Malcolm Host PC Software Setup (Phase Malcolm-3)
 
-→ detail: `gcs/WBS.md` §4.5.3
+→ detail: `gcs/WBS.md` §4.5
 
 - [ ] Install Debian Linux on GCS host PC
 - [ ] Run installation scripts in order:
@@ -678,7 +678,7 @@
 
 #### 4.5.4 — Tracking and Gimbal Integration (Phase Malcolm-3)
 
-→ detail: `gcs/WBS.md` §4.5.4
+→ detail: `gcs/WBS.md` §4.5
 
 - [ ] Bench test gimbal hardware
 - [ ] Gimbal calibration:
@@ -689,7 +689,7 @@
 
 #### 4.5.5 — Malcolm Integration Testing (Phase Malcolm-4)
 
-→ detail: `gcs/WBS.md` §4.5.5
+→ detail: `gcs/WBS.md` §4.5
 
 - [ ] Multi-link communication bench test:
 - [ ] 915 MHz link margin test (open field, 1 km):

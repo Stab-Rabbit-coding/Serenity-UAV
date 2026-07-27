@@ -52,17 +52,17 @@
 - [x] Code-identifier "RCRS" naming renamed to "49MHZ_XCVR"/"XCVR-49MHZ…
 
 ### 0.2 — Incorrect Reference Correction
-→ detail: `docs/WBS.md` §0.2
+→ detail: `REFERENCES.md` "Removed / Superseded Citations"
 
 - [x] Remove NIST SP 800-72 write-blocker citation
 
 ### 0.3 — 14 CFR Part 47 vs Part 48 Clarification
-→ detail: `docs/WBS.md` §0.3
+→ detail: `REFERENCES.md` "Open Standards Verification Items"
 
 - [x] Replace 14 CFR Part 47 references with Part 48 §48.205 where ap…
 
 ### 0.4 — AUVSI/ASTM Standards Identification
-→ detail: `docs/WBS.md` §0.4
+→ detail: `REFERENCES.md` "Open Standards Verification Items"
 
 - [x] Identify specific ASTM F38 Committee standards applicable to ai…
 
@@ -74,7 +74,7 @@
 - [x] Audit KiCad companion Markdown files — done 2026-06-22.
 
 ### 0.6 — IEC 62368-1 PCB Layout Isolation Verification
-→ detail: `avionics/WBS.md` §0.6
+→ detail: `avionics/emi-hardening/WBS.md` §0.6
 
 - [x] Verify creepage and clearance distances in Wash PCB layout
 - [x] Verify creepage and clearance distances in Zoë PCB layout
@@ -854,7 +854,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 ### 4.5 — Ground Control (Malcolm / "CAPT Reynolds")
 
 #### 4.5.1 — Malcolm Hardware Design
-→ detail: `gcs/WBS.md` §4.5.1
+→ detail: `gcs/WBS.md` §4.5
 
 - [ ] Create Malcolm host computer specification
 - [ ] Malcolm field enclosure — print and fit-check
@@ -865,7 +865,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [ ] Procure gimbal hardware:
 
 #### 4.5.2 — Malcolm Comms Node Setup (Phase Malcolm-2)
-→ detail: `gcs/WBS.md` §4.5.2
+→ detail: `gcs/WBS.md` §4.5
 
 - [ ] Flash Debian Linux to Malcolm PB2-I eMMC
 - [ ] Apply Cape-B-2 device tree overlay for Malcolm
@@ -877,7 +877,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [ ] Configure Wi-Fi transmit power
 
 #### 4.5.3 — Malcolm Host PC Software Setup (Phase Malcolm-3)
-→ detail: `gcs/WBS.md` §4.5.3
+→ detail: `gcs/WBS.md` §4.5
 
 - [ ] Install Debian Linux on GCS host PC
 - [ ] Run installation scripts in order:
@@ -887,7 +887,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [ ] Implement gcs/malcolm/firmware/pb2i/src/mal_comms.c and mal_com…
 
 #### 4.5.4 — Tracking and Gimbal Integration (Phase Malcolm-3)
-→ detail: `gcs/WBS.md` §4.5.4
+→ detail: `gcs/WBS.md` §4.5
 
 - [ ] Bench test gimbal hardware
 - [ ] Gimbal calibration:
@@ -897,7 +897,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [ ] End-to-end tracking test (outdoor):
 
 #### 4.5.5 — Malcolm Integration Testing (Phase Malcolm-4)
-→ detail: `gcs/WBS.md` §4.5.5
+→ detail: `gcs/WBS.md` §4.5
 
 - [ ] Multi-link communication bench test:
 - [ ] 915 MHz link margin test (open field, 1 km):
