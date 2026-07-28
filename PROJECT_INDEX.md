@@ -2,9 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-07-27 — Automated reconciliation pass -->
-REFERENCES.md                     — Standards and regulatory reference catalog (REF-IDs, verified URLs,
-                                    chapter/section/paragraph per citation, repo usage index)
-REPO_ENFORCEMENT.md               — Repository rules
 SECURITY.md                       — Security policy and vulnerability reporting
 WBS.md                            — Master WBS index (full record, compact: headings/short
                                     checkbox items only, ≤70 chars each, done+open); full
@@ -27,7 +24,6 @@ TODO.md                           — Build-tools & automation reference index (
                                     graphical-build-guide/WBS.md for the owned detail)
 AGENTS.md                         — Build tools and automation standards (hull-frame bake tool,
                                     Blender pipeline, SCAD generation, mesh validation)
-compact_bom_entries.py            — Restores compact single-line BOM entry formatting after a
                                     json.dump() round-trip. docs/bom_*.json mixes expanded and
                                     compact styles; rewriting via json.dump silently re-expands
                                     the compact ones, adding ~35 lines of unrelated diff churn
@@ -161,12 +157,12 @@ Compiled and repaired STLs ready for slicing.
 
 ```text
                                     bow_sensor_faceplate.scad, see fuselage/ section above)
-                                    lofted, per-station conforming sleeve (samples actual inner-cavity
-                                    cross-section at each Y, insets by bond gap, lofts via pairwise
-generate_head_cargo_splice_collar.py, generate_cargo_middle_splice_collar.py,
-                                    each extruded ONE constant inner contour straight across the
-                                    joint, which passed through solid plastic (collar∩shell ≈
-                                    1600-2000 mm³/side); still on disk, not yet archived
+generate_conforming_collars.py      Rev R3: builds all three splice collars as ONE constant-
+                                    profile sleeve = intersection of the fwd-lap and aft-lap inner
+                                    cavities, extruded straight across the joint; single body,
+                                    watertight, no shell subtraction. Requires genuinely OPEN mating
+                                    faces (tools/open_mating_faces.py). Supersedes + replaces the three
+                                    retired single-cross-section generators (git rm 2026-07-27).
 landing-gear/
 [Rev R1.4 parametric corner V-brace concept (arm_upper_r1/arm_lower_r1/main_strut_r1/
 docs/LANDING_GEAR_ANALYSIS.md (Rev R5). Superseded by the Rev R5 wire-brace files below.]
@@ -78159,7 +78155,6 @@ avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_prl — [PENDING AI 
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pro — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.net — [PENDING AI CLASSIFICATION]
-avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.ses — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1_v2.ses — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/fp-info-cache — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_pcb.py — [PENDING AI CLASSIFICATION]
@@ -78279,3 +78274,12 @@ avionics/kicad/Emma/kicads/Emma-backups/Emma-2026-07-27_151556.zip — [IGNORED/
 avionics/kicad/Jayne/kicads/Jayne-backups/Jayne-2026-07-27_153954.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Jayne/kicads/~Jayne.kicad_sch.lck — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Jayne/kicads/~_autosave-Jayne.kicad_pcb.lck — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-07-27) ---
+docs/references/POCKETBEAGLE2 V10_241220.DSN — [PENDING AI CLASSIFICATION]
+docs/references/pocketbeagle2 revA_241205.brd — [PENDING AI CLASSIFICATION]
+tools/compact_bom_entries.py — [PENDING AI CLASSIFICATION]
+
+## --- AUTO-DISCOVERED (2026-07-27) ---
+avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1_pcb_pre-reroute_2026-07-27_221541.kicad_pcb — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1_pcb_pre-reroute_2026-07-27_221541.kicad_pcb — [IGNORED/VCS-EXCLUDED]

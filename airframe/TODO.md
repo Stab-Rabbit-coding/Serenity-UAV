@@ -16,7 +16,6 @@
 ## §1.1.0 — Hull-Frame Coordinate Standardisation (R1)
 → full detail: `WBS.md` §1.1.0
 
-- [ ] Re-verify head↔cargo joint bosses in hull Y.
 - [ ] Hull-frame placements for VERIFY parts
 
 ## §1.1.5 — Non-Printable Component Placeholders

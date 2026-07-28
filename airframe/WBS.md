@@ -53,11 +53,19 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     comment updated, SCAD build commands corrected (port: SWIRL_DIR=−1/PYLON_SIDE=−1,
     stbd: SWIRL_DIR=+1/PYLON_SIDE=+1), CLAUDE.md extents table corrected.
     *(done 2026-06-11)*
-- [ ] **Re-verify head↔cargo joint bosses in hull Y.** The 2026-06-10 joint analysis
+- [x] **Re-verify head↔cargo joint bosses in hull Y. — RESOLVED 2026-07-27.** The joint
+    boss pins were REMOVED entirely 2026-07-06; the head/cargo joint is now made by the
+    internal bonded splice collar (`generate_conforming_collars.py`, Rev R3), which both
+    secures and aligns the sections. The head-aft mating face (a rounded closure still
+    capped on the published shell) and the middle-fwd face were opened by
+    `tools/open_mating_faces.py` (2026-07-27); the head/cargo mate plane moved to hull
+    Y = −72.95. All four sections + all three collars pass `validate_stls.py` watertight.
+    Historical notes below retained.
+    The 2026-06-10 joint analysis
     used hull X as the longitudinal mating axis; in the validated frame the longitudinal
     axis is Y (sections mate at hull Y ≈ −71 mm; X is lateral). Re-check
     BOSS_FORE/BOSS_AFT positions in `head_shell24.scad` / `cargo_sect_shell24.scad`
-    against the baked meshes. **BLOCKS head/cargo printing.**
+    against the baked meshes.
     - **Verification DONE 2026-06-29 (trimesh Y-cross-sections of the baked shells).**
         The SCAD `BOSS_FORE`/`BOSS_AFT` parameters are **obsolete** — the canonical joint
         bosses now come from `add_structural_features.py` `BOSS_PIN_BORES["joint1"]`
@@ -202,9 +210,12 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     Y −71.5..132.0, Z 0..163.2 mm, matching the CLAUDE.md table).  All active references
     (`serenity_assembly.py`, `tools/bake_hull_frame.py`, `serenity_render_views.py`,
     `bom_revR.csv`) use the `fuselage/cargo/` path; the stale `s_cargo…` reference in
-    `serenity_assembly.py` was corrected.  NOTE: the canonical copy still carries the
-    **MESH-01 fragmentation defect** (71,131 disconnected bodies, `is_watertight=False`) —
-    that is the separately-tracked MESH-01 blocker above, not a consolidation issue.
+    `serenity_assembly.py` was corrected.  **MESH-01 RESOLVED 2026-07-27:** the canonical
+    cargo copy is now a watertight single body (0 boundary / 0 non-manifold edges, volume
+    298 576 mm³ unchanged), fixed by the weld+clean finalization added to
+    `merge_cargo_interior.py` (`--repair-only` reloads the float32-exported STL, welds the
+    boolean-seam duplicate vertices, drops the zero-area slivers, keeps the largest body,
+    re-stamps the marker).  All 59 STLs pass `tools/validate_stls.py`.
 - [ ] **Hull-frame placements for VERIFY parts** (assembly-load blocker resolved; visual
     fit-validation remains). Cargo mounts (8), pylons, EDF sleeves,
     nozzles/gears, battery tray, belly panel, tip caps, dorsal antenna fin, landing

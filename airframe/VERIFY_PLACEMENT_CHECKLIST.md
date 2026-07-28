@@ -28,7 +28,7 @@ This checklist guides the placement of VERIFY-tier (un-validated, part-local or 
 
 | Component | X min..max | Y min..max | Z min..max |
 |-----------|----------|----------|----------|
-| Head_Shell | −232.9..−103.5 | −305.7..−70.7 | +61.1..+201.5 |
+| Head_Shell | −232.9..−103.5 | −305.7..−72.95 | +61.1..+201.5 |
 | Cargo_Shell | −267.0..−72.7 | −71.5..+132.0 | 0.0..+163.2 |
 | Middle_Shell | −258.5..−81.6 | +130.4..+203.6 | +1.3..+166.1 |
 | Rear_Shell | −246.1..−105.5 | +203.2..+384.3 | +3.3..+161.1 |
