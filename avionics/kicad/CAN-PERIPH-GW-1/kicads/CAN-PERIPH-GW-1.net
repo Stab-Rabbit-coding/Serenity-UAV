@@ -1,7 +1,7 @@
 (export (version "E")
   (design
     (source "/home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenity-UAV/avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch")
-    (date "2026-07-26T22:45:10-0400")
+    (date "2026-07-27T16:42:42-0400")
     (tool "Eeschema 9.0.2+dfsg-1")
     (sheet (number "1") (name "/") (tstamps "/")
       (title_block

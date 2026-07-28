@@ -4,21 +4,27 @@ injection (same non-destructive pattern as Kaylee's
 inject_kaylee_trust_module.py), rather than a full gen_emma_sch.py rerun.
 
 Emma (49 MHz + LoRa transceiver cape) has no MCU of its own -- it connects
-only via the P1+P2 header stack to its host PocketBeagle2 node, which
-already carries Wash + Zoe (both of which already have their own TPM). Per
-user direction: Emma does NOT need its own isolated CAN-FD/RS-485 (it rides
-Zoe's), it only needs its own TPM so ITS OWN telemetry/config messages can
-be signed with an Emma-specific key.
+only via the P1+P2 header stack to its host PocketBeagle2 node. The TPM
+provides the last/first cryptographic signature for radio messages Emma
+transmits and for messages it forwards to/from Zoe or elsewhere; binding it
+to the PB2-I host it's plugged into (rather than giving it an isolated
+identity of its own) is what lets Emma run as a self-sufficient cape in
+non-Serenity deployments too, with the TPM providing full services to
+whichever host it's stacked on.
 
-The TPM's SPI+control lines are exposed on a NEW dedicated 6-pin header
-(J_TPM, see lib_symbol_j_tpm_emma()) rather than tapped into Emma's
-existing P1/P2 PocketBeagle2 stack -- an earlier draft tried reusing Wash's
-"SPI0_CLK" etc. net names directly, but global labels only merge within one
-schematic FILE; reusing the same net-name string across Wash.kicad_sch and
-Emma.kicad_sch does NOT actually connect them (two separate boards/files),
-and produced 5 "input not driven" ERC errors on the TPM's own input pins
-once actually checked. A dedicated header is unambiguous and ERC-correct
-without needing to first verify which P1/P2 pins are free on the PB2 side.
+**2026-07-26 correction:** the TPM's SPI+control lines tap the **SPI1**
+slot already reserved on Emma's own P1/P2 trunk -- `SPI1_CS_TPM` /
+`SPI1_CLK` / `SPI1_MOSI` / `SPI1_MISO` (a shared bus also carrying
+`SPI1_CS_NOR` and `SPI1_CS_LORA`) plus the pre-existing `TPM_IRQN` /
+`TPM_RSTN` global labels, all already wired to specific PB2-P1/P2 pins
+elsewhere in `Emma.kicad_sch`. An earlier version of this script instead
+added a dedicated 6-pin header, reasoning (incorrectly, for this case) that
+reusing a net name across schematic FILES doesn't connect anything -- true
+for reusing *Wash's* `SPI0_CLK` name in *Emma's* file (those are two
+separate boards), but Emma's own P1/P2 block already reserves an SPI1 slot
+named for exactly this purpose *within Emma's own file*, which does
+connect correctly (verified: 0 ERC errors). The dedicated-header approach
+and its `J_TPM`/`lib_symbol_j_tpm_emma()` symbol were removed.
 
 Uses the ALREADY-VERIFIED Jayne_SLB9670_TPM clean-room symbol (real
 Infineon datasheet pin numbers) -- NOT Wash's own inline "SLB9670" symbol,
@@ -27,19 +33,12 @@ its pin 24 is labeled CS_N; the real datasheet's pin 24 is MISO). That is a
 separate, pre-existing defect on Wash, out of scope for this change (not
 requested), flagged in REFERENCES.md / TODO.md.
 
-OPEN ITEM: SPI0_CS_TPM_EMMA / TPM_IRQN_EMMA / TPM_RSTN_EMMA are placeholder
-net names for Emma's own chip-select/IRQ/reset -- which physical P1/P2
-header pin these land on (a free PocketBeagle2 GPIO not already claimed by
-Wash/Zoe on the same stack) has NOT been verified against the PB2 pinout
-and needs confirmation before fab.
-
 Usage: python3 inject_emma_tpm.py
 Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI-assist: Claude Fable 5 (Anthropic), 2026-07-26
 License: CC BY 4.0
 """
 import re
-import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -148,42 +147,6 @@ def two_pin(lib_id, ref, value, cx, cy, net1, net2, footprint):
 TPM_FOOTPRINT = "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm"
 
 
-def lib_symbol_j_tpm_emma():
-    # Dedicated 6-pin header for the TPM's SPI+control -- NOT tapped into
-    # Emma's existing P1/P2 PocketBeagle2 stack (that header's exact free
-    # pins were not verified against the PB2 pinout in the time available --
-    # tracked as an open item). Pin ELECTRICAL TYPE is set from the HOST's
-    # point of view (this connector is where the host's signal enters/exits
-    # Emma): SCLK/MOSI/CS#/RST# are "output" (host drives them onto Emma),
-    # MISO/IRQ# are "input" (Emma's TPM drives them back to the host) -- so
-    # each of the TPM's own input pins gets a real ERC driver instead of a
-    # dangling global label with nothing behind it.
-    pins = [
-        ("SCLK", "output"), ("MOSI", "output"), ("CS_N", "output"),
-        ("RST_N", "output"), ("MISO", "input"), ("IRQ_N", "input"),
-    ]
-    half = (len(pins) - 1) * 1.27
-    lines = [
-        '  (symbol "J_TPM_EMMA" (in_bom yes) (on_board yes)',
-        f'    (property "Reference" "J" (at 0 {-(half + 3.81):.2f} 0) (effects (font (size 1.27 1.27))))',
-        f'    (property "Value" "J_TPM_EMMA" (at 0 {(half + 3.81):.2f} 0) (effects (font (size 1.27 1.27))))',
-        '    (property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))',
-        '    (symbol "J_TPM_EMMA_0_1"',
-        f"      (rectangle (start -2.54 {-half - 1.27:.2f}) (end 2.54 {half + 1.27:.2f})))",
-        '    (symbol "J_TPM_EMMA_1_1"',
-    ]
-    for i, (pname, ptype) in enumerate(pins):
-        py = -half + i * 2.54
-        lines.append(
-            f'      (pin {ptype} line (at -5.08 {py:.2f} 0) (length 2.54)\n'
-            f'        (name "{pname}" (effects (font (size 1.016 1.016))))\n'
-            f'        (number "{i + 1}" (effects (font (size 1.016 1.016)))))'
-        )
-    lines.append("    )")
-    lines.append("  )")
-    return "\n".join(lines)
-
-
 def lib_symbol_pwr_flag():
     return (
         '  (symbol "PWR_FLAG_TPM" (power) (in_bom no) (on_board no)\n'
@@ -250,18 +213,32 @@ def build():
         tpm_lib_block + "\n"
         + _gen2pin("R_Generic_TPM") + "\n"
         + _gen2pin("C_Generic_TPM") + "\n"
-        + lib_symbol_j_tpm_emma() + "\n"
         + lib_symbol_pwr_flag()
     )
 
+    # Emma's TPM binds to the PB2-I host it's plugged into (not its own
+    # standalone SPI peripheral): it provides the last/first cryptographic
+    # signature for radio messages Emma transmits and for messages it
+    # forwards to/from Zoe or elsewhere, so Emma can run as a self-sufficient
+    # cape in non-Serenity deployments too. It therefore taps the SPI1 slot
+    # already reserved on the PB2-P1/P2 trunk (SPI1_CS_TPM/SPI1_CLK/
+    # SPI1_MOSI/SPI1_MISO -- a shared bus also carrying SPI1_CS_NOR and
+    # SPI1_CS_LORA to other devices) plus the pre-existing TPM_IRQN/TPM_RSTN
+    # global labels already wired to P1/P2 pins, instead of a dedicated
+    # local header (2026-07-26 correction; the header this script used to
+    # add was removed).
     netmap = {
         "1": "+3V3", "2": "GND", "8": "+3V3", "9": "GND", "14": "+3V3", "16": "GND",
-        "17": "TPM_RSTN_EMMA", "18": "TPM_IRQN_EMMA", "19": "TPM_SCLK_EMMA",
-        "20": "TPM_CS_EMMA", "21": "TPM_MOSI_EMMA", "22": "+3V3", "23": "GND",
-        "24": "TPM_MISO_EMMA", "32": "GND",
+        "17": "TPM_RSTN", "18": "TPM_IRQN", "19": "SPI1_CLK",
+        "20": "SPI1_CS_TPM", "21": "SPI1_MOSI", "22": "+3V3", "23": "GND",
+        "24": "SPI1_MISO", "32": "GND",
     }
     cx, cy = 250, 1100
-    body = [text_note("=== Section: TPM (SLB9670, added 2026-07-26 -- own key/signing identity) ===", 200, 1080)]
+    body = [text_note(
+        "=== Section: TPM (SLB9670, added 2026-07-26; binds to the PB2-I host -- "
+        "SPI1 shared bus + TPM_IRQN/TPM_RSTN via P1/P2, no dedicated header) ===",
+        200, 1080,
+    )]
     body.append(sym_inst_unit("Jayne_SLB9670_TPM", "TPM", "Infineon SLB9670 TPM2.0", cx, cy, 1, TPM_FOOTPRINT))
     for pnum, pname, x, y, ang, etype, unit in pins:
         sx, sy = cx + x, cy - y
@@ -271,20 +248,10 @@ def build():
         else:
             rot = 180 if ang == 0 else 0
             body.append(glabel(net, sx, sy, rot=rot))
-    body.extend(two_pin("R_Generic_TPM", "R_TPM_RST_EMMA", "10k", 210, 1090, "+3V3", "TPM_RSTN_EMMA", "Resistor_SMD:R_0402_1005Metric"))
+    body.extend(two_pin("R_Generic_TPM", "R_TPM_RST_EMMA", "10k", 210, 1090, "+3V3", "TPM_RSTN", "Resistor_SMD:R_0402_1005Metric"))
     body.extend(two_pin("C_Generic_TPM", "C_TPM_EMMA1", "100nF", 210, 1105, "+3V3", "GND", "Capacitor_SMD:C_0402_1005Metric"))
     body.extend(pwr_flag("+3V3", 230, 1090))
     body.extend(pwr_flag("GND", 230, 1105))
-
-    # Dedicated SPI+control header (see lib_symbol_j_tpm_emma() docstring
-    # for why this isn't tapped into the existing P1/P2 stack).
-    jx, jy = 290, 1100
-    j_nets = ["TPM_SCLK_EMMA", "TPM_MOSI_EMMA", "TPM_CS_EMMA", "TPM_RSTN_EMMA", "TPM_MISO_EMMA", "TPM_IRQN_EMMA"]
-    body.append(sym_inst_unit("J_TPM_EMMA", "J_TPM", "TPM SPI+control (host PB2 side, open item -- see script docstring)", jx, jy, 1, "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical"))
-    half = (len(j_nets) - 1) * 1.27
-    for i, net in enumerate(j_nets):
-        py = -half + i * 2.54
-        body.append(glabel(net, jx - 5.08, jy - py, rot=180))
     return lib_block, body
 
 

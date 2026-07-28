@@ -515,18 +515,31 @@ to populate 132289RP in place of 132289 is the remaining fabrication step.
 
 **Updated 2026-07-26:** Emma now carries its own TPM — Infineon SLB9670 (SPI TPM 2.0,
 same part standardized fleet-wide), added via `avionics/kicad/Emma/scripts/inject_emma_tpm.py`
-(schematic ref `TPM`, dedicated 6-pin SPI+control header `J_TPM`; no local CAN-FD/RS-485
-transceiver is needed — Emma reaches the bus via Zoë's P1/P2 stacking link). TPM + its
-10 kΩ reset pull-up (`R_TPM_RST_EMMA`) + 100 nF decoupling cap (`C_TPM_EMMA1`) are now
-placed on the PCB (B.Cu — Emma's F.Cu is fully saturated, confirmed by an exhaustive
-obstacle-aware search finding zero clear ≥6×6 mm front-side sites anywhere on the
-board), nets assigned, DRC-clean. **`J_TPM` header itself is not yet placed** — every
-candidate site collided with existing front- or back-side copper (its through-hole pads
-span both layers); tracked as open work, root `TODO.md` §1.2a. Routing from TPM/R/C to
-the rest of the board is also open (first-pass footprint population only, per this
-project's established convention). Prior to this addition, cryptographic operations for
-AX.25 payload signing were entirely on the CAPE-B host CPU; that remains true for any
-signing not routed through the new local TPM.
+(schematic ref `TPM`). TPM + its 10 kΩ reset pull-up (`R_TPM_RST_EMMA`) + 100 nF
+decoupling cap (`C_TPM_EMMA1`) are placed on the PCB (B.Cu — Emma's F.Cu is fully
+saturated, confirmed by an exhaustive obstacle-aware search finding zero clear ≥6×6 mm
+front-side sites anywhere on the board), nets assigned, DRC-clean. Routing from TPM/R/C
+to the rest of the board is open (first-pass footprint population only, per this
+project's established convention).
+
+**Architecture, corrected 2026-07-26:** the TPM provides the last/first cryptographic
+signature for radio messages Emma transmits and for messages it forwards to/from Zoë or
+elsewhere. It binds to the PB2-I host it's plugged into — no local CAN-FD/RS-485
+transceiver and, per the same reasoning, **no dedicated SPI hardware or header either**.
+Emma is designed to run as a self-sufficient cape for other (non-Serenity) deployments
+too, and the TPM binds to whichever PB2 host it's on, providing that host's full TPM
+services. It therefore taps the **SPI1** slot already reserved on Emma's own P1/P2 trunk
+— `SPI1_CS_TPM` / `SPI1_CLK` / `SPI1_MOSI` / `SPI1_MISO` (a shared bus also carrying
+`SPI1_CS_NOR` and `SPI1_CS_LORA` to other on-board devices) plus the pre-existing
+`TPM_IRQN` / `TPM_RSTN` global labels, all already wired to specific PB2-P1/P2 pins
+elsewhere in `Emma.kicad_sch`. An earlier draft of `inject_emma_tpm.py` instead added a
+dedicated 6-pin `J_TPM` header (reasoning that cross-*file* net-name reuse, e.g. Wash's
+`SPI0_CLK` name, doesn't connect anything — true, but irrelevant here since Emma's own
+P1/P2 block already reserves an SPI1 slot for exactly this purpose within Emma's own
+file). That header has been removed from both the schematic and the generator script;
+see `inject_emma_tpm.py`'s docstring for the full correction. Prior to the TPM's
+addition, cryptographic operations for AX.25 payload signing were entirely on the
+CAPE-B host CPU; that remains true for any signing not routed through the local TPM.
 
 ---
 
