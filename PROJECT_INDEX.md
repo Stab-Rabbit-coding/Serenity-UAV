@@ -2,7 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-07-28 — Automated reconciliation pass -->
-                                    checkbox items only, ≤70 chars each, done+open); full
                                     detail lives in the subordinate WBS.md files per-folder
 TODO.md                           — Open-work-only subset of WBS.md (what's left to do)
 package.json                       — Node.js dependency manifest (tooling/preview support)
@@ -78130,7 +78129,6 @@ airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad — Rev R6 canonical arti
 ## --- AUTO-DISCOVERED (2026-07-26) ---
 .github/workflows/stale-branches.yml — [PENDING AI CLASSIFICATION]
 archives/airframe-archives/archive/openscad/fuselage/canonical_leg_r6.scad — [PENDING AI CLASSIFICATION]
-avionics/datasheets/6391731564544371956530548.pdf — [PENDING AI CLASSIFICATION]
 avionics/datasheets/FOCSineESCCANCommunicationProtocolV30.pdf — [PENDING AI CLASSIFICATION]
 avionics/datasheets/isow1412.pdf — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md — [PENDING AI CLASSIFICATION]

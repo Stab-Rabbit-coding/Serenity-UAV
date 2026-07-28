@@ -3,7 +3,6 @@
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
 <!-- Last updated: 2026-07-28 — Automated reconciliation pass -->
-
 Pre-Rev Q (superseded by Cape-A/B architecture at Rev K):
 
                                        Cape-B-1 boards (16 + 5 zips respectively)
@@ -77695,7 +77694,6 @@ airframe/stls/fuselage/landing-gear/lg_r6_common_ductile_wire_nominal.stl — [P
 airframe/stls/fuselage/landing-gear/lg_r6_common_foot.stl — [PENDING AI CLASSIFICATION]
 airframe/stls/fuselage/landing-gear/lg_r6_common_spring_wire_deformed.stl — [PENDING AI CLASSIFICATION]
 airframe/stls/fuselage/landing-gear/lg_r6_common_spring_wire_nominal.stl — [PENDING AI CLASSIFICATION]
-avionics/datasheets/6391731564544371956530548.pdf — [PENDING AI CLASSIFICATION]
 avionics/datasheets/FOCSineESCCANCommunicationProtocolV30.pdf — [PENDING AI CLASSIFICATION]
 avionics/datasheets/isow1412.pdf — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md — [PENDING AI CLASSIFICATION]
