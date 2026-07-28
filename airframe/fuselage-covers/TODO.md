@@ -16,6 +16,6 @@
 ## §1.1.1 — Fuselage: Access Covers, Antenna Mounts, Nacelle Bracket (part 2/3)
 → full detail: `WBS.md` §1.1.1
 
-- [ ] MESH-01 `add_structural_features.py` boolean cuts left non-wate…
+- [ ] MESH-01 `add_structural_features.py` boolean cuts left non-watertight hull
 
 ---

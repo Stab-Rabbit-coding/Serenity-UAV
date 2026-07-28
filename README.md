@@ -385,14 +385,14 @@ NIST SP 800-207 Zero Trust architecture [REF-NIST-001]; NIST SP 800-82 Rev 3 OT 
 ## References
 
 - Design conversation: [claude.ai/share/a1e3900e-d2bf-4690-ba63-25178e7de666](https://claude.ai/share/a1e3900e-d2bf-4690-ba63-25178e7de666)
-- Latest design revision spec: `current-specification/serenity-rev-r.jsx`
+- Latest design revision spec: `current-specification/serenity-rev-s.jsx`
 
 ---
 
 ## License
 
 Published under **Creative Commons Attribution 4.0 International** by Steve Griffing,
-PE(CSE), CISSP-ISSEP, CPP. Revision R, June 2026.
+PE(CSE), CISSP-ISSEP, CPP. Revision S, July 2026.
 [creativecommons.org/licenses/by/4.0](https://creativecommons.org/licenses/by/4.0)
 
 ## Attribution

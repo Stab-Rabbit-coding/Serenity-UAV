@@ -20,14 +20,14 @@
 - [ ] cargo_sect_shell24.stl
 - [ ] Cargo gondola shell
 - [ ] Clamshell door halves
-- [ ] `cargo_sect_shell24.scad` — shuttle exterior fairing profiles o…
-- [ ] Avionics dorsal access covers / Faraday tray lids for Inara and…
+- [ ] `cargo_sect_shell24.scad` — shuttle exterior fairing profiles on Z walls
+- [ ] Avionics dorsal access covers / Faraday tray lids (Inara & River)
 - [ ] Update REVN_BUILD_GUIDE_24IN.md bay layout table
 - [ ] Regenerate `cargo_sect_shell24.stl`
 - [ ] Add DRV8833-tray boss locations to `cargo_sect_shell24.scad`
-- [ ] Add SG90 bell-crank boss to inner face of each door panel for p…
-- [ ] ★ STS3215 datasheet gate — envelope/torque/mass/stall
-- [ ] ★ Winch containment: 5 positive fixes (spool = projectile)
+- [ ] Add SG90 bell-crank boss to inner face of each door panel
+- [ ] ★ STS3215 datasheet gate — envelope/torque/mass/stall (BLOCKER)
+- [ ] ★ Winch containment: 5 positive fixes (spool must stay in bay)
 - [ ] Verify Part 107 dropped-object section number
 - [ ] Containment checks on assembly + pre-flight cards
 - [ ] ★ Shed threshold vs manoeuvre envelope (2.0g = 0.98x)
@@ -47,13 +47,13 @@
 - [ ] Slicer verification
 - [ ] Kaylee's room — PDB mounting in inner neck
 - [ ] CF skid rod channels
-- [ ] Simon bay — define avionics bay in the MIDDLE section (moved he…
+- [ ] Simon bay — define avionics bay in MIDDLE section (Phase 11 move)
 - [ ] Kaylee room — PDB + battery bay, middle VENTRAL (2026-06-13).
 - [ ] Avionics-bay interior name marks (DEFERRED, 2026-06-13).
 - [ ] Phase 11 — aft EDF intake scoop cuts
 - [ ] neck_intake_frame.stl (Phase 11)
 - [ ] aft_edf_plenum.stl
-- [ ] Mount ant-collision strobe on belly of middle section in accord…
-- [ ] Mount ant-collision steady white tail light on upper pod of rea…
+- [ ] Mount ant-collision strobe on belly of middle section (FAA 91.209)
+- [ ] Mount ant-collision steady white tail light on upper pod of rear
 
 ---

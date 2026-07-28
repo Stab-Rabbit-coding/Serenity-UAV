@@ -18,15 +18,15 @@
 
 - [ ] Reconcile Wash.md §14 field-connector table with the actual PCB
 - [ ] Wire the MIL-1553 connector + transformer.
-- [ ] Redesign the tamper mesh as a per-domain anti-tamper mesh (all…
-- [ ] Carry the tamper signal over the link for the TPM-less boards.
-- [ ] Route the rearranged capes.
+- [ ] Redesign the tamper mesh as a per-domain anti-tamper mesh (all bays)
+- [ ] Carry the tamper signal over the link for the TPM-less boards
+- [ ] Route the rearranged capes (after mesh design)
 - [ ] Clear residual DRC after mesh + routing
-- [ ] Finish Wash PCB (CAPE-A-2) close-out pass:
+- [ ] Finish Wash PCB (CAPE-A-2) close-out pass
 - [ ] Add SBUS/UART DIP switch to Wash
-- [ ] Generate Wash gerbers
-- [ ] Generate Zoë gerbers
-- [ ] Zigbee RF chain was never actually added to Zoë — PCB scope gap…
+- [ ] Generate Wash gerbers (post-DRC)
+- [ ] Generate Zoë gerbers (post-DRC)
+- [ ] Zigbee RF chain was never added to Zoë — PCB scope gap (deferred)
 - [ ] FCC Part 15 §15.235 pre-compliance checklist for Emma
 - [ ] EMI isolation validation checklist
 - [ ] Merge `claude/cape-em-harsh-variants-9Yfr1` → master
@@ -36,8 +36,8 @@
 ### Wash footprint verification and schematic-first rebuild (2026-07-13/14)
 → full detail: `WBS.md` §1.2a
 
-- [ ] Wash footprint-vs-datasheet verification — DONE 2026-07-13 (Cla…
-- [ ] Wash SCHEMATIC-FIRST REBUILD — decided + started 2026-07-14 (us…
+- [ ] Wash footprint-vs-datasheet verification — DONE 2026-07-13 (confirmed)
+- [ ] Wash SCHEMATIC-FIRST REBUILD — decided + started 2026-07-14 (user-initiated)
 - [ ] Finish Wash PCB (CAPE-A-2) close-out pass:
 
 ### Fleet Trust Module + Tilt Encoder (2026-07-26)

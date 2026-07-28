@@ -16,12 +16,12 @@
 ## §1.1.1 — Fuselage: Joints, Bow Sensor Pod, Interior Bosses (part 1/3)
 → full detail: `WBS.md` §1.1.1
 
-- [ ] User FreeCAD fine-tune (fractional mm):
-- [ ] PMMA window spec finalised
-- [ ] Procure PMMA discs
-- [ ] Add standards REF-IDs to bow_sensor_pod.scad firmware integrati…
+- [ ] User FreeCAD fine-tune (fractional mm) for all component placements
+- [ ] PMMA window spec finalised (optical & structural requirements)
+- [ ] Procure PMMA discs per final specification
+- [ ] Add standards REF-IDs to bow_sensor_pod.scad (firmware interface)
 - [ ] Middle section inner neck — Phase 5-10 print guidance
-- [ ] Deprecate SCAD fuselage shell files
+- [ ] Deprecate SCAD fuselage shell files (post-Rev S archive)
 
 ### Jayne (Vera) PCB mounting + Faraday enclosure (2026-07-12)
 → full detail: `WBS.md` §1.1.1
