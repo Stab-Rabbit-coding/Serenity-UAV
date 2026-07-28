@@ -56,6 +56,6 @@
 - [ ] Review/remove stray tracked _autosave-Zoë.kicad_pcb + .lck files
 - [ ] Kaylee full PCB resync to trust-module schematic (213 DRC hard)
 - [ ] Jayne PCB resync — RS-485/Section H never reached layout (124 DRC)
-- [ ] Emma: place J_TPM header (every site collided; F.Cu fully saturated)
+- [ ] Emma: route TPM/R/C to the SPI1/TPM_IRQN/TPM_RSTN nets on P1/P2
 
 ---

@@ -438,9 +438,11 @@ REFERENCES.md Removed/Superseded Citations).
     working file); this pre-existing drift is unresolved, tracked below.
 - [x] **Jayne** — RS-485 (ISOW1412) added; already had MCU + TPM + CAN-FD.
     ERC 0.
-- [x] **Emma** — TPM only (SLB9670 via a dedicated `J_TPM_EMMA` header); no
-    separate CAN-FD/RS-485 needed, Emma reaches the bus via Zoë's P1/P2
-    PocketBeagle2 link. ERC 0, added via `inject_emma_tpm.py`.
+- [x] **Emma** — TPM only (SLB9670); no separate CAN-FD/RS-485 needed, Emma
+    reaches the bus via Zoë's P1/P2 PocketBeagle2 link. ERC 0, added via
+    `inject_emma_tpm.py`. **Corrected 2026-07-26:** binds to the PB2-I host
+    via the SPI1 slot + `TPM_IRQN`/`TPM_RSTN` already reserved on Emma's own
+    P1/P2 trunk, not a dedicated header — see Emma.md "Security Notes".
 - [x] **Wash, Zoë** — pre-existing (unrelated, predates this session)
     defects fixed while swapping to ISOW1412: broken ADM2795EBRWZ pin
     numbering and wrong ISOW1044BDFMR footprint (16-pin footprint on a
@@ -488,10 +490,17 @@ REFERENCES.md Removed/Superseded Citations).
     is fully saturated — an exhaustive obstacle-aware search (pads + tracks
     + vias, not just courtyards) found zero clear ≥6×6 mm sites anywhere on
     the front layer. TPM + its reset pull-up + decoupling cap placed on
-    B.Cu instead (verified clear), nets assigned, DRC 0 hard. **`J_TPM`
-    header not placed** — every candidate site collided with existing
-    copper on one side or the other of its through-hole pads; left as an
-    open item rather than force a bad placement.
+    B.Cu instead (verified clear), nets assigned, DRC 0 hard.
+- [x] **Emma TPM architecture corrected, 2026-07-26.** TPM now binds to the
+    PB2-I host via the `SPI1_CS_TPM`/`SPI1_CLK`/`SPI1_MOSI`/`SPI1_MISO` +
+    `TPM_IRQN`/`TPM_RSTN` nets already reserved on Emma's own P1/P2 trunk
+    (a shared SPI1 bus also carrying `SPI1_CS_NOR`/`SPI1_CS_LORA`), not a
+    dedicated header — matches the design intent that Emma run as a
+    self-sufficient cape on non-Serenity deployments, with the TPM
+    providing full services to whichever PB2 host it's stacked on. The
+    dedicated `J_TPM` header (and its unplaced-header open item) is
+    removed from both the schematic and `inject_emma_tpm.py`. ERC/DRC 0
+    hard after the rewire. Routing TPM/R/C to these nets is still open.
 - [ ] **Wash: `PB2-P2` header appears fully unwired in ERC (all 36 pins,
     2026-07-26 finding) — root cause not found.** WBS history (§1.2a.1)
     records ETH2/`PB2-P2` wiring as completed work, but current ERC shows
