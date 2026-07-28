@@ -2,7 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-07-28 — Automated reconciliation pass -->
-WBS.md                            — Master WBS index (full record, compact: headings/short
                                     checkbox items only, ≤70 chars each, done+open); full
                                     detail lives in the subordinate WBS.md files per-folder
 TODO.md                           — Open-work-only subset of WBS.md (what's left to do)
@@ -39364,8 +39363,6 @@ avionics/jayne/WBS.md — [PENDING AI CLASSIFICATION]
 avionics/kicad/.gitignore — [PENDING AI CLASSIFICATION]
 avionics/kicad/.history/.gitignore — [PENDING AI CLASSIFICATION]
 avionics/kicad/.history/README.txt — [PENDING AI CLASSIFICATION]
-avionics/kicad/ENC-NACELLE-1.kicad_sch — [PENDING AI CLASSIFICATION]
-avionics/kicad/ENC-NACELLE-1.md — [PENDING AI CLASSIFICATION]
 avionics/kicad/Emma/Emma.md — [PENDING AI CLASSIFICATION]
 avionics/kicad/Emma/gerbers/XCVR-49MHZ-2-B_Cu.gbr — [PENDING AI CLASSIFICATION]
 avionics/kicad/Emma/gerbers/XCVR-49MHZ-2-B_Mask.gbr — [PENDING AI CLASSIFICATION]
@@ -78076,10 +78073,6 @@ archives/airframe-archives/archive/stls/fuselage/landing-gear/post.stl — [PEND
 archives/airframe-archives/archive/stls/fuselage/landing-gear/spring_wire_deformed.stl — [PENDING AI CLASSIFICATION]
 archives/airframe-archives/archive/stls/fuselage/landing-gear/spring_wire_nominal.stl — [PENDING AI CLASSIFICATION]
 archives/airframe-archives/archive/stls/fuselage/landing-gear/strong-leg.stl — [PENDING AI CLASSIFICATION]
-avionics/kicad/ENC-NACELLE-1.kicad_pcb — [PENDING AI CLASSIFICATION]
-avionics/kicad/ENC-NACELLE-1.kicad_prl — [PENDING AI CLASSIFICATION]
-avionics/kicad/ENC-NACELLE-1.kicad_pro — [PENDING AI CLASSIFICATION]
-avionics/kicad/ENC-NACELLE-1.net — [PENDING AI CLASSIFICATION]
 avionics/kicad/Emma/kicads/Emma-backups/Emma-2026-07-21_115328.zip — [PENDING AI CLASSIFICATION]
 avionics/kicad/Emma/kicads/fp-info-cache — [PENDING AI CLASSIFICATION]
 avionics/kicad/Jayne/kicads/Jayne-backups/Jayne-2026-07-20_171142.zip — [PENDING AI CLASSIFICATION]
@@ -78107,7 +78100,6 @@ avionics/kicad/Zoë/kicads/_autosave-Zoë.kicad_pcb — [PENDING AI CLASSIFICATI
 avionics/kicad/Zoë/kicads/fp-info-cache — [PENDING AI CLASSIFICATION]
 avionics/kicad/Zoë/kicads/~Zoë.kicad_sch.lck — [PENDING AI CLASSIFICATION]
 avionics/kicad/Zoë/kicads/~_autosave-Zoë.kicad_pcb.lck — [PENDING AI CLASSIFICATION]
-avionics/kicad/gen_enc_nacelle_pcb.py — [PENDING AI CLASSIFICATION]
 tools/landing_gear_r6_sizing.py — [PENDING AI CLASSIFICATION]
 avionics/kicad/Emma/kicads/Emma-backups/Emma-2026-07-21_115328.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Emma/kicads/fp-info-cache — [IGNORED/VCS-EXCLUDED]
@@ -78127,19 +78119,13 @@ avionics/kicad/Wash/kicads/Wash-backups/Wash-2026-07-21_110101.zip — [IGNORED/
 .githooks/pre-commit — [PENDING AI CLASSIFICATION]
 
 ## --- AUTO-DISCOVERED (2026-07-22) ---
-avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_173538.zip — [PENDING AI CLASSIFICATION]
 avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-22_172905.zip — [PENDING AI CLASSIFICATION]
-avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_173538.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-22_172905.zip — [IGNORED/VCS-EXCLUDED]
 
 ## --- AUTO-DISCOVERED (2026-07-23) ---
 .github/workflows/ci.yml — [PENDING AI CLASSIFICATION]
 airframe/openscad/fuselage/canonical_leg_r6_1_5in.scad — Rev R6 canonical articulated hip-pivot leg, 1.5in (38.1mm) belly-clearance variant (default)
 airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad — Rev R6 canonical articulated hip-pivot leg, 3.0in (80mm) belly-clearance variant (extended, kept)
-avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_201104.zip — [PENDING AI CLASSIFICATION]
-avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_202404.zip — [PENDING AI CLASSIFICATION]
-avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_201104.zip — [IGNORED/VCS-EXCLUDED]
-avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_202404.zip — [IGNORED/VCS-EXCLUDED]
 
 ## --- AUTO-DISCOVERED (2026-07-26) ---
 .github/workflows/stale-branches.yml — [PENDING AI CLASSIFICATION]
@@ -78159,8 +78145,6 @@ avionics/kicad/CAN-PERIPH-GW-1/kicads/fp-info-cache — [PENDING AI CLASSIFICATI
 avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_pcb.py — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_sch.py — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/scripts/route_can_periph_gw_pcb.py — [PENDING AI CLASSIFICATION]
-avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_155528.zip — [PENDING AI CLASSIFICATION]
-avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_174345.zip — [PENDING AI CLASSIFICATION]
 avionics/kicad/Emma/scripts/inject_emma_tpm.py — [PENDING AI CLASSIFICATION]
 avionics/kicad/Kaylee/scripts/inject_kaylee_trust_module.py — [PENDING AI CLASSIFICATION]
 avionics/kicad/fix_wash_zoe_isolators.py — [PENDING AI CLASSIFICATION]
@@ -78181,8 +78165,6 @@ airframe/Serenity-Assembled.20260718-101616.FCBak — [IGNORED/VCS-EXCLUDED]
 airframe/freecad/assembly/SerenityAssembly.20260722-133959.FCBak — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/fp-info-cache — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/CAN-PERIPH-GW-1/scripts/__pycache__/gen_can_periph_gw_sch.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
-avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_155528.zip — [IGNORED/VCS-EXCLUDED]
-avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_174345.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Kaylee/scripts/__pycache__/gen_kaylee.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Kaylee/scripts/__pycache__/inject_kaylee_trust_module.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
 
@@ -78208,12 +78190,10 @@ avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-F_Silkscreen.gto — [PEN
 avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-Margin.gbr — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1-job.gbrjob — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/gerbers/CAN-PERIPH-GW-1.drl — [PENDING AI CLASSIFICATION]
-avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_222454.zip — [PENDING AI CLASSIFICATION]
 avionics/kicad/fix_starved_thermal_pads.py — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1_N1_2026-07-26.kicad_pcb — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1_N1_2026-07-26.kicad_sch — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/CAN-PERIPH-GW-1/scripts/__pycache__/gen_can_periph_gw_pcb.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
-avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_222454.zip — [IGNORED/VCS-EXCLUDED]
 
 ## --- AUTO-DISCOVERED (2026-07-26) ---
 avionics/kicad/Emma/gerbers/Emma-B_Courtyard.gbr — [PENDING AI CLASSIFICATION]
@@ -78241,12 +78221,10 @@ tools/open_mating_faces.py — [PENDING AI CLASSIFICATION]
 
 ## --- AUTO-DISCOVERED (2026-07-27) ---
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1-2026-07-27_103702.zip — [PENDING AI CLASSIFICATION]
-avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-27_000443.zip — [PENDING AI CLASSIFICATION]
 avionics/kicad/Emma/kicads/Emma-backups/Emma-2026-07-27_104819.zip — [PENDING AI CLASSIFICATION]
 avionics/kicad/Emma/kicads/Emma-backups/Emma-2026-07-27_105531.zip — [PENDING AI CLASSIFICATION]
 avionics/kicad/Jayne/kicads/Jayne.kicad_dru — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1-2026-07-27_103702.zip — [IGNORED/VCS-EXCLUDED]
-avionics/kicad/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-27_000443.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Emma/kicads/Emma-backups/Emma-2026-07-27_104819.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Emma/kicads/Emma-backups/Emma-2026-07-27_105531.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Emma/scripts/__pycache__/inject_emma_tpm.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
@@ -78256,7 +78234,6 @@ avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1-20
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1-2026-07-27_160558.zip — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1-2026-07-27_162107.zip — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1-2026-07-27_163535.zip — [PENDING AI CLASSIFICATION]
-avionics/kicad/CAN-PERIPH-GW-1/kicads/~CAN-PERIPH-GW-1.kicad_pcb.lck — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/~CAN-PERIPH-GW-1.kicad_sch.lck — [PENDING AI CLASSIFICATION]
 avionics/kicad/Emma/kicads/Emma-backups/Emma-2026-07-27_151556.zip — [PENDING AI CLASSIFICATION]
 avionics/kicad/Jayne/kicads/Jayne-backups/Jayne-2026-07-27_153954.zip — [PENDING AI CLASSIFICATION]
@@ -78265,7 +78242,6 @@ avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1-20
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1-2026-07-27_160558.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1-2026-07-27_162107.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1-2026-07-27_163535.zip — [IGNORED/VCS-EXCLUDED]
-avionics/kicad/CAN-PERIPH-GW-1/kicads/~CAN-PERIPH-GW-1.kicad_pcb.lck — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/~CAN-PERIPH-GW-1.kicad_sch.lck — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Emma/kicads/Emma-backups/Emma-2026-07-27_151556.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Jayne/kicads/Jayne-backups/Jayne-2026-07-27_153954.zip — [IGNORED/VCS-EXCLUDED]
@@ -78317,3 +78293,31 @@ avionics/kicad/Jayne/kicads/Jayne-backups/Jayne-2026-07-28_082623.zip — [IGNOR
 avionics/kicad/Jayne/kicads/Jayne-backups/Jayne-2026-07-28_090954.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Jayne/kicads/Jayne-backups/Jayne-2026-07-28_091842.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Jayne/kicads/Jayne-backups/Jayne-2026-07-28_093255.zip — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-07-28) ---
+avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1-2026-07-28_105023.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Encoder/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_173538.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Encoder/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_201104.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Encoder/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_202404.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Encoder/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_155528.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Encoder/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_174345.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Encoder/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_222454.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Encoder/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-27_000443.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Encoder/ENC-NACELLE-1.kicad_pcb — [PENDING AI CLASSIFICATION]
+avionics/kicad/Encoder/ENC-NACELLE-1.kicad_prl — [PENDING AI CLASSIFICATION]
+avionics/kicad/Encoder/ENC-NACELLE-1.kicad_pro — [PENDING AI CLASSIFICATION]
+avionics/kicad/Encoder/ENC-NACELLE-1.kicad_sch — [PENDING AI CLASSIFICATION]
+avionics/kicad/Encoder/ENC-NACELLE-1.md — [PENDING AI CLASSIFICATION]
+avionics/kicad/Encoder/ENC-NACELLE-1.net — [PENDING AI CLASSIFICATION]
+avionics/kicad/Encoder/gen_enc_nacelle_pcb.py — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/kicads/Jayne-backups/Jayne-2026-07-28_104628.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1-2026-07-28_105023.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Encoder/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_173538.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Encoder/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_201104.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Encoder/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-22_202404.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Encoder/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_155528.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Encoder/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_174345.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Encoder/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-26_222454.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Encoder/ENC-NACELLE-1-backups/ENC-NACELLE-1-2026-07-27_000443.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Jayne/kicads/Jayne-backups/Jayne-2026-07-28_104628.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Wash/scripts/__pycache__/gen_wash_sch.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]

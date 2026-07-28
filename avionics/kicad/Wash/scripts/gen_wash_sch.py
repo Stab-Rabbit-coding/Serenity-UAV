@@ -9,16 +9,35 @@ design reads cleanly and `kicad-cli sch erc` stays quiet on off-sheet nets.
 Pinouts are transcribed directly from the OEM datasheets in
 ``avionics/datasheets/`` (authoritative per avionics/CLAUDE.md):
   * ISOW1044BDFMR  -> isow1044.pdf  Fig 7-1 / Table 7-1 (20-pin DFM)
-  * ADM2795EBRWZ   -> adm2795e.pdf  Table 10 (16-lead RW-16)
+  * ISOW1412DFMR   -> isow1412.pdf  Table 7-1 (20-pin DFM)
   * SLB9670 (TPM)  -> SLB_9670VQ20_Infineon.pdf Fig 1 (PG-VQFN-32-13)
   * SAM-M10Q       -> SAM-M10Q_DataSheet_UBX-22013293.pdf §3.1 (LGA module)
+  * DS26LV31       -> ds26lv31qml.pdf Fig 1 Connection Diagram (SOIC-16)
+  * DS26LV32AT     -> ds26lv32at.pdf  Fig 1 Connection Diagram (SOIC-16)
+  * ADIN1300BCPZ   -> adin1300.pdf   pin table (40-LFCSP)
 
-This first pass covers the isolated-bus (CAN / RS-485), the TPM, and GPS — the
-parts whose net->pin maps were most broken and are now fully verified.  The
-Ethernet PHY/isolator section is deferred pending the DP83825I-vs-ADIN1300
-architecture decision; the 1553, IMU, baro, compass, GPIO and PB2 headers follow.
+Covered so far: the isolated buses (CAN / RS-485), the TPM, GPS, the MIL-STD-1553B
+driver/receiver pair, and the Ethernet PHYs + magnetics.  Still to author before
+the sheet covers the whole PCB: PB2-P1/P2 headers, IMU, baro, PCA9555 GPIO
+expander, the ISO6442 RMII isolators (needs the barrier re-architected — see
+WBS.md §1.2a), field connectors, and passives/protection.
 
-Author: Claude (Opus 4.8), 2026-07-14.  CC BY 4.0.
+Progress checkpoints
+--------------------
+2026-07-14 (Opus 4.8): initial pass — CAN-TR, RS485, TPM, GPS + ADIN1300/magnetics.
+2026-07-28 (Opus 5):
+  * RS485 retargeted ADM2795EBRWZ (16-pin) -> ISOW1412DFMR (20-pin), which is what
+    the PCB's 20-pad SOIC-20W land actually fits, per the 2026-07-26 fleet swap.
+    The previous PCB net map had bus pins Y/Z/B/A unconnected and signals sitting
+    on GNDIO/VDD/GND2 — i.e. the RS-485 port could not have worked.
+  * Added 1553-DRV / 1553-RCV with datasheet-verified pinouts.  The prior PCB net
+    map put M1553_TX_N on the driver's VCC pin (pad 16) and host PRU signals on
+    driver *outputs*; both are corrected here.
+  * Added PWR_FLAG emission so off-sheet-supplied rails clear
+    `power_pin_not_driven` without inventing connectivity.
+
+Author: Claude (Opus 4.8), 2026-07-14; extended by Claude (Opus 5), 2026-07-28.
+License: CC BY 4.0.
 """
 
 from __future__ import annotations
@@ -536,6 +555,7 @@ def main():
     parts.append("  )")
     for ic, X, Y, left, right, hw, hh in placed:
         parts += emit_instance(ic, X, Y, left, right, hw, hh, sheet_uuid)
+    parts += emit_pwr_flags(X0, Y0 - 45.72, sheet_uuid)
     parts.append('  (sheet_instances (path "/" (page "1")))')
     parts.append(")")
     OUT.write_text("\n".join(parts) + "\n")

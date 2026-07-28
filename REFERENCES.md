@@ -77,6 +77,7 @@ REF-CAD-002 Nick Henning after consolidation)
     - [REF-SENSOR-010: TI ISOW1412 — 5 kVrms Isolated RS-485/RS-422 Transceiver with Integrated Isolated DC-DC](#ref-sensor-010-ti-isow1412--5-kvrms-isolated-rs-485rs-422-transceiver-with-integrated-isolated-dc-dc)
     - [REF-SENSOR-011: Infineon OPTIGA™ SLB 9670 — SPI TPM 2.0](#ref-sensor-011-infineon-optiga-slb-9670--spi-tpm-20)
     - [REF-SENSOR-012: STS3215 Digital Servo Motor — Cargo Winch Control](#ref-sensor-012-sts3215-digital-servo-motor--cargo-winch-control)
+    - [REF-SENSOR-013: TI TPS54620 — 4.5-V to 17-V Input, 6-A, Synchronous Step-Down SWIFT™ Converter](#ref-sensor-013-ti-tps54620--45-v-to-17-v-input-6-a-synchronous-step-down-swift-converter)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
@@ -1510,6 +1511,22 @@ ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verific
 
 **Status:** ACTIVE specification, **NOT cleared for procurement or STL generation** until the
 ⚠ rows above are resolved.
+
+---
+
+### REF-SENSOR-013: TI TPS54620 — 4.5-V to 17-V Input, 6-A, Synchronous Step-Down SWIFT™ Converter
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Texas Instruments |
+| **Product** | TPS54620RGYT / TPS54620RHLT, 17-V, 6-A synchronous step-down SWIFT™ converter, adjustable output, peak current mode control |
+| **Datasheet** | SLVS949F, May 2009 — Revised May 2017 |
+| **Datasheet URL** | <https://www.ti.com/lit/ds/symlink/tps54620.pdf> |
+| **Package** | VQFN-14, RGY (3.50 mm × 3.50 mm) or RHL |
+| **Key parameters used for design** | Vref = 0.800 V ±1% (§6.5); gm(ea) = 1300 µA/V, gm(ps) = 12 A/V per the R4 compensation design procedure (§7.3.18 Eq. 9), 16 A/V as quoted in the general small-signal-model description (§7.3.16) — both values are as printed in the datasheet, the discrepancy is TI's own and is not resolved by this project; Iss = 2.3 µA slow-start charge current (§6.5); output divider Eq. 1 (§7.3.5); compensation Eqs. 9–12 (§7.3.18); RT resistor Eq. 13 (§7.4.1, Rrt = 100 kΩ ±1% for Fsw = 480 kHz typ., matching the RT column of the Electrical Characteristics table in §6.5) |
+| **Note** | Fleet-standard BEC used on Kaylee (`U_BEC_5V_1`, `U_BEC_5V_2`, `U_BEC_SERVO_5V`) since Rev R/S1. No datasheet was archived in `avionics/datasheets/` prior to 2026-07-28; added here after the feedback-divider/compensation-network placeholders were worked out against this document (see `avionics/kicad/Kaylee/Kaylee.md` Bill of Materials). |
+
+**Used in:** `avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch` (`U_BEC_5V_1`, `U_BEC_5V_2`, `U_BEC_SERVO_5V`).
 
 ---
 
