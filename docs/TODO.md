@@ -16,7 +16,7 @@
 ## §0.1 — FCC Part 95 Section-Number Verification
 → full detail: `WBS.md` §0.1
 
-- [ ] Code-identifier "RCRS" naming left unchanged — separate tracked…
+*(All items completed 2026-07-18)*
 
 ## §0.7 — CI Lint Scope and Repo-Wide Lint Debt
 → full detail: `WBS.md` §0.7

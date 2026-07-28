@@ -23,7 +23,7 @@
 ## §1.1.3 — Nacelles
 → full detail: `WBS.md` §1.1.3
 
-- [ ] [OPEN — DESIGN] Nozzle drive protrudes ~10 mm past the nacelle…
+- [ ] [OPEN — DESIGN] Nozzle drive protrudes ~10 mm past nacelle bore (routing)
 - [ ] [OPEN — VERIFY] AK7455 off-axis bench-cal / wing pocket 4x4 §1.1.3.6
 
 ---

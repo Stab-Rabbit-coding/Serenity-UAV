@@ -20,6 +20,7 @@
 
 → detail: `docs/WBS.md` §0.1
 
+*(All items completed 2026-07-18)*
 
 ### 0.7 — CI Lint Scope and Repo-Wide Lint Debt
 
@@ -45,18 +46,18 @@
 
 → detail: `airframe/fuselage-joints/WBS.md` §1.1.1 (1/3)
 
-- [ ] User FreeCAD fine-tune (fractional mm):
-- [ ] PMMA window spec finalised
-- [ ] Procure PMMA discs
-- [ ] Add standards REF-IDs to bow_sensor_pod.scad firmware integrati…
+- [ ] User FreeCAD fine-tune (fractional mm) for all component placements
+- [ ] PMMA window spec finalised (optical & structural requirements)
+- [ ] Procure PMMA discs per final specification
+- [ ] Add standards REF-IDs to bow_sensor_pod.scad (firmware interface)
 - [ ] Middle section inner neck — Phase 5-10 print guidance
-- [ ] Deprecate SCAD fuselage shell files
+- [ ] Deprecate SCAD fuselage shell files (post-Rev S archive)
 
 #### 1.1.1 — Fuselage (continued)
 
 → detail: `airframe/fuselage-covers/WBS.md` §1.1.1 (2/3)
 
-- [ ] MESH-01 add_structural_features.py boolean cuts left non-wate…
+- [ ] MESH-01 `add_structural_features.py` boolean cuts left non-watertight hull
 
 #### 1.1.1 — Fuselage (continued)
 
@@ -66,12 +67,12 @@
 - [ ] cargo_sect_shell24.stl
 - [ ] Cargo gondola shell
 - [ ] Clamshell door halves
-- [ ] cargo_sect_shell24.scad — shuttle exterior fairing profiles on…
-- [ ] Avionics dorsal access covers / Faraday tray lids for Inara and…
+- [ ] `cargo_sect_shell24.scad` — shuttle exterior fairing profiles on Z walls
+- [ ] Avionics dorsal access covers / Faraday tray lids (Inara & River)
 - [ ] Update REVN_BUILD_GUIDE_24IN.md bay layout table
 - [ ] Regenerate cargo_sect_shell24.stl
 - [ ] Add DRV8833-tray boss locations to cargo_sect_shell24.scad
-- [ ] Add SG90 bell-crank boss to inner face of each door panel for p…
+- [ ] Add SG90 bell-crank boss to inner face of each door panel
 - [ ] ★ STS3215 datasheet gate — envelope/torque/mass/stall
 - [ ] ★ Winch containment: 5 positive fixes (spool = projectile)
 - [ ] Verify Part 107 dropped-object section number
