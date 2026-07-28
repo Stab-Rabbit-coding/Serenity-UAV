@@ -109,7 +109,9 @@
 
 - [ ] wing_nacelle_pylon_revo.stl
 - [ ] wings_s1223_revo.stl
-- [ ] [OPEN — BLOCKER] Fuselage spar-interface now mismatched.
+- [ ] [OPEN — BLOCKER] Fuselage spar-interface mismatched: cargo bore at old 30%
+    chord (Y≈+31.7), wing spar now at 22mm station (Y≈+15); bore axis must move
+    fwd ~16mm; see airframe/wings-nacelles/WBS.md for full detail & resolution
 
 #### 1.1.3 — Nacelles
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.3
