@@ -156,6 +156,7 @@ Every schematic and PCB modification **must** be verified:
 4. Run **Design Rules Checker** (DRC) — resolve all violations and errors
 5. Document any violations that cannot be resolved in `TODO.md` with the specific DRC rule and reason
 6. Commit only after all DRC violations are either resolved or documented
+7. All routing and component spacing will maintain 0.3mm minimum copper spacing (as enforced by the min_copper_edge_clearance DRC check) per [REF-IPC-001].
 
 ### Footprint and Component Placement
 
