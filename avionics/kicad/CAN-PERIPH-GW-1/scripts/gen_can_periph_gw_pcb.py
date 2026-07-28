@@ -20,8 +20,20 @@ generator (gen_kaylee_pcb.py docstring).
 RS-485 isolation is ISOW1412 (own integrated isolated DC-DC per stack, no
 external DC-DC placeholder needed -- see schematic docstring).
 
+2026-07-28: placement templates (NODE_TEMPLATE/ADDON_TEMPLATE), the board
+outline, and the attribution block were re-captured from the user's
+hand-packed `N_STACKS=2` alignment pass (board outline corner-squared,
+0.3 mm copper clearance fleet policy -- see CAN-PERIPH-GW-1.md "Status").
+This does NOT mean re-running this generator against the live, hand-routed
+`CAN-PERIPH-GW-1.kicad_pcb` -- doing so would wipe the manual placement and
+all routed tracks. Running `gen_can_periph_gw_pcb.py` is only for
+regenerating this board from scratch (e.g. a fresh N_STACKS value that has
+never been hand-packed); `route_can_periph_gw_pcb.py` is the safe,
+non-destructive tool for the live board (net sync + rip-up/reroute without
+moving footprints).
+
 Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-AI-assist: Claude Fable 5 (Anthropic), 2026-07-26
+AI-assist: Claude Fable 5 (Anthropic), 2026-07-26/28
 License: CC BY 4.0
 """
 
@@ -86,62 +98,85 @@ PINHDR = f"{SYS_FP}/Connector_PinHeader_2.54mm.pretty"
 JUMPER = f"{SYS_FP}/Jumper.pretty"
 
 # Real, manually-packed placement captured from the user's built
-# CAN-PERIPH-GW-1.kicad_pcb (Rev 2026-07-26, N_STACKS=1 at capture time) --
-# NOT an invented grid. Per-stack parts carry an explicit layer ("F"/"B";
-# 4 of them -- the MCU/TPM/CAN-FD-iso/RS-485-iso ICs -- are hand-placed on
-# the BACK). For stacks 2..N_STACKS this same per-stack template is
-# replayed shifted along one axis (past the shared bus/power section, which
-# is placed once and never duplicated) -- a first-pass mechanical repeat of
-# the user's single-stack layout, same "final compaction is a manual
-# follow-on pass" convention already used by every generator in this
-# project (see module docstring).
+# CAN-PERIPH-GW-1.kicad_pcb (Rev 3, 2026-07-28, N_STACKS chopped to 2 for this
+# hand-alignment pass -- see CAN-PERIPH-GW-1.md "Status") -- NOT an invented
+# grid. This capture replaces the earlier N_STACKS=1-derived template (Rev 2,
+# 2026-07-26): that template used ONE per-stack layout mechanically repeated
+# for every stack, but the user's 2026-07-28 pass revealed the real design
+# intent is TWO distinct templates -- stack 1 ("node") and stack 2+ ("addon
+# node", the pattern repeated for the end-to-end chain) genuinely differ in
+# rotation and even layer for several parts (e.g. U1_1/U2_1 hand-placed on
+# B.Cu, rot 180; U1_2/U2_2 on F.Cu, rot 0) -- not a copy-paste artifact.
 #
-# STACK_ORIENTATION picks which axis stacks repeat along -- the per-stack
-# cluster's own footprint is ~34 mm (long axis, X) x ~16.4 mm (short axis,
-# Y), so the two choices are:
-#   "END_TO_END"  (default) -- tile along X (LANE_DX pitch). Adjacent
-#       stacks meet short-side-to-short-side, like train cars coupling at
-#       their narrow ends: board grows long and thin.
-#   "SIDE_BY_SIDE" -- tile along Y (LANE_DY pitch). Adjacent stacks meet
-#       long-side-to-long-side: board grows wide and short instead.
-# Both LANE_DX and LANE_DY are sized from the real per-stack footprint
-# cluster's own bounding-box span on that axis plus each edge footprint's
-# own body half-width, so adjacent lanes don't collide -- verified via DRC
-# (0 courtyards_overlap/clearance from placement) at N_STACKS=4 in a
-# sandboxed dry run for both orientations, see commit notes.
-STACK_ORIENTATION = "END_TO_END"  # or "SIDE_BY_SIDE"
-LANE_DX = 50.0
-LANE_DY = 30.0
+# STACK_ORIENTATION: only "END_TO_END" (tile along X) is captured from real
+# data. The earlier "SIDE_BY_SIDE" (tile along Y) option is REMOVED, not just
+# undocumented -- it was sized from a sandboxed dry-run guess against the old
+# single-template model, which this two-template capture supersedes; redo it
+# from a real side-by-side hand-packing pass before reintroducing it.
+STACK_ORIENTATION = "END_TO_END"
+
+# NODE_TEMPLATE = stack 1 (unique, not repeated).
+# ADDON_TEMPLATE = stack 2 (the pattern every further stack, 3..N_STACKS,
+# repeats, tiled by LANE_DX_ADDON along X -- see PLACE-building loop below).
+#
+# LANE_DX_ADDON is measured from the ONLY real node-to-addon transition this
+# project has ever hand-packed (stack 1's cluster left edge at x=43.745 to
+# stack 2's cluster left edge at x=81.045, delta 37.3 mm) and is UNVERIFIED
+# as the correct addon-to-addon repeat pitch for N_STACKS=3 or 4 -- it is
+# reused here because it's the only real data point available, not because
+# it's confirmed collision-free at N>2. Re-verify with DRC (0 courtyard/
+# clearance from placement) the next time N_STACKS=3 or 4 is actually
+# regenerated, and correct this constant from that real placement if it
+# doesn't hold, rather than treating it as settled.
+LANE_DX_ADDON = 37.3
 
 # ref-without-suffix -> (lib dir, footprint name, (x, y), rotation deg, layer)
-_PER_STACK_REAL: dict[str, tuple[str, str, tuple[float, float], float, str]] = {
-    "R_NRST": (RSMD, "R_0402_1005Metric", (143.98, 106.0), 0, "F"),
-    "C_VCORE": (CSMD, "C_0402_1005Metric", (150.48, 107.0), 0, "F"),
-    "C_MCU1": (CSMD, "C_0402_1005Metric", (143.48, 105.0), 0, "F"),
-    "J_SWD": (JST, "JST_GH_BM04B-GHS-TBT_1x04-1MP_P1.25mm_Vertical", (174.46, 113.9), 0, "F"),
-    "C_TPM1": (CSMD, "C_0402_1005Metric", (167.46, 106.48), 90, "F"),
-    "C_TPM2": (CSMD, "C_0402_1005Metric", (168.96, 106.48), 90, "F"),
-    "R_TPM_RST": (RSMD, "R_0402_1005Metric", (170.46, 106.51), 90, "F"),
-    "C_ISO1": (CSMD, "C_0402_1005Metric", (143.96, 110.0), 0, "F"),
-    "C_ISO2": (CSMD, "C_0402_1005Metric", (160.46, 105.0), 0, "F"),
-    "C_RS1": (CSMD, "C_0402_1005Metric", (149.48, 110.5), 0, "F"),
-    "C_RS2": (CSMD, "C_0402_1005Metric", (163.94, 106.0), 0, "F"),
-    "J_ENC": (CUSTOM_FP, "Pigtail_7W_DirectSolder", (140.41, 114.0), 0, "F"),
-    "J_FLEX": (PINHDR, "PinHeader_1x08_P2.54mm_Vertical", (166.54, 114.0), -90, "F"),
-    "U1": (QFN, "QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm", (154.75, 106.5625), 180, "B"),
-    "U2": (QFN, "QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm", (155.25, 97.5625), 180, "B"),
-    "U3": (SO, "SOIC-20W_7.5x12.8mm_P1.27mm", (140.5, 107.0), 90, "B"),
-    "U4": (SO, "SOIC-20W_7.5x12.8mm_P1.27mm", (171.0, 106.5), -90, "B"),
+NODE_TEMPLATE: dict[str, tuple[str, str, tuple[float, float], float, str]] = {
+    "R_NRST": (RSMD, "R_0402_1005Metric", (54.63, 102.5), 0, "F"),
+    "C_VCORE": (CSMD, "C_0402_1005Metric", (67.52, 103.0), 0, "F"),
+    "C_MCU1": (CSMD, "C_0402_1005Metric", (56.5, 103.0), -90, "F"),
+    "J_SWD": (JST, "JST_GH_BM04B-GHS-TBT_1x04-1MP_P1.25mm_Vertical", (48.5, 102.5), 0, "F"),
+    "C_TPM1": (CSMD, "C_0402_1005Metric", (64.0, 105.02), 0, "F"),
+    "C_TPM2": (CSMD, "C_0402_1005Metric", (64.0, 103.0), 90, "F"),
+    "R_TPM_RST": (RSMD, "R_0402_1005Metric", (65.5, 103.0), 90, "F"),
+    "C_ISO1": (CSMD, "C_0402_1005Metric", (54.52, 101.0), 0, "F"),
+    "C_ISO2": (CSMD, "C_0402_1005Metric", (67.52, 101.5), 0, "F"),
+    "C_RS1": (CSMD, "C_0402_1005Metric", (56.15, 100.5), -90, "F"),
+    "C_RS2": (CSMD, "C_0402_1005Metric", (67.5, 100.0), 0, "F"),
+    "J_ENC": (CUSTOM_FP, "Pigtail_7W_DirectSolder", (72.95, 107.5), 0, "F"),
+    "J_FLEX": (PINHDR, "PinHeader_1x08_P2.54mm_Vertical", (63.39, 108.0), -90, "F"),
+    "U1": (QFN, "QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm", (60.645, 102.355), 180, "B"),
+    "U2": (QFN, "QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm", (60.15, 95.0), 180, "B"),
+    "U3": (SO, "SOIC-20W_7.5x12.8mm_P1.27mm", (50.0, 99.0), 180, "B"),
+    "U4": (SO, "SOIC-20W_7.5x12.8mm_P1.27mm", (71.0, 99.0), 0, "B"),
+}
+ADDON_TEMPLATE: dict[str, tuple[str, str, tuple[float, float], float, str]] = {
+    "R_NRST": (RSMD, "R_0402_1005Metric", (92.5, 102.5), 0, "F"),
+    "C_VCORE": (CSMD, "C_0402_1005Metric", (92.48, 98.0), 0, "F"),
+    "C_MCU1": (CSMD, "C_0402_1005Metric", (92.5, 99.5), 0, "F"),
+    "J_SWD": (JST, "JST_GH_BM04B-GHS-TBT_1x04-1MP_P1.25mm_Vertical", (86.0, 102.0), 0, "F"),
+    "C_TPM1": (CSMD, "C_0402_1005Metric", (91.5, 95.48), 90, "F"),
+    "C_TPM2": (CSMD, "C_0402_1005Metric", (93.0, 95.48), 90, "F"),
+    "R_TPM_RST": (RSMD, "R_0402_1005Metric", (90.0, 95.51), 90, "F"),
+    "C_ISO1": (CSMD, "C_0402_1005Metric", (92.5, 104.0), 0, "F"),
+    "C_ISO2": (CSMD, "C_0402_1005Metric", (93.0, 93.0), 90, "F"),
+    "C_RS1": (CSMD, "C_0402_1005Metric", (92.5, 101.0), 0, "F"),
+    "C_RS2": (CSMD, "C_0402_1005Metric", (91.5, 92.98), 90, "F"),
+    "J_ENC": (CUSTOM_FP, "Pigtail_7W_DirectSolder", (98.9, 103.5), 0, "F"),
+    "J_FLEX": (PINHDR, "PinHeader_1x08_P2.54mm_Vertical", (100.62, 108.0), -90, "F"),
+    "U1": (QFN, "QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm", (99.065, 95.855), 0, "F"),
+    "U2": (QFN, "QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm", (85.35, 95.0), 0, "F"),
+    "U3": (SO, "SOIC-20W_7.5x12.8mm_P1.27mm", (87.35, 99.175), 180, "B"),
+    "U4": (SO, "SOIC-20W_7.5x12.8mm_P1.27mm", (99.5, 99.0), 180, "B"),
 }
 
 PLACE: dict[str, tuple[str, str, tuple[float, float], float, str]] = {}
-for _base, (_lib, _fpname, (_rx, _ry), _rot, _lyr) in _PER_STACK_REAL.items():
-    for _i in range(1, N_STACKS + 1):
-        if STACK_ORIENTATION == "SIDE_BY_SIDE":
-            _dx, _dy = 0.0, (_i - 1) * LANE_DY
-        else:
-            _dx, _dy = (_i - 1) * LANE_DX, 0.0
-        PLACE[f"{_base}_{_i}"] = (_lib, _fpname, (_rx + _dx, _ry + _dy), _rot, _lyr)
+for _base, (_lib, _fpname, (_rx, _ry), _rot, _lyr) in NODE_TEMPLATE.items():
+    PLACE[f"{_base}_1"] = (_lib, _fpname, (_rx, _ry), _rot, _lyr)
+for _base, (_lib, _fpname, (_rx, _ry), _rot, _lyr) in ADDON_TEMPLATE.items():
+    for _i in range(2, N_STACKS + 1):
+        _dx = (_i - 2) * LANE_DX_ADDON
+        PLACE[f"{_base}_{_i}"] = (_lib, _fpname, (_rx + _dx, _ry), _rot, _lyr)
 
 VALUES = {}
 for _i in range(1, N_STACKS + 1):
@@ -177,15 +212,15 @@ for _i in range(1, N_STACKS + 1):
     })
 
 # Shared Section A: power (once, feeds every stack) -- real absolute
-# positions, placed once regardless of N_STACKS.
+# positions (captured 2026-07-28), placed once regardless of N_STACKS.
 PLACE.update({
-    "J_PWR": (JST, "JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical", (135.435, 99.4), 0, "F"),
-    "U_REG_3V3": (SOT, "SOT-23-6", (136.3225, 107.0), 0, "F"),
-    "L1": (LSMD, "L_Taiyo-Yuden_NR-20xx", (140.285, 109.5), 0, "F"),
-    "R_FBT": (RSMD, "R_0402_1005Metric", (140.95, 105.5), 0, "F"),
-    "R_FBB": (RSMD, "R_0402_1005Metric", (147.49, 107.5), 0, "F"),
-    "C_IN": (CSMD, "C_0402_1005Metric", (136.98, 110.5), 0, "F"),
-    "C_OUT": (CSMD, "C_0402_1005Metric", (133.96, 110.0), 0, "F"),
+    "J_PWR": (JST, "JST_GH_BM02B-GHS-TBT_1x02-1MP_P1.25mm_Vertical", (47.5, 95.5), 0, "F"),
+    "U_REG_3V3": (SOT, "SOT-23-6", (60.0, 104.0), 0, "F"),
+    "L1": (LSMD, "L_Taiyo-Yuden_NR-20xx", (67.175, 105.5), 0, "F"),
+    "R_FBT": (RSMD, "R_0402_1005Metric", (54.5, 105.0), 0, "F"),
+    "R_FBB": (RSMD, "R_0402_1005Metric", (54.49, 100.0), 0, "F"),
+    "C_IN": (CSMD, "C_0402_1005Metric", (54.52, 103.56), 0, "F"),
+    "C_OUT": (CSMD, "C_0402_1005Metric", (56.52, 105.0), 0, "F"),
 })
 VALUES.update({
     "J_PWR": "+5V/GND", "U_REG_3V3": "TLV62569DBVR", "L1": "2.2uH",
@@ -203,18 +238,19 @@ NICK.update({
 
 # Shared Sections D/E: the ONE physical CAN-FD bus + ONE physical RS-485 bus
 # (true multi-drop topology -- every stack's xcvr taps the same two wires).
-# Real absolute positions, placed once regardless of N_STACKS. No shared
-# isolated DC-DC is needed -- each stack's own ISOW1412 (U4_i) has an
-# integrated isolated DC-DC, same as ISOW1044 (U3_i) already does for CAN-FD.
+# Real absolute positions (captured 2026-07-28), placed once regardless of
+# N_STACKS. No shared isolated DC-DC is needed -- each stack's own ISOW1412
+# (U4_i) has an integrated isolated DC-DC, same as ISOW1044 (U3_i) already
+# does for CAN-FD.
 PLACE.update({
-    "J_CAN_IN": (JST, "JST_GH_BM03B-GHS-TBT_1x03-1MP_P1.25mm_Vertical", (144.96, 100.0), 0, "F"),
-    "J_CAN_OUT": (JST, "JST_GH_BM03B-GHS-TBT_1x03-1MP_P1.25mm_Vertical", (154.56, 100.0), 0, "F"),
-    "R_CANTERM": (RSMD, "R_0402_1005Metric", (153.96, 106.99), 90, "F"),
-    "SJ1": (JUMPER, "SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm", (157.11, 107.0), 0, "F"),
-    "J_RS485_IN": (JST, "JST_GH_BM03B-GHS-TBT_1x03-1MP_P1.25mm_Vertical", (165.46, 100.5), 0, "F"),
-    "J_RS485_OUT": (JST, "JST_GH_BM03B-GHS-TBT_1x03-1MP_P1.25mm_Vertical", (175.21, 100.0), 0, "F"),
-    "R_485TERM": (RSMD, "R_0402_1005Metric", (172.95, 105.5), 0, "F"),
-    "SJ2": (JUMPER, "SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm", (176.46, 106.0), 0, "F"),
+    "J_CAN_IN": (JST, "JST_GH_BM03B-GHS-TBT_1x03-1MP_P1.25mm_Vertical", (56.0, 95.5), 0, "F"),
+    "J_CAN_OUT": (JST, "JST_GH_BM03B-GHS-TBT_1x03-1MP_P1.25mm_Vertical", (64.5, 95.5), 0, "F"),
+    "R_CANTERM": (RSMD, "R_0402_1005Metric", (57.5, 100.5), 90, "F"),
+    "SJ1": (JUMPER, "SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm", (60.0, 100.5), 0, "F"),
+    "J_RS485_IN": (JST, "JST_GH_BM03B-GHS-TBT_1x03-1MP_P1.25mm_Vertical", (73.1, 95.4), 0, "F"),
+    "J_RS485_OUT": (JST, "JST_GH_BM03B-GHS-TBT_1x03-1MP_P1.25mm_Vertical", (73.0, 102.5), 0, "F"),
+    "R_485TERM": (RSMD, "R_0402_1005Metric", (65.85, 100.51), -90, "F"),
+    "SJ2": (JUMPER, "SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm", (63.5, 100.5), 0, "F"),
 })
 VALUES.update({
     "J_CAN_IN": "CAN-FD IN", "J_CAN_OUT": "CAN-FD OUT", "R_CANTERM": "120R", "SJ1": "open",
@@ -231,31 +267,28 @@ NICK.update({
     "SJ2": "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm",
 })
 
-# Real board outline is 130.91,92.45 - 180.01,118.05 for N_STACKS=1; each
-# additional stack's lane extends the board along the tiling axis --
-# to the right for END_TO_END, downward for SIDE_BY_SIDE.
-X0, Y0 = 130.0, 91.0
-if STACK_ORIENTATION == "SIDE_BY_SIDE":
-    X1 = 180.5
-    Y1 = 119.0 + max(0, N_STACKS - 1) * LANE_DY
-else:
-    X1 = 180.5 + max(0, N_STACKS - 1) * LANE_DX
-    Y1 = 119.0
+# Real board outline for N_STACKS=2 (captured 2026-07-28, corner-squared --
+# see CAN-PERIPH-GW-1.md "Status"): (43.1759,91)-(107.5,110.5). Each addon
+# stack beyond 2 extends the board to the right by LANE_DX_ADDON (see the
+# same UNVERIFIED-pitch caveat on LANE_DX_ADDON above -- this outline growth
+# inherits that same caveat).
+X0, Y0 = 43.1759, 91.0
+X1 = 107.5 + max(0, N_STACKS - 2) * LANE_DX_ADDON
+Y1 = 110.5
 
 # Back-silkscreen attribution block (mirrors the block already on Wash.md /
-# Zoe.md boards). Position user-corrected 2026-07-26 (the generator's first
-# guess ran off the board corner) -- keep in sync with the live board if
-# moved again by hand.
+# Zoe.md boards). Re-synced 2026-07-28 to match the live board exactly (text
+# and position had both drifted from the generator's prior constants after
+# the 2026-07-28 N_STACKS=2 repacking moved the whole board's coordinate
+# frame -- X0 alone shifted from 130.0 to 43.1759) -- keep in sync with the
+# live board if moved/edited again by hand.
 ATTRIBUTION_TEXT = (
     "TPM-Secured CAN-FD/RS-485 Gateway\n"
-    "For the PocketBeagle2 fleet\n"
     "CC BY 4.0 — July 2026\n"
-    "Steve Griffing\n"
-    "PE(CSE), CISSP-ISSEP, CPP\n"
     "Griffing Technology LLC\n"
     "github.com/Stab-Rabbit-Coding\n"
 )
-ATTRIBUTION_POS = (54.0, 96.5)
+ATTRIBUTION_POS = (70.5, 107.5)
 
 
 def u():

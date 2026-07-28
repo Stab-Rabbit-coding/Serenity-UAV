@@ -532,16 +532,28 @@ REFERENCES.md Removed/Superseded Citations).
     DRC violations on its own, clearly not real design intent) and should
     be reviewed for removal. **Keep all legacy connectors** (user
     instruction).
-- [ ] **Kaylee full PCB resync — not started.** 213 DRC hard, almost all
-    `net_conflict` (PCB pad nets don't match the schematic at all — the
-    injected trust module and other schematic changes never propagated to
-    layout; compounds the pre-existing `gen_kaylee.py` drift above). No
-    trust-module footprints exist on the PCB yet. Largest remaining board
-    task — needs a real `Update PCB from Schematic` pass plus manual net
-    cleanup, not just footprint addition.
-- [ ] **Jayne PCB resync — not started.** 124 DRC hard. PCB (`Jayne.kicad_pcb`,
-    dated 2026-07-14) predates the schematic's ISOW1412/Section H addition
-    (2026-07-26) entirely — no RS-485 footprint on the board yet.
+- [x] **Kaylee PCB resync — trust module done, 2026-07-27.** Renamed 7 stale
+    refs (`L_BEC1-3`→`L1`/`L2`/`L4`, `RS_1-4`→`RS1-4`, verified by net-pattern
+    matching), re-synced all 214 existing pads' nets from a fresh schematic
+    netlist export, added the Section H trust module (27 refs: U_MCU/U_TPM/
+    U_ISOCAN/U_RS485 + supporting passives/connectors), raised netclasses to
+    the fleet 0.3 mm clearance floor (AGENTS.md), added `Kaylee.kicad_dru`
+    scoped fine-pitch exceptions for 9 ICs (existing BEC/current-sense parts
+    plus the 4 new trust-module ICs). DRC 0 hard / ERC 0 hard. U_ISOCAN,
+    U_RS485, and the 4 RS-485/CAN-FD trunk connectors are staged off-board
+    (no clear ~12×13 mm site on the front layer) for the user to place.
+    **Separate, larger gap found and documented, not fixed this pass:** 52
+    more schematic components (ESC5 channel, cell-balance connector, NTC
+    sense, shield-ground pigtails, BEC support passives, `U_CELL`) are also
+    missing from the PCB, predating the trust-module work entirely — see
+    `Kaylee.md` "Separate, larger gap" for the full list.
+- [x] **Jayne PCB resync — done, 2026-07-27.** Fixed 124 pre-existing DRC hard
+    violations (2 overlapping 0402 pairs, U2/U_SOM/U5 fine-pitch clearance via
+    `Jayne.kicad_dru` scoped exceptions, U3's RS485_DE/TX/RX net assignment,
+    U5's unmodeled EP-pad mismatch) and added the Section H RS-485 addition
+    (U6 + 6 supporting parts) with nets from the schematic netlist. Netclasses
+    raised to the fleet 0.3 mm floor. DRC 0 hard / ERC 0 hard, gerbers
+    generated. U6 was staged off-board and hand-placed by the user afterward.
 
 ---
 

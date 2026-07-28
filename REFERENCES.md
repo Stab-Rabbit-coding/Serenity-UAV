@@ -46,6 +46,7 @@ REF-CAD-002 Nick Henning after consolidation)
 - [Part V-A — IPC PCB Design Standards](#part-va--ipc-pcb-design-standards)
     - [REF-IPC-001: IPC-2221 — Design Guidelines for Printed Board Layout (PCB Design Fundamentals)](#ref-ipc-001-ipc-2221--design-guidelines-for-printed-board-layout-pcb-design-fundamentals)
     - [REF-IPC-002: IPC-A-600 — Acceptability of Printed Boards](#ref-ipc-002-ipc-a-600--acceptability-of-printed-boards)
+    - [REF-IPC-003: IPC-7351 — Generic Requirements for Surface Mount Design and Land Pattern Standard](#ref-ipc-003-ipc-7351--generic-requirements-for-surface-mount-design-and-land-pattern-standard)
 - [Part VI — IEEE Standards](#part-vi--ieee-standards)
     - [REF-IEEE-001: IEEE 802.3-2022 — Ethernet (CSMA/CD Access Method and Physical Layer Specifications)](#ref-ieee-001-ieee-8023-2022--ethernet-csmacd-access-method-and-physical-layer-specifications)
     - [REF-IEEE-002: IEEE 802.11-2020 — Wireless LAN Medium Access Control (MAC) and Physical Layer (PHY) Specifications](#ref-ieee-002-ieee-80211-2020--wireless-lan-medium-access-control-mac-and-physical-layer-phy-specifications)
@@ -828,9 +829,27 @@ The design environment of 500 W/m² (≈434 V/m, equivalent to RF proximity near
 
 **Applied to:** All PCB designs (Wash, Zoë, Kaylee, Emma, Jayne, CAN-PERIPH-GW-1, ENC-NACELLE-1).
 
-**Design Decision (2026-07-27):** Copper-to-edge clearance (min_copper_edge_clearance in KiCad) is established at **0.20 mm minimum** per IPC-2221B §4.2 for harsh RF environments. This clearance must not be reduced below 0.20 mm without explicit re-evaluation against the 500 W/m² field-strength requirement and validation that manufacturing yield remains acceptable.
+**Design Decision (2026-07-27, revised 2026-07-27 same day):** Copper-to-edge clearance
+(`min_copper_edge_clearance` in KiCad) was initially established at 0.20 mm minimum per
+IPC-2221B §4.2 for harsh RF environments, then raised to **0.30 mm minimum** (the top of
+the harsh-RF-environment range given in the guidance above) the same day, fleet-wide
+across all seven board project files. This clearance must not be reduced below 0.30 mm
+without explicit re-evaluation against the 500 W/m² field-strength requirement and
+validation that manufacturing yield remains acceptable.
 
-**Used in:** `avionics/kicad/*/kicads/*.kicad_pro` (all board project files), EMI hardening documentation
+**Design Decision (2026-07-28):** The same EMI-hardening rationale (500 W/m² RF field,
+[REF-NIST-002] §6.2.5) is extended from copper-to-*edge* clearance to copper-to-*copper*
+clearance — i.e. the netclass `clearance` value governing trace-to-trace, trace-to-pad,
+and pad-to-pad spacing between different nets (IPC-2221B §3, "Trace Routing and
+Spacing", distinct from §4.2's edge-clearance clause). All netclasses (`Default`,
+`PGND`, `POWER_5V`, `CANFD_DIFF_120R`, `ETH_DIFF_100R`) plus the board-wide `clearance`/
+`min_clearance` design-rule floor are set to **0.30 mm minimum**, starting with
+`CAN-PERIPH-GW-1` (see that board's own `.md` "DRC" section for the resulting fine-pitch
+footprint exception ledger); intended to become the same fleet-wide floor as the
+edge-clearance rule above as each board is next touched.
+
+**Used in:** `avionics/kicad/*/kicads/*.kicad_pro` (all board project files: `rules.clearance`,
+`rules.min_clearance`, and every entry in `net_settings.classes`), EMI hardening documentation
 
 ---
 
@@ -855,6 +874,46 @@ The design environment of 500 W/m² (≈434 V/m, equivalent to RF proximity near
 **Applied to:** PCB manufacturing accept/reject criteria during fabrication quality verification. All boards (Wash, Zoë, Kaylee, Emma, Jayne, CAN-PERIPH-GW-1, ENC-NACELLE-1) are fabricated by JLCPCB and inspected against IPC-A-600 standards prior to assembly.
 
 **Used in:** Board-specific design markdown files, incoming inspection checklists, Gerber generation workflows
+
+---
+
+### REF-IPC-003: IPC-7351 — Generic Requirements for Surface Mount Design and Land Pattern Standard
+
+| Field | Value |
+|---|---|
+| **Issuing authority** | IPC (Association Connecting Electronics Industries) |
+| **Edition** | IPC-7351C (current; earlier editions A, B also valid) |
+| **Official URL** | <https://www.ipc.org/> (catalog: search "IPC-7351") |
+| **Current status** | Active standard |
+
+**Clauses applied in this project:**
+
+| Section | Title | Application |
+|---|---|---|
+| Section 3 | Land Pattern Geometry Definitions | Nominal (level B) land pattern sizing for SMD footprints (KiCad's system footprint libraries generate against this level by default) |
+| Section 5 | Component Land Pattern Calculations | Pad size/pitch/courtyard formulas per package family (QFN, SOIC, chip passives) |
+
+**Fine-pitch pad-to-pad clearance exception:** IPC-7351B/C nominal land patterns for
+≤0.5 mm-pitch fine-pitch packages (e.g. QFN-48 0.5 mm pitch, QFN-32 0.5 mm pitch) place
+adjacent different-net pad edges **0.20–0.30 mm apart by the standard's own geometry** —
+this is inherent to the datasheet package pitch, not a routing or placement choice, and
+cannot be widened to meet a separate board-wide copper *clearance* target (REF-IPC-001
+§3) without deviating from the IPC-7351 land pattern itself (which would risk the
+solder-joint/tombstoning defects IPC-A-600, REF-IPC-002, exists to catch). Where this
+project's board-wide copper clearance floor (0.30 mm, REF-IPC-001) exceeds a fine-pitch
+footprint's own IPC-7351 pad-to-pad spacing, the resulting DRC `clearance` violations are
+an accepted, standards-justified exception — not a defect — **provided** the specific
+footprint, pin pitch, measured gap, and this citation are recorded in the affected
+board's own `.md` file (see `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` "DRC"
+section for the first instance of this ledger, 2026-07-28).
+
+**Applied to:** Every SMD footprint in every board's `.pretty` library reference (system
+KiCad footprints `Package_DFN_QFN.pretty`, `Package_SO.pretty`, `Resistor_SMD.pretty`,
+`Capacitor_SMD.pretty`, etc.) — all already IPC-7351 nominal by KiCad's own footprint
+generator (see each footprint's `descr` field).
+
+**Used in:** `CAN-PERIPH-GW-1.md` DRC exception ledger; `avionics/AGENTS.md` PCB Design
+Standards §DRC Workflow.
 
 ---
 

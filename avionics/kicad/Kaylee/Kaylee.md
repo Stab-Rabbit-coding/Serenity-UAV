@@ -267,10 +267,40 @@ like every other node:
 | U_ISOCAN | TI ISOW1044BDFMR | Isolated CAN-FD transceiver, 20-pin DFM, 5 kV reinforced |
 | U_RS485 | TI ISOW1412 (REFERENCES.md REF-SENSOR-010) | Isolated RS-485 transceiver, own integrated isolated DC-DC (no external isolated supply needed, unlike the superseded ADM2795EBRWZ) |
 
-**PCB not yet synced:** `Kaylee.kicad_pcb` predates this injection and carries none of these
-four footprints — `gen_kaylee.py` itself has drifted from the checked-in generator and is not
-safe to regenerate from (tracked as a separate open item). Bringing the PCB up to date is
-open work (root `TODO.md` §1.2a).
+**PCB synced 2026-07-27.** All four ICs plus their supporting passives/connectors/jumpers
+(23 more refs: `R_H_*`, `C_H_*`, `J_SWD_H`, `J_CAN_IN_H`/`J_CAN_OUT_H`, `J_RS485_IN_H`/
+`J_RS485_OUT_H`, `SJ_H_CAN`/`SJ_H_485`, `U_REG_3V3_H`, `L_H1`) are now placed with nets
+assigned from the schematic netlist. Fine-pitch pad-to-pad clearance for `U_MCU`/`U_TPM`/
+`U_ISOCAN`/`U_RS485` (0.5 mm / 1.27 mm pitch parts, cannot meet the fleet's 0.3 mm default
+clearance — see AGENTS.md) is handled by scoped courtyard-limited rules in `Kaylee.kicad_dru`.
+DRC 0 hard violations. **`U_ISOCAN`, `U_RS485`, and the four RS-485/CAN-FD trunk connectors
+are staged off-board** (to the right of the board outline, correctly netted) — the board's
+front layer had no contiguous ~12×13 mm clear site for the two SOIC-20W parts; per
+AGENTS.md's placement policy this is referred to the user for final positioning rather than
+force-fit automatically. `gen_kaylee.py` itself remains drifted from the checked-in file
+(separate open item, unrelated to this sync — see below); this sync was done by direct
+pad-net re-assignment from a fresh netlist export, not by regenerating.
+
+### Separate, larger gap: ~52 non-trust-module parts also missing from the PCB
+
+Independent of the Section H sync above, a broader audit (schematic netlist vs. PCB
+footprint list, 2026-07-27) found the PCB is missing **52 more components** that exist in
+the current schematic — predates the trust-module work and is unrelated to it:
+
+- **ESC5** (a 5th ESC channel): `CM_ESC5`, `F_ESC5`, `J_ESC5`, `U_IS5`, `RS5`, `J_SHLD_ESC5`
+- **Cell balance connector**: `J_BAL`, `R_BAL1`–`R_BAL6`
+- **NTC thermal sense**: `C_NTC`, `J_NTC`
+- **Shield-ground pigtail connectors**: `J_SHLD_5V`, `J_SHLD_ALERT`, `J_SHLD_ESC1`–`4`,
+  `J_SHLD_I2C`, `J_SHLD_NTC`, `J_SHLD_SV`
+- **BEC support passives** (decoupling/boot/soft-start/comp caps and resistors for the
+  existing BEC circuits): `C_DEC1`–`5`, `C_BOOT1`/`2`/`_SV`, `C_SS1`/`2`/`_SV`, `C_COMPA1`/`2`,
+  `C_COMPB1`/`2`, `C_COMP2_SV`, `C_COMP_SV`, `C_5V_OUT`, `C_CAP`, `R_COMP1`/`2`/`_SV`, `R_VSNS`
+- **`U_CELL`** — the BQ76930 cell monitor IC itself
+
+This is a substantially larger task than the trust-module sync (52 parts vs. 27) and was
+**not** attempted in this pass — flagged here rather than left silently undocumented, per
+AGENTS.md's "document any violations/gaps that cannot be resolved" requirement. Tracked in
+root `TODO.md` §1.2a / `avionics/TODO.md`.
 
 ---
 

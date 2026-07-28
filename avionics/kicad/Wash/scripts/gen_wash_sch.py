@@ -86,25 +86,39 @@ ICS = [
     },
     {
         "ref": "RS485",
-        "value": "ADM2795EBRWZ",
-        "ds": "adm2795e.pdf Table 10 (16-lead RW-16)",
+        "value": "ISOW1412DFMR",
+        "ds": "isow1412.pdf Table 7-1 (20-pin DFM / SOIC-20W land)",
+        # Fleet-wide ADM2795E -> ISOW1412 swap (2026-07-26): ISOW1412 integrates
+        # its own isolated DC-DC, so no external isolated supply is needed.  The
+        # 20-pad SOIC-20W land already on the PCB is correct for this part (the
+        # WBS "wrong land, part is RW-16" item applied to the superseded
+        # ADM2795E and is closed by this swap).
+        #
+        # Half-duplex on the 2-wire RS485_A/RS485_B bus per Wash.md §3: the
+        # full-duplex driver outputs are shorted to the receiver inputs
+        # (Y->A, Z->B), and RE (active low) is tied to DE so one direction
+        # control line drives both.
         "pins": [
-            ("1", "VDD1", "+3V3", "L"),
-            ("2", "GND1", "GND", "L"),
-            ("3", "TxD", "RS485_TX", "L"),
-            ("4", "DE", "RS485_DE", "L"),
+            ("1", "VIO", "+3V3", "L"),
+            ("2", "D", "RS485_TX", "L"),
+            ("3", "DE", "RS485_DE", "L"),
+            ("4", "R", "RS485_RX", "L"),
             ("5", "RE", "RS485_DE", "L"),
-            ("6", "RxD", "RS485_RX", "L"),
-            ("7", "NIC", None, "L"),
-            ("8", "GND1", "GND", "L"),
-            ("16", "VDD2", "VCC2_RS485", "R"),
-            ("15", "GND2", "GND2_RS485", "R"),
-            ("14", "B", "RS485_B", "R"),
-            ("13", "VDD2", "VCC2_RS485", "R"),
-            ("12", "GND2", "GND2_RS485", "R"),
-            ("11", "A", "RS485_A", "R"),
-            ("10", "GND2", "GND2_RS485", "R"),
-            ("9", "GND2", "GND2_RS485", "R"),
+            ("6", "GNDIO", "GND", "L"),
+            ("7", "OUT", None, "L"),
+            ("8", "EN/FLT", "+3V3", "L"),
+            ("9", "VDD", "+3V3", "L"),
+            ("10", "GND1", "GND", "L"),
+            ("20", "A", "RS485_A", "R"),
+            ("19", "B", "RS485_B", "R"),
+            ("18", "Z", "RS485_B", "R"),
+            ("17", "Y", "RS485_A", "R"),
+            ("16", "VISOIN", "VCC2_RS485", "R"),
+            ("15", "GISOIN", "GND2_RS485", "R"),
+            ("14", "IN", None, "R"),
+            ("13", "MODE", "GND2_RS485", "R"),
+            ("12", "VISOOUT", "VCC2_RS485", "R"),
+            ("11", "GND2", "GND2_RS485", "R"),
         ],
     },
     {
@@ -133,6 +147,64 @@ ICS = [
         ],
         # NCI pins 3,4,5,10,11,12,13,14,15,16,25,26,27,28,29,30,31 omitted from
         # the readable sheet (all not-connected-internally); documented here.
+    },
+    {
+        "ref": "1553-DRV",
+        "value": "DS26LV31",
+        "ds": "ds26lv31qml.pdf Fig 1 Connection Diagram (SOIC-16)",
+        # MIL-STD-1553B transmit path.  The PRU emits a complementary
+        # Manchester pair (PRU_1553_TX_P / _N); each polarity drives its own
+        # line-driver channel, and the two channel outputs form the
+        # transformer-primary differential drive (M1553_TX_P / _N).
+        # Both enables asserted (EN high, EN* low) => drivers always on.
+        # Channels 3/4 unused: inputs strapped to GND, outputs left open.
+        "pins": [
+            ("1", "DI1", "PRU_1553_TX_P", "L"),
+            ("7", "DI2", "PRU_1553_TX_N", "L"),
+            ("9", "DI3", "GND", "L"),
+            ("15", "DI4", "GND", "L"),
+            ("4", "EN", "+3V3", "L"),
+            ("12", "EN*", "GND", "L"),
+            ("8", "GND", "GND", "L"),
+            ("16", "VCC", "+3V3", "L"),
+            ("2", "DO1+", "M1553_TX_P", "R"),
+            ("3", "DO1-", None, "R"),
+            ("6", "DO2+", "M1553_TX_N", "R"),
+            ("5", "DO2-", None, "R"),
+            ("10", "DO3+", None, "R"),
+            ("11", "DO3-", None, "R"),
+            ("14", "DO4+", None, "R"),
+            ("13", "DO4-", None, "R"),
+        ],
+    },
+    {
+        "ref": "1553-RCV",
+        "value": "DS26LV32AT",
+        "ds": "ds26lv32at.pdf Fig 1 Connection Diagram (SOIC-16)",
+        # MIL-STD-1553B receive path.  The transformer primary receive pair
+        # (M1553_RX_P / _N) feeds two receiver channels wired in opposite
+        # polarity, regenerating the complementary logic pair the PRU
+        # Manchester decoder expects (PRU_1553_RX_P / _N).
+        # Both enables asserted.  Channels 3/4 unused: inputs open (the part
+        # has an OPEN-input failsafe), outputs left open.
+        "pins": [
+            ("2", "RI1+", "M1553_RX_P", "L"),
+            ("1", "RI1-", "M1553_RX_N", "L"),
+            ("6", "RI2+", "M1553_RX_N", "L"),
+            ("7", "RI2-", "M1553_RX_P", "L"),
+            ("10", "RI3+", None, "L"),
+            ("9", "RI3-", None, "L"),
+            ("14", "RI4+", None, "L"),
+            ("15", "RI4-", None, "L"),
+            ("4", "EN", "+3V3", "R"),
+            ("12", "EN*", "GND", "R"),
+            ("8", "GND", "GND", "R"),
+            ("16", "VCC", "+3V3", "R"),
+            ("3", "RO1", "PRU_1553_RX_P", "R"),
+            ("5", "RO2", "PRU_1553_RX_N", "R"),
+            ("11", "RO3", None, "R"),
+            ("13", "RO4", None, "R"),
+        ],
     },
     {
         "ref": "GPS",
@@ -399,6 +471,49 @@ def emit_instance(ic, X, Y, left, right, half_w, half_h, sheet_uuid):
     return out + wl
 
 
+# Rails that are supplied from off-sheet (the PB2 stack / PWR-IN connector) and
+# therefore have no power_out pin on this sheet.  A PWR_FLAG tells ERC each one
+# is genuinely driven, clearing `power_pin_not_driven` on the GND/EP power pins
+# without falsifying any connectivity.  Remove a rail from this list once a real
+# supply symbol for it is authored onto the sheet.
+PWR_FLAG_RAILS = ["GND", "+3V3"]
+
+PWR_FLAG_LIB = """    (symbol "PWR_FLAG" (power) (pin_numbers hide) (pin_names (offset 0) hide) \
+(exclude_from_sim yes) (in_bom no) (on_board no)
+      (property "Reference" "#FLG" (at 0 1.905 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      (property "Value" "PWR_FLAG" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
+      (symbol "PWR_FLAG_0_0"
+        (pin power_out line (at 0 0 90) (length 0) (name "~" \
+(effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+      )
+      (symbol "PWR_FLAG_0_1"
+        (polyline (pts (xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) \
+(xy 1.016 1.905) (xy 0 1.27)) (stroke (width 0) (type default)) (fill (type none)))
+      )
+    )"""
+
+
+def emit_pwr_flags(x0, y0, sheet_uuid):
+    """Place one PWR_FLAG per off-sheet-supplied rail, wired to its net label."""
+    out = []
+    for i, rail in enumerate(PWR_FLAG_RAILS):
+        x = x0 + i * 20.32
+        out.append(
+            f'  (symbol (lib_id "PWR_FLAG") (at {x:.2f} {y0:.2f} 0) (unit 1)\n'
+            f"    (exclude_from_sim yes) (in_bom no) (on_board no) (dnp no)\n"
+            f'    (uuid "{uid()}")\n'
+            f'    (property "Reference" "#FLG{i + 1}" (at {x:.2f} {y0 - 2.54:.2f} 0) '
+            f"(effects (font (size 1.27 1.27)) (hide yes)))\n"
+            f'    (property "Value" "PWR_FLAG" (at {x:.2f} {y0 - 5.08:.2f} 0) '
+            f"(effects (font (size 1.27 1.27))))\n"
+            f'    (instances (project "Wash_rebuild" (path "/{sheet_uuid}" '
+            f'(reference "#FLG{i + 1}") (unit 1)))))'
+        )
+        out.append(wire(x, y0, x, y0 + STUB))
+        out.append(label(rail, x, y0 + STUB, 270))
+    return out
+
+
 def main():
     sheet_uuid = uid()
     parts = [
@@ -406,6 +521,7 @@ def main():
         f'  (uuid "{uid()}")',
         '  (paper "A2")',
         "  (lib_symbols",
+        PWR_FLAG_LIB,
     ]
     placed = []
     X0, Y0, DX = 76.2, 76.2, 101.6

@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "Serenity-Custom")(type "KiCad")(uri "${KIPRJMOD}/../../Serenity-Custom.pretty")(options "")(descr "Serenity project custom footprints (WL1837MOD, SAM-M10Q, ENC-NACELLE-1 pigtail lands + compact M2 mounting hole)"))
+)

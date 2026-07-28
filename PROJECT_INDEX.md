@@ -1,8 +1,7 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: 2026-07-27 — Automated reconciliation pass -->
-SECURITY.md                       — Security policy and vulnerability reporting
+<!-- Last updated: 2026-07-28 — Automated reconciliation pass -->
 WBS.md                            — Master WBS index (full record, compact: headings/short
                                     checkbox items only, ≤70 chars each, done+open); full
                                     detail lives in the subordinate WBS.md files per-folder
@@ -78261,9 +78260,7 @@ avionics/kicad/CAN-PERIPH-GW-1/kicads/~CAN-PERIPH-GW-1.kicad_pcb.lck — [PENDIN
 avionics/kicad/CAN-PERIPH-GW-1/kicads/~CAN-PERIPH-GW-1.kicad_sch.lck — [PENDING AI CLASSIFICATION]
 avionics/kicad/Emma/kicads/Emma-backups/Emma-2026-07-27_151556.zip — [PENDING AI CLASSIFICATION]
 avionics/kicad/Jayne/kicads/Jayne-backups/Jayne-2026-07-27_153954.zip — [PENDING AI CLASSIFICATION]
-avionics/kicad/Jayne/kicads/_autosave-Jayne.kicad_pcb — [PENDING AI CLASSIFICATION]
 avionics/kicad/Jayne/kicads/~Jayne.kicad_sch.lck — [PENDING AI CLASSIFICATION]
-avionics/kicad/Jayne/kicads/~_autosave-Jayne.kicad_pcb.lck — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1-2026-07-27_155537.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1-2026-07-27_160558.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1-2026-07-27_162107.zip — [IGNORED/VCS-EXCLUDED]
@@ -78273,7 +78270,6 @@ avionics/kicad/CAN-PERIPH-GW-1/kicads/~CAN-PERIPH-GW-1.kicad_sch.lck — [IGNORE
 avionics/kicad/Emma/kicads/Emma-backups/Emma-2026-07-27_151556.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Jayne/kicads/Jayne-backups/Jayne-2026-07-27_153954.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Jayne/kicads/~Jayne.kicad_sch.lck — [IGNORED/VCS-EXCLUDED]
-avionics/kicad/Jayne/kicads/~_autosave-Jayne.kicad_pcb.lck — [IGNORED/VCS-EXCLUDED]
 
 ## --- AUTO-DISCOVERED (2026-07-27) ---
 docs/references/POCKETBEAGLE2 V10_241220.DSN — [PENDING AI CLASSIFICATION]
@@ -78283,3 +78279,41 @@ tools/compact_bom_entries.py — [PENDING AI CLASSIFICATION]
 ## --- AUTO-DISCOVERED (2026-07-27) ---
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1_pcb_pre-reroute_2026-07-27_221541.kicad_pcb — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1_pcb_pre-reroute_2026-07-27_221541.kicad_pcb — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-07-28) ---
+avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1-2026-07-28_082426.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.ses — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/kicads/fp-lib-table — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/kicads/freerouting_run.log — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/gerbers/Jayne-B_Adhesive.gba — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/gerbers/Jayne-B_Courtyard.gbr — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/gerbers/Jayne-B_Cu.gbl — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/gerbers/Jayne-B_Fab.gbr — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/gerbers/Jayne-B_Mask.gbs — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/gerbers/Jayne-B_Paste.gbp — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/gerbers/Jayne-B_Silkscreen.gbo — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/gerbers/Jayne-Edge_Cuts.gm1 — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/gerbers/Jayne-F_Adhesive.gta — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/gerbers/Jayne-F_Courtyard.gbr — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/gerbers/Jayne-F_Cu.gtl — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/gerbers/Jayne-F_Fab.gbr — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/gerbers/Jayne-F_Mask.gts — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/gerbers/Jayne-F_Paste.gtp — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/gerbers/Jayne-F_Silkscreen.gto — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/gerbers/Jayne-In1_Cu.g1 — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/gerbers/Jayne-In2_Cu.g2 — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/gerbers/Jayne-Margin.gbr — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/gerbers/Jayne-job.gbrjob — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/gerbers/Jayne.drl — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/kicads/Jayne-backups/Jayne-2026-07-28_082623.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/kicads/Jayne-backups/Jayne-2026-07-28_090954.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/kicads/Jayne-backups/Jayne-2026-07-28_091842.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/kicads/Jayne-backups/Jayne-2026-07-28_093255.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/gerbers/Kaylee-In2_Cu.g2 — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee.kicad_dru — [PENDING AI CLASSIFICATION]
+avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1-2026-07-28_082426.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/CAN-PERIPH-GW-1/scripts/__pycache__/route_can_periph_gw_pcb.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Jayne/kicads/Jayne-backups/Jayne-2026-07-28_082623.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Jayne/kicads/Jayne-backups/Jayne-2026-07-28_090954.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Jayne/kicads/Jayne-backups/Jayne-2026-07-28_091842.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Jayne/kicads/Jayne-backups/Jayne-2026-07-28_093255.zip — [IGNORED/VCS-EXCLUDED]

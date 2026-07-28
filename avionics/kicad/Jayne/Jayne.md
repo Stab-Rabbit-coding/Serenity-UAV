@@ -109,8 +109,15 @@ or wrong and were caught before being committed to any citation-tracked file —
   as part of the fleet-wide trust-module rollout (schematic "Section H: ISOW1412 Isolated
   RS-485 (U6)"). Integrates its own isolated DC-DC for the bus-side supply, run half-duplex
   on RS485_A/RS485_B by shorting Y-to-A and Z-to-B; RS485_DE drives both DE and RE_N.
-  J_RS485_IN/J_RS485_OUT trunk connectors added alongside. **PCB layout not yet synced** —
-  Jayne.kicad_pcb predates this schematic addition (open work, root `TODO.md` §1.2a).
+  J_RS485_IN/J_RS485_OUT trunk connectors added alongside. **PCB synced 2026-07-27** —
+  U6 + C_ADM1/C_ADM2/R_485TERM/SJ_485/J_RS485_IN/J_RS485_OUT all placed with nets assigned
+  from the schematic netlist; DRC 0 hard at the fleet's 0.3 mm clearance policy (AGENTS.md),
+  with a scoped `Jayne.kicad_dru` exception for U6's own SOIC-20W pad pitch. Also fixed
+  124 pre-existing DRC hard violations found while touching this file: two overlapping
+  0402 pairs (moved apart), U2 (KSZ9477)/U_SOM (PHYTEC SoM connector)/U5 (SLB9670) fine-pitch
+  pad clearance (same `.kicad_dru` scoped-exception pattern), and U3's RS485_DE/TX/RX pads +
+  U5's unmodeled EP pad net mismatches. User hand-placed U6 into its final board position
+  after an initial off-board staging pass (front layer had no clear ~12×13 mm site).
 - **Y1** — 25 MHz crystal for U2's reference clock.
 
 ### EMI hardening (added 2026-07-03 — see "EMI Hardening Status" below)

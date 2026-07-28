@@ -156,7 +156,32 @@ Every schematic and PCB modification **must** be verified:
 4. Run **Design Rules Checker** (DRC) — resolve all violations and errors
 5. Document any violations that cannot be resolved in `TODO.md` with the specific DRC rule and reason
 6. Commit only after all DRC violations are either resolved or documented
-7. All routing and component spacing will maintain 0.3mm minimum copper spacing (as enforced by the min_copper_edge_clearance DRC check) per [REF-IPC-001].
+7. **Two separate 0.3 mm floors, both driven by the 500 W/m² EMI-hardening design
+   objective (REF-NIST-002 §6.2.5) per REF-IPC-001 (IPC-2221B §3–4.2):**
+   - **Copper-to-edge clearance** (`min_copper_edge_clearance`, KiCad board setup) — 0.3 mm minimum, all boards.
+   - **Copper-to-copper clearance** (every netclass's `clearance` value plus the
+     board-wide `rules.clearance`/`rules.min_clearance` floor, KiCad project settings) —
+     0.3 mm minimum, all boards (CAN-PERIPH-GW-1 first, 2026-07-28; extend to each other
+     board the next time it's touched).
+   Do not cite REF-IPC-002 (IPC-A-600, a *manufacturing acceptance* standard) for either
+   clearance value — cite REF-IPC-001 (IPC-2221, the *design-guideline* standard that
+   actually specifies clearance numbers). REF-IPC-002 governs the fine-pitch exception
+   below instead.
+8. **Fine-pitch footprint exception (REF-IPC-003, IPC-7351):** a ≤0.5 mm-pitch QFN/QFP's
+   own IPC-7351 nominal land pattern places adjacent different-net pads 0.20–0.30 mm
+   apart — below the 0.3 mm copper-to-copper floor above, and not wideneable without
+   deviating from the datasheet package geometry (which would itself violate IPC-7351
+   and risk the defects IPC-A-600/REF-IPC-002 exists to catch). Do **not** shrink the
+   fleet-wide clearance floor to make these pass, and do **not** edit the footprint's pad
+   geometry to force compliance. Instead: record the exact footprint reference(s), pin
+   pitch, and measured gap range in the affected board's own `.md` file (see
+   `CAN-PERIPH-GW-1.md` "DRC" section for the pattern to follow) citing REF-IPC-003 +
+   REF-IPC-002, and mark the corresponding DRC violations as excluded in the KiCad GUI
+   (Board Setup → DRC panel → right-click → "Exclude this violation") if a clean
+   `kicad-cli pcb drc` report is wanted — this project's kicad-cli-based tooling has no
+   scriptable way to author a valid DRC exclusion entry, so this step is GUI-only.
+
+- Each deviation must be explicity justified in the md file of the affected pcb.
 
 ### Footprint and Component Placement
 

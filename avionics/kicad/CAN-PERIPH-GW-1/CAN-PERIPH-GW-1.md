@@ -4,25 +4,47 @@
 **Drafted by:** Claude Fable 5 (Anthropic), 2026-07-25/26
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
 **BOM designator:** `MAL-CAN-PERIPH-GW-PCB`
-**Revision:** 2 (2026-07-26) — promoted to `N_STACKS=4` (deployed configuration)
-**Status:** Schematic + PCB regenerated at the deployed configuration, **`N_STACKS=4`**
-(one board per nacelle side — GW-PORT / GW-STBD — covering 2× ESC + 1× tilt servo +
-1× AK7455 tilt encoder each, see "Deployment" below; superseded the earlier
-`N_STACKS=1` prototype, backed up to `CAN-PERIPH-GW-1-backups/`). `kicad-cli` ERC
-**0 errors**. PCB placement is the user's own manually-packed single-stack layout,
-captured into `gen_can_periph_gw_pcb.py` as a real per-stack template (not an
-invented grid) and mechanically tiled ×4 along a 50 mm lane pitch — verified via a
-sandboxed dry run that this placement logic is DRC-clean (0 shorts/clearance/
-courtyard from placement) at both N=1 (exact match to the real board) and N=4.
-Back-silkscreen attribution block added, matching the Wash/Zoë pattern.
-**Routing: freerouted via the Specctra DSN/freerouting 2.2.4 bridge**, 20-pass
-autorouter session, 296 → 47 unrouted nets (~84% routed), session self-terminated
-cleanly (this is the fixed 2.2.4 behavior — the earlier "never self-exits" finding
-was specific to 2.1.0 and no longer applies). DRC after import: **1 hard violation**
-(a freerouted via 0.055 mm short of the 0.2 mm board-edge-clearance rule — left
-as-is rather than risk breaking its routed connections with an automated nudge;
-fix by hand in the KiCad GUI at final layout review). Gerbers generated reflecting
-this ~84%-routed state; the remaining 47 nets are open manual/GUI routing work.
+**Revision:** 3 (2026-07-28) — PCB placement chopped to `N_STACKS=2` for a hand-alignment
+pass (schematic generator remains `N_STACKS=4`, the deployed configuration; see below)
+**Status:** PCB placement in `kicads/CAN-PERIPH-GW-1.kicad_pcb` is currently a **2-stack
+subset** the user hand-packed to nail down two distinct per-stack templates: stack 1
+("node") and stack 2 ("addon node" — the pattern later stacks in an end-to-end chain
+repeat; several parts on stack 2 use different rotations/layers than stack 1, e.g.
+`U1_2`/`U2_2` on F.Cu vs `U1_1`/`U2_1` on B.Cu, by design, not a copy-paste artifact).
+This is a placement/alignment exercise, not the deployed board — see "Stackable" below
+for how `N_STACKS=4` gets regenerated from these two templates.
+
+**2026-07-28 fine-alignment + net/routing rebuild pass:**
+
+- **Square corners:** the board outline (`Edge.Cuts`) had a hand-drag defect — the
+  bottom-left vertex sat at `y=91.0935` while the bottom-right vertex sat at `y=91`,
+  making the "bottom" edge a 0.0935 mm diagonal instead of a horizontal line (a
+  parallelogram, not a rectangle). Fixed to a true rectangle,
+  `(43.1759,91)-(107.5,91)-(107.5,110.5)-(43.1759,110.5)`.
+- **Fine alignment:** one footprint (`R_NRST_1`) carried 6-decimal-place drag noise
+  (`x=54.627836`) from freehand mouse placement; snapped to `54.63` (0.002 mm nudge,
+  no clearance impact). Every other footprint was already on a clean sub-mm grid — no
+  broader grid-snap was needed or applied (the tight packing is deliberate; a blanket
+  grid-snap risked re-introducing overlaps).
+- **Nets rebuilt:** every pad's net re-synced from a fresh schematic netlist export
+  (`route_can_periph_gw_pcb.py`), 275 pads synced — non-destructive, footprint positions
+  untouched.
+- **Copper clearance raised to 0.3 mm fleet-wide policy** (see "DRC" below): all of
+  `Default`/`PGND`/`POWER_5V`/`CANFD_DIFF_120R`/`ETH_DIFF_100R` netclasses plus the
+  board's `clearance`/`min_clearance` floor moved from 0.127–0.2 mm to **0.3 mm**, per
+  REFERENCES.md REF-IPC-001, extending the existing 0.3 mm copper-*edge* clearance
+  policy to copper-to-*copper* (trace/pad) clearance for the same EMI-hardening
+  rationale (500 W/m² RF field, REF-NIST-002 §6.2.5).
+- **Routing rebuilt from scratch** at the new 0.3 mm clearance (the prior routing, done
+  at the old 0.127–0.2 mm clearance, was stripped rather than patched, since freerouting
+  needs the tighter constraint from the start of its own pass, not applied after the
+  fact): all 580 stale track/via segments removed, re-exported to Specctra DSN, routed
+  via **freerouting 2.2.4** (headless CLI, `-de`/`-do`/`-mp 20`), 20-pass session,
+  **158 → 91 unrouted, session self-terminated cleanly** after ~12 minutes, imported
+  back via `pcbnew.ImportSpecctraSES` + zone refill.
+- **Starved thermals fixed:** `fix_starved_thermal_pads.py` (general, DRC-driven,
+  already used fleet-wide) solid-connected 7 GND pads across 2 iterations. DRC:
+  **0 `starved_thermal` remaining.**
 
 ---
 
@@ -165,22 +187,29 @@ several sensors or actuators live at the same physical location — the
 motivating case is a single nacelle's two EDFs sharing one gateway PCB
 (`N_STACKS=2`) instead of two separate boards.
 
-**Orientation, added 2026-07-27:** `STACK_ORIENTATION` in
-`scripts/gen_can_periph_gw_pcb.py` picks which axis additional stacks tile
-along:
+**Orientation, added 2026-07-27, templates re-captured 2026-07-28:**
+`STACK_ORIENTATION` in `scripts/gen_can_periph_gw_pcb.py` picks which axis
+additional stacks tile along. Only `"END_TO_END"` (tiles along X) is
+currently supported — the earlier `"SIDE_BY_SIDE"` (tile along Y) option was
+**removed**, not just left undocumented: it was sized from a sandboxed
+dry-run guess against a since-superseded single-per-stack-template model
+(see below), and would need a real side-by-side hand-packing pass to
+re-derive before it's trustworthy again.
 
-- `"END_TO_END"` (default) — tiles along X (`LANE_DX` pitch, 50 mm).
-  Adjacent stacks meet short-side-to-short-side, like train cars coupling
-  at their narrow ends: the board grows long and thin.
-- `"SIDE_BY_SIDE"` — tiles along Y (`LANE_DY` pitch, 30 mm). Adjacent
-  stacks meet long-side-to-long-side instead: the board grows wide and
-  short. Useful when board outline/enclosure constraints favor width over
-  length.
-
-Both pitches are sized from the real per-stack footprint cluster's own
-bounding-box span on that axis plus each edge footprint's own body
-half-width, verified via DRC (0 shorts/clearance/courtyard from placement)
-at `N_STACKS=4` in a sandboxed dry run for both orientations.
+**Two templates, not one, as of the 2026-07-28 `N_STACKS=2` hand-alignment
+pass:** the user's placement work revealed the real design intent is a
+`NODE_TEMPLATE` (stack 1, unique) and an `ADDON_TEMPLATE` (stack 2, the
+pattern every further stack repeats) — several parts genuinely differ in
+rotation and layer between the two (e.g. `U1_1`/`U2_1` hand-placed on B.Cu
+at 180°, `U1_2`/`U2_2` on F.Cu at 0°), not a copy-paste artifact of one
+template reused verbatim. Addon stacks 3+ tile at `LANE_DX_ADDON = 37.3 mm`
+(X pitch only), measured from the one real node→addon transition this
+project has hand-packed — **unverified as the correct addon-to-addon
+repeat pitch for `N_STACKS` 3 or 4** (there is no real 3-stack placement to
+confirm it against yet); re-verify with DRC (0 courtyard/clearance from
+placement) the next time `N_STACKS=3` or `4` is actually regenerated from
+these templates, and correct the constant from that real data if it
+doesn't hold rather than treating today's value as settled.
 
 Each stack keeps its **own, independent** MCU, TPM, isolated CAN-FD
 transceiver, isolated RS-485 transceiver, and encoder/flex headers — every
@@ -298,25 +327,28 @@ REF-SENSOR-010 and "Removed / Superseded Citations".
 
 ## Open items
 
-1. **Signal routing — in progress, 2026-07-26.** Superseded the earlier
-   "reverted naive routing" state below: the headless Specctra DSN/SES bridge
-   (`tools/export-specctra-dsn.py` + freerouting 2.2.4 + `tools/import-specctra-ses.py`)
-   is a real, collision-aware autorouter and **does** work in this environment
-   (the "no `freerouting` binary" limitation below was from an earlier session
-   without it installed). Routing the deployed `N_STACKS=4` board is in
-   progress at time of writing; see `avionics/WBS.md` for the current
-   unrouted-net count. ~~An earlier attempt at automatic straight-line routing
-   was tried and reverted: a naive minimum-spanning-tree route made DRC
-   measurably worse (114 unconnected → 266 errors, including 48 actual shorts)
-   — that finding is about naive straight-line routing, not freerouting, and
+1. **Signal routing — in progress, rebuilt 2026-07-28.** The prior routing pass
+   (296 → 47 unrouted at the old 0.127–0.2 mm clearance) was **stripped and redone
+   from scratch** after this board's placement was chopped to `N_STACKS=2` and its
+   copper clearance raised to 0.3 mm — the earlier routing was against a different
+   placement and a looser clearance, so patching it in place wasn't viable; freerouting
+   needs the current placement/clearance from the start of its own pass. Current
+   result: 20-pass freerouting 2.2.4 session, **158 → 91 unrouted**, self-terminated
+   cleanly; the remaining 91 nets are open manual/GUI routing work (or a further
+   autorouter pass once this N=2 placement exercise is folded back into the deployed
+   `N_STACKS=4` board — see "Stackable" above). ~~An earlier attempt at automatic
+   straight-line routing was tried and reverted: a naive minimum-spanning-tree route
+   made DRC measurably worse (114 unconnected → 266 errors, including 48 actual
+   shorts) — that finding is about naive straight-line routing, not freerouting, and
    no longer applies.~~
-2. **RESOLVED, 2026-07-26.** The `starved_thermal` class (GND pads that can't
-   get 2 thermal-relief spokes at QFN/fine pitch) is fixed board-wide by
-   `avionics/kicad/fix_starved_thermal_pads.py` — a general, DRC-driven fixer
+2. **RESOLVED, 2026-07-26, reverified 2026-07-28.** The `starved_thermal` class (GND
+   pads that can't get 2 thermal-relief spokes at QFN/fine pitch) is fixed board-wide
+   by `avionics/kicad/fix_starved_thermal_pads.py` — a general, DRC-driven fixer
    (re-derives the offending pad list from a fresh DRC pass each run, not
    hardcoded to specific references) that sets those pads to a solid zone
-   connection. Verified at both `N_STACKS=1` and `N_STACKS=4`. DRC is
-   **0 hard violations**.
+   connection. Verified again after today's rip-up/reroute at `N_STACKS=2`. DRC is
+   **0 `starved_thermal`** (0 hard violations beyond the documented fine-pitch
+   pad-clearance exception — see "Verification" above).
 3. **RESOLVED, 2026-07-26 — moot.** This item assumed ADM2795E (signal-only,
    needs an external isolated DC-DC for VDD2). RS-485 is now **ISOW1412**
    (REFERENCES.md REF-SENSOR-010), which has its **own integrated isolated
@@ -338,17 +370,53 @@ REF-SENSOR-010 and "Removed / Superseded Citations".
 
 ## Verification
 
-- `kicad-cli sch erc CAN-PERIPH-GW-1.kicad_sch --severity-all`: **0 errors**,
-  74 warnings — all `lib_symbol_issues` (no project sym-lib-table entry for the
-  embedded lib_symbols) and `endpoint_off_grid` (auto-placed label coordinates
-  off the 50 mil grid). Confirmed identical warning classes appear on this
-  project's own `Jayne.kicad_sch` (0 errors / 141 warnings) — a pre-existing,
-  accepted characteristic of this project's generator-script workflow, not a
-  defect introduced here.
-- `kicad-cli pcb drc CAN-PERIPH-GW-1.kicad_pcb --severity-all`: 2 errors
-  (documented above), 5 warnings (silk/copper edge-clearance and one isolated-
-  copper sliver — cosmetic, first-pass placement), 86 unrouted nets (documented
-  above).
+- `kicad-cli sch erc CAN-PERIPH-GW-1.kicad_sch --severity-all`: **0 errors**, 164
+  warnings — `lib_symbol_issues` (88, no project sym-lib-table entry for the embedded
+  lib_symbols) and `endpoint_off_grid` (76, auto-placed label coordinates off the
+  50 mil grid). Confirmed identical warning classes appear on this project's own
+  `Jayne.kicad_sch` — a pre-existing, accepted characteristic of this project's
+  generator-script workflow, not a defect introduced here. **2026-07-28:** a third
+  warning class, `footprint_link_issues` (4, "current configuration does not include
+  the footprint library 'Serenity-Custom'" for `J_ENC_1..4`), was found and fixed by
+  adding `kicads/fp-lib-table` (this board's project directory had no project-local
+  footprint library table at all, unlike `ENC-NACELLE-1`, which sits next to the
+  fleet-level one, or `Jayne/kicads/fp-lib-table`, which already has its own) —
+  0 `footprint_link_issues` after the fix.
+- `kicad-cli pcb drc CAN-PERIPH-GW-1.kicad_pcb --severity-all`: **0 hard violations
+  beyond the documented fine-pitch pad-clearance exception below** (224 `clearance`
+  errors, all four inherent to two footprint types — see ledger), 9 cosmetic warnings
+  (silk/copper edge-clearance, one isolated-copper sliver, text sizing — first-pass
+  placement, same accepted classes as other boards), 93 unconnected items (open
+  manual/GUI routing work on the 91 nets freerouting's 20-pass session left unrouted
+  at the current placement — see "Signal routing" open item below). 0 `starved_thermal`.
+
+### DRC exception ledger — fine-pitch pad-to-pad clearance (REF-IPC-003, REF-IPC-002)
+
+Raising this board's copper-to-copper clearance floor to 0.3 mm (see "Status" above,
+REF-IPC-001) makes every ≤0.5 mm-pitch fine-pitch IC footprint fail DRC's `clearance`
+check between its own adjacent, different-net pads — this is the IPC-7351 land
+pattern's own inherent geometry (REF-IPC-003), not a routing defect, and is not
+reducible without deviating from the datasheet package footprint (which would itself
+risk the assembly defects IPC-A-600/REF-IPC-002 exists to catch). All 224 `clearance`
+violations on this board trace to exactly these four footprint instances:
+
+| Ref | Part | Package / pitch | Violations | Measured gap (mm) | vs. 0.3 mm floor |
+| --- | --- | --- | --- | --- | --- |
+| U1_1 | MSPM0G3507 | QFN-48-1EP 7×7 mm, 0.5 mm pitch | 48 | 0.2286 – 0.25 | short by 0.05–0.0714 |
+| U1_2 | MSPM0G3507 | QFN-48-1EP 7×7 mm, 0.5 mm pitch | 48 | 0.2286 – 0.25 | short by 0.05–0.0714 |
+| U2_1 | SLB9670 TPM | QFN-32-1EP 5×5 mm, 0.5 mm pitch | 64 | 0.2286 – 0.275 | short by 0.025–0.0714 |
+| U2_2 | SLB9670 TPM | QFN-32-1EP 5×5 mm, 0.5 mm pitch | 64 | 0.2286 – 0.275 | short by 0.025–0.0714 |
+
+No other footprint on this board (the 1.27 mm-pitch SOIC-20W isolators, 2.54 mm-pitch
+headers, or any passive) is affected — their native pad spacing already clears 0.3 mm.
+**These 224 violations are an accepted, standards-justified exception, not open work.**
+Per `avionics/AGENTS.md` §PCB Design Standards, marking them "excluded" in the KiCad GUI
+(Board Setup → DRC → right-click → Exclude) is available for a visually clean report,
+but is a manual, per-violation GUI action — this project's `kicad-cli`-based tooling has
+no scriptable way to author a valid DRC exclusion entry (the underlying `RC_ITEM` type
+needed to construct one isn't exposed via `pcbnew`'s Python bindings, and a hand-written
+exclusion-string guess round-tripped as a silent no-op when tested), so exclusion was
+not attempted programmatically for this pass.
 
 ## Bill of Materials (new parts introduced by this board)
 

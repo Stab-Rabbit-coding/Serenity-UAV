@@ -31,8 +31,8 @@
     (via "Via[0-1]_600:300_um" "Via[0-1]_800:400_um")
     (rule
       (width 200)
-      (clearance 127)
-      (clearance 31.75 (type smd_smd))
+      (clearance 300)
+      (clearance 75 (type smd_smd))
     )
   )
   (placement
@@ -1120,7 +1120,7 @@
       )
       (rule
         (width 200)
-        (clearance 127)
+        (clearance 300)
       )
     )
     (class PGND,Default GND
@@ -1129,7 +1129,7 @@
       )
       (rule
         (width 400)
-        (clearance 200)
+        (clearance 300)
       )
     )
     (class CANFD_DIFF_120R,Default CANFD_FLT_N_1 CANFD_FLT_N_2 CANFD_RX_1
@@ -1139,7 +1139,7 @@
       )
       (rule
         (width 200)
-        (clearance 150)
+        (clearance 300)
       )
     )
     (class POWER_5V,Default +3V3 +5V
@@ -1148,7 +1148,7 @@
       )
       (rule
         (width 400)
-        (clearance 200)
+        (clearance 300)
       )
     )
   )

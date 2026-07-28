@@ -54,8 +54,7 @@
 - [ ] Wash full DRC/ERC clean-out (48 ERC + 76 DRC hard) + ISOW1412 swap
 - [ ] Zoë full DRC/ERC clean-out (219 ERC + 154 DRC hard) + ISOW1412 swap
 - [ ] Review/remove stray tracked _autosave-Zoë.kicad_pcb + .lck files
-- [ ] Kaylee full PCB resync to trust-module schematic (213 DRC hard)
-- [ ] Jayne PCB resync — RS-485/Section H never reached layout (124 DRC)
+- [ ] Kaylee: 52 more schematic parts (ESC5, balance conn, NTC, BEC…
 - [ ] Emma: route TPM/R/C to the SPI1/TPM_IRQN/TPM_RSTN nets on P1/P2
 
 ---

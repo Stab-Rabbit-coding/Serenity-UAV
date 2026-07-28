@@ -1,0 +1,64 @@
+(version 1)
+
+# Fine-pitch IC pad-to-pad clearance exceptions. AGENTS.md mandates 0.3 mm
+# minimum copper spacing project-wide, but these are real 0.5 mm-pitch parts
+# (TPS54620 VQFN-20, INA226 MSOP-10) whose datasheet-correct land pattern
+# cannot meet 0.3 mm between adjacent pads -- physically impossible at that
+# pitch, not a placement defect. Scoped to each part's own courtyard only;
+# does not relax clearance anywhere else on the board. See Kaylee.md Bill of
+# Materials.
+(rule "BEC VQFN-20 fine-pitch pad clearance (TPS54620, 0.5mm pitch)"
+    (condition "A.insideCourtyard('U_BEC_SERVO_5V') && B.insideCourtyard('U_BEC_SERVO_5V')")
+    (constraint clearance (min 0.15mm))
+)
+(rule "BEC VQFN-20 fine-pitch pad clearance (TPS54620, 0.5mm pitch) 2"
+    (condition "A.insideCourtyard('U_BEC_5V_1') && B.insideCourtyard('U_BEC_5V_1')")
+    (constraint clearance (min 0.15mm))
+)
+(rule "BEC VQFN-20 fine-pitch pad clearance (TPS54620, 0.5mm pitch) 3"
+    (condition "A.insideCourtyard('U_BEC_5V_2') && B.insideCourtyard('U_BEC_5V_2')")
+    (constraint clearance (min 0.15mm))
+)
+(rule "Current-sense MSOP-10 fine-pitch pad clearance (INA226, 0.5mm pitch) main"
+    (condition "A.insideCourtyard('U_IS_MAIN') && B.insideCourtyard('U_IS_MAIN')")
+    (constraint clearance (min 0.15mm))
+)
+(rule "Current-sense MSOP-10 fine-pitch pad clearance (INA226, 0.5mm pitch) 1"
+    (condition "A.insideCourtyard('U_IS1') && B.insideCourtyard('U_IS1')")
+    (constraint clearance (min 0.15mm))
+)
+(rule "Current-sense MSOP-10 fine-pitch pad clearance (INA226, 0.5mm pitch) 2"
+    (condition "A.insideCourtyard('U_IS2') && B.insideCourtyard('U_IS2')")
+    (constraint clearance (min 0.15mm))
+)
+(rule "Current-sense MSOP-10 fine-pitch pad clearance (INA226, 0.5mm pitch) 3"
+    (condition "A.insideCourtyard('U_IS3') && B.insideCourtyard('U_IS3')")
+    (constraint clearance (min 0.15mm))
+)
+(rule "Current-sense MSOP-10 fine-pitch pad clearance (INA226, 0.5mm pitch) 4"
+    (condition "A.insideCourtyard('U_IS4') && B.insideCourtyard('U_IS4')")
+    (constraint clearance (min 0.15mm))
+)
+(rule "D_I2C SOT-363 fine-pitch pad clearance"
+    (condition "A.insideCourtyard('D_I2C') && B.insideCourtyard('D_I2C')")
+    (constraint clearance (min 0.15mm))
+)
+
+# Section H trust-module fine-pitch ICs (added 2026-07-27), same reasoning
+# as above -- real 0.5mm/0.4mm-pitch parts that cannot meet 0.3mm pad-to-pad.
+(rule "U_MCU QFN-48 fine-pitch pad clearance (MSPM0G3507, 0.5mm pitch)"
+    (condition "A.insideCourtyard('U_MCU') && B.insideCourtyard('U_MCU')")
+    (constraint clearance (min 0.15mm))
+)
+(rule "U_TPM QFN-32 fine-pitch pad clearance (SLB9670, 0.5mm pitch)"
+    (condition "A.insideCourtyard('U_TPM') && B.insideCourtyard('U_TPM')")
+    (constraint clearance (min 0.15mm))
+)
+(rule "U_ISOCAN SOIC-20W fine-pitch pad clearance (ISOW1044BDFMR, 1.27mm pitch)"
+    (condition "A.insideCourtyard('U_ISOCAN') && B.insideCourtyard('U_ISOCAN')")
+    (constraint clearance (min 0.2mm))
+)
+(rule "U_RS485 SOIC-20W fine-pitch pad clearance (ISOW1412, 1.27mm pitch)"
+    (condition "A.insideCourtyard('U_RS485') && B.insideCourtyard('U_RS485')")
+    (constraint clearance (min 0.2mm))
+)

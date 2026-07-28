@@ -116,9 +116,9 @@
         "zones_intersect": "error"
       },
       "rules": {
-        "clearance": 0.127,
+        "clearance": 0.3,
         "max_error": 0.005,
-        "min_clearance": 0.0,
+        "min_clearance": 0.3,
         "min_connection": 0.0,
         "min_copper_edge_clearance": 0.3,
         "min_groove_width": 0.0,
@@ -266,7 +266,7 @@
     "classes": [
       {
         "bus_width": 12,
-        "clearance": 0.127,
+        "clearance": 0.3,
         "diff_pair_gap": 0.15,
         "diff_pair_via_gap": 0.15,
         "diff_pair_width": 0.2,
@@ -283,7 +283,7 @@
         "wire_width": 6
       },
       {
-        "clearance": 0.15,
+        "clearance": 0.3,
         "diff_pair_gap": 0.2,
         "diff_pair_width": 0.2,
         "name": "CANFD_DIFF_120R",
@@ -295,7 +295,7 @@
         "via_drill": 0.3
       },
       {
-        "clearance": 0.15,
+        "clearance": 0.3,
         "diff_pair_gap": 0.15,
         "diff_pair_width": 0.15,
         "name": "ETH_DIFF_100R",
@@ -307,7 +307,7 @@
         "via_drill": 0.3
       },
       {
-        "clearance": 0.2,
+        "clearance": 0.3,
         "name": "PGND",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "priority": 0,
@@ -317,7 +317,7 @@
         "via_drill": 0.4
       },
       {
-        "clearance": 0.2,
+        "clearance": 0.3,
         "name": "POWER_5V",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "priority": 1,

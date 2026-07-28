@@ -18,3 +18,9 @@
     (condition "A.insideCourtyard('U_SOM') && B.insideCourtyard('U_SOM')")
     (constraint clearance (min 0.15mm))
 )
+
+# U5 (Infineon SLB9670 TPM, QFN-32, 0.5mm pitch) -- same reasoning.
+(rule "U5 fine-pitch pad clearance (SLB9670 TPM, 0.5mm pitch)"
+    (condition "A.insideCourtyard('U5') && B.insideCourtyard('U5')")
+    (constraint clearance (min 0.15mm))
+)
