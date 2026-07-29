@@ -2,7 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-07-29 — Automated reconciliation pass -->
-previewConfig.json                 — Live preview configuration
 requirements-dev.txt               — Python development dependencies
 ```
 
@@ -78394,3 +78393,11 @@ avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_104224.zip — [IG
 avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_105229.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_111108.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Kaylee/kicads/~Kaylee.kicad_sch.lck — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-07-29) ---
+avionics/firmware/mspm0/README2.md — [PENDING AI CLASSIFICATION]
+avionics/firmware/mspm0/template/include/serenity/aes_gcm.h — [PENDING AI CLASSIFICATION]
+avionics/firmware/mspm0/template/include/serenity/hal2.h — [PENDING AI CLASSIFICATION]
+avionics/firmware/mspm0/template/include/serenity/sec_envelope2.h — [PENDING AI CLASSIFICATION]
+avionics/firmware/mspm0/template/include/serenity/tpm2_.h — [PENDING AI CLASSIFICATION]
+avionics/firmware/mspm0/template/src/aes_gcm.c — [PENDING AI CLASSIFICATION]

@@ -85,11 +85,11 @@ coredumpctl gdb kicad-cli      # then: bt full
 
 ---
 
-**Title:**
+#### Title
 
 `kicad-cli sch erc: SIGSEGV with empty output when a symbol instance has pins but its lib_id is absent from lib_symbols`
 
-**Description**
+#### Description
 
 `kicad-cli sch erc` segfaults (SIGSEGV, shell exit 139) producing **completely
 empty stdout and stderr** when a schematic contains a `(symbol (lib_id "X") …)`
@@ -101,13 +101,13 @@ indication of which symbol is responsible. Diagnosing it in a real 3800-line
 schematic required bisecting the file by truncating at successive top-level
 object boundaries and re-running ERC until the crash disappeared.
 
-**Steps to reproduce**
+#### Steps to reproduce
 
 1. Save the minimal schematic below as `crash.kicad_sch`.
 2. Run `kicad-cli sch erc -o out.json --format json crash.kicad_sch`
 3. Observe exit code 139 and no output.
 
-```
+```text
 (kicad_sch (version 20240101) (generator eeschema)
   (uuid "e2000000-0000-0000-0000-000000000001")
   (paper "A4")
@@ -125,17 +125,17 @@ object boundaries and re-running ERC until the crash disappeared.
 )
 ```
 
-**Expected behaviour**
+#### Expected behaviour
 
 An `lib_symbol_issues` ERC violation naming the unresolvable reference
 designator, and a normal exit — which is exactly what already happens when the
 same dangling `lib_id` appears **without** instance `(pin …)` entries.
 
-**Actual behaviour**
+#### Actual behaviour
 
 SIGSEGV, exit 139, no stdout, no stderr, no ERC report written.
 
-**Isolation — both conditions are required**
+#### Isolation — both conditions are required
 
 Five variants differing only in whether the library symbol is defined and
 whether the instance carries `(pin …)` children:
@@ -154,7 +154,7 @@ matched against a *present* library symbol is also survivable. The crash needs
 the instance to hold pin references **and** the library symbol to be entirely
 absent. One instance pin is sufficient.
 
-**Scope — only `sch erc` is affected**
+#### Scope — only `sch erc` is affected
 
 Against the identical input file:
 
@@ -170,13 +170,13 @@ Because the export paths all succeed, a generator script can produce and consume
 a schematic that ERC cannot open. That is how this went unnoticed in our
 repository for an extended period.
 
-**Backtrace**
+#### Backtrace
 
-```
+```text
 PASTE BACKTRACE HERE
 ```
 
-**Speculation on root cause** (unverified — offered only as a starting point)
+#### Speculation on root cause (unverified — a starting point only)
 
 On load, each `SCH_SYMBOL` instance is bound to its `LIB_SYMBOL` and the
 instance's `(pin …)` entries are reconciled against the library symbol's pin list
@@ -189,34 +189,34 @@ Possibly relevant: `SCH_SYMBOL::UpdatePins()`, the binding performed after
 `SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()` handles the `pin` token, and
 the null-guard on `m_part` before the instance pin list is walked.
 
-**Version**
+#### Version
 
-```
+```text
 Application: kicad-cli x86_64 on x86_64
 
 Version: 9.0.2+dfsg-1, release build
 
 Libraries:
-	wxWidgets 3.2.8
-	FreeType 2.13.3
-	HarfBuzz 10.2.0
-	FontConfig 2.15.0
-	libcurl/8.14.1 OpenSSL/3.5.6 zlib/1.3.1 brotli/1.1.0 zstd/1.5.7 libidn2/2.3.8 libpsl/0.21.2 libssh2/1.11.1 nghttp2/1.64.0 nghttp3/1.8.0 librtmp/2.3 OpenLDAP/2.6.10
+    wxWidgets 3.2.8
+    FreeType 2.13.3
+    HarfBuzz 10.2.0
+    FontConfig 2.15.0
+    libcurl/8.14.1 OpenSSL/3.5.6 zlib/1.3.1 brotli/1.1.0 zstd/1.5.7 libidn2/2.3.8 libpsl/0.21.2 libssh2/1.11.1 nghttp2/1.64.0 nghttp3/1.8.0 librtmp/2.3 OpenLDAP/2.6.10
 
 Platform: Parrot Security 7.3 (echo), 64 bit, Little endian, wxBase, mate, x11
 
 Build Info:
-	Date: May 10 2025 09:34:36
-	wxWidgets: 3.2.8 (wchar_t,wx containers) GTK+ 0.0
-	Boost: 1.83.0
-	OCC: 7.8.1
-	Curl: 8.13.0
-	ngspice: 44.2
-	Compiler: GCC 14.2.0 with C++ ABI 1019
-	KICAD_IPC_API=ON
+    Date: May 10 2025 09:34:36
+    wxWidgets: 3.2.8 (wchar_t,wx containers) GTK+ 0.0
+    Boost: 1.83.0
+    OCC: 7.8.1
+    Curl: 8.13.0
+    ngspice: 44.2
+    Compiler: GCC 14.2.0 with C++ ABI 1019
+    KICAD_IPC_API=ON
 
 Locale:
-	Lang: en_US
+    Lang: en_US
 ```
 
 *(Obtained with `kicad-cli version --format about`. Debian package
