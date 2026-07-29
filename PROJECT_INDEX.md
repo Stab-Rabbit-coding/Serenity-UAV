@@ -1,8 +1,7 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: 2026-07-28 — Automated reconciliation pass -->
-package.json                       — Node.js dependency manifest (tooling/preview support)
+<!-- Last updated: 2026-07-29 — Automated reconciliation pass -->
 package-lock.json                  — Node.js dependency lockfile
 previewConfig.json                 — Live preview configuration
 requirements-dev.txt               — Python development dependencies
@@ -39486,6 +39485,14 @@ avionics/kicad/Wash/kicads/Wash.kicad_sch — Wash schematic (schematic-first re
 avionics/kicad/Wash/kicads/fp-info-cache — [PENDING AI CLASSIFICATION]
 avionics/kicad/Wash/kicads/sym-lib-table — [PENDING AI CLASSIFICATION]
 avionics/kicad/Wash/scripts/gen_wash_sch.py — generates Wash.kicad_sch from datasheet-transcribed pinouts
+avionics/kicad/Wash/KICAD_CLI_ERC_SEGFAULT_BUG.md — upstream defect report: kicad-cli 9.0.2 `sch erc` SIGSEGVs on a symbol instance whose lib_id is absent from lib_symbols
+avionics/kicad/Wash/kicad_cli_erc_segfault_repro/README.md — reproduction set index for the above
+avionics/kicad/Wash/kicad_cli_erc_segfault_repro/run_repro.sh — runs all five reproducer variants
+avionics/kicad/Wash/kicad_cli_erc_segfault_repro/A_absent_0pins.kicad_sch — control: dangling lib_id, no instance pins (survives)
+avionics/kicad/Wash/kicad_cli_erc_segfault_repro/B_present_0pins.kicad_sch — control: symbol present, no instance pins
+avionics/kicad/Wash/kicad_cli_erc_segfault_repro/C_absent_1pin.kicad_sch.crashes — CRASHES: absent symbol + 1 instance pin
+avionics/kicad/Wash/kicad_cli_erc_segfault_repro/D_absent_2pins.kicad_sch.crashes — CRASHES: absent symbol + 2 instance pins
+avionics/kicad/Wash/kicad_cli_erc_segfault_repro/E_present_extra_pin.kicad_sch — control: present symbol, unmatched instance pin
 avionics/kicad/Wash/scripts/sync_wash_pcb_nets.py — pushes verified schematic nets onto Wash.kicad_pcb without moving footprints
 avionics/kicad/XCVR-49MHZ-2-backups/XCVR-49MHZ-2-2026-06-04_213151.zip — [PENDING AI CLASSIFICATION]
 avionics/kicad/XCVR-49MHZ-2-backups/XCVR-49MHZ-2-2026-06-05_123254.zip — [PENDING AI CLASSIFICATION]
@@ -78358,3 +78365,18 @@ avionics/kicad/Kaylee/kicads/fp-lib-table — [PENDING AI CLASSIFICATION]
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1-2026-07-28_213127.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-28_214234.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Wash/scripts/__pycache__/sync_wash_pcb_nets.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-07-29) ---
+avionics/firmware/mspm0/README.md — [PENDING AI CLASSIFICATION]
+avionics/firmware/mspm0/agent/README.md — [PENDING AI CLASSIFICATION]
+avionics/firmware/mspm0/agent/profiles.xml — [PENDING AI CLASSIFICATION]
+avionics/firmware/mspm0/cmake/arm-none-eabi.cmake — [PENDING AI CLASSIFICATION]
+avionics/firmware/mspm0/cmake/mspm0g3507.ld — [PENDING AI CLASSIFICATION]
+avionics/firmware/mspm0/hal/mspm0/hal_mspm0.c — [PENDING AI CLASSIFICATION]
+avionics/firmware/mspm0/hal/mspm0/syscalls.c — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-28_225412.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_090941.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_091943.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-28_225412.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_090941.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_091943.zip — [IGNORED/VCS-EXCLUDED]

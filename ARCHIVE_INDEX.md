@@ -2,8 +2,7 @@
 
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
-<!-- Last updated: 2026-07-28 — Automated reconciliation pass -->
-                                       Cape-B-1 boards (16 + 5 zips respectively)
+<!-- Last updated: 2026-07-29 — Automated reconciliation pass -->
 ```
 
 ---
@@ -77924,3 +77923,26 @@ avionics/kicad/Wash/scripts/sync_wash_pcb_nets.py — [PENDING AI CLASSIFICATION
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1-2026-07-28_213127.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-28_214234.zip — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Wash/scripts/__pycache__/sync_wash_pcb_nets.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-07-29) ---
+avionics/firmware/mspm0/README.md — [PENDING AI CLASSIFICATION]
+avionics/firmware/mspm0/agent/README.md — [PENDING AI CLASSIFICATION]
+avionics/firmware/mspm0/agent/profiles.xml — [PENDING AI CLASSIFICATION]
+avionics/firmware/mspm0/cmake/arm-none-eabi.cmake — [PENDING AI CLASSIFICATION]
+avionics/firmware/mspm0/cmake/mspm0g3507.ld — [PENDING AI CLASSIFICATION]
+avionics/firmware/mspm0/hal/mspm0/hal_mspm0.c — [PENDING AI CLASSIFICATION]
+avionics/firmware/mspm0/hal/mspm0/syscalls.c — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-28_225412.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_090941.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_091943.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Wash/KICAD_CLI_ERC_SEGFAULT_BUG.md — [PENDING AI CLASSIFICATION]
+avionics/kicad/Wash/kicad_cli_erc_segfault_repro/A_absent_0pins.kicad_sch — [PENDING AI CLASSIFICATION]
+avionics/kicad/Wash/kicad_cli_erc_segfault_repro/B_present_0pins.kicad_sch — [PENDING AI CLASSIFICATION]
+avionics/kicad/Wash/kicad_cli_erc_segfault_repro/C_absent_1pin.kicad_sch.crashes — [PENDING AI CLASSIFICATION]
+avionics/kicad/Wash/kicad_cli_erc_segfault_repro/D_absent_2pins.kicad_sch.crashes — [PENDING AI CLASSIFICATION]
+avionics/kicad/Wash/kicad_cli_erc_segfault_repro/E_present_extra_pin.kicad_sch — [PENDING AI CLASSIFICATION]
+avionics/kicad/Wash/kicad_cli_erc_segfault_repro/README.md — [PENDING AI CLASSIFICATION]
+avionics/kicad/Wash/kicad_cli_erc_segfault_repro/run_repro.sh — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-28_225412.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_090941.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_091943.zip — [IGNORED/VCS-EXCLUDED]

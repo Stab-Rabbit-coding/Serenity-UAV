@@ -372,10 +372,14 @@ the same pass:
 - **`lib_symbols`** — `C_SMD` and `R` were referenced but never defined.
   Definitions added.
 
-> **Toolchain note:** a `lib_id` with no matching `lib_symbols` entry
-> makes **kicad-cli 9.0.2 segfault** (exit 139) rather than report an
-> error. If `kicad-cli` dies with no output on a schematic, check for
-> missing symbol definitions first.
+> **Toolchain note:** an instance whose `lib_id` has no matching
+> `lib_symbols` entry makes **kicad-cli 9.0.2 `sch erc` segfault**
+> (exit 139) with completely empty output, if — and only if — the
+> instance also carries `(pin …)` entries. Every other `kicad-cli sch`
+> subcommand parses the same file fine. If `kicad-cli` dies silently on a
+> schematic, check for missing symbol definitions first. Written up with a
+> five-variant minimal reproduction in
+> [`KICAD_CLI_ERC_SEGFAULT_BUG.md`](KICAD_CLI_ERC_SEGFAULT_BUG.md).
 
 **The true ERC baseline for this file was 275 errors, not the 48
 previously recorded** — the old number was measuring only the fraction of
