@@ -16,11 +16,17 @@ Pinouts are transcribed directly from the OEM datasheets in
   * DS26LV32AT     -> ds26lv32at.pdf  Fig 1 Connection Diagram (SOIC-16)
   * ADIN1300BCPZ   -> adin1300.pdf   pin table (40-LFCSP)
 
-Covered so far: the isolated buses (CAN / RS-485), the TPM, GPS, the MIL-STD-1553B
-driver/receiver pair, and the Ethernet PHYs + magnetics.  Still to author before
-the sheet covers the whole PCB: PB2-P1/P2 headers, IMU, baro, PCA9555 GPIO
-expander, the ISO6442 RMII isolators (needs the barrier re-architected — see
-WBS.md §1.2a), field connectors, and passives/protection.
+Coverage: **all 40 footprints on the Wash PCB**, at ERC = 0 errors — the isolated
+buses (CAN / RS-485), TPM, GPS, the MIL-STD-1553B driver/receiver/transformer
+chain, the Ethernet PHYs + magnetics, IMU, baro, the PCA9555 GPIO expander, both
+PocketBeagle 2 stacking headers, every field connector, and the protection and
+filter passives.
+
+Pad-level parity with the board is 32/40.  The 8 that differ are all cases where
+the board carries the wrong land pattern for the real part (e.g. a 16-pad
+SOIC-16W under the 20-pin ISOW1044); those are enumerated in ``WBS.md`` §1.2a and
+in ``sync_wash_pcb_nets.py``'s ``BLOCKED_WRONG_FOOTPRINT``, and are blocked on
+footprint replacement, which is a user action per ``avionics/AGENTS.md``.
 
 Progress checkpoints
 --------------------
@@ -35,6 +41,13 @@ Progress checkpoints
     driver *outputs*; both are corrected here.
   * Added PWR_FLAG emission so off-sheet-supplied rails clear
     `power_pin_not_driven` without inventing connectivity.
+  * Authored the remaining 30 components (PB2-P1/P2, IMU, BARO, U-GPIO, 1553-XFM,
+    field connectors, TVS/CMC/X2Y/ferrite passives), taking the sheet to full
+    board coverage at ERC 0.  The ISO6442 RMII isolators were *dropped* rather
+    than authored: galvanic isolation belongs in the line-side magnetics, and a
+    general-purpose digital isolator cannot pass 50 MHz RMII REF_CLK.
+  * Promoted to `Wash.kicad_sch` (the superseded hand-authored file is archived
+    under `archives/avionics-archives/kicad-archives/Wash-superseded-2026-07-28/`).
 
 Author: Claude (Opus 4.8), 2026-07-14; extended by Claude (Opus 5), 2026-07-28.
 License: CC BY 4.0.
@@ -47,7 +60,7 @@ from pathlib import Path
 from typing import Any, List, Tuple
 
 HERE = Path(__file__).resolve().parent
-OUT = HERE.parent / "kicads" / "Wash_rebuild.kicad_sch"
+OUT = HERE.parent / "kicads" / "Wash.kicad_sch"
 
 SIZE = 1.27
 PIN_PITCH = 2.54
@@ -163,9 +176,27 @@ ICS = [
             ("32", "GND", "GND", "R"),
             ("33", "EP", "GND", "R"),
             ("1", "NCI/VDD", None, "R"),
+            # NCI = not-connected-internally.  These carry no signal, but they
+            # are real pads on the PG-VQFN-32 land, so the symbol must declare
+            # them or sch<->pcb pad parity fails.  All emitted as no-connects.
+            ("3", "NCI", None, "R"),
+            ("4", "NCI", None, "R"),
+            ("5", "NCI", None, "R"),
+            ("10", "NCI", None, "R"),
+            ("11", "NCI", None, "R"),
+            ("12", "NCI", None, "R"),
+            ("13", "NCI", None, "R"),
+            ("14", "NCI", None, "R"),
+            ("15", "NCI", None, "R"),
+            ("16", "NCI", None, "R"),
+            ("25", "NCI", None, "R"),
+            ("26", "NCI", None, "R"),
+            ("27", "NCI", None, "R"),
+            ("28", "NCI", None, "R"),
+            ("29", "NCI", None, "R"),
+            ("30", "NCI", None, "R"),
+            ("31", "NCI", None, "R"),
         ],
-        # NCI pins 3,4,5,10,11,12,13,14,15,16,25,26,27,28,29,30,31 omitted from
-        # the readable sheet (all not-connected-internally); documented here.
     },
     {
         "ref": "1553-DRV",
@@ -174,21 +205,27 @@ ICS = [
         # MIL-STD-1553B transmit path.  The PRU emits a complementary
         # Manchester pair (PRU_1553_TX_P / _N); each polarity drives its own
         # line-driver channel, and the two channel outputs form the
-        # transformer-primary differential drive (M1553_TX_P / _N).
-        # Both enables asserted (EN high, EN* low) => drivers always on.
+        # transformer-primary differential drive (M1553_P / _N).
+        #
+        # The transformer primary is SHARED with the receiver (half duplex),
+        # so the drivers must tri-state while receiving: EN is driven by
+        # M1553_TX_EN rather than strapped high.  EN* is held low so the
+        # active-high EN alone controls the outputs.
+        # ** M1553_TX_EN still needs a host pin allocated on the PB2 rails —
+        #    open item, see WBS.md §1.2a. **
         # Channels 3/4 unused: inputs strapped to GND, outputs left open.
         "pins": [
             ("1", "DI1", "PRU_1553_TX_P", "L"),
             ("7", "DI2", "PRU_1553_TX_N", "L"),
             ("9", "DI3", "GND", "L"),
             ("15", "DI4", "GND", "L"),
-            ("4", "EN", "+3V3", "L"),
+            ("4", "EN", "M1553_TX_EN", "L"),
             ("12", "EN*", "GND", "L"),
             ("8", "GND", "GND", "L"),
             ("16", "VCC", "+3V3", "L"),
-            ("2", "DO1+", "M1553_TX_P", "R"),
+            ("2", "DO1+", "M1553_P", "R"),
             ("3", "DO1-", None, "R"),
-            ("6", "DO2+", "M1553_TX_N", "R"),
+            ("6", "DO2+", "M1553_N", "R"),
             ("5", "DO2-", None, "R"),
             ("10", "DO3+", None, "R"),
             ("11", "DO3-", None, "R"),
@@ -207,10 +244,10 @@ ICS = [
         # Both enables asserted.  Channels 3/4 unused: inputs open (the part
         # has an OPEN-input failsafe), outputs left open.
         "pins": [
-            ("2", "RI1+", "M1553_RX_P", "L"),
-            ("1", "RI1-", "M1553_RX_N", "L"),
-            ("6", "RI2+", "M1553_RX_N", "L"),
-            ("7", "RI2-", "M1553_RX_P", "L"),
+            ("2", "RI1+", "M1553_P", "L"),
+            ("1", "RI1-", "M1553_N", "L"),
+            ("6", "RI2+", "M1553_N", "L"),
+            ("7", "RI2-", "M1553_P", "L"),
             ("10", "RI3+", None, "L"),
             ("9", "RI3-", None, "L"),
             ("14", "RI4+", None, "L"),
@@ -343,6 +380,250 @@ ICS += [
     eth_xfmr("T-ETH", "ETH"),
     eth_xfmr("T-ETH2", "ETH2"),
 ]
+
+
+# ---------------------------------------------------------------------------
+# Sensors / expander.
+# ---------------------------------------------------------------------------
+ICS += [
+    {
+        "ref": "IMU",
+        "value": "ICM-42688-P",
+        "ds": "ds-000347-icm-42688-p-v1.6.pdf Table 10 (LGA-14), 4-wire SPI",
+        # The prior PCB map was scrambled (SPI0_MOSI on the SDO *output*,
+        # SPI0_MISO on VDDIO).  Corrected to the datasheet 4-wire SPI mode.
+        # Pin 7 RESV is "Connect to GND" (mandatory); the other RESV pins are
+        # "No Connect or Connect to GND" and are grounded here for EMI.
+        "pins": [
+            ("1", "AP_SDO", "SPI0_MISO", "L"),
+            ("14", "AP_SDI", "SPI0_MOSI", "L"),
+            ("13", "AP_SCLK", "SPI0_CLK", "L"),
+            ("12", "AP_CS", "SPI0_CS_IMU", "L"),
+            ("4", "INT1", "IMU_INT1", "L"),
+            ("9", "INT2/FSYNC", "IMU_INT2", "L"),
+            ("5", "VDDIO", "+3V3", "R"),
+            ("8", "VDD", "+3V3", "R"),
+            ("6", "GND", "GND", "R"),
+            ("7", "RESV(GND)", "GND", "R"),
+            ("2", "RESV", "GND", "R"),
+            ("3", "RESV", "GND", "R"),
+            ("10", "RESV", "GND", "R"),
+            ("11", "RESV", "GND", "R"),
+        ],
+    },
+    {
+        "ref": "BARO",
+        "value": "BMP388",
+        "ds": "bst-bmp388-ds001.pdf Table 50 Pin description (10-pin LGA), SPI 4W",
+        # NOTE: the PCB currently carries an 8-pad land; BMP388 is a 10-pin
+        # part (WBS.md §1.2a footprint item).  Footprint replacement is a
+        # PCB-side action for the user; the symbol here is datasheet-correct.
+        "pins": [
+            ("2", "SCK", "SPI0_CLK", "L"),
+            ("4", "SDI", "SPI0_MOSI", "L"),
+            ("5", "SDO", "SPI0_MISO", "L"),
+            ("6", "CSB", "SPI0_CS_BARO", "L"),
+            ("7", "INT", "BARO_INT", "L"),
+            ("1", "VDDIO", "+3V3", "R"),
+            ("10", "VDD", "+3V3", "R"),
+            ("3", "VSS", "GND", "R"),
+            ("8", "VSS", "GND", "R"),
+            ("9", "VSS", "GND", "R"),
+        ],
+    },
+    {
+        "ref": "U-GPIO",
+        "value": "PCA9555DB",
+        "ds": "PCA9555.pdf Table 3 Pin description (SSOP24)",
+        # A0/A1/A2 strapped low => I2C address 0x20 (matches WBS §1.2a.1).
+        # Port 0 bits 0-5 drive the six GPIO-A..F field connectors; the rest
+        # of port 0 and all of port 1 are spare and left open.
+        "pins": [
+            ("22", "SCL", "I2C1_SCL", "L"),
+            ("23", "SDA", "I2C1_SDA", "L"),
+            ("1", "INT", None, "L"),
+            ("21", "A0", "GND", "L"),
+            ("2", "A1", "GND", "L"),
+            ("3", "A2", "GND", "L"),
+            ("24", "VDD", "+3V3", "L"),
+            ("12", "VSS", "GND", "L"),
+            ("4", "IO0_0", "GPIO_EXP_A", "R"),
+            ("5", "IO0_1", "GPIO_EXP_B", "R"),
+            ("6", "IO0_2", "GPIO_EXP_C", "R"),
+            ("7", "IO0_3", "GPIO_EXP_D", "R"),
+            ("8", "IO0_4", "GPIO_EXP_E", "R"),
+            ("9", "IO0_5", "GPIO_EXP_F", "R"),
+            ("10", "IO0_6", None, "R"),
+            ("11", "IO0_7", None, "R"),
+            ("13", "IO1_0", None, "R"),
+            ("14", "IO1_1", None, "R"),
+            ("15", "IO1_2", None, "R"),
+            ("16", "IO1_3", None, "R"),
+            ("17", "IO1_4", None, "R"),
+            ("18", "IO1_5", None, "R"),
+            ("19", "IO1_6", None, "R"),
+            ("20", "IO1_7", None, "R"),
+        ],
+    },
+    {
+        "ref": "1553-XFM",
+        "value": "SM1553-028",
+        "ds": "SM1553-Series...RevD.pdf SCHEMATIC (8-pin, pri 1-3 CT 2, sec 4-8)",
+        # MIL-STD-1553B isolation transformer.  Primary 1-3 is shared by the
+        # DS26LV31 driver outputs and the DS26LV32 receiver inputs (half
+        # duplex: the driver tri-states while receiving).  Secondary 4-8 is the
+        # field bus.  Centre tap (2) and the intermediate secondary taps
+        # (5/6/7) are unused on this 1.4:1 configuration.
+        # NOTE: the PCB carries a 2-pad placeholder land — a real SM1553
+        # footprint must be authored and placed (WBS.md §1.2a).
+        "pins": [
+            ("1", "PRI_P", "M1553_P", "L"),
+            ("2", "PRI_CT", None, "L"),
+            ("3", "PRI_N", "M1553_N", "L"),
+            ("4", "SEC_1", "BUS_1553_P", "R"),
+            ("5", "SEC_2", None, "R"),
+            ("6", "SEC_3", None, "R"),
+            ("7", "SEC_4", None, "R"),
+            ("8", "SEC_5", "BUS_1553_N", "R"),
+        ],
+    },
+]
+
+
+# ---------------------------------------------------------------------------
+# PocketBeagle 2 Industrial stacking headers.  Net assignment is the board's
+# established P1/P2 map (all 72 pins were already fully netted on the PCB and
+# are self-consistent with the signal names used across this sheet).
+# ---------------------------------------------------------------------------
+PB2_P1 = [
+    "GND", "GND", "DSHOT3", "DSHOT2", "DSHOT1", "DSHOT0",
+    "PRU_1553_RX_N", "PRU_1553_RX_P", "PRU_1553_TX_N", "PRU_1553_TX_P",
+    "RS485_DE", "RS485_RX", "RS485_TX", "CAN_STB", "MCAN0_RX", "MCAN0_TX",
+    "BARO_INT", "IMU_INT2", "IMU_INT1", "SPI0_CS_1553", "SPI0_CS_TPM",
+    "SPI0_CS_BARO", "SPI0_MISO", "SPI0_MOSI", "SPI0_CLK", "SPI0_CS_IMU",
+    "I2C1_SDA", "I2C1_SCL", "UART_ESC_RX", "UART_ESC_TX", "UART_GPS_RX",
+    "UART_GPS_TX", "+3V3", "+3V3", "+5V", "GND",
+]
+PB2_P2 = [
+    "MDIO1", "MDC1", "SERVO5", "SERVO4", "SERVO3", "SERVO2", "SERVO1",
+    "SERVO0", "GPS_RESETN", "GPS_TIMEPULSE", "TPM_RSTN", "TPM_IRQN",
+    "PHY2_RSTN", "PHY2_INTRN", "PHY1_RSTN", "PHY1_INTRN", "MDIO0", "MDC0",
+    "RMII1_REF_CLK", "RMII1_RX_ER", "RMII1_CRS_DV", "RMII1_RXD1",
+    "RMII1_RXD0", "RMII1_TX_EN", "RMII1_TXD1", "RMII1_TXD0",
+    "RMII0_REF_CLK", "RMII0_RX_ER", "RMII0_CRS_DV", "RMII0_RXD1",
+    "RMII0_RXD0", "RMII0_TX_EN", "RMII0_TXD1", "RMII0_TXD0", "+5V", "GND",
+]
+
+
+def pb2_header(ref, value, nets):
+    """2x18 PocketBeagle 2 socket rail; pins 1-18 left, 19-36 right."""
+    pins = []
+    for i, net in enumerate(nets, start=1):
+        pins.append((str(i), f"P{i}", net, "L" if i <= 18 else "R"))
+    return {"ref": ref, "value": value, "ds": "PocketBeagle 2 P1/P2 expansion rails", "pins": pins}
+
+
+ICS += [
+    pb2_header("PB2-P1", "PB2I-P1-2x18", PB2_P1),
+    pb2_header("PB2-P2", "PB2I-P2-2x18", PB2_P2),
+]
+
+
+# ---------------------------------------------------------------------------
+# Field connectors, protection and passives.
+#
+# Two bus-filter defects present on the PCB are corrected here:
+#   * SRF2012 common-mode chokes: the Bourns datasheet schematic gives windings
+#     1-2 and 4-3.  The PCB had CAN_H on pads 1 AND 3 with CAN_L on 2 AND 4,
+#     which puts a winding directly across the differential pair — i.e. it
+#     SHORTED CAN_H to CAN_L (same on RS-485).  Correct wiring takes the
+#     transceiver-side net in on 1/4 and brings the filtered net out on 2/3.
+#   * FB1 ferrite bead had +5V on both pads (bead shorted out).  The power
+#     entry is now PWR-IN -> +5V_IN -> FB1 -> +5V, per Wash.md §6.
+# TVS arrays sit on the filtered/connector side per Wash.md §5.
+# ---------------------------------------------------------------------------
+SIMPLE = [
+    # --- power entry -------------------------------------------------------
+    ("PWR-IN", "Molex Nano-Fit 4P", "Wash.md §14 power entry",
+     [("1", "+5V_IN", "+5V_IN"), ("2", "+5V_IN", "+5V_IN"),
+      ("3", "GND", "GND"), ("4", "GND", "GND")]),
+    ("FB1", "742792512 600R@100MHz", "Wash.md §6 power-entry pi filter",
+     [("1", "IN", "+5V_IN"), ("2", "OUT", "+5V")]),
+    # --- CAN FD field port -------------------------------------------------
+    ("CMC-CAN", "SRF2012-100Y", "SRF2012A.pdf schematic (windings 1-2, 4-3)",
+     [("1", "W1_IN", "CAN_H"), ("2", "W1_OUT", "CAN_H_F"),
+      ("4", "W2_IN", "CAN_L"), ("3", "W2_OUT", "CAN_L_F")]),
+    ("TVS-CAN", "PRTR5V0U2X", "Wash.md §5 dual TVS at CAN field connector",
+     [("1", "IO1", "CAN_H_F"), ("2", "GND", "GND2_CAN"),
+      ("3", "IO2", "CAN_L_F"), ("4", "NC", None),
+      ("5", "VCC", "VCC2_CAN"), ("6", "NC", None)]),
+    ("CAN-FD", "JST SM04B-GHS-TB", "Wash.md §14 J_CAN",
+     [("1", "GND", "GND2_CAN"), ("2", "CAN_H", "CAN_H_F"),
+      ("3", "CAN_L", "CAN_L_F"), ("4", "VCC", "VCC2_CAN")]),
+    ("X2Y-CAN", "X2Y 4.7nF", "Wash.md §2 GND1<->GND2 RF bridge",
+     [("1", "G1", "GND"), ("2", "G1", "GND"),
+      ("3", "G1", "GND"), ("4", "G2", "GND2_CAN")]),
+    # --- RS-485 field port -------------------------------------------------
+    ("CMC-RS485", "SRF2012-100Y", "SRF2012A.pdf schematic (windings 1-2, 4-3)",
+     [("1", "W1_IN", "RS485_A"), ("2", "W1_OUT", "RS485_A_F"),
+      ("4", "W2_IN", "RS485_B"), ("3", "W2_OUT", "RS485_B_F")]),
+    ("TVS-RS485", "PRTR5V0U2X", "Wash.md §5 dual TVS at RS-485 field connector",
+     [("1", "IO1", "RS485_A_F"), ("2", "GND", "GND2_RS485"),
+      ("3", "IO2", "RS485_B_F"), ("4", "NC", None),
+      ("5", "VCC", "VCC2_RS485"), ("6", "NC", None)]),
+    ("RS-485", "JST SM04B-GHS-TB", "Wash.md §14 J_485",
+     [("1", "GND", "GND2_RS485"), ("2", "A", "RS485_A_F"),
+      ("3", "B", "RS485_B_F"), ("4", "VCC", "VCC2_RS485")]),
+    ("X2Y-RS485", "X2Y 4.7nF", "Wash.md §3 GND1<->GND2 RF bridge",
+     [("1", "G1", "GND"), ("2", "G1", "GND"),
+      ("3", "G1", "GND"), ("4", "G2", "GND2_RS485")]),
+    # --- Ethernet line-side connectors -------------------------------------
+    ("ETH1", "JST SM04B-GHS-TB", "ETH1 line pair to T-ETH secondary",
+     [("1", "TXP", "ETH_LINE_TXP"), ("2", "TXN", "ETH_LINE_TXN"),
+      ("3", "RXP", "ETH_LINE_RXP"), ("4", "RXN", "ETH_LINE_RXN")]),
+    ("ETH2", "JST SM04B-GHS-TB", "ETH2 line pair to T-ETH2 secondary",
+     [("1", "TXP", "ETH2_LINE_TXP"), ("2", "TXN", "ETH2_LINE_TXN"),
+      ("3", "RXP", "ETH2_LINE_RXP"), ("4", "RXN", "ETH2_LINE_RXN")]),
+    # --- MIL-STD-1553B field port ------------------------------------------
+    ("TVS-1553", "SMAJ33CA", "Wash.md §5 bidirectional TVS, bus line to PGND",
+     [("1", "A", "BUS_1553_P"), ("2", "K", "PGND")]),
+    ("MIL-1553", "JST SM04B-GHS-TB", "Wash.md §14 J_1553",
+     [("1", "BUS_P", "BUS_1553_P"), ("2", "BUS_N", "BUS_1553_N"),
+      ("3", "GND", "GND"), ("4", "SHIELD", "PGND")]),
+    # --- ESC / servo / GPIO field ports ------------------------------------
+    ("ESC-PWM", "JST SM05B-GHS-TB-1MP", "Wash.md §14 J_ESC (DSHOT0-3)",
+     [("1", "DSHOT0", "DSHOT0"), ("2", "DSHOT1", "DSHOT1"),
+      ("3", "DSHOT2", "DSHOT2"), ("4", "DSHOT3", "DSHOT3"),
+      ("5", "GND", "GND"), ("MP", "SHIELD", "PGND")]),
+    ("ESC-TLM", "JST SM03B-GHS-TB", "ESC telemetry UART",
+     [("1", "GND", "GND"), ("2", "TX", "UART_ESC_TX"),
+      ("3", "RX", "UART_ESC_RX")]),
+    ("SERVO-PWM", "PinHeader 2.54mm 1x08", "Wash.md §14 J_SERVO (6 ch + pwr)",
+     [("1", "SERVO0", "SERVO0"), ("2", "SERVO1", "SERVO1"),
+      ("3", "SERVO2", "SERVO2"), ("4", "SERVO3", "SERVO3"),
+      ("5", "SERVO4", "SERVO4"), ("6", "SERVO5", "SERVO5"),
+      ("7", "+5V", "+5V"), ("8", "GND", "GND")]),
+    ("C-GPIO", "100nF 0805", "PCA9555 VDD decoupling",
+     [("1", "P", "+3V3"), ("2", "N", "GND")]),
+]
+SIMPLE += [
+    (f"GPIO-{c}", "JST SM03B-GHS-TB", f"GPIO expander field port {c}",
+     [("1", "GND", "GND"), ("2", "+3V3", "+3V3"), ("3", "SIG", f"GPIO_EXP_{c}")])
+    for c in "ABCDEF"
+]
+
+for _ref, _val, _ds, _pins in SIMPLE:
+    _n = len(_pins)
+    _half = (_n + 1) // 2
+    ICS.append({
+        "ref": _ref,
+        "value": _val,
+        "ds": _ds,
+        "pins": [
+            (pn, fn, net, "L" if i < _half else "R")
+            for i, (pn, fn, net) in enumerate(_pins)
+        ],
+    })
 
 
 def lib_symbol(
@@ -495,7 +776,7 @@ def emit_instance(ic, X, Y, left, right, half_w, half_h, sheet_uuid):
 # is genuinely driven, clearing `power_pin_not_driven` on the GND/EP power pins
 # without falsifying any connectivity.  Remove a rail from this list once a real
 # supply symbol for it is authored onto the sheet.
-PWR_FLAG_RAILS = ["GND", "+3V3"]
+PWR_FLAG_RAILS = ["GND", "+3V3", "GND2_CAN", "GND2_RS485", "PGND"]
 
 PWR_FLAG_LIB = """    (symbol "PWR_FLAG" (power) (pin_numbers hide) (pin_names (offset 0) hide) \
 (exclude_from_sim yes) (in_bom no) (on_board no)
@@ -542,16 +823,25 @@ def main():
         "  (lib_symbols",
         PWR_FLAG_LIB,
     ]
+    # Column-packed layout: symbols vary from 2 to 36 pins, so a fixed row
+    # pitch either overlaps the tall parts or wastes metres of sheet.  Walk
+    # each column top-down using the actual symbol height plus room for the
+    # net-label stubs, and start a new column once the current one is full.
     placed = []
-    X0, Y0, DX = 76.2, 76.2, 101.6
-    for k, ic in enumerate(ICS):
+    X0, Y0, DX = 76.2, 76.2, 127.0
+    COL_MAX_Y = 1600.0
+    x, y = X0, Y0
+    built = []
+    for ic in ICS:
         libtext, left, right, hw, hh = lib_symbol(ic)
         parts.append(libtext)
-        col = k % 3
-        rowi = k // 3
-        X = X0 + col * DX
-        Y = Y0 + rowi * 152.4
-        placed.append((ic, X, Y, left, right, hw, hh))
+        built.append((ic, left, right, hw, hh))
+    for ic, left, right, hw, hh in built:
+        if y + hh > COL_MAX_Y and y > Y0:
+            x += DX
+            y = Y0
+        placed.append((ic, x, y + hh, left, right, hw, hh))
+        y += 2 * hh + 25.4
     parts.append("  )")
     for ic, X, Y, left, right, hw, hh in placed:
         parts += emit_instance(ic, X, Y, left, right, hw, hh, sheet_uuid)

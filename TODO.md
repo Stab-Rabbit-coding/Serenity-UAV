@@ -234,8 +234,11 @@
 
 → detail: `avionics/WBS.md` §1.2a
 
+- [x] Wash schematic-first rebuild — all 40 footprints, ERC 0 errors
+- [x] Wire the MIL-1553 connector + transformer.
+- [ ] Replace 8 wrong-land Wash footprints, then re-sync + DRC
+- [ ] Allocate a host pin for Wash M1553_TX_EN (1553 half-duplex)
 - [ ] Reconcile Wash.md §14 field-connector table with the actual P…
-- [ ] Wire the MIL-1553 connector + transformer.
 - [ ] Redesign the tamper mesh as a per-domain anti-tamper mesh (all…
 - [ ] Carry the tamper signal over the link for the TPM-less boards.
 - [ ] Route the rearranged capes.
@@ -251,7 +254,7 @@
 - [ ] Design Faraday cages / boxes to protect all PCBs
 - [ ] Specify / implement tightly twisted pair bonded shielded wiring…
 
-→ Fleet trust module (2026-07-26), see `avionics/TODO.md` "Fleet Trust Module and Tilt Encoder": Wash PB2-P2 unwired-header finding, Wash/Zoë/Kaylee/Jayne DRC clean-out, CAN-PERIPH-GW-1 N=4 routing all still open.
+→ Fleet trust module (2026-07-26), see `avionics/TODO.md` "Fleet Trust Module and Tilt Encoder": Wash/Zoë/Kaylee/Jayne DRC clean-out and CAN-PERIPH-GW-1 N=4 routing still open. **Wash PB2-P2 "unwired header" is RESOLVED (2026-07-28)** — root cause was a corrupt S-expression that made KiCad silently truncate `Wash.kicad_sch` at line 1504; the header was never mis-wired, it simply was not being parsed. See `avionics/kicad/Wash/Wash.md` "Known Issues".
 
 ### 1.4 — EMI Hardening Beyond the PCBs (500 W/m^2 environment)
 

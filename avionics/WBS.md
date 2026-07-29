@@ -278,19 +278,95 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     Auditable generator: `avionics/kicad/Wash/scripts/gen_wash_sch.py`, datasheet-accurate
     full-pinout symbols → `kicads/Wash_rebuild.kicad_sch` (loads in kicad-cli 9.0.2; ERC
     only expected off-sheet-global warnings).
-    - [x] Core isolated-bus + security + GPS ICs authored with full datasheet pinouts:
-        **CAN-TR (ISOW1044, 20-pin), RS485 (ADM2795E, 16-pin RW-16), TPM (SLB9670, 32-pin
-        correct 17–24 SPI map), GPS (SAM-M10Q, 16-pin).**
-    - [ ] Author ETH section on **ADIN1300** (40-LFCSP) + Würth 749010012A magnetics +
-        ISO6442 — redesign the RMII isolation (current scheme shorts the barrier / 50 MHz
-        REF_CLK through a digital isolator is unworkable).
-    - [ ] Add remaining ICs: 1553 (DS26LV31/32 + SM1553 xfmr), IMU (ICM-42688-P), baro
-        (BMP388, 10-pin), compass (MMC5983MA/QMC5883L), INA226, PCA9555, 74LVC1G14.
-    - [ ] Add PB2-P1/P2 (2×36) SoC headers + connectors + passives (TVS/CMC/X2Y-Syfer-0805/
-        Nano-Fit); tie the off-sheet global labels; drive GND/power (PWR_FLAG) to clear ERC.
-    - [ ] Associate corrected footprints (per WASH_FOOTPRINT_VERIFICATION.md) to each symbol;
-        regenerate/re-sync the PCB; ERC + DRC --schematic-parity to zero.
-    - [ ] Once approved, promote `Wash_rebuild.kicad_sch` → `Wash.kicad_sch` (archive old).
+    - [x] Core isolated-bus + security + GPS ICs authored with full datasheet
+          pinouts:
+        **CAN-TR (ISOW1044, 20-pin), RS485 (ISOW1412, 20-pin — retargeted from
+        ADM2795E
+        2026-07-28 per the fleet swap), TPM (SLB9670, 32-pin correct 17–24 SPI
+        map),
+        GPS (SAM-M10Q, 16-pin).**
+    - [x] Author ETH section on **ADIN1300** (40-LFCSP) + Würth 749010012A
+          magnetics.
+        **RMII isolation redesign RESOLVED:** the ISO6442-on-RMII scheme is
+        *removed* —
+        galvanic isolation belongs in the line-side magnetics, and RMII now runs
+        direct
+        from the SoC to the PHY. `U-ISO-TX` / `U-ISO-RX` are consequently
+        obsolete and were
+        deleted from the PCB 2026-07-28.
+    - [x] Add remaining ICs: 1553 (DS26LV31/32 + SM1553 xfmr), IMU
+          (ICM-42688-P), baro
+        (BMP388, 10-pin), PCA9555. *(Compass MMC5983MA/QMC5883L, INA226 and
+        74LVC1G14 are
+        **not** on this PCB revision — no footprint exists for them; dropped
+        from scope,
+        re-add only if the board grows one.)*
+    - [x] Add PB2-P1/P2 (2×36) SoC headers + connectors + passives
+          (TVS/CMC/X2Y/Nano-Fit);
+        tie the off-sheet global labels; drive GND/power (PWR_FLAG) to clear
+        ERC.
+        **`Wash_rebuild.kicad_sch` now covers all 40 board footprints at ERC = 0
+        errors.**
+    - [x] Sync verified nets onto the board without disturbing manual placement
+          —
+        `avionics/kicad/Wash/scripts/sync_wash_pcb_nets.py` (32 footprints / 244
+        pads).
+        Three latent electrical defects were corrected in the process, each
+        verified against
+        the OEM datasheet:
+        - **SRF2012 common-mode chokes shorted the differential pair.** The
+          datasheet
+          windings are 1-2 and 4-3; the board had `CAN_H` on pads 1 *and* 3 with
+          `CAN_L` on
+          2 *and* 4, putting a winding straight across the pair (same on
+          RS-485).
+        - **FB1 ferrite bead had `+5V` on both pads** — shorted out. Now
+          `PWR-IN → +5V_IN → FB1 → +5V` per `Wash.md` §6.
+        - **1553 driver had `M1553_TX_N` on its VCC pin** and host PRU signals
+          on driver
+          *outputs*; the **IMU** SPI map was scrambled (MOSI on the SDO output,
+          MISO on VDDIO).
+    - [ ] **BLOCKED — 8 footprints carry the wrong land for the real part.**
+          Pad-level
+        parity is 32/40; these 8 cannot be net-synced until the land is
+        replaced, because
+        writing a 20-pin part's nets onto a 16-pad land mis-assigns every pad.
+        Footprint
+        replacement + re-placement is a user action (`avionics/AGENTS.md`):
+        - `CAN-TR` — board has SOIC-16W (16 pad); ISOW1044BDFMR is **20-pin
+          DFM**.
+        - `ETH1-PHY`, `ETH2-PHY` — board has QFN-48 7×7 (49 pad); ADIN1300BCPZ
+          is
+            **40-LFCSP CP-40-26**, 6×6 mm (i.e. the correct land is *smaller*).
+        - `T-ETH`, `T-ETH2` — board has an 8-pad land; Würth 749010012A is
+          **12-pin**.
+        - `BARO` — board has LGA-8 2.0×2.5; BMP388 is **10-pin LGA 2.0×2.0**
+            (`bst-bmp388-ds001.pdf` Table 50).
+        - `GPS` — board has a 2-pad placeholder blob (malformed pad named
+            `SAM-M10Q-00B`); needs the real **16-pad SAM-M10Q LGA**.
+        - `1553-XFM` — board has a 2-pad placeholder blob (malformed pad named
+            `SM-1553-11`); needs the real **8-pin SM1553** (pri 1-3 CT 2, sec
+            4-8).
+    - [ ] After the footprint swap: re-run `sync_wash_pcb_nets.py` (drop the
+          swapped refs
+        from `BLOCKED_WRONG_FOOTPRINT`), then DRC. **Do not nudge for the 11
+        remaining
+        inter-footprint clearance violations first** — 9 of them involve
+        `ETH1-PHY`/
+        `ETH2-PHY`, whose replacement land is *smaller* (6×6 vs 7×7), so they
+        may clear
+        themselves. The other 26 clearance hits are intra-package pin-to-pin
+        under the
+        `ISOLATION` netclass and are not a real creepage issue (`Wash.md` §"PCB
+        Layout").
+    - [ ] Allocate a host pin for **`M1553_TX_EN`**. The 1553 transformer
+          primary is shared
+        half-duplex between the DS26LV31 driver and DS26LV32 receiver, so the
+        driver must
+        tri-state while receiving; the enable is currently an unbound global
+        label.
+    - [ ] Once approved, promote `Wash_rebuild.kicad_sch` → `Wash.kicad_sch`
+          (archive old).
 - [ ] **Finish Wash PCB (CAPE-A-2) close-out pass:**
     - [ ] Verify every external-facing connector (SERVO-PWM, ESC-PWM, MIL-1553, CAN-FD,
         RS-485, ETH) is a shielded-shell part with shell tied to PGND — audit against

@@ -95,8 +95,15 @@ DC-DC for its bus-side VDD2. ISOW1412 integrates its own isolated DC-DC, removin
 supply fleet-wide (same swap applied to Zoë, Jayne, Kaylee, CAN-PERIPH-GW-1). While performing
 this swap, Wash's pre-existing ADM2795EBRWZ symbol was found to have incorrectly numbered pins
 (pre-existing defect, corrected in the same pass — see `avionics/kicad/fix_wash_zoe_isolators.py`).
-Wash's own **PCB footprint has not yet been swapped to ISOW1412** — it currently still carries
-the old ADM2795EBRWZ footprint; this is open work (see root `TODO.md` §1.2a).
+**Footprint status — RESOLVED 2026-07-28.** The board's `RS485` land was
+verified to be a 20-pad `SOIC-20W_7.5x12.8mm_P1.27mm`, correct for the
+20-pin ISOW1412; the earlier note that it "still carries the old
+ADM2795EBRWZ footprint" was stale. (The superseded `WBS.md` item calling
+this land wrong applied to the 16-lead RW-16 ADM2795E and is closed by the
+swap.) The rebuild symbol was retargeted to the ISOW1412 pinout in the
+same pass — before that, the board's RS-485 net map left the bus pins
+**Y/Z/B/A entirely unconnected** while driving signals onto `GNDIO`,
+`VDD` and `GND2`, so the port could not have functioned.
 
 ISOW1412 is a full-duplex part (separate Y/Z driver-out, A/B receiver-in); it is run in
 half-duplex mode on this project's 2-wire RS485_A/RS485_B bus by shorting Y-to-A and Z-to-B,
@@ -341,29 +348,54 @@ routed through the π-filter (FB1/C11/C12) before distribution to the cape rail.
 
 ## Known Issues
 
-### `PB2-P2` header appears fully unwired (found 2026-07-26, unresolved)
+### `PB2-P2` header appeared fully unwired — RESOLVED 2026-07-28
 
-`kicad-cli sch erc` reports every one of `PB2-P2`'s 36 pins as `pin_not_connected`, and
-`kicad-cli sch export netlist` confirms zero nets reference `PB2-P2` at all — not even a
-single-pin net. This is surprising: `WBS.md` §1.2a.1 records the ETH2/`PB2-P2` wiring
-(RMII1, MDIO1/MDC1 on repurposed servo pins, etc.) as completed work back in 2026-06-12.
+**Root cause: `Wash.kicad_sch` was structurally corrupt and KiCad was
+silently truncating it.** A stray `)))` at line 1504 (where a single `)`
+was correct) closed the top-level `kicad_sch` form early, so everything
+past the `PB2-P2` symbol — roughly 60% of the design — sat outside the
+parsed document and was invisible to every ERC run ever performed on the
+file. `PB2-P2` was not mis-wired; it simply was not being read. The
+coordinate transform investigated previously was correct all along.
 
-Investigation so far: `PB2-P2` uses the same `Conn_36` lib symbol as `PB2-P1`, whose pins
-mostly **do** connect correctly (only 6 of 36 fail, all edge pins) — so the general
-label-to-pin coincidence mechanism works in this file. Reconstructing the coordinate
-transform from a known-good `PB2-P1` pin (`sheet_x = anchor_x + local_x`, `sheet_y =
-anchor_y − local_y`, matching this project's documented KiCad hand-authoring convention)
-and applying it to `PB2-P2` pin 1 predicts sheet position (67.54, 474.45) — and the
-`MDIO1` global label sits at exactly that position. Despite the apparent exact coincidence,
-KiCad does not merge the nets.
+Four further defects surfaced once the file parsed in full, all fixed in
+the same pass:
 
-**Not resolved before this finding was recorded.** Next step is almost certainly to open
-`Wash.kicad_sch` in the KiCad GUI and look at the `PB2-P2` block directly — something is
-visually different there vs. `PB2-P1` that isn't obvious from the raw S-expression text
-(a duplicate/orphaned object exactly on top of the label, a stray hierarchical sheet pin,
-or a symbol instance issue are all plausible). **If this is a genuine defect, Wash's
-ETH2/MDIO1 wiring has been silently non-functional** — treat as higher priority than the
-rest of the pre-existing ERC/DRC backlog.
+- **line 1504** — `)))` closed `kicad_sch` early; corrected to `)`.
+- **lines 1845–48** — corrupted `global_label`: an extra paren plus an
+  orphaned fragment of a deleted label. Fragment removed; the `RE_N`→`DE`
+  wire already implements the half-duplex tie described in §3.
+- **lines 2803, 3126** — `( comment N "…" )` at top level, which is only
+  legal inside `title_block`. Converted to `(text …)` nodes.
+- **4 sites** — `(shape power_in)` on global labels; `power_in` is a pin
+  electrical type, not a valid label shape. Changed to `bidirectional`.
+- **`lib_symbols`** — `C_SMD` and `R` were referenced but never defined.
+  Definitions added.
+
+> **Toolchain note:** a `lib_id` with no matching `lib_symbols` entry
+> makes **kicad-cli 9.0.2 segfault** (exit 139) rather than report an
+> error. If `kicad-cli` dies with no output on a schematic, check for
+> missing symbol definitions first.
+
+**The true ERC baseline for this file was 275 errors, not the 48
+previously recorded** — the old number was measuring only the fraction of
+the board KiCad could see. The file is superseded by the schematic-first
+rebuild below and is retained for reference only.
+
+### Schematic and PCB were different design generations
+
+Verified 2026-07-28: `Wash.kicad_sch` and `Wash.kicad_pcb` shared only 11
+of 60 reference designators, and used different naming conventions
+throughout (`J_CAN` / `U_ETH1_PHY` in the schematic vs `CAN-FD` /
+`ETH1-PHY` on the board). The schematic-first rebuild
+(`Wash_rebuild.kicad_sch`, generated by `scripts/gen_wash_sch.py`) is the
+authority; see `WBS.md` §1.2a.
+
+As of 2026-07-28 the rebuild covers **all 40 board footprints at ERC = 0
+errors**, and 32 of the 40 match the board at pad level. The 8 that do not
+are every one a case where the board carries the wrong land pattern for
+the real part; they are listed in `WBS.md` §1.2a and are blocked on
+footprint replacement, which is a user action per `avionics/AGENTS.md`.
 
 ---
 
