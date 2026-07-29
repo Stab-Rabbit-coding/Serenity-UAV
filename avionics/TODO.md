@@ -57,4 +57,16 @@
 - [ ] Kaylee: 52 more schematic parts (ESC5, balance conn, NTC, BEC…
 - [ ] Emma: route TPM/R/C to the SPI1/TPM_IRQN/TPM_RSTN nets on P1/P2
 
+### Kaylee BEC regulator rebuild (2026-07-28)
+
+→ full detail: `WBS.md` §1.9.3
+
+- [ ] Kaylee: verify real KiCad footprints exist for FC2QFN-17 (MAX42408)…
+- [ ] Kaylee: verify real KiCad footprint exists for WQFN-30 6x4mm (LM7…
+- [ ] Kaylee: PCB placement for MAX42408AFOA x3 + LM76005 (BEC rebuild)
+- [ ] Kaylee: PCB DRC clean-out + gerbers after BEC rebuild placement
+- [ ] Sync docs/POWER_DISTRIBUTION.md §3.3 (stale DS3218MG/6V servo text)
+- [ ] Sync docs/CARGO_WINCH_SPECIFICATION.md to STS3215-C018 + new rail
+- [ ] Confirm each STS3215's dedicated CAN-PERIPH-GW-1 node design (new…
+
 ---

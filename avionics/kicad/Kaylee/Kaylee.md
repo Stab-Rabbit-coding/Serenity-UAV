@@ -196,44 +196,73 @@ J_SHLD_ESCn (M3 chassis ground lug pad, adjacent to J_ESCn) ← cable shield dra
 J_ESCn(−) ──── PGND (power return — GND shared, no shunt)
 ```
 
-### 5 V BEC (Dual Redundant)
+### 5 V BEC (Dual Redundant) — rebuilt 2026-07-28, MAX42408AFOA (ADI)
+
+> **Superseded TPS54620RGYT, 2026-07-28.** While adding the RT resistor flagged in the
+> prior BOM audit, found TPS54620's own VIN rating (4.5–17 V recommended, 20 V absolute
+> max) cannot survive Kaylee's VDIS bus (18.75–25.2 V, 6S LiPo) — a pre-existing defect,
+> not introduced this pass. Whole fleet swapped to REF-SENSOR-014 (MAX42408AFOA, ADI,
+> 4.5–36 V in, 8 A) for BEC1/BEC2/Servo, and REF-SENSOR-015 (LM76005, TI, 3.5–60 V in,
+> 5 A) for the new Nacelle 12 V rail below. See REFERENCES.md REF-SENSOR-013/014/015 for
+> full citation trail. Schematic rebuild is ERC-clean (0 hard errors); **PCB footprint
+> authoring, placement, DRC, and gerbers are NOT yet done** — tracked in TODO.md.
 
 ```text
-VDIS ──── FB_5V1 (Würth 742792612, 10 µH, 2 A) ──── BEC5V_1 section
-                  │
-           C_BEC1_IN (100 µF / 50 V)
-                  │
-           U_BEC_5V_1 (Texas Instruments TPS54620RGYT, adjustable, 6 A)
-             R_FB1 divider: Vout = 5.0 V
-             C_BEC1_OUT (220 µF + 100 nF)
-                  │
-                  ├── D_OR1 (MBRD1045CT cathode, Schottky 10 A / 45 V)
-                  │
-VDIS ──── FB_5V2 ──── U_BEC_5V_2 (TPS54620RGYT, identical) ──── D_OR2
-                                                                      │
-                                                                5V_AVIONICS rail
-                                                                   │
-                                                               J_5V (+/−)
+VDIS ──── C_BEC1_IN (0.1uF+4.7uF) ──── U_BEC_5V_1 (MAX42408AFOA, 8 A)
+                                          R_FB1_1/R_FB1_2 divider: Vout = 5.296 V
+                                          L1 (2.2uH) + C_BEC1_OUT (88uF eff)
+                                                │
+                                                ├── D_OR1 (MBRD1045CT) ──┐
+                                                                          │
+VDIS ──── C_BEC2_IN ──── U_BEC_5V_2 (MAX42408AFOA, identical) ── D_OR2 ──┤
+                                                                          │
+                                                                    5V_AVIONICS rail
+                                                                          │
+                                                                      J_5V (+/−)
 ```
 
-If U_BEC_5V_1 fails (output collapses), D_OR1 reverse-biases; U_BEC_5V_2 continues
-carrying full load via D_OR2. The Schottky forward drop (~0.3 V at 10 A) is absorbed
-by the 5.3 V set-point (TPS54620 output adjusted to 5.3 V so rail arrives at 5.0 V
-after diode drop).
+Same dual-redundant OR-diode topology as before (D_OR1/D_OR2, J_5V, C_5V_OUT untouched by
+the rebuild). The 5.296 V set-point (vs. the old 5.3 V) absorbs the Schottky forward drop
+so the rail still arrives at ~5.0 V after the diode. MAX42408 is internally compensated
+(average current-mode control) — no external R_COMP/C_COMP network, unlike TPS54620.
 
-### 6 V BEC
+### Servo rail, low-power/expansion (5.0 V) — rebuilt 2026-07-28, MAX42408AFOA (ADI)
 
 ```text
-VDIS ──── FB_6V (Würth 742792612, 10 µH, 2 A) ────
-               │
-          C_BEC_SV_IN (100 µF / 50 V)
-               │
-          U_BEC_6V (Texas Instruments TPS54540DDAR, 40 V / 5 A adjustable)
-            R_FB: Vout = 6.0 V ± 1 %
-            C_BEC_SV_OUT (100 µF + 100 nF)
-               │
-           J_6V (+/−)
+VDIS ──── C_BEC_SV_IN ──── U_BEC_SERVO_5V (MAX42408AFOA, 8 A)
+                              R_FBSV_1/R_FBSV_2 divider: Vout = 4.984 V
+                              L4 (2.2uH) + C_BEC_SV_OUT (120uF eff)
+                                    │
+                                J_SERVO_5V (+/−) ── RCS valve servos (×4, SG90-class,
+                                                      Phase 11) + cargo door/release
+                                                      servos (SG90-class) + expansion
+                                                      headroom
 ```
+
+Kept at 5.0 V (low-power SG90-class loads only, not shared with the STS3215 nacelle
+servos — see "Servo rail split" decision, 2026-07-28). `J_SERVO_5V`/`J_SHLD_SV` untouched.
+
+### Nacelle 12 V rail (NEW, 2026-07-28) — LM76005 (TI), feeds 3× STS3215-C018
+
+```text
+VDIS ──── C_N_IN ──── U_BEC_NACELLE_12V (LM76005, 5 A)
+                         R_FB_N1/R_FB_N2 divider: Vout = 11.99 V
+                         L_N (6.8uH) + C_N_OUT (90uF eff, >=16V rated)
+                               │
+                           J_NACELLE_12V (+/−) ── 2× nacelle-tilt STS3215-C018
+                                                    + cargo-winch STS3215-C018
+                                                    (REF-SENSOR-012), each via its
+                                                    own dedicated CAN-PERIPH-GW-1
+                                                    node (TTL-serial <-> CAN-FD)
+```
+
+Added because the STS3215-C018 variant (30 kg·cm @ 12 V) was selected over the 7.4 V/
+19.5 kg·cm variant to clear the nacelle-tilt ≥25 kg·cm design requirement
+(`docs/POWER_DISTRIBUTION.md` §3.3) — the 7.4 V variant falls short of that requirement.
+Design current point: 1 unit stalled (2.7 A) + 2 units at rated (0.9 A each) = 4.5 A,
+25% margin under LM76005's 5 A rating. LM76005 chosen over MAX42408/MAX42410 specifically
+because the latter's adjustable range tops out at 10 V (400 kHz) / 6 V (1.5 MHz) — cannot
+reach 12 V at all.
 
 ### BQ76930 Cell Monitor
 

@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "Kaylee")(type "KiCad")(uri "${KIPRJMOD}/../Kaylee.pretty")(options "")(descr "Kaylee-specific custom footprints (MAX42408/MAX42410 FC2QFN-17 -- estimated geometry, see .kicad_mod description; CMC/FuseHolder etc.)"))
+)

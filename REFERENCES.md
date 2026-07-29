@@ -78,6 +78,8 @@ REF-CAD-002 Nick Henning after consolidation)
     - [REF-SENSOR-011: Infineon OPTIGA™ SLB 9670 — SPI TPM 2.0](#ref-sensor-011-infineon-optiga-slb-9670--spi-tpm-20)
     - [REF-SENSOR-012: STS3215 Digital Servo Motor — Cargo Winch Control](#ref-sensor-012-sts3215-digital-servo-motor--cargo-winch-control)
     - [REF-SENSOR-013: TI TPS54620 — 4.5-V to 17-V Input, 6-A, Synchronous Step-Down SWIFT™ Converter](#ref-sensor-013-ti-tps54620--45-v-to-17-v-input-6-a-synchronous-step-down-swift-converter)
+    - [REF-SENSOR-014: Analog Devices MAX42408/MAX42410 — 36-V, 8-A/10-A Fully Integrated Buck Converter with Dual-Phase Capability](#ref-sensor-014-analog-devices-max42408max42410--36-v-8-a10-a-fully-integrated-buck-converter-with-dual-phase-capability)
+    - [REF-SENSOR-015: TI LM76005 — 3.5-V to 60-V, 5-A Synchronous Step-Down Converter](#ref-sensor-015-ti-lm76005--35-v-to-60-v-5-a-synchronous-step-down-converter)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
@@ -1480,34 +1482,58 @@ ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verific
 
 ---
 
-### REF-SENSOR-012: STS3215 Serial-Bus Servo — Cargo Winch Drive
+### REF-SENSOR-012: FEETECH STS3215 Serial-Bus Servo — Nacelle Tilt (×2) + Cargo Winch Drive
 
-> **⚠ REQUIRES VERIFICATION (root `AGENTS.md` §4).** The archived datasheet is a
-> **scanned/CID-encoded PDF**, and no OCR toolchain is available in the current build
-> environment (`pdftotext`, `tesseract`, `mutool`, `poppler-utils` absent; `pypdf` fails on a
-> broken `cryptography` build). **No performance figure below is quoted from that datasheet.**
-> Nothing in this entry may be cited as a verified value until the gaps are read off the
-> document and this table is updated. Tracked in "Open Standards Verification Items" and in
-> `docs/TODO.md` §0.x.
+> **✅ VERIFICATION GATE RESOLVED, 2026-07-28.** The prior session's OCR toolchain
+> (`pdftotext`/`tesseract`/`mutool`/`poppler-utils`/`pypdf`) could not read the archived
+> scanned/CID-encoded PDF. This session's PDF reader extracted it cleanly on direct read —
+> no OCR needed. All figures below are now read directly from the real datasheets, both
+> archived in `avionics/datasheets/`.
 
-| Field | Value |
-|---|---|
-| **Part Number** | STS3215 (repo SKU 108090023, variant C001) |
-| **Manufacturer** | ⚠ Not yet confirmed from the datasheet |
-| **Datasheet** | `docs/references/108090023_STS3215-C001_Datasheet.pdf` — revision/date ⚠ not extracted |
-| **Control Interface** | **TTL half-duplex serial bus, ID-addressable** — **not** 1000–2000 µs PWM. Lands on `CAN-PERIPH-GW-1` `J_FLEX` → `FLEX_TTL_GPIO`, documented there as covering "a TTL-level digital servo protocol (e.g. a serial-bus servo)". |
-| **Operating Voltage** | Driven at 5.4 V nominal from Kaylee RAIL-2 `5V_JAYNE` (project-side decision, not a datasheet limit) |
-| **Torque** | ⚠ Not verified. **Design requirement is ≥ 3.2 kgf·cm (0.31 N·m)** at the coupler — derived in `docs/CARGO_WINCH_SPECIFICATION.md` §4.2, must be checked against the real rating. |
-| **Stall current** | ⚠ Not verified. Budgeted at 1.2 A for the RAIL-2 sizing (spec §5.4); if actual stall exceeds ~2.5 A, RAIL-2 must be resized. |
-| **Mass** | ⚠ Not verified. **60 g assumed** in the mass/CG table (spec §6); this term dominates the +98.6 g net delta and the resulting T/W 1.613 → 1.557. |
-| **Case envelope / boss pattern** | ⚠ Not verified. Blocks `make_winch_pedestal_port()` in `airframe/stls/fuselage/cargo/generate_cargo_mounts.py`. |
-| **Application** | Cargo winch drive. Transmits **torque only** through a lost-motion dog coupler; the spool is carried on two MR84ZZ bearings on a fixed Ø4 mm axle clamped at both pedestals, so no radial load reaches the servo output. Paired with a normally-engaged one-way safety ratchet whose catch is retracted by a solenoid on the same gateway. Signed CAN-FD telemetry per [REF-NIST-001 §2.1]. |
+| Field | C001 (7.4 V, 19.5 kg·cm) | C018 (12 V, 30 kg·cm) — **fleet-selected variant** |
+|---|---|---|
+| **Part Number** | STS3215 (model "STS3215", edition A/1, 2023-06-23) | ST-3215-C018 (edition A/0, 2023-07-20) |
+| **Manufacturer** | Shenzhen Feetech RC Model Co., Ltd. | same |
+| **Datasheet** | `docs/references/108090023_STS3215-C001_Datasheet.pdf` | `avionics/datasheets/feetech-sts3215-c018.pdf` |
+| **Rated input voltage** | 4–7.4 V | 4–14 V |
+| **Operating voltage (characterized)** | 6 V / 7.4 V | 12 V |
+| **Stall torque** | 16.5 kg·cm (6 V) / 19.5 kg·cm (7.4 V) | 30 kg·cm |
+| **Rated (continuous) torque** | 4 kg·cm (6 V) / 5 kg·cm (7.4 V) | 10 kg·cm |
+| **Stall current** | 2 A (6 V) / 2.5 A (7.4 V) | 2.7 A |
+| **Rated current** | 500 mA (6 V) / 650 mA (7.4 V) | 900 mA |
+| **No-load current** | 130 mA (6 V) / 150 mA (7.4 V) | 180 mA |
+| **Over-voltage / under-voltage protection trip** | >8 V or <4 V | >14 V or <4 V |
+| **Mass** | 55 ± 1 g | 55 ± 1 g |
+| **Size** | 45.2 × 24.7 × 35 mm | same |
+| **Connector** | 5264-3P: 1=GND, 2=Vcc, 3=Signal/TTL | same |
+| **Control Interface** | **TTL half-duplex serial bus** (packet-based, ID 0–253, 38.4 kbps–1 Mbps), **not** PWM | same |
+| **Gear** | Copper, 1/345 ratio, 25T/⌀5.9 mm horn | same |
+
+**Fleet decision (2026-07-28):** both nacelle-tilt servos and the cargo winch motor now use
+the **C018 (12 V, 30 kg·cm) variant** — the nacelle-tilt design requirement is ≥25 kg·cm
+(`docs/POWER_DISTRIBUTION.md` §3.3), which C001's 19.5 kg·cm stall does not clear but C018's
+30 kg·cm does, with margin. All three units are powered from Kaylee's new dedicated
+`U_BEC_NACELLE_12V` rail (REF-SENSOR-015), **not** the old `5V_JAYNE`/RAIL-2 path referenced
+in earlier drafts of this entry — that routing is now stale, see `Kaylee.md` Section-H BOM.
+Each unit is bridged to the trust-signed CAN-FD bus by its own dedicated `CAN-PERIPH-GW-1`
+node (TTL serial ↔ CAN-FD, per-node TPM identity) rather than sharing the ESC-focused
+`N_STACKS=4` gateway.
+
+**Winch-specific note:** the winch transmits **torque only** through a lost-motion dog
+coupler; the spool is carried on two MR84ZZ bearings on a fixed Ø4 mm axle clamped at both
+pedestals, so no radial load reaches the servo output. Paired with a normally-engaged
+one-way safety ratchet whose catch is retracted by a solenoid on the same gateway. Signed
+CAN-FD telemetry per [REF-NIST-001 §2.1]. Design torque requirement (≥3.2 kgf·cm at the
+coupler, `docs/CARGO_WINCH_SPECIFICATION.md` §4.2) is cleared by both variants with very
+large margin.
 
 **Supersedes:** the Rev P/Q/R `N20-WINCH` (N20 300RPM 6V gearmotor) and its cantilever mount
-`cargo_winch_motor_mount.stl` + N20-bored `cargo_winch_spool.stl`.
+`cargo_winch_motor_mount.stl` + N20-bored `cargo_winch_spool.stl`; also supersedes the
+2× DS3218MG nacelle-tilt design (`docs/POWER_DISTRIBUTION.md` §3.3, DS3218MG entry now stale).
 
 **Used in:** `docs/CARGO_WINCH_SPECIFICATION.md` (Rev B), `docs/bom_revR.json`
-(`STS3215-WINCH`), `airframe/stls/fuselage/cargo/generate_cargo_mounts.py`.
+(`STS3215-WINCH`), `airframe/stls/fuselage/cargo/generate_cargo_mounts.py`,
+`avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch` (`U_BEC_NACELLE_12V` / `J_NACELLE_12V`).
 
 **Status:** ACTIVE specification, **NOT cleared for procurement or STL generation** until the
 ⚠ rows above are resolved.
@@ -1524,9 +1550,160 @@ ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verific
 | **Datasheet URL** | <https://www.ti.com/lit/ds/symlink/tps54620.pdf> |
 | **Package** | VQFN-14, RGY (3.50 mm × 3.50 mm) or RHL |
 | **Key parameters used for design** | Vref = 0.800 V ±1% (§6.5); gm(ea) = 1300 µA/V, gm(ps) = 12 A/V per the R4 compensation design procedure (§7.3.18 Eq. 9), 16 A/V as quoted in the general small-signal-model description (§7.3.16) — both values are as printed in the datasheet, the discrepancy is TI's own and is not resolved by this project; Iss = 2.3 µA slow-start charge current (§6.5); output divider Eq. 1 (§7.3.5); compensation Eqs. 9–12 (§7.3.18); RT resistor Eq. 13 (§7.4.1, Rrt = 100 kΩ ±1% for Fsw = 480 kHz typ., matching the RT column of the Electrical Characteristics table in §6.5) |
-| **Note** | Fleet-standard BEC used on Kaylee (`U_BEC_5V_1`, `U_BEC_5V_2`, `U_BEC_SERVO_5V`) since Rev R/S1. No datasheet was archived in `avionics/datasheets/` prior to 2026-07-28; added here after the feedback-divider/compensation-network placeholders were worked out against this document (see `avionics/kicad/Kaylee/Kaylee.md` Bill of Materials). |
+| **Note** | ⚠ **SUPERSEDED on Kaylee, 2026-07-28** — see "Removed / Superseded Citations" below. TPS54620's own VIN rating (4.5–17 V recommended, 20 V absolute max) cannot survive Kaylee's VDIS bus (18.75–25.2 V, 6S LiPo); found while adding the missing RT resistor flagged in the prior audit. Replaced fleet-wide on Kaylee by REF-SENSOR-014 (MAX42408AFOA, BEC1/BEC2/Servo) and REF-SENSOR-015 (LM76005, Nacelle 12V rail). This entry is kept for historical citation traceability only — do not use TPS54620 for any new VDIS-fed rail on this project. |
 
-**Used in:** `avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch` (`U_BEC_5V_1`, `U_BEC_5V_2`, `U_BEC_SERVO_5V`).
+**Used in:** historical only — no longer instantiated in `avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch` as of 2026-07-28.
+
+---
+
+### REF-SENSOR-014: Analog Devices MAX42408/MAX42410 — 36-V, 8-A/10-A Fully Integrated Buck Converter with Dual-Phase Capability
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Analog Devices, Inc. (US) |
+| **Product** | MAX42408AFOA+T (8 A) / MAX42410AFOA+T (10 A), adjustable output, average current-mode control, internally compensated |
+| **Datasheet** | 19-101749, Rev 1, 12/23, archived at `avionics/datasheets/max42408-max42410.pdf` |
+| **Datasheet URL** | <https://www.analog.com/media/en/technical-documentation/data-sheets/max42408-max42410.pdf> |
+| **Package** | 17-pin FC2QFN, 3.5 mm × 3.75 mm |
+| **Key parameters used for design** | VIN 4.5–36 V (p.4 §Electrical Characteristics; huge margin over Kaylee's 18.75–25.2 V VDIS, replacing TPS54620 which could not survive that bus — REF-SENSOR-013); VFB = 0.800 V ±1.5% (same table); adjustable output range 0.8–10 V at 400 kHz, 0.8–6 V at 1.5 MHz (p.12 §Setting the Output Voltage — **12 V is out of range for this part**, hence the separate LM76005-based Nacelle rail, REF-SENSOR-015); RFB1 = RFB2 × (VOUT/VFB − 1), RFB2 < 20 kΩ (p.12 Eq., Table 2 component-selection table); internally compensated (average current-mode control, no external R/C compensation network); EN self-start by tying to SUP; SYNC tied low for skip-mode. |
+| **Note** | Selected 2026-07-28 to replace TPS54620 on Kaylee's BEC1/BEC2 (5.3 V) and Servo (5.0 V, low-power/expansion) rails after TPS54620 was found unsuitable for direct VDIS connection. Chosen over paralleling two lower-current parts (user's original ask) because the family scales to a single 8 A/10 A chip — simpler, no current-sharing uncertainty. US-sourced per project supply-chain preference. |
+| **Package outline (POD)** | 21-100699 Rev A, effective 12/05/2022, archived at `avionics/datasheets/21-100699a.pdf` — real dimensioned drawing (D=3.50mm NOM, E=3.75mm NOM, side-pin pitch e1=0.50mm BSC, top-pin pitch e2=0.575mm BSC, terminal widths b1–b4 0.20–0.55mm NOM, terminal length L1=0.55mm NOM, pkg code F173A3F+1F) used to build `avionics/kicad/Kaylee/Kaylee.pretty/MAX42408AFOA_FC2QFN17_3.5x3.75mm.kicad_mod`. The separate Land Pattern document (90-100239) would give IPC-style outward-extended solder-pad sizing instead of raw terminal dimensions, but repeated fetch attempts on it timed out — the footprint uses POD NOM terminal size directly, a standard, defensible fallback documented in the footprint's own `descr` field. |
+
+**Used in:** `avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch` (`U_BEC_5V_1`, `U_BEC_5V_2`, `U_BEC_SERVO_5V`, all MAX42408AFOA).
+
+---
+
+### REF-SENSOR-015: TI LM76005 — 3.5-V to 60-V, 5-A Synchronous Step-Down Converter
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Texas Instruments (US) |
+| **Product** | LM76005RNPR, adjustable output, peak current-mode control, internally compensated |
+| **Datasheet** | SNVSBK5A, February 2020 — Revised July 2020 |
+| **Datasheet URL** | <https://www.ti.com/lit/ds/symlink/lm76005.pdf> |
+| **Package** | WQFN-30, 6.00 mm × 4.00 mm |
+| **Key parameters used for design** | VIN 3.5–60 V (§6.3, huge margin over VDIS's 18.75–25.2 V); VFB = 1.006 V typ. (§6.5); RFBB = VFB/(VOUT−VFB) × RFBT, RFBT recommended 10–100 kΩ (§7.3.3 Eq. 1); internally compensated; RT floating = 400 kHz internal default (§7.3.7, no external resistor needed); SS/TRK floating = internal 6.3 ms soft-start (§7.3.6); BIAS tied to VOUT (recommended for 3.3 V ≤ VOUT ≤ 18 V, §7.3.5); Table 1 recommended inductor/Cout by VOUT bracket. |
+| **Note** | Selected 2026-07-28 for Kaylee's new Nacelle 12 V rail (`U_BEC_NACELLE_12V`), feeding all 3 STS3215-C018 servos (2× nacelle tilt + cargo winch) — REF-SENSOR-012. Chosen specifically because MAX42408/MAX42410 (REF-SENSOR-014) cannot reach 12 V (adjustable range tops out at 10 V). |
+
+**Used in:** `avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch` (`U_BEC_NACELLE_12V`).
+
+---
+
+### REF-SENSOR-016: TI DS26LV31QML — 3 V Enhanced CMOS Quad Differential Line Driver
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Texas Instruments |
+| **Product** | DS26LV31QML |
+| **Datasheet** | SNOSAS6A — March 2006, revised April 2013; archived at `avionics/datasheets/ds26lv31qml.pdf` |
+| **Package** | SOIC-16 (also CLGA, package NAD0016A) |
+| **Section applied** | Figure 1 "Connection Diagram" (p.1) — pinout transcribed pin-for-pin |
+| **Pinout as applied** | 1 DI1, 2 DO1+, 3 DO1−, 4 EN, 5 DO2−, 6 DO2+, 7 DI2, 8 GND, 9 DI3, 10 DO3+, 11 DO3−, 12 EN\*, 13 DO4−, 14 DO4+, 15 DI4, 16 VCC |
+| **Note** | MIL-STD-1553B transmit driver on Wash. The connection diagram is a **raster image** — `pdftotext` cannot extract it; the page was read visually. Wash's pre-existing inline `DS26LV31` symbol was found 2026-07-28 to be **wrong** (duplicate pin numbers: pin 8 declared as both GND and 4Y−, pin 16 as both VCC and 4Y+) and must not be reused. |
+
+**Used in:** `avionics/kicad/Wash/scripts/gen_wash_sch.py` (`1553-DRV`),
+`avionics/kicad/Wash/kicads/Wash_rebuild.kicad_sch`.
+
+---
+
+### REF-SENSOR-017: TI DS26LV32AT — 3 V Enhanced CMOS Quad Differential Line Receiver
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Texas Instruments |
+| **Product** | DS26LV32AT |
+| **Datasheet** | SNLS128C — April 1999, revised February 2013; archived at `avionics/datasheets/ds26lv32at.pdf` |
+| **Package** | SOIC-16 (package D0016A / NAD0016A) |
+| **Section applied** | Figure 1 "Connection Diagram" (p.1) — pinout transcribed pin-for-pin |
+| **Pinout as applied** | 1 RI1−, 2 RI1+, 3 RO1, 4 EN, 5 RO2, 6 RI2+, 7 RI2−, 8 GND, 9 RI3−, 10 RI3+, 11 RO3, 12 EN\*, 13 RO4, 14 RI4+, 15 RI4−, 16 VCC |
+| **Note** | MIL-STD-1553B receive path on Wash; two channels are wired in opposite polarity off the shared transformer primary to regenerate the complementary logic pair the PRU Manchester decoder expects. Datasheet notes a receiver **OPEN-input failsafe**, so the two unused channels may be left open. |
+
+**Used in:** `avionics/kicad/Wash/scripts/gen_wash_sch.py` (`1553-RCV`),
+`avionics/kicad/Wash/kicads/Wash_rebuild.kicad_sch`.
+
+---
+
+### REF-SENSOR-018: TDK InvenSense ICM-42688-P — 6-Axis MEMS IMU
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | TDK InvenSense |
+| **Product** | ICM-42688-P |
+| **Datasheet** | DS-000347 Revision 1.6; archived at `avionics/datasheets/ds-000347-icm-42688-p-v1.6.pdf` |
+| **Package** | 14-pin LGA, 2.5 × 3.0 × 0.91 mm |
+| **Section applied** | §4.1 "Pin Out Diagram and Signal Description", Table 10 |
+| **Pinout as applied** | 1 AP_SDO/AP_AD0, 2 RESV, 3 RESV, 4 INT1, 5 VDDIO, 6 GND, 7 RESV (**"Connect to GND"** — mandatory), 8 VDD, 9 INT2/FSYNC/CLKIN, 10 RESV, 11 RESV, 12 AP_CS, 13 AP_SCL/AP_SCLK, 14 AP_SDA/AP_SDIO/AP_SDI |
+| **Note** | Run in 4-wire SPI mode on Wash. The board's prior net map was scrambled — `SPI0_MOSI` sat on pin 1 (the SDO **output**) and `SPI0_MISO` on pin 5 (VDDIO); corrected 2026-07-28. |
+
+**Used in:** `avionics/kicad/Wash/scripts/gen_wash_sch.py` (`IMU`),
+`avionics/kicad/Wash/kicads/Wash_rebuild.kicad_sch`.
+
+---
+
+### REF-SENSOR-019: Bosch Sensortec BMP388 — Barometric Pressure Sensor
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Bosch Sensortec |
+| **Product** | BMP388 |
+| **Datasheet** | BST-BMP388-DS001-07, Revision 1.7, 11/2020; archived at `avionics/datasheets/bst-bmp388-ds001.pdf` |
+| **Package** | **10-pin** LGA, 2.0 × 2.0 mm metal lid |
+| **Section applied** | Table 50 "Pin description"; §6.2 "Connection diagram ¾-wire SPI" |
+| **Pinout as applied** | 1 VDDIO, 2 SCK, 3 VSS, 4 SDI, 5 SDO, 6 CSB, 7 INT, 8 VSS, 9 VSS, 10 VDD |
+| **Note** | Run in 4-wire SPI mode on Wash. **The Wash PCB currently carries an 8-pad LGA land, which cannot fit this 10-pin part** — footprint replacement is open work (`avionics/WBS.md` §1.2a). |
+
+**Used in:** `avionics/kicad/Wash/scripts/gen_wash_sch.py` (`BARO`),
+`avionics/kicad/Wash/kicads/Wash_rebuild.kicad_sch`.
+
+---
+
+### REF-SENSOR-020: NXP PCA9555 — 16-bit I²C/SMBus I/O Port with Interrupt
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | NXP Semiconductors |
+| **Product** | PCA9555 (PCA9555DB, SSOP24 / SOT340-1) |
+| **Datasheet** | archived at `avionics/datasheets/PCA9555.pdf` |
+| **Section applied** | §5.2 "Pin description", Table 3 (SO24/SSOP24/TSSOP24 column) |
+| **Pinout as applied** | 1 INT, 2 A1, 3 A2, 4–11 IO0_0…IO0_7, 12 VSS, 13–20 IO1_0…IO1_7, 21 A0, 22 SCL, 23 SDA, 24 VDD |
+| **Note** | Wash GPIO expander. A0/A1/A2 strapped to GND ⇒ I²C address **0x20**; port-0 bits 0–5 drive the six `GPIO-A…F` field connectors. Verified 2026-07-28 that the board's existing net map for this part already matched the datasheet exactly, including the address strapping. |
+
+**Used in:** `avionics/kicad/Wash/scripts/gen_wash_sch.py` (`U-GPIO`),
+`avionics/kicad/Wash/kicads/Wash_rebuild.kicad_sch`.
+
+---
+
+### REF-SENSOR-021: Vanguard Electronics SM1553 Series — MIL-STD-1553 Data Bus Pulse Transformer
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Vanguard Electronics |
+| **Product** | SM1553 series (SM1553-027 / -028 / -029 / -030) |
+| **Datasheet** | rev D; archived at `avionics/datasheets/SM1553-Series_HiRel-Data-Bus-Pulse-Transformer_RevD.pdf` |
+| **Package** | **8-pin** transfer-moulded SMD (gull-wing); through-hole packages also available |
+| **Section applied** | "SCHEMATIC" and the Vanguard P/N table (p.1) |
+| **Pinout as applied** | Primary **1-3** (centre tap 2); secondary **4-8** (intermediate taps 5/6/7). SM1553-028 gives 1.4 : 1 on 1-3 / 4-8. |
+| **Note** | Built to MIL-STD-1553, dielectric withstanding 1500 V AC 1 min, −55 to +125 °C. **The Wash PCB carries a 2-pad placeholder blob (with a malformed pad literally named `SM-1553-11`) in place of this part** — a real footprint must be authored and placed (`avionics/WBS.md` §1.2a). The designator "SM-1553-11" does not appear in Vanguard's published P/N table; the exact ordering P/N still needs confirmation. |
+
+**Used in:** `avionics/kicad/Wash/scripts/gen_wash_sch.py` (`1553-XFM`),
+`avionics/kicad/Wash/kicads/Wash_rebuild.kicad_sch`.
+
+---
+
+### REF-SENSOR-022: Bourns SRF2012A Series — Common-Mode Chip Inductor
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Bourns |
+| **Product** | SRF2012A series (SRF2012-121YA used as the 100 Ω @ 100 MHz part) |
+| **Datasheet** | archived at `avionics/datasheets/SRF2012A.pdf` |
+| **Package** | 2012 (0805) SMD, 4-terminal |
+| **Section applied** | "Schematic" and "Product Dimensions" (p.1) |
+| **Winding topology as applied** | **Windings are 1↔2 and 4↔3** — i.e. terminals 1 and 4 are one side of the choke, 2 and 3 the other |
+| **Note** | Common-mode choke on the Wash CAN-FD and RS-485 field ports. **This topology matters:** the board previously had `CAN_H` on pads 1 *and* 3 with `CAN_L` on pads 2 *and* 4, which places a winding directly across the differential pair — it **shorted CAN_H to CAN_L** (identically on RS-485). Corrected 2026-07-28 so each winding carries one bus line from the transceiver side to the filtered connector side. |
+
+**Used in:** `avionics/kicad/Wash/scripts/gen_wash_sch.py` (`CMC-CAN`, `CMC-RS485`),
+`avionics/kicad/Wash/kicads/Wash_rebuild.kicad_sch`.
 
 ---
 

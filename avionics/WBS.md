@@ -631,6 +631,68 @@ REFERENCES.md Removed/Superseded Citations).
     raised to the fleet 0.3 mm floor. DRC 0 hard / ERC 0 hard, gerbers
     generated. U6 was staged off-board and hand-placed by the user afterward.
 
+### §1.9.3 — Kaylee BEC Regulator Rebuild (MAX42408/LM76005, STS3215-C018 rail)
+
+Started 2026-07-28 while auditing Kaylee's generic-placeholder BOM entries for the
+TPS54620-based BEC channels (feedback dividers, compensation network). Escalated into a
+full regulator-fleet swap after finding TPS54620 itself was unsuitable, not just its
+support components.
+
+- [x] **TPS54620RGYT audited against the real datasheet (SLVS949F)** — found the
+    schematic symbol used on Kaylee is a 9-pin arbitrary simplification with no RT/CLK
+    pin modeled at all (blocking the originally-requested "add the missing RT resistor"
+    fix outright), its PCB footprint is TI's `RGP0020D` (a real, but wrong, 20-pin QFN —
+    the real TPS54620RGYT is a 14-pin VQFN), and two of its PCB pads (GND/PGND) were found
+    wired to a stray unrelated net (`CM2_OUT_N`, the EMI common-mode filter's own net) —
+    a pre-existing PCB net-sync defect, not introduced this session. Most critically:
+    TPS54620's VIN rating (4.5–17 V recommended, 20 V absolute max, REF-SENSOR-013) cannot
+    survive Kaylee's VDIS bus (18.75–25.2 V, 6S LiPo) at any point in its range — full
+    charge (25.2 V) exceeds even the absolute-max stress rating. User decided (2026-07-28)
+    to swap the whole BEC fleet rather than patch around a chip that can't take the input
+    voltage.
+- [x] **Part selection** — TI LM76005 (60 V/5 A, REF-SENSOR-015) considered first
+    (real datasheet read, SNVSBK5A), then Analog Devices MAX42408/MAX42410 (36 V/8-10 A,
+    REF-SENSOR-014, US-sourced per project supply-chain preference) found to be a better
+    fit for BEC1/BEC2/Servo — single 8 A chip beats paralleling two lower-current parts,
+    no current-sharing uncertainty, internally compensated (simpler BOM than TPS54620's
+    external R/C compensation network). MAX42408/MAX42410's adjustable range tops out at
+    10 V (400 kHz) — cannot reach 12 V — so the new Nacelle rail below stays on LM76005.
+- [x] **STS3215 servo variant decision** — nacelle-tilt design requirement is ≥25 kg·cm
+    (`docs/POWER_DISTRIBUTION.md` §3.3); the 7.4 V/C001 variant's 19.5 kg·cm stall falls
+    short, the 12 V/C018 variant's 30 kg·cm clears it with margin. Both nacelle tilt
+    servos AND the cargo winch motor (previously C001, now also C018) share one new
+    dedicated Kaylee rail; each of the 3 units gets its own dedicated `CAN-PERIPH-GW-1`
+    node (TTL-serial↔CAN-FD bridge + own TPM identity) rather than sharing the
+    ESC-focused `N_STACKS=4` gateway. Real C018 datasheet read (2026-07-28,
+    `avionics/datasheets/feetech-sts3215-c018.pdf`) after an initial mismatched PDF
+    (FEETECH FU8830BL, a different CAN-bus brushless servo) was caught and corrected —
+    see REFERENCES.md REF-SENSOR-012 for full verified spec table (both variants).
+- [x] **Schematic rebuild** — `U_BEC_5V_1`/`U_BEC_5V_2`/`U_BEC_SERVO_5V` TPS54620RGYT
+    instances + their compensation networks (R_COMP*/C_COMPA*/C_COMPB*/C_SS*) removed;
+    replaced with MAX42408AFOA instances (real 17-pin FC2QFN pinout, clean-room lib_symbol
+    authored directly from the ADI datasheet) with revalued FB dividers (56.2k/10.0k →
+    5.296 V for BEC1/BEC2, 52.3k/10.0k → 4.984 V for Servo) and Table-2 recommended
+    L/Cout/Cff values. New `U_BEC_NACELLE_12V` (LM76005, real 30-pin WQFN pinout,
+    clean-room lib_symbol from the TI datasheet) added with 100k/9.09k divider (11.99 V)
+    and its own `J_NACELLE_12V` connector. D_OR1/D_OR2/J_5V/C_5V_OUT/J_SHLD_5V and
+    J_SERVO_5V/J_SHLD_SV (downstream connectors) deliberately left untouched — new
+    regulator output nets were named to match what those already expect. ERC-driven
+    iterative cleanup of orphaned global_label/PGND residue from the old parts (converged
+    via a fixed-point removal loop against `kicad-cli sch erc` output). **Final: 0 hard
+    ERC errors** (the 3 remaining `power_pin_not_driven` warnings on the new SUP pins are
+    in this project's own `ERC_SOFT_TYPES` non-blocking set, per `validate_kicad.py`).
+- [ ] **PCB footprint + placement + DRC + gerbers** — NOT yet done. Need to verify real
+    KiCad footprints exist for FC2QFN-17 3.5×3.75mm (MAX42408 family) and WQFN-30 6×4mm
+    (LM76005) — current schematic symbols cite footprint names that are not yet confirmed
+    against the installed KiCad footprint library (4 `footprint_link_issues` in the ERC
+    report track this). PCB-side net resync, placement (off-board staging per AGENTS.md
+    policy if no clean spot found), DRC clean-out, and gerbers are the next pass.
+- [ ] **Doc sync** — `docs/POWER_DISTRIBUTION.md` §3.3 still describes the old
+    DS3218MG/6 V servo-rail design (stale); `docs/CARGO_WINCH_SPECIFICATION.md`'s power
+    routing still references the old `5V_JAYNE`/RAIL-2 path. Both need updating to the
+    new `U_BEC_NACELLE_12V`/`J_NACELLE_12V` rail and per-servo `CAN-PERIPH-GW-1` node
+    design. `Kaylee.md` Section-H BEC description already updated this pass.
+
 ---
 
 ## Procurement — §2.4, §2.5 (Avionics BOM tables)

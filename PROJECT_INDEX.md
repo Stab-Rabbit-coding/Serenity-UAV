@@ -2,7 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-07-28 — Automated reconciliation pass -->
-TODO.md                           — Open-work-only subset of WBS.md (what's left to do)
 package.json                       — Node.js dependency manifest (tooling/preview support)
 package-lock.json                  — Node.js dependency lockfile
 previewConfig.json                 — Live preview configuration
