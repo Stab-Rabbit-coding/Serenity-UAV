@@ -2,11 +2,14 @@
 
 # Fine-pitch IC pad-to-pad clearance exceptions. AGENTS.md mandates 0.3 mm
 # minimum copper spacing project-wide, but these are real 0.5 mm-pitch parts
-# (TPS54620 VQFN-20, INA226 MSOP-10) whose datasheet-correct land pattern
+# (MAX42408AFOA FC2QFN-17 side pitch e1=0.50mm BSC per POD 21-100699; LM76005
+# WQFN-30 0.5mm pitch; INA226 MSOP-10) whose datasheet-correct land pattern
 # cannot meet 0.3 mm between adjacent pads -- physically impossible at that
 # pitch, not a placement defect. Scoped to each part's own courtyard only;
 # does not relax clearance anywhere else on the board. See Kaylee.md Bill of
-# Materials.
+# Materials. (Rule names below still say "TPS54620" for the 3 original BEC
+# channels -- historical, those channels were rebuilt to MAX42408AFOA
+# 2026-07-28, REF-SENSOR-013/014; not renamed to avoid unrelated churn.)
 (rule "BEC VQFN-20 fine-pitch pad clearance (TPS54620, 0.5mm pitch)"
     (condition "A.insideCourtyard('U_BEC_SERVO_5V') && B.insideCourtyard('U_BEC_SERVO_5V')")
     (constraint clearance (min 0.15mm))
@@ -17,6 +20,14 @@
 )
 (rule "BEC VQFN-20 fine-pitch pad clearance (TPS54620, 0.5mm pitch) 3"
     (condition "A.insideCourtyard('U_BEC_5V_2') && B.insideCourtyard('U_BEC_5V_2')")
+    (constraint clearance (min 0.15mm))
+)
+(rule "U_BEC_RCS_6V fine-pitch pad clearance (MAX42408AFOA, 0.5mm pitch)"
+    (condition "A.insideCourtyard('U_BEC_RCS_6V') && B.insideCourtyard('U_BEC_RCS_6V')")
+    (constraint clearance (min 0.15mm))
+)
+(rule "U_BEC_NACELLE_12V fine-pitch pad clearance (LM76005 WQFN-30, 0.5mm pitch)"
+    (condition "A.insideCourtyard('U_BEC_NACELLE_12V') && B.insideCourtyard('U_BEC_NACELLE_12V')")
     (constraint clearance (min 0.15mm))
 )
 (rule "Current-sense MSOP-10 fine-pitch pad clearance (INA226, 0.5mm pitch) main"

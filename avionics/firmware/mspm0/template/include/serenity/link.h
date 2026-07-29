@@ -122,7 +122,7 @@ typedef struct {
  * one stops carrying traffic.  The published data is identical either way,
  * and the TPM envelope makes the choice of bearer irrelevant to a subscriber.
  */
-typedef struct {
+typedef struct ser_link {
     ser_link_cfg_t  cfg[2];         /**< [0] primary, [1] standby.            */
     uint8_t         count;          /**< 1 or 2 bearers configured.           */
     uint8_t         active;         /**< Index of the bearer in use.          */

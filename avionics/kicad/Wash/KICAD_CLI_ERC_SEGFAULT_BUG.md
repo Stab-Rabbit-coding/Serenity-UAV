@@ -4,7 +4,10 @@
 **AI-assist:** Claude Opus 5 (Anthropic) — isolation and minimal reproduction during
 the Wash schematic-first rebuild, 2026-07-28
 **License:** CC BY 4.0
-**Status:** Root cause understood and worked around in this repo; upstream fix wanted.
+**Status:** Root cause understood and worked around in this repo; **not yet
+filed upstream** — paste-ready issue text and the pre-submission checklist are in
+[`kicad_cli_erc_segfault_repro/UPSTREAM_SUBMISSION.md`](kicad_cli_erc_segfault_repro/UPSTREAM_SUBMISSION.md),
+tracked as `TODO.md` §0.9.
 
 `kicad-cli sch erc` **segfaults (SIGSEGV, shell exit 139) with no output at
 all** when a

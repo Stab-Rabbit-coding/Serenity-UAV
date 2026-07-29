@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    profiles.xml — Fast DDS participant profiles for the MSPM0 trust nodes.
+
+    Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+    Drafted by: Claude Opus 5 (Anthropic), 2026-07-28
+    License: CC BY 4.0 - creativecommons.org/licenses/by/4.0
+
+    This is what makes each MSPM0 a full DDS domain peer rather than traffic
+    behind a proxy.
+
+    An MSPM0 node creates its XRCE Participant *by reference*, naming one of
+    the profiles below.  The Micro XRCE-DDS Agent resolves that name and calls
+    DomainParticipantFactory::create_participant_with_profile(), so each node
+    gets its OWN Fast DDS DomainParticipant - its own GUID, its own
+    participant name, its own endpoints - announced by SPDP and SEDP exactly
+    like any other peer on the domain.  Peers discover the node, not the Agent.
+
+    Because the profile is per node, the DDS-Security properties below are per
+    node too: each carries that node's own identity certificate and private
+    key, so the OMG DDS-Security authentication handshake [REF-OMG-002 9.3]
+    authenticates the node's own credential.
+
+    RESIDUAL LIMITATION, stated plainly: the DDS-Security private key lives on
+    the Agent host, because the ECDSA/ECDH handshake cannot run on a Cortex-M0+
+    with no PKA engine.  That is exactly why every node also carries its own
+    SLB9670 TPM and why every sample carries a TPM-keyed envelope MAC
+    (template/include/serenity/sec_envelope.h).  DDS-Security authenticates the
+    participant; the envelope proves the sample came out of that node's TPM.
+    Compromising the Agent host yields the DDS identity but NOT the ability to
+    forge a node's telemetry.
+
+    Run the Agent with (see agent/README.md for the exact invocation; XML
+    comments cannot contain a double hyphen, so the flags are spelled out
+    there rather than here).
+
+    Certificate and key files are NOT in this repository.  Generate them per
+    node with the procedure in agent/README.md.
+-->
+<dds xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
+    <profiles>
+
+        <!--
+            Shared security properties are repeated per profile rather than
+            inherited: Fast DDS profile inheritance does not merge property
+            lists, and a silently-unmerged security property would leave a
+            participant running unauthenticated while appearing configured.
+        -->
+
+        <participant profile_name="serenity_gw_encoder">
+            <rtps>
+                <name>serenity/gw/encoder</name>
+                <propertiesPolicy>
+                    <properties>
+                        <property>
+                            <name>dds.sec.auth.plugin</name>
+                            <value>builtin.PKI-DH</value>
+                        </property>
+                        <property>
+                            <name>dds.sec.auth.builtin.PKI-DH.identity_ca</name>
+                            <value>file:///etc/serenity/pki/identity_ca.pem</value>
+                        </property>
+                        <property>
+                            <name>dds.sec.auth.builtin.PKI-DH.identity_certificate</name>
+                            <value>file:///etc/serenity/pki/gw_encoder_cert.pem</value>
+                        </property>
+                        <property>
+                            <name>dds.sec.auth.builtin.PKI-DH.private_key</name>
+                            <value>file:///etc/serenity/pki/gw_encoder_key.pem</value>
+                        </property>
+                        <property>
+                            <name>dds.sec.access.plugin</name>
+                            <value>builtin.Access-Permissions</value>
+                        </property>
+                        <property>
+                            <name>dds.sec.access.builtin.Access-Permissions.permissions_ca</name>
+                            <value>file:///etc/serenity/pki/permissions_ca.pem</value>
+                        </property>
+                        <property>
+                            <name>dds.sec.access.builtin.Access-Permissions.governance</name>
+                            <value>file:///etc/serenity/pki/governance.smime</value>
+                        </property>
+                        <property>
+                            <name>dds.sec.access.builtin.Access-Permissions.permissions</name>
+                            <value>file:///etc/serenity/pki/gw_encoder_permissions.smime</value>
+                        </property>
+                        <property>
+                            <name>dds.sec.crypto.plugin</name>
+                            <value>builtin.AES-GCM-GMAC</value>
+                        </property>
+                    </properties>
+                </propertiesPolicy>
+            </rtps>
+        </participant>
+
+        <participant profile_name="serenity_gw_esc">
+            <rtps>
+                <name>serenity/gw/esc</name>
+                <propertiesPolicy>
+                    <properties>
+                        <property><name>dds.sec.auth.plugin</name><value>builtin.PKI-DH</value></property>
+                        <property><name>dds.sec.auth.builtin.PKI-DH.identity_ca</name><value>file:///etc/serenity/pki/identity_ca.pem</value></property>
+                        <property><name>dds.sec.auth.builtin.PKI-DH.identity_certificate</name><value>file:///etc/serenity/pki/gw_esc_cert.pem</value></property>
+                        <property><name>dds.sec.auth.builtin.PKI-DH.private_key</name><value>file:///etc/serenity/pki/gw_esc_key.pem</value></property>
+                        <property><name>dds.sec.access.plugin</name><value>builtin.Access-Permissions</value></property>
+                        <property><name>dds.sec.access.builtin.Access-Permissions.permissions_ca</name><value>file:///etc/serenity/pki/permissions_ca.pem</value></property>
+                        <property><name>dds.sec.access.builtin.Access-Permissions.governance</name><value>file:///etc/serenity/pki/governance.smime</value></property>
+                        <property><name>dds.sec.access.builtin.Access-Permissions.permissions</name><value>file:///etc/serenity/pki/gw_esc_permissions.smime</value></property>
+                        <property><name>dds.sec.crypto.plugin</name><value>builtin.AES-GCM-GMAC</value></property>
+                    </properties>
+                </propertiesPolicy>
+            </rtps>
+        </participant>
+
+        <participant profile_name="serenity_gw_servo">
+            <rtps>
+                <name>serenity/gw/servo</name>
+                <propertiesPolicy>
+                    <properties>
+                        <property><name>dds.sec.auth.plugin</name><value>builtin.PKI-DH</value></property>
+                        <property><name>dds.sec.auth.builtin.PKI-DH.identity_ca</name><value>file:///etc/serenity/pki/identity_ca.pem</value></property>
+                        <property><name>dds.sec.auth.builtin.PKI-DH.identity_certificate</name><value>file:///etc/serenity/pki/gw_servo_cert.pem</value></property>
+                        <property><name>dds.sec.auth.builtin.PKI-DH.private_key</name><value>file:///etc/serenity/pki/gw_servo_key.pem</value></property>
+                        <property><name>dds.sec.access.plugin</name><value>builtin.Access-Permissions</value></property>
+                        <property><name>dds.sec.access.builtin.Access-Permissions.permissions_ca</name><value>file:///etc/serenity/pki/permissions_ca.pem</value></property>
+                        <property><name>dds.sec.access.builtin.Access-Permissions.governance</name><value>file:///etc/serenity/pki/governance.smime</value></property>
+                        <property><name>dds.sec.access.builtin.Access-Permissions.permissions</name><value>file:///etc/serenity/pki/gw_servo_permissions.smime</value></property>
+                        <property><name>dds.sec.crypto.plugin</name><value>builtin.AES-GCM-GMAC</value></property>
+                    </properties>
+                </propertiesPolicy>
+            </rtps>
+        </participant>
+
+        <participant profile_name="serenity_jayne_nose">
+            <rtps>
+                <name>serenity/jayne/nose</name>
+                <propertiesPolicy>
+                    <properties>
+                        <property><name>dds.sec.auth.plugin</name><value>builtin.PKI-DH</value></property>
+                        <property><name>dds.sec.auth.builtin.PKI-DH.identity_ca</name><value>file:///etc/serenity/pki/identity_ca.pem</value></property>
+                        <property><name>dds.sec.auth.builtin.PKI-DH.identity_certificate</name><value>file:///etc/serenity/pki/jayne_nose_cert.pem</value></property>
+                        <property><name>dds.sec.auth.builtin.PKI-DH.private_key</name><value>file:///etc/serenity/pki/jayne_nose_key.pem</value></property>
+                        <property><name>dds.sec.access.plugin</name><value>builtin.Access-Permissions</value></property>
+                        <property><name>dds.sec.access.builtin.Access-Permissions.permissions_ca</name><value>file:///etc/serenity/pki/permissions_ca.pem</value></property>
+                        <property><name>dds.sec.access.builtin.Access-Permissions.governance</name><value>file:///etc/serenity/pki/governance.smime</value></property>
+                        <property><name>dds.sec.access.builtin.Access-Permissions.permissions</name><value>file:///etc/serenity/pki/jayne_nose_permissions.smime</value></property>
+                        <property><name>dds.sec.crypto.plugin</name><value>builtin.AES-GCM-GMAC</value></property>
+                    </properties>
+                </propertiesPolicy>
+            </rtps>
+        </participant>
+
+        <participant profile_name="serenity_jayne_cargo">
+            <rtps>
+                <name>serenity/jayne/cargo</name>
+                <propertiesPolicy>
+                    <properties>
+                        <property><name>dds.sec.auth.plugin</name><value>builtin.PKI-DH</value></property>
+                        <property><name>dds.sec.auth.builtin.PKI-DH.identity_ca</name><value>file:///etc/serenity/pki/identity_ca.pem</value></property>
+                        <property><name>dds.sec.auth.builtin.PKI-DH.identity_certificate</name><value>file:///etc/serenity/pki/jayne_cargo_cert.pem</value></property>
+                        <property><name>dds.sec.auth.builtin.PKI-DH.private_key</name><value>file:///etc/serenity/pki/jayne_cargo_key.pem</value></property>
+                        <property><name>dds.sec.access.plugin</name><value>builtin.Access-Permissions</value></property>
+                        <property><name>dds.sec.access.builtin.Access-Permissions.permissions_ca</name><value>file:///etc/serenity/pki/permissions_ca.pem</value></property>
+                        <property><name>dds.sec.access.builtin.Access-Permissions.governance</name><value>file:///etc/serenity/pki/governance.smime</value></property>
+                        <property><name>dds.sec.access.builtin.Access-Permissions.permissions</name><value>file:///etc/serenity/pki/jayne_cargo_permissions.smime</value></property>
+                        <property><name>dds.sec.crypto.plugin</name><value>builtin.AES-GCM-GMAC</value></property>
+                    </properties>
+                </propertiesPolicy>
+            </rtps>
+        </participant>
+
+        <participant profile_name="serenity_kaylee_pdb">
+            <rtps>
+                <name>serenity/kaylee/pdb</name>
+                <propertiesPolicy>
+                    <properties>
+                        <property><name>dds.sec.auth.plugin</name><value>builtin.PKI-DH</value></property>
+                        <property><name>dds.sec.auth.builtin.PKI-DH.identity_ca</name><value>file:///etc/serenity/pki/identity_ca.pem</value></property>
+                        <property><name>dds.sec.auth.builtin.PKI-DH.identity_certificate</name><value>file:///etc/serenity/pki/kaylee_cert.pem</value></property>
+                        <property><name>dds.sec.auth.builtin.PKI-DH.private_key</name><value>file:///etc/serenity/pki/kaylee_key.pem</value></property>
+                        <property><name>dds.sec.access.plugin</name><value>builtin.Access-Permissions</value></property>
+                        <property><name>dds.sec.access.builtin.Access-Permissions.permissions_ca</name><value>file:///etc/serenity/pki/permissions_ca.pem</value></property>
+                        <property><name>dds.sec.access.builtin.Access-Permissions.governance</name><value>file:///etc/serenity/pki/governance.smime</value></property>
+                        <property><name>dds.sec.access.builtin.Access-Permissions.permissions</name><value>file:///etc/serenity/pki/kaylee_permissions.smime</value></property>
+                        <property><name>dds.sec.crypto.plugin</name><value>builtin.AES-GCM-GMAC</value></property>
+                    </properties>
+                </propertiesPolicy>
+            </rtps>
+        </participant>
+
+    </profiles>
+</dds>

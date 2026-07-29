@@ -138,8 +138,17 @@ target_compile_options(uxrclient PRIVATE -w)
 set_target_properties(uxrclient PROPERTIES C_STANDARD 99)
 
 ## upstream `util/time.c` calls clock_gettime(CLOCK_REALTIME, ...) with only
-## <time.h> included, which C99's strict mode hides.  On a POSIX host the
-## feature-test macro exposes it; on the bare-metal MSPM0 port the symbol is
-## supplied by the newlib retargeting shim in hal/mspm0/syscalls.c, backed by
-## ser_hal_time_ns().  Either way upstream stays unpatched.
-target_compile_definitions(uxrclient PRIVATE _POSIX_C_SOURCE=200809L)
+## <time.h> included, which C99's strict mode hides.  The macro that exposes
+## the declaration differs by C library, and getting it wrong is silent: the
+## call compiles as an implicit int-returning function and the session clock
+## reads garbage.  glibc wants _POSIX_C_SOURCE; newlib (arm-none-eabi) gates
+## it on _POSIX_TIMERS instead, and defining _POSIX_C_SOURCE there actually
+## *hides* it again.  Verified on both toolchains rather than assumed.
+##
+## The symbol itself is supplied by hal/mspm0/syscalls.c on bare metal,
+## backed by ser_hal_time_ns().  Either way upstream stays unpatched.
+if(CMAKE_SYSTEM_NAME STREQUAL "Generic")
+    target_compile_definitions(uxrclient PRIVATE _POSIX_TIMERS=1)
+else()
+    target_compile_definitions(uxrclient PRIVATE _POSIX_C_SOURCE=200809L)
+endif()

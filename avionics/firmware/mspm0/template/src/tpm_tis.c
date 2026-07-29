@@ -61,9 +61,9 @@
  * base + n * 0x1000.
  */
 static uint32_t tis_addr(const ser_tpm_tis_t *tis, uint16_t reg) {
-    return TPM_TIS_SPI_BASE
-           + ((uint32_t)tis->locality * TPM_TIS_LOCALITY_STRIDE)
-           + (uint32_t)reg;
+    return (uint32_t)(TPM_TIS_SPI_BASE
+                      + ((uint32_t)tis->locality * TPM_TIS_LOCALITY_STRIDE)
+                      + (uint32_t)reg);
 }
 
 /**

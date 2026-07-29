@@ -32,6 +32,7 @@
 #define SERENITY_BOARD_H_
 
 #include "serenity/hal.h"
+#include "serenity/node.h"
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -133,6 +134,25 @@ void board_app_safe_state(void);
  * `boards/<board>/board.c`.
  */
 int board_hal_configure(void);
+
+/**
+ * @brief Board hook: declare this board's bearers and failover policy.
+ *
+ * Implemented in `boards/<board>/board.c`.  Declared here (rather than as a
+ * bare `extern` at the use site) so the definition and the call are checked
+ * against one prototype.
+ */
+void board_configure_link(ser_link_t *link);
+
+/**
+ * @brief Board hook: this board's topic table and its length.
+ *
+ * Defined in `boards/<board>/board.c`.  A node declares only the entities its
+ * own context needs, which is why the table is per-board rather than a fleet
+ * union that every node would carry the cost of.
+ */
+extern const ser_topic_t board_topics[];
+extern const uint8_t     board_topic_count;
 
 #ifdef __cplusplus
 }

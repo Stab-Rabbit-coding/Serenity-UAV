@@ -681,17 +681,52 @@ support components.
     via a fixed-point removal loop against `kicad-cli sch erc` output). **Final: 0 hard
     ERC errors** (the 3 remaining `power_pin_not_driven` warnings on the new SUP pins are
     in this project's own `ERC_SOFT_TYPES` non-blocking set, per `validate_kicad.py`).
-- [ ] **PCB footprint + placement + DRC + gerbers** — NOT yet done. Need to verify real
-    KiCad footprints exist for FC2QFN-17 3.5×3.75mm (MAX42408 family) and WQFN-30 6×4mm
-    (LM76005) — current schematic symbols cite footprint names that are not yet confirmed
-    against the installed KiCad footprint library (4 `footprint_link_issues` in the ERC
-    report track this). PCB-side net resync, placement (off-board staging per AGENTS.md
-    policy if no clean spot found), DRC clean-out, and gerbers are the next pass.
-- [ ] **Doc sync** — `docs/POWER_DISTRIBUTION.md` §3.3 still describes the old
-    DS3218MG/6 V servo-rail design (stale); `docs/CARGO_WINCH_SPECIFICATION.md`'s power
-    routing still references the old `5V_JAYNE`/RAIL-2 path. Both need updating to the
-    new `U_BEC_NACELLE_12V`/`J_NACELLE_12V` rail and per-servo `CAN-PERIPH-GW-1` node
-    design. `Kaylee.md` Section-H BEC description already updated this pass.
+- [x] **MAX42408AFOA real footprint built from ADI POD 21-100699** (17-pin FC2QFN,
+    3.5×3.75mm, real per-edge pin pitch 0.50mm sides/0.575mm top — differs from the
+    initial 0.5mm-everywhere estimate). ADI's own land-pattern PDF (90-100239) never
+    became fetchable (repeated timeouts); POD NOM terminal dimensions used directly as
+    a documented, defensible fallback. `avionics/kicad/Kaylee/Kaylee.pretty/
+    MAX42408AFOA_FC2QFN17_3.5x3.75mm.kicad_mod`. LM76005 uses a real, already-installed
+    KiCad library footprint (`Texas_RNP0030B_WQFN-30-1EP_4x6mm_P0.5mm_EP1.8x4.5mm`,
+    matches TI's actual RNP package code). Kaylee had no local `fp-lib-table` at all
+    (pre-existing gap, also affected already-referenced `Kaylee:CMC_WE-SL5...` etc.) —
+    added one matching the Jayne/CAN-PERIPH-GW-1 sibling pattern.
+- [x] **Real topology bug found and fixed during PCB sync prep**: the schematic
+    rebuild had wired each new regulator's inductor between SUP and LX instead of LX
+    and the regulated output (backwards — would bypass the switching function
+    entirely), and never actually tied the chip SUP pins to VDIS (dead-end net). ERC
+    cannot catch this class of defect (topology, not connectivity). Found by manually
+    cross-checking net assignments before trusting them for PCB sync; fixed via label
+    rename + swap for all 3 original channels (Nacelle channel was already correct).
+- [x] **Design revision mid-sync**: winch reverted from STS3215-C018 back to C001 and
+    moved off Nacelle-12V onto the Servo/cargo rail (raised 5.0V→6.0V, verified against
+    both C001's real datasheet and Tower Pro's own SG90 spec page before changing);
+    separately split RCS proportional valve servos onto a new dedicated `U_BEC_RCS_6V`
+    rail for flight-critical fault isolation from cargo-handling loads. Full rationale
+    in `Kaylee.md` and REFERENCES.md REF-SENSOR-012/014.
+- [x] **PCB sync completed** via the established pcbnew-SWIG-bug workaround (see
+    `avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md`): FootprintLoad/Add in a fresh process
+    per stage, net assignment via text post-pass (Pads()/SetNet() are broken in this
+    pcbnew build). Removed the 3 old TPS54620 footprints + 3 now-obsolete ferrite
+    beads (FB_5V1/FB_5V2/FB_SERVO, no longer used now that C_BEC*_IN wires directly to
+    VDIS); added 32 new footprints (3 replacement regulators at their prior positions,
+    2 new regulator channels + support passives + connectors, off-board staged).
+    Fine-pitch `.kicad_dru` exceptions added for the 2 new regulator instances (same
+    pattern as the 3 existing ones). DRC: 503→218 total violations; of the hard-classified
+    types (`HARD_DRC_TYPES`), everything touching this session's new/moved parts is
+    clean — the remainder is 3 pre-existing proximity clusters between components this
+    session never repositioned (`C_BEC2_OUT`/`U_ISOCAN`, `C_BEC_SV_IN`+`C_BEC_SV_OUT`/
+    `U_RS485`, `C_BEC_SV_IN`/`R_FBSV_1`+`R_FBSV_2`), flagged per AGENTS.md placement
+    policy rather than silently moved, plus the pre-existing ~233-item footprint/value
+    mismatch and missing-footprint backlog (unrelated, predates this session). Gerbers
+    regenerated.
+- [ ] **Doc sync still open**: `docs/POWER_DISTRIBUTION.md` §3.3 still describes the
+    old DS3218MG/6 V servo-rail design (stale, predates today's RCS/Servo/Nacelle/Winch
+    rework); `docs/CARGO_WINCH_SPECIFICATION.md`'s power routing still references the
+    old `5V_JAYNE`/RAIL-2 path. `Kaylee.md` and REFERENCES.md are current as of this
+    session's final state.
+- [ ] **Placement conflict referral**: `C_BEC2_OUT`, `C_BEC_SV_IN`, `C_BEC_SV_OUT`
+    need user placement decisions (see Kaylee.md "Known placement conflict").
 
 ---
 

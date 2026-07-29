@@ -2,7 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-07-29 — Automated reconciliation pass -->
-package-lock.json                  — Node.js dependency lockfile
 previewConfig.json                 — Live preview configuration
 requirements-dev.txt               — Python development dependencies
 ```
@@ -39487,6 +39486,7 @@ avionics/kicad/Wash/kicads/sym-lib-table — [PENDING AI CLASSIFICATION]
 avionics/kicad/Wash/scripts/gen_wash_sch.py — generates Wash.kicad_sch from datasheet-transcribed pinouts
 avionics/kicad/Wash/KICAD_CLI_ERC_SEGFAULT_BUG.md — upstream defect report: kicad-cli 9.0.2 `sch erc` SIGSEGVs on a symbol instance whose lib_id is absent from lib_symbols
 avionics/kicad/Wash/kicad_cli_erc_segfault_repro/README.md — reproduction set index for the above
+avionics/kicad/Wash/kicad_cli_erc_segfault_repro/UPSTREAM_SUBMISSION.md — paste-ready KiCad GitLab issue text + pre-submission checklist (TODO.md 0.9)
 avionics/kicad/Wash/kicad_cli_erc_segfault_repro/run_repro.sh — runs all five reproducer variants
 avionics/kicad/Wash/kicad_cli_erc_segfault_repro/A_absent_0pins.kicad_sch — control: dangling lib_id, no instance pins (survives)
 avionics/kicad/Wash/kicad_cli_erc_segfault_repro/B_present_0pins.kicad_sch — control: symbol present, no instance pins
@@ -78375,8 +78375,22 @@ avionics/firmware/mspm0/cmake/mspm0g3507.ld — [PENDING AI CLASSIFICATION]
 avionics/firmware/mspm0/hal/mspm0/hal_mspm0.c — [PENDING AI CLASSIFICATION]
 avionics/firmware/mspm0/hal/mspm0/syscalls.c — [PENDING AI CLASSIFICATION]
 avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-28_225412.zip — [PENDING AI CLASSIFICATION]
-avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_090941.zip — [PENDING AI CLASSIFICATION]
-avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_091943.zip — [PENDING AI CLASSIFICATION]
 avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-28_225412.zip — [IGNORED/VCS-EXCLUDED]
-avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_090941.zip — [IGNORED/VCS-EXCLUDED]
-avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_091943.zip — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-07-29) ---
+avionics/kicad/Kaylee/kicads/#auto_saved_files# — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_101609.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_103147.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_104224.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_105229.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_111108.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/_autosave-Kaylee.kicad_prl — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/_autosave-Kaylee.kicad_pro — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/_autosave-Kaylee.kicad_sch — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/~Kaylee.kicad_sch.lck — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_101609.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_103147.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_104224.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_105229.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_111108.zip — [IGNORED/VCS-EXCLUDED]
+avionics/kicad/Kaylee/kicads/~Kaylee.kicad_sch.lck — [IGNORED/VCS-EXCLUDED]

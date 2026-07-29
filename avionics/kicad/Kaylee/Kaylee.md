@@ -226,43 +226,96 @@ the rebuild). The 5.296 V set-point (vs. the old 5.3 V) absorbs the Schottky for
 so the rail still arrives at ~5.0 V after the diode. MAX42408 is internally compensated
 (average current-mode control) — no external R_COMP/C_COMP network, unlike TPS54620.
 
-### Servo rail, low-power/expansion (5.0 V) — rebuilt 2026-07-28, MAX42408AFOA (ADI)
+### Servo/cargo rail (6.0 V) — rebuilt 2026-07-28, MAX42408AFOA (ADI)
 
 ```text
 VDIS ──── C_BEC_SV_IN ──── U_BEC_SERVO_5V (MAX42408AFOA, 8 A)
-                              R_FBSV_1/R_FBSV_2 divider: Vout = 4.984 V
+                              R_FBSV_1/R_FBSV_2 divider: Vout = 5.992 V
                               L4 (2.2uH) + C_BEC_SV_OUT (120uF eff)
                                     │
-                                J_SERVO_5V (+/−) ── RCS valve servos (×4, SG90-class,
-                                                      Phase 11) + cargo door/release
-                                                      servos (SG90-class) + expansion
-                                                      headroom
+                                J_SERVO_5V (+/−) ── cargo door/release servos (SG90-class)
+                                J_WINCH_6V (+/−) ── cargo-winch STS3215-C001 (own
+                                                      dedicated CAN-PERIPH-GW-1 node)
 ```
 
-Kept at 5.0 V (low-power SG90-class loads only, not shared with the STS3215 nacelle
-servos — see "Servo rail split" decision, 2026-07-28). `J_SERVO_5V`/`J_SHLD_SV` untouched.
+Raised from 5.0 V to 6.0 V (2026-07-28) to carry the cargo winch after it was moved back
+to the STS3215-**C001** variant (7.4 V-class, rated input 4–14V... rated input 4–7.4V) and
+off the Nacelle-12V rail — see next section. 6.0 V was chosen as the common safe voltage:
+it's the upper end of Tower Pro's own stated SG90 range ("4.8V–6V are fine",
+towerpro.com.tw product page) so the existing cargo door/release SG90 loads are not
+overvolted, and it's a real characterized point in the STS3215-C001 datasheet (4 kg·cm
+rated torque, 500 mA rated current, 2 A stall — 25% margin over the winch's ≥3.2 kgf·cm
+design requirement, `docs/CARGO_WINCH_SPECIFICATION.md` §4.2). `J_SERVO_5V`/`J_SHLD_SV`
+untouched (ref name kept for historical continuity despite the voltage change); new
+`J_WINCH_6V` added for the winch's own harness drop.
 
-### Nacelle 12 V rail (NEW, 2026-07-28) — LM76005 (TI), feeds 3× STS3215-C018
+### RCS 6 V rail (NEW, 2026-07-28) — MAX42408AFOA (ADI), flight-critical isolation
+
+```text
+VDIS ──── C_RCS_IN ──── U_BEC_RCS_6V (MAX42408AFOA, 8 A)
+                            R_FBRCS_1/R_FBRCS_2 divider: Vout = 5.992 V
+                            L_RCS (2.2uH) + C_RCS_OUT (88uF eff)
+                                  │
+                              J_RCS_6V (+/−) ── 4x RCS proportional valve servos
+                                                  (SG90-class, Phase 11, flight-critical)
+```
+
+Split out from the Servo/cargo rail (2026-07-28) so a fault on a non-flight-critical
+load (cargo door, cargo release, winch) can never brown out RCS attitude-control
+authority during hover. Same 6.0 V target as the Servo rail (RCS is also SG90-class —
+this is a fault-isolation split, not a voltage-class split). Design current is light
+(4× SG90-class servos, well under the 8 A MAX42408 rating) — sized for isolation, not
+current headroom.
+
+### Nacelle 12 V rail (NEW, 2026-07-28) — LM76005 (TI), feeds 2× STS3215-C018 nacelle-tilt only
 
 ```text
 VDIS ──── C_N_IN ──── U_BEC_NACELLE_12V (LM76005, 5 A)
                          R_FB_N1/R_FB_N2 divider: Vout = 11.99 V
                          L_N (6.8uH) + C_N_OUT (90uF eff, >=16V rated)
                                │
-                           J_NACELLE_12V (+/−) ── 2× nacelle-tilt STS3215-C018
-                                                    + cargo-winch STS3215-C018
-                                                    (REF-SENSOR-012), each via its
-                                                    own dedicated CAN-PERIPH-GW-1
-                                                    node (TTL-serial <-> CAN-FD)
+                           J_NACELLE_12V (+/−) ── 2× nacelle-tilt STS3215-C018 ONLY,
+                                                    each via its own dedicated
+                                                    CAN-PERIPH-GW-1 node
 ```
 
-Added because the STS3215-C018 variant (30 kg·cm @ 12 V) was selected over the 7.4 V/
-19.5 kg·cm variant to clear the nacelle-tilt ≥25 kg·cm design requirement
-(`docs/POWER_DISTRIBUTION.md` §3.3) — the 7.4 V variant falls short of that requirement.
-Design current point: 1 unit stalled (2.7 A) + 2 units at rated (0.9 A each) = 4.5 A,
-25% margin under LM76005's 5 A rating. LM76005 chosen over MAX42408/MAX42410 specifically
-because the latter's adjustable range tops out at 10 V (400 kHz) / 6 V (1.5 MHz) — cannot
-reach 12 V at all.
+Added because the STS3215-C018 variant (30 kg·cm @ 12 V) was selected for nacelle tilt
+to clear the ≥25 kg·cm design requirement (`docs/POWER_DISTRIBUTION.md` §3.3) — the
+7.4 V/19.5 kg·cm C001 variant falls short of that requirement. The cargo winch was
+**removed** from this rail (2026-07-28) and moved to the Servo/cargo 6.0 V rail on
+C001 instead, both to reduce this flight-critical rail's load (now 1 stall + 1 rated =
+3.6 A vs the 5 A LM76005 rating, 28% margin, up from 10% with 3 servos) and because the
+winch doesn't need C018's extra torque. LM76005 chosen over MAX42408/MAX42410
+specifically because the latter's adjustable range tops out at 10 V (400 kHz) / 6 V
+(1.5 MHz) — cannot reach 12 V at all.
+
+### Board outline — rounded corners concentric with mounting holes (2026-07-28)
+
+User hand-placed the remaining Section H / BEC-rebuild components and extended the
+board to fit them, which left the 4 mounting holes (H1–H4, all confirmed exactly
+square with each other: X-aligned in pairs at 104.58/191.0mm, Y-aligned in pairs at
+65.5/122.5mm, no skew) at an asymmetric inset — 4.0mm from the top/left/right edges
+but only 3.5mm from the (newly extended) bottom edge. Per user direction, the bottom
+edge was nudged out 0.5mm (126.0mm → 126.5mm) to restore a symmetric 4.0mm inset on
+all four sides, then the single `gr_rect` outline was replaced with an 8-segment
+rounded-rectangle outline (4 straight edges + 4 quarter-circle arcs) with each
+corner's arc **centered exactly on its mounting hole**, R=4.0mm, exactly tangent to
+both adjacent edges at every corner (verified: no gap, no overshoot, edge continuity
+confirmed closed, 0 `invalid_outline` DRC violations). Attribution block added on
+B.Silkscreen at (116.84, 68.58) mm = (4.6in, 2.7in), confirmed clear of any B.Cu
+footprint within 15mm.
+
+### Known placement conflict — flagged, not auto-fixed (2026-07-28)
+
+DRC (with `--schematic-parity`) found 3 pre-existing proximity clusters between
+components whose positions this session did not touch: `C_BEC2_OUT` overlaps `U_ISOCAN`
+(B.Cu), `C_BEC_SV_IN`/`C_BEC_SV_OUT` overlap `U_RS485` (B.Cu), and `C_BEC_SV_IN`
+overlaps `R_FBSV_1`/`R_FBSV_2` courtyards. All 4 are large through-hole electrolytic
+caps sitting close enough to nearby SMD parts (some on the back layer) to trip
+clearance/shorting/courtyard checks now that this session's net changes made the
+conflict visible. Per `avionics/AGENTS.md` §"refer to the user" placement policy, these
+are **not** silently moved — need your call on where `C_BEC2_OUT`, `C_BEC_SV_IN`, and
+`C_BEC_SV_OUT` should actually sit.
 
 ### BQ76930 Cell Monitor
 

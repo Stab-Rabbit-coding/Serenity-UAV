@@ -1509,15 +1509,26 @@ ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verific
 | **Control Interface** | **TTL half-duplex serial bus** (packet-based, ID 0–253, 38.4 kbps–1 Mbps), **not** PWM | same |
 | **Gear** | Copper, 1/345 ratio, 25T/⌀5.9 mm horn | same |
 
-**Fleet decision (2026-07-28):** both nacelle-tilt servos and the cargo winch motor now use
-the **C018 (12 V, 30 kg·cm) variant** — the nacelle-tilt design requirement is ≥25 kg·cm
-(`docs/POWER_DISTRIBUTION.md` §3.3), which C001's 19.5 kg·cm stall does not clear but C018's
-30 kg·cm does, with margin. All three units are powered from Kaylee's new dedicated
-`U_BEC_NACELLE_12V` rail (REF-SENSOR-015), **not** the old `5V_JAYNE`/RAIL-2 path referenced
-in earlier drafts of this entry — that routing is now stale, see `Kaylee.md` Section-H BOM.
-Each unit is bridged to the trust-signed CAN-FD bus by its own dedicated `CAN-PERIPH-GW-1`
-node (TTL serial ↔ CAN-FD, per-node TPM identity) rather than sharing the ESC-focused
-`N_STACKS=4` gateway.
+**Fleet decision (2026-07-28, revised same day):** the 2 nacelle-tilt servos use the
+**C018 (12 V, 30 kg·cm) variant** — the nacelle-tilt design requirement is ≥25 kg·cm
+(`docs/POWER_DISTRIBUTION.md` §3.3), which C001's 19.5 kg·cm stall does not clear but
+C018's 30 kg·cm does, with margin. Powered from Kaylee's dedicated `U_BEC_NACELLE_12V`
+rail (REF-SENSOR-015), flight-critical/isolated (nacelle tilt only, nothing else shares
+it). The **cargo winch reverted to the C001 (7.4 V-class, characterized at 6 V/7.4 V)
+variant** the same day and moved to Kaylee's Servo/cargo rail (`U_BEC_SERVO_5V`,
+REF-SENSOR-014) run at **6.0 V** — chosen as the common safe voltage between C001's
+rated range and Tower Pro's own stated SG90 ceiling ("4.8V–6V are fine"), since that
+rail also carries SG90-class cargo door/release servos. At 6 V, C001 gives 4 kg·cm
+rated torque against the winch's ≥3.2 kgf·cm requirement (25% margin, real datasheet
+point, not extrapolated) — the winch doesn't need C018's extra torque, and removing it
+from the Nacelle-12V rail gives that flight-critical rail more margin (3.6 A design vs
+5 A LM76005 rating = 28%, up from 10% with 3 units). Each of the 3 STS3215 units (2
+tilt + winch) is bridged to the trust-signed CAN-FD bus by its own dedicated
+`CAN-PERIPH-GW-1` node (TTL serial ↔ CAN-FD, per-node TPM identity) rather than sharing
+the ESC-focused `N_STACKS=4` gateway. Separately, the RCS proportional valve servos
+(SG90-class, flight-critical attitude control) were split onto their own new
+`U_BEC_RCS_6V` rail so a fault on the non-flight-critical cargo door/release/winch loads
+can never brown out RCS authority — see `Kaylee.md` for the full rail topology.
 
 **Winch-specific note:** the winch transmits **torque only** through a lost-motion dog
 coupler; the spool is carried on two MR84ZZ bearings on a fixed Ø4 mm axle clamped at both

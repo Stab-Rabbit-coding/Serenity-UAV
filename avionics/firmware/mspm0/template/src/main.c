@@ -23,13 +23,6 @@
 /** @brief Delay between restart attempts after a fault, milliseconds. */
 #define MAIN_FAULT_RETRY_MS     (1000U)
 
-/** @brief Topic table for this board, from `boards/<board>/board.c`. */
-extern const ser_topic_t board_topics[];
-extern const uint8_t     board_topic_count;
-
-/** @brief Bearer configuration for this board, from `boards/<board>/board.c`. */
-extern void board_configure_link(ser_link_t *link);
-
 static ser_node_t g_node;
 
 int main(void) {
