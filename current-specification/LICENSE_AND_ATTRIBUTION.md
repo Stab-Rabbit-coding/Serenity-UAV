@@ -138,7 +138,7 @@ rights holders before using the Serenity name or likeness in trade.
 | **Title** | Serenity Firefly with landing gear and swivel engines |
 | **Author** | misubisu |
 | **Source** | [thingiverse.com/thing:7330462](https://www.thingiverse.com/thing:7330462) |
-| **License** | CC BY 4.0 |
+| **License** | CC BY 4.0 SA|
 | **Use** | Hull outer geometry adapted; retains the four canonical sections (head, cargo, middle, rear); scaled to 24 in (609 mm) overall length; hollowed to 2.0 mm watertight CF-PETG shell; structurally redesigned with CF skeleton and foam fill for UAV flight loads. |
 
 ## Remix attribution template
@@ -146,7 +146,7 @@ rights holders before using the Serenity name or likeness in trade.
 ```text
 
 Hull: "Serenity Firefly with landing gear and swivel engines" by misubisu
-thingiverse.com/thing:7330462 · CC BY 4.0
+thingiverse.com/thing:7330462 · CC BY 4.0 SA
 Remixed by Steve Griffing: scaled 24 in (609 mm), hollowed to 2.0 mm
 watertight CF-PETG shell, CF skeleton and foam fill added. CC BY 4.0.
 
