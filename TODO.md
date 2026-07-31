@@ -1,8 +1,8 @@
 # Serenity UAV — TODO (Open Work Only)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-07-18
+**License:** CC BY SA 4.0 — creativecommons.org/licenses/by/4.0  
+**Last updated:** 2026-07-31
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -34,6 +34,45 @@
 - [ ] Verify 4130 / 17-4 PH / 7075 allowables vs MMPDS/AMS (REF-MAT-*)
 - [ ] Add 4130 corrosion-finish spec (zinc/cad plate) to BOM/build guide
 - [ ] Verify AK7455 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
+
+### 0.6 Update and correct documentation touching every non-archived file.
+
+→ detail: `docs/WBS.md` §0.6
+
+#### 0.6.1 Systems
+
+
+→ detail: `docs/WBS.md` §1.6.1
+
+- [ ] Verify and update airframe specifications vs as built for each component.
+- [ ] Verify avionics specifications vs as- built.
+- [ ] Verify and update all assessment and engineering documents.
+- [ ] Verify and update all software, firmware, and scripts, along with their documentation.
+
+#### 0.6.2 Documentation
+
+
+→ detail: `docs/WBS.md` §0.6.2
+
+- [ ] Verify and update all compliance and licensing documents.
+- [ ] Verify and update all READM1E files and the starting with subsystem ones and correcting the root README to match.
+- [ ] Verify and update the system specification files and BOM.
+- [ ] Verify and update the WBS and TODO files. 
+- [ ] Verify and update the REFERENCES.md file.
+
+### 0.9 Licensing Updates
+
+→ detail: `docs/WBS.md` §0.9
+
+- [ ] Correct Thingiverse model license to CC-BY-SA 4.0.
+- [ ] Do a clean-room derivation of the nacelle shells from QMX blueprints and nick henning drawings.
+- [ ] License wings, nacelles, landing gear, cargo system, and all other original airframe components under CERN-OHL-W.
+- [ ] License all avionics under CERN-OHL-W.
+- [ ] License all documentation,code, scripts, drawings, and other non-hardware items under CC-BY-SA.
+- [ ] Create License files for each subsystem  folder with clear, unambiguous federation from root License and docs/attribution_and_licencing.md
+- [ ] Create all other supporting documents for OSHW certification 
+- [ ] Apply
+
 
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
 
@@ -765,6 +804,12 @@
 - [ ] Structural validation
 - [ ] IEEE/ISA/AUVSI best practices
 - [ ] Tamper-evident logging
+
+### 5.4 - Open Source Hardware Certification
+
+→ detail: §0.9, `docs/WBS.md` §0.9, & `docs/WBS.md` §5.4
+
+- [ ] Get OSHW certification
 
 ### 6.1 — Branch Reconciliation (2026-06-09)
 
