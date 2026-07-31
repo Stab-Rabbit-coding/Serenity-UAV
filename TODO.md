@@ -74,7 +74,7 @@
 - [ ] License all documentation,code, scripts, drawings, and other non-hardware items under CC-BY-SA.
 - [ ] Create License files for each subsystem  folder with clear, unambiguous federation from root License and docs/attribution_and_licencing.md
 - [ ] Create all other supporting documents for OSHW certification 
-- [ ] Apply
+- [ ] Rename all avionics boards to IP and trademark free names.
 
 
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
