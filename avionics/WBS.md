@@ -542,7 +542,7 @@ REFERENCES.md Removed/Superseded Citations).
 - [ ] **Jayne PCB resync — not started.** 124 DRC hard. PCB (`Jayne.kicad_pcb`,
     dated 2026-07-14) predates the schematic's ISOW1412/Section H addition
     (2026-07-26) entirely — no RS-485 footprint on the board yet.
-- [ ] **Upgrade all SLB9670 TPMs to SLB9672 TPM 
+- [ ] **Upgrade all SLB9670 TPMs to SLB9672 TPM** fleetwide
 
 ---
 
