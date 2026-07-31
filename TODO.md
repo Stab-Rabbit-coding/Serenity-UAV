@@ -22,11 +22,9 @@
 
 *(All items completed 2026-07-18)*
 
-
 ### 0.6 Update and correct documentation touching every non-archived file.
 
 → detail: `docs/WBS.md` §0.6
-
 
 #### 0.6.1 Systems
 
@@ -37,22 +35,19 @@
 - [ ] Verify and update all assessment and engineering documents.
 - [ ] Verify and update all software, firmware, and scripts, along with their documentation.
 
-
 #### 0.6.2 Documentation
 
 → detail: `docs/WBS.md` §0.6.2
 
 - [ ] Verify and update all compliance and licensing documents.
-- [ ] Verify and update all READM1E files and the starting with subsystem ones and correcting the root README to match.
+- [ ] Verify and update all README files and the starting with subsystem ones and correcting the root README to match.
 - [ ] Verify and update the system specification files and BOM.
-- [ ] Verify and update the WBS and TODO files. 
+- [ ] Verify and update the WBS and TODO files.
 - [ ] Verify and update the REFERENCES.md file.
-
 
 ### 0.7 — CI Lint Scope and Repo-Wide Lint Debt
 
 → detail: `docs/WBS.md` §0.7
-
 
 ### 0.8 — Tilt-Spar Material Allowables + Hall Encoder Verification
 
@@ -62,20 +57,18 @@
 - [ ] Add 4130 corrosion-finish spec (zinc/cad plate) to BOM/build guide
 - [ ] Verify AK7455 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
 
-
 ### 0.9 Licensing Updates
 
 → detail: `docs/WBS.md` §0.9
 
-- [ ] Correct Thingiverse model license to CC-BY-SA 4.0.
-- [ ] Do a clean-room derivation of the nacelle shells from QMX blueprints and nick henning drawings.
+- [ ] Correct Thingiverse misubisu model [REF-CAD-004] license to CC-BY-SA 4.0.
+- [ ] Integrate [REF-CAD-002], [REF-CAD-003], [REF-CAD-004], into the project as available components under CERN-OHL-W 2.0, ensuring clean Intellectual property boundaries.
 - [ ] License wings, nacelles, landing gear, cargo system, and all other original airframe components under CERN-OHL-W.
 - [ ] License all avionics under CERN-OHL-W.
 - [ ] License all documentation,code, scripts, drawings, and other non-hardware items under CC-BY-SA.
 - [ ] Create License files for each subsystem  folder with clear, unambiguous federation from root License and docs/attribution_and_licencing.md
-- [ ] Create all other supporting documents for OSHW certification 
-- [ ] Apply
-
+- [ ] Create all other supporting documents for OSHW certification.
+- [ ] Rename avionics boards to non-trademarked names.
 
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
 
