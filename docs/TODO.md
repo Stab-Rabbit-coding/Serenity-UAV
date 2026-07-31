@@ -23,6 +23,17 @@
 
 - [ ] Repo-wide lint debt
 
+## §0.9 Licensing Updates
+
+### §0.9.3 Rename Avionics to Trademark Clean names.
+
+- [ ] Malcolm -> Skipper
+- [ ] Zoe -> XO
+- [ ] Wash -> Pilot
+- [ ] Jayne -> Load Master
+- [ ] Kaylee -> In Flight Engineer
+- [ ] Emma -> Commo
+
 ## §1.5 — Documentation
 → full detail: `WBS.md` §1.5
 
