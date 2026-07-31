@@ -22,6 +22,33 @@
 
 *(All items completed 2026-07-18)*
 
+
+### 0.6 Update and correct documentation touching every non-archived file.
+
+→ detail: `docs/WBS.md` §0.6
+
+
+#### 0.6.1 Systems
+
+→ detail: `docs/WBS.md` §1.6.1
+
+- [ ] Verify and update airframe specifications vs as built for each component.
+- [ ] Verify avionics specifications vs as- built.
+- [ ] Verify and update all assessment and engineering documents.
+- [ ] Verify and update all software, firmware, and scripts, along with their documentation.
+
+
+#### 0.6.2 Documentation
+
+→ detail: `docs/WBS.md` §0.6.2
+
+- [ ] Verify and update all compliance and licensing documents.
+- [ ] Verify and update all READM1E files and the starting with subsystem ones and correcting the root README to match.
+- [ ] Verify and update the system specification files and BOM.
+- [ ] Verify and update the WBS and TODO files. 
+- [ ] Verify and update the REFERENCES.md file.
+
+
 ### 0.7 — CI Lint Scope and Repo-Wide Lint Debt
 
 → detail: `docs/WBS.md` §0.7
@@ -35,30 +62,6 @@
 - [ ] Add 4130 corrosion-finish spec (zinc/cad plate) to BOM/build guide
 - [ ] Verify AK7455 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
 
-### 0.6 Update and correct documentation touching every non-archived file.
-
-→ detail: `docs/WBS.md` §0.6
-
-#### 0.6.1 Systems
-
-
-→ detail: `docs/WBS.md` §1.6.1
-
-- [ ] Verify and update airframe specifications vs as built for each component.
-- [ ] Verify avionics specifications vs as- built.
-- [ ] Verify and update all assessment and engineering documents.
-- [ ] Verify and update all software, firmware, and scripts, along with their documentation.
-
-#### 0.6.2 Documentation
-
-
-→ detail: `docs/WBS.md` §0.6.2
-
-- [ ] Verify and update all compliance and licensing documents.
-- [ ] Verify and update all READM1E files and the starting with subsystem ones and correcting the root README to match.
-- [ ] Verify and update the system specification files and BOM.
-- [ ] Verify and update the WBS and TODO files. 
-- [ ] Verify and update the REFERENCES.md file.
 
 ### 0.9 Licensing Updates
 
