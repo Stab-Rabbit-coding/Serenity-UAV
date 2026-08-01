@@ -21,7 +21,7 @@ under **two** licenses depending on content type — there is no single project-
 
 | Content type | License | Full text |
 |---|---|---|
-| Hardware / CAD / PCB design files — airframe SCAD/STL/FCStd (wings, nacelles, landing gear, cargo system, fuselage, all other original airframe components), avionics KiCad schematics/PCB layouts/Gerbers (Wash, Zoë, Kaylee, Emma, Jayne, CAN-PERIPH-GW-1) | **CERN-OHL-W 2.0** (CERN Open Hardware Licence v2, Weakly Reciprocal) | `LICENSE` (root), `LICENSES/CERN-OHL-W 2.0` |
+| Hardware / CAD / PCB design files — airframe SCAD/STL/FCStd (wings, nacelles, landing gear, cargo system, fuselage, all other original airframe components), avionics KiCad schematics/PCB layouts/Gerbers (Pilot, XO, Flight Engineer, Commo, Observer, CAN-PERIPH-GW-1) | **CERN-OHL-W 2.0** (CERN Open Hardware Licence v2, Weakly Reciprocal) | `LICENSE` (root), `LICENSES/CERN-OHL-W 2.0` |
 | Documentation, code, scripts, drawings, and all other non-hardware items — build guides, firmware/tooling source, SVG diagrams, specifications, this file | **CC BY-SA 4.0** (Creative Commons Attribution-ShareAlike 4.0 International) | `LICENSES/CC-BY-SA 4.0`, <https://creativecommons.org/licenses/by-sa/4.0/> |
 
 Rationale: CERN-OHL-W is purpose-built for hardware design files (it defines "Source,"
@@ -61,7 +61,7 @@ self-contained and license-scanner-friendly.
 | `airframe/` | CERN-OHL-W 2.0 | Wings, nacelles, landing gear, cargo system, fuselage — all original hardware/CAD |
 | `avionics/` | CERN-OHL-W 2.0 | PCB schematics/layouts/Gerbers (already in place; header added 2026-08-01 for consistency) |
 | `docs/` | CC BY-SA 4.0 | Documentation, standards references, build/compliance records |
-| `gcs/` | **Mixed** — CERN-OHL-W 2.0 (Malcolm enclosure/gimbal STLs, comms-node hardware) + CC BY-SA 4.0 (firmware, Python control scripts, docs) — both stated in one `LICENSE` file since the folder is genuinely mixed | `gcs/malcolm/` contains both hardware and software |
+| `gcs/` | **Mixed** — CERN-OHL-W 2.0 (Skipper enclosure/gimbal STLs, comms-node hardware) + CC BY-SA 4.0 (firmware, Python control scripts, docs) — both stated in one `LICENSE` file since the folder is genuinely mixed | `gcs/skipper/` contains both hardware and software |
 | `tools/` | CC BY-SA 4.0 | Build-automation Python/Blender/FreeCAD scripts — code, not hardware |
 | `current-specification/` | CC BY-SA 4.0 | Active specs, BOM, revision `.jsx` design documents |
 | `graphical-build-guide/` | CC BY-SA 4.0 | Build guide, SVG fabrication diagrams |
@@ -127,14 +127,21 @@ Preparing this project for OSHWA self-certification is tracked separately in
 Certification itself requires the human maintainer (Steve Griffing) to submit the
 Certification Mark License Agreement; this repository can only get the documentation ready.
 
-## 6. Board naming (open item, not resolved by this document)
+## 6. Board naming (resolved 2026-08-01)
 
-TODO.md §0.9 also lists "Rename avionics boards to non-trademarked names" (Wash, Zoë,
-Kaylee, Emma, Jayne). This conflicts with the canonical naming table in root `AGENTS.md` §9
-(deliberate Firefly-character naming with PACE roles and Firefly quotes, referenced across
-~284 files). Per user decision on 2026-08-01, this item is **left open and flagged** rather
-than executed — see `docs/WBS.md` §0.9 for the full note. It is not addressed by the
-licensing work in this document.
+TODO.md §0.9 item 8, "Rename avionics boards to non-trademarked names," was initially flagged
+open (2026-08-01) because it conflicted with the then-canonical Firefly-character naming table
+in root `AGENTS.md` §9, referenced across ~284 files. The user subsequently supplied
+replacement role names and directed the rename to proceed, including the physical KiCad
+project files/folders (unverified in this environment — no `kicad-cli` available; the
+maintainer should confirm ERC/DRC on each board before trusting it for fabrication).
+
+The six boards are now named **Skipper** (GCS), **Pilot** (flight control/sensor cape), **XO**
+(comms/logging/payload cape), **Flight Engineer** (power distribution board), **Commo** (49 MHz
++ LoRa transceiver cape), and **Observer** (cargo-handling/vision/ToF/laser board) — generic
+role names, no longer Firefly character names. The four avionics bay names (Shepherd's Room,
+Inara's Shuttle, River's Room, Simon's Medbay) were **not** renamed. Full record: root
+`AGENTS.md` §9 "Naming history", `docs/WBS.md` §0.9.
 
 ---
 

@@ -6,7 +6,7 @@
  * Copyright 2026 Steve Griffing
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
- * Drives the Texas Instruments BQ76930PWRQ1 on the Kaylee power distribution
+ * Drives the Texas Instruments BQ76930PWRQ1 on the Flight Engineer power distribution
  * board via Linux userspace i2c-dev.  The BQ76930 monitors 6–10 series LiPo
  * cells and provides per-cell OVP, UVP, OCD, and SCD hardware protection.
  *
@@ -18,7 +18,7 @@
  *
  * The BQ76930 supports I2C with optional CRC-8 error checking.  CRC mode is
  * selected by the hardware CHEM / DFSEL pin configuration at power-on.
- * On Kaylee, CRC mode IS enabled (DFSEL tied appropriately during board
+ * On Flight Engineer, CRC mode IS enabled (DFSEL tied appropriately during board
  * layout).
  *
  * In CRC mode every I2C transaction includes an 8-bit CRC byte:
@@ -41,7 +41,7 @@
  *
  * ── ALERT output ──────────────────────────────────────────────────────────
  *
- * The BQ76930 open-drain ALERT pin is connected to Wash GPIO.  On any
+ * The BQ76930 open-drain ALERT pin is connected to Pilot GPIO.  On any
  * hardware fault (OVP, UVP, OCD, SCD) the ALERT pin asserts LOW.  Firmware
  * should configure a falling-edge GPIO interrupt and call
  * cell_mon_read_status() from the interrupt service thread.
@@ -49,7 +49,7 @@
  * ── DSG / CHG FET control ─────────────────────────────────────────────────
  *
  * The BQ76930 DSG (discharge) and CHG (charge) output pins drive the gate
- * of Q_BATT_DSG / Q_BATT_CHG MOSFETs on Kaylee.  In normal operation, both
+ * of Q_BATT_DSG / Q_BATT_CHG MOSFETs on FlightEngineer.  In normal operation, both
  * FETs are ON (driven by firmware via SYS_CTRL2 CHG_ON / DSG_ON bits).
  * On any hardware protection trigger, the BQ76930 independently asserts the
  * appropriate FET gate OFF without firmware intervention.
@@ -58,7 +58,7 @@
  *   [1] BQ76930 Datasheet SLUSBB2C, Texas Instruments.
  *       https://www.ti.com/lit/ds/symlink/bq76930.pdf
  *   [2] BQ76920/30/40 EVM User Guide SLUU431, TI.
- *   [3] Kaylee.md — Serenity UAV Power Distribution Board specification.
+ *   [3] FlightEngineer.md — Serenity UAV Power Distribution Board specification.
  *
  * Target platform: PocketBeagle 2 Industrial (AM6254), Debian Trixie.
  */
@@ -78,7 +78,7 @@ extern "C" {
 
 /**
  * BQ76930 I2C address (7-bit) when CRC mode is enabled and CHEM pin selects
- * the default address.  On Kaylee this is 0x08.
+ * the default address.  On Flight Engineer this is 0x08.
  */
 #define CELL_MON_I2C_ADDR          (0x08U)
 

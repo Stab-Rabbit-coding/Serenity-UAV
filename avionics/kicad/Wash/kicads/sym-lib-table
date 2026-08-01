@@ -1,9 +1,0 @@
-(sym_lib_table
-  (version 7)
-  (lib (name "Jayne_ISOW1044BDFMR")(type "KiCad")(uri "/home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenity-UAV/avionics/kicad/symbols/Jayne_ISOW1044BDFMR.kicad_sym")(options "")(descr "")(hidden))
-  (lib (name "Jayne_KSZ9477")(type "KiCad")(uri "/home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenity-UAV/avionics/kicad/symbols/Jayne_KSZ9477.kicad_sym")(options "")(descr ""))
-  (lib (name "Jayne_MSPM0G3507_RGZ")(type "KiCad")(uri "/home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenity-UAV/avionics/kicad/symbols/Jayne_MSPM0G3507_RGZ.kicad_sym")(options "")(descr ""))
-  (lib (name "Jayne_SLB9670_TPM")(type "KiCad")(uri "/home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenity-UAV/avionics/kicad/symbols/Jayne_SLB9670_TPM.kicad_sym")(options "")(descr ""))
-  (lib (name "Jayne_SoM")(type "KiCad")(uri "/home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenity-UAV/avionics/kicad/symbols/Jayne_SoM.kicad_sym")(options "")(descr ""))
-  (lib (name "Jayne_SoM_PCM071")(type "KiCad")(uri "/home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenity-UAV/avionics/kicad/symbols/Jayne_SoM_PCM071.kicad_sym")(options "")(descr ""))
-)

@@ -36,9 +36,9 @@ Non-negotiable, project-wide requirements:
 implementation/PCB status see `avionics/AGENTS.md` and each board's own `.md` under
 `avionics/kicad/<board>/`, which is updated more often than this file and is authoritative for
 as-built state):
-- 8× PocketBeagle2 Industrial SBC nodes, each carrying **Wash** (flight control/sensor cape) +
-  **Zoë** (comms/logging/payload cape), 5 kV galvanic isolation on CAN FD/RS-485/Ethernet.
-- **Emma** (49 MHz + LoRa transceiver cape) is installed only in River's Room and Simon's
+- 8× PocketBeagle2 Industrial SBC nodes, each carrying **Pilot** (flight control/sensor cape) +
+  **XO** (comms/logging/payload cape), 5 kV galvanic isolation on CAN FD/RS-485/Ethernet.
+- **Commo** (49 MHz + LoRa transceiver cape) is installed only in River's Room and Simon's
   Medbay.
 - Onboard bus: CAN FD, MIL-STD 1553, RS-485, Ethernet — all 8 nodes interconnected.
 - External C2, all 4 usable for command and control: Wi-Fi 5 GHz, Zigbee 2.4 GHz, MAVLink/SiK
@@ -56,7 +56,7 @@ Read this file plus the one matching your task's scope:
 | `airframe/AGENTS.md` | Structural/CAD/3D design, hull-frame coordinates, fabrication, STL/SCAD, FreeCAD |
 | `avionics/AGENTS.md` | KiCad PCB design, capes, security/crypto, comms protocols |
 | `docs/AGENTS.md` | Documentation standards, standards vetting, references |
-| `gcs/AGENTS.md` | Ground Control Station (Malcolm) |
+| `gcs/AGENTS.md` | Ground Control Station (Skipper) |
 | `tools/AGENTS.md` | Build automation, bake tool, Blender pipeline |
 | `current-specification/AGENTS.md` | Active specs, revision numbering, traceability |
 | `graphical-build-guide/AGENTS.md` | Build guide, fabrication checklists |
@@ -190,26 +190,52 @@ is under active trade study and must not be assumed.
 
 ## 9. Naming and Roles
 
-| Name | Role | Firefly line |
-|---|---|---|
-| Malcolm | Ground control station | "I aim to misbehave." |
-| Wash | Flight Control + Sensor cape | "I'm a leaf on the wind." |
-| Zoë | Comms/Logging/Payload cape | "Big Damn Heroes, sir." |
-| Kaylee | Power Distribution Board | "Everything is shiny." |
-| Emma | 49 MHz + LoRa transceiver cape | — |
-| Jayne | Cargo-handling + nose/cargo-bay vision/ToF/laser board | "She's a good gun." |
-| Shepherd's Room | Bay A — forward avionics | "I have heathens enough right here." |
-| Inara's Shuttle | Bay B — port avionics | "Mal, I will never understand you." |
-| River's Room | Bay C — starboard avionics | "I can kill you with my mind." |
-| Simon's Medbay | Bay D — aft avionics | "What did they do to you?" |
+| Name | Role |
+|---|---|
+| Skipper | Ground control station |
+| Pilot | Flight Control + Sensor cape |
+| XO | Comms/Logging/Payload cape |
+| Flight Engineer | Power Distribution Board |
+| Commo | 49 MHz + LoRa transceiver cape |
+| Observer | Cargo-handling + nose/cargo-bay vision/ToF/laser board |
+| Shepherd's Room | Bay A — forward avionics |
+| Inara's Shuttle | Bay B — port avionics |
+| River's Room | Bay C — starboard avionics |
+| Simon's Medbay | Bay D — aft avionics |
 
-Kaylee's room sits in the middle-section inner neck (open ventral face of the horseshoe ring),
-minimizing power-run length to all four nacelles/stacks/battery. Jayne is a standalone board
+### Naming history (TODO.md §0.9, closed 2026-08-01)
+
+The six board names above (Skipper, Pilot, XO, Flight Engineer, Commo, Observer) are
+**generic role names**, chosen 2026-08-01 to replace the project's original Firefly-character
+board names (TODO.md §0.9 item 8 — avoiding trademark exposure on hardware that "may be
+offered commercially beyond this project," §3 above). The four bay names (Shepherd's Room,
+Inara's Shuttle, River's Room, Simon's Medbay) were **not** part of that rename and are
+unchanged.
+
+For attribution completeness (§3 — "derivative files carry the full attribution chain"), the
+original names and their inspiration are recorded here rather than on the live table above,
+since restating the character quotes next to the new generic names would just re-attach the
+same recognizable Firefly branding the rename was meant to remove:
+
+| Current name | Former name | Inspiration | Firefly line |
+|---|---|---|---|
+| Skipper | Malcolm ("Mal") | Malcolm Reynolds, captain | "I aim to misbehave." |
+| Pilot | Wash | Hoban "Wash" Washburne, pilot | "I'm a leaf on the wind." |
+| XO | Zoë | Zoë Washburne, first mate | "Big Damn Heroes, sir." |
+| Flight Engineer | Kaylee | Kaylee Frye, ship's mechanic | "Everything is shiny." |
+| Commo | Emma | — (not a character name) | — |
+| Observer | Jayne | Jayne Cobb, hired muscle | "She's a good gun." |
+
+This table is historical only — do not use the former names anywhere in new work. See
+`docs/WBS.md` §0.9 and `docs/attribution_and_licencing.md` §6 for the full renaming record.
+
+Flight Engineer's room sits in the middle-section inner neck (open ventral face of the horseshoe ring),
+minimizing power-run length to all four nacelles/stacks/battery. Observer is a standalone board
 (not a PB2-I cape) installed at two locations — bow sensor pod and cargo nadir FPV mount —
-connected only via the shielded Ethernet ring + CAN-FD trunk. **Jayne's laser-indicator specs
+connected only via the shielded Ethernet ring + CAN-FD trunk. **Observer's laser-indicator specs
 (class, spread angle, per-site optics) change as the design matures — do not restate them
-here; canonical source is `docs/JAYNE_LASER_ANALYSIS.md` (current revision) and
-`avionics/kicad/Jayne/Jayne.md`.**
+here; canonical source is `docs/OBSERVER_LASER_ANALYSIS.md` (current revision) and
+`avionics/kicad/Observer/Observer.md`.**
 
 **PACE per stack** (Primary / Alternative / Contingency / Emergency):
 
@@ -224,9 +250,9 @@ Shepherd: watchdog/fault-detect/failover/auth; SiK primary, Wi-Fi secondary.
 Inara: camera/external sensors/high-bandwidth ground link; Wi-Fi primary, SiK-MAVLink
 secondary.
 River: forward EDF + nacelle tilt sync + most resilient comms; 49 MHz primary, LoRa secondary,
-both via Emma.
-Simon: aft EDF + alternate watchdog + Jayne/cargo oversight; 49 MHz primary, SiK secondary,
-both via Emma.
+both via Commo.
+Simon: aft EDF + alternate watchdog + Observer/cargo oversight; 49 MHz primary, SiK secondary,
+both via Commo.
 
 ## 10. Workflow
 
@@ -255,11 +281,11 @@ Governance stays with the `AGENTS.md` files listed in §2; several subsystems ke
 detail split across more than one file so none exceeds ~500 lines (the threshold at which a
 subsystem gets a new detail file rather than an ever-growing one):
 
-- **avionics/** — `avionics/{TODO,WBS}.md` (Wash/Zoë/Emma cape hardware, names, workload),
-  `avionics/rev-s1/{TODO,WBS}.md` (Emma/Zoë/Kaylee Rev S1 redesign),
+- **avionics/** — `avionics/{TODO,WBS}.md` (Pilot/XO/Commo cape hardware, names, workload),
+  `avionics/rev-s1/{TODO,WBS}.md` (Commo/XO/Flight Engineer Rev S1 redesign),
   `avionics/emi-hardening/{TODO,WBS}.md` (§0.6, §1.4 EMI hardening beyond the PCBs),
-  `avionics/jayne/{TODO,WBS}.md` (Jayne board + firmware), `avionics/firmware/{TODO,WBS}.md`
-  (Wash/Zoë node firmware)
+  `avionics/observer/{TODO,WBS}.md` (Observer board + firmware), `avionics/firmware/{TODO,WBS}.md`
+  (Pilot/XO node firmware)
 - **airframe/** — `airframe/{TODO,WBS}.md` (hull-frame standard, non-printable placeholders,
   procurement), `airframe/fuselage-joints/{TODO,WBS}.md`, `airframe/fuselage-covers/{TODO,WBS}.md`,
   `airframe/fuselage-mid/{TODO,WBS}.md` (fuselage §1.1.1, split 3 ways),
@@ -272,7 +298,7 @@ subsystem gets a new detail file rather than an ever-growing one):
   subsystem's `WBS.md`/`TODO.md`)
 
 Split detail files are governed by their parent folder's `AGENTS.md` (no separate federated
-`AGENTS.md` per split — e.g. `avionics/jayne/` follows `avionics/AGENTS.md`).
+`AGENTS.md` per split — e.g. `avionics/observer/` follows `avionics/AGENTS.md`).
 
 New work: close it in the owning `WBS.md` first (full notes there), then prune/regenerate the
 matching `TODO.md` line from it. Sync root and subsystem `WBS.md`/`TODO.md` before committing.

@@ -243,11 +243,11 @@ pre-Rev N ring-plate layout). Cure 2 h minimum.
 **8. Install antenna posts and SMA bulkhead pass-throughs:**
 - Belly port, X≈**260mm**: SiK 915MHz SMA-RP bulkhead *(relocated forward from 310mm — station 310mm is now the neck intake ring; 260mm is in cargo bay belly, Panel C, clear of intake frame)*
 - Belly stbd, X≈260mm: LoRa RFM95W 915MHz SMA-RP bulkhead
-- Dorsal, X≈**120mm**: **49MHz (Part 15 §15.235) forward wire post** — PETG insulated mast (~10mm tall, 12×12mm foot), bonded to dorsal hull skin just aft of bridge/cockpit section; loading coil + LC pi-network at this post; RG-316 coax routed internally to Bay A Emma (XCVR-49MHZ-2) module *(replaces dorsal fin + vertical whip — wire now runs nose-to-tail along hull spine)*
+- Dorsal, X≈**120mm**: **49MHz (Part 15 §15.235) forward wire post** — PETG insulated mast (~10mm tall, 12×12mm foot), bonded to dorsal hull skin just aft of bridge/cockpit section; loading coil + LC pi-network at this post; RG-316 coax routed internally to Bay A Commo (XCVR-49MHZ-2) module *(replaces dorsal fin + vertical whip — wire now runs nose-to-tail along hull spine)*
 - Aft dorsal hull, X≈580mm: **49MHz (Part 15 §15.235) temporary aft wire post** — PETG hook post (~10mm tall) bonded to aft dorsal hull skin near station ~580mm with 5-min epoxy; electrically open (insulated end). *(Note: the permanent aft post on the canonical tail nozzle (`rear_nozzle_canonical.stl`) is a Phase 11 item. This temporary post is removed and replaced in Phase 11.)*
 - Dorsal fwd, X≈140mm: Wi-Fi 2.4/5GHz antenna
-- **49MHz top wire**: 0.3mm stainless steel wire or 22AWG enamelled copper, strung from forward post hook (~120mm) to temporary aft post hook (~580mm) with light tension (~20g); CF keel bar connected to Emma (XCVR-49MHZ-2) GND as counterpoise
-- **⚠ GPS clearance check**: forward wire post at ~120mm is ~43mm from GPS patch (both dorsal face). Bench-verify GPS HDOP ≤1.5 with Emma (49 MHz) transmitting before flight. If GPS degrades, move GPS patch to ≥165mm from nose.
+- **49MHz top wire**: 0.3mm stainless steel wire or 22AWG enamelled copper, strung from forward post hook (~120mm) to temporary aft post hook (~580mm) with light tension (~20g); CF keel bar connected to Commo (XCVR-49MHZ-2) GND as counterpoise
+- **⚠ GPS clearance check**: forward wire post at ~120mm is ~43mm from GPS patch (both dorsal face). Bench-verify GPS HDOP ≤1.5 with Commo (49 MHz) transmitting before flight. If GPS degrades, move GPS patch to ≥165mm from nose.
 
 **9. Install 12× ToF sensor flush-mount PETG frames** (6.5mm hull cutouts):
 
@@ -618,7 +618,7 @@ Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_s
 
 ## Phase 8 — Finishing
 
-1. **Decals and paint.** Airbrush or hand-paint hull sections in Serenity's distinctive brown. Panel lines with thin wash.
+1. **Decals and paint.** Airbrush or hand-paint hull sections in Serenity's distinctive brown. Panel lines with thin pilot.
 2. **NAV lights.** Port = red, starboard = green, aft/top = white strobe
    [REF-FAA-003 §91.209(a)] / [REF-ICAO-001 Ch.3 §3.1.9]. Wire to Cape-B CN4 GPIO.
 3. **FAA registration.** Display on hull exterior per 14 CFR Part 48 §48.205(b)(1)
@@ -718,7 +718,7 @@ regulatory readiness for real-world deployment.
 **Dependency:** Phase 9 complete.
 
 1. **Multi-link failover mission** — fly 5-waypoint mission; disable each radio link in sequence
-   (SiK → LoRa → Wi-Fi → 49 MHz Emma); verify mission continues on surviving link.
+   (SiK → LoRa → Wi-Fi → 49 MHz Commo); verify mission continues on surviving link.
 2. **10-waypoint autonomous mission** — full mission at ≤120m AGL including obstacle avoidance halts.
 3. **Autonomous cargo delivery** — takeoff → transit → deploy payload at waypoint → return → land;
    cradle auto-latched on return.

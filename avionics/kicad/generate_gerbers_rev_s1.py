@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-generate_gerbers_rev_s1.py — Generate Gerber files for Rev S1 boards (Emma, Zoë, Kaylee)
+generate_gerbers_rev_s1.py — Generate Gerber files for Rev S1 boards (Commo, XO, Flight Engineer)
 
 Usage:
-    python3 generate_gerbers_rev_s1.py [emma|zoë|kaylee]
+    python3 generate_gerbers_rev_s1.py [commo|xo|flight_engineer]
 
 Generates production Gerber and drill files to:
-  - avionics/kicad/gerbers/Emma-S1/
+  - avionics/kicad/gerbers/Commo-S1/
   - avionics/kicad/gerbers/CAPE-B-2-S1/
-  - avionics/kicad/gerbers/Kaylee-S1/
+  - avionics/kicad/gerbers/FlightEngineer-S1/
 
 Author: Claude Haiku 4.5 (Anthropic) — 2026-07-18
 License: CC BY 4.0
@@ -20,23 +20,23 @@ import subprocess
 from pathlib import Path
 
 BOARDS = {
-    "emma": {
-        "pcb": "avionics/kicad/Emma/kicads/Emma.kicad_pcb",
-        "pro": "avionics/kicad/Emma/kicads/Emma.kicad_pro",
-        "gerber_dir": "avionics/kicad/gerbers/Emma-S1",
-        "name": "Emma Rev S1",
+    "commo": {
+        "pcb": "avionics/kicad/Commo/kicads/Commo.kicad_pcb",
+        "pro": "avionics/kicad/Commo/kicads/Commo.kicad_pro",
+        "gerber_dir": "avionics/kicad/gerbers/Commo-S1",
+        "name": "Commo Rev S1",
     },
-    "zoë": {
-        "pcb": "avionics/kicad/Zoë/kicads/Zoë.kicad_pcb",
-        "pro": "avionics/kicad/Zoë/kicads/Zoë.kicad_pro",
+    "xo": {
+        "pcb": "avionics/kicad/XO/kicads/XO.kicad_pcb",
+        "pro": "avionics/kicad/XO/kicads/XO.kicad_pro",
         "gerber_dir": "avionics/kicad/gerbers/CAPE-B-2-S1",
-        "name": "Zoë Rev S1",
+        "name": "XO Rev S1",
     },
-    "kaylee": {
-        "pcb": "avionics/kicad/Kaylee/kicads/Kaylee.kicad_pcb",
-        "pro": "avionics/kicad/Kaylee/kicads/Kaylee.kicad_pro",
-        "gerber_dir": "avionics/kicad/gerbers/Kaylee-S1",
-        "name": "Kaylee Rev S1",
+    "flight_engineer": {
+        "pcb": "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pcb",
+        "pro": "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pro",
+        "gerber_dir": "avionics/kicad/gerbers/FlightEngineer-S1",
+        "name": "Flight Engineer Rev S1",
     },
 }
 

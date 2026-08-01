@@ -7,7 +7,7 @@
 Resolves `TODO.md` Phase 0 pre-print documentation gate item "Failsafe Threshold
 Document." Compile-time expression of the thresholds defined here lives in
 [`avionics/firmware/common/include/failsafe_config.h`](../avionics/firmware/common/include/failsafe_config.h),
-which every FC (Wash) and CN (Zoe) node includes.
+which every FC (Pilot) and CN (XO) node includes.
 
 **Reconciliation note (important):** the Phase 0 WBS item that requested this
 document listed provisional "default" values for the battery and ESC-thermal
@@ -90,8 +90,8 @@ opportunities, not a single-frame trigger).
 
 | Link | Timer | Role |
 |---|---|---|
-| SiK 915 MHz / LoRa 915 MHz | **5 s** | Primary/secondary comms links (Shepherd primary, Inara secondary comms tier; River/Simon LoRa via Emma) |
-| 49 MHz AX.25 [REF-FCC-003 S15.235] | **10 s** | River/Simon Emma-board backup link; slower AFSK/KISS framing legitimately has longer inter-frame gaps |
+| SiK 915 MHz / LoRa 915 MHz | **5 s** | Primary/secondary comms links (Shepherd primary, Inara secondary comms tier; River/Simon LoRa via Commo) |
+| 49 MHz AX.25 [REF-FCC-003 S15.235] | **10 s** | River/Simon Commo-board backup link; slower AFSK/KISS framing legitimately has longer inter-frame gaps |
 
 Matches the Phase 10 WBS pass criterion (`TODO.md` SS3.0 Phase 10):
 "Emergency RTL validation ... verify automatic RTL initiates within 5 s of
@@ -104,8 +104,8 @@ in the repository. Tracked as a follow-up in `TODO.md` (see closing note)
 rather than inventing an unreviewed value here.
 
 **Distinct from:** `MAL_HEARTBEAT_TIMEOUT_MS` (5000 ms,
-`gcs/malcolm/firmware/pb2i/src/mal_config.h`) — that constant governs when
-Malcolm's GCS *alerts the operator* that it has stopped hearing the
+`gcs/skipper/firmware/pb2i/src/skipper_config.h`) — that constant governs when
+Skipper's GCS *alerts the operator* that it has stopped hearing the
 aircraft; it is a ground-side operator-notification timer, not the
 aircraft's autonomous RTL trigger defined here. The two happen to be the
 same order of magnitude by coincidence of independent design choices, not
@@ -182,6 +182,6 @@ documentation pass — tracked as a follow-up in `TODO.md`.
 
 ---
 
-*"We are not going anywhere. I don't care what's engaged." — Wash, holding
+*"We are not going anywhere. I don't care what's engaged." — Pilot, holding
 Serenity level on hydraulics alone. Failsafes exist so no one has to be
-Wash in that moment.*
+Pilot in that moment.*

@@ -1,9 +1,9 @@
 Serenity UAV — gcs — License
 
-Scope: Ground Control Station "Malcolm" — MIXED CONTENT.
-  - Hardware/CAD (Malcolm field enclosure STL, gimbal STL/hardware,
-    comms-node board integration under gcs/malcolm/): CERN-OHL-W 2.0.
-  - Software/docs (gcs/malcolm firmware, Python control scripts
+Scope: Ground Control Station "Skipper" — MIXED CONTENT.
+  - Hardware/CAD (Skipper field enclosure STL, gimbal STL/hardware,
+    comms-node board integration under gcs/skipper/): CERN-OHL-W 2.0.
+  - Software/docs (gcs/skipper firmware, Python control scripts
     [telemetry_feed.py, tracker.py, gimbal_ctrl.py], setup docs):
     CC BY-SA 4.0.
 

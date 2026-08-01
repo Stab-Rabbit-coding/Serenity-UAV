@@ -11,7 +11,7 @@
 > the root index as a commit prerequisite (root `AGENTS.md` "Revisions and Version
 > Control").
 
-*"Love keeps her in the air. — Capt. Malcolm Reynolds"*
+*"Love keeps her in the air. — Capt. Skipper Reynolds"*
 
 ---
 
@@ -267,7 +267,7 @@
     - Keel locating channels cut into cargo and rear shells by `add_structural_features.py`.
     **SUB-TASKS OPEN:**
     - [x] Add WIRE-COUNTERPOISE-49MHZ to BOM: AWG 22 stranded tinned copper, 460 mm,
-        2 g, routed alongside keel inside foam from cargo to rear, terminated at Emma
+        2 g, routed alongside keel inside foam from cargo to rear, terminated at Commo
         antenna feed on River's Room stack. *(done 2026-06-22 — was referenced here since
         Rev R1 but never actually added; backfilled as part of §1.4.2 antenna work, which
         also added a second counterpoise wire, WIRE-COUNTERPOISE-49MHZ-2, for Simon's
@@ -288,7 +288,7 @@
         ("stations 60–130mm inside head/bridge section") conflicts with (a) the Rev R1
         keel decision, which is headless in that section, and (b) other TODO.md entries
         ("battery tray in cargo section") — while a separate, older note (~line 2818–2830,
-        2026-06-08 Kaylee placement decision) instead places a battery boss pattern in the
+        2026-06-08 Flight Engineer placement decision) instead places a battery boss pattern in the
         MIDDLE section keel face, which itself conflicts with the Rev R1 finding that the
         middle-section keel span is unsupported (foam only, no hard attachment). This
         three-way placement conflict (head / cargo / middle) needs a user decision before

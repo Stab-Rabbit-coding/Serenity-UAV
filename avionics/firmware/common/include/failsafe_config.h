@@ -31,7 +31,7 @@
  *   yet applied to governor_config.h.
  *
  * Target platform: PocketBeagle 2 Industrial (AM6254), Debian Trixie.
- * Shared across FC (Wash) and CN (Zoe) node firmware.
+ * Shared across FC (Pilot) and CN (XO) node firmware.
  */
 
 #ifndef AVIONICS_FIRMWARE_COMMON_INCLUDE_FAILSAFE_CONFIG_H_
@@ -81,9 +81,9 @@ extern "C" {
 #define FAILSAFE_RADIO_LOSS_RTL_SIK_LORA_MS       (5000U)
 
 /**
- * 49 MHz (Emma, 47 CFR Part 15 S15.235) link-loss timer before autonomous
+ * 49 MHz (Commo, 47 CFR Part 15 S15.235) link-loss timer before autonomous
  * RTL (ms).  Longer than the SiK/LoRa timer because 49 MHz is the
- * designated backup/high-RF-environment link (River/Simon Emma boards,
+ * designated backup/high-RF-environment link (River/Simon Commo boards,
  * CLAUDE.md) — a slower AFSK/KISS link legitimately has more inter-frame
  * gap, so the timer must not nuisance-trigger RTL during normal operation.
  */

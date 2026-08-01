@@ -4,14 +4,14 @@ This directory holds the KiCad projects for the four cape/board types:
 
 | Project | Name | Role |
 | --- | --- | --- |
-| `Wash.kicad_*` | **Wash** | Flight-control & sensor cape (FC) |
-| `Zoë.kicad_*` | **Zoë** | Comms / logging / payload cape (CN) |
-| `Kaylee.kicad_*` | **Kaylee** | Power-distribution board (PDB) |
-| `Emma.kicad_*` | **Emma** | 49 MHz (Part 15 §15.235) transceiver |
-| `Jayne.kicad_*` | **Jayne** | Nose/Cargo vision, ToF, & laser board (standalone) |
+| `Pilot.kicad_*` | **Pilot** | Flight-control & sensor cape (FC) |
+| `XO.kicad_*` | **XO** | Comms / logging / payload cape (CN) |
+| `FlightEngineer.kicad_*` | **Flight Engineer** | Power-distribution board (PDB) |
+| `Commo.kicad_*` | **Commo** | 49 MHz (Part 15 §15.235) transceiver |
+| `Observer.kicad_*` | **Observer** | Nose/Cargo vision, ToF, & laser board (standalone) |
 
 Per-board net/pin documentation lives in the matching `*.md` files
-(`Wash.md`, `Zoë.md`, `Kaylee.md`, `XCVR-49MHZ-2.md`). KiCad files keep
+(`Pilot.md`, `XO.md`, `FlightEngineer.md`, `XCVR-49MHZ-2.md`). KiCad files keep
 KiCad board coordinates (documented exception to the hull-frame standard,
 see root `AGENTS.md`).
 
@@ -26,7 +26,7 @@ what is still open, so the thread can be picked up cleanly.
 
 ### ✅ Done
 
-- **Second Ethernet (ETH2) wired on Wash.** The newly placed `ETH2`
+- **Second Ethernet (ETH2) wired on Pilot.** The newly placed `ETH2`
   (JST-GH-4P), `ETH2-PHY` (ADIN1300BCPZ), and `T-ETH2` (749010012A
   magnetics) footprints were present but unconnected. Their nets now
   mirror the ETH1 topology exactly:
@@ -41,7 +41,7 @@ what is still open, so the thread can be picked up cleanly.
   isolation domains. 44 pads assigned (ETH2-PHY 32, T-ETH2 8, ETH2 4);
   diff-pair chains verified end-to-end. *(Delivered in PR #59.)*
 
-- **Split the two Wash PHYs onto independent MDIO buses (2026-06-12).** Instead
+- **Split the two Pilot PHYs onto independent MDIO buses (2026-06-12).** Instead
   of an address strap on a shared bus, PHY1 now uses `MDIO0`/`MDC0` (the CPSW
   MDIO controller, PB2-P2 pins 17/18) and PHY2 uses `MDIO1`/`MDC1` (PB2-P2 pins
   1/2, the two spare servo channels SERVO6/7). Each PB2-I NIC manages its own
@@ -66,21 +66,21 @@ what is still open, so the thread can be picked up cleanly.
   board. "Update PCB from Schematic" therefore does **not** repopulate
   the component nets — net edits are made on the `.kicad_pcb`.
 
-- **Verified the boards load** in `pcbnew` (Wash 43, Zoë 42, Emma 69,
-  Kaylee 67 footprints) and characterised the violation landscape (below).
+- **Verified the boards load** in `pcbnew` (Pilot 43, XO 42, Commo 69,
+  Flight Engineer 67 footprints) and characterised the violation landscape (below).
 
 ### ❌ Not done — open follow-up
 
 1. **Tamper mesh (`TMESH_P`/`TMESH_N`).** Drawn today as a raw
    cross-hatch grid on F.Cu/B.Cu that **shorts across SMD pads and across
    the isolated `GND2_*` domains** — this is the single largest source of
-   DRC errors (≈335 of Wash's 465; similar on Zoë). The agreed design is
+   DRC errors (≈335 of Pilot's 465; similar on XO). The agreed design is
    a **per-domain anti-tamper mesh**: a separate monitored mesh net per
    isolation region (secure/`GND` area plus one per `GND2_CAN` / `GND2_ETH`
    / `GND2_RS485` field side), with the 0.5 mm `ISOLATION` creepage moat
-   kept clear between them. Wash and Zoë tie their mesh to the local TPM;
-   **Kaylee and Emma have no local TPM**, so their tamper signal must be
-   carried over the inter-board link (Emma → Zoë, Kaylee → Wash).
+   kept clear between them. Pilot and XO tie their mesh to the local TPM;
+   **Flight Engineer and Commo have no local TPM**, so their tamper signal must be
+   carried over the inter-board link (Commo → XO, Flight Engineer → Pilot).
 
 2. **Routing / ratsnest.** The manual rearrangement left signal nets
    unrouted (~60 multi-pin signal nets per cape; the 7 power/ground nets
@@ -95,12 +95,12 @@ what is still open, so the thread can be picked up cleanly.
 
    | Board | violations | unconnected | dominant types |
    | --- | --- | --- | --- |
-   | Wash | 465 | 121 | mesh shorts, solder-mask bridges, clearance |
-   | Zoë | 554 | 146 | mesh shorts, solder-mask bridges, clearance |
-   | Emma | 421 | 160 | silk-over-copper, text-height, mask bridges |
-   | Kaylee | 221 | 181 | courtyard overlap, lib-footprint mismatch, silk |
+   | Pilot | 465 | 121 | mesh shorts, solder-mask bridges, clearance |
+   | XO | 554 | 146 | mesh shorts, solder-mask bridges, clearance |
+   | Commo | 421 | 160 | silk-over-copper, text-height, mask bridges |
+   | Flight Engineer | 221 | 181 | courtyard overlap, lib-footprint mismatch, silk |
 
-4. **MDIO addressing.** Both Wash PHYs (ETH1-PHY, ETH2-PHY) share the
+4. **MDIO addressing.** Both Pilot PHYs (ETH1-PHY, ETH2-PHY) share the
    `MDIO`/`MDC` management bus but there are **no address-strap resistors
    on the board**, so both default to the same MDIO address. A strap
    (or a decision to manage each PHY only over its own RMII channel) is
@@ -134,7 +134,7 @@ These are recorded so the next person does not re-derive them:
 - **Recommended workflow:** finish routing in the **KiCad GUI** (where
   Specctra DSN export and the interactive/auto routers are reliable), with
   the Ethernet pairs routed by hand. The deterministic, non-routing work
-  (per-domain tamper-mesh zones, cosmetic/footprint DRC, the Emma/Kaylee
+  (per-domain tamper-mesh zones, cosmetic/footprint DRC, the Commo/Flight Engineer
   link tamper signalling) can still be scripted headless via the board API.
 
 ---

@@ -1,0 +1,9 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "Observer_ISOW1044BDFMR")(type "KiCad")(uri "/home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenity-UAV/avionics/kicad/symbols/Observer_ISOW1044BDFMR.kicad_sym")(options "")(descr "")(hidden))
+  (lib (name "Observer_KSZ9477")(type "KiCad")(uri "/home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenity-UAV/avionics/kicad/symbols/Observer_KSZ9477.kicad_sym")(options "")(descr ""))
+  (lib (name "Observer_MSPM0G3507_RGZ")(type "KiCad")(uri "/home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenity-UAV/avionics/kicad/symbols/Observer_MSPM0G3507_RGZ.kicad_sym")(options "")(descr ""))
+  (lib (name "Observer_SLB9670_TPM")(type "KiCad")(uri "/home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenity-UAV/avionics/kicad/symbols/Observer_SLB9670_TPM.kicad_sym")(options "")(descr ""))
+  (lib (name "Observer_SoM")(type "KiCad")(uri "/home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenity-UAV/avionics/kicad/symbols/Observer_SoM.kicad_sym")(options "")(descr ""))
+  (lib (name "Observer_SoM_PCM071")(type "KiCad")(uri "/home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenity-UAV/avionics/kicad/symbols/Observer_SoM_PCM071.kicad_sym")(options "")(descr ""))
+)

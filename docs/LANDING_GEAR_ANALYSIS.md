@@ -10,7 +10,7 @@ AI-attribution policy.
 split 2026-07-23) — Canonical articulated hip-pivot leg, spring + ductile
 bowed-wire energy absorption retained
 
-*"She's tore up plenty, but she'll fly true." — Mal, on a ship that's seen worse landings than this one's rated for.*
+*"She's tore up plenty, but she'll fly true." — Skipper, on a ship that's seen worse landings than this one's rated for.*
 
 > **Rev R5** (vertical post + 4-wire brace) **superseded 2026-07-21.** The
 > R5 post geometry — like every revision before it — descended from the
