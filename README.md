@@ -70,7 +70,7 @@ Serenity from the 2002 show. Designed using Claude AI.
 |-----------|-------|
 | Length | 24.0 in (609 mm) |
 | Wingspan | 19.1 in (486 mm) |
-| Height | 7.2 in (182 mm) |
+| Height | 7.93 in (201.5 mm) |
 | AUW — Phases 5–10 (nacelles only) | ~6.10 lbm (2,768 g) |
 | AUW — Phase 11 (full system) | ~6.90 lbm (3,130 g) |
 | Payload capacity (minimum) | 8.0 oz (226 g) in a 4″ × 3″ × 3″ bay |

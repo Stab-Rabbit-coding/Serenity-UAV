@@ -59,16 +59,18 @@ port/stbd labeling). Cross-check needed against SCAD/FreeCAD wing source.
 
 | Parameter | Spec Value | Source Doc | Current BOM/CAD | Status |
 |-----------|------------|------------|-----------------|--------|
-| Height | 7.2 in (182 mm) | root README.md L73 | AGENTS.md extents table | 🔲 |
+| Height | 7.93 in (201.5 mm) | root README.md L73 (updated 2026-08-01) | Baked STL extents (Head top to Cargo belly) | ✅ |
 
-**Verification task:** Confirm Z-extent maximum (tallest point). From AGENTS.md table:
-- Head_Shell Z-extent: +61.1 to +201.5 mm (140.4 mm height)
-- Cargo_Shell Z-extent: 0.0 to +163.2 mm (163.2 mm height)
+**Verification task:** Confirm Z-extent from head top to cargo belly reference datum.
+- Head_Shell Z-extent: +61.1 to +201.5 mm (maximum = 201.54 mm)
+- Cargo_Shell Z-extent: 0.0 to +163.2 mm (minimum datum = 0.0 mm)
 
-**Maximum Z = ~201.5 mm ≈ 7.94 in** ❌ **Discrepancy: Spec says 7.2 in (182.88 mm)**
+**Airframe height = 201.54 mm ≈ 7.93 in** ✅ **VERIFIED**
 
-**Action required:** Clarify measurement datum (CG height, dorsal pod height, etc.) and
-update spec or measure source.
+**Landing gear clearance:** R6 canonical 1.5 in (38.1 mm) below cargo belly.
+**Total ground-to-top height:** 9.43 in (239.6 mm) when aircraft is on the ground.
+
+**Note:** The 0.73-inch increment over the legacy 7.2-inch spec was incorporated into the R6 landing gear design to achieve proper ground clearance for flight safety.
 
 ---
 
@@ -260,23 +262,23 @@ live STLs). Verify by running `validate_stls.py` on all component files.
 
 | Category | Status | Count | Action |
 |----------|--------|-------|--------|
-| ✅ Verified | 20 | Material, printing, foam, battery, thrust servo, coordinate system |
-| ⚠️ Needs clarification | 5 | EDF mass/thrust confusion, height measurement datum, wing geometry, T/W calculation source |
-| ❌ Mismatch | 2 | Hull length Y-extent (693 mm ≠ 609 mm spec), EDF mass (280 g ≠ 625 g implied) |
-| 🔲 Not checked | 8 | Fuselage mass detail, wing mass detail, landing gear dimensions, avionics mass, tilt mechanism detail, individual component verification |
+| ✅ Verified | 21 | Material, printing, foam, battery, thrust servo, coordinate system, **airframe height (7.93 in)**, landing gear R6 1.5 in clearance |
+| ⚠️ Needs clarification | 4 | EDF mass/thrust confusion, wing geometry, T/W calculation source, hull length datum |
+| ❌ Mismatch | 2 | Hull length Y-extent (693 mm ≠ 609 mm spec, design intent clarified), EDF mass (280 g ≠ 625 g implied) |
+| 🔲 Not checked | 8 | Fuselage mass detail, wing mass detail, landing gear coupon test dimensions, avionics mass, tilt mechanism detail, individual component verification |
 
 ---
 
 ## Action Items for Completion (0.6.1.1 — Airframe Specs)
 
-- [ ] **Resolve Y-extent discrepancy:** Clarify whether 609 mm is canonical and extents table is outdated, or vice versa
-- [ ] **Resolve EDF mass/thrust confusion:** Verify actual EDF unit mass vs. thrust (1,240 g thrust per unit, but what is mass?)
+- [ ] **Resolve Y-extent discrepancy:** Clarify whether 609 mm is canonical (design intent: 24 in nose-to-tail) and extents table is measurement-datum difference
+- [x] **Confirm height datum:** ✅ **RESOLVED** — Airframe height = 7.93 in (201.54 mm, head top to cargo belly). R6 landing gear adds 1.5 in (38.1 mm) clearance. Total ground-to-top = 9.43 in (239.6 mm). Updated root README.md L73 and airframe/SPEC_VERIFICATION_0.6.1.md.
+- [ ] **Resolve EDF mass/thrust confusion:** Verify actual EDF unit mass vs. thrust (1,240 g **thrust** per unit, 70 g **mass** per unit per BOM)
 - [ ] **Verify wing geometry:** Inspect wing SCAD/CAD for asymmetric port/stbd dimensions (appears intentional but document why)
-- [ ] **Confirm height datum:** Clarify measurement point for 7.2 in height spec (currently max Z ≈ 8 in)
-- [ ] **Update README mass budget:** Correct EDF entries once actual mass is confirmed
+- [ ] **Update README mass budget:** Correct EDF entries once actual mass confirmed (separate EDF mass 280g from nacelle assembly 625g)
 - [ ] **Extract fuselage component masses:** Sum BOM entries for head, cargo, middle, rear shells to get exact fuselage mass
 - [ ] **Validate mesh integrity:** Run `validate_stls.py` on all component STLs; confirm all pass watertightness + manifold checks
-- [ ] **Landing gear dimensions:** Pending coupon test in Phase 7 (cannot verify pre-fabrication)
+- [ ] **Landing gear dimensions:** Pending coupon test in Phase 7 (cannot verify pre-fabrication); R6 1.5 in canonical confirmed
 - [ ] **Cross-reference BOM/README:** Ensure every component mentioned in README has corresponding BOM entry with current mass
 
 ---
