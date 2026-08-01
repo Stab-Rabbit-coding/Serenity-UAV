@@ -1,0 +1,73 @@
+SERENITY UAV — DEFERRED PHASES LICENSING
+=========================================
+
+**Hardware Designs:** CERN Open Hardware License v2 — Weakly Reciprocal (CERN-OHL-W)
+
+**Documentation:** CC BY 4.0 (Creative Commons Attribution)
+
+See root LICENSE and docs/attribution_and_licensing.md for full details:
+  ../LICENSE
+  ../docs/attribution_and_licensing.md
+
+---
+
+SUMMARY (Deferred Phases)
+
+Phase 11+ design files (aft EDF integration, cargo-bay range-extender battery,
+and speculative future features) follow the same dual-licensing model as the
+baseline Serenity UAV hardware:
+
+  • CAD files, STLs, schematics → CERN-OHL-W (reciprocal open hardware)
+  • Design documentation, specifications → CC BY 4.0 (permissive attribution)
+
+Even though these phases are deferred pending flight-test validation, they are
+licensed identically to Phases 0–10.
+
+---
+
+PHASE-SPECIFIC FILES
+
+**Phase 11 — Aft EDF Integration:**
+  aft-edf/*.stl, *.FCStd           — CERN-OHL-W (CAD geometry)
+  rcs-thrusters/*.stl, *.FCStd     — CERN-OHL-W (RCS manifold design)
+  README.md, WBS.md, TODO.md       — CC BY 4.0 (documentation)
+
+**Phase 12 — Cargo-Bay Battery Module:**
+  cargo-rbm/*.stl, *.FCStd         — CERN-OHL-W (gondola & tray CAD)
+  README.md, WBS.md                — CC BY 4.0 (documentation)
+
+**Phase 13+ — Speculative:**
+  design documentation             — CC BY 4.0 (future exploration)
+  (CAD, if created, will be CERN-OHL-W)
+
+---
+
+MODIFICATION NOTICE TEMPLATE
+
+When you modify deferred-phase designs:
+
+  For CAD (comment in file):
+    Modified [DATE] by [YOUR NAME]: [brief description]
+    Phase [11–13+] Aft EDF / RBM / [subsystem]
+    Licensed under CERN-OHL-W v2
+    See ../docs/attribution_and_licensing.md
+
+---
+
+START TRIGGERS
+
+Phase 11 starts when:
+  ✅ Phases 5–10 baseline flight testing complete and documented
+  ✅ T/W and endurance measured and logged
+  ✅ Failover architecture proven
+
+Phase 12 starts when:
+  ✅ Phase 11 forward-flight envelope validated
+  ✅ RCS attitude authority verified
+  (Conditional: triggered if endurance <10 min and missions need >12 min loiter)
+
+---
+
+Questions?
+  CERN-OHL-W: https://ohwr.org/cern_ohl_w_v2
+  CC BY 4.0: https://creativecommons.org/licenses/by/4.0/

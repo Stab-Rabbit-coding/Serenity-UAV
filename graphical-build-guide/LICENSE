@@ -1,0 +1,72 @@
+SERENITY UAV — GRAPHICAL BUILD GUIDE LICENSING
+===============================================
+
+**License:** CC BY 4.0 (Creative Commons Attribution)
+
+See root LICENSE and docs/attribution_and_licensing.md for full licensing strategy:
+  ../LICENSE
+  ../docs/attribution_and_licensing.md
+
+---
+
+SUMMARY
+
+All SVG diagrams, graphical elements, photos, and render images in the graphical
+build guide are licensed under CC BY 4.0. This permissive license allows use,
+remix, and redistribution with attribution.
+
+**Key permissions:**
+  • Use and adapt the diagrams freely
+  • Commercial use allowed
+  • Remix and republish
+  • Must provide attribution
+
+**Key obligations:**
+  • Credit the original Serenity UAV Project
+  • Indicate if you made changes to the diagrams
+  • Preserve the license notice
+
+---
+
+REQUIRED ATTRIBUTION FORMAT
+
+When using or adapting these diagrams, include:
+
+  "Diagrams based on Serenity UAV Graphical Build Guide
+   (https://github.com/[repo]/graphical-build-guide),
+   licensed under CC BY 4.0.
+   Changes: [describe modifications, if any]."
+
+For SVG files with embedded metadata, add a comment block:
+
+  <!-- Design by Serenity UAV Project; CC BY 4.0 -->
+  <!-- Modifications: [date, description] -->
+  <!-- See ../docs/attribution_and_licensing.md -->
+
+---
+
+DIAGRAM ORGANIZATION
+
+All SVG files in this directory follow CC BY 4.0:
+
+  build_guide_NN_*.svg  — Phase-by-phase assembly guides
+  overview_*.svg        — Vehicle overview and component breakdown
+  LEGEND.svg            — Symbol reference and color coding
+  flight_phases/        — Flight test sequence documentation
+
+---
+
+FAIR USE & EXCEPTIONS
+
+The following materials used in diagrams retain their original licenses:
+
+  • Third-party component symbols — Follow component supplier licenses
+  • FreeCAD/Blender-derived geometry — Derived from our CERN-OHL-W hardware designs
+  • Standard callout fonts — System fonts (CC0 or permissive)
+  • Background patterns — Serenity UAV project original (CC BY 4.0)
+
+---
+
+Questions?
+  CC BY 4.0 full legal text: https://creativecommons.org/licenses/by/4.0/legalcode
+  CC BY 4.0 simple summary: https://creativecommons.org/licenses/by/4.0/
