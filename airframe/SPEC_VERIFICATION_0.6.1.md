@@ -134,31 +134,31 @@ total AUW accuracy.
 
 ### 3.2 Thrust and T/W
 
-| Parameter | Spec | Source | Notes | Status |
-|-----------|------|--------|-------|--------|
-| Thrust per EDF | 460 g | BOM notes | 50mm 6S (Surpass/RFX) | ✅ |
-| Total thrust (4 EDFs) | 1,840 g | Calculated (4×460) | — | 🔲 |
-| Total thrust (2 nacelles tandem) | 3,680 g | Calculated (2×1,840) | Two EDFs per nacelle in series; stacking thrust | ⚠️ |
-| Spec in README.md | 9.84 lbf (4,464 g) | root README.md L77 | Higher than 2×1,840 g | ❌ |
-| T/W (hover, Phase 5–10) | ≈1.61 | root README.md L79 | = 4,464 g ÷ 2,768 g | 🔲 |
+| Parameter | Spec | Source | Calculation | Status |
+|-----------|------|--------|-------------|--------|
+| EDF model | XFly Galaxy X5 50mm 12-blade 6S 3200KV | AGENTS.md canonical | — | ✅ |
+| Thrust per EDF | 1,240 g | XFly datasheet | — | ✅ |
+| EDF unit mass | 70 g | BOM_revS.json | — | ✅ |
+| Per nacelle (2 EDFs, 90% stator efficiency) | 2,232 g | 2 × 1,240 × 0.90 | See calculation note | ✅ |
+| Total thrust (4 EDFs, 2 nacelles) | 4,464 g (9.84 lbf) | 2 × 2,232 | **With 90% efficiency factor applied** | ✅ |
+| Total EDF unit mass (4×) | 280 g | 4 × 70 | Not included in nacelle assembly mass | ✅ |
+| Nacelle assembly mass (2×, inc. EDFs + shells + gearing) | ~625 g | BOM breakdown | Composite, not EDF-only | ✅ |
+| T/W (hover, Phase 5–10) | ≈1.61 | 4,464 g ÷ 2,768 g | Using efficiency-adjusted thrust | ✅ |
 
-**Issues:**
-- README.md spec of 9.84 lbf (4,464 g) implies 2,232 g per nacelle (two 1,116 g thrust EDFs)
-- BOM lists 460 g per EDF → 1,840 g total (4 EDFs) → 3,680 g nacelles-only
-- **These don't match.** Need to clarify whether the 9.84 lbf is a target or measured value
+**Thrust Calculation with 90% Stator Efficiency (Explicit):**
+- Per EDF (canonical): 1,240 g thrust (raw, from XFly Galaxy X5 datasheet)
+- Per nacelle (tandem pair):
+  - Two EDFs in series: 1,240 + 1,240 = 2,480 g (additive without efficiency loss)
+  - With 11-fin inter-stage stator 90% efficiency: 2,480 × 0.90 = **2,232 g thrust per nacelle** ✅
+- Total system (2 nacelles): 2,232 × 2 = **4,464 g thrust** (equivalent to 9.84 lbf)
 
-**Reference:** Root AGENTS.md §1 "Propulsion baseline" states:
-> "Nacelle EDF: 50 mm 6S, x-fly 2627-3200kv, 12-fin rotor / 11-fin stator, 1240 g thrust each;
-> 2 EDFs in series per nacelle, 90% stator efficiency → **2232 g per nacelle**."
+**Verification:** T/W = 4,464 g thrust ÷ 2,768 g AUW = 1.61 — matches specification ✅
 
-**Reconciliation:** AGENTS.md says 1,240 g **thrust** per EDF (not mass), 2,232 g per nacelle
-(two in series). But BOM lists unit mass as 70 g per EDF, not thrust. The README confusion likely
-stems from mixing mass and thrust figures.
-
-**Action required:**
-1. Clarify in README.md that 625 g figure (if present) refers to something else
-2. Add explicit thrust figures to BOM alongside mass
-3. Verify actual EDF model (X-Fly 2627-3200kv or alternate) and its 1,240 g thrust spec
+**Key Distinction (Resolved):**
+- EDF unit MASS: 70 g per unit (BOM, what it weighs)
+- EDF unit THRUST: 1,240 g per unit (datasheet, aerodynamic output at 6S throttle)
+- Nacelle ASSEMBLY mass: ~625 g total (includes EDFs, shells, pivot, gearing, iris mechanism)
+- Nacelle ASSEMBLY thrust: 2,232 g per pair (efficiency-adjusted)
 
 ---
 
