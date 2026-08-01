@@ -87,3 +87,17 @@ jobs:
         run: |
           git fetch origin main
           python3 tools/validate_kicad.py --changed-since origin/main --verbose
+
+  index-check:
+    name: Project/Archive Index sync
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify PROJECT_INDEX.md / ARCHIVE_INDEX.md / index_tags.json are in sync
+        run: |
+          python3 tools/precommit_index.py --check
