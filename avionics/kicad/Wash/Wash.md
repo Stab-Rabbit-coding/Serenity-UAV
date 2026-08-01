@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Callsign:** Wash
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Revision:** R (Rev R baseline; carried forward from Rev A — EMI-hardened variant of CAPE-A-1 Rev M; no design changes)
 **Date:** 2026-06-11
 **Status:** Schematic complete — PCB layout pending

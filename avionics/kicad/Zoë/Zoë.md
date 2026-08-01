@@ -2,7 +2,7 @@
 
 **Callsign:** Zoë
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Revision:** R (Rev R baseline — Zoë naming finalised from CAPE-B-2; EMI-hardened variant of CAPE-B-1 Rev M, Ethernet PHY restored)
 **Date:** 2026-06-07
 **Status:** Schematic complete — PCB layout pending. **Rev S1 reconciliation IN PROGRESS

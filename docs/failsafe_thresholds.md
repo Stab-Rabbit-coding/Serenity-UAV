@@ -1,7 +1,7 @@
 # Serenity UAV — Failsafe Threshold Document
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Revision:** Rev S (2026-07-12)
 
 Resolves `TODO.md` Phase 0 pre-print documentation gate item "Failsafe Threshold

@@ -1,7 +1,7 @@
 # Serenity UAV — First-Flight Readiness: Open-Item Summary
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
 **Compiled by:** Claude (Opus 4.8), 2026-07-05, from master `WBS.md` (md5 `829246af291844cd6b557230e8430a12`).
 
 > **First flight = master WBS Phase 5, "Minimum Viable Flyer."**

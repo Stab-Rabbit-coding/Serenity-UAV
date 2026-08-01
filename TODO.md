@@ -1,8 +1,8 @@
 # Serenity UAV — TODO (Open Work Only)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY SA 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-07-31
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
+**Last updated:** 2026-08-01
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -22,29 +22,6 @@
 
 *(All items completed 2026-07-18)*
 
-### 0.6 Update and correct documentation touching every non-archived file.
-
-→ detail: `docs/WBS.md` §0.6
-
-#### 0.6.1 Systems
-
-→ detail: `docs/WBS.md` §1.6.1
-
-- [ ] Verify and update airframe specifications vs as built for each component.
-- [ ] Verify avionics specifications vs as- built.
-- [ ] Verify and update all assessment and engineering documents.
-- [ ] Verify and update all software, firmware, and scripts, along with their documentation.
-
-#### 0.6.2 Documentation
-
-→ detail: `docs/WBS.md` §0.6.2
-
-- [ ] Verify and update all compliance and licensing documents.
-- [ ] Verify and update all README files and the starting with subsystem ones and correcting the root README to match.
-- [ ] Verify and update the system specification files and BOM.
-- [ ] Verify and update the WBS and TODO files.
-- [ ] Verify and update the REFERENCES.md file.
-
 ### 0.7 — CI Lint Scope and Repo-Wide Lint Debt
 
 → detail: `docs/WBS.md` §0.7
@@ -59,16 +36,42 @@
 
 ### 0.9 Licensing Updates
 
-→ detail: `docs/WBS.md` §0.9
+→ detail: `docs/WBS.md` §0.9 *(items 1–7 closed 2026-08-01; item 8 open, flagged)*
 
-- [ ] Correct Thingiverse misubisu model [REF-CAD-004] license to CC-BY-SA 4.0.
-- [ ] Integrate [REF-CAD-002], [REF-CAD-003], [REF-CAD-004], into the project as available components under CERN-OHL-W 2.0, ensuring clean Intellectual property boundaries.
-- [ ] License wings, nacelles, landing gear, cargo system, and all other original airframe components under CERN-OHL-W.
-- [ ] License all avionics under CERN-OHL-W.
-- [ ] License all documentation,code, scripts, drawings, and other non-hardware items under CC-BY-SA.
-- [ ] Create License files for each subsystem  folder with clear, unambiguous federation from root License and docs/attribution_and_licencing.md
-- [ ] Create all other supporting documents for OSHW certification.
-- [ ] Rename avionics boards to non-trademarked names.
+- [ ] Rename avionics boards to non-trademarked names — conflicts with `AGENTS.md` §9
+    naming table; user decision 2026-08-01 was to leave this open rather than execute a
+    284-file rename. Needs a maintainer call on replacement names (or accepting the
+    fan-use/trademark-disclaimer framing already in
+    `current-specification/LICENSE_AND_ATTRIBUTION.md` "Note on Rights") before any
+    further action.
+
+### 0.10 Update and correct documentation touching every non-archived file.
+
+→ detail: `docs/WBS.md` §0.10
+
+*(Renumbered 2026-08-01 from a colliding "0.6" — root `WBS.md` §0.6 was already the distinct,
+completed "IEC 62368-1 PCB Layout Isolation Verification" item, so the old label here was not
+a valid cross-reference. Renumbered in both files, and moved after §0.9 here for ascending
+numeric order.)*
+
+#### 0.10.1 Systems
+
+→ detail: `docs/WBS.md` §1.10.1
+
+- [ ] Verify and update airframe specifications vs as built for each component.
+- [ ] Verify avionics specifications vs as- built.
+- [ ] Verify and update all assessment and engineering documents.
+- [ ] Verify and update all software, firmware, and scripts, along with their documentation.
+
+#### 0.10.2 Documentation
+
+→ detail: `docs/WBS.md` §0.10.2
+
+- [ ] Verify and update all compliance and licensing documents.
+- [ ] Verify and update all README files and the starting with subsystem ones and correcting the root README to match.
+- [ ] Verify and update the system specification files and BOM.
+- [ ] Verify and update the WBS and TODO files.
+- [ ] Verify and update the REFERENCES.md file.
 
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
 
