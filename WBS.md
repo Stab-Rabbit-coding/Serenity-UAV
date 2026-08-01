@@ -224,8 +224,9 @@ Updates" item above. See docs/WBS.md §0.9 for the note.)*
 - [ ] Add SG90 bell-crank boss to inner face of each door panel for p…
 - [x] Cargo winch Rev B spec — STS3215, both-ends spool, ratchet
 - [x] N20 winch train scrubbed from active files (Rev A withdrawn)
-- [x] New winch hardware specified — 6 STLs + 7 BOM refs
-- [ ] ★ STS3215 datasheet gate — envelope/torque/mass/stall
+- [x] New winch hardware specified — 6 STLs + 7 BOM ref
+- [x] ★ STS3215 datasheet gate — envelope/torque/mass/stall [SUPERCEDED]
+- [ ] SPT5425LV with LibreServo installed and limit pin removed replaces STS3215
 - [x] Winch coupler trade closed: slip clutch in the spool hub
 - [ ] ★ Winch containment: 5 positive fixes (spool = projectile)
 - [ ] Verify Part 107 dropped-object section number
