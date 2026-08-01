@@ -1,13 +1,92 @@
-<!-- OpenDyslexic font for screen reading (CC BY 4.0) -->
+# Serenity UAV — Documentation Index
 
-# Serenity-Class Tiltrotor UAV — Rev M (18" Canonical Build) — SUPERSEDED
+> **Rev S Baseline (2026-07-04):** 24-inch CF-PETG hull, 8-node cooperative avionics,
+> 50mm tandem EDF nacelles, cargo system, autonomous flight capability. See below for
+> links to all design documents, build guides, and technical analysis.
 
-> **⚠ SUPERSEDED for 24-inch builds.** This document describes the Rev M 18-inch hull with
-> dual 80mm EDFs (Changesun XRP 3660-2700KV) and an XFLY X4 PRO 5850KV fuselage EDF — propulsion
-> and mass figures here do **not** match the current baseline. For the current 24-inch Rev P–R1
-> build (50mm x-fly 2627-3200KV nacelle EDFs, 1,240 g/EDF, 2,232 g/nacelle), use the top-level
-> **README.md**, **docs/REVN_BUILD_GUIDE_24IN.md**, and **TODO.md**. This file is retained as a
-> historical reference for the Rev M 18-inch design iteration only.
+## 📋 Quick Navigation
+
+- **[Root README.md](../README.md)** — High-level project overview, mission profile, architecture
+- **[AGENTS.md](../AGENTS.md)** — Authoritative project policy (standards, coding, fabrication,
+  licensing, attribution)
+- **[REFERENCES.md](../REFERENCES.md)** — Master citation catalog (all standards, regulations,
+  suppliers, datasheets)
+- **[PHASED_BUILD_GUIDE.md](./PHASED_BUILD_GUIDE.md)** — Rev S phases 0–10 assembly steps (with
+  material quantities and time estimates)
+- **[REVN_BUILD_GUIDE_24IN.md](./REVN_BUILD_GUIDE_24IN.md)** — Detailed Phase 1–4 guidance for
+  24-inch hull structure
+
+## 📁 Design Documentation by Domain
+
+### Airframe & Structures
+- **[airframe/README.md](../airframe/README.md)** — Fuselage, wings, nacelles, landing gear
+- **[airframe/AGENTS.md](../airframe/AGENTS.md)** — CAD standards, STL generation, printing specs
+- **[TILT_SPAR_ANALYSIS.md](./TILT_SPAR_ANALYSIS.md)** — Material selection, stress analysis for
+  tilt pivot rod (AISI 4130, 17-4 PH, 7075-T6)
+- **[NOZZLE_DRIVE_TRADE.md](./NOZZLE_DRIVE_TRADE.md)** — Nacelle nozzle iris actuation mechanism
+  design decisions
+- **[LANDING_GEAR_ANALYSIS.md](./LANDING_GEAR_ANALYSIS.md)** — Wire schedule, drop-height testing,
+  fail-safe design
+
+### Avionics & Electronics
+- **[avionics/README.md](../avionics/README.md)** — 8-node PACE failover, PCB boards, firmware
+  architecture
+- **[avionics/AGENTS.md](../avionics/AGENTS.md)** — PCB design standards, security, EMI hardening
+- **[avionics/kicad/Wash/Wash.md](../avionics/kicad/Wash/)** — Flight control cape (IMU, ESC
+  drive, servo outputs)
+- **[avionics/kicad/Zoë/Zoë.md](../avionics/kicad/Zoë/)** — Comms/logging cape (radios, μSD,
+  payload GPIO)
+- **[avionics/kicad/Kaylee/Kaylee.md](../avionics/kicad/Kaylee/)** — Power distribution board
+  (fuses, 5V BEC, main bus)
+- **[avionics/kicad/Emma/Emma.md](../avionics/kicad/Emma/)** — 49 MHz + LoRa transceiver cape
+  (optional Phase 10+)
+- **[avionics/kicad/Jayne/Jayne.md](../avionics/kicad/Jayne/)** — Vision/ToF/laser board (nose +
+  cargo sensors)
+- **[JAYNE_LASER_ANALYSIS.md](./JAYNE_LASER_ANALYSIS.md)** — Laser indicator class, safety
+  interlocks, eye-safety compliance
+
+### Ground Control Station
+- **[gcs/README.md](../gcs/README.md)** — Malcolm hardware spec, 5-radio comms, antenna gimbal
+- **[gcs/AGENTS.md](../gcs/AGENTS.md)** — GCS firmware, QGroundControl integration, tracking
+
+### Build Tools & Automation
+- **[tools/README.md](../tools/README.md)** — Validation scripts (STL mesh, KiCad ERC/DRC),
+  CI pipeline, design automation
+- **[tools/AGENTS.md](../tools/AGENTS.md)** — Build tool specifications and usage guidelines
+
+### Bill of Materials & Procurement
+- **[current-specification/README.md](../current-specification/README.md)** — Rev S BOM
+  (JSON/CSV), parts list, revision history
+- **[current-specification/bom_revS.json](../current-specification/bom_revS.json)** —
+  Structured BOM (suppliers, mass, CG, cost tracking)
+- **[current-specification/bom_revS.csv](../current-specification/bom_revS.csv)** — Flat BOM
+  (import to spreadsheet)
+
+## 📊 Regulatory & Compliance
+
+- **[attribution_and_licensing.md](./attribution_and_licensing.md)** — CC BY 4.0 / CERN-OHL-W 2.0
+  licensing strategy; third-party attribution chains
+- **Regulatory checklist** (under development):
+  - FAA Part 48 (sUAS registration)
+  - FAA Part 107 (remote pilot cert)
+  - FCC Part 15 §15.235 (49 MHz unlicensed)
+  - IEC 62368-1 (safety / EMI)
+  - AUVSI / ASTM F38 (best practices)
+
+## 📈 Historical Revisions
+
+| Rev | Hull | Nacelle EDFs | Avionics | Build Status | Archive |
+|-----|------|--------------|----------|--------------|---------|
+| S | 24" | 50mm X-Fly tandem | 8-node Wash/Zoë/Kaylee/Emma/Jayne (Rev S1) | Current baseline (Phase 5 ready) | — |
+| R1 | 24" | 50mm X-Fly tandem | 8-node (pre-S1) + hull-frame baking | Design complete | `git log` |
+| R | 24" | 50mm X-Fly tandem | 8-node (first 24" iteration) | Archived | `git log` |
+| Q | 24" | 50mm X-Fly tandem | 8-node architecture finalized | Archived | `git log` |
+| P | 18" | 80mm Changesun 2700KV | 4-node prototype | Archived | `git log` |
+| M & earlier | 18" | Various | 2–4 node prototypes | Archived | `git log` |
+
+**⚠ SUPERSEDED for builds:** Rev M (18", dual 80mm EDFs) and earlier are **not** the current
+design baseline. All new work targets Rev S (24", 50mm tandem EDFs, 8-node Wash/Zoë). The Rev M
+design documents are retained for historical reference only; see links below.
 
 **Author:** Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
