@@ -5,12 +5,12 @@
 Fable 5, Anthropic) under the author's direction, 2026-07-21; extended for
 the 1.5in/3.0in leg-length variant split 2026-07-23, per `AGENTS.md`
 AI-attribution policy.
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Revision:** R6 (2026-07-21, design point; 1.5in/3.0in leg-length variant
 split 2026-07-23) — Canonical articulated hip-pivot leg, spring + ductile
 bowed-wire energy absorption retained
 
-*"She's tore up plenty, but she'll fly true." — Mal, on a ship that's seen worse landings than this one's rated for.*
+*"She's tore up plenty, but she'll fly true." — Skipper, on a ship that's seen worse landings than this one's rated for.*
 
 > **Rev R5** (vertical post + 4-wire brace) **superseded 2026-07-21.** The
 > R5 post geometry — like every revision before it — descended from the

@@ -7,7 +7,7 @@
 This folder contains design specifications, analysis, and artifacts for work that is **intentionally deferred** beyond the current build phase (Phases 5–10). These items are planned but not part of the active build baseline.
 
 Deferred work is organized by:
-- **Planned upgrades to current components** (Emma Rev R1, Zoë Rev R1, Kaylee Rev A1)
+- **Planned upgrades to current components** (Commo Rev R1, XO Rev R1, Flight Engineer Rev A1)
 - **Future system additions** (Phase 11: rear EDF + RCS, aft intake scoop geometry)
 - **Analysis of alternative designs** evaluated but not selected for current baseline
 - **Long-term enhancements** (Phase 12+: advanced autonomy, extended payload, etc.)
@@ -18,13 +18,13 @@ Deferred work is organized by:
 
 **Planned for the next major revision (Rev R1 detailed changes, target integration date: Phase 6–7):**
 
-- **Emma Rev R1:** Add LoRa, replace JST GH 6P with P1+P2 socket rails
-- **Zoë Rev R1:** Remove LoRa (migrated to Emma), add P1+P2 passthrough rails matching Emma pinout on River and Simon stacks
-- **Kaylee Rev A1:** Remove 6V servo BEC; tilt servos to run on 5V rail (~21 kg·cm capacity vs ~16 kg·cm tilt load requirement)
+- **Commo Rev R1:** Add LoRa, replace JST GH 6P with P1+P2 socket rails
+- **XO Rev R1:** Remove LoRa (migrated to Commo), add P1+P2 passthrough rails matching Commo pinout on River and Simon stacks
+- **Flight Engineer Rev A1:** Remove 6V servo BEC; tilt servos to run on 5V rail (~21 kg·cm capacity vs ~16 kg·cm tilt load requirement)
 
 Per-item status changes often and is not tracked here — read the current state directly from
-each board's own `.md` (`avionics/kicad/Emma/Emma.md`, `avionics/kicad/Zoë/Zoë.md`,
-`avionics/kicad/Kaylee/Kaylee.md`) and `TODO.md` §1.2b before starting work.
+each board's own `.md` (`avionics/kicad/Commo/Commo.md`, `avionics/kicad/XO/XO.md`,
+`avionics/kicad/FlightEngineer/FlightEngineer.md`) and `TODO.md` §1.2b before starting work.
 
 ### Phase 11 (Medium Priority — Cruise and RCS)
 
@@ -83,7 +83,7 @@ To integrate deferred work into the next phase:
 
 Each deferred item in this folder shall include:
 
-- **Title and revision:** e.g., "Rev R1 — Emma PCB Redesign"
+- **Title and revision:** e.g., "Rev R1 — Commo PCB Redesign"
 - **Status:** Planned / In Analysis / Waiting (for dependency) / Phase 11 / Phase 12+
 - **Scope:** What problem does it solve? What capability does it add?
 - **Technical approach:** Proposed solution or design
@@ -115,7 +115,7 @@ When deferred work becomes active, it will be incorporated into the relevant pha
 
 Items in this folder are tracked in `TODO.md` with cross-references:
 
-- `TODO.md §1.2b` — Planned PCB revisions (Emma R1, Zoë R1, Kaylee A1)
+- `TODO.md §1.2b` — Planned PCB revisions (Commo R1, XO R1, Flight Engineer A1)
 - `TODO.md §1.3` — Phase 11 system integration (rear EDF, RCS)
 - `TODO.md §2.x` — Phase 12+ capability planning
 
@@ -126,7 +126,9 @@ When adding new deferred work to this folder:
 
 ## Legal and Licensing Notes
 
-All deferred work is covered under the same CC BY 4.0 license as active work. Deferred designs may be:
+All deferred work is covered under the same dual license as active work — CERN-OHL-W 2.0 for
+hardware/CAD (e.g. `deferred/aft-edf/` SCAD/STL), CC BY-SA 4.0 for docs/code — see
+`deferred/LICENSE` and `docs/attribution_and_licencing.md`. Deferred designs may be:
 - **Shared publicly** on version control
 - **Used by others** for their own UAV projects
 - **Cited with attribution** to Steve Griffing and this project

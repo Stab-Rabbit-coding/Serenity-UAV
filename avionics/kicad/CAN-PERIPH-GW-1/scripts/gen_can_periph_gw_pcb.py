@@ -14,8 +14,8 @@ places every footprint with correct nets and a generous non-overlapping grid
 -- it does NOT hand-route signal traces (30+ nets). DRC will report
 unconnected-ratsnest items for the un-routed nets; that is expected at this
 stage and is tracked as an open item in CAN-PERIPH-GW-1.md / TODO.md, the
-same documented-residual-DRC pattern already used for Kaylee's own PCB
-generator (gen_kaylee_pcb.py docstring).
+same documented-residual-DRC pattern already used for Flight Engineer's own PCB
+generator (gen_flight_engineer_pcb.py docstring).
 
 RS-485 isolation is ISOW1412 (own integrated isolated DC-DC per stack, no
 external DC-DC placeholder needed -- see schematic docstring).
@@ -242,8 +242,8 @@ else:
     X1 = 180.5 + max(0, N_STACKS - 1) * LANE_DX
     Y1 = 119.0
 
-# Back-silkscreen attribution block (mirrors the block already on Wash.md /
-# Zoe.md boards). Position user-corrected 2026-07-26 (the generator's first
+# Back-silkscreen attribution block (mirrors the block already on Pilot.md /
+# XO.md boards). Position user-corrected 2026-07-26 (the generator's first
 # guess ran off the board corner) -- keep in sync with the live board if
 # moved again by hand.
 ATTRIBUTION_TEXT = (
@@ -307,7 +307,7 @@ def base_board_text():
 \t)
 \t(paper "A4")
 \t(title_block
-\t\t(title "CAN-PERIPH-GW-1 / MAL-CAN-PERIPH-GW-PCB")
+\t\t(title "CAN-PERIPH-GW-1 / SKIPPER-CAN-PERIPH-GW-PCB")
 \t\t(date "2026-07-26")
 \t\t(rev "1")
 \t\t(comment 1 "Serenity UAV -- TPM-secured dual-isolated-bus (CAN-FD+RS-485) peripheral gateway")

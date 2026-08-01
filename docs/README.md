@@ -89,7 +89,7 @@ design baseline. All new work targets Rev S (24", 50mm tandem EDFs, 8-node Wash/
 design documents are retained for historical reference only; see links below.
 
 **Author:** Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Year:**2026  |**Status:** Superseded — historical reference only (see banner above)
 
 > Rev M supersedes Rev L. Hardware upgrade: all 8 PocketBeagle 2 (AM6232) replaced by PocketBeagle 2 Industrial (AM6254).
@@ -104,7 +104,8 @@ design documents are retained for historical reference only; see links below.
 | Hull geometry | Peter Farell | CC BY 4.0 | printables.com/model/548545 |
 | EDF nozzles | BamJr | CC BY 4.0 | thingiverse.com/thing:2991269 |
 | Blueprint proportions | Mandel + Earls / QMx / Universal | © 2007 QMx | 269ft×170ft×79ft ratios |
-| All other design | Steve Griffing | CC BY 4.0 | This project |
+| All other design (hardware/CAD/PCB) | Steve Griffing | CERN-OHL-W 2.0 | This project |
+| All other design (docs/code/scripts) | Steve Griffing | CC BY-SA 4.0 | This project |
 | Visual inspiration | Joss Whedon / Mutant Enemy / Universal | © reserved | Firefly (2002) / Serenity (2005) — Fan work |
 
 ---

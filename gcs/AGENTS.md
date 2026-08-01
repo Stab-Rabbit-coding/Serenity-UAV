@@ -1,22 +1,22 @@
-# Ground Control Station (Malcolm) — Agent Instructions
+# Ground Control Station (Skipper) — Agent Instructions
 
 > *See the root `AGENTS.md` for project-wide policies. This file provides specific guidance for the ground control station (GCS) software, hardware, and operator interface.*
 
 ## Scope
 
-Malcolm is the ground control station (GCS) for Serenity-UAV. This folder contains:
+Skipper is the ground control station (GCS) for Serenity-UAV. This folder contains:
 - GCS software (command and control, telemetry display, mission planning)
 - Hardware interface and communications middleware
 - Operator interface design and documentation
 - Test harnesses and simulation tools
 
-Malcolm's role: the boss. He commands the UAV, receives telemetry, authenticates all commands, and maintains a real-time audit log of all flight operations and command/response transactions.
+Skipper's role: the boss. He commands the UAV, receives telemetry, authenticates all commands, and maintains a real-time audit log of all flight operations and command/response transactions.
 
 ## Ground Control Station Architecture
 
 ### Role and Responsibilities
 
-Malcolm is responsible for:
+Skipper is responsible for:
 - **Command and Control (C2):** Send verified, cryptographically signed commands to all onboard nodes
 - **Telemetry Reception:** Receive, verify, and display real-time sensor data and system status
 - **Mission Planning:** Design and upload flight missions with autonomous execution capability
@@ -26,7 +26,7 @@ Malcolm is responsible for:
 
 ### External Communications Channels
 
-Malcolm communicates with Serenity via:
+Skipper communicates with Serenity via:
 1. **Wi-Fi (5 GHz):** Primary high-bandwidth channel for telemetry and camera feed
 2. **Zigbee (2.4 GHz):** Secondary mesh network for command retry and extended range
 3. **SiK / MAVLink (915 MHz):** Backup control channel (900 MHz unlicensed ISM)
@@ -67,7 +67,7 @@ Operators shall be able to:
 
 ### Message Format
 
-All messages between Malcolm and Serenity shall:
+All messages between Skipper and Serenity shall:
 - Use a standard message wrapper with:
     - Message type (command, telemetry, acknowledgment, error)
     - Source (ground / node ID)
@@ -113,7 +113,7 @@ Each operator must possess:
 
 ### Message Verification
 
-Malcolm verifies every received message:
+Skipper verifies every received message:
 - Signature valid (matches the transmitter's certificate)
 - Sequence number in order (detects replay attacks)
 - Timestamp within acceptable skew (detects old messages)
@@ -134,14 +134,14 @@ Logs are saved to local storage and optionally uploaded after flight for forensi
 
 ### Computer Requirements
 
-Malcolm can run on:
+Skipper can run on:
 - **Desktop / laptop:** Windows, macOS, Linux with standard telemetry radio interface
 - **Tablet/mobile:** Android or iOS with Wi-Fi or USB radio dongle
 - **Embedded SBC:** Raspberry Pi or similar for autonomous ground station operation
 
 ### Radio Interface
 
-Malcolm must support:
+Skipper must support:
 - Standard USB radio dongles (SiK, Wi-Fi USB adapters)
 - Integrated Wi-Fi and Bluetooth (for tablet-based operation)
 - Multiple radios simultaneously (for redundancy and channel switching)
@@ -157,7 +157,7 @@ Portable operation requires:
 
 ### Modular Design
 
-Malcolm's software is organized into independent modules:
+Skipper's software is organized into independent modules:
 - **Command Interface:** Operator input, button/keyboard/touch handling
 - **Comms Stack:** Manage multiple radio channels, retransmit logic, failover
 - **Telemetry Processor:** Parse, verify, and cache incoming telemetry
@@ -176,7 +176,7 @@ A software-in-the-loop (SITL) simulator shall support:
 
 ## Work Tracking and Documentation
 
-When developing Malcolm features:
+When developing Skipper features:
 
 1. Document the operator workflow (how a user accomplishes a task)
 2. Specify the command message format and any authentication steps

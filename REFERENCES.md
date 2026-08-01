@@ -1,15 +1,17 @@
 # REFERENCES.md — Serenity UAV Standards and Regulatory Reference Catalog
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Revision:** S
-**Last updated:** 2026-07-20
+**Last updated:** 2026-08-01
 **Revision history:** Rev R (2026-06-10) → Rev R1 (2026-06-11, hull-frame bake) → Rev S
 (2026-07-04, comprehensive checkpoint — integrates all Rev R1/R1c/R1d/R2 modifications;
 see TODO.md "Rev S Checkpoint" for the full consolidated changelog) → 2026-07-20 (added the
 Creative-Universe Attribution section and the `docs/references/` canonical-reference library:
 REF-CAD-003 QMx 2007 Blueprints pack, REF-CAD-004 misubisu Thingiverse origin model; expanded
-REF-CAD-002 Nick Henning after consolidation)
+REF-CAD-002 Nick Henning after consolidation) → 2026-08-01 (TODO.md §0.9 licensing audit: added
+Part XV REF-LIC-001/002, corrected REF-CAD-004 license to CC BY-SA 4.0, documented the
+CERN-OHL-W 2.0 / CC BY-SA 4.0 dual-license split)
 
 ---
 
@@ -26,7 +28,7 @@ REF-CAD-002 Nick Henning after consolidation)
     - [REF-FCC-001: 47 CFR §15.247 — Operation within the bands 902–928 MHz, 2400–2483.5 MHz, and 5725–5850 MHz](#ref-fcc-001-47-cfr-15247--operation-within-the-bands-902928-mhz-240024835-mhz-and-57255850-mhz)
     - [REF-FCC-002: 47 CFR Part 15 Subpart E — Unlicensed National Information Infrastructure Devices (UNII)](#ref-fcc-002-47-cfr-part-15-subpart-e--unlicensed-national-information-infrastructure-devices-unii)
     - [REF-FCC-003: 47 CFR Part 15 §15.235 — Operation Within the Band 49.82–49.90 MHz](#ref-fcc-003-47-cfr-part-15-15235--operation-within-the-band-49824990-mhz)
-    - [REF-FCC-004: 47 CFR Part 95 Subpart C — Radio Control Radio Service (RCRS) — Evaluated and Rejected for Emma's 49 MHz Link](#ref-fcc-004-47-cfr-part-95-subpart-c--radio-control-radio-service-rcrs--evaluated-and-rejected-for-emmas-49-mhz-link)
+    - [REF-FCC-004: 47 CFR Part 95 Subpart C — Radio Control Radio Service (RCRS) — Evaluated and Rejected for Commo's 49 MHz Link](#ref-fcc-004-47-cfr-part-95-subpart-c--radio-control-radio-service-rcrs--evaluated-and-rejected-for-commos-49-mhz-link)
 - [Part III — NIST Security Standards](#part-iii--nist-security-standards)
     - [REF-NIST-001: NIST SP 800-207 — Zero Trust Architecture](#ref-nist-001-nist-sp-800-207--zero-trust-architecture)
     - [REF-NIST-002: NIST SP 800-82 Rev 3 — Guide to Operational Technology (OT) Security](#ref-nist-002-nist-sp-800-82-rev-3--guide-to-operational-technology-ot-security)
@@ -79,6 +81,9 @@ REF-CAD-002 Nick Henning after consolidation)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
+- [Part XV — Open Hardware / Software Licensing Standards](#part-xv--open-hardware--software-licensing-standards)
+    - [REF-LIC-001: CERN Open Hardware Licence Version 2 — Weakly Reciprocal (CERN-OHL-W 2.0)](#ref-lic-001-cern-open-hardware-licence-version-2--weakly-reciprocal-cern-ohl-w-20)
+    - [REF-LIC-002: OSHWA Open Source Hardware Certification](#ref-lic-002-oshwa-open-source-hardware-certification)
 - [Removed / Superseded Citations](#removed--superseded-citations)
 - [Open Standards Verification Items](#open-standards-verification-items)
 
@@ -89,27 +94,40 @@ REF-CAD-002 Nick Henning after consolidation)
 This catalog is the standards/regulatory index; it is **not** the project's licensing document.
 The authoritative, full attribution chain — original creators, cast/crew, upstream CAD authors,
 and third-party software licenses — is
-[`current-specification/LICENSE_AND_ATTRIBUTION.md`](current-specification/LICENSE_AND_ATTRIBUTION.md),
-and the project's own license text is the root [`LICENSE`](LICENSE) (CC BY 4.0). This section is a
+[`current-specification/LICENSE_AND_ATTRIBUTION.md`](current-specification/LICENSE_AND_ATTRIBUTION.md);
+the project's dual-license policy and subsystem federation map is
+[`docs/attribution_and_licencing.md`](docs/attribution_and_licencing.md). This section is a
 **summary with cross-references**, recorded here so that the creative-universe rights holders — never
 previously named in this file — are acknowledged wherever this catalog is read.
 
 ### Project license (this work)
 
-All original work in this repository is © 2025 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP, released
-under **Creative Commons Attribution 4.0 International (CC BY 4.0)** —
-<https://creativecommons.org/licenses/by/4.0/>. You may share and adapt it, including commercially,
-with appropriate credit, a link to the license, and an indication of changes; attribution must not
-imply endorsement by the licensor or by any rights holder named below. Full terms: root
-[`LICENSE`](LICENSE).
+All original work in this repository is © 2025 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP,
+**dual-licensed** (corrected 2026-08-01 — see "Removed / Superseded Citations"):
+
+- **Hardware/CAD/PCB design** (airframe SCAD/STL/FCStd, KiCad schematics/PCB/Gerbers, mechanical
+  drawings) — **CERN Open Hardware Licence Version 2 — Weakly Reciprocal (CERN-OHL-W 2.0)**
+  [REF-LIC-001]. Full terms: root [`LICENSE`](LICENSE).
+- **Documentation, code, scripts, and non-hardware drawings** — **Creative Commons
+  Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)** —
+  <https://creativecommons.org/licenses/by-sa/4.0/>. Full terms: `LICENSES/CC-BY-SA 4.0`.
+
+You may share and adapt either under its own terms, including commercially, with appropriate
+credit, a link to the license, and an indication of changes; attribution must not imply
+endorsement by the licensor or by any rights holder named below. See
+[`docs/attribution_and_licencing.md`](docs/attribution_and_licencing.md) for the full split and
+the per-subsystem `LICENSE` federation.
 
 ### *Firefly* / *Serenity* creative universe (underlying IP)
 
 The hull form and visual identity of this UAV draw **visual inspiration** from the Firefly-class
-transport ship *Serenity*, and the avionics/role naming scheme (Malcolm, Wash, Zoë, Kaylee, Jayne,
-Emma, Shepherd's Room, Inara's Shuttle, River's Room, Simon's Medbay) is drawn from the same
-characters. The names, ship design, characters, and all associated intellectual property are the
-trademarks and copyrights of their respective rights holders:
+transport ship *Serenity*. The eight-node avionics bay names (Shepherd's Room, Inara's Shuttle,
+River's Room, Simon's Medbay) are drawn from the same characters. The six board role names
+(Skipper, Pilot, XO, Flight Engineer, Commo, Observer) were originally drawn from the same
+characters too, but were renamed 2026-08-01 to generic role names — see `AGENTS.md` §9 "Naming
+history" — specifically to avoid using character names as commercial hardware identifiers; the
+bay names were not part of that rename. The ship design, characters, and all associated
+intellectual property remain the trademarks and copyrights of their respective rights holders:
 
 | Role / Rights | Party |
 |---|---|
@@ -124,7 +142,8 @@ trademarks and copyrights of their respective rights holders:
 ### Fan-engineering terms
 
 This project is a **non-commercial fan-engineering work**. It draws visual inspiration from
-Serenity's silhouette and reuses character names for subsystem identifiers only. It does **not**:
+Serenity's silhouette and reuses character names for the four avionics bay identifiers only
+(the six board names were moved off character names 2026-08-01). It does **not**:
 
 - reproduce, redistribute, or commercially exploit any copyrighted *Firefly* / *Serenity* artwork,
   script, footage, soundtrack, model mesh, or character likeness;
@@ -289,7 +308,7 @@ aft white); controlled by FC4 node (Simon's medbay, Bay E).
 
 **Applied to:** SiK 915 MHz MAVLink (RFD900x), LoRa 915 MHz (RFM95W), Zigbee 2.4 GHz (CC2652R7)
 
-**Used in:** `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`, `TODO.md`, `AGENTS.md`,
+**Used in:** `gcs/skipper/hardware/docs/skipper_antenna_spec.md`, `TODO.md`, `AGENTS.md`,
 `avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`
 
 ---
@@ -311,7 +330,7 @@ aft white); controlled by FC4 node (Simon's medbay, Bay E).
 **Applied to:** TI WL1837MOD Wi-Fi 5 GHz link (UNII-3 band); Tx power must be reduced to
 17 dBm conducted when a 14 dBi directional antenna is connected to maintain EIRP ≤ 30 dBm.
 
-**Used in:** `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`, `TODO.md`, `AGENTS.md`
+**Used in:** `gcs/skipper/hardware/docs/skipper_antenna_spec.md`, `TODO.md`, `AGENTS.md`
 
 ---
 
@@ -322,7 +341,7 @@ aft white); controlled by FC4 node (Simon's medbay, Bay E).
 | **Issuing authority** | FCC |
 | **Official URL** | <https://www.ecfr.gov/current/title-47/chapter-I/subchapter-A/part-15/subpart-C/section-15.235> |
 
-> **Correction (2026-06-20):** Earlier project revisions cited the Emma 49 MHz link against
+> **Correction (2026-06-20):** Earlier project revisions cited the Commo 49 MHz link against
 > 47 CFR **Part 95** (Radio Control Radio Service, RCRS).  Part 95 Subpart C RCRS covers only
 > the 26–28 MHz, 72 MHz, and 75 MHz bands — it does **not** include 49 MHz.  The 49.82–49.90 MHz
 > band is an unlicensed, license-exempt intentional-radiator band governed by **47 CFR Part 15
@@ -342,7 +361,7 @@ aft white); controlled by FC4 node (Simon's medbay, Bay E).
 | Antenna restriction | No antenna other than that furnished by the manufacturer may be used; a permanently attached antenna or a unique (non-standard) coupling satisfies this; **"the use of a standard antenna jack or electrical connector is prohibited"**, even where the manufacturer permits user replacement of a broken antenna | §15.203 |
 | Equipment authorization | Requires FCC Certification through a Telecommunication Certification Body (TCB) prior to marketing; device must bear an FCC ID and Part 15 compliance statement | §2.803, §15.19 |
 
-**Applied to:** Emma (XCVR-49MHZ-2) 49 MHz AX.25 link; River's Room and Simon's Medbay nodes only.
+**Applied to:** Commo (XCVR-49MHZ-2) 49 MHz AX.25 link; River's Room and Simon's Medbay nodes only.
 No operator or station license is required — the band is license-exempt under Part 15, not
 because it is an RCRS personal radio service.
 
@@ -361,32 +380,32 @@ can be replaced by the user, but the use of a standard antenna jack or electrica
 prohibited."* (47 CFR §15.203, <https://www.ecfr.gov/current/title-47/chapter-I/subchapter-A/part-15/subpart-C/section-15.20>3).
 The section also exempts carrier-current devices and intentional radiators that must be
 professionally installed and measured at the installation site (e.g., perimeter protection
-systems, field disturbance sensors) — Emma is neither, so no exemption applies. Per
-`gcs/malcolm/hardware/docs/malcolm_wiring.md`, Emma's RF port previously used a standard SMA
-connector (Amphenol 132289) on both the aircraft and Malcolm GCS sub-modules — **this was a
+systems, field disturbance sensors) — Commo is neither, so no exemption applies. Per
+`gcs/skipper/hardware/docs/skipper_wiring.md`, Commo's RF port previously used a standard SMA
+connector (Amphenol 132289) on both the aircraft and Skipper GCS sub-modules — **this was a
 confirmed §15.203 violation**. **Resolution (2026-06-20):** J2 is now specified as Amphenol
 **132289RP**, the reverse-polarity (RP-SMA) counterpart of 132289 — same PCB footprint, reversed
 mating-pin gender, mechanically incompatible with generic commercial SMA antennas/cables, which
-satisfies §15.203's "unique coupling" provision. Updated in `avionics/kicad/Emma.kicad_sch`,
-`avionics/kicad/Emma.kicad_pcb`, `avionics/kicad/Emma.md`,
-`gcs/malcolm/hardware/docs/malcolm_wiring.md`, and
-`gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`. See TODO.md §0.1 — remaining step is the
+satisfies §15.203's "unique coupling" provision. Updated in `avionics/kicad/Commo.kicad_sch`,
+`avionics/kicad/Commo.kicad_pcb`, `avionics/kicad/Commo.md`,
+`gcs/skipper/hardware/docs/skipper_wiring.md`, and
+`gcs/skipper/hardware/docs/skipper_antenna_spec.md`. See TODO.md §0.1 — remaining step is the
 physical board re-spin/fabrication run to populate 132289RP in place of 132289; the design-level
 fix is complete.
 
-**Used in:** `gcs/malcolm/hardware/docs/malcolm_antenna_spec.md`,
+**Used in:** `gcs/skipper/hardware/docs/skipper_antenna_spec.md`,
 `avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`,
 `README.md`, `TODO.md`, `AGENTS.md`, `docs/AVIONICS_PB2_REDESIGN.md`
 
 ---
 
-### REF-FCC-004: 47 CFR Part 95 Subpart C — Radio Control Radio Service (RCRS) — Evaluated and Rejected for Emma's 49 MHz Link
+### REF-FCC-004: 47 CFR Part 95 Subpart C — Radio Control Radio Service (RCRS) — Evaluated and Rejected for Commo's 49 MHz Link
 
 | Field | Value |
 |---|---|
 | **Issuing authority** | FCC |
 | **Official URL** | <https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-95/subpart-C> |
-| **Status** | **Not used in design.** Researched 2026-06-20 as a candidate replacement band/service for Emma's 49 MHz link (to recover the power/range budget §15.235 does not permit — see REF-FCC-003 and TODO.md §0.1) and rejected. Retained here per the Standards Vetting Policy so the rejection is auditable and is not re-investigated from scratch in a future session. |
+| **Status** | **Not used in design.** Researched 2026-06-20 as a candidate replacement band/service for Commo's 49 MHz link (to recover the power/range budget §15.235 does not permit — see REF-FCC-003 and TODO.md §0.1) and rejected. Retained here per the Standards Vetting Policy so the rejection is auditable and is not re-investigated from scratch in a future session. |
 
 **Regulatory provisions reviewed:**
 
@@ -399,13 +418,13 @@ fix is complete.
 | Transmitter power | Mean output power ≤ 0.75 W on 72/75 MHz | §95.767 |
 | Permissible use | RCRS transmitters may be used **only for one-way communications** (telecommand, and on 26–28 MHz only, narrow on/off-indicator telemetry); **"No person shall use a RCRS transmitter to transmit data"** | §95.731 |
 | Equipment certification | No certification exception exists for 72/75 MHz transmitters (the §95.735 non-certified-transmitter exception applies only to the 26–28 MHz band) | §95.735 |
-| Licensing | Operated without an individual license ("licensed by rule"), but the equipment itself requires Part 95-specific FCC certification, separate from the Part 15 §2.803/§15.19 process REF-FCC-003 already requires for Emma | §95.305 |
+| Licensing | Operated without an individual license ("licensed by rule"), but the equipment itself requires Part 95-specific FCC certification, separate from the Part 15 §2.803/§15.19 process REF-FCC-003 already requires for Commo | §95.305 |
 
-**Findings — why RCRS does not apply to Emma:**
+**Findings — why RCRS does not apply to Commo:**
 
 1. **No 78 MHz allocation exists.** §95.763 defines only the 26–28 MHz, 72 MHz, and 75 MHz channel plans; there is no 78 MHz RCRS band in 47 CFR Part 95 at any subpart.
 2. **Aircraft/surface split forecloses 75 MHz.** Serenity is an aircraft. §95.763(c) restricts 75 MHz channels to model *surface* craft by rule; only the 72 MHz band (§95.763(b)) is available to an aircraft under RCRS.
-3. **§95.731 is disqualifying regardless of band or power.** Emma's payload is bidirectional
+3. **§95.731 is disqualifying regardless of band or power.** Commo's payload is bidirectional
     AX.25 KISS-framed packet data (signed/authenticated messages, telemetry, command — required
     by the Zero Trust policy, REF-NIST-001 §2.1) — squarely "data" under §95.731's prohibition.
     RCRS permits only one-way telecommand/indicator-telemetry traffic; it cannot legally carry
@@ -469,7 +488,7 @@ to "Operational Technology (OT) Security."
 | §5.5 | Remote Access | Hardened external comms links; no unauthenticated remote access |
 | §6.2.5 | Electromagnetic Interference | Basis for EMI hardening design objective (500 W/m² RF environment) |
 
-**Applied to:** 5 kV galvanic isolation on all inter-node buses; Faraday enclosure for Kaylee PDB;
+**Applied to:** 5 kV galvanic isolation on all inter-node buses; Faraday enclosure for Flight Engineer PDB;
 PACE redundancy design; hostile RF environment design objective.
 
 **Used in:** `AGENTS.md`, `README.md`, `docs/AVIONICS_PB2_REDESIGN.md`
@@ -512,11 +531,11 @@ Verify section references against the final revision when it is published.
 
 | Section | Title | Application |
 |---|---|---|
-| §4.4.2 | Protecting Log Data | Recommends measures preventing unauthorized modification, deletion, or access to logs; the ATF16V8BQL CPLD hardware write-block on each Zoë node implements this principle at the hardware layer |
+| §4.4.2 | Protecting Log Data | Recommends measures preventing unauthorized modification, deletion, or access to logs; the ATF16V8BQL CPLD hardware write-block on each XO node implements this principle at the hardware layer |
 | §4.1 | Log Generation | Every sensor reading, message, and camera frame logged to hardware-enforced non-executable microSD |
 
 **Applied to:** ATF16V8BQL CPLD hardware write-block (SET at power-on, CLEAR only on hard power
-cycle); hardware-enforced append-only non-executable log microSD on every Zoë node.
+cycle); hardware-enforced append-only non-executable log microSD on every XO node.
 
 **Used in:** `README.md` (replaces incorrect NIST SP 800-72 citation — see "Removed Citations"),
 `TODO.md`, `docs/AVIONICS_PB2_REDESIGN.md`
@@ -569,18 +588,18 @@ PE-68515 coupling transformer (1:1.41, 78 Ω); 78 Ω termination at CN1 (Bay A) 
 
 | Requirement | Title | Application |
 |---|---|---|
-| RE102 | Radiated Emissions, Electric Field | Limit C applies to all avionics subsystems; 100BASE-TX EMI suppressed via HX1188NL magnetics, CMCs, and TVS arrays on Wash and Zoë |
-| RS103 | Radiated Susceptibility, Electric Field | 200 V/m, 10 kHz–18 GHz; isolated buses + chassis-grounded Kaylee enclosure provide margin |
-| CS101 | Conducted Susceptibility, Power Leads | 50 V, 30 Hz – 150 kHz; π-filter bulk caps on Kaylee BECs |
+| RE102 | Radiated Emissions, Electric Field | Limit C applies to all avionics subsystems; 100BASE-TX EMI suppressed via HX1188NL magnetics, CMCs, and TVS arrays on Pilot and XO |
+| RS103 | Radiated Susceptibility, Electric Field | 200 V/m, 10 kHz–18 GHz; isolated buses + chassis-grounded Flight Engineer enclosure provide margin |
+| CS101 | Conducted Susceptibility, Power Leads | 50 V, 30 Hz – 150 kHz; π-filter bulk caps on Flight Engineer BECs |
 | CS114 | Conducted Susceptibility, Bulk Cable Injection | Curve 05; two-stage CM filter (CM1+CM2, > 80 dB at 10 MHz) + Y-caps to chassis |
 | CE102 | Conducted Emissions, Power Leads | Limit B; CM1+CM2 input chokes + π-filter on each BEC |
 
-**Applied to:** Wash (Cape-A-2), Zoë (Cape-B-2), and Kaylee EMC compliance targets.  The
+**Applied to:** Pilot (Cape-A-2), XO (Cape-B-2), and Flight Engineer EMC compliance targets.  The
 design environment (500 W/m², E ≈ 434 V/m) [REF-NIST-002 §6.2.5] exceeds all MIL-STD-461G
 RS103 limits; compliance with 200 V/m RS103 is a design floor, not the design ceiling.  Full
 MIL-STD-461G qualification testing is deferred pending airframe integration.
 
-**Used in:** `avionics/kicad/Wash.md`, `avionics/kicad/Zoë.md`, `avionics/kicad/Kaylee.md`,
+**Used in:** `avionics/kicad/Pilot.md`, `avionics/kicad/XO.md`, `avionics/kicad/FlightEngineer.md`,
 `docs/AVIONICS_PB2_REDESIGN.md`
 
 ---
@@ -671,7 +690,7 @@ required before fabrication (see TODO.md §1.4 PCB DRC and isolation verificatio
 
 **Applied to (Class 3R, cargo bay only — 2026-07-03 update):** 12 mm OD crosshair-pattern
 laser module (5 mW, 650 nm) installed in the cargo bay nadir FPV mount (`cargo_fpv_bezel`,
-Jayne board); required fan angle for a 3"×3" (76×76 mm) crosshair at 5 ft (1.5 m) is only
+Observer board); required fan angle for a 3"×3" (76×76 mm) crosshair at 5 ft (1.5 m) is only
 ≈2.86°, well within reach of an off-the-shelf 5 mW Class 3R module — no change from the
 original bow pod laser spec, just relocated. This module is **no longer installed in the bow
 sensor pod** — see the Class 3B entry below for the nose laser, which has a materially
@@ -686,7 +705,7 @@ different optical throw requirement.
 | §5.4 | Engineering controls for Class 3B | Requires: key-controlled interlock, emission indicator (visible when armed), a beam-stop or shutter, and protective housing — beyond the GPIO-default-off pull-down alone used for the Class 3R module |
 | §7 | Labeling | Class 3B warning label and aperture label required on the module housing |
 
-**Applied to:** bow sensor pod (nose, Jayne board) crosshair laser. A 2"×2" (51×51 mm) crosshair
+**Applied to:** bow sensor pod (nose, Observer board) crosshair laser. A 2"×2" (51×51 mm) crosshair
 at 50 ft (15.2 m) requires ≈0.19° fan angle — no catalog 520 nm crosshair module publishes
 this tight a divergence, so a custom-collimated module is required, and the optical power
 needed for daylight camera visibility at that divergence places it in Class 3B rather than
@@ -744,10 +763,10 @@ per individual component certifications in the ISOW1044BDFMR and ADM2795EBRWZ da
 | §5 | Classification of ESD generators | Contact discharge ±8 kV (Level 4), air discharge ±15 kV (Level 4) at all field connectors |
 | §8 | Test levels | Level 4 is the highest defined test level; selected as design target for the 500 W/m² hostile EMI environment [REF-NIST-002 §6.2.5] |
 
-**Applied to:** TVS arrays (PRTR5V0U2X) at all JST-GH field connectors on Wash and Zoë;
-shielded Kaylee enclosure provides ESD isolation for PDB connectors.
+**Applied to:** TVS arrays (PRTR5V0U2X) at all JST-GH field connectors on Pilot and XO;
+shielded Flight Engineer enclosure provides ESD isolation for PDB connectors.
 
-**Used in:** `avionics/kicad/Wash.md`, `avionics/kicad/Zoë.md`, `avionics/kicad/Kaylee.md`
+**Used in:** `avionics/kicad/Pilot.md`, `avionics/kicad/XO.md`, `avionics/kicad/FlightEngineer.md`
 
 ---
 
@@ -767,9 +786,9 @@ shielded Kaylee enclosure provides ESD isolation for PDB connectors.
 | §5.2 | Test levels | Level 4 (4 kV peak, 5/50 ns) on all signal lines |
 
 **Applied to:** Common-mode chokes (CM2: Bourns SRF2012-100Y) and isolated transceivers
-(ISOW1044BDFMR, ADM2795EBRWZ) on Wash and Zoë signal buses.
+(ISOW1044BDFMR, ADM2795EBRWZ) on Pilot and XO signal buses.
 
-**Used in:** `avionics/kicad/Wash.md`, `avionics/kicad/Zoë.md`
+**Used in:** `avionics/kicad/Pilot.md`, `avionics/kicad/XO.md`
 
 ---
 
@@ -790,10 +809,10 @@ shielded Kaylee enclosure provides ESD isolation for PDB connectors.
 | Annex A | Combination wave generator | Defines the 1.2/50 µs (voltage) / 8/20 µs (current) surge waveform |
 
 **Applied to:** ADM2795EBRWZ RS-485 transceiver (rated ±42 V bus fault — exceeds IEC 61000-4-5
-Level 3 ±2 kV CM surge on bus); SMBJ33CA TVS (D1) on Kaylee VBAT line; PRTR5V0U2X TVS
-arrays at field connectors on Wash and Zoë.
+Level 3 ±2 kV CM surge on bus); SMBJ33CA TVS (D1) on Flight Engineer VBAT line; PRTR5V0U2X TVS
+arrays at field connectors on Pilot and XO.
 
-**Used in:** `avionics/kicad/Wash.md`, `avionics/kicad/Zoë.md`, `avionics/kicad/Kaylee.md`
+**Used in:** `avionics/kicad/Pilot.md`, `avionics/kicad/XO.md`, `avionics/kicad/FlightEngineer.md`
 
 ---
 
@@ -826,7 +845,7 @@ The 500 W/m² RF field design objective [REF-NIST-002 §6.2.5] places this proje
 
 The design environment of 500 W/m² (≈434 V/m, equivalent to RF proximity near a strong broadcast or cellular link) **exceeds even MIL-STD-461G RS103 susceptibility limits** (200 V/m). **Consequently, a minimum 0.20 mm copper-to-edge clearance is the design floor for this project, not a design maximum.** Reducing to 0.15 mm would increase risk of field coupling, arcing, and PCB manufacturing defects in the harsh RF environment.
 
-**Applied to:** All PCB designs (Wash, Zoë, Kaylee, Emma, Jayne, CAN-PERIPH-GW-1, ENC-NACELLE-1).
+**Applied to:** All PCB designs (Pilot, XO, Flight Engineer, Commo, Observer, CAN-PERIPH-GW-1, ENC-NACELLE-1).
 
 **Design Decision (2026-07-27):** Copper-to-edge clearance (min_copper_edge_clearance in KiCad) is established at **0.20 mm minimum** per IPC-2221B §4.2 for harsh RF environments. This clearance must not be reduced below 0.20 mm without explicit re-evaluation against the 500 W/m² field-strength requirement and validation that manufacturing yield remains acceptable.
 
@@ -852,7 +871,7 @@ The design environment of 500 W/m² (≈434 V/m, equivalent to RF proximity near
 | Section 5 | Acceptability Criteria — Etching and Drilling | Hole size tolerance, plating coverage, clearance around drilled holes |
 | Section 8 | Workmanship Standards — Copper Traces and Pads | Conductor spacing, edge clearance acceptance, solder mask coverage verification |
 
-**Applied to:** PCB manufacturing accept/reject criteria during fabrication quality verification. All boards (Wash, Zoë, Kaylee, Emma, Jayne, CAN-PERIPH-GW-1, ENC-NACELLE-1) are fabricated by JLCPCB and inspected against IPC-A-600 standards prior to assembly.
+**Applied to:** PCB manufacturing accept/reject criteria during fabrication quality verification. All boards (Pilot, XO, Flight Engineer, Commo, Observer, CAN-PERIPH-GW-1, ENC-NACELLE-1) are fabricated by JLCPCB and inspected against IPC-A-600 standards prior to assembly.
 
 **Used in:** Board-specific design markdown files, incoming inspection checklists, Gerber generation workflows
 
@@ -1067,7 +1086,7 @@ documentation).
 | **Official URL** | <https://store.astm.org/f3269-21.html> |
 | **Scope** | Design/test practice providing a run-time-assurance (RTA) architectural framework so that flight behavior of a complex/unverifiable function is constrained to a safe envelope by an independent monitor, without requiring traditional design-time certification (e.g. DO-178C) of the complex function itself. |
 
-**Applied to:** The PACE-prioritized failover architecture across Wash/Zoë avionics stacks
+**Applied to:** The PACE-prioritized failover architecture across Pilot/XO avionics stacks
 (Watchdog, Comms, Flight Control, Payload Control primary/alternate/contingency/emergency
 assignments — see AGENTS.md "Avionics Workload Balancing"): each PACE tier acts as an
 independent runtime monitor/take-over path bounding the behavior of the primary controller,
@@ -1128,7 +1147,7 @@ an environment where persons may be present in the beam path.
 
 ### REF-SENSOR-001: RunCam Nano 4 — 19 mm Nano Format FPV Camera Specification (SUPERSEDED)
 
-**Status: SUPERSEDED 2026-07-03.** Replaced by the Jayne board's TI AM62Ax digital vision SoC
+**Status: SUPERSEDED 2026-07-03.** Replaced by the Observer board's TI AM62Ax digital vision SoC
 (REF-SENSOR-003) at both the bow sensor pod (nose) and the cargo bay nadir FPV mount. This
 entry is retained per project revision policy (components are referenced as of their last
 active revision even after superseding) — do not delete.
@@ -1181,7 +1200,7 @@ camera body pockets behind the flat and is retained by bow_sensor_faceplate.scad
 | 3 | MOSI | 7 | DIO5 | 11 | DIO3 | 15 | DIO1 |
 | 4 | SCK | 8 | GND | 12 | DIO4 | 16 | DIO2 |
 
-**Applied to:** `avionics/kicad/Emma.kicad_pcb` footprint "LoRa" (HOPERF_RFM9XW_SMD,
+**Applied to:** `avionics/kicad/Commo.kicad_pcb` footprint "LoRa" (HOPERF_RFM9XW_SMD,
 RFM95W per `TODO.md` §1.2b). **Corrected 2026-06-20:** the as-placed footprint had
 SPI1_MISO/MOSI/CLK/SPI1_CS_LORA wired to pads 10–13 (real pins GND/DIO3/DIO4/3.3V) and
 LORA_RESETN wired to pad 2 (real pin MISO) — a wrong-pin-number error, not merely a
@@ -1194,7 +1213,7 @@ are unassigned pending a GPIO budget decision on the P1 header. Footprint pad si
 dimensions and the footprint physically overlaps `CAPE-B IF`; both require a footprint
 correction and reposition before fabrication. Tracked in `TODO.md` §1.2b.
 
-**Used in:** `avionics/kicad/Emma.kicad_pcb`, `avionics/kicad/Emma.md`, `TODO.md`
+**Used in:** `avionics/kicad/Commo.kicad_pcb`, `avionics/kicad/Commo.md`, `TODO.md`
 
 ---
 
@@ -1227,7 +1246,7 @@ correction and reposition before fabrication. Tracked in `TODO.md` §1.2b.
 `airframe/openscad/fuselage/bow_sensor_pod.scad`; pocket dimensions designed for
 TFmini-S body with 0.5 mm clearance per dimension (TOF_BODY_X = 36 mm,
 TOF_BODY_Y = 20 mm, TOF_BODY_D = 22 mm).  UART routed to Shepherd's room
-Wash (Cape-A-2) UART2 port; I2C available as fallback per Zero Trust data-path
+Pilot (Cape-A-2) UART2 port; I2C available as fallback per Zero Trust data-path
 redundancy policy [REF-NIST-001 §2.1].
 
 **Used in:** `airframe/openscad/fuselage/bow_sensor_pod.scad`,
@@ -1256,8 +1275,8 @@ redundancy policy [REF-NIST-001 §2.1].
 | Video encode | H.264 Baseline/Main/High Profile up to Level 5.2; HEVC (H.265) Main Profile up to Level 5.1 High-tier; up to 4K UHD (3840×2160) | AM62Ax datasheet Rev. E |
 | Package | 484-ball FCBGA/FCCSP | AM62Ax datasheet Rev. E |
 
-**Applied to:** Jayne board vision half (nose bow sensor pod and cargo bay nadir FPV mount) —
-see `avionics/AGENTS.md` "Jayne — Cargo-Handling System and Nose/Cargo-Bay Vision, ToF & Laser Board". **Open item:** the
+**Applied to:** Observer board vision half (nose bow sensor pod and cargo bay nadir FPV mount) —
+see `avionics/AGENTS.md` "Observer — Cargo-Handling System and Nose/Cargo-Bay Vision, ToF & Laser Board". **Open item:** the
 484-ball FCBGA package is a substantial escalation in assembly difficulty versus the discrete
 components elsewhere in this design; PCB fabrication/assembly house capability for this
 package must be confirmed before board layout (tracked in TODO.md §1.2c).
@@ -1284,7 +1303,7 @@ package must be confirmed before board layout (tracked in TODO.md §1.2c).
 | CAN interface | Native hardware MCAN peripheral (CAN-FD capable) | MSPM0G3507 datasheet title: "Mixed-Signal Microcontrollers With CAN-FD Interface" |
 | Package options | 48-pin LQFP (PT), 48-pin VQFN (RGZ), 32-pin VQFN (RHB), 32-/28-pin VSSOP | MSPM0G3507 datasheet |
 
-**Applied to:** Jayne board control half — reads Benewake TFmini-S (REF-SENSOR-002) over UART,
+**Applied to:** Observer board control half — reads Benewake TFmini-S (REF-SENSOR-002) over UART,
 drives the location-specific crosshair laser GPIO, and republishes signed sensor data over
 both the Ethernet ring (via REF-SENSOR-005) and the CAN-FD trunk (via REF-SENSOR-006).
 Selected specifically for its native MCAN peripheral and shared TI toolchain with the
@@ -1305,7 +1324,7 @@ synthesis that a non-TI MCU (e.g. RP2350) would require.
 | **Application note** | AN3474 — "KSZ9477 High-Availability Seamless Redundancy" |
 | **Note** | Selected specifically because it is confirmed (per AN3474) to hardware-offload HSR (High-availability Seamless Redundancy) and PRP (Parallel Redundancy Protocol) per IEC 62439-3 — HSR tag insertion, TX frame duplication, RX duplicate-frame discard. Two other Microchip switch parts (LAN9355, KSZ9563) were considered and **rejected** for this role: neither datasheet documents HSR/PRP/MRP hardware support; substituting either would leave the Ethernet ring without hardware-level redundancy and is not permitted for the ring-node role. |
 
-**Applied to:** Jayne board control half — Ethernet ring pass-through node (in/out via shielded
+**Applied to:** Observer board control half — Ethernet ring pass-through node (in/out via shielded
 JST-GH connectors), with hardware-level HSR/PRP failover so a link break elsewhere in the ring
 does not require software topology management on the PocketBeagle 2 nodes.
 
@@ -1335,7 +1354,7 @@ tracked in TODO.md §1.2c and in "Open Standards Verification Items" below.
 | Data rate | Up to 5 Mbps (CAN-FD data phase) | TCAN1042HG-Q1 datasheet |
 | Package | SOIC-8 or VSON-8 (3×3 mm) | TCAN1042HG-Q1 datasheet |
 
-**Applied to:** Jayne board control half — CAN-FD trunk transceiver, MSPM0G3507 MCAN peripheral
+**Applied to:** Observer board control half — CAN-FD trunk transceiver, MSPM0G3507 MCAN peripheral
 to shielded JST-GH CAN-FD connector.
 
 **Used in:** `avionics/AGENTS.md`, `TODO.md`
@@ -1351,7 +1370,7 @@ to shielded JST-GH CAN-FD connector.
 | **Official product page** | <https://www.akm.com/global/en/products/rotation-angle-sensor/ak7455/> |
 | **Announcement** | <https://www.akm.com/us/en/about-us/news/2022/20220509-ak7455/> ("14-bit magnetic rotation angle sensor … that supports off-axis configuration") |
 | **Datasheet** | Doc **200800064-E-00** (2020/09), 68 pp — archived in repo at `avionics/datasheets/ak7455-en-datasheet-myakm.pdf` (AKM gates the web download behind a form) |
-| **Note** | Selected for the wing/nacelle tilt-angle encoder (`MAL-TILT-ENC-PCB`) because it explicitly supports the **Off-Axis (side-of-shaft)** configuration required by the through-shaft tilt-spar, and adds anomaly-magnetic-field detection + dynamic error reduction + EEPROM INL calibration — suited to the ferromagnetic (4130/17-4 PH) spar. Supersedes the on-axis MT6701 (rejected) and AS5600 (Rev Q). |
+| **Note** | Selected for the wing/nacelle tilt-angle encoder (`SKIPPER-TILT-ENC-PCB`) because it explicitly supports the **Off-Axis (side-of-shaft)** configuration required by the through-shaft tilt-spar, and adds anomaly-magnetic-field detection + dynamic error reduction + EEPROM INL calibration — suited to the ferromagnetic (4130/17-4 PH) spar. Supersedes the on-axis MT6701 (rejected) and AS5600 (Rev Q). |
 
 **Specifications applied in this design:**
 
@@ -1367,13 +1386,13 @@ to shielded JST-GH CAN-FD connector.
 | Package | QFN24, 4.0 × 4.0 × 0.85 mm (EP/back-tab must be OPEN, Note5) | §3, §22 |
 | Pin handling | TEST1 open (Note3); TEST2 → VSS (Note4); NC pins open (Note2) | §6 |
 
-**Applied to:** wing-tip tilt-angle encoder board `MAL-TILT-ENC-PCB` — off-axis read of the
+**Applied to:** wing-tip tilt-angle encoder board `SKIPPER-TILT-ENC-PCB` — off-axis read of the
 rotating ring magnet (`HALL-RING-MAG`) on the tilt-spar hub. Off-axis flux (10–70 mT) at
 the IC and the EEPROM INL calibration are **bench-verification** items (AKM app support);
 ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verification items.
 
 **Used in:** `avionics/kicad/ENC-NACELLE-1.kicad_sch`, `avionics/kicad/ENC-NACELLE-1.md`,
-`current-specification/bom_revS.csv` (`MAL-TILT-ENC-PCB`),
+`current-specification/bom_revS.csv` (`SKIPPER-TILT-ENC-PCB`),
 `airframe/wings-nacelles/WBS.md` §1.1.3.6, `avionics/WBS.md` §1.9.1
 
 ---
@@ -1386,9 +1405,9 @@ ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verific
 | **Product** | ISOW1044BDFMR |
 | **Datasheet** | SLLSFF7A, archived at `avionics/datasheets/isow1044.pdf` |
 | **Package** | 20-pin DFM (SOIC-20W compatible), `Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm` |
-| **Note** | Combines galvanic signal isolation + an integrated isolated DC-DC converter in one part (no external isolated supply needed for the bus side) — used for every isolated CAN-FD node this project builds. Clean-room symbol `Jayne_MSPM0G3507_RGZ`/`Jayne_ISOW1044BDFMR` built directly from datasheet Table 7-1, first on Jayne, then reused verbatim on `CAN-PERIPH-GW-1` and Kaylee. |
+| **Note** | Combines galvanic signal isolation + an integrated isolated DC-DC converter in one part (no external isolated supply needed for the bus side) — used for every isolated CAN-FD node this project builds. Clean-room symbol `Observer_MSPM0G3507_RGZ`/`Observer_ISOW1044BDFMR` built directly from datasheet Table 7-1, first on Observer, then reused verbatim on `CAN-PERIPH-GW-1` and FlightEngineer. |
 
-**Used in:** `avionics/kicad/Jayne/kicads/Jayne.kicad_sch` (U4), `avionics/kicad/CAN-PERIPH-GW-1/` (U3 per stack), `avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch` (U_ISOCAN), `avionics/kicad/Wash/kicads/Wash.kicad_sch`, `avionics/kicad/Zoë/kicads/Zoë.kicad_sch` (both fixed 2026-07-26, see Removed/Superseded Citations).
+**Used in:** `avionics/kicad/Observer/kicads/Observer.kicad_sch` (U4), `avionics/kicad/CAN-PERIPH-GW-1/` (U3 per stack), `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch` (U_ISOCAN), `avionics/kicad/Pilot/kicads/Pilot.kicad_sch`, `avionics/kicad/XO/kicads/XO.kicad_sch` (both fixed 2026-07-26, see Removed/Superseded Citations).
 
 ---
 
@@ -1402,7 +1421,7 @@ ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verific
 | **Package** | 20-pin DFM (SOIC-20W compatible), `Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm` |
 | **Note** | Full-duplex part (separate Y/Z driver-out and A/B receiver-in pins); run in half-duplex mode on this project's 2-wire RS485_A/RS485_B multi-drop bus by shorting Y-to-A and Z-to-B, matching the standard technique for using a full-duplex transceiver as half-duplex. Selected 2026-07-26 to replace ADI ADM2795E fleet-wide (see Removed/Superseded Citations) because it integrates its own isolated DC-DC for the bus-side supply — ADM2795E is signal-only and needs a separate external isolated supply. Clean-room symbol built directly from datasheet Table 7-1 ("Pin Functions"). |
 
-**Used in:** `avionics/kicad/CAN-PERIPH-GW-1/` (U4 per stack, `GW_ISOW1412`), `avionics/kicad/Jayne/kicads/Jayne.kicad_sch` (U6), `avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch` (U_RS485), `avionics/kicad/Wash/kicads/Wash.kicad_sch`, `avionics/kicad/Zoë/kicads/Zoë.kicad_sch` (both fixed 2026-07-26, renamed from the broken inline "ADM2795EBRWZ" symbol).
+**Used in:** `avionics/kicad/CAN-PERIPH-GW-1/` (U4 per stack, `GW_ISOW1412`), `avionics/kicad/Observer/kicads/Observer.kicad_sch` (U6), `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch` (U_RS485), `avionics/kicad/Pilot/kicads/Pilot.kicad_sch`, `avionics/kicad/XO/kicads/XO.kicad_sch` (both fixed 2026-07-26, renamed from the broken inline "ADM2795EBRWZ" symbol).
 
 ---
 
@@ -1414,9 +1433,9 @@ ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verific
 | **Product** | OPTIGA™ TPM SLB 9670 TPM2.0 (SLB9670VQ2.0 / SLB9670XQ2.0) |
 | **Datasheet** | Revision 1.4, 2018-12-07, archived at `avionics/datasheets/SLB_9670VQ20_Infineon.pdf` |
 | **Package** | PG-VQFN-32-13, `Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm` |
-| **Note** | Fleet-standard TPM (root `AGENTS.md` §Security: "every Cape carries a TPM"). Clean-room symbol `Jayne_SLB9670_TPM` built directly from datasheet Tables 3/4/5, first on Jayne, reused verbatim on `CAN-PERIPH-GW-1`, Kaylee, and Emma (2026-07-26). **Not** the same as the inline "SLB9670" symbol already embedded in Wash.kicad_sch/Zoë.kicad_sch, which was found (2026-07-26, not yet corrected) to have incorrect pin numbers relative to this same datasheet — see Removed/Superseded Citations. |
+| **Note** | Fleet-standard TPM (root `AGENTS.md` §Security: "every Cape carries a TPM"). Clean-room symbol `Observer_SLB9670_TPM` built directly from datasheet Tables 3/4/5, first on Observer, reused verbatim on `CAN-PERIPH-GW-1`, Flight Engineer, and Commo (2026-07-26). **Not** the same as the inline "SLB9670" symbol already embedded in Pilot.kicad_sch/XO.kicad_sch, which was found (2026-07-26, not yet corrected) to have incorrect pin numbers relative to this same datasheet — see Removed/Superseded Citations. |
 
-**Used in:** `avionics/kicad/Jayne/kicads/Jayne.kicad_sch` (U5), `avionics/kicad/CAN-PERIPH-GW-1/` (U2 per stack), `avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch` (U_TPM), `avionics/kicad/Emma/kicads/Emma.kicad_sch` (TPM).
+**Used in:** `avionics/kicad/Observer/kicads/Observer.kicad_sch` (U5), `avionics/kicad/CAN-PERIPH-GW-1/` (U2 per stack), `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch` (U_TPM), `avionics/kicad/Commo/kicads/Commo.kicad_sch` (TPM).
 
 ---
 
@@ -1436,7 +1455,7 @@ ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verific
 | **Manufacturer** | ⚠ Not yet confirmed from the datasheet |
 | **Datasheet** | `docs/references/108090023_STS3215-C001_Datasheet.pdf` — revision/date ⚠ not extracted |
 | **Control Interface** | **TTL half-duplex serial bus, ID-addressable** — **not** 1000–2000 µs PWM. Lands on `CAN-PERIPH-GW-1` `J_FLEX` → `FLEX_TTL_GPIO`, documented there as covering "a TTL-level digital servo protocol (e.g. a serial-bus servo)". |
-| **Operating Voltage** | Driven at 5.4 V nominal from Kaylee RAIL-2 `5V_JAYNE` (project-side decision, not a datasheet limit) |
+| **Operating Voltage** | Driven at 5.4 V nominal from Flight Engineer RAIL-2 `5V_JAYNE` (project-side decision, not a datasheet limit) |
 | **Torque** | ⚠ Not verified. **Design requirement is ≥ 3.2 kgf·cm (0.31 N·m)** at the coupler — derived in `docs/CARGO_WINCH_SPECIFICATION.md` §4.2, must be checked against the real rating. |
 | **Stall current** | ⚠ Not verified. Budgeted at 1.2 A for the RAIL-2 sizing (spec §5.4); if actual stall exceeds ~2.5 A, RAIL-2 must be resized. |
 | **Mass** | ⚠ Not verified. **60 g assumed** in the mass/CG table (spec §6); this term dominates the +98.6 g net delta and the resulting T/W 1.613 → 1.557. |
@@ -1475,11 +1494,11 @@ ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verific
 | §9 | Cable characteristics | 120 Ω characteristic impedance; matched by 120 Ω termination at CN1 and FC4 |
 
 **Applied to:** 8-node RS-485 half-duplex multidrop bus; ADM2795EBRWZ isolated RS-485
-transceivers on Wash (Cape-A-2) and Zoë (Cape-B-2); 120 Ω termination resistors at CN1
+transceivers on Pilot (Cape-A-2) and XO (Cape-B-2); 120 Ω termination resistors at CN1
 (Shepherd's Room / Bay A) and FC4 (Simon's Medbay / Bay E).
 
 **Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `docs/REVN_BUILD_GUIDE_24IN.md`,
-`avionics/kicad/Wash.md`, `avionics/kicad/Zoë.md`,
+`avionics/kicad/Pilot.md`, `avionics/kicad/XO.md`,
 `avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
 `avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts`,
 `graphical-build-guide/build_guide_11_inter_board.svg`
@@ -1574,8 +1593,9 @@ REF-CAD-004 and by `current-specification/LICENSE_AND_ATTRIBUTION.md`.
 | **Work** | Serenity Firefly with landing gear and swivel engines (multi-part printable model — head, cargo, middle, rear, wings, engines, landing gear) |
 | **Designation** | Thingiverse Thing 7330462 |
 | **Official URL** | <https://www.thingiverse.com/thing:7330462> |
-| **License** | Creative Commons Attribution 4.0 International (CC BY 4.0) — <https://creativecommons.org/licenses/by/4.0/> |
+| **License** | Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0) — <https://creativecommons.org/licenses/by-sa/4.0/> (corrected 2026-08-01 from an earlier "CC BY 4.0" mis-citation in this catalog and in `current-specification/LICENSE_AND_ATTRIBUTION.md`/`README.md` — the upstream Thingiverse license page states CC BY-SA 4.0, not plain CC BY) |
 | **Repository copy** | `docs/references/thingverse-serenity/` (source STLs in `files/`, renders in `images/`, upstream `LICENSE.txt` + `README.txt`) |
+| **CERN-OHL-W integration** | Incorporated into the project's CERN-OHL-W 2.0-licensed airframe Covered Source as an **Available Component** [REF-LIC-001 §1.6] — the upstream geometry keeps its own CC BY-SA 4.0 terms (share-alike applies to redistributions of the upstream model itself; the project's original adaptation work is separately licensed CERN-OHL-W 2.0 per `airframe/LICENSE`). See `docs/attribution_and_licencing.md` "Available Component Boundary." |
 | **Note** | This is the **origin of the project's `s_*.stl` geometry** — every hull/nacelle/wing/gear STL in the build traces back to this model (adapted: scaled to 24 in (609 mm), hollowed to 2.0 mm CF-PETG, CF skeleton + foam fill added). It is the **lowest** of the three canonical references in authority: **verify its detail against REF-CAD-003 (QMx) and REF-CAD-002 (Nick Henning) before treating any feature as canonical** — but it remains a usable, license-clean geometry starting point. Do not confuse Thing 7330462 with the separate low-poly orientation guide Thing 4677565 (`current-specification/LICENSE_AND_ATTRIBUTION.md` §2b). |
 
 **Applied to:** base hull/section geometry for the entire fuselage and nacelle build; the four
@@ -1587,6 +1607,40 @@ dropped Rev R1); full remix attribution in
 
 ---
 
+## Part XV — Open Hardware / Software Licensing Standards
+
+### REF-LIC-001: CERN Open Hardware Licence Version 2 — Weakly Reciprocal (CERN-OHL-W 2.0)
+
+| Field | Value |
+|---|---|
+| **Publisher** | CERN (European Organization for Nuclear Research) |
+| **Designation** | CERN-OHL-W-2.0 |
+| **Official URL** | <https://ohwr.org/licences/> (license text + user guide), SPDX record <https://spdx.org/licenses/CERN-OHL-W-2.0.html> |
+| **Applied sections** | §1.6 "Available Component" (upstream hardware not itself licensed under CERN-OHL but legitimately referenced/incorporated without relicensing); §4 (distribution obligations); §5 ("weakly reciprocal" scope — modifications to Covered Source must stay CERN-OHL, but a design that merely *uses* Covered Source without modifying it is not itself pulled under the license) |
+| **Note** | Selected 2026-08-01 (TODO.md §0.9 licensing audit) as the license for this project's original hardware/CAD/PCB design work — airframe (wings, nacelles, landing gear, cargo system, fuselage) and avionics (Pilot/XO/FlightEngineer/Commo/Observer PCB schematics, layouts, Gerbers). Documentation, code, scripts, and non-hardware drawings remain CC BY-SA 4.0 — see `docs/attribution_and_licencing.md`. |
+
+**Applied to:** `LICENSE` (root), `avionics/LICENSE`, `airframe/LICENSE`; the CERN-OHL-W
+"Available Component" concept is used to define the IP boundary around the three canonical
+airframe reference sources (REF-CAD-002/003/004) — see `docs/attribution_and_licencing.md`
+"Available Component Boundary."
+
+**Used in:** all KiCad/SCAD/STL/FCStd original design files in `airframe/` and `avionics/`.
+
+### REF-LIC-002: OSHWA Open Source Hardware Certification
+
+| Field | Value |
+|---|---|
+| **Publisher** | Open Source Hardware Association (OSHWA) |
+| **Designation** | OSHWA Certification Program / Open Source Hardware Definition |
+| **Official URL** | <https://certification.oshwa.org/requirements.html> (requirements), <https://certification.oshwa.org/process.html> (self-certification process), <https://certification.oshwa.org/basics.html> (definition basics) — verified 2026-08-01 |
+| **Applied requirements** | (1) all of the creator's own contributions to a certified product must be shared as open source; (2) all parts within the creator's control must be open source, third-party proprietary components clearly distinguished, and third-party chips must have fully accessible/shareable datasheets; (3) all software necessary for hardware operation must be licensed under an OSI-approved license; self-certification is completed via an online license form + Certification Mark License Agreement, valid one year with annual reaffirmation |
+| **Note** | Program is **self-certification**, not a numbered legal standard — no §-citation exists to verify beyond the requirements page above. UUID assignment and the Certification Mark License Agreement require the human maintainer (Steve Griffing) to submit the actual application; this repository can only prepare the supporting documentation. See `docs/OSHW_CERTIFICATION.md` for the readiness checklist (TODO.md §0.9 item 7, still open — submission not yet made). |
+
+**Applied to:** `docs/OSHW_CERTIFICATION.md` readiness checklist; not yet applied to an actual
+OSHWA certification submission (open item).
+
+**Used in:** `docs/OSHW_CERTIFICATION.md`, `TODO.md` §0.9.
+
 ## Removed / Superseded Citations
 
 The following references appeared in earlier versions of project files but have been removed
@@ -1595,12 +1649,12 @@ because they were incorrectly attributed, unverifiable, or inapplicable.
 | Old Citation | Where Found | Reason Removed | Replacement |
 |---|---|---|---|
 | "NIST SP 800-72 principles" (write-blocker design) | `README.md` §Patent Notice, line 382 | **Incorrect attribution.** NIST SP 800-72 (2004) is "Guidelines on PDA Forensics" — unrelated to write-blocker design. The closest applicable standard is NIST SP 800-92 §4.4.2 (log data protection principles). | REF-NIST-004 (NIST SP 800-92 §4.4.2) |
-| 47 CFR Part 95 RCRS (§95.635/§95.655/§95.639, "TDDS"/"LERS"/"27 channels") | REF-FCC-003, `malcolm_antenna_spec.md`, `AGENTS.md`, `README.md`, `TODO.md`, `AVIONICS_PB2_REDESIGN.md` | **Wrong band.** RCRS covers only 26–28/72/75 MHz, not 49 MHz; "TDDS"/"LERS"/27-channel terms untraceable. Emma's 49.82–49.90 MHz band is Part 15 §15.235, unlicensed. | REF-FCC-003 (Part 15 §15.235) |
+| 47 CFR Part 95 RCRS (§95.635/§95.655/§95.639, "TDDS"/"LERS"/"27 channels") | REF-FCC-003, `skipper_antenna_spec.md`, `AGENTS.md`, `README.md`, `TODO.md`, `AVIONICS_PB2_REDESIGN.md` | **Wrong band.** RCRS covers only 26–28/72/75 MHz, not 49 MHz; "TDDS"/"LERS"/27-channel terms untraceable. Commo's 49.82–49.90 MHz band is Part 15 §15.235, unlicensed. | REF-FCC-003 (Part 15 §15.235) |
 | "ASTM F3322 — sUAS Battery Safety" | TODO.md §0.4 (candidate list, not yet cited in active docs) | **Incorrect attribution.** F3322 is the *Standard Specification for Small Unmanned Aircraft System (sUAS) Parachutes* — unrelated to batteries, and not applicable to Serenity (no deployable recovery parachute). | REF-ASTM-002 (ASTM F3005-22, sUAS battery specification) |
 | "ASTM F3003 — Quality Assurance of a Small Unmanned Aircraft System" | TODO.md §0.4 (candidate list, not yet cited in active docs) | **Withdrawn standard.** F3003-14 was withdrawn by ASTM in January 2023 with no replacement. | None — see REF-ASTM-001 (F2910) for design/construction/test coverage |
-| RunCam Nano 4 analog camera (REF-SENSOR-001) at bow sensor pod | `avionics/AGENTS.md`, `TODO.md` §1.1.1.1a | **Superseded by design decision (2026-07-03), not an error.** Replaced by the Jayne board's TI AM62Ax digital vision SoC (REF-SENSOR-003) at both the nose and cargo bay locations. | REF-SENSOR-003 (TI AM62Ax) |
-| "TI DM38x + remixed OpenIPC firmware" (early Jayne design concept from an external AI-assisted brainstorm, never committed) | Not committed to any file — caught during REFERENCES.md drafting 2026-07-03 | **Infeasible as proposed.** TI DM385/DM388 (DaVinci DM38x) are NRND; OpenIPC's supported-hardware list contains no TI part, not even at R&D stage — porting would mean a from-scratch ISP/encoder bring-up on a chip TI is discontinuing, not a firmware port. Also: the same source proposed LAN9355/KSZ9563 for "MRP" ring redundancy (neither chip implements it) and an "ST33GTPMISPI" TPM part number that does not exist. | REF-SENSOR-003 (TI AM62Ax, in-production, TI's own open BSP), REF-SENSOR-005 (KSZ9477, real HSR/PRP support), Infineon SLB9670 (fleet-standard TPM, REFERENCES.md §3.3/§4.2) |
-| ADI ADM2795EBRWZ (isolated RS-485, signal-only) — `Jayne`, `CAN-PERIPH-GW-1`, `Kaylee`, `Wash`, `Zoë` RS-485 transceivers | `avionics/kicad/Jayne/kicads/Jayne.kicad_sch`, `avionics/kicad/CAN-PERIPH-GW-1/`, `avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch`, `avionics/kicad/Wash/kicads/Wash.kicad_sch`, `avionics/kicad/Zoë/kicads/Zoë.kicad_sch` | **Superseded by design decision, 2026-07-26.** ADM2795E provides signal isolation only and requires a separate external isolated DC-DC supply for its bus-side VDD2. TI ISOW1412 integrates its own isolated DC-DC, eliminating the extra supply and simplifying every "trust module" node fleet-wide. Fleet-wide swap performed 2026-07-26. Separately, while performing this swap on Wash and Zoë, found their pre-existing ADM2795EBRWZ symbols had incorrectly numbered pins (and their ISOW1044BDFMR symbols had the wrong footprint, `SOIC-16W` instead of the correct `SOIC-20W` for a 20-pin part) — both defects predate this session and were corrected as part of the same fix (`kicad-cli sch erc` violation counts unchanged before/after: Wash 48, Zoë 234 — confirming the fix corrected the target defects with zero regression against these boards' large, pre-existing, out-of-scope ERC backlog). | REF-SENSOR-010 (TI ISOW1412) |
+| RunCam Nano 4 analog camera (REF-SENSOR-001) at bow sensor pod | `avionics/AGENTS.md`, `TODO.md` §1.1.1.1a | **Superseded by design decision (2026-07-03), not an error.** Replaced by the Observer board's TI AM62Ax digital vision SoC (REF-SENSOR-003) at both the nose and cargo bay locations. | REF-SENSOR-003 (TI AM62Ax) |
+| "TI DM38x + remixed OpenIPC firmware" (early Observer design concept from an external AI-assisted brainstorm, never committed) | Not committed to any file — caught during REFERENCES.md drafting 2026-07-03 | **Infeasible as proposed.** TI DM385/DM388 (DaVinci DM38x) are NRND; OpenIPC's supported-hardware list contains no TI part, not even at R&D stage — porting would mean a from-scratch ISP/encoder bring-up on a chip TI is discontinuing, not a firmware port. Also: the same source proposed LAN9355/KSZ9563 for "MRP" ring redundancy (neither chip implements it) and an "ST33GTPMISPI" TPM part number that does not exist. | REF-SENSOR-003 (TI AM62Ax, in-production, TI's own open BSP), REF-SENSOR-005 (KSZ9477, real HSR/PRP support), Infineon SLB9670 (fleet-standard TPM, REFERENCES.md §3.3/§4.2) |
+| ADI ADM2795EBRWZ (isolated RS-485, signal-only) — `Observer`, `CAN-PERIPH-GW-1`, `Flight Engineer`, `Pilot`, `XO` RS-485 transceivers | `avionics/kicad/Observer/kicads/Observer.kicad_sch`, `avionics/kicad/CAN-PERIPH-GW-1/`, `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch`, `avionics/kicad/Pilot/kicads/Pilot.kicad_sch`, `avionics/kicad/XO/kicads/XO.kicad_sch` | **Superseded by design decision, 2026-07-26.** ADM2795E provides signal isolation only and requires a separate external isolated DC-DC supply for its bus-side VDD2. TI ISOW1412 integrates its own isolated DC-DC, eliminating the extra supply and simplifying every "trust module" node fleet-wide. Fleet-wide swap performed 2026-07-26. Separately, while performing this swap on Pilot and XO, found their pre-existing ADM2795EBRWZ symbols had incorrectly numbered pins (and their ISOW1044BDFMR symbols had the wrong footprint, `SOIC-16W` instead of the correct `SOIC-20W` for a 20-pin part) — both defects predate this session and were corrected as part of the same fix (`kicad-cli sch erc` violation counts unchanged before/after: Pilot 48, XO 234 — confirming the fix corrected the target defects with zero regression against these boards' large, pre-existing, out-of-scope ERC backlog). | REF-SENSOR-010 (TI ISOW1412) |
 
 ---
 
@@ -1611,22 +1665,23 @@ Add verified section numbers to the relevant files and update this table.
 
 | Citation | File | Issue | Action Required |
 |---|---|---|---|
-| §15.203 antenna restriction (Emma RF connector) | Emma board files, `malcolm_wiring.md` | **Confirmed, resolved 2026-06-20.** §15.203 binds the manufacturer directly. J2 used a generic SMA edge connector (Amphenol 132289), a standard jack; no exception applies. | **Resolved:** J2 changed to 132289RP (RP-SMA, same footprint), satisfying §15.203. Board re-spin tracked in TODO.md §0.1 |
+| §15.203 antenna restriction (Commo RF connector) | Commo board files, `skipper_wiring.md` | **Confirmed, resolved 2026-06-20.** §15.203 binds the manufacturer directly. J2 used a generic SMA edge connector (Amphenol 132289), a standard jack; no exception applies. | **Resolved:** J2 changed to 132289RP (RP-SMA, same footprint), satisfying §15.203. Board re-spin tracked in TODO.md §0.1 |
 | 14 CFR Part 47 (aircraft registration marks) | `ax25_types.h` | **Resolved 2026-06-21.** README/build guide had no erroneous citation; the miscitation was in `ax25_types.h`, which stated Part 47 governs registration and AX.25 needs an amateur license (Part 97) | Corrected to cite Part 48 §48.205 [REF-FAA-001]; link is license-exempt under Part 15 §15.235 [REF-FCC-003], per REF-PROTO-001 |
 | AUVSI "standards" (unnamed) | `AGENTS.md`, `README.md` | **Resolved 2026-06-22.** No specific numbered AUVSI standard exists (AUVSI publishes frameworks, not numbered design standards). Identified and verified three applicable ASTM F38 standards. | Added REF-ASTM-001 (F2910-22, design/construction/test), REF-ASTM-002 (F3005-22, batteries), REF-ASTM-003 (F3269-21, runtime assurance/failover). `AGENTS.md`/`README.md` AUVSI text is accurate as-is (AUVSI frameworks, not numbered standards) — no doc text change needed there. |
-| IEC 62368-1 clause numbers | PCB layout (not yet complete) | PCB layout must verify creepage/clearance distances meet IEC 62368-1 Clause 5.5.2 requirements for 5 kV reinforced insulation; this cannot be verified until PCB layout is complete | Verify during Wash and Zoë PCB layout review (see TODO.md §1.4) |
+| IEC 62368-1 clause numbers | PCB layout (not yet complete) | PCB layout must verify creepage/clearance distances meet IEC 62368-1 Clause 5.5.2 requirements for 5 kV reinforced insulation; this cannot be verified until PCB layout is complete | Verify during Pilot and XO PCB layout review (see TODO.md §1.4) |
 | REF-IEC-003 (IEC 61000-4-2) exact product URL | `REFERENCES.md` REF-IEC-003 | Exact webstore.iec.ch product-page URL not confirmed during catalog entry (WebFetch redirected to homepage during verification attempt 2026-06-29); standard designation and content are correct | Confirm product page URL via <https://webstore.iec.ch/> search for "IEC 61000-4-2" and update REF-IEC-003 |
 | REF-IEC-004 (IEC 61000-4-4) exact product URL | `REFERENCES.md` REF-IEC-004 | Same as REF-IEC-003 — webstore URL not confirmed 2026-06-29 | Confirm via <https://webstore.iec.ch/> search "IEC 61000-4-4" |
 | REF-IEC-005 (IEC 61000-4-5) exact product URL | `REFERENCES.md` REF-IEC-005 | Same as REF-IEC-003 — webstore URL not confirmed 2026-06-29 | Confirm via <https://webstore.iec.ch/> search "IEC 61000-4-5" |
 | REF-TIA-001 (ANSI/TIA-485-A) exact product URL | `REFERENCES.md` REF-TIA-001 | TIA standards portal URL not confirmed via WebFetch 2026-06-29 (domain blocked by permission hook) | Confirm product page via <https://www.tiaonline.org/standards/> or <https://webstore.ansi.org/> search "TIA-485-A" |
 | Anti-collision flash rate "60 FPM" | `build_guide_13_nav_lights.svg`, `decal_sheet.svg` | **Resolved 2026-06-29.** Researched 14 CFR Part 107 §107.29(b) (anti-collision light visible 3 statute miles — no flash rate specified), old Part 23 §23.1401 (reorganized 2017, prescriptive flash-rate text no longer exists in current eCFR), and Part 25 §25.1401(f) (transport category, 40–100 FPM — not directly applicable to this sUAS). No currently-enforceable regulatory standard applicable to Part 107 UAS mandates a specific flash rate. "60 FPM" in the build guide is a design convention within the conventional aviation anti-collision light range (40–100 FPM). No regulatory citation is required or appropriate; the figure is a design target, not a compliance claim. | No citation required — design convention documented here. |
 | REF-SENSOR-005 (KSZ9477 HSR/PRP) IEC 62439-3 clause numbers | `REFERENCES.md` REF-SENSOR-005 | AN3474 confirms HSR/PRP hardware support but exact IEC 62439-3 Clause 4 (HSR)/Clause 5 (PRP) sub-clause numbers applied have not been cross-checked against the standard text itself | Obtain IEC 62439-3 and confirm clause numbers before final PCB layout citation (TODO.md §1.2c) |
-| Jayne laser — single 520 nm green source, **Class 2 both sites**, part/optic ratings | `REFERENCES.md` REF-IEC-002, `avionics/kicad/Jayne/Jayne.md`, `docs/JAYNE_LASER_ANALYSIS.md` | Per `docs/JAYNE_LASER_ANALYSIS.md` Rev A1 (2026-07-05) both installs share ONE 520 nm green diode + driver and are **both Class 2 (≤1 mW)** — the nose is a concentrated dot detected by Jayne's camera (strobe + frame-difference), ~0.45 mW, NOT the inherently Class 3B module of Rev A. Differ only by per-location terminal optic (spread) + hardware current limit. No real, sourced part exists yet. | Source a real datasheet with manufacturer-stated mW output and IEC 60825-1 class for the green diode + both optics before procurement; update REF-IEC-002 with the verified citation (TODO.md §1.2c.4). Do not fabricate or procure against the placeholder. Both Class 2 caps must be hardware-enforced; no Class 3B interlock/shutter required unless a human-at-target-in-full-sun requirement is later added. |
-| Emma `RSSI_CMP` carrier-detect comparator part number and pinout | `avionics/kicad/Emma.kicad_sch` / `Emma.kicad_pcb`, `avionics/kicad/mod_emma_pcb.py` | The RSSI→`RSSI_DCD` conversion (2026-07-04 reconciliation) adds an on-board comparator, value placeholder "LMV331-class". No specific part is vetted; the PCB pad→net map is by function only and the SOT-23-5 pin order is unconfirmed. | Select a real comparator, confirm its SOT-23-5 datasheet pinout (and push-pull vs open-drain — add a `RSSI_DCD` pull-up if open-drain), add a `REF-*` catalog entry with a validated URL, and correct the footprint pad map before layout is final (TODO.md §1.2b). Do not fabricate or procure against the placeholder. |
+| Observer laser — single 520 nm green source, **Class 2 both sites**, part/optic ratings | `REFERENCES.md` REF-IEC-002, `avionics/kicad/Observer/Observer.md`, `docs/OBSERVER_LASER_ANALYSIS.md` | Per `docs/OBSERVER_LASER_ANALYSIS.md` Rev A1 (2026-07-05) both installs share ONE 520 nm green diode + driver and are **both Class 2 (≤1 mW)** — the nose is a concentrated dot detected by Observer's camera (strobe + frame-difference), ~0.45 mW, NOT the inherently Class 3B module of Rev A. Differ only by per-location terminal optic (spread) + hardware current limit. No real, sourced part exists yet. | Source a real datasheet with manufacturer-stated mW output and IEC 60825-1 class for the green diode + both optics before procurement; update REF-IEC-002 with the verified citation (TODO.md §1.2c.4). Do not fabricate or procure against the placeholder. Both Class 2 caps must be hardware-enforced; no Class 3B interlock/shutter required unless a human-at-target-in-full-sun requirement is later added. |
+| Commo `RSSI_CMP` carrier-detect comparator part number and pinout | `avionics/kicad/Commo.kicad_sch` / `Commo.kicad_pcb`, `avionics/kicad/mod_commo_pcb.py` | The RSSI→`RSSI_DCD` conversion (2026-07-04 reconciliation) adds an on-board comparator, value placeholder "LMV331-class". No specific part is vetted; the PCB pad→net map is by function only and the SOT-23-5 pin order is unconfirmed. | Select a real comparator, confirm its SOT-23-5 datasheet pinout (and push-pull vs open-drain — add a `RSSI_DCD` pull-up if open-drain), add a `REF-*` catalog entry with a validated URL, and correct the footprint pad map before layout is final (TODO.md §1.2b). Do not fabricate or procure against the placeholder. |
 | VL53L5CX obstacle-avoidance ToF sensor — no REF-ID | `docs/failsafe_thresholds.md`, `avionics/firmware/common/include/failsafe_config.h`, `docs/PHASED_BUILD_GUIDE.md` | Found 2026-07-12 while writing the Failsafe Threshold Document: the 12× VL53L5CX obstacle-avoidance array is cited throughout the repository (4 m range noted informally inside the REF-SENSOR-002 entry above) but has no `REFERENCES.md` catalog entry of its own, unlike the project's other core sensor ICs (REF-SENSOR-002 through -006). | Add a `REF-SENSOR-007` entry for ST Microelectronics VL53L5CX (validated datasheet URL, ranging accuracy, and the 4 m operating range cited in `docs/failsafe_thresholds.md` §3) before final PCB layout citation sign-off (TODO.md §3.0 Phase 0). |
 | Tilt-spar material allowables (4130 + trade-study alternates) | `docs/TILT_SPAR_ANALYSIS.md` §3.1–3.2/§3.5, `current-specification/bom_revS.csv` SPAR-TILT-4130 | The §3.5 material trade study uses **typical handbook allowables** for AISI 4130 (~460 MPa yield), 17-4 PH H1075 (~860 MPa), 7075-T6 (~503 MPa), 6061-T6 (~276 MPa), 316 SS, and Ti-6Al-4V (~880 MPa); none are yet tied to a validated MMPDS/AMS product page. Moduli/densities are nominal. | Confirm the **selected** material's design allowable and the two carried alternates (17-4 PH, 7075-T6) vs MMPDS-2023 / AMS (or mill cert) and add `REF-MAT-*` catalog entries with validated URLs before spar procurement (TODO §0.8). |
 | 14 CFR Part 107 dropped-object provision — section number **not yet verified** | `REFERENCES.md` REF-FAA-002 applied-sections table, `docs/CARGO_WINCH_SPECIFICATION.md` §3.10.2 | Part 107 contains a provision prohibiting dropping an object from a small UA in a manner that creates an undue hazard to persons or property. REF-FAA-002's applied-sections table currently lists only §107.3, §107.29, §107.31 and §107.51(a)–(d) — the dropped-object section is **absent**, so no section number is asserted in the winch spec (root `AGENTS.md` §4: never guess a section number). This matters because the cargo winch **intentionally** releases a payload (requirement R5, overload line-shed) while an uncommanded structural release of the spool itself (19.1 J, or 31.8 J for the full assembly, from the §107.51(b) 400 ft ceiling) is precisely the hazard the provision addresses. | Look up the section in the eCFR Part 107 text, add it to REF-FAA-002's applied-sections table with the exact title and a validated URL, then cite it in `docs/CARGO_WINCH_SPECIFICATION.md` §3.10.2 and state explicitly how a commanded shed differs from an uncommanded release under that text. Do not fabricate the number. (`docs/TODO.md` §0.x) |
 | STS3215 cargo winch servo — envelope, torque, mass, stall current (REF-SENSOR-012) | `REFERENCES.md` REF-SENSOR-012, `docs/CARGO_WINCH_SPECIFICATION.md` §3.1, `docs/bom_revR.json` `STS3215-WINCH`, `airframe/stls/fuselage/cargo/generate_cargo_mounts.py` | The datasheet **is in the repo** (`docs/references/108090023_STS3215-C001_Datasheet.pdf`) but is a **scanned/CID-encoded PDF** and could not be text-extracted in the build environment (no `pdftotext`/`tesseract`/`mutool`/`poppler-utils`; `pypdf` fails on a broken `cryptography` build). Consequently **no** performance figure for this part is datasheet-verified. Four values are currently assumed or derived, not read: (a) **case envelope + mounting-boss pattern** — blocks `make_winch_pedestal_port()`; (b) **torque** — the design *requires* ≥ 3.2 kgf·cm (spec §4.2), unconfirmed against the real rating; (c) **mass** — 60 g assumed, and this term dominates the +98.6 g net mass delta and the T/W 1.613 → 1.557 result in spec §6; (d) **stall current** — budgeted 1.2 A for RAIL-2 sizing (spec §5.4). The interface is stated as **TTL half-duplex serial bus (not PWM)**, consistent with `CAN-PERIPH-GW-1.md` §G, but this too should be confirmed off the datasheet. | Read the four values off the datasheet (or the vendor's published spec page, cited with a validated URL) and update REF-SENSOR-012, spec §3.1/§4.2/§5.4/§6, and the BOM entry. **Do not order the part or generate the six winch STLs until (a) and (b) are resolved**; re-run the §6 mass/CG table if (c) differs from 60 g; resize RAIL-2 if (d) exceeds ~2.5 A. Do not fabricate these numbers. (`docs/TODO.md` §0.x) |
-| Wing/nacelle Hall tilt encoder — sensor selection | `current-specification/bom_revS.csv` MAL-TILT-ENC-PCB, `avionics/kicad/ENC-NACELLE-1.*`, `docs/TILT_SPAR_ANALYSIS.md` §1/§3.5/§8.1, `avionics/WBS.md` §1.9.1 | **RESOLVED 2026-07-19 (datasheets in repo).** MT6701 (Rev 1.9) was **rejected** — its datasheet §6 confirms it is **on-axis only** (Ø6 mm cyl magnet, off-axis misalignment ≤ 0.3 mm), so it cannot read the through-shaft off-axis; AS5600 has the same limit. Part selected = **AKM AK7455** (REF-SENSOR-008), which explicitly supports the Off-Axis (side-of-shaft) configuration; pinout/interface **verified** vs datasheet 200800064-E-00 and the schematic rebuilt (`kicad-cli` ERC 0-error). Interface is **SPI** (no off-axis absolute IC offers I²C). | **Electrical spec resolved.** Remaining, now scoped as bench/layout items (not "unverified part"): (1) off-axis flux 10–70 mT at the IC with the chosen ring/gap; (2) EEPROM INL calibration over −5..90° (AKM app support); (3) ERROR-pin push-pull vs open-drain; (4) QFN24 4×4 EP dims (EP left floating) + wing-pocket resize 3×3→4×4 (`HALL_*` in `wings_s1223_revo.scad`); (5) confirm the AKM product URL if the datasheet is re-hosted. TODO §0.8 / `airframe/wings-nacelles/WBS.md` §1.1.3.6. |
-| Wash's own inline "SLB9670" TPM symbol pin numbers | `avionics/kicad/Wash/kicads/Wash.kicad_sch` | Found 2026-07-26 while building Emma's TPM addition (which deliberately reused the separately-verified `Jayne_SLB9670_TPM` clean-room symbol instead, precisely to avoid this defect): Wash's own, independently-authored inline "SLB9670" symbol has pin numbers that do not match datasheet Revision 1.4 Tables 3–5 (REF-SENSOR-011). Not fixed this session — out of scope for the CAN-FD/RS-485 trust-module task. | Rebuild Wash's TPM symbol from REF-SENSOR-011 using the same clean-room `parse_real_symbol`/pin-table method as `Jayne_SLB9670_TPM`, or replace the instance with that verified symbol outright; re-run `kicad-cli sch erc` to confirm no regression against Wash's existing 48-violation baseline. |
+| Wing/nacelle Hall tilt encoder — sensor selection | `current-specification/bom_revS.csv` SKIPPER-TILT-ENC-PCB, `avionics/kicad/ENC-NACELLE-1.*`, `docs/TILT_SPAR_ANALYSIS.md` §1/§3.5/§8.1, `avionics/WBS.md` §1.9.1 | **RESOLVED 2026-07-19 (datasheets in repo).** MT6701 (Rev 1.9) was **rejected** — its datasheet §6 confirms it is **on-axis only** (Ø6 mm cyl magnet, off-axis misalignment ≤ 0.3 mm), so it cannot read the through-shaft off-axis; AS5600 has the same limit. Part selected = **AKM AK7455** (REF-SENSOR-008), which explicitly supports the Off-Axis (side-of-shaft) configuration; pinout/interface **verified** vs datasheet 200800064-E-00 and the schematic rebuilt (`kicad-cli` ERC 0-error). Interface is **SPI** (no off-axis absolute IC offers I²C). | **Electrical spec resolved.** Remaining, now scoped as bench/layout items (not "unverified part"): (1) off-axis flux 10–70 mT at the IC with the chosen ring/gap; (2) EEPROM INL calibration over −5..90° (AKM app support); (3) ERROR-pin push-pull vs open-drain; (4) QFN24 4×4 EP dims (EP left floating) + wing-pocket resize 3×3→4×4 (`HALL_*` in `wings_s1223_revo.scad`); (5) confirm the AKM product URL if the datasheet is re-hosted. TODO §0.8 / `airframe/wings-nacelles/WBS.md` §1.1.3.6. |
+| Pilot's own inline "SLB9670" TPM symbol pin numbers | `avionics/kicad/Pilot/kicads/Pilot.kicad_sch` | Found 2026-07-26 while building Commo's TPM addition (which deliberately reused the separately-verified `Observer_SLB9670_TPM` clean-room symbol instead, precisely to avoid this defect): Pilot's own, independently-authored inline "SLB9670" symbol has pin numbers that do not match datasheet Revision 1.4 Tables 3–5 (REF-SENSOR-011). Not fixed this session — out of scope for the CAN-FD/RS-485 trust-module task. | Rebuild Pilot's TPM symbol from REF-SENSOR-011 using the same clean-room `parse_real_symbol`/pin-table method as `Observer_SLB9670_TPM`, or replace the instance with that verified symbol outright; re-run `kicad-cli sch erc` to confirm no regression against Pilot's existing 48-violation baseline. |
 | VimDrones `ap_periph_pico` / ESC S50 concept-only inspiration, `CAN-PERIPH-GW-1` and CAN-PERIPH-GW-1's ESC-gateway deployment mode | `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` | **Not a citation defect — documented here for license-boundary auditability.** `CAN-PERIPH-GW-1` was built as a fleet-integrated remix of the *publicly documented product concept* at <https://dev.vimdrones.com/products/vimdrones_can_periph_pico/> and <https://dev.vimdrones.com/products/vimdrones_esc_s50/> (peripheral-bus CAN/servo gateway; per-ESC CAN telemetry). VimDrones' own KiCad source (`VimDrones/AM32_esc_development_board` on GitHub) is licensed GPL-3.0, which is incompatible with this project's CC-BY-4.0-or-better attribution baseline for derivative files — no VimDrones schematic, footprint, or geometry was copied; only the public product specification was used as design inspiration, and the entire trust-module implementation (MCU, TPM, isolators, netlist) is original clean-room work against TI/Infineon datasheets. | N/A — informational; see `CAN-PERIPH-GW-1.md` "Why VimDrones' concept but not VimDrones' hardware" |
+| REF-CAD-004 misubisu hull model license stated as "CC BY 4.0" | REFERENCES.md REF-CAD-004, `current-specification/LICENSE_AND_ATTRIBUTION.md` §2, `README.md` Component License Map + Attribution quote, `docs/references/thingverse-serenity/LICENSE.txt` | **Incorrect attribution, found during TODO.md §0.9 licensing audit (2026-08-01).** The Thingiverse listing for Thing 7330462 is licensed **CC BY-SA 4.0** (ShareAlike), not plain CC BY 4.0 — the two earlier docs that had it right (`current-specification/LICENSE_AND_ATTRIBUTION.md` §2 "CC BY 4.0 SA", `docs/references/thingverse-serenity/LICENSE.txt`) used a garbled/non-standard label that also needed correcting. All four locations corrected to read "CC BY-SA 4.0". | REF-CAD-004 (corrected), REF-LIC-001 (CERN-OHL-W 2.0 Available Component treatment) |

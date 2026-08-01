@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Drafted by:** Claude Haiku 4.5 (Anthropic), 2026-07-27
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Revision:** B (2026-07-27)
 **Supersedes:** the Rev P/Q/R N20 winch train (see "Superseded Hardware" below)
 
@@ -34,7 +34,7 @@ Ten requirements drive this revision:
 | R9 | Servo operating mode suits multi-turn travel **and** a slipping spool | §3.9 |
 | R10 | **The spool can never leave the cargo bay.** No failure — including its own designed wear — may release it as a projectile | §3.10 |
 
-*"Everything is shiny." — Kaylee Frye*
+*"Everything is shiny." — Flight Engineer Frye*
 
 ---
 
@@ -90,7 +90,7 @@ payload hanging under the aircraft. This is the concrete reason R3 exists.
 | Part | STS3215 serial-bus servo | User-directed (R1) |
 | Datasheet | `docs/references/108090023_STS3215-C001_Datasheet.pdf` | In repo |
 | Interface | **TTL half-duplex serial bus**, ID-addressable, daisy-chainable | §3.1.1 |
-| Supply | 5.4 V nominal, from Kaylee RAIL-2 `5V_JAYNE` | `docs/POWER_DISTRIBUTION.md` §3.2.1 |
+| Supply | 5.4 V nominal, from Flight Engineer RAIL-2 `5V_JAYNE` | `docs/POWER_DISTRIBUTION.md` §3.2.1 |
 | **Required** output torque | **≥ 3.2 kgf·cm (0.31 N·m)** at the coupler | Derived, §4.2 |
 | **Required** side load on output | **0 N** — see §3.3 | Derived, R3 |
 
@@ -628,7 +628,7 @@ than taken. Cross-reference `docs/flight_envelope.md` when resolved.
 
 ## 5. Electrical Integration — one CAN-PERIPH-GW (R6)
 
-One `MAL-CAN-PERIPH-GW-PCB` at `N_STACKS=1`, mounted in the cargo bay, drives
+One `SKIPPER-CAN-PERIPH-GW-PCB` at `N_STACKS=1`, mounted in the cargo bay, drives
 **both** the servo and the catch. **No board respin is required** — every signal
 lands on the existing `J_FLEX` header.
 
@@ -643,7 +643,7 @@ lands on the existing `J_FLEX` header.
 | `+5V`, `GND` | power | Servo, solenoid, HX711 | RAIL-2 `5V_JAYNE` |
 
 **Solenoid drive** — AO3400 SOT-23 N-FET (already a project-standard part; see
-`avionics/kicad/Jayne/Jayne.md` Q1), 100 Ω gate resistor, 10 kΩ gate pull-down
+`avionics/kicad/Observer/Observer.md` Q1), 100 Ω gate resistor, 10 kΩ gate pull-down
 so an un-driven or resetting MCU leaves the catch **engaged**, and an SS34
 flyback diode across the coil.
 

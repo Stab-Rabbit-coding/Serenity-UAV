@@ -8,14 +8,14 @@
  * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
  *
  * Drives the Texas Instruments INA219AIDR (Cape-A-1) and INA226AIDGSR
- * (Wash and Kaylee) via Linux userspace i2c-dev.
+ * (Pilot and Flight Engineer) via Linux userspace i2c-dev.
  *
  * Two operating modes are supported:
  *
- *   VOLTAGE-ONLY   Wash INA226 on-cape pack-voltage tap.
+ *   VOLTAGE-ONLY   Pilot INA226 on-cape pack-voltage tap.
  *                  IN+ and IN− tied; no shunt; calibration register = 0.
  *
- *   CURRENT-SENSE  Kaylee INA226 devices (U_IS1–U_IS4, U_IS_MAIN).
+ *   CURRENT-SENSE  Flight Engineer INA226 devices (U_IS1–U_IS4, U_IS_MAIN).
  *                  IN+ / IN− across a Kelvin shunt resistor.
  *                  Call bmon_ina226_configure_shunt() after open() to program
  *                  the calibration register and unlock current / power reads.
@@ -29,26 +29,26 @@
  *     PGA = ±320 mV, BADC = 12-bit, SADC = 12-bit, MODE = Continuous both
  *   Cape-A-1 usage: voltage-only; shunt disabled by tying IN+/IN−.
  *
- * ── INA226AIDGSR (Wash on-cape) ──────────────────────────────────────
+ * ── INA226AIDGSR (Pilot on-cape) ──────────────────────────────────────
  *
  *   I2C address : 0x40 (A0, A1 tied to GND)
  *   Bus voltage : 0–36 V, register 0x02, full 16-bit unsigned.
  *   Resolution  : 1.25 mV per LSB.
  *   die_id register 0xFF: always reads 0x2260.
  *   Manufacturer ID register 0xFE: reads 0x5449 ("TI").
- *   Wash usage: voltage-only (IN+ / IN− tied).
+ *   Pilot usage: voltage-only (IN+ / IN− tied).
  *
- * ── INA226AIDGSR (Kaylee current monitors) ────────────────────────────────
+ * ── INA226AIDGSR (Flight Engineer current monitors)
+ * ────────────────────────────────
  *
- *   I2C addresses: 0x40–0x44 (see Kaylee.md §INA226 Address Assignment).
- *   Shunt resistors: 1 mΩ (ESC channels, 60 A full scale),
- *                    1 mΩ (main bus, 75 A full scale).
- *   After bmon_ina226_configure_shunt() the following registers are valid:
- *     0x04 CURRENT_REG : signed 16-bit, LSB = CURRENT_LSB as programmed.
- *     0x05 CALIBRATION  : set by configure_shunt; do not overwrite.
- *     0x03 POWER_REG    : unsigned 16-bit, LSB = 25 × CURRENT_LSB.
- *     0x07 ALERT_LIMIT  : threshold register (bmon_ina226_configure_alert).
- *     0x06 MASK_ENABLE  : alert configuration (bmon_ina226_configure_alert).
+ *   I2C addresses: 0x40–0x44 (see FlightEngineer.md §INA226 Address
+ * Assignment). Shunt resistors: 1 mΩ (ESC channels, 60 A full scale), 1 mΩ
+ * (main bus, 75 A full scale). After bmon_ina226_configure_shunt() the
+ * following registers are valid: 0x04 CURRENT_REG : signed 16-bit, LSB =
+ * CURRENT_LSB as programmed. 0x05 CALIBRATION  : set by configure_shunt; do not
+ * overwrite. 0x03 POWER_REG    : unsigned 16-bit, LSB = 25 × CURRENT_LSB. 0x07
+ * ALERT_LIMIT  : threshold register (bmon_ina226_configure_alert). 0x06
+ * MASK_ENABLE  : alert configuration (bmon_ina226_configure_alert).
  *
  * ── Auto-detection ────────────────────────────────────────────────────────
  *
@@ -77,7 +77,8 @@
  *   [2] INA226 Datasheet SBOS547E, Texas Instruments.
  *       https://www.ti.com/lit/ds/symlink/ina226.pdf
  *   [3] Linux i2c-dev interface — Documentation/i2c/dev-interface.rst.
- *   [4] Kaylee.md — Serenity UAV Power Distribution Board specification.
+ *   [4] FlightEngineer.md — Serenity UAV Power Distribution Board
+ * specification.
  *
  * Target platform: PocketBeagle 2 Industrial (AM6254), Debian Trixie.
  */
@@ -198,7 +199,7 @@ typedef enum {
     /** Texas Instruments INA219 (Cape-A-1). */
     BMON_INA_INA219 = 1,
 
-    /** Texas Instruments INA226 (Wash). */
+    /** Texas Instruments INA226 (Pilot). */
     BMON_INA_INA226 = 2,
 } bmon_ina_type_t;
 
@@ -218,10 +219,10 @@ typedef struct bmon_ina2xx_ctx bmon_ina2xx_ctx_t;
  * @brief Open the INA219/INA226 driver at a specific I2C address.
  *
  * Opens the I2C bus device and sets the slave address to @p i2c_addr via
- * ioctl I2C_SLAVE.  Pass INA2XX_I2C_ADDR (0x40) for the default Wash
- * on-cape device.  For Kaylee multi-device buses, pass the per-channel address
- * directly (0x40–0x44); a separate open() per device is required because each
- * context holds its own file descriptor and slave address.
+ * ioctl I2C_SLAVE.  Pass INA2XX_I2C_ADDR (0x40) for the default Pilot
+ * on-cape device.  For Flight Engineer multi-device buses, pass the per-channel
+ * address directly (0x40–0x44); a separate open() per device is required
+ * because each context holds its own file descriptor and slave address.
  *
  * If @p type is BMON_INA_AUTO, reads the die-ID register (0xFF); if the
  * result is 0x2260 the device is treated as INA226, otherwise INA219.
@@ -232,7 +233,8 @@ typedef struct bmon_ina2xx_ctx bmon_ina2xx_ctx_t;
  *
  * @param[in]  i2c_dev   Path to I2C bus device, e.g. "/dev/i2c-2".
  * @param[in]  i2c_addr  7-bit I2C slave address of the target device
- *                       (e.g. 0x40, 0x41, 0x42, 0x43, or 0x44 for Kaylee).
+ *                       (e.g. 0x40, 0x41, 0x42, 0x43, or 0x44 for Flight
+ * Engineer).
  * @param[in]  type      Device variant, or BMON_INA_AUTO to auto-detect.
  * @param[out] ctx_out   Set to driver context on success.
  * @return 0 on success, negative errno on error:
@@ -290,7 +292,7 @@ bmon_ina_type_t bmon_ina2xx_get_type(const bmon_ina2xx_ctx_t *ctx);
  * writes it to register 0x05.  After this call, bmon_ina226_read_current_ma()
  * and bmon_ina226_read_power_mw() return valid data.
  *
- * In voltage-only mode (Wash on-cape INA226), do NOT call this function;
+ * In voltage-only mode (Pilot on-cape INA226), do NOT call this function;
  * the calibration register remains 0 and the current / power registers read 0.
  *
  * @param[in] ctx           Driver context (must be INA226).

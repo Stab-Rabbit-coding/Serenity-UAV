@@ -2,8 +2,8 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Drafted by:** Claude Fable 5 (Anthropic), 2026-07-25/26
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
-**BOM designator:** `MAL-CAN-PERIPH-GW-PCB`
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
+**BOM designator:** `SKIPPER-CAN-PERIPH-GW-PCB`
 **Revision:** 2 (2026-07-26) — promoted to `N_STACKS=4` (deployed configuration)
 **Status:** Schematic + PCB regenerated at the deployed configuration, **`N_STACKS=4`**
 (one board per nacelle side — GW-PORT / GW-STBD — covering 2× ESC + 1× tilt servo +
@@ -14,7 +14,7 @@ captured into `gen_can_periph_gw_pcb.py` as a real per-stack template (not an
 invented grid) and mechanically tiled ×4 along a 50 mm lane pitch — verified via a
 sandboxed dry run that this placement logic is DRC-clean (0 shorts/clearance/
 courtyard from placement) at both N=1 (exact match to the real board) and N=4.
-Back-silkscreen attribution block added, matching the Wash/Zoë pattern.
+Back-silkscreen attribution block added, matching the Pilot/XO pattern.
 **Routing: freerouted via the Specctra DSN/freerouting 2.2.4 bridge**, 20-pass
 autorouter session, 296 → 47 unrouted nets (~84% routed), session self-terminated
 cleanly (this is the fixed 2.2.4 behavior — the earlier "never self-exits" finding
@@ -28,7 +28,7 @@ this ~84%-routed state; the remaining 47 nets are open manual/GUI routing work.
 
 ## Purpose
 
-`MAL-CAN-PERIPH-GW-PCB` is a standalone, TPM-secured gateway node that bridges a
+`SKIPPER-CAN-PERIPH-GW-PCB` is a standalone, TPM-secured gateway node that bridges a
 sensor or actuator onto **both** of this project's onboard digital buses — CAN-FD
 and RS-485, both galvanically isolated — signing every republished message with
 its on-board TPM. It is a clean-room remix of the *concept* behind VimDrones'
@@ -44,7 +44,7 @@ the three components requested for this task:
 
 **Not a PocketBeagle 2 Industrial cape** — standalone board, own 5 V power input,
 connects to the airframe only via its CAN-FD and RS-485 daisy-chain connectors
-plus a local power connector, matching Jayne's own "standalone board" pattern.
+plus a local power connector, matching Observer's own "standalone board" pattern.
 
 ## Why VimDrones' concept, but not VimDrones' hardware
 
@@ -65,7 +65,7 @@ already-verified clean-room part or newly authored directly from the OEM
 datasheet.
 
 The MCU is **TI MSPM0G3507** (this project's fleet-standard part, REF-SENSOR-004
-— already used on Jayne; native CAN 2.0/CAN-FD peripheral, 4× UART, 2× SPI, up to
+— already used on Observer; native CAN 2.0/CAN-FD peripheral, 4× UART, 2× SPI, up to
 60 GPIO, QEI-capable timer), not VimDrones' STM32L431 — so this gateway shares its
 brain with the rest of the fleet instead of introducing a one-off part, and no
 GPL-licensed VimDrones schematic content needs to be touched at all.
@@ -96,7 +96,7 @@ GPL-licensed VimDrones schematic content needs to be touched at all.
 
 U1 reads the local sensor/actuator (AK7455 SPI, or ESC UART/TTL/PWM/BSHOT), has
 the TPM sign the outgoing telemetry/command frame, and republishes it on **both**
-isolated buses so every other node on the airframe (River, Simon, Wash/Zoë at
+isolated buses so every other node on the airframe (River, Simon, Pilot/XO at
 every stack, etc.) can see it without trusting an unsigned local link.
 
 ## Deployment (3 use cases, same board type)
@@ -104,7 +104,7 @@ every stack, etc.) can see it without trusting an unsigned local link.
 ### 1. Nacelle tilt-encoder gateway (ENC-PORT / ENC-STBD, 2×)
 
 Reads the local **AK7455** off-axis tilt encoder (`ENC-NACELLE-1.md`,
-`MAL-TILT-ENC-PCB`) over its **existing, unmodified** 7-wire SPI+ERROR pigtail —
+`SKIPPER-TILT-ENC-PCB`) over its **existing, unmodified** 7-wire SPI+ERROR pigtail —
 `J_ENC` on this board uses the identical `Serenity-Custom:Pigtail_7W_DirectSolder`
 footprint with the same pad 1–7 assignment as ENC-NACELLE-1's own P1
 (GND, CSN, SCLK, MOSI, MISO, +3V3, ERROR), so the existing pigtail plugs in
@@ -113,12 +113,12 @@ unchanged.
 **This resolves the open cross-subsystem item recorded in `ENC-NACELLE-1.md`
 "Host assignment" and `airframe/wings-nacelles/WBS.md`**: previously, River
 (primary) / Simon (alternate) were expected to read the AK7455 SPI bus directly
-over a long wire run through the airframe, and `Wash.md` §13 still listed a
+over a long wire run through the airframe, and `Pilot.md` §13 still listed a
 legacy AS5600 I²C `J_ENC`. With this gateway in place, **River/Simon no longer
 read the encoder directly at all** — they receive the TPM-signed tilt angle over
-CAN-FD/RS-485 like every other piece of telemetry on the airframe. `Wash.md` §13
+CAN-FD/RS-485 like every other piece of telemetry on the airframe. `Pilot.md` §13
 still needs a documentation pass to drop the stale `J_ENC` I²C line (flagged in
-TODO.md; not edited here since it is Wash's own file, out of this board's scope).
+TODO.md; not edited here since it is Pilot's own file, out of this board's scope).
 
 ### 2. Per-EDF ESC gateway (ESC-{PORT,STBD}-{FWD,AFT}, 4×)
 
@@ -225,16 +225,16 @@ the schematic generator so the two can never drift out of sync.
 ## Section-by-section design (see `scripts/gen_can_periph_gw_sch.py`)
 
 - **A — Power:** JST-GH 2P +5V/GND in → TI TLV62569 buck → +3V3 (identical
-  topology to Jayne's own Section A, reused verbatim — already-verified
+  topology to Observer's own Section A, reused verbatim — already-verified
   regulator circuit).
-- **B — MCU (U1, TI MSPM0G3507):** `Jayne_MSPM0G3507_RGZ` clean-room symbol
-  reused verbatim (QFN-48-1EP 7×7 mm, ERC-0-proven on Jayne). NRST 10 kΩ
+- **B — MCU (U1, TI MSPM0G3507):** `Observer_MSPM0G3507_RGZ` clean-room symbol
+  reused verbatim (QFN-48-1EP 7×7 mm, ERC-0-proven on Observer). NRST 10 kΩ
   pull-up, VCORE 1 µF decouple, SWD 4-pin program header.
-- **C — TPM (U2, Infineon SLB9670):** `Jayne_SLB9670_TPM` clean-room symbol
+- **C — TPM (U2, Infineon SLB9670):** `Observer_SLB9670_TPM` clean-room symbol
   reused verbatim (QFN-32-1EP 5×5 mm). RST# gets an explicit 10 kΩ pull-up
   (datasheet notes only a *weak* internal pull-up); pin 1 and pin 14 tied to
   VDD and pin 16 to GND per the datasheet's own TCG-compliance notes (Table 5).
-- **D — Isolated CAN-FD (U3, TI ISOW1044BDFMR):** `Jayne_ISOW1044BDFMR`
+- **D — Isolated CAN-FD (U3, TI ISOW1044BDFMR):** `Observer_ISOW1044BDFMR`
   clean-room symbol reused verbatim. STB tied to GND (normal mode); EN/FLT
   routed to a spare MCU GPIO (`CANFD_FLT_N`) for fault visibility rather than
   left floating — a real, datasheet-supported feature of the part, not
@@ -266,11 +266,11 @@ the schematic generator so the two can never drift out of sync.
 **This board no longer uses ADM2795E or the `GW_ADM2795E` symbol at all** — RS-485
 is TI **ISOW1412** fleet-wide as of 2026-07-26 (REFERENCES.md REF-SENSOR-010; see
 "Stackable" above). Kept below as the historical record of the defect that was
-found and fixed in Wash/Zoë while this board was still being designed against
+found and fixed in Pilot/XO while this board was still being designed against
 ADM2795E; that fix (`avionics/kicad/fix_wash_zoe_isolators.py`) has since shipped.
 
-**The `ADM2795EBRWZ` symbol already embedded in `Wash.kicad_sch` and
-`Zoë.kicad_sch` has incorrect pin numbers** — found while researching this
+**The `ADM2795EBRWZ` symbol already embedded in `Pilot.kicad_sch` and
+`XO.kicad_sch` has incorrect pin numbers** — found while researching this
 board. Its pin list assigns a pin **17** to a 16-pin part and a duplicate pin
 number **20** to two different pin names (`VCC1` and `GND2`), inconsistent with
 the real ADM2795E datasheet (Analog Devices Rev D, 16-lead SOIC_W / RW-16
@@ -291,7 +291,7 @@ authored fresh from Table 10 ("Pin Function Descriptions") of
 | 8 | GND1 | 16 | VDD2 |
 
 Footprint: `Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm` (real KiCad system
-footprint, matches the datasheet's RW-16 package body). **The Wash/Zoë defect
+footprint, matches the datasheet's RW-16 package body). **The Pilot/XO defect
 has since been fixed** (`avionics/kicad/fix_wash_zoe_isolators.py`, 2026-07-26)
 as part of the same fleet-wide swap to ISOW1412 — see REFERENCES.md
 REF-SENSOR-010 and "Removed / Superseded Citations".
@@ -324,7 +324,7 @@ REF-SENSOR-010 and "Removed / Superseded Citations".
 4. **MSPM0 GPIO → peripheral pinmux** (SPI0/SPI1/UART0/UART1/CAN/GPIO
    assignments) is a defensible datasheet-capable assignment, not yet
    cross-checked against the MSPM0G3507 pinmux tables — the same caveat
-   Jayne's own carrier schematic already carries for this same MCU.
+   Observer's own carrier schematic already carries for this same MCU.
 5. **Firmware** is out of scope for this hardware task. The gateway needs an
    AP_Periph-derived (not stock) firmware image: DroneCAN publish/subscribe on
    CAN-FD, a mirrored publish on RS-485, TPM-backed message signing, plus
@@ -332,9 +332,9 @@ REF-SENSOR-010 and "Removed / Superseded Citations".
    Firmware in ArduPilot's AP_Periph is GPLv3 — a separate licensing domain
    from this CC-BY-4.0 hardware design (same relationship every ArduPilot-based
    board in this project already has).
-6. **`Wash.md` §13** still lists a legacy AS5600 I²C `J_ENC` — needs a
+6. **`Pilot.md` §13** still lists a legacy AS5600 I²C `J_ENC` — needs a
    documentation-only edit to note the encoder is now read via this gateway,
-   not directly. Flagged, not edited here (Wash's own file).
+   not directly. Flagged, not edited here (Pilot's own file).
 
 ## Verification
 
@@ -342,7 +342,7 @@ REF-SENSOR-010 and "Removed / Superseded Citations".
   74 warnings — all `lib_symbol_issues` (no project sym-lib-table entry for the
   embedded lib_symbols) and `endpoint_off_grid` (auto-placed label coordinates
   off the 50 mil grid). Confirmed identical warning classes appear on this
-  project's own `Jayne.kicad_sch` (0 errors / 141 warnings) — a pre-existing,
+  project's own `Observer.kicad_sch` (0 errors / 141 warnings) — a pre-existing,
   accepted characteristic of this project's generator-script workflow, not a
   defect introduced here.
 - `kicad-cli pcb drc CAN-PERIPH-GW-1.kicad_pcb --severity-all`: 2 errors
@@ -365,11 +365,11 @@ REF-SENSOR-010 and "Removed / Superseded Citations".
 
 - `avionics/kicad/ENC-NACELLE-1.md` — the AK7455 tilt-encoder board this
   gateway's `J_ENC` mates with.
-- `avionics/kicad/Jayne/Jayne.md` — source of the MSPM0G3507/SLB9670/ISOW1044
+- `avionics/kicad/Observer/Observer.md` — source of the MSPM0G3507/SLB9670/ISOW1044
   clean-room symbols reused here.
 - `docs/references/vimdrones_can_periph_pico_v1.0.stl`,
   `docs/references/vimdrones_esc_s50_v1.0.step` — mechanical reference models
   already in the repo for the two VimDrones products this board's concept
   draws on (informational/fit reference only, not electrically reused).
 - `REFERENCES.md` — REF-SENSOR entries for ISOW1044/ADM2795E/SLB9670, and the
-  Wash/Zoë ADM2795E pin-numbering defect note.
+  Pilot/XO ADM2795E pin-numbering defect note.

@@ -23,7 +23,8 @@
  *   [1] INA219 Datasheet SBOS448G, Texas Instruments.
  *   [2] INA226 Datasheet SBOS547E, Texas Instruments.
  *   [3] Linux i2c-dev interface — Documentation/i2c/dev-interface.rst.
- *   [4] Kaylee.md — Serenity UAV Power Distribution Board specification.
+ *   [4] FlightEngineer.md — Serenity UAV Power Distribution Board
+ * specification.
  *
  * Target platform: PocketBeagle 2 Industrial (AM6254), Debian Trixie.
  */

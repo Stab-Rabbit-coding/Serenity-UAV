@@ -1,7 +1,7 @@
-# Serenity UAV — Airframe Fuselage — Head/Cargo/Middle Shells, Kaylee/Simon Bays Work Breakdown Structure (Detail)
+# Serenity UAV — Airframe Fuselage — Head/Cargo/Middle Shells, FlightEngineer/Simon Bays Work Breakdown Structure (Detail)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Current design revision:** Rev S (2026-07-04)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../../TODO.md)
@@ -41,7 +41,7 @@
     dedicated copper counterpoise wire (AWG 22 stranded, < 2 g) bonded alongside the keel
     is more reliable than relying on CF conductivity.  Decide: (a) keep CF keel as structural
     only and add a separate copper counterpoise wire in the wiring trunk, or (b) embed a
-    copper braid in the keel lap joint.  Update Emma/XCVR antenna design accordingly.
+    copper braid in the keel lap joint.  Update Commo/XCVR antenna design accordingly.
 
     **Step 5 — Update BOM, battery tray, and build guide.**
     - Update CF-BAR-6X3 Notes: confirmed form, span, Z routing, cross-section, mass.
@@ -56,11 +56,11 @@
 
 - [x] **Access panel frames + covers (24" Rev R)** — `airframe/openscad/fuselage/access_panels_24in.scad` created 2026-06-11. Geometries derived from authoritative shell SCADs (Rev R baseline):
     - 4× Faraday-bay covers (Shepherd/Inara/River/Simon): 72×52 mm, 4× M3 clearance bores, positive-stop shoulder; Inara + River covers include Ø42 mm GPS retention-ring recess.
-    - 2× ventral hatch covers: battery 160×60 mm, Kaylee 115×100 mm; M2.5 pilots into bonded frames.
-    - 2× ventral hatch frames: battery + Kaylee; 6 mm CF-PETG wall, West System 105/206 epoxy-bonded to hull.
+    - 2× ventral hatch covers: battery 160×60 mm, Flight Engineer 115×100 mm; M2.5 pilots into bonded frames.
+    - 2× ventral hatch frames: battery + Flight Engineer; 6 mm CF-PETG wall, West System 105/206 epoxy-bonded to hull.
     - **SUB-TASKS:**
         - [ ] Export individual STLs (set RENDER variable in SCAD): shepherd, inara, river, simon,
-            battery, battery_f, kaylee, kaylee_f → `airframe/stls/fuselage/` — **NOT DONE
+            battery, battery_f, flight_engineer, flight_engineer_f → `airframe/stls/fuselage/` — **NOT DONE
             2026-07-03**: `openscad -o` export could not be run this session (sandboxed sub-agent
             Bash permission hook blocks any command containing `-o`, and the main session hit a
             separate OpenSCAD-render permission block); must be run by the user or an unrestricted
@@ -124,8 +124,8 @@
             recommend Z ≥ 65 mm (hinge Z + envelope radius + margin) at any station falling within
             hull Y 2–108, then re-verify numerically. **Still BLOCKS bonding both antennas'
             posts.**
-        - [ ] Bond River's forward post to the port flank at sta 120 mm; dress wire aft to River's Emma J2
-        - [ ] Bond Simon's forward post to the starboard flank at sta 120 mm; dress wire aft to Simon's Emma J2
+        - [ ] Bond River's forward post to the port flank at sta 120 mm; dress wire aft to River's Commo J2
+        - [ ] Bond Simon's forward post to the starboard flank at sta 120 mm; dress wire aft to Simon's Commo J2
         - [ ] Install both temporary aft posts (port + starboard) at sta 580 mm; remove and replace with integrated mounts in Phase 11
 
 ##### 1.1.1.1 *Head*
@@ -206,7 +206,7 @@
     (55×35 mm) at port half (Z_CEN=118 mm, Inara) and stbd half (Z_CEN=45 mm, River). GPS_PORT/STBD
     colocated for minimal SMA routing. *(done 2026-06-08, PR #42)*
 - [x] **`cargo_sect_shell24.scad` Rev S3** — Faraday enclosure space allocation.
-    Panel cuts enlarged 55×35 → 62×42 mm; boss offsets updated ±40×±25 → [TBD pending PCB layout — hole pattern must be derived from Wash.kicad_pcb / Zoë.kicad_pcb once layout is complete] to match
+    Panel cuts enlarged 55×35 → 62×42 mm; boss offsets updated ±40×±25 → [TBD pending PCB layout — hole pattern must be derived from Pilot.kicad_pcb / XO.kicad_pcb once layout is complete] to match
     Faraday tray corner mounts; bay Z centres adjusted ±1 mm (Inara 118→119, River 45→44) for 10 mm
     inter-bay gap; FARADAY_* envelope parameters (95×65×65 mm, 1.5 mm Al wall, 25 mm fan) added.
     *(done 2026-06-08, PR #42)*
@@ -273,7 +273,7 @@ do not restate its dimensions here.
     `make_winch_spool()` in `generate_cargo_mounts.py` converted to documented
     `NotImplementedError` stubs and dropped from the build list; prose updated in
     `README.md`, root `WBS.md`/`TODO.md`, `airframe/WBS.md`,
-    `airframe/VERIFY_PLACEMENT_CHECKLIST.md`, `avionics/jayne/WBS.md`,
+    `airframe/VERIFY_PLACEMENT_CHECKLIST.md`, `avionics/observer/WBS.md`,
     `graphical-build-guide/` (REVN guide + flight-phases + SVG task),
     `docs/PHASED_BUILD_GUIDE.md`, `docs/PROTO_PRINT_DAVINCI_JR.md`,
     `docs/AVIONICS_PB2_REDESIGN.md`, `docs/POWER_DISTRIBUTION.md`, `PROJECT_INDEX.md`.
@@ -373,7 +373,7 @@ do not restate its dimensions here.
 - [ ] **Pedestal mounting stations in `cargo_sect_shell24.scad`.** The retired mount used 4× M2
     self-taps into the gondola *ceiling*; the two pedestals need real M3 heat-set boss stations
     on the bay floor, FreeCAD-verified against the cargo-door 180° swing envelope
-    (`generate_cargo_doors.py`) and clear of `CARGO_CAM_POS` / the Jayne nadir bosses.
+    (`generate_cargo_doors.py`) and clear of `CARGO_CAM_POS` / the Observer nadir bosses.
 - [ ] **Half-duplex TTL bus wiring.** Confirm the MSPM0G3507 can drive a single-wire UART on
     `FLEX_TTL_GPIO`, or add a direction-steering resistor/buffer at the harness. Same pinmux
     caveat as `CAN-PERIPH-GW-1.md` open item 4. Cross-ref `avionics/WBS.md`.
@@ -396,7 +396,7 @@ do not restate its dimensions here.
     gateway's spare `FLEX_PWM_IO` and retire `DRV8833-CARGO` + `cargo_drv8833_tray.stl`.
 
 **BLOCKS:** Phase 8 cargo winch assembly; `build_guide_23_winch_latch.svg` rebuild;
-Kaylee RAIL-2 third BEC channel (`docs/POWER_DISTRIBUTION.md` §11.1).
+Flight Engineer RAIL-2 third BEC channel (`docs/POWER_DISTRIBUTION.md` §11.1).
 
 ###### 1.1.1.2.2 *Wing Root*
 
@@ -429,19 +429,19 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     - Z-range +1.3..+166.1 mm in hull frame; total height ≈ 165 mm — fits build-volume vertical
     **BLOCKS middle section printing.**
 
-- [ ] **Kaylee's room — PDB mounting in inner neck** — the Kaylee Power Distribution Board
-    (Kaylee Rev A1; 75 g) is housed inside the inner neck of the middle section, accessible
+- [ ] **Flight Engineer's room — PDB mounting in inner neck** — the Flight Engineer Power Distribution Board
+    (Flight Engineer Rev A1; 75 g) is housed inside the inner neck of the middle section, accessible
     through the open ventral face of the horseshoe ring.  The inner neck central location
     minimises power run lengths to all four nacelles, all four avionics stacks, and the battery.
     Required additions to the Blender middle mesh (or as bonded inserts):
-    - 4× M3 standoff boss posts for Kaylee PCB (55×35 mm board; ±20×±12.5 mm pattern from bore centre)
+    - 4× M3 standoff boss posts for Flight Engineer PCB (55×35 mm board; ±20×±12.5 mm pattern from bore centre)
     - Power cable exit notches (6 AWG leads, 4× nacelle ESC runs + avionics BEC tap)
     - Ventilation opening or clearance to allow heat dissipation from TPS54620 regulators
-    - Access clearance from horseshoe ventral opening (confirm Kaylee can be inserted and removed
+    - Access clearance from horseshoe ventral opening (confirm Flight Engineer can be inserted and removed
         with hand tools — field disassembly requirement per CLAUDE.md)
     - Confirm inner neck bore dimensions from baked `middle_shell24_2mm_repaired.stl` cross-section
         at hull Y ≈ +165 mm (midpoint of middle section) before adding boss features.
-    **BLOCKS middle section Blender mesh update; BLOCKS Kaylee installation.**
+    **BLOCKS middle section Blender mesh update; BLOCKS Flight Engineer installation.**
 
 - [ ] **CF skid rod channels** — add 4.2 mm bore channel along each horseshoe-to-skid arm (lower
     legs of the horseshoe) in the Blender mesh, coaxial with the matching channels in the rear shell.
@@ -455,13 +455,13 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     Ref: CLAUDE.md PACE (Simon = alternate watchdog, aft EDF control); shuttle Faraday-fit method in
     `engrave_plaques.py`/cavity-profile check. **BLOCKS Phase 6 full 8-node installation.**
 
-- [ ] **Kaylee room — PDB + battery bay, middle VENTRAL (2026-06-13).**
-    The Kaylee power-distribution board and the main battery mount together in the middle section's
+- [ ] **Flight Engineer room — PDB + battery bay, middle VENTRAL (2026-06-13).**
+    The Flight Engineer power-distribution board and the main battery mount together in the middle section's
     ventral region (the open −Z side of the horseshoe). Define the mounting bay / strap points there;
     keep mass low and central for CG. Coordinate with §1.4.5 (power distribution).
 
 - [ ] **Avionics-bay interior name marks (DEFERRED, 2026-06-13).** Engrave/emboss bay identifiers
-    (INARA port shuttle, RIVER stbd shuttle, SHEPHERD head fwd, SIMON middle dorsal, KAYLEE middle
+    (INARA port shuttle, RIVER stbd shuttle, SHEPHERD head fwd, SIMON middle dorsal, FLIGHT ENGINEER middle
     ventral) on each bay interior. First attempt (flat recessed plaque via `engrave_plaques.py`) did
     not read cleanly on the morph-opened organic cavity walls; pending a method decision (raised letters
     on a flat boss pad, or smooth the bay wall first). Mechanism is watertight and stays inside the 2 mm
@@ -497,7 +497,7 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
     - [ ] Create cableways from mount point to avionics bay
 
-    - [ ] Wire strobe to led pwd output on Wash cape in Simon's medbay
+    - [ ] Wire strobe to led pwd output on Pilot cape in Simon's medbay
 
 ##### 1.1.1.4 *Rear Engine Cone*
 
@@ -507,5 +507,5 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
     - [ ] Create cableways from mount point to avionics bay
 
-    - [ ] Wire strobe to led pwd output on Wash cape in Simon's medbay
+    - [ ] Wire strobe to led pwd output on Pilot cape in Simon's medbay
 

@@ -9,7 +9,7 @@
 > historical reference for the Rev M 18-inch design iteration.
 
 **Author:** Steve Griffing, PE(CSE) \[Control Systems Engineering\], CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Year:**2026 |**Status:** Public release
 
 > Fan engineering work inspired by the Firefly-class transport ship _Serenity_
@@ -25,7 +25,8 @@
 | Hull geometry         | Peter Farell                     | CC BY 4.0  | printables.com/model/548545    |
 | EDF nozzles           | BamJr                            | CC BY 4.0  | thingiverse.com/thing:2991269  |
 | Blueprint proportions | Mandel + Earls / QMx / Universal | © 2007 QMx | 269 ft × 170 ft × 79 ft ratios |
-| All other design      | Steve Griffing                   | CC BY 4.0  | This project                   |
+| All other design (hardware/CAD/PCB) | Steve Griffing     | CERN-OHL-W 2.0 | This project                |
+| All other design (docs/code/scripts) | Steve Griffing    | CC BY-SA 4.0 | This project                  |
 
 ---
 
@@ -50,10 +51,10 @@
 | T/W one nacelle lost | **1.64:1** — FC RTH |
 | Max payload | **3.07 lbm (1,392 g)** at T/W = 2.0 |
 | Compute nodes | **8 nodes:** FC1–FC4 (Cape-A, sensor/flight) + CN1–CN4 (Cape-B, comms/payload) |
-| FC node hardware | **PocketBeagle 2 Industrial (AM6254)** + Wash 55×35mm — ICM-42688-P IMU, BMP388 baro, u-blox M10Q GPS, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0** · DK 2820-100003007-ND |
-| CN node hardware | **PocketBeagle 2 Industrial (AM6254)** + Zoë 55×35mm — SiK 915MHz, LoRa RFM95W 915MHz, TI WL1837MOD WiFi/BT, XCVR-49MHZ sub-module, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0**; ATF16V8BQL CPLD write-blocker (log μSD) · DK 2820-100003007-ND |
+| FC node hardware | **PocketBeagle 2 Industrial (AM6254)** + Pilot 55×35mm — ICM-42688-P IMU, BMP388 baro, u-blox M10Q GPS, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0** · DK 2820-100003007-ND |
+| CN node hardware | **PocketBeagle 2 Industrial (AM6254)** + XO 55×35mm — SiK 915MHz, LoRa RFM95W 915MHz, TI WL1837MOD WiFi/BT, XCVR-49MHZ sub-module, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0**; ATF16V8BQL CPLD write-blocker (log μSD) · DK 2820-100003007-ND |
 | Bay assignments | Shepherd's room (Bay A): CN1+FC1 · Inara's shuttle (Bay B): CN2+FC2 · River's room (Bay D): CN3+FC3 · Simon's medbay (Bay E): CN4+FC4 (CN lower, FC upper per bay) |
-| Cape variant layout | **v2 · v2 · v2 · v2 (nose → tail, Rev Q):** All 8 positions use Wash / Zoë (EMI-hardened, 5 kV isolated CAN FD / RS-485 / Ethernet transceivers). Single-SKU procurement; Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 archived as of Rev Q. |
+| Cape variant layout | **v2 · v2 · v2 · v2 (nose → tail, Rev Q):** All 8 positions use Pilot / XO (EMI-hardened, 5 kV isolated CAN FD / RS-485 / Ethernet transceivers). Single-SKU procurement; Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 archived as of Rev Q. |
 | Bus order | CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4 — CN and FC interleaved on all data buses (CAN FD, RS-485, 1553) and power distribution; any single segment or bay power failure leaves ≥2 FC + ≥2 CN on both sides of the break |
 | Node role election | CAN FD heartbeat priority arbitration at boot — all 8 nodes identical hardware; master elected dynamically with automatic failover |
 | Radios | SiK 915MHz MAVLink + LoRa RFM95W 915MHz backup + TI WL1837MOD WiFi/BT GCS + 49MHz XCVR-49MHZ RC; all 4 on every CN node; software-elected master per link |
