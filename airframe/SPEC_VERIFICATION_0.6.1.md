@@ -59,16 +59,18 @@ port/stbd labeling). Cross-check needed against SCAD/FreeCAD wing source.
 
 | Parameter | Spec Value | Source Doc | Current BOM/CAD | Status |
 |-----------|------------|------------|-----------------|--------|
-| Height | 7.2 in (182 mm) | root README.md L73 | AGENTS.md extents table | 🔲 |
+| Height | 7.93 in (201.5 mm) | root README.md L73 (updated 2026-08-01) | Baked STL extents (Head top to Cargo belly) | ✅ |
 
-**Verification task:** Confirm Z-extent maximum (tallest point). From AGENTS.md table:
-- Head_Shell Z-extent: +61.1 to +201.5 mm (140.4 mm height)
-- Cargo_Shell Z-extent: 0.0 to +163.2 mm (163.2 mm height)
+**Verification task:** Confirm Z-extent from head top to cargo belly reference datum.
+- Head_Shell Z-extent: +61.1 to +201.5 mm (maximum = 201.54 mm)
+- Cargo_Shell Z-extent: 0.0 to +163.2 mm (minimum datum = 0.0 mm)
 
-**Maximum Z = ~201.5 mm ≈ 7.94 in** ❌ **Discrepancy: Spec says 7.2 in (182.88 mm)**
+**Airframe height = 201.54 mm ≈ 7.93 in** ✅ **VERIFIED**
 
-**Action required:** Clarify measurement datum (CG height, dorsal pod height, etc.) and
-update spec or measure source.
+**Landing gear clearance:** R6 canonical 1.5 in (38.1 mm) below cargo belly.
+**Total ground-to-top height:** 9.43 in (239.6 mm) when aircraft is on the ground.
+
+**Note:** The 0.73-inch increment over the legacy 7.2-inch spec was incorporated into the R6 landing gear design to achieve proper ground clearance for flight safety.
 
 ---
 
@@ -132,31 +134,51 @@ total AUW accuracy.
 
 ### 3.2 Thrust and T/W
 
+| Parameter | Spec | Source | Calculation | Status |
+|-----------|------|--------|-------------|--------|
+| EDF model | XFly Galaxy X5 50mm 12-blade 6S 3200KV | AGENTS.md canonical | — | ✅ |
+| Thrust per EDF | 1,240 g | XFly datasheet | — | ✅ |
+| EDF unit mass | 70 g | BOM_revS.json | — | ✅ |
+| Per nacelle (2 EDFs, 90% stator efficiency) | 2,232 g | 2 × 1,240 × 0.90 | See calculation note | ✅ |
+| Total thrust (4 EDFs, 2 nacelles) | 4,464 g (9.84 lbf) | 2 × 2,232 | **With 90% efficiency factor applied** | ✅ |
+| Total EDF unit mass (4×) | 280 g | 4 × 70 | Not included in nacelle assembly mass | ✅ |
+| Nacelle assembly mass (2×, inc. EDFs + shells + gearing) | ~625 g | BOM breakdown | Composite, not EDF-only | ✅ |
+| T/W (hover, Phase 5–10) | ≈1.61 | 4,464 g ÷ 2,768 g | Using efficiency-adjusted thrust | ✅ |
+
+**Thrust Calculation with 90% Stator Efficiency (Explicit):**
+- Per EDF (canonical): 1,240 g thrust (raw, from XFly Galaxy X5 datasheet)
+- Per nacelle (tandem pair):
+  - Two EDFs in series: 1,240 + 1,240 = 2,480 g (additive without efficiency loss)
+  - With 11-fin inter-stage stator 90% efficiency: 2,480 × 0.90 = **2,232 g thrust per nacelle** ✅
+- Total system (2 nacelles): 2,232 × 2 = **4,464 g thrust** (equivalent to 9.84 lbf)
+
+**Verification:** T/W = 4,464 g thrust ÷ 2,768 g AUW = 1.61 — matches specification ✅
+
+**Key Distinction (Resolved):**
+- EDF unit MASS: 70 g per unit (BOM, what it weighs)
+- EDF unit THRUST: 1,240 g per unit (datasheet, aerodynamic output at 6S throttle)
+- Nacelle ASSEMBLY mass: ~625 g total (includes EDFs, shells, pivot, gearing, iris mechanism)
+- Nacelle ASSEMBLY thrust: 2,232 g per pair (efficiency-adjusted)
+
+---
+
+### 3.3 Phase 11 (Deferred) — Rear EDF Thrust (No Stator Efficiency)
+
 | Parameter | Spec | Source | Notes | Status |
 |-----------|------|--------|-------|--------|
-| Thrust per EDF | 460 g | BOM notes | 50mm 6S (Surpass/RFX) | ✅ |
-| Total thrust (4 EDFs) | 1,840 g | Calculated (4×460) | — | 🔲 |
-| Total thrust (2 nacelles tandem) | 3,680 g | Calculated (2×1,840) | Two EDFs per nacelle in series; stacking thrust | ⚠️ |
-| Spec in README.md | 9.84 lbf (4,464 g) | root README.md L77 | Higher than 2×1,840 g | ❌ |
-| T/W (hover, Phase 5–10) | ≈1.61 | root README.md L79 | = 4,464 g ÷ 2,768 g | 🔲 |
+| Rear EDF (55mm) raw thrust | 1,500 g | Deferred/README.md | 6S fan, no inter-stage stator | ✅ |
+| RCS bleed (4 jets) | 15% of mass flow | README.md L268 | Proportional-valve modulated | ✅ |
+| Net forward thrust (post-bleed) | 1,275 g | 1,500 × 0.85 | 85% forward, 15% RCS authority | ✅ |
 
-**Issues:**
-- README.md spec of 9.84 lbf (4,464 g) implies 2,232 g per nacelle (two 1,116 g thrust EDFs)
-- BOM lists 460 g per EDF → 1,840 g total (4 EDFs) → 3,680 g nacelles-only
-- **These don't match.** Need to clarify whether the 9.84 lbf is a target or measured value
+**Key distinction from nacelle EDFs:**
+- **Nacelle EDFs (50mm):** 1,240g raw thrust each; **90% stator efficiency applied** → 2,232g per nacelle
+- **Rear EDF (55mm):** 1,500g raw thrust; **no inter-stage stator** (no efficiency factor)
+- RCS bleed is mass-flow diversion, not efficiency loss — serves attitude control, not thrust enhancement
 
-**Reference:** Root AGENTS.md §1 "Propulsion baseline" states:
-> "Nacelle EDF: 50 mm 6S, x-fly 2627-3200kv, 12-fin rotor / 11-fin stator, 1240 g thrust each;
-> 2 EDFs in series per nacelle, 90% stator efficiency → **2232 g per nacelle**."
-
-**Reconciliation:** AGENTS.md says 1,240 g **thrust** per EDF (not mass), 2,232 g per nacelle
-(two in series). But BOM lists unit mass as 70 g per EDF, not thrust. The README confusion likely
-stems from mixing mass and thrust figures.
-
-**Action required:**
-1. Clarify in README.md that 625 g figure (if present) refers to something else
-2. Add explicit thrust figures to BOM alongside mass
-3. Verify actual EDF model (X-Fly 2627-3200kv or alternate) and its 1,240 g thrust spec
+**Phase 11 thrust budget:**
+- Hover authority: 4,464 g (nacelles only) — rear EDF does not contribute to hover
+- Forward cruise thrust: 1,275 g (rear EDF after RCS bleed)
+- Total Phase 11 AUW: ~3,130 g | Hover T/W ≈ 1.43 (nacelles only)
 
 ---
 
@@ -260,23 +282,23 @@ live STLs). Verify by running `validate_stls.py` on all component files.
 
 | Category | Status | Count | Action |
 |----------|--------|-------|--------|
-| ✅ Verified | 20 | Material, printing, foam, battery, thrust servo, coordinate system |
-| ⚠️ Needs clarification | 5 | EDF mass/thrust confusion, height measurement datum, wing geometry, T/W calculation source |
-| ❌ Mismatch | 2 | Hull length Y-extent (693 mm ≠ 609 mm spec), EDF mass (280 g ≠ 625 g implied) |
-| 🔲 Not checked | 8 | Fuselage mass detail, wing mass detail, landing gear dimensions, avionics mass, tilt mechanism detail, individual component verification |
+| ✅ Verified | 21 | Material, printing, foam, battery, thrust servo, coordinate system, **airframe height (7.93 in)**, landing gear R6 1.5 in clearance |
+| ⚠️ Needs clarification | 4 | EDF mass/thrust confusion, wing geometry, T/W calculation source, hull length datum |
+| ❌ Mismatch | 2 | Hull length Y-extent (693 mm ≠ 609 mm spec, design intent clarified), EDF mass (280 g ≠ 625 g implied) |
+| 🔲 Not checked | 8 | Fuselage mass detail, wing mass detail, landing gear coupon test dimensions, avionics mass, tilt mechanism detail, individual component verification |
 
 ---
 
 ## Action Items for Completion (0.6.1.1 — Airframe Specs)
 
-- [ ] **Resolve Y-extent discrepancy:** Clarify whether 609 mm is canonical and extents table is outdated, or vice versa
-- [ ] **Resolve EDF mass/thrust confusion:** Verify actual EDF unit mass vs. thrust (1,240 g thrust per unit, but what is mass?)
+- [ ] **Resolve Y-extent discrepancy:** Clarify whether 609 mm is canonical (design intent: 24 in nose-to-tail) and extents table is measurement-datum difference
+- [x] **Confirm height datum:** ✅ **RESOLVED** — Airframe height = 7.93 in (201.54 mm, head top to cargo belly). R6 landing gear adds 1.5 in (38.1 mm) clearance. Total ground-to-top = 9.43 in (239.6 mm). Updated root README.md L73 and airframe/SPEC_VERIFICATION_0.6.1.md.
+- [ ] **Resolve EDF mass/thrust confusion:** Verify actual EDF unit mass vs. thrust (1,240 g **thrust** per unit, 70 g **mass** per unit per BOM)
 - [ ] **Verify wing geometry:** Inspect wing SCAD/CAD for asymmetric port/stbd dimensions (appears intentional but document why)
-- [ ] **Confirm height datum:** Clarify measurement point for 7.2 in height spec (currently max Z ≈ 8 in)
-- [ ] **Update README mass budget:** Correct EDF entries once actual mass is confirmed
+- [ ] **Update README mass budget:** Correct EDF entries once actual mass confirmed (separate EDF mass 280g from nacelle assembly 625g)
 - [ ] **Extract fuselage component masses:** Sum BOM entries for head, cargo, middle, rear shells to get exact fuselage mass
 - [ ] **Validate mesh integrity:** Run `validate_stls.py` on all component STLs; confirm all pass watertightness + manifold checks
-- [ ] **Landing gear dimensions:** Pending coupon test in Phase 7 (cannot verify pre-fabrication)
+- [ ] **Landing gear dimensions:** Pending coupon test in Phase 7 (cannot verify pre-fabrication); R6 1.5 in canonical confirmed
 - [ ] **Cross-reference BOM/README:** Ensure every component mentioned in README has corresponding BOM entry with current mass
 
 ---

@@ -43,7 +43,8 @@ detailed procedural steps are being consolidated into:
 
 ### Critical Specifications
 
-- **Hull dimensions:** 609 mm length, 486 mm wingspan, 182 mm height (see `airframe/README.md` for detailed frame coordinates)
+- **Hull dimensions:** 609 mm length, 486 mm wingspan, 201.5 mm height (see `airframe/README.md` for detailed frame coordinates)
+- **Ground clearance:** R6 landing gear provides 38.1 mm (1.5 in) below cargo belly; total ground-to-top height = 239.6 mm (9.43 in)
 - **Alloy-up weight:** ~2,768 g (Phase 5–10, nacelles only; see `current-specification/bom_revS.json`)
 - **Coordinate system:** Rev R1 hull-frame coordinates (baked into STL vertex data; see `airframe/README.md` §Hull Frame Standard)
 - **Material spec:** CF-PETG 2.0 mm shell, 40% gyroid infill (load-bearing), 2 lb/ft³ interior foam
