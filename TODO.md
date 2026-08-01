@@ -28,7 +28,7 @@
 
 #### 0.6.1 Systems
 
-→ detail: `docs/WBS.md` §1.6.1
+→ detail: `docs/WBS.md` §0.6.1
 
 - [ ] Verify and update airframe specifications vs as built for each component.
 - [ ] Verify avionics specifications vs as- built.

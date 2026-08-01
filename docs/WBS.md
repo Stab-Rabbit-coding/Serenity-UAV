@@ -2,6 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**Last updated:** 2026-08-01
 **Current design revision:** Rev S (2026-07-04)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../TODO.md)
@@ -266,6 +267,129 @@
         semicolons under JavaScript Standard Style, which directly contradicts
         `AGENTS.md` §6's explicit, project-wide "4-space indent, every language, always"
         override. Not applying a linter's default style over an explicit project rule.
+
+
+## §0.6 — Update and Correct Documentation Touching Every Non-Archived File
+
+*(root `WBS.md` §0.6)*
+
+**Overview:** Comprehensive documentation accuracy pass across all non-archived
+subsystems, ensuring specifications match as-built hardware, all engineering
+documents are current, and all supporting documentation (compliance, licensing,
+README files, BOM, WBS/TODO files, REFERENCES) is complete and consistent.
+Two major streams: Systems (0.6.1) and Documentation (0.6.2).
+
+### 0.6.1 — Systems Documentation Verification
+
+- [ ] **Airframe specifications vs as-built** — verify each component's spec (weight,
+    dimensions, material, finish, procure vs print, CG) against the actual build or
+    most recent CAD/STL snapshot (current baseline: 24-inch hull, Rev S1 nacelles,
+    tilt-spar/hall-encoder integration complete). Ensure `docs/PHASED_BUILD_GUIDE.md`,
+    BOM files, and subsystem README files match the current airframe design revision.
+    Scope: fuselage (hull sections, access panels, cargo gondola, door system, winch),
+    wings (spar, leading edges, control surfaces), nacelles (EDFs, nozzle iris, tilt
+    servo, hall tilt-feedback encoder), landing gear (wire schedule, mounting bosses),
+    and all structural provisions (cable runs, cooling ducting, battery bay, avionics
+    racks).
+
+- [ ] **Avionics specifications vs as-built** — verify each PCB, cape, and comms node
+    matches its current board revision (as of 2026-07-31: Wash/Cape-A-2, Zoë/Cape-B-2,
+    Emma Rev S1, Kaylee Rev S1, Jayne Rev S1). Check pinouts, connector types, signal
+    assignments, voltage rails, thermal specs, mass, and mounting footprints against
+    the live schematic and PCB layouts (`avionics/kicad/<board>/`). Verify that
+    `current-specification/bom_revS.csv`, `bom_revS.json`, and the build guide reflect
+    current connector naming (XCVR-49MHZ, not RCRS — see §0.1) and component selections.
+    Confirm all board markdown files (`avionics/kicad/<board>/<board>.md`) are up-to-date
+    with the latest design changes (e.g., Jayne SoM upgrade to PCM-071).
+
+- [ ] **Assessment and engineering documents** — verify all analysis and trade-study
+    documents are current and cite the correct subsystem revisions:
+    - `docs/TILT_SPAR_ANALYSIS.md` — verify material allowables against MMPDS-2023/AMS
+      and update material references (see §0.8).
+    - `docs/NOZZLE_DRIVE_TRADE.md` — confirm "DECISION AMENDMENT" reflects current nacelle
+      nozzle-drive design (wing-fixed sun gear, nacelle pinion, geared bellcrank).
+    - `docs/LANDING_GEAR_ANALYSIS.md` — verify wire schedule, drop-height selection,
+      and coupon-test results against the current design (bay placements in middle section).
+    - `docs/JAYNE_LASER_ANALYSIS.md` — confirm both Class 2 laser mount locations,
+      specifications, and interlock logic.
+    - `docs/PHASED_BUILD_GUIDE.md` — update from Rev M 18-inch to Rev S 24-inch across
+      all Phase 0–4 structural and assembly details; update Phase 5+ avionics placement
+      and electrical connections for all 8 nodes.
+
+- [ ] **Software, firmware, and scripts documentation** — verify docstrings, inline
+    comments, and README files match the actual code functionality:
+    - Avionics firmware: `avionics/firmware/*/src/` — verify all module-level and
+      function-level documentation describes current implementation (not stale prior
+      versions).
+    - GCS Malcolm: `gcs/malcolm/firmware/pb2i/src/` and `gcs/malcolm/firmware/host/` —
+      ensure all subsystem init, telemetry, and tracking routines are documented and
+      match the live code path.
+    - Airframe/FreeCAD scripts: `airframe/freecad-scripts/` and
+      `airframe/blender-scripts/` — verify docstrings describe the actual geometry
+      transforms and output file locations.
+    - Build/validation tools: `tools/` — update docstrings in `validate_kicad.py`,
+      `validate_stls.py`, and any other active linting/verification scripts to match
+      their current checks and pass/fail criteria.
+
+### 0.6.2 — Documentation Structure and Consistency
+
+- [ ] **Compliance and licensing documents** — verify each top-level and subsystem
+    README includes:
+    - Correct **CC BY 4.0** (or equivalent) license declaration per `docs/attribution_and_licensing.md`.
+    - Attribution to **Steve Griffing** (as primary author) and any AI-model contributors
+      (cite model name separately, e.g. "Claude Sonnet 5" rather than lumping all models
+      together).
+    - Links to `AGENTS.md`, `REFERENCES.md`, and any applicable design analysis docs.
+    - For subsystems with original hardware designs (airframe, avionics, gcs): confirm
+      CERN-OHL-W 2.0 hardware license is declared and tracked in separate license files
+      per subsystem (as planned in §0.9).
+
+- [ ] **README files — all levels** — update to reflect Rev S baseline and 8-node
+    architecture:
+    - Root `README.md` — ensure project scope, high-level architecture, and first-flight
+      target (Phase 5) are current.
+    - Subsystem READMEs:
+      - `airframe/README.md` — 24-inch hull, CF-PETG printing, STL output directory structure.
+      - `avionics/README.md` — 8-node PACE failover, PCB revisions (Wash/Cape-A-2, Zoë/Cape-B-2,
+        Emma/Kaylee/Jayne Rev S1), comms topology (CAN FD, RS-485, Ethernet ring, 49 MHz / LoRa).
+      - `gcs/README.md` — Malcolm hardware spec, 5-radio comms node, QGroundControl integration.
+      - `docs/README.md` — pointer to AGENTS.md, REFERENCES.md, analysis docs, build-guide phases.
+      - `current-specification/README.md` — BOM rev strategy, part cross-reference, Rev S baseline.
+      - `tools/README.md` — build automation scripts, Blender/FreeCAD/KiCad pipeline tools.
+      - `graphical-build-guide/README.md` — pointer to WBS/TODO, Phase 0–10 build sequence,
+        link to Blender/FreeCAD source geometry.
+
+- [ ] **System specification and BOM files** — verify consistency across all formats:
+    - `current-specification/bom_revS.csv` and `bom_revS.json` — component count, part numbers,
+      mass totals, supplier links, and footprint data match the current PCB/airframe state.
+    - Component-level specs in subsystem directories (e.g., `avionics/kicad/Wash/Wash.md`,
+      `airframe/stls/fuselage/README.md`) — ensure every component listed in the BOM has
+      a corresponding README or `.md` file documenting its interface, mass, procurement source.
+    - Procured vs. printed component split — update `current-specification/` and build guides
+      to mark which parts are 3D-printed (with wall thickness / infill spec), purchased
+      (with supplier/PN), or machined (with material/finish spec).
+
+- [ ] **WBS and TODO file sync** — update both files to reflect completed work and reopen
+    any tasks that are genuinely still open (do not mark complete until verified):
+    - Delete any completed items from `TODO.md` (the lean, open-only view).
+    - Verify that every open-item checkbox in root `TODO.md` has a corresponding detailed
+      entry in `docs/WBS.md` with full context.
+    - Regenerate subsystem TODO files from their corresponding WBS files per `AGENTS.md`
+      "WBS.md / TODO.md Federation" (§10 Workflow) — run a script or manual pass to pull
+      only unchecked items.
+    - Confirm no stale or duplicate items exist across TODO/WBS splits.
+
+- [ ] **REFERENCES.md file** — audit all citations for accuracy and coverage:
+    - Verify every `[REF-ID]` cited in code/docs has a matching entry in `REFERENCES.md`
+      with exact section number and a validated URL.
+    - Update any "requires verification" placeholders (e.g., MMPDS-2023 material allowables,
+      MT6701 sensor pinout per §0.8) with real source citations.
+    - Add `REF-MAT-*` and `REF-SENSOR-*` entries for material standards and encoder specs
+      once §0.8 procurement/verification is complete.
+    - Correct the 49 MHz transceiver reference from the superseded Part 95 claim to Part 15
+      §15.235 (completed as part of §0.1 but verify REFERENCES.md consistency).
+    - Check for any broken/archived URLs and mark them "link obsolete, historical reference"
+      if not replaceable.
 
 
 ## §0.8 — Tilt-Spar Material Allowables + Hall Encoder Verification

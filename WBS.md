@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-07-18  
+**Last updated:** 2026-08-01  
 **Current design revision:** Rev S (2026-07-04, see `docs/WBS.md` §6.3 for changelog) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 > **This is the full historical record — every task ever defined, done or open,**
@@ -73,13 +73,6 @@
 - [x] Audit remaining firmware source files for standards citations —…
 - [x] Audit KiCad companion Markdown files — done 2026-06-22.
 
-### 0.6 — IEC 62368-1 PCB Layout Isolation Verification
-→ detail: `avionics/emi-hardening/WBS.md` §0.6
-
-- [x] Verify creepage and clearance distances in Wash PCB layout
-- [x] Verify creepage and clearance distances in Zoë PCB layout
-- [x] Document verified creepage/clearance values
-
 ### 0.7 — CI Lint Scope and Repo-Wide Lint Debt
 → detail: `docs/WBS.md` §0.7
 
@@ -93,20 +86,19 @@
 - [ ] Add 4130 corrosion-finish spec (zinc/cad plate) to BOM/build guide
 - [ ] Verify AK7455 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
 
-### 0.9 Update and correct documentation touching every non-archived file.
-→ detail: docs/WBS.md §0.9
+### 0.6 — Update and Correct Documentation Touching Every Non-Archived File
+→ detail: docs/WBS.md §0.6
 
-#### 0.9.1 Systems
-→ detail: docs/WBS.md §1.9.1
+#### 0.6.1 Systems
+→ detail: docs/WBS.md §0.6.1
 
 - [ ] Verify and update airframe specifications vs as built for each component.
 - [ ] Verify avionics specifications vs as- built.
 - [ ] Verify and update all assessment and engineering documents.
 - [ ] Verify and update all software, firmware, and scripts, along with their documentation.
 
-#### 0.9.2 Documentation
-
-→ detail: docs/WBS.md §0.9.2
+#### 0.6.2 Documentation
+→ detail: docs/WBS.md §0.6.2
 
 - [ ] Verify and update all compliance and licensing documents.
 - [ ] Verify and update all README files and the starting with subsystem ones and correcting the root README to match.
