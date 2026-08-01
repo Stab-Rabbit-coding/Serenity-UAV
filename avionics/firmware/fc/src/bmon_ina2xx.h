@@ -38,17 +38,17 @@
  *   Manufacturer ID register 0xFE: reads 0x5449 ("TI").
  *   Pilot usage: voltage-only (IN+ / IN− tied).
  *
- * ── INA226AIDGSR (Flight Engineer current monitors) ────────────────────────────────
+ * ── INA226AIDGSR (Flight Engineer current monitors)
+ * ────────────────────────────────
  *
- *   I2C addresses: 0x40–0x44 (see FlightEngineer.md §INA226 Address Assignment).
- *   Shunt resistors: 1 mΩ (ESC channels, 60 A full scale),
- *                    1 mΩ (main bus, 75 A full scale).
- *   After bmon_ina226_configure_shunt() the following registers are valid:
- *     0x04 CURRENT_REG : signed 16-bit, LSB = CURRENT_LSB as programmed.
- *     0x05 CALIBRATION  : set by configure_shunt; do not overwrite.
- *     0x03 POWER_REG    : unsigned 16-bit, LSB = 25 × CURRENT_LSB.
- *     0x07 ALERT_LIMIT  : threshold register (bmon_ina226_configure_alert).
- *     0x06 MASK_ENABLE  : alert configuration (bmon_ina226_configure_alert).
+ *   I2C addresses: 0x40–0x44 (see FlightEngineer.md §INA226 Address
+ * Assignment). Shunt resistors: 1 mΩ (ESC channels, 60 A full scale), 1 mΩ
+ * (main bus, 75 A full scale). After bmon_ina226_configure_shunt() the
+ * following registers are valid: 0x04 CURRENT_REG : signed 16-bit, LSB =
+ * CURRENT_LSB as programmed. 0x05 CALIBRATION  : set by configure_shunt; do not
+ * overwrite. 0x03 POWER_REG    : unsigned 16-bit, LSB = 25 × CURRENT_LSB. 0x07
+ * ALERT_LIMIT  : threshold register (bmon_ina226_configure_alert). 0x06
+ * MASK_ENABLE  : alert configuration (bmon_ina226_configure_alert).
  *
  * ── Auto-detection ────────────────────────────────────────────────────────
  *
@@ -77,7 +77,8 @@
  *   [2] INA226 Datasheet SBOS547E, Texas Instruments.
  *       https://www.ti.com/lit/ds/symlink/ina226.pdf
  *   [3] Linux i2c-dev interface — Documentation/i2c/dev-interface.rst.
- *   [4] FlightEngineer.md — Serenity UAV Power Distribution Board specification.
+ *   [4] FlightEngineer.md — Serenity UAV Power Distribution Board
+ * specification.
  *
  * Target platform: PocketBeagle 2 Industrial (AM6254), Debian Trixie.
  */
@@ -219,9 +220,9 @@ typedef struct bmon_ina2xx_ctx bmon_ina2xx_ctx_t;
  *
  * Opens the I2C bus device and sets the slave address to @p i2c_addr via
  * ioctl I2C_SLAVE.  Pass INA2XX_I2C_ADDR (0x40) for the default Pilot
- * on-cape device.  For Flight Engineer multi-device buses, pass the per-channel address
- * directly (0x40–0x44); a separate open() per device is required because each
- * context holds its own file descriptor and slave address.
+ * on-cape device.  For Flight Engineer multi-device buses, pass the per-channel
+ * address directly (0x40–0x44); a separate open() per device is required
+ * because each context holds its own file descriptor and slave address.
  *
  * If @p type is BMON_INA_AUTO, reads the die-ID register (0xFF); if the
  * result is 0x2260 the device is treated as INA226, otherwise INA219.
@@ -232,7 +233,8 @@ typedef struct bmon_ina2xx_ctx bmon_ina2xx_ctx_t;
  *
  * @param[in]  i2c_dev   Path to I2C bus device, e.g. "/dev/i2c-2".
  * @param[in]  i2c_addr  7-bit I2C slave address of the target device
- *                       (e.g. 0x40, 0x41, 0x42, 0x43, or 0x44 for Flight Engineer).
+ *                       (e.g. 0x40, 0x41, 0x42, 0x43, or 0x44 for Flight
+ * Engineer).
  * @param[in]  type      Device variant, or BMON_INA_AUTO to auto-detect.
  * @param[out] ctx_out   Set to driver context on success.
  * @return 0 on success, negative errno on error:

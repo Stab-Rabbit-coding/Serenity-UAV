@@ -103,7 +103,7 @@ assigned link-loss RTL timer in the originating WBS item or anywhere else
 in the repository. Tracked as a follow-up in `TODO.md` (see closing note)
 rather than inventing an unreviewed value here.
 
-**Distinct from:** `MAL_HEARTBEAT_TIMEOUT_MS` (5000 ms,
+**Distinct from:** `SKIPPER_HEARTBEAT_TIMEOUT_MS` (5000 ms,
 `gcs/skipper/firmware/pb2i/src/skipper_config.h`) — that constant governs when
 Skipper's GCS *alerts the operator* that it has stopped hearing the
 aircraft; it is a ground-side operator-notification timer, not the

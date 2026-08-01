@@ -6,7 +6,7 @@ License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
 Revision: R (2026-06-11)
 
 Receives aircraft position from telemetry_feed.py (UDP JSON datagrams on
-MAL_TRACKER_UDP_PORT) and GCS position from a local GNSS receiver, then
+SKIPPER_TRACKER_UDP_PORT) and GCS position from a local GNSS receiver, then
 computes the azimuth (bearing) and elevation angle from Skipper to the
 aircraft.  Publishes the gimbal target to gimbal_ctrl.py via a shared queue
 or Unix domain socket.

@@ -13,7 +13,7 @@
  *   - Uses the MAVLink C library (mavlink2) header-only parser.
  *     Include path must contain mavlink/common/mavlink.h.
  *     Build with: cmake option MAVLINK_INCLUDE_DIR=/path/to/mavlink/headers
- *   - Position UDP publish: datagram to 127.0.0.1:MAL_TRACKER_UDP_PORT,
+ *   - Position UDP publish: datagram to 127.0.0.1:SKIPPER_TRACKER_UDP_PORT,
  *     JSON-encoded for tracker.py.  Format:
  *       {"lat_degE7":<int>,"lon_degE7":<int>,"alt_mm":<int>,
  *        "vx_cms":<int>,"vy_cms":<int>,"hdg_cdeg":<int>}
@@ -52,7 +52,7 @@ static mavlink_status_t  s_mav_status;
 /** Latest aircraft position (protected by calling convention — single thread).
  */
 static skipper_aircraft_pos_t s_aircraft_pos;
-static int                s_has_position = 0;
+static int                    s_has_position = 0;
 
 /** Link status. */
 static skipper_telemetry_status_t s_status;
@@ -110,15 +110,15 @@ static void handle_heartbeat(const mavlink_message_t *msg) {
  *
  * @note   Sysid filtering only — this does NOT verify the MAVLink v2
  *         [REF-PROTO-002] HMAC-SHA256 message signature, despite
- *         MAL_TPM_KEY_HANDLE (skipper_config.h) provisioning a TPM key slot for
- *         that purpose.  CLAUDE.md requires every message, internal and
- *         external, to be digitally signed and authenticated
- *         [REF-NIST-001 §2.1, §2.2].  Tracked as an open functional gap in
+ *         SKIPPER_TPM_KEY_HANDLE (skipper_config.h) provisioning a TPM key slot
+ * for that purpose.  CLAUDE.md requires every message, internal and external,
+ * to be digitally signed and authenticated [REF-NIST-001 §2.1, §2.2].  Tracked
+ * as an open functional gap in
  *         TODO.md §0.5 — do not treat sysid filtering as authentication.
  */
 static void dispatch_message(const mavlink_message_t *msg) {
     /* Only process messages from the aircraft system. */
-    if (msg->sysid != MAL_AIRCRAFT_SYS_ID) {
+    if (msg->sysid != SKIPPER_AIRCRAFT_SYS_ID) {
         return;
     }
 
@@ -158,7 +158,7 @@ int skipper_telemetry_init(void) {
 
     memset(&s_tracker_addr, 0, sizeof(s_tracker_addr));
     s_tracker_addr.sin_family = AF_INET;
-    s_tracker_addr.sin_port = htons((uint16_t)MAL_TRACKER_UDP_PORT);
+    s_tracker_addr.sin_port = htons((uint16_t)SKIPPER_TRACKER_UDP_PORT);
     s_tracker_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
     return 0;
@@ -204,5 +204,5 @@ int skipper_telemetry_is_link_lost(void) {
     long elapsed_ms =
         (now.tv_sec - s_status.last_heartbeat.tv_sec) * 1000L +
         (now.tv_nsec - s_status.last_heartbeat.tv_nsec) / 1000000L;
-    return (elapsed_ms > (long)MAL_HEARTBEAT_TIMEOUT_MS) ? 1 : 0;
+    return (elapsed_ms > (long)SKIPPER_HEARTBEAT_TIMEOUT_MS) ? 1 : 0;
 }

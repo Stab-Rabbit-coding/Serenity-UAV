@@ -77,7 +77,7 @@
     Verify EHRPWM0 appears as `/sys/class/pwm/pwmchip0/` with 2 channels.
     Verify I²C2 appears as `/dev/i2c-2`.
 - [ ] **Provision TPM 2.0 (SLB9670) on Skipper's PB2-I** — unique key material; persistent
-    handle `MAL_TPM_KEY_HANDLE` (0x81000001) per `skipper_config.h`.
+    handle `SKIPPER_TPM_KEY_HANDLE` (0x81000001) per `skipper_config.h`.
     Follow the same provisioning procedure as aircraft nodes (PROVISIONING.md, TBD).
 - [ ] **Verify CPLD write-blocker on Skipper's log μSD** (Cape-B-2 ATF16V8BQL):
     `echo test > /mnt/flightlog/test.txt` must return read-only error.

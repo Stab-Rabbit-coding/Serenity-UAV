@@ -7,7 +7,7 @@ Revision: R (2026-06-11)
 
 Connects to the mavlink-router MAVLink stream (UDP on localhost:14550, or
 serial to PB2-I USB) and extracts GLOBAL_POSITION_INT messages.  Publishes
-aircraft position as JSON UDP datagrams to tracker.py on MAL_TRACKER_UDP_PORT.
+aircraft position as JSON UDP datagrams to tracker.py on SKIPPER_TRACKER_UDP_PORT.
 
 This module is the host-PC-side complement to skipper_telemetry.c (which runs on
 Skipper's PB2-I).  Running both provides redundant position extraction: if the
@@ -33,7 +33,7 @@ from pymavlink import mavutil  # type: ignore[import]
 DEFAULT_CONFIG_PATH = (
     Path(__file__).parent.parent.parent / "config" / "skipper_config.yaml"
 )
-MAVLINK_SYS_ID_AIRCRAFT = 1  # Must match MAL_AIRCRAFT_SYS_ID in skipper_config.h
+MAVLINK_SYS_ID_AIRCRAFT = 1  # Must match SKIPPER_AIRCRAFT_SYS_ID in skipper_config.h
 
 log = logging.getLogger(__name__)
 

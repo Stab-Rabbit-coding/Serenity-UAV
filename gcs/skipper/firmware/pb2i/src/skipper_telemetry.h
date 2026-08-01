@@ -12,11 +12,11 @@
  * 49 MHz [REF-FCC-003 §15.235]) and:
  *
  *   1. Publishes the current aircraft position to the tracking software via
- *      a UDP datagram on MAL_TRACKER_UDP_PORT.
+ *      a UDP datagram on SKIPPER_TRACKER_UDP_PORT.
  *   2. Forwards all MAVLink frames to the host PC via the USB CDC-ECM link
  *      (mavlink-router handles this; this module handles the position extract).
  *   3. Monitors MAVLink heartbeat and raises a link-lost flag if no heartbeat
- *      is received within MAL_HEARTBEAT_TIMEOUT_MS.
+ *      is received within SKIPPER_HEARTBEAT_TIMEOUT_MS.
  *
  * Parsed message types:
  *   HEARTBEAT            (#0)  — link health monitoring
@@ -25,8 +25,8 @@
  *   SYS_STATUS           (#1)  — battery voltage and load
  */
 
-#ifndef MAL_TELEMETRY_H
-#define MAL_TELEMETRY_H
+#ifndef SKIPPER_TELEMETRY_H
+#define SKIPPER_TELEMETRY_H
 
 #include <stdint.h>
 #include <time.h>
@@ -112,4 +112,4 @@ void skipper_telemetry_get_status(skipper_telemetry_status_t *status);
  */
 int skipper_telemetry_is_link_lost(void);
 
-#endif /* MAL_TELEMETRY_H */
+#endif /* SKIPPER_TELEMETRY_H */

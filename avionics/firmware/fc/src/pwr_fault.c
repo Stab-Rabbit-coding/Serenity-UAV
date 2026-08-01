@@ -210,9 +210,9 @@ int pwr_fault_open(const char *i2c_dev_pdb, pwr_fault_ctx_t **ctx_out) {
     /* Open INA226 contexts for each ESC channel. */
     for (i = 0U; i < PWR_FAULT_ESC_COUNT; i++) {
         /*
-         * Each INA226 on the Flight Engineer shares the same I2C bus but has a distinct
-         * address (0x40–0x43 for ESC1–ESC4).  Each bmon_ina2xx_open() call
-         * opens a separate file descriptor and programs the address via
+         * Each INA226 on the Flight Engineer shares the same I2C bus but has a
+         * distinct address (0x40–0x43 for ESC1–ESC4).  Each bmon_ina2xx_open()
+         * call opens a separate file descriptor and programs the address via
          * ioctl I2C_SLAVE, so all contexts are fully independent.
          */
         rc = bmon_ina2xx_open(i2c_dev_pdb, ESC_I2C_ADDR[i], BMON_INA_INA226,

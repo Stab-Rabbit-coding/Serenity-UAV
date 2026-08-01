@@ -17,8 +17,8 @@ mavlink:
   #   "/dev/ttyACM0,115200"         — USB serial direct to PB2-I
   source: "udpin:localhost:14550"
 
-  aircraft_sysid: 1     # Must match MAL_AIRCRAFT_SYS_ID in skipper_config.h
-  gcs_sysid:     255    # Must match MAL_MAVLINK_SYS_ID in skipper_config.h
+  aircraft_sysid: 1     # Must match SKIPPER_AIRCRAFT_SYS_ID in skipper_config.h
+  gcs_sysid:     255    # Must match SKIPPER_MAVLINK_SYS_ID in skipper_config.h
 
 # ---------------------------------------------------------------------------
 # Tracker (tracker.py configuration)

@@ -65,8 +65,8 @@ static char s_tilt_pwm_path[128];
 static int s_i2c_fd = -1;
 
 /** Current servo PWM duty cycle (ns) — cached to avoid redundant writes. */
-static uint32_t s_pan_duty_ns = MAL_SERVO_NEUTRAL_NS;
-static uint32_t s_tilt_duty_ns = MAL_SERVO_NEUTRAL_NS;
+static uint32_t s_pan_duty_ns = SKIPPER_SERVO_NEUTRAL_NS;
+static uint32_t s_tilt_duty_ns = SKIPPER_SERVO_NEUTRAL_NS;
 
 /** Last known encoder positions (degrees). */
 static skipper_gimbal_pos_t s_current_pos = {0.0f, 0.0f};
@@ -133,10 +133,10 @@ static int pwm_export(uint32_t chip, uint32_t chan, char *path,
 
     snprintf(path, path_sz, PWM_PATH_FMT, chip, chan);
 
-    if (pwm_write(path, "period", MAL_SERVO_PERIOD_NS) != 0) {
+    if (pwm_write(path, "period", SKIPPER_SERVO_PERIOD_NS) != 0) {
         return -1;
     }
-    if (pwm_write(path, "duty_cycle", MAL_SERVO_NEUTRAL_NS) != 0) {
+    if (pwm_write(path, "duty_cycle", SKIPPER_SERVO_NEUTRAL_NS) != 0) {
         return -1;
     }
     if (pwm_write(path, "enable", 1U) != 0) {
@@ -156,7 +156,7 @@ static int pwm_export(uint32_t chip, uint32_t chan, char *path,
  * @return 0 on success; -1 on failure.
  */
 static int tca9548a_select(uint8_t chan) {
-    if (ioctl(s_i2c_fd, I2C_SLAVE, MAL_TCA9548A_ADDR) < 0) {
+    if (ioctl(s_i2c_fd, I2C_SLAVE, SKIPPER_TCA9548A_ADDR) < 0) {
         return -1;
     }
     uint8_t mask = (uint8_t)(1U << chan);
@@ -172,7 +172,7 @@ static int tca9548a_select(uint8_t chan) {
  */
 static int as5600_read_angle(uint16_t *angle_counts) {
     /* Switch to AS5600 I²C address. */
-    if (ioctl(s_i2c_fd, I2C_SLAVE, MAL_AS5600_ADDR) < 0) {
+    if (ioctl(s_i2c_fd, I2C_SLAVE, SKIPPER_AS5600_ADDR) < 0) {
         return -1;
     }
 
@@ -218,13 +218,13 @@ static float counts_to_deg(uint16_t raw_counts, uint16_t zero_counts) {
     int32_t delta = (int32_t)raw_counts - (int32_t)zero_counts;
 
     /* Unwrap modular arithmetic around 4096 boundary. */
-    if (delta > (int32_t)(MAL_AS5600_COUNTS_PER_REV / 2U)) {
-        delta -= (int32_t)MAL_AS5600_COUNTS_PER_REV;
-    } else if (delta < -(int32_t)(MAL_AS5600_COUNTS_PER_REV / 2U)) {
-        delta += (int32_t)MAL_AS5600_COUNTS_PER_REV;
+    if (delta > (int32_t)(SKIPPER_AS5600_COUNTS_PER_REV / 2U)) {
+        delta -= (int32_t)SKIPPER_AS5600_COUNTS_PER_REV;
+    } else if (delta < -(int32_t)(SKIPPER_AS5600_COUNTS_PER_REV / 2U)) {
+        delta += (int32_t)SKIPPER_AS5600_COUNTS_PER_REV;
     }
 
-    return (float)delta * (360.0f / (float)MAL_AS5600_COUNTS_PER_REV);
+    return (float)delta * (360.0f / (float)SKIPPER_AS5600_COUNTS_PER_REV);
 }
 
 /**
@@ -236,13 +236,13 @@ static float counts_to_deg(uint16_t raw_counts, uint16_t zero_counts) {
  */
 static uint32_t angle_to_duty_ns(float angle_deg) {
     float frac = angle_deg / 180.0f;
-    float duty = (float)MAL_SERVO_MIN_NS +
-                 frac * (float)(MAL_SERVO_MAX_NS - MAL_SERVO_MIN_NS);
+    float duty = (float)SKIPPER_SERVO_MIN_NS +
+                 frac * (float)(SKIPPER_SERVO_MAX_NS - SKIPPER_SERVO_MIN_NS);
 
-    if (duty < (float)MAL_SERVO_MIN_NS) {
-        duty = (float)MAL_SERVO_MIN_NS;
-    } else if (duty > (float)MAL_SERVO_MAX_NS) {
-        duty = (float)MAL_SERVO_MAX_NS;
+    if (duty < (float)SKIPPER_SERVO_MIN_NS) {
+        duty = (float)SKIPPER_SERVO_MIN_NS;
+    } else if (duty > (float)SKIPPER_SERVO_MAX_NS) {
+        duty = (float)SKIPPER_SERVO_MAX_NS;
     }
     return (uint32_t)duty;
 }
@@ -260,39 +260,39 @@ static float clampf(float v, float lo, float hi) {
 
 skipper_gimbal_err_t skipper_gimbal_init(void) {
     /* Open I²C bus for TCA9548A and AS5600. */
-    s_i2c_fd = open("/dev/i2c-" __STRING(MAL_I2C_BUS), O_RDWR);
+    s_i2c_fd = open("/dev/i2c-" __STRING(SKIPPER_I2C_BUS), O_RDWR);
     if (s_i2c_fd < 0) {
         perror("skipper_gimbal_init: open i2c");
-        return MAL_GIMBAL_ERR_INIT;
+        return SKIPPER_GIMBAL_ERR_INIT;
     }
 
     /* Export and configure pan servo PWM. */
-    if (pwm_export(MAL_GIMBAL_PAN_PWM_CHIP, MAL_GIMBAL_PAN_PWM_CHAN,
+    if (pwm_export(SKIPPER_GIMBAL_PAN_PWM_CHIP, SKIPPER_GIMBAL_PAN_PWM_CHAN,
                    s_pan_pwm_path, sizeof(s_pan_pwm_path)) != 0) {
         fprintf(stderr, "skipper_gimbal_init: pan PWM export failed\n");
-        return MAL_GIMBAL_ERR_INIT;
+        return SKIPPER_GIMBAL_ERR_INIT;
     }
 
     /* Export and configure tilt servo PWM. */
-    if (pwm_export(MAL_GIMBAL_TILT_PWM_CHIP, MAL_GIMBAL_TILT_PWM_CHAN,
+    if (pwm_export(SKIPPER_GIMBAL_TILT_PWM_CHIP, SKIPPER_GIMBAL_TILT_PWM_CHAN,
                    s_tilt_pwm_path, sizeof(s_tilt_pwm_path)) != 0) {
         fprintf(stderr, "skipper_gimbal_init: tilt PWM export failed\n");
-        return MAL_GIMBAL_ERR_INIT;
+        return SKIPPER_GIMBAL_ERR_INIT;
     }
 
     /* Capture zero-reference encoder readings. */
     uint16_t raw = 0U;
-    if (tca9548a_select(MAL_ENC_PAN_MUX_CHAN) != 0 ||
+    if (tca9548a_select(SKIPPER_ENC_PAN_MUX_CHAN) != 0 ||
         as5600_read_angle(&raw) != 0) {
         fprintf(stderr, "skipper_gimbal_init: pan encoder read failed\n");
-        return MAL_GIMBAL_ERR_ENCODER;
+        return SKIPPER_GIMBAL_ERR_ENCODER;
     }
     s_pan_zero_counts = raw;
 
-    if (tca9548a_select(MAL_ENC_TILT_MUX_CHAN) != 0 ||
+    if (tca9548a_select(SKIPPER_ENC_TILT_MUX_CHAN) != 0 ||
         as5600_read_angle(&raw) != 0) {
         fprintf(stderr, "skipper_gimbal_init: tilt encoder read failed\n");
-        return MAL_GIMBAL_ERR_ENCODER;
+        return SKIPPER_GIMBAL_ERR_ENCODER;
     }
     s_tilt_zero_counts = raw;
 
@@ -300,7 +300,7 @@ skipper_gimbal_err_t skipper_gimbal_init(void) {
     s_current_pos.tilt_deg = 0.0f;
     s_target_pos = s_current_pos;
 
-    return MAL_GIMBAL_OK;
+    return SKIPPER_GIMBAL_OK;
 }
 
 void skipper_gimbal_deinit(void) {
@@ -318,42 +318,43 @@ void skipper_gimbal_deinit(void) {
     }
 }
 
-skipper_gimbal_err_t skipper_gimbal_set_target(const skipper_gimbal_pos_t *target) {
+skipper_gimbal_err_t skipper_gimbal_set_target(
+    const skipper_gimbal_pos_t *target) {
     if (target == NULL) {
-        return MAL_GIMBAL_ERR_LIMIT;
+        return SKIPPER_GIMBAL_ERR_LIMIT;
     }
 
     /* Validate limits. */
-    if (fabsf(target->pan_deg) > MAL_GIMBAL_PAN_MAX_DEG) {
-        return MAL_GIMBAL_ERR_LIMIT;
+    if (fabsf(target->pan_deg) > SKIPPER_GIMBAL_PAN_MAX_DEG) {
+        return SKIPPER_GIMBAL_ERR_LIMIT;
     }
-    if (target->tilt_deg < -MAL_GIMBAL_TILT_DOWN_DEG ||
-        target->tilt_deg > MAL_GIMBAL_TILT_UP_DEG) {
-        return MAL_GIMBAL_ERR_LIMIT;
+    if (target->tilt_deg < -SKIPPER_GIMBAL_TILT_DOWN_DEG ||
+        target->tilt_deg > SKIPPER_GIMBAL_TILT_UP_DEG) {
+        return SKIPPER_GIMBAL_ERR_LIMIT;
     }
 
     s_target_pos = *target;
-    return MAL_GIMBAL_OK;
+    return SKIPPER_GIMBAL_OK;
 }
 
 skipper_gimbal_err_t skipper_gimbal_update(float dt_s) {
     /* Read current encoder positions. */
     uint16_t raw = 0U;
 
-    if (tca9548a_select(MAL_ENC_PAN_MUX_CHAN) != 0 ||
+    if (tca9548a_select(SKIPPER_ENC_PAN_MUX_CHAN) != 0 ||
         as5600_read_angle(&raw) != 0) {
-        return MAL_GIMBAL_ERR_ENCODER;
+        return SKIPPER_GIMBAL_ERR_ENCODER;
     }
     s_current_pos.pan_deg = counts_to_deg(raw, s_pan_zero_counts);
 
-    if (tca9548a_select(MAL_ENC_TILT_MUX_CHAN) != 0 ||
+    if (tca9548a_select(SKIPPER_ENC_TILT_MUX_CHAN) != 0 ||
         as5600_read_angle(&raw) != 0) {
-        return MAL_GIMBAL_ERR_ENCODER;
+        return SKIPPER_GIMBAL_ERR_ENCODER;
     }
     s_current_pos.tilt_deg = counts_to_deg(raw, s_tilt_zero_counts);
 
     /* Apply rate-limited step toward target. */
-    float max_step = MAL_GIMBAL_MAX_SLEW_DPS * dt_s;
+    float max_step = SKIPPER_GIMBAL_MAX_SLEW_DPS * dt_s;
 
     float pan_err = s_target_pos.pan_deg - s_current_pos.pan_deg;
     float tilt_err = s_target_pos.tilt_deg - s_current_pos.tilt_deg;
@@ -366,35 +367,37 @@ skipper_gimbal_err_t skipper_gimbal_update(float dt_s) {
 
     /* Convert commanded angles to servo duty cycles and write PWM. */
     /* Pan: map [-170, +170] degrees → [1000, 2000] µs via mid = 1500 µs. */
-    float pan_servo_deg = 90.0f + (new_pan / MAL_GIMBAL_PAN_MAX_DEG * 85.0f);
-    float tilt_servo_deg = 90.0f - (new_tilt / MAL_GIMBAL_TILT_UP_DEG * 85.0f);
+    float pan_servo_deg =
+        90.0f + (new_pan / SKIPPER_GIMBAL_PAN_MAX_DEG * 85.0f);
+    float tilt_servo_deg =
+        90.0f - (new_tilt / SKIPPER_GIMBAL_TILT_UP_DEG * 85.0f);
 
     uint32_t pan_duty = angle_to_duty_ns(pan_servo_deg);
     uint32_t tilt_duty = angle_to_duty_ns(tilt_servo_deg);
 
     if (pan_duty != s_pan_duty_ns) {
         if (pwm_write(s_pan_pwm_path, "duty_cycle", pan_duty) != 0) {
-            return MAL_GIMBAL_ERR_SERVO;
+            return SKIPPER_GIMBAL_ERR_SERVO;
         }
         s_pan_duty_ns = pan_duty;
     }
 
     if (tilt_duty != s_tilt_duty_ns) {
         if (pwm_write(s_tilt_pwm_path, "duty_cycle", tilt_duty) != 0) {
-            return MAL_GIMBAL_ERR_SERVO;
+            return SKIPPER_GIMBAL_ERR_SERVO;
         }
         s_tilt_duty_ns = tilt_duty;
     }
 
-    return MAL_GIMBAL_OK;
+    return SKIPPER_GIMBAL_OK;
 }
 
 skipper_gimbal_err_t skipper_gimbal_get_position(skipper_gimbal_pos_t *pos) {
     if (pos == NULL) {
-        return MAL_GIMBAL_ERR_ENCODER;
+        return SKIPPER_GIMBAL_ERR_ENCODER;
     }
     *pos = s_current_pos;
-    return MAL_GIMBAL_OK;
+    return SKIPPER_GIMBAL_OK;
 }
 
 void skipper_gimbal_get_target(skipper_gimbal_pos_t *target) {

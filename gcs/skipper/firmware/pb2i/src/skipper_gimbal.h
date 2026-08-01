@@ -17,11 +17,11 @@
  *
  * Thread safety:
  *   All public functions are NOT thread-safe.  Call only from the gimbal
- *   control task or after acquiring MAL_GIMBAL_LOCK.
+ *   control task or after acquiring SKIPPER_GIMBAL_LOCK.
  */
 
-#ifndef MAL_GIMBAL_H
-#define MAL_GIMBAL_H
+#ifndef SKIPPER_GIMBAL_H
+#define SKIPPER_GIMBAL_H
 
 #include <stdint.h>
 
@@ -37,11 +37,11 @@ typedef struct {
 
 /** Return codes for gimbal functions. */
 typedef enum {
-    MAL_GIMBAL_OK = 0,           /**< Operation successful.               */
-    MAL_GIMBAL_ERR_INIT = -1,    /**< Initialisation failure.             */
-    MAL_GIMBAL_ERR_ENCODER = -2, /**< I²C encoder read failure.           */
-    MAL_GIMBAL_ERR_SERVO = -3,   /**< PWM servo write failure.            */
-    MAL_GIMBAL_ERR_LIMIT = -4,   /**< Requested position exceeds travel.  */
+    SKIPPER_GIMBAL_OK = 0,           /**< Operation successful.               */
+    SKIPPER_GIMBAL_ERR_INIT = -1,    /**< Initialisation failure.             */
+    SKIPPER_GIMBAL_ERR_ENCODER = -2, /**< I²C encoder read failure.           */
+    SKIPPER_GIMBAL_ERR_SERVO = -3,   /**< PWM servo write failure.            */
+    SKIPPER_GIMBAL_ERR_LIMIT = -4,   /**< Requested position exceeds travel.  */
 } skipper_gimbal_err_t;
 
 /* ---------------------------------------------------------------------------
@@ -54,7 +54,7 @@ typedef enum {
  * Must be called once before any other gimbal function.  On failure, the
  * gimbal is left in an undefined state and must not be used.
  *
- * @return MAL_GIMBAL_OK on success; MAL_GIMBAL_ERR_INIT on failure.
+ * @return SKIPPER_GIMBAL_OK on success; SKIPPER_GIMBAL_ERR_INIT on failure.
  */
 skipper_gimbal_err_t skipper_gimbal_init(void);
 
@@ -72,14 +72,16 @@ void skipper_gimbal_deinit(void);
 /**
  * @brief  Command gimbal to a new absolute position.
  *
- * The command is rate-limited to MAL_GIMBAL_MAX_SLEW_DPS.  The function
+ * The command is rate-limited to SKIPPER_GIMBAL_MAX_SLEW_DPS.  The function
  * returns immediately; the gimbal reaches the target asynchronously via the
  * background task kicked off by skipper_gimbal_update().
  *
  * @param[in] target  Desired position.
- * @return MAL_GIMBAL_OK or MAL_GIMBAL_ERR_LIMIT if target is out of range.
+ * @return SKIPPER_GIMBAL_OK or SKIPPER_GIMBAL_ERR_LIMIT if target is out of
+ * range.
  */
-skipper_gimbal_err_t skipper_gimbal_set_target(const skipper_gimbal_pos_t *target);
+skipper_gimbal_err_t skipper_gimbal_set_target(
+    const skipper_gimbal_pos_t *target);
 
 /**
  * @brief  Advance the servo position one control cycle towards the target.
@@ -88,7 +90,7 @@ skipper_gimbal_err_t skipper_gimbal_set_target(const skipper_gimbal_pos_t *targe
  * Reads encoder feedback, applies rate limiting, writes servo PWM.
  *
  * @param[in] dt_s  Time elapsed since last call (seconds).
- * @return MAL_GIMBAL_OK or error code.
+ * @return SKIPPER_GIMBAL_OK or error code.
  */
 skipper_gimbal_err_t skipper_gimbal_update(float dt_s);
 
@@ -100,7 +102,7 @@ skipper_gimbal_err_t skipper_gimbal_update(float dt_s);
  * @brief  Read current encoder positions.
  *
  * @param[out] pos  Populated with current pan and tilt angles.
- * @return MAL_GIMBAL_OK or MAL_GIMBAL_ERR_ENCODER on I²C failure.
+ * @return SKIPPER_GIMBAL_OK or SKIPPER_GIMBAL_ERR_ENCODER on I²C failure.
  */
 skipper_gimbal_err_t skipper_gimbal_get_position(skipper_gimbal_pos_t *pos);
 
@@ -119,4 +121,4 @@ void skipper_gimbal_get_target(skipper_gimbal_pos_t *target);
  */
 int skipper_gimbal_is_on_target(void);
 
-#endif /* MAL_GIMBAL_H */
+#endif /* SKIPPER_GIMBAL_H */

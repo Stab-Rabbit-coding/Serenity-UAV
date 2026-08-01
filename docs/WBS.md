@@ -78,8 +78,8 @@
     - Firmware: `SI5351_RCRS_*`/`si5351_set_rcrs_channel()`/`rcrs_channel_reg_t`/
       `s_rcrs_channels` → `SI5351_49MHZ_XCVR_*`/`si5351_set_49mhz_xcvr_channel()`/
       `xcvr_49mhz_channel_reg_t`/`s_xcvr_49mhz_channels` in
-      `avionics/firmware/cn/src/si5351.{h,c}`, `xcvr_kiss.c`, `main.c`; `MAL_RCRS_*` →
-      `MAL_49MHZ_XCVR_*` in `gcs/skipper/firmware/pb2i/src/skipper_config.h`.
+      `avionics/firmware/cn/src/si5351.{h,c}`, `xcvr_kiss.c`, `main.c`; `SKIPPER_RCRS_*` →
+      `SKIPPER_49MHZ_XCVR_*` in `gcs/skipper/firmware/pb2i/src/skipper_config.h`.
     - KiCad: `UART_RCRS_TX`/`UART_RCRS_RX` → `UART_49MHZ_XCVR_TX`/`UART_49MHZ_XCVR_RX` in
       `avionics/kicad/add_sensors_sbus.py` and both `XO.kicad_sch`/`.kicad_pcb` and
       `Commo.kicad_sch`/`.kicad_pcb` (pure net-name text edits, occurrence counts verified
