@@ -263,7 +263,7 @@ like every other node:
 | Ref | Part | Function |
 |---|---|---|
 | U_MCU | TI MSPM0G3507 | Local trust-module MCU (pinmux verified against SLASEX6C) |
-| U_TPM | Infineon SLB9670 | SPI TPM 2.0 — same part standardized fleet-wide |
+| U_TPM | Infineon SLB9672 | SPI TPM 2.0 — same part standardized fleet-wide |
 | U_ISOCAN | TI ISOW1044BDFMR | Isolated CAN-FD transceiver, 20-pin DFM, 5 kV reinforced |
 | U_RS485 | TI ISOW1412 (REFERENCES.md REF-SENSOR-010) | Isolated RS-485 transceiver, own integrated isolated DC-DC (no external isolated supply needed, unlike the superseded ADM2795EBRWZ) |
 

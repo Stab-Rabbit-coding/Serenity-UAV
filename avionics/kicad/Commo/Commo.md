@@ -513,7 +513,7 @@ to populate 132289RP in place of 132289 is the remaining fabrication step.
 
 ## Security Notes
 
-**Updated 2026-07-26:** Commo now carries its own TPM — Infineon SLB9670 (SPI TPM 2.0,
+**Updated 2026-07-26:** Commo now carries its own TPM — Infineon SLB9672 (SPI TPM 2.0,
 same part standardized fleet-wide), added via `avionics/kicad/Commo/scripts/inject_commo_tpm.py`
 (schematic ref `TPM`). TPM + its 10 kΩ reset pull-up (`R_TPM_RST_EMMA`) + 100 nF
 decoupling cap (`C_TPM_EMMA1`) are placed on the PCB (B.Cu — Commo's F.Cu is fully

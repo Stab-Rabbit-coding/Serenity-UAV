@@ -153,7 +153,7 @@ def build_section_h_body(real_trust):
         "20": "TPM_SPI_CS", "21": "TPM_SPI_MOSI", "22": "+3V3", "23": "PGND",
         "24": "TPM_SPI_MISO", "32": "PGND",
     }
-    parts.extend(gk.place_real_trust("TPM", "U_TPM", "Infineon SLB9670", {1: (710, 130)}, tpm_nm, tpm_pins))
+    parts.extend(gk.place_real_trust("TPM", "U_TPM", "Infineon SLB9672", {1: (710, 130)}, tpm_nm, tpm_pins))
     parts.extend(two_pin_trust("C_Generic", "C_H_TPM1", "100nF", 690, 125, "+3V3", "PGND"))
     parts.extend(two_pin_trust("R_Generic", "R_H_TPM_RST", "10k", 690, 131, "+3V3", "TPM_RESET_N"))
 

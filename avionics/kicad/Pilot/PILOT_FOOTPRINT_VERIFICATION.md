@@ -35,7 +35,7 @@ Note: BARO plus the two ETH-PHYs make the "wrong" list 6 refs across 5 part type
 | Ref | Part | PCB footprint (WRONG) | Datasheet says | Source |
 | --- | --- | --- | --- | --- |
 | **CAN-TR** | ISOW1044BDFMR | `SOIC-16W_7.5x10.3mm` — **16 pads** | **20-pin DFM** (SOIC-20 land) — "DFM (20)", "20 PINS", Fig 7-1 | `isow1044.pdf` §7 |
-| **TPM** | SLB9670 | `QFN-32-1EP_4x4mm_**P0.4mm**_EP2.65` | **VQFN-32, 0.5 mm pitch**, ~5×5 body, **EP 3.6×3.6** | `SLB_9670VQ20_Infineon.pdf` p.15 ("7 × 0.5 = 3.5"; "3.6 ±0.1") |
+| **TPM** | SLB9672 | `QFN-32-1EP_4x4mm_**P0.4mm**_EP2.65` | **UQFN-32, 0.5 mm pitch**, 5×5 body, **EP 3.6×3.6** | `SLB_9672XU20_Infineon.pdf` p.9/11, Fig 1/Fig 3 ("Package Outline 5 x 5"; "3.6 ±0.1") — same land pattern the superseded SLB9670 datasheet showed on p.15 |
 | **ETH1-PHY / ETH2-PHY** | ADIN1300BCPZ | `QFN-48-1EP_**7x7mm**` — **48 lead** | **40-lead LFCSP, 6×6 mm** (CP-40-26), 0.5 mm pitch, w/ EP | `adin1300.pdf` ("40-lead, 6 mm × 6 mm LFCSP") |
 | **RS485** | ADM2795EBRWZ | `SOIC-**20W**_7.5x12.8mm` — **20 pads** | **16-lead SOIC_W (RW-16)** | `adm2795e.pdf` Table 3/4/7 ("16-Lead … RW-16") |
 | **BARO** | BMP388 | `Bosch_LGA-**8**_2x**2.5**mm_P0.65` — **8 pads** | **10-pin metal-lid LGA, 2.0 × 2.0 mm** | `bst-bmp388-ds001.pdf` ("10-pin … 2.0 × 2.0 mm") |
@@ -91,7 +91,10 @@ drills) versus the current SMD stub.
 Verifying pinouts surfaced that the **net-to-pin assignments are wrong**, independent
 of the land-pattern errors. Confirmed on two parts so far:
 
-- **TPM (SLB9670)** vs. datasheet Fig 1 (PG-VQFN-32-13): TPM_RSTN on pin 1 (=NCI/VDD;
+- **TPM (SLB9672, renamed 2026-08-01 from SLB9670 — this analysis predates the
+  rename and was done against the former SLB9670 datasheet; the pin numbers
+  below were never corrected, so the same defect carries over under the new
+  chip name)** vs. datasheet Fig 1 (PG-VQFN-32-13): TPM_RSTN on pin 1 (=NCI/VDD;
   RST# is pin 17), SPI0_MISO on pin 22 (=VDD; MISO is 24), SPI0_CLK on pin 23 (=GND;
   SCLK is 19), TPM_IRQN on pin 24 (=MISO; PIRQ# is 18), SPI0_CS_TPM on pin 28 (=NC;
   CS# is 20). Only SPI0_MOSI (pin 21) is right. Correct map: 17→TPM_RSTN, 18→TPM_IRQN,
@@ -154,7 +157,7 @@ Confirmed 2026-07-13 by inspecting `Pilot.kicad_sch` lib_symbols/instances:
   only meaningful if ADIN1300 is the intended architecture.
 - **The schematic symbols are partial/wrong-pinout, not datasheet-accurate:**
   ISOW1044BDFMR symbol = **9 pins** (real = 20), ADM2795EBRWZ = **10** (real = 16),
-  SLB9670 = **8** (real = 32), SAM-M10Q = **7** (real = 16+), BMP388 = **7** (real =
+  SLB9672 = **8** (real = 32), SAM-M10Q = **7** (real = 16+), BMP388 = **7** (real =
   10). They draw only the pins the designer chose to wire, and (per the TPM/ISO
   checks above) some of those are on the wrong physical pins.
 - The schematic also carries parts not stuffed on the PCB (MMC5983MA + QMC5883L

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""inject_commo_tpm.py -- add an SLB9670 TPM to Commo.kicad_sch via text
+"""inject_commo_tpm.py -- add an SLB9672 TPM to Commo.kicad_sch via text
 injection (same non-destructive pattern as Flight Engineer's
 inject_flight_engineer_trust_module.py), rather than a full gen_commo_sch.py rerun.
 
@@ -26,8 +26,8 @@ named for exactly this purpose *within Commo's own file*, which does
 connect correctly (verified: 0 ERC errors). The dedicated-header approach
 and its `J_TPM`/`lib_symbol_j_tpm_commo()` symbol were removed.
 
-Uses the ALREADY-VERIFIED Observer_SLB9670_TPM clean-room symbol (real
-Infineon datasheet pin numbers) -- NOT Pilot's own inline "SLB9670" symbol,
+Uses the ALREADY-VERIFIED Observer_SLB9672_TPM clean-room symbol (real
+Infineon datasheet pin numbers) -- NOT Pilot's own inline "SLB9672" symbol,
 which was found during this same pass to have incorrect pin numbers (e.g.
 its pin 24 is labeled CS_N; the real datasheet's pin 24 is MISO). That is a
 separate, pre-existing defect on Pilot, out of scope for this change (not
@@ -208,7 +208,7 @@ def _gen2pin(name):
 
 
 def build():
-    tpm_lib_block, pins = parse_real_symbol("Observer_SLB9670_TPM")
+    tpm_lib_block, pins = parse_real_symbol("Observer_SLB9672_TPM")
     lib_block = (
         tpm_lib_block + "\n"
         + _gen2pin("R_Generic_TPM") + "\n"
@@ -235,11 +235,11 @@ def build():
     }
     cx, cy = 250, 1100
     body = [text_note(
-        "=== Section: TPM (SLB9670, added 2026-07-26; binds to the PB2-I host -- "
+        "=== Section: TPM (SLB9672, added 2026-07-26; binds to the PB2-I host -- "
         "SPI1 shared bus + TPM_IRQN/TPM_RSTN via P1/P2, no dedicated header) ===",
         200, 1080,
     )]
-    body.append(sym_inst_unit("Observer_SLB9670_TPM", "TPM", "Infineon SLB9670 TPM2.0", cx, cy, 1, TPM_FOOTPRINT))
+    body.append(sym_inst_unit("Observer_SLB9672_TPM", "TPM", "Infineon SLB9672 TPM2.0", cx, cy, 1, TPM_FOOTPRINT))
     for pnum, pname, x, y, ang, etype, unit in pins:
         sx, sy = cx + x, cy - y
         net = netmap.get(pnum)

@@ -17,7 +17,7 @@ definitions, and the design rules are preserved from the loaded board.
 
 Exposed-pad handling: U2 (KSZ) EP is pad 129 = GND in the clean-room symbol and
 in the Observer TQFP-128-1EP footprint; U3 (MSPM0) EP is pad 49 = VSS; U5 (TPM) EP
-is footprint pad 33 with no symbol pin, so it is forced to GND here (SLB9670
+is footprint pad 33 with no symbol pin, so it is forced to GND here (SLB9672
 thermal pad = GND).  Any footprint pad not named in the netlist and belonging to
 one of these EP/thermal-via groups is tied to GND.
 

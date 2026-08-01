@@ -48,7 +48,9 @@
 - [ ] Shielded encoder-to-gateway + gateway-to-bus wiring per EMI spec
 - [ ] Reconcile gen_flight_engineer.py drift from checked-in FlightEngineer.kicad_sch
 - [ ] Remove obsolete J_ENC (AS5600 I²C) connector from Pilot
-- [ ] Fix Pilot's own inline SLB9670 symbol's incorrect pin numbers
+- [ ] Fix Pilot's own inline SLB9672 symbol's incorrect pin numbers
+- [ ] Re-run ERC/DRC after SLB9670→SLB9672 migration (no KiCad here)
+- [ ] Swap XO's TPM footprint (wrong 4x4mm/0.4mm land, needs 5x5mm/0.5mm)
 - [ ] Finish routing CAN-PERIPH-GW-1 PCB (47/296 nets still unrouted)
 - [ ] Pilot PB2-P2 header appears fully unwired in ERC — root cause TBD
 - [ ] Pilot full DRC/ERC clean-out (48 ERC + 76 DRC hard) + ISOW1412 swap

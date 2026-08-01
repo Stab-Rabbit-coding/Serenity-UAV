@@ -134,7 +134,7 @@ Systemd unit files are in `cn/serenity-cn.service` and `fc/serenity-fc.service` 
 
 ## Security
 
-All inter-node messages are digitally signed using the node's TPM 2.0 (SLB9670).
+All inter-node messages are digitally signed using the node's TPM 2.0 (SLB9672).
 The signing key is bound to the TPM's PCR state at boot (measured boot).
 The AX.25 payload carries a SHA-256 HMAC before KISS framing; the CN node
 verifies the HMAC on received frames before forwarding to the AX.25 stack.

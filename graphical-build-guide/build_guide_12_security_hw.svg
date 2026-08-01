@@ -28,7 +28,7 @@
 <text x="1112" y="50" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="22" fill="#ffffff">12 / 26</text>
 <rect x="0" y="64" width="1200" height="40" fill="#dde4ea" rx="0"/>
 <text x="24" y="90" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="16" fill="#006db7">PHASE 7 — SECURITY HARDWARE SETUP (ALL 8 NODES)</text>
-<text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">SLB9670 TPM 2.0 · write-blocker μSD · signed messages</text>
+<text x="500" y="90" font-family="'OpenDyslexic',sans-serif" font-size="12" fill="#607080">SLB9672 TPM 2.0 · write-blocker μSD · signed messages</text>
 <rect x="0" y="872" width="1200" height="28" fill="#006db7"/>
 <text x="600" y="890" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8dff0">Hull: misubisu CC BY 4.0 · Nozzle: BamJr CC BY 4.0 · Visual inspiration: Firefly/Serenity © Joss Whedon/Mutant Enemy/Universal — Fan engineering work</text>
 <rect x="16" y="112" width="720" height="752" rx="8" fill="#fffdf6" stroke="#dde4ea" stroke-width="1.5"/>
@@ -55,7 +55,7 @@
 <text x="968" y="283" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="11" fill="#ffffff">INSTRUCTIONS</text>
 <circle cx="776" cy="299" r="9" fill="#006db7"/>
 <text x="776" y="303" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">1</text>
-<text x="792" y="304" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Provision SLB9670 TPM 2.0 on CAPE-A-1 and CAPE-B-1 of each node (8 total)</text>
+<text x="792" y="304" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Provision SLB9672 TPM 2.0 on CAPE-A-1 and CAPE-B-1 of each node (8 total)</text>
 <circle cx="776" cy="323" r="9" fill="#006db7"/>
 <text x="776" y="327" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#ffffff">2</text>
 <text x="792" y="328" font-family="'OpenDyslexic',sans-serif" font-size="10" fill="#222222">Generate unique key material per node; seal to TPM non-reversible</text>
@@ -112,7 +112,7 @@
 <polygon points="296.0,488.0 311.6,479.0 311.6,483.0 296.0,492.0" fill="#f5c518" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
 <polygon points="311.6,479.0 299.5,472.0 299.5,476.0 311.6,483.0" fill="#f5c518" stroke="#222222" stroke-width="1.5" stroke-linejoin="round"/>
 <text x="305" y="498" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="7" fill="#222222">TPM 2.0</text>
-<text x="305" y="518" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#607080">SLB9670 on both boards</text>
+<text x="305" y="518" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="8" fill="#607080">SLB9672 on both boards</text>
 <rect x="96" y="528" width="620" height="90" rx="6" fill="#fffdf6" stroke="#a3e635" stroke-width="2"/>
 <text x="126" y="546" font-family="'OpenDyslexic',sans-serif" font-weight="bold" font-size="10" fill="#2e7d32">SECURITY VERIFICATION CHECKLIST</text>
 <rect x="106" y="550" width="14" height="14" rx="2" fill="#2e7d32" opacity="0.6"/>

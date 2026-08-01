@@ -38,7 +38,7 @@ the three components requested for this task:
 
 | Addition | Part | Datasheet in repo |
 | --- | --- | --- |
-| Trusted platform module | Infineon OPTIGA™ TPM SLB 9670 TPM2.0 | `avionics/datasheets/SLB_9670VQ20_Infineon.pdf` |
+| Trusted platform module | Infineon OPTIGA™ TPM SLB 9672 TPM2.0 | `avionics/datasheets/SLB_9672XU20_Infineon.pdf` |
 | Isolated CAN-FD transceiver | TI ISOW1044BDFMR | `avionics/datasheets/isow1044.pdf` |
 | Isolated RS-485 transceiver | ADI ADM2795E | `avionics/datasheets/adm2795e.pdf` |
 
@@ -85,7 +85,7 @@ GPL-licensed VimDrones schematic content needs to be touched at all.
                                           SPI0    │        │  UART0 + GPIO
                                      ┌────────────┘        └────────────┐
                                      ▼                                  ▼
-                          U2 SLB9670 TPM                    U3 ISOW1044 ── U4 ADM2795E
+                          U2 SLB9672 TPM                    U3 ISOW1044 ── U4 ADM2795E
                           (signs every                      (isolated      (isolated
                            republished                       CAN-FD)       RS-485)
                            message)                             │              │
@@ -190,7 +190,7 @@ physical infrastructure is generated once for the whole board:
 | Shared once per board | Per-stack (own copy each) |
 | --- | --- |
 | +5V input connector + TLV62569 3V3 buck | U1 MSPM0G3507 MCU |
-| CAN-FD bus connectors (IN/OUT) + 120 Ω term | U2 SLB9670 TPM |
+| CAN-FD bus connectors (IN/OUT) + 120 Ω term | U2 SLB9672 TPM |
 | RS-485 bus connectors (IN/OUT) + 120 Ω term | U3 ISOW1044BDFMR (+ its own integrated isolated DC-DC) |
 | `CAN_H` / `CAN_L` / `ISO_GND_CAN` nets | U4 **ISOW1412** (+ its own integrated isolated DC-DC — REF-SENSOR-010) |
 | `RS485_A` / `RS485_B` / `ISO_GND_485` nets | `J_ENC`, `J_FLEX`, `J_SWD` (independent programming/debug per MCU) |
@@ -230,7 +230,7 @@ the schematic generator so the two can never drift out of sync.
 - **B — MCU (U1, TI MSPM0G3507):** `Observer_MSPM0G3507_RGZ` clean-room symbol
   reused verbatim (QFN-48-1EP 7×7 mm, ERC-0-proven on Observer). NRST 10 kΩ
   pull-up, VCORE 1 µF decouple, SWD 4-pin program header.
-- **C — TPM (U2, Infineon SLB9670):** `Observer_SLB9670_TPM` clean-room symbol
+- **C — TPM (U2, Infineon SLB9672):** `Observer_SLB9672_TPM` clean-room symbol
   reused verbatim (QFN-32-1EP 5×5 mm). RST# gets an explicit 10 kΩ pull-up
   (datasheet notes only a *weak* internal pull-up); pin 1 and pin 14 tied to
   VDD and pin 16 to GND per the datasheet's own TCG-compliance notes (Table 5).
@@ -355,7 +355,7 @@ REF-SENSOR-010 and "Removed / Superseded Citations".
 | Ref | Part | Package | Datasheet |
 | --- | --- | --- | --- |
 | U1 | TI MSPM0G3507 | QFN-48-1EP 7×7 mm | REF-SENSOR-004 |
-| U2 | Infineon SLB9670VQ2.0 | PG-VQFN-32-13 | `SLB_9670VQ20_Infineon.pdf` |
+| U2 | Infineon SLB9672XU2.0 | PG-UQFN-32-1,-2 | `SLB_9672XU20_Infineon.pdf` |
 | U3 | TI ISOW1044BDFMR | SOIC-20W 7.5×12.8 mm | `isow1044.pdf` |
 | U4 | ADI ADM2795EBRWZ | SOIC-16W 7.5×10.3 mm | `adm2795e.pdf` |
 | U_REG_3V3 | TI TLV62569DBVR | SOT-23-6 | ti.com/lit/ds/symlink/tlv62569.pdf |
@@ -365,11 +365,11 @@ REF-SENSOR-010 and "Removed / Superseded Citations".
 
 - `avionics/kicad/ENC-NACELLE-1.md` — the AK7455 tilt-encoder board this
   gateway's `J_ENC` mates with.
-- `avionics/kicad/Observer/Observer.md` — source of the MSPM0G3507/SLB9670/ISOW1044
+- `avionics/kicad/Observer/Observer.md` — source of the MSPM0G3507/SLB9672/ISOW1044
   clean-room symbols reused here.
 - `docs/references/vimdrones_can_periph_pico_v1.0.stl`,
   `docs/references/vimdrones_esc_s50_v1.0.step` — mechanical reference models
   already in the repo for the two VimDrones products this board's concept
   draws on (informational/fit reference only, not electrically reused).
-- `REFERENCES.md` — REF-SENSOR entries for ISOW1044/ADM2795E/SLB9670, and the
+- `REFERENCES.md` — REF-SENSOR entries for ISOW1044/ADM2795E/SLB9672, and the
   Pilot/XO ADM2795E pin-numbering defect note.

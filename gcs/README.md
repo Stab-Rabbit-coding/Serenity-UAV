@@ -55,7 +55,7 @@ Located in `firmware/pb2i/src/`:
 - **CAN FD interface:** bridge aircraft CAN to radio payloads (MAVLink, 49 MHz frames, telemetry)
 - **Link arbitration:** rate-limit and prioritize messages across 5 concurrent paths; failover
   to backup link on primary loss
-- **TPM attestation:** sign every outbound packet with PB2-I node key (SLB9670 TPM 2.0)
+- **TPM attestation:** sign every outbound packet with PB2-I node key (SLB9672 TPM 2.0)
 - **Log forwarding:** relay aircraft's signed flight logs (via CAN FD) to GCS μSD with
   timestamp and signature verification
 
@@ -139,7 +139,7 @@ lora:
 1. **Hardware assembly:**
    - 3D-print enclosure halves, heat-sink plate, gimbal mount; validate tolerances
    - Solder PB2-I + Zoë-Cape + USB/power connectors
-   - Install TPM 2.0 (SLB9670) via SPI header; test attestation
+   - Install TPM 2.0 (SLB9672) via SPI header; test attestation
 
 2. **Software provisioning:**
    - Flash Debian Linux to PB2-I eMMC (from buildroot or official PocketBeagle images)

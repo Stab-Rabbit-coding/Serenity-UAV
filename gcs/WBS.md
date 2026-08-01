@@ -76,7 +76,7 @@
     `gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-cape-b2.dtbo`.
     Verify EHRPWM0 appears as `/sys/class/pwm/pwmchip0/` with 2 channels.
     Verify I²C2 appears as `/dev/i2c-2`.
-- [ ] **Provision TPM 2.0 (SLB9670) on Skipper's PB2-I** — unique key material; persistent
+- [ ] **Provision TPM 2.0 (SLB9672) on Skipper's PB2-I** — unique key material; persistent
     handle `SKIPPER_TPM_KEY_HANDLE` (0x81000001) per `skipper_config.h`.
     Follow the same provisioning procedure as aircraft nodes (PROVISIONING.md, TBD).
 - [ ] **Verify CPLD write-blocker on Skipper's log μSD** (Cape-B-2 ATF16V8BQL):

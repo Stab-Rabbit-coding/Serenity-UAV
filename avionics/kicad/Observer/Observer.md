@@ -7,7 +7,7 @@
 **Date:** 2026-07-13
 **Status:** **SoM end-state built** by `scripts/gen_Observer_carrier_sch.py` +
 `gen_Observer_carrier_pcb.py`. Schematic uses REAL clean-room symbols (PCM-071 SoM + KSZ9477 +
-MSPM0G3507 + ISOW1044BDFMR + SLB9670) wired by signal name — **ERC = 0 errors**. PCB has REAL
+MSPM0G3507 + ISOW1044BDFMR + SLB9672) wired by signal name — **ERC = 0 errors**. PCB has REAL
 footprints (240-pad 2×BTH-060 SoM on the back, TQFP-128-1EP switch, QFN/SOIC/SOT carrier),
 **0 placeholder footprints**, all pad nets injected, sch↔pcb parity clean (bar 4 mounting-holes
 + the TPM thermal-EP GND tie). Placement is an initial shelf-pack (no shorts; user reserves
@@ -68,7 +68,7 @@ or wrong and were caught before being committed to any citation-tracked file —
 - **"LAN9355 / KSZ9563 for MRP ring redundancy"** — neither chip implements HSR/PRP/MRP.
   Replaced with **Microchip KSZ9477**, confirmed via Microchip's own AN3474 application note
   to hardware-offload HSR/PRP per IEC 62439-3.
-- **"ST33GTPMISPI" TPM part** — does not exist. Replaced with **Infineon SLB9670**, the same
+- **"ST33GTPMISPI" TPM part** — does not exist. Replaced with **Infineon SLB9672**, the same
   SPI TPM 2.0 part already standardized fleet-wide on all 8 Pilot/XO nodes.
 
 ## Architecture
@@ -93,7 +93,7 @@ or wrong and were caught before being committed to any citation-tracked file —
   with the AM6254 real-time domain on Pilot/XO. Two independent UART instances: UART0 to
   U1 (AM62A7, crossed TX↔RX), UART1 dedicated to the TFmini-S ToF sensor (no net-sharing
   between the two links).
-- **U5 — Infineon SLB9670** SPI TPM 2.0 — the exact part already used fleet-wide on all 8
+- **U5 — Infineon SLB9672** SPI TPM 2.0 — the exact part already used fleet-wide on all 8
   Pilot/XO nodes, reused here rather than introducing a new TPM part number.
 - **U2 — Microchip KSZ9477** 7-port Ethernet switch. Port 1 (RGMII) to U1 for video egress;
   Ports 2/3 (integrated PHY, full TX+/TX-/RX+/RX- differential pairs each) feed the
@@ -210,7 +210,7 @@ dimensions. Several things brought it down to the current 1.0 × 2.75 in (25.4 �
 2. **Real component body sizes** (2026-07-03 datasheet research pass) replaced rough
    estimates — most significantly MSPM0G3507 turned out to have a real VSSOP-28 package
    option (7.1×4.9mm) far smaller than the VQFN-48 (7×7mm) first assumed, and AM62A7/KSZ9477/
-   SLB9670/TPS65219 all have smaller real bodies (18×18mm, 14×14mm, 5×5mm, 5×5mm
+   SLB9672/TPS65219 all have smaller real bodies (18×18mm, 14×14mm, 5×5mm, 5×5mm
    respectively) than the placeholder generator's original guesses.
 3. **Adding the full EMI-hardening chain** (12 new small parts: 2 magnetics, 4 CMC, 4 TVS,
    plus the isolated CAN transceiver and its own CMC/TVS) grew the script-generated layout
@@ -280,7 +280,7 @@ Mounting holes: 4× M3, symmetric 4 mm margin from each edge — (4,4), (65.85,4
 - AM62A7 real body size 18×18mm (484-ball FCBGA/FCCSP, AMB/ANF package).
 - MSPM0G3507 real VSSOP-28 (DGS) package option, body ~7.1×4.9mm — smaller than the VQFN-48
   first assumed.
-- SLB9670 real PG-VQFN-32 package, body ~5×5mm.
+- SLB9672 real PG-UQFN-32 package, body ~5×5mm.
 - Wurth 749010012A magnetics, Bourns SRF2012-100Y CMC, Nexperia PRTR5V0U2X TVS — all reused
   verbatim (pinout + footprint reference) from this project's own working Pilot/XO generator.
 
@@ -465,7 +465,7 @@ should be back-ported into `gen_jayne_pcb.py` so the script and file stay in syn
 |---|---|---|---|---|
 | U1 | TI AM62A7 | 484-ball BGA, 18×18mm real body (placeholder footprint) | Front | Vision SoC |
 | U_PMIC | TI TPS65219 | VQFN-32/RSM, 5×5mm real body (placeholder footprint) | Back | Power management |
-| U5 | Infineon SLB9670 | PG-VQFN-32, 5×5mm real body (placeholder footprint) | Back | TPM 2.0 |
+| U5 | Infineon SLB9672 | PG-UQFN-32, 5×5mm real body (placeholder footprint) | Back | TPM 2.0 |
 | U3 | TI MSPM0G3507 | VSSOP-28/DGS, 7.1×4.9mm real body (placeholder footprint) | Back | Control MCU |
 | U2 | Microchip KSZ9477 | 128-TQFP-EP, 14×14mm real body (placeholder footprint) | Back | Ethernet switch |
 | U4 | TI ISOW1044BDFMR | SOIC-16W_7.5x10.3mm (real footprint) | Front | Isolated CAN-FD transceiver |

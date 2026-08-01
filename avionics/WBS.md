@@ -235,8 +235,8 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     - [ ] **CAN-TR (ISOW1044BDFMR): wrong land — has 16-pad `SOIC-16W`, part is a
         20-pin DFM (SOIC-20 land).** Datasheet `isow1044.pdf` §7 / Fig 7-1. (This is the
         fleet-wide ISOW1044 footprint error; confirmed present on Pilot.)
-    - [ ] **TPM (SLB9670): wrong land — has `QFN-32 4×4 P0.4mm EP2.65`, part is VQFN-32
-        0.5 mm pitch, ~5×5 body, EP 3.6×3.6.** Datasheet `SLB_9670VQ20_Infineon.pdf` p.15.
+    - [ ] **TPM (SLB9672): wrong land — has `QFN-32 4×4 P0.4mm EP2.65`, part is UQFN-32
+        0.5 mm pitch, 5×5 body, EP 3.6×3.6.** Datasheet `SLB_9672XU20_Infineon.pdf` p.9/11.
     - [ ] **ETH1-PHY / ETH2-PHY (ADIN1300BCPZ): wrong land — has `QFN-48 7×7`, part is
         40-lead LFCSP 6×6 mm (CP-40-26) w/ EP.** Datasheet `adin1300.pdf`.
     - [ ] **RS485 (ADM2795EBRWZ): wrong land — has 20-pad `SOIC-20W`, part is 16-lead
@@ -279,7 +279,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     full-pinout symbols → `kicads/Wash_rebuild.kicad_sch` (loads in kicad-cli 9.0.2; ERC
     only expected off-sheet-global warnings).
     - [x] Core isolated-bus + security + GPS ICs authored with full datasheet pinouts:
-        **CAN-TR (ISOW1044, 20-pin), RS485 (ADM2795E, 16-pin RW-16), TPM (SLB9670, 32-pin
+        **CAN-TR (ISOW1044, 20-pin), RS485 (ADM2795E, 16-pin RW-16), TPM (SLB9672, 32-pin
         correct 17–24 SPI map), GPS (SAM-M10Q, 16-pin).**
     - [ ] Author ETH section on **ADIN1300** (40-LFCSP) + Würth 749010012A magnetics +
         ISO6442 — redesign the RMII isolation (current scheme shorts the barrier / 50 MHz
@@ -374,7 +374,7 @@ ring).
     2026-07-26, architecture changed from direct read to bus-published.**
     River/Simon no longer read AK7455 SPI directly. Each nacelle's AK7455
     is read by a `CAN-PERIPH-GW-1` trust-module gateway (own MSPM0G3507 +
-    SLB9670 TPM) mounted in the nacelle, which publishes the angle as a
+    SLB9672 TPM) mounted in the nacelle, which publishes the angle as a
     signed message on both isolated CAN-FD and isolated RS-485 (ISOW1044BDFMR
     / ISOW1412, REF-SENSOR-009/010). River (primary) and Simon (failover)
     subscribe to the published bus message instead of owning a dedicated I²C
@@ -401,7 +401,7 @@ ring).
 ### §1.9.2 — Fleet Trust Module (MCU + TPM + isolated CAN-FD + isolated RS-485)
 
 Added 2026-07-26: a reusable "trust module" block (TI MSPM0G3507 + Infineon
-SLB9670 TPM + TI ISOW1044BDFMR isolated CAN-FD + TI ISOW1412 isolated RS-485,
+SLB9672 TPM + TI ISOW1044BDFMR isolated CAN-FD + TI ISOW1412 isolated RS-485,
 REF-SENSOR-004/009/010/011) — every fleet node now carries a TPM and at least
 CAN-FD + RS-485 bus access. Concept remixes the publicly documented VimDrones
 `ap_periph_pico` / ESC S50 product concept (informational reference only;
@@ -445,7 +445,7 @@ REFERENCES.md Removed/Superseded Citations).
     working file); this pre-existing drift is unresolved, tracked below.
 - [x] **Observer** — RS-485 (ISOW1412) added; already had MCU + TPM + CAN-FD.
     ERC 0.
-- [x] **Commo** — TPM only (SLB9670); no separate CAN-FD/RS-485 needed, Commo
+- [x] **Commo** — TPM only (SLB9672); no separate CAN-FD/RS-485 needed, Commo
     reaches the bus via XO's P1/P2 PocketBeagle2 link. ERC 0, added via
     `inject_commo_tpm.py`. **Corrected 2026-07-26:** binds to the PB2-I host
     via the SPI1 slot + `TPM_IRQN`/`TPM_RSTN` already reserved on Commo's own
@@ -469,15 +469,44 @@ REFERENCES.md Removed/Superseded Citations).
     using injection pattern for future schematic changes (`inject_flight_engineer_trust_module.py`)
     until generator can be audited and fixed by user. Generator audit deferred
     to Rev U (after Phase 6 fab completion).
-- [x] **Pilot's own inline "SLB9670" TPM symbol** has incorrect pin numbers
-    vs. datasheet Rev 1.4 (found while building Commo's TPM, which used the
-    separately-verified `Observer_SLB9670_TPM` symbol instead specifically to
-    avoid this defect). **RESOLVED 2026-08-01:** Issue documented in
-    `PILOT_FOOTPRINT_VERIFICATION.md` §TPM (SLB9670); recommended fix is to
-    substitute Pilot symbol with verified `Observer_SLB9670_TPM` symbol from
+- [x] **Pilot's own inline "SLB9672" TPM symbol** has incorrect pin numbers
+    vs. the (former SLB9670) datasheet Rev 1.4 (found while building Commo's
+    TPM, which used the separately-verified `Observer_SLB9670_TPM` symbol
+    instead specifically to avoid this defect). Renamed "SLB9670"→"SLB9672"
+    in the 2026-08-01 chip migration (REFERENCES.md REF-SENSOR-011); its pin
+    *numbers* were left untouched by that rename, so it still carries the
+    same defect, now under the new chip's name. **RESOLVED 2026-08-01:**
+    Issue documented in `PILOT_FOOTPRINT_VERIFICATION.md` §TPM (SLB9670);
+    recommended fix is to substitute Pilot symbol with verified
+    `Observer_SLB9672_TPM` symbol from
     `avionics/kicad/Observer/kicads/Observer.kicad_sch` at Pilot schematic rebuild
     (see item "Pilot SCHEMATIC-FIRST REBUILD" in §1.2a.1). No immediate
     action needed if PCB is not being re-spun; documented for next revision.
+- [ ] **SLB9670→SLB9672 TPM migration — ERC/DRC not re-run, 2026-08-01.**
+    Fleet-wide chip swap (Infineon OPTIGA TPM SLB9670 → SLB9672, REF-SENSOR-011):
+    new clean-room symbol `Observer_SLB9672_TPM` (footprint unchanged — same
+    5x5mm/0.5mm-pitch/32-pin QFN land pattern per both datasheets) swapped
+    into Observer, Commo, Flight Engineer, and CAN-PERIPH-GW-1's schematics
+    (lib_symbol block + all placed instances renamed, pin functions
+    corrected for the real SLB9672 pinout); Pilot's and XO's own
+    independently-authored inline TPM symbols were text-renamed only (their
+    pre-existing wrong-pin-number defect, tracked above and in
+    REFERENCES.md, was left as-is — out of scope for this swap). PCB
+    footprint Value/property text renamed on every board carrying the part.
+    Firmware: `infineon,slb9670` → `infineon,slb9672` compatible string and
+    `tpm_slb9670:` → `tpm_slb9672:` node label in both active cape DTS files.
+    **`kicad-cli` is not available in this environment** (no KiCad install),
+    so ERC/DRC could not be re-run to confirm zero regression against each
+    board's existing violation-count baseline (documented above/below per
+    board). Also found while migrating: XO's own placed TPM footprint uses
+    a generic 4x4mm/0.4mm-pitch land pattern that doesn't match either
+    chip's real 5x5mm/0.5mm-pitch package — a separate, pre-existing defect,
+    not fixed (see REFERENCES.md Open Standards Verification Items). Next
+    person to open these boards in KiCad: run `kicad-cli sch erc` /
+    `kicad-cli pcb drc` on Observer, Commo, Flight Engineer,
+    CAN-PERIPH-GW-1, Pilot, and XO and compare against the violation counts
+    already recorded in this file to confirm the rename introduced no new
+    errors.
 - [ ] **`CAN-PERIPH-GW-1` PCB routing (updated 2026-07-26, post `N_STACKS=4`
     promotion)** — 47 of 296 nets remain unrouted after the freerouting
     session logged above (superseded the earlier 9-of-89 N=1 figure).

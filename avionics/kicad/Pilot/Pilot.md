@@ -275,7 +275,7 @@ value cannot address.
 | Rail | Consumers | Max current |
 | --- | --- | --- |
 | +5V (filtered) | PB2 VIN | 2.0 A |
-| +3V3 (LDO) | ICM-42688-P, BMP388, M10Q, SLB9670, ISOW1044BDFMR VCC1, ADM2795EBRWZ VDD1, 2× DP83825I IOVDD (55 mA each = 110 mA), 2× TPS62933 VIN quiescent | 720 mA |
+| +3V3 (LDO) | ICM-42688-P, BMP388, M10Q, SLB9672, ISOW1044BDFMR VCC1, ADM2795EBRWZ VDD1, 2× DP83825I IOVDD (55 mA each = 110 mA), 2× TPS62933 VIN quiescent | 720 mA |
 | +3V3 isolated bus-side (VCC2/VDD2 — internal) | CAN bus stub loads, RS-485 line drivers | ≤ 150 mA combined (limited by ISOW1044B) |
 | +1V8_ETH1 (TPS62933 output) | DP83825I PHY1 AVDD + DVDD | 80 mA |
 | +1V8_ETH2 (TPS62933 output) | DP83825I PHY2 AVDD + DVDD | 80 mA |

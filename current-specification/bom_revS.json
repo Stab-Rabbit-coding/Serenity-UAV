@@ -268,7 +268,7 @@
     },
     {
       "Ref": "CAPE-B-2",
-      "Description": "Cape-B-2 PCB 55x35mm — EMI-hardened Cape-B: same CAN FD + RS-485 + Ethernet isolation stack as CAPE-A-2 plus Cape-B payload ICs (MAVLink, TI WL1837MOD WiFi/BT, SLB9670 TPM 2.0, ATF16V8BQL CPLD write-blocker, log microSD); P1+P2 passthrough socket rails on upper face for Commo XCVR stack (LoRa removed from XO — moved to Commo board Rev R1)",
+      "Description": "Cape-B-2 PCB 55x35mm — EMI-hardened Cape-B: same CAN FD + RS-485 + Ethernet isolation stack as CAPE-A-2 plus Cape-B payload ICs (MAVLink, TI WL1837MOD WiFi/BT, SLB9672 TPM 2.0, ATF16V8BQL CPLD write-blocker, log microSD); P1+P2 passthrough socket rails on upper face for Commo XCVR stack (LoRa removed from XO — moved to Commo board Rev R1)",
       "Category": "Avionics",
       "Qty": "4",
       "Unit_Mass_g": "40",

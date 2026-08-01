@@ -127,7 +127,7 @@ SCAD: `airframe/openscad/fuselage/bow_sensor_pod.scad` (cuts) +
     brainstorm, fact-checked and corrected against real datasheets — see REFERENCES.md
     "Removed / Superseded Citations" for what was fabricated in the original brainstorm) into
     the **Observer** standalone board (not a PB2-I cape — its own board, peer network node via
-    Ethernet ring/CAN-FD only): TI MSPM0G3507 (native CAN-FD) + Infineon SLB9670 TPM
+    Ethernet ring/CAN-FD only): TI MSPM0G3507 (native CAN-FD) + Infineon SLB9672 TPM
     (fleet-standard part, not a new one) + Microchip KSZ9477 Ethernet switch, plus a TI AM62Ax
     digital vision SoC replacing the RunCam Nano 4 analog camera. One board design, installed
     at both the bow sensor pod (nose) and the cargo bay nadir FPV mount.

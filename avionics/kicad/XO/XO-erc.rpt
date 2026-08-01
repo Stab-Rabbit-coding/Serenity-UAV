@@ -471,7 +471,7 @@ ERC report (2026-07-18T19:33:32-0400, Encoding UTF8)
     @(367.30 mm, 177.62 mm): Symbol NOR-FLASH Pin 4 [GND, Power input, Line]
 [lib_symbol_issues]: The current configuration does not include the symbol library ''
     ; warning
-    @(210.00 mm, 350.00 mm): Symbol TPM [SLB9670]
+    @(210.00 mm, 350.00 mm): Symbol TPM [SLB9672]
 [power_pin_not_driven]: Input Power pin not driven by any Output Power pins
     ; error
     @(197.30 mm, 357.62 mm): Symbol TPM Pin 1 [GND, Power input, Line]

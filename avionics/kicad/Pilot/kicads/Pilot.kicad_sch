@@ -465,15 +465,15 @@
     )
   )
   
-  (symbol "SLB9670" (in_bom yes) (on_board yes)
+  (symbol "SLB9672" (in_bom yes) (on_board yes)
     (property "Reference" "U" (at 0 -13.16 0) (effects (font (size 1.27 1.27))))
-    (property "Value" "SLB9670" (at 0 13.16 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "SLB9672" (at 0 13.16 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-    (symbol "SLB9670_0_1"
+    (symbol "SLB9672_0_1"
       (rectangle (start -10.16 -11.43) (end 10.16 11.43)
         (stroke (width 0.254) (type default)) (fill (type background))))
-    (symbol "SLB9670_1_1"
+    (symbol "SLB9672_1_1"
       (pin power_in line (at -12.70 -10.16 0) (length 2.54)
         (name "VCC" (effects (font (size 1.016 1.016))))
         (number "14" (effects (font (size 1.016 1.016)))))
@@ -1987,11 +1987,11 @@
       (effects (font (size 1.016 1.016)) (hide yes))))
   
   
-  (symbol (lib_id "SLB9670") (at 360.00 185.00 0)
+  (symbol (lib_id "SLB9672") (at 360.00 185.00 0)
     (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "a2000000-0000-0000-0000-000000000356")
     (property "Reference" "TPM" (at 360.00 169.84 0) (effects (font (size 1.27 1.27))))
-    (property "Value" "SLB9670" (at 360.00 200.16 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "SLB9672" (at 360.00 200.16 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (pin "14" (uuid "a2000000-0000-0000-0000-000000000357"))

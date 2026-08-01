@@ -25,7 +25,7 @@
 - [ ] Procure gimbal hardware:
 - [ ] Flash Debian Linux to Skipper PB2-I eMMC
 - [ ] Apply Cape-B-2 device tree overlay for Skipper
-- [ ] Provision TPM 2.0 (SLB9670) on Skipper's PB2-I
+- [ ] Provision TPM 2.0 (SLB9672) on Skipper's PB2-I
 - [ ] Verify CPLD write-blocker on Skipper's log μSD
 - [ ] Build and install Skipper PB2-I firmware:
 - [ ] Install and configure mavlink-router on Skipper's PB2-I

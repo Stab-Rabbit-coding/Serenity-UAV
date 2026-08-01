@@ -5086,7 +5086,7 @@
 				)
 			)
 		)
-		(property "Value" "SLB9670"
+		(property "Value" "SLB9672"
 			(at 0 3.83 0)
 			(layer "F.Fab")
 			(uuid "86dc97be-0ff0-4b77-a64b-e5f56e4a8424")
@@ -11438,7 +11438,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "SLB9670"
+		(property "Value" "SLB9672"
 			(at 0 -3.83 0)
 			(layer "B.Fab")
 			(uuid "ece352fb-0116-4212-b69b-e7816573ec95")

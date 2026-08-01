@@ -147,7 +147,7 @@ VALUES = {}
 for _i in range(1, N_STACKS + 1):
     VALUES.update({
         f"U1_{_i}": "MSPM0G3507", f"R_NRST_{_i}": "10k", f"C_VCORE_{_i}": "1uF",
-        f"C_MCU1_{_i}": "100nF", f"J_SWD_{_i}": "SWD", f"U2_{_i}": "SLB9670",
+        f"C_MCU1_{_i}": "100nF", f"J_SWD_{_i}": "SWD", f"U2_{_i}": "SLB9672",
         f"C_TPM1_{_i}": "100nF", f"C_TPM2_{_i}": "1uF", f"R_TPM_RST_{_i}": "10k",
         f"U3_{_i}": "ISOW1044BDFMR", f"C_ISO1_{_i}": "100nF", f"C_ISO2_{_i}": "1uF",
         f"U4_{_i}": "ISOW1412", f"C_RS1_{_i}": "100nF", f"C_RS2_{_i}": "100nF",
