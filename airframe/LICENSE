@@ -1,15 +1,17 @@
-Serenity UAV — avionics — License
+Serenity UAV — airframe — License
 
-Scope: Wash, Zoe, Kaylee, Emma, Jayne, and CAN-PERIPH-GW-1 PCB schematics,
-layouts, and Gerber files (all original KiCad hardware design work).
+Scope: Wings, nacelles, landing gear, cargo system, fuselage, and all
+other original airframe SCAD/STL/FCStd hardware design files.
 License: CERN-OHL-W 2.0.
 
 This file federates from the project root LICENSE and
 docs/attribution_and_licencing.md (the dual-license policy and the
 CERN-OHL-W 2.0 Available Component boundary for upstream reference
-geometry). Third-party components keep their own terms — see
-REFERENCES.md and current-specification/LICENSE_AND_ATTRIBUTION.md for
-the full chain.
+geometry — see docs/attribution_and_licencing.md §3 for how the
+misubisu hull model (REF-CAD-004, CC BY-SA 4.0) and the BamJr nozzle
+mechanism are incorporated as Available Components, and how the QMx
+blueprints (REF-CAD-003) and Nick Henning renders (REF-CAD-002) stay
+reference-only and outside this boundary).
 
 ---
 

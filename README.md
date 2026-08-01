@@ -104,7 +104,7 @@ hardware (part-local), and G-code (printer bed). See `airframe/AGENTS.md`
 
 The design retains the four canonical sections — head, cargo, middle, and rear — from the source hull model:
 [thingiverse.com/thing:7330462](https://www.thingiverse.com/thing:7330462)
-("Serenity Firefly with landing gear and swivel engines" by misubisu, CC BY 4.0).
+("Serenity Firefly with landing gear and swivel engines" by misubisu, CC BY-SA 4.0).
 Scaled to 24 in (609 mm) overall length.
 
 - Shell walls hollowed to 0.079 in (2.0 mm) CF-PETG, watertight exterior surface.
@@ -391,36 +391,54 @@ NIST SP 800-207 Zero Trust architecture [REF-NIST-001]; NIST SP 800-82 Rev 3 OT 
 
 ## License
 
-Published under **Creative Commons Attribution 4.0 International** by Steve Griffing,
-PE(CSE), CISSP-ISSEP, CPP. Revision S, July 2026.
-[creativecommons.org/licenses/by/4.0](https://creativecommons.org/licenses/by/4.0)
+Dual-licensed by Steve Griffing, PE(CSE), CISSP-ISSEP, CPP:
+
+- **Hardware / CAD / PCB design files** — **CERN Open Hardware Licence Version 2 —
+  Weakly Reciprocal (CERN-OHL-W 2.0)**. Covers airframe SCAD/STL/FCStd, KiCad
+  schematics/PCB/Gerbers, and mechanical drawings. Full text: `LICENSE` (root) /
+  `LICENSES/CERN-OHL-W 2.0`, [ohwr.org/licences](https://ohwr.org/licences/).
+- **Documentation, code, scripts, and non-hardware drawings** — **Creative Commons
+  Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)**. Covers this document,
+  firmware/tooling source, build guides, and SVG diagrams. Full text:
+  `LICENSES/CC-BY-SA 4.0`, [creativecommons.org/licenses/by-sa/4.0](https://creativecommons.org/licenses/by-sa/4.0).
+
+See `docs/attribution_and_licencing.md` for the full policy, the per-subsystem `LICENSE`
+federation map, and the CERN-OHL-W "Available Component" treatment of upstream
+canonical-reference geometry. Revision S, July 2026.
 
 ## Attribution
 
-> "Serenity Tiltrotor Drone Project, CC BY 4.0, based on:
-> · Serenity Firefly-class hull by misubisu (thingiverse.com/thing:7330462, CC BY 4.0)
+> "Serenity Tiltrotor Drone Project — hardware CERN-OHL-W 2.0, docs/code CC BY-SA 4.0, based on:
+> · Serenity Firefly-class hull by misubisu (thingiverse.com/thing:7330462, CC BY-SA 4.0)
 > · Variable-area EDF nozzle by BamJr (thingiverse.com/thing:2991269, CC BY 4.0)
-> Include a link to creativecommons.org/licenses/by/4.0 and indicate if changes were made."
+> Include a link to the applicable license and indicate if changes were made."
 
 ### Component License Map
 
 | Component | Original Author | Source | License | Derivative Notes |
 |-----------|----------------|--------|---------|-----------------|
-| Hull | misubisu | [thingiverse.com/thing:7330462](https://www.thingiverse.com/thing:7330462) | CC BY 4.0 | Scaled to 24 in, hollowed to 0.079 in (2.0 mm) CF-PETG shell, foam-filled |
+| Hull | misubisu | [thingiverse.com/thing:7330462](https://www.thingiverse.com/thing:7330462) | CC BY-SA 4.0 (Available Component under CERN-OHL-W 2.0) | Scaled to 24 in, hollowed to 0.079 in (2.0 mm) CF-PETG shell, foam-filled |
 | Nozzle mechanism concept | BamJr | [thingiverse.com/thing:2991269](https://www.thingiverse.com/thing:2991269) | CC BY 4.0 | Iris petal concept reference; all Rev O/P/Q nozzle geometry original |
-| Design | This project | — | CC BY 4.0 | All original work: PCBs, firmware spec, wiring, flight system |
+| Design (hardware/CAD/PCB) | This project | — | CERN-OHL-W 2.0 | All original work: PCBs, mechanical/CAD, wiring |
+| Design (docs/code/scripts) | This project | — | CC BY-SA 4.0 | Firmware spec, tooling, build guides, this document |
 
 ### What This License Covers
 
-Covered under CC BY 4.0:
+Covered under **CERN-OHL-W 2.0** (hardware):
 
 - 3D-printable hull, nacelle, and nozzle design files (STL/SCAD/FCStd)
 - PCB schematics and Gerber files for Wash, Zoë, Kaylee, and Emma
 - Circuit diagrams, pinout tables, and wiring specifications
 - Mechanical drawings and assembly specifications
+- Any derived hardware must carry CERN-OHL-W 2.0 (or a compatible licence) and attribute
+  all upstream authors
+
+Covered under **CC BY-SA 4.0** (documentation, code, scripts, non-hardware drawings):
+
 - Firmware architecture specifications and algorithm descriptions
 - This design document in all its revisions (A–R and beyond)
-- Any derived works must carry CC BY 4.0 and attribute all upstream authors
+- Build automation/tooling scripts and non-hardware SVG diagrams
+- Any derived works must carry CC BY-SA 4.0 and attribute all upstream authors
 
 Not covered / separate terms:
 

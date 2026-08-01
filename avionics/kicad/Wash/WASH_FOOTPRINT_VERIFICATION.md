@@ -1,7 +1,7 @@
 # Wash (CAPE-A-2) — Footprint-vs-Datasheet Verification
 
 **Author:** Claude (Opus 4.8), 2026-07-13
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Board:** `avionics/kicad/Wash/kicads/Wash.kicad_pcb`
 **Method:** Every placed footprint's pad geometry (count, pitch, body, EP) was
 extracted from the PCB and compared against the manufacturer datasheet in

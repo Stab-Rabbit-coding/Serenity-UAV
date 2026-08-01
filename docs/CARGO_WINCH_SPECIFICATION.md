@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Drafted by:** Claude Haiku 4.5 (Anthropic), 2026-07-27
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Revision:** B (2026-07-27)
 **Supersedes:** the Rev P/Q/R N20 winch train (see "Superseded Hardware" below)
 

@@ -1,7 +1,7 @@
 # Malcolm GCS — Antenna Specification and FCC EIRP Compliance
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Revision:** R (2026-06-11)
 
 ---

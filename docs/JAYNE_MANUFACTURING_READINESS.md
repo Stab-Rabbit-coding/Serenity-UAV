@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **AI-assist:** Claude Opus 4.8 (Anthropic) — gap analysis, 2026-07-06
-**License:** CC BY 4.0
+**License:** CC BY-SA 4.0
 **Revision:** Rev B (2026-07-06)
 **Status:** Analysis + recommended resolution — the raw-SoC gap, and the SoM-carrier path
 that closes most of it.

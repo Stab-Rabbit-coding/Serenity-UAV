@@ -1,7 +1,7 @@
 # Rotating Tilt-Spar Analysis — 8 mm Through-Spar Option
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (analysis drafted by Claude Opus 4.8)
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Date:** 2026-07-18
 **Status:** DECISION SUPPORT — pre-implementation. Presents loading + airflow +
 nav-wire feasibility for the rotating 8 mm tilt-spar mechanism before the wing

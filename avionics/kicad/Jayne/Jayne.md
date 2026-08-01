@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Callsign:** Jayne (Jayne's rifle — "she's a good gun.")
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Revision:** S1 (SoM end-state — PCM-071 carrier, real symbols/footprints)
 **Date:** 2026-07-13
 **Status:** **SoM end-state built** by `scripts/gen_Jayne_carrier_sch.py` +
