@@ -1,7 +1,7 @@
 # Serenity UAV — Documentation, Standards & Regulatory Work Breakdown Structure
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Current design revision:** Rev S (2026-07-04)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../TODO.md)
@@ -23,6 +23,7 @@
 | §0.1 | 0.1 — FCC Part 95 Section-Number Verification | 1 | — |
 | §0.7 | 0.7 — CI Lint Scope and Repo-Wide Lint Debt | 1 | — |
 | §0.8 | 0.8 — Tilt-Spar Material Allowables + Hall Encoder | 3 | — |
+| §0.9 | 0.9 — Licensing Updates | 1 | — |
 | §1.5 | 1.5 — Documentation | 3 | — |
 | §1.6 | 1.6 — Rev Q: Repo-Wide Architecture Propagation | 0 | — |
 | §1.7 | 1.7 — Rev R: Component Rev Sync + s_ Prefix Removal | 0 | — |
@@ -32,7 +33,7 @@
 | §6.1 | 6.1 — Branch Reconciliation / Pre-Flight Compliance | 1 | &#9733; |
 | §6.2 | 6.2 — STL Mesh Repair | 0 | — |
 | §6.3 | 6.3 — Rev S Checkpoint | 0 | — |
-| | **Total open (this subsystem)** | **17** | |
+| | **Total open (this subsystem)** | **18** | |
 
 ---
 
@@ -292,6 +293,111 @@ study and the wing/nacelle Hall tilt-feedback sensor. Both carry
     behaviour; add a `REF-SENSOR-*` entry with a validated URL before PCB/harness
     sign-off. Bench-cal tracked in `avionics/emi-hardening/WBS.md` §1.4.6 and
     `avionics/WBS.md` §1.9.1.
+
+
+## §0.9 — Licensing Updates
+
+*(root `WBS.md` §0.9)*
+
+Opened 2026-08-01 as `TODO.md` §0.9. **Numbering note:** this file's own §0.6 was already
+the distinct, completed "IEC 62368-1 PCB Layout Isolation Verification" item, so the
+"Update and correct documentation" item that both root `WBS.md` and `TODO.md` had mislabeled
+as (variously) §0.9 / §0.6 was renumbered to §0.10 in both files as part of this same pass,
+to free §0.9 cleanly for this item. See root `WBS.md` §0.9/§0.10 for the renumbering note.
+
+The project's original license statement (root `AGENTS.md` §3, `README.md`, `REFERENCES.md`)
+said all work was CC BY 4.0, but root `LICENSE` and `avionics/LICENSE` already carried the
+full CERN-OHL-W 2.0 text before this audit — a stale-documentation gap (root `AGENTS.md`
+§11.4: "actual code/model state outranks stale documentation"). This item formalizes and
+completes the dual-license split those two files already implied, corrects a real
+misattribution (misubisu hull license), and closes out the remaining structural/documentation
+gaps. Full policy: `docs/attribution_and_licencing.md` (new).
+
+- [x] **Correct misubisu Thingiverse model [REF-CAD-004] license to CC-BY-SA 4.0.** The
+    upstream Thingiverse listing for Thing 7330462 is CC BY-SA 4.0, not the "CC BY 4.0" (and,
+    in one place, garbled "CC BY 4.0 SA") stated in four locations:
+    `REFERENCES.md` REF-CAD-004, `current-specification/LICENSE_AND_ATTRIBUTION.md` §2,
+    `README.md` Component License Map + Attribution quote, and
+    `docs/references/thingverse-serenity/LICENSE.txt` (which also had a stray/wrong
+    Thingiverse ID, 482910 instead of 7330462 — fixed in the same pass). Logged in
+    `REFERENCES.md` "Removed / Superseded Citations."
+- [x] **Integrate REF-CAD-002/003/004 as Available Components under CERN-OHL-W 2.0 with
+    clean IP boundaries.** `docs/attribution_and_licencing.md` §3 classifies each of the
+    three canonical airframe references explicitly: misubisu (REF-CAD-004, CC BY-SA 4.0) and
+    the BamJr nozzle concept are **Available Components** (CERN-OHL-W 2.0 §1.6) — openly
+    licensed geometry actually incorporated into the project's Covered Source, keeping its
+    own upstream terms. Nick Henning (REF-CAD-002, permission-only) and the QMx blueprints
+    (REF-CAD-003, copyrighted commercial product) are **reference-only** — outside the
+    Covered Source boundary entirely, never redistributed or treated as components. Added
+    `REFERENCES.md` Part XV (REF-LIC-001 CERN-OHL-W 2.0, REF-LIC-002 OSHWA certification)
+    to catalog the license standards themselves, consistent with how every other standard in
+    this project is cataloged.
+- [x] **License wings, nacelles, landing gear, cargo system, and all other original airframe
+    components under CERN-OHL-W.** Created `airframe/LICENSE` (full CERN-OHL-W 2.0 text with
+    a scope header naming these components).
+- [x] **License all avionics under CERN-OHL-W.** `avionics/LICENSE` already carried the full
+    CERN-OHL-W 2.0 text (predates this audit); added the same scope-header treatment as
+    `airframe/LICENSE` for consistency (naming Wash/Zoë/Kaylee/Emma/Jayne/CAN-PERIPH-GW-1).
+- [x] **License all documentation, code, scripts, drawings, and other non-hardware items
+    under CC-BY-SA.** Created `docs/LICENSE`, `tools/LICENSE`, `current-specification/LICENSE`,
+    `graphical-build-guide/LICENSE` (pure CC BY-SA 4.0), plus mixed `gcs/LICENSE` and
+    `deferred/LICENSE` (both licenses, since each folder genuinely contains both hardware and
+    software/docs). Swept the `**License:** CC BY 4.0` header stamp to `CC BY-SA 4.0` across
+    71 non-archived documentation files project-wide (`WBS.md`, `REFERENCES.md`, every
+    subsystem `TODO.md`/`WBS.md`, `docs/*.md` analysis documents, KiCad companion `.md`
+    files, etc. — header metadata line only; in-body citations of genuinely CC BY 4.0
+    third-party sources, e.g. BamJr's nozzle, were left untouched). Also corrected
+    `current-specification/LICENSE_AND_ATTRIBUTION.md`'s own top-level license section,
+    "Original Creative Work Covered by This License" list (split into CERN-OHL-W vs
+    CC BY-SA subsections), and "Suggested Full Attribution Block" example, which all still
+    stated a single project-wide CC BY 4.0 license.
+- [x] **Create License files for each subsystem folder with clear, unambiguous federation
+    from root License and `docs/attribution_and_licencing.md`.** All seven subsystem folders
+    (`airframe/`, `avionics/`, `docs/`, `gcs/`, `tools/`, `current-specification/`,
+    `graphical-build-guide/`, `deferred/` — eight, `avionics/` already existed) now carry a
+    `LICENSE` file with a short scope header plus the full applicable license text(s),
+    self-contained per folder rather than a bare pointer. Header template documented in
+    `docs/attribution_and_licencing.md` §4.
+- [x] **Create all other supporting documents for OSHW certification.** Created
+    `docs/OSHW_CERTIFICATION.md` — a readiness checklist against the verified OSHWA
+    self-certification requirements [REF-LIC-002] (own contributions open-sourced,
+    third-party components distinguished with accessible datasheets, necessary software
+    OSI-approved). Flags two real gaps that block an actual submission today: the TI Z-Stack
+    Zigbee dependency is not OSI-licensed (TI TSPA), and Phase 7 firmware source doesn't
+    exist yet (only the architecture spec does). Certification submission itself requires the
+    human maintainer to act — this repository can only prepare the documentation.
+- [ ] **Rename avionics boards to non-trademarked names — OPEN, flagged, not executed.**
+    Wash, Zoë, Kaylee, Emma, and Jayne are the canonical board names in the authoritative
+    root `AGENTS.md` §9 naming table (deliberate Firefly-character naming, tied to PACE
+    failover roles and Firefly quotes, referenced across roughly 284 files: KiCad
+    silkscreens/schematics, firmware, every subsystem doc). Per root `AGENTS.md` §11.2 ("any
+    conflict between this file and a subsystem file: stop and get user adjudication before
+    proceeding"), this item was raised with the user before any rename was attempted. **User
+    decision (2026-08-01): skip the rename, leave this item open.** No files were renamed.
+    Before this can be executed, a maintainer needs to either (a) supply replacement names
+    and accept the ~284-file, largely-irreversible-in-effort rename, or (b) formally close
+    this as "won't do" and instead rely on the trademark disclaimer already present in
+    `current-specification/LICENSE_AND_ATTRIBUTION.md` "Note on Rights" (non-commercial
+    fan-engineering framing, no claimed trademark rights, no implied endorsement).
+
+**Also touched, stale-doc fixes surfaced during this audit (not separate TODO items, fixed
+in place per root `AGENTS.md` §11.4):**
+
+- Root `AGENTS.md` §3 said "All work is published under CC BY 4.0" — corrected to state the
+  dual-license split and point to `docs/attribution_and_licencing.md`.
+- `README.md` "License" section, Component License Map, and "What This License Covers" all
+  restated a single CC BY 4.0 project license — corrected to the CERN-OHL-W 2.0 /
+  CC BY-SA 4.0 split.
+- `REFERENCES.md` "Project license (this work)" (under "Creative-Universe Attribution and
+  Fan-Engineering Terms") had the same stale single-license statement — corrected.
+- `TODO.md` header license stamp said "CC BY SA 4.0" with a URL pointing at
+  `/licenses/by/4.0` (mismatched slug) — corrected to CC BY-SA 4.0 with the matching URL.
+- Root `WBS.md` §0.9/`TODO.md` §0.6 numbering collision (see "Numbering note" above).
+
+**Used in:** `docs/attribution_and_licencing.md`, `docs/OSHW_CERTIFICATION.md`,
+`REFERENCES.md` Part XV, `airframe/LICENSE`, `avionics/LICENSE`, `docs/LICENSE`,
+`gcs/LICENSE`, `tools/LICENSE`, `current-specification/LICENSE`,
+`graphical-build-guide/LICENSE`, `deferred/LICENSE`.
 
 
 ## §1.5 — Documentation

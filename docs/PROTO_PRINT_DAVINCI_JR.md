@@ -5,7 +5,7 @@
 ## XYZprinting da Vinci Jr. 1.0 w · PLA · Rev P Baseline
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Date:**2026-06-01 |**Baseline:** Rev P
 
 > Fan engineering work inspired by the Firefly-class transport ship *Serenity*
@@ -713,5 +713,5 @@ surface finish matters for the fit check.
 
 ---
 
-*© 2026 Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP — CC BY 4.0*
-*Hull: misubisu CC BY 4.0 · Nozzles: BamJr CC BY 4.0 · Inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy / Universal*
+*© 2026 Steve Griffing, PE(CSE) [Control Systems Engineering], CISSP-ISSEP, CPP — CC BY-SA 4.0*
+*Hull: misubisu CC BY-SA 4.0 · Nozzles: BamJr CC BY 4.0 · Inspiration: Firefly/Serenity © Joss Whedon / Mutant Enemy / Universal*

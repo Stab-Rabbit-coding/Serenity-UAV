@@ -126,7 +126,9 @@ When adding new deferred work to this folder:
 
 ## Legal and Licensing Notes
 
-All deferred work is covered under the same CC BY 4.0 license as active work. Deferred designs may be:
+All deferred work is covered under the same dual license as active work — CERN-OHL-W 2.0 for
+hardware/CAD (e.g. `deferred/aft-edf/` SCAD/STL), CC BY-SA 4.0 for docs/code — see
+`deferred/LICENSE` and `docs/attribution_and_licencing.md`. Deferred designs may be:
 - **Shared publicly** on version control
 - **Used by others** for their own UAV projects
 - **Cited with attribution** to Steve Griffing and this project

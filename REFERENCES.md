@@ -1,15 +1,17 @@
 # REFERENCES.md — Serenity UAV Standards and Regulatory Reference Catalog
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Revision:** S
-**Last updated:** 2026-07-20
+**Last updated:** 2026-08-01
 **Revision history:** Rev R (2026-06-10) → Rev R1 (2026-06-11, hull-frame bake) → Rev S
 (2026-07-04, comprehensive checkpoint — integrates all Rev R1/R1c/R1d/R2 modifications;
 see TODO.md "Rev S Checkpoint" for the full consolidated changelog) → 2026-07-20 (added the
 Creative-Universe Attribution section and the `docs/references/` canonical-reference library:
 REF-CAD-003 QMx 2007 Blueprints pack, REF-CAD-004 misubisu Thingiverse origin model; expanded
-REF-CAD-002 Nick Henning after consolidation)
+REF-CAD-002 Nick Henning after consolidation) → 2026-08-01 (TODO.md §0.9 licensing audit: added
+Part XV REF-LIC-001/002, corrected REF-CAD-004 license to CC BY-SA 4.0, documented the
+CERN-OHL-W 2.0 / CC BY-SA 4.0 dual-license split)
 
 ---
 
@@ -79,6 +81,9 @@ REF-CAD-002 Nick Henning after consolidation)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
+- [Part XV — Open Hardware / Software Licensing Standards](#part-xv--open-hardware--software-licensing-standards)
+    - [REF-LIC-001: CERN Open Hardware Licence Version 2 — Weakly Reciprocal (CERN-OHL-W 2.0)](#ref-lic-001-cern-open-hardware-licence-version-2--weakly-reciprocal-cern-ohl-w-20)
+    - [REF-LIC-002: OSHWA Open Source Hardware Certification](#ref-lic-002-oshwa-open-source-hardware-certification)
 - [Removed / Superseded Citations](#removed--superseded-citations)
 - [Open Standards Verification Items](#open-standards-verification-items)
 
@@ -89,19 +94,29 @@ REF-CAD-002 Nick Henning after consolidation)
 This catalog is the standards/regulatory index; it is **not** the project's licensing document.
 The authoritative, full attribution chain — original creators, cast/crew, upstream CAD authors,
 and third-party software licenses — is
-[`current-specification/LICENSE_AND_ATTRIBUTION.md`](current-specification/LICENSE_AND_ATTRIBUTION.md),
-and the project's own license text is the root [`LICENSE`](LICENSE) (CC BY 4.0). This section is a
+[`current-specification/LICENSE_AND_ATTRIBUTION.md`](current-specification/LICENSE_AND_ATTRIBUTION.md);
+the project's dual-license policy and subsystem federation map is
+[`docs/attribution_and_licencing.md`](docs/attribution_and_licencing.md). This section is a
 **summary with cross-references**, recorded here so that the creative-universe rights holders — never
 previously named in this file — are acknowledged wherever this catalog is read.
 
 ### Project license (this work)
 
-All original work in this repository is © 2025 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP, released
-under **Creative Commons Attribution 4.0 International (CC BY 4.0)** —
-<https://creativecommons.org/licenses/by/4.0/>. You may share and adapt it, including commercially,
-with appropriate credit, a link to the license, and an indication of changes; attribution must not
-imply endorsement by the licensor or by any rights holder named below. Full terms: root
-[`LICENSE`](LICENSE).
+All original work in this repository is © 2025 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP,
+**dual-licensed** (corrected 2026-08-01 — see "Removed / Superseded Citations"):
+
+- **Hardware/CAD/PCB design** (airframe SCAD/STL/FCStd, KiCad schematics/PCB/Gerbers, mechanical
+  drawings) — **CERN Open Hardware Licence Version 2 — Weakly Reciprocal (CERN-OHL-W 2.0)**
+  [REF-LIC-001]. Full terms: root [`LICENSE`](LICENSE).
+- **Documentation, code, scripts, and non-hardware drawings** — **Creative Commons
+  Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)** —
+  <https://creativecommons.org/licenses/by-sa/4.0/>. Full terms: `LICENSES/CC-BY-SA 4.0`.
+
+You may share and adapt either under its own terms, including commercially, with appropriate
+credit, a link to the license, and an indication of changes; attribution must not imply
+endorsement by the licensor or by any rights holder named below. See
+[`docs/attribution_and_licencing.md`](docs/attribution_and_licencing.md) for the full split and
+the per-subsystem `LICENSE` federation.
 
 ### *Firefly* / *Serenity* creative universe (underlying IP)
 
@@ -1574,8 +1589,9 @@ REF-CAD-004 and by `current-specification/LICENSE_AND_ATTRIBUTION.md`.
 | **Work** | Serenity Firefly with landing gear and swivel engines (multi-part printable model — head, cargo, middle, rear, wings, engines, landing gear) |
 | **Designation** | Thingiverse Thing 7330462 |
 | **Official URL** | <https://www.thingiverse.com/thing:7330462> |
-| **License** | Creative Commons Attribution 4.0 International (CC BY 4.0) — <https://creativecommons.org/licenses/by/4.0/> |
+| **License** | Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0) — <https://creativecommons.org/licenses/by-sa/4.0/> (corrected 2026-08-01 from an earlier "CC BY 4.0" mis-citation in this catalog and in `current-specification/LICENSE_AND_ATTRIBUTION.md`/`README.md` — the upstream Thingiverse license page states CC BY-SA 4.0, not plain CC BY) |
 | **Repository copy** | `docs/references/thingverse-serenity/` (source STLs in `files/`, renders in `images/`, upstream `LICENSE.txt` + `README.txt`) |
+| **CERN-OHL-W integration** | Incorporated into the project's CERN-OHL-W 2.0-licensed airframe Covered Source as an **Available Component** [REF-LIC-001 §1.6] — the upstream geometry keeps its own CC BY-SA 4.0 terms (share-alike applies to redistributions of the upstream model itself; the project's original adaptation work is separately licensed CERN-OHL-W 2.0 per `airframe/LICENSE`). See `docs/attribution_and_licencing.md` "Available Component Boundary." |
 | **Note** | This is the **origin of the project's `s_*.stl` geometry** — every hull/nacelle/wing/gear STL in the build traces back to this model (adapted: scaled to 24 in (609 mm), hollowed to 2.0 mm CF-PETG, CF skeleton + foam fill added). It is the **lowest** of the three canonical references in authority: **verify its detail against REF-CAD-003 (QMx) and REF-CAD-002 (Nick Henning) before treating any feature as canonical** — but it remains a usable, license-clean geometry starting point. Do not confuse Thing 7330462 with the separate low-poly orientation guide Thing 4677565 (`current-specification/LICENSE_AND_ATTRIBUTION.md` §2b). |
 
 **Applied to:** base hull/section geometry for the entire fuselage and nacelle build; the four
@@ -1586,6 +1602,40 @@ dropped Rev R1); full remix attribution in
 [`current-specification/LICENSE_AND_ATTRIBUTION.md`](current-specification/LICENSE_AND_ATTRIBUTION.md) §2.
 
 ---
+
+## Part XV — Open Hardware / Software Licensing Standards
+
+### REF-LIC-001: CERN Open Hardware Licence Version 2 — Weakly Reciprocal (CERN-OHL-W 2.0)
+
+| Field | Value |
+|---|---|
+| **Publisher** | CERN (European Organization for Nuclear Research) |
+| **Designation** | CERN-OHL-W-2.0 |
+| **Official URL** | <https://ohwr.org/licences/> (license text + user guide), SPDX record <https://spdx.org/licenses/CERN-OHL-W-2.0.html> |
+| **Applied sections** | §1.6 "Available Component" (upstream hardware not itself licensed under CERN-OHL but legitimately referenced/incorporated without relicensing); §4 (distribution obligations); §5 ("weakly reciprocal" scope — modifications to Covered Source must stay CERN-OHL, but a design that merely *uses* Covered Source without modifying it is not itself pulled under the license) |
+| **Note** | Selected 2026-08-01 (TODO.md §0.9 licensing audit) as the license for this project's original hardware/CAD/PCB design work — airframe (wings, nacelles, landing gear, cargo system, fuselage) and avionics (Wash/Zoë/Kaylee/Emma/Jayne PCB schematics, layouts, Gerbers). Documentation, code, scripts, and non-hardware drawings remain CC BY-SA 4.0 — see `docs/attribution_and_licencing.md`. |
+
+**Applied to:** `LICENSE` (root), `avionics/LICENSE`, `airframe/LICENSE`; the CERN-OHL-W
+"Available Component" concept is used to define the IP boundary around the three canonical
+airframe reference sources (REF-CAD-002/003/004) — see `docs/attribution_and_licencing.md`
+"Available Component Boundary."
+
+**Used in:** all KiCad/SCAD/STL/FCStd original design files in `airframe/` and `avionics/`.
+
+### REF-LIC-002: OSHWA Open Source Hardware Certification
+
+| Field | Value |
+|---|---|
+| **Publisher** | Open Source Hardware Association (OSHWA) |
+| **Designation** | OSHWA Certification Program / Open Source Hardware Definition |
+| **Official URL** | <https://certification.oshwa.org/requirements.html> (requirements), <https://certification.oshwa.org/process.html> (self-certification process), <https://certification.oshwa.org/basics.html> (definition basics) — verified 2026-08-01 |
+| **Applied requirements** | (1) all of the creator's own contributions to a certified product must be shared as open source; (2) all parts within the creator's control must be open source, third-party proprietary components clearly distinguished, and third-party chips must have fully accessible/shareable datasheets; (3) all software necessary for hardware operation must be licensed under an OSI-approved license; self-certification is completed via an online license form + Certification Mark License Agreement, valid one year with annual reaffirmation |
+| **Note** | Program is **self-certification**, not a numbered legal standard — no §-citation exists to verify beyond the requirements page above. UUID assignment and the Certification Mark License Agreement require the human maintainer (Steve Griffing) to submit the actual application; this repository can only prepare the supporting documentation. See `docs/OSHW_CERTIFICATION.md` for the readiness checklist (TODO.md §0.9 item 7, still open — submission not yet made). |
+
+**Applied to:** `docs/OSHW_CERTIFICATION.md` readiness checklist; not yet applied to an actual
+OSHWA certification submission (open item).
+
+**Used in:** `docs/OSHW_CERTIFICATION.md`, `TODO.md` §0.9.
 
 ## Removed / Superseded Citations
 
@@ -1630,3 +1680,4 @@ Add verified section numbers to the relevant files and update this table.
 | Wing/nacelle Hall tilt encoder — sensor selection | `current-specification/bom_revS.csv` MAL-TILT-ENC-PCB, `avionics/kicad/ENC-NACELLE-1.*`, `docs/TILT_SPAR_ANALYSIS.md` §1/§3.5/§8.1, `avionics/WBS.md` §1.9.1 | **RESOLVED 2026-07-19 (datasheets in repo).** MT6701 (Rev 1.9) was **rejected** — its datasheet §6 confirms it is **on-axis only** (Ø6 mm cyl magnet, off-axis misalignment ≤ 0.3 mm), so it cannot read the through-shaft off-axis; AS5600 has the same limit. Part selected = **AKM AK7455** (REF-SENSOR-008), which explicitly supports the Off-Axis (side-of-shaft) configuration; pinout/interface **verified** vs datasheet 200800064-E-00 and the schematic rebuilt (`kicad-cli` ERC 0-error). Interface is **SPI** (no off-axis absolute IC offers I²C). | **Electrical spec resolved.** Remaining, now scoped as bench/layout items (not "unverified part"): (1) off-axis flux 10–70 mT at the IC with the chosen ring/gap; (2) EEPROM INL calibration over −5..90° (AKM app support); (3) ERROR-pin push-pull vs open-drain; (4) QFN24 4×4 EP dims (EP left floating) + wing-pocket resize 3×3→4×4 (`HALL_*` in `wings_s1223_revo.scad`); (5) confirm the AKM product URL if the datasheet is re-hosted. TODO §0.8 / `airframe/wings-nacelles/WBS.md` §1.1.3.6. |
 | Wash's own inline "SLB9670" TPM symbol pin numbers | `avionics/kicad/Wash/kicads/Wash.kicad_sch` | Found 2026-07-26 while building Emma's TPM addition (which deliberately reused the separately-verified `Jayne_SLB9670_TPM` clean-room symbol instead, precisely to avoid this defect): Wash's own, independently-authored inline "SLB9670" symbol has pin numbers that do not match datasheet Revision 1.4 Tables 3–5 (REF-SENSOR-011). Not fixed this session — out of scope for the CAN-FD/RS-485 trust-module task. | Rebuild Wash's TPM symbol from REF-SENSOR-011 using the same clean-room `parse_real_symbol`/pin-table method as `Jayne_SLB9670_TPM`, or replace the instance with that verified symbol outright; re-run `kicad-cli sch erc` to confirm no regression against Wash's existing 48-violation baseline. |
 | VimDrones `ap_periph_pico` / ESC S50 concept-only inspiration, `CAN-PERIPH-GW-1` and CAN-PERIPH-GW-1's ESC-gateway deployment mode | `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` | **Not a citation defect — documented here for license-boundary auditability.** `CAN-PERIPH-GW-1` was built as a fleet-integrated remix of the *publicly documented product concept* at <https://dev.vimdrones.com/products/vimdrones_can_periph_pico/> and <https://dev.vimdrones.com/products/vimdrones_esc_s50/> (peripheral-bus CAN/servo gateway; per-ESC CAN telemetry). VimDrones' own KiCad source (`VimDrones/AM32_esc_development_board` on GitHub) is licensed GPL-3.0, which is incompatible with this project's CC-BY-4.0-or-better attribution baseline for derivative files — no VimDrones schematic, footprint, or geometry was copied; only the public product specification was used as design inspiration, and the entire trust-module implementation (MCU, TPM, isolators, netlist) is original clean-room work against TI/Infineon datasheets. | N/A — informational; see `CAN-PERIPH-GW-1.md` "Why VimDrones' concept but not VimDrones' hardware" |
+| REF-CAD-004 misubisu hull model license stated as "CC BY 4.0" | REFERENCES.md REF-CAD-004, `current-specification/LICENSE_AND_ATTRIBUTION.md` §2, `README.md` Component License Map + Attribution quote, `docs/references/thingverse-serenity/LICENSE.txt` | **Incorrect attribution, found during TODO.md §0.9 licensing audit (2026-08-01).** The Thingiverse listing for Thing 7330462 is licensed **CC BY-SA 4.0** (ShareAlike), not plain CC BY 4.0 — the two earlier docs that had it right (`current-specification/LICENSE_AND_ATTRIBUTION.md` §2 "CC BY 4.0 SA", `docs/references/thingverse-serenity/LICENSE.txt`) used a garbled/non-standard label that also needed correcting. All four locations corrected to read "CC BY-SA 4.0". | REF-CAD-004 (corrected), REF-LIC-001 (CERN-OHL-W 2.0 Available Component treatment) |

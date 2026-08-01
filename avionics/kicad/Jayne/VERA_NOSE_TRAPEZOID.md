@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **AI-assist:** Claude Opus 4.8 (Anthropic) — geometry derivation, 2026-07-12
-**License:** CC BY 4.0
+**License:** CC BY-SA 4.0
 **Revision:** Rev C (2026-07-12)
 
 > **Rev C — SoM variant switched to connectorized PCM-071** (user, 2026-07-12). The

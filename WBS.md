@@ -1,7 +1,7 @@
 # Serenity UAV — Work Breakdown Structure (Master Index)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
 **Last updated:** 2026-07-18  
 **Current design revision:** Rev S (2026-07-04, see `docs/WBS.md` §6.3 for changelog) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
@@ -93,20 +93,40 @@
 - [ ] Add 4130 corrosion-finish spec (zinc/cad plate) to BOM/build guide
 - [ ] Verify AK7455 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
 
-### 0.9 Update and correct documentation touching every non-archived file.
-→ detail: docs/WBS.md §0.9
+### 0.9 — Licensing Updates
+→ detail: `docs/WBS.md` §0.9
 
-#### 0.9.1 Systems
-→ detail: docs/WBS.md §1.9.1
+- [x] Correct misubisu Thingiverse model [REF-CAD-004] license to CC-BY-SA 4.0
+- [x] Integrate REF-CAD-002/003/004 as Available Components under CERN-OHL-W 2.0
+- [x] License wings, nacelles, landing gear, cargo, other airframe under CERN-OHL-W
+- [x] License all avionics under CERN-OHL-W
+- [x] License all documentation, code, scripts, drawings under CC-BY-SA
+- [x] Create per-subsystem LICENSE files federated from root + attribution doc
+- [x] Create OSHW certification supporting documents (readiness checklist)
+- [ ] Rename avionics boards to non-trademarked names — **OPEN, flagged** (conflicts
+    with authoritative `AGENTS.md` §9 naming table; user decision 2026-08-01: skip
+    renaming, leave open)
+
+### 0.10 Update and correct documentation touching every non-archived file.
+→ detail: docs/WBS.md §0.10
+
+*(Renumbered 2026-08-01 from a stale "0.9" — this file's own §0.6 was already taken by the
+distinct, completed "IEC 62368-1 PCB Layout Isolation Verification" item above, so `TODO.md`'s
+matching "§0.6" label for this item was also a collision, not a valid cross-reference; both
+files are renumbered here to §0.10, which frees "0.9" cleanly for the new §0.9 "Licensing
+Updates" item above. See docs/WBS.md §0.9 for the note.)*
+
+#### 0.10.1 Systems
+→ detail: docs/WBS.md §1.10.1
 
 - [ ] Verify and update airframe specifications vs as built for each component.
 - [ ] Verify avionics specifications vs as- built.
 - [ ] Verify and update all assessment and engineering documents.
 - [ ] Verify and update all software, firmware, and scripts, along with their documentation.
 
-#### 0.9.2 Documentation
+#### 0.10.2 Documentation
 
-→ detail: docs/WBS.md §0.9.2
+→ detail: docs/WBS.md §0.10.2
 
 - [ ] Verify and update all compliance and licensing documents.
 - [ ] Verify and update all README files and the starting with subsystem ones and correcting the root README to match.

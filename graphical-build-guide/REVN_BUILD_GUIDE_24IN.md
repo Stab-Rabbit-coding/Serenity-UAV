@@ -15,7 +15,7 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 # Serenity-Class Tiltrotor UAV — Build Guide Rev P baseline (24-inch)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
 **Year:** 2026 | **Status:** Public release — Rev S baseline (2026-07-04, integrates all Rev
 R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 
@@ -37,11 +37,12 @@ R1/R1c/R1d/R2 modifications; see TODO.md §6.3 "Rev S Checkpoint")
 
 | Work | Author | License | Source |
 |------|--------|---------|--------|
-| Hull geometry | misubisu | CC BY 4.0 | thingiverse.com/thing:7330462 |
+| Hull geometry | misubisu | CC BY-SA 4.0 | thingiverse.com/thing:7330462 |
 | Hull geometry (historical, Rev M and earlier 18") | Peter Farell | CC BY 4.0 | printables.com/model/548545 |
 | Iris nozzle concept (nacelle) | BamJr | CC BY 4.0 | thingiverse.com/thing:2991269 |
 | Blueprint proportions | Mandel + Earls / QMx / Universal | © 2007 QMx | 269 ft × 170 ft × 79 ft ratios |
-| All other design | Steve Griffing | CC BY 4.0 | This project |
+| All other design (hardware/CAD/PCB) | Steve Griffing | CERN-OHL-W 2.0 | This project |
+| All other design (docs/code/scripts) | Steve Griffing | CC BY-SA 4.0 | This project |
 
 ---
 
