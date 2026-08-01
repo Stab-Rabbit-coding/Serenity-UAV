@@ -11,9 +11,10 @@
 
 | File | Format | Purpose | Coverage |
 |------|--------|---------|----------|
-| `bom_revS.json` | JSON | Structured BOM: part numbering, supplier links, mass, CG, cost | All components (procured + printed + machined) |
-| `bom_revS.csv` | CSV | Flat-file BOM for spreadsheet import; same data as JSON | Import into build-tracking sheets, inventory management |
-| `serenity-rev-r.jsx` | JSX (React) | Interactive BOM viewer + system schematic (web/desktop app) | Same part list, visual links to subsystems, CAD references |
+| `bom_revS.json` | JSON | **Canonical** structured BOM: part numbering, supplier links, mass, CG, cost | All components (procured + printed + machined) |
+| `bom_revS.csv` | CSV | Flat-file BOM for spreadsheet import; derived from `bom_revS.json` | Import into build-tracking sheets, inventory management |
+| `serenity-rev-s.jsx` | JSX (React) | **Current** interactive BOM viewer + system schematic (web/desktop app) | Same part list, visual links to subsystems, CAD references |
+| `serenity-rev-r.jsx` | JSX (React) | **Archived** Rev R viewer (legacy; maintained for reference only) | Use `serenity-rev-s.jsx` for current Rev S baseline |
 | `parts/` | CSV per subsystem | Breakdown by domain: airframe, avionics, power, cargo | Detail-level procurement checklists |
 
 ## BOM Structure (JSON Schema)
