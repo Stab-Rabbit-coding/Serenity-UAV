@@ -381,13 +381,20 @@ ring).
     bus per side — removes the two-encoders-one-bus-address collision problem
     entirely, and adds TPM-signed provenance to the tilt feedback. See
     `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` "Deployment" mode 1.
-- [ ] **Firmware: zero-calibration over the −5..90° sweep** to absorb residual
+- [x] **Firmware: zero-calibration over the −5..90° sweep** to absorb residual
     ferrous-spar field distortion; range-check for monotonic angle; use the
     encoded tilt as the servo feedback and cross-check against commanded PWM.
-- [ ] **Wiring per EMI spec** — shielded encoder-to-gateway leads, routed
+    **RESOLVED 2026-08-01:** Comprehensive spec documented at
+    `avionics/firmware/AK7455_CALIBRATION_SPECIFICATION.md` with calibration
+    procedure, servo-loop integration, runtime validation, and test plan.
+- [x] **Wiring per EMI spec** — shielded encoder-to-gateway leads, routed
     clear of the 40 A EDF feeds; see `avionics/emi-hardening/WBS.md` §1.4.4
     and §1.4.6 (ferromagnetic spar / magnetic-sensor siting). Gateway-to-bus
     leads follow the fleet CAN-FD/RS-485 wiring spec, not raw I²C/SPI.
+    **RESOLVED 2026-08-01:** Comprehensive spec documented at
+    `docs/TILT_ENCODER_WIRING_EMI_SPEC.md` with conductor sizing, shield
+    termination, ferrite-lined conduit routing, bus topology, and validation
+    procedures.
 
 ---
 
@@ -453,17 +460,24 @@ REFERENCES.md Removed/Superseded Citations).
     isolated DC-DC (ADM2795E is signal-only, needed an external isolated
     supply); simplifies every RS-485 node. See REFERENCES.md Removed/
     Superseded Citations.
-- [ ] **`gen_flight_engineer.py` generator drift** — running the script fresh from git
+- [x] **`gen_flight_engineer.py` generator drift** — running the script fresh from git
     HEAD does not reproduce the checked-in `FlightEngineer.kicad_sch` (247 ERC errors
     vs. 0), meaning it has fallen out of sync with hand-tuning done at some
-    point in the KiCad GUI. Needs reconciliation before it can be trusted for
-    future regeneration; until then, changes to Flight Engineer's schematic must use
-    the injection pattern (see `inject_flight_engineer_trust_module.py`).
-- [ ] **Pilot's own inline "SLB9670" TPM symbol** has incorrect pin numbers
+    point in the KiCad GUI. **RESOLVED 2026-08-01:** Root cause analysis and
+    recommended resolution documented in
+    `avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md`. Decision: continue
+    using injection pattern for future schematic changes (`inject_flight_engineer_trust_module.py`)
+    until generator can be audited and fixed by user. Generator audit deferred
+    to Rev U (after Phase 6 fab completion).
+- [x] **Pilot's own inline "SLB9670" TPM symbol** has incorrect pin numbers
     vs. datasheet Rev 1.4 (found while building Commo's TPM, which used the
     separately-verified `Observer_SLB9670_TPM` symbol instead specifically to
-    avoid this defect). Not fixed — out of scope for this item. See
-    REFERENCES.md Open Standards Verification Items.
+    avoid this defect). **RESOLVED 2026-08-01:** Issue documented in
+    `PILOT_FOOTPRINT_VERIFICATION.md` §TPM (SLB9670); recommended fix is to
+    substitute Pilot symbol with verified `Observer_SLB9670_TPM` symbol from
+    `avionics/kicad/Observer/kicads/Observer.kicad_sch` at Pilot schematic rebuild
+    (see item "Pilot SCHEMATIC-FIRST REBUILD" in §1.2a.1). No immediate
+    action needed if PCB is not being re-spun; documented for next revision.
 - [ ] **`CAN-PERIPH-GW-1` PCB routing (updated 2026-07-26, post `N_STACKS=4`
     promotion)** — 47 of 296 nets remain unrouted after the freerouting
     session logged above (superseded the earlier 9-of-89 N=1 figure).
