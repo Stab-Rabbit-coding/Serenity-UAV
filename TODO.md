@@ -34,17 +34,6 @@
 - [ ] Add 4130 corrosion-finish spec (zinc/cad plate) to BOM/build guide
 - [ ] Verify AK7455 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
 
-### 0.9 Licensing Updates
-
-→ detail: `docs/WBS.md` §0.9 *(items 1–7 closed 2026-08-01; item 8 open, flagged)*
-
-- [ ] Rename avionics boards to non-trademarked names — conflicts with `AGENTS.md` §9
-    naming table; user decision 2026-08-01 was to leave this open rather than execute a
-    284-file rename. Needs a maintainer call on replacement names (or accepting the
-    fan-use/trademark-disclaimer framing already in
-    `current-specification/LICENSE_AND_ATTRIBUTION.md` "Note on Rights") before any
-    further action.
-
 ### 0.10 Update and correct documentation touching every non-archived file.
 
 → detail: `docs/WBS.md` §0.10
@@ -130,10 +119,10 @@ numeric order.)*
 - [ ] Winch state machine firmware (Simon + gateway)
 - [ ] Re-run winch mass/CG once STS3215 mass is known
 - [ ] Slicer verification
-- [ ] Kaylee's room — PDB mounting in inner neck
+- [ ] Flight Engineer's room — PDB mounting in inner neck
 - [ ] CF skid rod channels
 - [ ] Simon bay — define avionics bay in the MIDDLE section (moved he…
-- [ ] Kaylee room — PDB + battery bay, middle VENTRAL (2026-06-13).
+- [ ] Flight Engineer room — PDB + battery bay, middle VENTRAL (2026-06-13).
 - [ ] Avionics-bay interior name marks (DEFERRED, 2026-06-13).
 - [ ] Phase 11 — aft EDF intake scoop cuts
 - [ ] neck_intake_frame.stl (Phase 11)
@@ -245,61 +234,61 @@ numeric order.)*
 - [ ] FAR-FT-PANEL PCB design
 - [ ] Link placeholders to BOM entries
 
-### 1.2b — PCB Redesigns: Emma Rev S1 / Zoe Rev S1 / Kaylee Rev S1
+### 1.2b — PCB Redesigns: Commo Rev S1 / XO Rev S1 / Flight Engineer Rev S1
 
 → detail: `avionics/rev-s1/WBS.md` §1.2b
 
-- [ ] Emma Rev S1 — add LoRa, replace JST with P1+P2 socket rails
-- [ ] Zoë (Cape-B-2) Rev S1 — remove LoRa, add P1+P2 passthrough rails
-- [ ] Kaylee Rev S1 — remove 6 V BEC, add 5 V servo output
+- [ ] Commo Rev S1 — add LoRa, replace JST with P1+P2 socket rails
+- [ ] XO (Cape-B-2) Rev S1 — remove LoRa, add P1+P2 passthrough rails
+- [ ] Flight Engineer Rev S1 — remove 6 V BEC, add 5 V servo output
 
-### 1.2c — PCB Design: Jayne (Nose/Cargo-Bay Vision, ToF & Laser)
+### 1.2c — PCB Design: Observer (Nose/Cargo-Bay Vision, ToF & Laser)
 
-→ detail: `avionics/jayne/WBS.md` §1.2c
+→ detail: `avionics/observer/WBS.md` §1.2c
 
 - [ ] Final component placement (user-reserved) + impedance-controlle…
-- [ ] Generate production-ready Gerber files to avionics/kicad/Jayne/…
+- [ ] Generate production-ready Gerber files to avionics/kicad/Observer/…
 - [ ] Flag stale laser bore dimensions:
 - [ ] Add cargo_tof_cut() and cargo_laser_cut() cutter modules
 - [ ] Local sensor harness (both sites):
 - [ ] External ring harness — nose:
 - [ ] External ring harness — cargo:
-- [ ] Kaylee second 5 V rail — cross-tied, mutually fault-tolerant…
-- [ ] Jayne 5 V harness:
+- [ ] Flight Engineer second 5 V rail — cross-tied, mutually fault-tolerant…
+- [ ] Observer 5 V harness:
 - [ ] Laser — unify to a single 520 nm green source, Class 2 both sit…
 - [ ] Both Class 2 caps must be hardware-enforced
 - [ ] Nose camera strobe + frame-difference detection
 - [ ] Do not source
 
-### 1.2a — PCB Design: Wash, Zoe, and Emma (EMI-Hardened Variants)
+### 1.2a — PCB Design: Pilot, XO, and Commo (EMI-Hardened Variants)
 
 → detail: `avionics/WBS.md` §1.2a
 
-- [ ] Reconcile Wash.md §14 field-connector table with the actual P…
+- [ ] Reconcile Pilot.md §14 field-connector table with the actual P…
 - [ ] Wire the MIL-1553 connector + transformer.
 - [ ] Redesign the tamper mesh as a per-domain anti-tamper mesh (all…
 - [ ] Carry the tamper signal over the link for the TPM-less boards.
 - [ ] Route the rearranged capes.
 - [ ] Clear residual DRC after mesh + routing
-- [ ] Finish Wash PCB (CAPE-A-2) close-out pass:
-- [ ] Add SBUS/UART DIP switch to Wash
-- [ ] Generate Wash gerbers
-- [ ] Generate Zoë gerbers
-- [ ] Zigbee RF chain was never actually added to Zoë — PCB scope g…
-- [ ] FCC Part 15 §15.235 pre-compliance checklist for Emma
+- [ ] Finish Pilot PCB (CAPE-A-2) close-out pass:
+- [ ] Add SBUS/UART DIP switch to Pilot
+- [ ] Generate Pilot gerbers
+- [ ] Generate XO gerbers
+- [ ] Zigbee RF chain was never actually added to XO — PCB scope g…
+- [ ] FCC Part 15 §15.235 pre-compliance checklist for Commo
 - [ ] EMI isolation validation checklist
 - [ ] Merge claude/cape-em-harsh-variants-9Yfr1 → master
 - [ ] Design Faraday cages / boxes to protect all PCBs
 - [ ] Specify / implement tightly twisted pair bonded shielded wiring…
 
-→ Fleet trust module (2026-07-26), see `avionics/TODO.md` "Fleet Trust Module and Tilt Encoder": Wash PB2-P2 unwired-header finding, Wash/Zoë/Kaylee/Jayne DRC clean-out, CAN-PERIPH-GW-1 N=4 routing all still open.
+→ Fleet trust module (2026-07-26), see `avionics/TODO.md` "Fleet Trust Module and Tilt Encoder": Pilot PB2-P2 unwired-header finding, Pilot/XO/FlightEngineer/Observer DRC clean-out, CAN-PERIPH-GW-1 N=4 routing all still open.
 
 ### 1.4 — EMI Hardening Beyond the PCBs (500 W/m^2 environment)
 
 → detail: `avionics/emi-hardening/WBS.md` §1.4
 
-- [ ] PB2-I + Wash Enclosure
-- [ ] PB2-I + Zoë Enclosure
+- [ ] PB2-I + Pilot Enclosure
+- [ ] PB2-I + XO Enclosure
 - [ ] CAN FD
 - [ ] RS-485
 - [ ] MIL-STD-1553B
@@ -308,10 +297,10 @@ numeric order.)*
 - [ ] I2C
 - [ ] BDSHOT/DSHOT (ESC telemetry)
 - [ ] PWM
-- [ ] Add Kaylee/battery boss pattern to middle_canonical_shell24.sca…
+- [ ] Add FlightEngineer/battery boss pattern to middle_canonical_shell24.sca…
 - [ ] Add ventral battery-swap hatch cut to middle_canonical_shell24.…
-- [ ] Create kaylee_battery_tray.scad.
-- [ ] Create kaylee_pdb_tray.scad.
+- [ ] Create flight_engineer_battery_tray.scad.
+- [ ] Create flight_engineer_pdb_tray.scad.
 - [ ] Update REVN_BUILD_GUIDE_24IN.md Phase 1
 
 ### 1.5 — Documentation
@@ -438,8 +427,8 @@ numeric order.)*
 - [ ] Install 5V/5A BEC; verify 5.00V ±0.05V under 1A bench load.
 - [ ] Pull motor phase leads through conduit to ESCs; solder (verify…
 - [ ] CAN FD termination: 120Ω SOLDERED to CN1 Cape-B at Shepherd's r…
-- [ ] Mount CN1 Zoë on Shepherd's room (Bay A) floor standoffs (M2.5…
-- [ ] Mount FC1 Wash on inter-cape standoffs (M2.5 nylon 20mm) above…
+- [ ] Mount CN1 XO on Shepherd's room (Bay A) floor standoffs (M2.5…
+- [ ] Mount FC1 Pilot on inter-cape standoffs (M2.5 nylon 20mm) above…
 - [ ] Flash OS to eMMC on CN1 and FC1 via USB-C before installation.
 - [ ] CN1-LOG
 - [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN1 Cape-B head…
@@ -449,14 +438,14 @@ numeric order.)*
 - [ ] Daisy-chain RS-485: CN1 → FC1 → exit toward Inara's shuttle (Ba…
 - [ ] Connect MIL-STD-1553: FC1 = Bus Controller (primary); CN1 = RT…
 - [ ] Cap Simon's medbay (Bay E) end of ETH-EA conduit (will connect…
-- [ ] Mount CN2 Zoë on Inara's shuttle (Bay B) floor standoffs; inser…
+- [ ] Mount CN2 XO on Inara's shuttle (Bay B) floor standoffs; inser…
 - [ ] Flash OS to eMMC on CN2 and FC2 before installation.
 - [ ] CN2-LOG
-- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN2 Zoë J_XCVR…
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN2 XO J_XCVR…
 - [ ] Route FC2 GPS coax through dorsal PTFE sleeve (sta ~130mm); mou…
 - [ ] Continue CAN FD daisy-chain Shepherd's room→Inara's shuttle: CN…
 - [ ] Continue RS-485 daisy-chain Shepherd's room (Bay A) → Inara's s…
-- [ ] Connect ETH-AB (Shepherd's room → Inara's shuttle): FC1 Wash ET…
+- [ ] Connect ETH-AB (Shepherd's room → Inara's shuttle): FC1 Pilot ET…
 - [ ] Cap River's room (Bay D) end of ETH-BD (will connect to CN3 in…
 - [ ] Power taps: connect CN1, FC1, CN2, FC2 power leads from PWR con…
 - [ ] Provision TPM 2.0 (SLB9670) on CN1, FC1, CN2, FC2 — unique key…
@@ -498,16 +487,16 @@ numeric order.)*
 
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase6
 
-- [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Wash in Inara's s…
-- [ ] Mount CN3 Zoë on River's room (Bay D) floor standoffs; insert P…
+- [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Pilot in Inara's s…
+- [ ] Mount CN3 XO on River's room (Bay D) floor standoffs; insert P…
 - [ ] CN3-LOG
-- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN3 Zoë J_XCVR…
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN3 XO J_XCVR…
 - [ ] Route FC3 GPS coax through dorsal PTFE sleeve (sta ~275mm); mou…
 - [ ] Continue CAN FD chain: Inara's shuttle (Bay B) FC2 → River's ro…
 - [ ] Continue RS-485 chain Inara's shuttle (Bay B) → River's room (B…
-- [ ] Connect ETH-BD (Inara's shuttle → River's room): FC2 Wash ETH-1…
+- [ ] Connect ETH-BD (Inara's shuttle → River's room): FC2 Pilot ETH-1…
 - [ ] Power tap River's room (Bay D); verify 5V ±0.05V.
-- [ ] Mount CN4 Zoë on Simon's medbay (Bay E) standoffs; insert PB2-I…
+- [ ] Mount CN4 XO on Simon's medbay (Bay E) standoffs; insert PB2-I…
 - [ ] CN4-LOG
 - [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN4 header.
 - [ ] Route FC4 GPS coax through dorsal PTFE sleeve (sta ~350mm); mou…
@@ -649,13 +638,13 @@ numeric order.)*
 → detail: `deferred/WBS.md` §Phase12
 
 - [ ] RBM module:
-- [ ] Kaylee input:
+- [ ] Flight Engineer input:
 - [ ] Current sharing:
 - [ ] Firmware (pwr_fault):
 - [ ] W&B:
 - [ ] CAD:
 
-### 4.2 — FC Node (Wash) - Phase 7 Firmware
+### 4.2 — FC Node (Pilot) - Phase 7 Firmware
 
 → detail: `avionics/firmware/WBS.md` §4.2
 
@@ -667,7 +656,7 @@ numeric order.)*
 - [ ] MIL-STD-1553B RT implementation
 - [ ] TPM-bound attestation
 
-### 4.3 — CN Node (Zoe) - Phase 7 Firmware
+### 4.3 — CN Node (XO) - Phase 7 Firmware
 
 → detail: `avionics/firmware/WBS.md` §4.3
 
@@ -690,32 +679,32 @@ numeric order.)*
 - [ ] GPS cross-check
 - [ ] Security message signing
 
-#### 4.5.1 — Malcolm Hardware Design
+#### 4.5.1 — Skipper Hardware Design
 
 → detail: `gcs/WBS.md` §4.5
 
-- [ ] Create Malcolm host computer specification
-- [ ] Malcolm field enclosure — print and fit-check
+- [ ] Create Skipper host computer specification
+- [ ] Skipper field enclosure — print and fit-check
 - [ ] Gimbal STL generation and mesh verification
 - [ ] Gimbal servo wind-load torque check
-- [ ] Procure Malcolm comms node hardware:
+- [ ] Procure Skipper comms node hardware:
 - [ ] Procure antenna hardware
 - [ ] Procure gimbal hardware:
 
-#### 4.5.2 — Malcolm Comms Node Setup (Phase Malcolm-2)
+#### 4.5.2 — Skipper Comms Node Setup (Phase Skipper-2)
 
 → detail: `gcs/WBS.md` §4.5
 
-- [ ] Flash Debian Linux to Malcolm PB2-I eMMC
-- [ ] Apply Cape-B-2 device tree overlay for Malcolm
-- [ ] Provision TPM 2.0 (SLB9670) on Malcolm's PB2-I
-- [ ] Verify CPLD write-blocker on Malcolm's log μSD
-- [ ] Build and install Malcolm PB2-I firmware:
-- [ ] Install and configure mavlink-router on Malcolm's PB2-I
-- [ ] Enable all 5 radio interfaces on Malcolm's PB2-I
+- [ ] Flash Debian Linux to Skipper PB2-I eMMC
+- [ ] Apply Cape-B-2 device tree overlay for Skipper
+- [ ] Provision TPM 2.0 (SLB9670) on Skipper's PB2-I
+- [ ] Verify CPLD write-blocker on Skipper's log μSD
+- [ ] Build and install Skipper PB2-I firmware:
+- [ ] Install and configure mavlink-router on Skipper's PB2-I
+- [ ] Enable all 5 radio interfaces on Skipper's PB2-I
 - [ ] Configure Wi-Fi transmit power
 
-#### 4.5.3 — Malcolm Host PC Software Setup (Phase Malcolm-3)
+#### 4.5.3 — Skipper Host PC Software Setup (Phase Skipper-3)
 
 → detail: `gcs/WBS.md` §4.5
 
@@ -724,9 +713,9 @@ numeric order.)*
 - [ ] Configure QGroundControl:
 - [ ] Configure Wi-Fi Tx power on host PC
 - [ ] Run tracking software tests:
-- [ ] Implement gcs/malcolm/firmware/pb2i/src/mal_comms.c and mal_com…
+- [ ] Implement gcs/skipper/firmware/pb2i/src/skipper_comms.c and skipper_com…
 
-#### 4.5.4 — Tracking and Gimbal Integration (Phase Malcolm-3)
+#### 4.5.4 — Tracking and Gimbal Integration (Phase Skipper-3)
 
 → detail: `gcs/WBS.md` §4.5
 
@@ -737,7 +726,7 @@ numeric order.)*
 - [ ] Run gimbal_ctrl.py bench test
 - [ ] End-to-end tracking test (outdoor):
 
-#### 4.5.5 — Malcolm Integration Testing (Phase Malcolm-4)
+#### 4.5.5 — Skipper Integration Testing (Phase Skipper-4)
 
 → detail: `gcs/WBS.md` §4.5
 
@@ -747,11 +736,11 @@ numeric order.)*
 - [ ] 49 MHz (Part 15 §15.235) link test (1 km):
 - [ ] Gimbal pointing accuracy test (outdoor, aircraft at 200–500 m):
 - [ ] MAVLink authentication test:
-- [ ] Node loss with Malcolm active:
+- [ ] Node loss with Skipper active:
 
 #### 4.6.1 — TI AM62Ax Vision Pipeline Bring-Up
 
-→ detail: `avionics/jayne/WBS.md` §4.6.1
+→ detail: `avionics/observer/WBS.md` §4.6.1
 
 - [ ] MIPI CSI-2 camera sensor bring-up
 - [ ] VPAC/ISP pipeline configuration
@@ -761,19 +750,19 @@ numeric order.)*
 
 #### 4.6.2 — TI MSPM0G3507 Control Firmware
 
-→ detail: `avionics/jayne/WBS.md` §4.6.2
+→ detail: `avionics/observer/WBS.md` §4.6.2
 
 - [ ] MCAN (CAN-FD) driver bring-up
 - [ ] TFmini-S UART driver
 - [ ] KSZ9477 Ethernet switch management driver
-- [ ] Laser GPIO driver (both sites Class 2 — docs/JAYNE_LASER_ANALYS…
+- [ ] Laser GPIO driver (both sites Class 2 — docs/OBSERVER_LASER_ANALYS…
 - [ ] Laser strobe + crosshair-metrology routine (AM62A7 ISP):
 - [ ] SPI driver to Infineon SLB9670 TPM
 - [ ] Signed telemetry:
 
 #### 4.6.3 — Integration Testing
 
-→ detail: `avionics/jayne/WBS.md` §4.6.3
+→ detail: `avionics/observer/WBS.md` §4.6.3
 
 - [ ] Bench test:
 - [ ] Ring failure test:
@@ -818,4 +807,4 @@ numeric order.)*
 
 ---
 
-*"Get on with it, Wash." — Capt. Malcolm Reynolds*
+*"Get on with it, Pilot." — Capt. Skipper Reynolds*

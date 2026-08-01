@@ -823,7 +823,7 @@
         "cost_usd": 8,
         "supplier": "In-house / AliExpress",
         "search": "38 uH air-core inductor + variable cap + PETG printed post",
-        "notes": "3 mm clearance from GPS patch face; bench-test HDOP ≤1.5 with Emma (49 MHz) TX active before first flight"
+        "notes": "3 mm clearance from GPS patch face; bench-test HDOP ≤1.5 with Commo (49 MHz) TX active before first flight"
       },
       {
         "ref": "POST-AFT-49",
@@ -857,7 +857,7 @@
       },
       {
         "ref": "ANT-LORA-915",
-        "desc": "LoRa 915 MHz RP-SMA whip antenna — River's Room (secondary link, fed from Zoë J_SMA_LORA)",
+        "desc": "LoRa 915 MHz RP-SMA whip antenna — River's Room (secondary link, fed from XO J_SMA_LORA)",
         "qty": 1,
         "mass_g": 5,
         "cost_usd": 3,
@@ -867,7 +867,7 @@
       },
       {
         "ref": "ANT-GPS-PATCH",
-        "desc": "Active GNSS patch antenna, integrated LNA — one per FC node (Wash, Cape-A-2), mounted dorsal hull face-up",
+        "desc": "Active GNSS patch antenna, integrated LNA — one per FC node (Pilot, Cape-A-2), mounted dorsal hull face-up",
         "qty": 4,
         "mass_g": 6,
         "cost_usd": 9,
@@ -877,7 +877,7 @@
       },
       {
         "ref": "WIRE-COUNTERPOISE-49MHZ",
-        "desc": "49 MHz counterpoise (River's antenna) — AWG 22 stranded tinned copper, 460 mm, routed alongside the structural keel inside foam (cargo to rear) — interior/embedded, unaffected by the port-flank relocation of the radiating wire above — terminated at River's Emma antenna feed",
+        "desc": "49 MHz counterpoise (River's antenna) — AWG 22 stranded tinned copper, 460 mm, routed alongside the structural keel inside foam (cargo to rear) — interior/embedded, unaffected by the port-flank relocation of the radiating wire above — terminated at River's Commo antenna feed",
         "qty": 1,
         "mass_g": 2,
         "cost_usd": 2,
@@ -887,7 +887,7 @@
       },
       {
         "ref": "WIRE-49MHZ-2",
-        "desc": "Second, independent 49 MHz top wire (Simon's antenna) — 0.3 mm stainless steel, ~470 mm (same length as WIRE-49MHZ), STARBOARD flank, shoulder height — feeds Simon's Medbay Emma board (River and Simon do not share an antenna, §1.4.2)",
+        "desc": "Second, independent 49 MHz top wire (Simon's antenna) — 0.3 mm stainless steel, ~470 mm (same length as WIRE-49MHZ), STARBOARD flank, shoulder height — feeds Simon's Medbay Commo board (River and Simon do not share an antenna, §1.4.2)",
         "qty": 1,
         "mass_g": 3,
         "cost_usd": 5,
@@ -917,7 +917,7 @@
       },
       {
         "ref": "WIRE-COUNTERPOISE-49MHZ-2",
-        "desc": "Second 49 MHz counterpoise for Simon's antenna — AWG 22 stranded tinned copper, ~460 mm, routed alongside the structural keel inside foam (interior/embedded, unaffected by the starboard-flank relocation of the radiating wire above), terminated at Simon's Emma antenna feed",
+        "desc": "Second 49 MHz counterpoise for Simon's antenna — AWG 22 stranded tinned copper, ~460 mm, routed alongside the structural keel inside foam (interior/embedded, unaffected by the starboard-flank relocation of the radiating wire above), terminated at Simon's Commo antenna feed",
         "qty": 1,
         "mass_g": 2,
         "cost_usd": 2,
@@ -943,7 +943,7 @@
         "cost_usd": 1,
         "supplier": "Digikey / Mouser",
         "search": "Wurth Elektronik 74271222 snap-on ferrite",
-        "notes": "Mirrors choke treatment already used on Emma's internal 49 MHz feedline, Emma.md lines 553–557, §1.4.2"
+        "notes": "Mirrors choke treatment already used on Commo's internal 49 MHz feedline, Commo.md lines 553–557, §1.4.2"
       }
     ]
   },
@@ -1207,7 +1207,7 @@
     ],
     "items": [
       {"ref": "BOW-CAM", "desc": "Bow camera — RunCam Nano 4 (19 mm Nano), forward video to Inara's stack", "qty": 1, "mass_g": 3.6, "mass_oz": 0.13, "std": "REF-SENSOR-001"},
-      {"ref": "BOW-TOF", "desc": "Benewake TFmini-S long-range ToF (12 m indoor / 7 m outdoor, 100 Hz, UART/I2C) to Shepherd Wash UART2", "qty": 1, "mass_g": 5.0, "mass_oz": 0.18, "std": "REF-SENSOR-002"},
+      {"ref": "BOW-TOF", "desc": "Benewake TFmini-S long-range ToF (12 m indoor / 7 m outdoor, 100 Hz, UART/I2C) to Shepherd Pilot UART2", "qty": 1, "mass_g": 5.0, "mass_oz": 0.18, "std": "REF-SENSOR-002"},
       {"ref": "BOW-LASER", "desc": "12 mm crosshair laser module, <=5 mW 650 nm Class 3R, 30 deg below horizon on CL; GPIO-enabled via 2N7002 with key-switch interlock", "qty": 1, "mass_g": 8.0, "mass_oz": 0.28, "std": "REF-IEC-002, REF-FDA-001", "notes": "Mass is a COTS-supplier estimate; varies by module."},
       {"ref": "BOW-PMMA-TOF", "desc": "PMMA disc window for ToF aperture — 8 mm dia x 2 mm, uncoated (transmits 905 nm IR)", "qty": 1, "mass_g": 0.1, "supplier": "source per TODO §1.1.1.1a"},
       {"ref": "BOW-PMMA-LASER", "desc": "PMMA exit window for laser — 5 mm dia x 2 mm (optional; sealed modules may omit)", "qty": 1, "mass_g": 0.1, "supplier": "source per TODO §1.1.1.1a"},
@@ -1245,11 +1245,11 @@
   },
   "rev_q_summary": "Rev Q standardises all 8 avionics nodes on EMI-hardened v2 capes. Changes from Rev P: (1) All 4 FC positions now use Cape-A-2 (Bay A/B/D/E); (2) All 4 CN positions now use Cape-B-2; (3) All 4 XCVR sub-modules now use XCVR-49MHZ-2. Cape-A-1, Cape-B-1, XCVR-49MHZ-1 KiCad, gerbers, and DTS archived. Old nacelle and fuselage EDF design variants archived (see airframe/archive/). AUW impact: +~40 g. Cost impact: +~$232 (inner bays upgraded to v2).",
   "gcs": {
-    "note": "Rev Q1 — Malcolm GCS (Ground Control Station). Host PC + PB2-I comms node + Cape-B-2 + XCVR-49MHZ-2. Five radio links: SiK 915 MHz, LoRa 915 MHz, WiFi 5 GHz, 49 MHz (Part 15 §15.235), Zigbee 2.4 GHz. Servo-driven two-axis antenna gimbal with AS5600 magnetic encoders. IP65 field enclosure. No external PAs (FCC-compliant). See gcs/malcolm/hardware/docs/malcolm_antenna_spec.md.",
+    "note": "Rev Q1 — Skipper GCS (Ground Control Station). Host PC + PB2-I comms node + Cape-B-2 + XCVR-49MHZ-2. Five radio links: SiK 915 MHz, LoRa 915 MHz, WiFi 5 GHz, 49 MHz (Part 15 §15.235), Zigbee 2.4 GHz. Servo-driven two-axis antenna gimbal with AS5600 magnetic encoders. IP65 field enclosure. No external PAs (FCC-compliant). See gcs/skipper/hardware/docs/skipper_antenna_spec.md.",
     "items": [
       {
-        "ref": "MAL-PB2-I",
-        "desc": "PocketBeagle 2 Industrial (AM6254) — Malcolm comms node",
+        "ref": "SKIPPER-PB2-I",
+        "desc": "PocketBeagle 2 Industrial (AM6254) — Skipper comms node",
         "qty": 1,
         "mass_g": 13,
         "cost_usd": 51.03,
@@ -1258,8 +1258,8 @@
         "notes": "USB CDC-ECM to host PC; same hardware as aircraft CN nodes"
       },
       {
-        "ref": "MAL-CAPE-B-2",
-        "desc": "Cape-B-2 (Zoë) PCB — Malcolm radio+logging cape",
+        "ref": "SKIPPER-CAPE-B-2",
+        "desc": "Cape-B-2 (XO) PCB — Skipper radio+logging cape",
         "qty": 1,
         "mass_g": 35,
         "cost_usd": 105.0,
@@ -1268,8 +1268,8 @@
         "notes": "Same PCB as aircraft CN; SiK+LoRa+WiFi+Zigbee+49 MHz interfaces"
       },
       {
-        "ref": "MAL-XCVR-49MHZ-2",
-        "desc": "XCVR-49MHZ-2 49 MHz (Part 15 §15.235) sub-module — Malcolm Emma link",
+        "ref": "SKIPPER-XCVR-49MHZ-2",
+        "desc": "XCVR-49MHZ-2 49 MHz (Part 15 §15.235) sub-module — Skipper Commo link",
         "qty": 1,
         "mass_g": 18,
         "cost_usd": 32.0,
@@ -1278,8 +1278,8 @@
         "notes": "KISS AX.25; UART5; same sub-module as aircraft positions"
       },
       {
-        "ref": "MAL-MICROSD-LOG",
-        "desc": "64 GB microSD — Malcolm log storage (CPLD write-blocked)",
+        "ref": "SKIPPER-MICROSD-LOG",
+        "desc": "64 GB microSD — Skipper log storage (CPLD write-blocked)",
         "qty": 1,
         "mass_g": 2,
         "cost_usd": 12.0,
@@ -1288,7 +1288,7 @@
         "notes": "Same spec as aircraft log cards; CPLD enforces write-block"
       },
       {
-        "ref": "MAL-ANT-915-OMNI",
+        "ref": "SKIPPER-ANT-915-OMNI",
         "desc": "5 dBi 915 MHz omni rubber duck — bench and portable use",
         "qty": 2,
         "mass_g": 28,
@@ -1298,17 +1298,17 @@
         "notes": "One for SiK bench; one for LoRa bench; field use uses Yagi+splitter"
       },
       {
-        "ref": "MAL-ANT-915-YAGI",
+        "ref": "SKIPPER-ANT-915-YAGI",
         "desc": "9 dBi 915 MHz Yagi directional — shared SiK+LoRa via RF splitter",
         "qty": 1,
         "mass_g": 180,
         "cost_usd": 28.0,
         "supplier": "Amazon / Taoglas",
         "pn": "9dBi RP-SMA 915MHz Yagi ~1.2m boom",
-        "notes": "EIRP ≤27.5 dBm FCC-compliant; shared via MAL-RF-SPLITTER; gimbal-mounted"
+        "notes": "EIRP ≤27.5 dBm FCC-compliant; shared via SKIPPER-RF-SPLITTER; gimbal-mounted"
       },
       {
-        "ref": "MAL-ANT-WIFI-PNL",
+        "ref": "SKIPPER-ANT-WIFI-PNL",
         "desc": "14 dBi 5 GHz flat panel — WiFi directional antenna",
         "qty": 1,
         "mass_g": 220,
@@ -1318,17 +1318,17 @@
         "notes": "MUST reduce WL1837MOD Tx to 17 dBm (1700 mBm) for EIRP ≤30 dBm FCC UNII-3; gimbal-mounted"
       },
       {
-        "ref": "MAL-ANT-49MHZ",
+        "ref": "SKIPPER-ANT-49MHZ",
         "desc": "49 MHz base-loaded ¼-wave whip with 4 ground radials",
         "qty": 1,
         "mass_g": 150,
         "cost_usd": 18.0,
         "supplier": "AliExpress / in-house cut",
         "pn": "49MHz loaded whip SO-239 with radial kit",
-        "notes": "~0.94 m physical; per FCC Part 15 §15.235 field-strength limit, EIRP ceiling is ≈-15.2 dBm (≈30 µW), not 20 dBm — see REF-FCC-003 / malcolm_antenna_spec.md"
+        "notes": "~0.94 m physical; per FCC Part 15 §15.235 field-strength limit, EIRP ceiling is ≈-15.2 dBm (≈30 µW), not 20 dBm — see REF-FCC-003 / skipper_antenna_spec.md"
       },
       {
-        "ref": "MAL-ANT-ZIGBEE",
+        "ref": "SKIPPER-ANT-ZIGBEE",
         "desc": "3 dBi 2.4 GHz rubber duck dipole — Zigbee link",
         "qty": 1,
         "mass_g": 15,
@@ -1338,7 +1338,7 @@
         "notes": "Cape-B-2 Zigbee interface"
       },
       {
-        "ref": "MAL-ANT-GPS",
+        "ref": "SKIPPER-ANT-GPS",
         "desc": "u-blox ANN-MB-00 active GNSS patch — GCS operator position fix",
         "qty": 1,
         "mass_g": 20,
@@ -1348,7 +1348,7 @@
         "notes": "3.3 V; SMA; /dev/gnss_gcs via udev"
       },
       {
-        "ref": "MAL-GPS-MODULE",
+        "ref": "SKIPPER-GPS-MODULE",
         "desc": "u-blox M9N/M10Q GNSS breakout — operator position module",
         "qty": 1,
         "mass_g": 5,
@@ -1358,7 +1358,7 @@
         "notes": "USB UART to host PC; NMEA GGA at 10 Hz; tracker.py reads /dev/gnss_gcs"
       },
       {
-        "ref": "MAL-RF-SPLITTER",
+        "ref": "SKIPPER-RF-SPLITTER",
         "desc": "2-way 915 MHz RF splitter — SiK and LoRa share Yagi",
         "qty": 1,
         "mass_g": 25,
@@ -1368,7 +1368,7 @@
         "notes": "≥20 dB isolation; 3.5 dB insertion loss; only one link transmits at a time"
       },
       {
-        "ref": "MAL-GIMBAL-SERVO",
+        "ref": "SKIPPER-GIMBAL-SERVO",
         "desc": "DS3218MG digital servo — pan and tilt axes (×2)",
         "qty": 2,
         "mass_g": 60,
@@ -1378,7 +1378,7 @@
         "notes": "Same model as aircraft nacelle tilt servos; 25 kg·cm at 6 V"
       },
       {
-        "ref": "MAL-GIMBAL-ENC",
+        "ref": "SKIPPER-GIMBAL-ENC",
         "desc": "AS5600 12-bit magnetic encoder PCB breakout — pan and tilt (×2)",
         "qty": 2,
         "mass_g": 3,
@@ -1388,7 +1388,7 @@
         "notes": "I²C 0x36 fixed; ANGLE 0x0E-0x0F; STATUS bit 5=MD; requires TCA9548A mux"
       },
       {
-        "ref": "MAL-GIMBAL-MAG",
+        "ref": "SKIPPER-GIMBAL-MAG",
         "desc": "N42 diametrically magnetised disc magnet 6×2 mm — encoder rotor (×2)",
         "qty": 2,
         "mass_g": 1,
@@ -1398,7 +1398,7 @@
         "notes": "Must be diametric (not axial) for AS5600; epoxy to servo output shaft"
       },
       {
-        "ref": "MAL-TCA9548A",
+        "ref": "SKIPPER-TCA9548A",
         "desc": "TCA9548A 1-to-8 I²C mux breakout — encoder address isolation",
         "qty": 1,
         "mass_g": 2,
@@ -1408,7 +1408,7 @@
         "notes": "addr 0x70; pan on ch.0; tilt on ch.1; resolves AS5600 0x36 address conflict"
       },
       {
-        "ref": "MAL-BRG-6804",
+        "ref": "SKIPPER-BRG-6804",
         "desc": "6804 thin-section bearing 20×32×7 mm — gimbal pan stage",
         "qty": 1,
         "mass_g": 12,
@@ -1418,8 +1418,8 @@
         "notes": "Press-fit to pan turret housing; ABEC-3; grease Mobilux EP2"
       },
       {
-        "ref": "MAL-ENCLOSURE",
-        "desc": "IP65 aluminum project box — Malcolm field enclosure",
+        "ref": "SKIPPER-ENCLOSURE",
+        "desc": "IP65 aluminum project box — Skipper field enclosure",
         "qty": 1,
         "mass_g": 280,
         "cost_usd": 28.0,
@@ -1428,7 +1428,7 @@
         "notes": "EPDM gasket; 40mm fan cutout; cable glands; PCB standoffs at 55×35mm Cape-B-2 hole pattern"
       },
       {
-        "ref": "MAL-TRIPOD",
+        "ref": "SKIPPER-TRIPOD",
         "desc": "Heavy-duty camera tripod / antenna mast — GCS antenna support",
         "qty": 1,
         "mass_g": 1200,
@@ -1438,17 +1438,17 @@
         "notes": "≥5 kg load rating; ≥1.5 m height; 3/8\"-16 to M6 tripod thread at gimbal pan base"
       },
       {
-        "ref": "MAL-PWR-5V-BEC",
-        "desc": "5V 5A DC-DC switching BEC — Malcolm comms node 5V rail",
+        "ref": "SKIPPER-PWR-5V-BEC",
+        "desc": "5V 5A DC-DC switching BEC — Skipper comms node 5V rail",
         "qty": 1,
         "mass_g": 30,
         "cost_usd": 12.0,
         "supplier": "Pololu",
         "pn": "Pololu D24V50F5",
-        "notes": "560 mA typ; 1400 mA peak; input from MAL-FIELD-BATTERY via XT30"
+        "notes": "560 mA typ; 1400 mA peak; input from SKIPPER-FIELD-BATTERY via XT30"
       },
       {
-        "ref": "MAL-PWR-6V-BEC",
+        "ref": "SKIPPER-PWR-6V-BEC",
         "desc": "6V 2A DC-DC switching BEC — gimbal servo 6V rail",
         "qty": 1,
         "mass_g": 20,
@@ -1458,8 +1458,8 @@
         "notes": "200 mA typ; 1200 mA peak stall; dedicated servo rail for 2× DS3218MG"
       },
       {
-        "ref": "MAL-FIELD-BATTERY",
-        "desc": "4S 10000 mAh LiPo — Malcolm field power pack",
+        "ref": "SKIPPER-FIELD-BATTERY",
+        "desc": "4S 10000 mAh LiPo — Skipper field power pack",
         "qty": 1,
         "mass_g": 830,
         "cost_usd": 65.0,
@@ -1470,6 +1470,6 @@
     ],
     "total_mass_g": 3240,
     "total_cost_usd": 566.53,
-    "fcc_compliance_note": "No external PAs are FCC-compliant for any link in standard directional-antenna configuration. WiFi MUST reduce Tx to 17 dBm (1700 mBm) with 14 dBi panel. See malcolm_antenna_spec.md for full EIRP analysis."
+    "fcc_compliance_note": "No external PAs are FCC-compliant for any link in standard directional-antenna configuration. WiFi MUST reduce Tx to 17 dBm (1700 mBm) with 14 dBi panel. See skipper_antenna_spec.md for full EIRP analysis."
   }
 }

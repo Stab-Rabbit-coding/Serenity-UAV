@@ -149,7 +149,7 @@ Each phase build guide includes a **completion checklist** that must be verified
 - [ ] Servo tests completed (nacelle tilt, cargo bay, hoist)
 - [ ] SD card formatted and logged test flights recorded
 - [ ] System security: TPM enrollment, key generation, operator certificates installed
-- [ ] Ground station (Malcolm) communication verified
+- [ ] Ground station (Skipper) communication verified
 - [ ] First hover test completed and stable
 
 ## Work Tracking and Documentation

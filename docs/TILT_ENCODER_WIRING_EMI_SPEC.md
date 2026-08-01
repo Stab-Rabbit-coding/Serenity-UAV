@@ -95,7 +95,7 @@ Each CAN-PERIPH-GW-1 gateway (port and starboard nacelles) publishes tilt-angle 
 **Routing Rules:**
 1. **Separation:** Keep CAN-FD and RS-485 pairs ≥20 mm apart to avoid crosstalk
 2. **Common Conduit:** Use separate ferrite-lined PTFE conduits for CAN-FD and RS-485; route through dedicated channels in fuselage keel or internal structure
-3. **Shield Continuity:** 100% braid coverage, continuous from gateway connector to receiving node (Wash/Zoë/Emma cape connectors)
+3. **Shield Continuity:** 100% braid coverage, continuous from gateway connector to receiving node (Pilot/XO/Commo cape connectors)
 4. **Drain Wires:** One continuous drain per shielded pair; solder to J_CAN / J_RS485 connector shells at receiving nodes (see §4 below)
 
 ### 3.3 Ferrite-Lined Conduit
@@ -104,39 +104,39 @@ Each CAN-PERIPH-GW-1 gateway (port and starboard nacelles) publishes tilt-angle 
 - **Type:** PTFE tubing, internal Ni-Zn ferrite powder fill (or bifilar winding)
 - **Size:** 6 mm OD, 4 mm ID (accommodates two 24 AWG shielded pairs + drain wire slack)
 - **Length:** Nacelle exit point → first avionics bay (Shepherd's room / Bay A); approximately 1.2 m per side
-- **Termination:** Ferrite-lined connector ferrules at both nacelle (gateway) and fuselage (Wash) ends
+- **Termination:** Ferrite-lined connector ferrules at both nacelle (gateway) and fuselage (Pilot) ends
 - **Purpose:** Attenuates RF ingress over 100 kHz–1 GHz range; typical insertion loss ≥20 dB at 500 MHz
 
 ---
 
-## 4. Fuselage Avionics Bay Terminations (Wash/Zoë Capes)
+## 4. Fuselage Avionics Bay Terminations (Pilot/XO Capes)
 
-### 4.1 CAN-FD Connector (J_CAN-FD on Wash / J_CAN-FD on Zoë)
+### 4.1 CAN-FD Connector (J_CAN-FD on Pilot / J_CAN-FD on XO)
 
-**Connector:** 3-pin JST-GH (CAN_H, CAN_L, GND) on Wash and Zoë capes (already populated per AGENTS.md §1.2a)
+**Connector:** 3-pin JST-GH (CAN_H, CAN_L, GND) on Pilot and XO capes (already populated per AGENTS.md §1.2a)
 
 **Wiring:**
-- CAN_H (pin 1): Shielded wire from gateway CAN_H → Wash/Zoë CAN_H pad
-- CAN_L (pin 2): Shielded wire from gateway CAN_L → Wash/Zoë CAN_L pad
+- CAN_H (pin 1): Shielded wire from gateway CAN_H → Pilot/XO CAN_H pad
+- CAN_L (pin 2): Shielded wire from gateway CAN_L → Pilot/XO CAN_L pad
 - Drain Wire: Soldered to J_CAN-FD connector shell (metal); shell bonded to cape GND plane via via-stitching (existing)
-- Shield: Continuous from gateway to Wash; termination: solder braid to shell
+- Shield: Continuous from gateway to Pilot; termination: solder braid to shell
 
 **Isolation on Cape:**
-- ISOW1044BDFMR (or verified drop-in) provides 5 kV galvanic isolation; already present on Wash.kicad_sch (§1.2a.1)
+- ISOW1044BDFMR (or verified drop-in) provides 5 kV galvanic isolation; already present on Pilot.kicad_sch (§1.2a.1)
 - CAN termination: 120 Ω resistor soldered across CAN_H/CAN_L at **Shepherd's room bay terminus only** (see routing topology in §5 below)
 
-### 4.2 RS-485 Connector (J_RS485 on Wash / J_RS485 on Zoë)
+### 4.2 RS-485 Connector (J_RS485 on Pilot / J_RS485 on XO)
 
-**Connector:** 3-pin JST-GH (RS485_A, RS485_B, GND) on Wash and Zoë capes
+**Connector:** 3-pin JST-GH (RS485_A, RS485_B, GND) on Pilot and XO capes
 
 **Wiring:**
-- RS485_A (pin 1): Shielded wire from gateway RS485_A → Wash/Zoë RS485_A pad
-- RS485_B (pin 2): Shielded wire from gateway RS485_B → Wash/Zoë RS485_B pad
+- RS485_A (pin 1): Shielded wire from gateway RS485_A → Pilot/XO RS485_A pad
+- RS485_B (pin 2): Shielded wire from gateway RS485_B → Pilot/XO RS485_B pad
 - Drain Wire: Soldered to J_RS485 connector shell
-- Shield: Continuous from gateway to Wash; termination: solder braid to shell
+- Shield: Continuous from gateway to Pilot; termination: solder braid to shell
 
 **Isolation on Cape:**
-- ISOW1412 provides 5 kV galvanic isolation; already present on Wash.kicad_sch (via fleet-wide upgrade in §1.9.2)
+- ISOW1412 provides 5 kV galvanic isolation; already present on Pilot.kicad_sch (via fleet-wide upgrade in §1.9.2)
 - RS-485 termination: 120 Ω resistor soldered across RS485_A/B at **the two physical bus ends only** (see topology in §5)
 
 ---
@@ -147,27 +147,27 @@ Each CAN-PERIPH-GW-1 gateway (port and starboard nacelles) publishes tilt-angle 
 
 ```
                      Shepherd's Room (Bay A)
-                     ├─ CN1 Zoë (Comms)
-                     ├─ FC1 Wash (Flight Control)
+                     ├─ CN1 XO (Comms)
+                     ├─ FC1 Pilot (Flight Control)
                      └─ 120 Ω termination (SOLDERED)
                               ↓
               [Port Nacelle Gateway] ──CAN_H/L──→ [Shielded pair in ferrite conduit]
               Port AK7455 tilt data                         ↓
               [ISOW1044BDFMR on gateway]          Inara's Shuttle (Bay B)
-                              ↑                   ├─ CN2 Zoë
-                              │                   ├─ FC2 Wash
+                              ↑                   ├─ CN2 XO
+                              │                   ├─ FC2 Pilot
                     [Daisy-chain to other nodes]  └─ No termination
                               ↑
               [Stbd Nacelle Gateway] ──CAN_H/L──→ [Shielded pair in ferrite conduit]
               Stbd AK7455 tilt data                        ↓
               [ISOW1044BDFMR on gateway]           River's Room (Bay D)
-                                                  ├─ CN3 Zoë
-                                                  ├─ FC3 Wash
+                                                  ├─ CN3 XO
+                                                  ├─ FC3 Pilot
                                                   └─ No termination
                                                            ↓
                                                   Simon's Medbay (Bay E)
-                                                  ├─ CN4 Zoë
-                                                  ├─ FC4 Wash
+                                                  ├─ CN4 XO
+                                                  ├─ FC4 Pilot
                                                   └─ 120 Ω termination (SOLDERED)
 ```
 
@@ -218,7 +218,7 @@ Each CAN-PERIPH-GW-1 gateway (port and starboard nacelles) publishes tilt-angle 
 | Gateway CAN_H/L via J_CAN | Twisted pair, 120 Ω characteristic | 100–140 Ω (@1 MHz) |
 | Gateway RS485_A/B via J_RS485 | Twisted pair, 120 Ω characteristic | 100–140 Ω (@1 MHz) |
 | Shield drain wire (encoder → gateway) | Continuous, single strand | < 0.01 Ω |
-| Shield continuity (gateway → Wash) | Braid + drain, full run | < 0.1 Ω |
+| Shield continuity (gateway → Pilot) | Braid + drain, full run | < 0.1 Ω |
 
 ### 7.2 EMI Susceptibility (Bench, Phase 4)
 

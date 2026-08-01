@@ -20,9 +20,9 @@
         - [DEFERRED — Phase 11: Fuselage EDF + RCS](#deferred--phase-11-fuselage-edf--rcs)
     - [Servos and Motors](#servos-and-motors)
 - [Avionics](#avionics)
-    - [Ground Control — Mal](#ground-control--mal)
+    - [Ground Control — Skipper](#ground-control--skipper)
     - [Onboard — 8-node cooperative architecture](#onboard--8-node-cooperative-architecture)
-- [Cargo Handling — Jayne](#cargo-handling--jayne)
+- [Cargo Handling — Observer](#cargo-handling--observer)
 - [References](#references)
 - [License](#license)
 - [Attribution](#attribution)
@@ -96,7 +96,7 @@ Z = +dorsal, origin at the `SerenityAssembly.FCStd` world origin. As of R1
 STL vertex data** by `tools/bake_hull_frame.py` (header marker
 `SerenityUAV HULL-FRAME R1`); the FreeCAD assembly imports every primary
 component at identity. Re-run the bake tool after regenerating any primary STL.
-Documented exceptions: avionics KiCad files (board coordinates), Malcolm GCS
+Documented exceptions: avionics KiCad files (board coordinates), Skipper GCS
 hardware (part-local), and G-code (printer bed). See `airframe/AGENTS.md`
 "Hull-Frame Coordinate Standard" for the full rule set and baked extents.
 
@@ -120,40 +120,40 @@ Seven named compartments are specified:
 
 **Shepherd's room** — Forward avionics bay (Bay A), head section near the bridge.
 Primary tasking: watchdog, fault detection, failover, and authentication.
-Wash + Zoë stack. SiK primary / Wi-Fi secondary comms.
+Pilot + XO stack. SiK primary / Wi-Fi secondary comms.
 Ventilation ducting, cable conduits, and low-impedance bonding to other avionics bays.
 External access via a removable hull panel on the head section.
 
 **Inara's shuttle** — Avionics bay (Bay B), port side of the cargo section.
 Primary tasking: camera, external sensors, and high-bandwidth ground communications.
-Wash + Zoë stack. Wi-Fi primary / LoRa secondary comms.
+Pilot + XO stack. Wi-Fi primary / LoRa secondary comms.
 Ventilation ducting, cable conduits, and low-impedance bonding to other avionics bays.
 External access via a removable hull panel above the port wing (resembles the shuttle
-fairing in the canonical model). Also accessible via Jayne's cargo bay.
+fairing in the canonical model). Also accessible via Observer's cargo bay.
 
 **River's room** — Avionics bay (Bay C), starboard side of the cargo section.
 Primary tasking: forward EDF control, nacelle tilt command/sync, and resilient comms.
-Wash + Zoë stack. 49 MHz (Part 15 §15.235) primary / LoRa secondary comms.
+Pilot + XO stack. 49 MHz (Part 15 §15.235) primary / LoRa secondary comms.
 Ventilation ducting, cable conduits, and low-impedance bonding to other avionics bays.
 External access via a removable hull panel above the starboard wing. Also accessible
-via Jayne's cargo bay.
+via Observer's cargo bay.
 
 **Simon's medbay** — Aft avionics bay (Bay D), middle section.
 Primary tasking: aft EDF control, alternate watchdog, and cargo/payload oversight.
-Wash + Zoë stack. 49 MHz (Part 15 §15.235) primary / SiK secondary comms.
+Pilot + XO stack. 49 MHz (Part 15 §15.235) primary / SiK secondary comms.
 Ventilation ducting, cable conduits, and low-impedance bonding to other avionics bays.
-Adjacent to Kaylee's room. Accessible via Jayne's cargo bay.
+Adjacent to Flight Engineer's room. Accessible via Observer's cargo bay.
 
-**Kaylee's room** — EMI-hardened power distribution bay, middle section, aft of the
+**Flight Engineer's room** — EMI-hardened power distribution bay, middle section, aft of the
 cargo bay and adjacent to Simon's medbay and the engine cone.
-Houses the Kaylee Power Distribution Board (PDB) and battery management system.
-Accessible via Jayne's cargo bay.
+Houses the Flight Engineer Power Distribution Board (PDB) and battery management system.
+Accessible via Observer's cargo bay.
 
-**Battery compartment** — head/cargo section, accessible via Jayne's cargo bay.
+**Battery compartment** — head/cargo section, accessible via Observer's cargo bay.
 Designed for quick field-swapping of the flight battery. Allows mounting of different size batteries based on various intended flight profiles, and allows adjustment for per flight weight and balance tuning.
 
-**Jayne's cargo bay** — Belly clamshell cargo bay with actuated doors.
-Provides payload loading/release and access to Kaylee's room, the battery compartment,
+**Observer's cargo bay** — Belly clamshell cargo bay with actuated doors.
+Provides payload loading/release and access to Flight Engineer's room, the battery compartment,
 Simon's medbay, and the port/starboard avionics bays (Inara's and River's).
 
 **Deferred — Fuselage EDF compartment** *(Phase 11 only)*: 55 mm EDF and motor bay in the
@@ -224,10 +224,10 @@ Rated for the 6 ft (1.829 m) design drop at Phase 11 AUW. Full structural analys
 
 ### Power Distribution
 
-**Kaylee** — EMI-hardened Power Distribution Board provides clean, filtered, monitored,
+**Flight Engineer** — EMI-hardened Power Distribution Board provides clean, filtered, monitored,
 and decoupled power to all powerplant, avionics, flight control, and cargo-handling
-systems with graceful degradation. Kaylee receives direction from the flight control node
-(Wash). Faraday enclosure; located in Kaylee's room, middle section.
+systems with graceful degradation. Flight Engineer receives direction from the flight control node
+(Pilot). Faraday enclosure; located in Flight Engineer's room, middle section.
 
 ### Battery
 
@@ -299,34 +299,34 @@ Cargo door + release controlled via DRV8833 H-bridge on the Simon node.
 EMI hardening design objective: operation in a **500 W/m²** RF environment (e.g., in the
 near field of radiating commercial antenna systems).
 
-### Ground Control — Mal
+### Ground Control — Skipper
 
 - ArduPilot-compatible Ground Control Station.
-- Name: **Malcolm** ("CAPT Reynolds / CAPT Tight Pants") — *"I aim to misbehave."*
-- Requires a paired Zoë + PocketBeagle 2 Industrial stack for communications.
+- Name: **Skipper** ("CAPT Reynolds / CAPT Tight Pants") — *"I aim to misbehave."*
+- Requires a paired XO + PocketBeagle 2 Industrial stack for communications.
 
 ### Onboard — 8-node cooperative architecture
 
-8 × PocketBeagle 2 Industrial (AM6254) boards arranged as 4 stacks of 1 Wash + 1 Zoë,
+8 × PocketBeagle 2 Industrial (AM6254) boards arranged as 4 stacks of 1 Pilot + 1 XO,
 one stack per avionics bay.
 
-**Wash** (flight control cape — 4 nodes):
+**Pilot** (flight control cape — 4 nodes):
 GPS, IMU, barometer, airspeed sensor, FPV camera, TPM 2.0, ADC, ESC telemetry, PWM, GPIO.
 EMI-hardened v2 design (CAPE-A-2).
 
-**Zoë** (comms/logging cape — 4 nodes):
+**XO** (comms/logging cape — 4 nodes):
 MAVLink/SiK 915 MHz, LoRa RFM95W 915 MHz, TI WL1837MOD WiFi/BT, 49 MHz (Part 15 §15.235) transceiver
-**Emma** (daughter board to Zoë), CAN FD, MIL-STD-1553B, RS-485, Ethernet RSTP ring, TPM 2.0,
+**Commo** (daughter board to XO), CAN FD, MIL-STD-1553B, RS-485, Ethernet RSTP ring, TPM 2.0,
 ATF16V8BQL CPLD hardware write-blocker, non-executable log microSD.
 EMI-hardened v2 design (CAPE-B-2).
 
-**Jayne** Camera, TimeOfFlight, and Laser module.  The two Jayne boards provide external sensing.  they are mcu nodes on the can-fd and ethernet ring with vision processing.  one is mounted in the nose, with forward view, and one in the cargo bay with a downward view.  the one in the cargo bay is capable of 3d imaging of objects within close proximity to the belly of the uav.  the forward looking one can do rough size and orientation detection.
+**Observer** Camera, TimeOfFlight, and Laser module.  The two Observer boards provide external sensing.  they are mcu nodes on the can-fd and ethernet ring with vision processing.  one is mounted in the nose, with forward view, and one in the cargo bay with a downward view.  the one in the cargo bay is capable of 3d imaging of objects within close proximity to the belly of the uav.  the forward looking one can do rough size and orientation detection.
 **Rev R — EMI-hardened v2 capes at ALL 8 positions.**
 All nodes use 5 kV galvanic isolation:
 - CAN FD: ISOW1044BDFMR (TI)
 - RS-485: ADM2795EBRWZ (ADI)
 - Ethernet: ADIN1300BCPZ PHY via dual ISO7642FDWRR + Würth 749010012A transformer (JST GH 4P)
-- Emma: SRF2012-100Y CMC, PRTR5V0U2X TVS, X2Y bridging capacitor on antenna feed
+- Commo: SRF2012-100Y CMC, PRTR5V0U2X TVS, X2Y bridging capacitor on antenna feed
 
 All isolation barriers certified at 5 kV reinforced insulation
 [REF-IEC-001 Cl.5.5.2] / [REF-VDE-001 Cl.4.3 and Cl.5.3].
@@ -343,12 +343,12 @@ Gerbers for v2 capes pending DRC sign-off.
 | Wi-Fi | 5 GHz | Inara (primary), Shepherd (secondary) |
 | LoRa | 915 MHz | River (primary), Simon (secondary) |
 | AX.25 / 49 MHz | 49 MHz | River + Simon (47 CFR Part 15 §15.235 [REF-FCC-003] / AX.25 framing [REF-PROTO-001]) |
-| Zigbee | 2.4 GHz | Zoë nodes (secondary mesh) |
+| Zigbee | 2.4 GHz | XO nodes (secondary mesh) |
 
 **Security:** Every message (internal and external) is digitally signed and authenticated
 [REF-NIST-001 §2.1 — Zero Trust Architecture: no implicit trust by network location].
 All sensor data, messages, and camera feeds are logged to hardware-enforced non-executable
-microSD cards (ATF16V8BQL CPLD write-blocker on each Zoë node)
+microSD cards (ATF16V8BQL CPLD write-blocker on each XO node)
 [REF-NIST-004 §4.4.2 — log data protection via hardware write-block].
 NIST SP 800-207 Zero Trust architecture [REF-NIST-001]; NIST SP 800-82 Rev 3 OT security
 [REF-NIST-002]; every board has a TPM 2.0 [REF-NIST-001 §3.3 — device agent attestation].
@@ -364,7 +364,7 @@ NIST SP 800-207 Zero Trust architecture [REF-NIST-001]; NIST SP 800-82 Rev 3 OT 
 
 ---
 
-## Cargo Handling — Jayne
+## Cargo Handling — Observer
 
 *"I was aiming for his head."*
 
@@ -427,7 +427,7 @@ canonical-reference geometry. Revision S, July 2026.
 Covered under **CERN-OHL-W 2.0** (hardware):
 
 - 3D-printable hull, nacelle, and nozzle design files (STL/SCAD/FCStd)
-- PCB schematics and Gerber files for Wash, Zoë, Kaylee, and Emma
+- PCB schematics and Gerber files for Pilot, XO, Flight Engineer, and Commo
 - Circuit diagrams, pinout tables, and wiring specifications
 - Mechanical drawings and assembly specifications
 - Any derived hardware must carry CERN-OHL-W 2.0 (or a compatible licence) and attribute

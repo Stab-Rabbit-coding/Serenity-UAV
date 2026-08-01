@@ -1,4 +1,4 @@
-# Serenity UAV — Avionics (Wash / Zoe / Emma Cape Hardware) Work Breakdown Structure (Detail)
+# Serenity UAV — Avionics (Pilot / XO / Commo Cape Hardware) Work Breakdown Structure (Detail)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
@@ -11,7 +11,7 @@
 > the root index as a commit prerequisite (root `AGENTS.md` "Revisions and Version
 > Control").
 
-*"I'm a leaf on the wind — watch how I soar. — Wash"*
+*"I'm a leaf on the wind — watch how I soar. — Pilot"*
 
 ---
 
@@ -29,7 +29,7 @@
 
 ---
 
-## §1.2a — PCB Design: Wash, Zoe, Emma (EMI-Hardened Variants)
+## §1.2a — PCB Design: Pilot, XO, Commo (EMI-Hardened Variants)
 
 *(root `WBS.md` §1.2a)*
 
@@ -46,9 +46,9 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     integrated DC/DC converter)
 - **Ethernet PHY (Rev S baseline; introduced Rev Q)**: DP83825I (TI, LQFP-32, 10/100BASE-TX RMII) with EMI hardening:
     HX1188NL LAN magnetics (1500 V isolation), SRF2012-100Y CMC, PRTR5V0U2X TVS, TPS62933 1.8V
-    supply. JST SM06B-GHS-TB-1MP connector (no RJ45). Wash: 2× PHY (RMII0+RMII1);
-    Zoë: 1× PHY (RMII0).
-- **Emma**: SRF2012-100Y CMC on antenna coax shield, PRTR5V0U2X TVS on PTT/RX lines,
+    supply. JST SM06B-GHS-TB-1MP connector (no RJ45). Pilot: 2× PHY (RMII0+RMII1);
+    XO: 1× PHY (RMII0).
+- **Commo**: SRF2012-100Y CMC on antenna coax shield, PRTR5V0U2X TVS on PTT/RX lines,
     X2Y bridging capacitor on RF ground plane, Würth 742792512 ferrite bead on +5V rail
 
 **Transform scripts** (generate -2 files from -1 originals):
@@ -68,24 +68,24 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     latency/jitter unfit for the flight-control bus, a fragile 480 Mbps EMI ingress
     path in the 200 V/m environment, and hard/costly galvanic isolation — while
     wasting the AM6254/AM62A7 native MAC. Native DP83825I / ADIN1300 / KSZ9477 path
-    retained. If "reduce per-PHY glue on Wash" resurfaces, the on-architecture answer
+    retained. If "reduce per-PHY glue on Pilot" resurfaces, the on-architecture answer
     is a managed KSZ9477/KSZ9567 switch, tracked as a separate trade — NOT USB.
 
 ##### 1.2a.1 *Cape DRC / routing / ETH2 status (2026-06-12)* — see `avionics/kicad/README.md`
 
-- [x] **Wire second Ethernet (ETH2) on Wash.** `ETH2` / `ETH2-PHY` (ADIN1300) /
+- [x] **Wire second Ethernet (ETH2) on Pilot.** `ETH2` / `ETH2-PHY` (ADIN1300) /
     `T-ETH2` (749010012A) were placed but unconnected; nets now mirror ETH1
     (`ETH2_LINE_*` → `T-ETH2` → `ETH2_*` → PHY), reusing the host-side `RMII1_*`,
     `MDIO`/`MDC`, `PHY2_INTRN`/`PHY2_RSTN`, `VCC2_ETH`/`GND`/`GND2_ETH` nets on
     PB2-P2. 44 pads assigned; diff pairs verified. *(PR #59, 2026-06-12)*
-- [x] **Separate the two Wash PHYs onto independent MDIO buses** (instead of an
+- [x] **Separate the two Pilot PHYs onto independent MDIO buses** (instead of an
     address strap). PHY1/ETH1-PHY → `MDIO0`/`MDC0` (CPSW MDIO, PB2-P2 pins 17/18);
     PHY2/ETH2-PHY → `MDIO1`/`MDC1` (2nd bus, PB2-P2 pins 1/2 = the two spare servo
     channels SERVO6/7). Each PB2-I NIC manages its own PHY; no shared-address
     conflict. PCB + schematic global labels updated. *(2026-06-12)*
     - **Firmware/DT:** PHY2's bus must be brought up as `mdio-gpio` (bit-banged) on
         the two repurposed balls; verify they are GPIO-capable in the PB2-I pinmux.
-- [x] **Wire the field-connector pins to their signals on Wash** (connectors were
+- [x] **Wire the field-connector pins to their signals on Pilot** (connectors were
     all floating). Done per each footprint's Description pinout: SERVO-PWM pads 1–6
     → SERVO0–5 (PWM); ESC-TLM → UART_ESC_TX/RX; GPIO-A…F → GND/+3V3 (+ `GPIO_EXP_*`
     signal pin labelled); CAN-FD → CAN_H/CAN_L; RS-485 → RS485_A/B; PWR-IN → +5V/GND.
@@ -99,7 +99,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 - [x] **Add an ESC-PWM output connector for DSHOT0–3.** Added `ESC-PWM`
     (JST-GH 5-pin SM05B): pins 1–4 → DSHOT0–3, pin 5 → GND. *(2026-06-12)*
     - [ ] Finalise ESC-PWM placement (added at a tentative location).
-- [ ] **Reconcile Wash.md §14 field-connector table with the actual PCB
+- [ ] **Reconcile Pilot.md §14 field-connector table with the actual PCB
     connectors** (PCB has SERVO-PWM 1×8 + GPIO-A…F + ESC-TLM; §14 lists J_SERVO/
     J_ESC/J_GPS/J_ENC/J_SBUS/J_VBAT/J_FAN). Bring the doc and board into agreement.
 - [ ] **Wire the MIL-1553 connector + transformer.** `MIL-1553` connector and the
@@ -107,17 +107,17 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     driver/receiver (DS26LV31/32) are only partially netted.
 - [ ] **Redesign the tamper mesh as a per-domain anti-tamper mesh (all 4 capes).**
     The current `TMESH_P`/`TMESH_N` cross-hatch grid on F.Cu/B.Cu shorts across SMD
-    pads and across the isolated `GND2_*` domains (≈335 of Wash's 465 DRC errors;
-    similar on Zoë). Rework as one monitored mesh net per isolation region
+    pads and across the isolated `GND2_*` domains (≈335 of Pilot's 465 DRC errors;
+    similar on XO). Rework as one monitored mesh net per isolation region
     (secure/`GND` + per-`GND2_CAN`/`GND2_ETH`/`GND2_RS485` field side), keeping the
     0.5 mm `ISOLATION` creepage moat clear between domains. **BLOCKS DRC-clean.**
     Quantified against the IEC 62368-1 reinforced-insulation requirement in §0.6
-    (2026-06-22): 13 genuine cross-domain `TMESH`-vs-`GND2_*` violations on Wash
-    (min 0.125 mm), 9 on Zoë (min 0.0 mm/direct contact) — both far short of the
-    0.5 mm netclass minimum and the ≥ 8 mm physical creepage target in `Wash.md`.
-- [ ] **Carry the tamper signal over the link for the TPM-less boards.** Kaylee
-    and Emma have no local TPM: route Kaylee's mesh signal to Wash and
-    Emma's to Zoë over the inter-board link.
+    (2026-06-22): 13 genuine cross-domain `TMESH`-vs-`GND2_*` violations on Pilot
+    (min 0.125 mm), 9 on XO (min 0.0 mm/direct contact) — both far short of the
+    0.5 mm netclass minimum and the ≥ 8 mm physical creepage target in `Pilot.md`.
+- [ ] **Carry the tamper signal over the link for the TPM-less boards.** Flight Engineer
+    and Commo have no local TPM: route Flight Engineer's mesh signal to Pilot and
+    Commo's to XO over the inter-board link.
 - [ ] **Route the rearranged capes.** The manual component reseat left ~60 signal
     nets per cape unrouted (7 power/ground nets are planes). Headless freerouting
     was **not** usable (see toolchain findings in `avionics/kicad/README.md`):
@@ -126,47 +126,47 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     KiCad GUI**; route the impedance-controlled Ethernet pairs interactively
     (length-matched, 100 Ω ±10% MDI). **BLOCKS gerbers / fab.**
 - [ ] **Clear residual DRC after mesh + routing** (counts measured 2026-06-12,
-    error+warning): Wash 465 / 121 unconnected, Zoë 554 / 146, Emma 421 /
-    160, Kaylee 221 / 181. Remaining types after the mesh fix are mostly
+    error+warning): Pilot 465 / 121 unconnected, XO 554 / 146, Commo 421 /
+    160, Flight Engineer 221 / 181. Remaining types after the mesh fix are mostly
     silk-over-copper, text-height, courtyard-overlap, and lib-footprint mismatch.
 
-- [ ] **Finish Wash PCB (CAPE-A-2) close-out pass:**
+- [ ] **Finish Pilot PCB (CAPE-A-2) close-out pass:**
     - [ ] Verify every external-facing connector (SERVO-PWM, ESC-PWM, MIL-1553, CAN-FD,
         RS-485, ETH) is a shielded-shell part with shell tied to PGND — audit against
         the footprint Description pinout already documented at §1.2 line ~1340.
     - [ ] Run ERC/DRC net-validity pass — confirm zero unconnected nets outside the
-        13-net Emma-style residual list; cross-check against the 465/121 DRC count
-        already logged for Wash at §1.2.
+        13-net Commo-style residual list; cross-check against the 465/121 DRC count
+        already logged for Pilot at §1.2.
     - [ ] Verify all ferrite beads are placed at each digital/RF section boundary and
         on +5V/+3V3 entering from off-board connectors (pattern already used on
-        Emma's +5V boundary, §1.2/§1.3 Phase 3).
+        Commo's +5V boundary, §1.2/§1.3 Phase 3).
     - [ ] Verify isolation caps/creepage moat (0.5 mm `ISOLATION`) are intact after the
         per-domain tamper-mesh rework (§1.2, "Redesign the tamper mesh").
-- [ ] **Add SBUS/UART DIP switch to Wash** — add a 2-position DIP (or solder-jumper
+- [ ] **Add SBUS/UART DIP switch to Pilot** — add a 2-position DIP (or solder-jumper
     pair) to select SBUS vs. plain UART framing on the existing J_SBUS-equivalent
-    pad, matching the J_SBUS line item already in Wash.md §14's field-connector
-    table (§1.2, "Reconcile Wash.md §14...").
-- [ ] **Generate Wash gerbers** — `CAPE-A-2.kicad_pcb` complete; run DRC to zero errors in
+    pad, matching the J_SBUS line item already in Pilot.md §14's field-connector
+    table (§1.2, "Reconcile Pilot.md §14...").
+- [ ] **Generate Pilot gerbers** — `CAPE-A-2.kicad_pcb` complete; run DRC to zero errors in
     KiCad; export to `avionics/kicad/gerbers/CAPE-A-2/`; re-export drill files.
-    - **BLOCKS Wash fab order**
-- [ ] **Generate Zoë gerbers** — `CAPE-B-2.kicad_pcb` complete; same DRC + export procedure;
+    - **BLOCKS Pilot fab order**
+- [ ] **Generate XO gerbers** — `CAPE-B-2.kicad_pcb` complete; same DRC + export procedure;
     export to `avionics/kicad/gerbers/CAPE-B-2/`.
-    - **BLOCKS Zoë fab order**
+    - **BLOCKS XO fab order**
 
-- [x] remove Wi-Fi, sik, and loRa antennas from Zoë. Use filtered chokes on rf lines to route all
-    RF signals from antennas to Wi-Fi, lora, zigbee,and sik xcvr circuits on Zoë, and/or use uart
+- [x] remove Wi-Fi, sik, and loRa antennas from XO. Use filtered chokes on rf lines to route all
+    RF signals from antennas to Wi-Fi, lora, zigbee,and sik xcvr circuits on XO, and/or use uart
     or i2c with filtering to connect isolated xcvrs to the cape. **Done (2026-06-05):** Added §13
     antenna filter chains to CAPE-B-2.kicad_sch — each radio ANT pin now routes through a Johanson
     BPF (FL_LORA/FL_SIK: 0915LP15B0100E; FL_WIFI: 2450BP15B050E) and RCLAMP0502B ESD shunt to a
     dedicated SMA connector (J_SMA_LORA, J_SMA_WIFI, J_SMA_SIK). SiK uses Hirose U.FL J_SIK_ANT for
     module pigtail. All connector shells PGND. See CAPE-B-2.md §13.
-- [x] **Re-evaluate space / restore Ethernet to Zoë** — One DP83825I EMI-hardened PHY
-    added to Zoë at Rev R (introduced Rev Q); J_ETH_B connector populated. Board has adequate
+- [x] **Re-evaluate space / restore Ethernet to XO** — One DP83825I EMI-hardened PHY
+    added to XO at Rev R (introduced Rev Q); J_ETH_B connector populated. Board has adequate
     space; RF SMA connectors remain. *(done 2026-06-07)*
-- [ ] **Zigbee RF chain was never actually added to Zoë — PCB scope gap (flagged 2026-06-22,
+- [ ] **Zigbee RF chain was never actually added to XO — PCB scope gap (flagged 2026-06-22,
     cross-ref §1.4.2).** The "remove Wi-Fi, sik, and loRa antennas" item above (2026-06-05)
     names Zigbee as a target XCVR circuit, but only LoRa/SiK/Wi-Fi filter chains were built;
-    `Zoë.kicad_sch` has no CC2652R7 (or equivalent Zigbee SoC), no Zigbee antenna filter, and
+    `XO.kicad_sch` has no CC2652R7 (or equivalent Zigbee SoC), no Zigbee antenna filter, and
     no SMA/diplexer pad. `CLAUDE.md` lists Zigbee 2.4 GHz as one of the 4 required external
     C2 links — this is a real hardware gap, not yet scheduled to a revision. **Antenna
     strategy already decided (§1.4.2, 2026-06-22):** restrict WL1837MOD Wi-Fi to 5 GHz only
@@ -174,10 +174,10 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     shared Wi-Fi antenna (no separate Zigbee antenna/SMA pad needed). Still open: add
     CC2652R7 + diplexer to a Cape-B-2 schematic revision; decide which bay(s) carry it.
 
-- [ ] **Generate Emma gerbers** — `XCVR-49MHZ-2.kicad_pcb` complete; export to
+- [ ] **Generate Commo gerbers** — `XCVR-49MHZ-2.kicad_pcb` complete; export to
     `avionics/kicad/gerbers/XCVR-49MHZ-2/`.
-    - **BLOCKS Emma fab order**
-- [ ] **FCC Part 15 §15.235 pre-compliance checklist for Emma** — document field strength
+    - **BLOCKS Commo fab order**
+- [ ] **FCC Part 15 §15.235 pre-compliance checklist for Commo** — document field strength
     (≤10,000 µV/m at 3 m per §15.235(a), ≈30 µW / −15.2 dBm EIRP-equivalent — requires firmware
     PA limit, not the ≤100 mW previously assumed), harmonic suppression ≥40 dBc at 2nd/3rd
     harmonics (§15.235(b)/§15.209), FCC ID silkscreen labeling block (§2.803/§15.19).  Not
@@ -194,14 +194,14 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     FAR-FAN-40, FAR-EMI-VENT-40, FAR-BOND-STRAP, FAR-FT-PANEL, FAR-FERRITE-4MM) already exists at
     §1.1.5 (364 g / 0.80 lbm system total) — these sub-tasks convert the placeholders into
     real, build-ready enclosures:
-    - [ ] **Shepherd's Room cage** (Cape-A-2 + Cape-B-2 stack, no Emma) — final wall thickness,
+    - [ ] **Shepherd's Room cage** (Cape-A-2 + Cape-B-2 stack, no Commo) — final wall thickness,
         seam/gasket detail, FAR-FAN-40 mount, FAR-EMI-VENT-40 vent location.
-    - [ ] **Inara's Shuttle cage** (Cape-A-2 + Cape-B-2 stack, no Emma) — same scope as Shepherd's.
-    - [ ] **River's Room cage** (Cape-A-2 + Cape-B-2 + Emma stack) — add Emma board clearance and
+    - [ ] **Inara's Shuttle cage** (Cape-A-2 + Cape-B-2 stack, no Commo) — same scope as Shepherd's.
+    - [ ] **River's Room cage** (Cape-A-2 + Cape-B-2 + Commo stack) — add Commo board clearance and
         LoRa/49 MHz feedthrough ports to the FAR-FT-PANEL design.
-    - [ ] **Simon's Medbay cage** (Cape-A-2 + Cape-B-2 + Emma stack) — same scope as River's Room.
-    - [ ] **Kaylee (PDB) enclosure** — verify whether the PDB needs a full Faraday cage or only a
-        bond strap to the keel ground plane (no TPM/RF on Kaylee; see §1.2 "Carry the tamper
+    - [ ] **Simon's Medbay cage** (Cape-A-2 + Cape-B-2 + Commo stack) — same scope as River's Room.
+    - [ ] **Flight Engineer (PDB) enclosure** — verify whether the PDB needs a full Faraday cage or only a
+        bond strap to the keel ground plane (no TPM/RF on Flight Engineer; see §1.2 "Carry the tamper
         signal over the link for the TPM-less boards").
     - [ ] Bond each cage to the airframe ground reference via FAR-BOND-STRAP with no second
         return path (avoid ground loops per §1.4.1 prose constraint).
@@ -220,27 +220,27 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
     - [ ] Ethernet (CPSW3G ring) — shielded Cat5e/Cat6, 100 Ω ±10% MDI pairs matching the
         impedance-controlled PCB traces already specified at §1.2.
     - [ ] Servo/PWM and ESC telemetry leads — twisted pair, routed ≥5 mm from RF/antenna runs.
-    - [ ] Power harness (14 AWG nacelle feeds, battery-to-Kaylee) — twisted where co-routed with
+    - [ ] Power harness (14 AWG nacelle feeds, battery-to-Flight Engineer) — twisted where co-routed with
         signal wiring; ferrite bead at each digital/RF section boundary crossing.
 
 ---
 
-### Wash footprint verification and schematic-first rebuild (2026-07-13/14)
+### Pilot footprint verification and schematic-first rebuild (2026-07-13/14)
 
-- [ ] **Wash footprint-vs-datasheet verification — DONE 2026-07-13 (Claude Opus 4.8);
+- [ ] **Pilot footprint-vs-datasheet verification — DONE 2026-07-13 (Claude Opus 4.8);
     7 footprints are NOT manufacturable, must be rebuilt before fab.** Full report:
-    `avionics/kicad/Wash/WASH_FOOTPRINT_VERIFICATION.md`. Fixing any of these remaps
+    `avionics/kicad/Pilot/WASH_FOOTPRINT_VERIFICATION.md`. Fixing any of these remaps
     pin→net on flight hardware, so each needs the confirmed schematic pinout first (ERC
     is not clean — see below) and MUST NOT be guessed.
     - [ ] **CAN-TR (ISOW1044BDFMR): wrong land — has 16-pad `SOIC-16W`, part is a
         20-pin DFM (SOIC-20 land).** Datasheet `isow1044.pdf` §7 / Fig 7-1. (This is the
-        fleet-wide ISOW1044 footprint error; confirmed present on Wash.)
+        fleet-wide ISOW1044 footprint error; confirmed present on Pilot.)
     - [ ] **TPM (SLB9670): wrong land — has `QFN-32 4×4 P0.4mm EP2.65`, part is VQFN-32
         0.5 mm pitch, ~5×5 body, EP 3.6×3.6.** Datasheet `SLB_9670VQ20_Infineon.pdf` p.15.
     - [ ] **ETH1-PHY / ETH2-PHY (ADIN1300BCPZ): wrong land — has `QFN-48 7×7`, part is
         40-lead LFCSP 6×6 mm (CP-40-26) w/ EP.** Datasheet `adin1300.pdf`.
     - [ ] **RS485 (ADM2795EBRWZ): wrong land — has 20-pad `SOIC-20W`, part is 16-lead
-        SOIC_W (RW-16).** Datasheet `adm2795e.pdf` Tables 3/4/7. (Also fix `Wash.md` §3.)
+        SOIC_W (RW-16).** Datasheet `adm2795e.pdf` Tables 3/4/7. (Also fix `Pilot.md` §3.)
     - [ ] **BARO (BMP388): wrong land — has 8-pad `LGA-8 2.0×2.5`, part is 10-pin metal-lid
         LGA 2.0×2.0 mm.** Datasheet `bst-bmp388-ds001.pdf`.
     - [ ] **GPS (SAM-M10Q-00B): placeholder `Package` (2-pad blob) — author real u-blox
@@ -257,25 +257,25 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
         across the barrier (same net on side-1 input AND side-2 output pin) — no isolation;
         (c) 50 MHz RMII `REF_CLK` through a general-purpose digital isolator is unworkable.
         The ETH-isolation subcircuit must be re-architected + re-netted (schematic-first),
-        and the BOM/`Wash.md`/`REFERENCES.md` strings changed ISO7642FDWRR → ISO6442.
+        and the BOM/`Pilot.md`/`REFERENCES.md` strings changed ISO7642FDWRR → ISO6442.
     - [ ] **Remaining part-number gaps (land OK, part unconfirmed):** (a) X2Y 4.7 nF caps
         (`X2Y_Cap_4T_0402`) — no mfr P/N supplied; (b) Molex Nano-Fit 4P (PWR-IN) — no
         datasheet supplied. *(JST GH 4P/3P connectors VERIFIED CORRECT vs `eGH.pdf` — GH
         1.25 mm pitch, SM0xB-GHS-TB — no action.)*
-    - [ ] **Rewrite `Wash.md` §§1–3 to the as-built architecture** — board uses ADIN1300 +
-        Würth 749010012A + ISO7642 + ADM2795E(RW-16); `Wash.md` still documents a stale
+    - [ ] **Rewrite `Pilot.md` §§1–3 to the as-built architecture** — board uses ADIN1300 +
+        Würth 749010012A + ISO7642 + ADM2795E(RW-16); `Pilot.md` still documents a stale
         DP83825I + HX1188NL + TPS62933 design that is not on the PCB.
     - [ ] **Verified CORRECT (no action):** DS26LV31, DS26LV32, ICM-42688-P, PCA9555DB,
         SMAJ33CA, PRTR5V0U2X, SRF2012-100Y, 742792512, PB2 P1/P2 sockets, SERVO-PWM header.
-- [ ] **Wash SCHEMATIC-FIRST REBUILD — decided + started 2026-07-14 (user).**
-    Verification proved the schematic (`Wash.kicad_sch`) and PCB are *different designs*
+- [ ] **Pilot SCHEMATIC-FIRST REBUILD — decided + started 2026-07-14 (user).**
+    Verification proved the schematic (`Pilot.kicad_sch`) and PCB are *different designs*
     (schematic = DP83825I + HX1188NL + TPS62933; PCB = ADIN1300 + 749010012A + ISO6442),
     and that net→pin maps are wrong on multiple parts (TPM signals on NC/VDD/GND pins;
-    ISO6442 channels shorted). Fixing the PCB alone would re-create the Emma/Zoë sch↔pcb
+    ISO6442 channels shorted). Fixing the PCB alone would re-create the Commo/XO sch↔pcb
     divergence, so the rebuild is **schematic-first** (user choice). **Ethernet PHY =
     ADIN1300** (the EMI-hardening rework moved to ADI's industrial PHY; it's on the PCB and
-    is the datasheet on hand) — `Wash.md`/schematic DP83825I baseline is superseded.
-    Auditable generator: `avionics/kicad/Wash/scripts/gen_wash_sch.py`, datasheet-accurate
+    is the datasheet on hand) — `Pilot.md`/schematic DP83825I baseline is superseded.
+    Auditable generator: `avionics/kicad/Pilot/scripts/gen_wash_sch.py`, datasheet-accurate
     full-pinout symbols → `kicads/Wash_rebuild.kicad_sch` (loads in kicad-cli 9.0.2; ERC
     only expected off-sheet-global warnings).
     - [x] Core isolated-bus + security + GPS ICs authored with full datasheet pinouts:
@@ -290,17 +290,17 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
         Nano-Fit); tie the off-sheet global labels; drive GND/power (PWR_FLAG) to clear ERC.
     - [ ] Associate corrected footprints (per WASH_FOOTPRINT_VERIFICATION.md) to each symbol;
         regenerate/re-sync the PCB; ERC + DRC --schematic-parity to zero.
-    - [ ] Once approved, promote `Wash_rebuild.kicad_sch` → `Wash.kicad_sch` (archive old).
-- [ ] **Finish Wash PCB (CAPE-A-2) close-out pass:**
+    - [ ] Once approved, promote `Wash_rebuild.kicad_sch` → `Pilot.kicad_sch` (archive old).
+- [ ] **Finish Pilot PCB (CAPE-A-2) close-out pass:**
     - [ ] Verify every external-facing connector (SERVO-PWM, ESC-PWM, MIL-1553, CAN-FD,
         RS-485, ETH) is a shielded-shell part with shell tied to PGND — audit against
         the footprint Description pinout already documented at §1.2 line ~1340.
     - [ ] Run ERC/DRC net-validity pass — confirm zero unconnected nets outside the
-        13-net Emma-style residual list; cross-check against the 465/121 DRC count
-        already logged for Wash at §1.2.
+        13-net Commo-style residual list; cross-check against the 465/121 DRC count
+        already logged for Pilot at §1.2.
     - [ ] Verify all ferrite beads are placed at each digital/RF section boundary and
         on +5V/+3V3 entering from off-board connectors (pattern already used on
-        Emma's +5V boundary, §1.2/§1.3 Phase 3).
+        Commo's +5V boundary, §1.2/§1.3 Phase 3).
     - [ ] Verify isolation caps/creepage moat (0.5 mm `ISOLATION`) are intact after the
         per-domain tamper-mesh rework (§1.2, "Redesign the tamper mesh").
 
@@ -308,19 +308,19 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 *(root `WBS.md` §1.8)*
 
-- [x] The ground control station is named "Malcolm" aka "CAPT Reynolds" or "CAPT Tight Pants" - "I aim to misbehave" *(implemented throughout all docs)*
+- [x] The ground control station is named "Skipper" aka "CAPT Reynolds" or "CAPT Tight Pants" - "I aim to misbehave" *(implemented throughout all docs)*
 
-- [x] The Flight Control Avionics Cape is named "Wash" - "I'm a leaf on the wind" *(implemented: CAPE-A-2.kicad_sch, CAPE-A-2.md, all docs)*
+- [x] The Flight Control Avionics Cape is named "Pilot" - "I'm a leaf on the wind" *(implemented: CAPE-A-2.kicad_sch, CAPE-A-2.md, all docs)*
 
-- [x] The Comms/Logging/Payload Cape is named "Zoë" - "Big Damn Heros, sir." *(implemented: CAPE-B-2.kicad_sch, CAPE-B-2.md, all docs)*
+- [x] The Comms/Logging/Payload Cape is named "XO" - "Big Damn Heros, sir." *(implemented: CAPE-B-2.kicad_sch, CAPE-B-2.md, all docs)*
 
-- [x] The Power Distribution Board is named "Kaylee" - "Everything is shiny." *(implemented: Kaylee.md, PWR-DIST-1.kicad_sch)*
+- [x] The Power Distribution Board is named "Flight Engineer" - "Everything is shiny." *(implemented: FlightEngineer.md, PWR-DIST-1.kicad_sch)*
 
-- [x] The Cargo handling system is named "Jayne" - "I was aiming for his head." *(implemented: README.md §Cargo Handling — Jayne, CLAUDE.md, generate_placeholders.py, middle_canonical_shell24.scad)*
+- [x] The Cargo handling system is named "Observer" - "I was aiming for his head." *(implemented: README.md §Cargo Handling — Observer, CLAUDE.md, generate_placeholders.py, middle_canonical_shell24.scad)*
 
 - [x] The forward avionics bay is named "Shepherd's room" (Bay A) - "I have heathens enough right here." *(implemented 2026-06-07)*
 
-- [x] The second avionics bay is named "Inara's shuttle" (Bay B) - "Mal, I will never understand you." *(implemented 2026-06-07)*
+- [x] The second avionics bay is named "Inara's shuttle" (Bay B) - "Mal, I will never understand you." *(implemented 2026-06-07; bay name unchanged by the 2026-08-01 board rename, TODO.md §0.9)*
 
 - [x] The third avionics bay is named "River's room" (Bay D) - "Also, I can kill you with my mind." *(implemented 2026-06-07)*
 
@@ -330,7 +330,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 *(root `WBS.md` §1.9)*
 
-- While all Wash capes are identical and all Zoë capes are also identical, they have different primary tasking.  **All Stacks are capable to communicate and control the UAV safety in a benign environment on their own.***
+- While all Pilot capes are identical and all XO capes are also identical, they have different primary tasking.  **All Stacks are capable to communicate and control the UAV safety in a benign environment on their own.***
 
 - UAV Tasks with PACE prioritization and failover per stack (primary, alternative, contingency, emergency)
 
@@ -344,7 +344,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 ---
 
-- Mal is the ground control station - He's the boss.
+- Skipper is the ground control station - He's the boss.
 
 - Shepherd is the crew's conscience and therefore takes care of primarily watchdog, fault detection, failover, and authentication. His stack has SiK primary and Wi-Fi secondary.
 
@@ -352,11 +352,11 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 - River provides primary control of the forward EDFs, and provides EDF and nacelle control command and syncing, and the most resilient comms.  She may be crazy, but she comes through when no one else can.  She has 49 MHz (Part 15 §15.235) primary and LoRa secondary.
 
-- Simon is the alternate watchdog for the ship, but most of his attention is on River.  He's got aft EDF control and alternate nacelle control. He follows River's lead but makes sure she doesn't crash the ship. Simon also controls Jayne, and ensures that the cargo isn't jettisoned or the crew abandoned. He's got 49MHz as his primary antenna and SiK as his backup.
+- Simon is the alternate watchdog for the ship, but most of his attention is on River.  He's got aft EDF control and alternate nacelle control. He follows River's lead but makes sure she doesn't crash the ship. Simon also controls Observer, and ensures that the cargo isn't jettisoned or the crew abandoned. He's got 49MHz as his primary antenna and SiK as his backup.
 
 ### §1.9.1 — Nacelle Tilt-Angle Feedback (Hall encoder)
 
-Each nacelle carries a magnetic angle encoder (`MAL-TILT-ENC-PCB` — **AKM
+Each nacelle carries a magnetic angle encoder (`SKIPPER-TILT-ENC-PCB` — **AKM
 AK7455**, SPI, off-axis, REF-SENSOR-008) at the wing/nacelle joint reading a
 Ø22 diametric ring magnet on the rotating spar hub (airframe:
 `wings-nacelles/WBS.md` §1.1.3.6). It closes the tilt-servo loop on the
@@ -438,45 +438,45 @@ REFERENCES.md Removed/Superseded Citations).
         edge clearance; left as-is rather than risk breaking its routed
         connections with an automated nudge — fix by hand in final GUI
         review). Gerbers generated reflecting this ~84%-routed state.
-- [x] **Kaylee** — full trust module added (had none before). ERC 0, added
-    via non-destructive schematic injection (`inject_kaylee_trust_module.py`)
-    rather than full regeneration — `gen_kaylee.py` itself has drifted from
+- [x] **Flight Engineer** — full trust module added (had none before). ERC 0, added
+    via non-destructive schematic injection (`inject_flight_engineer_trust_module.py`)
+    rather than full regeneration — `gen_flight_engineer.py` itself has drifted from
     the checked-in working file (247 ERC errors if run fresh vs. 0 in the
     working file); this pre-existing drift is unresolved, tracked below.
-- [x] **Jayne** — RS-485 (ISOW1412) added; already had MCU + TPM + CAN-FD.
+- [x] **Observer** — RS-485 (ISOW1412) added; already had MCU + TPM + CAN-FD.
     ERC 0.
-- [x] **Emma** — TPM only (SLB9670); no separate CAN-FD/RS-485 needed, Emma
-    reaches the bus via Zoë's P1/P2 PocketBeagle2 link. ERC 0, added via
-    `inject_emma_tpm.py`. **Corrected 2026-07-26:** binds to the PB2-I host
-    via the SPI1 slot + `TPM_IRQN`/`TPM_RSTN` already reserved on Emma's own
-    P1/P2 trunk, not a dedicated header — see Emma.md "Security Notes".
-- [x] **Wash, Zoë** — pre-existing (unrelated, predates this session)
+- [x] **Commo** — TPM only (SLB9670); no separate CAN-FD/RS-485 needed, Commo
+    reaches the bus via XO's P1/P2 PocketBeagle2 link. ERC 0, added via
+    `inject_commo_tpm.py`. **Corrected 2026-07-26:** binds to the PB2-I host
+    via the SPI1 slot + `TPM_IRQN`/`TPM_RSTN` already reserved on Commo's own
+    P1/P2 trunk, not a dedicated header — see Commo.md "Security Notes".
+- [x] **Pilot, XO** — pre-existing (unrelated, predates this session)
     defects fixed while swapping to ISOW1412: broken ADM2795EBRWZ pin
     numbering and wrong ISOW1044BDFMR footprint (16-pin footprint on a
     20-pin part). `avionics/kicad/fix_wash_zoe_isolators.py`. Verified zero
-    ERC regression against baseline (Wash 48 / Zoë 234 violations, unchanged
+    ERC regression against baseline (Pilot 48 / XO 234 violations, unchanged
     — both counts are pre-existing and out of scope for this item).
 - [x] **Fleet-wide ADM2795E → ISOW1412** — ISOW1412 integrates its own
     isolated DC-DC (ADM2795E is signal-only, needed an external isolated
     supply); simplifies every RS-485 node. See REFERENCES.md Removed/
     Superseded Citations.
-- [x] **`gen_kaylee.py` generator drift** — running the script fresh from git
-    HEAD does not reproduce the checked-in `Kaylee.kicad_sch` (247 ERC errors
+- [x] **`gen_flight_engineer.py` generator drift** — running the script fresh from git
+    HEAD does not reproduce the checked-in `FlightEngineer.kicad_sch` (247 ERC errors
     vs. 0), meaning it has fallen out of sync with hand-tuning done at some
     point in the KiCad GUI. **RESOLVED 2026-08-01:** Root cause analysis and
     recommended resolution documented in
-    `avionics/kicad/Kaylee/GENERATOR_DRIFT_ANALYSIS.md`. Decision: continue
-    using injection pattern for future schematic changes (inject_kaylee_trust_module.py)
+    `avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md`. Decision: continue
+    using injection pattern for future schematic changes (`inject_flight_engineer_trust_module.py`)
     until generator can be audited and fixed by user. Generator audit deferred
     to Rev U (after Phase 6 fab completion).
-- [x] **Wash's own inline "SLB9670" TPM symbol** has incorrect pin numbers
-    vs. datasheet Rev 1.4 (found while building Emma's TPM, which used the
-    separately-verified `Jayne_SLB9670_TPM` symbol instead specifically to
+- [x] **Pilot's own inline "SLB9670" TPM symbol** has incorrect pin numbers
+    vs. datasheet Rev 1.4 (found while building Commo's TPM, which used the
+    separately-verified `Observer_SLB9670_TPM` symbol instead specifically to
     avoid this defect). **RESOLVED 2026-08-01:** Issue documented in
-    `WASH_FOOTPRINT_VERIFICATION.md` §TPM (SLB9670); recommended fix is to
-    substitute Wash symbol with verified `Jayne_SLB9670_TPM` symbol from
-    `avionics/kicad/Jayne/kicads/Jayne.kicad_sch` at Wash schematic rebuild
-    (see item "Wash SCHEMATIC-FIRST REBUILD" in §1.2a.1). No immediate
+    `PILOT_FOOTPRINT_VERIFICATION.md` §TPM (SLB9670); recommended fix is to
+    substitute Pilot symbol with verified `Observer_SLB9670_TPM` symbol from
+    `avionics/kicad/Observer/kicads/Observer.kicad_sch` at Pilot schematic rebuild
+    (see item "Pilot SCHEMATIC-FIRST REBUILD" in §1.2a.1). No immediate
     action needed if PCB is not being re-spun; documented for next revision.
 - [ ] **`CAN-PERIPH-GW-1` PCB routing (updated 2026-07-26, post `N_STACKS=4`
     promotion)** — 47 of 296 nets remain unrouted after the freerouting
@@ -492,30 +492,30 @@ REFERENCES.md Removed/Superseded Citations).
     violations from a congested prior reroute, by moving the conflicting
     +3V3 copper to B.Cu with a via bridge chosen to clear both the ENC_CSN
     trace and a nearby GND stitching via. DRC 0 hard (was 11).
-- [x] **Emma RSSI_DCD net — properly routed, 2026-07-26.** The existing
+- [x] **Commo RSSI_DCD net — properly routed, 2026-07-26.** The existing
     "routed" copper was a straight line plowing through +3V3, RF_TX, +5V,
     and GND (the naive router flagged as unusable in
-    `avionics/kicad/TODO-1.2b-STATUS-REPORT.md` §Emma). Ripped up and
+    `avionics/kicad/TODO-1.2b-STATUS-REPORT.md` §Commo). Ripped up and
     re-routed via a grid-based A* pathfinder (avoiding all pad/via/track
     obstacles with margin) on the previously-empty In1.Cu layer, with one
     manual clearance fix against a GND stitching via. DRC 0 hard.
-- [x] **Emma TPM footprint — placed, 2026-07-26.** Schematic-only since
-    `inject_emma_tpm.py`; PCB had zero trust-module footprints. Emma's F.Cu
+- [x] **Commo TPM footprint — placed, 2026-07-26.** Schematic-only since
+    `inject_commo_tpm.py`; PCB had zero trust-module footprints. Commo's F.Cu
     is fully saturated — an exhaustive obstacle-aware search (pads + tracks
     + vias, not just courtyards) found zero clear ≥6×6 mm sites anywhere on
     the front layer. TPM + its reset pull-up + decoupling cap placed on
     B.Cu instead (verified clear), nets assigned, DRC 0 hard.
-- [x] **Emma TPM architecture corrected, 2026-07-26.** TPM now binds to the
+- [x] **Commo TPM architecture corrected, 2026-07-26.** TPM now binds to the
     PB2-I host via the `SPI1_CS_TPM`/`SPI1_CLK`/`SPI1_MOSI`/`SPI1_MISO` +
-    `TPM_IRQN`/`TPM_RSTN` nets already reserved on Emma's own P1/P2 trunk
+    `TPM_IRQN`/`TPM_RSTN` nets already reserved on Commo's own P1/P2 trunk
     (a shared SPI1 bus also carrying `SPI1_CS_NOR`/`SPI1_CS_LORA`), not a
-    dedicated header — matches the design intent that Emma run as a
+    dedicated header — matches the design intent that Commo run as a
     self-sufficient cape on non-Serenity deployments, with the TPM
     providing full services to whichever PB2 host it's stacked on. The
     dedicated `J_TPM` header (and its unplaced-header open item) is
-    removed from both the schematic and `inject_emma_tpm.py`. ERC/DRC 0
+    removed from both the schematic and `inject_commo_tpm.py`. ERC/DRC 0
     hard after the rewire. Routing TPM/R/C to these nets is still open.
-- [ ] **Wash: `PB2-P2` header appears fully unwired in ERC (all 36 pins,
+- [ ] **Pilot: `PB2-P2` header appears fully unwired in ERC (all 36 pins,
     2026-07-26 finding) — root cause not found.** WBS history (§1.2a.1)
     records ETH2/`PB2-P2` wiring as completed work, but current ERC shows
     every `PB2-P2` pin as `pin_not_connected`, and `kicad-cli sch export
@@ -526,9 +526,9 @@ REFERENCES.md Removed/Superseded Citations).
     `Conn_36` lib symbol) — genuinely coincident, yet KiCad won't merge the
     nets. Not resolved before session end; needs either sub-millimeter
     precision inspection or opening the file in the KiCad GUI to see what's
-    visually happening. **If real, this means Wash's ETH2/MDIO1 wiring has
+    visually happening. **If real, this means Pilot's ETH2/MDIO1 wiring has
     been silently dead** — treat as higher priority than cosmetic ERC noise.
-- [ ] **Wash full DRC/ERC clean-out — not started.** 48 ERC hard (42
+- [ ] **Pilot full DRC/ERC clean-out — not started.** 48 ERC hard (42
     `pin_not_connected` + 6 `wire_dangling`, all `PB2-P1`/`PB2-P2`, see
     above) + 76 DRC hard (ISOLATION/POWER/DIFF_PAIR netclass clearance +
     `net_conflict` — PCB pad nets don't match schematic in many places).
@@ -536,24 +536,24 @@ REFERENCES.md Removed/Superseded Citations).
     swapped to ISOW1412 (`fix_wash_zoe_isolators.py`) — footprint swap +
     re-route + gerbers still open. **Keep all legacy connectors** (user
     instruction) even where superseded by the trust module.
-- [ ] **Zoë full DRC/ERC clean-out — not started.** 219 ERC hard (206
+- [ ] **XO full DRC/ERC clean-out — not started.** 219 ERC hard (206
     `pin_not_connected`, mirrors the CAN-TR/ISOW1044 VCC1/GND1/RXD/VCC2 pins
     genuinely unconnected in the schematic, plus LoRa/other pre-existing
     gaps) + 154 DRC hard. Same ADM2795E→ISOW1412 PCB footprint swap needed
-    as Wash. A stray `_autosave-Zoë.kicad_pcb` + `.lck` files are
-    git-tracked in `avionics/kicad/Zoë/kicads/` — the autosave file appears
+    as Pilot. A stray `_autosave-XO.kicad_pcb` + `.lck` files are
+    git-tracked in `avionics/kicad/XO/kicads/` — the autosave file appears
     to be an accidental commit of a KiCad crash-recovery artifact (578 hard
     DRC violations on its own, clearly not real design intent) and should
     be reviewed for removal. **Keep all legacy connectors** (user
     instruction).
-- [ ] **Kaylee full PCB resync — not started.** 213 DRC hard, almost all
+- [ ] **Flight Engineer full PCB resync — not started.** 213 DRC hard, almost all
     `net_conflict` (PCB pad nets don't match the schematic at all — the
     injected trust module and other schematic changes never propagated to
-    layout; compounds the pre-existing `gen_kaylee.py` drift above). No
+    layout; compounds the pre-existing `gen_flight_engineer.py` drift above). No
     trust-module footprints exist on the PCB yet. Largest remaining board
     task — needs a real `Update PCB from Schematic` pass plus manual net
     cleanup, not just footprint addition.
-- [ ] **Jayne PCB resync — not started.** 124 DRC hard. PCB (`Jayne.kicad_pcb`,
+- [ ] **Observer PCB resync — not started.** 124 DRC hard. PCB (`Observer.kicad_pcb`,
     dated 2026-07-14) predates the schematic's ISOW1412/Section H addition
     (2026-07-26) entirely — no RS-485 footprint on the board yet.
 
@@ -568,9 +568,9 @@ REFERENCES.md Removed/Superseded Citations).
 | Item | Qty | Unit Cost | Total | Notes |
 |------|-----|----------|-------|-------|
 | PocketBeagle 2 Industrial (AM6254) | 4× | $51.03 | ~$204 | DK 2820-100003007-ND |
-| Wash (Wash) PCB (JLCPCB assembled) | 2× | ~$55 | ~$110 | FC1/Shepherd's room (Bay A) + FC2/Inara's shuttle (Bay B) (v2, EMI-hardened) |
-| Zoë (Zoë) PCB (JLCPCB assembled) | 2× | ~$95 | ~$190 | CN1/Shepherd's room (Bay A) + CN2/Inara's shuttle (Bay B) (v2, EMI-hardened) |
-| Emma PCB (JLCPCB assembled) | 2× | ~$25 | ~$50 | 49 MHz (Part 15 §15.235) sub-module for CN1, CN2 (v2 EMI-hardened) |
+| Pilot (Pilot) PCB (JLCPCB assembled) | 2× | ~$55 | ~$110 | FC1/Shepherd's room (Bay A) + FC2/Inara's shuttle (Bay B) (v2, EMI-hardened) |
+| XO (XO) PCB (JLCPCB assembled) | 2× | ~$95 | ~$190 | CN1/Shepherd's room (Bay A) + CN2/Inara's shuttle (Bay B) (v2, EMI-hardened) |
+| Commo PCB (JLCPCB assembled) | 2× | ~$25 | ~$50 | 49 MHz (Part 15 §15.235) sub-module for CN1, CN2 (v2 EMI-hardened) |
 | SiK 915MHz ground station radio | 1× | ~$15 | ~$15 | MAVLink GCS link |
 | microSD 64GB (log, write-blocked) | 2× | ~$10 | ~$20 | CN1-LOG, CN2-LOG |
 | JST-GH cables: CAN 3-pin, RS-485 3-pin, ETH 6-pin, 1553 4-pin, GPS 5-pin | assorted | — | ~$20 | Per §14 connector table |
@@ -583,9 +583,9 @@ REFERENCES.md Removed/Superseded Citations).
 | Item | Qty | Approx. Cost | Notes |
 |------|-----|-------------|-------|
 | PocketBeagle 2 Industrial (AM6254) | 4× | ~$204 | CN3, FC3, CN4, FC4 |
-| Wash (Wash) PCB (JLCPCB assembled) | 2× | ~$110 | FC3/River's room (Bay D) + FC4/Simon's medbay (Bay E) (v2) |
-| Zoë (Zoë) PCB (JLCPCB assembled) | 2× | ~$190 | CN3/River's room (Bay D) + CN4/Simon's medbay (Bay E) (v2) |
-| Emma PCB (assembled) | 2× | ~$50 | CN3, CN4 (v2 EMI-hardened) |
+| Pilot (Pilot) PCB (JLCPCB assembled) | 2× | ~$110 | FC3/River's room (Bay D) + FC4/Simon's medbay (Bay E) (v2) |
+| XO (XO) PCB (JLCPCB assembled) | 2× | ~$190 | CN3/River's room (Bay D) + CN4/Simon's medbay (Bay E) (v2) |
+| Commo PCB (assembled) | 2× | ~$50 | CN3, CN4 (v2 EMI-hardened) |
 | microSD 64GB (log) | 2× | ~$20 | CN3-LOG, CN4-LOG |
 | VL53L5CX 8×8 ToF sensor | 12× | ~$84 | Dual OA arrays |
 | TCA9548A 8-ch I²C multiplexer | 2× | ~$3 | One per array host |

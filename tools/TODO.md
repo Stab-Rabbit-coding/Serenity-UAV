@@ -12,7 +12,7 @@
 > and the owning subsystem `WBS.md` files (open subsets live in each subsystem's `TODO.md`). **&#9733; = on the critical path to first
 > flight (Phase 5).**
 
-*"Everything is shiny, Cap'n. Not to fret. — Kaylee"*
+*"Everything is shiny, Cap'n. Not to fret. — Flight Engineer"*
 
 ---
 
@@ -53,5 +53,5 @@ Close them in `WBS.md` there; this list is a read-only convenience view for the 
 
 - `tools/bake_hull_frame.py` — hull-frame bake (idempotent; `--check`, `--report`)
 - `airframe/blender-scripts/` — canonical fuselage hollowing pipeline
-- `airframe/kicad/*.py` (e.g. `gen_emma_sch.py`, `mod_emma_pcb.py`) — avionics schematic/PCB
+- `airframe/kicad/*.py` (e.g. `gen_commo_sch.py`, `mod_commo_pcb.py`) — avionics schematic/PCB
   generators (see [`avionics/WBS.md`](../avionics/WBS.md), [`avionics/rev-s1/WBS.md`](../avionics/rev-s1/WBS.md))

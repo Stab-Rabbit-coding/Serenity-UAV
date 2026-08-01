@@ -63,7 +63,7 @@
 → full detail: `WBS.md` §Phase12
 
 - [ ] RBM module:
-- [ ] Kaylee input:
+- [ ] Flight Engineer input:
 - [ ] Current sharing:
 - [ ] Firmware (`pwr_fault`):
 - [ ] W&B:

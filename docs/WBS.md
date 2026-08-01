@@ -23,7 +23,7 @@
 | §0.1 | 0.1 — FCC Part 95 Section-Number Verification | 1 | — |
 | §0.7 | 0.7 — CI Lint Scope and Repo-Wide Lint Debt | 1 | — |
 | §0.8 | 0.8 — Tilt-Spar Material Allowables + Hall Encoder | 3 | — |
-| §0.9 | 0.9 — Licensing Updates | 1 | — |
+| §0.9 | 0.9 — Licensing Updates | 0 | — |
 | §1.5 | 1.5 — Documentation | 3 | — |
 | §1.6 | 1.6 — Rev Q: Repo-Wide Architecture Propagation | 0 | — |
 | §1.7 | 1.7 — Rev R: Component Rev Sync + s_ Prefix Removal | 0 | — |
@@ -33,7 +33,7 @@
 | §6.1 | 6.1 — Branch Reconciliation / Pre-Flight Compliance | 1 | &#9733; |
 | §6.2 | 6.2 — STL Mesh Repair | 0 | — |
 | §6.3 | 6.3 — Rev S Checkpoint | 0 | — |
-| | **Total open (this subsystem)** | **18** | |
+| | **Total open (this subsystem)** | **17** | |
 
 ---
 
@@ -49,7 +49,7 @@
     `build_guide_12_security_hw.svg`, `build_guide_20_node_placement.svg`,
     `build_guide_21_node_install.svg`, `build_plan.svg`, `components_overview.svg`) are
     built entirely or partly around the **archived** Cape-A-1/Cape-B-1 hardware instead of
-    the Rev R1 baseline (all 8 nodes now carry Wash/Cape-A-2 + Zoë/Cape-B-2 per CLAUDE.md).
+    the Rev R1 baseline (all 8 nodes now carry Pilot/Cape-A-2 + XO/Cape-B-2 per CLAUDE.md).
     This is a content-currency problem independent of citations — needs a dedicated pass
     (likely a content rewrite, not a text-substitution fix) with visual verification.
     **Superseded by, and folded into, the "Rebuild `graphical-build-guide/`..." item in
@@ -70,7 +70,7 @@
 
 - [x] **Code-identifier "RCRS" naming renamed to "49MHZ_XCVR"/"XCVR-49MHZ"** *(done
     2026-07-18, user-approved naming — user explicitly specified the frequency-qualified
-    form to avoid ambiguity with "Emma," the board that also carries LoRa)*. Every
+    form to avoid ambiguity with "Commo," the board that also carries LoRa)*. Every
     code-identifier/label use of "RCRS" as a naming convention (not a regulatory claim) was
     renamed; every legitimate regulatory-term use of "RCRS" (i.e. actually discussing 47 CFR
     Part 95 Subpart C, Radio Control Radio Service) was left untouched. Scope, beyond the
@@ -78,22 +78,22 @@
     - Firmware: `SI5351_RCRS_*`/`si5351_set_rcrs_channel()`/`rcrs_channel_reg_t`/
       `s_rcrs_channels` → `SI5351_49MHZ_XCVR_*`/`si5351_set_49mhz_xcvr_channel()`/
       `xcvr_49mhz_channel_reg_t`/`s_xcvr_49mhz_channels` in
-      `avionics/firmware/cn/src/si5351.{h,c}`, `xcvr_kiss.c`, `main.c`; `MAL_RCRS_*` →
-      `MAL_49MHZ_XCVR_*` in `gcs/malcolm/firmware/pb2i/src/mal_config.h`.
+      `avionics/firmware/cn/src/si5351.{h,c}`, `xcvr_kiss.c`, `main.c`; `SKIPPER_RCRS_*` →
+      `SKIPPER_49MHZ_XCVR_*` in `gcs/skipper/firmware/pb2i/src/skipper_config.h`.
     - KiCad: `UART_RCRS_TX`/`UART_RCRS_RX` → `UART_49MHZ_XCVR_TX`/`UART_49MHZ_XCVR_RX` in
-      `avionics/kicad/add_sensors_sbus.py` and both `Zoë.kicad_sch`/`.kicad_pcb` and
-      `Emma.kicad_sch`/`.kicad_pcb` (pure net-name text edits, occurrence counts verified
+      `avionics/kicad/add_sensors_sbus.py` and both `XO.kicad_sch`/`.kicad_pcb` and
+      `Commo.kicad_sch`/`.kicad_pcb` (pure net-name text edits, occurrence counts verified
       1:1 before/after — no geometry, placement, or routing touched); `JST-GH-3P-RCRS` →
-      `JST-GH-3P-XCVR-49MHZ`; the Emma board title comment dropped the redundant "RCRS".
-      Also updated the two Emma migration scripts (`gen_emma_sch.py`, `mod_emma_pcb.py`) so
+      `JST-GH-3P-XCVR-49MHZ`; the Commo board title comment dropped the redundant "RCRS".
+      Also updated the two Commo migration scripts (`gen_commo_sch.py`, `mod_commo_pcb.py`) so
       a future re-run doesn't regress the renamed nets.
     - Docs: `RCRS-49`/`TVS-RCRS`/`FB-RCRS` → `XCVR-49MHZ`/`TVS-XCVR-49MHZ`/`FB-XCVR-49MHZ` in
-      `Emma.md`/`Zoë.md`; same pattern in the active current-spec files
+      `Commo.md`/`XO.md`; same pattern in the active current-spec files
       (`current-specification/bom_revS.csv`, `serenity-rev-r.jsx` — excluding the one BOM row
       already self-labeled `ARCHIVED`, left as-is per the revision-archival policy) and
       `docs/PHASED_BUILD_GUIDE.md`.
     - Also found and fixed while auditing: two DTS pinctrl labels
-      (`malcolm_rcrs_uart_pins` → `malcolm_xcvr_49mhz_uart_pins`), a `malcolm_config.yaml`
+      (`skipper_rcrs_uart_pins` → `skipper_xcvr_49mhz_uart_pins`), a `skipper_config.yaml`
       config key (`rcrs:` → `xcvr_49mhz:`, unused by any code yet), SCAD comment prose in
       `rcrs49_wire_post.scad`/`middle_canonical_shell24.scad`/`head_shell24.scad` (filenames
       left as-is — a physical-file rename is a separate, larger task), and a **stale/incorrect
@@ -109,7 +109,7 @@
       documentation); root `TODO.md`/`WBS.md` historical entries; `docs/bom_revP/Q/R.json`
       (already-archived historical BOM snapshots that self-document the same Part 95
       correction via `~~strikethrough~~` — rewriting them would erase that record); Gerber
-      files under `avionics/kicad/Zoë/gerbers/` (fab output regenerated from source — net-name
+      files under `avionics/kicad/XO/gerbers/` (fab output regenerated from source — net-name
       text embedded in them is informational only and doesn't affect the physical board;
       regenerate before sending to fab).
     - **ERC/DRC could not be re-verified in this environment**: `tools/validate_kicad.py`
@@ -142,7 +142,7 @@
         `airframe/stls/fuselage/cargo/generate_cargo_doors.py` (renamed the early-return
         fallback closure `belly_z` → `belly_z_fallback`) and a confusing except-variable
         reuse in `generate_cargo_mounts.py` (renamed the loop variable `exc` → `err`). The
-        3 remaining "missing yaml stubs" findings on the Malcolm tracking scripts were a
+        3 remaining "missing yaml stubs" findings on the Skipper tracking scripts were a
         missing dev-tool dependency, not a code issue — installed `types-PyYAML`.
       - `PYTHON_PYLINT` (E/F classes only) — 5 real findings, all the same root cause:
         this dev sandbox's KiCad 7.0.11 `pcbnew` Python bindings don't have the KiCad 9
@@ -151,7 +151,7 @@
         `ci.yml`/`tools/validate_kicad.py`) — scoped `# pylint: disable=...` comments
         added with the version-mismatch explanation, not code rewrites, since the code is
         correct for the real target. One further pylint tuple-unpacking false positive
-        (`mod_vera_ds_pcb.py`/`mod_Jayne_ds_pcb.py`, `padnets.items()` mis-inferred as
+        (`mod_vera_ds_pcb.py`/`mod_Observer_ds_pcb.py`, `padnets.items()` mis-inferred as
         `float`/`str`) got the same treatment.
       - `CLANG_FORMAT` — root-caused via the PR #140 CI run: `clang-format -i` (repo's
         own `.clang-format`) locally against clang-format 18.1.3 left 7 lines across 7
@@ -254,10 +254,10 @@
         design, and BOM revision snapshots (`bom_revP/Q/R.json`) that are supposed to
         largely restate the prior revision plus incremental changes per the Rev-letter
         archival policy (`AGENTS.md` §8) — or independent per-board KiCad automation
-        scripts (e.g. `mod_vera_ds_pcb.py` / `mod_Jayne_ds_pcb.py`) that are
+        scripts (e.g. `mod_vera_ds_pcb.py` / `mod_Observer_ds_pcb.py`) that are
         deliberately self-contained so one board's generator can be modified without
         risking another's already-validated PCB. Real de-duplication candidates exist
-        (that Vera/Jayne script pair is the clearest one) but extracting shared code
+        (that Vera/Observer script pair is the clearest one) but extracting shared code
         from working, physically-validated PCB-generation scripts is an architectural
         decision with real hardware consequences — needs explicit user review, not a
         mechanical lint fix, matching the same caution applied to the RCRS rename in
@@ -287,7 +287,7 @@ study and the wing/nacelle Hall tilt-feedback sensor. Both carry
     `SPAR-TILT-4130` in the BOM and the build guide, or adopt the plating-free
     17-4 PH alternative. (docs §3.5 / §9.)
 - [ ] **Verify the MT6701 off-axis geometry + pinout.** Encoder selected =
-    `MAL-TILT-ENC-PCB` (Magntek MT6701, I²C, off-axis; MA732/SPI fallback). Confirm
+    `SKIPPER-TILT-ENC-PCB` (Magntek MT6701, I²C, off-axis; MA732/SPI fallback). Confirm
     against the MT6701 datasheet: pinout/protocol, off-axis air-gap (assumed
     1.5 mm), ring OD/ID, IC radial offset (R = 12 mm), and ferrous-through-shaft
     behaviour; add a `REF-SENSOR-*` entry with a validated URL before PCB/harness
@@ -337,7 +337,7 @@ gaps. Full policy: `docs/attribution_and_licencing.md` (new).
     a scope header naming these components).
 - [x] **License all avionics under CERN-OHL-W.** `avionics/LICENSE` already carried the full
     CERN-OHL-W 2.0 text (predates this audit); added the same scope-header treatment as
-    `airframe/LICENSE` for consistency (naming Wash/Zoë/Kaylee/Emma/Jayne/CAN-PERIPH-GW-1).
+    `airframe/LICENSE` for consistency (naming Pilot/XO/FlightEngineer/Commo/Observer/CAN-PERIPH-GW-1).
 - [x] **License all documentation, code, scripts, drawings, and other non-hardware items
     under CC-BY-SA.** Created `docs/LICENSE`, `tools/LICENSE`, `current-specification/LICENSE`,
     `graphical-build-guide/LICENSE` (pure CC BY-SA 4.0), plus mixed `gcs/LICENSE` and
@@ -366,19 +366,61 @@ gaps. Full policy: `docs/attribution_and_licencing.md` (new).
     Zigbee dependency is not OSI-licensed (TI TSPA), and Phase 7 firmware source doesn't
     exist yet (only the architecture spec does). Certification submission itself requires the
     human maintainer to act — this repository can only prepare the documentation.
-- [ ] **Rename avionics boards to non-trademarked names — OPEN, flagged, not executed.**
-    Wash, Zoë, Kaylee, Emma, and Jayne are the canonical board names in the authoritative
-    root `AGENTS.md` §9 naming table (deliberate Firefly-character naming, tied to PACE
-    failover roles and Firefly quotes, referenced across roughly 284 files: KiCad
-    silkscreens/schematics, firmware, every subsystem doc). Per root `AGENTS.md` §11.2 ("any
-    conflict between this file and a subsystem file: stop and get user adjudication before
-    proceeding"), this item was raised with the user before any rename was attempted. **User
-    decision (2026-08-01): skip the rename, leave this item open.** No files were renamed.
-    Before this can be executed, a maintainer needs to either (a) supply replacement names
-    and accept the ~284-file, largely-irreversible-in-effort rename, or (b) formally close
-    this as "won't do" and instead rely on the trademark disclaimer already present in
-    `current-specification/LICENSE_AND_ATTRIBUTION.md` "Note on Rights" (non-commercial
-    fan-engineering framing, no claimed trademark rights, no implied endorsement).
+- [x] **Rename avionics boards to non-trademarked names — CLOSED 2026-08-01.**
+    Wash, Zoë, Kaylee, Emma, Jayne, and Malcolm ("Mal") were the original Firefly-character
+    board names in the authoritative root `AGENTS.md` §9 naming table (PACE failover roles,
+    Firefly quotes, referenced across ~284 files: KiCad silkscreens/schematics/PCB/gerbers,
+    firmware, every subsystem doc). Per root `AGENTS.md` §11.2, this was first raised with the
+    user before any rename was attempted; the user's initial call was to leave it open. The
+    user then supplied replacement role names directly (Malcolm/Mal→Skipper, Wash→Pilot,
+    Zoë→XO, Kaylee→Flight Engineer, Emma→Commo, Jayne→Observer) and directed the full rename,
+    including the physical KiCad project files/folders.
+    - Physical renames: `git mv` for all 198 board-folder paths (schematics, PCBs, gerbers,
+      scripts, companion `.md` docs) plus the 6 shared `Jayne_*.kicad_sym` symbol libraries
+      (authored under Jayne, reused fleet-wide) → `Observer_*.kicad_sym`, with every
+      referencing `sym-lib-table`/`fp-lib-table`/embedded `lib_symbols` updated to match.
+      Also caught: a second, separate `avionics/kicad/gerbers/{CAPE-B-2-S1,Emma-S1,Kaylee-S1}/`
+      gerber export set not inside the per-board folders, and 4 STL BOM placeholders
+      (`Kaylee_PDB_*.stl`, `Malcolm_enclosure_*.stl`, `Malcolm_tripod_*.stl`, `text_kaylee.stl`).
+    - Content sweep: ~5,800 substitutions across ~330 tracked text files, using word-boundary
+      regex for the safe general case (`\bWash\b`, `\bMAL\b`, etc.) plus a small set of
+      hand-verified literal-substring rules for snake_case/compound identifiers (`Jayne_`,
+      `mal_gimbal`, `mal_config`, `mal_telemetry`, `mal_com`, `mal_far`, `mal_aircraft`, etc.).
+      **Deliberately did not** use a blanket substring replace for "mal_" or "emma" — verified
+      first that would have corrupted real, unrelated tokens already in the repo: Blender
+      `normal_z` surface-normal variables and KiCad `thermal_pads`/`thermal_gap`/
+      `thermal_bridge_width` PCB thermal-relief settings (contain "mal" as a substring),
+      "washer" fastener text, and "piezoelectric" (contains "zoe"). All four verified intact
+      after the sweep.
+    - **Not verified: KiCad ERC/DRC.** No `kicad-cli` in this build environment. Every renamed
+      symbol/lib-id/net string was changed identically everywhere it appears (single global
+      substitution pass), which preserves netlist topology by construction as long as no
+      instance was missed — a full repo-wide grep confirms zero remaining old-name
+      occurrences in tracked files — but the maintainer should still open each of the 5 boards
+      in KiCad and re-run ERC/DRC before trusting them for fabrication.
+    - `MAL-*` BOM/component designators (`MAL-TILT-ENC-PCB`, `MAL-CAPE-B-2`, etc.) were renamed
+      to `SKIPPER-*` along with everything else — these are baked into `ENC-NACELLE-1` and
+      `CAN-PERIPH-GW-1`'s own netlists as cross-board net names, updated consistently.
+    - Root `AGENTS.md` §9 table rewritten: dropped the "Firefly line" column from the live
+      naming table (keeping a mutated Firefly quote next to the new generic name would still
+      visibly signal the original character, defeating the purpose) and added a "Naming
+      history" subsection recording the former names, inspirations, and original quotes for
+      attribution completeness. The 4 avionics bay names (Shepherd's Room, Inara's Shuttle,
+      River's Room, Simon's Medbay) were **not** renamed — out of scope, not requested.
+    - Found and fixed one casualty of the mechanical rename: `avionics/WBS.md`'s Inara's
+      Shuttle bay quote had been auto-mutated from "Mal, I will never understand you." to
+      "Skipper, I will never understand you." (word-boundary rule correctly fired on the
+      quote text since "Mal" is a real word there) — restored to the genuine, unmodified
+      Firefly line since the bay itself wasn't renamed. **Caution for anyone re-running a
+      similar sweep:** the two "Naming history" tables (here and `AGENTS.md` §9) and this
+      bullet's own prose *intentionally* contain the former names as historical record — a
+      second blind sweep pass will corrupt them (it did, twice, while drafting this entry;
+      both times fixed by hand). Do not re-run a global rename script after this kind of
+      historical text has been written; fix any further stray old-name occurrences with
+      targeted, reviewed edits instead. Other decorative Firefly footer quotes throughout the
+      repo (e.g. "— Pilot", "— Skipper") were left as the mechanical rename produced them,
+      consistent with root `AGENTS.md` §10's existing practice of sprinkling on-topic quotes
+      through the docs.
 
 **Also touched, stale-doc fixes surfaced during this audit (not separate TODO items, fixed
 in place per root `AGENTS.md` §11.4):**
@@ -413,7 +455,7 @@ in place per root `AGENTS.md` §11.4):**
     inter-board wiring, first flight, etc.) are hand-drawn schematic line art — the
     airframe silhouettes in them were never derived from actual model geometry at all,
     and (per the §0.5 audit above) several depict the **archived** Cape-A-1/Cape-B-1
-    hardware instead of the Rev R1 Wash/Zoë baseline
+    hardware instead of the Rev R1 Pilot/XO baseline
     (`build_guide_09_avionics.svg`, `build_guide_11_inter_board.svg`,
     `build_guide_12_security_hw.svg`, `build_guide_20_node_placement.svg`,
     `build_guide_21_node_install.svg`, `build_plan.svg`, `components_overview.svg`) —
@@ -447,16 +489,16 @@ in place per root `AGENTS.md` §11.4):**
     this same day's PR #138) into the new `AGENTS.md` §10 Workflow, updating its internal
     `CLAUDE.md` references to `AGENTS.md`.
     - **Volatile single-subsystem detail replaced with pointers**, since it goes stale
-      faster than the policy file gets edited: Jayne's laser-indicator class/spread specs
-      (→ `docs/JAYNE_LASER_ANALYSIS.md`), the landing-gear post/wire design
+      faster than the policy file gets edited: Observer's laser-indicator class/spread specs
+      (→ `docs/OBSERVER_LASER_ANALYSIS.md`), the landing-gear post/wire design
       (→ `docs/LANDING_GEAR_ANALYSIS.md`), the nacelle nozzle-drive mechanism
       (→ `docs/NOZZLE_DRIVE_TRADE.md` — newly cross-referenced from
-      `airframe/AGENTS.md`, previously undocumented there), and Emma/Zoë/Kaylee/Jayne
+      `airframe/AGENTS.md`, previously undocumented there), and Commo/XO/FlightEngineer/Observer
       sch↔pcb reconciliation narratives (→ each board's own `.md` under
       `avionics/kicad/<board>/`, which is already updated more often than the policy file).
-    - **Confirmed a real staleness case while auditing:** `avionics/CLAUDE.md`'s Jayne
-      section described a raw TI AM62A3/AM62A7 chip-level design; `avionics/kicad/Jayne/
-      Jayne.md` (Rev S1, 2026-07-13) had already moved to a PCM-071 SoM carrier design —
+    - **Confirmed a real staleness case while auditing:** `avionics/CLAUDE.md`'s Observer
+      section described a raw TI AM62A3/AM62A7 chip-level design; `avionics/kicad/Observer/
+      Observer.md` (Rev S1, 2026-07-13) had already moved to a PCM-071 SoM carrier design —
       the policy file was out of date relative to the as-built board doc. Root cause of
       this class of drift: subsystem status belongs in the board's own `.md`/analysis doc,
       not duplicated into the instructions file.

@@ -282,4 +282,4 @@ here.
 
 *"We're on the leading edge of a new age." Also, apparently, of a fairly
 generous V_NE margin over what a 50 mm EDF tilt-rotor can actually manage.
-— paraphrasing Mal, not verifying his airspeed indicator*
+— paraphrasing Skipper, not verifying his airspeed indicator*

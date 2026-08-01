@@ -125,8 +125,8 @@
 | nacelle_servo_bracket.stl | CF-PETG | 0.15mm | 40%, 4 walls | 2 | One per nacelle; from `airframe/openscad/nacelles/nacelle_servo_bracket.scad` (Rev R). Print with channel mouth up; no supports needed. VERIFY M3 hole ±17.5×±8 mm pattern matches NSVMT inserts in slicer before printing. |
 | inara_access_cover.stl | PETG (Cu-foil lined) | 0.20mm | 40% | 1 | Faraday tray lid for Inara bay; 105×75 mm footprint, 5 mm shoulder, Ø38 mm GPS bore offset −13.3 mm Z from cover centre. SCAD not yet created — **BLOCKS printing.** |
 | river_access_cover.stl | PETG (Cu-foil lined) | 0.20mm | 40% | 1 | Faraday tray lid for River bay; 105×75 mm footprint, 5 mm shoulder, Ø38 mm GPS bore at +0.7 mm Z from cover centre. SCAD not yet created — **BLOCKS printing.** |
-| kaylee_battery_tray.stl | CF-PETG | 0.15mm | 40%, 4 walls | 1 | Battery slide-in rail tray for 6S 4000 mAh LiPo; keel mount at 190 mm station. SCAD not yet created — **BLOCKS Phase 1.** |
-| kaylee_pdb_tray.stl | CF-PETG | 0.15mm | 40%, 4 walls | 1 | Kaylee PDB mount tray; keel area, middle section. SCAD not yet created — **BLOCKS Phase 1.** |
+| flight_engineer_battery_tray.stl | CF-PETG | 0.15mm | 40%, 4 walls | 1 | Battery slide-in rail tray for 6S 4000 mAh LiPo; keel mount at 190 mm station. SCAD not yet created — **BLOCKS Phase 1.** |
+| flight_engineer_pdb_tray.stl | CF-PETG | 0.15mm | 40%, 4 walls | 1 | Flight Engineer PDB mount tray; keel area, middle section. SCAD not yet created — **BLOCKS Phase 1.** |
 
 **CF cuts:**
 
@@ -352,7 +352,7 @@
 *(root `TODO.md` §1.5, detailed here — see also `docs/TODO.md` §1.5 for the general
 documentation item this expands)*
 
-> *“Love keeps her in the air when she oughta fall down.” — Captain Malcolm Reynolds*
+> *“Love keeps her in the air when she oughta fall down.” — Captain Skipper Reynolds*
 
 This section covers the comprehensive rebuild of the graphical build guide's SVG assets and pipeline, transitioning from pre-Rev-N hand-drawn line art to 24-inch Rev R1 Blender and FreeCAD assembly-derived silhouettes. This process resolves the two major stale-geometry issues: hand-drawn line art of archived hardware (Cape-A-1/Cape-B-1) on 7 critical cards, and a partial silhouette pipeline referencing 18-inch pre-Rev-N models.
 
@@ -381,10 +381,10 @@ This section covers the comprehensive rebuild of the graphical build guide's SVG
 - [ ] **Phase C (06/10): Rebuild `build_guide_06_access_panels.svg`** — Access panel frame installation card for all 6 panels.
 - [ ] **Phase C (07/10): Rebuild `build_guide_07_standoffs.svg`** — Avionics bay standoff positioning with correct M2.5 standoff locations.
 - [ ] **Phase C (08/10): Rebuild `build_guide_08_wing_spar.svg`** — Wing spar sleeve mounting.
-- [ ] **Phase C (09/10): Rebuild `build_guide_09_avionics.svg`** — **STALE geometry Cape-A/B fix:** Replace archived Cape-A-1/Cape-B-1 line art with active Rev R1 Cape-A-2 (Wash) and Cape-B-2 (Zoë) baseline layout. Ensure standards citations (`[REF-ID]`) survive.
+- [ ] **Phase C (09/10): Rebuild `build_guide_09_avionics.svg`** — **STALE geometry Cape-A/B fix:** Replace archived Cape-A-1/Cape-B-1 line art with active Rev R1 Cape-A-2 (Pilot) and Cape-B-2 (XO) baseline layout. Ensure standards citations (`[REF-ID]`) survive.
 - [ ] **Phase C (10/10): Rebuild `build_guide_10_servos.svg`** — Nacelle tilt servo bracket and sector gear assembly.
-- [ ] **Phase D (01/10): Rebuild `build_guide_11_inter_board.svg`** — **STALE Cape-A/B fix:** Replace archived Cape-A-1/Cape-B-1 wiring schematic with active Cape-A-2 (Wash), Cape-B-2 (Zoë), Emma (XCVR-49MHZ-2), Kaylee, and Jayne inter-board CAN FD, RS-485, and Ethernet wiring.
-- [ ] **Phase D (02/10): Rebuild `build_guide_12_security_hw.svg`** — **STALE Cape-A/B fix:** Update with active Cape-A-2 (Wash) and Cape-B-2 (Zoë) crypto-elements (TPM 2.0 enrollment, key generation, and operator certificates).
+- [ ] **Phase D (01/10): Rebuild `build_guide_11_inter_board.svg`** — **STALE Cape-A/B fix:** Replace archived Cape-A-1/Cape-B-1 wiring schematic with active Cape-A-2 (Pilot), Cape-B-2 (XO), Commo (XCVR-49MHZ-2), Flight Engineer, and Observer inter-board CAN FD, RS-485, and Ethernet wiring.
+- [ ] **Phase D (02/10): Rebuild `build_guide_12_security_hw.svg`** — **STALE Cape-A/B fix:** Update with active Cape-A-2 (Pilot) and Cape-B-2 (XO) crypto-elements (TPM 2.0 enrollment, key generation, and operator certificates).
 - [ ] **Phase D (03/10): Rebuild `build_guide_13_antennas.svg`** — Antenna SMA bulkheads and coax wire routing.
 - [ ] **Phase D (04/10): Rebuild `build_guide_14_49mhz_post.svg`** — 49 MHz forward and temporary aft posts (temporary post at station ~580mm).
 - [ ] **Phase D (05/10): Rebuild `build_guide_15_49mhz_wire.svg`** — 49 MHz wire tensioning and grounding with keel counterpoise.
@@ -392,8 +392,8 @@ This section covers the comprehensive rebuild of the graphical build guide's SVG
 - [ ] **Phase D (07/10): Rebuild `build_guide_17_conduits.svg`** — PTFE wiring conduit threading.
 - [ ] **Phase D (08/10): Rebuild `build_guide_18_void_formers.svg`** — EPS void former dry-fitting and pull string verification.
 - [ ] **Phase D (09/10): Rebuild `build_guide_19_foam_pour.svg`** — PU foam zone-controlled injection (3 shots aft->fwd, <=60 mL per batch).
-- [ ] **Phase D (10/10): Rebuild `build_guide_20_node_placement.svg`** — **STALE Cape-A/B fix:** Update 8-node arch placement showing all 8 nodes carrying active Cape-A-2 (Wash) and Cape-B-2 (Zoë) with uniform 5 kV galvanic isolation. Depict Emma transceivers only in River's Room and Simon's Medbay nodes (per `REF-FCC-003`).
-- [ ] **Phase E (1/6): Rebuild `build_guide_21_node_install.svg`** — **STALE Cape-A/B fix:** Rebuild flight control node mounting card showing Cape-A-2 (Wash) and Cape-B-2 (Zoë) physical mounting, CAN FD terminal access, and isolated port wiring.
+- [ ] **Phase D (10/10): Rebuild `build_guide_20_node_placement.svg`** — **STALE Cape-A/B fix:** Update 8-node arch placement showing all 8 nodes carrying active Cape-A-2 (Pilot) and Cape-B-2 (XO) with uniform 5 kV galvanic isolation. Depict Commo transceivers only in River's Room and Simon's Medbay nodes (per `REF-FCC-003`).
+- [ ] **Phase E (1/6): Rebuild `build_guide_21_node_install.svg`** — **STALE Cape-A/B fix:** Rebuild flight control node mounting card showing Cape-A-2 (Pilot) and Cape-B-2 (XO) physical mounting, CAN FD terminal access, and isolated port wiring.
 - [ ] **Phase E (2/6): Rebuild `build_guide_22_clamshell_doors.svg`** — Clamshell cargo doors, hinges at X≈-117.6mm, -222.5mm, and hinge retention blocks.
 - [ ] **Phase E (3/6): Rebuild `build_guide_23_winch_latch.svg`** — Winch spool (STS3215 servo,
     twin pedestals, ratchet ring + pawl) and autolatch cargo cradle assembly card. Must show

@@ -63,64 +63,64 @@ Task 1.9 Avionics Workload Balancing encompasses two subtasks with a total of 44
 2. [x] Promoted to deployed config N_STACKS=4 (per-nacelle gateway)
 3. [x] `starved_thermal` DRC class fixed globally
 4. [x] Freerouted to 84% (296 → 47 unrouted nets)
-5. [x] Kaylee trust module added
-6. [x] Jayne RS-485 added (ISOW1412)
-7. [x] Emma TPM added + architecture corrected
-8. [x] Wash + Zoë isolator defects fixed
+5. [x] Flight Engineer trust module added
+6. [x] Observer RS-485 added (ISOW1412)
+7. [x] Commo TPM added + architecture corrected
+8. [x] Pilot + XO isolator defects fixed
 9. [x] Fleet-wide ADM2795E → ISOW1412 migration
 10. [x] ENC-NACELLE-1 DRC fixed (11 → 0 hard)
-11. [x] Emma RSSI_DCD net properly routed
-12. [x] Emma TPM footprint placed on B.Cu
-13. [x] Emma TPM architecture verified SPI1 bus binding
+11. [x] Commo RSSI_DCD net properly routed
+12. [x] Commo TPM footprint placed on B.Cu
+13. [x] Commo TPM architecture verified SPI1 bus binding
 
 **Completed (Updated) Items:** 2/25 (8%)
 
-14. [x] **Wash TPM symbol pin numbers** (✅ DOCUMENTED 2026-08-01)
-    - **Issue:** Wash.kicad_sch TPM symbol has incorrect pin numbers vs. datasheet Rev 1.4
+14. [x] **Pilot TPM symbol pin numbers** (✅ DOCUMENTED 2026-08-01)
+    - **Issue:** Pilot.kicad_sch TPM symbol has incorrect pin numbers vs. datasheet Rev 1.4
     - **Resolution:** Documented in `WASH_FOOTPRINT_VERIFICATION.md` §TPM
-    - **Recommendation:** Substitute with verified `Jayne_SLB9670_TPM` symbol at next Wash schematic rebuild
+    - **Recommendation:** Substitute with verified `Observer_SLB9670_TPM` symbol at next Pilot schematic rebuild
     - **Blocking:** None — PCB unaffected if not re-spun
 
-15. [x] **`gen_kaylee.py` generator drift** (✅ ANALYZED 2026-08-01)
+15. [x] **`gen_flight_engineer.py` generator drift** (✅ ANALYZED 2026-08-01)
     - **Issue:** Fresh generator run produces 247 ERC errors vs. 0 in checked-in file
     - **Root Cause:** Hand-tuning divergence; generator not updated after trust module injection
     - **Resolution:** Use injection pattern for future changes; defer generator audit to Rev U
-    - **Impact:** Allows continued use of current Kaylee.kicad_sch with injection pattern
-    - **Deliverable:** `avionics/kicad/Kaylee/GENERATOR_DRIFT_ANALYSIS.md`
+    - **Impact:** Allows continued use of current FlightEngineer.kicad_sch with injection pattern
+    - **Deliverable:** `avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md`
 
 **Open (Queued) Items:** 8/25 (32%) — CRITICAL PCB PATH
 
 #### Priority 1: BLOCKING FOR FAB ORDERS (Next 5-7 days)
 
-16. [ ] **Wash: PB2-P2 header appears fully unwired** (CRITICAL)
+16. [ ] **Pilot: PB2-P2 header appears fully unwired** (CRITICAL)
     - **Issue:** All 36 PB2-P2 pins show `pin_not_connected` in ERC; netlist export confirms zero refs
     - **Status:** Awaiting GUI investigation
     - **Owner:** KiCad schematic debug team
-    - **Blocks:** Wash full DRC/ERC clean-out (item #17)
+    - **Blocks:** Pilot full DRC/ERC clean-out (item #17)
 
-17. [ ] **Wash full DRC/ERC clean-out** (CRITICAL)
+17. [ ] **Pilot full DRC/ERC clean-out** (CRITICAL)
     - **Current State:** 48 ERC hard + 76 DRC hard
     - **Blockers:** PB2-P2 resolution (item #16); ADM2795E PCB footprint swap
     - **Owner:** PCB layout + schematic leads
-    - **Blocks:** Wash fab order
+    - **Blocks:** Pilot fab order
 
-18. [ ] **Zoë full DRC/ERC clean-out** (CRITICAL)
+18. [ ] **XO full DRC/ERC clean-out** (CRITICAL)
     - **Current State:** 219 ERC hard + 154 DRC hard
     - **Scope:** CAN-TR/ISOW1044 pinout review; ADM2795E → ISOW1412 footprint swap
     - **Owner:** PCB layout + schematic leads
-    - **Blocks:** Zoë fab order
+    - **Blocks:** XO fab order
 
-19. [ ] **Kaylee full PCB resync** (CRITICAL)
+19. [ ] **Flight Engineer full PCB resync** (CRITICAL)
     - **Current State:** 213 DRC hard (almost all `net_conflict`)
     - **Scope:** Update PCB from schematic; add trust-module footprints
     - **Owner:** PCB layout engineer
-    - **Blocks:** Kaylee fab order
+    - **Blocks:** Flight Engineer fab order
 
-20. [ ] **Jayne PCB resync** (CRITICAL)
+20. [ ] **Observer PCB resync** (CRITICAL)
     - **Current State:** 124 DRC hard; PCB predates ISOW1412 addition
     - **Scope:** Add ISOW1412 footprint + RS-485 connector routing
     - **Owner:** PCB layout engineer
-    - **Blocks:** Jayne fab order
+    - **Blocks:** Observer fab order
 
 #### Priority 2: TECHNICAL COMPLETION (2-3 days after Priority 1)
 
@@ -138,8 +138,8 @@ Task 1.9 Avionics Workload Balancing encompasses two subtasks with a total of 44
 |----------|---------|--------|
 | `AK7455_CALIBRATION_SPECIFICATION.md` | AK7455 firmware spec + test plan | ✅ Complete |
 | `TILT_ENCODER_WIRING_EMI_SPEC.md` | EMI wiring routing + validation | ✅ Complete |
-| `WASH_FOOTPRINT_VERIFICATION.md` (updated) | Wash board footprint audit + fixes | ✅ Referenced |
-| `GENERATOR_DRIFT_ANALYSIS.md` | Kaylee gen_kaylee.py analysis | ✅ Complete |
+| `WASH_FOOTPRINT_VERIFICATION.md` (updated) | Pilot board footprint audit + fixes | ✅ Referenced |
+| `GENERATOR_DRIFT_ANALYSIS.md` | Flight Engineer gen_flight_engineer.py analysis | ✅ Complete |
 
 ---
 
@@ -148,13 +148,13 @@ Task 1.9 Avionics Workload Balancing encompasses two subtasks with a total of 44
 ```
 Timeline: Start 2026-08-01 (Day 0)
 
-Day 0–1:   Wash PB2-P2 investigation + resolution (gates all Wash work)
+Day 0–1:   Pilot PB2-P2 investigation + resolution (gates all Pilot work)
            ↓
-Day 1–3:   Wash + Zoë DRC/ERC clean-out + gerber generation
+Day 1–3:   Pilot + XO DRC/ERC clean-out + gerber generation
            ↓
-Day 2–4:   Kaylee PCB resync + gerber generation (parallel with Wash/Zoë)
+Day 2–4:   Flight Engineer PCB resync + gerber generation (parallel with Pilot/XO)
            ↓
-Day 3–4:   Jayne PCB resync + gerber generation (parallel)
+Day 3–4:   Observer PCB resync + gerber generation (parallel)
            ↓
 Day 4–6:   CAN-PERIPH-GW-1 routing completion + gerber generation
            ↓
@@ -165,7 +165,7 @@ Day 6:     All gerbers ready for fab submission (Phase 6)
          → Avionics bay assembly prep (boards return from fab ~2 weeks)
 ```
 
-**Critical Blocking:** Wash PB2-P2 header investigation (must be resolved first)
+**Critical Blocking:** Pilot PB2-P2 header investigation (must be resolved first)
 
 ---
 
@@ -174,15 +174,15 @@ Day 6:     All gerbers ready for fab submission (Phase 6)
 ### Phase 1: Documentation & Analysis ✅ COMPLETE
 - [x] 1.9.1 firmware specification (AK7455 calibration)
 - [x] 1.9.1 wiring specification (EMI + component integration)
-- [x] 1.9.2 generator drift analysis (Kaylee decision made)
-- [x] 1.9.2 TPM symbol defect documented (Wash)
+- [x] 1.9.2 generator drift analysis (Flight Engineer decision made)
+- [x] 1.9.2 TPM symbol defect documented (Pilot)
 
 ### Phase 2: PCB Critical Path ⏳ QUEUED
-- [ ] Wash PB2-P2 header investigation + fix
-- [ ] Wash full DRC/ERC clean-out + gerber generation
-- [ ] Zoë full DRC/ERC clean-out + gerber generation
-- [ ] Kaylee full PCB resync + gerber generation
-- [ ] Jayne PCB resync + gerber generation
+- [ ] Pilot PB2-P2 header investigation + fix
+- [ ] Pilot full DRC/ERC clean-out + gerber generation
+- [ ] XO full DRC/ERC clean-out + gerber generation
+- [ ] Flight Engineer full PCB resync + gerber generation
+- [ ] Observer PCB resync + gerber generation
 
 ### Phase 3: Firmware/Wiring Integration 📅 SCHEDULED
 - [ ] AK7455 calibration firmware development (River/Simon teams)
@@ -199,16 +199,16 @@ Day 6:     All gerbers ready for fab submission (Phase 6)
 ## Unblocking Recommendations for Phase 2
 
 **Immediate (Day 0):**
-1. Open `avionics/kicad/Wash/kicads/Wash.kicad_sch` in KiCad GUI
+1. Open `avionics/kicad/Pilot/kicads/Pilot.kicad_sch` in KiCad GUI
 2. Navigate to PB2-P2 connector instance
 3. Visually inspect pin labels vs. global labels in same vicinity
 4. Check sheet position / hierarchy for label resolution issues
 5. Document findings for PCB team
 
 **Parallel:**
-1. Begin Zoë ERC/DRC analysis while Wash investigation is underway
-2. Stage KiCad environment for batch DRC/ERC runs (Wash, Zoë, Kaylee, Jayne)
-3. Prepare gerber export templates (existing for Wash, adapt for others)
+1. Begin XO ERC/DRC analysis while Pilot investigation is underway
+2. Stage KiCad environment for batch DRC/ERC runs (Pilot, XO, Flight Engineer, Observer)
+3. Prepare gerber export templates (existing for Pilot, adapt for others)
 
 ---
 
@@ -221,9 +221,9 @@ Day 6:     All gerbers ready for fab submission (Phase 6)
 
 ⚠️ **Task 1.9.2 — 68% COMPLETE (Quality Gate Remaining)**
 - Trust-module architecture finalized (CAN-PERIPH-GW-1, fleet-wide TPM + isolated buses)
-- Schematic changes integrated (Kaylee, Jayne, Emma, Wash, Zoë)
-- PCB layout awaiting critical DRC/ERC resolution (Wash PB2-P2 mystery) before fab clearance
-- Documentation complete for deferred issues (Wash TPM symbol, gen_kaylee.py drift)
+- Schematic changes integrated (Flight Engineer, Observer, Commo, Pilot, XO)
+- PCB layout awaiting critical DRC/ERC resolution (Pilot PB2-P2 mystery) before fab clearance
+- Documentation complete for deferred issues (Pilot TPM symbol, gen_flight_engineer.py drift)
 
 ---
 
@@ -235,9 +235,9 @@ Day 6:     All gerbers ready for fab submission (Phase 6)
 **Created:**
 - `avionics/firmware/AK7455_CALIBRATION_SPECIFICATION.md` — firmware spec
 - `docs/TILT_ENCODER_WIRING_EMI_SPEC.md` — wiring spec
-- `avionics/kicad/Kaylee/GENERATOR_DRIFT_ANALYSIS.md` — generator drift analysis
+- `avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md` — generator drift analysis
 - `avionics/TODO-1-9-COMPLETION-STATUS.md` — this status document
 
 ---
 
-**Next Handoff:** PCB team to proceed with Phase 2 critical path (Wash PB2-P2 investigation + DRC/ERC cleanup). Documentation + decision framework provided. Firmware teams can begin AK7455 implementation in parallel.
+**Next Handoff:** PCB team to proceed with Phase 2 critical path (Pilot PB2-P2 investigation + DRC/ERC cleanup). Documentation + decision framework provided. Firmware teams can begin AK7455 implementation in parallel.
