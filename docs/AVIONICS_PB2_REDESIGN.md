@@ -108,7 +108,7 @@ The RP2350 PIO state machines in RevJ handled servo PWM generation, Manchester I
 | U7 | DS26LV31 + DS26LV32 | PRU GPIO | MIL-STD-1553 differential driver + receiver |
 | T1 | PE-68515 (or equiv) | — | 1553 coupling transformer, 1:1.41, 78 Ω |
 | U8 | DP83825I × 2 | CPSW3G RMII | 10/100 Ethernet PHY, ring port A and port B |
-| U9 | SLB9670 | SPI | TPM 2.0 — attestation, key storage |
+| U9 | SLB9672 | SPI | TPM 2.0 — attestation, key storage |
 | U10 | AP2112K-3.3 | — | 3.3 V LDO, 600 mA, ultra-low noise |
 | U11 | TPS62933 (or equiv) | — | 3.3 V → 1.8 V SMPS for PHY AVDD if required |
 
@@ -145,7 +145,7 @@ The RP2350 PIO state machines in RevJ handled servo PWM generation, Manchester I
 | Rail | Consumers | Max current |
 | --- | --- | --- |
 | 5 V in | PB2 VIN, CAN/RS-485 transceivers | 2.0 A |
-| 3.3 V (LDO) | ICM-42688-P, BMP388, M10Q, DP83825I × 2, SLB9670, MAX3485E | 600 mA |
+| 3.3 V (LDO) | ICM-42688-P, BMP388, M10Q, DP83825I × 2, SLB9672, MAX3485E | 600 mA |
 
 ---
 
@@ -184,7 +184,7 @@ Each Cape-B board carries all 4 radio types. Software assigns one CN node as pri
 | U8 | W25Q128JV | SPI | 128 Mbit NOR flash — circular flight log buffer (non-executable) |
 | U9 | microSD socket | SPI | Removable log card — hardware write-block enforced by U10 |
 | U10 | ATF16V8BQL CPLD | GPIO latch → SD-WP pin | Write-block latch: SET at power-on by boot sequence, CLEAR only on hard power cycle; implements non-executable append-only log semantics identical to RevJ CPLD write-blocker |
-| U11 | SLB9670 | SPI | TPM 2.0 — per-node attestation, radio key storage, boot measurement |
+| U11 | SLB9672 | SPI | TPM 2.0 — per-node attestation, radio key storage, boot measurement |
 | U12 | DRV8833 | GPIO (H-bridge) | Cargo door + payload-release SG90 servos, 1.5 A. **Winch removed 2026-07-27** — the STS3215 is a bus servo driven by CAN-PERIPH-GW, no H-bridge. |
 | U13 | HX711 | GPIO bit-bang (DOUT/SCK) | 24-bit load cell ADC — payload weight |
 | U14 | TPS63031 (or equiv) | — | 3.3 V/1.5 A SMPS (radio TX peaks up to 800 mA combined) |
@@ -226,7 +226,7 @@ Each Cape-B board carries all 4 radio types. Software assigns one CN node as pri
 | --- | --- | --- |
 | 5 V in | PB2 VIN, DRV8833 motor, radio modules | 3.0 A |
 | 3.3 V RF (SMPS) | RFD900x (1.2 A TX peak), RFM95W (120 mA TX), WL1837MOD (550 mA TX peak) | 1.5 A continuous, 2.0 A peak |
-| 3.3 V logic (LDO) | MAX3485E, ATA6561, DS26LV31/32, DP83825I × 2, HX711, SLB9670, ATF16V8BQL | 350 mA |
+| 3.3 V logic (LDO) | MAX3485E, ATA6561, DS26LV31/32, DP83825I × 2, HX711, SLB9672, ATF16V8BQL | 350 mA |
 
 ---
 
@@ -397,7 +397,7 @@ Cape-B PRU-1 is used for cargo servo PWM (2 channels only) + PTT sync timing for
 
 The CPLD write-blocker and STM32 OTP fuse architecture from RevJ applies unchanged. Each node boots from its 64GB eMMC (Rev M — no OS microSD). Log storage (Cape-B microSD + NOR flash) uses hardware write-protect via the CPLD latch — the latch is set at power-on and cannot be cleared until the node is powered off, enforcing non-executable, append-only log semantics.
 
-TPM 2.0 (SLB9670) is present on **both Cape-A and Cape-B** — all 8 nodes carry a TPM. FC nodes use it for flight-critical attestation and key storage. CN nodes use it for radio link key storage, boot measurement, and flight-log authenticity attestation (the CPLD write-blocker enforces append-only access; the TPM binds log signing keys).
+TPM 2.0 (SLB9672) is present on **both Cape-A and Cape-B** — all 8 nodes carry a TPM. FC nodes use it for flight-critical attestation and key storage. CN nodes use it for radio link key storage, boot measurement, and flight-log authenticity attestation (the CPLD write-blocker enforces append-only access; the TPM binds log signing keys).
 
 ---
 
@@ -447,7 +447,7 @@ Full catalog with official URLs and specific clause details is in `REFERENCES.md
 | REF-ISO-001 | ISO 11898-1:2015+Amd.1:2020 (CAN FD) | Clause 8 (CAN data frame), Clause 10 (CAN FD frame), Clause 12 (bit timing) | AM6254 MCAN at 1 Mbps arbitration / 5 Mbps data; ATA6561 transceivers; 120 Ω termination |
 | REF-IEC-001 | IEC 62368-1 Ed. 3.0 (2018) | Clause 5.5.2 (creepage/clearance for reinforced insulation) | 5 kV isolation barriers on CAN FD (ISOW1044BDFMR), RS-485 (ADM2795EBRWZ), Ethernet (ADIN1300BCPZ + ISO7642FDWRR + Würth 749010012A) |
 | REF-VDE-001 | VDE V 0884-11:2017-01 | Clause 4.3 (reinforced insulation class), Clause 5.3 (5000 Vrms hipot) | Same isolation devices as above; compliance verified per component datasheet certifications |
-| REF-NIST-001 | NIST SP 800-207 (Zero Trust, 2020) | §2.1 (authenticate every connection), §3.3 (device agent/TPM) | Per-node TPM 2.0 (SLB9670); TPM-bound SHA-256 HMAC on all transmitted frames |
+| REF-NIST-001 | NIST SP 800-207 (Zero Trust, 2020) | §2.1 (authenticate every connection), §3.3 (device agent/TPM) | Per-node TPM 2.0 (SLB9672); TPM-bound SHA-256 HMAC on all transmitted frames |
 | REF-NIST-002 | NIST SP 800-82 Rev 3 (OT Security, 2023) | §5.3 (network segmentation), §5.4 (defense in depth), §6.2.5 (EMI) | Multiple independent bus types as defense-in-depth; galvanic isolation; 500 W/m² EMI hardening design objective |
 | REF-NIST-004 | NIST SP 800-92 (Log Management, 2006) | §4.4.2 (protecting log data via hardware enforcement) | ATF16V8BQL CPLD write-block on each XO node; append-only non-executable log microSD |
 | REF-ISA-001 | ISA/IEC 62443-3-3:2013 | SR 3.1 (comms integrity), SR 4.2 (cryptography), SR 7.6 (network hardening) | HMAC authentication; TPM key storage; 5 kV isolation as physical security hardening |

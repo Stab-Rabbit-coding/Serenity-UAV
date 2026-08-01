@@ -11986,7 +11986,7 @@
 				)
 			)
 		)
-		(property "Value" "Infineon SLB9670"
+		(property "Value" "Infineon SLB9672"
 			(at 0 3.83 90)
 			(layer "F.Fab")
 			(uuid "fbadea2a-1cbf-4b42-a5f6-cded85fd886f")

@@ -117,12 +117,12 @@ per side** — ample by area for a 2-sided layout. Fit by *shape*:
 | SoM phyCORE-AM62A | 40×40 (clean-room fp NOT yet authored — PHYTEC mech drawing) | only if wide end ≥60 mm (§4) |
 | KSZ9477 | TQFP-128 14×14 | ✅ anywhere aft of the 14 mm-wide station |
 | MSPM0G3507 | QFN-48 7×7 | ✅ |
-| SLB9670 | QFN-32 5×5 | ✅ |
+| SLB9672 | QFN-32 5×5 | ✅ |
 | ISOW1044 | DFM-20 (fp TBD — TI mech drawing) | ✅ by size (~10×7) |
 | EMI (magnetics/CMC/TVS), JST conns, DS lands, passives | real KiCad fps | ✅ |
 
 **Placement intent (2-sided):** front = SoM at the aft/wide end + the sensor
-direct-solder lands / JSTs at the forward/narrow end; back = KSZ9477, MSPM0, SLB9670,
+direct-solder lands / JSTs at the forward/narrow end; back = KSZ9477, MSPM0, SLB9672,
 ISOW1044, EMI, and network connectors at the aft end. Every part except the SoM is
 size-compatible with the taper; **the SoM is the sole fit driver** and gates the
 wide-end width.

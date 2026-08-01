@@ -12,7 +12,7 @@ primary datasheets/manual:
   U2     Observer_KSZ9477         Microchip KSZ9477 7-port switch (128-TQFP-EP)
   U3     Observer_MSPM0G3507_RGZ  TI MSPM0G3507 MCU (48-VQFN)
   U4     Observer_ISOW1044BDFMR   TI ISOW1044BDFMR isolated CAN-FD (20-DFM/SOIC-20)
-  U5     Observer_SLB9670_TPM     Infineon SLB9670 TPM 2.0 (32-VQFN)
+  U5     Observer_SLB9672_TPM     Infineon SLB9672 TPM 2.0 (32-UQFN)
 
 Design decisions locked with the user 2026-07-13:
   * The 240-pin PCM-071 connector takes 5V IN only and hands NO 3V3/2V5/1V2 rail
@@ -68,7 +68,7 @@ REAL_SYMS = {
     ),
     "ISO": ("Observer_ISOW1044BDFMR", "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm"),
     "TPM": (
-        "Observer_SLB9670_TPM",
+        "Observer_SLB9672_TPM",
         "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm",
     ),
 }
@@ -723,7 +723,7 @@ def gen_sch():
     parts.append(
         gj.text_note(
             "OBSERVER — Nose/Cargo Vision/ToF/Laser  |  STANDALONE board (NOT a PB2-I cape)  |  "
-            "SoM end-state: PHYTEC PCM-071 + carrier (KSZ9477 / MSPM0G3507 / SLB9670 / ISOW1044)",
+            "SoM end-state: PHYTEC PCM-071 + carrier (KSZ9477 / MSPM0G3507 / SLB9672 / ISOW1044)",
             10,
             8,
             2.0,
@@ -853,7 +853,7 @@ def gen_sch():
     # Section D — MSPM0G3507 (U3) + TPM (U5)
     # ==================================================================
     parts.append(
-        gj.text_note("=== Section D: MSPM0G3507 (U3) + SLB9670 TPM (U5) ===", 10, 110)
+        gj.text_note("=== Section D: MSPM0G3507 (U3) + SLB9672 TPM (U5) ===", 10, 110)
     )
     msp_pins = real["MSP"][1]
     msp_nm = build_msp_netmap(msp_pins)
@@ -879,7 +879,7 @@ def gen_sch():
     tpm_pins = real["TPM"][1]
     tpm_nm = build_tpm_netmap(tpm_pins)
     parts.extend(
-        place_real("TPM", "U5", "Infineon SLB9670", {1: (110, 165)}, tpm_nm, tpm_pins)
+        place_real("TPM", "U5", "Infineon SLB9672", {1: (110, 165)}, tpm_nm, tpm_pins)
     )
 
     # ==================================================================

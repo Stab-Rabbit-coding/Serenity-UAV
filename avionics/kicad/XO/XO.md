@@ -341,7 +341,7 @@ copper pour, consistent with §11.
 | --- | --- | --- |
 | +5V (filtered) | PB2 VIN, DRV8833 motor, radio modules | 3.0 A |
 | +3V3_RF (SMPS) | RFD900x (1.2 A TX peak), RFM95W (120 mA TX), WL1837MOD (550 mA TX) | 1.5 A continuous, 2.0 A peak |
-| +3V3 logic (LDO) | MAX3485E→ADM2795, ATA6561→ISOW1044B, DS26LV31/32, HX711, SLB9670, ATF16V8BQL | 350 mA |
+| +3V3 logic (LDO) | MAX3485E→ADM2795, ATA6561→ISOW1044B, DS26LV31/32, HX711, SLB9672, ATF16V8BQL | 350 mA |
 
 DP83825I removal saves approximately 100 mA from the 3.3V logic rail, leaving additional
 headroom absorbed by the new isolated transceivers (~80 mA combined increase).

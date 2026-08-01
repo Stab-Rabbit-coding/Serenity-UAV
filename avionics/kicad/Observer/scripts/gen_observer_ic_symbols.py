@@ -11,8 +11,13 @@ in avionics/kicad/symbols/ (open, authoritative -- kept in-repo by project owner
     Functions", Table 7-1.  Package: **20-pin DFM** (per Fig 7-1 and Section 8.4
     Thermal Information "DFM / 20 PINS").  NOTE: this corrects the project docs,
     which previously called it "SOIC-16W" -- it is a 20-pin part.
-  * SLB9670VQ2.0 (OPTIGA TPM) -- Infineon Data Sheet Rev 1.4 (2018-12-07),
-    Section 3 "Pin Description", Tables 3/4/5.  Package: **PG-VQFN-32-13**.
+  * SLB9672XU2.0 (OPTIGA TPM) -- Infineon Datasheet Rev 1.3 (2024-11-18),
+    Section 3.1.2 "Pin description", Tables 11/12/13.  Package: **PG-UQFN-32-1,-2**.
+    Supersedes the earlier SLB9670VQ2.0 (Infineon DS Rev 1.4, 2018-12-07,
+    PG-VQFN-32-13) -- same 5x5mm/0.5mm-pitch/32-pin QFN land pattern, but the
+    GPIO/PP pin functions and which VDD/GND pins are mandatory vs optional
+    differ; see the "pins" list below (transcribed from the 9672 datasheet,
+    not carried over from the 9670 entry).
 
 These are our own original symbol drawings (coordinates/arrangement); only the
 factual pad<->signal mapping comes from the datasheets (facts, not copyrightable).
@@ -67,13 +72,15 @@ ISOW1044 = {
     ],
 }
 
-SLB9670 = {
-    "name": "Observer_SLB9670_TPM",
-    "value": "SLB9670VQ2.0",
+SLB9672 = {
+    "name": "Observer_SLB9672_TPM",
+    "value": "SLB9672XU2.0",
     "footprint": "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm",
-    # PG-VQFN-32-13; confirm EP size vs Infineon pkg drawing before layout
-    "desc": "Infineon OPTIGA TPM SLB9670 (SPI TPM 2.0), PG-VQFN-32-13 "
-    "(clean-room from Infineon DS Rev1.4 Tables 3/4/5)",
+    # PG-UQFN-32-1,-2; same 5x5mm/0.5mm-pitch/32-pin QFN land pattern as the
+    # superseded SLB9670VQ2.0 (Infineon datasheet Fig 3 recommended footprint,
+    # both parts: 5x5mm body, 3.6x3.6mm exposed pad) -- footprint reused as-is.
+    "desc": "Infineon OPTIGA TPM SLB9672 (SPI TPM 2.0), PG-UQFN-32-1,-2 "
+    "(clean-room from Infineon DS Rev1.3 Tables 11/12/13)",
     "pins": [
         # SPI + control -- left
         (20, "CS#", "input", "L"),
@@ -82,13 +89,13 @@ SLB9670 = {
         (24, "MISO", "output", "L"),
         (18, "PIRQ#", "output", "L"),
         (17, "RST#", "input", "L"),
-        (6, "GPIO", "bidirectional", "L"),
-        (7, "PP", "input", "L"),
+        (6, "NC", "no_connect", "L"),
+        (7, "GPIO_02", "bidirectional", "L"),
         # Power + TCG-compliance + NC -- right
-        (8, "VDD", "power_in", "R"),
+        (8, "NCI/VDD", "passive", "R"),
         (22, "VDD", "power_in", "R"),
-        (1, "NCI/VDD", "passive", "R"),
-        (14, "NCI/VDD", "passive", "R"),
+        (1, "VDD", "power_in", "R"),
+        (14, "VDD", "power_in", "R"),
         (2, "GND", "power_in", "R"),
         (9, "GND", "power_in", "R"),
         (23, "GND", "power_in", "R"),
@@ -96,10 +103,10 @@ SLB9670 = {
         (16, "NCI/GND", "passive", "R"),
         (29, "NC", "no_connect", "R"),
         (30, "NC", "no_connect", "R"),
-        (3, "NCI", "no_connect", "R"),
-        (4, "NCI", "no_connect", "R"),
+        (3, "GPIO_00", "bidirectional", "R"),
+        (4, "GPIO_01", "bidirectional", "R"),
         (5, "NCI", "no_connect", "R"),
-        (10, "NCI", "no_connect", "R"),
+        (10, "NCI/VDD", "passive", "R"),
         (11, "NCI", "no_connect", "R"),
         (12, "NCI", "no_connect", "R"),
         (13, "NCI", "no_connect", "R"),
@@ -253,7 +260,7 @@ def write_part(part):
 
 
 def main():
-    for part in (ISOW1044, SLB9670, MSPM0):
+    for part in (ISOW1044, SLB9672, MSPM0):
         write_part(part)
 
 

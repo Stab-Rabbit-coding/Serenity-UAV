@@ -18,13 +18,13 @@ COMPACTION: component body sizes were corrected to REAL verified datasheet dimen
     AM62A7      18x18mm   (484-ball FCBGA/FCCSP, TI datasheet)
     KSZ9477     14x14mm   (128-TQFP-EP, Microchip datasheet)
     MSPM0G3507  7.1x4.9mm (VSSOP-28/DGS package — smaller than the VQFN-48 first assumed)
-    SLB9670      5x5mm    (PG-VQFN-32, Infineon datasheet)
+    SLB9672      5x5mm    (PG-UQFN-32, Infineon datasheet)
     TPS65219     5x5mm    (VQFN-32/RSM, TI datasheet)
 This, plus using both copper faces, is what let the board shrink significantly from the
 110x190mm single-sided first draft.
 
 IMPORTANT — footprint honesty policy for this file:
-    U1 (AM62A7, 484-ball BGA), U2 (KSZ9477), U3 (MSPM0G3507), U5 (SLB9670), U_PMIC
+    U1 (AM62A7, 484-ball BGA), U2 (KSZ9477), U3 (MSPM0G3507), U5 (SLB9672), U_PMIC
     (TPS65219) do NOT get a fabricated "realistic-looking" BGA/QFN pad grid here.
     Inventing a plausible-looking full ball-out with no datasheet to back it up would be
     worse than an honest placeholder. Instead each gets a deliberately simple TWO-ROW pad
@@ -708,7 +708,7 @@ KSZ_R = [
     ("P3_RXN", "33", "input"),
 ]
 
-TPM_SIZE = (2.5, 2.5)  # Infineon SLB9670: PG-VQFN-32, real body ~5x5mm
+TPM_SIZE = (2.5, 2.5)  # Infineon SLB9672: PG-UQFN-32, real body ~5x5mm
 TPM_L = [
     ("+3V3", "1", "power_in"),
     ("GND", "2", "power_in"),
@@ -991,13 +991,13 @@ def gen_pcb() -> str:
 
     lines += comp_2row_placeholder(
         "U5",
-        "Infineon SLB9670",
+        "Infineon SLB9672",
         34.0,
         8.0,
         TPM_L,
         TPM_R,
         TPM_SIZE,
-        "Observer:TPM_SLB9670_PLACEHOLDER_VQFN32",
+        "Observer:TPM_SLB9672_PLACEHOLDER_UQFN32",
         TPM_NETMAP,
         side="B",
         pitch=1.0,

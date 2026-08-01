@@ -63,7 +63,7 @@ All four paths are **authenticated, signed, logged**:
 - **Actuators:** Servo outputs for tilt servos, door servo, winch servo
 - **Isolation:** Galvanic isolation on all external buses (CAN FD, RS-485, Ethernet) via
   5 kV iso-gate chips and transformers (EMI-hardening per Rev S)
-- **Security:** TPM 2.0 (SLB9670) for attestation; CPLD write-blocker on log μSD
+- **Security:** TPM 2.0 (SLB9672) for attestation; CPLD write-blocker on log μSD
 
 ### Zoë (CAPE-B-2) — Comms / Logging / Payload
 - **Radios:** SiK 915 MHz (RFD900x), LoRa SX1262 (optional expansion), dedicated UART for

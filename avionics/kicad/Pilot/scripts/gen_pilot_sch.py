@@ -10,7 +10,7 @@ Pinouts are transcribed directly from the OEM datasheets in
 ``avionics/datasheets/`` (authoritative per avionics/CLAUDE.md):
   * ISOW1044BDFMR  -> isow1044.pdf  Fig 7-1 / Table 7-1 (20-pin DFM)
   * ADM2795EBRWZ   -> adm2795e.pdf  Table 10 (16-lead RW-16)
-  * SLB9670 (TPM)  -> SLB_9670VQ20_Infineon.pdf Fig 1 (PG-VQFN-32-13)
+  * SLB9672 (TPM)  -> SLB_9672XU20_Infineon.pdf Figure 6 (PG-UQFN-32-1,-2)
   * SAM-M10Q       -> SAM-M10Q_DataSheet_UBX-22013293.pdf §3.1 (LGA module)
 
 This first pass covers the isolated-bus (CAN / RS-485), the TPM, and GPS — the
@@ -109,8 +109,8 @@ ICS = [
     },
     {
         "ref": "TPM",
-        "value": "SLB9670",
-        "ds": "SLB_9670VQ20_Infineon.pdf Fig 1 (PG-VQFN-32-13)",
+        "value": "SLB9672XU2.0",
+        "ds": "SLB_9672XU20_Infineon.pdf Figure 6 / Tables 11-13 (PG-UQFN-32-1,-2)",
         "pins": [
             # left column = SPI / control (side toward SoC)
             ("17", "RST#", "TPM_RSTN", "L"),
@@ -119,20 +119,34 @@ ICS = [
             ("20", "CS#", "SPI0_CS_TPM", "L"),
             ("21", "MOSI", "SPI0_MOSI", "L"),
             ("24", "MISO", "SPI0_MISO", "L"),
-            ("6", "GPIO", None, "L"),
-            ("7", "PP", None, "L"),
+            # pin 6 was GPIO on SLB9670; on SLB9672 it is a true NC (must not
+            # be connected). Pin 7 was PP (physical presence) on SLB9670; on
+            # SLB9672 there is no PP pin -- it is GPIO_02 instead (may be
+            # left unconnected, matches the pin 3/4 GPIO_00/01 below).
+            ("6", "NC", None, "L"),
+            ("7", "GPIO_02", None, "L"),
             # right column = power / ground / NC
+            # SLB9672 makes pins 1/14/22 the three MANDATORY VDD pins (on
+            # SLB9670 only 8/22 were mandatory and 1/14 were optional
+            # NCI/VDD) -- pin 14 moves from "omitted NCI" to a required,
+            # connected VDD pin here.
+            ("1", "VDD", "+3V3", "R"),
+            ("14", "VDD", "+3V3", "R"),
             ("22", "VDD", "+3V3", "R"),
-            ("8", "VDD", "+3V3", "R"),
+            # pin 8 is now optional NCI/VDD (was mandatory VDD on SLB9670);
+            # kept tied to +3V3 for consistency with the fleet-standard
+            # wiring used on Observer/Commo/Flight Engineer/CAN-PERIPH-GW-1.
+            ("8", "NCI/VDD", "+3V3", "R"),
             ("2", "GND", "GND", "R"),
             ("9", "GND", "GND", "R"),
             ("23", "GND", "GND", "R"),
             ("32", "GND", "GND", "R"),
             ("33", "EP", "GND", "R"),
-            ("1", "NCI/VDD", None, "R"),
         ],
-        # NCI pins 3,4,5,10,11,12,13,14,15,16,25,26,27,28,29,30,31 omitted from
-        # the readable sheet (all not-connected-internally); documented here.
+        # NCI pins 3,4,5,10,11,12,13,15,25,26,27,28,31 omitted from the
+        # readable sheet (all not-connected-internally); documented here.
+        # (3=GPIO_00, 4=GPIO_01, 10=NCI/VDD -- may be left unconnected per
+        # the datasheet; the rest are plain NCI.)
     },
     {
         "ref": "GPS",

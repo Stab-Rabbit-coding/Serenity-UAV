@@ -17,12 +17,12 @@ project's CC BY 4.0 terms, so no VimDrones file, symbol, or schematic
 geometry is copied here. Only the public spec facts (MCU family choice,
 CAN-bridge concept, 5V supply, switchable 120R termination) informed this
 design; every symbol/footprint below is either this project's own
-already-verified clean-room part (MSPM0G3507, SLB9670, ISOW1044 -- reused
+already-verified clean-room part (MSPM0G3507, SLB9672, ISOW1044 -- reused
 verbatim from Observer, ERC-0 proven) or newly authored here directly from the
 OEM datasheet in avionics/datasheets/.
 
 Remix additions over the VimDrones concept (the 3 datasheets in this task):
-    U2  Infineon SLB9670   TPM 2.0 (avionics/datasheets/SLB_9670VQ20_Infineon.pdf)
+    U2  Infineon SLB9672   TPM 2.0 (avionics/datasheets/SLB_9672XU20_Infineon.pdf)
     U3  TI ISOW1044BDFMR   isolated CAN-FD xcvr (avionics/datasheets/isow1044.pdf)
     U4  ADI ADM2795E       isolated RS-485 xcvr (avionics/datasheets/adm2795e.pdf)
         -- NEW clean-room symbol authored here from the real 16-lead SOIC_W
@@ -127,7 +127,7 @@ REAL_SYMS = {
         "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm",
     ),
     "TPM": (
-        "Observer_SLB9670_TPM",
+        "Observer_SLB9672_TPM",
         "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm",
     ),
     "ISO": ("Observer_ISOW1044BDFMR", "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm"),
@@ -625,7 +625,7 @@ def gen_stack(idx, mcu_pins, tpm_pins, iso_pins):
         "24": f"TPM_SPI_MISO{s}", "32": "GND",
     }
     body += place_real(
-        "TPM", f"U2{s}", "Infineon SLB9670 TPM2.0", {1: (110 + off, 230)}, tpm_netmap, tpm_pins
+        "TPM", f"U2{s}", "Infineon SLB9672 TPM2.0", {1: (110 + off, 230)}, tpm_netmap, tpm_pins
     )
     body.append(sym_inst("C_Generic", f"C_TPM1{s}", "100nF", 145 + off, 220, footprint="Capacitor_SMD:C_0402_1005Metric"))
     body.append(glabel("+3V3", 141.19 + off, 220, rot=180))
@@ -841,7 +841,7 @@ def gen_sch():
     ]
     # Pull in the real, already-verified clean-room symbols verbatim.
     mcu_block, mcu_pins = parse_real_symbol("Observer_MSPM0G3507_RGZ")
-    tpm_block, tpm_pins = parse_real_symbol("Observer_SLB9670_TPM")
+    tpm_block, tpm_pins = parse_real_symbol("Observer_SLB9672_TPM")
     iso_block, iso_pins = parse_real_symbol("Observer_ISOW1044BDFMR")
     lib += [mcu_block, tpm_block, iso_block]
     lib.append("  )")

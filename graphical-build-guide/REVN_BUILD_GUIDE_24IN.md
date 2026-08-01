@@ -625,7 +625,7 @@ Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_s
    [REF-FAA-001 §48.205] — minimum 3 in (76 mm) characters, clearly visible.
    Replace N00000 on decal sheet with your FAA-issued number.
    Note: 14 CFR Part 47 applies to manned aircraft; the applicable UAS regulation is Part 48.
-4. **Firmware security provisioning.** Program Cape-B CPLD write-blocker (ATF16V8BQL). Provision SLB9670 TPM 2.0 endorsement keys on all 8 nodes. Keys cannot be regenerated without physical node replacement.
+4. **Firmware security provisioning.** Program Cape-B CPLD write-blocker (ATF16V8BQL). Provision SLB9672 TPM 2.0 endorsement keys on all 8 nodes. Keys cannot be regenerated without physical node replacement.
 5. **Weight and balance.** Measure actual AUW with battery. CG should be at 40–45% of hull length from nose. Adjust battery position in cargo bay for trim if needed.
 6. **Documentation.** Log all configuration in `governor_config.h`. Archive MAVLink parameter file. Photograph completed build for insurance / forensic baseline.
 

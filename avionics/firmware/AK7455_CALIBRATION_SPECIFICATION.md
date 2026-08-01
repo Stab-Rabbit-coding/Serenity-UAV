@@ -10,7 +10,7 @@
 
 ## 1. Overview
 
-Each nacelle carries a CAN-PERIPH-GW-1 trust-module gateway (TI MSPM0G3507 + Infineon SLB9670 TPM) that reads the AK7455 magnetic angle encoder mounted at the wing/nacelle joint. The encoder measures nacelle tilt angle (−5° to 90°), independent of tilt-spar torsional wind-up.
+Each nacelle carries a CAN-PERIPH-GW-1 trust-module gateway (TI MSPM0G3507 + Infineon SLB9672 TPM) that reads the AK7455 magnetic angle encoder mounted at the wing/nacelle joint. The encoder measures nacelle tilt angle (−5° to 90°), independent of tilt-spar torsional wind-up.
 
 The encoder's output compensates for residual ferrous-spar field distortion that may shift the zero point or introduce non-linearity over the sweep range. This specification defines the zero-calibration procedure and servo-feedback integration.
 

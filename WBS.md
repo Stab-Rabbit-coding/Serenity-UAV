@@ -667,7 +667,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [ ] Connect ETH-AB (Shepherd's room → Inara's shuttle): FC1 Pilot ET…
 - [ ] Cap River's room (Bay D) end of ETH-BD (will connect to CN3 in…
 - [ ] Power taps: connect CN1, FC1, CN2, FC2 power leads from PWR con…
-- [ ] Provision TPM 2.0 (SLB9670) on CN1, FC1, CN2, FC2 — unique key…
+- [ ] Provision TPM 2.0 (SLB9672) on CN1, FC1, CN2, FC2 — unique key…
 - [ ] Verify CPLD write-blocker on CN1 and CN2: echo test > /mnt/flig…
 - [ ] Configure forensic log mount in /etc/fstab (noexec, nodev, nosu…
 - [ ] Flash serenity-cn Phase 6 daemon to CN1 and CN2.
@@ -922,7 +922,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 
 - [ ] Flash Debian Linux to Skipper PB2-I eMMC
 - [ ] Apply Cape-B-2 device tree overlay for Skipper
-- [ ] Provision TPM 2.0 (SLB9670) on Skipper's PB2-I
+- [ ] Provision TPM 2.0 (SLB9672) on Skipper's PB2-I
 - [ ] Verify CPLD write-blocker on Skipper's log μSD
 - [ ] Build and install Skipper PB2-I firmware:
 - [ ] Install and configure mavlink-router on Skipper's PB2-I
@@ -979,7 +979,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [ ] KSZ9477 Ethernet switch management driver
 - [ ] Laser GPIO driver (both sites Class 2 — docs/OBSERVER_LASER_ANALYS…
 - [ ] Laser strobe + crosshair-metrology routine (AM62A7 ISP):
-- [ ] SPI driver to Infineon SLB9670 TPM
+- [ ] SPI driver to Infineon SLB9672 TPM
 - [ ] Signed telemetry:
 
 #### 4.6.3 — Integration Testing

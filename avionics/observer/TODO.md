@@ -61,7 +61,7 @@
 - [ ] KSZ9477 Ethernet switch management driver
 - [ ] Laser GPIO driver (both sites Class 2 — `docs/OBSERVER_LASER_ANALY…
 - [ ] Laser strobe + crosshair-metrology routine (AM62A7 ISP):
-- [ ] SPI driver to Infineon SLB9670 TPM
+- [ ] SPI driver to Infineon SLB9672 TPM
 - [ ] Signed telemetry:
 
 #### 4.6.3 — Integration Testing

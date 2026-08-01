@@ -114,7 +114,7 @@ shared avionics bus.
 
 Two Observer boards are installed (bow sensor pod + cargo-bay nadir mount). Each carries a TI
 AM62A7 vision SoC (via TPS65219 PMIC), a KSZ9477 Ethernet switch, an MSPM0G3507 MCU, an
-SLB9670 TPM, an ISOW1044 isolated CAN-FD, plus the camera module, TFmini-S ToF, and a laser.
+SLB9672 TPM, an ISOW1044 isolated CAN-FD, plus the camera module, TFmini-S ToF, and a laser.
 Figures are **datasheet-typical** at the 5 V board input (PMIC/buck-fed items divided by
 0.88 efficiency); refine when the placeholder SoC/switch footprints are replaced with sourced
 silicon (Observer.md "Verified vs. Placeholder").
@@ -123,7 +123,7 @@ silicon (Observer.md "Verified vs. Placeholder").
 |---|---|---|---|
 | AM62A7 SoC (quad-A53 + VPAC/ISP + H.264/H.265 encode) | 0.57 | 1.02 | via TPS65219 PMIC |
 | KSZ9477 7-port Ethernet switch (3 ports active) | 0.27 | 0.46 | |
-| MSPM0G3507 MCU + SLB9670 TPM | 0.02 | 0.03 | |
+| MSPM0G3507 MCU + SLB9672 TPM | 0.02 | 0.03 | |
 | ISOW1044 isolated CAN-FD (integrated iso DC-DC) | 0.05 | 0.10 | |
 | Camera module (MIPI CSI-2, via J_CAM) | 0.11 | 0.18 | |
 | TFmini-S ToF (140 mA typ / 200 mA peak @5 V) | 0.14 | 0.20 | REF-SENSOR-002 |

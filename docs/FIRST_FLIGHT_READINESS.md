@@ -179,7 +179,7 @@ Not every prerequisite item is strictly Phase-5 scoped (e.g. §1.1 and §4.5 car
 - [ ] Connect ETH-AB (Shepherd's room → Inara's shuttle): FC1 Pilot ETH-1 → CN2 XO ETH-B (FC1↔CN2 Ethernet ring link).
 - [ ] Cap River's room (Bay D) end of ETH-BD (will connect to CN3 in Phase 7).
 - [ ] Power taps: connect CN1, FC1, CN2, FC2 power leads from PWR conduit; verify 5V ±0.05V at each header.
-- [ ] Provision TPM 2.0 (SLB9670) on CN1, FC1, CN2, FC2 — unique key material per node.
+- [ ] Provision TPM 2.0 (SLB9672) on CN1, FC1, CN2, FC2 — unique key material per node.
 - [ ] Verify CPLD write-blocker on CN1 and CN2: `echo test > /mnt/flightlog/test.txt` must return read-only error.
 - [ ] Configure forensic log mount in `/etc/fstab` (noexec, nodev, nosuid, ro) on CN1 and CN2.
 - [ ] Flash serenity-cn Phase 6 daemon to CN1 and CN2.

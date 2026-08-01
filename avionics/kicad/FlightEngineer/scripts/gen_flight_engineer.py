@@ -908,7 +908,7 @@ def text_note(txt, x, y):
 
 # ---------------------------------------------------------------------------
 # Section H additions (2026-07-26): TPM-secured trust module (MSPM0G3507 MCU
-# + SLB9670 TPM + isolated CAN-FD + isolated RS-485). Flight Engineer previously had
+# + SLB9672 TPM + isolated CAN-FD + isolated RS-485). Flight Engineer previously had
 # no MCU/TPM/CAN/RS-485 at all -- it exposed its INA226/BQ76930 telemetry
 # only over a raw external I2C bus (J_I2C, to Pilot/Shepherd's Room). This
 # adds the same trust-module recipe used on CAN-PERIPH-GW-1 and Observer, so
@@ -925,7 +925,7 @@ REAL_SYMS_TRUST = {
         "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm",
     ),
     "TPM": (
-        "Observer_SLB9670_TPM",
+        "Observer_SLB9672_TPM",
         "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm",
     ),
     "ISO": ("Observer_ISOW1044BDFMR", "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm"),
@@ -2018,7 +2018,7 @@ def gen_sch() -> str:
     parts.append(pwr_sym("PGND", 590 - 2.54, 75, rot=0))
 
     # -----------------------------------------------------------------------
-    # Section H: TPM-secured trust module (MSPM0G3507 + SLB9670 + ISOW1044 +
+    # Section H: TPM-secured trust module (MSPM0G3507 + SLB9672 + ISOW1044 +
     # ADM2795E) -- added 2026-07-26, see module docstring above.
     # -----------------------------------------------------------------------
     parts.append(
@@ -2086,7 +2086,7 @@ def gen_sch() -> str:
         "20": "TPM_SPI_CS", "21": "TPM_SPI_MOSI", "22": "+3V3", "23": "PGND",
         "24": "TPM_SPI_MISO", "32": "PGND",
     }
-    parts.extend(place_real_trust("TPM", "U_TPM", "Infineon SLB9670", {1: (710, 130)}, tpm_nm, tpm_pins))
+    parts.extend(place_real_trust("TPM", "U_TPM", "Infineon SLB9672", {1: (710, 130)}, tpm_nm, tpm_pins))
     parts.append(sym_inst("C_Generic", "C_H_TPM1", "100nF", 690, 125))
     parts.append(glabel("+3V3", 686.19, 125, rot=180))
     parts.append(glabel("PGND", 693.81, 125, rot=0))

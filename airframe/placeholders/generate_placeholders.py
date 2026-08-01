@@ -417,7 +417,7 @@ def gen_cape_b2():
     """
     Cape-B-2 PCB 55 × 35 mm — EMI-hardened XO (Comms / Logging / Payload) cape.
     Same form factor as PocketBeagle 2 Industrial SBC and Cape-A-2.
-    Adds MAVLink SiK, LoRa RFM95W, TI WL1837MOD WiFi/BT, SLB9670 TPM 2.0,
+    Adds MAVLink SiK, LoRa RFM95W, TI WL1837MOD WiFi/BT, SLB9672 TPM 2.0,
     ATF16V8BQL CPLD write-blocker, log microSD.
     Assembled height ~12 mm (RF module stack + JST-GH connectors).
     BOM: CAPE-B-2 (×4 aircraft), SKIPPER-CAPE-B-2 (×1 GCS).

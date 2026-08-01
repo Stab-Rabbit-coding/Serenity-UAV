@@ -6107,6 +6107,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/SLB_9672XU20_Infineon.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/SM04B-SRSS-TB.pdf": {
       "description": "PDF document",
       "tags": [
@@ -7202,7 +7209,7 @@
       "archived": false
     },
     "avionics/kicad/Commo/scripts/inject_commo_tpm.py": {
-      "description": "inject_commo_tpm.py -- add an SLB9670 TPM to Commo.kicad_sch via text",
+      "description": "inject_commo_tpm.py -- add an SLB9672 TPM to Commo.kicad_sch via text",
       "tags": [
         "avionics-hardware",
         "pcb-design",
@@ -8968,7 +8975,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/symbols/Observer_SLB9670_TPM.kicad_sym": {
+    "avionics/kicad/symbols/Observer_SLB9672_TPM.kicad_sym": {
       "description": "KiCad symbol library",
       "tags": [
         "avionics-hardware",
@@ -8993,7 +9000,7 @@
       ],
       "archived": false
     },
-    "avionics/kicad/symbols/SLB9670VQ2_0_pinmap.csv": {
+    "avionics/kicad/symbols/SLB9672XU2_0_pinmap.csv": {
       "description": "Tabular data (CSV)",
       "tags": [
         "avionics-hardware",
@@ -12249,7 +12256,7 @@
       "avionics/kicad/README.md",
       "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
       "avionics/kicad/replace_footprints.py",
-      "avionics/kicad/symbols/Observer_SLB9670_TPM.kicad_sym",
+      "avionics/kicad/symbols/Observer_SLB9672_TPM.kicad_sym",
       "avionics/observer/TODO.md",
       "avionics/observer/WBS.md",
       "avionics/rev-s1/WBS.md",
@@ -13318,7 +13325,7 @@
       "avionics/kicad/symbols/ISOW1044BDFMR_pinmap.csv",
       "avionics/kicad/symbols/KSZ9477STXI_pinmap.csv",
       "avionics/kicad/symbols/MSPM0G3507SRGZR_pinmap.csv",
-      "avionics/kicad/symbols/SLB9670VQ2_0_pinmap.csv",
+      "avionics/kicad/symbols/SLB9672XU2_0_pinmap.csv",
       "avionics/kicad/symbols/phyCORE_AM62x_PCM071_pinmap.csv",
       "current-specification/bom_revS.csv",
       "current-specification/bom_revS.json",
@@ -14392,10 +14399,10 @@
       "avionics/kicad/symbols/Observer_ISOW1044BDFMR.kicad_sym",
       "avionics/kicad/symbols/Observer_KSZ9477.kicad_sym",
       "avionics/kicad/symbols/Observer_MSPM0G3507_RGZ.kicad_sym",
-      "avionics/kicad/symbols/Observer_SLB9670_TPM.kicad_sym",
+      "avionics/kicad/symbols/Observer_SLB9672_TPM.kicad_sym",
       "avionics/kicad/symbols/Observer_SoM.kicad_sym",
       "avionics/kicad/symbols/Observer_SoM_PCM071.kicad_sym",
-      "avionics/kicad/symbols/SLB9670VQ2_0_pinmap.csv",
+      "avionics/kicad/symbols/SLB9672XU2_0_pinmap.csv",
       "avionics/kicad/symbols/Vera_SoM_PCM071.kicad_sym",
       "avionics/kicad/symbols/footprints/PHYCORE-AM62AX-DSC-FOOTPRINT.kicad_mod",
       "avionics/kicad/symbols/phyCORE_AM62x_PCM071_pinmap.csv",
@@ -14419,6 +14426,7 @@
       "avionics/datasheets/PCA9555.pdf",
       "avionics/datasheets/SAM-M10Q_DataSheet_UBX-22013293.pdf",
       "avionics/datasheets/SLB_9670VQ20_Infineon.pdf",
+      "avionics/datasheets/SLB_9672XU20_Infineon.pdf",
       "avionics/datasheets/SM04B-SRSS-TB.pdf",
       "avionics/datasheets/SM1553-Series_HiRel-Data-Bus-Pulse-Transformer_RevD.pdf",
       "avionics/datasheets/SRF2012A.pdf",
@@ -14764,10 +14772,10 @@
       "avionics/kicad/symbols/Observer_ISOW1044BDFMR.kicad_sym",
       "avionics/kicad/symbols/Observer_KSZ9477.kicad_sym",
       "avionics/kicad/symbols/Observer_MSPM0G3507_RGZ.kicad_sym",
-      "avionics/kicad/symbols/Observer_SLB9670_TPM.kicad_sym",
+      "avionics/kicad/symbols/Observer_SLB9672_TPM.kicad_sym",
       "avionics/kicad/symbols/Observer_SoM.kicad_sym",
       "avionics/kicad/symbols/Observer_SoM_PCM071.kicad_sym",
-      "avionics/kicad/symbols/SLB9670VQ2_0_pinmap.csv",
+      "avionics/kicad/symbols/SLB9672XU2_0_pinmap.csv",
       "avionics/kicad/symbols/Vera_SoM_PCM071.kicad_sym",
       "avionics/kicad/symbols/footprints/PHYCORE-AM62AX-DSC-FOOTPRINT.kicad_mod",
       "avionics/kicad/symbols/phyCORE_AM62x_PCM071_pinmap.csv",

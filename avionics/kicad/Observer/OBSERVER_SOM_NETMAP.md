@@ -13,7 +13,7 @@ U1 (the raw TI AM62A7 placeholder) and U_PMIC (TPS65219) are replaced by the SoM
 `docs/OBSERVER_MANUFACTURING_READINESS.md` Rev C §3B and `gen_jayne.py`).
 
 Net names match the existing Observer net vocabulary in `gen_jayne.py` so the carrier side
-(KSZ9477, SLB9670, MSPM0G3507, ISOW1044, connectors) connects by label without change.
+(KSZ9477, SLB9672, MSPM0G3507, ISOW1044, connectors) connects by label without change.
 
 ## Migration delta (schematic-first)
 
@@ -64,7 +64,7 @@ CAM_RESET_N / CAM_PWDN ride WKUP GPIO — **assign a specific WKUP GPIO pad from
 X_CPSW_ETH0_A/B/C/D± pads 63–70 + LED/INT 61,62,71,72 — available if a direct magnetics port
 is ever wanted instead of / in addition to the KSZ9477 ring.)*
 
-## TPM — SPI0 to SLB9670 (U5)
+## TPM — SPI0 to SLB9672 (U5)
 
 | SoM pad | SoM pin | Observer net |
 | --- | --- | --- |

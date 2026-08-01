@@ -72,8 +72,8 @@
     - [ ] BC arbitration logic for FC1 (primary) / FC2 (standby).
     - [ ] Bench test against the 1553-XFM transformer coupling hardware (§1.2 "Wire the MIL-1553 connector + transformer").
 
-- [ ] **TPM-bound attestation** — SLB9670 TPM 2.0 HMAC on all outbound flight-critical CAN FD messages; pcrs extend on each boot; boot measurement chain.
-    - [ ] SLB9670 TPM 2.0 driver (HMAC key derivation, PCR extend calls).
+- [ ] **TPM-bound attestation** — SLB9672 TPM 2.0 HMAC on all outbound flight-critical CAN FD messages; pcrs extend on each boot; boot measurement chain.
+    - [ ] SLB9672 TPM 2.0 driver (HMAC key derivation, PCR extend calls).
     - [ ] Boot measurement chain (PCR extend at each boot stage).
     - [ ] Outbound CAN FD HMAC signing hook for flight-critical message classes.
     - [ ] Bench test: tamper/replay rejection unit test against signed vs. unsigned frames.
@@ -111,8 +111,8 @@
     - [ ] W25Q128JV NOR flash circular buffer driver for overflow when microSD is full/unavailable.
     - [ ] Bench test: attempt out-of-order/overwrite write, verify CPLD blocks it.
 
-- [ ] **TPM-bound HMAC on all outbound AX.25 payloads** — each 49 MHz (Part 15 §15.235) packet includes HMAC-SHA256 computed from SLB9670 stored key; receiver nodes verify before acting.
-    - [ ] SLB9670 stored-key HMAC-SHA256 signer for outbound AX.25/49 MHz frames (Commo boards, River/Simon).
+- [ ] **TPM-bound HMAC on all outbound AX.25 payloads** — each 49 MHz (Part 15 §15.235) packet includes HMAC-SHA256 computed from SLB9672 stored key; receiver nodes verify before acting.
+    - [ ] SLB9672 stored-key HMAC-SHA256 signer for outbound AX.25/49 MHz frames (Commo boards, River/Simon).
     - [ ] Receiver-side verification gate (discard unsigned/invalid before acting, mirrors §4.4 "Security message signing").
     - [ ] Bench test: signed/unsigned/corrupted-signature frame acceptance matrix.
 
@@ -153,7 +153,7 @@
     - [ ] Bench test: inject a synthetic outlier fix, verify exclusion from blend.
 
 - [ ] **Security message signing** — every inter-node CAN FD message signed; unauthenticated messages discarded; signing key material bound to node TPM endorsement key.
-    - [ ] CAN FD message signing hook bound to each node's TPM endorsement key (SLB9670, §4.2).
+    - [ ] CAN FD message signing hook bound to each node's TPM endorsement key (SLB9672, §4.2).
     - [ ] Receiver-side verification gate; discard unauthenticated frames before acting.
     - [ ] Bench test: inject unsigned/forged frame on the bus, verify it is discarded and logged.
 

@@ -74,7 +74,7 @@ list below before treating anything here as final.
     library table) plus minor silk-clearance/overlap warnings.
 - **Board is double-sided (F.Cu + B.Cu), EMI-hardened, and compact: 78×80 mm, 4-layer FR4,
     rounded corners.** U1 (AM62A7) populates the front of the board's upper area; U_PMIC/U5
-    (SLB9670)/U3 (MSPM0G3507)/U2 (KSZ9477) populate the BACK of that same area (legal —
+    (SLB9672)/U3 (MSPM0G3507)/U2 (KSZ9477) populate the BACK of that same area (legal —
     opposite copper faces don't collide). Real component body sizes (verified via datasheet
     research, not rough guesses) plus double-siding shrank the board from an initial
     single-sided 110×190 mm draft; adding the full EMI-hardening chain (12 new parts) grew it
@@ -89,7 +89,7 @@ list below before treating anything here as final.
     UART crossing, CAN-FD, SPI buses, PGND/GND single-point isolation); TCAN1042HG-Q1's SOIC-8
     pinout (standard, well-documented part); AO3400 SOT-23 N-FET pinout.
 - **Placeholder / NOT real, must be replaced before fab (see `gen_vera_pcb.py` docstring):**
-    U1 (AM62A7, 484-ball BGA), U2 (KSZ9477), U3 (MSPM0G3507), U5 (SLB9670), and U_PMIC
+    U1 (AM62A7, 484-ball BGA), U2 (KSZ9477), U3 (MSPM0G3507), U5 (SLB9672), and U_PMIC
     (TPS65219) all use a deliberately-obvious "2-row pad" placeholder footprint — NOT a
     fabricated-to-look-real BGA/QFN ball-out, since inventing a plausible-looking one with no
     datasheet to back it up would be worse than an honest placeholder. Real pin NUMBERS for
@@ -104,7 +104,7 @@ list below before treating anything here as final.
 
 - **Vision half:** TI AM62A3 or AM62A7 [REF-SENSOR-003] — MIPI CSI-2 camera in, VPAC/ISP,
     H.264/H.265 encode. Runs TI's own open-source Linux BSP (V4L2/GStreamer), not OpenIPC.
-- **Control half:** TI MSPM0G3507 [REF-SENSOR-004] (native CAN-FD) + Infineon SLB9670 TPM
+- **Control half:** TI MSPM0G3507 [REF-SENSOR-004] (native CAN-FD) + Infineon SLB9672 TPM
     (fleet-standard part, already used on all 8 Pilot/XO nodes — do not introduce a different
     TPM part number) + Microchip KSZ9477 [REF-SENSOR-005] Ethernet switch (HSR/PRP hardware
     redundancy) + TI TCAN1042HG-Q1 [REF-SENSOR-006] CAN-FD transceiver.
@@ -126,7 +126,7 @@ list below before treating anything here as final.
     ICs use REAL clean-room symbols + real footprints: U2 KSZ9477 (custom
     `Observer:TQFP-128-1EP_KSZ9477…EP10x10`, generic TQFP-128 + datasheet 10×10 GND EP), U3
     MSPM0G3507 (QFN-48-1EP), U4 ISOW1044BDFMR (**SOIC-20W / 20-pin DFM**, corrects the SOIC-16W
-    error), U5 SLB9670 (QFN-32-1EP). Wiring is by signal name from each symbol's real pin table
+    error), U5 SLB9672 (QFN-32-1EP). Wiring is by signal name from each symbol's real pin table
     (no hand-entered pin numbers). **ERC = 0 errors.** sch↔pcb parity clean except 4
     mounting-holes (`extra_footprint`, expected) + 1 TPM thermal-EP tie (`net_conflict`,
     intentional GND). Netlist spot-checked: RGMII MAC↔switch crossover, CAN path, SPI to
@@ -214,11 +214,11 @@ list below before treating anything here as final.
     110×190 mm draft; manually fine-tuned in the KiCad GUI (row/column alignment,
     mounting-hole symmetry, rounded corners, reduced to 68.5×63.5 mm); real component body
     sizes substituted for rough first-guesses (AM62A7 18×18mm, KSZ9477 14×14mm, MSPM0G3507
-    VSSOP-28 7.1×4.9mm, SLB9670/TPS65219 5×5mm each); full EMI-hardening chain added (see
+    VSSOP-28 7.1×4.9mm, SLB9672/TPS65219 5×5mm each); full EMI-hardening chain added (see
     above), which — combined with rebuilding the rounded-corner outline and mounting-hole
     placement directly into the generator script (`rounded_board_outline()`) rather than as a
     manual GUI post-pass — landed the board at **78×80 mm**. U1 (AM62A7) on the front;
-    U_PMIC/U5 (SLB9670)/U3 (MSPM0G3507)/U2 (KSZ9477) stacked on the back of the same board
+    U_PMIC/U5 (SLB9672)/U3 (MSPM0G3507)/U2 (KSZ9477) stacked on the back of the same board
     area (legal, opposite copper faces); connectors, U4 (ISOW1044BDFMR), and the EMI chain
     stay front-side. Component placement only — **no copper traces are routed yet** (only a
     GND pour zone on In1.Cu); this is net-correct footprint placement per this project's
@@ -410,7 +410,7 @@ direction (2026-07-03).
     **size** = (obj_px/cross_px)·2R·tan(θ/2) and **tilt** from arm foreshortening, using the
     boresighted TFmini-S range R (`docs/OBSERVER_LASER_ANALYSIS.md §4.4`). Publish size/orientation
     with the signed telemetry below.
-- [ ] **SPI driver to Infineon SLB9670 TPM** — reuse the existing TPM driver approach already
+- [ ] **SPI driver to Infineon SLB9672 TPM** — reuse the existing TPM driver approach already
     used fleet-wide on Pilot/XO nodes rather than writing a new one from scratch.
 - [ ] **Signed telemetry:** TPM-signed HMAC or ECDSA signature on all ToF/laser-state packets
     published over CAN-FD and Ethernet, per Zero Trust policy [REF-NIST-001 §2.1].

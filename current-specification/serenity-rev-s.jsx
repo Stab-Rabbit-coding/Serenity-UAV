@@ -182,7 +182,7 @@ function TabOverview() {
                         ["Cape variant",       "EMI-hardened v2 at ALL 8 positions",   "v2·v2·v2·v2 (Rev R baseline — Pilot/XO naming finalised)"],
                         ["Data buses",         "Ethernet RSTP · CAN FD · RS-485 · MIL-STD-1553B", "All 4 on every node"],
                         ["Radio links",        "SiK 915 MHz + LoRa 915 MHz + WiFi + XCVR 49 MHz", "All 4 on every CN node"],
-                        ["Security",           "SLB9670 TPM 2.0 on all 8 nodes + ATF16V8BQL CPLD write-blocker", "Message signing + forensic log"],
+                        ["Security",           "SLB9672 TPM 2.0 on all 8 nodes + ATF16V8BQL CPLD write-blocker", "Message signing + forensic log"],
                         ["Cargo bay",          "101.6 × 76.2 × 76.2 mm",  "Clamshell doors + N20 winch + auto-latch cradle"],
                         ["EMI protection",     "5 kV isolated transceivers on ALL 8 nodes", "IEC 62368-1 / VDE 0884-11 at every position"],
                         ["FAA registration",   "N00000 PLACEHOLDER",       "Replace before first untethered flight (14 CFR Part 48)"],
@@ -483,7 +483,7 @@ function TabAvionics() {
                         ["ESC PWM",       "EHRPWM / PRU-ICSS — BDSHOT600; 5 outputs (4× nacelle + 1× rear)"],
                         ["Servo PWM",     "2 channels active — 2× nacelle tilt (+4× RCS valves at Phase 11)"],
                         ["ToF array",     "TCA9548A 8-ch I²C mux + MCP23008 XSHUT expander → 6× VL53L5CX per node"],
-                        ["TPM",           "SLB9670 TPM 2.0 (SPI) — attestation + HMAC signing"],
+                        ["TPM",           "SLB9672 TPM 2.0 (SPI) — attestation + HMAC signing"],
                         ["Tamper mesh",   "F.Cu / B.Cu TMESH_P/N nets routed to TPM GPIO — physical intrusion detect"],
                         ["MIL-STD-1553", "PRU Manchester II encoder/decoder; FC1=BC, FC2=standby BC"],
                         ["ADC (ESC telem)","74HC4051 8:1 mux — BDSHOT telemetry demux for 4 ESCs"],
@@ -511,7 +511,7 @@ function TabAvionics() {
                         ["Log μSD",        "XO microSD slot — hardware write-blocked via CPLD"],
                         ["CPLD",           "ATF16V8BQL — hardware-enforced non-executable log storage"],
                         ["NOR flash",      "W25Q128JV 128 Mb — circular log overflow buffer"],
-                        ["TPM",            "SLB9670 TPM 2.0 — key material for log signing + HMAC on AX.25 payloads"],
+                        ["TPM",            "SLB9672 TPM 2.0 — key material for log signing + HMAC on AX.25 payloads"],
                         ["Tamper mesh",    "Same as Pilot"],
                         ["Cargo GPIO",     "DRV8833 winch H-bridge + HX711 load cell ADC via XO GPIO"],
                         ["MIL-STD-1553",  "PRU Manchester II; CN1=RT 0x01, CN2–CN4 RT addresses"],
@@ -686,13 +686,13 @@ function TabSecurity() {
                     cols={["Layer", "Implementation", "Coverage"]}
                     accent={C.red}
                     rows={[
-                        ["TPM 2.0",              "SLB9670 on every Pilot and XO (8 chips total)", "Unique key material per node; HMAC-SHA256 on all flight-critical CAN FD messages; PCR extend on each boot"],
+                        ["TPM 2.0",              "SLB9672 on every Pilot and XO (8 chips total)", "Unique key material per node; HMAC-SHA256 on all flight-critical CAN FD messages; PCR extend on each boot"],
                         ["CPLD write-blocker",   "ATF16V8BQL on every XO (4 chips total)", "Hardware-enforced read-only append to log μSD; NX enforcement; cannot be bypassed in firmware"],
                         ["Message signing",      "TPM-bound HMAC on all outbound inter-node CAN FD frames", "Unauthenticated messages discarded by all nodes"],
                         ["AX.25 HMAC",           "TPM-bound HMAC-SHA256 on every XCVR-49MHZ AX.25 packet", "Receiver nodes verify before acting on RC commands"],
                         ["5 kV isolation",       "ISOW1044BDFMR + ADM2795EBRWZ + ADIN1300BCPZ at all 8 nodes", "Galvanic isolation prevents conducted EMI/transient propagation across bus boundaries"],
                         ["NOR flash log",        "W25Q128JV 128 Mb circular log on XO", "Overflow buffer for log μSD; also write-blocked; NX enforced"],
-                        ["Tamper mesh",          "F.Cu/B.Cu TMESH_P/N copper nets on Pilot + XO", "Physical intrusion detection routed to SLB9670 TPM GPIO"],
+                        ["Tamper mesh",          "F.Cu/B.Cu TMESH_P/N copper nets on Pilot + XO", "Physical intrusion detection routed to SLB9672 TPM GPIO"],
                         ["Boot measurement",     "TPM PCR extend on each boot stage", "Detected replay or firmware modification flagged to ground station"],
                         ["Log integrity",        "SHA-256 hash chain on all log records", "Forensically sound; record tampering detectable"],
                     ]}

@@ -14,7 +14,7 @@ Reference: avionics/CLAUDE.md "Observer" section; REFERENCES.md Part XII
 (REF-SENSOR-002 .. REF-SENSOR-006).
 
 IMPORTANT — verification status (do not treat as fab-ready without addressing these):
-    - U1 (TI AM62A7), U2 (KSZ9477), U3 (MSPM0G3507), U5 (SLB9670), U_PMIC (TPS65219) all
+    - U1 (TI AM62A7), U2 (KSZ9477), U3 (MSPM0G3507), U5 (SLB9672), U_PMIC (TPS65219) all
       use a SIMPLIFIED schematic symbol / "2-row placeholder" PCB footprint. Real BODY
       sizes are verified (18x18mm BGA, 14x14mm TQFP, VSSOP-28 7.1x4.9mm, VQFN-32 5x5mm x2
       respectively — see each SIZE constant's comment), but exact pin NUMBERS are still
@@ -805,7 +805,7 @@ KSZ_R = [
     ("P3_RXN", "33", "input"),
 ]
 
-TPM_SIZE = (2.5, 2.5)  # Infineon SLB9670: PG-VQFN-32, real body ~5x5mm
+TPM_SIZE = (2.5, 2.5)  # Infineon SLB9672: PG-UQFN-32, real body ~5x5mm
 TPM_L = [
     ("+3V3", "1", "power_in"),
     ("GND", "2", "power_in"),
@@ -975,9 +975,9 @@ def gen_sch() -> str:
             size=TVS_SIZE,
         ),
         lib_symbol_generic_ic(
-            "INFINEON_SLB9670",
-            "Observer:TPM_SLB9670_PLACEHOLDER",
-            "https://www.infineon.com/dgdl/Infineon-SLB9670-DataSheet.pdf",
+            "INFINEON_SLB9672",
+            "Observer:TPM_SLB9672_PLACEHOLDER",
+            "https://www.infineon.com/assets/row/public/documents/30/49/infineon-slb9672-tpm20-spi-fw16.xx-ds-rev1-3-2024-11-18-datasheet-en.pdf",
             left=TPM_L,
             right=TPM_R,
             size=TPM_SIZE,
@@ -1020,7 +1020,7 @@ def gen_sch() -> str:
     )
     parts.append(
         text_note(
-            "SIMPLIFIED SCHEMATIC SYMBOLS: U1 (AM62A7), U2 (KSZ9477), U5 (SLB9670) show "
+            "SIMPLIFIED SCHEMATIC SYMBOLS: U1 (AM62A7), U2 (KSZ9477), U5 (SLB9672) show "
             "representative pins only; real pin numbers not yet verified against datasheets. "
             "See file docstring in gen_jayne.py. Do not fabricate without completing TODO.md §1.2c.",
             10,
@@ -1323,7 +1323,7 @@ def gen_sch() -> str:
 
     # TPM
     cx, cy = 115, 155
-    parts.append(sym_inst("INFINEON_SLB9670", "U5", "Infineon SLB9670 TPM 2.0", cx, cy))
+    parts.append(sym_inst("INFINEON_SLB9672", "U5", "Infineon SLB9672 TPM 2.0", cx, cy))
     parts.append(pwr_pin("+3V3", cx, cy, TPM_L, TPM_R, "+3V3", TPM_SIZE))
     parts.append(pwr_pin("GND", cx, cy, TPM_L, TPM_R, "GND", TPM_SIZE))
     parts.append(glabel_pin("TPM_SPI_CS", cx, cy, TPM_L, TPM_R, "SPI_CS", TPM_SIZE))
