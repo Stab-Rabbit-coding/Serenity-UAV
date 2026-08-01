@@ -50,9 +50,8 @@ See `AGENTS.md` "Airframe Geometry" for the validated component placement extent
 |-----------|----------|-----------|-------|
 | Fuselage (printed) | ~350 | 12.3 | Includes all sections, access panels, bosses |
 | Wings | ~180 | 6.3 | Span 486 mm, spar + skin, no cargo nacelles |
-| Nacelles (2×) | ~420 | 14.8 | Shells, hubs, iris mechanism; excludes EDFs |
-| Nacelle EDFs (4×) | ~625 | 22.0 | 4× XFly Galaxy X5 50 mm (156g each) |
-| Tilt mechanism (servos, linkage, frame) | ~200 | 7.1 | 2× SG90 servos, rods, brackets |
+| Nacelle assembly (2× complete: EDFs + shells + pivot + iris) | ~625 | 22.0 | Includes 4× XFly Galaxy X5 (70g mass each), shells, hubs, pivot, iris mechanism |
+| Tilt mechanism (servos, linkage, frame) | ~200 | 7.1 | 2× DS3218MG digital metal-gear servos (≥25 kg·cm @ 6V), rods, brackets |
 | Landing gear (wire + mounts) | ~150 | 5.3 | 4130 steel wire, epoxy-bonded |
 | Avionics (all 8 nodes, capes, TPM, SD cards) | ~280 | 9.9 | Includes cable, connectors |
 | Power (battery + PDB + ESCs) | ~500 | 17.6 | 6S 4000 mAh LiPo + Kaylee PDB + 4× 40A BLHeli32 ESCs |

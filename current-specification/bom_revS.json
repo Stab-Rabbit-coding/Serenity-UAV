@@ -11,10 +11,10 @@
       "Unit_Mass_g": "70",
       "Total_Mass_g": "280",
       "Supplier": "AliExpress / Banggood",
-      "Supplier_PN_or_Search": "Surpass Hobby 2627 50mm 6S EDF OR RFX 50mm 12-blade 6S EDF",
-      "Est_Unit_Price_USD": "25.00",
-      "Est_Total_Price_USD": "100.00",
-      "Notes": "460g thrust each; verify CW vs CCW rotation before nacelle install; 2 per nacelle tandem; Rev O EDF1 Z=22..72mm EDF2 Z=98..143mm"
+      "Supplier_PN_or_Search": "XFly Galaxy X5 50mm 12-blade 6S 3200KV (canonical) OR Surpass Hobby 2627 (legacy)",
+      "Est_Unit_Price_USD": "28.00",
+      "Est_Total_Price_USD": "112.00",
+      "Notes": "1240g thrust each (XFly Galaxy X5 canonical); 70g unit mass; verify CW vs CCW rotation before nacelle install; 2 per nacelle tandem with 11-fin stator (90% efficiency); Rev S1 positioning Z=22..72mm EDF1, Z=98..143mm EDF2"
     },
     {
       "Ref": "EDF-55-6S",
