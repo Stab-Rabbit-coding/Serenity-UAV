@@ -162,6 +162,26 @@ total AUW accuracy.
 
 ---
 
+### 3.3 Phase 11 (Deferred) — Rear EDF Thrust (No Stator Efficiency)
+
+| Parameter | Spec | Source | Notes | Status |
+|-----------|------|--------|-------|--------|
+| Rear EDF (55mm) raw thrust | 1,500 g | Deferred/README.md | 6S fan, no inter-stage stator | ✅ |
+| RCS bleed (4 jets) | 15% of mass flow | README.md L268 | Proportional-valve modulated | ✅ |
+| Net forward thrust (post-bleed) | 1,275 g | 1,500 × 0.85 | 85% forward, 15% RCS authority | ✅ |
+
+**Key distinction from nacelle EDFs:**
+- **Nacelle EDFs (50mm):** 1,240g raw thrust each; **90% stator efficiency applied** → 2,232g per nacelle
+- **Rear EDF (55mm):** 1,500g raw thrust; **no inter-stage stator** (no efficiency factor)
+- RCS bleed is mass-flow diversion, not efficiency loss — serves attitude control, not thrust enhancement
+
+**Phase 11 thrust budget:**
+- Hover authority: 4,464 g (nacelles only) — rear EDF does not contribute to hover
+- Forward cruise thrust: 1,275 g (rear EDF after RCS bleed)
+- Total Phase 11 AUW: ~3,130 g | Hover T/W ≈ 1.43 (nacelles only)
+
+---
+
 ## 4. Component Specifications (Key Items)
 
 ### 4.1 Tilt Servo

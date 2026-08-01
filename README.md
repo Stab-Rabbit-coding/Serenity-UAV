@@ -260,13 +260,14 @@ Design files in `deferred/aft-edf/`. Physical build deferred until all other sys
 Nacelle-only T/W ≈ 1.61 is sufficient for VTOL hover; the rear EDF adds cruise thrust and
 attitude authority, **not** hover lift.
 
-- 1 × 2.17 in (55 mm) 6S EDF in the rear fuselage cone — ~3.31 lbf (1,500 g) fan thrust,
+- 1 × 2.17 in (55 mm) 6S EDF in the rear fuselage cone — **~3.31 lbf (1,500 g) raw fan thrust**
+  (no inter-stage stator; differs from tandem nacelle EDFs which use 90% efficiency factor),
   exhausting through the **fixed canonical elliptical tail nozzle** (2.06 in × 1.76 in /
   52.3 mm × 44.7 mm, ~1,836 mm² exit). Because the canonical nozzle fires straight aft, the
   rear EDF provides **horizontal forward thrust only** (cruise/range) — it is not counted in hover T/W.
 - **4 RCS (reaction-control) bleed-air thrusters** fed from the EDF discharge plenum, tapping
-  ~15 % of EDF mass flow for pitch/yaw attitude authority (proportional-valve modulated).
-  Net forward thrust after bleed: ~2.81 lbf (1,275 g).
+  ~15% of EDF mass flow for pitch/yaw attitude authority (proportional-valve modulated).
+  Net forward thrust after RCS bleed: ~2.81 lbf (1,275 g) = 1,500 g × 0.85 (85% forward, 15% RCS).
 - Deferred EDF system mass: ~0.79 lbm (360 g) total
   (EDF ~3.4 oz / 95 g + ESC ~1.2 oz / 35 g + CF-PETG intake frame ~0.7 oz / 20 g
     + CF-PETG plenum + RCS manifold ~1.8 oz / 50 g + fixed canonical nozzle ~1.1 oz / 30 g

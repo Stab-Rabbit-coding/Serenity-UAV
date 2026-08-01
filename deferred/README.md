@@ -100,13 +100,15 @@ Possible additions beyond Phase 12 (not yet formally scoped):
 
 ### Aft EDF Selection & Integration
 
-**Current baseline:** 55 mm 6S EDF (HobbyKing / AliExpress), ~1,500 g thrust.
+**Current baseline:** 55 mm 6S EDF (HobbyKing / AliExpress), **~1,500 g raw fan thrust** (no inter-stage stator).
+
+**Key difference from nacelle EDFs:** Rear EDF has no stator efficiency factor (unlike 50mm nacelle EDFs with 90% efficiency); 1,500g is raw thrust. The 4 RCS jets bleed ~15% of mass flow (not an efficiency factor, but a flow diversion).
 
 **Design constraints:**
 1. **Fixed nozzle** — Unlike nacelle iris (variable), the aft nozzle is canonical and fixed shape
    (2.06" × 1.76" elliptical)
 2. **Forward thrust only** — Does not contribute to hover T/W (decoupled from VTOL authority)
-3. **Intake:** Shared with RCS bleed system (~15% flow diversion)
+3. **RCS bleed integration:** ~15% of EDF mass flow diverted to 4 RCS jets → 1,275 g net forward thrust (1,500 × 0.85)
 
 **SCAD sources (Phase 11):**
 - `aft_edf_plenum.stl` — EDF inlet plenum, 55 mm bore, 4× RCS bleed taps
