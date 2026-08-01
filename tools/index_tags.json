@@ -524,7 +524,7 @@
       ],
       "archived": false
     },
-    "airframe/blender-scripts/files-hollowed-24in/operands/text_inara.stl": {
+    "airframe/blender-scripts/files-hollowed-24in/operands/text_flight_engineer.stl": {
       "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
@@ -532,11 +532,10 @@
       ],
       "archived": false
     },
-    "airframe/blender-scripts/files-hollowed-24in/operands/text_flight_engineer.stl": {
+    "airframe/blender-scripts/files-hollowed-24in/operands/text_inara.stl": {
       "description": "STL mesh (binary)",
       "tags": [
         "cad-mesh",
-        "power",
         "structural"
       ],
       "archived": false
@@ -787,7 +786,7 @@
       "archived": false
     },
     "airframe/fuselage-mid/WBS.md": {
-      "description": "Serenity UAV \u2014 Airframe Fuselage \u2014 Head/Cargo/Middle Shells, FlightEngineer/Simon Bays Work Breakdown Structure (Deta\u2026",
+      "description": "Serenity UAV \u2014 Airframe Fuselage \u2014 Head/Cargo/Middle Shells, FlightEngineer/Simon Bays Work Breakdown Structu\u2026",
       "tags": [
         "documentation",
         "project-tracking",
@@ -1127,7 +1126,6 @@
       "description": "STL mesh \u2014 header: SerenityUAV PLACEHOLDER R1",
       "tags": [
         "cad-mesh",
-        "power",
         "structural"
       ],
       "archived": false
@@ -1476,24 +1474,6 @@
       ],
       "archived": false
     },
-    "airframe/placeholders/gcs/Skipper_enclosure_IP65_145x90x65mm.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV PLACEHOLDER R1",
-      "tags": [
-        "cad-mesh",
-        "ground-control",
-        "structural"
-      ],
-      "archived": false
-    },
-    "airframe/placeholders/gcs/Skipper_tripod_antenna_mast.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV PLACEHOLDER R1",
-      "tags": [
-        "cad-mesh",
-        "ground-control",
-        "structural"
-      ],
-      "archived": false
-    },
     "airframe/placeholders/gcs/N42_disc_magnet_6x2mm.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV PLACEHOLDER R1",
       "tags": [
@@ -1522,6 +1502,24 @@
       "archived": false
     },
     "airframe/placeholders/gcs/RF_splitter_915MHz_2way_ZFSC.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV PLACEHOLDER R1",
+      "tags": [
+        "cad-mesh",
+        "ground-control",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/placeholders/gcs/Skipper_enclosure_IP65_145x90x65mm.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV PLACEHOLDER R1",
+      "tags": [
+        "cad-mesh",
+        "ground-control",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/placeholders/gcs/Skipper_tripod_antenna_mast.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV PLACEHOLDER R1",
       "tags": [
         "cad-mesh",
@@ -4285,7 +4283,7 @@
       "archived": true
     },
     "archives/avionics-archives/kicad-archives/archive/CAPE-A-2.md": {
-      "description": "Pilot (CAPE-A-2) \u2014 EMI-Hardened Flight Control & Sensor Cape",
+      "description": "Wash (CAPE-A-2) \u2014 EMI-Hardened Flight Control & Sensor Cape",
       "tags": [
         "archive",
         "documentation",
@@ -6583,29 +6581,6 @@
       ],
       "archived": false
     },
-    "avionics/observer/TODO.md": {
-      "description": "Serenity UAV \u2014 Observer (Cargo-Handling + Vision/ToF/Laser) TODO (Open Work Only)",
-      "tags": [
-        "avionics-hardware",
-        "documentation",
-        "project-tracking",
-        "security",
-        "sensors-vision"
-      ],
-      "archived": false
-    },
-    "avionics/observer/WBS.md": {
-      "description": "Serenity UAV \u2014 Observer (Cargo-Handling + Nose/Cargo-Bay Vision, ToF & Laser) Work Breakdown Structure (Detail)",
-      "tags": [
-        "avionics-hardware",
-        "documentation",
-        "emi-hardening",
-        "project-tracking",
-        "security",
-        "sensors-vision"
-      ],
-      "archived": false
-    },
     "avionics/kicad/.gitignore": {
       "description": "KiCad runtime / generated files \u2014 do not commit",
       "tags": [
@@ -6866,67 +6841,10 @@
       ],
       "archived": false
     },
-    "avionics/kicad/ENC-NACELLE-1.kicad_pcb": {
-      "description": "KiCad PCB layout",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "propulsion"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/ENC-NACELLE-1.kicad_prl": {
-      "description": "KiCad project-local settings",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "propulsion"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/ENC-NACELLE-1.kicad_pro": {
-      "description": "KiCad project file",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "propulsion"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/ENC-NACELLE-1.kicad_sch": {
-      "description": "KiCad schematic",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "propulsion"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/ENC-NACELLE-1.md": {
-      "description": "ENC-NACELLE-1 \u2014 Nacelle Tilt-Angle Encoder Board (AKM AK7455, off-axis)",
-      "tags": [
-        "avionics-hardware",
-        "documentation",
-        "emi-hardening",
-        "pcb-design",
-        "propulsion"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/ENC-NACELLE-1.net": {
-      "description": "KiCad netlist",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "propulsion"
-      ],
-      "archived": false
-    },
     "avionics/kicad/Commo/Commo.md": {
       "description": "Commo \u2014 EMI-Hardened 49 MHz AX.25 Transceiver",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "documentation",
         "emi-hardening",
         "pcb-design",
@@ -6938,7 +6856,6 @@
       "description": "Gerber fabrication layer (b_courtyard)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -6947,7 +6864,6 @@
       "description": "Gerber fabrication layer (b_cu)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -6956,7 +6872,6 @@
       "description": "Gerber fabrication layer (b_fab)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -6965,7 +6880,6 @@
       "description": "Gerber fabrication layer (b_mask)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -6974,7 +6888,6 @@
       "description": "Gerber fabrication layer (b_paste)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -6983,7 +6896,6 @@
       "description": "Gerber fabrication layer (b_silkscreen)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -6992,7 +6904,6 @@
       "description": "Gerber fabrication layer (edge_cuts)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -7001,7 +6912,6 @@
       "description": "Gerber fabrication layer (f_courtyard)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -7010,7 +6920,6 @@
       "description": "Gerber fabrication layer (f_cu)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -7019,7 +6928,6 @@
       "description": "Gerber fabrication layer (f_fab)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -7028,7 +6936,6 @@
       "description": "Gerber fabrication layer (f_mask)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -7037,7 +6944,6 @@
       "description": "Gerber fabrication layer (f_paste)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -7046,7 +6952,6 @@
       "description": "Gerber fabrication layer (f_silkscreen)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -7055,7 +6960,6 @@
       "description": "Gerber fabrication layer (in1_cu)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -7064,7 +6968,6 @@
       "description": "Gerber fabrication layer (in2_cu)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -7073,7 +6976,6 @@
       "description": "Gerber fabrication layer (margin)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -7082,7 +6984,6 @@
       "description": "Drill file (NC drill data)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -7091,7 +6992,6 @@
       "description": "Gerber job file (fabrication job spec)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -7100,7 +7000,6 @@
       "description": "Drill file (NC drill data)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -7226,7 +7125,6 @@
       "description": "KiCad PCB layout",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -7235,7 +7133,6 @@
       "description": "KiCad project-local settings",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -7244,7 +7141,6 @@
       "description": "KiCad project file",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -7253,7 +7149,6 @@
       "description": "KiCad schematic",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -7262,7 +7157,6 @@
       "description": "cleanup_commo_drc.py \u2014 Clear the pre-existing hard DRC debt on Commo.kicad_pcb",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -7271,7 +7165,6 @@
       "description": "gen_commo_sch.py \u2014 Author Commo.kicad_sch from the as-placed Commo.kicad_pcb.",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "emi-hardening",
         "pcb-design"
       ],
@@ -7281,7 +7174,6 @@
       "description": "inject_commo_tpm.py -- add an SLB9670 TPM to Commo.kicad_sch via text",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design",
         "security"
       ],
@@ -7291,7 +7183,6 @@
       "description": "mod_commo_pcb.py \u2014 Apply the schematic-first reconciliation transform to",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -7300,7 +7191,332 @@
       "description": "route_commo_rssi.py \u2014 Route the RSSI carrier-detect sub-circuit on Commo.kicad_pcb.",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/ENC-NACELLE-1.kicad_pcb": {
+      "description": "KiCad PCB layout",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design",
+        "propulsion"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/ENC-NACELLE-1.kicad_prl": {
+      "description": "KiCad project-local settings",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design",
+        "propulsion"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/ENC-NACELLE-1.kicad_pro": {
+      "description": "KiCad project file",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design",
+        "propulsion"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/ENC-NACELLE-1.kicad_sch": {
+      "description": "KiCad schematic",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design",
+        "propulsion"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/ENC-NACELLE-1.md": {
+      "description": "ENC-NACELLE-1 \u2014 Nacelle Tilt-Angle Encoder Board (AKM AK7455, off-axis)",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "emi-hardening",
+        "pcb-design",
+        "propulsion"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/ENC-NACELLE-1.net": {
+      "description": "KiCad netlist",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design",
+        "propulsion"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/FlightEngineer.md": {
+      "description": "Flight Engineer \u2014 Power Distribution Board Rev R",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "emi-hardening",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md": {
+      "description": "Flight Engineer Generator Drift Analysis",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Adhesive.gba": {
+      "description": "Gerber fabrication layer (b_adhesive)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Courtyard.gbr": {
+      "description": "Gerber fabrication layer (b_courtyard)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Cu.gbl": {
+      "description": "Gerber fabrication layer (b_cu)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Fab.gbr": {
+      "description": "Gerber fabrication layer (b_fab)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Mask.gbs": {
+      "description": "Gerber fabrication layer (b_mask)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Paste.gbp": {
+      "description": "Gerber fabrication layer (b_paste)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Silkscreen.gbo": {
+      "description": "Gerber fabrication layer (b_silkscreen)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-Edge_Cuts.gm1": {
+      "description": "Gerber fabrication layer (edge_cuts)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Adhesive.gta": {
+      "description": "Gerber fabrication layer (f_adhesive)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Courtyard.gbr": {
+      "description": "Gerber fabrication layer (f_courtyard)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Cu.gtl": {
+      "description": "Gerber fabrication layer (f_cu)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Fab.gbr": {
+      "description": "Gerber fabrication layer (f_fab)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Mask.gts": {
+      "description": "Gerber fabrication layer (f_mask)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Paste.gtp": {
+      "description": "Gerber fabrication layer (f_paste)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Silkscreen.gto": {
+      "description": "Gerber fabrication layer (f_silkscreen)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-In1_Cu.g1": {
+      "description": "Gerber fabrication layer (in1_cu)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-Margin.gbr": {
+      "description": "Gerber fabrication layer (margin)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-job.gbrjob": {
+      "description": "Gerber job file (fabrication job spec)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer.drl": {
+      "description": "Drill file (NC drill data)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pcb": {
+      "description": "KiCad PCB layout",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_prl": {
+      "description": "KiCad project-local settings",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pro": {
+      "description": "KiCad project file",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch": {
+      "description": "KiCad schematic",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_pin_snap.py": {
+      "description": "Snap power-symbol instances onto the pins they were meant to touch.",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_revs1_cleanup.py": {
+      "description": "Flight Engineer Rev S1 close-out fixes (run after gen_flight_engineer_revs1.py).",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_yinv.py": {
+      "description": "Repair the Y-inversion label-placement bug in FlightEngineer.kicad_sch.",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer.py": {
+      "description": "Deterministic UUID helpers",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_pcb.py": {
+      "description": "Python script",
+      "tags": [
+        "avionics-hardware",
+        "emi-hardening",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py": {
+      "description": "Flight Engineer Rev S1 schematic conversion: 6 V servo BEC -> 5 V servo BEC.",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py": {
+      "description": "inject_flight_engineer_trust_module.py -- add the Section H trust module (MCU + TPM",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py": {
+      "description": "Flight Engineer PCB Rev S1: remove the 6 V servo BEC, add the 5 V servo BEC.",
+      "tags": [
+        "avionics-hardware",
         "pcb-design"
       ],
       "archived": false
@@ -7311,8 +7527,7 @@
         "avionics-hardware",
         "documentation",
         "pcb-design",
-        "security",
-        "sensors-vision"
+        "security"
       ],
       "archived": false
     },
@@ -7323,8 +7538,7 @@
         "documentation",
         "emi-hardening",
         "pcb-design",
-        "security",
-        "sensors-vision"
+        "security"
       ],
       "archived": false
     },
@@ -7359,8 +7573,7 @@
       "description": "KiCad footprint",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7368,8 +7581,7 @@
       "description": "KiCad footprint",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7377,8 +7589,7 @@
       "description": "KiCad footprint",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7386,8 +7597,7 @@
       "description": "KiCad footprint",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7396,8 +7606,7 @@
       "tags": [
         "avionics-hardware",
         "bom",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7407,8 +7616,7 @@
         "avionics-hardware",
         "documentation",
         "emi-hardening",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7443,8 +7651,7 @@
       "description": "KiCad footprint",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7452,8 +7659,7 @@
       "description": "KiCad footprint",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7461,8 +7667,7 @@
       "description": "gen_vera_bth060_footprint.py -- clean-room carrier footprint for the PHYTEC",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7470,8 +7675,7 @@
       "description": "gen_vera_ds_footprints.py -- CLEAN-ROOM direct-solder land footprints for Vera's",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7479,8 +7683,7 @@
       "description": "gen_vera_som_pcm071.py -- CLEAN-ROOM KiCad symbol for the PHYTEC phyCORE-AM62x",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7488,8 +7691,7 @@
       "description": "KiCad custom design-rules file",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7497,8 +7699,7 @@
       "description": "KiCad PCB layout",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7506,8 +7707,7 @@
       "description": "KiCad project-local settings",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7515,8 +7715,7 @@
       "description": "KiCad project file",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7524,8 +7723,7 @@
       "description": "KiCad schematic",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7533,8 +7731,7 @@
       "description": "KiCad netlist",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7542,8 +7739,7 @@
       "description": "KiCad PCB layout",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7551,8 +7747,7 @@
       "description": "(fp_lib_table",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7560,8 +7755,7 @@
       "description": "mod_vera_corners.py -- Vera nose PCB: fillet the trapezoid corners with arcs",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7569,8 +7763,7 @@
       "description": "mod_vera_ds_pcb.py -- add the direct-solder sensor lands (camera/ToF/laser) to the",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7578,8 +7771,7 @@
       "description": "mod_vera_som_place.py -- place the phyCORE-AM62x PCM-071 SoM (placement footprint)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -7587,444 +7779,316 @@
       "description": "mod_vera_trapezoid.py -- redraw Vera.kicad_pcb Edge.Cuts as the nose-carrier",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Observer/scripts/gen_Jayne.py": {
+    "avionics/kicad/Observer/scripts/gen_observer.py": {
       "description": "Deterministic UUID helpers",
       "tags": [
         "avionics-hardware",
         "emi-hardening",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Observer/scripts/gen_Observer_bth060_footprint.py": {
+    "avionics/kicad/Observer/scripts/gen_observer_bth060_footprint.py": {
       "description": "gen_jayne_bth060_footprint.py -- clean-room carrier footprint for the PHYTEC",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Observer/scripts/gen_Observer_carrier_pcb.py": {
+    "avionics/kicad/Observer/scripts/gen_observer_carrier_pcb.py": {
       "description": "gen_Observer_carrier_pcb.py -- rebuild Observer.kicad_pcb in the SoM end-state.",
       "tags": [
         "avionics-hardware",
         "pcb-design",
-        "security",
-        "sensors-vision"
+        "security"
       ],
       "archived": false
     },
-    "avionics/kicad/Observer/scripts/gen_Observer_carrier_sch.py": {
+    "avionics/kicad/Observer/scripts/gen_observer_carrier_sch.py": {
       "description": "-*- coding: utf-8 -*-",
       "tags": [
         "avionics-hardware",
         "emi-hardening",
         "pcb-design",
-        "security",
-        "sensors-vision"
+        "security"
       ],
       "archived": false
     },
-    "avionics/kicad/Observer/scripts/gen_Observer_ds_footprints.py": {
+    "avionics/kicad/Observer/scripts/gen_observer_ds_footprints.py": {
       "description": "gen_jayne_ds_footprints.py -- CLEAN-ROOM direct-solder land footprints for Observer's",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Observer/scripts/gen_Observer_ic_symbols.py": {
+    "avionics/kicad/Observer/scripts/gen_observer_ic_symbols.py": {
       "description": "gen_jayne_ic_symbols.py -- CLEAN-ROOM KiCad symbols for Observer carrier ICs, authored",
       "tags": [
         "avionics-hardware",
         "pcb-design",
-        "security",
-        "sensors-vision"
+        "security"
       ],
       "archived": false
     },
-    "avionics/kicad/Observer/scripts/gen_Observer_ksz_symbol.py": {
+    "avionics/kicad/Observer/scripts/gen_observer_ksz_symbol.py": {
       "description": "gen_jayne_ksz_symbol.py -- CLEAN-ROOM KiCad symbol for the Microchip KSZ9477S",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Observer/scripts/gen_Observer_pcb.py": {
+    "avionics/kicad/Observer/scripts/gen_observer_pcb.py": {
       "description": "UUID management",
       "tags": [
         "avionics-hardware",
         "emi-hardening",
         "pcb-design",
-        "security",
-        "sensors-vision"
+        "security"
       ],
       "archived": false
     },
-    "avionics/kicad/Observer/scripts/gen_Observer_som_pcm071.py": {
+    "avionics/kicad/Observer/scripts/gen_observer_som_pcm071.py": {
       "description": "gen_jayne_som_pcm071.py -- CLEAN-ROOM KiCad symbol for the PHYTEC phyCORE-AM62x",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Observer/scripts/gen_Observer_som_symbol.py": {
+    "avionics/kicad/Observer/scripts/gen_observer_som_symbol.py": {
       "description": "gen_jayne_som_symbol.py -- author a CLEAN-ROOM KiCad symbol for the PHYTEC",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Observer/scripts/mod_Observer_corners.py": {
+    "avionics/kicad/Observer/scripts/mod_observer_corners.py": {
       "description": "mod_jayne_corners.py -- Observer nose PCB: fillet the trapezoid corners with arcs",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Observer/scripts/mod_Observer_ds_pcb.py": {
+    "avionics/kicad/Observer/scripts/mod_observer_ds_pcb.py": {
       "description": "mod_jayne_ds_pcb.py -- add the direct-solder sensor lands (camera/ToF/laser) to the",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Observer/scripts/mod_Observer_som_place.py": {
+    "avionics/kicad/Observer/scripts/mod_observer_som_place.py": {
       "description": "mod_jayne_som_place.py -- place the phyCORE-AM62x PCM-071 SoM (placement footprint)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Observer/scripts/mod_Observer_trapezoid.py": {
+    "avionics/kicad/Observer/scripts/mod_observer_trapezoid.py": {
       "description": "mod_jayne_trapezoid.py -- redraw Observer.kicad_pcb Edge.Cuts as the nose-carrier",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md": {
-      "description": "Flight Engineer Generator Drift Analysis",
+    "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md": {
+      "description": "Pilot (CAPE-A-2) \u2014 Footprint-vs-Datasheet Verification",
       "tags": [
         "avionics-hardware",
         "documentation",
         "pcb-design",
-        "power"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/FlightEngineer/FlightEngineer.md": {
-      "description": "Flight Engineer \u2014 Power Distribution Board Rev R",
-      "tags": [
-        "avionics-hardware",
-        "documentation",
-        "emi-hardening",
-        "pcb-design",
-        "power",
         "security"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Adhesive.gba": {
-      "description": "Gerber fabrication layer (b_adhesive)",
+    "avionics/kicad/Pilot/Pilot.md": {
+      "description": "Pilot \u2014 EMI-Hardened Flight Control & Sensor Cape",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "documentation",
+        "emi-hardening",
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Courtyard.gbr": {
-      "description": "Gerber fabrication layer (b_courtyard)",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "power"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Cu.gbl": {
+    "avionics/kicad/Pilot/gerbers/Pilot-B_Cu.gbr": {
       "description": "Gerber fabrication layer (b_cu)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Fab.gbr": {
-      "description": "Gerber fabrication layer (b_fab)",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "power"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Mask.gbs": {
+    "avionics/kicad/Pilot/gerbers/Pilot-B_Mask.gbr": {
       "description": "Gerber fabrication layer (b_mask)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Paste.gbp": {
+    "avionics/kicad/Pilot/gerbers/Pilot-B_Paste.gbr": {
       "description": "Gerber fabrication layer (b_paste)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Silkscreen.gbo": {
+    "avionics/kicad/Pilot/gerbers/Pilot-B_Silkscreen.gbr": {
       "description": "Gerber fabrication layer (b_silkscreen)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-Edge_Cuts.gm1": {
+    "avionics/kicad/Pilot/gerbers/Pilot-Edge_Cuts.gbr": {
       "description": "Gerber fabrication layer (edge_cuts)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Adhesive.gta": {
-      "description": "Gerber fabrication layer (f_adhesive)",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "power"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Courtyard.gbr": {
-      "description": "Gerber fabrication layer (f_courtyard)",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "power"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Cu.gtl": {
+    "avionics/kicad/Pilot/gerbers/Pilot-F_Cu.gbr": {
       "description": "Gerber fabrication layer (f_cu)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Fab.gbr": {
-      "description": "Gerber fabrication layer (f_fab)",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "power"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Mask.gts": {
+    "avionics/kicad/Pilot/gerbers/Pilot-F_Mask.gbr": {
       "description": "Gerber fabrication layer (f_mask)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Paste.gtp": {
+    "avionics/kicad/Pilot/gerbers/Pilot-F_Paste.gbr": {
       "description": "Gerber fabrication layer (f_paste)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Silkscreen.gto": {
+    "avionics/kicad/Pilot/gerbers/Pilot-F_Silkscreen.gbr": {
       "description": "Gerber fabrication layer (f_silkscreen)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-In1_Cu.g1": {
+    "avionics/kicad/Pilot/gerbers/Pilot-In1_Cu.gbr": {
       "description": "Gerber fabrication layer (in1_cu)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-Margin.gbr": {
-      "description": "Gerber fabrication layer (margin)",
+    "avionics/kicad/Pilot/gerbers/Pilot-In2_Cu.gbr": {
+      "description": "Gerber fabrication layer (in2_cu)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-job.gbrjob": {
+    "avionics/kicad/Pilot/gerbers/Pilot-job.gbrjob": {
       "description": "Gerber job file (fabrication job spec)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/gerbers/FlightEngineer.drl": {
+    "avionics/kicad/Pilot/gerbers/Pilot.drl": {
       "description": "Drill file (NC drill data)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pcb": {
+    "avionics/kicad/Pilot/kicads/Pilot.kicad_pcb": {
       "description": "KiCad PCB layout",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_prl": {
+    "avionics/kicad/Pilot/kicads/Pilot.kicad_prl": {
       "description": "KiCad project-local settings",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pro": {
+    "avionics/kicad/Pilot/kicads/Pilot.kicad_pro": {
       "description": "KiCad project file",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch": {
+    "avionics/kicad/Pilot/kicads/Pilot.kicad_sch": {
       "description": "KiCad schematic",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_pin_snap.py": {
-      "description": "Snap power-symbol instances onto the pins they were meant to touch.",
+    "avionics/kicad/Pilot/kicads/Pilot_rebuild.kicad_sch": {
+      "description": "KiCad schematic",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_revs1_cleanup.py": {
-      "description": "Flight Engineer Rev S1 close-out fixes (run after gen_flight_engineer_revs1.py).",
+    "avionics/kicad/Pilot/kicads/sym-lib-table": {
+      "description": "(sym_lib_table",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_yinv.py": {
-      "description": "Repair the Y-inversion label-placement bug in FlightEngineer.kicad_sch.",
+    "avionics/kicad/Pilot/scripts/gen_pilot_sch.py": {
+      "description": "gen_wash_sch.py \u2014 Author a readable, datasheet-accurate Pilot schematic.",
       "tags": [
         "avionics-hardware",
         "pcb-design",
-        "power"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer.py": {
-      "description": "Deterministic UUID helpers",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "power"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_pcb.py": {
-      "description": "gen_flight_engineer_pcb.py \u2014 Generate complete FlightEngineer.kicad_pcb with all component placements.",
-      "tags": [
-        "avionics-hardware",
-        "emi-hardening",
-        "pcb-design",
-        "power"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py": {
-      "description": "Flight Engineer Rev S1 schematic conversion: 6 V servo BEC -> 5 V servo BEC.",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "power"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py": {
-      "description": "inject_flight_engineer_trust_module.py -- add the Section H trust module (MCU + TPM",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "power",
         "security"
       ],
       "archived": false
     },
-    "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py": {
-      "description": "Flight Engineer PCB Rev S1: remove the 6 V servo BEC, add the 5 V servo BEC.",
+    "avionics/kicad/Pilot/scripts/mod_pilot_pcb_reconcile.py": {
+      "description": "Pilot PCB repair pass: strip stale routing, reconcile with Wash_rebuild.",
       "tags": [
         "avionics-hardware",
         "pcb-design",
-        "power"
+        "security"
       ],
       "archived": false
     },
@@ -8101,397 +8165,156 @@
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/WASH_FOOTPRINT_VERIFICATION.md": {
-      "description": "Pilot (CAPE-A-2) \u2014 Footprint-vs-Datasheet Verification",
-      "tags": [
-        "avionics-hardware",
-        "documentation",
-        "flight-control",
-        "pcb-design",
-        "security"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Pilot/Pilot.md": {
-      "description": "Pilot \u2014 EMI-Hardened Flight Control & Sensor Cape",
+    "avionics/kicad/XO/XO.md": {
+      "description": "XO \u2014 EMI-Hardened Communications, Logging & Payload Cape",
       "tags": [
         "avionics-hardware",
         "documentation",
         "emi-hardening",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/gerbers/Pilot-B_Cu.gbr": {
+    "avionics/kicad/XO/gerbers/XO-B_Cu.gbr": {
       "description": "Gerber fabrication layer (b_cu)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/gerbers/Pilot-B_Mask.gbr": {
+    "avionics/kicad/XO/gerbers/XO-B_Mask.gbr": {
       "description": "Gerber fabrication layer (b_mask)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/gerbers/Pilot-B_Paste.gbr": {
+    "avionics/kicad/XO/gerbers/XO-B_Paste.gbr": {
       "description": "Gerber fabrication layer (b_paste)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/gerbers/Pilot-B_Silkscreen.gbr": {
+    "avionics/kicad/XO/gerbers/XO-B_Silkscreen.gbr": {
       "description": "Gerber fabrication layer (b_silkscreen)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/gerbers/Pilot-Edge_Cuts.gbr": {
+    "avionics/kicad/XO/gerbers/XO-Edge_Cuts.gbr": {
       "description": "Gerber fabrication layer (edge_cuts)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/gerbers/Pilot-F_Cu.gbr": {
+    "avionics/kicad/XO/gerbers/XO-F_Cu.gbr": {
       "description": "Gerber fabrication layer (f_cu)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/gerbers/Pilot-F_Mask.gbr": {
+    "avionics/kicad/XO/gerbers/XO-F_Mask.gbr": {
       "description": "Gerber fabrication layer (f_mask)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/gerbers/Pilot-F_Paste.gbr": {
+    "avionics/kicad/XO/gerbers/XO-F_Paste.gbr": {
       "description": "Gerber fabrication layer (f_paste)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/gerbers/Pilot-F_Silkscreen.gbr": {
+    "avionics/kicad/XO/gerbers/XO-F_Silkscreen.gbr": {
       "description": "Gerber fabrication layer (f_silkscreen)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/gerbers/Pilot-In1_Cu.gbr": {
+    "avionics/kicad/XO/gerbers/XO-In1_Cu.gbr": {
       "description": "Gerber fabrication layer (in1_cu)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/gerbers/Pilot-In2_Cu.gbr": {
+    "avionics/kicad/XO/gerbers/XO-In2_Cu.gbr": {
       "description": "Gerber fabrication layer (in2_cu)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/gerbers/Pilot-job.gbrjob": {
+    "avionics/kicad/XO/gerbers/XO-job.gbrjob": {
       "description": "Gerber job file (fabrication job spec)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/gerbers/Pilot.drl": {
+    "avionics/kicad/XO/gerbers/XO.drl": {
       "description": "Drill file (NC drill data)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/kicads/Pilot.kicad_pcb": {
+    "avionics/kicad/XO/kicads/XO.kicad_pcb": {
       "description": "KiCad PCB layout",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/kicads/Pilot.kicad_prl": {
+    "avionics/kicad/XO/kicads/XO.kicad_prl": {
       "description": "KiCad project-local settings",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/kicads/Pilot.kicad_pro": {
+    "avionics/kicad/XO/kicads/XO.kicad_pro": {
       "description": "KiCad project file",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/kicads/Pilot.kicad_sch": {
+    "avionics/kicad/XO/kicads/XO.kicad_sch": {
       "description": "KiCad schematic",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/Pilot/kicads/Wash_rebuild.kicad_sch": {
-      "description": "KiCad schematic",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Pilot/kicads/sym-lib-table": {
-      "description": "(sym_lib_table",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Pilot/scripts/gen_wash_sch.py": {
-      "description": "gen_wash_sch.py \u2014 Author a readable, datasheet-accurate Pilot schematic.",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design",
-        "security"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Pilot/scripts/mod_wash_pcb_reconcile.py": {
-      "description": "Pilot PCB repair pass: strip stale routing, reconcile with Wash_rebuild.",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design",
-        "security"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Zo\u00eb/Zo\u00eb.md": {
-      "description": "Zo\u00eb \u2014 EMI-Hardened Communications, Logging & Payload Cape",
-      "tags": [
-        "avionics-hardware",
-        "documentation",
-        "emi-hardening",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-B_Cu.gbr": {
-      "description": "Gerber fabrication layer (b_cu)",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-B_Mask.gbr": {
-      "description": "Gerber fabrication layer (b_mask)",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-B_Paste.gbr": {
-      "description": "Gerber fabrication layer (b_paste)",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-B_Silkscreen.gbr": {
-      "description": "Gerber fabrication layer (b_silkscreen)",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-Edge_Cuts.gbr": {
-      "description": "Gerber fabrication layer (edge_cuts)",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-F_Cu.gbr": {
-      "description": "Gerber fabrication layer (f_cu)",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-F_Mask.gbr": {
-      "description": "Gerber fabrication layer (f_mask)",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-F_Paste.gbr": {
-      "description": "Gerber fabrication layer (f_paste)",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-F_Silkscreen.gbr": {
-      "description": "Gerber fabrication layer (f_silkscreen)",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-In1_Cu.gbr": {
-      "description": "Gerber fabrication layer (in1_cu)",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-In2_Cu.gbr": {
-      "description": "Gerber fabrication layer (in2_cu)",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-job.gbrjob": {
-      "description": "Gerber job file (fabrication job spec)",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb.drl": {
-      "description": "Drill file (NC drill data)",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Zo\u00eb/kicads/Zo\u00eb.kicad_pcb": {
-      "description": "KiCad PCB layout",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Zo\u00eb/kicads/Zo\u00eb.kicad_prl": {
-      "description": "KiCad project-local settings",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Zo\u00eb/kicads/Zo\u00eb.kicad_pro": {
-      "description": "KiCad project file",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Zo\u00eb/kicads/Zo\u00eb.kicad_sch": {
-      "description": "KiCad schematic",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Zo\u00eb/kicads/_autosave-Zo\u00eb.kicad_pcb": {
-      "description": "KiCad PCB layout",
-      "tags": [
-        "avionics-hardware",
-        "flight-control",
-        "pcb-design"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/Zo\u00eb/ref_remap_2026-07-18.json": {
+    "avionics/kicad/XO/ref_remap_2026-07-18.json": {
       "description": "JSON data (10 top-level keys)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
@@ -8555,19 +8378,18 @@
       ],
       "archived": false
     },
-    "avionics/kicad/fix_starved_thermal_pads.py": {
-      "description": "General, DRC-driven starved-thermal fixer: solid-connects any GND pad",
+    "avionics/kicad/fix_pilot_xo_isolators.py": {
+      "description": "Fix Pilot's and XO's pre-existing, broken isolator symbols in place.",
       "tags": [
         "avionics-hardware",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/fix_wash_zoe_isolators.py": {
-      "description": "Fix Pilot's and XO's pre-existing, broken isolator symbols in place.",
+    "avionics/kicad/fix_starved_thermal_pads.py": {
+      "description": "General, DRC-driven starved-thermal fixer: solid-connects any GND pad",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
@@ -8608,171 +8430,153 @@
       "archived": false
     },
     "avionics/kicad/generate_gerbers_rev_s1.py": {
-      "description": "generate_gerbers_rev_s1.py \u2014 Generate Gerber files for Rev S1 boards (Commo, Zo\u00eb, Flight Engineer)",
+      "description": "generate_gerbers_rev_s1.py \u2014 Generate Gerber files for Rev S1 boards (Commo, XO, Flight Engineer)",
       "tags": [
         "avionics-hardware",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Courtyard.gbr": {
+    "avionics/kicad/gerbers/CAPE-B-2-S1/XO-B_Courtyard.gbr": {
       "description": "Gerber fabrication layer (b_courtyard)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Cu.gbl": {
+    "avionics/kicad/gerbers/CAPE-B-2-S1/XO-B_Cu.gbl": {
       "description": "Gerber fabrication layer (b_cu)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Fab.gbr": {
+    "avionics/kicad/gerbers/CAPE-B-2-S1/XO-B_Fab.gbr": {
       "description": "Gerber fabrication layer (b_fab)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Mask.gbs": {
+    "avionics/kicad/gerbers/CAPE-B-2-S1/XO-B_Mask.gbs": {
       "description": "Gerber fabrication layer (b_mask)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Paste.gbp": {
+    "avionics/kicad/gerbers/CAPE-B-2-S1/XO-B_Paste.gbp": {
       "description": "Gerber fabrication layer (b_paste)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Silkscreen.gbo": {
+    "avionics/kicad/gerbers/CAPE-B-2-S1/XO-B_Silkscreen.gbo": {
       "description": "Gerber fabrication layer (b_silkscreen)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-Edge_Cuts.gm1": {
+    "avionics/kicad/gerbers/CAPE-B-2-S1/XO-Edge_Cuts.gm1": {
       "description": "Gerber fabrication layer (edge_cuts)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Courtyard.gbr": {
+    "avionics/kicad/gerbers/CAPE-B-2-S1/XO-F_Courtyard.gbr": {
       "description": "Gerber fabrication layer (f_courtyard)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Cu.gtl": {
+    "avionics/kicad/gerbers/CAPE-B-2-S1/XO-F_Cu.gtl": {
       "description": "Gerber fabrication layer (f_cu)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Fab.gbr": {
+    "avionics/kicad/gerbers/CAPE-B-2-S1/XO-F_Fab.gbr": {
       "description": "Gerber fabrication layer (f_fab)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Mask.gts": {
+    "avionics/kicad/gerbers/CAPE-B-2-S1/XO-F_Mask.gts": {
       "description": "Gerber fabrication layer (f_mask)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Paste.gtp": {
+    "avionics/kicad/gerbers/CAPE-B-2-S1/XO-F_Paste.gtp": {
       "description": "Gerber fabrication layer (f_paste)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Silkscreen.gto": {
+    "avionics/kicad/gerbers/CAPE-B-2-S1/XO-F_Silkscreen.gto": {
       "description": "Gerber fabrication layer (f_silkscreen)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-In1_Cu.g1": {
+    "avionics/kicad/gerbers/CAPE-B-2-S1/XO-In1_Cu.g1": {
       "description": "Gerber fabrication layer (in1_cu)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-In2_Cu.g2": {
+    "avionics/kicad/gerbers/CAPE-B-2-S1/XO-In2_Cu.g2": {
       "description": "Gerber fabrication layer (in2_cu)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-Margin.gbr": {
+    "avionics/kicad/gerbers/CAPE-B-2-S1/XO-Margin.gbr": {
       "description": "Gerber fabrication layer (margin)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-job.gbrjob": {
+    "avionics/kicad/gerbers/CAPE-B-2-S1/XO-job.gbrjob": {
       "description": "Gerber job file (fabrication job spec)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
     },
-    "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb.drl/Zo\u00eb.drl": {
+    "avionics/kicad/gerbers/CAPE-B-2-S1/XO.drl/XO.drl": {
       "description": "Drill file (NC drill data)",
       "tags": [
         "avionics-hardware",
-        "flight-control",
         "pcb-design"
       ],
       "archived": false
@@ -8781,7 +8585,6 @@
       "description": "Gerber fabrication layer (b_courtyard)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -8790,7 +8593,6 @@
       "description": "Gerber fabrication layer (b_cu)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -8799,7 +8601,6 @@
       "description": "Gerber fabrication layer (b_fab)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -8808,7 +8609,6 @@
       "description": "Gerber fabrication layer (b_mask)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -8817,7 +8617,6 @@
       "description": "Gerber fabrication layer (b_paste)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -8826,7 +8625,6 @@
       "description": "Gerber fabrication layer (b_silkscreen)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -8835,7 +8633,6 @@
       "description": "Gerber fabrication layer (edge_cuts)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -8844,7 +8641,6 @@
       "description": "Gerber fabrication layer (f_courtyard)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -8853,7 +8649,6 @@
       "description": "Gerber fabrication layer (f_cu)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -8862,7 +8657,6 @@
       "description": "Gerber fabrication layer (f_fab)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -8871,7 +8665,6 @@
       "description": "Gerber fabrication layer (f_mask)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -8880,7 +8673,6 @@
       "description": "Gerber fabrication layer (f_paste)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -8889,7 +8681,6 @@
       "description": "Gerber fabrication layer (f_silkscreen)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -8898,7 +8689,6 @@
       "description": "Gerber fabrication layer (in1_cu)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -8907,7 +8697,6 @@
       "description": "Gerber fabrication layer (in2_cu)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -8916,7 +8705,6 @@
       "description": "Gerber fabrication layer (margin)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -8925,7 +8713,6 @@
       "description": "Gerber job file (fabrication job spec)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -8934,7 +8721,6 @@
       "description": "Drill file (NC drill data)",
       "tags": [
         "avionics-hardware",
-        "comms-protocol",
         "pcb-design"
       ],
       "archived": false
@@ -8943,8 +8729,7 @@
       "description": "Gerber fabrication layer (b_adhesive)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -8952,8 +8737,7 @@
       "description": "Gerber fabrication layer (b_courtyard)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -8961,8 +8745,7 @@
       "description": "Gerber fabrication layer (b_cu)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -8970,8 +8753,7 @@
       "description": "Gerber fabrication layer (b_fab)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -8979,8 +8761,7 @@
       "description": "Gerber fabrication layer (b_mask)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -8988,8 +8769,7 @@
       "description": "Gerber fabrication layer (b_paste)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -8997,8 +8777,7 @@
       "description": "Gerber fabrication layer (b_silkscreen)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -9006,8 +8785,7 @@
       "description": "Gerber fabrication layer (edge_cuts)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -9015,8 +8793,7 @@
       "description": "Gerber fabrication layer (f_adhesive)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -9024,8 +8801,7 @@
       "description": "Gerber fabrication layer (f_courtyard)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -9033,8 +8809,7 @@
       "description": "Gerber fabrication layer (f_cu)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -9042,8 +8817,7 @@
       "description": "Gerber fabrication layer (f_fab)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -9051,8 +8825,7 @@
       "description": "Gerber fabrication layer (f_mask)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -9060,8 +8833,7 @@
       "description": "Gerber fabrication layer (f_paste)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -9069,8 +8841,7 @@
       "description": "Gerber fabrication layer (f_silkscreen)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -9078,8 +8849,7 @@
       "description": "Gerber fabrication layer (in1_cu)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -9087,8 +8857,7 @@
       "description": "Gerber fabrication layer (margin)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -9096,8 +8865,7 @@
       "description": "Gerber job file (fabrication job spec)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -9105,8 +8873,7 @@
       "description": "Drill file (NC drill data)",
       "tags": [
         "avionics-hardware",
-        "pcb-design",
-        "power"
+        "pcb-design"
       ],
       "archived": false
     },
@@ -9128,61 +8895,6 @@
       ],
       "archived": false
     },
-    "avionics/kicad/symbols/Observer_ISOW1044BDFMR.kicad_sym": {
-      "description": "KiCad symbol library",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/symbols/Observer_KSZ9477.kicad_sym": {
-      "description": "KiCad symbol library",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/symbols/Observer_MSPM0G3507_RGZ.kicad_sym": {
-      "description": "KiCad symbol library",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/symbols/Observer_SLB9670_TPM.kicad_sym": {
-      "description": "KiCad symbol library",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "security",
-        "sensors-vision"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/symbols/Observer_SoM.kicad_sym": {
-      "description": "KiCad symbol library",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
-      ],
-      "archived": false
-    },
-    "avionics/kicad/symbols/Observer_SoM_PCM071.kicad_sym": {
-      "description": "KiCad symbol library",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "sensors-vision"
-      ],
-      "archived": false
-    },
     "avionics/kicad/symbols/KSZ9477STXI_pinmap.csv": {
       "description": "Tabular data (CSV)",
       "tags": [
@@ -9197,6 +8909,55 @@
       "tags": [
         "avionics-hardware",
         "bom",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/symbols/Observer_ISOW1044BDFMR.kicad_sym": {
+      "description": "KiCad symbol library",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/symbols/Observer_KSZ9477.kicad_sym": {
+      "description": "KiCad symbol library",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/symbols/Observer_MSPM0G3507_RGZ.kicad_sym": {
+      "description": "KiCad symbol library",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/symbols/Observer_SLB9670_TPM.kicad_sym": {
+      "description": "KiCad symbol library",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/symbols/Observer_SoM.kicad_sym": {
+      "description": "KiCad symbol library",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/symbols/Observer_SoM_PCM071.kicad_sym": {
+      "description": "KiCad symbol library",
+      "tags": [
+        "avionics-hardware",
         "pcb-design"
       ],
       "archived": false
@@ -9232,6 +8993,27 @@
         "avionics-hardware",
         "bom",
         "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/observer/TODO.md": {
+      "description": "Serenity UAV \u2014 Observer (Cargo-Handling + Vision/ToF/Laser) TODO (Open Work Only)",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "project-tracking",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/observer/WBS.md": {
+      "description": "Serenity UAV \u2014 Observer (Cargo-Handling + Nose/Cargo-Bay Vision, ToF & Laser) Work Breakdown Structure (Detai\u2026",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "emi-hardening",
+        "project-tracking",
+        "security"
       ],
       "archived": false
     },
@@ -9619,25 +9401,6 @@
       ],
       "archived": false
     },
-    "docs/OBSERVER_LASER_ANALYSIS.md": {
-      "description": "Observer Laser Indicator \u2014 Single-Source Feasibility & Spread-Angle Analysis",
-      "tags": [
-        "documentation",
-        "security",
-        "sensors-vision"
-      ],
-      "archived": false
-    },
-    "docs/OBSERVER_MANUFACTURING_READINESS.md": {
-      "description": "Observer \u2014 Manufacturing-Readiness Gap Analysis",
-      "tags": [
-        "documentation",
-        "emi-hardening",
-        "security",
-        "sensors-vision"
-      ],
-      "archived": false
-    },
     "docs/LANDING_GEAR_ANALYSIS.md": {
       "description": "Serenity UAV \u2014 Landing Gear Structural Analysis",
       "tags": [
@@ -9666,6 +9429,24 @@
       "tags": [
         "documentation",
         "propulsion"
+      ],
+      "archived": false
+    },
+    "docs/OBSERVER_LASER_ANALYSIS.md": {
+      "description": "Observer Laser Indicator \u2014 Single-Source Feasibility & Spread-Angle Analysis",
+      "tags": [
+        "documentation",
+        "security",
+        "sensors-vision"
+      ],
+      "archived": false
+    },
+    "docs/OBSERVER_MANUFACTURING_READINESS.md": {
+      "description": "Observer \u2014 Manufacturing-Readiness Gap Analysis",
+      "tags": [
+        "documentation",
+        "emi-hardening",
+        "security"
       ],
       "archived": false
     },
@@ -9773,8 +9554,7 @@
       "description": "Serenity UAV \u2014 Attribution and Licensing Policy",
       "tags": [
         "documentation",
-        "licensing",
-        "redundancy-failover"
+        "licensing"
       ],
       "archived": false
     },
@@ -10636,17 +10416,17 @@
       ],
       "archived": false
     },
-    "gcs/skipper/software/config/skipper_config.yaml": {
-      "description": "YAML config",
-      "tags": [
-        "ground-control"
-      ],
-      "archived": false
-    },
     "gcs/skipper/software/config/mavlink_router.conf": {
       "description": "mavlink_router.conf \u2014 mavlink-router configuration for Skipper GCS",
       "tags": [
         "comms-protocol",
+        "ground-control"
+      ],
+      "archived": false
+    },
+    "gcs/skipper/software/config/skipper_config.yaml": {
+      "description": "YAML config",
+      "tags": [
         "ground-control"
       ],
       "archived": false
@@ -12016,23 +11796,23 @@
       "avionics/firmware/TODO.md",
       "avionics/firmware/WBS.md",
       "avionics/firmware/dts/README.md",
-      "avionics/observer/TODO.md",
-      "avionics/observer/WBS.md",
       "avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md",
-      "avionics/kicad/ENC-NACELLE-1.md",
       "avionics/kicad/Commo/Commo.md",
+      "avionics/kicad/ENC-NACELLE-1.md",
+      "avionics/kicad/FlightEngineer/FlightEngineer.md",
+      "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/VERA_NOSE_TRAPEZOID.md",
-      "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
-      "avionics/kicad/FlightEngineer/FlightEngineer.md",
+      "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
+      "avionics/kicad/Pilot/Pilot.md",
       "avionics/kicad/README.md",
       "avionics/kicad/TODO-1.2b-CHECKLIST.md",
       "avionics/kicad/TODO-1.2b-KICAD-READY.md",
       "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
-      "avionics/kicad/Pilot/WASH_FOOTPRINT_VERIFICATION.md",
-      "avionics/kicad/Pilot/Pilot.md",
-      "avionics/kicad/Zo\u00eb/Zo\u00eb.md",
+      "avionics/kicad/XO/XO.md",
+      "avionics/observer/TODO.md",
+      "avionics/observer/WBS.md",
       "avionics/rev-s1/TODO.md",
       "avionics/rev-s1/WBS.md",
       "current-specification/AGENTS.md",
@@ -12049,12 +11829,12 @@
       "docs/DOCUMENTATION_RECONCILIATION_2026-07-28.md",
       "docs/ETHERNET_PHY_TRADE.md",
       "docs/FIRST_FLIGHT_READINESS.md",
-      "docs/OBSERVER_LASER_ANALYSIS.md",
-      "docs/OBSERVER_MANUFACTURING_READINESS.md",
       "docs/LANDING_GEAR_ANALYSIS.md",
       "docs/LICENSE",
       "docs/MANIFEST.json",
       "docs/NOZZLE_DRIVE_TRADE.md",
+      "docs/OBSERVER_LASER_ANALYSIS.md",
+      "docs/OBSERVER_MANUFACTURING_READINESS.md",
       "docs/OSHW_CERTIFICATION.md",
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/POWER_DISTRIBUTION.md",
@@ -12205,21 +11985,21 @@
       "avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts",
       "avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts",
       "avionics/firmware/fc/src/mag_mmc5983ma.h",
-      "avionics/observer/WBS.md",
-      "avionics/kicad/ENC-NACELLE-1.md",
       "avionics/kicad/Commo/Commo.md",
       "avionics/kicad/Commo/scripts/gen_commo_sch.py",
-      "avionics/kicad/Observer/Observer.md",
-      "avionics/kicad/Observer/VERA_NOSE_TRAPEZOID.md",
-      "avionics/kicad/Observer/scripts/gen_Jayne.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_carrier_sch.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_pcb.py",
+      "avionics/kicad/ENC-NACELLE-1.md",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_pcb.py",
+      "avionics/kicad/Observer/Observer.md",
+      "avionics/kicad/Observer/VERA_NOSE_TRAPEZOID.md",
+      "avionics/kicad/Observer/scripts/gen_observer.py",
+      "avionics/kicad/Observer/scripts/gen_observer_carrier_sch.py",
+      "avionics/kicad/Observer/scripts/gen_observer_pcb.py",
       "avionics/kicad/Pilot/Pilot.md",
-      "avionics/kicad/Zo\u00eb/Zo\u00eb.md",
+      "avionics/kicad/XO/XO.md",
       "avionics/kicad/complete_xcvr_49mhz2.py",
       "avionics/kicad/fix_xcvr_labels.py",
+      "avionics/observer/WBS.md",
       "avionics/rev-s1/WBS.md",
       "current-specification/serenity-rev-r.jsx",
       "current-specification/serenity-rev-s.jsx",
@@ -12257,7 +12037,6 @@
       "docs/ETHERNET_PHY_TRADE.md",
       "docs/FIRST_FLIGHT_READINESS.md",
       "docs/PHASED_BUILD_GUIDE.md",
-      "docs/attribution_and_licencing.md",
       "docs/electrical_fault_margins.md",
       "docs/failsafe_thresholds.md",
       "gcs/AGENTS.md",
@@ -12320,28 +12099,28 @@
       "avionics/firmware/dts/cape-b/archive/k3-am6254-pocketbeagle2-serenity-cape-b.dts",
       "avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts",
       "avionics/firmware/fc/src/main.c",
-      "avionics/observer/TODO.md",
-      "avionics/observer/WBS.md",
       "avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md",
       "avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_pcb.py",
       "avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_sch.py",
       "avionics/kicad/Commo/Commo.md",
       "avionics/kicad/Commo/scripts/inject_commo_tpm.py",
-      "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
-      "avionics/kicad/Observer/Observer.md",
-      "avionics/kicad/Observer/scripts/gen_Observer_carrier_pcb.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_carrier_sch.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_ic_symbols.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_pcb.py",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
       "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py",
+      "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
+      "avionics/kicad/Observer/Observer.md",
+      "avionics/kicad/Observer/scripts/gen_observer_carrier_pcb.py",
+      "avionics/kicad/Observer/scripts/gen_observer_carrier_sch.py",
+      "avionics/kicad/Observer/scripts/gen_observer_ic_symbols.py",
+      "avionics/kicad/Observer/scripts/gen_observer_pcb.py",
+      "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
+      "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
+      "avionics/kicad/Pilot/scripts/mod_pilot_pcb_reconcile.py",
       "avionics/kicad/README.md",
       "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
-      "avionics/kicad/Pilot/WASH_FOOTPRINT_VERIFICATION.md",
-      "avionics/kicad/Pilot/scripts/gen_wash_sch.py",
-      "avionics/kicad/Pilot/scripts/mod_wash_pcb_reconcile.py",
       "avionics/kicad/replace_footprints.py",
       "avionics/kicad/symbols/Observer_SLB9670_TPM.kicad_sym",
+      "avionics/observer/TODO.md",
+      "avionics/observer/WBS.md",
       "avionics/rev-s1/WBS.md",
       "current-specification/LICENSE_AND_ATTRIBUTION.md",
       "current-specification/serenity-rev-r.jsx",
@@ -12507,11 +12286,11 @@
       "avionics/emi-hardening/WBS.md",
       "avionics/firmware/TODO.md",
       "avionics/firmware/WBS.md",
-      "avionics/observer/TODO.md",
-      "avionics/observer/WBS.md",
       "avionics/kicad/TODO-1.2b-CHECKLIST.md",
       "avionics/kicad/TODO-1.2b-KICAD-READY.md",
       "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
+      "avionics/observer/TODO.md",
+      "avionics/observer/WBS.md",
       "avionics/rev-s1/TODO.md",
       "avionics/rev-s1/WBS.md",
       "current-specification/TODO.md",
@@ -12569,8 +12348,8 @@
       "airframe/blender-scripts/files-hollowed-24in/operands/rear_inner_opened.stl",
       "airframe/blender-scripts/files-hollowed-24in/operands/rear_shell24_2mm_repaired__inner.stl",
       "airframe/blender-scripts/files-hollowed-24in/operands/rear_shell24_2mm_repaired__outer.stl",
-      "airframe/blender-scripts/files-hollowed-24in/operands/text_inara.stl",
       "airframe/blender-scripts/files-hollowed-24in/operands/text_flight_engineer.stl",
+      "airframe/blender-scripts/files-hollowed-24in/operands/text_inara.stl",
       "airframe/blender-scripts/files-hollowed-24in/operands/text_river.stl",
       "airframe/blender-scripts/files-hollowed-24in/operands/text_shepherd.stl",
       "airframe/blender-scripts/files-hollowed-24in/operands/text_simon.stl",
@@ -12682,12 +12461,12 @@
       "airframe/placeholders/gcs/Antenna_GNSS_patch_ANN_MB00.stl",
       "airframe/placeholders/gcs/B6804_20x32x7mm_gimbal_pan.stl",
       "airframe/placeholders/gcs/GPS_module_M10Q_SparkFun.stl",
-      "airframe/placeholders/gcs/Skipper_enclosure_IP65_145x90x65mm.stl",
-      "airframe/placeholders/gcs/Skipper_tripod_antenna_mast.stl",
       "airframe/placeholders/gcs/N42_disc_magnet_6x2mm.stl",
       "airframe/placeholders/gcs/Pololu_D24V22F6_6V2A_BEC.stl",
       "airframe/placeholders/gcs/Pololu_D24V50F5_5V5A_BEC.stl",
       "airframe/placeholders/gcs/RF_splitter_915MHz_2way_ZFSC.stl",
+      "airframe/placeholders/gcs/Skipper_enclosure_IP65_145x90x65mm.stl",
+      "airframe/placeholders/gcs/Skipper_tripod_antenna_mast.stl",
       "airframe/placeholders/gcs/TCA9548A_I2C_mux_breakout.stl",
       "airframe/placeholders/gears/Bevel_M1_14T_pair.stl",
       "airframe/placeholders/gears/Bevel_housing_CF_PETG.stl",
@@ -12826,8 +12605,8 @@
       "airframe/blender-scripts/files-hollowed-24in/operands/rear_inner_opened.stl",
       "airframe/blender-scripts/files-hollowed-24in/operands/rear_shell24_2mm_repaired__inner.stl",
       "airframe/blender-scripts/files-hollowed-24in/operands/rear_shell24_2mm_repaired__outer.stl",
-      "airframe/blender-scripts/files-hollowed-24in/operands/text_inara.stl",
       "airframe/blender-scripts/files-hollowed-24in/operands/text_flight_engineer.stl",
+      "airframe/blender-scripts/files-hollowed-24in/operands/text_inara.stl",
       "airframe/blender-scripts/files-hollowed-24in/operands/text_river.stl",
       "airframe/blender-scripts/files-hollowed-24in/operands/text_shepherd.stl",
       "airframe/blender-scripts/files-hollowed-24in/operands/text_simon.stl",
@@ -12923,12 +12702,12 @@
       "airframe/placeholders/gcs/Antenna_GNSS_patch_ANN_MB00.stl",
       "airframe/placeholders/gcs/B6804_20x32x7mm_gimbal_pan.stl",
       "airframe/placeholders/gcs/GPS_module_M10Q_SparkFun.stl",
-      "airframe/placeholders/gcs/Skipper_enclosure_IP65_145x90x65mm.stl",
-      "airframe/placeholders/gcs/Skipper_tripod_antenna_mast.stl",
       "airframe/placeholders/gcs/N42_disc_magnet_6x2mm.stl",
       "airframe/placeholders/gcs/Pololu_D24V22F6_6V2A_BEC.stl",
       "airframe/placeholders/gcs/Pololu_D24V50F5_5V5A_BEC.stl",
       "airframe/placeholders/gcs/RF_splitter_915MHz_2way_ZFSC.stl",
+      "airframe/placeholders/gcs/Skipper_enclosure_IP65_145x90x65mm.stl",
+      "airframe/placeholders/gcs/Skipper_tripod_antenna_mast.stl",
       "airframe/placeholders/gcs/TCA9548A_I2C_mux_breakout.stl",
       "airframe/placeholders/gears/Bevel_M1_14T_pair.stl",
       "airframe/placeholders/gears/Bevel_housing_CF_PETG.stl",
@@ -13388,82 +13167,6 @@
       "graphical-build-guide/build_guide_08_nozzle_gear.svg",
       "graphical-build-guide/pngs/17_closeup_nacelle.png"
     ],
-    "power": [
-      "airframe/blender-scripts/files-hollowed-24in/operands/text_flight_engineer.stl",
-      "airframe/openscad/fuselage/battery_tray.scad",
-      "airframe/placeholders/avionics/FlightEngineer_PDB_90x65mm.stl",
-      "airframe/placeholders/foam/Void_power_bus_25x500x25mm.stl",
-      "airframe/placeholders/power/Fuse_MAXI_150A.stl",
-      "airframe/placeholders/power/Fuse_mini_40A.stl",
-      "airframe/placeholders/power/LiPo_4S_10000mAh_175x64x38mm_GCS.stl",
-      "airframe/placeholders/power/LiPo_6S_2800mAh_115x35x35mm.stl",
-      "airframe/placeholders/power/LiPo_6S_4000mAh_138x44x36mm.stl",
-      "airframe/placeholders/power/Shunt_CSS2H_2512K_1mohm.stl",
-      "airframe/placeholders/propulsion/ESC_40A_6S_BLHeli32.stl",
-      "airframe/placeholders/propulsion/ESC_80A_6S_BLHeli32_deferred.stl",
-      "airframe/stls/fuselage/battery_tray.stl",
-      "archives/docs-superseded/POWER_SYSTEM_Q.md",
-      "archives/serenity-esc-telem-revH1.jsx",
-      "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
-      "avionics/kicad/FlightEngineer/FlightEngineer.md",
-      "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Adhesive.gba",
-      "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Courtyard.gbr",
-      "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Cu.gbl",
-      "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Fab.gbr",
-      "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Mask.gbs",
-      "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Paste.gbp",
-      "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Silkscreen.gbo",
-      "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-Edge_Cuts.gm1",
-      "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Adhesive.gta",
-      "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Courtyard.gbr",
-      "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Cu.gtl",
-      "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Fab.gbr",
-      "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Mask.gts",
-      "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Paste.gtp",
-      "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-F_Silkscreen.gto",
-      "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-In1_Cu.g1",
-      "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-Margin.gbr",
-      "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-job.gbrjob",
-      "avionics/kicad/FlightEngineer/gerbers/FlightEngineer.drl",
-      "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pcb",
-      "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_prl",
-      "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pro",
-      "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch",
-      "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_pin_snap.py",
-      "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_revs1_cleanup.py",
-      "avionics/kicad/FlightEngineer/scripts/fix_flight_engineer_yinv.py",
-      "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer.py",
-      "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_pcb.py",
-      "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py",
-      "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py",
-      "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
-      "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer-B_Adhesive.gba",
-      "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer-B_Courtyard.gbr",
-      "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer-B_Cu.gbl",
-      "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer-B_Fab.gbr",
-      "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer-B_Mask.gbs",
-      "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer-B_Paste.gbp",
-      "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer-B_Silkscreen.gbo",
-      "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer-Edge_Cuts.gm1",
-      "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer-F_Adhesive.gta",
-      "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer-F_Courtyard.gbr",
-      "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer-F_Cu.gtl",
-      "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer-F_Fab.gbr",
-      "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer-F_Mask.gts",
-      "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer-F_Paste.gtp",
-      "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer-F_Silkscreen.gto",
-      "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer-In1_Cu.g1",
-      "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer-Margin.gbr",
-      "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer-job.gbrjob",
-      "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer.drl/FlightEngineer.drl",
-      "docs/BATTERY_MOUNT.md",
-      "docs/POWER_DISTRIBUTION.md",
-      "docs/references/vimdrones_esc_s50_v1.0.step",
-      "docs/references/vimdrones_esc_s50_v1.0.stl",
-      "docs/references/vimdrones_esc_s50_wiring.png",
-      "gcs/skipper/hardware/docs/skipper_power_budget.md",
-      "graphical-build-guide/build_guide_10_power_wiring.svg"
-    ],
     "bom": [
       "airframe/diagrams/ring_frames/ring_cargo_Y30_inner.csv",
       "airframe/diagrams/ring_frames/ring_rear_Y290_inner.csv",
@@ -13529,66 +13232,40 @@
       "tools/build_landing_gear_views.py",
       "tools/landing_gear_r6_sizing.py"
     ],
+    "power": [
+      "airframe/openscad/fuselage/battery_tray.scad",
+      "airframe/placeholders/foam/Void_power_bus_25x500x25mm.stl",
+      "airframe/placeholders/power/Fuse_MAXI_150A.stl",
+      "airframe/placeholders/power/Fuse_mini_40A.stl",
+      "airframe/placeholders/power/LiPo_4S_10000mAh_175x64x38mm_GCS.stl",
+      "airframe/placeholders/power/LiPo_6S_2800mAh_115x35x35mm.stl",
+      "airframe/placeholders/power/LiPo_6S_4000mAh_138x44x36mm.stl",
+      "airframe/placeholders/power/Shunt_CSS2H_2512K_1mohm.stl",
+      "airframe/placeholders/propulsion/ESC_40A_6S_BLHeli32.stl",
+      "airframe/placeholders/propulsion/ESC_80A_6S_BLHeli32_deferred.stl",
+      "airframe/stls/fuselage/battery_tray.stl",
+      "archives/docs-superseded/POWER_SYSTEM_Q.md",
+      "archives/serenity-esc-telem-revH1.jsx",
+      "docs/BATTERY_MOUNT.md",
+      "docs/POWER_DISTRIBUTION.md",
+      "docs/references/vimdrones_esc_s50_v1.0.step",
+      "docs/references/vimdrones_esc_s50_v1.0.stl",
+      "docs/references/vimdrones_esc_s50_wiring.png",
+      "gcs/skipper/hardware/docs/skipper_power_budget.md",
+      "graphical-build-guide/build_guide_10_power_wiring.svg"
+    ],
     "sensors-vision": [
       "airframe/openscad/fuselage/bow_sensor_faceplate.scad",
       "airframe/openscad/fuselage/bow_sensor_pod.scad",
       "airframe/stls/fuselage/bow_sensor_faceplate.stl",
-      "avionics/observer/TODO.md",
-      "avionics/observer/WBS.md",
-      "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
-      "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
       "avionics/kicad/Observer/Observer.pretty/DS_Laser_2P.kicad_mod",
       "avionics/kicad/Observer/Observer.pretty/DS_ToF_4P.kicad_mod",
-      "avionics/kicad/Observer/Observer.pretty/TQFP-128-1EP_KSZ9477_14x14mm_P0.4mm_EP10x10.kicad_mod",
-      "avionics/kicad/Observer/Observer.pretty/Wurth_749010012A_10-100BASE-TX.kicad_mod",
-      "avionics/kicad/Observer/Observer.pretty/phyCORE-AM62x_PCM071_2xBTH-060.kicad_mod",
-      "avionics/kicad/Observer/Observer.pretty/phyCORE-AM62x_PCM071_placement.kicad_mod",
-      "avionics/kicad/Observer/Observer_som_pinmap.csv",
-      "avionics/kicad/Observer/VERA_NOSE_TRAPEZOID.md",
       "avionics/kicad/Observer/Vera.pretty/DS_Camera_9P.kicad_mod",
       "avionics/kicad/Observer/Vera.pretty/DS_Laser_2P.kicad_mod",
       "avionics/kicad/Observer/Vera.pretty/DS_ToF_4P.kicad_mod",
-      "avionics/kicad/Observer/Vera.pretty/phyCORE-AM62x_PCM071_2xBTH-060.kicad_mod",
-      "avionics/kicad/Observer/Vera.pretty/phyCORE-AM62x_PCM071_placement.kicad_mod",
-      "avionics/kicad/Observer/gen_vera_bth060_footprint.py",
-      "avionics/kicad/Observer/gen_vera_ds_footprints.py",
-      "avionics/kicad/Observer/gen_vera_som_pcm071.py",
-      "avionics/kicad/Observer/kicads/Observer.kicad_dru",
-      "avionics/kicad/Observer/kicads/Observer.kicad_pcb",
-      "avionics/kicad/Observer/kicads/Observer.kicad_prl",
-      "avionics/kicad/Observer/kicads/Observer.kicad_pro",
-      "avionics/kicad/Observer/kicads/Observer.kicad_sch",
-      "avionics/kicad/Observer/kicads/Observer.net",
-      "avionics/kicad/Observer/kicads/_autosave-Observer.kicad_pcb",
-      "avionics/kicad/Observer/kicads/fp-lib-table",
-      "avionics/kicad/Observer/mod_vera_corners.py",
-      "avionics/kicad/Observer/mod_vera_ds_pcb.py",
-      "avionics/kicad/Observer/mod_vera_som_place.py",
-      "avionics/kicad/Observer/mod_vera_trapezoid.py",
-      "avionics/kicad/Observer/scripts/gen_Jayne.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_bth060_footprint.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_carrier_pcb.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_carrier_sch.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_ds_footprints.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_ic_symbols.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_ksz_symbol.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_pcb.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_som_pcm071.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_som_symbol.py",
-      "avionics/kicad/Observer/scripts/mod_Observer_corners.py",
-      "avionics/kicad/Observer/scripts/mod_Observer_ds_pcb.py",
-      "avionics/kicad/Observer/scripts/mod_Observer_som_place.py",
-      "avionics/kicad/Observer/scripts/mod_Observer_trapezoid.py",
       "avionics/kicad/add_sensors_sbus.py",
-      "avionics/kicad/symbols/Observer_ISOW1044BDFMR.kicad_sym",
-      "avionics/kicad/symbols/Observer_KSZ9477.kicad_sym",
-      "avionics/kicad/symbols/Observer_MSPM0G3507_RGZ.kicad_sym",
-      "avionics/kicad/symbols/Observer_SLB9670_TPM.kicad_sym",
-      "avionics/kicad/symbols/Observer_SoM.kicad_sym",
-      "avionics/kicad/symbols/Observer_SoM_PCM071.kicad_sym",
       "docs/OBSERVER_LASER_ANALYSIS.md",
-      "docs/OBSERVER_MANUFACTURING_READINESS.md",
       "graphical-build-guide/build_guide_25_obstacle_sensors.svg"
     ],
     "comms-protocol": [
@@ -13619,26 +13296,6 @@
       "avionics/firmware/cn/src/xcvr_kiss.c",
       "avionics/firmware/cn/src/xcvr_kiss.h",
       "avionics/firmware/common/include/ax25_types.h",
-      "avionics/kicad/Commo/Commo.md",
-      "avionics/kicad/Commo/gerbers/Commo-B_Courtyard.gbr",
-      "avionics/kicad/Commo/gerbers/Commo-B_Cu.gbl",
-      "avionics/kicad/Commo/gerbers/Commo-B_Fab.gbr",
-      "avionics/kicad/Commo/gerbers/Commo-B_Mask.gbs",
-      "avionics/kicad/Commo/gerbers/Commo-B_Paste.gbp",
-      "avionics/kicad/Commo/gerbers/Commo-B_Silkscreen.gbo",
-      "avionics/kicad/Commo/gerbers/Commo-Edge_Cuts.gm1",
-      "avionics/kicad/Commo/gerbers/Commo-F_Courtyard.gbr",
-      "avionics/kicad/Commo/gerbers/Commo-F_Cu.gtl",
-      "avionics/kicad/Commo/gerbers/Commo-F_Fab.gbr",
-      "avionics/kicad/Commo/gerbers/Commo-F_Mask.gts",
-      "avionics/kicad/Commo/gerbers/Commo-F_Paste.gtp",
-      "avionics/kicad/Commo/gerbers/Commo-F_Silkscreen.gto",
-      "avionics/kicad/Commo/gerbers/Commo-In1_Cu.g1",
-      "avionics/kicad/Commo/gerbers/Commo-In2_Cu.g2",
-      "avionics/kicad/Commo/gerbers/Commo-Margin.gbr",
-      "avionics/kicad/Commo/gerbers/Commo-in1-back.drl",
-      "avionics/kicad/Commo/gerbers/Commo-job.gbrjob",
-      "avionics/kicad/Commo/gerbers/Commo.drl",
       "avionics/kicad/Commo/gerbers/XCVR-49MHZ-2-B_Cu.gbr",
       "avionics/kicad/Commo/gerbers/XCVR-49MHZ-2-B_Mask.gbr",
       "avionics/kicad/Commo/gerbers/XCVR-49MHZ-2-B_Paste.gbr",
@@ -13652,35 +13309,8 @@
       "avionics/kicad/Commo/gerbers/XCVR-49MHZ-2-In2_Cu.gbr",
       "avionics/kicad/Commo/gerbers/XCVR-49MHZ-2-job.gbrjob",
       "avionics/kicad/Commo/gerbers/XCVR-49MHZ-2.drl",
-      "avionics/kicad/Commo/kicads/Commo.kicad_pcb",
-      "avionics/kicad/Commo/kicads/Commo.kicad_prl",
-      "avionics/kicad/Commo/kicads/Commo.kicad_pro",
-      "avionics/kicad/Commo/kicads/Commo.kicad_sch",
-      "avionics/kicad/Commo/scripts/cleanup_commo_drc.py",
-      "avionics/kicad/Commo/scripts/gen_commo_sch.py",
-      "avionics/kicad/Commo/scripts/inject_commo_tpm.py",
-      "avionics/kicad/Commo/scripts/mod_commo_pcb.py",
-      "avionics/kicad/Commo/scripts/route_commo_rssi.py",
       "avionics/kicad/complete_xcvr_49mhz2.py",
       "avionics/kicad/fix_xcvr_labels.py",
-      "avionics/kicad/gerbers/Commo-S1/Commo-B_Courtyard.gbr",
-      "avionics/kicad/gerbers/Commo-S1/Commo-B_Cu.gbl",
-      "avionics/kicad/gerbers/Commo-S1/Commo-B_Fab.gbr",
-      "avionics/kicad/gerbers/Commo-S1/Commo-B_Mask.gbs",
-      "avionics/kicad/gerbers/Commo-S1/Commo-B_Paste.gbp",
-      "avionics/kicad/gerbers/Commo-S1/Commo-B_Silkscreen.gbo",
-      "avionics/kicad/gerbers/Commo-S1/Commo-Edge_Cuts.gm1",
-      "avionics/kicad/gerbers/Commo-S1/Commo-F_Courtyard.gbr",
-      "avionics/kicad/gerbers/Commo-S1/Commo-F_Cu.gtl",
-      "avionics/kicad/gerbers/Commo-S1/Commo-F_Fab.gbr",
-      "avionics/kicad/gerbers/Commo-S1/Commo-F_Mask.gts",
-      "avionics/kicad/gerbers/Commo-S1/Commo-F_Paste.gtp",
-      "avionics/kicad/gerbers/Commo-S1/Commo-F_Silkscreen.gto",
-      "avionics/kicad/gerbers/Commo-S1/Commo-In1_Cu.g1",
-      "avionics/kicad/gerbers/Commo-S1/Commo-In2_Cu.g2",
-      "avionics/kicad/gerbers/Commo-S1/Commo-Margin.gbr",
-      "avionics/kicad/gerbers/Commo-S1/Commo-job.gbrjob",
-      "avionics/kicad/gerbers/Commo-S1/Commo.drl/Commo.drl",
       "gcs/skipper/software/config/mavlink_router.conf",
       "gcs/skipper/software/install/install_mavlink_router.sh"
     ],
@@ -13695,12 +13325,12 @@
       "airframe/placeholders/gcs/Antenna_GNSS_patch_ANN_MB00.stl",
       "airframe/placeholders/gcs/B6804_20x32x7mm_gimbal_pan.stl",
       "airframe/placeholders/gcs/GPS_module_M10Q_SparkFun.stl",
-      "airframe/placeholders/gcs/Skipper_enclosure_IP65_145x90x65mm.stl",
-      "airframe/placeholders/gcs/Skipper_tripod_antenna_mast.stl",
       "airframe/placeholders/gcs/N42_disc_magnet_6x2mm.stl",
       "airframe/placeholders/gcs/Pololu_D24V22F6_6V2A_BEC.stl",
       "airframe/placeholders/gcs/Pololu_D24V50F5_5V5A_BEC.stl",
       "airframe/placeholders/gcs/RF_splitter_915MHz_2way_ZFSC.stl",
+      "airframe/placeholders/gcs/Skipper_enclosure_IP65_145x90x65mm.stl",
+      "airframe/placeholders/gcs/Skipper_tripod_antenna_mast.stl",
       "airframe/placeholders/gcs/TCA9548A_I2C_mux_breakout.stl",
       "airframe/placeholders/power/LiPo_4S_10000mAh_175x64x38mm_GCS.stl",
       "gcs/AGENTS.md",
@@ -13722,8 +13352,8 @@
       "gcs/skipper/hardware/gimbal/openscad/skipper_gimbal_mount.scad",
       "gcs/skipper/hardware/gimbal/openscad/skipper_gimbal_pan.scad",
       "gcs/skipper/hardware/gimbal/openscad/skipper_gimbal_tilt.scad",
-      "gcs/skipper/software/config/skipper_config.yaml",
       "gcs/skipper/software/config/mavlink_router.conf",
+      "gcs/skipper/software/config/skipper_config.yaml",
       "gcs/skipper/software/install/install_deps.sh",
       "gcs/skipper/software/install/install_mavlink_router.sh",
       "gcs/skipper/software/install/install_qgc.sh",
@@ -14370,12 +14000,6 @@
       "avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_pcb.py",
       "avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_sch.py",
       "avionics/kicad/CAN-PERIPH-GW-1/scripts/route_can_periph_gw_pcb.py",
-      "avionics/kicad/ENC-NACELLE-1.kicad_pcb",
-      "avionics/kicad/ENC-NACELLE-1.kicad_prl",
-      "avionics/kicad/ENC-NACELLE-1.kicad_pro",
-      "avionics/kicad/ENC-NACELLE-1.kicad_sch",
-      "avionics/kicad/ENC-NACELLE-1.md",
-      "avionics/kicad/ENC-NACELLE-1.net",
       "avionics/kicad/Commo/Commo.md",
       "avionics/kicad/Commo/gerbers/Commo-B_Courtyard.gbr",
       "avionics/kicad/Commo/gerbers/Commo-B_Cu.gbl",
@@ -14418,53 +14042,14 @@
       "avionics/kicad/Commo/scripts/inject_commo_tpm.py",
       "avionics/kicad/Commo/scripts/mod_commo_pcb.py",
       "avionics/kicad/Commo/scripts/route_commo_rssi.py",
-      "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
-      "avionics/kicad/Observer/Observer.md",
-      "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
-      "avionics/kicad/Observer/Observer.pretty/DS_Laser_2P.kicad_mod",
-      "avionics/kicad/Observer/Observer.pretty/DS_ToF_4P.kicad_mod",
-      "avionics/kicad/Observer/Observer.pretty/TQFP-128-1EP_KSZ9477_14x14mm_P0.4mm_EP10x10.kicad_mod",
-      "avionics/kicad/Observer/Observer.pretty/Wurth_749010012A_10-100BASE-TX.kicad_mod",
-      "avionics/kicad/Observer/Observer.pretty/phyCORE-AM62x_PCM071_2xBTH-060.kicad_mod",
-      "avionics/kicad/Observer/Observer.pretty/phyCORE-AM62x_PCM071_placement.kicad_mod",
-      "avionics/kicad/Observer/Observer_som_pinmap.csv",
-      "avionics/kicad/Observer/VERA_NOSE_TRAPEZOID.md",
-      "avionics/kicad/Observer/Vera.pretty/DS_Camera_9P.kicad_mod",
-      "avionics/kicad/Observer/Vera.pretty/DS_Laser_2P.kicad_mod",
-      "avionics/kicad/Observer/Vera.pretty/DS_ToF_4P.kicad_mod",
-      "avionics/kicad/Observer/Vera.pretty/phyCORE-AM62x_PCM071_2xBTH-060.kicad_mod",
-      "avionics/kicad/Observer/Vera.pretty/phyCORE-AM62x_PCM071_placement.kicad_mod",
-      "avionics/kicad/Observer/gen_vera_bth060_footprint.py",
-      "avionics/kicad/Observer/gen_vera_ds_footprints.py",
-      "avionics/kicad/Observer/gen_vera_som_pcm071.py",
-      "avionics/kicad/Observer/kicads/Observer.kicad_dru",
-      "avionics/kicad/Observer/kicads/Observer.kicad_pcb",
-      "avionics/kicad/Observer/kicads/Observer.kicad_prl",
-      "avionics/kicad/Observer/kicads/Observer.kicad_pro",
-      "avionics/kicad/Observer/kicads/Observer.kicad_sch",
-      "avionics/kicad/Observer/kicads/Observer.net",
-      "avionics/kicad/Observer/kicads/_autosave-Observer.kicad_pcb",
-      "avionics/kicad/Observer/kicads/fp-lib-table",
-      "avionics/kicad/Observer/mod_vera_corners.py",
-      "avionics/kicad/Observer/mod_vera_ds_pcb.py",
-      "avionics/kicad/Observer/mod_vera_som_place.py",
-      "avionics/kicad/Observer/mod_vera_trapezoid.py",
-      "avionics/kicad/Observer/scripts/gen_Jayne.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_bth060_footprint.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_carrier_pcb.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_carrier_sch.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_ds_footprints.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_ic_symbols.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_ksz_symbol.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_pcb.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_som_pcm071.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_som_symbol.py",
-      "avionics/kicad/Observer/scripts/mod_Observer_corners.py",
-      "avionics/kicad/Observer/scripts/mod_Observer_ds_pcb.py",
-      "avionics/kicad/Observer/scripts/mod_Observer_som_place.py",
-      "avionics/kicad/Observer/scripts/mod_Observer_trapezoid.py",
-      "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
+      "avionics/kicad/ENC-NACELLE-1.kicad_pcb",
+      "avionics/kicad/ENC-NACELLE-1.kicad_prl",
+      "avionics/kicad/ENC-NACELLE-1.kicad_pro",
+      "avionics/kicad/ENC-NACELLE-1.kicad_sch",
+      "avionics/kicad/ENC-NACELLE-1.md",
+      "avionics/kicad/ENC-NACELLE-1.net",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
+      "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
       "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Adhesive.gba",
       "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Courtyard.gbr",
       "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Cu.gbl",
@@ -14496,15 +14081,52 @@
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py",
       "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py",
       "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
-      "avionics/kicad/README.md",
-      "avionics/kicad/Serenity-Custom.pretty/MountingHole_2.2mm_M2_SelfTap_Compact.kicad_mod",
-      "avionics/kicad/Serenity-Custom.pretty/Pigtail_7W_DirectSolder.kicad_mod",
-      "avionics/kicad/Serenity-Custom.pretty/TI_WL1837MOD.kicad_mod",
-      "avionics/kicad/Serenity-Custom.pretty/uBlox_SAM-M10Q-00B.kicad_mod",
-      "avionics/kicad/TODO-1.2b-CHECKLIST.md",
-      "avionics/kicad/TODO-1.2b-KICAD-READY.md",
-      "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
-      "avionics/kicad/Pilot/WASH_FOOTPRINT_VERIFICATION.md",
+      "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
+      "avionics/kicad/Observer/Observer.md",
+      "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
+      "avionics/kicad/Observer/Observer.pretty/DS_Laser_2P.kicad_mod",
+      "avionics/kicad/Observer/Observer.pretty/DS_ToF_4P.kicad_mod",
+      "avionics/kicad/Observer/Observer.pretty/TQFP-128-1EP_KSZ9477_14x14mm_P0.4mm_EP10x10.kicad_mod",
+      "avionics/kicad/Observer/Observer.pretty/Wurth_749010012A_10-100BASE-TX.kicad_mod",
+      "avionics/kicad/Observer/Observer.pretty/phyCORE-AM62x_PCM071_2xBTH-060.kicad_mod",
+      "avionics/kicad/Observer/Observer.pretty/phyCORE-AM62x_PCM071_placement.kicad_mod",
+      "avionics/kicad/Observer/Observer_som_pinmap.csv",
+      "avionics/kicad/Observer/VERA_NOSE_TRAPEZOID.md",
+      "avionics/kicad/Observer/Vera.pretty/DS_Camera_9P.kicad_mod",
+      "avionics/kicad/Observer/Vera.pretty/DS_Laser_2P.kicad_mod",
+      "avionics/kicad/Observer/Vera.pretty/DS_ToF_4P.kicad_mod",
+      "avionics/kicad/Observer/Vera.pretty/phyCORE-AM62x_PCM071_2xBTH-060.kicad_mod",
+      "avionics/kicad/Observer/Vera.pretty/phyCORE-AM62x_PCM071_placement.kicad_mod",
+      "avionics/kicad/Observer/gen_vera_bth060_footprint.py",
+      "avionics/kicad/Observer/gen_vera_ds_footprints.py",
+      "avionics/kicad/Observer/gen_vera_som_pcm071.py",
+      "avionics/kicad/Observer/kicads/Observer.kicad_dru",
+      "avionics/kicad/Observer/kicads/Observer.kicad_pcb",
+      "avionics/kicad/Observer/kicads/Observer.kicad_prl",
+      "avionics/kicad/Observer/kicads/Observer.kicad_pro",
+      "avionics/kicad/Observer/kicads/Observer.kicad_sch",
+      "avionics/kicad/Observer/kicads/Observer.net",
+      "avionics/kicad/Observer/kicads/_autosave-Observer.kicad_pcb",
+      "avionics/kicad/Observer/kicads/fp-lib-table",
+      "avionics/kicad/Observer/mod_vera_corners.py",
+      "avionics/kicad/Observer/mod_vera_ds_pcb.py",
+      "avionics/kicad/Observer/mod_vera_som_place.py",
+      "avionics/kicad/Observer/mod_vera_trapezoid.py",
+      "avionics/kicad/Observer/scripts/gen_observer.py",
+      "avionics/kicad/Observer/scripts/gen_observer_bth060_footprint.py",
+      "avionics/kicad/Observer/scripts/gen_observer_carrier_pcb.py",
+      "avionics/kicad/Observer/scripts/gen_observer_carrier_sch.py",
+      "avionics/kicad/Observer/scripts/gen_observer_ds_footprints.py",
+      "avionics/kicad/Observer/scripts/gen_observer_ic_symbols.py",
+      "avionics/kicad/Observer/scripts/gen_observer_ksz_symbol.py",
+      "avionics/kicad/Observer/scripts/gen_observer_pcb.py",
+      "avionics/kicad/Observer/scripts/gen_observer_som_pcm071.py",
+      "avionics/kicad/Observer/scripts/gen_observer_som_symbol.py",
+      "avionics/kicad/Observer/scripts/mod_observer_corners.py",
+      "avionics/kicad/Observer/scripts/mod_observer_ds_pcb.py",
+      "avionics/kicad/Observer/scripts/mod_observer_som_place.py",
+      "avionics/kicad/Observer/scripts/mod_observer_trapezoid.py",
+      "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
       "avionics/kicad/Pilot/gerbers/Pilot-B_Cu.gbr",
       "avionics/kicad/Pilot/gerbers/Pilot-B_Mask.gbr",
@@ -14523,30 +14145,37 @@
       "avionics/kicad/Pilot/kicads/Pilot.kicad_prl",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_pro",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_sch",
-      "avionics/kicad/Pilot/kicads/Wash_rebuild.kicad_sch",
+      "avionics/kicad/Pilot/kicads/Pilot_rebuild.kicad_sch",
       "avionics/kicad/Pilot/kicads/sym-lib-table",
-      "avionics/kicad/Pilot/scripts/gen_wash_sch.py",
-      "avionics/kicad/Pilot/scripts/mod_wash_pcb_reconcile.py",
-      "avionics/kicad/Zo\u00eb/Zo\u00eb.md",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-B_Cu.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-B_Mask.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-B_Paste.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-B_Silkscreen.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-Edge_Cuts.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-F_Cu.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-F_Mask.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-F_Paste.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-F_Silkscreen.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-In1_Cu.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-In2_Cu.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-job.gbrjob",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb.drl",
-      "avionics/kicad/Zo\u00eb/kicads/Zo\u00eb.kicad_pcb",
-      "avionics/kicad/Zo\u00eb/kicads/Zo\u00eb.kicad_prl",
-      "avionics/kicad/Zo\u00eb/kicads/Zo\u00eb.kicad_pro",
-      "avionics/kicad/Zo\u00eb/kicads/Zo\u00eb.kicad_sch",
-      "avionics/kicad/Zo\u00eb/kicads/_autosave-Zo\u00eb.kicad_pcb",
-      "avionics/kicad/Zo\u00eb/ref_remap_2026-07-18.json",
+      "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
+      "avionics/kicad/Pilot/scripts/mod_pilot_pcb_reconcile.py",
+      "avionics/kicad/README.md",
+      "avionics/kicad/Serenity-Custom.pretty/MountingHole_2.2mm_M2_SelfTap_Compact.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Pigtail_7W_DirectSolder.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/TI_WL1837MOD.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/uBlox_SAM-M10Q-00B.kicad_mod",
+      "avionics/kicad/TODO-1.2b-CHECKLIST.md",
+      "avionics/kicad/TODO-1.2b-KICAD-READY.md",
+      "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
+      "avionics/kicad/XO/XO.md",
+      "avionics/kicad/XO/gerbers/XO-B_Cu.gbr",
+      "avionics/kicad/XO/gerbers/XO-B_Mask.gbr",
+      "avionics/kicad/XO/gerbers/XO-B_Paste.gbr",
+      "avionics/kicad/XO/gerbers/XO-B_Silkscreen.gbr",
+      "avionics/kicad/XO/gerbers/XO-Edge_Cuts.gbr",
+      "avionics/kicad/XO/gerbers/XO-F_Cu.gbr",
+      "avionics/kicad/XO/gerbers/XO-F_Mask.gbr",
+      "avionics/kicad/XO/gerbers/XO-F_Paste.gbr",
+      "avionics/kicad/XO/gerbers/XO-F_Silkscreen.gbr",
+      "avionics/kicad/XO/gerbers/XO-In1_Cu.gbr",
+      "avionics/kicad/XO/gerbers/XO-In2_Cu.gbr",
+      "avionics/kicad/XO/gerbers/XO-job.gbrjob",
+      "avionics/kicad/XO/gerbers/XO.drl",
+      "avionics/kicad/XO/kicads/XO.kicad_pcb",
+      "avionics/kicad/XO/kicads/XO.kicad_prl",
+      "avionics/kicad/XO/kicads/XO.kicad_pro",
+      "avionics/kicad/XO/kicads/XO.kicad_sch",
+      "avionics/kicad/XO/ref_remap_2026-07-18.json",
       "avionics/kicad/add_eth_phy.py",
       "avionics/kicad/add_sensors_sbus.py",
       "avionics/kicad/apply_netlist.py",
@@ -14554,31 +14183,31 @@
       "avionics/kicad/complete_1_2b.py",
       "avionics/kicad/complete_xcvr_49mhz2.py",
       "avionics/kicad/drc_report.txt",
+      "avionics/kicad/fix_pilot_xo_isolators.py",
       "avionics/kicad/fix_starved_thermal_pads.py",
-      "avionics/kicad/fix_wash_zoe_isolators.py",
       "avionics/kicad/fix_xcvr_labels.py",
       "avionics/kicad/fp-lib-table",
       "avionics/kicad/gen_enc_nacelle_pcb.py",
       "avionics/kicad/generate_gerbers.py",
       "avionics/kicad/generate_gerbers_rev_s1.py",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Courtyard.gbr",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Cu.gbl",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Fab.gbr",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Mask.gbs",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Paste.gbp",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Silkscreen.gbo",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-Edge_Cuts.gm1",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Courtyard.gbr",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Cu.gtl",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Fab.gbr",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Mask.gts",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Paste.gtp",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Silkscreen.gto",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-In1_Cu.g1",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-In2_Cu.g2",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-Margin.gbr",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-job.gbrjob",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb.drl/Zo\u00eb.drl",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-B_Courtyard.gbr",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-B_Cu.gbl",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-B_Fab.gbr",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-B_Mask.gbs",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-B_Paste.gbp",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-B_Silkscreen.gbo",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-Edge_Cuts.gm1",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-F_Courtyard.gbr",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-F_Cu.gtl",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-F_Fab.gbr",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-F_Mask.gts",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-F_Paste.gtp",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-F_Silkscreen.gto",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-In1_Cu.g1",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-In2_Cu.g2",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-Margin.gbr",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-job.gbrjob",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO.drl/XO.drl",
       "avionics/kicad/gerbers/Commo-S1/Commo-B_Courtyard.gbr",
       "avionics/kicad/gerbers/Commo-S1/Commo-B_Cu.gbl",
       "avionics/kicad/gerbers/Commo-S1/Commo-B_Fab.gbr",
@@ -14618,14 +14247,14 @@
       "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer.drl/FlightEngineer.drl",
       "avionics/kicad/replace_footprints.py",
       "avionics/kicad/symbols/ISOW1044BDFMR_pinmap.csv",
+      "avionics/kicad/symbols/KSZ9477STXI_pinmap.csv",
+      "avionics/kicad/symbols/MSPM0G3507SRGZR_pinmap.csv",
       "avionics/kicad/symbols/Observer_ISOW1044BDFMR.kicad_sym",
       "avionics/kicad/symbols/Observer_KSZ9477.kicad_sym",
       "avionics/kicad/symbols/Observer_MSPM0G3507_RGZ.kicad_sym",
       "avionics/kicad/symbols/Observer_SLB9670_TPM.kicad_sym",
       "avionics/kicad/symbols/Observer_SoM.kicad_sym",
       "avionics/kicad/symbols/Observer_SoM_PCM071.kicad_sym",
-      "avionics/kicad/symbols/KSZ9477STXI_pinmap.csv",
-      "avionics/kicad/symbols/MSPM0G3507SRGZR_pinmap.csv",
       "avionics/kicad/symbols/SLB9670VQ2_0_pinmap.csv",
       "avionics/kicad/symbols/Vera_SoM_PCM071.kicad_sym",
       "avionics/kicad/symbols/footprints/PHYCORE-AM62AX-DSC-FOOTPRINT.kicad_mod",
@@ -14710,8 +14339,6 @@
       "avionics/firmware/fc/tools/.gitignore",
       "avionics/firmware/fc/tools/governor_cal.py",
       "avionics/firmware/fc/tools/requirements.txt",
-      "avionics/observer/TODO.md",
-      "avionics/observer/WBS.md",
       "avionics/kicad/.gitignore",
       "avionics/kicad/4_Run KiCad ERC_DRC validator (changed files only).txt",
       "avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md",
@@ -14744,12 +14371,6 @@
       "avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_pcb.py",
       "avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_sch.py",
       "avionics/kicad/CAN-PERIPH-GW-1/scripts/route_can_periph_gw_pcb.py",
-      "avionics/kicad/ENC-NACELLE-1.kicad_pcb",
-      "avionics/kicad/ENC-NACELLE-1.kicad_prl",
-      "avionics/kicad/ENC-NACELLE-1.kicad_pro",
-      "avionics/kicad/ENC-NACELLE-1.kicad_sch",
-      "avionics/kicad/ENC-NACELLE-1.md",
-      "avionics/kicad/ENC-NACELLE-1.net",
       "avionics/kicad/Commo/Commo.md",
       "avionics/kicad/Commo/gerbers/Commo-B_Courtyard.gbr",
       "avionics/kicad/Commo/gerbers/Commo-B_Cu.gbl",
@@ -14792,53 +14413,14 @@
       "avionics/kicad/Commo/scripts/inject_commo_tpm.py",
       "avionics/kicad/Commo/scripts/mod_commo_pcb.py",
       "avionics/kicad/Commo/scripts/route_commo_rssi.py",
-      "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
-      "avionics/kicad/Observer/Observer.md",
-      "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
-      "avionics/kicad/Observer/Observer.pretty/DS_Laser_2P.kicad_mod",
-      "avionics/kicad/Observer/Observer.pretty/DS_ToF_4P.kicad_mod",
-      "avionics/kicad/Observer/Observer.pretty/TQFP-128-1EP_KSZ9477_14x14mm_P0.4mm_EP10x10.kicad_mod",
-      "avionics/kicad/Observer/Observer.pretty/Wurth_749010012A_10-100BASE-TX.kicad_mod",
-      "avionics/kicad/Observer/Observer.pretty/phyCORE-AM62x_PCM071_2xBTH-060.kicad_mod",
-      "avionics/kicad/Observer/Observer.pretty/phyCORE-AM62x_PCM071_placement.kicad_mod",
-      "avionics/kicad/Observer/Observer_som_pinmap.csv",
-      "avionics/kicad/Observer/VERA_NOSE_TRAPEZOID.md",
-      "avionics/kicad/Observer/Vera.pretty/DS_Camera_9P.kicad_mod",
-      "avionics/kicad/Observer/Vera.pretty/DS_Laser_2P.kicad_mod",
-      "avionics/kicad/Observer/Vera.pretty/DS_ToF_4P.kicad_mod",
-      "avionics/kicad/Observer/Vera.pretty/phyCORE-AM62x_PCM071_2xBTH-060.kicad_mod",
-      "avionics/kicad/Observer/Vera.pretty/phyCORE-AM62x_PCM071_placement.kicad_mod",
-      "avionics/kicad/Observer/gen_vera_bth060_footprint.py",
-      "avionics/kicad/Observer/gen_vera_ds_footprints.py",
-      "avionics/kicad/Observer/gen_vera_som_pcm071.py",
-      "avionics/kicad/Observer/kicads/Observer.kicad_dru",
-      "avionics/kicad/Observer/kicads/Observer.kicad_pcb",
-      "avionics/kicad/Observer/kicads/Observer.kicad_prl",
-      "avionics/kicad/Observer/kicads/Observer.kicad_pro",
-      "avionics/kicad/Observer/kicads/Observer.kicad_sch",
-      "avionics/kicad/Observer/kicads/Observer.net",
-      "avionics/kicad/Observer/kicads/_autosave-Observer.kicad_pcb",
-      "avionics/kicad/Observer/kicads/fp-lib-table",
-      "avionics/kicad/Observer/mod_vera_corners.py",
-      "avionics/kicad/Observer/mod_vera_ds_pcb.py",
-      "avionics/kicad/Observer/mod_vera_som_place.py",
-      "avionics/kicad/Observer/mod_vera_trapezoid.py",
-      "avionics/kicad/Observer/scripts/gen_Jayne.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_bth060_footprint.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_carrier_pcb.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_carrier_sch.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_ds_footprints.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_ic_symbols.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_ksz_symbol.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_pcb.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_som_pcm071.py",
-      "avionics/kicad/Observer/scripts/gen_Observer_som_symbol.py",
-      "avionics/kicad/Observer/scripts/mod_Observer_corners.py",
-      "avionics/kicad/Observer/scripts/mod_Observer_ds_pcb.py",
-      "avionics/kicad/Observer/scripts/mod_Observer_som_place.py",
-      "avionics/kicad/Observer/scripts/mod_Observer_trapezoid.py",
-      "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
+      "avionics/kicad/ENC-NACELLE-1.kicad_pcb",
+      "avionics/kicad/ENC-NACELLE-1.kicad_prl",
+      "avionics/kicad/ENC-NACELLE-1.kicad_pro",
+      "avionics/kicad/ENC-NACELLE-1.kicad_sch",
+      "avionics/kicad/ENC-NACELLE-1.md",
+      "avionics/kicad/ENC-NACELLE-1.net",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
+      "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
       "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Adhesive.gba",
       "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Courtyard.gbr",
       "avionics/kicad/FlightEngineer/gerbers/FlightEngineer-B_Cu.gbl",
@@ -14870,15 +14452,52 @@
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py",
       "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py",
       "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
-      "avionics/kicad/README.md",
-      "avionics/kicad/Serenity-Custom.pretty/MountingHole_2.2mm_M2_SelfTap_Compact.kicad_mod",
-      "avionics/kicad/Serenity-Custom.pretty/Pigtail_7W_DirectSolder.kicad_mod",
-      "avionics/kicad/Serenity-Custom.pretty/TI_WL1837MOD.kicad_mod",
-      "avionics/kicad/Serenity-Custom.pretty/uBlox_SAM-M10Q-00B.kicad_mod",
-      "avionics/kicad/TODO-1.2b-CHECKLIST.md",
-      "avionics/kicad/TODO-1.2b-KICAD-READY.md",
-      "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
-      "avionics/kicad/Pilot/WASH_FOOTPRINT_VERIFICATION.md",
+      "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
+      "avionics/kicad/Observer/Observer.md",
+      "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
+      "avionics/kicad/Observer/Observer.pretty/DS_Laser_2P.kicad_mod",
+      "avionics/kicad/Observer/Observer.pretty/DS_ToF_4P.kicad_mod",
+      "avionics/kicad/Observer/Observer.pretty/TQFP-128-1EP_KSZ9477_14x14mm_P0.4mm_EP10x10.kicad_mod",
+      "avionics/kicad/Observer/Observer.pretty/Wurth_749010012A_10-100BASE-TX.kicad_mod",
+      "avionics/kicad/Observer/Observer.pretty/phyCORE-AM62x_PCM071_2xBTH-060.kicad_mod",
+      "avionics/kicad/Observer/Observer.pretty/phyCORE-AM62x_PCM071_placement.kicad_mod",
+      "avionics/kicad/Observer/Observer_som_pinmap.csv",
+      "avionics/kicad/Observer/VERA_NOSE_TRAPEZOID.md",
+      "avionics/kicad/Observer/Vera.pretty/DS_Camera_9P.kicad_mod",
+      "avionics/kicad/Observer/Vera.pretty/DS_Laser_2P.kicad_mod",
+      "avionics/kicad/Observer/Vera.pretty/DS_ToF_4P.kicad_mod",
+      "avionics/kicad/Observer/Vera.pretty/phyCORE-AM62x_PCM071_2xBTH-060.kicad_mod",
+      "avionics/kicad/Observer/Vera.pretty/phyCORE-AM62x_PCM071_placement.kicad_mod",
+      "avionics/kicad/Observer/gen_vera_bth060_footprint.py",
+      "avionics/kicad/Observer/gen_vera_ds_footprints.py",
+      "avionics/kicad/Observer/gen_vera_som_pcm071.py",
+      "avionics/kicad/Observer/kicads/Observer.kicad_dru",
+      "avionics/kicad/Observer/kicads/Observer.kicad_pcb",
+      "avionics/kicad/Observer/kicads/Observer.kicad_prl",
+      "avionics/kicad/Observer/kicads/Observer.kicad_pro",
+      "avionics/kicad/Observer/kicads/Observer.kicad_sch",
+      "avionics/kicad/Observer/kicads/Observer.net",
+      "avionics/kicad/Observer/kicads/_autosave-Observer.kicad_pcb",
+      "avionics/kicad/Observer/kicads/fp-lib-table",
+      "avionics/kicad/Observer/mod_vera_corners.py",
+      "avionics/kicad/Observer/mod_vera_ds_pcb.py",
+      "avionics/kicad/Observer/mod_vera_som_place.py",
+      "avionics/kicad/Observer/mod_vera_trapezoid.py",
+      "avionics/kicad/Observer/scripts/gen_observer.py",
+      "avionics/kicad/Observer/scripts/gen_observer_bth060_footprint.py",
+      "avionics/kicad/Observer/scripts/gen_observer_carrier_pcb.py",
+      "avionics/kicad/Observer/scripts/gen_observer_carrier_sch.py",
+      "avionics/kicad/Observer/scripts/gen_observer_ds_footprints.py",
+      "avionics/kicad/Observer/scripts/gen_observer_ic_symbols.py",
+      "avionics/kicad/Observer/scripts/gen_observer_ksz_symbol.py",
+      "avionics/kicad/Observer/scripts/gen_observer_pcb.py",
+      "avionics/kicad/Observer/scripts/gen_observer_som_pcm071.py",
+      "avionics/kicad/Observer/scripts/gen_observer_som_symbol.py",
+      "avionics/kicad/Observer/scripts/mod_observer_corners.py",
+      "avionics/kicad/Observer/scripts/mod_observer_ds_pcb.py",
+      "avionics/kicad/Observer/scripts/mod_observer_som_place.py",
+      "avionics/kicad/Observer/scripts/mod_observer_trapezoid.py",
+      "avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md",
       "avionics/kicad/Pilot/Pilot.md",
       "avionics/kicad/Pilot/gerbers/Pilot-B_Cu.gbr",
       "avionics/kicad/Pilot/gerbers/Pilot-B_Mask.gbr",
@@ -14897,30 +14516,37 @@
       "avionics/kicad/Pilot/kicads/Pilot.kicad_prl",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_pro",
       "avionics/kicad/Pilot/kicads/Pilot.kicad_sch",
-      "avionics/kicad/Pilot/kicads/Wash_rebuild.kicad_sch",
+      "avionics/kicad/Pilot/kicads/Pilot_rebuild.kicad_sch",
       "avionics/kicad/Pilot/kicads/sym-lib-table",
-      "avionics/kicad/Pilot/scripts/gen_wash_sch.py",
-      "avionics/kicad/Pilot/scripts/mod_wash_pcb_reconcile.py",
-      "avionics/kicad/Zo\u00eb/Zo\u00eb.md",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-B_Cu.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-B_Mask.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-B_Paste.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-B_Silkscreen.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-Edge_Cuts.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-F_Cu.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-F_Mask.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-F_Paste.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-F_Silkscreen.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-In1_Cu.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-In2_Cu.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-job.gbrjob",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb.drl",
-      "avionics/kicad/Zo\u00eb/kicads/Zo\u00eb.kicad_pcb",
-      "avionics/kicad/Zo\u00eb/kicads/Zo\u00eb.kicad_prl",
-      "avionics/kicad/Zo\u00eb/kicads/Zo\u00eb.kicad_pro",
-      "avionics/kicad/Zo\u00eb/kicads/Zo\u00eb.kicad_sch",
-      "avionics/kicad/Zo\u00eb/kicads/_autosave-Zo\u00eb.kicad_pcb",
-      "avionics/kicad/Zo\u00eb/ref_remap_2026-07-18.json",
+      "avionics/kicad/Pilot/scripts/gen_pilot_sch.py",
+      "avionics/kicad/Pilot/scripts/mod_pilot_pcb_reconcile.py",
+      "avionics/kicad/README.md",
+      "avionics/kicad/Serenity-Custom.pretty/MountingHole_2.2mm_M2_SelfTap_Compact.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/Pigtail_7W_DirectSolder.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/TI_WL1837MOD.kicad_mod",
+      "avionics/kicad/Serenity-Custom.pretty/uBlox_SAM-M10Q-00B.kicad_mod",
+      "avionics/kicad/TODO-1.2b-CHECKLIST.md",
+      "avionics/kicad/TODO-1.2b-KICAD-READY.md",
+      "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
+      "avionics/kicad/XO/XO.md",
+      "avionics/kicad/XO/gerbers/XO-B_Cu.gbr",
+      "avionics/kicad/XO/gerbers/XO-B_Mask.gbr",
+      "avionics/kicad/XO/gerbers/XO-B_Paste.gbr",
+      "avionics/kicad/XO/gerbers/XO-B_Silkscreen.gbr",
+      "avionics/kicad/XO/gerbers/XO-Edge_Cuts.gbr",
+      "avionics/kicad/XO/gerbers/XO-F_Cu.gbr",
+      "avionics/kicad/XO/gerbers/XO-F_Mask.gbr",
+      "avionics/kicad/XO/gerbers/XO-F_Paste.gbr",
+      "avionics/kicad/XO/gerbers/XO-F_Silkscreen.gbr",
+      "avionics/kicad/XO/gerbers/XO-In1_Cu.gbr",
+      "avionics/kicad/XO/gerbers/XO-In2_Cu.gbr",
+      "avionics/kicad/XO/gerbers/XO-job.gbrjob",
+      "avionics/kicad/XO/gerbers/XO.drl",
+      "avionics/kicad/XO/kicads/XO.kicad_pcb",
+      "avionics/kicad/XO/kicads/XO.kicad_prl",
+      "avionics/kicad/XO/kicads/XO.kicad_pro",
+      "avionics/kicad/XO/kicads/XO.kicad_sch",
+      "avionics/kicad/XO/ref_remap_2026-07-18.json",
       "avionics/kicad/add_eth_phy.py",
       "avionics/kicad/add_sensors_sbus.py",
       "avionics/kicad/apply_netlist.py",
@@ -14928,31 +14554,31 @@
       "avionics/kicad/complete_1_2b.py",
       "avionics/kicad/complete_xcvr_49mhz2.py",
       "avionics/kicad/drc_report.txt",
+      "avionics/kicad/fix_pilot_xo_isolators.py",
       "avionics/kicad/fix_starved_thermal_pads.py",
-      "avionics/kicad/fix_wash_zoe_isolators.py",
       "avionics/kicad/fix_xcvr_labels.py",
       "avionics/kicad/fp-lib-table",
       "avionics/kicad/gen_enc_nacelle_pcb.py",
       "avionics/kicad/generate_gerbers.py",
       "avionics/kicad/generate_gerbers_rev_s1.py",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Courtyard.gbr",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Cu.gbl",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Fab.gbr",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Mask.gbs",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Paste.gbp",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Silkscreen.gbo",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-Edge_Cuts.gm1",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Courtyard.gbr",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Cu.gtl",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Fab.gbr",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Mask.gts",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Paste.gtp",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Silkscreen.gto",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-In1_Cu.g1",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-In2_Cu.g2",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-Margin.gbr",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-job.gbrjob",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb.drl/Zo\u00eb.drl",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-B_Courtyard.gbr",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-B_Cu.gbl",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-B_Fab.gbr",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-B_Mask.gbs",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-B_Paste.gbp",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-B_Silkscreen.gbo",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-Edge_Cuts.gm1",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-F_Courtyard.gbr",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-F_Cu.gtl",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-F_Fab.gbr",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-F_Mask.gts",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-F_Paste.gtp",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-F_Silkscreen.gto",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-In1_Cu.g1",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-In2_Cu.g2",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-Margin.gbr",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO-job.gbrjob",
+      "avionics/kicad/gerbers/CAPE-B-2-S1/XO.drl/XO.drl",
       "avionics/kicad/gerbers/Commo-S1/Commo-B_Courtyard.gbr",
       "avionics/kicad/gerbers/Commo-S1/Commo-B_Cu.gbl",
       "avionics/kicad/gerbers/Commo-S1/Commo-B_Fab.gbr",
@@ -14992,18 +14618,20 @@
       "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer.drl/FlightEngineer.drl",
       "avionics/kicad/replace_footprints.py",
       "avionics/kicad/symbols/ISOW1044BDFMR_pinmap.csv",
+      "avionics/kicad/symbols/KSZ9477STXI_pinmap.csv",
+      "avionics/kicad/symbols/MSPM0G3507SRGZR_pinmap.csv",
       "avionics/kicad/symbols/Observer_ISOW1044BDFMR.kicad_sym",
       "avionics/kicad/symbols/Observer_KSZ9477.kicad_sym",
       "avionics/kicad/symbols/Observer_MSPM0G3507_RGZ.kicad_sym",
       "avionics/kicad/symbols/Observer_SLB9670_TPM.kicad_sym",
       "avionics/kicad/symbols/Observer_SoM.kicad_sym",
       "avionics/kicad/symbols/Observer_SoM_PCM071.kicad_sym",
-      "avionics/kicad/symbols/KSZ9477STXI_pinmap.csv",
-      "avionics/kicad/symbols/MSPM0G3507SRGZR_pinmap.csv",
       "avionics/kicad/symbols/SLB9670VQ2_0_pinmap.csv",
       "avionics/kicad/symbols/Vera_SoM_PCM071.kicad_sym",
       "avionics/kicad/symbols/footprints/PHYCORE-AM62AX-DSC-FOOTPRINT.kicad_mod",
       "avionics/kicad/symbols/phyCORE_AM62x_PCM071_pinmap.csv",
+      "avionics/observer/TODO.md",
+      "avionics/observer/WBS.md",
       "avionics/rev-s1/TODO.md",
       "avionics/rev-s1/WBS.md"
     ],
@@ -15054,70 +14682,6 @@
       "gcs/skipper/firmware/pb2i/src/skipper_gimbal.h",
       "gcs/skipper/firmware/pb2i/src/skipper_telemetry.c",
       "gcs/skipper/firmware/pb2i/src/skipper_telemetry.h"
-    ],
-    "flight-control": [
-      "avionics/kicad/Pilot/WASH_FOOTPRINT_VERIFICATION.md",
-      "avionics/kicad/Pilot/Pilot.md",
-      "avionics/kicad/Pilot/gerbers/Pilot-B_Cu.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-B_Mask.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-B_Paste.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-B_Silkscreen.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-Edge_Cuts.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-F_Cu.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-F_Mask.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-F_Paste.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-F_Silkscreen.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-In1_Cu.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-In2_Cu.gbr",
-      "avionics/kicad/Pilot/gerbers/Pilot-job.gbrjob",
-      "avionics/kicad/Pilot/gerbers/Pilot.drl",
-      "avionics/kicad/Pilot/kicads/Pilot.kicad_pcb",
-      "avionics/kicad/Pilot/kicads/Pilot.kicad_prl",
-      "avionics/kicad/Pilot/kicads/Pilot.kicad_pro",
-      "avionics/kicad/Pilot/kicads/Pilot.kicad_sch",
-      "avionics/kicad/Pilot/kicads/Wash_rebuild.kicad_sch",
-      "avionics/kicad/Pilot/kicads/sym-lib-table",
-      "avionics/kicad/Pilot/scripts/gen_wash_sch.py",
-      "avionics/kicad/Pilot/scripts/mod_wash_pcb_reconcile.py",
-      "avionics/kicad/Zo\u00eb/Zo\u00eb.md",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-B_Cu.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-B_Mask.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-B_Paste.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-B_Silkscreen.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-Edge_Cuts.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-F_Cu.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-F_Mask.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-F_Paste.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-F_Silkscreen.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-In1_Cu.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-In2_Cu.gbr",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb-job.gbrjob",
-      "avionics/kicad/Zo\u00eb/gerbers/Zo\u00eb.drl",
-      "avionics/kicad/Zo\u00eb/kicads/Zo\u00eb.kicad_pcb",
-      "avionics/kicad/Zo\u00eb/kicads/Zo\u00eb.kicad_prl",
-      "avionics/kicad/Zo\u00eb/kicads/Zo\u00eb.kicad_pro",
-      "avionics/kicad/Zo\u00eb/kicads/Zo\u00eb.kicad_sch",
-      "avionics/kicad/Zo\u00eb/kicads/_autosave-Zo\u00eb.kicad_pcb",
-      "avionics/kicad/Zo\u00eb/ref_remap_2026-07-18.json",
-      "avionics/kicad/fix_wash_zoe_isolators.py",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Courtyard.gbr",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Cu.gbl",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Fab.gbr",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Mask.gbs",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Paste.gbp",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-B_Silkscreen.gbo",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-Edge_Cuts.gm1",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Courtyard.gbr",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Cu.gtl",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Fab.gbr",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Mask.gts",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Paste.gtp",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-F_Silkscreen.gto",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-In1_Cu.g1",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-In2_Cu.g2",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-Margin.gbr",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb-job.gbrjob",
-      "avionics/kicad/gerbers/CAPE-B-2-S1/Zo\u00eb.drl/Zo\u00eb.drl"
     ],
     "deferred-future": [
       "deferred/AGENTS.md",
