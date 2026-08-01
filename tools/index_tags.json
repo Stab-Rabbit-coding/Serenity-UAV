@@ -262,9 +262,29 @@
       "archived": false
     },
     "airframe/LICENSE": {
-      "description": "Serenity UAV \u2014 airframe \u2014 License",
+      "description": "SERENITY UAV \u2014 AIRFRAME SUBSYSTEM LICENSING",
       "tags": [
         "licensing",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/README.md": {
+      "description": "Serenity UAV \u2014 Airframe Subsystem",
+      "tags": [
+        "documentation",
+        "emi-hardening",
+        "security",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/SPEC_VERIFICATION_0.6.1.md": {
+      "description": "Airframe Specifications Verification (Task 0.6.1)",
+      "tags": [
+        "documentation",
+        "redundancy-failover",
+        "security",
         "structural"
       ],
       "archived": false
@@ -5965,10 +5985,21 @@
       "archived": false
     },
     "avionics/LICENSE": {
-      "description": "Serenity UAV \u2014 avionics \u2014 License",
+      "description": "SERENITY UAV \u2014 AVIONICS SUBSYSTEM LICENSING",
       "tags": [
         "avionics-hardware",
         "licensing"
+      ],
+      "archived": false
+    },
+    "avionics/README.md": {
+      "description": "Serenity UAV \u2014 Avionics Subsystem",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "emi-hardening",
+        "redundancy-failover",
+        "security"
       ],
       "archived": false
     },
@@ -9046,7 +9077,7 @@
       "archived": false
     },
     "current-specification/LICENSE": {
-      "description": "Serenity UAV \u2014 current-specification \u2014 License",
+      "description": "SERENITY UAV \u2014 SPECIFICATION & BOM LICENSING",
       "tags": [
         "licensing",
         "specification"
@@ -9058,6 +9089,16 @@
       "tags": [
         "documentation",
         "licensing",
+        "security",
+        "specification"
+      ],
+      "archived": false
+    },
+    "current-specification/README.md": {
+      "description": "Serenity UAV \u2014 Current Specification (Rev S Baseline)",
+      "tags": [
+        "documentation",
+        "redundancy-failover",
         "security",
         "specification"
       ],
@@ -9115,10 +9156,19 @@
       "archived": false
     },
     "deferred/LICENSE": {
-      "description": "Serenity UAV \u2014 deferred \u2014 License",
+      "description": "SERENITY UAV \u2014 DEFERRED PHASES LICENSING",
       "tags": [
         "deferred-future",
         "licensing"
+      ],
+      "archived": false
+    },
+    "deferred/README.md": {
+      "description": "Serenity UAV \u2014 Deferred Work & Future Phases",
+      "tags": [
+        "deferred-future",
+        "documentation",
+        "redundancy-failover"
       ],
       "archived": false
     },
@@ -9382,6 +9432,13 @@
       ],
       "archived": false
     },
+    "docs/DOC_VERIFICATION_0.6.2.md": {
+      "description": "Documentation Verification (Task 0.6.2)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/ETHERNET_PHY_TRADE.md": {
       "description": "Onboard Ethernet Interface Trade Study (Rev S, 2026-07-11)",
       "tags": [
@@ -9494,9 +9551,21 @@
       "archived": false
     },
     "docs/README.md": {
-      "description": "Serenity-Class Tiltrotor UAV \u2014 Rev M (18\" Canonical Build) \u2014 SUPERSEDED",
+      "description": "Serenity UAV \u2014 Documentation Index",
       "tags": [
-        "documentation"
+        "documentation",
+        "emi-hardening",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": false
+    },
+    "docs/REVN_BUILD_GUIDE_24IN.md": {
+      "description": "Serenity UAV \u2014 24-Inch Build Guide (Rev S Baseline)",
+      "tags": [
+        "documentation",
+        "emi-hardening",
+        "redundancy-failover"
       ],
       "archived": false
     },
@@ -9552,6 +9621,14 @@
     },
     "docs/attribution_and_licencing.md": {
       "description": "Serenity UAV \u2014 Attribution and Licensing Policy",
+      "tags": [
+        "documentation",
+        "licensing"
+      ],
+      "archived": false
+    },
+    "docs/attribution_and_licensing.md": {
+      "description": "Serenity UAV \u2014 Licensing & Attribution",
       "tags": [
         "documentation",
         "licensing"
@@ -10260,10 +10337,20 @@
       "archived": false
     },
     "gcs/LICENSE": {
-      "description": "Serenity UAV \u2014 gcs \u2014 License",
+      "description": "SERENITY UAV \u2014 GROUND CONTROL STATION (GCS) LICENSING",
       "tags": [
         "ground-control",
         "licensing"
+      ],
+      "archived": false
+    },
+    "gcs/README.md": {
+      "description": "Serenity UAV \u2014 Ground Control Station (Malcolm)",
+      "tags": [
+        "documentation",
+        "ground-control",
+        "redundancy-failover",
+        "security"
       ],
       "archived": false
     },
@@ -10498,10 +10585,20 @@
       "archived": false
     },
     "graphical-build-guide/LICENSE": {
-      "description": "Serenity UAV \u2014 graphical-build-guide \u2014 License",
+      "description": "SERENITY UAV \u2014 GRAPHICAL BUILD GUIDE LICENSING",
       "tags": [
         "build-guide",
         "licensing"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/README.md": {
+      "description": "Serenity UAV \u2014 Graphical Build Guide",
+      "tags": [
+        "build-guide",
+        "documentation",
+        "redundancy-failover",
+        "security"
       ],
       "archived": false
     },
@@ -11601,10 +11698,18 @@
       "archived": false
     },
     "tools/LICENSE": {
-      "description": "Serenity UAV \u2014 tools \u2014 License",
+      "description": "SERENITY UAV \u2014 TOOLS & UTILITIES LICENSING",
       "tags": [
         "build-tooling",
         "licensing"
+      ],
+      "archived": false
+    },
+    "tools/README.md": {
+      "description": "Serenity UAV \u2014 Build Tools & Validation Scripts",
+      "tags": [
+        "build-tooling",
+        "documentation"
       ],
       "archived": false
     },
@@ -11758,6 +11863,8 @@
       "TODO.md",
       "WBS.md",
       "airframe/AGENTS.md",
+      "airframe/README.md",
+      "airframe/SPEC_VERIFICATION_0.6.1.md",
       "airframe/TODO.md",
       "airframe/VERIFY_PLACEMENT_CHECKLIST.md",
       "airframe/WBS.md",
@@ -11786,6 +11893,7 @@
       "archives/stale-20260601/files-revF/serenity-drone-revF/README.md",
       "archives/stale-20260601/files-revF/serenity-drone-revF/docs/LICENSE_AND_ATTRIBUTION.md",
       "avionics/AGENTS.md",
+      "avionics/README.md",
       "avionics/TODO-1-9-COMPLETION-STATUS.md",
       "avionics/TODO.md",
       "avionics/WBS.md",
@@ -11817,8 +11925,10 @@
       "avionics/rev-s1/WBS.md",
       "current-specification/AGENTS.md",
       "current-specification/LICENSE_AND_ATTRIBUTION.md",
+      "current-specification/README.md",
       "current-specification/TODO.md",
       "deferred/AGENTS.md",
+      "deferred/README.md",
       "deferred/TODO.md",
       "deferred/WBS.md",
       "deferred/aft-edf/README.md",
@@ -11827,6 +11937,7 @@
       "docs/BATTERY_MOUNT.md",
       "docs/CARGO_WINCH_SPECIFICATION.md",
       "docs/DOCUMENTATION_RECONCILIATION_2026-07-28.md",
+      "docs/DOC_VERIFICATION_0.6.2.md",
       "docs/ETHERNET_PHY_TRADE.md",
       "docs/FIRST_FLIGHT_READINESS.md",
       "docs/LANDING_GEAR_ANALYSIS.md",
@@ -11841,6 +11952,7 @@
       "docs/PROTO_PRINT_DAVINCI_JR.md",
       "docs/PYLON_INTEGRATION_2026-07-18.md",
       "docs/README.md",
+      "docs/REVN_BUILD_GUIDE_24IN.md",
       "docs/TILT_ENCODER_WIRING_EMI_SPEC.md",
       "docs/TILT_SPAR_ANALYSIS.md",
       "docs/TODO.md",
@@ -11848,6 +11960,7 @@
       "docs/VERIFY_PLACEMENT_WORKFLOW.md",
       "docs/WBS.md",
       "docs/attribution_and_licencing.md",
+      "docs/attribution_and_licensing.md",
       "docs/bom_revP.json",
       "docs/bom_revQ.json",
       "docs/bom_revR.json",
@@ -11933,6 +12046,7 @@
       "docs/references/vimdrones_esc_s50_wiring.png",
       "docs/structural_analysis.md",
       "gcs/AGENTS.md",
+      "gcs/README.md",
       "gcs/TODO.md",
       "gcs/WBS.md",
       "gcs/skipper/README.md",
@@ -11940,6 +12054,7 @@
       "gcs/skipper/hardware/docs/skipper_power_budget.md",
       "gcs/skipper/hardware/docs/skipper_wiring.md",
       "graphical-build-guide/AGENTS.md",
+      "graphical-build-guide/README.md",
       "graphical-build-guide/REVN_BUILD_GUIDE_24IN.md",
       "graphical-build-guide/TODO-old.md",
       "graphical-build-guide/TODO.md",
@@ -11947,6 +12062,7 @@
       "graphical-build-guide/flight-phases/TODO.md",
       "graphical-build-guide/flight-phases/WBS.md",
       "tools/AGENTS.md",
+      "tools/README.md",
       "tools/TODO.md"
     ],
     "emi-hardening": [
@@ -11955,6 +12071,7 @@
       "TODO.md",
       "WBS.md",
       "airframe/FreeCAD-scripts/serenity_placeholders_assembly.py",
+      "airframe/README.md",
       "airframe/fuselage-joints/WBS.md",
       "airframe/openscad/fuselage/cargo/cargo_sect_shell24.scad",
       "airframe/openscad/fuselage/cargo/cargo_vera_faraday.scad",
@@ -11975,6 +12092,7 @@
       "archives/docs-superseded/serenity-rev-q.jsx",
       "archives/serenity-rev-q.jsx",
       "avionics/AGENTS.md",
+      "avionics/README.md",
       "avionics/TODO-1-9-COMPLETION-STATUS.md",
       "avionics/TODO.md",
       "avionics/WBS.md",
@@ -12011,6 +12129,8 @@
       "docs/OBSERVER_MANUFACTURING_READINESS.md",
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/POWER_DISTRIBUTION.md",
+      "docs/README.md",
+      "docs/REVN_BUILD_GUIDE_24IN.md",
       "docs/TILT_ENCODER_WIRING_EMI_SPEC.md",
       "docs/TILT_SPAR_ANALYSIS.md",
       "docs/electrical_fault_margins.md",
@@ -12023,25 +12143,33 @@
     "redundancy-failover": [
       "AGENTS.md",
       "README.md",
+      "airframe/SPEC_VERIFICATION_0.6.1.md",
       "airframe/openscad/fuselage/cargo/cargo_sect_shell24.scad",
       "airframe/openscad/fuselage/head_shell24.scad",
       "airframe/openscad/fuselage/middle_canonical_shell24.scad",
       "avionics/AGENTS.md",
+      "avionics/README.md",
       "avionics/TODO-1-9-COMPLETION-STATUS.md",
       "avionics/emi-hardening/WBS.md",
       "avionics/firmware/AK7455_CALIBRATION_SPECIFICATION.md",
       "avionics/firmware/WBS.md",
       "avionics/firmware/common/include/failsafe_config.h",
+      "current-specification/README.md",
+      "deferred/README.md",
       "docs/AVIONICS_PB2_REDESIGN.md",
       "docs/DOCUMENTATION_RECONCILIATION_2026-07-28.md",
       "docs/ETHERNET_PHY_TRADE.md",
       "docs/FIRST_FLIGHT_READINESS.md",
       "docs/PHASED_BUILD_GUIDE.md",
+      "docs/README.md",
+      "docs/REVN_BUILD_GUIDE_24IN.md",
       "docs/electrical_fault_margins.md",
       "docs/failsafe_thresholds.md",
       "gcs/AGENTS.md",
+      "gcs/README.md",
       "gcs/WBS.md",
       "gcs/skipper/hardware/docs/skipper_antenna_spec.md",
+      "graphical-build-guide/README.md",
       "graphical-build-guide/TODO-old.md",
       "graphical-build-guide/WBS.md",
       "graphical-build-guide/flight-phases/TODO.md",
@@ -12057,6 +12185,8 @@
       "TODO.md",
       "WBS.md",
       "airframe/FreeCAD-scripts/serenity_assembly.py",
+      "airframe/README.md",
+      "airframe/SPEC_VERIFICATION_0.6.1.md",
       "airframe/blender-scripts/add_structural_features.py",
       "airframe/fuselage-joints/WBS.md",
       "airframe/openscad/fuselage/cargo/cargo_spar_drive.scad",
@@ -12084,6 +12214,7 @@
       "archives/stale-20260601/files-revF/serenity-drone-revF/docs/LICENSE_AND_ATTRIBUTION.md",
       "archives/stale-20260601/pico2-hat.jsx",
       "avionics/AGENTS.md",
+      "avionics/README.md",
       "avionics/TODO-1-9-COMPLETION-STATUS.md",
       "avionics/TODO.md",
       "avionics/WBS.md",
@@ -12123,6 +12254,7 @@
       "avionics/observer/WBS.md",
       "avionics/rev-s1/WBS.md",
       "current-specification/LICENSE_AND_ATTRIBUTION.md",
+      "current-specification/README.md",
       "current-specification/serenity-rev-r.jsx",
       "current-specification/serenity-rev-s.jsx",
       "docs/AGENTS.md",
@@ -12135,10 +12267,12 @@
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/POWER_DISTRIBUTION.md",
       "docs/PROTO_PRINT_DAVINCI_JR.md",
+      "docs/README.md",
       "docs/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "docs/VERIFY_PLACEMENT_WORKFLOW.md",
       "docs/WBS.md",
       "gcs/AGENTS.md",
+      "gcs/README.md",
       "gcs/TODO.md",
       "gcs/WBS.md",
       "gcs/skipper/README.md",
@@ -12147,6 +12281,7 @@
       "gcs/skipper/firmware/pb2i/src/skipper_telemetry.c",
       "gcs/skipper/hardware/docs/skipper_power_budget.md",
       "graphical-build-guide/AGENTS.md",
+      "graphical-build-guide/README.md",
       "graphical-build-guide/REVN_BUILD_GUIDE_24IN.md",
       "graphical-build-guide/TODO-old.md",
       "graphical-build-guide/TODO.md",
@@ -12173,6 +12308,7 @@
       "deferred/LICENSE",
       "docs/LICENSE",
       "docs/attribution_and_licencing.md",
+      "docs/attribution_and_licensing.md",
       "docs/references/thingverse-serenity/LICENSE.txt",
       "gcs/LICENSE",
       "graphical-build-guide/LICENSE",
@@ -12183,6 +12319,7 @@
       "current-specification/AGENTS.md",
       "current-specification/LICENSE",
       "current-specification/LICENSE_AND_ATTRIBUTION.md",
+      "current-specification/README.md",
       "current-specification/TODO.md",
       "current-specification/bom_revS.csv",
       "current-specification/bom_revS.json",
@@ -12317,6 +12454,8 @@
       "airframe/FreeCAD-scripts/serenity_assembly.py",
       "airframe/FreeCAD-scripts/serenity_placeholders_assembly.py",
       "airframe/LICENSE",
+      "airframe/README.md",
+      "airframe/SPEC_VERIFICATION_0.6.1.md",
       "airframe/TODO.md",
       "airframe/VERIFY_PLACEMENT_CHECKLIST.md",
       "airframe/WBS.md",
@@ -13335,6 +13474,7 @@
       "airframe/placeholders/power/LiPo_4S_10000mAh_175x64x38mm_GCS.stl",
       "gcs/AGENTS.md",
       "gcs/LICENSE",
+      "gcs/README.md",
       "gcs/TODO.md",
       "gcs/WBS.md",
       "gcs/skipper/README.md",
@@ -14265,6 +14405,7 @@
     "avionics-hardware": [
       "avionics/AGENTS.md",
       "avionics/LICENSE",
+      "avionics/README.md",
       "avionics/TODO-1-9-COMPLETION-STATUS.md",
       "avionics/TODO.md",
       "avionics/WBS.md",
@@ -14686,6 +14827,7 @@
     "deferred-future": [
       "deferred/AGENTS.md",
       "deferred/LICENSE",
+      "deferred/README.md",
       "deferred/TODO.md",
       "deferred/WBS.md",
       "deferred/aft-edf/README.md",
@@ -14714,6 +14856,7 @@
     "build-guide": [
       "graphical-build-guide/AGENTS.md",
       "graphical-build-guide/LICENSE",
+      "graphical-build-guide/README.md",
       "graphical-build-guide/REVN_BUILD_GUIDE_24IN.md",
       "graphical-build-guide/TODO-old.md",
       "graphical-build-guide/TODO.md",
@@ -14865,6 +15008,7 @@
     "build-tooling": [
       "tools/AGENTS.md",
       "tools/LICENSE",
+      "tools/README.md",
       "tools/TODO.md",
       "tools/add_landing_gear_bosses.py",
       "tools/bake_hull_frame.py",
