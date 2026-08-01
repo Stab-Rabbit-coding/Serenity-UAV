@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Rev S reconciliation drafted by:** Claude Opus 4.8 (2026-07-19)
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **BOM designator:** `MAL-TILT-ENC-PCB` (`current-specification/bom_revS.csv`)
 **Revision:** S (2026-07-19) — AKM **AK7455** off-axis sensor selected; pinout verified
 against the AK7455 datasheet (doc 200800064-E-00, `avionics/datasheets/ak7455-en-datasheet-myakm.pdf`)

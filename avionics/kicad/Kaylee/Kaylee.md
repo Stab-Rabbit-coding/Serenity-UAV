@@ -3,7 +3,7 @@
 *Named after Kaylee Frye, ship's mechanic, Firefly-class vessel Serenity.*
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Revision:** R (Rev R baseline; carried forward from Rev A, 2026-06-07; no design changes)
 **Date:** 2026-06-11
 **Status:** Schematic complete — PCB layout pending DRC sign-off

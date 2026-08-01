@@ -351,7 +351,7 @@ When you reach this state, todo 1.2b is **complete**:
 - pcbnew Python module (part of KiCad package)
 - kicad-cli (command-line tool)
 
-**License:** CC BY 4.0 (Creative Commons Attribution)
+**License:** CC BY-SA 4.0 (Creative Commons Attribution)
 
 ---
 

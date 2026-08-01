@@ -67,8 +67,16 @@ pick one silently — see §11.
 
 ## 3. Attribution and Licensing
 
-All work is published under **CC BY 4.0**. Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-(personal copyright retained; avionics boards are marked with his personally owned LLC name).
+Work is **dual-licensed** by content type — see `docs/attribution_and_licencing.md` for the
+full policy and the per-subsystem `LICENSE` federation map:
+- **Hardware/CAD/PCB design files** (airframe SCAD/STL/FCStd, avionics KiCad
+  schematics/layouts/Gerbers) — **CERN-OHL-W 2.0**. Root `LICENSE`, `airframe/LICENSE`,
+  `avionics/LICENSE`.
+- **Documentation, code, scripts, and non-hardware drawings** — **CC BY-SA 4.0**.
+  `docs/LICENSE`, `tools/LICENSE`, and other subsystem `LICENSE` files.
+
+Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (personal copyright retained; avionics
+boards are marked with his personally owned LLC name).
 
 - **Never fabricate a reference, citation, standard, or other resource.**
 - Cite every resource used, whether or not the license requires it.
@@ -80,8 +88,9 @@ All work is published under **CC BY 4.0**. Author: Steve Griffing, PE(CSE), CISS
   **must** be cited in the source file's docstring/comment block and in the commit message.
 - Derivative files carry the **full attribution chain** back to upstream sources.
 - **Before committing any model, image, KiCad symbol, SCAD file, STL, or code snippet**,
-  confirm its license is compatible with CC BY 4.0. Only license-compatible items are
-  integrated.
+  confirm its license is compatible with the applicable project license — CERN-OHL-W 2.0 for
+  hardware/CAD/PCB files, CC BY-SA 4.0 for documentation/code/scripts/drawings (see
+  `docs/attribution_and_licencing.md`). Only license-compatible items are integrated.
 
 ## 4. Standards Vetting
 

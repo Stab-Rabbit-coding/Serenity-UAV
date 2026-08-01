@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Drafted by:** Claude Fable 5 (Anthropic), 2026-07-25/26
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **BOM designator:** `MAL-CAN-PERIPH-GW-PCB`
 **Revision:** 2 (2026-07-26) — promoted to `N_STACKS=4` (deployed configuration)
 **Status:** Schematic + PCB regenerated at the deployed configuration, **`N_STACKS=4`**

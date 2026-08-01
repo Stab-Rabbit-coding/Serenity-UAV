@@ -9,7 +9,7 @@
 > historical reference for the Rev M 18-inch design iteration.
 
 **Author:** Steve Griffing, PE(CSE) \[Control Systems Engineering\], CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Year:**2026 |**Status:** Public release
 
 > Fan engineering work inspired by the Firefly-class transport ship _Serenity_
@@ -25,7 +25,8 @@
 | Hull geometry         | Peter Farell                     | CC BY 4.0  | printables.com/model/548545    |
 | EDF nozzles           | BamJr                            | CC BY 4.0  | thingiverse.com/thing:2991269  |
 | Blueprint proportions | Mandel + Earls / QMx / Universal | © 2007 QMx | 269 ft × 170 ft × 79 ft ratios |
-| All other design      | Steve Griffing                   | CC BY 4.0  | This project                   |
+| All other design (hardware/CAD/PCB) | Steve Griffing     | CERN-OHL-W 2.0 | This project                |
+| All other design (docs/code/scripts) | Steve Griffing    | CC BY-SA 4.0 | This project                  |
 
 ---
 

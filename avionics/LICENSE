@@ -1,3 +1,18 @@
+Serenity UAV — avionics — License
+
+Scope: Wash, Zoe, Kaylee, Emma, Jayne, and CAN-PERIPH-GW-1 PCB schematics,
+layouts, and Gerber files (all original KiCad hardware design work).
+License: CERN-OHL-W 2.0.
+
+This file federates from the project root LICENSE and
+docs/attribution_and_licencing.md (the dual-license policy and the
+CERN-OHL-W 2.0 Available Component boundary for upstream reference
+geometry). Third-party components keep their own terms — see
+REFERENCES.md and current-specification/LICENSE_AND_ATTRIBUTION.md for
+the full chain.
+
+---
+
 CERN Open Hardware Licence Version 2 - Weakly Reciprocal
 
 
