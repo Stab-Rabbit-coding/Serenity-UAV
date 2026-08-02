@@ -16,7 +16,8 @@ generate_cargo_mounts.py
 Generate STL files for all Serenity UAV cargo handling equipment mounts.
 
 Components generated (all to thingverse-serenity/files-hollowed-18in/):
-    cargo_winch_pedestal_port.stl   -- Port axle clamp + bearing seat + SPT5425LV cradle (CF-PETG, 1)
+    cargo_winch_pedestal_port.stl   -- Port axle clamp + bearing seat + SPT5425LV
+                                        cradle (CF-PETG, 1)
     cargo_winch_pedestal_stbd.stl   -- Stbd axle clamp + bearing seat + pawl/solenoid (CF-PETG, 1)
     cargo_winch_spool_r2.stl        -- Dyneema drum, twin bearings + ratchet ring (CF-PETG, 1)
     cargo_winch_pawl.stl            -- Ratchet pawl lever (CF-PETG, print 1)
