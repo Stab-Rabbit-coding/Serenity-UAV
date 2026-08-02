@@ -22,7 +22,8 @@
 //      The mortise pocket is sized to the wing root TENON (fuselage_root_tab
 //      30 W × 20 H × 12 deep) + 0.3 mm slip + a positive-stop shoulder.
 //   2. ROOT BEARING SEAT — F688ZZ (8×16×5) supporting the inboard spar end.
-//   3. SERVO MOUNT — DS3218MG (≈40×20×40 mm) mounted FLAT against the outboard
+//   3. SERVO MOUNT — SPT5425LV + LibreServo v2 (was DS3218MG; ≈40.5×20×40.5 mm,
+//      REFERENCES.md REF-SENSOR-013) mounted FLAT against the outboard
 //      side bulkhead (long faces in the Y–Z plane, only the 20 mm width into the
 //      bay) so it does NOT intrude on the cargo volume.  Drives a horn on the
 //      spar via a 2 mm pushrod + M2 clevis (repo hardware); linkage throw for the
@@ -61,8 +62,8 @@ BRG_W         =  5.0;    // [mm] bearing width
 BRG_BOSS_OD   = 22.0;    // [mm] bearing boss OD (≥ 3 mm wall around the seat)
 BRG_BOSS_L    = 10.0;    // [mm] boss length (seat + backing)
 
-// ── DS3218MG servo ────────────────────────────────────────────────────────────
-SRV_L = 40.0; SRV_W = 20.0; SRV_H = 40.0;   // [mm] body (L,H are the long faces)
+// ── SPT5425LV servo (was DS3218MG) — REFERENCES.md REF-SENSOR-013 ─────────────
+SRV_L = 40.5; SRV_W = 20.0; SRV_H = 40.5;   // [mm] body (L,H are the long faces)
 SRV_LUG_L = 54.0;                            // [mm] tab-to-tab length
 SRV_WALL = 2.5;                              // [mm] cradle wall
 

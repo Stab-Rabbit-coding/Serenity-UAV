@@ -156,6 +156,24 @@ designs) matches root `AGENTS.md`'s explicit goal: *"Avionics, comms, and
 software are designed for reuse on other UAV/UGV/USV/robot platforms, not just
 this airframe."*
 
+**⚠ Open item, added 2026-08-02 — LibreServo v2 needs differential RS-485, not
+single-wire TTL.** The nacelle tilt servos and the cargo winch servo are all
+migrating to SPT5425LV converted with LibreServo v2 (`REFERENCES.md`
+"Servo Fleet Standardisation, 2026-08-02"; `docs/CARGO_WINCH_SPECIFICATION.md`
+Rev C §3.1.1). LibreServo v2's daisy-chain bus is genuine differential RS-485
+(an A/B pair through an onboard transceiver), not the single-wire half-duplex
+TTL scheme `FLEX_TTL_GPIO` was designed for above. `J_FLEX` exposes a bare
+`FLEX_UART_TX/RX` pair but no RS-485 transceiver of its own for this local
+servo drop — this board's own isolated RS-485 trunk (Section E, ISOW1412,
+`RS485_A`/`RS485_B`) is dedicated to the board-to-board uplink to Pilot/XO,
+not intended as a shared local servo sub-bus without further isolation/
+topology review. **Not resolved here.** Two options, neither selected:
+(1) add a local RS-485 transceiver fed from `FLEX_UART_TX/RX`, dedicated to
+the servo drop; or (2) extend the existing isolated RS-485 trunk to also
+carry the local servo traffic, if that can be done without compromising the
+isolation/topology it exists for. Filed in `airframe/fuselage-mid/WBS.md`
+§1.1.1.2.1b and `avionics/WBS.md`.
+
 ## Stackable: N complete trust modules on one PCB
 
 Set `N_STACKS` at the top of `scripts/gen_can_periph_gw_sch.py` (and the PCB
@@ -335,6 +353,12 @@ REF-SENSOR-010 and "Removed / Superseded Citations".
 6. **`Pilot.md` §13** still lists a legacy AS5600 I²C `J_ENC` — needs a
    documentation-only edit to note the encoder is now read via this gateway,
    not directly. Flagged, not edited here (Pilot's own file).
+7. **LibreServo v2 RS-485 servo bus (added 2026-08-02), not resolved.** See
+   "Servo actuator gateway" above — `J_FLEX` has no local RS-485 transceiver
+   for the differential bus the SPT5425LV/LibreServo v2 servos now need.
+   Decide the transceiver approach (dedicated part fed from
+   `FLEX_UART_TX/RX`, or extend the existing isolated RS-485 trunk) before
+   winch or nacelle-tilt firmware bring-up.
 
 ## Verification
 

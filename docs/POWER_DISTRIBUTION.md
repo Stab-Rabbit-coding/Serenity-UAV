@@ -94,7 +94,7 @@ over-current threshold in governor_config.h: `EDF_ESC_OVERCURRENT_A = 80 A`).
 | XO (radios TX simultaneous) | 4 | 1 500 | 2 500 | 6 000 | 10 000 |
 | Commo sub-modules | 4 | 100 | 250 | 400 | 1 000 |
 | HX711 + load cell | 1 | 10 | 10 | 10 | 10 |
-| STS3215 winch servo (via CAN-PERIPH-GW, RAIL-2) | 1 | 200 | 1200 | 200 | 1200 |
+| SPT5425LV/LibreServo v2 winch servo (via CAN-PERIPH-GW, RAIL-2) ⚠ current not yet bench-verified, STS3215-era figure carried forward | 1 | 200 | 1200 | 200 | 1200 |
 | **5 V subtotal** | — | — | — | **13 410** | **26 710** |
 
 At 5 V / 22.2 V conversion: 26.7 A × 5 V / 22.2 V ≈ **6.0 A from VBAT** at peak.
@@ -170,16 +170,18 @@ margin and worsens single-fault brown-out) — not the flight configuration.
 
 | Load | Qty | Stall (mA) | Running (mA) | Total run (mA) |
 |------|-----|-----------|--------------|----------------|
-| Nacelle tilt servos (DS3218MG, ≥25 kg·cm @ 6 V) | 2 | 1 500 | 150 | 300 |
-| RCS proportional valve servos (SG90 class, Phase 11) | 4 | 700 | 70 | 280 |
-| Cargo door servo (SG90) | 1 | 700 | 70 | 70 |
-| Cargo release servo (SG90) | 1 | 700 | 70 | 70 |
+| Nacelle tilt servos (SPT5425LV/LibreServo v2, 25-26 kgf·cm @ 6 V — was DS3218MG) ⚠ current not yet bench-verified, DS3218MG-era figure carried forward | 2 | 1 500 | 150 | 300 |
+| RCS proportional valve servos (SG90 class + OpenServoCore, Phase 11) | 4 | 700 | 70 | 280 |
+| Cargo door servo (SG90 + OpenServoCore) | 1 | 700 | 70 | 70 |
+| Cargo release servo (SG90 + OpenServoCore) | 1 | 700 | 70 | 70 |
 | **6 V subtotal (running)** | — | — | — | **720** |
 | **6 V subtotal (all stalled simultaneously)** | — | — | — | **7 400** |
 
-All-servo stall is a transient; the BEC is sized for 5 A continuous (stall of 2×DS3218MG
-+ 3×SG90 ≈ 5.1 A — marginal; the 6 V BEC is sized at 5 A with up to 7 A burst for
-≤100 ms, which covers brief simultaneous stall events).
+All-servo stall is a transient; the BEC is sized for 5 A continuous (stall of 2×SPT5425LV
++ 3×SG90 ≈ 5.1 A, carrying forward the DS3218MG-era current figure — marginal; the 6 V BEC
+is sized at 5 A with up to 7 A burst for ≤100 ms, which covers brief simultaneous stall
+events). Re-check once the SPT5425LV is bench-measured (REFERENCES.md Open Standards
+Verification Items).
 
 At 6 V / 22.2 V: 5.3 A × 6 V / 22.2 V ≈ **1.4 A from VBAT** at stall.
 
@@ -536,7 +538,7 @@ Minimum PocketBeagle 2 Industrial VIN: 4.75 V (AM6254 VIN absolute minimum 4.5 V
 ### 9.3 Servo BEC Brown-Out
 
 6 V BEC (TPS54540 configured for 6.0 V ±1 %): minimum output 5.94 V.
-DS3218MG servo minimum operating voltage: 4.8 V.
+SPT5425LV servo minimum operating voltage: 4.8 V (was DS3218MG, same rating — REF-SENSOR-013).
 SG90 minimum operating voltage: 4.8 V.
 Margin: 5.94 V − 4.8 V = **1.14 V** — safe; brown-out requires catastrophic BEC failure.
 

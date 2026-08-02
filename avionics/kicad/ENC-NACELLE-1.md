@@ -246,7 +246,7 @@ Wing-tip radial reaction ≈ 19 N (4.3 lbf) dynamic — geometry-limited, not lo
   `hall_sensor_cableway()`, `HALL_*` (comments still name MT6701 — to update).
 - `airframe/openscad/nacelles/_export_pivot_slab.scad` — `nacelle_hall_ring_hub()` (ring + hub).
 - `airframe/openscad/fuselage/cargo/cargo_spar_drive.scad` — cargo-bay spar drive (the
-  DS3218MG actuator whose wind-up this true-tilt feedback rejects).
+  SPT5425LV/LibreServo v2 actuator, was DS3218MG, whose wind-up this true-tilt feedback rejects).
 - `docs/TILT_SPAR_ANALYSIS.md` §1 / §3.5 — tilt-feedback rationale, ferrous-spar mitigation.
 - `avionics/WBS.md` §1.9.1 ; `avionics/emi-hardening/WBS.md` §1.4.4 / §1.4.6.
 - `airframe/wings-nacelles/WBS.md` §1.1.3.6 — airframe-side task detail.

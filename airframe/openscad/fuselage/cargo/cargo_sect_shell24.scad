@@ -802,24 +802,26 @@ module latch_catch_lip(x_start, z_pos) {
 //   CF-PETG shear yield ≈ 25 MPa → FOS_shear = 472  ✓✓✓
 //
 // ── Nacelle tilt servo torque at mount block ──────────────────────────────
-// Servo: DS3218MG class; rated 25 kg·cm at 6 V = 2.45 N·m (minimum spec).
+// Servo: SPT5425LV class (was DS3218MG); rated 26 kgf·cm at 6 V = 2.55 N·m
+//   (REFERENCES.md REF-SENSOR-013, 2026-08-02 servo fleet standardisation —
+//   up slightly from DS3218MG's 2.45 N·m minimum-spec figure, re-checked below).
 // Mount bolt pattern: 4× M3 heat-set inserts at ±NSVMT_HOLE_S_X = ±17.5 mm in Y
 //   (was "in X" — re-labelled 2026-06-22 when the mount block's mirror axis
 //   moved from Z to X; the moment-arm distance itself is unchanged).
 //   Moment arm between bolt-pair couple: 2 × 17.5 = 35.0 mm = 0.035 m
 //   Bolt-pair load at servo stall: F_pair = τ_servo / moment_arm
-//     = 2.45 / 0.035 = 70.0 N → 35.0 N per individual bolt
+//     = 2.55 / 0.035 = 72.9 N → 36.4 N per individual bolt
 //   M3 insert pullout in CF-PETG: P_out ≈ 400 N (Ruthex RX-M3x5.7; ISO 14589)
-//   FOS_bolt = 400 / 35.0 = 11.4  ✓  (>> 4.0 target)
+//   FOS_bolt = 400 / 36.4 = 11.0  ✓  (>> 4.0 target)
 //
 // Nacelle pushrod dynamic load (at sector gear radius, stall transient):
-//   F_pushrod = τ_servo / r_sector = 2.45 / 0.022 = 111 N
+//   F_pushrod = τ_servo / r_sector = 2.55 / 0.022 = 115.9 N
 //   Carried in pushrod axially (tension/compression).  Does NOT load mount block.
 //
 // References:
 //   Selig & Guglielmo (1997) J. Aircraft 34(1):72–79 (S1223 CL data).
   //   ASTM F2910-14 [ASTM F38]; FOS_min = 4.0 design judgment for FDM composite joints.
-//   DS3218MG datasheet; Ruthex RX-M3x5.7; ISO 14589 (heat-set inserts).
+//   REFERENCES.md REF-SENSOR-013 (SPT5425LV); Ruthex RX-M3x5.7; ISO 14589 (heat-set inserts).
 //   wings_s1223_revo.scad SPAR_BORE_X, WING_ROOT_TAB_*, WING_CHORD_ROOT.
 //   nacelle_sector_gear.scad SLOT_BC_R = 18 mm; nacelle_pod_50mm_tandem.scad.
 //   PHASED_BUILD_GUIDE.md Phase 3 tilt servo installation.
@@ -894,11 +896,15 @@ CARGO_X_WALL_PORT = -201.5;   // mm, local-X exterior face mapping to hull PORT
 WING_ROOT_Z_CEN = 62.5;   // mm, VERIFY against final wing thickness profile at root
 
 // Nacelle tilt servo mount block (one per Z side)
-//   Target servo class: DS3218MG or equivalent — body 40 × 20 × 38 mm;
+//   Target servo: SPT5425LV + LibreServo v2 (was DS3218MG) — body
+//   40.5 × 20 × 40.5 mm (REFERENCES.md REF-SENSOR-013);
 //   output shaft points outboard (Z direction, toward nacelle).
 //   A separately-printed nacelle_servo_bracket.stl clamps the servo body to
-//   this block via 4× M3×10 SHCS (one per heat-set insert).
-//   Ref: DS3218MG datasheet; PHASED_BUILD_GUIDE.md Phase 3; load analysis above.
+//   this block via 4× M3×10 SHCS (one per heat-set insert).  The pad's own
+//   bolt pattern (below) is independent of servo body size, so the
+//   2026-08-02 servo migration required no change to this block itself.
+//   Ref: REFERENCES.md REF-SENSOR-013 (SPT5425LV); PHASED_BUILD_GUIDE.md
+//   Phase 3; load analysis above.
 // NSVMT_Z_OFFSET placement constraint — RE-DERIVED 2026-06-22 (was
 // NSVMT_X_CEN; see CARGO_X_WALL_*/WING_ROOT_Z_CEN comment above for why X is
 // no longer a free placement axis for this pad).  Old logic offset the pad
@@ -1136,8 +1142,10 @@ module spar_bearing_block(side) {
 // ----------------------------------------------------------------------------
 // Module: nacelle_servo_mount_block
 //   Solid rectangular mounting pad on the interior LATERAL (X) wall for the
-//   nacelle tilt servo (DS3218MG class: 40 × 20 × 38 mm body, ±17.5 mm lug
-//   spacing).  Provides:
+//   nacelle tilt servo (SPT5425LV + LibreServo v2, was DS3218MG:
+//   40.5 × 20 × 40.5 mm body, ±17.5 mm lug spacing — REFERENCES.md
+//   REF-SENSOR-013).  Bolt pattern is independent of body size, so this pad's
+//   own geometry is unchanged by the 2026-08-02 servo migration.  Provides:
 //     • Flat inboard face for servo body seating (normal to X axis)
 //     • 4× M3 heat-set insert pockets (±17.5 mm × ±8 mm pattern)
 //     • 10 × 6 mm lead conduit slot through inboard face for servo wiring
@@ -1156,9 +1164,9 @@ module spar_bearing_block(side) {
 //   side = +1: port wall  (pad protrudes inward +X, shaft toward port nacelle)
 //   side = -1: stbd wall  (pad protrudes inward -X, shaft toward stbd nacelle)
 //
-//   Servo stall torque reaction: 4× M3 inserts at 35 mm couple arm → 35 N/bolt.
-//   FOS_bolt = 400 / 35 = 11.4.  See load analysis above.
-//   Ref: DS3218MG datasheet; PHASED_BUILD_GUIDE.md Phase 3 tilt servo install.
+//   Servo stall torque reaction: 4× M3 inserts at 35 mm couple arm → 36.4 N/bolt.
+//   FOS_bolt = 400 / 36.4 = 11.0.  See load analysis above.
+//   Ref: REFERENCES.md REF-SENSOR-013 (SPT5425LV); PHASED_BUILD_GUIDE.md Phase 3 tilt servo install.
 // ----------------------------------------------------------------------------
 module nacelle_servo_mount_block(side) {
     z_cen = WING_ROOT_Z_CEN + NSVMT_Z_OFFSET;   // see NSVMT_Z_OFFSET note above —
@@ -1184,8 +1192,8 @@ module nacelle_servo_mount_block(side) {
 
         // 4× M3 heat-set insert pockets bored from inboard face into pad,
         // bore axis along X.
-        //   ±NSVMT_HOLE_S_X (±17.5 mm) in Y: matches DS3218MG lug-hole spacing.
-        //   ±NSVMT_HOLE_S_Y (±8.0 mm)  in Z: matches DS3218MG lug width / 2.
+        //   ±NSVMT_HOLE_S_X (±17.5 mm) in Y: matches the servo bracket's lug-hole spacing.
+        //   ±NSVMT_HOLE_S_Y (±8.0 mm)  in Z: matches the servo bracket's lug width / 2.
         for (dy = [-NSVMT_HOLE_S_X, NSVMT_HOLE_S_X])
         for (dz = [-NSVMT_HOLE_S_Y, NSVMT_HOLE_S_Y])
             translate([x_bore_lo, NSVMT_Y_CEN + dy, z_cen + dz])
@@ -1378,8 +1386,9 @@ union() {
             //     LATERAL (X) walls.  FIXED 2026-06-22 — was mirrored across
             //     Z; see CARGO_X_WALL_*/WING_ROOT_Z_CEN comment above.
             //     Each block: 52(Y)×30(Z) mm face × 8 mm deep (X); 4× M3
-            //     heat-set inserts; 10×6 mm lead conduit slot.  DS3218MG-class
-            //     servo (≥25 kg·cm) mounts via separately-printed
+            //     heat-set inserts; 10×6 mm lead conduit slot.  SPT5425LV +
+            //     LibreServo v2 (was DS3218MG-class; ≥25 kgf·cm) servo mounts
+            //     via separately-printed
             //     nacelle_servo_bracket.stl using 4× M3×10 SHCS through the
             //     bracket into these inserts.
             //     Block Y range: NSVMT_Y_CEN ± 26 mm = −314.6 .. −262.6 mm
