@@ -743,7 +743,7 @@ Rev B's open item here was whether the MSPM0G3507 could drive a single-wire
 half-duplex UART on `FLEX_TTL_GPIO` for the STS3215. That is moot under Rev C:
 LibreServo v2 needs genuine **differential RS-485** (an A/B pair through a
 transceiver), which `J_FLEX`'s bare `FLEX_UART_TX/RX` pins do not provide by
-themselves. Two ways to close this, **neither selected here**:
+themselves. Two interim ways to close this, **neither selected here**:
 
 1. **Add a local RS-485 transceiver at the gateway or in the servo harness**,
    fed from `FLEX_UART_TX/RX`, dedicated to this one servo drop.
@@ -752,10 +752,26 @@ themselves. Two ways to close this, **neither selected here**:
    compromising the isolation/topology that trunk exists for — this needs
    deliberate review, not an assumption.
 
+**Intended end state (per the LibreServo v2 fork maintainer, 2026-08-02,
+not yet shipped):** the fork's in-progress isolated-RS-485 + isolated-CAN-FD +
+SLB9672 TPM upgrade (`PCB/RS485-CANFD-TPM-upgrade.md`, schematic-only as of
+this writing — see REF-SENSOR-014) is intended to let a converted servo **drop
+directly onto the airframe's isolated CAN-FD and RS-485 trunks as a
+self-signing bus node, with no `CAN-PERIPH-GW-1` bridge required for this
+application at all.** If and when that lands, options 1/2 above become moot —
+the servo attaches to the same isolated trunks Pilot/XO/Observer/the gateway
+boards already use, TPM-signs its own frames, and `CAN-PERIPH-GW-1`'s role for
+the winch/nacelle-tilt servos (bridging RS-485 command traffic onto the
+CAN-FD/RS-485 trunk) goes away. **Not yet true** — the fork's TPM work has not
+started, the RS-485/CAN-FD work is schematic-only (no footprints, no board,
+no firmware port), so options 1/2 remain the near-term path until it ships.
+Tracked for re-check; see `avionics/WBS.md`.
+
 Filed in `avionics/WBS.md` and `REFERENCES.md` "Open Standards Verification
 Items" ("LibreServo v2 fork — RS-485 differential bus electrical
-integration"). Do not wire either option silently; it changes the gateway's
-BOM and possibly its schematic.
+integration"). Do not wire either interim option as a permanent architecture
+decision; it changes the gateway's BOM and possibly its schematic, and may be
+short-lived once the fork's direct-bus-attach capability ships.
 
 ### 5.2 Failsafe state table
 

@@ -430,12 +430,18 @@ Standardisation, 2026-08-02" (fleet-wide rationale) — do not restate their con
     publishes stall current or the exact rotation-pin removal procedure. Blocks final RAIL-2
     sizing (`docs/POWER_DISTRIBUTION.md` §3.2.1) and the nacelle-tilt servo rail, and the
     build-guide step for pin removal. Do not fabricate either figure.
-- [ ] **RS-485 gateway integration (both winch and nacelle-tilt applications).** LibreServo
-    v2's differential RS-485 bus has no local transceiver on `CAN-PERIPH-GW-1`'s `J_FLEX`
-    header (which was sized for the STS3215's single-wire half-duplex TTL scheme). Decide:
-    add a transceiver fed from `FLEX_UART_TX/RX`, or extend the gateway's own isolated
-    RS-485 uplink trunk (ISOW1412) to this local servo drop. Cross-ref `avionics/WBS.md`,
-    `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`.
+- [ ] **RS-485 gateway integration (both winch and nacelle-tilt applications) — interim.**
+    LibreServo v2's differential RS-485 bus has no local transceiver on `CAN-PERIPH-GW-1`'s
+    `J_FLEX` header (which was sized for the STS3215's single-wire half-duplex TTL scheme).
+    Decide: add a transceiver fed from `FLEX_UART_TX/RX`, or extend the gateway's own
+    isolated RS-485 uplink trunk (ISOW1412) to this local servo drop. Cross-ref
+    `avionics/WBS.md`, `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`.
+    **Watch before committing:** the LibreServo v2 fork maintainer confirmed (2026-08-02)
+    the fork's in-progress isolated-RS-485/CAN-FD/SLB9672-TPM upgrade is intended to let a
+    converted servo attach directly to the airframe's isolated CAN-FD/RS-485 trunks as its
+    own self-signing node, eliminating the gateway-bridge need for this application entirely
+    — not shipped yet (schematic-only, TPM not started). If it lands before this item is
+    implemented, re-scope to direct-attach instead of building an interim bridge.
 - [ ] **Nacelle tilt firmware — command scheme change.** Pilot's servo-PWM generation
     (`avionics/firmware/WBS.md` §4.2) moves to LibreServo v2's RS-485 protocol; the servo's
     real range limit stays the external CF-PETG hard-stop blocks in the gear train
