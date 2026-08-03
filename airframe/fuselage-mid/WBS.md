@@ -284,13 +284,11 @@ do not restate its dimensions here.
     `BRG-MR84ZZ` ×2, `SHAFT-SS-4MM`, `SPRING-PAWL`, `DOWEL-M2-10`, `SS34-CATCH`) added to
     `docs/bom_revR.json` with masses, notes and cost roll-up.
 
-- [ ] **★ BLOCKER — STS3215 datasheet verification (REFERENCES.md REF-SENSOR-012, TODO §0.x).**
-    The datasheet is in the repo but is a scanned/CID-encoded PDF that could not be extracted
-    (no OCR toolchain in the build environment). Read off and record: **(a)** case envelope +
-    mounting-boss pattern, **(b)** torque vs. the ≥ 3.2 kgf·cm requirement, **(c)** mass
-    (60 g assumed — dominates the +98.6 g delta and T/W 1.613 → 1.557), **(d)** stall current
-    (1.2 A budgeted; resize RAIL-2 if > ~2.5 A). **Blocks STL generation and procurement.**
-    Do not fabricate these values.
+- [x] **BLOCKER RESOLVED via servo supersession, not datasheet recovery (2026-08-02).**
+    The STS3215 datasheet remains unreadable, but the servo itself is superseded — see
+    §1.1.1.2.1b below. Case envelope, mass, and torque are now published COTS figures for the
+    replacement (SPT5425LV, REF-SENSOR-013); stall current remains unverified under the new
+    part too (§1.1.1.2.1b).
 - [ ] **★ CONTAINMENT — the spool must never leave the cargo bay (spec §3.10).**
     Designating the spool sacrificial (§3.8) made it a planned-degradation part
     sitting directly above clamshell doors that open 180° to free air. Rev B
@@ -349,11 +347,12 @@ do not restate its dimensions here.
 - [ ] **Set the servo torque ceiling below `T_slip`** — protection layer 1 of 4, so
     routine lifting never reaches the friction interface and the sacrificial hub is
     consumed only by genuine overload events. Spec §3.8.3.
-- [ ] **Servo mode: encoded continuous rotation** (position/servo mode cannot
-    express 23.2 turns; stepper mode's open-loop count becomes fiction after a hub
-    slip). Gateway closes position on the AK7455. Confirm mode indices, selecting
-    register, and per-mode torque-ceiling settability against the datasheet — part
-    of the §3.1 gate; **no register number is invented in the spec**. Spec §3.9.
+- [ ] **Servo mode: continuous rotation by construction** (Rev C — the STS3215's
+    register-selected mode scheme no longer applies; SPT5425LV + LibreServo v2 is
+    continuous-rotation by construction once the limit pin is removed, §1.1.1.2.1b).
+    Gateway closes position on the AK7455. Confirm LibreServo v2 wire-protocol
+    commands (rate, torque-ceiling, readback) against its protocol docs — **no
+    command/register value is invented in the spec**. Spec §3.9.
 - [ ] **Mark the spool a consumable** — wear item in the build guide, inspection
     interval, slip witness-mark, spare in the field kit; hand-tool replacement per
     root `AGENTS.md` §7.
@@ -374,9 +373,12 @@ do not restate its dimensions here.
     self-taps into the gondola *ceiling*; the two pedestals need real M3 heat-set boss stations
     on the bay floor, FreeCAD-verified against the cargo-door 180° swing envelope
     (`generate_cargo_doors.py`) and clear of `CARGO_CAM_POS` / the Observer nadir bosses.
-- [ ] **Half-duplex TTL bus wiring.** Confirm the MSPM0G3507 can drive a single-wire UART on
-    `FLEX_TTL_GPIO`, or add a direction-steering resistor/buffer at the harness. Same pinmux
-    caveat as `CAN-PERIPH-GW-1.md` open item 4. Cross-ref `avionics/WBS.md`.
+- [ ] **RS-485 differential bus wiring (Rev C — supersedes the Rev B half-duplex TTL item).**
+    LibreServo v2 needs a true differential RS-485 pair, not the STS3215's single-wire
+    half-duplex TTL scheme `FLEX_TTL_GPIO` was sized for. Decide: add a local RS-485
+    transceiver fed from `J_FLEX.FLEX_UART_TX/RX`, or extend the gateway's own isolated
+    RS-485 trunk (ISOW1412) to this drop — not decided in the spec. Cross-ref
+    `avionics/WBS.md`, `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`.
 - [ ] **Catch solenoid drive circuit.** AO3400 N-FET + 100 Ω gate + **10 kΩ gate pull-down**
     (undriven/resetting MCU must leave the catch ENGAGED) + SS34 flyback across the coil.
 - [ ] **Bench-calibrate the ratchet slip threshold to 8.0 N ± 1.0 N** measured at the line, via
@@ -390,13 +392,72 @@ do not restate its dimensions here.
     driver; HX711 re-hosted from Cape-B to the gateway; Shepherd watchdog cuts RAIL-2 on
     heartbeat timeout (which *engages* the catch). Bus IDs assigned in firmware, not in the
     spec. Cross-ref `avionics/firmware/WBS.md`.
-- [ ] **Re-run the §6 mass/CG table** once the real STS3215 mass is known; propagate to
-    `docs/flight_envelope.md` if AUW moves materially.
+- [ ] **Re-run the §6 mass/CG table** once the SPT5425LV+LibreServo v2 unit is bench-weighed;
+    propagate to `docs/flight_envelope.md` if AUW moves materially.
 - [ ] *(Optional, out of scope for this change)* Move the door/release SG90s onto the
     gateway's spare `FLEX_PWM_IO` and retire `DRV8833-CARGO` + `cargo_drv8833_tray.stl`.
 
 **BLOCKS:** Phase 8 cargo winch assembly; `build_guide_23_winch_latch.svg` rebuild;
 Flight Engineer RAIL-2 third BEC channel (`docs/POWER_DISTRIBUTION.md` §11.1).
+
+###### 1.1.1.2.1b *Servo Fleet Standardisation — SPT5425LV + LibreServo v2 (Rev C, 2026-08-02)*
+
+Supersedes §1.1.1.2.1a's STS3215 servo selection and extends the same treatment to the
+2× nacelle tilt servos (previously DS3218MG, uncited). All three high-torque servos on the
+airframe now share one physical part (SPT5425LV, REF-SENSOR-013) running one open-source
+control board (LibreServo v2, REF-SENSOR-014), each with the servo's internal
+rotation-limiting pin removed. Canonical source:
+[`docs/CARGO_WINCH_SPECIFICATION.md`](../../docs/CARGO_WINCH_SPECIFICATION.md) **Rev C**
+§3.1/§3.1.1/§3.1.2/§3.9/§5.1 (winch-specific) and `REFERENCES.md` "Servo Fleet
+Standardisation, 2026-08-02" (fleet-wide rationale) — do not restate their content here.
+
+- [x] **`docs/CARGO_WINCH_SPECIFICATION.md` Rev C authored** *(2026-08-02)* — servo section
+    rewrite; STS3215-era open items (datasheet gate, half-duplex TTL wiring, mode-register
+    semantics) closed or superseded by SPT5425LV/LibreServo v2-specific equivalents.
+- [x] **`REFERENCES.md` updated** *(2026-08-02)* — REF-SENSOR-012 (STS3215) marked
+    SUPERSEDED; REF-SENSOR-013 (SPT5425LV), REF-SENSOR-014 (LibreServo v2), REF-SENSOR-015
+    (OpenServoCore, for the SG90 cargo servos — separate board, separate servo class) added
+    with sourced specifications; four new rows added to "Open Standards Verification Items."
+- [x] **Nacelle tilt bracket updated** *(2026-08-02)* — `nacelle_servo_bracket.scad`
+    `SERVO_BODY_X`/`SERVO_BODY_Z` updated 40.0/38.0 → 40.5/40.5 mm (SPT5425LV envelope);
+    `SERVO_BODY_Y` unchanged at 20.0 mm; stall-torque/FOS check re-run at 2.55 N·m
+    (26 kgf·cm @ 6 V) — FOS 82.4, still far above the 4.0 design-judgment target.
+- [x] **`generate_cargo_mounts.py` comments updated** *(2026-08-02)* — case-envelope gate
+    that blocked `make_winch_pedestal_port()` under the STS3215 selection is resolved
+    (SPT5425LV envelope is a published figure); SG90 bracket docstring notes the
+    OpenServoCore control board and its pre-production status.
+- [ ] **★ Bench-verify the SPT5425LV/LibreServo v2 conversion.** Neither sourced listing
+    publishes stall current or the exact rotation-pin removal procedure. Blocks final RAIL-2
+    sizing (`docs/POWER_DISTRIBUTION.md` §3.2.1) and the nacelle-tilt servo rail, and the
+    build-guide step for pin removal. Do not fabricate either figure.
+- [ ] **RS-485 gateway integration (both winch and nacelle-tilt applications) — interim.**
+    LibreServo v2's differential RS-485 bus has no local transceiver on `CAN-PERIPH-GW-1`'s
+    `J_FLEX` header (which was sized for the STS3215's single-wire half-duplex TTL scheme).
+    Decide: add a transceiver fed from `FLEX_UART_TX/RX`, or extend the gateway's own
+    isolated RS-485 uplink trunk (ISOW1412) to this local servo drop. Cross-ref
+    `avionics/WBS.md`, `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`.
+    **Watch before committing:** the LibreServo v2 fork maintainer confirmed (2026-08-02)
+    the fork's in-progress isolated-RS-485/CAN-FD/SLB9672-TPM upgrade is intended to let a
+    converted servo attach directly to the airframe's isolated CAN-FD/RS-485 trunks as its
+    own self-signing node, eliminating the gateway-bridge need for this application entirely
+    — not shipped yet (schematic-only, TPM not started). If it lands before this item is
+    implemented, re-scope to direct-attach instead of building an interim bridge.
+- [ ] **Nacelle tilt firmware — command scheme change.** Pilot's servo-PWM generation
+    (`avionics/firmware/WBS.md` §4.2) moves to LibreServo v2's RS-485 protocol; the servo's
+    real range limit stays the external CF-PETG hard-stop blocks in the gear train
+    (`docs/NOZZLE_DRIVE_TRADE.md`), not the (now-removed) internal servo pin — firmware still
+    needs its own soft-limit enforcement, not a hardware guarantee from the servo alone.
+- [ ] **`current-specification/bom_revS.json`/`.csv` reconciliation.** These files still
+    carried the retired N20 winch train (never updated to STS3215 under Rev B); reconciled
+    directly to the Rev C SPT5425LV/LibreServo v2 state as part of this change rather than
+    passing through an intermediate STS3215 BOM entry that was never accurate to begin with.
+- [ ] **OpenServoCore maturity re-check before SG90 procurement.** Upstream project status
+    at time of writing is "in active development, nothing here is shippable yet," hardware
+    validated to rev B only. Re-check `github.com/OpenServoCore/open-servo-core` before
+    ordering in flight-article quantity.
+
+**BLOCKS:** Same as §1.1.1.2.1a above, plus Pilot's nacelle-tilt servo firmware
+(`avionics/firmware/WBS.md` §4.2) and the RS-485 gateway decision.
 
 ###### 1.1.1.2.2 *Wing Root*
 

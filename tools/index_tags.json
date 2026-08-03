@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-01",
+  "generated": "2026-08-02",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -9121,7 +9121,7 @@
       "archived": false
     },
     "current-specification/bom_revS.csv": {
-      "description": "Bill of materials, CSV (151 items)",
+      "description": "Bill of materials, CSV (167 items)",
       "tags": [
         "bom",
         "specification"
@@ -9129,7 +9129,7 @@
       "archived": false
     },
     "current-specification/bom_revS.json": {
-      "description": "Bill of materials, JSON (151 items)",
+      "description": "Bill of materials, JSON (167 items)",
       "tags": [
         "bom",
         "specification"

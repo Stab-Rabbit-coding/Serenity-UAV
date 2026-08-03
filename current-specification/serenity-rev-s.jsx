@@ -362,7 +362,7 @@ function TabPropulsion() {
                         ["Travel",       "0° (cruise) → 90° (hover) → 120° (backing)", "Hard stops at −5° and 140°"],
                         ["Pivot Z",      "83 mm from intake (nacelle CG)", "Eliminates gravity torque on servo in all attitudes"],
                         ["Bearing",      "MF104ZZ 4×10×4 mm flanged, 2 per nacelle", "Press-fit; pivot rod = 4 mm CF rod (fixed)"],
-                        ["Servo",        "≥25 kg·cm @ 6V digital metal-gear, 2×", "Fuselage-mounted, one per nacelle"],
+                        ["Servo",        "SPT5425LV + LibreServo v2, 25-26 kgf·cm @ 6V, 2× (was DS3218MG)", "Fuselage-mounted, one per nacelle; rotation-limit pin removed (fleet-standard with the cargo winch servo)"],
                         ["Hard stops",   "CF-PETG blocks bonded at −5° and 140°", "Servo stalls at stop; does not strip"],
                     ]}
                 />

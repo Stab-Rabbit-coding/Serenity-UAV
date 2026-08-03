@@ -6,7 +6,7 @@
      look, change the generator (tools/precommit_index.py), not this
      file. Machine-readable form: tools/index_tags.json -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last generated: 2026-08-01 -->
+<!-- Last generated: 2026-08-02 -->
 
 ## Tag Index
 
@@ -1155,8 +1155,8 @@ WBS.md — Serenity UAV — Avionics Rev S1 Redesign (Commo / XO / Flight Engine
 
 ```text
 AGENTS.md — Current Specification — Agent Instructions [documentation, specification]
-bom_revS.csv — Bill of materials, CSV (151 items) [bom, specification]
-bom_revS.json — Bill of materials, JSON (151 items) [bom, specification]
+bom_revS.csv — Bill of materials, CSV (167 items) [bom, specification]
+bom_revS.json — Bill of materials, JSON (167 items) [bom, specification]
 LICENSE — SERENITY UAV — SPECIFICATION & BOM LICENSING [licensing, specification]
 LICENSE_AND_ATTRIBUTION.md — Serenity-Class Tiltrotor UAV — License & Attribution [documentation, licensing, security, specification]
 README.md — Serenity UAV — Current Specification (Rev S Baseline) [documentation, redundancy-failover, security, specification]
