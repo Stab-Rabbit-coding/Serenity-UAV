@@ -3,7 +3,6 @@
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
 <!-- Last updated: 2026-08-03 — Automated reconciliation pass -->
-Archived 2026-06-10 (renamed to Wash / Zoë within Rev Q):
 
 
                                        scripts archived alongside their boards
@@ -77888,3 +77887,6 @@ avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-07-29_111108.zip — [IG
 avionics/kicad/Kaylee/kicads/~Kaylee.kicad_sch.lck — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Wash/scripts/__pycache__/gen_wash_sch.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
 avionics/kicad/Wash/scripts/__pycache__/sync_wash_pcb_nets.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-08-03) ---
+avionics/kicad/symbols/Jayne_MSPM0G3507_Q1_RGZ.kicad_sym — [PENDING AI CLASSIFICATION]
