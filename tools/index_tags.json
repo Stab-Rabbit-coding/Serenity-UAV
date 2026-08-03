@@ -4770,6 +4770,25 @@
       ],
       "archived": true
     },
+    "archives/root-readme-deep-dive-2026-08-03/README.md": {
+      "description": "Root README Deep-Dive Sections \u2014 Archived 2026-08-03",
+      "tags": [
+        "archive",
+        "documentation"
+      ],
+      "archived": true
+    },
+    "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md": {
+      "description": "Root README \u2014 Archived Deep-Dive Sections (verbatim, pre-2026-08-03)",
+      "tags": [
+        "archive",
+        "documentation",
+        "emi-hardening",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": true
+    },
     "archives/sensorhat_mounting_tray.stl": {
       "description": "STL mesh (ASCII): sensorhat_mounting_tray",
       "tags": [
@@ -11907,6 +11926,8 @@
       "archives/avionics-archives/kicad-archives/archive/XCVR-49MHZ-1.md",
       "archives/docs-superseded/POWER_SYSTEM_Q.md",
       "archives/docs-superseded/README.md",
+      "archives/root-readme-deep-dive-2026-08-03/README.md",
+      "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "archives/serenity/README.md",
       "archives/stale-20260601/README.md",
       "archives/stale-20260601/airframe-stls/fuselage.md",
@@ -12111,6 +12132,7 @@
       "archives/avionics-archives/kicad-archives/archive/gen_cape_b2.py",
       "archives/avionics-archives/kicad-archives/archive/gen_cape_b2_pcb.py",
       "archives/docs-superseded/serenity-rev-q.jsx",
+      "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "archives/serenity-rev-q.jsx",
       "avionics/AGENTS.md",
       "avionics/README.md",
@@ -12168,6 +12190,7 @@
       "airframe/openscad/fuselage/cargo/cargo_sect_shell24.scad",
       "airframe/openscad/fuselage/head_shell24.scad",
       "airframe/openscad/fuselage/middle_canonical_shell24.scad",
+      "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "avionics/AGENTS.md",
       "avionics/README.md",
       "avionics/TODO-1-9-COMPLETION-STATUS.md",
@@ -12226,6 +12249,7 @@
       "archives/chat/journal.txt",
       "archives/docs-superseded/POWER_SYSTEM_Q.md",
       "archives/docs-superseded/serenity-rev-q.jsx",
+      "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "archives/serenity-esc-telem-revH1.jsx",
       "archives/serenity-rev-f-.jsx",
       "archives/serenity-rev-f.jsx",
@@ -13814,6 +13838,8 @@
       "archives/more-files.zip",
       "archives/nacelle-nozzle-gear.jsx",
       "archives/nacelles.jst",
+      "archives/root-readme-deep-dive-2026-08-03/README.md",
+      "archives/root-readme-deep-dive-2026-08-03/deep_dive_sections.md",
       "archives/sensorhat_mounting_tray.stl",
       "archives/serenity firefly transport ship - 2601098.zip",
       "archives/serenity-connectivity-revH.jsx",
