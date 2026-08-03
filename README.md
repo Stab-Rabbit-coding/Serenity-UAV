@@ -1,11 +1,153 @@
-# Serenity-UAV
+<div align="center">
 
-> *Can't stop the signal, and can't take the sky from me.*
+# Serenity UAV
+
+### A flight-worthy, security-hardened EDF tilt-rotor replica of the Firefly-class ship *Serenity*
+
+[![Hardware License: CERN-OHL-W 2.0](https://img.shields.io/badge/hardware-CERN--OHL--W%202.0-004488)](LICENSE)
+[![Docs/Code License: CC BY-SA 4.0](https://img.shields.io/badge/docs%2Fcode-CC%20BY--SA%204.0-8250df)](docs/attribution_and_licencing.md)
+[![CAD: FreeCAD | OpenSCAD | Blender](https://img.shields.io/badge/CAD-FreeCAD%20%7C%20OpenSCAD%20%7C%20Blender-fe7d37)](airframe/README.md)
+[![PCB: KiCad 9](https://img.shields.io/badge/PCB-KiCad%209-1BA94C)](avionics/README.md)
+[![Firmware: C | Python](https://img.shields.io/badge/firmware-C%20%7C%20Python-2f81f7)](avionics/firmware/)
+[![Status: Rev S — Phase 5 build](https://img.shields.io/badge/status-Rev%20S%20%E2%80%94%20Phase%205%20build-dfb317)](TODO.md)
+
+*"Can't stop the signal, and can't take the sky from me."*
+
+<img src="graphical-build-guide/pngs/07_iso_port_bow_dorsal.png" width="720" alt="Serenity UAV — isometric render of the full assembly">
+
+*Isometric render of the full Rev S assembly — port/bow/dorsal view.*
+
+</div>
+
+## Overview
+
+Serenity UAV is a fully functional electric ducted fan (EDF) tilt-rotor aircraft engineered as an
+actual physical build of the Firefly-class transport *Serenity* (Joss Whedon, 2002) — every
+component here is fabricated or procured, not conceptual. Four canonical CF-PETG-printed hull
+sections carry two tilting EDF nacelles, a belly cargo bay with powered winch and clamshell doors,
+and an 8-node cooperative avionics architecture with PACE (Primary/Alternate/Contingency/Emergency)
+failover across every flight-critical function.
+
+The design is held to the same rigor as a certifiable aircraft: real mass/CG/load budgets (no
+"TBD" specs), FAA/FCC/NIST/IEC standards vetting on every design decision with any effect beyond
+cosmetics, redundant power and control paths throughout, and a zero-trust security model — every
+onboard message is signed, authenticated, and logged to hardware-enforced non-executable storage —
+engineered to keep operating correctly inside a 500 W/m² RF field. Avionics, comms, and software
+are built for reuse across other UAV/UGV/USV platforms, not just this airframe. See
+[`AGENTS.md`](AGENTS.md) for the full authoritative project policy that governs every design
+decision in this repository.
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### Nominal Mission Profile
+
+1. Take off VTOL.
+2. Land vertically with cargo bay open and load and secure a 4″ × 3″ × 3″, 8 oz payload.
+3. Take off VTOL with payload.
+4. Fly into a 500 W/m² broadband RF environment.
+5. Lower and release the payload from the cargo bay onto a platform.
+6. Identify a 4″ × 3″ × 3″ payload on a moving platform.
+7. Synchronize flight with the platform.
+8. Attach the payload to the hoist and lift it from the platform.
+9. Pull the payload into the cargo bay and close the clamshells.
+10. Exit the hazardous environment and return to origin.
+
+Throughout the mission, the aircraft must also:
+
+- Identify, categorize, log, and report rogue or unauthorized C2 commands or malicious logic from
+  any transmitter, authorized or not.
+- Identify unauthorized or unsafe behavior from any onboard compute node.
+- Isolate the affected node(s), gracefully fail over its functions, and log/report to ground
+  control — all while maintaining safety of flight.
+
+</td>
+<td width="50%" valign="top">
+
+### Specifications
+
+| Parameter | Value |
+|-----------|-------|
+| Length | 24.0 in (609 mm) |
+| Wingspan | 19.1 in (486 mm) |
+| Height | 7.93 in (201.5 mm) |
+| AUW — Phases 5–10 (nacelles only) | ~6.10 lbm (2,768 g) |
+| AUW — Phase 11 (full system) | ~6.90 lbm (3,130 g) |
+| Payload capacity (minimum) | 8.0 oz (226 g) in a 4″ × 3″ × 3″ bay |
+| Thrust — nacelles only (hover) | 9.84 lbf (4,464 g) |
+| Thrust — Phase 11 rear EDF (cruise) | ~2.81 lbf (1,275 g) net after RCS bleed |
+| T/W — nacelles only (hover) | ≈ 1.61 (full VTOL hover capable) |
+| T/W — Phase 11 (hover, nacelles only) | ≈ 1.43 (rear EDF is forward-thrust only) |
+| Compute | 8× PocketBeagle 2 Industrial (AM6254), PACE failover |
+| Onboard buses | CAN FD, MIL-STD-1553B, RS-485, Ethernet RSTP ring |
+| External comms | Wi-Fi 5 GHz, Zigbee 2.4 GHz, SiK/MAVLink 915 MHz, 49 MHz AX.25 |
+| EMI design objective | 500 W/m² RF field, correct operation |
+
+</td>
+</tr>
+</table>
+
+## Subsystems
+
+<table>
+<tr>
+<td width="50%" valign="top">
+<img src="graphical-build-guide/pngs/01_port.png" width="100%" alt="Airframe — hull, wings, and nacelles"><br><br>
+
+**Airframe**
+
+Four-section CF-PETG printed hull (head, cargo, middle, rear) with high-lift wings and two tilting
+EDF nacelles, hollow-walled and foam-filled to the canonical Firefly outer mold line.
+
+[Airframe README →](airframe/README.md)
+
+</td>
+<td width="50%" valign="top">
+<img src="graphical-build-guide/pngs/12_iso_stbd_bow_ventral.png" width="100%" alt="Powerplant — tandem EDF nacelles"><br><br>
+
+**Powerplant**
+
+Tandem 50 mm EDF pairs in each tilting nacelle drive variable-area nozzles gear-linked to tilt
+angle, giving 9.84 lbf combined hover thrust at a T/W of ≈1.61 with counter-rotating torque
+cancellation.
+
+[More →](#powerplant)
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+<img src="graphical-build-guide/build_guide_09_avionics.svg" width="100%" alt="Avionics — 8-node PACE failover architecture"><br><br>
+
+**Avionics**
+
+Eight PocketBeagle 2 Industrial nodes in four PACE-redundant stacks handle flight control, comms,
+and payload functions, all with 5 kV galvanic isolation, TPM-backed signed logging, and the
+**Skipper** ground control station.
+
+[Avionics README →](avionics/README.md)
+
+</td>
+<td width="50%" valign="top">
+<img src="graphical-build-guide/shellview/cargoax_iso.png" width="100%" alt="Cargo Handling — belly clamshell bay"><br><br>
+
+**Cargo Handling — Observer**
+
+A belly clamshell cargo bay with powered winch and hoist loads/releases an 8 oz payload in flight,
+guided by the **Observer** nose and cargo-bay vision/ToF/laser sensors.
+
+[More →](#cargo-handling--observer)
+
+</td>
+</tr>
+</table>
+
+---
 
 ## Table of Contents
 
 - [Authoritative Project Instructions](#authoritative-project-instructions)
-- [Specifications](#specifications)
 - [Airframe](#airframe)
     - [Coordinate Standard (Rev R1)](#coordinate-standard-rev-r1)
     - [Fuselage](#fuselage)
@@ -40,44 +182,9 @@ contributors and automated tools (including AI assistants) must follow the requi
 standards documented there (coding style, fabrication specs, licensing, and attribution).
 `CLAUDE.md` is a one-line pointer to the same file, kept for tooling that looks for that name.
 
-A functional, security-conscious Unmanned Aerial Vehicle based on the Firefly-class spacecraft
-Serenity from the 2002 show. Designed using Claude AI.
-
-> Design mission profile:
->
-> 1. Take off VTOL.
-> 2. Land vertically with cargo bay open and load and secure a 4" x 3" x 3" 8oz Payload.
-> 3. Take off VTOL with payload.
-> 4. Fly into a 500W/m^2 broadband radio frequency environment.
-> 5. Lower and release the payload from the cargo bay onto a platform.
-> 6. Identify a 4x3x3 inch payload on a moving platform.
-> 7. Synchronise flight with the platform.
-> 8. Attach the payload to the hoist and lift it from the platform.
-> 9. Pull the payload into the cargo bay and close the clamshells.
-> 10. Exit the hazardous environment and return to origin.
->
-> During execution of this mission profile, be able to perform the following:
->
-> 1. Identify, categorized, log, and report rogue or unauthorized C2 commands and/or malicious logic from unauthorized or authorized transmitters.
-> 2. Identify unauthorized or unsafe behavior from one or more of the onboard compute nodes.
-> 3. Isolate effected node(s), gracefully failover functions, log, and report to ground control, while maintaining safety of flight.
-
----
-
-## Specifications
-
-| Parameter | Value |
-|-----------|-------|
-| Length | 24.0 in (609 mm) |
-| Wingspan | 19.1 in (486 mm) |
-| Height | 7.93 in (201.5 mm) |
-| AUW — Phases 5–10 (nacelles only) | ~6.10 lbm (2,768 g) |
-| AUW — Phase 11 (full system) | ~6.90 lbm (3,130 g) |
-| Payload capacity (minimum) | 8.0 oz (226 g) in a 4″ × 3″ × 3″ bay |
-| Thrust — nacelles only (vertical/hover) | 9.84 lbf (4,464 g) |
-| Thrust — Phase 11 rear EDF (forward/cruise) | ~2.81 lbf (1,275 g) net after RCS bleed |
-| T/W — nacelles only (hover) | ≈ 1.61 (full VTOL hover capable) |
-| T/W — Phase 11 (hover, nacelles only) | ≈ 1.43 (rear EDF is forward-thrust only) |
+The [Nominal Mission Profile](#nominal-mission-profile) and [Specifications](#specifications)
+above are the current design baseline; the sections below give the full engineering detail behind
+each subsystem.
 
 ---
 
@@ -321,7 +428,10 @@ MAVLink/SiK 915 MHz, LoRa RFM95W 915 MHz, TI WL1837MOD WiFi/BT, 49 MHz (Part 15 
 ATF16V8BQL CPLD hardware write-blocker, non-executable log microSD.
 EMI-hardened v2 design (CAPE-B-2).
 
-**Observer** Camera, TimeOfFlight, and Laser module.  The two Observer boards provide external sensing.  they are mcu nodes on the can-fd and ethernet ring with vision processing.  one is mounted in the nose, with forward view, and one in the cargo bay with a downward view.  the one in the cargo bay is capable of 3d imaging of objects within close proximity to the belly of the uav.  the forward looking one can do rough size and orientation detection.
+**Observer** (camera, Time-of-Flight, and laser module): two standalone MCU nodes on the CAN FD
+and Ethernet ring with vision processing — one mounted in the nose with a forward view, one in the
+cargo bay with a downward view. The cargo-bay unit does 3D imaging of objects close to the belly
+of the UAV; the forward-looking unit does rough size and orientation detection.
 **Rev R — EMI-hardened v2 capes at ALL 8 positions.**
 All nodes use 5 kV galvanic isolation:
 - CAN FD: ISOW1044BDFMR (TI)
