@@ -107,14 +107,15 @@
 
 - **EDFs:** 4× XFly Galaxy X5 50 mm (6S, 3200 KV, 12-blade rotor, 11-fin stator)
 - **Servos:**
-  - 2× SG90 (tilt servo, door actuator)
-  - 1× STS3215 (winch motor, continuous rotation + encoder feedback)
+  - 2× SPT5425LV + LibreServo v2 (nacelle tilt, was DS3218MG)
+  - 1× SPT5425LV + LibreServo v2 (winch motor, continuous rotation + encoder feedback, was STS3215)
+  - SG90 + OpenServoCore (door actuator, payload release)
 
 ### Cargo System
 
 - **Gondola shell** (printed CF-PETG, with clamshell door halves)
 - **Winch mechanism:**
-  - STS3215 servo (continuous rotation)
+  - SPT5425LV + LibreServo v2 servo (continuous rotation, was STS3215)
   - Twin pedestal spool (magnetic brake ratchet)
   - Dyneema line (2 mm, 3 m length, 100 lb break strength)
   - Auto-latch and payload release solenoid

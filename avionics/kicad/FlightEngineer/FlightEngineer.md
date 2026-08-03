@@ -455,7 +455,7 @@ and recomputes OV_TRIP and UV_TRIP using the actual trimmed calibration values.
 |------|-----------|-------------------|
 | VBAT main bus | 4× ESC outputs | Up to 4 × 40 A = 160 A burst |
 | 5 V avionics (dual BEC) | 8× PocketBeagle 2 + 4× Pilot + 4× XO + accessories | 10 A cont. (dual SMPS) |
-| 6 V servo | 2× DS3218MG tilt + 3× SG90 (nozzle/cargo) | 5 A cont. |
+| 6 V servo | 2× SPT5425LV/LibreServo v2 tilt (was DS3218MG) + 3× SG90/OpenServoCore (nozzle/cargo) | 5 A cont. |
 | BQ76930 self | Internal LDO from REGSRC | < 100 µA quiescent |
 
 Total VBAT draw (avionics + servos at peak, from VBAT side):

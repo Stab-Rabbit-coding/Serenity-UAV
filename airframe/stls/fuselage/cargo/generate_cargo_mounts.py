@@ -16,7 +16,8 @@ generate_cargo_mounts.py
 Generate STL files for all Serenity UAV cargo handling equipment mounts.
 
 Components generated (all to thingverse-serenity/files-hollowed-18in/):
-    cargo_winch_pedestal_port.stl   -- Port axle clamp + bearing seat + STS3215 cradle (CF-PETG, 1)
+    cargo_winch_pedestal_port.stl   -- Port axle clamp + bearing seat + SPT5425LV
+                                        cradle (CF-PETG, 1)
     cargo_winch_pedestal_stbd.stl   -- Stbd axle clamp + bearing seat + pawl/solenoid (CF-PETG, 1)
     cargo_winch_spool_r2.stl        -- Dyneema drum, twin bearings + ratchet ring (CF-PETG, 1)
     cargo_winch_pawl.stl            -- Ratchet pawl lever (CF-PETG, print 1)
@@ -34,16 +35,26 @@ Print specifications (CLAUDE.md fabrication standards):
     PETG non-structural: 0.15 mm layer height, 4 perimeters, 25 % infill
 
 Design references:
-    STS3215 serial-bus servo: case envelope + mounting-boss pattern PENDING
-        VERIFICATION -- the datasheet in docs/references/ is a scanned/CID-encoded
-        PDF that could not be text-extracted.  make_winch_pedestal_port() must be
-        parameterised on the confirmed envelope before it is implemented.
-        See docs/CARGO_WINCH_SPECIFICATION.md section 3.1 (verification gate).
+    SPT5425LV servo (2026-08-02 fleet standardisation, supersedes STS3215):
+        40.5 x 20 x 40.5 mm body, ~57 g -- REFERENCES.md REF-SENSOR-013
+        (manufacturer product page + servodatabase.com independent listing).
+        Converted with LibreServo v2 (REF-SENSOR-014); rotation-limiting pin
+        removed. This RESOLVES the case-envelope gate that previously blocked
+        make_winch_pedestal_port() under the STS3215 selection (its scanned/
+        CID-encoded datasheet could not be text-extracted) -- envelope is now
+        a published COTS figure.  Stall current is still NOT published by
+        either source above; do not assume a value for RAIL-2 sizing.
+        See docs/CARGO_WINCH_SPECIFICATION.md section 3.1 (Rev C).
     MR84ZZ bearing: 4 mm bore x 8 mm OD x 3 mm width, static rating ~130 N
     Winch axle: 4 mm A2 stainless x 46 mm, FIXED (does not rotate); the spool
         rides on two MR84ZZ pressed into its own hub, so it is supported at BOTH
         ends rather than cantilevered off the motor shaft.
-    SG90 servo: 22.8 x 12.2 x 23.0 mm body, 27.9 mm mount hole c/c, M2 mount holes
+    SG90 servo: 22.8 x 12.2 x 23.0 mm body, 27.9 mm mount hole c/c, M2 mount holes.
+        Control board: OpenServoCore "OSC SG90 M007" swap board (10 x 12.5 mm,
+        replaces the SG90 factory PCB in place) -- REFERENCES.md REF-SENSOR-015.
+        ⚠ Upstream project status is "in active development, nothing here is
+        shippable yet" (hardware validated to rev B only) -- do not procure in
+        flight-article quantity until upstream reaches a shippable release.
     DRV8833 carrier PCB: 26 x 23 mm nominal (generic breakout or SparkFun ROB-14450)
     Dyneema SK75 0.5 mm braid: OD 0.5 mm, min break load >= 100 N (Lankhorst Euronete)
     u-blox ANN-MB-00 GPS patch antenna: 35 mm OD circular (data sheet rev 1.0)
@@ -189,7 +200,7 @@ def save(mesh, filename):
 
 
 def _superseded(part, replacement, reason):
-    """Raise for a Rev P/Q/R winch part retired by the STS3215 conversion."""
+    """Raise for a Rev P/Q/R winch part retired by the bus-servo winch conversion."""
     raise NotImplementedError(
         f"{part} is SUPERSEDED by {replacement}. {reason} "
         "See docs/CARGO_WINCH_SPECIFICATION.md Rev B section 2."
@@ -208,8 +219,10 @@ def make_motor_mount():
     with a payload hanging under the aircraft.
 
     Replaced by a two-pedestal support (make_winch_pedestal_port/_stbd) that
-    carries the spool on its own bearings at BOTH ends, with the STS3215
-    transmitting torque only through a lost-motion dog coupler.
+    carries the spool on its own bearings at BOTH ends, with the winch servo
+    (SPT5425LV + LibreServo v2 as of the 2026-08-02 fleet standardisation,
+    was STS3215 under Rev B) transmitting torque only through a lost-motion
+    dog coupler.
     """
     _superseded(
         "cargo_winch_motor_mount.stl",
@@ -240,15 +253,20 @@ def make_winch_spool():
 
 
 # ---------------------------------------------------------------------------
-# Rev S winch train (STS3215 + both-ends spool support + safety ratchet).
+# Rev S winch train (SPT5425LV/LibreServo v2 + both-ends spool support +
+# safety ratchet).  Servo updated 2026-08-02 (was STS3215 under Rev B).
 #
 # NOT YET IMPLEMENTED.  Geometry is fully specified in
-# docs/CARGO_WINCH_SPECIFICATION.md Rev B sections 3.2-3.6, but
-# make_winch_pedestal_port() is blocked on the STS3215 case envelope and
-# mounting-boss pattern (specification section 3.1 verification gate), and the
-# parts are dimensionally interdependent -- the axle span, bearing seats and
-# ratchet-ring clearance are all set off that envelope.  Emitting some of them
-# now would publish meshes that will not assemble.
+# docs/CARGO_WINCH_SPECIFICATION.md Rev C sections 3.2-3.6.  The prior
+# blocker -- an unreadable STS3215 datasheet, no case envelope or
+# mounting-boss pattern available -- is RESOLVED: the SPT5425LV envelope
+# (40.5 x 20 x 40.5 mm) and mass (~57 g) are published COTS figures
+# (REFERENCES.md REF-SENSOR-013).  The parts are still dimensionally
+# interdependent -- the axle span, bearing seats and ratchet-ring clearance
+# are all set off the servo envelope -- so emitting some of them now would
+# still publish meshes that will not assemble; the reason to implement them
+# together is unchanged even though the envelope gate that used to be the
+# reason is gone.
 #
 # Implement together, then mesh-validate per root AGENTS.md section 7.
 # ---------------------------------------------------------------------------
@@ -280,6 +298,14 @@ def make_servo_bracket():
     Dims: 44 x 28 x 5 mm.
     Material: CF-PETG.  Print: 0.15 mm layers, 4 perimeters, 40 % infill.
     Reference: SG90 servo data sheet (Tower Pro or compatible).
+
+    Control board (2026-08-02): OpenServoCore "OSC SG90 M007" swap board
+    (REFERENCES.md REF-SENSOR-015) -- physically replaces the SG90 factory
+    PCB in place, same 22.8x12.2x23.0 mm body envelope, so this bracket's
+    geometry is unchanged.  ⚠ Upstream hardware is pre-production ("nothing
+    here is shippable yet" per the project's own status note) -- do not
+    procure in flight-article quantity until upstream reaches a shippable
+    release.
     """
     PL = 44.0  # plate length (X)
     PW = 28.0  # plate width (Y)
