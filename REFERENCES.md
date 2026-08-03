@@ -77,7 +77,10 @@ CERN-OHL-W 2.0 / CC BY-SA 4.0 dual-license split)
     - [REF-SENSOR-009: TI ISOW1044BDFMR — 5 kVrms Isolated CAN-FD Transceiver with Integrated Isolated DC-DC](#ref-sensor-009-ti-isow1044bdfmr--5-kvrms-isolated-can-fd-transceiver-with-integrated-isolated-dc-dc)
     - [REF-SENSOR-010: TI ISOW1412 — 5 kVrms Isolated RS-485/RS-422 Transceiver with Integrated Isolated DC-DC](#ref-sensor-010-ti-isow1412--5-kvrms-isolated-rs-485rs-422-transceiver-with-integrated-isolated-dc-dc)
     - [REF-SENSOR-011: Infineon OPTIGA™ SLB 9672 — SPI TPM 2.0](#ref-sensor-011-infineon-optiga-slb-9672--spi-tpm-20)
-    - [REF-SENSOR-012: STS3215 Digital Servo Motor — Cargo Winch Control](#ref-sensor-012-sts3215-digital-servo-motor--cargo-winch-control)
+    - [REF-SENSOR-012: STS3215 Digital Servo Motor — Cargo Winch Control (SUPERSEDED)](#ref-sensor-012-sts3215-serial-bus-servo--cargo-winch-drive-superseded)
+    - [REF-SENSOR-013: SPT Servo SPT5425LV — 25 kgf·cm Analog/Digital PWM Servo (fleet-standard high-torque body)](#ref-sensor-013-spt-servo-spt5425lv--25-kgfcm-analogdigital-pwm-servo-fleet-standard-high-torque-body)
+    - [REF-SENSOR-014: LibreServo v2 (stab-rabbit-coding fork) — Open-Source Smart-Servo Control Board](#ref-sensor-014-libreservo-v2-stab-rabbit-coding-fork--open-source-smart-servo-control-board)
+    - [REF-SENSOR-015: OpenServoCore — Open-Source SG90/MG90-Class Smart-Servo Control Board](#ref-sensor-015-openservocore--open-source-sg90mg90-class-smart-servo-control-board)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
@@ -1440,7 +1443,14 @@ ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verific
 
 ---
 
-### REF-SENSOR-012: STS3215 Serial-Bus Servo — Cargo Winch Drive
+### REF-SENSOR-012: STS3215 Serial-Bus Servo — Cargo Winch Drive (SUPERSEDED)
+
+**Status: SUPERSEDED 2026-08-02.** Replaced fleet-wide by the SPT5425LV (REF-SENSOR-013)
+running the LibreServo v2 control board (REF-SENSOR-014) — see "Servo Fleet Standardisation,
+2026-08-02" below. The STS3215's own datasheet-verification gate (below) is now moot: it is
+retained here per project revision policy (components are referenced as of their last active
+revision even after superseding) and because it explains *why* the winch briefly specified a
+TTL bus servo before the fleet-wide standardisation. Do not delete; do not cite as active.
 
 > **⚠ REQUIRES VERIFICATION (root `AGENTS.md` §4).** The archived datasheet is a
 > **scanned/CID-encoded PDF**, and no OCR toolchain is available in the current build
@@ -1448,7 +1458,8 @@ ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verific
 > broken `cryptography` build). **No performance figure below is quoted from that datasheet.**
 > Nothing in this entry may be cited as a verified value until the gaps are read off the
 > document and this table is updated. Tracked in "Open Standards Verification Items" and in
-> `docs/TODO.md` §0.x.
+> `docs/TODO.md` §0.x. **Moot as of the 2026-08-02 supersession — left unresolved
+> deliberately; do not spend further effort clearing this gate.**
 
 | Field | Value |
 |---|---|
@@ -1466,11 +1477,148 @@ ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verific
 **Supersedes:** the Rev P/Q/R `N20-WINCH` (N20 300RPM 6V gearmotor) and its cantilever mount
 `cargo_winch_motor_mount.stl` + N20-bored `cargo_winch_spool.stl`.
 
-**Used in:** `docs/CARGO_WINCH_SPECIFICATION.md` (Rev B), `docs/bom_revR.json`
-(`STS3215-WINCH`), `airframe/stls/fuselage/cargo/generate_cargo_mounts.py`.
+**Used in:** `docs/CARGO_WINCH_SPECIFICATION.md` (Rev B, historical), `docs/bom_revR.json`
+(`STS3215-WINCH`, historical), `airframe/stls/fuselage/cargo/generate_cargo_mounts.py`
+(historical comment only).
 
-**Status:** ACTIVE specification, **NOT cleared for procurement or STL generation** until the
-⚠ rows above are resolved.
+**Status:** SUPERSEDED. Not cleared for procurement or STL generation under this REF-ID;
+current work uses REF-SENSOR-013/014 instead.
+
+---
+
+### Servo Fleet Standardisation, 2026-08-02
+
+The three high-torque servos on the airframe — 2× nacelle tilt (previously DS3218MG, no
+REF-ID; standard COTS analog/digital PWM servo, uncited) and 1× cargo winch (previously
+STS3215, REF-SENSOR-012 above) — are unified onto **one physical servo model
+(SPT5425LV, REF-SENSOR-013) running one open-source control board (LibreServo v2,
+REF-SENSOR-014)**, each with the servo's internal mechanical rotation-limiting pin
+removed. This gives the fleet a single spare part across three previously-different
+servo/board combinations, and gives every one of them the signed-serial-bus telemetry the
+STS3215 winch conversion was chasing in the first place — without the STS3215's own
+never-resolved datasheet-verification gate (REF-SENSOR-012 above), since the SPT5425LV's
+envelope, torque and mass are all published COTS figures (REF-SENSOR-013). Separately, the
+SG90 micro servos (cargo door, payload release; RCS bleed-valve servos are Phase 11
+deferred) are standardised on **OpenServoCore** (REF-SENSOR-015), an SG90/MG90-class
+open-source swap board — not LibreServo, whose smallest documented target is a
+standard-size (40 mm class) servo, not the 23 mm SG90 body.
+
+Per-application operating mode differs even though the hardware is now identical:
+
+| Application | Qty | Mode | Range |
+|---|---|---|---|
+| Cargo winch | 1 | Continuous rotation, gateway closes position on the AK7455 spool encoder (REF-SENSOR-008) | Multi-turn, unbounded by the servo itself |
+| Nacelle tilt | 2 | Position, firmware soft-limited | −5°…140°, backstopped by the existing CF-PETG hard-stop blocks in the external gear train (`docs/NOZZLE_DRIVE_TRADE.md`) — mechanically independent of the servo's own (now-removed) rotation pin |
+
+Removing the pin on all three is a deliberate commonality choice, not a requirement of the
+position-mode applications: LibreServo replaces the servo's potentiometer with a 360°
+absolute magnetic encoder (AEAT-8800, 16-bit), so position feedback and soft-limit
+enforcement no longer depend on the mechanical stop the pin used to provide. See
+REF-SENSOR-013/014/015 below for the individual part records, and
+`docs/CARGO_WINCH_SPECIFICATION.md` §3.1/§3.9 (Rev C) for the winch-specific analysis.
+
+---
+
+### REF-SENSOR-013: SPT Servo SPT5425LV — 25 kgf·cm Analog/Digital PWM Servo (fleet-standard high-torque body)
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Shantou SiPaiTe Electronic Technology Co., Ltd. ("SPT Servo") |
+| **Product** | SPT5425LV (waterproof variant SPT5425LV-W also available; both share the servo-database listing's mechanical/electrical figures below) |
+| **Manufacturer product page** | <http://www.spt-servo.com/Product/1027594540.html> |
+| **Independent spec listing** | <https://servodatabase.com/servo/sptservo/spt5425lv> |
+| **Stall torque** | 24 kgf·cm (2.35 N·m) @ 4.8 V; 26 kgf·cm (2.55 N·m) @ 6.0 V |
+| **Operating speed** | 0.22 s/60° @ 4.8 V; 0.18 s/60° @ 6.0 V |
+| **Operating voltage** | 4.8–6.0 V (native PWM servo rating; LibreServo v2 re-drives the motor from its own 4.5–18 V input, REF-SENSOR-014, so the servo's native voltage window is a motor-only figure once converted) |
+| **Dimensions** | 40.5 × 20 × 40.5 mm |
+| **Mass** | ~57 g |
+| **Construction** | Metal gear train, 2× ball bearings |
+| **⚠ Not yet independently verified** | Stall current draw (needed for the RAIL-2 budget, `docs/POWER_DISTRIBUTION.md` §3.2.1) is not published in either source above; carried forward as "requires verification" rather than assumed. |
+
+**Why this part, not a bus servo:** SPT5425LV is a standard hobby PWM/analog servo body,
+not a native serial-bus servo like the STS3215 it replaces. The serial-bus behaviour comes
+entirely from swapping its internal control PCB for LibreServo v2 (REF-SENSOR-014), which
+is explicitly designed to convert "any standard servo motor" without modifying the
+mechanical body or bottom cover. Selecting a standard-body servo (rather than staying on a
+factory bus servo like the STS3215) is what makes a single physical part usable identically
+for the nacelle-tilt position application (where DS3218MG-class bodies were already
+qualified, §"Servo Fleet Standardisation" above) and the winch's continuous-rotation
+application.
+
+**Mechanical note — rotation-limiting pin.** Like most analog/digital hobby servos of this
+class, the SPT5425LV output gear/potentiometer assembly includes a small internal
+mechanical stop (a plastic pin/tab molded into the output gear and case) that limits shaft
+travel to roughly one physical turn, matching the servo's stock potentiometer. This is the
+"rotation blocking pin" removed during LibreServo conversion (REF-SENSOR-014): with the
+stock potentiometer removed and replaced by LibreServo's 360° magnetic encoder, the pin's
+sole function — protecting the potentiometer wiper from over-travel — no longer applies, and
+removing it lets the output shaft rotate continuously. **⚠ Exact pin location/removal
+procedure is not yet documented for this specific part number** — verify by teardown before
+committing to the build guide (`graphical-build-guide/`); do not assume it matches a
+different manufacturer's servo internals.
+
+**Applied to:** cargo winch drive (replacing STS3215, REF-SENSOR-012), 2× nacelle tilt servo
+(replacing uncited DS3218MG). See `docs/CARGO_WINCH_SPECIFICATION.md` §3.1 (Rev C),
+`current-specification/bom_revS.json`/`.csv`, `airframe/openscad/nacelles/nacelle_servo_bracket.scad`.
+
+**Used in:** `docs/CARGO_WINCH_SPECIFICATION.md`, `current-specification/bom_revS.json`,
+`current-specification/bom_revS.csv`, `airframe/openscad/nacelles/nacelle_servo_bracket.scad`,
+`airframe/stls/fuselage/cargo/generate_cargo_mounts.py`
+
+---
+
+### REF-SENSOR-014: LibreServo v2 (stab-rabbit-coding fork) — Open-Source Smart-Servo Control Board
+
+| Field | Value |
+|---|---|
+| **Project** | LibreServo — "An Open source controller to convert any servo motor to the best smart servo" |
+| **Fork used by this project** | <https://github.com/Stab-Rabbit-coding/LibreServo_v2> (adds isolated RS-485 + isolated CAN-FD + a TPM to the upstream design) |
+| **Upstream project** | <https://www.libreservo.com/en> |
+| **Hardware license** | CC BY-SA 4.0 — <https://creativecommons.org/licenses/by-sa/4.0/> |
+| **Board revision (this fork)** | v2.3.1 (`PCB/LibreServo-v2.3.1.sch`/`.brd`) |
+| **MCU (as-built v2.3.1)** | STM32F302K8U6, Cortex-M4 @ 72 MHz, 64 KB flash (the fork's own BOM lists it as "STM32F301K8U6" — a naming discrepancy the fork's own `PCB/RS485-CANFD-TPM-upgrade.md` flags and does not resolve; treat as F302 per the `.ioc` project config) |
+| **Communications (as-built)** | RS-485 half-duplex, up to 9 Mbps, daisy-chained, CRC-16 |
+| **Motor driver** | Up to 16 A continuous (WSD3069DN56 N+P MOSFET pair, v2.3+) |
+| **Position sensor** | AEAT-8800 16-bit (65,536 count) magnetic encoder, 360°, replaces the servo's stock potentiometer — this is what makes continuous rotation and true absolute position both available on the same converted servo |
+| **Current sensor** | ACS711, ±15 A |
+| **Input voltage** | 4.5–18 V (recommended 5–14 V) |
+| **Mechanical fit** | Explicitly "compatible with standard servo motors (no need to change the bottom cover of them!)" — a same-footprint swap for the servo's factory control PCB |
+| **⚠ Fork upgrade status (isolated RS-485 / isolated CAN-FD / TPM)** | `PCB/RS485-CANFD-TPM-upgrade.md` in the fork records this as an **in-progress, schematic-only** change: MCU swap to STM32G431 (native FDCAN) + isolated RS-485 (ADM2587E) + isolated CAN-FD (ADM3055E) are wired in the EAGLE schematic netlist, but have **no footprints, no PCB placement, and no firmware port yet**; the TPM (Infineon SLB9672) is **explicitly out of scope of that pass** — "not part of this pass — only the MCU/RS-485/CAN-FD work requested." **Do not assume TPM-signed servo-bus messages are available from the servo itself** until this upgrade lands; message signing for servo commands/telemetry on this airframe continues to rely on the CAN-PERIPH-GW gateway's own TPM (SLB9672) signing the bus frame the servo command rides in, per [REF-NIST-001 §2.1], not on a TPM inside the servo. |
+| **⚠ Bus electrical integration open item** | LibreServo's daisy-chain bus is genuine differential RS-485 (A/B pair via an onboard transceiver), not the STS3215's single-wire half-duplex TTL scheme that `CAN-PERIPH-GW-1`'s `J_FLEX.FLEX_TTL_GPIO` was built for. `J_FLEX` exposes a bare `FLEX_UART_TX/RX` pair but no RS-485 transceiver of its own for this local servo drop (the gateway's onboard ISOW1412 is dedicated to its own board-to-board uplink trunk, not intended as a shared local servo sub-bus without further isolation/topology review). **Not resolved here** — filed as an open item in `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` and `airframe/fuselage-mid/WBS.md`. |
+| **⚠ Intended end state, confirmed with the fork maintainer (2026-08-02)** | Once the fork's isolated-RS-485/isolated-CAN-FD/SLB9672-TPM upgrade ships, a converted servo is intended to **drop directly onto the airframe's isolated CAN-FD and RS-485 trunks as its own self-signing bus node — no `CAN-PERIPH-GW-1` bridge required for this application.** This would make the bus-electrical-integration open item above moot rather than resolved-as-planned; the interim gateway-bridge options remain the near-term path until the fork ships. **Not yet true** — as of this writing the RS-485/CAN-FD work is schematic-only (no footprints, no board, no firmware port) and the TPM work has not started. |
+
+**Applied to:** cargo winch drive (1×) and 2× nacelle tilt servo — all three high-torque
+servos, standardised per "Servo Fleet Standardisation, 2026-08-02" above.
+
+**Used in:** `docs/CARGO_WINCH_SPECIFICATION.md`, `current-specification/bom_revS.json`,
+`current-specification/bom_revS.csv`, `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`
+
+---
+
+### REF-SENSOR-015: OpenServoCore — Open-Source SG90/MG90-Class Smart-Servo Control Board
+
+| Field | Value |
+|---|---|
+| **Project** | OpenServoCore — "the goal of this project is to create an open servo controller board and firmware," targeting SG90/MG90-class servos specifically |
+| **Repository** | <https://github.com/OpenServoCore/open-servo-core> |
+| **Swap board (SG90 target)** | "OSC SG90 M007" — "a swap board that physically replaces the SG90 factory PCB," 10×12.5 mm, double-sided |
+| **MCU** | CH32V006, RISC-V, 48 MHz, 62 KB flash, 8 KB RAM ("no multi-chip roadmap; one chip, done well") |
+| **Communication protocol** | osc-native — a custom break-framed wire protocol inspired by Dynamixel Protocol 2.0; 0.5–3 Mbaud, ~30 µs ping turnaround at 1 Mbaud, multi-servo status chains, hardware CRC both directions |
+| **Firmware license** | MIT OR Apache-2.0 |
+| **Hardware license** | CERN-OHL-P v2.0 |
+| **⚠ Project maturity** | Explicitly **"in active development. Nothing here is shippable yet."** Firmware v2 is underway; hardware validated only to revision B (as of May 2026 per project status). **Treat as a pre-production part — do not commit to procurement quantities until the project reaches a shippable release**; tracked as an open item, not silently assumed production-ready. |
+
+**Why this part, not LibreServo:** LibreServo v2 (REF-SENSOR-014) targets standard-size
+(≥40 mm class) servo bodies; OpenServoCore is purpose-built for the SG90/MG90 body size
+(23 mm class) used by the cargo door and payload-release servos, so the two boards are
+applied to different servo classes on this airframe rather than one board covering both.
+
+**Applied to:** `SERVO-CARGO` (cargo door actuation ×1, payload release ×1); RCS bleed-jet
+proportional valve servos (`SERVO-RCS-VALVE`, ×4, Phase 11 deferred) are the same SG90 class
+and inherit this note when that phase is implemented, but are not otherwise touched here.
+
+**Used in:** `current-specification/bom_revS.json`, `current-specification/bom_revS.csv`,
+`airframe/stls/fuselage/cargo/generate_cargo_mounts.py`
 
 ---
 
@@ -1681,7 +1829,10 @@ Add verified section numbers to the relevant files and update this table.
 | VL53L5CX obstacle-avoidance ToF sensor — no REF-ID | `docs/failsafe_thresholds.md`, `avionics/firmware/common/include/failsafe_config.h`, `docs/PHASED_BUILD_GUIDE.md` | Found 2026-07-12 while writing the Failsafe Threshold Document: the 12× VL53L5CX obstacle-avoidance array is cited throughout the repository (4 m range noted informally inside the REF-SENSOR-002 entry above) but has no `REFERENCES.md` catalog entry of its own, unlike the project's other core sensor ICs (REF-SENSOR-002 through -006). | Add a `REF-SENSOR-007` entry for ST Microelectronics VL53L5CX (validated datasheet URL, ranging accuracy, and the 4 m operating range cited in `docs/failsafe_thresholds.md` §3) before final PCB layout citation sign-off (TODO.md §3.0 Phase 0). |
 | Tilt-spar material allowables (4130 + trade-study alternates) | `docs/TILT_SPAR_ANALYSIS.md` §3.1–3.2/§3.5, `current-specification/bom_revS.csv` SPAR-TILT-4130 | The §3.5 material trade study uses **typical handbook allowables** for AISI 4130 (~460 MPa yield), 17-4 PH H1075 (~860 MPa), 7075-T6 (~503 MPa), 6061-T6 (~276 MPa), 316 SS, and Ti-6Al-4V (~880 MPa); none are yet tied to a validated MMPDS/AMS product page. Moduli/densities are nominal. | Confirm the **selected** material's design allowable and the two carried alternates (17-4 PH, 7075-T6) vs MMPDS-2023 / AMS (or mill cert) and add `REF-MAT-*` catalog entries with validated URLs before spar procurement (TODO §0.8). |
 | 14 CFR Part 107 dropped-object provision — section number **not yet verified** | `REFERENCES.md` REF-FAA-002 applied-sections table, `docs/CARGO_WINCH_SPECIFICATION.md` §3.10.2 | Part 107 contains a provision prohibiting dropping an object from a small UA in a manner that creates an undue hazard to persons or property. REF-FAA-002's applied-sections table currently lists only §107.3, §107.29, §107.31 and §107.51(a)–(d) — the dropped-object section is **absent**, so no section number is asserted in the winch spec (root `AGENTS.md` §4: never guess a section number). This matters because the cargo winch **intentionally** releases a payload (requirement R5, overload line-shed) while an uncommanded structural release of the spool itself (19.1 J, or 31.8 J for the full assembly, from the §107.51(b) 400 ft ceiling) is precisely the hazard the provision addresses. | Look up the section in the eCFR Part 107 text, add it to REF-FAA-002's applied-sections table with the exact title and a validated URL, then cite it in `docs/CARGO_WINCH_SPECIFICATION.md` §3.10.2 and state explicitly how a commanded shed differs from an uncommanded release under that text. Do not fabricate the number. (`docs/TODO.md` §0.x) |
-| STS3215 cargo winch servo — envelope, torque, mass, stall current (REF-SENSOR-012) | `REFERENCES.md` REF-SENSOR-012, `docs/CARGO_WINCH_SPECIFICATION.md` §3.1, `docs/bom_revR.json` `STS3215-WINCH`, `airframe/stls/fuselage/cargo/generate_cargo_mounts.py` | The datasheet **is in the repo** (`docs/references/108090023_STS3215-C001_Datasheet.pdf`) but is a **scanned/CID-encoded PDF** and could not be text-extracted in the build environment (no `pdftotext`/`tesseract`/`mutool`/`poppler-utils`; `pypdf` fails on a broken `cryptography` build). Consequently **no** performance figure for this part is datasheet-verified. Four values are currently assumed or derived, not read: (a) **case envelope + mounting-boss pattern** — blocks `make_winch_pedestal_port()`; (b) **torque** — the design *requires* ≥ 3.2 kgf·cm (spec §4.2), unconfirmed against the real rating; (c) **mass** — 60 g assumed, and this term dominates the +98.6 g net mass delta and the T/W 1.613 → 1.557 result in spec §6; (d) **stall current** — budgeted 1.2 A for RAIL-2 sizing (spec §5.4). The interface is stated as **TTL half-duplex serial bus (not PWM)**, consistent with `CAN-PERIPH-GW-1.md` §G, but this too should be confirmed off the datasheet. | Read the four values off the datasheet (or the vendor's published spec page, cited with a validated URL) and update REF-SENSOR-012, spec §3.1/§4.2/§5.4/§6, and the BOM entry. **Do not order the part or generate the six winch STLs until (a) and (b) are resolved**; re-run the §6 mass/CG table if (c) differs from 60 g; resize RAIL-2 if (d) exceeds ~2.5 A. Do not fabricate these numbers. (`docs/TODO.md` §0.x) |
+| STS3215 cargo winch servo — envelope, torque, mass, stall current (REF-SENSOR-012) | `REFERENCES.md` REF-SENSOR-012 | **MOOT — servo superseded 2026-08-02.** The STS3215 datasheet-verification gate below is retained only as a historical record; the winch (and nacelle tilt) servos have moved to SPT5425LV/LibreServo v2 (REF-SENSOR-013/014), whose envelope/torque/mass are published COTS figures — see the row below. Do not spend further effort clearing this gate. | None — superseded. |
+| SPT5425LV servo — stall current; rotation-pin removal procedure (REF-SENSOR-013) | `REFERENCES.md` REF-SENSOR-013, `docs/CARGO_WINCH_SPECIFICATION.md` §3.1/§3.9 (Rev C), `current-specification/bom_revS.json`/`.csv`, `airframe/openscad/nacelles/nacelle_servo_bracket.scad` | Stall/running current is not published on either sourced listing (manufacturer product page or servodatabase.com), so RAIL-2 and the nacelle-tilt servo rail budgets carry the prior STS3215-era 1.2 A figure forward as a **placeholder, not a verified SPT5425LV number**. Separately, the exact internal location and removal procedure for the rotation-limiting pin has not been confirmed by teardown — the "remove the pin for continuous rotation" mod is a well-known technique on hobby servos generally, but part-specific verification is outstanding. | Bench-measure SPT5425LV stall current at 5–6 V before finalizing RAIL-2 / nacelle-tilt servo-rail sizing; photograph/document the pin-removal procedure on a teardown unit before committing steps to the build guide. Do not fabricate either figure. (`docs/TODO.md` §0.x) |
+| LibreServo v2 fork — RS-485 differential bus electrical integration onto `CAN-PERIPH-GW-1` (REF-SENSOR-014) | `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`, `docs/CARGO_WINCH_SPECIFICATION.md` §5.1 (Rev C) | LibreServo's daisy-chain is genuine differential RS-485 (onboard transceiver on the servo side); `J_FLEX` on the gateway exposes only a bare `FLEX_UART_TX/RX` pair, not a local RS-485 transceiver for this specific servo drop. Also, the fork's own isolated-RS-485/CAN-FD/TPM upgrade (`PCB/RS485-CANFD-TPM-upgrade.md`) is schematic-only with no footprints, PCB placement, or firmware port yet, and the TPM addition has not been started at all. | Decide and document the gateway-side RS-485 transceiver approach (add one at the harness, or extend the gateway schematic) before winch/nacelle-tilt firmware bring-up; do not assume TPM-signed servo-native messages until the fork's TPM work lands — rely on the gateway's own TPM signing the CAN-FD/RS-485 frame instead. (`airframe/fuselage-mid/WBS.md`) |
+| OpenServoCore hardware maturity for SG90 cargo servos (REF-SENSOR-015) | `REFERENCES.md` REF-SENSOR-015, `current-specification/bom_revS.json`/`.csv` `SERVO-CARGO` | Upstream project status is explicitly "in active development, nothing here is shippable yet," hardware validated only to revision B as of the source consulted. | Re-check `github.com/OpenServoCore/open-servo-core` project status before procurement; do not order SG90+OpenServoCore boards in flight-article quantity until upstream reaches a tagged/shippable hardware release. (`docs/TODO.md` §0.x) |
 | Wing/nacelle Hall tilt encoder — sensor selection | `current-specification/bom_revS.csv` SKIPPER-TILT-ENC-PCB, `avionics/kicad/ENC-NACELLE-1.*`, `docs/TILT_SPAR_ANALYSIS.md` §1/§3.5/§8.1, `avionics/WBS.md` §1.9.1 | **RESOLVED 2026-07-19 (datasheets in repo).** MT6701 (Rev 1.9) was **rejected** — its datasheet §6 confirms it is **on-axis only** (Ø6 mm cyl magnet, off-axis misalignment ≤ 0.3 mm), so it cannot read the through-shaft off-axis; AS5600 has the same limit. Part selected = **AKM AK7455** (REF-SENSOR-008), which explicitly supports the Off-Axis (side-of-shaft) configuration; pinout/interface **verified** vs datasheet 200800064-E-00 and the schematic rebuilt (`kicad-cli` ERC 0-error). Interface is **SPI** (no off-axis absolute IC offers I²C). | **Electrical spec resolved.** Remaining, now scoped as bench/layout items (not "unverified part"): (1) off-axis flux 10–70 mT at the IC with the chosen ring/gap; (2) EEPROM INL calibration over −5..90° (AKM app support); (3) ERROR-pin push-pull vs open-drain; (4) QFN24 4×4 EP dims (EP left floating) + wing-pocket resize 3×3→4×4 (`HALL_*` in `wings_s1223_revo.scad`); (5) confirm the AKM product URL if the datasheet is re-hosted. TODO §0.8 / `airframe/wings-nacelles/WBS.md` §1.1.3.6. |
 | Pilot's own inline "SLB9672" TPM symbol pin numbers | `avionics/kicad/Pilot/kicads/Pilot.kicad_sch` | Found 2026-07-26 while building Commo's TPM addition (which deliberately reused the separately-verified `Observer_SLB9670_TPM` clean-room symbol instead, precisely to avoid this defect): Pilot's own, independently-authored inline "SLB9670" symbol had pin numbers that did not match datasheet Revision 1.4 Tables 3–5. Not fixed at the time — out of scope for the CAN-FD/RS-485 trust-module task. **2026-08-01 SLB9670→SLB9672 migration:** the symbol/lib_id/value text was renamed to "SLB9672" (its pin *numbers* were left exactly as they were — this defect predates and is independent of the chip migration) so it now carries the same wrong-pin-number defect under the new chip's name (REF-SENSOR-011). Still not fixed — still out of scope. | Rebuild Pilot's TPM symbol from REF-SENSOR-011 using the same clean-room `parse_real_symbol`/pin-table method as `Observer_SLB9672_TPM`, or replace the instance with that verified symbol outright; re-run `kicad-cli sch erc` to confirm no regression against Pilot's existing 48-violation baseline. |
 | VimDrones `ap_periph_pico` / ESC S50 concept-only inspiration, `CAN-PERIPH-GW-1` and CAN-PERIPH-GW-1's ESC-gateway deployment mode | `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` | **Not a citation defect — documented here for license-boundary auditability.** `CAN-PERIPH-GW-1` was built as a fleet-integrated remix of the *publicly documented product concept* at <https://dev.vimdrones.com/products/vimdrones_can_periph_pico/> and <https://dev.vimdrones.com/products/vimdrones_esc_s50/> (peripheral-bus CAN/servo gateway; per-ESC CAN telemetry). VimDrones' own KiCad source (`VimDrones/AM32_esc_development_board` on GitHub) is licensed GPL-3.0, which is incompatible with this project's CC-BY-4.0-or-better attribution baseline for derivative files — no VimDrones schematic, footprint, or geometry was copied; only the public product specification was used as design inspiration, and the entire trust-module implementation (MCU, TPM, isolators, netlist) is original clean-room work against TI/Infineon datasheets. | N/A — informational; see `CAN-PERIPH-GW-1.md` "Why VimDrones' concept but not VimDrones' hardware" |

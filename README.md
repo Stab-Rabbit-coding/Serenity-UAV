@@ -285,11 +285,11 @@ attitude authority, **not** hover lift.
 
 | Item | Qty | Spec |
 |------|-----|------|
-| Nacelle tilt servo | 2 | Digital, ≥ 347 oz·in (25 kg·cm) @ 6 V |
-| Cargo door servo | 1 | SG90 class |
-| Cargo release servo | 1 | SG90 class |
-| Cargo winch motor | 1 | STS3215 serial-bus servo (supersedes N20) |
-| **Deferred Phase 11** RCS proportional valve servos | 4 | SG90 class (one per RCS bleed jet) |
+| Nacelle tilt servo | 2 | SPT5425LV + LibreServo v2, ≥ 347 oz·in (25 kg·cm) @ 6 V (supersedes DS3218MG) |
+| Cargo door servo | 1 | SG90 class + OpenServoCore control board |
+| Cargo release servo | 1 | SG90 class + OpenServoCore control board |
+| Cargo winch motor | 1 | SPT5425LV + LibreServo v2 serial-bus servo (supersedes N20, then STS3215) |
+| **Deferred Phase 11** RCS proportional valve servos | 4 | SG90 class + OpenServoCore control board (one per RCS bleed jet) |
 
 Cargo door + release controlled via DRV8833 H-bridge on the Simon node.
 
@@ -373,10 +373,10 @@ NIST SP 800-207 Zero Trust architecture [REF-NIST-001]; NIST SP 800-82 Rev 3 OT 
 - Payload capacity (PDB-rated): 14.1 oz (400 g).
 - Belly clamshell doors (CF-PETG, port + starboard), 8-barrel piano hinge on 0.118 in (3 mm)
   CF rod.
-- SG90 door servo + SG90 release servo via DRV8833 H-bridge.
-- STS3215 winch servo on a both-ends-supported spool with a normally-engaged safety
-  ratchet + Dyneema SK75 0.020 in (0.5 mm) line, auto-latch payload cradle.
-  See `docs/CARGO_WINCH_SPECIFICATION.md`.
+- SG90 door servo + SG90 release servo (OpenServoCore control board) via DRV8833 H-bridge.
+- SPT5425LV + LibreServo v2 winch servo (supersedes STS3215, rotation-limit pin removed) on
+  a both-ends-supported spool with a normally-engaged safety ratchet + Dyneema SK75
+  0.020 in (0.5 mm) line, auto-latch payload cradle. See `docs/CARGO_WINCH_SPECIFICATION.md`.
 - HX711 load cell, FPV camera bezel, GPS retention ring, 3M foam gasket door seal.
 - Winch/gondola system supports loading and releasing cargo in flight.
   *(Just be careful about taking jobs from Mr. Niska.)*
