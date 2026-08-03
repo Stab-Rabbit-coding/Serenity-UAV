@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-02",
+  "generated": "2026-08-03",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -150,7 +150,7 @@
       "archived": false
     },
     "README.md": {
-      "description": "Serenity-UAV",
+      "description": "Serenity UAV",
       "tags": [
         "documentation",
         "emi-hardening",
@@ -6087,6 +6087,20 @@
       "archived": false
     },
     "avionics/datasheets/PCA9555.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/S32K-RM.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/S32K1xx.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -14424,6 +14438,8 @@
       "avionics/datasheets/L-1038e.A5_phyCORE-AM62x_HW Manual.pdf",
       "avionics/datasheets/MT6701_Datasheet_Rev.1.9.pdf",
       "avionics/datasheets/PCA9555.pdf",
+      "avionics/datasheets/S32K-RM.pdf",
+      "avionics/datasheets/S32K1xx.pdf",
       "avionics/datasheets/SAM-M10Q_DataSheet_UBX-22013293.pdf",
       "avionics/datasheets/SLB_9670VQ20_Infineon.pdf",
       "avionics/datasheets/SLB_9672XU20_Infineon.pdf",
