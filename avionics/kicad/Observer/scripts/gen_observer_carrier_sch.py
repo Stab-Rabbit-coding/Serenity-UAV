@@ -1,4 +1,20 @@
 #!/usr/bin/env python3
+
+
+# ---------------------------------------------------------------------------
+# SUPERSEDED PART WARNING (2026-08-03)
+#
+# This generator still emits the MSPM0G3507 and/or SLB9670VQ2.0.  Both were
+# retargeted on 2026-08-03:
+#     MSPM0G3507  ->  MSPM0G3519-Q1 (M0G3519QRGZRQ1, RGZ-48)   on Jayne
+#                 ->  MSPM0G3518-Q1 (M0G3518QRHBRQ1, RHB-32)   on the gateway and Kaylee
+#     SLB9670VQ2.0 -> SLB 9672AU2.0 (PG-UQFN-32-1,-2)          on all three
+# See REFERENCES.md REF-SENSOR-013 / REF-SEC-002 and TODO.md 1.2d.
+#
+# Do NOT re-run this script against the committed schematic: it has drifted
+# from the as-placed design and regenerating would revert the retarget.  Apply
+# changes with avionics/kicad/retarget_mspm0g351x_slb9672.py instead.
+# ---------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 """
 gen_Observer_carrier_sch.py -- author Observer.kicad_sch in the SoM end-state.
@@ -12,7 +28,7 @@ primary datasheets/manual:
   U2     Observer_KSZ9477         Microchip KSZ9477 7-port switch (128-TQFP-EP)
   U3     Observer_MSPM0G3507_RGZ  TI MSPM0G3507 MCU (48-VQFN)
   U4     Observer_ISOW1044BDFMR   TI ISOW1044BDFMR isolated CAN-FD (20-DFM/SOIC-20)
-  U5     Observer_SLB9672_TPM     Infineon SLB9672 TPM 2.0 (32-UQFN)
+  U5     SLB9672_TPM     Infineon SLB9672 TPM 2.0 (32-UQFN)
 
 Design decisions locked with the user 2026-07-13:
   * The 240-pin PCM-071 connector takes 5V IN only and hands NO 3V3/2V5/1V2 rail
@@ -68,7 +84,7 @@ REAL_SYMS = {
     ),
     "ISO": ("Observer_ISOW1044BDFMR", "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm"),
     "TPM": (
-        "Observer_SLB9672_TPM",
+        "SLB9672_TPM",
         "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm",
     ),
 }

@@ -73,7 +73,7 @@ ISOW1044 = {
 }
 
 SLB9672 = {
-    "name": "Observer_SLB9672_TPM",
+    "name": "SLB9672_TPM",
     "value": "SLB9672XU2.0",
     "footprint": "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm",
     # PG-UQFN-32-1,-2; same 5x5mm/0.5mm-pitch/32-pin QFN land pattern as the

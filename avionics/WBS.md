@@ -478,13 +478,13 @@ REFERENCES.md Removed/Superseded Citations).
     same defect, now under the new chip's name. **RESOLVED 2026-08-01:**
     Issue documented in `PILOT_FOOTPRINT_VERIFICATION.md` §TPM (SLB9670);
     recommended fix is to substitute Pilot symbol with verified
-    `Observer_SLB9672_TPM` symbol from
+    `SLB9672_TPM` symbol from
     `avionics/kicad/Observer/kicads/Observer.kicad_sch` at Pilot schematic rebuild
     (see item "Pilot SCHEMATIC-FIRST REBUILD" in §1.2a.1). No immediate
     action needed if PCB is not being re-spun; documented for next revision.
 - [ ] **SLB9670→SLB9672 TPM migration — ERC/DRC not re-run, 2026-08-01.**
     Fleet-wide chip swap (Infineon OPTIGA TPM SLB9670 → SLB9672, REF-SENSOR-011):
-    new clean-room symbol `Observer_SLB9672_TPM` (footprint unchanged — same
+    new clean-room symbol `SLB9672_TPM` (footprint unchanged — same
     5x5mm/0.5mm-pitch/32-pin QFN land pattern per both datasheets) swapped
     into Observer, Commo, Flight Engineer, and CAN-PERIPH-GW-1's schematics
     (lib_symbol block + all placed instances renamed, pin functions

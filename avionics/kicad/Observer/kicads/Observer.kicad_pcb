@@ -8,13 +8,13 @@
 	)
 	(paper "A3")
 	(title_block
-		(title "Observer — Nose/Cargo-Bay Vision, ToF & Laser Board (Observer cargo-handling system)")
+		(title "Jayne — Nose/Cargo-Bay Vision, ToF & Laser Board (Jayne cargo-handling system)")
 		(date "2026-07-03")
 		(rev "-")
 		(comment 1 "Serenity UAV — STANDALONE board, NOT a PocketBeagle 2 Industrial cape")
 		(comment 2 "CC BY 4.0 creativecommons.org/licenses/by/4.0")
-		(comment 3 "1.0 × 2.75 in (25.4 × 69.85 mm) 4-layer FR4, DOUBLE-SIDED, EMI-hardened — see gen_Observer_pcb.py docstring")
-		(comment 4 "SoM end-state: real footprints (PCM-071 2xBTH-060, TQFP-128-EP, VQFN, SOIC-20W); see gen_Observer_carrier_pcb.py")
+		(comment 3 "1.0 × 2.75 in (25.4 × 69.85 mm) 4-layer FR4, DOUBLE-SIDED, EMI-hardened — see gen_Jayne_pcb.py docstring")
+		(comment 4 "SoM end-state: real footprints (PCM-071 2xBTH-060, TQFP-128-EP, VQFN, SOIC-20W); see gen_Jayne_carrier_pcb.py")
 	)
 	(layers
 		(0 "F.Cu" signal)
@@ -173,7 +173,7 @@
 	(net 90 "U_REG_1V2_SW")
 	(net 91 "U_REG_3V3_FB")
 	(net 92 "U_REG_3V3_SW")
-	(footprint "Observer:TQFP-128-1EP_KSZ9477_14x14mm_P0.4mm_EP10x10"
+	(footprint "Jayne:TQFP-128-1EP_KSZ9477_14x14mm_P0.4mm_EP10x10"
 		(layer "F.Cu")
 		(uuid "053bfbfe-15fb-44ac-9b72-5e7a04f8e98b")
 		(at 192.5 140.5)
@@ -2646,7 +2646,7 @@
 			)
 		)
 	)
-	(footprint "Observer:DS_Camera_9P"
+	(footprint "Jayne:DS_Camera_9P"
 		(layer "F.Cu")
 		(uuid "25f13b19-c0eb-4c97-bcc9-b85bdcc75011")
 		(at 230 148.5)
@@ -7645,7 +7645,7 @@
 			)
 		)
 	)
-	(footprint "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm"
+(footprint "Package_DFN_QFN:VQFN-48-1EP_7x7mm_P0.5mm_EP4.1x4.1mm"
 		(layer "F.Cu")
 		(uuid "802ded1a-01e8-4095-8643-999a91241d0f")
 		(at 206.435 147.355 -90)
@@ -7662,7 +7662,7 @@
 				)
 			)
 		)
-		(property "Value" "TI MSPM0G3507"
+		(property "Value" "TI MSPM0G3519-Q1"
 			(at 0 4.83 90)
 			(layer "F.Fab")
 			(uuid "06fd2183-191f-4c0e-a262-bff34a722900")
@@ -8488,7 +8488,7 @@
 		)
 		(pad "49" smd rect
 			(at 0 0 270)
-			(size 5.15 5.15)
+			(size 4.1 4.1)
 			(property pad_prop_heatsink)
 			(layers "F.Cu" "F.Mask")
 			(net 46 "GND")
@@ -11034,7 +11034,7 @@
 			)
 		)
 	)
-	(footprint "Observer:DS_Laser_2P"
+	(footprint "Jayne:DS_Laser_2P"
 		(layer "F.Cu")
 		(uuid "b61cf431-10d0-4224-9d3b-592ace06e9bd")
 		(at 233.5 153)
@@ -11657,7 +11657,7 @@
 			)
 		)
 	)
-	(footprint "Observer:DS_ToF_4P"
+	(footprint "Jayne:DS_ToF_4P"
 		(layer "F.Cu")
 		(uuid "c86319e0-b9e2-40c3-80c2-edbaa859949a")
 		(at 224.5 162)
@@ -11969,7 +11969,7 @@
 			)
 		)
 	)
-	(footprint "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm"
+(footprint "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.6x3.6mm"
 		(layer "F.Cu")
 		(uuid "cced7007-3b76-476e-a786-ad7143ace2d4")
 		(at 206.5 137.75 -90)
@@ -11986,7 +11986,7 @@
 				)
 			)
 		)
-		(property "Value" "Infineon SLB9672"
+		(property "Value" "Infineon SLB 9672AU2.0"
 			(at 0 3.83 90)
 			(layer "F.Fab")
 			(uuid "fbadea2a-1cbf-4b42-a5f6-cded85fd886f")
@@ -12639,7 +12639,7 @@
 		)
 		(pad "33" smd rect
 			(at 0 0 270)
-			(size 3.45 3.45)
+			(size 3.6 3.6)
 			(property pad_prop_heatsink)
 			(layers "F.Cu" "F.Mask")
 			(net 46 "GND")
@@ -15491,7 +15491,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Observer:Wurth_749010012A_10-100BASE-TX"
+	(footprint "Jayne:Wurth_749010012A_10-100BASE-TX"
 		(layer "B.Cu")
 		(uuid "c71c1626-ecde-4f6d-85da-4970627d4e81")
 		(at 229 146.5 180)
@@ -15636,11 +15636,11 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Observer:phyCORE-AM62x_PCM071_2xBTH-060"
+	(footprint "Jayne:phyCORE-AM62x_PCM071_2xBTH-060"
 		(layer "B.Cu")
 		(uuid "e60f6127-17d0-4805-bbc2-f0245f8379bb")
 		(at 200 151 90)
-		(descr "PHYTEC phyCORE-AM62x PCM-071 carrier footprint: 2x Samtec BTH-060-01-L-D-A (0.5mm, 2x60) + 2x M2.5 holes. Land pattern from Samtec BTH-XXX-XX-X-D-XX Rev D; module dims from PHYTEC L-1038e.A5. Pad names A1..D60 match Observer_SoM_PCM071. Verify row<->column + pin-1 vs Fig 6.")
+		(descr "PHYTEC phyCORE-AM62x PCM-071 carrier footprint: 2x Samtec BTH-060-01-L-D-A (0.5mm, 2x60) + 2x M2.5 holes. Land pattern from Samtec BTH-XXX-XX-X-D-XX Rev D; module dims from PHYTEC L-1038e.A5. Pad names A1..D60 match Jayne_SoM_PCM071. Verify row<->column + pin-1 vs Fig 6.")
 		(property "Reference" "U_SOM"
 			(at 0 23 270)
 			(layer "B.SilkS")
@@ -17510,7 +17510,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Observer:Wurth_749010012A_10-100BASE-TX"
+	(footprint "Jayne:Wurth_749010012A_10-100BASE-TX"
 		(layer "B.Cu")
 		(uuid "e646b3fe-c871-43e0-9920-0d85f66de1e2")
 		(at 229 156.27)
@@ -17759,7 +17759,7 @@
 		(layer "Edge.Cuts")
 		(uuid "e32c0991-b2f0-4b5e-8805-f3e4e0a0151d")
 	)
-	(gr_text "Observer Rev - (design exploration)"
+	(gr_text "Jayne Rev - (design exploration)"
 		(at 22.5 39.5 -0)
 		(layer "B.Fab")
 		(uuid "7e5aec00-0000-0000-0000-000000000009")

@@ -493,3 +493,54 @@ should be back-ported into `gen_jayne_pcb.py` so the script and file stay in syn
 For project-wide standards see the root `AGENTS.md`; for avionics-specific conventions see
 `avionics/AGENTS.md` "Observer" section; for the full task breakdown see `TODO.md` §1.2c
 (hardware) and §4.6 (firmware).
+
+---
+
+## 2026-08-03 — Trust-module MCU/TPM retarget
+
+The trust module on this board now uses **TI MSPM0G3519-Q1 (`M0G3519QRGZRQ1`)** (48-pin RGZ VQFN, 512 KB flash / 128 KB SRAM) and the
+**Infineon SLB 9672AU2.0** TPM (PG-UQFN-32-1,-2, extended −40 to +105 °C), superseding the
+MSPM0G3507 and SLB9670VQ2.0.  Parts and the specifications applied are catalogued as
+REF-SENSOR-013 and REF-SEC-002 in `REFERENCES.md`; the change was applied by
+`avionics/kicad/retarget_mspm0g351x_slb9672.py` and `avionics/kicad/retarget_pcb_footprints.py`,
+which also wrote `.pre-g351x` backups beside each edited file.
+
+**No net or pin assignment changed.** The MSPM0G351x-Q1 RGZ-48 pin map was verified pad
+for pad against the MSPM0G350x it replaces (SLASFA6B Fig 6-5 vs SLASEX6C Fig 6-4) and is
+identical, so U3 keeps every one of its 29 connections exactly as they were.
+
+Two corrections did land on the PCB:
+
+- **U3 land pattern.** The footprint was `QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm`, which
+  KiCad's own `descr` field identifies as an *Analog Devices LTC legacy* QFN outline. TI's
+  RGZ0048F exposed thermal pad is 4.1 mm square, so that land overhung the package's
+  thermal pad by 0.525 mm on every side. Now `VQFN-48-1EP_7x7mm_P0.5mm_EP4.1x4.1mm`; the
+  48 lead pads are identical between the two, so only pad 49 changed.
+- **U5 exposed pad.** The SLB9670 symbol stopped at pin 32 and never netted the package's
+  thermal pad. It is now pad 33 tied to GND, as Infineon requires.
+
+Firmware note: the CAN pins do not move, but their IOMUX changes — `CAN0_TX`/`CAN0_RX` on
+PA12/PA13 are **PF12** on this family, and PA15 offers `SPI1_CS2` rather than `SPI1_CS0`.
+
+Open items from this pass are tracked in `TODO.md` §1.2d — read those before ordering
+anything from this board.
+
+### DRC status after the retarget
+
+Measured in place (a `.kicad_pcb` copied away from its project directory loses the
+sibling `.kicad_pro` custom rules and netclasses, and the counts become meaningless):
+
+| Board | before | after |
+|---|---|---|
+| Observer | 289 | 289 — unchanged |
+| CAN-PERIPH-GW-1 | 743 | 804 |
+
+The gateway's +61 are `clearance` violations in the MCU area, where the 48-pin traces
+still run to a footprint that is now 32 pads at 5 x 5 mm. They clear with the manual
+re-route tracked in TODO.md 1.2d.
+
+The exposed-pad corrections are applied as an in-place edit of the placed footprint
+(library reference, Value and the thermal pad only). Rebuilding the footprint from the
+library instead would discard whatever the board author tuned on that instance — mask
+margins, pad clearance overrides, zone connections — which showed up as ~180 spurious
+clearance / solder-mask-bridge / shorting violations on Observer before this was fixed.

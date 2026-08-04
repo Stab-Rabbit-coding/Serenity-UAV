@@ -693,3 +693,40 @@ mandatory cost of 500 W/m² immunity — a deliberate design trade documented in
 ---
 
 *© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY 4.0*
+
+---
+
+## 2026-08-03 — Trust-module MCU/TPM retarget
+
+The trust module on this board now uses **TI MSPM0G3518-Q1 (`M0G3518QRHBRQ1`)** (32-pin RHB VQFN 5×5 mm, 256 KB flash / 128 KB SRAM) and the
+**Infineon SLB 9672AU2.0** TPM (PG-UQFN-32-1,-2, extended −40 to +105 °C), superseding the
+MSPM0G3507 and SLB9670VQ2.0.  Parts and the specifications applied are catalogued as
+REF-SENSOR-013 and REF-SEC-002 in `REFERENCES.md`; the change was applied by
+`avionics/kicad/retarget_mspm0g351x_slb9672.py` and `avionics/kicad/retarget_pcb_footprints.py`,
+which also wrote `.pre-g351x` backups beside each edited file.
+
+The RHB-32 package bonds out **PA0–PA27 only** — no PBx port exists (SLASFA6B Fig 6-6) —
+so the four signals that were on PBx were rehomed onto free PA pins that still carry the
+required function:
+
+| Signal | was | now | function |
+|---|---|---|---|
+| `RS485_TX` | PB15 pad 25 | PA8 pad 12 | `UART1_TX` PF2 |
+| `RS485_RX` | PB16 pad 26 | PA9 pad 13 | `UART1_RX` PF2 |
+| `RS485_DE` | PB2 pad 14 | PA21 pad 25 | GPIO |
+| `RS485_FLT_N` | PB3 pad 15 | PA22 pad 26 | GPIO |
+| `CANFD_FLT_N` | PA8 pad 16 | PA23 pad 27 | GPIO (displaced by RS485_TX) |
+
+**A pre-existing schematic defect was fixed in the process.** `U_MCU` and `U_TPM` were
+drawn on top of each other: seventeen MCU pads sat on the exact coordinate of a TPM pad, so
+a single global label served both symbols. That shorted the whole TPM SPI bus to a second
+set of MCU pins and tied MCU `VCORE` to TPM `GND`. `U_TPM` has been moved +34.29 mm clear
+and its labels re-emitted from the authoritative pin map in
+`scripts/inject_kaylee_trust_module.py`; labels belonging to `U_ISOCAN`, which is stacked at
+some of the same coordinates, were preserved. ERC pin-to-pin errors dropped by 7.
+
+The MCU is still **schematic-only on this board** — it is not placed on `Kaylee.kicad_pcb`,
+so no layout work was needed here.
+
+Open items from this pass are tracked in `TODO.md` §1.2d — read those before ordering
+anything from this board.

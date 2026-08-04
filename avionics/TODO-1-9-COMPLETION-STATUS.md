@@ -78,7 +78,7 @@ Task 1.9 Avionics Workload Balancing encompasses two subtasks with a total of 44
 14. [x] **Pilot TPM symbol pin numbers** (✅ DOCUMENTED 2026-08-01)
     - **Issue:** Pilot.kicad_sch TPM symbol has incorrect pin numbers vs. datasheet Rev 1.4
     - **Resolution:** Documented in `WASH_FOOTPRINT_VERIFICATION.md` §TPM
-    - **Recommendation:** Substitute with verified `Observer_SLB9672_TPM` symbol at next Pilot schematic rebuild
+    - **Recommendation:** Substitute with verified `SLB9672_TPM` symbol at next Pilot schematic rebuild
     - **Blocking:** None — PCB unaffected if not re-spun
 
 15. [x] **`gen_flight_engineer.py` generator drift** (✅ ANALYZED 2026-08-01)

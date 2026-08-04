@@ -26,7 +26,7 @@ named for exactly this purpose *within Commo's own file*, which does
 connect correctly (verified: 0 ERC errors). The dedicated-header approach
 and its `J_TPM`/`lib_symbol_j_tpm_commo()` symbol were removed.
 
-Uses the ALREADY-VERIFIED Observer_SLB9672_TPM clean-room symbol (real
+Uses the ALREADY-VERIFIED SLB9672_TPM clean-room symbol (real
 Infineon datasheet pin numbers) -- NOT Pilot's own inline "SLB9672" symbol,
 which was found during this same pass to have incorrect pin numbers (e.g.
 its pin 24 is labeled CS_N; the real datasheet's pin 24 is MISO). That is a
@@ -208,7 +208,7 @@ def _gen2pin(name):
 
 
 def build():
-    tpm_lib_block, pins = parse_real_symbol("Observer_SLB9672_TPM")
+    tpm_lib_block, pins = parse_real_symbol("SLB9672_TPM")
     lib_block = (
         tpm_lib_block + "\n"
         + _gen2pin("R_Generic_TPM") + "\n"
@@ -239,7 +239,7 @@ def build():
         "SPI1 shared bus + TPM_IRQN/TPM_RSTN via P1/P2, no dedicated header) ===",
         200, 1080,
     )]
-    body.append(sym_inst_unit("Observer_SLB9672_TPM", "TPM", "Infineon SLB9672 TPM2.0", cx, cy, 1, TPM_FOOTPRINT))
+    body.append(sym_inst_unit("SLB9672_TPM", "TPM", "Infineon SLB9672 TPM2.0", cx, cy, 1, TPM_FOOTPRINT))
     for pnum, pname, x, y, ang, etype, unit in pins:
         sx, sy = cx + x, cy - y
         net = netmap.get(pnum)

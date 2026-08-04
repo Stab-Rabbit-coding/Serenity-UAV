@@ -109,6 +109,14 @@
       ],
       "archived": false
     },
+    "CLAUDE-MEMORY.md": {
+      "description": "CLAUDE-MEMORY.md",
+      "tags": [
+        "documentation",
+        "security"
+      ],
+      "archived": false
+    },
     "CLAUDE.md": {
       "description": "See [`AGENTS.md`](AGENTS.md) \u2014 the authoritative, model-agnostic project instructions for all AI agents worki\u2026",
       "tags": [
@@ -187,7 +195,6 @@
       "description": "Serenity UAV \u2014 TODO (Open Work Only)",
       "tags": [
         "documentation",
-        "emi-hardening",
         "project-tracking",
         "security"
       ],
@@ -6280,7 +6287,63 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/mspm0g3507-q1.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/mspm0g3507.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/mspm0g3518-q1.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/slaae29a.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/slaae76e.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/slaaet8a.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/slau846e.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/slaz742g.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/slb9672.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -6896,7 +6959,7 @@
       "archived": false
     },
     "avionics/kicad/CAN-PERIPH-GW-1/scripts/gen_can_periph_gw_sch.py": {
-      "description": "-*- coding: utf-8 -*-",
+      "description": "SUPERSEDED PART WARNING (2026-08-03)",
       "tags": [
         "avionics-hardware",
         "pcb-design",
@@ -7551,7 +7614,7 @@
       "archived": false
     },
     "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer.py": {
-      "description": "Deterministic UUID helpers",
+      "description": "SUPERSEDED PART WARNING (2026-08-03)",
       "tags": [
         "avionics-hardware",
         "pcb-design"
@@ -7589,6 +7652,16 @@
       "tags": [
         "avionics-hardware",
         "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md": {
+      "description": "pcbnew 9.0.2 Python (SWIG) Binding Defects \u2014 PCB-Build Crash Report",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design",
+        "sensors-vision"
       ],
       "archived": false
     },
@@ -7881,7 +7954,7 @@
       "archived": false
     },
     "avionics/kicad/Observer/scripts/gen_observer_carrier_sch.py": {
-      "description": "-*- coding: utf-8 -*-",
+      "description": "SUPERSEDED PART WARNING (2026-08-03)",
       "tags": [
         "avionics-hardware",
         "emi-hardening",
@@ -8957,6 +9030,24 @@
       ],
       "archived": false
     },
+    "avionics/kicad/retarget_mspm0g351x_slb9672.py": {
+      "description": "Retarget the Serenity trust-module MCU and TPM (2026-08-03).",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/retarget_pcb_footprints.py": {
+      "description": "PCB-side companion to `retarget_mspm0g351x_slb9672.py` (2026-08-03).",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design",
+        "security"
+      ],
+      "archived": false
+    },
     "avionics/kicad/symbols/ISOW1044BDFMR_pinmap.csv": {
       "description": "Tabular data (CSV)",
       "tags": [
@@ -8980,6 +9071,22 @@
       "tags": [
         "avionics-hardware",
         "bom",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/symbols/MSPM0G3518_Q1_RHB.kicad_sym": {
+      "description": "KiCad symbol library",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/symbols/MSPM0G3519_Q1_RGZ.kicad_sym": {
+      "description": "KiCad symbol library",
+      "tags": [
+        "avionics-hardware",
         "pcb-design"
       ],
       "archived": false
@@ -9008,15 +9115,6 @@
       ],
       "archived": false
     },
-    "avionics/kicad/symbols/Observer_SLB9672_TPM.kicad_sym": {
-      "description": "KiCad symbol library",
-      "tags": [
-        "avionics-hardware",
-        "pcb-design",
-        "security"
-      ],
-      "archived": false
-    },
     "avionics/kicad/symbols/Observer_SoM.kicad_sym": {
       "description": "KiCad symbol library",
       "tags": [
@@ -9039,6 +9137,15 @@
         "avionics-hardware",
         "bom",
         "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/symbols/SLB9672_TPM.kicad_sym": {
+      "description": "KiCad symbol library",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design",
+        "security"
       ],
       "archived": false
     },
@@ -11895,6 +12002,7 @@
     ],
     "documentation": [
       "AGENTS.md",
+      "CLAUDE-MEMORY.md",
       "CLAUDE.md",
       "README.md",
       "REFERENCES.md",
@@ -11951,6 +12059,7 @@
       "avionics/kicad/ENC-NACELLE-1.md",
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
       "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
+      "avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/VERA_NOSE_TRAPEZOID.md",
@@ -12110,7 +12219,6 @@
     "emi-hardening": [
       "AGENTS.md",
       "README.md",
-      "TODO.md",
       "WBS.md",
       "airframe/FreeCAD-scripts/serenity_placeholders_assembly.py",
       "airframe/README.md",
@@ -12223,6 +12331,7 @@
     ],
     "security": [
       "AGENTS.md",
+      "CLAUDE-MEMORY.md",
       "README.md",
       "REFERENCES.md",
       "SECURITY.md",
@@ -12294,7 +12403,9 @@
       "avionics/kicad/README.md",
       "avionics/kicad/TODO-1.2b-STATUS-REPORT.md",
       "avionics/kicad/replace_footprints.py",
-      "avionics/kicad/symbols/Observer_SLB9672_TPM.kicad_sym",
+      "avionics/kicad/retarget_mspm0g351x_slb9672.py",
+      "avionics/kicad/retarget_pcb_footprints.py",
+      "avionics/kicad/symbols/SLB9672_TPM.kicad_sym",
       "avionics/observer/TODO.md",
       "avionics/observer/WBS.md",
       "avionics/rev-s1/WBS.md",
@@ -13442,6 +13553,7 @@
       "airframe/openscad/fuselage/bow_sensor_faceplate.scad",
       "airframe/openscad/fuselage/bow_sensor_pod.scad",
       "airframe/stls/fuselage/bow_sensor_faceplate.stl",
+      "avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md",
       "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
       "avionics/kicad/Observer/Observer.pretty/DS_Laser_2P.kicad_mod",
       "avionics/kicad/Observer/Observer.pretty/DS_ToF_4P.kicad_mod",
@@ -14268,6 +14380,7 @@
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py",
       "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py",
       "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
+      "avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
@@ -14433,16 +14546,20 @@
       "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer-job.gbrjob",
       "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer.drl/FlightEngineer.drl",
       "avionics/kicad/replace_footprints.py",
+      "avionics/kicad/retarget_mspm0g351x_slb9672.py",
+      "avionics/kicad/retarget_pcb_footprints.py",
       "avionics/kicad/symbols/ISOW1044BDFMR_pinmap.csv",
       "avionics/kicad/symbols/KSZ9477STXI_pinmap.csv",
       "avionics/kicad/symbols/MSPM0G3507SRGZR_pinmap.csv",
+      "avionics/kicad/symbols/MSPM0G3518_Q1_RHB.kicad_sym",
+      "avionics/kicad/symbols/MSPM0G3519_Q1_RGZ.kicad_sym",
       "avionics/kicad/symbols/Observer_ISOW1044BDFMR.kicad_sym",
       "avionics/kicad/symbols/Observer_KSZ9477.kicad_sym",
       "avionics/kicad/symbols/Observer_MSPM0G3507_RGZ.kicad_sym",
-      "avionics/kicad/symbols/Observer_SLB9672_TPM.kicad_sym",
       "avionics/kicad/symbols/Observer_SoM.kicad_sym",
       "avionics/kicad/symbols/Observer_SoM_PCM071.kicad_sym",
       "avionics/kicad/symbols/SLB9672XU2_0_pinmap.csv",
+      "avionics/kicad/symbols/SLB9672_TPM.kicad_sym",
       "avionics/kicad/symbols/Vera_SoM_PCM071.kicad_sym",
       "avionics/kicad/symbols/footprints/PHYCORE-AM62AX-DSC-FOOTPRINT.kicad_mod",
       "avionics/kicad/symbols/phyCORE_AM62x_PCM071_pinmap.csv",
@@ -14488,7 +14605,15 @@
       "avionics/datasheets/iso6442.pdf",
       "avionics/datasheets/isow1044.pdf",
       "avionics/datasheets/isow1412.pdf",
+      "avionics/datasheets/mspm0g3507-q1.pdf",
       "avionics/datasheets/mspm0g3507.pdf",
+      "avionics/datasheets/mspm0g3518-q1.pdf",
+      "avionics/datasheets/slaae29a.pdf",
+      "avionics/datasheets/slaae76e.pdf",
+      "avionics/datasheets/slaaet8a.pdf",
+      "avionics/datasheets/slau846e.pdf",
+      "avionics/datasheets/slaz742g.pdf",
+      "avionics/datasheets/slb9672.pdf",
       "avionics/emi-hardening/TODO.md",
       "avionics/emi-hardening/WBS.md",
       "avionics/firmware/AK7455_CALIBRATION_SPECIFICATION.md",
@@ -14643,6 +14768,7 @@
       "avionics/kicad/FlightEngineer/scripts/gen_flight_engineer_revs1.py",
       "avionics/kicad/FlightEngineer/scripts/inject_flight_engineer_trust_module.py",
       "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
+      "avionics/kicad/Jayne/PCBNEW_SWIG_BUG.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
@@ -14808,16 +14934,20 @@
       "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer-job.gbrjob",
       "avionics/kicad/gerbers/FlightEngineer-S1/FlightEngineer.drl/FlightEngineer.drl",
       "avionics/kicad/replace_footprints.py",
+      "avionics/kicad/retarget_mspm0g351x_slb9672.py",
+      "avionics/kicad/retarget_pcb_footprints.py",
       "avionics/kicad/symbols/ISOW1044BDFMR_pinmap.csv",
       "avionics/kicad/symbols/KSZ9477STXI_pinmap.csv",
       "avionics/kicad/symbols/MSPM0G3507SRGZR_pinmap.csv",
+      "avionics/kicad/symbols/MSPM0G3518_Q1_RHB.kicad_sym",
+      "avionics/kicad/symbols/MSPM0G3519_Q1_RGZ.kicad_sym",
       "avionics/kicad/symbols/Observer_ISOW1044BDFMR.kicad_sym",
       "avionics/kicad/symbols/Observer_KSZ9477.kicad_sym",
       "avionics/kicad/symbols/Observer_MSPM0G3507_RGZ.kicad_sym",
-      "avionics/kicad/symbols/Observer_SLB9672_TPM.kicad_sym",
       "avionics/kicad/symbols/Observer_SoM.kicad_sym",
       "avionics/kicad/symbols/Observer_SoM_PCM071.kicad_sym",
       "avionics/kicad/symbols/SLB9672XU2_0_pinmap.csv",
+      "avionics/kicad/symbols/SLB9672_TPM.kicad_sym",
       "avionics/kicad/symbols/Vera_SoM_PCM071.kicad_sym",
       "avionics/kicad/symbols/footprints/PHYCORE-AM62AX-DSC-FOOTPRINT.kicad_mod",
       "avionics/kicad/symbols/phyCORE_AM62x_PCM071_pinmap.csv",

@@ -70,7 +70,10 @@ CERN-OHL-W 2.0 / CC BY-SA 4.0 dual-license split)
     - [REF-SENSOR-001: RunCam Nano 4 — 19 mm Nano Format FPV Camera Specification (SUPERSEDED)](#ref-sensor-001-runcam-nano-4--19-mm-nano-format-fpv-camera-specification-superseded)
     - [REF-SENSOR-002: Benewake TFmini-S — Long-Range Time-of-Flight Ranging Module Specification](#ref-sensor-002-benewake-tfmini-s--long-range-time-of-flight-ranging-module-specification)
     - [REF-SENSOR-003: TI AM62Ax Sitara Processors — Vision SoC Datasheet](#ref-sensor-003-ti-am62ax-sitara-processors--vision-soc-datasheet)
-    - [REF-SENSOR-004: TI MSPM0G3507 — Mixed-Signal MCU with CAN-FD Interface](#ref-sensor-004-ti-mspm0g3507--mixed-signal-mcu-with-can-fd-interface)
+    - [REF-SENSOR-004: TI MSPM0G3507 — Mixed-Signal MCU with CAN-FD Interface (SUPERSEDED)](#ref-sensor-004-ti-mspm0g3507--mixed-signal-mcu-with-can-fd-interface-superseded)
+    - [REF-SENSOR-013: TI MSPM0G351x-Q1 — Automotive Mixed-Signal MCU with CAN-FD](#ref-sensor-013-ti-mspm0g351x-q1--automotive-mixed-signal-mcu-with-can-fd)
+    - [REF-SENSOR-014: TI MSPM0 G-Series Design and Support Literature](#ref-sensor-014-ti-mspm0-g-series-design-and-support-literature)
+    - [REF-SEC-002: Infineon OPTIGA TPM SLB 9672 — SPI TPM 2.0](#ref-sec-002-infineon-optiga-tpm-slb-9672--spi-tpm-20)
     - [REF-SENSOR-005: Microchip KSZ9477 — Ethernet Switch with HSR/PRP Hardware Redundancy](#ref-sensor-005-microchip-ksz9477--ethernet-switch-with-hsrprp-hardware-redundancy)
     - [REF-SENSOR-006: TI TCAN1042HG-Q1 — CAN-FD Transceiver](#ref-sensor-006-ti-tcan1042hg-q1--can-fd-transceiver)
     - [REF-SENSOR-008: AKM AK7455 — 14-bit Off-Axis Magnetic Rotation Angle Sensor](#ref-sensor-008-akm-ak7455--14-bit-off-axis-magnetic-rotation-angle-sensor)
@@ -1288,7 +1291,7 @@ package must be confirmed before board layout (tracked in TODO.md §1.2c).
 
 ---
 
-### REF-SENSOR-004: TI MSPM0G3507 — Mixed-Signal MCU with CAN-FD Interface
+### REF-SENSOR-004: TI MSPM0G3507 — Mixed-Signal MCU with CAN-FD Interface (SUPERSEDED)
 
 | Field | Value |
 |---|---|
@@ -1306,6 +1309,10 @@ package must be confirmed before board layout (tracked in TODO.md §1.2c).
 | CAN interface | Native hardware MCAN peripheral (CAN-FD capable) | MSPM0G3507 datasheet title: "Mixed-Signal Microcontrollers With CAN-FD Interface" |
 | Package options | 48-pin LQFP (PT), 48-pin VQFN (RGZ), 32-pin VQFN (RHB), 32-/28-pin VSSOP | MSPM0G3507 datasheet |
 
+> **Superseded 2026-08-03 by REF-SENSOR-013 (MSPM0G351x-Q1)** on all three trust-module
+> boards. Retained here because the clean-room RGZ-48 symbol geometry used by the
+> MSPM0G3519-Q1 symbol was originally derived from this part's datasheet (SLASEX6C).
+
 **Applied to:** Observer board control half — reads Benewake TFmini-S (REF-SENSOR-002) over UART,
 drives the location-specific crosshair laser GPIO, and republishes signed sensor data over
 both the Ethernet ring (via REF-SENSOR-005) and the CAN-FD trunk (via REF-SENSOR-006).
@@ -1314,6 +1321,113 @@ PocketBeagle 2 Industrial's AM6254 real-time domain — avoids the software-PIO 
 synthesis that a non-TI MCU (e.g. RP2350) would require.
 
 **Used in:** `avionics/AGENTS.md`, `TODO.md`
+
+---
+
+### REF-SENSOR-013: TI MSPM0G351x-Q1 — Automotive Mixed-Signal MCU with CAN-FD
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Texas Instruments |
+| **Product** | MSPM0G3519-Q1 / MSPM0G3518-Q1 (MSPM0G351x-Q1 family) |
+| **Official product page** | <https://www.ti.com/product/MSPM0G3519-Q1>, <https://www.ti.com/product/MSPM0G3518-Q1> |
+| **Datasheet** | SLASFA6B, *MSPM0G351x-Q1 Automotive Mixed-Signal Microcontrollers With CAN-FD Interface*, Nov 2024, rev. Oct 2025 |
+| **Datasheet URL** | <https://www.ti.com/lit/ds/symlink/mspm0g3519-q1.pdf> |
+| **Local copy** | `avionics/datasheets/mspm0g3518-q1.pdf` |
+| **Lifecycle status** | ACTIVE / PRODUCTION DATA |
+
+**Specifications applied in this design:**
+
+| Parameter | Value | Source |
+|---|---|---|
+| Core | Arm Cortex-M0+ @ 80 MHz | SLASFA6B §1 Features |
+| Qualification | AEC-Q100 Grade 1, −40 °C to +125 °C | SLASFA6B §1 Features |
+| Flash / SRAM | MSPM0G3519-Q1 512 KB / 128 KB; MSPM0G3518-Q1 256 KB / 128 KB | SLASFA6B ordering table |
+| CAN-FD instances | 1 in the 48-pin and 32-pin packages (2 in 64/80/100-pin) | SLASFA6B ordering table |
+| Orderable, 48-pin RGZ VQFN 7×7 mm | `M0G3519QRGZRQ1` | SLASFA6B ordering table + §10.2 nomenclature |
+| Orderable, 32-pin RHB VQFN 5×5 mm | `M0G3518QRHBRQ1` | SLASFA6B ordering table + §10.2 nomenclature |
+| RGZ-48 pin map | Verified identical, pad for pad, to the MSPM0G350x/-Q1 RGZ-48 | SLASFA6B Fig 6-5 vs SLASEX6C/SLASF88C Fig 6-4 |
+| RHB-32 bonded ports | PA0–PA27 only, plus NRST/VDD/VSS/VCORE and the exposed pad; **no PBx port is available** | SLASFA6B Fig 6-6 |
+| CAN pins | `CAN0_TX` PA12, `CAN0_RX` PA13, **IOMUX PF12** | SLASFA6B Table 6-2 |
+| SPI1 chip select on PA15 | `SPI1_CS2` (PF3); this family does not offer `SPI1_CS0` on PA15 | SLASFA6B Table 6-2 |
+| UART on PB15/PB16 | `UART7_TX`/`UART7_RX` (PF2); this family does not offer UART2 there | SLASFA6B Table 6-2 |
+| C(VDD) / C(VCORE) | 10 µF / 470 nF, ±20 % or better, low-ESR, close to the pins | SLASFA6B recommended operating conditions |
+| Package outline, RGZ-48 | RGZ0048F, exposed thermal pad **4.1 mm × 4.1 mm** | SLASFA6B land pattern 4229427/A |
+| Package outline, RHB-32 | RHB0032T, exposed thermal pad **3.45 mm × 3.45 mm** | SLASFA6B land pattern 4224744/A |
+
+**Applied to:** the trust-module MCU on all three trust-module boards, superseding
+REF-SENSOR-004 (MSPM0G3507) at the 2026-08-03 retarget — `MSPM0G3519-Q1` in RGZ-48 on Jayne,
+`MSPM0G3518-Q1` in RHB-32 on `CAN-PERIPH-GW-1` and Kaylee.
+
+**Used in:** `avionics/kicad/symbols/Jayne_MSPM0G3519_Q1_RGZ.kicad_sym`,
+`avionics/kicad/symbols/Jayne_MSPM0G3518_Q1_RHB.kicad_sym`,
+`avionics/kicad/retarget_mspm0g351x_slb9672.py`, `avionics/kicad/Jayne/Jayne.md`,
+`avionics/kicad/Kaylee/Kaylee.md`, `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`, `TODO.md`
+
+---
+
+### REF-SENSOR-014: TI MSPM0 G-Series Design and Support Literature
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Texas Instruments |
+| **Documents** | SLAAE76E, SLAAET8A, SLAAE29A, SLAU846E, SLAZ742G |
+| **Local copies** | `avionics/datasheets/slaae76e.pdf`, `slaaet8a.pdf`, `slaae29a.pdf`, `slau846e.pdf`, `slaz742g.pdf` |
+
+| Designation | Title | URL | Sections applied |
+|---|---|---|---|
+| SLAAE76E | *MSPM0 G-Series MCUs Hardware Development Guide* (rev. E, Apr 2026) | <https://www.ti.com/lit/an/slaae76e/slaae76e.pdf> | §1 Table 1-1 hardware design check list; §2.4 decoupling; §3 reset; §8.5 open-drain I/O; §9 layout |
+| SLAAET8A | *EMC Improvement Guide for MSPM0* (rev. A) | <https://www.ti.com/lit/an/slaaet8a/slaaet8a.pdf> | EMC design practice for the nacelle-bay EMI environment |
+| SLAAE29A | *Cybersecurity Enablers in MSPM0 MCUs* (rev. A) | <https://www.ti.com/lit/an/slaae29a/slaae29a.pdf> | Secure boot and secure storage, paired with the SLB 9672 TPM |
+| SLAU846E | *MSPM0 G-Series 80-MHz Microcontrollers Technical Reference Manual* (rev. E, Jul 2026) | <https://www.ti.com/lit/ug/slau846e/slau846e.pdf> | Peripheral programming model for §4.6 firmware |
+| SLAZ742G | *MSPM0G3x0x, MSPM0G1x0x, MSPM0G3x0x-Q1 Microcontrollers Errata* (rev. G, Jul 2026) | <https://www.ti.com/lit/er/slaz742g/slaz742g.pdf> | Silicon advisories |
+
+**Requires verification:** SLAZ742G covers the MSPM0G3x0x/G1x0x families and their -Q1
+variants. It does **not** enumerate the MSPM0G351x-Q1 parts adopted on 2026-08-03, and the
+TRM SLAU846E contains no occurrence of "MSPM0G3518"/"MSPM0G3519". The MSPM0G351x-Q1 errata
+and TRM applicability must be confirmed against TI before firmware sign-off — see TODO.md
+§1.2d.
+
+**Applied to:** MCU support-circuit design review for all three trust-module boards.
+
+**Used in:** `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`, `TODO.md`
+
+---
+
+### REF-SEC-002: Infineon OPTIGA TPM SLB 9672 — SPI TPM 2.0
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Infineon Technologies |
+| **Product** | SLB 9672AU2.0 FW16.xx (OPTIGA TPM 2.0) |
+| **Datasheet** | *OPTIGA TPM SLB9672 TPM 2.0 FW16.xx Datasheet*, rev. 1.3, 2024-11-18 |
+| **Datasheet URL** | <https://www.infineon.com/assets/row/public/documents/30/49/infineon-slb9672-tpm20-spi-fw16.xx-ds-rev1-3-2024-11-18-datasheet-en.pdf> |
+| **Local copy** | `avionics/datasheets/slb9672.pdf` |
+
+**Specifications applied in this design:**
+
+| Parameter | Value | Source |
+|---|---|---|
+| Interface | SPI, mode 0 only, up to 33 MHz | Rev 1.3 §3.1.1, Table 11 |
+| Package | PG-UQFN-32-1,-2, 5 × 5 mm | Rev 1.3 §2.1 |
+| Temperature range | SLB 9672AU2.0 extended, −40 °C to +105 °C (XU2.0 is −40 to +85 °C) | Rev 1.3 ordering information |
+| SPI pins | CS# 20, SCLK 19, MOSI 21, MISO 24, PIRQ# 18, RST# 17 | Rev 1.3 Table 11 |
+| Supply pins | VDD 1, 14, 22; GND 2, 9, 23, 32 | Rev 1.3 Table 12 |
+| TCG-compatibility pins | Pin 8 NCI/VDD and pin 16 NCI/GND — connect to VDD/GND respectively | Rev 1.3 Table 13 |
+| Exposed pad | Internally connected to GND; **must also be connected to GND externally** | Rev 1.3 §2.1.2 |
+| Recommended land | 4.1 mm outline, exposed pad **3.6 mm × 3.6 mm** | Rev 1.3 Figure 3 |
+
+**Compatibility with the superseded SLB9670VQ2.0:** every pin the Serenity boards connect —
+the SPI group (17–24), VDD (1/8/14/22) and GND (2/9/16/23/32) — is identical between the two
+parts. The differences are confined to pins 3, 4, 6 and 7 (GPIO_00/GPIO_01/NC/GPIO_02 on the
+SLB 9672), all of which are left unconnected on all three Serenity boards.
+
+**Applied to:** the trust-module TPM on Jayne, Kaylee and `CAN-PERIPH-GW-1`, superseding the
+SLB9670VQ2.0 at the 2026-08-03 retarget. Not yet applied to Emma, Wash or Zoë, which still
+carry the SLB9670.
+
+**Used in:** `avionics/kicad/symbols/Jayne_SLB9672_TPM.kicad_sym`,
+`avionics/kicad/retarget_mspm0g351x_slb9672.py`, `TODO.md`
 
 ---
 
@@ -1437,7 +1551,7 @@ ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verific
 | **Datasheet** | Revision 1.3, 2024-11-18, archived at `avionics/datasheets/SLB_9672XU20_Infineon.pdf`, <https://www.infineon.com/assets/row/public/documents/30/49/infineon-slb9672-tpm20-spi-fw16.xx-ds-rev1-3-2024-11-18-datasheet-en.pdf> |
 | **Product page** | <https://www.infineon.com/OPTIGA-TPM-SLB9672> |
 | **Package** | PG-UQFN-32-1,-2, `Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm` |
-| **Note** | Fleet-standard TPM (root `AGENTS.md` §Security: "every Cape carries a TPM"). **Migrated from SLB9670 to SLB9672 (2026-08-01)** — same 5x5mm/0.5mm-pitch/32-pin QFN land pattern (both datasheets: 5x5mm body, 3.6x3.6mm exposed pad), so the existing `Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm` footprint was reused as-is; the GPIO/PP pin functions and which VDD/GND pins are mandatory vs optional differ (SLB9672 pins 1/14/22 are the three mandatory VDD pins, vs 8/22 on SLB9670; pin 6 is a true no-connect instead of a GPIO; pins 3/4/7 are GPIO_00/01/02 instead of NCI/NCI/PP) — see Removed/Superseded Citations for the old SLB9670VQ2.0/XQ2.0 entry. Clean-room symbol `Observer_SLB9672_TPM` built directly from datasheet Tables 11/12/13, first on Observer, reused verbatim on `CAN-PERIPH-GW-1`, Flight Engineer, and Commo. **Not** the same as the inline "SLB9672" symbol already embedded in Pilot.kicad_sch/XO.kicad_sch (renamed from "SLB9670" in the same migration, pin numbers unchanged), which was found (2026-07-26, not yet corrected) to have incorrect pin numbers relative to the datasheet — see Removed/Superseded Citations. |
+| **Note** | Fleet-standard TPM (root `AGENTS.md` §Security: "every Cape carries a TPM"). **Migrated from SLB9670 to SLB9672 (2026-08-01)** — same 5x5mm/0.5mm-pitch/32-pin QFN land pattern (both datasheets: 5x5mm body, 3.6x3.6mm exposed pad), so the existing `Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm` footprint was reused as-is; the GPIO/PP pin functions and which VDD/GND pins are mandatory vs optional differ (SLB9672 pins 1/14/22 are the three mandatory VDD pins, vs 8/22 on SLB9670; pin 6 is a true no-connect instead of a GPIO; pins 3/4/7 are GPIO_00/01/02 instead of NCI/NCI/PP) — see Removed/Superseded Citations for the old SLB9670VQ2.0/XQ2.0 entry. Clean-room symbol `SLB9672_TPM` built directly from datasheet Tables 11/12/13, first on Observer, reused verbatim on `CAN-PERIPH-GW-1`, Flight Engineer, and Commo. **Not** the same as the inline "SLB9672" symbol already embedded in Pilot.kicad_sch/XO.kicad_sch (renamed from "SLB9670" in the same migration, pin numbers unchanged), which was found (2026-07-26, not yet corrected) to have incorrect pin numbers relative to the datasheet — see Removed/Superseded Citations. |
 
 **Used in:** `avionics/kicad/Observer/kicads/Observer.kicad_sch` (U5), `avionics/kicad/CAN-PERIPH-GW-1/` (U2 per stack), `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch` (U_TPM), `avionics/kicad/Commo/kicads/Commo.kicad_sch` (TPM), `avionics/kicad/Pilot/kicads/Pilot.kicad_sch`/`Pilot_rebuild.kicad_sch` (TPM), `avionics/kicad/XO/kicads/XO.kicad_sch` (TPM).
 
@@ -1834,7 +1948,7 @@ Add verified section numbers to the relevant files and update this table.
 | LibreServo v2 fork — RS-485 differential bus electrical integration onto `CAN-PERIPH-GW-1` (REF-SENSOR-014) | `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`, `docs/CARGO_WINCH_SPECIFICATION.md` §5.1 (Rev C) | LibreServo's daisy-chain is genuine differential RS-485 (onboard transceiver on the servo side); `J_FLEX` on the gateway exposes only a bare `FLEX_UART_TX/RX` pair, not a local RS-485 transceiver for this specific servo drop. Also, the fork's own isolated-RS-485/CAN-FD/TPM upgrade (`PCB/RS485-CANFD-TPM-upgrade.md`) is schematic-only with no footprints, PCB placement, or firmware port yet, and the TPM addition has not been started at all. | Decide and document the gateway-side RS-485 transceiver approach (add one at the harness, or extend the gateway schematic) before winch/nacelle-tilt firmware bring-up; do not assume TPM-signed servo-native messages until the fork's TPM work lands — rely on the gateway's own TPM signing the CAN-FD/RS-485 frame instead. (`airframe/fuselage-mid/WBS.md`) |
 | OpenServoCore hardware maturity for SG90 cargo servos (REF-SENSOR-015) | `REFERENCES.md` REF-SENSOR-015, `current-specification/bom_revS.json`/`.csv` `SERVO-CARGO` | Upstream project status is explicitly "in active development, nothing here is shippable yet," hardware validated only to revision B as of the source consulted. | Re-check `github.com/OpenServoCore/open-servo-core` project status before procurement; do not order SG90+OpenServoCore boards in flight-article quantity until upstream reaches a tagged/shippable hardware release. (`docs/TODO.md` §0.x) |
 | Wing/nacelle Hall tilt encoder — sensor selection | `current-specification/bom_revS.csv` SKIPPER-TILT-ENC-PCB, `avionics/kicad/ENC-NACELLE-1.*`, `docs/TILT_SPAR_ANALYSIS.md` §1/§3.5/§8.1, `avionics/WBS.md` §1.9.1 | **RESOLVED 2026-07-19 (datasheets in repo).** MT6701 (Rev 1.9) was **rejected** — its datasheet §6 confirms it is **on-axis only** (Ø6 mm cyl magnet, off-axis misalignment ≤ 0.3 mm), so it cannot read the through-shaft off-axis; AS5600 has the same limit. Part selected = **AKM AK7455** (REF-SENSOR-008), which explicitly supports the Off-Axis (side-of-shaft) configuration; pinout/interface **verified** vs datasheet 200800064-E-00 and the schematic rebuilt (`kicad-cli` ERC 0-error). Interface is **SPI** (no off-axis absolute IC offers I²C). | **Electrical spec resolved.** Remaining, now scoped as bench/layout items (not "unverified part"): (1) off-axis flux 10–70 mT at the IC with the chosen ring/gap; (2) EEPROM INL calibration over −5..90° (AKM app support); (3) ERROR-pin push-pull vs open-drain; (4) QFN24 4×4 EP dims (EP left floating) + wing-pocket resize 3×3→4×4 (`HALL_*` in `wings_s1223_revo.scad`); (5) confirm the AKM product URL if the datasheet is re-hosted. TODO §0.8 / `airframe/wings-nacelles/WBS.md` §1.1.3.6. |
-| Pilot's own inline "SLB9672" TPM symbol pin numbers | `avionics/kicad/Pilot/kicads/Pilot.kicad_sch` | Found 2026-07-26 while building Commo's TPM addition (which deliberately reused the separately-verified `Observer_SLB9670_TPM` clean-room symbol instead, precisely to avoid this defect): Pilot's own, independently-authored inline "SLB9670" symbol had pin numbers that did not match datasheet Revision 1.4 Tables 3–5. Not fixed at the time — out of scope for the CAN-FD/RS-485 trust-module task. **2026-08-01 SLB9670→SLB9672 migration:** the symbol/lib_id/value text was renamed to "SLB9672" (its pin *numbers* were left exactly as they were — this defect predates and is independent of the chip migration) so it now carries the same wrong-pin-number defect under the new chip's name (REF-SENSOR-011). Still not fixed — still out of scope. | Rebuild Pilot's TPM symbol from REF-SENSOR-011 using the same clean-room `parse_real_symbol`/pin-table method as `Observer_SLB9672_TPM`, or replace the instance with that verified symbol outright; re-run `kicad-cli sch erc` to confirm no regression against Pilot's existing 48-violation baseline. |
+| Pilot's own inline "SLB9672" TPM symbol pin numbers | `avionics/kicad/Pilot/kicads/Pilot.kicad_sch` | Found 2026-07-26 while building Commo's TPM addition (which deliberately reused the separately-verified `Observer_SLB9670_TPM` clean-room symbol instead, precisely to avoid this defect): Pilot's own, independently-authored inline "SLB9670" symbol had pin numbers that did not match datasheet Revision 1.4 Tables 3–5. Not fixed at the time — out of scope for the CAN-FD/RS-485 trust-module task. **2026-08-01 SLB9670→SLB9672 migration:** the symbol/lib_id/value text was renamed to "SLB9672" (its pin *numbers* were left exactly as they were — this defect predates and is independent of the chip migration) so it now carries the same wrong-pin-number defect under the new chip's name (REF-SENSOR-011). Still not fixed — still out of scope. | Rebuild Pilot's TPM symbol from REF-SENSOR-011 using the same clean-room `parse_real_symbol`/pin-table method as `SLB9672_TPM`, or replace the instance with that verified symbol outright; re-run `kicad-cli sch erc` to confirm no regression against Pilot's existing 48-violation baseline. |
 | VimDrones `ap_periph_pico` / ESC S50 concept-only inspiration, `CAN-PERIPH-GW-1` and CAN-PERIPH-GW-1's ESC-gateway deployment mode | `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` | **Not a citation defect — documented here for license-boundary auditability.** `CAN-PERIPH-GW-1` was built as a fleet-integrated remix of the *publicly documented product concept* at <https://dev.vimdrones.com/products/vimdrones_can_periph_pico/> and <https://dev.vimdrones.com/products/vimdrones_esc_s50/> (peripheral-bus CAN/servo gateway; per-ESC CAN telemetry). VimDrones' own KiCad source (`VimDrones/AM32_esc_development_board` on GitHub) is licensed GPL-3.0, which is incompatible with this project's CC-BY-4.0-or-better attribution baseline for derivative files — no VimDrones schematic, footprint, or geometry was copied; only the public product specification was used as design inspiration, and the entire trust-module implementation (MCU, TPM, isolators, netlist) is original clean-room work against TI/Infineon datasheets. | N/A — informational; see `CAN-PERIPH-GW-1.md` "Why VimDrones' concept but not VimDrones' hardware" |
 | REF-CAD-004 misubisu hull model license stated as "CC BY 4.0" | REFERENCES.md REF-CAD-004, `current-specification/LICENSE_AND_ATTRIBUTION.md` §2, `README.md` Component License Map + Attribution quote, `docs/references/thingverse-serenity/LICENSE.txt` | **Incorrect attribution, found during TODO.md §0.9 licensing audit (2026-08-01).** The Thingiverse listing for Thing 7330462 is licensed **CC BY-SA 4.0** (ShareAlike), not plain CC BY 4.0 — the two earlier docs that had it right (`current-specification/LICENSE_AND_ATTRIBUTION.md` §2 "CC BY 4.0 SA", `docs/references/thingverse-serenity/LICENSE.txt`) used a garbled/non-standard label that also needed correcting. All four locations corrected to read "CC BY-SA 4.0". | REF-CAD-004 (corrected), REF-LIC-001 (CERN-OHL-W 2.0 Available Component treatment) |
 | XO's own local TPM footprint (`QFN-32-1EP_4x4mm_P0.4mm_EP2.65x2.65mm`) | `avionics/kicad/XO/kicads/XO.kicad_pcb` (TPM footprint, renamed SLB9670→SLB9672 in the 2026-08-01 migration) | Found 2026-08-01 while migrating SLB9670→SLB9672: XO's placed TPM footprint uses a generic Renesas-sourced KiCad standard-library QFN-32 land pattern (4x4mm body, 0.4mm pitch, 2.65x2.65mm EP) that does not match either TPM's real package (both SLB9670 and SLB9672 are 5x5mm body, 0.5mm pitch, per their respective datasheets' Fig 6/Fig 3 recommended footprints) — i.e. `Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm`, the footprint used everywhere else this part appears (Observer, Commo, Flight Engineer, CAN-PERIPH-GW-1, Pilot). A separate, pre-existing defect from the wrong-pin-number one already tracked above; not fixed this session — out of scope for the chip-migration task (renamed text only; root `AGENTS.md` §5 requires footprint-position/DRC-driven moves to be referred to the user). | Replace XO's TPM footprint with `Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm` (refer the footprint swap to the user per `avionics/AGENTS.md` "Footprint and Component Placement"); re-run `kicad-cli pcb drc` to confirm no regression against XO's existing DRC baseline. |
