@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-03",
+  "generated": "2026-08-04",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
