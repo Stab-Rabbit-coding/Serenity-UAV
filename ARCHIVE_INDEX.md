@@ -4,7 +4,6 @@
 <!-- Active file tree described in PROJECT_INDEX.md. -->
 <!-- Last updated: 2026-08-03 — Automated reconciliation pass -->
 
-
                                        scripts archived alongside their boards
 
 Pre-Rev Q (superseded by Cape-A/B architecture at Rev K):
@@ -77890,3 +77889,8 @@ avionics/kicad/Wash/scripts/__pycache__/sync_wash_pcb_nets.cpython-313.pyc — [
 
 ## --- AUTO-DISCOVERED (2026-08-03) ---
 avionics/kicad/symbols/Jayne_MSPM0G3507_Q1_RGZ.kicad_sym — [PENDING AI CLASSIFICATION]
+
+## --- AUTO-DISCOVERED (2026-08-03) ---
+avionics/datasheets/mspm0g3518-q1.pdf — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-08-03_142456.zip — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-08-03_142456.zip — [IGNORED/VCS-EXCLUDED]
