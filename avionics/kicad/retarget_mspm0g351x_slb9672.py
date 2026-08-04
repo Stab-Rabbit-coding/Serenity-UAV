@@ -144,6 +144,7 @@ BOARDS = {
     },
 }
 
+
 def _cut(text: str, start: int) -> str:
     """Delete the balanced s-expression at `start`, plus its line whitespace."""
     depth = 0
@@ -335,9 +336,12 @@ def retarget(board: str, cfg: dict, apply_changes: bool) -> None:
             if old_at not in text:
                 raise SystemExit(f"{board}: could not find {tref} placement to shift")
             text = text.replace(old_at, new_at, 1)
-            text = re.sub(r'(\(property "(?:Reference|Value)" "[^"]*" \(at %g )([\d.]+)( \d+\))' % tix,
-                          lambda m: f"{m.group(1)}{float(m.group(2)) + shift:g}{m.group(3)}",
-                          text)
+            prop_at = (r'(\(property "(?:Reference|Value)" "[^"]*" '
+                       r'\(at %g )([\d.]+)( \d+\))' % tix)
+            text = re.sub(
+                prop_at,
+                lambda m: f"{m.group(1)}{float(m.group(2)) + shift:g}{m.group(3)}",
+                text)
 
             # Re-emit the TPM's labels at the relocated pin coordinates.
             add = []
@@ -350,15 +354,20 @@ def retarget(board: str, cfg: dict, apply_changes: bool) -> None:
                     f'  (global_label "{net}" (shape bidirectional) (at {x:g} {y:g} {rot})\n'
                     f'    (effects (font (size 1.016 1.016)))\n'
                     f'    (uuid "9672tpm0-0000-0000-0000-{pad:012x}")\n'
-                    f'    (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {x:g} {y:g} 0)\n'
+                    f'    (property "Intersheet References" "${{INTERSHEET_REFS}}" '
+                    f'(at {x:g} {y:g} 0)\n'
                     f'      (effects (font (size 1.016 1.016)) (hide yes))))\n')
-            for (x, y), name in sorted(set(restore)):
+            # Enumerate rather than hash for the uuid suffix: hash() is salted
+            # per interpreter run, so hashing would make the output differ
+            # between otherwise identical runs of this script.
+            for n, ((x, y), name) in enumerate(sorted(set(restore))):
                 add.append(
                     f'  (global_label "{name}" (shape bidirectional) '
                     f'(at {x:g} {y:g} {0 if x > tix else 180})\n'
                     f'    (effects (font (size 1.016 1.016)))\n'
-                    f'    (uuid "9672rst0-0000-0000-0000-{abs(hash((x, y, name))) % 16**12:012x}")\n'
-                    f'    (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {x:g} {y:g} 0)\n'
+                    f'    (uuid "9672rst0-0000-0000-0000-{n:012x}")\n'
+                    f'    (property "Intersheet References" "${{INTERSHEET_REFS}}" '
+                    f'(at {x:g} {y:g} 0)\n'
                     f'      (effects (font (size 1.016 1.016)) (hide yes))))\n')
 
             text = text.rstrip()

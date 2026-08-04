@@ -2,7 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-08-04 — Automated reconciliation pass -->
-                                    detail lives in the subordinate WBS.md files per-folder
 TODO.md                           — Open-work-only subset of WBS.md (what's left to do)
 package.json                       — Node.js dependency manifest (tooling/preview support)
 package-lock.json                  — Node.js dependency lockfile
@@ -78356,7 +78355,9 @@ avionics/kicad/symbols/Jayne_SLB9672_TPM.kicad_sym — clean-room SLB 9672AU2.0 
 avionics/kicad/retarget_mspm0g351x_slb9672.py — 2026-08-03 schematic retarget injection pass
 avionics/kicad/retarget_pcb_footprints.py — 2026-08-03 PCB footprint swap / re-anchor pass
 
-Each edited schematic and PCB also has a `.pre-g351x` backup beside it (`<board>.kicad_sch.pre-g351x`, `<board>.kicad_pcb.pre-g351x`); these are working backups, not archive entries.
+The retarget scripts also write a local `.pre-g351x` backup beside each edited
+schematic and PCB. Those are gitignored working files, not repository artefacts —
+the authoritative pre-change state is git history.
 
 ## --- AUTO-DISCOVERED (2026-08-04) ---
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb.pre-g351x — [PENDING AI CLASSIFICATION]
