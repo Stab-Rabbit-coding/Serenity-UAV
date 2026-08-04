@@ -1,8 +1,7 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: 2026-08-03 — Automated reconciliation pass -->
-                                    checkbox items only, ≤70 chars each, done+open); full
+<!-- Last updated: 2026-08-04 — Automated reconciliation pass -->
                                     detail lives in the subordinate WBS.md files per-folder
 TODO.md                           — Open-work-only subset of WBS.md (what's left to do)
 package.json                       — Node.js dependency manifest (tooling/preview support)
@@ -78338,3 +78337,28 @@ avionics/kicad/__pycache__/retarget_mspm0g351x_slb9672.cpython-313.pyc — [IGNO
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch.pre-g351x — [PENDING AI CLASSIFICATION]
 avionics/kicad/Jayne/kicads/Jayne.kicad_sch.pre-g351x — [PENDING AI CLASSIFICATION]
 avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch.pre-g351x — [PENDING AI CLASSIFICATION]
+
+## 2026-08-03 — Trust-module MCU/TPM retarget (TODO.md 1.2d)
+
+New files added by the MSPM0G351x-Q1 + SLB 9672 retarget:
+
+avionics/datasheets/mspm0g3518-q1.pdf — TI SLASFA6B — MSPM0G351x-Q1 datasheet (REF-SENSOR-013)
+avionics/datasheets/mspm0g3507-q1.pdf — TI SLASF88C — MSPM0G350x-Q1 datasheet (pin-map cross-check)
+avionics/datasheets/slb9672.pdf — Infineon SLB9672 TPM 2.0 FW16.xx datasheet rev 1.3 (REF-SEC-002)
+avionics/datasheets/slaae76e.pdf — TI MSPM0 G-Series Hardware Development Guide (REF-SENSOR-014)
+avionics/datasheets/slaaet8a.pdf — TI EMC Improvement Guide for MSPM0 (REF-SENSOR-014)
+avionics/datasheets/slaae29a.pdf — TI Cybersecurity Enablers in MSPM0 MCUs (REF-SENSOR-014)
+avionics/datasheets/slau846e.pdf — TI MSPM0 G-Series 80-MHz TRM (REF-SENSOR-014)
+avionics/datasheets/slaz742g.pdf — TI MSPM0G3x0x errata (REF-SENSOR-014)
+avionics/kicad/symbols/Jayne_MSPM0G3519_Q1_RGZ.kicad_sym — clean-room MSPM0G3519-Q1 RGZ-48 symbol
+avionics/kicad/symbols/Jayne_MSPM0G3518_Q1_RHB.kicad_sym — clean-room MSPM0G3518-Q1 RHB-32 symbol
+avionics/kicad/symbols/Jayne_SLB9672_TPM.kicad_sym — clean-room SLB 9672AU2.0 TPM symbol
+avionics/kicad/retarget_mspm0g351x_slb9672.py — 2026-08-03 schematic retarget injection pass
+avionics/kicad/retarget_pcb_footprints.py — 2026-08-03 PCB footprint swap / re-anchor pass
+
+Each edited schematic and PCB also has a `.pre-g351x` backup beside it (`<board>.kicad_sch.pre-g351x`, `<board>.kicad_pcb.pre-g351x`); these are working backups, not archive entries.
+
+## --- AUTO-DISCOVERED (2026-08-04) ---
+avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb.pre-g351x — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/kicads/Jayne.kicad_pcb.pre-g351x — [PENDING AI CLASSIFICATION]
+avionics/kicad/__pycache__/retarget_pcb_footprints.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]

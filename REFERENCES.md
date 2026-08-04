@@ -68,7 +68,10 @@ REF-CAD-002 Nick Henning after consolidation)
     - [REF-SENSOR-001: RunCam Nano 4 — 19 mm Nano Format FPV Camera Specification (SUPERSEDED)](#ref-sensor-001-runcam-nano-4--19-mm-nano-format-fpv-camera-specification-superseded)
     - [REF-SENSOR-002: Benewake TFmini-S — Long-Range Time-of-Flight Ranging Module Specification](#ref-sensor-002-benewake-tfmini-s--long-range-time-of-flight-ranging-module-specification)
     - [REF-SENSOR-003: TI AM62Ax Sitara Processors — Vision SoC Datasheet](#ref-sensor-003-ti-am62ax-sitara-processors--vision-soc-datasheet)
-    - [REF-SENSOR-004: TI MSPM0G3507 — Mixed-Signal MCU with CAN-FD Interface](#ref-sensor-004-ti-mspm0g3507--mixed-signal-mcu-with-can-fd-interface)
+    - [REF-SENSOR-004: TI MSPM0G3507 — Mixed-Signal MCU with CAN-FD Interface (SUPERSEDED)](#ref-sensor-004-ti-mspm0g3507--mixed-signal-mcu-with-can-fd-interface-superseded)
+    - [REF-SENSOR-013: TI MSPM0G351x-Q1 — Automotive Mixed-Signal MCU with CAN-FD](#ref-sensor-013-ti-mspm0g351x-q1--automotive-mixed-signal-mcu-with-can-fd)
+    - [REF-SENSOR-014: TI MSPM0 G-Series Design and Support Literature](#ref-sensor-014-ti-mspm0-g-series-design-and-support-literature)
+    - [REF-SEC-002: Infineon OPTIGA TPM SLB 9672 — SPI TPM 2.0](#ref-sec-002-infineon-optiga-tpm-slb-9672--spi-tpm-20)
     - [REF-SENSOR-005: Microchip KSZ9477 — Ethernet Switch with HSR/PRP Hardware Redundancy](#ref-sensor-005-microchip-ksz9477--ethernet-switch-with-hsrprp-hardware-redundancy)
     - [REF-SENSOR-006: TI TCAN1042HG-Q1 — CAN-FD Transceiver](#ref-sensor-006-ti-tcan1042hg-q1--can-fd-transceiver)
     - [REF-SENSOR-008: AKM AK7455 — 14-bit Off-Axis Magnetic Rotation Angle Sensor](#ref-sensor-008-akm-ak7455--14-bit-off-axis-magnetic-rotation-angle-sensor)
@@ -1266,7 +1269,7 @@ package must be confirmed before board layout (tracked in TODO.md §1.2c).
 
 ---
 
-### REF-SENSOR-004: TI MSPM0G3507 — Mixed-Signal MCU with CAN-FD Interface
+### REF-SENSOR-004: TI MSPM0G3507 — Mixed-Signal MCU with CAN-FD Interface (SUPERSEDED)
 
 | Field | Value |
 |---|---|
@@ -1284,6 +1287,10 @@ package must be confirmed before board layout (tracked in TODO.md §1.2c).
 | CAN interface | Native hardware MCAN peripheral (CAN-FD capable) | MSPM0G3507 datasheet title: "Mixed-Signal Microcontrollers With CAN-FD Interface" |
 | Package options | 48-pin LQFP (PT), 48-pin VQFN (RGZ), 32-pin VQFN (RHB), 32-/28-pin VSSOP | MSPM0G3507 datasheet |
 
+> **Superseded 2026-08-03 by REF-SENSOR-013 (MSPM0G351x-Q1)** on all three trust-module
+> boards. Retained here because the clean-room RGZ-48 symbol geometry used by the
+> MSPM0G3519-Q1 symbol was originally derived from this part's datasheet (SLASEX6C).
+
 **Applied to:** Jayne board control half — reads Benewake TFmini-S (REF-SENSOR-002) over UART,
 drives the location-specific crosshair laser GPIO, and republishes signed sensor data over
 both the Ethernet ring (via REF-SENSOR-005) and the CAN-FD trunk (via REF-SENSOR-006).
@@ -1292,6 +1299,113 @@ PocketBeagle 2 Industrial's AM6254 real-time domain — avoids the software-PIO 
 synthesis that a non-TI MCU (e.g. RP2350) would require.
 
 **Used in:** `avionics/AGENTS.md`, `TODO.md`
+
+---
+
+### REF-SENSOR-013: TI MSPM0G351x-Q1 — Automotive Mixed-Signal MCU with CAN-FD
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Texas Instruments |
+| **Product** | MSPM0G3519-Q1 / MSPM0G3518-Q1 (MSPM0G351x-Q1 family) |
+| **Official product page** | <https://www.ti.com/product/MSPM0G3519-Q1>, <https://www.ti.com/product/MSPM0G3518-Q1> |
+| **Datasheet** | SLASFA6B, *MSPM0G351x-Q1 Automotive Mixed-Signal Microcontrollers With CAN-FD Interface*, Nov 2024, rev. Oct 2025 |
+| **Datasheet URL** | <https://www.ti.com/lit/ds/symlink/mspm0g3519-q1.pdf> |
+| **Local copy** | `avionics/datasheets/mspm0g3518-q1.pdf` |
+| **Lifecycle status** | ACTIVE / PRODUCTION DATA |
+
+**Specifications applied in this design:**
+
+| Parameter | Value | Source |
+|---|---|---|
+| Core | Arm Cortex-M0+ @ 80 MHz | SLASFA6B §1 Features |
+| Qualification | AEC-Q100 Grade 1, −40 °C to +125 °C | SLASFA6B §1 Features |
+| Flash / SRAM | MSPM0G3519-Q1 512 KB / 128 KB; MSPM0G3518-Q1 256 KB / 128 KB | SLASFA6B ordering table |
+| CAN-FD instances | 1 in the 48-pin and 32-pin packages (2 in 64/80/100-pin) | SLASFA6B ordering table |
+| Orderable, 48-pin RGZ VQFN 7×7 mm | `M0G3519QRGZRQ1` | SLASFA6B ordering table + §10.2 nomenclature |
+| Orderable, 32-pin RHB VQFN 5×5 mm | `M0G3518QRHBRQ1` | SLASFA6B ordering table + §10.2 nomenclature |
+| RGZ-48 pin map | Verified identical, pad for pad, to the MSPM0G350x/-Q1 RGZ-48 | SLASFA6B Fig 6-5 vs SLASEX6C/SLASF88C Fig 6-4 |
+| RHB-32 bonded ports | PA0–PA27 only, plus NRST/VDD/VSS/VCORE and the exposed pad; **no PBx port is available** | SLASFA6B Fig 6-6 |
+| CAN pins | `CAN0_TX` PA12, `CAN0_RX` PA13, **IOMUX PF12** | SLASFA6B Table 6-2 |
+| SPI1 chip select on PA15 | `SPI1_CS2` (PF3); this family does not offer `SPI1_CS0` on PA15 | SLASFA6B Table 6-2 |
+| UART on PB15/PB16 | `UART7_TX`/`UART7_RX` (PF2); this family does not offer UART2 there | SLASFA6B Table 6-2 |
+| C(VDD) / C(VCORE) | 10 µF / 470 nF, ±20 % or better, low-ESR, close to the pins | SLASFA6B recommended operating conditions |
+| Package outline, RGZ-48 | RGZ0048F, exposed thermal pad **4.1 mm × 4.1 mm** | SLASFA6B land pattern 4229427/A |
+| Package outline, RHB-32 | RHB0032T, exposed thermal pad **3.45 mm × 3.45 mm** | SLASFA6B land pattern 4224744/A |
+
+**Applied to:** the trust-module MCU on all three trust-module boards, superseding
+REF-SENSOR-004 (MSPM0G3507) at the 2026-08-03 retarget — `MSPM0G3519-Q1` in RGZ-48 on Jayne,
+`MSPM0G3518-Q1` in RHB-32 on `CAN-PERIPH-GW-1` and Kaylee.
+
+**Used in:** `avionics/kicad/symbols/Jayne_MSPM0G3519_Q1_RGZ.kicad_sym`,
+`avionics/kicad/symbols/Jayne_MSPM0G3518_Q1_RHB.kicad_sym`,
+`avionics/kicad/retarget_mspm0g351x_slb9672.py`, `avionics/kicad/Jayne/Jayne.md`,
+`avionics/kicad/Kaylee/Kaylee.md`, `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`, `TODO.md`
+
+---
+
+### REF-SENSOR-014: TI MSPM0 G-Series Design and Support Literature
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Texas Instruments |
+| **Documents** | SLAAE76E, SLAAET8A, SLAAE29A, SLAU846E, SLAZ742G |
+| **Local copies** | `avionics/datasheets/slaae76e.pdf`, `slaaet8a.pdf`, `slaae29a.pdf`, `slau846e.pdf`, `slaz742g.pdf` |
+
+| Designation | Title | URL | Sections applied |
+|---|---|---|---|
+| SLAAE76E | *MSPM0 G-Series MCUs Hardware Development Guide* (rev. E, Apr 2026) | <https://www.ti.com/lit/an/slaae76e/slaae76e.pdf> | §1 Table 1-1 hardware design check list; §2.4 decoupling; §3 reset; §8.5 open-drain I/O; §9 layout |
+| SLAAET8A | *EMC Improvement Guide for MSPM0* (rev. A) | <https://www.ti.com/lit/an/slaaet8a/slaaet8a.pdf> | EMC design practice for the nacelle-bay EMI environment |
+| SLAAE29A | *Cybersecurity Enablers in MSPM0 MCUs* (rev. A) | <https://www.ti.com/lit/an/slaae29a/slaae29a.pdf> | Secure boot and secure storage, paired with the SLB 9672 TPM |
+| SLAU846E | *MSPM0 G-Series 80-MHz Microcontrollers Technical Reference Manual* (rev. E, Jul 2026) | <https://www.ti.com/lit/ug/slau846e/slau846e.pdf> | Peripheral programming model for §4.6 firmware |
+| SLAZ742G | *MSPM0G3x0x, MSPM0G1x0x, MSPM0G3x0x-Q1 Microcontrollers Errata* (rev. G, Jul 2026) | <https://www.ti.com/lit/er/slaz742g/slaz742g.pdf> | Silicon advisories |
+
+**Requires verification:** SLAZ742G covers the MSPM0G3x0x/G1x0x families and their -Q1
+variants. It does **not** enumerate the MSPM0G351x-Q1 parts adopted on 2026-08-03, and the
+TRM SLAU846E contains no occurrence of "MSPM0G3518"/"MSPM0G3519". The MSPM0G351x-Q1 errata
+and TRM applicability must be confirmed against TI before firmware sign-off — see TODO.md
+§1.2d.
+
+**Applied to:** MCU support-circuit design review for all three trust-module boards.
+
+**Used in:** `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`, `TODO.md`
+
+---
+
+### REF-SEC-002: Infineon OPTIGA TPM SLB 9672 — SPI TPM 2.0
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Infineon Technologies |
+| **Product** | SLB 9672AU2.0 FW16.xx (OPTIGA TPM 2.0) |
+| **Datasheet** | *OPTIGA TPM SLB9672 TPM 2.0 FW16.xx Datasheet*, rev. 1.3, 2024-11-18 |
+| **Datasheet URL** | <https://www.infineon.com/assets/row/public/documents/30/49/infineon-slb9672-tpm20-spi-fw16.xx-ds-rev1-3-2024-11-18-datasheet-en.pdf> |
+| **Local copy** | `avionics/datasheets/slb9672.pdf` |
+
+**Specifications applied in this design:**
+
+| Parameter | Value | Source |
+|---|---|---|
+| Interface | SPI, mode 0 only, up to 33 MHz | Rev 1.3 §3.1.1, Table 11 |
+| Package | PG-UQFN-32-1,-2, 5 × 5 mm | Rev 1.3 §2.1 |
+| Temperature range | SLB 9672AU2.0 extended, −40 °C to +105 °C (XU2.0 is −40 to +85 °C) | Rev 1.3 ordering information |
+| SPI pins | CS# 20, SCLK 19, MOSI 21, MISO 24, PIRQ# 18, RST# 17 | Rev 1.3 Table 11 |
+| Supply pins | VDD 1, 14, 22; GND 2, 9, 23, 32 | Rev 1.3 Table 12 |
+| TCG-compatibility pins | Pin 8 NCI/VDD and pin 16 NCI/GND — connect to VDD/GND respectively | Rev 1.3 Table 13 |
+| Exposed pad | Internally connected to GND; **must also be connected to GND externally** | Rev 1.3 §2.1.2 |
+| Recommended land | 4.1 mm outline, exposed pad **3.6 mm × 3.6 mm** | Rev 1.3 Figure 3 |
+
+**Compatibility with the superseded SLB9670VQ2.0:** every pin the Serenity boards connect —
+the SPI group (17–24), VDD (1/8/14/22) and GND (2/9/16/23/32) — is identical between the two
+parts. The differences are confined to pins 3, 4, 6 and 7 (GPIO_00/GPIO_01/NC/GPIO_02 on the
+SLB 9672), all of which are left unconnected on all three Serenity boards.
+
+**Applied to:** the trust-module TPM on Jayne, Kaylee and `CAN-PERIPH-GW-1`, superseding the
+SLB9670VQ2.0 at the 2026-08-03 retarget. Not yet applied to Emma, Wash or Zoë, which still
+carry the SLB9670.
+
+**Used in:** `avionics/kicad/symbols/Jayne_SLB9672_TPM.kicad_sym`,
+`avionics/kicad/retarget_mspm0g351x_slb9672.py`, `TODO.md`
 
 ---
 

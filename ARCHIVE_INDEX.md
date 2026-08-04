@@ -2,8 +2,7 @@
 
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
-<!-- Last updated: 2026-08-03 — Automated reconciliation pass -->
-
+<!-- Last updated: 2026-08-04 — Automated reconciliation pass -->
 Pre-Rev Q (superseded by Cape-A/B architecture at Rev K):
 
                                        Cape-B-1 boards (16 + 5 zips respectively)
@@ -77904,3 +77903,9 @@ avionics/kicad/__pycache__/retarget_mspm0g351x_slb9672.cpython-313.pyc — [IGNO
 avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch.pre-g351x — [PENDING AI CLASSIFICATION]
 avionics/kicad/Jayne/kicads/Jayne.kicad_sch.pre-g351x — [PENDING AI CLASSIFICATION]
 avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch.pre-g351x — [PENDING AI CLASSIFICATION]
+
+## --- AUTO-DISCOVERED (2026-08-04) ---
+avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_pcb.pre-g351x — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/kicads/Jayne.kicad_pcb.pre-g351x — [PENDING AI CLASSIFICATION]
+avionics/kicad/retarget_pcb_footprints.py — [PENDING AI CLASSIFICATION]
+avionics/kicad/__pycache__/retarget_pcb_footprints.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]

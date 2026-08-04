@@ -373,3 +373,39 @@ REF-SENSOR-010 and "Removed / Superseded Citations".
   draws on (informational/fit reference only, not electrically reused).
 - `REFERENCES.md` — REF-SENSOR entries for ISOW1044/ADM2795E/SLB9670, and the
   Wash/Zoë ADM2795E pin-numbering defect note.
+
+---
+
+## 2026-08-03 — Trust-module MCU/TPM retarget
+
+The trust module on this board now uses **TI MSPM0G3518-Q1 (`M0G3518QRHBRQ1`)** (32-pin RHB VQFN 5×5 mm, 256 KB flash / 128 KB SRAM) and the
+**Infineon SLB 9672AU2.0** TPM (PG-UQFN-32-1,-2, extended −40 to +105 °C), superseding the
+MSPM0G3507 and SLB9670VQ2.0.  Parts and the specifications applied are catalogued as
+REF-SENSOR-013 and REF-SEC-002 in `REFERENCES.md`; the change was applied by
+`avionics/kicad/retarget_mspm0g351x_slb9672.py` and `avionics/kicad/retarget_pcb_footprints.py`,
+which also wrote `.pre-g351x` backups beside each edited file.
+
+Each of the four tiled lanes drops from the 48-pin RGZ to the 32-pin RHB package. The
+RHB-32 bonds out **PA0–PA27 only** — no PBx port exists (SLASFA6B Fig 6-6) — so the five
+signals that were on PBx were rehomed onto free PA pins that still carry the required
+function:
+
+| Signal | was | now | function |
+|---|---|---|---|
+| `RS485_TX` | PB15 pad 25 | PA8 pad 12 | `UART1_TX` PF2 |
+| `RS485_RX` | PB16 pad 26 | PA9 pad 13 | `UART1_RX` PF2 |
+| `RS485_DE` | PB2 pad 14 | PA21 pad 25 | GPIO |
+| `RS485_FLT_N` | PA8 pad 16 | PA22 pad 26 | GPIO |
+| `FLEX_PWM_IO` | PB3 pad 15 | PA25 pad 29 | `TIMA0_C3` PF5 |
+| `FLEX_BSHOT_IO` | PB6 pad 20 | PA26 pad 30 | `TIMG8_C0` PF4 |
+
+PA10, PA11 and PA27 are left spare. All 30 connections per lane are accounted for; the
+schematic netlist was verified pad-for-pad against this table after the change.
+
+**The PCB needs re-routing.** `U1_1` and `U1_2` were re-anchored on their original origins
+and rotations, but going from 48 pads at 7×7 mm to 32 pads at 5×5 mm leaves every trace
+into them dangling. `U1_3`/`U1_4` are in the schematic but were never placed, so only two
+lanes exist on the board today.
+
+Open items from this pass are tracked in `TODO.md` §1.2d — read those before ordering
+anything from this board.

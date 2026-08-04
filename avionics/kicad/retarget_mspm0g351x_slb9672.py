@@ -86,20 +86,31 @@ KAYLEE_REMAP = {
     48: 32, 49: 33,
 }
 
-# Kaylee carries stale global labels from a superseded draft pinmux that the
-# 2026-07-26 trust-module injection replaced but never cleaned up.  The
-# authoritative map is `mcu_nm` in Kaylee/scripts/inject_kaylee_trust_module.py,
-# whose comment records that the draft "put CANFD_TX/RX on PA6/PA7 and
-# RS485_TX/RX on PB3/PA8, none of which offer CAN or UART functions".  Those
-# draft labels are still present, so today:
-#   pads 17-22 (PA9,PA10,PA11,PB6,PB7,PB8) duplicate the TPM SPI bus that
-#       already lands on pads 8-13, shorting six MCU GPIOs pin-to-pin, and
-#   pads 41-44 strap PB20/PB24/PA23/PA24 to +3V3 while pads 45-47 strap
-#       PA25/PA26/PA27 to PGND, which shorts a rail the moment firmware
-#       configures any of them as an output.
-# They are dropped here so the retargeted schematic matches its own documented
-# intent.  See TODO.md 1.2d.
-KAYLEE_STALE_PADS = {17, 18, 19, 20, 21, 22, 41, 42, 43, 44, 45, 46, 47}
+# Kaylee has a pre-existing schematic-layout defect: U_MCU (at y=90.17, a
+# 49-pin symbol 68.6 mm tall) and U_TPM (at y=129.54, 66 mm tall) are drawn on
+# top of each other.  Seventeen MCU pads land on the exact coordinate of a TPM
+# pad, so a single global label serves both symbols and silently shorts them:
+#
+#     MCU 17..24 == TPM 20,19,21,24,18,17,6,7   (the whole SPI bus + two NCI)
+#     MCU 41..47 == TPM 8,22,1,14,2,9,23        (the TPM's supply pins)
+#     MCU 48     == TPM 32   -> MCU VCORE tied to TPM GND
+#     MCU 49     == TPM 16
+#
+# That is what the baseline `pin_to_pin` ERC errors are reporting.  Shrinking
+# the MCU to the 32-pin symbol does not clear it (the MCU still reaches
+# y=110.49 and the TPM starts at y=104.14), so the TPM is moved down out of the
+# way first and its labels re-emitted from its authoritative pin map before the
+# MCU is remapped.  See TODO.md 1.2d.
+KAYLEE_TPM_SHIFT = 34.29        # mm, clears the retargeted MCU with margin
+
+# Authoritative TPM pin map: `tpm_nm` in
+# Kaylee/scripts/inject_kaylee_trust_module.py, plus pad 33 (exposed pad).
+KAYLEE_TPM_NETS = {
+    1: "+3V3", 2: "PGND", 8: "+3V3", 9: "PGND", 14: "+3V3", 16: "PGND",
+    17: "TPM_RESET_N", 18: "TPM_PIRQ", 19: "TPM_SPI_SCK", 20: "TPM_SPI_CS",
+    21: "TPM_SPI_MOSI", 22: "+3V3", 23: "PGND", 24: "TPM_SPI_MISO",
+    32: "PGND", 33: "PGND",
+}
 
 BOARDS = {
     "CAN-PERIPH-GW-1": {
@@ -115,7 +126,12 @@ BOARDS = {
         "mcu_value": "TI MSPM0G3518-Q1",
         "mcu_fp": "Package_DFN_QFN:Texas_RHB0032E_VQFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm",
         "remap": KAYLEE_REMAP,
-        "drop_pads": KAYLEE_STALE_PADS,
+        "tpm_shift": KAYLEE_TPM_SHIFT,
+        "tpm_nets": KAYLEE_TPM_NETS,
+        # MCU pads 48/49 shared a coordinate with TPM pads 32/16, so clearing
+        # the TPM's labels also removed the MCU's.  Restore them from the
+        # authoritative `mcu_nm` map before the remap runs.
+        "mcu_restore": {48: "MCU_VCORE", 49: "PGND"},
     },
     "Jayne": {
         "sch": KICAD / "Jayne/kicads/Jayne.kicad_sch",
@@ -127,6 +143,67 @@ BOARDS = {
         "remap": None,          # identical package, pads and nets stay put
     },
 }
+
+def _cut(text: str, start: int) -> str:
+    """Delete the balanced s-expression at `start`, plus its line whitespace."""
+    depth = 0
+    for i in range(start, len(text)):
+        if text[i] == "(":
+            depth += 1
+        elif text[i] == ")":
+            depth -= 1
+            if depth == 0:
+                end = i + 1
+                break
+    else:
+        raise ValueError("unterminated s-expression")
+    while end < len(text) and text[end] in " \t":
+        end += 1
+    if end < len(text) and text[end] == "\n":
+        end += 1
+    while start > 0 and text[start - 1] in " \t":
+        start -= 1
+    return text[:start] + text[end:]
+
+
+def _no_connects(text: str) -> dict:
+    """Map (x, y) -> match start for every no-connect marker."""
+    return {(round(float(m.group(1)), 2), round(float(m.group(2)), 2)): m.start()
+            for m in re.finditer(r'\(no_connect \(at ([-\d.]+) ([-\d.]+)\)[^\n]*\)', text)}
+
+
+def _add_no_connects(text: str, coords) -> str:
+    add = "".join(
+        f'  (no_connect (at {x:g} {y:g}) '
+        f'(uuid "9351nc00-0000-0000-0000-{i:012x}"))\n'
+        for i, (x, y) in enumerate(sorted(set(coords))))
+    text = text.rstrip()
+    return text[:-1] + add + ")\n"
+
+
+def all_pin_coords(text: str, exclude: set) -> set:
+    """Every pin coordinate of every placed symbol whose lib_id is not excluded.
+
+    Kaylee stacks U_MCU, U_TPM and U_ISOCAN on top of one another, so a label
+    sitting on a TPM pin may in fact belong to a third symbol.  Relocating the
+    TPM must not take those labels with it.
+    """
+    libs = {}
+    for m in re.finditer(r'\(symbol "([A-Za-z0-9_]+)" \(pin_names', text):
+        name = m.group(1)
+        try:
+            libs[name] = pin_coords(symbol_block(text, name))
+        except Exception:
+            continue
+    out = set()
+    for lib, pins in libs.items():
+        if lib in exclude:
+            continue
+        for _, _ref, ix, iy, rot in instances(text, lib):
+            for px, py in pins.values():
+                out.add((round(ix + px, 2), round(iy - py, 2)))
+    return out
+
 
 def sexpr_blocks(text: str, head: str):
     """Yield every balanced `(<head> ...)` s-expression found in `text`.
@@ -209,7 +286,116 @@ def retarget(board: str, cfg: dict, apply_changes: bool) -> None:
     new_pins = pin_coords(new_sym)
 
     remap = cfg["remap"]
-    drop_pads = cfg.get("drop_pads", set())
+    drop_pads = set()
+
+    # --- Kaylee only: separate the overlapping TPM before touching the MCU ---
+    shift = cfg.get("tpm_shift")
+    if shift:
+        # Geometry comes from the *new* symbol: it is pin-for-pin identical to
+        # the SLB9670 for pads 1-32 and additionally carries pad 33 (the
+        # exposed pad), which the old symbol omitted.
+        tpm_pin = pin_coords(symbol_block(
+            (SYMDIR / f"{TPM_NEW}.kicad_sym").read_text(), TPM_NEW))
+        labs0 = label_index(text)
+        for _, tref, tix, tiy, trot in list(instances(text, TPM_OLD)):
+            # Drop every label sitting on a TPM pin; they are re-emitted below
+            # at the relocated position, and any that were shared with an MCU
+            # pad must not be left behind to keep shorting the two symbols.
+            others = all_pin_coords(text, {TPM_OLD, MCU_OLD})
+            kill, restore = [], []
+            for pad, (px, py) in tpm_pin.items():
+                key = (round(tix + px, 2), round(tiy - py, 2))
+                for span, name in labs0.get(key, []):
+                    kill.append(span)
+                    if key in others:
+                        # Belongs to a third symbol stacked at this point.
+                        restore.append((key, name))
+            for span in sorted(set(kill), key=lambda s: s[0], reverse=True):
+                depth = 0
+                for i in range(span[0], len(text)):
+                    if text[i] == "(":
+                        depth += 1
+                    elif text[i] == ")":
+                        depth -= 1
+                        if depth == 0:
+                            end = i + 1
+                            break
+                while end < len(text) and text[end] in " \t":
+                    end += 1
+                if end < len(text) and text[end] == "\n":
+                    end += 1
+                start = span[0]
+                while start > 0 and text[start - 1] in " \t":
+                    start -= 1
+                text = text[:start] + text[end:]
+
+            # Move the instance itself.
+            old_at = '(symbol (lib_id "%s") (at %g %g %d)' % (TPM_OLD, tix, tiy, trot)
+            new_at = '(symbol (lib_id "%s") (at %g %g %d)' % (TPM_OLD, tix, tiy + shift, trot)
+            if old_at not in text:
+                raise SystemExit(f"{board}: could not find {tref} placement to shift")
+            text = text.replace(old_at, new_at, 1)
+            text = re.sub(r'(\(property "(?:Reference|Value)" "[^"]*" \(at %g )([\d.]+)( \d+\))' % tix,
+                          lambda m: f"{m.group(1)}{float(m.group(2)) + shift:g}{m.group(3)}",
+                          text)
+
+            # Re-emit the TPM's labels at the relocated pin coordinates.
+            add = []
+            for pad, net in sorted(cfg["tpm_nets"].items()):
+                px, py = tpm_pin[pad]
+                x = round(tix + px, 2)
+                y = round(tiy + shift - py, 2)
+                rot = 0 if px > 0 else 180
+                add.append(
+                    f'  (global_label "{net}" (shape bidirectional) (at {x:g} {y:g} {rot})\n'
+                    f'    (effects (font (size 1.016 1.016)))\n'
+                    f'    (uuid "9672tpm0-0000-0000-0000-{pad:012x}")\n'
+                    f'    (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {x:g} {y:g} 0)\n'
+                    f'      (effects (font (size 1.016 1.016)) (hide yes))))\n')
+            for (x, y), name in sorted(set(restore)):
+                add.append(
+                    f'  (global_label "{name}" (shape bidirectional) '
+                    f'(at {x:g} {y:g} {0 if x > tix else 180})\n'
+                    f'    (effects (font (size 1.016 1.016)))\n'
+                    f'    (uuid "9672rst0-0000-0000-0000-{abs(hash((x, y, name))) % 16**12:012x}")\n'
+                    f'    (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {x:g} {y:g} 0)\n'
+                    f'      (effects (font (size 1.016 1.016)) (hide yes))))\n')
+
+            text = text.rstrip()
+            text = text[:-1] + "".join(add) + ")\n"
+            if restore:
+                print(f"    {tref}: restored {len(set(restore))} label(s) "
+                      f"belonging to symbols stacked at the same coordinates")
+
+            # The TPM's own no-connect markers stayed behind at the old
+            # position; move them with it.
+            nc = _no_connects(text)
+            drop = [nc[(round(tix + px, 2), round(tiy - py, 2))]
+                    for px, py in tpm_pin.values()
+                    if (round(tix + px, 2), round(tiy - py, 2)) in nc]
+            for s in sorted(set(drop), reverse=True):
+                text = _cut(text, s)
+            text = _add_no_connects(text, [
+                (round(tix + px, 2), round(tiy + shift - py, 2))
+                for pad, (px, py) in tpm_pin.items() if pad not in cfg["tpm_nets"]])
+            print(f"    {tref}: moved +{shift:g} mm clear of {"U_MCU"}, "
+                  f"{len(set(kill))} shared label(s) replaced by "
+                  f"{len(cfg['tpm_nets'])} from its authoritative pin map")
+
+    for pad, net in sorted(cfg.get("mcu_restore", {}).items()):
+        for _, mref, mix, miy, _ in list(instances(text, MCU_OLD)):
+            px, py = old_pins[pad]
+            x, y = round(mix + px, 2), round(miy - py, 2)
+            rot = 0 if px > 0 else 180
+            text = text.rstrip()
+            text = text[:-1] + (
+                f'  (global_label "{net}" (shape bidirectional) (at {x:g} {y:g} {rot})\n'
+                f'    (effects (font (size 1.016 1.016)))\n'
+                f'    (uuid "9351mcu0-0000-0000-0000-{pad:012x}")\n'
+                f'    (property "Intersheet References" "${{INTERSHEET_REFS}}" (at {x:g} {y:g} 0)\n'
+                f'      (effects (font (size 1.016 1.016)) (hide yes))))\n') + ")\n"
+            print(f"    {mref}: restored pad {pad} label {net!r}")
+
     labels = label_index(text)
     moves = []          # (old_span, new_x, new_y, netname, ref, old_pad, new_pad)
     drops = []          # (old_span, netname, ref, old_pad)
@@ -295,6 +481,40 @@ def retarget(board: str, cfg: dict, apply_changes: bool) -> None:
         seg = re.sub(r'\(at [-\d.]+ [-\d.]+ (\d+)\)',
                      lambda m: f'(at {nx:g} {ny:g} {m.group(1)})', seg)
         text = text[:span[0]] + seg + text[span[1]:]
+
+    # --- no-connect markers ------------------------------------------------
+    # The old symbol carried `(no_connect ...)` markers on its unused pins.
+    # After a 48 -> 32 pin swap those sit at coordinates the new symbol has no
+    # pin at, so KiCad reports them as dangling; meanwhile the new symbol's own
+    # unused pins have nothing on them.  Rebuild the set: drop every marker
+    # that belongs to an MCU pin, then re-emit one for each new-symbol pin that
+    # ends up with neither a label nor a connection.
+    if remap is not None:
+        # Remove every marker belonging to an old MCU pin first, then work out
+        # which of the *new* pins still need one.  Computing "fresh" against
+        # the pre-deletion marker set would skip any new pin that happened to
+        # share a coordinate with a stale marker, leaving it unconnected.
+        stale = []
+        for _, ref, ix, iy, rot in instances(text, MCU_OLD):
+            nc = _no_connects(text)
+            for px, py in old_pins.values():
+                key = (round(ix + px, 2), round(iy - py, 2))
+                if key in nc:
+                    stale.append(nc[key])
+        n_stale = len(set(stale))
+        for s in sorted(set(stale), reverse=True):
+            text = _cut(text, s)
+
+        labels_now = label_index(text)
+        nc = _no_connects(text)
+        fresh = []
+        for _, ref, ix, iy, rot in instances(text, MCU_OLD):
+            for px, py in new_pins.values():
+                key = (round(ix + px, 2), round(iy - py, 2))
+                if key not in labels_now and key not in nc:
+                    fresh.append(key)
+        text = _add_no_connects(text, fresh)
+        print(f"    no-connect: removed {n_stale} stale, added {len(set(fresh))}")
 
     # Swap the MCU library symbol and every instance's identity properties.
     text = text.replace(old_sym, new_sym)

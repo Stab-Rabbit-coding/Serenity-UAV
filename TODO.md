@@ -275,6 +275,75 @@
 - [ ] Nose camera strobe + frame-difference detection
 - [ ] Do not source
 
+### 1.2d — Trust-Module MCU/TPM Retarget (MSPM0G351x-Q1 + SLB 9672)
+
+Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematics) and
+`avionics/kicad/retarget_pcb_footprints.py` (PCBs).  Parts per REF-SENSOR-013 and REF-SEC-002.
+
+| Board | MCU | Package | TPM |
+|---|---|---|---|
+| Jayne (observer) | `M0G3519QRGZRQ1` | 48-pin RGZ VQFN 7×7 | `SLB 9672AU2.0` |
+| `CAN-PERIPH-GW-1` (gateway) | `M0G3518QRHBRQ1` | 32-pin RHB VQFN 5×5 | `SLB 9672AU2.0` |
+| Kaylee (flight engineer) | `M0G3518QRHBRQ1` | 32-pin RHB VQFN 5×5 | `SLB 9672AU2.0` |
+
+- [x] Verify the MSPM0G351x-Q1 RGZ-48 pin map against the MSPM0G350x it replaces —
+      identical for all 48 pads plus the exposed pad (SLASFA6B Fig 6-5 vs SLASEX6C Fig 6-4).
+- [x] Re-pinmux the gateway and Kaylee onto RHB-32, which bonds out PA0–PA27 only and has
+      no PBx ports: RS485_TX→PA8 (UART1_TX PF2), RS485_RX→PA9 (UART1_RX PF2),
+      RS485_DE→PA21, RS485_FLT_N→PA22, CANFD_FLT_N→PA23 (Kaylee),
+      FLEX_PWM_IO→PA25 (TIMA0_C3 PF5), FLEX_BSHOT_IO→PA26 (TIMG8_C0 PF4).
+- [x] Swap and re-anchor the PCB footprints on the gateway (U1_1/U1_2) and Jayne (U3).
+- [x] Tie the TPM exposed pad to GND on all three boards — the SLB9670 symbol omitted pad 33
+      entirely, so it was floating (Infineon SLB9672 datasheet rev 1.3 §2.1.2 requires it).
+- [x] Correct the MCU land pattern: the design used
+      `QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm`, which KiCad's own `descr` identifies as an
+      **Analog Devices LTC legacy** outline. TI's RGZ0048F exposed pad is 4.1 mm square, so
+      the old land overhung the package thermal pad by 0.525 mm per side.
+- [x] Separate Kaylee's overlapping `U_MCU` / `U_TPM` symbols (17 pads shared a coordinate,
+      shorting the SPI bus and tying MCU VCORE to TPM GND); `U_TPM` moved +34.29 mm.
+
+**Open — blocks fabrication:**
+
+- [ ] **Re-route the gateway MCU area.** U1_1/U1_2 went from 48 pads at 7×7 mm to 32 pads at
+      5×5 mm, so every trace into them is dangling. Needs a manual placement/routing pass and
+      a DRC sign-off before gerbers.
+- [ ] **Confirm MSPM0G351x-Q1 errata and TRM applicability.** SLAZ742G covers MSPM0G3x0x /
+      G1x0x / G3x0x-Q1 and does not enumerate MSPM0G3518/3519; SLAU846E contains no
+      occurrence of either part number. Obtain the correct errata/TRM for MSPM0G351x-Q1
+      before firmware sign-off (REF-SENSOR-014 "requires verification").
+- [ ] **Update firmware pinmux constants for the new family.** CAN moves from
+      `CAN_TX`/`CAN_RX` PF5/PF6 to `CAN0_TX`/`CAN0_RX` **PF12**; PA15 offers `SPI1_CS2`
+      (PF3) rather than `SPI1_CS0`; PB15/PB16 offered UART2 on the old part and UART7 on the
+      new one (moot on the 32-pin boards, which now use UART1 on PA8/PA9). See §4.6.2.
+- [ ] **Add the missing MCU support parts per SLAAE76E Table 1-1.** No board has the
+      10 µF bulk C(VDD) local to the MCU (the gateway shares one 22 µF at the regulator and
+      Kaylee's MCU has no local 100 nF at all), and none has the recommended NRST network —
+      all three use a 10 kΩ pull-up with no 10 nF pull-down capacitor against the
+      recommended 47 kΩ + 10 nF.
+- [ ] **Add a pull-up on the gateway's PA0/PA1 FLEX UART.** PA0/PA1 are 5 V-tolerant
+      open-drain on this family with no internal pull-up available, so `FLEX_UART_TX` cannot
+      drive high without an external pull-up (SLASFA6B §9.1.1; SLAAE76E §8.5).
+- [ ] **Pull PA18 down on the gateway and Jayne.** PA18 is the default BSL invoke pin and is
+      used as SPI MOSI on both boards; it floats during reset, so the part can enter BSL
+      (SLAAE76E Table 1-1).
+- [ ] **Add thermal vias under the MCU exposed pad.** Only gateway U1_1 has any (3);
+      U1_2 and Jayne U3 have none. TI requires the pad be soldered to a board thermal pad
+      and recommends the 3×3 via pattern in the land-pattern drawing.
+- [ ] **Resolve Kaylee's ground-net naming.** Kaylee's board ground carries the name
+      `CM2_OUT_N` (108 nodes, including every MCU/TPM ground pin), i.e. a current-monitor
+      output label is shorted into, or mis-merged with, `PGND`. Pre-existing; not introduced
+      by this retarget.
+- [ ] **Clean up Kaylee's dangling no-connect flags.** The retarget left ~30 `no_connect`
+      markers that no longer sit on a pin (ERC warnings only; error count is unchanged at 0).
+- [ ] **Close the Jayne sch↔pcb parity gap.** `RS485_DE`, `RS485_TX` and `RS485_RX` exist on
+      U3 in the schematic but not in the PCB net table; those pads were left unconnected
+      rather than inventing net entries.
+- [ ] **Place gateway lanes 3 and 4.** `U1_3`/`U1_4` and `U2_3`/`U2_4` exist in the
+      schematic but are not on the PCB, so only two of the four tiled lanes were retargeted
+      on the board.
+- [ ] **Decide whether Emma, Wash and Zoë follow to the SLB 9672.** They still carry the
+      SLB9670; this retarget deliberately did not touch them.
+
 ### 1.2a — PCB Design: Wash, Zoe, and Emma (EMI-Hardened Variants)
 
 → detail: `avionics/WBS.md` §1.2a
