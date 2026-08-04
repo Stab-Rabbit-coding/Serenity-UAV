@@ -10,7 +10,7 @@
  *   Tucson Amateur Packet Radio (TAPR) / ARRL, 1998 [REF-PROTO-001].
  *   Available: https://www.tapr.org/pdf/AX25.2.2.pdf
  *
- * Only the subset of AX.25 needed for the Serenity UAV 49 MHz link (Emma,
+ * Only the subset of AX.25 needed for the Serenity UAV 49 MHz link (Commo,
  * 47 CFR Part 15 §15.235 [REF-FCC-003]) is defined here.  The UAV uses
  * UI (unnumbered information) frames for telemetry and command packets;
  * connection-oriented modes are not required.

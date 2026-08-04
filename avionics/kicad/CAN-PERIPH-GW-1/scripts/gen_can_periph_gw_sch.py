@@ -19,7 +19,7 @@
 """
 gen_can_periph_gw_sch.py -- author CAN-PERIPH-GW-1.kicad_sch.
 
-CAN-PERIPH-GW-1 ("MAL-CAN-PERIPH-GW-PCB") is a standalone, TPM-secured,
+CAN-PERIPH-GW-1 ("SKIPPER-CAN-PERIPH-GW-PCB") is a standalone, TPM-secured,
 dual-isolated-bus (CAN-FD + RS-485) peripheral gateway. It is a clean-room
 remix of the *concept* behind the VimDrones "AP_Periph Pico" (a small
 dedicated MCU + CAN transceiver running ArduPilot AP_Periph firmware to
@@ -33,18 +33,18 @@ project's CC BY 4.0 terms, so no VimDrones file, symbol, or schematic
 geometry is copied here. Only the public spec facts (MCU family choice,
 CAN-bridge concept, 5V supply, switchable 120R termination) informed this
 design; every symbol/footprint below is either this project's own
-already-verified clean-room part (MSPM0G3507, SLB9670, ISOW1044 -- reused
-verbatim from Jayne, ERC-0 proven) or newly authored here directly from the
+already-verified clean-room part (MSPM0G3507, SLB9672, ISOW1044 -- reused
+verbatim from Observer, ERC-0 proven) or newly authored here directly from the
 OEM datasheet in avionics/datasheets/.
 
 Remix additions over the VimDrones concept (the 3 datasheets in this task):
-    U2  Infineon SLB9670   TPM 2.0 (avionics/datasheets/SLB_9670VQ20_Infineon.pdf)
+    U2  Infineon SLB9672   TPM 2.0 (avionics/datasheets/SLB_9672XU20_Infineon.pdf)
     U3  TI ISOW1044BDFMR   isolated CAN-FD xcvr (avionics/datasheets/isow1044.pdf)
     U4  ADI ADM2795E       isolated RS-485 xcvr (avionics/datasheets/adm2795e.pdf)
         -- NEW clean-room symbol authored here from the real 16-lead SOIC_W
            (RW-16) pinout (ADM2795E datasheet Table 10). NOTE: the
-           "ADM2795EBRWZ" symbol already embedded in Wash.kicad_sch /
-           Zoe.kicad_sch has WRONG pin numbers (a pin 17 on a 16-pin part; a
+           "ADM2795EBRWZ" symbol already embedded in Pilot.kicad_sch /
+           XO.kicad_sch has WRONG pin numbers (a pin 17 on a 16-pin part; a
            duplicate pin 20 on two different pin names) -- it was evidently
            cloned from the ISOW1044 (20-pin) template and never corrected.
            Flagged in REFERENCES.md; NOT reused here.
@@ -52,7 +52,7 @@ Remix additions over the VimDrones concept (the 3 datasheets in this task):
 MCU: TI MSPM0G3507 (fleet-standard part, REF-SENSOR-004; native CAN 2.0/CAN-FD
 peripheral, 4x UART, 2x SPI, up to 60 GPIO) -- chosen over VimDrones' own
 STM32L431 so this gateway is built from the SAME MCU family already used on
-Wash/Zoe/Jayne, not a new one-off part, and so no GPL-licensed VimDrones
+Pilot/XO/Observer, not a new one-off part, and so no GPL-licensed VimDrones
 schematic content needs to be touched at all.
 
 STACKABLE (2026-07-26): set N_STACKS below to put multiple complete trust
@@ -100,16 +100,16 @@ Deployment (see CAN-PERIPH-GW-1.md for the full rationale):
       servo, 1x AK7455 tilt encoder share the one PCB/one pair of bus
       connectors per side, instead of 4 separate single-stack boards.
 
-Layout convention matches this project's own gen_Jayne_carrier_sch.py: real
+Layout convention matches this project's own gen_Observer_carrier_sch.py: real
 clean-room symbols are pulled from avionics/kicad/symbols/*.kicad_sym by
 parse_real_symbol() and wired by PIN NUMBER via place_real(); electrical
 connection is by coincident (x, y) between a pin and its global_label /
-power symbol, not by drawn wires (same convention proven ERC-0 in Jayne).
+power symbol, not by drawn wires (same convention proven ERC-0 in Observer).
 
 PRE-FAB GATES (tracked avionics/WBS.md, see CAN-PERIPH-GW-1.md):
     * MSPM0 GPIO -> peripheral pinmux (SPI0/SPI1/UART0/UART1/CAN/GPIO) is a
       defensible datasheet-capable assignment, not yet cross-checked against
-      the MSPM0G3507 pinmux tables -- same caveat Jayne's own carrier
+      the MSPM0G3507 pinmux tables -- same caveat Observer's own carrier
       schematic already carries for this MCU.
     * ADM2795E VDD2 (isolated bus-side supply) needs a small isolated DC-DC
       module (e.g. a 1W SIP4 5V->5V or 5V->3.3V isolated converter) -- MPN
@@ -139,14 +139,14 @@ SYMDIR = HERE.parent.parent / "symbols"  # avionics/kicad/symbols
 
 REAL_SYMS = {
     "MCU": (
-        "Jayne_MSPM0G3507_RGZ",
+        "Observer_MSPM0G3507_RGZ",
         "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm",
     ),
     "TPM": (
-        "Jayne_SLB9670_TPM",
+        "SLB9672_TPM",
         "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm",
     ),
-    "ISO": ("Jayne_ISOW1044BDFMR", "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm"),
+    "ISO": ("Observer_ISOW1044BDFMR", "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm"),
 }
 
 LANE_WIDTH = 220.0  # mm of X per stack lane
@@ -166,7 +166,7 @@ def _next_uid():
 
 # ---------------------------------------------------------------------------
 # Generic s-expr helpers (reused verbatim, same shape as gen_Jayne.py /
-# gen_Jayne_carrier_sch.py -- this project's own proven infrastructure)
+# gen_Observer_carrier_sch.py -- this project's own proven infrastructure)
 # ---------------------------------------------------------------------------
 def _pin_def(ptype, shape, px, py, ang, length, name, number):
     return (
@@ -414,7 +414,7 @@ def snap(v):
 
 # ---------------------------------------------------------------------------
 # Real clean-room symbol import (verbatim from avionics/kicad/symbols/) --
-# same mechanism as gen_Jayne_carrier_sch.py's parse_real_symbol()/place_real()
+# same mechanism as gen_Observer_carrier_sch.py's parse_real_symbol()/place_real()
 # ---------------------------------------------------------------------------
 def parse_real_symbol(name):
     src = (SYMDIR / f"{name}.kicad_sym").read_text()
@@ -641,7 +641,7 @@ def gen_stack(idx, mcu_pins, tpm_pins, iso_pins):
         "24": f"TPM_SPI_MISO{s}", "32": "GND",
     }
     body += place_real(
-        "TPM", f"U2{s}", "Infineon SLB9670 TPM2.0", {1: (110 + off, 230)}, tpm_netmap, tpm_pins
+        "TPM", f"U2{s}", "Infineon SLB9672 TPM2.0", {1: (110 + off, 230)}, tpm_netmap, tpm_pins
     )
     body.append(sym_inst("C_Generic", f"C_TPM1{s}", "100nF", 145 + off, 220, footprint="Capacitor_SMD:C_0402_1005Metric"))
     body.append(glabel("+3V3", 141.19 + off, 220, rot=180))
@@ -856,9 +856,9 @@ def gen_sch():
         ),
     ]
     # Pull in the real, already-verified clean-room symbols verbatim.
-    mcu_block, mcu_pins = parse_real_symbol("Jayne_MSPM0G3507_RGZ")
-    tpm_block, tpm_pins = parse_real_symbol("Jayne_SLB9670_TPM")
-    iso_block, iso_pins = parse_real_symbol("Jayne_ISOW1044BDFMR")
+    mcu_block, mcu_pins = parse_real_symbol("Observer_MSPM0G3507_RGZ")
+    tpm_block, tpm_pins = parse_real_symbol("SLB9672_TPM")
+    iso_block, iso_pins = parse_real_symbol("Observer_ISOW1044BDFMR")
     lib += [mcu_block, tpm_block, iso_block]
     lib.append("  )")
 
@@ -873,7 +873,7 @@ def gen_sch():
         '  (paper "A2")',
         "  (title_block",
         f'    (title "CAN-PERIPH-GW-1 -- TPM-secured Dual-Isolated-Bus (CAN-FD + RS-485) Peripheral Gateway ({N_STACKS}x stack)") (date "2026-07-26") (rev "1") (company "Griffing Technology LLC")',
-        '    (comment 1 "Serenity UAV -- MAL-CAN-PERIPH-GW-PCB -- standalone board, not a PocketBeagle 2 Industrial cape")',
+        '    (comment 1 "Serenity UAV -- SKIPPER-CAN-PERIPH-GW-PCB -- standalone board, not a PocketBeagle 2 Industrial cape")',
         '    (comment 2 "Copyright 2026 Steve Griffing PE(CSE) CISSP-ISSEP CPP | Griffing Technology LLC")',
         '    (comment 3 "License: CC BY 4.0  |  creativecommons.org/licenses/by/4.0")',
         '    (comment 4 "Concept remix of VimDrones AP_Periph Pico (informational ref only, GPLv3 -- no source copied); see CAN-PERIPH-GW-1.md")',

@@ -1,8 +1,8 @@
 # Serenity UAV — TODO (Open Work Only)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY SA 4.0 — creativecommons.org/licenses/by/4.0  
-**Last updated:** 2026-07-31
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
+**Last updated:** 2026-08-01
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -22,37 +22,9 @@
 
 *(All items completed 2026-07-18)*
 
-
-### 0.6 Update and correct documentation touching every non-archived file.
-
-→ detail: `docs/WBS.md` §0.6
-
-
-#### 0.6.1 Systems
-
-→ detail: `docs/WBS.md` §1.6.1
-
-- [ ] Verify and update airframe specifications vs as built for each component.
-- [ ] Verify avionics specifications vs as- built.
-- [ ] Verify and update all assessment and engineering documents.
-- [ ] Verify and update all software, firmware, and scripts, along with their documentation.
-
-
-#### 0.6.2 Documentation
-
-→ detail: `docs/WBS.md` §0.6.2
-
-- [ ] Verify and update all compliance and licensing documents.
-- [ ] Verify and update all READM1E files and the starting with subsystem ones and correcting the root README to match.
-- [ ] Verify and update the system specification files and BOM.
-- [ ] Verify and update the WBS and TODO files. 
-- [ ] Verify and update the REFERENCES.md file.
-
-
 ### 0.7 — CI Lint Scope and Repo-Wide Lint Debt
 
 → detail: `docs/WBS.md` §0.7
-
 
 ### 0.8 — Tilt-Spar Material Allowables + Hall Encoder Verification
 
@@ -62,20 +34,33 @@
 - [ ] Add 4130 corrosion-finish spec (zinc/cad plate) to BOM/build guide
 - [ ] Verify AK7455 off-axis geometry + pinout vs datasheet (REF-SENSOR-*)
 
+### 0.10 Update and correct documentation touching every non-archived file.
 
-### 0.9 Licensing Updates
+→ detail: `docs/WBS.md` §0.10
 
-→ detail: `docs/WBS.md` §0.9
+*(Renumbered 2026-08-01 from a colliding "0.6" — root `WBS.md` §0.6 was already the distinct,
+completed "IEC 62368-1 PCB Layout Isolation Verification" item, so the old label here was not
+a valid cross-reference. Renumbered in both files, and moved after §0.9 here for ascending
+numeric order.)*
 
-- [ ] Correct Thingiverse model license to CC-BY-SA 4.0.
-- [ ] Do a clean-room derivation of the nacelle shells from QMX blueprints and nick henning drawings.
-- [ ] License wings, nacelles, landing gear, cargo system, and all other original airframe components under CERN-OHL-W.
-- [ ] License all avionics under CERN-OHL-W.
-- [ ] License all documentation,code, scripts, drawings, and other non-hardware items under CC-BY-SA.
-- [ ] Create License files for each subsystem  folder with clear, unambiguous federation from root License and docs/attribution_and_licencing.md
-- [ ] Create all other supporting documents for OSHW certification 
-- [ ] Apply
+#### 0.10.1 Systems
 
+→ detail: `docs/WBS.md` §1.10.1
+
+- [ ] Verify and update airframe specifications vs as built for each component.
+- [ ] Verify avionics specifications vs as- built.
+- [ ] Verify and update all assessment and engineering documents.
+- [ ] Verify and update all software, firmware, and scripts, along with their documentation.
+
+#### 0.10.2 Documentation
+
+→ detail: `docs/WBS.md` §0.10.2
+
+- [ ] Verify and update all compliance and licensing documents.
+- [ ] Verify and update all README files and the starting with subsystem ones and correcting the root README to match.
+- [ ] Verify and update the system specification files and BOM.
+- [ ] Verify and update the WBS and TODO files.
+- [ ] Verify and update the REFERENCES.md file.
 
 #### 1.1.0 — Hull-Frame Coordinate Standardisation (R1)
 
@@ -115,29 +100,29 @@
 - [ ] Regenerate cargo_sect_shell24.stl
 - [ ] Add DRV8833-tray boss locations to cargo_sect_shell24.scad
 - [ ] Add SG90 bell-crank boss to inner face of each door panel
-- [ ] ★ STS3215 datasheet gate — envelope/torque/mass/stall
+- [ ] ★ Bench-verify SPT5425LV stall current + pin-removal procedure (was: STS3215 datasheet gate)
 - [ ] ★ Winch containment: 5 positive fixes (spool = projectile)
 - [ ] Verify Part 107 dropped-object section number
 - [ ] Containment checks on assembly + pre-flight cards
 - [ ] ★ Shed threshold vs manoeuvre envelope (2.0g = 0.98x)
 - [ ] Calibrate T_slip 0.060 N·m at the spool hub collar
 - [ ] Set servo torque ceiling below T_slip (wear protection)
-- [ ] Servo mode: encoded continuous rotation (not stepper)
+- [ ] Servo mode: continuous rotation by construction (pin removed); confirm LibreServo v2 protocol commands
 - [ ] Mark winch spool a consumable (wear item + spare)
 - [ ] AK7455 spool encoder on gateway J_ENC (spec §3.7.3)
 - [ ] Implement the six Rev S winch STLs
 - [ ] Winch pedestal M3 boss stations in cargo_sect_shell24.scad
-- [ ] Half-duplex TTL bus wiring on FLEX_TTL_GPIO
+- [ ] RS-485 differential bus wiring for LibreServo v2 (was: half-duplex TTL on FLEX_TTL_GPIO)
 - [ ] Catch solenoid drive (AO3400 + pull-down + SS34)
 - [ ] Bench-calibrate ratchet slip to 8.0 N ± 1.0 N
 - [ ] Line-shed test (inboard end must NOT be anchored)
 - [ ] Winch state machine firmware (Simon + gateway)
-- [ ] Re-run winch mass/CG once STS3215 mass is known
+- [ ] Re-run winch mass/CG once SPT5425LV+LibreServo v2 mass is bench-weighed
 - [ ] Slicer verification
-- [ ] Kaylee's room — PDB mounting in inner neck
+- [ ] Flight Engineer's room — PDB mounting in inner neck
 - [ ] CF skid rod channels
 - [ ] Simon bay — define avionics bay in the MIDDLE section (moved he…
-- [ ] Kaylee room — PDB + battery bay, middle VENTRAL (2026-06-13).
+- [ ] Flight Engineer room — PDB + battery bay, middle VENTRAL (2026-06-13).
 - [ ] Avionics-bay interior name marks (DEFERRED, 2026-06-13).
 - [ ] Phase 11 — aft EDF intake scoop cuts
 - [ ] neck_intake_frame.stl (Phase 11)
@@ -249,27 +234,27 @@
 - [ ] FAR-FT-PANEL PCB design
 - [ ] Link placeholders to BOM entries
 
-### 1.2b — PCB Redesigns: Emma Rev S1 / Zoe Rev S1 / Kaylee Rev S1
+### 1.2b — PCB Redesigns: Commo Rev S1 / XO Rev S1 / Flight Engineer Rev S1
 
 → detail: `avionics/rev-s1/WBS.md` §1.2b
 
-- [ ] Emma Rev S1 — add LoRa, replace JST with P1+P2 socket rails
-- [ ] Zoë (Cape-B-2) Rev S1 — remove LoRa, add P1+P2 passthrough rails
-- [ ] Kaylee Rev S1 — remove 6 V BEC, add 5 V servo output
+- [ ] Commo Rev S1 — add LoRa, replace JST with P1+P2 socket rails
+- [ ] XO (Cape-B-2) Rev S1 — remove LoRa, add P1+P2 passthrough rails
+- [ ] Flight Engineer Rev S1 — remove 6 V BEC, add 5 V servo output
 
-### 1.2c — PCB Design: Jayne (Nose/Cargo-Bay Vision, ToF & Laser)
+### 1.2c — PCB Design: Observer (Nose/Cargo-Bay Vision, ToF & Laser)
 
-→ detail: `avionics/jayne/WBS.md` §1.2c
+→ detail: `avionics/observer/WBS.md` §1.2c
 
 - [ ] Final component placement (user-reserved) + impedance-controlle…
-- [ ] Generate production-ready Gerber files to avionics/kicad/Jayne/…
+- [ ] Generate production-ready Gerber files to avionics/kicad/Observer/…
 - [ ] Flag stale laser bore dimensions:
 - [ ] Add cargo_tof_cut() and cargo_laser_cut() cutter modules
 - [ ] Local sensor harness (both sites):
 - [ ] External ring harness — nose:
 - [ ] External ring harness — cargo:
-- [ ] Kaylee second 5 V rail — cross-tied, mutually fault-tolerant…
-- [ ] Jayne 5 V harness:
+- [ ] Flight Engineer second 5 V rail — cross-tied, mutually fault-tolerant…
+- [ ] Observer 5 V harness:
 - [ ] Laser — unify to a single 520 nm green source, Class 2 both sit…
 - [ ] Both Class 2 caps must be hardware-enforced
 - [ ] Nose camera strobe + frame-difference detection
@@ -282,24 +267,24 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 
 | Board | MCU | Package | TPM |
 |---|---|---|---|
-| Jayne (observer) | `M0G3519QRGZRQ1` | 48-pin RGZ VQFN 7×7 | `SLB 9672AU2.0` |
+| Observer (observer) | `M0G3519QRGZRQ1` | 48-pin RGZ VQFN 7×7 | `SLB 9672AU2.0` |
 | `CAN-PERIPH-GW-1` (gateway) | `M0G3518QRHBRQ1` | 32-pin RHB VQFN 5×5 | `SLB 9672AU2.0` |
-| Kaylee (flight engineer) | `M0G3518QRHBRQ1` | 32-pin RHB VQFN 5×5 | `SLB 9672AU2.0` |
+| FlightEngineer (flight engineer) | `M0G3518QRHBRQ1` | 32-pin RHB VQFN 5×5 | `SLB 9672AU2.0` |
 
 - [x] Verify the MSPM0G351x-Q1 RGZ-48 pin map against the MSPM0G350x it replaces —
       identical for all 48 pads plus the exposed pad (SLASFA6B Fig 6-5 vs SLASEX6C Fig 6-4).
-- [x] Re-pinmux the gateway and Kaylee onto RHB-32, which bonds out PA0–PA27 only and has
+- [x] Re-pinmux the gateway and FlightEngineer onto RHB-32, which bonds out PA0–PA27 only and has
       no PBx ports: RS485_TX→PA8 (UART1_TX PF2), RS485_RX→PA9 (UART1_RX PF2),
-      RS485_DE→PA21, RS485_FLT_N→PA22, CANFD_FLT_N→PA23 (Kaylee),
+      RS485_DE→PA21, RS485_FLT_N→PA22, CANFD_FLT_N→PA23 (FlightEngineer),
       FLEX_PWM_IO→PA25 (TIMA0_C3 PF5), FLEX_BSHOT_IO→PA26 (TIMG8_C0 PF4).
-- [x] Swap and re-anchor the PCB footprints on the gateway (U1_1/U1_2) and Jayne (U3).
+- [x] Swap and re-anchor the PCB footprints on the gateway (U1_1/U1_2) and Observer (U3).
 - [x] Tie the TPM exposed pad to GND on all three boards — the SLB9670 symbol omitted pad 33
       entirely, so it was floating (Infineon SLB9672 datasheet rev 1.3 §2.1.2 requires it).
 - [x] Correct the MCU land pattern: the design used
       `QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm`, which KiCad's own `descr` identifies as an
       **Analog Devices LTC legacy** outline. TI's RGZ0048F exposed pad is 4.1 mm square, so
       the old land overhung the package thermal pad by 0.525 mm per side.
-- [x] Separate Kaylee's overlapping `U_MCU` / `U_TPM` symbols (17 pads shared a coordinate,
+- [x] Separate FlightEngineer's overlapping `U_MCU` / `U_TPM` symbols (17 pads shared a coordinate,
       shorting the SPI bus and tying MCU VCORE to TPM GND); `U_TPM` moved +34.29 mm.
 
 **Open — blocks fabrication:**
@@ -317,25 +302,25 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
       new one (moot on the 32-pin boards, which now use UART1 on PA8/PA9). See §4.6.2.
 - [ ] **Add the missing MCU support parts per SLAAE76E Table 1-1.** No board has the
       10 µF bulk C(VDD) local to the MCU (the gateway shares one 22 µF at the regulator and
-      Kaylee's MCU has no local 100 nF at all), and none has the recommended NRST network —
+      FlightEngineer's MCU has no local 100 nF at all), and none has the recommended NRST network —
       all three use a 10 kΩ pull-up with no 10 nF pull-down capacitor against the
       recommended 47 kΩ + 10 nF.
 - [ ] **Add a pull-up on the gateway's PA0/PA1 FLEX UART.** PA0/PA1 are 5 V-tolerant
       open-drain on this family with no internal pull-up available, so `FLEX_UART_TX` cannot
       drive high without an external pull-up (SLASFA6B §9.1.1; SLAAE76E §8.5).
-- [ ] **Pull PA18 down on the gateway and Jayne.** PA18 is the default BSL invoke pin and is
+- [ ] **Pull PA18 down on the gateway and Observer.** PA18 is the default BSL invoke pin and is
       used as SPI MOSI on both boards; it floats during reset, so the part can enter BSL
       (SLAAE76E Table 1-1).
 - [ ] **Add thermal vias under the MCU exposed pad.** Only gateway U1_1 has any (3);
-      U1_2 and Jayne U3 have none. TI requires the pad be soldered to a board thermal pad
+      U1_2 and Observer U3 have none. TI requires the pad be soldered to a board thermal pad
       and recommends the 3×3 via pattern in the land-pattern drawing.
-- [ ] **Resolve Kaylee's ground-net naming.** Kaylee's board ground carries the name
+- [ ] **Resolve FlightEngineer's ground-net naming.** FlightEngineer's board ground carries the name
       `CM2_OUT_N` (108 nodes, including every MCU/TPM ground pin), i.e. a current-monitor
       output label is shorted into, or mis-merged with, `PGND`. Pre-existing; not introduced
       by this retarget.
-- [ ] **Clean up Kaylee's dangling no-connect flags.** The retarget left ~30 `no_connect`
+- [ ] **Clean up FlightEngineer's dangling no-connect flags.** The retarget left ~30 `no_connect`
       markers that no longer sit on a pin (ERC warnings only; error count is unchanged at 0).
-- [ ] **Close the Jayne sch↔pcb parity gap.** `RS485_DE`, `RS485_TX` and `RS485_RX` exist on
+- [ ] **Close the Observer sch↔pcb parity gap.** `RS485_DE`, `RS485_TX` and `RS485_RX` exist on
       U3 in the schematic but not in the PCB net table; those pads were left unconnected
       rather than inventing net entries.
 - [ ] **Place gateway lanes 3 and 4.** `U1_3`/`U1_4` and `U2_3`/`U2_4` exist in the
@@ -344,35 +329,35 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] **Decide whether Emma, Wash and Zoë follow to the SLB 9672.** They still carry the
       SLB9670; this retarget deliberately did not touch them.
 
-### 1.2a — PCB Design: Wash, Zoe, and Emma (EMI-Hardened Variants)
+### 1.2a — PCB Design: Pilot, XO, and Commo (EMI-Hardened Variants)
 
 → detail: `avionics/WBS.md` §1.2a
 
-- [ ] Reconcile Wash.md §14 field-connector table with the actual P…
+- [ ] Reconcile Pilot.md §14 field-connector table with the actual P…
 - [ ] Wire the MIL-1553 connector + transformer.
 - [ ] Redesign the tamper mesh as a per-domain anti-tamper mesh (all…
 - [ ] Carry the tamper signal over the link for the TPM-less boards.
 - [ ] Route the rearranged capes.
 - [ ] Clear residual DRC after mesh + routing
-- [ ] Finish Wash PCB (CAPE-A-2) close-out pass:
-- [ ] Add SBUS/UART DIP switch to Wash
-- [ ] Generate Wash gerbers
-- [ ] Generate Zoë gerbers
-- [ ] Zigbee RF chain was never actually added to Zoë — PCB scope g…
-- [ ] FCC Part 15 §15.235 pre-compliance checklist for Emma
+- [ ] Finish Pilot PCB (CAPE-A-2) close-out pass:
+- [ ] Add SBUS/UART DIP switch to Pilot
+- [ ] Generate Pilot gerbers
+- [ ] Generate XO gerbers
+- [ ] Zigbee RF chain was never actually added to XO — PCB scope g…
+- [ ] FCC Part 15 §15.235 pre-compliance checklist for Commo
 - [ ] EMI isolation validation checklist
 - [ ] Merge claude/cape-em-harsh-variants-9Yfr1 → master
 - [ ] Design Faraday cages / boxes to protect all PCBs
 - [ ] Specify / implement tightly twisted pair bonded shielded wiring…
 
-→ Fleet trust module (2026-07-26), see `avionics/TODO.md` "Fleet Trust Module and Tilt Encoder": Wash PB2-P2 unwired-header finding, Wash/Zoë/Kaylee/Jayne DRC clean-out, CAN-PERIPH-GW-1 N=4 routing all still open.
+→ Fleet trust module (2026-07-26), see `avionics/TODO.md` "Fleet Trust Module and Tilt Encoder": Pilot PB2-P2 unwired-header finding, Pilot/XO/FlightEngineer/Observer DRC clean-out, CAN-PERIPH-GW-1 N=4 routing all still open.
 
 ### 1.4 — EMI Hardening Beyond the PCBs (500 W/m^2 environment)
 
 → detail: `avionics/emi-hardening/WBS.md` §1.4
 
-- [ ] PB2-I + Wash Enclosure
-- [ ] PB2-I + Zoë Enclosure
+- [ ] PB2-I + Pilot Enclosure
+- [ ] PB2-I + XO Enclosure
 - [ ] CAN FD
 - [ ] RS-485
 - [ ] MIL-STD-1553B
@@ -381,10 +366,10 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] I2C
 - [ ] BDSHOT/DSHOT (ESC telemetry)
 - [ ] PWM
-- [ ] Add Kaylee/battery boss pattern to middle_canonical_shell24.sca…
+- [ ] Add FlightEngineer/battery boss pattern to middle_canonical_shell24.sca…
 - [ ] Add ventral battery-swap hatch cut to middle_canonical_shell24.…
-- [ ] Create kaylee_battery_tray.scad.
-- [ ] Create kaylee_pdb_tray.scad.
+- [ ] Create flight_engineer_battery_tray.scad.
+- [ ] Create flight_engineer_pdb_tray.scad.
 - [ ] Update REVN_BUILD_GUIDE_24IN.md Phase 1
 
 ### 1.5 — Documentation
@@ -511,8 +496,8 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Install 5V/5A BEC; verify 5.00V ±0.05V under 1A bench load.
 - [ ] Pull motor phase leads through conduit to ESCs; solder (verify…
 - [ ] CAN FD termination: 120Ω SOLDERED to CN1 Cape-B at Shepherd's r…
-- [ ] Mount CN1 Zoë on Shepherd's room (Bay A) floor standoffs (M2.5…
-- [ ] Mount FC1 Wash on inter-cape standoffs (M2.5 nylon 20mm) above…
+- [ ] Mount CN1 XO on Shepherd's room (Bay A) floor standoffs (M2.5…
+- [ ] Mount FC1 Pilot on inter-cape standoffs (M2.5 nylon 20mm) above…
 - [ ] Flash OS to eMMC on CN1 and FC1 via USB-C before installation.
 - [ ] CN1-LOG
 - [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN1 Cape-B head…
@@ -522,17 +507,17 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Daisy-chain RS-485: CN1 → FC1 → exit toward Inara's shuttle (Ba…
 - [ ] Connect MIL-STD-1553: FC1 = Bus Controller (primary); CN1 = RT…
 - [ ] Cap Simon's medbay (Bay E) end of ETH-EA conduit (will connect…
-- [ ] Mount CN2 Zoë on Inara's shuttle (Bay B) floor standoffs; inser…
+- [ ] Mount CN2 XO on Inara's shuttle (Bay B) floor standoffs; inser…
 - [ ] Flash OS to eMMC on CN2 and FC2 before installation.
 - [ ] CN2-LOG
-- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN2 Zoë J_XCVR…
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN2 XO J_XCVR…
 - [ ] Route FC2 GPS coax through dorsal PTFE sleeve (sta ~130mm); mou…
 - [ ] Continue CAN FD daisy-chain Shepherd's room→Inara's shuttle: CN…
 - [ ] Continue RS-485 daisy-chain Shepherd's room (Bay A) → Inara's s…
-- [ ] Connect ETH-AB (Shepherd's room → Inara's shuttle): FC1 Wash ET…
+- [ ] Connect ETH-AB (Shepherd's room → Inara's shuttle): FC1 Pilot ET…
 - [ ] Cap River's room (Bay D) end of ETH-BD (will connect to CN3 in…
 - [ ] Power taps: connect CN1, FC1, CN2, FC2 power leads from PWR con…
-- [ ] Provision TPM 2.0 (SLB9670) on CN1, FC1, CN2, FC2 — unique key…
+- [ ] Provision TPM 2.0 (SLB9672) on CN1, FC1, CN2, FC2 — unique key…
 - [ ] Verify CPLD write-blocker on CN1 and CN2: echo test > /mnt/flig…
 - [ ] Configure forensic log mount in /etc/fstab (noexec, nodev, nosu…
 - [ ] Flash serenity-cn Phase 6 daemon to CN1 and CN2.
@@ -571,16 +556,16 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase6
 
-- [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Wash in Inara's s…
-- [ ] Mount CN3 Zoë on River's room (Bay D) floor standoffs; insert P…
+- [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Pilot in Inara's s…
+- [ ] Mount CN3 XO on River's room (Bay D) floor standoffs; insert P…
 - [ ] CN3-LOG
-- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN3 Zoë J_XCVR…
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN3 XO J_XCVR…
 - [ ] Route FC3 GPS coax through dorsal PTFE sleeve (sta ~275mm); mou…
 - [ ] Continue CAN FD chain: Inara's shuttle (Bay B) FC2 → River's ro…
 - [ ] Continue RS-485 chain Inara's shuttle (Bay B) → River's room (B…
-- [ ] Connect ETH-BD (Inara's shuttle → River's room): FC2 Wash ETH-1…
+- [ ] Connect ETH-BD (Inara's shuttle → River's room): FC2 Pilot ETH-1…
 - [ ] Power tap River's room (Bay D); verify 5V ±0.05V.
-- [ ] Mount CN4 Zoë on Simon's medbay (Bay E) standoffs; insert PB2-I…
+- [ ] Mount CN4 XO on Simon's medbay (Bay E) standoffs; insert PB2-I…
 - [ ] CN4-LOG
 - [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN4 header.
 - [ ] Route FC4 GPS coax through dorsal PTFE sleeve (sta ~350mm); mou…
@@ -613,7 +598,7 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 
 - [ ] Bond cargo gondola shell into belly void at 4× M3 hard points (…
 - [ ] Install 3mm CF door hinge pins; attach clamshell door halves (s…
-- [ ] Install STS3215 winch + twin-pedestal spool + ratchet; wind Dy…
+- [ ] Install SPT5425LV/LibreServo v2 winch + twin-pedestal spool + ratchet; wind Dy…
 - [ ] Install SG90 door-actuator servo (spring-assist open, servo pul…
 - [ ] Install SG90 payload-release servo; connect to DRV8833 IN1/IN2…
 - [ ] Route control leads through PWR conduit belly tap to CN master…
@@ -722,25 +707,25 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 → detail: `deferred/WBS.md` §Phase12
 
 - [ ] RBM module:
-- [ ] Kaylee input:
+- [ ] Flight Engineer input:
 - [ ] Current sharing:
 - [ ] Firmware (pwr_fault):
 - [ ] W&B:
 - [ ] CAD:
 
-### 4.2 — FC Node (Wash) - Phase 7 Firmware
+### 4.2 — FC Node (Pilot) - Phase 7 Firmware
 
 → detail: `avionics/firmware/WBS.md` §4.2
 
 - [ ] EDF ESC PID governor
-- [ ] Nacelle tilt servo PWM generation
+- [ ] Nacelle tilt servo command generation (RS-485/LibreServo v2, was PWM)
 - [ ] IMU / barometer sensor fusion
 - [ ] ToF sensor array management
 - [ ] u-blox M10Q GNSS integration
 - [ ] MIL-STD-1553B RT implementation
 - [ ] TPM-bound attestation
 
-### 4.3 — CN Node (Zoe) - Phase 7 Firmware
+### 4.3 — CN Node (XO) - Phase 7 Firmware
 
 → detail: `avionics/firmware/WBS.md` §4.3
 
@@ -763,32 +748,32 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] GPS cross-check
 - [ ] Security message signing
 
-#### 4.5.1 — Malcolm Hardware Design
+#### 4.5.1 — Skipper Hardware Design
 
 → detail: `gcs/WBS.md` §4.5
 
-- [ ] Create Malcolm host computer specification
-- [ ] Malcolm field enclosure — print and fit-check
+- [ ] Create Skipper host computer specification
+- [ ] Skipper field enclosure — print and fit-check
 - [ ] Gimbal STL generation and mesh verification
 - [ ] Gimbal servo wind-load torque check
-- [ ] Procure Malcolm comms node hardware:
+- [ ] Procure Skipper comms node hardware:
 - [ ] Procure antenna hardware
 - [ ] Procure gimbal hardware:
 
-#### 4.5.2 — Malcolm Comms Node Setup (Phase Malcolm-2)
+#### 4.5.2 — Skipper Comms Node Setup (Phase Skipper-2)
 
 → detail: `gcs/WBS.md` §4.5
 
-- [ ] Flash Debian Linux to Malcolm PB2-I eMMC
-- [ ] Apply Cape-B-2 device tree overlay for Malcolm
-- [ ] Provision TPM 2.0 (SLB9670) on Malcolm's PB2-I
-- [ ] Verify CPLD write-blocker on Malcolm's log μSD
-- [ ] Build and install Malcolm PB2-I firmware:
-- [ ] Install and configure mavlink-router on Malcolm's PB2-I
-- [ ] Enable all 5 radio interfaces on Malcolm's PB2-I
+- [ ] Flash Debian Linux to Skipper PB2-I eMMC
+- [ ] Apply Cape-B-2 device tree overlay for Skipper
+- [ ] Provision TPM 2.0 (SLB9672) on Skipper's PB2-I
+- [ ] Verify CPLD write-blocker on Skipper's log μSD
+- [ ] Build and install Skipper PB2-I firmware:
+- [ ] Install and configure mavlink-router on Skipper's PB2-I
+- [ ] Enable all 5 radio interfaces on Skipper's PB2-I
 - [ ] Configure Wi-Fi transmit power
 
-#### 4.5.3 — Malcolm Host PC Software Setup (Phase Malcolm-3)
+#### 4.5.3 — Skipper Host PC Software Setup (Phase Skipper-3)
 
 → detail: `gcs/WBS.md` §4.5
 
@@ -797,9 +782,9 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Configure QGroundControl:
 - [ ] Configure Wi-Fi Tx power on host PC
 - [ ] Run tracking software tests:
-- [ ] Implement gcs/malcolm/firmware/pb2i/src/mal_comms.c and mal_com…
+- [ ] Implement gcs/skipper/firmware/pb2i/src/skipper_comms.c and skipper_com…
 
-#### 4.5.4 — Tracking and Gimbal Integration (Phase Malcolm-3)
+#### 4.5.4 — Tracking and Gimbal Integration (Phase Skipper-3)
 
 → detail: `gcs/WBS.md` §4.5
 
@@ -810,7 +795,7 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] Run gimbal_ctrl.py bench test
 - [ ] End-to-end tracking test (outdoor):
 
-#### 4.5.5 — Malcolm Integration Testing (Phase Malcolm-4)
+#### 4.5.5 — Skipper Integration Testing (Phase Skipper-4)
 
 → detail: `gcs/WBS.md` §4.5
 
@@ -820,11 +805,11 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 - [ ] 49 MHz (Part 15 §15.235) link test (1 km):
 - [ ] Gimbal pointing accuracy test (outdoor, aircraft at 200–500 m):
 - [ ] MAVLink authentication test:
-- [ ] Node loss with Malcolm active:
+- [ ] Node loss with Skipper active:
 
 #### 4.6.1 — TI AM62Ax Vision Pipeline Bring-Up
 
-→ detail: `avionics/jayne/WBS.md` §4.6.1
+→ detail: `avionics/observer/WBS.md` §4.6.1
 
 - [ ] MIPI CSI-2 camera sensor bring-up
 - [ ] VPAC/ISP pipeline configuration
@@ -834,19 +819,19 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 
 #### 4.6.2 — TI MSPM0G3507 Control Firmware
 
-→ detail: `avionics/jayne/WBS.md` §4.6.2
+→ detail: `avionics/observer/WBS.md` §4.6.2
 
 - [ ] MCAN (CAN-FD) driver bring-up
 - [ ] TFmini-S UART driver
 - [ ] KSZ9477 Ethernet switch management driver
-- [ ] Laser GPIO driver (both sites Class 2 — docs/JAYNE_LASER_ANALYS…
+- [ ] Laser GPIO driver (both sites Class 2 — docs/OBSERVER_LASER_ANALYS…
 - [ ] Laser strobe + crosshair-metrology routine (AM62A7 ISP):
-- [ ] SPI driver to Infineon SLB9670 TPM
+- [ ] SPI driver to Infineon SLB9672 TPM
 - [ ] Signed telemetry:
 
 #### 4.6.3 — Integration Testing
 
-→ detail: `avionics/jayne/WBS.md` §4.6.3
+→ detail: `avionics/observer/WBS.md` §4.6.3
 
 - [ ] Bench test:
 - [ ] Ring failure test:
@@ -891,4 +876,4 @@ Applied 2026-08-03 by `avionics/kicad/retarget_mspm0g351x_slb9672.py` (schematic
 
 ---
 
-*"Get on with it, Wash." — Capt. Malcolm Reynolds*
+*"Get on with it, Pilot." — Capt. Skipper Reynolds*

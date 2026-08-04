@@ -172,7 +172,7 @@
 //   aft move from the 104.5 mm gear-train pivot.  Drivers: the 40 mm flaps and
 //   the discrete Ø71 housing at the far aft, only partly offset by the 19 g
 //   steel spar sitting on the pivot; the deleted gear train and the ring-gear→
-//   cam swap are ~a wash.  FIRST-PASS estimate (credible band ≈109–112 mm):
+//   cam swap are ~a pilot.  FIRST-PASS estimate (credible band ≈109–112 mm):
 //   effective printed densities pending printer-sliced masses, and the discrete
 //   housing vs. cowl-skin overlap pending the Ø72 nozzle-pocket shell re-bake
 //   (see NOZZLE_RING_OD note + WBS §1.1.3).  First-article verification against

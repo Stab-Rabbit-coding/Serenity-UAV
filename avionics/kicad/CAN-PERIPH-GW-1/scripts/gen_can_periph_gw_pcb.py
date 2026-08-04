@@ -14,8 +14,8 @@ places every footprint with correct nets and a generous non-overlapping grid
 -- it does NOT hand-route signal traces (30+ nets). DRC will report
 unconnected-ratsnest items for the un-routed nets; that is expected at this
 stage and is tracked as an open item in CAN-PERIPH-GW-1.md / TODO.md, the
-same documented-residual-DRC pattern already used for Kaylee's own PCB
-generator (gen_kaylee_pcb.py docstring).
+same documented-residual-DRC pattern already used for Flight Engineer's own PCB
+generator (gen_flight_engineer_pcb.py docstring).
 
 RS-485 isolation is ISOW1412 (own integrated isolated DC-DC per stack, no
 external DC-DC placeholder needed -- see schematic docstring).
@@ -163,7 +163,7 @@ VALUES = {}
 for _i in range(1, N_STACKS + 1):
     VALUES.update({
         f"U1_{_i}": "MSPM0G3507", f"R_NRST_{_i}": "10k", f"C_VCORE_{_i}": "1uF",
-        f"C_MCU1_{_i}": "100nF", f"J_SWD_{_i}": "SWD", f"U2_{_i}": "SLB9670",
+        f"C_MCU1_{_i}": "100nF", f"J_SWD_{_i}": "SWD", f"U2_{_i}": "SLB9672",
         f"C_TPM1_{_i}": "100nF", f"C_TPM2_{_i}": "1uF", f"R_TPM_RST_{_i}": "10k",
         f"U3_{_i}": "ISOW1044BDFMR", f"C_ISO1_{_i}": "100nF", f"C_ISO2_{_i}": "1uF",
         f"U4_{_i}": "ISOW1412", f"C_RS1_{_i}": "100nF", f"C_RS2_{_i}": "100nF",
@@ -258,8 +258,8 @@ else:
     X1 = 180.5 + max(0, N_STACKS - 1) * LANE_DX
     Y1 = 119.0
 
-# Back-silkscreen attribution block (mirrors the block already on Wash.md /
-# Zoe.md boards). Position user-corrected 2026-07-26 (the generator's first
+# Back-silkscreen attribution block (mirrors the block already on Pilot.md /
+# XO.md boards). Position user-corrected 2026-07-26 (the generator's first
 # guess ran off the board corner) -- keep in sync with the live board if
 # moved again by hand.
 ATTRIBUTION_TEXT = (
@@ -323,7 +323,7 @@ def base_board_text():
 \t)
 \t(paper "A4")
 \t(title_block
-\t\t(title "CAN-PERIPH-GW-1 / MAL-CAN-PERIPH-GW-PCB")
+\t\t(title "CAN-PERIPH-GW-1 / SKIPPER-CAN-PERIPH-GW-PCB")
 \t\t(date "2026-07-26")
 \t\t(rev "1")
 \t\t(comment 1 "Serenity UAV -- TPM-secured dual-isolated-bus (CAN-FD+RS-485) peripheral gateway")

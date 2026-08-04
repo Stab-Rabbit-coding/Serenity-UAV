@@ -46,8 +46,8 @@
 //   for Simon's — NOT dorsal centreline, NOT ventral/keel line) at shoulder
 //   height with West System 105/206 structural epoxy.  Thread 49 MHz antenna
 //   wire through bore; dress wire aft to aft post.  For each forward post,
-//   feed wire to that bay's own Emma (XCVR-49MHZ-2) J2: River's Room for the
-//   port antenna, Simon's Medbay for the starboard antenna — the two Emma
+//   feed wire to that bay's own Commo (XCVR-49MHZ-2) J2: River's Room for the
+//   port antenna, Simon's Medbay for the starboard antenna — the two Commo
 //   boards do not share an antenna (TODO.md §1.4.2, redundancy mandate).
 //
 // References:

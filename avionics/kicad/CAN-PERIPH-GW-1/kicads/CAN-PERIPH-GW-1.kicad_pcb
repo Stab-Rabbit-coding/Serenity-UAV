@@ -8,7 +8,7 @@
 	)
 	(paper "A4")
 	(title_block
-		(title "CAN-PERIPH-GW-1 / MAL-CAN-PERIPH-GW-PCB")
+		(title "CAN-PERIPH-GW-1 / SKIPPER-CAN-PERIPH-GW-PCB")
 		(date "2026-07-26")
 		(rev "1")
 		(comment 1 "Serenity UAV -- TPM-secured dual-isolated-bus (CAN-FD+RS-485) peripheral gateway")

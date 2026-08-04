@@ -68,7 +68,8 @@ Use these as ground truth in this authority order (highest first):
    commercial product retained for internal reference only — NOT relicensed under CC BY.**
 2. **Nick Henning render collection** — REF-CAD-002. Derived from show/QMx canon; more mechanical
    detail than the blueprints; used by email permission (2026-07-06).
-3. **misubisu Thingiverse model, Thing 7330462** — REF-CAD-004 (CC BY 4.0). The `s_*.stl` origin;
+3. **misubisu Thingiverse model, Thing 7330462** — REF-CAD-004 (CC BY-SA 4.0, Available Component
+   under CERN-OHL-W 2.0 — see `docs/attribution_and_licencing.md` §3). The `s_*.stl` origin;
    still usable but **verify against the two above** before treating any detail as canonical.
 
 The creative-universe attribution and fan-engineering terms (Joss Whedon, cast/crew, Universal /

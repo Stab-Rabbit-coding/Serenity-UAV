@@ -11,10 +11,10 @@
       "Unit_Mass_g": "70",
       "Total_Mass_g": "280",
       "Supplier": "AliExpress / Banggood",
-      "Supplier_PN_or_Search": "Surpass Hobby 2627 50mm 6S EDF OR RFX 50mm 12-blade 6S EDF",
-      "Est_Unit_Price_USD": "25.00",
-      "Est_Total_Price_USD": "100.00",
-      "Notes": "460g thrust each; verify CW vs CCW rotation before nacelle install; 2 per nacelle tandem; Rev O EDF1 Z=22..72mm EDF2 Z=98..143mm"
+      "Supplier_PN_or_Search": "XFly Galaxy X5 50mm 12-blade 6S 3200KV (canonical) OR Surpass Hobby 2627 (legacy)",
+      "Est_Unit_Price_USD": "28.00",
+      "Est_Total_Price_USD": "112.00",
+      "Notes": "1240g thrust each (XFly Galaxy X5 canonical); 70g unit mass; verify CW vs CCW rotation before nacelle install; 2 per nacelle tandem with 11-fin stator (90% efficiency); Rev S1 positioning Z=22..72mm EDF1, Z=98..143mm EDF2"
     },
     {
       "Ref": "EDF-55-6S",
@@ -57,42 +57,42 @@
     },
     {
       "Ref": "SERVO-TILT",
-      "Description": "Nacelle tilt servo — digital, metal gear, >=25 kg·cm @ 6V",
+      "Description": "Nacelle tilt servo — SPT5425LV converted with LibreServo v2, 25-26 kgf·cm @ 6V, rotation-limit pin removed",
       "Category": "Servo",
       "Qty": "2",
-      "Unit_Mass_g": "65",
-      "Total_Mass_g": "130",
-      "Supplier": "Amazon / AliExpress",
-      "Supplier_PN_or_Search": "DS3218MG 25kg digital servo metal gear",
+      "Unit_Mass_g": "60",
+      "Total_Mass_g": "120",
+      "Supplier": "Amazon / AliExpress (servo) + github.com/Stab-Rabbit-coding/LibreServo_v2 (board, self-build)",
+      "Supplier_PN_or_Search": "SPT5425LV 25kg digital servo metal gear",
       "Est_Unit_Price_USD": "13.00",
       "Est_Total_Price_USD": "26.00",
-      "Notes": "Rev O: servo torque demand reduced by CG-pivot at Z=83mm; only aero + inertia moments remain; hard stops -5°/140°"
+      "Notes": "2026-08-02: was DS3218MG (uncited); migrated to SPT5425LV+LibreServo v2 as part of servo fleet standardisation (REFERENCES.md REF-SENSOR-013/014, Servo Fleet Standardisation 2026-08-02) — same physical part/board as the cargo winch servo below. Rotation-limit pin removed for fleet commonality; real range limit is the external CF-PETG hard-stop blocks in the gear train (-5°/140°), enforced in firmware, not by the servo's own (now-removed) pin. Rev O: servo torque demand reduced by CG-pivot at Z=83mm; only aero + inertia moments remain. Unit mass 60g is a placeholder (57g servo body, REF-SENSOR-013, + unweighed LibreServo v2 PCB) pending bench weigh-in — see REFERENCES.md Open Standards Verification Items."
     },
     {
       "Ref": "SERVO-RCS-VALVE",
-      "Description": "RCS bleed-jet proportional valve servo — SG90 class — Phase 11 DEFERRED",
+      "Description": "RCS bleed-jet proportional valve servo — SG90 class, OpenServoCore control board — Phase 11 DEFERRED",
       "Category": "Servo",
       "Qty": "0",
       "Unit_Mass_g": "9",
       "Total_Mass_g": "0",
-      "Supplier": "Amazon / AliExpress",
+      "Supplier": "Amazon / AliExpress (servo) + github.com/OpenServoCore/open-servo-core (board, self-build)",
       "Supplier_PN_or_Search": "SG90 9g micro servo 1.8kg",
       "Est_Unit_Price_USD": "3.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "*** PHASE 11 DEFERRED — 4 per aircraft; modulates the 4 EDF-fed RCS bleed jets for pitch/yaw attitude authority; replaces the deleted iris rear-nozzle servo (canonical nozzle is fixed) ***"
+      "Notes": "*** PHASE 11 DEFERRED — 4 per aircraft; modulates the 4 EDF-fed RCS bleed jets for pitch/yaw attitude authority; replaces the deleted iris rear-nozzle servo (canonical nozzle is fixed) *** 2026-08-02: SG90-class micro servos standardise on the OpenServoCore \"OSC SG90 M007\" swap board (REFERENCES.md REF-SENSOR-015) when this phase is implemented — inherits the same pre-production-hardware caveat as SERVO-CARGO below."
     },
     {
       "Ref": "SERVO-CARGO",
-      "Description": "SG90 micro servo — cargo door actuation (1×) + payload release (1×)",
+      "Description": "SG90 micro servo — cargo door actuation (1×) + payload release (1×), OpenServoCore control board",
       "Category": "Cargo",
       "Qty": "2",
       "Unit_Mass_g": "9",
       "Total_Mass_g": "18",
-      "Supplier": "Amazon / AliExpress",
+      "Supplier": "Amazon / AliExpress (servo) + github.com/OpenServoCore/open-servo-core (board, self-build)",
       "Supplier_PN_or_Search": "SG90 9g micro servo 1.8kg cm",
       "Est_Unit_Price_USD": "3.00",
       "Est_Total_Price_USD": "6.00",
-      "Notes": "Rev P new; Ch-A = door cam via DRV8833 H-bridge; Ch-B = latch release pull-wire; both on Cape-B GPIO PWM"
+      "Notes": "Rev P new; Ch-A = door cam via DRV8833 H-bridge; Ch-B = latch release pull-wire; both on Cape-B GPIO PWM. 2026-08-02: control board specified as OpenServoCore \"OSC SG90 M007\" (REFERENCES.md REF-SENSOR-015), a swap board that physically replaces the SG90 factory PCB — same body envelope, no bracket change. ⚠ Upstream hardware is pre-production (\"nothing here is shippable yet\" per project status); do not procure in flight-article quantity until upstream reaches a shippable release."
     },
     {
       "Ref": "BRG-MF104ZZ",
@@ -268,7 +268,7 @@
     },
     {
       "Ref": "CAPE-B-2",
-      "Description": "Cape-B-2 PCB 55x35mm — EMI-hardened Cape-B: same CAN FD + RS-485 + Ethernet isolation stack as CAPE-A-2 plus Cape-B payload ICs (MAVLink, TI WL1837MOD WiFi/BT, SLB9670 TPM 2.0, ATF16V8BQL CPLD write-blocker, log microSD); P1+P2 passthrough socket rails on upper face for Emma XCVR stack (LoRa removed from Zoë — moved to Emma board Rev R1)",
+      "Description": "Cape-B-2 PCB 55x35mm — EMI-hardened Cape-B: same CAN FD + RS-485 + Ethernet isolation stack as CAPE-A-2 plus Cape-B payload ICs (MAVLink, TI WL1837MOD WiFi/BT, SLB9672 TPM 2.0, ATF16V8BQL CPLD write-blocker, log microSD); P1+P2 passthrough socket rails on upper face for Commo XCVR stack (LoRa removed from XO — moved to Commo board Rev R1)",
       "Category": "Avionics",
       "Qty": "4",
       "Unit_Mass_g": "40",
@@ -277,20 +277,20 @@
       "Supplier_PN_or_Search": "serenity/kicad/ CAPE-B-2 gerbers + BOM",
       "Est_Unit_Price_USD": "105.00",
       "Est_Total_Price_USD": "420.00",
-      "Notes": "Cape-B-2 PCB 55x35mm EMI-hardened — ALL 4 CN positions — Rev R1: LoRa RFM95W removed (moved to Emma); P1+P2 passthrough rails added to upper face (Emma plugs onto River and Simon stacks; rails bare/capped on Shepherd and Inara stacks). PCB redesign required — see TODO §avionics. Gerbers pending DRC. DTS: cape-b2.dts"
+      "Notes": "Cape-B-2 PCB 55x35mm EMI-hardened — ALL 4 CN positions — Rev R1: LoRa RFM95W removed (moved to Commo); P1+P2 passthrough rails added to upper face (Commo plugs onto River and Simon stacks; rails bare/capped on Shepherd and Inara stacks). PCB redesign required — see TODO §avionics. Gerbers pending DRC. DTS: cape-b2.dts"
     },
     {
-      "Ref": "Emma",
-      "Description": "Emma XCVR sub-module PCB — EMI-hardened 49 MHz AX.25 XCVR + LoRa RFM95W 915 MHz: SRF2012-100Y CMC + PRTR5V0U2X TVS + X2Y cap + Wurth 742792512 ferrite on +5V; P1+P2 2×20-pin socket rails (replaces JST GH 6P); 55x35mm 4-layer PCB",
+      "Ref": "Commo",
+      "Description": "Commo XCVR sub-module PCB — EMI-hardened 49 MHz AX.25 XCVR + LoRa RFM95W 915 MHz: SRF2012-100Y CMC + PRTR5V0U2X TVS + X2Y cap + Wurth 742792512 ferrite on +5V; P1+P2 2×20-pin socket rails (replaces JST GH 6P); 55x35mm 4-layer PCB",
       "Category": "Avionics",
       "Qty": "2",
       "Unit_Mass_g": "20",
       "Total_Mass_g": "40",
       "Supplier": "JLCPCB (fab from project gerbers)",
-      "Supplier_PN_or_Search": "Emma gerbers (redesign pending — see TODO §avionics)",
+      "Supplier_PN_or_Search": "Commo gerbers (redesign pending — see TODO §avionics)",
       "Est_Unit_Price_USD": "32.00",
       "Est_Total_Price_USD": "64.00",
-      "Notes": "Emma XCVR sub-module — River's Room + Simon's Medbay only (Rev R1). LoRa RFM95W added (moved from Cape-B-2); P1+P2 socket rails replace JST GH 6P for clean board-to-board stacking on Zoë passthrough rails. RF Z0=52.26Ohm PASS. PCB redesign required. Gerbers pending DRC."
+      "Notes": "Commo XCVR sub-module — River's Room + Simon's Medbay only (Rev R1). LoRa RFM95W added (moved from Cape-B-2); P1+P2 socket rails replace JST GH 6P for clean board-to-board stacking on XO passthrough rails. RF Z0=52.26Ohm PASS. PCB redesign required. Gerbers pending DRC."
     },
     {
       "Ref": "MICROSD-LOG",
@@ -371,14 +371,14 @@
       "Notes": "Use when payload <=250g; -225g AUW vs 4000mAh cell"
     },
     {
-      "Ref": "Kaylee",
+      "Ref": "Flight Engineer",
       "Description": "Custom Power Distribution Board Rev A1 — 4-layer 90x65mm PCB; dual redundant 5V/10A BEC (TPS54620x2 diode-OR'd); 5V/3A dedicated servo BEC (TPS54620 third instance); 5x INA226 current monitors; BQ76930 6S cell monitor; 150A MAXI + 4x40A mini blade fuses; XT60 in / 4xXT30 out / Molex Nano-Fit BEC out",
       "Category": "Power",
       "Qty": "1",
       "Unit_Mass_g": "75",
       "Total_Mass_g": "75",
       "Supplier": "JLCPCB (fab from project gerbers)",
-      "Supplier_PN_or_Search": "avionics/kicad/ Kaylee gerbers + BOM",
+      "Supplier_PN_or_Search": "avionics/kicad/ Flight Engineer gerbers + BOM",
       "Est_Unit_Price_USD": "65.00",
       "Est_Total_Price_USD": "65.00",
       "Notes": "Rev A1: 6V/5A TPS54540 servo BEC removed; replaced with 5V/3A servo output from third TPS54620 instance sharing 5V rail (DS3218MG operates 4.8-7.4V; ~21 kg·cm at 5V vs 25 kg·cm at 6V — adequate for nacelle tilt loads with safety margin). Dual redundant 5V avionics SMPS retained. 5x INA226 current sense (0x40-0x44). BQ76930 cell monitor 0x08. 150A MAXI main fuse + 4x40A mini ESC fuses. PCB redesign required — see TODO §avionics."
@@ -394,7 +394,7 @@
       "Supplier_PN_or_Search": "Littelfuse 0297150.ZXNV or 0297150.PXCN",
       "Est_Unit_Price_USD": "1.50",
       "Est_Total_Price_USD": "1.50",
-      "Notes": "Installed in Kaylee inline fuse holder on VBAT positive rail between XT60 and distribution outputs; clears AFTER 40A branch fuses on short-circuit"
+      "Notes": "Installed in Flight Engineer inline fuse holder on VBAT positive rail between XT60 and distribution outputs; clears AFTER 40A branch fuses on short-circuit"
     },
     {
       "Ref": "FUSE-ESC-40A",
@@ -407,7 +407,7 @@
       "Supplier_PN_or_Search": "Littelfuse 0297040.WXNV",
       "Est_Unit_Price_USD": "0.50",
       "Est_Total_Price_USD": "2.00",
-      "Notes": "One per ESC output on Kaylee; coordinates with 10AWG wire (55A rated); clears first on ESC-side short; 4 included in Kaylee BOM"
+      "Notes": "One per ESC output on Flight Engineer; coordinates with 10AWG wire (55A rated); clears first on ESC-side short; 4 included in Flight Engineer BOM"
     },
     {
       "Ref": "SHUNT-1MOHM",
@@ -420,20 +420,176 @@
       "Supplier_PN_or_Search": "Bourns CSS2H-2512K-1L00F",
       "Est_Unit_Price_USD": "2.50",
       "Est_Total_Price_USD": "12.50",
-      "Notes": "5x on Kaylee: 4 for ESC current monitors (U_IS1-U_IS4) + 1 for main bus monitor (U_IS_MAIN); Kelvin 4-terminal connection required; 3W rating; at 40A: P=1.6W within rating"
+      "Notes": "5x on Flight Engineer: 4 for ESC current monitors (U_IS1-U_IS4) + 1 for main bus monitor (U_IS_MAIN); Kelvin 4-terminal connection required; 3W rating; at 40A: P=1.6W within rating"
     },
     {
-      "Ref": "N20-WINCH",
-      "Description": "N20 300RPM 6V gear motor — cargo door winch",
+      "Ref": "SPT5425LV-WINCH-LS2",
+      "Description": "Cargo winch servo — SPT5425LV converted with LibreServo v2, rotation-limit pin removed, RS-485 bus, encoded continuous rotation",
       "Category": "Cargo",
       "Qty": "1",
-      "Unit_Mass_g": "10",
-      "Total_Mass_g": "10",
+      "Unit_Mass_g": "60",
+      "Total_Mass_g": "60",
+      "Supplier": "Amazon / AliExpress (servo) + github.com/Stab-Rabbit-coding/LibreServo_v2 (board, self-build)",
+      "Supplier_PN_or_Search": "SPT5425LV 25kg digital servo metal gear",
+      "Est_Unit_Price_USD": "13.00",
+      "Est_Total_Price_USD": "13.00",
+      "Notes": "2026-08-02 (docs/CARGO_WINCH_SPECIFICATION.md Rev C): supersedes both the retired N20-WINCH gearmotor (Rev P/Q/R) and the never-procured STS3215 (Rev B) in this reconciled BOM — see REFERENCES.md REF-SENSOR-012 (superseded) and REF-SENSOR-013/014. Drives the both-ends-supported spool through a lost-motion dog coupler (torque only, no radial load); paired with HX711 load cell for line tension and AK7455 for true spool position. ⚠ Stall current not yet published — see REFERENCES.md Open Standards Verification Items."
+    },
+    {
+      "Ref": "SOL-CATCH-5V",
+      "Description": "Pull solenoid, >=2.5 N @ 3 mm stroke, 5 V — winch ratchet catch actuator",
+      "Category": "Cargo",
+      "Qty": "1",
+      "Unit_Mass_g": "15",
+      "Total_Mass_g": "15",
       "Supplier": "Amazon / AliExpress",
-      "Supplier_PN_or_Search": "N20 micro gear motor 300RPM 6V",
+      "Supplier_PN_or_Search": "5V pull-type linear solenoid 3mm stroke 2.5N",
+      "Est_Unit_Price_USD": "4.00",
+      "Est_Total_Price_USD": "4.00",
+      "Notes": "docs/CARGO_WINCH_SPECIFICATION.md §3.5; de-energised = catch engaged (fail-safe); driven by AO3400 N-FET + SS34 flyback"
+    },
+    {
+      "Ref": "BRG-MR84ZZ",
+      "Description": "MR84ZZ bearing, 4x8x3mm — winch spool hub, pressed in pairs",
+      "Category": "Bearing",
+      "Qty": "2",
+      "Unit_Mass_g": "1.5",
+      "Total_Mass_g": "3",
+      "Supplier": "Amazon / AliExpress",
+      "Supplier_PN_or_Search": "MR84ZZ miniature ball bearing 4x8x3mm",
+      "Est_Unit_Price_USD": "1.00",
+      "Est_Total_Price_USD": "2.00",
+      "Notes": "docs/CARGO_WINCH_SPECIFICATION.md §3.2/§3.3; static rating ~130N, FOS~13 at 10N/bearing"
+    },
+    {
+      "Ref": "SHAFT-SS-4MM",
+      "Description": "4mm OD A2 stainless rod, 46mm — winch fixed spool axle",
+      "Category": "Structural Hardware",
+      "Qty": "1",
+      "Unit_Mass_g": "4.6",
+      "Total_Mass_g": "4.6",
+      "Supplier": "Amazon / AliExpress / McMaster-Carr",
+      "Supplier_PN_or_Search": "4mm A2 stainless steel rod 46mm",
+      "Est_Unit_Price_USD": "2.00",
+      "Est_Total_Price_USD": "2.00",
+      "Notes": "docs/CARGO_WINCH_SPECIFICATION.md §3.2; stationary, clamped at both pedestals; new stock item (project's stocked 3mm CF rod is unsuitable in a press-fit bearing race)"
+    },
+    {
+      "Ref": "SPRING-PAWL",
+      "Description": "Compression spring, 1.0N +/-0.2N installed — winch ratchet pawl",
+      "Category": "Hardware",
+      "Qty": "1",
+      "Unit_Mass_g": "1",
+      "Total_Mass_g": "1",
+      "Supplier": "Amazon / AliExpress / McMaster-Carr",
+      "Supplier_PN_or_Search": "small stainless compression spring 1N",
+      "Est_Unit_Price_USD": "1.00",
+      "Est_Total_Price_USD": "1.00",
+      "Notes": "docs/CARGO_WINCH_SPECIFICATION.md §3.4; seated in a set-screw-adjustable seat in the starboard pedestal for bench trim of the slip threshold"
+    },
+    {
+      "Ref": "DOWEL-M2-10",
+      "Description": "M2 x 10mm A2 stainless dowel — winch pawl pivot",
+      "Category": "Hardware",
+      "Qty": "1",
+      "Unit_Mass_g": "0.3",
+      "Total_Mass_g": "0.3",
+      "Supplier": "Amazon / AliExpress / McMaster-Carr",
+      "Supplier_PN_or_Search": "M2 x 10mm stainless dowel pin",
+      "Est_Unit_Price_USD": "0.50",
+      "Est_Total_Price_USD": "0.50",
+      "Notes": "docs/CARGO_WINCH_SPECIFICATION.md §3.4"
+    },
+    {
+      "Ref": "SLEEVE-HUB-STEEL",
+      "Description": "Steel sleeve, 10mm OD x 8mm ID x 25mm — winch spool hub bearing race",
+      "Category": "Hardware",
+      "Qty": "1",
+      "Unit_Mass_g": "5.6",
+      "Total_Mass_g": "5.6",
+      "Supplier": "Amazon / AliExpress / McMaster-Carr",
+      "Supplier_PN_or_Search": "steel sleeve bushing 10mm OD 8mm ID",
+      "Est_Unit_Price_USD": "3.00",
+      "Est_Total_Price_USD": "3.00",
+      "Notes": "docs/CARGO_WINCH_SPECIFICATION.md §3.10.3 FM2 — bearings press into steel, not printed plastic; keeps fragments captive if the printed hub cracks"
+    },
+    {
+      "Ref": "CLIP-EXT-4MM",
+      "Description": "External circlip, 4mm shaft — winch axle positive retention",
+      "Category": "Hardware",
+      "Qty": "2",
+      "Unit_Mass_g": "0.1",
+      "Total_Mass_g": "0.2",
+      "Supplier": "Amazon / AliExpress / McMaster-Carr",
+      "Supplier_PN_or_Search": "4mm external circlip retaining ring",
+      "Est_Unit_Price_USD": "0.30",
+      "Est_Total_Price_USD": "0.60",
+      "Notes": "docs/CARGO_WINCH_SPECIFICATION.md §3.10.3 FM1 — positive axle retention outboard of each pedestal; the pinch screw is demoted to locating/anti-rotation only"
+    },
+    {
+      "Ref": "KEEPER-WINCH",
+      "Description": "Keeper bar, 1mm aluminium, pedestal-to-pedestal — winch independent secondary capture",
+      "Category": "Hardware",
+      "Qty": "1",
+      "Unit_Mass_g": "5",
+      "Total_Mass_g": "5",
+      "Supplier": "In-house fabrication / Amazon aluminium stock",
+      "Supplier_PN_or_Search": "1mm aluminium sheet/strap stock",
+      "Est_Unit_Price_USD": "2.00",
+      "Est_Total_Price_USD": "2.00",
+      "Notes": "docs/CARGO_WINCH_SPECIFICATION.md §3.10.3 FM4 — holds the spool assembly captive even if FM1-FM3 all fail or a retainer is omitted at assembly"
+    },
+    {
+      "Ref": "PLATE-PEDESTAL",
+      "Description": "Aluminium backing plate, pedestal through-bolt — winch pedestal mounting",
+      "Category": "Hardware",
+      "Qty": "2",
+      "Unit_Mass_g": "2",
+      "Total_Mass_g": "4",
+      "Supplier": "In-house fabrication / Amazon aluminium stock",
+      "Supplier_PN_or_Search": "aluminium backing plate stock",
+      "Est_Unit_Price_USD": "1.50",
+      "Est_Total_Price_USD": "3.00",
+      "Notes": "docs/CARGO_WINCH_SPECIFICATION.md §3.10.3 FM3 — replaces heat-set-insert-only mounting for a flight-critical joint per root AGENTS.md §7"
+    },
+    {
+      "Ref": "ENC-AK7455-SPOOL",
+      "Description": "AKM AK7455 off-axis angle sensor + diametric magnet — winch spool position",
+      "Category": "Cargo",
+      "Qty": "1",
+      "Unit_Mass_g": "4",
+      "Total_Mass_g": "4",
+      "Supplier": "Mouser / Digi-Key",
+      "Supplier_PN_or_Search": "AKM AK7455 14-bit off-axis angle sensor QFN24",
       "Est_Unit_Price_USD": "5.00",
       "Est_Total_Price_USD": "5.00",
-      "Notes": "Drives clamshell cargo door; paired with HX711 load cell for weight sensing"
+      "Notes": "docs/CARGO_WINCH_SPECIFICATION.md §3.7.3; REF-SENSOR-008, fleet-standard part already used for nacelle tilt (SKIPPER-TILT-ENC-PCB below) — no new part number; mates the CAN-PERIPH-GW's existing J_ENC pigtail on a dedicated SPI bus, no board change; reads true spool angle through any hub slip"
+    },
+    {
+      "Ref": "FET-AO3400",
+      "Description": "AO3400 N-FET, SOT-23 — winch catch solenoid drive",
+      "Category": "Hardware",
+      "Qty": "1",
+      "Unit_Mass_g": "0.1",
+      "Total_Mass_g": "0.1",
+      "Supplier": "Mouser / Digi-Key",
+      "Supplier_PN_or_Search": "AO3400 N-channel MOSFET SOT-23",
+      "Est_Unit_Price_USD": "0.30",
+      "Est_Total_Price_USD": "0.30",
+      "Notes": "docs/CARGO_WINCH_SPECIFICATION.md §5.1; existing project-standard part (see avionics/kicad/Observer/Observer.md Q1); 100 Ohm gate resistor + 10k gate pull-down so an un-driven/resetting MCU leaves the catch engaged"
+    },
+    {
+      "Ref": "DIODE-SS34",
+      "Description": "SS34 flyback diode — across winch catch solenoid coil",
+      "Category": "Hardware",
+      "Qty": "1",
+      "Unit_Mass_g": "0.2",
+      "Total_Mass_g": "0.2",
+      "Supplier": "Mouser / Digi-Key",
+      "Supplier_PN_or_Search": "SS34 Schottky diode 3A 40V",
+      "Est_Unit_Price_USD": "0.30",
+      "Est_Total_Price_USD": "0.30",
+      "Notes": "docs/CARGO_WINCH_SPECIFICATION.md §5.1"
     },
     {
       "Ref": "HX711-LC",
@@ -557,7 +713,7 @@
     },
     {
       "Ref": "WIRE-6AWG",
-      "Description": "6AWG silicone wire — battery XT60 to Kaylee XT60 (main bus)",
+      "Description": "6AWG silicone wire — battery XT60 to Flight Engineer XT60 (main bus)",
       "Category": "Wiring",
       "Qty": "1",
       "Unit_Mass_g": "60",
@@ -570,7 +726,7 @@
     },
     {
       "Ref": "WIRE-10AWG",
-      "Description": "10AWG silicone wire — Kaylee XT30 outputs to ESC inputs",
+      "Description": "10AWG silicone wire — Flight Engineer XT30 outputs to ESC inputs",
       "Category": "Wiring",
       "Qty": "1",
       "Unit_Mass_g": "80",
@@ -579,7 +735,7 @@
       "Supplier_PN_or_Search": "10AWG silicone wire red/black 1m each",
       "Est_Unit_Price_USD": "15.00",
       "Est_Total_Price_USD": "15.00",
-      "Notes": "ESC branch wiring only (Kaylee XT30 to ESC XT30); 55A rated free air; 1 pair per ESC x4 = ~400mm per polarity total; NOT for main battery bus (use WIRE-4AWG)"
+      "Notes": "ESC branch wiring only (Flight Engineer XT30 to ESC XT30); 55A rated free air; 1 pair per ESC x4 = ~400mm per polarity total; NOT for main battery bus (use WIRE-4AWG)"
     },
     {
       "Ref": "WIRE-16AWG",
@@ -693,8 +849,8 @@
       "Est_Total_Price_USD": "0.00",
       "Notes": "PRINT FROM: airframe/stls/fuselage/middle_shell24_2mm_repaired.stl (baked hull-frame R1; 855328 tri; extents X -258.5..-81.6 / Y +130.4..+203.6 / Z +1.3..+166.1 mm). BLENDER SOURCE: airframe/blender-scripts/files-hollowed-24in/middle_shell24_2mm_repaired.stl. SCAD s_middle_canonical_shell24.scad superseded. GEOMETRY: ONE printed piece — (1) outer horseshoe ring (U-shaped exterior frame open at −Z/ventral); (2) inner neck (closed tube passing through horseshoe centre",
       "null": [
-        " connecting cargo bay interior to rear engine room interior). KAYLEE'S ROOM: the Kaylee PDB bay is located inside the inner neck",
-        " accessible through the open ventral face of the horseshoe. Mounting boss features for Kaylee must be added to the inner neck before printing — see TODO §1.1.1.3. PHASE 5-10: inner neck is a closed tube — aft EDF intake scoops (4 radial cuts for 120mm EDF) are DEFERRED to Phase 11. Print as-is with no intake modifications. 0.20mm / 8% gyroid. Rev R1 skid reinforcement: add 4.2mm bore CF rod channel running full length of each horseshoe-to-skid section (2 channels",
+        " connecting cargo bay interior to rear engine room interior). FLIGHT ENGINEER'S ROOM: the Flight Engineer PDB bay is located inside the inner neck",
+        " accessible through the open ventral face of the horseshoe. Mounting boss features for Flight Engineer must be added to the inner neck before printing — see TODO §1.1.1.3. PHASE 5-10: inner neck is a closed tube — aft EDF intake scoops (4 radial cuts for 120mm EDF) are DEFERRED to Phase 11. Print as-is with no intake modifications. 0.20mm / 8% gyroid. Rev R1 skid reinforcement: add 4.2mm bore CF rod channel running full length of each horseshoe-to-skid section (2 channels",
         " coaxial with PRINT-REAR-NECK-INTAKE) — see TODO §1.1.5 skid task. FABRICATION SPLITS at cargo/middle hull Y≈+131mm (fwd face) and middle/rear hull Y≈+203mm (aft face) — print-splits for fabrication access only. Skids are integral extensions of this horseshoe ring; the middle/rear cut was for printability only. STRUCTURAL CONTINUITY REQUIRES ENGINEERING: the Thingiverse model was a decorative display piece — no structural provision for UAV flight loads. The inner neck and horseshoe ring cross-sections were not designed for bending",
         " torsion",
         " or shear. Inter-section and intra-section structural solutions must be designed from first principles. See CF-BAR-6X3 keel re-evaluation",
@@ -1312,30 +1468,82 @@
       "Notes": "Rev P new (PR #22 2026-06-01); mirror of cargo_door_port.stl; print with supports on hinge tab; 0.15mm / 40% gyroid / 4 walls"
     },
     {
-      "Ref": "PRINT-CARGO-WINCH-MOUNT",
-      "Description": "cargo_winch_motor_mount.stl — N20 winch motor mount, CF-PETG",
+      "Ref": "PRINT-CARGO-WINCH-PEDESTAL-PORT",
+      "Description": "cargo_winch_pedestal_port.stl — Port axle clamp + bearing seat + SPT5425LV case cradle, CF-PETG",
       "Category": "Printed Part",
       "Qty": "1",
-      "Unit_Mass_g": "25",
-      "Total_Mass_g": "25",
+      "Unit_Mass_g": "18",
+      "Total_Mass_g": "18",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "CF-PETG + hardened nozzle — see FIL-CF-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev P new (PR #21 2026-05-30); 10x12mm N20 pocket; 2x M2.5 SHCS clamp; 4x M3 heat-set inserts for forward frame; 0.15mm / 40% gyroid / 4 walls"
+      "Notes": "docs/CARGO_WINCH_SPECIFICATION.md Rev C §3.3; supersedes cargo_winch_motor_mount.stl (N20 cantilever mount, violated both-ends spool support). Servo case cradle parameterised on the SPT5425LV 40.5x20x40.5mm envelope (REF-SENSOR-013). NOT YET GENERATED — generator implementation open (airframe/fuselage-mid/WBS.md §1.1.1.2.1a item 11); mesh-validate per root AGENTS.md §7 before committing an STL. 0.15mm / 40% gyroid / 4 walls."
     },
     {
-      "Ref": "PRINT-CARGO-WINCH-SPOOL",
-      "Description": "cargo_winch_spool.stl — Dyneema winch spool, PETG 4-start helical groove OD=26mm",
+      "Ref": "PRINT-CARGO-WINCH-PEDESTAL-STBD",
+      "Description": "cargo_winch_pedestal_stbd.stl — Stbd axle clamp + bearing seat + pawl pivot boss + solenoid mount, CF-PETG",
       "Category": "Printed Part",
       "Qty": "1",
-      "Unit_Mass_g": "15",
-      "Total_Mass_g": "15",
+      "Unit_Mass_g": "20",
+      "Total_Mass_g": "20",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "CF-PETG + hardened nozzle — see FIL-CF-PETG",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "docs/CARGO_WINCH_SPECIFICATION.md Rev C §3.3/§3.4/§3.5. NOT YET GENERATED — see PRINT-CARGO-WINCH-PEDESTAL-PORT notes. 0.15mm / 40% gyroid / 4 walls."
+    },
+    {
+      "Ref": "PRINT-CARGO-WINCH-SPOOL-R2",
+      "Description": "cargo_winch_spool_r2.stl — Dyneema winch spool, CF-PETG, twin MR84ZZ bearing counterbores + integral 24-tooth ratchet ring, no anchor slot",
+      "Category": "Printed Part",
+      "Qty": "1",
+      "Unit_Mass_g": "16",
+      "Total_Mass_g": "16",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "CF-PETG — see FIL-CF-PETG",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "docs/CARGO_WINCH_SPECIFICATION.md Rev C §3.3; supersedes cargo_winch_spool.stl (PETG, N20 D-bore + Dyneema anchor slot — both belonged to the retired design and the anchor slot defeated the overload line-shed requirement R5). Deliberate wear/sacrificial part (§3.8) — mark as a consumable with a spare in the field kit. NOT YET GENERATED — see PRINT-CARGO-WINCH-PEDESTAL-PORT notes. 0.15mm / 40% gyroid."
+    },
+    {
+      "Ref": "PRINT-CARGO-WINCH-PAWL",
+      "Description": "cargo_winch_pawl.stl — sawtooth ratchet pawl lever, CF-PETG",
+      "Category": "Printed Part",
+      "Qty": "1",
+      "Unit_Mass_g": "2",
+      "Total_Mass_g": "2",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "CF-PETG — see FIL-CF-PETG",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "docs/CARGO_WINCH_SPECIFICATION.md Rev C §3.4. NOT YET GENERATED — see PRINT-CARGO-WINCH-PEDESTAL-PORT notes. 0.15mm / 40% gyroid / 4 walls."
+    },
+    {
+      "Ref": "PRINT-CARGO-WINCH-DOG-COUPLER",
+      "Description": "cargo_winch_dog_coupler.stl — lost-motion servo-to-spool dog coupler, CF-PETG",
+      "Category": "Printed Part",
+      "Qty": "1",
+      "Unit_Mass_g": "3",
+      "Total_Mass_g": "3",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "CF-PETG — see FIL-CF-PETG",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "docs/CARGO_WINCH_SPECIFICATION.md Rev C §3.2/§3.3; isolates the servo from radial load — no radial or moment load reaches the servo output spline. NOT YET GENERATED — see PRINT-CARGO-WINCH-PEDESTAL-PORT notes. 0.15mm / 40% gyroid / 4 walls."
+    },
+    {
+      "Ref": "PRINT-CARGO-WINCH-FAIRLEAD",
+      "Description": "cargo_winch_fairlead.stl — line exit guide, 10mm throat radius, PETG",
+      "Category": "Printed Part",
+      "Qty": "1",
+      "Unit_Mass_g": "3",
+      "Total_Mass_g": "3",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "PETG — see FIL-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev P new (PR #21 2026-05-30); 4-start 0.6mm-pitch groove for Dyneema SK75 0.5mm; hub bore 3mm for N20 shaft; 0.15mm / 40% gyroid"
+      "Notes": "docs/CARGO_WINCH_SPECIFICATION.md Rev C §3.3/§3.6; keeps a shed line clear of the flange. NOT YET GENERATED — see PRINT-CARGO-WINCH-PEDESTAL-PORT notes. 0.15mm / 25% gyroid."
     },
     {
       "Ref": "PRINT-CARGO-DOOR-SERVO-BKT",
@@ -1507,8 +1715,8 @@
       "Notes": "Rev Q new; applied in 1.5mm rebate of belly panel; dust seal (not waterproof); replace if adhesion fails after repeated panel cycles"
     },
     {
-      "Ref": "MAL-PB2-I",
-      "Description": "PocketBeagle 2 Industrial (AM6254) — Malcolm comms node",
+      "Ref": "SKIPPER-PB2-I",
+      "Description": "PocketBeagle 2 Industrial (AM6254) — Skipper comms node",
       "Category": "GCS",
       "Qty": "1",
       "Unit_Mass_g": "13",
@@ -1517,11 +1725,11 @@
       "Supplier_PN_or_Search": "2820-100003007-ND",
       "Est_Unit_Price_USD": "51.03",
       "Est_Total_Price_USD": "51.03",
-      "Notes": "Rev Q1; USB CDC-ECM tether to host PC; same hardware as aircraft CN nodes; Cape-B-2 + Emma mounted; separate from aircraft nodes"
+      "Notes": "Rev Q1; USB CDC-ECM tether to host PC; same hardware as aircraft CN nodes; Cape-B-2 + Commo mounted; separate from aircraft nodes"
     },
     {
-      "Ref": "MAL-CAPE-B-2",
-      "Description": "Cape-B-2 (Zoë) Rev R1 PCB — Malcolm radio+logging cape",
+      "Ref": "SKIPPER-CAPE-B-2",
+      "Description": "Cape-B-2 (XO) Rev R1 PCB — Skipper radio+logging cape",
       "Category": "GCS",
       "Qty": "1",
       "Unit_Mass_g": "34",
@@ -1532,25 +1740,25 @@
       "Est_Total_Price_USD": "105.00",
       "Notes": "Rev R1: same PCB as aircraft CN (LoRa removed",
       "null": [
-        " P1+P2 passthrough rails added); Malcolm does not mount Emma board; WiFi+SiK+MAVLink interfaces"
+        " P1+P2 passthrough rails added); Skipper does not mount Commo board; WiFi+SiK+MAVLink interfaces"
       ]
     },
     {
-      "Ref": "MAL-Emma",
-      "Description": "Emma 49 MHz XCVR sub-module — Malcolm XCVR link",
+      "Ref": "SKIPPER-Commo",
+      "Description": "Commo 49 MHz XCVR sub-module — Skipper XCVR link",
       "Category": "GCS",
       "Qty": "1",
       "Unit_Mass_g": "18",
       "Total_Mass_g": "18",
       "Supplier": "In-house fab",
-      "Supplier_PN_or_Search": "Order with aircraft Emma batch",
+      "Supplier_PN_or_Search": "Order with aircraft Commo batch",
       "Est_Unit_Price_USD": "32.00",
       "Est_Total_Price_USD": "32.00",
       "Notes": "Rev Q1; KISS AX.25; UART5; same sub-module as aircraft positions"
     },
     {
-      "Ref": "MAL-MICROSD-LOG",
-      "Description": "64 GB microSD — Malcolm log storage (CPLD write-blocked)",
+      "Ref": "SKIPPER-MICROSD-LOG",
+      "Description": "64 GB microSD — Skipper log storage (CPLD write-blocked)",
       "Category": "GCS",
       "Qty": "1",
       "Unit_Mass_g": "2",
@@ -1562,7 +1770,7 @@
       "Notes": "Rev Q1; CPLD enforces write-block on log partition; same spec as aircraft log cards"
     },
     {
-      "Ref": "MAL-ANT-915-OMNI",
+      "Ref": "SKIPPER-ANT-915-OMNI",
       "Description": "5 dBi 915 MHz omni rubber duck — bench and portable use (×2)",
       "Category": "GCS",
       "Qty": "2",
@@ -1575,7 +1783,7 @@
       "Notes": "Rev Q1; one for SiK UART2 bench use; one for LoRa SPI1 bench use; field use switches to Yagi+splitter"
     },
     {
-      "Ref": "MAL-ANT-915-YAGI",
+      "Ref": "SKIPPER-ANT-915-YAGI",
       "Description": "9 dBi 915 MHz Yagi directional — shared SiK+LoRa via RF splitter",
       "Category": "GCS",
       "Qty": "1",
@@ -1585,10 +1793,10 @@
       "Supplier_PN_or_Search": "9dBi RP-SMA 915MHz Yagi directional antenna ~1.2m boom",
       "Est_Unit_Price_USD": "28.00",
       "Est_Total_Price_USD": "28.00",
-      "Notes": "Rev Q1; shared via MAL-RF-SPLITTER; only one link transmits at a time; gimbal-mounted; EIRP ≤27.5 dBm (FCC compliant)"
+      "Notes": "Rev Q1; shared via SKIPPER-RF-SPLITTER; only one link transmits at a time; gimbal-mounted; EIRP ≤27.5 dBm (FCC compliant)"
     },
     {
-      "Ref": "MAL-ANT-WIFI-PNL",
+      "Ref": "SKIPPER-ANT-WIFI-PNL",
       "Description": "14 dBi 5 GHz flat panel — WiFi directional antenna",
       "Category": "GCS",
       "Qty": "1",
@@ -1601,7 +1809,7 @@
       "Notes": "Rev Q1; MUST use with WL1837MOD Tx=17 dBm (1700 mBm) to stay ≤30 dBm EIRP (FCC Part 15 UNII-3); gimbal-mounted alongside Yagi"
     },
     {
-      "Ref": "MAL-ANT-49MHZ",
+      "Ref": "SKIPPER-ANT-49MHZ",
       "Description": "49 MHz base-loaded ¼-wave whip with 4 ground radials",
       "Category": "GCS",
       "Qty": "1",
@@ -1614,7 +1822,7 @@
       "Notes": "Rev Q1; ~0.94 m physical; 4 radials 1.5 m each; ERP ≤18 dBm (FCC Part 95 limit 20 dBm); tripod-mast mounted"
     },
     {
-      "Ref": "MAL-ANT-ZIGBEE",
+      "Ref": "SKIPPER-ANT-ZIGBEE",
       "Description": "3 dBi 2.4 GHz rubber duck dipole — Zigbee link",
       "Category": "GCS",
       "Qty": "1",
@@ -1627,7 +1835,7 @@
       "Notes": "Rev Q1; Zigbee 2.4 GHz link on Cape-B-2; optional directional upgrade to 6 dBi panel in future"
     },
     {
-      "Ref": "MAL-ANT-GPS",
+      "Ref": "SKIPPER-ANT-GPS",
       "Description": "u-blox ANN-MB-00 active GNSS patch — GCS operator position fix",
       "Category": "GCS",
       "Qty": "1",
@@ -1640,7 +1848,7 @@
       "Notes": "Rev Q1; 3.3 V; SMA; provides GCS lat/lon/alt to tracker.py via /dev/gnss_gcs"
     },
     {
-      "Ref": "MAL-GPS-MODULE",
+      "Ref": "SKIPPER-GPS-MODULE",
       "Description": "u-blox M9N/M10Q GNSS breakout — operator position module",
       "Category": "GCS",
       "Qty": "1",
@@ -1653,7 +1861,7 @@
       "Notes": "Rev Q1; USB UART to host PC; NMEA GGA output at 10 Hz; symlinked to /dev/gnss_gcs via udev"
     },
     {
-      "Ref": "MAL-RF-SPLITTER",
+      "Ref": "SKIPPER-RF-SPLITTER",
       "Description": "2-way 915 MHz RF splitter — SiK and LoRa share Yagi",
       "Category": "GCS",
       "Qty": "1",
@@ -1666,7 +1874,7 @@
       "Notes": "Rev Q1; ≥20 dB port-to-port isolation; 3.5 dB insertion loss; only one link transmits at a time; SMA connectors"
     },
     {
-      "Ref": "MAL-GIMBAL-SERVO",
+      "Ref": "SKIPPER-GIMBAL-SERVO",
       "Description": "DS3218MG digital servo — pan axis and tilt axis",
       "Category": "GCS",
       "Qty": "2",
@@ -1679,7 +1887,7 @@
       "Notes": "Rev Q1; 25 kg·cm at 6 V; same model as aircraft nacelle tilt servos; pan stage and tilt stage of antenna gimbal"
     },
     {
-      "Ref": "MAL-GIMBAL-ENC",
+      "Ref": "SKIPPER-GIMBAL-ENC",
       "Description": "AS5600 12-bit magnetic encoder PCB breakout — pan and tilt axes",
       "Category": "GCS",
       "Qty": "2",
@@ -1689,10 +1897,10 @@
       "Supplier_PN_or_Search": "AS5600 I2C magnetic encoder module 12-bit",
       "Est_Unit_Price_USD": "4.00",
       "Est_Total_Price_USD": "8.00",
-      "Notes": "Rev Q1; I²C addr 0x36 (fixed); requires TCA9548A mux MAL-TCA9548A for dual-encoder; ANGLE reg 0x0E-0x0F; STATUS bit 5=MD"
+      "Notes": "Rev Q1; I²C addr 0x36 (fixed); requires TCA9548A mux SKIPPER-TCA9548A for dual-encoder; ANGLE reg 0x0E-0x0F; STATUS bit 5=MD"
     },
     {
-      "Ref": "MAL-GIMBAL-MAG",
+      "Ref": "SKIPPER-GIMBAL-MAG",
       "Description": "N42 diametrically magnetised disc magnet 6×2 mm — encoder rotor",
       "Category": "GCS",
       "Qty": "2",
@@ -1705,7 +1913,7 @@
       "Notes": "Rev Q1; one per encoder; epoxy to servo output shaft; must be diametric (not axial) for AS5600"
     },
     {
-      "Ref": "MAL-TCA9548A",
+      "Ref": "SKIPPER-TCA9548A",
       "Description": "TCA9548A 1-to-8 I²C mux breakout — encoder address isolation",
       "Category": "GCS",
       "Qty": "1",
@@ -1718,7 +1926,7 @@
       "Notes": "Rev Q1; addr 0x70; pan encoder on ch.0; tilt encoder on ch.1; resolves AS5600 fixed-addr conflict on I²C2 bus"
     },
     {
-      "Ref": "MAL-BRG-6804",
+      "Ref": "SKIPPER-BRG-6804",
       "Description": "6804 thin-section bearing 20×32×7 mm — gimbal pan stage",
       "Category": "GCS",
       "Qty": "1",
@@ -1731,8 +1939,8 @@
       "Notes": "Rev Q1; press-fit to pan turret housing; ABEC-3 or better; LubeNote: grease with Mobilux EP2; same OD/ID tolerance as nacelle bearing pockets"
     },
     {
-      "Ref": "MAL-ENCLOSURE",
-      "Description": "IP65 aluminum project box — Malcolm field enclosure",
+      "Ref": "SKIPPER-ENCLOSURE",
+      "Description": "IP65 aluminum project box — Skipper field enclosure",
       "Category": "GCS",
       "Qty": "1",
       "Unit_Mass_g": "280",
@@ -1744,7 +1952,7 @@
       "Notes": "Rev Q1; EPDM gasket; 40mm fan cutout; cable glands for USB/RF/power/servo; PCB standoffs at Cape-B-2 hole pattern 55×35mm"
     },
     {
-      "Ref": "MAL-TRIPOD",
+      "Ref": "SKIPPER-TRIPOD",
       "Description": "Heavy-duty camera tripod / antenna mast — GCS antenna support",
       "Category": "GCS",
       "Qty": "1",
@@ -1757,8 +1965,8 @@
       "Notes": "Rev Q1; minimum 5 kg load rating; ≥1.5 m extended height; 3/8\"-16 × ¼\"-20 adapter to gimbal pan base M6 tripod thread"
     },
     {
-      "Ref": "MAL-PWR-5V-BEC",
-      "Description": "5V 5A DC-DC switching BEC — Malcolm comms node 5V rail",
+      "Ref": "SKIPPER-PWR-5V-BEC",
+      "Description": "5V 5A DC-DC switching BEC — Skipper comms node 5V rail",
       "Category": "GCS",
       "Qty": "1",
       "Unit_Mass_g": "30",
@@ -1767,10 +1975,10 @@
       "Supplier_PN_or_Search": "Pololu D24V50F5 5V 5A switching step-down",
       "Est_Unit_Price_USD": "12.00",
       "Est_Total_Price_USD": "12.00",
-      "Notes": "Rev Q1; supplies PB2-I + Cape-B-2 (560 mA typ; 1400 mA peak); input from MAL-FIELD-BATTERY via XT30"
+      "Notes": "Rev Q1; supplies PB2-I + Cape-B-2 (560 mA typ; 1400 mA peak); input from SKIPPER-FIELD-BATTERY via XT30"
     },
     {
-      "Ref": "MAL-PWR-6V-BEC",
+      "Ref": "SKIPPER-PWR-6V-BEC",
       "Description": "6V 2A DC-DC switching BEC — gimbal servo 6V rail",
       "Category": "GCS",
       "Qty": "1",
@@ -1780,11 +1988,11 @@
       "Supplier_PN_or_Search": "Pololu D24V22F6 6V 2.2A switching step-down",
       "Est_Unit_Price_USD": "8.00",
       "Est_Total_Price_USD": "8.00",
-      "Notes": "Rev Q1; dedicated servo rail for 2× DS3218MG (200 mA typ; 1200 mA peak stall); input from MAL-FIELD-BATTERY"
+      "Notes": "Rev Q1; dedicated servo rail for 2× DS3218MG (200 mA typ; 1200 mA peak stall); input from SKIPPER-FIELD-BATTERY"
     },
     {
-      "Ref": "MAL-FIELD-BATTERY",
-      "Description": "4S 10000 mAh LiPo — Malcolm field power pack",
+      "Ref": "SKIPPER-FIELD-BATTERY",
+      "Description": "4S 10000 mAh LiPo — Skipper field power pack",
       "Category": "GCS",
       "Qty": "1",
       "Unit_Mass_g": "830",
@@ -1832,7 +2040,7 @@
       "Supplier_PN_or_Search": "Sunon ME40101V1-000U-A99 or equiv 40mm 5V fan",
       "Est_Unit_Price_USD": "6.00",
       "Est_Total_Price_USD": "24.00",
-      "Notes": "Rev R new; one per cage; mounts on aft fan-face panel; inlet + outlet each covered by FAR-EMI-VENT-40; powered from Kaylee 5 V rail via FAR-FT-PANEL"
+      "Notes": "Rev R new; one per cage; mounts on aft fan-face panel; inlet + outlet each covered by FAR-EMI-VENT-40; powered from Flight Engineer 5 V rail via FAR-FT-PANEL"
     },
     {
       "Ref": "FAR-EMI-VENT-40",
@@ -1890,8 +2098,8 @@
       ]
     },
     {
-      "Ref": "MAL-FAR-FAN",
-      "Description": "40×40×10 mm axial fan 5 V DC — Malcolm Hammond enclosure cooling",
+      "Ref": "SKIPPER-FAR-FAN",
+      "Description": "40×40×10 mm axial fan 5 V DC — Skipper Hammond enclosure cooling",
       "Category": "GCS",
       "Qty": "1",
       "Unit_Mass_g": "17",
@@ -1900,11 +2108,11 @@
       "Supplier_PN_or_Search": "Sunon ME40101V1-000U-A99 (same PN as FAR-FAN-40)",
       "Est_Unit_Price_USD": "6.00",
       "Est_Total_Price_USD": "6.00",
-      "Notes": "Rev R new; mount in existing 40 mm fan cutout of Hammond 1455N1601; powered from MAL-PWR-5V-BEC 5 V rail"
+      "Notes": "Rev R new; mount in existing 40 mm fan cutout of Hammond 1455N1601; powered from SKIPPER-PWR-5V-BEC 5 V rail"
     },
     {
-      "Ref": "MAL-FAR-GASKET",
-      "Description": "EMI spring-contact gasket 470 mm × 8 mm — Malcolm Hammond 1455N1601 lid seal",
+      "Ref": "SKIPPER-FAR-GASKET",
+      "Description": "EMI spring-contact gasket 470 mm × 8 mm — Skipper Hammond 1455N1601 lid seal",
       "Category": "GCS",
       "Qty": "1",
       "Unit_Mass_g": "5",
@@ -2011,7 +2219,7 @@
       ]
     },
     {
-      "Ref": "MAL-TILT-ENC-PCB",
+      "Ref": "SKIPPER-TILT-ENC-PCB",
       "Description": "Tilt-encoder PCB — AKM AK7455 off-axis magnetic angle IC (SPI) — wing/nacelle true-tilt feedback",
       "Category": "Sensor",
       "Qty": "2",
@@ -2034,7 +2242,7 @@
       "Supplier_PN_or_Search": "ring magnet 22x10x2.5mm NdFeB",
       "Est_Unit_Price_USD": "2.00",
       "Est_Total_Price_USD": "4.00",
-      "Notes": "Rev S: 1 per nacelle; rides the NON-FERROUS printed hub (PRINT-HALL-HUB) keyed to the rotating spar at the nacelle inboard face; presents the rotating field to MAL-TILT-ENC-PCB (AKM AK7455) OFF-AXIS. Field at the IC must fall in the AK7455 off-axis window 10-70mT (low-flux alarm <~15mT) — magnetization (diametric vs radial) + exact air-gap/offset to be RE-VALIDATED on the bench for the AK7455 off-axis read (set sense plane via R_FIELDSEL; run INL cal). Ø10 ID keeps ≥1mm non-ferrous wall off the 8mm steel spar. OD Ø22 sized for the off-axis IC. _export_pivot_slab.scad nacelle_hall_ring_hub."
+      "Notes": "Rev S: 1 per nacelle; rides the NON-FERROUS printed hub (PRINT-HALL-HUB) keyed to the rotating spar at the nacelle inboard face; presents the rotating field to SKIPPER-TILT-ENC-PCB (AKM AK7455) OFF-AXIS. Field at the IC must fall in the AK7455 off-axis window 10-70mT (low-flux alarm <~15mT) — magnetization (diametric vs radial) + exact air-gap/offset to be RE-VALIDATED on the bench for the AK7455 off-axis read (set sense plane via R_FIELDSEL; run INL cal). Ø10 ID keeps ≥1mm non-ferrous wall off the 8mm steel spar. OD Ø22 sized for the off-axis IC. _export_pivot_slab.scad nacelle_hall_ring_hub."
     },
     {
       "Ref": "PRINT-HALL-HUB",

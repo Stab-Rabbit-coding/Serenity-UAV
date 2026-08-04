@@ -4,7 +4,7 @@
 **AI note:** Rev R6 redesign authored by Claude (model: Claude Fable 5,
 Anthropic) under the author's direction, 2026-07-21; extended for the
 1.5in/3.0in leg-length variant split 2026-07-23, per `AGENTS.md`.
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Current design revision:** Rev R6 (2026-07-21; variant split 2026-07-23)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../../TODO.md)
@@ -14,7 +14,7 @@ Anthropic) under the author's direction, 2026-07-21; extended for the
 > the root index as a commit prerequisite (root `AGENTS.md` "Revisions and Version
 > Control").
 
-*"We're still flying. That's not nothing. — Mal"*
+*"We're still flying. That's not nothing. — Skipper"*
 
 ---
 
@@ -221,7 +221,7 @@ the lowest.
 
 ##### 1.1.4.7 *Qualification Testing (BLOCKS first flight)*
 
-*"Time for some thrilling heroics." — Mal. Drop tests count.*
+*"Time for some thrilling heroics." — Skipper. Drop tests count.*
 
 - [ ] **LG-06 Elastic bench check (protocol revised 2026-07-21)** — mount one
     complete corner (bay + leg + wires) to a **quarter-AUW 1.73 lbm (783 g)**

@@ -123,7 +123,7 @@ When citing a standard requirement:
 
 This folder may include a `DEFERRED_ITEMS.md` document listing:
 - **Phase 11+:** Rear EDF + RCS (deferred), aft intake scoop carving (deferred)
-- **Planned revisions:** Emma Rev R1, Zoë Rev R1, Kaylee Rev A1 (planned but not yet implemented)
+- **Planned revisions:** Commo Rev R1, XO Rev R1, Flight Engineer Rev A1 (planned but not yet implemented)
 - **Known limitations:** Open issues that do not block the current baseline
 
 Deferred items should reference `TODO.md` for the specific work items.

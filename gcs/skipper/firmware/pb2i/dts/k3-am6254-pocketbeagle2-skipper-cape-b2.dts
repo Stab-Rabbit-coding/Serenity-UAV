@@ -1,0 +1,172 @@
+// SPDX-License-Identifier: CC-BY-4.0
+/*
+ * k3-am6254-pocketbeagle2-skipper-cape-b2.dts
+ * Device tree overlay — Skipper GCS Cape-B-2 (same hardware as aircraft XO,
+ * different operational role: no cargo, no flight-data log, gimbal servo outputs)
+ *
+ * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * Revision: Q1 (2026-06-10)
+ *
+ * Target:
+ *   Board  : PocketBeagle 2 Industrial (DigiKey 2820-100003007-ND)
+ *   SoC    : TI AM6254 (quad Cortex-A53 @ 1.4 GHz, dual PRU-ICSS)
+ *   OS     : BeagleBone Debian Trixie (Linux >= 6.1, dtc 1.7.x)
+ *   Cape   : Cape-B-2 — EMI-hardened comms + logging cape (same gerbers as aircraft)
+ *
+ * Build:
+ *   dtc -@ -I dts -O dtb \
+ *       -o k3-am6254-pocketbeagle2-skipper-cape-b2.dtbo \
+ *       k3-am6254-pocketbeagle2-skipper-cape-b2.dts
+ *
+ * Install:
+ *   sudo cp *.dtbo /boot/firmware/overlays/
+ *   Add "fdtoverlays /overlays/k3-am6254-pocketbeagle2-skipper-cape-b2.dtbo"
+ *   to /boot/firmware/extlinux/extlinux.conf
+ *
+ * Skipper-specific peripheral map (differences from aircraft Cape-B-2 overlay):
+ *   EHRPWM0_A (P1.33) — Pan gimbal servo PWM output (instead of cargo servo)
+ *   EHRPWM0_B (P1.36) — Tilt gimbal servo PWM output
+ *   I2C2               — TCA9548A mux + 2x AS5600 encoder (instead of ToF mux)
+ *   UART5              — XCVR-49MHZ-2 (same as aircraft)
+ *   UART2              — SiK 915 MHz (same as aircraft)
+ *   SPI1               — RFM95W LoRa + TPM + log uSD (same as aircraft)
+ *   MCAN0              — CAN FD (same as aircraft, but Skipper is not in ring)
+ *
+ * Pad offset verification: same requirements as aircraft Cape-B-2 overlay.
+ * See k3-am6254-pocketbeagle2-serenity-cape-b2.dts for detailed pad notes.
+ */
+
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/k3.h>
+
+&{/chosen} {
+    overlays {
+        skipper-cape-b2 = __TIMESTAMP__;
+    };
+};
+
+&main_pmx0 {
+    /*
+     * EHRPWM0 — pan and tilt gimbal servo PWM outputs
+     * [ESTIMATE] Offsets follow AM62x pad-table pattern; verify vs. TRM SPRUJ40.
+     */
+    skipper_gimbal_pwm_pins: skipper-gimbal-pwm-pins {
+        pinctrl-single,pins = <
+            AM62X_IOPAD(0x01B4, PIN_OUTPUT, 6)   /* EHRPWM0_A — pan servo */
+            AM62X_IOPAD(0x01B8, PIN_OUTPUT, 6)   /* EHRPWM0_B — tilt servo */
+        >;
+    };
+
+    /*
+     * I2C2 — TCA9548A mux + AS5600 encoders
+     * [ESTIMATE] Offsets follow AM62x pad-table pattern.
+     */
+    skipper_i2c2_pins: skipper-i2c2-pins {
+        pinctrl-single,pins = <
+            AM62X_IOPAD(0x01E0, PIN_INPUT_PULLUP, 0)   /* I2C2_SCL */
+            AM62X_IOPAD(0x01E4, PIN_INPUT_PULLUP, 0)   /* I2C2_SDA */
+        >;
+    };
+
+    /*
+     * UART2 — SiK 915 MHz (hardware CTS/RTS)
+     * [CONFIRMED] Same as aircraft overlay.
+     */
+    skipper_sik_uart_pins: skipper-sik-uart-pins {
+        pinctrl-single,pins = <
+            AM62X_IOPAD(0x001C, PIN_INPUT,  4)   /* UART2_RXD */
+            AM62X_IOPAD(0x0018, PIN_OUTPUT, 4)   /* UART2_TXD */
+            AM62X_IOPAD(0x0024, PIN_INPUT,  4)   /* UART2_CTSn */
+            AM62X_IOPAD(0x0020, PIN_OUTPUT, 4)   /* UART2_RTSn */
+        >;
+    };
+
+    /*
+     * UART5 — XCVR-49MHZ-2 AX.25
+     * [ESTIMATE] Offsets follow AM62x pad-table pattern.
+     */
+    skipper_xcvr_49mhz_uart_pins: skipper-xcvr-49mhz-uart-pins {
+        pinctrl-single,pins = <
+            AM62X_IOPAD(0x006C, PIN_INPUT,  3)   /* UART5_RXD */
+            AM62X_IOPAD(0x0068, PIN_OUTPUT, 3)   /* UART5_TXD */
+        >;
+    };
+};
+
+/* ---------------------------------------------------------------------------
+ * EHRPWM0 — gimbal servo outputs
+ * ---------------------------------------------------------------------------*/
+&epwm0 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&skipper_gimbal_pwm_pins>;
+};
+
+/* ---------------------------------------------------------------------------
+ * I2C2 — TCA9548A + AS5600 encoders
+ * ---------------------------------------------------------------------------*/
+&main_i2c2 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&skipper_i2c2_pins>;
+    clock-frequency = <400000>;  /* 400 kHz Fast Mode */
+
+    /*
+     * TCA9548A 8-channel I2C multiplexer
+     * A0=A1=A2=GND → address 0x70
+     * Channel 0: pan AS5600 (0x36)
+     * Channel 1: tilt AS5600 (0x36)
+     */
+    tca9548a@70 {
+        compatible = "nxp,pca9548";
+        reg = <0x70>;
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+        i2c@0 {
+            /* Pan encoder */
+            #address-cells = <1>;
+            #size-cells = <0>;
+            reg = <0>;
+
+            as5600_pan: as5600@36 {
+                compatible = "ams,as5600";
+                reg = <0x36>;
+            };
+        };
+
+        i2c@1 {
+            /* Tilt encoder */
+            #address-cells = <1>;
+            #size-cells = <0>;
+            reg = <1>;
+
+            as5600_tilt: as5600@36 {
+                compatible = "ams,as5600";
+                reg = <0x36>;
+            };
+        };
+    };
+};
+
+/* ---------------------------------------------------------------------------
+ * UART2 — SiK 915 MHz
+ * ---------------------------------------------------------------------------*/
+&main_uart2 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&skipper_sik_uart_pins>;
+};
+
+/* ---------------------------------------------------------------------------
+ * UART5 — XCVR-49MHZ-2
+ * ---------------------------------------------------------------------------*/
+&main_uart5 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&skipper_xcvr_49mhz_uart_pins>;
+};

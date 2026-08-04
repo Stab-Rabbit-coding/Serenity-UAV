@@ -33,7 +33,7 @@ The fuselage has four canonical sections, each with specific spatial properties:
 
 - **Head** — forwardmost; tapers to a narrow nose (most negative Y extent, Y ≈ −305.6 mm)
 - **Cargo** — immediately aft of head; largest cross-section; wing attachment flanges on upper outer edges; bay door opens toward −Z (ventral)
-- **Middle** — narrow horseshoe-ring neck between cargo and rear; open at −Z (ventral); houses the inner-neck tube and Kaylee's room (power distribution); aft EDF intake scoops deferred to Phase 11
+- **Middle** — narrow horseshoe-ring neck between cargo and rear; open at −Z (ventral); houses the inner-neck tube and Flight Engineer's room (power distribution); aft EDF intake scoops deferred to Phase 11
 - **Rear** — aftmost; houses engine room, dorsal pod, and two landing skids extending aft
 
 **Wings and nacelles:**
@@ -57,7 +57,9 @@ When judging whether hull/exterior geometry is faithful to the real ship, treat 
    the show/QMx canon; carries **more mechanical/surface detail** than the blueprints. Use it where
    the blueprints are ambiguous. Used by email permission (2026-07-06).
 3. **misubisu Thingiverse model, Thing 7330462** — `docs/references/thingverse-serenity/`
-   (REF-CAD-004, CC BY 4.0). The **origin of the `s_*.stl` geometry** in `airframe/stls/`. It is the
+   (REF-CAD-004, CC BY-SA 4.0 — Available Component under CERN-OHL-W 2.0, see
+   `docs/attribution_and_licencing.md` §3). The **origin of the `s_*.stl` geometry** in
+   `airframe/stls/`. It is the
    working starting point, but **verify any detail against the two sources above before treating it
    as canonical** — it is the lowest-authority of the three.
 

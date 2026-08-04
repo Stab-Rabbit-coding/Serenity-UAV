@@ -1,7 +1,7 @@
 # Rotating Tilt-Spar Analysis — 8 mm Through-Spar Option
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (analysis drafted by Claude Opus 4.8)
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Date:** 2026-07-18
 **Status:** DECISION SUPPORT — pre-implementation. Presents loading + airflow +
 nav-wire feasibility for the rotating 8 mm tilt-spar mechanism before the wing
@@ -368,9 +368,9 @@ TODO §0.8).
 
 **Open the go-ahead decision** on §8 rework + §6 regear before I edit geometry.
 
-> Mal: Wash, you gotta give me an Ivan.
-> Wash: I'll see what I can do.
+> Skipper: Pilot, you gotta give me an Ivan.
+> Pilot: I'll see what I can do.
 > (over the intercom)
-> Wash: Kaylee, how would you feel about pullin' a Crazy Ivan?
-> Kaylee: (sounds weak but positive) Always wanted to try one.
+> Pilot: Flight Engineer, how would you feel about pullin' a Crazy Ivan?
+> Flight Engineer: (sounds weak but positive) Always wanted to try one.
   

@@ -1,0 +1,20 @@
+(version 1)
+
+# U2 (Microchip KSZ9477, TQFP-128-1EP, 0.4 mm pitch) has adjacent pads on
+# different nets whose clearance is fixed by the real datasheet footprint
+# geometry -- 0.17 mm at the tightest, well within JLCPCB/standard-fab
+# capability (0.09 mm minimum) but under this board's general PGND/POWER_5V
+# netclass minimum (0.2 mm), which was never meant to govern fine-pitch IC
+# pad-to-pad spacing. Scoped to U2's own courtyard only -- does not relax
+# clearance anywhere else on the board. See Observer.md Bill of Materials (U2).
+(rule "U2 fine-pitch pad clearance (KSZ9477, 0.4mm pitch)"
+    (condition "A.insideCourtyard('U2') && B.insideCourtyard('U2')")
+    (constraint clearance (min 0.15mm))
+)
+
+# U_SOM (PHYTEC phyCORE-AM62A SoM edge connector, fine-pitch land grid) --
+# same reasoning as U2 above. Scoped to U_SOM's own courtyard only.
+(rule "U_SOM fine-pitch pad clearance (PHYTEC SoM connector)"
+    (condition "A.insideCourtyard('U_SOM') && B.insideCourtyard('U_SOM')")
+    (constraint clearance (min 0.15mm))
+)

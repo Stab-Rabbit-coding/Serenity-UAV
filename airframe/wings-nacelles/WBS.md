@@ -1,7 +1,7 @@
 # Serenity UAV — Airframe Wings and Nacelles Work Breakdown Structure (Detail)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Current design revision:** Rev S (2026-07-04)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../../TODO.md)
@@ -477,22 +477,22 @@ tracked in `avionics/WBS.md` §1.9.1 and `avionics/emi-hardening/WBS.md` §1.4.6
     (side-of-shaft)** configuration and adds **anomaly-magnetic-field detection + dynamic
     error reduction + EEPROM INL calibration** — purpose-built for the ferromagnetic
     (4130/17-4) through-shaft. Both KiCad files rebuilt around the AK7455
-    (`MAL-TILT-ENC-PCB`, **QFN24 4×4**, **SPI** 4-wire + ERROR on a **7-wire** direct-
+    (`SKIPPER-TILT-ENC-PCB`, **QFN24 4×4**, **SPI** 4-wire + ERROR on a **7-wire** direct-
     solder pigtail; both nacelles share the SPI bus via separate **CSN** → the I²C
     fixed-address problem is gone). Pinout **verified** vs the datasheet (TEST2→VSS,
     TEST1 open, NC pins + back-tab/EP open); `kicad-cli` (9.0.2) ERC **0 errors**.
-    `bom_revS.csv` (`MAL-TILT-ENC-PCB` + `HALL-RING-MAG`) and `REFERENCES.md`
+    `bom_revS.csv` (`SKIPPER-TILT-ENC-PCB` + `HALL-RING-MAG`) and `REFERENCES.md`
     (REF-SENSOR-008 + pending row) updated. (A KiCad symbol Y-inversion wiring bug —
     library Y-up vs sheet Y-down — was found and fixed during the rebuild.)
-- [ ] **[OPEN — cross-subsystem, rescoped 2026-07-26] `Wash.md` §13 / `Wash.kicad_sch` still
+- [ ] **[OPEN — cross-subsystem, rescoped 2026-07-26] `Pilot.md` §13 / `Pilot.kicad_sch` still
     have a `J_ENC` connector row (SM04B-GHS-TB, `ENC_SDA`/`ENC_SCL`, "AS5600 nacelle tilt angle
     encoder (I2C)")** — this is now **obsolete, not merely stale**: the architecture moved to
     AK7455 read locally in-nacelle by a `CAN-PERIPH-GW-1` trust-module gateway (own
     MSPM0G3507, SPI 4-wire + ERROR direct to the gateway MCU), published as a signed message on
     isolated CAN-FD + isolated RS-485. River (primary) and Simon (failover) subscribe to the
-    bus message rather than Wash owning a dedicated I²C/SPI bus to each nacelle. **Action:**
-    remove the `J_ENC` connector + `ENC_SDA`/`ENC_SCL` net from `Wash.kicad_sch` and the §13
-    table row (not a SPI reconciliation — the connector's function no longer belongs on Wash at
+    bus message rather than Pilot owning a dedicated I²C/SPI bus to each nacelle. **Action:**
+    remove the `J_ENC` connector + `ENC_SDA`/`ENC_SCL` net from `Pilot.kicad_sch` and the §13
+    table row (not a SPI reconciliation — the connector's function no longer belongs on Pilot at
     all). See `avionics/WBS.md` §1.9.1/§1.9.2 and
     `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` deployment mode 1.
 - [ ] **[OPEN — airframe] Resize the wing sensor pocket for the AK7455 QFN24 4×4**

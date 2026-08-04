@@ -1,0 +1,48 @@
+SERENITY UAV — SPECIFICATION & BOM LICENSING
+==============================================
+
+**Bill of Materials:** CC BY 4.0 (Documentation)
+
+**Interactive Viewers:** MIT (Software)
+
+**Supporting Documentation:** CC BY 4.0
+
+See root LICENSE and docs/attribution_and_licensing.md for details:
+  ../LICENSE
+  ../docs/attribution_and_licensing.md
+
+---
+
+SUMMARY (Specification)
+
+The bill of materials (JSON, CSV formats) and all supporting specification documents
+are licensed under CC BY 4.0 (permissive attribution model).
+
+Interactive BOM viewers (JSX components) are licensed under MIT (software license).
+
+---
+
+SPECIFIC FILES & LICENSING
+
+| File | Format | License | Purpose |
+|------|--------|---------|---------|
+| bom_revS.json | JSON | CC BY 4.0 | Primary BOM (structured) |
+| bom_revS.csv | CSV | CC BY 4.0 | BOM export (spreadsheet) |
+| serenity-rev-s.jsx | JavaScript | MIT | Interactive BOM viewer |
+| README.md | Markdown | CC BY 4.0 | Specification documentation |
+| AGENTS.md | Markdown | CC BY 4.0 | Specification policy |
+
+---
+
+ATTRIBUTION REQUIREMENTS
+
+When using or adapting the BOM, provide credit to Serenity UAV:
+
+  "Bill of Materials sourced from Serenity UAV Project, licensed under CC BY 4.0.
+   See [link to bom_revS.json or current-specification/README.md]."
+
+---
+
+Questions?
+  CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
+  MIT: https://opensource.org/licenses/MIT

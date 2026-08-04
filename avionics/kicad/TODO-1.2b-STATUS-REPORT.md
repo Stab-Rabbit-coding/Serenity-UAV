@@ -9,40 +9,40 @@
 ## Executive Summary
 
 Todo item 1.2b requires completing PCB redesigns for three boards:
-1. **Emma Rev S1** — Add LoRa, replace JST with P1+P2 socket rails
-2. **Zoë Rev S1** — Remove LoRa, add P1+P2 passthrough rails  
-3. **Kaylee Rev S1** — Remove 6 V BEC, add 5 V servo output
+1. **Commo Rev S1** — Add LoRa, replace JST with P1+P2 socket rails
+2. **XO Rev S1** — Remove LoRa, add P1+P2 passthrough rails  
+3. **Flight Engineer Rev S1** — Remove 6 V BEC, add 5 V servo output
 
 Most of the technical work has been started and partially completed, but **all three boards are blocked from completion** due to:
 - Missing KiCad tools (kicad-cli, pcbnew Python module)
-- User interaction required (Zoë reference-designator mapping, Emma RSSI routing)
+- User interaction required (XO reference-designator mapping, Commo RSSI routing)
 - Design decisions needing sign-off (firmware pinmux approvals)
 
 ---
 
 ## Detailed Status by Board
 
-### 1. Emma Rev S1 — Add LoRa, Replace JST with P1+P2 Socket Rails
+### 1. Commo Rev S1 — Add LoRa, Replace JST with P1+P2 Socket Rails
 
 **Last Updated:** 2026-07-05 (13 days old)  
 **Completion Status:** ~70% (schematic complete, PCB 90% routed, blocking items prevent gerber export)
 
 #### Completed ✓
-- [x] Schematic authored from as-placed PCB (`gen_emma_sch.py`, 2026-07-04)
+- [x] Schematic authored from as-placed PCB (`gen_commo_sch.py`, 2026-07-04)
   - ERC: 0 errors, 120 benign warnings
   - 74 reference designators match, 104 nets exact parity
-- [x] PCB rework applied (`mod_emma_pcb.py`, 2026-07-04)
+- [x] PCB rework applied (`mod_commo_pcb.py`, 2026-07-04)
   - J1 (JST-GH-6P) removed; UART moved to PB2-P1 rails
   - RSSI_CMP comparator + dividers added
   - DRC hard violations cleared: 0 errors
 - [x] RSSI parts placed by user (2026-07-05) — parked on back of board in RF section
-- [x] RSSI sub-circuit routed (2026-07-05, `route_emma_rssi.py`)
+- [x] RSSI sub-circuit routed (2026-07-05, `route_commo_rssi.py`)
   - GND, RSSI_REF, +3V3, +3V3-link, RSSI_ANA all routed
   - Unconnected pad count: 104 → 95
 
 #### Blocking — Cannot Complete Without KiCad
 - [ ] **RSSI_DCD routing** — 1 net remaining (~28 mm cross-board run)
-  - Attempted in `route_emma_rssi.py dcd` but naively routes; needs GUI push-shove or real autorouter
+  - Attempted in `route_commo_rssi.py dcd` but naively routes; needs GUI push-shove or real autorouter
   - **TOOL REQUIRED:** kicad-cli/pcbnew for interactive or advanced autorouting
   - **Impact:** RSSI carrier-detect feature incomplete; output line to host PB2-P2 pad 2 unconnected
   
@@ -90,11 +90,11 @@ Most of the technical work has been started and partially completed, but **all t
   
 - [ ] **Gerber generation** BLOCKED
   - `generate_gerbers.py` requires `kicad-cli` not available
-  - Output directory: `avionics/kicad/gerbers/Emma-S1/`
+  - Output directory: `avionics/kicad/gerbers/Commo-S1/`
   - **REQUIRES:** kicad-cli + completion of above routing/part-selection work
 
 #### Summary
-Emma is ~90% complete on schematic/PCB design, but **cannot be fabricated** until:
+Commo is ~90% complete on schematic/PCB design, but **cannot be fabricated** until:
 1. All 13 unrouted nets completed (requires KiCad routing tools)
 2. Differential pair impedance routing (Ethernet, LoRa SPI) completed (requires KiCad)
 3. RSSI_CMP part/pinout confirmed (requires user research + datasheet)
@@ -106,7 +106,7 @@ Emma is ~90% complete on schematic/PCB design, but **cannot be fabricated** unti
 
 ---
 
-### 2. Zoë (Cape-B-2) Rev S1 — Remove LoRa, Add P1+P2 Passthrough Rails
+### 2. XO (Cape-B-2) Rev S1 — Remove LoRa, Add P1+P2 Passthrough Rails
 
 **Last Updated:** 2026-07-04  
 **Completion Status:** ~65% (PCB finished, schematic needs major reconciliation)
@@ -139,7 +139,7 @@ Emma is ~90% complete on schematic/PCB design, but **cannot be fabricated** unti
 
 - [ ] **Schematic cleanup** (after reference-designator remap)
   - Remove LoRa block: LORA, RFM95W, FL_LORA, D_ANT_LORA, J_SMA_LORA, BPF_915×2
-  - Remove obsolete J_XCVR (JST-GH Emma-cable connector — Emma now stacks via P1/P2)
+  - Remove obsolete J_XCVR (JST-GH Commo-cable connector — Commo now stacks via P1/P2)
   - Remove SBUS block: U_SBUS_B, R_SBUS_RX, SW1
   - Add P1/P2 passthrough sockets to schematic (already placed on PCB)
   - Re-run ERC after cleanup
@@ -148,10 +148,10 @@ Emma is ~90% complete on schematic/PCB design, but **cannot be fabricated** unti
 
 - [ ] **Verify P1/P2 socket nets** — Confirm already-placed sockets carry correct signals
   - Lower P1/P2 pins → upper P1/P2 sockets should pass through all PB2 signals
-  - Confirm proper passthrough 0Ω jumper placement on signals consumed by Zoë (Wi-Fi, SiK, I²C, UART)
-  - **ACTION REQUIRED:** User to inspect `Zoë.kicad_pcb` P1/P2 socket net assignments
+  - Confirm proper passthrough 0Ω jumper placement on signals consumed by XO (Wi-Fi, SiK, I²C, UART)
+  - **ACTION REQUIRED:** User to inspect `XO.kicad_pcb` P1/P2 socket net assignments
   - **TOOL REQUIRED:** kicad-cli for net connectivity check
-  - **IMPACT:** Medium — if nets are wrong, Emma stack will not function
+  - **IMPACT:** Medium — if nets are wrong, Commo stack will not function
 
 - [ ] **Nets and vias** — Finalize interconnections post-reference-remap
   - **TOOL REQUIRED:** kicad-cli DRC for validation
@@ -166,7 +166,7 @@ Emma is ~90% complete on schematic/PCB design, but **cannot be fabricated** unti
   - Output directory: `avionics/kicad/gerbers/CAPE-B-2-S1/`
 
 #### Summary
-Zoë PCB is **complete and ready**, but schematic is **30 days behind** and cannot be used without:
+XO PCB is **complete and ready**, but schematic is **30 days behind** and cannot be used without:
 1. **User confirmation of reference-designator mapping** (no guessing — flight-critical board)
 2. Removal of LoRa, J_XCVR, SBUS blocks from schematic
 3. Addition of P1/P2 passthrough sockets to schematic
@@ -176,13 +176,13 @@ Zoë PCB is **complete and ready**, but schematic is **30 days behind** and cann
 
 ---
 
-### 3. Kaylee Rev S1 — Remove 6 V BEC, Add 5 V Servo Output
+### 3. Flight Engineer Rev S1 — Remove 6 V BEC, Add 5 V Servo Output
 
 **Last Updated:** 2026-07-18 (no recent work)  
 **Completion Status:** 0% (design not started; current board is Rev R, not S1)
 
 #### Current State
-- Schematic exists: `avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch` (Rev R)
+- Schematic exists: `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch` (Rev R)
   - TPS54540DDAR 6V/5A BEC defined at U_BEC_6V (lines 3552–3580)
   - Dual TPS54620 5V BECs already present (U_BEC_5V_1, U_BEC_5V_2)
   - Board status: "Schematic complete — PCB layout pending DRC sign-off"
@@ -202,7 +202,7 @@ Zoë PCB is **complete and ready**, but schematic is **30 days behind** and cann
   - Change output connector label from "6V_SERVO" to "SERVO-5V"
   - Verify 5 V servo current budget: 2× DS3218MG = 2× 500 mA stall = 1.0 A peak
     - TPS54620 3 A rated output provides 3× headroom ✓ (adequate)
-  - Add to fabric layer: "Kaylee Rev S1"
+  - Add to fabric layer: "Flight Engineer Rev S1"
 
 #### Design Approach
 ```
@@ -217,7 +217,7 @@ SECTION E (NEW): 5V Servo BEC (TPS54620)
 
 #### Blocking Work
 - [ ] **Schematic modification**
-  - Edit `Kaylee.kicad_sch` to remove TPS54540 circuit, add third TPS54620
+  - Edit `FlightEngineer.kicad_sch` to remove TPS54540 circuit, add third TPS54620
   - Update title block to "Rev S1"
   - **RISK:** Editing S-expression KiCad files without interactive tool is error-prone
   - **RECOMMENDED:** Use KiCad GUI to make these changes safely
@@ -235,11 +235,11 @@ SECTION E (NEW): 5V Servo BEC (TPS54620)
   - **TOOL REQUIRED:** kicad-cli
 
 - [ ] **Gerber generation**
-  - Output directory: `avionics/kicad/gerbers/Kaylee-S1/`
+  - Output directory: `avionics/kicad/gerbers/FlightEngineer-S1/`
   - **TOOL REQUIRED:** kicad-cli + `generate_gerbers.py`
 
 #### Summary
-Kaylee design changes are **straightforward** (6V → 5V servo rail conversion) but **not yet started**.
+Flight Engineer design changes are **straightforward** (6V → 5V servo rail conversion) but **not yet started**.
 - Schematic is easy to plan (delete one BEC section, duplicate another)
 - PCB footprints are straightforward (same TPS54620 size/pinout as existing)
 - **Main risk:** Safe editing of S-expression schematic files without KiCad validation tools
@@ -249,24 +249,24 @@ Kaylee design changes are **straightforward** (6V → 5V servo rail conversion) 
 ## Dependency Chain
 
 ```
-Emma Rev S1:
+Commo Rev S1:
   → Schematic complete (DONE)
   → PCB 90% routed (NEEDS: 13 nets + differential pair routing, kicad-cli DRC)
   → RSSI_CMP part selection (NEEDS: user research + datasheet)
   → Firmware sign-off (NEEDS: firmware team review)
   → Gerber export (NEEDS: kicad-cli, all above complete)
 
-Zoë Rev S1:
+XO Rev S1:
   → PCB complete (DONE)
   → Schematic remap (BLOCKED: NEEDS user sch↔pcb confirmation, kicad-cli ERC)
   → Gerber export (NEEDS: kicad-cli, schematic complete)
 
-Kaylee Rev S1:
+Flight Engineer Rev S1:
   → Schematic edit (NEEDS: schematic mods + careful S-expression work or KiCad GUI)
   → PCB layout (NEEDS: footprint placement, routing, kicad-cli DRC)
   → Gerber export (NEEDS: kicad-cli, all above complete)
 
-CRITICAL PATH: Zoë sch↔pcb remap (user decision) + Emma part selection (user research)
+CRITICAL PATH: XO sch↔pcb remap (user decision) + Commo part selection (user research)
 ```
 
 ---
@@ -274,37 +274,37 @@ CRITICAL PATH: Zoë sch↔pcb remap (user decision) + Emma part selection (user 
 ## Recommendations for Completion
 
 ### Immediate (No Tools Required)
-1. **Zoë reference-designator mapping**
+1. **XO reference-designator mapping**
    - User to create name-map CSV or JSON mapping schematic refs → PCB refs
    - Example: `{ "CMC_CAN": "CMC-CAN", "X2Y_RS485": "X2Y-RS485", … }`
    - **Effort:** ~30 min (tedious but straightforward)
 
-2. **Emma RSSI_CMP part selection**
+2. **Commo RSSI_CMP part selection**
    - User research: LM393, LMV331, LM741, or similar?
    - Confirm SOT-23-5 pin order against real datasheet
    - Verify push-pull vs open-drain (pull-up topology)
    - Add REFERENCES.md entry with part number + datasheet link
    - **Effort:** ~1 hour (research + datasheet verification)
 
-3. **Kaylee design review**
+3. **Flight Engineer design review**
    - Confirm 5V servo rail (2× DS3218MG) vs 6V conversion is acceptable for firmware/mechanics
    - **Effort:** 15 min (cross-team sync)
 
 ### With KiCad Tools Available (kicad-cli + pcbnew Python)
-1. **Emma routing completion** (~4–6 hours)
+1. **Commo routing completion** (~4–6 hours)
    - 13 unrouted nets + differential pairs + stubs routing
-   - Use `route_emma_rssi.py dcd` as starting point for RSSI_DCD
+   - Use `route_commo_rssi.py dcd` as starting point for RSSI_DCD
    - Run DRC iteratively
    - Generate gerbers
 
-2. **Zoë schematic reconciliation** (~2–3 hours)
+2. **XO schematic reconciliation** (~2–3 hours)
    - Apply name-map to remap refs
    - Delete LoRa/SBUS/J_XCVR blocks
    - Add P1/P2 sockets to schematic
    - Run ERC to zero
    - Generate gerbers
 
-3. **Kaylee S1 conversion** (~2–3 hours)
+3. **Flight Engineer S1 conversion** (~2–3 hours)
    - Remove TPS54540 circuit from schematic
    - Add third TPS54620 instance
    - PCB footprint rework (copy TPS54620 instance)
@@ -320,25 +320,25 @@ CRITICAL PATH: Zoë sch↔pcb remap (user decision) + Emma part selection (user 
 
 ## Files Involved
 
-### Emma
-- Schematic: `avionics/kicad/Emma/kicads/Emma.kicad_sch` (generated, DONE)
-- PCB: `avionics/kicad/Emma/kicads/Emma.kicad_pcb` (90% routed, NEEDS work)
+### Commo
+- Schematic: `avionics/kicad/Commo/kicads/Commo.kicad_sch` (generated, DONE)
+- PCB: `avionics/kicad/Commo/kicads/Commo.kicad_pcb` (90% routed, NEEDS work)
 - Scripts:
-  - `gen_emma_sch.py` (schematic generation, DONE)
-  - `mod_emma_pcb.py` (PCB rework, DONE)
-  - `route_emma_rssi.py` (RSSI routing, partial)
-  - `cleanup_emma_drc.py` (DRC cleanup, DONE)
-- Documentation: `avionics/kicad/Emma/Emma.md` (up-to-date)
+  - `gen_commo_sch.py` (schematic generation, DONE)
+  - `mod_commo_pcb.py` (PCB rework, DONE)
+  - `route_commo_rssi.py` (RSSI routing, partial)
+  - `cleanup_commo_drc.py` (DRC cleanup, DONE)
+- Documentation: `avionics/kicad/Commo/Commo.md` (up-to-date)
 
-### Zoë
-- Schematic: `avionics/kicad/Zoë/kicads/Zoë.kicad_sch` (NEEDS reconciliation)
-- PCB: `avionics/kicad/Zoë/kicads/Zoë.kicad_pcb` (DONE)
-- Documentation: `avionics/kicad/Zoë/Zoë.md` (notes remap is needed)
+### XO
+- Schematic: `avionics/kicad/XO/kicads/XO.kicad_sch` (NEEDS reconciliation)
+- PCB: `avionics/kicad/XO/kicads/XO.kicad_pcb` (DONE)
+- Documentation: `avionics/kicad/XO/XO.md` (notes remap is needed)
 
-### Kaylee
-- Schematic: `avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch` (NEEDS Rev S1 edits)
-- PCB: `avionics/kicad/Kaylee/kicads/Kaylee.kicad_pcb` (NEEDS S1 layout)
-- Documentation: `avionics/kicad/Kaylee/Kaylee.md` (notes Rev R status)
+### Flight Engineer
+- Schematic: `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch` (NEEDS Rev S1 edits)
+- PCB: `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pcb` (NEEDS S1 layout)
+- Documentation: `avionics/kicad/FlightEngineer/FlightEngineer.md` (notes Rev R status)
 
 ### Work Tracking
 - Root TODO: `TODO.md` §1.2b (high-level, 3 items unchecked)
@@ -348,17 +348,17 @@ CRITICAL PATH: Zoë sch↔pcb remap (user decision) + Emma part selection (user 
 
 ## Conclusion
 
-**All three boards are blocked from completion.** While Emma and Zoë have substantial prior work, they cannot reach fabrication-ready state without:
+**All three boards are blocked from completion.** While Commo and XO have substantial prior work, they cannot reach fabrication-ready state without:
 1. KiCad tools (kicad-cli, pcbnew Python)
-2. User decisions (Zoë remap, Emma part selection, Kaylee 5V confirmation)
+2. User decisions (XO remap, Commo part selection, Flight Engineer 5V confirmation)
 3. Firmware team sign-off (PTT_N/RSSI_DCD pinmux)
 
-**Kaylee design is straightforward** but has not been started — design decisions are clear and low-risk.
+**Flight Engineer design is straightforward** but has not been started — design decisions are clear and low-risk.
 
 **Recommended next steps:**
 1. Provide KiCad tools (install kicad-cli + python-pcbnew, or use interactive KiCad GUI)
-2. User supplies Zoë reference-designator mapping
-3. User researches Emma RSSI_CMP part + datasheet
+2. User supplies XO reference-designator mapping
+3. User researches Commo RSSI_CMP part + datasheet
 4. Firmware team reviews PTT_N/RSSI_DCD pinmux constraints
 5. Execute routing / schematic edits with KiCad
 

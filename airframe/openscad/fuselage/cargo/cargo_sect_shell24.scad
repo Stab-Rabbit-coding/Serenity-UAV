@@ -30,7 +30,7 @@
 //
 // Rev S4 (2026-06-08): Correct Cape-B-2/Cape-A-2 PCB dimensions — was CAPE-B-1 legacy.
 //   VERIFIED from CAPE-B-2.kicad_pcb Edge.Cuts (X=121..176, Y=87.5..122.5 mm):
-//   Both Cape-B-2 (Zoë) and Cape-A-2 (Wash) are 55×35 mm, not the 90×60 mm / 85×55 mm
+//   Both Cape-B-2 (XO) and Cape-A-2 (Pilot) are 55×35 mm, not the 90×60 mm / 85×55 mm
 //   values used in Rev S2/S3.  Those came from CAPE-B-1's archived footprint referenced
 //   in CAPE-B-2.md; CAPE-B-2 was redesigned to match the 55×35 mm PB2-I footprint.
 //   All AVINICS_BOSS_* and FARADAY_ENC_* parameters corrected accordingly:
@@ -65,8 +65,8 @@
 //
 // Rev S2 (2026-06-08): Inara and River avionics bay dorsal mounts.
 //   Inara bay (port, Z centre = 118 mm): 4× M3 boss standoffs on interior
-//   dorsal face; 85×55 mm dorsal access panel cut.  Cape-B (Zoë Cape-A-2,
-//   90×60 mm) mounts on 6 mm standoffs; Cape-A (Wash Cape-B-2, 85×55 mm)
+//   dorsal face; 85×55 mm dorsal access panel cut.  Cape-B (XO Cape-A-2,
+//   90×60 mm) mounts on 6 mm standoffs; Cape-A (Pilot Cape-B-2, 85×55 mm)
 //   on 20 mm inter-cape standoffs above (total stack height 29.2 mm).
 //   GPS_PORT (Z=104.7 mm) co-located for minimal SMA routing.
 //   River bay (stbd, Z centre = 45 mm): same boss + panel pattern.
@@ -576,30 +576,30 @@ module gps_mount_cut(pos, rot) {
 
 // ----------------------------------------------------------------------------
 // Module: jayne_board_bosses (added Rev R2, 2026-07-03)
-//   4x M3 heat-set insert boss posts for the Jayne vision/ToF/laser PCB
-//   (avionics/kicad/Jayne.kicad_pcb, 1.0 × 2.75 in (25.4 × 69.85 mm) double-sided board, mounting
+//   4x M3 heat-set insert boss posts for the Observer vision/ToF/laser PCB
+//   (avionics/kicad/Observer.kicad_pcb, 1.0 × 2.75 in (25.4 × 69.85 mm) double-sided board, mounting
 //   holes at board-local (4,4)/(42,4)/(4,44)/(42,44) -- i.e. +/-19 mm x
 //   +/-20 mm from board centre).  Mounted on the belly interior floor,
 //   standing up (+Z) from just above the nadir exterior skin, centred on
 //   CARGO_CAM_POS's (X,Y) station so the board sits directly above/behind
 //   the camera aperture -- short local harness runs to J_CAM1/J_CAM2/
-//   J_TOF/J_LASER (see Jayne.md "Mechanical Mounting and Wiring").
+//   J_TOF/J_LASER (see Observer.md "Mechanical Mounting and Wiring").
 //   Boss base at Z = WALL_MM (interior nadir face); extends to
 //   Z = WALL_MM + BOSS_H (= 8 mm) -- an 8 mm standoff starting allowance,
 //   pending real (non-placeholder) component-height verification per
-//   Jayne.md.  PROPOSED placement -- verify in FreeCAD before printing
+//   Observer.md.  PROPOSED placement -- verify in FreeCAD before printing
 //   (this hull's geometry is too complex for bounding-box placement per
 //   CLAUDE.md "Assembly and Placement").
-//   Ref: avionics/kicad/Jayne.md; TODO.md §1.2c.3.
+//   Ref: avionics/kicad/Observer.md; TODO.md §1.2c.3.
 // ----------------------------------------------------------------------------
-JAYNE_HOLE_DX = 19.0;   // mm, +/-X half-spacing of Jayne's mounting-hole pattern
-JAYNE_HOLE_DY = 20.0;   // mm, +/-Y half-spacing of Jayne's mounting-hole pattern
-JAYNE_STATION_X = CX;         // mm, lateral centreline, same as CARGO_CAM_POS
-JAYNE_STATION_Y = CY;         // mm, longitudinal station, same as CARGO_CAM_POS
+OBSERVER_HOLE_DX = 19.0;   // mm, +/-X half-spacing of Observer's mounting-hole pattern
+OBSERVER_HOLE_DY = 20.0;   // mm, +/-Y half-spacing of Observer's mounting-hole pattern
+OBSERVER_STATION_X = CX;         // mm, lateral centreline, same as CARGO_CAM_POS
+OBSERVER_STATION_Y = CY;         // mm, longitudinal station, same as CARGO_CAM_POS
 module jayne_board_bosses() {
-    for (dx = [-JAYNE_HOLE_DX, JAYNE_HOLE_DX])
-    for (dy = [-JAYNE_HOLE_DY, JAYNE_HOLE_DY])
-        m3_boss([JAYNE_STATION_X + dx, JAYNE_STATION_Y + dy, WALL_MM], [0, 0, 0]);
+    for (dx = [-OBSERVER_HOLE_DX, OBSERVER_HOLE_DX])
+    for (dy = [-OBSERVER_HOLE_DY, OBSERVER_HOLE_DY])
+        m3_boss([OBSERVER_STATION_X + dx, OBSERVER_STATION_Y + dy, WALL_MM], [0, 0, 0]);
 }
 
 // ----------------------------------------------------------------------------
@@ -802,24 +802,26 @@ module latch_catch_lip(x_start, z_pos) {
 //   CF-PETG shear yield ≈ 25 MPa → FOS_shear = 472  ✓✓✓
 //
 // ── Nacelle tilt servo torque at mount block ──────────────────────────────
-// Servo: DS3218MG class; rated 25 kg·cm at 6 V = 2.45 N·m (minimum spec).
+// Servo: SPT5425LV class (was DS3218MG); rated 26 kgf·cm at 6 V = 2.55 N·m
+//   (REFERENCES.md REF-SENSOR-013, 2026-08-02 servo fleet standardisation —
+//   up slightly from DS3218MG's 2.45 N·m minimum-spec figure, re-checked below).
 // Mount bolt pattern: 4× M3 heat-set inserts at ±NSVMT_HOLE_S_X = ±17.5 mm in Y
 //   (was "in X" — re-labelled 2026-06-22 when the mount block's mirror axis
 //   moved from Z to X; the moment-arm distance itself is unchanged).
 //   Moment arm between bolt-pair couple: 2 × 17.5 = 35.0 mm = 0.035 m
 //   Bolt-pair load at servo stall: F_pair = τ_servo / moment_arm
-//     = 2.45 / 0.035 = 70.0 N → 35.0 N per individual bolt
+//     = 2.55 / 0.035 = 72.9 N → 36.4 N per individual bolt
 //   M3 insert pullout in CF-PETG: P_out ≈ 400 N (Ruthex RX-M3x5.7; ISO 14589)
-//   FOS_bolt = 400 / 35.0 = 11.4  ✓  (>> 4.0 target)
+//   FOS_bolt = 400 / 36.4 = 11.0  ✓  (>> 4.0 target)
 //
 // Nacelle pushrod dynamic load (at sector gear radius, stall transient):
-//   F_pushrod = τ_servo / r_sector = 2.45 / 0.022 = 111 N
+//   F_pushrod = τ_servo / r_sector = 2.55 / 0.022 = 115.9 N
 //   Carried in pushrod axially (tension/compression).  Does NOT load mount block.
 //
 // References:
 //   Selig & Guglielmo (1997) J. Aircraft 34(1):72–79 (S1223 CL data).
   //   ASTM F2910-14 [ASTM F38]; FOS_min = 4.0 design judgment for FDM composite joints.
-//   DS3218MG datasheet; Ruthex RX-M3x5.7; ISO 14589 (heat-set inserts).
+//   REFERENCES.md REF-SENSOR-013 (SPT5425LV); Ruthex RX-M3x5.7; ISO 14589 (heat-set inserts).
 //   wings_s1223_revo.scad SPAR_BORE_X, WING_ROOT_TAB_*, WING_CHORD_ROOT.
 //   nacelle_sector_gear.scad SLOT_BC_R = 18 mm; nacelle_pod_50mm_tandem.scad.
 //   PHASED_BUILD_GUIDE.md Phase 3 tilt servo installation.
@@ -894,11 +896,15 @@ CARGO_X_WALL_PORT = -201.5;   // mm, local-X exterior face mapping to hull PORT
 WING_ROOT_Z_CEN = 62.5;   // mm, VERIFY against final wing thickness profile at root
 
 // Nacelle tilt servo mount block (one per Z side)
-//   Target servo class: DS3218MG or equivalent — body 40 × 20 × 38 mm;
+//   Target servo: SPT5425LV + LibreServo v2 (was DS3218MG) — body
+//   40.5 × 20 × 40.5 mm (REFERENCES.md REF-SENSOR-013);
 //   output shaft points outboard (Z direction, toward nacelle).
 //   A separately-printed nacelle_servo_bracket.stl clamps the servo body to
-//   this block via 4× M3×10 SHCS (one per heat-set insert).
-//   Ref: DS3218MG datasheet; PHASED_BUILD_GUIDE.md Phase 3; load analysis above.
+//   this block via 4× M3×10 SHCS (one per heat-set insert).  The pad's own
+//   bolt pattern (below) is independent of servo body size, so the
+//   2026-08-02 servo migration required no change to this block itself.
+//   Ref: REFERENCES.md REF-SENSOR-013 (SPT5425LV); PHASED_BUILD_GUIDE.md
+//   Phase 3; load analysis above.
 // NSVMT_Z_OFFSET placement constraint — RE-DERIVED 2026-06-22 (was
 // NSVMT_X_CEN; see CARGO_X_WALL_*/WING_ROOT_Z_CEN comment above for why X is
 // no longer a free placement axis for this pad).  Old logic offset the pad
@@ -932,7 +938,7 @@ NSVMT_CONDUIT_W    =   10.0;        // mm, servo lead conduit slot width (X)
 NSVMT_CONDUIT_H    =    6.0;        // mm, servo lead conduit slot height (Y)
 
 // ── Cape PCB dimensions (Rev S4 — verified from CAPE-B-2.kicad_pcb Edge.Cuts) ──
-//   Both Cape-B-2 (Zoë) and Cape-A-2 (Wash) share the 55×35 mm PB2-I footprint.
+//   Both Cape-B-2 (XO) and Cape-A-2 (Pilot) share the 55×35 mm PB2-I footprint.
 //   Ref: CAPE-B-2.kicad_pcb X=121..176 mm (55 mm), Y=87.5..122.5 mm (35 mm).
 //   MH1–MH4: 2.7 mm drill (M2.5 nylon standoffs inside tray) at ±24.5×±14.5 mm
 //   from board centre.  Title block: "55x35mm 4L JLCPCB assembled".
@@ -944,8 +950,8 @@ CAPE_HOLE_DZ   =  14.5;   // mm, ±Z M2.5 corner hole offset from board centre
 // ── Avionics bay dorsal mounts — Inara (port) and River (stbd) (Rev S4) ──────
 //
 // CAPE STACK GEOMETRY (Rev Q -2 EMI-hardened capes per CLAUDE.md Rev Q):
-//   Cape-B-2 (Zoë):  55×35 mm PCB; M2.5 corner holes at ±24.5×±14.5 mm.
-//   Cape-A-2 (Wash): 55×35 mm PCB; M2.5 corner holes at ±24.5×±14.5 mm.
+//   Cape-B-2 (XO):  55×35 mm PCB; M2.5 corner holes at ±24.5×±14.5 mm.
+//   Cape-A-2 (Pilot): 55×35 mm PCB; M2.5 corner holes at ±24.5×±14.5 mm.
 //   Architecture: hull M3 bosses → Faraday tray body.
 //                 M2.5 nylon standoffs inside tray → PCB corners.
 //   Cape-B-2 ↔ dorsal tray floor: 6 mm standoff + 1.6 mm PCB.
@@ -1006,7 +1012,7 @@ BAY_GAP            =  35.0;        // mm, edge-to-edge gap between Inara/River t
 //   The access panel cover (72×52 mm, copper-foil-lined PETG or 0.5 mm Al sheet)
 //   completes the EMI shield when installed.
 //   Tray body inserts through AVINICS_PANEL_X × AVINICS_PANEL_Y dorsal opening.
-//   Cape-B-2 (Zoë) and Cape-A-2 (Wash) PCBs mount on M2.5 internal standoffs.
+//   Cape-B-2 (XO) and Cape-A-2 (Pilot) PCBs mount on M2.5 internal standoffs.
 //   One 25×25×7 mm axial fan per tray on one tray wall; air exhausts into
 //   gondola interior (no hull skin penetrations required).  Intake covered by
 //   6 mm-thick waveguide-below-cutoff honeycomb panel (6 mm cell, attenuation
@@ -1136,8 +1142,10 @@ module spar_bearing_block(side) {
 // ----------------------------------------------------------------------------
 // Module: nacelle_servo_mount_block
 //   Solid rectangular mounting pad on the interior LATERAL (X) wall for the
-//   nacelle tilt servo (DS3218MG class: 40 × 20 × 38 mm body, ±17.5 mm lug
-//   spacing).  Provides:
+//   nacelle tilt servo (SPT5425LV + LibreServo v2, was DS3218MG:
+//   40.5 × 20 × 40.5 mm body, ±17.5 mm lug spacing — REFERENCES.md
+//   REF-SENSOR-013).  Bolt pattern is independent of body size, so this pad's
+//   own geometry is unchanged by the 2026-08-02 servo migration.  Provides:
 //     • Flat inboard face for servo body seating (normal to X axis)
 //     • 4× M3 heat-set insert pockets (±17.5 mm × ±8 mm pattern)
 //     • 10 × 6 mm lead conduit slot through inboard face for servo wiring
@@ -1156,9 +1164,9 @@ module spar_bearing_block(side) {
 //   side = +1: port wall  (pad protrudes inward +X, shaft toward port nacelle)
 //   side = -1: stbd wall  (pad protrudes inward -X, shaft toward stbd nacelle)
 //
-//   Servo stall torque reaction: 4× M3 inserts at 35 mm couple arm → 35 N/bolt.
-//   FOS_bolt = 400 / 35 = 11.4.  See load analysis above.
-//   Ref: DS3218MG datasheet; PHASED_BUILD_GUIDE.md Phase 3 tilt servo install.
+//   Servo stall torque reaction: 4× M3 inserts at 35 mm couple arm → 36.4 N/bolt.
+//   FOS_bolt = 400 / 36.4 = 11.0.  See load analysis above.
+//   Ref: REFERENCES.md REF-SENSOR-013 (SPT5425LV); PHASED_BUILD_GUIDE.md Phase 3 tilt servo install.
 // ----------------------------------------------------------------------------
 module nacelle_servo_mount_block(side) {
     z_cen = WING_ROOT_Z_CEN + NSVMT_Z_OFFSET;   // see NSVMT_Z_OFFSET note above —
@@ -1184,8 +1192,8 @@ module nacelle_servo_mount_block(side) {
 
         // 4× M3 heat-set insert pockets bored from inboard face into pad,
         // bore axis along X.
-        //   ±NSVMT_HOLE_S_X (±17.5 mm) in Y: matches DS3218MG lug-hole spacing.
-        //   ±NSVMT_HOLE_S_Y (±8.0 mm)  in Z: matches DS3218MG lug width / 2.
+        //   ±NSVMT_HOLE_S_X (±17.5 mm) in Y: matches the servo bracket's lug-hole spacing.
+        //   ±NSVMT_HOLE_S_Y (±8.0 mm)  in Z: matches the servo bracket's lug width / 2.
         for (dy = [-NSVMT_HOLE_S_X, NSVMT_HOLE_S_X])
         for (dz = [-NSVMT_HOLE_S_Y, NSVMT_HOLE_S_Y])
             translate([x_bore_lo, NSVMT_Y_CEN + dy, z_cen + dz])
@@ -1378,8 +1386,9 @@ union() {
             //     LATERAL (X) walls.  FIXED 2026-06-22 — was mirrored across
             //     Z; see CARGO_X_WALL_*/WING_ROOT_Z_CEN comment above.
             //     Each block: 52(Y)×30(Z) mm face × 8 mm deep (X); 4× M3
-            //     heat-set inserts; 10×6 mm lead conduit slot.  DS3218MG-class
-            //     servo (≥25 kg·cm) mounts via separately-printed
+            //     heat-set inserts; 10×6 mm lead conduit slot.  SPT5425LV +
+            //     LibreServo v2 (was DS3218MG-class; ≥25 kgf·cm) servo mounts
+            //     via separately-printed
             //     nacelle_servo_bracket.stl using 4× M3×10 SHCS through the
             //     bracket into these inserts.
             //     Block Y range: NSVMT_Y_CEN ± 26 mm = −314.6 .. −262.6 mm
@@ -1394,7 +1403,7 @@ union() {
             nacelle_servo_mount_block(+1);  // port wall
             nacelle_servo_mount_block(-1);  // stbd wall
 
-            // A8b. Jayne vision/ToF/laser PCB mounting bosses (Rev R2, 2026-07-03).
+            // A8b. Observer vision/ToF/laser PCB mounting bosses (Rev R2, 2026-07-03).
             //      4x M3 bosses on the belly interior floor, centred on
             //      CARGO_CAM_POS's (X,Y) station.  See jayne_board_bosses() header.
             jayne_board_bosses();
@@ -1404,7 +1413,7 @@ union() {
             //     4× M3 Faraday tray anchor bosses on interior dorsal face (Z≈DORSAL_Z_EXT).
             //     Boss pattern: ±15 mm (X) × ±25 mm (Y) from bay centre.
             //     GPS_PORT co-located (same X); nearest boss ≥ 5 mm from GPS centre.
-            //     Cape-B-2 (Zoë) / Cape-A-2 (Wash) PCBs mount on M2.5 internal standoffs
+            //     Cape-B-2 (XO) / Cape-A-2 (Pilot) PCBs mount on M2.5 internal standoffs
             //     inside Faraday tray; hull bosses anchor tray body only.
             //     VERIFY boss positions and clearance in slicer before printing.
             //     Ref: Rev S4 dimension correction (Rev R2 axis fix); GPS_PORT recess
@@ -1418,7 +1427,7 @@ union() {
             //      4× M3 Faraday tray anchor bosses on interior dorsal face (Z≈DORSAL_Z_EXT).
             //      Boss pattern: ±15 mm (X) × ±25 mm (Y) from bay centre.
             //      GPS_STBD co-located (same X); nearest boss ≥ 5 mm from GPS centre.
-            //      Cape-B-2 (Zoë) / Cape-A-2 (Wash) PCBs mount on M2.5 internal standoffs.
+            //      Cape-B-2 (XO) / Cape-A-2 (Pilot) PCBs mount on M2.5 internal standoffs.
             //      35 mm inter-bay gap (X) available for conduit and wiring routing.
             //      VERIFY boss positions and clearance in slicer before printing.
             //      Ref: Rev S4 dimension correction (Rev R2 axis fix); GPS_STBD recess

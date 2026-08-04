@@ -1,7 +1,7 @@
 # Serenity UAV — Airframe Fuselage — Head/Cargo/Middle Shells TODO (Open Work Only)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 
 > **This file lists only currently-open (unchecked) top-level tasks for
 > this subsystem — one line each, <=70 chars, no prose.** Full detail
@@ -45,10 +45,10 @@
 - [ ] Winch state machine firmware (Simon + gateway)
 - [ ] Re-run winch mass/CG once STS3215 mass is known
 - [ ] Slicer verification
-- [ ] Kaylee's room — PDB mounting in inner neck
+- [ ] Flight Engineer's room — PDB mounting in inner neck
 - [ ] CF skid rod channels
 - [ ] Simon bay — define avionics bay in MIDDLE section (Phase 11 move)
-- [ ] Kaylee room — PDB + battery bay, middle VENTRAL (2026-06-13).
+- [ ] Flight Engineer room — PDB + battery bay, middle VENTRAL (2026-06-13).
 - [ ] Avionics-bay interior name marks (DEFERRED, 2026-06-13).
 - [ ] Phase 11 — aft EDF intake scoop cuts
 - [ ] neck_intake_frame.stl (Phase 11)

@@ -42,7 +42,7 @@
  * [REF-IEC-001 Cl.5.5.2] / [REF-VDE-001 Cl.4.3, Cl.5.3] — per component datasheet certs
  *
  * Cape-A-2 peripheral map:
- *   SPI0      — ICM-42688-P IMU, BMP388 barometer, SLB9670 TPM 2.0
+ *   SPI0      — ICM-42688-P IMU, BMP388 barometer, SLB9672 TPM 2.0
  *               (Cape-A-2: ISOW1044BDFMR CAN FD; ADM2795EBRWZ RS-485; ADIN1300BCPZ PHY)
  *   I2C1      — MMC5983MA magnetometer (0x30), INA226AIDGSR battery monitor (0x40)
  *   I2C2      — TCA9548A 8-ch mux → 2× VL53L5CX ToF (array A), MS4525DO
@@ -95,9 +95,9 @@
 #define CAPE_A_GPIO_IMU_INT2        15  /* ICM-42688-P interrupt 2      [ESTIMATE] */
 #define CAPE_A_GPIO_IMU_CS          16  /* SPI0 CS — ICM-42688-P        [ESTIMATE] */
 #define CAPE_A_GPIO_BARO_CS         17  /* SPI0 CS — BMP388             [ESTIMATE] */
-#define CAPE_A_GPIO_TPM_CS          18  /* SPI0 CS — SLB9670 TPM        [ESTIMATE] */
-#define CAPE_A_GPIO_TPM_IRQ         19  /* SLB9670 IRQ (active-low)     [ESTIMATE] */
-#define CAPE_A_GPIO_TPM_RST         20  /* SLB9670 reset (active-low)   [ESTIMATE] */
+#define CAPE_A_GPIO_TPM_CS          18  /* SPI0 CS — SLB9672 TPM        [ESTIMATE] */
+#define CAPE_A_GPIO_TPM_IRQ         19  /* SLB9672 IRQ (active-low)     [ESTIMATE] */
+#define CAPE_A_GPIO_TPM_RST         20  /* SLB9672 reset (active-low)   [ESTIMATE] */
 #define CAPE_A_GPIO_GPS_RST         21  /* u-blox M10Q RESETN           [ESTIMATE] */
 #define CAPE_A_GPIO_GPS_TIMEPULSE   22  /* u-blox M10Q TIMEPULSE        [ESTIMATE] */
 #define CAPE_A_GPIO_RS485_DE        23  /* ADM2795EBRWZ driver enable   [ESTIMATE] */
@@ -122,7 +122,7 @@
  * ─────────────────────────────────────────────────────────────────────────*/
 &main_pmx0 {
 
-    /* SPI0: ICM-42688-P IMU + BMP388 barometer + SLB9670 TPM.
+    /* SPI0: ICM-42688-P IMU + BMP388 barometer + SLB9672 TPM.
      * Chip selects are GPIO-controlled (cs-gpios on the SPI node) so only
      * the 4-wire bus pins appear here.                                    */
     cape_a_spi0_pins: cape-a-spi0-pins {
@@ -348,9 +348,9 @@
          * re-assign if conflict during layout.                           */
     };
 
-    /* SLB9670 TPM 2.0 — Infineon, SPI mode 0, 33 MHz max.               */
-    tpm_slb9670: tpm@2 {
-        compatible = "infineon,slb9670";
+    /* SLB9672 TPM 2.0 — Infineon, SPI mode 0, 33 MHz max.               */
+    tpm_slb9672: tpm@2 {
+        compatible = "infineon,slb9672";
         reg = <2>;                           /* CS index 2 (TPM_CS GPIO)   */
         spi-max-frequency = <33000000>;
         interrupt-parent = <&main_gpio0>;

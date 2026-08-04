@@ -1,7 +1,7 @@
-# Serenity UAV — Ground Control Station (Malcolm) TODO (Open Work Only)
+# Serenity UAV — Ground Control Station (Skipper) TODO (Open Work Only)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 
 > **This file lists only currently-open (unchecked) top-level tasks for
 > this subsystem — one line each, <=70 chars, no prose.** Full detail
@@ -9,34 +9,34 @@
 > [`WBS.md`](WBS.md), the full historical record for project-progression
 > tracking. Close an item in `WBS.md` first, then delete its line here.
 
-*"I aim to misbehave. — Capt. Malcolm Reynolds"*
+*"I aim to misbehave. — Capt. Skipper Reynolds"*
 
 ---
 
-## §4.5 — Ground Control (Malcolm / CAPT Reynolds) &#9733;
+## §4.5 — Ground Control (Skipper / CAPT Reynolds) &#9733;
 → full detail: `WBS.md` §4.5
 
-- [ ] Create Malcolm host computer specification
-- [ ] Malcolm field enclosure — print and fit-check
+- [ ] Create Skipper host computer specification
+- [ ] Skipper field enclosure — print and fit-check
 - [ ] Gimbal STL generation and mesh verification
 - [ ] Gimbal servo wind-load torque check
-- [ ] Procure Malcolm comms node hardware:
+- [ ] Procure Skipper comms node hardware:
 - [ ] Procure antenna hardware
 - [ ] Procure gimbal hardware:
-- [ ] Flash Debian Linux to Malcolm PB2-I eMMC
-- [ ] Apply Cape-B-2 device tree overlay for Malcolm
-- [ ] Provision TPM 2.0 (SLB9670) on Malcolm's PB2-I
-- [ ] Verify CPLD write-blocker on Malcolm's log μSD
-- [ ] Build and install Malcolm PB2-I firmware:
-- [ ] Install and configure mavlink-router on Malcolm's PB2-I
-- [ ] Enable all 5 radio interfaces on Malcolm's PB2-I
+- [ ] Flash Debian Linux to Skipper PB2-I eMMC
+- [ ] Apply Cape-B-2 device tree overlay for Skipper
+- [ ] Provision TPM 2.0 (SLB9672) on Skipper's PB2-I
+- [ ] Verify CPLD write-blocker on Skipper's log μSD
+- [ ] Build and install Skipper PB2-I firmware:
+- [ ] Install and configure mavlink-router on Skipper's PB2-I
+- [ ] Enable all 5 radio interfaces on Skipper's PB2-I
 - [ ] Configure Wi-Fi transmit power
 - [ ] Install Debian Linux on GCS host PC
 - [ ] Run installation scripts in order:
 - [ ] Configure QGroundControl:
 - [ ] Configure Wi-Fi Tx power on host PC
 - [ ] Run tracking software tests:
-- [ ] Implement `gcs/malcolm/firmware/pb2i/src/mal_comms.c` and `mal_…
+- [ ] Implement `gcs/skipper/firmware/pb2i/src/skipper_comms.c` and `skipper_…
 - [ ] Bench test gimbal hardware
 - [ ] Gimbal calibration:
 - [ ] Run telemetry_feed.py bench test
@@ -49,6 +49,6 @@
 - [ ] 49 MHz (Part 15 §15.235) link test (1 km):
 - [ ] Gimbal pointing accuracy test (outdoor, aircraft at 200–500 m):
 - [ ] MAVLink authentication test:
-- [ ] Node loss with Malcolm active:
+- [ ] Node loss with Skipper active:
 
 ---
