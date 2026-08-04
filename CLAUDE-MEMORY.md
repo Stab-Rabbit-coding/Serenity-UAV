@@ -1472,8 +1472,14 @@ re-anchor). Both write `.pre-g351x` backups. Generator scripts were **not** re-r
 they carry a superseded-part guard header now; see
 [[feedback-generator-drift-and-freerouting]].
 
-Result: ERC errors 0 on all three (unchanged); DRC violations fell on both PCBs
-(gateway 1256→1101, Jayne 747→584). Gateway MCU area still needs manual re-routing.
+Result: ERC errors 0 on all three (unchanged). DRC, measured in place so the
+sibling .kicad_pro custom rules apply: Observer 289 -> 289 (unchanged),
+gateway 743 -> 804, the +61 being clearance violations in the MCU area that the
+pending manual re-route will clear.
+
+**Do not DRC a .kicad_pcb copied away from its project directory** - without the
+sibling .kicad_pro the custom rules and netclasses are missing and the counts are
+meaningless (that mistake produced a bogus "DRC improved" reading first time).
 
 ---
 

@@ -524,3 +524,23 @@ PA12/PA13 are **PF12** on this family, and PA15 offers `SPI1_CS2` rather than `S
 
 Open items from this pass are tracked in `TODO.md` §1.2d — read those before ordering
 anything from this board.
+
+### DRC status after the retarget
+
+Measured in place (a `.kicad_pcb` copied away from its project directory loses the
+sibling `.kicad_pro` custom rules and netclasses, and the counts become meaningless):
+
+| Board | before | after |
+|---|---|---|
+| Observer | 289 | 289 — unchanged |
+| CAN-PERIPH-GW-1 | 743 | 804 |
+
+The gateway's +61 are `clearance` violations in the MCU area, where the 48-pin traces
+still run to a footprint that is now 32 pads at 5 x 5 mm. They clear with the manual
+re-route tracked in TODO.md 1.2d.
+
+The exposed-pad corrections are applied as an in-place edit of the placed footprint
+(library reference, Value and the thermal pad only). Rebuilding the footprint from the
+library instead would discard whatever the board author tuned on that instance — mask
+margins, pad clearance overrides, zone connections — which showed up as ~180 spurious
+clearance / solder-mask-bridge / shorting violations on Observer before this was fixed.

@@ -56,7 +56,8 @@ JOBS = [
              "old_fp": "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm",
              "new_fp": "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.6x3.6mm",
              "mod": "QFN-32-1EP_5x5mm_P0.5mm_EP3.6x3.6mm",
-             "value": "Infineon SLB 9672AU2.0"},
+             "value": "Infineon SLB 9672AU2.0",
+             "ep_pad": "33", "ep_size": 3.6},
         ],
     },
     {
@@ -68,12 +69,14 @@ JOBS = [
              "old_fp": "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm",
              "new_fp": "Package_DFN_QFN:VQFN-48-1EP_7x7mm_P0.5mm_EP4.1x4.1mm",
              "mod": "VQFN-48-1EP_7x7mm_P0.5mm_EP4.1x4.1mm",
-             "value": "TI MSPM0G3519-Q1"},
+             "value": "TI MSPM0G3519-Q1",
+             "ep_pad": "49", "ep_size": 4.1},
             {"refs": ["U5"],
              "old_fp": "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm",
              "new_fp": "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.6x3.6mm",
              "mod": "QFN-32-1EP_5x5mm_P0.5mm_EP3.6x3.6mm",
-             "value": "Infineon SLB 9672AU2.0"},
+             "value": "Infineon SLB 9672AU2.0",
+             "ep_pad": "33", "ep_size": 3.6},
         ],
     },
 ]
@@ -203,6 +206,32 @@ def build_block(mod_text: str, new_fp: str, ref: str, value: str,
             f'{body}\n\t)')
 
 
+def edit_block(blk: str, new_fp: str, value: str, ep_pad: str, ep_size: float,
+               pads: dict[str, str], codes: dict[str, int]) -> str:
+    """Retarget a placed footprint in place, touching only what must change.
+
+    Changes the library reference and Value, resizes the exposed pad, and adds
+    a net to the exposed pad if it had none.  Every other pad, property and
+    graphic is left byte-for-byte alone.
+    """
+    out = re.sub(r'^\(footprint "[^"]*"', f'(footprint "{new_fp}"', blk, count=1)
+    out = re.sub(r'(\(property "Value" ")[^"]*(")',
+                 lambda m: f'{m.group(1)}{value}{m.group(2)}', out, count=1)
+
+    m = re.search(r'\(pad "%s"' % re.escape(ep_pad), out)
+    if m is None:
+        raise SystemExit(f"footprint has no pad {ep_pad} to resize")
+    _, end = sexpr_at(out, m.start())
+    pad_blk = out[m.start():end]
+
+    pad_new = re.sub(r'\(size [\d.]+ [\d.]+\)',
+                     f'(size {ep_size:g} {ep_size:g})', pad_blk, count=1)
+    if '(net ' not in pad_new and pads.get(ep_pad) in codes:
+        name = pads[ep_pad]
+        pad_new = pad_new[:-1].rstrip() + f'\n\t\t\t(net {codes[name]} "{name}")\n\t\t)'
+    return out[:m.start()] + pad_new + out[end:]
+
+
 def run(job: dict, apply_changes: bool) -> None:
     pcb_path = job["pcb"]
     pcb = pcb_path.read_text()
@@ -275,9 +304,20 @@ def run(job: dict, apply_changes: bool) -> None:
                       f"PCB net table, pad left unconnected: {', '.join(missing)}")
                 new_nets = {p: n for p, n in new_nets.items() if n in codes}
 
-            new_blk = build_block(mod_text, swap["new_fp"], ref, swap["value"],
-                                  at_line, uuid, layer, new_nets, codes,
-                                  ref_at, val_at)
+            if swap.get("mode") == "renet":
+                new_blk = build_block(mod_text, swap["new_fp"], ref,
+                                      swap["value"], at_line, uuid, layer,
+                                      new_nets, codes, ref_at, val_at)
+            else:
+                # Same pad count: edit the placed block in place instead of
+                # rebuilding it from the library.  Rebuilding discards whatever
+                # the board author tuned on this instance (mask margins, pad
+                # clearance overrides, zone connections), which shows up as a
+                # burst of new clearance / solder_mask_bridge / shorting DRC
+                # violations even though only the thermal pad actually changed.
+                new_blk = edit_block(blk, swap["new_fp"], swap["value"],
+                                     swap["ep_pad"], swap["ep_size"],
+                                     new_nets, codes)
             pcb = pcb[:s] + new_blk + pcb[e:]
             print(f"   {ref:<6} {swap['old_fp'].split(':')[1]}")
             print(f"          -> {swap['new_fp'].split(':')[1]}")
