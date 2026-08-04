@@ -16,11 +16,6 @@
       "tags": [],
       "archived": false
     },
-    ".git": {
-      "description": "gitdir: /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenity-UAV/.git/worktrees/ciwt",
-      "tags": [],
-      "archived": false
-    },
     ".githooks/pre-commit": {
       "description": "!/bin/sh",
       "tags": [
