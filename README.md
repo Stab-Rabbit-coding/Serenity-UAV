@@ -13,7 +13,7 @@
 
 *"Can't stop the signal, and can't take the sky from me."*
 
-<img src="graphical-build-guide/pngs/07_iso_port_bow_dorsal.png" width="720" alt="Serenity UAV — isometric render of the full assembly">
+<img src="docs/img/assembled-iso.png" width="720" alt="Serenity UAV — isometric render of the full assembly">
 
 *Isometric render of the full Rev S assembly — port/bow/dorsal view.*
 
@@ -104,7 +104,7 @@ and foam-filled to the canonical Firefly outer mold line.
 
 </td>
 <td width="50%" valign="top">
-<img src="graphical-build-guide/pngs/16_closeup_gear.png" width="100%" alt="Landing Gear — vertical post and wire-brace legs"><br><br>
+<img src="docs/img/leg.png" width="100%" alt="Landing Gear — vertical post and wire-brace legs"><br><br>
 
 **Landing Gear**
 
@@ -117,7 +117,7 @@ deliberately progressive, field-replaceable failure mode rated for a 6 ft full-A
 </tr>
 <tr>
 <td width="50%" valign="top">
-<img src="graphical-build-guide/pngs/12_iso_stbd_bow_ventral.png" width="100%" alt="Nacelles — tilting tandem EDF pods"><br><br>
+<img src="docs/img/starboard-nacelle-vert.png" width="100%" alt="Nacelles — tilting tandem EDF pods"><br><br>
 
 **Nacelles**
 
@@ -128,7 +128,7 @@ variable-area nozzle gear-linked passively to the 0°–140° tilt pivot.
 
 </td>
 <td width="50%" valign="top">
-<img src="graphical-build-guide/pngs/09_iso_port_stern_dorsal.png" width="100%" alt="Powerplant — EDF thrust and power distribution"><br><br>
+<img src="docs/img/transparent-nacelle.png" width="100%" alt="Powerplant — EDF thrust and power distribution"><br><br>
 
 **Powerplant**
 
