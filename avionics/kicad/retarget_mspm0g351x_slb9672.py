@@ -296,6 +296,7 @@ def retarget(board: str, cfg: dict, apply_changes: bool) -> None:
     # --- FlightEngineer only: separate the overlapping TPM before touching the MCU ---
     shift = cfg.get("tpm_shift")
     if shift:
+        dy = float(shift)
         # Geometry comes from the *new* symbol: it is pin-for-pin identical to
         # the SLB9670 for pads 1-32 and additionally carries pad 33 (the
         # exposed pad), which the old symbol omitted.
@@ -344,7 +345,7 @@ def retarget(board: str, cfg: dict, apply_changes: bool) -> None:
                        r'\(at %g )([\d.]+)( \d+\))' % tix)
             text = re.sub(
                 prop_at,
-                lambda m: f"{m.group(1)}{float(m.group(2)) + shift:g}{m.group(3)}",
+                lambda m: f"{m.group(1)}{float(m.group(2)) + dy:g}{m.group(3)}",
                 text)
 
             # Re-emit the TPM's labels at the relocated pin coordinates.
