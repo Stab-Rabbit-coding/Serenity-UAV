@@ -37,13 +37,13 @@ jobs:
             fi
             
             # Get the last commit date for this branch
-            LAST_COMMIT_DATE=$(git log -1 --format=%ci origin/$branch | cut -d' ' -f1)
+            LAST_COMMIT_DATE=$(git log -1 --format=%ci "origin/$branch" | cut -d' ' -f1)
             LAST_COMMIT_TIMESTAMP=$(date -d "$LAST_COMMIT_DATE" +%s)
-            
+
             # Check if branch is older than 3 days
-            if [ $LAST_COMMIT_TIMESTAMP -lt $THREE_DAYS_AGO ]; then
+            if [ "$LAST_COMMIT_TIMESTAMP" -lt "$THREE_DAYS_AGO" ]; then
               echo "Deleting stale branch: $branch"
-              git push origin --delete $branch
+              git push origin --delete "$branch"
             else
               echo "Keeping branch (recent commits): $branch"
             fi
