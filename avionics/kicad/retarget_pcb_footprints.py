@@ -7,12 +7,12 @@ have them placed, re-anchoring each new footprint on the old one's origin,
 rotation and reference designator:
 
     CAN-PERIPH-GW-1   U1_1, U1_2   QFN-48 EP5.15 (7x7)  ->  Texas RHB0032E VQFN-32 EP3.45 (5x5)
-    Jayne             U3           QFN-48 EP5.15 (7x7)  ->  VQFN-48 EP4.1 (7x7)
+    Observer             U3           QFN-48 EP5.15 (7x7)  ->  VQFN-48 EP4.1 (7x7)
     both boards       TPM          QFN-32 EP3.45        ->  QFN-32 EP3.6 (PG-UQFN-32-1,-2)
 
-Why the Jayne footprint changes even though the package does not
+Why the Observer footprint changes even though the package does not
 ----------------------------------------------------------------
-Jayne stays in the 48-pin RGZ package, but the land it was drawn on is wrong
+Observer stays in the 48-pin RGZ package, but the land it was drawn on is wrong
 and always has been.  `QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm` is, per its own
 KiCad `descr` field, an Analog Devices LTC legacy QFN outline.  TI's RGZ0048F
 exposed thermal pad is 4.1 mm square (SLASFA6B land pattern 4229427/A), so the
@@ -60,9 +60,9 @@ JOBS = [
         ],
     },
     {
-        "board": "Jayne",
-        "pcb": KICAD / "Jayne/kicads/Jayne.kicad_pcb",
-        "net": KICAD / "Jayne/kicads/Jayne.kicad_sch",
+        "board": "Observer",
+        "pcb": KICAD / "Observer/kicads/Observer.kicad_pcb",
+        "net": KICAD / "Observer/kicads/Observer.kicad_sch",
         "swaps": [
             {"refs": ["U3"],
              "old_fp": "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm",
@@ -126,7 +126,7 @@ def pad_nets(block: str) -> dict[str, tuple[int, str]]:
     forward from `(pad "N"` for the next `(net ...)` would silently attribute
     the *following* pad's net to any pad that has none.
     """
-    out = {}
+    out: dict[str, tuple[int, str]] = {}
     for m in re.finditer(r'\(pad "([^"]+)"', block):
         _, end = sexpr_at(block, m.start())
         pad_blk = block[m.start():end]
@@ -229,13 +229,23 @@ def run(job: dict, apply_changes: bool) -> None:
             if f'(footprint "{swap["old_fp"]}"' not in blk:
                 print(f"   {ref:<6} unexpected footprint, skipped")
                 continue
-            at_line = re.search(r'\n\t\t\(at ([^\n]*)\)', blk).group(1)
-            uuid = re.search(r'\n\t\t\(uuid "([^"]+)"\)', blk).group(1)
-            layer = re.search(r'\n\t\t\(layer "([^"]+)"\)', blk).group(1)
-            ref_at = re.search(
-                r'\(property "Reference" "[^"]*"\n\s*\(at ([^\n]*)\)', blk).group(1)
-            val_at = re.search(
-                r'\(property "Value" "[^"]*"\n\s*\(at ([^\n]*)\)', blk).group(1)
+
+            def field(pattern: str, what: str) -> str:
+                """Pull a required field out of the placed footprint block."""
+                m = re.search(pattern, blk)
+                if m is None:
+                    raise SystemExit(
+                        f"{job['board']}: {ref} has no {what}; refusing to "
+                        f"rebuild the footprint from an incomplete block")
+                return m.group(1)
+
+            at_line = field(r'\n\t\t\(at ([^\n]*)\)', "placement")
+            uuid = field(r'\n\t\t\(uuid "([^"]+)"\)', "uuid")
+            layer = field(r'\n\t\t\(layer "([^"]+)"\)', "layer")
+            ref_at = field(r'\(property "Reference" "[^"]*"\n\s*\(at ([^\n]*)\)',
+                           "Reference text position")
+            val_at = field(r'\(property "Value" "[^"]*"\n\s*\(at ([^\n]*)\)',
+                           "Value text position")
 
             old_nets = pad_nets(blk)
             sch_nets = sch_pad_nets(tmp, ref)

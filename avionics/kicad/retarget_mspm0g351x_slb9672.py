@@ -3,9 +3,13 @@
 Retarget the Serenity trust-module MCU and TPM (2026-08-03).
 
     CAN-PERIPH-GW-1   MSPM0G3507 RGZ-48  ->  MSPM0G3518-Q1 RHB-32 (M0G3518QRHBRQ1)
-    Kaylee            MSPM0G3507 RGZ-48  ->  MSPM0G3518-Q1 RHB-32 (M0G3518QRHBRQ1)
-    Jayne             MSPM0G3507 RGZ-48  ->  MSPM0G3519-Q1 RGZ-48 (M0G3519QRGZRQ1)
+    FlightEngineer            MSPM0G3507 RGZ-48  ->  MSPM0G3518-Q1 RHB-32 (M0G3518QRHBRQ1)
+    Observer             MSPM0G3507 RGZ-48  ->  MSPM0G3519-Q1 RGZ-48 (M0G3519QRGZRQ1)
     all three         SLB9670VQ2.0       ->  SLB 9672AU2.0 (PG-UQFN-32-1,-2)
+
+ALREADY APPLIED. This pass ran on 2026-08-03 and is kept for audit and
+reproducibility; the symbols it consumes were renamed afterwards when main
+moved the boards to crew-role names, so it cannot be replayed as-is.
 
 This is a *non-destructive injection* pass over the existing `.kicad_sch`
 files.  The board generator scripts have drifted from the as-placed
@@ -44,7 +48,7 @@ offer the required peripheral function per SLASFA6B Table 6-2:
     RS485_RX       PB16 UART2_RX  ->  PA9  UART1_RX  (PF2)
     RS485_DE       PB2  GPIO      ->  PA21 GPIO
     RS485_FLT_N    PB3/PA8 GPIO   ->  PA22 GPIO
-    CANFD_FLT_N    PA8  GPIO      ->  PA23 GPIO      (Kaylee only)
+    CANFD_FLT_N    PA8  GPIO      ->  PA23 GPIO      (FlightEngineer only)
     FLEX_PWM_IO    PB3  GPIO      ->  PA25 TIMA0_C3  (PF5, gateway only)
     FLEX_BSHOT_IO  PB6  GPIO      ->  PA26 TIMG8_C0  (PF4, gateway only)
 
@@ -67,9 +71,9 @@ from pathlib import Path
 KICAD = Path(__file__).resolve().parent
 SYMDIR = KICAD / "symbols"
 
-MCU_OLD = "Jayne_MSPM0G3507_RGZ"
-TPM_OLD = "Jayne_SLB9670_TPM"
-TPM_NEW = "Jayne_SLB9672_TPM"
+MCU_OLD = "Observer_MSPM0G3507_RGZ"
+TPM_OLD = "Observer_SLB9670_TPM"
+TPM_NEW = "SLB9672_TPM"
 TPM_VALUE = "Infineon SLB 9672AU2.0"
 TPM_FP = "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.6x3.6mm"
 
@@ -80,13 +84,13 @@ GW_REMAP = {
     34: 23, 35: 24, 14: 25, 16: 26, 43: 27, 44: 28, 15: 29, 20: 30,
     48: 32, 49: 33,
 }
-KAYLEE_REMAP = {
+FLIGHT_ENGINEER_REMAP = {
     1: 1, 2: 2, 4: 3, 6: 4, 7: 5, 8: 6, 9: 7, 10: 8, 11: 9, 12: 10, 13: 11,
     25: 12, 26: 13, 27: 16, 28: 17, 34: 23, 35: 24, 14: 25, 15: 26, 16: 27,
     48: 32, 49: 33,
 }
 
-# Kaylee has a pre-existing schematic-layout defect: U_MCU (at y=90.17, a
+# FlightEngineer has a pre-existing schematic-layout defect: U_MCU (at y=90.17, a
 # 49-pin symbol 68.6 mm tall) and U_TPM (at y=129.54, 66 mm tall) are drawn on
 # top of each other.  Seventeen MCU pads land on the exact coordinate of a TPM
 # pad, so a single global label serves both symbols and silently shorts them:
@@ -101,11 +105,11 @@ KAYLEE_REMAP = {
 # y=110.49 and the TPM starts at y=104.14), so the TPM is moved down out of the
 # way first and its labels re-emitted from its authoritative pin map before the
 # MCU is remapped.  See TODO.md 1.2d.
-KAYLEE_TPM_SHIFT = 34.29        # mm, clears the retargeted MCU with margin
+FLIGHT_ENGINEER_TPM_SHIFT = 34.29        # mm, clears the retargeted MCU with margin
 
 # Authoritative TPM pin map: `tpm_nm` in
-# Kaylee/scripts/inject_kaylee_trust_module.py, plus pad 33 (exposed pad).
-KAYLEE_TPM_NETS = {
+# FlightEngineer/scripts/inject_flight_engineer_trust_module.py, plus pad 33 (exposed pad).
+FLIGHT_ENGINEER_TPM_NETS = {
     1: "+3V3", 2: "PGND", 8: "+3V3", 9: "PGND", 14: "+3V3", 16: "PGND",
     17: "TPM_RESET_N", 18: "TPM_PIRQ", 19: "TPM_SPI_SCK", 20: "TPM_SPI_CS",
     21: "TPM_SPI_MOSI", 22: "+3V3", 23: "PGND", 24: "TPM_SPI_MISO",
@@ -115,27 +119,27 @@ KAYLEE_TPM_NETS = {
 BOARDS = {
     "CAN-PERIPH-GW-1": {
         "sch": KICAD / "CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch",
-        "mcu_new": "Jayne_MSPM0G3518_Q1_RHB",
+        "mcu_new": "MSPM0G3518_Q1_RHB",
         "mcu_value": "TI MSPM0G3518-Q1",
         "mcu_fp": "Package_DFN_QFN:Texas_RHB0032E_VQFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm",
         "remap": GW_REMAP,
     },
-    "Kaylee": {
-        "sch": KICAD / "Kaylee/kicads/Kaylee.kicad_sch",
-        "mcu_new": "Jayne_MSPM0G3518_Q1_RHB",
+    "FlightEngineer": {
+        "sch": KICAD / "FlightEngineer/kicads/FlightEngineer.kicad_sch",
+        "mcu_new": "MSPM0G3518_Q1_RHB",
         "mcu_value": "TI MSPM0G3518-Q1",
         "mcu_fp": "Package_DFN_QFN:Texas_RHB0032E_VQFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm",
-        "remap": KAYLEE_REMAP,
-        "tpm_shift": KAYLEE_TPM_SHIFT,
-        "tpm_nets": KAYLEE_TPM_NETS,
+        "remap": FLIGHT_ENGINEER_REMAP,
+        "tpm_shift": FLIGHT_ENGINEER_TPM_SHIFT,
+        "tpm_nets": FLIGHT_ENGINEER_TPM_NETS,
         # MCU pads 48/49 shared a coordinate with TPM pads 32/16, so clearing
         # the TPM's labels also removed the MCU's.  Restore them from the
         # authoritative `mcu_nm` map before the remap runs.
         "mcu_restore": {48: "MCU_VCORE", 49: "PGND"},
     },
-    "Jayne": {
-        "sch": KICAD / "Jayne/kicads/Jayne.kicad_sch",
-        "mcu_new": "Jayne_MSPM0G3519_Q1_RGZ",
+    "Observer": {
+        "sch": KICAD / "Observer/kicads/Observer.kicad_sch",
+        "mcu_new": "MSPM0G3519_Q1_RGZ",
         "mcu_value": "TI MSPM0G3519-Q1",
         # RGZ0048F exposed thermal pad is 4.1 mm square, not the 5.15 mm of the
         # Analog Devices legacy QFN outline previously referenced.
@@ -185,7 +189,7 @@ def _add_no_connects(text: str, coords) -> str:
 def all_pin_coords(text: str, exclude: set) -> set:
     """Every pin coordinate of every placed symbol whose lib_id is not excluded.
 
-    Kaylee stacks U_MCU, U_TPM and U_ISOCAN on top of one another, so a label
+    FlightEngineer stacks U_MCU, U_TPM and U_ISOCAN on top of one another, so a label
     sitting on a TPM pin may in fact belong to a third symbol.  Relocating the
     TPM must not take those labels with it.
     """
@@ -267,7 +271,7 @@ def instances(text: str, lib_id: str):
 
 def label_index(text: str):
     """Map (x, y) -> list of (span, name) for every global label."""
-    idx = {}
+    idx: dict[tuple[float, float], list] = {}
     for m in re.finditer(
             r'\(global_label "([^"]+)"[^\n]*\(at ([-\d.]+) ([-\d.]+) (\d+)\)', text):
         key = (round(float(m.group(2)), 2), round(float(m.group(3)), 2))
@@ -287,9 +291,9 @@ def retarget(board: str, cfg: dict, apply_changes: bool) -> None:
     new_pins = pin_coords(new_sym)
 
     remap = cfg["remap"]
-    drop_pads = set()
+    drop_pads: set[int] = set()
 
-    # --- Kaylee only: separate the overlapping TPM before touching the MCU ---
+    # --- FlightEngineer only: separate the overlapping TPM before touching the MCU ---
     shift = cfg.get("tpm_shift")
     if shift:
         # Geometry comes from the *new* symbol: it is pin-for-pin identical to
@@ -387,9 +391,10 @@ def retarget(board: str, cfg: dict, apply_changes: bool) -> None:
             text = _add_no_connects(text, [
                 (round(tix + px, 2), round(tiy + shift - py, 2))
                 for pad, (px, py) in tpm_pin.items() if pad not in cfg["tpm_nets"]])
-            print(f"    {tref}: moved +{shift:g} mm clear of {"U_MCU"}, "
+            n_tpm_nets = len(cfg["tpm_nets"])
+            print(f"    {tref}: moved +{shift:g} mm clear of the MCU, "
                   f"{len(set(kill))} shared label(s) replaced by "
-                  f"{len(cfg['tpm_nets'])} from its authoritative pin map")
+                  f"{n_tpm_nets} from its authoritative pin map")
 
     for pad, net in sorted(cfg.get("mcu_restore", {}).items()):
         for _, mref, mix, miy, _ in list(instances(text, MCU_OLD)):
