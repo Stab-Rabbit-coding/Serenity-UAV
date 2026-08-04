@@ -3,7 +3,6 @@
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
 <!-- Last updated: 2026-08-03 — Automated reconciliation pass -->
-                                       scripts archived alongside their boards
 
 Pre-Rev Q (superseded by Cape-A/B architecture at Rev K):
 
@@ -77900,3 +77899,8 @@ avionics/kicad/symbols/Jayne_MSPM0G3518_Q1_RHB.kicad_sym — [PENDING AI CLASSIF
 avionics/kicad/symbols/Jayne_MSPM0G3519_Q1_RGZ.kicad_sym — [PENDING AI CLASSIFICATION]
 avionics/kicad/symbols/Jayne_SLB9672_TPM.kicad_sym — [PENDING AI CLASSIFICATION]
 avionics/kicad/__pycache__/retarget_mspm0g351x_slb9672.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-08-03) ---
+avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch.pre-g351x — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/kicads/Jayne.kicad_sch.pre-g351x — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch.pre-g351x — [PENDING AI CLASSIFICATION]

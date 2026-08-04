@@ -2,7 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-08-03 — Automated reconciliation pass -->
-WBS.md                            — Master WBS index (full record, compact: headings/short
                                     checkbox items only, ≤70 chars each, done+open); full
                                     detail lives in the subordinate WBS.md files per-folder
 TODO.md                           — Open-work-only subset of WBS.md (what's left to do)
@@ -78334,3 +78333,8 @@ avionics/kicad/symbols/Jayne_MSPM0G3518_Q1_RHB.kicad_sym — [PENDING AI CLASSIF
 avionics/kicad/symbols/Jayne_MSPM0G3519_Q1_RGZ.kicad_sym — [PENDING AI CLASSIFICATION]
 avionics/kicad/symbols/Jayne_SLB9672_TPM.kicad_sym — [PENDING AI CLASSIFICATION]
 avionics/kicad/__pycache__/retarget_mspm0g351x_slb9672.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-08-03) ---
+avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch.pre-g351x — [PENDING AI CLASSIFICATION]
+avionics/kicad/Jayne/kicads/Jayne.kicad_sch.pre-g351x — [PENDING AI CLASSIFICATION]
+avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch.pre-g351x — [PENDING AI CLASSIFICATION]

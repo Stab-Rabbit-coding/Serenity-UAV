@@ -115,6 +115,7 @@ BOARDS = {
         "mcu_value": "TI MSPM0G3518-Q1",
         "mcu_fp": "Package_DFN_QFN:Texas_RHB0032E_VQFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm",
         "remap": KAYLEE_REMAP,
+        "drop_pads": KAYLEE_STALE_PADS,
     },
     "Jayne": {
         "sch": KICAD / "Jayne/kicads/Jayne.kicad_sch",
@@ -162,13 +163,17 @@ def symbol_block(text: str, name: str) -> str:
 
 def pin_coords(sym_text: str) -> dict[int, tuple[float, float]]:
     """Map pad number -> (x, y) of the pin's connection point."""
+    # Match a full float including any exponent: a coordinate written as
+    # "3.55271e-15" must not be read as 3.55271.
+    num_pat = r'[-+]?[\d.]+(?:[eE][-+]?\d+)?'
     out = {}
     for blk in sexpr_blocks(sym_text, "pin"):
         num = re.search(r'\(number\s+"(\d+)"', blk)
-        at = re.search(r'\(at\s+(-?[\d.]+)\s+(-?[\d.]+)', blk)
+        at = re.search(r'\(at\s+(%s)\s+(%s)' % (num_pat, num_pat), blk)
         if not num or not at:
             continue
-        out[int(num.group(1))] = (float(at.group(1)), float(at.group(2)))
+        out[int(num.group(1))] = (round(float(at.group(1)), 2),
+                                  round(float(at.group(2)), 2))
     return out
 
 
@@ -204,8 +209,10 @@ def retarget(board: str, cfg: dict, apply_changes: bool) -> None:
     new_pins = pin_coords(new_sym)
 
     remap = cfg["remap"]
+    drop_pads = cfg.get("drop_pads", set())
     labels = label_index(text)
     moves = []          # (old_span, new_x, new_y, netname, ref, old_pad, new_pad)
+    drops = []          # (old_span, netname, ref, old_pad)
 
     for _, ref, ix, iy, rot in instances(text, MCU_OLD):
         if rot != 0:
@@ -216,6 +223,9 @@ def retarget(board: str, cfg: dict, apply_changes: bool) -> None:
             if not found:
                 continue                      # pad is unconnected on this board
             span, name = found[0]
+            if pad in drop_pads:
+                drops.append((span, name, ref, pad))
+                continue
             new_pad = pad if remap is None else remap.get(pad)
             if new_pad is None:
                 raise SystemExit(
@@ -231,6 +241,53 @@ def retarget(board: str, cfg: dict, apply_changes: bool) -> None:
         if pad != new_pad or remap is None:
             tag = "" if remap is None else "  <- REPINNED"
             print(f"   {ref:<6} pad {pad:>2} -> {new_pad:>2}  {name}{tag}")
+
+    for _, name, ref, pad in drops:
+        print(f"   {ref:<6} pad {pad:>2}     {name}  <- DROPPED (stale draft label)")
+
+    # Delete the stale labels whole, back-to-front so earlier spans stay valid.
+    # The extent has to be found by matching parens from the opening
+    # `(global_label`: a label body contains several nested `)))` runs of its
+    # own, so scanning for a literal paren run truncates it mid-way.
+    for span, *_ in sorted(drops, key=lambda d: d[0][0], reverse=True):
+        depth = 0
+        for i in range(span[0], len(text)):
+            if text[i] == "(":
+                depth += 1
+            elif text[i] == ")":
+                depth -= 1
+                if depth == 0:
+                    end = i + 1
+                    break
+        else:
+            raise SystemExit(f"{board}: unterminated global_label at {span[0]}")
+        while end < len(text) and text[end] in " \t":
+            end += 1
+        if end < len(text) and text[end] == "\n":
+            end += 1
+        start = span[0]
+        while start > 0 and text[start - 1] in " \t":
+            start -= 1
+        text = text[:start] + text[end:]
+
+    # Recompute move spans after the deletions shifted the text.
+    if drops:
+        labels = label_index(text)
+        rebuilt = []
+        for _, ref, ix, iy, rot in instances(text, MCU_OLD):
+            for pad, (px, py) in sorted(old_pins.items()):
+                if pad in drop_pads:
+                    continue
+                key = (round(ix + px, 2), round(iy - py, 2))
+                found = labels.get(key)
+                if not found:
+                    continue
+                span, name = found[0]
+                new_pad = remap[pad] if remap else pad
+                nx, ny = new_pins[new_pad]
+                rebuilt.append((span, round(ix + nx, 2), round(iy - ny, 2),
+                                name, ref, pad, new_pad))
+        moves = rebuilt
 
     # Apply label moves back-to-front so earlier spans stay valid.
     for span, nx, ny, *_ in sorted(moves, key=lambda m: m[0][0], reverse=True):
