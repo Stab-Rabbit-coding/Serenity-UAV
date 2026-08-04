@@ -1,11 +1,11 @@
-(kicad_symbol_lib (version 20211014) (generator serenity_cleanroom_q1)
-  (symbol "Jayne_MSPM0G3507_Q1_RGZ" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+(kicad_symbol_lib (version 20211014) (generator serenity_cleanroom_2026_08_03)
+  (symbol "Jayne_MSPM0G3519_Q1_RGZ" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
     (property "Reference" "U" (id 0) (at -22.86 35.56 0) (effects (font (size 1.27 1.27)) (justify left)))
-    (property "Value" "M0G3507QRGZRQ1" (at -22.86 -36.83 0) (effects (font (size 1.27 1.27)) (justify left)))
+    (property "Value" "M0G3519QRGZRQ1" (at -22.86 -36.83 0) (effects (font (size 1.27 1.27)) (justify left)))
     (property "Footprint" "Package_DFN_QFN:VQFN-48-1EP_7x7mm_P0.5mm_EP4.1x4.1mm" (id 2) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-    (property "Datasheet" "https://www.ti.com/lit/ds/symlink/mspm0g3507-q1.pdf" (id 3) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-    (property "ki_description" "TI MSPM0G3507-Q1 (M0G3507QRGZRQ1) Arm Cortex-M0+ MCU with CAN-FD, 48-pin RGZ VQFN, AEC-Q100 Grade 1, -40 to +125 degC. Pin map verified identical to the non-Q1 MSPM0G3507SRGZR. Derived from the Serenity clean-room symbol built from TI SLASEX6C Fig 6-4 / Table 6-2; re-verified against TI SLASF88C Fig 6-4 / Table 6-2. See REFERENCES.md REF-SENSOR-004Q." (id 4) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-    (symbol "Jayne_MSPM0G3507_Q1_RGZ_1_1"
+    (property "Datasheet" "https://www.ti.com/lit/ds/symlink/mspm0g3519-q1.pdf" (id 3) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_description" "TI MSPM0G3519-Q1 (M0G3519QRGZRQ1) Arm Cortex-M0+ MCU with CAN-FD, 512KB flash / 128KB SRAM, 48-pin RGZ VQFN 7x7mm, AEC-Q100 Grade 1, -40 to +125 degC. RGZ-48 pin map verified identical to the MSPM0G350x/-Q1 RGZ-48 (SLASFA6B Fig 6-5 vs SLASEX6C Fig 6-4). Clean-room from TI SLASFA6B Fig 6-5 / Table 6-2. See REFERENCES.md REF-SENSOR-004R." (id 4) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (symbol "Jayne_MSPM0G3519_Q1_RGZ_1_1"
       (rectangle (start -22.86 -34.29) (end 22.86 34.29)
         (stroke (width 0.254)) (fill (type background)))
       (pin bidirectional line (at -26.67 31.75 0) (length 3.81)

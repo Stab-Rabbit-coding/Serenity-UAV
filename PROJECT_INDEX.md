@@ -2,7 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-08-03 — Automated reconciliation pass -->
-SECURITY.md                       — Security policy and vulnerability reporting
 WBS.md                            — Master WBS index (full record, compact: headings/short
                                     checkbox items only, ≤70 chars each, done+open); full
                                     detail lives in the subordinate WBS.md files per-folder
@@ -78322,9 +78321,16 @@ avionics/kicad/Wash/scripts/__pycache__/gen_wash_sch.cpython-313.pyc — [IGNORE
 avionics/kicad/Wash/scripts/__pycache__/sync_wash_pcb_nets.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
 
 ## --- AUTO-DISCOVERED (2026-08-03) ---
-avionics/kicad/symbols/Jayne_MSPM0G3507_Q1_RGZ.kicad_sym — [PENDING AI CLASSIFICATION]
 
 ## --- AUTO-DISCOVERED (2026-08-03) ---
 avionics/datasheets/mspm0g3518-q1.pdf — [PENDING AI CLASSIFICATION]
 avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-08-03_142456.zip — [PENDING AI CLASSIFICATION]
 avionics/kicad/Kaylee/kicads/Kaylee-backups/Kaylee-2026-08-03_142456.zip — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-08-03) ---
+avionics/datasheets/slb9672.pdf — [PENDING AI CLASSIFICATION]
+avionics/kicad/retarget_mspm0g351x_slb9672.py — [PENDING AI CLASSIFICATION]
+avionics/kicad/symbols/Jayne_MSPM0G3518_Q1_RHB.kicad_sym — [PENDING AI CLASSIFICATION]
+avionics/kicad/symbols/Jayne_MSPM0G3519_Q1_RGZ.kicad_sym — [PENDING AI CLASSIFICATION]
+avionics/kicad/symbols/Jayne_SLB9672_TPM.kicad_sym — [PENDING AI CLASSIFICATION]
+avionics/kicad/__pycache__/retarget_mspm0g351x_slb9672.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
