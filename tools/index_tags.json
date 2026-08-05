@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-04",
+  "generated": "2026-08-05",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -6664,6 +6664,13 @@
       "archived": false
     },
     "avionics/datasheets/eGH.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/infineon-optiga-trust-m-datasheet-en.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -16180,6 +16187,7 @@
       "avionics/datasheets/ds26lv31qml.pdf",
       "avionics/datasheets/ds26lv32at.pdf",
       "avionics/datasheets/eGH.pdf",
+      "avionics/datasheets/infineon-optiga-trust-m-datasheet-en.pdf",
       "avionics/datasheets/iso6442.pdf",
       "avionics/datasheets/isow1044.pdf",
       "avionics/datasheets/isow1412.pdf",
