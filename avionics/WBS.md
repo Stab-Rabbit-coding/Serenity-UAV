@@ -507,6 +507,39 @@ REFERENCES.md Removed/Superseded Citations).
     CAN-PERIPH-GW-1, Pilot, and XO and compare against the violation counts
     already recorded in this file to confirm the rename introduced no new
     errors.
+- [ ] **★ SLB9672 → OPTIGA™ Trust M, `CAN-PERIPH-GW-1` + Flight Engineer only
+    (added 2026-08-06), not started.** At the user's direction, citing the
+    SLB9672's TPM-2.0 startup/self-test sequence as a boot-latency concern
+    for these two specific boards (REF-SENSOR-016). **Scope: two boards
+    only** — Observer, Commo, Pilot, XO keep the SLB9672 (root `AGENTS.md`
+    §1 "every Cape carries a TPM" applies to Pilot/XO, the fleet's actual
+    Capes; the gateway and PDB are standalone boards, not Capes, so this is
+    not a fleet-wide TPM policy change). Blocked on two independent gates,
+    same pattern as the STS3215 servo datasheet gate
+    (`docs/CARGO_WINCH_SPECIFICATION.md` §3.1, historical): **(1)** the
+    primary OPTIGA Trust M datasheet was unreachable in the session that
+    recorded this decision (`infineon.com` blocked by network egress
+    policy) — no verified pin-to-pad table exists to build a clean-room
+    KiCad symbol from, the same way `Observer_SLB9672_TPM` was built off
+    the SLB9672's own datasheet tables; **(2)** `kicad-cli` was not
+    installed in that session either, so even a pin-verified edit could not
+    be ERC-checked before committing — the same reason
+    `inject_flight_engineer_trust_module.py` uses surgical text injection
+    instead of full regeneration on Flight Engineer already. Not a
+    pin-for-pin swap: OPTIGA Trust M is I²C, not SPI, so this removes the
+    dedicated TPM SPI bus and needs a real I²C bus assignment decision —
+    Flight Engineer's `U_MCU` (MSPM0G3507) already exposes an I²C0 bus
+    (`PDB_SDA`/`PDB_SCL`) used by the power-monitor ICs that a secure
+    element *might* share (unverified — see gate above); `CAN-PERIPH-GW-1`'s
+    equivalent bus has not been checked. **Flight Engineer's PCB has no
+    placed TPM footprint yet** (see the generator-drift item above), so a
+    schematic-only part swap there is lower-risk now than after the first
+    `Update PCB from Schematic` pass — do this before that pass, not after,
+    once the two gates clear. No `.kicad_sch`/`.kicad_pcb` file has been
+    touched for this change. See
+    `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` §C and
+    `avionics/kicad/FlightEngineer/FlightEngineer.md` "Section H" for the
+    per-board write-ups.
 - [ ] **`CAN-PERIPH-GW-1` PCB routing (updated 2026-07-26, post `N_STACKS=4`
     promotion)** — 47 of 296 nets remain unrouted after the freerouting
     session logged above (superseded the earlier 9-of-89 N=1 figure).

@@ -84,6 +84,7 @@ CERN-OHL-W 2.0 / CC BY-SA 4.0 dual-license split)
     - [REF-SENSOR-013: SPT Servo SPT5425LV — 25 kgf·cm Analog/Digital PWM Servo (fleet-standard high-torque body)](#ref-sensor-013-spt-servo-spt5425lv--25-kgfcm-analogdigital-pwm-servo-fleet-standard-high-torque-body)
     - [REF-SENSOR-014: LibreServo v2 (stab-rabbit-coding fork) — Open-Source Smart-Servo Control Board](#ref-sensor-014-libreservo-v2-stab-rabbit-coding-fork--open-source-smart-servo-control-board)
     - [REF-SENSOR-015: OpenServoCore — Open-Source SG90/MG90-Class Smart-Servo Control Board](#ref-sensor-015-openservocore--open-source-sg90mg90-class-smart-servo-control-board)
+    - [REF-SENSOR-016: Infineon OPTIGA™ Trust M — I2C Secure Element (planned, CAN-PERIPH-GW-1 + Flight Engineer only)](#ref-sensor-016-infineon-optiga-trust-m--i2c-secure-element-planned-can-periph-gw-1--flight-engineer-only)
 - [Part XIII — Telecommunications Standards](#part-xiii--telecommunications-standards)
     - [REF-TIA-001: ANSI/TIA-485-A — Electrical Characteristics of Generators and Receivers for Use in Balanced Digital Multipoint Systems (RS-485)](#ref-tia-001-ansitia-485-a--electrical-characteristics-of-generators-and-receivers-for-use-in-balanced-digital-multipoint-systems-rs-485)
 - [Part XIV — Upstream CAD / Derivative-Source Attributions](#part-xiv--upstream-cad--derivative-source-attributions)
@@ -1555,6 +1556,19 @@ ERROR-pin push-pull-vs-open-drain and the QFN24 EP dimensions are layout-verific
 
 **Used in:** `avionics/kicad/Observer/kicads/Observer.kicad_sch` (U5), `avionics/kicad/CAN-PERIPH-GW-1/` (U2 per stack), `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch` (U_TPM), `avionics/kicad/Commo/kicads/Commo.kicad_sch` (TPM), `avionics/kicad/Pilot/kicads/Pilot.kicad_sch`/`Pilot_rebuild.kicad_sch` (TPM), `avionics/kicad/XO/kicads/XO.kicad_sch` (TPM).
 
+**Planned partial supersession (2026-08-06, not yet implemented — see REF-SENSOR-016).**
+`CAN-PERIPH-GW-1` and Flight Engineer are slated to move from this SPI TPM to the
+Infineon OPTIGA™ Trust M I2C secure element, at the user's direction, citing SLB9672's
+comparatively slow TPM-2.0 startup/self-test sequence as a boot-latency concern for
+those two boards specifically. **Neither board's `.kicad_sch`/`.kicad_pcb` has been
+edited yet** — see REF-SENSOR-016 for why (datasheet/tooling access gate) and
+`avionics/WBS.md` §1.9.2 for the open item. This entry (REF-SENSOR-011) remains
+authoritative and unchanged for Observer, Commo, Pilot, and XO, which are **not** in
+scope for this change and keep the SLB9672 (root `AGENTS.md` §1 "every Cape carries a
+TPM" — Pilot/XO are the fleet's actual Capes; `CAN-PERIPH-GW-1` and Flight Engineer are
+standalone boards, not Capes, so this substitution does not conflict with that
+requirement).
+
 ---
 
 ### REF-SENSOR-012: STS3215 Serial-Bus Servo — Cargo Winch Drive (SUPERSEDED)
@@ -1733,6 +1747,82 @@ and inherit this note when that phase is implemented, but are not otherwise touc
 
 **Used in:** `current-specification/bom_revS.json`, `current-specification/bom_revS.csv`,
 `airframe/stls/fuselage/cargo/generate_cargo_mounts.py`
+
+---
+
+### REF-SENSOR-016: Infineon OPTIGA™ Trust M — I2C Secure Element (planned, CAN-PERIPH-GW-1 + Flight Engineer only)
+
+> **⚠ REQUIRES VERIFICATION (root `AGENTS.md` §4).** The primary datasheet
+> (`infineon-optiga-trust-m-datasheet-en.pdf`, Infineon document reference
+> `Z8F80311641-D`) could **not** be fetched in this session — `infineon.com`,
+> `mouser.com`, `digikey.com`, and `device.report` are all blocked by this
+> environment's network egress policy. Everything below is sourced from
+> Infineon's own public GitHub overview
+> (<https://github.com/Infineon/optiga-trust-m-overview>, fetched successfully)
+> plus WebSearch-aggregated snippets of the primary datasheet, **not** a direct
+> read of the datasheet PDF itself. **The pin-to-pad table in particular is
+> not verified** and must not be used for a footprint or schematic pin
+> binding until read directly off the primary datasheet. No KiCad symbol,
+> footprint, or schematic net has been created against these figures — see
+> "Status" below.
+
+| Field | Value |
+|---|---|
+| **Manufacturer** | Infineon Technologies |
+| **Product family** | OPTIGA™ Trust M, SLS32AIA — industrial variant (`SLS32AIA010MK` cited as the PSA Level 3-certified SKU in the sourced overview) |
+| **Source consulted** | <https://github.com/Infineon/optiga-trust-m-overview> (official Infineon GitHub, fetched successfully) |
+| **Datasheet (not fetched this session)** | Z8F80311641-D — <https://www.infineon.com/dgdl/Infineon-OPTIGA%20TRUST%20M%20SLS32AIA-DataSheet-v03_00-EN.pdf?fileId=5546d4626c1f3dc3016c853c271a7e4a> |
+| **Package** | PG-USON-10, 3×3 mm |
+| **Interface** | I²C, with an optional "I²C Shielded Connection" encrypted/authenticated channel over the same bus |
+| **Supply voltage** | 3.3 V nominal; 5.5 V absolute maximum |
+| **Temperature range** | −40°C to +105°C (matches this project's other automotive/industrial-grade parts) |
+| **Asymmetric crypto** | ECC up to NIST P-521; Brainpool up to 512-bit |
+| **Symmetric crypto** | RSA up to 2048; AES up to 256; HMAC up to SHA-512 |
+| **Hash** | SHA-256 |
+| **Key/cert storage** | Up to 10 kB user memory, multiple key/certificate slots |
+| **Anti-replay** | 4 monotonic up-counters |
+| **Power modes** | Hibernate (application context saved/restored across power-off, per the overview text) |
+| **Certification** | Common Criteria EAL6+ (hardware); PSA Level 3 (cited SKU) |
+| **⚠ Pin-to-pad table** | Not verified this session. WebSearch-aggregated snippets suggest VDD/GND/SDA/SCL on a 10-pin USON with several NC pins, but this is **not** cited to a page/table in the primary datasheet and must be independently confirmed before use. |
+| **⚠ Boot/power-up latency figure** | **Not found in any source reachable this session.** The user's stated rationale for this swap is SLB9672's TPM-2.0 startup/self-test sequence being slow relative to a lighter-weight secure element; this is architecturally plausible (OPTIGA Trust M implements a vendor-specific command set, not the full TCG TPM 2.0 command interpreter/self-test suite a TPM 2.0 part like the SLB9672 runs), but no numeric figure for either part's actual power-on-ready time was verified in this session. Do not cite a specific millisecond figure until one is read off a primary datasheet. |
+
+**Why this part, not another TPM:** the request was specifically to move away from
+a TPM-class part on these two boards for latency reasons, not to swap TPM vendors.
+OPTIGA Trust M supports ECDSA signing (asymmetric), AES/HMAC (symmetric), and
+monotonic counters (anti-replay) — the primitives this project's message-signing
+architecture actually uses on these two boards — without implementing the TCG
+TPM 2.0 command protocol, PCR/attestation model, or the associated startup
+self-test sequence a TPM 2.0 part runs. Since `CAN-PERIPH-GW-1` and Flight
+Engineer are bare-metal MCU boards signing/verifying discrete CAN-FD/RS-485
+frames (not doing OS-level measured boot or PCR attestation), the TPM's
+attestation machinery was not being used by this project's own architecture on
+these two boards in the first place — see `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`
+and `avionics/kicad/FlightEngineer/FlightEngineer.md` for the specific open-item
+write-ups.
+
+**Status: decision recorded, NOT implemented.** No `.kicad_sch`, `.kicad_pcb`,
+clean-room symbol, or footprint has been created or edited for this part. Two
+independent gates block that work, per root `AGENTS.md` §4 and §7:
+
+1. **Datasheet access** — the pin-to-pad table above is unverified (see the
+   gate note at the top of this entry).
+2. **`kicad-cli` availability** — this project's standard for a schematic/PCB
+   edit is an ERC/DRC pass (root `AGENTS.md` §7); `kicad-cli` is not installed
+   in this session's environment, so even a pin-verified edit could not be
+   checked before being committed. Flight Engineer's own trust-module section
+   was already added via a narrow text-injection script rather than a full
+   regeneration specifically because a bad regeneration silently reintroduced
+   drift undetectable without ERC (`inject_flight_engineer_trust_module.py`
+   docstring) — the same risk applies here, more acutely, for a part with an
+   unverified pinout.
+
+**Applied to (planned):** `CAN-PERIPH-GW-1` (replacing U2, SLB9672, per stack)
+and Flight Engineer (replacing `U_TPM`, SLB9672, in "Section H: Trust Module").
+**Not applied to:** Observer, Commo, Pilot, XO — out of scope for this request;
+those boards keep the SLB9672 (REF-SENSOR-011).
+
+**Used in:** `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` (open item),
+`avionics/kicad/FlightEngineer/FlightEngineer.md` (open item), `avionics/WBS.md` §1.9.2
 
 ---
 
@@ -1947,6 +2037,7 @@ Add verified section numbers to the relevant files and update this table.
 | SPT5425LV servo — stall current; rotation-pin removal procedure (REF-SENSOR-013) | `REFERENCES.md` REF-SENSOR-013, `docs/CARGO_WINCH_SPECIFICATION.md` §3.1/§3.9 (Rev C), `current-specification/bom_revS.json`/`.csv`, `airframe/openscad/nacelles/nacelle_servo_bracket.scad` | Stall/running current is not published on either sourced listing (manufacturer product page or servodatabase.com), so RAIL-2 and the nacelle-tilt servo rail budgets carry the prior STS3215-era 1.2 A figure forward as a **placeholder, not a verified SPT5425LV number**. Separately, the exact internal location and removal procedure for the rotation-limiting pin has not been confirmed by teardown — the "remove the pin for continuous rotation" mod is a well-known technique on hobby servos generally, but part-specific verification is outstanding. | Bench-measure SPT5425LV stall current at 5–6 V before finalizing RAIL-2 / nacelle-tilt servo-rail sizing; photograph/document the pin-removal procedure on a teardown unit before committing steps to the build guide. Do not fabricate either figure. (`docs/TODO.md` §0.x) |
 | LibreServo v2 fork — RS-485 differential bus electrical integration onto `CAN-PERIPH-GW-1` (REF-SENSOR-014) | `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`, `docs/CARGO_WINCH_SPECIFICATION.md` §5.1 (Rev C) | LibreServo's daisy-chain is genuine differential RS-485 (onboard transceiver on the servo side); `J_FLEX` on the gateway exposes only a bare `FLEX_UART_TX/RX` pair, not a local RS-485 transceiver for this specific servo drop. Also, the fork's own isolated-RS-485/CAN-FD/TPM upgrade (`PCB/RS485-CANFD-TPM-upgrade.md`) is schematic-only with no footprints, PCB placement, or firmware port yet, and the TPM addition has not been started at all. | Decide and document the gateway-side RS-485 transceiver approach (add one at the harness, or extend the gateway schematic) before winch/nacelle-tilt firmware bring-up; do not assume TPM-signed servo-native messages until the fork's TPM work lands — rely on the gateway's own TPM signing the CAN-FD/RS-485 frame instead. (`airframe/fuselage-mid/WBS.md`) |
 | OpenServoCore hardware maturity for SG90 cargo servos (REF-SENSOR-015) | `REFERENCES.md` REF-SENSOR-015, `current-specification/bom_revS.json`/`.csv` `SERVO-CARGO` | Upstream project status is explicitly "in active development, nothing here is shippable yet," hardware validated only to revision B as of the source consulted. | Re-check `github.com/OpenServoCore/open-servo-core` project status before procurement; do not order SG90+OpenServoCore boards in flight-article quantity until upstream reaches a tagged/shippable hardware release. (`docs/TODO.md` §0.x) |
+| OPTIGA™ Trust M pin-to-pad table + boot-latency figure, and `CAN-PERIPH-GW-1`/Flight Engineer schematic edits (REF-SENSOR-016) | `REFERENCES.md` REF-SENSOR-016, `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`, `avionics/kicad/FlightEngineer/FlightEngineer.md`, `avionics/WBS.md` §1.9.2 | Primary datasheet unreachable this session (`infineon.com`/`mouser.com`/`digikey.com`/`device.report` all blocked by network egress policy) — pin-to-pad table and any specific boot/power-up latency figure are unverified. `kicad-cli` is also not installed in this session, so even a verified schematic edit could not be ERC/DRC-checked. **No `.kicad_sch`/`.kicad_pcb` file has been touched for this change.** | Read the pin-to-pad table and any startup-timing figures off the primary datasheet (or a reachable mirror) from an environment with `infineon.com` access; build a clean-room KiCad symbol the same way `Observer_SLB9672_TPM` was built (datasheet tables, not vendor convention); confirm `kicad-cli` availability before editing `CAN-PERIPH-GW-1.kicad_sch`/`FlightEngineer.kicad_sch`, then run ERC. Do not fabricate pin numbers or a latency figure. (`avionics/WBS.md` §1.9.2) |
 | Wing/nacelle Hall tilt encoder — sensor selection | `current-specification/bom_revS.csv` SKIPPER-TILT-ENC-PCB, `avionics/kicad/ENC-NACELLE-1.*`, `docs/TILT_SPAR_ANALYSIS.md` §1/§3.5/§8.1, `avionics/WBS.md` §1.9.1 | **RESOLVED 2026-07-19 (datasheets in repo).** MT6701 (Rev 1.9) was **rejected** — its datasheet §6 confirms it is **on-axis only** (Ø6 mm cyl magnet, off-axis misalignment ≤ 0.3 mm), so it cannot read the through-shaft off-axis; AS5600 has the same limit. Part selected = **AKM AK7455** (REF-SENSOR-008), which explicitly supports the Off-Axis (side-of-shaft) configuration; pinout/interface **verified** vs datasheet 200800064-E-00 and the schematic rebuilt (`kicad-cli` ERC 0-error). Interface is **SPI** (no off-axis absolute IC offers I²C). | **Electrical spec resolved.** Remaining, now scoped as bench/layout items (not "unverified part"): (1) off-axis flux 10–70 mT at the IC with the chosen ring/gap; (2) EEPROM INL calibration over −5..90° (AKM app support); (3) ERROR-pin push-pull vs open-drain; (4) QFN24 4×4 EP dims (EP left floating) + wing-pocket resize 3×3→4×4 (`HALL_*` in `wings_s1223_revo.scad`); (5) confirm the AKM product URL if the datasheet is re-hosted. TODO §0.8 / `airframe/wings-nacelles/WBS.md` §1.1.3.6. |
 | Pilot's own inline "SLB9672" TPM symbol pin numbers | `avionics/kicad/Pilot/kicads/Pilot.kicad_sch` | Found 2026-07-26 while building Commo's TPM addition (which deliberately reused the separately-verified `Observer_SLB9670_TPM` clean-room symbol instead, precisely to avoid this defect): Pilot's own, independently-authored inline "SLB9670" symbol had pin numbers that did not match datasheet Revision 1.4 Tables 3–5. Not fixed at the time — out of scope for the CAN-FD/RS-485 trust-module task. **2026-08-01 SLB9670→SLB9672 migration:** the symbol/lib_id/value text was renamed to "SLB9672" (its pin *numbers* were left exactly as they were — this defect predates and is independent of the chip migration) so it now carries the same wrong-pin-number defect under the new chip's name (REF-SENSOR-011). Still not fixed — still out of scope. | Rebuild Pilot's TPM symbol from REF-SENSOR-011 using the same clean-room `parse_real_symbol`/pin-table method as `SLB9672_TPM`, or replace the instance with that verified symbol outright; re-run `kicad-cli sch erc` to confirm no regression against Pilot's existing 48-violation baseline. |
 | VimDrones `ap_periph_pico` / ESC S50 concept-only inspiration, `CAN-PERIPH-GW-1` and CAN-PERIPH-GW-1's ESC-gateway deployment mode | `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` | **Not a citation defect — documented here for license-boundary auditability.** `CAN-PERIPH-GW-1` was built as a fleet-integrated remix of the *publicly documented product concept* at <https://dev.vimdrones.com/products/vimdrones_can_periph_pico/> and <https://dev.vimdrones.com/products/vimdrones_esc_s50/> (peripheral-bus CAN/servo gateway; per-ESC CAN telemetry). VimDrones' own KiCad source (`VimDrones/AM32_esc_development_board` on GitHub) is licensed GPL-3.0, which is incompatible with this project's CC-BY-4.0-or-better attribution baseline for derivative files — no VimDrones schematic, footprint, or geometry was copied; only the public product specification was used as design inspiration, and the entire trust-module implementation (MCU, TPM, isolators, netlist) is original clean-room work against TI/Infineon datasheets. | N/A — informational; see `CAN-PERIPH-GW-1.md` "Why VimDrones' concept but not VimDrones' hardware" |

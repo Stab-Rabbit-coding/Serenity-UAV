@@ -263,14 +263,37 @@ like every other node:
 | Ref | Part | Function |
 |---|---|---|
 | U_MCU | TI MSPM0G3507 | Local trust-module MCU (pinmux verified against SLASEX6C) |
-| U_TPM | Infineon SLB9672 | SPI TPM 2.0 — same part standardized fleet-wide |
+| U_TPM | Infineon SLB9672 | SPI TPM 2.0 — current as-built; **see planned-change callout below** |
 | U_ISOCAN | TI ISOW1044BDFMR | Isolated CAN-FD transceiver, 20-pin DFM, 5 kV reinforced |
 | U_RS485 | TI ISOW1412 (REFERENCES.md REF-SENSOR-010) | Isolated RS-485 transceiver, own integrated isolated DC-DC (no external isolated supply needed, unlike the superseded ADM2795EBRWZ) |
 
 **PCB not yet synced:** `FlightEngineer.kicad_pcb` predates this injection and carries none of these
 four footprints — `gen_flight_engineer.py` itself has drifted from the checked-in generator and is not
 safe to regenerate from (tracked as a separate open item). Bringing the PCB up to date is
-open work (root `TODO.md` §1.2a).
+open work (root `TODO.md` §1.2a). **This is actually the right moment for the `U_TPM` swap below**,
+since there is no placed footprint yet to rework — a schematic-only edit is strictly lower-risk here
+than it would be after the first `Update PCB from Schematic` pass.
+
+> **⚠ Planned change, NOT implemented (2026-08-06): SLB9672 → OPTIGA™ Trust M.**
+> At the user's direction, `U_TPM` is slated to move from the SPI SLB9672 TPM to the
+> Infineon OPTIGA™ Trust M I²C secure element, citing SLB9672's TPM-2.0 startup/
+> self-test sequence as a boot-latency concern — see REF-SENSOR-016. **Not done.**
+> Blocked on the same two gates as `CAN-PERIPH-GW-1` (see its `.md` §C callout):
+> unverified primary datasheet (network egress blocked `infineon.com` in the
+> session that recorded this decision) and no `kicad-cli` available to ERC-check
+> an edit. One thing specific to this board makes the swap more attractive here
+> than elsewhere: `U_MCU` (TI MSPM0G3507) already exposes an I²C0 bus on this
+> board — `PDB_SDA`/`PDB_SCL` (pins `PA0`/`PA1`), used elsewhere for the power-
+> monitoring ICs — which an I²C secure element could potentially share (distinct
+> I²C address; OPTIGA Trust M's default address does not appear to conflict with
+> the INA226 0x40–0x44 or BQ76930 0x08 ranges already on that bus, though this is
+> not independently verified against the OPTIGA datasheet — see the gate above).
+> If that holds, this swap would also **free the six MCU pins** currently
+> dedicated to the TPM's SPI bus (`TPM_SPI_CS/SCK/MOSI/MISO`, `TPM_RESET_N`,
+> `TPM_PIRQ` — pads 8/9/10/11/12/13 in `inject_flight_engineer_trust_module.py`).
+> Do not implement any of this — including the I²C address/sharing claim — until
+> it is confirmed against a primary datasheet and can be ERC-checked. Tracked in
+> `avionics/WBS.md` §1.9.2.
 
 ---
 
