@@ -190,6 +190,17 @@
 //   cam actuation) is original work authored for this project; no BamJr
 //   geometry, mesh, or source is copied.  See REFERENCES.md [REF-CAD-001].
 //
+// Prior-art attribution (REFERENCES.md REF-CAD-005):
+//   The Rev T3 master-flap / seal-flap arrangement — alternate flaps lapped
+//   radially outboard so a circumferential flap overlap is realisable instead
+//   of interpenetrating — follows the principle disclosed in E. W. Ryan and
+//   G. H. Israel, Jr., "Exhaust nozzle flap seal arrangement," U.S. Patent
+//   4,128,208, Dec. 5, 1978 (assigned to General Electric Co.; EXPIRED, public
+//   domain — verified 2026-08-09).  Cited for the principle ONLY: that patent
+//   centres its seals with a bellcrank linkage, whereas each seal flap here
+//   rides its own hinge identically to a master flap.  No patent text, figure,
+//   or geometry is copied.  See REFERENCES.md [REF-CAD-005].
+//
 // Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 // License: CC BY 4.0  <https://creativecommons.org/licenses/by/4.0/>
 // Date:    2026-05-24
@@ -812,9 +823,12 @@ RENDER_PART = "asm";   // "throat" | "ring" | "flap" | "flap_seal" | "asm"
 //       openscad -D 'RENDER_PART="asm"' -o <out> nacelle_nozzle_iris.scad
 //   airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-open.stl
 //       openscad -D 'RENDER_PART="asm"' -D 'FLAP_PHI=PHI_OPEN' -o <out> …
-// (nacelle_nozzle_iris-closed-5deg.stl predates this parameter and was exported
-// from a source revision that is no longer in the tree — its swing angle could
-// not be reproduced from this file, so it was left untouched.  See the WBS item.)
+// (nacelle_nozzle_iris-closed-5deg.stl was DISCARDED 2026-08-09: it was an
+// earlier, abandoned attempt at shingling the flaps, exported from a source
+// revision no longer in the tree — rendering this file at phi = 5 deg
+// reproduced neither its facet count nor its volume.  Superseded by the Rev T3
+// master/seal shingle, which is generated from this source.  User decision
+// 2026-08-09; see TODO.md §1.1.3.)
 FLAP_PHI = PHI_CLOSED;   // [deg] flap swing angle for the asm preview
 
 if (RENDER_PART == "throat") {

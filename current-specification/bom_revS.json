@@ -1187,17 +1187,30 @@
       "Notes": "4 per pylon wing block × 2 pylons; M3×16 SHCS bolt from wing side"
     },
     {
-      "Ref": "PRINT-NACELLE-FLAP",
-      "Description": "nacelle_nozzle_flap.stl — Nacelle nozzle overlapping conical flap (50mm) — Rev S tangential-hinge flap",
+      "Ref": "PRINT-NACELLE-FLAP-MASTER",
+      "Description": "nacelle_nozzle_flap.stl — Nacelle nozzle overlapping conical flap, MASTER — Rev T3 tangential-hinge flap",
       "Category": "Printed Part",
-      "Qty": "16",
-      "Unit_Mass_g": "2",
-      "Total_Mass_g": "32",
+      "Qty": "8",
+      "Unit_Mass_g": "3.4",
+      "Total_Mass_g": "27.2",
       "Supplier": "In-house 3D print",
       "Supplier_PN_or_Search": "PETG body + translucent-blue PETG inner face — see FIL-PETG",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "8 per nacelle x 2; print flat (concave/flow face down); tangential hinge (PIN-3X18) + spiral-cam follower (PIN-2X4); translucent-blue inner face is a visual airflow reference only (WS2812B backlight removed); RENDER_PART=\"flap\" of nacelle_nozzle_iris.scad; supersedes the archived Rev O flat petal (nacelle_nozzle_petal.stl)"
+      "Notes": "4 per nacelle x 2 (Rev T3 splits the former 8-per-nacelle single flap into 4 master + 4 seal); print flat (concave/flow face down); tangential hinge (PIN-3X18) + spiral-cam follower (PIN-2X4); translucent-blue inner face is a visual airflow reference only (WS2812B backlight removed); RENDER_PART=\"flap\" of nacelle_nozzle_iris.scad; band r25.0-27.5 mm UNCHANGED from Rev S, so it still sets exit_r(phi) and the 75%/105% bore targets [REF-CAD-005]. Mass measured from the rendered solid (2.637 cm^3 x 1.27 g/cm^3 PETG = 3.35 g); at 2.5 mm wall with 3 x 0.4 mm perimeters the section is effectively solid, so the previous 2 g/flap figure was an under-estimate. Supersedes the archived Rev O flat petal (nacelle_nozzle_petal.stl)"
+    },
+    {
+      "Ref": "PRINT-NACELLE-FLAP-SEAL",
+      "Description": "nacelle_nozzle_flap_seal.stl — Nacelle nozzle overlapping conical flap, SEAL — Rev T3 shingle",
+      "Category": "Printed Part",
+      "Qty": "8",
+      "Unit_Mass_g": "3.7",
+      "Total_Mass_g": "29.6",
+      "Supplier": "In-house 3D print",
+      "Supplier_PN_or_Search": "PETG body + translucent-blue PETG inner face — see FIL-PETG",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "4 per nacelle x 2. NEW in Rev T3: alternates with the master flap and is lapped FLAP_SHINGLE_GAP = 0.2 mm (0.008 in) radially OUTBOARD (band r27.7-30.2 mm), closing the gap between adjacent masters from outside so the 5 deg circumferential overlap is realisable instead of interpenetrating [REF-CAD-005]. Identical clevis, lever tab and follower pin to the master, so it shares PIN-3X18 / PIN-2X4 hardware and needs no extra fasteners. RENDER_PART=\"flap_seal\" of nacelle_nozzle_iris.scad. Mass measured from the rendered solid (2.874 cm^3 x 1.27 g/cm^3 PETG = 3.65 g)"
     },
     {
       "Ref": "PRINT-NACELLE-THROAT",

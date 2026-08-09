@@ -180,9 +180,34 @@ numeric order.)*
     - [ ] Motion study: 1:1-mesh + crank/pushrod transmission angle, monotonic
         0..90° tilt → 0..23.9° ring; verify joint-gap width vs. the coaxial
         bearing + sun-gear + Hall-magnet/AK7455 stack.
-- [ ] Fix iris asm flap sign (nacelle_nozzle_iris.scad) — 8-flap loop…
-    uses `rotate([0, PHI_CLOSED, 0])` → petals DIVERGE at "closed"; must be
+- [x] Fix iris asm flap sign (nacelle_nozzle_iris.scad) — 8-flap loop…
+    used `rotate([0, PHI_CLOSED, 0])` → petals DIVERGE at "closed"; must be
     `−PHI_CLOSED` to converge to 75 % bore. Preview-only (print parts unaffected).
+    **RESOLVED 2026-07-20** (sign-bug fix in the asm loop); the loop now reads
+    `rotate([0, −FLAP_PHI, 0])` after the Rev T3 parameterisation.
+- [x] Iris flap shingle (Rev T3, 2026-08-09) — the documented 5° inter-flap…
+    overlap was a solid INTERPENETRATION: all 8 flaps sat in one radial band, so
+    adjacent flaps shared coincident surfaces (17/12 non-manifold edges) and CI
+    "STL Validation" failed. Alternate flaps are now SEAL flaps lapped
+    `FLAP_SHINGLE_GAP` 0.2 mm (0.008 in) outboard of the MASTER flaps
+    [REF-CAD-005]. Masters unchanged → `exit_r(φ)` and the 75 %/105 % bore
+    targets unaffected. Print split 8 → 4 master + 4 seal per nozzle; the
+    abandoned `-closed-5deg.stl` shingling attempt was discarded (user).
+    → detail: `airframe/wings-nacelles/WBS.md` §1.1.3.1. SUB-TASKS:
+    - [ ] VERIFY mass/CG: flap set 32.0 → 56.8 g (+24.8 g / +0.87 oz total,
+        +12.4 g / +0.44 oz per nacelle), all aft/outboard of the tilt pivot —
+        re-check the Rev T CG band (≈109–112 mm) and tilt-servo torque margin.
+    - [ ] VERIFY the 0.2 mm seal step against the "smooth, low-turbulence exit"
+        goal by bench/CFD; fall back to a scarfed seal if the step is material.
+    - [ ] Rewrite `docs/PHASED_BUILD_GUIDE.md` §7 for Rev T — it still describes
+        the deleted sector/bevel/crown gear chain and a third fuselage nozzle
+        (current drive is a pushrod/bellcrank to one ring lever; 2 nozzles).
+    - [ ] Harden `tools/precommit_index.py`: `collect_files()` indexes every
+        root-level loose FILE, and inside a git worktree `.git` IS a file, so a
+        regeneration from a worktree re-injects a bare `.git` entry (the artefact
+        removed in 48eae05; it recurred via the `.githooks` pre-commit hook on
+        2026-08-08). Apply `IGNORE_DIR_NAMES` to the root loop, or filter to
+        git-tracked paths.
 - [ ] Stator spar crossing (Rev T2): 11 vanes, coprime w/ 12-blade rotor
     rotor — Tyler–Sofrin); spar carried in a streamlined teardrop strut (tail
     aft, TE ≈ vane TE) + 0° anti-rotation key drilled through. VERIFY strut
