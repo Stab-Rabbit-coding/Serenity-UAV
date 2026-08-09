@@ -50,6 +50,7 @@
 - [ ] Remove obsolete J_ENC (AS5600 I²C) connector from Pilot
 - [ ] Fix Pilot's own inline SLB9672 symbol's incorrect pin numbers
 - [ ] Re-run ERC/DRC after SLB9670→SLB9672 migration (no KiCad here)
+- [ ] ★ SLB9672→OPTIGA Trust M on CAN-PERIPH-GW-1 + Flight Engineer only
 - [ ] Swap XO's TPM footprint (wrong 4x4mm/0.4mm land, needs 5x5mm/0.5mm)
 - [ ] Finish routing CAN-PERIPH-GW-1 PCB (47/296 nets still unrouted)
 - [ ] Pilot PB2-P2 header appears fully unwired in ERC — root cause TBD
