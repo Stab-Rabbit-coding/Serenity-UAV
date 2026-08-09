@@ -2,7 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-08-09 — Automated reconciliation pass -->
-TODO.md                           — Open-work-only subset of WBS.md (what's left to do)
 package.json                       — Node.js dependency manifest (tooling/preview support)
 package-lock.json                  — Node.js dependency lockfile
 previewConfig.json                 — Live preview configuration
@@ -2036,3 +2035,6 @@ airframe/stls/fuselage/cargo/__pycache__/generate_cargo_hinge_retention.cpython-
 ## --- AUTO-DISCOVERED (2026-08-09) ---
 airframe/blender-scripts/__pycache__/merge_cargo_interior.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
 tools/__pycache__/landing_gear_r6_sizing.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-08-09) ---
+tools/landing_gear_opening_fit.py — [PENDING AI CLASSIFICATION]

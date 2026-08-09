@@ -3,7 +3,6 @@
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
 <!-- Last updated: 2026-08-09 — Automated reconciliation pass -->
-
                                        Cape-B-1 boards (16 + 5 zips respectively)
 ```
 
@@ -1602,3 +1601,6 @@ airframe/stls/fuselage/cargo/__pycache__/generate_cargo_hinge_retention.cpython-
 ## --- AUTO-DISCOVERED (2026-08-09) ---
 airframe/blender-scripts/__pycache__/merge_cargo_interior.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
 tools/__pycache__/landing_gear_r6_sizing.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-08-09) ---
+tools/landing_gear_opening_fit.py — [PENDING AI CLASSIFICATION]
