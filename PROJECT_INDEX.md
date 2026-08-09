@@ -1698,7 +1698,6 @@ verify_bow_pod.py — verify_bow_pod.py — Rev R1 (2026-06-30) [build-tooling]
 .clang-format — clang-format configuration for the Serenity UAV firmware sources.
 .editorconfig — root = true
 .flake8 — [flake8]
-.git — gitdir: /home/steve/Documents/Vocation/Employers/Griffing.tech/designs/Serenity-UAV/.git/worktrees/wt-mcu
 .gitignore — 3DBenchy - The jolly 3D printing torture-test by CreativeTools.se - 763622 - part 1 of 2.zip
 .jscpd.json — JSON data (3 top-level keys)
 .liveui.json — JSON data (5 top-level keys)
