@@ -1958,6 +1958,37 @@ canonical sections and the swivel-engine/tilt concept originate here.
 dropped Rev R1); full remix attribution in
 [`current-specification/LICENSE_AND_ATTRIBUTION.md`](current-specification/LICENSE_AND_ATTRIBUTION.md) §2.
 
+### REF-CAD-005: Ryan and Israel (General Electric) — "Exhaust nozzle flap seal arrangement" (US 4,128,208)
+
+| Field | Value |
+|---|---|
+| **Inventors** | Edward W. Ryan; George H. Israel, Jr. |
+| **Assignee** | General Electric Company |
+| **Work** | Exhaust nozzle flap seal arrangement — variable-area exhaust nozzle carrying seals **between adjacent flaps** to minimise flow loss as the flaps modulate between minimum and maximum area positions |
+| **Designation** | United States Patent US 4,128,208 |
+| **Official URL** | <https://patents.google.com/patent/US4128208A/en> |
+| **Filed / Granted** | Filed 1977-07-11; granted 1978-12-05 |
+| **Legal status** | **Expired — lifetime.** Verified 2026-08-09 via the Google Patents record above. The disclosure is in the public domain; nothing in this project practises a live claim. |
+| **License** | Not applicable — an expired US patent is public-domain technical disclosure, cited here as prior-art/technique literature. No text, figure, or geometry from the patent is copied or redistributed. |
+| **Note** | Cited for the **master-flap / seal-flap principle only**: in a variable-area nozzle whose flaps overlap circumferentially, the overlap is only realisable if alternate members sit at different radii, so one set laps over its neighbours and closes the inter-flap gap from outside rather than occupying the same material. Serenity-UAV's implementation (tangential-hinge conical flaps, `FLAP_SHINGLE_GAP` running clearance, spiral-cam unison ring) is original work; the patent's own bellcrank-centred seal linkage is **not** used — this design carries the seal on its own hinge, identical to the master flap. |
+
+**Concept applied in this project:** Rev T3 (2026-08-09) of the nacelle variable nozzle.  All eight
+flaps had been carved from one radial band, so the deliberate 5° circumferential overlap
+(`FLAP_SPAN_DEG` 50° × 8 = 400° of arc on a 360° circle) was a solid interpenetration — physically
+unbuildable, and it exported assembly STLs with coincident cylindrical surfaces that failed the
+repository's watertight check.  Alternate flaps are now **seal flaps** lapped
+`FLAP_SHINGLE_GAP` = 0.2 mm (0.008 in) outboard of the **master flaps**, which keeps the masters'
+inner surface as the flow-facing boundary.  The master flaps are geometrically unchanged, so
+`exit_r(φ) = R_HINGE − FLAP_LENGTH·sin φ` and the 75 %/105 % bore-percentage targets are unaffected.
+
+**Applied to:** the nacelle variable-area nozzle flap ring (8 flaps per nozzle = 4 master + 4 seal;
+2 nozzles per aircraft).
+
+**Used in:** `airframe/openscad/nacelles/nacelle_nozzle_iris.scad` (header Rev T3 and the
+`FLAP_SHINGLE_GAP` derivation block), `airframe/wings-nacelles/WBS.md` §1.1.3,
+`docs/PHASED_BUILD_GUIDE.md` (nozzle flap print quantities), `current-specification/bom_revS.json`
+(`PRINT-NACELLE-FLAP-MASTER` / `PRINT-NACELLE-FLAP-SEAL`), `TODO.md` §1.1.3.
+
 ---
 
 ## Part XV — Open Hardware / Software Licensing Standards

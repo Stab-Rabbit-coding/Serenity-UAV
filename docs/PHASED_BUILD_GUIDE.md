@@ -149,7 +149,8 @@ These rules eliminate costly structural rework. Read before you start Phase 1.
 | `spar_bracket.stl`              | CF-PETG  | 0.15mm | 40%        | 1     | 4 walls                                                                                     |
 | `nozzle_outer_housing.stl`      | PETG     | 0.20mm | 20% gyroid | 3     | 2 nacelle + 1 fuselage                                                                      |
 | `nozzle_inner_ring.stl`         | CF-PETG  | 0.15mm | vertical   | 3     | Print vertical for tooth accuracy                                                           |
-| `nozzle_flap.stl`               | PETG     | 0.20mm | 20%        | 48    | 8 per nozzle × 3 sets = 24; print flat                                                      |
+| `nacelle_nozzle_flap.stl`       | PETG     | 0.20mm | 20%        | 8     | MASTER flap: 4 per nozzle × 2 nacelles; print flat [REF-CAD-005]                            |
+| `nacelle_nozzle_flap_seal.stl`  | PETG     | 0.20mm | 20%        | 8     | SEAL flap: alternates w/ master, lapped 0.2mm out; 4 per nozzle × 2 [REF-CAD-005]           |
 | `sector_gear_22mm.stl`          | PETG     | 0.12mm | 40%        | 2     | 0.12mm layer for tooth accuracy                                                             |
 | `access_panel_frames.stl`       | PETG     | 0.20mm | 100%       | 1 set | 6 frames + 6 lids; 2mm wall                                                                 |
 | `cargo_gondola_shell.stl`       | PETG     | 0.20mm | 15% gyroid | 1     | 112×85×22mm belly pod                                                                       |
@@ -404,7 +405,14 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 
 - Bevel block → longitudinal shaft → crown pinion → ring gear
 - Install sector gear on bracket; rotate by hand to verify mesh; adjust for 0.1–0.2mm backlash
-- Install 8 nozzle flaps per set
+- Install 8 nozzle flaps per nozzle, **alternating 4 master and 4 seal** around the ring (Rev T3):
+  the seal flap laps 0.2 mm (0.008 in) OUTBOARD of its two neighbouring masters, closing the gap
+  between them from outside.  Both types share the same PIN-3X18 hinge and PIN-2X4 follower, so
+  they differ only in the panel — check the part label before fitting.  See REFERENCES.md
+  [REF-CAD-005].  **NOTE:** the gear-train steps in this section are pre-Rev T and describe the
+  deleted sector/bevel/crown chain plus a third fuselage nozzle; the current drive is a
+  pushrod/bellcrank to a single ring lever, and there are 2 nozzles, not 3 — this section still
+  needs a Rev T rewrite (TODO.md §1.1.3).
 - Install SG90 nozzle servos (2 nacelle + 1 fuselage); cap servo leads at hull/bay E
 
 **8. Install nacelle tip caps** (with WS2812C LEDs embedded) — M2.5 screws or press-fit per drawing.
