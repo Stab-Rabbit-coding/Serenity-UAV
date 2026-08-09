@@ -348,7 +348,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 - Shepherd is the crew's conscience and therefore takes care of primarily watchdog, fault detection, failover, and authentication. His stack has SiK primary and Wi-Fi secondary.
 
-- Inara has primarily camera, external sensors, and high bandwidth ground communication.  Her stack is connected to  Wi-Fi primarily and LoRa secondary.
+- Inara has primarily camera, external sensors, and high bandwidth ground communication.  Her stack is connected to  Wi-Fi primarily and SiK-MAVLink secondary.  (Corrected 2026-08-08 from "LoRa secondary": Inara carries Pilot + XO only, with no Commo cape, so LoRa 915 MHz is not available on that stack.  Root `AGENTS.md` §9 is authoritative.)
 
 - River provides primary control of the forward EDFs, and provides EDF and nacelle control command and syncing, and the most resilient comms.  She may be crazy, but she comes through when no one else can.  She has 49 MHz (Part 15 §15.235) primary and LoRa secondary.
 
