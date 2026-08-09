@@ -2,7 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-08-09 — Automated reconciliation pass -->
-requirements-dev.txt               — Python development dependencies
 ```
 
 ---
@@ -2035,3 +2034,6 @@ tools/__pycache__/landing_gear_r6_sizing.cpython-313.pyc — [IGNORED/VCS-EXCLUD
 
 ## --- AUTO-DISCOVERED (2026-08-09) ---
 tools/landing_gear_opening_fit.py — [PENDING AI CLASSIFICATION]
+
+## --- AUTO-DISCOVERED (2026-08-09) ---
+airframe/landing-gear/HANDOFF.md — [PENDING AI CLASSIFICATION]
