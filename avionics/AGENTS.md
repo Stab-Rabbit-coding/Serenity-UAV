@@ -41,9 +41,8 @@ does not carry:
   (Bay A) and Inara's Shuttle (Bay B) run Pilot + XO only.
 - LoRa is migrating from XO to Commo on the River and Simon stacks — see "Cape Naming and
   Revision History" below for current build status.
-- The Inara stack's secondary link is LoRa in the current build but SiK-MAVLink in root §9.
-  That discrepancy is unreconciled: per root §11 item 2, **stop and get user adjudication**
-  before relying on either.
+- The Inara stack's secondary link is **SiK-MAVLink** (root §9 is authoritative). Inara carries
+  Pilot + XO only — no Commo cape — so LoRa 915 MHz is not available on that stack.
 
 ## Cape Naming and Revision History
 
