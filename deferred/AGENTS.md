@@ -4,24 +4,26 @@
 
 ## Scope
 
-This folder contains design specifications, analysis, and artifacts for work that is **intentionally deferred** beyond the current build phase (Phases 5–10). These items are planned but not part of the active build baseline.
-
-Deferred work is organized by:
-
-- **Planned upgrades to current components** (Commo Rev R1, XO Rev R1, Flight Engineer Rev A1)
-- **Future system additions** (Phase 11: rear EDF + RCS, aft intake scoop geometry)
-- **Analysis of alternative designs** evaluated but not selected for current baseline
-- **Long-term enhancements** (Phase 12+: advanced autonomy, extended payload, etc.)
+This folder holds design specifications, analysis, and artifacts for work that is
+**intentionally deferred** beyond the current build baseline (Phases 5–10): planned upgrades to
+current components, future system additions (Phase 11 — rear EDF + RCS, aft intake scoop
+geometry), analyses of alternative designs evaluated but not selected, and Phase 12+ long-term
+enhancements. Phase 1–4 prototype-airframe work is archived. Nothing here is part of the active
+build baseline. When a deferred item becomes active it is incorporated into the relevant phase's
+documentation and build guide; the phase table itself lives in `graphical-build-guide/AGENTS.md`
+"Phases Overview" and must not be restated here.
 
 ## Status Categories
 
 ### Planned (High Priority — Next Release)
 
-**Planned for the next major revision (Rev R1 detailed changes, target integration date: Phase 6–7):**
+Rev R1 detailed changes, target integration Phase 6–7:
 
-- **Commo Rev R1:** Add LoRa, replace JST GH 6P with P1+P2 socket rails
-- **XO Rev R1:** Remove LoRa (migrated to Commo), add P1+P2 passthrough rails matching Commo pinout on River and Simon stacks
-- **Flight Engineer Rev A1:** Remove 6V servo BEC; tilt servos to run on 5V rail (~21 kg·cm capacity vs ~16 kg·cm tilt load requirement)
+- **Commo Rev R1:** add LoRa; replace JST GH 6P with P1+P2 socket rails
+- **XO Rev R1:** remove LoRa (migrated to Commo); add P1+P2 passthrough rails matching the Commo
+  pinout on the River and Simon stacks
+- **Flight Engineer Rev A1:** remove the 6V servo BEC; tilt servos run on the 5V rail
+  (~21 kg·cm capacity vs ~16 kg·cm tilt load requirement)
 
 Per-item status changes often and is not tracked here — read the current state directly from
 each board's own `.md` (`avionics/kicad/Commo/Commo.md`, `avionics/kicad/XO/XO.md`,
@@ -29,31 +31,24 @@ each board's own `.md` (`avionics/kicad/Commo/Commo.md`, `avionics/kicad/XO/XO.m
 
 ### Phase 11 (Medium Priority — Cruise and RCS)
 
-- **Rear EDF (55 mm 6S):** Fuselage-mounted, horizontal-thrust-only propulsion
-    - Purpose: Extend endurance, enable sustained forward flight (cruise phase)
-    - Status: Motor and intake design deferred; duct geometry speculative
-    - Technical note: The 55 mm EDF feeds 4 RCS (reaction-control) thrusters tapping ~15% of mass flow; remainder exits the canonical nozzle as forward thrust
-    - Deferred: Aft EDF intake scoop carving into the middle-section inner neck (Phase 11 or later)
-
-- **RCS Thrusters (4×):** Low-authority pitch/yaw attitude control via bleed air from rear EDF
-    - Purpose: Reduce nacelle servo load, extend battery life in hover, improve stability
-    - Status: Plumbing concept only; sizing pending EDF performance data
-    - Deferred pending: Rear EDF motor selection and thrust-curve validation
-
-- **Build phasing:** Phase 11 work requires completion of Phases 5–10 and includes:
-    - Rear fuselage EDF bay fabrication and intake duct carving
-    - RCS plumbing and thruster integration
-    - Flight control firmware update for multi-axis thrust vectoring
-    - Revised T/W and hover performance calculations
+- **Rear EDF (55 mm 6S):** fuselage-mounted, horizontal-thrust-only propulsion to extend
+  endurance and enable sustained forward flight. Motor and intake design are deferred and duct
+  geometry is speculative — do not treat either as settled. It feeds 4 RCS thrusters tapping
+  ~15% of mass flow; the remainder exits the canonical nozzle as forward thrust. Carving the aft
+  EDF intake scoop into the middle-section inner neck is deferred to Phase 11 or later.
+- **RCS thrusters (4×):** low-authority pitch/yaw attitude control on bleed air from the rear
+  EDF — reduces nacelle servo load, extends battery life in hover, improves stability. Plumbing
+  concept only; sizing is blocked pending rear-EDF motor selection and thrust-curve validation.
+- **Build phasing:** Phase 11 requires Phases 5–10 complete, and covers rear fuselage EDF bay
+  fabrication and intake duct carving, RCS plumbing and thruster integration, flight-control
+  firmware for multi-axis thrust vectoring, and revised T/W and hover performance calculations.
 
 ### Phase 12+ (Lower Priority — Extended Capabilities)
 
-**Future enhancements under consideration (not yet scoped):**
-
-- **Advanced autonomous maneuvers:** Carrier landing simulation, formation flight
-- **Extended payload:** Modular payload bay for different sensors or tools
-- **Solar power augmentation:** Ultra-light solar cell integration for extended endurance
-- **Swarm coordination:** Multi-UAV formation control and task distribution
+Under consideration, not yet scoped: advanced autonomous maneuvers (carrier landing simulation,
+formation flight), a modular extended-payload bay for different sensors or tools, ultra-light
+solar power augmentation for extended endurance, and swarm coordination (multi-UAV formation
+control and task distribution).
 
 ## How to Use This Folder
 
@@ -72,15 +67,6 @@ Some deferred items document **design decisions evaluated but not selected** for
 
 These documents support traceability: if future work requires revisiting a design choice, the full evaluation is available in this folder.
 
-## Phase Numbering Convention
-
-- **Phases 1–4:** Prototype airframe (archived)
-- **Phases 5–10:** Current baseline (active, in production)
-- **Phase 11:** Rear EDF + RCS (deferred)
-- **Phase 12+:** Advanced autonomy, extended payload, etc. (deferred, not yet scoped)
-
-When deferred work becomes active, it will be incorporated into the relevant phase's documentation and build guide.
-
 ## Work Tracking
 
 Items in this folder are tracked in `TODO.md` with cross-references:
@@ -98,7 +84,3 @@ hardware/CAD (e.g. `deferred/aft-edf/` SCAD/STL), CC BY-SA 4.0 for docs/code —
 - **Shared publicly** on version control
 - **Used by others** for their own UAV projects
 - **Cited with attribution** to Steve Griffing and this project
-
----
-
-For project-wide standards, see the root `AGENTS.md`.

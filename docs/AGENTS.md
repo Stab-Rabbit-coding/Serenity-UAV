@@ -112,25 +112,16 @@ authoring or revising any document in this folder.
 
 ## Measurements and Units
 
-All measurements shall be expressed **imperial-primary with metric in parentheses** (root
-`AGENTS.md` §5):
-
-- Length: `10 in (254 mm)`
-- Mass: `2.5 lbm (1.13 kg)` — **lbm** = pounds-mass (component weight, payload capacity); **kg** = metric mass
-- Force: `4.8 lbf (21.4 N)` — **lbf** = pounds-force (thrust, lift, loads); **N** = newton
-- Airspeed: `25 kt (12.8 m/s)` — **kt** = knots (airspeed, wind speed), never mph or km/h for aviation
+Every measurement in this folder follows the units convention in root `AGENTS.md` §5
+"Engineering Requirements" — read it there; the convention is not restated in this file.
 
 ## Work Tracking and Documentation
 
 When creating or updating documentation:
 
-1. Add a commit message explaining the changes
-2. If adding a new standard citation, update `REFERENCES.md` with validation details
-3. If modifying a standards citation, verify the reference and update `REFERENCES.md`
-4. Update `PROJECT_INDEX.md` when adding new active documentation files
-5. Archive superseded documents in `archives/` and update `ARCHIVE_INDEX.md`
-6. If the documentation work is complex or spans multiple documents, track subtasks in `TODO.md`
-
----
-
-For project-wide standards, see the root `AGENTS.md`.
+1. Explain the change in the commit message
+2. When adding or modifying a standards citation, verify the reference and update
+   `REFERENCES.md` with the validation details
+3. Archive superseded documents in `archives/`; index and archive upkeep (`PROJECT_INDEX.md`,
+   `ARCHIVE_INDEX.md`) follows root `AGENTS.md` §10
+4. If the documentation work is complex or spans multiple documents, track subtasks in `TODO.md`

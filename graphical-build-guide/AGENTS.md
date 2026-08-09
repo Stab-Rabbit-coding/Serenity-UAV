@@ -27,12 +27,10 @@ Serenity-UAV is constructed in sequential **phases**, each adding specific capab
 
 **Current capability:** Full vertical-takeoff-and-landing (VTOL) hover with two nacelles per pylon, networked avionics, autonomous command and control, redundant communications, and full secure logging.
 
-**Excluded from current phase:**
-
-- Rear fuselage EDF (thrust-vectoring horizontal propulsion)
-- RCS (reaction-control) thrusters (attitude control)
-- Aft EDF intake scoops into the middle-section inner neck
-- Advanced autonomous maneuvers requiring forward propulsion
+**Excluded from the current phase** — the rear fuselage EDF, the RCS thrusters, the aft EDF
+intake scoops into the middle-section inner neck, and advanced autonomous maneuvers requiring
+forward propulsion. Those are described in `deferred/AGENTS.md` "Phase 11"; do not restate them
+here.
 
 ## Build Guide Structure and Checklists
 
@@ -69,10 +67,6 @@ When creating or updating a build guide phase:
 1. Test the procedure yourself or with a technical reviewer (no untested instructions)
 2. Include all necessary figures and dimensions in the guide
 3. If standards citations are needed (e.g., fastener grades), use REF-IDs from `REFERENCES.md`
-4. Add the guide to `PROJECT_INDEX.md`
-5. If the guide references deferred work, link to `TODO.md` items
-6. Archive superseded build guides (older phasing, obsolete components) to `archives/`
-
----
-
-For project-wide standards, see the root `AGENTS.md`.
+4. If the guide references deferred work, link to `TODO.md` items
+5. Archive superseded build guides (older phasing, obsolete components) to `archives/`; index
+   and archive upkeep (`PROJECT_INDEX.md`, `ARCHIVE_INDEX.md`) follows root `AGENTS.md` §10
