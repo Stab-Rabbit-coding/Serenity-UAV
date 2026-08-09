@@ -2365,8 +2365,8 @@
       ],
       "archived": false
     },
-    "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed-5deg.stl": {
-      "description": "STL mesh \u2014 header: OpenSCAD Model",
+    "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal.stl": {
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -9320,7 +9320,7 @@
       "archived": false
     },
     "current-specification/bom_revS.json": {
-      "description": "Bill of materials, JSON (167 items)",
+      "description": "Bill of materials, JSON (168 items)",
       "tags": [
         "bom",
         "specification"
@@ -13038,7 +13038,7 @@
       "airframe/stls/nacelles/nacelle_servo_bracket.stl",
       "airframe/stls/nacelles/nacelle_stbd_revs.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap.stl",
-      "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed-5deg.stl",
+      "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-open.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris.stl",
@@ -13276,7 +13276,7 @@
       "airframe/stls/nacelles/nacelle_servo_bracket.stl",
       "airframe/stls/nacelles/nacelle_stbd_revs.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap.stl",
-      "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed-5deg.stl",
+      "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-open.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris.stl",
@@ -13550,7 +13550,7 @@
       "airframe/stls/nacelles/nacelle_servo_bracket.stl",
       "airframe/stls/nacelles/nacelle_stbd_revs.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap.stl",
-      "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed-5deg.stl",
+      "airframe/stls/nacelles/nozzles/nacelle_nozzle_flap_seal.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-open.stl",
       "airframe/stls/nacelles/nozzles/nacelle_nozzle_iris.stl",
