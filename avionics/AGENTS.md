@@ -10,73 +10,47 @@ This folder contains all electronics design and implementation: KiCad schematics
 
 **Platform:** Four pairs of **PocketBeagle2 Industrial SBCs** (8 nodes total, Rev S placement,
 established at Rev R1):
+
 - All 8 nodes carry **Pilot** (Flight Control and Sensor Cape) and **XO** (Communications, Logging, and Payload Cape)
 - All 8 nodes carry **TPM** (Trusted Platform Module) for cryptographic operations
 
 **Commo Transceiver Cape** (49 MHz Part 15 §15.235 + LoRa 915 MHz — see "Cape Naming and
 Revision History" below for current build status):
+
 - Installed in **River's Room** (Bay C, starboard cargo) and **Simon's Medbay** (Bay D, middle section) only
 
 **Power Distribution — Flight Engineer (PDB):**
+
 - Central location: inner neck of middle section, minimizes power run lengths to all four nacelles, all four avionics stacks, and the battery
 - Interfaces with all four flight-control nodes for EDF and servo control
 
 ### Node Workload Balancing and PACE Failover
 
-All Pilot capes are identical and all XO capes are identical, but each stack has **primary and alternative tasking** with PACE prioritization (Primary, Alternative, Contingency, Emergency):
+All Pilot capes are identical and all XO capes are identical, but each stack has **primary and
+alternative tasking** with PACE prioritization (**P**rimary, **A**lternative, **C**ontingency,
+**E**mergency):
 
-#### Shepherd's Room (Bay A) — Forward Avionics
-**Primary tasking:** watchdog, fault detection, failover, authentication  
-**Stack:** Pilot + XO  
-**Comms:** SiK primary / Wi-Fi secondary  
-**PACE assignments:**
-- Watchdog: **P**rimary
-- Comms: **A**lternative
-- Flight Control: **C**ontingency
-- Payload Control: **E**mergency
+| Bay / Stack | Primary tasking | Cape stack | Comms | Watchdog | Comms role | Flight Control | Payload |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **Shepherd's Room** (Bay A) — forward | Watchdog, fault detection, failover, authentication | Pilot + XO | SiK primary / Wi-Fi secondary | **P** | **A** | **C** | **E** |
+| **Inara's Shuttle** (Bay B) — port | Camera, external sensors, high-bandwidth ground comms | Pilot + XO | Wi-Fi primary / LoRa secondary | **A** | **P** | **E** | **C** |
+| **River's Room** (Bay C) — starboard | Forward EDF control, nacelle tilt command/sync, resilient comms | Pilot + XO + **Commo** | 49 MHz (Part 15 §15.235) primary / LoRa 915 MHz secondary | **C** | **E** | **P** | **A** |
+| **Simon's Medbay** (Bay D) — aft | Aft EDF control, alternate watchdog, cargo/payload oversight | Pilot + XO + **Commo** | 49 MHz (Part 15 §15.235) primary / SiK secondary | **A** | **C** | **A** | **P** |
 
-#### Inara's Shuttle (Bay B) — Port Avionics
-**Primary tasking:** camera, external sensors, high-bandwidth ground communications  
-**Stack:** Pilot + XO  
-**Comms:** Wi-Fi primary / LoRa secondary (LoRa is migrating from XO to Commo on River/Simon —
-see "Cape Naming and Revision History" below for current build status)  
-**PACE assignments:**
-- Watchdog: **A**lternative
-- Comms: **P**rimary
-- Flight Control: **E**mergency
-- Payload Control: **C**ontingency
-
-#### River's Room (Bay C) — Starboard Avionics
-**Primary tasking:** forward EDF control, nacelle tilt command/sync, resilient comms  
-**Stack:** Pilot + XO + **Commo** (49 MHz primary; LoRa secondary migrating onto Commo — see
-"Cape Naming and Revision History" below for current build status)  
-**Comms:** 49 MHz (Part 15 §15.235) primary / LoRa 915 MHz secondary  
-**PACE assignments:**
-- Watchdog: **C**ontingency
-- Comms: **E**mergency
-- Flight Control: **P**rimary
-- Payload Control: **A**lternative
-
-#### Simon's Medbay (Bay D) — Aft Avionics
-**Primary tasking:** aft EDF control, alternate watchdog, cargo/payload oversight  
-**Stack:** Pilot + XO + **Commo** (49 MHz primary; LoRa secondary migrating onto Commo — see
-"Cape Naming and Revision History" below for current build status)  
-**Comms:** 49 MHz (Part 15 §15.235) primary / SiK secondary  
-**PACE assignments:**
-- Watchdog: **A**lternative
-- Comms: **C**ontingency
-- Flight Control: **A**lternative
-- Payload Control: **P**rimary
+LoRa is migrating from XO to Commo on the River and Simon stacks — see "Cape Naming and
+Revision History" below for current build status.
 
 ### Communication Protocols
 
 **Onboard:**
+
 - CAN FD (galvanically isolated at every node via Cape-A-2 and Cape-B-2)
 - MIL-STD 1553 (legacy, being phased)
 - RS-485 (galvanically isolated at every node)
 - Ethernet (galvanically isolated at every node)
 
 **External command and control (all four usable for autonomous or manual C2):**
+
 - Wi-Fi at 5 GHz
 - Zigbee at 2.4 GHz
 - MAVLink / SiK at 915 MHz
@@ -148,15 +122,12 @@ TODO.md §1.2b.
 
 ### Design Rules Checker (DRC) Workflow
 
-Every schematic and PCB modification **must** be verified:
-
-1. Open the schematic file in KiCad
-2. Run **Electrical Rules Checker** (ERC) — resolve all violations and warnings
-3. Open the PCB layout
-4. Run **Design Rules Checker** (DRC) — resolve all violations and errors
-5. Document any violations that cannot be resolved in `TODO.md` with the specific DRC rule and reason
-6. Commit only after all DRC violations are either resolved or documented
-7. All routing and component spacing will maintain 0.3mm minimum copper spacing (as enforced by the min_copper_edge_clearance DRC check) per [REF-IPC-001].
+Every schematic and PCB modification **must** be verified: run **ERC** on the `.kicad_sch` and
+resolve all violations and warnings, then run **DRC** on the `.kicad_pcb` and resolve all
+violations and errors. Document anything that cannot be resolved in `TODO.md` with the specific
+DRC rule and reason; commit only after every violation is resolved or documented. All routing
+and component spacing will maintain 0.3mm minimum copper spacing (as enforced by the
+min_copper_edge_clearance DRC check) per [REF-IPC-001].
 
 ### Footprint and Component Placement
 
@@ -167,35 +138,25 @@ Every schematic and PCB modification **must** be verified:
 
 ### Schematics and PCB Files
 
-- Every cape requires:
-    - Complete schematic file (`.kicad_sch`)
-    - Complete PCB layout (`.kicad_pcb`)
-    - Copper traces ready for production
-    - Proper IC footprints for all components
-    - Production-ready Gerber files
+Every cape requires a complete schematic (`.kicad_sch`), a complete PCB layout
+(`.kicad_pcb`), production-ready copper traces, proper IC footprints for all components, and
+production-ready Gerber files.
 
 ## Security and Cryptography Requirements
 
-Every message, internal and external, must be:
-- **Digitally signed** and authenticated
-- **Logged** for forensic analysis
-- **Timestamped** by the TPM
+Every message, internal and external, must be **digitally signed** and authenticated,
+**logged** for forensic analysis, and **timestamped** by the TPM.
 
-### TPM (Trusted Platform Module)
-
-- Every node carries a TPM for cryptographic operations
-- All keys are generated and stored on the TPM, never in software
-- All messages are signed using TPM-held keys
-
-### Data Logging
-
-- Everything is logged: sensor data, CAN messages, MAVLink commands, camera feed, authentication events
-- Logs are saved to **hardware-enforced non-executable microSD cards** (write-once, never executable)
-- All logs are signed and timestamped
+- **TPM:** every node carries one; all keys are generated and stored on the TPM, never in
+  software; all messages are signed using TPM-held keys.
+- **Data logging:** everything is logged — sensor data, CAN messages, MAVLink commands, camera
+  feed, authentication events — to **hardware-enforced non-executable microSD cards**
+  (write-once, never executable). All logs are signed and timestamped.
 
 ### Zero Trust Architecture Compliance
 
 All avionics design shall comply with **NIST SP 800-207 Zero Trust Architecture** [REF-NIST-001 §2.1, §2.2, §3.3]:
+
 - Assume breach: expect both external and internal attacks
 - Verify every transaction: no implicit trust based on network location
 - Authenticate every message and every node state change

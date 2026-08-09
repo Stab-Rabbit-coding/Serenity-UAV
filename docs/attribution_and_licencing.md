@@ -140,8 +140,37 @@ The six boards are now named **Skipper** (GCS), **Pilot** (flight control/sensor
 (comms/logging/payload cape), **Flight Engineer** (power distribution board), **Commo** (49 MHz
 + LoRa transceiver cape), and **Observer** (cargo-handling/vision/ToF/laser board) — generic
 role names, no longer Firefly character names. The four avionics bay names (Shepherd's Room,
-Inara's Shuttle, River's Room, Simon's Medbay) were **not** renamed. Full record: root
-`AGENTS.md` §9 "Naming history", `docs/WBS.md` §0.9.
+Inara's Shuttle, River's Room, Simon's Medbay) were **not** renamed. See root `AGENTS.md` §9
+for the live naming/role table and `docs/WBS.md` §0.9 for the work item.
+
+### 6.1 Naming history (TODO.md §0.9, closed 2026-08-01)
+
+Relocated here from root `AGENTS.md` §9, which points at this subsection.
+
+The six board names above (Skipper, Pilot, XO, Flight Engineer, Commo, Observer) are
+**generic role names**, chosen 2026-08-01 to replace the project's original Firefly-character
+board names (TODO.md §0.9 item 8 — avoiding trademark exposure on hardware that "may be
+offered commercially beyond this project," root `AGENTS.md` §3). The four bay names (Shepherd's
+Room, Inara's Shuttle, River's Room, Simon's Medbay) were **not** part of that rename and are
+unchanged.
+
+For attribution completeness (root `AGENTS.md` §3 — "derivative files carry the full
+attribution chain"), the original names and their inspiration are recorded here rather than on
+the live table in root `AGENTS.md` §9, since restating the character quotes next to the new
+generic names would just re-attach the same recognizable Firefly branding the rename was meant
+to remove:
+
+| Current name | Former name | Inspiration | Firefly line |
+|---|---|---|---|
+| Skipper | Malcolm ("Mal") | Malcolm Reynolds, captain | "I aim to misbehave." |
+| Pilot | Wash | Hoban "Wash" Washburne, pilot | "I'm a leaf on the wind." |
+| XO | Zoë | Zoë Washburne, first mate | "Big Damn Heroes, sir." |
+| Flight Engineer | Kaylee | Kaylee Frye, ship's mechanic | "Everything is shiny." |
+| Commo | Emma | — (not a character name) | — |
+| Observer | Jayne | Jayne Cobb, hired muscle | "She's a good gun." |
+
+This table is historical only — do not use the former names anywhere in new work. See
+`docs/WBS.md` §0.9 for the full renaming record.
 
 ---
 

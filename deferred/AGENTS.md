@@ -7,6 +7,7 @@
 This folder contains design specifications, analysis, and artifacts for work that is **intentionally deferred** beyond the current build phase (Phases 5–10). These items are planned but not part of the active build baseline.
 
 Deferred work is organized by:
+
 - **Planned upgrades to current components** (Commo Rev R1, XO Rev R1, Flight Engineer Rev A1)
 - **Future system additions** (Phase 11: rear EDF + RCS, aft intake scoop geometry)
 - **Analysis of alternative designs** evaluated but not selected for current baseline
@@ -27,8 +28,6 @@ each board's own `.md` (`avionics/kicad/Commo/Commo.md`, `avionics/kicad/XO/XO.m
 `avionics/kicad/FlightEngineer/FlightEngineer.md`) and `TODO.md` §1.2b before starting work.
 
 ### Phase 11 (Medium Priority — Cruise and RCS)
-
-**Phase 11 work scope:**
 
 - **Rear EDF (55 mm 6S):** Fuselage-mounted, horizontal-thrust-only propulsion
     - Purpose: Extend endurance, enable sustained forward flight (cruise phase)
@@ -58,40 +57,11 @@ each board's own `.md` (`avionics/kicad/Commo/Commo.md`, `avionics/kicad/XO/XO.m
 
 ## How to Use This Folder
 
-### For Contributors
-
-If you are asked to work on a deferred item:
-
-1. **Check the status:** Is it "Planned" or "Phase 11+" or "Phase 12+"?
-2. **Understand the scope:** Read the item description and design notes
-3. **Identify dependencies:** What must be complete before this work can start?
-4. **Check for blockers:** Are there open design questions (marked in TODO.md)?
-5. **Create a task in TODO.md:** Link to the relevant deferred document
-6. **Keep this folder updated:** As you progress, update the status and document blockers
-
-### For Planners
-
-To integrate deferred work into the next phase:
-
-1. Review items in the "Planned" category
-2. Validate that dependencies are met (earlier phases complete)
-3. Move the item to active specification folder once integration planning begins
-4. Create phase-specific build guide steps
-5. Archive design notes to `archives/` once work is complete and released
-
-## Deferred Items Tracking
-
-Each deferred item in this folder shall include:
-
-- **Title and revision:** e.g., "Rev R1 — Commo PCB Redesign"
-- **Status:** Planned / In Analysis / Waiting (for dependency) / Phase 11 / Phase 12+
-- **Scope:** What problem does it solve? What capability does it add?
-- **Technical approach:** Proposed solution or design
-- **Dependencies:** What must be complete first?
-- **Blockers:** Open questions or risks
-- **Estimated effort:** Design, prototyping, integration, testing
-- **Integration date:** Target revision or phase
-- **Owner or next reviewer:** Who should drive this when it becomes active
+**`deferred/DEFERRED_ITEM_TEMPLATE.md`** holds the required field template for every deferred
+item (title/revision, status, scope, technical approach, dependencies, blockers, estimated
+effort, integration date, owner) plus the step-by-step "For Contributors" and "For Planners"
+procedures and the routine for adding new deferred work. Follow it whenever you open, advance,
+or promote an item in this folder.
 
 ## Design Decisions Leading to Deferral
 
@@ -119,16 +89,12 @@ Items in this folder are tracked in `TODO.md` with cross-references:
 - `TODO.md §1.3` — Phase 11 system integration (rear EDF, RCS)
 - `TODO.md §2.x` — Phase 12+ capability planning
 
-When adding new deferred work to this folder:
-1. Create a Markdown document with the item details
-2. Add a tracking item to `TODO.md` with a cross-reference
-3. Link from this document's index
-
 ## Legal and Licensing Notes
 
 All deferred work is covered under the same dual license as active work — CERN-OHL-W 2.0 for
 hardware/CAD (e.g. `deferred/aft-edf/` SCAD/STL), CC BY-SA 4.0 for docs/code — see
 `deferred/LICENSE` and `docs/attribution_and_licencing.md`. Deferred designs may be:
+
 - **Shared publicly** on version control
 - **Used by others** for their own UAV projects
 - **Cited with attribution** to Steve Griffing and this project
