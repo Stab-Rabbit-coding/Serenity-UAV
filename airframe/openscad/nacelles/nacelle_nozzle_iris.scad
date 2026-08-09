@@ -117,6 +117,10 @@
 //   flap printed/assembled on top at each seam) so the OUTER, flow-facing
 //   surface stays continuous at every position — there is no facet gap to
 //   open up, unlike the old iris where opening the petals opened gaps.
+//   Rev T3 (2026-08-09) actually IMPLEMENTS that shingle: until then every
+//   flap was carved from the same radial band, so the 5 deg overlap was an
+//   interpenetration rather than a lap joint (see the FLAP_SHINGLE_GAP block
+//   for the failure it caused and the master/seal fix).
 //
 // Three separately-printable parts, each in its own module:
 //   1. nozzle_throat_and_housing() — fixed: throat tube (flow liner, with
@@ -125,8 +129,11 @@
 //   2. unison_ring()               — rotating: Rev S1 INTERNAL 136T M=0.5
 //      ring gear (meshed from inside by the Nozzle Drive Pinion), plus
 //      8 spiral cam slots on its downstream face.
-//   3. nozzle_flap()                — one flap (print x 8): tangential
-//      hinge knuckle (clevis) + compound lever tab + follower pin.
+//   3. nozzle_flap(seal)            — one flap: tangential hinge knuckle
+//      (clevis) + compound lever tab + follower pin.  Rev T3: two variants —
+//      MASTER (seal = false, print x 4) and SEAL (seal = true, print x 4,
+//      panel lapped FLAP_SHINGLE_GAP outboard).  Was one part x 8 before the
+//      shingle was implemented.
 //
 // Mating interfaces (pushrod drive, Rev T — Option B):
 //   Pushrod: a ball-ended rod from a fixed crank on the nacelle pivot spar
@@ -153,10 +160,13 @@
 //   Orient:      Print flat (gear face down) for tooth quality
 //   Nozzle:      Hardened steel
 //
-// Print specification — Flaps:
+// Print specification — Flaps (Rev T3: master x 4 AND seal x 4):
 //   Material:    PETG (non-structural aerodynamic surface; slight flex OK)
 //   Layers:      0.15 mm, 3 perimeters, 25 % gyroid infill
 //   Orient:      Print flat (concave/flow face down)
+//   Quantity:    RENDER_PART "flap" x 4 (master) + "flap_seal" x 4 (seal).
+//                The two differ ONLY in the panel's radial band; clevis, lever
+//                tab and follower pin are identical, so they share hardware.
 //   Color note:  Flow-facing (concave) face marked "TRANSLUCENT-BLUE" — use
 //                translucent blue PETG filament for visual airflow
 //                reference.  Convex (outer) face matches nacelle hull
@@ -226,6 +236,20 @@
 //          (archive the gear-train parts), Stage 5 (pod pocket, assembly,
 //          docs) — tracked in the WBS.  AI contribution: Claude (Opus 4.8,
 //          Anthropic), directed by Steve Griffing.
+// Rev:     T3 (2026-08-09): FLAP SHINGLE implemented.  All 8 flaps had been carved
+//          from one radial band, so the deliberate 5 deg inter-flap overlap was a
+//          solid interpenetration — physically unbuildable, and it exported STLs
+//          with coincident cylindrical surfaces (17 non-manifold edges closed /
+//          12 open) that failed CI "STL Validation".  Alternate flaps are now
+//          SEAL flaps lapped FLAP_SHINGLE_GAP = 0.2 mm outboard of the MASTER
+//          flaps (master/seal arrangement per real variable-area nozzles); the
+//          master flaps' band, the hinge circle, the hinge bosses and the housing
+//          are all unchanged, so exit_r(phi) and the CLAUDE.md 75 %/105 % bore
+//          targets are numerically unaffected.  Flap print count becomes 4 + 4.
+//          Also exposed FLAP_PHI so each published asm STL is reproducible.
+//          Found by CI, not by inspection — the header had claimed shingling since
+//          Rev R2 while the geometry never implemented it.  AI contribution:
+//          Claude (Opus 5, Anthropic), directed by Steve Griffing.
 
 // ── Resolution ────────────────────────────────────────────────────────────────
 
@@ -386,6 +410,42 @@ FLAP_THICKNESS  =  2.5;     // [mm] flap shell thickness
 HINGE_PIN_D     =  3.0;     // [mm] stainless steel hinge pin OD (tangential)
 HINGE_BORE_D    =  3.2;     // [mm] clearance bore for 3 mm hinge pin (0.2 mm clr)
 HINGE_KNUCKLE_W =  6.0;     // [mm] width (tangential) of each hinge knuckle half
+
+// ── Shingle (master / seal flap alternation) — Rev T3 ─────────────────────────
+//
+// Rev T3 (2026-08-09): the 5 deg overlap above is only realisable if alternate
+// flaps sit at DIFFERENT radii.  8 flaps x FLAP_SPAN_DEG 50 = 400 deg of arc on
+// a 360 deg circle, so with every flap carved from the same radial band
+// (R_HINGE-FLAP_THICKNESS .. R_HINGE) each neighbouring pair overlapped by 5 deg
+// IN THE SAME MATERIAL — the parts interpenetrated.  That is physically
+// impossible in hardware, and in the exported mesh the two coincident
+// cylindrical surfaces produced edges shared by four facets (17 on the closed
+// asm, 12 on the open), so trimesh reported the STL non-watertight AND
+// mesh.split() returned zero bodies, defeating validate_stls.py's multi-body
+// fallback.  (Found 2026-08-09 by CI "STL Validation"; the header's Overlap
+// section had specified shingling since Rev R2 but the geometry never
+// implemented it.)
+//
+// Fix — the master/seal flap arrangement real variable-area jet nozzles use:
+//   * EVEN-index flaps ("master") keep the ORIGINAL band, unchanged.  All the
+//     published exit-radius kinematics (exit_r = R_HINGE - FLAP_LENGTH*sin(phi),
+//     and hence the CLAUDE.md 75 %/105 % bore-percentage targets) are defined by
+//     these flaps and are therefore NUMERICALLY UNCHANGED by this revision.
+//   * ODD-index flaps ("seal") are carved from a band FLAP_SHINGLE_GAP outboard
+//     of the master band, so they lap OVER the master flaps' outer surface and
+//     close the 40 deg gap between adjacent masters from outside — the standard
+//     arrangement, which keeps the master flaps' inner surface as the
+//     flow-facing boundary rather than putting a seal in the airstream.
+//   * Both types keep an IDENTICAL hinge clevis on the local origin, so all 8
+//     still pivot on the same R_HINGE circle and straddle the same unmodified
+//     hinge bosses in nozzle_throat_and_housing().  No housing change.
+//
+// Consequence for printing: the flap is no longer one part x8.  It is now
+// master x4 + seal x4 (see RENDER_PART "flap" / "flap_seal").
+FLAP_SHINGLE_GAP = 0.2;     // [mm] radial running clearance between the master
+                            //   flap's outer surface and the seal flap's inner
+                            //   surface (matches the 0.2 mm/side running fit used
+                            //   at the hinge clevis and the cam follower)
 
 // ── Ring (Unison Disc) Dimensions — Rev T CAM-ONLY ring (pushrod drive) ───────
 //
@@ -645,7 +705,7 @@ module unison_ring() {
 //   (X, Y) = (-R_HINGE, 0).  Assembly applies rotate([0,0,i*360/N_FLAPS])
 //   then rotate([0, phi, 0]) per flap (about local Y, the tangential hinge)
 //   — see assembly preview below.
-module nozzle_flap() {
+module nozzle_flap(seal = false) {
     // ── Main flap body — curved channel, constant section, extruded along
     //    local Z by FLAP_LENGTH (see header: same curved-sector technique
     //    Rev R1 used, just extruded along the flap's length instead of its
@@ -654,10 +714,21 @@ module nozzle_flap() {
     //    (radius R_HINGE) passes exactly through the local origin — that is
     //    where the hinge line sits.  Built with annular_wedge() (defined
     //    above) rather than a circle/square mask, for an unambiguous wedge.
+    //
+    //    Rev T3 shingle (see FLAP_SHINGLE_GAP block): seal = false is the
+    //    MASTER flap and keeps the original band exactly; seal = true shifts
+    //    the band FLAP_SHINGLE_GAP outboard of the master's outer surface so
+    //    the two never share a surface.  Only this panel moves — the clevis
+    //    and lever tab below are identical for both types, so both pivot on
+    //    the same R_HINGE hinge circle.
+    flap_r_in  = seal ? R_HINGE + FLAP_SHINGLE_GAP
+                      : R_HINGE - FLAP_THICKNESS;
+    flap_r_out = seal ? R_HINGE + FLAP_SHINGLE_GAP + FLAP_THICKNESS
+                      : R_HINGE;
     linear_extrude(height = FLAP_LENGTH) {
         translate([-R_HINGE, 0]) {
             polygon(annular_wedge(
-                R_HINGE - FLAP_THICKNESS, R_HINGE,
+                flap_r_in, flap_r_out,
                 -FLAP_SPAN_DEG / 2, FLAP_SPAN_DEG / 2,
                 12
             ));
@@ -732,27 +803,44 @@ module nozzle_flap() {
 // Assembly-per-flap (applied right-to-left): rotate by PHI_CLOSED about the
 // hinge's own tangential (local Y) axis, THEN translate the tilted flap so its
 // hinge lands at (R_HINGE, 0, HINGE_Z), THEN sweep around Z by the flap index.
-RENDER_PART = "asm";   // "throat" | "ring" | "flap" | "asm"
+RENDER_PART = "asm";   // "throat" | "ring" | "flap" | "flap_seal" | "asm"
+
+// Flap swing angle used by the "asm" preview.  Exposed as a parameter (Rev T3)
+// so each published assembly STL is reproducible from this one source rather
+// than by hand-editing the tilt:
+//   airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-closed.stl
+//       openscad -D 'RENDER_PART="asm"' -o <out> nacelle_nozzle_iris.scad
+//   airframe/stls/nacelles/nozzles/nacelle_nozzle_iris-open.stl
+//       openscad -D 'RENDER_PART="asm"' -D 'FLAP_PHI=PHI_OPEN' -o <out> …
+// (nacelle_nozzle_iris-closed-5deg.stl predates this parameter and was exported
+// from a source revision that is no longer in the tree — its swing angle could
+// not be reproduced from this file, so it was left untouched.  See the WBS item.)
+FLAP_PHI = PHI_CLOSED;   // [deg] flap swing angle for the asm preview
 
 if (RENDER_PART == "throat") {
     nozzle_throat_and_housing();
 } else if (RENDER_PART == "ring") {
     unison_ring();
 } else if (RENDER_PART == "flap") {
-    nozzle_flap();
+    nozzle_flap(seal = false);      // master flap — print x 4
+} else if (RENDER_PART == "flap_seal") {
+    nozzle_flap(seal = true);       // seal flap   — print x 4
 } else {
-    // asm — full closed-position assembly preview
+    // asm — full assembly preview at FLAP_PHI
     nozzle_throat_and_housing();
     unison_ring();
     for (i = [0 : N_FLAPS - 1]) {
         rotate([0, 0, i * 360 / N_FLAPS])
             translate([R_HINGE, 0, HINGE_Z])
-                // −PHI_CLOSED: the flap body extrudes +Z just inside R_HINGE, so a
+                // −FLAP_PHI: the flap body extrudes +Z just inside R_HINGE, so a
                 // POSITIVE tilt throws the tips radially OUTWARD (diverging).  The
                 // closed nozzle must CONVERGE (exit_r = R_HINGE − FLAP_LENGTH·sin φ
-                // = 18.75 < 27.5), so the assembly tilt is −PHI_CLOSED.  (Sign-bug
+                // = 18.75 < 27.5), so the assembly tilt is −FLAP_PHI.  (Sign-bug
                 // fix 2026-07-20; preview only — print parts are unaffected.)
-                rotate([0, -PHI_CLOSED, 0])
-                    nozzle_flap();
+                rotate([0, -FLAP_PHI, 0])
+                    // Rev T3: alternate flaps are seals, lapped outboard of the
+                    // masters so the 5 deg overlap is realisable instead of
+                    // interpenetrating (see FLAP_SHINGLE_GAP).
+                    nozzle_flap(seal = (i % 2) == 1);
     }
 }
