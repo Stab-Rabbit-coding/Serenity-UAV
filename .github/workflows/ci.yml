@@ -88,6 +88,25 @@ jobs:
           git fetch origin main
           python3 tools/validate_kicad.py --changed-since origin/main --verbose
 
+  # PROJECT_INDEX.md / ARCHIVE_INDEX.md / tools/index_tags.json are generated
+  # build output.  They are kept current AUTOMATICALLY by .githooks/pre-commit,
+  # which regenerates and stages them on every commit; this job is the backstop
+  # that verifies it happened.
+  #
+  # Since tools/precommit_index.py indexes only git-TRACKED files, its output is a
+  # deterministic function of the commit — a fresh CI clone, a developer clone
+  # full of untracked KiCad backups and sliced gcode, and a linked git worktree
+  # all produce byte-identical output.  Before that (2026-08) this job failed
+  # repeatedly on differences that were artefacts of WHERE the generator ran, not
+  # of the commit, which is what made it feel like it "randomly" broke CI.
+  #
+  # DELIBERATELY NOT AUTO-COMMITTING THE FIX: pushing a correction from CI would
+  # need GITHUB_TOKEN, and pushes made with GITHUB_TOKEN do not trigger new
+  # workflow runs by design.  The corrected head commit would therefore arrive
+  # with the ruleset's required checks ("Python lint", "STL Validation") missing
+  # and the PR would be unmergeable — strictly worse than a clear failure.  If an
+  # auto-fix is wanted later it needs a PAT or GitHub App token in secrets, which
+  # is a credential decision for a human to make.
   index-check:
     name: Project/Archive Index sync
     runs-on: ubuntu-latest
@@ -100,4 +119,39 @@ jobs:
           python-version: '3.11'
       - name: Verify PROJECT_INDEX.md / ARCHIVE_INDEX.md / index_tags.json are in sync
         run: |
-          python3 tools/precommit_index.py --check
+          if python3 tools/precommit_index.py --check; then
+            exit 0
+          fi
+          echo "::group::Regenerated output vs committed"
+          python3 tools/precommit_index.py >/dev/null
+          git --no-pager diff --stat -- PROJECT_INDEX.md ARCHIVE_INDEX.md tools/index_tags.json
+          echo "::endgroup::"
+          cat <<'EOF'
+          ::error::Generated indexes are stale.
+
+          Fix (one command, from the repo root):
+
+              python3 tools/precommit_index.py && git add PROJECT_INDEX.md ARCHIVE_INDEX.md tools/index_tags.json
+
+          This normally never fires: .githooks/pre-commit regenerates and stages
+          these files on every commit.  If it fired, the hook is probably not
+          enabled in your clone.  Enable it once with:
+
+              git config core.hooksPath .githooks
+
+          The generator indexes only git-tracked files, so it produces identical
+          output in any clone or worktree — regenerating locally is safe and will
+          match this job exactly.  The corrected files are attached to this run as
+          the "regenerated-indexes" artifact if you would rather download them.
+          EOF
+          exit 1
+      - name: Upload the corrected indexes for download
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: regenerated-indexes
+          path: |
+            PROJECT_INDEX.md
+            ARCHIVE_INDEX.md
+            tools/index_tags.json
+          if-no-files-found: ignore

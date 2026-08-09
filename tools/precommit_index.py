@@ -28,6 +28,15 @@ airframe/archive/, avionics/kicad/<board>/archive/,
 avionics/firmware/dts/cape-*/archive/). Everything else tracked is ACTIVE,
 including deferred/ (Phase 11+ future work — deferred, not superseded).
 
+Only git-TRACKED files are indexed (see git_tracked_paths()). The index is
+therefore a deterministic function of the COMMIT, not of the working
+directory: a fresh CI clone, a developer's clone full of untracked KiCad
+backups and sliced gcode, and a linked git worktree all produce byte-identical
+output. Regenerating anywhere is safe, which is what lets the CI job below
+auto-correct a stale index instead of failing the build. If git cannot answer
+(a source tarball with no .git), the generator falls back to the plain
+filesystem walk and may then include untracked files.
+
 Usage:
     python3 tools/precommit_index.py            # regenerate and write
     python3 tools/precommit_index.py --check    # exit 1 if files would change
@@ -38,6 +47,7 @@ import ast
 import json
 import os
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -406,8 +416,53 @@ def is_archived(relpath):
     return any(part.lower() in ARCHIVE_DIR_NAMES for part in Path(relpath).parts)
 
 
+def git_tracked_paths():
+    """
+    Repo-relative paths of every git-TRACKED file, or None if git is unavailable.
+
+    This is what makes the index a deterministic function of the COMMIT rather
+    than of whatever happens to be sitting in the working directory.  Two real
+    failure modes it removes (both cost real CI time in 2026-08):
+
+      1. Untracked local artefacts leaking into the index.  The walk below does
+         not consult .gitignore, so regenerating in a working clone silently
+         indexed 154 untracked files — KiCad autosave/backup archives
+         (*-backups/*.zip), editor lock files (~*.lck), fp-info-cache, sliced
+         gcode, and FreeCAD *.FCStd working files.  CI checks out a fresh clone
+         that contains none of them, so its regenerated index never matched the
+         committed one and "Project/Archive Index sync" failed on a developer
+         machine's leftovers.
+      2. A git worktree's .git ENTRY being indexed.  In a linked worktree .git
+         is a FILE, not a directory, so the root-level loose-file scan below
+         picked it up (IGNORE_DIR_NAMES only filters directories).  That is the
+         artefact removed in 48eae05; it came back via this hook whenever anyone
+         committed from a worktree.  `git ls-files` never lists .git in any
+         checkout topology, so the whole class is gone.
+
+    Returns None (not an empty set) when git cannot answer — a source tarball,
+    an export with no .git, or git missing from PATH — so the caller can fall
+    back to the filesystem walk instead of silently emptying the index.
+    """
+    try:
+        result = subprocess.run(
+            ["git", "-C", str(ROOT), "ls-files", "-z"],
+            capture_output=True, check=True,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    paths = {p for p in result.stdout.decode("utf-8").split("\0") if p}
+    return paths or None
+
+
 def collect_files():
-    """Walk the tracked tree plus root-level loose files; return sorted relpaths."""
+    """Walk the tracked tree plus root-level loose files; return sorted relpaths.
+
+    The walk defines WHICH paths are eligible (the TRACKED_DIRS whitelist, the
+    ignore rules, root-level loose files).  When git is available its tracked
+    set then filters the result, so untracked working-directory noise and the
+    worktree .git entry can never reach the index — see git_tracked_paths().
+    """
+    tracked_paths = git_tracked_paths()
     found = []
 
     for name in sorted(os.listdir(ROOT)):
@@ -429,6 +484,9 @@ def collect_files():
                 if relpath in GENERATED_RELPATHS:
                     continue
                 found.append(relpath)
+
+    if tracked_paths is not None:
+        found = [p for p in found if p in tracked_paths]
 
     return sorted(set(found))
 

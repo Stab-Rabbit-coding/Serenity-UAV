@@ -202,12 +202,39 @@ numeric order.)*
     - [ ] Rewrite `docs/PHASED_BUILD_GUIDE.md` §7 for Rev T — it still describes
         the deleted sector/bevel/crown gear chain and a third fuselage nozzle
         (current drive is a pushrod/bellcrank to one ring lever; 2 nozzles).
-    - [ ] Harden `tools/precommit_index.py`: `collect_files()` indexes every
+    - [x] Harden `tools/precommit_index.py`: `collect_files()` indexed every
         root-level loose FILE, and inside a git worktree `.git` IS a file, so a
-        regeneration from a worktree re-injects a bare `.git` entry (the artefact
+        regeneration from a worktree re-injected a bare `.git` entry (the artefact
         removed in 48eae05; it recurred via the `.githooks` pre-commit hook on
-        2026-08-08). Apply `IGNORE_DIR_NAMES` to the root loop, or filter to
-        git-tracked paths.
+        2026-08-08). **RESOLVED 2026-08-09** — `collect_files()` now filters the
+        walk through `git_tracked_paths()` (`git ls-files`), so the index is a
+        deterministic function of the COMMIT rather than the working directory.
+        Kills both failure modes at once: the worktree `.git` entry (git never
+        lists it in any checkout topology) and untracked local artefacts leaking
+        in (154 of them — KiCad `*-backups/*.zip`, `~*.lck`, `fp-info-cache`,
+        sliced gcode, `*.FCStd` — which CI's fresh clone never had, the actual
+        cause of the "random" index-sync failures). Falls back to the plain walk
+        when git cannot answer (source tarball). Verified output-neutral: a clean
+        worktree regenerates byte-identically, and planted untracked strays are
+        excluded. The pre-commit hook is now safe to run anywhere, so `--no-verify`
+        is no longer needed when committing index changes from a worktree.
+    - [x] DevSkim `DS176209` false positives on the generated indexes —
+        **RESOLVED 2026-08-09**: excluded the three generated artefacts by PATH via
+        `ignore-globs` in `.github/workflows/devskim.yml` rather than disabling the
+        rule repo-wide, so leftover-TODO detection stays active in real source. The
+        alerts flagged the substring "TODO" inside indexed *filenames*
+        (`tools/TODO.md`) and document titles, which cannot be reworded because the
+        files are generator output asserted byte-equal by CI (PR #180, alerts
+        942/945).
+    - [ ] **[OPEN — needs a credential decision]** Auto-commit a stale index from
+        CI instead of failing. Drafted and deliberately NOT shipped: the push would
+        use `GITHUB_TOKEN`, and GitHub does not trigger workflow runs for
+        `GITHUB_TOKEN` pushes, so the corrected head commit would arrive without the
+        ruleset's required checks ("Python lint", "STL Validation") and the PR would
+        be unmergeable — worse than a clear failure. Needs a PAT or GitHub App token
+        in repository secrets to do safely. Meanwhile the determinism fix above
+        removes the failure class that actually kept firing, and the job now prints
+        a one-command fix plus uploads the corrected files as an artifact.
 - [ ] Stator spar crossing (Rev T2): 11 vanes, coprime w/ 12-blade rotor
     rotor — Tyler–Sofrin); spar carried in a streamlined teardrop strut (tail
     aft, TE ≈ vane TE) + 0° anti-rotation key drilled through. VERIFY strut
