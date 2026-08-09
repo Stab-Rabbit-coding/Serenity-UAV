@@ -132,6 +132,89 @@ def wire_stroke_available(b_mm: float) -> float:
     return (hmax**2 - H0**2) / (2.0 * b_mm)
 
 
+def lg02_bay_attachment() -> None:
+    """LG-02: bay-to-shell attachment margins, and why the backing plate exists.
+
+    Landing is an IMPACT load, so the acceptance criterion is FOS >= 4.0
+    against ultimate (general machinery practice for dynamic/impact; static
+    would be 2.5).  Bolt-hole bearing is checked with a stress-concentration
+    factor K_t = 3.0 for a circular hole in a plate.
+
+    Geometry: 4x M3 through-bolts on a 30 (pin axis) x 70 (up the plate) mm
+    pattern, through the bay plate, the cargo wall, and an internal printed
+    backing plate.  The hull side carries a 5 mm internal boss at each bolt
+    (merge_cargo_interior.py lg_bay_features).
+    """
+    f_leg = 1241.0          # N, worst case: 1.5in variant, 6 ft schedule
+    m_hip = 52.0e3          # N*mm, hip moment (= 2*P*r, R_h-independent)
+    lever = 70.0            # mm, bolt pattern extent up the plate
+    n_bolt, n_row = 4, 2
+
+    couple_row = m_hip / lever              # N per row
+    tension = couple_row / n_row            # N per bolt
+    shear = f_leg / n_bolt                  # N per bolt
+    resultant = math.hypot(tension, shear)
+
+    # M3 A2-70
+    a_stress = 5.03                          # mm^2 tensile stress area
+    su_bolt = 700.0                          # MPa
+    cap_t = su_bolt * a_stress
+    cap_v = 0.6 * su_bolt * a_stress
+
+    sigma_bear = 70.0                        # MPa, CF-PETG bearing (SS4.6)
+    tau_petg = 30.0                          # MPa, ~0.6 x 55 MPa yield
+    kt_hole = 3.0
+    d_bolt, d_head = 3.0, 5.5
+
+    print("\n--- LG-02: bay -> shell attachment " + "-" * 40)
+    print(f"  worst F_leg {f_leg:.0f} N; hip moment {m_hip/1000:.1f} N*m over a "
+          f"{lever:.0f} mm bolt pattern")
+    print(f"  per bolt: tension {tension:.0f} N, shear {shear:.0f} N, "
+          f"resultant {resultant:.0f} N")
+    print(f"  M3 A2-70 tension {cap_t:.0f} N -> FOS {cap_t/tension:.1f};  "
+          f"shear {cap_v:.0f} N -> FOS {cap_v/shear:.1f}")
+
+    # NOTE: K_t belongs on the NET-SECTION TENSION check, not on bearing.
+    # Bearing is a contact/compressive allowable that already accounts for the
+    # local condition; dividing it by K_t double-counts and understates every
+    # stackup by 3x.
+    print("\n  bolt-hole BEARING in CF-PETG (impact FOS target 4.0):")
+    stackups = [
+        ("bare 2 mm wall", 2.0),
+        ("wall + 5 mm internal boss", 7.0),
+        ("wall + boss + 3 mm backing plate", 10.0),
+    ]
+    fos_by_t = {}
+    for label, t in stackups:
+        cap = sigma_bear * d_bolt * t
+        fos = cap / resultant
+        fos_by_t[t] = fos
+        verdict = "OK" if fos >= 4.0 else "FAILS impact criterion"
+        print(f"    {label:34s} t={t:5.1f} mm  cap {cap:6.0f} N  "
+              f"FOS {fos:4.2f}  {verdict}")
+
+    # Net-section tension around the hole -- this IS where K_t = 3.0 applies.
+    w_strip = 30.0                          # mm of plate width per bolt column
+    t_net = 10.0
+    a_net = (w_strip - d_bolt) * t_net
+    sigma_net = kt_hole * tension / a_net
+    allow = SIGMA_ALLOW_PETG
+    print(f"\n  net-section tension at the hole (K_t = {kt_hole}): "
+          f"{sigma_net:.1f} MPa vs {allow:.1f} MPa allowable "
+          f"-> FOS {allow/sigma_net:.1f}")
+
+    t_pull = 7.0
+    cap_pull = math.pi * d_head * t_pull * tau_petg
+    print(f"  head pull-through (M3 washer face Ø{d_head}, t={t_pull:.0f} mm): "
+          f"{cap_pull:.0f} N vs {tension:.0f} N -> FOS {cap_pull/tension:.1f}")
+
+    boss_only, with_plate = fos_by_t[7.0], fos_by_t[10.0]
+    print(f"\n  => backing plate {'REQUIRED' if boss_only < 4.0 else 'optional'}: "
+          f"the 5 mm boss alone reaches FOS {boss_only:.2f} on bearing")
+    print(f"     ({'short of' if boss_only < 4.0 else 'meeting'} the 4.0 impact "
+          f"criterion); 3 mm of backing plate takes it to {with_plate:.2f}.")
+
+
 def derive_stroke_relation() -> None:
     """Symbolic re-derivation of the stroke <-> bow-rise relation (LG-13).
 

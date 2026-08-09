@@ -4,7 +4,6 @@
 <!-- Active file tree described in PROJECT_INDEX.md. -->
 <!-- Last updated: 2026-08-09 — Automated reconciliation pass -->
 
-
                                        scripts archived alongside their boards
 
 Pre-Rev Q (superseded by Cape-A/B architecture at Rev K):
@@ -1603,3 +1602,7 @@ tools/__pycache__/landing_gear_bay_pad_fit.cpython-313.pyc — [IGNORED/VCS-EXCL
 tools/landing_gear_cowl_clearance.py — [PENDING AI CLASSIFICATION]
 airframe/blender-scripts/__pycache__/add_structural_features.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
 airframe/stls/fuselage/cargo/__pycache__/generate_cargo_hinge_retention.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-08-09) ---
+airframe/blender-scripts/__pycache__/merge_cargo_interior.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
+tools/__pycache__/landing_gear_r6_sizing.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]

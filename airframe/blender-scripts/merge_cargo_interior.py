@@ -198,6 +198,20 @@ def y_pin(x_cen, z_cen, y0, y1, radius, sections=32):
     return cyl
 
 
+def axis_cylinder(center, direction, t0, t1, radius, sections=32):
+    """Cylinder on an ARBITRARY axis, spanning t0..t1 along `direction`
+    measured from `center`.  The landing-gear bay bolts run normal to the
+    canted bay plate, so none of the axis-aligned helpers above fit them."""
+    d = np.asarray(direction, dtype=float)
+    d = d / np.linalg.norm(d)
+    c = np.asarray(center, dtype=float)
+    cyl = trimesh.creation.cylinder(radius=radius, height=(t1 - t0),
+                                    sections=sections)
+    cyl.apply_transform(trimesh.geometry.align_vectors([0, 0, 1], d))
+    cyl.apply_translation(c + d * ((t0 + t1) / 2.0))
+    return cyl
+
+
 # ---------------------------------------------------------------------------
 # Outer-skin envelope (for wall-conforming feature clipping)
 # ---------------------------------------------------------------------------
@@ -288,13 +302,122 @@ BOSS_BORE_D = 4.1
 DORSAL_Z_TOP = 172.0  # above the dorsal skin (Z_max ≈ 163); clipped by envelope
 DORSAL_Z_INB = 145.0  # boss reaches this far into the cavity
 
-# Landing-gear leg-mount keep-out zones (DEFERRED; clearance check only).
-LEG_ZONES = [
-    ("fwd-port", (-130.0, -95.0, 15.0, 35.0, 0.0, 40.0)),
-    ("fwd-stbd", (-245.0, -210.0, 15.0, 35.0, 0.0, 40.0)),
-    ("aft-port", (-130.0, -95.0, 90.0, 110.0, 0.0, 40.0)),
-    ("aft-stbd", (-245.0, -210.0, 90.0, 110.0, 0.0, 40.0)),
+# ---------------------------------------------------------------------------
+# Rev R6 landing-gear bay integration (LG-02 / LG-10, 2026-08-09)
+#
+# Canonical corner stations, docs/LANDING_GEAR_ANALYSIS.md SS2.2:
+#   (label, hip_x, hip_y, hip_z, swing_azimuth_deg)
+# These SUPERSEDE the Rev R5 keep-out boxes that used to live here, which were
+# at the wrong stations entirely (fwd Y 15..35 vs the real fore hip at Y = -7,
+# and X -130..-95 vs the real port hips at X -79 / -90).
+#
+# What the hull carries: bolt bosses ONLY.  The bay's recess depth is carried
+# on the printed bay plate as a cowl (canonical_leg_r6_*.scad bay_cowl), not on
+# the airframe -- a full flat pad on the hull costs 240 g because it must fill
+# 9-30 mm of flank curvature, and the footprint's interior is already occupied
+# by the wing-spar boss, wing-root mortise and nacelle-servo pad, so it cannot
+# be sunk inward either.  These bosses are internal thickening: modelled deep
+# and clipped by the outer-skin envelope, so each conforms to the real curved
+# wall and fuses to it (same treatment as the nacelle-servo pads above).
+LG_CORNERS = [
+    ("fore-port", -90.0, -7.0, 38.0, -22.4),
+    ("fore-stbd", -249.8, -7.0, 38.0, -157.6),
+    ("aft-port", -79.0, 107.0, 38.0, 28.0),
+    ("aft-stbd", -260.8, 107.0, 38.0, 152.0),
 ]
+
+# Bay plate bolt pattern, leg-local (canonical_leg_r6_*.scad bay()).
+LG_BAY_BACK_X = -8.0            # plate datum
+LG_BAY_CANT = -11.5             # deg; negative = leans outboard at the top
+LG_PLATE_Z0 = 12.0              # plate frame origin above the hip
+LG_BOLT_YB = (-15.0, 15.0)      # along the pin axis
+LG_BOLT_ZB = (-28.0, 42.0)      # up the canted plane
+LG_BOLT_PLATE_X = -4.1          # bolt start, plate frame
+
+LG_BOSS_R = 8.0                 # Ø16 internal boss around each bolt
+LG_BOSS_DEPTH = 5.0             # mm of internal thickening (2 mm wall -> 7 mm)
+LG_M3_D = 3.4                   # M3 clearance through-bore
+
+# Retained as an informational clearance check (now at the Rev R6 stations).
+LEG_ZONES = [
+    (label, (hx - 25.0, hx + 25.0, hy - 30.0, hy + 30.0, 10.0, 60.0))
+    for label, hx, hy, _hz, _az in LG_CORNERS
+]
+
+
+def _lg_bolt_frame(hx, hy, hz, az_deg):
+    """Return (bolt_points, axis) in HULL frame for one bay station.
+
+    Mirrors the OpenSCAD construction exactly:
+        translate([BAY_BACK_X, 0, PLATE_Z0]) rotate([0, -BAY_CANT, 0])
+            translate([LG_BOLT_PLATE_X, yb, zb]) rotate([0, 90, 0]) cylinder(...)
+    OpenSCAD's rotate([0, a, 0]) maps x -> (cos a, 0, -sin a) and
+    z -> (sin a, 0, cos a); here a = -BAY_CANT.
+    """
+    a = np.radians(-LG_BAY_CANT)
+    e_x = np.array([np.cos(a), 0.0, -np.sin(a)])   # plate outboard normal
+    e_y = np.array([0.0, 1.0, 0.0])
+    e_z = np.array([np.sin(a), 0.0, np.cos(a)])
+    p0 = np.array([LG_BAY_BACK_X, 0.0, LG_PLATE_Z0])
+
+    t = np.radians(az_deg)
+    rz = np.array([[np.cos(t), -np.sin(t), 0.0],
+                   [np.sin(t), np.cos(t), 0.0],
+                   [0.0, 0.0, 1.0]])
+    hip = np.array([hx, hy, hz])
+
+    pts = []
+    for yb in LG_BOLT_YB:
+        for zb in LG_BOLT_ZB:
+            local = p0 + LG_BOLT_PLATE_X * e_x + yb * e_y + zb * e_z
+            pts.append(rz @ local + hip)
+    return pts, rz @ e_x
+
+
+def _skin_anchor(shell_tm, p, axis, radius):
+    """Slide a bolt point onto the OUTER SKIN along its own axis.
+
+    Returns the most outboard shell vertex inside the boss footprint, or None
+    if the axis misses the hull.  This is required because the bay plate datum
+    floats 9-30 mm off the flank (the plate is canted and the flank is doubly
+    curved), so a boss anchored at the plate-frame bolt point is almost
+    entirely outside the envelope and the clip trims it to a ~1.5 mm wafer
+    instead of the intended LG_BOSS_DEPTH of thickening.
+    """
+    v = shell_tm.vertices - p
+    near = np.abs(v).max(axis=1) < 60.0
+    if not near.any():
+        return None
+    v = v[near]
+    along = v @ axis
+    radial = np.linalg.norm(v - np.outer(along, axis), axis=1)
+    sel = radial < radius
+    if not sel.any():
+        return None
+    return p + axis * float(along[sel].max())
+
+
+def lg_bay_features(shell_tm):
+    """Return (positives, negatives, note) for the four landing-gear bays."""
+    pos, neg, missed = [], [], []
+    for label, hx, hy, hz, az in LG_CORNERS:
+        pts, axis = _lg_bolt_frame(hx, hy, hz, az)
+        for i, p in enumerate(pts):
+            anchor = _skin_anchor(shell_tm, p, axis, LG_BOSS_R)
+            if anchor is None:
+                missed.append(f"{label}#{i}")
+                continue
+            # Boss: from LG_BOSS_DEPTH inboard of the skin, out past it; the
+            # envelope clip trims the outboard end back to the real surface.
+            pos.append(axis_cylinder(anchor, axis, -LG_BOSS_DEPTH, 8.0,
+                                     LG_BOSS_R))
+            # Bore: through boss + wall, generous either side.
+            neg.append(axis_cylinder(anchor, axis, -LG_BOSS_DEPTH - 6.0, 10.0,
+                                     LG_M3_D / 2.0))
+    note = f"{len(pos)} landing-gear bay bolt bosses (4 x 4 corners)"
+    if missed:
+        note += f"  [WARN missed skin: {', '.join(missed)}]"
+    return pos, neg, note
 
 
 # ---------------------------------------------------------------------------
@@ -398,10 +521,14 @@ def build_negatives(shell_tm):
                 )
     notes.append("servo M3 pilot bores")
 
+    _lg_pos, lg_neg, _n = lg_bay_features(shell_tm)
+    cutters.extend(lg_neg)
+    notes.append(f"{len(lg_neg)} landing-gear bay M3 bores")
+
     return cutters, notes
 
 
-def build_positives():
+def build_positives(shell_tm):
     """Return (raw deep features, notes).  Clipped to the envelope in main()."""
     feats, notes = [], []
 
@@ -463,6 +590,10 @@ def build_positives():
             feats.append(from_man(to_man(body) - to_man(bore)))
             n += 1
     notes.append(f"Inara avionics bosses ({n})")
+
+    lg_pos, _lg_neg, lg_note = lg_bay_features(shell_tm)
+    feats.extend(lg_pos)
+    notes.append(lg_note)
 
     return feats, notes
 
@@ -601,7 +732,8 @@ def repair_exported(out_path):
     """Reload the exported cargo STL, weld+clean it to a watertight single body,
     and re-stamp the HULL-FRAME marker.  Runs WITHOUT Blender, so it serves both
     as the tail of the full merge (guaranteeing the ON-DISK file is clean, not
-    just the in-memory float64 result) and as a standalone ``--repair-only`` pass on an already-published cargo STL."""
+    just the in-memory float64 result) and as a standalone ``--repair-only``
+    pass on an already-published cargo STL."""
     print(f"\n=== repair_exported (float32 round-trip finalize): {out_path} ===")
     m = trimesh.load(out_path, process=False)
     m.merge_vertices()
@@ -656,7 +788,7 @@ def main():
     )
 
     negs, nnotes = build_negatives(shell_tm)
-    poss, pnotes = build_positives()
+    poss, pnotes = build_positives(shell_tm)
     print(f"\n  negatives ({len(negs)} cutters):")
     for n in nnotes:
         print(f"    - {n}")
