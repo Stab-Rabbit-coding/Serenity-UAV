@@ -397,8 +397,22 @@ def _skin_anchor(shell_tm, p, axis, radius):
     return p + axis * float(along[sel].max())
 
 
+# DISABLED pending LG-10 rework (2026-08-09).  The bolt stations below were
+# derived against the bare cargo FLANK, but the real mounting face is the
+# ANGLED TRAPEZOIDAL FLAT of the landing-gear opening in the sponson
+# (docs/LANDING_GEAR_ANALYSIS.md SS2.4a).  Bolts on the flank measure
+# 5.6-64.1 deg off the local surface normal and the bosses add almost no
+# material.  Left in the tree because the machinery is correct and only the
+# stations/axes are wrong -- but OFF by default so a routine merge run cannot
+# inject misplaced geometry into the published cargo shell.
+LG_BAY_ENABLED = False
+
+
 def lg_bay_features(shell_tm):
     """Return (positives, negatives, note) for the four landing-gear bays."""
+    if not LG_BAY_ENABLED:
+        return [], [], ("landing-gear bay bosses DISABLED "
+                        "(LG-10 rework: wrong mounting face, see SS2.4a)")
     pos, neg, missed = [], [], []
     for label, hx, hy, hz, az in LG_CORNERS:
         pts, axis = _lg_bolt_frame(hx, hy, hz, az)

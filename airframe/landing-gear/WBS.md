@@ -147,17 +147,43 @@ the lowest.
     active default. Full structural comparison:
     `docs/LANDING_GEAR_ANALYSIS.md` §4.7.
 
-- [ ] **LG-10 Finalize the 4 bay placements** in `SerenityAssembly.FCStd`:
-    conform each bay plate's back face to the true flank curvature at its
-    station (§ table above; flank slope ≈22° approximated flat today), remove
-    the retired Strong-Leg Boolean objects `Union`…`Union003`, bake, re-export.
-    Z-leveling rule: align all 4 feet to the most negative Z. Interim: the
-    identity-placed `lg_r6_1_5in_hull_legs.stl` stands in inside
-    `serenity_assembly.py`. **BLOCKS LG-02 and leg printing.**
+- [ ] **LG-10 Finalize the 4 bay placements.** Substantially re-scoped
+    2026-08-09 — the original wording below is superseded. Measurement showed
+    the bay plate never touched the hull (back face floating 14–17 mm outboard,
+    `BAY_CANT` sign inverted, 15–42 mm of curvature across the footprint), and
+    the mounting face was then identified as the **angled trapezoidal flat of
+    the landing-gear opening in the sponson**, not the flank at all
+    (`docs/LANDING_GEAR_ANALYSIS.md` §2.4a). Ordered remaining steps:
 
-- [ ] **LG-17 Drop-height decision: 6 ft vs 4 ft schedule** — numbers ready in
-    `docs/LANDING_GEAR_ANALYSIS.md` §4.4; changes ductile wire stock Ø only
-    (4.36 vs 3.81 mm). Owner decision. **BLOCKS LG-15 procurement.**
+    - [ ] **LG-10.1** Re-measure both trapezoidal opening flats per side. The
+        fore flat is measured (Y −7: Z 45–48, half-width 67.1→67.7, outer X
+        −102.8→−102.2); the **aft outline is noisy and did not segment
+        cleanly** — it is the blocker for everything below.
+    - [ ] **LG-10.2** Fit the opening outline on each flat and re-derive the
+        §2.2 hip stations onto those faces (currently hips are at hull Z +38 on
+        the cargo flank). Keep feet within 5 mm of the canonical QMx stations.
+    - [ ] **LG-10.3** Re-aim the 4 bay bolts per corner normal to the
+        trapezoidal flat, relocate the 16 bosses in
+        `merge_cargo_interior.py` off the bare flank, then set
+        `LG_BAY_ENABLED = True` (gated off 2026-08-09 so a routine merge run
+        cannot publish misplaced geometry).
+    - [ ] **LG-10.4** Hollow/reinforce the sponson for the attachment.
+        **Must clear the wing** — Ø12.3 spar at Y +31.7 and root mortises at
+        Y +57.5, Z 62.5; the sponson spans the wing-root station.
+    - [ ] **LG-10.5** Re-run the cargo merge, verify watertight + CI-valid,
+        then publish to `cargo_sect_shell24_2mm_repaired.stl` (the merged
+        shell is currently held in scratch, canonical file untouched).
+    - [ ] **LG-10.6** Generate the per-station hull patches and set
+        `BAY_CONFORM = true` so the bay back face is cut to the real surface.
+    - [ ] **LG-10.7** Purge stale FCStd objects `leg_4_scaled24` and
+        `nacelle_port_revq` (the `Union`…`Union003` Strong-Leg objects named
+        in the original item are **already gone**), bake, re-export.
+    - [ ] **LG-10.8** Z-leveling: align all 4 feet to the most negative Z.
+
+- [x] **LG-17 Drop-height decision — CLOSED 2026-08-09, 4 ft adopted**
+    (owner). Ductile stock Ø4.36 → **Ø3.81** mm, same lengths; wire mass
+    70.2 → 53.6 g/aircraft. P_wire 4,333 → 2,889 N; F_leg (1.5in) 1,241 →
+    827 N; hip moment 52.0 → 34.7 N·m. Unblocks LG-15 procurement.
 
 ##### 1.1.4.2 *Spring and Ductile Wires*
 
