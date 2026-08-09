@@ -3,7 +3,6 @@
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
 <!-- Last updated: 2026-08-09 — Automated reconciliation pass -->
-Archived 2026-06-10 (renamed to Wash / Zoë within Rev Q):
 
 
                                        scripts archived alongside their boards
@@ -1599,3 +1598,8 @@ docs/DOCUMENTATION_RECONCILIATION_2026-07-28.md — [PENDING AI CLASSIFICATION]
 tools/compact_bom_entries.py — [PENDING AI CLASSIFICATION]
 tools/landing_gear_bay_pad_fit.py — [PENDING AI CLASSIFICATION]
 tools/__pycache__/landing_gear_bay_pad_fit.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
+
+## --- AUTO-DISCOVERED (2026-08-09) ---
+tools/landing_gear_cowl_clearance.py — [PENDING AI CLASSIFICATION]
+airframe/blender-scripts/__pycache__/add_structural_features.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]
+airframe/stls/fuselage/cargo/__pycache__/generate_cargo_hinge_retention.cpython-313.pyc — [IGNORED/VCS-EXCLUDED]

@@ -312,6 +312,64 @@ unambiguous field-inspection indicator**
 in the shorter-radius 1.5in leg); TPU treads slide rather than grab —
 intended.
 
+### 4.5a Stroke ↔ Bow-Rise Relation — Correction (2026-08-09)
+
+**`wire_stroke_available()` in `tools/landing_gear_r6_sizing.py` is a factor of
+4 too small.** The script models the wire as a two-hinge mechanism (two rigid
+half-links, plastic hinge at mid-span) but implements the chord shortening as
+`Δ = (h² − h₀²) / (2B)`. Re-deriving that mechanism symbolically (SymPy: series
+expansion of the exact chord `2√(ℓ² − h²)` about `h = 0`, with `ℓ = B/2`) gives
+
+```text
+Δ_exact  = 2√(ℓ² − h₀²) − 2√(ℓ² − h²)          (ℓ = B/2)
+Δ_approx = 2(h² − h₀²) / B
+```
+
+The implemented form divides by `2B` where the mechanism divides by `B/2`. The
+ratio `Δ_approx / Δ_script` is exactly **4.00** at every bow rise, confirming an
+algebra slip rather than a modelling choice. At the ductile design point
+(B = 55 mm, h₀ = 3.5 mm):
+
+| h (mm) | 2-hinge exact | 2-hinge approx | parabola, const. arc | script |
+| --- | --- | --- | --- | --- |
+| 6.0 | 0.878 | 0.864 | 1.145 | 0.216 |
+| 10.0 | 3.318 | 3.191 | 4.262 | 0.798 |
+| 14.0 | 7.214 | 6.682 | 9.061 | 1.670 |
+| 19.2 | 15.177 | 12.960 | 18.281 | 3.240 |
+
+**Consequences (open — the wire schedule is NOT re-solved here; that is LG-15 /
+LG-17 owner territory):**
+
+1. `H_DEF_DUCT = 19.2 mm` — the "visibly bent" field-inspection indicator and
+   the `leg_deformed` / `ductile_wire_deformed` renders — is wrong. The bow that
+   actually delivers the required 3.24 mm stroke is **9.90 mm** (exact two-hinge)
+   or 10.07 mm (approx).
+2. `wire_stroke_available()` under-credits every wire 4×, so the solver grew the
+   ductile bow span to 55 mm where ≈14 mm meets the same energy demand. Stock
+   could fall 75 mm → ≈40 mm, worth **≈33 g** against LG-18.
+3. Knock-on to LG-02/LG-10: the 82 mm bay plate length is set by that 75 mm
+   wire (bosses sit ≈59 mm from the hip along `CHORD_AZ`). A correctly-sized
+   wire shrinks the bay enough to clear the wing-spar boss, wing-root mortise
+   and nacelle-servo pad interior conflicts recorded in §7.
+
+**What does NOT change:** the required stroke itself. It comes from energy,
+`s = U/P = 3.24 mm`, independent of the bow geometry. That is what LG-13 is
+sized against — see below.
+
+**LG-13 consequence.** The chord shortens by the full stroke as the bow deepens,
+so each wire end slides **1.62 mm deeper into its bore** at full ductile stroke
+(3.24 mm ÷ 2 ends), against an 8 mm ductile seat with 2 mm run-in. The seat is a
+**sliding** interface. A set screw torqued onto it would clamp that motion and
+fight the fuse, so retention is a **nylon-tipped M2 drag screw** (≈5 N friction:
+enough to stop vibration walk-out, and 0.12 % of the 4,333 N chord force, so it
+does not impede the stroke). Bay side only — with the bay end captive the wire
+cannot leave the thigh-side blind bore either, since escape requires axial
+translation.
+
+Source: SymPy derivation, 2026-08-09. Reproduce with the derivation block in
+`tools/landing_gear_r6_sizing.py` (run under `/usr/bin/python3` — the repo
+`.venv` hides the system SymPy).
+
 ### 4.6 Structure Checks — R_h-Independent Part (both variants)
 
 The hip bending moment **M = 2·P·r depends only on the wire hardware**,

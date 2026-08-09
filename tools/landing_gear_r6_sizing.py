@@ -62,6 +62,7 @@ License : CC BY 4.0 <https://creativecommons.org/licenses/by/4.0/>
 """
 
 import math
+import sys
 
 # ---------------------------------------------------------------------------
 # Aircraft and mission constants
@@ -117,9 +118,67 @@ END_RUN_IN = 2.0               # mm, straight run-in beyond the socket mouth
 def wire_stroke_available(b_mm: float) -> float:
     """Axial chord-shortening available on a bow span B before the bow
     exceeds the model validity limit h_max = HMAX_FRAC * B.
-    s = (h_max^2 - h0^2) / (2B)."""
+    s = (h_max^2 - h0^2) / (2B).
+
+    KNOWN DEFECT (2026-08-09, docs/LANDING_GEAR_ANALYSIS.md SS4.5a): this is a
+    factor of 4 LOW.  The two-hinge mechanism this claims to model gives
+    Delta = 2*(h^2 - h0^2)/B, i.e. division by B/2, not by 2B.  Left in place
+    deliberately: correcting it re-opens the ductile wire schedule (LG-15) and
+    the drop-height decision (LG-17), which are owner calls, and every
+    published Rev R6 number traces to the current form.  Run
+    `--derive-stroke` for the symbolic proof and the corrected values.
+    """
     hmax = HMAX_FRAC * b_mm
     return (hmax**2 - H0**2) / (2.0 * b_mm)
+
+
+def derive_stroke_relation() -> None:
+    """Symbolic re-derivation of the stroke <-> bow-rise relation (LG-13).
+
+    Proves the factor-4 defect in wire_stroke_available() and reports the
+    per-end socket slide that sets the LG-13 retention detail.  Needs SymPy:
+    run under /usr/bin/python3, since the repo .venv is built with
+    include-system-site-packages = false and hides the apt-installed sympy.
+    """
+    try:
+        import sympy as sp
+    except ImportError:
+        print("  [skip] sympy unavailable -- run under /usr/bin/python3")
+        return
+
+    h, h0s, ll = sp.symbols("h h0 l", positive=True)
+    chord = 2 * sp.sqrt(ll**2 - h**2)
+    delta = chord.subs(h, h0s) - chord
+    bsym = sp.Symbol("B", positive=True)
+    series = sp.simplify(
+        sp.series(delta, h, 0, 3).removeO().subs(ll, bsym / 2))
+
+    print("\n--- LG-13: stroke <-> bow-rise derivation " + "-" * 33)
+    print("  two-hinge exact : Delta = 2*sqrt(l^2-h0^2) - 2*sqrt(l^2-h^2),  l = B/2")
+    print(f"  small-h series  : Delta ~ {series}")
+    print("  script uses     : Delta = (h^2 - h0^2)/(2B)      <-- 4x LOW")
+
+    bb, hh0 = 55.0, H0
+    lv = bb / 2.0
+    print(f"\n  at the ductile design point B={bb:.0f} mm, h0={hh0:.1f} mm:")
+    print(f"  {'h (mm)':>8} {'exact':>10} {'approx':>10} {'script':>10} {'ratio':>7}")
+    for hv in (6.0, 10.0, 14.0, 19.2):
+        ex = 2 * math.sqrt(lv**2 - hh0**2) - 2 * math.sqrt(lv**2 - hv**2)
+        ap = 2 * (hv**2 - hh0**2) / bb
+        sc = (hv**2 - hh0**2) / (2 * bb)
+        print(f"  {hv:8.1f} {ex:10.3f} {ap:10.3f} {sc:10.3f} {ap / sc:7.2f}")
+
+    stroke = 3.24  # mm, U/P at the 6 ft ductile design point
+    h_true = float(sp.nsolve(
+        sp.Eq(2 * sp.sqrt(lv**2 - hh0**2) - 2 * sp.sqrt(lv**2 - h**2), stroke),
+        h, 8.0))
+    print(f"\n  required stroke (U/P)            = {stroke:.2f} mm")
+    print(f"  fired bow, corrected             = {h_true:.2f} mm "
+          f"(H_DEF_DUCT currently 19.2 -- wrong)")
+    print(f"  per-end slide into the socket    = {stroke / 2:.2f} mm "
+          f"(seat {SEAT_DUCTILE:.0f} mm + {END_RUN_IN:.0f} mm run-in)")
+    print("  => the seat SLIDES: retention must be a nylon-tipped drag screw,")
+    print("     not a clamp.  See docs/LANDING_GEAR_ANALYSIS.md SS4.5a.")
 
 
 def solve_ductile_wire(u_per_wire_j: float, f_leg_target_n: float, r_h: float):
@@ -281,4 +340,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    if "--derive-stroke" in sys.argv:
+        derive_stroke_relation()
+    else:
+        main()
