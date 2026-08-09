@@ -45,7 +45,7 @@ Mirrored: 33 memory files plus the index.
 - [Trust-module G351x/SLB9672 retarget](project_trust_module_g351x_retarget.md) — 2026-08-03: Jayne=G3519-Q1 RGZ-48, gateway+Kaylee=G3518-Q1 RHB-32 (no PBx ports), SLB9672; "observer"=Jayne / "flight engineer"=Kaylee; Kaylee symbols are STACKED (overlap, not duplicate labels); committed .net files were stale
 - [venv hides system Python pkgs](env_venv_hides_system_python.md) — manifold3d/sympy/matplotlib exist but are hidden by .venv; use /usr/bin/python3, never pip (not permitted); no rtree/embree either
 - [Nozzle flap shingle (Rev T3)](project_nozzle_flap_shingle.md) — 8×50° flaps in ONE radial band interpenetrated (17/12 non-manifold edges, 0 open edges, split()=0 bodies); alternate flaps now seal-lapped 0.2mm outboard; masters unchanged so bore targets hold; print = 4 master + 4 seal; -5deg variant discarded
-- [Generated index conflicts](project_generated_index_conflicts.md) — PROJECT_INDEX/ARCHIVE_INDEX/index_tags.json conflict on EVERY base merge; regenerate from a pristine `git archive` export (never pick a side, never in a worktree — `.git` is a file there), commit with --no-verify
+- [Generated index conflicts](project_generated_index_conflicts.md) — PROJECT_INDEX/ARCHIVE_INDEX/index_tags.json conflict on EVERY base merge; resolve by REGENERATING, never by picking a side. PR #183 made the generator deterministic (git-tracked only), so regenerating anywhere is safe and --no-verify is no longer needed
 
 ---
 
@@ -654,13 +654,22 @@ metadata:
 
 ---
 name: project_generated_index_conflicts
-description: "PROJECT_INDEX.md/ARCHIVE_INDEX.md/tools/index_tags.json conflict on EVERY base movement; always regenerate from a pristine git archive export, never pick a merge side, never regenerate in a worktree"
+description: "PROJECT_INDEX.md/ARCHIVE_INDEX.md/tools/index_tags.json conflict on EVERY base movement; resolve by regenerating, never by picking a merge side. Since PR #183 the generator is deterministic (git-tracked only) so regenerating anywhere is safe"
 metadata: 
   node_type: memory
   type: project
   originSessionId: 316a1d12-da5a-471d-b586-fa5585a88b3e
-  modified: 2026-08-09T15:42:49.097Z
+  modified: 2026-08-09T21:11:00.739Z
 ---
+
+**STATUS UPDATE (PR #183, 2026-08-09): items 2 and 3 below are FIXED AT THE
+SOURCE.** `tools/precommit_index.py` now filters `collect_files()` through
+`git ls-files`, so its output is a deterministic function of the COMMIT.
+Regenerating in a normal clone or a worktree is now safe and matches CI exactly,
+and `--no-verify` is no longer needed for index commits. Item 1 (these files
+conflict on every base movement) is UNCHANGED and still the main thing to know.
+The history below is kept because it explains why the generator looks the way it
+does — and because the fix only helps on commits that contain it.
 
 The three generated artefacts — `PROJECT_INDEX.md`, `ARCHIVE_INDEX.md`,
 `tools/index_tags.json` — are committed to git AND asserted by the CI check
