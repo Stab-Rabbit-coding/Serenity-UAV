@@ -6,7 +6,7 @@
      look, change the generator (tools/precommit_index.py), not this
      file. Machine-readable form: tools/index_tags.json -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last generated: 2026-08-08 -->
+<!-- Last generated: 2026-08-09 -->
 
 ## Tag Index
 
@@ -507,8 +507,8 @@ nacelle_stbd_revs.stl — STL mesh — header: SerenityUAV HULL-FRAME R1 Nacelle
 ```text
 nacelle_nozzle_flap.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, propulsion, structural]
 nacelle_nozzle_iris-closed-5deg.stl — STL mesh — header: OpenSCAD Model [cad-mesh, propulsion, structural]
-nacelle_nozzle_iris-closed.stl — STL mesh — header: OpenSCAD Model [cad-mesh, propulsion, structural]
-nacelle_nozzle_iris-open.stl — STL mesh — header: OpenSCAD Model [cad-mesh, propulsion, structural]
+nacelle_nozzle_iris-closed.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, propulsion, structural]
+nacelle_nozzle_iris-open.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, propulsion, structural]
 nacelle_nozzle_iris.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, propulsion, structural]
 nacelle_nozzle_ring.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, propulsion, structural]
 nacelle_nozzle_throat.stl — STL mesh (ASCII): OpenSCAD_Model [cad-mesh, propulsion, structural]
