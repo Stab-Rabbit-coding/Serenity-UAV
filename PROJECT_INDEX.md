@@ -2,7 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-08-09 — Automated reconciliation pass -->
-package.json                       — Node.js dependency manifest (tooling/preview support)
 package-lock.json                  — Node.js dependency lockfile
 previewConfig.json                 — Live preview configuration
 requirements-dev.txt               — Python development dependencies

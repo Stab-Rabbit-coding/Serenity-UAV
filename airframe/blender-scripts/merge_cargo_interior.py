@@ -374,6 +374,106 @@ def _lg_bolt_frame(hx, hy, hz, az_deg):
     return pts, rz @ e_x
 
 
+# --- LG-10.2/10.3: cut the gear wells open at the canonical stations --------
+# The shell carries only shallow trapezoidal OUTLINES of the wells; they are
+# not open and there is no mounting structure.  Owner direction 2026-08-09:
+# cut them open at the canonical stations and build a proper mount.
+#
+# Each well is a trapezoid (narrow at the bottom -- the mouth the leg swings
+# out of, per SS2.4a) cut normal to the LOCAL skin, with a reinforcing collar
+# grown around it on the inside so the bay has real material to bolt into.
+# The collar is envelope-clipped like every other positive here, so it
+# conforms to the real curved wall.
+# OFF pending station reconciliation (see below).  Cutting at the canonical
+# stations does not work yet: the sponson's 25 deg outboard panel spans
+# Y 8..93, but the canonical stations are Y -7 (forward of it) and Y +107 (aft
+# of it), so _local_frame lands on the door-frame/joint surfaces instead --
+# measured normals are Y-dominated fore (0.901, 0.798) and -Z-dominated aft
+# (-0.846, -0.934), none of them the outboard panel.  Either the stations move
+# onto the panel or the sponson is extended to reach them.  Owner call.
+LG_WELL_ENABLED = False
+LG_WELL_L = 70.0        # mm, well length up the panel
+LG_WELL_W_TOP = 34.0    # mm, width at the top (wide end)
+LG_WELL_W_BOT = 25.0    # mm, width at the bottom (mouth)
+LG_COLLAR = 8.0         # mm, reinforcing collar width around the opening
+LG_COLLAR_D = 5.0       # mm, collar thickening inboard of the skin
+
+
+def _local_frame(shell_tm, hx, hy, hz, az_deg):
+    """Local skin frame at a bay station: (origin on skin, outward normal,
+    up-the-panel, across).  The normal is averaged over the faces near the
+    station so a single bad facet cannot tilt the well."""
+    d = np.array([np.cos(np.radians(az_deg)), np.sin(np.radians(az_deg)), 0.0])
+    hip = np.array([hx, hy, hz])
+    v = shell_tm.vertices - hip
+    along = v @ d
+    lateral = v - np.outer(along, d)
+    lateral[:, 2] = 0.0
+    sel = (
+        (np.linalg.norm(lateral, axis=1) < 12.0)   # near the station in plan
+        & (np.abs(v[:, 2]) < 12.0)                 # AND at the hip's height
+        & (np.abs(along) < 80.0)
+    )
+    if not sel.any():
+        return None
+    # skin point = most outboard vertex at the station's own height.  The Z
+    # constraint is essential: without it argmax finds the hull's widest point
+    # (Z ~78) rather than the bay station (Z 38), and the frame comes out
+    # tilted with a large spurious Y component in the normal.
+    origin = shell_tm.vertices[sel][np.argmax(along[sel])]
+
+    cen = shell_tm.triangles.mean(axis=1)
+    near = np.linalg.norm(cen - origin, axis=1) < 14.0
+    if not near.any():
+        return None
+    n = shell_tm.face_normals[near].mean(axis=0)
+    if n @ d < 0:
+        n = -n
+    n /= np.linalg.norm(n)
+
+    up = np.array([0.0, 0.0, 1.0]) - n * (n @ [0.0, 0.0, 1.0])
+    up /= np.linalg.norm(up)
+    across = np.cross(n, up)
+    return origin, n, up, across
+
+
+def _trap(origin, n, up, across, w_bot, w_top, length, t0, t1):
+    """Trapezoidal prism on an arbitrary frame, spanning t0..t1 along n."""
+    hb, ht, hl = w_bot / 2.0, w_top / 2.0, length / 2.0
+    quad = [(-hb, -hl), (hb, -hl), (ht, hl), (-ht, hl)]
+    pts = []
+    for t in (t0, t1):
+        for a, b in quad:
+            pts.append(origin + across * a + up * b + n * t)
+    return trimesh.convex.convex_hull(trimesh.PointCloud(np.array(pts)))
+
+
+def lg_well_features(shell_tm):
+    """Return (collars, cuts, note): open the four wells and reinforce them."""
+    if not LG_WELL_ENABLED:
+        return [], [], "landing-gear wells DISABLED"
+    pos, neg, missed = [], [], []
+    for label, hx, hy, hz, az in LG_CORNERS:
+        fr = _local_frame(shell_tm, hx, hy, hz, az)
+        if fr is None:
+            missed.append(label)
+            continue
+        o, n, up, across = fr
+        # collar first (grown outline, inboard thickening), then the opening
+        pos.append(_trap(o, n, up, across,
+                         LG_WELL_W_BOT + 2 * LG_COLLAR,
+                         LG_WELL_W_TOP + 2 * LG_COLLAR,
+                         LG_WELL_L + 2 * LG_COLLAR,
+                         -LG_COLLAR_D, 8.0))
+        neg.append(_trap(o, n, up, across,
+                         LG_WELL_W_BOT, LG_WELL_W_TOP, LG_WELL_L,
+                         -LG_COLLAR_D - 25.0, 25.0))
+    note = f"{len(pos)} landing-gear wells cut open + reinforcing collars"
+    if missed:
+        note += f"  [WARN no local frame: {', '.join(missed)}]"
+    return pos, neg, note
+
+
 def _skin_anchor(shell_tm, p, axis, radius):
     """Slide a bolt point onto the OUTER SKIN along its own axis.
 
@@ -535,6 +635,10 @@ def build_negatives(shell_tm):
                 )
     notes.append("servo M3 pilot bores")
 
+    _w_pos, w_neg, _wn = lg_well_features(shell_tm)
+    cutters.extend(w_neg)
+    notes.append(f"{len(w_neg)} landing-gear well openings")
+
     _lg_pos, lg_neg, _n = lg_bay_features(shell_tm)
     cutters.extend(lg_neg)
     notes.append(f"{len(lg_neg)} landing-gear bay M3 bores")
@@ -608,6 +712,10 @@ def build_positives(shell_tm):
     lg_pos, _lg_neg, lg_note = lg_bay_features(shell_tm)
     feats.extend(lg_pos)
     notes.append(lg_note)
+
+    w_pos, _w_neg, w_note = lg_well_features(shell_tm)
+    feats.extend(w_pos)
+    notes.append(w_note)
 
     return feats, notes
 
