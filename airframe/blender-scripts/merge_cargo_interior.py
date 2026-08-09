@@ -391,87 +391,101 @@ def _lg_bolt_frame(hx, hy, hz, az_deg):
 # measured normals are Y-dominated fore (0.901, 0.798) and -Z-dominated aft
 # (-0.846, -0.934), none of them the outboard panel.  Either the stations move
 # onto the panel or the sponson is extended to reach them.  Owner call.
-LG_WELL_ENABLED = False
-LG_WELL_L = 70.0        # mm, well length up the panel
-LG_WELL_W_TOP = 34.0    # mm, width at the top (wide end)
-LG_WELL_W_BOT = 25.0    # mm, width at the bottom (mouth)
-LG_COLLAR = 8.0         # mm, reinforcing collar width around the opening
-LG_COLLAR_D = 5.0       # mm, collar thickening inboard of the skin
+X_CL_HULL = -169.9          # hull centreline
+LG_WELL_ENABLED = True
+LG_WELL_Y = (-7.0, 107.0)   # canonical stations; sponson is squared to these
+LG_WELL_L = 70.0            # mm, well length UP the panel
+LG_WELL_W_TOP = 34.0        # mm, width along Y at the top (wide end)
+LG_WELL_W_BOT = 25.0        # mm, width along Y at the bottom (mouth)
+LG_COLLAR = 8.0             # mm, reinforcing collar around the opening
+LG_COLLAR_D = 5.0           # mm, collar thickening inboard of the skin
+
+# Measured sponson panel (tools/landing_gear_opening_fit.py, mirror-verified
+# to 1.4 mm).  Used directly instead of deriving a frame per station: a
+# per-station search lands on door-frame/joint surfaces at the fore end and
+# returns junk normals (Y-dominated fore, -Z-dominated aft).
+LG_PANEL_N = {"port": np.array([0.901, 0.015, -0.433]),
+              "stbd": np.array([-0.901, -0.015, -0.433])}
+LG_PANEL_PT = {"port": np.array([-84.9, 61.0, 38.0]),     # a point on the panel
+               "stbd": np.array([-253.9, 55.8, 37.2])}
+LG_SPONSON_Y = (-7.0, 107.0)   # squared-off sponson extent
 
 
-def _local_frame(shell_tm, hx, hy, hz, az_deg):
-    """Local skin frame at a bay station: (origin on skin, outward normal,
-    up-the-panel, across).  The normal is averaged over the faces near the
-    station so a single bad facet cannot tilt the well."""
-    d = np.array([np.cos(np.radians(az_deg)), np.sin(np.radians(az_deg)), 0.0])
-    hip = np.array([hx, hy, hz])
-    v = shell_tm.vertices - hip
-    along = v @ d
-    lateral = v - np.outer(along, d)
-    lateral[:, 2] = 0.0
-    sel = (
-        (np.linalg.norm(lateral, axis=1) < 12.0)   # near the station in plan
-        & (np.abs(v[:, 2]) < 12.0)                 # AND at the hip's height
-        & (np.abs(along) < 80.0)
-    )
-    if not sel.any():
-        return None
-    # skin point = most outboard vertex at the station's own height.  The Z
-    # constraint is essential: without it argmax finds the hull's widest point
-    # (Z ~78) rather than the bay station (Z 38), and the frame comes out
-    # tilted with a large spurious Y component in the normal.
-    origin = shell_tm.vertices[sel][np.argmax(along[sel])]
-
-    cen = shell_tm.triangles.mean(axis=1)
-    near = np.linalg.norm(cen - origin, axis=1) < 14.0
-    if not near.any():
-        return None
-    n = shell_tm.face_normals[near].mean(axis=0)
-    if n @ d < 0:
-        n = -n
-    n /= np.linalg.norm(n)
-
+def _panel_frame(side):
+    """(point-on-panel, outward normal, up-the-panel, across) for one side."""
+    n = LG_PANEL_N[side] / np.linalg.norm(LG_PANEL_N[side])
     up = np.array([0.0, 0.0, 1.0]) - n * (n @ [0.0, 0.0, 1.0])
     up /= np.linalg.norm(up)
     across = np.cross(n, up)
-    return origin, n, up, across
+    return LG_PANEL_PT[side], n, up, across
 
 
 def _trap(origin, n, up, across, w_bot, w_top, length, t0, t1):
     """Trapezoidal prism on an arbitrary frame, spanning t0..t1 along n."""
     hb, ht, hl = w_bot / 2.0, w_top / 2.0, length / 2.0
     quad = [(-hb, -hl), (hb, -hl), (ht, hl), (-ht, hl)]
-    pts = []
-    for t in (t0, t1):
-        for a, b in quad:
-            pts.append(origin + across * a + up * b + n * t)
+    pts = [origin + across * a + up * b + n * t
+           for t in (t0, t1) for a, b in quad]
     return trimesh.convex.convex_hull(trimesh.PointCloud(np.array(pts)))
 
 
+def sponson_square(shell_tm, side):
+    """Extend and square the sponson so it spans LG_SPONSON_Y.
+
+    The 25 deg panel is well formed from about Y +8 aft; forward of that the
+    skin sweeps up and inboard toward the head joint, leaving the fore
+    canonical station off structure.  This sweeps the existing forward-end
+    cross-section of the sponson lobe forward to the squared limit, so the
+    fore well lands in real material.  Aft already reaches past +107, so only
+    the fore end is built up.
+    """
+    sgn = 1.0 if side == "port" else -1.0
+    cen = shell_tm.triangles.mean(axis=1)
+    nrm = shell_tm.face_normals
+    seed = (
+        (sgn * nrm[:, 0] > 0.70) & (nrm[:, 2] < -0.25)
+        # X constraint is essential: without it the starboard INNER wall
+        # (whose normal points toward +X, i.e. inboard) is picked up as
+        # "port outward" and the convex hull spans the whole hull.
+        & (sgn * (cen[:, 0] - X_CL_HULL) > 30.0)
+        & (cen[:, 2] > 15.0) & (cen[:, 2] < 60.0)
+        & (cen[:, 1] > 8.0) & (cen[:, 1] < 34.0)      # forward end of the lobe
+    )
+    if seed.sum() < 20:
+        return None
+    v = shell_tm.vertices[np.unique(shell_tm.faces[seed].reshape(-1))]
+    _, n, _, _ = _panel_frame(side)
+    y0 = LG_SPONSON_Y[0]
+    pts = [v, v - n * 26.0]                    # give the lobe real thickness
+    for blk in list(pts):
+        f = blk.copy()
+        f[:, 1] = y0                           # sweep the section forward
+        pts.append(f)
+    return trimesh.convex.convex_hull(trimesh.PointCloud(np.vstack(pts)))
+
+
 def lg_well_features(shell_tm):
-    """Return (collars, cuts, note): open the four wells and reinforce them."""
+    """Return (positives, negatives, note): squared sponsons + open wells."""
     if not LG_WELL_ENABLED:
         return [], [], "landing-gear wells DISABLED"
-    pos, neg, missed = [], [], []
-    for label, hx, hy, hz, az in LG_CORNERS:
-        fr = _local_frame(shell_tm, hx, hy, hz, az)
-        if fr is None:
-            missed.append(label)
-            continue
-        o, n, up, across = fr
-        # collar first (grown outline, inboard thickening), then the opening
-        pos.append(_trap(o, n, up, across,
-                         LG_WELL_W_BOT + 2 * LG_COLLAR,
-                         LG_WELL_W_TOP + 2 * LG_COLLAR,
-                         LG_WELL_L + 2 * LG_COLLAR,
-                         -LG_COLLAR_D, 8.0))
-        neg.append(_trap(o, n, up, across,
-                         LG_WELL_W_BOT, LG_WELL_W_TOP, LG_WELL_L,
-                         -LG_COLLAR_D - 25.0, 25.0))
-    note = f"{len(pos)} landing-gear wells cut open + reinforcing collars"
-    if missed:
-        note += f"  [WARN no local frame: {', '.join(missed)}]"
-    return pos, neg, note
+    pos, neg, notes = [], [], []
+    for side in ("port", "stbd"):
+        ext = sponson_square(shell_tm, side)
+        if ext is not None:
+            pos.append(ext)
+            notes.append(f"{side} sponson squared to Y {LG_SPONSON_Y}")
+        o, n, up, across = _panel_frame(side)
+        for wy in LG_WELL_Y:
+            # slide the panel point along Y to this station
+            org = o + np.array([0.0, wy - o[1], 0.0])
+            pos.append(_trap(org, n, up, across,
+                             LG_WELL_W_BOT + 2 * LG_COLLAR,
+                             LG_WELL_W_TOP + 2 * LG_COLLAR,
+                             LG_WELL_L + 2 * LG_COLLAR, -LG_COLLAR_D, 6.0))
+            neg.append(_trap(org, n, up, across,
+                             LG_WELL_W_BOT, LG_WELL_W_TOP, LG_WELL_L,
+                             -LG_COLLAR_D - 30.0, 30.0))
+    return pos, neg, "; ".join(notes) + f"; {len(neg)} wells cut open"
 
 
 def _skin_anchor(shell_tm, p, axis, radius):
