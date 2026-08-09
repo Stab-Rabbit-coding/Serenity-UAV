@@ -409,6 +409,7 @@ LG_PANEL_N = {"port": np.array([0.901, 0.015, -0.433]),
 LG_PANEL_PT = {"port": np.array([-84.9, 61.0, 38.0]),     # a point on the panel
                "stbd": np.array([-253.9, 55.8, 37.2])}
 LG_SPONSON_Y = (-7.0, 107.0)   # squared-off sponson extent
+SPONSON_EXTEND = False         # not needed; see lg_well_features()
 
 
 def _panel_frame(side):
@@ -470,10 +471,17 @@ def lg_well_features(shell_tm):
         return [], [], "landing-gear wells DISABLED"
     pos, neg, notes = [], [], []
     for side in ("port", "stbd"):
-        ext = sponson_square(shell_tm, side)
-        if ext is not None:
-            pos.append(ext)
-            notes.append(f"{side} sponson squared to Y {LG_SPONSON_Y}")
+        # NO sponson extension.  Y -7 is approximately where the existing
+        # sponson already meets the wall (owner, 2026-08-09), and a direct
+        # intersection test confirms all four wells cut 6.0-6.7 cm^3 of real
+        # shell at the canonical stations without any build-up.  The earlier
+        # convex-hull extension added +61.7 g of bulge and erased ~120k faces
+        # of existing sponson detail for nothing.
+        if SPONSON_EXTEND:
+            ext = sponson_square(shell_tm, side)
+            if ext is not None:
+                pos.append(ext)
+                notes.append(f"{side} sponson squared to Y {LG_SPONSON_Y}")
         o, n, up, across = _panel_frame(side)
         for wy in LG_WELL_Y:
             # slide the panel point along Y to this station
