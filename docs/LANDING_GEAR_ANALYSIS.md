@@ -253,10 +253,55 @@ proportion and detail.
    why they measure 5.6-64.1° off the local normal. Relocate them to the
    aperture and aim each along its own local surface normal.
 
-   Open sub-question: the sponson envelope itself is not in the cargo shell
-   today. Confirm whether it is already carried by the wing STL (in which case
-   the two must be reconciled so the bay is not double-walled) or must be added
-   to the cargo section.
+   **RESOLVED (owner, 2026-08-09): the sponsons are already modelled in the
+   cargo section STLs.** No new envelope is needed and there is no
+   double-walling risk. Owner's description of the lower front of the cargo
+   section: the rectangular canonical cargo door in the centre, then vertical
+   corners, then vertical sides running back to an internal corner each side,
+   then a trapezoidal flat that runs into a sloped side — and the run with the
+   **trapezoidal cross-section is the sponson**.
+
+   Measured on the baked `cargo_sect_shell24_2mm_repaired.stl`, port side
+   (half-width = X − centreline −169.9):
+
+   | Station | Face | Z span | half-width | outer X |
+   | --- | --- | --- | --- | --- |
+   | Y −7 (fore) | belly turn | 0–7.5 | 52.8→56.2 | — |
+   | Y −7 | **vertical side (flat)** | **10–40** | **56.04** (const ±0.02) | **−113.86** |
+   | Y −7 | internal corner | ~42.5 | 56.0→66.9 | step ~11 mm outboard |
+   | Y −7 | trapezoidal flat | 45–48 | 67.1→67.7 | −102.8→−102.2 |
+   | Y −7 | sloped side | 50+ | 70.2 → flare | — |
+   | Y +107 (aft) | **vertical side (flat)** | **57.5–72.5** | 84.3→83.5 | −85.6→−86.4 |
+   | Y +107 | flat | 80–85 | 87.29 (const) | −82.61 |
+
+   **Which face is which (owner, 2026-08-09) — do not confuse these:**
+
+   - The **vertical walls** squared to port/starboard (Y −7: Z 10–40 at
+     half-width 56.04) are the **hull sides forward of the sponson**. They are
+     NOT the sponson and NOT a mounting face.
+   - The **angled trapezoidal flats** are the **modelled landing-gear
+     openings** — this is where the gear mounts. At Y −7 the fore flat measures
+     Z 45–48, half-width 67.1→67.7, outer X −102.8→−102.2.
+   - The **sponson** is the volume **between the two trapezoidal flats on each
+     side** (fore opening and aft opening). It may be hollowed and/or
+     reinforced as needed to carry the gear attachment.
+
+   So the mounting face is **angled, not vertical** — the bolt axis is normal
+   to the trapezoidal flat. This also means the earlier `BAY_CANT` solve
+   (−11.5°, §2.2 / `tools/landing_gear_bay_pad_fit.py`) was fitting the right
+   *kind* of surface after all; what was wrong was fitting it to the whole
+   82 × 40 flank footprint instead of to the actual opening.
+
+   **Wing interference is a hard constraint.** The wings attach to the cargo
+   lateral walls with the Ø12.3 spar at Y +31.7 and the root mortises at
+   Y +57.5, Z 62.5. Any hollowing or reinforcement of the sponson must clear
+   those, and the sponson sits between the fore and aft openings — i.e. spanning
+   the wing-root station. Check before cutting.
+
+   Still to do: re-measure both trapezoidal flats properly (the aft station's
+   outline is noisier than the fore and was not cleanly segmented), fit the
+   opening outline on each, and re-derive the §2.2 hip stations onto those
+   faces.
 2. **The bay "recess" is a hinged DOOR**, a separate gridded panel, not a rim
    moulded into the skin. Its outline is an irregular pentagon with one clipped
    corner — not the symmetric trapezoid currently in `bay_cowl()`. The
