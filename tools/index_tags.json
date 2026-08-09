@@ -268,6 +268,15 @@
       ],
       "archived": false
     },
+    "airframe/HULL_FRAME_REFERENCE.md": {
+      "description": "Airframe Hull-Frame and Canonical-Accuracy Reference",
+      "tags": [
+        "documentation",
+        "specification",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/LICENSE": {
       "description": "SERENITY UAV \u2014 AIRFRAME SUBSYSTEM LICENSING",
       "tags": [
@@ -9285,6 +9294,14 @@
       ],
       "archived": false
     },
+    "current-specification/SPEC_TEMPLATE.md": {
+      "description": "Specification Document Template and Approval Workflow",
+      "tags": [
+        "documentation",
+        "specification"
+      ],
+      "archived": false
+    },
     "current-specification/TODO.md": {
       "description": "Serenity UAV \u2014 Current Specification Work Breakdown Structure",
       "tags": [
@@ -9330,6 +9347,14 @@
     },
     "deferred/AGENTS.md": {
       "description": "Deferred Work \u2014 Agent Instructions",
+      "tags": [
+        "deferred-future",
+        "documentation"
+      ],
+      "archived": false
+    },
+    "deferred/DEFERRED_ITEM_TEMPLATE.md": {
+      "description": "Deferred Item Template and Handling Procedures",
       "tags": [
         "deferred-future",
         "documentation"
@@ -9613,6 +9638,13 @@
       ],
       "archived": false
     },
+    "docs/DOC_TEMPLATES.md": {
+      "description": "Documentation Structure Templates",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/DOC_VERIFICATION_0.6.2.md": {
       "description": "Documentation Verification (Task 0.6.2)",
       "tags": [
@@ -9797,6 +9829,15 @@
         "documentation",
         "project-tracking",
         "security"
+      ],
+      "archived": false
+    },
+    "docs/WBS_FEDERATION.md": {
+      "description": "WBS.md / TODO.md Federation Inventory (Rev S2)",
+      "tags": [
+        "documentation",
+        "emi-hardening",
+        "project-tracking"
       ],
       "archived": false
     },
@@ -10545,6 +10586,14 @@
       ],
       "archived": false
     },
+    "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md": {
+      "description": "Reducing token cost of a federated AGENTS.md set \u2014 relocate before you compress",
+      "tags": [
+        "documentation",
+        "security"
+      ],
+      "archived": false
+    },
     "docs/structural_analysis.md": {
       "description": "Serenity UAV \u2014 Fuselage Structural Analysis",
       "tags": [
@@ -10572,6 +10621,16 @@
     },
     "gcs/README.md": {
       "description": "Serenity UAV \u2014 Ground Control Station (Malcolm)",
+      "tags": [
+        "documentation",
+        "ground-control",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": false
+    },
+    "gcs/SKIPPER_SPEC.md": {
+      "description": "Skipper Ground Control Station \u2014 Interface and Platform Specification",
       "tags": [
         "documentation",
         "ground-control",
@@ -10803,6 +10862,15 @@
     },
     "graphical-build-guide/AGENTS.md": {
       "description": "Graphical Build Guide \u2014 Agent Instructions",
+      "tags": [
+        "build-guide",
+        "documentation",
+        "security"
+      ],
+      "archived": false
+    },
+    "graphical-build-guide/BUILD_GUIDE_TEMPLATE.md": {
+      "description": "Build Guide Template, Checklists, and Troubleshooting Catalog",
       "tags": [
         "build-guide",
         "documentation",
@@ -11916,10 +11984,7 @@
       "description": "Tools and Build Automation \u2014 Agent Instructions",
       "tags": [
         "build-tooling",
-        "documentation",
-        "emi-hardening",
-        "redundancy-failover",
-        "security"
+        "documentation"
       ],
       "archived": false
     },
@@ -11945,6 +12010,18 @@
         "build-tooling",
         "documentation",
         "project-tracking"
+      ],
+      "archived": false
+    },
+    "tools/TOOL_REFERENCE.md": {
+      "description": "Build Tool Reference \u2014 Usage, Output Locations, and Pre-Commit Checklists",
+      "tags": [
+        "build-tooling",
+        "documentation",
+        "emi-hardening",
+        "redundancy-failover",
+        "security",
+        "specification"
       ],
       "archived": false
     },
@@ -12090,6 +12167,7 @@
       "TODO.md",
       "WBS.md",
       "airframe/AGENTS.md",
+      "airframe/HULL_FRAME_REFERENCE.md",
       "airframe/README.md",
       "airframe/SPEC_VERIFICATION_0.6.1.md",
       "airframe/TODO.md",
@@ -12156,8 +12234,10 @@
       "current-specification/AGENTS.md",
       "current-specification/LICENSE_AND_ATTRIBUTION.md",
       "current-specification/README.md",
+      "current-specification/SPEC_TEMPLATE.md",
       "current-specification/TODO.md",
       "deferred/AGENTS.md",
+      "deferred/DEFERRED_ITEM_TEMPLATE.md",
       "deferred/README.md",
       "deferred/TODO.md",
       "deferred/WBS.md",
@@ -12167,6 +12247,7 @@
       "docs/BATTERY_MOUNT.md",
       "docs/CARGO_WINCH_SPECIFICATION.md",
       "docs/DOCUMENTATION_RECONCILIATION_2026-07-28.md",
+      "docs/DOC_TEMPLATES.md",
       "docs/DOC_VERIFICATION_0.6.2.md",
       "docs/ETHERNET_PHY_TRADE.md",
       "docs/FIRST_FLIGHT_READINESS.md",
@@ -12189,6 +12270,7 @@
       "docs/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "docs/VERIFY_PLACEMENT_WORKFLOW.md",
       "docs/WBS.md",
+      "docs/WBS_FEDERATION.md",
       "docs/attribution_and_licencing.md",
       "docs/attribution_and_licensing.md",
       "docs/bom_revP.json",
@@ -12280,9 +12362,11 @@
       "docs/references/vimdrones_esc_s50_v1.0.step",
       "docs/references/vimdrones_esc_s50_v1.0.stl",
       "docs/references/vimdrones_esc_s50_wiring.png",
+      "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
       "docs/structural_analysis.md",
       "gcs/AGENTS.md",
       "gcs/README.md",
+      "gcs/SKIPPER_SPEC.md",
       "gcs/TODO.md",
       "gcs/WBS.md",
       "gcs/skipper/README.md",
@@ -12290,6 +12374,7 @@
       "gcs/skipper/hardware/docs/skipper_power_budget.md",
       "gcs/skipper/hardware/docs/skipper_wiring.md",
       "graphical-build-guide/AGENTS.md",
+      "graphical-build-guide/BUILD_GUIDE_TEMPLATE.md",
       "graphical-build-guide/README.md",
       "graphical-build-guide/REVN_BUILD_GUIDE_24IN.md",
       "graphical-build-guide/TODO-old.md",
@@ -12299,7 +12384,8 @@
       "graphical-build-guide/flight-phases/WBS.md",
       "tools/AGENTS.md",
       "tools/README.md",
-      "tools/TODO.md"
+      "tools/TODO.md",
+      "tools/TOOL_REFERENCE.md"
     ],
     "emi-hardening": [
       "AGENTS.md",
@@ -12369,10 +12455,11 @@
       "docs/REVN_BUILD_GUIDE_24IN.md",
       "docs/TILT_ENCODER_WIRING_EMI_SPEC.md",
       "docs/TILT_SPAR_ANALYSIS.md",
+      "docs/WBS_FEDERATION.md",
       "docs/electrical_fault_margins.md",
       "gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-cape-b2.dts",
       "graphical-build-guide/flight-phases/WBS.md",
-      "tools/AGENTS.md",
+      "tools/TOOL_REFERENCE.md",
       "tools/precommit_index.py",
       "tools/validate_kicad.py"
     ],
@@ -12404,6 +12491,7 @@
       "docs/failsafe_thresholds.md",
       "gcs/AGENTS.md",
       "gcs/README.md",
+      "gcs/SKIPPER_SPEC.md",
       "gcs/WBS.md",
       "gcs/skipper/hardware/docs/skipper_antenna_spec.md",
       "graphical-build-guide/README.md",
@@ -12411,7 +12499,7 @@
       "graphical-build-guide/WBS.md",
       "graphical-build-guide/flight-phases/TODO.md",
       "graphical-build-guide/flight-phases/WBS.md",
-      "tools/AGENTS.md",
+      "tools/TOOL_REFERENCE.md",
       "tools/precommit_index.py"
     ],
     "security": [
@@ -12512,8 +12600,10 @@
       "docs/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "docs/VERIFY_PLACEMENT_WORKFLOW.md",
       "docs/WBS.md",
+      "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
       "gcs/AGENTS.md",
       "gcs/README.md",
+      "gcs/SKIPPER_SPEC.md",
       "gcs/TODO.md",
       "gcs/WBS.md",
       "gcs/skipper/README.md",
@@ -12522,6 +12612,7 @@
       "gcs/skipper/firmware/pb2i/src/skipper_telemetry.c",
       "gcs/skipper/hardware/docs/skipper_power_budget.md",
       "graphical-build-guide/AGENTS.md",
+      "graphical-build-guide/BUILD_GUIDE_TEMPLATE.md",
       "graphical-build-guide/README.md",
       "graphical-build-guide/REVN_BUILD_GUIDE_24IN.md",
       "graphical-build-guide/TODO-old.md",
@@ -12529,7 +12620,7 @@
       "graphical-build-guide/build_guide_12_security_hw.svg",
       "graphical-build-guide/flight-phases/TODO.md",
       "graphical-build-guide/flight-phases/WBS.md",
-      "tools/AGENTS.md",
+      "tools/TOOL_REFERENCE.md",
       "tools/add_landing_gear_bosses.py",
       "tools/build_landing_gear_views.py",
       "tools/open_mating_faces.py",
@@ -12557,10 +12648,12 @@
     ],
     "specification": [
       "REFERENCES.md",
+      "airframe/HULL_FRAME_REFERENCE.md",
       "current-specification/AGENTS.md",
       "current-specification/LICENSE",
       "current-specification/LICENSE_AND_ATTRIBUTION.md",
       "current-specification/README.md",
+      "current-specification/SPEC_TEMPLATE.md",
       "current-specification/TODO.md",
       "current-specification/bom_revS.csv",
       "current-specification/bom_revS.json",
@@ -12640,7 +12733,8 @@
       "docs/references/vimdrones_can_periph_pico_v1.0.stl",
       "docs/references/vimdrones_esc_s50_v1.0.step",
       "docs/references/vimdrones_esc_s50_v1.0.stl",
-      "docs/references/vimdrones_esc_s50_wiring.png"
+      "docs/references/vimdrones_esc_s50_wiring.png",
+      "tools/TOOL_REFERENCE.md"
     ],
     "project-tracking": [
       "TODO.md",
@@ -12677,6 +12771,7 @@
       "docs/TODO.md",
       "docs/TODO_1_1_0_COMPLETION_SUMMARY.md",
       "docs/WBS.md",
+      "docs/WBS_FEDERATION.md",
       "gcs/TODO.md",
       "gcs/WBS.md",
       "graphical-build-guide/TODO-old.md",
@@ -12694,6 +12789,7 @@
       "airframe/FreeCAD-scripts/make_flat_pattern.py",
       "airframe/FreeCAD-scripts/serenity_assembly.py",
       "airframe/FreeCAD-scripts/serenity_placeholders_assembly.py",
+      "airframe/HULL_FRAME_REFERENCE.md",
       "airframe/LICENSE",
       "airframe/README.md",
       "airframe/SPEC_VERIFICATION_0.6.1.md",
@@ -13729,6 +13825,7 @@
       "gcs/AGENTS.md",
       "gcs/LICENSE",
       "gcs/README.md",
+      "gcs/SKIPPER_SPEC.md",
       "gcs/TODO.md",
       "gcs/WBS.md",
       "gcs/skipper/README.md",
@@ -15104,6 +15201,7 @@
     ],
     "deferred-future": [
       "deferred/AGENTS.md",
+      "deferred/DEFERRED_ITEM_TEMPLATE.md",
       "deferred/LICENSE",
       "deferred/README.md",
       "deferred/TODO.md",
@@ -15133,6 +15231,7 @@
     ],
     "build-guide": [
       "graphical-build-guide/AGENTS.md",
+      "graphical-build-guide/BUILD_GUIDE_TEMPLATE.md",
       "graphical-build-guide/LICENSE",
       "graphical-build-guide/README.md",
       "graphical-build-guide/REVN_BUILD_GUIDE_24IN.md",
@@ -15288,6 +15387,7 @@
       "tools/LICENSE",
       "tools/README.md",
       "tools/TODO.md",
+      "tools/TOOL_REFERENCE.md",
       "tools/add_landing_gear_bosses.py",
       "tools/bake_hull_frame.py",
       "tools/build_head_shell.py",
