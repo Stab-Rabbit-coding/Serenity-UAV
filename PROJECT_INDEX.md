@@ -2,7 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-08-09 — Automated reconciliation pass -->
-WBS.md                            — Master WBS index (full record, compact: headings/short
                                     checkbox items only, ≤70 chars each, done+open); full
                                     detail lives in the subordinate WBS.md files per-folder
 TODO.md                           — Open-work-only subset of WBS.md (what's left to do)

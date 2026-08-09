@@ -200,6 +200,86 @@ Deviations (functional, deliberate):
 3. **Fixed-down gear** — no retraction; the bay plate supplies the
    canonical recess look.
 
+### 2.4a Henning-Derived Geometry Corrections (2026-08-09, OPEN)
+
+Owner confirmed [REF-CAD-003] **Sheet 1** agrees with the Nick Henning model
+[REF-CAD-002], so the Henning gear drawings are authoritative for detail shape.
+Read from `docs/references/nick-henning/nick-henning-close-gear-combine.jpg`
+(in-situ render) and `nick-henning-uvdisplay-gear.jpg` (shaded, UV, wireframe
+and UV-layout views of the isolated leg).
+
+**What Rev R6 already gets right.** The architecture is confirmed:
+cylinder-cluster thigh at ~50-55°, a disc knee, a disc ankle, and a tri-pad
+arrowhead foot. The concept does not need rework — the corrections below are
+proportion and detail.
+
+**Corrections required:**
+
+1. **Mounting surface — the big one. The bay is in the WING-ROOT SPONSON, not
+   the cargo shell.** `nick-henning-uvdisplay-wing.jpg` shows the wing root as
+   a large wedge-shaped sponson with the **empty gear bay recessed into its
+   underside/outboard face** — a trapezoidal aperture (wider at top, narrowing
+   downward, confirming the owner's description), with a raised lip framing it
+   and stepped panel detail on the bay floor.
+
+   This reconciles the whole integration problem. `airframe/AGENTS.md` records
+   that the wings attach to the **cargo section lateral walls** — so the bay
+   sits in wing-root structure mounted at roughly the station Rev R6 has been
+   targeting, but it belongs to the **wing part, not the cargo shell**. That
+   is why the bay bolt axes measure 5.6-64.1° off the local *cargo skin*
+   normal: they are being projected onto a surface that is not the mounting
+   face at all.
+
+   **Do NOT split the bay onto the wing part.** The wing-root sponson is the
+   *outer shape* the bay aperture appears in; it is not where the bay should
+   structurally live. The original lower-detail model merged the gear bay into
+   the cargo hold as a single piece, and that is the structurally correct
+   arrangement:
+
+   - **Load path.** Each leg delivers 827 N (4 ft schedule) plus a 34.7 N·m
+     hip moment. If the bay were carried on the wing root, all of that would
+     pass through the wing attachment — the Ø12.3 mm spar and the two root
+     mortises at Y +31.7 / +57.5 — which are sized for *flight* loads, not
+     landing impact. That inserts a joint directly into the impact path and
+     creates the weak point the merged design avoids.
+   - **Mass.** Splitting duplicates the bay walls, adds a structural joint and
+     its fasteners, and works against LG-18.
+
+   So the bay stays **continuous with the cargo shell** (i.e. still
+   `merge_cargo_interior.py`), and the wing-root sponson fairs around it. The
+   16 bolt bosses added in `d83c806` are therefore on the right *component*;
+   what is wrong is their **placement and axes** — they sit on the bare cargo
+   flank rather than on the bay aperture inside the sponson envelope, which is
+   why they measure 5.6-64.1° off the local normal. Relocate them to the
+   aperture and aim each along its own local surface normal.
+
+   Open sub-question: the sponson envelope itself is not in the cargo shell
+   today. Confirm whether it is already carried by the wing STL (in which case
+   the two must be reconciled so the bay is not double-walled) or must be added
+   to the cargo section.
+2. **The bay "recess" is a hinged DOOR**, a separate gridded panel, not a rim
+   moulded into the skin. Its outline is an irregular pentagon with one clipped
+   corner — not the symmetric trapezoid currently in `bay_cowl()`. The
+   trapezoid is a fair first approximation of the aperture but the door itself
+   is a distinct part that Rev R6 does not model at all.
+3. **Foot pads** are much longer, thinner and more sharply tapered than
+   `FOOT_PAD_T = 8` implies — flat blade-like wedges radiating from a central
+   hub, with small louvre/rib groups near each tip. Current pads are stubby by
+   comparison.
+4. **Knee and ankle are real disc joints** with circular hub/cap detail, not
+   the flat styling discs Rev R6 uses. (They can stay cosmetic structurally —
+   Rev R6 articulates at the hip only — but the *shape* should read as a hub.)
+5. **Thigh** is a large main tube plus two or three smaller parallel piston
+   rods, with visible hose runs alongside. Rev R6's twin-Ø14 cluster is close;
+   the rods and hoses are missing.
+6. **Shin is short** relative to the thigh, and boxy/slotted rather than the
+   current long stadium-section blade.
+
+**Status: NOT YET IMPLEMENTED.** Item 1 gates the rest — if the bays move to a
+ventral overhang, the corner stations, the bolt-normal fix (LG-02), the
+conforming hull patches (LG-10) and the pad-fit study all get re-derived
+against the new surface. Do not re-aim the bay bolts before settling it.
+
 ---
 
 ## 3. Impact Velocity and Kinetic Energy

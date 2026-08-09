@@ -3,7 +3,6 @@
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
 <!-- Last updated: 2026-08-09 — Automated reconciliation pass -->
-                                       scripts archived alongside their boards
 
 Pre-Rev Q (superseded by Cape-A/B architecture at Rev K):
 
