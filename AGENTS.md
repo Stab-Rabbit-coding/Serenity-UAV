@@ -13,6 +13,7 @@ fabricated or procured. Never leave a spec as "TBD"; quote real masses, CG, and 
 `README.md` for the mission profile.
 
 Non-negotiable, project-wide requirements:
+
 - **Redundancy/failover** in every system where feasible (dual ESCs, independent battery
   rails, manual override).
 - **Security**: every message, internal and external, is digitally signed, authenticated, and
@@ -24,6 +25,7 @@ Non-negotiable, project-wide requirements:
   not just this airframe.
 
 **Propulsion baseline** (use for all thrust calculations):
+
 - Nacelle EDF: 50 mm 6S, x-fly 2627-3200kv, 12-fin rotor / 11-fin stator, 1240 g thrust each;
   2 EDFs in series per nacelle, 90% stator efficiency → **2232 g per nacelle**.
 - Fuselage EDF (Phase 11, optional/deferred): 55 mm 6S, feeds the **fixed** canonical
@@ -36,6 +38,7 @@ Non-negotiable, project-wide requirements:
 implementation/PCB status see `avionics/AGENTS.md` and each board's own `.md` under
 `avionics/kicad/<board>/`, which is updated more often than this file and is authoritative for
 as-built state):
+
 - 8× PocketBeagle2 Industrial SBC nodes, each carrying **Pilot** (flight control/sensor cape) +
   **XO** (comms/logging/payload cape), 5 kV galvanic isolation on CAN FD/RS-485/Ethernet.
 - **Commo** (49 MHz + LoRa transceiver cape) is installed only in River's Room and Simon's
@@ -69,6 +72,7 @@ pick one silently — see §11.
 
 Work is **dual-licensed** by content type — see `docs/attribution_and_licencing.md` for the
 full policy and the per-subsystem `LICENSE` federation map:
+
 - **Hardware/CAD/PCB design files** (airframe SCAD/STL/FCStd, avionics KiCad
   schematics/layouts/Gerbers) — **CERN-OHL-W 2.0**. Root `LICENSE`, `airframe/LICENSE`,
   `avionics/LICENSE`.
@@ -128,11 +132,12 @@ placement from the user when uncertain. Keep the canonical outer mold line intac
 modifications must blend into it and never alter the exterior unless structurally required. The
 `docs/references/` library is the ground truth for what "canonical" shape means — authority order
 QMx 2007 blueprints (most authoritative) → Nick Henning renders → misubisu Thingiverse model
-(the `s_*.stl` origin; verify against the two above). See `airframe/AGENTS.md` "Canonical Accuracy
-References" and `REFERENCES.md` REF-CAD-002/003/004.
+(the `s_*.stl` origin; verify against the two above). See `airframe/HULL_FRAME_REFERENCE.md`
+"Canonical Accuracy References" and `REFERENCES.md` REF-CAD-002/003/004.
 Four fuselage sections (head, cargo, middle-neck/horseshoe ring, rear) plus wings and tilting
-nacelles — see `airframe/AGENTS.md` for the qualitative layout, the hull-frame coordinate
-standard, and the validated extents table (do not duplicate that table here).
+nacelles — see `airframe/AGENTS.md` for the qualitative layout and the hull-frame coordinate
+standard, and `airframe/HULL_FRAME_REFERENCE.md` for the validated extents table (do not
+duplicate that table here).
 
 Landing-gear and nacelle-nozzle-drive implementation details change as the design matures —
 do not restate their specifics in this file. Canonical sources: `docs/LANDING_GEAR_ANALYSIS.md`
@@ -203,31 +208,12 @@ is under active trade study and must not be assumed.
 | River's Room | Bay C — starboard avionics |
 | Simon's Medbay | Bay D — aft avionics |
 
-### Naming history (TODO.md §0.9, closed 2026-08-01)
-
-The six board names above (Skipper, Pilot, XO, Flight Engineer, Commo, Observer) are
-**generic role names**, chosen 2026-08-01 to replace the project's original Firefly-character
-board names (TODO.md §0.9 item 8 — avoiding trademark exposure on hardware that "may be
-offered commercially beyond this project," §3 above). The four bay names (Shepherd's Room,
-Inara's Shuttle, River's Room, Simon's Medbay) were **not** part of that rename and are
-unchanged.
-
-For attribution completeness (§3 — "derivative files carry the full attribution chain"), the
-original names and their inspiration are recorded here rather than on the live table above,
-since restating the character quotes next to the new generic names would just re-attach the
-same recognizable Firefly branding the rename was meant to remove:
-
-| Current name | Former name | Inspiration | Firefly line |
-|---|---|---|---|
-| Skipper | Malcolm ("Mal") | Malcolm Reynolds, captain | "I aim to misbehave." |
-| Pilot | Wash | Hoban "Wash" Washburne, pilot | "I'm a leaf on the wind." |
-| XO | Zoë | Zoë Washburne, first mate | "Big Damn Heroes, sir." |
-| Flight Engineer | Kaylee | Kaylee Frye, ship's mechanic | "Everything is shiny." |
-| Commo | Emma | — (not a character name) | — |
-| Observer | Jayne | Jayne Cobb, hired muscle | "She's a good gun." |
-
-This table is historical only — do not use the former names anywhere in new work. See
-`docs/WBS.md` §0.9 and `docs/attribution_and_licencing.md` §6 for the full renaming record.
+The six board names (Skipper, Pilot, XO, Flight Engineer, Commo, Observer) are **generic role
+names**, chosen 2026-08-01 to replace the project's original Firefly-character board names
+(TODO.md §0.9 item 8 — avoiding trademark exposure, §3 above). The four bay names were **not**
+renamed. The former-name/inspiration table and the full renaming record live in
+`docs/attribution_and_licencing.md` §6 (also `docs/WBS.md` §0.9) — historical only; never use a
+former name in new work.
 
 Flight Engineer's room sits in the middle-section inner neck (open ventral face of the horseshoe ring),
 minimizing power-run length to all four nacelles/stacks/battery. Observer is a standalone board
@@ -277,31 +263,16 @@ Every subsystem that owns WBS branches keeps **two files, not one**:
   `WBS.md`. This is the "what's actually left" view. Close an item in `WBS.md` first;
   `TODO.md` is regenerated/pruned from there, never edited as the source of truth.
 
-Governance stays with the `AGENTS.md` files listed in §2; several subsystems keep `WBS.md`
-detail split across more than one file so none exceeds ~500 lines (the threshold at which a
-subsystem gets a new detail file rather than an ever-growing one):
-
-- **avionics/** — `avionics/{TODO,WBS}.md` (Pilot/XO/Commo cape hardware, names, workload),
-  `avionics/rev-s1/{TODO,WBS}.md` (Commo/XO/Flight Engineer Rev S1 redesign),
-  `avionics/emi-hardening/{TODO,WBS}.md` (§0.6, §1.4 EMI hardening beyond the PCBs),
-  `avionics/observer/{TODO,WBS}.md` (Observer board + firmware), `avionics/firmware/{TODO,WBS}.md`
-  (Pilot/XO node firmware)
-- **airframe/** — `airframe/{TODO,WBS}.md` (hull-frame standard, non-printable placeholders,
-  procurement), `airframe/fuselage-joints/{TODO,WBS}.md`, `airframe/fuselage-covers/{TODO,WBS}.md`,
-  `airframe/fuselage-mid/{TODO,WBS}.md` (fuselage §1.1.1, split 3 ways),
-  `airframe/wings-nacelles/{TODO,WBS}.md`, `airframe/landing-gear/{TODO,WBS}.md`
-- **graphical-build-guide/** — `graphical-build-guide/{TODO,WBS}.md` (Phases 0-4 + SVG rebuild
-  pipeline), `graphical-build-guide/flight-phases/{TODO,WBS}.md` (Phases 5-10)
-- **docs/**, **gcs/**, **deferred/** — a single `{TODO,WBS}.md` pair each (well under the cap)
-- **tools/**, **current-specification/** — reference-index `TODO.md` files only, no `WBS.md`
-  (own no WBS branch and no checkboxes of their own; pointer views into the owning
-  subsystem's `WBS.md`/`TODO.md`)
-
-Split detail files are governed by their parent folder's `AGENTS.md` (no separate federated
-`AGENTS.md` per split — e.g. `avionics/observer/` follows `avionics/AGENTS.md`).
+Governance stays with the `AGENTS.md` files listed in §2. Several subsystems split `WBS.md`
+detail across more than one file so none exceeds ~500 lines (the threshold at which a subsystem
+gets a new detail file); the full per-subsystem inventory of those `{TODO,WBS}.md` pairs — for
+`avionics/`, `airframe/`, `graphical-build-guide/`, `docs/`, `gcs/`, `deferred/`, `tools/`, and
+`current-specification/` — is in **`docs/WBS_FEDERATION.md`**. Split detail files are governed
+by their parent folder's `AGENTS.md` (no separate federated `AGENTS.md` per split).
 
 New work: close it in the owning `WBS.md` first (full notes there), then prune/regenerate the
 matching `TODO.md` line from it. Sync root and subsystem `WBS.md`/`TODO.md` before committing.
+
 - Prefer editing existing files. No speculative abstractions, feature flags, or unused
   scaffolding — build only what the task needs.
 - Blender: run headless — `blender --background --python <script>.py`. FreeCAD:
