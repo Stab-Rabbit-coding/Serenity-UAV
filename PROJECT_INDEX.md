@@ -2,7 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-08-09 — Automated reconciliation pass -->
-SECURITY.md                       — Security policy and vulnerability reporting
 WBS.md                            — Master WBS index (full record, compact: headings/short
                                     checkbox items only, ≤70 chars each, done+open); full
                                     detail lives in the subordinate WBS.md files per-folder

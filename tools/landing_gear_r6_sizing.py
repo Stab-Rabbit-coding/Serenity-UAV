@@ -145,8 +145,12 @@ def lg02_bay_attachment() -> None:
     backing plate.  The hull side carries a 5 mm internal boss at each bolt
     (merge_cargo_interior.py lg_bay_features).
     """
-    f_leg = 1241.0          # N, worst case: 1.5in variant, 6 ft schedule
-    m_hip = 52.0e3          # N*mm, hip moment (= 2*P*r, R_h-independent)
+    # LG-17 CLOSED 2026-08-09 (owner decision): 4 ft crash height adopted.
+    # Ductile stock Ø3.81 mm, P_wire 2,888.9 N.  Worst leg load is still the
+    # compact 1.5in variant (shorter lever -> higher F_leg for the same wire).
+    p_wire = 2888.9         # N, per ductile wire at the 4 ft schedule
+    f_leg = 827.4           # N, 1.5in variant at 4 ft
+    m_hip = 2.0 * p_wire * R_WIRE   # N*mm, hip moment (R_h-independent)
     lever = 70.0            # mm, bolt pattern extent up the plate
     n_bolt, n_row = 4, 2
 

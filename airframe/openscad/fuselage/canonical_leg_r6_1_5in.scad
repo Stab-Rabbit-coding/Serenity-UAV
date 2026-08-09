@@ -139,14 +139,21 @@ WIRE_STAGGER = 3.5;         // socket pitch along pin axis Y
 SPRING_D     = 3.35;        // mm, spring wire diameter
 SPRING_L     = 37.0;        // mm, spring stock length (bow span 23)
 SPRING_SEAT  = 5.0;         // mm, spring socket seat depth per end
-DUCTILE_D    = 4.36;        // mm, ductile wire diameter (6 ft schedule)
-DUCTILE_D4   = 3.81;        // mm, ductile alternative (4 ft schedule, ref only)
+DUCTILE_D    = 3.81;        // mm, ductile wire dia -- 4 ft schedule
+                            // (LG-17 CLOSED 2026-08-09, owner decision:
+                            //  4 ft crash height adopted).  The 6 ft
+                            //  alternative was d = 4.36 mm, SAME lengths.
+DUCTILE_D6   = 4.36;        // mm, 6 ft schedule (superseded, ref only)
 DUCTILE_L    = 75.0;        // mm, ductile stock length (bow span 55)
 DUCTILE_SEAT = 8.0;         // mm, ductile socket seat depth per end
 END_RUN_IN   = 2.0;         // mm, straight run-in beyond each socket mouth
 H_NOM        = 3.5;         // mm, pre-bend bow rise (both types)
 H_DEF_SPRING = 7.4;         // mm, bow at spring elastic-limit stroke (0.93 mm)
-H_DEF_DUCT   = 19.2;        // mm, fired ductile bow (full 3.24 mm stroke)
+H_DEF_DUCT   = 9.9;         // mm, fired ductile bow at full stroke.
+                            // Was 19.2 -- that came from the 4x-low
+                            // stroke formula (SS4.5a); the corrected
+                            // two-hinge value at the required stroke
+                            // is 9.90 mm.
 SOCK_CLR     = 0.65;        // socket bore diametral clearance over wire d
 
 // Thigh cylinder cluster (structural section: sizing script "2x14 @ 18")
@@ -222,12 +229,15 @@ BOSS_L       = 10.0;        // wire boss length along chord
 // nacelle-servo pad (Y 19..71 @ Z 78..108).  The bay depth is therefore
 // carried on THIS printed part as a cowl standing proud of the plate, which
 // is also how a real retraction-bay liner is built.
+// The bay aperture is TRAPEZOIDAL, not rectangular: narrower at the bottom
+// (the mouth the leg swings out of) than at the top, per the canonical flank
+// bays in [REF-CAD-003] Sheet 5 / [REF-CAD-002].
 COWL_H       = 12.0;        // rim height proud of the plate face
 COWL_T       = 2.5;         // rim wall thickness
 COWL_INSET   = 2.0;         // rim inset from the plate edge
-COWL_FILLET  = 1.5;         // rim outer edge break
-COWL_MOUTH_W = 30.0;        // throat width across the pin axis (leg clearance)
-COWL_MOUTH_S = 26.0;        // throat length along the canted plane
+COWL_TAPER   = 0.72;        // bottom width / top width (trapezoid)
+COWL_W_TOP   = BAY_PLATE_W - 2 * COWL_INSET;   // wide end, along the pin axis
+COWL_W_BOT   = COWL_W_TOP * COWL_TAPER;        // narrow end (mouth)
 
 // --- LG-13 wire-end retention ----------------------------------------------
 // The wire ends MUST remain free to slide: the chord shortens by the stroke as
@@ -534,27 +544,39 @@ module foot() {
 // ~0.8 mm^3 by 20 deg -- because the leg exits across that edge.  Verified
 // clear with the same check after opening it; see the LG-13/LG-19 notes in
 // docs/LANDING_GEAR_ANALYSIS.md.
+// Trapezoidal prism in the plate frame: width tapers w_bot -> w_top going up
+// the plate (local z), centred on the plate's pin-axis centreline, spanning
+// x0..x1 out from the plate face.  hull() of two thin end slabs gives the
+// linear taper.
+module trap_prism(w_bot, w_top, z0, z1, x0, x1) {
+    e = 0.01;
+    hull() {
+        translate([x0, BAY_PLATE_W / 2 - w_bot / 2, z0])
+            cube([x1 - x0, w_bot, e]);
+        translate([x0, BAY_PLATE_W / 2 - w_top / 2, z1 - e])
+            cube([x1 - x0, w_top, e]);
+    }
+}
+
 module bay_cowl() {
-    inner_w = BAY_PLATE_W - 2 * (COWL_INSET + COWL_T);
-    inner_l = BAY_PLATE_L - 2 * (COWL_INSET + COWL_T);
+    z0 = COWL_INSET;
+    z1 = BAY_PLATE_L - COWL_INSET;
+    iw_bot = COWL_W_BOT - 2 * COWL_T;
+    iw_top = COWL_W_TOP - 2 * COWL_T;
     translate([BAY_BACK_X, 0, 12])
         rotate([0, -BAY_CANT, 0])
             translate([0, -BAY_PLATE_W / 2, -34])
                 difference() {
-                    translate([BAY_PLATE_T, COWL_INSET, COWL_INSET])
-                        cube([COWL_H,
-                              BAY_PLATE_W - 2 * COWL_INSET,
-                              BAY_PLATE_L - 2 * COWL_INSET]);
-                    // hollow the bay
+                    trap_prism(COWL_W_BOT, COWL_W_TOP, z0, z1,
+                               BAY_PLATE_T, BAY_PLATE_T + COWL_H);
+                    // hollow the bay (same taper, walls stay parallel)
+                    trap_prism(iw_bot, iw_top, z0 + COWL_T, z1 - COWL_T,
+                               BAY_PLATE_T - 0.1, BAY_PLATE_T + COWL_H + 0.1);
+                    // open the mouth: remove the narrow low-end wall
                     translate([BAY_PLATE_T - 0.1,
-                               COWL_INSET + COWL_T,
-                               COWL_INSET + COWL_T])
-                        cube([COWL_H + 0.2, inner_w, inner_l]);
-                    // open the mouth: remove the low-end wall entirely
-                    translate([BAY_PLATE_T - 0.1,
-                               COWL_INSET + COWL_T,
-                               COWL_INSET - 0.1])
-                        cube([COWL_H + 0.2, inner_w, COWL_T + 0.2]);
+                               BAY_PLATE_W / 2 - iw_bot / 2,
+                               z0 - 0.1])
+                        cube([COWL_H + 0.2, iw_bot, COWL_T + 0.2]);
                 }
 }
 

@@ -135,14 +135,21 @@ WIRE_STAGGER = 3.5;         // socket pitch along pin axis Y
 SPRING_D     = 3.35;        // mm, spring wire diameter
 SPRING_L     = 37.0;        // mm, spring stock length (bow span 23)
 SPRING_SEAT  = 5.0;         // mm, spring socket seat depth per end
-DUCTILE_D    = 4.36;        // mm, ductile wire diameter (6 ft schedule)
-DUCTILE_D4   = 3.81;        // mm, ductile alternative (4 ft schedule, ref only)
+DUCTILE_D    = 3.81;        // mm, ductile wire dia -- 4 ft schedule
+                            // (LG-17 CLOSED 2026-08-09, owner decision:
+                            //  4 ft crash height adopted).  The 6 ft
+                            //  alternative was d = 4.36 mm, SAME lengths.
+DUCTILE_D6   = 4.36;        // mm, 6 ft schedule (superseded, ref only)
 DUCTILE_L    = 75.0;        // mm, ductile stock length (bow span 55)
 DUCTILE_SEAT = 8.0;         // mm, ductile socket seat depth per end
 END_RUN_IN   = 2.0;         // mm, straight run-in beyond each socket mouth
 H_NOM        = 3.5;         // mm, pre-bend bow rise (both types)
 H_DEF_SPRING = 7.4;         // mm, bow at spring elastic-limit stroke (0.93 mm)
-H_DEF_DUCT   = 19.2;        // mm, fired ductile bow (full 3.24 mm stroke)
+H_DEF_DUCT   = 9.9;         // mm, fired ductile bow at full stroke.
+                            // Was 19.2 -- that came from the 4x-low
+                            // stroke formula (SS4.5a); the corrected
+                            // two-hinge value at the required stroke
+                            // is 9.90 mm.
 SOCK_CLR     = 0.65;        // socket bore diametral clearance over wire d
 
 // Thigh cylinder cluster (structural section: sizing script "2x14 @ 18")
