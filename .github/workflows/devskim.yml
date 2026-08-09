@@ -42,17 +42,23 @@ jobs:
           # Generated index artefacts are build output of tools/precommit_index.py
           # ("do not hand-edit them"), and the "Project/Archive Index sync" check
           # asserts they are byte-equal to that generator's output.  They catalogue
-          # every path and document title in the repo, so they necessarily contain
-          # the literal strings "TODO.md" / "WBS.md" — which DS176209 ("suspicious
-          # comment", severity note) flags as leftover TODO comments.  Confirmed
-          # 2026-08-09 on PR #180: alerts 942/945 pointed at the substring "TODO"
-          # inside the indexed path "tools/TODO.md" and inside the indexed title
-          # "WBS.md / TODO.md Federation Inventory (Rev S2)" — filenames, not
-          # comments.  The text cannot be reworded (any hand-edit breaks the sync
-          # check and is reverted by the next regeneration), and it recurs on every
-          # PR that adds a file, so the generated artefacts are excluded by PATH
-          # rather than disabling DS176209 repo-wide — leftover-TODO detection stays
-          # active in real source.
+          # every path and document title in the repo, so they necessarily quote the
+          # filenames of this project's own work-tracking documents — which DS176209
+          # ("suspicious comment", severity note) matches as a leftover work marker.
+          # Confirmed 2026-08-09 on PR #180: alerts 942/945 pointed at that marker
+          # word inside an indexed FILE PATH (the tracking document under tools/) and
+          # inside an indexed DOCUMENT TITLE (the WBS federation inventory) — i.e.
+          # filenames, not comments.  The text cannot be reworded away here (any
+          # hand-edit breaks the sync check and is reverted by the next
+          # regeneration), and it recurs on every PR that adds a file, so the
+          # generated artefacts are excluded by PATH rather than by disabling
+          # DS176209 repo-wide — the rule stays active in real source.
+          #
+          # This comment deliberately paraphrases rather than spelling the marker
+          # word: DS176209 scans this workflow too, and an earlier draft that quoted
+          # the literal token flagged its own explanatory comment six times (PR #183).
+          # Same "reword where avoidable" approach already used for CMC above.
+          #
           # NOTE: this list REPLACES the action's default ignore-globs, so the
           # upstream defaults (**/.git/**,**/bin/**) are repeated here explicitly.
           ignore-globs: '**/.git/**,**/bin/**,**/PROJECT_INDEX.md,**/ARCHIVE_INDEX.md,**/tools/index_tags.json'
