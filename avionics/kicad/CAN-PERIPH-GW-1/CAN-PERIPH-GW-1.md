@@ -257,6 +257,28 @@ the schematic generator so the two can never drift out of sync.
   reused verbatim (QFN-32-1EP 5×5 mm). RST# gets an explicit 10 kΩ pull-up
   (datasheet notes only a *weak* internal pull-up); pin 1 and pin 14 tied to
   VDD and pin 16 to GND per the datasheet's own TCG-compliance notes (Table 5).
+  **This is current as-built** — see the planned-but-not-implemented change
+  immediately below before assuming U2 stays an SLB9672.
+
+> **⚠ Planned change, NOT implemented (2026-08-06): SLB9672 → OPTIGA™ Trust M.**
+> At the user's direction, U2 on this board is slated to move from the SPI
+> SLB9672 TPM to the Infineon OPTIGA™ Trust M I²C secure element, citing the
+> SLB9672's TPM-2.0 startup/self-test sequence as a boot-latency concern —
+> see REF-SENSOR-016. **Nothing in this section, or `.kicad_sch`, has been
+> edited to reflect that yet.** Two things block it: (1) the primary OPTIGA
+> Trust M datasheet was unreachable in the session that recorded this
+> decision (`infineon.com` blocked by network egress policy), so there is no
+> verified pin-to-pad table to build a clean-room symbol from — exactly the
+> same category of gate the STS3215 servo datasheet hit (`docs/CARGO_WINCH_SPECIFICATION.md`
+> §3.1, historical); (2) `kicad-cli` was not available in that session, so
+> even a verified edit could not be ERC-checked before committing, and this
+> board's own `N_STACKS` templating makes a per-stack part swap higher-risk
+> than a single-instance edit. Because OPTIGA Trust M is I²C rather than
+> SPI, this is not a drop-in pin-for-pin substitution: it removes the
+> dedicated TPM SPI bus (freeing those MCU pins) and needs an I²C bus
+> assignment instead — a real design decision, not just a part-number
+> change. Tracked in `avionics/WBS.md` §1.9.2. **Until this is resolved, U2
+> is an SLB9672 in every design artifact on this board.**
 - **D — Isolated CAN-FD (U3, TI ISOW1044BDFMR):** `Observer_ISOW1044BDFMR`
   clean-room symbol reused verbatim. STB tied to GND (normal mode); EN/FLT
   routed to a spare MCU GPIO (`CANFD_FLT_N`) for fault visibility rather than
@@ -372,6 +394,12 @@ REF-SENSOR-010 and "Removed / Superseded Citations".
    TPM not started as of 2026-08-02); if/when it lands, this board's role for
    the winch/nacelle-tilt servos may be eliminated rather than just rewired.
    Re-check before committing to either interim transceiver option above.
+8. **SLB9672 → OPTIGA™ Trust M (added 2026-08-06), not resolved.** See the
+   callout in "Section-by-section design" §C above and REF-SENSOR-016.
+   Blocked on primary-datasheet access (network egress) and `kicad-cli`
+   availability (ERC verification) — do not edit `U2`'s symbol/footprint
+   until both are available and a real pin-to-pad table is in hand. Also
+   needs an I²C bus assignment decision (this is not a pin-for-pin swap).
 
 ## Verification
 
