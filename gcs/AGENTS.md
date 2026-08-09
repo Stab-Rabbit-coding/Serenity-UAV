@@ -28,12 +28,12 @@ Skipper is responsible for:
 
 ### External Communications Channels
 
-Skipper communicates with Serenity via:
-
-1. **Wi-Fi (5 GHz):** Primary high-bandwidth channel for telemetry and camera feed
-2. **Zigbee (2.4 GHz):** Secondary mesh network for command retry and extended range
-3. **SiK / MAVLink (915 MHz):** Backup control channel (900 MHz unlicensed ISM)
-4. **49 MHz (Part 15 §15.235):** Ultra-reliable emergency command/response in harsh RF environments
+Skipper reaches Serenity over the four external C2 channels listed in root `AGENTS.md` §1 —
+that list is not restated here, and band-by-band FCC citations are in `avionics/AGENTS.md`
+"External Communications Regulations Compliance". Ground-side roles: Wi-Fi is the primary
+high-bandwidth link for telemetry and camera feed; Zigbee is the secondary mesh for command
+retry and extended range; SiK/MAVLink is the backup control channel; 49 MHz is the
+ultra-reliable emergency command/response channel for harsh RF environments.
 
 All channels support full command and control capability in both directions. Channel selection is automatic based on signal quality and command priority.
 
@@ -43,9 +43,9 @@ All channels support full command and control capability in both directions. Cha
 needs: operator-interface design (command authentication, telemetry display fields, mission
 planning capabilities), the message-wrapper format, the command-priority table
 (CRITICAL/HIGH/MEDIUM/LOW with channel and retransmit intervals), the telemetry data-rate table
-(nominal and degraded rates per data type), computer/radio/power hardware requirements, the
-seven software modules, and the SITL simulator requirements. Read it before designing or
-changing any Skipper interface, message, or platform behavior.
+(nominal and degraded rates per data type), the audit-log record fields, computer/radio/power
+hardware requirements, the seven software modules, and the SITL simulator requirements. Read it
+before designing or changing any Skipper interface, message, or platform behavior.
 
 ## Security and Compliance
 
@@ -69,14 +69,10 @@ Skipper verifies every received message:
 
 ### Audit Logging
 
-All transactions are logged:
-
-- Command sent: time, operator, command text, signature
-- Command received ACK: time, source node, ACK signature
-- Command execution result: time, status (success/error), any side effects
-- Unsolicited telemetry: time, source node, data summary, signature
-
-Logs are saved to local storage and optionally uploaded after flight for forensic analysis.
+**All transactions are logged** — commands sent, ACKs received, execution results, and
+unsolicited telemetry. The per-record field lists are in `gcs/SKIPPER_SPEC.md` "Audit Log
+Records". Logs are saved to local storage and optionally uploaded after flight for forensic
+analysis.
 
 ## Work Tracking and Documentation
 
@@ -88,7 +84,3 @@ When developing Skipper features:
 4. Ensure all security and logging requirements are met
 5. Test with the simulator before flight testing
 6. Archive any deprecated commands or protocols in documentation
-
----
-
-For project-wide standards, see the root `AGENTS.md`.

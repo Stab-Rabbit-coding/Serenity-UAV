@@ -10,19 +10,13 @@ This folder contains the active (in-progress) design specifications and requirem
 
 ## Revision Policy
 
-All specifications follow the Serenity-UAV revision numbering scheme (root `AGENTS.md` §8):
-
-- A **revision with a letter** (e.g., Rev R, Rev N, Rev L) is a **comprehensive design
-  checkpoint**. All components referenced as of a revision letter have current specifications,
-  have been integrated and tested together, are ready for fabrication or continued development,
-  and have all documentation updated to match the hardware baseline. All components are
-  referenced as of the latest revision, even if nothing changed for that component since an
-  earlier revision.
-- **Modifications after a revision** are numbered sequentially — Rev N1, Rev N2, Rev N3 — each
-  an incremental change to specific components while the overall revision baseline holds. The
-  numbers reset with each new letter revision. Example: Rev N (baseline, released) → Rev N1
-  (first modification) → Rev N2 (second modification; N1 components carry forward) → Rev O (new
-  comprehensive revision, all active components carry forward, numbering resets).
+Root `AGENTS.md` §8 "Revisions" is authoritative for the revision-numbering scheme — letter
+revisions as comprehensive checkpoints, sequential numbered modifications that reset at each new
+letter, and archived items keeping the label they held at archival. Read it there; it is not
+restated here. Every specification in this folder follows it and carries its revision label in
+the header. Example progression: Rev N (baseline, released) → Rev N1 (first modification) →
+Rev N2 (second modification; N1 components carry forward) → Rev O (new comprehensive revision,
+all active components carry forward, numbering resets).
 
 ## Specification Document Structure and Workflow
 
@@ -55,8 +49,5 @@ This folder may include a `DEFERRED_ITEMS.md` document listing:
 - **Planned revisions:** Commo Rev R1, XO Rev R1, Flight Engineer Rev A1 (planned but not yet implemented)
 - **Known limitations:** Open issues that do not block the current baseline
 
-Deferred items should reference `TODO.md` for the specific work items.
-
----
-
-For project-wide standards, see the root `AGENTS.md`.
+Deferred items should reference `TODO.md` for the specific work items; the deferred work itself
+is described in `deferred/AGENTS.md` "Status Categories".

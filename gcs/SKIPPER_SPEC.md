@@ -76,6 +76,16 @@ Serenity transmits telemetry at variable rates depending on link quality and pri
 | Payload state (cargo bay, hoist position) | 2 Hz | 1 Hz | Medium |
 | Event log (errors, failovers, anomalies) | On event | On event | Critical |
 
+### Audit Log Records
+
+`gcs/AGENTS.md` "Audit Logging" requires that every transaction be logged. Each record type
+carries these fields:
+
+- **Command sent:** time, operator, command text, signature
+- **Command received ACK:** time, source node, ACK signature
+- **Command execution result:** time, status (success/error), any side effects
+- **Unsolicited telemetry:** time, source node, data summary, signature
+
 ## Hardware Considerations
 
 ### Computer Requirements
