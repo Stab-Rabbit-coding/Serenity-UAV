@@ -205,8 +205,16 @@ int main(int argc, char *argv[]) {
     xcvr_kiss_ctx_t *xcvr = NULL;
     int              rc = xcvr_kiss_open(&xcvr_cfg, &xcvr);
     if (rc != 0) {
+        /* strerror_r() rather than strerror(): xcvr_kiss_open() has already
+         * spawned the RX thread by the time a late failure path reports here,
+         * and strerror() returns a pointer to a shared static buffer that a
+         * concurrent call may overwrite (POSIX.1-2017 marks it MT-Unsafe).
+         * _GNU_SOURCE is defined above, so this is the GNU variant, whose
+         * RETURN VALUE is the string — it may or may not be errbuf, so errbuf
+         * must never be printed directly. */
+        char errbuf[64];
         (void)fprintf(stderr, "serenity-cn: XCVR init failed (%s)\n",
-                      strerror(-rc));
+                      strerror_r(-rc, errbuf, sizeof(errbuf)));
         return 1;
     }
 

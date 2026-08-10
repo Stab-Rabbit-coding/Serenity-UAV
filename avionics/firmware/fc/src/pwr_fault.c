@@ -436,7 +436,12 @@ int pwr_fault_get_snapshot(const pwr_fault_ctx_t *ctx,
     if (ctx == NULL || snap == NULL) {
         return -EINVAL;
     }
-    memcpy(snap, &ctx->snap, sizeof(*snap));
+    /* Plain struct assignment rather than memcpy(): source and destination are
+     * the same complete type, so the compiler emits the copy with full type
+     * checking and no dependence on the size argument matching the pointee.  A
+     * mismatched sizeof() in a memcpy() here would silently over- or under-copy
+     * the snapshot; this form cannot. */
+    *snap = ctx->snap;
     return 0;
 }
 
