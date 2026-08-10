@@ -1,7 +1,7 @@
 # Serenity UAV — Airframe Fuselage — Joints, Bow Pod, Interior Bosses TODO (Open Work Only)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 
 > **This file lists only currently-open (unchecked) top-level tasks for
 > this subsystem — one line each, <=70 chars, no prose.** Full detail
@@ -23,7 +23,7 @@
 - [ ] Middle section inner neck — Phase 5-10 print guidance
 - [ ] Deprecate SCAD fuselage shell files (post-Rev S archive)
 
-### Jayne (Vera) PCB mounting + Faraday enclosure (2026-07-12)
+### Observer (Vera) PCB mounting + Faraday enclosure (2026-07-12)
 → full detail: `WBS.md` §1.1.1
 
 - [ ] Vera PCB mounting + Faraday (2026-07-12, Rev S1).

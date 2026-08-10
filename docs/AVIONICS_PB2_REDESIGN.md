@@ -1,7 +1,7 @@
 # Serenity Avionics Redesign — 8× PocketBeagle 2 Industrial
 
-**Status:** Rev R baseline — All 8 nodes use EMI-hardened v2 capes (Wash / Zoë / Emma)
-**Date:** 2026-06-11 (Rev R: Wash/Zoë naming finalised; Kaylee PDB DRC-clean + gerbers; hull-frame coords validated; battery spec propagated)
+**Status:** Rev R baseline — All 8 nodes use EMI-hardened v2 capes (Pilot / XO / Commo)
+**Date:** 2026-06-11 (Rev R: Pilot/XO naming finalised; Flight Engineer PDB DRC-clean + gerbers; hull-frame coords validated; battery spec propagated)
 **Scope:** Avionics compute, cape specifications, bus topology, radio link architecture
 
 > **Rev Q cape change:** All 8 nodes (Bays A, B, D, E) now use EMI-hardened -2 capes. Previously
@@ -43,13 +43,13 @@ Bus order: **CN1 → FC1 → CN2 → FC2 → CN3 → FC3 → CN4 → FC4** — o
 
 | Bay | Pair | Cape variant | Rationale |
 |-----|------|-------------|-----------|
-| A — Shepherd's room (nose, sta 0–3.58 in / 0–91 mm) | CN1 / FC1 | Zoë / Wash | Bus start termination node (CAN FD 120 Ω, RS-485 120 Ω, 1553B 78 Ω); 5 kV isolated transceivers |
-| B — Inara's shuttle (sta 3.58–6.50 in / 91–165 mm) | CN2 / FC2 | Zoë / Wash | Rev Q: upgraded from -1. Uniform EMI hardening; ADIN1300BCPZ provides 1000BASE-T with isolation |
-| D — River's room (sta 9.88–12.60 in / 251–320 mm) | CN3 / FC3 | Zoë / Wash | Rev Q: upgraded from -1. Same rationale as Inara's shuttle |
-| E — Simon's medbay (tail, sta 12.60–15.28 in / 320–388 mm) | CN4 / FC4 | Zoë / Wash | Bus end termination node; 5 kV isolation at aft bus endpoint |
+| A — Shepherd's room (nose, sta 0–3.58 in / 0–91 mm) | CN1 / FC1 | XO / Pilot | Bus start termination node (CAN FD 120 Ω, RS-485 120 Ω, 1553B 78 Ω); 5 kV isolated transceivers |
+| B — Inara's shuttle (sta 3.58–6.50 in / 91–165 mm) | CN2 / FC2 | XO / Pilot | Rev Q: upgraded from -1. Uniform EMI hardening; ADIN1300BCPZ provides 1000BASE-T with isolation |
+| D — River's room (sta 9.88–12.60 in / 251–320 mm) | CN3 / FC3 | XO / Pilot | Rev Q: upgraded from -1. Same rationale as Inara's shuttle |
+| E — Simon's medbay (tail, sta 12.60–15.28 in / 320–388 mm) | CN4 / FC4 | XO / Pilot | Bus end termination node; 5 kV isolation at aft bus endpoint |
 
 Rev Q places 5 kV galvanic isolation at every node. Single-SKU procurement eliminates dual-sourcing.
-The ADIN1300BCPZ 1000BASE-T PHY on Wash / Zoë provides equivalent ring throughput to the
+The ADIN1300BCPZ 1000BASE-T PHY on Pilot / XO provides equivalent ring throughput to the
 DP83825I 100BASE-TX used on Cape-A-1 / Cape-B-1. Cape-A-1, Cape-B-1, XCVR-49MHZ-1 are archived.
 
 ---
@@ -108,7 +108,7 @@ The RP2350 PIO state machines in RevJ handled servo PWM generation, Manchester I
 | U7 | DS26LV31 + DS26LV32 | PRU GPIO | MIL-STD-1553 differential driver + receiver |
 | T1 | PE-68515 (or equiv) | — | 1553 coupling transformer, 1:1.41, 78 Ω |
 | U8 | DP83825I × 2 | CPSW3G RMII | 10/100 Ethernet PHY, ring port A and port B |
-| U9 | SLB9670 | SPI | TPM 2.0 — attestation, key storage |
+| U9 | SLB9672 | SPI | TPM 2.0 — attestation, key storage |
 | U10 | AP2112K-3.3 | — | 3.3 V LDO, 600 mA, ultra-low noise |
 | U11 | TPS62933 (or equiv) | — | 3.3 V → 1.8 V SMPS for PHY AVDD if required |
 
@@ -145,7 +145,7 @@ The RP2350 PIO state machines in RevJ handled servo PWM generation, Manchester I
 | Rail | Consumers | Max current |
 | --- | --- | --- |
 | 5 V in | PB2 VIN, CAN/RS-485 transceivers | 2.0 A |
-| 3.3 V (LDO) | ICM-42688-P, BMP388, M10Q, DP83825I × 2, SLB9670, MAX3485E | 600 mA |
+| 3.3 V (LDO) | ICM-42688-P, BMP388, M10Q, DP83825I × 2, SLB9672, MAX3485E | 600 mA |
 
 ---
 
@@ -162,11 +162,11 @@ Each Cape-B board carries all 4 radio types. Software assigns one CN node as pri
 | --- | --- | --- | --- | --- |
 | MAVLink telemetry | SiK v3 module (RFD900x footprint) | UART + GPIO | 902–928 MHz | Bidirectional telemetry / command uplink |
 | Long-range backup | RFM95W LoRa | SPI + DIO IRQ | 902–928 MHz (separate channel plan) | Backup command / low-rate telemetry |
-| RC control | Emma (XCVR-49MHZ-2) sub-module | UART + timing GPIO | 49 MHz (Part 15 §15.235) | Pilot RC input, dynamic channel assignment |
+| RC control | Commo (XCVR-49MHZ-2) sub-module | UART + timing GPIO | 49 MHz (Part 15 §15.235) | Pilot RC input, dynamic channel assignment |
 | Local mesh / GCS | TI WL1837MOD | SDIO | 2.4 + 5 GHz WiFi (802.11 a/b/g/n) + BT 5.0 | Ground station AP, short-range streaming; BT for tablet GCS |
 
 > **SiK + LoRa coexistence:** Both operate in the 902–928 MHz US ISM band. Coordinate channel plans at firmware level — SiK on 915 MHz center, LoRa on 903 MHz or 927 MHz. Physical separation of SMA ports ≥50 mm, separate ground pours under each RF section.
-> **Emma (XCVR-49MHZ-2) sub-module:** Emma is a custom 49 MHz (Part 15 §15.235) AX.25 PCB (separate from this cape). Cape-B provides a 6-pin JST-GH header (5 V, GND, UART TX, UART RX, PTT-SYNC GPIO, n/c) and an SMA bulkhead for the 49 MHz loaded whip. The sub-module plugs in; the RF section remains on the Emma board.
+> **Commo (XCVR-49MHZ-2) sub-module:** Commo is a custom 49 MHz (Part 15 §15.235) AX.25 PCB (separate from this cape). Cape-B provides a 6-pin JST-GH header (5 V, GND, UART TX, UART RX, PTT-SYNC GPIO, n/c) and an SMA bulkhead for the 49 MHz loaded whip. The sub-module plugs in; the RF section remains on the Commo board.
 
 ### 4.2 Cape-B IC inventory
 
@@ -180,11 +180,11 @@ Each Cape-B board carries all 4 radio types. Software assigns one CN node as pri
 | U5 | RFD900x (or SiK v3 mod.) | UART, CTS/RTS | SiK 915 MHz MAVLink radio |
 | U6 | RFM95W | SPI, DIO0–DIO3 | LoRa 915 MHz long-range backup |
 | U7 | TI WL1837MOD | SDIO (4-bit) | WiFi 802.11 a/b/g/n (2.4 + 5 GHz) + BT 5.0 — uses TI wl18xx mainline kernel driver |
-| — | Emma (XCVR-49MHZ-2) sub-module | JST-GH 6-pin header | 49 MHz (Part 15 §15.235) RC control |
+| — | Commo (XCVR-49MHZ-2) sub-module | JST-GH 6-pin header | 49 MHz (Part 15 §15.235) RC control |
 | U8 | W25Q128JV | SPI | 128 Mbit NOR flash — circular flight log buffer (non-executable) |
 | U9 | microSD socket | SPI | Removable log card — hardware write-block enforced by U10 |
 | U10 | ATF16V8BQL CPLD | GPIO latch → SD-WP pin | Write-block latch: SET at power-on by boot sequence, CLEAR only on hard power cycle; implements non-executable append-only log semantics identical to RevJ CPLD write-blocker |
-| U11 | SLB9670 | SPI | TPM 2.0 — per-node attestation, radio key storage, boot measurement |
+| U11 | SLB9672 | SPI | TPM 2.0 — per-node attestation, radio key storage, boot measurement |
 | U12 | DRV8833 | GPIO (H-bridge) | Cargo door + payload-release SG90 servos, 1.5 A. **Winch removed 2026-07-27** — the STS3215 is a bus servo driven by CAN-PERIPH-GW, no H-bridge. |
 | U13 | HX711 | GPIO bit-bang (DOUT/SCK) | 24-bit load cell ADC — payload weight |
 | U14 | TPS63031 (or equiv) | — | 3.3 V/1.5 A SMPS (radio TX peaks up to 800 mA combined) |
@@ -217,7 +217,7 @@ Each Cape-B board carries all 4 radio types. Software assigns one CN node as pri
 | --- | --- | --- |
 | SMA-915-SIK | 902–928 MHz | SiK λ/4 monopole whip (82 mm) |
 | SMA-915-LORA | 902–928 MHz | LoRa λ/4 monopole or SMA whip |
-| SMA-49 | 49 MHz | Emma (XCVR-49MHZ-2) loaded whip (via sub-module) |
+| SMA-49 | 49 MHz | Commo (XCVR-49MHZ-2) loaded whip (via sub-module) |
 | SMA-WIFI | 2.4 / 5 GHz | WL1837MOD PCB antenna or U.FL → SMA pigtail |
 
 ### 4.6 Cape-B power budget
@@ -226,7 +226,7 @@ Each Cape-B board carries all 4 radio types. Software assigns one CN node as pri
 | --- | --- | --- |
 | 5 V in | PB2 VIN, DRV8833 motor, radio modules | 3.0 A |
 | 3.3 V RF (SMPS) | RFD900x (1.2 A TX peak), RFM95W (120 mA TX), WL1837MOD (550 mA TX peak) | 1.5 A continuous, 2.0 A peak |
-| 3.3 V logic (LDO) | MAX3485E, ATA6561, DS26LV31/32, DP83825I × 2, HX711, SLB9670, ATF16V8BQL | 350 mA |
+| 3.3 V logic (LDO) | MAX3485E, ATA6561, DS26LV31/32, DP83825I × 2, HX711, SLB9672, ATF16V8BQL | 350 mA |
 
 ---
 
@@ -272,7 +272,7 @@ CN1 ─T─ FC1 ─T─ CN2 ─T─ FC2 ─T─ CN3 ─T─ FC3 ─T─ CN4 ─T
 - **T** = stub coupling transformer (PE-68515 or equivalent, 0.9 m max stub)
 - **Primary BC:** FC1 (elected at boot via CAN FD priority arbitration)
 - **Standby BC:** FC2 (assumes BC role if FC1 heartbeat absent for 3 frames)
-- **Termination:** 78Ω at CN1 (bus start, Shepherd's room / Bay A) and FC4 (bus end, Simon's medbay / Bay E). Both termination nodes use Zoë / Wash (EMI-hardened).
+- **Termination:** 78Ω at CN1 (bus start, Shepherd's room / Bay A) and FC4 (bus end, Simon's medbay / Bay E). Both termination nodes use XO / Pilot (EMI-hardened).
 - **Shielded cable:** MIL-C-17/131 or equivalent, 78 Ω, twisted pair, drain wire grounded at one end per segment
 - **PRU firmware requirement:** Manchester II encoder at 1 Mbps ± 0.5%; decoder with sync-word detection and RT address filtering; TX/RX half-duplex arbitration
 
@@ -287,7 +287,7 @@ CN1 ─┬─ FC1 ─ CN2 ─ FC2 ─ CN3 ─ FC3 ─ CN4 ─┬─ FC4
 ```
 
 - **Transceiver:** ATA6561 on every cape, 3.3 V, 5 Mbps data rate
-- **Termination:** 120 Ω resistor soldered on CN1 cape (bus start, Shepherd's room / Bay A) and FC4 cape (bus end, Simon's medbay / Bay E); all others: open. Both termination nodes use Zoë / Wash (EMI-hardened, 5 kV isolated transceivers).
+- **Termination:** 120 Ω resistor soldered on CN1 cape (bus start, Shepherd's room / Bay A) and FC4 cape (bus end, Simon's medbay / Bay E); all others: open. Both termination nodes use XO / Pilot (EMI-hardened, 5 kV isolated transceivers).
 - **Controllers:** AM6254 MCAN0 (primary bus) + MCAN1 (reserved for second CAN bus or redundant arbitration)
 - **Protocol:** DroneCAN v1 / UAVCANv1 for sensor data; custom priority-voting messages for role election
 
@@ -318,7 +318,7 @@ All 4 radio links are physically present on every Cape-B board. At any given tim
 | 49 MHz (Part 15 §15.235) RC | CN3 | CN4 → CN1 → CN2 |
 | WiFi 2.4 GHz / BLE | CN4 | CN1 → CN2 → CN3 |
 
-Failover trigger: CAN FD heartbeat loss from primary CN node for ≥200 ms. The next-priority node activates its radio master TX and announces takeover via CAN FD. No pilot input is interrupted; the RC link failover handoff is transparent because all CN nodes are receiving Emma 49 MHz AX.25 frames simultaneously (receive-all mode), and only the TX/processing primary changes.
+Failover trigger: CAN FD heartbeat loss from primary CN node for ≥200 ms. The next-priority node activates its radio master TX and announces takeover via CAN FD. No pilot input is interrupted; the RC link failover handoff is transparent because all CN nodes are receiving Commo 49 MHz AX.25 frames simultaneously (receive-all mode), and only the TX/processing primary changes.
 
 GPS receivers (u-blox M10Q) are on all 4 Cape-A nodes. GNSS data is broadcast over CAN FD (DroneCAN GPS message). FC1 uses its local M10Q as primary; if FC1 fails, FC2's M10Q becomes the active GPS source via CAN FD arbitration.
 
@@ -389,7 +389,7 @@ Both cape variants require the same two PRU firmware images:
 - Synchronised multi-channel update from shared memory command buffer
 - EHRPWM handles 6 channels natively; PRU-1 handles 2 overflow channels
 
-Cape-B PRU-1 is used for cargo servo PWM (2 channels only) + PTT sync timing for Emma (XCVR-49MHZ-2).
+Cape-B PRU-1 is used for cargo servo PWM (2 channels only) + PTT sync timing for Commo (XCVR-49MHZ-2).
 
 ---
 
@@ -397,7 +397,7 @@ Cape-B PRU-1 is used for cargo servo PWM (2 channels only) + PTT sync timing for
 
 The CPLD write-blocker and STM32 OTP fuse architecture from RevJ applies unchanged. Each node boots from its 64GB eMMC (Rev M — no OS microSD). Log storage (Cape-B microSD + NOR flash) uses hardware write-protect via the CPLD latch — the latch is set at power-on and cannot be cleared until the node is powered off, enforcing non-executable, append-only log semantics.
 
-TPM 2.0 (SLB9670) is present on **both Cape-A and Cape-B** — all 8 nodes carry a TPM. FC nodes use it for flight-critical attestation and key storage. CN nodes use it for radio link key storage, boot measurement, and flight-log authenticity attestation (the CPLD write-blocker enforces append-only access; the TPM binds log signing keys).
+TPM 2.0 (SLB9672) is present on **both Cape-A and Cape-B** — all 8 nodes carry a TPM. FC nodes use it for flight-critical attestation and key storage. CN nodes use it for radio link key storage, boot measurement, and flight-log authenticity attestation (the CPLD write-blocker enforces append-only access; the TPM binds log signing keys).
 
 ---
 
@@ -407,7 +407,7 @@ TPM 2.0 (SLB9670) is present on **both Cape-A and Cape-B** — all 8 nodes carry
 | --- | --- | --- |
 | CPSW3G RMII/RGMII availability on PocketBeagle 2 P1/P2 | Medium | Verify against BeagleBoard PB2 hardware reference manual before Cape-A layout. Fallback: W5500 SPI. |
 | PRU I/O pin availability on P1/P2 | Medium | Confirm PRU_PRU0_GPIO pins are routed to P1/P2 expansion headers on PB2. |
-| Emma (XCVR-49MHZ-2) sub-module connector footprint | Low | Define JST-GH 6-pin header pinout with Emma firmware team before Cape-B layout. |
+| Commo (XCVR-49MHZ-2) sub-module connector footprint | Low | Define JST-GH 6-pin header pinout with Commo firmware team before Cape-B layout. |
 | SiK + LoRa 915 MHz coexistence channel plan | Medium | Validate with spectrum analyzer — both in 902–928 MHz ISM band, minimum 2 MHz separation required between channels. |
 | PB2 boot time in failover scenario | High | Benchmark: measure time from 5 V applied to CAN FD heartbeat present. Target <15 s. If >15 s, implement kexec warm-restart and/or pre-arm node-ready gating. |
 | Cape power connector to vehicle bus | Low | Specify: Molex Nano-Fit 4-pin (5 V, 5 V, GND, GND) per node, rated 6 A. 4 FC + 4 CN = 8 connectors to PDB. |
@@ -447,14 +447,14 @@ Full catalog with official URLs and specific clause details is in `REFERENCES.md
 | REF-ISO-001 | ISO 11898-1:2015+Amd.1:2020 (CAN FD) | Clause 8 (CAN data frame), Clause 10 (CAN FD frame), Clause 12 (bit timing) | AM6254 MCAN at 1 Mbps arbitration / 5 Mbps data; ATA6561 transceivers; 120 Ω termination |
 | REF-IEC-001 | IEC 62368-1 Ed. 3.0 (2018) | Clause 5.5.2 (creepage/clearance for reinforced insulation) | 5 kV isolation barriers on CAN FD (ISOW1044BDFMR), RS-485 (ADM2795EBRWZ), Ethernet (ADIN1300BCPZ + ISO7642FDWRR + Würth 749010012A) |
 | REF-VDE-001 | VDE V 0884-11:2017-01 | Clause 4.3 (reinforced insulation class), Clause 5.3 (5000 Vrms hipot) | Same isolation devices as above; compliance verified per component datasheet certifications |
-| REF-NIST-001 | NIST SP 800-207 (Zero Trust, 2020) | §2.1 (authenticate every connection), §3.3 (device agent/TPM) | Per-node TPM 2.0 (SLB9670); TPM-bound SHA-256 HMAC on all transmitted frames |
+| REF-NIST-001 | NIST SP 800-207 (Zero Trust, 2020) | §2.1 (authenticate every connection), §3.3 (device agent/TPM) | Per-node TPM 2.0 (SLB9672); TPM-bound SHA-256 HMAC on all transmitted frames |
 | REF-NIST-002 | NIST SP 800-82 Rev 3 (OT Security, 2023) | §5.3 (network segmentation), §5.4 (defense in depth), §6.2.5 (EMI) | Multiple independent bus types as defense-in-depth; galvanic isolation; 500 W/m² EMI hardening design objective |
-| REF-NIST-004 | NIST SP 800-92 (Log Management, 2006) | §4.4.2 (protecting log data via hardware enforcement) | ATF16V8BQL CPLD write-block on each Zoë node; append-only non-executable log microSD |
+| REF-NIST-004 | NIST SP 800-92 (Log Management, 2006) | §4.4.2 (protecting log data via hardware enforcement) | ATF16V8BQL CPLD write-block on each XO node; append-only non-executable log microSD |
 | REF-ISA-001 | ISA/IEC 62443-3-3:2013 | SR 3.1 (comms integrity), SR 4.2 (cryptography), SR 7.6 (network hardening) | HMAC authentication; TPM key storage; 5 kV isolation as physical security hardening |
 | REF-IEEE-001 | IEEE 802.3-2022 (Ethernet) | Clause 22 (RMII), Clause 24 (100BASE-TX), Clause 38 (1500 Vrms isolation transformer) | CPSW3G RMII; ADIN1300BCPZ / DP83825I PHYs; Würth 749010012A transformer |
 | REF-IEEE-002 | IEEE 802.11-2020 (WiFi) | Clause 17 (OFDM 5 GHz), Clause 19 (802.11n) | TI WL1837MOD SDIO; 5 GHz UNII-3 primary, 2.4 GHz fallback |
 | REF-IEEE-003 | IEEE 802.15.4-2020 (Zigbee PHY) | Clause 10 (2.4 GHz O-QPSK) | CC2652R7 optional Zigbee backup mesh |
-| REF-FCC-003 | 47 CFR Part 15 §15.235 | Field strength ≤ 10,000 µV/m at 3 m (≈ 30 µW / −15.2 dBm EIRP-equivalent) — not Part 95 RCRS, which does not cover 49 MHz | Emma 49 MHz link; River's Room and Simon's Medbay nodes only |
+| REF-FCC-003 | 47 CFR Part 15 §15.235 | Field strength ≤ 10,000 µV/m at 3 m (≈ 30 µW / −15.2 dBm EIRP-equivalent) — not Part 95 RCRS, which does not cover 49 MHz | Commo 49 MHz link; River's Room and Simon's Medbay nodes only |
 | REF-PROTO-001 | AX.25 v2.2 (1998) | §6.2 (I Frame), §6.3 (S Frames) | AX.25 framing on 49 MHz link |
 | REF-PROTO-002 | MAVLink v2.0 | Packet format, message signing | SiK 915 MHz MAVLink C2 link |
 

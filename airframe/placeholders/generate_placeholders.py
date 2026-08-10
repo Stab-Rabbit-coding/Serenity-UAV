@@ -14,14 +14,14 @@ Output tree (relative to this script):
     servos/         DS3218MG, SG90
     bearings/       MF104ZZ, MR63ZZ, 6804
     structural/     CF rods / tubes / bar / plate, PTFE sleeve
-    avionics/       PocketBeagle2, Cape-A-2/B-2, XCVR-49MHZ-2, Kaylee PDB, microSD
+    avionics/       PocketBeagle2, Cape-A-2/B-2, XCVR-49MHZ-2, Flight Engineer PDB, microSD
     power/          LiPo packs, automotive fuses, Bourns shunt
     cargo/          N20 winch motor, HX711, DRV8833
     gears/          M=1.0 sector, pinion, bevel pair, crown (resin-print or SDP-SI)
     hardware/       hinge pins, heat-set inserts, screws, PTFE sleeve, cam straps
     lighting/       WS2812C-2020 SMD nav LED
     wiring/         PTFE conduit, representative wire bundle cross-sections
-    gcs/            Malcolm enclosure, GCS LiPo, antenna types, tripod, encoders
+    gcs/            Skipper enclosure, GCS LiPo, antenna types, tripod, encoders
 
 Every STL header carries the marker "SerenityUAV PLACEHOLDER R1" (distinct from the
 hull-frame baked STL marker).  Shapes are solid representations of each component's
@@ -276,7 +276,7 @@ def gen_ds3218mg():
     """
     DS3218MG 25 kg·cm digital metal-gear servo.
     Body 40.7 × 20.2 × 38.0 mm; output spline stub 5.8 mm dia × 5 mm.
-    BOM: SERVO-TILT (×2 nacelle tilt), MAL-GIMBAL-SERVO (×2 GCS gimbal).
+    BOM: SERVO-TILT (×2 nacelle tilt), SKIPPER-GIMBAL-SERVO (×2 GCS gimbal).
     Ref [3]: DS3218MG datasheet.
     """
     body = _box(40.7, 20.2, 38.0)
@@ -326,7 +326,7 @@ def gen_brg_6804():
     """
     6804-2RS thin-section bearing 20 × 32 × 7 mm (GCS gimbal pan stage).
     OD=32 mm, ID=20 mm, W=7 mm.
-    BOM: MAL-BRG-6804.
+    BOM: SKIPPER-BRG-6804.
     """
     return _tube(16.0, 10.0, 7.0, n=32)
 
@@ -388,8 +388,8 @@ def gen_ptfe_sleeve_4mm():
 def gen_pocketbeagle2():
     """
     PocketBeagle 2 Industrial AM6254 SBC — 56 × 35 mm PCB, ~8 mm assembled height.
-    Used as both FC node (Wash cape) and CN node (Zoë cape) upper slot.
-    BOM: PB2-I-FC (×4), PB2-I-CN (×4), MAL-PB2-I (×1 GCS).
+    Used as both FC node (Pilot cape) and CN node (XO cape) upper slot.
+    BOM: PB2-I-FC (×4), PB2-I-CN (×4), SKIPPER-PB2-I (×1 GCS).
     Ref [3]: BeagleBoard.org PocketBeagle 2 Industrial datasheet.
     """
     pcb = _box(56.0, 35.0, 1.6)
@@ -400,12 +400,12 @@ def gen_pocketbeagle2():
 
 def gen_cape_a2():
     """
-    Cape-A-2 PCB 55 × 35 mm — EMI-hardened Wash (Flight Control) cape.
+    Cape-A-2 PCB 55 × 35 mm — EMI-hardened Pilot (Flight Control) cape.
     Same form factor as PocketBeagle 2 Industrial SBC.
     Includes ISOW1044BDFMR CAN FD isolator, ADM2795EBRWZ RS-485, 2× DP83825I ETH PHY.
     Assembled height ~10 mm (PCB + isolation ICs + JST-GH connectors).
     BOM: CAPE-A-2 (×4, all FC positions).
-    Dimensions verified against Wash.kicad_pcb Edge.Cuts (X: 121–176, Y: 87.5–122.5 mm).
+    Dimensions verified against Pilot.kicad_pcb Edge.Cuts (X: 121–176, Y: 87.5–122.5 mm).
     """
     pcb = _box(55.0, 35.0, 1.6)
     components = _box(49.0, 29.0, 8.4)
@@ -415,13 +415,13 @@ def gen_cape_a2():
 
 def gen_cape_b2():
     """
-    Cape-B-2 PCB 55 × 35 mm — EMI-hardened Zoë (Comms / Logging / Payload) cape.
+    Cape-B-2 PCB 55 × 35 mm — EMI-hardened XO (Comms / Logging / Payload) cape.
     Same form factor as PocketBeagle 2 Industrial SBC and Cape-A-2.
-    Adds MAVLink SiK, LoRa RFM95W, TI WL1837MOD WiFi/BT, SLB9670 TPM 2.0,
+    Adds MAVLink SiK, LoRa RFM95W, TI WL1837MOD WiFi/BT, SLB9672 TPM 2.0,
     ATF16V8BQL CPLD write-blocker, log microSD.
     Assembled height ~12 mm (RF module stack + JST-GH connectors).
-    BOM: CAPE-B-2 (×4 aircraft), MAL-CAPE-B-2 (×1 GCS).
-    Dimensions verified against Zoë.kicad_pcb Edge.Cuts (X: 121–176, Y: 87.5–122.5 mm).
+    BOM: CAPE-B-2 (×4 aircraft), SKIPPER-CAPE-B-2 (×1 GCS).
+    Dimensions verified against XO.kicad_pcb Edge.Cuts (X: 121–176, Y: 87.5–122.5 mm).
     """
     pcb = _box(55.0, 35.0, 1.6)
     components = _box(49.0, 29.0, 10.4)
@@ -435,7 +435,7 @@ def gen_xcvr_49mhz2():
     AX.25 transceiver.
     SRF2012-100Y CMC, PRTR5V0U2X TVS, X2Y cap; 4-layer 55 × 35 mm PCB.
     Assembled height ~6 mm.
-    BOM: XCVR-49MHZ-2 (×4 aircraft), MAL-XCVR-49MHZ-2 (×1 GCS).
+    BOM: XCVR-49MHZ-2 (×4 aircraft), SKIPPER-XCVR-49MHZ-2 (×1 GCS).
     """
     pcb = _box(55.0, 35.0, 1.6)
     components = _box(49.0, 29.0, 4.4)
@@ -443,14 +443,14 @@ def gen_xcvr_49mhz2():
     return _cat(pcb, components)
 
 
-def gen_kaylee_pdb():
+def gen_flight_engineer_pdb():
     """
-    Kaylee Power Distribution Board — custom 4-layer 90 × 65 mm PCB.
+    Flight Engineer Power Distribution Board — custom 4-layer 90 × 65 mm PCB.
     Dual 5 V/10 A BEC (TPS54620×2), 6 V/5 A BEC (TPS54540),
     5× INA226 current monitors, BQ76930 6S cell monitor.
     150 A MAXI main fuse + 4× 40 A mini ESC fuses.
     Assembled height ~10 mm (tall electrolytic caps + fuse holders).
-    BOM: Kaylee (×1).
+    BOM: Flight Engineer (×1).
     """
     pcb = _box(90.0, 65.0, 1.6)
     components = _box(84.0, 59.0, 8.4)
@@ -462,7 +462,7 @@ def gen_microsd():
     """
     64 GB microSD card — Cape-B write-blocked flight log.
     Standard microSD form factor: 15 × 11 × 1.0 mm.
-    BOM: MICROSD-LOG (×4 aircraft), MAL-MICROSD-LOG (×1 GCS).
+    BOM: MICROSD-LOG (×4 aircraft), SKIPPER-MICROSD-LOG (×1 GCS).
     """
     return _box(15.0, 11.0, 1.0)
 
@@ -498,9 +498,9 @@ def gen_lipo_6s_2800mah():
 
 def gen_lipo_4s_10000mah_gcs():
     """
-    4S 10000 mAh 14.8 V LiPo — Malcolm GCS field power pack.
+    4S 10000 mAh 14.8 V LiPo — Skipper GCS field power pack.
     Nominal dimensions: 175 × 64 × 38 mm.
-    BOM: MAL-FIELD-BATTERY (×1).
+    BOM: SKIPPER-FIELD-BATTERY (×1).
     """
     body = _box(175.0, 64.0, 38.0)
     xt60 = _box(12.0, 10.0, 8.0)
@@ -512,7 +512,7 @@ def gen_fuse_maxi_150a():
     """
     Littelfuse 0297150.ZXNV 150 A MAXI blade fuse — main battery bus.
     Standard MAXI blade: 29.2 × 15.2 × 16.6 mm (body only, no terminals).
-    BOM: FUSE-MAIN-150A (×1 on Kaylee).
+    BOM: FUSE-MAIN-150A (×1 on Flight Engineer).
     """
     return _box(29.0, 15.0, 17.0)
 
@@ -521,7 +521,7 @@ def gen_fuse_mini_40a():
     """
     Littelfuse 0297040.WXNV 40 A mini blade fuse — per-ESC branch.
     Standard mini blade: 19.0 × 11.0 × 16.6 mm.
-    BOM: FUSE-ESC-40A (×4 on Kaylee).
+    BOM: FUSE-ESC-40A (×4 on Flight Engineer).
     """
     return _box(19.0, 11.0, 17.0)
 
@@ -530,7 +530,7 @@ def gen_shunt_1mohm():
     """
     Bourns CSS2H-2512K 1 mΩ 3 W Kelvin shunt resistor — 2512 SMD package.
     Package: 6.4 × 3.2 × 2.3 mm.
-    BOM: SHUNT-1MOHM (×5 on Kaylee).
+    BOM: SHUNT-1MOHM (×5 on Flight Engineer).
     """
     return _box(6.4, 3.2, 2.3)
 
@@ -715,7 +715,7 @@ def gen_wire_4awg():
 
 def gen_wire_10awg():
     """
-    10 AWG silicone wire — ESC branch wiring (Kaylee XT30 → ESC XT30).
+    10 AWG silicone wire — ESC branch wiring (Flight Engineer XT30 → ESC XT30).
     OD ≈ 6 mm; shown as a 400 mm bundle (4 ESC runs × ~100 mm each).
     BOM: WIRE-10AWG (×1).
     """
@@ -739,14 +739,14 @@ def gen_wire_49mhz():
     return _cyl(0.15, 470.0, n=8)
 
 
-# ---- GCS (Malcolm) components -------------------------------------------- #
+# ---- GCS (Skipper) components -------------------------------------------- #
 
 
-def gen_malcolm_enclosure():
+def gen_skipper_enclosure():
     """
-    Hammond 1455N1601 IP65 aluminium project box — Malcolm field enclosure.
+    Hammond 1455N1601 IP65 aluminium project box — Skipper field enclosure.
     Exterior: 145 × 90 × 65 mm; EPDM gasket; 40 mm fan cutout.
-    BOM: MAL-ENCLOSURE (×1).
+    BOM: SKIPPER-ENCLOSURE (×1).
     Ref [3]: Hammond 1455N1601 datasheet.
     """
     body = _box(145.0, 90.0, 65.0)
@@ -758,18 +758,18 @@ def gen_malcolm_enclosure():
 
 def gen_pololu_bec_5v():
     """
-    Pololu D24V50F5 5 V/5 A step-down BEC — Malcolm comms-node 5 V rail.
+    Pololu D24V50F5 5 V/5 A step-down BEC — Skipper comms-node 5 V rail.
     PCB: 33 × 15 × 8 mm.
-    BOM: MAL-PWR-5V-BEC (×1).
+    BOM: SKIPPER-PWR-5V-BEC (×1).
     """
     return _box(33.0, 15.0, 8.0)
 
 
 def gen_pololu_bec_6v():
     """
-    Pololu D24V22F6 6 V/2.2 A step-down BEC — Malcolm gimbal servo 6 V rail.
+    Pololu D24V22F6 6 V/2.2 A step-down BEC — Skipper gimbal servo 6 V rail.
     PCB: 27 × 15 × 8 mm.
-    BOM: MAL-PWR-6V-BEC (×1).
+    BOM: SKIPPER-PWR-6V-BEC (×1).
     """
     return _box(27.0, 15.0, 8.0)
 
@@ -778,7 +778,7 @@ def gen_ant_915_omni():
     """
     5 dBi 915 MHz RP-SMA rubber duck — SiK / LoRa bench antenna.
     Approximate: 5 mm dia × 120 mm tall whip element.
-    BOM: MAL-ANT-915-OMNI (×2: one SiK + one LoRa).
+    BOM: SKIPPER-ANT-915-OMNI (×2: one SiK + one LoRa).
     """
     base = _cyl(6.0, 15.0, n=16)  # SMA/RP-SMA base
     whip = _cyl(2.5, 105.0, n=12)
@@ -790,7 +790,7 @@ def gen_ant_915_yagi():
     """
     9 dBi 915 MHz Yagi — shared SiK + LoRa directional field antenna.
     Approximate boom: 1200 × 20 × 20 mm with 5 element stubs (30 mm × 3 mm dia).
-    BOM: MAL-ANT-915-YAGI (×1).
+    BOM: SKIPPER-ANT-915-YAGI (×1).
     """
     boom = _box(1200.0, 20.0, 20.0)
     elements = _cat(
@@ -805,9 +805,9 @@ def gen_ant_915_yagi():
 
 def gen_ant_wifi_panel():
     """
-    14 dBi 5 GHz flat-panel antenna — Malcolm WiFi directional.
+    14 dBi 5 GHz flat-panel antenna — Skipper WiFi directional.
     Approximate panel: 100 × 100 × 20 mm.
-    BOM: MAL-ANT-WIFI-PNL (×1).
+    BOM: SKIPPER-ANT-WIFI-PNL (×1).
     """
     return _box(100.0, 100.0, 20.0)
 
@@ -816,7 +816,7 @@ def gen_ant_49mhz_whip():
     """
     49 MHz base-loaded ¼-wave whip + 4 ground radials (~940 mm physical).
     Base coil + housing: 30 mm dia × 80 mm; mast: 12 mm dia × 860 mm.
-    BOM: MAL-ANT-49MHZ (×1, SO-239 mount, 4 × 1.5 m radials).
+    BOM: SKIPPER-ANT-49MHZ (×1, SO-239 mount, 4 × 1.5 m radials).
     """
     base = _cyl(15.0, 80.0, n=20)
     mast = _cyl(6.0, 860.0, n=12)
@@ -828,7 +828,7 @@ def gen_ant_zigbee():
     """
     3 dBi 2.4 GHz RP-SMA rubber duck dipole — Zigbee link.
     5 mm dia × 100 mm.
-    BOM: MAL-ANT-ZIGBEE (×1).
+    BOM: SKIPPER-ANT-ZIGBEE (×1).
     """
     base = _cyl(5.0, 15.0, n=16)
     whip = _cyl(2.5, 85.0, n=12)
@@ -840,7 +840,7 @@ def gen_ant_gnss_patch():
     """
     u-blox ANN-MB-00 active GNSS patch — GCS operator position fix.
     Ceramic patch: 25 × 25 × 5 mm + SMA pigtail stub.
-    BOM: MAL-ANT-GPS (×1).
+    BOM: SKIPPER-ANT-GPS (×1).
     """
     patch = _box(25.0, 25.0, 5.0)
     return patch
@@ -850,7 +850,7 @@ def gen_gps_module():
     """
     SparkFun GPS-17285 / u-blox M10Q GNSS breakout — GCS position module.
     PCB: 25 × 25 × 7 mm assembled.
-    BOM: MAL-GPS-MODULE (×1).
+    BOM: SKIPPER-GPS-MODULE (×1).
     """
     return _box(25.0, 25.0, 7.0)
 
@@ -859,7 +859,7 @@ def gen_rf_splitter():
     """
     Mini-Circuits ZFSC-2-1W-S+ 2-way 915 MHz RF splitter.
     Approximate housing: 37 × 19 × 14 mm (SMA connectors add ~20 mm per port).
-    BOM: MAL-RF-SPLITTER (×1, shared SiK + LoRa Yagi path).
+    BOM: SKIPPER-RF-SPLITTER (×1, shared SiK + LoRa Yagi path).
     """
     body = _box(37.0, 19.0, 14.0)
     port1 = _cyl(3.5, 20.0, n=12)
@@ -876,7 +876,7 @@ def gen_as5600_encoder():
     """
     AS5600 12-bit magnetic encoder breakout PCB — gimbal pan/tilt axes.
     PCB: 15 × 15 × 4 mm.
-    BOM: MAL-GIMBAL-ENC (×2).
+    BOM: SKIPPER-GIMBAL-ENC (×2).
     """
     return _box(15.0, 15.0, 4.0)
 
@@ -884,7 +884,7 @@ def gen_as5600_encoder():
 def gen_n42_magnet():
     """
     N42 diametrically magnetised disc magnet 6 × 2 mm — AS5600 encoder rotor.
-    BOM: MAL-GIMBAL-MAG (×2, epoxy to servo output shaft).
+    BOM: SKIPPER-GIMBAL-MAG (×2, epoxy to servo output shaft).
     """
     return _cyl(3.0, 2.0, n=16)
 
@@ -893,17 +893,17 @@ def gen_tca9548a():
     """
     TCA9548A 1-to-8 I²C mux breakout (Adafruit 2717) — encoder address isolation.
     PCB: 25 × 15 × 4 mm.
-    BOM: MAL-TCA9548A (×1).
+    BOM: SKIPPER-TCA9548A (×1).
     """
     return _box(25.0, 15.0, 4.0)
 
 
-def gen_malcolm_tripod():
+def gen_skipper_tripod():
     """
     Heavy-duty camera tripod / antenna mast — GCS antenna support.
     Collapsed: ~600 mm; extended: ≥1500 mm; head: 60 × 60 mm.
     Modelled as: head box + 3 leg tubes (simplified vertical form).
-    BOM: MAL-TRIPOD (×1, 5 kg rated, 3/8-16 mount, ≥1.5 m extended).
+    BOM: SKIPPER-TRIPOD (×1, 5 kg rated, 3/8-16 mount, ≥1.5 m extended).
     """
     head = _box(60.0, 60.0, 40.0)
     # Three telescoping leg sections collapsed — shown as single central tube
@@ -929,7 +929,7 @@ def gen_wire_post_49mhz():
 # ---- EMC / Faraday shielding -------------------------------------------- #
 #
 # Custom Faraday cage assemblies for each avionics bay (Shepherd, Inara,
-# River, Simon) and for the Malcolm GCS enclosure.  Each aircraft cage
+# River, Simon) and for the Skipper GCS enclosure.  Each aircraft cage
 # provides ≥60 dB RF attenuation to meet the 500 W/m² EM operating
 # environment requirement (CLAUDE.md).
 #
@@ -942,9 +942,9 @@ def gen_wire_post_49mhz():
 #   FAR-FT-PANEL     — EMI-filtered feed-through panel; 55×35 mm PCB
 #   FAR-FERRITE-4MM  — 4 mm bore split ferrite clamp (×8/cage)
 #
-# GCS (Malcolm):
-#   MAL-FAR-FAN     — 40 mm 5 V fan for Hammond 1455N1601 enclosure
-#   MAL-FAR-GASKET  — 470 mm EMI spring gasket for Hammond lid seal
+# GCS (Skipper):
+#   SKIPPER-FAR-FAN     — 40 mm 5 V fan for Hammond 1455N1601 enclosure
+#   SKIPPER-FAR-GASKET  — 470 mm EMI spring gasket for Hammond lid seal
 #
 # References:
 #   [2] CLAUDE.md — 500 W/m² EM operating environment requirement
@@ -1015,7 +1015,7 @@ def gen_far_fan_40():
     satisfy the ≤ 55 °C avionics thermal limit in the 500 W/m² EM
     environment.  Modelled as square frame + centre hub cylinder.
 
-    BOM: FAR-FAN-40 (×4 aircraft); MAL-FAR-FAN (×1 GCS) — same model.
+    BOM: FAR-FAN-40 (×4 aircraft); SKIPPER-FAR-FAN (×1 GCS) — same model.
     Ref [2]: CLAUDE.md 500 W/m² EM environment; avionics thermal limit.
     """
     frame = _box(40.0, 40.0, 10.0)
@@ -1047,7 +1047,7 @@ def gen_far_bond_strap():
     Braid body 100 mm × 10 mm × 2 mm; M3 lug tabs (12 × 10 × 4 mm)
     crimped at both ends.  Two straps per cage provide redundant bond
     paths per the failover requirement (CLAUDE.md).  Connects the
-    FAR-CAGE-AV body to the airframe ground plane / Kaylee GND bus.
+    FAR-CAGE-AV body to the airframe ground plane / Flight Engineer GND bus.
     DC resistance ≤ 2.5 mΩ; rated 10 A continuous for fault-current.
 
     BOM: FAR-BOND-STRAP (×2 per cage = ×8 aircraft).
@@ -1101,9 +1101,9 @@ def gen_far_ferrite_4mm():
     return _tube(7.5, 2.0, 11.0, n=24)
 
 
-def gen_mal_far_gasket():
+def gen_skipper_far_gasket():
     """
-    EMI spring-contact gasket — Malcolm GCS Hammond 1455N1601 lid seal.
+    EMI spring-contact gasket — Skipper GCS Hammond 1455N1601 lid seal.
 
     Replaces the standard EPDM weatherseal with a conductive spring
     strip to add RF attenuation at the enclosure lid interface.
@@ -1112,9 +1112,9 @@ def gen_mal_far_gasket():
     lid rebate depth; slightly wider than FAR-GASKET-AV).
     Modelled as a single straight strip at uncompressed length.
 
-    BOM: MAL-FAR-GASKET (×1 GCS).
+    BOM: SKIPPER-FAR-GASKET (×1 GCS).
     Example: Laird Soft Shield 325 or Leader Tech F-100-B wide grade.
-    Ref [2]: CLAUDE.md Malcolm GCS; MAL-ENCLOSURE 40 mm fan cutout.
+    Ref [2]: CLAUDE.md Skipper GCS; SKIPPER-ENCLOSURE 40 mm fan cutout.
     """
     return _box(470.0, 8.0, 1.5)
 
@@ -1168,7 +1168,7 @@ def gen_foam_cargo():
     Low-density foam fill block — cargo section.
 
     Approximates the interior void of Cargo_Shell (190 × 200 × 159 mm).
-    Avionics bays, cargo door, and Kaylee PDB bay are cut out during
+    Avionics bays, cargo door, and Flight Engineer PDB bay are cut out during
     fit-up; use VOID-AVBAY and VOID-CARGO-BAY overlays to plan clearances.
 
     BOM:  FOAM-FILL-CARGO (×1)
@@ -1185,7 +1185,7 @@ def gen_foam_middle():
 
     The middle section is an open-bottomed ring (open at −Z / belly).
     Foam fills the two vertical pillars and the top arch; the open belly
-    gap is left void to allow wiring and Kaylee PDB access.
+    gap is left void to allow wiring and Flight Engineer PDB access.
 
     Modelled as three rectangular blocks assembled into a U-frame:
       Left  pillar : 30 × 69 × 161 mm at X = 0
@@ -1234,8 +1234,8 @@ def gen_void_avbay():
     """
     Avionics bay clearance void — one node stack pocket.
 
-    Each stack houses: PocketBeagle 2 Industrial (56×35 mm) + Wash
-    (Cape-A-2, 55×35 mm) + Zoë (Cape-B-2, 55×35 mm) + XCVR-49MHZ-2
+    Each stack houses: PocketBeagle 2 Industrial (56×35 mm) + Pilot
+    (Cape-A-2, 55×35 mm) + XO (Cape-B-2, 55×35 mm) + XCVR-49MHZ-2
     (55×35 mm), stacked vertically on M3 standoffs.
 
     Clear interior: 62 × 42 × 75 mm (footprint + 7 mm clearance each
@@ -1258,13 +1258,13 @@ def gen_void_cargo_bay():
     """
     Cargo bay belly void — open payload well under cargo section.
 
-    The Jayne cargo handling system occupies the belly of the cargo
+    The Observer cargo handling system occupies the belly of the cargo
     section.  Approximate clear volume: 120 × 150 × 80 mm.  The cargo
     door opens in the −Z (ventral) direction; the N20 winch motor, HX711
     load-cell ADC, and hook assembly must clear this pocket.
 
     BOM:  VOID-CARGO-BAY (×1)
-    Ref [2]: CLAUDE.md cargo section description; Jayne cargo system.
+    Ref [2]: CLAUDE.md cargo section description; Observer cargo system.
     """
     return _box(120.0, 150.0, 80.0)
 
@@ -1294,7 +1294,7 @@ def gen_void_power_bus():
     shunt.  Cross-section 25 × 25 mm (X × Z), length 500 mm.
 
     BOM:  VOID-POWER-BUS (×1 longitudinal channel)
-    Ref [2]: CLAUDE.md Kaylee PDB power distribution topology.
+    Ref [2]: CLAUDE.md Flight Engineer PDB power distribution topology.
     """
     return _box(25.0, 500.0, 25.0)
 
@@ -1413,7 +1413,7 @@ _COMPONENTS = [
         gen_ds3218mg,
         "servos",
         "DS3218MG_25kgcm.stl",
-        "SERVO-TILT / MAL-GIMBAL-SERVO",
+        "SERVO-TILT / SKIPPER-GIMBAL-SERVO",
         "DS3218MG digital metal-gear servo (×2 nacelle tilt + ×2 GCS gimbal)",
     ),
     (
@@ -1442,7 +1442,7 @@ _COMPONENTS = [
         gen_brg_6804,
         "bearings",
         "B6804_20x32x7mm_GCS.stl",
-        "MAL-BRG-6804",
+        "SKIPPER-BRG-6804",
         "6804-2RS thin bearing 20×32×7 mm (×1 GCS gimbal pan)",
     ),
     # Structural / CF hardware
@@ -1494,7 +1494,7 @@ _COMPONENTS = [
         gen_pocketbeagle2,
         "avionics",
         "PocketBeagle2_Industrial_56x35mm.stl",
-        "PB2-I-FC / PB2-I-CN / MAL-PB2-I",
+        "PB2-I-FC / PB2-I-CN / SKIPPER-PB2-I",
         "PocketBeagle 2 Industrial AM6254 SBC 56×35 mm (×8 aircraft + ×1 GCS)",
     ),
     (
@@ -1502,35 +1502,35 @@ _COMPONENTS = [
         "avionics",
         "Cape_A2_PCB_55x35mm.stl",
         "CAPE-A-2",
-        "Cape-A-2 Wash FC cape PCB 55×35 mm (×4 aircraft)",
+        "Cape-A-2 Pilot FC cape PCB 55×35 mm (×4 aircraft)",
     ),
     (
         gen_cape_b2,
         "avionics",
         "Cape_B2_PCB_55x35mm.stl",
-        "CAPE-B-2 / MAL-CAPE-B-2",
-        "Cape-B-2 Zoë Comms cape PCB 55×35 mm (×4 aircraft + ×1 GCS)",
+        "CAPE-B-2 / SKIPPER-CAPE-B-2",
+        "Cape-B-2 XO Comms cape PCB 55×35 mm (×4 aircraft + ×1 GCS)",
     ),
     (
         gen_xcvr_49mhz2,
         "avionics",
         "XCVR_49MHZ2_PCB_55x35mm.stl",
-        "XCVR-49MHZ-2 / MAL-XCVR-49MHZ-2",
+        "XCVR-49MHZ-2 / SKIPPER-XCVR-49MHZ-2",
         "XCVR-49MHZ-2 49 MHz (Part 15 §15.235) sub-module 55×35 mm"
         " (×4 aircraft + ×1 GCS)",
     ),
     (
-        gen_kaylee_pdb,
+        gen_flight_engineer_pdb,
         "avionics",
-        "Kaylee_PDB_90x65mm.stl",
-        "Kaylee",
-        "Kaylee Power Distribution Board 90×65 mm (×1)",
+        "FlightEngineer_PDB_90x65mm.stl",
+        "Flight Engineer",
+        "Flight Engineer Power Distribution Board 90×65 mm (×1)",
     ),
     (
         gen_microsd,
         "avionics",
         "microSD_64GB.stl",
-        "MICROSD-LOG / MAL-MICROSD-LOG",
+        "MICROSD-LOG / SKIPPER-MICROSD-LOG",
         "64 GB microSD — write-blocked flight log (×4 aircraft + ×1 GCS)",
     ),
     # Power
@@ -1552,7 +1552,7 @@ _COMPONENTS = [
         gen_lipo_4s_10000mah_gcs,
         "power",
         "LiPo_4S_10000mAh_175x64x38mm_GCS.stl",
-        "MAL-FIELD-BATTERY",
+        "SKIPPER-FIELD-BATTERY",
         "4S 10000 mAh GCS field battery (×1)",
     ),
     (
@@ -1560,21 +1560,21 @@ _COMPONENTS = [
         "power",
         "Fuse_MAXI_150A.stl",
         "FUSE-MAIN-150A",
-        "150 A MAXI blade fuse — main battery bus (×1 on Kaylee)",
+        "150 A MAXI blade fuse — main battery bus (×1 on Flight Engineer)",
     ),
     (
         gen_fuse_mini_40a,
         "power",
         "Fuse_mini_40A.stl",
         "FUSE-ESC-40A",
-        "40 A mini blade fuse — per-ESC branch (×4 on Kaylee)",
+        "40 A mini blade fuse — per-ESC branch (×4 on Flight Engineer)",
     ),
     (
         gen_shunt_1mohm,
         "power",
         "Shunt_CSS2H_2512K_1mohm.stl",
         "SHUNT-1MOHM",
-        "Bourns CSS2H 1 mΩ Kelvin shunt, 2512 SMD (×5 on Kaylee)",
+        "Bourns CSS2H 1 mΩ Kelvin shunt, 2512 SMD (×5 on Flight Engineer)",
     ),
     # Cargo
     (
@@ -1723,115 +1723,115 @@ _COMPONENTS = [
     ),
     # GCS
     (
-        gen_malcolm_enclosure,
+        gen_skipper_enclosure,
         "gcs",
-        "Malcolm_enclosure_IP65_145x90x65mm.stl",
-        "MAL-ENCLOSURE",
+        "Skipper_enclosure_IP65_145x90x65mm.stl",
+        "SKIPPER-ENCLOSURE",
         "Hammond 1455N1601 IP65 Al enclosure 145×90×65 mm (×1)",
     ),
     (
         gen_pololu_bec_5v,
         "gcs",
         "Pololu_D24V50F5_5V5A_BEC.stl",
-        "MAL-PWR-5V-BEC",
+        "SKIPPER-PWR-5V-BEC",
         "Pololu D24V50F5 5 V/5 A step-down BEC (×1 GCS)",
     ),
     (
         gen_pololu_bec_6v,
         "gcs",
         "Pololu_D24V22F6_6V2A_BEC.stl",
-        "MAL-PWR-6V-BEC",
+        "SKIPPER-PWR-6V-BEC",
         "Pololu D24V22F6 6 V/2.2 A step-down BEC (×1 GCS)",
     ),
     (
         gen_ant_915_omni,
         "gcs",
         "Antenna_915MHz_omni_5dBi.stl",
-        "MAL-ANT-915-OMNI",
+        "SKIPPER-ANT-915-OMNI",
         "5 dBi 915 MHz rubber duck — SiK/LoRa bench (×2 GCS)",
     ),
     (
         gen_ant_915_yagi,
         "gcs",
         "Antenna_915MHz_Yagi_9dBi.stl",
-        "MAL-ANT-915-YAGI",
+        "SKIPPER-ANT-915-YAGI",
         "9 dBi 915 MHz Yagi — shared SiK+LoRa field directional (×1)",
     ),
     (
         gen_ant_wifi_panel,
         "gcs",
         "Antenna_5GHz_panel_14dBi.stl",
-        "MAL-ANT-WIFI-PNL",
-        "14 dBi 5 GHz flat panel — Malcolm WiFi directional (×1)",
+        "SKIPPER-ANT-WIFI-PNL",
+        "14 dBi 5 GHz flat panel — Skipper WiFi directional (×1)",
     ),
     (
         gen_ant_49mhz_whip,
         "gcs",
         "Antenna_49MHz_whip_940mm.stl",
-        "MAL-ANT-49MHZ",
+        "SKIPPER-ANT-49MHZ",
         "49 MHz base-loaded ¼-wave whip + radials ~940 mm (×1)",
     ),
     (
         gen_ant_zigbee,
         "gcs",
         "Antenna_2p4GHz_zigbee_rubber_duck.stl",
-        "MAL-ANT-ZIGBEE",
+        "SKIPPER-ANT-ZIGBEE",
         "3 dBi 2.4 GHz rubber duck — Zigbee link (×1 GCS)",
     ),
     (
         gen_ant_gnss_patch,
         "gcs",
         "Antenna_GNSS_patch_ANN_MB00.stl",
-        "MAL-ANT-GPS",
+        "SKIPPER-ANT-GPS",
         "u-blox ANN-MB-00 active GNSS patch 25×25×5 mm (×1)",
     ),
     (
         gen_gps_module,
         "gcs",
         "GPS_module_M10Q_SparkFun.stl",
-        "MAL-GPS-MODULE",
+        "SKIPPER-GPS-MODULE",
         "SparkFun M10Q GNSS breakout PCB 25×25×7 mm (×1)",
     ),
     (
         gen_rf_splitter,
         "gcs",
         "RF_splitter_915MHz_2way_ZFSC.stl",
-        "MAL-RF-SPLITTER",
+        "SKIPPER-RF-SPLITTER",
         "Mini-Circuits ZFSC-2-1W-S+ 2-way 915 MHz splitter (×1)",
     ),
     (
         gen_as5600_encoder,
         "gcs",
         "AS5600_encoder_breakout_15x15mm.stl",
-        "MAL-GIMBAL-ENC",
+        "SKIPPER-GIMBAL-ENC",
         "AS5600 12-bit magnetic encoder breakout (×2 pan + tilt)",
     ),
     (
         gen_n42_magnet,
         "gcs",
         "N42_disc_magnet_6x2mm.stl",
-        "MAL-GIMBAL-MAG",
+        "SKIPPER-GIMBAL-MAG",
         "N42 diametric disc magnet 6×2 mm — AS5600 rotor (×2)",
     ),
     (
         gen_tca9548a,
         "gcs",
         "TCA9548A_I2C_mux_breakout.stl",
-        "MAL-TCA9548A",
+        "SKIPPER-TCA9548A",
         "TCA9548A 1-to-8 I²C mux breakout 25×15×4 mm (×1 GCS)",
     ),
     (
         gen_brg_6804,
         "gcs",
         "B6804_20x32x7mm_gimbal_pan.stl",
-        "MAL-BRG-6804",
+        "SKIPPER-BRG-6804",
         "6804-2RS thin bearing 20×32×7 mm — GCS gimbal pan (×1)",
     ),
     (
-        gen_malcolm_tripod,
+        gen_skipper_tripod,
         "gcs",
-        "Malcolm_tripod_antenna_mast.stl",
-        "MAL-TRIPOD",
+        "Skipper_tripod_antenna_mast.stl",
+        "SKIPPER-TRIPOD",
         "Heavy-duty tripod / antenna mast ≥1.5 m (×1 GCS)",
     ),
     # EMC / Faraday shielding
@@ -1888,15 +1888,15 @@ _COMPONENTS = [
         gen_far_fan_40,
         "faraday",
         "Mal_far_fan_40mm_5V.stl",
-        "MAL-FAR-FAN",
-        "40×40×10 mm 5 V fan — Malcolm enclosure cooling (×1 GCS)",
+        "SKIPPER-FAR-FAN",
+        "40×40×10 mm 5 V fan — Skipper enclosure cooling (×1 GCS)",
     ),
     (
-        gen_mal_far_gasket,
+        gen_skipper_far_gasket,
         "faraday",
         "Mal_far_gasket_470x8x1p5mm.stl",
-        "MAL-FAR-GASKET",
-        "EMI spring gasket 470×8×1.5 mm — Malcolm Hammond lid seal (×1)",
+        "SKIPPER-FAR-GASKET",
+        "EMI spring gasket 470×8×1.5 mm — Skipper Hammond lid seal (×1)",
     ),
     # Foam fill and interior void visualisation
     (
@@ -1939,7 +1939,7 @@ _COMPONENTS = [
         "foam",
         "Void_cargo_bay_120x150x80mm.stl",
         "VOID-CARGO-BAY",
-        "Cargo belly void 120×150×80 mm — Jayne payload door opening",
+        "Cargo belly void 120×150×80 mm — Observer payload door opening",
     ),
     (
         gen_void_wiring_trunk,

@@ -1,7 +1,7 @@
 # Serenity UAV — Airframe Wings and Nacelles Work Breakdown Structure (Detail)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Current design revision:** Rev S (2026-07-04)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../../TODO.md)
@@ -84,6 +84,59 @@
     pass (unrelated to the nozzle/gear-train work above).
 
 ##### 1.1.3.1 *Nozzle*
+
+- **Rev T3 (2026-08-09) — flap SHINGLE implemented (master/seal)** (user decision
+  2026-08-09; found by CI "STL Validation", not by inspection).
+    - [x] **Root cause** — `N_FLAPS` 8 × `FLAP_SPAN_DEG` 50° = 400° of arc on a
+        360° circle, i.e. the deliberate 5° inter-flap overlap documented since
+        Rev R2. But every flap was carved from the SAME radial band
+        (`R_HINGE−FLAP_THICKNESS`..`R_HINGE`) at the same radius, so that overlap
+        was a solid INTERPENETRATION, not a lap joint — physically unbuildable.
+        Adjacent flaps therefore shared exactly coincident cylindrical surfaces,
+        which exported as edges belonging to four facets (17 on the closed asm,
+        12 on the open). `trimesh` reported the mesh non-watertight AND
+        `mesh.split()` returned **zero** bodies, so the multi-body fallback in
+        `tools/validate_stls.py` could not rescue it either. Confirmed in source,
+        not inferred: re-rendering the committed SCAD reproduced the published
+        mesh face-for-face (25 716).
+    - [x] **Fix** — alternate flaps are now SEAL flaps lapped
+        `FLAP_SHINGLE_GAP` = 0.2 mm (0.008 in) radially OUTBOARD of the MASTER
+        flaps, closing the gap between adjacent masters from outside. Principle
+        per REFERENCES.md **[REF-CAD-005]** (US 4,128,208, GE, expired). Both
+        types keep an identical clevis on the hinge line, so all 8 still pivot on
+        the same `R_HINGE` circle and straddle the same UNMODIFIED hinge bosses —
+        housing, throat, ring and cam untouched.
+    - [x] **Kinematics preserved** — the master band is unchanged, so
+        `exit_r(φ) = R_HINGE − FLAP_LENGTH·sin φ` and the 75 %/105 % bore targets
+        are numerically unaffected. Verified against the mesh: flow-boundary min
+        radius 16.311 mm (0.642 in) and overall max radius 35.600 mm (1.402 in)
+        identical before and after; the print-ready master STL renders
+        byte-identical geometry (1 702 facets, 2 636.5722 mm³).
+    - [x] **`FLAP_PHI` exposed** so each published assembly STL is reproducible
+        from source instead of by hand-editing the tilt.
+    - [x] **5° variant DISCARDED** (user 2026-08-09) —
+        `nacelle_nozzle_iris-closed-5deg.stl` was an earlier, abandoned attempt at
+        shingling the petals, exported from a source revision no longer in the
+        tree (rendering the current file at φ = 5° reproduced neither its facet
+        count nor its volume). Superseded by this revision; file deleted.
+    - [x] **BOM/print split** — `PRINT-NACELLE-FLAP` (16) →
+        `PRINT-NACELLE-FLAP-MASTER` (8) + `PRINT-NACELLE-FLAP-SEAL` (8), i.e.
+        4 + 4 per nozzle. New print part `nacelle_nozzle_flap_seal.stl`. Masses
+        re-measured from the rendered solids (master 2.637 cm³ → 3.4 g, seal
+        2.874 cm³ → 3.7 g at 1.27 g/cm³ PETG); at 2.5 mm wall with 3 × 0.4 mm
+        perimeters the section is effectively solid, so the previous 2 g/flap
+        figure was an under-estimate.
+    - [ ] **[OPEN — VERIFY] Mass/CG impact of the shingle.** Flap-set mass rises
+        32.0 g → 56.8 g (1.13 oz → 2.00 oz), i.e. **+24.8 g (+0.87 oz) total,
+        +12.4 g (+0.44 oz) per nacelle**, all of it aft of and outboard of the
+        tilt pivot. Re-check the Rev T CG band (≈109–112 mm) and the tilt-servo
+        torque margin against this before flight — see §1.1.3 "VERIFY Rev T CG".
+    - [ ] **[OPEN — VERIFY] Seal-flap aerodynamic step.** The seal sits 0.2 mm
+        proud of the masters' outer surface, so the flow boundary is no longer a
+        single continuous cone: masters bound it over 4 × 50° of arc, seals over
+        the intervening gaps at +2.7 mm radius. Confirm the residual step is
+        acceptable for the "smooth, low-turbulence exit" goal by bench/CFD before
+        flight; if not, the alternative is a scarfed (tapering-thickness) seal.
 
 - **Rev T (2026-07-18) — Option B pushrod drive adopted** (user decision;
   `docs/NOZZLE_DRIVE_TRADE.md`). Supersedes the Rev S1 internal-ring gear drive.
@@ -477,22 +530,22 @@ tracked in `avionics/WBS.md` §1.9.1 and `avionics/emi-hardening/WBS.md` §1.4.6
     (side-of-shaft)** configuration and adds **anomaly-magnetic-field detection + dynamic
     error reduction + EEPROM INL calibration** — purpose-built for the ferromagnetic
     (4130/17-4) through-shaft. Both KiCad files rebuilt around the AK7455
-    (`MAL-TILT-ENC-PCB`, **QFN24 4×4**, **SPI** 4-wire + ERROR on a **7-wire** direct-
+    (`SKIPPER-TILT-ENC-PCB`, **QFN24 4×4**, **SPI** 4-wire + ERROR on a **7-wire** direct-
     solder pigtail; both nacelles share the SPI bus via separate **CSN** → the I²C
     fixed-address problem is gone). Pinout **verified** vs the datasheet (TEST2→VSS,
     TEST1 open, NC pins + back-tab/EP open); `kicad-cli` (9.0.2) ERC **0 errors**.
-    `bom_revS.csv` (`MAL-TILT-ENC-PCB` + `HALL-RING-MAG`) and `REFERENCES.md`
+    `bom_revS.csv` (`SKIPPER-TILT-ENC-PCB` + `HALL-RING-MAG`) and `REFERENCES.md`
     (REF-SENSOR-008 + pending row) updated. (A KiCad symbol Y-inversion wiring bug —
     library Y-up vs sheet Y-down — was found and fixed during the rebuild.)
-- [ ] **[OPEN — cross-subsystem, rescoped 2026-07-26] `Wash.md` §13 / `Wash.kicad_sch` still
+- [ ] **[OPEN — cross-subsystem, rescoped 2026-07-26] `Pilot.md` §13 / `Pilot.kicad_sch` still
     have a `J_ENC` connector row (SM04B-GHS-TB, `ENC_SDA`/`ENC_SCL`, "AS5600 nacelle tilt angle
     encoder (I2C)")** — this is now **obsolete, not merely stale**: the architecture moved to
     AK7455 read locally in-nacelle by a `CAN-PERIPH-GW-1` trust-module gateway (own
     MSPM0G3507, SPI 4-wire + ERROR direct to the gateway MCU), published as a signed message on
     isolated CAN-FD + isolated RS-485. River (primary) and Simon (failover) subscribe to the
-    bus message rather than Wash owning a dedicated I²C/SPI bus to each nacelle. **Action:**
-    remove the `J_ENC` connector + `ENC_SDA`/`ENC_SCL` net from `Wash.kicad_sch` and the §13
-    table row (not a SPI reconciliation — the connector's function no longer belongs on Wash at
+    bus message rather than Pilot owning a dedicated I²C/SPI bus to each nacelle. **Action:**
+    remove the `J_ENC` connector + `ENC_SDA`/`ENC_SCL` net from `Pilot.kicad_sch` and the §13
+    table row (not a SPI reconciliation — the connector's function no longer belongs on Pilot at
     all). See `avionics/WBS.md` §1.9.1/§1.9.2 and
     `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` deployment mode 1.
 - [ ] **[OPEN — airframe] Resize the wing sensor pocket for the AK7455 QFN24 4×4**

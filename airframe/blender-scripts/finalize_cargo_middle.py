@@ -14,7 +14,7 @@ Same fill approach as finalize_head_rear.py: inner_used = opened INTERSECT origi
 (opened = morph_open_voxel.py output) so the wall is never thinner than 2 mm and
 thin details (greebles) come out solid.  The r=4 mm opening cannot fill the large
 port/starboard shuttle cavities (verified: both pod interiors remain hollow), so
-those avionics bays are left open for the Wash/Zoe stacks + Faraday trays.
+those avionics bays are left open for the Pilot/XO stacks + Faraday trays.
 
 Interior INARA (port +X) / RIVER (stbd -X) shuttle marks are engraved by the
 companion step engrave_shuttles.py (kept separate so the recess depth can be

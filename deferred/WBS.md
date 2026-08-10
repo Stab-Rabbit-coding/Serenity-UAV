@@ -1,7 +1,7 @@
 # Serenity UAV — Deferred Work (Phase 11+) Work Breakdown Structure
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Current design revision:** Rev S (2026-07-04)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../TODO.md)
@@ -26,7 +26,7 @@
 ---
 
 
-> **Phase 12 (Range-Extender Battery Module)** rides in the cargo bay on the same Jayne hooks/release and adds a `J_BATT2` input to Kaylee — a cruise-range, not hover, enhancement. See the Jayne cross-cutting map in [avionics/jayne/TODO.md](../avionics/jayne/TODO.md).
+> **Phase 12 (Range-Extender Battery Module)** rides in the cargo bay on the same Observer hooks/release and adds a `J_BATT2` input to Flight Engineer — a cruise-range, not hover, enhancement. See the Observer cross-cutting map in [avionics/observer/TODO.md](../avionics/observer/TODO.md).
 
 
 ## §Phase11 — Aft EDF Integration (Deferred)
@@ -82,12 +82,12 @@
 *(root `WBS.md` §Phase12)*
 
 - [ ] **RBM module:** 6S LiPo (matched 4000 mAh recommended) + BQ76930-class BMS + ideal-diode
-    ORing output, in a tray retained by the same Jayne cargo hooks/release (jettisonable),
+    ORing output, in a tray retained by the same Observer cargo hooks/release (jettisonable),
     with a keyed XT60 pigtail.
-- [ ] **Kaylee input:** add `J_BATT2` (XT60) + `F_BATT2` + an ideal-diode / current-share
+- [ ] **Flight Engineer input:** add `J_BATT2` (XT60) + `F_BATT2` + an ideal-diode / current-share
     combiner (LTC4359- or LTC4370-class — a NEW part family) OR-combining `J_BATT`/`J_BATT2`
     into VBAT: hot-swap-safe across SoC mismatch, reverse-blocking so a faulted/absent RBM
-    can't drain or back-feed the main pack. (Kaylee board revision — not yet in KiCad.)
+    can't drain or back-feed the main pack. (Flight Engineer board revision — not yet in KiCad.)
 - [ ] **Current sharing:** same pack model + matched-SoC at takeoff (or LTC4370 to force
     balanced sharing); simple diode-ORing alone lets the higher-SoC pack hog.
 - [ ] **Firmware (`pwr_fault`):** add a second-pack context (V/I/SoC over the existing
@@ -96,4 +96,4 @@
 - [ ] **W&B:** add the RBM to the §14 moment table; re-balance on the keel rail and verify on
     the physical CG rig before flight (a second ~750 g mass in the cargo bay shifts CG).
 - [ ] **CAD:** RBM tray + retention on the cargo-bay payload envelope; verify cargo-door and
-    Jayne clearances.
+    Observer clearances.

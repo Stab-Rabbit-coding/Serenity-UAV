@@ -4,17 +4,28 @@ License & Attribution
 === ORIGINAL WORK ===
 
 Nacelle integration scripts, Blender geometry generation, and EDF housing
-bore carving logic: © 2025 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-Licensed under Creative Commons Attribution 4.0 International (CC BY 4.0)
+bore carving logic: (c) 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+Licensed under Creative Commons Attribution-ShareAlike 4.0 International
+(CC BY-SA 4.0), per root AGENTS.md §3 and docs/attribution_and_licencing.md.
 
 === ATTRIBUTED SOURCES ===
 
-1. Hull Geometry (Serenity, Firefly Class)
-   Author: Peter Farell
-   Source: printables.com/model/548545
-   License: CC BY 4.0
-   Use: Hull outer geometry adapted; scaled 365 mm, hollowed thin-wall,
-        CF skeleton added for UAV flight loads
+1. Hull Geometry: misubisu, "Serenity Firefly with landing gear and swivel
+   engines" (Thingiverse Thing 7330462, thingiverse.com/thing:7330462)
+   License: CC BY-SA 4.0
+   - Incorporated as an Available Component per CERN-OHL-W 2.0 §1.6 (the
+     project's own airframe Covered Source stays CERN-OHL-W 2.0; the
+     upstream misubisu geometry keeps its own CC BY-SA 4.0 terms per
+     REFERENCES.md REF-CAD-004 / REF-LIC-001).
+
+   Reference-only canonical-accuracy sources used to verify this geometry
+   (NOT redistributed, NOT relicensed, outside all Covered Source boundaries):
+   - Nick Henning render collection — public-space reference imagery, direct
+     email permission granted 2026-07-06 (REFERENCES.md REF-CAD-002).
+   - "The Official Serenity Blueprints Reference Pack", (c) 2007 Quantum
+     Mechanix Inc. (QMx) [docs/references/The_Official_Serenity_Blueprints_Reference_Pack.pdf]
+     — copyrighted commercial product, internal reference only, NOT
+     redistributed under any open license (REFERENCES.md REF-CAD-003).
 
 2. Variable-Area EDF Nozzle Mechanism
    Author: BamJr
@@ -23,27 +34,22 @@ Licensed under Creative Commons Attribution 4.0 International (CC BY 4.0)
    Use (nacelle): 70mm ID, servo removed, M0.5 rack teeth added,
                   gear-coupled to nacelle tilt pivot via sector/bevel/crown chain
 
-3. 50mm EDF Motor Housing (Interior Bore Reference)
-   Author: Unknown (archived design)
-   Source: thingiverse.com/thing:4560034
-   License: CC BY 4.0
-   Use (nacelle interior): Bore geometry and motor mount pocket layout reference.
-                          Dual-motor nacelle (EDF1 + EDF2 series) with stator
-                          vanes between motor seats
-
 === LICENSE TEXT ===
 
-Creative Commons Attribution 4.0 International
-Full text: https://creativecommons.org/licenses/by/4.0/legalcode
+Creative Commons Attribution-ShareAlike 4.0 International
+Full text: https://creativecommons.org/licenses/by-sa/4.0/legalcode
 
 You are free to share, adapt, and remix this work for any purpose
 (including commercial) under the condition that you provide appropriate
-attribution to all original authors and indicate modifications made.
+attribution to all original authors, indicate modifications made, and
+distribute any derivative works under the same CC BY-SA 4.0 license.
 
-Original work by: Thingiverse user misubisu (base hull shells)
+Original work by: Thingiverse user misubisu (base hull shells, CC BY-SA 4.0)
               + Steve Griffing (integration, carving, stator, actuation)
-              + Peter Farell (Serenity hull model)
-              + BamJr (EDF nozzle mechanism)
-              + Archived designer (EDF housing reference)
+              + BamJr (EDF nozzle mechanism, CC BY 4.0)
+              + Archived designer (EDF housing reference, CC BY 4.0 presumed)
 
-All licensed under CC BY 4.0.
+Historical note: the pre-Rev O concept-stage hull basis (Peter Farell,
+printables.com/model/548545, CC BY 4.0) was superseded by the misubisu
+model above and is retained for attribution traceability only — see
+current-specification/LICENSE_AND_ATTRIBUTION.md §2a.

@@ -2,7 +2,7 @@
 
 **Revision:** R1 (2026-06-14)
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 
 **Standards and regulatory references:**
 
@@ -167,7 +167,7 @@ At 49 MHz (λ = 6.12 m), a 455 mm bar is λ/13 — well below a useful counterpo
 
 Counterpoise: WIRE-COUNTERPOISE-49MHZ, AWG 22 stranded copper (< 2 g), λ/4 = 1.53 m,
 dressed alongside the keel in the wiring trunk (PTFE conduit), bent and routed as needed.
-Emma/XCVR antenna designs should reference this counterpoise wire, not the CF bar.
+Commo/XCVR antenna designs should reference this counterpoise wire, not the CF bar.
 
 ### 4.5 Keel Locating Channel (implemented in shells)
 
@@ -613,7 +613,7 @@ Ring frame inner-profile CSVs exported to `airframe/diagrams/ring_frames/`.
 
 - [ ] Ring-frame DXF generation (FreeCAD, from CSV profiles) — `airframe/diagrams/ring_frames/`
 - [ ] Verify all feature positions in slicer cross-section (confirm bores do not exit outer skin)
-- [ ] Add Kaylee/battery boss pattern to `middle_canonical_shell24.scad` (§1.4.5)
+- [ ] Add FlightEngineer/battery boss pattern to `middle_canonical_shell24.scad` (§1.4.5)
 - [ ] Add ventral battery-swap hatch cut to middle shell (§1.4.5)
 - [ ] Merge SCAD interior boss features (wing mortises, spar bore, servo mounts, avionics
   standoffs) back into Blender-canonical cargo shell (§1.1.1.0a)

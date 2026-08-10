@@ -4,7 +4,7 @@
 precommit_kicad_load.py — block a commit if any staged KiCad board/schematic is
 unloadable or has a broken copper stackup / outline.
 ==============================================================================
-Guards against the recurring GUI-save corruption that has bitten Jayne three
+Guards against the recurring GUI-save corruption that has bitten Observer three
 times (a dropped In2.Cu layer -> invalid 3-copper-layer stackup -> "Failed to
 load board", and self-intersecting Edge.Cuts). Those faults do not show up in a
 normal diff, so they get committed and only surface when someone next opens the
@@ -158,7 +158,7 @@ def main():
         print(
             "\nFix the file (it must open in KiCad / `kicad-cli`) before committing.\n"
             "This is the recurring In2.Cu / Edge.Cuts corruption guard — see\n"
-            "avionics/kicad/Jayne/Jayne.md. To bypass in an emergency:\n"
+            "avionics/kicad/Observer/Observer.md. To bypass in an emergency:\n"
             "  git commit --no-verify\n",
             file=sys.stderr,
         )

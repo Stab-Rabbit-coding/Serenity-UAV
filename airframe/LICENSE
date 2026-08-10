@@ -1,0 +1,44 @@
+SERENITY UAV — AIRFRAME SUBSYSTEM LICENSING
+============================================
+
+**Primary License:** CERN Open Hardware License v2 — Weakly Reciprocal (CERN-OHL-W)
+
+See the root LICENSE file for the full text:
+  ../LICENSE
+
+**Documentation License:** CC BY 4.0
+
+See docs/attribution_and_licensing.md for complete licensing strategy and subsystem details:
+  ../docs/attribution_and_licensing.md
+
+---
+
+SUMMARY (Airframe)
+
+CAD files (FreeCAD, SCAD, STL), schematics, and structural designs are licensed under
+CERN-OHL-W v2. This means:
+
+  • You may use, modify, and distribute the designs
+  • You must retain the license notice and make modifications available to others
+  • Documentation of changes is required if you convey products based on these designs
+  • Compatible proprietary components (External Material) may be used
+
+Documentation and build guides are licensed under CC BY 4.0 (permissive attribution model).
+
+For attribution and contribution guidelines, see:
+  ../docs/attribution_and_licensing.md
+  ../CONTRIBUTING.md (if present)
+
+---
+
+MODIFICATION NOTICE TEMPLATE
+
+If you modify airframe CAD or designs, add a comment like this to your source files:
+
+  Modified [DATE] by [YOUR NAME]: [brief description of changes]
+  Licensed under CERN-OHL-W v2
+  See ../docs/attribution_and_licensing.md
+
+---
+
+Questions? See https://ohwr.org/cern_ohl_w_v2

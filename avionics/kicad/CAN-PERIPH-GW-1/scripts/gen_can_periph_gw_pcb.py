@@ -14,8 +14,8 @@ places every footprint with correct nets and a generous non-overlapping grid
 -- it does NOT hand-route signal traces (30+ nets). DRC will report
 unconnected-ratsnest items for the un-routed nets; that is expected at this
 stage and is tracked as an open item in CAN-PERIPH-GW-1.md / TODO.md, the
-same documented-residual-DRC pattern already used for Kaylee's own PCB
-generator (gen_kaylee_pcb.py docstring).
+same documented-residual-DRC pattern already used for Flight Engineer's own PCB
+generator (gen_flight_engineer_pcb.py docstring).
 
 RS-485 isolation is ISOW1412 (own integrated isolated DC-DC per stack, no
 external DC-DC placeholder needed -- see schematic docstring).
@@ -24,6 +24,22 @@ Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI-assist: Claude Fable 5 (Anthropic), 2026-07-26
 License: CC BY 4.0
 """
+
+# ---------------------------------------------------------------------------
+# SUPERSEDED PART WARNING (2026-08-03)
+#
+# This generator still emits the MSPM0G3507 and/or SLB9670VQ2.0.  Both were
+# retargeted on 2026-08-03:
+#     MSPM0G3507  ->  MSPM0G3519-Q1 (M0G3519QRGZRQ1, RGZ-48)   on Jayne
+#                 ->  MSPM0G3518-Q1 (M0G3518QRHBRQ1, RHB-32)   on the gateway and Kaylee
+#     SLB9670VQ2.0 -> SLB 9672AU2.0 (PG-UQFN-32-1,-2)          on all three
+# See REFERENCES.md REF-SENSOR-013 / REF-SEC-002 and TODO.md 1.2d.
+#
+# Do NOT re-run this script against the committed schematic: it has drifted
+# from the as-placed design and regenerating would revert the retarget.  Apply
+# changes with avionics/kicad/retarget_mspm0g351x_slb9672.py instead.
+# ---------------------------------------------------------------------------
+
 
 import re
 import subprocess
@@ -147,7 +163,7 @@ VALUES = {}
 for _i in range(1, N_STACKS + 1):
     VALUES.update({
         f"U1_{_i}": "MSPM0G3507", f"R_NRST_{_i}": "10k", f"C_VCORE_{_i}": "1uF",
-        f"C_MCU1_{_i}": "100nF", f"J_SWD_{_i}": "SWD", f"U2_{_i}": "SLB9670",
+        f"C_MCU1_{_i}": "100nF", f"J_SWD_{_i}": "SWD", f"U2_{_i}": "SLB9672",
         f"C_TPM1_{_i}": "100nF", f"C_TPM2_{_i}": "1uF", f"R_TPM_RST_{_i}": "10k",
         f"U3_{_i}": "ISOW1044BDFMR", f"C_ISO1_{_i}": "100nF", f"C_ISO2_{_i}": "1uF",
         f"U4_{_i}": "ISOW1412", f"C_RS1_{_i}": "100nF", f"C_RS2_{_i}": "100nF",
@@ -242,8 +258,8 @@ else:
     X1 = 180.5 + max(0, N_STACKS - 1) * LANE_DX
     Y1 = 119.0
 
-# Back-silkscreen attribution block (mirrors the block already on Wash.md /
-# Zoe.md boards). Position user-corrected 2026-07-26 (the generator's first
+# Back-silkscreen attribution block (mirrors the block already on Pilot.md /
+# XO.md boards). Position user-corrected 2026-07-26 (the generator's first
 # guess ran off the board corner) -- keep in sync with the live board if
 # moved again by hand.
 ATTRIBUTION_TEXT = (
@@ -307,7 +323,7 @@ def base_board_text():
 \t)
 \t(paper "A4")
 \t(title_block
-\t\t(title "CAN-PERIPH-GW-1 / MAL-CAN-PERIPH-GW-PCB")
+\t\t(title "CAN-PERIPH-GW-1 / SKIPPER-CAN-PERIPH-GW-PCB")
 \t\t(date "2026-07-26")
 \t\t(rev "1")
 \t\t(comment 1 "Serenity UAV -- TPM-secured dual-isolated-bus (CAN-FD+RS-485) peripheral gateway")

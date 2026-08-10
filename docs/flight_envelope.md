@@ -1,7 +1,7 @@
 # Serenity UAV — Flight Envelope Document
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Revision:** Rev S (2026-07-12)
 
 Resolves `TODO.md` Phase 0 pre-print documentation gate item "Flight Envelope
@@ -282,4 +282,4 @@ here.
 
 *"We're on the leading edge of a new age." Also, apparently, of a fairly
 generous V_NE margin over what a 50 mm EDF tilt-rotor can actually manage.
-— paraphrasing Mal, not verifying his airspeed indicator*
+— paraphrasing Skipper, not verifying his airspeed indicator*

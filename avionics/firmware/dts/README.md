@@ -1,7 +1,7 @@
 # Serenity UAV — Device Tree Overlays
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Status:** Phase 6 — Minimum Viable Firmware for First Flight
 
 ---
@@ -93,7 +93,7 @@ be verified against the PocketBeagle 2 expansion header pin map.
 | ------------ | ----------- | -------------- | ------- |
 | ICM-42688-P IMU | SPI0 CS0 | `invensense,icm42688p` | SPI mode 3, 24 MHz |
 | BMP388 barometer | SPI0 CS1 | `bosch,bmp388` | SPI mode 0, 10 MHz |
-| SLB9670 TPM 2.0 | SPI0 CS2 | `infineon,slb9670` | 33 MHz, IRQ + RST GPIO |
+| SLB9672 TPM 2.0 | SPI0 CS2 | `infineon,slb9670` | 33 MHz, IRQ + RST GPIO |
 | TCA9548A I²C mux | I2C2 0x70 | `nxp,pca9548` | 8-ch, 400 kHz |
 | VL53L5CX ToF ×2 | I2C2 mux ch0/1 | `st,vl53l5cx` | 0x29, share addr |
 | MS4525DO airspeed | I2C2 mux ch2 | `ms4525do` | FC1 only |
@@ -111,7 +111,7 @@ be verified against the PocketBeagle 2 expansion header pin map.
 
 | Peripheral | Interface | Linux Driver | Notes |
 | ------------ | ----------- | -------------- | ------- |
-| SLB9670 TPM 2.0 | SPI1 CS0 | `infineon,slb9670` | HMAC keys for radio frames |
+| SLB9672 TPM 2.0 | SPI1 CS0 | `infineon,slb9670` | HMAC keys for radio frames |
 | RFM95W LoRa 915 | SPI1 CS1 | `semtech,sx1276` | 47 CFR Part 15 Subpart C |
 | W25Q128JV NOR flash | SPI1 CS2 | `jedec,spi-nor` | 16 MiB, 3 partitions |
 | Logging microSD | SPI1 CS3 | `mmc-spi-slot` | ext4, noexec, CPLD WP |

@@ -1,0 +1,124 @@
+/**
+ * @file    skipper_gimbal.h
+ * @brief   Skipper GCS — antenna tracking gimbal controller API.
+ *
+ * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
+ * Copyright 2026 Steve Griffing
+ * License: CC BY 4.0 — creativecommons.org/licenses/by/4.0
+ * Revision: R (2026-06-11)
+ *
+ * The gimbal controller drives two DS3218MG servos (pan and tilt) via
+ * Cape-B-2 EHRPWM outputs, and reads two AS5600 magnetic encoders (via
+ * TCA9548A I²C mux on Cape-B-2) for closed-loop position feedback.
+ *
+ * Position convention:
+ *   Pan  (azimuth)  : 0° = North; +CW from above; range ±170°.
+ *   Tilt (elevation): 0° = horizontal horizon; +up; range −10° to +90°.
+ *
+ * Thread safety:
+ *   All public functions are NOT thread-safe.  Call only from the gimbal
+ *   control task or after acquiring SKIPPER_GIMBAL_LOCK.
+ */
+
+#ifndef SKIPPER_GIMBAL_H
+#define SKIPPER_GIMBAL_H
+
+#include <stdint.h>
+
+/* ---------------------------------------------------------------------------
+ * Types
+ * ---------------------------------------------------------------------------*/
+
+/** Gimbal position in degrees. */
+typedef struct {
+    float pan_deg;  /**< Azimuth   — 0° = North, +CW, range ±170°.   */
+    float tilt_deg; /**< Elevation — 0° = horizon, + = up, max +90°. */
+} skipper_gimbal_pos_t;
+
+/** Return codes for gimbal functions. */
+typedef enum {
+    SKIPPER_GIMBAL_OK = 0,           /**< Operation successful.               */
+    SKIPPER_GIMBAL_ERR_INIT = -1,    /**< Initialisation failure.             */
+    SKIPPER_GIMBAL_ERR_ENCODER = -2, /**< I²C encoder read failure.           */
+    SKIPPER_GIMBAL_ERR_SERVO = -3,   /**< PWM servo write failure.            */
+    SKIPPER_GIMBAL_ERR_LIMIT = -4,   /**< Requested position exceeds travel.  */
+} skipper_gimbal_err_t;
+
+/* ---------------------------------------------------------------------------
+ * Initialisation and teardown
+ * ---------------------------------------------------------------------------*/
+
+/**
+ * @brief  Open PWM and I²C handles; configure EHRPWM period; zero encoders.
+ *
+ * Must be called once before any other gimbal function.  On failure, the
+ * gimbal is left in an undefined state and must not be used.
+ *
+ * @return SKIPPER_GIMBAL_OK on success; SKIPPER_GIMBAL_ERR_INIT on failure.
+ */
+skipper_gimbal_err_t skipper_gimbal_init(void);
+
+/**
+ * @brief  Disable servo PWM outputs and release all file descriptors.
+ *
+ * Safe to call even if skipper_gimbal_init() failed (checks open state).
+ */
+void skipper_gimbal_deinit(void);
+
+/* ---------------------------------------------------------------------------
+ * Position control
+ * ---------------------------------------------------------------------------*/
+
+/**
+ * @brief  Command gimbal to a new absolute position.
+ *
+ * The command is rate-limited to SKIPPER_GIMBAL_MAX_SLEW_DPS.  The function
+ * returns immediately; the gimbal reaches the target asynchronously via the
+ * background task kicked off by skipper_gimbal_update().
+ *
+ * @param[in] target  Desired position.
+ * @return SKIPPER_GIMBAL_OK or SKIPPER_GIMBAL_ERR_LIMIT if target is out of
+ * range.
+ */
+skipper_gimbal_err_t skipper_gimbal_set_target(
+    const skipper_gimbal_pos_t *target);
+
+/**
+ * @brief  Advance the servo position one control cycle towards the target.
+ *
+ * Must be called at a fixed rate (suggested ≥10 Hz) from a timer or loop.
+ * Reads encoder feedback, applies rate limiting, writes servo PWM.
+ *
+ * @param[in] dt_s  Time elapsed since last call (seconds).
+ * @return SKIPPER_GIMBAL_OK or error code.
+ */
+skipper_gimbal_err_t skipper_gimbal_update(float dt_s);
+
+/* ---------------------------------------------------------------------------
+ * Position readback
+ * ---------------------------------------------------------------------------*/
+
+/**
+ * @brief  Read current encoder positions.
+ *
+ * @param[out] pos  Populated with current pan and tilt angles.
+ * @return SKIPPER_GIMBAL_OK or SKIPPER_GIMBAL_ERR_ENCODER on I²C failure.
+ */
+skipper_gimbal_err_t skipper_gimbal_get_position(skipper_gimbal_pos_t *pos);
+
+/**
+ * @brief  Return the last commanded target position.
+ *
+ * @param[out] target  Populated with the current target.
+ */
+void skipper_gimbal_get_target(skipper_gimbal_pos_t *target);
+
+/**
+ * @brief  Return non-zero if the gimbal is within 1° of its target on both
+ * axes.
+ *
+ * @return 1 if on-target; 0 if still slewing.
+ */
+int skipper_gimbal_is_on_target(void);
+
+#endif /* SKIPPER_GIMBAL_H */

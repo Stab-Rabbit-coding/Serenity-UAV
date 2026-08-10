@@ -1,7 +1,7 @@
-# Serenity UAV — Airframe Fuselage — Head/Cargo/Middle Shells, Kaylee/Simon Bays Work Breakdown Structure (Detail)
+# Serenity UAV — Airframe Fuselage — Head/Cargo/Middle Shells, FlightEngineer/Simon Bays Work Breakdown Structure (Detail)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Current design revision:** Rev S (2026-07-04)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../../TODO.md)
@@ -41,7 +41,7 @@
     dedicated copper counterpoise wire (AWG 22 stranded, < 2 g) bonded alongside the keel
     is more reliable than relying on CF conductivity.  Decide: (a) keep CF keel as structural
     only and add a separate copper counterpoise wire in the wiring trunk, or (b) embed a
-    copper braid in the keel lap joint.  Update Emma/XCVR antenna design accordingly.
+    copper braid in the keel lap joint.  Update Commo/XCVR antenna design accordingly.
 
     **Step 5 — Update BOM, battery tray, and build guide.**
     - Update CF-BAR-6X3 Notes: confirmed form, span, Z routing, cross-section, mass.
@@ -56,11 +56,11 @@
 
 - [x] **Access panel frames + covers (24" Rev R)** — `airframe/openscad/fuselage/access_panels_24in.scad` created 2026-06-11. Geometries derived from authoritative shell SCADs (Rev R baseline):
     - 4× Faraday-bay covers (Shepherd/Inara/River/Simon): 72×52 mm, 4× M3 clearance bores, positive-stop shoulder; Inara + River covers include Ø42 mm GPS retention-ring recess.
-    - 2× ventral hatch covers: battery 160×60 mm, Kaylee 115×100 mm; M2.5 pilots into bonded frames.
-    - 2× ventral hatch frames: battery + Kaylee; 6 mm CF-PETG wall, West System 105/206 epoxy-bonded to hull.
+    - 2× ventral hatch covers: battery 160×60 mm, Flight Engineer 115×100 mm; M2.5 pilots into bonded frames.
+    - 2× ventral hatch frames: battery + Flight Engineer; 6 mm CF-PETG wall, West System 105/206 epoxy-bonded to hull.
     - **SUB-TASKS:**
         - [ ] Export individual STLs (set RENDER variable in SCAD): shepherd, inara, river, simon,
-            battery, battery_f, kaylee, kaylee_f → `airframe/stls/fuselage/` — **NOT DONE
+            battery, battery_f, flight_engineer, flight_engineer_f → `airframe/stls/fuselage/` — **NOT DONE
             2026-07-03**: `openscad -o` export could not be run this session (sandboxed sub-agent
             Bash permission hook blocks any command containing `-o`, and the main session hit a
             separate OpenSCAD-render permission block); must be run by the user or an unrestricted
@@ -124,8 +124,8 @@
             recommend Z ≥ 65 mm (hinge Z + envelope radius + margin) at any station falling within
             hull Y 2–108, then re-verify numerically. **Still BLOCKS bonding both antennas'
             posts.**
-        - [ ] Bond River's forward post to the port flank at sta 120 mm; dress wire aft to River's Emma J2
-        - [ ] Bond Simon's forward post to the starboard flank at sta 120 mm; dress wire aft to Simon's Emma J2
+        - [ ] Bond River's forward post to the port flank at sta 120 mm; dress wire aft to River's Commo J2
+        - [ ] Bond Simon's forward post to the starboard flank at sta 120 mm; dress wire aft to Simon's Commo J2
         - [ ] Install both temporary aft posts (port + starboard) at sta 580 mm; remove and replace with integrated mounts in Phase 11
 
 ##### 1.1.1.1 *Head*
@@ -206,7 +206,7 @@
     (55×35 mm) at port half (Z_CEN=118 mm, Inara) and stbd half (Z_CEN=45 mm, River). GPS_PORT/STBD
     colocated for minimal SMA routing. *(done 2026-06-08, PR #42)*
 - [x] **`cargo_sect_shell24.scad` Rev S3** — Faraday enclosure space allocation.
-    Panel cuts enlarged 55×35 → 62×42 mm; boss offsets updated ±40×±25 → [TBD pending PCB layout — hole pattern must be derived from Wash.kicad_pcb / Zoë.kicad_pcb once layout is complete] to match
+    Panel cuts enlarged 55×35 → 62×42 mm; boss offsets updated ±40×±25 → [TBD pending PCB layout — hole pattern must be derived from Pilot.kicad_pcb / XO.kicad_pcb once layout is complete] to match
     Faraday tray corner mounts; bay Z centres adjusted ±1 mm (Inara 118→119, River 45→44) for 10 mm
     inter-bay gap; FARADAY_* envelope parameters (95×65×65 mm, 1.5 mm Al wall, 25 mm fan) added.
     *(done 2026-06-08, PR #42)*
@@ -273,7 +273,7 @@ do not restate its dimensions here.
     `make_winch_spool()` in `generate_cargo_mounts.py` converted to documented
     `NotImplementedError` stubs and dropped from the build list; prose updated in
     `README.md`, root `WBS.md`/`TODO.md`, `airframe/WBS.md`,
-    `airframe/VERIFY_PLACEMENT_CHECKLIST.md`, `avionics/jayne/WBS.md`,
+    `airframe/VERIFY_PLACEMENT_CHECKLIST.md`, `avionics/observer/WBS.md`,
     `graphical-build-guide/` (REVN guide + flight-phases + SVG task),
     `docs/PHASED_BUILD_GUIDE.md`, `docs/PROTO_PRINT_DAVINCI_JR.md`,
     `docs/AVIONICS_PB2_REDESIGN.md`, `docs/POWER_DISTRIBUTION.md`, `PROJECT_INDEX.md`.
@@ -284,13 +284,11 @@ do not restate its dimensions here.
     `BRG-MR84ZZ` ×2, `SHAFT-SS-4MM`, `SPRING-PAWL`, `DOWEL-M2-10`, `SS34-CATCH`) added to
     `docs/bom_revR.json` with masses, notes and cost roll-up.
 
-- [ ] **★ BLOCKER — STS3215 datasheet verification (REFERENCES.md REF-SENSOR-012, TODO §0.x).**
-    The datasheet is in the repo but is a scanned/CID-encoded PDF that could not be extracted
-    (no OCR toolchain in the build environment). Read off and record: **(a)** case envelope +
-    mounting-boss pattern, **(b)** torque vs. the ≥ 3.2 kgf·cm requirement, **(c)** mass
-    (60 g assumed — dominates the +98.6 g delta and T/W 1.613 → 1.557), **(d)** stall current
-    (1.2 A budgeted; resize RAIL-2 if > ~2.5 A). **Blocks STL generation and procurement.**
-    Do not fabricate these values.
+- [x] **BLOCKER RESOLVED via servo supersession, not datasheet recovery (2026-08-02).**
+    The STS3215 datasheet remains unreadable, but the servo itself is superseded — see
+    §1.1.1.2.1b below. Case envelope, mass, and torque are now published COTS figures for the
+    replacement (SPT5425LV, REF-SENSOR-013); stall current remains unverified under the new
+    part too (§1.1.1.2.1b).
 - [ ] **★ CONTAINMENT — the spool must never leave the cargo bay (spec §3.10).**
     Designating the spool sacrificial (§3.8) made it a planned-degradation part
     sitting directly above clamshell doors that open 180° to free air. Rev B
@@ -349,11 +347,12 @@ do not restate its dimensions here.
 - [ ] **Set the servo torque ceiling below `T_slip`** — protection layer 1 of 4, so
     routine lifting never reaches the friction interface and the sacrificial hub is
     consumed only by genuine overload events. Spec §3.8.3.
-- [ ] **Servo mode: encoded continuous rotation** (position/servo mode cannot
-    express 23.2 turns; stepper mode's open-loop count becomes fiction after a hub
-    slip). Gateway closes position on the AK7455. Confirm mode indices, selecting
-    register, and per-mode torque-ceiling settability against the datasheet — part
-    of the §3.1 gate; **no register number is invented in the spec**. Spec §3.9.
+- [ ] **Servo mode: continuous rotation by construction** (Rev C — the STS3215's
+    register-selected mode scheme no longer applies; SPT5425LV + LibreServo v2 is
+    continuous-rotation by construction once the limit pin is removed, §1.1.1.2.1b).
+    Gateway closes position on the AK7455. Confirm LibreServo v2 wire-protocol
+    commands (rate, torque-ceiling, readback) against its protocol docs — **no
+    command/register value is invented in the spec**. Spec §3.9.
 - [ ] **Mark the spool a consumable** — wear item in the build guide, inspection
     interval, slip witness-mark, spare in the field kit; hand-tool replacement per
     root `AGENTS.md` §7.
@@ -373,10 +372,13 @@ do not restate its dimensions here.
 - [ ] **Pedestal mounting stations in `cargo_sect_shell24.scad`.** The retired mount used 4× M2
     self-taps into the gondola *ceiling*; the two pedestals need real M3 heat-set boss stations
     on the bay floor, FreeCAD-verified against the cargo-door 180° swing envelope
-    (`generate_cargo_doors.py`) and clear of `CARGO_CAM_POS` / the Jayne nadir bosses.
-- [ ] **Half-duplex TTL bus wiring.** Confirm the MSPM0G3507 can drive a single-wire UART on
-    `FLEX_TTL_GPIO`, or add a direction-steering resistor/buffer at the harness. Same pinmux
-    caveat as `CAN-PERIPH-GW-1.md` open item 4. Cross-ref `avionics/WBS.md`.
+    (`generate_cargo_doors.py`) and clear of `CARGO_CAM_POS` / the Observer nadir bosses.
+- [ ] **RS-485 differential bus wiring (Rev C — supersedes the Rev B half-duplex TTL item).**
+    LibreServo v2 needs a true differential RS-485 pair, not the STS3215's single-wire
+    half-duplex TTL scheme `FLEX_TTL_GPIO` was sized for. Decide: add a local RS-485
+    transceiver fed from `J_FLEX.FLEX_UART_TX/RX`, or extend the gateway's own isolated
+    RS-485 trunk (ISOW1412) to this drop — not decided in the spec. Cross-ref
+    `avionics/WBS.md`, `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`.
 - [ ] **Catch solenoid drive circuit.** AO3400 N-FET + 100 Ω gate + **10 kΩ gate pull-down**
     (undriven/resetting MCU must leave the catch ENGAGED) + SS34 flyback across the coil.
 - [ ] **Bench-calibrate the ratchet slip threshold to 8.0 N ± 1.0 N** measured at the line, via
@@ -390,13 +392,72 @@ do not restate its dimensions here.
     driver; HX711 re-hosted from Cape-B to the gateway; Shepherd watchdog cuts RAIL-2 on
     heartbeat timeout (which *engages* the catch). Bus IDs assigned in firmware, not in the
     spec. Cross-ref `avionics/firmware/WBS.md`.
-- [ ] **Re-run the §6 mass/CG table** once the real STS3215 mass is known; propagate to
-    `docs/flight_envelope.md` if AUW moves materially.
+- [ ] **Re-run the §6 mass/CG table** once the SPT5425LV+LibreServo v2 unit is bench-weighed;
+    propagate to `docs/flight_envelope.md` if AUW moves materially.
 - [ ] *(Optional, out of scope for this change)* Move the door/release SG90s onto the
     gateway's spare `FLEX_PWM_IO` and retire `DRV8833-CARGO` + `cargo_drv8833_tray.stl`.
 
 **BLOCKS:** Phase 8 cargo winch assembly; `build_guide_23_winch_latch.svg` rebuild;
-Kaylee RAIL-2 third BEC channel (`docs/POWER_DISTRIBUTION.md` §11.1).
+Flight Engineer RAIL-2 third BEC channel (`docs/POWER_DISTRIBUTION.md` §11.1).
+
+###### 1.1.1.2.1b *Servo Fleet Standardisation — SPT5425LV + LibreServo v2 (Rev C, 2026-08-02)*
+
+Supersedes §1.1.1.2.1a's STS3215 servo selection and extends the same treatment to the
+2× nacelle tilt servos (previously DS3218MG, uncited). All three high-torque servos on the
+airframe now share one physical part (SPT5425LV, REF-SENSOR-013) running one open-source
+control board (LibreServo v2, REF-SENSOR-014), each with the servo's internal
+rotation-limiting pin removed. Canonical source:
+[`docs/CARGO_WINCH_SPECIFICATION.md`](../../docs/CARGO_WINCH_SPECIFICATION.md) **Rev C**
+§3.1/§3.1.1/§3.1.2/§3.9/§5.1 (winch-specific) and `REFERENCES.md` "Servo Fleet
+Standardisation, 2026-08-02" (fleet-wide rationale) — do not restate their content here.
+
+- [x] **`docs/CARGO_WINCH_SPECIFICATION.md` Rev C authored** *(2026-08-02)* — servo section
+    rewrite; STS3215-era open items (datasheet gate, half-duplex TTL wiring, mode-register
+    semantics) closed or superseded by SPT5425LV/LibreServo v2-specific equivalents.
+- [x] **`REFERENCES.md` updated** *(2026-08-02)* — REF-SENSOR-012 (STS3215) marked
+    SUPERSEDED; REF-SENSOR-013 (SPT5425LV), REF-SENSOR-014 (LibreServo v2), REF-SENSOR-015
+    (OpenServoCore, for the SG90 cargo servos — separate board, separate servo class) added
+    with sourced specifications; four new rows added to "Open Standards Verification Items."
+- [x] **Nacelle tilt bracket updated** *(2026-08-02)* — `nacelle_servo_bracket.scad`
+    `SERVO_BODY_X`/`SERVO_BODY_Z` updated 40.0/38.0 → 40.5/40.5 mm (SPT5425LV envelope);
+    `SERVO_BODY_Y` unchanged at 20.0 mm; stall-torque/FOS check re-run at 2.55 N·m
+    (26 kgf·cm @ 6 V) — FOS 82.4, still far above the 4.0 design-judgment target.
+- [x] **`generate_cargo_mounts.py` comments updated** *(2026-08-02)* — case-envelope gate
+    that blocked `make_winch_pedestal_port()` under the STS3215 selection is resolved
+    (SPT5425LV envelope is a published figure); SG90 bracket docstring notes the
+    OpenServoCore control board and its pre-production status.
+- [ ] **★ Bench-verify the SPT5425LV/LibreServo v2 conversion.** Neither sourced listing
+    publishes stall current or the exact rotation-pin removal procedure. Blocks final RAIL-2
+    sizing (`docs/POWER_DISTRIBUTION.md` §3.2.1) and the nacelle-tilt servo rail, and the
+    build-guide step for pin removal. Do not fabricate either figure.
+- [ ] **RS-485 gateway integration (both winch and nacelle-tilt applications) — interim.**
+    LibreServo v2's differential RS-485 bus has no local transceiver on `CAN-PERIPH-GW-1`'s
+    `J_FLEX` header (which was sized for the STS3215's single-wire half-duplex TTL scheme).
+    Decide: add a transceiver fed from `FLEX_UART_TX/RX`, or extend the gateway's own
+    isolated RS-485 uplink trunk (ISOW1412) to this local servo drop. Cross-ref
+    `avionics/WBS.md`, `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md`.
+    **Watch before committing:** the LibreServo v2 fork maintainer confirmed (2026-08-02)
+    the fork's in-progress isolated-RS-485/CAN-FD/SLB9672-TPM upgrade is intended to let a
+    converted servo attach directly to the airframe's isolated CAN-FD/RS-485 trunks as its
+    own self-signing node, eliminating the gateway-bridge need for this application entirely
+    — not shipped yet (schematic-only, TPM not started). If it lands before this item is
+    implemented, re-scope to direct-attach instead of building an interim bridge.
+- [ ] **Nacelle tilt firmware — command scheme change.** Pilot's servo-PWM generation
+    (`avionics/firmware/WBS.md` §4.2) moves to LibreServo v2's RS-485 protocol; the servo's
+    real range limit stays the external CF-PETG hard-stop blocks in the gear train
+    (`docs/NOZZLE_DRIVE_TRADE.md`), not the (now-removed) internal servo pin — firmware still
+    needs its own soft-limit enforcement, not a hardware guarantee from the servo alone.
+- [ ] **`current-specification/bom_revS.json`/`.csv` reconciliation.** These files still
+    carried the retired N20 winch train (never updated to STS3215 under Rev B); reconciled
+    directly to the Rev C SPT5425LV/LibreServo v2 state as part of this change rather than
+    passing through an intermediate STS3215 BOM entry that was never accurate to begin with.
+- [ ] **OpenServoCore maturity re-check before SG90 procurement.** Upstream project status
+    at time of writing is "in active development, nothing here is shippable yet," hardware
+    validated to rev B only. Re-check `github.com/OpenServoCore/open-servo-core` before
+    ordering in flight-article quantity.
+
+**BLOCKS:** Same as §1.1.1.2.1a above, plus Pilot's nacelle-tilt servo firmware
+(`avionics/firmware/WBS.md` §4.2) and the RS-485 gateway decision.
 
 ###### 1.1.1.2.2 *Wing Root*
 
@@ -429,19 +490,19 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     - Z-range +1.3..+166.1 mm in hull frame; total height ≈ 165 mm — fits build-volume vertical
     **BLOCKS middle section printing.**
 
-- [ ] **Kaylee's room — PDB mounting in inner neck** — the Kaylee Power Distribution Board
-    (Kaylee Rev A1; 75 g) is housed inside the inner neck of the middle section, accessible
+- [ ] **Flight Engineer's room — PDB mounting in inner neck** — the Flight Engineer Power Distribution Board
+    (Flight Engineer Rev A1; 75 g) is housed inside the inner neck of the middle section, accessible
     through the open ventral face of the horseshoe ring.  The inner neck central location
     minimises power run lengths to all four nacelles, all four avionics stacks, and the battery.
     Required additions to the Blender middle mesh (or as bonded inserts):
-    - 4× M3 standoff boss posts for Kaylee PCB (55×35 mm board; ±20×±12.5 mm pattern from bore centre)
+    - 4× M3 standoff boss posts for Flight Engineer PCB (55×35 mm board; ±20×±12.5 mm pattern from bore centre)
     - Power cable exit notches (6 AWG leads, 4× nacelle ESC runs + avionics BEC tap)
     - Ventilation opening or clearance to allow heat dissipation from TPS54620 regulators
-    - Access clearance from horseshoe ventral opening (confirm Kaylee can be inserted and removed
+    - Access clearance from horseshoe ventral opening (confirm Flight Engineer can be inserted and removed
         with hand tools — field disassembly requirement per CLAUDE.md)
     - Confirm inner neck bore dimensions from baked `middle_shell24_2mm_repaired.stl` cross-section
         at hull Y ≈ +165 mm (midpoint of middle section) before adding boss features.
-    **BLOCKS middle section Blender mesh update; BLOCKS Kaylee installation.**
+    **BLOCKS middle section Blender mesh update; BLOCKS Flight Engineer installation.**
 
 - [ ] **CF skid rod channels** — add 4.2 mm bore channel along each horseshoe-to-skid arm (lower
     legs of the horseshoe) in the Blender mesh, coaxial with the matching channels in the rear shell.
@@ -455,13 +516,13 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     Ref: CLAUDE.md PACE (Simon = alternate watchdog, aft EDF control); shuttle Faraday-fit method in
     `engrave_plaques.py`/cavity-profile check. **BLOCKS Phase 6 full 8-node installation.**
 
-- [ ] **Kaylee room — PDB + battery bay, middle VENTRAL (2026-06-13).**
-    The Kaylee power-distribution board and the main battery mount together in the middle section's
+- [ ] **Flight Engineer room — PDB + battery bay, middle VENTRAL (2026-06-13).**
+    The Flight Engineer power-distribution board and the main battery mount together in the middle section's
     ventral region (the open −Z side of the horseshoe). Define the mounting bay / strap points there;
     keep mass low and central for CG. Coordinate with §1.4.5 (power distribution).
 
 - [ ] **Avionics-bay interior name marks (DEFERRED, 2026-06-13).** Engrave/emboss bay identifiers
-    (INARA port shuttle, RIVER stbd shuttle, SHEPHERD head fwd, SIMON middle dorsal, KAYLEE middle
+    (INARA port shuttle, RIVER stbd shuttle, SHEPHERD head fwd, SIMON middle dorsal, FLIGHT ENGINEER middle
     ventral) on each bay interior. First attempt (flat recessed plaque via `engrave_plaques.py`) did
     not read cleanly on the morph-opened organic cavity walls; pending a method decision (raised letters
     on a flat boss pad, or smooth the bay wall first). Mechanism is watertight and stays inside the 2 mm
@@ -497,7 +558,7 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
     - [ ] Create cableways from mount point to avionics bay
 
-    - [ ] Wire strobe to led pwd output on Wash cape in Simon's medbay
+    - [ ] Wire strobe to led pwd output on Pilot cape in Simon's medbay
 
 ##### 1.1.1.4 *Rear Engine Cone*
 
@@ -507,5 +568,5 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 
     - [ ] Create cableways from mount point to avionics bay
 
-    - [ ] Wire strobe to led pwd output on Wash cape in Simon's medbay
+    - [ ] Wire strobe to led pwd output on Pilot cape in Simon's medbay
 

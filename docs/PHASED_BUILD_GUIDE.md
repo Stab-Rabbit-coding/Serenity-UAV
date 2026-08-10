@@ -9,7 +9,7 @@
 > historical reference for the Rev M 18-inch design iteration.
 
 **Author:** Steve Griffing, PE(CSE) \[Control Systems Engineering\], CISSP-ISSEP, CPP
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Year:**2026 |**Status:** Public release
 
 > Fan engineering work inspired by the Firefly-class transport ship _Serenity_
@@ -25,7 +25,8 @@
 | Hull geometry         | Peter Farell                     | CC BY 4.0  | printables.com/model/548545    |
 | EDF nozzles           | BamJr                            | CC BY 4.0  | thingiverse.com/thing:2991269  |
 | Blueprint proportions | Mandel + Earls / QMx / Universal | © 2007 QMx | 269 ft × 170 ft × 79 ft ratios |
-| All other design      | Steve Griffing                   | CC BY 4.0  | This project                   |
+| All other design (hardware/CAD/PCB) | Steve Griffing     | CERN-OHL-W 2.0 | This project                |
+| All other design (docs/code/scripts) | Steve Griffing    | CC BY-SA 4.0 | This project                  |
 
 ---
 
@@ -50,16 +51,16 @@
 | T/W one nacelle lost | **1.64:1** — FC RTH |
 | Max payload | **3.07 lbm (1,392 g)** at T/W = 2.0 |
 | Compute nodes | **8 nodes:** FC1–FC4 (Cape-A, sensor/flight) + CN1–CN4 (Cape-B, comms/payload) |
-| FC node hardware | **PocketBeagle 2 Industrial (AM6254)** + Wash 55×35mm — ICM-42688-P IMU, BMP388 baro, u-blox M10Q GPS, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0** · DK 2820-100003007-ND |
-| CN node hardware | **PocketBeagle 2 Industrial (AM6254)** + Zoë 55×35mm — SiK 915MHz, LoRa RFM95W 915MHz, TI WL1837MOD WiFi/BT, XCVR-49MHZ sub-module, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9670 TPM 2.0**; ATF16V8BQL CPLD write-blocker (log μSD) · DK 2820-100003007-ND |
+| FC node hardware | **PocketBeagle 2 Industrial (AM6254)** + Pilot 55×35mm — ICM-42688-P IMU, BMP388 baro, u-blox M10Q GPS, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9672 TPM 2.0** · DK 2820-100003007-ND |
+| CN node hardware | **PocketBeagle 2 Industrial (AM6254)** + XO 55×35mm — SiK 915MHz, LoRa RFM95W 915MHz, TI WL1837MOD WiFi/BT, XCVR-49MHZ sub-module, MIL-STD-1553, CAN FD, RS-485, Ethernet; **SLB9672 TPM 2.0**; ATF16V8BQL CPLD write-blocker (log μSD) · DK 2820-100003007-ND |
 | Bay assignments | Shepherd's room (Bay A): CN1+FC1 · Inara's shuttle (Bay B): CN2+FC2 · River's room (Bay D): CN3+FC3 · Simon's medbay (Bay E): CN4+FC4 (CN lower, FC upper per bay) |
-| Cape variant layout | **v2 · v2 · v2 · v2 (nose → tail, Rev Q):** All 8 positions use Wash / Zoë (EMI-hardened, 5 kV isolated CAN FD / RS-485 / Ethernet transceivers). Single-SKU procurement; Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 archived as of Rev Q. |
+| Cape variant layout | **v2 · v2 · v2 · v2 (nose → tail, Rev Q):** All 8 positions use Pilot / XO (EMI-hardened, 5 kV isolated CAN FD / RS-485 / Ethernet transceivers). Single-SKU procurement; Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 archived as of Rev Q. |
 | Bus order | CN1→FC1→CN2→FC2→CN3→FC3→CN4→FC4 — CN and FC interleaved on all data buses (CAN FD, RS-485, 1553) and power distribution; any single segment or bay power failure leaves ≥2 FC + ≥2 CN on both sides of the break |
 | Node role election | CAN FD heartbeat priority arbitration at boot — all 8 nodes identical hardware; master elected dynamically with automatic failover |
 | Radios | SiK 915MHz MAVLink + LoRa RFM95W 915MHz backup + TI WL1837MOD WiFi/BT GCS + 49MHz XCVR-49MHZ RC; all 4 on every CN node; software-elected master per link |
 | Obstacle avoidance | 12× VL53L5CX 8×8 ToF sensors, dual redundant arrays (A on FC3 River's room / Bay D, B on FC1 Shepherd's room / Bay A) |
 | Cargo | 101.6 × 76.2 × 76.2 mm bay, clamshell doors, STS3215 winch + safety ratchet + auto-latch cradle |
-| Security | ATF16V8BQL CPLD write-blocker (log μSD, all Cape-B nodes) + **SLB9670 TPM 2.0 on all 8 nodes** (Cape-A and Cape-B) + W25Q128JV NOR flash circular log buffer |
+| Security | ATF16V8BQL CPLD write-blocker (log μSD, all Cape-B nodes) + **SLB9672 TPM 2.0 on all 8 nodes** (Cape-A and Cape-B) + W25Q128JV NOR flash circular log buffer |
 | Navigation lights | ICAO Annex 2 / 14 CFR 91.209 (6-position) |
 | Access panels | 6 removable panels A–F (bayonet/screw/hinge/magnet) |
 | Build estimate | 100–130 hours across all phases |
@@ -148,7 +149,8 @@ These rules eliminate costly structural rework. Read before you start Phase 1.
 | `spar_bracket.stl`              | CF-PETG  | 0.15mm | 40%        | 1     | 4 walls                                                                                     |
 | `nozzle_outer_housing.stl`      | PETG     | 0.20mm | 20% gyroid | 3     | 2 nacelle + 1 fuselage                                                                      |
 | `nozzle_inner_ring.stl`         | CF-PETG  | 0.15mm | vertical   | 3     | Print vertical for tooth accuracy                                                           |
-| `nozzle_flap.stl`               | PETG     | 0.20mm | 20%        | 48    | 8 per nozzle × 3 sets = 24; print flat                                                      |
+| `nacelle_nozzle_flap.stl`       | PETG     | 0.20mm | 20%        | 8     | MASTER flap: 4 per nozzle × 2 nacelles; print flat [REF-CAD-005]                            |
+| `nacelle_nozzle_flap_seal.stl`  | PETG     | 0.20mm | 20%        | 8     | SEAL flap: alternates w/ master, lapped 0.2mm out; 4 per nozzle × 2 [REF-CAD-005]           |
 | `sector_gear_22mm.stl`          | PETG     | 0.12mm | 40%        | 2     | 0.12mm layer for tooth accuracy                                                             |
 | `access_panel_frames.stl`       | PETG     | 0.20mm | 100%       | 1 set | 6 frames + 6 lids; 2mm wall                                                                 |
 | `cargo_gondola_shell.stl`       | PETG     | 0.20mm | 15% gyroid | 1     | 112×85×22mm belly pod                                                                       |
@@ -403,7 +405,14 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 
 - Bevel block → longitudinal shaft → crown pinion → ring gear
 - Install sector gear on bracket; rotate by hand to verify mesh; adjust for 0.1–0.2mm backlash
-- Install 8 nozzle flaps per set
+- Install 8 nozzle flaps per nozzle, **alternating 4 master and 4 seal** around the ring (Rev T3):
+  the seal flap laps 0.2 mm (0.008 in) OUTBOARD of its two neighbouring masters, closing the gap
+  between them from outside.  Both types share the same PIN-3X18 hinge and PIN-2X4 follower, so
+  they differ only in the panel — check the part label before fitting.  See REFERENCES.md
+  [REF-CAD-005].  **NOTE:** the gear-train steps in this section are pre-Rev T and describe the
+  deleted sector/bevel/crown chain plus a third fuselage nozzle; the current drive is a
+  pushrod/bellcrank to a single ring lever, and there are 2 nozzles, not 3 — this section still
+  needs a Rev T rewrite (TODO.md §1.1.3).
 - Install SG90 nozzle servos (2 nacelle + 1 fuselage); cap servo leads at hull/bay E
 
 **8. Install nacelle tip caps** (with WS2812C LEDs embedded) — M2.5 screws or press-fit per drawing.
@@ -529,7 +538,7 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 
 - Step 30: Power each node via USB-C (3.3V/5V rail from Cape BEC) and boot from OS μSD. SSH in via USB-UART adapter (CP2102 on Cape-A/B debug UART header).
 
-- Step 31: On each node, provision TPM 2.0 (SLB9670 on Cape-A and Cape-B):
+- Step 31: On each node, provision TPM 2.0 (SLB9672 on Cape-A and Cape-B):
 
 ```bash
 
@@ -1147,18 +1156,18 @@ Bus order: **CN1 → FC1 → CN2 → FC2 → CN3 → FC3 → CN4 → FC4** (inte
 
 | Node | Bay             | Position           | Hardware                                   | Role (elected)                                                        | Security                                        |
 | ---- | --------------- | ------------------ | ------------------------------------------ | --------------------------------------------------------------------- | ----------------------------------------------- |
-| CN1  | A — Nose        | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 55×35mm | CN master or standby; radios master; CAN FD bus start (120Ω soldered) | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
-| FC1  | A — Nose        | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 55×35mm | FC master or standby; OA Array B host; 1553 primary BC                | SLB9670 TPM 2.0                                 |
-| CN2  | B — Dorsal Fwd  | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 55×35mm | CN master or standby                                                  | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
-| FC2  | B — Dorsal Fwd  | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 55×35mm | FC master or standby; 1553 standby BC                                 | SLB9670 TPM 2.0                                 |
-| CN3  | D — Dorsal Aft  | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 55×35mm | CN node                                                               | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
-| FC3  | D — Dorsal Aft  | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 55×35mm | FC node; OA Array A host                                              | SLB9670 TPM 2.0                                 |
-| CN4  | E — Aft Service | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 55×35mm | CN node; cargo control                                                | SLB9670 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
-| FC4  | E — Aft Service | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 55×35mm | FC node; CAN FD bus end (120Ω soldered)                               | SLB9670 TPM 2.0                                 |
+| CN1  | A — Nose        | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 55×35mm | CN master or standby; radios master; CAN FD bus start (120Ω soldered) | SLB9672 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
+| FC1  | A — Nose        | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 55×35mm | FC master or standby; OA Array B host; 1553 primary BC                | SLB9672 TPM 2.0                                 |
+| CN2  | B — Dorsal Fwd  | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 55×35mm | CN master or standby                                                  | SLB9672 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
+| FC2  | B — Dorsal Fwd  | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 55×35mm | FC master or standby; 1553 standby BC                                 | SLB9672 TPM 2.0                                 |
+| CN3  | D — Dorsal Aft  | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 55×35mm | CN node                                                               | SLB9672 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
+| FC3  | D — Dorsal Aft  | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 55×35mm | FC node; OA Array A host                                              | SLB9672 TPM 2.0                                 |
+| CN4  | E — Aft Service | Lower (floor)      | PocketBeagle 2 Industrial + Cape-B 55×35mm | CN node; cargo control                                                | SLB9672 TPM 2.0 + ATF16V8BQL CPLD write-blocker |
+| FC4  | E — Aft Service | Upper (inter-cape) | PocketBeagle 2 Industrial + Cape-A 55×35mm | FC node; CAN FD bus end (120Ω soldered)                               | SLB9672 TPM 2.0                                 |
 
-**All FC nodes (Cape-A):** ICM-42688-P IMU · BMP388 baro · u-blox M10Q GPS · ATA6561 CAN FD · MAX3485E RS-485 · DS26LV31/32 + PE-68515 1553 · DP83825I ×2 Ethernet · SLB9670 TPM 2.0 · 8× servo PWM rail
+**All FC nodes (Cape-A):** ICM-42688-P IMU · BMP388 baro · u-blox M10Q GPS · ATA6561 CAN FD · MAX3485E RS-485 · DS26LV31/32 + PE-68515 1553 · DP83825I ×2 Ethernet · SLB9672 TPM 2.0 · 8× servo PWM rail
 
-**All CN nodes (Cape-B):** SiK 915MHz · LoRa RFM95W 915MHz · TI WL1837MOD WiFi/BT · XCVR-49MHZ sub-module · ATA6561 CAN FD · MAX3485E RS-485 · DS26LV31/32 + PE-68515 1553 · DP83825I ×2 Ethernet · SLB9670 TPM 2.0 · ATF16V8BQL CPLD write-blocker · W25Q128JV NOR flash log · DRV8833 winch · HX711 load cell · 2× cargo servo PWM
+**All CN nodes (Cape-B):** SiK 915MHz · LoRa RFM95W 915MHz · TI WL1837MOD WiFi/BT · XCVR-49MHZ sub-module · ATA6561 CAN FD · MAX3485E RS-485 · DS26LV31/32 + PE-68515 1553 · DP83825I ×2 Ethernet · SLB9672 TPM 2.0 · ATF16V8BQL CPLD write-blocker · W25Q128JV NOR flash log · DRV8833 winch · HX711 load cell · 2× cargo servo PWM
 
 ---
 

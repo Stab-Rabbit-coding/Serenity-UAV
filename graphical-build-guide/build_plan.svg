@@ -118,7 +118,7 @@
 <text x="18" y="367" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• MIL-STD-1553B PRU firmware on all 4 AM6254 PRU0 cores</text>
 <text x="18" y="382" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• SiK 915MHz belly port + LoRa RFM95W belly stbd + 49MHz top wire</text>
 <text x="18" y="397" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• u-blox M10Q GPS at dorsal sta 140mm · WS2812C-2020 nav LEDs · 6S 4000mAh</text>
-<text x="18" y="412" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• SLB9670 TPM 2.0 provision on all 4 nodes · write-blocker μSD enable</text>
+<text x="18" y="412" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• SLB9672 TPM 2.0 provision on all 4 nodes · write-blocker μSD enable</text>
 <text x="18" y="427" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• Boot PocketBeagle2 AM6254 Debian 12 · install mavlink-router · configure</text>
 <text x="18" y="442" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• CG at 203mm (knife-edge) · ESC calibration · servo ±5° · radio HDOP check</text>
 <text x="18" y="457" font-family="'OpenDyslexic',sans-serif" font-size="7.5" fill="rgba(255,255,255,0.88)">• FAA reg N-number on airframe · ABCD pre-flight checklist</text>

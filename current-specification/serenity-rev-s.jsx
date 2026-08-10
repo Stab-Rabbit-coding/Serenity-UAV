@@ -5,17 +5,17 @@
  *
  * Key changes from Rev R:
  *   1. Integrates all Rev R1/R1c/R1d/R2 modifications (see docs/WBS.md §6.3 changelog).
- *   2. Wash/Zoë PCB Rev S1 designs: EMI hardening applied; full isolation (5 kV);
+ *   2. Pilot/XO PCB Rev S1 designs: EMI hardening applied; full isolation (5 kV);
  *      all 8 avionics stacks in identical EMI-hardened configuration.
- *   3. Emma Rev S1: Adds LoRa + RSSI detection; part of distributed comms strategy.
- *   4. Kaylee Rev S: PDB finalized; 5-rail power distribution; clean DRC.
- *   5. Jayne board (vision/ToF/laser): Standalone CAN-FD + Ethernet node; two units
+ *   3. Commo Rev S1: Adds LoRa + RSSI detection; part of distributed comms strategy.
+ *   4. Flight Engineer Rev S: PDB finalized; 5-rail power distribution; clean DRC.
+ *   5. Observer board (vision/ToF/laser): Standalone CAN-FD + Ethernet node; two units
  *      (nose sensor pod forward view; cargo bay nadir 3D imaging).
  *   6. STS3215 digital servo winch: Replaces N20 motor train; 5 containment fixes;
  *      ratchet safety mechanism; Dyneema SK75 line.
  *   7. Tilt-spar material selection open (4130, 17-4 PH, 7075 candidates).
  *   8. Landing gear: Wire brace design finalized; elastic + ductile wire grades.
- *   9. Fuselage mid-section bays refined (Kaylee's room, Simon's medbay).
+ *   9. Fuselage mid-section bays refined (Flight Engineer's room, Simon's medbay).
  *   10. Lint debt remediation complete (2026-07-18); CI pipeline green.
  *
  * This is a COMPLETE design specification — not a delta from Rev R.
@@ -153,10 +153,10 @@ function TabOverview() {
                     cols={["Subsystem", "Change", "Status", "Date"]}
                     accent={C.green}
                     rows={[
-                        ["Avionics / Naming", "Cape-A-2 renamed to Wash; Cape-B-2 renamed to Zoë. CAPE-A-2 and CAPE-B-2 KiCad files archived to avionics/kicad/archive/. Wash.* and Zoë.* are now the sole active cape design files.", "✓ DONE", "2026-06-10"],
-                        ["Avionics / Kaylee PDB", "Kaylee Power Distribution Board: KiCad pro/sch/pcb generated; DRC 0 shorts; gerbers generated to avionics/kicad/gerbers/. Kaylee.md design notes created.", "✓ DONE", "2026-06-10"],
+                        ["Avionics / Naming", "Cape-A-2 renamed to Pilot; Cape-B-2 renamed to XO. CAPE-A-2 and CAPE-B-2 KiCad files archived to avionics/kicad/archive/. Pilot.* and XO.* are now the sole active cape design files.", "✓ DONE", "2026-06-10"],
+                        ["Avionics / Flight Engineer PDB", "Flight Engineer Power Distribution Board: KiCad pro/sch/pcb generated; DRC 0 shorts; gerbers generated to avionics/kicad/gerbers/. FlightEngineer.md design notes created.", "✓ DONE", "2026-06-10"],
                         ["Airframe / FreeCAD", "SerenityAssembly.FCStd validated: position + quaternion for Head, Cargo, Middle, Rear, Wing×2, Nacelle×2 documented in CLAUDE.md and serenity_assembly.py. Hull-frame axes defined (X = +port, Y = +aft, Z = +dorsal).", "✓ DONE", "2026-06-10"],
-                        ["Airframe / Coordinates (R1)", "Hull-frame standardisation: validated placements baked into all 8 primary STLs (tools/bake_hull_frame.py, header marker 'SerenityUAV HULL-FRAME R1'); serenity_assembly.py imports at identity; 48 scripts stamped with the hull-frame standard header. Exceptions: avionics KiCad, Malcolm GCS, G-code. Open: nacelle port/stbd label swap vs wings; head-cargo joint axis re-verify.", "✓ DONE", "2026-06-11"],
+                        ["Airframe / Coordinates (R1)", "Hull-frame standardisation: validated placements baked into all 8 primary STLs (tools/bake_hull_frame.py, header marker 'SerenityUAV HULL-FRAME R1'); serenity_assembly.py imports at identity; 48 scripts stamped with the hull-frame standard header. Exceptions: avionics KiCad, Skipper GCS, G-code. Open: nacelle port/stbd label swap vs wings; head-cargo joint axis re-verify.", "✓ DONE", "2026-06-11"],
                         ["Mission Profile", "10-step cargo mission and 3-step cyber-resilience criteria added to README.md.", "✓ DONE", "2026-06-10"],
                         ["Standards / CLAUDE.md", "Imperial-primary units formalised (lbm vs lbf); airspeed in knots (kt); hull-frame coordinate system canonically defined with validated placements.", "✓ DONE", "2026-06-10"],
                         ["Code Quality", "All Python scripts brought to flake8 compliance: E201/E122/E501/E251/F401/E231 violations resolved.", "✓ DONE", "2026-06-10"],
@@ -178,11 +178,11 @@ function TabOverview() {
                         ["Nozzle actuation",   "Passive gear train per nacelle; rear nozzle is FIXED canonical (no servo)", "M=1.0 sector → pinion → bevel → crown → iris ring (nacelles only)"],
                         ["Hover thrust (nacelles)",  "~4,464 g",            "4× 1,240 g × 0.9 stator; rear EDF is forward-thrust only"],
                         ["AUW (6S 4000 mAh)",  "~3,130 g (Phase 11)",      "Hover T/W ≈ 1.43 (nacelles only)"],
-                        ["Avionics",           "8× PocketBeagle 2 Industrial (AM6254)", "4× FC (Wash) + 4× CN (Zoë) — ALL v2"],
-                        ["Cape variant",       "EMI-hardened v2 at ALL 8 positions",   "v2·v2·v2·v2 (Rev R baseline — Wash/Zoë naming finalised)"],
+                        ["Avionics",           "8× PocketBeagle 2 Industrial (AM6254)", "4× FC (Pilot) + 4× CN (XO) — ALL v2"],
+                        ["Cape variant",       "EMI-hardened v2 at ALL 8 positions",   "v2·v2·v2·v2 (Rev R baseline — Pilot/XO naming finalised)"],
                         ["Data buses",         "Ethernet RSTP · CAN FD · RS-485 · MIL-STD-1553B", "All 4 on every node"],
                         ["Radio links",        "SiK 915 MHz + LoRa 915 MHz + WiFi + XCVR 49 MHz", "All 4 on every CN node"],
-                        ["Security",           "SLB9670 TPM 2.0 on all 8 nodes + ATF16V8BQL CPLD write-blocker", "Message signing + forensic log"],
+                        ["Security",           "SLB9672 TPM 2.0 on all 8 nodes + ATF16V8BQL CPLD write-blocker", "Message signing + forensic log"],
                         ["Cargo bay",          "101.6 × 76.2 × 76.2 mm",  "Clamshell doors + N20 winch + auto-latch cradle"],
                         ["EMI protection",     "5 kV isolated transceivers on ALL 8 nodes", "IEC 62368-1 / VDE 0884-11 at every position"],
                         ["FAA registration",   "N00000 PLACEHOLDER",       "Replace before first untethered flight (14 CFR Part 48)"],
@@ -212,7 +212,7 @@ function TabOverview() {
                         ["O", "2026-05",  "CG-pivot nacelle (Z=83 mm) + M=1.0 gear train + S1223 wings"],
                         ["P", "2026-06",  "Cargo bay complete (doors + mounts + Rev S shell)"],
                         ["Q", "2026-06",  "Hardened avionics baseline — EMI-hardened v2 capes at ALL positions; v1 archived; old design variants archived"],
-                        ["R", "2026-06",  "Naming finalisation (Wash/Zoë); Kaylee PDB DRC-clean + gerbers; FreeCAD hull-frame validated; mission profile; CLAUDE.md standards — this revision"],
+                        ["R", "2026-06",  "Naming finalisation (Pilot/XO); Flight Engineer PDB DRC-clean + gerbers; FreeCAD hull-frame validated; mission profile; CLAUDE.md standards — this revision"],
                     ]}
                 />
             </Card>
@@ -247,16 +247,16 @@ function TabAirframe() {
                     cols={["Panel", "Bay", "Station (from nose)", "Access Type", "Contents"]}
                     accent={C.teal}
                     rows={[
-                        ["A — Shepherd's room (nose)",   "Bay A", "~0–91 mm",   "Screw/bayonet", "CN1 (Zoë) + FC1 (Wash); GPS coax; SiK/LoRa radios"],
-                        ["B — Inara's shuttle (fwd dors)","Bay B", "~91–165 mm", "Screw/bayonet", "CN2 (Zoë) + FC2 (Wash); GPS coax"],
+                        ["A — Shepherd's room (nose)",   "Bay A", "~0–91 mm",   "Screw/bayonet", "CN1 (XO) + FC1 (Pilot); GPS coax; SiK/LoRa radios"],
+                        ["B — Inara's shuttle (fwd dors)","Bay B", "~91–165 mm", "Screw/bayonet", "CN2 (XO) + FC2 (Pilot); GPS coax"],
                         ["C (wing root)",                 "Bay C", "~165–251 mm","Hinge+latch",   "ESC pairs, servo leads, wing spar access"],
-                        ["D — River's room (aft dorsal)", "Bay D", "~251–320 mm","Screw/bayonet", "CN3 (Zoë) + FC3 (Wash)"],
-                        ["E — Simon's medbay (aft svc)",  "Bay E", "~320–388 mm","Screw/bayonet", "CN4 (Zoë) + FC4 (Wash)"],
+                        ["D — River's room (aft dorsal)", "Bay D", "~251–320 mm","Screw/bayonet", "CN3 (XO) + FC3 (Pilot)"],
+                        ["E — Simon's medbay (aft svc)",  "Bay E", "~320–388 mm","Screw/bayonet", "CN4 (XO) + FC4 (Pilot)"],
                         ["F (engine bell)","Bay F","~388–600 mm","Magnet+snap",   "55 mm EDF, 50A ESC, plenum, canonical nozzle, 4× RCS valves (Phase 11)"],
                     ]}
                 />
                 <div style={{ marginTop: 8, fontFamily: M, fontSize: 11, color: C.dimmer }}>
-                    All bays: Zoë (CN lower) + Wash (FC upper). Uniform v2 EMI hardening at all positions.
+                    All bays: XO (CN lower) + Pilot (FC upper). Uniform v2 EMI hardening at all positions.
                     Panel lids: PETG 0.20 mm / 100% infill. Gasket: 3M 4016 closed-cell foam tape on frame lip.
                 </div>
             </Card>
@@ -362,7 +362,7 @@ function TabPropulsion() {
                         ["Travel",       "0° (cruise) → 90° (hover) → 120° (backing)", "Hard stops at −5° and 140°"],
                         ["Pivot Z",      "83 mm from intake (nacelle CG)", "Eliminates gravity torque on servo in all attitudes"],
                         ["Bearing",      "MF104ZZ 4×10×4 mm flanged, 2 per nacelle", "Press-fit; pivot rod = 4 mm CF rod (fixed)"],
-                        ["Servo",        "≥25 kg·cm @ 6V digital metal-gear, 2×", "Fuselage-mounted, one per nacelle"],
+                        ["Servo",        "SPT5425LV + LibreServo v2, 25-26 kgf·cm @ 6V, 2× (was DS3218MG)", "Fuselage-mounted, one per nacelle; rotation-limit pin removed (fleet-standard with the cargo winch servo)"],
                         ["Hard stops",   "CF-PETG blocks bonded at −5° and 140°", "Servo stalls at stop; does not strip"],
                     ]}
                 />
@@ -397,7 +397,7 @@ function TabPropulsion() {
                         ["Rear EDF thrust",  "~1,275 g", "55 mm 6S, net forward after RCS bleed — HORIZONTAL (cruise), not summed into hover"],
                         ["Hull prints + foam","~1,150 g","All shell sections + access panels + foam"],
                         ["Nacelle assemblies","~440 g",  "2× nacelle shells + EDFs + ESCs + gear + nozzle"],
-                        ["Avionics",         "~460 g",   "8× PB2-I + 4× Wash + 4× Zoë + 4× Emma + GPS×4 + radios"],
+                        ["Avionics",         "~460 g",   "8× PB2-I + 4× Pilot + 4× XO + 4× Commo + GPS×4 + radios"],
                         ["Servos + linkage", "~155 g",   "2× tilt servo + pushrods (4× RCS valves are Phase 11)"],
                         ["Power (6S 4000mAh)","~750 g",  "Primary flight battery"],
                         ["Rear EDF system (Phase 11)","~360 g","55 mm EDF + 50A ESC + canonical nozzle + 4 RCS jets/valves + plenum/mount"],
@@ -421,7 +421,7 @@ function TabPropulsion() {
 function TabAvionics() {
     return (
         <div>
-            <Card title="8-Node Cooperative Architecture — Rev R: All v2 (Wash / Zoë)" accent={C.accent}>
+            <Card title="8-Node Cooperative Architecture — Rev R: All v2 (Pilot / XO)" accent={C.accent}>
                 <div style={{ fontFamily: M, fontSize: 12, color: C.text, marginBottom: 12, lineHeight: 1.8 }}>
                     Eight PocketBeagle 2 Industrial (AM6254) boards, split into two groups of four.
                     All nodes run the same base Linux image (from 64 GB eMMC — no OS microSD required).
@@ -430,17 +430,17 @@ function TabAvionics() {
                     Any node can fail over for any role.
                     <br /><br />
                     <span style={{ color: C.green }}>Rev Q change:</span> All 8 positions use EMI-hardened v2 capes
-                    (Wash / Zoë + Emma). Placement is uniform v2·v2·v2·v2 nose to tail.
+                    (Pilot / XO + Commo). Placement is uniform v2·v2·v2·v2 nose to tail.
                     Cape-A-1, Cape-B-1, XCVR-49MHZ-1 designs are archived.
                     <br />
                     <span style={{ color: C.green }}>Rev R change:</span> Cape-A-2 / Cape-B-2 generic designators retired.
-                    Wash and Zoë are now the sole active cape names in all documentation, design files, and gerbers.
+                    Pilot and XO are now the sole active cape names in all documentation, design files, and gerbers.
                 </div>
                 <Table
                     cols={["Group", "Count", "Cape", "Primary Responsibility"]}
                     rows={[
-                        ["FC1–FC4", "4", "Wash (EMI-hardened Sensor/Flight)", "Flight control, IMU/GPS/baro fusion, ESC PID governor, ToF OA, actuator PWM"],
-                        ["CN1–CN4", "4", "Zoë (EMI-hardened Comms/Payload)", "Radio links (all 4), system logging, cargo/payload control, MAVLink routing"],
+                        ["FC1–FC4", "4", "Pilot (EMI-hardened Sensor/Flight)", "Flight control, IMU/GPS/baro fusion, ESC PID governor, ToF OA, actuator PWM"],
+                        ["CN1–CN4", "4", "XO (EMI-hardened Comms/Payload)", "Radio links (all 4), system logging, cargo/payload control, MAVLink routing"],
                     ]}
                 />
             </Card>
@@ -465,15 +465,15 @@ function TabAvionics() {
                 />
             </Card>
 
-            <Card title="Wash — FC Node (EMI-Hardened Flight Control / Sensor)" accent={C.green}>
+            <Card title="Pilot — FC Node (EMI-Hardened Flight Control / Sensor)" accent={C.green}>
                 <div style={{ fontFamily: M, fontSize: 11, color: C.green, marginBottom: 8 }}>
-                    Rev R: Active design. Cape-A-1 and CAPE-A-2 designators archived. All 4 FC positions use Wash.
+                    Rev R: Active design. Cape-A-1 and CAPE-A-2 designators archived. All 4 FC positions use Pilot.
                 </div>
                 <Table
                     cols={["Feature", "Detail"]}
                     accent={C.green}
                     rows={[
-                        ["Size",          "55×35 mm, 4-layer KiCad (Wash gerbers — active)"],
+                        ["Size",          "55×35 mm, 4-layer KiCad (Pilot gerbers — active)"],
                         ["CAN FD",        "ISOW1044BDFMR 5 kV isolated CAN FD transceiver (TI) — IEC 62368-1 / VDE 0884-11 certified"],
                         ["RS-485",        "ADM2795EBRWZ 5 kV isolated RS-485 (ADI) — half-duplex, 1 Mbps"],
                         ["Ethernet",      "ADIN1300BCPZ 1000BASE-T PHY + 2× ISO7642FDWRR 6-ch digital isolators + Würth 749010012A transformer; JST GH 4P (no RJ45)"],
@@ -483,7 +483,7 @@ function TabAvionics() {
                         ["ESC PWM",       "EHRPWM / PRU-ICSS — BDSHOT600; 5 outputs (4× nacelle + 1× rear)"],
                         ["Servo PWM",     "2 channels active — 2× nacelle tilt (+4× RCS valves at Phase 11)"],
                         ["ToF array",     "TCA9548A 8-ch I²C mux + MCP23008 XSHUT expander → 6× VL53L5CX per node"],
-                        ["TPM",           "SLB9670 TPM 2.0 (SPI) — attestation + HMAC signing"],
+                        ["TPM",           "SLB9672 TPM 2.0 (SPI) — attestation + HMAC signing"],
                         ["Tamper mesh",   "F.Cu / B.Cu TMESH_P/N nets routed to TPM GPIO — physical intrusion detect"],
                         ["MIL-STD-1553", "PRU Manchester II encoder/decoder; FC1=BC, FC2=standby BC"],
                         ["ADC (ESC telem)","74HC4051 8:1 mux — BDSHOT telemetry demux for 4 ESCs"],
@@ -492,35 +492,35 @@ function TabAvionics() {
                 />
             </Card>
 
-            <Card title="Zoë — CN Node (EMI-Hardened Comms / Logging / Payload)" accent={C.pink}>
+            <Card title="XO — CN Node (EMI-Hardened Comms / Logging / Payload)" accent={C.pink}>
                 <div style={{ fontFamily: M, fontSize: 11, color: C.green, marginBottom: 8 }}>
-                    Rev R: Active design. Cape-B-1 and CAPE-B-2 designators archived. All 4 CN positions use Zoë.
+                    Rev R: Active design. Cape-B-1 and CAPE-B-2 designators archived. All 4 CN positions use XO.
                 </div>
                 <Table
                     cols={["Feature", "Detail"]}
                     accent={C.pink}
                     rows={[
-                        ["Size",           "55×35 mm, 4-layer KiCad (Zoë gerbers — active)"],
-                        ["CAN FD",         "ISOW1044BDFMR 5 kV isolated (same as Wash)"],
-                        ["RS-485",         "ADM2795EBRWZ 5 kV isolated (same as Wash)"],
-                        ["Ethernet",       "ADIN1300BCPZ + ISO7642FDWRR × 2 + Würth transformer (same as Wash)"],
+                        ["Size",           "55×35 mm, 4-layer KiCad (XO gerbers — active)"],
+                        ["CAN FD",         "ISOW1044BDFMR 5 kV isolated (same as Pilot)"],
+                        ["RS-485",         "ADM2795EBRWZ 5 kV isolated (same as Pilot)"],
+                        ["Ethernet",       "ADIN1300BCPZ + ISO7642FDWRR × 2 + Würth transformer (same as Pilot)"],
                         ["SiK radio",      "SiK 915 MHz MAVLink — belly port SMA bulkhead"],
                         ["LoRa radio",     "RFM95W 915 MHz backup — belly stbd SMA bulkhead"],
                         ["WiFi/BT",        "TI WL1837MOD 2.4/5 GHz — dorsal fwd SMA bulkhead"],
-                        ["XCVR-49MHZ",     "Emma sub-module — 49 MHz AX.25 RC (EMI-hardened)"],
-                        ["Log μSD",        "Zoë microSD slot — hardware write-blocked via CPLD"],
+                        ["XCVR-49MHZ",     "Commo sub-module — 49 MHz AX.25 RC (EMI-hardened)"],
+                        ["Log μSD",        "XO microSD slot — hardware write-blocked via CPLD"],
                         ["CPLD",           "ATF16V8BQL — hardware-enforced non-executable log storage"],
                         ["NOR flash",      "W25Q128JV 128 Mb — circular log overflow buffer"],
-                        ["TPM",            "SLB9670 TPM 2.0 — key material for log signing + HMAC on AX.25 payloads"],
-                        ["Tamper mesh",    "Same as Wash"],
-                        ["Cargo GPIO",     "DRV8833 winch H-bridge + HX711 load cell ADC via Zoë GPIO"],
+                        ["TPM",            "SLB9672 TPM 2.0 — key material for log signing + HMAC on AX.25 payloads"],
+                        ["Tamper mesh",    "Same as Pilot"],
+                        ["Cargo GPIO",     "DRV8833 winch H-bridge + HX711 load cell ADC via XO GPIO"],
                         ["MIL-STD-1553",  "PRU Manchester II; CN1=RT 0x01, CN2–CN4 RT addresses"],
                         ["DTS overlay",   "k3-am6254-pocketbeagle2-serenity-cape-b2.dts (avionics/firmware/dts/cape-b/)"],
                     ]}
                 />
             </Card>
 
-            <Card title="Emma — EMI-Hardened 49 MHz AX.25 Transceiver" accent={C.orange}>
+            <Card title="Commo — EMI-Hardened 49 MHz AX.25 Transceiver" accent={C.orange}>
                 <div style={{ fontFamily: M, fontSize: 11, color: C.green, marginBottom: 8 }}>
                     Rev R: Active design. XCVR-49MHZ-1 archived. All 4 CN positions use XCVR-49MHZ-2.
                 </div>
@@ -533,7 +533,7 @@ function TabAvionics() {
                         ["TVS",          "PRTR5V0U2X TVS on signal lines — transient suppression"],
                         ["X2Y cap",      "X2Y bridging capacitor on antenna feed — EMI filtering"],
                         ["Ferrite bead", "Würth 742792512 ferrite bead on +5V supply rail"],
-                        ["Connector",    "JST GH 6P to Zoë J1 (replaces direct-coupled connection)"],
+                        ["Connector",    "JST GH 6P to XO J1 (replaces direct-coupled connection)"],
                         ["RF trace",     "Z₀ = 52.26 Ω — W=2.75 mm, H=1.6 mm, εr=4.5, T=35 µm — PASS [45–55 Ω]"],
                         ["Modem",        "TCM3105 AFSK modem — same as XCVR-49MHZ-1"],
                         ["PA / LNA",     "MGA-82563 LNA, PE4259 TX/RX switch — same as XCVR-49MHZ-1"],
@@ -542,18 +542,18 @@ function TabAvionics() {
                 />
             </Card>
 
-            <Card title="Kaylee — Power Distribution Board (Rev A)" accent={C.lime}>
+            <Card title="Flight Engineer — Power Distribution Board (Rev A)" accent={C.lime}>
                 <div style={{ fontFamily: M, fontSize: 11, color: C.green, marginBottom: 8 }}>
-                    Rev R: Added. Kaylee PDB KiCad files generated; DRC clean (0 shorts); gerbers produced 2026-06-10.
+                    Rev R: Added. Flight Engineer PDB KiCad files generated; DRC clean (0 shorts); gerbers produced 2026-06-10.
                 </div>
                 <Table
                     cols={["Feature", "Detail"]}
                     accent={C.lime}
                     rows={[
-                        ["Board name",     "Kaylee — Power Distribution Board"],
-                        ["Callsign",       "\"Everything is shiny.\" — Kaylee Frye, Firefly-class vessel Serenity"],
-                        ["KiCad files",    "avionics/kicad/Kaylee.kicad_{pro,sch,pcb}"],
-                        ["Design notes",   "avionics/kicad/Kaylee.md"],
+                        ["Board name",     "Flight Engineer — Power Distribution Board"],
+                        ["Callsign",       "\"Everything is shiny.\" — Flight Engineer Frye, Firefly-class vessel Serenity"],
+                        ["KiCad files",    "avionics/kicad/FlightEngineer.kicad_{pro,sch,pcb}"],
+                        ["Design notes",   "avionics/kicad/FlightEngineer.md"],
                         ["Gerbers",        "avionics/kicad/gerbers/ — generated 2026-06-10"],
                         ["DRC status",     "✓ 0 shorts, 0 unconnected (schematic level) — 2026-06-10"],
                         ["Function",       "Primary 6S battery power distribution; dual BEC outputs (5 V and 3.3 V); current sensing per rail; bus protection MOSFETs"],
@@ -564,12 +564,12 @@ function TabAvionics() {
 
             <Card title="Bay Assignments — Rev R (All v2)" accent={C.yellow}>
                 <Table
-                    cols={["Bay / Room", "Station", "Lower CN (Zoë)", "Upper FC (Wash)", "Notes"]}
+                    cols={["Bay / Room", "Station", "Lower CN (XO)", "Upper FC (Pilot)", "Notes"]}
                     accent={C.yellow}
                     rows={[
-                        ["A — Shepherd's room (nose)",   "0–91 mm",   "CN1", "FC1", "5 kV CAN FD/RS-485/ETH isolation; GPS1; SiK + LoRa + WiFi + Emma; CAN FD bus start 120Ω"],
-                        ["B — Inara's shuttle (fwd dors)","91–165 mm", "CN2", "FC2", "5 kV isolation; GPS2; Emma"],
-                        ["D — River's room (aft dorsal)", "251–320 mm","CN3", "FC3", "5 kV isolation; GPS3; Emma"],
+                        ["A — Shepherd's room (nose)",   "0–91 mm",   "CN1", "FC1", "5 kV CAN FD/RS-485/ETH isolation; GPS1; SiK + LoRa + WiFi + Commo; CAN FD bus start 120Ω"],
+                        ["B — Inara's shuttle (fwd dors)","91–165 mm", "CN2", "FC2", "5 kV isolation; GPS2; Commo"],
+                        ["D — River's room (aft dorsal)", "251–320 mm","CN3", "FC3", "5 kV isolation; GPS3; Commo"],
                         ["E — Simon's medbay (aft svc)",  "320–388 mm","CN4", "FC4", "5 kV CAN FD/RS-485/ETH isolation; GPS4; CAN FD bus end 120Ω permanent"],
                     ]}
                 />
@@ -608,7 +608,7 @@ function TabComms() {
                         ["SiK 915 MHz",  "SiK v2 MAVLink",           "915 MHz ISM", "Primary GCS telemetry (MAVLink)", "FCC Part 15 / module FCC ID required"],
                         ["LoRa 915 MHz", "RFM95W / LoRa",             "915 MHz ISM", "Backup GCS telemetry + long-range", "FCC Part 15 / module FCC ID required"],
                         ["WiFi 2.4/5GHz","TI WL1837MOD 802.11b/g/n/ac","ISM", "GCS app link; firmware update; video stream", "FCC Part 15 / WL1837MOD certified"],
-                        ["XCVR 49 MHz",  "Emma AX.25 AFSK",  "49.830–49.890 MHz", "RC command link (backup)", "FCC Part 15 §15.235 (not Part 95 RCRS — REF-FCC-003); FCC equipment authorization required before airborne TX"],
+                        ["XCVR 49 MHz",  "Commo AX.25 AFSK",  "49.830–49.890 MHz", "RC command link (backup)", "FCC Part 15 §15.235 (not Part 95 RCRS — REF-FCC-003); FCC equipment authorization required before airborne TX"],
                     ]}
                 />
             </Card>
@@ -621,7 +621,7 @@ function TabComms() {
                         ["Top wire",       "0.3 mm SS wire, ~470 mm dorsal spine", "Forward post ~120 mm → aft post ~600 mm from nose"],
                         ["Forward post",   "PETG mast, base-loading coil 38 µH + LC pi-net", "Bonded at dorsal ~120 mm; 3 mm clearance from GPS patch"],
                         ["Aft post",       "PETG mast, ceramic bead insulator", "Top of rear nozzle cone; insulated (open-circuit) end"],
-                        ["Counterpoise",   "CF keel bar 6×3 mm, 620 mm", "Connected to Emma GND on Zoë"],
+                        ["Counterpoise",   "CF keel bar 6×3 mm, 620 mm", "Connected to Commo GND on XO"],
                         ["XCVR Z₀",        "52.26 Ω for W=2.75 mm, H=1.6 mm, εr=4.5, T=35 µm", "PASS [45–55 Ω] — verified by check_impedance.py 2026-05-30"],
                     ]}
                 />
@@ -686,13 +686,13 @@ function TabSecurity() {
                     cols={["Layer", "Implementation", "Coverage"]}
                     accent={C.red}
                     rows={[
-                        ["TPM 2.0",              "SLB9670 on every Wash and Zoë (8 chips total)", "Unique key material per node; HMAC-SHA256 on all flight-critical CAN FD messages; PCR extend on each boot"],
-                        ["CPLD write-blocker",   "ATF16V8BQL on every Zoë (4 chips total)", "Hardware-enforced read-only append to log μSD; NX enforcement; cannot be bypassed in firmware"],
+                        ["TPM 2.0",              "SLB9672 on every Pilot and XO (8 chips total)", "Unique key material per node; HMAC-SHA256 on all flight-critical CAN FD messages; PCR extend on each boot"],
+                        ["CPLD write-blocker",   "ATF16V8BQL on every XO (4 chips total)", "Hardware-enforced read-only append to log μSD; NX enforcement; cannot be bypassed in firmware"],
                         ["Message signing",      "TPM-bound HMAC on all outbound inter-node CAN FD frames", "Unauthenticated messages discarded by all nodes"],
                         ["AX.25 HMAC",           "TPM-bound HMAC-SHA256 on every XCVR-49MHZ AX.25 packet", "Receiver nodes verify before acting on RC commands"],
                         ["5 kV isolation",       "ISOW1044BDFMR + ADM2795EBRWZ + ADIN1300BCPZ at all 8 nodes", "Galvanic isolation prevents conducted EMI/transient propagation across bus boundaries"],
-                        ["NOR flash log",        "W25Q128JV 128 Mb circular log on Zoë", "Overflow buffer for log μSD; also write-blocked; NX enforced"],
-                        ["Tamper mesh",          "F.Cu/B.Cu TMESH_P/N copper nets on Wash + Zoë", "Physical intrusion detection routed to SLB9670 TPM GPIO"],
+                        ["NOR flash log",        "W25Q128JV 128 Mb circular log on XO", "Overflow buffer for log μSD; also write-blocked; NX enforced"],
+                        ["Tamper mesh",          "F.Cu/B.Cu TMESH_P/N copper nets on Pilot + XO", "Physical intrusion detection routed to SLB9672 TPM GPIO"],
                         ["Boot measurement",     "TPM PCR extend on each boot stage", "Detected replay or firmware modification flagged to ground station"],
                         ["Log integrity",        "SHA-256 hash chain on all log records", "Forensically sound; record tampering detectable"],
                     ]}
@@ -714,14 +714,14 @@ function TabSecurity() {
                     cols={["Node", "Bay", "Cape", "TPM Action"]}
                     accent={C.purple}
                     rows={[
-                        ["CN1", "A — Shepherd's room", "Zoë", "TPM clear → generate endorsement key → extend PCR0 on first boot"],
-                        ["FC1", "A — Shepherd's room", "Wash", "Same; also bind HMAC signing key to FC1 endorsement key"],
-                        ["CN2", "B — Inara's shuttle", "Zoë", "Same as CN1"],
-                        ["FC2", "B — Inara's shuttle", "Wash", "Same as FC1"],
-                        ["CN3", "D — River's room", "Zoë", "Phase 7 — provision after board installation"],
-                        ["FC3", "D — River's room", "Wash", "Phase 7"],
-                        ["CN4", "E — Simon's medbay", "Zoë", "Phase 7"],
-                        ["FC4", "E — Simon's medbay", "Wash", "Phase 7"],
+                        ["CN1", "A — Shepherd's room", "XO", "TPM clear → generate endorsement key → extend PCR0 on first boot"],
+                        ["FC1", "A — Shepherd's room", "Pilot", "Same; also bind HMAC signing key to FC1 endorsement key"],
+                        ["CN2", "B — Inara's shuttle", "XO", "Same as CN1"],
+                        ["FC2", "B — Inara's shuttle", "Pilot", "Same as FC1"],
+                        ["CN3", "D — River's room", "XO", "Phase 7 — provision after board installation"],
+                        ["FC3", "D — River's room", "Pilot", "Phase 7"],
+                        ["CN4", "E — Simon's medbay", "XO", "Phase 7"],
+                        ["FC4", "E — Simon's medbay", "Pilot", "Phase 7"],
                     ]}
                 />
                 <div style={{ marginTop: 8, fontFamily: M, fontSize: 11, color: C.red }}>
@@ -761,7 +761,7 @@ function TabRegulatory() {
                         ["SiK 915 MHz",         "FCC Part 15 ISM",     "✓ PASS", "Module must carry FCC ID marking; verify before installation"],
                         ["LoRa RFM95W 915 MHz", "FCC Part 15 ISM",     "✓ PASS", "Module FCC ID required; verify"],
                         ["WiFi WL1837MOD",       "FCC Part 15 ISM",     "✓ PASS", "TI WL1837MOD certified; verify FCC ID on module"],
-                        ["Emma",         "47 CFR Part 15 §15.235 (REF-FCC-003)", "○ OPEN", "Equipment authorization (FCC ID grant) required before airborne TX; pre-compliance checklist in WBS §1.3 Phase 4"],
+                        ["Commo",         "47 CFR Part 15 §15.235 (REF-FCC-003)", "○ OPEN", "Equipment authorization (FCC ID grant) required before airborne TX; pre-compliance checklist in WBS §1.3 Phase 4"],
                         ["49 MHz channels",      "47 CFR §15.235",       "○ OPEN", "Channel selection (49.830–49.890 MHz) set in CN firmware; verify FCC channel table"],
                         ["49 MHz field strength", "47 CFR §15.235(a)",   "○ OPEN", "≤10,000 µV/m at 3 m (≈30 µW / −15.2 dBm EIRP-equivalent); firmware PA limit required — see REF-FCC-003"],
                     ]}
@@ -776,7 +776,7 @@ function TabRegulatory() {
                         ["AUVSI", "UAS best practices — structural redundancy, failsafe modes, pre-flight checklists", "Design compliant; validate at build"],
                         ["IEEE",  "IEEE 802.3 (Ethernet), ISO 11898 (CAN FD), NIST SP 800-72 (write-blocker)", "All wired bus protocols conformant"],
                         ["ISA",   "ISA-99/IEC 62443 — message authentication, secure boot, isolation barriers", "TPM + HMAC + 5 kV isolation architecture addresses core requirements"],
-                        ["IEC",   "IEC 62368-1 / VDE 0884-11 — 5 kV isolation barrier certification", "All isolation barriers on Wash / Zoë / Emma certified"],
+                        ["IEC",   "IEC 62368-1 / VDE 0884-11 — 5 kV isolation barrier certification", "All isolation barriers on Pilot / XO / Commo certified"],
                         ["FAA",   "AC 107-2 (remote pilot operations), FAA Part 107 waivers if above 400 ft AGL", "Operator responsibility"],
                         ["ICAO",  "Annex 2 — nav light colours/positions; Annex 13 — accident reporting", "Nav light design conformant"],
                     ]}
@@ -793,8 +793,8 @@ function TabBOM() {
         { cat: "Tilt servos + linkage",        items: 2,  mass_g: 130,  cost: 26,   notes: "2× tilt servo + pushrods (rear nozzle servo deleted — canonical nozzle is fixed)" },
         { cat: "Cargo servos",                 items: 2,  mass_g: 18,   cost: 6,    notes: "2× SG90 — door actuator + payload release" },
         { cat: "Gear train (M=1.0)",           items: 8,  mass_g: 62,   cost: 62,   notes: "Sector, pinion ×2, bevel ×2, crown, housing ×2, shafts, bearings" },
-        { cat: "Avionics (PB2-I + v2 capes)",  items: 6,  mass_g: 460,  cost: 1348, notes: "8× PB2-I + 4× Wash + 4× Zoë + 4× Emma + 4× log μSD" },
-        { cat: "PCB fabrication (JLCPCB)",     items: 3,  mass_g: 0,    cost: 680,  notes: "Wash ×4 + Zoë ×4 + Emma ×4 (assembled, active)" },
+        { cat: "Avionics (PB2-I + v2 capes)",  items: 6,  mass_g: 460,  cost: 1348, notes: "8× PB2-I + 4× Pilot + 4× XO + 4× Commo + 4× log μSD" },
+        { cat: "PCB fabrication (JLCPCB)",     items: 3,  mass_g: 0,    cost: 680,  notes: "Pilot ×4 + XO ×4 + Commo ×4 (assembled, active)" },
         { cat: "Power (batteries + PDB)",      items: 3,  mass_g: 1540, cost: 120,  notes: "6S 4000 mAh + 6S 2800 mAh + dual BEC PDB" },
         { cat: "Printed parts (filament)",     items: 3,  mass_g: 2000, cost: 106,  notes: "PETG ~1,400 g + CF-PETG ~650 g + TPU ~100 g" },
         { cat: "Structural (CF stock + foam)", items: 5,  mass_g: 980,  cost: 77,   notes: "Keel + spars + ring frames + PU foam + epoxy" },
@@ -837,15 +837,15 @@ function TabBOM() {
                     cols={["Item", "Rev Q", "Rev R", "Delta"]}
                     accent={C.green}
                     rows={[
-                        ["Wash ×4 (unchanged from Rev Q)",     "$272", "$272", "$0"],
-                        ["Zoë ×4 (unchanged from Rev Q)",      "$420", "$420", "$0"],
-                        ["Emma ×4 (unchanged)",        "$128", "$128", "$0"],
-                        ["Kaylee PDB (new in Rev R)",           "—",    "~$45", "+$45"],
+                        ["Pilot ×4 (unchanged from Rev Q)",     "$272", "$272", "$0"],
+                        ["XO ×4 (unchanged from Rev Q)",      "$420", "$420", "$0"],
+                        ["Commo ×4 (unchanged)",        "$128", "$128", "$0"],
+                        ["Flight Engineer PDB (new in Rev R)",           "—",    "~$45", "+$45"],
                         ["Total estimate",                      "~$2,137","~$2,182","~+$45"],
                     ]}
                 />
                 <div style={{ marginTop: 8, fontFamily: M, fontSize: 11, color: C.dimmer }}>
-                    Rev R cost increase is minimal — only the Kaylee PDB is new.
+                    Rev R cost increase is minimal — only the Flight Engineer PDB is new.
                     All avionics cape costs carry forward from Rev Q unchanged. Hover T/W ≈ 1.61 (Phases 5–10) / 1.43 (Phase 11).
                 </div>
             </Card>
@@ -889,11 +889,11 @@ function TabFiles() {
                     cols={["File", "Board", "Status"]}
                     accent={C.green}
                     rows={[
-                        ["Wash.kicad_pcb / .kicad_sch", "Wash (55×35mm EMI-hardened FC)", "✓ ACTIVE — primary FC cape at all positions"],
-                        ["Zoë.kicad_pcb / .kicad_sch", "Zoë (55×35mm EMI-hardened CN)", "✓ ACTIVE — primary CN cape at all positions"],
-                        ["XCVR-49MHZ-2.kicad_pcb / .kicad_sch", "Emma (55×35mm EMI-hardened)", "✓ ACTIVE — primary 49 MHz sub-module"],
-                        ["Kaylee.kicad_pcb / .kicad_sch", "Kaylee PDB Rev A", "✓ ACTIVE — Rev R addition; DRC clean; gerbers generated 2026-06-10"],
-                        ["CAPE-A-2 / CAPE-B-2", "v2 generic cape designators", "ARCHIVED — avionics/kicad/archive/ (Rev R 2026-06-10; renamed Wash/Zoë)"],
+                        ["Pilot.kicad_pcb / .kicad_sch", "Pilot (55×35mm EMI-hardened FC)", "✓ ACTIVE — primary FC cape at all positions"],
+                        ["XO.kicad_pcb / .kicad_sch", "XO (55×35mm EMI-hardened CN)", "✓ ACTIVE — primary CN cape at all positions"],
+                        ["XCVR-49MHZ-2.kicad_pcb / .kicad_sch", "Commo (55×35mm EMI-hardened)", "✓ ACTIVE — primary 49 MHz sub-module"],
+                        ["FlightEngineer.kicad_pcb / .kicad_sch", "Flight Engineer PDB Rev A", "✓ ACTIVE — Rev R addition; DRC clean; gerbers generated 2026-06-10"],
+                        ["CAPE-A-2 / CAPE-B-2", "v2 generic cape designators", "ARCHIVED — avionics/kicad/archive/ (Rev R 2026-06-10; renamed Pilot/XO)"],
                         ["CAPE-A-1 / CAPE-B-1 / XCVR-49MHZ-1", "v1 standard capes", "ARCHIVED — avionics/kicad/archive/ (Rev Q 2026-06-05)"],
                     ]}
                 />
@@ -904,17 +904,17 @@ function TabFiles() {
                     cols={["Directory", "Board", "Status"]}
                     accent={C.yellow}
                     rows={[
-                        ["avionics/kicad/gerbers/Kaylee/", "Kaylee PDB",  "✓ GENERATED — DRC clean 2026-06-10; ready for fab review"],
-                        ["avionics/kicad/gerbers/Wash/",   "Wash",        "○ PENDING — PCB layout and DRC sign-off required before fab submission"],
-                        ["avionics/kicad/gerbers/Zoë/",   "Zoë",        "○ PENDING — PCB layout and DRC sign-off required before fab submission"],
-                        ["avionics/kicad/gerbers/XCVR-49MHZ-2/","Emma","○ PENDING — DRC sign-off required before fab submission"],
+                        ["avionics/kicad/gerbers/FlightEngineer/", "Flight Engineer PDB",  "✓ GENERATED — DRC clean 2026-06-10; ready for fab review"],
+                        ["avionics/kicad/gerbers/Pilot/",   "Pilot",        "○ PENDING — PCB layout and DRC sign-off required before fab submission"],
+                        ["avionics/kicad/gerbers/XO/",   "XO",        "○ PENDING — PCB layout and DRC sign-off required before fab submission"],
+                        ["avionics/kicad/gerbers/XCVR-49MHZ-2/","Commo","○ PENDING — DRC sign-off required before fab submission"],
                         ["avionics/kicad/archive/",        "Cape-A-1, Cape-B-1, CAPE-A-2, CAPE-B-2, XCVR-49MHZ-1", "ARCHIVED Rev Q/R"],
                     ]}
                 />
                 <div style={{ marginTop: 8, fontFamily: M, fontSize: 11, color: C.orange }}>
-                    ⚠ Wash, Zoë, and Emma gerbers still pending PCB layout completion.
-                    Kaylee gerbers are the only fully generated set at Rev R.
-                    Do not submit Wash/Zoë/XCVR for fabrication until DRC passes with 0 errors / 0 unconnected.
+                    ⚠ Pilot, XO, and Commo gerbers still pending PCB layout completion.
+                    Flight Engineer gerbers are the only fully generated set at Rev R.
+                    Do not submit Pilot/XO/XCVR for fabrication until DRC passes with 0 errors / 0 unconnected.
                 </div>
             </Card>
 
@@ -923,8 +923,8 @@ function TabFiles() {
                     cols={["File", "Cape", "Status"]}
                     accent={C.teal}
                     rows={[
-                        ["avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts", "Wash", "✓ ACTIVE"],
-                        ["avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts", "Zoë", "✓ ACTIVE"],
+                        ["avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts", "Pilot", "✓ ACTIVE"],
+                        ["avionics/firmware/dts/cape-b/k3-am6254-pocketbeagle2-serenity-cape-b2.dts", "XO", "✓ ACTIVE"],
                         ["avionics/firmware/dts/cape-a/archive/k3-am6254-pocketbeagle2-serenity-cape-a.dts", "Cape-A-1", "ARCHIVED Rev Q"],
                         ["avionics/firmware/dts/cape-b/archive/k3-am6254-pocketbeagle2-serenity-cape-b.dts", "Cape-B-1", "ARCHIVED Rev Q"],
                     ]}
@@ -961,8 +961,8 @@ function TabFiles() {
                         ["PROJECT_INDEX.md",                        "Complete file manifest, quick specs", "Rev R ← CURRENT"],
                         ["docs/AVIONICS_PB2_REDESIGN.md",           "8-node PB2-I architecture — Rev R baseline", "Rev R ← CURRENT"],
                         ["docs/REVN_BUILD_GUIDE_24IN.md",           "9-phase 24-inch build guide", "Rev R (carried forward)"],
-                        ["docs/bom_revR.json",                      "Rev R BOM — machine-readable, all v2 capes + Kaylee PDB", "Rev R ← CURRENT"],
-                        ["current-specification/bom_revR.csv",      "Rev R BOM CSV — Kaylee PDB added", "Rev R ← CURRENT"],
+                        ["docs/bom_revR.json",                      "Rev R BOM — machine-readable, all v2 capes + Flight Engineer PDB", "Rev R ← CURRENT"],
+                        ["current-specification/bom_revR.csv",      "Rev R BOM CSV — Flight Engineer PDB added", "Rev R ← CURRENT"],
                         ["docs/bom_revQ.json",                      "Rev Q BOM — historical reference", "Rev Q"],
                         ["current-specification/bom_revQ.csv",      "Rev Q BOM CSV — historical reference", "Rev Q"],
                     ]}
@@ -995,21 +995,21 @@ function TabBuildStatus() {
             ],
         },
         {
-            phase: "Pre-Build: PCBs (Rev R — v2 + Kaylee PDB)", status: "IN PROGRESS",
+            phase: "Pre-Build: PCBs (Rev R — v2 + Flight Engineer PDB)", status: "IN PROGRESS",
             color: C.yellow,
             items: [
-                ["Kaylee PDB KiCad pro/sch/pcb generated", "✓ DONE  Rev R 2026-06-10"],
-                ["Kaylee PDB DRC clean (0 shorts)", "✓ DONE  Rev R 2026-06-10"],
-                ["Kaylee PDB gerbers generated", "✓ DONE  Rev R 2026-06-10"],
-                ["Cape-A-2 / Cape-B-2 archived; Wash/Zoë naming finalised", "✓ DONE  Rev R 2026-06-10"],
+                ["Flight Engineer PDB KiCad pro/sch/pcb generated", "✓ DONE  Rev R 2026-06-10"],
+                ["Flight Engineer PDB DRC clean (0 shorts)", "✓ DONE  Rev R 2026-06-10"],
+                ["Flight Engineer PDB gerbers generated", "✓ DONE  Rev R 2026-06-10"],
+                ["Cape-A-2 / Cape-B-2 archived; Pilot/XO naming finalised", "✓ DONE  Rev R 2026-06-10"],
                 ["Cape-A-1 / Cape-B-1 / XCVR-49MHZ-1 archived", "✓ DONE  Rev Q 2026-06-05"],
-                ["Emma RF trace Z₀ = 52.26 Ω", "✓ DONE  PASS"],
-                ["Wash PCB layout complete (EMI-hardened)", "○ OPEN — BLOCKS Phase 6 fab"],
-                ["Zoë PCB layout complete (EMI-hardened)", "○ OPEN — BLOCKS Phase 6 fab"],
-                ["Emma PCB layout complete (EMI-hardened)", "○ OPEN — BLOCKS Phase 6 fab"],
-                ["Wash DRC pass + gerbers generated", "○ OPEN — BLOCKS Phase 6 fab"],
-                ["Zoë DRC pass + gerbers generated", "○ OPEN — BLOCKS Phase 6 fab"],
-                ["Emma DRC pass + gerbers generated", "○ OPEN"],
+                ["Commo RF trace Z₀ = 52.26 Ω", "✓ DONE  PASS"],
+                ["Pilot PCB layout complete (EMI-hardened)", "○ OPEN — BLOCKS Phase 6 fab"],
+                ["XO PCB layout complete (EMI-hardened)", "○ OPEN — BLOCKS Phase 6 fab"],
+                ["Commo PCB layout complete (EMI-hardened)", "○ OPEN — BLOCKS Phase 6 fab"],
+                ["Pilot DRC pass + gerbers generated", "○ OPEN — BLOCKS Phase 6 fab"],
+                ["XO DRC pass + gerbers generated", "○ OPEN — BLOCKS Phase 6 fab"],
+                ["Commo DRC pass + gerbers generated", "○ OPEN"],
             ],
         },
         {
@@ -1056,11 +1056,11 @@ function TabBuildStatus() {
             phase: "Phase 6 — Minimum Viable Flyer ★ (Rev Q: all v2 capes)", status: "NOT STARTED",
             color: C.red,
             items: [
-                ["CN1+FC1 (Shepherd's room/Bay A) + CN2+FC2 (Inara's shuttle/Bay B) Wash/Zoë installed", "○ BLOCKED by Phase 5 + PCB fab"],
-                ["Wash/Zoë PCBs received from JLCPCB", "○ BLOCKED by DRC + gerber regen"],
-                ["Emma sub-modules received", "○ BLOCKED by gerber regen"],
+                ["CN1+FC1 (Shepherd's room/Bay A) + CN2+FC2 (Inara's shuttle/Bay B) Pilot/XO installed", "○ BLOCKED by Phase 5 + PCB fab"],
+                ["Pilot/XO PCBs received from JLCPCB", "○ BLOCKED by DRC + gerber regen"],
+                ["Commo sub-modules received", "○ BLOCKED by gerber regen"],
                 ["TPM provisioning (all 4 Shepherd's room + Inara's shuttle nodes)", "○ OPEN"],
-                ["CPLD write-blocker verification (Zoë)", "○ OPEN"],
+                ["CPLD write-blocker verification (XO)", "○ OPEN"],
                 ["Load k3-am6254-...-cape-a2.dts / cape-b2.dts overlays", "○ OPEN"],
                 ["CAN FD heartbeat ring (0x001–0x004)", "○ OPEN"],
                 ["serenity-cn Phase 6 + serenity-fc Phase 6 flashed", "✓ FIRMWARE DONE"],
@@ -1070,10 +1070,10 @@ function TabBuildStatus() {
             ],
         },
         {
-            phase: "Phase 7 — Full 8-Node + OA (Rev Q: River's room/Bay D + Simon's medbay/Bay E use Wash/Zoë)", status: "NOT STARTED",
+            phase: "Phase 7 — Full 8-Node + OA (Rev Q: River's room/Bay D + Simon's medbay/Bay E use Pilot/XO)", status: "NOT STARTED",
             color: C.red,
             items: [
-                ["CN3+FC3 (River's room/Bay D) + CN4+FC4 (Simon's medbay/Bay E) Wash/Zoë installed", "○ BLOCKED by Phase 6"],
+                ["CN3+FC3 (River's room/Bay D) + CN4+FC4 (Simon's medbay/Bay E) Pilot/XO installed", "○ BLOCKED by Phase 6"],
                 ["12× VL53L5CX ToF sensors installed + configured", "○ OPEN"],
                 ["Ethernet RSTP ring closed + verified (8 ADIN1300BCPZ nodes)", "○ OPEN"],
                 ["3-waypoint autonomous mission", "○ OPEN"],
@@ -1177,10 +1177,10 @@ export default function RevRSpec() {
                     letterSpacing: 1, marginBottom: 4,
                 }}>
                     SERENITY-CLASS TILTROTOR UAV — REV R
-                    <Badge text="NAMING FINALISATION + KAYLEE PDB" color={C.lime} />
+                    <Badge text="NAMING FINALISATION + FLIGHT ENGINEER PDB" color={C.lime} />
                 </div>
                 <div style={{ color: C.dimmer, fontSize: 12 }}>
-                    Wash / Zoë Naming Finalised · Kaylee PDB DRC-Clean · Hull-Frame Validated · 24-inch Hull · M=1.0 Gear Train
+                    Pilot / XO Naming Finalised · Flight Engineer PDB DRC-Clean · Hull-Frame Validated · 24-inch Hull · M=1.0 Gear Train
                 </div>
                 <div style={{ color: C.dimmer, fontSize: 11, marginTop: 4 }}>
                     Author: Steve Griffing PE(CSE) [Control Systems Engineering] CISSP-ISSEP CPP ·

@@ -196,7 +196,7 @@
 <text x="425" y="569" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7" fill="#ff8888" font-weight="normal">C11 — COMPANION GUILD (fun)</text>
 <rect x="520" y="575" width="200" height="45" rx="3" ry="3" fill="#8b3a1a" stroke="#8b6b1a" stroke-width="2"/>
 <rect x="524" y="579" width="192" height="37" rx="1" fill="none" stroke="#c8a84b" stroke-width="0.8"/>
-<text x="620" y="591" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#e8d08b"  letter-spacing="1">MALCOLM REYNOLDS</text>
+<text x="620" y="591" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="9" fill="#e8d08b"  letter-spacing="1">SKIPPER REYNOLDS</text>
 <text x="620" y="605" text-anchor="middle" font-family="'OpenDyslexic',sans-serif" font-size="9" fill="#c8a84b" font-weight="normal">CAPTAIN  ·  SERENITY</text>
 <text x="620" y="616" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7" fill="#8b6b1a" font-weight="normal">FIREFLY-CLASS 03SK</text>
 <rect x="516" y="571" width="208" height="53" rx="9" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
@@ -345,9 +345,9 @@
 <text x="295" y="1019" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">E2 — MAINTENANCE ARROW (cockpit side)</text>
 <rect x="510" y="1025" width="400" height="45" rx="5" ry="5" fill="rgba(10,5,2,0.9)" stroke="rgba(200,168,75,0.4)" stroke-width="1.5"/>
 <text x="710" y="1057" text-anchor="middle" font-family="'Georgia',serif" font-size="20" font-style="italic" fill="#c8a84b" letter-spacing="3">...I aim to misbehave.</text>
-<text x="710" y="1066" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7" fill="#8b6b1a" font-weight="normal">— Capt. Malcolm Reynolds · Serenity (2005)</text>
+<text x="710" y="1066" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="7" fill="#8b6b1a" font-weight="normal">— Capt. Skipper Reynolds · Serenity (2005)</text>
 <rect x="506" y="1021" width="408" height="53" rx="10" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
-<text x="510" y="1019" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">E3 — MAL QUOTE (optional fun detail, aft fuselage)</text>
+<text x="510" y="1019" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">E3 — SKIPPER QUOTE (optional fun detail, aft fuselage)</text>
 <rect x="30" y="1095" width="300" height="35" rx="3" ry="3" fill="#f5c518" stroke="#111111" stroke-width="1.5"/>
 <text x="180" y="1109" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="11" fill="#111111"  letter-spacing="2">⚠  INTAKE HAZARD</text>
 <text x="180" y="1122" text-anchor="middle" font-family="'Courier New','Courier',monospace" font-size="8" fill="#444444" font-weight="normal">KEEP CLEAR WHEN ARMED  ·  EDF 70mm</text>
@@ -370,10 +370,10 @@
 <rect x="775" y="1095" width="390" height="85" rx="3" ry="3" fill="rgba(20,10,5,0.8)" stroke="rgba(100,80,40,0.4)" stroke-width="1"/>
 <rect x="775" y="1095" width="390" height="85" rx="3" fill="url(#cut_pattern)" opacity="0.3"/>
 <text x="970" y="1113" text-anchor="middle" font-family="'OpenDyslexic Bold','OpenDyslexic',sans-serif" font-weight="900" font-size="10" fill="#e8d08b"  letter-spacing="2">WEATHERING GUIDE</text>
-<text x="781" y="1127" text-anchor="start" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#8b3a1a" font-weight="normal">• Rust streaks: paint thin burnt-sienna wash along panel lines</text>
+<text x="781" y="1127" text-anchor="start" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#8b3a1a" font-weight="normal">• Rust streaks: paint thin burnt-sienna pilot along panel lines</text>
 <text x="781" y="1140" text-anchor="start" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#888888" font-weight="normal">• Soot: dry-brush dark grey on aft bell, nacelle exits</text>
 <text x="781" y="1153" text-anchor="start" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#c8d0d8" font-weight="normal">• Chipping: silver/chrome dabbed on leading edges, corners</text>
-<text x="781" y="1166" text-anchor="start" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#444444" font-weight="normal">• Grime: diluted black wash pooled in recesses and seams</text>
+<text x="781" y="1166" text-anchor="start" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#444444" font-weight="normal">• Grime: diluted black pilot pooled in recesses and seams</text>
 <text x="781" y="1179" text-anchor="start" font-family="'OpenDyslexic',sans-serif" font-size="8.5" fill="#8b6b1a" font-weight="normal">• Oil stains: dark brown streaks beneath engine bell</text>
 <rect x="771" y="1091" width="398" height="93" rx="8" fill="none" stroke="#ff0066" stroke-width="0.6" stroke-dasharray="6 3" opacity="0.7"/>
 <text x="775" y="1089" text-anchor="start" font-family="'Courier New','Courier',monospace" font-size="8" fill="#ff8888" font-weight="normal">E7 — WEATHERING REFERENCE GUIDE</text>

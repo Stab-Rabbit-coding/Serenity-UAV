@@ -1,17 +1,17 @@
 # Serenity UAV — First-Flight Readiness: Open-Item Summary
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
+**License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0  
 **Compiled by:** Claude (Opus 4.8), 2026-07-05, from master `WBS.md` (md5 `829246af291844cd6b557230e8430a12`).
 
 > **First flight = master WBS Phase 5, "Minimum Viable Flyer."**
 > Goal: CN1+FC1 (Shepherd's room / Bay A) and CN2+FC2 (Inara's shuttle / Bay B)
 > installed and flying — a 4-node VTOL hover (nacelle T/W ~1.61). The aft EDF
-> (Phase 11), the remaining 4 nodes (Phase 6), cargo (Phase 7), and Jayne vision
+> (Phase 11), the remaining 4 nodes (Phase 6), cargo (Phase 7), and Observer vision
 > (Phase 6+) are **not** first-flight gates. This report rolls up every open item
 > on the critical path to that milestone.
 
-*"Define 'interesting.'" / "Oh God, oh God, we're all gonna die?" — Wash & Mal*
+*"Define 'interesting.'" / "Oh God, oh God, we're all gonna die?" — Pilot & Skipper*
 
 
 ---
@@ -22,14 +22,14 @@
 | Master § | Branch | Open | Owning WBS file | Notes |
 |----------|--------|-----:|-----------------|-------|
 | §1.1 | 3D Models: SCAD -> STL Exports (Rev S baseline) | 88 | [airframe](../airframe/WBS.md) + fuselage-joints/-covers/-mid, wings-nacelles, landing-gear | Only the Phase-0/5 parts gate flight; §1.1 also carries Phase 6-11 geometry. |
-| §1.2a | PCB Design: Wash, Zoe, Emma (EMI-hardened) | 37 | [avionics](../avionics/WBS.md) | Wash + Zoe EMI-hardened capes for the 4 MVP nodes (2 bays x 2). |
-| §1.2b | PCB Redesigns: Emma / Zoe / Kaylee Rev S1 | 26 | [avionics/rev-s1](../avionics/rev-s1/WBS.md) | **Kaylee PDB** completion gates flight; Emma/Zoe-Rev-S1 items do not. |
+| §1.2a | PCB Design: Pilot, XO, Commo (EMI-hardened) | 37 | [avionics](../avionics/WBS.md) | Pilot + XO EMI-hardened capes for the 4 MVP nodes (2 bays x 2). |
+| §1.2b | PCB Redesigns: Commo / XO / Flight Engineer Rev S1 | 26 | [avionics/rev-s1](../avionics/rev-s1/WBS.md) | **Flight Engineer PDB** completion gates flight; Commo/XO-Rev-S1 items do not. |
 | §0.6 | IEC 62368-1 PCB Layout Isolation Verification | 0 | [avionics/emi-hardening](../avionics/emi-hardening/WBS.md) | IEC 62368-1 isolation sign-off before any board is fabbed. |
 | §1.4 | EMI Hardening Beyond the PCBs (500 W/m^2) | 43 | [avionics/emi-hardening](../avionics/emi-hardening/WBS.md) | 500 W/m^2 hardening is a design objective; a benign-environment maiden hover can precede full §1.4 close-out (annotate risk). |
-| §4.2 | FC Node (Wash) Firmware | 38 | [avionics/firmware](../avionics/firmware/WBS.md) | FC (Wash) node firmware — PID governor, tilt, failover. |
-| §4.3 | CN Node (Zoe) Firmware | 36 | [avionics/firmware](../avionics/firmware/WBS.md) | CN (Zoe) node firmware — comms, logging. |
+| §4.2 | FC Node (Pilot) Firmware | 38 | [avionics/firmware](../avionics/firmware/WBS.md) | FC (Pilot) node firmware — PID governor, tilt, failover. |
+| §4.3 | CN Node (XO) Firmware | 36 | [avionics/firmware](../avionics/firmware/WBS.md) | CN (XO) node firmware — comms, logging. |
 | §4.4 | Both Nodes (shared firmware) | 22 | [avionics/firmware](../avionics/firmware/WBS.md) | Shared node firmware (TPM, signing, CAN/1553). |
-| §4.5 | Ground Control (Malcolm / CAPT Reynolds) | 34 | [gcs](../gcs/WBS.md) | Malcolm GCS — needed to command/monitor the maiden flight. |
+| §4.5 | Ground Control (Skipper / CAPT Reynolds) | 34 | [gcs](../gcs/WBS.md) | Skipper GCS — needed to command/monitor the maiden flight. |
 | §5.2 | FAA (airworthiness and operations) | 6 | [docs](../docs/WBS.md) | FAA registration + Part 107 remote-pilot currency — legal gate to fly. |
 | §6.1 | Branch Reconciliation / Pre-Flight Compliance | 1 | [docs](../docs/WBS.md) | Pre-flight compliance: nav lights, data plate, structural validation. |
 | §3.0 | **Physical build Phases 0-5** | **160** | [graphical-build-guide](../graphical-build-guide/WBS.md) (Phases 0-4) + [flight-phases](../graphical-build-guide/flight-phases/WBS.md) (Phase 5 = FIRST FLIGHT) | The literal build-to-flight sequence (enumerated below). |
@@ -158,8 +158,8 @@ Not every prerequisite item is strictly Phase-5 scoped (e.g. §1.1 and §4.5 car
 - [ ] Install 5V/5A BEC; verify 5.00V ±0.05V under 1A bench load.
 - [ ] Pull motor phase leads through conduit to ESCs; solder (verify rotation marking first).
 - [ ] CAN FD termination: 120Ω SOLDERED to CN1 Cape-B at Shepherd's room (Bay A, bus start); temporary 120Ω at FC2 Cape-A in Inara's shuttle (Bay B, Phase 3 far-end; remove in Phase 7).
-- [ ] Mount CN1 Zoë on Shepherd's room (Bay A) floor standoffs (M2.5 nylon 6mm). Insert PB2-I. Secure.
-- [ ] Mount FC1 Wash on inter-cape standoffs (M2.5 nylon 20mm) above CN1. Insert second PB2-I.
+- [ ] Mount CN1 XO on Shepherd's room (Bay A) floor standoffs (M2.5 nylon 6mm). Insert PB2-I. Secure.
+- [ ] Mount FC1 Pilot on inter-cape standoffs (M2.5 nylon 20mm) above CN1. Insert second PB2-I.
 - [ ] Flash OS to eMMC on CN1 and FC1 via USB-C before installation.
 - [ ] Install log μSD (64GB) in CN1 Cape-B log slot. Label: **CN1-LOG**.
 - [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN1 Cape-B header; connect its coax to forward 49 MHz wire post.
@@ -169,17 +169,17 @@ Not every prerequisite item is strictly Phase-5 scoped (e.g. §1.1 and §4.5 car
 - [ ] Daisy-chain RS-485: CN1 → FC1 → exit toward Inara's shuttle (Bay B).
 - [ ] Connect MIL-STD-1553: FC1 = Bus Controller (primary); CN1 = RT 0x01.
 - [ ] Cap Simon's medbay (Bay E) end of ETH-EA conduit (will connect to FC4 in Phase 7); connect Shepherd's room (Bay A) end to CN1 Cape-B ETH-2.
-- [ ] Mount CN2 Zoë on Inara's shuttle (Bay B) floor standoffs; insert PB2-I; mount FC2 Wash above.
+- [ ] Mount CN2 XO on Inara's shuttle (Bay B) floor standoffs; insert PB2-I; mount FC2 Pilot above.
 - [ ] Flash OS to eMMC on CN2 and FC2 before installation.
 - [ ] Install log μSD (64GB) in CN2 Cape-B log slot. Label: **CN2-LOG**.
-- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN2 Zoë J_XCVR header.
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN2 XO J_XCVR header.
 - [ ] Route FC2 GPS coax through dorsal PTFE sleeve (sta ~130mm); mount GPS patch on dorsal hull, face UP.
 - [ ] Continue CAN FD daisy-chain Shepherd's room→Inara's shuttle: CN2 → FC2 + temporary 120Ω at FC2 (remove Phase 7).
 - [ ] Continue RS-485 daisy-chain Shepherd's room (Bay A) → Inara's shuttle (Bay B).
-- [ ] Connect ETH-AB (Shepherd's room → Inara's shuttle): FC1 Wash ETH-1 → CN2 Zoë ETH-B (FC1↔CN2 Ethernet ring link).
+- [ ] Connect ETH-AB (Shepherd's room → Inara's shuttle): FC1 Pilot ETH-1 → CN2 XO ETH-B (FC1↔CN2 Ethernet ring link).
 - [ ] Cap River's room (Bay D) end of ETH-BD (will connect to CN3 in Phase 7).
 - [ ] Power taps: connect CN1, FC1, CN2, FC2 power leads from PWR conduit; verify 5V ±0.05V at each header.
-- [ ] Provision TPM 2.0 (SLB9670) on CN1, FC1, CN2, FC2 — unique key material per node.
+- [ ] Provision TPM 2.0 (SLB9672) on CN1, FC1, CN2, FC2 — unique key material per node.
 - [ ] Verify CPLD write-blocker on CN1 and CN2: `echo test > /mnt/flightlog/test.txt` must return read-only error.
 - [ ] Configure forensic log mount in `/etc/fstab` (noexec, nodev, nosuid, ro) on CN1 and CN2.
 - [ ] Flash serenity-cn Phase 6 daemon to CN1 and CN2.
