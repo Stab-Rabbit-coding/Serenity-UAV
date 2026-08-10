@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the Rev R6 bay cowl clears the leg through its full flexion sweep.
+"""Verify the Rev R6 bay clears the leg through its full flexion sweep.
 
 The canonical retraction-bay cowl (LG-19) is a rim standing proud of the bay
 plate so the leg reads as emerging from a recessed flank bay.  The rim sits
@@ -40,8 +40,11 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
 SCAD_DIR = os.path.join(REPO_ROOT, "airframe", "openscad", "fuselage")
 
-# Sample the full hip rotation; FLEX_DEG = 30.9 at full ductile stroke.
-FLEX_ANGLES = (0.0, 8.0, 16.0, 24.0, 30.9)
+# Sample the full hip rotation.  FLEX_DEG fell 30.9 -> 22.0 deg when the
+# ductile wire was stiffened for the canonical foot spread (2026-08-09): the
+# same energy is absorbed over less wire stroke, and rotation = stroke/CRANK_R.
+# 26 deg is sampled past the stop as margin -- the leg cannot reach it.
+FLEX_ANGLES = (0.0, 5.5, 11.0, 16.5, 22.0, 26.0)
 EMPTY_MARKER = "Current top level object is empty"
 TIMEOUT_S = 400
 
@@ -52,7 +55,11 @@ def check_angle(scad_path, flex, workdir):
     out = os.path.join(workdir, f"c{flex}.stl")
     with open(src, "w") as fh:
         fh.write(f"use <{scad_path}>\n")
-        fh.write(f"intersection() {{ bay_cowl(); "
+        # Check the WHOLE bay, not just the cowl: since LG-10.3 the bay also
+        # carries a boss-carrier slab and two clevis gussets INSIDE the
+        # aperture, and those sit closer to the swinging thigh than the rim
+        # ever did.  Checking bay_cowl() alone would miss them entirely.
+        fh.write(f"intersection() {{ bay(); "
                  f"rotate([0, -{flex}, 0]) leg_frame(); }}\n")
 
     proc = subprocess.run(

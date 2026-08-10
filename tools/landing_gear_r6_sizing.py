@@ -28,20 +28,26 @@ box, then winching/pulling it into the cargo bay, is an acceptable ops
 concept and does not size the gear.  Two leg lengths are offered, sharing
 one common bay/foot/wire BOM (only the printed leg-frame length differs):
 
-  "1.5in"  hip->foot arm R_H = 41.9 mm, belly clearance 38.1 mm (1.50 in)
-           -- compact/default variant.
-  "3.0in"  hip->foot arm R_H = 65.0 mm, belly clearance 80.0 mm (3.15 in)
-           -- extended variant, kept (not scrapped) for rough-field /
-           extra-margin missions.
+  "1.5in"  belly clearance 38.1 mm (1.50 in) -- compact/default variant.
+  "3.0in"  belly clearance 80.0 mm (3.15 in) -- extended variant, kept (not
+           scrapped) for rough-field / extra-margin missions.
 
-Because both variants share the SAME wire hardware (same P per wire), and
-the hip bending moment M = 2*P*r is independent of R_H (wire-side only),
-shortening the leg does NOT change the leg-frame structural margin -- it
-trades ground clearance for a HIGHER peak deceleration and a SMALLER
-settle-stroke reserve, since F_leg = 2*P*r/R_H is inversely proportional
-to R_H for a fixed wire.  This script solves the wire schedule once
-against the historical 3.0in design point (peak decel target), then
-reports what the SAME hardware does when reused in the 1.5in leg.
+As of 2026-08-09 BOTH variants run the same hip->foot arm, R_H_BUILT = 80 mm,
+and therefore the same crash dynamics; they differ only in belly clearance and
+printed leg-frame length.  Two owner decisions got them there: the LG-10.2
+15 mm hip recess (pivot moved into the bay so the pivot and wire anchors sit
+inside the recess rather than outside the skin), and the extension of the
+compact leg to the CANONICAL foot spread, which its old R_H 41.9 could not
+reach.  See R_H_BUILT below for the full provenance.
+
+Because the lever is now shared, the wire schedule is no longer solved against
+a peak-deceleration target on one variant and reused on the other.  It is
+solved against the CLEARANCE-LIMITED variant: the arrest must stop inside the
+compact leg's 38.1 mm with RESIDUAL_MIN to spare.  That is the binding
+constraint, and sizing to it directly is what stops a geometry change from
+silently pushing the leg past bottoming.  The hip bending moment M = 2*P*r
+remains R_H-independent (wire-side only), so the leg-frame section margin is
+identical in both variants.
 
 Design references (see REFERENCES.md):
   REF-CAD-003  QMx Official Serenity Blueprints Reference Pack (2007),
@@ -87,14 +93,68 @@ WHEELBASE = Y_FOOT_AFT - Y_FOOT_FORE
 R_WIRE = 6.0               # bellcrank radius, both wire pairs (M3 pin + walls)
 HIP_HULL_Z = 38.0          # hip pin height above the cargo belly (both variants)
 
+# LG-10.2 (2026-08-09, owner decision): the hip pivot moves INBOARD into the
+# recessed bay.  tools/landing_gear_bay_station_fit.py measured the canonical
+# hips sitting essentially ON the skin (+1.17 mm fore, -7.53 mm aft along the
+# SS2.4a panel normal), which cannot produce a coherent bay once LG-10.3 cuts
+# the wells open: the wire bosses land 16-20 mm OUTBOARD of the skin while the
+# mounting flange has to sit inboard of it, so the bay renders as disconnected
+# bodies.  Recessing the pivot puts the pivot and the wire anchors inside the
+# bay box, which is also what [REF-CAD-002] shows.
+#
+# The FEET stay at their canonical QMx stations, so the hip->foot arm grows by
+# the same amount: R_H += HIP_INBOARD.  A UNIFORM offset is used at all four
+# corners deliberately -- a per-station offset would make the fore and aft legs
+# different parts and break "one common leg part per variant" (SS11.1).
+#
+# ACCEPTED TRADE (owner, 2026-08-09): a longer lever makes the leg SOFTER, so
+# peak deceleration falls but the arrest settles further.  The compact 1.5in
+# variant pays for this out of the only clearance it has: residual clearance
+# after settle drops 15.5 -> 7.4 mm.  The alternative -- holding F_leg constant
+# by growing the ductile wire to d = 4.22 mm -- was offered and declined.  The
+# single-ductile-wire-only fallback (SS4.7 safety note) does NOT close on the
+# 1.5in variant either before or after this change, and is now further away.
+HIP_INBOARD = 15.0         # mm, pivot recessed along the panel normal
+
+# Historical hip->foot arms, kept so the provenance of R_H_BUILT is readable.
+R_H_CANON = {"1.5in": 41.9, "3.0in": 65.0}
+
+# CANONICAL FOOT SPREAD (2026-08-09, owner decision).  The 1.5in variant's feet
+# sat ~23 mm INBOARD of their canonical QMx stations -- a defect that predates
+# the recess: R_H 41.9 simply could not reach, and the WBS corner-station table
+# quoted the 3.0in foot positions as if they covered both variants.  The compact
+# leg is now extended to reach canon, which lands BOTH variants on the same
+# hip->foot arm:
+#
+#   1.5in   41.9 --(+15 recess)--> 56.9 --(+23.1 canonical spread)--> 80.0
+#   3.0in   65.0 --(+15 recess)------------------------------------> 80.0
+#
+# So the two variants now differ ONLY in belly clearance and leg-frame length:
+# one lever, one wire schedule, one set of crash dynamics.  Feet land within
+# 0.5 mm of the canonical stations for both.
+R_H_BUILT = 80.0           # mm, shared hip->foot arm, both variants
+
 LEG_VARIANTS = {
-    # name: (R_H mm, belly clearance mm) -- see canonical_leg_r6_<name>.scad
-    "1.5in": (41.9, 38.1),
-    "3.0in": (65.0, 80.0),
+    # name: (as-built R_H mm, belly clearance mm) -- canonical_leg_r6_<name>.scad
+    "1.5in": (R_H_BUILT, 38.1),
+    "3.0in": (R_H_BUILT, 80.0),
 }
-DESIGN_VARIANT = "3.0in"   # variant the wire schedule is SOLVED against
-# (historical design point); the other variant reuses the resulting
-# hardware -- see header.
+
+# The ductile wire is now sized by the CLEARANCE-LIMITED variant, not by a peak
+# deceleration target.  Extending the compact leg to canonical spread without
+# re-sizing the wire would have made it BOTTOM OUT: at R_H 80 the old d 3.81
+# wire needs 43.2 mm of settle and has 38.1 mm, so 2.20 J (11.8%) of a 4 ft
+# arrest would arrive as a belly strike at 1.68 m/s -- equivalent to dropping
+# the hull 143 mm flat onto its belly with no gear in the path, with the ductile
+# fuse only 88% fired.  The wire therefore has to hold the settle inside the
+# compact variant's clearance, which is what these two numbers say.
+CLEARANCE_COMPACT = 38.1   # mm, the tighter of the two variants
+RESIDUAL_MIN = 7.4         # mm, residual clearance after full settle.  This is
+# the value accepted with the LG-10.2 recess; holding it here means the
+# canonical-spread leg reproduces the accepted crash performance exactly
+# (F_leg 609 N, settle 30.7 mm, 39.7/79.4 g) rather than trading it again.
+
+DESIGN_VARIANT = "1.5in"   # the clearance-limited variant sets the schedule
 
 # Wire materials (Rev R5 values carried forward)
 SIGMA_FLOW_DUCTILE = 550.0    # MPa, ductile temper flow stress
@@ -114,22 +174,64 @@ SEAT_DUCTILE = 8.0             # mm, socket seat depth per end (ductile)
 SEAT_SPRING = 5.0              # mm, socket seat depth per end (spring)
 END_RUN_IN = 2.0               # mm, straight run-in beyond the socket mouth
 
+# Shortest bow span the jig can form reliably in either temper (LG-16): below
+# this the straight seat ends and the bow run into each other and the formed
+# rise stops being repeatable.  It is a MANUFACTURING floor, not a structural
+# one -- with the corrected stroke relation below, both wires would otherwise
+# solve shorter than this.
+BOW_SPAN_MIN = 20.0            # mm
+
+# Stroke reserve demanded of each wire type, as a multiple of the stroke the
+# energy balance actually requires.  The spring pair carries the recoverable
+# phase and has always been solved at 1.2x.  The DUCTILE pair is the
+# last-resort structural fuse and is the only thing between the hull and the
+# ground once the springs are through, so it is solved at 1.5x: a bow that
+# reaches its plateau-model limit mid-arrest stops absorbing at constant force
+# and spikes the deceleration.
+STROKE_RESERVE_SPRING = 1.2
+STROKE_RESERVE_DUCTILE = 1.5
+
 
 def wire_stroke_available(b_mm: float) -> float:
     """Axial chord-shortening available on a bow span B before the bow
-    exceeds the model validity limit h_max = HMAX_FRAC * B.
-    s = (h_max^2 - h0^2) / (2B).
+    exceeds the 2-hinge plateau-model validity limit h_max = HMAX_FRAC * B.
 
-    KNOWN DEFECT (2026-08-09, docs/LANDING_GEAR_ANALYSIS.md SS4.5a): this is a
-    factor of 4 LOW.  The two-hinge mechanism this claims to model gives
-    Delta = 2*(h^2 - h0^2)/B, i.e. division by B/2, not by 2B.  Left in place
-    deliberately: correcting it re-opens the ductile wire schedule (LG-15) and
-    the drop-height decision (LG-17), which are owner calls, and every
-    published Rev R6 number traces to the current form.  Run
-    `--derive-stroke` for the symbolic proof and the corrected values.
+        Delta = 2 * (h_max^2 - h0^2) / B
+
+    CORRECTED 2026-08-09 (docs/LANDING_GEAR_ANALYSIS.md SS4.5a).  The previous
+    form divided by 2B where the two-hinge mechanism divides by B/2, making
+    every result a factor of 4 LOW; `--derive-stroke` carries the SymPy proof.
+
+    Correcting it does NOT reopen LG-17 (drop height) or the wire DIAMETER.
+    Those come from the force/energy balance: `solve_ductile_wire` fixes P
+    from the per-leg force target and d from P, and neither reads this
+    function.  B is chosen AFTER d, purely to guarantee the bow can travel the
+    required chord shortening -- so the only thing that moves is bow span, and
+    with it stock length and wire mass.  See SS4.5a.
     """
     hmax = HMAX_FRAC * b_mm
-    return (hmax**2 - H0**2) / (2.0 * b_mm)
+    return 2.0 * (hmax**2 - H0**2) / b_mm
+
+
+def solve_bow_span(stroke_mm: float, reserve: float) -> float:
+    """Shortest formable bow span whose available stroke covers reserve *
+    the required stroke.  Steps in 1 mm from the manufacturing floor."""
+    bow = BOW_SPAN_MIN
+    while wire_stroke_available(bow) < reserve * stroke_mm and bow < 120.0:
+        bow += 1.0
+    return bow
+
+
+def fired_bow_rise(b_mm: float, stroke_mm: float) -> float:
+    """Exact two-hinge bow rise after the chord has shortened by stroke_mm.
+
+    Inverts Delta = 2*sqrt(l^2 - h0^2) - 2*sqrt(l^2 - h^2) with l = B/2.
+    This is the "visibly bent" field-inspection dimension (H_DEF_* in the
+    SCAD), and it must be read against the span it was solved on.
+    """
+    half = b_mm / 2.0
+    root = math.sqrt(half**2 - H0**2) - stroke_mm / 2.0
+    return math.sqrt(max(half**2 - root**2, 0.0))
 
 
 def lg02_bay_attachment() -> None:
@@ -140,18 +242,30 @@ def lg02_bay_attachment() -> None:
     would be 2.5).  Bolt-hole bearing is checked with a stress-concentration
     factor K_t = 3.0 for a circular hole in a plate.
 
-    Geometry: 4x M3 through-bolts on a 30 (pin axis) x 70 (up the plate) mm
-    pattern, through the bay plate, the cargo wall, and an internal printed
-    backing plate.  The hull side carries a 5 mm internal boss at each bolt
-    (merge_cargo_interior.py lg_bay_features).
+    Geometry (LG-10.3, 2026-08-09): 4x M3 through-bolts on the bay frame's
+    flange, following the trapezoidal aperture -- centres at +/-17.5 mm (mouth
+    end) and +/-22.0 mm (head end) across the pin axis, 68 mm apart up the
+    canted plane.  They pass through the frame, the 2 mm cargo wall and the
+    5 mm reinforcing collar the merge tool grows around each well opening
+    (merge_cargo_interior.py lg_well_features / lg_bay_features).
+
+    Superseded: the Rev R6 "30 x 70 mm pattern on a solid plate" had no room
+    for its own bolts -- at the head the aperture was 36 mm wide inside a
+    40 mm plate, so the M3 centres at +/-15 fell INSIDE the opening.
     """
     # LG-17 CLOSED 2026-08-09 (owner decision): 4 ft crash height adopted.
-    # Ductile stock Ø3.81 mm, P_wire 2,888.9 N.  Worst leg load is still the
-    # compact 1.5in variant (shorter lever -> higher F_leg for the same wire).
-    p_wire = 2888.9         # N, per ductile wire at the 4 ft schedule
-    f_leg = 827.4           # N, 1.5in variant at 4 ft
+    # F_leg and the hip moment both come from the clearance-driven schedule, so
+    # both variants load this joint identically (shared R_H_BUILT lever).
+    # Derived from the SAME solve main() uses -- this function previously
+    # hardcoded p_wire, which is exactly how its published numbers went stale
+    # through LG-17 and again through LG-10.2.
+    u_leg = M_AUW_KG * G * 4.0 * FT * 0.5           # J, tail-down worst leg
+    settle_max = CLEARANCE_COMPACT - RESIDUAL_MIN
+    _d, _b, _l, p_wire, _s = solve_ductile_wire(
+        u_leg / 2.0, u_leg * 1000.0 / settle_max, R_H_BUILT)
+    f_leg = 2.0 * p_wire * R_WIRE / R_H_BUILT       # N, at the 4 ft schedule
     m_hip = 2.0 * p_wire * R_WIRE   # N*mm, hip moment (R_h-independent)
-    lever = 70.0            # mm, bolt pattern extent up the plate
+    lever = 68.0            # mm, bolt pattern extent up the canted plane
     n_bolt, n_row = 4, 2
 
     couple_row = m_hip / lever              # N per row
@@ -222,8 +336,10 @@ def lg02_bay_attachment() -> None:
 def derive_stroke_relation() -> None:
     """Symbolic re-derivation of the stroke <-> bow-rise relation (LG-13).
 
-    Proves the factor-4 defect in wire_stroke_available() and reports the
-    per-end socket slide that sets the LG-13 retention detail.  Needs SymPy:
+    Regression evidence for the factor-4 defect that wire_stroke_available()
+    carried until 2026-08-09, and the source of the per-end socket slide that
+    sets the LG-13 retention detail.  The defective form is reproduced inline
+    below purely so the comparison table still proves the correction.  Needs SymPy:
     run under /usr/bin/python3, since the repo .venv is built with
     include-system-site-packages = false and hides the apt-installed sympy.
     """
@@ -243,7 +359,8 @@ def derive_stroke_relation() -> None:
     print("\n--- LG-13: stroke <-> bow-rise derivation " + "-" * 33)
     print("  two-hinge exact : Delta = 2*sqrt(l^2-h0^2) - 2*sqrt(l^2-h^2),  l = B/2")
     print(f"  small-h series  : Delta ~ {series}")
-    print("  script uses     : Delta = (h^2 - h0^2)/(2B)      <-- 4x LOW")
+    print("  script NOW uses : Delta = 2*(h^2 - h0^2)/B       (corrected)")
+    print("  script UNTIL    : Delta = (h^2 - h0^2)/(2B)      <-- was 4x LOW")
 
     bb, hh0 = 55.0, H0
     lv = bb / 2.0
@@ -255,13 +372,24 @@ def derive_stroke_relation() -> None:
         sc = (hv**2 - hh0**2) / (2 * bb)
         print(f"  {hv:8.1f} {ex:10.3f} {ap:10.3f} {sc:10.3f} {ap / sc:7.2f}")
 
-    stroke = 3.24  # mm, U/P at the 6 ft ductile design point
-    h_true = float(sp.nsolve(
-        sp.Eq(2 * sp.sqrt(lv**2 - hh0**2) - 2 * sp.sqrt(lv**2 - h**2), stroke),
-        h, 8.0))
+    # The stroke itself is energy-derived (s = U/P) and is IDENTICAL before and
+    # after the correction -- only the span needed to deliver it changes.  Take
+    # it from the same solver main() uses rather than a rounded literal: 3.24
+    # rounds up across the 24 mm span boundary and would print 25 mm here.
+    _d, _b, _l, _p, stroke = solve_ductile_wire(
+        M_AUW_KG * G * 4.0 * FT * 0.5 / 2.0,
+        800.0 * 4.0 / 6.0,
+        R_H_CANON[DESIGN_VARIANT])
+    b_now = solve_bow_span(stroke, STROKE_RESERVE_DUCTILE)
     print(f"\n  required stroke (U/P)            = {stroke:.2f} mm")
-    print(f"  fired bow, corrected             = {h_true:.2f} mm "
-          f"(H_DEF_DUCT currently 19.2 -- wrong)")
+    print(f"  bow span, corrected + {STROKE_RESERVE_DUCTILE:.1f}x reserve  "
+          f"= {b_now:.0f} mm  (was 55 mm; floor {BOW_SPAN_MIN:.0f} mm)")
+    print(f"  available stroke on that span    = "
+          f"{wire_stroke_available(b_now):.2f} mm "
+          f"({wire_stroke_available(b_now) / stroke:.2f}x required)")
+    print(f"  fired bow rise on that span      = "
+          f"{fired_bow_rise(b_now, stroke):.2f} mm  (from h0 {H0:.1f} mm "
+          f"-- this is H_DEF_DUCT in the SCAD)")
     print(f"  per-end slide into the socket    = {stroke / 2:.2f} mm "
           f"(seat {SEAT_DUCTILE:.0f} mm + {END_RUN_IN:.0f} mm run-in)")
     print("  => the seat SLIDES: retention must be a nylon-tipped drag screw,")
@@ -276,10 +404,9 @@ def solve_ductile_wire(u_per_wire_j: float, f_leg_target_n: float, r_h: float):
     # invert P = 2*(sigma*d^3/6)/h0  ->  d = (3*P*h0/sigma)^(1/3)
     d = (3.0 * p_wire * H0 / SIGMA_FLOW_DUCTILE) ** (1.0 / 3.0)
     stroke = u_per_wire_j * 1000.0 / p_wire               # mm (U = P*s plateau)
-    # shortest bow span whose available stroke covers the demand
-    bow = 20.0
-    while wire_stroke_available(bow) < stroke and bow < 120.0:
-        bow += 1.0
+    # shortest formable bow span whose available stroke covers the demand
+    # plus the ductile reserve (SS4.5a)
+    bow = solve_bow_span(stroke, STROKE_RESERVE_DUCTILE)
     length = bow + 2.0 * (SEAT_DUCTILE + END_RUN_IN)      # full stock length
     return d, bow, length, p_wire, stroke
 
@@ -315,7 +442,10 @@ def main() -> None:
             print(f"{h_ft:.0f} ft  {case:<15} KE {ke:6.2f} J   worst leg "
                   f"{u_leg:6.2f} J   ({share*100:.1f}% share)")
 
-    r_h_design, _ = LEG_VARIANTS[DESIGN_VARIANT]
+    # Both variants now share R_H_BUILT, so the schedule is solved on the
+    # as-built lever directly -- the pre-recess indirection is gone.
+    r_h_design = R_H_BUILT
+    settle_max = CLEARANCE_COMPACT - RESIDUAL_MIN
 
     # Solve the ductile wire ONCE per drop schedule against the design
     # variant (3.0in, the historical design point), then report what the
@@ -323,20 +453,34 @@ def main() -> None:
     for label, h_ft in [("6 ft", 6.0), ("4 ft", 4.0)]:
         u_leg_design = M_AUW_KG * G * h_ft * FT * 0.5      # tail-down, worst leg
         u_wire = u_leg_design / 2.0                        # ductile pair shares
-        # design-point target: keep the DESIGN_VARIANT's tail-down peak
-        # near 50 g at 6 ft (scaled proportionally at 4 ft)
-        f_leg_design = 800.0 if label == "6 ft" else 800.0 * 4.0 / 6.0
+        # design-point target: the leg must stop inside the compact
+        # variant's belly clearance with RESIDUAL_MIN to spare.  F = U/s.
+        f_leg_design = u_leg_design * 1000.0 / settle_max
         d, b, l, p_wire, _ = solve_ductile_wire(u_wire, f_leg_design, r_h_design)
         print(f"\n--- DUCTILE schedule solved for {label} tail-down at "
-              f"{DESIGN_VARIANT} (R_h {r_h_design:.1f} mm) " + "-" * 8)
+              f"{DESIGN_VARIANT} (R_h {r_h_design:.1f} mm, shared) " + "-" * 8)
         print(f"  design target  {f_leg_design:6.1f} N/leg "
-              f"({f_leg_design/4.448:5.1f} lbf) -> wire P {p_wire:7.1f} N")
+              f"({f_leg_design/4.448:5.1f} lbf) -> wire P {p_wire:7.1f} N"
+              f"   [settle <= {settle_max:.1f} mm of "
+              f"{CLEARANCE_COMPACT:.1f} mm clearance]")
         print(f"  wire: d {d:5.2f} mm, bow span {b:4.0f} mm, stock "
               f"L {l:4.0f} mm (straight seat ends), h0 {H0} mm")
+        stroke_d = (M_AUW_KG * G * h_ft * FT * 0.5 / 2.0) * 1000.0 / p_wire
+        print(f"  stroke {stroke_d:.2f} mm required, "
+              f"{wire_stroke_available(b):.2f} mm available "
+              f"({wire_stroke_available(b)/stroke_d:.2f}x); fired bow rise "
+              f"{fired_bow_rise(b, stroke_d):.2f} mm from h0 {H0:.1f} mm")
         print(f"  wire mass {wire_mass_g(d, l):.2f} g x8 = "
               f"{8*wire_mass_g(d, l):.1f} g/aircraft")
+        # LG-18/LG-10 consequence: the exposed span between socket mouths is
+        # what sets how far up the bay plate the wire boss sits, and hence the
+        # bay plate length.  Reported here so the SCAD can be read off it.
+        print(f"  bay boss station: exposed span {l - 2*SEAT_DUCTILE:.0f} mm "
+              f"from the thigh socket mouth along CHORD_AZ "
+              f"(sets BAY_PLATE_L; was 59 mm)")
 
-        print(f"  Reusing this wire (P={p_wire:.0f} N) in every variant:")
+        print(f"  This wire (P={p_wire:.0f} N) on the shared R_h "
+              f"{R_H_BUILT:.0f} mm lever -- variants differ only in clearance:")
         for name, (r_h, clearance) in LEG_VARIANTS.items():
             f_leg = 2.0 * p_wire * R_WIRE / r_h            # N, actual leg force
             settle = u_leg_design * 1000.0 / f_leg          # mm vertical
@@ -361,10 +505,8 @@ def main() -> None:
     p_spring = f_leg_el * r_h_design / (2.0 * R_WIRE)
     d_s = (16.0 * p_spring * H0 / (SIGMA_WORK_SPRING * math.pi)) ** (1 / 3.0)
     stroke_s = u_spring_wire * 1000.0 / p_spring
-    b_s = 20.0
     # 1.2x stroke reserve so the spring never approaches the bow-model limit
-    while wire_stroke_available(b_s) < 1.2 * stroke_s and b_s < 120.0:
-        b_s += 1.0
+    b_s = solve_bow_span(stroke_s, STROKE_RESERVE_SPRING)
     l_s = b_s + 2.0 * (SEAT_SPRING + END_RUN_IN)
     print(f"\n--- SPRING schedule (elastic phase, solved at {DESIGN_VARIANT}) "
           + "-" * 12)
@@ -374,9 +516,14 @@ def main() -> None:
           f"{p_spring:.1f} N")
     print(f"  wire: d {d_s:.2f} mm, bow span {b_s:.0f} mm, stock L {l_s:.0f} "
           f"mm (straight seat ends), h0 {H0} mm, stroke "
-          f"{stroke_s:.2f} mm (avail {wire_stroke_available(b_s):.2f})")
+          f"{stroke_s:.2f} mm (avail {wire_stroke_available(b_s):.2f}, "
+          f"{wire_stroke_available(b_s)/stroke_s:.2f}x)")
+    print(f"  bow rise at the elastic-limit stroke "
+          f"{fired_bow_rise(b_s, stroke_s):.2f} mm  (H_DEF_SPRING in the SCAD)")
     print(f"  wire mass {wire_mass_g(d_s, l_s):.2f} g x8 = "
           f"{8*wire_mass_g(d_s, l_s):.1f} g/aircraft")
+    print(f"  bay boss station: exposed span {l_s - 2*SEAT_SPRING:.0f} mm "
+          f"along CHORD_AZ (was 27 mm)")
     print("  Reusing this wire in every variant:")
     for name, (r_h, clearance) in LEG_VARIANTS.items():
         f_leg = 2.0 * p_spring * R_WIRE / r_h
@@ -385,13 +532,22 @@ def main() -> None:
               f"{f_leg:6.1f} N/leg, settle at limit {settle_el:4.1f} mm, "
               f"onset decel (level) {4*f_leg/w_n:5.1f} g")
 
-    # Structure checks -- done ONCE at the 6 ft design point per variant.
+    # Structure checks -- run at the ADOPTED drop schedule, per variant.
     # Hip bending moment M = 2*P*r is wire-side only (independent of R_h),
     # so the thigh margin is IDENTICAL across variants; everything else
     # that depends on F_leg (hip pin, lateral case, static stance) is
     # reported per variant.
+    #
+    # These were pinned to 6 ft with a hardcoded 800 N target, which was the
+    # design point only until LG-17 closed at 4 ft (2026-08-09).  Under the
+    # clearance-driven wire rule the retired 6 ft case now demands d 4.88 mm
+    # and M 64.0 N*m, which OVERSTRESSES the thigh (sigma 28.8 vs 27.5 MPa,
+    # margin 0.95x).  Reporting structure margins at a superseded drop height
+    # is how a "passing" number outlives the decision that invalidated it.
+    ADOPTED_DROP_FT = 4.0
+    u_ref = M_AUW_KG * G * ADOPTED_DROP_FT * FT * 0.5
     d_ref, b_ref, l_ref, p_ref, _ = solve_ductile_wire(
-        (M_AUW_KG * G * 6.0 * FT * 0.5) / 2.0, 800.0, r_h_design)
+        u_ref / 2.0, u_ref * 1000.0 / settle_max, R_H_BUILT)
     m_hip = 2.0 * p_ref * R_WIRE                            # N*mm, all variants
     d_cyl, c_ctr = 14.0, 18.0
     r_c = d_cyl / 2.0
@@ -403,8 +559,8 @@ def main() -> None:
     c_out = c_ctr / 2.0 + r_c
     z_mod = i_tot / c_out
     sigma = m_hip / z_mod
-    print("\n--- Structure checks (6 ft design point, both variants) "
-          + "-" * 15)
+    print(f"\n--- Structure checks ({ADOPTED_DROP_FT:.0f} ft adopted schedule, "
+          f"both variants) " + "-" * 8)
     print(f"  thigh @hip: M {m_hip/1000:.1f} N*m (= 2*P*r, R_h-INDEPENDENT -- "
           f"same for every variant), section 2x{d_cyl:.0f} mm cyl @ "
           f"{c_ctr:.0f} mm ctrs + web -> Z {z_mod:.0f} mm^3, sigma "
@@ -431,3 +587,8 @@ if __name__ == "__main__":
         derive_stroke_relation()
     else:
         main()
+        # lg02_bay_attachment() was defined but never invoked -- its numbers
+        # were quoted in docs/LANDING_GEAR_ANALYSIS.md while nothing regenerated
+        # them, so they silently went stale across LG-17 and LG-10.2.  It now
+        # runs with every sizing pass.
+        lg02_bay_attachment()

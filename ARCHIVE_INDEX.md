@@ -2,8 +2,7 @@
 
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
-<!-- Last updated: 2026-08-09 — Automated reconciliation pass -->
-
+<!-- Last updated: 2026-08-10 — Automated reconciliation pass -->
 ## airframe/archive/
 
 Superseded Blender scripts and STL files. Active scripts are in `airframe/blender-scripts/`.
@@ -1603,3 +1602,6 @@ tools/landing_gear_opening_fit.py — [PENDING AI CLASSIFICATION]
 
 ## --- AUTO-DISCOVERED (2026-08-09) ---
 airframe/landing-gear/HANDOFF.md — [PENDING AI CLASSIFICATION]
+
+## --- AUTO-DISCOVERED (2026-08-10) ---
+tools/landing_gear_bay_station_fit.py — [PENDING AI CLASSIFICATION]

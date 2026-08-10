@@ -1,8 +1,7 @@
 # PROJECT_INDEX.md — Serenity UAV
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last updated: 2026-08-09 — Automated reconciliation pass -->
-```
+<!-- Last updated: 2026-08-10 — Automated reconciliation pass -->
 
 ---
 
@@ -2037,3 +2036,6 @@ tools/landing_gear_opening_fit.py — [PENDING AI CLASSIFICATION]
 
 ## --- AUTO-DISCOVERED (2026-08-09) ---
 airframe/landing-gear/HANDOFF.md — [PENDING AI CLASSIFICATION]
+
+## --- AUTO-DISCOVERED (2026-08-10) ---
+tools/landing_gear_bay_station_fit.py — [PENDING AI CLASSIFICATION]
