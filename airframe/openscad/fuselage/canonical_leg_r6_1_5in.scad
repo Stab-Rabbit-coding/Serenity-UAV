@@ -211,18 +211,36 @@ SOCK_CLR     = 0.65;        // socket bore diametral clearance over wire d
 // Thigh cylinder cluster (structural section: sizing script "2x14 @ 18")
 THIGH_CYL_D  = 14.0;        // main cylinder OD
 THIGH_CYL_C  = 18.0;        // main cylinder centre spacing (in swing plane)
+THIGH_BORE_D = 6.0;         // LG-18: axial bore through each main cylinder.
+                            // MUST equal THIGH_BORE_D in
+                            // tools/landing_gear_r6_sizing.py, which
+                            // regenerates the section margin from it:
+                            //   bore 0  Z 2219 mm^3  margin 1.25x
+                            //   bore 6  Z 1926 mm^3  margin 1.09x  <- here
+                            //   bore 8  Z 1686 mm^3  margin 0.95x  FAILS
 THIGH_PISTON_D = 5.0;       // cosmetic telescoping piston rod OD
-THIGH_COLLAR_D = 16.0;      // cosmetic telescope collar OD, lower third
+THIGH_COLLAR_D = 15.0;      // cosmetic telescope collar OD, lower third.
+                            // LG-19: 16 read as a swollen sleeve against
+                            // the Ø14 tube; [REF-CAD-002] shows a slim
+                            // collar barely proud of the tube it rides.
 
 // Knee / ankle disc joints -- canonical 4-satellite-hole wheel styling.
 // COSMETIC on Rev R6 (leg frame is one piece; articulation is at the hip).
+THIGH_HOSE_D = 2.2;         // LG-19 #5: hose runs alongside the cluster,
+                            // visible in every [REF-CAD-002] view and
+                            // absent from Rev R6 entirely.
 KNEE_DISC_D  = 26.0;
 KNEE_DISC_T  = 3.0;         // proud styling disc, both Y faces
 KNEE_BCD     = 15.0;        // satellite-hole circle diameter
 KNEE_SAT_D   = 3.0;         // satellite recess diameter (1.6 mm deep)
 KNEE_CTR_D   = 5.0;         // centre recess
 ANKLE_DISC_D = 16.0;
-ANKLE_DISC_T = 14.0;        // spans the shin thickness + proud both faces
+ANKLE_DISC_T = 12.0;        // spans the shin thickness + proud both faces.
+                            // LG-19 #4: was 14 (2 mm proud each side), which
+                            // read as a flat plate.  12 gives 1 mm of rim
+                            // and the hub cap below carries the joint look.
+ANKLE_HUB_D  = 9.0;         // raised hub cap OD, both faces
+ANKLE_HUB_H  = 2.0;         // hub cap height proud of the disc
 
 // Shin blade (canonical slotted flat member)
 SHIN_W       = 20.0;        // width in swing plane
@@ -234,10 +252,15 @@ SHIN_SLOT_DEEP = 2.0;       // pocket depth per face (NOT through -- keeps secti
 // Foot (canonical tri-pad arrowhead, TPU 95A) -- print frame: sole on Z=0
 FOOT_HUB_D   = 24.0;        // central hub OD
 FOOT_HUB_H   = 10.0;        // hub height; top face meets the ankle disc rim
-FOOT_PAD_T   = 8.0;         // pad thickness at hub, wedges taper to 4
-FOOT_TOE_L   = 34.0;        // fore (toe) pad length from hub centre
+FOOT_PAD_T   = 5.0;         // pad thickness at hub.  LG-19 #3: Rev R6's 8 mm
+                            // pads are stubby slabs; [REF-CAD-002] shows flat
+                            // blade-like wedges, much longer and thinner, with
+                            // a sharp taper to the tip.  This is also the
+                            // single largest LG-18 saving on the foot.
+FOOT_PAD_TIP_T = 2.5;       // pad thickness at the tip (was a hardcoded 4.0)
+FOOT_TOE_L   = 40.0;        // fore (toe) pad length from hub centre (was 34)
 FOOT_TOE_W   = 20.0;        // toe pad root width
-FOOT_HEEL_L  = 26.0;        // rear pad length from hub centre
+FOOT_HEEL_L  = 31.0;        // rear pad length from hub centre (was 26)
 FOOT_HEEL_W  = 18.0;        // rear pad root width
 FOOT_HEEL_AZ = 130;         // rear pads at +/-130 deg from toe
 FOOT_SPIG    = 8.0;         // square ankle spigot side ("Feet Pivot 90 deg":
@@ -576,12 +599,24 @@ module leg_frame() {
                 rod_between(KNEE - 28 * axis + s * THIGH_CYL_C / 2 * perp,
                             KNEE - 8 * axis + s * THIGH_CYL_C / 2 * perp,
                             THIGH_COLLAR_D);
-            // Cosmetic piston rods on the outboard shoulder
+            // Cosmetic piston rods on the outboard shoulder.  LG-19 #5:
+            // [REF-CAD-002] shows a large main tube plus TWO OR THREE smaller
+            // parallel rods; Rev R6 had two.  The third sits inboard-low so
+            // the cluster reads as a stack rather than a symmetric pair.
             for (yo = [-4, 4])
                 translate([0, yo, 0])
                     rod_between(12 * axis + 10 * perp,
                                 KNEE - 24 * axis + 10 * perp,
                                 THIGH_PISTON_D);
+            rod_between(14 * axis - 9 * perp, KNEE - 26 * axis - 9 * perp,
+                        THIGH_PISTON_D * 0.8);
+            // Hose runs alongside the cluster (LG-19 #5).  Two thin tubes
+            // stood off the outboard shoulder, following the thigh line.
+            for (yo = [-6.5, 6.5])
+                translate([0, yo, 0])
+                    rod_between(16 * axis + 12.5 * perp,
+                                KNEE - 20 * axis + 12.5 * perp,
+                                THIGH_HOSE_D);
             // Knee styling discs, both faces (canonical wheel pattern)
             knee_disc_cosmetic(1);
             knee_disc_cosmetic(-1);
@@ -590,12 +625,25 @@ module leg_frame() {
                 ycyl(KNEE, SHIN_T, SHIN_W);
                 ycyl(ANKLE, SHIN_T, SHIN_W * 0.8);
             }
-            // Ankle disc (canonical joint styling, proud both faces)
+            // Ankle disc + raised hub caps (LG-19 #4: reads as a real hub
+            // joint, not a flat styling plate)
             ycyl(ANKLE, ANKLE_DISC_T, ANKLE_DISC_D);
+            for (yf = [-1, 1])
+                ycyl(ANKLE + [0, yf * (ANKLE_DISC_T / 2 + ANKLE_HUB_H / 2), 0],
+                     ANKLE_HUB_H, ANKLE_HUB_D);
             // Square foot spigot: ankle disc rim down into the foot socket
             translate([ANKLE[0], ANKLE[1], ANKLE[2] - 9.75])
                 cube([FOOT_SPIG, FOOT_SPIG, 9.5], center = true);
         }
+        // LG-18: axial bore through each main thigh cylinder.  Starts past the
+        // root lug blend (which carries the hip moment into the cluster) and
+        // stops short of the knee, so the loaded ends stay solid.  Printed
+        // lying on the -Y face the bore axis is horizontal -- a Ø6 bridge.
+        if (THIGH_BORE_D > 0)
+            for (s = [-1, 1])
+                rod_between(20 * axis + s * THIGH_CYL_C / 2 * perp,
+                            KNEE - 6 * axis + s * THIGH_CYL_C / 2 * perp,
+                            THIGH_BORE_D);
         // Hip pin bore
         ycyl([0, 0, 0], LUG_W + 0.2, PIN_D);
         // 4 bellcrank wire sockets: bore along the chord, into the root
@@ -648,7 +696,7 @@ module leg_frame() {
 module foot_pad_wedge(l, w) {
     hull() {
         cylinder(h = FOOT_PAD_T, d = w);
-        translate([l, 0, 0]) cylinder(h = 4.0, d = w * 0.45);
+        translate([l, 0, 0]) cylinder(h = FOOT_PAD_TIP_T, d = w * 0.45);
     }
 }
 

@@ -714,7 +714,6 @@ def build_positives(shell_tm):
     feats.extend(lg_pos)
     notes.append(lg_note)
 
-
     return feats, notes
 
 

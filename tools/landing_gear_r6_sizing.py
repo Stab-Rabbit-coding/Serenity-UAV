@@ -164,6 +164,14 @@ H0 = 3.5                       # mm, pre-bend rise (both wire types)
 HMAX_FRAC = 0.35               # deepest usable bow rise as fraction of chord L
 # (2-hinge plateau model validity limit)
 
+# LG-18 mass reduction: axial bore through each thigh cylinder.  Sized against
+# the SS4.6 section check below -- at M 48.8 N*m the solid section runs
+# sigma 22.0 MPa (margin 1.25x), and the bore trades margin for mass:
+#   bore 0 mm  Z 2219 mm^3  sigma 22.0 MPa  margin 1.25x   (solid)
+#   bore 6 mm  Z 1926 mm^3  sigma 25.3 MPa  margin 1.09x   <- adopted
+#   bore 8 mm  Z 1686 mm^3  sigma 28.9 MPa  margin 0.95x   FAILS
+THIGH_BORE_D = 6.0             # mm
+
 # CF-PETG structure allowable (Rev R5 SS4.6 convention: yield/2)
 SIGMA_ALLOW_PETG = 27.5        # MPa
 
@@ -550,9 +558,13 @@ def main() -> None:
         u_ref / 2.0, u_ref * 1000.0 / settle_max, R_H_BUILT)
     m_hip = 2.0 * p_ref * R_WIRE                            # N*mm, all variants
     d_cyl, c_ctr = 14.0, 18.0
+    # LG-18: the thigh cylinders are BORED to save mass.  The bore is carried
+    # here, not asserted in the SCAD, so the section margin is regenerated from
+    # whatever diameter the geometry actually uses.  Set 0.0 for a solid thigh.
+    d_bore = THIGH_BORE_D
     r_c = d_cyl / 2.0
-    a_circ = math.pi * r_c**2
-    i_circ = math.pi * d_cyl**4 / 64.0
+    a_circ = math.pi * (r_c**2 - (d_bore / 2.0)**2)
+    i_circ = math.pi * (d_cyl**4 - d_bore**4) / 64.0
     i_pair = 2.0 * (i_circ + a_circ * (c_ctr / 2.0)**2)
     i_web = d_cyl * c_ctr**3 / 12.0
     i_tot = i_pair + i_web
@@ -563,7 +575,8 @@ def main() -> None:
           f"both variants) " + "-" * 8)
     print(f"  thigh @hip: M {m_hip/1000:.1f} N*m (= 2*P*r, R_h-INDEPENDENT -- "
           f"same for every variant), section 2x{d_cyl:.0f} mm cyl @ "
-          f"{c_ctr:.0f} mm ctrs + web -> Z {z_mod:.0f} mm^3, sigma "
+          f"{c_ctr:.0f} mm ctrs (bore {d_bore:.0f}) + web -> Z {z_mod:.0f} "
+          f"mm^3, sigma "
           f"{sigma:.1f} MPa (allow {SIGMA_ALLOW_PETG} MPa, margin "
           f"{SIGMA_ALLOW_PETG/sigma:.2f}x)")
 
