@@ -109,6 +109,11 @@
       ],
       "archived": false
     },
+    "Browncoats-workspace.code-workspace": {
+      "description": "\"folders\": [",
+      "tags": [],
+      "archived": false
+    },
     "CLAUDE-MEMORY.md": {
       "description": "CLAUDE-MEMORY.md",
       "tags": [

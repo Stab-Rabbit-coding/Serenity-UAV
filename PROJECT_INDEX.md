@@ -1719,6 +1719,7 @@ verify_bow_pod.py — verify_bow_pod.py — Rev R1 (2026-06-30) [build-tooling]
 .liveui.json — JSON data (5 top-level keys)
 .super-lintignore — airframe/archive/
 AGENTS.md — Serenity UAV — Agent Instructions [documentation, emi-hardening, redundancy-failover, security]
+Browncoats-workspace.code-workspace — "folders": [
 CLAUDE-MEMORY.md — CLAUDE-MEMORY.md [documentation, security]
 CLAUDE.md — See [`AGENTS.md`](AGENTS.md) — the authoritative, model-agnostic project instructions for all AI agents worki… [documentation]
 CPPLINT.cfg — cpplint configuration for the Serenity UAV firmware sources.
