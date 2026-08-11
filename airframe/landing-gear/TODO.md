@@ -35,10 +35,10 @@
 - [ ] LG-14 Instrumented drop test (load cell + high-speed video) at AUW
 - [ ] LG-18 Mass-reduction pass (leg frame / bay / thigh)
 - [ ] LG-19 Styling refinement pass vs REF-CAD-002 (cosmetic)
-- [ ] Reconcile the remaining-parts list
-- [ ] Combine all airframe STLs
-- [ ] Render overview SVGs using FreeCAD TechDraw
-- [ ] Exploded view SVG — printed parts only
-- [ ] Exploded view SVG — full build
+- [ ] LG-20 Reconcile the remaining-parts list
+- [ ] LG-21 Combine all airframe STLs
+- [ ] LG-22 Render overview SVGs using FreeCAD TechDraw
+- [ ] LG-23 Exploded view SVG — printed parts only
+- [ ] LG-24 Exploded view SVG — full build
 
 ---

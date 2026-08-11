@@ -2,7 +2,6 @@
 <!-- Auto-maintained: updated whenever active files are added or removed. -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
 <!-- Last updated: 2026-08-10 — Automated reconciliation pass -->
----
 
 ## tools/
 

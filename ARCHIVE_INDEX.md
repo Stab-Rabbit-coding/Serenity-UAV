@@ -3,7 +3,6 @@
 <!-- Auto-maintained: updated whenever files move into archive. -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
 <!-- Last updated: 2026-08-10 — Automated reconciliation pass -->
-
 Superseded Blender scripts and STL files. Active scripts are in `airframe/blender-scripts/`.
 Design notes in `ARCHIVE-REVQ.md` inside this directory (distinct from the KiCad archive's
 own `ARCHIVE-REVQ.md`).

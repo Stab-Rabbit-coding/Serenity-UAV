@@ -622,10 +622,21 @@ module leg_frame() {
         // root lug blend (which carries the hip moment into the cluster) and
         // stops short of the knee, so the loaded ends stay solid.  Printed
         // lying on the -Y face the bore axis is horizontal -- a Ø6 bridge.
+        // It runs OUT through the knee end rather than stopping inside: ending
+        // it flush with the cylinder's end cap left a sealed internal void
+        // (watertight, CI-passing, and invisible -- it showed up only as two
+        // NEGATIVE-volume bodies in the split), which traps air, cannot drain
+        // and cannot be inspected.  Through-bored it also reads as the real
+        // tube [REF-CAD-002] shows.
+        //
+        // NOTE the section check is conservative: the bore starts 20 mm out
+        // along the thigh, so the CRITICAL section at the hip -- where the
+        // bending moment is greatest -- stays SOLID.  The 1.09x margin from
+        // the sizing script applies the bored section at the full hip moment.
         if (THIGH_BORE_D > 0)
             for (s = [-1, 1])
                 rod_between(20 * axis + s * THIGH_CYL_C / 2 * perp,
-                            KNEE - 6 * axis + s * THIGH_CYL_C / 2 * perp,
+                            KNEE + 4 * axis + s * THIGH_CYL_C / 2 * perp,
                             THIGH_BORE_D);
         // Hip pin bore
         ycyl([0, 0, 0], LUG_W + 0.2, PIN_D);
