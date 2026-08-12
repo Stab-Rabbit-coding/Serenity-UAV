@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-10",
+  "generated": "2026-08-11",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -83,6 +83,13 @@
     ".super-lintignore": {
       "description": "airframe/archive/",
       "tags": [],
+      "archived": false
+    },
+    ".vscode/c_cpp_properties.json": {
+      "description": "JSON data (2 top-level keys)",
+      "tags": [
+        "repo-infra"
+      ],
       "archived": false
     },
     ".vscode/extensions.json": {
@@ -9223,6 +9230,13 @@
       ],
       "archived": false
     },
+    "avionics/mosfet-search.txt": {
+      "description": "Text file",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/observer/TODO.md": {
       "description": "Serenity UAV \u2014 Observer (Cargo-Handling + Vision/ToF/Laser) TODO (Open Work Only)",
       "tags": [
@@ -12176,6 +12190,7 @@
       ".github/workflows/devskim.yml",
       ".github/workflows/stale-branches.yml",
       ".github/workflows/super-linter.yml",
+      ".vscode/c_cpp_properties.json",
       ".vscode/extensions.json",
       ".vscode/settings.json"
     ],
@@ -15173,6 +15188,7 @@
       "avionics/kicad/symbols/Vera_SoM_PCM071.kicad_sym",
       "avionics/kicad/symbols/footprints/PHYCORE-AM62AX-DSC-FOOTPRINT.kicad_mod",
       "avionics/kicad/symbols/phyCORE_AM62x_PCM071_pinmap.csv",
+      "avionics/mosfet-search.txt",
       "avionics/observer/TODO.md",
       "avionics/observer/WBS.md",
       "avionics/rev-s1/TODO.md",

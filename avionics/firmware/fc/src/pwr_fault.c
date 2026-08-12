@@ -202,7 +202,7 @@ int pwr_fault_open(const char *i2c_dev_pdb, pwr_fault_ctx_t **ctx_out) {
         return -EINVAL;
     }
 
-    ctx = calloc(1U, sizeof(*ctx));
+    ctx = (pwr_fault_ctx_t *)calloc(1U, sizeof(*ctx));
     if (ctx == NULL) {
         return -ENOMEM;
     }

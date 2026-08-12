@@ -39,7 +39,7 @@
  */
 #define _GNU_SOURCE
 
-#include "sbus_input.h"
+#include "../include/sbus_input.h"
 
 /* System headers — <asm/termbits.h> replaces <termios.h> in this file. */
 #include <asm/termbits.h>
