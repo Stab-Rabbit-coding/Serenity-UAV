@@ -301,9 +301,18 @@ static void *rx_thread_func(void *arg) {
             if (errno == EINTR || errno == EAGAIN) {
                 continue; /* signal or timeout — retry */
             }
-            /* Unrecoverable UART error — log and exit thread. */
+            /* Unrecoverable UART error — log and exit thread.
+             *
+             * strerror_r() rather than strerror(): this runs on the background
+             * RX thread while the caller's thread may also be formatting an
+             * error, and strerror() returns a pointer to a shared static buffer
+             * that a concurrent call may overwrite (POSIX.1-2017 marks it
+             * MT-Unsafe).  _GNU_SOURCE is defined above, so this is the GNU
+             * variant, whose RETURN VALUE is the string — it may or may not be
+             * errbuf, so errbuf must never be printed directly. */
+            char errbuf[64];
             (void)fprintf(stderr, "xcvr_kiss: RX UART read error: %s\n",
-                          strerror(errno));
+                          strerror_r(errno, errbuf, sizeof(errbuf)));
             break;
         }
 

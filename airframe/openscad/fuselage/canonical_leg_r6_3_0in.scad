@@ -135,14 +135,21 @@ WIRE_STAGGER = 3.5;         // socket pitch along pin axis Y
 SPRING_D     = 3.35;        // mm, spring wire diameter
 SPRING_L     = 37.0;        // mm, spring stock length (bow span 23)
 SPRING_SEAT  = 5.0;         // mm, spring socket seat depth per end
-DUCTILE_D    = 4.36;        // mm, ductile wire diameter (6 ft schedule)
-DUCTILE_D4   = 3.81;        // mm, ductile alternative (4 ft schedule, ref only)
+DUCTILE_D    = 3.81;        // mm, ductile wire dia -- 4 ft schedule
+                            // (LG-17 CLOSED 2026-08-09, owner decision:
+                            //  4 ft crash height adopted).  The 6 ft
+                            //  alternative was d = 4.36 mm, SAME lengths.
+DUCTILE_D6   = 4.36;        // mm, 6 ft schedule (superseded, ref only)
 DUCTILE_L    = 75.0;        // mm, ductile stock length (bow span 55)
 DUCTILE_SEAT = 8.0;         // mm, ductile socket seat depth per end
 END_RUN_IN   = 2.0;         // mm, straight run-in beyond each socket mouth
 H_NOM        = 3.5;         // mm, pre-bend bow rise (both types)
 H_DEF_SPRING = 7.4;         // mm, bow at spring elastic-limit stroke (0.93 mm)
-H_DEF_DUCT   = 19.2;        // mm, fired ductile bow (full 3.24 mm stroke)
+H_DEF_DUCT   = 9.9;         // mm, fired ductile bow at full stroke.
+                            // Was 19.2 -- that came from the 4x-low
+                            // stroke formula (SS4.5a); the corrected
+                            // two-hinge value at the required stroke
+                            // is 9.90 mm.
 SOCK_CLR     = 0.65;        // socket bore diametral clearance over wire d
 
 // Thigh cylinder cluster (structural section: sizing script "2x14 @ 18")
@@ -184,11 +191,23 @@ FOOT_M25_D   = 2.8;         // M2.5 cross-bolt clearance
 TREAD_N      = 3;           // tread ribs per pad (canonical ribbed sole)
 TREAD_D      = 1.5;         // tread rib depth
 
-// Bay plate (surface-mounts to the cargo-shell flank; conforming spacer /
-// recess integration is LG-02.  Local frame: plate back face at X = -8 at
-// pivot height, canted BAY_CANT to follow the flank slope.)
-BAY_BACK_X   = -8.0;        // plate back plane X at Z=0 (pivot height)
-BAY_CANT     = 22;          // deg from vertical -- cargo flank slope
+// Bay plate.  LG-10 (2026-08-09): the original surface-mount assumption was
+// measured against the baked cargo skin and does NOT hold -- the back face
+// floated 14-17 mm outboard of the hull at hip height, BAY_CANT leaned the
+// plate the WRONG WAY (the real flank leans outboard going up, not inboard),
+// and the flank is doubly curved with 15-42 mm of deviation across the
+// footprint.  See tools/landing_gear_bay_pad_fit.py for the measurements.
+//
+// The back face is therefore CONFORMING: the plate is cut against a local
+// hull-surface patch (BAY_STATION selects fore/aft), so it seats on the real
+// skin.  Because the fore and aft flanks are different surfaces this makes the
+// bay TWO geometries, each a mirrored pair -- not one shared part.
+BAY_STATION  = "aft";       // "fore" | "aft" -- selects the hull patch
+BAY_CONFORM  = false;       // true once tools/build_bay_hull_patches.py has run
+BAY_PATCH_DIR = "../../../stls/fuselage/landing-gear";
+BAY_BACK_X   = -8.0;        // nominal plate datum (conforming cut overrides)
+BAY_CANT     = -11.5;       // deg; NEGATIVE = leans outboard at the top, which
+                            // is what the real cargo flank does (was +22)
 BAY_PLATE_W  = 40.0;        // along pin axis Y
 BAY_PLATE_L  = 82.0;        // up the flank (in the canted plane)
 BAY_PLATE_T  = 5.0;
@@ -196,6 +215,39 @@ BAY_SURR_T   = 3.0;         // raised canonical bay-recess surround rim
 BAY_M3_D     = 3.4;         // 4x M3 shell through-bolts (+ internal backing)
 BOSS_OD      = 11.0;        // wire boss OD (bearing margin: see sizing script)
 BOSS_L       = 10.0;        // wire boss length along chord
+
+// --- Canonical retraction-bay cowl (LG-19 / LG-02) -------------------------
+// On the canonical ship the leg retracts into a recessed flank bay; this build
+// is fixed-down but must still READ as a leg emerging from that bay.  The
+// recess cannot be sunk into the hull: the cargo wall measures 1.97-4.65 mm
+// there, and the footprint's interior is already occupied by the wing spar
+// boss (Y 20.7..42.7), the wing root mortise (Y 42..73 @ Z 52..73) and the
+// nacelle-servo pad (Y 19..71 @ Z 78..108).  The bay depth is therefore
+// carried on THIS printed part as a cowl standing proud of the plate, which
+// is also how a real retraction-bay liner is built.
+COWL_H       = 12.0;        // rim height proud of the plate face
+COWL_T       = 2.5;         // rim wall thickness
+COWL_INSET   = 2.0;         // rim inset from the plate edge
+COWL_FILLET  = 1.5;         // rim outer edge break
+COWL_MOUTH_W = 30.0;        // throat width across the pin axis (leg clearance)
+COWL_MOUTH_S = 26.0;        // throat length along the canted plane
+
+// --- LG-13 wire-end retention ----------------------------------------------
+// The wire ends MUST remain free to slide: the chord shortens by the stroke as
+// the bow deepens, so each end travels ~1.62 mm DEEPER into its bore at full
+// ductile stroke (stroke = U/P = 3.24 mm; see tools/landing_gear_r6_sizing.py
+// and the sympy derivation recorded in docs/LANDING_GEAR_ANALYSIS.md SS4.5a).
+// A set screw torqued onto the seat would clamp that motion and fight the
+// fuse, so retention is a NYLON-TIPPED drag screw: enough friction to stop
+// vibration walk-out (~5 N) and negligible against the 4,333 N chord force.
+// Bay side only -- with the bay end captive the wire cannot leave the
+// thigh-side blind bore either (it would have to translate along its axis).
+RET_SCREW_D  = 2.0;         // M2 nylon-tipped cup-point set screw
+RET_TAP_D    = 1.6;         // M2 tap drill (printed pilot, tapped after print)
+RET_PAD_D    = 6.5;         // local thread pad OD on the boss
+RET_PAD_H    = 3.5;         // pad height proud of the boss OD
+RET_DEPTH_D  = 4.0;         // screw axis, mm from the boss mouth (ductile)
+RET_DEPTH_S  = 2.5;         // screw axis, mm from the boss mouth (spring)
 
 // Flexion at full ductile stroke (sizing script: 30.9 deg hip rotation)
 FLEX_DEG     = 30.9;
@@ -473,9 +525,77 @@ module foot() {
 // cross-pin), 4 wire bosses on riser wedges at each wire's far chord end,
 // 4x M3 shell through-bolt holes.  LG-02 owns final flank conforming.
 // ---------------------------------------------------------------------------
+// Canonical retraction-bay cowl: a rim standing proud of the plate face so the
+// leg reads as emerging from a recessed flank bay (see the COWL_* block).  The
+// leg exits through the rim's hollow interior; the sector cut below is
+// insurance against the thigh fouling the rim anywhere in its 0..FLEX_DEG
+// sweep.
+// The rim is a U, OPEN at the low end: that is the bay mouth the leg swings
+// out of, and it is what the canonical retraction bay does.  A closed
+// rectangular rim was tried first and fails a boolean interference check --
+// the thigh fouls the lower wall by 188 mm^3 at rest (flex = 0), falling to
+// ~0.8 mm^3 by 20 deg -- because the leg exits across that edge.  Verified
+// clear with the same check after opening it; see the LG-13/LG-19 notes in
+// docs/LANDING_GEAR_ANALYSIS.md.
+module bay_cowl() {
+    inner_w = BAY_PLATE_W - 2 * (COWL_INSET + COWL_T);
+    inner_l = BAY_PLATE_L - 2 * (COWL_INSET + COWL_T);
+    translate([BAY_BACK_X, 0, 12])
+        rotate([0, -BAY_CANT, 0])
+            translate([0, -BAY_PLATE_W / 2, -34])
+                difference() {
+                    translate([BAY_PLATE_T, COWL_INSET, COWL_INSET])
+                        cube([COWL_H,
+                              BAY_PLATE_W - 2 * COWL_INSET,
+                              BAY_PLATE_L - 2 * COWL_INSET]);
+                    // hollow the bay
+                    translate([BAY_PLATE_T - 0.1,
+                               COWL_INSET + COWL_T,
+                               COWL_INSET + COWL_T])
+                        cube([COWL_H + 0.2, inner_w, inner_l]);
+                    // open the mouth: remove the low-end wall entirely
+                    translate([BAY_PLATE_T - 0.1,
+                               COWL_INSET + COWL_T,
+                               COWL_INSET - 0.1])
+                        cube([COWL_H + 0.2, inner_w, COWL_T + 0.2]);
+                }
+}
+
+// LG-13 retention: local thread pad on one wire boss.  The Ø11 boss wall is
+// only (11 - 5.65)/2 = 2.68 mm, too thin to tap M2 with any engagement, so the
+// thread is carried on a raised pad.  Axis is radial to the wire (normal to
+// the chord) and set back RET_DEPTH_* from the boss mouth so the screw always
+// bears on the STRAIGHT seat, including after the 1.62 mm inward slide.
+module retention_pad(y, spring, cut) {
+    l    = spring ? SPRING_L : DUCTILE_L;
+    st   = spring ? SPRING_SEAT : DUCTILE_SEAT;
+    dep  = spring ? RET_DEPTH_S : RET_DEPTH_D;
+    m    = boss_mouth(l, st, y);
+    // step `dep` INTO the boss along the chord, then go radial (+Z-ish in the
+    // swing plane, i.e. perpendicular to the chord, clear of the neighbours).
+    seat = m + dep * azv(CHORD_AZ);
+    translate(seat) rotate([0, 90 - CHORD_AZ, 0]) rotate([0, 90, 0])
+        if (cut) {
+            // tap pilot: through the pad and the boss wall into the bore
+            translate([0, 0, -0.1])
+                cylinder(h = RET_PAD_H + BOSS_OD / 2 + 0.2, d = RET_TAP_D);
+            // shallow counterbore so the screw sits below the pad face
+            translate([0, 0, RET_PAD_H + BOSS_OD / 2 - 1.2])
+                cylinder(h = 1.4, d = RET_SCREW_D + 0.6);
+        } else {
+            translate([0, 0, BOSS_OD / 2 - 1.0])
+                cylinder(h = RET_PAD_H + 1.0, d = RET_PAD_D);
+        }
+}
+
 module bay() {
     difference() {
         union() {
+            bay_cowl();
+            for (i = [0 : 3]) {
+                y = (i - 1.5) * WIRE_STAGGER;
+                retention_pad(y, abs(y) > 3, false);
+            }
             // Canted plate: back face follows the flank slope
             translate([BAY_BACK_X, 0, 12])
                 rotate([0, -BAY_CANT, 0])
@@ -537,6 +657,25 @@ module bay() {
                     translate([-4.1, yb, zb])
                         rotate([0, 90, 0])
                             cylinder(h = BAY_PLATE_T + 8.2, d = BAY_M3_D);
+        // LG-13 retention tap pilots + counterbores
+        for (i = [0 : 3]) {
+            y = (i - 1.5) * WIRE_STAGGER;
+            retention_pad(y, abs(y) > 3, true);
+        }
+        // NOTE: no thigh-sweep sector cut here.  The leg already exits through
+        // the cowl rim's hollow interior, and an xz_sector centred on the hip
+        // reaches the plate itself at large radius (the plate spans s -34..+48,
+        // i.e. radius ~50 across the very azimuths the thigh sweeps), so it
+        // gouged the plate open rather than notching the rim.  Rim-vs-thigh
+        // clearance is verified numerically instead -- see
+        // tools/landing_gear_cowl_clearance.py.
+        // Conforming back face (LG-10).  The plate is cut against a local
+        // hull-surface patch so it seats on the real, doubly-curved flank.
+        // Patches are generated by tools/build_bay_hull_patches.py; until they
+        // exist the part still renders as the nominal flat-backed plate.
+        if (BAY_CONFORM)
+            import(str(BAY_PATCH_DIR, "/lg_r6_hull_patch_", BAY_STATION,
+                       ".stl"), convexity = 6);
     }
 }
 

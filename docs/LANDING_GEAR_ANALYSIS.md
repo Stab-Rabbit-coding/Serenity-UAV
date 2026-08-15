@@ -200,6 +200,131 @@ Deviations (functional, deliberate):
 3. **Fixed-down gear** — no retraction; the bay plate supplies the
    canonical recess look.
 
+### 2.4a Henning-Derived Geometry Corrections (2026-08-09, OPEN)
+
+Owner confirmed [REF-CAD-003] **Sheet 1** agrees with the Nick Henning model
+[REF-CAD-002], so the Henning gear drawings are authoritative for detail shape.
+Read from `docs/references/nick-henning/nick-henning-close-gear-combine.jpg`
+(in-situ render) and `nick-henning-uvdisplay-gear.jpg` (shaded, UV, wireframe
+and UV-layout views of the isolated leg).
+
+**What Rev R6 already gets right.** The architecture is confirmed:
+cylinder-cluster thigh at ~50-55°, a disc knee, a disc ankle, and a tri-pad
+arrowhead foot. The concept does not need rework — the corrections below are
+proportion and detail.
+
+**Corrections required:**
+
+1. **Mounting surface — the big one. The bay is in the WING-ROOT SPONSON, not
+   the cargo shell.** `nick-henning-uvdisplay-wing.jpg` shows the wing root as
+   a large wedge-shaped sponson with the **empty gear bay recessed into its
+   underside/outboard face** — a trapezoidal aperture (wider at top, narrowing
+   downward, confirming the owner's description), with a raised lip framing it
+   and stepped panel detail on the bay floor.
+
+   This reconciles the whole integration problem. `airframe/AGENTS.md` records
+   that the wings attach to the **cargo section lateral walls** — so the bay
+   sits in wing-root structure mounted at roughly the station Rev R6 has been
+   targeting, but it belongs to the **wing part, not the cargo shell**. That
+   is why the bay bolt axes measure 5.6-64.1° off the local *cargo skin*
+   normal: they are being projected onto a surface that is not the mounting
+   face at all.
+
+   **Do NOT split the bay onto the wing part.** The wing-root sponson is the
+   *outer shape* the bay aperture appears in; it is not where the bay should
+   structurally live. The original lower-detail model merged the gear bay into
+   the cargo hold as a single piece, and that is the structurally correct
+   arrangement:
+
+   - **Load path.** Each leg delivers 827 N (4 ft schedule) plus a 34.7 N·m
+     hip moment. If the bay were carried on the wing root, all of that would
+     pass through the wing attachment — the Ø12.3 mm spar and the two root
+     mortises at Y +31.7 / +57.5 — which are sized for *flight* loads, not
+     landing impact. That inserts a joint directly into the impact path and
+     creates the weak point the merged design avoids.
+   - **Mass.** Splitting duplicates the bay walls, adds a structural joint and
+     its fasteners, and works against LG-18.
+
+   So the bay stays **continuous with the cargo shell** (i.e. still
+   `merge_cargo_interior.py`), and the wing-root sponson fairs around it. The
+   16 bolt bosses added in `d83c806` are therefore on the right *component*;
+   what is wrong is their **placement and axes** — they sit on the bare cargo
+   flank rather than on the bay aperture inside the sponson envelope, which is
+   why they measure 5.6-64.1° off the local normal. Relocate them to the
+   aperture and aim each along its own local surface normal.
+
+   **RESOLVED (owner, 2026-08-09): the sponsons are already modelled in the
+   cargo section STLs.** No new envelope is needed and there is no
+   double-walling risk. Owner's description of the lower front of the cargo
+   section: the rectangular canonical cargo door in the centre, then vertical
+   corners, then vertical sides running back to an internal corner each side,
+   then a trapezoidal flat that runs into a sloped side — and the run with the
+   **trapezoidal cross-section is the sponson**.
+
+   Measured on the baked `cargo_sect_shell24_2mm_repaired.stl`, port side
+   (half-width = X − centreline −169.9):
+
+   | Station | Face | Z span | half-width | outer X |
+   | --- | --- | --- | --- | --- |
+   | Y −7 (fore) | belly turn | 0–7.5 | 52.8→56.2 | — |
+   | Y −7 | **vertical side (flat)** | **10–40** | **56.04** (const ±0.02) | **−113.86** |
+   | Y −7 | internal corner | ~42.5 | 56.0→66.9 | step ~11 mm outboard |
+   | Y −7 | trapezoidal flat | 45–48 | 67.1→67.7 | −102.8→−102.2 |
+   | Y −7 | sloped side | 50+ | 70.2 → flare | — |
+   | Y +107 (aft) | **vertical side (flat)** | **57.5–72.5** | 84.3→83.5 | −85.6→−86.4 |
+   | Y +107 | flat | 80–85 | 87.29 (const) | −82.61 |
+
+   **Which face is which (owner, 2026-08-09) — do not confuse these:**
+
+   - The **vertical walls** squared to port/starboard (Y −7: Z 10–40 at
+     half-width 56.04) are the **hull sides forward of the sponson**. They are
+     NOT the sponson and NOT a mounting face.
+   - The **angled trapezoidal flats** are the **modelled landing-gear
+     openings** — this is where the gear mounts. At Y −7 the fore flat measures
+     Z 45–48, half-width 67.1→67.7, outer X −102.8→−102.2.
+   - The **sponson** is the volume **between the two trapezoidal flats on each
+     side** (fore opening and aft opening). It may be hollowed and/or
+     reinforced as needed to carry the gear attachment.
+
+   So the mounting face is **angled, not vertical** — the bolt axis is normal
+   to the trapezoidal flat. This also means the earlier `BAY_CANT` solve
+   (−11.5°, §2.2 / `tools/landing_gear_bay_pad_fit.py`) was fitting the right
+   *kind* of surface after all; what was wrong was fitting it to the whole
+   82 × 40 flank footprint instead of to the actual opening.
+
+   **Wing interference is a hard constraint.** The wings attach to the cargo
+   lateral walls with the Ø12.3 spar at Y +31.7 and the root mortises at
+   Y +57.5, Z 62.5. Any hollowing or reinforcement of the sponson must clear
+   those, and the sponson sits between the fore and aft openings — i.e. spanning
+   the wing-root station. Check before cutting.
+
+   Still to do: re-measure both trapezoidal flats properly (the aft station's
+   outline is noisier than the fore and was not cleanly segmented), fit the
+   opening outline on each, and re-derive the §2.2 hip stations onto those
+   faces.
+2. **The bay "recess" is a hinged DOOR**, a separate gridded panel, not a rim
+   moulded into the skin. Its outline is an irregular pentagon with one clipped
+   corner — not the symmetric trapezoid currently in `bay_cowl()`. The
+   trapezoid is a fair first approximation of the aperture but the door itself
+   is a distinct part that Rev R6 does not model at all.
+3. **Foot pads** are much longer, thinner and more sharply tapered than
+   `FOOT_PAD_T = 8` implies — flat blade-like wedges radiating from a central
+   hub, with small louvre/rib groups near each tip. Current pads are stubby by
+   comparison.
+4. **Knee and ankle are real disc joints** with circular hub/cap detail, not
+   the flat styling discs Rev R6 uses. (They can stay cosmetic structurally —
+   Rev R6 articulates at the hip only — but the *shape* should read as a hub.)
+5. **Thigh** is a large main tube plus two or three smaller parallel piston
+   rods, with visible hose runs alongside. Rev R6's twin-Ø14 cluster is close;
+   the rods and hoses are missing.
+6. **Shin is short** relative to the thigh, and boxy/slotted rather than the
+   current long stadium-section blade.
+
+**Status: NOT YET IMPLEMENTED.** Item 1 gates the rest — if the bays move to a
+ventral overhang, the corner stations, the bolt-normal fix (LG-02), the
+conforming hull patches (LG-10) and the pad-fit study all get re-derived
+against the new surface. Do not re-aim the bay bolts before settling it.
+
 ---
 
 ## 3. Impact Velocity and Kinetic Energy
@@ -311,6 +436,64 @@ unambiguous field-inspection indicator**
 30.9° in both variants. During full flex the foot skids outboard (more so
 in the shorter-radius 1.5in leg); TPU treads slide rather than grab —
 intended.
+
+### 4.5a Stroke ↔ Bow-Rise Relation — Correction (2026-08-09)
+
+**`wire_stroke_available()` in `tools/landing_gear_r6_sizing.py` is a factor of
+4 too small.** The script models the wire as a two-hinge mechanism (two rigid
+half-links, plastic hinge at mid-span) but implements the chord shortening as
+`Δ = (h² − h₀²) / (2B)`. Re-deriving that mechanism symbolically (SymPy: series
+expansion of the exact chord `2√(ℓ² − h²)` about `h = 0`, with `ℓ = B/2`) gives
+
+```text
+Δ_exact  = 2√(ℓ² − h₀²) − 2√(ℓ² − h²)          (ℓ = B/2)
+Δ_approx = 2(h² − h₀²) / B
+```
+
+The implemented form divides by `2B` where the mechanism divides by `B/2`. The
+ratio `Δ_approx / Δ_script` is exactly **4.00** at every bow rise, confirming an
+algebra slip rather than a modelling choice. At the ductile design point
+(B = 55 mm, h₀ = 3.5 mm):
+
+| h (mm) | 2-hinge exact | 2-hinge approx | parabola, const. arc | script |
+| --- | --- | --- | --- | --- |
+| 6.0 | 0.878 | 0.864 | 1.145 | 0.216 |
+| 10.0 | 3.318 | 3.191 | 4.262 | 0.798 |
+| 14.0 | 7.214 | 6.682 | 9.061 | 1.670 |
+| 19.2 | 15.177 | 12.960 | 18.281 | 3.240 |
+
+**Consequences (open — the wire schedule is NOT re-solved here; that is LG-15 /
+LG-17 owner territory):**
+
+1. `H_DEF_DUCT = 19.2 mm` — the "visibly bent" field-inspection indicator and
+   the `leg_deformed` / `ductile_wire_deformed` renders — is wrong. The bow that
+   actually delivers the required 3.24 mm stroke is **9.90 mm** (exact two-hinge)
+   or 10.07 mm (approx).
+2. `wire_stroke_available()` under-credits every wire 4×, so the solver grew the
+   ductile bow span to 55 mm where ≈14 mm meets the same energy demand. Stock
+   could fall 75 mm → ≈40 mm, worth **≈33 g** against LG-18.
+3. Knock-on to LG-02/LG-10: the 82 mm bay plate length is set by that 75 mm
+   wire (bosses sit ≈59 mm from the hip along `CHORD_AZ`). A correctly-sized
+   wire shrinks the bay enough to clear the wing-spar boss, wing-root mortise
+   and nacelle-servo pad interior conflicts recorded in §7.
+
+**What does NOT change:** the required stroke itself. It comes from energy,
+`s = U/P = 3.24 mm`, independent of the bow geometry. That is what LG-13 is
+sized against — see below.
+
+**LG-13 consequence.** The chord shortens by the full stroke as the bow deepens,
+so each wire end slides **1.62 mm deeper into its bore** at full ductile stroke
+(3.24 mm ÷ 2 ends), against an 8 mm ductile seat with 2 mm run-in. The seat is a
+**sliding** interface. A set screw torqued onto it would clamp that motion and
+fight the fuse, so retention is a **nylon-tipped M2 drag screw** (≈5 N friction:
+enough to stop vibration walk-out, and 0.12 % of the 4,333 N chord force, so it
+does not impede the stroke). Bay side only — with the bay end captive the wire
+cannot leave the thigh-side blind bore either, since escape requires axial
+translation.
+
+Source: SymPy derivation, 2026-08-09. Reproduce with the derivation block in
+`tools/landing_gear_r6_sizing.py` (run under `/usr/bin/python3` — the repo
+`.venv` hides the system SymPy).
 
 ### 4.6 Structure Checks — R_h-Independent Part (both variants)
 

@@ -1785,3 +1785,144 @@ Only diagnosed. Needs the same cycle. Its ERC baseline is 234 errors.
 
 See [[feedback_kicad_hand_authoring]], [[project_fleet_trust_module]],
 [[feedback_generator_drift_and_freerouting]].
+
+## Memory Index (mirror)
+
+<!-- memory-index:start -->
+
+<!-- Mirror of the Claude memory index, refreshed 2026-08-10. -->
+
+- [Fuselage open-face splice joints](project_fuselage_open_faces.md) — collars
+  need OPEN mating faces; head-aft/middle-fwd were capped, opened via
+  tools/open_mating_faces.py (head→Y−72.95); collar Rev R3 constant-profile;
+  cargo MESH-01 resolved
+
+- [Rev N authoritative design spec](project_rev_n_design_spec.md) — 24-inch
+  build: 2 nacelles, counter-rotating 50mm EDFs, integrated stators,
+  gear-linked nozzles, PETG/CF-PETG, 3 servos
+- [Rev L/N nozzle & intake geometry](project_rev_l_nozzle_intake.md) — iris
+  nozzle petal profiles, rear frame-with-ribs design, fuselage intake cut
+  position
+- [SCAD manifold fixes](project_scad_manifold_fixes.md) — touching-face root
+  causes + fixes for all 16 SCAD files; gear timeout fix; shell repair pattern
+- [Blender nacelle bore center](project_blender_nacelle_bore.md) — bore-center
+  bug/fix in blender_nacelle_integrated_v2.py; correct 50mm nacelle bore
+  centres
+- [Nacelle STL import (Rev P)](project_nacelle_stl_import.md) — canonical
+  Serenity shell imported; Z params scaled 1.25×; repaired STL workflow; boss
+  X-face positions
+- [R1 hull-frame bake](project_r1_hull_frame_bake.md) — placements baked into
+  STLs via tools/bake_hull_frame.py; identity assembly; open: nacelle label
+  swap, head-cargo joint axis
+- [Middle section inner neck](middle_section_inner_neck.md) — middle is
+  horseshoe ring PLUS a closed inner-neck tube (cargo→rear); don't call it
+  "just an open horseshoe"
+- [Cargo interior merge pipeline](cargo_interior_merge_pipeline.md) —
+  merge_cargo_interior.py owns cargo; MESH-01 root cause = sequential trimesh
+  booleans; cargo SCAD GPS/FPV/servo/latch/avionics modules are in a BROKEN
+  legacy Y-as-dorsal frame
+- [Jayne cape design](project_jayne_cape_design.md) — nose/cargo
+  vision+ToF+laser board (was "Vera"); TI AM62Ax (not OpenIPC/DM38x), KSZ9477
+  (not LAN9355), laser is Class 3B nose / Class 3R cargo; caught fabricated
+  parts from an imported AI brainstorm
+- [TODO.md stale-item feedback](feedback_todo_stale_items.md) — never leave a
+  checkbox `[ ]` once its own text says resolved/superseded; close it out
+  immediately, standing rule for every TODO.md touch
+- [Emma/Zoë schematic migration](project_emma_zoe_schematic_migration.md) —
+  schematic-first reconciliation; locked decisions: drop J1, UART→PB2 rails,
+  PTT_N + RSSI_DCD as presence-gated payload GPIOs (RSSI→on-board comparator
+  DCD)
+- [Nacelle §1.1.3 completion](project_nacelle_1_1_3_completion.md) — Rev S1
+  locked: pivot=CG 104.5mm, Crown Pinion −10mm idler fix, nav lights→outboard
+  face, WS2812B LED rings removed, intake bellmouth trim, BamJr=REF-CAD-001
+- [Jayne SoM-carrier path](project_jayne_som_carrier.md) — Jayne=trapezoidal
+  carrier for PHYTEC phyCORE-AM62A SoM; ≤1in narrow end at pod; the 270-pad
+  pinout (phytec.com/snapeda blocked by hook) is the one gate to authoring the
+  schematic symbol
+- [Jayne SoM end-state built](project_jayne_som_endstate.md) — 2026-07-13: real
+  symbols/footprints, ERC 0, carrier rails added (TLV62569/TLV75725); pcbnew
+  9.0.2 binding broken (FootprintLoad-after-Remove segfault, unwrapped PADs) →
+  text-pass net injection; see PCBNEW_SWIG_BUG.md
+- [Vera→Jayne rename/merge](project_jayne_vera_rename.md) — Vera board renamed
+  to Jayne 2026-07-13; collided with pre-existing Jayne cargo-handling name,
+  user chose to merge as one subsystem, not rename either away
+- [Avionics board folder reorg](project_avionics_board_folder_reorg.md) —
+  `avionics/kicad/<Board>/{kicads,scripts,gerbers}/` layout (template=Kaylee);
+  HERE-relative script paths need an extra .parent after the move; Kaylee's own
+  gen scripts still have this bug
+- [Port tilt-spar overlay](project_port_tilt_overlay.md) —
+  port_tilt_spar_assembly.scad integration view; nacelle→hull bake transform;
+  pivot=CG 111.5mm (conforms to canon "Engine Pivots 360°" balance-center);
+  nozzle drive = wing-fixed sync gear + geared bellcrank (spar-crank was
+  kinematically dead); servo −inb/wall bug fixed; iris-asm PHI sign FIXED;
+  superseded gear-train/nozzle STLs archived
+- [Tilt encoder = AKM AK7455](project_tilt_encoder_ak7455.md) — off-axis SPI
+  sensor; MT6701/AS5600 rejected as on-axis; ENC-NACELLE-1/MAL-TILT-ENC-PCB,
+  REF-SENSOR-008
+- [KiCad hand-authoring gotchas](feedback_kicad_hand_authoring.md) — sheet_y =
+  instance_y − lib_y (Y inverted); no ';' comments; verify by net node count;
+  kicad-cli 9.0.2
+- [Ground clearance requirement
+  feedback](feedback_ground_clearance_requirement.md) — clearance is
+  aircraft-safety-only, NOT sized to a cargo box's height (aircraft lands over
+  box, winches it in); don't back-derive geometry from payload dimensions
+  without confirming ops concept
+- [Landing gear Rev R6 leg variants](project_landing_gear_r6_variants.md) —
+  canonical_leg_r6_1_5in.scad (default) / _3_0in.scad (extended, kept) share
+  one bay/foot/wire BOM; same wire hardware reused at different R_h levers →
+  1.5in runs hotter (81/162g) with tight clearance margin, 3.0in gentler
+  (52/104g); tools/landing_gear_r6_sizing.py
+- [Fleet trust module rollout](project_fleet_trust_module.md) — 2026-07-26:
+  MCU+SLB9670 TPM+ISOW1044+ISOW1412 stack on new stackable CAN-PERIPH-GW-1
+  board + Jayne/Kaylee/Emma/Wash/Zoë; ADM2795E→ISOW1412 fleet swap; AK7455 now
+  bus-published not direct-read
+- [Generator drift + freerouting
+  workflow](feedback_generator_drift_and_freerouting.md) — drifted gen_*.py →
+  use non-destructive injection, not regeneration; never re-run PCB gen after
+  manual packing; pcbnew.ExportSpecctraDSN/ImportSpecctraSES + freerouting JAR
+  (not native launcher) for autorouting
+- [Wash/Zoë schematic-first rebuild](project_wash_zoe_rebuild.md) — 2026-07-28:
+  Wash.kicad_sch was silently TRUNCATED by KiCad (corrupt S-expr; true ERC=275
+  not 48); sch↔PCB are different generations on both boards; gerbers gated on
+  parity; RS485→ISOW1412 + 1553 chain fixed
+- [LibreServo: KiCad primary, v4.0.0](libreservo_kicad_primary.md) — 2026-08-04
+  reversal: all new work in `PCB/kicad/LibreServo-v4.0.0.*`; EAGLE frozen at
+  v2.3.1; import left U1/U5/U6 as `#`-prefixed pseudo-parts
+- [LibreServo U1 MCU swap chain](libreservo_mcu_swap_chain.md) — now TI
+  MSPM0G3518-Q1 (VQFN-32 RHB); MSPM0G350x has NO CSC/keystore but G351x does —
+  never generalise MSPM0 security across subfamilies
+- [Trust-module G351x/SLB9672 retarget](project_trust_module_g351x_retarget.md)
+  — 2026-08-03: Jayne=G3519-Q1 RGZ-48, gateway+Kaylee=G3518-Q1 RHB-32 (no PBx
+  ports), SLB9672; "observer"=Jayne / "flight engineer"=Kaylee; Kaylee symbols
+  are STACKED (overlap, not duplicate labels); committed .net files were stale
+- [venv hides system Python pkgs](env_venv_hides_system_python.md) —
+  manifold3d/sympy/matplotlib exist but are hidden by .venv; use
+  /usr/bin/python3, never pip (not permitted); no rtree/embree either
+- [Nozzle flap shingle (Rev T3)](project_nozzle_flap_shingle.md) — 8×50° flaps
+  in ONE radial band interpenetrated (17/12 non-manifold edges, 0 open edges,
+  split()=0 bodies); alternate flaps now seal-lapped 0.2mm outboard; masters
+  unchanged so bore targets hold; print = 4 master + 4 seal; -5deg variant
+  discarded
+- [Generated index conflicts](project_generated_index_conflicts.md) —
+  PROJECT_INDEX/ARCHIVE_INDEX/index_tags.json conflict on EVERY base merge;
+  resolve by REGENERATING, never by picking a side. PR #183 made the generator
+  deterministic (git-tracked only), so regenerating anywhere is safe and
+  --no-verify is no longer needed
+- [LG sponson wells (Rev R6)](project_lg_sponson_wells.md) — gear bays mount on
+  the sponson 25° panel (0.901,0.015,-0.433), NOT the cargo flank; wells at
+  canonical Y -7/+107 need no extension (-26.6 g); 3 silent-bug traps
+- [OPTIGA Trust M swap (ESC + servo)](project_optiga_trust_m_swap.md) —
+  2026-08-10 SLB9672 TPM → OPTIGA Trust M on both boards; secure element ≠ TPM;
+  5s protected-op budget keeps it out of the hot path; LibreServo_v2-Sec →
+  LibreServo_v4
+- [S32K144 pinout source found](project_s32k144_pinout_source.md) — the pin map
+  is in XLSX files EMBEDDED in S32K-RM.pdf (pdfdetach); unblocks the
+  placeholder pin map; LPI2C0 = PTA2/PTA3 pins 48/47
+- [kiutils missing → inject, don't regenerate](env_kiutils_missing.md) — ESC
+  generator scripts can't run; use targeted S-expression injection + kicad-cli
+  validation; paren-walk, don't regex, for lib_symbol ends
+- [ESC MCU swap → MSPM0G3518-Q1 (PENDING)](project_esc_mcu_swap_mspm0.md) — for
+  AES-256 over CSEc's AES-128; VCORE needs a DEDICATED cap, not a VDDA
+  slot-swap; start from docs/HANDOFF-mcu-swap-s32k144-to-mspm0g3518.md
+
+<!-- memory-index:end -->

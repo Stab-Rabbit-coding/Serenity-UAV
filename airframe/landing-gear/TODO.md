@@ -16,12 +16,17 @@
 ## §1.1.4 — Landing Gear
 → full detail: `WBS.md` §1.1.4
 
-- [ ] LG-10 Finalize the 4 bay placements in SerenityAssembly.FCStd
-- [ ] LG-17 Drop-height decision: 6 ft vs 4 ft ductile wire schedule
-- [ ] LG-15 Procure both wire grades/tempers; coupon test
+- [ ] LG-10.1 Re-measure the aft trapezoidal opening flat (blocker)
+- [ ] LG-10.2 Re-derive hip stations onto the opening flats
+- [ ] LG-10.3 Re-aim bay bolts normal to the flat; re-enable bosses
+- [ ] LG-10.4 Hollow/reinforce sponson; clear the wing spar + mortises
+- [ ] LG-10.5 Re-run cargo merge; publish the shell
+- [ ] LG-10.6 Generate hull patches; enable BAY_CONFORM
+- [ ] LG-10.7 Purge stale FCStd objects; bake, re-export
+- [ ] LG-10.8 Z-level all 4 feet to the most negative Z
+- [ ] LG-15 Procure wire to the 4 ft schedule; coupon test
 - [ ] LG-16 Confirm ductile wire temper survives jig-forming
-- [ ] LG-13 Define wire-end retention detail at bay bosses
-- [ ] LG-02 Bay mounting integration: backing plates, flank conforming
+- [ ] LG-02 Backing plate part (optional at 4 ft; FOS 4.56 unaided)
 - [ ] Assess foot grip on concrete/asphalt (traction requirement)
 - [ ] LG-03 CF rod channel in `middle_canonical_shell24.scad` rear skids
 - [ ] LG-06 Elastic bench check: quarter-AUW fixture, 1.5 ft drop
