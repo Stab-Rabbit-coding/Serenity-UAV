@@ -319,12 +319,18 @@ DORSAL_Z_INB = 145.0  # boss reaches this far into the cavity
 # be sunk inward either.  These bosses are internal thickening: modelled deep
 # and clipped by the outer-skin envelope, so each conforms to the real curved
 # wall and fuses to it (same treatment as the nacelle-servo pads above).
-LG_CORNERS = [
-    ("fore-port", -90.0, -7.0, 38.0, -22.4),
-    ("fore-stbd", -249.8, -7.0, 38.0, -157.6),
-    ("aft-port", -79.0, 107.0, 38.0, 28.0),
-    ("aft-stbd", -260.8, 107.0, 38.0, 152.0),
-]
+#
+# NOTE the third sentence above: the footprint's interior is occupied by the
+# wing-spar boss, the wing-root mortise and the nacelle-servo pad.  That was
+# recorded here as prose in 2026-08-09 but never enforced geometrically, and
+# measurement in 2026-08-16 showed all three conflicts were real -- see
+# wing_keepout_*() below and tools/landing_gear_wing_clearance.py.
+#
+# The corner table that used to sit here (hips at Y -7 / +107, a 5-tuple) was
+# DEAD CODE: the LG-10.2 table below rebinds LG_CORNERS before any read, so
+# editing this copy changed nothing.  Removed 2026-08-16; the live table is
+# the recessed one under "Corner stations" below.  Do not reintroduce a second
+# binding of this name.
 
 # --- LG-10.3/10.4: the gear bay seat, aperture and bolt bosses --------------
 #
@@ -403,6 +409,105 @@ LEG_ZONES = [
 LG_BAY_ENABLED = True
 
 
+# --- LG-10.4: the wing keep-outs the bay must respect ----------------------
+#
+# The sponson spans the wing-root station, so a bay footprint and the wing
+# mount compete for the same block of hull.  Measured 2026-08-16
+# (tools/landing_gear_wing_clearance.py) before any of this was enforced:
+#
+#   fore rebate  x spar boss    45 / 105 mm^3, 2.26-3.14 mm radially
+#                               -> bearing wall 4.85 -> 2.59 mm over ~7 mm
+#   fore rebate  x servo pad    52 / 89 mm^3, 3.44-4.29 mm deep
+#   aft collar   x mortise      347 / 349 mm^3, 4.13 mm across the FULL
+#                               20.8 mm mortise height -- the wing-root tenon
+#                               would not enter at assembly
+#   fore collar  x spar bore    2.7 mm^3, 0.84 mm -- the spar rod would not
+#                               slide through
+#
+# Resolution: on the HULL the wing always wins.  The bay's cuts stop at wing
+# material and the bay's added material stops at wing voids.  The residual fit
+# error is taken on the PRINTED bay frame instead (a local relief pocket in
+# canonical_leg_r6_*.scad), because relieving a 5 mm printed flange is free and
+# thinning a spar bearing is not.
+#
+# Bay BOLT BORES are deliberately NOT trimmed: a blocked M3 bore is a hard
+# assembly failure, and the bores were verified to miss every nacelle-servo M3
+# pilot bore by construction (0.000 mm^3 overlap).  They clip the servo pad
+# edge by 7.7-14.5 mm^3, which is accepted and recorded here.
+
+
+def wing_keepout_positives(envelope_tm=None):
+    """Wing material the gear bay's cuts must not remove.  (label, solid).
+
+    Pass `envelope_tm` -- main() already has it.  These are DEEP features that
+    only become real where they meet the skin (main() adds them as
+    `positives ^ envelope`), so an unclipped solid runs far outboard of the
+    hull into open air.  Protecting the raw box measured 9-11 mm of phantom
+    proud material under the fore flanges; clipped, the real figure is what
+    the flange must actually clear.  Unclipped is for reporting only.
+    """
+    raw = [
+        ("spar boss port", x_cylinder(
+            WING_SPAR_Y, WING_ROOT_Z, PORT_INB, PORT_OUTB,
+            WING_SPAR_BOSS_OD / 2.0)),
+        ("spar boss stbd", x_cylinder(
+            WING_SPAR_Y, WING_ROOT_Z, STBD_OUTB, STBD_INB,
+            WING_SPAR_BOSS_OD / 2.0)),
+        ("servo pad port", box(
+            PORT_INB, PORT_OUTB,
+            NSVMT_Y - NSVMT_PAD_W / 2, NSVMT_Y + NSVMT_PAD_W / 2,
+            NSVMT_Z - NSVMT_PAD_H / 2, NSVMT_Z + NSVMT_PAD_H / 2)),
+        ("servo pad stbd", box(
+            STBD_OUTB, STBD_INB,
+            NSVMT_Y - NSVMT_PAD_W / 2, NSVMT_Y + NSVMT_PAD_W / 2,
+            NSVMT_Z - NSVMT_PAD_H / 2, NSVMT_Z + NSVMT_PAD_H / 2)),
+    ]
+    if envelope_tm is None:
+        return raw
+    env = to_man(envelope_tm)
+    clipped = []
+    for label, solid in raw:
+        got = from_man(to_man(solid) ^ env)
+        if len(got.faces):
+            clipped.append((label, got))
+    return clipped
+
+
+def wing_keepout_negatives():
+    """Wing voids the gear bay's added material must not intrude into."""
+    my0, my1 = WING_MORT_Y - MORT_W / 2, WING_MORT_Y + MORT_W / 2
+    mz0, mz1 = WING_ROOT_Z - MORT_H / 2, WING_ROOT_Z + MORT_H / 2
+    return [
+        ("spar bore", x_cylinder(
+            WING_SPAR_Y, WING_ROOT_Z, -270.0, -70.0, WING_SPAR_BORE_D / 2.0)),
+        ("mortise port", box(
+            PORT_INB + 1.0, PORT_OUTB - 10.0, my0, my1, mz0, mz1)),
+        ("mortise stbd", box(
+            STBD_OUTB + 8.0, STBD_INB - 1.0, my0, my1, mz0, mz1)),
+    ]
+
+
+def _subtract_all(solid, keepouts):
+    """solid minus every keep-out, as a trimesh.  Returns (mesh, removed_mm3).
+
+    Returns the ORIGINAL solid untouched when nothing intersects, so the
+    common case costs one AABB test per keep-out and no boolean at all.
+    """
+    smin, smax = solid.bounds
+    hits = [k for _lbl, k in keepouts
+            if not ((smin > k.bounds[1]).any() or (k.bounds[0] > smax).any())]
+    if not hits:
+        return solid, 0.0
+    acc = to_man(solid)
+    before = abs(solid.volume)
+    for k in hits:
+        acc = acc - to_man(k)
+    trimmed = from_man(acc)
+    if len(trimmed.faces) == 0:
+        return solid, 0.0
+    return trimmed, before - abs(trimmed.volume)
+
+
 def _plate_frame(hx, hy, hz, az_deg, station):
     """(origin, e_x, e_y, e_z) of one bay's plate frame, in HULL coords.
 
@@ -467,16 +572,23 @@ def _plate_trap(org, ex, ey, ez, w_bot, w_top, zb0, zb1, x0, x1):
     return trimesh.convex.convex_hull(trimesh.PointCloud(np.array(pts)))
 
 
-def lg_bay_features(shell_tm):
+def lg_bay_features(shell_tm, envelope_tm=None):
     """Return (positives, negatives, note) for the four landing-gear bays.
 
     positives: one seat collar per corner, sunk inboard of the flange rebate.
                Envelope-clipped by main(), so it conforms to the real wall.
     negatives: the aperture (through), the flange rebate (so the frame sits
                flush with the skin), and 4 M3 bores per corner.
+
+    `envelope_tm` clips the LG-10.4 wing keep-outs to material that really
+    exists.  Without it the deep spar-boss/servo-pad solids reach far outboard
+    of the skin and would protect open air, leaving the flange footprint
+    9-11 mm proud instead of the true figure.
     """
     if not LG_BAY_ENABLED:
         return [], [], "landing-gear bays DISABLED"
+    keep_pos = wing_keepout_positives(envelope_tm)
+    keep_neg = wing_keepout_negatives()
     pos, neg, report = [], [], []
     for label, hx, hy, hz, az, station in LG_CORNERS:
         org, ex, ey, ez = _plate_frame(hx, hy, hz, az, station)
@@ -505,24 +617,44 @@ def lg_bay_features(shell_tm):
                       f"proud corner")
 
         # Seat collar: the bolts' bearing material, inboard of the flange.
-        pos.append(_plate_trap(org, ex, ey, ez,
-                               BAY_PLATE_WB, BAY_PLATE_W,
-                               BAY_PLATE_ZB0, zb1,
-                               -LG_SEAT_D, 0.0))
+        # LG-10.4: trimmed clear of the spar bore and the wing-root mortises,
+        # so the collar can never block the spar rod or the root tenon.
+        collar, cut_v = _subtract_all(
+            _plate_trap(org, ex, ey, ez,
+                        BAY_PLATE_WB, BAY_PLATE_W,
+                        BAY_PLATE_ZB0, zb1,
+                        -LG_SEAT_D, 0.0),
+            keep_neg)
+        pos.append(collar)
+        if cut_v > 0.0:
+            report.append(f"{label}: collar relieved {cut_v:.1f} mm^3 "
+                          f"around the wing void")
 
         # Aperture, straight through -- the liner runs COWL_H inboard.
-        neg.append(_plate_trap(org, ex, ey, ez,
-                               BAY_APER_W_BOT + 2 * LG_FIT_CLR,
-                               BAY_APER_W_TOP + 2 * LG_FIT_CLR,
-                               BAY_APER_ZB0 - LG_FIT_CLR, zb1 + LG_FIT_CLR,
-                               -(COWL_H + 6.0), 12.0))
+        # LG-10.4: stops at wing material rather than eating into it.
+        aper, aper_v = _subtract_all(
+            _plate_trap(org, ex, ey, ez,
+                        BAY_APER_W_BOT + 2 * LG_FIT_CLR,
+                        BAY_APER_W_TOP + 2 * LG_FIT_CLR,
+                        BAY_APER_ZB0 - LG_FIT_CLR, zb1 + LG_FIT_CLR,
+                        -(COWL_H + 6.0), 12.0),
+            keep_pos)
+        neg.append(aper)
 
         # Flange rebate: BAY_PLATE_T deep, so the frame finishes flush.
-        neg.append(_plate_trap(org, ex, ey, ez,
-                               BAY_PLATE_WB + 2 * LG_FIT_CLR,
-                               BAY_PLATE_W + 2 * LG_FIT_CLR,
-                               BAY_PLATE_ZB0 - LG_FIT_CLR, zb1 + LG_FIT_CLR,
-                               0.0, 12.0))
+        # LG-10.4: likewise stops at wing material.  Where it does, the skin
+        # is left proud and the PRINTED frame carries the relief instead.
+        rebate, reb_v = _subtract_all(
+            _plate_trap(org, ex, ey, ez,
+                        BAY_PLATE_WB + 2 * LG_FIT_CLR,
+                        BAY_PLATE_W + 2 * LG_FIT_CLR,
+                        BAY_PLATE_ZB0 - LG_FIT_CLR, zb1 + LG_FIT_CLR,
+                        0.0, 12.0),
+            keep_pos)
+        neg.append(rebate)
+        if aper_v + reb_v > 0.0:
+            report.append(f"{label}: {aper_v + reb_v:.1f} mm^3 of wing "
+                          f"material protected from the bay cuts")
 
         # 4x M3, on the flange centreline, following the trapezoid.
         for i in (0, 1):
@@ -553,7 +685,7 @@ def bake(mesh):
     return trimesh.Trimesh(vertices=v, faces=mesh.faces, process=False)
 
 
-def build_negatives(shell_tm):
+def build_negatives(shell_tm, envelope_tm=None):
     """Return (cutters, notes)."""
     cutters, notes = [], []
 
@@ -599,31 +731,11 @@ def build_negatives(shell_tm):
     notes.append("ring pocket Y=30")
 
     # Wing spar bore (full lateral span) + 2 root mortises (through each wall).
-    cutters.append(
-        x_cylinder(WING_SPAR_Y, WING_ROOT_Z, -270.0, -70.0, WING_SPAR_BORE_D / 2.0)
-    )
-    notes.append("wing spar bore")
-    cutters.append(
-        box(
-            PORT_INB + 1.0,
-            PORT_OUTB - 10.0,
-            WING_MORT_Y - MORT_W / 2,
-            WING_MORT_Y + MORT_W / 2,
-            WING_ROOT_Z - MORT_H / 2,
-            WING_ROOT_Z + MORT_H / 2,
-        )
-    )
-    cutters.append(
-        box(
-            STBD_OUTB + 8.0,
-            STBD_INB - 1.0,
-            WING_MORT_Y - MORT_W / 2,
-            WING_MORT_Y + MORT_W / 2,
-            WING_ROOT_Z - MORT_H / 2,
-            WING_ROOT_Z + MORT_H / 2,
-        )
-    )
-    notes.append("wing mortises (port + stbd)")
+    # Built by wing_keepout_negatives() so the solids the gear bay is trimmed
+    # against are the SAME solids the hull is actually cut with (LG-10.4).
+    for label, solid in wing_keepout_negatives():
+        cutters.append(solid)
+        notes.append(f"wing {label}")
 
     # Nacelle-servo M3 heat-set pilot bores (into the cavity face of each pad).
     for x_in, x_out in ((PORT_INB, PORT_INB + 8.0), (STBD_INB, STBD_INB - 8.0)):
@@ -640,14 +752,14 @@ def build_negatives(shell_tm):
                 )
     notes.append("servo M3 pilot bores")
 
-    _lg_pos, lg_neg, lg_note = lg_bay_features(shell_tm)
+    _lg_pos, lg_neg, lg_note = lg_bay_features(shell_tm, envelope_tm)
     cutters.extend(lg_neg)
     notes.append(lg_note)
 
     return cutters, notes
 
 
-def build_positives(shell_tm):
+def build_positives(shell_tm, envelope_tm=None):
     """Return (raw deep features, notes).  Clipped to the envelope in main()."""
     feats, notes = [], []
 
@@ -656,40 +768,13 @@ def build_positives(shell_tm):
             feats.append(hinge._block(side, station))
     notes.append("4 hinge retention blocks")
 
-    # Wing-spar bearing bosses (Ø22, coaxial with the spar; deep, clipped).
-    feats.append(
-        x_cylinder(
-            WING_SPAR_Y, WING_ROOT_Z, PORT_INB, PORT_OUTB, WING_SPAR_BOSS_OD / 2.0
-        )
-    )
-    feats.append(
-        x_cylinder(
-            WING_SPAR_Y, WING_ROOT_Z, STBD_OUTB, STBD_INB, WING_SPAR_BOSS_OD / 2.0
-        )
-    )
+    # Wing-spar bearing bosses (Ø22, coaxial with the spar) and the two
+    # nacelle-servo mount pads -- deep boxes/cylinders, envelope-clipped.
+    # Built by wing_keepout_positives() so the solids the gear bay is trimmed
+    # against are the SAME solids the hull actually carries (LG-10.4).
+    for _label, solid in wing_keepout_positives():  # raw: main() clips
+        feats.append(solid)
     notes.append("2 wing-spar bearing bosses")
-
-    # Nacelle-servo mount pads (deep box, clipped).
-    feats.append(
-        box(
-            PORT_INB,
-            PORT_OUTB,
-            NSVMT_Y - NSVMT_PAD_W / 2,
-            NSVMT_Y + NSVMT_PAD_W / 2,
-            NSVMT_Z - NSVMT_PAD_H / 2,
-            NSVMT_Z + NSVMT_PAD_H / 2,
-        )
-    )
-    feats.append(
-        box(
-            STBD_OUTB,
-            STBD_INB,
-            NSVMT_Y - NSVMT_PAD_W / 2,
-            NSVMT_Y + NSVMT_PAD_W / 2,
-            NSVMT_Z - NSVMT_PAD_H / 2,
-            NSVMT_Z + NSVMT_PAD_H / 2,
-        )
-    )
     notes.append("2 nacelle-servo mount pads")
 
     # Inara avionics-bay standoff bosses (dorsal port, deep Z-cyl, clipped).
@@ -710,7 +795,7 @@ def build_positives(shell_tm):
             n += 1
     notes.append(f"Inara avionics bosses ({n})")
 
-    lg_pos, _lg_neg, lg_note = lg_bay_features(shell_tm)
+    lg_pos, _lg_neg, lg_note = lg_bay_features(shell_tm, envelope_tm)
     feats.extend(lg_pos)
     notes.append(lg_note)
 
@@ -906,8 +991,8 @@ def main():
         f"X {eb[0][0]:.1f}..{eb[1][0]:.1f}"
     )
 
-    negs, nnotes = build_negatives(shell_tm)
-    poss, pnotes = build_positives(shell_tm)
+    negs, nnotes = build_negatives(shell_tm, envelope_tm)
+    poss, pnotes = build_positives(shell_tm, envelope_tm)
     print(f"\n  negatives ({len(negs)} cutters):")
     for n in nnotes:
         print(f"    - {n}")
