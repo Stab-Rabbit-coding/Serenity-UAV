@@ -326,111 +326,216 @@ LG_CORNERS = [
     ("aft-stbd", -260.8, 107.0, 38.0, 152.0),
 ]
 
-# Bay plate bolt pattern, leg-local (canonical_leg_r6_*.scad bay()).
-LG_BAY_BACK_X = -8.0            # plate datum
-LG_BAY_CANT = -11.5             # deg; negative = leans outboard at the top
-LG_PLATE_Z0 = 12.0              # plate frame origin above the hip
-LG_BOLT_YB = (-15.0, 15.0)      # along the pin axis
-LG_BOLT_ZB = (-28.0, 42.0)      # up the canted plane
-LG_BOLT_PLATE_X = -4.1          # bolt start, plate frame
+# --- LG-10.3/10.4: the gear bay seat, aperture and bolt bosses --------------
+#
+# WHY THIS IS BUILT IN THE BAY'S PLATE FRAME, NOT ON THE PANEL NORMAL
+# ------------------------------------------------------------------
+# SS2.4a says to aim the bay bolts normal to the sponson's trapezoidal flat.
+# That is not achievable, and the measurement says so plainly.  The bay's
+# orientation is fixed by the leg: the hip pin axis is leg-local Y and the
+# corner's swing azimuth is fixed by the CANONICAL FOOT STATIONS.  The panel
+# normal is fixed by the sponson's shape.  Those two disagree by a YAW of
+# 21-24 deg at every corner, and no value of BAY_CANT removes it -- a cant is
+# a rotation about Y and the residual is about Z:
+#
+#     BAY_CANT -11.5   bolt axis 26.2 deg (fore) / 29.2 deg (aft) off normal
+#     BAY_CANT -25.66  bolt axis 21.1 deg (fore) / 24.4 deg (aft) off normal
+#
+# Yawing the leg to close it moves the feet 32 mm off their canonical stations,
+# which is the one thing SS2.2 will not trade.  So the hull gives the bay a
+# printed SEAT instead: a flange-shaped collar whose face is normal to the bolt
+# axis by construction, recessed into the sponson.  The bolts are then normal
+# to their own bearing face -- which is what bolt bearing, head seating and
+# boss depth actually require -- and the panel normal is used only to LOCATE
+# the opening, never to orient the mount.  This is the "hollow/reinforce the
+# sponson for the attachment" of LG-10.4.
+#
+# Everything below is a CONTRACT with canonical_leg_r6_*.scad.  Change one,
+# change both; the aperture here must match the liner there exactly or the leg
+# will not pass through its own bay.
+X_CL_HULL = -169.9          # hull centreline
+BAY_APER_W_BOT = 25.0       # mm, aperture width at the mouth
+BAY_APER_W_TOP = 34.0       # mm, aperture width at the head
+BAY_APER_L = 58.0           # mm, aperture length up the canted plane
+BAY_APER_ZB0 = -38.0        # mm, aperture bottom edge, plate frame
+BAY_FLANGE = 10.0           # mm, bolt flange width all round the aperture
+BAY_PLATE_W = BAY_APER_W_TOP + 2 * BAY_FLANGE      # 54
+BAY_PLATE_WB = BAY_APER_W_BOT + 2 * BAY_FLANGE     # 45
+BAY_PLATE_L = BAY_APER_L + 2 * BAY_FLANGE          # 78
+BAY_PLATE_ZB0 = BAY_APER_ZB0 - BAY_FLANGE          # -48
+BAY_BOLT_ZB = (BAY_PLATE_ZB0 + BAY_FLANGE / 2.0,
+               BAY_PLATE_ZB0 + BAY_PLATE_L - BAY_FLANGE / 2.0)     # -43, +25
+BAY_BOLT_YB = ((BAY_APER_W_BOT + BAY_FLANGE) / 2.0,
+               (BAY_APER_W_TOP + BAY_FLANGE) / 2.0)                # 17.5, 22
+BAY_PLATE_T = 5.0           # frame thickness (depth of the flange rebate)
+COWL_H = 7.0                # liner depth inboard of the frame
+BAY_CANT = -11.5            # deg
+LG_PLATE_Z0 = 12.0          # plate origin above the hip, leg-local
+BAY_STANDOFF = {"fore": 12.6, "aft": 5.4}   # skin standoff, post-recess
 
-LG_BOSS_R = 8.0                 # Ø16 internal boss around each bolt
-LG_BOSS_DEPTH = 5.0             # mm of internal thickening (2 mm wall -> 7 mm)
-LG_M3_D = 3.4                   # M3 clearance through-bore
+LG_SEAT_D = 8.0             # mm, collar depth inboard of the flange (bolt bite)
+LG_FIT_CLR = 0.4            # mm, assembly clearance on the rebate and aperture
+LG_M3_D = 3.4               # M3 clearance through-bore
 
-# Retained as an informational clearance check (now at the Rev R6 stations).
-LEG_ZONES = [
-    (label, (hx - 25.0, hx + 25.0, hy - 30.0, hy + 30.0, 10.0, 60.0))
-    for label, hx, hy, _hz, _az in LG_CORNERS
+# Measured sponson panel (tools/landing_gear_opening_fit.py).  Retained ONLY to
+# locate/report the opening -- it no longer orients anything.
+# NOTE the starboard sign: mirroring across the centreline flips X and leaves Y
+# alone.  This table previously negated BOTH, which is a 180 deg rotation about
+# Z, not a mirror, and it broke the port/stbd symmetry of every derived yaw.
+LG_PANEL_N = {"port": np.array([0.901, 0.015, -0.433]),
+              "stbd": np.array([-0.901, 0.015, -0.433])}
+
+# Corner stations, RECESSED 15 mm along each corner's own swing axis (LG-10.2).
+# (label, hip_x, hip_y, hip_z, swing_azimuth_deg, station)
+LG_CORNERS = [
+    ("fore-port", -103.87, -1.28, 38.0, -22.4, "fore"),
+    ("fore-stbd", -235.93, -1.28, 38.0, -157.6, "fore"),
+    ("aft-port", -92.24, 99.96, 38.0, 28.0, "aft"),
+    ("aft-stbd", -247.56, 99.96, 38.0, 152.0, "aft"),
 ]
 
+# Retained as an informational clearance check.
+LEG_ZONES = [
+    (label, (hx - 25.0, hx + 25.0, hy - 30.0, hy + 30.0, 10.0, 60.0))
+    for label, hx, hy, _hz, _az, _st in LG_CORNERS
+]
 
-def _lg_bolt_frame(hx, hy, hz, az_deg):
-    """Return (bolt_points, axis) in HULL frame for one bay station.
+LG_BAY_ENABLED = True
+
+
+def _plate_frame(hx, hy, hz, az_deg, station):
+    """(origin, e_x, e_y, e_z) of one bay's plate frame, in HULL coords.
 
     Mirrors the OpenSCAD construction exactly:
-        translate([BAY_BACK_X, 0, PLATE_Z0]) rotate([0, -BAY_CANT, 0])
-            translate([LG_BOLT_PLATE_X, yb, zb]) rotate([0, 90, 0]) cylinder(...)
-    OpenSCAD's rotate([0, a, 0]) maps x -> (cos a, 0, -sin a) and
-    z -> (sin a, 0, cos a); here a = -BAY_CANT.
+        translate([BAY_BACK_X, 0, LG_PLATE_Z0]) rotate([0, -BAY_CANT, 0])
+    then the corner's own rotate([0, 0, az]) and translate to the hip.
+    OpenSCAD's rotate([0, a, 0]) maps x -> (cos a, 0, -sin a).
     """
-    a = np.radians(-LG_BAY_CANT)
-    e_x = np.array([np.cos(a), 0.0, -np.sin(a)])   # plate outboard normal
-    e_y = np.array([0.0, 1.0, 0.0])
-    e_z = np.array([np.sin(a), 0.0, np.cos(a)])
-    p0 = np.array([LG_BAY_BACK_X, 0.0, LG_PLATE_Z0])
+    a = np.radians(-BAY_CANT)
+    ex_l = np.array([np.cos(a), 0.0, -np.sin(a)])
+    ey_l = np.array([0.0, 1.0, 0.0])
+    ez_l = np.array([np.sin(a), 0.0, np.cos(a)])
+    p0_l = np.array([BAY_STANDOFF[station] - BAY_PLATE_T, 0.0, LG_PLATE_Z0])
 
     t = np.radians(az_deg)
     rz = np.array([[np.cos(t), -np.sin(t), 0.0],
                    [np.sin(t), np.cos(t), 0.0],
                    [0.0, 0.0, 1.0]])
     hip = np.array([hx, hy, hz])
-
-    pts = []
-    for yb in LG_BOLT_YB:
-        for zb in LG_BOLT_ZB:
-            local = p0 + LG_BOLT_PLATE_X * e_x + yb * e_y + zb * e_z
-            pts.append(rz @ local + hip)
-    return pts, rz @ e_x
+    return rz @ p0_l + hip, rz @ ex_l, rz @ ey_l, rz @ ez_l
 
 
-def _skin_anchor(shell_tm, p, axis, radius):
-    """Slide a bolt point onto the OUTER SKIN along its own axis.
+def seat_offset(shell_tm, org, ex, ey, ez):
+    """Plate-frame x at which the real skin sits under a bay's flange footprint.
 
-    Returns the most outboard shell vertex inside the boss footprint, or None
-    if the axis misses the hull.  This is required because the bay plate datum
-    floats 9-30 mm off the flank (the plate is canted and the flank is doubly
-    curved), so a boss anchored at the plate-frame bolt point is almost
-    entirely outside the envelope and the clip trims it to a ~1.5 mm wafer
-    instead of the intended LG_BOSS_DEPTH of thickening.
+    BAY_STANDOFF was measured along the SS2.4a PANEL NORMAL, but the plate's own
+    axis e_x is 21-24 deg off that normal (see the yaw note above), so applying
+    the standoff along e_x overshoots and leaves the seat hanging outside the
+    hull -- it lands only 11-15% inside the envelope.  Measure it in the frame
+    that actually places the part instead of deriving it in a different one.
+
+    Returns (x_median, x_p10, x_p90).  The spread is the footprint's real
+    curvature: a FLAT seat can only be justified while it stays small, and it is
+    what LG-10.6's conforming patch removes.
     """
-    v = shell_tm.vertices - p
-    near = np.abs(v).max(axis=1) < 60.0
-    if not near.any():
+    v = shell_tm.vertices - org
+    u = v @ ey
+    w = v @ ez
+    x = v @ ex
+    zb1 = BAY_PLATE_ZB0 + BAY_PLATE_L
+    # inside the trapezoid, with the half-width interpolated along its run
+    frac = np.clip((w - BAY_PLATE_ZB0) / BAY_PLATE_L, 0.0, 1.0)
+    half = (BAY_PLATE_WB + frac * (BAY_PLATE_W - BAY_PLATE_WB)) / 2.0
+    sel = (w > BAY_PLATE_ZB0) & (w < zb1) & (np.abs(u) < half) & (np.abs(x) < 60.0)
+    if sel.sum() < 20:
         return None
-    v = v[near]
-    along = v @ axis
-    radial = np.linalg.norm(v - np.outer(along, axis), axis=1)
-    sel = radial < radius
-    if not sel.any():
-        return None
-    return p + axis * float(along[sel].max())
+    xs = x[sel]
+    # the OUTBOARD skin is the far side of the distribution; the near cluster is
+    # the opposite wall of the shell
+    outer = xs[xs > np.median(xs)]
+    return (float(np.median(outer)), float(np.percentile(outer, 10)),
+            float(np.percentile(outer, 90)))
 
 
-# DISABLED pending LG-10 rework (2026-08-09).  The bolt stations below were
-# derived against the bare cargo FLANK, but the real mounting face is the
-# ANGLED TRAPEZOIDAL FLAT of the landing-gear opening in the sponson
-# (docs/LANDING_GEAR_ANALYSIS.md SS2.4a).  Bolts on the flank measure
-# 5.6-64.1 deg off the local surface normal and the bosses add almost no
-# material.  Left in the tree because the machinery is correct and only the
-# stations/axes are wrong -- but OFF by default so a routine merge run cannot
-# inject misplaced geometry into the published cargo shell.
-LG_BAY_ENABLED = False
+def _plate_trap(org, ex, ey, ez, w_bot, w_top, zb0, zb1, x0, x1):
+    """Trapezoidal prism in a bay's plate frame (widths along ey, run along ez,
+    extruded x0..x1 along ex)."""
+    quad = [(-w_bot / 2.0, zb0), (w_bot / 2.0, zb0),
+            (w_top / 2.0, zb1), (-w_top / 2.0, zb1)]
+    pts = [org + ey * u + ez * v + ex * xx
+           for xx in (x0, x1) for u, v in quad]
+    return trimesh.convex.convex_hull(trimesh.PointCloud(np.array(pts)))
 
 
 def lg_bay_features(shell_tm):
-    """Return (positives, negatives, note) for the four landing-gear bays."""
+    """Return (positives, negatives, note) for the four landing-gear bays.
+
+    positives: one seat collar per corner, sunk inboard of the flange rebate.
+               Envelope-clipped by main(), so it conforms to the real wall.
+    negatives: the aperture (through), the flange rebate (so the frame sits
+               flush with the skin), and 4 M3 bores per corner.
+    """
     if not LG_BAY_ENABLED:
-        return [], [], ("landing-gear bay bosses DISABLED "
-                        "(LG-10 rework: wrong mounting face, see SS2.4a)")
-    pos, neg, missed = [], [], []
-    for label, hx, hy, hz, az in LG_CORNERS:
-        pts, axis = _lg_bolt_frame(hx, hy, hz, az)
-        for i, p in enumerate(pts):
-            anchor = _skin_anchor(shell_tm, p, axis, LG_BOSS_R)
-            if anchor is None:
-                missed.append(f"{label}#{i}")
-                continue
-            # Boss: from LG_BOSS_DEPTH inboard of the skin, out past it; the
-            # envelope clip trims the outboard end back to the real surface.
-            pos.append(axis_cylinder(anchor, axis, -LG_BOSS_DEPTH, 8.0,
-                                     LG_BOSS_R))
-            # Bore: through boss + wall, generous either side.
-            neg.append(axis_cylinder(anchor, axis, -LG_BOSS_DEPTH - 6.0, 10.0,
-                                     LG_M3_D / 2.0))
-    note = f"{len(pos)} landing-gear bay bolt bosses (4 x 4 corners)"
-    if missed:
-        note += f"  [WARN missed skin: {', '.join(missed)}]"
+        return [], [], "landing-gear bays DISABLED"
+    pos, neg, report = [], [], []
+    for label, hx, hy, hz, az, station in LG_CORNERS:
+        org, ex, ey, ez = _plate_frame(hx, hy, hz, az, station)
+        zb1 = BAY_PLATE_ZB0 + BAY_PLATE_L
+
+        # Seat the frame on the MEASURED skin, not on a standoff carried over
+        # from a different frame.  x0 is where the frame's outer face lands.
+        meas = seat_offset(shell_tm, org, ex, ey, ez)
+        if meas is None:
+            report.append(f"{label}: NO SKIN under the flange footprint")
+            continue
+        x_med, lo, hi = meas
+        # Seat at the MOST INBOARD decile of the skin over the footprint, not at
+        # its median.  The footprint is doubly curved (7.5-8.7 mm of relief
+        # across it, comparable to the seat's own 8 mm depth), so seating on the
+        # median leaves most of the collar hanging outboard of the skin -- it
+        # kept only 11-17% of its volume inside the envelope.  Seating on the
+        # inboard decile buries the collar and lets the flange rebate cut away
+        # the skin that stands proud, which is the "hollow the sponson for the
+        # attachment" half of LG-10.4.
+        x0 = lo
+        org = org + ex * x0
+        report.append(f"{label} {station}: seat x {x0:+.1f} mm "
+                      f"(median {x_med:+.1f}), footprint relief {hi - lo:.1f} mm, "
+                      f"rebate cuts {hi - lo + BAY_PLATE_T:.1f} mm at the "
+                      f"proud corner")
+
+        # Seat collar: the bolts' bearing material, inboard of the flange.
+        pos.append(_plate_trap(org, ex, ey, ez,
+                               BAY_PLATE_WB, BAY_PLATE_W,
+                               BAY_PLATE_ZB0, zb1,
+                               -LG_SEAT_D, 0.0))
+
+        # Aperture, straight through -- the liner runs COWL_H inboard.
+        neg.append(_plate_trap(org, ex, ey, ez,
+                               BAY_APER_W_BOT + 2 * LG_FIT_CLR,
+                               BAY_APER_W_TOP + 2 * LG_FIT_CLR,
+                               BAY_APER_ZB0 - LG_FIT_CLR, zb1 + LG_FIT_CLR,
+                               -(COWL_H + 6.0), 12.0))
+
+        # Flange rebate: BAY_PLATE_T deep, so the frame finishes flush.
+        neg.append(_plate_trap(org, ex, ey, ez,
+                               BAY_PLATE_WB + 2 * LG_FIT_CLR,
+                               BAY_PLATE_W + 2 * LG_FIT_CLR,
+                               BAY_PLATE_ZB0 - LG_FIT_CLR, zb1 + LG_FIT_CLR,
+                               0.0, 12.0))
+
+        # 4x M3, on the flange centreline, following the trapezoid.
+        for i in (0, 1):
+            for s in (-1.0, 1.0):
+                pt = (org + ey * (s * BAY_BOLT_YB[i])
+                      + ez * BAY_BOLT_ZB[i])
+                neg.append(axis_cylinder(pt, ex, -LG_SEAT_D - 8.0, 12.0,
+                                         LG_M3_D / 2.0))
+
+    note = (f"{len(pos)} bay seat collars + {len(neg)} cuts "
+            f"(aperture, flange rebate, 16 M3 bores)")
+    for line in report:
+        note += f"\n        {line}"
     return pos, neg, note
 
 
@@ -535,9 +640,9 @@ def build_negatives(shell_tm):
                 )
     notes.append("servo M3 pilot bores")
 
-    _lg_pos, lg_neg, _n = lg_bay_features(shell_tm)
+    _lg_pos, lg_neg, lg_note = lg_bay_features(shell_tm)
     cutters.extend(lg_neg)
-    notes.append(f"{len(lg_neg)} landing-gear bay M3 bores")
+    notes.append(lg_note)
 
     return cutters, notes
 

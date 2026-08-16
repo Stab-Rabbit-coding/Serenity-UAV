@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-11",
+  "generated": "2026-08-16",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -866,6 +866,16 @@
     "airframe/gcode/davinci-jr-proto/xyz_wrap.py": {
       "description": "xyz_wrap.py \u2014 Convert slic3r G-code to XYZprinting .3w format.",
       "tags": [
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/landing-gear/HANDOFF.md": {
+      "description": "Landing Gear \u2014 Session Handoff (2026-08-09)",
+      "tags": [
+        "documentation",
+        "landing-gear",
+        "security",
         "structural"
       ],
       "archived": false
@@ -2114,7 +2124,7 @@
       "archived": false
     },
     "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_legs.stl": {
-      "description": "STL mesh \u2014 header: OpenSCAD Model",
+      "description": "STL mesh (ASCII): OpenSCAD_Model",
       "tags": [
         "cad-mesh",
         "landing-gear",
@@ -12108,8 +12118,24 @@
       ],
       "archived": false
     },
+    "tools/landing_gear_bay_station_fit.py": {
+      "description": "LG-10.2/10.3 -- reconcile the four canonical hip stations with the real skin.",
+      "tags": [
+        "build-tooling",
+        "landing-gear"
+      ],
+      "archived": false
+    },
     "tools/landing_gear_cowl_clearance.py": {
-      "description": "Verify the Rev R6 bay cowl clears the leg through its full flexion sweep.",
+      "description": "Verify the Rev R6 bay clears the leg through its full flexion sweep.",
+      "tags": [
+        "build-tooling",
+        "landing-gear"
+      ],
+      "archived": false
+    },
+    "tools/landing_gear_opening_fit.py": {
+      "description": "LG-10.1 -- locate and measure the landing-gear opening flats in the sponson.",
       "tags": [
         "build-tooling",
         "landing-gear"
@@ -12217,6 +12243,7 @@
       "airframe/fuselage-joints/WBS.md",
       "airframe/fuselage-mid/TODO.md",
       "airframe/fuselage-mid/WBS.md",
+      "airframe/landing-gear/HANDOFF.md",
       "airframe/landing-gear/TODO.md",
       "airframe/landing-gear/WBS.md",
       "airframe/wings-nacelles/TODO.md",
@@ -12553,6 +12580,7 @@
       "airframe/SPEC_VERIFICATION_0.6.1.md",
       "airframe/blender-scripts/add_structural_features.py",
       "airframe/fuselage-joints/WBS.md",
+      "airframe/landing-gear/HANDOFF.md",
       "airframe/landing-gear/WBS.md",
       "airframe/openscad/fuselage/cargo/cargo_spar_drive.scad",
       "airframe/openscad/fuselage/landing_leg_assy.scad",
@@ -12901,6 +12929,7 @@
       "airframe/gcode/davinci-jr-proto/davinci_jr_pla.ini",
       "airframe/gcode/davinci-jr-proto/slice_all_batches.sh",
       "airframe/gcode/davinci-jr-proto/xyz_wrap.py",
+      "airframe/landing-gear/HANDOFF.md",
       "airframe/landing-gear/TODO.md",
       "airframe/landing-gear/WBS.md",
       "airframe/openscad/fuselage/access_panels_24in.scad",
@@ -13717,6 +13746,7 @@
       "tools/compact_bom_entries.py"
     ],
     "landing-gear": [
+      "airframe/landing-gear/HANDOFF.md",
       "airframe/landing-gear/TODO.md",
       "airframe/landing-gear/WBS.md",
       "airframe/stls/fuselage/landing-gear/lg_r6_1_5in_hull_legs.stl",
@@ -13759,7 +13789,9 @@
       "tools/add_landing_gear_bosses.py",
       "tools/build_landing_gear_views.py",
       "tools/landing_gear_bay_pad_fit.py",
+      "tools/landing_gear_bay_station_fit.py",
       "tools/landing_gear_cowl_clearance.py",
+      "tools/landing_gear_opening_fit.py",
       "tools/landing_gear_r6_sizing.py"
     ],
     "power": [
@@ -15439,7 +15471,9 @@
       "tools/export-specctra-dsn.py",
       "tools/import-specctra-ses.py",
       "tools/landing_gear_bay_pad_fit.py",
+      "tools/landing_gear_bay_station_fit.py",
       "tools/landing_gear_cowl_clearance.py",
+      "tools/landing_gear_opening_fit.py",
       "tools/landing_gear_r6_sizing.py",
       "tools/open_mating_faces.py",
       "tools/precommit_index.py",
