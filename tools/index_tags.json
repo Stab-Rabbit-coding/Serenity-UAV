@@ -685,7 +685,7 @@
       "archived": false
     },
     "airframe/blender-scripts/merge_cargo_interior.py": {
-      "description": "Python script",
+      "description": "merge_cargo_interior.py \u2014 Rev R1 (2026-06-30)",
       "tags": [
         "cad-mesh",
         "structural"
@@ -12150,6 +12150,14 @@
       ],
       "archived": false
     },
+    "tools/landing_gear_wing_clearance.py": {
+      "description": "Verify the Rev R6 gear bay clears the wing structure it shares a station with.",
+      "tags": [
+        "build-tooling",
+        "landing-gear"
+      ],
+      "archived": false
+    },
     "tools/open_mating_faces.py": {
       "description": "Open the capped head-aft and middle-fwd fuselage mating faces.",
       "tags": [
@@ -12201,6 +12209,27 @@
     },
     "tools/verify_bow_pod.py": {
       "description": "verify_bow_pod.py \u2014 Rev R1 (2026-06-30)",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/wing_airfoil_variants.py": {
+      "description": "Generate and compare S1223 thickening strategies for the Rev R1b spar move.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/wing_cfd_openfoam.py": {
+      "description": "2D RANS comparison of S1223 thickening strategies, via OpenFOAM. **WIP.**",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/wing_spar_station_fit.py": {
+      "description": "Size the wing spar's chordwise station against the S1223 section it lives in.",
       "tags": [
         "build-tooling"
       ],
@@ -13792,7 +13821,8 @@
       "tools/landing_gear_bay_station_fit.py",
       "tools/landing_gear_cowl_clearance.py",
       "tools/landing_gear_opening_fit.py",
-      "tools/landing_gear_r6_sizing.py"
+      "tools/landing_gear_r6_sizing.py",
+      "tools/landing_gear_wing_clearance.py"
     ],
     "power": [
       "airframe/openscad/fuselage/battery_tray.scad",
@@ -15475,13 +15505,17 @@
       "tools/landing_gear_cowl_clearance.py",
       "tools/landing_gear_opening_fit.py",
       "tools/landing_gear_r6_sizing.py",
+      "tools/landing_gear_wing_clearance.py",
       "tools/open_mating_faces.py",
       "tools/precommit_index.py",
       "tools/precommit_kicad_load.py",
       "tools/precommit_sanitize.py",
       "tools/validate_kicad.py",
       "tools/validate_stls.py",
-      "tools/verify_bow_pod.py"
+      "tools/verify_bow_pod.py",
+      "tools/wing_airfoil_variants.py",
+      "tools/wing_cfd_openfoam.py",
+      "tools/wing_spar_station_fit.py"
     ]
   }
 }
