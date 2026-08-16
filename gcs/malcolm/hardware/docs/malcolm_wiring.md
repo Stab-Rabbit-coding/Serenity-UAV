@@ -61,7 +61,7 @@ The gimbal servos and AS5600 encoders connect to Cape-B-2 servo and I²C outputs
 | J_SERVO VCC (6 V rail)   | Servo power    | Both servo +V pins  | 22 AWG     |
 | J_SERVO GND              | Ground         | Both servo GND pins | 22 AWG     |
 
-> Cape-B-2 servo rail is 6 V (from TPS54540 BEC on Kaylee PDB for aircraft, or from a
+> Cape-B-2 servo rail is 6 V (from TPS54540 BEC on FlightEngineer PDB for aircraft, or from a
 > standalone 6 V BEC on the GCS field power supply).  DS3218MG rated 6 V, 25 kg·cm.
 
 ### Encoder I²C Bus

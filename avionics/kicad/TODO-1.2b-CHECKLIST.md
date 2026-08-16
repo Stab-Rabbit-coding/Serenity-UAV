@@ -26,7 +26,7 @@
 ### Pre-Work Review
 - [ ] Read `avionics/rev-s1/WBS.md` §1.2b (understanding of design decisions)
 - [ ] Read `AGENTS.md` §5 & §7 (standards compliance requirements)
-- [ ] Review existing `avionics/kicad/*/Emma.md`, `Zoë.md`, `Kaylee.md` (current state)
+- [ ] Review existing `avionics/kicad/*/Emma.md`, `TACCO.md`, `FlightEngineer.md` (current state)
 
 ---
 
@@ -149,8 +149,8 @@
 **Status:** 65% complete (PCB done, schematic 30 days behind, major rework needed)
 
 #### Task 2.A: Reference-designator remapping (CRITICAL)
-- [ ] Open `avionics/kicad/Zoë/kicads/Zoë.kicad_sch` in KiCad
-- [ ] Use reference mapping file: `avionics/kicad/Zoë/ref_remap_2026-07-18.json`
+- [ ] Open `avionics/kicad/TACCO/kicads/TACCO.kicad_sch` in KiCad
+- [ ] Use reference mapping file: `avionics/kicad/TACCO/ref_remap_2026-07-18.json`
 - [ ] For each mapping in "critical_renames":
   1. Edit → Find & Replace (Ctrl+H)
   2. Find: old reference (e.g., "CMC_CAN")
@@ -158,7 +158,7 @@
   4. Replace All
   5. Run ERC immediately to check for issues:
      ```bash
-     kicad-cli sch erc Zoë.kicad_sch | head -50
+     kicad-cli sch erc TACCO.kicad_sch | head -50
      ```
   6. If ERC errors appear, undo (Ctrl+Z) and diagnose
 
@@ -177,13 +177,13 @@ WINCH-DRV      → WINCH DRV
 
 - [ ] After all renames, run full ERC:
   ```bash
-  kicad-cli sch erc Zoë.kicad_sch
+  kicad-cli sch erc TACCO.kicad_sch
   ```
   - Accept pre-existing violations (564 warnings, not caused by remapping)
   - Check for NEW errors introduced by remapping (should be 0)
 
 #### Task 2.B: Remove obsolete components (LoRa, SBUS, XCVR blocks)
-- [ ] Open `Zoë.kicad_sch` (should already be open from 2.A)
+- [ ] Open `TACCO.kicad_sch` (should already be open from 2.A)
 - [ ] For each component in "to_delete_from_schematic":
 
   **LoRa block:**
@@ -200,7 +200,7 @@ WINCH-DRV      → WINCH DRV
 
   **XCVR block (Emma cable — obsolete):**
   - [ ] Delete: J_XCVR, R_XCVR_RX, D_XCVR_TVS
-  - [ ] Note: Emma now stacks on Zoë via P1/P2 passthrough, no cable needed
+  - [ ] Note: Emma now stacks on TACCO via P1/P2 passthrough, no cable needed
 
   **Deprecated items:**
   - [ ] Delete: CM_ETH_B, U_ETH_B_1V8, TVS_ETHB_RX, TVS_ETHB_TX
@@ -212,22 +212,22 @@ WINCH-DRV      → WINCH DRV
 - [ ] After each deletion, run ERC to verify no new errors
 
 #### Task 2.C: Add P1/P2 TOP (passthrough) socket headers
-- [ ] Open `Zoë.kicad_sch`
+- [ ] Open `TACCO.kicad_sch`
 - [ ] Add symbols for passthrough sockets (copy from existing P1/P2 lower headers):
   - [ ] Add symbol: PB2-P1-TOP (upper-face passthrough, 2x18 header)
   - [ ] Add symbol: PB2-P2-TOP (upper-face passthrough, 2x18 header)
   - [ ] Wire: Each lower header pin → corresponding upper header pin (passthrough)
-  - [ ] Add 0Ω jumpers on signals used by Zoë (Wi-Fi, SiK, I²C, UART) so they're both connected and passed through
+  - [ ] Add 0Ω jumpers on signals used by TACCO (Wi-Fi, SiK, I²C, UART) so they're both connected and passed through
   - [ ] Label nets clearly (e.g., "WIFI_TX_TOP", "UART_RX_TOP")
 
 - [ ] Run ERC to verify all nets connected:
   ```bash
-  kicad-cli sch erc Zoë.kicad_sch | grep -i dangling
+  kicad-cli sch erc TACCO.kicad_sch | grep -i dangling
   ```
   - Should show only pre-existing dangling labels (not new ones from passthrough work)
 
 #### Task 2.D: Verify P1/P2 socket net assignments on PCB
-- [ ] Open `avionics/kicad/Zoë/kicads/Zoë.kicad_pcb` in KiCad
+- [ ] Open `avionics/kicad/TACCO/kicads/TACCO.kicad_pcb` in KiCad
 - [ ] Inspect footprints: PB2-P1-TOP, PB2-P2-TOP (already placed per 2026-07-04 notes)
   - Select each pad → Check net assignment (Properties panel, right side)
   - Verify: Lower P1 pin N → Upper P1 pin N (same net)
@@ -238,10 +238,10 @@ WINCH-DRV      → WINCH DRV
   - [ ] Document as "user will verify/fix during interactive PCB editing"
 
 #### Task 2.E: Final ERC check
-- [ ] Open `Zoë.kicad_sch`
+- [ ] Open `TACCO.kicad_sch`
 - [ ] Run ERC:
   ```bash
-  kicad-cli sch erc Zoë.kicad_sch
+  kicad-cli sch erc TACCO.kicad_sch
   ```
 - [ ] Target: 0 NEW errors (pre-existing 564 warnings are acceptable)
 - [ ] Document any new errors and resolve before proceeding
@@ -256,14 +256,14 @@ WINCH-DRV      → WINCH DRV
 
 ---
 
-## KAYLEE REV S1 — Remove 6 V BEC, Add 5 V Servo Output
+## FLIGHTENGINEER REV S1 — Remove 6 V BEC, Add 5 V Servo Output
 
 ### Phase 3: 6V→5V Servo Rail Conversion
 
 **Status:** 0% (not yet started; design decisions clear, low risk)
 
-#### Task 3.A: Edit Kaylee schematic (remove 6V BEC, add 5V servo BEC)
-- [ ] Open `avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch` in KiCad
+#### Task 3.A: Edit FlightEngineer schematic (remove 6V BEC, add 5V servo BEC)
+- [ ] Open `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch` in KiCad
 - [ ] Navigate to Section E (6V Servo BEC) — search for "Section E" or "U_BEC_6V"
 
 **DELETE (Section E, old 6V BEC):**
@@ -299,19 +299,19 @@ WINCH-DRV      → WINCH DRV
                                   Feedback divider → 5V reference
   ```
 
-- [ ] Update title block: Change "Kaylee Rev R" to "Kaylee Rev S1"
+- [ ] Update title block: Change "FlightEngineer Rev R" to "FlightEngineer Rev S1"
   - Edit → Sheet Properties (Ctrl+Shift+P)
-  - Title: "Kaylee Power Distribution Board Rev S1"
+  - Title: "FlightEngineer Power Distribution Board Rev S1"
   - Date: 2026-07-18 (today)
 
 - [ ] Run ERC:
   ```bash
-  kicad-cli sch erc Kaylee.kicad_sch
+  kicad-cli sch erc FlightEngineer.kicad_sch
   ```
   - Target: Same or fewer errors than before (no new regressions)
 
-#### Task 3.B: Layout Kaylee PCB (move 6V→5V BEC footprints)
-- [ ] Open `avionics/kicad/Kaylee/kicads/Kaylee.kicad_pcb` in KiCad
+#### Task 3.B: Layout FlightEngineer PCB (move 6V→5V BEC footprints)
+- [ ] Open `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pcb` in KiCad
 
 **DELETE (old 6V section footprints):**
 - [ ] Delete footprints:
@@ -341,13 +341,13 @@ WINCH-DRV      → WINCH DRV
 
 - [ ] Run incremental DRC after each section:
   ```bash
-  kicad-cli pcb drc --schematic-parity Kaylee.kicad_pcb
+  kicad-cli pcb drc --schematic-parity FlightEngineer.kicad_pcb
   ```
 
 #### Task 3.C: Final DRC check
 - [ ] Run full DRC:
   ```bash
-  kicad-cli pcb drc --schematic-parity Kaylee.kicad_pcb
+  kicad-cli pcb drc --schematic-parity FlightEngineer.kicad_pcb
   ```
 - [ ] Target: 0 hard violations (shorting, clearance, courtyard, solder mask)
 - [ ] Accept: SOFT violations (silk, lib-footprint — pre-existing backlog)
@@ -356,10 +356,10 @@ WINCH-DRV      → WINCH DRV
 #### Task 3.D: Generate Gerbers
 - [ ] Run:
   ```bash
-  python3 avionics/kicad/generate_gerbers.py kaylee
+  python3 avionics/kicad/generate_gerbers.py flightengineer
   ```
-- [ ] Verify output in `avionics/kicad/gerbers/Kaylee-S1/`
-- [ ] Inspect gerber files (same checklist as Emma 1.F + Zoë 2.F)
+- [ ] Verify output in `avionics/kicad/gerbers/FlightEngineer-S1/`
+- [ ] Inspect gerber files (same checklist as Emma 1.F + TACCO 2.F)
 
 ---
 
@@ -374,13 +374,13 @@ WINCH-DRV      → WINCH DRV
   - [ ] Drill (.drl): Hole coordinates reasonable
 
 - [ ] **CAPE-B-2-S1/**: Same checks as Emma
-- [ ] **Kaylee-S1/**: Same checks as Emma
+- [ ] **FlightEngineer-S1/**: Same checks as Emma
 
 ### Documentation Updates
 - [ ] Update `avionics/rev-s1/WBS.md`: Check off all items
   - [ ] Emma: mark top-level item [x]
-  - [ ] Zoë: mark top-level item [x]
-  - [ ] Kaylee: mark top-level item [x]
+  - [ ] TACCO: mark top-level item [x]
+  - [ ] FlightEngineer: mark top-level item [x]
 
 - [ ] Update root `TODO.md`:
   - [ ] Remove 3 items from section 1.2b (now complete)
@@ -388,21 +388,21 @@ WINCH-DRV      → WINCH DRV
 
 - [ ] Update board markdown files:
   - [ ] `avionics/kicad/Emma/Emma.md`: Update status to "Rev S1 complete, gerbers generated, ready for fabrication"
-  - [ ] `avionics/kicad/Zoë/Zoë.md`: Update status to "Rev S1 complete, gerbers generated, ready for fabrication"
-  - [ ] `avionics/kicad/Kaylee/Kaylee.md`: Update status to "Rev S1 complete, gerbers generated, ready for fabrication"
+  - [ ] `avionics/kicad/TACCO/TACCO.md`: Update status to "Rev S1 complete, gerbers generated, ready for fabrication"
+  - [ ] `avionics/kicad/FlightEngineer/FlightEngineer.md`: Update status to "Rev S1 complete, gerbers generated, ready for fabrication"
 
 ### Git Commit & PR
 - [ ] Stage changes:
   ```bash
-  git add -A avionics/kicad/Emma/kicads/*.kicad_* avionics/kicad/Zoë/kicads/*.kicad_* avionics/kicad/Kaylee/kicads/*.kicad_*
-  git add avionics/kicad/gerbers/Emma-S1/ avionics/kicad/gerbers/CAPE-B-2-S1/ avionics/kicad/gerbers/Kaylee-S1/
+  git add -A avionics/kicad/Emma/kicads/*.kicad_* avionics/kicad/TACCO/kicads/*.kicad_* avionics/kicad/FlightEngineer/kicads/*.kicad_*
+  git add avionics/kicad/gerbers/Emma-S1/ avionics/kicad/gerbers/CAPE-B-2-S1/ avionics/kicad/gerbers/FlightEngineer-S1/
   git add avionics/rev-s1/WBS.md TODO.md
-  git add avionics/kicad/Emma/Emma.md avionics/kicad/Zoë/Zoë.md avionics/kicad/Kaylee/Kaylee.md
+  git add avionics/kicad/Emma/Emma.md avionics/kicad/TACCO/TACCO.md avionics/kicad/FlightEngineer/FlightEngineer.md
   ```
 
 - [ ] Commit:
   ```bash
-  git commit -m "Complete todo 1.2b: Emma/Zoë/Kaylee Rev S1 PCB redesigns
+  git commit -m "Complete todo 1.2b: Emma/TACCO/FlightEngineer Rev S1 PCB redesigns
 
   - Emma Rev S1: Add LoRa (RFM95W), replace JST with P1+P2 sockets
     • Schematic reconciliation complete (gen_emma_sch.py)
@@ -411,18 +411,18 @@ WINCH-DRV      → WINCH DRV
     • All remaining nets routed; DRC 0 hard errors
     • Gerbers generated to avionics/kicad/gerbers/Emma-S1/
 
-  - Zoë Rev S1: Remove LoRa, add P1/P2 passthrough rails
+  - TACCO Rev S1: Remove LoRa, add P1/P2 passthrough rails
     • Schematic reconciliation complete (ref-designator remapping)
     • LoRa/SBUS/XCVR blocks removed from schematic
     • P1/P2 TOP passthrough sockets added
     • ERC 0 new errors; pre-existing 564 warnings documented
     • Gerbers generated to avionics/kicad/gerbers/CAPE-B-2-S1/
 
-  - Kaylee Rev S1: Remove 6V BEC, add 5V servo output
+  - FlightEngineer Rev S1: Remove 6V BEC, add 5V servo output
     • Schematic: TPS54540 (6V BEC) removed, TPS54620 (5V servo BEC) added
     • PCB layout: 5V servo section routed; DRC 0 hard errors
     • Current budget verified: 2× DS3218MG (1.0A peak) << 3A rated output
-    • Gerbers generated to avionics/kicad/gerbers/Kaylee-S1/
+    • Gerbers generated to avionics/kicad/gerbers/FlightEngineer-S1/
 
   All three boards ready for fabrication order.
   Closes todo 1.2b per avionics/rev-s1/WBS.md.
@@ -438,17 +438,17 @@ WINCH-DRV      → WINCH DRV
 
 - [ ] Create PR (if not already open):
   ```bash
-  gh pr create --title "Complete todo 1.2b: PCB redesigns (Emma/Zoë/Kaylee Rev S1)" \
+  gh pr create --title "Complete todo 1.2b: PCB redesigns (Emma/TACCO/FlightEngineer Rev S1)" \
     --body "...see commit message above..."
   ```
 
 ### Sign-Off & Handoff
 - [ ] Notify firmware team:
   - [ ] Emma PTT_N / RSSI_DCD presence-gated pinmux (Simon vs River nodes)
-  - [ ] Kaylee 5V servo rail replacement (firmware mapping for servo outputs)
+  - [ ] FlightEngineer 5V servo rail replacement (firmware mapping for servo outputs)
 
 - [ ] Notify PCB fabrication vendor:
-  - [ ] Provide gerbers from avionics/kicad/gerbers/{Emma-S1,CAPE-B-2-S1,Kaylee-S1}/
+  - [ ] Provide gerbers from avionics/kicad/gerbers/{Emma-S1,CAPE-B-2-S1,FlightEngineer-S1}/
   - [ ] Specify: FR-4, 4-layer, ENIG finish, 1oz copper on signal layers
   - [ ] Quote for 5 units (prototype + spares)
 
@@ -465,7 +465,7 @@ kicad-cli sch erc avionics/kicad/[Board]/kicads/[Board].kicad_sch
 kicad-cli pcb drc --schematic-parity avionics/kicad/[Board]/kicads/[Board].kicad_pcb
 
 # Generate gerbers
-python3 avionics/kicad/generate_gerbers.py [emma|zoë|kaylee]
+python3 avionics/kicad/generate_gerbers.py [emma|zoë|flightengineer]
 
 # Check impedance
 python3 avionics/kicad/check_impedance.py
@@ -501,11 +501,11 @@ cd avionics/kicad/Emma && python3 scripts/route_emma_rssi.py dcd  # RSSI_DCD onl
 |-------|------|----------|--------------|
 | 1 | Emma routing (13 nets + differential pairs) | 3–4 hours | None |
 | 1 | Emma DRC & gerbers | 0.5 hours | Routing complete |
-| 2 | Zoë schematic remap & cleanup | 1–2 hours | None (parallel to Phase 1) |
-| 2 | Zoë ERC & gerbers | 0.5 hours | Schematic cleanup complete |
-| 3 | Kaylee schematic edit | 1 hour | None (parallel to Phase 1–2) |
-| 3 | Kaylee PCB layout | 1–2 hours | Schematic complete |
-| 3 | Kaylee DRC & gerbers | 0.5 hours | PCB layout complete |
+| 2 | TACCO schematic remap & cleanup | 1–2 hours | None (parallel to Phase 1) |
+| 2 | TACCO ERC & gerbers | 0.5 hours | Schematic cleanup complete |
+| 3 | FlightEngineer schematic edit | 1 hour | None (parallel to Phase 1–2) |
+| 3 | FlightEngineer PCB layout | 1–2 hours | Schematic complete |
+| 3 | FlightEngineer DRC & gerbers | 0.5 hours | PCB layout complete |
 | Post | Documentation & commit | 0.5 hours | All gerbers complete |
 | **Total** | | **8–12 hours** | |
 
@@ -517,8 +517,8 @@ cd avionics/kicad/Emma && python3 scripts/route_emma_rssi.py dcd  # RSSI_DCD onl
 |---------|-----------|
 | RSSI_DCD routing too tight (GUI push-shove required) | Use KiCad push-shove, or route manually with B.Cu fallback |
 | 13 nets unrouted (tight pockets) | Route incrementally; check DRC after each net |
-| Zoë ref-mismatch (cannot auto-correct) | Use Find&Replace; verify ERC after each rename |
-| Kaylee 5V servo placement (space constrained) | Reuse Section D footprint geometry; tight layout is acceptable |
+| TACCO ref-mismatch (cannot auto-correct) | Use Find&Replace; verify ERC after each rename |
+| FlightEngineer 5V servo placement (space constrained) | Reuse Section D footprint geometry; tight layout is acceptable |
 
 ---
 

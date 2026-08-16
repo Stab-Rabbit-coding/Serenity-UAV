@@ -1,4 +1,4 @@
-# Serenity UAV — Avionics (Wash / Zoe / Emma Cape Hardware) TODO (Open Work Only)
+# Serenity UAV — Avionics (Wash / Zoe / COMMO Cape Hardware) TODO (Open Work Only)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
@@ -25,9 +25,9 @@
 - [ ] Finish Wash PCB (CAPE-A-2) close-out pass
 - [ ] Add SBUS/UART DIP switch to Wash
 - [ ] Generate Wash gerbers (post-DRC)
-- [ ] Generate Zoë gerbers (post-DRC)
-- [ ] Zigbee RF chain was never added to Zoë — PCB scope gap (deferred)
-- [ ] FCC Part 15 §15.235 pre-compliance checklist for Emma
+- [ ] Generate TACCO gerbers (post-DRC)
+- [ ] Zigbee RF chain was never added to TACCO — PCB scope gap (deferred)
+- [ ] FCC Part 15 §15.235 pre-compliance checklist for COMMO
 - [ ] EMI isolation validation checklist
 - [ ] Merge `claude/cape-em-harsh-variants-9Yfr1` → master
 - [ ] Design Faraday cages / boxes to protect all PCBs
@@ -46,16 +46,16 @@
 
 - [ ] AK7455 firmware zero-calibration over −5..90° sweep
 - [ ] Shielded encoder-to-gateway + gateway-to-bus wiring per EMI spec
-- [ ] Reconcile gen_kaylee.py drift from checked-in Kaylee.kicad_sch
+- [ ] Reconcile gen_kaylee.py drift from checked-in FlightEngineer.kicad_sch
 - [ ] Remove obsolete J_ENC (AS5600 I²C) connector from Wash
 - [ ] Fix Wash's own inline SLB9670 symbol's incorrect pin numbers
 - [ ] Finish routing CAN-PERIPH-GW-1 PCB (47/296 nets still unrouted)
 - [ ] Wash PB2-P2 header appears fully unwired in ERC — root cause TBD
 - [ ] Wash full DRC/ERC clean-out (48 ERC + 76 DRC hard) + ISOW1412 swap
-- [ ] Zoë full DRC/ERC clean-out (219 ERC + 154 DRC hard) + ISOW1412 swap
-- [ ] Review/remove stray tracked _autosave-Zoë.kicad_pcb + .lck files
-- [ ] Kaylee full PCB resync to trust-module schematic (213 DRC hard)
-- [ ] Jayne PCB resync — RS-485/Section H never reached layout (124 DRC)
-- [ ] Emma: route TPM/R/C to the SPI1/TPM_IRQN/TPM_RSTN nets on P1/P2
+- [ ] TACCO full DRC/ERC clean-out (219 ERC + 154 DRC hard) + ISOW1412 swap
+- [ ] Review/remove stray tracked _autosave-TACCO.kicad_pcb + .lck files
+- [ ] FlightEngineer full PCB resync to trust-module schematic (213 DRC hard)
+- [ ] Observer PCB resync — RS-485/Section H never reached layout (124 DRC)
+- [ ] COMMO: route TPM/R/C to the SPI1/TPM_IRQN/TPM_RSTN nets on P1/P2
 
 ---

@@ -45,10 +45,10 @@
 - [ ] Winch state machine firmware (Simon + gateway)
 - [ ] Re-run winch mass/CG once STS3215 mass is known
 - [ ] Slicer verification
-- [ ] Kaylee's room — PDB mounting in inner neck
+- [ ] FlightEngineer's room — PDB mounting in inner neck
 - [ ] CF skid rod channels
 - [ ] Simon bay — define avionics bay in MIDDLE section (Phase 11 move)
-- [ ] Kaylee room — PDB + battery bay, middle VENTRAL (2026-06-13).
+- [ ] FlightEngineer room — PDB + battery bay, middle VENTRAL (2026-06-13).
 - [ ] Avionics-bay interior name marks (DEFERRED, 2026-06-13).
 - [ ] Phase 11 — aft EDF intake scoop cuts
 - [ ] neck_intake_frame.stl (Phase 11)

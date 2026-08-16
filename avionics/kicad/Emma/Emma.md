@@ -1,10 +1,10 @@
-# Emma — EMI-Hardened 49 MHz AX.25 Transceiver
+# COMMO — EMI-Hardened 49 MHz AX.25 Transceiver
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0
 **Revision:** S1 (Rev S baseline + schematic-first reconciliation 2026-07-04)
 **Date:** 2026-07-04
-**Status:** Schematic-first reconciliation COMPLETE — `Emma.kicad_sch` authored from the
+**Status:** Schematic-first reconciliation COMPLETE — `COMMO.kicad_sch` authored from the
 as-placed PCB (`gen_emma_sch.py`), PCB transformed to match (`mod_emma_pcb.py`); sch↔pcb
 parity exact (74 refs / 104 nets / 0 pin-count mismatches), ERC 0 errors. J1 (JST-GH-6P)
 DROPPED — modem UART now rides the PB2-P1 rails (`UART_49MHZ_XCVR_RX`/`_TX`); PTT_N and a new
@@ -15,13 +15,13 @@ in-circuit stubs the schematic surfaced (`RF_ANT_SW`, `PA_EMIT`, `DDS_FSYNC`).
 
 > **Note:** the "As-Built" tables below predate the 2026-07-04 reconciliation and still
 > list J1 "CAPE-B IF" as present; J1 has since been removed and the modem UART moved to the
-> PB2 rails. `Emma.kicad_sch` (not these tables) is now the source of truth.
+> PB2 rails. `COMMO.kicad_sch` (not these tables) is now the source of truth.
 
 ---
 
 ## Purpose
 
-Emma is an electromagnetic-environment-hardened variant of XCVR-49MHZ-1. The
+COMMO is an electromagnetic-environment-hardened variant of XCVR-49MHZ-1. The
 board is a 49 MHz AX.25 KISS modem operating under 47 CFR Part 15 §15.235 (an unlicensed
 intentional-radiator rule, not Part 95 RCRS — see REFERENCES.md REF-FCC-003); the -2 variant
 adds conducted and radiated immunity measures to handle the EDF motor and ESC switching
@@ -37,10 +37,10 @@ constraints from XCVR-49MHZ-1 apply unchanged.
 
 ### 1. J1 host interface — EMI filter and protection
 
-The 6-pin 2.54 mm pitch header J1 that connects to Zoë's XCVR-49MHZ port is the
+The 6-pin 2.54 mm pitch header J1 that connects to TACCO's XCVR-49MHZ port is the
 primary EMI ingress path. Any high-frequency conducted noise arriving on the UART and
 PTT lines from the CAPE-B harness routes directly to the Si5351A logic interface
-and MCP4921 SPI port. Emma adds a three-tier protection network:
+and MCP4921 SPI port. COMMO adds a three-tier protection network:
 
 ## Tier 1 — Common-mode choke (CM5)
 
@@ -74,7 +74,7 @@ and MCP4921 SPI port. Emma adds a three-tier protection network:
 
 ### 2. LDO upgrade: AMS1117-3.3 → MCP1703T-3302E/CB
 
-| Parameter | XCVR-49MHZ-1 | Emma |
+| Parameter | XCVR-49MHZ-1 | COMMO |
 | --- | --- | --- |
 | Part | AMS1117-3.3 (SOT-223) | MCP1703T-3302E/CB (SOT-23A-5) |
 | PSRR (100 kHz) | 40 dB | 72 dB |
@@ -93,7 +93,7 @@ important for the 1200-baud AFSK modulation scheme.
 
 ### 3. Enhanced supply bypass cascade
 
-The original AMS1117 output had a single 10 µF + 100 nF bypass pair. Emma
+The original AMS1117 output had a single 10 µF + 100 nF bypass pair. COMMO
 adds a four-capacitor cascade to address both low-frequency (EDF PWM) and high-frequency
 (RF pickup) ripple:
 
@@ -123,7 +123,7 @@ temperature, preventing resonance shifts in the decoupling network.
 ### 4. Improved low-pass filter: 6-element Chebyshev
 
 XCVR-49MHZ-1 specified a 5-element Chebyshev LPF (FL1) with fc = 75 MHz and
-≥ 40 dBc attenuation at the 2nd harmonic (98 MHz). Emma upgrades to a
+≥ 40 dBc attenuation at the 2nd harmonic (98 MHz). COMMO upgrades to a
 6-element design to add one additional pole, targeting ≥ 50 dBc at 98 MHz and
 ≥ 60 dBc at 147 MHz (3rd harmonic):
 
@@ -390,7 +390,7 @@ The BOM delta tables above only cover the §1–§9 changes from XCVR-49MHZ-1. T
 itemize the Phase 1 carryover circuitry (DDS, PA chain, LPF, T/R switch, LNA, AFSK
 modem) or the Rev R1 Ethernet/LoRa additions, none of which had ever been fully
 captured in this document. The table below is generated directly from
-`Emma.kicad_pcb`'s footprint list (the as-placed source of truth) so it cannot drift
+`COMMO.kicad_pcb`'s footprint list (the as-placed source of truth) so it cannot drift
 from the actual board the way a hand-maintained BOM can.
 
 | Ref | Value / Part | Footprint | Function |
@@ -446,7 +446,7 @@ from the actual board the way a hand-maintained BOM can.
 | CAPE-B IF | JST-GH-6P (custom) | JST_GH_6P | Host UART/PTT/RSSI/+3V3 interface |
 | PB2-P1, PB2-P2 | PB2I 2×18 sockets | 2x18 socket | Rev R1 PocketBeagle2 header rails |
 | **Ethernet (Rev R1 addition — see TODO.md §1.2b)** | | | |
-| ETH-PHY | ADIN1300BCPZ | QFN-48, B.Cu | Second Ethernet PHY, gives Emma (and the Zoë stack it plugs into) a 2nd port matching Wash's 2-PHY config; also lets Emma run Ethernet standalone outside Serenity |
+| ETH-PHY | ADIN1300BCPZ | QFN-48, B.Cu | Second Ethernet PHY, gives COMMO (and the TACCO stack it plugs into) a 2nd port matching Wash's 2-PHY config; also lets COMMO run Ethernet standalone outside Serenity |
 | T-ETH | Würth 749010012A | ETH_XFMR_8P, B.Cu | RMII-side isolation transformer; secondary (`*_ETH2`/`GND2_ETH`/`VCC2_ETH`) is a galvanically isolated domain — **must not be bridged to the main GND/+5V planes** |
 | J-ETH | JST-GH-4P (custom) | JST_GH_4P | Isolated-side Ethernet line connector |
 | **LoRa (Rev R1 addition — see TODO.md §1.2b, REF-RFMOD-001)** | | | |
@@ -513,29 +513,29 @@ to populate 132289RP in place of 132289 is the remaining fabrication step.
 
 ## Security Notes
 
-**Updated 2026-07-26:** Emma now carries its own TPM — Infineon SLB9670 (SPI TPM 2.0,
-same part standardized fleet-wide), added via `avionics/kicad/Emma/scripts/inject_emma_tpm.py`
+**Updated 2026-07-26:** COMMO now carries its own TPM — Infineon SLB9670 (SPI TPM 2.0,
+same part standardized fleet-wide), added via `avionics/kicad/COMMO/scripts/inject_emma_tpm.py`
 (schematic ref `TPM`). TPM + its 10 kΩ reset pull-up (`R_TPM_RST_EMMA`) + 100 nF
-decoupling cap (`C_TPM_EMMA1`) are placed on the PCB (B.Cu — Emma's F.Cu is fully
+decoupling cap (`C_TPM_EMMA1`) are placed on the PCB (B.Cu — COMMO's F.Cu is fully
 saturated, confirmed by an exhaustive obstacle-aware search finding zero clear ≥6×6 mm
 front-side sites anywhere on the board), nets assigned, DRC-clean. Routing from TPM/R/C
 to the rest of the board is open (first-pass footprint population only, per this
 project's established convention).
 
 **Architecture, corrected 2026-07-26:** the TPM provides the last/first cryptographic
-signature for radio messages Emma transmits and for messages it forwards to/from Zoë or
+signature for radio messages COMMO transmits and for messages it forwards to/from TACCO or
 elsewhere. It binds to the PB2-I host it's plugged into — no local CAN-FD/RS-485
 transceiver and, per the same reasoning, **no dedicated SPI hardware or header either**.
-Emma is designed to run as a self-sufficient cape for other (non-Serenity) deployments
+COMMO is designed to run as a self-sufficient cape for other (non-Serenity) deployments
 too, and the TPM binds to whichever PB2 host it's on, providing that host's full TPM
-services. It therefore taps the **SPI1** slot already reserved on Emma's own P1/P2 trunk
+services. It therefore taps the **SPI1** slot already reserved on COMMO's own P1/P2 trunk
 — `SPI1_CS_TPM` / `SPI1_CLK` / `SPI1_MOSI` / `SPI1_MISO` (a shared bus also carrying
 `SPI1_CS_NOR` and `SPI1_CS_LORA` to other on-board devices) plus the pre-existing
 `TPM_IRQN` / `TPM_RSTN` global labels, all already wired to specific PB2-P1/P2 pins
-elsewhere in `Emma.kicad_sch`. An earlier draft of `inject_emma_tpm.py` instead added a
+elsewhere in `COMMO.kicad_sch`. An earlier draft of `inject_emma_tpm.py` instead added a
 dedicated 6-pin `J_TPM` header (reasoning that cross-*file* net-name reuse, e.g. Wash's
-`SPI0_CLK` name, doesn't connect anything — true, but irrelevant here since Emma's own
-P1/P2 block already reserves an SPI1 slot for exactly this purpose within Emma's own
+`SPI0_CLK` name, doesn't connect anything — true, but irrelevant here since COMMO's own
+P1/P2 block already reserves an SPI1 slot for exactly this purpose within COMMO's own
 file). That header has been removed from both the schematic and the generator script;
 see `inject_emma_tpm.py`'s docstring for the full correction. Prior to the TPM's
 addition, cryptographic operations for AX.25 payload signing were entirely on the
@@ -565,13 +565,13 @@ The JST-GH SM06B-GHS-TB-1MP connector symbol for J1 now includes a SHIELD pin
 - **Cable type:** Belden 9533 6-conductor overall foil + braid shielded (or equivalent
   multi-conductor shielded, ≥ 28 AWG per conductor, overall shield coverage ≥ 85 %).
 - **Drain wire:** 28 AWG stranded, terminate to the J1 PGND mounting-tab pad.  Bond the
-  other end to Zoë's corresponding J_XCVR PGND pad.
+  other end to TACCO's corresponding J_XCVR PGND pad.
 - **Ferrite clamp:** Würth 74271222 snap-on ferrite (or Laird 28B0562-100) ≤ 25 mm from
-  the connector body at BOTH the Emma end and the Zoë end.
+  the connector body at BOTH the COMMO end and the TACCO end.
 - **Maximum cable length:** 150 mm (limited by signal integrity at 1200-baud AFSK and
   UART signal rise time ≤ 10 ns at 3.3 V LVCMOS).
 
-### Wiring to Host (Zoë J_XCVR)
+### Wiring to Host (TACCO J_XCVR)
 
 The J1-to-J_XCVR harness is the primary EMI ingress path.  In addition to the
 cable shield, the following on-board measures are active (see §1):
@@ -599,8 +599,8 @@ cable shield, the following on-board measures are active (see §1):
 
 - `XCVR-49MHZ-1.kicad_sch` — original (Phase 1 stub) schematic
 - `XCVR-49MHZ-1.md` — original Phase 1 design notes and committed BOM
-- `Zoë.kicad_sch` — host board with J1 counter-connector
-- `Zoë.md` — Zoë design notes
+- `TACCO.kicad_sch` — host board with J1 counter-connector
+- `TACCO.md` — TACCO design notes
 
 ---
 
@@ -632,7 +632,7 @@ and is preserved here per project standards (AGENTS.md §Coding Standards).
 
 ### File Header (removed from kicad_pcb)
 
-- **Board:** Emma EMI-Hardened 49 MHz AX.25 KISS Transceiver
+- **Board:** COMMO EMI-Hardened 49 MHz AX.25 KISS Transceiver
 - **Date:**2026-06-03**Rev:** 2
 - **4-layer stackup:** F.Cu (signal) / In1.Cu (GND) / In2.Cu (+5V power) / B.Cu (signal)
 - **Board size:** 55 × 35 mm, origin at (100, 100) mm

@@ -74,7 +74,7 @@ SCAD: `airframe/openscad/fuselage/bow_sensor_pod.scad` (cuts) +
     re-bake needed — only booleans were applied, matching the identity-rotation head bake).
     `python3 tools/validate_stls.py` — **all 69 STL files pass watertight, including this
     one.**
-    Jayne's nose-mount bosses (`jayne_board_bosses()`, added earlier this session) and
+    Observer's nose-mount bosses (`jayne_board_bosses()`, added earlier this session) and
     Shepherd's Book-bay bosses (`book_dorsal_boss()`, known unfixed legacy-axis bug) were
     DELIBERATELY EXCLUDED from this merge — both remain SCAD-only proposals, not baked into
     the fabrication mesh, per their own open-item flags (merging an unverified/buggy
@@ -122,39 +122,39 @@ SCAD: `airframe/openscad/fuselage/bow_sensor_pod.scad` (cuts) +
 
 ###### Avionics Integration *(physical wiring + firmware — external to this CAD task)*
 
-- [x] **Superseded 2026-07-03 — see §1.2c "Jayne" below.** ~~Create RP2350 (or similar) based
+- [x] **Superseded 2026-07-03 — see §1.2c "Observer" below.** ~~Create RP2350 (or similar) based
     Camera/TOF/laser mcu board~~ Scope expanded during design exploration (imported AI-assisted
     brainstorm, fact-checked and corrected against real datasheets — see REFERENCES.md
     "Removed / Superseded Citations" for what was fabricated in the original brainstorm) into
-    the **Jayne** standalone board (not a PB2-I cape — its own board, peer network node via
+    the **Observer** standalone board (not a PB2-I cape — its own board, peer network node via
     Ethernet ring/CAN-FD only): TI MSPM0G3507 (native CAN-FD) + Infineon SLB9670 TPM
     (fleet-standard part, not a new one) + Microchip KSZ9477 Ethernet switch, plus a TI AM62Ax
     digital vision SoC replacing the RunCam Nano 4 analog camera. One board design, installed
     at both the bow sensor pod (nose) and the cargo bay nadir FPV mount.
 
-- [x] **Wire TFmini-S UART to bow sensor MCU.** — **SUPERSEDED by Jayne (2026-07-06).**
-    The pre-Jayne plan ran a 28 AWG loom from the bow pod all the way to Shepherd's Room and
-    read the TFmini-S on the Shepherd (Wash) node. Jayne is now the board *at* the bow pod, so
-    the TFmini-S is a short local run (<75 mm) on Jayne's dedicated `J_TOF`/UART1, read by Jayne's
+- [x] **Wire TFmini-S UART to bow sensor MCU.** — **SUPERSEDED by Observer (2026-07-06).**
+    The pre-Observer plan ran a 28 AWG loom from the bow pod all the way to Shepherd's Room and
+    read the TFmini-S on the Shepherd (Wash) node. Observer is now the board *at* the bow pod, so
+    the TFmini-S is a short local run (<75 mm) on Observer's dedicated `J_TOF`/UART1, read by Observer's
     MSPM0G3507 — no head-section loom to Shepherd's, no Shepherd `serenity-fc` UART driver.
-    Replaced by the Jayne local sensor harness (§1.2c) and Jayne node firmware (§4.6).
-- [x] **Wire bow camera video output to bow sensor MCU** — **SUPERSEDED by Jayne (2026-07-06).**
-    The RG178 analog-coax run was for the RunCam Nano 4 analog camera, which Jayne supersedes
-    (REF-SENSOR-001, superseded). Jayne's camera is a digital MIPI CSI-2 module on `J_CAM1/J_CAM2`
+    Replaced by the Observer local sensor harness (§1.2c) and Observer node firmware (§4.6).
+- [x] **Wire bow camera video output to bow sensor MCU** — **SUPERSEDED by Observer (2026-07-06).**
+    The RG178 analog-coax run was for the RunCam Nano 4 analog camera, which Observer supersedes
+    (REF-SENSOR-001, superseded). Observer's camera is a digital MIPI CSI-2 module on `J_CAM1/J_CAM2`
     (flex/FPC, ~20–30 mm), encoded on-board by the AM62A7 and published over the Ethernet ring —
-    no analog coax to a separate MCU. Tracked as the Jayne local sensor harness (§1.2c).
-- [x] **Wire laser GPIO enable bow sensor MCU** — **SUPERSEDED by Jayne (2026-07-06).**
+    no analog coax to a separate MCU. Tracked as the Observer local sensor harness (§1.2c).
+- [x] **Wire laser GPIO enable bow sensor MCU** — **SUPERSEDED by Observer (2026-07-06).**
     This discrete 2N7002-from-Wash-GPIO driver plus a Class-3B-style physical key-switch
-    ([REF-FDA-001 §1040.10(f)(1)]) is replaced by Jayne's own on-board laser driver (Q1 AO3400
+    ([REF-FDA-001 §1040.10(f)(1)]) is replaced by Observer's own on-board laser driver (Q1 AO3400
     logic-level N-FET, R1 100 Ω gate, R2 10 kΩ pulldown-default-off, `J_LASER`), enabled by
-    Jayne's MSPM0G3507 — not a Wash GPIO. Per `docs/JAYNE_LASER_ANALYSIS.md` Rev A2 the nose is
+    Observer's MSPM0G3507 — not a Wash GPIO. Per `docs/JAYNE_LASER_ANALYSIS.md` Rev A2 the nose is
     **Class 2 (≤ 1 mW green), NOT Class 3B**, so the mandatory key-interlock/shutter is dropped
     and the ≤ 1 mW cap is hardware-enforced (fixed current limit). Tracked at §1.2c (driver) and
     §4.6 (GPIO firmware + interlock).
 - [x] **Add laser enable command to MAVLink C2 interface** [REF-PROTO-002] — **SUPERSEDED /
-    RELOCATED to Jayne (2026-07-06).** The laser is now Jayne-owned (commanded by Jayne's
+    RELOCATED to Observer (2026-07-06).** The laser is now Observer-owned (commanded by Observer's
     MSPM0G3507, published/gated over the CAN-FD + Ethernet ring), not the Wash MAVLink path. The
-    surviving C2-enable requirement is folded into the Jayne "Laser GPIO driver" firmware task
+    surviving C2-enable requirement is folded into the Observer "Laser GPIO driver" firmware task
     (§4.6). Because the nose is now Class 2 (`docs/JAYNE_LASER_ANALYSIS.md` Rev A2), the previously
     **mandatory** operator acknowledgement is downgraded to **optional** defense-in-depth rather
     than a Class-3B requirement.
@@ -258,7 +258,7 @@ and baked to hull frame.  SCAD fuselage shell files are secondary references onl
             reading that script — only Inara's boss/standoff geometry was merged, using
             its own independently-correct hardcoded hull-frame (X,Y)=(-135,90) values,
             unaffected by the SCAD bug).  Extending `merge_cargo_interior.py` to merge
-            the now-fixed GPS/FPV/River-bay cuts (and the new Jayne bosses below) into the
+            the now-fixed GPS/FPV/River-bay cuts (and the new Observer bosses below) into the
             real printed mesh is a follow-on task, not yet started.
         - [ ] **Door-servo pads, latch-catch lips, belly ribs, hinge-pin blocks — SAME
             axis bug found (2026-07-03), NOT yet fixed.**  `BELLY_INT_Y = -413` is used
@@ -417,7 +417,7 @@ Joint faces in hull-frame Y (confirmed from baked extents):
     lofts pairwise intersections, so it follows the tapering wall and never exceeds the local
     outer skin. Regenerated + verified by starboard-silhouette comparison: **the dorsal "top
 
-### Jayne (Vera) PCB mounting + Faraday enclosure (2026-07-12)
+### Observer (Vera) PCB mounting + Faraday enclosure (2026-07-12)
 - [ ] **Vera PCB mounting + Faraday (2026-07-12, Rev S1).** DONE:
     `cargo/cargo_sect_shell24.scad` `vera_board_bosses()` updated to the NEW Vera trapezoid
     outline's 4 corner **M2.5** holes (was the old 46×48 / ±19×±20 M3 grid); CARGO variant —

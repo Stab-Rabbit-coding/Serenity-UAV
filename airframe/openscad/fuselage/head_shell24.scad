@@ -51,7 +51,7 @@
 //   All bow positions marked VERIFY in slicer before printing.
 // Rev R (2026-06-11): Rev R baseline checkpoint — no geometry changes.
 // Rev S1 (2026-06-09): Shepherd Book avionics bay (Faraday enclosure) on
-//   interior dorsal face.  Book bay: Cape-B-2 (Zoë) + Cape-A-2 (Wash) stack,
+//   interior dorsal face.  Book bay: Cape-B-2 (TACCO) + Cape-A-2 (Wash) stack,
 //   60×40×55 mm Faraday tray, 4× M3 bosses + 62×42 mm dorsal access panel.
 //   Ductwork parameters shared with cargo SCAD spec (DUCT_* constants).
 //   Ref: cargo_sect_shell24.scad Rev S4; CLAUDE.md Book bay; CAPE-B-2.kicad_pcb.
@@ -277,7 +277,7 @@ BOSS_AFT_6 = [  99, CY + 38, CZ - 52  ];  // VERIFY: dorsal-stbd quadrant
 //
 // Book is the primary watchdog / fault-detection / authentication SBC stack
 // (CLAUDE.md: Book bay = "Shepherd Book" = forward avionics bay).
-// Cape stack: Cape-B-2 (Zoë) + PB2-I + Cape-A-2 (Wash) + PB2-I, 55×35 mm each.
+// Cape stack: Cape-B-2 (TACCO) + PB2-I + Cape-A-2 (Wash) + PB2-I, 55×35 mm each.
 // Faraday enclosure: 5-walled aluminium-sheet tray, 60×40×55 mm external.
 // Hull dorsal skin IS the 6th wall; access cover (72×52 mm) is the EMI lid.
 //
@@ -344,8 +344,8 @@ module book_dorsal_boss(x_pos, z_pos) {
 
 // ----------------------------------------------------------------------------
 // Module: jayne_board_bosses (added Rev R2, 2026-07-03)
-//   4x M3 heat-set insert boss posts for the Jayne vision/ToF/laser PCB
-//   (avionics/kicad/Jayne.kicad_pcb, 1.0 × 2.75 in (25.4 × 69.85 mm) double-sided board, mounting
+//   4x M3 heat-set insert boss posts for the Observer vision/ToF/laser PCB
+//   (avionics/kicad/Observer.kicad_pcb, 1.0 × 2.75 in (25.4 × 69.85 mm) double-sided board, mounting
 //   holes at board-local (4,4)/(42,4)/(4,44)/(42,44), i.e. +/-19 mm x
 //   +/-20 mm from board centre), nose install.
 //   PROPOSED placement, NOT FreeCAD-verified: standoff ~20 mm aft (local +Y,
@@ -358,11 +358,11 @@ module book_dorsal_boss(x_pos, z_pos) {
 //   for this hull's geometry) this position and the interior wall/pocket
 //   clearance against bow_camera_cut/bow_tof_cut MUST be verified in
 //   FreeCAD before printing -- do not treat as final.
-//   Ref: avionics/kicad/Jayne.md "Mechanical Mounting and Wiring"; TODO.md
+//   Ref: avionics/kicad/Observer.md "Mechanical Mounting and Wiring"; TODO.md
 //   §1.2c.3; bow_sensor_pod.scad FACEPLATE_CTR/BOW_CX.
 // ----------------------------------------------------------------------------
-JAYNE_NOSE_HOLE_DX = 19.0;   // mm, +/-X half-spacing of Jayne's mounting-hole pattern
-JAYNE_NOSE_HOLE_DZ = 20.0;   // mm, +/-Z half-spacing of Jayne's mounting-hole pattern
+JAYNE_NOSE_HOLE_DX = 19.0;   // mm, +/-X half-spacing of Observer's mounting-hole pattern
+JAYNE_NOSE_HOLE_DZ = 20.0;   // mm, +/-Z half-spacing of Observer's mounting-hole pattern
 JAYNE_NOSE_STATION_Y = FACEPLATE_CTR[1] + 20.0;   // mm, ~20 mm aft (into hull) of the faceplate
 JAYNE_NOSE_STATION_Z = FACEPLATE_CTR[2];          // mm, level with the sensor cluster
 module jayne_board_bosses() {
@@ -531,7 +531,7 @@ difference() {
         for (dz = [-BOOK_BOSS_DZ, BOOK_BOSS_DZ])
             book_dorsal_boss(BOOK_X_CEN + dx, BOOK_Z_CEN + dz);
 
-        // Jayne vision/ToF/laser PCB mounting bosses, nose install (Rev R2,
+        // Observer vision/ToF/laser PCB mounting bosses, nose install (Rev R2,
         // 2026-07-03).  PROPOSED placement -- see jayne_board_bosses() header;
         // needs FreeCAD verification before printing.
         jayne_board_bosses();

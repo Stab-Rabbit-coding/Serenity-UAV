@@ -97,12 +97,12 @@ Cargo bay interior mounts:
 
 ### 1.5 Cargo FPV Bezel
 - **Part:** `cargo_fpv_bezel.stl`
-- **Design intent:** Nadir-facing FPV camera mount pod + Jayne cape co-location. Hangs from cargo-bay roof (dorsal face), pointing down for ground/target imagery.
+- **Design intent:** Nadir-facing FPV camera mount pod + Observer cape co-location. Hangs from cargo-bay roof (dorsal face), pointing down for ground/target imagery.
 - **Current state:** Unplaced.
 - **Placement estimate:** Cargo-section dorsal interior ceiling, aft of the GPS antenna. Nominal: X ≈ −170 mm (centred), Y ≈ 40..80 mm, Z ≈ 160..163 mm (touching roof interior).
 - **User action:** Confirm orientation (camera lens points −Z / downward); adjust Y if needed to clear other mounts.
 - **Status:** [ ] Positioned for inspection
-- **Notes:** Jayne board (TI AM62A vision SoC + stepper/laser driver) mounts here; full harness routing is Phase 11 (deferred).
+- **Notes:** Observerver board (TI AM62A vision SoC + stepper/laser driver) mounts here; full harness routing is Phase 11 (deferred).
 
 ### 1.6 Cargo GPS Retention Ring
 - **Part:** `cargo_gps_retention_ring.stl`
@@ -163,7 +163,7 @@ Cargo bay interior mounts:
 
 ## §2 — BATTERY TRAY & BELLY PANEL (Fuselage Interior Accessories)
 
-Located in the middle section's ventral interior (inner-neck/Kaylee's room).
+Located in the middle section's ventral interior (inner-neck/FlightEngineer's room).
 
 ### 2.1 Battery Tray
 - **Part:** `battery_tray.stl`
@@ -175,7 +175,7 @@ Located in the middle section's ventral interior (inner-neck/Kaylee's room).
   Y: −263.0 (keel underside ≈ CY_head − TRAY_H)
   Z: 41.0 (centred: CZ_hull − TRAY_W/2)
   ```
-- **CLAUDE.md reference:** Kaylee's room (battery bay) is in the inner neck of the middle section, accessible through the open ventral face (−Z). Central location minimises power run lengths to all 4 nacelles and avionics stacks.
+- **CLAUDE.md reference:** FlightEngineer's room (battery bay) is in the inner neck of the middle section, accessible through the open ventral face (−Z). Central location minimises power run lengths to all 4 nacelles and avionics stacks.
 - **Verification needed:** 
   - Does tray fore edge sit at ship station ≈ 112 mm (roughly mid-cargo)?
   - Is tray CG centred on the FCOG (forward CG)?

@@ -48,7 +48,7 @@
     `build_guide_12_security_hw.svg`, `build_guide_20_node_placement.svg`,
     `build_guide_21_node_install.svg`, `build_plan.svg`, `components_overview.svg`) are
     built entirely or partly around the **archived** Cape-A-1/Cape-B-1 hardware instead of
-    the Rev R1 baseline (all 8 nodes now carry Wash/Cape-A-2 + Zoë/Cape-B-2 per CLAUDE.md).
+    the Rev R1 baseline (all 8 nodes now carry Wash/Cape-A-2 + TACCO/Cape-B-2 per CLAUDE.md).
     This is a content-currency problem independent of citations — needs a dedicated pass
     (likely a content rewrite, not a text-substitution fix) with visual verification.
     **Superseded by, and folded into, the "Rebuild `graphical-build-guide/`..." item in
@@ -69,7 +69,7 @@
 
 - [x] **Code-identifier "RCRS" naming renamed to "49MHZ_XCVR"/"XCVR-49MHZ"** *(done
     2026-07-18, user-approved naming — user explicitly specified the frequency-qualified
-    form to avoid ambiguity with "Emma," the board that also carries LoRa)*. Every
+    form to avoid ambiguity with "COMMO," the board that also carries LoRa)*. Every
     code-identifier/label use of "RCRS" as a naming convention (not a regulatory claim) was
     renamed; every legitimate regulatory-term use of "RCRS" (i.e. actually discussing 47 CFR
     Part 95 Subpart C, Radio Control Radio Service) was left untouched. Scope, beyond the
@@ -80,14 +80,14 @@
       `avionics/firmware/cn/src/si5351.{h,c}`, `xcvr_kiss.c`, `main.c`; `MAL_RCRS_*` →
       `MAL_49MHZ_XCVR_*` in `gcs/malcolm/firmware/pb2i/src/mal_config.h`.
     - KiCad: `UART_RCRS_TX`/`UART_RCRS_RX` → `UART_49MHZ_XCVR_TX`/`UART_49MHZ_XCVR_RX` in
-      `avionics/kicad/add_sensors_sbus.py` and both `Zoë.kicad_sch`/`.kicad_pcb` and
-      `Emma.kicad_sch`/`.kicad_pcb` (pure net-name text edits, occurrence counts verified
+      `avionics/kicad/add_sensors_sbus.py` and both `TACCO.kicad_sch`/`.kicad_pcb` and
+      `COMMO.kicad_sch`/`.kicad_pcb` (pure net-name text edits, occurrence counts verified
       1:1 before/after — no geometry, placement, or routing touched); `JST-GH-3P-RCRS` →
-      `JST-GH-3P-XCVR-49MHZ`; the Emma board title comment dropped the redundant "RCRS".
-      Also updated the two Emma migration scripts (`gen_emma_sch.py`, `mod_emma_pcb.py`) so
+      `JST-GH-3P-XCVR-49MHZ`; the COMMO board title comment dropped the redundant "RCRS".
+      Also updated the two COMMO migration scripts (`gen_emma_sch.py`, `mod_emma_pcb.py`) so
       a future re-run doesn't regress the renamed nets.
     - Docs: `RCRS-49`/`TVS-RCRS`/`FB-RCRS` → `XCVR-49MHZ`/`TVS-XCVR-49MHZ`/`FB-XCVR-49MHZ` in
-      `Emma.md`/`Zoë.md`; same pattern in the active current-spec files
+      `COMMO.md`/`TACCO.md`; same pattern in the active current-spec files
       (`current-specification/bom_revS.csv`, `serenity-rev-r.jsx` — excluding the one BOM row
       already self-labeled `ARCHIVED`, left as-is per the revision-archival policy) and
       `docs/PHASED_BUILD_GUIDE.md`.
@@ -108,7 +108,7 @@
       documentation); root `TODO.md`/`WBS.md` historical entries; `docs/bom_revP/Q/R.json`
       (already-archived historical BOM snapshots that self-document the same Part 95
       correction via `~~strikethrough~~` — rewriting them would erase that record); Gerber
-      files under `avionics/kicad/Zoë/gerbers/` (fab output regenerated from source — net-name
+      files under `avionics/kicad/TACCO/gerbers/` (fab output regenerated from source — net-name
       text embedded in them is informational only and doesn't affect the physical board;
       regenerate before sending to fab).
     - **ERC/DRC could not be re-verified in this environment**: `tools/validate_kicad.py`
@@ -256,7 +256,7 @@
         scripts (e.g. `mod_vera_ds_pcb.py` / `mod_Jayne_ds_pcb.py`) that are
         deliberately self-contained so one board's generator can be modified without
         risking another's already-validated PCB. Real de-duplication candidates exist
-        (that Vera/Jayne script pair is the clearest one) but extracting shared code
+        (that Vera/Observer script pair is the clearest one) but extracting shared code
         from working, physically-validated PCB-generation scripts is an architectural
         decision with real hardware consequences — needs explicit user review, not a
         mechanical lint fix, matching the same caution applied to the RCRS rename in
@@ -307,7 +307,7 @@ study and the wing/nacelle Hall tilt-feedback sensor. Both carry
     inter-board wiring, first flight, etc.) are hand-drawn schematic line art — the
     airframe silhouettes in them were never derived from actual model geometry at all,
     and (per the §0.5 audit above) several depict the **archived** Cape-A-1/Cape-B-1
-    hardware instead of the Rev R1 Wash/Zoë baseline
+    hardware instead of the Rev R1 Wash/TACCO baseline
     (`build_guide_09_avionics.svg`, `build_guide_11_inter_board.svg`,
     `build_guide_12_security_hw.svg`, `build_guide_20_node_placement.svg`,
     `build_guide_21_node_install.svg`, `build_plan.svg`, `components_overview.svg`) —
@@ -341,16 +341,16 @@ study and the wing/nacelle Hall tilt-feedback sensor. Both carry
     this same day's PR #138) into the new `AGENTS.md` §10 Workflow, updating its internal
     `CLAUDE.md` references to `AGENTS.md`.
     - **Volatile single-subsystem detail replaced with pointers**, since it goes stale
-      faster than the policy file gets edited: Jayne's laser-indicator class/spread specs
+      faster than the policy file gets edited: Observer's laser-indicator class/spread specs
       (→ `docs/JAYNE_LASER_ANALYSIS.md`), the landing-gear post/wire design
       (→ `docs/LANDING_GEAR_ANALYSIS.md`), the nacelle nozzle-drive mechanism
       (→ `docs/NOZZLE_DRIVE_TRADE.md` — newly cross-referenced from
-      `airframe/AGENTS.md`, previously undocumented there), and Emma/Zoë/Kaylee/Jayne
+      `airframe/AGENTS.md`, previously undocumented there), and COMMO/TACCO/FlightEngineer/Observer
       sch↔pcb reconciliation narratives (→ each board's own `.md` under
       `avionics/kicad/<board>/`, which is already updated more often than the policy file).
-    - **Confirmed a real staleness case while auditing:** `avionics/CLAUDE.md`'s Jayne
-      section described a raw TI AM62A3/AM62A7 chip-level design; `avionics/kicad/Jayne/
-      Jayne.md` (Rev S1, 2026-07-13) had already moved to a PCM-071 SoM carrier design —
+    - **Confirmed a real staleness case while auditing:** `avionics/CLAUDE.md`'s Observer
+      section described a raw TI AM62A3/AM62A7 chip-level design; `avionics/kicad/Observer/
+      Observer.md` (Rev S1, 2026-07-13) had already moved to a PCM-071 SoM carrier design —
       the policy file was out of date relative to the as-built board doc. Root cause of
       this class of drift: subsystem status belongs in the board's own `.md`/analysis doc,
       not duplicated into the instructions file.

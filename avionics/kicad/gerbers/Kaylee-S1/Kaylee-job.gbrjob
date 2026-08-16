@@ -9,7 +9,7 @@
   },
   "GeneralSpecs": {
     "ProjectId": {
-      "Name": "Kaylee",
+      "Name": "FlightEngineer",
       "GUID": "4b61796c-6565-42e6-9b69-6361645f7063",
       "Revision": "A"
     },
@@ -41,72 +41,72 @@
   ],
   "FilesAttributes": [
     {
-      "Path": "Kaylee-F_Cu.gtl",
+      "Path": "FlightEngineer-F_Cu.gtl",
       "FileFunction": "Copper,L1,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Kaylee-In1_Cu.g1",
+      "Path": "FlightEngineer-In1_Cu.g1",
       "FileFunction": "Copper,L5,Inr",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Kaylee-B_Cu.gbl",
+      "Path": "FlightEngineer-B_Cu.gbl",
       "FileFunction": "Copper,L3,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Kaylee-F_Adhesive.gta",
+      "Path": "FlightEngineer-F_Adhesive.gta",
       "FileFunction": "Glue,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Kaylee-B_Adhesive.gba",
+      "Path": "FlightEngineer-B_Adhesive.gba",
       "FileFunction": "Glue,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Kaylee-F_Paste.gtp",
+      "Path": "FlightEngineer-F_Paste.gtp",
       "FileFunction": "SolderPaste,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Kaylee-B_Paste.gbp",
+      "Path": "FlightEngineer-B_Paste.gbp",
       "FileFunction": "SolderPaste,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Kaylee-F_Silkscreen.gto",
+      "Path": "FlightEngineer-F_Silkscreen.gto",
       "FileFunction": "Legend,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Kaylee-B_Silkscreen.gbo",
+      "Path": "FlightEngineer-B_Silkscreen.gbo",
       "FileFunction": "Legend,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Kaylee-F_Mask.gts",
+      "Path": "FlightEngineer-F_Mask.gts",
       "FileFunction": "SolderMask,Top",
       "FilePolarity": "Negative"
     },
     {
-      "Path": "Kaylee-B_Mask.gbs",
+      "Path": "FlightEngineer-B_Mask.gbs",
       "FileFunction": "SolderMask,Bot",
       "FilePolarity": "Negative"
     },
     {
-      "Path": "Kaylee-Edge_Cuts.gm1",
+      "Path": "FlightEngineer-Edge_Cuts.gm1",
       "FileFunction": "Profile",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Kaylee-F_Fab.gbr",
+      "Path": "FlightEngineer-F_Fab.gbr",
       "FileFunction": "AssemblyDrawing,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Kaylee-B_Fab.gbr",
+      "Path": "FlightEngineer-B_Fab.gbr",
       "FileFunction": "AssemblyDrawing,Bot",
       "FilePolarity": "Positive"
     }

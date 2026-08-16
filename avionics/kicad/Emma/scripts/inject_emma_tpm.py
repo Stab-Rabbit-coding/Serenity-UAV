@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """inject_emma_tpm.py -- add an SLB9670 TPM to Emma.kicad_sch via text
-injection (same non-destructive pattern as Kaylee's
+injection (same non-destructive pattern as FlightEngineer's
 inject_kaylee_trust_module.py), rather than a full gen_emma_sch.py rerun.
 
 Emma (49 MHz + LoRa transceiver cape) has no MCU of its own -- it connects

@@ -11,7 +11,7 @@
 > the root index as a commit prerequisite (root `AGENTS.md` "Revisions and Version
 > Control").
 
-*"Everything is shiny, Cap'n. Not to fret. — Kaylee"*
+*"Everything is shiny, Cap'n. Not to fret. — FlightEngineer"*
 
 ---
 
@@ -32,15 +32,15 @@
     `TODO.md` §1.2a. Verification performed; **layout rework not performed** — per
     `CLAUDE.md`, repositioning footprints/routes to close this gap is referred to the
     user, not done automatically.
-- [x] **Verify creepage and clearance distances in Zoë PCB layout** [REF-IEC-001 §5.5.2]
-    — **verified 2026-06-22 via `kicad-cli pcb drc` against `Zoë.kicad_pcb`. Result: NOT
+- [x] **Verify creepage and clearance distances in TACCO PCB layout** [REF-IEC-001 §5.5.2]
+    — **verified 2026-06-22 via `kicad-cli pcb drc` against `TACCO.kicad_pcb`. Result: NOT
     MET — still BLOCKS PCB fab.** Same root cause as Wash: 40 `ISOLATION`-netclass
     violations, 31 same-package false positives excluded, **9 genuine cross-domain
     violations** between `TMESH_P`/`TMESH_N` (and, in one case, a primary-side Ethernet
     PHY ground pad) and the isolated `GND2_CAN`/`GND2_RS485` domains, actual spacing as
     low as **0.0 mm (direct contact)**. Not fixed here, same reason as Wash.
 - [x] **Document verified creepage/clearance values** in `avionics/kicad/Wash.md` and
-    `avionics/kicad/Zoë.md` — added a "Verification status" block to each file's
+    `avionics/kicad/TACCO.md` — added a "Verification status" block to each file's
     "Isolation creepage" PCB layout constraint with the measured DRC findings above,
     dated and tool-versioned, distinguishing the design target (≥ 8 mm creepage /
     ≥ 1.5 mm clearance, IEC 62368-1 Annex G) from the as-laid-out current state (not met).
@@ -66,7 +66,7 @@
 
 - Must protect the log uSD
 
-- [ ] **PB2-I + Wash Enclosure** (Shepherd's Room / Inara's Shuttle — no Emma board):
+- [ ] **PB2-I + Wash Enclosure** (Shepherd's Room / Inara's Shuttle — no COMMO board):
     - [ ] Confirm internal clearance for PB2-Industrial + Cape-A-2 stack height against
         the FAR-CAGE-AV placeholder envelope (76×56×88 mm, §1.1.5).
     - [ ] Cut-outs for GPS/IMU/barometer sensor leads, ToF array cabling, servo/ESC
@@ -75,15 +75,15 @@
     - [ ] Mount FAR-FAN-40 + FAR-EMI-VENT-40 on the low-pressure side of the enclosure;
         verify intake/exhaust path does not create a direct RF leakage slot.
     - [ ] Bond enclosure to chassis ground via FAR-BOND-STRAP (single point, no loop).
-- [ ] **PB2-I + Zoë Enclosure** (all 4 bays — Cape-B-2, plus Emma in River's Room /
+- [ ] **PB2-I + TACCO Enclosure** (all 4 bays — Cape-B-2, plus COMMO in River's Room /
     Simon's Medbay only):
-    - [ ] Confirm internal clearance for PB2-Industrial + Cape-B-2 (+ Emma where fitted)
+    - [ ] Confirm internal clearance for PB2-Industrial + Cape-B-2 (+ COMMO where fitted)
         stack height against the FAR-CAGE-AV placeholder envelope.
     - [ ] Cut-outs for CAN FD/RS-485/Ethernet/MIL-1553 connectors, SMA antenna feeds
         (WiFi/SiK/LoRa per §1.4.2), and the microSD log slot — feedthrough or grommet
         per cut-out.
     - [ ] River's Room / Simon's Medbay variant: add the LoRa + 49 MHz SMA feedthrough
-        pair for Emma; Shepherd's Room / Inara's Shuttle variant omits these.
+        pair for COMMO; Shepherd's Room / Inara's Shuttle variant omits these.
     - [ ] Mount FAR-FAN-40 + FAR-EMI-VENT-40; bond via FAR-BOND-STRAP.
 
 #### 1.4.2. Antenna Placement and feedlines
@@ -98,14 +98,14 @@
 
     | Bay | Radios fitted | External antennas | GPS |
     | --- | --- | --- | --- |
-    | Shepherd's Room (Bay A) | Zoë: Wi-Fi, SiK, LoRa chain present on PCB | SiK whip (primary) + Wi-Fi patch (secondary) = 2 | 1 |
-    | Inara's Shuttle (Bay B) | Zoë: Wi-Fi, SiK, LoRa chain present on PCB | Wi-Fi patch (primary) + SiK whip (secondary) = 2 | 1 |
-    | River's Room (Bay D) | Zoë + Emma (49 MHz) | 49 MHz whip (primary) + LoRa whip (secondary, fed from Zoë's `J_SMA_LORA`) = 2 | 1 |
-    | Simon's Medbay (Bay E) | Zoë + Emma (49 MHz) | 49 MHz whip (primary, **independent antenna — see new sub-task below**) + SiK whip (secondary) = 2 | 1 |
+    | Shepherd's Room (Bay A) | TACCO: Wi-Fi, SiK, LoRa chain present on PCB | SiK whip (primary) + Wi-Fi patch (secondary) = 2 | 1 |
+    | Inara's Shuttle (Bay B) | TACCO: Wi-Fi, SiK, LoRa chain present on PCB | Wi-Fi patch (primary) + SiK whip (secondary) = 2 | 1 |
+    | River's Room (Bay D) | TACCO + COMMO (49 MHz) | 49 MHz whip (primary) + LoRa whip (secondary, fed from TACCO's `J_SMA_LORA`) = 2 | 1 |
+    | Simon's Medbay (Bay E) | TACCO + COMMO (49 MHz) | 49 MHz whip (primary, **independent antenna — see new sub-task below**) + SiK whip (secondary) = 2 | 1 |
 
     **Total: 8 external C2/payload-link antennas + 4 GPS patches = 12 physical antennas.**
-    Every Zoë (Cape-B-2) carries identical Wi-Fi/SiK/LoRa RF frontends per board (all
-    4 Zoë boards are the same PCB), but only the antenna feeding that bay's PACE-assigned
+    Every TACCO (Cape-B-2) carries identical Wi-Fi/SiK/LoRa RF frontends per board (all
+    4 TACCO boards are the same PCB), but only the antenna feeding that bay's PACE-assigned
     primary/secondary link is populated — the unused chain's SMA pad is left unpopulated
     (no antenna, no feedline) rather than wasting mass/hull penetrations on a link that
     bay never uses. **Zigbee 2.4 GHz has no antenna mount** — see flagged gap below; it is
@@ -121,7 +121,7 @@
         spacing as Shepherd's.
     - [x] **River's Room** (Bay D, dorsal aft, sta ≈ 275 mm) — 49 MHz top-wire antenna
         (existing `WIRE-49MHZ`/`POST-FWD-49`/`POST-AFT-49`, §1.1.1.0b; primary) + LoRa
-        915 MHz RP-SMA whip (secondary, fed from Zoë `J_SMA_LORA`). **Relocated
+        915 MHz RP-SMA whip (secondary, fed from TACCO `J_SMA_LORA`). **Relocated
         2026-06-22 (with user): the 49 MHz top wire moves from the dorsal centreline to
         the PORT flank, shoulder height** — see the port/starboard sub-task below;
         LoRa whip stays dorsal.
@@ -138,7 +138,7 @@
         off the dorsal centreline (below); re-verify the 3 mm figure still applies once
         the shoulder-height mount line is fixed.
     - [ ] **Zigbee 2.4 GHz antenna mount — BLOCKED, hardware gap confirmed; antenna
-        strategy decided 2026-06-22 (with user).** Zoë (Cape-B-2) Rev S has no Zigbee
+        strategy decided 2026-06-22 (with user).** TACCO (Cape-B-2) Rev S has no Zigbee
         transceiver, antenna filter chain, or SMA pad (the CC2652R7 Zigbee radio exists
         only in the archived COMMS-HAT-1 design, not in the current Rev S Cape-B-2
         schematic) — **no antenna can be mounted for hardware that does not exist on
@@ -173,13 +173,13 @@
 - [x] **Feedlines** *(cable spec and run-length budget resolved 2026-06-22)*:
     - Cable: **RG-316** (50 Ω, PTFE dielectric, silver-plated copper braid) for every
         aircraft-side antenna-to-SMA-bulkhead run. RG-316 is already the spec used for
-        Emma's own 49 MHz feed (`Emma.md` lines 553–554); standardizing on one cable type
+        COMMO's own 49 MHz feed (`COMMO.md` lines 553–554); standardizing on one cable type
         for all 8 runs simplifies stock and crimping tooling.
     - Run-length budget: **≤ 300 mm per run** for Wi-Fi/SiK/LoRa whip-to-bulkhead runs
         (antenna is mounted directly over its bay); **≤ 500 mm** for the 49 MHz runs
-        (River's existing run and Simon's new run both route from the bay's Emma J2 to
+        (River's existing run and Simon's new run both route from the bay's COMMO J2 to
         the forward wire-post loading coil, matching the existing 500 mm ceiling already
-        set in `Emma.md`). RG-316 loss at 915 MHz/2.4 GHz over these lengths is
+        set in `COMMO.md`). RG-316 loss at 915 MHz/2.4 GHz over these lengths is
         ≈ 0.3–0.5 dB — negligible against the link budgets in `malcolm_antenna_spec.md`.
     - Routing: each run exits its bay's Faraday enclosure through an SMA bulkhead
         feedthrough in the FAR-FT-PANEL (§1.1.5, still in design) and is dressed along
@@ -191,13 +191,13 @@
 - [x] **Chokes** *(part and placement resolved 2026-06-22)* — one **Würth 74271222**
     snap-on ferrite clamp per antenna feedline, placed within 25 mm of the Faraday
     enclosure boundary crossing on the *inside* (cage) end of the run. This mirrors the
-    treatment Emma already applies to its own 49 MHz feedline (`Emma.md` lines 553–557)
+    treatment COMMO already applies to its own 49 MHz feedline (`COMMO.md` lines 553–557)
     and is consistent with the 500 W/m² EMI design objective (`CLAUDE.md`). 8 feedlines
     (Shepherd ×2, Inara ×2, River's LoRa run, Simon's SiK run, plus River's and Simon's
     49 MHz runs) → **8× Würth 74271222 required**, added to BOM.
 
 - [x] **Second 49 MHz antenna for Simon's Medbay** *(decision made 2026-06-22, with
-    user; routing corrected 2026-06-22, with user)* — Simon's Emma board currently has
+    user; routing corrected 2026-06-22, with user)* — Simon's COMMO board currently has
     no antenna feed at all; only River's J2 is wired to the single existing
     `WIRE-49MHZ` top-wire antenna. **Decision: build a second, fully independent 49 MHz
     antenna for Simon rather than sharing River's antenna through a mux/switch or
@@ -212,7 +212,7 @@
         stranded copper counterpoise (routed inside the foam alongside the structural
         keel — the keel itself is interior/embedded and not affected by the exterior
         clamshell door swing discussed below, so this counterpoise routing is unchanged),
-        RG-316 feed to Simon's Emma J2 (≤ 500 mm), Würth 74271222 choke at the Faraday
+        RG-316 feed to Simon's COMMO J2 (≤ 500 mm), Würth 74271222 choke at the Faraday
         crossing — same component set as `POST-FWD-49`/`WIRE-49MHZ`/`POST-AFT-49`/
         `WIRE-COUNTERPOISE-49MHZ`, new reference IDs (see BOM).
     - [x] **Route on the STARBOARD flank, shoulder height — not ventral, not dorsal
@@ -245,11 +245,11 @@
     - [ ] **Bench-verify isolation between the two 49 MHz antennas** (River's port,
         Simon's starboard) before first flight — confirm neither antenna's feedpoint
         impedance shifts unacceptably with the other antenna present, and that
-        simultaneous Emma TX on one does not desense the other's receiver beyond an
+        simultaneous COMMO TX on one does not desense the other's receiver beyond an
         acceptable margin. Use the same HDOP-with-TX-active bench test already specified
         for `POST-FWD-49` as a model.
 
-- [x] **Ensure all transceivers have antenna placement and wiring from Zoë and/or Emma
+- [x] **Ensure all transceivers have antenna placement and wiring from TACCO and/or COMMO
     boards to mounted antennas** *(moved here from former §1.1.1.0.1, 2026-06-22)* —
     satisfied by the mount/feedline/choke specs above for all populated radio chains;
     remaining open items are the Zigbee hardware gap (flagged above) and the FreeCAD/
@@ -283,7 +283,7 @@ Ethernet) connecting all 8 nodes — see CLAUDE.md "Onboard Communications."
     partially netted on Wash (§1.2).
 - [ ] **Ethernet** — specify CPSW3G ring topology (node-to-node order), cable category, and
     connector pinout; cross-reference the 100 Ω ±10% MDI impedance-controlled traces already
-    specified on Wash/Zoë (§1.2) and the RSTP ring management firmware task (§4.3).
+    specified on Wash/TACCO (§1.2) and the RSTP ring management firmware task (§4.3).
 
 #### 1.4.4 flight control signal wiring
 
@@ -301,7 +301,7 @@ Per-signal-type wiring specification for sensor/actuator signals local to each F
     servo PWM generation") and the SERVO-PWM 1×8 connector pinout already defined on Wash
     (§1.2).
 
-#### 1.4.5 power distribution — Kaylee (PDB) and battery
+#### 1.4.5 power distribution — FlightEngineer (PDB) and battery
 
 **Battery placement decision (2026-06-08):**
 The 6S 4000 mAh LiPo (~450–520 g, ~155×52×36 mm) must be located near the aircraft CG.
@@ -313,8 +313,8 @@ Battery is placed on the keel floor of the middle section, oriented longitudinal
 - Velcro retention strap through keel slot (safety tether, not sole retention)
 - Slide-in rail guides on keel face prevent lateral shift at 3g manoeuvre
 
-**Kaylee (PDB) placement decision (2026-06-08):**
-Kaylee (XT90 PDB, 4× XT30 outputs, ~80×60 mm) mounts adjacent to the battery in the middle
+**FlightEngineer (PDB) placement decision (2026-06-08):**
+FlightEngineer (XT90 PDB, 4× XT30 outputs, ~80×60 mm) mounts adjacent to the battery in the middle
 section keel area (X≈−165..−245 mm station range) to minimise high-current 14 AWG wire length
 to the four nacelle ESC feeds (fed through PTFE conduits in the wing spar channel and to the
 cargo gondola lateral walls).
@@ -322,9 +322,9 @@ Battery swap access via a **ventral hatch** in the middle section belly skin (ha
 X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
 
 **Open items — BLOCKS Phase 1 foam pour:**
-- [ ] **Add Kaylee/battery boss pattern to `middle_canonical_shell24.scad`.**
+- [ ] **Add FlightEngineer/battery boss pattern to `middle_canonical_shell24.scad`.**
     Boss posts: 4× M3 at (±55 mm X) × (±25 mm Z) from X=−190 mm keel centre for battery tray.
-    Kaylee PDB: 4× M3 boss posts at X≈−205 mm, Z=CZ±25 mm. Both on keel interior face (+Y rail).
+    FlightEngineer PDB: 4× M3 boss posts at X≈−205 mm, Z=CZ±25 mm. Both on keel interior face (+Y rail).
     Verify boss positions clear keel CF flat bar (6×3 mm) and ring frame station notches in slicer.
 
 - [ ] **Add ventral battery-swap hatch cut to `middle_canonical_shell24.scad`.**
@@ -337,24 +337,24 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
     **Add to Phase 0 print schedule.**
 
 - [ ] **Create `kaylee_pdb_tray.scad`.**
-    CF-PETG mounting tray for Kaylee PDB (80×60 mm footprint); M3 boss attachment;
+    CF-PETG mounting tray for FlightEngineer PDB (80×60 mm footprint); M3 boss attachment;
     XT90 input pigtail route-through; 4× XT30 output ports facing AFT (toward ESC conduits).
     **Add to Phase 0 print schedule.**
 
-- [x] **Kaylee PCB KiCad files generated (Rev A, 2026-06-10):**
+- [x] **FlightEngineer PCB KiCad files generated (Rev A, 2026-06-10):**
 
-    - [x] `avionics/kicad/Kaylee.kicad_pro` — project file; net classes VBAT/PGND/POWER_5V/Default; DRC rules
+    - [x] `avionics/kicad/FlightEngineer.kicad_pro` — project file; net classes VBAT/PGND/POWER_5V/Default; DRC rules
 
-    - [x] `avionics/kicad/Kaylee.kicad_sch` — full schematic; 90×65 mm 4-layer; BQ76930 6S cell monitor;
+    - [x] `avionics/kicad/FlightEngineer.kicad_sch` — full schematic; 90×65 mm 4-layer; BQ76930 6S cell monitor;
                 dual TPS54620 5V BEC; TPS54540 6V BEC; 5× INA226 monitors; 4× ESC branches with 40A fuses +
                 470µF caps + CMC + 1 mΩ shunts; SMBJ33CA TVS; AON6556 discharge FET; dual Würth 7440640500 CM filter
 
-    - [x] `avionics/kicad/Kaylee.kicad_pcb` — PCB outline + 4-layer stackup (F.Cu signal, In1.Cu GND,
+    - [x] `avionics/kicad/FlightEngineer.kicad_pcb` — PCB outline + 4-layer stackup (F.Cu signal, In1.Cu GND,
                 In2.Cu VBAT 4oz, B.Cu signal); 4× M3 NPTH mounting holes; all 19 nets declared
     - [x] `avionics/kicad/gen_kaylee.py` — Python generator producing all three KiCad files
-- [x] **Kaylee PCB — DRC run and gerbers generated (Rev A, 2026-06-10):**
+- [x] **FlightEngineer PCB — DRC run and gerbers generated (Rev A, 2026-06-10):**
     - [x] Run KiCad DRC; resolved all shorting and 0.0 mm clearance violations
-    - [x] Generate gerbers to `avionics/kicad/gerbers/Kaylee/` (17 Gerber layers + Kaylee.drl)
+    - [x] Generate gerbers to `avionics/kicad/gerbers/FlightEngineer/` (17 Gerber layers + FlightEngineer.drl)
     - [ ] **DRC accepted violations (document only — not fixable without PCB re-architecture):**
         - [ ] 16 clearance violations at 0.15 mm: INA226 MSOP-10 adjacent pads (pins 3/4) at 0.5 mm pitch
         inherently violate 0.2 mm PGND/POWER_5V class rule; IPC-2221B allows ≥ 0.1 mm for ≤ 31 V
@@ -363,7 +363,7 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
         - [ ] 33 silk_over_copper / 26 silk_overlap / 2 silk_edge_clearance: cosmetic; board is fab-ready
         - [ ] 8 lib_footprint_issues: inline footprints; not KiCad library-linked; expected
         - [ ] 181 unconnected_items: traces not yet routed (power planes on In1/In2.Cu are correct)
-    - [ ] **Kaylee PCB — remaining layout tasks (BLOCKS fabrication):**
+    - [ ] **FlightEngineer PCB — remaining layout tasks (BLOCKS fabrication):**
         - [ ] Manually place in KiCad: CM_ESC1–4 (INA226 shunt caps), C_DEC1–4 (ESC decoupling), Section F
                     (BQ76930, J_BAL, R_BAL1–6, C_CAP, J_NTC, C_NTC) — area x=62–88, y=50–65 recommended
         - [ ] Manually place: J_SHLD_5V, J_SHLD_6V, J_SHLD_I2C, J_SHLD_ALERT chassis shield lugs
@@ -373,7 +373,7 @@ X≈−190 mm, ~120×60 mm opening; 2 mm shoulder lip; 4× M2 captive screws).
         - [ ] Verify XT30 connectors (J_ESC1–4) courtyard clears board edge on left side
         - [ ] Verify size and weight: PCB target ≤ 90×65 mm, ≤ 0.110 lbm (≤ 50 g)
 
-- [ ] **Update REVN_BUILD_GUIDE_24IN.md Phase 1** to include Kaylee + battery tray installation
+- [ ] **Update REVN_BUILD_GUIDE_24IN.md Phase 1** to include FlightEngineer + battery tray installation
     in the pre-foam-pour checklist. Battery tray and hatch must be installed and hatch zone
     masked before the foam pour step.
 

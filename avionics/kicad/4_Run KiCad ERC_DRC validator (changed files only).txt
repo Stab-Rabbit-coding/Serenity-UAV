@@ -9,8 +9,8 @@
 2026-07-27T00:05:40.0704762Z [PASS] ERC avionics/kicad/CAN-PERIPH-GW-1/kicads/CAN-PERIPH-GW-1.kicad_sch: 0 hard, 103 soft (accepted-class)
 2026-07-27T00:05:40.0705538Z [PASS] ERC avionics/kicad/ENC-NACELLE-1.kicad_sch: 0 hard, 54 soft (accepted-class)
 2026-07-27T00:05:40.0706216Z [PASS] ERC avionics/kicad/Emma/kicads/Emma.kicad_sch: 0 hard, 136 soft (accepted-class)
-2026-07-27T00:05:40.0706914Z [PASS] ERC avionics/kicad/Jayne/kicads/Jayne.kicad_sch: 0 hard, 214 soft (accepted-class)
-2026-07-27T00:05:40.0707715Z [PASS] ERC avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch: 0 hard, 567 soft (accepted-class)
+2026-07-27T00:05:40.0706914Z [PASS] ERC avionics/kicad/Observer/kicads/Observer.kicad_sch: 0 hard, 214 soft (accepted-class)
+2026-07-27T00:05:40.0707715Z [PASS] ERC avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch: 0 hard, 567 soft (accepted-class)
 2026-07-27T00:05:40.0708283Z     HARD (ERC pin_not_connected): Pin not connected
 2026-07-27T00:05:40.0708717Z     HARD (ERC wire_dangling): Wires not connected to anything
 2026-07-27T00:05:40.0709140Z     HARD (ERC pin_not_connected): Pin not connected
@@ -59,7 +59,7 @@
 2026-07-27T00:05:40.0720308Z     HARD (ERC pin_not_connected): Pin not connected
 2026-07-27T00:05:40.0720547Z     HARD (ERC pin_not_connected): Pin not connected
 2026-07-27T00:05:40.0720785Z     HARD (ERC pin_not_connected): Pin not connected
-2026-07-27T00:05:40.0721130Z [FAIL] ERC avionics/kicad/Wash/kicads/Wash.kicad_sch: 48 hard, 46 soft (accepted-class)
+2026-07-27T00:05:40.0721130Z [FAIL] ERC avionics/kicad/Pilot/kicads/Pilot.kicad_sch: 48 hard, 46 soft (accepted-class)
 2026-07-27T00:05:40.0721631Z     HARD (starved_thermal): Thermal relief connection to zone incomplete (layer B.Cu; zone min spoke count 2; actual 1)
 2026-07-27T00:05:40.0722176Z     HARD (starved_thermal): Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)
 2026-07-27T00:05:40.0722706Z     HARD (starved_thermal): Thermal relief connection to zone incomplete (layer B.Cu; zone min spoke count 2; actual 1)
@@ -319,7 +319,7 @@
 2026-07-27T00:05:40.4266256Z     HARD (net_conflict): Pad missing net given by schematic (+5V).
 2026-07-27T00:05:40.4266627Z     HARD (net_conflict): Pad missing net given by schematic (CM2_OUT_N).
 2026-07-27T00:05:40.4266999Z     HARD (net_conflict): Pad net (VBAT) doesn't match net given by schematic (VDIS_SENSE).
-2026-07-27T00:05:40.4267455Z [FAIL] DRC avionics/kicad/Kaylee/kicads/Kaylee.kicad_pcb: 213 hard, 315 soft (accepted-class)
+2026-07-27T00:05:40.4267455Z [FAIL] DRC avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pcb: 213 hard, 315 soft (accepted-class)
 2026-07-27T00:05:40.4267901Z     HARD (solder_mask_bridge): Front solder mask aperture bridges items with different nets
 2026-07-27T00:05:40.4268323Z     HARD (solder_mask_bridge): Front solder mask aperture bridges items with different nets
 2026-07-27T00:05:40.4268753Z     HARD (solder_mask_bridge): Front solder mask aperture bridges items with different nets
@@ -396,7 +396,7 @@
 2026-07-27T00:05:40.4295056Z     HARD (net_conflict): No corresponding pin found in schematic.
 2026-07-27T00:05:40.4295339Z     HARD (net_conflict): No corresponding pin found in schematic.
 2026-07-27T00:05:40.4295622Z     HARD (net_conflict): No corresponding pin found in schematic.
-2026-07-27T00:05:40.4295985Z [FAIL] DRC avionics/kicad/Wash/kicads/Wash.kicad_pcb: 76 hard, 105 soft (accepted-class)
+2026-07-27T00:05:40.4295985Z [FAIL] DRC avionics/kicad/Pilot/kicads/Pilot.kicad_pcb: 76 hard, 105 soft (accepted-class)
 2026-07-27T00:05:40.4296239Z 
 2026-07-27T00:05:40.4296420Z 6 schematic(s), 5 PCB(s) checked. 380 hard violation(s), 1823 accepted-class finding(s).
 2026-07-27T00:05:40.4296776Z FAIL: at least one hard (real electrical) violation found.

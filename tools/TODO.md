@@ -12,7 +12,7 @@
 > and the owning subsystem `WBS.md` files (open subsets live in each subsystem's `TODO.md`). **&#9733; = on the critical path to first
 > flight (Phase 5).**
 
-*"Everything is shiny, Cap'n. Not to fret. — Kaylee"*
+*"Everything is shiny, Cap'n. Not to fret. — FlightEngineer"*
 
 ---
 

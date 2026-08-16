@@ -9,7 +9,7 @@
   },
   "GeneralSpecs": {
     "ProjectId": {
-      "Name": "Zoë",
+      "Name": "TACCO",
       "GUID": "5a6feb2e-6b69-4636-9164-5f7063625858",
       "Revision": "A-STUB"
     },
@@ -38,67 +38,67 @@
   ],
   "FilesAttributes": [
     {
-      "Path": "Zoë-F_Cu.gtl",
+      "Path": "TACCO-F_Cu.gtl",
       "FileFunction": "Copper,L1,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Zoë-In1_Cu.g1",
+      "Path": "TACCO-In1_Cu.g1",
       "FileFunction": "Copper,L5,Inr",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Zoë-In2_Cu.g2",
+      "Path": "TACCO-In2_Cu.g2",
       "FileFunction": "Copper,L7,Inr",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Zoë-B_Cu.gbl",
+      "Path": "TACCO-B_Cu.gbl",
       "FileFunction": "Copper,L4,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Zoë-F_Paste.gtp",
+      "Path": "TACCO-F_Paste.gtp",
       "FileFunction": "SolderPaste,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Zoë-B_Paste.gbp",
+      "Path": "TACCO-B_Paste.gbp",
       "FileFunction": "SolderPaste,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Zoë-F_Silkscreen.gto",
+      "Path": "TACCO-F_Silkscreen.gto",
       "FileFunction": "Legend,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Zoë-B_Silkscreen.gbo",
+      "Path": "TACCO-B_Silkscreen.gbo",
       "FileFunction": "Legend,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Zoë-F_Mask.gts",
+      "Path": "TACCO-F_Mask.gts",
       "FileFunction": "SolderMask,Top",
       "FilePolarity": "Negative"
     },
     {
-      "Path": "Zoë-B_Mask.gbs",
+      "Path": "TACCO-B_Mask.gbs",
       "FileFunction": "SolderMask,Bot",
       "FilePolarity": "Negative"
     },
     {
-      "Path": "Zoë-Edge_Cuts.gm1",
+      "Path": "TACCO-Edge_Cuts.gm1",
       "FileFunction": "Profile",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Zoë-F_Fab.gbr",
+      "Path": "TACCO-F_Fab.gbr",
       "FileFunction": "AssemblyDrawing,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Zoë-B_Fab.gbr",
+      "Path": "TACCO-B_Fab.gbr",
       "FileFunction": "AssemblyDrawing,Bot",
       "FilePolarity": "Positive"
     }

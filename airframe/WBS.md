@@ -15,8 +15,8 @@
 
 ---
 
-**Cross-cutting system: Jayne (cargo handling)** — doors/winch/latch/gondola geometry is
-in [fuselage-mid/TODO.md](fuselage-mid/TODO.md) §1.1.1; the full Jayne subsystem map
+**Cross-cutting system: Observer (cargo handling)** — doors/winch/latch/gondola geometry is
+in [fuselage-mid/TODO.md](fuselage-mid/TODO.md) §1.1.1; the full Observerver subsystem map
 (vision/ToF/laser board, firmware, assembly, deferred range-extender battery) is in
 [avionics/jayne/TODO.md](../avionics/jayne/TODO.md).
 
@@ -268,7 +268,7 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
 | Servos (DS3218MG, SG90) | 2 | `airframe/placeholders/servos/` |
 | Bearings (MF104ZZ, MR63ZZ, 6804) | 3 | `airframe/placeholders/bearings/` |
 | Structural CF (rods, tube, bar, plate, PTFE) | 6 | `airframe/placeholders/structural/` |
-| Avionics PCBs (PB2-I, Cape-A-2/B-2, Emma, Kaylee, microSD) | 6 | `airframe/placeholders/avionics/` |
+| Avionics PCBs (PB2-I, Cape-A-2/B-2, COMMO, FlightEngineer, microSD) | 6 | `airframe/placeholders/avionics/` |
 | Power (LiPos, fuses, shunt) | 7 | `airframe/placeholders/power/` |
 | Cargo (STS3215, HX711, DRV8833, Dyneema) | 4 | `airframe/placeholders/cargo/` — N20 placeholder retired, STS3215 placeholder pending envelope |
 | Gears M=1.0 (sector, pinion, bevel, housing) | 4 | `airframe/placeholders/gears/` |

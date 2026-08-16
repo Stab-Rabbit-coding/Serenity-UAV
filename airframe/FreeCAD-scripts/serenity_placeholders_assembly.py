@@ -95,7 +95,7 @@ _PLACEHOLDERS = [
     ("CAPE-A-2", "avionics/Cape_A2_PCB_55x35mm.stl", "Cape_A2"),
     ("CAPE-B-2", "avionics/Cape_B2_PCB_55x35mm.stl", "Cape_B2"),
     ("XCVR-49MHZ-2", "avionics/XCVR_49MHZ2_PCB_55x35mm.stl", "XCVR_49MHZ2"),
-    ("Kaylee", "avionics/Kaylee_PDB_90x65mm.stl", "Kaylee_PDB"),
+    ("FlightEngineer", "avionics/Kaylee_PDB_90x65mm.stl", "Kaylee_PDB"),
     ("MICROSD-LOG", "avionics/microSD_64GB.stl", "microSD_64GB"),
     # Power
     ("BATT-6S-4000", "power/LiPo_6S_4000mAh_138x44x36mm.stl", "LiPo_6S_4000mAh"),

@@ -23,7 +23,7 @@
 - [ ] Middle section inner neck — Phase 5-10 print guidance
 - [ ] Deprecate SCAD fuselage shell files (post-Rev S archive)
 
-### Jayne (Vera) PCB mounting + Faraday enclosure (2026-07-12)
+### Observer (Vera) PCB mounting + Faraday enclosure (2026-07-12)
 → full detail: `WBS.md` §1.1.1
 
 - [ ] Vera PCB mounting + Faraday (2026-07-12, Rev S1).

@@ -5,13 +5,13 @@ This directory holds the KiCad projects for the four cape/board types:
 | Project | Name | Role |
 | --- | --- | --- |
 | `Wash.kicad_*` | **Wash** | Flight-control & sensor cape (FC) |
-| `Zoë.kicad_*` | **Zoë** | Comms / logging / payload cape (CN) |
-| `Kaylee.kicad_*` | **Kaylee** | Power-distribution board (PDB) |
-| `Emma.kicad_*` | **Emma** | 49 MHz (Part 15 §15.235) transceiver |
-| `Jayne.kicad_*` | **Jayne** | Nose/Cargo vision, ToF, & laser board (standalone) |
+| `TACCO.kicad_*` | **TACCO** | Comms / logging / payload cape (CN) |
+| `FlightEngineer.kicad_*` | **FlightEngineer** | Power-distribution board (PDB) |
+| `COMMO.kicad_*` | **COMMO** | 49 MHz (Part 15 §15.235) transceiver |
+| `Observer.kicad_*` | **Observer** | Nose/Cargo vision, ToF, & laser board (standalone) |
 
 Per-board net/pin documentation lives in the matching `*.md` files
-(`Wash.md`, `Zoë.md`, `Kaylee.md`, `XCVR-49MHZ-2.md`). KiCad files keep
+(`Wash.md`, `TACCO.md`, `FlightEngineer.md`, `XCVR-49MHZ-2.md`). KiCad files keep
 KiCad board coordinates (documented exception to the hull-frame standard,
 see root `AGENTS.md`).
 
@@ -66,21 +66,21 @@ what is still open, so the thread can be picked up cleanly.
   board. "Update PCB from Schematic" therefore does **not** repopulate
   the component nets — net edits are made on the `.kicad_pcb`.
 
-- **Verified the boards load** in `pcbnew` (Wash 43, Zoë 42, Emma 69,
-  Kaylee 67 footprints) and characterised the violation landscape (below).
+- **Verified the boards load** in `pcbnew` (Wash 43, TACCO 42, COMMO 69,
+  FlightEngineer 67 footprints) and characterised the violation landscape (below).
 
 ### ❌ Not done — open follow-up
 
 1. **Tamper mesh (`TMESH_P`/`TMESH_N`).** Drawn today as a raw
    cross-hatch grid on F.Cu/B.Cu that **shorts across SMD pads and across
    the isolated `GND2_*` domains** — this is the single largest source of
-   DRC errors (≈335 of Wash's 465; similar on Zoë). The agreed design is
+   DRC errors (≈335 of Wash's 465; similar on TACCO). The agreed design is
    a **per-domain anti-tamper mesh**: a separate monitored mesh net per
    isolation region (secure/`GND` area plus one per `GND2_CAN` / `GND2_ETH`
    / `GND2_RS485` field side), with the 0.5 mm `ISOLATION` creepage moat
-   kept clear between them. Wash and Zoë tie their mesh to the local TPM;
-   **Kaylee and Emma have no local TPM**, so their tamper signal must be
-   carried over the inter-board link (Emma → Zoë, Kaylee → Wash).
+   kept clear between them. Wash and TACCO tie their mesh to the local TPM;
+   **FlightEngineer and COMMO have no local TPM**, so their tamper signal must be
+   carried over the inter-board link (COMMO → TACCO, FlightEngineer → Wash).
 
 2. **Routing / ratsnest.** The manual rearrangement left signal nets
    unrouted (~60 multi-pin signal nets per cape; the 7 power/ground nets
@@ -96,9 +96,9 @@ what is still open, so the thread can be picked up cleanly.
    | Board | violations | unconnected | dominant types |
    | --- | --- | --- | --- |
    | Wash | 465 | 121 | mesh shorts, solder-mask bridges, clearance |
-   | Zoë | 554 | 146 | mesh shorts, solder-mask bridges, clearance |
-   | Emma | 421 | 160 | silk-over-copper, text-height, mask bridges |
-   | Kaylee | 221 | 181 | courtyard overlap, lib-footprint mismatch, silk |
+   | TACCO | 554 | 146 | mesh shorts, solder-mask bridges, clearance |
+   | COMMO | 421 | 160 | silk-over-copper, text-height, mask bridges |
+   | FlightEngineer | 221 | 181 | courtyard overlap, lib-footprint mismatch, silk |
 
 4. **MDIO addressing.** Both Wash PHYs (ETH1-PHY, ETH2-PHY) share the
    `MDIO`/`MDC` management bus but there are **no address-strap resistors
@@ -134,7 +134,7 @@ These are recorded so the next person does not re-derive them:
 - **Recommended workflow:** finish routing in the **KiCad GUI** (where
   Specctra DSN export and the interactive/auto routers are reliable), with
   the Ethernet pairs routed by hand. The deterministic, non-routing work
-  (per-domain tamper-mesh zones, cosmetic/footprint DRC, the Emma/Kaylee
+  (per-domain tamper-mesh zones, cosmetic/footprint DRC, the COMMO/FlightEngineer
   link tamper signalling) can still be scripted headless via the board API.
 
 ---

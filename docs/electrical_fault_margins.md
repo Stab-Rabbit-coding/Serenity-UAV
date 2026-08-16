@@ -10,7 +10,7 @@ the substantive analysis for three of the four required checks was already
 performed and documented in `docs/POWER_DISTRIBUTION.md` §9 ("Electrical
 Fault Margin Validation") and §11 ("Redundant Power Rail Strategy") before
 this file existed. Per the DRY convention already used elsewhere in this
-repository (e.g. `Zoë.md`'s creepage/clearance rule inheriting Wash's by explicit
+repository (e.g. `TACCO.md`'s creepage/clearance rule inheriting Wash's by explicit
 reference rather than restating it), this document cites that analysis
 instead of re-deriving it, and performs the one check that had no existing
 home.
@@ -27,7 +27,7 @@ before the 90°C wire insulation limit is approached. **Conclusion (already
 established): correctly coordinated.**
 
 The originating WBS item also named "XT30 + 100A poly fuse" — that
-combination does not appear in the current Kaylee BOM (`current-specification/bom_revS.csv`
+combination does not appear in the current FlightEngineer BOM (`current-specification/bom_revS.csv`
 lists `FUSE-ESC-40A`, a 40 A mini-blade fuse per ESC, plus a 150 A MAXI main
 fuse, `docs/POWER_DISTRIBUTION.md` §5). No 100 A poly (resettable PTC) fuse
 is specified anywhere in this design. This is a stale component reference
@@ -70,7 +70,7 @@ not hardware-redundant** (`docs/POWER_DISTRIBUTION.md` §11, opening
 sentence). The mitigations already in place are:
 
 - **SMPS-level redundancy:** two independent TPS54620 5 V regulators on
-  Kaylee, Schottky diode-OR'd (`docs/POWER_DISTRIBUTION.md` §11). If one
+  FlightEngineer, Schottky diode-OR'd (`docs/POWER_DISTRIBUTION.md` §11). If one
   SMPS channel fails, the other alone carries up to 6 A — sufficient for
   the 5 V rail's ~10 A nominal load only if load shedding (§8.3) has
   already reduced demand; a full-load single-channel failure without
@@ -87,7 +87,7 @@ sentence). The mitigations already in place are:
 
 **Conclusion:** loss of a single SMPS *channel* is tolerated (diode-OR'd
 redundancy, with a load-shedding-dependent capacity limit noted above).
-Loss of a single **rail wiring segment/tap** downstream of the Kaylee PDB
+Loss of a single **rail wiring segment/tap** downstream of the FlightEngineer PDB
 (e.g., a severed or shorted conduit run to one bay) is *not* redundant at
 the wiring level — it isolates that bay's power feed with no alternate
 path, mitigated only by that bay's PACE tier having its watchdog/comms/
@@ -110,5 +110,5 @@ rather than implied — this document states it plainly.
 
 ---
 
-*"Everything is shiny, Cap'n. Not to fret." — Kaylee, whose engine room this
+*"Everything is shiny, Cap'n. Not to fret." — FlightEngineer, whose engine room this
 power budget ultimately answers to.*

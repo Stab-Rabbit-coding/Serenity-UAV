@@ -12,14 +12,14 @@
 ### Automation Scripts
 - **`avionics/kicad/complete_1_2b.py`** (executable)
   - Master orchestration script for todo 1.2b
-  - Guides through 13 sequential steps across Emma, Zoë, Kaylee
+  - Guides through 13 sequential steps across Emma, TACCO, FlightEngineer
   - Auto-detects KiCad environment; runs DRC/gerber generation
   - Handles manual steps (GUI routing, schematic edits) with clear prompts
   - Usage: `python3 complete_1_2b.py --board emma --verbose`
 
 ### Reference Mappings
-- **`avionics/kicad/Zoë/ref_remap_2026-07-18.json`**
-  - Zoë schematic→PCB reference-designator remapping
+- **`avionics/kicad/TACCO/ref_remap_2026-07-18.json`**
+  - TACCO schematic→PCB reference-designator remapping
   - 9 critical renames (CMC_CAN → CMC-CAN, WIFI-BT → WIFI & BT, etc.)
   - Components to remove (LoRa, SBUS, XCVR blocks)
   - Step-by-step procedure for Find&Replace
@@ -54,11 +54,11 @@ python3 -c "import pcbnew"   # Should succeed
 # Start with Emma board
 python3 avionics/kicad/complete_1_2b.py --board emma --verbose
 
-# Then Zoë
+# Then TACCO
 python3 avionics/kicad/complete_1_2b.py --board zoë --verbose
 
-# Then Kaylee
-python3 avionics/kicad/complete_1_2b.py --board kaylee --verbose
+# Then FlightEngineer
+python3 avionics/kicad/complete_1_2b.py --board flightengineer --verbose
 ```
 
 The script will:
@@ -73,8 +73,8 @@ If you want more granular control, follow:
 TODO-1.2b-CHECKLIST.md
 
 ├─ Phase 1: Emma Rev S1 (sections 1.A–1.F)
-├─ Phase 2: Zoë Rev S1 (sections 2.A–2.F)
-└─ Phase 3: Kaylee Rev S1 (sections 3.A–3.D)
+├─ Phase 2: TACCO Rev S1 (sections 2.A–2.F)
+└─ Phase 3: FlightEngineer Rev S1 (sections 3.A–3.D)
 ```
 
 Each section includes:
@@ -86,12 +86,12 @@ Each section includes:
 ### 4. Commit Results
 After all three boards are complete:
 ```bash
-git add avionics/kicad/Emma/kicads/*.kicad_* avionics/kicad/Zoë/kicads/*.kicad_* avionics/kicad/Kaylee/kicads/*.kicad_*
-git add avionics/kicad/gerbers/Emma-S1/ avionics/kicad/gerbers/CAPE-B-2-S1/ avionics/kicad/gerbers/Kaylee-S1/
+git add avionics/kicad/Emma/kicads/*.kicad_* avionics/kicad/TACCO/kicads/*.kicad_* avionics/kicad/FlightEngineer/kicads/*.kicad_*
+git add avionics/kicad/gerbers/Emma-S1/ avionics/kicad/gerbers/CAPE-B-2-S1/ avionics/kicad/gerbers/FlightEngineer-S1/
 git add avionics/rev-s1/WBS.md TODO.md
-git add avionics/kicad/Emma/Emma.md avionics/kicad/Zoë/Zoë.md avionics/kicad/Kaylee/Kaylee.md
+git add avionics/kicad/Emma/Emma.md avionics/kicad/TACCO/TACCO.md avionics/kicad/FlightEngineer/FlightEngineer.md
 
-git commit -m "Complete todo 1.2b: Emma/Zoë/Kaylee Rev S1 PCB redesigns (per checklist)"
+git commit -m "Complete todo 1.2b: Emma/TACCO/FlightEngineer Rev S1 PCB redesigns (per checklist)"
 git push -u origin claude/todo-item-1-2b-e89qrb
 ```
 
@@ -134,7 +134,7 @@ git push -u origin claude/todo-item-1-2b-e89qrb
 
 ---
 
-### Zoë (Cape-B-2) Rev S1 — Remove LoRa, Add P1+P2 Passthrough Rails
+### TACCO (Cape-B-2) Rev S1 — Remove LoRa, Add P1+P2 Passthrough Rails
 
 **Current Status:** 65% complete (PCB done, schematic 30 days behind, major rework needed)
 
@@ -145,7 +145,7 @@ git push -u origin claude/todo-item-1-2b-e89qrb
 **What's Left:** ~1–2 hours (mostly manual GUI work)
 1. Remap reference designators (9 renames: CMC_CAN → CMC-CAN, etc.)
    - Tool: Find & Replace (Ctrl+H) in KiCad GUI
-   - Reference file: `avionics/kicad/Zoë/ref_remap_2026-07-18.json`
+   - Reference file: `avionics/kicad/TACCO/ref_remap_2026-07-18.json`
    - Validate: Run ERC after each rename
 
 2. Remove obsolete components:
@@ -157,19 +157,19 @@ git push -u origin claude/todo-item-1-2b-e89qrb
 3. Add P1/P2-TOP (upper-face passthrough headers)
    - Copy from existing P1/P2 lower headers
    - Wire: lower pin N ↔ upper pin N (passthrough)
-   - Add 0Ω jumpers on signals used by Zoë (Wi-Fi, SiK, I²C, UART)
+   - Add 0Ω jumpers on signals used by TACCO (Wi-Fi, SiK, I²C, UART)
 
-4. Run ERC: `kicad-cli sch erc Zoë.kicad_sch`
+4. Run ERC: `kicad-cli sch erc TACCO.kicad_sch`
    - Target: 0 new errors (pre-existing 564 warnings acceptable)
 
 5. Generate gerbers: `python3 avionics/kicad/generate_gerbers.py zoë`
 
 **Key File:**
-- `avionics/kicad/Zoë/ref_remap_2026-07-18.json` (remapping guide)
+- `avionics/kicad/TACCO/ref_remap_2026-07-18.json` (remapping guide)
 
 ---
 
-### Kaylee Rev S1 — Remove 6 V BEC, Add 5 V Servo Output
+### FlightEngineer Rev S1 — Remove 6 V BEC, Add 5 V Servo Output
 
 **Current Status:** 0% (not yet started; design straightforward, low risk)
 
@@ -188,14 +188,14 @@ git push -u origin claude/todo-item-1-2b-e89qrb
    - Add: TPS54620 (copy from U_BEC_5V_2 location)
    - Route: VBAT → FB_SERVO → U_BEC_SERVO_5V IN → L4 → SERVO-5V connector
 
-3. Run DRC: `kicad-cli pcb drc --schematic-parity Kaylee.kicad_pcb`
+3. Run DRC: `kicad-cli pcb drc --schematic-parity FlightEngineer.kicad_pcb`
    - Target: 0 hard errors
 
-4. Generate gerbers: `python3 avionics/kicad/generate_gerbers.py kaylee`
+4. Generate gerbers: `python3 avionics/kicad/generate_gerbers.py flightengineer`
 
 **Key Documents:**
-- Current schematic: `avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch`
-- Current PCB: `avionics/kicad/Kaylee/kicads/Kaylee.kicad_pcb`
+- Current schematic: `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch`
+- Current PCB: `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pcb`
 
 ---
 
@@ -216,15 +216,15 @@ avionics/kicad/gerbers/Emma-S1/
   ├─ Emma.drl (drill file)
   └─ Emma-job.gbrjob (KiCad job file)
 
-[Same structure for CAPE-B-2-S1/ and Kaylee-S1/]
+[Same structure for CAPE-B-2-S1/ and FlightEngineer-S1/]
 ```
 
 ### Updated Documentation
 - `avionics/rev-s1/WBS.md` — §1.2b fully checked (all items complete)
-- `TODO.md` — 3 items removed from §1.2b (Emma, Zoë, Kaylee marked done)
+- `TODO.md` — 3 items removed from §1.2b (Emma, TACCO, FlightEngineer marked done)
 - `avionics/kicad/Emma/Emma.md` — status updated to "Rev S1 complete, ready for fabrication"
-- `avionics/kicad/Zoë/Zoë.md` — status updated to "Rev S1 complete, ready for fabrication"
-- `avionics/kicad/Kaylee/Kaylee.md` — status updated to "Rev S1 complete, ready for fabrication"
+- `avionics/kicad/TACCO/TACCO.md` — status updated to "Rev S1 complete, ready for fabrication"
+- `avionics/kicad/FlightEngineer/FlightEngineer.md` — status updated to "Rev S1 complete, ready for fabrication"
 
 ---
 
@@ -249,8 +249,8 @@ sudo apt install python3-kicad
 **Issue: DRC reports unexpected violations**
 - Review `avionics/rev-s1/WBS.md` for **pre-existing backlog**
   - Emma: 174 silk warnings, 15 clearance errors (0.5mm IC pitches, unfixable)
-  - Zoë: 564 ERC warnings (pre-existing, not caused by recent work)
-  - Kaylee: 701 open items (pre-existing, CI ignores via --changed-since)
+  - TACCO: 564 ERC warnings (pre-existing, not caused by recent work)
+  - FlightEngineer: 701 open items (pre-existing, CI ignores via --changed-since)
 - Accept SOFT violations; only fix HARD violations (shorts, clearance, courtyard)
 
 **Issue: Routing too tight (cannot fit 0.2mm traces)**
@@ -277,7 +277,7 @@ When you reach this state, todo 1.2b is **complete**:
   - [ ] Gerbers generated to `avionics/kicad/gerbers/Emma-S1/`
   - [ ] Board markdown updated, status = "Rev S1 complete, ready for fabrication"
 
-- [ ] **Zoë Rev S1**
+- [ ] **TACCO Rev S1**
   - [ ] Schematic reference-designators remapped (9 critical renames)
   - [ ] LoRa, SBUS, XCVR blocks removed from schematic
   - [ ] P1/P2-TOP passthrough sockets added to schematic
@@ -285,11 +285,11 @@ When you reach this state, todo 1.2b is **complete**:
   - [ ] Gerbers generated to `avionics/kicad/gerbers/CAPE-B-2-S1/`
   - [ ] Board markdown updated, status = "Rev S1 complete, ready for fabrication"
 
-- [ ] **Kaylee Rev S1**
+- [ ] **FlightEngineer Rev S1**
   - [ ] TPS54540 (6V BEC) removed, TPS54620 (5V servo BEC) added to schematic
   - [ ] PCB layout updated (5V servo section routed)
   - [ ] DRC: 0 hard errors
-  - [ ] Gerbers generated to `avionics/kicad/gerbers/Kaylee-S1/`
+  - [ ] Gerbers generated to `avionics/kicad/gerbers/FlightEngineer-S1/`
   - [ ] Board markdown updated, status = "Rev S1 complete, ready for fabrication"
 
 - [ ] **Project Tracking**
@@ -315,7 +315,7 @@ When you reach this state, todo 1.2b is **complete**:
 3. **Firmware Integration**
    - Notify firmware team of electrical changes
    - Emma: PTT_N / RSSI_DCD presence-gated pinmux (Simon vs River nodes)
-   - Kaylee: 5V servo rail replacement in firmware servo mappings
+   - FlightEngineer: 5V servo rail replacement in firmware servo mappings
 
 4. **Assembly Planning**
    - Print build guide with updated component placements
@@ -335,8 +335,8 @@ When you reach this state, todo 1.2b is **complete**:
 **External (Verification Only):**
 - KiCad 9.0.2 Documentation: https://kicad.org/help/9.0.2/
 - FCC Part 15 §15.235 (Emma 49 MHz): 47 CFR §15.235
-- MIL-STD-1553B (Zoë bus): Military Standard
-- Firefly Servo (Kaylee): DS3218MG specification
+- MIL-STD-1553B (TACCO bus): Military Standard
+- Firefly Servo (FlightEngineer): DS3218MG specification
 
 ---
 

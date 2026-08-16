@@ -613,7 +613,7 @@ Ring frame inner-profile CSVs exported to `airframe/diagrams/ring_frames/`.
 
 - [ ] Ring-frame DXF generation (FreeCAD, from CSV profiles) — `airframe/diagrams/ring_frames/`
 - [ ] Verify all feature positions in slicer cross-section (confirm bores do not exit outer skin)
-- [ ] Add Kaylee/battery boss pattern to `middle_canonical_shell24.scad` (§1.4.5)
+- [ ] Add FlightEngineer/battery boss pattern to `middle_canonical_shell24.scad` (§1.4.5)
 - [ ] Add ventral battery-swap hatch cut to middle shell (§1.4.5)
 - [ ] Merge SCAD interior boss features (wing mortises, spar bore, servo mounts, avionics
   standoffs) back into Blender-canonical cargo shell (§1.1.1.0a)

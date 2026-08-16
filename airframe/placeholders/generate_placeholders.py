@@ -14,7 +14,7 @@ Output tree (relative to this script):
     servos/         DS3218MG, SG90
     bearings/       MF104ZZ, MR63ZZ, 6804
     structural/     CF rods / tubes / bar / plate, PTFE sleeve
-    avionics/       PocketBeagle2, Cape-A-2/B-2, XCVR-49MHZ-2, Kaylee PDB, microSD
+    avionics/       PocketBeagle2, Cape-A-2/B-2, XCVR-49MHZ-2, FlightEngineer PDB, microSD
     power/          LiPo packs, automotive fuses, Bourns shunt
     cargo/          N20 winch motor, HX711, DRV8833
     gears/          M=1.0 sector, pinion, bevel pair, crown (resin-print or SDP-SI)
@@ -388,7 +388,7 @@ def gen_ptfe_sleeve_4mm():
 def gen_pocketbeagle2():
     """
     PocketBeagle 2 Industrial AM6254 SBC — 56 × 35 mm PCB, ~8 mm assembled height.
-    Used as both FC node (Wash cape) and CN node (Zoë cape) upper slot.
+    Used as both FC node (Wash cape) and CN node (TACCO cape) upper slot.
     BOM: PB2-I-FC (×4), PB2-I-CN (×4), MAL-PB2-I (×1 GCS).
     Ref [3]: BeagleBoard.org PocketBeagle 2 Industrial datasheet.
     """
@@ -415,13 +415,13 @@ def gen_cape_a2():
 
 def gen_cape_b2():
     """
-    Cape-B-2 PCB 55 × 35 mm — EMI-hardened Zoë (Comms / Logging / Payload) cape.
+    Cape-B-2 PCB 55 × 35 mm — EMI-hardened TACCO (Comms / Logging / Payload) cape.
     Same form factor as PocketBeagle 2 Industrial SBC and Cape-A-2.
     Adds MAVLink SiK, LoRa RFM95W, TI WL1837MOD WiFi/BT, SLB9670 TPM 2.0,
     ATF16V8BQL CPLD write-blocker, log microSD.
     Assembled height ~12 mm (RF module stack + JST-GH connectors).
     BOM: CAPE-B-2 (×4 aircraft), MAL-CAPE-B-2 (×1 GCS).
-    Dimensions verified against Zoë.kicad_pcb Edge.Cuts (X: 121–176, Y: 87.5–122.5 mm).
+    Dimensions verified against TACCO.kicad_pcb Edge.Cuts (X: 121–176, Y: 87.5–122.5 mm).
     """
     pcb = _box(55.0, 35.0, 1.6)
     components = _box(49.0, 29.0, 10.4)
@@ -445,12 +445,12 @@ def gen_xcvr_49mhz2():
 
 def gen_kaylee_pdb():
     """
-    Kaylee Power Distribution Board — custom 4-layer 90 × 65 mm PCB.
+    FlightEngineer Power Distribution Board — custom 4-layer 90 × 65 mm PCB.
     Dual 5 V/10 A BEC (TPS54620×2), 6 V/5 A BEC (TPS54540),
     5× INA226 current monitors, BQ76930 6S cell monitor.
     150 A MAXI main fuse + 4× 40 A mini ESC fuses.
     Assembled height ~10 mm (tall electrolytic caps + fuse holders).
-    BOM: Kaylee (×1).
+    BOM: FlightEngineer (×1).
     """
     pcb = _box(90.0, 65.0, 1.6)
     components = _box(84.0, 59.0, 8.4)
@@ -512,7 +512,7 @@ def gen_fuse_maxi_150a():
     """
     Littelfuse 0297150.ZXNV 150 A MAXI blade fuse — main battery bus.
     Standard MAXI blade: 29.2 × 15.2 × 16.6 mm (body only, no terminals).
-    BOM: FUSE-MAIN-150A (×1 on Kaylee).
+    BOM: FUSE-MAIN-150A (×1 on FlightEngineer).
     """
     return _box(29.0, 15.0, 17.0)
 
@@ -521,7 +521,7 @@ def gen_fuse_mini_40a():
     """
     Littelfuse 0297040.WXNV 40 A mini blade fuse — per-ESC branch.
     Standard mini blade: 19.0 × 11.0 × 16.6 mm.
-    BOM: FUSE-ESC-40A (×4 on Kaylee).
+    BOM: FUSE-ESC-40A (×4 on FlightEngineer).
     """
     return _box(19.0, 11.0, 17.0)
 
@@ -530,7 +530,7 @@ def gen_shunt_1mohm():
     """
     Bourns CSS2H-2512K 1 mΩ 3 W Kelvin shunt resistor — 2512 SMD package.
     Package: 6.4 × 3.2 × 2.3 mm.
-    BOM: SHUNT-1MOHM (×5 on Kaylee).
+    BOM: SHUNT-1MOHM (×5 on FlightEngineer).
     """
     return _box(6.4, 3.2, 2.3)
 
@@ -715,7 +715,7 @@ def gen_wire_4awg():
 
 def gen_wire_10awg():
     """
-    10 AWG silicone wire — ESC branch wiring (Kaylee XT30 → ESC XT30).
+    10 AWG silicone wire — ESC branch wiring (FlightEngineer XT30 → ESC XT30).
     OD ≈ 6 mm; shown as a 400 mm bundle (4 ESC runs × ~100 mm each).
     BOM: WIRE-10AWG (×1).
     """
@@ -1047,7 +1047,7 @@ def gen_far_bond_strap():
     Braid body 100 mm × 10 mm × 2 mm; M3 lug tabs (12 × 10 × 4 mm)
     crimped at both ends.  Two straps per cage provide redundant bond
     paths per the failover requirement (CLAUDE.md).  Connects the
-    FAR-CAGE-AV body to the airframe ground plane / Kaylee GND bus.
+    FAR-CAGE-AV body to the airframe ground plane / FlightEngineer GND bus.
     DC resistance ≤ 2.5 mΩ; rated 10 A continuous for fault-current.
 
     BOM: FAR-BOND-STRAP (×2 per cage = ×8 aircraft).
@@ -1168,7 +1168,7 @@ def gen_foam_cargo():
     Low-density foam fill block — cargo section.
 
     Approximates the interior void of Cargo_Shell (190 × 200 × 159 mm).
-    Avionics bays, cargo door, and Kaylee PDB bay are cut out during
+    Avionics bays, cargo door, and FlightEngineer PDB bay are cut out during
     fit-up; use VOID-AVBAY and VOID-CARGO-BAY overlays to plan clearances.
 
     BOM:  FOAM-FILL-CARGO (×1)
@@ -1185,7 +1185,7 @@ def gen_foam_middle():
 
     The middle section is an open-bottomed ring (open at −Z / belly).
     Foam fills the two vertical pillars and the top arch; the open belly
-    gap is left void to allow wiring and Kaylee PDB access.
+    gap is left void to allow wiring and FlightEngineer PDB access.
 
     Modelled as three rectangular blocks assembled into a U-frame:
       Left  pillar : 30 × 69 × 161 mm at X = 0
@@ -1235,7 +1235,7 @@ def gen_void_avbay():
     Avionics bay clearance void — one node stack pocket.
 
     Each stack houses: PocketBeagle 2 Industrial (56×35 mm) + Wash
-    (Cape-A-2, 55×35 mm) + Zoë (Cape-B-2, 55×35 mm) + XCVR-49MHZ-2
+    (Cape-A-2, 55×35 mm) + TACCO (Cape-B-2, 55×35 mm) + XCVR-49MHZ-2
     (55×35 mm), stacked vertically on M3 standoffs.
 
     Clear interior: 62 × 42 × 75 mm (footprint + 7 mm clearance each
@@ -1258,13 +1258,13 @@ def gen_void_cargo_bay():
     """
     Cargo bay belly void — open payload well under cargo section.
 
-    The Jayne cargo handling system occupies the belly of the cargo
+    The Observer cargo handling system occupies the belly of the cargo
     section.  Approximate clear volume: 120 × 150 × 80 mm.  The cargo
     door opens in the −Z (ventral) direction; the N20 winch motor, HX711
     load-cell ADC, and hook assembly must clear this pocket.
 
     BOM:  VOID-CARGO-BAY (×1)
-    Ref [2]: CLAUDE.md cargo section description; Jayne cargo system.
+    Ref [2]: CLAUDE.md cargo section description; Observer cargo system.
     """
     return _box(120.0, 150.0, 80.0)
 
@@ -1294,7 +1294,7 @@ def gen_void_power_bus():
     shunt.  Cross-section 25 × 25 mm (X × Z), length 500 mm.
 
     BOM:  VOID-POWER-BUS (×1 longitudinal channel)
-    Ref [2]: CLAUDE.md Kaylee PDB power distribution topology.
+    Ref [2]: CLAUDE.md FlightEngineer PDB power distribution topology.
     """
     return _box(25.0, 500.0, 25.0)
 
@@ -1509,7 +1509,7 @@ _COMPONENTS = [
         "avionics",
         "Cape_B2_PCB_55x35mm.stl",
         "CAPE-B-2 / MAL-CAPE-B-2",
-        "Cape-B-2 Zoë Comms cape PCB 55×35 mm (×4 aircraft + ×1 GCS)",
+        "Cape-B-2 TACCO Comms cape PCB 55×35 mm (×4 aircraft + ×1 GCS)",
     ),
     (
         gen_xcvr_49mhz2,
@@ -1523,8 +1523,8 @@ _COMPONENTS = [
         gen_kaylee_pdb,
         "avionics",
         "Kaylee_PDB_90x65mm.stl",
-        "Kaylee",
-        "Kaylee Power Distribution Board 90×65 mm (×1)",
+        "FlightEngineer",
+        "FlightEngineer Power Distribution Board 90×65 mm (×1)",
     ),
     (
         gen_microsd,
@@ -1560,21 +1560,21 @@ _COMPONENTS = [
         "power",
         "Fuse_MAXI_150A.stl",
         "FUSE-MAIN-150A",
-        "150 A MAXI blade fuse — main battery bus (×1 on Kaylee)",
+        "150 A MAXI blade fuse — main battery bus (×1 on FlightEngineer)",
     ),
     (
         gen_fuse_mini_40a,
         "power",
         "Fuse_mini_40A.stl",
         "FUSE-ESC-40A",
-        "40 A mini blade fuse — per-ESC branch (×4 on Kaylee)",
+        "40 A mini blade fuse — per-ESC branch (×4 on FlightEngineer)",
     ),
     (
         gen_shunt_1mohm,
         "power",
         "Shunt_CSS2H_2512K_1mohm.stl",
         "SHUNT-1MOHM",
-        "Bourns CSS2H 1 mΩ Kelvin shunt, 2512 SMD (×5 on Kaylee)",
+        "Bourns CSS2H 1 mΩ Kelvin shunt, 2512 SMD (×5 on FlightEngineer)",
     ),
     # Cargo
     (
@@ -1939,7 +1939,7 @@ _COMPONENTS = [
         "foam",
         "Void_cargo_bay_120x150x80mm.stl",
         "VOID-CARGO-BAY",
-        "Cargo belly void 120×150×80 mm — Jayne payload door opening",
+        "Cargo belly void 120×150×80 mm — Observer payload door opening",
     ),
     (
         gen_void_wiring_trunk,

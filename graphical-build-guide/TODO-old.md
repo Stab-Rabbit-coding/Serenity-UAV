@@ -31,7 +31,7 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 | §Phase4 | Phase 4 — Hull Foam Pour + Close-up | 11 | &#9733; |
 | §Phase5 | Phase 5 — Minimum Viable Flyer  * FIRST FLIGHT | 61 | &#9733; |
 | §Phase6 | Phase 6 — Full 8-Node Arch + ToF Obstacle Avoidance | 35 | — |
-| §Phase7 | Phase 7 — Cargo System (Jayne assembly) | 14 | — |
+| §Phase7 | Phase 7 — Cargo System (Observer assembly) | 14 | — |
 | §Phase8 | Phase 8 — Finishing | 6 | — |
 | §Phase9 | Phase 9 — Performance Tuning + Flight-Envelope Expansion | 11 | — |
 | §Phase10 | Phase 10 — Advanced Autonomy + Long-Range Ops | 12 | — |
@@ -40,7 +40,7 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 ---
 
 
-> **Phase 7 assembles Jayne** (cargo doors, winch, latch, gondola, and the Jayne vision boards). See the cross-cutting Jayne map in [airframe/TODO.md](../airframe/TODO.md). Deferred Phases 11–12 are in [deferred/TODO.md](../deferred/TODO.md).
+> **Phase 7 assembles Observer** (cargo doors, winch, latch, gondola, and the Observer vision boards). See the cross-cutting Observer map in [airframe/TODO.md](../airframe/TODO.md). Deferred Phases 11–12 are in [deferred/TODO.md](../deferred/TODO.md).
 
 
 ## §Phase0 — Print All Parts + CF Cuts &#9733;
@@ -175,7 +175,7 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 - [ ] Install 5V/5A BEC; verify 5.00V ±0.05V under 1A bench load.
 - [ ] Pull motor phase leads through conduit to ESCs; solder (verify rotation marking first).
 - [ ] CAN FD termination: 120Ω SOLDERED to CN1 Cape-B at Shepherd's room (Bay A, bus start); temporary 120Ω at FC2 Cape-A in Inara's shuttle (Bay B, Phase 3 far-end; remove in Phase 7).
-- [ ] Mount CN1 Zoë on Shepherd's room (Bay A) floor standoffs (M2.5 nylon 6mm). Insert PB2-I. Secure.
+- [ ] Mount CN1 TACCO on Shepherd's room (Bay A) floor standoffs (M2.5 nylon 6mm). Insert PB2-I. Secure.
 - [ ] Mount FC1 Wash on inter-cape standoffs (M2.5 nylon 20mm) above CN1. Insert second PB2-I.
 - [ ] Flash OS to eMMC on CN1 and FC1 via USB-C before installation.
 - [ ] Install log μSD (64GB) in CN1 Cape-B log slot. Label: **CN1-LOG**.
@@ -186,14 +186,14 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 - [ ] Daisy-chain RS-485: CN1 → FC1 → exit toward Inara's shuttle (Bay B).
 - [ ] Connect MIL-STD-1553: FC1 = Bus Controller (primary); CN1 = RT 0x01.
 - [ ] Cap Simon's medbay (Bay E) end of ETH-EA conduit (will connect to FC4 in Phase 7); connect Shepherd's room (Bay A) end to CN1 Cape-B ETH-2.
-- [ ] Mount CN2 Zoë on Inara's shuttle (Bay B) floor standoffs; insert PB2-I; mount FC2 Wash above.
+- [ ] Mount CN2 TACCO on Inara's shuttle (Bay B) floor standoffs; insert PB2-I; mount FC2 Wash above.
 - [ ] Flash OS to eMMC on CN2 and FC2 before installation.
 - [ ] Install log μSD (64GB) in CN2 Cape-B log slot. Label: **CN2-LOG**.
-- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN2 Zoë J_XCVR header.
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN2 TACCO J_XCVR header.
 - [ ] Route FC2 GPS coax through dorsal PTFE sleeve (sta ~130mm); mount GPS patch on dorsal hull, face UP.
 - [ ] Continue CAN FD daisy-chain Shepherd's room→Inara's shuttle: CN2 → FC2 + temporary 120Ω at FC2 (remove Phase 7).
 - [ ] Continue RS-485 daisy-chain Shepherd's room (Bay A) → Inara's shuttle (Bay B).
-- [ ] Connect ETH-AB (Shepherd's room → Inara's shuttle): FC1 Wash ETH-1 → CN2 Zoë ETH-B (FC1↔CN2 Ethernet ring link).
+- [ ] Connect ETH-AB (Shepherd's room → Inara's shuttle): FC1 Wash ETH-1 → CN2 TACCO ETH-B (FC1↔CN2 Ethernet ring link).
 - [ ] Cap River's room (Bay D) end of ETH-BD (will connect to CN3 in Phase 7).
 - [ ] Power taps: connect CN1, FC1, CN2, FC2 power leads from PWR conduit; verify 5V ±0.05V at each header.
 - [ ] Provision TPM 2.0 (SLB9670) on CN1, FC1, CN2, FC2 — unique key material per node.
@@ -237,15 +237,15 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 *Master:* [`TODO.md` §Phase6](../TODO.md) — 35 open, 0 done at snapshot.
 
 - [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Wash in Inara's shuttle (Bay B).
-- [ ] Mount CN3 Zoë on River's room (Bay D) floor standoffs; insert PB2-I; mount FC3 Wash above.
+- [ ] Mount CN3 TACCO on River's room (Bay D) floor standoffs; insert PB2-I; mount FC3 Wash above.
 - [ ] Flash OS to eMMC; install log μSD. Label: **CN3-LOG**.
-- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN3 Zoë J_XCVR header.
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN3 TACCO J_XCVR header.
 - [ ] Route FC3 GPS coax through dorsal PTFE sleeve (sta ~275mm); mount GPS patch, face UP.
 - [ ] Continue CAN FD chain: Inara's shuttle (Bay B) FC2 → River's room (Bay D) CN3 → FC3 → exit toward Simon's medbay (Bay E).
 - [ ] Continue RS-485 chain Inara's shuttle (Bay B) → River's room (Bay D) → Simon's medbay (Bay E).
-- [ ] Connect ETH-BD (Inara's shuttle → River's room): FC2 Wash ETH-1 → CN3 Zoë ETH-B.
+- [ ] Connect ETH-BD (Inara's shuttle → River's room): FC2 Wash ETH-1 → CN3 TACCO ETH-B.
 - [ ] Power tap River's room (Bay D); verify 5V ±0.05V.
-- [ ] Mount CN4 Zoë on Simon's medbay (Bay E) standoffs; insert PB2-I; mount FC4 Wash above.
+- [ ] Mount CN4 TACCO on Simon's medbay (Bay E) standoffs; insert PB2-I; mount FC4 Wash above.
 - [ ] Flash OS to eMMC; install log μSD. Label: **CN4-LOG**.
 - [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN4 header.
 - [ ] Route FC4 GPS coax through dorsal PTFE sleeve (sta ~350mm); mount GPS patch, face UP.
@@ -273,7 +273,7 @@ snapshot (`TODO.md`, md5 `829246af291844cd6b557230e8430a12`).
 - [ ] 3-waypoint autonomous mission with GPS, altitude hold, RTL on simulated link loss
 
 
-## §Phase7 — Cargo System (Jayne assembly)
+## §Phase7 — Cargo System (Observer assembly)
 
 *Master:* [`TODO.md` §Phase7](../TODO.md) — 14 open, 0 done at snapshot.
 

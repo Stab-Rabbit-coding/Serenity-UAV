@@ -2,7 +2,7 @@
   (symbol "Jayne_SoM_PCM071" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
     (property "Reference" "U" (id 0) (at -33.02 6.0 0) (effects (font (size 1.27 1.27)) (justify left)))
     (property "Value" "phyCORE-AM62x (PCM-071)" (id 1) (at -33.02 3.0 0) (effects (font (size 1.27 1.27)) (justify left)))
-    (property "Footprint" "Jayne:phyCORE-AM62x_PCM071_2xBTH-060" (id 2) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Footprint" "Observer:phyCORE-AM62x_PCM071_2xBTH-060" (id 2) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
     (property "Datasheet" "" (id 3) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
     (property "ki_description" "PHYTEC phyCORE-AM62x PCM-071 SoM, 240-pin 2x Samtec BTH-060 -- clean-room from PHYTEC HW manual Tables 7-10" (id 4) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
     (symbol "Jayne_SoM_PCM071_1_1"

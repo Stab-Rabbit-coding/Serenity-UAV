@@ -8,7 +8,7 @@
  *
  * Implements the power fault state machine described in pwr_fault.h.
  *
- * INA226 I2C address layout on Kaylee (all on i2c_dev_pdb bus):
+ * INA226 I2C address layout on FlightEngineer (all on i2c_dev_pdb bus):
  *   0x40 — ESC1 (Port Fwd, EDF0)
  *   0x41 — ESC2 (Port Aft,  EDF1)
  *   0x42 — ESC3 (Stbd Fwd,  EDF2)
@@ -16,7 +16,7 @@
  *   0x44 — Main bus monitor
  *   0x08 — BQ76930 cell monitor
  *
- * Shunt resistor values (see Kaylee.md §INA226 Calibration):
+ * Shunt resistor values (see FlightEngineer.md §INA226 Calibration):
  *   ESC channels: 1 mΩ, I_max = 60 A
  *   Main bus:     1 mΩ, I_max = 75 A
  *
@@ -38,7 +38,7 @@
  * INA226 I2C addresses and shunt configuration
  * ---------------------------------------------------------------------------*/
 
-/** I2C addresses for ESC current monitors on Kaylee. */
+/** I2C addresses for ESC current monitors on FlightEngineer. */
 static const uint8_t ESC_I2C_ADDR[PWR_FAULT_ESC_COUNT] = {0x40U, 0x41U, 0x42U,
                                                           0x43U};
 
@@ -210,7 +210,7 @@ int pwr_fault_open(const char *i2c_dev_pdb, pwr_fault_ctx_t **ctx_out) {
     /* Open INA226 contexts for each ESC channel. */
     for (i = 0U; i < PWR_FAULT_ESC_COUNT; i++) {
         /*
-         * Each INA226 on the Kaylee shares the same I2C bus but has a distinct
+         * Each INA226 on the FlightEngineer shares the same I2C bus but has a distinct
          * address (0x40–0x43 for ESC1–ESC4).  Each bmon_ina2xx_open() call
          * opens a separate file descriptor and programs the address via
          * ioctl I2C_SLAVE, so all contexts are fully independent.

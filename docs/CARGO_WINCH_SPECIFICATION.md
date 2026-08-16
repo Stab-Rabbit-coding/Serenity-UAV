@@ -34,7 +34,7 @@ Ten requirements drive this revision:
 | R9 | Servo operating mode suits multi-turn travel **and** a slipping spool | §3.9 |
 | R10 | **The spool can never leave the cargo bay.** No failure — including its own designed wear — may release it as a projectile | §3.10 |
 
-*"Everything is shiny." — Kaylee Frye*
+*"Everything is shiny." — FlightEngineer Frye*
 
 ---
 
@@ -90,7 +90,7 @@ payload hanging under the aircraft. This is the concrete reason R3 exists.
 | Part | STS3215 serial-bus servo | User-directed (R1) |
 | Datasheet | `docs/references/108090023_STS3215-C001_Datasheet.pdf` | In repo |
 | Interface | **TTL half-duplex serial bus**, ID-addressable, daisy-chainable | §3.1.1 |
-| Supply | 5.4 V nominal, from Kaylee RAIL-2 `5V_JAYNE` | `docs/POWER_DISTRIBUTION.md` §3.2.1 |
+| Supply | 5.4 V nominal, from FlightEngineer RAIL-2 `5V_JAYNE` | `docs/POWER_DISTRIBUTION.md` §3.2.1 |
 | **Required** output torque | **≥ 3.2 kgf·cm (0.31 N·m)** at the coupler | Derived, §4.2 |
 | **Required** side load on output | **0 N** — see §3.3 | Derived, R3 |
 

@@ -48,7 +48,7 @@ Full license text: https://creativecommons.org/licenses/by/4.0/legalcode
 | **Physical Sec.** | CPP — Certified Protection Professional (ASIS International) |
 
 Steve Griffing is the sole proprietor of **Griffing Technology LLC**. PCB silkscreens and title
-blocks (Wash, Zoë, Kaylee, Emma/XCVR-49MHZ-2, and their predecessors) carry both the personal
+blocks (Wash, TACCO, FlightEngineer, COMMO/XCVR-49MHZ-2, and their predecessors) carry both the personal
 copyright/license line and the "Griffing Technology LLC" company mark, since these boards may be
 offered commercially beyond this project. Personal copyright is retained regardless of the company
 mark's presence on a given board.

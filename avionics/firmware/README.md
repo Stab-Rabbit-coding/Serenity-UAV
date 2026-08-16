@@ -27,10 +27,10 @@ The eight nodes use a **v2 · v2 · v2 · v2** (nose → tail) cape variant layo
 
 | Bay | Room name | Pair | FC cape | CN cape | Rationale |
 |-----|-----------|------|---------|---------|-----------|
-| A (nose) | Shepherd's room | FC1 / CN1 | Wash | Zoë | Bus start termination; 5 kV isolated CAN FD / RS-485 / Ethernet at forward bus endpoint |
-| B | Inara's shuttle | FC2 / CN2 | Wash | Zoë | Rev R: uniform EMI hardening across all bays |
-| D | River's room | FC3 / CN3 | Wash | Zoë | Rev R: uniform EMI hardening across all bays |
-| E (tail) | Simon's medbay | FC4 / CN4 | Wash | Zoë | Bus end termination; 5 kV isolation closest to nacelle motor wiring / rear EDF |
+| A (nose) | Shepherd's room | FC1 / CN1 | Wash | TACCO | Bus start termination; 5 kV isolated CAN FD / RS-485 / Ethernet at forward bus endpoint |
+| B | Inara's shuttle | FC2 / CN2 | Wash | TACCO | Rev R: uniform EMI hardening across all bays |
+| D | River's room | FC3 / CN3 | Wash | TACCO | Rev R: uniform EMI hardening across all bays |
+| E (tail) | Simon's medbay | FC4 / CN4 | Wash | TACCO | Bus end termination; 5 kV isolation closest to nacelle motor wiring / rear EDF |
 
 Rev R places 5 kV galvanic isolation at every node. Cape-A-1 / Cape-B-1 are archived (Rev Q, 2026-06-05).
 

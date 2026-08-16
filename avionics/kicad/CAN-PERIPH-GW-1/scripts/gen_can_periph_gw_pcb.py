@@ -14,7 +14,7 @@ places every footprint with correct nets and a generous non-overlapping grid
 -- it does NOT hand-route signal traces (30+ nets). DRC will report
 unconnected-ratsnest items for the un-routed nets; that is expected at this
 stage and is tracked as an open item in CAN-PERIPH-GW-1.md / TODO.md, the
-same documented-residual-DRC pattern already used for Kaylee's own PCB
+same documented-residual-DRC pattern already used for FlightEngineer's own PCB
 generator (gen_kaylee_pcb.py docstring).
 
 RS-485 isolation is ISOW1412 (own integrated isolated DC-DC per stack, no

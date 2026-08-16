@@ -33,7 +33,7 @@ The fuselage has four canonical sections, each with specific spatial properties:
 
 - **Head** — forwardmost; tapers to a narrow nose (most negative Y extent, Y ≈ −305.6 mm)
 - **Cargo** — immediately aft of head; largest cross-section; wing attachment flanges on upper outer edges; bay door opens toward −Z (ventral)
-- **Middle** — narrow horseshoe-ring neck between cargo and rear; open at −Z (ventral); houses the inner-neck tube and Kaylee's room (power distribution); aft EDF intake scoops deferred to Phase 11
+- **Middle** — narrow horseshoe-ring neck between cargo and rear; open at −Z (ventral); houses the inner-neck tube and FlightEngineer's room (power distribution); aft EDF intake scoops deferred to Phase 11
 - **Rear** — aftmost; houses engine room, dorsal pod, and two landing skids extending aft
 
 **Wings and nacelles:**

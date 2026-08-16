@@ -823,7 +823,7 @@
         "cost_usd": 8,
         "supplier": "In-house / AliExpress",
         "search": "38 uH air-core inductor + variable cap + PETG printed post",
-        "notes": "3 mm clearance from GPS patch face; bench-test HDOP ≤1.5 with Emma (49 MHz) TX active before first flight"
+        "notes": "3 mm clearance from GPS patch face; bench-test HDOP ≤1.5 with COMMO (49 MHz) TX active before first flight"
       },
       {
         "ref": "POST-AFT-49",
@@ -857,7 +857,7 @@
       },
       {
         "ref": "ANT-LORA-915",
-        "desc": "LoRa 915 MHz RP-SMA whip antenna — River's Room (secondary link, fed from Zoë J_SMA_LORA)",
+        "desc": "LoRa 915 MHz RP-SMA whip antenna — River's Room (secondary link, fed from TACCO J_SMA_LORA)",
         "qty": 1,
         "mass_g": 5,
         "cost_usd": 3,
@@ -877,7 +877,7 @@
       },
       {
         "ref": "WIRE-COUNTERPOISE-49MHZ",
-        "desc": "49 MHz counterpoise (River's antenna) — AWG 22 stranded tinned copper, 460 mm, routed alongside the structural keel inside foam (cargo to rear) — interior/embedded, unaffected by the port-flank relocation of the radiating wire above — terminated at River's Emma antenna feed",
+        "desc": "49 MHz counterpoise (River's antenna) — AWG 22 stranded tinned copper, 460 mm, routed alongside the structural keel inside foam (cargo to rear) — interior/embedded, unaffected by the port-flank relocation of the radiating wire above — terminated at River's COMMO antenna feed",
         "qty": 1,
         "mass_g": 2,
         "cost_usd": 2,
@@ -887,7 +887,7 @@
       },
       {
         "ref": "WIRE-49MHZ-2",
-        "desc": "Second, independent 49 MHz top wire (Simon's antenna) — 0.3 mm stainless steel, ~470 mm (same length as WIRE-49MHZ), STARBOARD flank, shoulder height — feeds Simon's Medbay Emma board (River and Simon do not share an antenna, §1.4.2)",
+        "desc": "Second, independent 49 MHz top wire (Simon's antenna) — 0.3 mm stainless steel, ~470 mm (same length as WIRE-49MHZ), STARBOARD flank, shoulder height — feeds Simon's Medbay COMMO board (River and Simon do not share an antenna, §1.4.2)",
         "qty": 1,
         "mass_g": 3,
         "cost_usd": 5,
@@ -917,7 +917,7 @@
       },
       {
         "ref": "WIRE-COUNTERPOISE-49MHZ-2",
-        "desc": "Second 49 MHz counterpoise for Simon's antenna — AWG 22 stranded tinned copper, ~460 mm, routed alongside the structural keel inside foam (interior/embedded, unaffected by the starboard-flank relocation of the radiating wire above), terminated at Simon's Emma antenna feed",
+        "desc": "Second 49 MHz counterpoise for Simon's antenna — AWG 22 stranded tinned copper, ~460 mm, routed alongside the structural keel inside foam (interior/embedded, unaffected by the starboard-flank relocation of the radiating wire above), terminated at Simon's COMMO antenna feed",
         "qty": 1,
         "mass_g": 2,
         "cost_usd": 2,
@@ -943,7 +943,7 @@
         "cost_usd": 1,
         "supplier": "Digikey / Mouser",
         "search": "Wurth Elektronik 74271222 snap-on ferrite",
-        "notes": "Mirrors choke treatment already used on Emma's internal 49 MHz feedline, Emma.md lines 553–557, §1.4.2"
+        "notes": "Mirrors choke treatment already used on COMMO's internal 49 MHz feedline, COMMO.md lines 553–557, §1.4.2"
       }
     ]
   },
@@ -1259,7 +1259,7 @@
       },
       {
         "ref": "MAL-CAPE-B-2",
-        "desc": "Cape-B-2 (Zoë) PCB — Malcolm radio+logging cape",
+        "desc": "Cape-B-2 (TACCO) PCB — Malcolm radio+logging cape",
         "qty": 1,
         "mass_g": 35,
         "cost_usd": 105.0,
@@ -1269,7 +1269,7 @@
       },
       {
         "ref": "MAL-XCVR-49MHZ-2",
-        "desc": "XCVR-49MHZ-2 49 MHz (Part 15 §15.235) sub-module — Malcolm Emma link",
+        "desc": "XCVR-49MHZ-2 49 MHz (Part 15 §15.235) sub-module — Malcolm COMMO link",
         "qty": 1,
         "mass_g": 18,
         "cost_usd": 32.0,

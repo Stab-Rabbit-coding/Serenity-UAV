@@ -23,9 +23,9 @@ in a SINGLE manifold3d boolean (closed-manifold-in / closed-manifold-out —
 same robust pattern used by merge_cargo_interior.py to avoid the MESH-01
 fragmentation class of defect).
 
-Jayne nose-mount bosses (head_shell24.scad jayne_board_bosses()) are
+Observer nose-mount bosses (head_shell24.scad jayne_board_bosses()) are
 DELIBERATELY EXCLUDED — those are explicitly flagged PROPOSED / not
-FreeCAD-verified (see TODO.md §1.2c.3, avionics/kicad/Jayne/Jayne.md); merging them
+FreeCAD-verified (see TODO.md §1.2c.3, avionics/kicad/Observer/Observerver.md); merging them
 here would falsely certify an unverified placement.  Likewise
 book_dorsal_boss() (Shepherd's Book bay) is excluded — it carries a known,
 not-yet-fixed legacy axis bug (see TODO.md §1.1.1.0a).

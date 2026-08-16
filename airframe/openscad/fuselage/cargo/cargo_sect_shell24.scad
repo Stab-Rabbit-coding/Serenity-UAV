@@ -30,7 +30,7 @@
 //
 // Rev S4 (2026-06-08): Correct Cape-B-2/Cape-A-2 PCB dimensions — was CAPE-B-1 legacy.
 //   VERIFIED from CAPE-B-2.kicad_pcb Edge.Cuts (X=121..176, Y=87.5..122.5 mm):
-//   Both Cape-B-2 (Zoë) and Cape-A-2 (Wash) are 55×35 mm, not the 90×60 mm / 85×55 mm
+//   Both Cape-B-2 (TACCO) and Cape-A-2 (Wash) are 55×35 mm, not the 90×60 mm / 85×55 mm
 //   values used in Rev S2/S3.  Those came from CAPE-B-1's archived footprint referenced
 //   in CAPE-B-2.md; CAPE-B-2 was redesigned to match the 55×35 mm PB2-I footprint.
 //   All AVINICS_BOSS_* and FARADAY_ENC_* parameters corrected accordingly:
@@ -65,7 +65,7 @@
 //
 // Rev S2 (2026-06-08): Inara and River avionics bay dorsal mounts.
 //   Inara bay (port, Z centre = 118 mm): 4× M3 boss standoffs on interior
-//   dorsal face; 85×55 mm dorsal access panel cut.  Cape-B (Zoë Cape-A-2,
+//   dorsal face; 85×55 mm dorsal access panel cut.  Cape-B (TACCO Cape-A-2,
 //   90×60 mm) mounts on 6 mm standoffs; Cape-A (Wash Cape-B-2, 85×55 mm)
 //   on 20 mm inter-cape standoffs above (total stack height 29.2 mm).
 //   GPS_PORT (Z=104.7 mm) co-located for minimal SMA routing.
@@ -576,24 +576,24 @@ module gps_mount_cut(pos, rot) {
 
 // ----------------------------------------------------------------------------
 // Module: jayne_board_bosses (added Rev R2, 2026-07-03)
-//   4x M3 heat-set insert boss posts for the Jayne vision/ToF/laser PCB
-//   (avionics/kicad/Jayne.kicad_pcb, 1.0 × 2.75 in (25.4 × 69.85 mm) double-sided board, mounting
+//   4x M3 heat-set insert boss posts for the Observer vision/ToF/laser PCB
+//   (avionics/kicad/Observer.kicad_pcb, 1.0 × 2.75 in (25.4 × 69.85 mm) double-sided board, mounting
 //   holes at board-local (4,4)/(42,4)/(4,44)/(42,44) -- i.e. +/-19 mm x
 //   +/-20 mm from board centre).  Mounted on the belly interior floor,
 //   standing up (+Z) from just above the nadir exterior skin, centred on
 //   CARGO_CAM_POS's (X,Y) station so the board sits directly above/behind
 //   the camera aperture -- short local harness runs to J_CAM1/J_CAM2/
-//   J_TOF/J_LASER (see Jayne.md "Mechanical Mounting and Wiring").
+//   J_TOF/J_LASER (see Observer.md "Mechanical Mounting and Wiring").
 //   Boss base at Z = WALL_MM (interior nadir face); extends to
 //   Z = WALL_MM + BOSS_H (= 8 mm) -- an 8 mm standoff starting allowance,
 //   pending real (non-placeholder) component-height verification per
-//   Jayne.md.  PROPOSED placement -- verify in FreeCAD before printing
+//   Observer.md.  PROPOSED placement -- verify in FreeCAD before printing
 //   (this hull's geometry is too complex for bounding-box placement per
 //   CLAUDE.md "Assembly and Placement").
-//   Ref: avionics/kicad/Jayne.md; TODO.md §1.2c.3.
+//   Ref: avionics/kicad/Observer.md; TODO.md §1.2c.3.
 // ----------------------------------------------------------------------------
-JAYNE_HOLE_DX = 19.0;   // mm, +/-X half-spacing of Jayne's mounting-hole pattern
-JAYNE_HOLE_DY = 20.0;   // mm, +/-Y half-spacing of Jayne's mounting-hole pattern
+JAYNE_HOLE_DX = 19.0;   // mm, +/-X half-spacing of Observer's mounting-hole pattern
+JAYNE_HOLE_DY = 20.0;   // mm, +/-Y half-spacing of Observer's mounting-hole pattern
 JAYNE_STATION_X = CX;         // mm, lateral centreline, same as CARGO_CAM_POS
 JAYNE_STATION_Y = CY;         // mm, longitudinal station, same as CARGO_CAM_POS
 module jayne_board_bosses() {
@@ -932,7 +932,7 @@ NSVMT_CONDUIT_W    =   10.0;        // mm, servo lead conduit slot width (X)
 NSVMT_CONDUIT_H    =    6.0;        // mm, servo lead conduit slot height (Y)
 
 // ── Cape PCB dimensions (Rev S4 — verified from CAPE-B-2.kicad_pcb Edge.Cuts) ──
-//   Both Cape-B-2 (Zoë) and Cape-A-2 (Wash) share the 55×35 mm PB2-I footprint.
+//   Both Cape-B-2 (TACCO) and Cape-A-2 (Wash) share the 55×35 mm PB2-I footprint.
 //   Ref: CAPE-B-2.kicad_pcb X=121..176 mm (55 mm), Y=87.5..122.5 mm (35 mm).
 //   MH1–MH4: 2.7 mm drill (M2.5 nylon standoffs inside tray) at ±24.5×±14.5 mm
 //   from board centre.  Title block: "55x35mm 4L JLCPCB assembled".
@@ -944,7 +944,7 @@ CAPE_HOLE_DZ   =  14.5;   // mm, ±Z M2.5 corner hole offset from board centre
 // ── Avionics bay dorsal mounts — Inara (port) and River (stbd) (Rev S4) ──────
 //
 // CAPE STACK GEOMETRY (Rev Q -2 EMI-hardened capes per CLAUDE.md Rev Q):
-//   Cape-B-2 (Zoë):  55×35 mm PCB; M2.5 corner holes at ±24.5×±14.5 mm.
+//   Cape-B-2 (TACCO):  55×35 mm PCB; M2.5 corner holes at ±24.5×±14.5 mm.
 //   Cape-A-2 (Wash): 55×35 mm PCB; M2.5 corner holes at ±24.5×±14.5 mm.
 //   Architecture: hull M3 bosses → Faraday tray body.
 //                 M2.5 nylon standoffs inside tray → PCB corners.
@@ -1006,7 +1006,7 @@ BAY_GAP            =  35.0;        // mm, edge-to-edge gap between Inara/River t
 //   The access panel cover (72×52 mm, copper-foil-lined PETG or 0.5 mm Al sheet)
 //   completes the EMI shield when installed.
 //   Tray body inserts through AVINICS_PANEL_X × AVINICS_PANEL_Y dorsal opening.
-//   Cape-B-2 (Zoë) and Cape-A-2 (Wash) PCBs mount on M2.5 internal standoffs.
+//   Cape-B-2 (TACCO) and Cape-A-2 (Wash) PCBs mount on M2.5 internal standoffs.
 //   One 25×25×7 mm axial fan per tray on one tray wall; air exhausts into
 //   gondola interior (no hull skin penetrations required).  Intake covered by
 //   6 mm-thick waveguide-below-cutoff honeycomb panel (6 mm cell, attenuation
@@ -1394,7 +1394,7 @@ union() {
             nacelle_servo_mount_block(+1);  // port wall
             nacelle_servo_mount_block(-1);  // stbd wall
 
-            // A8b. Jayne vision/ToF/laser PCB mounting bosses (Rev R2, 2026-07-03).
+            // A8b. Observer vision/ToF/laser PCB mounting bosses (Rev R2, 2026-07-03).
             //      4x M3 bosses on the belly interior floor, centred on
             //      CARGO_CAM_POS's (X,Y) station.  See jayne_board_bosses() header.
             jayne_board_bosses();
@@ -1404,7 +1404,7 @@ union() {
             //     4× M3 Faraday tray anchor bosses on interior dorsal face (Z≈DORSAL_Z_EXT).
             //     Boss pattern: ±15 mm (X) × ±25 mm (Y) from bay centre.
             //     GPS_PORT co-located (same X); nearest boss ≥ 5 mm from GPS centre.
-            //     Cape-B-2 (Zoë) / Cape-A-2 (Wash) PCBs mount on M2.5 internal standoffs
+            //     Cape-B-2 (TACCO) / Cape-A-2 (Wash) PCBs mount on M2.5 internal standoffs
             //     inside Faraday tray; hull bosses anchor tray body only.
             //     VERIFY boss positions and clearance in slicer before printing.
             //     Ref: Rev S4 dimension correction (Rev R2 axis fix); GPS_PORT recess
@@ -1418,7 +1418,7 @@ union() {
             //      4× M3 Faraday tray anchor bosses on interior dorsal face (Z≈DORSAL_Z_EXT).
             //      Boss pattern: ±15 mm (X) × ±25 mm (Y) from bay centre.
             //      GPS_STBD co-located (same X); nearest boss ≥ 5 mm from GPS centre.
-            //      Cape-B-2 (Zoë) / Cape-A-2 (Wash) PCBs mount on M2.5 internal standoffs.
+            //      Cape-B-2 (TACCO) / Cape-A-2 (Wash) PCBs mount on M2.5 internal standoffs.
             //      35 mm inter-bay gap (X) available for conduit and wiring routing.
             //      VERIFY boss positions and clearance in slicer before printing.
             //      Ref: Rev S4 dimension correction (Rev R2 axis fix); GPS_STBD recess

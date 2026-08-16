@@ -368,9 +368,9 @@ TODO §0.8).
 
 **Open the go-ahead decision** on §8 rework + §6 regear before I edit geometry.
 
-> Mal: Wash, you gotta give me an Ivan.
-> Wash: I'll see what I can do.
+> Mal: Pilot, you gotta give me an Ivan.
+> Pilot: I'll see what I can do.
 > (over the intercom)
-> Wash: Kaylee, how would you feel about pullin' a Crazy Ivan?
-> Kaylee: (sounds weak but positive) Always wanted to try one.
+> Pilot: FlightEngineer, how would you feel about pullin' a Crazy Ivan?
+> FlightEngineer: (sounds weak but positive) Always wanted to try one.
   

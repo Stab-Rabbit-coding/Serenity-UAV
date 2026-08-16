@@ -10,12 +10,12 @@
 
 Todo item 1.2b requires completing PCB redesigns for three boards:
 1. **Emma Rev S1** — Add LoRa, replace JST with P1+P2 socket rails
-2. **Zoë Rev S1** — Remove LoRa, add P1+P2 passthrough rails  
-3. **Kaylee Rev S1** — Remove 6 V BEC, add 5 V servo output
+2. **TACCO Rev S1** — Remove LoRa, add P1+P2 passthrough rails  
+3. **FlightEngineer Rev S1** — Remove 6 V BEC, add 5 V servo output
 
 Most of the technical work has been started and partially completed, but **all three boards are blocked from completion** due to:
 - Missing KiCad tools (kicad-cli, pcbnew Python module)
-- User interaction required (Zoë reference-designator mapping, Emma RSSI routing)
+- User interaction required (TACCO reference-designator mapping, Emma RSSI routing)
 - Design decisions needing sign-off (firmware pinmux approvals)
 
 ---
@@ -106,7 +106,7 @@ Emma is ~90% complete on schematic/PCB design, but **cannot be fabricated** unti
 
 ---
 
-### 2. Zoë (Cape-B-2) Rev S1 — Remove LoRa, Add P1+P2 Passthrough Rails
+### 2. TACCO (Cape-B-2) Rev S1 — Remove LoRa, Add P1+P2 Passthrough Rails
 
 **Last Updated:** 2026-07-04  
 **Completion Status:** ~65% (PCB finished, schematic needs major reconciliation)
@@ -148,8 +148,8 @@ Emma is ~90% complete on schematic/PCB design, but **cannot be fabricated** unti
 
 - [ ] **Verify P1/P2 socket nets** — Confirm already-placed sockets carry correct signals
   - Lower P1/P2 pins → upper P1/P2 sockets should pass through all PB2 signals
-  - Confirm proper passthrough 0Ω jumper placement on signals consumed by Zoë (Wi-Fi, SiK, I²C, UART)
-  - **ACTION REQUIRED:** User to inspect `Zoë.kicad_pcb` P1/P2 socket net assignments
+  - Confirm proper passthrough 0Ω jumper placement on signals consumed by TACCO (Wi-Fi, SiK, I²C, UART)
+  - **ACTION REQUIRED:** User to inspect `TACCO.kicad_pcb` P1/P2 socket net assignments
   - **TOOL REQUIRED:** kicad-cli for net connectivity check
   - **IMPACT:** Medium — if nets are wrong, Emma stack will not function
 
@@ -166,7 +166,7 @@ Emma is ~90% complete on schematic/PCB design, but **cannot be fabricated** unti
   - Output directory: `avionics/kicad/gerbers/CAPE-B-2-S1/`
 
 #### Summary
-Zoë PCB is **complete and ready**, but schematic is **30 days behind** and cannot be used without:
+TACCO PCB is **complete and ready**, but schematic is **30 days behind** and cannot be used without:
 1. **User confirmation of reference-designator mapping** (no guessing — flight-critical board)
 2. Removal of LoRa, J_XCVR, SBUS blocks from schematic
 3. Addition of P1/P2 passthrough sockets to schematic
@@ -176,13 +176,13 @@ Zoë PCB is **complete and ready**, but schematic is **30 days behind** and cann
 
 ---
 
-### 3. Kaylee Rev S1 — Remove 6 V BEC, Add 5 V Servo Output
+### 3. FlightEngineer Rev S1 — Remove 6 V BEC, Add 5 V Servo Output
 
 **Last Updated:** 2026-07-18 (no recent work)  
 **Completion Status:** 0% (design not started; current board is Rev R, not S1)
 
 #### Current State
-- Schematic exists: `avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch` (Rev R)
+- Schematic exists: `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch` (Rev R)
   - TPS54540DDAR 6V/5A BEC defined at U_BEC_6V (lines 3552–3580)
   - Dual TPS54620 5V BECs already present (U_BEC_5V_1, U_BEC_5V_2)
   - Board status: "Schematic complete — PCB layout pending DRC sign-off"
@@ -202,7 +202,7 @@ Zoë PCB is **complete and ready**, but schematic is **30 days behind** and cann
   - Change output connector label from "6V_SERVO" to "SERVO-5V"
   - Verify 5 V servo current budget: 2× DS3218MG = 2× 500 mA stall = 1.0 A peak
     - TPS54620 3 A rated output provides 3× headroom ✓ (adequate)
-  - Add to fabric layer: "Kaylee Rev S1"
+  - Add to fabric layer: "FlightEngineer Rev S1"
 
 #### Design Approach
 ```
@@ -217,7 +217,7 @@ SECTION E (NEW): 5V Servo BEC (TPS54620)
 
 #### Blocking Work
 - [ ] **Schematic modification**
-  - Edit `Kaylee.kicad_sch` to remove TPS54540 circuit, add third TPS54620
+  - Edit `FlightEngineer.kicad_sch` to remove TPS54540 circuit, add third TPS54620
   - Update title block to "Rev S1"
   - **RISK:** Editing S-expression KiCad files without interactive tool is error-prone
   - **RECOMMENDED:** Use KiCad GUI to make these changes safely
@@ -235,11 +235,11 @@ SECTION E (NEW): 5V Servo BEC (TPS54620)
   - **TOOL REQUIRED:** kicad-cli
 
 - [ ] **Gerber generation**
-  - Output directory: `avionics/kicad/gerbers/Kaylee-S1/`
+  - Output directory: `avionics/kicad/gerbers/FlightEngineer-S1/`
   - **TOOL REQUIRED:** kicad-cli + `generate_gerbers.py`
 
 #### Summary
-Kaylee design changes are **straightforward** (6V → 5V servo rail conversion) but **not yet started**.
+FlightEngineer design changes are **straightforward** (6V → 5V servo rail conversion) but **not yet started**.
 - Schematic is easy to plan (delete one BEC section, duplicate another)
 - PCB footprints are straightforward (same TPS54620 size/pinout as existing)
 - **Main risk:** Safe editing of S-expression schematic files without KiCad validation tools
@@ -256,17 +256,17 @@ Emma Rev S1:
   → Firmware sign-off (NEEDS: firmware team review)
   → Gerber export (NEEDS: kicad-cli, all above complete)
 
-Zoë Rev S1:
+TACCO Rev S1:
   → PCB complete (DONE)
   → Schematic remap (BLOCKED: NEEDS user sch↔pcb confirmation, kicad-cli ERC)
   → Gerber export (NEEDS: kicad-cli, schematic complete)
 
-Kaylee Rev S1:
+FlightEngineer Rev S1:
   → Schematic edit (NEEDS: schematic mods + careful S-expression work or KiCad GUI)
   → PCB layout (NEEDS: footprint placement, routing, kicad-cli DRC)
   → Gerber export (NEEDS: kicad-cli, all above complete)
 
-CRITICAL PATH: Zoë sch↔pcb remap (user decision) + Emma part selection (user research)
+CRITICAL PATH: TACCO sch↔pcb remap (user decision) + Emma part selection (user research)
 ```
 
 ---
@@ -274,7 +274,7 @@ CRITICAL PATH: Zoë sch↔pcb remap (user decision) + Emma part selection (user 
 ## Recommendations for Completion
 
 ### Immediate (No Tools Required)
-1. **Zoë reference-designator mapping**
+1. **TACCO reference-designator mapping**
    - User to create name-map CSV or JSON mapping schematic refs → PCB refs
    - Example: `{ "CMC_CAN": "CMC-CAN", "X2Y_RS485": "X2Y-RS485", … }`
    - **Effort:** ~30 min (tedious but straightforward)
@@ -286,7 +286,7 @@ CRITICAL PATH: Zoë sch↔pcb remap (user decision) + Emma part selection (user 
    - Add REFERENCES.md entry with part number + datasheet link
    - **Effort:** ~1 hour (research + datasheet verification)
 
-3. **Kaylee design review**
+3. **FlightEngineer design review**
    - Confirm 5V servo rail (2× DS3218MG) vs 6V conversion is acceptable for firmware/mechanics
    - **Effort:** 15 min (cross-team sync)
 
@@ -297,14 +297,14 @@ CRITICAL PATH: Zoë sch↔pcb remap (user decision) + Emma part selection (user 
    - Run DRC iteratively
    - Generate gerbers
 
-2. **Zoë schematic reconciliation** (~2–3 hours)
+2. **TACCO schematic reconciliation** (~2–3 hours)
    - Apply name-map to remap refs
    - Delete LoRa/SBUS/J_XCVR blocks
    - Add P1/P2 sockets to schematic
    - Run ERC to zero
    - Generate gerbers
 
-3. **Kaylee S1 conversion** (~2–3 hours)
+3. **FlightEngineer S1 conversion** (~2–3 hours)
    - Remove TPS54540 circuit from schematic
    - Add third TPS54620 instance
    - PCB footprint rework (copy TPS54620 instance)
@@ -330,15 +330,15 @@ CRITICAL PATH: Zoë sch↔pcb remap (user decision) + Emma part selection (user 
   - `cleanup_emma_drc.py` (DRC cleanup, DONE)
 - Documentation: `avionics/kicad/Emma/Emma.md` (up-to-date)
 
-### Zoë
-- Schematic: `avionics/kicad/Zoë/kicads/Zoë.kicad_sch` (NEEDS reconciliation)
-- PCB: `avionics/kicad/Zoë/kicads/Zoë.kicad_pcb` (DONE)
-- Documentation: `avionics/kicad/Zoë/Zoë.md` (notes remap is needed)
+### TACCO
+- Schematic: `avionics/kicad/TACCO/kicads/TACCO.kicad_sch` (NEEDS reconciliation)
+- PCB: `avionics/kicad/TACCO/kicads/TACCO.kicad_pcb` (DONE)
+- Documentation: `avionics/kicad/TACCO/TACCO.md` (notes remap is needed)
 
-### Kaylee
-- Schematic: `avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch` (NEEDS Rev S1 edits)
-- PCB: `avionics/kicad/Kaylee/kicads/Kaylee.kicad_pcb` (NEEDS S1 layout)
-- Documentation: `avionics/kicad/Kaylee/Kaylee.md` (notes Rev R status)
+### FlightEngineer
+- Schematic: `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch` (NEEDS Rev S1 edits)
+- PCB: `avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pcb` (NEEDS S1 layout)
+- Documentation: `avionics/kicad/FlightEngineer/FlightEngineer.md` (notes Rev R status)
 
 ### Work Tracking
 - Root TODO: `TODO.md` §1.2b (high-level, 3 items unchecked)
@@ -348,16 +348,16 @@ CRITICAL PATH: Zoë sch↔pcb remap (user decision) + Emma part selection (user 
 
 ## Conclusion
 
-**All three boards are blocked from completion.** While Emma and Zoë have substantial prior work, they cannot reach fabrication-ready state without:
+**All three boards are blocked from completion.** While Emma and TACCO have substantial prior work, they cannot reach fabrication-ready state without:
 1. KiCad tools (kicad-cli, pcbnew Python)
-2. User decisions (Zoë remap, Emma part selection, Kaylee 5V confirmation)
+2. User decisions (TACCO remap, Emma part selection, FlightEngineer 5V confirmation)
 3. Firmware team sign-off (PTT_N/RSSI_DCD pinmux)
 
-**Kaylee design is straightforward** but has not been started — design decisions are clear and low-risk.
+**FlightEngineer design is straightforward** but has not been started — design decisions are clear and low-risk.
 
 **Recommended next steps:**
 1. Provide KiCad tools (install kicad-cli + python-pcbnew, or use interactive KiCad GUI)
-2. User supplies Zoë reference-designator mapping
+2. User supplies TACCO reference-designator mapping
 3. User researches Emma RSSI_CMP part + datasheet
 4. Firmware team reviews PTT_N/RSSI_DCD pinmux constraints
 5. Execute routing / schematic edits with KiCad

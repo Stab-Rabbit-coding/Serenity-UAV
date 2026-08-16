@@ -120,40 +120,40 @@ Seven named compartments are specified:
 
 **Shepherd's room** — Forward avionics bay (Bay A), head section near the bridge.
 Primary tasking: watchdog, fault detection, failover, and authentication.
-Wash + Zoë stack. SiK primary / Wi-Fi secondary comms.
+Wash + TACCO stack. SiK primary / Wi-Fi secondary comms.
 Ventilation ducting, cable conduits, and low-impedance bonding to other avionics bays.
 External access via a removable hull panel on the head section.
 
 **Inara's shuttle** — Avionics bay (Bay B), port side of the cargo section.
 Primary tasking: camera, external sensors, and high-bandwidth ground communications.
-Wash + Zoë stack. Wi-Fi primary / LoRa secondary comms.
+Wash + TACCO stack. Wi-Fi primary / LoRa secondary comms.
 Ventilation ducting, cable conduits, and low-impedance bonding to other avionics bays.
 External access via a removable hull panel above the port wing (resembles the shuttle
 fairing in the canonical model). Also accessible via Jayne's cargo bay.
 
 **River's room** — Avionics bay (Bay C), starboard side of the cargo section.
 Primary tasking: forward EDF control, nacelle tilt command/sync, and resilient comms.
-Wash + Zoë stack. 49 MHz (Part 15 §15.235) primary / LoRa secondary comms.
+Wash + TACCO stack. 49 MHz (Part 15 §15.235) primary / LoRa secondary comms.
 Ventilation ducting, cable conduits, and low-impedance bonding to other avionics bays.
 External access via a removable hull panel above the starboard wing. Also accessible
 via Jayne's cargo bay.
 
 **Simon's medbay** — Aft avionics bay (Bay D), middle section.
 Primary tasking: aft EDF control, alternate watchdog, and cargo/payload oversight.
-Wash + Zoë stack. 49 MHz (Part 15 §15.235) primary / SiK secondary comms.
+Wash + TACCO stack. 49 MHz (Part 15 §15.235) primary / SiK secondary comms.
 Ventilation ducting, cable conduits, and low-impedance bonding to other avionics bays.
-Adjacent to Kaylee's room. Accessible via Jayne's cargo bay.
+Adjacent to FlightEngineer's room. Accessible via Jayne's cargo bay.
 
-**Kaylee's room** — EMI-hardened power distribution bay, middle section, aft of the
+**FlightEngineer's room** — EMI-hardened power distribution bay, middle section, aft of the
 cargo bay and adjacent to Simon's medbay and the engine cone.
-Houses the Kaylee Power Distribution Board (PDB) and battery management system.
+Houses the FlightEngineer Power Distribution Board (PDB) and battery management system.
 Accessible via Jayne's cargo bay.
 
 **Battery compartment** — head/cargo section, accessible via Jayne's cargo bay.
 Designed for quick field-swapping of the flight battery. Allows mounting of different size batteries based on various intended flight profiles, and allows adjustment for per flight weight and balance tuning.
 
 **Jayne's cargo bay** — Belly clamshell cargo bay with actuated doors.
-Provides payload loading/release and access to Kaylee's room, the battery compartment,
+Provides payload loading/release and access to FlightEngineer's room, the battery compartment,
 Simon's medbay, and the port/starboard avionics bays (Inara's and River's).
 
 **Deferred — Fuselage EDF compartment** *(Phase 11 only)*: 55 mm EDF and motor bay in the
@@ -224,10 +224,10 @@ Rated for the 6 ft (1.829 m) design drop at Phase 11 AUW. Full structural analys
 
 ### Power Distribution
 
-**Kaylee** — EMI-hardened Power Distribution Board provides clean, filtered, monitored,
+**FlightEngineer** — EMI-hardened Power Distribution Board provides clean, filtered, monitored,
 and decoupled power to all powerplant, avionics, flight control, and cargo-handling
-systems with graceful degradation. Kaylee receives direction from the flight control node
-(Wash). Faraday enclosure; located in Kaylee's room, middle section.
+systems with graceful degradation. FlightEngineer receives direction from the flight control node
+(Wash). Faraday enclosure; located in FlightEngineer's room, middle section.
 
 ### Battery
 
@@ -303,30 +303,30 @@ near field of radiating commercial antenna systems).
 
 - ArduPilot-compatible Ground Control Station.
 - Name: **Malcolm** ("CAPT Reynolds / CAPT Tight Pants") — *"I aim to misbehave."*
-- Requires a paired Zoë + PocketBeagle 2 Industrial stack for communications.
+- Requires a paired TACCO + PocketBeagle 2 Industrial stack for communications.
 
 ### Onboard — 8-node cooperative architecture
 
-8 × PocketBeagle 2 Industrial (AM6254) boards arranged as 4 stacks of 1 Wash + 1 Zoë,
+8 × PocketBeagle 2 Industrial (AM6254) boards arranged as 4 stacks of 1 Wash + 1 TACCO,
 one stack per avionics bay.
 
 **Wash** (flight control cape — 4 nodes):
 GPS, IMU, barometer, airspeed sensor, FPV camera, TPM 2.0, ADC, ESC telemetry, PWM, GPIO.
 EMI-hardened v2 design (CAPE-A-2).
 
-**Zoë** (comms/logging cape — 4 nodes):
+**TACCO** (comms/logging cape — 4 nodes):
 MAVLink/SiK 915 MHz, LoRa RFM95W 915 MHz, TI WL1837MOD WiFi/BT, 49 MHz (Part 15 §15.235) transceiver
-**Emma** (daughter board to Zoë), CAN FD, MIL-STD-1553B, RS-485, Ethernet RSTP ring, TPM 2.0,
+**COMMO** (daughter board to TACCO), CAN FD, MIL-STD-1553B, RS-485, Ethernet RSTP ring, TPM 2.0,
 ATF16V8BQL CPLD hardware write-blocker, non-executable log microSD.
 EMI-hardened v2 design (CAPE-B-2).
 
-**Jayne** Camera, TimeOfFlight, and Laser module.  The two Jayne boards provide external sensing.  they are mcu nodes on the can-fd and ethernet ring with vision processing.  one is mounted in the nose, with forward view, and one in the cargo bay with a downward view.  the one in the cargo bay is capable of 3d imaging of objects within close proximity to the belly of the uav.  the forward looking one can do rough size and orientation detection.
+**Observer** Camera, TimeOfFlight, and Laser module.  The two Observer boards provide external sensing.  they are mcu nodes on the can-fd and ethernet ring with vision processing.  one is mounted in the nose, with forward view, and one in the cargo bay with a downward view.  the one in the cargo bay is capable of 3d imaging of objects within close proximity to the belly of the uav.  the forward looking one can do rough size and orientation detection.
 **Rev R — EMI-hardened v2 capes at ALL 8 positions.**
 All nodes use 5 kV galvanic isolation:
 - CAN FD: ISOW1044BDFMR (TI)
 - RS-485: ADM2795EBRWZ (ADI)
 - Ethernet: ADIN1300BCPZ PHY via dual ISO7642FDWRR + Würth 749010012A transformer (JST GH 4P)
-- Emma: SRF2012-100Y CMC, PRTR5V0U2X TVS, X2Y bridging capacitor on antenna feed
+- COMMO: SRF2012-100Y CMC, PRTR5V0U2X TVS, X2Y bridging capacitor on antenna feed
 
 All isolation barriers certified at 5 kV reinforced insulation
 [REF-IEC-001 Cl.5.5.2] / [REF-VDE-001 Cl.4.3 and Cl.5.3].
@@ -343,12 +343,12 @@ Gerbers for v2 capes pending DRC sign-off.
 | Wi-Fi | 5 GHz | Inara (primary), Shepherd (secondary) |
 | LoRa | 915 MHz | River (primary), Simon (secondary) |
 | AX.25 / 49 MHz | 49 MHz | River + Simon (47 CFR Part 15 §15.235 [REF-FCC-003] / AX.25 framing [REF-PROTO-001]) |
-| Zigbee | 2.4 GHz | Zoë nodes (secondary mesh) |
+| Zigbee | 2.4 GHz | TACCO nodes (secondary mesh) |
 
 **Security:** Every message (internal and external) is digitally signed and authenticated
 [REF-NIST-001 §2.1 — Zero Trust Architecture: no implicit trust by network location].
 All sensor data, messages, and camera feeds are logged to hardware-enforced non-executable
-microSD cards (ATF16V8BQL CPLD write-blocker on each Zoë node)
+microSD cards (ATF16V8BQL CPLD write-blocker on each TACCO node)
 [REF-NIST-004 §4.4.2 — log data protection via hardware write-block].
 NIST SP 800-207 Zero Trust architecture [REF-NIST-001]; NIST SP 800-82 Rev 3 OT security
 [REF-NIST-002]; every board has a TPM 2.0 [REF-NIST-001 §3.3 — device agent attestation].
@@ -415,7 +415,7 @@ PE(CSE), CISSP-ISSEP, CPP. Revision S, July 2026.
 Covered under CC BY 4.0:
 
 - 3D-printable hull, nacelle, and nozzle design files (STL/SCAD/FCStd)
-- PCB schematics and Gerber files for Wash, Zoë, Kaylee, and Emma
+- PCB schematics and Gerber files for Wash, TACCO, FlightEngineer, and COMMO
 - Circuit diagrams, pinout tables, and wiring specifications
 - Mechanical drawings and assembly specifications
 - Firmware architecture specifications and algorithm descriptions

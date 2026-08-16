@@ -3,7 +3,7 @@
 """
 complete_1_2b.py — Master orchestration script for finishing todo 1.2b
 ================================================================================
-This script automates the completion of the three PCB redesigns (Emma, Zoë, Kaylee
+This script automates the completion of the three PCB redesigns (Emma, TACCO, FlightEngineer
 Rev S1) when run in an environment with KiCad 9.0.2 + pcbnew Python module.
 
 PREREQUISITES:
@@ -16,7 +16,7 @@ USAGE:
   python3 avionics/kicad/complete_1_2b.py [--board BOARD] [--steps STEPS]
 
   Options:
-    --board emma|zoë|kaylee    Work on specific board (default: all)
+    --board emma|zoë|flightengineer    Work on specific board (default: all)
     --steps list              Show available steps
     --dry-run                 Plan work without modifying files
     --verbose                 Show detailed progress
@@ -42,16 +42,16 @@ PROJECTS = {
         "scripts": ["avionics/kicad/Emma/scripts/route_emma_rssi.py"],
     },
     "zoë": {
-        "sch": "avionics/kicad/Zoë/kicads/Zoë.kicad_sch",
-        "pcb": "avionics/kicad/Zoë/kicads/Zoë.kicad_pcb",
-        "pro": "avionics/kicad/Zoë/kicads/Zoë.kicad_pro",
+        "sch": "avionics/kicad/TACCO/kicads/TACCO.kicad_sch",
+        "pcb": "avionics/kicad/TACCO/kicads/TACCO.kicad_pcb",
+        "pro": "avionics/kicad/TACCO/kicads/TACCO.kicad_pro",
         "gerber_dir": "avionics/kicad/gerbers/CAPE-B-2-S1",
     },
-    "kaylee": {
-        "sch": "avionics/kicad/Kaylee/kicads/Kaylee.kicad_sch",
-        "pcb": "avionics/kicad/Kaylee/kicads/Kaylee.kicad_pcb",
-        "pro": "avionics/kicad/Kaylee/kicads/Kaylee.kicad_pro",
-        "gerber_dir": "avionics/kicad/gerbers/Kaylee-S1",
+    "flightengineer": {
+        "sch": "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_sch",
+        "pcb": "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pcb",
+        "pro": "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pro",
+        "gerber_dir": "avionics/kicad/gerbers/FlightEngineer-S1",
     },
 }
 
@@ -171,9 +171,9 @@ def emma_generate_gerbers():
 
 
 def zoë_run_erc():
-    """Run ERC on Zoë schematic"""
+    """Run ERC on TACCO schematic"""
     print("\n" + "=" * 70)
-    print("STEP: Run ERC on Zoë schematic")
+    print("STEP: Run ERC on TACCO schematic")
     print("=" * 70)
     sch = PROJECTS["zoë"]["sch"]
     try:
@@ -196,9 +196,9 @@ def zoë_run_erc():
 
 
 def zoë_generate_gerbers():
-    """Generate Gerber files for Zoë"""
+    """Generate Gerber files for TACCO"""
     print("\n" + "=" * 70)
-    print("STEP: Generate Zoë Gerbers")
+    print("STEP: Generate TACCO Gerbers")
     print("=" * 70)
     script = "avionics/kicad/generate_gerbers.py"
     board = "zoë"
@@ -226,11 +226,11 @@ def zoë_generate_gerbers():
 
 
 def kaylee_run_drc():
-    """Run DRC on Kaylee PCB"""
+    """Run DRC on FlightEngineer PCB"""
     print("\n" + "=" * 70)
-    print("STEP: DRC check on Kaylee PCB")
+    print("STEP: DRC check on FlightEngineer PCB")
     print("=" * 70)
-    pcb = PROJECTS["kaylee"]["pcb"]
+    pcb = PROJECTS["flightengineer"]["pcb"]
     try:
         result = subprocess.run(
             ["kicad-cli", "pcb", "drc", "--schematic-parity", pcb],
@@ -251,12 +251,12 @@ def kaylee_run_drc():
 
 
 def kaylee_generate_gerbers():
-    """Generate Gerber files for Kaylee"""
+    """Generate Gerber files for FlightEngineer"""
     print("\n" + "=" * 70)
-    print("STEP: Generate Kaylee Gerbers")
+    print("STEP: Generate FlightEngineer Gerbers")
     print("=" * 70)
     script = "avionics/kicad/generate_gerbers.py"
-    board = "kaylee"
+    board = "flightengineer"
 
     if not Path(script).exists():
         print(f"✗ Script not found: {script}")
@@ -284,19 +284,19 @@ STEPS = {
     "emma-route": ("Route Emma RSSI_DCD (1 net)", emma_route_rssi_dcd),
     "emma-drc": ("DRC check Emma", emma_drc_check),
     "emma-gerber": ("Generate Emma gerbers", emma_generate_gerbers),
-    "zoë-erc": ("ERC check Zoë", zoë_run_erc),
-    "zoë-gerber": ("Generate Zoë gerbers", zoë_generate_gerbers),
-    "kaylee-drc": ("DRC check Kaylee", kaylee_run_drc),
-    "kaylee-gerber": ("Generate Kaylee gerbers", kaylee_generate_gerbers),
+    "zoë-erc": ("ERC check TACCO", zoë_run_erc),
+    "zoë-gerber": ("Generate TACCO gerbers", zoë_generate_gerbers),
+    "flightengineer-drc": ("DRC check FlightEngineer", kaylee_run_drc),
+    "flightengineer-gerber": ("Generate FlightEngineer gerbers", kaylee_generate_gerbers),
 }
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Complete todo 1.2b PCB redesigns (Emma, Zoë, Kaylee Rev S1)"
+        description="Complete todo 1.2b PCB redesigns (Emma, TACCO, FlightEngineer Rev S1)"
     )
     parser.add_argument(
-        "--board", choices=["emma", "zoë", "kaylee"], help="Work on specific board"
+        "--board", choices=["emma", "zoë", "flightengineer"], help="Work on specific board"
     )
     parser.add_argument("--steps", action="store_true", help="List available steps")
     parser.add_argument("--verbose", action="store_true", help="Verbose output")
@@ -340,8 +340,8 @@ def main():
                 if args.verbose:
                     input("Press Enter to continue...")
 
-    if args.board == "kaylee" or not args.board:
-        for step_name in ["kaylee-drc", "kaylee-gerber"]:
+    if args.board == "flightengineer" or not args.board:
+        for step_name in ["flightengineer-drc", "flightengineer-gerber"]:
             if step_name in STEPS:
                 _, func = STEPS[step_name]
                 func()

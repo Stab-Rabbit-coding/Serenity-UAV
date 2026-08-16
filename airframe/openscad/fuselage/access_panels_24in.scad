@@ -23,10 +23,10 @@
 //
 //   (B) Ventral hatch covers (middle section, hull −Y normal)
 //       Battery  — 150 × 50 mm hull opening → 160 × 60 mm cover OD
-//       Kaylee   — 105 × 90 mm hull opening → 115 × 100 mm cover OD
+//       FlightEngineer   — 105 × 90 mm hull opening → 115 × 100 mm cover OD
 //
 //   (C) Ventral hatch frames — bonded PETG frames for (B) covers
-//       Battery frame, Kaylee frame
+//       Battery frame, FlightEngineer frame
 //       (flat rectangular rings; hull conformance not required for interior-bonded frames)
 //
 // Hull STL coordinate conventions (all hull sections):
@@ -212,10 +212,10 @@ BATT_OPEN_Z =  50.0;   // mm, hull opening lateral  (1.97 in)
 BATT_COVER_X = BATT_OPEN_X + 2 * AV_SHOULDER;  // = 160 mm (6.30 in)
 BATT_COVER_Z = BATT_OPEN_Z + 2 * AV_SHOULDER;  // =  60 mm (2.36 in)
 //
-// Kaylee PDB (middle_canonical_shell24.scad: KAYLEE_* constants):
+// FlightEngineer PDB (middle_canonical_shell24.scad: KAYLEE_* constants):
 //   KAYLEE_X_CEN = 29.0; KAYLEE_Z_CEN = MID_Z = 36.47; KAYLEE_HATCH_X/Z = 105/90
-KLEE_X_CEN  =  29.0;   // mm, Kaylee tray X centre
-KLEE_Z_CEN  =  36.47;  // mm, Kaylee tray Z centre
+KLEE_X_CEN  =  29.0;   // mm, FlightEngineer tray X centre
+KLEE_Z_CEN  =  36.47;  // mm, FlightEngineer tray Z centre
 KLEE_Y_INT  = -126.78; // mm, interior ventral face Y (same as battery)
 KLEE_OPEN_X = 105.0;   // mm, hull opening fore-aft (4.13 in)
 KLEE_OPEN_Z =  90.0;   // mm, hull opening lateral  (3.54 in)
@@ -580,14 +580,14 @@ module battery_frame() {
     hatch_frame(BATT_OPEN_X, BATT_OPEN_Z);
 }
 
-// Kaylee cover — middle section, ventral face
+// FlightEngineer cover — middle section, ventral face
 module kaylee_cover() {
     rotate([90, 0, 0])
     translate([-KLEE_X_CEN, -(KLEE_Y_INT + H_STEP_H), -KLEE_Z_CEN])
         av_cover_ventral(KLEE_X_CEN, KLEE_Y_INT, KLEE_Z_CEN, KLEE_OPEN_X, KLEE_OPEN_Z);
 }
 
-// Kaylee frame — bonded PETG frame for Kaylee hatch
+// FlightEngineer frame — bonded PETG frame for FlightEngineer hatch
 module kaylee_frame() {
     hatch_frame(KLEE_OPEN_X, KLEE_OPEN_Z);
 }
@@ -604,8 +604,8 @@ module kaylee_frame() {
 //   "simon"      Simon Faraday cover     (middle section, dorsal)
 //   "battery"    Battery ventral cover   (middle section, ventral)
 //   "battery_f"  Battery ventral frame
-//   "kaylee"     Kaylee ventral cover    (middle section, ventral)
-//   "kaylee_f"   Kaylee ventral frame
+//   "flightengineer"     FlightEngineer ventral cover    (middle section, ventral)
+//   "kaylee_f"   FlightEngineer ventral frame
 //   "layout"     All 8 parts arranged on build plate (slow — 3 hull STL imports)
 
 RENDER = "layout";   // ← change to part name for single-part STL export
@@ -616,7 +616,7 @@ if (RENDER == "river")     river_cover();
 if (RENDER == "simon")     simon_cover();
 if (RENDER == "battery")   battery_cover();
 if (RENDER == "battery_f") battery_frame();
-if (RENDER == "kaylee")    kaylee_cover();
+if (RENDER == "flightengineer")    kaylee_cover();
 if (RENDER == "kaylee_f")  kaylee_frame();
 
 if (RENDER == "layout") {
@@ -630,7 +630,7 @@ if (RENDER == "layout") {
     translate([ _pitch * 0.5, 0, 0]) river_cover();
     translate([ _pitch * 1.5, 0, 0]) simon_cover();
 
-    // ── Row 2: battery cover + frame, Kaylee cover + frame ───────────────
+    // ── Row 2: battery cover + frame, FlightEngineer cover + frame ───────────────
     _row2_y = AV_COVER_Z + 30;
 
     translate([-(BATT_COVER_X + _gap) / 2 - (KLEE_COVER_X + _gap) / 2,

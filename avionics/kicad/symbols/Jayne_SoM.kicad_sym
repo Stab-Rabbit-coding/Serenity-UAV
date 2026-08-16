@@ -2,7 +2,7 @@
   (symbol "Jayne_SoM_phyCORE_AM62A" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
     (property "Reference" "U" (id 0) (at -33.02 6.0 0) (effects (font (size 1.27 1.27)) (justify left)))
     (property "Value" "phyCORE-AM62A" (id 1) (at -33.02 3.0 0) (effects (font (size 1.27 1.27)) (justify left)))
-    (property "Footprint" "Jayne:phyCORE-AM62A-DSC-270" (id 2) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Footprint" "Observer:phyCORE-AM62A-DSC-270" (id 2) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
     (property "Datasheet" "" (id 3) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
     (property "ki_description" "PHYTEC phyCORE-AM62A SoM (270-pad DSC) -- clean-room symbol from published pinout facts" (id 4) (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
     (symbol "Jayne_SoM_phyCORE_AM62A_1_1"

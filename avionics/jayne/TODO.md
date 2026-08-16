@@ -22,7 +22,7 @@
 → full detail: `WBS.md` §1.2c
 
 - [ ] Final component placement (user-reserved) + impedance-controlle…
-- [ ] Generate production-ready Gerber files to `avionics/kicad/Jayne…
+- [ ] Generate production-ready Gerber files to `avionics/kicad/Observer…
 
 #### 1.2c.3 — Mechanical Integration
 → full detail: `WBS.md` §1.2c
@@ -33,11 +33,11 @@
 - [ ] External ring harness — nose:
 - [ ] External ring harness — cargo:
 
-#### 1.2c.4 — Jayne Power Feed and Laser Unification (2026-07-05)
+#### 1.2c.4 — Observer Power Feed and Laser Unification (2026-07-05)
 → full detail: `WBS.md` §1.2c
 
-- [ ] Kaylee second 5 V rail — cross-tied, mutually fault-tolerant (P…
-- [ ] Jayne 5 V harness:
+- [ ] FlightEngineer second 5 V rail — cross-tied, mutually fault-tolerant (P…
+- [ ] Observer 5 V harness:
 - [ ] Laser — unify to a single 520 nm green source, Class 2 both sit…
 - [ ] Both Class 2 caps must be hardware-enforced
 - [ ] Nose camera strobe + frame-difference detection

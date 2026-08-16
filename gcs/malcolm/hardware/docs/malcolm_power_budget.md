@@ -22,7 +22,7 @@ Malcolm GCS uses two independent power rails in field configuration:
 | Component                       | Typical (mA) | Peak (mA) | Notes |
 |---------------------------------|-------------|-----------|-------|
 | PocketBeagle 2 Industrial (AM6254) | 350       | 600       | AM6254 quad-core at ~1 GHz; includes LPDDR4 |
-| Cape-B-2 (Zoë) digital section  | 120         | 200       | ISOW1044, ADM2795, CPLD, TPM, log microSD |
+| Cape-B-2 (TACCO) digital section  | 120         | 200       | ISOW1044, ADM2795, CPLD, TPM, log microSD |
 | RFM95W LoRa (Tx)                | 0 (Rx)      | 120       | +20 dBm Tx burst, 40 mA Rx |
 | RFD900x SiK (Tx)                | 0 (Rx)      | 200       | +20 dBm Tx burst, 50 mA Rx |
 | TI WL1837MOD WiFi (Tx)          | 80          | 250       | Tx peak at +18 dBm; Rx ~80 mA |
@@ -38,7 +38,7 @@ A 5 V 5 A switching BEC (e.g., Pololu D24V50F5 or equivalent) provides adequate 
 ## Gimbal Servo Power (6 V rail)
 
 Gimbal servos are powered from a separate 6 V rail to avoid switching noise on the 5 V
-avionics rail.  If a Kaylee PDB is not present at the GCS, use a dedicated 6 V BEC.
+avionics rail.  If a FlightEngineer PDB is not present at the GCS, use a dedicated 6 V BEC.
 
 | Component                | Typical (mA) | Peak (mA) | Notes |
 |--------------------------|-------------|-----------|-------|

@@ -29,7 +29,7 @@
 //   structural_analysis.md §4.1), and other TODO.md entries (§1.1.1 "battery
 //   tray in cargo section") now place this tray in the CARGO section, on the
 //   cargo keel segment. A separate, older note (TODO.md ~line 2818-2830,
-//   2026-06-08 Kaylee placement decision) instead describes a battery boss
+//   2026-06-08 FlightEngineer placement decision) instead describes a battery boss
 //   pattern in the MIDDLE section keel face. These two placements conflict
 //   and are NOT reconciled by this edit -- re-verify the tray's actual
 //   hull-Y station and update this header before final placement in

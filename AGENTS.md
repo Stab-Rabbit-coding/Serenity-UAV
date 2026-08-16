@@ -36,9 +36,9 @@ Non-negotiable, project-wide requirements:
 implementation/PCB status see `avionics/AGENTS.md` and each board's own `.md` under
 `avionics/kicad/<board>/`, which is updated more often than this file and is authoritative for
 as-built state):
-- 8× PocketBeagle2 Industrial SBC nodes, each carrying **Wash** (flight control/sensor cape) +
-  **Zoë** (comms/logging/payload cape), 5 kV galvanic isolation on CAN FD/RS-485/Ethernet.
-- **Emma** (49 MHz + LoRa transceiver cape) is installed only in River's Room and Simon's
+- 8× PocketBeagle2 Industrial SBC nodes, each carrying **Pilot** (flight control/sensor cape) +
+  **TACCO** (comms/logging/payload cape), 5 kV galvanic isolation on CAN FD/RS-485/Ethernet.
+- **COMMO** (49 MHz + LoRa transceiver cape) is installed only in River's Room and Simon's
   Medbay.
 - Onboard bus: CAN FD, MIL-STD 1553, RS-485, Ethernet — all 8 nodes interconnected.
 - External C2, all 4 usable for command and control: Wi-Fi 5 GHz, Zigbee 2.4 GHz, MAVLink/SiK
@@ -184,23 +184,23 @@ is under active trade study and must not be assumed.
 | Name | Role | Firefly line |
 |---|---|---|
 | Malcolm | Ground control station | "I aim to misbehave." |
-| Wash | Flight Control + Sensor cape | "I'm a leaf on the wind." |
-| Zoë | Comms/Logging/Payload cape | "Big Damn Heroes, sir." |
-| Kaylee | Power Distribution Board | "Everything is shiny." |
-| Emma | 49 MHz + LoRa transceiver cape | — |
-| Jayne | Cargo-handling + nose/cargo-bay vision/ToF/laser board | "She's a good gun." |
+| Pilot | Flight Control + Sensor cape | "I'm a leaf on the wind." |
+| TACCO | Comms/Logging/Payload cape | "Big Damn Heroes, sir." |
+| FlightEngineer | Power Distribution Board | "Everything is shiny." |
+| COMMO | 49 MHz + LoRa transceiver cape | — |
+| Observer | Cargo-handling + nose/cargo-bay vision/ToF/laser board | "She's a good gun." |
 | Shepherd's Room | Bay A — forward avionics | "I have heathens enough right here." |
 | Inara's Shuttle | Bay B — port avionics | "Mal, I will never understand you." |
 | River's Room | Bay C — starboard avionics | "I can kill you with my mind." |
 | Simon's Medbay | Bay D — aft avionics | "What did they do to you?" |
 
-Kaylee's room sits in the middle-section inner neck (open ventral face of the horseshoe ring),
-minimizing power-run length to all four nacelles/stacks/battery. Jayne is a standalone board
+FlightEngineer's room sits in the middle-section inner neck (open ventral face of the horseshoe ring),
+minimizing power-run length to all four nacelles/stacks/battery. Observer is a standalone board
 (not a PB2-I cape) installed at two locations — bow sensor pod and cargo nadir FPV mount —
-connected only via the shielded Ethernet ring + CAN-FD trunk. **Jayne's laser-indicator specs
+connected only via the shielded Ethernet ring + CAN-FD trunk. **Observer's laser-indicator specs
 (class, spread angle, per-site optics) change as the design matures — do not restate them
 here; canonical source is `docs/JAYNE_LASER_ANALYSIS.md` (current revision) and
-`avionics/kicad/Jayne/Jayne.md`.**
+`avionics/kicad/Observerver/Observer.md`.**
 
 **PACE per stack** (Primary / Alternative / Contingency / Emergency):
 
@@ -215,9 +215,9 @@ Shepherd: watchdog/fault-detect/failover/auth; SiK primary, Wi-Fi secondary.
 Inara: camera/external sensors/high-bandwidth ground link; Wi-Fi primary, SiK-MAVLink
 secondary.
 River: forward EDF + nacelle tilt sync + most resilient comms; 49 MHz primary, LoRa secondary,
-both via Emma.
+both via COMMO.
 Simon: aft EDF + alternate watchdog + Jayne/cargo oversight; 49 MHz primary, SiK secondary,
-both via Emma.
+both via COMMO.
 
 ## 10. Workflow
 
@@ -246,11 +246,11 @@ Governance stays with the `AGENTS.md` files listed in §2; several subsystems ke
 detail split across more than one file so none exceeds ~500 lines (the threshold at which a
 subsystem gets a new detail file rather than an ever-growing one):
 
-- **avionics/** — `avionics/{TODO,WBS}.md` (Wash/Zoë/Emma cape hardware, names, workload),
-  `avionics/rev-s1/{TODO,WBS}.md` (Emma/Zoë/Kaylee Rev S1 redesign),
+- **avionics/** — `avionics/{TODO,WBS}.md` (Pilot/TACCO/COMMO cape hardware, names, workload),
+  `avionics/rev-s1/{TODO,WBS}.md` (COMMO/TACCO/FlightEngineer Rev S1 redesign),
   `avionics/emi-hardening/{TODO,WBS}.md` (§0.6, §1.4 EMI hardening beyond the PCBs),
-  `avionics/jayne/{TODO,WBS}.md` (Jayne board + firmware), `avionics/firmware/{TODO,WBS}.md`
-  (Wash/Zoë node firmware)
+  `avionics/jayne/{TODO,WBS}.md` (Observer board + firmware), `avionics/firmware/{TODO,WBS}.md`
+  (Pilot/TACCO node firmware)
 - **airframe/** — `airframe/{TODO,WBS}.md` (hull-frame standard, non-printable placeholders,
   procurement), `airframe/fuselage-joints/{TODO,WBS}.md`, `airframe/fuselage-covers/{TODO,WBS}.md`,
   `airframe/fuselage-mid/{TODO,WBS}.md` (fuselage §1.1.1, split 3 ways),

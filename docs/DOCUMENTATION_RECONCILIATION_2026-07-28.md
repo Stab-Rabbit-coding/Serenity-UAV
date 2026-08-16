@@ -29,7 +29,7 @@ A systematic documentation audit identified 11 categories of stale, incomplete, 
 **Issues Resolved:**
 - ✅ **Created `/current-specification/serenity-rev-s.jsx`**
   - Specification file now reflects Rev S comprehensive checkpoint
-  - Updated header with Rev S key changes (Wash/Zoë EMI hardening, Emma LoRa, Kaylee v2, Jayne vision system, STS3215 winch)
+  - Updated header with Rev S key changes (Wash/TACCO EMI hardening, COMMO LoRa, FlightEngineer v2, Observer vision system, STS3215 winch)
   - Established Rev S as the canonical current specification document
 
 - ✅ **Created `/current-specification/bom_revS.json`**

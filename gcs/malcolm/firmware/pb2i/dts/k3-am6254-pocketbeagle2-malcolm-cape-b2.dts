@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: CC-BY-4.0
 /*
  * k3-am6254-pocketbeagle2-malcolm-cape-b2.dts
- * Device tree overlay — Malcolm GCS Cape-B-2 (same hardware as aircraft Zoë,
+ * Device tree overlay — Malcolm GCS Cape-B-2 (same hardware as aircraft TACCO,
  * different operational role: no cargo, no flight-data log, gimbal servo outputs)
  *
  * Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP

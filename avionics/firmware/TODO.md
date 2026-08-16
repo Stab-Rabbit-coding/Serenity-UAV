@@ -23,7 +23,7 @@
 - [ ] MIL-STD-1553B RT implementation
 - [ ] TPM-bound attestation
 
-### 4.3 — CN Node (Zoë) — Phase 7 Firmware
+### 4.3 — CN Node (TACCO) — Phase 7 Firmware
 
 - [ ] CAN FD heartbeat and telemetry forwarding
 - [ ] MIL-STD-1553B BC/RT tasks

@@ -82,7 +82,7 @@
 
 - [x] **governor_config.h** — template with calibrated k values per EDF; compile-time constants. *(done 2026-06-04)*
 
-### 4.3 — CN Node (Zoë) — Phase 7 Firmware
+### 4.3 — CN Node (TACCO) — Phase 7 Firmware
 
 - [ ] **CAN FD heartbeat and telemetry forwarding** — broadcast 0x001–0x008 node health frames; relay MAVLink telemetry from elected FC master to SiK GCS link.
     - [ ] 0x001–0x008 node health frame broadcaster (per-node heartbeat content/period).
@@ -96,7 +96,7 @@
 
 - [ ] **RS-485 inter-board messaging** — structured message format (header/payload/CRC); inter-node command and status relay.
     - [ ] Define structured frame format (header/payload/CRC) shared across all 8 nodes.
-    - [ ] Driver for the RS485_A/B footprint pinout already fixed on Wash/Zoë (§1.2).
+    - [ ] Driver for the RS485_A/B footprint pinout already fixed on Wash/TACCO (§1.2).
     - [ ] Bench test: CRC-reject malformed frame, command/status round-trip between two nodes.
 
 - [ ] **Ethernet RSTP ring management** — CPSW3G bridge configuration; RSTP fast-failover (<1s) verification; ring segment health monitoring.
@@ -112,7 +112,7 @@
     - [ ] Bench test: attempt out-of-order/overwrite write, verify CPLD blocks it.
 
 - [ ] **TPM-bound HMAC on all outbound AX.25 payloads** — each 49 MHz (Part 15 §15.235) packet includes HMAC-SHA256 computed from SLB9670 stored key; receiver nodes verify before acting.
-    - [ ] SLB9670 stored-key HMAC-SHA256 signer for outbound AX.25/49 MHz frames (Emma boards, River/Simon).
+    - [ ] SLB9670 stored-key HMAC-SHA256 signer for outbound AX.25/49 MHz frames (COMMO boards, River/Simon).
     - [ ] Receiver-side verification gate (discard unsigned/invalid before acting, mirrors §4.4 "Security message signing").
     - [ ] Bench test: signed/unsigned/corrupted-signature frame acceptance matrix.
 
@@ -125,7 +125,7 @@
 
 - [ ] **MAVLink routing configuration** — mavlink-router config: elected CN master routes FC master telemetry to all 4 radio links (SiK, LoRa, Wi-Fi, 49 MHz (Part 15 §15.235) backup).
     - [ ] mavlink-router config file per CN role (master vs. standby).
-    - [ ] Per-link output adapter: SiK, LoRa (Emma), Wi-Fi, 49 MHz (Part 15 §15.235) (Emma, backup).
+    - [ ] Per-link output adapter: SiK, LoRa (COMMO), Wi-Fi, 49 MHz (Part 15 §15.235) (COMMO, backup).
     - [ ] Bench test: verify telemetry reaches Malcolm GCS over each of the 4 links independently.
 
 ### 4.4 — Both Nodes

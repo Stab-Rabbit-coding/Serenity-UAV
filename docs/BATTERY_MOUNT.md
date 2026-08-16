@@ -59,9 +59,9 @@ required before first flight (see §6 Procedure, step 3).
 | 4× BLHeli32 ESCs | 0.221 lbm (100 g) | 19.29 in (490 mm) | 49 000 |
 | 2× tilt servos + CF pivot rods | 0.322 lbm (146 g) | 19.29 in (490 mm) | 71 540 |
 | 8× PocketBeagle 2 Industrial | 0.229 lbm (104 g) | 11.61 in (295 mm) | 30 680 |
-| 4× Wash + 4× Zoë | 0.635 lbm (288 g) | 11.61 in (295 mm) | 84 960 |
-| 4× Emma | 0.115 lbm (52 g) | 11.61 in (295 mm) | 15 340 |
-| Kaylee (enclosed, 278 g) | 0.613 lbm (278 g) | 9.65 in (245 mm) | 68 110 |
+| 4× Wash + 4× TACCO | 0.635 lbm (288 g) | 11.61 in (295 mm) | 84 960 |
+| 4× COMMO | 0.115 lbm (52 g) | 11.61 in (295 mm) | 15 340 |
+| FlightEngineer (enclosed, 278 g) | 0.613 lbm (278 g) | 9.65 in (245 mm) | 68 110 |
 | CF keel bar | 0.066 lbm (30 g) | 12.01 in (305 mm) | 9 150 |
 | Airframe (shell + foam fill + hardware) | 1.323 lbm (600 g) | 11.42 in (290 mm) | 174 000 |
 | Wiring harness + misc | 0.617 lbm (280 g) | 11.61 in (295 mm) | 82 600 |
@@ -168,18 +168,18 @@ on a flat surface for a controlled exchange.
 ### 4.1 Discharge Lead (XT60)
 
 The XT60 discharge lead exits the battery tray through the rear wall slot, runs aft
-along the CF keel bar for ~3.15 in (~80 mm), and enters the Kaylee enclosure through
+along the CF keel bar for ~3.15 in (~80 mm), and enters the FlightEngineer enclosure through
 the M16 EMC cable gland at J_BATT. Maximum lead length from battery terminal to
-Kaylee enclosure: **6.30 in (160 mm)** (keeps cable inductance below 150 nH, well
+FlightEngineer enclosure: **6.30 in (160 mm)** (keeps cable inductance below 150 nH, well
 within EMI budget).
 
 Cable construction: 4 AWG silicone, twisted pair, 95 % braid shield, per
-`Kaylee.md §Harness Specification`.
+`FlightEngineer.md §Harness Specification`.
 
 ### 4.2 Balance Lead (JST-XH-7P)
 
 The balance lead exits through the rear wall slot alongside the discharge lead and
-runs to the Kaylee J_BAL connector. The balance lead uses a separate strain-relief
+runs to the FlightEngineer J_BAL connector. The balance lead uses a separate strain-relief
 tie to the keel bar so it cannot pull the battery out of the tray during exchange.
 
 Balance lead is not shielded (7-wire ribbon at < 5 µA measurement current) but is

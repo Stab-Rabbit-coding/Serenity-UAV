@@ -134,10 +134,10 @@
 - [ ] Winch state machine firmware (Simon + gateway)
 - [ ] Re-run winch mass/CG once STS3215 mass is known
 - [ ] Slicer verification
-- [ ] Kaylee's room — PDB mounting in inner neck
+- [ ] FlightEngineer's room — PDB mounting in inner neck
 - [ ] CF skid rod channels
 - [ ] Simon bay — define avionics bay in the MIDDLE section (moved he…
-- [ ] Kaylee room — PDB + battery bay, middle VENTRAL (2026-06-13).
+- [ ] FlightEngineer room — PDB + battery bay, middle VENTRAL (2026-06-13).
 - [ ] Avionics-bay interior name marks (DEFERRED, 2026-06-13).
 - [ ] Phase 11 — aft EDF intake scoop cuts
 - [ ] neck_intake_frame.stl (Phase 11)
@@ -249,33 +249,33 @@
 - [ ] FAR-FT-PANEL PCB design
 - [ ] Link placeholders to BOM entries
 
-### 1.2b — PCB Redesigns: Emma Rev S1 / Zoe Rev S1 / Kaylee Rev S1
+### 1.2b — PCB Redesigns: COMMO Rev S1 / Zoe Rev S1 / FlightEngineer Rev S1
 
 → detail: `avionics/rev-s1/WBS.md` §1.2b
 
-- [ ] Emma Rev S1 — add LoRa, replace JST with P1+P2 socket rails
-- [ ] Zoë (Cape-B-2) Rev S1 — remove LoRa, add P1+P2 passthrough rails
-- [ ] Kaylee Rev S1 — remove 6 V BEC, add 5 V servo output
+- [ ] COMMO Rev S1 — add LoRa, replace JST with P1+P2 socket rails
+- [ ] TACCO (Cape-B-2) Rev S1 — remove LoRa, add P1+P2 passthrough rails
+- [ ] FlightEngineer Rev S1 — remove 6 V BEC, add 5 V servo output
 
-### 1.2c — PCB Design: Jayne (Nose/Cargo-Bay Vision, ToF & Laser)
+### 1.2c — PCB Design: Observer (Nose/Cargo-Bay Vision, ToF & Laser)
 
 → detail: `avionics/jayne/WBS.md` §1.2c
 
 - [ ] Final component placement (user-reserved) + impedance-controlle…
-- [ ] Generate production-ready Gerber files to avionics/kicad/Jayne/…
+- [ ] Generate production-ready Gerber files to avionics/kicad/Observer/…
 - [ ] Flag stale laser bore dimensions:
 - [ ] Add cargo_tof_cut() and cargo_laser_cut() cutter modules
 - [ ] Local sensor harness (both sites):
 - [ ] External ring harness — nose:
 - [ ] External ring harness — cargo:
-- [ ] Kaylee second 5 V rail — cross-tied, mutually fault-tolerant…
-- [ ] Jayne 5 V harness:
+- [ ] FlightEngineer second 5 V rail — cross-tied, mutually fault-tolerant…
+- [ ] Observer 5 V harness:
 - [ ] Laser — unify to a single 520 nm green source, Class 2 both sit…
 - [ ] Both Class 2 caps must be hardware-enforced
 - [ ] Nose camera strobe + frame-difference detection
 - [ ] Do not source
 
-### 1.2a — PCB Design: Wash, Zoe, and Emma (EMI-Hardened Variants)
+### 1.2a — PCB Design: Wash, Zoe, and COMMO (EMI-Hardened Variants)
 
 → detail: `avionics/WBS.md` §1.2a
 
@@ -288,22 +288,22 @@
 - [ ] Finish Wash PCB (CAPE-A-2) close-out pass:
 - [ ] Add SBUS/UART DIP switch to Wash
 - [ ] Generate Wash gerbers
-- [ ] Generate Zoë gerbers
-- [ ] Zigbee RF chain was never actually added to Zoë — PCB scope g…
-- [ ] FCC Part 15 §15.235 pre-compliance checklist for Emma
+- [ ] Generate TACCO gerbers
+- [ ] Zigbee RF chain was never actually added to TACCO — PCB scope g…
+- [ ] FCC Part 15 §15.235 pre-compliance checklist for COMMO
 - [ ] EMI isolation validation checklist
 - [ ] Merge claude/cape-em-harsh-variants-9Yfr1 → master
 - [ ] Design Faraday cages / boxes to protect all PCBs
 - [ ] Specify / implement tightly twisted pair bonded shielded wiring…
 
-→ Fleet trust module (2026-07-26), see `avionics/TODO.md` "Fleet Trust Module and Tilt Encoder": Wash PB2-P2 unwired-header finding, Wash/Zoë/Kaylee/Jayne DRC clean-out, CAN-PERIPH-GW-1 N=4 routing all still open.
+→ Fleet trust module (2026-07-26), see `avionics/TODO.md` "Fleet Trust Module and Tilt Encoder": Wash PB2-P2 unwired-header finding, Wash/TACCO/FlightEngineer/Observer DRC clean-out, CAN-PERIPH-GW-1 N=4 routing all still open.
 
 ### 1.4 — EMI Hardening Beyond the PCBs (500 W/m^2 environment)
 
 → detail: `avionics/emi-hardening/WBS.md` §1.4
 
 - [ ] PB2-I + Wash Enclosure
-- [ ] PB2-I + Zoë Enclosure
+- [ ] PB2-I + TACCO Enclosure
 - [ ] CAN FD
 - [ ] RS-485
 - [ ] MIL-STD-1553B
@@ -312,7 +312,7 @@
 - [ ] I2C
 - [ ] BDSHOT/DSHOT (ESC telemetry)
 - [ ] PWM
-- [ ] Add Kaylee/battery boss pattern to middle_canonical_shell24.sca…
+- [ ] Add FlightEngineer/battery boss pattern to middle_canonical_shell24.sca…
 - [ ] Add ventral battery-swap hatch cut to middle_canonical_shell24.…
 - [ ] Create kaylee_battery_tray.scad.
 - [ ] Create kaylee_pdb_tray.scad.
@@ -442,7 +442,7 @@
 - [ ] Install 5V/5A BEC; verify 5.00V ±0.05V under 1A bench load.
 - [ ] Pull motor phase leads through conduit to ESCs; solder (verify…
 - [ ] CAN FD termination: 120Ω SOLDERED to CN1 Cape-B at Shepherd's r…
-- [ ] Mount CN1 Zoë on Shepherd's room (Bay A) floor standoffs (M2.5…
+- [ ] Mount CN1 TACCO on Shepherd's room (Bay A) floor standoffs (M2.5…
 - [ ] Mount FC1 Wash on inter-cape standoffs (M2.5 nylon 20mm) above…
 - [ ] Flash OS to eMMC on CN1 and FC1 via USB-C before installation.
 - [ ] CN1-LOG
@@ -453,10 +453,10 @@
 - [ ] Daisy-chain RS-485: CN1 → FC1 → exit toward Inara's shuttle (Ba…
 - [ ] Connect MIL-STD-1553: FC1 = Bus Controller (primary); CN1 = RT…
 - [ ] Cap Simon's medbay (Bay E) end of ETH-EA conduit (will connect…
-- [ ] Mount CN2 Zoë on Inara's shuttle (Bay B) floor standoffs; inser…
+- [ ] Mount CN2 TACCO on Inara's shuttle (Bay B) floor standoffs; inser…
 - [ ] Flash OS to eMMC on CN2 and FC2 before installation.
 - [ ] CN2-LOG
-- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN2 Zoë J_XCVR…
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN2 TACCO J_XCVR…
 - [ ] Route FC2 GPS coax through dorsal PTFE sleeve (sta ~130mm); mou…
 - [ ] Continue CAN FD daisy-chain Shepherd's room→Inara's shuttle: CN…
 - [ ] Continue RS-485 daisy-chain Shepherd's room (Bay A) → Inara's s…
@@ -503,15 +503,15 @@
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase6
 
 - [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Wash in Inara's s…
-- [ ] Mount CN3 Zoë on River's room (Bay D) floor standoffs; insert P…
+- [ ] Mount CN3 TACCO on River's room (Bay D) floor standoffs; insert P…
 - [ ] CN3-LOG
-- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN3 Zoë J_XCVR…
+- [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN3 TACCO J_XCVR…
 - [ ] Route FC3 GPS coax through dorsal PTFE sleeve (sta ~275mm); mou…
 - [ ] Continue CAN FD chain: Inara's shuttle (Bay B) FC2 → River's ro…
 - [ ] Continue RS-485 chain Inara's shuttle (Bay B) → River's room (B…
 - [ ] Connect ETH-BD (Inara's shuttle → River's room): FC2 Wash ETH-1…
 - [ ] Power tap River's room (Bay D); verify 5V ±0.05V.
-- [ ] Mount CN4 Zoë on Simon's medbay (Bay E) standoffs; insert PB2-I…
+- [ ] Mount CN4 TACCO on Simon's medbay (Bay E) standoffs; insert PB2-I…
 - [ ] CN4-LOG
 - [ ] Seat the 49 MHz (Part 15 §15.235) sub-module on CN4 header.
 - [ ] Route FC4 GPS coax through dorsal PTFE sleeve (sta ~350mm); mou…
@@ -653,7 +653,7 @@
 → detail: `deferred/WBS.md` §Phase12
 
 - [ ] RBM module:
-- [ ] Kaylee input:
+- [ ] FlightEngineer input:
 - [ ] Current sharing:
 - [ ] Firmware (pwr_fault):
 - [ ] W&B:

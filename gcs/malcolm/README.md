@@ -32,7 +32,7 @@ Debian Linux PC (x86\_64).  Minimum specification documented in
 
 ### Malcolm Comms Node
 
-One PocketBeagle 2 Industrial (AM6254) + Cape-B-2 (Zoë) stack, USB-tethered to the host
+One PocketBeagle 2 Industrial (AM6254) + Cape-B-2 (TACCO) stack, USB-tethered to the host
 PC.  This is the same hardware and firmware base used in the aircraft, providing a
 symmetric, tested ground-side interface for every radio link.
 

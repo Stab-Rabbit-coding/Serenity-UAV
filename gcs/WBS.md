@@ -48,7 +48,7 @@
     provides ≥2× safety factor.  Document in `gcs/malcolm/hardware/docs/malcolm_power_budget.md`.
 - [ ] **Procure Malcolm comms node hardware:**
     - 1× PocketBeagle 2 Industrial (AM6254) — same DigiKey PN 2820-100003007-ND
-    - 1× Cape-B-2 (Zoë) PCB — order 1 additional unit when placing aircraft PCB order at JLCPCB
+    - 1× Cape-B-2 (TACCO) PCB — order 1 additional unit when placing aircraft PCB order at JLCPCB
     - 1× Emma sub-module — order 1 additional unit with aircraft Emma order
     - 1× 64 GB microSD (Samsung or equiv, same as aircraft CN nodes)
     - 1× 5 V / 5 A switching BEC (Pololu D24V50F5 or equiv)

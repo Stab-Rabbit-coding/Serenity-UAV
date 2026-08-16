@@ -919,7 +919,7 @@
       },
       {
         "ref": "MAL-CAPE-B-2",
-        "desc": "Cape-B-2 (Zoë) PCB — Malcolm radio+logging cape",
+        "desc": "Cape-B-2 (TACCO) PCB — Malcolm radio+logging cape",
         "qty": 1,
         "mass_g": 35,
         "cost_usd": 105.0,

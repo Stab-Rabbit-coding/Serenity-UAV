@@ -18,7 +18,7 @@ geometry is copied here. Only the public spec facts (MCU family choice,
 CAN-bridge concept, 5V supply, switchable 120R termination) informed this
 design; every symbol/footprint below is either this project's own
 already-verified clean-room part (MSPM0G3507, SLB9670, ISOW1044 -- reused
-verbatim from Jayne, ERC-0 proven) or newly authored here directly from the
+verbatim from Observer, ERC-0 proven) or newly authored here directly from the
 OEM datasheet in avionics/datasheets/.
 
 Remix additions over the VimDrones concept (the 3 datasheets in this task):
@@ -36,7 +36,7 @@ Remix additions over the VimDrones concept (the 3 datasheets in this task):
 MCU: TI MSPM0G3507 (fleet-standard part, REF-SENSOR-004; native CAN 2.0/CAN-FD
 peripheral, 4x UART, 2x SPI, up to 60 GPIO) -- chosen over VimDrones' own
 STM32L431 so this gateway is built from the SAME MCU family already used on
-Wash/Zoe/Jayne, not a new one-off part, and so no GPL-licensed VimDrones
+Wash/Zoe/Observer, not a new one-off part, and so no GPL-licensed VimDrones
 schematic content needs to be touched at all.
 
 STACKABLE (2026-07-26): set N_STACKS below to put multiple complete trust
@@ -88,12 +88,12 @@ Layout convention matches this project's own gen_Jayne_carrier_sch.py: real
 clean-room symbols are pulled from avionics/kicad/symbols/*.kicad_sym by
 parse_real_symbol() and wired by PIN NUMBER via place_real(); electrical
 connection is by coincident (x, y) between a pin and its global_label /
-power symbol, not by drawn wires (same convention proven ERC-0 in Jayne).
+power symbol, not by drawn wires (same convention proven ERC-0 in Observer).
 
 PRE-FAB GATES (tracked avionics/WBS.md, see CAN-PERIPH-GW-1.md):
     * MSPM0 GPIO -> peripheral pinmux (SPI0/SPI1/UART0/UART1/CAN/GPIO) is a
       defensible datasheet-capable assignment, not yet cross-checked against
-      the MSPM0G3507 pinmux tables -- same caveat Jayne's own carrier
+      the MSPM0G3507 pinmux tables -- same caveat Observer's own carrier
       schematic already carries for this MCU.
     * ADM2795E VDD2 (isolated bus-side supply) needs a small isolated DC-DC
       module (e.g. a 1W SIP4 5V->5V or 5V->3.3V isolated converter) -- MPN

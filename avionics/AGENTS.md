@@ -10,24 +10,24 @@ This folder contains all electronics design and implementation: KiCad schematics
 
 **Platform:** Four pairs of **PocketBeagle2 Industrial SBCs** (8 nodes total, Rev S placement,
 established at Rev R1):
-- All 8 nodes carry **Wash** (Flight Control and Sensor Cape) and **Zoë** (Communications, Logging, and Payload Cape)
+- All 8 nodes carry **Pilot** (Flight Control and Sensor Cape) and **TACCO** (Communications, Logging, and Payload Cape)
 - All 8 nodes carry **TPM** (Trusted Platform Module) for cryptographic operations
 
-**Emma Transceiver Cape** (49 MHz Part 15 §15.235 + LoRa 915 MHz — see "Cape Naming and
+**COMMO Transceiver Cape** (49 MHz Part 15 §15.235 + LoRa 915 MHz — see "Cape Naming and
 Revision History" below for current build status):
 - Installed in **River's Room** (Bay C, starboard cargo) and **Simon's Medbay** (Bay D, middle section) only
 
-**Power Distribution — Kaylee (PDB):**
+**Power Distribution — FlightEngineer (PDB):**
 - Central location: inner neck of middle section, minimizes power run lengths to all four nacelles, all four avionics stacks, and the battery
 - Interfaces with all four flight-control nodes for EDF and servo control
 
 ### Node Workload Balancing and PACE Failover
 
-All Wash capes are identical and all Zoë capes are identical, but each stack has **primary and alternative tasking** with PACE prioritization (Primary, Alternative, Contingency, Emergency):
+All Pilot capes are identical and all TACCO capes are identical, but each stack has **primary and alternative tasking** with PACE prioritization (Primary, Alternative, Contingency, Emergency):
 
 #### Shepherd's Room (Bay A) — Forward Avionics
 **Primary tasking:** watchdog, fault detection, failover, authentication  
-**Stack:** Wash + Zoë  
+**Stack:** Pilot + TACCO  
 **Comms:** SiK primary / Wi-Fi secondary  
 **PACE assignments:**
 - Watchdog: **P**rimary
@@ -37,8 +37,8 @@ All Wash capes are identical and all Zoë capes are identical, but each stack ha
 
 #### Inara's Shuttle (Bay B) — Port Avionics
 **Primary tasking:** camera, external sensors, high-bandwidth ground communications  
-**Stack:** Wash + Zoë  
-**Comms:** Wi-Fi primary / LoRa secondary (LoRa is migrating from Zoë to Emma on River/Simon —
+**Stack:** Pilot + TACCO  
+**Comms:** Wi-Fi primary / LoRa secondary (LoRa is migrating from TACCO to COMMO on River/Simon —
 see "Cape Naming and Revision History" below for current build status)  
 **PACE assignments:**
 - Watchdog: **A**lternative
@@ -48,7 +48,7 @@ see "Cape Naming and Revision History" below for current build status)
 
 #### River's Room (Bay C) — Starboard Avionics
 **Primary tasking:** forward EDF control, nacelle tilt command/sync, resilient comms  
-**Stack:** Wash + Zoë + **Emma** (49 MHz primary; LoRa secondary migrating onto Emma — see
+**Stack:** Pilot + TACCO + **COMMO** (49 MHz primary; LoRa secondary migrating onto COMMO — see
 "Cape Naming and Revision History" below for current build status)  
 **Comms:** 49 MHz (Part 15 §15.235) primary / LoRa 915 MHz secondary  
 **PACE assignments:**
@@ -59,7 +59,7 @@ see "Cape Naming and Revision History" below for current build status)
 
 #### Simon's Medbay (Bay D) — Aft Avionics
 **Primary tasking:** aft EDF control, alternate watchdog, cargo/payload oversight  
-**Stack:** Wash + Zoë + **Emma** (49 MHz primary; LoRa secondary migrating onto Emma — see
+**Stack:** Pilot + TACCO + **COMMO** (49 MHz primary; LoRa secondary migrating onto COMMO — see
 "Cape Naming and Revision History" below for current build status)  
 **Comms:** 49 MHz (Part 15 §15.235) primary / SiK secondary  
 **PACE assignments:**
@@ -89,59 +89,59 @@ see "Cape Naming and Revision History" below for current build status)
 Board architecture, sch↔pcb parity status, and reconciliation progress change frequently and
 are tracked at the source, not duplicated here. **For any board, the authoritative,
 most-current status is that board's own `.md` file** under `avionics/kicad/<board>/` (e.g.
-`Wash.md`, `Zoë.md`, `Emma.md`, `Kaylee.md`, `Jayne.md`) plus the matching `TODO.md` §1.2
+`Pilot.md`, `TACCO.md`, `COMMO.md`, `FlightEngineer.md`, `Observer.md`) plus the matching `TODO.md` §1.2
 subsection — read those before starting work, and do not assume this file's stable-fact
 summary below reflects today's as-built state.
 
-### Wash — Flight Control and Sensor Cape
+### Pilot — Flight Control and Sensor Cape
 
 Flight control input, sensor fusion, and PID motor speed control: GPS, IMU, compass,
 barometer, anti-collision range sensors, airspeed sensor, EDF PID control, nacelle tilt servo
-control. Current build designation: Cape-A-2. Status/history: `avionics/kicad/Wash/Wash.md`.
+control. Current build designation: Cape-A-2. Status/history: `avionics/kicad/Pilot/Pilot.md`.
 
-### Zoë — Communications, Logging, and Payload Cape
+### TACCO — Communications, Logging, and Payload Cape
 
 External communications, onboard logging, payload interface: all four external radio
 transceivers, onboard data logging to hardware-enforced non-executable microSD, payload I/O.
-Current build designation: Cape-B-2. Status/history: `avionics/kicad/Zoë/Zoë.md`, TODO.md
+Current build designation: Cape-B-2. Status/history: `avionics/kicad/TACCO/TACCO.md`, TODO.md
 §1.2b.
 
-### Emma — 49 MHz + LoRa Transceiver Cape
+### COMMO — 49 MHz + LoRa Transceiver Cape
 
 Unlicensed-band communications for high-RF-field environments: 49 MHz transceiver (47 CFR
 Part 15 §15.235) plus LoRa 915 MHz, both galvanically isolated. Installed only in River's Room
 (Bay C) and Simon's Medbay (Bay D). Connects via P1+P2 socket rails (Rev R1; replaces the
-legacy JST GH 6P). Status/history: `avionics/kicad/Emma/Emma.md`, TODO.md §1.2b.
+legacy JST GH 6P). Status/history: `avionics/kicad/COMMO/COMMO.md`, TODO.md §1.2b.
 
-### Jayne — Cargo-Handling System and Nose/Cargo-Bay Vision, ToF & Laser Board
+### Observer — Cargo-Handling System and Nose/Cargo-Bay Vision, ToF & Laser Board
 
 One integrated subsystem covering both the mechanical cargo-handling hardware (winch, latch,
 cargo bay door) and the vision/ToF/laser sensing board. Historical references to "Vera" (an
 earlier working name for the sensing board) refer to this same board.
 
-**Jayne is a standalone PCB — not a PocketBeagle 2 Industrial cape.** It does not use the
-P1+P2 header stack and does not mount on a Wash/Zoë node; it connects to the rest of the
+**Observer is a standalone PCB — not a PocketBeagle 2 Industrial cape.** It does not use the
+P1+P2 header stack and does not mount on a Pilot/TACCO node; it connects to the rest of the
 airframe only via the shielded JST-GH Ethernet ring and CAN-FD trunk connectors, with its own
 5V power input. One shared board design is installed at two physical locations: the bow
 sensor pod (nose) and the cargo bay nadir FPV mount, the latter co-located with the mechanical
 cargo-handling hardware it supervises. It supersedes the RunCam Nano 4 analog camera
 (REF-SENSOR-001, superseded).
 
-**Do not restate Jayne's chip-level architecture, EMI hardening, or fabrication status here —
+**Do not restate Observer's chip-level architecture, EMI hardening, or fabrication status here —
 it has changed materially between doc passes and this section has gone stale before.**
-Canonical source: `avionics/kicad/Jayne/Jayne.md`, TODO.md §1.2c (hardware) and §4.6
+Canonical source: `avionics/kicad/Observer/Observer.md`, TODO.md §1.2c (hardware) and §4.6
 (firmware).
 
 **Laser indicator:** single shared 520 nm green source; per-site optics and IEC 60825-1
 class are a live engineering analysis, not a fixed spec — canonical source:
 `docs/JAYNE_LASER_ANALYSIS.md` (current revision), TODO.md §1.2c.4.
 
-### Kaylee — Power Distribution Board (PDB)
+### FlightEngineer — Power Distribution Board (PDB)
 
 Battery management, EDF power distribution, and PID control-line routing to all
-flight-control nodes. Location: inner neck of the middle section (Kaylee's room), adjacent to
+flight-control nodes. Location: inner neck of the middle section (FlightEngineer's room), adjacent to
 Simon's Medbay — minimizes power-run length to all nacelles, all four stacks, and the battery.
-Status/history (including the planned 6V-servo-BEC removal): `avionics/kicad/Kaylee/Kaylee.md`,
+Status/history (including the planned 6V-servo-BEC removal): `avionics/kicad/FlightEngineer/FlightEngineer.md`,
 TODO.md §1.2b.
 
 ## PCB Design Standards

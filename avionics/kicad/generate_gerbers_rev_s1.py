@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-generate_gerbers_rev_s1.py — Generate Gerber files for Rev S1 boards (Emma, Zoë, Kaylee)
+generate_gerbers_rev_s1.py — Generate Gerber files for Rev S1 boards (Emma, TACCO, FlightEngineer)
 
 Usage:
-    python3 generate_gerbers_rev_s1.py [emma|zoë|kaylee]
+    python3 generate_gerbers_rev_s1.py [emma|zoë|flightengineer]
 
 Generates production Gerber and drill files to:
   - avionics/kicad/gerbers/Emma-S1/
   - avionics/kicad/gerbers/CAPE-B-2-S1/
-  - avionics/kicad/gerbers/Kaylee-S1/
+  - avionics/kicad/gerbers/FlightEngineer-S1/
 
 Author: Claude Haiku 4.5 (Anthropic) — 2026-07-18
 License: CC BY 4.0
@@ -27,16 +27,16 @@ BOARDS = {
         "name": "Emma Rev S1",
     },
     "zoë": {
-        "pcb": "avionics/kicad/Zoë/kicads/Zoë.kicad_pcb",
-        "pro": "avionics/kicad/Zoë/kicads/Zoë.kicad_pro",
+        "pcb": "avionics/kicad/TACCO/kicads/TACCO.kicad_pcb",
+        "pro": "avionics/kicad/TACCO/kicads/TACCO.kicad_pro",
         "gerber_dir": "avionics/kicad/gerbers/CAPE-B-2-S1",
-        "name": "Zoë Rev S1",
+        "name": "TACCO Rev S1",
     },
-    "kaylee": {
-        "pcb": "avionics/kicad/Kaylee/kicads/Kaylee.kicad_pcb",
-        "pro": "avionics/kicad/Kaylee/kicads/Kaylee.kicad_pro",
-        "gerber_dir": "avionics/kicad/gerbers/Kaylee-S1",
-        "name": "Kaylee Rev S1",
+    "flightengineer": {
+        "pcb": "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pcb",
+        "pro": "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pro",
+        "gerber_dir": "avionics/kicad/gerbers/FlightEngineer-S1",
+        "name": "FlightEngineer Rev S1",
     },
 }
 
