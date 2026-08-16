@@ -211,7 +211,9 @@ and baked to hull frame.  SCAD fuselage shell files are secondary references onl
         pocket — single-sourced from `add_structural_features.py`.
     - **Wing mortices** — Ø12.3 spar bore (full lateral span, both walls), 2 root mortises,
         and 2× Ø22 spar-bearing bosses, at the **re-derived** chordwise stations (129 mm Rev
-        R1 root chord, LE root hull Y=−7: spar 30% → Y=+31.7; mortise 50% → Y=+57.5; Z=62.5).
+        R1 root chord, LE root hull Y=−7: spar 35% → Y=+38.15 at Z=68.42 on the
+        S1223 camber midline (Rev S1b 2026-08-16, was 30% → Y=+31.7 at the
+        mortise height Z=62.5); mortise 50% → Y=+57.5, Z=62.5).
         Supersedes the SCAD `WING_ROOT_Y_CEN=CY+40` (hull Y≈+6) stale-161mm-chord stand-in
         (§1.1.2).  All lateral-wall/dorsal features are seated against the wall position
         **sampled from the real baked mesh** at each feature's (Y,Z) — the walls curve

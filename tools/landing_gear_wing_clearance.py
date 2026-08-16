@@ -4,10 +4,15 @@
 LG-10.4 requires the sponson attachment to be hollowed and reinforced for the
 bay **without touching the wing**.  That is not a small margin: the sponson
 spans the wing-root station, so the bay's aperture, flange rebate and 16 M3
-bores are cut into the same block of hull that carries the Ø12.3 spar bore
-(Y +31.7), the Ø22 spar bearing bosses coaxial with it, and the two wing-root
-mortises (Y +57.5, Z 62.5, 30.8 x 20.8).  A bay that eats into a spar boss
-looks perfectly clean in isolation and destroys the wing mount.
+bores are cut into the same block of hull that carries the Ø12.3 spar bore,
+the Ø22 spar bearing bosses coaxial with it, and the two wing-root mortises.
+A bay that eats into a spar boss looks perfectly clean in isolation and
+destroys the wing mount.
+
+Every station is read live from `merge_cargo_interior` and echoed in the run
+header -- deliberately NOT repeated here, because the spar has already moved
+once (30 % -> 35 % root chord, Rev S1b 2026-08-16) and any figure hardcoded
+in this docstring went stale the moment it did.
 
 Two independent failure modes are checked, because they fail in opposite
 directions and either one alone would pass a naive test:
@@ -245,9 +250,12 @@ def main():
 
     print("LG-10.4 wing clearance -- Rev R6 gear bay vs wing-root structure")
     print(f"  shell   : {os.path.relpath(args.shell, REPO_ROOT)}")
+    # The spar rides the camber midline (WING_SPAR_Z); WING_ROOT_Z is the
+    # mortise height and is NOT where the spar sits -- they were the same
+    # number before Rev S1b, which is exactly how the two got conflated.
     print(f"  spar    : bore D{mci.WING_SPAR_BORE_D} / boss D"
           f"{mci.WING_SPAR_BOSS_OD} at Y {mci.WING_SPAR_Y:+.1f}, "
-          f"Z {mci.WING_ROOT_Z:.1f}")
+          f"Z {mci.WING_SPAR_Z:.2f}")
     print(f"  mortise : {mci.MORT_W} x {mci.MORT_H} at Y "
           f"{mci.WING_MORT_Y:+.1f}, Z {mci.WING_ROOT_Z:.1f}")
 

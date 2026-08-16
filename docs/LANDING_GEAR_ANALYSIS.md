@@ -239,7 +239,8 @@ proportion and detail.
    - **Load path.** Each leg delivers 827 N (4 ft schedule) plus a 34.7 N·m
      hip moment. If the bay were carried on the wing root, all of that would
      pass through the wing attachment — the Ø12.3 mm spar and the two root
-     mortises at Y +31.7 / +57.5 — which are sized for *flight* loads, not
+     mortises at Y +38.15 / +57.5 (spar moved 30 % → 35 % root chord, Rev S1b
+     2026-08-16) — which are sized for *flight* loads, not
      landing impact. That inserts a joint directly into the impact path and
      creates the weak point the merged design avoids.
    - **Mass.** Splitting duplicates the bay walls, adds a structural joint and
@@ -293,10 +294,25 @@ proportion and detail.
    82 × 40 flank footprint instead of to the actual opening.
 
    **Wing interference is a hard constraint.** The wings attach to the cargo
-   lateral walls with the Ø12.3 spar at Y +31.7 and the root mortises at
-   Y +57.5, Z 62.5. Any hollowing or reinforcement of the sponson must clear
-   those, and the sponson sits between the fore and aft openings — i.e. spanning
-   the wing-root station. Check before cutting.
+   lateral walls with the Ø12.3 spar and the two root mortises, and the sponson
+   sits between the fore and aft openings — i.e. spanning the wing-root
+   station. Any hollowing or reinforcement of the sponson must clear those.
+
+   **Stations (Rev S1b, 2026-08-16).** Spar **Y +38.15, Z 68.42**; mortises
+   **Y +57.5, Z 62.5**. Two corrections to the figures previously carried here:
+   the spar moved from 30 % to 35 % root chord (Y +31.7 → +38.15), and its
+   height is **not** the mortise height — the bore rides the S1223 camber
+   midline, so Z is 68.42, not 62.5. Conflating the two is why the fuselage
+   bore never lined up with the wing (`airframe/wings-nacelles/WBS.md` §1.1.2).
+
+   **This was not merely a caution — it was violated.** When the sponson work
+   was first treated as complete, measurement found the bay collars intruding
+   347/349 mm³ into the mortises across their full height, a collar blocking
+   the spar bore by 0.84 mm, and the flange rebate thinning the Ø22 spar
+   bearing wall from 4.85 mm to 2.59 mm. Do not take "check before cutting" on
+   trust: run `tools/landing_gear_wing_clearance.py --proud`, which certifies
+   this by boolean intersection against the same solids the hull is built
+   with, and exits non-zero on any unbudgeted overlap.
 
    Still to do: re-measure both trapezoidal flats properly (the aft station's
    outline is noisier than the fore and was not cleanly segmented), fit the

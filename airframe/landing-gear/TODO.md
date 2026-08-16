@@ -16,11 +16,7 @@
 ## §1.1.4 — Landing Gear
 → full detail: `WBS.md` §1.1.4
 
-- [ ] LG-10.1 Re-measure the aft trapezoidal opening flat (blocker)
-- [ ] LG-10.2 Re-derive hip stations onto the opening flats
-- [ ] LG-10.3 Re-aim bay bolts normal to the flat; re-enable bosses
-- [ ] LG-10.4 Hollow/reinforce sponson; clear the wing spar + mortises
-- [ ] LG-10.5 Re-run cargo merge; publish the shell
+- [ ] LG-10.5 Re-merge cargo shell (LG-10.4 keep-outs + Rev S1b spar)
 - [ ] LG-10.6 Generate hull patches; enable BAY_CONFORM
 - [ ] LG-10.7 Purge stale FCStd objects; bake, re-export
 - [ ] LG-10.8 Z-level all 4 feet to the most negative Z

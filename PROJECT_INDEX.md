@@ -106,7 +106,7 @@ hollow_manifold.py — hollow_manifold.py — manifold3d boolean stage of the 2 
 inspect_shell_center.py — HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md. [cad-mesh, structural]
 make_bay_text.py — make_bay_text.py — origin-centred watertight text slabs for avionics-bay marks. [cad-mesh, structural]
 make_shuttle_text.py — make_shuttle_text.py — generate INARA / RIVER text cutter slabs for the cargo [cad-mesh, structural]
-merge_cargo_interior.py — merge_cargo_interior.py — Rev R1 (2026-06-30) [cad-mesh, structural]
+merge_cargo_interior.py — Python script [cad-mesh, structural]
 merge_head_interior.py — merge_head_interior.py — Rev R1d (2026-07-03) [cad-mesh, structural]
 morph_open_voxel.py — morph_open_voxel.py — voxel-SDF morphological opening of a shell inner operand. [cad-mesh, structural]
 regen_rear_interior.py — regen_rear_interior.py — regenerate the REAR fuselage shell (featured, hull frame). [cad-mesh, structural]
@@ -1712,7 +1712,7 @@ TOOL_REFERENCE.md — Build Tool Reference — Usage, Output Locations, and Pre-
 validate_kicad.py — validate_kicad.py — KiCad schematic/PCB validator for CI. [build-tooling, emi-hardening, pcb-design]
 validate_stls.py — STL validator for CI. [build-tooling]
 verify_bow_pod.py — verify_bow_pod.py — Rev R1 (2026-06-30) [build-tooling]
-wing_airfoil_variants.py — Generate and compare S1223 thickening strategies for the Rev R1b spar move. [build-tooling]
+wing_airfoil_variants.py — Generate and compare S1223 thickening strategies for the Rev S1b spar move. [build-tooling]
 wing_cfd_openfoam.py — 2D RANS comparison of S1223 thickening strategies, via OpenFOAM. **WIP.** [build-tooling]
 wing_spar_station_fit.py — Size the wing spar's chordwise station against the S1223 section it lives in. [build-tooling]
 ```

@@ -47,17 +47,86 @@
     (`cableway_bore()`): 40 A EDF ESC power + ESC signal split across the two;
     nav-light 3-core routes through the hollow spar (Ø9 mm tube ID). Section
     figure: `docs/img/wing_rev_r1a_sections.png`.
-- [ ] **[OPEN — BLOCKER] Fuselage spar-interface now mismatched.** §1.1.1.3 cuts the
-    cargo-shell mating Ø12.3 spar bore + Ø22 bearing bosses at the **old** 30 %-chord
-    line (hull **Y ≈ +31.7, Z ≈ 62.5**). The Rev R1a wing spar now sits at the 22 mm
-    station on the camber midline → root ≈ hull **Y ≈ +15, Z ≈ +71** (~16 mm fwd,
-    ~8 mm up). The spar can no longer pass through both parts. **User decision
-    required:** (a) relocate the cargo-shell bore + bosses to the new spar line
-    (cargo-shell / Blender-canonical change + re-merge + re-bake), or (b) keep the
-    fuselage bore and instead thicken the tip further (~1.6×) so a straight spar at
-    the 38.7 mm station fits — fatter wingtip OML. **Do not print either wing or
-    cargo shell until reconciled.** Consider whether `THICKNESS_SCALE_TIP` /
-    `SPAR_BORE_STATION` should be canon-checked against the Serenity wing silhouette.
+- [x] **Fuselage spar-interface mismatch — RESOLVED 2026-08-16 (Rev S1b), owner
+    decision: move the spar aft to 35 % root chord.** §1.1.1.3 cut the cargo-shell
+    Ø12.3 spar bore + Ø22 bearing bosses at the **old** 30 %-chord line while the
+    Rev R1a wing spar sat at the 22 mm station, so the spar could not pass through
+    both parts. Neither original option was taken: (a) relocating the fuselage bore
+    to the 22 mm line would have left the nacelle slid forward to hull Y +15 to
+    reach it, and (b) keeping the fuselage bore needed a ~1.6× tip. Instead **both**
+    parts moved onto one station, **45.15 mm = 35.0 % root chord**, which also
+    brings the nacelle tilt axis back toward its canonical station instead of
+    dragging the pod forward to meet the spar (the 2026-07-19 "slide the nacelle
+    forward to Y = 15" reconciliation is hereby superseded).
+
+    Applied:
+    - `wings_s1223_revo.scad`: `SPAR_BORE_STATION` 22.0 → **45.15**;
+        `THICKNESS_SCALE_TIP` 1.25 → **1.45**.
+    - `merge_cargo_interior.py`: `WING_SPAR_Y` 0.30 → **0.35** of root chord
+        (hull Y +31.7 → **+38.15**), and the spar bore + both bearing bosses moved
+        off the mortise height onto a new `WING_SPAR_Z` = **68.42**.
+
+    **Corrections to the original text of this item** (`AGENTS.md` §11.4 — model
+    state outranks stale documentation):
+    - "root ≈ hull **Z ≈ +71** (~8 mm up)" was a prose estimate and is **wrong**.
+        The wing chord line sits at hull Z **58.01** — confirmed two independent
+        ways: `port_tilt_spar_assembly.scad` states `SPAR_Z` is the camber
+        midline plus 58, and solving this file's own recorded baked bound
+        (Z max +76.99) against the root section top (+18.99 above the chord
+        line) gives 58.01.
+        The spar at the **old** 22 mm station was therefore at Z **66.52**,
+        not 71; at the new station it is **68.42**.
+    - The fuselage previously cut the spar at `WING_ROOT_Z` = 62.5, i.e. on the
+        **mortise** height rather than the camber midline. That conflation is why
+        the bore never lined up; the two are now separate constants.
+
+    Verified: `tools/wing_spar_station_fit.py` (root wall 3.78 mm, tip wall
+    1.17 mm ≥ the 1.16 mm the root already runs at);
+    `tools/landing_gear_wing_clearance.py --proud` (all 4 checks clear).
+
+    **Still gated on the re-bake — do not print either wing or cargo shell yet.**
+    See the two open items directly below.
+
+- [ ] **[OPEN] Re-render and re-bake both wings (Rev S1b OML change).** The tip
+    OML changed twice over: `THICKNESS_SCALE_TIP` 1.25 → 1.45, and
+    `s1223_section()` now scales **thickness only** about the camber line instead
+    of scaling all of y (see §1.1.2 note below). The baked wing STLs and
+    `docs/img/wing_rev_r1a_sections.png` are therefore **stale**. Re-render port
+    and stbd, then `python3 tools/bake_hull_frame.py Wing_Port Wing_Stbd`, then
+    `tools/validate_stls.py`. Expected envelope: Z max stays **+76.99** (set
+    by the root section, which is unchanged); the tip top drops to ≈ +74.51.
+
+- [ ] **[OPEN] Re-merge the cargo shell.** `merge_cargo_interior.py` carries the
+    new spar station/height **and** the LG-10.4 wing keep-outs, but the published
+    `cargo_sect_shell24_2mm_repaired.stl` predates both. One re-merge covers both
+    changes; re-run `tools/validate_stls.py` and
+    `tools/landing_gear_wing_clearance.py` after.
+
+- [x] **`s1223_section()` scales THICKNESS ONLY (Rev S1b, 2026-08-16).** It
+    previously did `scale([chord, chord * t_scale])`, which multiplies camber and
+    thickness together, and its own comment conceded this was "acceptable for
+    t_scale in [0.85, 1.0]" — a range `THICKNESS_SCALE_TIP` left at 1.25 and would
+    have left far behind at 1.45. Uniform scaling at that factor drives S1223's
+    camber from **8.12 % to 11.75 %**, i.e. a number chosen purely to fit a spar
+    would have silently re-cambered a section whose whole value is its camber.
+    Decomposing into camber + thickness and scaling only the thickness gives the
+    **identical** section depth and the **identical** +1.17 mm of skin over the
+    bore, with the camber line left exactly where Selig put it
+    (`tools/wing_airfoil_variants.py`). Consequential fix: the bore-centre
+    expressions (`spar_tip_y()`, `spar_bore()`, cableway, Hall-cable) no longer
+    multiply `midline_frac()` by the thickness scale — doing so would now lift
+    each bore off the camber line it is meant to be centred on.
+
+    **Not CFD-verified.** Tip t/c rises 13.45 % → 19.47 %, and the drag
+    penalty of a 19.5 % t/c tip at Re ≈ 2.1 × 10⁵ is **not** quantified: the
+    OpenFOAM study
+    built for it (`tools/wing_cfd_openfoam.py`) is blocked on mesh generation and
+    is committed WIP. The camber-preservation argument above does not depend on
+    CFD; the absolute penalty of the thicker tip does.
+
+- [ ] **[OPEN] Canon-check `THICKNESS_SCALE_TIP` / `SPAR_BORE_STATION` against the
+    Serenity wing silhouette** before print — carried over from the resolved item
+    above, and now more pointed, since the tip is thicker than when it was raised.
 
 
 ## §1.1.3 — Nacelles

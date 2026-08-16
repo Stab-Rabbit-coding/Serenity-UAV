@@ -685,7 +685,7 @@
       "archived": false
     },
     "airframe/blender-scripts/merge_cargo_interior.py": {
-      "description": "merge_cargo_interior.py \u2014 Rev R1 (2026-06-30)",
+      "description": "Python script",
       "tags": [
         "cad-mesh",
         "structural"
@@ -12215,7 +12215,7 @@
       "archived": false
     },
     "tools/wing_airfoil_variants.py": {
-      "description": "Generate and compare S1223 thickening strategies for the Rev R1b spar move.",
+      "description": "Generate and compare S1223 thickening strategies for the Rev S1b spar move.",
       "tags": [
         "build-tooling"
       ],

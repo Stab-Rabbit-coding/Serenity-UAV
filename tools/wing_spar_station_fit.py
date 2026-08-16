@@ -87,7 +87,16 @@ class Section:
         self.upper, self.lower = upper, lower
 
     def at(self, station_mm):
-        """(depth, midline, wall_up, wall_dn) in mm for a bore at station_mm."""
+        """(depth, midline, wall_up, wall_dn) in mm for a bore at station_mm.
+
+        NOTE this applies t_scale uniformly, which is how the SCAD scaled the
+        section before Rev S1b.  DEPTH and WALL are unaffected by that choice
+        -- thickness-only scaling opens the envelope by the same factor -- so
+        the fit numbers here remain correct either way.  Only the reported
+        MIDLINE differs: under thickness-only scaling the camber line is not
+        scaled, so the true bore centre is midline / t_scale.  See
+        tools/wing_airfoil_variants.py for the camber comparison.
+        """
         xq = station_mm / self.chord
         yu = surf_y(self.upper, xq) * self.chord * self.t_scale
         yl = surf_y(self.lower, xq) * self.chord * self.t_scale

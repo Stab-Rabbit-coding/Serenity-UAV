@@ -18,7 +18,9 @@
 
 - [ ] wing_nacelle_pylon_revo.stl
 - [ ] wings_s1223_revo.stl
-- [ ] [OPEN — BLOCKER] Fuselage spar-interface now mismatched.
+- [ ] Re-render + re-bake both wings (Rev S1b tip OML change)
+- [ ] Re-merge cargo shell (Rev S1b spar + LG-10.4 keep-outs)
+- [ ] Canon-check tip thickness/spar station vs silhouette
 
 ## §1.1.3 — Nacelles
 → full detail: `WBS.md` §1.1.3

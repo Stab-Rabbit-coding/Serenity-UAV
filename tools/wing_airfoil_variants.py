@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate and compare S1223 thickening strategies for the Rev R1b spar move.
+"""Generate and compare S1223 thickening strategies for the Rev S1b spar move.
 
 Moving `SPAR_BORE_STATION` aft to 35 % root chord (45.15 mm) puts the bore at
 48.5 % of the TIP chord, where S1223 has lost most of its depth.  The tip must

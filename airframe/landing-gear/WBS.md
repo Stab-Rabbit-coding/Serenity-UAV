@@ -155,24 +155,57 @@ the lowest.
     the landing-gear opening in the sponson**, not the flank at all
     (`docs/LANDING_GEAR_ANALYSIS.md` §2.4a). Ordered remaining steps:
 
-    - [ ] **LG-10.1** Re-measure both trapezoidal opening flats per side. The
-        fore flat is measured (Y −7: Z 45–48, half-width 67.1→67.7, outer X
-        −102.8→−102.2); the **aft outline is noisy and did not segment
-        cleanly** — it is the blocker for everything below.
-    - [ ] **LG-10.2** Fit the opening outline on each flat and re-derive the
-        §2.2 hip stations onto those faces (currently hips are at hull Z +38 on
-        the cargo flank). Keep feet within 5 mm of the canonical QMx stations.
-    - [ ] **LG-10.3** Re-aim the 4 bay bolts per corner normal to the
-        trapezoidal flat, relocate the 16 bosses in
-        `merge_cargo_interior.py` off the bare flank, then set
-        `LG_BAY_ENABLED = True` (gated off 2026-08-09 so a routine merge run
-        cannot publish misplaced geometry).
-    - [ ] **LG-10.4** Hollow/reinforce the sponson for the attachment.
-        **Must clear the wing** — Ø12.3 spar at Y +31.7 and root mortises at
-        Y +57.5, Z 62.5; the sponson spans the wing-root station.
+    - [x] **LG-10.1 — DONE** (branch `legs`). Both flats measured;
+        `tools/landing_gear_opening_fit.py` /
+        `tools/landing_gear_bay_station_fit.py`. The aft outline that would not
+        segment cleanly was resolved — both stations now carry a measured skin
+        standoff (fore 12.6, aft 5.4 mm).
+    - [x] **LG-10.2 — DONE** (branch `legs`). Hip stations re-derived onto the
+        flats and recessed 15 mm along each corner's own swing axis; the live
+        `LG_CORNERS` table in `merge_cargo_interior.py` carries them.
+    - [x] **LG-10.3 — DONE** (branch `legs`), but NOT as written. Aiming the
+        bolts normal to the trapezoidal flat proved unachievable: the bay's
+        orientation is fixed by the leg (hip pin axis + canonical foot
+        stations) and the panel normal by the sponson, and the two disagree by
+        a 21–24° YAW at every corner that no `BAY_CANT` can remove — a cant
+        rotates about Y, the residual is about Z. Closing it by yawing the leg
+        would move the feet 32 mm off their §2.2 stations. The hull therefore
+        carries a printed **seat collar** whose face is normal to the bolt axis
+        by construction, and `LG_PANEL_N` is now used only to LOCATE the
+        opening, never to orient the mount. `LG_BAY_ENABLED = True`.
+    - [x] **LG-10.4 — DONE 2026-08-16.** Hollow/reinforce the sponson for the
+        attachment, clearing the wing. The "must clear the wing" clause was
+        **not** satisfied when this item was previously treated as done —
+        measurement found three real conflicts:
+        aft collars intruded **347/349 mm³** into the wing-root mortises across
+        their full 20.8 mm height (the root tenon would not have entered); a
+        fore collar blocked the spar bore by 0.84 mm; and the fore flange
+        rebate thinned the Ø22 spar bearing wall from **4.85 mm to 2.59 mm**
+        over ~7 mm of its length.
+
+        Fixed two ways. First, on the hull the wing now always wins:
+        `wing_keepout_positives/negatives()` in `merge_cargo_interior.py` trim
+        the bay's cuts back from wing material and the bay's collars back from
+        wing voids, and `build_negatives`/`build_positives` construct the real
+        features from those same helpers so check and part cannot drift.
+        Second, and decisively, the **wing spar moved aft to 35 % root chord**
+        (Rev S1b — `airframe/wings-nacelles/WBS.md` §1.1.2), which lifts the
+        spar boss clear of the bay flange altogether.
+
+        Result: `tools/landing_gear_wing_clearance.py --proud` reports all four
+        checks clear and **no proud material at all** — "the rebate shaves the
+        whole footprint". Note the spar station is what actually removed the
+        conflict; at the old 30 % station the boss fouled the fore flange at
+        every setting. Re-verify with that tool after any spar move.
     - [ ] **LG-10.5** Re-run the cargo merge, verify watertight + CI-valid,
-        then publish to `cargo_sect_shell24_2mm_repaired.stl` (the merged
-        shell is currently held in scratch, canonical file untouched).
+        then publish to `cargo_sect_shell24_2mm_repaired.stl`. **Partly done
+        and now re-opened.** The shell WAS published on branch `legs` (commit
+        `677d5e0`, 52.6 → 45.5 MB) — the note that it "is currently held in
+        scratch, canonical file untouched" is stale and was already wrong when
+        `HANDOFF.md` repeated it. It must be re-merged again because the shell
+        now predates BOTH the LG-10.4 wing keep-outs and the Rev S1b spar
+        station/height. One re-merge covers both; then `tools/validate_stls.py`
+        and `tools/landing_gear_wing_clearance.py`.
     - [ ] **LG-10.6** Generate the per-station hull patches and set
         `BAY_CONFORM = true` so the bay back face is cut to the real surface.
     - [ ] **LG-10.7** Purge stale FCStd objects `leg_4_scaled24` and

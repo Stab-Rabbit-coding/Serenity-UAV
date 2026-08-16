@@ -136,9 +136,11 @@ numeric order.)*
 
 - [ ] wing_nacelle_pylon_revo.stl
 - [ ] wings_s1223_revo.stl
-- [ ] [OPEN — BLOCKER] Fuselage spar-interface mismatched: cargo bore at old 30%
-    chord (Y≈+31.7), wing spar now at 22mm station (Y≈+15); bore axis must move
-    fwd ~16mm; see airframe/wings-nacelles/WBS.md for full detail & resolution
+- [ ] Re-render + re-bake both wings — Rev S1b tip OML change
+    (THICKNESS_SCALE_TIP 1.25→1.45, thickness-only section scaling); baked wing
+    STLs and docs/img/wing_rev_r1a_sections.png are stale
+- [ ] Re-merge the cargo shell — carries the Rev S1b spar station/height AND
+    the LG-10.4 wing keep-outs; published STL predates both
 
 #### 1.1.3 — Nacelles
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.3

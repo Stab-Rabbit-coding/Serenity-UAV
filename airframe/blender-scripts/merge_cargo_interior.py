@@ -53,7 +53,8 @@ NEGATIVE (removed):
     Y=+30 ring-frame pocket — single-sourced from add_structural_features.py.
   * Wing spar bore (Ø12.3, full lateral span) + 2 wing-root mortises (through
     each lateral wall), at the RE-DERIVED chord stations (129 mm root chord, LE
-    root hull Y=−7: spar 30% → Y=+31.7; mortise 50% → Y=+57.5; Z=62.5).
+    root hull Y=−7: spar 35% → Y=+38.15 at Z=68.42 (camber midline, Rev S1b);
+    mortise 50% → Y=+57.5 at Z=62.5).
   * M3 heat-set bores in the nacelle-servo pads.
 
 POSITIVE (added, envelope-clipped so they conform + fuse to the curved wall):
@@ -270,9 +271,41 @@ APERTURE = (-222.5, -117.6, 2.0, 108.0, -3.0, 9.0)
 # Wing subsystem — RE-DERIVED chordwise stations (hull frame).
 WING_LE_ROOT_Y = -7.0
 WING_ROOT_CHORD = 129.0
-WING_SPAR_Y = WING_LE_ROOT_Y + 0.30 * WING_ROOT_CHORD  # = +31.7
+
+# REV S1b (2026-08-16): spar station 30 % -> 35 % of root chord, by owner
+# decision.  This is the fuselage half of the wings SS1.1.2 spar-interface
+# blocker: the wing sat at the 22.0 mm station (hull Y +15) and this shell cut
+# at 38.7 mm (Y +31.7), so the spar could not pass through both parts.  Both
+# are now on 45.15 mm.  Keep in step with SPAR_BORE_STATION in
+# airframe/openscad/wings/wings_s1223_revo.scad -- they are the same physical
+# rod and there is no other link between the two files.
+WING_SPAR_Y = WING_LE_ROOT_Y + 0.35 * WING_ROOT_CHORD  # = +38.15
 WING_MORT_Y = WING_LE_ROOT_Y + 0.50 * WING_ROOT_CHORD  # = +57.5
+
+# Mortise / nacelle-servo reference height.  NOT the spar height -- see below.
 WING_ROOT_Z = 62.5
+
+# Spar axis height, hull frame.  The bore is centred on the S1223 CAMBER
+# MIDLINE, not on the chord line, so moving the station chordwise also moves it
+# vertically: midline 8.523 mm at the old 22.0 mm station, 10.410 mm at 45.15.
+#
+# WING_CHORD_LINE_Z is where the wing's chord line sits in the hull frame.
+# 58.01 is confirmed two independent ways: airframe/openscad/port_tilt_spar_-
+# assembly.scad states SPAR_Z = "camber midline + 58", and solving the wing
+# SCAD's own recorded baked bound (Z max +76.99) against the root section's
+# top (+18.99 mm above the chord line) gives 58.01.
+#
+# This SUPERSEDES the "root ≈ hull Z ≈ +71 (~8 mm up)" figure in the
+# wings-nacelles WBS SS1.1.2 blocker text, which was a prose estimate: the same
+# derivation puts the OLD station at 66.52, not 71.  AGENTS.md SS11.4 -- actual
+# model state outranks stale documentation.
+#
+# Previously the spar bore and bosses were cut at WING_ROOT_Z (62.5), i.e. on
+# the mortise height rather than on the camber midline, which is why they never
+# lined up with the wing.
+WING_CHORD_LINE_Z = 58.01
+WING_SPAR_MIDLINE = 10.41   # midline_frac(45.15/129) * 129, from the wing SCAD
+WING_SPAR_Z = WING_CHORD_LINE_Z + WING_SPAR_MIDLINE  # = 68.42
 WING_SPAR_BORE_D = 12.3
 WING_SPAR_BOSS_OD = 22.0
 MORT_W = 30.8  # mortise Y span
@@ -284,10 +317,26 @@ PORT_OUTB, PORT_INB = -60.0, -100.0  # port wall bracket (skin ≈ −83..−90)
 STBD_OUTB, STBD_INB = -278.0, -240.0  # stbd wall bracket (skin ≈ −250..−255)
 
 # Nacelle-servo mount pads.
-NSVMT_Y = 45.0
+# Nacelle-servo mount pads.  The servo DRIVES the rotating tilt-spar (horn ->
+# pushrod -> spar crank), so its mount is positioned RELATIVE TO THE SPAR, not
+# in absolute hull coordinates: move the spar and the servo must move with it
+# or the linkage throw is detuned and the pushrod needs re-sizing
+# (airframe/wings-nacelles/TODO.md SS1.1.3, "Tune servo->spar horn/pushrod
+# linkage throw").  Rev S1b makes that dependency explicit in the code, because
+# holding NSVMT_Y/Z absolute through the spar move silently broke it.
+#
+# The offsets below are exactly those in force before the move
+# (spar Y 31.7 -> pad Y 45.0; spar Z 62.5 -> pad Z 93.0), so the linkage
+# geometry is carried across unchanged.
+NSVMT_DY = 13.3   # pad centre, chordwise aft of the spar axis
+NSVMT_DZ = 30.5   # pad centre, above the spar axis
+NSVMT_Y = WING_SPAR_Y + NSVMT_DY   # = 51.45
 NSVMT_PAD_W = 52.0  # Y span
 NSVMT_PAD_H = 30.0  # Z span
-NSVMT_Z = WING_ROOT_Z + 30.5  # = 93.0 (clears spar boss Z 51.5..73.5 by ~4 mm)
+# = 98.92.  Tracking the spar also restores the spar-boss clearance the old
+# absolute value had: boss top is Z 79.42 and the pad now starts at 83.92,
+# a 4.5 mm gap (the pre-move design intent was ~4 mm).
+NSVMT_Z = WING_SPAR_Z + NSVMT_DZ
 NSVMT_HOLE_S_Y = 17.5
 NSVMT_HOLE_S_Z = 8.0
 NSVMT_M3_D = 4.1
@@ -448,10 +497,10 @@ def wing_keepout_positives(envelope_tm=None):
     """
     raw = [
         ("spar boss port", x_cylinder(
-            WING_SPAR_Y, WING_ROOT_Z, PORT_INB, PORT_OUTB,
+            WING_SPAR_Y, WING_SPAR_Z, PORT_INB, PORT_OUTB,
             WING_SPAR_BOSS_OD / 2.0)),
         ("spar boss stbd", x_cylinder(
-            WING_SPAR_Y, WING_ROOT_Z, STBD_OUTB, STBD_INB,
+            WING_SPAR_Y, WING_SPAR_Z, STBD_OUTB, STBD_INB,
             WING_SPAR_BOSS_OD / 2.0)),
         ("servo pad port", box(
             PORT_INB, PORT_OUTB,
@@ -479,7 +528,7 @@ def wing_keepout_negatives():
     mz0, mz1 = WING_ROOT_Z - MORT_H / 2, WING_ROOT_Z + MORT_H / 2
     return [
         ("spar bore", x_cylinder(
-            WING_SPAR_Y, WING_ROOT_Z, -270.0, -70.0, WING_SPAR_BORE_D / 2.0)),
+            WING_SPAR_Y, WING_SPAR_Z, -270.0, -70.0, WING_SPAR_BORE_D / 2.0)),
         ("mortise port", box(
             PORT_INB + 1.0, PORT_OUTB - 10.0, my0, my1, mz0, mz1)),
         ("mortise stbd", box(

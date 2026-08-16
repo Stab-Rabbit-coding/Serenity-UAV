@@ -54,7 +54,7 @@ them expecting a different answer:
 
 Purpose
 -------
-The Rev R1b spar move to 35 % root chord forces the wing TIP section to be
+The Rev S1b spar move to 35 % root chord forces the wing TIP section to be
 thickened (`tools/wing_airfoil_variants.py`).  Two strategies fit the spar
 identically but treat the camber line very differently, so the choice is
 aerodynamic, not geometric.  This driver settles it by running each candidate
