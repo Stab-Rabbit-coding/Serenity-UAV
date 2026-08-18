@@ -12221,6 +12221,14 @@
       ],
       "archived": false
     },
+    "tools/purge_stale_fcstd_objects.py": {
+      "description": "Remove superseded geometry from the archived FreeCAD assembly (LG-10.7).",
+      "tags": [
+        "build-tooling",
+        "cad-mesh"
+      ],
+      "archived": false
+    },
     "tools/validate_kicad.py": {
       "description": "validate_kicad.py \u2014 KiCad schematic/PCB validator for CI.",
       "tags": [
@@ -13647,7 +13655,8 @@
       "gcs/skipper/hardware/gimbal/openscad/skipper_gimbal_mount.scad",
       "gcs/skipper/hardware/gimbal/openscad/skipper_gimbal_pan.scad",
       "gcs/skipper/hardware/gimbal/openscad/skipper_gimbal_tilt.scad",
-      "graphical-build-guide/shellview/port_wall.stl"
+      "graphical-build-guide/shellview/port_wall.stl",
+      "tools/purge_stale_fcstd_objects.py"
     ],
     "propulsion": [
       "airframe/blender-scripts/blender_edf_bore_and_petals.py",
@@ -15546,6 +15555,7 @@
       "tools/precommit_index.py",
       "tools/precommit_kicad_load.py",
       "tools/precommit_sanitize.py",
+      "tools/purge_stale_fcstd_objects.py",
       "tools/validate_kicad.py",
       "tools/validate_stls.py",
       "tools/verify_bow_pod.py",
