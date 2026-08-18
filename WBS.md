@@ -321,9 +321,12 @@ Updates" item above. See docs/WBS.md §0.9 for the note.)*
 
 - [x] Build and render the Rev R5 post + wire SCAD/STL *(done —
 - [x] Build assembled / exploded / deformed demonstration compound ST…
-- [ ] LG-12 Model the post per the §4.6 dimensions
-- [ ] LG-10 Finalize the 4 bay placements in SerenityAssembly.FCStd
-- [ ] Ground clearance check carried forward from Rev R1
+- [x] LG-12 Model the post per the §4.6 dimensions *(superseded and
+      delivered as Rev R6, 2026-07-21)*
+- [x] LG-10 Finalize the 4 bay placements *(closed 2026-08-17; all eight
+      sub-items LG-10.1…10.8 done)*
+- [x] Ground clearance check carried forward from Rev R1 *(closed
+      2026-07-21; requirement corrected 2026-07-23)*
 - [ ] LG-15 Procure both wire grades/tempers; coupon test
 - [ ] LG-16 Confirm ductile wire temper survives jig-forming
 - [ ] LG-13 Define wire-end retention detail at bay bosses
@@ -343,7 +346,8 @@ Updates" item above. See docs/WBS.md §0.9 for the note.)*
 - [ ] Combine all airframe STLs
 - [ ] Exploded view SVG — printed parts only
 - [ ] Exploded view SVG — full build
-- [ ] LG-17 Drop-height decision: 6 ft vs 4 ft ductile wire schedule
+- [x] LG-17 Drop-height decision: 6 ft vs 4 ft ductile wire schedule
+      *(closed 2026-08-09 — 4 ft adopted)*
 - [ ] LG-18 Mass-reduction pass (leg frame / bay / thigh)
 - [ ] LG-19 Styling refinement pass vs REF-CAD-002 (cosmetic)
 - [ ] Render overview SVGs using FreeCAD TechDraw

@@ -1,67 +1,82 @@
-# Landing Gear — Session Handoff (2026-08-09)
+# Landing Gear — Session Handoff (2026-08-17)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **AI note:** Session record written by Claude (model: Claude Opus 5,
 Anthropic) under the author's direction, per `AGENTS.md` AI-attribution policy.  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 
-> Start here, then read `docs/LANDING_GEAR_ANALYSIS.md` §2.4a and §4.5a.
-> The ordered task list is `WBS.md` §1.1.4.1 (LG-10.1 … LG-10.8).
+> **LG-10 is closed.** All eight sub-items (LG-10.1 … LG-10.8) are done and
+> gated by tools. Full detail is `WBS.md` §1.1.4.1; this file is the short
+> version plus the traps worth carrying forward.
 
 ---
 
 ## 1. State
 
-Branch `feat/lg-r6-bay-integration` (worktree `.worktrees/lg-r6-bay-integration`).
-Local `main` was fast-forwarded through `ae7ad5f`; later commits are on the
-branch only. Nothing is pushed.
+Bay integration is complete: the hull carries the four seats, the printed bay
+seats on them, and the gear stands on its treads. Four tools gate it, and all
+four pass:
 
-| Commit | What |
-| --- | --- |
-| `f6043ba` | bay pad fit tool; proved the flat-mount defect |
-| `6a6b09a` | bay cowl + LG-13 retention; `BAY_CANT` sign fix |
-| `d83c806` | hull-side bolt bosses (wrong placement — see §3) + LG-02 margins |
-| `4a9df0e` | trapezoidal cowl; **LG-17 closed at 4 ft** |
-| `fd383d4`, `6c464a0` | Henning geometry spec; sponson identification |
-| `ae7ad5f` | gated the misplaced bosses off; recorded the finish plan |
-| `abf88b5` | LG-10.1 planar-segmentation measurement tool |
-| `f687c9b`, `1211cd6`, `cac91cf` | LG-10.2/10.3 wells cut open |
+| Tool | Gates | Result |
+| --- | --- | --- |
+| `tools/validate_stls.py` | every STL watertight | 62/62 pass |
+| `tools/landing_gear_wing_clearance.py --proud` | LG-10.4 bay vs wing | clear, no proud material |
+| `tools/landing_gear_bay_seat_fit.py` | LG-10.6 datum + seat | 0.00 mm drift, 0.000 mm³ interference |
+| `tools/landing_gear_foot_stance.py` | LG-10.8 stance | both variants clear |
 
-**The canonical `cargo_sect_shell24_2mm_repaired.stl` is UNTOUCHED.** Every
-merge wrote to a scratch `CARGO_MERGE_OUT`. The accepted result is
-`cargo_wells_only.stl` (regenerate it; the scratch dir is session-local).
+Published cargo shell: 908,106 faces, 1 body, watertight, 0 boundary / 0
+non-manifold edges, 295,931 mm³ → 310.7 g as-printed … 378.8 g solid CF-PETG.
 
-## 2. Closed
+Run mesh/boolean tooling with **`/usr/bin/python3`** — see §4.
 
-- **LG-13** — nylon-tipped M2 drag screw on a raised thread pad, bay side only.
-  The seat **slides 1.62 mm per stroke**, so a torqued clamp would fight the
-  fuse. Derivation: `landing_gear_r6_sizing.py --derive-stroke`.
-- **LG-17** — **4 ft** adopted. Ø4.36 → Ø3.81, wire 70.2 → 53.6 g,
-  P_wire 4,333 → 2,889 N, F_leg 1,241 → 827 N, hip moment 52.0 → 34.7 N·m.
-- **LG-19** — trapezoidal bay cowl on the bay plate (taper 0.72), open at the
-  mouth, verified clear of the thigh at 0/8/16/24/30.9° by boolean
-  intersection (`tools/landing_gear_cowl_clearance.py`).
-- **LG-10.1/10.2/10.3** — wells measured, placed and cut (below).
+## 2. What the last session actually changed
+
+Three of the four remaining items closed **differently from how they were
+written**, and the reasons matter more than the diffs:
+
+- **LG-10.6** — the conforming back face and `BAY_CONFORM` are **retired**, not
+  built. The hull's flange rebate already presents a flat seat, so cutting the
+  printed part to a curve would put the mismatch back. The real defect was the
+  **datum**: `BAY_STANDOFF` was 12.6/5.4 (measured along the panel normal)
+  against a hull pocket cut at −7.69/−3.55 in the plate frame — a **3.5–7.7 mm
+  air gap** under every M3. Now 4.91 fore / 1.85 aft, one datum per station.
+- **LG-10.8** — the four feet were always level (spread 0.0000 mm). The
+  assembly's lowest point was not the sole: a hardcoded spigot cube drove
+  **2.9 mm through the foot** on the 1.5in leg, with **743.9 mm³** of leg
+  inside the foot. `ANKLE[2]` was 6.4 mm off the rule `FOOT_HUB_H`'s own
+  comment states. Fixed, with an in-SCAD `assert()` so it cannot recur.
+- **LG-10.7** — purged the whole superseded object set from the FCStd (16 → 6
+  objects), not just the two the item named; purging literally would have left
+  three legs beside four feet.
+
+Two latent bugs surfaced on the way and are fixed:
+
+- **`bowed_wire` in the 1.5in SCAD** built its side wall as a list of face
+  PAIRS inside a no-op `concat()`. Every wire on the **default** leg had been
+  exporting as 20 cap faces of zero volume; the shared wire STLs looked fine
+  only because they came from the 3.0in file.
+- **Zero-area collinear slits** on nearly-coplanar boolean seams failed the CI
+  watertight gate, and `fill_holes` cannot close them (the fill triangle has no
+  area). `merge_cargo_interior.close_zero_area_slits()` collapses them; real
+  holes still fail loudly.
 
 ## 3. The one thing to understand before touching anything
 
 **The mounting face is the sponson's 25° angled panel, NOT the cargo flank.**
 Rev R6 assumed the flank throughout, and that assumption caused every defect
-found this session.
+found in this work.
 
-- Measured panel normal **(0.901, 0.015, −0.433)** port, mirrored starboard;
-  tilt 25.1–26.0°, mirror-verified to 1.4 mm. **Use this constant directly.**
-  A per-station frame search lands on door-frame/joint surfaces and returns
-  junk normals (Y-dominated fore, −Z-dominated aft).
-- The vertical walls squared to port/starboard are the hull sides **forward
-  of** the sponson — not a mounting face.
+- Measured panel normal **(0.901, 0.015, −0.433)** port, mirrored starboard.
+  **Use this constant directly** — a per-station frame search lands on
+  door-frame/joint surfaces and returns junk normals. Since LG-10.3 it is used
+  only to LOCATE the opening, never to orient the mount: the bolt axis and the
+  panel normal disagree by a 21–24° yaw that no `BAY_CANT` can remove.
 - **Y −7 is where the sponson meets the wall**, so the wells need **no**
-  sponson extension. Each cutter removes 6.0–6.7 cm³ of existing shell at the
-  canonical stations. A convex-hull extension was tried and reverted: +61.7 g
-  of bulge for nothing. Wells-only is **−26.6 g** (298,576 → 273,270 mm³), and
-  that delta matching 4 × ~6.3 cm³ is the check that the cuts are correct.
-- `d83c806`'s 16 bolt bosses are on the bare flank and are therefore
-  mispositioned. `LG_BAY_ENABLED = False` keeps them out of the shell.
+  sponson extension. A convex-hull extension was tried and reverted: +61.7 g of
+  bulge for nothing.
+- **`BAY_STANDOFF` is a contract** with `merge_cargo_interior.py`
+  (`station_seat_data()`). Re-run `landing_gear_bay_seat_fit.py` after ANY hull
+  re-merge, and `landing_gear_wing_clearance.py` after any spar move.
 
 ## 4. Traps that cost real time
 
@@ -71,32 +86,38 @@ found this session.
 2. **"Most outboard vertex" finds the hull's widest point (Z ≈ 78)**, not the
    bay station (Z 38). Constrain height as well as plan position.
 3. **`nx > 0.7` for "port outward" also catches the starboard INNER wall**
-   (its normal points toward +X). Always add an X-vs-centreline constraint —
-   without it a convex hull spanned the entire hull.
+   (its normal points toward +X). Always add an X-vs-centreline constraint.
 4. Run mesh/boolean tooling with **`/usr/bin/python3`**; the repo `.venv` hides
    `manifold3d`, `sympy` and `matplotlib`. **pip is not permitted.** There is
    no `rtree`/`embree`, so `trimesh.ray` and `proximity.closest_point` are
    unavailable — use projection or sectioning.
+5. **Measuring the seat on the PUBLISHED shell is circular** — the rebate has
+   already been cut there, which moves the outboard skin inboard. Measure it on
+   `BLENDER_SRC` (pre-cut), which is what `station_seat_data()` does.
+6. **A sub-tolerance geometry nudge can break the mesh.** Moving one collar
+   0.02 mm to share a station datum was enough to create a coplanar seam and a
+   zero-area slit that failed CI.
 
-## 5. Next, in order
+## 5. Still open in this subsystem
 
-1. **Visually review the cut wells**, then publish the merged shell to the
-   canonical STL and re-run `tools/validate_stls.py`.
-2. Relocate the 16 bay bolt bosses onto the new well collars, aim them along
-   the panel normal, set `LG_BAY_ENABLED = True`.
-3. LG-10.6 hull patches + `BAY_CONFORM`; LG-10.7 FCStd purge of
-   `leg_4_scaled24` and `nacelle_port_revq`; LG-10.8 foot Z-levelling.
-
-**Carried analysis items** (both affect geometry, worth settling early):
+Nothing in LG-10. What remains is procurement, physical test, and cosmetics —
+see `TODO.md`. The two that most affect geometry:
 
 - **`wire_stroke_available()` is 4× low** (§4.5a). `H_DEF_DUCT` should be 9.9
   not 19.2, and ductile stock could drop 75 → ~40 mm (~33 g, LG-18).
   Correcting it re-opens LG-15 and would shrink the bay.
-- **§11.4 "shared BOM"** needs amending: a conforming back face makes the bay
-  two mirrored geometries, not one shared part.
+- **LG-15 / LG-16** (wire procurement and temper) **block leg fabrication**;
+  **LG-13** (wire-end retention) **blocks first flight**.
 
 ## 6. Known noise
 
-`tools/precommit_sanitize.py` flags `BAKE_T` in `merge_cargo_interior.py:127`
-as a "phone number" on every commit touching that file. False positive,
+`tools/precommit_sanitize.py` flags `BAKE_T` in `merge_cargo_interior.py` as a
+"phone number" on every commit touching that file. False positive,
 non-blocking.
+
+`tools/landing_gear_cowl_clearance.py --variant 1_5in` reports 5.468 mm³ at
+**26°**, which is 4° PAST the 22° mechanical stop the leg cannot reach; it is
+clear at every angle through the real stroke, and this was true before the
+LG-10 close-out (baselined 2026-08-17). The tool fails on any sampled angle, so
+it exits non-zero — do not read that as a new regression. The 3.0in variant is
+clear at every sampled angle.

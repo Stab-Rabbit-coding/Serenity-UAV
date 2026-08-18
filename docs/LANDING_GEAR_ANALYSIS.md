@@ -338,7 +338,8 @@ proportion and detail.
 
 **Status: NOT YET IMPLEMENTED.** Item 1 gates the rest — if the bays move to a
 ventral overhang, the corner stations, the bolt-normal fix (LG-02), the
-conforming hull patches (LG-10) and the pad-fit study all get re-derived
+bay seat datum (LG-10.6 — the conforming hull patch it originally called
+for was retired) and the pad-fit study all get re-derived
 against the new surface. Do not re-aim the bay bolts before settling it.
 
 ---
@@ -729,13 +730,13 @@ Dyneema SK75 2 mm, ≥750 N — one per leg, foot hub → bay → hull anchor
 
 ## 15. Open Items and Verification Requirements
 
+*Closed since the last revision: **LG-17** (2026-08-09, 4 ft adopted) and **LG-10** (2026-08-17, all eight sub-items — see `airframe/landing-gear/WBS.md` §1.1.4.1). LG-10's "flank conforming" clause was **retired** rather than built: the hull-side flange rebate presents a flat seat, so the printed bay keeps a flat back face and the two are held together by a shared datum instead (`tools/landing_gear_bay_seat_fit.py`). Its "Z-level rule" turned out not to be about the four feet, which were always level — see §1.1.4.1 LG-10.8.*
+
 | ID | Item | Blocks |
 | --- | --- | --- |
-| LG-17 | **Drop-height decision: 6 ft vs 4 ft schedule** (§4.4 — wire Ø only, both variants) | LG-15 procurement |
 | LG-15 | Procure both wire grades to the §11.2/11.3 schedule; re-check Ø against as-weighed AUW; coupon test | Leg fabrication |
 | LG-16 | Confirm ductile temper survives jig-forming without cracking | Leg fabrication |
 | LG-13 | Wire-end retention detail at bay bosses (pin/set screw/adhesive) vs §4.6/§4.7 lateral load — extra weight for the 1.5in variant's tighter single-wire-fallback margin | First flight |
-| LG-10 | Finalize 4 bay placements in `SerenityAssembly.FCStd` (flank conforming, Z-level rule); remove retired Strong-Leg `Union…003` objects; bake | LG-02, printing |
 | LG-02 | Bay mounting integration: internal backing plates, through-bolts, flank conforming spacer or shell recess; DRC mesh check | Hull print |
 | LG-03 | Rear-skid CF rod channel (unchanged, unrelated) | Taxi test |
 | LG-06 | **Revised elastic bench check:** quarter-AUW fixture **1.73 lbm (783 g)** dropped 1.5 ft onto one corner = 3.51 J → zero permanent set anywhere, either variant. (R5 protocol used full AUW = 14 J — it would fire the fuses; superseded.) | First flight |

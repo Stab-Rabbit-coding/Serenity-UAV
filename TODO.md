@@ -256,8 +256,6 @@ numeric order.)*
 
 → detail: `airframe/landing-gear/WBS.md` §1.1.4
 
-- [ ] LG-10 Finalize the 4 bay placements in SerenityAssembly.FCStd
-- [ ] LG-17 Drop-height decision: 6 ft vs 4 ft ductile wire schedule
 - [ ] LG-15 Procure both wire grades/tempers; coupon test
 - [ ] LG-16 Confirm ductile wire temper survives jig-forming
 - [ ] LG-13 Define wire-end retention detail at bay bosses

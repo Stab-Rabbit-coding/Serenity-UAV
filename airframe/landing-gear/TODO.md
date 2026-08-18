@@ -16,10 +16,6 @@
 ## §1.1.4 — Landing Gear
 → full detail: `WBS.md` §1.1.4
 
-- [ ] LG-10.5 Re-merge cargo shell (LG-10.4 keep-outs + Rev S1b spar)
-- [ ] LG-10.6 Generate hull patches; enable BAY_CONFORM
-- [ ] LG-10.7 Purge stale FCStd objects; bake, re-export
-- [ ] LG-10.8 Z-level all 4 feet to the most negative Z
 - [ ] LG-15 Procure wire to the 4 ft schedule; coupon test
 - [ ] LG-16 Confirm ductile wire temper survives jig-forming
 - [ ] LG-02 Backing plate part (optional at 4 ft; FOS 4.56 unaided)
