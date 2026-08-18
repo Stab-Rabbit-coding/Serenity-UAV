@@ -314,6 +314,66 @@ WING_SPAR_MIDLINE = 10.41   # midline_frac(45.15/129) * 129, from the wing SCAD
 WING_SPAR_Z = WING_CHORD_LINE_Z + WING_SPAR_MIDLINE  # = 68.42
 WING_SPAR_BORE_D = 12.3
 WING_SPAR_BOSS_OD = 22.0
+
+# Wing harness entry ports (Rev S1c, 2026-08-18) — NEW.
+#
+# Until now the shell had NO harness entry at all: the wing's spanwise conduits
+# ran to the wing root face and stopped against solid cargo skin.  That was
+# survivable only while the EDF double-D was routed through the wing-root tenon
+# (which enters the mortise), and Rev S1c moves it off the tenon entirely, so
+# the entry has to be cut explicitly.
+#
+# Stations come from the wing SCAD and MUST be kept in step with it — there is
+# no other link between the two files, exactly as for WING_SPAR_Y:
+#   CABLE_BORE_STATION 27.5 mm, CABLE_BORE_SEP 9.5  -> conduits at 22.75 / 32.25
+#   HALL_CABLE_STATION 54.0 mm                      -> encoder lead
+# Midline heights are midline_frac(station / 129) * 129 evaluated on the same
+# S1223 tables the wing uses; the identical derivation reproduces WING_SPAR_Y
+# +38.150 and WING_SPAR_Z +68.420 exactly, which is the cross-check that these
+# three are on the same footing as the spar.
+#
+# Both wings now share WING_LE_ROOT_Y, so one set of stations serves both sides
+# — that is only true since the Wing_Stbd bake was mirror-corrected at Rev S1c
+# (tools/bake_hull_frame.py).  Before that the starboard wing sat 5 mm aft of
+# these ports.
+WING_EDF_STATION_FWD = 22.75
+WING_EDF_STATION_AFT = 32.25
+WING_ENC_STATION = 54.0
+WING_EDF_MIDLINE_FWD = 8.685
+WING_EDF_MIDLINE_AFT = 10.088
+WING_ENC_MIDLINE = 9.823
+
+WING_EDF_Y_FWD = WING_LE_ROOT_Y + WING_EDF_STATION_FWD   # = +15.75
+WING_EDF_Y_AFT = WING_LE_ROOT_Y + WING_EDF_STATION_AFT   # = +25.25
+WING_ENC_Y = WING_LE_ROOT_Y + WING_ENC_STATION           # = +47.00
+
+# Bore diameters are the wing conduit + 1.0 mm.  The oversize is deliberate:
+# the root joint carries assembly tolerance in Y and Z, and a harness port that
+# is merely flush leaves the wire pinched on the skin edge at the transition.
+# It costs nothing structurally — these are through-skin holes in a 2 mm shell,
+# not load paths.
+WING_EDF_ENTRY_D = 8.0   # wing conduit Ø7.0 + 1.0
+WING_ENC_ENTRY_D = 4.5   # wing conduit Ø3.5 + 1.0
+
+# Inboard end of the harness bores.  The lateral wall brackets used for the
+# spar boss (PORT_INB -100 / STBD_INB -240) are NOT deep enough here: ray-tracing
+# the merged shell showed a ~2.2 mm internal wall immediately inboard of them,
+# whose outboard face sits at exactly -100.0 / -240.0 on the EDF-forward line and
+# at -113.1 / -223.2 on the encoder line.  A bore that stops flush against that
+# wall passes the skin and then dead-ends, which is the same failure this whole
+# feature exists to remove -- just moved 17 mm inboard where it is harder to see.
+#
+# These values carry each bore past the deepest observed obstruction with margin,
+# into open cargo cavity.  The spar bore already crosses the same region (it spans
+# the full -270..-70 lateral run, because it is a continuous rod), so punching a
+# harness bore through it is not a new intrusion into that wall.
+WING_HARNESS_INB_PORT = -125.0   # past the -115.2 encoder-line wall
+WING_HARNESS_INB_STBD = -213.0   # past the -225.2 encoder-line wall (stbd inboard is +X)
+
+# Entry heights — same camber-midline rule as the spar.
+WING_EDF_Z_FWD = WING_CHORD_LINE_Z + WING_EDF_MIDLINE_FWD   # = +66.695
+WING_EDF_Z_AFT = WING_CHORD_LINE_Z + WING_EDF_MIDLINE_AFT   # = +68.098
+WING_ENC_Z = WING_CHORD_LINE_Z + WING_ENC_MIDLINE           # = +67.833
 MORT_W = 30.8  # mortise Y span
 MORT_H = 20.8  # mortise Z span
 
@@ -528,6 +588,40 @@ def wing_keepout_positives(envelope_tm=None):
     return clipped
 
 
+def wing_harness_ports():
+    """Wing harness entry bores through each lateral wall.  (label, solid).
+
+    Rev S1c.  Three per side: the EDF double-D (two Ø8.0) and the AK7455
+    encoder lead (one Ø4.5), each coaxial with the matching spanwise conduit in
+    wings_s1223_revo.scad so the wire runs straight from the wing into the
+    cargo cavity instead of dead-ending on the skin.
+
+    These are cut through the same wall brackets the spar bore uses, so the
+    outboard end is clipped to the real skin by the envelope exactly as the
+    spar bore is.
+    """
+    return [
+        ("EDF entry fwd", x_cylinder(
+            WING_EDF_Y_FWD, WING_EDF_Z_FWD, WING_HARNESS_INB_PORT, PORT_OUTB,
+            WING_EDF_ENTRY_D / 2.0)),
+        ("EDF entry aft", x_cylinder(
+            WING_EDF_Y_AFT, WING_EDF_Z_AFT, WING_HARNESS_INB_PORT, PORT_OUTB,
+            WING_EDF_ENTRY_D / 2.0)),
+        ("encoder entry", x_cylinder(
+            WING_ENC_Y, WING_ENC_Z, WING_HARNESS_INB_PORT, PORT_OUTB,
+            WING_ENC_ENTRY_D / 2.0)),
+        ("EDF entry fwd stbd", x_cylinder(
+            WING_EDF_Y_FWD, WING_EDF_Z_FWD, STBD_OUTB, WING_HARNESS_INB_STBD,
+            WING_EDF_ENTRY_D / 2.0)),
+        ("EDF entry aft stbd", x_cylinder(
+            WING_EDF_Y_AFT, WING_EDF_Z_AFT, STBD_OUTB, WING_HARNESS_INB_STBD,
+            WING_EDF_ENTRY_D / 2.0)),
+        ("encoder entry stbd", x_cylinder(
+            WING_ENC_Y, WING_ENC_Z, STBD_OUTB, WING_HARNESS_INB_STBD,
+            WING_ENC_ENTRY_D / 2.0)),
+    ]
+
+
 def wing_keepout_negatives():
     """Wing voids the gear bay's added material must not intrude into."""
     my0, my1 = WING_MORT_Y - MORT_W / 2, WING_MORT_Y + MORT_W / 2
@@ -539,7 +633,12 @@ def wing_keepout_negatives():
             PORT_INB + 1.0, PORT_OUTB - 10.0, my0, my1, mz0, mz1)),
         ("mortise stbd", box(
             STBD_OUTB + 8.0, STBD_INB - 1.0, my0, my1, mz0, mz1)),
-    ]
+        # Rev S1c: the harness entries join the keep-out set for the same
+        # reason the spar bore is in it -- "on the HULL the wing always wins".
+        # A gear-bay flange that plugs a harness port is the same class of
+        # failure as one that plugs the spar bore: it is found at assembly,
+        # with the wire in hand, and it cannot be relieved from outside.
+    ] + wing_harness_ports()
 
 
 def _subtract_all(solid, keepouts):

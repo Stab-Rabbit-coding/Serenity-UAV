@@ -55,8 +55,16 @@ $fn = 48;
 use <fuselage/cargo/cargo_spar_drive.scad>   // root_bearing_seat/servo_mount/…
 
 // ── Spar axis (hull frame) ───────────────────────────────────────────────────
-SPAR_Y   = 15;    // hull Y (chord-station 22 → camber)   [cargo_spar_drive PORT]
-SPAR_Z   = 66;    // hull Z (camber midline + 58)
+// REV S1c (2026-08-18): these were still the pre-Rev-S1b values (the 22.0 mm
+// chord station, and a Z rounded off the old midline).  Rev S1b moved the spar
+// to the 45.15 mm station = 35 % root chord; this overlay never followed, so
+// every derived pose below — including NAC_D, which slides the nacelle onto the
+// spar line — was solving against a spar that no longer exists.
+// Both values now match airframe/blender-scripts/merge_cargo_interior.py
+// (WING_SPAR_Y / WING_SPAR_Z), which is the fuselage-side authority for the
+// same physical rod.
+SPAR_Y   = 38.15; // hull Y (chord-station 45.15 = 35 % root chord → camber midline)
+SPAR_Z   = 68.42; // hull Z (camber midline 10.41 + chord line 58.01)
 SPAR_X0  = -96;   // cargo (root-bearing) end
 SPAR_X1  =  88;   // nacelle outboard end (through the outboard pivot boss)
 SPAR_OD  = 8.0;
@@ -98,7 +106,11 @@ PIVOT_ZLOC = 111.5;           // nacelle-local duct Z of the CG pivot / spar axi
 //   wing through the full tilt, and the bearing/sensor/mesh live here.
 JOINT_GAP_X   = 1;                                    // [mm] → ~4 mm joint gap (min)
 PIVOT_Y_BAKED = PIVOT_ZLOC + NAC_BAKE[1];             // pre-shift pivot hull Y (= 47.5)
-NAC_D = [JOINT_GAP_X, SPAR_Y - PIVOT_Y_BAKED, SPAR_Z - 63.2];  // = [+5, -32.5, +2.8]
+NAC_D = [JOINT_GAP_X, SPAR_Y - PIVOT_Y_BAKED, SPAR_Z - 63.2];  // = [+1, -9.35, +5.22]
+// Rev S1c: the trailing comment used to read [+5, -32.5, +2.8].  Two of the
+// three were stale: the Y shift followed the spar from 15 to 38.15 (so the pod
+// slides 23.15 mm LESS far forward — the point of moving the spar aft), and the
+// X figure had never been updated after JOINT_GAP_X was minimised 5 -> 1.
 
 // ── Small helpers ─────────────────────────────────────────────────────────────
 module x_cyl(d, len)  { rotate([0, 90, 0]) cylinder(d = d, h = len); }      // +X axis
