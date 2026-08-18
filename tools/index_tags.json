@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-17",
+  "generated": "2026-08-18",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -12266,6 +12266,14 @@
       ],
       "archived": false
     },
+    "tools/wing_internal_clearance.py": {
+      "description": "Check every internal bore in the wing against its neighbours and the skin.",
+      "tags": [
+        "build-tooling",
+        "security"
+      ],
+      "archived": false
+    },
     "tools/wing_spar_station_fit.py": {
       "description": "Size the wing spar's chordwise station against the S1223 section it lives in.",
       "tags": [
@@ -12758,7 +12766,8 @@
       "tools/build_landing_gear_views.py",
       "tools/landing_gear_bay_pad_fit.py",
       "tools/open_mating_faces.py",
-      "tools/precommit_index.py"
+      "tools/precommit_index.py",
+      "tools/wing_internal_clearance.py"
     ],
     "licensing": [
       "LICENSE",
@@ -15561,6 +15570,7 @@
       "tools/verify_bow_pod.py",
       "tools/wing_airfoil_variants.py",
       "tools/wing_cfd_openfoam.py",
+      "tools/wing_internal_clearance.py",
       "tools/wing_spar_station_fit.py"
     ]
   }

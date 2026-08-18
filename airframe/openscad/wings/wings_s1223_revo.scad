@@ -227,23 +227,58 @@ SPAR_BORE_STATION =  45.15; // [mm] chordwise station aft of LE — CONSTANT ove
                             // chord fraction (midline_frac(), below) — NOT a single
                             // constant — so it stays centred (root breakout fixed).
 
-// ── Harness cableway (Rev R2) ────────────────────────────────────────────────
+// ── Harness cableway (Rev S1c — moved FORWARD of the spar) ───────────────────
 // The 8 mm rotating spar is hollow (≈ 5 mm ID) — enough for the nav-light 3-core
 // (Ø 2.5 mm), which routes THROUGH the hollow spar to the outboard nacelle nav
 // light (95° tilt twist is benign — docs/TILT_SPAR_ANALYSIS.md §5), but NOT for
 // the 40 A EDF ESC feeds.  This dedicated wing conduit carries those: TWO
-// parallel Ø CABLE_BORE_D bores forming a flat "double-D" (overall ≈ 15 × 7 mm),
-// tracking a constant chord FRACTION (sweep is immaterial for a flexible
-// harness) and camber-centred at each station.  Splitting into two bores keeps
-// the EDF power pair separate from ESC signal/telemetry (noise).
+// parallel Ø CABLE_BORE_D bores forming a flat "double-D", camber-centred at
+// each station.  Splitting into two bores keeps the EDF power pair separate
+// from ESC signal/telemetry (noise).
+//
+// REV S1c (2026-08-18) — WHY THIS MOVED, AND WHY IT IS NOW CONSTANT-mm:
+// Rev S1b moved SPAR_BORE_STATION 22.0 → 45.15 mm but left this conduit on a
+// constant chord FRACTION (0.48c).  A constant-mm bore and a constant-fraction
+// bore CONVERGE as the chord tapers 129 → 93 mm, so the pair that cleared at
+// the root did not stay clear: the forward Ø7 conduit entered the Ø8.3 spar
+// bore from 29.6 % span outboard, and at the tip BOTH conduits were merged
+// with the spar (0.48 × 93 = 44.6 mm vs a spar at 45.15 mm).  That is 40 A of
+// EDF feed sharing a cavity with a rotating steel spar — a wiring fault, not a
+// tolerance one.  It was invisible to tools/wing_spar_station_fit.py, which
+// sizes ONE bore against its section and cannot see bore-to-bore convergence;
+// tools/wing_internal_clearance.py was written for exactly this class of fault
+// and is fail-closed.
+//
+// The conduit had to go FORWARD of the spar: every station AFT of it fails, and
+// not marginally — S1223 loses depth fast, and at the 58 mm station the TIP
+// section is only 4.17 mm deep, so a Ø7 bore has negative wall before any
+// thickening.  Forward of the spar the section is near its max-thickness point
+// at BOTH ends (27.5 mm = 21.3 % root / 29.6 % tip chord), which is why the
+// walls there are ~4.5 mm instead of ~1.2 mm.
+//
+// CONSTANT MILLIMETRES, matching the spar's own law (see SPAR_BORE_STATION):
+// with a straight LE (WING_SWEEP_LE = 0), two constant-mm bores hold the SAME
+// chordwise separation at every span station, so the web cannot be eroded by
+// taper.  A chord-fraction conduit re-creates the convergence this change
+// exists to remove.
 CABLE_BORE_D    =   7.0;  // [mm] each conduit bore diameter (Ø7 ≈ 38 mm² each)
-CABLE_BORE_SEP  =   8.0;  // [mm] chordwise centre-to-centre (overall ≈ 15 mm wide)
-CABLE_BORE_XFR  =   0.48; // [chord fraction] cableway chordwise centre.  Moved aft
-                          //      0.40 → 0.48 (Rev R2) so the forward conduit (tip
-                          //      chordX ≈ 40.6 mm) clears the Ø26 wingtip mount pad
-                          //      (reaches chordX ≈ 35 mm); still well aft of the
-                          //      8 mm spar (ends ≈ 26% chord).  The nacelle harness
-                          //      entry port must match this station.
+// REV S1c: separation 8.0 → 9.5 mm.  At 8.0 the web between the two Ø7 bores
+// was 1.0 mm — under two extrusions at the 0.6 mm nozzle WALL_T is specified
+// for, so it would not have printed as a wall and the "double-D" would have
+// fused into one cavity, defeating the power/signal split it exists for.
+// 9.5 mm gives a 2.5 mm web = WALL_T.  The chord forward of the spar affords
+// it; this was only ever tight because the pair was crowded aft.
+CABLE_BORE_SEP  =   9.5;  // [mm] chordwise centre-to-centre (overall ≈ 16.5 mm)
+CABLE_BORE_STATION = 27.5; // [mm] chordwise station aft of LE — CONSTANT over the
+                          //      span, like SPAR_BORE_STATION.  Conduits land at
+                          //      22.75 / 32.25 mm.  Clearances held over the whole
+                          //      span (tools/wing_internal_clearance.py):
+                          //        web to spar bore   +5.25 mm
+                          //        skin, root / tip   +4.45 / +4.84 mm
+                          //        gap to wingtip pad +1.40 mm
+                          //      The nacelle harness entry port must match this
+                          //      station — see HARNESS_PORT_Z in
+                          //      airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad.
 
 // ── Pylon mount pocket (must match wing_nacelle_pylon_revo.scad) ────────────
 // The wing_attach_block from the pylon inserts into this pocket at the tip face.
@@ -304,12 +339,25 @@ FIX_GEAR_PLATE_H      =   3.0;   // [mm] sector gear plate thickness (reference)
 // Wingtip mount pad — minimal boss around the spar at the tip face that houses
 // the bearing seat + gear-bolt inserts. Kept low (butts against the nacelle
 // inboard face) rather than standing on a tall block.
-TIP_PAD_OD            =  29.5;   // [mm] pad OD — hosts the Ø13.5 bearing flange AND the
-                                //      MT6701 Hall pocket (IC at R=11), while its aft edge
-                                //      (X≈36.75) stays clear of the forward EDF bore (X≈37.1)
-                                //      so the pad no longer caps the cableway.  Proud only
-                                //      (Z > tip face) — sits in the nacelle inboard-face
-                                //      footprint; does not touch the exposed OML.
+// REV S1c (2026-08-18): the pad is a TEARDROP, not a disc.  As a Ø29.5 disc it
+// spanned X 30.4..59.9 on the tip face and capped BOTH relocated EDF conduits —
+// the conduits exit the tip face into the nacelle, so a pad over them is not a
+// cosmetic overlap, it is a blocked harness.  The disc OD was sized when the
+// EDF pair sat AFT at 0.48c; with the pair now forward at 27.5 mm the disc can
+// no longer be both small enough to clear them and large enough to host the
+// AK7455 pocket at R = 11.
+//
+// A teardrop resolves it because the two things the pad must host are on
+// OPPOSITE sides of the spar: the Ø13.5 bearing flange is concentric (needs
+// r ≥ 6.75 all round) and the sensor pocket is purely AFT (needs reach to
+// R ≈ 14.5).  Hulling a small forward circle to a small aft one covers both
+// without the forward sweep a disc would need.  Forward edge lands at
+// X = 37.15, clearing the aft EDF conduit (aft edge 35.75) by 1.40 mm.
+// Proud only (Z > tip face) — sits in the nacelle inboard-face footprint; does
+// not touch the exposed OML.
+TIP_PAD_FWD_R         =   8.0;   // [mm] pad radius at the spar — Ø13.5 flange (r6.75) + 1.25 rim
+TIP_PAD_AFT_R         =   5.5;   // [mm] pad radius at the sensor pocket centre (spar + HALL_SENS_R);
+                                //      reaches X 61.65, covering the 7 mm PCB seat (52.65..59.65)
 TIP_PAD_PROUD         =   2.0;   // [mm] proud height beyond wing tip face (minimal)
 
 // ── Wing/nacelle tilt-angle Hall sensor (Rev R2c, 2026-07-19) ─────────────────
@@ -337,20 +385,31 @@ TIP_PAD_PROUD         =   2.0;   // [mm] proud height beyond wing tip face (mini
 // avionics).  A ferrous shaft through a ring magnet is a supported commercial
 // arrangement, but MUST be calibrated in situ.
 //
-// PLACEMENT (Rev R2d, 2026-07-19): SENSOR = Magntek MT6701 (I²C, off-axis
-// capable) on a small in-house PCB.  The IC sits OFF-AXIS at HALL_SENS_R = 12 mm,
-// CHORDWISE-aft of the spar, clear of the Ø13.5 bearing-flange keep-out (r6.75)
-// on the pad face — the earlier R=6 pocket collided with the flange/seat.  The
-// diametric ring is OD 24 (mean r ≈ 12) so the MT6701 reads mid-annulus.  Aft
-// offset (not +Y) keeps the pocket in the wide chord direction, well under the
-// top skin (Y-thickness is limited); the pad (TIP_PAD_OD 36) hosts it.  The
-// MT6701 off-axis air-gap / ring geometry is a REQUIRES-VERIFICATION item vs its
-// datasheet (REFERENCES.md; TODO §0.8) — MA732 (SPI) is the off-axis fallback.
-// The IC threads the ~8.4 mm chordwise gap between the Ø13.5 bearing flange
-// (aft edge X≈28.75) and the forward EDF double-D bore (inboard edge X≈37.1) —
-// see the cableway congestion echo.  A compact 7×7 in-house board (MT6701 3×3
-// QFN + 2 decoupling caps + a direct-solder 4-wire pigtail, no connector) fits;
-// R=11 centres it in the gap.  Pad OD 29.5 hosts it without reaching the EDF bore.
+// PLACEMENT (Rev R2d 2026-07-19; sensor part and pad revised Rev S1c 2026-08-18):
+// SENSOR = AKM AK7455 (SPI, off-axis capable) on a small in-house PCB
+// (ENC-NACELLE-1 / MAL-TILT-ENC-PCB; REFERENCES.md REF-SENSOR-008).  It
+// SUPERSEDES the Magntek MT6701 named in earlier revisions of this block —
+// MT6701 and AS5600 were both rejected as on-axis parts, and the spar is a
+// THROUGH-shaft here.
+//
+// The IC sits OFF-AXIS at HALL_SENS_R = 11 mm, CHORDWISE-aft of the spar, clear
+// of the Ø13.5 bearing-flange keep-out (r6.75) on the pad face — the earlier
+// R = 6 pocket collided with the flange/seat.  The diametric ring is OD 22
+// (mean r ≈ 11) so the IC reads mid-annulus.  Aft offset (not +Y) keeps the
+// pocket in the wide chord direction, well under the top skin (Y-thickness is
+// limited at the tip).
+//
+// REV S1c: the pocket is no longer THREADED between the bearing flange and the
+// EDF double-D.  That congestion existed only because the EDF pair sat aft at
+// 0.48c; with the pair moved forward to the 27.5 mm station (see the harness
+// cableway block) the whole region aft of the spar is free, and the pad's aft
+// lobe (TIP_PAD_AFT_R) hosts the 7 × 7 board outright.  A compact in-house
+// board (AK7455 QFN + 2 decoupling caps + a direct-solder pigtail, no
+// connector) fits at R = 11.
+//
+// The off-axis air-gap / ring geometry remains a REQUIRES-VERIFICATION item vs
+// the AK7455 datasheet (REFERENCES.md; TODO §0.8) and is gated on the bench-cal
+// in wings-nacelles WBS §1.1.3.6.
 HALL_RING_OD    =  22.0;  // [mm] diametric ring-magnet OD (matches nacelle seat)
 HALL_RING_ID    =  10.0;  // [mm] ring-magnet ID (rides non-ferrous collar on spar)
 HALL_SENS_R     =  11.0;  // [mm] MT6701 IC offset from spar axis ≈ ring mean radius
@@ -364,12 +423,28 @@ HALL_PCB_SCR_D  =   1.7;  // [mm] M2 self-tap pilot (2×, chordwise ±HALL_PCB_S
 HALL_PCB_SCR_S  =   2.5;  // [mm] screw pilot half-spacing (chordwise) — within W/2 span
 HALL_KEEPOUT_R  =  10.0;  // [mm] NON-FERROUS keep-out radius around the IC
 HALL_CABLE_D    =   3.5;  // [mm] 4-wire I²C sensor conduit (VCC/GND/SDA/SCL, shielded)
-HALL_CABLE_XFR  =   0.33; // [chord fraction] conduit chordwise centre — between the
-                          //      spar (0.237c) and the 0.48c EDF double-D so the
-                          //      low-level sensor lines stay separated from the 40 A
-                          //      EDF feeds (EMI — EMI WBS §1.4.4/§1.4.6) while its
-                          //      tip end (X≈30.7) sits just aft of the bearing seat,
-                          //      shortening the jog to the R=11 pocket (X≈33).
+// REV S1c (2026-08-18): 0.33c → a CONSTANT 54.0 mm station, AFT of the spar.
+// The old fraction was sized against a spar at the 22.0 mm station and was left
+// behind by Rev S1b: 0.33 × 129 = 42.57 mm put this Ø3.5 conduit INSIDE the
+// Ø8.3 spar bore at the ROOT (conduit 40.82..44.32 vs spar 41.00..49.30) — the
+// mirror image of the EDF failure above, converging inboard instead of outboard.
+//
+// It stays AFT of the spar deliberately, where the EDF double-D could not go.
+// A Ø3.5 sensor bore needs far less depth than a Ø7 power conduit, and 54.0 mm
+// is the station where BOTH constraints close: a 2.95 mm web to the spar bore
+// (≥ WALL_T) and 1.28 mm of tip skin — thicker than the 1.16 mm the root spar
+// already runs at and prints, which is the floor tools/wing_spar_station_fit.py
+// enforces.  Keeping it aft preserves the original EMI intent in its strongest
+// form: the ferromagnetic spar sits physically BETWEEN the shielded low-level
+// sensor pair and the 40 A EDF feeds (EMI-hardening WBS §1.4.4/§1.4.6), rather
+// than trading that barrier for a printed web, which is what any forward
+// placement would have done.
+//
+// Its tip end (X = 54.0) also sits just aft of the Ø11.95 bearing seat
+// (aft edge X ≈ 51.1), shortening the jog to the R = 11 sensor pocket (X ≈ 56.15)
+// to ~2.2 mm.
+HALL_CABLE_STATION = 54.0; // [mm] chordwise station aft of LE — CONSTANT over the
+                          //      span, like SPAR_BORE_STATION and CABLE_BORE_STATION
 
 // Spar-axis thickness (internal Y) height at the TIP station — the spar exits on
 // the camber midline, NOT the chord line, so all wingtip spar features (pad,
@@ -644,46 +719,41 @@ module spar_bore() {
 // =============================================================================
 // Two parallel spanwise conduits (a flat "double-D") for the nacelle harness —
 // the 40 A EDF power feeds cannot fit the spar-tube ID (see parameter block).
-// Each conduit tracks a constant chord FRACTION (CABLE_BORE_XFR) and is
-// camber-centred at each station via midline_frac().  The two bores are offset
-// ±CABLE_BORE_SEP/2 chordwise about that fraction.  Runs full span (root face
-// into the fuselage, tip face into the pylon harness channel).
+//
+// REV S1c (2026-08-18): the pair sits at a CONSTANT chordwise station
+// (CABLE_BORE_STATION), FORWARD of the spar, replacing the constant chord
+// FRACTION that converged onto the spar bore after Rev S1b moved the spar aft.
+// Because the station is now constant in millimetres — the same law the spar
+// uses — root and tip share one X, so the conduits run truly parallel to the
+// spar and the web between them cannot be eroded by chord taper.  Each is still
+// camber-centred at its own end station via midline_frac(), so the pair follows
+// the camber line as the section changes.  Runs full span (root face into the
+// fuselage, tip face into the nacelle harness port).
 module cableway_bore() {
-    // Chordwise conduit centres at root and tip (constant fraction → tapered).
-    root_xc = WING_CHORD_ROOT * CABLE_BORE_XFR;
-    tip_xc  = WING_CHORD_TIP  * CABLE_BORE_XFR;
-    // REV S1b: thickness-scale factors dropped -- camber is no longer scaled.
-    root_yc = midline_frac(CABLE_BORE_XFR) * WING_CHORD_ROOT;
-    tip_yc  = midline_frac(CABLE_BORE_XFR) * WING_CHORD_TIP;
+    // Chordwise conduit centre — one constant station, root and tip alike.
+    xc = CABLE_BORE_STATION;
+    // Camber-centred at each end.  No thickness-scale factor: s1223_section()
+    // scales thickness about the camber line, so the camber line is unscaled
+    // (Rev S1b) and re-applying the scale here would lift the bore off it.
+    root_yc = midline_frac(xc / WING_CHORD_ROOT) * WING_CHORD_ROOT;
+    tip_yc  = midline_frac(xc / WING_CHORD_TIP)  * WING_CHORD_TIP;
 
-    // DRILL THROUGH THE ROOT TENON (Rev R2d, 2026-07-19; STRAIGHT, Rev R2e): the
-    // fuselage_root_tab spans Z −WING_ROOT_TAB_L..0 at X 49.5..79.5, Y ±10 and
-    // BLOCKS the EDF double-D (X≈57.9/65.9, Yc≈8.9) — the wires dead-ended 1 mm
-    // into a solid tenon.  The tenon pass-through is a SEPARATE STRAIGHT, AXIAL
-    // (constant X,Y) bore that continues each conduit straight down through the
-    // tenon and out its inboard face — NOT an extension of the slanted spanwise
-    // hull (that skewed the root-face hole ~2.3 mm sideways, making wires hard to
-    // thread).  The straight bore keeps the root-face opening and the tenon-exit
-    // opening perfectly coaxial.  SOUNDNESS: the double-D sits in the UPPER
-    // ~4.6 mm of the 20 mm-tall tenon (Yc 8.9 ± 3.5 ⇒ ~5.4..12.4, capped by the
-    // Y=+10 tenon top), so the two bores only groove the tenon crown; the
-    // full-width lower 30 × ~15 mm of the tenon stays solid — the load-bearing
-    // spine is intact.  (The 1 mm web between the two Ø7 bores is the existing
-    // double-D design, present along the whole span, not new to the tenon.)
-
+    // NO ROOT-TENON PASS-THROUGH IS NEEDED ANY MORE (Rev S1c).  The Rev R2d/R2e
+    // straight tenon drill existed because the double-D at 0.48c landed at
+    // X ≈ 57.9 / 65.9, inside the fuselage_root_tab (X 49.5..79.5), and the
+    // wires dead-ended in solid tenon.  At the 27.5 mm station the conduits are
+    // at X 22.75 / 32.25 — entirely FORWARD of the tenon — so they exit the root
+    // face in clear air and the tenon crown is left intact.  The sensor conduit
+    // inherits the tenon problem instead; see hall_sensor_cableway().
     for (dx = [-CABLE_BORE_SEP / 2, CABLE_BORE_SEP / 2]) {
-        // Spanwise conduit: root face (−1 mm) → wing tip.  Ends AT the root face
-        // so its exit sits exactly at (root_xc, root_yc) — no skew.
+        // Spanwise conduit: root face (−1 mm) → 1 mm past the wing tip, so it
+        // breaks cleanly out of the tip face into the nacelle harness port.
         hull() {
-            translate([root_xc + dx, root_yc, -1.0])
+            translate([xc + dx, root_yc, -1.0])
                 cylinder(r = CABLE_BORE_D / 2, h = 0.01);
-            translate([tip_xc + dx, tip_yc + WING_DIHEDRAL, WING_SEMI_SPAN + 1.0])
+            translate([xc + dx, tip_yc + WING_DIHEDRAL, WING_SEMI_SPAN + 1.0])
                 cylinder(r = CABLE_BORE_D / 2, h = 0.01);
         }
-        // Straight vertical tenon pass-through at the SAME (root_xc, root_yc):
-        // spans Z +1 (overlaps the spanwise conduit) down to −(tenon_L+1).
-        translate([root_xc + dx, root_yc, -(WING_ROOT_TAB_L + 1.0)])
-            cylinder(r = CABLE_BORE_D / 2, h = WING_ROOT_TAB_L + 2.0, $fn = 32);
     }
 }
 
@@ -730,11 +800,17 @@ module wing_tip_nacelle_mount_pad() {
     spar_y = spar_tip_y();                          // spar on the camber midline (not chord line)
     spar_z = WING_SEMI_SPAN;                      // wing tip spanwise station
 
-    // Low cylindrical pad, proud of the tip face by TIP_PAD_PROUD only.
-    translate([spar_x, spar_y, spar_z])
-        cylinder(r = TIP_PAD_OD / 2,
-                 h = TIP_PAD_PROUD,
-                 $fn = 48);
+    // Low TEARDROP pad, proud of the tip face by TIP_PAD_PROUD only (Rev S1c).
+    // Hull of a forward circle on the spar axis (hosts the bearing flange) and a
+    // smaller aft circle on the sensor-pocket axis (hosts the AK7455 seat).  The
+    // forward edge stops at spar_x − TIP_PAD_FWD_R so it clears the relocated
+    // EDF double-D, which exits this same face.
+    hull() {
+        translate([spar_x, spar_y, spar_z])
+            cylinder(r = TIP_PAD_FWD_R, h = TIP_PAD_PROUD, $fn = 48);
+        translate([spar_x + HALL_SENS_R, spar_y, spar_z])
+            cylinder(r = TIP_PAD_AFT_R, h = TIP_PAD_PROUD, $fn = 48);
+    }
 }
 
 
@@ -813,33 +889,53 @@ module wing_tip_hall_sensor_pocket() {
 // =============================================================================
 // ── Module: hall_sensor_cableway — fixed sensor-lead conduit to the root ─────
 // =============================================================================
-// Dedicated spanwise conduit for the Hall sensor's 4-wire I²C lead (VCC/GND/
-// SDA/SCL, shielded).  Because the SENSOR is on the FIXED wing (only the magnet
-// rotates), this lead does NOT twist with tilt — no slip ring.  It runs a
-// separate chord fraction (HALL_CABLE_XFR = 0.30c) FORWARD of the 0.48c EDF
-// double-D so the low-level sensor lines stay clear of the 40 A EDF feeds
-// (EMI — EMI-hardening WBS §1.4.4/§1.4.6), camber-centred at each station.  A
-// short chordwise jog links the tip end of the conduit to the sensor pocket.
+// Dedicated spanwise conduit for the AK7455 tilt encoder's shielded lead.
+// Because the SENSOR is on the FIXED wing (only the ring magnet rotates), this
+// lead does NOT twist with tilt — no slip ring.
+//
+// REV S1c (2026-08-18): a CONSTANT chordwise station (HALL_CABLE_STATION),
+// AFT of the spar.  The old 0.33c fraction put it INSIDE the spar bore at the
+// root once Rev S1b moved the spar to 45.15 mm.  Aft placement is deliberate:
+// the spar then sits physically between this shielded low-level pair and the
+// 40 A EDF double-D, which is now forward of the spar (EMI-hardening WBS
+// §1.4.4/§1.4.6).  A Ø3.5 bore is small enough to hold wall in the shallower
+// aft section where the Ø7 EDF conduits could not.
+//
+// A short chordwise jog links the tip end of the conduit to the sensor pocket.
 module hall_sensor_cableway() {
-    root_xc = WING_CHORD_ROOT * HALL_CABLE_XFR;
-    tip_xc  = WING_CHORD_TIP  * HALL_CABLE_XFR;
-    // REV S1b: thickness-scale factors dropped -- camber is no longer scaled.
-    root_yc = midline_frac(HALL_CABLE_XFR) * WING_CHORD_ROOT;
-    tip_yc  = midline_frac(HALL_CABLE_XFR) * WING_CHORD_TIP;
+    xc = HALL_CABLE_STATION;
+    // Camber-centred at each end; no thickness-scale factor (see Rev S1b note
+    // in spar_bore()).
+    root_yc = midline_frac(xc / WING_CHORD_ROOT) * WING_CHORD_ROOT;
+    tip_yc  = midline_frac(xc / WING_CHORD_TIP)  * WING_CHORD_TIP;
 
     // Spanwise run: root face (into fuselage) → wing tip.
     hull() {
-        translate([root_xc, root_yc, -1.0])
+        translate([xc, root_yc, -1.0])
             cylinder(r = HALL_CABLE_D / 2, h = 0.01);
-        translate([tip_xc, tip_yc + WING_DIHEDRAL, WING_SEMI_SPAN])
+        translate([xc, tip_yc + WING_DIHEDRAL, WING_SEMI_SPAN])
             cylinder(r = HALL_CABLE_D / 2, h = 0.01);
     }
+
+    // ROOT-TENON PASS-THROUGH (inherited from the EDF pair at Rev S1c).  The
+    // fuselage_root_tab spans X 49.5..79.5, and at the 54.0 mm station this
+    // conduit (X 52.25..55.75) now lands inside it — the same dead-end the EDF
+    // double-D used to hit at 0.48c.  A SEPARATE STRAIGHT, AXIAL (constant X,Y)
+    // bore continues it down through the tenon and out the inboard face, so the
+    // root-face opening and the tenon-exit opening stay perfectly coaxial and
+    // the wire threads straight.  SOUNDNESS: at Ø3.5 on a 30 × 20 mm tenon this
+    // only grooves the crown (root_yc ≈ +9.8, so the bore reaches ≈ +11.6 vs
+    // the Y = +10 tenon top); the full-width lower ~15 mm of the tenon — the
+    // load-bearing spine — is untouched.  This is a strictly SMALLER intrusion
+    // than the Ø7 double-D it replaces there.
+    translate([xc, root_yc, -(WING_ROOT_TAB_L + 1.0)])
+        cylinder(r = HALL_CABLE_D / 2, h = WING_ROOT_TAB_L + 2.0, $fn = 32);
 
     // Chordwise jog at the tip linking the conduit to the sensor pocket.
     spar_x = WING_SWEEP_LE + SPAR_BORE_STATION;
     ic_x   = spar_x + HALL_SENS_R;
     hull() {
-        translate([tip_xc, tip_yc + WING_DIHEDRAL, WING_SEMI_SPAN - 2.0])
+        translate([xc, tip_yc + WING_DIHEDRAL, WING_SEMI_SPAN - 2.0])
             cylinder(r = HALL_CABLE_D / 2, h = 0.01);
         translate([ic_x, spar_tip_y(), WING_SEMI_SPAN - 2.0])
             cylinder(r = HALL_CABLE_D / 2, h = 0.01);
