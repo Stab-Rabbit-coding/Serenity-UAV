@@ -595,36 +595,58 @@ def render_json(entries, generated_date):
     return json.dumps(payload, indent=2, sort_keys=False) + "\n"
 
 
+# The date each generated file last recorded.  Matches both the markdown
+# stamp `<!-- Last generated: 2026-08-18 -->` and the JSON `"generated":
+# "2026-08-18"` field.
+STAMP_RE = re.compile(r'generated"?:\s*"?(\d{4}-\d{2}-\d{2})')
+
+
+def stamped_date(text):
+    """Return the date a previously generated file recorded, else None."""
+    match = STAMP_RE.search(text or "")
+    return match.group(1) if match else None
+
+
 def sync_and_format(check=False):
     from datetime import datetime
-    generated_date = datetime.now().date().isoformat()
+    today = datetime.now().date().isoformat()
 
     entries = build_index()
     active = [e for e in entries if not e["archived"]]
     archived = [e for e in entries if e["archived"]]
 
-    project_text = render_index(
-        active, "PROJECT_INDEX.md — Serenity UAV",
-        "Archive contents described in ARCHIVE_INDEX.md.",
-        "Tag Index", generated_date,
-    )
-    archive_text = render_index(
-        archived, "ARCHIVE_INDEX.md — Serenity UAV",
-        "Active file tree described in PROJECT_INDEX.md.",
-        "Tag Index", generated_date,
-    )
-    json_text = render_json(entries, generated_date)
+    def render_for(path, generated_date):
+        """Render one output stamped with `generated_date`."""
+        if path == PROJECT_INDEX:
+            return render_index(
+                active, "PROJECT_INDEX.md — Serenity UAV",
+                "Archive contents described in ARCHIVE_INDEX.md.",
+                "Tag Index", generated_date,
+            )
+        if path == ARCHIVE_INDEX:
+            return render_index(
+                archived, "ARCHIVE_INDEX.md — Serenity UAV",
+                "Active file tree described in PROJECT_INDEX.md.",
+                "Tag Index", generated_date,
+            )
+        return render_json(entries, generated_date)
 
-    outputs = {
-        PROJECT_INDEX: project_text,
-        ARCHIVE_INDEX: archive_text,
-        TAG_JSON: json_text,
-    }
-
+    # The stamp must not be a difference in its own right.  Rendering always
+    # with today's date made every index "stale" the day after it was
+    # committed, no matter that the file tree had not moved: the CI sync job
+    # regenerates on the day it RUNS, so a PR opened on the 17th failed on the
+    # 18th over one changed character.  So compare against a re-render carrying
+    # the date already on disk; only when THAT differs has the content really
+    # changed, and only then does the stamp advance to today.
+    outputs = {}
     changed = []
-    for path, text in outputs.items():
+    for path in (PROJECT_INDEX, ARCHIVE_INDEX, TAG_JSON):
         current = path.read_text() if path.exists() else None
-        if current != text:
+        prior = stamped_date(current)
+        if prior is not None and render_for(path, prior) == current:
+            outputs[path] = current          # content unchanged -- keep stamp
+        else:
+            outputs[path] = render_for(path, today)
             changed.append(path)
 
     if check:
