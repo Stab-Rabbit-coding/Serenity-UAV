@@ -53,7 +53,8 @@ NEGATIVE (removed):
     Y=+30 ring-frame pocket — single-sourced from add_structural_features.py.
   * Wing spar bore (Ø12.3, full lateral span) + 2 wing-root mortises (through
     each lateral wall), at the RE-DERIVED chord stations (129 mm root chord, LE
-    root hull Y=−7: spar 30% → Y=+31.7; mortise 50% → Y=+57.5; Z=62.5).
+    root hull Y=−7: spar 35% → Y=+38.15 at Z=68.42 (camber midline, Rev S1b);
+    mortise 50% → Y=+57.5 at Z=62.5).
   * M3 heat-set bores in the nacelle-servo pads.
 
 POSITIVE (added, envelope-clipped so they conform + fuse to the curved wall):
@@ -127,6 +128,12 @@ MARKER = b"SerenityUAV HULL-FRAME R1"
 BAKE_T = np.array([-274.4000100, -282.8000440, 0.0])
 
 WALL_MM = 2.0  # 2 mm foam-fill wall (Blender hollowing pitch / SCAD)
+
+# A boundary loop flatter than this (width away from its best-fit line) is a
+# zero-area boolean-seam slit, not a hole -- see close_zero_area_slits().
+# 1e-3 mm is a micron: four orders below the 0.1 mm print resolution, so no
+# real feature can hide under it.
+SLIT_FLAT_MM = 1e-3
 
 # CF-PETG mass reporting: as-printed (4 perimeters + ≥40% infill) ~1.05 g/cm^3;
 # fully dense CF-PETG ~1.28 g/cm^3.  These bracket the true printed mass.
@@ -270,9 +277,41 @@ APERTURE = (-222.5, -117.6, 2.0, 108.0, -3.0, 9.0)
 # Wing subsystem — RE-DERIVED chordwise stations (hull frame).
 WING_LE_ROOT_Y = -7.0
 WING_ROOT_CHORD = 129.0
-WING_SPAR_Y = WING_LE_ROOT_Y + 0.30 * WING_ROOT_CHORD  # = +31.7
+
+# REV S1b (2026-08-16): spar station 30 % -> 35 % of root chord, by owner
+# decision.  This is the fuselage half of the wings SS1.1.2 spar-interface
+# blocker: the wing sat at the 22.0 mm station (hull Y +15) and this shell cut
+# at 38.7 mm (Y +31.7), so the spar could not pass through both parts.  Both
+# are now on 45.15 mm.  Keep in step with SPAR_BORE_STATION in
+# airframe/openscad/wings/wings_s1223_revo.scad -- they are the same physical
+# rod and there is no other link between the two files.
+WING_SPAR_Y = WING_LE_ROOT_Y + 0.35 * WING_ROOT_CHORD  # = +38.15
 WING_MORT_Y = WING_LE_ROOT_Y + 0.50 * WING_ROOT_CHORD  # = +57.5
+
+# Mortise / nacelle-servo reference height.  NOT the spar height -- see below.
 WING_ROOT_Z = 62.5
+
+# Spar axis height, hull frame.  The bore is centred on the S1223 CAMBER
+# MIDLINE, not on the chord line, so moving the station chordwise also moves it
+# vertically: midline 8.523 mm at the old 22.0 mm station, 10.410 mm at 45.15.
+#
+# WING_CHORD_LINE_Z is where the wing's chord line sits in the hull frame.
+# 58.01 is confirmed two independent ways: airframe/openscad/port_tilt_spar_-
+# assembly.scad states SPAR_Z = "camber midline + 58", and solving the wing
+# SCAD's own recorded baked bound (Z max +76.99) against the root section's
+# top (+18.99 mm above the chord line) gives 58.01.
+#
+# This SUPERSEDES the "root ≈ hull Z ≈ +71 (~8 mm up)" figure in the
+# wings-nacelles WBS SS1.1.2 blocker text, which was a prose estimate: the same
+# derivation puts the OLD station at 66.52, not 71.  AGENTS.md SS11.4 -- actual
+# model state outranks stale documentation.
+#
+# Previously the spar bore and bosses were cut at WING_ROOT_Z (62.5), i.e. on
+# the mortise height rather than on the camber midline, which is why they never
+# lined up with the wing.
+WING_CHORD_LINE_Z = 58.01
+WING_SPAR_MIDLINE = 10.41   # midline_frac(45.15/129) * 129, from the wing SCAD
+WING_SPAR_Z = WING_CHORD_LINE_Z + WING_SPAR_MIDLINE  # = 68.42
 WING_SPAR_BORE_D = 12.3
 WING_SPAR_BOSS_OD = 22.0
 MORT_W = 30.8  # mortise Y span
@@ -284,10 +323,26 @@ PORT_OUTB, PORT_INB = -60.0, -100.0  # port wall bracket (skin ≈ −83..−90)
 STBD_OUTB, STBD_INB = -278.0, -240.0  # stbd wall bracket (skin ≈ −250..−255)
 
 # Nacelle-servo mount pads.
-NSVMT_Y = 45.0
+# Nacelle-servo mount pads.  The servo DRIVES the rotating tilt-spar (horn ->
+# pushrod -> spar crank), so its mount is positioned RELATIVE TO THE SPAR, not
+# in absolute hull coordinates: move the spar and the servo must move with it
+# or the linkage throw is detuned and the pushrod needs re-sizing (root WBS.md
+# SS1.1.3 -- Nacelles, "Tune servo->spar horn/pushrod linkage throw
+# (-5..140 deg)").  Rev S1b makes that dependency explicit in the code, because
+# holding NSVMT_Y/Z absolute through the spar move silently broke it.
+#
+# The offsets below are exactly those in force before the move
+# (spar Y 31.7 -> pad Y 45.0; spar Z 62.5 -> pad Z 93.0), so the linkage
+# geometry is carried across unchanged.
+NSVMT_DY = 13.3   # pad centre, chordwise aft of the spar axis
+NSVMT_DZ = 30.5   # pad centre, above the spar axis
+NSVMT_Y = WING_SPAR_Y + NSVMT_DY   # = 51.45
 NSVMT_PAD_W = 52.0  # Y span
 NSVMT_PAD_H = 30.0  # Z span
-NSVMT_Z = WING_ROOT_Z + 30.5  # = 93.0 (clears spar boss Z 51.5..73.5 by ~4 mm)
+# = 98.92.  Tracking the spar also restores the spar-boss clearance the old
+# absolute value had: boss top is Z 79.42 and the pad now starts at 83.92,
+# a 4.5 mm gap (the pre-move design intent was ~4 mm).
+NSVMT_Z = WING_SPAR_Z + NSVMT_DZ
 NSVMT_HOLE_S_Y = 17.5
 NSVMT_HOLE_S_Z = 8.0
 NSVMT_M3_D = 4.1
@@ -319,118 +374,405 @@ DORSAL_Z_INB = 145.0  # boss reaches this far into the cavity
 # be sunk inward either.  These bosses are internal thickening: modelled deep
 # and clipped by the outer-skin envelope, so each conforms to the real curved
 # wall and fuses to it (same treatment as the nacelle-servo pads above).
+#
+# NOTE the third sentence above: the footprint's interior is occupied by the
+# wing-spar boss, the wing-root mortise and the nacelle-servo pad.  That was
+# recorded here as prose in 2026-08-09 but never enforced geometrically, and
+# measurement in 2026-08-16 showed all three conflicts were real -- see
+# wing_keepout_*() below and tools/landing_gear_wing_clearance.py.
+#
+# The corner table that used to sit here (hips at Y -7 / +107, a 5-tuple) was
+# DEAD CODE: the LG-10.2 table below rebinds LG_CORNERS before any read, so
+# editing this copy changed nothing.  Removed 2026-08-16; the live table is
+# the recessed one under "Corner stations" below.  Do not reintroduce a second
+# binding of this name.
+
+# --- LG-10.3/10.4: the gear bay seat, aperture and bolt bosses --------------
+#
+# WHY THIS IS BUILT IN THE BAY'S PLATE FRAME, NOT ON THE PANEL NORMAL
+# ------------------------------------------------------------------
+# SS2.4a says to aim the bay bolts normal to the sponson's trapezoidal flat.
+# That is not achievable, and the measurement says so plainly.  The bay's
+# orientation is fixed by the leg: the hip pin axis is leg-local Y and the
+# corner's swing azimuth is fixed by the CANONICAL FOOT STATIONS.  The panel
+# normal is fixed by the sponson's shape.  Those two disagree by a YAW of
+# 21-24 deg at every corner, and no value of BAY_CANT removes it -- a cant is
+# a rotation about Y and the residual is about Z:
+#
+#     BAY_CANT -11.5   bolt axis 26.2 deg (fore) / 29.2 deg (aft) off normal
+#     BAY_CANT -25.66  bolt axis 21.1 deg (fore) / 24.4 deg (aft) off normal
+#
+# Yawing the leg to close it moves the feet 32 mm off their canonical stations,
+# which is the one thing SS2.2 will not trade.  So the hull gives the bay a
+# printed SEAT instead: a flange-shaped collar whose face is normal to the bolt
+# axis by construction, recessed into the sponson.  The bolts are then normal
+# to their own bearing face -- which is what bolt bearing, head seating and
+# boss depth actually require -- and the panel normal is used only to LOCATE
+# the opening, never to orient the mount.  This is the "hollow/reinforce the
+# sponson for the attachment" of LG-10.4.
+#
+# Everything below is a CONTRACT with canonical_leg_r6_*.scad.  Change one,
+# change both; the aperture here must match the liner there exactly or the leg
+# will not pass through its own bay.
+X_CL_HULL = -169.9          # hull centreline
+BAY_APER_W_BOT = 25.0       # mm, aperture width at the mouth
+BAY_APER_W_TOP = 34.0       # mm, aperture width at the head
+BAY_APER_L = 58.0           # mm, aperture length up the canted plane
+BAY_APER_ZB0 = -38.0        # mm, aperture bottom edge, plate frame
+BAY_FLANGE = 10.0           # mm, bolt flange width all round the aperture
+BAY_PLATE_W = BAY_APER_W_TOP + 2 * BAY_FLANGE      # 54
+BAY_PLATE_WB = BAY_APER_W_BOT + 2 * BAY_FLANGE     # 45
+BAY_PLATE_L = BAY_APER_L + 2 * BAY_FLANGE          # 78
+BAY_PLATE_ZB0 = BAY_APER_ZB0 - BAY_FLANGE          # -48
+BAY_BOLT_ZB = (BAY_PLATE_ZB0 + BAY_FLANGE / 2.0,
+               BAY_PLATE_ZB0 + BAY_PLATE_L - BAY_FLANGE / 2.0)     # -43, +25
+BAY_BOLT_YB = ((BAY_APER_W_BOT + BAY_FLANGE) / 2.0,
+               (BAY_APER_W_TOP + BAY_FLANGE) / 2.0)                # 17.5, 22
+BAY_PLATE_T = 5.0           # frame thickness (depth of the flange rebate)
+COWL_H = 7.0                # liner depth inboard of the frame
+BAY_CANT = -11.5            # deg
+LG_PLATE_Z0 = 12.0          # plate origin above the hip, leg-local
+BAY_STANDOFF = {"fore": 12.6, "aft": 5.4}   # skin standoff, post-recess
+
+LG_SEAT_D = 8.0             # mm, collar depth inboard of the flange (bolt bite)
+LG_FIT_CLR = 0.4            # mm, assembly clearance on the rebate and aperture
+LG_M3_D = 3.4               # M3 clearance through-bore
+
+# Measured sponson panel (tools/landing_gear_opening_fit.py).  Retained ONLY to
+# locate/report the opening -- it no longer orients anything.
+# NOTE the starboard sign: mirroring across the centreline flips X and leaves Y
+# alone.  This table previously negated BOTH, which is a 180 deg rotation about
+# Z, not a mirror, and it broke the port/stbd symmetry of every derived yaw.
+LG_PANEL_N = {"port": np.array([0.901, 0.015, -0.433]),
+              "stbd": np.array([-0.901, 0.015, -0.433])}
+
+# Corner stations, RECESSED 15 mm along each corner's own swing axis (LG-10.2).
+# (label, hip_x, hip_y, hip_z, swing_azimuth_deg, station)
 LG_CORNERS = [
-    ("fore-port", -90.0, -7.0, 38.0, -22.4),
-    ("fore-stbd", -249.8, -7.0, 38.0, -157.6),
-    ("aft-port", -79.0, 107.0, 38.0, 28.0),
-    ("aft-stbd", -260.8, 107.0, 38.0, 152.0),
+    ("fore-port", -103.87, -1.28, 38.0, -22.4, "fore"),
+    ("fore-stbd", -235.93, -1.28, 38.0, -157.6, "fore"),
+    ("aft-port", -92.24, 99.96, 38.0, 28.0, "aft"),
+    ("aft-stbd", -247.56, 99.96, 38.0, 152.0, "aft"),
 ]
 
-# Bay plate bolt pattern, leg-local (canonical_leg_r6_*.scad bay()).
-LG_BAY_BACK_X = -8.0            # plate datum
-LG_BAY_CANT = -11.5             # deg; negative = leans outboard at the top
-LG_PLATE_Z0 = 12.0              # plate frame origin above the hip
-LG_BOLT_YB = (-15.0, 15.0)      # along the pin axis
-LG_BOLT_ZB = (-28.0, 42.0)      # up the canted plane
-LG_BOLT_PLATE_X = -4.1          # bolt start, plate frame
-
-LG_BOSS_R = 8.0                 # Ø16 internal boss around each bolt
-LG_BOSS_DEPTH = 5.0             # mm of internal thickening (2 mm wall -> 7 mm)
-LG_M3_D = 3.4                   # M3 clearance through-bore
-
-# Retained as an informational clearance check (now at the Rev R6 stations).
+# Retained as an informational clearance check.
 LEG_ZONES = [
     (label, (hx - 25.0, hx + 25.0, hy - 30.0, hy + 30.0, 10.0, 60.0))
-    for label, hx, hy, _hz, _az in LG_CORNERS
+    for label, hx, hy, _hz, _az, _st in LG_CORNERS
 ]
 
+LG_BAY_ENABLED = True
 
-def _lg_bolt_frame(hx, hy, hz, az_deg):
-    """Return (bolt_points, axis) in HULL frame for one bay station.
+
+# --- LG-10.4: the wing keep-outs the bay must respect ----------------------
+#
+# The sponson spans the wing-root station, so a bay footprint and the wing
+# mount compete for the same block of hull.  Measured 2026-08-16
+# (tools/landing_gear_wing_clearance.py) before any of this was enforced:
+#
+#   fore rebate  x spar boss    45 / 105 mm^3, 2.26-3.14 mm radially
+#                               -> bearing wall 4.85 -> 2.59 mm over ~7 mm
+#   fore rebate  x servo pad    52 / 89 mm^3, 3.44-4.29 mm deep
+#   aft collar   x mortise      347 / 349 mm^3, 4.13 mm across the FULL
+#                               20.8 mm mortise height -- the wing-root tenon
+#                               would not enter at assembly
+#   fore collar  x spar bore    2.7 mm^3, 0.84 mm -- the spar rod would not
+#                               slide through
+#
+# Resolution: on the HULL the wing always wins.  The bay's cuts stop at wing
+# material and the bay's added material stops at wing voids.  The residual fit
+# error is taken on the PRINTED bay frame instead (a local relief pocket in
+# canonical_leg_r6_*.scad), because relieving a 5 mm printed flange is free and
+# thinning a spar bearing is not.
+#
+# Bay BOLT BORES are deliberately NOT trimmed: a blocked M3 bore is a hard
+# assembly failure, and the bores were verified to miss every nacelle-servo M3
+# pilot bore by construction (0.000 mm^3 overlap).  They clip the servo pad
+# edge by 7.7-14.5 mm^3, which is accepted and recorded here.
+
+
+def wing_keepout_positives(envelope_tm=None):
+    """Wing material the gear bay's cuts must not remove.  (label, solid).
+
+    Pass `envelope_tm` -- main() already has it.  These are DEEP features that
+    only become real where they meet the skin (main() adds them as
+    `positives ^ envelope`), so an unclipped solid runs far outboard of the
+    hull into open air.  Protecting the raw box measured 9-11 mm of phantom
+    proud material under the fore flanges; clipped, the real figure is what
+    the flange must actually clear.  Unclipped is for reporting only.
+    """
+    raw = [
+        ("spar boss port", x_cylinder(
+            WING_SPAR_Y, WING_SPAR_Z, PORT_INB, PORT_OUTB,
+            WING_SPAR_BOSS_OD / 2.0)),
+        ("spar boss stbd", x_cylinder(
+            WING_SPAR_Y, WING_SPAR_Z, STBD_OUTB, STBD_INB,
+            WING_SPAR_BOSS_OD / 2.0)),
+        ("servo pad port", box(
+            PORT_INB, PORT_OUTB,
+            NSVMT_Y - NSVMT_PAD_W / 2, NSVMT_Y + NSVMT_PAD_W / 2,
+            NSVMT_Z - NSVMT_PAD_H / 2, NSVMT_Z + NSVMT_PAD_H / 2)),
+        ("servo pad stbd", box(
+            STBD_OUTB, STBD_INB,
+            NSVMT_Y - NSVMT_PAD_W / 2, NSVMT_Y + NSVMT_PAD_W / 2,
+            NSVMT_Z - NSVMT_PAD_H / 2, NSVMT_Z + NSVMT_PAD_H / 2)),
+    ]
+    if envelope_tm is None:
+        return raw
+    env = to_man(envelope_tm)
+    clipped = []
+    for label, solid in raw:
+        got = from_man(to_man(solid) ^ env)
+        if len(got.faces):
+            clipped.append((label, got))
+    return clipped
+
+
+def wing_keepout_negatives():
+    """Wing voids the gear bay's added material must not intrude into."""
+    my0, my1 = WING_MORT_Y - MORT_W / 2, WING_MORT_Y + MORT_W / 2
+    mz0, mz1 = WING_ROOT_Z - MORT_H / 2, WING_ROOT_Z + MORT_H / 2
+    return [
+        ("spar bore", x_cylinder(
+            WING_SPAR_Y, WING_SPAR_Z, -270.0, -70.0, WING_SPAR_BORE_D / 2.0)),
+        ("mortise port", box(
+            PORT_INB + 1.0, PORT_OUTB - 10.0, my0, my1, mz0, mz1)),
+        ("mortise stbd", box(
+            STBD_OUTB + 8.0, STBD_INB - 1.0, my0, my1, mz0, mz1)),
+    ]
+
+
+def _subtract_all(solid, keepouts):
+    """solid minus every keep-out, as a trimesh.  Returns (mesh, removed_mm3).
+
+    Returns the ORIGINAL solid untouched when nothing intersects, so the
+    common case costs one AABB test per keep-out and no boolean at all.
+    """
+    smin, smax = solid.bounds
+    hits = [k for _lbl, k in keepouts
+            if not ((smin > k.bounds[1]).any() or (k.bounds[0] > smax).any())]
+    if not hits:
+        return solid, 0.0
+    acc = to_man(solid)
+    before = abs(solid.volume)
+    for k in hits:
+        acc = acc - to_man(k)
+    trimmed = from_man(acc)
+    if len(trimmed.faces) == 0:
+        return solid, 0.0
+    return trimmed, before - abs(trimmed.volume)
+
+
+def _plate_frame(hx, hy, hz, az_deg, station):
+    """(origin, e_x, e_y, e_z) of one bay's plate frame, in HULL coords.
 
     Mirrors the OpenSCAD construction exactly:
-        translate([BAY_BACK_X, 0, PLATE_Z0]) rotate([0, -BAY_CANT, 0])
-            translate([LG_BOLT_PLATE_X, yb, zb]) rotate([0, 90, 0]) cylinder(...)
-    OpenSCAD's rotate([0, a, 0]) maps x -> (cos a, 0, -sin a) and
-    z -> (sin a, 0, cos a); here a = -BAY_CANT.
+        translate([BAY_BACK_X, 0, LG_PLATE_Z0]) rotate([0, -BAY_CANT, 0])
+    then the corner's own rotate([0, 0, az]) and translate to the hip.
+    OpenSCAD's rotate([0, a, 0]) maps x -> (cos a, 0, -sin a).
     """
-    a = np.radians(-LG_BAY_CANT)
-    e_x = np.array([np.cos(a), 0.0, -np.sin(a)])   # plate outboard normal
-    e_y = np.array([0.0, 1.0, 0.0])
-    e_z = np.array([np.sin(a), 0.0, np.cos(a)])
-    p0 = np.array([LG_BAY_BACK_X, 0.0, LG_PLATE_Z0])
+    a = np.radians(-BAY_CANT)
+    ex_l = np.array([np.cos(a), 0.0, -np.sin(a)])
+    ey_l = np.array([0.0, 1.0, 0.0])
+    ez_l = np.array([np.sin(a), 0.0, np.cos(a)])
+    p0_l = np.array([BAY_STANDOFF[station] - BAY_PLATE_T, 0.0, LG_PLATE_Z0])
 
     t = np.radians(az_deg)
     rz = np.array([[np.cos(t), -np.sin(t), 0.0],
                    [np.sin(t), np.cos(t), 0.0],
                    [0.0, 0.0, 1.0]])
     hip = np.array([hx, hy, hz])
-
-    pts = []
-    for yb in LG_BOLT_YB:
-        for zb in LG_BOLT_ZB:
-            local = p0 + LG_BOLT_PLATE_X * e_x + yb * e_y + zb * e_z
-            pts.append(rz @ local + hip)
-    return pts, rz @ e_x
+    return rz @ p0_l + hip, rz @ ex_l, rz @ ey_l, rz @ ez_l
 
 
-def _skin_anchor(shell_tm, p, axis, radius):
-    """Slide a bolt point onto the OUTER SKIN along its own axis.
+def seat_offset(shell_tm, org, ex, ey, ez):
+    """Plate-frame x at which the real skin sits under a bay's flange footprint.
 
-    Returns the most outboard shell vertex inside the boss footprint, or None
-    if the axis misses the hull.  This is required because the bay plate datum
-    floats 9-30 mm off the flank (the plate is canted and the flank is doubly
-    curved), so a boss anchored at the plate-frame bolt point is almost
-    entirely outside the envelope and the clip trims it to a ~1.5 mm wafer
-    instead of the intended LG_BOSS_DEPTH of thickening.
+    BAY_STANDOFF was measured along the SS2.4a PANEL NORMAL, but the plate's own
+    axis e_x is 21-24 deg off that normal (see the yaw note above), so applying
+    the standoff along e_x overshoots and leaves the seat hanging outside the
+    hull -- it lands only 11-15% inside the envelope.  Measure it in the frame
+    that actually places the part instead of deriving it in a different one.
+
+    Returns (x_median, x_p10, x_p90).  The spread is the footprint's real
+    curvature: a FLAT seat can only be justified while it stays small, and it is
+    what LG-10.6's conforming patch removes.
     """
-    v = shell_tm.vertices - p
-    near = np.abs(v).max(axis=1) < 60.0
-    if not near.any():
+    v = shell_tm.vertices - org
+    u = v @ ey
+    w = v @ ez
+    x = v @ ex
+    zb1 = BAY_PLATE_ZB0 + BAY_PLATE_L
+    # inside the trapezoid, with the half-width interpolated along its run
+    frac = np.clip((w - BAY_PLATE_ZB0) / BAY_PLATE_L, 0.0, 1.0)
+    half = (BAY_PLATE_WB + frac * (BAY_PLATE_W - BAY_PLATE_WB)) / 2.0
+    sel = (w > BAY_PLATE_ZB0) & (w < zb1) & (np.abs(u) < half) & (np.abs(x) < 60.0)
+    if sel.sum() < 20:
         return None
-    v = v[near]
-    along = v @ axis
-    radial = np.linalg.norm(v - np.outer(along, axis), axis=1)
-    sel = radial < radius
-    if not sel.any():
-        return None
-    return p + axis * float(along[sel].max())
+    xs = x[sel]
+    # the OUTBOARD skin is the far side of the distribution; the near cluster is
+    # the opposite wall of the shell
+    outer = xs[xs > np.median(xs)]
+    return (float(np.median(outer)), float(np.percentile(outer, 10)),
+            float(np.percentile(outer, 90)))
 
 
-# DISABLED pending LG-10 rework (2026-08-09).  The bolt stations below were
-# derived against the bare cargo FLANK, but the real mounting face is the
-# ANGLED TRAPEZOIDAL FLAT of the landing-gear opening in the sponson
-# (docs/LANDING_GEAR_ANALYSIS.md SS2.4a).  Bolts on the flank measure
-# 5.6-64.1 deg off the local surface normal and the bosses add almost no
-# material.  Left in the tree because the machinery is correct and only the
-# stations/axes are wrong -- but OFF by default so a routine merge run cannot
-# inject misplaced geometry into the published cargo shell.
-LG_BAY_ENABLED = False
+def station_seat_data(shell_tm):
+    """Measure every bay's seat, and reduce it to ONE datum per station.
+
+    Returns ``(seats, station_x0)``:
+      * ``seats[label]``  -> the raw ``seat_offset()`` triple for that corner
+        (median, p10, p90) in that corner's own plate frame.  Corners with no
+        skin under the flange footprint are absent.
+      * ``station_x0[station]`` -> the plate-frame x the hull's seat face and
+        flange-rebate floor are cut to, for BOTH corners of that station: the
+        p10 of the DEEPER of the two.
+
+    Single-sourced here because two things must agree on it and they live in
+    different files: this module cuts the hull to it, and
+    ``canonical_leg_r6_*.scad`` places the printed bay against it via
+    ``BAY_STANDOFF``.  ``tools/landing_gear_bay_seat_fit.py`` gates the pair.
+    The required SCAD value is ``BAY_STANDOFF[station] + station_x0[station]``.
+    """
+    seats = {}
+    for label, hx, hy, hz, az, station in LG_CORNERS:
+        got = seat_offset(shell_tm, *_plate_frame(hx, hy, hz, az, station))
+        if got is not None:
+            seats[label] = got
+    station_x0 = {}
+    for label, _hx, _hy, _hz, _az, station in LG_CORNERS:
+        if label in seats:
+            lo = seats[label][1]
+            station_x0[station] = min(station_x0.get(station, lo), lo)
+    return seats, station_x0
 
 
-def lg_bay_features(shell_tm):
-    """Return (positives, negatives, note) for the four landing-gear bays."""
+def _plate_trap(org, ex, ey, ez, w_bot, w_top, zb0, zb1, x0, x1):
+    """Trapezoidal prism in a bay's plate frame (widths along ey, run along ez,
+    extruded x0..x1 along ex)."""
+    quad = [(-w_bot / 2.0, zb0), (w_bot / 2.0, zb0),
+            (w_top / 2.0, zb1), (-w_top / 2.0, zb1)]
+    pts = [org + ey * u + ez * v + ex * xx
+           for xx in (x0, x1) for u, v in quad]
+    return trimesh.convex.convex_hull(trimesh.PointCloud(np.array(pts)))
+
+
+def lg_bay_features(shell_tm, envelope_tm=None):
+    """Return (positives, negatives, note) for the four landing-gear bays.
+
+    positives: one seat collar per corner, sunk inboard of the flange rebate.
+               Envelope-clipped by main(), so it conforms to the real wall.
+    negatives: the aperture (through), the flange rebate (so the frame sits
+               flush with the skin), and 4 M3 bores per corner.
+
+    `envelope_tm` clips the LG-10.4 wing keep-outs to material that really
+    exists.  Without it the deep spar-boss/servo-pad solids reach far outboard
+    of the skin and would protect open air, leaving the flange footprint
+    9-11 mm proud instead of the true figure.
+    """
     if not LG_BAY_ENABLED:
-        return [], [], ("landing-gear bay bosses DISABLED "
-                        "(LG-10 rework: wrong mounting face, see SS2.4a)")
-    pos, neg, missed = [], [], []
-    for label, hx, hy, hz, az in LG_CORNERS:
-        pts, axis = _lg_bolt_frame(hx, hy, hz, az)
-        for i, p in enumerate(pts):
-            anchor = _skin_anchor(shell_tm, p, axis, LG_BOSS_R)
-            if anchor is None:
-                missed.append(f"{label}#{i}")
-                continue
-            # Boss: from LG_BOSS_DEPTH inboard of the skin, out past it; the
-            # envelope clip trims the outboard end back to the real surface.
-            pos.append(axis_cylinder(anchor, axis, -LG_BOSS_DEPTH, 8.0,
-                                     LG_BOSS_R))
-            # Bore: through boss + wall, generous either side.
-            neg.append(axis_cylinder(anchor, axis, -LG_BOSS_DEPTH - 6.0, 10.0,
-                                     LG_M3_D / 2.0))
-    note = f"{len(pos)} landing-gear bay bolt bosses (4 x 4 corners)"
-    if missed:
-        note += f"  [WARN missed skin: {', '.join(missed)}]"
+        return [], [], "landing-gear bays DISABLED"
+    keep_pos = wing_keepout_positives(envelope_tm)
+    keep_neg = wing_keepout_negatives()
+    pos, neg, report = [], [], []
+
+    # --- LG-10.6: ONE seat datum per station -------------------------------
+    #
+    # Seat the frame on the MEASURED skin, not on a standoff carried over from
+    # a different frame.  Seat at the MOST INBOARD decile of the skin over the
+    # footprint, not at its median: the footprint is doubly curved (10.2-10.8
+    # mm of relief across it, more than the seat's own 8 mm depth), so seating
+    # on the median leaves most of the collar hanging outboard of the skin --
+    # it kept only 11-17% of its volume inside the envelope.  Seating on the
+    # inboard decile buries the collar and lets the flange rebate cut away the
+    # skin that stands proud, which is the "hollow the sponson for the
+    # attachment" half of LG-10.4.
+    #
+    # The datum is taken PER STATION (the deepest of that station's two
+    # corners), not per corner.  Per-corner seating gave the two fore pockets
+    # floors 1.14 mm apart, and the printed bay is ONE part per station -- so
+    # it could seat on at most one of them and the other kept a gap.  Cutting
+    # both fore pockets to the deeper of the two costs 1.14 mm of extra hull
+    # relief at fore-port (the rebate already cuts ~15 mm at the proud corner)
+    # and buys a bay that seats on both sides.  This is what keeps the SS11.4
+    # shared-BOM claim true: fore part + aft part, each a mirrored pair.
+    seats, station_x0 = station_seat_data(shell_tm)
+    for label, _hx, _hy, _hz, _az, _station in LG_CORNERS:
+        if label not in seats:
+            report.append(f"{label}: NO SKIN under the flange footprint")
+    for station, x0 in sorted(station_x0.items()):
+        report.append(
+            f"{station} station datum x0 {x0:+.2f} mm  ->  "
+            f"canonical_leg_r6_*.scad BAY_STANDOFF[{station}] must be "
+            f"{BAY_STANDOFF[station] + x0:.2f} "
+            f"(declared {BAY_STANDOFF[station]:.1f})")
+
+    for label, hx, hy, hz, az, station in LG_CORNERS:
+        if label not in seats:
+            continue
+        org, ex, ey, ez = _plate_frame(hx, hy, hz, az, station)
+        zb1 = BAY_PLATE_ZB0 + BAY_PLATE_L
+
+        x_med, lo, hi = seats[label]
+        x0 = station_x0[station]
+        org = org + ex * x0
+        report.append(f"{label} {station}: seat x {x0:+.1f} mm "
+                      f"(median {x_med:+.1f}), footprint relief {hi - lo:.1f} mm, "
+                      f"rebate cuts {hi - x0 + BAY_PLATE_T:.1f} mm at the "
+                      f"proud corner, over-relief {lo - x0:.2f} mm")
+
+        # Seat collar: the bolts' bearing material, inboard of the flange.
+        # LG-10.4: trimmed clear of the spar bore and the wing-root mortises,
+        # so the collar can never block the spar rod or the root tenon.
+        collar, cut_v = _subtract_all(
+            _plate_trap(org, ex, ey, ez,
+                        BAY_PLATE_WB, BAY_PLATE_W,
+                        BAY_PLATE_ZB0, zb1,
+                        -LG_SEAT_D, 0.0),
+            keep_neg)
+        pos.append(collar)
+        if cut_v > 0.0:
+            report.append(f"{label}: collar relieved {cut_v:.1f} mm^3 "
+                          f"around the wing void")
+
+        # Aperture, straight through -- the liner runs COWL_H inboard.
+        # LG-10.4: stops at wing material rather than eating into it.
+        aper, aper_v = _subtract_all(
+            _plate_trap(org, ex, ey, ez,
+                        BAY_APER_W_BOT + 2 * LG_FIT_CLR,
+                        BAY_APER_W_TOP + 2 * LG_FIT_CLR,
+                        BAY_APER_ZB0 - LG_FIT_CLR, zb1 + LG_FIT_CLR,
+                        -(COWL_H + 6.0), 12.0),
+            keep_pos)
+        neg.append(aper)
+
+        # Flange rebate: BAY_PLATE_T deep, so the frame finishes flush.
+        # LG-10.4: likewise stops at wing material.  Where it does, the skin
+        # is left proud and the PRINTED frame carries the relief instead.
+        rebate, reb_v = _subtract_all(
+            _plate_trap(org, ex, ey, ez,
+                        BAY_PLATE_WB + 2 * LG_FIT_CLR,
+                        BAY_PLATE_W + 2 * LG_FIT_CLR,
+                        BAY_PLATE_ZB0 - LG_FIT_CLR, zb1 + LG_FIT_CLR,
+                        0.0, 12.0),
+            keep_pos)
+        neg.append(rebate)
+        if aper_v + reb_v > 0.0:
+            report.append(f"{label}: {aper_v + reb_v:.1f} mm^3 of wing "
+                          f"material protected from the bay cuts")
+
+        # 4x M3, on the flange centreline, following the trapezoid.
+        for i in (0, 1):
+            for s in (-1.0, 1.0):
+                pt = (org + ey * (s * BAY_BOLT_YB[i])
+                      + ez * BAY_BOLT_ZB[i])
+                neg.append(axis_cylinder(pt, ex, -LG_SEAT_D - 8.0, 12.0,
+                                         LG_M3_D / 2.0))
+
+    note = (f"{len(pos)} bay seat collars + {len(neg)} cuts "
+            f"(aperture, flange rebate, 16 M3 bores)")
+    for line in report:
+        note += f"\n        {line}"
     return pos, neg, note
 
 
@@ -448,7 +790,7 @@ def bake(mesh):
     return trimesh.Trimesh(vertices=v, faces=mesh.faces, process=False)
 
 
-def build_negatives(shell_tm):
+def build_negatives(shell_tm, envelope_tm=None):
     """Return (cutters, notes)."""
     cutters, notes = [], []
 
@@ -494,31 +836,11 @@ def build_negatives(shell_tm):
     notes.append("ring pocket Y=30")
 
     # Wing spar bore (full lateral span) + 2 root mortises (through each wall).
-    cutters.append(
-        x_cylinder(WING_SPAR_Y, WING_ROOT_Z, -270.0, -70.0, WING_SPAR_BORE_D / 2.0)
-    )
-    notes.append("wing spar bore")
-    cutters.append(
-        box(
-            PORT_INB + 1.0,
-            PORT_OUTB - 10.0,
-            WING_MORT_Y - MORT_W / 2,
-            WING_MORT_Y + MORT_W / 2,
-            WING_ROOT_Z - MORT_H / 2,
-            WING_ROOT_Z + MORT_H / 2,
-        )
-    )
-    cutters.append(
-        box(
-            STBD_OUTB + 8.0,
-            STBD_INB - 1.0,
-            WING_MORT_Y - MORT_W / 2,
-            WING_MORT_Y + MORT_W / 2,
-            WING_ROOT_Z - MORT_H / 2,
-            WING_ROOT_Z + MORT_H / 2,
-        )
-    )
-    notes.append("wing mortises (port + stbd)")
+    # Built by wing_keepout_negatives() so the solids the gear bay is trimmed
+    # against are the SAME solids the hull is actually cut with (LG-10.4).
+    for label, solid in wing_keepout_negatives():
+        cutters.append(solid)
+        notes.append(f"wing {label}")
 
     # Nacelle-servo M3 heat-set pilot bores (into the cavity face of each pad).
     for x_in, x_out in ((PORT_INB, PORT_INB + 8.0), (STBD_INB, STBD_INB - 8.0)):
@@ -535,14 +857,14 @@ def build_negatives(shell_tm):
                 )
     notes.append("servo M3 pilot bores")
 
-    _lg_pos, lg_neg, _n = lg_bay_features(shell_tm)
+    _lg_pos, lg_neg, lg_note = lg_bay_features(shell_tm, envelope_tm)
     cutters.extend(lg_neg)
-    notes.append(f"{len(lg_neg)} landing-gear bay M3 bores")
+    notes.append(lg_note)
 
     return cutters, notes
 
 
-def build_positives(shell_tm):
+def build_positives(shell_tm, envelope_tm=None):
     """Return (raw deep features, notes).  Clipped to the envelope in main()."""
     feats, notes = [], []
 
@@ -551,40 +873,13 @@ def build_positives(shell_tm):
             feats.append(hinge._block(side, station))
     notes.append("4 hinge retention blocks")
 
-    # Wing-spar bearing bosses (Ø22, coaxial with the spar; deep, clipped).
-    feats.append(
-        x_cylinder(
-            WING_SPAR_Y, WING_ROOT_Z, PORT_INB, PORT_OUTB, WING_SPAR_BOSS_OD / 2.0
-        )
-    )
-    feats.append(
-        x_cylinder(
-            WING_SPAR_Y, WING_ROOT_Z, STBD_OUTB, STBD_INB, WING_SPAR_BOSS_OD / 2.0
-        )
-    )
+    # Wing-spar bearing bosses (Ø22, coaxial with the spar) and the two
+    # nacelle-servo mount pads -- deep boxes/cylinders, envelope-clipped.
+    # Built by wing_keepout_positives() so the solids the gear bay is trimmed
+    # against are the SAME solids the hull actually carries (LG-10.4).
+    for _label, solid in wing_keepout_positives():  # raw: main() clips
+        feats.append(solid)
     notes.append("2 wing-spar bearing bosses")
-
-    # Nacelle-servo mount pads (deep box, clipped).
-    feats.append(
-        box(
-            PORT_INB,
-            PORT_OUTB,
-            NSVMT_Y - NSVMT_PAD_W / 2,
-            NSVMT_Y + NSVMT_PAD_W / 2,
-            NSVMT_Z - NSVMT_PAD_H / 2,
-            NSVMT_Z + NSVMT_PAD_H / 2,
-        )
-    )
-    feats.append(
-        box(
-            STBD_OUTB,
-            STBD_INB,
-            NSVMT_Y - NSVMT_PAD_W / 2,
-            NSVMT_Y + NSVMT_PAD_W / 2,
-            NSVMT_Z - NSVMT_PAD_H / 2,
-            NSVMT_Z + NSVMT_PAD_H / 2,
-        )
-    )
     notes.append("2 nacelle-servo mount pads")
 
     # Inara avionics-bay standoff bosses (dorsal port, deep Z-cyl, clipped).
@@ -605,7 +900,7 @@ def build_positives(shell_tm):
             n += 1
     notes.append(f"Inara avionics bosses ({n})")
 
-    lg_pos, _lg_neg, lg_note = lg_bay_features(shell_tm)
+    lg_pos, _lg_neg, lg_note = lg_bay_features(shell_tm, envelope_tm)
     feats.extend(lg_pos)
     notes.append(lg_note)
 
@@ -701,6 +996,52 @@ def verify(mesh):
     return ok
 
 
+def close_zero_area_slits(mesh, flat_mm=SLIT_FLAT_MM):
+    """Close boundary loops that enclose no area, and report how many.
+
+    manifold3d can leave a T-junction on a nearly-coplanar boolean seam: the
+    seam vertex splits one edge of a neighbouring triangle, that triangle
+    strips out as degenerate, and what is left is a SLIT -- a boundary loop
+    whose vertices are exactly collinear.  Geometrically the surface is still
+    closed (the slit has zero width); topologically it is a hole, and
+    `tools/validate_stls.py` fails it.
+
+    `trimesh.repair.fill_holes` cannot close one, because the triangle it would
+    have to add has zero area and is rejected.  Collapsing the loop to a single
+    vertex does close it, and removes no material: the faces that vanish are
+    exactly the zero-area ones.
+
+    Only loops flatter than `flat_mm` are touched -- measured as the SECOND
+    singular value of the loop's vertices, i.e. its width away from the
+    best-fit line.  A real hole has width and is left open, so it still fails
+    loudly in verify() instead of being silently papered over.
+    """
+    uniq, cnt = np.unique(mesh.edges_sorted, axis=0, return_counts=True)
+    bnd = uniq[cnt == 1]
+    if not len(bnd):
+        return mesh, 0
+    remap = np.arange(len(mesh.vertices))
+    closed = 0
+    for vids in trimesh.graph.connected_components(bnd):
+        if len(vids) < 3:
+            continue
+        pts = mesh.vertices[vids]
+        # singular values of the centred loop: s[1] is its off-line width
+        sv = np.linalg.svd(pts - pts.mean(axis=0), compute_uv=False)
+        if len(sv) > 1 and sv[1] > flat_mm:
+            continue
+        remap[vids] = vids[0]
+        closed += 1
+    if not closed:
+        return mesh, 0
+    out = trimesh.Trimesh(vertices=mesh.vertices.copy(),
+                          faces=remap[mesh.faces], process=False)
+    out.update_faces(out.nondegenerate_faces())
+    out.update_faces(out.unique_faces())
+    out.remove_unreferenced_vertices()
+    return out, closed
+
+
 def finalize_watertight(mesh):
     """Weld float32-coincident boolean-seam vertices, strip the resulting
     degenerate/duplicate faces, and keep the single largest body — so the mesh
@@ -736,6 +1077,12 @@ def finalize_watertight(mesh):
             )
         mesh = big
     # Insurance: close any residual small holes so the result is a true 2-manifold.
+    # Zero-area slits FIRST -- fill_holes cannot close those (see the helper),
+    # and leaving one open fails the CI watertight gate.
+    if not mesh.is_watertight:
+        mesh, n_slit = close_zero_area_slits(mesh)
+        if n_slit:
+            print(f"  finalize: closed {n_slit} zero-area collinear slit(s)")
     if not mesh.is_watertight:
         trimesh.repair.fill_holes(mesh)
     trimesh.repair.fix_normals(mesh)
@@ -801,8 +1148,8 @@ def main():
         f"X {eb[0][0]:.1f}..{eb[1][0]:.1f}"
     )
 
-    negs, nnotes = build_negatives(shell_tm)
-    poss, pnotes = build_positives(shell_tm)
+    negs, nnotes = build_negatives(shell_tm, envelope_tm)
+    poss, pnotes = build_positives(shell_tm, envelope_tm)
     print(f"\n  negatives ({len(negs)} cutters):")
     for n in nnotes:
         print(f"    - {n}")
