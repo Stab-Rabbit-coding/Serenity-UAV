@@ -172,11 +172,19 @@ def main():
     # A constant-mm station is parallel to the LE only while the LE is
     # straight; with sweep it would rake and stop being perpendicular to the
     # aircraft centreline, which the spar must be.
-    print(f"  WING_SWEEP_LE = {sweep:.1f} mm -> "
-          f"{'straight LE: constant-mm station is perpendicular to centreline'
-             if sweep == 0.0 else
-             'SWEPT LE: a constant-mm station is NOT perpendicular to the '
-             'centreline -- resolve before trusting these numbers'}")
+    # The conditional is hoisted OUT of the f-string deliberately.  A
+    # replacement field spanning physical lines inside a single-quoted
+    # f-string is PEP 701, i.e. Python 3.12+; CI lints on 3.11, where the
+    # tokenizer ends the literal at the newline and reports
+    # "unterminated string literal" (E999 / mypy [syntax]) -- which aborts the
+    # whole lint run before any other file is checked.  Keep it hoisted.
+    sweep_note = (
+        "straight LE: constant-mm station is perpendicular to centreline"
+        if sweep == 0.0 else
+        "SWEPT LE: a constant-mm station is NOT perpendicular to the "
+        "centreline -- resolve before trusting these numbers"
+    )
+    print(f"  WING_SWEEP_LE = {sweep:.1f} mm -> {sweep_note}")
     if wing_bore != args.bore:
         print(f"  NOTE wing SPAR_BORE_OD is D{wing_bore} "
               f"(rotating spar); checking D{args.bore} instead")
