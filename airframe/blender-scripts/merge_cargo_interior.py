@@ -326,9 +326,9 @@ STBD_OUTB, STBD_INB = -278.0, -240.0  # stbd wall bracket (skin ≈ −250..−2
 # Nacelle-servo mount pads.  The servo DRIVES the rotating tilt-spar (horn ->
 # pushrod -> spar crank), so its mount is positioned RELATIVE TO THE SPAR, not
 # in absolute hull coordinates: move the spar and the servo must move with it
-# or the linkage throw is detuned and the pushrod needs re-sizing
-# (airframe/wings-nacelles/TODO.md SS1.1.3, "Tune servo->spar horn/pushrod
-# linkage throw").  Rev S1b makes that dependency explicit in the code, because
+# or the linkage throw is detuned and the pushrod needs re-sizing (root WBS.md
+# SS1.1.3 -- Nacelles, "Tune servo->spar horn/pushrod linkage throw
+# (-5..140 deg)").  Rev S1b makes that dependency explicit in the code, because
 # holding NSVMT_Y/Z absolute through the spar move silently broke it.
 #
 # The offsets below are exactly those in force before the move
