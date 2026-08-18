@@ -121,8 +121,22 @@ KNEE   = [59.0, 0, -42.6];      // knee disc centre (thigh 72.8 mm @ 35.8 deg fr
                                 // recess is taken in the thigh and 6 in the shin,
                                 // which keeps the shin SHORT per [REF-CAD-002]
                                 // instead of raking it out to reach the foot.
-ANKLE  = [80.0, 0, -64.5];     // ankle disc centre (shin 30.3 mm @ 43.8 deg lean).
+ANKLE  = [80.0, 0, -58.1];     // ankle disc centre (shin 26.1 mm @ 53.6 deg lean).
                                // X = R_H by construction: the foot spigot sits here.
+                               // Z was -64.5 until LG-10.8 (2026-08-17).  The
+                               // ankle-to-ground stack is FIXED by the shared
+                               // foot: ANKLE_DISC_D/2 + FOOT_HUB_H = 18 mm, so
+                               // ANKLE[2] = GROUND_Z + 18.  At -64.5 that stack
+                               // was 11.6 mm, i.e. 6.4 mm short, and the disc
+                               // gouged the hub while the spigot punched 2.9 mm
+                               // out through the sole -- 743.9 mm^3 of leg
+                               // inside the foot, so the corner could not be
+                               // assembled and the aircraft would have stood on
+                               // the PETG spigot tip.  GROUND_Z is pinned by the
+                               // 1.5 in belly-clearance spec, so the ANKLE moved,
+                               // not the ground.  R_H (X) is untouched, which is
+                               // what keeps the LG-17 load schedule valid.
+                               // The 3.0in variant already satisfied the rule.
 GROUND_Z = -76.1;            // foot sole plane (leg-local)
 R_H    = 80.0;                // horizontal hip->foot moment arm.  41.9 canonical
                               // -> 56.9 (LG-10.2 recess) -> 80.0 (canonical foot
@@ -270,6 +284,20 @@ FOOT_M25_D   = 2.8;         // M2.5 cross-bolt clearance
 TREAD_N      = 3;           // tread ribs per pad (canonical ribbed sole)
 TREAD_D      = 1.5;         // tread rib depth
 
+// Foot-joint stack-up, leg-local (LG-10.8, 2026-08-17).  The joint closes on
+// the foot's HUB TOP FACE against the ankle disc rim -- the spigot only
+// indexes the foot at 90 deg steps, it does not carry the stance load -- so
+// the spigot must stop SHORT of the socket floor.  The old hardcoded cube
+// (`ANKLE[2] - 9.75`, 9.5 tall) bottomed out on that floor instead: 0.6 mm on
+// the 3.0in leg and 7.0 mm on the 1.5in one.  Verify with
+// tools/landing_gear_foot_stance.py, which gates both rules below.
+FOOT_SOCK_FLOOR = GROUND_Z + FOOT_HUB_H - FOOT_SPIG_H + 0.1;  // socket floor
+SPIG_FLOOR_CLR  = 0.4;      // spigot tip clearance above that floor
+SPIG_Z0         = FOOT_SOCK_FLOOR + SPIG_FLOOR_CLR;
+// The disc rim must LAND on the hub top face, never inside it.
+assert(abs((ANKLE[2] - ANKLE_DISC_D / 2) - (GROUND_Z + FOOT_HUB_H)) < 0.05,
+       "ankle disc rim must meet the foot hub top face: set ANKLE[2] = GROUND_Z + ANKLE_DISC_D/2 + FOOT_HUB_H");
+
 // Bay plate.  LG-10 (2026-08-09): the original surface-mount assumption was
 // measured against the baked cargo skin and does NOT hold -- the back face
 // floated 14-17 mm outboard of the hull at hip height, BAY_CANT leaned the
@@ -277,14 +305,22 @@ TREAD_D      = 1.5;         // tread rib depth
 // and the flank is doubly curved with 15-42 mm of deviation across the
 // footprint.  See tools/landing_gear_bay_pad_fit.py for the measurements.
 //
-// The back face is therefore CONFORMING: the plate is cut against a local
-// hull-surface patch (BAY_STATION selects fore/aft), so it seats on the real
-// skin.  Because the fore and aft flanks are different surfaces this makes the
-// bay TWO geometries, each a mirrored pair -- not one shared part.
-BAY_STATION  = "aft";       // "fore" | "aft" -- selects the hull patch AND
-                            // the back-face datum (they differ by 8.7 mm)
-BAY_CONFORM  = false;       // true once tools/build_bay_hull_patches.py has run
-BAY_PATCH_DIR = "../../../stls/fuselage/landing-gear";
+// The back face is FLAT, and stays flat -- LG-10.6, 2026-08-17.  It was going
+// to be CONFORMING (cut against a local hull-surface patch), which is the
+// right answer for a plate bolted to a raw compound-curved flank; but since
+// LG-10.3/LG-10.4 the hull no longer offers one.
+// merge_cargo_interior.lg_bay_features() cuts a flange REBATE -- a flat
+// trapezoidal pocket, BAY_PLATE_T deep and 12 mm into the skin -- with a seat
+// collar under it, and that pocket is deep enough to shave the whole
+// footprint (tools/landing_gear_wing_clearance.py --proud reports "none").
+// The hull therefore presents a FLAT seat, normal to the bolt axis by
+// construction.  Cutting the printed part to a curve it no longer meets would
+// put the mismatch straight back, and would split the bay into four unshared
+// geometries for nothing -- one part per station still fits, so the SS11.4
+// shared-BOM claim holds.  BAY_CONFORM and its patch generator are retired;
+// what the two files must now agree on is the DATUM, gated by
+// tools/landing_gear_bay_seat_fit.py.
+BAY_STATION  = "aft";       // "fore" | "aft" -- selects the back-face datum
 
 BAY_PLATE_T  = 5.0;         // frame thickness -- MUST be assigned before
                             // BAY_BACK_X below, which reads it (OpenSCAD
@@ -292,18 +328,26 @@ BAY_PLATE_T  = 5.0;         // frame thickness -- MUST be assigned before
                             // a forward reference silently yields undef
                             // and the whole part renders displaced).
 
-// Back-face datum, PER STATION.  tools/landing_gear_bay_station_fit.py measures
-// the outboard skin along the SS2.4a panel normal at each canonical hip:
-// (measured AFTER the LG-10.2 15 mm hip recess, which is what the frame has to
-// seat against):
-//   fore  +12.6 mm from the hip        aft  +5.4 mm from the hip
-// (port/stbd mirror to 2.3 mm fore, 0.9 mm aft -- so the split is fore/aft, not
-// left/right; each value is the mean of its two sides).  The frame's OUTER face
-// must land on that skin, and the outer face sits BAY_PLATE_T out from the
-// datum, so datum = standoff - thickness.  The old shared -8.0 seated at
-// neither station.  Pre-recess the same measurement read +1.17 / -7.53 mm --
-// i.e. the hips sat ON the skin, which is why the bay could not close.
-BAY_STANDOFF = (BAY_STATION == "fore") ? 12.6 : 5.4;
+// Back-face datum, PER STATION.  This is a CONTRACT with
+// merge_cargo_interior.py, which cuts the hull pocket this frame drops into:
+//     BAY_STANDOFF[s] = mci.BAY_STANDOFF[s] + mci.station_seat_data()[1][s]
+// Gate it with tools/landing_gear_bay_seat_fit.py after ANY hull re-merge.
+//
+// The previous 12.6 / 5.4 came from tools/landing_gear_bay_station_fit.py,
+// which measures the outboard skin along the SS2.4a panel NORMAL.  The plate's
+// own e_x is 21-24 deg off that normal (the LG-10.3 yaw), so a standoff
+// measured in one frame and applied in the other overshoots: it left the frame
+// floating 3.5-7.7 mm outboard of the pocket floor the merge had actually cut,
+// and every M3 would have clamped across an air gap.  Re-measured 2026-08-17
+// in the frame that places the part (merge_cargo_interior.seat_offset), the
+// station datums are x0 -7.69 fore / -3.55 aft, giving:
+//   fore  +4.91 mm from the hip        aft  +1.85 mm from the hip
+// ONE datum per station, taken at the deeper of that station's two corners --
+// the printed bay is one part per station, so it can only seat on one floor.
+// The shallower corner (fore-port, 1.14 mm) takes a feeler shim at assembly;
+// aft is 0.02 mm, i.e. identical.  The frame's OUTER face lands on the seat
+// and sits BAY_PLATE_T out from the datum, so datum = standoff - thickness.
+BAY_STANDOFF = (BAY_STATION == "fore") ? 4.91 : 1.85;
 BAY_BACK_X   = BAY_STANDOFF - BAY_PLATE_T;
 BAY_CANT     = -11.5;       // deg; NEGATIVE = leans outboard at the top, which
                             // is what the real cargo flank does (was +22)
@@ -496,12 +540,21 @@ module bowed_wire(d, L, h, e = 0) {
     ) [for (j = [0 : sides - 1]) let (ang = 360 * j / sides)
         path[i] + r * (u * cos(ang) + v * sin(ang))]];
     points = [for (i = [0 : n]) for (j = [0 : sides - 1]) rings[i][j]];
-    side_faces = concat([for (i = [0 : n - 1]) for (j = [0 : sides - 1]) let (
+    // NOTE the `each`: this comprehension yields TWO faces per quad, and they
+    // must be spliced into one flat face list.  This variant used to wrap the
+    // pair-yielding comprehension in concat(), which with a single list
+    // argument is a no-op -- side_faces came out as a list of PAIRS, the
+    // polyhedron had no side wall at all, and every wire on the 1.5in leg
+    // rendered as 20 cap faces of zero volume ("PolySet has degenerate
+    // polygons").  The 3.0in variant always had the `each` form, which is why
+    // the shared lg_r6_common_*_wire_*.stl looked right: they were exported
+    // from the OTHER file.  Fixed 2026-08-17 during the LG-10 close-out.
+    side_faces = [for (i = [0 : n - 1]) for (j = [0 : sides - 1]) let (
         a = i * sides + j,
-        b2 = i * sides + (j + 1) % sides,
+        b = i * sides + (j + 1) % sides,
         c = (i + 1) * sides + (j + 1) % sides,
         d2 = (i + 1) * sides + j
-    ) [[a, c, b2], [a, d2, c]]]);
+    ) each [[a, c, b], [a, d2, c]]];
     faces = concat(side_faces,
                    [[for (j = [0 : sides - 1]) j]],
                    [[for (j = [sides - 1 : -1 : 0]) n * sides + j]]);
@@ -631,9 +684,11 @@ module leg_frame() {
             for (yf = [-1, 1])
                 ycyl(ANKLE + [0, yf * (ANKLE_DISC_T / 2 + ANKLE_HUB_H / 2), 0],
                      ANKLE_HUB_H, ANKLE_HUB_D);
-            // Square foot spigot: ankle disc rim down into the foot socket
-            translate([ANKLE[0], ANKLE[1], ANKLE[2] - 9.75])
-                cube([FOOT_SPIG, FOOT_SPIG, 9.5], center = true);
+            // Square foot spigot: ankle disc rim down into the foot socket,
+            // stopping SPIG_FLOOR_CLR short of the socket floor (LG-10.8).
+            translate([ANKLE[0], ANKLE[1], (SPIG_Z0 + ANKLE[2]) / 2])
+                cube([FOOT_SPIG, FOOT_SPIG, ANKLE[2] - SPIG_Z0],
+                     center = true);
         }
         // LG-18: axial bore through each main thigh cylinder.  Starts past the
         // root lug blend (which carries the hip moment into the cluster) and
@@ -946,13 +1001,10 @@ module bay() {
         // gouged the plate open rather than notching the rim.  Rim-vs-thigh
         // clearance is verified numerically instead -- see
         // tools/landing_gear_cowl_clearance.py.
-        // Conforming back face (LG-10).  The plate is cut against a local
-        // hull-surface patch so it seats on the real, doubly-curved flank.
-        // Patches are generated by tools/build_bay_hull_patches.py; until they
-        // exist the part still renders as the nominal flat-backed plate.
-        if (BAY_CONFORM)
-            import(str(BAY_PATCH_DIR, "/lg_r6_hull_patch_", BAY_STATION,
-                       ".stl"), convexity = 6);
+        // NOTE: no conforming back-face cut here.  LG-10.6 retired it -- the
+        // hull's flange rebate already presents a flat seat, so the flat back
+        // face IS the conforming one.  See the BAY_STANDOFF datum note above;
+        // tools/landing_gear_bay_seat_fit.py proves the pair still meet.
     }
 }
 

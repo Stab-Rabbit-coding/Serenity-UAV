@@ -129,6 +129,12 @@ BAKE_T = np.array([-274.4000100, -282.8000440, 0.0])
 
 WALL_MM = 2.0  # 2 mm foam-fill wall (Blender hollowing pitch / SCAD)
 
+# A boundary loop flatter than this (width away from its best-fit line) is a
+# zero-area boolean-seam slit, not a hole -- see close_zero_area_slits().
+# 1e-3 mm is a micron: four orders below the 0.1 mm print resolution, so no
+# real feature can hide under it.
+SLIT_FLAT_MM = 1e-3
+
 # CF-PETG mass reporting: as-printed (4 perimeters + ≥40% infill) ~1.05 g/cm^3;
 # fully dense CF-PETG ~1.28 g/cm^3.  These bracket the true printed mass.
 RHO_PRINT = 1.05e-3  # g/mm^3
@@ -611,6 +617,36 @@ def seat_offset(shell_tm, org, ex, ey, ez):
             float(np.percentile(outer, 90)))
 
 
+def station_seat_data(shell_tm):
+    """Measure every bay's seat, and reduce it to ONE datum per station.
+
+    Returns ``(seats, station_x0)``:
+      * ``seats[label]``  -> the raw ``seat_offset()`` triple for that corner
+        (median, p10, p90) in that corner's own plate frame.  Corners with no
+        skin under the flange footprint are absent.
+      * ``station_x0[station]`` -> the plate-frame x the hull's seat face and
+        flange-rebate floor are cut to, for BOTH corners of that station: the
+        p10 of the DEEPER of the two.
+
+    Single-sourced here because two things must agree on it and they live in
+    different files: this module cuts the hull to it, and
+    ``canonical_leg_r6_*.scad`` places the printed bay against it via
+    ``BAY_STANDOFF``.  ``tools/landing_gear_bay_seat_fit.py`` gates the pair.
+    The required SCAD value is ``BAY_STANDOFF[station] + station_x0[station]``.
+    """
+    seats = {}
+    for label, hx, hy, hz, az, station in LG_CORNERS:
+        got = seat_offset(shell_tm, *_plate_frame(hx, hy, hz, az, station))
+        if got is not None:
+            seats[label] = got
+    station_x0 = {}
+    for label, _hx, _hy, _hz, _az, station in LG_CORNERS:
+        if label in seats:
+            lo = seats[label][1]
+            station_x0[station] = min(station_x0.get(station, lo), lo)
+    return seats, station_x0
+
+
 def _plate_trap(org, ex, ey, ez, w_bot, w_top, zb0, zb1, x0, x1):
     """Trapezoidal prism in a bay's plate frame (widths along ey, run along ez,
     extruded x0..x1 along ex)."""
@@ -639,31 +675,51 @@ def lg_bay_features(shell_tm, envelope_tm=None):
     keep_pos = wing_keepout_positives(envelope_tm)
     keep_neg = wing_keepout_negatives()
     pos, neg, report = [], [], []
+
+    # --- LG-10.6: ONE seat datum per station -------------------------------
+    #
+    # Seat the frame on the MEASURED skin, not on a standoff carried over from
+    # a different frame.  Seat at the MOST INBOARD decile of the skin over the
+    # footprint, not at its median: the footprint is doubly curved (10.2-10.8
+    # mm of relief across it, more than the seat's own 8 mm depth), so seating
+    # on the median leaves most of the collar hanging outboard of the skin --
+    # it kept only 11-17% of its volume inside the envelope.  Seating on the
+    # inboard decile buries the collar and lets the flange rebate cut away the
+    # skin that stands proud, which is the "hollow the sponson for the
+    # attachment" half of LG-10.4.
+    #
+    # The datum is taken PER STATION (the deepest of that station's two
+    # corners), not per corner.  Per-corner seating gave the two fore pockets
+    # floors 1.14 mm apart, and the printed bay is ONE part per station -- so
+    # it could seat on at most one of them and the other kept a gap.  Cutting
+    # both fore pockets to the deeper of the two costs 1.14 mm of extra hull
+    # relief at fore-port (the rebate already cuts ~15 mm at the proud corner)
+    # and buys a bay that seats on both sides.  This is what keeps the SS11.4
+    # shared-BOM claim true: fore part + aft part, each a mirrored pair.
+    seats, station_x0 = station_seat_data(shell_tm)
+    for label, _hx, _hy, _hz, _az, _station in LG_CORNERS:
+        if label not in seats:
+            report.append(f"{label}: NO SKIN under the flange footprint")
+    for station, x0 in sorted(station_x0.items()):
+        report.append(
+            f"{station} station datum x0 {x0:+.2f} mm  ->  "
+            f"canonical_leg_r6_*.scad BAY_STANDOFF[{station}] must be "
+            f"{BAY_STANDOFF[station] + x0:.2f} "
+            f"(declared {BAY_STANDOFF[station]:.1f})")
+
     for label, hx, hy, hz, az, station in LG_CORNERS:
+        if label not in seats:
+            continue
         org, ex, ey, ez = _plate_frame(hx, hy, hz, az, station)
         zb1 = BAY_PLATE_ZB0 + BAY_PLATE_L
 
-        # Seat the frame on the MEASURED skin, not on a standoff carried over
-        # from a different frame.  x0 is where the frame's outer face lands.
-        meas = seat_offset(shell_tm, org, ex, ey, ez)
-        if meas is None:
-            report.append(f"{label}: NO SKIN under the flange footprint")
-            continue
-        x_med, lo, hi = meas
-        # Seat at the MOST INBOARD decile of the skin over the footprint, not at
-        # its median.  The footprint is doubly curved (7.5-8.7 mm of relief
-        # across it, comparable to the seat's own 8 mm depth), so seating on the
-        # median leaves most of the collar hanging outboard of the skin -- it
-        # kept only 11-17% of its volume inside the envelope.  Seating on the
-        # inboard decile buries the collar and lets the flange rebate cut away
-        # the skin that stands proud, which is the "hollow the sponson for the
-        # attachment" half of LG-10.4.
-        x0 = lo
+        x_med, lo, hi = seats[label]
+        x0 = station_x0[station]
         org = org + ex * x0
         report.append(f"{label} {station}: seat x {x0:+.1f} mm "
                       f"(median {x_med:+.1f}), footprint relief {hi - lo:.1f} mm, "
-                      f"rebate cuts {hi - lo + BAY_PLATE_T:.1f} mm at the "
-                      f"proud corner")
+                      f"rebate cuts {hi - x0 + BAY_PLATE_T:.1f} mm at the "
+                      f"proud corner, over-relief {lo - x0:.2f} mm")
 
         # Seat collar: the bolts' bearing material, inboard of the flange.
         # LG-10.4: trimmed clear of the spar bore and the wing-root mortises,
@@ -940,6 +996,52 @@ def verify(mesh):
     return ok
 
 
+def close_zero_area_slits(mesh, flat_mm=SLIT_FLAT_MM):
+    """Close boundary loops that enclose no area, and report how many.
+
+    manifold3d can leave a T-junction on a nearly-coplanar boolean seam: the
+    seam vertex splits one edge of a neighbouring triangle, that triangle
+    strips out as degenerate, and what is left is a SLIT -- a boundary loop
+    whose vertices are exactly collinear.  Geometrically the surface is still
+    closed (the slit has zero width); topologically it is a hole, and
+    `tools/validate_stls.py` fails it.
+
+    `trimesh.repair.fill_holes` cannot close one, because the triangle it would
+    have to add has zero area and is rejected.  Collapsing the loop to a single
+    vertex does close it, and removes no material: the faces that vanish are
+    exactly the zero-area ones.
+
+    Only loops flatter than `flat_mm` are touched -- measured as the SECOND
+    singular value of the loop's vertices, i.e. its width away from the
+    best-fit line.  A real hole has width and is left open, so it still fails
+    loudly in verify() instead of being silently papered over.
+    """
+    uniq, cnt = np.unique(mesh.edges_sorted, axis=0, return_counts=True)
+    bnd = uniq[cnt == 1]
+    if not len(bnd):
+        return mesh, 0
+    remap = np.arange(len(mesh.vertices))
+    closed = 0
+    for vids in trimesh.graph.connected_components(bnd):
+        if len(vids) < 3:
+            continue
+        pts = mesh.vertices[vids]
+        # singular values of the centred loop: s[1] is its off-line width
+        sv = np.linalg.svd(pts - pts.mean(axis=0), compute_uv=False)
+        if len(sv) > 1 and sv[1] > flat_mm:
+            continue
+        remap[vids] = vids[0]
+        closed += 1
+    if not closed:
+        return mesh, 0
+    out = trimesh.Trimesh(vertices=mesh.vertices.copy(),
+                          faces=remap[mesh.faces], process=False)
+    out.update_faces(out.nondegenerate_faces())
+    out.update_faces(out.unique_faces())
+    out.remove_unreferenced_vertices()
+    return out, closed
+
+
 def finalize_watertight(mesh):
     """Weld float32-coincident boolean-seam vertices, strip the resulting
     degenerate/duplicate faces, and keep the single largest body — so the mesh
@@ -975,6 +1077,12 @@ def finalize_watertight(mesh):
             )
         mesh = big
     # Insurance: close any residual small holes so the result is a true 2-manifold.
+    # Zero-area slits FIRST -- fill_holes cannot close those (see the helper),
+    # and leaving one open fails the CI watertight gate.
+    if not mesh.is_watertight:
+        mesh, n_slit = close_zero_area_slits(mesh)
+        if n_slit:
+            print(f"  finalize: closed {n_slit} zero-area collinear slit(s)")
     if not mesh.is_watertight:
         trimesh.repair.fill_holes(mesh)
     trimesh.repair.fix_normals(mesh)

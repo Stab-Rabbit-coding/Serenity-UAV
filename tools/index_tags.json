@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-16",
+  "generated": "2026-08-17",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -685,7 +685,7 @@
       "archived": false
     },
     "airframe/blender-scripts/merge_cargo_interior.py": {
-      "description": "Python script",
+      "description": "merge_cargo_interior.py \u2014 Rev R1 (2026-06-30)",
       "tags": [
         "cad-mesh",
         "structural"
@@ -771,7 +771,7 @@
       "archived": false
     },
     "airframe/freecad/assembly/SerenityAssembly.FCStd.bak2": {
-      "description": "PK\u0003\u0004\u0014\u0000\u0000\u0000\b\u0000\\\u07c4",
+      "description": "O@'\u0001qM\u0004M\"\u0003\u0016\u0005G;\bb\u0014\u0007F=PP\u0004",
       "tags": [
         "cad-mesh",
         "structural"
@@ -871,11 +871,10 @@
       "archived": false
     },
     "airframe/landing-gear/HANDOFF.md": {
-      "description": "Landing Gear \u2014 Session Handoff (2026-08-09)",
+      "description": "Landing Gear \u2014 Session Handoff (2026-08-17)",
       "tags": [
         "documentation",
         "landing-gear",
-        "security",
         "structural"
       ],
       "archived": false
@@ -12102,6 +12101,14 @@
       ],
       "archived": false
     },
+    "tools/export_landing_gear_stls.py": {
+      "description": "Re-export every Rev R6 landing-gear STL from the two canonical leg SCADs.",
+      "tags": [
+        "build-tooling",
+        "landing-gear"
+      ],
+      "archived": false
+    },
     "tools/import-specctra-ses.py": {
       "description": "Companion to export-specctra-dsn.py: import a freerouting-produced",
       "tags": [
@@ -12118,6 +12125,14 @@
       ],
       "archived": false
     },
+    "tools/landing_gear_bay_seat_fit.py": {
+      "description": "Verify the printed Rev R6 bay actually seats on the hull it bolts to.",
+      "tags": [
+        "build-tooling",
+        "landing-gear"
+      ],
+      "archived": false
+    },
     "tools/landing_gear_bay_station_fit.py": {
       "description": "LG-10.2/10.3 -- reconcile the four canonical hip stations with the real skin.",
       "tags": [
@@ -12128,6 +12143,14 @@
     },
     "tools/landing_gear_cowl_clearance.py": {
       "description": "Verify the Rev R6 bay clears the leg through its full flexion sweep.",
+      "tags": [
+        "build-tooling",
+        "landing-gear"
+      ],
+      "archived": false
+    },
+    "tools/landing_gear_foot_stance.py": {
+      "description": "Verify the Rev R6 gear stands on its feet -- LG-10.8.",
       "tags": [
         "build-tooling",
         "landing-gear"
@@ -12616,7 +12639,6 @@
       "airframe/SPEC_VERIFICATION_0.6.1.md",
       "airframe/blender-scripts/add_structural_features.py",
       "airframe/fuselage-joints/WBS.md",
-      "airframe/landing-gear/HANDOFF.md",
       "airframe/landing-gear/WBS.md",
       "airframe/openscad/fuselage/cargo/cargo_spar_drive.scad",
       "airframe/openscad/fuselage/landing_leg_assy.scad",
@@ -13824,9 +13846,12 @@
       "docs/LANDING_GEAR_ANALYSIS.md",
       "tools/add_landing_gear_bosses.py",
       "tools/build_landing_gear_views.py",
+      "tools/export_landing_gear_stls.py",
       "tools/landing_gear_bay_pad_fit.py",
+      "tools/landing_gear_bay_seat_fit.py",
       "tools/landing_gear_bay_station_fit.py",
       "tools/landing_gear_cowl_clearance.py",
+      "tools/landing_gear_foot_stance.py",
       "tools/landing_gear_opening_fit.py",
       "tools/landing_gear_r6_sizing.py",
       "tools/landing_gear_wing_clearance.py"
@@ -15506,10 +15531,13 @@
       "tools/build_landing_gear_views.py",
       "tools/compact_bom_entries.py",
       "tools/export-specctra-dsn.py",
+      "tools/export_landing_gear_stls.py",
       "tools/import-specctra-ses.py",
       "tools/landing_gear_bay_pad_fit.py",
+      "tools/landing_gear_bay_seat_fit.py",
       "tools/landing_gear_bay_station_fit.py",
       "tools/landing_gear_cowl_clearance.py",
+      "tools/landing_gear_foot_stance.py",
       "tools/landing_gear_opening_fit.py",
       "tools/landing_gear_r6_sizing.py",
       "tools/landing_gear_wing_clearance.py",

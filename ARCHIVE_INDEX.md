@@ -6,7 +6,7 @@
      look, change the generator (tools/precommit_index.py), not this
      file. Machine-readable form: tools/index_tags.json -->
 <!-- Active file tree described in PROJECT_INDEX.md. -->
-<!-- Last generated: 2026-08-16 -->
+<!-- Last generated: 2026-08-17 -->
 
 ## Tag Index
 
