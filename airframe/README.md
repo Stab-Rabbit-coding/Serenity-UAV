@@ -48,18 +48,18 @@ See `AGENTS.md` "Airframe Geometry" for the validated component placement extent
 
 | Component | Mass (g) | Mass (oz) | Notes |
 |-----------|----------|-----------|-------|
-| Fuselage (printed) | ~350 | 12.3 | Includes all sections, access panels, bosses |
+| Fuselage (printed) | ~630 | 22.2 | 4 shells (head 83g + cargo 165g + middle 135g + rear 200g = 583g) + 3 joint splice collars (47g); bom_revS.json PRINT-HEAD-SHELL/PRINT-CARGO-SECT/PRINT-MIDDLE-CANONICAL/PRINT-REAR-NECK-INTAKE/PRINT-*-COLLAR |
 | Wings | ~180 | 6.3 | Span 486 mm, spar + skin, no cargo nacelles |
 | Nacelle assembly (2× complete: EDFs + shells + pivot + iris) | ~625 | 22.0 | Includes 4× XFly Galaxy X5 (70g mass each), shells, hubs, pivot, iris mechanism |
-| Tilt mechanism (servos, linkage, frame) | ~200 | 7.1 | 2× DS3218MG digital metal-gear servos (≥25 kg·cm @ 6V), rods, brackets |
-| Landing gear (wire + mounts) | ~150 | 5.3 | 4130 steel wire, epoxy-bonded |
-| Avionics (all 8 nodes, capes, TPM, SD cards) | ~280 | 9.9 | Includes cable, connectors |
-| Power (battery + PDB + ESCs) | ~500 | 17.6 | 6S 4000 mAh LiPo + Kaylee PDB + 4× 40A BLHeli32 ESCs |
-| Cargo bay internals (gondola, door, winch, servo) | ~180 | 6.3 | STS3215 servo winch, ratchet, latch, Dyneema line |
+| Tilt mechanism (servos, linkage, frame) | ~200 | 7.1 | 2× SPT5425LV (converted with LibreServo v2, ≥25 kg·cm @ 6V), rods, brackets |
+| Landing gear (wire + mounts) | ~436 | 15.4 | R6 canonical (1.5 in): leg+bay+foot 310g + wires 91g + pins/bolts 34g; see docs/LANDING_GEAR_ANALYSIS.md §11.6 (open item LG-18: target ≤300g pending mass-reduction pass) |
+| Avionics (all 8 nodes, capes, TPM, SD cards) | ~432 | 15.2 | 8× PB2-I (104g) + 4× Cape-A-2 (124g) + 4× Cape-B-2 (160g) + 2× Commo (40g) + 4× microSD (4g); excludes cable/conduit |
+| Power (battery + PDB + ESCs) | ~925 | 32.6 | 6S 4000 mAh LiPo (750g) + Flight Engineer PDB (75g) + 4× 40A BLHeli32 ESCs (100g) |
+| Cargo bay internals (gondola, door, winch, servo) | ~180 | 6.3 | SPT5425LV winch servo (LibreServo v2), ratchet, latch, Dyneema line |
 | Payload bay (empty) | — | — | Rated for 226 g (8 oz) cargo |
-| **Total AUW** | ~2,768 | ~97.6 | Phase 5–10 (no aft EDF) |
+| **Total AUW** | ~3,911 | ~137.9 | Phase 5–10 (no aft EDF); corrected 2026-08-22 from a stale ~2,768g figure — see TODO.md §0.10.1 |
 | **Phase 11 addition (aft EDF, RCS)** | ~+362 | ~+12.8 | 55 mm EDF, RCS solenoids/valves, rear nozzle housing |
-| **AUW Phase 11** | ~3,130 | ~110.4 | Full system with rear propulsion |
+| **AUW Phase 11** | ~4,273 | ~150.7 | Full system with rear propulsion |
 
 Thrust: 4,464 g (9.84 lbf) nacelles-only; T/W ≈ 1.61 (VTOL capable).
 

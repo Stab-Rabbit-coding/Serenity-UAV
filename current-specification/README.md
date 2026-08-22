@@ -24,8 +24,8 @@
   "metadata": {
     "revision": "Rev S",
     "date": "2026-07-04",
-    "hull_length": "609.6 mm (24 in)",
-    "auw": "2768 g (Phase 5-10, nacelles only)",
+    "hull_length": "690.0 mm (27.17 in)",
+    "auw": "3911 g (Phase 5-10, nacelles only)",
     "design_phase": 5
   },
   "bom": [

@@ -69,15 +69,15 @@ Throughout the mission, the aircraft must also:
 
 | Parameter | Value |
 |-----------|-------|
-| Length | 24.0 in (609 mm) |
+| Length | 27.17 in (690 mm) |
 | Wingspan | 19.1 in (486 mm) |
 | Height | 7.93 in (201.5 mm) |
-| AUW — Phases 5–10 (nacelles only) | ~6.10 lbm (2,768 g) |
-| AUW — Phase 11 (full system) | ~6.90 lbm (3,130 g) |
+| AUW — Phases 5–10 (nacelles only) | ~8.62 lbm (3,911 g) |
+| AUW — Phase 11 (full system) | ~9.42 lbm (4,273 g) |
 | Payload capacity (minimum) | 8.0 oz (226 g) in a 4″ × 3″ × 3″ bay |
 | Thrust — nacelles only (hover) | 9.84 lbf (4,464 g) |
 | Thrust — Phase 11 rear EDF (cruise) | ~2.81 lbf (1,275 g) net after RCS bleed |
-| T/W — nacelles only (hover) | ≈ 1.61 (full VTOL hover capable) |
+| T/W — nacelles only (hover) | ≈ 1.14 (VTOL hover capable; margin corrected 2026-08-22, see TODO.md §0.10.1) |
 | T/W — Phase 11 (hover, nacelles only) | ≈ 1.43 (rear EDF is forward-thrust only) |
 | Compute | 8× PocketBeagle 2 Industrial (AM6254), PACE failover |
 | Onboard buses | CAN FD, MIL-STD-1553B, RS-485, Ethernet RSTP ring |
@@ -132,7 +132,7 @@ variable-area nozzle gear-linked passively to the 0°–140° tilt pivot.
 
 **Powerplant**
 
-Four nacelle EDFs give 9.84 lbf combined hover thrust at a T/W of ≈1.61, fed by a 6S LiPo through
+Four nacelle EDFs give 9.84 lbf combined hover thrust at a T/W of ≈1.14, fed by a 6S LiPo through
 the EMI-hardened Flight Engineer power distribution board.
 
 [Power Distribution →](docs/POWER_DISTRIBUTION.md)

@@ -1,7 +1,8 @@
 # Airframe Specifications Verification (Task 0.6.1)
 
 **Date:** 2026-08-01  
-**Status:** In Progress  
+**Status:** Superseded — closed out by `docs/WBS.md` §0.10.1 (2026-08-22); this document's
+open items were resolved there. Retained as historical record.  
 **Reviewer:** Claude Haiku 4.5
 
 ---
@@ -47,11 +48,15 @@ AGENTS.md against the actual as-built design state (CAD, BOM, build guide, STL g
 |-----------|------------|------------|-----------------|--------|
 | Wingspan | 19.1 in (486 mm) | root README.md L72 | AGENTS.md extents table | ✅ |
 
-**Verification note:** Wing port X-extent −93.0 to +4.7 mm = 97.7 mm (half-span).
-Wing stbd X-extent −428.1 to −346.1 mm = 82 mm (asymmetric, but appears intentional per
-port/stbd labeling). Cross-check needed against SCAD/FreeCAD wing source.
+**Verification note (RESOLVED 2026-08-22):** Wing port X-extent −93.0 to +4.7 mm = 97.7 mm.
+Wing stbd X-extent −347.7 to −250.0 mm = 97.7 mm — **symmetric with port**, not the 82 mm
+originally reported here. That 82 mm figure was a transcription mix-up one row down in the
+`HULL_FRAME_REFERENCE.md` extents table (it belongs to `Nacelle_Stbd`, not `Wing_Stbd`).
+Confirmed against `airframe/openscad/wings/wings_s1223_revo.scad:13-16`, whose own header
+states both bounds and whose `wings()` module (lines 939-950) generates stbd as a mirror
+transform of port. No wing geometry bug exists.
 
-**Status:** Assumed verified pending wing CAD review.
+**Status:** ✅ VERIFIED — symmetric, no CAD change needed.
 
 ---
 
