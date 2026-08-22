@@ -5,8 +5,8 @@
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
 **Revision:** S1 (SoM end-state — PCM-071 carrier, real symbols/footprints)
 **Date:** 2026-07-13
-**Status:** **SoM end-state built** by `scripts/gen_Observer_carrier_sch.py` +
-`gen_Observer_carrier_pcb.py`. Schematic uses REAL clean-room symbols (PCM-071 SoM + KSZ9477 +
+**Status:** **SoM end-state built** by `scripts/gen_observer_carrier_sch.py` +
+`gen_observer_carrier_pcb.py`. Schematic uses REAL clean-room symbols (PCM-071 SoM + KSZ9477 +
 MSPM0G3507 + ISOW1044BDFMR + SLB9672) wired by signal name — **ERC = 0 errors**. PCB has REAL
 footprints (240-pad 2×BTH-060 SoM on the back, TQFP-128-1EP switch, QFN/SOIC/SOT carrier),
 **0 placeholder footprints**, all pad nets injected, sch↔pcb parity clean (bar 4 mounting-holes
@@ -46,7 +46,7 @@ other physical or electrical dependency on any other avionics board.
 **Power (added 2026-07-05):** each Observer board draws ≈ **1.2 A typ / ~2.1–2.7 A peak at 5 V**
 (AM62A7 SoC + KSZ9477 switch + camera + ToF + laser; full budget in
 `docs/POWER_DISTRIBUTION.md §3.2.1`). The two boards (≈ 2.4 A typ / ~4.8 A peak combined) are
-fed from a **dedicated Flight Engineer 5 V payload rail (U_BEC_JAYNE → J_JAYNE)** — NOT the shared 5 V
+fed from a **dedicated Flight Engineer 5 V payload rail (U_BEC_OBS → J_OBS)** — NOT the shared 5 V
 avionics bus, which is already near its dual-BEC capacity — keeping the switching video-SoC
 load off the avionics rail and preserving its margin. Observer's own TPS65219 PMIC regulates this
 5 V input to the SoC core rails. `J_PWR` is the board-side 5 V/GND entry.

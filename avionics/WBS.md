@@ -324,7 +324,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 - [x] The third avionics bay is named "River's room" (Bay D) - "Also, I can kill you with my mind." *(implemented 2026-06-07)*
 
-- [x] The aft avionics bay is named "Simon's medbay" (Bay E) - "What did they do to you?" *(implemented 2026-06-07)*
+- [x] The aft avionics bay is named "Simon's medbay" (Bay D) - "What did they do to you?" *(implemented 2026-06-07)*
 
 ## §1.9 — Avionics Workload Balancing
 
@@ -645,8 +645,8 @@ REFERENCES.md Removed/Superseded Citations).
 | Item | Qty | Approx. Cost | Notes |
 |------|-----|-------------|-------|
 | PocketBeagle 2 Industrial (AM6254) | 4× | ~$204 | CN3, FC3, CN4, FC4 |
-| Pilot (Pilot) PCB (JLCPCB assembled) | 2× | ~$110 | FC3/River's room (Bay D) + FC4/Simon's medbay (Bay E) (v2) |
-| XO (XO) PCB (JLCPCB assembled) | 2× | ~$190 | CN3/River's room (Bay D) + CN4/Simon's medbay (Bay E) (v2) |
+| Pilot (Pilot) PCB (JLCPCB assembled) | 2× | ~$110 | FC3/River's room (Bay C) + FC4/Simon's medbay (Bay D) (v2) |
+| XO (XO) PCB (JLCPCB assembled) | 2× | ~$190 | CN3/River's room (Bay C) + CN4/Simon's medbay (Bay D) (v2) |
 | Commo PCB (assembled) | 2× | ~$50 | CN3, CN4 (v2 EMI-hardened) |
 | microSD 64GB (log) | 2× | ~$20 | CN3-LOG, CN4-LOG |
 | VL53L5CX 8×8 ToF sensor | 12× | ~$84 | Dual OA arrays |

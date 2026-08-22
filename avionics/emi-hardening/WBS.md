@@ -101,7 +101,7 @@
     | Shepherd's Room (Bay A) | XO: Wi-Fi, SiK, LoRa chain present on PCB | SiK whip (primary) + Wi-Fi patch (secondary) = 2 | 1 |
     | Inara's Shuttle (Bay B) | XO: Wi-Fi, SiK, LoRa chain present on PCB | Wi-Fi patch (primary) + SiK whip (secondary) = 2 | 1 |
     | River's Room (Bay D) | XO + Commo (49 MHz) | 49 MHz whip (primary) + LoRa whip (secondary, fed from XO's `J_SMA_LORA`) = 2 | 1 |
-    | Simon's Medbay (Bay E) | XO + Commo (49 MHz) | 49 MHz whip (primary, **independent antenna — see new sub-task below**) + SiK whip (secondary) = 2 | 1 |
+    | Simon's Medbay (Bay D) | XO + Commo (49 MHz) | 49 MHz whip (primary, **independent antenna — see new sub-task below**) + SiK whip (secondary) = 2 | 1 |
 
     **Total: 8 external C2/payload-link antennas + 4 GPS patches = 12 physical antennas.**
     Every XO (Cape-B-2) carries identical Wi-Fi/SiK/LoRa RF frontends per board (all
@@ -125,7 +125,7 @@
         2026-06-22 (with user): the 49 MHz top wire moves from the dorsal centreline to
         the PORT flank, shoulder height** — see the port/starboard sub-task below;
         LoRa whip stays dorsal.
-    - [x] **Simon's Medbay** (Bay E, aft service, sta ≈ 350 mm) — **independent** 49 MHz
+    - [x] **Simon's Medbay** (Bay D, aft service, sta ≈ 350 mm) — **independent** 49 MHz
         top-wire antenna, new, on the **STARBOARD flank, shoulder height** (primary; see
         dedicated sub-task below — do not share River's antenna) + SiK 915 MHz RP-SMA
         whip (secondary, stays dorsal).

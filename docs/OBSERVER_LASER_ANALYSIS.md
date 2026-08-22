@@ -3,7 +3,7 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **AI-assist:** Claude Opus 4.8 (Anthropic) — analysis authoring, 2026-07-05
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0
-**Revision:** Rev A2 (2026-07-05)
+**Revision:** Rev B (2026-07-06)
 **Status:** Analysis — feeds Observer laser BOM decision (TODO.md §1.2c); no part sourced yet.
 **Rev A1 correction:** the Rev A conclusion that the nose is inherently Class 3B was
 over-conservative (worst-case spread-pattern + naked-eye-in-full-sun). For Observer's actual
@@ -282,10 +282,11 @@ apart** (camera head + dot-projector head) rather than a colocated cluster — s
    existing Observer shared driver (Q1 AO3400 logic-level N-FET, R1 100 Ω gate, R2 10 kΩ
    pulldown, J_LASER). This retires the separate 650 nm red cargo module (unifies BOM to a
    single diode family).
-2. **Pattern:** a **thin-line crosshair** at both sites (NOT a bare dot) — the crosshair's
-   known projected angle is the metrology scale/orientation reference (§4.4). Keep the lines
-   thin (≤ ~1 mm at the target) so power stays Class 2 (§4.4.4); let the *fan angle* carry the
-   pixel budget.
+2. **Pattern:** a **dot grid** at both sites (NOT a bare dot) — supersedes the earlier
+   crosshair recommendation per §4.3's Rev B decision (nose is a stereo-baseline TRUE-3D
+   imager as of the cargo install, §4.5); the grid's known projected geometry is the
+   metrology scale/orientation reference (§4.4). Keep individual dots small so power stays
+   Class 2 (§4.4.4); let the *fan angle* carry the pixel budget.
 3. **Terminal optic + fan angle (per location, co-designed with the camera FOV):** size the
    fan angle so the crosshair spans **N ≈ 24–48 px** at the design range for ~1–2 % size /
    ~1–2° tilt accuracy (§4.4.3). Nose: **larger than the nominal 2 in — target ≈ 4–8 in at
@@ -349,7 +350,7 @@ apart** (camera head + dot-projector head) rather than a colocated cluster — s
 
 ---
 
-*© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY 4.0*
+*© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY-SA 4.0*
 
 ---
 

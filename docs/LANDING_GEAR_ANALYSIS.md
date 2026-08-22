@@ -692,7 +692,7 @@ Dyneema SK75 2 mm, ≥750 N — one per leg, foot hub → bay → hull anchor
 | M3 × 30 SS pin | 8 | Hip pin + stop pin, 2 per corner |
 | M3 × 12 SS bolt + backing | 16 | Bay-to-shell mounts, 4 per bay (LG-02) |
 | M2.5 × 30 SS bolt | 4 | Foot retention |
-| Wire retention (LG-13, TBD) | 16 | Pin / set screw / adhesive at bay bosses |
+| Wire retention (LG-13, pending sign-off) | 16 | Nylon-tipped M2 drag screw at bay bosses (candidate, §4.5a) |
 | Dyneema SK75 2 mm | 1.6 m | Safety cords |
 
 ---

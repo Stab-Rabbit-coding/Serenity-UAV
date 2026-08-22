@@ -285,7 +285,7 @@ When a standard has multiple applicable clauses, list them all:
 | §91.209(b) | Anti-collision light | Required for aircraft with a standard airworthiness certificate; applicable to UAS by AC 107-2B guidance |
 
 **Applied to:** Navigation light subsystem — 6× WS2812C-2020 RGB LEDs (port red, starboard green,
-aft white); controlled by FC4 node (Simon's medbay, Bay E).
+aft white); controlled by FC4 node (Simon's medbay, Bay D).
 
 **Used in:** `graphical-build-guide/build_guide_13_nav_lights.svg`, `docs/REVN_BUILD_GUIDE_24IN.md`,
 `README.md`, `TODO.md`, `AGENTS.md`
@@ -574,7 +574,7 @@ cycle); hardware-enforced append-only non-executable log microSD on every XO nod
 
 **Applied to:** 8-node linear bus (CN1–FC1–CN2–FC2–CN3–FC3–CN4–FC4); PRU-ICSS Manchester II
 encoder/decoder at 250 MHz (250 cycles per 1 µs bit cell); DS26LV31 driver / DS26LV32 receiver;
-PE-68515 coupling transformer (1:1.41, 78 Ω); 78 Ω termination at CN1 (Bay A) and FC4 (Bay E).
+PE-68515 coupling transformer (1:1.41, 78 Ω); 78 Ω termination at CN1 (Bay A) and FC4 (Bay D).
 
 **Used in:** `docs/AVIONICS_PB2_REDESIGN.md`,
 `avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`,
@@ -631,7 +631,7 @@ MIL-STD-461G qualification testing is deferred pending airframe integration.
 | Clause 12 (Amd.1) | Bit Timing | CAN FD two-phase bit timing (arbitration at 1 Mbps, data at 5 Mbps per design) |
 
 **Applied to:** AM6254 native MCAN controllers operating at 1 Mbps arbitration / 5 Mbps data;
-ATA6561 CAN FD transceivers; 120 Ω bus termination at CN1 (Bay A) and FC4 (Bay E).
+ATA6561 CAN FD transceivers; 120 Ω bus termination at CN1 (Bay A) and FC4 (Bay D).
 
 **Used in:** `docs/AVIONICS_PB2_REDESIGN.md`,
 `avionics/firmware/dts/cape-a/k3-am6254-pocketbeagle2-serenity-cape-a2.dts`, `AGENTS.md`
@@ -1595,7 +1595,7 @@ TTL bus servo before the fleet-wide standardisation. Do not delete; do not cite 
 | **Manufacturer** | ⚠ Not yet confirmed from the datasheet |
 | **Datasheet** | `docs/references/108090023_STS3215-C001_Datasheet.pdf` — revision/date ⚠ not extracted |
 | **Control Interface** | **TTL half-duplex serial bus, ID-addressable** — **not** 1000–2000 µs PWM. Lands on `CAN-PERIPH-GW-1` `J_FLEX` → `FLEX_TTL_GPIO`, documented there as covering "a TTL-level digital servo protocol (e.g. a serial-bus servo)". |
-| **Operating Voltage** | Driven at 5.4 V nominal from Flight Engineer RAIL-2 `5V_JAYNE` (project-side decision, not a datasheet limit) |
+| **Operating Voltage** | Driven at 5.4 V nominal from Flight Engineer RAIL-2 `5V_OBS` (project-side decision, not a datasheet limit) |
 | **Torque** | ⚠ Not verified. **Design requirement is ≥ 3.2 kgf·cm (0.31 N·m)** at the coupler — derived in `docs/CARGO_WINCH_SPECIFICATION.md` §4.2, must be checked against the real rating. |
 | **Stall current** | ⚠ Not verified. Budgeted at 1.2 A for the RAIL-2 sizing (spec §5.4); if actual stall exceeds ~2.5 A, RAIL-2 must be resized. |
 | **Mass** | ⚠ Not verified. **60 g assumed** in the mass/CG table (spec §6); this term dominates the +98.6 g net delta and the resulting T/W 1.613 → 1.557. |
@@ -1848,7 +1848,7 @@ those boards keep the SLB9672 (REF-SENSOR-011).
 
 **Applied to:** 8-node RS-485 half-duplex multidrop bus; ADM2795EBRWZ isolated RS-485
 transceivers on Pilot (Cape-A-2) and XO (Cape-B-2); 120 Ω termination resistors at CN1
-(Shepherd's Room / Bay A) and FC4 (Simon's Medbay / Bay E).
+(Shepherd's Room / Bay A) and FC4 (Simon's Medbay / Bay D).
 
 **Used in:** `docs/AVIONICS_PB2_REDESIGN.md`, `docs/REVN_BUILD_GUIDE_24IN.md`,
 `avionics/kicad/Pilot.md`, `avionics/kicad/XO.md`,

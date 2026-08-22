@@ -236,4 +236,4 @@ covered by a stainless 0.5 mm perforated mesh screen to prevent debris ingestion
 
 ---
 
-*© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY 4.0*
+*© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY-SA 4.0*

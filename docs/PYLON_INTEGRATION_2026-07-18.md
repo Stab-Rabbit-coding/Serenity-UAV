@@ -1,5 +1,12 @@
 # Tilt Bracket Integration into Wing — Summary (2026-07-18)
 
+> **SUPERSEDED 2026-07-18/19** — see `docs/TILT_SPAR_ANALYSIS.md` and
+> `docs/NOZZLE_DRIVE_TRADE.md` for the adopted mechanism (rotating 8 mm steel spar
+> driven by a cargo-bay servo, wingtip-gear + pushrod nozzle drive). The fixed 4 mm
+> CF press-fit spar and sector-gear-on-bracket design described below was replaced
+> within roughly a day of this document being written; retained as historical record
+> of the design this document's own integration work was built against.
+
 **Status:** Integration complete; wing SCAD updated; pylon artifacts archived
 
 ---

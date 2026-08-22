@@ -78,7 +78,7 @@
 
 - [ ] Connect MIL-STD-1553: FC1 = Bus Controller (primary); CN1 = RT 0x01.
 
-- [ ] Cap Simon's medbay (Bay E) end of ETH-EA conduit (will connect to FC4 in Phase 7); connect Shepherd's room (Bay A) end to CN1 Cape-B ETH-2.
+- [ ] Cap Simon's medbay (Bay D) end of ETH-EA conduit (will connect to FC4 in Phase 7); connect Shepherd's room (Bay A) end to CN1 Cape-B ETH-2.
 
 **CN2+FC2 installation — Inara's shuttle (Bay B, dorsal fwd) — XO / Pilot (Rev R):**
 > Rev R: Inara's shuttle (Bay B) also uses v2 EMI-hardened capes (same as Shepherd's room). All four bays use Pilot + XO.
@@ -99,7 +99,7 @@
 
 - [ ] Connect ETH-AB (Shepherd's room → Inara's shuttle): FC1 Pilot ETH-1 → CN2 XO ETH-B (FC1↔CN2 Ethernet ring link).
 
-- [ ] Cap River's room (Bay D) end of ETH-BD (will connect to CN3 in Phase 7).
+- [ ] Cap River's room (Bay C) end of ETH-BD (will connect to CN3 in Phase 7).
 
 - [ ] Power taps: connect CN1, FC1, CN2, FC2 power leads from PWR conduit; verify 5V ±0.05V at each header.
 
@@ -187,12 +187,12 @@
 
 **Goal:** All 8 nodes installed, full ring redundancy, 12× VL53L5CX dual-redundant obstacle avoidance operational.
 
-**CN3+FC3 installation — River's room (Bay D, dorsal aft) — XO / Pilot (Rev R):**
-> Rev R: River's room (Bay D) also uses v2 EMI-hardened capes. All four bays uniform.
+**CN3+FC3 installation — River's room (Bay C, dorsal aft) — XO / Pilot (Rev R):**
+> Rev R: River's room (Bay C) also uses v2 EMI-hardened capes. All four bays uniform.
 
 - [ ] Remove temporary Phase 6 CAN FD 120Ω from FC2 Pilot in Inara's shuttle (Bay B).
 
-- [ ] Mount CN3 XO on River's room (Bay D) floor standoffs; insert PB2-I; mount FC3 Pilot above.
+- [ ] Mount CN3 XO on River's room (Bay C) floor standoffs; insert PB2-I; mount FC3 Pilot above.
 
 - [ ] Flash OS to eMMC; install log μSD. Label: **CN3-LOG**.
 
@@ -200,20 +200,20 @@
 
 - [ ] Route FC3 GPS coax through dorsal PTFE sleeve (sta ~275mm); mount GPS patch, face UP.
 
-- [ ] Continue CAN FD chain: Inara's shuttle (Bay B) FC2 → River's room (Bay D) CN3 → FC3 → exit toward Simon's medbay (Bay E).
+- [ ] Continue CAN FD chain: Inara's shuttle (Bay B) FC2 → River's room (Bay C) CN3 → FC3 → exit toward Simon's medbay (Bay D).
 
-- [ ] Continue RS-485 chain Inara's shuttle (Bay B) → River's room (Bay D) → Simon's medbay (Bay E).
+- [ ] Continue RS-485 chain Inara's shuttle (Bay B) → River's room (Bay C) → Simon's medbay (Bay D).
 
 - [ ] Connect ETH-BD (Inara's shuttle → River's room): FC2 Pilot ETH-1 → CN3 XO ETH-B.
 
-- [ ] Power tap River's room (Bay D); verify 5V ±0.05V.
+- [ ] Power tap River's room (Bay C); verify 5V ±0.05V.
 
-**CN4+FC4 installation — Simon's medbay (Bay E, aft service) — XO / Pilot (v2 EM-hardened):**
-> Simon's medbay (Bay E) is the CAN FD / RS-485 / 1553B bus end termination node and is physically closest to the
+**CN4+FC4 installation — Simon's medbay (Bay D, aft service) — XO / Pilot (v2 EM-hardened):**
+> Simon's medbay (Bay D) is the CAN FD / RS-485 / 1553B bus end termination node and is physically closest to the
 > nacelle motor wiring and rear 55mm EDF.  Use XO / Pilot for 5 kV isolated
 > transceivers at this end of the bus.  v2 placement is mandatory here.
 
-- [ ] Mount CN4 XO on Simon's medbay (Bay E) standoffs; insert PB2-I; mount FC4 Pilot above.
+- [ ] Mount CN4 XO on Simon's medbay (Bay D) standoffs; insert PB2-I; mount FC4 Pilot above.
 
 - [ ] Flash OS to eMMC; install log μSD. Label: **CN4-LOG**.
 
@@ -227,7 +227,7 @@
 
 - [ ] Connect ETH-EA ring-close (Simon's medbay → Shepherd's room): FC4 Cape-A ETH-1 → [Shepherd's room CN1 Cape-B ETH-2 already connected]. Closes the 8-node RSTP ring.
 
-- [ ] Power tap Simon's medbay (Bay E); verify 5V ±0.05V.
+- [ ] Power tap Simon's medbay (Bay D); verify 5V ±0.05V.
 
 **Security provisioning — remaining 4 nodes:**
 
@@ -258,7 +258,7 @@ Array B (hosted by FC1, Shepherd's room / Bay A):
 
 - [ ] Install 6× VL53L5CX in Array B flush-mount frames; wire to TCA9548A ch.0–5 in Shepherd's room (Bay A); MCP23008 GP0–GP5 → XSHUT; I²C to FC1 Cape-A.
 
-Array A (hosted by FC3, River's room / Bay D):
+Array A (hosted by FC3, River's room / Bay C):
 
 | Sensor | Station | Position |
 |--------|---------|----------|
@@ -269,7 +269,7 @@ Array A (hosted by FC3, River's room / Bay D):
 | S5A | 215mm | Dorsal keel |
 | S6A | 195mm | Belly blister |
 
-- [ ] Install 6× VL53L5CX in Array A flush-mount frames; wire to TCA9548A ch.0–5 in River's room (Bay D); separate I²C bus (electrically isolated from Array B).
+- [ ] Install 6× VL53L5CX in Array A flush-mount frames; wire to TCA9548A ch.0–5 in River's room (Bay C); separate I²C bus (electrically isolated from Array B).
 - [ ] Apply 0.5mm PMMA disc over each sensor aperture with UV adhesive.
 - [ ] Configure OA fusion in firmware: halt at 1.0m obstacle clearance; either array independent on single-FC failure.
 - [ ] GPS clearance check for 49MHz wire post proximity: bench-verify HDOP ≤1.5 with the 49 MHz (Part 15 §15.235) link transmitting; if GPS degrades, move GPS patch to ≥165mm from forward post.

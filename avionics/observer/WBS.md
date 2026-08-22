@@ -331,10 +331,10 @@ Power-budget and laser analyses completed 2026-07-05 (`docs/POWER_DISTRIBUTION.m
 - [ ] **Flight Engineer second 5 V rail — cross-tied, mutually fault-tolerant (PLAN, `docs/POWER_
     DISTRIBUTION.md §11.1`).** Add a **third identical TPS54620 BEC channel** (`U_BEC_5V_3` +
     `L_5V3` + `R_FB3` + `C_BEC3_IN/OUT` + `FB_5V3` + `D_OR3` — copy of `U_BEC_5V_1`) feeding
-    **RAIL-2 (5V_JAYNE) → `J_JAYNE`** (both Observer boards, ≈ 2.4 A typ / ~4.2 A peak). Existing
+    **RAIL-2 (5V_OBS) → `J_OBS`** (both Observer boards, ≈ 2.4 A typ / ~4.2 A peak). Existing
     dual-BEC pair = **RAIL-1 (5V_AVIONICS) → `J_5V`**. **Diode-OR cross-tie** the two rails
     (`D_X1`/`D_X2` = 2× MBRD1045CT, same part) via cross-tie fuse `F_X`, plus per-rail fuses
-    `F_5V`/`F_VERA`, so each rail is fault-tolerant of the other (regulator-failure backup +
+    `F_5V`/`F_OBS`, so each rail is fault-tolerant of the other (regulator-failure backup +
     short isolation). **Same part chain (interchangeable channels); no new part numbers.**
     **Bump set-point 5.3 V → 5.4 V** (re-value the `R_FB` dividers) so a backed-up rail (two
     Schottky drops) stays > 4.75 V PB2-I min. Do schematic-first, then PCB (place `U_BEC_5V_3`

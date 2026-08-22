@@ -31,8 +31,21 @@ All measurements are imperial-primary with metric in parentheses per AGENTS.md c
 
 ## 2. Aircraft Mass Budget (Phase 5–10)
 
-Total static thrust: 4× nacelle × 2232 gf = 8928 gf = **19.68 lbf (87.5 N)**.
-Design T/W = 1.19 → AUW = 87.5 / 1.19 = **73.5 N (7.49 kgf / 16.5 lbm)**.
+> **Correction (2026-08-22, TODO.md §0.10.1):** this section previously double-counted
+> thrust — there are **2** nacelles (port + starboard), each already representing the
+> 2232 gf tandem-EDF-pair figure, not 4. The corrected total below drops AUW from a
+> fabricated 16.5 lbm to ≈8.27 lbm — closer to, but not identical to, the BOM-derived
+> Phase 5–10 AUW of ~8.62 lbm (3,911 g) established in `README.md`/`airframe/README.md`
+> (this section's AUW is a design-margin back-calculation, not a BOM sum — the two
+> should agree within rounding once both are current). **Every load case, margin, and
+> FOS number in §3 through §7 below was computed from the old, doubled mass budget and
+> has not yet been re-derived from the corrected baseline — treat them as stale until
+> re-verified.** Since the true mass is lower than what was analyzed, the existing
+> numbers are likely conservative (understating margin), not unsafe, but they should
+> not be cited as current until recomputed.
+
+Total static thrust: 2× nacelle × 2232 gf = 4464 gf = **9.84 lbf (43.79 N)**.
+Design T/W = 1.19 → AUW = 43.79 / 1.19 = **36.8 N (3.75 kgf / 8.27 lbm)**.
 
 Shell material volume and mass (CF-PETG, ρ = 1.27 g/cm³):
 

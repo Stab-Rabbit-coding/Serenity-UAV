@@ -265,14 +265,14 @@ All 8 nodes connect to one 1553 bus via their PRU-based Manchester II encoder/de
 CN1 ─T─ FC1 ─T─ CN2 ─T─ FC2 ─T─ CN3 ─T─ FC3 ─T─ CN4 ─T─ FC4
 [RT]  [BC/RT] [RT]  [stbyBC] [RT]  [RT]  [RT]  [RT]
 ╰─ 78Ω term                                          ╰─ 78Ω term
-   (CN1, Shepherd's room / Bay A)            (FC4, Simon's medbay / Bay E)
+   (CN1, Shepherd's room / Bay A)            (FC4, Simon's medbay / Bay D)
 
 ```
 
 - **T** = stub coupling transformer (PE-68515 or equivalent, 0.9 m max stub)
 - **Primary BC:** FC1 (elected at boot via CAN FD priority arbitration)
 - **Standby BC:** FC2 (assumes BC role if FC1 heartbeat absent for 3 frames)
-- **Termination:** 78Ω at CN1 (bus start, Shepherd's room / Bay A) and FC4 (bus end, Simon's medbay / Bay E). Both termination nodes use XO / Pilot (EMI-hardened).
+- **Termination:** 78Ω at CN1 (bus start, Shepherd's room / Bay A) and FC4 (bus end, Simon's medbay / Bay D). Both termination nodes use XO / Pilot (EMI-hardened).
 - **Shielded cable:** MIL-C-17/131 or equivalent, 78 Ω, twisted pair, drain wire grounded at one end per segment
 - **PRU firmware requirement:** Manchester II encoder at 1 Mbps ± 0.5%; decoder with sync-word detection and RT address filtering; TX/RX half-duplex arbitration
 
@@ -282,12 +282,12 @@ CN1 ─T─ FC1 ─T─ CN2 ─T─ FC2 ─T─ CN3 ─T─ FC3 ─T─ CN4 ─T
 
 CN1 ─┬─ FC1 ─ CN2 ─ FC2 ─ CN3 ─ FC3 ─ CN4 ─┬─ FC4
    120Ω                                     120Ω
-  (start, Shepherd's room / Bay A)  (end, Simon's medbay / Bay E)
+  (start, Shepherd's room / Bay A)  (end, Simon's medbay / Bay D)
 
 ```
 
 - **Transceiver:** ATA6561 on every cape, 3.3 V, 5 Mbps data rate
-- **Termination:** 120 Ω resistor soldered on CN1 cape (bus start, Shepherd's room / Bay A) and FC4 cape (bus end, Simon's medbay / Bay E); all others: open. Both termination nodes use XO / Pilot (EMI-hardened, 5 kV isolated transceivers).
+- **Termination:** 120 Ω resistor soldered on CN1 cape (bus start, Shepherd's room / Bay A) and FC4 cape (bus end, Simon's medbay / Bay D); all others: open. Both termination nodes use XO / Pilot (EMI-hardened, 5 kV isolated transceivers).
 - **Controllers:** AM6254 MCAN0 (primary bus) + MCAN1 (reserved for second CAN bus or redundant arbitration)
 - **Protocol:** DroneCAN v1 / UAVCANv1 for sensor data; custom priority-voting messages for role election
 
@@ -297,7 +297,7 @@ CN1 ─┬─ FC1 ─ CN2 ─ FC2 ─ CN3 ─ FC3 ─ CN4 ─┬─ FC4
 
 CN1 ─┬─ FC1 ─ CN2 ─ FC2 ─ CN3 ─ FC3 ─ CN4 ─┬─ FC4
    120Ω                                     120Ω
-  (CN1, Shepherd's room / Bay A)  (FC4, Simon's medbay / Bay E)
+  (CN1, Shepherd's room / Bay A)  (FC4, Simon's medbay / Bay D)
 
 ```
 
@@ -412,7 +412,7 @@ TPM 2.0 (SLB9672) is present on **both Cape-A and Cape-B** — all 8 nodes carry
 | PB2 boot time in failover scenario | High | Benchmark: measure time from 5 V applied to CAN FD heartbeat present. Target <15 s. If >15 s, implement kexec warm-restart and/or pre-arm node-ready gating. |
 | Cape power connector to vehicle bus | Low | Specify: Molex Nano-Fit 4-pin (5 V, 5 V, GND, GND) per node, rated 6 A. 4 FC + 4 CN = 8 connectors to PDB. |
 | DRV8833 current sense for winch stall detection | Low | Add 0.1 Ω sense resistor on DRV8833 AOUT1 path; read via AM6254 ADC for stall current detection. |
-| VL53L5CX obstacle avoidance array interface | Medium | The 12× ToF sensor arrays (TCA9548A + MCP23008 per array) connect to FC1 (Shepherd's room / Bay A, Array B host) and FC3 (River's room / Bay D, Array A host) via the external I²C header on Cape-A. Verify I²C pull-up voltage compatibility (VL53L5CX uses 1.8 V I²C — level shifter required between Cape-A 3.3 V and sensor 1.8 V). |
+| VL53L5CX obstacle avoidance array interface | Medium | The 12× ToF sensor arrays (TCA9548A + MCP23008 per array) connect to FC1 (Shepherd's room / Bay A, Array B host) and FC3 (River's room / Bay C, Array A host) via the external I²C header on Cape-A. Verify I²C pull-up voltage compatibility (VL53L5CX uses 1.8 V I²C — level shifter required between Cape-A 3.3 V and sensor 1.8 V). |
 
 ---
 

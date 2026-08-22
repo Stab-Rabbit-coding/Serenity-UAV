@@ -113,7 +113,7 @@ does not carry forward.
 | Control board | LibreServo v2 (`stab-rabbit-coding` fork), <https://github.com/Stab-Rabbit-coding/LibreServo_v2> | REF-SENSOR-014 |
 | Mechanical mod | Internal rotation-limiting pin **removed** — §3.1.2 | REF-SENSOR-013 |
 | Interface | **RS-485 half-duplex serial bus**, daisy-chainable, CRC-16 | §3.1.1 |
-| Supply | LibreServo v2 accepts 4.5–18 V (recommended 5–14 V); driven at 5.4 V nominal from Flight Engineer RAIL-2 `5V_JAYNE`, unchanged from Rev B | `docs/POWER_DISTRIBUTION.md` §3.2.1; REF-SENSOR-014 |
+| Supply | LibreServo v2 accepts 4.5–18 V (recommended 5–14 V); driven at 5.4 V nominal from Flight Engineer RAIL-2 `5V_OBS`, unchanged from Rev B | `docs/POWER_DISTRIBUTION.md` §3.2.1; REF-SENSOR-014 |
 | Stall torque (servo body, native) | 24 kgf·cm (2.35 N·m) @ 4.8 V, 26 kgf·cm (2.55 N·m) @ 6.0 V | REF-SENSOR-013 — comfortably clears the §4.2 requirement below |
 | Mass | ~57 g (servo body) + LibreServo v2 PCB (not separately published; treat as included in the ~57 g class figure pending a bench weigh-in) | REF-SENSOR-013 |
 | Case envelope | 40.5 × 20 × 40.5 mm | REF-SENSOR-013 — resolves the §3.3 `PEDESTAL_PORT` case-envelope gate that blocked pedestal generation under Rev B |
@@ -730,7 +730,7 @@ see the open item below.
 | `FLEX_PWM_IO` | output | AO3400 N-FET gate | Solenoid enable — high = catch retracted |
 | `FLEX_TTL_GPIO` | — | HX711 (moved here from the now-vacated `FLEX_UART_TX/RX` role) | Line-tension ADC (clock/data), bit-banged on a plain GPIO pair |
 | `ENC_SPI_*` (`J_ENC`) | input | **AK7455 on the spool** | Spool angle (§3.7.3) — existing header, dedicated SPI bus, no board change |
-| `+5V`, `GND` | power | Servo, solenoid, HX711 | RAIL-2 `5V_JAYNE` |
+| `+5V`, `GND` | power | Servo, solenoid, HX711 | RAIL-2 `5V_OBS` |
 
 **Solenoid drive** — AO3400 SOT-23 N-FET (already a project-standard part; see
 `avionics/kicad/Observer/Observer.md` Q1), 100 Ω gate resistor, 10 kΩ gate pull-down
@@ -819,7 +819,7 @@ WINCH_COMMAND  (event, Simon → gateway)
 engaged. Message IDs are assigned in the firmware task, not here — this document
 does not invent bus IDs.
 
-### 5.4 Power budget — RAIL-2 `5V_JAYNE`
+### 5.4 Power budget — RAIL-2 `5V_OBS`
 
 | Load | Current @ 5.4 V | Power |
 |---|---|---|
@@ -1009,7 +1009,7 @@ See §3.3. All six are new STLs from
 - REF-SENSOR-013 (SPT5425LV), REF-SENSOR-014 (LibreServo v2) — §3.1, current servo spec
 - `docs/references/108090023_STS3215-C001_Datasheet.pdf` — REF-SENSOR-012 (**superseded, historical**, §3.1)
 - `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` — gateway, `J_FLEX`, `N_STACKS`
-- `docs/POWER_DISTRIBUTION.md` §3.2.1, §11.1 — RAIL-2 `5V_JAYNE`
+- `docs/POWER_DISTRIBUTION.md` §3.2.1, §11.1 — RAIL-2 `5V_OBS`
 - `docs/flight_envelope.md` — AUW 2,768 g / 27.15 N
 - `docs/structural_analysis.md` §6 — 2.5 g cargo dynamic factor
 - `docs/bom_revR.json` — superseded winch entries (§2)

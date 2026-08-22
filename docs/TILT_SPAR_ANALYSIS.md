@@ -329,13 +329,15 @@ geometry issues were found and fixed **using the parametric numbers** (no STL gu
   even at `THICKNESS_SCALE_TIP` = 1.25) and cut a ~0.21 mm crescent through **both**
   airfoil skins. MF128ZZ seats with **+1.79 mm** margin. Wingtip radial reaction
   ≈ 19 N (dyn) ≪ MF128 capacity (~700 N) — load-safe. Root bearing stays F688ZZ.
-- **Tilt-feedback Hall sensor = Magntek MT6701** (I²C, off-axis) on a compact
+- **Tilt-feedback Hall sensor = AK7455** (SPI, magnetoresistive, off-axis/ferrous-through-shaft)
+  — supersedes the Magntek MT6701 (I²C) originally considered here; MT6701 was rejected this
+  same day in favor of AK7455 (see `avionics/kicad/ENC-NACELLE-1.md`, REF-SENSOR-008, and
+  `docs/TILT_ENCODER_WIRING_EMI_SPEC.md` for the current wiring/EMI spec), on a compact
   **7×7 mm** in-house PCB, seated off-axis at **R = 11 mm**, reading a **Ø22**
   diametric ring on the nacelle hub. The tip is congested — the pocket threads the
   ~8.4 mm chordwise gap between the Ø13.5 bearing flange (X≈28.75) and the forward
   EDF double-D bore (X≈37.1): echo-verified clearances 0.75 mm (flange) / 0.64 mm
   (EDF) / **4.01 mm** (top skin); pad OD 26→**29.5** (kept clear of the EDF bore).
-  Off-axis geometry pending MT6701-datasheet verification.
 - **EDF double-D drilled through the root tenon — STRAIGHT.** The `fuselage_root_tab`
   blocked the Ø7 double-D 1 mm in. The pass-through is a **separate straight axial
   bore** (constant X,Y) continuing each conduit through the tenon's inboard face —
