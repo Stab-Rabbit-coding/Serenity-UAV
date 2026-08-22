@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-17",
+  "generated": "2026-08-22",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -9878,14 +9878,6 @@
       ],
       "archived": false
     },
-    "docs/attribution_and_licensing.md": {
-      "description": "Serenity UAV \u2014 Licensing & Attribution",
-      "tags": [
-        "documentation",
-        "licensing"
-      ],
-      "archived": false
-    },
     "docs/bom_revP.json": {
       "description": "Bill of materials, JSON (0 items)",
       "tags": [
@@ -12404,7 +12396,6 @@
       "docs/WBS.md",
       "docs/WBS_FEDERATION.md",
       "docs/attribution_and_licencing.md",
-      "docs/attribution_and_licensing.md",
       "docs/bom_revP.json",
       "docs/bom_revQ.json",
       "docs/bom_revR.json",
@@ -12774,7 +12765,6 @@
       "deferred/LICENSE",
       "docs/LICENSE",
       "docs/attribution_and_licencing.md",
-      "docs/attribution_and_licensing.md",
       "docs/references/thingverse-serenity/LICENSE.txt",
       "gcs/LICENSE",
       "graphical-build-guide/LICENSE",

@@ -64,7 +64,7 @@
 
 ## 📊 Regulatory & Compliance
 
-- **[attribution_and_licensing.md](./attribution_and_licensing.md)** — CC BY 4.0 / CERN-OHL-W 2.0
+- **[attribution_and_licencing.md](./attribution_and_licencing.md)** — CC BY-SA 4.0 / CERN-OHL-W 2.0
   licensing strategy; third-party attribution chains
 - **Regulatory checklist** (under development):
   - FAA Part 48 (sUAS registration)

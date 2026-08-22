@@ -215,7 +215,7 @@ currently covers 4 overview SVGs; the 26+ build-guide cards remain hand-drawn.
 
 All SVG files and derivative graphics are **CC BY 4.0**.
 
-See root [`LICENSE`](../LICENSE) and [`docs/attribution_and_licensing.md`](../docs/attribution_and_licensing.md)
+See root [`LICENSE`](../LICENSE) and [`docs/attribution_and_licencing.md`](../docs/attribution_and_licencing.md)
 for details.
 
 ---

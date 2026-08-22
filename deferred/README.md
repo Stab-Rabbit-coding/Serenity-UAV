@@ -302,7 +302,7 @@ endurance meets mission needs)
 
 All deferred-phase documentation is **CC BY 4.0**.
 
-See root [`LICENSE`](../LICENSE) and [`docs/attribution_and_licensing.md`](../docs/attribution_and_licensing.md)
+See root [`LICENSE`](../LICENSE) and [`docs/attribution_and_licencing.md`](../docs/attribution_and_licencing.md)
 for details.
 
 ---

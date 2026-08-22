@@ -162,7 +162,7 @@ See root [`REFERENCES.md`](../REFERENCES.md) for complete reference catalog.
 **Firmware and Scripts:** CC BY 4.0  
 **All documentation:** CC BY 4.0
 
-See root [`LICENSE`](../LICENSE) and [`docs/attribution_and_licensing.md`](../docs/attribution_and_licensing.md)
+See root [`LICENSE`](../LICENSE) and [`docs/attribution_and_licencing.md`](../docs/attribution_and_licencing.md)
 for full licensing details.
 
 ---
