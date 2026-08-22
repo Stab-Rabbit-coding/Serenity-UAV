@@ -139,4 +139,4 @@ These are recorded so the next person does not re-derive them:
 
 ---
 
-*Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · License: CC BY 4.0*
+*Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP · License: CC BY-SA 4.0*

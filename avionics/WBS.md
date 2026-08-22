@@ -229,7 +229,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
 
 - [ ] **Pilot footprint-vs-datasheet verification — DONE 2026-07-13 (Claude Opus 4.8);
     7 footprints are NOT manufacturable, must be rebuilt before fab.** Full report:
-    `avionics/kicad/Pilot/WASH_FOOTPRINT_VERIFICATION.md`. Fixing any of these remaps
+    `avionics/kicad/Pilot/PILOT_FOOTPRINT_VERIFICATION.md`. Fixing any of these remaps
     pin→net on flight hardware, so each needs the confirmed schematic pinout first (ERC
     is not clean — see below) and MUST NOT be guessed.
     - [ ] **CAN-TR (ISOW1044BDFMR): wrong land — has 16-pad `SOIC-16W`, part is a
@@ -288,7 +288,7 @@ layout files (`*.kicad_pcb`) are complete. Gerber files have not yet been genera
         (BMP388, 10-pin), compass (MMC5983MA/QMC5883L), INA226, PCA9555, 74LVC1G14.
     - [ ] Add PB2-P1/P2 (2×36) SoC headers + connectors + passives (TVS/CMC/X2Y-Syfer-0805/
         Nano-Fit); tie the off-sheet global labels; drive GND/power (PWR_FLAG) to clear ERC.
-    - [ ] Associate corrected footprints (per WASH_FOOTPRINT_VERIFICATION.md) to each symbol;
+    - [ ] Associate corrected footprints (per PILOT_FOOTPRINT_VERIFICATION.md) to each symbol;
         regenerate/re-sync the PCB; ERC + DRC --schematic-parity to zero.
     - [ ] Once approved, promote `Wash_rebuild.kicad_sch` → `Pilot.kicad_sch` (archive old).
 - [ ] **Finish Pilot PCB (CAPE-A-2) close-out pass:**

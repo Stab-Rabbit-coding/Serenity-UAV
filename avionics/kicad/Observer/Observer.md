@@ -443,19 +443,21 @@ avionics-bay-to-bay ring cable run planning, not fabricated here.
 
 ## Generator Scripts
 
-- `avionics/kicad/gen_jayne.py` — generates `Observer.kicad_pro` + `Observer.kicad_sch`.
-- `avionics/kicad/gen_jayne_pcb.py` — generates `Observer.kicad_pcb`: footprint placement, nets,
-  and the rounded-corner board outline, all built into the script (not a manual post-pass).
+- `avionics/kicad/Observer/scripts/gen_observer_carrier_sch.py` — generates
+  `Observer.kicad_pro` + `Observer.kicad_sch` (SoM end-state, current).
+- `avionics/kicad/Observer/scripts/gen_observer_carrier_pcb.py` — generates `Observer.kicad_pcb`:
+  footprint placement, nets, and the rounded-corner board outline, all built into the script
+  (not a manual post-pass).
 
-**Note on regeneration:** `gen_jayne_pcb.py` generates a net-correct 78×80mm layout (with
-`rounded_board_outline()` for the corner rounding/mounting holes) — this was the state as of
-the EMI-hardening pass. `Observer.kicad_pcb` has since been **manually compacted further to
+**Note on regeneration:** `gen_observer_carrier_pcb.py` generates a net-correct 78×80mm layout
+(with `rounded_board_outline()` for the corner rounding/mounting holes) — this was the state as
+of the EMI-hardening pass. `Observer.kicad_pcb` has since been **manually compacted further to
 1.0 × 2.75 in (25.4 × 69.85 mm) in the KiCad GUI** (see "PCB" section above); the generator script was not updated to
-match. **Re-running `gen_jayne_pcb.py` will overwrite the 1.0 × 2.75 in (25.4 × 69.85 mm) hand-compaction back to the
-78×80mm script layout** — do not run it without confirming that's intended, per this
+match. **Re-running `gen_observer_carrier_pcb.py` will overwrite the 1.0 × 2.75 in (25.4 × 69.85 mm) hand-compaction
+back to the 78×80mm script layout** — do not run it without confirming that's intended, per this
 project's established FlightEngineer/Pilot script-then-manual-placement convention. If the
 hand-compacted layout is to remain the baseline going forward, the positions in this section
-should be back-ported into `gen_jayne_pcb.py` so the script and file stay in sync.
+should be back-ported into `gen_observer_carrier_pcb.py` so the script and file stay in sync.
 
 ---
 

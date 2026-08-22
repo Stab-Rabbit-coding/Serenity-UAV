@@ -1424,7 +1424,7 @@ parts. The differences are confined to pins 3, 4, 6 and 7 (GPIO_00/GPIO_01/NC/GP
 SLB 9672), all of which are left unconnected on all three Serenity boards.
 
 **Applied to:** the trust-module TPM on Jayne, Kaylee and `CAN-PERIPH-GW-1`, superseding the
-SLB9670VQ2.0 at the 2026-08-03 retarget. Not yet applied to Emma, Wash or Zoë, which still
+SLB9670VQ2.0 at the 2026-08-03 retarget. Not yet applied to Commo, Pilot or XO, which still
 carry the SLB9670.
 
 **Used in:** `avionics/kicad/symbols/Jayne_SLB9672_TPM.kicad_sym`,

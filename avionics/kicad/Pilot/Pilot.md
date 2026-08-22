@@ -7,6 +7,12 @@
 **Date:** 2026-06-11
 **Status:** Schematic complete — PCB layout pending
 
+> **Known divergence (open, `avionics/WBS.md` §1.2a):** this document's Ethernet-PHY/
+> magnetics/regulator sections below describe the *schematic* design (DP83825I +
+> HX1188NL + TPS62933). The **as-placed PCB** uses ADIN1300BCPZ + Würth 749010012A +
+> ISO7642 instead — see `PILOT_FOOTPRINT_VERIFICATION.md`. Schematic-first rebuild in
+> progress; do not treat §§1-2 below as as-built until that item closes.
+
 ---
 
 ## Purpose

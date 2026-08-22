@@ -715,7 +715,7 @@ mandatory cost of 500 W/m² immunity — a deliberate design trade documented in
 
 ---
 
-*© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY 4.0*
+*© 2026 Steve Griffing, PE(CSE), CISSP-ISSEP, CPP — CC BY-SA 4.0*
 
 ---
 
@@ -745,7 +745,7 @@ drawn on top of each other: seventeen MCU pads sat on the exact coordinate of a 
 a single global label served both symbols. That shorted the whole TPM SPI bus to a second
 set of MCU pins and tied MCU `VCORE` to TPM `GND`. `U_TPM` has been moved +34.29 mm clear
 and its labels re-emitted from the authoritative pin map in
-`scripts/inject_kaylee_trust_module.py`; labels belonging to `U_ISOCAN`, which is stacked at
+`scripts/inject_flight_engineer_trust_module.py`; labels belonging to `U_ISOCAN`, which is stacked at
 some of the same coordinates, were preserved. ERC pin-to-pin errors dropped by 7.
 
 The MCU is still **schematic-only on this board** — it is not placed on `Kaylee.kicad_pcb`,
