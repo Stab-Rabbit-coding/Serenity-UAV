@@ -1,6 +1,7 @@
 # Serenity UAV — Current Specification (Rev S Baseline)
 
-**License:** CC BY 4.0 — creativecommons.org/licenses/by/4.0  
+**License:** Dual-licensed — CERN-OHL-W 2.0 (hardware/CAD/PCB) / CC BY-SA 4.0 (docs/BOM/scripts).
+See `docs/attribution_and_licensing.md`.  
 **Current design revision:** Rev S (2026-07-04)
 
 > Bill of Materials, component specifications, and system-level design parameters for
@@ -14,8 +15,6 @@
 | `bom_revS.json` | JSON | **Canonical** structured BOM: part numbering, supplier links, mass, CG, cost | All components (procured + printed + machined) |
 | `bom_revS.csv` | CSV | Flat-file BOM for spreadsheet import; derived from `bom_revS.json` | Import into build-tracking sheets, inventory management |
 | `serenity-rev-s.jsx` | JSX (React) | **Current** interactive BOM viewer + system schematic (web/desktop app) | Same part list, visual links to subsystems, CAD references |
-| `serenity-rev-r.jsx` | JSX (React) | **Archived** Rev R viewer (legacy; maintained for reference only) | Use `serenity-rev-s.jsx` for current Rev S baseline |
-| `parts/` | CSV per subsystem | Breakdown by domain: airframe, avionics, power, cargo | Detail-level procurement checklists |
 
 ## BOM Structure (JSON Schema)
 
@@ -91,17 +90,17 @@
 ### Avionics (PCBs, Capes, Sensors)
 
 - **SBCs:** 8× PocketBeagle2 Industrial
-- **Capes:** 8× Wash/Cape-A-2, 8× Zoë/Cape-B-2, 2× Emma/Cape-X-1, 1× Kaylee/PDB
-- **Standalone:** 1× Jayne (vision/ToF/laser board, PCM-071 SoM)
+- **Capes:** 8× Pilot/Cape-A-2, 8× XO/Cape-B-2, 2× Commo/Cape-X-1, 1× Flight Engineer/PDB
+- **Standalone:** 1× Observer (vision/ToF/laser board, PCM-071 SoM)
 - **Sensors:** GPS, IMU, barometer, 2× Hall encoders (AK7455), 12× ToF (VL53L5CX), 2× laser
 - **Security:** 8× TPM 2.0 (SLB9672), 4× CPLD write-blocker (ATF16V8BQL)
 - **Connectors & cabling:** USB-C, XT90 PDB, RP-SMA antenna bulkheads, shielded Ethernet/CAN
 
 ### Power Distribution
 
-- **Kaylee PDB:** 2× 40A fuses, 5V/5A BEC, main bus connectors
+- **Flight Engineer PDB:** 2× 40A fuses, 5V/5A BEC, main bus connectors
 - **ESCs:** 4× 40A BLHeli32 (nacelle EDF control)
-- **Wiring:** 14 AWG main leads (XT90 → Kaylee), 22 AWG signal/logic
+- **Wiring:** 14 AWG main leads (XT90 → Flight Engineer), 22 AWG signal/logic
 
 ### Propulsion
 
@@ -152,8 +151,8 @@
 | 2 | Nacelle assembly | EDFs, nozzles, iris mechanism | — | CAD complete |
 | 3 | Tilt mechanism | Servo mounts, pivot rod, linkages | — | CAD complete |
 | 4 | Hull foam & close | Foam pour, panel lids | — | Ready |
-| 5 | Avionics (4 nodes, minimal) | Wash/Zoë on Shepherd + Inara, ESCs | — | PCBs in rev S1 |
-| 6 | Full 8-node architecture | All 8 nodes + Emma + Kaylee + Jayne | — | PCBs in rev S1 |
+| 5 | Avionics (4 nodes, minimal) | Pilot/XO on Shepherd + Inara, ESCs | — | PCBs in rev S1 |
+| 6 | Full 8-node architecture | All 8 nodes + Commo + Flight Engineer + Observer | — | PCBs in rev S1 |
 | 7 | Cargo system | Gondola, winch, servo, solenoid | — | CAD complete |
 | 8 | Finishing | Decals, documentation | — | Awaiting first flight |
 | 9–10 | Flight tuning & extended range | Optional LoRa, gimbal tracking | — | Deferred |
@@ -161,7 +160,7 @@
 
 ## Revision History
 
-- **Rev S** (2026-07-04): Baseline for Phase 5; 24-inch hull, 8-node PACE, Kaylee/Jayne, Wash/Zoë/Emma/Kaylee/Jayne Rev S1 PCBs
+- **Rev S** (2026-07-04): Baseline for Phase 5; 24-inch hull, 8-node PACE, Flight Engineer/Observer, Pilot/XO/Commo/Flight Engineer/Observer Rev S1 PCBs
 - **Rev R1** (2026-06-11): 24-inch hull final, hull-frame coordinate std baked into STLs, Nacelle CG tuning (PIVOT_Z = 111.5 mm)
 - **Rev R** (2026-04-XX): First 24-inch hull iteration, pre-PIVOT_Z tuning
 - **Rev Q** (2026-02-XX): Last 18-inch baseline; 8-node architecture finalized
@@ -187,7 +186,7 @@ Every part in the BOM has a cross-reference to:
    - Order date, delivery date, received qty, unit cost verified
    - Bin location (for inventory tracking)
    - Subcategory total cost (sum by subsystem)
-3. Cross-reference against `serenity-rev-r.jsx` for linked supplier pages
+3. Cross-reference against `serenity-rev-s.jsx` for linked supplier pages
 
 ### For Assembly / Build Guide
 
@@ -205,12 +204,12 @@ Every part in the BOM has a cross-reference to:
 ## Tools
 
 - **`tools/update_bom.py`** — Python script to sync JSON ↔ CSV and calculate totals
-- **`serenity-rev-r.jsx`** — React component (Webpack build) to render interactive BOM viewer
+- **`serenity-rev-s.jsx`** — React component (Webpack build) to render interactive BOM viewer
 - **`REFERENCES.md`** — Catalog of all supplier links, datasheets, and regulatory citations
 
 ## License
 
-All BOM files are **CC BY 4.0**.
+All BOM files are **CC BY-SA 4.0**.
 
 See root [`LICENSE`](../LICENSE) and [`docs/attribution_and_licensing.md`](../docs/attribution_and_licensing.md)
 for full details.
